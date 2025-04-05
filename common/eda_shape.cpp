@@ -2487,32 +2487,35 @@ static struct EDA_SHAPE_DESC
         PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
         REGISTER_TYPE( EDA_SHAPE );
 
-        auto isNotPolygonOrCircle = []( INSPECTABLE* aItem ) -> bool
-        {
-            // Polygons, unlike other shapes, have no meaningful start or end coordinates
-            if( EDA_SHAPE* shape = dynamic_cast<EDA_SHAPE*>( aItem ) )
-                return shape->GetShape() != SHAPE_T::POLY && shape->GetShape() != SHAPE_T::CIRCLE;
+        auto isNotPolygonOrCircle =
+                []( INSPECTABLE* aItem ) -> bool
+                {
+                    // Polygons, unlike other shapes, have no meaningful start or end coordinates
+                    if( EDA_SHAPE* shape = dynamic_cast<EDA_SHAPE*>( aItem ) )
+                        return shape->GetShape() != SHAPE_T::POLY && shape->GetShape() != SHAPE_T::CIRCLE;
 
-            return false;
-        };
+                    return false;
+                };
 
-        auto isCircle = []( INSPECTABLE* aItem ) -> bool
-        {
-            // Polygons, unlike other shapes, have no meaningful start or end coordinates
-            if( EDA_SHAPE* shape = dynamic_cast<EDA_SHAPE*>( aItem ) )
-                return shape->GetShape() == SHAPE_T::CIRCLE;
+        auto isCircle =
+                []( INSPECTABLE* aItem ) -> bool
+                {
+                    // Polygons, unlike other shapes, have no meaningful start or end coordinates
+                    if( EDA_SHAPE* shape = dynamic_cast<EDA_SHAPE*>( aItem ) )
+                        return shape->GetShape() == SHAPE_T::CIRCLE;
 
-            return false;
-        };
+                    return false;
+                };
 
-        auto isRectangle = []( INSPECTABLE* aItem ) -> bool
-        {
-            // Polygons, unlike other shapes, have no meaningful start or end coordinates
-            if( EDA_SHAPE* shape = dynamic_cast<EDA_SHAPE*>( aItem ) )
-                return shape->GetShape() == SHAPE_T::RECTANGLE;
+        auto isRectangle =
+                []( INSPECTABLE* aItem ) -> bool
+                {
+                    // Polygons, unlike other shapes, have no meaningful start or end coordinates
+                    if( EDA_SHAPE* shape = dynamic_cast<EDA_SHAPE*>( aItem ) )
+                        return shape->GetShape() == SHAPE_T::RECTANGLE;
 
-            return false;
-        };
+                    return false;
+                };
 
         const wxString shapeProps = _HKI( "Shape Properties" );
 
