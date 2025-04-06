@@ -109,7 +109,9 @@ static wxString escapeString( const wxString& aString )
 
 static std::string fmt_mask( const LSET& aSet )
 {
-    return ( aSet & LSET::AllCuMask() ).to_string();
+    std::string retv = ( aSet & LSET::AllCuMask() ).to_string();
+    retv.erase( 0, retv.find_first_not_of( '0' ) );
+    return retv;
 }
 
 
@@ -424,8 +426,8 @@ void GENCAD_EXPORTER::CreatePadsShapesSection()
             // top line
             if( lineX > 0 )
             {
-                fprintf( m_file, "LINE %g %g %g %g\n"
-                         , ( off.x - lineX ) / SCALE_FACTOR,
+                fprintf( m_file, "LINE %g %g %g %g\n",
+                         ( off.x - lineX ) / SCALE_FACTOR,
                          ( -off.y + lineY + radius ) / SCALE_FACTOR,
                          ( off.x + lineX ) / SCALE_FACTOR,
                          ( -off.y + lineY + radius ) / SCALE_FACTOR );
@@ -793,7 +795,7 @@ void GENCAD_EXPORTER::CreateComponentsSection()
 
             fprintf( m_file, "TEXT %g %g %g %g %s %s \"%s\"",
                      textItem->GetFPRelativePosition().x / SCALE_FACTOR,
-                    -textItem->GetFPRelativePosition().y / SCALE_FACTOR,
+                     -textItem->GetFPRelativePosition().y / SCALE_FACTOR,
                      textItem->GetTextWidth() / SCALE_FACTOR,
                      textItem->GetTextAngle().AsDegrees(),
                      mirror,
@@ -923,31 +925,31 @@ void GENCAD_EXPORTER::CreateRoutesSection()
 
     TRACKS tracks( m_board->Tracks() );
     std::sort( tracks.begin(), tracks.end(),
-            []( const PCB_TRACK* a, const PCB_TRACK* b )
-            {
-                int widthA = 0;
-                int widthB = 0;
+               []( const PCB_TRACK* a, const PCB_TRACK* b )
+               {
+                   int widthA = 0;
+                   int widthB = 0;
 
-                if( a->Type() == PCB_VIA_T )
-                    widthA = static_cast<const PCB_VIA*>( a )->GetWidth( PADSTACK::ALL_LAYERS );
-                else
-                    widthA = a->GetWidth();
+                   if( a->Type() == PCB_VIA_T )
+                       widthA = static_cast<const PCB_VIA*>( a )->GetWidth( PADSTACK::ALL_LAYERS );
+                   else
+                       widthA = a->GetWidth();
 
-                if( b->Type() == PCB_VIA_T )
-                    widthB = static_cast<const PCB_VIA*>( b )->GetWidth( PADSTACK::ALL_LAYERS );
-                else
-                    widthB = b->GetWidth();
+                   if( b->Type() == PCB_VIA_T )
+                       widthB = static_cast<const PCB_VIA*>( b )->GetWidth( PADSTACK::ALL_LAYERS );
+                   else
+                       widthB = b->GetWidth();
 
-                if( a->GetNetCode() == b->GetNetCode() )
-                {
-                    if( widthA == widthB )
-                        return ( a->GetLayer() < b->GetLayer() );
+                   if( a->GetNetCode() == b->GetNetCode() )
+                   {
+                       if( widthA == widthB )
+                           return ( a->GetLayer() < b->GetLayer() );
 
-                    return ( widthA < widthB );
-                }
+                       return ( widthA < widthB );
+                   }
 
-                return ( a->GetNetCode() < b->GetNetCode() );
-            } );
+                   return ( a->GetNetCode() < b->GetNetCode() );
+               } );
 
     fputs( "$ROUTES\n", m_file );
 
@@ -988,12 +990,12 @@ void GENCAD_EXPORTER::CreateRoutesSection()
             {
                 old_layer = track->GetLayer();
                 fprintf( m_file, "LAYER %s\n",
-                        GenCADLayerName( cu_count, track->GetLayer() ).c_str() );
+                         GenCADLayerName( cu_count, track->GetLayer() ).c_str() );
             }
 
             fprintf( m_file, "LINE %g %g %g %g\n",
-                    MapXTo( track->GetStart().x ), MapYTo( track->GetStart().y ),
-                    MapXTo( track->GetEnd().x ), MapYTo( track->GetEnd().y ) );
+                     MapXTo( track->GetStart().x ), MapYTo( track->GetStart().y ),
+                     MapXTo( track->GetEnd().x ), MapYTo( track->GetEnd().y ) );
         }
         else if( track->Type() == PCB_ARC_T )
         {
@@ -1002,7 +1004,8 @@ void GENCAD_EXPORTER::CreateRoutesSection()
 
             const PCB_ARC* arc = static_cast<const PCB_ARC*>( track );
 
-            if( arc->GetAngle() > ANGLE_0 )
+            // GenCAD arcs are always drawn counter-clockwise.
+            if( !arc->IsCCW() )
                 std::swap( start, end );
 
             VECTOR2I center = arc->GetCenter();
