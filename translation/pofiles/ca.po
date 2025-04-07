@@ -3,13 +3,14 @@
 # John Beard <john.j.beard@gmail.com>, 2025.
 # Marc de Miguel <marc.demiguel.c@gmail.com>, 2025.
 # Adolfo Jayme Barrientos <fitojb@ubuntu.com>, 2025.
+# "rsr.private" <rsr.private@gmail.com>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-28 16:28-0700\n"
-"PO-Revision-Date: 2025-04-04 12:49+0000\n"
-"Last-Translator: Adolfo Jayme Barrientos <fitojb@ubuntu.com>\n"
+"PO-Revision-Date: 2025-04-07 15:08+0000\n"
+"Last-Translator: \"rsr.private\" <rsr.private@gmail.com>\n"
 "Language-Team: Catalan <https://hosted.weblate.org/projects/kicad/"
 "master-source/ca/>\n"
 "Language: ca\n"
@@ -442,7 +443,7 @@ msgstr "Vista inicial"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:182
 msgid "Redraw at the home position and zoom"
-msgstr ""
+msgstr "Redibuixa en la posició i ampliació inicial"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:190
 msgid "Flip Board"
@@ -1313,7 +1314,7 @@ msgstr ""
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:544
 msgid "Left double click or middle click to change color"
-msgstr ""
+msgstr "Fes doble pulsació, o prem el boto central, per canviar el color"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:554
 msgid "Uncheck 'Use board stackup colors' to allow color editing."
@@ -4078,7 +4079,7 @@ msgstr ""
 #: common/dialogs/dialog_rc_job_base.cpp:80 kicad/cli/command_pcb_drc.cpp:60
 #: pcbnew/dialogs/dialog_drc_base.cpp:41
 msgid "Test for parity between PCB and schematic"
-msgstr ""
+msgstr "Verifica la paritat entre la placa i l'esquemàtic"
 
 #: common/dialogs/dialog_text_entry_base.cpp:20
 #: common/dialogs/dialog_text_entry_base.cpp:32
@@ -4186,7 +4187,7 @@ msgstr "Connexions"
 #: common/dialogs/git/dialog_git_auth.cpp:45
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:170
 msgid "Basic"
-msgstr ""
+msgstr "Bàsic"
 
 #: common/dialogs/git/dialog_git_auth.cpp:46
 #: common/dialogs/git/dialog_git_repository_base.cpp:58
@@ -4196,7 +4197,7 @@ msgstr "SSH"
 #: common/dialogs/git/dialog_git_auth.cpp:52
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:85
 msgid "Test"
-msgstr ""
+msgstr "Comprovació"
 
 #: common/dialogs/git/dialog_git_auth.cpp:53
 #: common/dialogs/git/dialog_git_commit.cpp:151
@@ -4281,11 +4282,11 @@ msgstr "Missatges d'error:"
 
 #: common/dialogs/git/dialog_git_commit.cpp:140
 msgid "Author:"
-msgstr ""
+msgstr "Autor:"
 
 #: common/dialogs/git/dialog_git_commit.cpp:161
 msgid "C&ommit"
-msgstr ""
+msgstr "C&onfirmar"
 
 #: common/dialogs/git/dialog_git_commit.cpp:178
 msgid "Commit message cannot be empty"
@@ -4405,7 +4406,7 @@ msgstr "Branca"
 
 #: common/dialogs/git/dialog_git_switch.cpp:59
 msgid "Last Commit"
-msgstr ""
+msgstr "Ultima confirmació"
 
 #: common/dialogs/git/dialog_git_switch.cpp:60
 #, fuzzy
@@ -4679,7 +4680,7 @@ msgstr ""
 
 #: common/dialogs/panel_common_settings_base.cpp:174
 msgid "Use alternating row colors in tables"
-msgstr ""
+msgstr "Utilitza els colors alternatius en les taules"
 
 #: common/dialogs/panel_common_settings_base.cpp:175
 msgid "When enabled, use a different color for every other table row"
@@ -4733,7 +4734,7 @@ msgstr "Petit"
 
 #: common/dialogs/panel_common_settings_base.cpp:216
 msgid "Use compact icons in the toolbars"
-msgstr ""
+msgstr "Utilitza icons compactes en les barres d'eines"
 
 #: common/dialogs/panel_common_settings_base.cpp:220 common/eda_text.cpp:976
 #: eeschema/sch_label.cpp:1240 eeschema/sch_tablecell.cpp:121
@@ -4759,7 +4760,7 @@ msgstr "Gran"
 
 #: common/dialogs/panel_common_settings_base.cpp:226
 msgid "Use larger icons in the toolbars"
-msgstr ""
+msgstr "Utilitza icons grans en les barres d'eines"
 
 #: common/dialogs/panel_common_settings_base.cpp:237
 msgid "Canvas scale:"
@@ -5909,7 +5910,7 @@ msgstr ""
 
 #: common/dialogs/panel_plugin_settings_base.cpp:27 kicad/pcm/pcm.cpp:781
 msgid "Enable KiCad API"
-msgstr ""
+msgstr "Habilita KiCad API"
 
 #: common/dialogs/panel_plugin_settings_base.cpp:28
 msgid ""
@@ -5919,11 +5920,11 @@ msgstr ""
 
 #: common/dialogs/panel_plugin_settings_base.cpp:40
 msgid "Python Interpreter"
-msgstr ""
+msgstr "Interprete API"
 
 #: common/dialogs/panel_plugin_settings_base.cpp:45
 msgid "Path to Python interpreter:"
-msgstr ""
+msgstr "Ruta al interprete Python:"
 
 #: common/dialogs/panel_plugin_settings_base.cpp:49
 #, fuzzy
@@ -5932,7 +5933,7 @@ msgstr "Elimina el directori i el seu contingut"
 
 #: common/dialogs/panel_plugin_settings_base.cpp:49
 msgid "*.*"
-msgstr ""
+msgstr "*.*"
 
 #: common/dialogs/panel_plugin_settings_base.cpp:52
 #, fuzzy
