@@ -274,10 +274,12 @@ void RENDER_3D_RAYTRACE_BASE::renderTracing( uint8_t* ptrPBO, REPORTER* aStatusR
         }
     };
 
-    for( size_t i = 0; i < tp.get_thread_count() + 1; ++i )
-        tp.push_task( processBlocks );
+    BS::multi_future<void> futures;
 
-    tp.wait_for_tasks();
+    for( size_t i = 0; i < tp.get_thread_count(); ++i )
+        futures.push_back( tp.submit( processBlocks ) );
+
+    futures.wait();
 
     m_blockRenderProgressCount += numBlocksRendered;
 
