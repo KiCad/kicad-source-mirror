@@ -368,8 +368,11 @@ void PCB_SHAPE::UpdateHatching() const
                     RECURSE_MODE::RECURSE );
         }
 
-        m_hatching.BooleanSubtract( holes );
-        m_hatching.Fracture();
+        if( !holes.IsEmpty() )
+        {
+            m_hatching.BooleanSubtract( holes );
+            m_hatching.Fracture();
+        }
     }
 }
 

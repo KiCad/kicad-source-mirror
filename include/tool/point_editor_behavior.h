@@ -191,6 +191,7 @@ public:
     {
         POLYGON_POINT_EDIT_BEHAVIOR::UpdateItem( aEditedPoint, aPoints, aCommit, aUpdatedItems );
         m_shape.SetHatchingDirty();
+        m_shape.UpdateHatching();
     }
 
 private:

@@ -596,7 +596,39 @@ void EDA_SHAPE::UpdateHatching() const
             [&]( const std::vector<SEG>& hatchLines )
             {
                 for( const SEG& seg : hatchLines )
-                    TransformOvalToPolygon( m_hatching, seg.A, seg.B, lineWidth, ARC_LOW_DEF, ERROR_INSIDE );
+                {
+                    // This is essentially TransformOvalToPolygon(), but without the rounded ends, which
+                    // in our case are nothing but a performance sink.
+
+                    VECTOR2I endp = seg.B - seg.A;
+                    VECTOR2I startp = seg.A;
+
+                    // normalize the position in order to have endp.x >= 0
+                    // it makes calculations more easy to understand
+                    if( endp.x < 0 )
+                    {
+                        endp    = seg.A - seg.B;
+                        startp  = seg.B;
+                    }
+
+                    EDA_ANGLE delta_angle( endp );
+                    int       seg_len = endp.EuclideanNorm();
+                    int       halfwidth = lineWidth / 2;
+
+                    // Build the polygon (a horizontal rectangle).
+                    SHAPE_POLY_SET polyshape;
+                    polyshape.NewOutline();
+                    polyshape.Append( -halfwidth, halfwidth );
+                    polyshape.Append( -halfwidth, -halfwidth );
+                    polyshape.Append( halfwidth + seg_len, -halfwidth );
+                    polyshape.Append( halfwidth + seg_len, halfwidth );
+
+                    // Rotate and move the polygon to its right location
+                    polyshape.Rotate( -delta_angle );
+                    polyshape.Move( startp );
+
+                    m_hatching.Append( polyshape);
+                }
             };
 
     switch( m_shape )
