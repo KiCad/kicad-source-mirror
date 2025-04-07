@@ -35,6 +35,7 @@
 #include <sch_draw_panel.h>
 #include <sch_view.h>
 #include <sch_painter.h>
+#include <sch_shape.h>
 #include <settings/settings_manager.h>
 #include <confirm.h>
 #include <preview_items/selection_area.h>
@@ -397,13 +398,20 @@ void SCH_BASE_FRAME::UpdateItem( EDA_ITEM* aItem, bool isAddOrDelete, bool aUpda
     }
     else
     {
+        if( aItem->Type() == SCH_SHAPE_T )
+            static_cast<SCH_SHAPE*>( aItem )->UpdateHatching();
+
         if( !isAddOrDelete )
             GetCanvas()->GetView()->Update( aItem );
 
         // Some children are drawn from their parents.  Mark them for re-paint.
-        if( parent
-          && parent->IsType( { SCH_SYMBOL_T, SCH_SHEET_T, SCH_LABEL_LOCATE_ANY_T, SCH_TABLE_T } ) )
+        if( parent && ( parent->Type() == SCH_SYMBOL_T
+                        || parent->Type() == SCH_SHEET_T
+                        || parent->Type() == SCH_LABEL_LOCATE_ANY_T
+                        || parent->Type() == SCH_TABLE_T ) )
+        {
             GetCanvas()->GetView()->Update( parent, KIGFX::REPAINT );
+        }
     }
 
     /*

@@ -145,7 +145,7 @@ public:
     UI_FILL_MODE GetFillModeProp() const;
 
     void SetHatchingDirty()                    { m_hatchingDirty = true; }
-    const SHAPE_POLY_SET& GetHatching() const;
+    const SHAPE_POLY_SET& GetHatching() const  { return m_hatching; }
 
     bool IsClosed() const;
 
@@ -403,6 +403,8 @@ public:
     int GetRectangleHeight() const;
     int GetRectangleWidth() const;
 
+    virtual void UpdateHatching() const;
+
     /**
      * Convert the shape to a closed polygon.
      *
@@ -464,7 +466,7 @@ protected:
     void endEdit( bool aClosed = true );
     void setEditState( int aState ) { m_editState = aState; }
 
-    virtual void updateHatching() const;
+    virtual bool isMoving() const { return false; }
 
     /**
      * Make a set of #SHAPE objects representing the #EDA_SHAPE.

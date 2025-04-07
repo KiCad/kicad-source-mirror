@@ -819,6 +819,7 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
         loadedBoard->BuildListOfNets();
         ResolveDRCExclusions( true );
         m_toolManager->RunAction( PCB_ACTIONS::repairBoard, true);
+        m_toolManager->RunAction( PCB_ACTIONS::rehatchShapes );
 
         if( loadedBoard->IsModified() )
             OnModify();

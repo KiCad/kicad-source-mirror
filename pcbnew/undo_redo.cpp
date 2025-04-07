@@ -41,6 +41,7 @@ using namespace std::placeholders;
 #include <connectivity/connectivity_data.h>
 #include <tool/tool_manager.h>
 #include <tool/actions.h>
+#include <tools/pcb_actions.h>
 #include <tools/pcb_selection_tool.h>
 #include <tools/pcb_control.h>
 #include <tools/board_editor_control.h>
@@ -620,33 +621,7 @@ void PCB_BASE_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
         }
     }
 
-    auto checkHatching =
-            [&]( BOARD_ITEM* item )
-            {
-                if( item->Type() == PCB_SHAPE_T )
-                {
-                    PCB_SHAPE* shape = static_cast<PCB_SHAPE*>( item );
-
-                    if( shape->IsHatchedFill() )
-                    {
-                        shape->SetHatchingDirty();
-                        view->Update( shape );
-                    }
-                }
-            };
-
-    for( BOARD_ITEM* item : GetBoard()->Drawings() )
-        checkHatching( item );
-
-    for( FOOTPRINT* footprint : GetBoard()->Footprints() )
-    {
-        footprint->RunOnChildren(
-                [&]( BOARD_ITEM* item )
-                {
-                    checkHatching( item );
-                },
-                RECURSE_MODE::RECURSE );
-    }
+    GetToolManager()->PostAction( PCB_ACTIONS::rehatchShapes );
 
     if( added_items.size() > 0 || deleted_items.size() > 0 || changed_items.size() > 0 )
         GetBoard()->OnItemsCompositeUpdate( added_items, deleted_items, changed_items );

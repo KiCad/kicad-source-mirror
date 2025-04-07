@@ -566,20 +566,11 @@ UI_FILL_MODE EDA_SHAPE::GetFillModeProp() const
 }
 
 
-const SHAPE_POLY_SET& EDA_SHAPE::GetHatching() const
+void EDA_SHAPE::UpdateHatching() const
 {
-    if( m_hatchingDirty )
-    {
-        updateHatching();
-        m_hatchingDirty = false;
-    }
+    if( !m_hatchingDirty )
+        return;
 
-    return m_hatching;
-}
-
-
-void EDA_SHAPE::updateHatching() const
-{
     m_hatching.RemoveAllContours();
 
     std::vector<double> slopes;
@@ -587,7 +578,9 @@ void EDA_SHAPE::updateHatching() const
     int                 spacing = GetHatchLineSpacing();
     SHAPE_POLY_SET      shapeBuffer;
 
-    if( GetFillMode() == FILL_T::CROSS_HATCH )
+    if( isMoving() )
+        return;
+    else if( GetFillMode() == FILL_T::CROSS_HATCH )
         slopes = { 1.0, -1.0 };
     else if( GetFillMode() == FILL_T::HATCH )
         slopes = { -1.0 };
@@ -603,10 +596,7 @@ void EDA_SHAPE::updateHatching() const
             [&]( const std::vector<SEG>& hatchLines )
             {
                 for( const SEG& seg : hatchLines )
-                {
-                    TransformOvalToPolygon( m_hatching, seg.A, seg.B, lineWidth, ARC_LOW_DEF,
-                                            ERROR_INSIDE );
-                }
+                    TransformOvalToPolygon( m_hatching, seg.A, seg.B, lineWidth, ARC_LOW_DEF, ERROR_INSIDE );
             };
 
     switch( m_shape )

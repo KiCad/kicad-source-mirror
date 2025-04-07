@@ -112,6 +112,8 @@ public:
 
     int FlipPcbView( const TOOL_EVENT& aEvent );
 
+    int RehatchShapes( const TOOL_EVENT& aEvent );
+
     // Drag and drop
     int DdAppendBoard( const TOOL_EVENT& aEvent );
     int DdAddLibrary( const TOOL_EVENT& aEvent );
@@ -151,15 +153,16 @@ private:
     bool placeBoardItems( BOARD_COMMIT* aCommit, BOARD* aBoard, bool aAnchorAtOrigin,
                           bool aReannotateDuplicates );
 
-    ///< Pointer to the currently used edit frame.
-    PCB_BASE_FRAME* m_frame;
+    void rehatchBoardItem( BOARD_ITEM* aItem );
 
-    ///< Grid origin marker.
+private:
+    PCB_BASE_FRAME*                         m_frame;
+
     std::unique_ptr<KIGFX::ORIGIN_VIEWITEM> m_gridOrigin;
 
-    BOARD_ITEM* m_pickerItem;
+    BOARD_ITEM*                             m_pickerItem;
 
-    std::unique_ptr<STATUS_TEXT_POPUP> m_statusPopup;
+    std::unique_ptr<STATUS_TEXT_POPUP>      m_statusPopup;
 };
 
 #endif

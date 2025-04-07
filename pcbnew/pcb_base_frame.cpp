@@ -238,6 +238,8 @@ void PCB_BASE_FRAME::AddFootprintToBoard( FOOTPRINT* aFootprint )
         aFootprint->SetOrientation( ANGLE_0 );
 
         GetBoard()->UpdateUserUnits( aFootprint, GetCanvas()->GetView() );
+
+        m_toolManager->RunAction( PCB_ACTIONS::rehatchShapes );
     }
 }
 

@@ -131,8 +131,6 @@ bool PCB_SHAPE::Deserialize( const google::protobuf::Any &aContainer )
 
     // TODO m_hasSolderMask and m_solderMaskMargin
 
-    m_hatchingDirty = true;
-
     return true;
 }
 
@@ -307,9 +305,13 @@ std::vector<VECTOR2I> PCB_SHAPE::GetConnectionPoints() const
 }
 
 
-void PCB_SHAPE::updateHatching() const
+void PCB_SHAPE::UpdateHatching() const
 {
-    EDA_SHAPE::updateHatching();
+    // Force update; we don't bother to propagate damage from all the things that might
+    // knock-out parts of our hatching.
+    m_hatchingDirty = true;
+
+    EDA_SHAPE::UpdateHatching();
 
     if( !m_hatching.IsEmpty() )
     {
@@ -356,7 +358,7 @@ void PCB_SHAPE::updateHatching() const
             footprint->RunOnChildren(
                     [&]( BOARD_ITEM* item )
                     {
-                        if( item->Type() == PCB_FIELD_T
+                        if( ( item->Type() == PCB_FIELD_T || item->Type() == PCB_SHAPE_T )
                                 && item->GetLayer() == layer
                                 && item->GetBoundingBox().Intersects( bbox ) )
                         {
@@ -598,8 +600,6 @@ void PCB_SHAPE::Mirror( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection )
     default:
         UNIMPLEMENTED_FOR( SHAPE_T_asString() );
     }
-
-    m_hatchingDirty = true;
 }
 
 

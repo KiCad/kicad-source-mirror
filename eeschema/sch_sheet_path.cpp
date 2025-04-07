@@ -26,10 +26,9 @@
 #include <refdes_utils.h>
 #include <hash.h>
 #include <sch_screen.h>
-#include <sch_item.h>
 #include <sch_marker.h>
 #include <sch_label.h>
-#include <sch_reference_list.h>
+#include <sch_shape.h>
 #include <symbol_library.h>
 #include <sch_sheet_path.h>
 #include <sch_symbol.h>
@@ -381,7 +380,9 @@ void SCH_SHEET_PATH::UpdateAllScreenReferences() const
                   std::back_inserter( items ),
             []( SCH_ITEM* aItem )
             {
-                return ( aItem->Type() == SCH_SYMBOL_T || aItem->Type() == SCH_GLOBAL_LABEL_T );
+                return ( aItem->Type() == SCH_SYMBOL_T
+                        || aItem->Type() == SCH_GLOBAL_LABEL_T
+                        || aItem->Type() == SCH_SHAPE_T );
             } );
 
     for( SCH_ITEM* item : items )
@@ -410,6 +411,11 @@ void SCH_SHEET_PATH::UpdateAllScreenReferences() const
                 intersheetRefs->SetVisible( label->Schematic()->Settings().m_IntersheetRefsShow );
                 LastScreen()->Update( intersheetRefs );
             }
+        }
+        else if( item->Type() == SCH_SHAPE_T )
+        {
+            SCH_SHAPE* shape = static_cast<SCH_SHAPE*>( item );
+            shape->UpdateHatching();
         }
     }
 }

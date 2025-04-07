@@ -349,6 +349,8 @@ void DISPLAY_FOOTPRINTS_FRAME::ReloadFootprint( FOOTPRINT* aFootprint )
             pad->SetPinFunction( net.GetPinFunction() );
     }
 
+    m_toolManager->RunAction( PCB_ACTIONS::rehatchShapes );
+
     GetBoard()->Add( aFootprint );
     updateView();
     GetCanvas()->Refresh();

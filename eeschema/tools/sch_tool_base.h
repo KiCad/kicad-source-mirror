@@ -35,6 +35,7 @@
 #include <sch_edit_frame.h>
 #include <sch_view.h>
 #include <symbol_edit_frame.h>
+#include <sch_shape.h>
 
 class SCH_SELECTION;
 
@@ -108,34 +109,7 @@ protected:
      */
     void updateItem( EDA_ITEM* aItem, bool aUpdateRTree ) const
     {
-        switch( aItem->Type() )
-        {
-        case SCH_SHEET_PIN_T:
-            getView()->Update( aItem );
-            getView()->Update( aItem->GetParent() );
-
-            // Moving sheet pins does not change the BBox.
-            break;
-
-        case SCH_PIN_T:
-        case SCH_FIELD_T:
-        case SCH_TABLECELL_T:
-            getView()->Update( aItem );
-            getView()->Update( aItem->GetParent() );
-
-            if( aUpdateRTree )
-                m_frame->GetScreen()->Update( static_cast<SCH_ITEM*>( aItem->GetParent() ) );
-
-            break;
-
-        default:
-            getView()->Update( aItem );
-
-            if( aUpdateRTree && dynamic_cast<SCH_ITEM*>( aItem ) )
-                m_frame->GetScreen()->Update( static_cast<SCH_ITEM*>( aItem ) );
-
-            break;
-        }
+        m_frame->UpdateItem( aItem, false, aUpdateRTree );
     }
 
     ///< Similar to m_frame->SaveCopyInUndoList(), but handles items that are owned by their

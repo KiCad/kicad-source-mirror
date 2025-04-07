@@ -585,10 +585,16 @@ bool EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, BOARD_COMMIT* aCommit
 
                         item->SetFlags( IS_MOVING );
 
+                        if( item->Type() == PCB_SHAPE_T )
+                            static_cast<PCB_SHAPE*>( item )->UpdateHatching();
+
                         static_cast<BOARD_ITEM*>( item )->RunOnChildren(
-                                [&]( BOARD_ITEM* bItem )
+                                [&]( BOARD_ITEM* child )
                                 {
-                                    item->SetFlags( IS_MOVING );
+                                    child->SetFlags( IS_MOVING );
+
+                                    if( child->Type() == PCB_SHAPE_T )
+                                        static_cast<PCB_SHAPE*>( child )->UpdateHatching();
                                 },
                                 RECURSE_MODE::RECURSE );
                     }
@@ -633,10 +639,10 @@ bool EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, BOARD_COMMIT* aCommit
                                 FPs.push_back( static_cast<FOOTPRINT*>( item ) );
 
                             item->RunOnChildren(
-                                    [&]( BOARD_ITEM* descendent )
+                                    [&]( BOARD_ITEM* child )
                                     {
-                                        if( descendent->Type() == PCB_FOOTPRINT_T )
-                                            FPs.push_back( static_cast<FOOTPRINT*>( descendent ) );
+                                        if( child->Type() == PCB_FOOTPRINT_T )
+                                            FPs.push_back( static_cast<FOOTPRINT*>( child ) );
                                     },
                                     RECURSE_MODE::RECURSE );
                         }

@@ -129,8 +129,7 @@ COMMIT& BOARD_COMMIT::Stage( const PICKED_ITEMS_LIST& aItems, UNDO_REDO aModFlag
 }
 
 
-void BOARD_COMMIT::propagateDamage( BOARD_ITEM* aChangedItem, std::vector<ZONE*>* aStaleZones,
-                                    std::vector<PCB_SHAPE*>* aStaleHatchedShapes )
+void BOARD_COMMIT::propagateDamage( BOARD_ITEM* aChangedItem, std::vector<ZONE*>* aStaleZones )
 {
     wxCHECK( aChangedItem, /* void */ );
 
@@ -138,7 +137,7 @@ void BOARD_COMMIT::propagateDamage( BOARD_ITEM* aChangedItem, std::vector<ZONE*>
         aStaleZones->push_back( static_cast<ZONE*>( aChangedItem ) );
 
     aChangedItem->RunOnChildren(
-            std::bind( &BOARD_COMMIT::propagateDamage, this, _1, aStaleZones, aStaleHatchedShapes ),
+            std::bind( &BOARD_COMMIT::propagateDamage, this, _1, aStaleZones ),
             RECURSE_MODE::NO_RECURSE );
 
     BOARD* board = static_cast<BOARD*>( m_toolMgr->GetModel() );
@@ -167,56 +166,6 @@ void BOARD_COMMIT::propagateDamage( BOARD_ITEM* aChangedItem, std::vector<ZONE*>
             }
         }
     }
-
-    auto checkItem =
-            [&]( BOARD_ITEM* item )
-            {
-                if( item->Type() != PCB_SHAPE_T )
-                    return;
-
-                PCB_SHAPE* shape = static_cast<PCB_SHAPE*>( item );
-
-                if( !shape->IsHatchedFill() )
-                   return;
-
-                if( ( shape->GetLayerSet() & damageLayers ).any()
-                        && shape->GetBoundingBox().Intersects( damageBBox ) )
-                {
-                    aStaleHatchedShapes->push_back( shape );
-                }
-            };
-
-    if( aStaleHatchedShapes && (    aChangedItem->Type() == PCB_FIELD_T
-                                 || aChangedItem->Type() == PCB_TEXT_T
-                                 || aChangedItem->Type() == PCB_TEXTBOX_T
-                                 || aChangedItem->Type() == PCB_SHAPE_T ) )
-    {
-        if( aChangedItem->IsOnLayer( F_CrtYd ) )
-        {
-            damageBBox = aChangedItem->GetParentFootprint()->GetBoundingBox();
-            damageLayers |= LSET::FrontMask();
-        }
-        else if( aChangedItem->IsOnLayer( B_CrtYd ) )
-        {
-            damageBBox = aChangedItem->GetParentFootprint()->GetBoundingBox();
-            damageLayers |= LSET::BackMask();
-        }
-
-        for( FOOTPRINT* footprint : board->Footprints() )
-        {
-            footprint->RunOnChildren(
-                    [&]( BOARD_ITEM* child )
-                    {
-                        checkItem( child );
-                    },
-                    RECURSE_MODE::RECURSE );
-        }
-
-        for( BOARD_ITEM* item : board->Drawings() )
-        {
-            checkItem( item );
-        }
-    }
 }
 
 
@@ -240,7 +189,6 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
     PCB_GROUP*               addedGroup = nullptr;
     std::vector<ZONE*>       staleZonesStorage;
     std::vector<ZONE*>*      staleZones = nullptr;
-    std::vector<PCB_SHAPE*>  staleHatchedShapes;
 
     if( Empty() )
         return;
@@ -375,7 +323,7 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
                 addedGroup = static_cast<PCB_GROUP*>( boardItem );
 
             if( boardItem->Type() != PCB_MARKER_T )
-                propagateDamage( boardItem, staleZones, &staleHatchedShapes );
+                propagateDamage( boardItem, staleZones );
 
             if( view && boardItem->Type() != PCB_NETINFO_T )
                 view->Add( boardItem );
@@ -407,7 +355,7 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
                 ent.m_parent = parentFP->m_Uuid;
 
             if( boardItem->Type() != PCB_MARKER_T )
-                propagateDamage( boardItem, staleZones, &staleHatchedShapes );
+                propagateDamage( boardItem, staleZones );
 
             switch( boardItem->Type() )
             {
@@ -521,8 +469,8 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
 
             if( boardItem->Type() != PCB_MARKER_T )
             {
-                propagateDamage( boardItemCopy, staleZones, &staleHatchedShapes );   // before
-                propagateDamage( boardItem, staleZones, &staleHatchedShapes );       // after
+                propagateDamage( boardItemCopy, staleZones );   // before
+                propagateDamage( boardItem, staleZones );       // after
             }
 
             updateComponentClasses( boardItem );
@@ -658,13 +606,7 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
         m_toolMgr->PostAction( PCB_ACTIONS::zoneFillDirty );
     }
 
-    for( PCB_SHAPE* shape : staleHatchedShapes )
-    {
-        shape->SetHatchingDirty();
-
-        if( view )
-            view->Update( shape );
-    }
+    m_toolMgr->PostAction( PCB_ACTIONS::rehatchShapes );
 
     if( selectedModified )
         m_toolMgr->ProcessEvent( EVENTS::SelectedItemsModified );

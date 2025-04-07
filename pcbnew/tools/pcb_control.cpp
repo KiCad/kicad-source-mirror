@@ -2174,6 +2174,31 @@ int PCB_CONTROL::FlipPcbView( const TOOL_EVENT& aEvent )
     return 0;
 }
 
+
+void PCB_CONTROL::rehatchBoardItem( BOARD_ITEM* aItem )
+{
+    if( aItem->Type() == PCB_SHAPE_T )
+    {
+        static_cast<PCB_SHAPE*>( aItem )->UpdateHatching();
+
+        if( view() )
+            view()->Update( aItem );
+    }
+}
+
+
+int PCB_CONTROL::RehatchShapes( const TOOL_EVENT& aEvent )
+{
+    for( FOOTPRINT* footprint : board()->Footprints() )
+        footprint->RunOnChildren( std::bind( &PCB_CONTROL::rehatchBoardItem, this, _1 ), NO_RECURSE );
+
+    for( BOARD_ITEM* item : board()->Drawings() )
+        rehatchBoardItem( item );
+
+    return 0;
+}
+
+
 // clang-format off
 void PCB_CONTROL::setTransitions()
 {
@@ -2204,6 +2229,7 @@ void PCB_CONTROL::setTransitions()
     Go( &PCB_CONTROL::NetColorModeCycle,     PCB_ACTIONS::netColorModeCycle.MakeEvent() );
     Go( &PCB_CONTROL::RatsnestModeCycle,     PCB_ACTIONS::ratsnestModeCycle.MakeEvent() );
     Go( &PCB_CONTROL::FlipPcbView,           PCB_ACTIONS::flipBoard.MakeEvent() );
+    Go( &PCB_CONTROL::RehatchShapes,         PCB_ACTIONS::rehatchShapes.MakeEvent() );
 
     // Layer control
     Go( &PCB_CONTROL::LayerSwitch,          PCB_ACTIONS::layerTop.MakeEvent() );

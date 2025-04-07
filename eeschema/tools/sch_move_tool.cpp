@@ -612,12 +612,10 @@ bool SCH_MOVE_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, SCH_COMMIT* aComm
 
                     std::vector<DANGLING_END_ITEM> endPointsByType = internalPoints;
                     std::vector<DANGLING_END_ITEM> endPointsByPos = endPointsByType;
-                    DANGLING_END_ITEM_HELPER::sort_dangling_end_items( endPointsByType,
-                                                                       endPointsByPos );
+                    DANGLING_END_ITEM_HELPER::sort_dangling_end_items( endPointsByType, endPointsByPos );
 
                     for( EDA_ITEM* item : selection )
-                        static_cast<SCH_ITEM*>( item )->UpdateDanglingState( endPointsByType,
-                                                                             endPointsByPos );
+                        static_cast<SCH_ITEM*>( item )->UpdateDanglingState( endPointsByType, endPointsByPos );
                 }
 
 
@@ -640,6 +638,12 @@ bool SCH_MOVE_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, SCH_COMMIT* aComm
                     }
 
                     item->SetFlags( IS_MOVING );
+
+                    if( SCH_SHAPE* shape = dynamic_cast<SCH_SHAPE*>( item ) )
+                    {
+                        shape->SetHatchingDirty();
+                        shape->UpdateHatching();
+                    }
 
                     if( SCH_ITEM* schItem = dynamic_cast<SCH_ITEM*>( item ) )
                         schItem->SetStoredPos( schItem->GetPosition() );

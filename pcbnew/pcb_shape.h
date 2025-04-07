@@ -149,6 +149,8 @@ public:
 
     void Scale( double aScale );
 
+    void UpdateHatching() const override;
+
     /**
      * Convert the shape to a closed polygon.  Circles and arcs are approximated by segments.
      *
@@ -199,7 +201,7 @@ public:
 protected:
     void swapData( BOARD_ITEM* aImage ) override;
 
-    void updateHatching() const override;
+    bool isMoving() const override { return IsMoving(); }
 
     struct cmp_drawings
     {

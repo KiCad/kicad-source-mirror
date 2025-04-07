@@ -245,6 +245,8 @@ FOOTPRINT_VIEWER_FRAME::FOOTPRINT_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent
         {
             GetBoard()->Add( footprint );
             setFPWatcher( footprint );
+
+            m_toolManager->RunAction( PCB_ACTIONS::rehatchShapes );
         }
     }
 
@@ -714,6 +716,8 @@ void FOOTPRINT_VIEWER_FRAME::displayFootprint( FOOTPRINT* aFootprint )
     }
 
     GetBoard()->Add( aFootprint );
+
+    m_toolManager->RunAction( PCB_ACTIONS::rehatchShapes );
 }
 
 

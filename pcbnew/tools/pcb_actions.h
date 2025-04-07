@@ -371,6 +371,8 @@ public:
 
     static TOOL_ACTION flipBoard;
 
+    static TOOL_ACTION rehatchShapes;
+
     // Track & via size control
     static TOOL_ACTION trackWidthInc;
     static TOOL_ACTION trackWidthDec;

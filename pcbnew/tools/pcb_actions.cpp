@@ -1445,6 +1445,11 @@ TOOL_ACTION PCB_ACTIONS::flipBoard( TOOL_ACTION_ARGS()
         .Tooltip( _( "View board from the opposite side" ) )
         .Icon( BITMAPS::flip_board ) );
 
+TOOL_ACTION PCB_ACTIONS::rehatchShapes( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.Control.rehatchShapes" )
+        .Scope( AS_CONTEXT ) );
+
+
 // Display modes
 TOOL_ACTION PCB_ACTIONS::showRatsnest( TOOL_ACTION_ARGS()
         .Name( "pcbnew.Control.showRatsnest" )

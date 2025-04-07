@@ -139,6 +139,8 @@ protected:
         m_fill = aFlag ? FILL_T::FILLED_WITH_COLOR : FILL_T::NO_FILL;
     }
 
+    bool isMoving() const override { return IsMoving(); }
+
     /**
      * @copydoc SCH_ITEM::compare()
      *
