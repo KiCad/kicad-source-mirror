@@ -76,6 +76,8 @@ public:
 
     wxString GetTextTypeDescription() const override;
 
+    bool Matches( const EDA_SEARCH_DATA& aSearchData, void* aAuxData ) const override;
+
     wxString GetItemDescription( UNITS_PROVIDER* aUnitsProvider, bool aFull ) const override;
 
     double ViewGetLOD( int aLayer, const KIGFX::VIEW* aView ) const override;

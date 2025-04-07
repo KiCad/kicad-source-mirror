@@ -39,13 +39,14 @@ enum class EDA_SEARCH_MATCH_MODE
 
 struct EDA_SEARCH_DATA
 {
-    wxString findString;
-    wxString replaceString;
+    wxString         findString;
+    wxString         replaceString;
 
     mutable wxRegEx  regex;
     mutable wxString regex_string;
 
-    bool     searchAndReplace;
+    bool             searchAndReplace;
+    bool             searchAllFields;
 
     bool                  matchCase;
     bool                  markersOnly;
@@ -55,6 +56,7 @@ struct EDA_SEARCH_DATA
             findString(),
             replaceString(),
             searchAndReplace( false ),
+            searchAllFields( false ),
             matchCase( false ),
             markersOnly( false ),
             matchMode( EDA_SEARCH_MATCH_MODE::PLAIN )
@@ -83,7 +85,6 @@ struct EDA_SEARCH_DATA
 
 struct SCH_SEARCH_DATA : public EDA_SEARCH_DATA
 {
-    bool searchAllFields;
     bool searchAllPins;
     bool searchCurrentSheetOnly;
     bool searchSelectedOnly;
@@ -93,7 +94,6 @@ struct SCH_SEARCH_DATA : public EDA_SEARCH_DATA
 
     SCH_SEARCH_DATA() :
             EDA_SEARCH_DATA(),
-            searchAllFields( false ),
             searchAllPins( false ),
             searchCurrentSheetOnly( false ),
             searchSelectedOnly( false ),

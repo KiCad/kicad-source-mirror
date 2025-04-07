@@ -138,6 +138,15 @@ wxString PCB_FIELD::GetTextTypeDescription() const
 }
 
 
+bool PCB_FIELD::Matches( const EDA_SEARCH_DATA& aSearchData, void* aAuxData ) const
+{
+    if( !IsVisible() && !aSearchData.searchAllFields )
+        return false;
+
+    return PCB_TEXT::Matches( aSearchData, aAuxData );
+}
+
+
 wxString PCB_FIELD::GetItemDescription( UNITS_PROVIDER* aUnitsProvider, bool aFull ) const
 {
     wxString content = aFull ? GetShownText( false ) : KIUI::EllipsizeMenuText( GetText() );

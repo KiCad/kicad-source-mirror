@@ -114,6 +114,7 @@ public:
         };
 
         SELECTION_ZOOM selection_zoom;
+        bool           search_hidden_fields;
     };
 
     struct GRAPHICS
