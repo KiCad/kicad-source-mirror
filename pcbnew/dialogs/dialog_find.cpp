@@ -40,16 +40,16 @@
 
 //Defined as global because these values have to survive the destructor
 
-bool FindOptionCase = false;
-bool FindOptionWords = false;
-bool FindOptionWildcards = false;
-bool FindOptionWrap = true;
+bool g_FindOptionCase = false;
+bool g_FindOptionWords = false;
+bool g_FindOptionWildcards = false;
+bool g_FindOptionWrap = true;
 
-bool FindIncludeTexts = true;
-bool FindIncludeValues = true;
-bool FindIncludeReferences = true;
-bool FindIncludeMarkers = true;
-bool FindIncludeNets = true;
+bool g_FindIncludeTexts = true;
+bool g_FindIncludeValues = true;
+bool g_FindIncludeReferences = true;
+bool g_FindIncludeMarkers = true;
+bool g_FindIncludeNets = true;
 
 
 DIALOG_FIND::DIALOG_FIND( PCB_EDIT_FRAME *aFrame ) :
@@ -72,16 +72,16 @@ DIALOG_FIND::DIALOG_FIND( PCB_EDIT_FRAME *aFrame ) :
         m_searchCombo->SelectAll();
     }
 
-    m_matchCase->SetValue( FindOptionCase );
-    m_matchWords->SetValue( FindOptionWords );
-    m_wildcards->SetValue( FindOptionWildcards );
-    m_wrap->SetValue( FindOptionWrap );
+    m_matchCase->SetValue( g_FindOptionCase );
+    m_matchWords->SetValue( g_FindOptionWords );
+    m_wildcards->SetValue( g_FindOptionWildcards );
+    m_wrap->SetValue( g_FindOptionWrap );
 
-    m_includeTexts->SetValue( FindIncludeTexts );
-    m_includeValues->SetValue( FindIncludeValues );
-    m_includeReferences->SetValue( FindIncludeReferences );
-    m_includeMarkers->SetValue( FindIncludeMarkers );
-    m_includeNets->SetValue( FindIncludeNets );
+    m_includeTexts->SetValue( g_FindIncludeTexts );
+    m_includeValues->SetValue( g_FindIncludeValues );
+    m_includeReferences->SetValue( g_FindIncludeReferences );
+    m_includeMarkers->SetValue( g_FindIncludeMarkers );
+    m_includeNets->SetValue( g_FindIncludeNets );
 
     m_status->SetLabel( wxEmptyString);
     m_upToDate = false;
@@ -203,68 +203,70 @@ void DIALOG_FIND::search( bool aDirection )
         m_frame->GetFindHistoryList().Insert( searchString, 0 );
     }
 
-    if( FindOptionCase != m_matchCase->GetValue() )
+    if( g_FindOptionCase != m_matchCase->GetValue() )
     {
-        FindOptionCase = m_matchCase->GetValue();
+        g_FindOptionCase = m_matchCase->GetValue();
         m_upToDate = false;
     }
 
-    if( FindOptionWords != m_matchWords->GetValue() )
+    if( g_FindOptionWords != m_matchWords->GetValue() )
     {
-        FindOptionWords = m_matchWords->GetValue();
+        g_FindOptionWords = m_matchWords->GetValue();
         m_upToDate = false;
     }
 
-    if( FindOptionWildcards != m_wildcards->GetValue() )
+    if( g_FindOptionWildcards != m_wildcards->GetValue() )
     {
-        FindOptionWildcards = m_wildcards->GetValue();
+        g_FindOptionWildcards = m_wildcards->GetValue();
         m_upToDate = false;
     }
 
-    FindOptionWrap = m_wrap->GetValue();
+    g_FindOptionWrap = m_wrap->GetValue();
 
-    if( FindIncludeTexts != m_includeTexts->GetValue() )
+    if( g_FindIncludeTexts != m_includeTexts->GetValue() )
     {
-        FindIncludeTexts = m_includeTexts->GetValue();
+        g_FindIncludeTexts = m_includeTexts->GetValue();
         m_upToDate = false;
     }
 
-    if( FindIncludeValues != m_includeValues->GetValue() )
+    if( g_FindIncludeValues != m_includeValues->GetValue() )
     {
-        FindIncludeValues = m_includeValues->GetValue();
+        g_FindIncludeValues = m_includeValues->GetValue();
         m_upToDate = false;
     }
 
-    if( FindIncludeReferences != m_includeReferences->GetValue() )
+    if( g_FindIncludeReferences != m_includeReferences->GetValue() )
     {
-        FindIncludeReferences = m_includeReferences->GetValue();
+        g_FindIncludeReferences = m_includeReferences->GetValue();
         m_upToDate = false;
     }
 
-    if( FindIncludeMarkers != m_includeMarkers->GetValue() )
+    if( g_FindIncludeMarkers != m_includeMarkers->GetValue() )
     {
-        FindIncludeMarkers = m_includeMarkers->GetValue();
+        g_FindIncludeMarkers = m_includeMarkers->GetValue();
         m_upToDate = false;
     }
 
-    if( FindIncludeNets != m_includeNets->GetValue() )
+    if( g_FindIncludeNets != m_includeNets->GetValue() )
     {
-        FindIncludeNets = m_includeNets->GetValue();
+        g_FindIncludeNets = m_includeNets->GetValue();
         m_upToDate = false;
     }
 
-    if( FindOptionCase )
-        m_frame->GetFindReplaceData().matchCase = true;
+    EDA_SEARCH_DATA& frd = m_frame->GetFindReplaceData();
 
-    if( FindOptionWords )
-        m_frame->GetFindReplaceData().matchMode = EDA_SEARCH_MATCH_MODE::WHOLEWORD;
-    else if( FindOptionWildcards )
-        m_frame->GetFindReplaceData().matchMode = EDA_SEARCH_MATCH_MODE::WILDCARD;
+    if( g_FindOptionCase )
+        frd.matchCase = true;
+
+    if( g_FindOptionWords )
+        frd.matchMode = EDA_SEARCH_MATCH_MODE::WHOLEWORD;
+    else if( g_FindOptionWildcards )
+        frd.matchMode = EDA_SEARCH_MATCH_MODE::WILDCARD;
     else
-        m_frame->GetFindReplaceData().matchMode = EDA_SEARCH_MATCH_MODE::PLAIN;
+        frd.matchMode = EDA_SEARCH_MATCH_MODE::PLAIN;
 
     // Search parameters
-    m_frame->GetFindReplaceData().findString = searchString;
+    frd.findString = searchString;
 
     m_frame->GetToolManager()->RunAction( ACTIONS::selectionClear );
     m_frame->GetCanvas()->GetViewStart( &screen->m_StartVisu.x, &screen->m_StartVisu.y );
@@ -277,19 +279,19 @@ void DIALOG_FIND::search( bool aDirection )
         m_status->SetLabel( _( "Searching..." ) );
         m_hitList.clear();
 
-        if( FindIncludeTexts || FindIncludeValues || FindIncludeReferences )
+        if( g_FindIncludeTexts || g_FindIncludeValues || g_FindIncludeReferences )
         {
             for( FOOTPRINT* fp : board->Footprints() )
             {
-                if( ( fp->Reference().Matches( m_frame->GetFindReplaceData(), nullptr )
-                      && FindIncludeReferences )
-                        || ( fp->Value().Matches( m_frame->GetFindReplaceData(), nullptr )
-                             && FindIncludeValues ) )
-                {
-                    m_hitList.push_back( fp );
-                }
+                bool found = false;
 
-                if( m_includeTexts->GetValue() )
+                if( g_FindIncludeReferences && fp->Reference().Matches( frd, nullptr ) )
+                    found = true;
+
+                if( !found && g_FindIncludeValues && fp->Value().Matches( frd, nullptr ) )
+                    found = true;
+
+                if( !found && m_includeTexts->GetValue() )
                 {
                     for( BOARD_ITEM* item : fp->GraphicalItems() )
                     {
@@ -297,20 +299,32 @@ void DIALOG_FIND::search( bool aDirection )
                         {
                             PCB_TEXT* text = static_cast<PCB_TEXT*>( item );
 
-                            if( text && text->Matches( m_frame->GetFindReplaceData(), nullptr ) )
-                                m_hitList.push_back( fp );
+                            if( text->Matches( frd, nullptr ) )
+                            {
+                                found = true;
+                                break;
+                            }
                         }
                     }
+                }
 
+                if( !found && m_includeTexts->GetValue() )
+                {
                     for( PCB_FIELD* field : fp->GetFields() )
                     {
-                        if( field->Matches( m_frame->GetFindReplaceData(), nullptr ) )
-                            m_hitList.push_back( fp );
+                        if( field->Matches( frd, nullptr ) )
+                        {
+                            found = true;
+                            break;
+                        }
                     }
                 }
+
+                if( found )
+                    m_hitList.push_back( fp );
             }
 
-            if( FindIncludeTexts )
+            if( g_FindIncludeTexts )
             {
                 for( BOARD_ITEM* item : board->Drawings() )
                 {
@@ -318,7 +332,7 @@ void DIALOG_FIND::search( bool aDirection )
                     {
                         PCB_TEXT* text = static_cast<PCB_TEXT*>( item );
 
-                        if( text && text->Matches( m_frame->GetFindReplaceData(), nullptr ) )
+                        if( text && text->Matches( frd, nullptr ) )
                             m_hitList.push_back( text );
                     }
                 }
@@ -327,26 +341,26 @@ void DIALOG_FIND::search( bool aDirection )
                 {
                     ZONE* zone = static_cast<ZONE*>( item );
 
-                    if( zone->Matches( m_frame->GetFindReplaceData(), nullptr ) )
+                    if( zone->Matches( frd, nullptr ) )
                         m_hitList.push_back( zone );
                 }
             }
         }
 
-        if( FindIncludeMarkers )
+        if( g_FindIncludeMarkers )
         {
             for( PCB_MARKER* marker : board->Markers() )
             {
-                if( marker->Matches( m_frame->GetFindReplaceData(), nullptr ) )
+                if( marker->Matches( frd, nullptr ) )
                     m_hitList.push_back( marker );
             }
         }
 
-        if( FindIncludeNets )
+        if( g_FindIncludeNets )
         {
             for( NETINFO_ITEM* net : board->GetNetInfo() )
             {
-                if( net && net->Matches( m_frame->GetFindReplaceData(), nullptr ) )
+                if( net && net->Matches( frd, nullptr ) )
                     m_hitList.push_back( net );
             }
         }
@@ -458,16 +472,16 @@ bool DIALOG_FIND::Show( bool show )
 
 void DIALOG_FIND::OnClose( wxCloseEvent& aEvent )
 {
-    FindOptionCase = m_matchCase->GetValue();
-    FindOptionWords = m_matchWords->GetValue();
-    FindOptionWildcards = m_wildcards->GetValue();
-    FindOptionWrap = m_wrap->GetValue();
+    g_FindOptionCase = m_matchCase->GetValue();
+    g_FindOptionWords = m_matchWords->GetValue();
+    g_FindOptionWildcards = m_wildcards->GetValue();
+    g_FindOptionWrap = m_wrap->GetValue();
 
-    FindIncludeTexts = m_includeTexts->GetValue();
-    FindIncludeValues = m_includeValues->GetValue();
-    FindIncludeMarkers = m_includeMarkers->GetValue();
-    FindIncludeReferences = m_includeReferences->GetValue();
-    FindIncludeNets = m_includeNets->GetValue();
+    g_FindIncludeTexts = m_includeTexts->GetValue();
+    g_FindIncludeValues = m_includeValues->GetValue();
+    g_FindIncludeMarkers = m_includeMarkers->GetValue();
+    g_FindIncludeReferences = m_includeReferences->GetValue();
+    g_FindIncludeNets = m_includeNets->GetValue();
 
     aEvent.Skip();
 }
