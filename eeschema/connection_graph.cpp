@@ -1349,13 +1349,13 @@ void CONNECTION_GRAPH::updateItemConnectivity( const SCH_SHEET_PATH& aSheet,
 
         thread_pool& tp = GetKiCadThreadPool();
 
-        tp.push_loop( connection_vec.size(),
-                [&]( const int a, const int b)
-                {
-                    for( int ii = a; ii < b; ++ii )
-                        update_lambda( connection_vec[ii] );
-                });
-        tp.wait_for_tasks();
+        auto results = tp.parallelize_loop( connection_vec.size(),
+                                [&]( const int a, const int b)
+                                {
+                                    for( int ii = a; ii < b; ++ii )
+                                        update_lambda( connection_vec[ii] );
+                                });
+        results.wait();
     }
 }
 
@@ -1506,13 +1506,13 @@ void CONNECTION_GRAPH::resolveAllDrivers()
 
     thread_pool& tp = GetKiCadThreadPool();
 
-    tp.push_loop( dirty_graphs.size(),
-            [&]( const int a, const int b)
-            {
-                for( int ii = a; ii < b; ++ii )
-                    update_lambda( dirty_graphs[ii] );
-            });
-    tp.wait_for_tasks();
+    auto results = tp.parallelize_loop( dirty_graphs.size(),
+                        [&]( const int a, const int b)
+                        {
+                            for( int ii = a; ii < b; ++ii )
+                                update_lambda( dirty_graphs[ii] );
+                        });
+    results.wait();
 
     // Now discard any non-driven subgraphs from further consideration
 
@@ -2146,14 +2146,14 @@ void CONNECTION_GRAPH::buildConnectionGraph( std::function<void( SCH_ITEM* )>* a
 
     thread_pool& tp = GetKiCadThreadPool();
 
-    tp.push_loop( m_driver_subgraphs.size(),
-            [&]( const int a, const int b)
-            {
-                for( int ii = a; ii < b; ++ii )
-                    m_driver_subgraphs[ii]->UpdateItemConnections();
-            });
+    auto results = tp.parallelize_loop( m_driver_subgraphs.size(),
+                            [&]( const int a, const int b)
+                            {
+                                for( int ii = a; ii < b; ++ii )
+                                    m_driver_subgraphs[ii]->UpdateItemConnections();
+                            });
 
-    tp.wait_for_tasks();
+    results.wait();
 
     // Next time through the subgraphs, we do some post-processing to handle things like
     // connecting bus members to their neighboring subgraphs, and then propagate connections
@@ -2352,13 +2352,13 @@ void CONNECTION_GRAPH::buildConnectionGraph( std::function<void( SCH_ITEM* )>* a
                 return 1;
             };
 
-    tp.push_loop( m_driver_subgraphs.size(),
-            [&]( const int a, const int b)
-            {
-                for( int ii = a; ii < b; ++ii )
-                    updateItemConnectionsTask( m_driver_subgraphs[ii] );
-            });
-    tp.wait_for_tasks();
+    auto results2 = tp.parallelize_loop( m_driver_subgraphs.size(),
+                            [&]( const int a, const int b)
+                            {
+                                for( int ii = a; ii < b; ++ii )
+                                    updateItemConnectionsTask( m_driver_subgraphs[ii] );
+                            });
+    results2.wait();
 
     m_net_code_to_subgraphs_map.clear();
     m_net_name_to_subgraphs_map.clear();
