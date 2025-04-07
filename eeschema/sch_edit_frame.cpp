@@ -84,6 +84,7 @@
 #include <tools/sch_edit_table_tool.h>
 #include <tools/sch_editor_conditions.h>
 #include <tools/sch_editor_control.h>
+#include <tools/sch_group_tool.h>
 #include <tools/sch_line_wire_bus_tool.h>
 #include <tools/sch_move_tool.h>
 #include <tools/sch_navigate_tool.h>
@@ -542,6 +543,7 @@ void SCH_EDIT_FRAME::setupTools()
     m_toolManager->RegisterTool( new SCH_MOVE_TOOL );
     m_toolManager->RegisterTool( new SCH_EDIT_TOOL );
     m_toolManager->RegisterTool( new SCH_EDIT_TABLE_TOOL );
+    m_toolManager->RegisterTool( new SCH_GROUP_TOOL );
     m_toolManager->RegisterTool( new SCH_INSPECTION_TOOL );
     m_toolManager->RegisterTool( new SCH_DESIGN_BLOCK_CONTROL );
     m_toolManager->RegisterTool( new SCH_EDITOR_CONTROL );

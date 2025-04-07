@@ -453,6 +453,7 @@ set( EESCHEMA_SRCS
     tools/sch_editor_control.cpp
     tools/sch_editor_conditions.cpp
     tools/sch_find_replace_tool.cpp
+    tools/sch_group_tool.cpp
     tools/sch_inspection_tool.cpp
     tools/sch_line_wire_bus_tool.cpp
     tools/sch_move_tool.cpp

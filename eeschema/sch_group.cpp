@@ -26,6 +26,7 @@
 #include <geometry/shape_compound.h>
 #include <sch_item.h>
 #include <sch_group.h>
+#include <sch_screen.h>
 #include <sch_symbol.h>
 #include <symbol.h>
 #include <confirm.h>
@@ -42,6 +43,9 @@ SCH_GROUP::SCH_GROUP( SCH_ITEM* aParent ) : SCH_ITEM( aParent, SCH_GROUP_T )
 {
 }
 
+SCH_GROUP::SCH_GROUP( SCH_SCREEN* aParent ) : SCH_ITEM( aParent, SCH_GROUP_T )
+{
+}
 
 bool SCH_GROUP::IsGroupableType( KICAD_T aType )
 {

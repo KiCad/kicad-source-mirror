@@ -55,6 +55,8 @@ public:
 
     SCH_GROUP( SCH_ITEM* aParent );
 
+    SCH_GROUP( SCH_SCREEN* aParent );
+
     EDA_ITEM* AsEdaItem() override { return this; }
 
     static inline bool ClassOf( const EDA_ITEM* aItem ) { return aItem && SCH_GROUP_T == aItem->Type(); }
