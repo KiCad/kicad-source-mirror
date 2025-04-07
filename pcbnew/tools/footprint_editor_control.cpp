@@ -229,6 +229,7 @@ int FOOTPRINT_EDITOR_CONTROL::NewFootprint( const TOOL_EVENT& aEvent )
     tryToSaveFootprintInLibrary( *newFootprint, selected );
 
     m_frame->UpdateView();
+    m_frame->GetCanvas()->ForceRefresh();
     m_frame->Update3DView( true, true );
 
     m_frame->SyncLibraryTree( false );

@@ -1282,16 +1282,24 @@ FOOTPRINT* PCB_BASE_FRAME::CreateNewFootprint( wxString aFootprintName, const wx
     VECTOR2I     default_pos;
     BOARD_DESIGN_SETTINGS& settings = GetDesignSettings();
 
-    footprint->Reference().SetText( settings.m_DefaultFPTextItems[0].m_Text );
-    footprint->Reference().SetVisible( settings.m_DefaultFPTextItems[0].m_Visible );
+    if( settings.m_DefaultFPTextItems.size() > 0 )
+    {
+        footprint->Reference().SetText( settings.m_DefaultFPTextItems[0].m_Text );
+        footprint->Reference().SetVisible( settings.m_DefaultFPTextItems[0].m_Visible );
+    }
+
     txt_layer = settings.m_DefaultFPTextItems[0].m_Layer;
     footprint->Reference().SetLayer( txt_layer );
     default_pos.y -= settings.GetTextSize( txt_layer ).y / 2;
     footprint->Reference().SetPosition( default_pos );
     default_pos.y += settings.GetTextSize( txt_layer ).y;
 
-    footprint->Value().SetText( settings.m_DefaultFPTextItems[1].m_Text );
-    footprint->Value().SetVisible( settings.m_DefaultFPTextItems[1].m_Visible );
+    if( settings.m_DefaultFPTextItems.size() > 1 )
+    {
+        footprint->Value().SetText( settings.m_DefaultFPTextItems[1].m_Text );
+        footprint->Value().SetVisible( settings.m_DefaultFPTextItems[1].m_Visible );
+    }
+
     txt_layer = settings.m_DefaultFPTextItems[1].m_Layer;
     footprint->Value().SetLayer( txt_layer );
     default_pos.y += settings.GetTextSize( txt_layer ).y / 2;
