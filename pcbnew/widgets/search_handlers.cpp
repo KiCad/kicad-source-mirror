@@ -131,7 +131,10 @@ int FOOTPRINT_SEARCH_HANDLER::Search( const wxString& aQuery )
     if( board == nullptr )
         return 0;
 
-    EDA_SEARCH_DATA frp;
+    APP_SETTINGS_BASE::SEARCH_PANE& settings = m_frame->config()->m_SearchPane;
+    EDA_SEARCH_DATA                 frp;
+
+    frp.searchAllFields = settings.search_hidden_fields;
     frp.findString = aQuery;
 
     // Try to handle whatever the user throws at us (substring, wildcards, regex, etc.)
@@ -139,11 +142,19 @@ int FOOTPRINT_SEARCH_HANDLER::Search( const wxString& aQuery )
 
     for( FOOTPRINT* fp : board->Footprints() )
     {
-        if( aQuery.IsEmpty()
-            || fp->Reference().Matches( frp, nullptr )
-            || fp->Value().Matches( frp, nullptr ) )
+        if( frp.findString.IsEmpty() )
         {
             m_hitlist.push_back( fp );
+            continue;
+        }
+
+        for( PCB_FIELD* field : fp->GetFields() )
+        {
+            if( field->Matches( frp, nullptr ) )
+            {
+                m_hitlist.push_back( fp );
+                break;
+            }
         }
     }
 
@@ -187,7 +198,10 @@ int ZONE_SEARCH_HANDLER::Search( const wxString& aQuery )
     m_hitlist.clear();
     BOARD* board = m_frame->GetBoard();
 
-    EDA_SEARCH_DATA frp;
+    APP_SETTINGS_BASE::SEARCH_PANE& settings = m_frame->config()->m_SearchPane;
+    EDA_SEARCH_DATA                 frp;
+
+    frp.searchAllFields = settings.search_hidden_fields;
     frp.findString = aQuery;
 
     // Try to handle whatever the user throws at us (substring, wildcards, regex, etc.)
@@ -195,10 +209,8 @@ int ZONE_SEARCH_HANDLER::Search( const wxString& aQuery )
 
     for( BOARD_ITEM* item : board->Zones() )
     {
-        ZONE* zoneItem = dynamic_cast<ZONE*>( item );
-
-        if( zoneItem && ( aQuery.IsEmpty() || zoneItem->Matches( frp, nullptr ) ) )
-            m_hitlist.push_back( zoneItem );
+        if( frp.findString.IsEmpty() || item->Matches( frp, nullptr ) )
+            m_hitlist.push_back( item );
     }
 
     return (int) m_hitlist.size();
@@ -251,7 +263,10 @@ int TEXT_SEARCH_HANDLER::Search( const wxString& aQuery )
     m_hitlist.clear();
     BOARD* board = m_frame->GetBoard();
 
-    EDA_SEARCH_DATA frp;
+    APP_SETTINGS_BASE::SEARCH_PANE& settings = m_frame->config()->m_SearchPane;
+    EDA_SEARCH_DATA                 frp;
+
+    frp.searchAllFields = settings.search_hidden_fields;
     frp.findString = aQuery;
 
     // Try to handle whatever the user throws at us (substring, wildcards, regex, etc.)
@@ -259,13 +274,14 @@ int TEXT_SEARCH_HANDLER::Search( const wxString& aQuery )
 
     for( BOARD_ITEM* item : board->Drawings() )
     {
-        PCB_TEXT* textItem = dynamic_cast<PCB_TEXT*>( item );
-        PCB_TEXTBOX* textBoxItem = dynamic_cast<PCB_TEXTBOX*>( item );
-
-        if( textItem && ( aQuery.IsEmpty() || textItem->Matches( frp, nullptr ) ) )
-            m_hitlist.push_back( textItem );
-        else if( textBoxItem && ( aQuery.IsEmpty() || textBoxItem->Matches( frp, nullptr ) ) )
-            m_hitlist.push_back( textBoxItem );
+        if( item->Type() == PCB_TEXT_T
+            || BaseType( item->Type() ) == PCB_DIMENSION_T
+            || item->Type() == PCB_TEXTBOX_T
+            || item->Type() == PCB_TABLECELL_T )
+        {
+            if( frp.findString.IsEmpty() || item->Matches( frp, nullptr ) )
+                m_hitlist.push_back( item );
+        }
     }
 
     return (int) m_hitlist.size();
@@ -315,7 +331,10 @@ int NETS_SEARCH_HANDLER::Search( const wxString& aQuery )
 {
     m_hitlist.clear();
 
-    EDA_SEARCH_DATA frp;
+    APP_SETTINGS_BASE::SEARCH_PANE& settings = m_frame->config()->m_SearchPane;
+    EDA_SEARCH_DATA                 frp;
+
+    frp.searchAllFields = settings.search_hidden_fields;
     frp.findString = aQuery;
 
     // Try to handle whatever the user throws at us (substring, wildcards, regex, etc.)
@@ -394,7 +413,10 @@ int RATSNEST_SEARCH_HANDLER::Search( const wxString& aQuery )
 {
     m_hitlist.clear();
 
-    EDA_SEARCH_DATA frp;
+    APP_SETTINGS_BASE::SEARCH_PANE& settings = m_frame->config()->m_SearchPane;
+    EDA_SEARCH_DATA                 frp;
+
+    frp.searchAllFields = settings.search_hidden_fields;
     frp.findString = aQuery;
 
     // Try to handle whatever the user throws at us (substring, wildcards, regex, etc.)

@@ -29,21 +29,27 @@
 #include <widgets/std_bitmap_button.h>
 
 
-#define ID_TOGGLE_ZOOM_TO_SELECTION 14000
-#define ID_TOGGLE_PAN_TO_SELECTION 14001
+#define ID_TOGGLE_ZOOM_TO_SELECTION    14000
+#define ID_TOGGLE_PAN_TO_SELECTION     14001
+#define ID_TOGGLE_SEARCH_HIDDEN_FIELDS 14002
 
 
 class SEARCH_PANE_MENU : public ACTION_MENU
 {
 public:
-    SEARCH_PANE_MENU( EDA_DRAW_FRAME& aFrame ) :
+    SEARCH_PANE_MENU( SEARCH_PANE* aSearchPane, EDA_DRAW_FRAME& aFrame ) :
             ACTION_MENU( true, nullptr ),
-            m_frame( aFrame )
+            m_frame( aFrame ),
+            m_searchPane( aSearchPane )
     {
         Add( _( "Zoom to Selection" ), _( "Toggle zooming to selections in the search pane" ),
              ID_TOGGLE_ZOOM_TO_SELECTION, BITMAPS::zoom_fit_to_objects, true );
         Add( _( "Pan to Selection" ), _( "Toggle panning to selections in the search pane" ),
              ID_TOGGLE_PAN_TO_SELECTION, BITMAPS::zoom_center_on_screen, true );
+
+        AppendSeparator();
+        Add( _( "Search Hidden Fields" ), wxEmptyString,
+             ID_TOGGLE_SEARCH_HIDDEN_FIELDS, BITMAPS::invisible_text, true );
 
         updateZoomPanCheckboxes();
     }
@@ -61,12 +67,20 @@ public:
                                                         : APP_SETTINGS_BASE::SEARCH_PANE::SELECTION_ZOOM::NONE;
             updateZoomPanCheckboxes();
             break;
+
         case ID_TOGGLE_PAN_TO_SELECTION:
             settings.selection_zoom = item->IsChecked() ? APP_SETTINGS_BASE::SEARCH_PANE::SELECTION_ZOOM::PAN
                                                         : APP_SETTINGS_BASE::SEARCH_PANE::SELECTION_ZOOM::NONE;
             updateZoomPanCheckboxes();
             break;
+
+        case ID_TOGGLE_SEARCH_HIDDEN_FIELDS:
+            settings.search_hidden_fields = item->IsChecked();
+            updateZoomPanCheckboxes();
+            m_searchPane->RefreshSearch();
+            break;
         }
+
         return OPT_TOOL_EVENT();
     }
 
@@ -77,13 +91,16 @@ private:
 
         wxMenuItem* zoomCb = FindItem( ID_TOGGLE_ZOOM_TO_SELECTION );
         wxMenuItem* panCb = FindItem( ID_TOGGLE_PAN_TO_SELECTION );
+        wxMenuItem* hiddenFieldsCb = FindItem( ID_TOGGLE_SEARCH_HIDDEN_FIELDS );
 
         zoomCb->Check( settings.selection_zoom == APP_SETTINGS_BASE::SEARCH_PANE::SELECTION_ZOOM::ZOOM );
         panCb->Check( settings.selection_zoom == APP_SETTINGS_BASE::SEARCH_PANE::SELECTION_ZOOM::PAN );
+        hiddenFieldsCb->Check( settings.search_hidden_fields );
     }
 
 private:
     EDA_DRAW_FRAME& m_frame;
+    SEARCH_PANE*    m_searchPane;
 };
 
 
@@ -93,7 +110,7 @@ SEARCH_PANE::SEARCH_PANE( EDA_DRAW_FRAME* aFrame ) :
 {
     m_frame->Bind( EDA_LANG_CHANGED, &SEARCH_PANE::OnLanguageChange, this );
 
-    m_menu = new SEARCH_PANE_MENU( *m_frame );
+    m_menu = new SEARCH_PANE_MENU( this, *m_frame );
 
     m_menuButton->SetBitmap( KiBitmapBundle( BITMAPS::config ) );
     m_menuButton->Bind( wxEVT_LEFT_DOWN,
