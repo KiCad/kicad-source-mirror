@@ -82,7 +82,7 @@ bool DIALOG_GROUP_PROPERTIES::TransferDataToWindow()
 
 bool DIALOG_GROUP_PROPERTIES::TransferDataFromWindow()
 {
-    m_commit.Modify( m_group->AsEdaItem() );
+    m_commit.Modify( m_group->AsEdaItem(), m_frame->GetScreen() );
 
     for( size_t ii = 0; ii < m_membersList->GetCount(); ++ii )
     {
@@ -91,10 +91,10 @@ bool DIALOG_GROUP_PROPERTIES::TransferDataFromWindow()
 
         if( existingGroup != m_group )
         {
-            m_commit.Modify( item );
+            m_commit.Modify( item, m_frame->GetScreen() );
 
             if( existingGroup )
-                m_commit.Modify( existingGroup->AsEdaItem() );
+                m_commit.Modify( existingGroup->AsEdaItem(), m_frame->GetScreen() );
         }
     }
 

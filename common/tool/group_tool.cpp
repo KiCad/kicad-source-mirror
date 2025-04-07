@@ -156,12 +156,12 @@ int GROUP_TOOL::Ungroup( const TOOL_EVENT& aEvent )
         {
             for( EDA_ITEM* member : group->GetItems() )
             {
-                m_commit->Stage( member, CHT_UNGROUP );
+                m_commit->Stage( member, CHT_UNGROUP, m_frame->GetScreen() );
                 toSelect.push_back( member );
             }
 
             group->AsEdaItem()->SetSelected();
-            m_commit->Remove( group->AsEdaItem() );
+            m_commit->Remove( group->AsEdaItem(), m_frame->GetScreen() );
         }
     }
 
@@ -186,7 +186,7 @@ int GROUP_TOOL::RemoveFromGroup( const TOOL_EVENT& aEvent )
     for( EDA_ITEM* item : selection )
     {
         if( item->GetParentGroup() )
-            m_commit->Stage( item, CHT_UNGROUP );
+            m_commit->Stage( item, CHT_UNGROUP, m_frame->GetScreen() );
     }
 
     m_commit->Push( _( "Remove Group Items" ) );
