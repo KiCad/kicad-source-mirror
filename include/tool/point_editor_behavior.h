@@ -180,8 +180,7 @@ class EDA_POLYGON_POINT_EDIT_BEHAVIOR : public POLYGON_POINT_EDIT_BEHAVIOR
 public:
     // Editing the underlying polygon shape in-place is enough
     EDA_POLYGON_POINT_EDIT_BEHAVIOR( EDA_SHAPE& aPolygon ) :
-            POLYGON_POINT_EDIT_BEHAVIOR( aPolygon.GetPolyShape() ),
-            m_shape( aPolygon )
+            POLYGON_POINT_EDIT_BEHAVIOR( aPolygon.GetPolyShape() )
     {
         wxASSERT( aPolygon.GetShape() == SHAPE_T::POLY );
     }
@@ -190,12 +189,7 @@ public:
                      std::vector<EDA_ITEM*>& aUpdatedItems ) override
     {
         POLYGON_POINT_EDIT_BEHAVIOR::UpdateItem( aEditedPoint, aPoints, aCommit, aUpdatedItems );
-        m_shape.SetHatchingDirty();
-        m_shape.UpdateHatching();
     }
-
-private:
-    EDA_SHAPE& m_shape;
 };
 
 

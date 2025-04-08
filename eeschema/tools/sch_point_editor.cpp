@@ -1115,6 +1115,14 @@ int SCH_POINT_EDITOR::Main( const TOOL_EVENT& aEvent )
             if( !inDrag )
             {
                 commit.Modify( m_editPoints->GetParent(), m_frame->GetScreen() );
+
+                if( SCH_SHAPE* shape = dynamic_cast<SCH_SHAPE*>( item ) )
+                {
+                    shape->SetFlags( IS_MOVING );
+                    shape->SetHatchingDirty();
+                    shape->UpdateHatching();
+                }
+
                 inDrag = true;
             }
 
@@ -1135,6 +1143,14 @@ int SCH_POINT_EDITOR::Main( const TOOL_EVENT& aEvent )
                 commit.Push( _( "Move Point" ) );
 
             controls->SetAutoPan( false );
+
+            if( SCH_SHAPE* shape = dynamic_cast<SCH_SHAPE*>( item ) )
+            {
+                shape->ClearFlags( IS_MOVING );
+                shape->SetHatchingDirty();
+                shape->UpdateHatching();
+            }
+
             inDrag = false;
         }
         else if( evt->IsCancelInteractive() || evt->IsActivate() )
@@ -1171,6 +1187,13 @@ int SCH_POINT_EDITOR::Main( const TOOL_EVENT& aEvent )
 
         controls->SetAutoPan( inDrag );
         controls->CaptureCursor( inDrag );
+    }
+
+    if( SCH_SHAPE* shape = dynamic_cast<SCH_SHAPE*>( item ) )
+    {
+        shape->ClearFlags( IS_MOVING );
+        shape->SetHatchingDirty();
+        shape->UpdateHatching();
     }
 
     controls->SetAutoPan( false );

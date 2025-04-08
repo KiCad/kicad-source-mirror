@@ -2267,6 +2267,15 @@ int PCB_POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
                 BOARD_ITEM* clone = static_cast<BOARD_ITEM*>( item->Clone() );
                 clone->SetParent( nullptr );
                 clone->SetParentGroup( nullptr );
+
+                if( PCB_SHAPE* shape= dynamic_cast<PCB_SHAPE*>( item ) )
+                {
+                    shape->SetFlags( IS_MOVING );
+                    shape->UpdateHatching();
+
+                    static_cast<PCB_SHAPE*>( clone )->SetFillMode( FILL_T::NO_FILL );
+                }
+
                 clones.emplace_back( clone );
                 grid.AddConstructionItems( { clone }, false, true );
             }
@@ -2370,6 +2379,12 @@ int PCB_POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
                 commit.Push( _( "Move Point" ) );
             }
 
+            if( PCB_SHAPE* shape= dynamic_cast<PCB_SHAPE*>( item ) )
+            {
+                shape->ClearFlags( IS_MOVING );
+                shape->UpdateHatching();
+            }
+
             inDrag = false;
             frame()->UndoRedoBlock( false );
 
@@ -2386,6 +2401,12 @@ int PCB_POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
                                                      static_cast<PCB_GENERATOR*>( item ) );
                 }
                 commit.Revert();
+
+                if( PCB_SHAPE* shape= dynamic_cast<PCB_SHAPE*>( item ) )
+                {
+                    shape->ClearFlags( IS_MOVING );
+                    shape->UpdateHatching();
+                }
 
                 inDrag = false;
                 frame()->UndoRedoBlock( false );
@@ -2415,6 +2436,12 @@ int PCB_POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
         {
             evt->SetPassEvent();
         }
+    }
+
+    if( PCB_SHAPE* shape= dynamic_cast<PCB_SHAPE*>( item ) )
+    {
+        shape->ClearFlags( IS_MOVING );
+        shape->UpdateHatching();
     }
 
     m_preview.FreeItems();
@@ -2798,8 +2825,6 @@ int PCB_POINT_EDITOR::addCorner( const TOOL_EVENT& aEvent )
 
         if( item->Type() == PCB_ZONE_T )
             static_cast<ZONE*>( item )->HatchBorder();
-        else
-            graphicItem->SetHatchingDirty();
 
         commit.Push( _( "Add Zone Corner" ) );
     }
@@ -2930,8 +2955,6 @@ int PCB_POINT_EDITOR::removeCorner( const TOOL_EVENT& aEvent )
 
         if( item->Type() == PCB_ZONE_T )
             static_cast<ZONE*>( item )->HatchBorder();
-        else if( item->Type() == PCB_SHAPE_T )
-            static_cast<PCB_SHAPE*>( item )->SetHatchingDirty();
 
         updatePoints();
     }
@@ -3031,8 +3054,6 @@ int PCB_POINT_EDITOR::chamferCorner( const TOOL_EVENT& aEvent )
 
     if( item->Type() == PCB_ZONE_T )
         static_cast<ZONE*>( item )->HatchBorder();
-    else if( item->Type() == PCB_SHAPE_T )
-        static_cast<PCB_SHAPE*>( item )->SetHatchingDirty();
 
     updatePoints();
 

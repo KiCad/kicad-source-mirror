@@ -592,51 +592,12 @@ void EDA_SHAPE::UpdateHatching() const
     if( spacing == 0 )
         return;
 
-    auto addHatchLines =
-            [&]( const std::vector<SEG>& hatchLines )
-            {
-                for( const SEG& seg : hatchLines )
-                {
-                    // This is essentially TransformOvalToPolygon(), but without the rounded ends, which
-                    // in our case are nothing but a performance sink.
-
-                    VECTOR2I endp = seg.B - seg.A;
-                    VECTOR2I startp = seg.A;
-
-                    // normalize the position in order to have endp.x >= 0
-                    // it makes calculations more easy to understand
-                    if( endp.x < 0 )
-                    {
-                        endp    = seg.A - seg.B;
-                        startp  = seg.B;
-                    }
-
-                    EDA_ANGLE delta_angle( endp );
-                    int       seg_len = endp.EuclideanNorm();
-                    int       halfwidth = lineWidth / 2;
-
-                    // Build the polygon (a horizontal rectangle).
-                    SHAPE_POLY_SET polyshape;
-                    polyshape.NewOutline();
-                    polyshape.Append( -halfwidth, halfwidth );
-                    polyshape.Append( -halfwidth, -halfwidth );
-                    polyshape.Append( halfwidth + seg_len, -halfwidth );
-                    polyshape.Append( halfwidth + seg_len, halfwidth );
-
-                    // Rotate and move the polygon to its right location
-                    polyshape.Rotate( -delta_angle );
-                    polyshape.Move( startp );
-
-                    m_hatching.Append( polyshape);
-                }
-            };
-
     switch( m_shape )
     {
     case SHAPE_T::ARC:
     case SHAPE_T::SEGMENT:
     case SHAPE_T::BEZIER:
-        break;
+        return;
 
     case SHAPE_T::RECTANGLE:
         shapeBuffer.NewOutline();
@@ -644,26 +605,84 @@ void EDA_SHAPE::UpdateHatching() const
         for( const VECTOR2I& pt : GetRectCorners() )
             shapeBuffer.Append( pt );
 
-        addHatchLines( shapeBuffer.GenerateHatchLines( slopes, spacing, -1 ) );
         break;
 
     case SHAPE_T::CIRCLE:
-        TransformCircleToPolygon( shapeBuffer, getCenter(), GetRadius(), ARC_HIGH_DEF, ERROR_INSIDE );
-        addHatchLines( shapeBuffer.GenerateHatchLines( slopes, spacing, -1 ) );
+        TransformCircleToPolygon( shapeBuffer, getCenter(), GetRadius() + GetWidth(),
+                                  ARC_HIGH_DEF, ERROR_INSIDE );
         break;
 
     case SHAPE_T::POLY:
-        if( IsClosed() )
-            addHatchLines( m_poly.GenerateHatchLines( slopes, spacing, -1 ) );
+        if( !IsClosed() )
+            return;
 
+        shapeBuffer = m_poly.CloneDropTriangulation();
         break;
 
     default:
         UNIMPLEMENTED_FOR( SHAPE_T_asString() );
-        break;
+        return;
     }
 
-    m_hatching.Fracture();
+    if( GetFillMode() == FILL_T::HATCH || GetFillMode() == FILL_T::REVERSE_HATCH )
+    {
+        for( const SEG& seg : shapeBuffer.GenerateHatchLines( slopes, spacing, -1 ) )
+        {
+            // We don't really need the rounded ends at all, so don't spend any extra time on them
+            int maxError = lineWidth;
+
+            TransformOvalToPolygon( m_hatching, seg.A, seg.B, lineWidth, maxError, ERROR_INSIDE );
+        }
+
+        m_hatching.Fracture();
+    }
+    else
+    {
+        // Generate a grid of holes for a cross-hatch.  This is about 3X the speed of the above
+        // algorithm, even when modified for the 45-degree fracture problem.
+
+        int            gridsize = GetHatchLineSpacing();
+        int            hole_size = gridsize - GetHatchLineWidth();
+
+        m_hatching = shapeBuffer.CloneDropTriangulation();
+        m_hatching.Rotate( -ANGLE_45 );
+
+        // Build hole shape
+        SHAPE_LINE_CHAIN hole_base;
+        VECTOR2I corner( 0, 0 );;
+        hole_base.Append( corner );
+        corner.x += hole_size;
+        hole_base.Append( corner );
+        corner.y += hole_size;
+        hole_base.Append( corner );
+        corner.x = 0;
+        hole_base.Append( corner );
+        hole_base.SetClosed( true );
+
+        // Build holes
+        BOX2I bbox = m_hatching.BBox( 0 );
+        SHAPE_POLY_SET holes;
+
+        int x_offset = bbox.GetX() - ( bbox.GetX() ) % gridsize - gridsize;
+        int y_offset = bbox.GetY() - ( bbox.GetY() ) % gridsize - gridsize;
+
+        for( int xx = x_offset; xx <= bbox.GetRight(); xx += gridsize )
+        {
+            for( int yy = y_offset; yy <= bbox.GetBottom(); yy += gridsize )
+            {
+                SHAPE_LINE_CHAIN hole( hole_base );
+                hole.Move( VECTOR2I( xx, yy ) );
+                holes.AddOutline( hole );
+            }
+        }
+
+        m_hatching.BooleanSubtract( holes );
+        m_hatching.Fracture();
+
+        // Must re-rotate after Fracture().  Clipper struggles mightily with fracturing
+        // 45-degree holes.
+        m_hatching.Rotate( ANGLE_45 );
+    }
 }
 
 
