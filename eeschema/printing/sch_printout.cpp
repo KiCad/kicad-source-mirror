@@ -338,6 +338,9 @@ bool SCH_PRINTOUT::PrintPage( SCH_SCREEN* aScreen, wxDC* aDC, bool aForPrinting 
         // Init the SCH_RENDER_SETTINGS used by the painter used to print schematic
         SCH_RENDER_SETTINGS* dstSettings = painter->GetSettings();
 
+        if( aForPrinting )
+            *dstSettings = *m_parent->GetRenderSettings();
+
         dstSettings->m_ShowPinsElectricalType = false;
 
         // Set the color scheme

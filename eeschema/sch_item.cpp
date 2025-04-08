@@ -477,11 +477,20 @@ int SCH_ITEM::GetEffectivePenWidth( const SCH_RENDER_SETTINGS* aSettings ) const
     // numbers meant "don't stroke".
 
     if( GetPenWidth() < 0 )
+    {
         return 0;
+    }
     else if( GetPenWidth() == 0 )
-        return std::max( aSettings->GetDefaultPenWidth(), aSettings->GetMinPenWidth() );
+    {
+        if( GetParent() && GetParent()->Type() == LIB_SYMBOL_T )
+            return std::max( aSettings->m_SymbolLineWidth, aSettings->GetMinPenWidth() );
+        else
+            return std::max( aSettings->GetDefaultPenWidth(), aSettings->GetMinPenWidth() );
+    }
     else
+    {
         return std::max( GetPenWidth(), aSettings->GetMinPenWidth() );
+    }
 }
 
 

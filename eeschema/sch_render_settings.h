@@ -100,6 +100,7 @@ public:
     double m_TextOffsetRatio;        // Proportion of font size to offset text above/below
                                      // wires, buses, etc.
     int    m_PinSymbolSize;
+    int    m_SymbolLineWidth;        ///< Override line widths for symbol drawing objects set to default line width.
 
     TRANSFORM m_Transform;
 };
