@@ -35,6 +35,7 @@
 #include <gal/cursors.h>
 
 class SCH_BASE_FRAME;
+class SCH_GROUP;
 class SCH_ITEM;
 class SCH_TABLE;
 class EE_GRID_HELPER;
@@ -82,6 +83,23 @@ public:
 
     ///< Zoom the screen to fit the bounding box for cross probing/selection sync.
     void ZoomFitCrossProbeBBox( const BOX2I& aBBox );
+
+    /**
+     * Enter the group at the head of the current selection.
+     */
+    void EnterGroup() override;
+
+    /**
+     * Leave the currently-entered group.
+     *
+     * @param aSelectGroup [optional] Select the group after leaving.
+     */
+    void ExitGroup( bool aSelectGroup = false ) override;
+
+    /**
+     * @return the currently-entered group.
+     */
+    SCH_GROUP* GetEnteredGroup() { return m_enteredGroup; }
 
     /**
      * @return the set of currently selected items.
@@ -315,6 +333,13 @@ private:
      */
     bool itemPassesFilter( EDA_ITEM* aItem );
 
+    /**
+     * In general we don't want to select both a parent and any of it's children.  This includes
+     * both symbols and their items, and groups and their members.
+     */
+    void filterCollectorForHierarchy( SCH_COLLECTOR& aCollector, bool aMultiselect ) const;
+    void filterCollectedItems( SCH_COLLECTOR& aCollector, bool aMultiSelect );
+
     ///< Set up handlers for various events.
     void setTransitions() override;
 
@@ -328,6 +353,10 @@ private:
     bool m_isSymbolViewer; // True when the symbol browser is the parent frame
     int  m_unit;           // Fixed unit filter (for symbol editor)
     int  m_bodyStyle;      // Fixed DeMorgan filter (for symbol editor)
+
+    SCH_GROUP*        m_enteredGroup;         // If non-null, selections are limited to
+                                              // members of this group
+    KIGFX::VIEW_GROUP m_enteredGroupOverlay;  // Overlay for the entered group's frame.
 
     SCH_SELECTION_FILTER_OPTIONS m_filter;
 

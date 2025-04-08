@@ -72,7 +72,7 @@ int SCH_GROUP_TOOL::PickNewMember( const TOOL_EVENT& aEvent )
 
                     if( !isSymbolEditor )
                     {
-                        while( elem->GetParent() && elem->GetParent()->Type() != SCHEMATIC_T )
+                        while( elem->GetParent() && elem->GetParent()->Type() != SCH_SCREEN_T )
                             elem = elem->GetParent();
                     }
 

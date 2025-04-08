@@ -41,6 +41,7 @@
 #include <sch_edit_frame.h>
 #include <sch_line.h>
 #include <sch_bus_entry.h>
+#include <sch_group.h>
 #include <sch_marker.h>
 #include <sch_no_connect.h>
 #include <sch_sheet_pin.h>
@@ -155,6 +156,7 @@ SCH_SELECTION_TOOL::SCH_SELECTION_TOOL() :
         SELECTION_TOOL( "common.InteractiveSelection" ),
         m_frame( nullptr ),
         m_nonModifiedCursor( KICURSOR::ARROW ),
+        m_enteredGroup( nullptr ),
         m_isSymbolEditor( false ),
         m_isSymbolViewer( false ),
         m_unit( 0 ),
@@ -169,6 +171,7 @@ SCH_SELECTION_TOOL::SCH_SELECTION_TOOL() :
 SCH_SELECTION_TOOL::~SCH_SELECTION_TOOL()
 {
     getView()->Remove( &m_selection );
+    getView()->Remove( &m_enteredGroupOverlay );
 }
 
 
@@ -272,6 +275,15 @@ bool SCH_SELECTION_TOOL::Init()
                        static_cast<SYMBOL_EDIT_FRAME*>( m_frame )->GetCurSymbol();
             };
 
+    auto groupEnterCondition =
+            SELECTION_CONDITIONS::Count( 1 ) && SELECTION_CONDITIONS::HasType( SCH_GROUP_T );
+
+    auto inGroupCondition =
+            [this] ( const SELECTION& )
+            {
+                return m_enteredGroup != nullptr;
+            };
+
     auto symbolDisplayNameIsEditable =
             [&]( const SELECTION& sel )
             {
@@ -290,6 +302,8 @@ bool SCH_SELECTION_TOOL::Init()
     auto& menu = m_menu->GetMenu();
 
     // clang-format off
+    menu.AddItem( ACTIONS::groupEnter,                groupEnterCondition, 1 );
+    menu.AddItem( ACTIONS::groupLeave,                inGroupCondition,    1 );
     menu.AddItem( SCH_ACTIONS::clearHighlight,        haveHighlight && SCH_CONDITIONS::Idle, 1 );
     menu.AddSeparator(                                haveHighlight && SCH_CONDITIONS::Idle, 1 );
 
@@ -345,6 +359,9 @@ void SCH_SELECTION_TOOL::Reset( RESET_REASON aReason )
 
     if( aReason != TOOL_BASE::REDRAW )
     {
+        if( m_enteredGroup )
+            ExitGroup();
+
         // Remove pointers to the selected items from containers without changing their
         // properties (as they are already deleted while a new sheet is loaded)
         m_selection.Clear();
@@ -375,6 +392,9 @@ void SCH_SELECTION_TOOL::Reset( RESET_REASON aReason )
     // Reinsert the VIEW_GROUP, in case it was removed from the VIEW
     getView()->Remove( &m_selection );
     getView()->Add( &m_selection );
+
+    getView()->Remove( &m_enteredGroupOverlay );
+    getView()->Add( &m_enteredGroupOverlay );
 }
 
 int SCH_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
@@ -611,6 +631,8 @@ int SCH_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
 
             if( item && item->Type() == SCH_SHEET_T )
                 m_toolMgr->PostAction( SCH_ACTIONS::enterSheet );
+            else if( m_selection.GetSize() == 1 && m_selection[0]->Type() == SCH_GROUP_T )
+                EnterGroup();
             else
                 m_toolMgr->PostAction( SCH_ACTIONS::properties );
         }
@@ -992,10 +1014,17 @@ int SCH_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
             }
             else if( evt->FirstResponder() == this && evt->GetCommandId() == (int) WXK_ESCAPE )
             {
-                SCH_EDITOR_CONTROL* editor = m_toolMgr->GetTool<SCH_EDITOR_CONTROL>();
+                if( m_enteredGroup )
+                {
+                    ExitGroup();
+                }
+                else
+                {
+                    SCH_EDITOR_CONTROL* editor = m_toolMgr->GetTool<SCH_EDITOR_CONTROL>();
 
-                if( editor && m_frame->eeconfig()->m_Input.esc_clears_net_highlight )
-                    editor->ClearHighlight( *evt );
+                    if( editor && m_frame->eeconfig()->m_Input.esc_clears_net_highlight )
+                        editor->ClearHighlight( *evt );
+                }
             }
         }
         else if( evt->Action() == TA_UNDO_REDO_PRE )
@@ -1110,6 +1139,57 @@ int SCH_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
     m_selection.Clear();
 
     return 0;
+}
+
+
+void SCH_SELECTION_TOOL::EnterGroup()
+{
+    wxCHECK_RET( m_selection.GetSize() == 1 && m_selection[0]->Type() == SCH_GROUP_T,
+                 wxT( "EnterGroup called when selection is not a single group" ) );
+    SCH_GROUP* aGroup = static_cast<SCH_GROUP*>( m_selection[0] );
+
+    if( m_enteredGroup != nullptr )
+        ExitGroup();
+
+    ClearSelection();
+    m_enteredGroup = aGroup;
+    m_enteredGroup->SetFlags( ENTERED );
+    m_enteredGroup->RunOnChildren(
+            [&]( SCH_ITEM* item )
+            {
+                if( item->Type() == SCH_LINE_T )
+                    item->SetFlags( STARTPOINT | ENDPOINT );
+                select( item );
+            },
+            RECURSE_MODE::NO_RECURSE );
+
+    m_toolMgr->ProcessEvent( EVENTS::SelectedEvent );
+
+    getView()->Hide( m_enteredGroup, true );
+    m_enteredGroupOverlay.Add( m_enteredGroup );
+    getView()->Update( &m_enteredGroupOverlay );
+}
+
+
+void SCH_SELECTION_TOOL::ExitGroup( bool aSelectGroup )
+{
+    // Only continue if there is a group entered
+    if( m_enteredGroup == nullptr )
+        return;
+
+    m_enteredGroup->ClearFlags( ENTERED );
+    getView()->Hide( m_enteredGroup, false );
+    ClearSelection();
+
+    if( aSelectGroup )
+    {
+        select( m_enteredGroup );
+        m_toolMgr->ProcessEvent( EVENTS::SelectedEvent );
+    }
+
+    m_enteredGroupOverlay.Clear();
+    m_enteredGroup = nullptr;
+    getView()->Update( &m_enteredGroupOverlay );
 }
 
 
@@ -1327,6 +1407,8 @@ void SCH_SELECTION_TOOL::narrowSelection( SCH_COLLECTOR& collector, const VECTOR
         }
     }
 
+    filterCollectorForHierarchy( collector, false );
+
     // Apply some ugly heuristics to avoid disambiguation menus whenever possible
     if( collector.GetCount() > 1 && !m_skip_heuristics )
         GuessSelectionCandidates( collector, aWhere );
@@ -1362,6 +1444,27 @@ bool SCH_SELECTION_TOOL::selectPoint( SCH_COLLECTOR& aCollector, const VECTOR2I&
 
     if( !aAdd && !aSubtract && !aExclusiveOr )
         ClearSelection();
+
+    // It is possible for slop in the selection model to cause us to be outside the group,
+    // but also selecting an item within the group, so only exit if the selection doesn't
+    // have an item belonging to the group
+    if( m_enteredGroup && !m_enteredGroup->GetBoundingBox().Contains( aWhere ) )
+    {
+        bool foundEnteredGroup = false;
+        for( EDA_ITEM* item : aCollector )
+        {
+            if( item->GetParentGroup() == m_enteredGroup )
+            {
+                foundEnteredGroup = true;
+                break;
+            }
+        }
+
+        if( !foundEnteredGroup )
+            ExitGroup();
+    }
+
+    filterCollectorForHierarchy( aCollector, true );
 
     int  addedCount = 0;
     bool anySubtracted = false;
@@ -1457,46 +1560,53 @@ bool SCH_SELECTION_TOOL::SelectPoint( const VECTOR2I& aWhere,
 
 int SCH_SELECTION_TOOL::SelectAll( const TOOL_EVENT& aEvent )
 {
+    SCH_COLLECTOR collection;
     m_multiple = true;          // Multiple selection mode is active
     KIGFX::VIEW* view = getView();
 
-    // hold all visible items
-    std::vector<KIGFX::VIEW::LAYER_ITEM_PAIR> selectedItems;
-    std::vector<KIGFX::VIEW::LAYER_ITEM_PAIR> sheetPins;
+    std::vector<EDA_ITEM*> sheetPins;
 
     // Filter the view items based on the selection box
     BOX2I selectionBox;
 
     selectionBox.SetMaximum();
-    view->Query( selectionBox, selectedItems );         // Get the list of selected items
+    view->Query( selectionBox,
+            [&]( KIGFX::VIEW_ITEM* viewItem ) -> bool
+            {
+                SCH_ITEM* item = static_cast<SCH_ITEM*>( viewItem );
+
+                if( !item )
+                    return true;
+
+                collection.Append( item );
+                return true;
+            } );
+
+    filterCollectorForHierarchy( collection, true );
 
     // Sheet pins aren't in the view; add them by hand
-    for( KIGFX::VIEW::LAYER_ITEM_PAIR& pair : selectedItems )
+    for( EDA_ITEM* item : collection )
     {
-        SCH_SHEET* sheet = dynamic_cast<SCH_SHEET*>( pair.first );
+        SCH_SHEET* sheet = dynamic_cast<SCH_SHEET*>( item );
 
         if( sheet )
         {
-            int layer = pair.second;
-
             for( SCH_SHEET_PIN* pin : sheet->GetPins() )
-                sheetPins.emplace_back( KIGFX::VIEW::LAYER_ITEM_PAIR( pin, layer ) );
+                sheetPins.emplace_back( pin );
         }
     }
 
-    selectedItems.insert( selectedItems.end(), sheetPins.begin(), sheetPins.end() );
+    for( EDA_ITEM* pin : sheetPins )
+        collection.Append( pin );
 
-    for( const std::pair<KIGFX::VIEW_ITEM*, int>& item_pair : selectedItems )
+    for( EDA_ITEM* item : collection )
     {
-        if( EDA_ITEM* item = dynamic_cast<EDA_ITEM*>( item_pair.first ) )
+        if( Selectable( item ) && itemPassesFilter( item ) )
         {
-            if( Selectable( item ) && itemPassesFilter( item ) )
-            {
-                if( item->Type() == SCH_LINE_T )
-                    item->SetFlags( STARTPOINT | ENDPOINT );
+            if( item->Type() == SCH_LINE_T )
+                item->SetFlags( STARTPOINT | ENDPOINT );
 
-                select( item );
-            }
+            select( item );
         }
     }
 
@@ -1807,6 +1917,24 @@ SCH_SELECTION& SCH_SELECTION_TOOL::RequestSelection( const std::vector<KICAD_T>&
 }
 
 
+void SCH_SELECTION_TOOL::filterCollectedItems( SCH_COLLECTOR& aCollector, bool aMultiSelect )
+{
+    if( aCollector.GetCount() == 0 )
+        return;
+
+    std::set<EDA_ITEM*> rejected;
+
+    for( EDA_ITEM* item : aCollector )
+    {
+        if( !itemPassesFilter( item ) )
+            rejected.insert( item );
+    }
+
+    for( EDA_ITEM* item : rejected )
+        aCollector.Remove( item );
+}
+
+
 bool SCH_SELECTION_TOOL::itemPassesFilter( EDA_ITEM* aItem )
 {
     if( !aItem )
@@ -1983,49 +2111,78 @@ bool SCH_SELECTION_TOOL::selectMultiple()
             view->SetVisible( &area, false );
 
             // Fetch items from the RTree that are in our area of interest
-            std::vector<KIGFX::VIEW::LAYER_ITEM_PAIR> nearbyViewItems;
-            view->Query( area.ViewBBox(), nearbyViewItems );
+            std::vector<KIGFX::VIEW::LAYER_ITEM_PAIR> candidates;
+            BOX2I selectionBox = area.ViewBBox();
+            view->Query( selectionBox, candidates );
+
+            // Construct a BOX2I to determine BOARD_ITEM selection
+            BOX2I selectionRect( area.GetOrigin(), VECTOR2I( width, height ) );
+
+            selectionRect.Normalize();
 
             // Build lists of nearby items and their children
-            std::unordered_set<EDA_ITEM*> nearbyItems;
-            std::vector<EDA_ITEM*>        nearbyChildren;
-            std::vector<EDA_ITEM*>        flaggedItems;
+            SCH_COLLECTOR       collector;
+            SCH_COLLECTOR       pinsCollector;
+            std::set<EDA_ITEM*> group_items;
 
-            for( KIGFX::VIEW::LAYER_ITEM_PAIR& pair : nearbyViewItems )
+            for( EDA_ITEM* item : m_frame->GetScreen()->Items().OfType( SCH_GROUP_T ) )
             {
-                if( EDA_ITEM* item = dynamic_cast<EDA_ITEM*>( pair.first ) )
+                SCH_GROUP* group = static_cast<SCH_GROUP*>( item );
+
+                // The currently entered group does not get limited
+                if( m_enteredGroup == group )
+                    continue;
+
+                std::unordered_set<EDA_ITEM*>& newset = group->GetItems();
+
+                // If we are not greedy and have selected the whole group, add just one item
+                // to allow it to be promoted to the group later
+                if( !isGreedy && selectionRect.Contains( group->GetBoundingBox() ) && newset.size() )
                 {
-                    if( nearbyItems.insert( item ).second )
+                    for( EDA_ITEM* group_item : newset )
                     {
-                        item->ClearFlags( CANDIDATE );
-
-                        if( SCH_ITEM* sch_item = dynamic_cast<SCH_ITEM*>( item ) )
-                        {
-                            sch_item->RunOnChildren(
-                                    [&]( SCH_ITEM* aChild )
-                                    {
-                                        // Filter pins by unit
-                                        if( SCH_PIN* pin = dynamic_cast<SCH_PIN*>( aChild ) )
-                                        {
-                                            int unit = pin->GetLibPin()->GetUnit();
-
-                                            if( unit && unit != pin->GetParentSymbol()->GetUnit() )
-                                                return;
-                                        }
-
-                                        nearbyChildren.push_back( aChild );
-                                    },
-                                    RECURSE_MODE::NO_RECURSE );
-                        }
+                        if( Selectable( static_cast<SCH_ITEM*>( group_item ) ) )
+                            collector.Append( *newset.begin() );
                     }
+                }
+
+                for( EDA_ITEM* group_item : newset )
+                    group_items.emplace( group_item );
+            }
+
+            for( KIGFX::VIEW::LAYER_ITEM_PAIR& candidate : candidates )
+            {
+                SCH_ITEM* item = static_cast<SCH_ITEM*>( candidate.first );
+
+                // If the item is a line, add it even if it doesn't pass the hit test using the greedy
+                // flag as we handle partially selecting line ends later
+                if( item && Selectable( item )
+                    && ( item->HitTest( selectionRect, !isGreedy ) || item->Type() == SCH_LINE_T )
+                    && ( isGreedy || !group_items.count( item ) ) )
+                {
+                    if( item->Type() == SCH_PIN_T && !m_isSymbolEditor )
+                        pinsCollector.Append( item );
+                    else
+                        collector.Append( item );
                 }
             }
 
-            std::vector<EDA_ITEM*> sortedNearbyItems( nearbyItems.begin(), nearbyItems.end() );
+            // Apply the stateful filter
+            filterCollectedItems( collector, true );
+
+            filterCollectorForHierarchy( collector, true );
+
+            // If we selected nothing but pins, allow them to be selected
+            if( collector.GetCount() == 0 )
+            {
+                collector = pinsCollector;
+                filterCollectedItems( collector, true );
+                filterCollectorForHierarchy( collector, true );
+            }
 
             // Sort the filtered selection by rows and columns to have a nice default
             // for tools that can use it.
-            std::sort( sortedNearbyItems.begin(), sortedNearbyItems.end(),
+            std::sort( collector.begin(), collector.end(),
                        []( EDA_ITEM* a, EDA_ITEM* b )
                        {
                            VECTOR2I aPos = a->GetPosition();
@@ -2036,9 +2193,6 @@ bool SCH_SELECTION_TOOL::selectMultiple()
 
                            return aPos.y < bPos.y;
                        } );
-
-            BOX2I selectionRect( area.GetOrigin(), VECTOR2I( width, height ) );
-            selectionRect.Normalize();
 
             bool anyAdded = false;
             bool anySubtracted = false;
@@ -2072,61 +2226,44 @@ bool SCH_SELECTION_TOOL::selectMultiple()
                         }
                     };
 
-            for( EDA_ITEM* item : sortedNearbyItems )
+            std::vector<EDA_ITEM*> flaggedItems;
+
+            for( EDA_ITEM* item : collector )
             {
-                bool           selected = false;
-                EDA_ITEM_FLAGS flags    = 0;
+                EDA_ITEM_FLAGS flags = 0;
+
+                item->SetFlags( CANDIDATE );
+                flaggedItems.push_back( item );
 
                 if( m_frame->GetRenderSettings()->m_ShowPinsElectricalType )
                     item->SetFlags( SHOW_ELEC_TYPE );
 
-                if( Selectable( item ) && itemPassesFilter( item ) )
+                if( item->Type() == SCH_LINE_T )
                 {
-                    if( item->Type() == SCH_LINE_T )
+                    SCH_LINE* line = static_cast<SCH_LINE*>( item );
+
+                    if( ( isGreedy && line->HitTest( selectionRect, false ) )
+                        || ( selectionRect.Contains( line->GetEndPoint() )
+                             && selectionRect.Contains( line->GetStartPoint() ) ) )
                     {
-                        SCH_LINE* line = static_cast<SCH_LINE*>( item );
-
-                        if( ( isGreedy && line->HitTest( selectionRect, false ) )
-                            || ( selectionRect.Contains( line->GetEndPoint() )
-                                 && selectionRect.Contains( line->GetStartPoint() ) ) )
-                        {
-                            selected = true;
-                            flags |= STARTPOINT | ENDPOINT;
-                        }
-                        else if( !isGreedy )
-                        {
-                            if( selectionRect.Contains( line->GetStartPoint() )
-                                && line->IsStartDangling() )
-                            {
-                                selected = true;
-                                flags |= STARTPOINT;
-                            }
-
-                            if( selectionRect.Contains( line->GetEndPoint() )
-                                && line->IsEndDangling() )
-                            {
-                                selected = true;
-                                flags |= ENDPOINT;
-                            }
-                        }
+                        flags |= STARTPOINT | ENDPOINT;
                     }
-                    else
+                    else if( !isGreedy )
                     {
-                        selected = item->HitTest( selectionRect, !isGreedy );
+                        if( selectionRect.Contains( line->GetStartPoint() ) && line->IsStartDangling() )
+                            flags |= STARTPOINT;
+
+                        if( selectionRect.Contains( line->GetEndPoint() ) && line->IsEndDangling() )
+                            flags |= ENDPOINT;
                     }
                 }
 
-                if( selected )
-                {
-                    item->SetFlags( CANDIDATE );
-                    flaggedItems.push_back( item );
-                    selectItem( item, flags );
-                }
+                selectItem( item, flags );
 
                 item->ClearFlags( SHOW_ELEC_TYPE );
             }
 
-            for( EDA_ITEM* item : nearbyChildren )
+            for( EDA_ITEM* item : pinsCollector )
             {
                 if( m_frame->GetRenderSettings()->m_ShowPinsElectricalType )
                     item->SetFlags( SHOW_ELEC_TYPE );
@@ -2179,6 +2316,78 @@ bool SCH_SELECTION_TOOL::selectMultiple()
 
     return cancelled;
 }
+
+
+void SCH_SELECTION_TOOL::filterCollectorForHierarchy( SCH_COLLECTOR& aCollector,
+                                                      bool aMultiselect ) const
+{
+    std::unordered_set<EDA_ITEM*> toAdd;
+
+    // Set CANDIDATE on all parents which are included in the GENERAL_COLLECTOR.  This
+    // algorithm is O(3n), whereas checking for the parent inclusion could potentially be O(n^2).
+    for( int j = 0; j < aCollector.GetCount(); j++ )
+    {
+        if( aCollector[j]->GetParent() )
+            aCollector[j]->GetParent()->ClearFlags( CANDIDATE );
+
+        if( aCollector[j]->GetParentSymbol() )
+            aCollector[j]->GetParentSymbol()->ClearFlags( CANDIDATE );
+    }
+
+    if( aMultiselect )
+    {
+        for( int j = 0; j < aCollector.GetCount(); j++ )
+            aCollector[j]->SetFlags( CANDIDATE );
+    }
+
+    for( int j = 0; j < aCollector.GetCount(); )
+    {
+        SCH_ITEM* item = aCollector[j];
+        SYMBOL*   sym = item->GetParentSymbol();
+        SCH_ITEM* start = item;
+
+        if( !m_isSymbolEditor && sym )
+            start = sym;
+
+        // If a group is entered, disallow selections of objects outside the group.
+        if( m_enteredGroup && !SCH_GROUP::WithinScope( item, m_enteredGroup, m_isSymbolEditor ) )
+        {
+            aCollector.Remove( item );
+            continue;
+        }
+
+        // If any element is a member of a group, replace those elements with the top containing
+        // group.
+        if( EDA_GROUP* top = SCH_GROUP::TopLevelGroup( start, m_enteredGroup, m_isSymbolEditor ) )
+        {
+            if( top->AsEdaItem() != item )
+            {
+                toAdd.insert( top->AsEdaItem() );
+                top->AsEdaItem()->SetFlags( CANDIDATE );
+
+                aCollector.Remove( item );
+                continue;
+            }
+        }
+
+        // Symbols are a bit easier as they can't be nested.
+        if( sym && ( sym->GetFlags() & CANDIDATE ) )
+        {
+            // Remove children of selected items
+            aCollector.Remove( item );
+            continue;
+        }
+
+        ++j;
+    }
+
+    for( EDA_ITEM* item : toAdd )
+    {
+        if( !aCollector.HasItem( item ) )
+            aCollector.Append( item );
+    }
+}
+
 
 void SCH_SELECTION_TOOL::InitializeSelectionState( SCH_TABLE* aTable )
 {
@@ -2633,6 +2842,8 @@ void SCH_SELECTION_TOOL::RebuildSelection()
 {
     m_selection.Clear();
 
+    bool enteredGroupFound = false;
+
     if( m_isSymbolEditor )
     {
         LIB_SYMBOL* start = static_cast<SYMBOL_EDIT_FRAME*>( m_frame )->GetCurSymbol();
@@ -2641,6 +2852,19 @@ void SCH_SELECTION_TOOL::RebuildSelection()
         {
             if( item.IsSelected() )
                 select( &item );
+
+            if( item.Type() == SCH_GROUP_T )
+            {
+                if( &item == m_enteredGroup )
+                {
+                    item.SetFlags( ENTERED );
+                    enteredGroupFound = true;
+                }
+                else
+                {
+                    item.ClearFlags( ENTERED );
+                }
+            }
         }
     }
     else
@@ -2662,10 +2886,29 @@ void SCH_SELECTION_TOOL::RebuildSelection()
                         },
                         RECURSE_MODE::NO_RECURSE );
             }
+
+            if( item->Type() == SCH_GROUP_T )
+            {
+                if( item == m_enteredGroup )
+                {
+                    item->SetFlags( ENTERED );
+                    enteredGroupFound = true;
+                }
+                else
+                {
+                    item->ClearFlags( ENTERED );
+                }
+            }
         }
     }
 
     updateReferencePoint();
+
+    if( !enteredGroupFound )
+    {
+        m_enteredGroupOverlay.Clear();
+        m_enteredGroup = nullptr;
+    }
 
     // Inform other potentially interested tools
     m_toolMgr->ProcessEvent( EVENTS::SelectedEvent );
@@ -2800,6 +3043,11 @@ void SCH_SELECTION_TOOL::ClearSelection( bool aQuietMode )
 
 void SCH_SELECTION_TOOL::select( EDA_ITEM* aItem )
 {
+    if( m_enteredGroup && !SCH_GROUP::WithinScope( static_cast<SCH_ITEM*>( aItem ), m_enteredGroup, m_isSymbolEditor ) )
+    {
+        ExitGroup();
+    }
+
     highlight( aItem, SELECTED, &m_selection );
 }
 
@@ -2824,20 +3072,25 @@ void SCH_SELECTION_TOOL::highlight( EDA_ITEM* aItem, int aMode, SELECTION* aGrou
     // represented in the LIB_SYMBOL and will inherit the settings of the parent symbol.)
     if( SCH_ITEM* sch_item = dynamic_cast<SCH_ITEM*>( aItem ) )
     {
-        sch_item->RunOnChildren(
-                [&]( SCH_ITEM* aChild )
-                {
-                    if( aMode == SELECTED )
+        // We don't want to select group children if the group itself is selected,
+        // we can only select them when the group is entered
+        if( sch_item->Type() != SCH_GROUP_T )
+        {
+            sch_item->RunOnChildren(
+                    [&]( SCH_ITEM* aChild )
                     {
-                        aChild->SetSelected();
-                        getView()->Hide( aChild, true );
-                    }
-                    else if( aMode == BRIGHTENED )
-                    {
-                        aChild->SetBrightened();
-                    }
-                },
-                RECURSE_MODE::NO_RECURSE );
+                        if( aMode == SELECTED )
+                        {
+                            aChild->SetSelected();
+                            getView()->Hide( aChild, true );
+                        }
+                        else if( aMode == BRIGHTENED )
+                        {
+                            aChild->SetBrightened();
+                        }
+                    },
+                    RECURSE_MODE::NO_RECURSE );
+        }
     }
 
     if( aGroup && aMode != BRIGHTENED )

@@ -281,7 +281,7 @@ const BOX2I SCH_GROUP::GetBoundingBox() const
             bbox.Merge( item->GetBoundingBox() );
     }
 
-    bbox.Inflate( schIUScale.MilsToIU( 5 ) ); // Give a min size to the bbox
+    bbox.Inflate( schIUScale.MilsToIU( 10 ) );
 
     return bbox;
 }
