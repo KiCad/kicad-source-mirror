@@ -32,6 +32,7 @@
 #define ID_TOGGLE_ZOOM_TO_SELECTION    14000
 #define ID_TOGGLE_PAN_TO_SELECTION     14001
 #define ID_TOGGLE_SEARCH_HIDDEN_FIELDS 14002
+#define ID_TOGGLE_SEARCH_METADATA      14003
 
 
 class SEARCH_PANE_MENU : public ACTION_MENU
@@ -50,6 +51,8 @@ public:
         AppendSeparator();
         Add( _( "Search Hidden Fields" ), wxEmptyString,
              ID_TOGGLE_SEARCH_HIDDEN_FIELDS, BITMAPS::invisible_text, true );
+        Add( _( "Search Metadata" ), _( "Search library links, descriptions and keywords" ),
+             ID_TOGGLE_SEARCH_METADATA, BITMAPS::library, true );
 
         updateZoomPanCheckboxes();
     }
@@ -79,6 +82,12 @@ public:
             updateZoomPanCheckboxes();
             m_searchPane->RefreshSearch();
             break;
+
+        case ID_TOGGLE_SEARCH_METADATA:
+            settings.search_metadata = item->IsChecked();
+            updateZoomPanCheckboxes();
+            m_searchPane->RefreshSearch();
+            break;
         }
 
         return OPT_TOOL_EVENT();
@@ -92,10 +101,12 @@ private:
         wxMenuItem* zoomCb = FindItem( ID_TOGGLE_ZOOM_TO_SELECTION );
         wxMenuItem* panCb = FindItem( ID_TOGGLE_PAN_TO_SELECTION );
         wxMenuItem* hiddenFieldsCb = FindItem( ID_TOGGLE_SEARCH_HIDDEN_FIELDS );
+        wxMenuItem* metadataCb = FindItem( ID_TOGGLE_SEARCH_METADATA );
 
         zoomCb->Check( settings.selection_zoom == APP_SETTINGS_BASE::SEARCH_PANE::SELECTION_ZOOM::ZOOM );
         panCb->Check( settings.selection_zoom == APP_SETTINGS_BASE::SEARCH_PANE::SELECTION_ZOOM::PAN );
         hiddenFieldsCb->Check( settings.search_hidden_fields );
+        metadataCb->Check( settings.search_metadata );
     }
 
 private:

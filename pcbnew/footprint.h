@@ -588,6 +588,8 @@ public:
 
     bool HitTest( const VECTOR2I& aPosition, int aAccuracy = 0 ) const override;
 
+    bool Matches( const EDA_SEARCH_DATA& aSearchData, void* aAuxData ) const override;
+
     /**
      * Test if a point is inside the bounding polygon of the footprint.
      *

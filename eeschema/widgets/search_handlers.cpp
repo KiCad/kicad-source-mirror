@@ -179,6 +179,7 @@ int SYMBOL_SEARCH_HANDLER::Search( const wxString& aQuery )
     SCH_SEARCH_DATA                 frp;
 
     frp.searchAllFields = settings.search_hidden_fields;
+    frp.searchMetadata = settings.search_metadata;
     frp.findString = aQuery;
 
     // Try to handle whatever the user throws at us (substring, wildcards, regex, etc.)
@@ -267,6 +268,7 @@ int POWER_SEARCH_HANDLER::Search( const wxString& aQuery )
     SCH_SEARCH_DATA                 frp;
 
     frp.searchAllFields = settings.search_hidden_fields;
+    frp.searchMetadata = settings.search_metadata;
     frp.findString = aQuery;
 
     // Try to handle whatever the user throws at us (substring, wildcards, regex, etc.)
@@ -341,6 +343,7 @@ int TEXT_SEARCH_HANDLER::Search( const wxString& aQuery )
     SCH_SEARCH_DATA                 frp;
 
     frp.searchAllFields = settings.search_hidden_fields;
+    frp.searchMetadata = settings.search_metadata;
     frp.findString = aQuery;
 
     // Try to handle whatever the user throws at us (substring, wildcards, regex, etc.)
@@ -428,6 +431,7 @@ int LABEL_SEARCH_HANDLER::Search( const wxString& aQuery )
     SCH_SEARCH_DATA                 frp;
 
     frp.searchAllFields = settings.search_hidden_fields;
+    frp.searchMetadata = settings.search_metadata;
     frp.findString = aQuery;
 
     // Try to handle whatever the user throws at us (substring, wildcards, regex, etc.)

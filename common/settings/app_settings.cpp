@@ -196,6 +196,9 @@ APP_SETTINGS_BASE::APP_SETTINGS_BASE( const std::string& aFilename, int aSchemaV
     m_params.emplace_back( new PARAM<bool>( "search_pane.search_hidden_fields",
             &m_SearchPane.search_hidden_fields, true ) );
 
+    m_params.emplace_back( new PARAM<bool>( "search_pane.search_metadata",
+            &m_SearchPane.search_metadata, false ) );
+
     m_params.emplace_back( new PARAM<bool>( "system.first_run_shown",
             &m_System.first_run_shown, false ) ); //@todo RFB remove? - not used
 

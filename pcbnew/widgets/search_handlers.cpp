@@ -137,6 +137,7 @@ int FOOTPRINT_SEARCH_HANDLER::Search( const wxString& aQuery )
     EDA_SEARCH_DATA                 frp;
 
     frp.searchAllFields = settings.search_hidden_fields;
+    frp.searchMetadata = settings.search_metadata;
     frp.findString = aQuery;
 
     // Try to handle whatever the user throws at us (substring, wildcards, regex, etc.)
@@ -144,20 +145,28 @@ int FOOTPRINT_SEARCH_HANDLER::Search( const wxString& aQuery )
 
     for( FOOTPRINT* fp : board->Footprints() )
     {
-        if( frp.findString.IsEmpty() )
-        {
-            m_hitlist.push_back( fp );
-            continue;
-        }
+        bool found = false;
 
-        for( PCB_FIELD* field : fp->GetFields() )
+        if( frp.findString.IsEmpty() )
+            found = true;
+
+        if( !found && fp->Matches( frp, nullptr ) )
+            found = true;
+
+        if( !found )
         {
-            if( field->Matches( frp, nullptr ) )
+            for( PCB_FIELD* field : fp->GetFields() )
             {
-                m_hitlist.push_back( fp );
-                break;
+                if( field->Matches( frp, nullptr ) )
+                {
+                    found = true;
+                    break;
+                }
             }
         }
+
+        if( found )
+            m_hitlist.push_back( fp );
     }
 
     return (int) m_hitlist.size();
@@ -208,6 +217,7 @@ int ZONE_SEARCH_HANDLER::Search( const wxString& aQuery )
     EDA_SEARCH_DATA                 frp;
 
     frp.searchAllFields = settings.search_hidden_fields;
+    frp.searchMetadata = settings.search_metadata;
     frp.findString = aQuery;
 
     // Try to handle whatever the user throws at us (substring, wildcards, regex, etc.)
@@ -273,6 +283,7 @@ int TEXT_SEARCH_HANDLER::Search( const wxString& aQuery )
     EDA_SEARCH_DATA                 frp;
 
     frp.searchAllFields = settings.search_hidden_fields;
+    frp.searchMetadata = settings.search_metadata;
     frp.findString = aQuery;
 
     // Try to handle whatever the user throws at us (substring, wildcards, regex, etc.)
@@ -341,6 +352,7 @@ int NETS_SEARCH_HANDLER::Search( const wxString& aQuery )
     EDA_SEARCH_DATA                 frp;
 
     frp.searchAllFields = settings.search_hidden_fields;
+    frp.searchMetadata = settings.search_metadata;
     frp.findString = aQuery;
 
     // Try to handle whatever the user throws at us (substring, wildcards, regex, etc.)
@@ -423,6 +435,7 @@ int RATSNEST_SEARCH_HANDLER::Search( const wxString& aQuery )
     EDA_SEARCH_DATA                 frp;
 
     frp.searchAllFields = settings.search_hidden_fields;
+    frp.searchMetadata = settings.search_metadata;
     frp.findString = aQuery;
 
     // Try to handle whatever the user throws at us (substring, wildcards, regex, etc.)

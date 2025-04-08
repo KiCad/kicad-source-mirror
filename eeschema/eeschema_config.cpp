@@ -264,6 +264,7 @@ void SCH_EDIT_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
     {
         searchData->replaceReferences = cfg->m_FindReplaceExtra.replace_references;
         searchData->searchAllFields = cfg->m_FindReplaceExtra.search_all_fields;
+        searchData->searchMetadata = cfg->m_FindReplaceExtra.search_metadata;
         searchData->searchAllPins = cfg->m_FindReplaceExtra.search_all_pins;
         searchData->searchCurrentSheetOnly = cfg->m_FindReplaceExtra.search_current_sheet_only;
         searchData->searchSelectedOnly = cfg->m_FindReplaceExtra.search_selected_only;
@@ -300,6 +301,7 @@ void SCH_EDIT_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
         {
             cfg->m_FindReplaceExtra.replace_references = searchData->replaceReferences;
             cfg->m_FindReplaceExtra.search_all_fields = searchData->searchAllFields;
+            cfg->m_FindReplaceExtra.search_metadata = searchData->searchMetadata;
             cfg->m_FindReplaceExtra.search_all_pins = searchData->searchAllPins;
             cfg->m_FindReplaceExtra.search_current_sheet_only =
                     searchData->searchCurrentSheetOnly;

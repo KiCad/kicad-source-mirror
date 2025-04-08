@@ -2070,6 +2070,24 @@ void FOOTPRINT::Add3DModel( FP_3DMODEL* a3DModel )
 }
 
 
+bool FOOTPRINT::Matches( const EDA_SEARCH_DATA& aSearchData, void* aAuxData ) const
+{
+    if( aSearchData.searchMetadata )
+    {
+        if( EDA_ITEM::Matches( GetFPIDAsString(), aSearchData ) )
+            return true;
+
+        if( EDA_ITEM::Matches( GetLibDescription(), aSearchData ) )
+            return true;
+
+        if( EDA_ITEM::Matches( GetKeywords(), aSearchData ) )
+            return true;
+    }
+
+    return false;
+}
+
+
 // see footprint.h
 INSPECT_RESULT FOOTPRINT::Visit( INSPECTOR inspector, void* testData,
                                  const std::vector<KICAD_T>& aScanTypes )

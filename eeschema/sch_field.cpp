@@ -640,16 +640,15 @@ GR_TEXT_V_ALIGN_T SCH_FIELD::GetEffectiveVertJustify() const
 
 bool SCH_FIELD::Matches( const EDA_SEARCH_DATA& aSearchData, void* aAuxData ) const
 {
-    bool searchHiddenFields = false;
-    bool searchAndReplace = false;
+    bool searchHiddenFields = aSearchData.searchAllFields;
+    bool searchMetadata = aSearchData.searchMetadata;
+    bool searchAndReplace = aSearchData.searchAndReplace;
     bool replaceReferences = false;
 
     try
     {
         // downcast
         const SCH_SEARCH_DATA& schSearchData = dynamic_cast<const SCH_SEARCH_DATA&>( aSearchData );
-        searchHiddenFields = schSearchData.searchAllFields;
-        searchAndReplace = schSearchData.searchAndReplace;
         replaceReferences = schSearchData.replaceReferences;
     }
     catch( const std::bad_cast& )
@@ -672,6 +671,9 @@ bool SCH_FIELD::Matches( const EDA_SEARCH_DATA& aSearchData, void* aAuxData ) co
         // have a sheet path to resolve the reference.
         if( !parentSymbol )
             return false;
+
+        if( parentSymbol->Matches( aSearchData, aAuxData ) )
+            return true;
 
         wxASSERT( aAuxData );
 

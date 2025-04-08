@@ -2083,6 +2083,18 @@ void SCH_SYMBOL::Rotate( const VECTOR2I& aCenter, bool aRotateCCW )
 
 bool SCH_SYMBOL::Matches( const EDA_SEARCH_DATA& aSearchData, void* aAuxData ) const
 {
+    if( aSearchData.searchMetadata )
+    {
+        if( EDA_ITEM::Matches( GetSchSymbolLibraryName(), aSearchData ) )
+            return true;
+
+        if( EDA_ITEM::Matches( GetDescription(), aSearchData ) )
+            return true;
+
+        if( EDA_ITEM::Matches( GetKeyWords(), aSearchData ) )
+            return true;
+    }
+
     for( SCH_ITEM& drawItem : GetLibSymbolRef()->GetDrawItems() )
     {
         if( drawItem.Matches( aSearchData, aAuxData ) )
