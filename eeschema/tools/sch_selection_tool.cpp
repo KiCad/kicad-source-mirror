@@ -158,7 +158,8 @@ SCH_SELECTION_TOOL::SCH_SELECTION_TOOL() :
         m_isSymbolEditor( false ),
         m_isSymbolViewer( false ),
         m_unit( 0 ),
-        m_bodyStyle( 0 )
+        m_bodyStyle( 0 ),
+        m_previous_first_cell( nullptr )
 {
     m_filter.SetDefaults();
     m_selection.Clear();
@@ -376,7 +377,6 @@ void SCH_SELECTION_TOOL::Reset( RESET_REASON aReason )
     getView()->Add( &m_selection );
 }
 
-
 int SCH_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
 {
     m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::ARROW );
@@ -478,7 +478,51 @@ int SCH_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
             CollectHits( collector, evt->Position() );
             narrowSelection( collector, evt->Position(), false );
 
-            if( collector.GetCount() == 1 && !m_isSymbolEditor && !hasModifier() )
+            if( m_selection.GetSize() != 0 && dynamic_cast<SCH_TABLECELL*>( m_selection.GetItem( 0 ) ) && m_additive
+                && collector.GetCount() == 1 && dynamic_cast<SCH_TABLECELL*>( collector[0] ) )
+            {
+                SCH_TABLECELL* firstCell = static_cast<SCH_TABLECELL*>( m_selection.GetItem( 0 ) );
+                SCH_TABLECELL* clickedCell = static_cast<SCH_TABLECELL*>( collector[0] );
+                bool allCellsFromSameTable = true;
+
+                if( m_previous_first_cell == nullptr || m_selection.GetSize() == 1)
+                {
+                    m_previous_first_cell = firstCell;
+                }
+
+                for( EDA_ITEM* selection : m_selection )
+                {
+                    if( !static_cast<SCH_TABLECELL*>( selection )
+                        || selection->GetParent() != clickedCell->GetParent() )
+                    {
+                        allCellsFromSameTable = false;
+                    }
+                }
+
+                if( m_previous_first_cell && clickedCell && allCellsFromSameTable )
+                {
+                    for( auto selection : m_selection )
+                    {
+                        selection->ClearSelected();
+                    }
+                    m_selection.Clear();
+                    SCH_TABLE* parentTable = dynamic_cast<SCH_TABLE*>( m_previous_first_cell->GetParent() );
+
+                    VECTOR2D start = m_previous_first_cell->GetCenter();
+                    VECTOR2D end = clickedCell->GetCenter();
+
+                    if( parentTable )
+                    {
+                        InitializeSelectionState( parentTable );
+
+                        VECTOR2D topLeft( std::min( start.x, end.x ), std::min( start.y, end.y ) );
+                        VECTOR2D bottomRight( std::max( start.x, end.x ), std::max( start.y, end.y ) );
+
+                        SelectCellsBetween( topLeft, bottomRight - topLeft, parentTable );
+                    }
+                }
+            }
+            else if( collector.GetCount() == 1 && !m_isSymbolEditor && !hasModifier() )
             {
                 OPT_TOOL_EVENT autostart = autostartEvent( evt, grid, collector[0] );
 
@@ -2136,12 +2180,8 @@ bool SCH_SELECTION_TOOL::selectMultiple()
     return cancelled;
 }
 
-
-bool SCH_SELECTION_TOOL::selectTableCells( SCH_TABLE* aTable )
+void SCH_SELECTION_TOOL::InitializeSelectionState( SCH_TABLE* aTable )
 {
-    bool cancelled = false;     // Was the tool canceled while it was running?
-    m_multiple = true;          // Multiple selection mode is active
-
     for( SCH_TABLECELL* cell : aTable->GetCells() )
     {
         if( cell->IsSelected() )
@@ -2149,12 +2189,50 @@ bool SCH_SELECTION_TOOL::selectTableCells( SCH_TABLE* aTable )
         else
             cell->ClearFlags( CANDIDATE );
     }
+}
+
+void SCH_SELECTION_TOOL::SelectCellsBetween( const VECTOR2D& start, const VECTOR2D& end, SCH_TABLE* aTable )
+{
+    BOX2I selectionRect( start, end );
+    selectionRect.Normalize();
 
     auto wasSelected =
-            []( EDA_ITEM* aItem )
-            {
-                return ( aItem->GetFlags() & CANDIDATE ) > 0;
-            };
+        []( EDA_ITEM* aItem )
+        {
+            return ( aItem->GetFlags() & CANDIDATE ) > 0;
+        };
+
+    for( SCH_TABLECELL* cell : aTable->GetCells() )
+    {
+        bool doSelect = false;
+
+        if( cell->HitTest( selectionRect, false ) )
+        {
+            if( m_subtractive )
+                doSelect = false;
+            else if( m_exclusive_or )
+                doSelect = !wasSelected( cell );
+            else
+                doSelect = true;
+        }
+        else if( wasSelected( cell ) )
+        {
+            doSelect = m_additive || m_subtractive || m_exclusive_or;
+        }
+
+        if( doSelect && !cell->IsSelected() )
+            select( cell );
+        else if( !doSelect && cell->IsSelected() )
+            unselect( cell );
+    }
+}
+
+bool SCH_SELECTION_TOOL::selectTableCells( SCH_TABLE* aTable )
+{
+    bool cancelled = false;
+    m_multiple = true;
+
+    InitializeSelectionState( aTable );
 
     while( TOOL_EVENT* evt = Wait() )
     {
@@ -2166,33 +2244,7 @@ bool SCH_SELECTION_TOOL::selectTableCells( SCH_TABLE* aTable )
         else if( evt->IsDrag( BUT_LEFT ) )
         {
             getViewControls()->SetAutoPan( true );
-
-            BOX2I selectionRect( evt->DragOrigin(), evt->Position() - evt->DragOrigin() );
-            selectionRect.Normalize();
-
-            for( SCH_TABLECELL* cell : aTable->GetCells() )
-            {
-                bool doSelect = false;
-
-                if( cell->HitTest( selectionRect, false ) )
-                {
-                    if( m_subtractive )
-                        doSelect = false;
-                    else if( m_exclusive_or )
-                        doSelect = !wasSelected( cell );
-                    else
-                        doSelect = true;
-                }
-                else if( wasSelected( cell ) )
-                {
-                    doSelect = m_additive || m_subtractive || m_exclusive_or;
-                }
-
-                if( doSelect && !cell->IsSelected() )
-                    select( cell );
-                else if( !doSelect && cell->IsSelected() )
-                    unselect( cell );
-            }
+            SelectCellsBetween( evt->DragOrigin(), evt->Position() - evt->DragOrigin(), aTable );
         }
         else if( evt->IsMouseUp( BUT_LEFT ) )
         {
@@ -2203,24 +2255,21 @@ bool SCH_SELECTION_TOOL::selectTableCells( SCH_TABLE* aTable )
 
             for( SCH_TABLECELL* cell : aTable->GetCells() )
             {
-                if( cell->IsSelected() && !wasSelected( cell ) )
+                if( cell->IsSelected() && ( cell->GetFlags() & CANDIDATE ) <= 0 )
                     anyAdded = true;
-                else if( wasSelected( cell ) && !cell->IsSelected() )
+                else if( ( cell->GetFlags() & CANDIDATE ) > 0 && !cell->IsSelected() )
                     anySubtracted = true;
             }
 
-            // Inform other potentially interested tools
             if( anyAdded )
                 m_toolMgr->ProcessEvent( EVENTS::SelectedEvent );
-
             if( anySubtracted )
                 m_toolMgr->ProcessEvent( EVENTS::UnselectedEvent );
 
-            break;  // Stop waiting for events
+            break;
         }
         else
         {
-            // Allow some actions for navigation
             for( int i = 0; allowedActions[i]; ++i )
             {
                 if( evt->IsAction( allowedActions[i] ) )
@@ -2234,7 +2283,7 @@ bool SCH_SELECTION_TOOL::selectTableCells( SCH_TABLE* aTable )
 
     getViewControls()->SetAutoPan( false );
 
-    m_multiple = false;         // Multiple selection mode is inactive
+    m_multiple = false;
 
     if( !cancelled )
         m_selection.ClearReferencePoint();

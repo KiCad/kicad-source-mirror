@@ -38,10 +38,11 @@ class SCH_BASE_FRAME;
 class SCH_ITEM;
 class SCH_TABLE;
 class EE_GRID_HELPER;
+class SCH_TABLECELL;
 
 namespace KIGFX
 {
-    class GAL;
+class GAL;
 }
 
 
@@ -95,7 +96,7 @@ public:
      * @return either the current selection or, if empty, the selection at the cursor.
      */
     SCH_SELECTION& RequestSelection( const std::vector<KICAD_T>& aScanTypes = { SCH_LOCATE_ANY_T },
-                                     bool aPromoteCellSelections = false );
+                                     bool                        aPromoteCellSelections = false );
 
     /**
      * Perform a click-type selection at a point (usually the cursor position).
@@ -113,11 +114,9 @@ public:
      * @param aExclusiveOr Indicates if found item(s) should be toggle in the selection.
      * @return true if the selection was modified.
      */
-    bool SelectPoint( const VECTOR2I& aWhere,
-                      const std::vector<KICAD_T>& aScanTypes = { SCH_LOCATE_ANY_T },
-                      EDA_ITEM** aItem = nullptr, bool* aSelectionCancelledFlag = nullptr,
-                      bool aCheckLocked = false, bool aAdd = false, bool aSubtract = false,
-                      bool aExclusiveOr = false );
+    bool SelectPoint( const VECTOR2I& aWhere, const std::vector<KICAD_T>& aScanTypes = { SCH_LOCATE_ANY_T },
+                      EDA_ITEM** aItem = nullptr, bool* aSelectionCancelledFlag = nullptr, bool aCheckLocked = false,
+                      bool aAdd = false, bool aSubtract = false, bool aExclusiveOr = false );
 
     /**
      * Finds a connected item at a point (usually the cursor position).  Iterative process with a
@@ -165,8 +164,7 @@ public:
      *
      * @return True if the item fulfills conditions to be selected.
      */
-    bool Selectable( const EDA_ITEM* aItem, const VECTOR2I* aPos = nullptr,
-                     bool checkVisibilityOnly = false ) const;
+    bool Selectable( const EDA_ITEM* aItem, const VECTOR2I* aPos = nullptr, bool checkVisibilityOnly = false ) const;
 
     /**
      * Apply heuristics to try and determine a single object when multiple are found under the
@@ -234,8 +232,8 @@ private:
      * @return true if the selection was modified.
      */
     bool selectPoint( SCH_COLLECTOR& aCollector, const VECTOR2I& aWhere, EDA_ITEM** aItem = nullptr,
-                      bool* aSelectionCancelledFlag = nullptr, bool aAdd = false,
-                      bool aSubtract = false, bool aExclusiveOr = false );
+                      bool* aSelectionCancelledFlag = nullptr, bool aAdd = false, bool aSubtract = false,
+                      bool aExclusiveOr = false );
 
     /**
      * Handle drawing a selection box that allows one to select many items at the same time.
@@ -250,6 +248,20 @@ private:
      * @return true if the function was canceled (i.e. CancelEvent was received).
      */
     bool selectTableCells( SCH_TABLE* aTable );
+
+    /**
+     * Initialize the selection state of table cells.
+     */
+    void InitializeSelectionState( SCH_TABLE* aTable );
+
+    /**
+     * Select table cells within a rectangular area between two points.
+     *
+     * @param start The starting point of the rectangular selection area.
+     * @param end The ending point of the rectangular selection area.
+     * @param aTable The table containing the cells to check and update.
+     */
+    void SelectCellsBetween( const VECTOR2D& start, const VECTOR2D& end, SCH_TABLE* aTable );
 
     /**
      * Handle disambiguation actions including displaying the menu.
@@ -307,18 +319,19 @@ private:
     void setTransitions() override;
 
 private:
+    SCH_BASE_FRAME* m_frame;     // Pointer to the parent frame
+    SCH_SELECTION   m_selection; // Current state of selection
 
-    SCH_BASE_FRAME* m_frame;             // Pointer to the parent frame
-    SCH_SELECTION   m_selection;         // Current state of selection
+    KICURSOR m_nonModifiedCursor; // Cursor in the absence of shift/ctrl/alt
 
-    KICURSOR        m_nonModifiedCursor; // Cursor in the absence of shift/ctrl/alt
-
-    bool            m_isSymbolEditor;    // True when the symbol editor is the parent frame
-    bool            m_isSymbolViewer;    // True when the symbol browser is the parent frame
-    int             m_unit;              // Fixed unit filter (for symbol editor)
-    int             m_bodyStyle;         // Fixed DeMorgan filter (for symbol editor)
+    bool m_isSymbolEditor; // True when the symbol editor is the parent frame
+    bool m_isSymbolViewer; // True when the symbol browser is the parent frame
+    int  m_unit;           // Fixed unit filter (for symbol editor)
+    int  m_bodyStyle;      // Fixed DeMorgan filter (for symbol editor)
 
     SCH_SELECTION_FILTER_OPTIONS m_filter;
+
+    SCH_TABLECELL* m_previous_first_cell; // First selected cell for shift+click selection range
 };
 
 #endif //SCH_SELECTION_TOOL_H
