@@ -155,6 +155,9 @@ void SCH_DRAW_PANEL::setDefaultLayerDeps()
     for( int i = 0; i < KIGFX::VIEW::VIEW_MAX_LAYERS; i++ )
         m_view->SetLayerTarget( i, target );
 
+    m_view->SetLayerTarget( LAYER_SCHEMATIC_ANCHOR, KIGFX::TARGET_NONCACHED );
+    m_view->SetLayerDisplayOnly( LAYER_SCHEMATIC_ANCHOR );
+
     // Bitmaps are draw on a non cached GAL layer:
     m_view->SetLayerTarget( LAYER_DRAW_BITMAPS, KIGFX::TARGET_NONCACHED );
 
@@ -175,6 +178,9 @@ void SCH_DRAW_PANEL::setDefaultLayerDeps()
 
     m_view->SetLayerTarget( LAYER_SELECTION_SHADOWS, KIGFX::TARGET_OVERLAY );
     m_view->SetLayerDisplayOnly( LAYER_SELECTION_SHADOWS ) ;
+
+    m_view->SetLayerDisplayOnly( LAYER_NET_COLOR_HIGHLIGHT );
+    m_view->SetLayerDisplayOnly( LAYER_DANGLING );
 }
 
 
