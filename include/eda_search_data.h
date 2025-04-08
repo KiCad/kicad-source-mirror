@@ -69,6 +69,7 @@ struct EDA_SEARCH_DATA
             replaceString( other.replaceString ),
             regex_string( other.regex_string ),
             searchAndReplace( other.searchAndReplace ),
+            searchAllFields( other.searchAllFields ),
             matchCase( other.matchCase ),
             markersOnly( other.markersOnly ),
             matchMode( other.matchMode )
