@@ -23,6 +23,7 @@
 #include <sch_bitmap.h>
 #include <sch_bus_entry.h>
 #include <sch_field.h>
+#include <sch_group.h>
 #include <sch_junction.h>
 #include <sch_label.h>
 #include <sch_line.h>
@@ -60,6 +61,7 @@ std::unique_ptr<EDA_ITEM> CreateItemForType( KICAD_T aType, EDA_ITEM* aContainer
     case SCH_HIER_LABEL_T:      return std::make_unique<SCH_HIERLABEL>();
     case SCH_DIRECTIVE_LABEL_T: return std::make_unique<SCH_DIRECTIVE_LABEL>();
     case SCH_FIELD_T:           return std::make_unique<SCH_FIELD>( parentSchItem );
+    case SCH_GROUP_T:           return std::make_unique<SCH_GROUP>();
 
     case SCH_SYMBOL_T:
     {
