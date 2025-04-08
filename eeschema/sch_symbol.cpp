@@ -1797,6 +1797,7 @@ int SCH_SYMBOL::GetOrientation() const
     // Try to find the current transform option:
     TRANSFORM transform = m_transform;
     SCH_SYMBOL temp( *this );
+    temp.SetParentGroup( nullptr );
 
     for( int type_rotate : rotate_values )
     {

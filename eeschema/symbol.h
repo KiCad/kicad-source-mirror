@@ -104,7 +104,7 @@ public:
         return *this;
     };
 
-    ~SYMBOL() override { };
+    ~SYMBOL() override;
 
     virtual const LIB_ID& GetLibId() const = 0;
     virtual wxString GetDescription() const = 0;

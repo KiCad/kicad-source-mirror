@@ -760,6 +760,7 @@ const std::vector<KICAD_T> SCH_EDIT_TOOL::RotatableItems = {
     SCH_TABLECELL_T,    // will be promoted to parent table(s)
     SCH_LABEL_T,
     SCH_GLOBAL_LABEL_T,
+    SCH_GROUP_T,
     SCH_HIER_LABEL_T,
     SCH_DIRECTIVE_LABEL_T,
     SCH_FIELD_T,
@@ -778,7 +779,7 @@ const std::vector<KICAD_T> SCH_EDIT_TOOL::RotatableItems = {
 int SCH_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
 {
     bool           clockwise = ( aEvent.Matches( SCH_ACTIONS::rotateCW.MakeEvent() ) );
-    SCH_SELECTION& selection = m_selectionTool->RequestSelection( RotatableItems, true );
+    SCH_SELECTION& selection = m_selectionTool->RequestSelection( RotatableItems, true, true );
 
     if( selection.GetSize() == 0 )
         return 0;
@@ -1056,7 +1057,7 @@ int SCH_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
 
 int SCH_EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
 {
-    SCH_SELECTION& selection = m_selectionTool->RequestSelection( RotatableItems );
+    SCH_SELECTION& selection = m_selectionTool->RequestSelection( RotatableItems, false, true );
 
     if( selection.GetSize() == 0 )
         return 0;

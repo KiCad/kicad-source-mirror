@@ -112,9 +112,14 @@ public:
      *
      * @param aScanTypes [optional] List of item types that are acceptable for selection.
      * @return either the current selection or, if empty, the selection at the cursor.
+     *
+     * @param aPromoteCellSelections [optional] If true, cell selections are promoted to their parent
+     *
+     * @param aPromoteGroups [optional] If true, group selections are promoted the items within the group
      */
     SCH_SELECTION& RequestSelection( const std::vector<KICAD_T>& aScanTypes = { SCH_LOCATE_ANY_T },
-                                     bool                        aPromoteCellSelections = false );
+                                     bool aPromoteCellSelections = false,
+                                     bool aPromoteGroups = false );
 
     /**
      * Perform a click-type selection at a point (usually the cursor position).

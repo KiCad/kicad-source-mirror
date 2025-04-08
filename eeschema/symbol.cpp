@@ -22,6 +22,7 @@
  */
 
 #include <symbol.h>
+#include <sch_group.h>
 
 
 std::vector<int> SYMBOL::ViewGetLayers() const
@@ -53,3 +54,12 @@ std::vector<int> SYMBOL::ViewGetLayers() const
 }
 
 
+SYMBOL::~SYMBOL()
+{
+    // Untangle group parents before doing any deleting
+    RunOnChildren( []( EDA_ITEM* item )
+                        {
+                            if( item->Type() == SCH_GROUP_T)
+                                item->SetParentGroup( nullptr );
+                        }, RECURSE_MODE::RECURSE );
+}

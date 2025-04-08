@@ -1847,7 +1847,8 @@ void SCH_SELECTION_TOOL::GuessSelectionCandidates( SCH_COLLECTOR& collector, con
 
 
 SCH_SELECTION& SCH_SELECTION_TOOL::RequestSelection( const std::vector<KICAD_T>& aScanTypes,
-                                                     bool aPromoteCellSelections )
+                                                     bool aPromoteCellSelections,
+                                                     bool aPromoteGroups )
 {
     bool anyUnselected = false;
     bool anySelected = false;
@@ -1879,6 +1880,38 @@ SCH_SELECTION& SCH_SELECTION_TOOL::RequestSelection( const std::vector<KICAD_T>&
 
         if( !isMoving )
             updateReferencePoint();
+    }
+
+    if( aPromoteGroups )
+    {
+        for( int i = (int) m_selection.GetSize() - 1; i >= 0; --i )
+        {
+            EDA_ITEM* item = (EDA_ITEM*) m_selection.GetItem( i );
+
+            std::set<EDA_ITEM*> selectedChildren;
+
+            if( item->Type() == SCH_GROUP_T )
+            {
+                static_cast<SCH_ITEM*>(item)
+                    ->RunOnChildren( [&]( SCH_ITEM* item )
+                                        {
+                                            if( item->IsType( aScanTypes ) )
+                                                selectedChildren.insert( item );
+                                        },
+                                        RECURSE_MODE::RECURSE );
+                unselect( item );
+                anyUnselected = true;
+            }
+
+            for( EDA_ITEM* child : selectedChildren )
+            {
+                if( !child->IsSelected() )
+                {
+                    select( child );
+                    anySelected = true;
+                }
+            }
+        }
     }
 
     if( aPromoteCellSelections )
