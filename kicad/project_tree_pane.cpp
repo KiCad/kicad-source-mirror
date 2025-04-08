@@ -2116,8 +2116,7 @@ void PROJECT_TREE_PANE::updateGitStatusIconMap()
     }
 
     // Get Current Branch
-    PROJECT_TREE_ITEM* rootItem = GetItemIdData( m_TreeProject->GetRootItem() );
-    wxFileName         rootFilename( rootItem->GetFileName() );
+    wxFileName         rootFilename( Prj().GetProjectFullName() );
     wxString           repoWorkDir( git_repository_workdir( repo ) );
 
     wxFileName relative = rootFilename;
