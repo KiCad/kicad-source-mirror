@@ -92,6 +92,7 @@
     "pin_step": 100
   },
   "search_pane": {
+    "search_hidden_fields": true,
     "selection_zoom": 1
   },
   "selection_filter": {

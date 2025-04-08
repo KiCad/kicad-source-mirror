@@ -575,6 +575,7 @@
     "annotate_sort_on_modules": true
   },
   "search_pane": {
+    "search_hidden_fields": true,
     "selection_zoom": 1
   },
   "system": {

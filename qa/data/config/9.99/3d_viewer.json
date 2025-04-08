@@ -209,6 +209,7 @@
     "use_board_editor_copper_colors": false
   },
   "search_pane": {
+    "search_hidden_fields": true,
     "selection_zoom": 1
   },
   "system": {
