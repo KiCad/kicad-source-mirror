@@ -464,7 +464,8 @@ void PCB_DRAW_PANEL_GAL::UpdateColors()
     }
     else
     {
-        auto* app = Pgm().GetSettingsManager().GetAppSettings<PCBNEW_SETTINGS>( "pcbnew" );
+        static const char pcbnew[] = "pcbnew";
+        PCBNEW_SETTINGS*  app = Pgm().GetSettingsManager().GetAppSettings<PCBNEW_SETTINGS>( pcbnew );
 
         if( app )
             cs = Pgm().GetSettingsManager().GetColorSettings( app->m_ColorTheme );

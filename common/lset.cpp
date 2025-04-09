@@ -569,7 +569,7 @@ const LSET& LSET::InternalCuMask()
 }
 
 
-LSET LSET::AllCuMask( int aCuLayerCount )
+LSET allCuMask( int aCuLayerCount )
 {
     LSET ret;
 
@@ -580,13 +580,39 @@ LSET LSET::AllCuMask( int aCuLayerCount )
 }
 
 
+LSET LSET::AllCuMask( int aCuLayerCount )
+{
+    static LSET savedMax = allCuMask( MAX_CU_LAYERS );
+    static LSET cache;
+    static int  cacheCuLayerCount = -1;
+
+    if( aCuLayerCount == MAX_CU_LAYERS )
+        return savedMax;
+
+    if( aCuLayerCount != cacheCuLayerCount )
+    {
+        cache = allCuMask( aCuLayerCount );
+        cacheCuLayerCount = aCuLayerCount;
+    }
+
+    return cache;
+}
+
+
+LSET allNonCuMask()
+{
+    LSET mask = LSET().set();
+
+    for( auto it = mask.copper_layers_begin(); it != mask.copper_layers_end(); ++it )
+        mask.reset( *it );
+
+    return mask;
+}
+
+
 LSET LSET::AllNonCuMask()
 {
-    LSET saved = LSET().set();
-
-    for( auto it = saved.copper_layers_begin(); it != saved.copper_layers_end(); ++it )
-        saved.reset( *it );
-
+    static LSET saved = allNonCuMask();
     return saved;
 }
 

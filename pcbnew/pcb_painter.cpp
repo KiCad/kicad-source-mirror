@@ -83,23 +83,27 @@ PCBNEW_SETTINGS* pcbconfig()
 // returns the viewer options existing to Cvpcb and Pcbnew
 PCB_VIEWERS_SETTINGS_BASE* PCB_PAINTER::viewer_settings()
 {
+    static const char pcbnew[] = "pcbnew";
+    static const char fpedit[] = "fpedit";
+    static const char cvpcb[] = "cvpcb";
+
     switch( m_frameType )
     {
     case FRAME_PCB_EDITOR:
     case FRAME_PCB_DISPLAY3D:
     default:
-        return Pgm().GetSettingsManager().GetAppSettings<PCBNEW_SETTINGS>( "pcbnew" );
+        return Pgm().GetSettingsManager().GetAppSettings<PCBNEW_SETTINGS>( pcbnew );
 
     case FRAME_FOOTPRINT_EDITOR:
     case FRAME_FOOTPRINT_WIZARD:
-        return Pgm().GetSettingsManager().GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>( "fpedit" );
+        return Pgm().GetSettingsManager().GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>( fpedit );
 
     case FRAME_FOOTPRINT_VIEWER:
     case FRAME_FOOTPRINT_CHOOSER:
     case FRAME_FOOTPRINT_PREVIEW:
     case FRAME_CVPCB:
     case FRAME_CVPCB_DISPLAY:
-        return Pgm().GetSettingsManager().GetAppSettings<CVPCB_SETTINGS>( "cvpcb" );
+        return Pgm().GetSettingsManager().GetAppSettings<CVPCB_SETTINGS>( cvpcb );
     }
 }
 
@@ -1230,10 +1234,8 @@ void PCB_PAINTER::draw( const PCB_VIA* aVia, int aLayer )
 void PCB_PAINTER::draw( const PAD* aPad, int aLayer )
 {
     COLOR4D      color = m_pcbSettings.GetColor( aPad, aLayer );
-
-    const int copperLayer = IsPadCopperLayer( aLayer ) ? aLayer - LAYER_PAD_COPPER_START : aLayer;
-
-    const PCB_LAYER_ID& pcbLayer = static_cast<PCB_LAYER_ID>( copperLayer );
+    const int    copperLayer = IsPadCopperLayer( aLayer ) ? aLayer - LAYER_PAD_COPPER_START : aLayer;
+    PCB_LAYER_ID pcbLayer = static_cast<PCB_LAYER_ID>( copperLayer );
 
     if( IsNetnameLayer( aLayer ) )
     {
