@@ -895,35 +895,41 @@ void PCB_BASE_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
 
 PCBNEW_SETTINGS* PCB_BASE_FRAME::GetPcbNewSettings() const
 {
-    return Pgm().GetSettingsManager().GetAppSettings<PCBNEW_SETTINGS>( "pcbnew" );
+    static const char pcbnew[] = "pcbnew";
+    return Pgm().GetSettingsManager().GetAppSettings<PCBNEW_SETTINGS>( pcbnew );
 }
 
 
 FOOTPRINT_EDITOR_SETTINGS* PCB_BASE_FRAME::GetFootprintEditorSettings() const
 {
-    return Pgm().GetSettingsManager().GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>( "fpedit" );
+    static const char fpedit[] = "fpedit";
+    return Pgm().GetSettingsManager().GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>( fpedit );
 }
 
 
 PCB_VIEWERS_SETTINGS_BASE* PCB_BASE_FRAME::GetViewerSettingsBase() const
 {
+    static const char pcbnew[] = "pcbnew";
+    static const char fpedit[] = "fpedit";
+    static const char cvpcb[] = "cvpcb";
+
     switch( GetFrameType() )
     {
     case FRAME_PCB_EDITOR:
     case FRAME_PCB_DISPLAY3D:
     default:
-        return Pgm().GetSettingsManager().GetAppSettings<PCBNEW_SETTINGS>( "pcbnew" );
+        return Pgm().GetSettingsManager().GetAppSettings<PCBNEW_SETTINGS>( pcbnew );
 
     case FRAME_FOOTPRINT_EDITOR:
     case FRAME_FOOTPRINT_WIZARD:
-        return Pgm().GetSettingsManager().GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>( "fpedit" );
+        return Pgm().GetSettingsManager().GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>( fpedit );
 
     case FRAME_FOOTPRINT_VIEWER:
     case FRAME_FOOTPRINT_CHOOSER:
     case FRAME_FOOTPRINT_PREVIEW:
     case FRAME_CVPCB:
     case FRAME_CVPCB_DISPLAY:
-        return Pgm().GetSettingsManager().GetAppSettings<CVPCB_SETTINGS>( "cvpcb" );
+        return Pgm().GetSettingsManager().GetAppSettings<CVPCB_SETTINGS>( cvpcb );
     }
 }
 
