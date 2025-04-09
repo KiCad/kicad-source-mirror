@@ -1005,7 +1005,7 @@ void GENCAD_EXPORTER::CreateRoutesSection()
             const PCB_ARC* arc = static_cast<const PCB_ARC*>( track );
 
             // GenCAD arcs are always drawn counter-clockwise.
-            if( !arc->IsCCW() )
+            if( arc->GetAngle() > ANGLE_0 )
                 std::swap( start, end );
 
             VECTOR2I center = arc->GetCenter();
