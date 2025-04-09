@@ -142,6 +142,7 @@ COMMIT& COMMIT::createModified( EDA_ITEM* aItem, EDA_ITEM* aCopy, int aExtraFlag
 
     if( m_changedItems.find( parent ) != m_changedItems.end() )
     {
+        aCopy->SetParentGroup( nullptr );
         delete aCopy;
         return *this; // item has been already modified once
     }
