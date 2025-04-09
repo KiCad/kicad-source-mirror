@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -309,15 +309,9 @@ DIALOG_SYMBOL_PROPERTIES_BASE::DIALOG_SYMBOL_PROPERTIES_BASE( wxWindow* parent, 
 	wxBoxSizer* bSizerBottom;
 	bSizerBottom = new wxBoxSizer( wxHORIZONTAL );
 
-	wxBoxSizer* bLibLink;
-	bLibLink = new wxBoxSizer( wxHORIZONTAL );
-
-
-	bSizerBottom->Add( bLibLink, 1, wxLEFT|wxEXPAND, 12 );
-
 	m_libraryIDLabel = new wxStaticText( this, wxID_ANY, _("Library link:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_libraryIDLabel->Wrap( -1 );
-	bSizerBottom->Add( m_libraryIDLabel, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
+	bSizerBottom->Add( m_libraryIDLabel, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM, 2 );
 
 	m_tcLibraryID = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY|wxBORDER_NONE );
 	bSizerBottom->Add( m_tcLibraryID, 1, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
@@ -338,7 +332,7 @@ DIALOG_SYMBOL_PROPERTIES_BASE::DIALOG_SYMBOL_PROPERTIES_BASE( wxWindow* parent, 
 	bSizerBottom->Add( m_stdDialogButtonSizer, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
 
-	mainSizer->Add( bSizerBottom, 0, wxEXPAND|wxLEFT, 5 );
+	mainSizer->Add( bSizerBottom, 0, wxEXPAND|wxLEFT, 12 );
 
 
 	this->SetSizer( mainSizer );

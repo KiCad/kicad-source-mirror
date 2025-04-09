@@ -156,16 +156,18 @@ void SCH_SEARCH_HANDLER::SelectItems( std::vector<long>& aItemRows )
 SYMBOL_SEARCH_HANDLER::SYMBOL_SEARCH_HANDLER( SCH_EDIT_FRAME* aFrame ) :
         SCH_SEARCH_HANDLER( _HKI( "Symbols" ), aFrame )
 {
-    m_columns.emplace_back( _HKI( "Reference" ),   2,  wxLIST_FORMAT_LEFT );
-    m_columns.emplace_back( _HKI( "Value" ),       6,  wxLIST_FORMAT_LEFT );
-    m_columns.emplace_back( _HKI( "Footprint" ),   10, wxLIST_FORMAT_LEFT );
-    m_columns.emplace_back( _HKI( "Page" ),        1,  wxLIST_FORMAT_CENTER );
-    m_columns.emplace_back( wxT( "X" ),            3,  wxLIST_FORMAT_CENTER );
-    m_columns.emplace_back( wxT( "Y" ),            3,  wxLIST_FORMAT_CENTER );
-    m_columns.emplace_back( _HKI( "Excl. sim" ),   2,  wxLIST_FORMAT_CENTER );
-    m_columns.emplace_back( _HKI( "Excl. BOM" ),   2,  wxLIST_FORMAT_CENTER );
-    m_columns.emplace_back( _HKI( "Excl. board" ), 2,  wxLIST_FORMAT_CENTER );
-    m_columns.emplace_back( _HKI( "DNP" ),         2,  wxLIST_FORMAT_CENTER );
+    m_columns.emplace_back( _HKI( "Reference" ),            2, wxLIST_FORMAT_LEFT );
+    m_columns.emplace_back( _HKI( "Value" ),                6, wxLIST_FORMAT_LEFT );
+    m_columns.emplace_back( _HKI( "Footprint" ),           10, wxLIST_FORMAT_LEFT );
+    m_columns.emplace_back( _HKI( "Page" ),                 1, wxLIST_FORMAT_CENTER );
+    m_columns.emplace_back(  wxT( "X" ),                    3, wxLIST_FORMAT_CENTER );
+    m_columns.emplace_back(  wxT( "Y" ),                    3, wxLIST_FORMAT_CENTER );
+    m_columns.emplace_back( _HKI( "Excl. Sim" ),            2, wxLIST_FORMAT_CENTER );
+    m_columns.emplace_back( _HKI( "Excl. BOM" ),            2, wxLIST_FORMAT_CENTER );
+    m_columns.emplace_back( _HKI( "Excl. Board" ),          2, wxLIST_FORMAT_CENTER );
+    m_columns.emplace_back( _HKI( "DNP" ),                  2, wxLIST_FORMAT_CENTER );
+    m_columns.emplace_back( _HKI( "Library Link" ),         8, wxLIST_FORMAT_LEFT );
+    m_columns.emplace_back( _HKI( "Library Description" ), 10, wxLIST_FORMAT_LEFT );
 }
 
 
@@ -237,6 +239,10 @@ wxString SYMBOL_SEARCH_HANDLER::getResultCell( const SCH_SEARCH_HIT& aHit, int a
         return sym->GetExcludedFromBoard() ? wxS( "X" ) : wxS( " " );
     else if( aCol == 9 )
         return sym->GetDNP() ? wxS( "X" ) : wxS( " " );
+    else if( aCol == 10 )
+        return sym->GetLibId().Format();
+    else if( aCol == 11 )
+        return sym->GetDescription();
 
     return wxEmptyString;
 }

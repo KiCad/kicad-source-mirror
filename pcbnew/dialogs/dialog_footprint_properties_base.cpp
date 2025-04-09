@@ -382,7 +382,7 @@ DIALOG_FOOTPRINT_PROPERTIES_BASE::DIALOG_FOOTPRINT_PROPERTIES_BASE( wxWindow* pa
 
 	m_libraryIDLabel = new wxStaticText( this, wxID_ANY, _("Library link:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_libraryIDLabel->Wrap( -1 );
-	bottomButtonsSizer->Add( m_libraryIDLabel, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 7 );
+	bottomButtonsSizer->Add( m_libraryIDLabel, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM, 2 );
 
 	m_tcLibraryID = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY|wxBORDER_NONE );
 	m_tcLibraryID->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_3DLIGHT ) );
@@ -403,7 +403,7 @@ DIALOG_FOOTPRINT_PROPERTIES_BASE::DIALOG_FOOTPRINT_PROPERTIES_BASE( wxWindow* pa
 	bottomButtonsSizer->Add( m_sdbSizerStdButtons, 0, wxEXPAND|wxALL, 5 );
 
 
-	m_GeneralBoxSizer->Add( bottomButtonsSizer, 0, wxEXPAND|wxLEFT, 5 );
+	m_GeneralBoxSizer->Add( bottomButtonsSizer, 0, wxEXPAND|wxLEFT, 12 );
 
 
 	this->SetSizer( m_GeneralBoxSizer );

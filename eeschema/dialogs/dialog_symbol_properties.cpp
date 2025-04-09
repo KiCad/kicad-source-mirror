@@ -378,6 +378,9 @@ DIALOG_SYMBOL_PROPERTIES::DIALOG_SYMBOL_PROPERTIES( SCH_EDIT_FRAME* aParent,
     m_pinGrid->PushEventHandler( new GRID_TRICKS( m_pinGrid ) );
     m_pinGrid->SetSelectionMode( wxGrid::wxGridSelectRows );
 
+    wxFont infoFont = KIUI::GetInfoFont( this );
+    m_libraryIDLabel->SetFont( infoFont );
+    m_tcLibraryID->SetFont( infoFont );
     m_tcLibraryID->SetBackgroundColour( KIPLATFORM::UI::GetDialogBGColour() );
 
     wxToolTip::Enable( true );
@@ -390,8 +393,7 @@ DIALOG_SYMBOL_PROPERTIES::DIALOG_SYMBOL_PROPERTIES( SCH_EDIT_FRAME* aParent,
     m_bpMoveDown->SetBitmap( KiBitmapBundle( BITMAPS::small_down ) );
 
     // wxFormBuilder doesn't include this event...
-    m_fieldsGrid->Bind( wxEVT_GRID_CELL_CHANGING, &DIALOG_SYMBOL_PROPERTIES::OnGridCellChanging,
-                        this );
+    m_fieldsGrid->Bind( wxEVT_GRID_CELL_CHANGING, &DIALOG_SYMBOL_PROPERTIES::OnGridCellChanging, this );
     m_pinGrid->Bind( wxEVT_GRID_COL_SORT, &DIALOG_SYMBOL_PROPERTIES::OnPinTableColSort, this );
     Bind( SYMBOL_DELAY_FOCUS, &DIALOG_SYMBOL_PROPERTIES::HandleDelayedFocus, this );
     Bind( SYMBOL_DELAY_SELECTION, &DIALOG_SYMBOL_PROPERTIES::HandleDelayedSelection, this );
@@ -422,8 +424,7 @@ DIALOG_SYMBOL_PROPERTIES::~DIALOG_SYMBOL_PROPERTIES()
     if( m_dataModel )
         m_pinGrid->DestroyTable( m_dataModel );
 
-    m_fieldsGrid->Unbind( wxEVT_GRID_CELL_CHANGING, &DIALOG_SYMBOL_PROPERTIES::OnGridCellChanging,
-                          this );
+    m_fieldsGrid->Unbind( wxEVT_GRID_CELL_CHANGING, &DIALOG_SYMBOL_PROPERTIES::OnGridCellChanging, this );
     m_pinGrid->Unbind( wxEVT_GRID_COL_SORT, &DIALOG_SYMBOL_PROPERTIES::OnPinTableColSort, this );
     Unbind( SYMBOL_DELAY_FOCUS, &DIALOG_SYMBOL_PROPERTIES::HandleDelayedFocus, this );
     Unbind( SYMBOL_DELAY_SELECTION, &DIALOG_SYMBOL_PROPERTIES::HandleDelayedSelection, this );

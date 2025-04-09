@@ -115,11 +115,13 @@ void PCB_SEARCH_HANDLER::SelectItems( std::vector<long>& aItemRows )
 FOOTPRINT_SEARCH_HANDLER::FOOTPRINT_SEARCH_HANDLER( PCB_EDIT_FRAME* aFrame ) :
         PCB_SEARCH_HANDLER( _HKI( "Footprints" ), aFrame )
 {
-    m_columns.emplace_back( _HKI( "Reference" ), 2, wxLIST_FORMAT_LEFT );
-    m_columns.emplace_back( _HKI( "Value" ),     8, wxLIST_FORMAT_LEFT );
-    m_columns.emplace_back( _HKI( "Layer" ),     3, wxLIST_FORMAT_CENTER );
-    m_columns.emplace_back( wxT( "X" ),          3, wxLIST_FORMAT_CENTER );
-    m_columns.emplace_back( wxT( "Y" ),          3, wxLIST_FORMAT_CENTER );
+    m_columns.emplace_back( _HKI( "Reference" ),            2, wxLIST_FORMAT_LEFT );
+    m_columns.emplace_back( _HKI( "Value" ),                6, wxLIST_FORMAT_LEFT );
+    m_columns.emplace_back( _HKI( "Layer" ),                2, wxLIST_FORMAT_CENTER );
+    m_columns.emplace_back(  wxT( "X" ),                    3, wxLIST_FORMAT_CENTER );
+    m_columns.emplace_back(  wxT( "Y" ),                    3, wxLIST_FORMAT_CENTER );
+    m_columns.emplace_back( _HKI( "Library Link" ),         8, wxLIST_FORMAT_LEFT );
+    m_columns.emplace_back( _HKI( "Library Description" ), 10, wxLIST_FORMAT_LEFT );
 }
 
 
@@ -176,6 +178,10 @@ wxString FOOTPRINT_SEARCH_HANDLER::getResultCell( BOARD_ITEM* aItem, int aCol )
         return m_frame->MessageTextFromCoord( fp->GetX(), ORIGIN_TRANSFORMS::ABS_X_COORD );
     else if( aCol == 4 )
         return m_frame->MessageTextFromCoord( fp->GetY(), ORIGIN_TRANSFORMS::ABS_Y_COORD );
+    else if( aCol == 5 )
+        return fp->GetFPID().Format();
+    else if( aCol == 6 )
+        return fp->GetLibDescription();
 
     return wxEmptyString;
 }
