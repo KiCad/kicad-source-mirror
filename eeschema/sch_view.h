@@ -100,6 +100,9 @@ public:
     SCH_VIEW( SCH_BASE_FRAME* aFrame );
     ~SCH_VIEW();
 
+    void Update( const KIGFX::VIEW_ITEM* aItem, int aUpdateFlags ) const override;
+    void Update( const KIGFX::VIEW_ITEM* aItem ) const override;
+
     void Cleanup();
 
     void DisplaySheet( const SCH_SCREEN* aScreen );

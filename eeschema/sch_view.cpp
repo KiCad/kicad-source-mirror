@@ -57,6 +57,40 @@ SCH_VIEW::~SCH_VIEW()
 }
 
 
+void SCH_VIEW::Update( const KIGFX::VIEW_ITEM* aItem, int aUpdateFlags ) const
+{
+    if( aItem->IsSCH_ITEM() )
+    {
+        // The equivalent function in PCB_VIEW doesn't need to do this, but
+        // that's only because RunOnChildren's constness is misleading in the PCB editor;
+        // it doesn't modify target item, but our uses of it modify its children.
+        SCH_ITEM* schItem = const_cast<SCH_ITEM*>( static_cast<const SCH_ITEM*>( aItem ) );
+
+        if( schItem->Type() == SCH_TABLECELL_T )
+        {
+            VIEW::Update( schItem->GetParent() );
+        }
+        else
+        {
+            schItem->RunOnChildren(
+                    [this, aUpdateFlags]( SCH_ITEM* child )
+                    {
+                        VIEW::Update( child, aUpdateFlags );
+                    },
+                    RECURSE_MODE::NO_RECURSE );
+        }
+    }
+
+    VIEW::Update( aItem, aUpdateFlags );
+}
+
+
+void SCH_VIEW::Update( const KIGFX::VIEW_ITEM* aItem ) const
+{
+    SCH_VIEW::Update( aItem, KIGFX::ALL );
+}
+
+
 void SCH_VIEW::Cleanup()
 {
     Clear();

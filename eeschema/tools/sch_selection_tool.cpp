@@ -2422,6 +2422,15 @@ void SCH_SELECTION_TOOL::filterCollectorForHierarchy( SCH_COLLECTOR& aCollector,
 }
 
 
+int SCH_SELECTION_TOOL::updateSelection( const TOOL_EVENT& aEvent )
+{
+    getView()->Update( &m_selection );
+    getView()->Update( &m_enteredGroupOverlay );
+
+    return 0;
+}
+
+
 void SCH_SELECTION_TOOL::InitializeSelectionState( SCH_TABLE* aTable )
 {
     for( SCH_TABLECELL* cell : aTable->GetCells() )
@@ -3273,6 +3282,9 @@ void SCH_SELECTION_TOOL::setTransitions()
 
     Go( &SCH_SELECTION_TOOL::SelectNext,          SCH_ACTIONS::nextNetItem.MakeEvent() );
     Go( &SCH_SELECTION_TOOL::SelectPrevious,      SCH_ACTIONS::previousNetItem.MakeEvent() );
+
+    Go( &SCH_SELECTION_TOOL::updateSelection,     EVENTS::SelectedItemsModified );
+    Go( &SCH_SELECTION_TOOL::updateSelection,     EVENTS::SelectedItemsMoved );
 
     Go( &SCH_SELECTION_TOOL::disambiguateCursor,  EVENTS::DisambiguatePoint );
 }

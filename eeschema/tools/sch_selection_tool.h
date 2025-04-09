@@ -334,6 +334,11 @@ private:
     bool selectionContains( const VECTOR2I& aPoint ) const;
 
     /**
+     * Event handler to update the selection VIEW_ITEM.
+     */
+    int updateSelection( const TOOL_EVENT& aEvent );
+
+    /**
      * Return true if the given item passes the stateful selection filter
      */
     bool itemPassesFilter( EDA_ITEM* aItem );

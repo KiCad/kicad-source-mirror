@@ -645,6 +645,13 @@ bool SCH_MOVE_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, SCH_COMMIT* aComm
                         shape->UpdateHatching();
                     }
 
+                    static_cast<SCH_ITEM*>( item )->RunOnChildren(
+                            [&]( SCH_ITEM* schItem )
+                            {
+                                item->SetFlags( IS_MOVING );
+                            },
+                            RECURSE_MODE::RECURSE );
+
                     if( SCH_ITEM* schItem = dynamic_cast<SCH_ITEM*>( item ) )
                         schItem->SetStoredPos( schItem->GetPosition() );
                 }
