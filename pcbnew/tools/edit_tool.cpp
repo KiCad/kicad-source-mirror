@@ -2495,7 +2495,7 @@ void EDIT_TOOL::DeleteItems( const PCB_SELECTION& aItems, bool aIsCut )
         BOARD_ITEM* board_item = static_cast<BOARD_ITEM*>( item );
         FOOTPRINT*  parentFP = board_item->GetParentFootprint();
 
-        if( board_item->GetParentGroup() )
+        if( board_item->GetParentGroup() && !parentFP )
             commit.Stage( board_item, CHT_UNGROUP );
 
         switch( item->Type() )
@@ -2522,6 +2522,16 @@ void EDIT_TOOL::DeleteItems( const PCB_SELECTION& aItems, bool aIsCut )
         }
 
         case PCB_TEXT_T:
+        case PCB_SHAPE_T:
+        case PCB_TEXTBOX_T:
+        case PCB_TABLE_T:
+        case PCB_REFERENCE_IMAGE_T:
+        case PCB_DIMENSION_T:
+        case PCB_DIM_ALIGNED_T:
+        case PCB_DIM_LEADER_T:
+        case PCB_DIM_CENTER_T:
+        case PCB_DIM_RADIAL_T:
+        case PCB_DIM_ORTHOGONAL_T:
             if( parentFP )
             {
                 commit.Modify( parentFP );
@@ -2533,20 +2543,6 @@ void EDIT_TOOL::DeleteItems( const PCB_SELECTION& aItems, bool aIsCut )
                 commit.Remove( board_item );
             }
 
-            itemsDeleted++;
-            break;
-
-        case PCB_SHAPE_T:
-        case PCB_TEXTBOX_T:
-        case PCB_TABLE_T:
-        case PCB_REFERENCE_IMAGE_T:
-        case PCB_DIMENSION_T:
-        case PCB_DIM_ALIGNED_T:
-        case PCB_DIM_LEADER_T:
-        case PCB_DIM_CENTER_T:
-        case PCB_DIM_RADIAL_T:
-        case PCB_DIM_ORTHOGONAL_T:
-            commit.Remove( board_item );
             itemsDeleted++;
             break;
 
