@@ -42,7 +42,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-28 16:28-0700\n"
-"PO-Revision-Date: 2025-04-04 06:01+0000\n"
+"PO-Revision-Date: 2025-04-10 05:09+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/kicad/master-source/zh_Hans/>\n"
@@ -7153,18 +7153,12 @@ msgstr ""
 "footprints.pretty。"
 
 #: common/env_vars.cpp:141
-#, fuzzy
 msgid "A directory containing system-wide scripts installed with KiCad."
-msgstr ""
-"KiCad 自带的脚本文件的存储路径(整个系统)/ 一个包含用 KiCad 安装的系统级脚本的"
-"目录"
+msgstr "由 KiCad 安装的脚本的目录 (系统级别)。"
 
 #: common/env_vars.cpp:144
-#, fuzzy
 msgid "A directory containing user-specific scripts installed with KiCad."
-msgstr ""
-"KiCad 自带的脚本文件的存储路径(特定用户)/一个包含用 KiCad 安装的用户指定脚本"
-"的目录"
+msgstr "由 KiCad 安装的脚本的目录 (特定用户)。"
 
 #: common/env_vars.cpp:147
 #, c-format
@@ -13666,9 +13660,8 @@ msgid "Jumper Pin Groups"
 msgstr ""
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:370
-#, fuzzy
 msgid "Available pins"
-msgstr "可用路径:"
+msgstr "可用引脚"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:386
 #, fuzzy
@@ -13681,14 +13674,12 @@ msgid "Remove the selected jumper pin group"
 msgstr "从自定义分组中移除选中项目"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:401
-#, fuzzy
 msgid "Grouped pins"
-msgstr "分组"
+msgstr ""
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:423
-#, fuzzy
 msgid "Pin Connections"
-msgstr "焊盘连接"
+msgstr "引脚连接"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:436
 msgid "Edit Simulation Model..."
@@ -33690,7 +33681,7 @@ msgstr "测量点与尺寸界线起点之间的间隙"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:427
 msgid "Extension line overshoot:"
-msgstr "延长线过冲:"
+msgstr "尺寸界线超程:"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:438
 msgid "Arrow direction:"
@@ -35110,7 +35101,7 @@ msgstr "网络结点(Net Ties)"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:344
 msgid "Pad groups allowed to short different nets:"
-msgstr "被允许短路不同网络的焊盘组:"
+msgstr "允许短路到不同网络的焊盘组:"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:404
 msgid "Pads with duplicate numbers are jumpers"
@@ -35144,7 +35135,7 @@ msgstr "从自定义分组中移除选中项目"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:449
 msgid "Grouped pads"
-msgstr "按焊盘分组"
+msgstr ""
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:471
 #: pcbnew/zone.cpp:2052
@@ -38311,7 +38302,7 @@ msgstr "目标 skew: "
 #: pcbnew/zone.cpp:945
 #, c-format
 msgid "(from %s)"
-msgstr "(从 %s)"
+msgstr "(来自 %s)"
 
 #: pcbnew/dialogs/dialog_tuning_pattern_properties_base.cpp:31
 msgid "Target length:"
@@ -44466,11 +44457,11 @@ msgstr "与测量标注保持对齐"
 
 #: pcbnew/pcb_dimension.cpp:1911
 msgid "Crossbar Height"
-msgstr "横杠高度"
+msgstr "标注线高度"
 
 #: pcbnew/pcb_dimension.cpp:1915
 msgid "Extension Line Overshoot"
-msgstr "引线超出"
+msgstr "尺寸界线超程"
 
 #: pcbnew/pcb_dimension.cpp:1986
 msgid "Leader Length"
