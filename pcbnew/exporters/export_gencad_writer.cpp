@@ -1014,12 +1014,9 @@ void GENCAD_EXPORTER::CreateRoutesSection()
             VECTOR2I center = arc->GetCenter();
 
             fprintf( m_file, "ARC %g %g %g %g %g %g\n",
-                     start.x / SCALE_FACTOR,
-                     -start.y / SCALE_FACTOR,
-                     end.x / SCALE_FACTOR,
-                     -end.y / SCALE_FACTOR,
-                     center.x / SCALE_FACTOR,
-                     -center.y / SCALE_FACTOR );
+                     MapXTo( start.x ), MapYTo( start.y ),
+                     MapXTo( end.x ), MapYTo( end.y ),
+                     MapXTo( center.x ), MapYTo( center.y ) );
         }
         else if( track->Type() == PCB_VIA_T )
         {
