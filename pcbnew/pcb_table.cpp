@@ -225,6 +225,17 @@ void PCB_TABLE::RunOnChildren( const std::function<void( BOARD_ITEM* )>& aFuncti
 }
 
 
+void PCB_TABLE::RunOnDescendants( const std::function<void( BOARD_ITEM* )>& aFunction, int aDepth ) const
+{
+    for( PCB_TABLECELL* cell : m_cells )
+    {
+        aFunction( cell );
+
+        cell->RunOnDescendants( aFunction, aDepth + 1 );
+    }
+}
+
+
 const BOX2I PCB_TABLE::GetBoundingBox() const
 {
     // Note: a table with no cells is not allowed

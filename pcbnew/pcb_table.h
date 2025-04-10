@@ -98,6 +98,7 @@ public:
     bool StrokeRows() const              { return m_strokeRows; }
 
     void RunOnChildren( const std::function<void( BOARD_ITEM* )>& aFunction ) const override;
+    void RunOnDescendants( const std::function<void( BOARD_ITEM* )>& aFunction, int aDepth = 0 ) const override;
 
     void SetPosition( const VECTOR2I& aPos ) override;
     VECTOR2I GetPosition() const override;
