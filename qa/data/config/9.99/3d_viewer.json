@@ -210,6 +210,7 @@
   },
   "search_pane": {
     "search_hidden_fields": true,
+    "search_metadata": false,
     "selection_zoom": 1
   },
   "system": {
