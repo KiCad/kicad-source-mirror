@@ -1,8 +1,10 @@
 
 
 %{
+#include <eda_group.h>
 #include <pcb_group.h>
 %}
+%include ../common/eda_group.h
 %include pcb_group.h
 
 %extend PCB_GROUP
