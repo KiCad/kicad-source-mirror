@@ -293,8 +293,13 @@ COLOR4D PCB_RENDER_SETTINGS::GetColor( const BOARD_ITEM* aItem, int aLayer ) con
     // Normal selection
     if( aItem->IsSelected() )
     {
-        auto it_selected = m_layerColorsSel.find( aLayer );
-        color = it_selected == m_layerColorsSel.end() ? color.Brightened( 0.8 ) : it_selected->second;
+        // Selection for tables is done with a background wash, so pass in nullptr to GetColor()
+        // so we just get the "normal" (un-selected/un-brightened) color for the borders.
+        if( aItem->Type() != PCB_TABLE_T && aItem->Type() != PCB_TABLECELL_T )
+        {
+            auto it_selected = m_layerColorsSel.find( aLayer );
+            color = it_selected == m_layerColorsSel.end() ? color.Brightened( 0.8 ) : it_selected->second;
+        }
     }
 
     // Some graphic objects are BOARD_CONNECTED_ITEM, but they are seen here as
@@ -2395,13 +2400,6 @@ void PCB_PAINTER::draw( const PCB_TEXTBOX* aTextBox, int aLayer )
         m_gal->DrawPolygon( dpts );
     }
 
-    if( aTextBox->Type() == PCB_TABLECELL_T )
-    {
-        // Selection for tables is done with a background wash, so pass in nullptr to GetColor()
-        // so we just get the "normal" (un-selected/un-brightened) color for the borders.
-        color = m_pcbSettings.GetColor( nullptr, aLayer );
-    }
-
     m_gal->SetFillColor( color );
     m_gal->SetStrokeColor( color );
     m_gal->SetIsFill( true );
@@ -2507,9 +2505,7 @@ void PCB_PAINTER::draw( const PCB_TABLE* aTable, int aLayer )
             draw( static_cast<PCB_TEXTBOX*>( cell ), aLayer );
     }
 
-    // Selection for tables is done with a background wash, so pass in nullptr to GetColor()
-    // so we just get the "normal" (un-selected/un-brightened) color for the borders.
-    COLOR4D color = m_pcbSettings.GetColor( nullptr, aLayer );
+    COLOR4D color = m_pcbSettings.GetColor( aTable, aLayer );
 
     aTable->DrawBorders(
             [&]( const VECTOR2I& ptA, const VECTOR2I& ptB, const STROKE_PARAMS& stroke )
