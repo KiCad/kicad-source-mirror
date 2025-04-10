@@ -1907,6 +1907,9 @@ SCH_SELECTION& SCH_SELECTION_TOOL::RequestSelection( const std::vector<KICAD_T>&
             {
                 if( !child->IsSelected() )
                 {
+                    if( child->Type() == SCH_LINE_T )
+                        static_cast<SCH_LINE*>( child )->SetFlags( STARTPOINT | ENDPOINT );
+
                     select( child );
                     anySelected = true;
                 }

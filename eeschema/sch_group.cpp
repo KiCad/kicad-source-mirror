@@ -321,28 +321,64 @@ double SCH_GROUP::ViewGetLOD( int aLayer, const KIGFX::VIEW* aView ) const
 void SCH_GROUP::Move( const VECTOR2I& aMoveVector )
 {
     for( EDA_ITEM* member : m_items )
+    {
+        EDA_ITEM_FLAGS flags = member->GetFlags();
+
+        if( member->Type() == SCH_LINE_T )
+            member->SetFlags( STARTPOINT | ENDPOINT );
+
         static_cast<SCH_ITEM*>( member )->Move( aMoveVector );
+
+        member->SetFlags( flags );
+    }
 }
 
 
 void SCH_GROUP::Rotate( const VECTOR2I& aCenter, bool aRotateCCW )
 {
     for( EDA_ITEM* member : m_items )
+    {
+        EDA_ITEM_FLAGS flags = member->GetFlags();
+
+        if( member->Type() == SCH_LINE_T )
+            member->SetFlags( STARTPOINT | ENDPOINT );
+
         static_cast<SCH_ITEM*>( member )->Rotate( aCenter, aRotateCCW );
+
+        member->SetFlags( flags );
+    }
 }
 
 
 void SCH_GROUP::MirrorHorizontally( int aCenter )
 {
-    for( EDA_ITEM* item : m_items )
-        static_cast<SCH_ITEM*>( item )->MirrorHorizontally( aCenter );
+    for( EDA_ITEM* member : m_items )
+    {
+        EDA_ITEM_FLAGS flags = member->GetFlags();
+
+        if( member->Type() == SCH_LINE_T )
+            member->SetFlags( STARTPOINT | ENDPOINT );
+
+        static_cast<SCH_ITEM*>( member )->MirrorHorizontally( aCenter );
+
+        member->SetFlags( flags );
+    }
 }
 
 
 void SCH_GROUP::MirrorVertically( int aCenter )
 {
-    for( EDA_ITEM* item : m_items )
-        static_cast<SCH_ITEM*>( item )->MirrorVertically( aCenter );
+    for( EDA_ITEM* member : m_items )
+    {
+        EDA_ITEM_FLAGS flags = member->GetFlags();
+
+        if( member->Type() == SCH_LINE_T )
+            member->SetFlags( STARTPOINT | ENDPOINT );
+
+        static_cast<SCH_ITEM*>( member )->MirrorVertically( aCenter );
+
+        member->SetFlags( flags );
+    }
 }
 
 

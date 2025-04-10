@@ -779,7 +779,7 @@ const std::vector<KICAD_T> SCH_EDIT_TOOL::RotatableItems = {
 int SCH_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
 {
     bool           clockwise = ( aEvent.Matches( SCH_ACTIONS::rotateCW.MakeEvent() ) );
-    SCH_SELECTION& selection = m_selectionTool->RequestSelection( RotatableItems, true, true );
+    SCH_SELECTION& selection = m_selectionTool->RequestSelection( RotatableItems, true, false );
 
     if( selection.GetSize() == 0 )
         return 0;
@@ -891,6 +891,7 @@ int SCH_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
         case SCH_NO_CONNECT_T:
         case SCH_BUS_BUS_ENTRY_T:
         case SCH_BUS_WIRE_ENTRY_T:
+        case SCH_GROUP_T:
             head->Rotate( rotPoint, !clockwise );
 
             break;
@@ -1057,7 +1058,7 @@ int SCH_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
 
 int SCH_EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
 {
-    SCH_SELECTION& selection = m_selectionTool->RequestSelection( RotatableItems, false, true );
+    SCH_SELECTION& selection = m_selectionTool->RequestSelection( RotatableItems, false, false );
 
     if( selection.GetSize() == 0 )
         return 0;
