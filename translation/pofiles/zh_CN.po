@@ -41,7 +41,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-28 16:28-0700\n"
-"PO-Revision-Date: 2025-03-27 13:55+0000\n"
+"PO-Revision-Date: 2025-04-10 05:09+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/kicad/v9/zh_Hans/>\n"
@@ -32894,7 +32894,7 @@ msgstr "测量点与尺寸界线起点之间的间隙"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:427
 msgid "Extension line overshoot:"
-msgstr "延长线过冲:"
+msgstr "尺寸界线超程:"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:438
 msgid "Arrow direction:"
@@ -34317,7 +34317,7 @@ msgstr "网络结点(Net Ties)"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:344
 msgid "Pad groups allowed to short different nets:"
-msgstr "被允许短路不同网络的焊盘组:"
+msgstr "允许短路到不同网络的焊盘组:"
 
 #: pcbnew/dialogs/dialog_footprint_wizard_list.cpp:146
 msgid "All footprint generator scripts were loaded"
@@ -37419,7 +37419,7 @@ msgstr "目标 skew: "
 #: pcbnew/zone.cpp:874
 #, c-format
 msgid "(from %s)"
-msgstr "(从 %s)"
+msgstr "(来自 %s)"
 
 #: pcbnew/dialogs/dialog_tuning_pattern_properties_base.cpp:31
 msgid "Target length:"
@@ -43441,11 +43441,11 @@ msgstr "与测量标注保持对齐"
 
 #: pcbnew/pcb_dimension.cpp:1911
 msgid "Crossbar Height"
-msgstr "横杠高度"
+msgstr "标注线高度"
 
 #: pcbnew/pcb_dimension.cpp:1915
 msgid "Extension Line Overshoot"
-msgstr "引线超出"
+msgstr "尺寸界线超程"
 
 #: pcbnew/pcb_dimension.cpp:1986
 msgid "Leader Length"
