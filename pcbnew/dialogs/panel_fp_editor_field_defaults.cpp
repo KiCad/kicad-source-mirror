@@ -537,7 +537,13 @@ void PANEL_FP_EDITOR_FIELD_DEFAULTS::OnAddTextItem( wxCommandEvent& event )
 
     int newRow = m_textItemsGrid->GetNumberRows();
     table->AppendRows( 1 );
-    table->SetValueAsLong( newRow, 1, table->GetValueAsLong( newRow - 1, 1 ) );
+
+    long defaultBoardLayer = F_SilkS;
+
+    if( newRow > 0 )
+         defaultBoardLayer = table->GetValueAsLong( newRow - 1, 1 );
+
+    table->SetValueAsLong( newRow, 1, defaultBoardLayer );
 
     m_textItemsGrid->MakeCellVisible( newRow, 0 );
     m_textItemsGrid->SetGridCursor( newRow, 0 );
