@@ -1313,6 +1313,9 @@ void DIALOG_SIM_MODEL<T>::onFilterCharHook( wxKeyEvent& aKeyStroke )
 template <typename T>
 void DIALOG_SIM_MODEL<T>::onModelFilter( wxCommandEvent& aEvent )
 {
+    if( library() == nullptr )  // No library loaded
+        return;
+
     wxArrayString modelNames;
     wxString      current = m_modelListBox->GetStringSelection();
     wxString      filter = wxT( "*" ) + m_modelFilter->GetValue() + wxT( "*" );
