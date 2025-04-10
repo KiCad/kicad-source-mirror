@@ -18,7 +18,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-28 16:28-0700\n"
-"PO-Revision-Date: 2025-04-03 00:32+0000\n"
+"PO-Revision-Date: 2025-04-10 22:01+0000\n"
 "Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/kicad/"
 "master-source/pl/>\n"
@@ -47822,23 +47822,20 @@ msgid "Not covered"
 msgstr "Niezakryte"
 
 #: pcbnew/pcb_track.cpp:2206
-#, fuzzy
 msgid "Plugged"
-msgstr "Wtyczka"
+msgstr "Zatkane"
 
 #: pcbnew/pcb_track.cpp:2207
-#, fuzzy
 msgid "Not plugged"
-msgstr "Nie znaleziono"
+msgstr "Nie zatkane"
 
 #: pcbnew/pcb_track.cpp:2212
 msgid "Capped"
-msgstr ""
+msgstr "Zaślepione"
 
 #: pcbnew/pcb_track.cpp:2213
-#, fuzzy
 msgid "Not capped"
-msgstr "Niepołączone"
+msgstr "Nie zaślepione"
 
 #: pcbnew/pcb_track.cpp:2219
 msgid "Not filled"
@@ -47890,17 +47887,15 @@ msgstr "Maskowanie po stronie dolnej"
 
 #: pcbnew/pcb_track.cpp:2310
 msgid "Capping"
-msgstr ""
+msgstr "Zaślepienie"
 
 #: pcbnew/pcb_track.cpp:2312
-#, fuzzy
 msgid "Filling"
-msgstr "Wypełnij"
+msgstr "Wypełnienie"
 
 #: pcbnew/pcbexpr_evaluator.cpp:614
-#, fuzzy
 msgid "must be mm, in, mil, or deg"
-msgstr "musi być mm, cal, lub mils"
+msgstr "musi być mm, cal, milsy, lub stopine"
 
 #: pcbnew/pcbexpr_functions.cpp:76
 #, c-format
@@ -48627,7 +48622,7 @@ msgstr "Wybór szerokości ścieżki"
 
 #: pcbnew/toolbars_pcb_editor.cpp:125
 msgid "Control to select the track width"
-msgstr ""
+msgstr "Kontrolka służąca do wyboru szerokości ścieżki"
 
 #: pcbnew/toolbars_pcb_editor.cpp:126
 msgid "Via diameter selector"
@@ -48635,7 +48630,7 @@ msgstr "Wybór rozmiaru przelotki"
 
 #: pcbnew/toolbars_pcb_editor.cpp:127
 msgid "Control to select the via diameter"
-msgstr ""
+msgstr "Kontrolka służąca do wyboru rozmiaru przelotki"
 
 #: pcbnew/toolbars_pcb_editor.cpp:195
 #, fuzzy
