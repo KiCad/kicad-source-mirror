@@ -714,6 +714,7 @@ TOOL_ACTION SCH_ACTIONS::repeatDrawItem( TOOL_ACTION_ARGS()
 TOOL_ACTION SCH_ACTIONS::rotateCW( TOOL_ACTION_ARGS()
         .Name( "eeschema.InteractiveEdit.rotateCW" )
         .Scope( AS_GLOBAL )
+        .DefaultHotkey( MD_SHIFT + 'R' )
         .FriendlyName( _( "Rotate Clockwise" ) )
         .Icon( BITMAPS::rotate_cw ) );
 
