@@ -21,6 +21,11 @@ class BOARD;
 class wxString;
 struct aFile;
 
+/**
+ * Export board to GenCAD file format.
+ *
+ * @note This exporter **only** supports GenCAD version 1.4.
+ */
 class GENCAD_EXPORTER
 {
 public:
@@ -31,48 +36,102 @@ public:
         m_useUniquePins( false ),
         m_useIndividualShapes( false ),
         m_storeOriginCoords( false )
-
     {
     }
 
-    /** Export a genCAD file
-     * @param aFullFileName is the full filenam to create
+    /**
+     * Export a GenCAD file.
+     *
+     * @param aFullFileName is the full filename to create.
      * @return true on success
      */
     bool WriteFile( const wxString& aFullFileName );
 
-    /// Set the coordinates offet when exporting items
-    void SetPlotOffet( VECTOR2I aOffset ) { GencadOffset = aOffset; }
+    /// Set the coordinates offset when exporting items.
+    void SetPlotOffet( VECTOR2I aOffset ) { m_gencadOffset = aOffset; }
 
-    /// Flip pad shapes on the bottom side
+    /// Flip pad shapes on the bottom side.
     void FlipBottomPads( bool aFlip ) { m_flipBottomPads = aFlip; }
 
-    /// Make pin names unique
+    /// Make pin names unique.
     void UsePinNamesUnique( bool aUnique ) { m_useUniquePins = aUnique; }
 
-    /// Make pad shapes unique
+    /// Make pad shapes unique.
     void UseIndividualShapes( bool aUnique ) { m_useIndividualShapes = aUnique; }
 
-    ///Store coord origin in genCAD file
+    /// Store origin coordinate in GenCAD file.
     void StoreOriginCoordsInFile( bool aStore ) { m_storeOriginCoords = aStore; }
 
 private:
     /// Creates the header section
-    bool CreateHeaderInfoData();
-    void CreateArtworksSection();
-    void CreateTracksInfoData();
-    void CreateBoardSection();
-    void CreateComponentsSection();
-    void CreateDevicesSection();
-    void CreateRoutesSection();
-    void CreateSignalsSection();
-    void CreateShapesSection();
-    void CreatePadsShapesSection();
-    void FootprintWriteShape( FOOTPRINT* aFootprint, const wxString& aShapeName );
+    bool createHeaderInfoData();
+    void createArtworksSection();
+
+    /**
+     * Create the "$TRACKS" section.
+     *
+     *  This section gives the list of widths (tools) used in tracks and vias
+     *
+     *  Each track name is build using "TRACK" + track width.
+     *  For instance for a width = 120 : name = "TRACK120".
+     */
+
+    void createTracksInfoData();
+    void createBoardSection();
+
+    /**
+     * Create the $COMPONENTS GenCAD section.
+     *
+     * GenCAD $COMPONENTS are the footprint placements.  Bottom side components are difficult to handle
+     * because shapes must be mirrored or flipped.  Silk screen layers need to be handled correctly and
+     * so on. Also it seems that *no one* follows the specs...
+     */
+    void createComponentsSection();
+
+    /**
+     * Create the $DEVICES section.
+     *
+     * This is a list of footprints properties. Footprint shapes are in $SHAPES section.
+     */
+
+    void createDevicesSection();
+
+    /**
+     * Create the $ROUTES section.
+     *
+     * This section handles tracks and vias
+     *
+     * @todo Add zones to GenCAD output.
+     */
+    void createRoutesSection();
+    void createSignalsSection();
+
+
+    /**
+     * Create the footprint shape list.
+     *
+     * Since footprint shape is customizable after the placement we cannot share them.
+     * Instead we opt for the one footprint one shape one component one device approach.
+     */
+    void createShapesSection();
+    void createPadsShapesSection();
+
+    /**
+     * Create the shape of a footprint (SHAPE section)
+     *
+     *  The shape is always given "normal" orientation.  It's almost guaranteed that the silk
+     * layer will be imported wrong but the shape also contains the pads.
+     */
+    void footprintWriteShape( FOOTPRINT* aFootprint, const wxString& aShapeName );
     const wxString getShapeName( FOOTPRINT* aFootprint );
 
-    double MapXTo( int aX );
-    double MapYTo( int aY );
+    /**
+     * Helper functions to calculate coordinates of footprints in GenCAD values.
+     *
+     * The GenCAD Y axis from bottom to top,
+     */
+    double mapXTo( int aX );
+    double mapYTo( int aY );
 
 
 private:
@@ -87,5 +146,5 @@ private:
     bool m_storeOriginCoords;
 
     // These are the export origin (the auxiliary axis)
-    VECTOR2I GencadOffset;
+    VECTOR2I m_gencadOffset;
 };
