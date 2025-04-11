@@ -289,7 +289,9 @@ std::vector<PCB_LAYER_ID> ALTIUM_PCB::GetKicadLayersToIterate( ALTIUM_LAYER aAlt
         }
 
         klayer = Eco1_User;
-        m_board->SetEnabledLayers( m_board->GetEnabledLayers() | LSET( { klayer } ) );
+
+        if( m_board )
+            m_board->SetEnabledLayers( m_board->GetEnabledLayers() | LSET( { klayer } ) );
     }
 
     return { klayer };
