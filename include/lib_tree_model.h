@@ -81,7 +81,7 @@ public:
      *
      * @param aMatcher  an EDA_COMBINED_MATCHER initialized with the search term
      */
-    virtual void UpdateScore( EDA_COMBINED_MATCHER* aMatcher, const wxString& aLib,
+    virtual void UpdateScore( const std::vector<std::unique_ptr<EDA_COMBINED_MATCHER>>& aMatchers,
                               std::function<bool( LIB_TREE_NODE& aNode )>* aFilter ) = 0;
 
     /**
@@ -178,7 +178,7 @@ public:
      */
     LIB_TREE_NODE_UNIT( LIB_TREE_NODE* aParent, LIB_TREE_ITEM* aItem, int aUnit );
 
-    void UpdateScore( EDA_COMBINED_MATCHER* aMatcher, const wxString& aLib,
+    void UpdateScore( const std::vector<std::unique_ptr<EDA_COMBINED_MATCHER>>& aMatchers,
                       std::function<bool( LIB_TREE_NODE& aNode )>* aFilter ) override;
 };
 
@@ -218,7 +218,7 @@ public:
     /**
      * Perform the actual search.
      */
-    void UpdateScore( EDA_COMBINED_MATCHER* aMatcher, const wxString& aLib,
+    void UpdateScore( const std::vector<std::unique_ptr<EDA_COMBINED_MATCHER>>& aMatchers,
                       std::function<bool( LIB_TREE_NODE& aNode )>* aFilter ) override;
 
 protected:
@@ -260,7 +260,7 @@ public:
      */
     LIB_TREE_NODE_ITEM& AddItem( LIB_TREE_ITEM* aItem );
 
-    void UpdateScore( EDA_COMBINED_MATCHER* aMatcher, const wxString& aLib,
+    void UpdateScore( const std::vector<std::unique_ptr<EDA_COMBINED_MATCHER>>& aMatchers,
                       std::function<bool( LIB_TREE_NODE& aNode )>* aFilter ) override;
 };
 
@@ -298,7 +298,7 @@ public:
      */
     void Clear();
 
-    void UpdateScore( EDA_COMBINED_MATCHER* aMatcher, const wxString& aLib,
+    void UpdateScore( const std::vector<std::unique_ptr<EDA_COMBINED_MATCHER>>& aMatchers,
                       std::function<bool( LIB_TREE_NODE& aNode )>* aFilter ) override;
 };
 

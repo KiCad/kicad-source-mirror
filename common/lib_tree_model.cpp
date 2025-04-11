@@ -171,11 +171,11 @@ LIB_TREE_NODE_UNIT::LIB_TREE_NODE_UNIT( LIB_TREE_NODE* aParent, LIB_TREE_ITEM* a
 }
 
 
-void LIB_TREE_NODE_UNIT::UpdateScore( EDA_COMBINED_MATCHER* aMatcher, const wxString& aLib,
+void LIB_TREE_NODE_UNIT::UpdateScore( const std::vector<std::unique_ptr<EDA_COMBINED_MATCHER>>& aMatchers,
                                       std::function<bool( LIB_TREE_NODE& aNode )>* aFilter )
 {
-    // aMatcher test results are inherited from parent
-    if( aMatcher )
+    // aMatchers test results are inherited from parent
+    if( !aMatchers.empty() )
         m_Score = m_Parent->m_Score;
 
     // aFilter test is subtractive
@@ -183,7 +183,7 @@ void LIB_TREE_NODE_UNIT::UpdateScore( EDA_COMBINED_MATCHER* aMatcher, const wxSt
         m_Score = 0;
 
     // show all nodes if no search/filter/etc. criteria are given
-    if( !aMatcher && aLib.IsEmpty() && ( !aFilter || (*aFilter)(*this) ) )
+    if( aMatchers.empty() && ( !aFilter || (*aFilter)(*this) ) )
         m_Score = 1;
 }
 
@@ -243,35 +243,24 @@ void LIB_TREE_NODE_ITEM::Update( LIB_TREE_ITEM* aItem )
 }
 
 
-void LIB_TREE_NODE_ITEM::UpdateScore( EDA_COMBINED_MATCHER* aMatcher, const wxString& aLib,
+void LIB_TREE_NODE_ITEM::UpdateScore( const std::vector<std::unique_ptr<EDA_COMBINED_MATCHER>>& aMatchers,
                                       std::function<bool( LIB_TREE_NODE& aNode )>* aFilter )
 {
-    // aMatcher test is additive, but if we don't match the given term at all, it nulls out
-    if( aMatcher )
-    {
-        int currentScore = aMatcher->ScoreTerms( m_SearchTerms );
+    m_Score = 0;
 
-        // This is a hack: the second phase of search in the adapter will look for a tokenized
-        // LIB_ID and send the lib part down here.  While we generally want to prune ourselves
-        // out here (by setting score to -1) the first time we fail to match a search term,
-        // we want to give the same search term a second chance if it has been split from a library
-        // name.
-        if( ( m_Score >= 0 || !aLib.IsEmpty() ) && currentScore > 0 )
-            m_Score += currentScore;
-        else
-            m_Score = -1;   // Item has failed to match this term, rule it out
-    }
+    for( const std::unique_ptr<EDA_COMBINED_MATCHER>& matcher : aMatchers )
+        m_Score += matcher->ScoreTerms( m_SearchTerms );
 
     // aFilter test is subtractive
     if( aFilter && !(*aFilter)(*this) )
         m_Score = 0;
 
     // show all nodes if no search/filter/etc. criteria are given
-    if( !aMatcher && aLib.IsEmpty() && ( !aFilter || (*aFilter)(*this) ) )
+    if( aMatchers.empty() && ( !aFilter || (*aFilter)(*this) ) )
         m_Score = 1;
 
     for( std::unique_ptr<LIB_TREE_NODE>& child: m_Children )
-        child->UpdateScore( aMatcher, aLib, aFilter );
+        child->UpdateScore( aMatchers, aFilter );
 }
 
 
@@ -296,52 +285,29 @@ LIB_TREE_NODE_ITEM& LIB_TREE_NODE_LIBRARY::AddItem( LIB_TREE_ITEM* aItem )
 }
 
 
-void LIB_TREE_NODE_LIBRARY::UpdateScore( EDA_COMBINED_MATCHER* aMatcher, const wxString& aLib,
+void LIB_TREE_NODE_LIBRARY::UpdateScore( const std::vector<std::unique_ptr<EDA_COMBINED_MATCHER>>& aMatchers,
                                          std::function<bool( LIB_TREE_NODE& aNode )>* aFilter )
 {
-    int maxChildScore = 0;
-
-    // children are additive
-    if( !m_Children.empty() )
+    if( m_Children.empty() )
     {
+        for( const std::unique_ptr<EDA_COMBINED_MATCHER>& matcher : aMatchers )
+            m_Score += matcher->ScoreTerms( m_SearchTerms );
+    }
+    else
+    {
+        int maxChildScore = 0;
+
         for( std::unique_ptr<LIB_TREE_NODE>& child: m_Children )
         {
-            child->UpdateScore( aMatcher, aLib, aFilter );
+            child->UpdateScore( aMatchers, aFilter );
             maxChildScore = std::max( maxChildScore, child->m_Score );
         }
 
         m_Score = std::max( m_Score, maxChildScore );
     }
 
-    // aLib test is additive
-    if( !aLib.IsEmpty() && m_Name.Lower().Matches( aLib ) )
-        m_Score += 1;
-
-    // aMatcher test is additive
-    if( aMatcher )
-    {
-        int ownScore = aMatcher->ScoreTerms( m_SearchTerms );
-        m_Score += ownScore;
-
-        // If we have a hit on a library, show all children in that library that pass the filter
-        if( maxChildScore <= 0 && ownScore > 0 )
-        {
-            for( std::unique_ptr<LIB_TREE_NODE>& child: m_Children )
-            {
-                if( !aFilter || (*aFilter)( *this ) )
-                    child->ForceScore( 1 );
-
-                maxChildScore = std::max( maxChildScore, child->m_Score );
-            }
-        }
-    }
-
-    // If all children are excluded for one reason or another, drop the library from the list
-    if( !m_Children.empty() && maxChildScore <= 0 )
-        m_Score = 0;
-
     // show all nodes if no search/filter/etc. criteria are given
-    if( m_Children.empty() && !aMatcher && aLib.IsEmpty() && ( !aFilter || (*aFilter)(*this) ) )
+    if( m_Children.empty() && aMatchers.empty() && ( !aFilter || (*aFilter)(*this) ) )
         m_Score = 1;
 }
 
@@ -383,10 +349,10 @@ void LIB_TREE_NODE_ROOT::Clear()
 }
 
 
-void LIB_TREE_NODE_ROOT::UpdateScore( EDA_COMBINED_MATCHER* aMatcher, const wxString& aLib,
+void LIB_TREE_NODE_ROOT::UpdateScore( const std::vector<std::unique_ptr<EDA_COMBINED_MATCHER>>& aMatchers,
                                       std::function<bool( LIB_TREE_NODE& aNode )>* aFilter )
 {
     for( std::unique_ptr<LIB_TREE_NODE>& child: m_Children )
-        child->UpdateScore( aMatcher, aLib, aFilter );
+        child->UpdateScore( aMatchers, aFilter );
 }
 

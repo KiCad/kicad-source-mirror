@@ -292,34 +292,16 @@ void LIB_TREE_MODEL_ADAPTER::UpdateSearchString( const wxString& aSearch, bool a
         // the search box.
         constexpr int MAX_TERMS = 100;
 
-        wxStringTokenizer tokenizer( aSearch );
-        int               termCount = 0;
+        wxStringTokenizer                                  tokenizer( aSearch );
+        std::vector<std::unique_ptr<EDA_COMBINED_MATCHER>> termMatchers;
 
-        while( tokenizer.HasMoreTokens() && termCount < MAX_TERMS )
+        while( tokenizer.HasMoreTokens() && termMatchers.size() < MAX_TERMS )
         {
-            // First search for the full token, in case it appears in a search string
-            wxString             term = tokenizer.GetNextToken().Lower();
-            EDA_COMBINED_MATCHER termMatcher( term, CTX_LIBITEM );
-
-            m_tree.UpdateScore( &termMatcher, wxEmptyString, m_filter );
-            termCount++;
-
-            if( term.Contains( ":" ) )
-            {
-                // Next search for the library:item_name
-                wxString             lib = term.BeforeFirst( ':' );
-                wxString             itemName = term.AfterFirst( ':' );
-                EDA_COMBINED_MATCHER itemNameMatcher( itemName, CTX_LIBITEM );
-
-                m_tree.UpdateScore( &itemNameMatcher, lib, m_filter );
-            }
+            wxString term = tokenizer.GetNextToken().Lower();
+            termMatchers.emplace_back( std::make_unique<EDA_COMBINED_MATCHER>( term, CTX_LIBITEM ) );
         }
 
-        if( termCount == 0 )
-        {
-            // No terms processed; just run the filter
-            m_tree.UpdateScore( nullptr, wxEmptyString, m_filter );
-        }
+        m_tree.UpdateScore( termMatchers, m_filter );
 
         m_tree.SortNodes( m_sort_mode == BEST_MATCH );
         AfterReset();
