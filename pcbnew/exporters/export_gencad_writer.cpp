@@ -33,8 +33,8 @@
 #include <export_gencad_writer.h>
 
 
-// layer names for Gencad export
-static std::string GenCADLayerName( int aCuCount, PCB_LAYER_ID aId )
+/// Layer names for GenCAD export.
+static std::string genCADLayerName( int aCuCount, PCB_LAYER_ID aId )
 {
     if( IsCopperLayer( aId ) )
     {
@@ -89,13 +89,13 @@ static std::string GenCADLayerName( int aCuCount, PCB_LAYER_ID aId )
 }
 
 
-// flipped layer name for Gencad export (to make CAM350 imports correct)
-static std::string GenCADLayerNameFlipped( int aCuCount, PCB_LAYER_ID aId )
+/// The flipped layer name for GenCAD export (to make CAM350 imports correct).
+static std::string genCADLayerNameFlipped( int aCuCount, PCB_LAYER_ID aId )
 {
     if( 1<= aId && aId <= 14 )
         return StrPrintf(  "INNER%d", 14 - aId );
 
-    return GenCADLayerName( aCuCount, aId );
+    return genCADLayerName( aCuCount, aId );
 }
 
 
@@ -115,7 +115,7 @@ static std::string fmt_mask( LSET aSet )
 }
 
 
-// Association between shape names (using shapeName index) and components
+/// Association between shape names (using shapeName index) and components.
 static std::map<FOOTPRINT*, int> componentShapes;
 static std::map<int, wxString> shapeNames;
 
@@ -141,18 +141,15 @@ const wxString GENCAD_EXPORTER::getShapeName( FOOTPRINT* aFootprint )
 const static double SCALE_FACTOR = 1000.0 * pcbIUScale.IU_PER_MILS;
 
 
-/* Two helper functions to calculate coordinates of footprints in gencad values
- * (GenCAD Y axis from bottom to top)
- */
-double GENCAD_EXPORTER::MapXTo( int aX )
+double GENCAD_EXPORTER::mapXTo( int aX )
 {
-    return (aX - GencadOffset.x) / SCALE_FACTOR;
+    return ( aX - m_gencadOffset.x ) / SCALE_FACTOR;
 }
 
 
-double GENCAD_EXPORTER::MapYTo( int aY )
+double GENCAD_EXPORTER::mapYTo( int aY )
 {
-    return (GencadOffset.y - aY) / SCALE_FACTOR;
+    return ( m_gencadOffset.y - aY ) / SCALE_FACTOR;
 }
 
 
@@ -170,7 +167,8 @@ bool GENCAD_EXPORTER::WriteFile( const wxString& aFullFileName )
     LOCALE_IO toggle;
 
     BOARD*  pcb = m_board;
-    // Update some board data, to ensure a reliable gencad export
+
+    // Update some board data, to ensure a reliable GenCAD export.
     pcb->ComputeBoundingBox( false );
 
     /* Temporary modification of footprints that are flipped (i.e. on bottom
@@ -191,27 +189,27 @@ bool GENCAD_EXPORTER::WriteFile( const wxString& aFullFileName )
         }
     }
 
-    /* Gencad has some mandatory and some optional sections: some importer
-     *  need the padstack section (which is optional) anyway. Also the
-     *  order of the section *is* important */
+    /* GenCAD has some mandatory and some optional sections: some importer
+     * need the padstack section (which is optional) anyway. Also the
+     * order of the section *is* important */
 
-    CreateHeaderInfoData();         // Gencad header
-    CreateBoardSection();           // Board perimeter
+    createHeaderInfoData();         // GenCAD header
+    createBoardSection();           // Board perimeter
 
-    CreatePadsShapesSection();      // Pads and padstacks
-    CreateArtworksSection();        // Empty but mandatory
+    createPadsShapesSection();      // Pads and padstacks
+    createArtworksSection();        // Empty but mandatory
 
-    /* Gencad splits a component info in shape, component and device.
-     *  We don't do any sharing (it would be difficult since each module is
-     *  customizable after placement) */
-    CreateShapesSection();
-    CreateComponentsSection();
-    CreateDevicesSection();
+    /* GenCAD splits a footprint information in shape, component and device.
+     * We don't do any sharing (it would be difficult since each module is
+     * customizable after placement) */
+    createShapesSection();
+    createComponentsSection();
+    createDevicesSection();
 
     // In a similar way the netlist is split in net, track and route
-    CreateSignalsSection();
-    CreateTracksInfoData();
-    CreateRoutesSection();
+    createSignalsSection();
+    createTracksInfoData();
+    createRoutesSection();
 
     fclose( m_file );
 
@@ -232,8 +230,8 @@ bool GENCAD_EXPORTER::WriteFile( const wxString& aFullFileName )
 }
 
 
-// Sort vias for uniqueness
-static bool ViaSort( const PCB_VIA* aPadref, const PCB_VIA* aPadcmp )
+/// Sort vias for uniqueness.
+static bool viaSort( const PCB_VIA* aPadref, const PCB_VIA* aPadcmp )
 {
     if( aPadref->GetWidth( PADSTACK::ALL_LAYERS ) != aPadcmp->GetWidth( PADSTACK::ALL_LAYERS ) )
         return aPadref->GetWidth( PADSTACK::ALL_LAYERS ) < aPadcmp->GetWidth( PADSTACK::ALL_LAYERS );
@@ -248,7 +246,7 @@ static bool ViaSort( const PCB_VIA* aPadref, const PCB_VIA* aPadcmp )
 }
 
 
-void GENCAD_EXPORTER::CreateArtworksSection( )
+void GENCAD_EXPORTER::createArtworksSection()
 {
     // The ARTWORKS section is empty but (officially) mandatory
     fputs( "$ARTWORKS\n", m_file );
@@ -256,7 +254,7 @@ void GENCAD_EXPORTER::CreateArtworksSection( )
 }
 
 
-void GENCAD_EXPORTER::CreatePadsShapesSection()
+void GENCAD_EXPORTER::createPadsShapesSection()
 {
     // Emit PADS and PADSTACKS. They are sorted and emitted uniquely.
     // Via name is synthesized from their attributes, pads are numbered
@@ -277,13 +275,11 @@ void GENCAD_EXPORTER::CreatePadsShapesSection()
     fputs( "$PADS\n", m_file );
 
     // Enumerate and sort the pads
-
     std::vector<PAD*> pads = m_board->GetPads();
     std::sort( pads.begin(), pads.end(), []( const PAD* a, const PAD* b )
                                          {
                                              return PAD::Compare( a, b ) < 0;
                                          } );
-
 
     // The same for vias
     for( PCB_TRACK* track : m_board->Tracks() )
@@ -292,12 +288,12 @@ void GENCAD_EXPORTER::CreatePadsShapesSection()
             vias.push_back( via );
     }
 
-    std::sort( vias.begin(), vias.end(), ViaSort );
+    std::sort( vias.begin(), vias.end(), viaSort );
     vias.erase( std::unique( vias.begin(), vias.end(), []( const PCB_VIA* a, const PCB_VIA* b )
                                                        {
-                                                           return ViaSort( a, b ) == false;
+                                                           return viaSort( a, b ) == false;
                                                        } ),
-            vias.end() );
+                             vias.end() );
 
     // Emit vias pads
     for( PCB_VIA* via : vias )
@@ -564,10 +560,10 @@ void GENCAD_EXPORTER::CreatePadsShapesSection()
         for( PCB_LAYER_ID layer : mask.Seq( gc_seq ) )
         {
             fprintf( m_file, "PAD V%d.%d.%s %s 0 0\n",
-                    via->GetWidth( PADSTACK::ALL_LAYERS ),
-                    via->GetDrillValue(),
-                    fmt_mask( mask ).c_str(),
-                    GenCADLayerName( cu_count, layer ).c_str() );
+                     via->GetWidth( PADSTACK::ALL_LAYERS ),
+                     via->GetDrillValue(),
+                     fmt_mask( mask ).c_str(),
+                     genCADLayerName( cu_count, layer ).c_str() );
         }
     }
 
@@ -588,7 +584,7 @@ void GENCAD_EXPORTER::CreatePadsShapesSection()
         // the special gc_seq
         for( PCB_LAYER_ID layer : pad_set.Seq( gc_seq ) )
         {
-            fprintf( m_file, "PAD P%u %s 0 0\n", i, GenCADLayerName( cu_count, layer ).c_str() );
+            fprintf( m_file, "PAD P%u %s 0 0\n", i, genCADLayerName( cu_count, layer ).c_str() );
         }
 
         // Flipped padstack
@@ -600,7 +596,7 @@ void GENCAD_EXPORTER::CreatePadsShapesSection()
             for( PCB_LAYER_ID layer : pad_set.Seq() )
             {
                 fprintf( m_file, "PAD P%u %s 0 0\n", i,
-                         GenCADLayerNameFlipped( cu_count, layer ).c_str() );
+                         genCADLayerNameFlipped( cu_count, layer ).c_str() );
             }
         }
     }
@@ -609,7 +605,7 @@ void GENCAD_EXPORTER::CreatePadsShapesSection()
 }
 
 
-/// Compute hashes for footprints without taking into account their position, rotation or layer
+/// Compute hashes for footprints without taking into account their position, rotation or layer.
 static size_t hashFootprint( const FOOTPRINT* aFootprint )
 {
     size_t    ret = 0x11223344;
@@ -629,11 +625,7 @@ static size_t hashFootprint( const FOOTPRINT* aFootprint )
 }
 
 
-/* Creates the footprint shape list.
- * Since module shape is customizable after the placement we cannot share them;
- * instead we opt for the one-module-one-shape-one-component-one-device approach
- */
-void GENCAD_EXPORTER::CreateShapesSection()
+void GENCAD_EXPORTER::createShapesSection()
 {
     const char* layer;
     wxString    pinname;
@@ -688,11 +680,11 @@ void GENCAD_EXPORTER::CreateShapesSection()
             componentShapes[footprint] = modHash;
             shapeNames[modHash] = shapeName;
             shapes[shapeName] = modHash;
-            FootprintWriteShape( footprint, shapeName );
+            footprintWriteShape( footprint, shapeName );
         }
         else // individual shape for each component
         {
-            FootprintWriteShape( footprint, footprint->GetReference() );
+            footprintWriteShape( footprint, footprint->GetReference() );
         }
 
         // set of already emitted pins to check for duplicates
@@ -746,12 +738,7 @@ void GENCAD_EXPORTER::CreateShapesSection()
 }
 
 
-/* Creates the section $COMPONENTS (Footprints placement)
- * Bottom side components are difficult to handle: shapes must be mirrored or
- * flipped, silk layers need to be handled correctly and so on. Also it seems
- * that *no one* follows the specs...
- */
-void GENCAD_EXPORTER::CreateComponentsSection()
+void GENCAD_EXPORTER::createComponentsSection()
 {
     fputs( "$COMPONENTS\n", m_file );
 
@@ -780,8 +767,8 @@ void GENCAD_EXPORTER::CreateComponentsSection()
         fprintf( m_file, "DEVICE \"DEV_%s\"\n",
                  TO_UTF8( escapeString( getShapeName( footprint ) ) ) );
         fprintf( m_file, "PLACE %g %g\n",
-                 MapXTo( footprint->GetPosition().x ),
-                 MapYTo( footprint->GetPosition().y ) );
+                 mapXTo( footprint->GetPosition().x ),
+                 mapYTo( footprint->GetPosition().y ) );
         fprintf( m_file, "LAYER %s\n",
                  footprint->GetFlag() ? "BOTTOM" : "TOP" );
         fprintf( m_file, "ROTATION %g\n",
@@ -793,8 +780,7 @@ void GENCAD_EXPORTER::CreateComponentsSection()
         // Text on silk layer: RefDes and value (are they actually useful?)
         for( PCB_TEXT* textItem : { &footprint->Reference(), &footprint->Value() } )
         {
-            std::string layer = GenCADLayerName( cu_count,
-                                                 footprint->GetFlag() ? B_SilkS : F_SilkS );
+            std::string layer = genCADLayerName( cu_count, footprint->GetFlag() ? B_SilkS : F_SilkS );
 
             fprintf( m_file, "TEXT %g %g %g %g %s %s \"%s\"",
                      textItem->GetFPRelativePosition().x / SCALE_FACTOR,
@@ -822,7 +808,7 @@ void GENCAD_EXPORTER::CreateComponentsSection()
 }
 
 
-void GENCAD_EXPORTER::CreateSignalsSection()
+void GENCAD_EXPORTER::createSignalsSection()
 {
     // Emit the netlist (which is actually the thing for which GenCAD is used these
     // days!); tracks are handled later
@@ -874,7 +860,7 @@ void GENCAD_EXPORTER::CreateSignalsSection()
 }
 
 
-bool GENCAD_EXPORTER::CreateHeaderInfoData()
+bool GENCAD_EXPORTER::createHeaderInfoData()
 {
     wxString msg;
 
@@ -897,8 +883,8 @@ bool GENCAD_EXPORTER::CreateHeaderInfoData()
 
     // giving 0 as the argument to Map{X,Y}To returns the scaled origin point
     msg.Printf( wxT( "ORIGIN %g %g\n" ),
-                m_storeOriginCoords ? MapXTo( 0 ) : 0,
-                m_storeOriginCoords ? MapYTo( 0 ) : 0 );
+                m_storeOriginCoords ? mapXTo( 0 ) : 0,
+                m_storeOriginCoords ? mapYTo( 0 ) : 0 );
     fputs( TO_UTF8( msg ), m_file );
 
     fputs( "INTERTRACK 0\n", m_file );
@@ -908,25 +894,14 @@ bool GENCAD_EXPORTER::CreateHeaderInfoData()
 }
 
 
-void GENCAD_EXPORTER::CreateRoutesSection()
+void GENCAD_EXPORTER::createRoutesSection()
 {
-    /* Creates the section ROUTES
-     * that handles tracks, vias
-     * TODO: add zones
-     *  section:
-     *  $ROUTE
-     *  ...
-     *  $ENROUTE
-     *  Track segments must be sorted by nets
-     */
-
     int     vianum = 1;
     int     old_netcode, old_width, old_layer;
     LSET    master_layermask = m_board->GetDesignSettings().GetEnabledLayers();
-
     int     cu_count = m_board->GetCopperLayerCount();
+    TRACKS  tracks( m_board->Tracks() );
 
-    TRACKS tracks( m_board->Tracks() );
     std::sort( tracks.begin(), tracks.end(),
                []( const PCB_TRACK* a, const PCB_TRACK* b )
                {
@@ -956,7 +931,9 @@ void GENCAD_EXPORTER::CreateRoutesSection()
 
     fputs( "$ROUTES\n", m_file );
 
-    old_netcode = -1; old_width = -1; old_layer = -1;
+    old_netcode = -1;
+    old_width = -1;
+    old_layer = -1;
 
     for( PCB_TRACK* track : tracks )
     {
@@ -993,12 +970,12 @@ void GENCAD_EXPORTER::CreateRoutesSection()
             {
                 old_layer = track->GetLayer();
                 fprintf( m_file, "LAYER %s\n",
-                         GenCADLayerName( cu_count, track->GetLayer() ).c_str() );
+                         genCADLayerName( cu_count, track->GetLayer() ).c_str() );
             }
 
             fprintf( m_file, "LINE %g %g %g %g\n",
-                     MapXTo( track->GetStart().x ), MapYTo( track->GetStart().y ),
-                     MapXTo( track->GetEnd().x ), MapYTo( track->GetEnd().y ) );
+                     mapXTo( track->GetStart().x ), mapYTo( track->GetStart().y ),
+                     mapXTo( track->GetEnd().x ), mapYTo( track->GetEnd().y ) );
         }
         else if( track->Type() == PCB_ARC_T )
         {
@@ -1014,9 +991,9 @@ void GENCAD_EXPORTER::CreateRoutesSection()
             VECTOR2I center = arc->GetCenter();
 
             fprintf( m_file, "ARC %g %g %g %g %g %g\n",
-                     MapXTo( start.x ), MapYTo( start.y ),
-                     MapXTo( end.x ), MapYTo( end.y ),
-                     MapXTo( center.x ), MapYTo( center.y ) );
+                     mapXTo( start.x ), mapYTo( start.y ),
+                     mapXTo( end.x ), mapYTo( end.y ),
+                     mapXTo( center.x ), mapYTo( center.y ) );
         }
         else if( track->Type() == PCB_VIA_T )
         {
@@ -1027,7 +1004,7 @@ void GENCAD_EXPORTER::CreateRoutesSection()
             fprintf( m_file, "VIA VIA%d.%d.%s %g %g ALL %g via%d\n",
                      via->GetWidth( PADSTACK::ALL_LAYERS ), via->GetDrillValue(),
                      fmt_mask( vset ).c_str(),
-                     MapXTo( via->GetStart().x ), MapYTo( via->GetStart().y ),
+                     mapXTo( via->GetStart().x ), mapYTo( via->GetStart().y ),
                      via->GetDrillValue() / SCALE_FACTOR, vianum++ );
         }
     }
@@ -1036,12 +1013,8 @@ void GENCAD_EXPORTER::CreateRoutesSection()
 }
 
 
-void GENCAD_EXPORTER::CreateDevicesSection()
+void GENCAD_EXPORTER::createDevicesSection()
 {
-    /* Creates the section $DEVICES
-     * This is a list of footprints properties
-     *  ( Shapes are in section $SHAPE )
-     */
     std::set<wxString> emitted;
 
     fputs( "$DEVICES\n", m_file );
@@ -1081,11 +1054,10 @@ void GENCAD_EXPORTER::CreateDevicesSection()
 }
 
 
-void GENCAD_EXPORTER::CreateBoardSection( )
+void GENCAD_EXPORTER::createBoardSection()
 {
     // Creates the section $BOARD.
     //  We output here only the board perimeter
-
     fputs( "$BOARD\n", m_file );
 
     // Extract the board edges
@@ -1096,25 +1068,15 @@ void GENCAD_EXPORTER::CreateBoardSection( )
     {
         SEG seg = *seg1;
         fprintf( m_file, "LINE %g %g %g %g\n",
-                 MapXTo( seg.A.x ), MapYTo( seg.A.y ),
-                 MapXTo( seg.B.x ), MapYTo( seg.B.y ) );
+                 mapXTo( seg.A.x ), mapYTo( seg.A.y ),
+                 mapXTo( seg.B.x ), mapYTo( seg.B.y ) );
     }
 
     fputs( "$ENDBOARD\n\n", m_file );
 }
 
 
-/* Creates the section "$TRACKS"
- *  This sections give the list of widths (tools) used in tracks and vias
- *  format:
- *  $TRACK
- *  TRACK <name> <width>
- *  $ENDTRACK
- *
- *  Each tool name is build like this: "TRACK" + track width.
- *  For instance for a width = 120 : name = "TRACK120".
- */
-void GENCAD_EXPORTER::CreateTracksInfoData()
+void GENCAD_EXPORTER::createTracksInfoData()
 {
     // Find thickness used for traces
     std::set<int> trackinfo;
@@ -1137,12 +1099,7 @@ void GENCAD_EXPORTER::CreateTracksInfoData()
 }
 
 
-/* Creates the shape of a footprint (section SHAPE)
- *  The shape is always given "normal" (Orient 0, not mirrored)
- * It's almost guaranteed that the silk layer will be imported wrong but
- * the shape also contains the pads!
- */
-void GENCAD_EXPORTER::FootprintWriteShape( FOOTPRINT* aFootprint, const wxString& aShapeName )
+void GENCAD_EXPORTER::footprintWriteShape( FOOTPRINT* aFootprint, const wxString& aShapeName )
 {
     /* creates header: */
     fprintf( m_file, "\nSHAPE \"%s\"\n", TO_UTF8( escapeString( aShapeName ) ) );
@@ -1158,8 +1115,7 @@ void GENCAD_EXPORTER::FootprintWriteShape( FOOTPRINT* aFootprint, const wxString
     // GerberTool usually get it right...
     for( BOARD_ITEM* item : aFootprint->GraphicalItems() )
     {
-        if( item->Type() == PCB_SHAPE_T
-                    && ( item->GetLayer() == F_SilkS || item->GetLayer() == B_SilkS ) )
+        if( item->Type() == PCB_SHAPE_T && ( item->GetLayer() == F_SilkS || item->GetLayer() == B_SilkS ) )
         {
             PCB_SHAPE* shape = static_cast<PCB_SHAPE*>( item );
             VECTOR2I   start = shape->GetStart() - aFootprint->GetPosition();
