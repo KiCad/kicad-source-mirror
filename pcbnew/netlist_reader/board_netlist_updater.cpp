@@ -555,10 +555,13 @@ bool BOARD_NETLIST_UPDATER::updateFootprintParameters( FOOTPRINT* aPcbFootprint,
                 }
             }
 
-            // Remove fields that aren't present in the symbol
+            // Remove and delete fields that aren't present in the symbol
             bool warned = false;
 
-            for( PCB_FIELD* field : aPcbFootprint->GetFields() )
+            std::vector<PCB_FIELD*> fieldList;
+            aPcbFootprint->GetFields( fieldList, false );
+
+            for( PCB_FIELD* field : fieldList )
             {
                 if( field->IsMandatory() )
                     continue;
