@@ -41,7 +41,9 @@ std::vector<SEARCH_TERM> LIB_SYMBOL::GetSearchTerms()
 {
     std::vector<SEARCH_TERM> terms;
 
+    terms.emplace_back( SEARCH_TERM( GetLibNickname(), 4 ) );
     terms.emplace_back( SEARCH_TERM( GetName(), 8 ) );
+    terms.emplace_back( SEARCH_TERM( GetLIB_ID().Format(), 16 ) );
 
     wxStringTokenizer keywordTokenizer( GetKeyWords(), wxS( " " ), wxTOKEN_STRTOK );
 
