@@ -113,6 +113,7 @@ LIB_SYMBOL::LIB_SYMBOL( const wxString& aName, LIB_SYMBOL* aParent, SYMBOL_LIB* 
             {
                 SCH_FIELD* field = new SCH_FIELD( this, id );
                 field->SetVisible( visible );
+                field->SetShowInChooser( false );
                 m_drawings[SCH_FIELD_T].push_back( field );
             };
 
