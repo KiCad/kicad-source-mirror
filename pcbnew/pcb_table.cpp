@@ -178,6 +178,54 @@ void PCB_TABLE::Normalize()
 }
 
 
+void PCB_TABLE::Autosize()
+{
+    std::vector<std::vector<BOX2I>> extents;
+
+    for( int row = 0; row < GetRowCount(); ++row )
+    {
+        extents.push_back( std::vector<BOX2I>() );
+
+        for( int col = 0; col < GetColCount(); ++col )
+        {
+            SHAPE_POLY_SET textPoly;
+            GetCell( row, col )->TransformTextToPolySet( textPoly, 0, ARC_LOW_DEF, ERROR_INSIDE );
+            extents[row].push_back( textPoly.BBox() );
+        }
+    }
+
+    for( int col = 0; col < GetColCount(); ++col )
+    {
+        int colWidth = 0;
+
+        for( int row = 0; row < GetRowCount(); ++row )
+        {
+            PCB_TABLECELL* cell = GetCell( row, col );
+            int            margins = cell->GetMarginLeft() + cell->GetMarginRight();
+            colWidth = std::max<int>( colWidth, extents[row][col].GetWidth() + ( margins * 1.5 ) );
+        }
+
+        SetColWidth( col, colWidth );
+    }
+
+    for( int row = 0; row < GetRowCount(); ++row )
+    {
+        int rowHeight = 0;
+
+        for( int col = 0; col < GetColCount(); ++col )
+        {
+            PCB_TABLECELL* cell = GetCell( row, col );
+            int            margins = cell->GetMarginLeft() + cell->GetMarginRight();
+            rowHeight = std::max( rowHeight, (int) extents[row][col].GetHeight() + margins );
+        }
+
+        SetRowHeight( row, rowHeight );
+    }
+
+    Normalize();
+}
+
+
 void PCB_TABLE::Move( const VECTOR2I& aMoveVector )
 {
     for( PCB_TABLECELL* cell : m_cells )

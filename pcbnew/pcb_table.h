@@ -196,6 +196,8 @@ public:
 
     void Normalize() override;
 
+    void Autosize();
+
     void Move( const VECTOR2I& aMoveVector ) override;
 
     void Rotate( const VECTOR2I& aRotCentre, const EDA_ANGLE& aAngle ) override;

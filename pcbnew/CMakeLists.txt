@@ -386,7 +386,6 @@ set( PCBNEW_CLASS_SRCS
     tools/board_reannotate_tool.cpp
     tools/convert_tool.cpp
     tools/drawing_tool.cpp
-    tools/drawing_stackup_table_tool.cpp
     tools/drc_tool.cpp
     tools/edit_tool.cpp
     tools/edit_tool_move_fct.cpp

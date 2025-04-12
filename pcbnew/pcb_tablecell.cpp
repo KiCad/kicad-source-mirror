@@ -36,6 +36,9 @@ PCB_TABLECELL::PCB_TABLECELL( BOARD_ITEM* aParent ) :
 {
     if( IsBackLayer( aParent->GetLayer() ) )
         SetMirrored( true );
+
+    SetRectangleHeight( std::numeric_limits<int>::max() / 2 );
+    SetRectangleWidth( std::numeric_limits<int>::max() / 2 );
 }
 
 

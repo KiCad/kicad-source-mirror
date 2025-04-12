@@ -92,17 +92,8 @@ public:
 
     /**
      */
-    std::vector<BOARD_ITEM*> DrawBoardCharacteristics( const VECTOR2I& origin, PCB_LAYER_ID aLayer,
-                                                       bool aDrawNow, VECTOR2I* tablesize );
-
-    /**
-     */
     std::vector<BOARD_ITEM*> DrawSpecificationStackup( const VECTOR2I& origin, PCB_LAYER_ID aLayer,
                                                        bool aDrawNow, VECTOR2I* tablesize );
-
-    /**
-     */
-    int PlaceCharacteristics( const TOOL_EVENT& aEvent );
 
     /**
      */

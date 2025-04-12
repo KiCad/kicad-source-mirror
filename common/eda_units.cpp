@@ -135,7 +135,7 @@ wxString EDA_UNIT_UTILS::GetText( EDA_UNITS aUnits, EDA_DATA_TYPE aType )
     case EDA_UNITS::CM:       label = wxT( " cm" );       break;
     case EDA_UNITS::DEGREES:  label = wxT( "°" );         break;
     case EDA_UNITS::MILS:     label = wxT( " mils" );     break;
-    case EDA_UNITS::INCH:       label = wxT( " in" );       break;
+    case EDA_UNITS::INCH:     label = wxT( " in" );       break;
     case EDA_UNITS::PERCENT:  label = wxT( "%" );         break;
     case EDA_UNITS::UNSCALED:                             break;
     default: UNIMPLEMENTED_FOR( wxS( "Unknown units" ) ); break;

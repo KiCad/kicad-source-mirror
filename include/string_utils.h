@@ -84,6 +84,11 @@ KICOMMON_API wxString PrettyPrintForMenu( const wxString& aString );
 KICOMMON_API wxString TitleCaps( const wxString& aString );
 
 /**
+ * Capitalize only the first word.
+ */
+KICOMMON_API wxString InitialCaps( const wxString& aString );
+
+/**
  * Copy bytes from @a aSource delimited string segment to @a aDest buffer.
  *
  * The extracted string will be null terminated even if truncation is necessary

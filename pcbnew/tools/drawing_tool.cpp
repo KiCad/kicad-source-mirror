@@ -4152,8 +4152,6 @@ const unsigned int DRAWING_TOOL::WIDTH_STEP = pcbIUScale.mmToIU( 0.1 );
 void DRAWING_TOOL::setTransitions()
 {
     // clang-format off
-    Go( &DRAWING_TOOL::PlaceStackup,          PCB_ACTIONS::placeStackup.MakeEvent() );
-    Go( &DRAWING_TOOL::PlaceCharacteristics,  PCB_ACTIONS::placeCharacteristics.MakeEvent() );
     Go( &DRAWING_TOOL::DrawLine,              PCB_ACTIONS::drawLine.MakeEvent() );
     Go( &DRAWING_TOOL::DrawZone,              PCB_ACTIONS::drawPolygon.MakeEvent() );
     Go( &DRAWING_TOOL::DrawRectangle,         PCB_ACTIONS::drawRectangle.MakeEvent() );
