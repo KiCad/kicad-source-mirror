@@ -1674,13 +1674,13 @@ SCH_IO_EAGLE::findNearestLinePoint( const VECTOR2I&         aPoint,
     VECTOR2I   nearestPoint;
     const SEG* nearestLine = nullptr;
 
-    float d, mindistance = std::numeric_limits<float>::max();
+    double d, mindistance = std::numeric_limits<double>::max();
 
     // Find the nearest start, middle or end of a line from the list of lines.
     for( const SEG& line : aLines )
     {
         VECTOR2I testpoint = line.A;
-        d = sqrt( abs( ( ( aPoint.x - testpoint.x ) ^ 2 ) + ( ( aPoint.y - testpoint.y ) ^ 2 ) ) );
+        d = aPoint.Distance( testpoint );
 
         if( d < mindistance )
         {
@@ -1690,7 +1690,7 @@ SCH_IO_EAGLE::findNearestLinePoint( const VECTOR2I&         aPoint,
         }
 
         testpoint = line.Center();
-        d = sqrt( abs( ( ( aPoint.x - testpoint.x ) ^ 2 ) + ( ( aPoint.y - testpoint.y ) ^ 2 ) ) );
+        d = aPoint.Distance( testpoint );
 
         if( d < mindistance )
         {
@@ -1700,7 +1700,7 @@ SCH_IO_EAGLE::findNearestLinePoint( const VECTOR2I&         aPoint,
         }
 
         testpoint = line.B;
-        d = sqrt( abs( ( ( aPoint.x - testpoint.x ) ^ 2 ) + ( ( aPoint.y - testpoint.y ) ^ 2 ) ) );
+        d = aPoint.Distance( testpoint );
 
         if( d < mindistance )
         {
