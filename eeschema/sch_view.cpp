@@ -49,13 +49,6 @@ SCH_VIEW::SCH_VIEW( SCH_BASE_FRAME* aFrame ) :
     VIEW()
 {
     m_frame = aFrame;
-
-    // Set m_boundary to define the max working area size. The default value is acceptable for
-    // Pcbnew and Gerbview, but too large for Eeschema due to very different internal units.
-    // A full size = 3 * MAX_PAGE_SIZE_MILS size allows a wide margin around the drawing-sheet.
-    double max_size = schIUScale.MilsToIU( MAX_PAGE_SIZE_EESCHEMA_MILS ) * 3.0;
-    m_boundary.SetOrigin( -max_size/4, -max_size/4 );
-    m_boundary.SetSize( max_size, max_size );
 }
 
 
@@ -79,16 +72,6 @@ void SCH_VIEW::SetScale( double aScale, VECTOR2D aAnchor )
     // Redraw items whose rendering is dependent on zoom
     if( m_frame )
         m_frame->RefreshZoomDependentItems();
-}
-
-
-void SCH_VIEW::ResizeSheetWorkingArea( const SCH_SCREEN* aScreen )
-{
-    const PAGE_INFO& page_info = aScreen->GetPageSettings();
-    double           max_size_x = page_info.GetWidthIU( schIUScale.IU_PER_MILS ) * 3.0;
-    double           max_size_y = page_info.GetHeightIU( schIUScale.IU_PER_MILS ) * 3.0;
-    m_boundary.SetOrigin( -max_size_x / 4, -max_size_y / 4 );
-    m_boundary.SetSize( max_size_x, max_size_y );
 }
 
 
@@ -122,8 +105,6 @@ void SCH_VIEW::DisplaySheet( const SCH_SCREEN *aScreen )
         m_drawingSheet->SetSheetName( "" );
         m_drawingSheet->SetSheetPath( "" );
     }
-
-    ResizeSheetWorkingArea( aScreen );
 
     Add( m_drawingSheet.get() );
 
