@@ -709,9 +709,7 @@ int PCB_CONTROL::LayerPresetFeedback( const TOOL_EVENT& aEvent )
         wxString label = layerPresentation.getLayerPairName( layerPairInfo.GetLayerPair() );
 
         if( layerPairInfo.GetName() )
-        {
             label += wxT( " (" ) + *layerPairInfo.GetName() + wxT( ")" );
-        }
 
         labels.Add( label );
     }
@@ -816,8 +814,7 @@ int PCB_CONTROL::InteractiveDelete( const TOOL_EVENT& aEvent )
                         m_statusPopup.reset( new STATUS_TEXT_POPUP( m_frame ) );
                         m_statusPopup->SetText( _( "Item locked." ) );
                         m_statusPopup->PopupFor( 2000 );
-                        m_statusPopup->Move( KIPLATFORM::UI::GetMousePosition()
-                                             + wxPoint( 20, 20 ) );
+                        m_statusPopup->Move( KIPLATFORM::UI::GetMousePosition() + wxPoint( 20, 20 ) );
                         return true;
                     }
 
@@ -1091,9 +1088,7 @@ int PCB_CONTROL::Paste( const TOOL_EVENT& aEvent )
             if( clipText.empty() )
                 return 0;
 
-            std::unique_ptr<PCB_TEXT> item;
-
-            item = std::make_unique<PCB_TEXT>( m_frame->GetModel() );
+            std::unique_ptr<PCB_TEXT> item = std::make_unique<PCB_TEXT>( m_frame->GetModel() );
             item->SetText( clipText );
 
             newItems.push_back( item.release() );
@@ -1222,17 +1217,16 @@ int PCB_CONTROL::Paste( const TOOL_EVENT& aEvent )
             else    // isBoardEditor
             {
                 // Fixup footprint component classes
-                for( FOOTPRINT* clipFootprint : clipBoard->Footprints() )
+                for( FOOTPRINT* fp : clipBoard->Footprints() )
                 {
-                    clipFootprint->ResolveComponentClassNames(
-                            board(), clipFootprint->GetTransientComponentClassNames() );
-                    clipFootprint->ClearTransientComponentClassNames();
+                    fp->ResolveComponentClassNames( board(), fp->GetTransientComponentClassNames() );
+                    fp->ClearTransientComponentClassNames();
                 }
 
                 if( mode == PASTE_MODE::REMOVE_ANNOTATIONS )
                 {
-                    for( FOOTPRINT* clipFootprint : clipBoard->Footprints() )
-                        clipFootprint->SetReference( defaultRef );
+                    for( FOOTPRINT* fp : clipBoard->Footprints() )
+                        fp->SetReference( defaultRef );
                 }
 
                 cancelled = !placeBoardItems( &commit, clipBoard, true,
@@ -1298,8 +1292,7 @@ int PCB_CONTROL::AppendBoardFromFile( const TOOL_EVENT& aEvent )
     if( !AskLoadBoardFileName( editFrame, &fileName, KICTL_KICAD_ONLY ) )
         return 1;
 
-    PCB_IO_MGR::PCB_FILE_T pluginType =
-            PCB_IO_MGR::FindPluginTypeFromBoardPath( fileName, KICTL_KICAD_ONLY );
+    PCB_IO_MGR::PCB_FILE_T pluginType = PCB_IO_MGR::FindPluginTypeFromBoardPath( fileName, KICTL_KICAD_ONLY );
     IO_RELEASER<PCB_IO> pi( PCB_IO_MGR::PluginFind( pluginType ) );
 
     if( !pi )
@@ -1662,9 +1655,7 @@ int PCB_CONTROL::AppendBoard( PCB_IO& pi, const wxString& fileName )
             for( EDA_ITEM* eda_item : selection )
             {
                 if( eda_item->IsBOARD_ITEM() && !static_cast<BOARD_ITEM*>( eda_item )->GetParentFootprint() )
-                {
                     grpCommit.Stage( static_cast<BOARD_ITEM*>( eda_item ), CHT_GROUP );
-                }
             }
 
             grpCommit.Push( _( "Group Items" ), APPEND_UNDO );
@@ -1718,9 +1709,8 @@ int PCB_CONTROL::Redo( const TOOL_EVENT& aEvent )
 
 int PCB_CONTROL::SnapMode( const TOOL_EVENT& aEvent )
 {
-    MAGNETIC_SETTINGS& settings = m_isFootprintEditor
-                                          ? m_frame->GetFootprintEditorSettings()->m_MagneticItems
-                                          : m_frame->GetPcbNewSettings()->m_MagneticItems;
+    MAGNETIC_SETTINGS& settings = m_isFootprintEditor ? m_frame->GetFootprintEditorSettings()->m_MagneticItems
+                                                      : m_frame->GetPcbNewSettings()->m_MagneticItems;
     bool& snapMode = settings.allLayers;
 
     if( aEvent.IsAction( &PCB_ACTIONS::magneticSnapActiveLayer ) )
@@ -1750,9 +1740,8 @@ int PCB_CONTROL::SnapModeFeedback( const TOOL_EVENT& aEvent )
 
     HOTKEY_CYCLE_POPUP* popup = m_frame->GetHotkeyPopup();
 
-    MAGNETIC_SETTINGS& settings = m_isFootprintEditor
-                                          ? m_frame->GetFootprintEditorSettings()->m_MagneticItems
-                                          : m_frame->GetPcbNewSettings()->m_MagneticItems;
+    MAGNETIC_SETTINGS& settings = m_isFootprintEditor ? m_frame->GetFootprintEditorSettings()->m_MagneticItems
+                                                      : m_frame->GetPcbNewSettings()->m_MagneticItems;
 
     if( popup )
         popup->Popup( _( "Object Snapping" ), labels, static_cast<int>( settings.allLayers ) );
