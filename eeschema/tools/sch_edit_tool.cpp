@@ -1004,11 +1004,6 @@ int SCH_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
 
                 field->Rotate( rotPoint, !clockwise );
 
-                if( field->GetTextAngle().IsHorizontal() )
-                    field->SetTextAngle( ANGLE_VERTICAL );
-                else
-                    field->SetTextAngle( ANGLE_HORIZONTAL );
-
                 // Now that we're moving a field, they're no longer autoplaced.
                 static_cast<SCH_ITEM*>( field->GetParent() )->SetFieldsAutoplaced( AUTOPLACE_NONE );
             }
