@@ -89,10 +89,16 @@ public:
             table->SetColCount( 2 );
 
             for( int ii = 0; ii < 4; ++ii )
-                table->InsertCell( ii, new PCB_TABLECELL( &m_board ) );
+            {
+                PCB_TABLECELL* cell = new PCB_TABLECELL( &m_board );
+                cell->SetRectangleHeight( 0 );
+                cell->SetRectangleWidth( 0 );
+                table->InsertCell( ii, cell );
+            }
 
             return table;
         }
+
         case PCB_REFERENCE_IMAGE_T:   return new PCB_REFERENCE_IMAGE( &m_board );
         case PCB_TRACE_T:             return new PCB_TRACK( &m_board );
         case PCB_VIA_T:               return new PCB_VIA( &m_board );
@@ -104,6 +110,7 @@ public:
         case PCB_DIM_RADIAL_T:        return new PCB_DIM_RADIAL( &m_board );
         case PCB_DIM_ORTHOGONAL_T:    return new PCB_DIM_ORTHOGONAL( &m_board );
         case PCB_TARGET_T:            return new PCB_TARGET( &m_board );
+
         case PCB_ZONE_T:
         {
             ZONE* zone = new ZONE( &m_board );
@@ -115,6 +122,7 @@ public:
 
             return zone;
         }
+
         case PCB_GROUP_T:
         {
             PCB_GROUP* group = new PCB_GROUP( &m_board );
