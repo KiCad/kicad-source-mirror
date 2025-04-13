@@ -439,14 +439,14 @@ PROJECT_LOCAL_SETTINGS::PROJECT_LOCAL_SETTINGS( PROJECT* aProject, const wxStrin
     registerMigration( 3, 4,
             [&]()
             {
-                // Schema version 3 to 4: LAYER_SHAPES added to visibility controls
+                // Schema version 3 to 4: LAYER_FILLED_SHAPES added to visibility controls
 
                 std::string ptr( "board.visible_items" );
 
                 if( Contains( ptr ) )
                 {
                     if( At( ptr ).is_array() )
-                        At( ptr ).push_back( LAYER_SHAPES - GAL_LAYER_ID_START );
+                        At( ptr ).push_back( LAYER_FILLED_SHAPES - GAL_LAYER_ID_START );
                     else
                         At( "board" ).erase( "visible_items" );
 

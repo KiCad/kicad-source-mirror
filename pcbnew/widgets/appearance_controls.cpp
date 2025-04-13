@@ -327,30 +327,33 @@ const APPEARANCE_CONTROLS::APPEARANCE_SETTING APPEARANCE_CONTROLS::s_objectSetti
 
 #define RR  APPEARANCE_CONTROLS::APPEARANCE_SETTING   // Render Row abbreviation to reduce source width
 
-    //     text                         id                        tooltip                   opacity slider   visibility checkbox
-    RR( _HKI( "Tracks" ),             LAYER_TRACKS,             _HKI( "Show tracks" ),         true ),
-    RR( _HKI( "Vias" ),               LAYER_VIAS,               _HKI( "Show all vias" ),       true ),
-    RR( _HKI( "Pads" ),               LAYER_PADS,               _HKI( "Show all pads" ),       true ),
-    RR( _HKI( "Zones" ),              LAYER_ZONES,              _HKI( "Show copper zones" ),   true ),
-    RR( _HKI( "Filled Shapes" ),      LAYER_SHAPES,             _HKI( "Opacity of filled shapes" ),  true,         false ),
-    RR( _HKI( "Images" ),             LAYER_DRAW_BITMAPS,       _HKI( "Show user images" ),    true ),
+    // clang-format off
+
+    //        text                           id                            tooltip                opacity slider   visibility checkbox
+    RR( _HKI( "Tracks" ),               LAYER_TRACKS,             _HKI( "Show tracks" ),              true ),
+    RR( _HKI( "Vias" ),                 LAYER_VIAS,               _HKI( "Show all vias" ),            true ),
+    RR( _HKI( "Pads" ),                 LAYER_PADS,               _HKI( "Show all pads" ),            true ),
+    RR( _HKI( "Zones" ),                LAYER_ZONES,              _HKI( "Show copper zones" ),        true ),
+    RR( _HKI( "Filled Shapes" ),        LAYER_FILLED_SHAPES,      _HKI( "Opacity of filled shapes" ), true,             false ),
+    RR( _HKI( "Images" ),               LAYER_DRAW_BITMAPS,       _HKI( "Show user images" ),         true ),
     RR(),
-    RR( _HKI( "Footprints Front" ),   LAYER_FOOTPRINTS_FR,      _HKI( "Show footprints that are on board's front" ) ),
-    RR( _HKI( "Footprints Back" ),    LAYER_FOOTPRINTS_BK,      _HKI( "Show footprints that are on board's back" ) ),
-    RR( _HKI( "Values" ),             LAYER_FP_VALUES,          _HKI( "Show footprint values" ) ),
-    RR( _HKI( "References" ),         LAYER_FP_REFERENCES,      _HKI( "Show footprint references" ) ),
-    RR( _HKI( "Footprint Text" ),     LAYER_FP_TEXT,            _HKI( "Show all footprint text" ) ),
+    RR( _HKI( "Footprints Front" ),     LAYER_FOOTPRINTS_FR,      _HKI( "Show footprints that are on board's front" ) ),
+    RR( _HKI( "Footprints Back" ),      LAYER_FOOTPRINTS_BK,      _HKI( "Show footprints that are on board's back" ) ),
+    RR( _HKI( "Values" ),               LAYER_FP_VALUES,          _HKI( "Show footprint values" ) ),
+    RR( _HKI( "References" ),           LAYER_FP_REFERENCES,      _HKI( "Show footprint references" ) ),
+    RR( _HKI( "Footprint Text" ),       LAYER_FP_TEXT,            _HKI( "Show all footprint text" ) ),
     RR(),
     RR(),
-    RR( _HKI( "Ratsnest" ),           LAYER_RATSNEST,           _HKI( "Show unconnected nets as a ratsnest") ),
-    RR( _HKI( "DRC Warnings" ),       LAYER_DRC_WARNING,        _HKI( "DRC violations with a Warning severity" ) ),
-    RR( _HKI( "DRC Errors" ),         LAYER_DRC_ERROR,          _HKI( "DRC violations with an Error severity" ) ),
-    RR( _HKI( "DRC Exclusions" ),     LAYER_DRC_EXCLUSION,      _HKI( "DRC violations which have been individually excluded" ) ),
-    RR( _HKI( "Anchors" ),            LAYER_ANCHOR,             _HKI( "Show footprint and text origins as a cross" ) ),
-    RR( _HKI( "Locked Item Shadow" ), LAYER_LOCKED_ITEM_SHADOW, _HKI( "Show a shadow marker on locked items" ) ),
-    RR( _HKI( "Conflict Footprint Shadow" ), LAYER_CONFLICTS_SHADOW,   _HKI( "Show a shadow marker on conflicting footprints" ) ),
-    RR( _HKI( "Drawing Sheet" ),      LAYER_DRAWINGSHEET,       _HKI( "Show drawing sheet borders and title block" ) ),
-    RR( _HKI( "Grid" ),               LAYER_GRID,               _HKI( "Show the (x,y) grid dots" ) )
+    RR( _HKI( "Ratsnest" ),             LAYER_RATSNEST,           _HKI( "Show unconnected nets as a ratsnest") ),
+    RR( _HKI( "DRC Warnings" ),         LAYER_DRC_WARNING,        _HKI( "DRC violations with a Warning severity" ) ),
+    RR( _HKI( "DRC Errors" ),           LAYER_DRC_ERROR,          _HKI( "DRC violations with an Error severity" ) ),
+    RR( _HKI( "DRC Exclusions" ),       LAYER_DRC_EXCLUSION,      _HKI( "DRC violations which have been individually excluded" ) ),
+    RR( _HKI( "Anchors" ),              LAYER_ANCHOR,             _HKI( "Show footprint and text origins as a cross" ) ),
+    RR( _HKI( "Locked Item Shadow" ),   LAYER_LOCKED_ITEM_SHADOW, _HKI( "Show a shadow on locked items" ) ),
+    RR( _HKI( "Colliding Courtyards" ), LAYER_CONFLICTS_SHADOW,   _HKI( "Show colliding footprint courtyards" ) ),
+    RR( _HKI( "Drawing Sheet" ),        LAYER_DRAWINGSHEET,       _HKI( "Show drawing sheet borders and title block" ) ),
+    RR( _HKI( "Grid" ),                 LAYER_GRID,               _HKI( "Show the (x,y) grid dots" ) )
+    // clang-format on
 };
 
 /// These GAL layers are shown in the Objects tab in the footprint editor
@@ -360,7 +363,7 @@ static std::set<int> s_allowedInFpEditor =
             LAYER_VIAS,
             LAYER_PADS,
             LAYER_ZONES,
-            LAYER_SHAPES,
+            LAYER_FILLED_SHAPES,
             LAYER_FP_VALUES,
             LAYER_FP_REFERENCES,
             LAYER_FP_TEXT,
@@ -2400,14 +2403,14 @@ void APPEARANCE_CONTROLS::syncObjectSettings()
               && m_objectSettingsMap.count( LAYER_PADS )
               && m_objectSettingsMap.count( LAYER_ZONES )
               && m_objectSettingsMap.count( LAYER_DRAW_BITMAPS )
-              && m_objectSettingsMap.count( LAYER_SHAPES ) );
+              && m_objectSettingsMap.count( LAYER_FILLED_SHAPES ) );
 
     m_objectSettingsMap[LAYER_TRACKS]->ctl_opacity->SetValue( opts.m_TrackOpacity * 100 );
     m_objectSettingsMap[LAYER_VIAS]->ctl_opacity->SetValue( opts.m_ViaOpacity * 100 );
     m_objectSettingsMap[LAYER_PADS]->ctl_opacity->SetValue( opts.m_PadOpacity * 100 );
     m_objectSettingsMap[LAYER_ZONES]->ctl_opacity->SetValue( opts.m_ZoneOpacity * 100 );
     m_objectSettingsMap[LAYER_DRAW_BITMAPS]->ctl_opacity->SetValue( opts.m_ImageOpacity * 100 );
-    m_objectSettingsMap[LAYER_SHAPES]->ctl_opacity->SetValue( opts.m_FilledShapeOpacity * 100 );
+    m_objectSettingsMap[LAYER_FILLED_SHAPES]->ctl_opacity->SetValue( opts.m_FilledShapeOpacity * 100 );
 }
 
 
@@ -3113,12 +3116,12 @@ void APPEARANCE_CONTROLS::onObjectOpacitySlider( int aLayer, float aOpacity )
 
     switch( aLayer )
     {
-    case static_cast<int>( LAYER_TRACKS ):        options.m_TrackOpacity    = aOpacity; break;
-    case static_cast<int>( LAYER_VIAS ):          options.m_ViaOpacity      = aOpacity; break;
-    case static_cast<int>( LAYER_PADS ):          options.m_PadOpacity      = aOpacity; break;
-    case static_cast<int>( LAYER_ZONES ):         options.m_ZoneOpacity     = aOpacity; break;
-    case static_cast<int>( LAYER_DRAW_BITMAPS ):  options.m_ImageOpacity    = aOpacity; break;
-    case static_cast<int>( LAYER_SHAPES ):        options.m_FilledShapeOpacity    = aOpacity; break;
+    case static_cast<int>( LAYER_TRACKS ):        options.m_TrackOpacity       = aOpacity; break;
+    case static_cast<int>( LAYER_VIAS ):          options.m_ViaOpacity         = aOpacity; break;
+    case static_cast<int>( LAYER_PADS ):          options.m_PadOpacity         = aOpacity; break;
+    case static_cast<int>( LAYER_ZONES ):         options.m_ZoneOpacity        = aOpacity; break;
+    case static_cast<int>( LAYER_DRAW_BITMAPS ):  options.m_ImageOpacity       = aOpacity; break;
+    case static_cast<int>( LAYER_FILLED_SHAPES ): options.m_FilledShapeOpacity = aOpacity; break;
     default: return;
     }
 
