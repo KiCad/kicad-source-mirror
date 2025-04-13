@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -75,7 +75,6 @@ DIALOG_ERC_BASE::DIALOG_ERC_BASE( wxWindow* parent, wxWindowID id, const wxStrin
 	bViolationsSizer = new wxBoxSizer( wxVERTICAL );
 
 	m_markerDataView = new wxDataViewCtrl( violationsPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxDV_NO_HEADER );
-	m_markerDataView->SetToolTip( _("Click on items to highlight them on the board.") );
 	m_markerDataView->SetMinSize( wxSize( 640,260 ) );
 
 	bViolationsSizer->Add( m_markerDataView, 2, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
