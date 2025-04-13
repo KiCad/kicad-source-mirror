@@ -809,17 +809,10 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataFromWindow()
 
                 switch( m_ViaTypeChoice->GetSelection() )
                 {
-                case 0:
-                    via->SetViaType( VIATYPE::THROUGH );
-                    break;
-                case 1:
-                    via->SetViaType( VIATYPE::MICROVIA );
-                    break;
-                case 2:
-                    via->SetViaType( VIATYPE::BLIND_BURIED );
-                    break;
-                default:
-                    break;
+                case 0: via->SetViaType( VIATYPE::THROUGH );      break;
+                case 1: via->SetViaType( VIATYPE::MICROVIA );     break;
+                case 2: via->SetViaType( VIATYPE::BLIND_BURIED ); break;
+                default:                                          break;
                 }
 
                 PCB_LAYER_ID startLayer = static_cast<PCB_LAYER_ID>( m_ViaStartLayer->GetLayerSelection() );
@@ -891,49 +884,47 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataFromWindow()
                 if( changeLock )
                     via->SetLocked( setLock );
 
-                auto setSurfaceProtection = [&]( std::optional<bool>& aFront,
-                                                 std::optional<bool>& aBack,
-                                                 IPC4761_SURFACE      aProtection )
-                {
-                    switch( aProtection )
-                    {
-                    case IPC4761_SURFACE::FROM_RULES:
-                        aFront.reset();
-                        aBack.reset();
-                        break;
-                    case IPC4761_SURFACE::NONE:
-                        aFront = false;
-                        aBack = false;
-                        break;
-                    case IPC4761_SURFACE::FRONT:
-                        aFront = true;
-                        aBack = false;
-                        break;
-                    case IPC4761_SURFACE::BACK:
-                        aFront = false;
-                        aBack = true;
-                        break;
-                    case IPC4761_SURFACE::BOTH:
-                        aFront = true;
-                        aBack = true;
-                        break;
-                    case IPC4761_SURFACE::CUSTOM: return;
-                    }
-                };
+                auto setSurfaceProtection =
+                        [&]( std::optional<bool>& aFront, std::optional<bool>& aBack, IPC4761_SURFACE aProtection )
+                        {
+                            switch( aProtection )
+                            {
+                            case IPC4761_SURFACE::FROM_RULES:
+                                aFront.reset();
+                                aBack.reset();
+                                break;
+                            case IPC4761_SURFACE::NONE:
+                                aFront = false;
+                                aBack = false;
+                                break;
+                            case IPC4761_SURFACE::FRONT:
+                                aFront = true;
+                                aBack = false;
+                                break;
+                            case IPC4761_SURFACE::BACK:
+                                aFront = false;
+                                aBack = true;
+                                break;
+                            case IPC4761_SURFACE::BOTH:
+                                aFront = true;
+                                aBack = true;
+                                break;
+                            case IPC4761_SURFACE::CUSTOM: return;
+                            }
+                        };
 
                 auto setDrillProtection =
                         [&]( std::optional<bool>& aDrill, IPC4761_DRILL aProtection )
-                {
-                    switch( aProtection )
-                    {
-                    case IPC4761_DRILL::FROM_RULES: aDrill.reset(); break;
-                    case IPC4761_DRILL::NOT_SET: aDrill = false; break;
-                    case IPC4761_DRILL::SET: aDrill = true; break;
-                    }
-                };
+                        {
+                            switch( aProtection )
+                            {
+                            case IPC4761_DRILL::FROM_RULES: aDrill.reset(); break;
+                            case IPC4761_DRILL::NOT_SET:    aDrill = false; break;
+                            case IPC4761_DRILL::SET:        aDrill = true;  break;
+                            }
+                        };
 
-                IPC4761_PRESET selectedPreset =
-                        static_cast<IPC4761_PRESET>( m_protectionFeatures->GetSelection() );
+                IPC4761_PRESET selectedPreset = static_cast<IPC4761_PRESET>( m_protectionFeatures->GetSelection() );
 
                 if( selectedPreset < IPC4761_PRESET::CUSTOM ) // Do not change custom feaure list.
                 {
@@ -955,7 +946,6 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataFromWindow()
 
                     setDrillProtection( via->Padstack().Drill().is_capped, config.cap );
                 }
-
 
                 break;
             }
