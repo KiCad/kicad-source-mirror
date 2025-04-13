@@ -96,8 +96,6 @@ DIALOG_DRC_BASE::DIALOG_DRC_BASE( wxWindow* parent, wxWindowID id, const wxStrin
 
 	bSizerViolationsBox->SetMinSize( wxSize( -1,320 ) );
 	m_markerDataView = new wxDataViewCtrl( m_panelViolations, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxDV_NO_HEADER );
-	m_markerDataView->SetToolTip( _("Click on items to highlight them on the board.") );
-
 	bSizerViolationsBox->Add( m_markerDataView, 1, wxALL|wxEXPAND, 5 );
 
 
