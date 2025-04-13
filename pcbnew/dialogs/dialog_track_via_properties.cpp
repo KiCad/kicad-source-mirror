@@ -611,9 +611,11 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataFromWindow()
             selected_tracks.push_back( track );
     }
 
+    static const std::vector<KICAD_T> trackTypes = { PCB_TRACE_T, PCB_ARC_T, PCB_VIA_T };
+
     for( PCB_TRACK* selected_track : selected_tracks )
     {
-        for( BOARD_CONNECTED_ITEM* connected_item : connectivity->GetConnectedItems( selected_track ) )
+        for( BOARD_CONNECTED_ITEM* connected_item : connectivity->GetConnectedItems( selected_track, trackTypes ) )
         {
             if( PCB_TRACK* track = dynamic_cast<PCB_TRACK*>( connected_item ) )
                 connected_tracks.insert( track );
