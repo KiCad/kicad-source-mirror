@@ -787,6 +787,7 @@ STEP_PCB_MODEL::~STEP_PCB_MODEL()
 bool STEP_PCB_MODEL::AddPadShape( const PAD* aPad, const VECTOR2D& aOrigin, bool aVia,
                                   SHAPE_POLY_SET* aClipPolygon )
 {
+    const double              c_padExtraThickness = 0.005;
     bool                      success = true;
     std::vector<TopoDS_Shape> padShapes;
     bool castellated = aClipPolygon && aPad->GetProperty() == PAD_PROP::CASTELLATED;
@@ -809,9 +810,9 @@ bool STEP_PCB_MODEL::AddPadShape( const PAD* aPad, const VECTOR2D& aOrigin, bool
         {
             // Pad surface as a separate face for FEM simulations.
             if( pcb_layer == F_Cu )
-                thickness += 0.005;
+                thickness += c_padExtraThickness;
             else if( pcb_layer == B_Cu )
-                thickness -= 0.005;
+                thickness -= c_padExtraThickness;
         }
 
         TopoDS_Shape testShape;
@@ -869,6 +870,14 @@ bool STEP_PCB_MODEL::AddPadShape( const PAD* aPad, const VECTOR2D& aOrigin, bool
         double b_pos, b_thickness;
         getLayerZPlacement( F_Cu, f_pos, f_thickness );
         getLayerZPlacement( B_Cu, b_pos, b_thickness );
+
+        if( !aVia )
+        {
+            // Pad surface is slightly thicker
+            f_thickness += c_padExtraThickness;
+            b_thickness -= c_padExtraThickness;
+        }
+
         double top = std::max( f_pos, f_pos + f_thickness );
         double bottom = std::min( b_pos, b_pos + b_thickness );
         double hole_height = top - bottom;
