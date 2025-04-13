@@ -703,7 +703,7 @@ bool test::DRC_TEST_PROVIDER_DIFF_PAIR_COUPLING::Run()
 
                     drcItem->SetViolatingRule( key.gapRule );
 
-                    reportViolation( drcItem, item->GetPosition(), item->GetLayer() );
+                    reportViolation( drcItem, item->GetFocusPosition(), item->GetLayer() );
                 }
             }
         }
