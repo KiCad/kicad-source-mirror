@@ -555,18 +555,20 @@ bool DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::TransferDataFromWindow()
         if( m_values->GetValue() )
             visitItem( commit, &fp->Value() );
 
-        if( m_otherFootprintFields->GetValue() )
+        for( PCB_FIELD* field : fp->GetFields() )
         {
-            for( PCB_FIELD* field : fp->GetFields() )
-            {
-                if( field->IsReference() )
-                    continue;
+            if( field->IsReference() )
+                continue;
 
-                if( field->IsValue() )
-                    continue;
+            if( field->IsValue() )
+                continue;
 
+            if( m_otherFootprintFields->GetValue() )
                 visitItem( commit, field );
-            }
+            else if( m_references->GetValue() && field->GetText() == wxT( "${REFERENCE}" ) )
+                visitItem( commit, field );
+            else if( m_values->GetValue() && field->GetText() == wxT( "${VALUE}" ) )
+                visitItem( commit, field );
         }
 
         // Go through all other footprint items
@@ -576,7 +578,13 @@ bool DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::TransferDataFromWindow()
 
             if( itemType == PCB_TEXT_T || itemType == PCB_TEXTBOX_T )
             {
+                EDA_TEXT* textItem = dynamic_cast<EDA_TEXT*>( boardItem );
+
                 if( m_footprintTexts->GetValue() )
+                    visitItem( commit, boardItem );
+                else if( m_references->GetValue() && textItem->GetText() == wxT( "${REFERENCE}" ) )
+                    visitItem( commit, boardItem );
+                else if( m_values->GetValue() && textItem->GetText() == wxT( "${VALUE}" ) )
                     visitItem( commit, boardItem );
             }
             else if( BaseType( itemType ) == PCB_DIMENSION_T )
