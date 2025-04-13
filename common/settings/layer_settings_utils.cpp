@@ -31,7 +31,7 @@ GAL_SET UserVisbilityLayers()
         LAYER_VIAS,
         LAYER_PADS,
         LAYER_ZONES,
-        LAYER_SHAPES,
+        LAYER_FILLED_SHAPES,
         LAYER_DRAW_BITMAPS,
         LAYER_FOOTPRINTS_FR,
         LAYER_FOOTPRINTS_BK,
@@ -62,7 +62,7 @@ GAL_LAYER_ID RenderLayerFromVisibilityLayer( VISIBILITY_LAYER aLayer )
     case VISIBILITY_LAYER::VIAS:                    return LAYER_VIAS;
     case VISIBILITY_LAYER::PADS:                    return LAYER_PADS;
     case VISIBILITY_LAYER::ZONES:                   return LAYER_ZONES;
-    case VISIBILITY_LAYER::SHAPES:                  return LAYER_SHAPES;
+    case VISIBILITY_LAYER::FILLED_SHAPES:           return LAYER_FILLED_SHAPES;
     case VISIBILITY_LAYER::BITMAPS:                 return LAYER_DRAW_BITMAPS;
     case VISIBILITY_LAYER::FOOTPRINTS_FRONT:        return LAYER_FOOTPRINTS_FR;
     case VISIBILITY_LAYER::FOOTPRINTS_BACK:         return LAYER_FOOTPRINTS_BK;
@@ -92,7 +92,7 @@ std::optional<VISIBILITY_LAYER> VisibilityLayerFromRenderLayer( GAL_LAYER_ID aLa
     case LAYER_VIAS:                return VISIBILITY_LAYER::VIAS;
     case LAYER_PADS:                return VISIBILITY_LAYER::PADS;
     case LAYER_ZONES:               return VISIBILITY_LAYER::ZONES;
-    case LAYER_SHAPES:              return VISIBILITY_LAYER::SHAPES;
+    case LAYER_FILLED_SHAPES:       return VISIBILITY_LAYER::FILLED_SHAPES;
     case LAYER_DRAW_BITMAPS:        return VISIBILITY_LAYER::BITMAPS;
     case LAYER_FOOTPRINTS_FR:       return VISIBILITY_LAYER::FOOTPRINTS_FRONT;
     case LAYER_FOOTPRINTS_BK:       return VISIBILITY_LAYER::FOOTPRINTS_BACK;

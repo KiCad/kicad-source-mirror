@@ -3020,10 +3020,7 @@ bool PCB_SELECTION_TOOL::Selectable( const BOARD_ITEM* aItem, bool checkVisibili
         KI_FALLTHROUGH;
 
     case PCB_SHAPE_T:
-        // Note: LAYER_SHAPES does not control the visibility of a PCB_SHAPE_T, only
-        // the opacity of filled areas
-        // The visibility is managed by the item layer
-        if( options.m_FilledShapeOpacity == 0.0 )
+        if( options.m_FilledShapeOpacity == 0.0 && static_cast<const PCB_SHAPE*>( aItem )->IsFilled() )
             return false;
 
         KI_FALLTHROUGH;

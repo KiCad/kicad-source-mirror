@@ -309,7 +309,7 @@ enum GAL_LAYER_ID: int
     LAYER_CONFLICTS_SHADOW   = GAL_LAYER_ID_START + 40,
 
     /// Copper graphic shape opacity/visibility (color ignored).
-    LAYER_SHAPES             = GAL_LAYER_ID_START + 41,
+    LAYER_FILLED_SHAPES      = GAL_LAYER_ID_START + 41,
 
     LAYER_DRC_SHAPE1         = GAL_LAYER_ID_START + 42,  ///< Custom shape for DRC marker.
     LAYER_DRC_SHAPE2         = GAL_LAYER_ID_START + 43,  ///< Custom shape for DRC marker.

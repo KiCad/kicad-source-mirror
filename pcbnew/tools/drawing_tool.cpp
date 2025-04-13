@@ -1911,7 +1911,7 @@ int DRAWING_TOOL::PlaceImportedGraphics( const TOOL_EVENT& aEvent )
     }
 
     // Turn shapes on if they are off, so that the created object will be visible after completion
-    m_frame->SetObjectVisible( LAYER_SHAPES );
+    m_frame->SetObjectVisible( LAYER_FILLED_SHAPES );
 
     if( !m_view->IsLayerVisible( layer ) )
     {
@@ -2173,7 +2173,7 @@ bool DRAWING_TOOL::drawShape( const TOOL_EVENT& aTool, PCB_SHAPE** aGraphic,
     }
 
     // Turn shapes on if they are off, so that the created object will be visible after completion
-    m_frame->SetObjectVisible( LAYER_SHAPES );
+    m_frame->SetObjectVisible( LAYER_FILLED_SHAPES );
 
     // geometric construction manager
     KIGFX::PREVIEW::TWO_POINT_GEOMETRY_MANAGER twoPointMgr;
@@ -2573,9 +2573,6 @@ bool DRAWING_TOOL::drawArc( const TOOL_EVENT& aTool, PCB_SHAPE** aGraphic,
         m_stroke.SetColor( COLOR4D::UNSPECIFIED );
     }
 
-    // Turn shapes on if they are off, so that the created object will be visible after completion
-    m_frame->SetObjectVisible( LAYER_SHAPES );
-
     // Arc geometric construction manager
     KIGFX::PREVIEW::ARC_GEOM_MANAGER arcManager;
 
@@ -2878,9 +2875,6 @@ std::unique_ptr<PCB_SHAPE> DRAWING_TOOL::drawOneBezier( const TOOL_EVENT&   aToo
         m_stroke.SetLineStyle( LINE_STYLE::DEFAULT );
         m_stroke.SetColor( COLOR4D::UNSPECIFIED );
     }
-
-    // Turn shapes on if they are off, so that the created object will be visible after completion
-    m_frame->SetObjectVisible( LAYER_SHAPES );
 
     // Arc geometric construction manager
     KIGFX::PREVIEW::BEZIER_GEOM_MANAGER bezierManager;
