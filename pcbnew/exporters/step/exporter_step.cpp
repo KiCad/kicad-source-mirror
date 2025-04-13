@@ -171,6 +171,9 @@ bool EXPORTER_STEP::buildFootprint3DShapes( FOOTPRINT* aFootprint, VECTOR2D aOri
         SHAPE_POLY_SET holePoly;
         holeShape->TransformToPolygon( holePoly, maxError, ERROR_INSIDE );
 
+        // This helps with fusing
+        holePoly.Deflate( m_platingThickness / 2, CORNER_STRATEGY::ROUND_ALL_CORNERS, maxError );
+
         for( PCB_LAYER_ID pcblayer : pad->GetLayerSet().Seq() )
         {
             if( pad->IsOnLayer( pcblayer ) )
@@ -420,6 +423,9 @@ bool EXPORTER_STEP::buildTrack3DShape( PCB_TRACK* aTrack, VECTOR2D aOrigin )
         std::shared_ptr<SHAPE_SEGMENT> holeShape = via->GetEffectiveHoleShape();
         SHAPE_POLY_SET                 holePoly;
         holeShape->TransformToPolygon( holePoly, maxError, ERROR_INSIDE );
+
+        // This helps with fusing
+        holePoly.Deflate( m_platingThickness / 2, CORNER_STRATEGY::ROUND_ALL_CORNERS, maxError );
 
         LSET layers( via->GetLayerSet() & m_layersToExport );
 
