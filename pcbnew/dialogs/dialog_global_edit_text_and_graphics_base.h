@@ -43,14 +43,14 @@ class DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE : public DIALOG_SHIM
 
 	protected:
 		wxCheckBox* m_references;
-		wxCheckBox* m_values;
-		wxCheckBox* m_footprintFields;
-		wxCheckBox* m_footprintGraphics;
-		wxCheckBox* m_footprintDimensions;
-		wxCheckBox* m_otherFootprintTexts;
 		wxCheckBox* m_boardGraphics;
+		wxCheckBox* m_values;
 		wxCheckBox* m_boardText;
+		wxCheckBox* m_otherFootprintFields;
 		wxCheckBox* m_boardDimensions;
+		wxCheckBox* m_footprintGraphics;
+		wxCheckBox* m_footprintTexts;
+		wxCheckBox* m_footprintDimensions;
 		wxCheckBox* m_layerFilterOpt;
 		PCB_LAYER_BOX_SELECTOR* m_layerFilter;
 		wxCheckBox* m_referenceFilterOpt;

@@ -25,72 +25,83 @@ DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE::DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_
 	wxStaticBoxSizer* sbScope;
 	sbScope = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Scope") ), wxVERTICAL );
 
+	wxFlexGridSizer* fgSizer3;
+	fgSizer3 = new wxFlexGridSizer( 0, 2, 5, 30 );
+	fgSizer3->SetFlexibleDirection( wxBOTH );
+	fgSizer3->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+
 	m_references = new wxCheckBox( sbScope->GetStaticBox(), wxID_ANY, _("Reference designators"), wxDefaultPosition, wxDefaultSize, 0 );
-	sbScope->Add( m_references, 0, wxBOTTOM|wxRIGHT|wxLEFT, 4 );
-
-	m_values = new wxCheckBox( sbScope->GetStaticBox(), wxID_ANY, _("Values"), wxDefaultPosition, wxDefaultSize, 0 );
-	sbScope->Add( m_values, 0, wxBOTTOM|wxRIGHT|wxLEFT, 4 );
-
-	m_footprintFields = new wxCheckBox( sbScope->GetStaticBox(), wxID_ANY, _("Footprint fields"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_footprintFields->SetToolTip( _("Footprint fields that are not the reference designator or value field") );
-
-	sbScope->Add( m_footprintFields, 0, wxALL, 4 );
-
-	m_footprintGraphics = new wxCheckBox( sbScope->GetStaticBox(), wxID_ANY, _("Footprint graphic items"), wxDefaultPosition, wxDefaultSize, 0 );
-	sbScope->Add( m_footprintGraphics, 0, wxBOTTOM|wxRIGHT|wxLEFT, 4 );
-
-	m_footprintDimensions = new wxCheckBox( sbScope->GetStaticBox(), wxID_ANY, _("Footprint dimension items"), wxDefaultPosition, wxDefaultSize, 0 );
-	sbScope->Add( m_footprintDimensions, 0, wxBOTTOM|wxRIGHT|wxLEFT, 4 );
-
-	m_otherFootprintTexts = new wxCheckBox( sbScope->GetStaticBox(), wxID_ANY, _("Other footprint text items"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_otherFootprintTexts->SetToolTip( _("Footprint text items not associated with a field") );
-
-	sbScope->Add( m_otherFootprintTexts, 0, wxBOTTOM|wxRIGHT|wxLEFT, 4 );
-
-
-	sbScope->Add( 0, 0, 0, wxEXPAND|wxTOP|wxBOTTOM, 5 );
+	fgSizer3->Add( m_references, 0, 0, 5 );
 
 	m_boardGraphics = new wxCheckBox( sbScope->GetStaticBox(), wxID_ANY, _("PCB graphic items"), wxDefaultPosition, wxDefaultSize, 0 );
-	sbScope->Add( m_boardGraphics, 0, wxBOTTOM|wxRIGHT|wxLEFT, 4 );
+	fgSizer3->Add( m_boardGraphics, 0, 0, 5 );
+
+	m_values = new wxCheckBox( sbScope->GetStaticBox(), wxID_ANY, _("Values"), wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizer3->Add( m_values, 0, 0, 5 );
 
 	m_boardText = new wxCheckBox( sbScope->GetStaticBox(), wxID_ANY, _("PCB text items"), wxDefaultPosition, wxDefaultSize, 0 );
-	sbScope->Add( m_boardText, 0, wxBOTTOM|wxRIGHT|wxLEFT, 4 );
+	fgSizer3->Add( m_boardText, 0, 0, 5 );
 
-	m_boardDimensions = new wxCheckBox( sbScope->GetStaticBox(), wxID_ANY, _("PCB dimension items"), wxDefaultPosition, wxDefaultSize, 0 );
-	sbScope->Add( m_boardDimensions, 0, wxBOTTOM|wxRIGHT|wxLEFT, 4 );
+	m_otherFootprintFields = new wxCheckBox( sbScope->GetStaticBox(), wxID_ANY, _("Other footprint fields"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_otherFootprintFields->SetToolTip( _("Footprint fields that are not the reference designator or value field") );
+
+	fgSizer3->Add( m_otherFootprintFields, 0, 0, 5 );
+
+	m_boardDimensions = new wxCheckBox( sbScope->GetStaticBox(), wxID_ANY, _("PCB dimensions"), wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizer3->Add( m_boardDimensions, 0, 0, 5 );
+
+	m_footprintGraphics = new wxCheckBox( sbScope->GetStaticBox(), wxID_ANY, _("Footprint graphic items"), wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizer3->Add( m_footprintGraphics, 0, wxTOP, 5 );
+
+
+	fgSizer3->Add( 0, 0, 1, wxEXPAND, 5 );
+
+	m_footprintTexts = new wxCheckBox( sbScope->GetStaticBox(), wxID_ANY, _("Footprint text items"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_footprintTexts->SetToolTip( _("Footprint text items not associated with a field") );
+
+	fgSizer3->Add( m_footprintTexts, 0, 0, 5 );
+
+
+	fgSizer3->Add( 0, 0, 1, wxEXPAND, 5 );
+
+	m_footprintDimensions = new wxCheckBox( sbScope->GetStaticBox(), wxID_ANY, _("Footprint dimensions"), wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizer3->Add( m_footprintDimensions, 0, 0, 5 );
+
+
+	sbScope->Add( fgSizer3, 1, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 
 
 	bSizerTop->Add( sbScope, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 10 );
 
 	wxStaticBoxSizer* sbFilters;
-	sbFilters = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Filters") ), wxVERTICAL );
+	sbFilters = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Filter Items") ), wxVERTICAL );
 
 	wxFlexGridSizer* fgSizer2;
-	fgSizer2 = new wxFlexGridSizer( 0, 2, 4, 0 );
+	fgSizer2 = new wxFlexGridSizer( 0, 2, 3, 0 );
 	fgSizer2->AddGrowableCol( 1 );
 	fgSizer2->SetFlexibleDirection( wxBOTH );
 	fgSizer2->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
-	m_layerFilterOpt = new wxCheckBox( sbFilters->GetStaticBox(), wxID_ANY, _("Filter items by layer:"), wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer2->Add( m_layerFilterOpt, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
+	m_layerFilterOpt = new wxCheckBox( sbFilters->GetStaticBox(), wxID_ANY, _("By layer:"), wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizer2->Add( m_layerFilterOpt, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 	m_layerFilter = new PCB_LAYER_BOX_SELECTOR( sbFilters->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, 0 );
 	fgSizer2->Add( m_layerFilter, 0, wxEXPAND|wxLEFT, 5 );
 
 
-	fgSizer2->Add( 0, 0, 1, wxEXPAND|wxTOP|wxBOTTOM, 3 );
+	fgSizer2->Add( 0, 0, 1, wxEXPAND|wxTOP|wxBOTTOM, 2 );
 
 
-	fgSizer2->Add( 0, 0, 1, wxEXPAND|wxTOP|wxBOTTOM, 3 );
+	fgSizer2->Add( 0, 0, 1, wxEXPAND|wxTOP|wxBOTTOM, 2 );
 
-	m_referenceFilterOpt = new wxCheckBox( sbFilters->GetStaticBox(), wxID_ANY, _("Filter items by parent reference designator:"), wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer2->Add( m_referenceFilterOpt, 0, wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
+	m_referenceFilterOpt = new wxCheckBox( sbFilters->GetStaticBox(), wxID_ANY, _("By parent reference designator:"), wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizer2->Add( m_referenceFilterOpt, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 	m_referenceFilter = new wxTextCtrl( sbFilters->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizer2->Add( m_referenceFilter, 0, wxEXPAND|wxLEFT, 5 );
 
-	m_footprintFilterOpt = new wxCheckBox( sbFilters->GetStaticBox(), wxID_ANY, _("Filter items by parent footprint library id:"), wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer2->Add( m_footprintFilterOpt, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	m_footprintFilterOpt = new wxCheckBox( sbFilters->GetStaticBox(), wxID_ANY, _("By parent footprint library link:"), wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizer2->Add( m_footprintFilterOpt, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT, 5 );
 
 	m_footprintFilter = new wxTextCtrl( sbFilters->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizer2->Add( m_footprintFilter, 0, wxBOTTOM|wxEXPAND|wxLEFT, 5 );
@@ -106,12 +117,6 @@ DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE::DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_
 
 
 	bMainSizer->Add( bSizerTop, 1, wxEXPAND, 5 );
-
-
-	bMainSizer->Add( 0, 0, 0, wxTOP, 5 );
-
-
-	bMainSizer->Add( 0, 0, 0, wxTOP, 5 );
 
 	wxStaticBoxSizer* sbAction;
 	sbAction = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Action") ), wxVERTICAL );
@@ -256,7 +261,7 @@ DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE::DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_
 	fgSizer1->Add( m_centerOnFP, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 120 );
 
 
-	bSizer2->Add( fgSizer1, 1, wxBOTTOM|wxEXPAND|wxTOP, 5 );
+	bSizer2->Add( fgSizer1, 1, wxBOTTOM|wxEXPAND|wxTOP, 2 );
 
 
 	m_specifiedValues->SetSizer( bSizer2 );
@@ -265,7 +270,7 @@ DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE::DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_
 	sbAction->Add( m_specifiedValues, 0, wxEXPAND|wxBOTTOM|wxLEFT, 18 );
 
 	m_setToLayerDefaults = new wxRadioButton( sbAction->GetStaticBox(), wxID_ANY, _("Set to layer default values:"), wxDefaultPosition, wxDefaultSize, 0 );
-	sbAction->Add( m_setToLayerDefaults, 0, wxTOP|wxBOTTOM|wxEXPAND, 5 );
+	sbAction->Add( m_setToLayerDefaults, 0, wxTOP|wxBOTTOM|wxEXPAND, 3 );
 
 	m_grid = new wxGrid( sbAction->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, wxBORDER_SIMPLE );
 
@@ -278,10 +283,10 @@ DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE::DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_
 
 	// Columns
 	m_grid->SetColSize( 0, 132 );
-	m_grid->SetColSize( 1, 116 );
-	m_grid->SetColSize( 2, 116 );
-	m_grid->SetColSize( 3, 116 );
-	m_grid->SetColSize( 4, 116 );
+	m_grid->SetColSize( 1, 120 );
+	m_grid->SetColSize( 2, 120 );
+	m_grid->SetColSize( 3, 120 );
+	m_grid->SetColSize( 4, 120 );
 	m_grid->SetColSize( 5, 96 );
 	m_grid->SetColSize( 6, 96 );
 	m_grid->EnableDragColMove( false );
@@ -300,13 +305,13 @@ DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE::DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_
 	m_grid->SetDefaultCellBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_BTNFACE ) );
 	m_grid->SetDefaultCellFont( wxFont( 11, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
 	m_grid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_CENTER );
-	sbAction->Add( m_grid, 0, wxEXPAND|wxLEFT|wxRIGHT, 5 );
+	sbAction->Add( m_grid, 0, wxEXPAND|wxLEFT, 23 );
 
 
 	sbAction->Add( 0, 0, 0, wxEXPAND|wxBOTTOM, 5 );
 
 
-	bMainSizer->Add( sbAction, 0, wxEXPAND|wxLEFT|wxRIGHT, 10 );
+	bMainSizer->Add( sbAction, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 10 );
 
 	m_sdbSizerButtons = new wxStdDialogButtonSizer();
 	m_sdbSizerButtonsOK = new wxButton( this, wxID_OK );
@@ -325,8 +330,8 @@ DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE::DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_
 	bMainSizer->Fit( this );
 
 	// Connect Events
-	m_footprintDimensions->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE::onDimensionItemCheckbox ), NULL, this );
 	m_boardDimensions->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE::onDimensionItemCheckbox ), NULL, this );
+	m_footprintDimensions->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE::onDimensionItemCheckbox ), NULL, this );
 	m_layerFilter->Connect( wxEVT_COMMAND_COMBOBOX_SELECTED, wxCommandEventHandler( DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE::OnLayerFilterSelect ), NULL, this );
 	m_referenceFilter->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE::OnReferenceFilterText ), NULL, this );
 	m_footprintFilter->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE::OnFootprintFilterText ), NULL, this );
@@ -345,8 +350,8 @@ DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE::DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_
 DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE::~DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE()
 {
 	// Disconnect Events
-	m_footprintDimensions->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE::onDimensionItemCheckbox ), NULL, this );
 	m_boardDimensions->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE::onDimensionItemCheckbox ), NULL, this );
+	m_footprintDimensions->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE::onDimensionItemCheckbox ), NULL, this );
 	m_layerFilter->Disconnect( wxEVT_COMMAND_COMBOBOX_SELECTED, wxCommandEventHandler( DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE::OnLayerFilterSelect ), NULL, this );
 	m_referenceFilter->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE::OnReferenceFilterText ), NULL, this );
 	m_footprintFilter->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE::OnFootprintFilterText ), NULL, this );
