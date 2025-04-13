@@ -601,12 +601,23 @@ bool DIALOG_TRACK_VIA_PROPERTIES::confirmPadChange( const std::set<PAD*>& changi
 
 bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataFromWindow()
 {
-    std::vector<PCB_TRACK*> selected_tracks;
+    std::shared_ptr<CONNECTIVITY_DATA> connectivity = m_frame->GetBoard()->GetConnectivity();
+    std::vector<PCB_TRACK*>            selected_tracks;
+    std::set<PCB_TRACK*>               connected_tracks;
 
     for( EDA_ITEM* item : m_items )
     {
         if( PCB_TRACK* track = dynamic_cast<PCB_TRACK*>( item ) )
             selected_tracks.push_back( track );
+    }
+
+    for( PCB_TRACK* selected_track : selected_tracks )
+    {
+        for( BOARD_CONNECTED_ITEM* connected_item : connectivity->GetConnectedItems( selected_track ) )
+        {
+            if( PCB_TRACK* track = dynamic_cast<PCB_TRACK*>( connected_item ) )
+                connected_tracks.insert( track );
+        }
     }
 
     // Check for malformed data ONLY; design rules and constraints are the business of DRC.
@@ -852,7 +863,7 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataFromWindow()
                 return false;
             };
 
-    for( PCB_TRACK* track : selected_tracks )
+    for( PCB_TRACK* track : connected_tracks )
     {
         for( PCB_TRACK* other : m_frame->GetBoard()->Tracks() )
         {
