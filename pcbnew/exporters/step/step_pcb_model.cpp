@@ -927,20 +927,23 @@ bool STEP_PCB_MODEL::AddPadShape( const PAD* aPad, const VECTOR2D& aOrigin, bool
     if( !success ) // Error
         ReportMessage( wxT( "OCC error adding pad/via polygon.\n" ) );
 
-    // Fuse pad shapes here before fusing them with tracks because OCCT sometimes has trouble
-    if( m_fuseShapes )
+    if( !padShapes.empty() )
     {
-        TopTools_ListOfShape padShapesList;
+        // Fuse pad shapes here before fusing them with tracks because OCCT sometimes has trouble
+        if( m_fuseShapes )
+        {
+            TopTools_ListOfShape padShapesList;
 
-        for( const TopoDS_Shape& shape : padShapes )
-            padShapesList.Append( shape );
+            for( const TopoDS_Shape& shape : padShapes )
+                padShapesList.Append( shape );
 
-        m_board_copper_pads.push_back( fuseShapesOrCompound( padShapesList ) );
-    }
-    else
-    {
-        for( const TopoDS_Shape& shape : padShapes )
-            m_board_copper_pads.push_back( shape );
+            m_board_copper_pads.push_back( fuseShapesOrCompound( padShapesList ) );
+        }
+        else
+        {
+            for( const TopoDS_Shape& shape : padShapes )
+                m_board_copper_pads.push_back( shape );
+        }
     }
 
     return success;
