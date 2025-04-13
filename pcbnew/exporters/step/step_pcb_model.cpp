@@ -857,7 +857,7 @@ bool STEP_PCB_MODEL::AddPadShape( const PAD* aPad, const VECTOR2D& aOrigin, bool
                 gp_Pnt point( pcbIUScale.IUTomm( aPad->GetX() - aOrigin.x ),
                               -pcbIUScale.IUTomm( aPad->GetY() - aOrigin.y ), Zpos + thickness );
 
-                m_pad_points[name] = { point, testShape };
+                m_pad_points[name].emplace_back( point, testShape );
             }
         }
     }
@@ -2387,34 +2387,37 @@ bool STEP_PCB_MODEL::WriteXAO( const wxString& aFileName )
         Bnd_Box bbox;
         BRepBndLib::Add( subShape, bbox );
 
-        for( const auto& [padKey, pair] : m_pad_points )
+        for( const auto& [padKey, pairs] : m_pad_points )
         {
-            const auto& [point, padTestShape] = pair;
-
-            if( bbox.IsOut( point ) )
-                continue;
-
-            BRepAdaptor_Surface surface( TopoDS::Face( subShape ) );
-
-            if( surface.GetType() != GeomAbs_Plane )
-                continue;
-
-            BRepExtrema_DistShapeShape dist( padTestShape, subShape );
-            dist.Perform();
-
-            if( !dist.IsDone() )
-                continue;
-
-            if( dist.Value() < Precision::Approximation() )
+            for( const auto& pair : pairs )
             {
-                // Push as a face group
-                groups[2][padKey].push_back( faceIndex );
+                const auto& [point, padTestShape] = pair;
 
-                GProp_GProps system;
-                BRepGProp::SurfaceProperties( subShape, system );
+                if( bbox.IsOut( point ) )
+                    continue;
 
-                double surfaceArea = system.Mass() / 1e6; // Convert to meters^2
-                groupAreas[padKey] = surfaceArea;
+                BRepAdaptor_Surface surface( TopoDS::Face( subShape ) );
+
+                if( surface.GetType() != GeomAbs_Plane )
+                    continue;
+
+                BRepExtrema_DistShapeShape dist( padTestShape, subShape );
+                dist.Perform();
+
+                if( !dist.IsDone() )
+                    continue;
+
+                if( dist.Value() < Precision::Approximation() )
+                {
+                    // Push as a face group
+                    groups[2][padKey].push_back( faceIndex );
+
+                    GProp_GProps system;
+                    BRepGProp::SurfaceProperties( subShape, system );
+
+                    double surfaceArea = system.Mass() / 1e6; // Convert to meters^2
+                    groupAreas[padKey] += surfaceArea;
+                }
             }
         }
 

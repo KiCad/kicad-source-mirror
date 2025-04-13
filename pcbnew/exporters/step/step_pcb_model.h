@@ -292,8 +292,8 @@ private:
     std::vector<TopoDS_Shape> m_board_silkscreen;
     std::vector<TopoDS_Shape> m_board_soldermask;
 
-    // Data for pads
-    std::map<wxString, std::pair<gp_Pnt, TopoDS_Shape>> m_pad_points;
+    // Data for pads. Key example: Pad_F_U2_1_GND
+    std::map<wxString, std::vector<std::pair<gp_Pnt, TopoDS_Shape>>> m_pad_points;
 
     /// Name of the PCB, which will most likely be the file name of the path.
     wxString m_pcbName;
