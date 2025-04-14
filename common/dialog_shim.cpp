@@ -653,9 +653,43 @@ void DIALOG_SHIM::OnCharHook( wxKeyEvent& aEvt )
             return;
         }
     }
-    // shift-return (Mac default) or Ctrl-Return (GTK) for OK
-    else if( ( aEvt.GetKeyCode() == WXK_RETURN || aEvt.GetKeyCode() == WXK_NUMPAD_ENTER )
-             && ( aEvt.ShiftDown() || aEvt.ControlDown() ) )
+    // shift-return (Mac default) or Ctrl-Return (GTK) for new line input
+    else if( ( aEvt.GetKeyCode() == WXK_RETURN || aEvt.GetKeyCode() == WXK_NUMPAD_ENTER ) && aEvt.ShiftDown() )
+    {
+        wxObject* eventSource = aEvt.GetEventObject();
+
+        if( wxTextCtrl* textCtrl = dynamic_cast<wxTextCtrl*>( eventSource ) )
+        {
+#if defined( __WXMAC__ ) || defined( __WXMSW__ )
+            wxString eol = "\r\n";
+#else
+            wxString eol = "\n";
+#endif
+
+            long pos = textCtrl->GetInsertionPoint();
+            textCtrl->WriteText( eol );
+            textCtrl->SetInsertionPoint( pos + eol.length() );
+            return;
+        }
+        else if( wxStyledTextCtrl* scintilla = dynamic_cast<wxStyledTextCtrl*>( eventSource ) )
+        {
+            wxString eol = "\n";
+            switch( scintilla->GetEOLMode() )
+            {
+            case wxSTC_EOL_CRLF: eol = "\r\n"; break;
+            case wxSTC_EOL_CR: eol = "\r"; break;
+            case wxSTC_EOL_LF: eol = "\n"; break;
+            }
+
+            long pos = scintilla->GetCurrentPos();
+            scintilla->InsertText( pos, eol );
+            scintilla->GotoPos( pos + eol.length() );
+            return;
+        }
+        return;
+    }
+    // command-return (Mac default) or Ctrl-Return (GTK) for OK
+    else if( ( aEvt.GetKeyCode() == WXK_RETURN || aEvt.GetKeyCode() == WXK_NUMPAD_ENTER ) && aEvt.ControlDown() )
     {
         wxPostEvent( this, wxCommandEvent( wxEVT_COMMAND_BUTTON_CLICKED, wxID_OK ) );
         return;

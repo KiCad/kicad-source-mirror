@@ -161,7 +161,7 @@ void GRID_CELL_STC_EDITOR::Create( wxWindow* aParent, wxWindowID aId, wxEvtHandl
     stc_ctrl()->SetScrollWidthTracking( true );
 
     m_scintillaTricks = new SCINTILLA_TRICKS(
-            stc_ctrl(), wxEmptyString, true,
+            stc_ctrl(), wxEmptyString, false,
 
             // onAcceptFn
             [this]( wxKeyEvent& aEvent )
