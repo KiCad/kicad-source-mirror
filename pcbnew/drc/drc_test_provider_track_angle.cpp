@@ -145,14 +145,14 @@ bool DRC_TEST_PROVIDER_TRACK_ANGLE::Run()
                     }
 
                     actual = EDA_ANGLE::Arccos( direction.Dot( other_direction ) );
-                    if( angle_below_90 && actual > 90 )
+                    if( angle_below_90 && actual > ANGLE_90 )
                     {
-                        actual -= 90;
+                        actual -= ANGLE_90;
                     }
 
                     bool fail_min = false;
                     bool fail_max = false;
-                    EDA_ANGLE constraintAngle = 0;
+                    EDA_ANGLE constraintAngle = ANGLE_0;
 
                     if( constraint.GetSeverity() != RPT_SEVERITY_IGNORE )
                     {

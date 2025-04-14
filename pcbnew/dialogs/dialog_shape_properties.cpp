@@ -446,7 +446,7 @@ public:
     {
         const EDA_ANGLE angle = GetAngleValue( CSA_ANGLE );
 
-        if( angle == 0 )
+        if( angle == ANGLE_0 )
         {
             aErrs.push_back( _( "Arc angle must be greater than 0" ) );
             return false;
@@ -489,9 +489,9 @@ public:
 
     void OnCSAChange()
     {
-        const VECTOR2I center{ GetIntValue( CSA_CENTER_X ), GetIntValue( CSA_CENTER_Y ) };
-        const VECTOR2I start{ GetIntValue( CSA_START_X ), GetIntValue( CSA_START_Y ) };
-        const int      angle = GetIntValue( CSA_ANGLE );
+        const VECTOR2I  center{ GetIntValue( CSA_CENTER_X ), GetIntValue( CSA_CENTER_Y ) };
+        const VECTOR2I  start{ GetIntValue( CSA_START_X ), GetIntValue( CSA_START_Y ) };
+        const EDA_ANGLE angle( GetIntValue( CSA_ANGLE ), DEGREES_T );
 
         GetShape().SetCenter( center );
         GetShape().SetStart( start );

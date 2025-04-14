@@ -61,10 +61,13 @@ public:
     }
 
     /**
-     * Construct an EDA_ANGLE in degrees
+     * Construct an EDA_ANGLE in degrees.  This is really only for the statically-defined
+     * global angles.  All other code should use EDA_ANGLE( xxx, DEGREES_T ).
      * @param aAngleInDegrees
      */
-    constexpr EDA_ANGLE( double aAngleInDegrees ) : m_value(aAngleInDegrees) {}
+    constexpr explicit EDA_ANGLE( double aAngleInDegrees ) :
+            m_value( aAngleInDegrees )
+    {}
 
     explicit EDA_ANGLE( const VECTOR2D& aVector )
     {
