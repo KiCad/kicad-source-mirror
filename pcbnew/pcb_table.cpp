@@ -199,6 +199,11 @@ void PCB_TABLE::Rotate( const VECTOR2I& aRotCentre, const EDA_ANGLE& aAngle )
 
 void PCB_TABLE::Flip( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection )
 {
+    EDA_ANGLE originalAngle = m_cells[0]->GetTextAngle();
+
+    Rotate( aCentre, -originalAngle );
+    Normalize();
+
     for( PCB_TABLECELL* cell : m_cells )
         cell->Flip( aCentre, aFlipDirection );
 
@@ -213,7 +218,26 @@ void PCB_TABLE::Flip( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection )
         rowOffset += GetColCount();
     }
 
+    VECTOR2I currentPos = GetPosition();
+
+    int      firstWidth = m_colWidths.begin()->second;
+    VECTOR2I translationVector = VECTOR2I( firstWidth, 0 );
+
+    VECTOR2I position = currentPos - translationVector;
+    SetPosition( position );
+
+    std::map<int, int> newColWidths;
+    for( int col = 0; col < GetColCount(); ++col )
+    {
+        newColWidths[col] = m_colWidths[GetColCount() - 1 - col];
+    }
+
+    m_colWidths = std::move( newColWidths );
+
     SetLayer( GetBoard()->FlipLayer( GetLayer() ) );
+    Normalize();
+
+    Rotate( aCentre, originalAngle );
     Normalize();
 }
 
