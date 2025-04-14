@@ -1258,8 +1258,13 @@ int SHAPE_LINE_CHAIN::ShapeCount() const
 
 SEG SHAPE_LINE_CHAIN::Segment( int aIndex ) const
 {
+    int segCount = SegmentCount();
+
     if( aIndex < 0 )
-        aIndex += SegmentCount();
+        aIndex += segCount;
+
+    wxCHECK( aIndex < segCount && aIndex >= 0,
+             m_points.size() > 0 ? SEG( m_points.back(), m_points.back() ) : SEG( 0, 0, 0, 0 ) );
 
     if( aIndex == (int) ( m_points.size() - 1 ) && m_closed )
         return SEG( m_points[aIndex], m_points[0], aIndex );
