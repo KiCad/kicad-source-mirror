@@ -93,12 +93,12 @@ enum PCB_DRC_CODE {
     DRCE_SOLDERMASK_BRIDGE,              // failure to maintain min soldermask web thickness
                                          //   between copper items with different nets
 
-    DRCE_SILK_CLEARANCE,                 // silkscreen clipped by mask (potentially leaving it
+    DRCE_SILK_MASK_CLEARANCE,            // silkscreen clipped by mask (potentially leaving it
                                          //   over pads, exposed copper, etc.)
     DRCE_SILK_EDGE_CLEARANCE,
     DRCE_TEXT_HEIGHT,
     DRCE_TEXT_THICKNESS,
-    DRCE_OVERLAPPING_SILK,               // silk to silk clearance error
+    DRCE_OVERLAPPING_SILK,               // silk-to-silk or silk-to-other clearance error
 
     DRCE_LENGTH_OUT_OF_RANGE,
     DRCE_SKEW_OUT_OF_RANGE,
@@ -238,7 +238,7 @@ private:
     static DRC_ITEM genericWarning;
     static DRC_ITEM genericError;
     static DRC_ITEM copperSliver;
-    static DRC_ITEM silkClearance;
+    static DRC_ITEM silkMaskClearance;
     static DRC_ITEM silkEdgeClearance;
     static DRC_ITEM solderMaskBridge;
     static DRC_ITEM silkOverlaps;

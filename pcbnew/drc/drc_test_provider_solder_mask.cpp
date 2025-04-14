@@ -40,7 +40,7 @@
     Solder mask tests. Checks for silkscreen which is clipped by mask openings and for bridges
     between mask apertures with different nets.
     Errors generated:
-    - DRCE_SILK_CLEARANCE
+    - DRCE_SILK_MASK_CLEARANCE
     - DRCE_SOLDERMASK_BRIDGE
 */
 
@@ -224,10 +224,11 @@ void DRC_TEST_PROVIDER_SOLDER_MASK::buildRTrees()
     solderMask->GetFill( F_Mask )->Simplify();
     solderMask->GetFill( B_Mask )->Simplify();
 
-    solderMask->GetFill( F_Mask )->Deflate( m_webWidth / 2, CORNER_STRATEGY::CHAMFER_ALL_CORNERS,
-                                            m_maxError );
-    solderMask->GetFill( B_Mask )->Deflate( m_webWidth / 2, CORNER_STRATEGY::CHAMFER_ALL_CORNERS,
-                                            m_maxError );
+    if( m_webWidth > 0 )
+    {
+        solderMask->GetFill( F_Mask )->Deflate( m_webWidth / 2, CORNER_STRATEGY::CHAMFER_ALL_CORNERS, m_maxError );
+        solderMask->GetFill( B_Mask )->Deflate( m_webWidth / 2, CORNER_STRATEGY::CHAMFER_ALL_CORNERS, m_maxError );
+    }
 
     solderMask->SetFillFlag( F_Mask, true );
     solderMask->SetFillFlag( B_Mask, true );
@@ -246,6 +247,11 @@ void DRC_TEST_PROVIDER_SOLDER_MASK::testSilkToMaskClearance()
 {
     LSET   silkLayers( { F_SilkS, B_SilkS } );
 
+    // If we have no minimum web width then we delegate to the silk checker which does object-to-object
+    // testing (instead of object-to-solder-mask-zone-fill checking that we do here).
+    if( m_webWidth <= 0 )
+        return;
+
     const size_t progressDelta = 250;
     int          count = 0;
     int          ii = 0;
@@ -260,7 +266,7 @@ void DRC_TEST_PROVIDER_SOLDER_MASK::testSilkToMaskClearance()
     forEachGeometryItem( s_allBasicItems, silkLayers,
             [&]( BOARD_ITEM* item ) -> bool
             {
-                if( m_drcEngine->IsErrorLimitExceeded( DRCE_SILK_CLEARANCE ) )
+                if( m_drcEngine->IsErrorLimitExceeded( DRCE_SILK_MASK_CLEARANCE ) )
                     return false;
 
                 if( !reportProgress( ii++, count, progressDelta ) )
@@ -290,7 +296,7 @@ void DRC_TEST_PROVIDER_SOLDER_MASK::testSilkToMaskClearance()
                     if( m_fullSolderMaskRTree->QueryColliding( itemBBox, itemShape.get(), maskLayer,
                                                                clearance, &actual, &pos ) )
                     {
-                        auto drce = DRC_ITEM::Create( DRCE_SILK_CLEARANCE );
+                        std::shared_ptr<DRC_ITEM> drce = DRC_ITEM::Create( DRCE_SILK_MASK_CLEARANCE );
 
                         if( clearance > 0 )
                         {
@@ -758,7 +764,7 @@ void DRC_TEST_PROVIDER_SOLDER_MASK::testMaskBridges()
 
 bool DRC_TEST_PROVIDER_SOLDER_MASK::Run()
 {
-    if( m_drcEngine->IsErrorLimitExceeded( DRCE_SILK_CLEARANCE )
+    if( m_drcEngine->IsErrorLimitExceeded( DRCE_SILK_MASK_CLEARANCE )
             && m_drcEngine->IsErrorLimitExceeded( DRCE_SOLDERMASK_BRIDGE ) )
     {
         reportAux( wxT( "Solder mask violations ignored. Tests not run." ) );

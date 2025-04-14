@@ -191,7 +191,7 @@ void DIALOG_FOOTPRINT_CHECKER::runChecks()
     footprint->CheckClippedSilk(
             [&]( BOARD_ITEM* aItemA, BOARD_ITEM* aItemB, const VECTOR2I& aPt )
             {
-                errorHandler( aItemA, aItemB, nullptr, DRCE_SILK_CLEARANCE, wxEmptyString, aPt );
+                errorHandler( aItemA, aItemB, nullptr, DRCE_SILK_MASK_CLEARANCE, wxEmptyString, aPt );
             } );
 
     m_checksRun = true;

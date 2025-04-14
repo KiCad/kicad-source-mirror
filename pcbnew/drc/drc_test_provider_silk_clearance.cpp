@@ -75,13 +75,19 @@ bool DRC_TEST_PROVIDER_SILK_CLEARANCE::Run()
 {
     const int progressDelta = 500;
 
-    if( m_drcEngine->IsErrorLimitExceeded( DRCE_OVERLAPPING_SILK ) )
+    m_board = m_drcEngine->GetBoard();
+
+    // If the soldermask min width is greater than 0 then we must use a healing algorithm to generate
+    // a whole-board soldermask poly, and then test against that.  However, that can't deal well with
+    // DRC exclusions (as any change anywhere on the board that affects the soldermask will null the
+    // associated exclusions), so we only use that when soldermask min width is > 0.
+    bool checkIndividualMaskItems = m_board->GetDesignSettings().m_SolderMaskMinWidth <= 0;
+
+    if( m_drcEngine->IsErrorLimitExceeded( DRCE_OVERLAPPING_SILK )
+            && ( m_drcEngine->IsErrorLimitExceeded( DRCE_SILK_MASK_CLEARANCE) || !checkIndividualMaskItems ) )
     {
-        reportAux( wxT( "Overlapping silk violations ignored.  Tests not run." ) );
         return true;    // continue with other tests
     }
-
-    m_board = m_drcEngine->GetBoard();
 
     DRC_CONSTRAINT worstClearanceConstraint;
     m_largestClearance = 0;
@@ -182,8 +188,11 @@ bool DRC_TEST_PROVIDER_SILK_CLEARANCE::Run()
 
                 std::shared_ptr<SHAPE> hole;
 
-                if( m_drcEngine->IsErrorLimitExceeded( DRCE_OVERLAPPING_SILK ) )
+                if( ( m_drcEngine->IsErrorLimitExceeded( DRCE_SILK_MASK_CLEARANCE) || !checkIndividualMaskItems )
+                        && m_drcEngine->IsErrorLimitExceeded( DRCE_OVERLAPPING_SILK ) )
+                {
                     return false;
+                }
 
                 if( isInvisibleText( refItem ) || isInvisibleText( testItem ) )
                     return true;
@@ -201,14 +210,21 @@ bool DRC_TEST_PROVIDER_SILK_CLEARANCE::Run()
                     }
                 }
 
+                int            errorCode = DRCE_OVERLAPPING_SILK;
                 DRC_CONSTRAINT constraint = m_drcEngine->EvalRules( SILK_CLEARANCE_CONSTRAINT,
-                                                                    refItem, testItem,
-                                                                    aLayers.second );
+                                                                    refItem, testItem, aLayers.second );
+                int            minClearance = -1;
 
-                if( constraint.IsNull() || constraint.GetSeverity() == RPT_SEVERITY_IGNORE )
-                    return true;
+                if( !constraint.IsNull() && constraint.GetSeverity() != RPT_SEVERITY_IGNORE )
+                    minClearance = constraint.GetValue().Min();
 
-                int minClearance = constraint.GetValue().Min();
+                if( aLayers.second == F_Mask || aLayers.second == B_Mask )
+                {
+                    if( checkIndividualMaskItems )
+                        minClearance = std::max( minClearance, 0 );
+
+                    errorCode = DRCE_SILK_MASK_CLEARANCE;
+                }
 
                 if( minClearance < 0 )
                     return true;
@@ -237,7 +253,7 @@ bool DRC_TEST_PROVIDER_SILK_CLEARANCE::Run()
 
                 if( refShape->Collide( testShape, minClearance, &actual, &pos ) )
                 {
-                    std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_OVERLAPPING_SILK );
+                    std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( errorCode );
 
                     if( minClearance > 0 )
                     {
