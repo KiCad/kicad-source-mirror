@@ -1556,9 +1556,14 @@ int PCB_CONTROL::AppendBoard( PCB_IO& pi, wxString& fileName )
     brd->SetVisibleLayers( enabledLayers );
 
     if( placeBoardItems( &commit, brd, false, false /* Don't reannotate dupes on Append Board */ ) )
+    {
         commit.Push( _( "Append Board" ) );
+        editFrame->GetBoard()->BuildConnectivity();
+    }
     else
+    {
         commit.Revert();
+    }
 
     // Refresh the UI for the updated board properties
     editFrame->GetAppearancePanel()->OnBoardChanged();
