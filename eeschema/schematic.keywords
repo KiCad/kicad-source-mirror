@@ -58,6 +58,7 @@ generator
 generator_version
 global
 global_label
+group
 hatch
 header
 hide

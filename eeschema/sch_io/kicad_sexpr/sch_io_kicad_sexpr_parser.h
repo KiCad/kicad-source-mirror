@@ -113,6 +113,19 @@ public:
     int GetParsedRequiredVersion() const { return m_requiredVersion; }
 
 private:
+    // Group membership info refers to other Uuids in the file.
+    // We don't want to rely on group declarations being last in the file, so
+    // we store info about the group declarations here during parsing and then resolve
+    // them into BOARD_ITEM* after we've parsed the rest of the file.
+    struct GROUP_INFO
+    {
+        virtual ~GROUP_INFO() = default; // Make polymorphic
+
+        wxString          name;
+        KIID              uuid;
+        std::vector<KIID> memberUuids;
+    };
+
     void checkpoint();
 
     KIID parseKIID();
@@ -210,6 +223,9 @@ private:
     void parseSchSymbolInstances( SCH_SCREEN* aScreen );
     void parseSchSheetInstances( SCH_SHEET* aRootSheet, SCH_SCREEN* aScreen );
 
+    void parseGroup();
+    void parseGroupMembers( GROUP_INFO& aGroupInfo );
+
     SCH_SHEET_PIN* parseSchSheetPin( SCH_SHEET* aSheet );
     SCH_FIELD* parseSchField( SCH_ITEM* aParent );
     SCH_SYMBOL* parseSchematicSymbol();
@@ -232,6 +248,8 @@ private:
     SCH_TABLE* parseSchTable();
     void parseBusAlias( SCH_SCREEN* aScreen );
 
+    void resolveGroups( SCH_SCREEN* aParent );
+
 private:
     int      m_requiredVersion;   ///< Set to the symbol library file version required.
     wxString m_generatorVersion;
@@ -251,6 +269,8 @@ private:
 
     /// The rootsheet for full project loads or null for importing a schematic.
     SCH_SHEET*         m_rootSheet;
+
+    std::vector<GROUP_INFO> m_groupInfos;
 };
 
 #endif    // SCH_IO_KICAD_SEXPR_PARSER_H_

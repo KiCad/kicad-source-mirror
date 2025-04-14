@@ -48,6 +48,7 @@ class SCH_BUS_ENTRY_BASE;
 class SCH_TEXT;
 class SCH_TEXTBOX;
 class SCH_TABLE;
+class SCH_GROUP;
 class SCH_SYMBOL;
 class SCH_FIELD;
 struct SCH_SYMBOL_INSTANCE;
@@ -158,6 +159,7 @@ private:
     void saveText( SCH_TEXT* aText );
     void saveTextBox( SCH_TEXTBOX* aText );
     void saveTable( SCH_TABLE* aTable );
+    void saveGroup( SCH_GROUP* aGroup );
     void saveBusAlias( std::shared_ptr<BUS_ALIAS> aAlias );
     void saveInstances( const std::vector<SCH_SHEET_INSTANCE>& aSheets );
 
@@ -180,6 +182,8 @@ protected:
 
     /// initialize PLUGIN like a constructor would.
     void init( SCHEMATIC* aSchematic, const std::map<std::string, UTF8>* aProperties = nullptr );
+
+    std::function<bool( wxString aTitle, int aIcon, wxString aMsg, wxString aAction )> m_queryUserCallback;
 };
 
 #endif  // SCH_IO_KICAD_SEXPR_H_

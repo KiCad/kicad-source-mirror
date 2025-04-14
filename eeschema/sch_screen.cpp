@@ -1627,6 +1627,86 @@ bool SCH_SCREEN::HasInstanceDataFromOtherProjects() const
 }
 
 
+wxString SCH_SCREEN::GroupsSanityCheck( bool repair )
+{
+    if( repair )
+    {
+        while( GroupsSanityCheckInternal( repair ) != wxEmptyString )
+        {
+        };
+
+        return wxEmptyString;
+    }
+    return GroupsSanityCheckInternal( repair );
+}
+
+
+wxString SCH_SCREEN::GroupsSanityCheckInternal( bool repair )
+{
+    // Cycle detection
+    //
+    // Each group has at most one parent group.
+    // So we start at group 0 and traverse the parent chain, marking groups seen along the way.
+    // If we ever see a group that we've already marked, that's a cycle.
+    // If we reach the end of the chain, we know all groups in that chain are not part of any cycle.
+    //
+    // Algorithm below is linear in the # of groups because each group is visited only once.
+    // There may be extra time taken due to the container access calls and iterators.
+    //
+    // Groups we know are cycle free
+    std::unordered_set<EDA_GROUP*> knownCycleFreeGroups;
+    // Groups in the current chain we're exploring.
+    std::unordered_set<EDA_GROUP*> currentChainGroups;
+    // Groups we haven't checked yet.
+    std::unordered_set<EDA_GROUP*> toCheckGroups;
+
+    // Initialize set of groups and generators to check that could participate in a cycle.
+    for( SCH_ITEM* item : Items().OfType( SCH_GROUP_T ) )
+        toCheckGroups.insert( static_cast<SCH_GROUP*>( item ) );
+
+    while( !toCheckGroups.empty() )
+    {
+        currentChainGroups.clear();
+        EDA_GROUP* group = *toCheckGroups.begin();
+
+        while( true )
+        {
+            if( currentChainGroups.find( group ) != currentChainGroups.end() )
+            {
+                if( repair )
+                    Remove( static_cast<SCH_ITEM*>( group->AsEdaItem() ) );
+
+                return "Cycle detected in group membership";
+            }
+            else if( knownCycleFreeGroups.find( group ) != knownCycleFreeGroups.end() )
+            {
+                // Parent is a group we know does not lead to a cycle
+                break;
+            }
+
+            currentChainGroups.insert( group );
+            // We haven't visited currIdx yet, so it must be in toCheckGroups
+            toCheckGroups.erase( group );
+
+            group = group->AsEdaItem()->GetParentGroup();
+
+            if( !group )
+            {
+                // end of chain and no cycles found in this chain
+                break;
+            }
+        }
+
+        // No cycles found in chain, so add it to set of groups we know don't participate
+        // in a cycle.
+        knownCycleFreeGroups.insert( currentChainGroups.begin(), currentChainGroups.end() );
+    }
+
+    // Success
+    return "";
+}
+
+
 bool SCH_SCREEN::InProjectPath() const
 {
     wxCHECK( Schematic() && !m_fileName.IsEmpty(), false );

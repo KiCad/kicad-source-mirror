@@ -38,6 +38,7 @@
 #include <sch_bitmap.h>
 #include <sch_bus_entry.h>
 #include <sch_edit_frame.h>       // SYMBOL_ORIENTATION_T
+#include <sch_group.h>
 #include <sch_io/kicad_sexpr/sch_io_kicad_sexpr.h>
 #include <sch_io/kicad_sexpr/sch_io_kicad_sexpr_common.h>
 #include <sch_io/kicad_sexpr/sch_io_kicad_sexpr_lib_cache.h>
@@ -337,6 +338,20 @@ void SCH_IO_KICAD_SEXPR::SaveSchematicFile( const wxString& aFileName, SCH_SHEET
 
     LOCALE_IO   toggle;     // toggles on, then off, the C locale, to write floating point values.
 
+    wxString sanityResult = aSheet->GetScreen()->GroupsSanityCheck();
+
+    if( sanityResult != wxEmptyString && m_queryUserCallback )
+    {
+        if( !m_queryUserCallback( _( "Internal Group Data Error" ), wxICON_ERROR,
+                                  wxString::Format( _( "Please report this bug.  Error validating group "
+                                                       "structure: %s\n\nSave anyway?" ),
+                                                    sanityResult ),
+                                  _( "Save Anyway" ) ) )
+        {
+            return;
+        }
+    }
+
     init( aSchematic, aProperties );
 
     wxFileName fn = aFileName;
@@ -468,6 +483,10 @@ void SCH_IO_KICAD_SEXPR::Format( SCH_SHEET* aSheet )
 
         case SCH_TABLE_T:
             saveTable( static_cast<SCH_TABLE*>( item ) );
+            break;
+
+        case SCH_GROUP_T:
+            saveGroup( static_cast<SCH_GROUP*>( item ) );
             break;
 
         default:
@@ -1440,6 +1459,36 @@ void SCH_IO_KICAD_SEXPR::saveTable( SCH_TABLE* aTable )
 
     if( aTable->GetFlags() & SKIP_STRUCT )
         delete aTable;
+}
+
+
+void SCH_IO_KICAD_SEXPR::saveGroup( SCH_GROUP* aGroup )
+{
+    // Don't write empty groups
+    if( aGroup->GetItems().empty() )
+        return;
+
+    m_out->Print( "(group %s", m_out->Quotew( aGroup->GetName() ).c_str() );
+
+    KICAD_FORMAT::FormatUuid( m_out, aGroup->m_Uuid );
+
+    if( aGroup->IsLocked() )
+        KICAD_FORMAT::FormatBool( m_out, "locked", true );
+
+    wxArrayString memberIds;
+
+    for( EDA_ITEM* member : aGroup->GetItems() )
+        memberIds.Add( member->m_Uuid.AsString() );
+
+    memberIds.Sort();
+
+    m_out->Print( "(members" );
+
+    for( const wxString& memberId : memberIds )
+        m_out->Print( " %s", m_out->Quotew( memberId ).c_str() );
+
+    m_out->Print( ")" ); // Close `members` token.
+    m_out->Print( ")" ); // Close `group` token.
 }
 
 

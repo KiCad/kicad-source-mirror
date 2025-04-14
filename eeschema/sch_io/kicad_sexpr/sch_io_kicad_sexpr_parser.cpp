@@ -50,6 +50,7 @@
 #include <sch_symbol.h>
 #include <sch_edit_frame.h>          // SYM_ORIENT_XXX
 #include <sch_field.h>
+#include <sch_group.h>
 #include <sch_line.h>
 #include <sch_rule_area.h>
 #include <sch_textbox.h>
@@ -2710,6 +2711,10 @@ void SCH_IO_KICAD_SEXPR_PARSER::ParseSchematic( SCH_SHEET* aSheet, bool aIsCopya
 
         switch( token )
         {
+        case T_group:
+            parseGroup();
+            break;
+
         case T_generator:
             // (generator "genname"); we don't care about it at the moment.
             NeedSYMBOL();
@@ -2999,6 +3004,8 @@ void SCH_IO_KICAD_SEXPR_PARSER::ParseSchematic( SCH_SHEET* aSheet, bool aIsCopya
 
     screen->UpdateLocalLibSymbolLinks();
     screen->FixupEmbeddedData();
+
+    resolveGroups( screen );
 
     SCHEMATIC* schematic = screen->Schematic();
 
@@ -4796,4 +4803,128 @@ void SCH_IO_KICAD_SEXPR_PARSER::parseBusAlias( SCH_SCREEN* aScreen )
     NeedRIGHT();
 
     aScreen->AddBusAlias( busAlias );
+}
+
+
+void SCH_IO_KICAD_SEXPR_PARSER::parseGroupMembers( GROUP_INFO& aGroupInfo )
+{
+    T token;
+
+    while( ( token = NextTok() ) != T_RIGHT )
+    {
+        // This token is the Uuid of the item in the group.
+        // Since groups are serialized at the end of the file/footprint, the Uuid should already
+        // have been seen and exist in the board.
+        KIID uuid( CurStr() );
+        aGroupInfo.memberUuids.push_back( uuid );
+    }
+}
+
+
+void SCH_IO_KICAD_SEXPR_PARSER::parseGroup()
+{
+    wxCHECK_RET( CurTok() == T_group,
+                 wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as PCB_GROUP." ) );
+
+    T token;
+
+    m_groupInfos.push_back( GROUP_INFO() );
+    GROUP_INFO& groupInfo = m_groupInfos.back();
+
+    while( ( token = NextTok() ) != T_LEFT )
+    {
+        if( token == T_STRING )
+            groupInfo.name = FromUTF8();
+        else
+            Expecting( "group name or locked" );
+    }
+
+    for( ; token != T_RIGHT; token = NextTok() )
+    {
+        if( token != T_LEFT )
+            Expecting( T_LEFT );
+
+        token = NextTok();
+
+        switch( token )
+        {
+        case T_uuid:
+            NextTok();
+            groupInfo.uuid = parseKIID();
+            NeedRIGHT();
+            break;
+
+        case T_members:
+        {
+            parseGroupMembers( groupInfo );
+            break;
+        }
+
+        default:
+            Expecting( "uuid, members" );
+        }
+    }
+}
+
+
+void SCH_IO_KICAD_SEXPR_PARSER::resolveGroups( SCH_SCREEN* aParent )
+{
+    if( !aParent )
+        return;
+
+    auto getItem =
+            [&]( const KIID& aId )
+            {
+                SCH_ITEM* aItem = nullptr;
+
+                for( SCH_ITEM* item : aParent->Items() )
+                {
+                    if( item->m_Uuid == aId )
+                    {
+                        aItem = item;
+                        break;
+                    }
+                }
+
+                return aItem;
+            };
+
+    // Now that we've parsed the other Uuids in the file we can resolve the uuids referred
+    // to in the group declarations we saw.
+    //
+    // First add all group objects so subsequent GetItem() calls for nested groups work.
+    for( const GROUP_INFO& groupInfo : m_groupInfos )
+    {
+        SCH_GROUP* group = nullptr;
+
+        group = new SCH_GROUP( aParent );
+        group->SetName( groupInfo.name );
+
+        const_cast<KIID&>( group->m_Uuid ) = groupInfo.uuid;
+
+        aParent->Append( group );
+    }
+
+    for( const GROUP_INFO& groupInfo : m_groupInfos )
+    {
+        SCH_GROUP* group = static_cast<SCH_GROUP*>( getItem( groupInfo.uuid ) );
+
+        if( group && group->Type() == SCH_GROUP_T )
+        {
+            for( const KIID& aUuid : groupInfo.memberUuids )
+            {
+                SCH_ITEM* gItem = getItem( aUuid );
+
+                if( !gItem || gItem->Type() == NOT_USED )
+                {
+                    // This is the deleted item singleton, which means we didn't find the uuid.
+                    continue;
+                }
+
+                group->AddItem( gItem );
+            }
+        }
+    }
+
+    aParent->GroupsSanityCheck( true );
 }

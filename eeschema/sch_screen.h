@@ -611,6 +611,21 @@ public:
      */
     bool HasInstanceDataFromOtherProjects() const;
 
+    /**
+     * Consistency check of internal m_groups structure.
+     *
+     * @param repair if true, modify groups structure until it passes the sanity check.
+     * @return empty string on success.  Or error description if there's a problem.
+     */
+    wxString GroupsSanityCheck( bool repair = false );
+
+    /**
+     * @param repair if true, make one modification to groups structure that brings it
+     *        closer to passing the sanity check.
+     * @return empty string on success.  Or error description if there's a problem.
+     */
+    wxString GroupsSanityCheckInternal( bool repair );
+
 private:
     friend SCH_EDIT_FRAME;     // Only to populate m_symbolInstances.
     friend SCH_IO_KICAD_SEXPR_PARSER;   // Only to load instance information from schematic file.
