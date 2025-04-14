@@ -720,9 +720,9 @@ void BE_SHAPE_CIRCLE::ShortenChildDueToGV( std::shared_ptr<GRAPH_NODE>& a1,
     EDA_ANGLE angle1 = EDA_ANGLE( a1->m_pos - m_pos );
     EDA_ANGLE angle2 = EDA_ANGLE( a2->m_pos - m_pos );
 
-    while( angle1 < 0 )
+    while( angle1 < ANGLE_0 )
         angle1 += ANGLE_360;
-    while( angle2 < 0 )
+    while( angle2 < ANGLE_0 )
         angle2 += ANGLE_360;
     while( angle1 > ANGLE_360 )
         angle1 -= ANGLE_360;

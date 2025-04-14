@@ -248,7 +248,7 @@ bool PADSTACK::Deserialize( const google::protobuf::Any& aContainer )
             if( thermals.has_width() )
                 CopperLayer( ALL_LAYERS ).thermal_spoke_width = thermals.width().value_nm();
 
-            SetThermalSpokeAngle( thermals.angle().value_degrees(), F_Cu );
+            SetThermalSpokeAngle( EDA_ANGLE( thermals.angle().value_degrees(), DEGREES_T ), F_Cu );
         }
     }
     else
