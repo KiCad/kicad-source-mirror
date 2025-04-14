@@ -148,6 +148,28 @@ SCH_ITEM* SCH_ITEM::Duplicate( bool doClone ) const
 }
 
 
+void SCH_ITEM::SetUnitProp( int aUnit )
+{
+    if( GetParentSymbol() )
+        aUnit = std::min( aUnit, GetParentSymbol()->GetUnitCount() );
+
+    aUnit = std::max( aUnit, 0 );
+
+    m_unit = aUnit;
+}
+
+
+void SCH_ITEM::SetBodyStyleProp( int aBodyStyle )
+{
+    if( GetParentSymbol() && GetParentSymbol()->HasAlternateBodyStyle() )
+        aBodyStyle = std::min( aBodyStyle, (int) BODY_STYLE::DEMORGAN );
+
+    aBodyStyle = std::max( aBodyStyle, 0 );
+
+    m_bodyStyle = aBodyStyle;
+}
+
+
 SCHEMATIC* SCH_ITEM::Schematic() const
 {
     EDA_ITEM* parent = GetParent();
@@ -585,7 +607,7 @@ static struct SCH_ITEM_DESC
                 };
 
         propMgr.AddProperty( new PROPERTY<SCH_ITEM, int>( _HKI( "Unit" ),
-                    &SCH_ITEM::SetUnit, &SCH_ITEM::GetUnit ) )
+                    &SCH_ITEM::SetUnitProp, &SCH_ITEM::GetUnit ) )
                 .SetAvailableFunc( multiUnit )
                 .SetIsHiddenFromDesignEditors();
 
