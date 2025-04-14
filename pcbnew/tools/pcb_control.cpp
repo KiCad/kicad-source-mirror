@@ -1668,6 +1668,7 @@ int PCB_CONTROL::AppendBoard( PCB_IO& pi, const wxString& fileName )
             m_frame->Refresh();
         }
 
+        editFrame->GetBoard()->BuildConnectivity();
         ret = 0;
     }
     else
