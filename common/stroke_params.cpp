@@ -174,7 +174,7 @@ void STROKE_PARAMS::Stroke( const SHAPE* aShape, LINE_STYLE aLineStyle, int aWid
 
         wxASSERT( startAngle < arcEndAngle );
 
-        EDA_ANGLE angleIncrementInRadians = EDA_ANGLE( M_PI / ANGLE_360 );
+        EDA_ANGLE angleIncrement = EDA_ANGLE( 0.5, DEGREES_T );
 
         for( size_t i = 0; i < 10000 && startAngle < arcEndAngle; ++i )
         {
@@ -188,13 +188,13 @@ void STROKE_PARAMS::Stroke( const SHAPE* aShape, LINE_STYLE aLineStyle, int aWid
                     || aLineStyle == LINE_STYLE::DASH )
                 {
                     for( EDA_ANGLE currentAngle = startAngle; currentAngle < endAngle;
-                         currentAngle += angleIncrementInRadians )
+                         currentAngle += angleIncrement )
                     {
                         VECTOR2I a( center.x + KiROUND( r * currentAngle.Cos() ),
                                     center.y + KiROUND( r * currentAngle.Sin() ) );
 
                         // Calculate the next angle step, ensuring it doesn't exceed the endAngle
-                        EDA_ANGLE nextAngle = currentAngle + angleIncrementInRadians;
+                        EDA_ANGLE nextAngle = currentAngle + angleIncrement;
 
                         if( nextAngle > endAngle )
                         {
