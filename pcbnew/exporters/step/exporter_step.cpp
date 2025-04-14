@@ -33,6 +33,7 @@
 #include <pcb_tablecell.h>
 #include <pcb_track.h>
 #include <pcb_shape.h>
+#include <pcb_painter.h>
 #include <pad.h>
 #include <zone.h>
 #include <fp_lib_table.h>
@@ -527,8 +528,36 @@ bool EXPORTER_STEP::buildGraphic3DShape( BOARD_ITEM* aItem, VECTOR2D aOrigin )
             return true;
         }
 
-        graphic->TransformShapeToPolygon( m_poly_shapes[pcblayer], pcblayer, 0, maxError,
-                                          ERROR_INSIDE );
+        LINE_STYLE lineStyle = graphic->GetLineStyle();
+
+        if( lineStyle == LINE_STYLE::SOLID )
+        {
+            graphic->TransformShapeToPolygon( m_poly_shapes[pcblayer],
+                                              pcblayer, 0, maxError, ERROR_INSIDE );
+        }
+        else
+        {
+            std::vector<SHAPE*>        shapes = graphic->MakeEffectiveShapes( true );
+            const PCB_PLOT_PARAMS&     plotParams = m_board->GetPlotOptions();
+            KIGFX::PCB_RENDER_SETTINGS renderSettings;
+
+            renderSettings.SetDashLengthRatio( plotParams.GetDashedLineDashRatio() );
+            renderSettings.SetGapLengthRatio( plotParams.GetDashedLineGapRatio() );
+
+            for( SHAPE* shape : shapes )
+            {
+                STROKE_PARAMS::Stroke( shape, lineStyle, graphic->GetWidth(), &renderSettings,
+                                       [&]( const VECTOR2I& a, const VECTOR2I& b )
+                                       {
+                                           SHAPE_SEGMENT seg( a, b, graphic->GetWidth() );
+                                           seg.TransformToPolygon( m_poly_shapes[pcblayer],
+                                                                   maxError, ERROR_INSIDE );
+                                       } );
+            }
+
+            for( SHAPE* shape : shapes )
+                delete shape;
+        }
 
         break;
     }
