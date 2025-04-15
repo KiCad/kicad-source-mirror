@@ -156,11 +156,11 @@ SCH_SELECTION_TOOL::SCH_SELECTION_TOOL() :
         SELECTION_TOOL( "common.InteractiveSelection" ),
         m_frame( nullptr ),
         m_nonModifiedCursor( KICURSOR::ARROW ),
-        m_enteredGroup( nullptr ),
         m_isSymbolEditor( false ),
         m_isSymbolViewer( false ),
         m_unit( 0 ),
         m_bodyStyle( 0 ),
+        m_enteredGroup( nullptr ),
         m_previous_first_cell( nullptr )
 {
     m_filter.SetDefaults();
