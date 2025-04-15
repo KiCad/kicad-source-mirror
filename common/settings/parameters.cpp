@@ -20,7 +20,7 @@
 
 #include <wx/string.h>
 
-#include <nlohmann/json.hpp>
+#include <json_common.h>
 
 #include <project/project_file.h>
 #include <settings/parameters.h>

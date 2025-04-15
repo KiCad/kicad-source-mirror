@@ -27,7 +27,7 @@
 
 #include <kicommon.h>
 #include <lib_id.h>
-#include <nlohmann/json.hpp>
+#include <json_common.h>
 
 
 class KICOMMON_API DESIGN_BLOCK

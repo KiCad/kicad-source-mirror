@@ -35,7 +35,7 @@
 #include <wx/string.h>
 #include <wx/arrstr.h>
 
-#include <nlohmann/json.hpp>
+#include <json_common.h>
 
 namespace EASYEDA
 {

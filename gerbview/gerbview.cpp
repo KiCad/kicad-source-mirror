@@ -32,7 +32,7 @@
 #include <gestfich.h>
 #include <kiface_base.h>
 #include <macros.h>
-#include <nlohmann/json.hpp>
+#include <json_common.h>
 #include <pgm_base.h>
 #include <richio.h>
 #include <settings/settings_manager.h>

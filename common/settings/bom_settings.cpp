@@ -19,7 +19,7 @@
  */
 
 #include <settings/bom_settings.h>
-#include <nlohmann/json.hpp>
+#include <json_common.h>
 #include <core/json_serializers.h>
 #include <wx/translation.h>
 

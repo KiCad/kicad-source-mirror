@@ -46,7 +46,7 @@
 #include <tool/tool_manager.h>
 #include <tools/pcb_selection_tool.h>
 #include <dialogs/dialog_design_block_properties.h>
-#include <nlohmann/json.hpp>
+#include <json_common.h>
 
 bool checkOverwriteDb( wxWindow* aFrame, wxString& libname, wxString& newName )
 {

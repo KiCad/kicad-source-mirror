@@ -30,7 +30,7 @@
 #include <erc/erc.h>
 #include <fstream>
 #include <macros.h>
-#include <nlohmann/json.hpp>
+#include <json_common.h>
 #include <rc_json_schema.h>
 
 

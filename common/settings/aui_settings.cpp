@@ -21,7 +21,7 @@
  */
 
 #include <settings/aui_settings.h>
-#include <nlohmann/json.hpp>
+#include <json_common.h>
 
 #include <wx/gdicmn.h>
 #include <wx/aui/framemanager.h>

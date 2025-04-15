@@ -23,7 +23,7 @@
  */
 
 #include <magic_enum.hpp>
-#include <nlohmann/json.hpp>
+#include <json_common.h>
 
 #include <tool/action_toolbar.h>
 #include <tool/ui/toolbar_configuration.h>

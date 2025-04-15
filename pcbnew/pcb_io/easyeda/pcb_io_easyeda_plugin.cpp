@@ -41,7 +41,7 @@
 #include <wx/zipstrm.h>
 #include <wx/stdstream.h>
 
-#include <nlohmann/json.hpp>
+#include <json_common.h>
 #include <core/map_helpers.h>
 
 

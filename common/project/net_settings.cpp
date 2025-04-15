@@ -22,7 +22,7 @@
 #include <algorithm>
 #include <limits>
 
-#include <nlohmann/json.hpp>
+#include <json_common.h>
 
 #include <project/net_settings.h>
 #include <settings/parameters.h>

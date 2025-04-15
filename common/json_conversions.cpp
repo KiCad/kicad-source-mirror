@@ -17,7 +17,7 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <nlohmann/json.hpp>
+#include <json_common.h>
 #include <json_conversions.h>
 
 // Specializations to allow directly reading/writing wxStrings from JSON
