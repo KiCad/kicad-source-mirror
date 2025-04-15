@@ -622,6 +622,7 @@ static void buildKicadAboutBanner( EDA_BASE_FRAME* aParent, ABOUT_APP_INFO& aInf
 
     ADD_DEV( wxT( "Nick Østergaard" ), CONTRIB_DEV );
     ADD_DEV( wxT( "木 王" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "wh201906" ), CONTRIB_DEV );
 
     // The document writers
 #define DOC_TEAM _( "Documentation Team" )

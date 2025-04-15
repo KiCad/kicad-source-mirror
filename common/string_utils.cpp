@@ -667,7 +667,7 @@ wxString RemoveHTMLTags( const wxString& aInput )
 
 wxString LinkifyHTML( wxString aStr )
 {
-    static wxRegEx regex( wxS( "\\b(https?|ftp|file)://([-\\w+&@#/%?=~|!:,.;]*[^.,:;<>\\s\u00b6])" ),
+    static wxRegEx regex( wxS( "\\b(https?|ftp|file)://([-\\w+&@#/%?=~|!:,.;]*[^.,:;<>\\(\\)\\s\u00b6])" ),
                           wxRE_ICASE );
 
     regex.ReplaceAll( &aStr, "<a href=\"\\0\">\\0</a>" );
