@@ -116,7 +116,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-28 16:28-0700\n"
-"PO-Revision-Date: 2025-03-25 19:16+0000\n"
+"PO-Revision-Date: 2025-04-15 16:28+0000\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/v9/it/>\n"
 "Language: it\n"
@@ -48804,17 +48804,17 @@ msgstr "Alcuni dei poligoni potrebbero non essere stati intersecati."
 #: pcbnew/tools/item_modification_routine.cpp:663
 #, fuzzy
 msgid "Outset items."
-msgstr "Altri elementi"
+msgstr "Elementi outset."
 
 #: pcbnew/tools/item_modification_routine.cpp:670
 #, fuzzy
 msgid "Unable to outset the selected items."
-msgstr "Impossibile stondare le linee selezionate."
+msgstr "Impossibile rendere outset gli elementi selezionati."
 
 #: pcbnew/tools/item_modification_routine.cpp:674
 #, fuzzy
 msgid "Some of the items could not be outset."
-msgstr "Alcune delle linee potrebbero non essere state stondate."
+msgstr "Alcuni degli elementi potrebbero non essere stati resi outset."
 
 #: pcbnew/tools/multichannel_tool.cpp:420
 msgid "Select a reference Rule Area to copy from..."
@@ -48966,12 +48966,12 @@ msgstr "Crea piste dalle linee grafiche selezionate"
 #: pcbnew/tools/pcb_actions.cpp:96
 #, fuzzy
 msgid "Create Outsets from Selection"
-msgstr "Crea dalla selezione"
+msgstr "Crea outset dalla selezione"
 
 #: pcbnew/tools/pcb_actions.cpp:97
 #, fuzzy
 msgid "Create outset lines from the selected item"
-msgstr "Crea linee grafiche dalla selezione"
+msgstr "Crea linee outset dagli elementi selezionati"
 
 #: pcbnew/tools/pcb_actions.cpp:159
 msgid "Add Board Characteristics"
@@ -49052,7 +49052,7 @@ msgstr "Disegna dimensioni ortogonali"
 #: pcbnew/tools/pcb_actions.cpp:273
 #, fuzzy
 msgid "Draw Leaders"
-msgstr "Disegna archi"
+msgstr "Disegna leaders"
 
 #: pcbnew/tools/pcb_actions.cpp:286
 msgid "Draw Filled Zones"
