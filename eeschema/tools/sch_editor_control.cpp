@@ -1726,13 +1726,19 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
     int annotateStartNum = m_frame->Schematic().Settings().m_AnnotateStartNum;
 
     PASTE_MODE pasteMode = annotate.automatic ? PASTE_MODE::RESPECT_OPTIONS : PASTE_MODE::REMOVE_ANNOTATIONS;
+    bool       forceRemoveAnnotations = false;
 
     if( aEvent.IsAction( &ACTIONS::pasteSpecial ) )
     {
-        DIALOG_PASTE_SPECIAL dlg( m_frame, &pasteMode );
+        PASTE_MODE           pasteModeSpecial = pasteMode;
+        DIALOG_PASTE_SPECIAL dlg( m_frame, &pasteModeSpecial );
 
         if( dlg.ShowModal() == wxID_CANCEL )
             return 0;
+
+        // We have to distinguish if removing was explicit
+        forceRemoveAnnotations = ( pasteModeSpecial == PASTE_MODE::REMOVE_ANNOTATIONS );
+        pasteMode = pasteModeSpecial;
     }
 
     bool forceKeepAnnotations = pasteMode != PASTE_MODE::REMOVE_ANNOTATIONS;
@@ -1879,7 +1885,7 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
             {
                 if( !existingRefsSet.contains( instance.m_Reference ) )
                 {
-                    forceKeepAnnotations = ( pasteMode != PASTE_MODE::REMOVE_ANNOTATIONS );
+                    forceKeepAnnotations = !forceRemoveAnnotations;
                     break;
                 }
             }
@@ -1914,16 +1920,16 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
                     const_cast<KIID&>( pin->m_Uuid ) = KIID();
                     pin->SetConnectivityDirty();
                 }
-            }
 
-            for( SCH_SHEET_PATH& sheetPath : sheetPathsForScreen )
-            {
-                // Ignore symbols from a non-existant library.
-                if( libSymbol )
+                for( SCH_SHEET_PATH& sheetPath : sheetPathsForScreen )
                 {
-                    SCH_REFERENCE schReference( symbol, sheetPath );
-                    schReference.SetSheetNumber( sheetPath.GetVirtualPageNumber() );
-                    pastedSymbols[sheetPath].AddItem( schReference );
+                    // Ignore symbols from a non-existant library.
+                    if( libSymbol )
+                    {
+                        SCH_REFERENCE schReference( symbol, sheetPath );
+                        schReference.SetSheetNumber( sheetPath.GetVirtualPageNumber() );
+                        pastedSymbols[sheetPath].AddItem( schReference );
+                    }
                 }
             }
         }
