@@ -31,6 +31,7 @@
 #include <pcb_dimension.h>
 #include <pcb_shape.h>
 #include <footprint.h>
+#include <pcb_table.h>
 #include <pad.h>
 #include <pcb_group.h>
 #include <pcb_reference_image.h>
@@ -1437,6 +1438,42 @@ void PCB_GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos
 
             if( checkVisibility( aItem ) )
                 handleShape( static_cast<PCB_SHAPE*>( aItem ) );
+
+            break;
+
+        case PCB_TABLE_T:
+            if( aFrom )
+            {
+                if( aSelectionFilter && !aSelectionFilter->text )
+                    break;
+            }
+            else
+            {
+                if( !m_magneticSettings->graphics )
+                    break;
+            }
+
+            if( checkVisibility( aItem ) )
+            {
+                PCB_TABLE* table = static_cast<PCB_TABLE*>( aItem );
+                EDA_ANGLE  drawAngle = table->GetCell( 0, 0 )->GetDrawRotation();
+
+                VECTOR2I topLeft = table->GetCell( 0, 0 )->GetCornersInSequence( drawAngle )[0];
+                VECTOR2I bottomLeft =
+                        table->GetCell( table->GetRowCount() - 1, 0 )->GetCornersInSequence( drawAngle )[3];
+                VECTOR2I topRight =
+                        table->GetCell( 0, table->GetColCount() - 1 )->GetCornersInSequence( drawAngle )[1];
+                VECTOR2I bottomRight =
+                        table->GetCell( table->GetRowCount() - 1, table->GetColCount() - 1 )
+                                ->GetCornersInSequence( drawAngle )[2];
+
+                addAnchor( topLeft, CORNER | SNAPPABLE, table, POINT_TYPE::PT_END );
+                addAnchor( bottomLeft, CORNER | SNAPPABLE, table, POINT_TYPE::PT_END );
+                addAnchor( topRight, CORNER | SNAPPABLE, table, POINT_TYPE::PT_END );
+                addAnchor( bottomRight, CORNER | SNAPPABLE, table, POINT_TYPE::PT_END );
+
+                addAnchor( table->GetCenter(), ORIGIN, table, POINT_TYPE::PT_MID );
+            }
 
             break;
 
