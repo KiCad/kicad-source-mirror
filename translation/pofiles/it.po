@@ -116,10 +116,10 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-28 16:28-0700\n"
-"PO-Revision-Date: 2025-03-25 19:16+0000\n"
+"PO-Revision-Date: 2025-04-15 16:28+0000\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
-"Language-Team: Italian <https://hosted.weblate.org/projects/kicad/master-"
-"source/it/>\n"
+"Language-Team: Italian <https://hosted.weblate.org/projects/kicad/"
+"master-source/it/>\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -5368,9 +5368,8 @@ msgid "&Export..."
 msgstr "&Esporta..."
 
 #: common/dialogs/panel_grid_settings.cpp:53
-#, fuzzy
 msgid "Pads:"
-msgstr "Piazzole"
+msgstr "Piazzole:"
 
 #: common/dialogs/panel_grid_settings.cpp:61
 msgid "Footprints/pads:"
@@ -7618,9 +7617,8 @@ msgid "Invalid HEAD.  Cannot merge."
 msgstr "HEAD non valido.  Impossibile fare merge."
 
 #: common/git/git_pull_handler.cpp:181
-#, fuzzy
 msgid "Could not access repository configuration"
-msgstr "Impossibile ottenere l'indice del repository"
+msgstr "Impossibile accedere alla configurazione del repository"
 
 #: common/git/git_pull_handler.cpp:251 common/git/git_push_handler.cpp:91
 msgid "Could not get repository head"
@@ -13981,7 +13979,7 @@ msgstr "Filtri impronte"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:356
 msgid "Pins with duplicate numbers are jumpers"
-msgstr ""
+msgstr "I pin con numeri duplicati sono ponticelli"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:357
 msgid ""
@@ -13989,35 +13987,33 @@ msgid ""
 "and pins with the same number will be considered to be jumpered together "
 "internally."
 msgstr ""
+"Se abilitata, questo simbolo potrà avere più di un pin con lo stesso numero "
+"e i pin con lo stesso numero saranno considerati come collegati tra loro "
+"internamente."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:362
 msgid "Jumper Pin Groups"
-msgstr ""
+msgstr "Gruppi di pin ponticelli"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:370
-#, fuzzy
 msgid "Available pins"
-msgstr "Percorsi disponibili:"
+msgstr "Pin disponibili"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:386
-#, fuzzy
 msgid "Create jumper group from the selected pins"
-msgstr "Crea una zona rame dalla selezione corrente"
+msgstr "Crea un gruppo di ponticelli dai pin selezionati"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:391
-#, fuzzy
 msgid "Remove the selected jumper pin group"
-msgstr "Rimuovi gruppo personalizzato selezionato"
+msgstr "Rimuovi il gruppo pin del ponticello selezionato"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:401
-#, fuzzy
 msgid "Grouped pins"
-msgstr "Raggruppamento"
+msgstr "Pin raggruppati"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:423
-#, fuzzy
 msgid "Pin Connections"
-msgstr "Connessioni piazzole"
+msgstr "Connessioni pin"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:436
 msgid "Edit Simulation Model..."
@@ -17333,9 +17329,9 @@ msgid "Global Field Name Templates"
 msgstr "Modelli nomi campo globali"
 
 #: eeschema/dialogs/panel_template_fieldnames.cpp:271
-#, fuzzy, c-format
+#, c-format
 msgid "The field name '%s' contains trailing and/or leading white space."
-msgstr "Il nome del campo \"%s\" contiene spazi iniziali e/o finali."
+msgstr "Il nome del campo '%s' contiene spazi bianchi iniziali e/o finali."
 
 #: eeschema/dialogs/panel_template_fieldnames.cpp:276
 msgid ""
@@ -36022,7 +36018,7 @@ msgstr "Ai gruppi di piazzole è permesso collegare net differenti:"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:404
 msgid "Pads with duplicate numbers are jumpers"
-msgstr ""
+msgstr "Le piazzole con numeri duplicati sono ponticelli"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:405
 msgid ""
@@ -36030,31 +36026,29 @@ msgid ""
 "number, and pads with the same number will be considered to be jumpered "
 "together internally."
 msgstr ""
+"Se abilitata, questa impronta può avere più di una piazzola con lo stesso "
+"numero e le piazzole con lo stesso numero saranno considerate come collegate "
+"tra loro internamente."
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:410
-#, fuzzy
 msgid "Jumper Pad Groups"
-msgstr "Rinumera piazzole"
+msgstr "Gruppi di piazzole ponticelli"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:418
-#, fuzzy
 msgid "Available pads"
-msgstr "Percorsi disponibili:"
+msgstr "Piazzole disponibili"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:434
-#, fuzzy
 msgid "Create jumper group from the selected pads"
-msgstr "Crea linee grafiche dalla selezione"
+msgstr "Crea un gruppo di ponticelli dalle piazzole selezionate"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:439
-#, fuzzy
 msgid "Remove the selected jumper pad group"
-msgstr "Rimuovi gruppo personalizzato selezionato"
+msgstr "Rimuovi il gruppo di piazzole ponticelli selezionato"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:449
-#, fuzzy
 msgid "Grouped pads"
-msgstr "Raggruppati per valore"
+msgstr "Piazzole raggruppate"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:471
 #: pcbnew/zone.cpp:2052
@@ -38663,25 +38657,22 @@ msgid "Background style:"
 msgstr "Stile sfondo:"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:86
-#, fuzzy
 msgid "Procedural textures"
-msgstr "Motivi procedurali (lento)"
+msgstr "Motivi procedurali"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:90
 msgid "Add floor"
 msgstr "Aggiungi pavimento"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:94
-#, fuzzy
 msgid "Anti-aliasing"
-msgstr "Anti-aliasing:"
+msgstr "Anti-aliasing"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:98
-#, fuzzy
 msgid "Screen space ambient occlusions and global illumination reflections"
 msgstr ""
-"Occlusioni ambiente spazio schermo e riflessioni sull'illuminazione globale "
-"(lento)"
+"Occlusioni ambientali nello spazio dello schermo e riflessioni "
+"dell'illuminazione globale"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:109
 msgid "View"
@@ -38732,7 +38723,6 @@ msgid "°"
 msgstr "°"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:244
-#, fuzzy
 msgid "Lights Intensity"
 msgstr "Intensità luci"
 
@@ -38741,7 +38731,6 @@ msgid "Camera:"
 msgstr "Fotocamera:"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:293
-#, fuzzy
 msgid "Lights Position"
 msgstr "Posizione luci"
 
@@ -39530,9 +39519,8 @@ msgid "Layer name %s already in use."
 msgstr "Nome strato %s già in uso."
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:34
-#, fuzzy
 msgid "Layer Names"
-msgstr "Nome strato"
+msgstr "Nomi strati"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:113
 msgid "Net names:"
@@ -43288,9 +43276,9 @@ msgid "%s keep-out property differs."
 msgstr "%s proprietà proibita diversa."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:502
-#, fuzzy, c-format
+#, c-format
 msgid "%s keep out zone fill setting differs."
-msgstr "%s impostazione riempimenti rame proibiti diversa."
+msgstr "L'impostazione riempimento zone proibite %s è diversa."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:504
 #, c-format
@@ -45212,32 +45200,34 @@ msgstr "Rimossi %s attributi di fabbricazione 'Non piazzare'."
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:753
 #, c-format
 msgid "Added %s 'duplicate pad numbers are jumpers' attribute."
-msgstr ""
+msgstr "Aggiunti %s attributi 'i numeri di piazzola duplicati sono ponticelli'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:758
-#, fuzzy, c-format
+#, c-format
 msgid "Removed %s 'duplicate pad numbers are jumpers' attribute."
-msgstr "Rimossi %s attributi di fabbricazione 'Non piazzare'."
+msgstr "Rimossi %s attributi 'i numeri di piazzola duplicati sono ponticelli'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:766
 #, c-format
 msgid "Add %s 'duplicate pad numbers are jumpers' attribute."
 msgstr ""
+"Aggiungi %s l'attributo 'i numeri di piazzola duplicati sono ponticelli'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:771
-#, fuzzy, c-format
+#, c-format
 msgid "Remove %s 'duplicate pad numbers are jumpers' attribute."
-msgstr "Rimuovi %s attributi di fabbricazione 'Non piazzare'."
+msgstr ""
+"Rimuovi %s l'attributo 'i numeri di piazzola duplicati sono ponticelli'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:785
-#, fuzzy, c-format
+#, c-format
 msgid "Updated %s jumper pad groups"
-msgstr "Aggiornati %s campi"
+msgstr "Aggiornati %s gruppi di piazzole ponticelli"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:789
-#, fuzzy, c-format
+#, c-format
 msgid "Update %s jumper pad groups"
-msgstr "Aggiorna forma e pin del simbolo"
+msgstr "Aggiorna %s gruppi di piazzola ponticelli"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:869
 #, c-format
@@ -47935,9 +47925,8 @@ msgid "Segment Length"
 msgstr "Lunghezza segmento"
 
 #: pcbnew/pcb_track.cpp:1754
-#, fuzzy
 msgid "Copper Area"
-msgstr "Zona rame"
+msgstr "Area rame"
 
 #: pcbnew/pcb_track.cpp:1769
 #, c-format
@@ -49874,17 +49863,17 @@ msgstr "Alcuni dei poligoni potrebbero non essere stati intersecati."
 #: pcbnew/tools/item_modification_routine.cpp:663
 #, fuzzy
 msgid "Outset items."
-msgstr "Altri elementi"
+msgstr "Elementi outset."
 
 #: pcbnew/tools/item_modification_routine.cpp:670
 #, fuzzy
 msgid "Unable to outset the selected items."
-msgstr "Impossibile stondare le linee selezionate."
+msgstr "Impossibile rendere outset gli elementi selezionati."
 
 #: pcbnew/tools/item_modification_routine.cpp:674
 #, fuzzy
 msgid "Some of the items could not be outset."
-msgstr "Alcune delle linee potrebbero non essere state stondate."
+msgstr "Alcuni degli elementi potrebbero non essere stati resi outset."
 
 #: pcbnew/tools/multichannel_tool.cpp:422
 msgid "Select a reference Rule Area to copy from..."
@@ -50036,12 +50025,12 @@ msgstr "Crea piste dalle linee grafiche selezionate"
 #: pcbnew/tools/pcb_actions.cpp:97
 #, fuzzy
 msgid "Create Outsets from Selection"
-msgstr "Crea dalla selezione"
+msgstr "Crea outset dalla selezione"
 
 #: pcbnew/tools/pcb_actions.cpp:98
 #, fuzzy
 msgid "Create outset lines from the selected item"
-msgstr "Crea linee grafiche dalla selezione"
+msgstr "Crea linee outset dagli elementi selezionati"
 
 #: pcbnew/tools/pcb_actions.cpp:166
 msgid "Add Board Characteristics"
@@ -50122,7 +50111,7 @@ msgstr "Disegna dimensioni ortogonali"
 #: pcbnew/tools/pcb_actions.cpp:290
 #, fuzzy
 msgid "Draw Leaders"
-msgstr "Disegna archi"
+msgstr "Disegna leaders"
 
 #: pcbnew/tools/pcb_actions.cpp:304
 msgid "Draw Filled Zones"
@@ -51985,34 +51974,28 @@ msgid "DP Gap Constraints: %s"
 msgstr "Vincoli spazio CD: %s"
 
 #: pcbnew/tools/pcb_control.cpp:1878
-#, fuzzy
 msgid "Resolved Clearance"
-msgstr "Clearance risolta"
+msgstr "Clearance risolte"
 
 #: pcbnew/tools/pcb_control.cpp:1888
-#, fuzzy
 msgid "Actual Clearance"
-msgstr "Clearance effettiva"
+msgstr "Clearance effettive"
 
 #: pcbnew/tools/pcb_control.cpp:1931
-#, fuzzy
 msgid "Resolved Hole Clearance"
-msgstr "Clearance foro risolta"
+msgstr "Clearance foro risolte"
 
 #: pcbnew/tools/pcb_control.cpp:1936
-#, fuzzy
 msgid "Actual Hole Clearance"
-msgstr "Clearance foro effettiva"
+msgstr "Clearance foro effettive"
 
 #: pcbnew/tools/pcb_control.cpp:1969
-#, fuzzy
 msgid "Resolved Edge Clearance"
-msgstr "Clearance bordo risolta"
+msgstr "Clearance bordo risolte"
 
 #: pcbnew/tools/pcb_control.cpp:1974
-#, fuzzy
 msgid "Resolved Margin Clearance"
-msgstr "Clearance margine risolta"
+msgstr "Clearance margine risolte"
 
 #: pcbnew/tools/pcb_control.cpp:1985
 msgid "Selected Items"
@@ -52023,9 +52006,8 @@ msgid "Selected 2D Length"
 msgstr "lunghezza 2D selezionata"
 
 #: pcbnew/tools/pcb_control.cpp:2132
-#, fuzzy
 msgid "Selected 2D Copper Area"
-msgstr "Seleziona coppia di strati in rame"
+msgstr "Area rame 2D selezionata"
 
 #: pcbnew/tools/pcb_point_editor.cpp:2366
 msgid "Resize Table Cells"
@@ -53140,9 +53122,8 @@ msgid "No pads"
 msgstr "No piazzole"
 
 #: pcbnew/zone.cpp:858
-#, fuzzy
 msgid "No zone fills"
-msgstr "Riempimenti aree proibite"
+msgstr "Nessuna zona riempimento"
 
 #: pcbnew/zone.cpp:861
 msgid "No footprints"
@@ -53243,9 +53224,8 @@ msgid "Keep Out Pads"
 msgstr "Piazzole proibite"
 
 #: pcbnew/zone.cpp:1925
-#, fuzzy
 msgid "Keep Out Zone Fills"
-msgstr "Riempimenti aree proibite"
+msgstr "Riempimenti zone proibite"
 
 #: pcbnew/zone.cpp:1931
 msgid "Keep Out Footprints"
