@@ -37,7 +37,7 @@
 #include <wx/stdstream.h>
 #include <wx/zipstrm.h>
 
-#include <nlohmann/json.hpp>
+#include <json_common.h>
 #include <core/map_helpers.h>
 #include <wx/wfstream.h>
 

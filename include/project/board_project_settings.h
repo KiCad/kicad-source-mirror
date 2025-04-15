@@ -26,7 +26,7 @@
 #include <settings/parameters.h>
 
 // Can be removed by refactoring PARAM_LAYER_PRESET
-#include <nlohmann/json.hpp>
+#include <json_common.h>
 #include <math/box2.h>
 #include <glm/glm.hpp>
 

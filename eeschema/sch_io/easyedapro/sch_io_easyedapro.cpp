@@ -40,7 +40,7 @@
 #include <wx/fs_zip.h>
 #include <wx/log.h>
 
-#include <nlohmann/json.hpp>
+#include <json_common.h>
 #include <string_utils.h>
 #include <wildcards_and_files_ext.h>
 #include <sch_io/kicad_sexpr/sch_io_kicad_sexpr.h>

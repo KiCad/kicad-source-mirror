@@ -34,7 +34,7 @@
 
 #include <wx/string.h>
 
-#include <nlohmann/json.hpp>
+#include <json_common.h>
 #include <math/vector2d.h>
 
 

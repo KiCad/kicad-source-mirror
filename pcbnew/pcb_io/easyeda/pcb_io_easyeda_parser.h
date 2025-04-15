@@ -37,7 +37,7 @@
 #include <wx/string.h>
 #include <wx/arrstr.h>
 
-#include <nlohmann/json.hpp>
+#include <json_common.h>
 #include <board_item_container.h>
 
 class BOARD;

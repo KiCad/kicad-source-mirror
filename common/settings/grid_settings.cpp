@@ -19,7 +19,7 @@
  */
 
 #include <settings/grid_settings.h>
-#include <nlohmann/json.hpp>
+#include <json_common.h>
 #include <wx/translation.h>
 #include <core/json_serializers.h>
 

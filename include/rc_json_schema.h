@@ -20,7 +20,7 @@
 #ifndef RC_JSON_SCHEMA_H
 #define RC_JSON_SCHEMA_H
 
-#include <nlohmann/json.hpp>
+#include <json_common.h>
 #include <wx/string.h>
 #include <vector>
 #include <json_conversions.h>

@@ -34,7 +34,7 @@
 #include <wx/filefn.h>
 #include <wx/log.h>
 #include <wx/filename.h>
-#include <nlohmann/json.hpp>
+#include <json_common.h>
 #include <wildcards_and_files_ext.h>
 
 #define LCK "KICAD_LOCKING"

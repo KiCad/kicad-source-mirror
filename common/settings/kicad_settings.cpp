@@ -20,7 +20,7 @@
 #include <wx/aui/framemanager.h>    // ensure class wxAuiPaneInfo is defined for other includes
 
 #include "settings/kicad_settings.h"
-#include <nlohmann/json.hpp>
+#include <json_common.h>
 #include <settings/aui_settings.h>
 #include <settings/parameters.h>
 

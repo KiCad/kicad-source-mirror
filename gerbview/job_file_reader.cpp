@@ -26,7 +26,7 @@
  * @file job_file_reader.cpp
  */
 
-#include <nlohmann/json.hpp>
+#include <json_common.h>
 #include <wx/filename.h>
 
 #include <wildcards_and_files_ext.h>

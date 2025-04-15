@@ -23,7 +23,7 @@
  */
 
 #include <dialogs/dialog_design_block_properties_base.h>
-#include <nlohmann/json.hpp>
+#include <json_common.h>
 
 class SCH_EDIT_FRAME;
 class DESIGN_BLOCK;

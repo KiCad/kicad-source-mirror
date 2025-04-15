@@ -33,7 +33,7 @@
 #include <boost/uuid/entropy_error.hpp>
 #endif
 
-#include <nlohmann/json.hpp>
+#include <json_common.h>
 
 #include <cctype>
 #include <mutex>

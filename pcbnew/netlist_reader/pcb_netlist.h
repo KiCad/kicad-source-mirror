@@ -28,7 +28,7 @@
 
 #include <boost/ptr_container/ptr_vector.hpp>
 #include <wx/arrstr.h>
-#include <nlohmann/json.hpp>
+#include <json_common.h>
 #include <unordered_set>
 
 #include <lib_id.h>

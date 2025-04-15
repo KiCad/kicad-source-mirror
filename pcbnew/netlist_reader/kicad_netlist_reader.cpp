@@ -24,7 +24,7 @@
 
 #include <netlist_lexer.h>  // netlist_lexer is common to Eeschema and Pcbnew
 #include <string_utils.h>
-#include <nlohmann/json.hpp>
+#include <json_common.h>
 
 #include "pcb_netlist.h"
 #include "netlist_reader.h"

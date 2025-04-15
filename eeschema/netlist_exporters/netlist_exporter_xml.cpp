@@ -34,7 +34,7 @@
 #include <core/kicad_algo.h>
 #include <wx/wfstream.h>
 #include <xnode.h>      // also nests: <wx/xml/xml.h>
-#include <nlohmann/json.hpp>
+#include <json_common.h>
 #include <project_sch.h>
 
 #include <symbol_lib_table.h>

@@ -24,7 +24,7 @@
 #include <ctime>
 
 #include <boost/algorithm/string.hpp>
-#include <nlohmann/json.hpp>
+#include <json_common.h>
 #include <wx/base64.h>
 
 #include <kicad_curl/kicad_curl_easy.h>

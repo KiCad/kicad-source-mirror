@@ -19,7 +19,7 @@
  */
 
 #include <i18n_utility.h>
-#include <nlohmann/json.hpp>
+#include <json_common.h>
 
 #include <settings/parameters.h>
 #include <wildcards_and_files_ext.h>

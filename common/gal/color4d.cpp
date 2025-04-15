@@ -24,7 +24,7 @@
  */
 
 #include <map>
-#include <nlohmann/json.hpp>
+#include <json_common.h>
 #include <gal/color4d.h>
 #include <i18n_utility.h>
 #include <wx/crt.h>

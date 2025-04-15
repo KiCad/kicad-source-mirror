@@ -24,7 +24,7 @@
 #ifndef JSON_SERIALIZERS_H_
 #define JSON_SERIALIZERS_H_
 
-#include <nlohmann/json.hpp>
+#include <json_common.h>
 #include <wx/string.h>
 #include <optional>
 

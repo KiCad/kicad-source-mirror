@@ -19,7 +19,7 @@
  */
 
 #include <magic_enum.hpp>
-#include <nlohmann/json.hpp>
+#include <json_common.h>
 #include <wx/log.h>
 #include <wx/regex.h>
 #include <wx/stdstream.h>
