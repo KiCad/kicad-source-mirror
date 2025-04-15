@@ -1357,6 +1357,16 @@ bool SCH_EDITOR_CONTROL::doCopy( bool aUseDuplicateClipboard )
             // Don't let the markers be copied
             selection.Remove( item );
         }
+        else if( item->Type() == SCH_GROUP_T )
+        {
+            // Groups need to have all their items selected
+            static_cast<SCH_ITEM*>( item )->RunOnChildren(
+                    [&]( EDA_ITEM* aChild )
+                    {
+                        selection.Add( aChild );
+                    },
+                    RECURSE_MODE::RECURSE );
+        }
     }
 
     STRING_FORMATTER   formatter;

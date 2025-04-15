@@ -642,6 +642,10 @@ void SCH_IO_KICAD_SEXPR::Format( SCH_SELECTION* aSelection, SCH_SHEET_PATH* aSel
             saveTable( static_cast<SCH_TABLE*>( item ) );
             break;
 
+        case SCH_GROUP_T:
+            saveGroup( static_cast<SCH_GROUP*>( item ) );
+            break;
+
         default:
             wxASSERT( "Unexpected schematic object type in SCH_IO_KICAD_SEXPR::Format()" );
         }
