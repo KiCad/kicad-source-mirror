@@ -95,15 +95,14 @@ GROUP_TOOL::GROUP_TOOL() : TOOL_INTERACTIVE( "common.Groups" )
 void GROUP_TOOL::Reset( RESET_REASON aReason )
 {
     m_frame = getEditFrame<EDA_DRAW_FRAME>();
-
-    if( aReason != RUN )
-        m_commit = createCommit();
+    m_commit = createCommit();
 }
 
 
 bool GROUP_TOOL::Init()
 {
     m_frame = getEditFrame<EDA_DRAW_FRAME>();
+    m_commit = createCommit();
 
     // Find the selection tool, so they can cooperate
     m_selectionTool = static_cast<SELECTION_TOOL*>( m_toolMgr->FindTool( "common.InteractiveSelection" ) );
