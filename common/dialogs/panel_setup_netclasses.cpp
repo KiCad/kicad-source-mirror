@@ -87,7 +87,9 @@ PANEL_SETUP_NETCLASSES::PANEL_SETUP_NETCLASSES( wxWindow* aParentWindow, EDA_DRA
         m_netNames( aNetNames ),
         m_lastCheckedTicker( 0 ),
         m_hoveredCol( -1 ),
-        m_lastNetclassGridWidth( -1 )
+        m_lastNetclassGridWidth( -1 ),
+        m_sortAsc( false ),
+        m_sortCol( 0 )
 {
     // Clear and re-load each time.  Language (or darkmode) might have changed.
     g_lineStyleIcons.clear();
@@ -233,6 +235,11 @@ PANEL_SETUP_NETCLASSES::PANEL_SETUP_NETCLASSES( wxWindow* aParentWindow, EDA_DRA
                                                    &PANEL_SETUP_NETCLASSES::OnNetclassGridMouseEvent,
                                                    this );
 
+    // Allow sorting assignments by column
+    m_assignmentGrid->Connect(
+            wxEVT_GRID_LABEL_LEFT_CLICK,
+            wxGridEventHandler( PANEL_SETUP_NETCLASSES::OnNetclassAssignmentSort ), nullptr, this );
+
     m_frame->Bind( EDA_EVT_UNITS_CHANGED, &PANEL_SETUP_NETCLASSES::onUnitsChanged, this );
 
     m_netclassGrid->EndBatch();
@@ -275,6 +282,10 @@ PANEL_SETUP_NETCLASSES::~PANEL_SETUP_NETCLASSES()
     m_netclassGrid->Disconnect( wxEVT_GRID_CELL_CHANGING,
                                 wxGridEventHandler( PANEL_SETUP_NETCLASSES::OnNetclassGridCellChanging ),
                                 nullptr, this );
+
+    m_assignmentGrid->Disconnect(
+            wxEVT_GRID_LABEL_LEFT_CLICK,
+            wxGridEventHandler( PANEL_SETUP_NETCLASSES::OnNetclassAssignmentSort ), nullptr, this );
 
     m_frame->Unbind( EDA_EVT_UNITS_CHANGED, &PANEL_SETUP_NETCLASSES::onUnitsChanged, this );
 }
@@ -642,6 +653,57 @@ void PANEL_SETUP_NETCLASSES::OnNetclassGridCellChanging( wxGridEvent& event )
     }
 }
 
+void PANEL_SETUP_NETCLASSES::OnNetclassAssignmentSort( wxGridEvent& event )
+{
+    event.Skip();
+
+    if( !m_assignmentGrid->CommitPendingChanges() )
+        return;
+
+    if( ( event.GetCol() < 0 ) || ( event.GetCol() >= m_assignmentGrid->GetNumberCols() ) )
+        return;
+
+    // Toggle sort order if the same column is clicked
+    if( event.GetCol() != m_sortCol )
+    {
+        m_sortCol = event.GetCol();
+        m_sortAsc = true;
+    }
+    else
+    {
+        m_sortAsc = !m_sortAsc;
+    }
+
+    std::vector<std::pair<wxString, wxString>> netclassesassignments;
+    netclassesassignments.reserve( m_assignmentGrid->GetNumberRows() );
+
+    for( int row = 0; row < m_assignmentGrid->GetNumberRows(); ++row )
+    {
+        netclassesassignments.emplace_back( m_assignmentGrid->GetCellValue( row, 0 ),
+                                            m_assignmentGrid->GetCellValue( row, 1 ) );
+    }
+
+    std::sort( netclassesassignments.begin(), netclassesassignments.end(),
+               [this]( const std::pair<wxString, wxString>& assign1,
+                       const std::pair<wxString, wxString>& assign2 )
+               {
+                   const wxString& str1 = ( m_sortCol == 0 ) ? assign1.first : assign1.second;
+                   const wxString& str2 = ( m_sortCol == 0 ) ? assign2.first : assign2.second;
+                   return m_sortAsc ? ( str1 < str2 ) : ( str1 > str2 );
+               } );
+
+    m_assignmentGrid->ClearRows();
+    m_assignmentGrid->AppendRows( netclassesassignments.size() );
+
+    int row = 0;
+
+    for( const auto& [pattern, netclassName] : netclassesassignments )
+    {
+        m_assignmentGrid->SetCellValue( row, 0, pattern );
+        m_assignmentGrid->SetCellValue( row, 1, netclassName );
+        row++;
+    }
+}
 
 void PANEL_SETUP_NETCLASSES::OnNetclassGridMouseEvent( wxMouseEvent& aEvent )
 {
