@@ -18,7 +18,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-28 16:28-0700\n"
-"PO-Revision-Date: 2025-04-01 10:49+0000\n"
+"PO-Revision-Date: 2025-04-15 16:28+0000\n"
 "Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/kicad/v9/pl/>\n"
 "Language: pl\n"
@@ -23036,7 +23036,7 @@ msgstr "Podziel na niezłączone segmenty"
 
 #: eeschema/tools/sch_actions.cpp:933 pcbnew/tools/pcb_actions.cpp:1241
 msgid "Highlight net under cursor"
-msgstr "Podświetl sieć"
+msgstr "Podświetl sieć na pozycji kursora"
 
 #: eeschema/tools/sch_actions.cpp:940 pcbnew/tools/pcb_actions.cpp:1256
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1217
@@ -36291,11 +36291,11 @@ msgstr "Arkusze"
 #: pcbnew/dialogs/dialog_multichannel_generate_rule_areas.cpp:88
 #: pcbnew/footprint.cpp:1751 pcbnew/footprint.cpp:4139 pcbnew/zone.cpp:1868
 msgid "Component Class"
-msgstr "Klasy komponentów"
+msgstr "Klasa komponentu"
 
 #: pcbnew/dialogs/dialog_multichannel_generate_rule_areas.cpp:90
 msgid "Component Classes"
-msgstr "Klasy komponentów"
+msgstr "Klasy komponentu"
 
 #: pcbnew/dialogs/dialog_multichannel_generate_rule_areas_base.cpp:32
 msgid "Replace existing placement rule areas"
