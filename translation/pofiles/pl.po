@@ -18,7 +18,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-28 16:28-0700\n"
-"PO-Revision-Date: 2025-04-10 22:01+0000\n"
+"PO-Revision-Date: 2025-04-15 16:28+0000\n"
 "Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/kicad/"
 "master-source/pl/>\n"
@@ -713,441 +713,360 @@ msgid "User.1"
 msgstr "Użytkownika 1"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:67
-#, fuzzy
 msgid "Show user defined layer 1"
-msgstr "Warstwa użytkownika 1"
+msgstr "Pokazuje warstwę użytkownika 1"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:68
 msgid "User.2"
 msgstr "Użytkownika 2"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:68
-#, fuzzy
 msgid "Show user defined layer 2"
-msgstr "Warstwa użytkownika 2"
+msgstr "Pokazuje warstwę użytkownika 2"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:69
 msgid "User.3"
 msgstr "Użytkownika 3"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:69
-#, fuzzy
 msgid "Show user defined layer 3"
-msgstr "Warstwa użytkownika 3"
+msgstr "Pokazuje warstwę użytkownika 3"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:70
 msgid "User.4"
 msgstr "Użytkownika 4"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:70
-#, fuzzy
 msgid "Show user defined layer 4"
-msgstr "Warstwa użytkownika 4"
+msgstr "Pokazuje warstwę użytkownika 4"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:71
 msgid "User.5"
 msgstr "Użytkownika 5"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:71
-#, fuzzy
 msgid "Show user defined layer 5"
-msgstr "Warstwa użytkownika 5"
+msgstr "Pokazuje warstwę użytkownika 5"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:72
 msgid "User.6"
 msgstr "Użytkownika 6"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:72
-#, fuzzy
 msgid "Show user defined layer 6"
-msgstr "Warstwa użytkownika 6"
+msgstr "Pokazuje warstwę użytkownika 6"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:73
 msgid "User.7"
 msgstr "Użytkownika 7"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:73
-#, fuzzy
 msgid "Show user defined layer 7"
-msgstr "Warstwa użytkownika 7"
+msgstr "Pokazuje warstwę użytkownika 7"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:74
 msgid "User.8"
 msgstr "Użytkownika 8"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:74
-#, fuzzy
 msgid "Show user defined layer 8"
-msgstr "Warstwa użytkownika 8"
+msgstr "Pokazuje warstwę użytkownika 8"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:75
 msgid "User.9"
 msgstr "Użytkownika 9"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:75
-#, fuzzy
 msgid "Show user defined layer 9"
-msgstr "Warstwa użytkownika 9"
+msgstr "Pokazuje warstwę użytkownika 9"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:76
-#, fuzzy
 msgid "User.10"
-msgstr "Użytkownika 1"
+msgstr "Użytkownika 10"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:76
-#, fuzzy
 msgid "Show user defined layer 10"
-msgstr "Warstwa użytkownika 10"
+msgstr "Pokazuje warstwę użytkownika 10"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:77
-#, fuzzy
 msgid "User.11"
-msgstr "Użytkownika 1"
+msgstr "Użytkownika 11"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:77
-#, fuzzy
 msgid "Show user defined layer 11"
-msgstr "Warstwa użytkownika 11"
+msgstr "Pokazuje warstwę użytkownika 11"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:78
-#, fuzzy
 msgid "User.12"
-msgstr "Użytkownika 1"
+msgstr "Użytkownika 12"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:78
-#, fuzzy
 msgid "Show user defined layer 12"
-msgstr "Warstwa użytkownika 12"
+msgstr "Pokazuje warstwę użytkownika 12"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:79
-#, fuzzy
 msgid "User.13"
-msgstr "Użytkownika 1"
+msgstr "Użytkownika 13"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:79
-#, fuzzy
 msgid "Show user defined layer 13"
-msgstr "Warstwa użytkownika 13"
+msgstr "Pokazuje warstwę użytkownika 13"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:80
-#, fuzzy
 msgid "User.14"
-msgstr "Użytkownika 1"
+msgstr "Użytkownika 14"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:80
-#, fuzzy
 msgid "Show user defined layer 14"
-msgstr "Warstwa użytkownika 14"
+msgstr "Pokazuje warstwę użytkownika 14"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:81
-#, fuzzy
 msgid "User.15"
-msgstr "Użytkownika 1"
+msgstr "Użytkownika 15"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:81
-#, fuzzy
 msgid "Show user defined layer 15"
-msgstr "Warstwa użytkownika 15"
+msgstr "Pokazuje warstwę użytkownika 15"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:82
-#, fuzzy
 msgid "User.16"
-msgstr "Użytkownika 1"
+msgstr "Użytkownika 16"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:82
-#, fuzzy
 msgid "Show user defined layer 16"
-msgstr "Warstwa użytkownika 16"
+msgstr "Pokazuje warstwę użytkownika 16"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:83
-#, fuzzy
 msgid "User.17"
-msgstr "Użytkownika 1"
+msgstr "Użytkownika 17"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:83
-#, fuzzy
 msgid "Show user defined layer 17"
-msgstr "Warstwa użytkownika 17"
+msgstr "Pokazuje warstwę użytkownika 17"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:84
-#, fuzzy
 msgid "User.18"
-msgstr "Użytkownika 1"
+msgstr "Użytkownika 18"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:84
-#, fuzzy
 msgid "Show user defined layer 18"
-msgstr "Warstwa użytkownika 18"
+msgstr "Pokazuje warstwę użytkownika 18"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:85
-#, fuzzy
 msgid "User.19"
-msgstr "Użytkownika 1"
+msgstr "Użytkownika 19"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:85
-#, fuzzy
 msgid "Show user defined layer 19"
-msgstr "Warstwa użytkownika 19"
+msgstr "Pokazuje warstwę użytkownika 19"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:86
-#, fuzzy
 msgid "User.20"
-msgstr "Użytkownika 2"
+msgstr "Użytkownika 20"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:86
-#, fuzzy
 msgid "Show user defined layer 20"
-msgstr "Warstwa użytkownika 20"
+msgstr "Pokazuje warstwę użytkownika 20"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:87
-#, fuzzy
 msgid "User.21"
-msgstr "Użytkownika 2"
+msgstr "Użytkownika 21"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:87
-#, fuzzy
 msgid "Show user defined layer 21"
-msgstr "Warstwa użytkownika 21"
+msgstr "Pokazuje warstwę użytkownika 21"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:88
-#, fuzzy
 msgid "User.22"
-msgstr "Użytkownika 2"
+msgstr "Użytkownika 22"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:88
-#, fuzzy
 msgid "Show user defined layer 22"
-msgstr "Warstwa użytkownika 22"
+msgstr "Pokazuje warstwę użytkownika 22"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:89
-#, fuzzy
 msgid "User.23"
-msgstr "Użytkownika 2"
+msgstr "Użytkownika 23"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:89
-#, fuzzy
 msgid "Show user defined layer 23"
-msgstr "Warstwa użytkownika 23"
+msgstr "Pokazuje warstwę użytkownika 23"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:90
-#, fuzzy
 msgid "User.24"
-msgstr "Użytkownika 2"
+msgstr "Użytkownika 24"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:90
-#, fuzzy
 msgid "Show user defined layer 24"
-msgstr "Warstwa użytkownika 24"
+msgstr "Pokazuje warstwę użytkownika 24"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:91
-#, fuzzy
 msgid "User.25"
-msgstr "Użytkownika 2"
+msgstr "Użytkownika 25"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:91
-#, fuzzy
 msgid "Show user defined layer 25"
-msgstr "Warstwa użytkownika 25"
+msgstr "Pokazuje warstwę użytkownika 25"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:92
-#, fuzzy
 msgid "User.26"
-msgstr "Użytkownika 2"
+msgstr "Użytkownika 26"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:92
-#, fuzzy
 msgid "Show user defined layer 26"
-msgstr "Warstwa użytkownika 26"
+msgstr "Pokazuje warstwę użytkownika 26"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:93
-#, fuzzy
 msgid "User.27"
-msgstr "Użytkownika 2"
+msgstr "Użytkownika 27"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:93
-#, fuzzy
 msgid "Show user defined layer 27"
-msgstr "Warstwa użytkownika 27"
+msgstr "Pokazuje warstwę użytkownika 27"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:94
-#, fuzzy
 msgid "User.28"
-msgstr "Użytkownika 2"
+msgstr "Użytkownika 28"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:94
-#, fuzzy
 msgid "Show user defined layer 28"
-msgstr "Warstwa użytkownika 28"
+msgstr "Pokazuje warstwę użytkownika 28"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:95
-#, fuzzy
 msgid "User.29"
-msgstr "Użytkownika 2"
+msgstr "Użytkownika 29"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:95
-#, fuzzy
 msgid "Show user defined layer 29"
-msgstr "Warstwa użytkownika 29"
+msgstr "Pokazuje warstwę użytkownika 29"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:96
-#, fuzzy
 msgid "User.30"
-msgstr "Użytkownika 3"
+msgstr "Użytkownika 30"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:96
-#, fuzzy
 msgid "Show user defined layer 30"
-msgstr "Warstwa użytkownika 30"
+msgstr "Pokazuje warstwę użytkownika 30"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:97
-#, fuzzy
 msgid "User.31"
-msgstr "Użytkownika 3"
+msgstr "Użytkownika 31"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:97
-#, fuzzy
 msgid "Show user defined layer 31"
-msgstr "Warstwa użytkownika 31"
+msgstr "Pokazuje warstwę użytkownika 31"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:98
-#, fuzzy
 msgid "User.32"
-msgstr "Użytkownika 3"
+msgstr "Użytkownika 32"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:98
-#, fuzzy
 msgid "Show user defined layer 32"
-msgstr "Warstwa użytkownika 32"
+msgstr "Pokazuje warstwę użytkownika 32"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:99
-#, fuzzy
 msgid "User.33"
-msgstr "Użytkownika 3"
+msgstr "Użytkownika 33"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:99
-#, fuzzy
 msgid "Show user defined layer 33"
-msgstr "Warstwa użytkownika 33"
+msgstr "Pokazuje warstwę użytkownika 33"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:100
-#, fuzzy
 msgid "User.34"
-msgstr "Użytkownika 3"
+msgstr "Użytkownika 34"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:100
-#, fuzzy
 msgid "Show user defined layer 34"
-msgstr "Warstwa użytkownika 34"
+msgstr "Pokazuje warstwę użytkownika 34"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:101
-#, fuzzy
 msgid "User.35"
-msgstr "Użytkownika 3"
+msgstr "Użytkownika 35"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:101
-#, fuzzy
 msgid "Show user defined layer 35"
-msgstr "Warstwa użytkownika 35"
+msgstr "Pokazuje warstwę użytkownika 35"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:102
-#, fuzzy
 msgid "User.36"
-msgstr "Użytkownika 3"
+msgstr "Użytkownika 36"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:102
-#, fuzzy
 msgid "Show user defined layer 36"
-msgstr "Warstwa użytkownika 36"
+msgstr "Pokazuje warstwę użytkownika 36"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:103
-#, fuzzy
 msgid "User.37"
-msgstr "Użytkownika 3"
+msgstr "Użytkownika 37"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:103
-#, fuzzy
 msgid "Show user defined layer 37"
-msgstr "Warstwa użytkownika 37"
+msgstr "Pokazuje warstwę użytkownika 37"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:104
-#, fuzzy
 msgid "User.38"
-msgstr "Użytkownika 3"
+msgstr "Użytkownika 38"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:104
-#, fuzzy
 msgid "Show user defined layer 38"
-msgstr "Warstwa użytkownika 38"
+msgstr "Pokazuje warstwę użytkownika 38"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:105
-#, fuzzy
 msgid "User.39"
-msgstr "Użytkownika 3"
+msgstr "Użytkownika 39"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:105
-#, fuzzy
 msgid "Show user defined layer 39"
-msgstr "Warstwa użytkownika 39"
+msgstr "Pokazuje warstwę użytkownika 39"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:106
-#, fuzzy
 msgid "User.40"
-msgstr "Użytkownika 4"
+msgstr "Użytkownika 40"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:106
-#, fuzzy
 msgid "Show user defined layer 40"
-msgstr "Warstwa użytkownika 40"
+msgstr "Pokazuje warstwę użytkownika 40"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:107
-#, fuzzy
 msgid "User.41"
-msgstr "Użytkownika 4"
+msgstr "Użytkownika 41"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:107
-#, fuzzy
 msgid "Show user defined layer 41"
-msgstr "Warstwa użytkownika 41"
+msgstr "Pokazuje warstwę użytkownika 41"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:108
-#, fuzzy
 msgid "User.42"
-msgstr "Użytkownika 4"
+msgstr "Użytkownika 42"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:108
-#, fuzzy
 msgid "Show user defined layer 42"
-msgstr "Warstwa użytkownika 42"
+msgstr "Pokazuje warstwę użytkownika 42"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:109
-#, fuzzy
 msgid "User.43"
-msgstr "Użytkownika 4"
+msgstr "Użytkownika 43"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:109
-#, fuzzy
 msgid "Show user defined layer 43"
-msgstr "Warstwa użytkownika 43"
+msgstr "Pokazuje warstwę użytkownika 43"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:110
-#, fuzzy
 msgid "User.44"
-msgstr "Użytkownika 4"
+msgstr "Użytkownika 44"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:110
-#, fuzzy
 msgid "Show user defined layer 44"
-msgstr "Warstwa użytkownika 44"
+msgstr "Pokazuje warstwę użytkownika 44"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:111
-#, fuzzy
 msgid "User.45"
-msgstr "Użytkownika 4"
+msgstr "Użytkownika 45"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:111
-#, fuzzy
 msgid "Show user defined layer 45"
-msgstr "Warstwa użytkownika 45"
+msgstr "Pokazuje warstwę użytkownika 45"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:113
 msgid "Through-hole Models"
@@ -2442,9 +2361,9 @@ msgid "Design block does not have a valid library ID."
 msgstr "Blok projektowy nie posiada prawidłowego ID biblioteki."
 
 #: common/design_block_io.cpp:379
-#, fuzzy
 msgid "Design block does not have a schematic or board file."
-msgstr "Blok projektowy nie posiada prawidłowego ID biblioteki."
+msgstr ""
+"Blok projektowy nie posiada pliku schematu lub pliku obwodu drukowanego."
 
 #: common/design_block_io.cpp:388
 #, c-format
@@ -2452,9 +2371,9 @@ msgid "Schematic source file '%s' does not exist."
 msgstr "Źródłowy plik schematu '%s' nie istnieje."
 
 #: common/design_block_io.cpp:393
-#, fuzzy, c-format
+#, c-format
 msgid "Board source file '%s' does not exist."
-msgstr "Źródłowy plik schematu '%s' nie istnieje."
+msgstr "Źródłowy plik obwodu drukowanego '%s' nie istnieje."
 
 #: common/design_block_io.cpp:406
 #, c-format
@@ -2469,10 +2388,11 @@ msgstr ""
 "Plik schematu '%s' nie mógł zostać zapisany jako blok projektowy w '%s'."
 
 #: common/design_block_io.cpp:444
-#, fuzzy, c-format
+#, c-format
 msgid "Board file '%s' could not be saved as design block at '%s'."
 msgstr ""
-"Plik schematu '%s' nie mógł zostać zapisany jako blok projektowy w '%s'."
+"Plik obwodu drukowanego '%s' nie mógł zostać zapisany jako blok projektowy w "
+"'%s'."
 
 #: common/design_block_io.cpp:478
 #, c-format
@@ -4985,9 +4905,9 @@ msgid "Multiple libraries cannot share the same nickname ('%s')."
 msgstr "Wiele bibliotek nie może mieć tej samej nazwy skrótowej ('%s')."
 
 #: common/dialogs/panel_design_block_lib_table.cpp:663
-#, fuzzy, c-format
+#, c-format
 msgid "Design block library '%s' failed to load."
-msgstr "Nie można załadować biblioteki symboli '%s'."
+msgstr "Nie można załadować biblioteki bloku projektowego '%s'."
 
 #: common/dialogs/panel_design_block_lib_table.cpp:666
 #: eeschema/dialogs/panel_sym_lib_table.cpp:597
@@ -7588,9 +7508,8 @@ msgid "Invalid HEAD.  Cannot merge."
 msgstr "Nieprawidłowy HEAD.  Nie można scalić."
 
 #: common/git/git_pull_handler.cpp:181
-#, fuzzy
 msgid "Could not access repository configuration"
-msgstr "Nie można uzyskać indeksu repozytorium"
+msgstr "Nie można uzyskać konfiguracji repozytorium"
 
 #: common/git/git_pull_handler.cpp:251 common/git/git_push_handler.cpp:91
 msgid "Could not get repository head"
@@ -8949,7 +8868,6 @@ msgid "Select Preferred Editor"
 msgstr "Wybierz preferowany edytor"
 
 #: common/pgm_base.cpp:384
-#, fuzzy
 msgid ""
 "KiCad can anonymously report crashes and special event data to developers in "
 "order to aid identifying critical bugs and help profile functionality to "
@@ -8963,21 +8881,20 @@ msgstr ""
 "pomagać w usprawnianiu funkcji.\n"
 "Jeśli użytkownik zgodzi się na takie działanie, program KiCad będzie "
 "automatycznie wysyłał raporty gdy wystąpią awarie lub zdarzenia. \n"
-"Pliki projektów użytkownika, takie jak schematy lub PCB nie będą przesyłane."
+"Pliki projektów użytkownika, takie jak schematy lub PCB nie są przesyłane "
+"razem z takim zgłoszeniem."
 
 #: common/pgm_base.cpp:389
-#, fuzzy
 msgid "Data Collection Opt In"
-msgstr "Zbieranie danych"
+msgstr "Weź udział w zbieraniu danych"
 
 #: common/pgm_base.cpp:391
 msgid "Opt In"
 msgstr "Zapisz się"
 
 #: common/pgm_base.cpp:391
-#, fuzzy
 msgid "Decline"
-msgstr "Zarysy linii"
+msgstr "Odmów"
 
 #: common/pgm_base.cpp:498
 msgid "Environment variable HOME is empty.  Unable to continue."
@@ -9232,18 +9149,16 @@ msgid "Layer selector"
 msgstr "Wybór warstwy"
 
 #: common/tool/action_toolbar.cpp:1046
-#, fuzzy
 msgid "Control to select the layer"
-msgstr "Czyści zawartość zaznaczonej warstwy rysunkowej"
+msgstr "Sterowanie umożliwiające wybór warstwy"
 
 #: common/tool/action_toolbar.cpp:1048
 msgid "Symbol unit selector"
 msgstr "Notacja symboli składowych"
 
 #: common/tool/action_toolbar.cpp:1049
-#, fuzzy
 msgid "Displays the current unit"
-msgstr "Zamyka obecny edytor"
+msgstr "Wyświetla obecną jednostkę"
 
 #: common/tool/actions.cpp:45
 msgid "New..."
@@ -9839,14 +9754,12 @@ msgid "Hide Library Tree"
 msgstr "Ukryj strukturę biblioteki"
 
 #: common/tool/actions.cpp:836
-#, fuzzy
 msgid "Show Side Panel"
-msgstr "Pokaż ukryte piny"
+msgstr "Pokaż panel boczny"
 
 #: common/tool/actions.cpp:841
-#, fuzzy
 msgid "Show Console Panel"
-msgstr "Pokaż okno konsoli"
+msgstr "Pokaż panel konsoli"
 
 #: common/tool/actions.cpp:846
 msgid "Focus Library Tree Search Field"
@@ -10717,9 +10630,8 @@ msgid "Updating Design Block Libraries"
 msgstr "Aktualizacja bibliotek bloków projektowych"
 
 #: common/widgets/panel_design_block_chooser.cpp:427
-#, fuzzy
 msgid "Errors were encountered loading design blocks:"
-msgstr "Wystąpiły błędy podczas ładowania symboli:"
+msgstr "Wystąpiły błędy podczas ładowania bloków projektowych:"
 
 #: common/widgets/properties_panel.cpp:76
 #: common/widgets/properties_panel.cpp:185
@@ -10943,9 +10855,8 @@ msgid "KiCad s-expression schematic files"
 msgstr "Pliki schematów S-expression programu KiCad"
 
 #: common/wildcards_and_files_ext.cpp:289
-#, fuzzy
 msgid "Altium Project files"
-msgstr "Wszystkie pliki projektów programu KiCad"
+msgstr "Pliki projektów Altium"
 
 #: common/wildcards_and_files_ext.cpp:295
 msgid "CADSTAR Archive files"
@@ -13340,9 +13251,8 @@ msgid "Enter the text to be used within the schematic"
 msgstr "Wpisz tekst, który zostanie użyty na schemacie"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:62
-#, fuzzy
 msgid "Multiple label input"
-msgstr "Wiele warstw"
+msgstr "Wprowadzanie wielu etykiet"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:68
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:42
@@ -13867,9 +13777,8 @@ msgstr ""
 "Nie zostaną uwzględnione w BOM i nie można im przypisać footprintu."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:203
-#, fuzzy
 msgid "Define as local power symbol"
-msgstr "Utwórz symbol jako symbol zasilania"
+msgstr "Utwórz jako lokalny symbol zasilania"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:204
 msgid ""
@@ -14001,24 +13910,20 @@ msgid "Available pins"
 msgstr "Dostępne piny"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:386
-#, fuzzy
 msgid "Create jumper group from the selected pins"
-msgstr "Utwórz strefę miedzi z zaznaczenia"
+msgstr "Utwórz grupę zworek z zaznaczonych pinów"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:391
-#, fuzzy
 msgid "Remove the selected jumper pin group"
-msgstr "Usuń wybraną grupę użytkownika"
+msgstr "Usuwa wybraną grupę zworek"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:401
-#, fuzzy
 msgid "Grouped pins"
-msgstr "Grupowanie"
+msgstr "Zgrupowane piny"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:423
-#, fuzzy
 msgid "Pin Connections"
-msgstr "Połączenia pól lutowniczych"
+msgstr "Połączenia pinów"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:436
 msgid "Edit Simulation Model..."
@@ -14693,9 +14598,8 @@ msgid "Whole &words only"
 msgstr "Tylko pełne wyrazy"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:90
-#, fuzzy
 msgid "Regular Expression"
-msgstr "Źle skonstruowane wyrażenie"
+msgstr "Wyrażenie regularne"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:93
 msgid "Search pin &names and numbers"
@@ -17341,9 +17245,9 @@ msgid "Global Field Name Templates"
 msgstr "Wzorce nazw pól globalnych"
 
 #: eeschema/dialogs/panel_template_fieldnames.cpp:271
-#, fuzzy, c-format
+#, c-format
 msgid "The field name '%s' contains trailing and/or leading white space."
-msgstr "Nazwa pola \"%s\" zawiera spacje końcowe lub spacje wiodące."
+msgstr "Nazwa pola '%s' zawiera spacje końcowe lub spacje wiodące."
 
 #: eeschema/dialogs/panel_template_fieldnames.cpp:276
 msgid ""
@@ -19070,9 +18974,8 @@ msgid "Design block '%s' already has a schematic."
 msgstr "Blok projektowy '%s' posiada już schemat."
 
 #: eeschema/sch_design_block_utils.cpp:64
-#, fuzzy
 msgid "Overwrite existing schematic?"
-msgstr "Nadpisać istniejący projekt?"
+msgstr "Nadpisać istniejący schemat?"
 
 #: eeschema/sch_design_block_utils.cpp:79
 #: eeschema/sch_design_block_utils.cpp:261
@@ -19100,9 +19003,8 @@ msgstr ""
 
 #: eeschema/sch_design_block_utils.cpp:162
 #: eeschema/sch_design_block_utils.cpp:362
-#, fuzzy
 msgid "Please select a design block to save the schematic to."
-msgstr "Proszę wybrać bibliotekę docelową by zapisać w niej blok projektowy."
+msgstr "Proszę wybrać blok projektowy do którego zapisać schemat."
 
 #: eeschema/sch_design_block_utils.cpp:254
 #: eeschema/sch_design_block_utils.cpp:355
@@ -22014,9 +21916,8 @@ msgstr "Kopiuj nazwę sygnału"
 #: eeschema/sim/simulator_frame_ui.cpp:180
 #: eeschema/sim/simulator_frame_ui.cpp:187
 #: eeschema/sim/simulator_frame_ui.cpp:200
-#, fuzzy
 msgid "Create new cursor..."
-msgstr "Utwórz raport..."
+msgstr "Utwórz nowy kursor..."
 
 #: eeschema/sim/simulator_frame_ui.cpp:194
 #, c-format
@@ -22882,9 +22783,8 @@ msgid "Power Symbol"
 msgstr "Symbol Zasilania"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1762
-#, fuzzy
 msgid "Power Symbol (Local)"
-msgstr "Symbol Zasilania"
+msgstr "Symbol Zasilania (Lokalny)"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1769
 msgid "Datasheet"
@@ -23257,7 +23157,6 @@ msgid "Create a new design block from the current selection"
 msgstr "Tworzy nowy blok projektowy na podstawie zaznaczenia"
 
 #: eeschema/tools/sch_actions.cpp:172
-#, fuzzy
 msgid "Save Current Sheet to Design Block..."
 msgstr "Zapisz bieżący arkusz jako blok projektowy..."
 
@@ -23266,14 +23165,12 @@ msgid "Add current sheet to design block"
 msgstr "Dodaj bieżący blok jako blok projektowy"
 
 #: eeschema/tools/sch_actions.cpp:179 pcbnew/tools/pcb_actions.cpp:489
-#, fuzzy
 msgid "Save Selection to Design Block..."
 msgstr "Zapisz zaznaczenie jako blok projektowy..."
 
 #: eeschema/tools/sch_actions.cpp:180 pcbnew/tools/pcb_actions.cpp:490
-#, fuzzy
 msgid "Add current selection to design block"
-msgstr "Przesuń bieżące zaznaczenie w dół"
+msgstr "Dodaje obecne zaznaczenie jako blok projektowy"
 
 #: eeschema/tools/sch_actions.cpp:186 pcbnew/tools/pcb_actions.cpp:496
 msgid "Delete Design Block"
@@ -23583,14 +23480,12 @@ msgid "Place Sheet Pins"
 msgstr "Umieść piny arkusza"
 
 #: eeschema/tools/sch_actions.cpp:595
-#, fuzzy
 msgid "Autoplace All Sheet Pins"
-msgstr "Umieść piny arkusza"
+msgstr "Automatycznie rozmieść wszystkie piny arkusza"
 
 #: eeschema/tools/sch_actions.cpp:596
-#, fuzzy
 msgid "Imports and auto places all sheet pins"
-msgstr "Importuje istniejące piny z arkusza"
+msgstr "Importuje i automatycznie rozmieszcza wszelkie piny arkusza"
 
 #: eeschema/tools/sch_actions.cpp:601 eeschema/tools/sch_actions.cpp:609
 msgid "Sync Sheet Pins..."
@@ -23872,7 +23767,7 @@ msgstr "Podziel na niezłączone segmenty"
 
 #: eeschema/tools/sch_actions.cpp:987 pcbnew/tools/pcb_actions.cpp:1363
 msgid "Highlight net under cursor"
-msgstr "Podświetl sieć"
+msgstr "Podświetl sieć na pozycji kursora"
 
 #: eeschema/tools/sch_actions.cpp:994 pcbnew/tools/pcb_actions.cpp:1378
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1217
@@ -24026,24 +23921,20 @@ msgstr ""
 "bibliotek symboli"
 
 #: eeschema/tools/sch_actions.cpp:1131
-#, fuzzy
 msgid "Next Net Item"
-msgstr "Elementy tekstowe"
+msgstr "Następny element sieci"
 
 #: eeschema/tools/sch_actions.cpp:1132
-#, fuzzy
 msgid "Select next item on the current net"
-msgstr "Wybiera połączony element znajdujący na pozycji kursora"
+msgstr "Wybiera następny element znajdujący się w bieżącej sieci"
 
 #: eeschema/tools/sch_actions.cpp:1138
-#, fuzzy
 msgid "Previous Net Item"
-msgstr "Poprzedni arkusz"
+msgstr "Poprzedni element sieci"
 
 #: eeschema/tools/sch_actions.cpp:1139
-#, fuzzy
 msgid "Select previous item on the current net"
-msgstr "Wybiera połączony element znajdujący na pozycji kursora"
+msgstr "Wybiera poprzedni element znajdujący w bieżącej sieci"
 
 #: eeschema/tools/sch_actions.cpp:1144
 msgid "Export Drawing to Clipboard"
@@ -26180,34 +26071,28 @@ msgid "DCode:"
 msgstr "D-Kod:"
 
 #: gerbview/toolbars_gerber.cpp:268 gerbview/toolbars_gerber.cpp:269
-#, fuzzy
 msgid "Text info entry"
-msgstr "Edytor tekstu"
+msgstr "Pole wprowadzania tekstu"
 
 #: gerbview/toolbars_gerber.cpp:271
-#, fuzzy
 msgid "Component highlight"
-msgstr "Przełącz podświetlenie danej sieci"
+msgstr "Podświetl komponent"
 
 #: gerbview/toolbars_gerber.cpp:273
-#, fuzzy
 msgid "Net highlight"
-msgstr "Kolor podświetlenia sieci"
+msgstr "Podświetl sieć"
 
 #: gerbview/toolbars_gerber.cpp:275
-#, fuzzy
 msgid "Aperture highlight"
-msgstr "Kolor podświetlenia sieci"
+msgstr "Podświetl aperturę"
 
 #: gerbview/toolbars_gerber.cpp:277
-#, fuzzy
 msgid "DCode Selector"
-msgstr "Trasuj wybrane"
+msgstr "Wybór D-Kodów"
 
 #: gerbview/toolbars_gerber.cpp:278
-#, fuzzy
 msgid "Select all items with the selected DCode"
-msgstr "Zaznacz wszystkie elementy na ekranie"
+msgstr "Zaznacza wszystkie elementy z oznaczonym D-Kodem"
 
 #: gerbview/toolbars_gerber.cpp:281
 msgid "<No selection>"
@@ -26971,9 +26856,8 @@ msgid "Generate map / summary of drill hits"
 msgstr "Wygeneruj mapę / zestawienie miejsc owiertów"
 
 #: kicad/cli/command_pcb_export_drill.cpp:94
-#, fuzzy
 msgid "Generate a file specifically for tenting"
-msgstr "Ustawienia zadania eksportu danych listy materiałowej (BOM)"
+msgstr "Wygeneruj plik z danymi o procesie wykończenia przelotek"
 
 #: kicad/cli/command_pcb_export_drill.cpp:99
 msgid "Valid options: pdf,gerberx2,ps,dxf,svg"
@@ -27105,9 +26989,8 @@ msgid "The new behavior will match --mode-multi"
 msgstr "Nowy wygląd będzie odpowiadać --mode-multi"
 
 #: kicad/cli/command_pcb_export_gencad.cpp:34
-#, fuzzy
 msgid "Export the PCB in Gencad format"
-msgstr "Eksportuj listę sieci w formacie KiCad"
+msgstr "Eksportuj PCB w formacie Gencad"
 
 #: kicad/cli/command_pcb_export_gencad.cpp:40
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:220
@@ -27961,9 +27844,8 @@ msgstr ""
 "nie może być zaimportowany."
 
 #: kicad/import_project.cpp:146
-#, fuzzy
 msgid "Import Altium Project Files"
-msgstr "Import projektów z programu EAGLE"
+msgstr "Import projektów z programu Altium"
 
 #: kicad/import_project.cpp:154
 msgid "Import CADSTAR Archive Project Files"
@@ -28086,14 +27968,12 @@ msgid "Import Non-KiCad Project..."
 msgstr "Importuj obwód drukowany spoza programu KiCad..."
 
 #: kicad/menubar.cpp:115
-#, fuzzy
 msgid "Altium Project..."
-msgstr "Projekt programu EAGLE..."
+msgstr "Projekt programu Altium..."
 
 #: kicad/menubar.cpp:116
-#, fuzzy
 msgid "Import Altium Schematic and PCB (*.PrjPcb)"
-msgstr "Importuj archiwum schematu CADSTAR i PCB (*.csa, *.cpa)"
+msgstr "Importuj schemat i PCB programu Altium (*.PrjPcb)"
 
 #: kicad/menubar.cpp:119
 msgid "CADSTAR Project..."
@@ -29603,23 +29483,20 @@ msgstr ""
 "elementy, które nie są składnikami wszystkich stron"
 
 #: pagelayout_editor/toolbars_pl_editor.cpp:160
-#, fuzzy
 msgid "Origin Selector"
-msgstr "Obraz oryginalny"
+msgstr "Wybór pozycji bazowej"
 
 #: pagelayout_editor/toolbars_pl_editor.cpp:161
 msgid "Select the origin of the status bar coordinates"
 msgstr "Wybierz początek układu współrzędnych paska stanu"
 
 #: pagelayout_editor/toolbars_pl_editor.cpp:162
-#, fuzzy
 msgid "Page Selector"
-msgstr "Wybór warstw"
+msgstr "Wybór strony"
 
 #: pagelayout_editor/toolbars_pl_editor.cpp:163
-#, fuzzy
 msgid "Select the page to simulate item displays"
-msgstr "Wybierz typ elementu by zapisać"
+msgstr "Wybiera stronę, aby zasymulować wyświetlanie elementów"
 
 #: pagelayout_editor/tools/pl_actions.cpp:72
 msgid "Place Bitmaps"
@@ -33242,7 +33119,7 @@ msgstr "Wzorce dostrajania długości"
 #: pcbnew/dialogs/dialog_board_setup.cpp:200
 #: pcbnew/dialogs/dialog_multichannel_generate_rule_areas.cpp:90
 msgid "Component Classes"
-msgstr "Klasy komponentów"
+msgstr "Klasy komponentu"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:218
 msgid "Board Data"
@@ -34262,20 +34139,17 @@ msgid "Circular Array"
 msgstr "Szyk w układzie okręgu"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:472
-#, fuzzy
 msgid "Item Source"
-msgstr "Źródło"
+msgstr "Źródło elementów"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:474
-#, fuzzy
 msgid "Duplicate selection"
-msgstr "Klonowanie strefy"
+msgstr "Powiel zaznaczenie"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:478
 #: pcbnew/tools/array_tool.cpp:204
-#, fuzzy
 msgid "Arrange selection"
-msgstr "Przełącz zaznaczenie"
+msgstr "Rozłóż zaznaczenie"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:479
 #: pcbnew/dialogs/dialog_create_array_base.cpp:498
@@ -36098,28 +35972,24 @@ msgstr ""
 "połączone."
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:410
-#, fuzzy
 msgid "Jumper Pad Groups"
-msgstr "Renumeracja pól lutowniczych"
+msgstr "Grupy pól zworek"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:418
 msgid "Available pads"
 msgstr "Dostępne pola lutownicze"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:434
-#, fuzzy
 msgid "Create jumper group from the selected pads"
-msgstr "Tworzy linie zaokrąglenia z zaznaczonych elementów"
+msgstr "Tworzy grupę zworek z wybranych padów"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:439
-#, fuzzy
 msgid "Remove the selected jumper pad group"
-msgstr "Usuń wybraną grupę użytkownika"
+msgstr "Usuwa wybraną grupę zworek padów"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:449
-#, fuzzy
 msgid "Grouped pads"
-msgstr "Pogrupowane wg wartości"
+msgstr "Zgrupowane pola lutownicze"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:471
 #: pcbnew/zone.cpp:2052
@@ -36327,9 +36197,8 @@ msgid "Gerber X2"
 msgstr "Gerber X2"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:92
-#, fuzzy
 msgid "Generate tenting layers"
-msgstr "Generuj pliki położeń elementów"
+msgstr "Generuj pliki dla procesu wykończenia przelotek"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:106
 msgid "Generate map:"
@@ -37101,7 +36970,6 @@ msgid "Length-tuning pattern defaults"
 msgstr "Wzorce dostrajania długości"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:78
-#, fuzzy
 msgid "Component classes"
 msgstr "Klasy komponentów"
 
@@ -37269,7 +37137,7 @@ msgstr "Arkusze"
 #: pcbnew/dialogs/dialog_multichannel_generate_rule_areas.cpp:88
 #: pcbnew/footprint.cpp:1725 pcbnew/footprint.cpp:4135 pcbnew/zone.cpp:1826
 msgid "Component Class"
-msgstr "Klasy komponentów"
+msgstr "Klasa komponentu"
 
 #: pcbnew/dialogs/dialog_multichannel_generate_rule_areas_base.cpp:32
 msgid "Replace existing placement rule areas"
@@ -38728,7 +38596,6 @@ msgid "Background style:"
 msgstr "Styl tła:"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:86
-#, fuzzy
 msgid "Procedural textures"
 msgstr "Tekstury proceduralne"
 
@@ -38741,10 +38608,8 @@ msgid "Anti-aliasing"
 msgstr "Anty-aliasing"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:98
-#, fuzzy
 msgid "Screen space ambient occlusions and global illumination reflections"
-msgstr ""
-"Okluzja otoczenia w przestrzeni ekranu i globalne odbicia oświetlenia (wolne)"
+msgstr "Okluzja otoczenia w przestrzeni ekranu i globalne odbicia oświetlenia"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:109
 msgid "View"
@@ -38795,7 +38660,6 @@ msgid "°"
 msgstr "°"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:244
-#, fuzzy
 msgid "Lights Intensity"
 msgstr "Intensywność oświetlenia"
 
@@ -38804,7 +38668,6 @@ msgid "Camera:"
 msgstr "Kamera:"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:293
-#, fuzzy
 msgid "Lights Position"
 msgstr "Pozycja oświetlenia"
 
@@ -39120,9 +38983,8 @@ msgid "Border style:"
 msgstr "Styl ramki:"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:148
-#, fuzzy
 msgid "Unknown choice"
-msgstr "Nieznana Metoda"
+msgstr "Nieznany wybór"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:628
 #, c-format
@@ -39327,9 +39189,8 @@ msgid "End layer:"
 msgstr "Końcowa warstwa:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:378
-#, fuzzy
 msgid "Protection features:"
-msgstr "Powierzchnia przekroju:"
+msgstr "Właściwości zabezpieczenia:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:385
 msgid ""
@@ -39545,46 +39406,40 @@ msgid "Footprint Field:"
 msgstr "Pole footprintu:"
 
 #: pcbnew/dialogs/panel_assign_component_classes.cpp:618
-#, fuzzy
 msgid "Import references from selection"
-msgstr "Utwórz ścieżkę z zaznaczenia"
+msgstr "Importuj odnośniki z zaznaczenia"
 
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:19
-#, fuzzy
 msgid "Assign component class per sheet"
-msgstr "Klasy komponentów"
+msgstr "Przypisz do klas komponentów na podstawie arkusza"
 
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:31
 msgid "Custom Assignments:"
 msgstr "Własne przypisania:"
 
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:38
-#, fuzzy
 msgid "Add Custom Assignment"
-msgstr "Dodaj przypisanie klasy sieci"
+msgstr "Dodaje własne przypisania"
 
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:84
 msgid "Component Class:"
 msgstr "Klasa komponentów:"
 
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:118
-#, fuzzy
 msgid "Match All"
-msgstr "Uaktualnij wszystko"
+msgstr "Dopasuj wszystko"
 
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:122
-#, fuzzy
 msgid "Match Any"
-msgstr "Pasujące warstwy"
+msgstr "Dopasuj dowolne"
 
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:294
 msgid "Footprint:"
 msgstr "Footprint:"
 
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:358
-#, fuzzy
 msgid "Field Value:"
-msgstr "Wartość końcowa:"
+msgstr "Wartość pola:"
 
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:442
 msgid "Sheet Name:"
@@ -39596,9 +39451,8 @@ msgid "Layer name %s already in use."
 msgstr "Nazwa warstwy %s jest już używana."
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:34
-#, fuzzy
 msgid "Layer Names"
-msgstr "Nazwa warstwy"
+msgstr "Nazwy warstwy"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:113
 msgid "Net names:"
@@ -41350,7 +41204,6 @@ msgstr ""
 "\n"
 
 #: pcbnew/dialogs/panel_setup_rules_help_8expression_functions.h:2
-#, fuzzy
 msgid ""
 "### Expression functions\n"
 "\n"
@@ -41499,8 +41352,8 @@ msgstr ""
 "\n"
 "UWAGA: Zwraca prawdę, jeśli `A` znajduje się na danej warstwie, \n"
 "niezależnie czy reguła jest oceniana dla tej warstwy.\n"
-"W tym ostatnim przypadku użyj w regule klauzuli `(layer "
-"\"nazwa_warstwy\")`.\n"
+"W tym ostatnim przypadku użyj w regule klauzuli `(layer \"nazwa_warstwy\")`."
+"\n"
 "<br><br>\n"
 "\n"
 "    A.fromTo('x', 'y')\n"
@@ -41531,8 +41384,8 @@ msgstr ""
 "\n"
 "    A.inDiffPair('<nazwa_sieci>')\n"
 "Prawdziwe jeśli `A` posiada sieć, która jest składnikiem pary różnicowej.\n"
-"`<nazwa_sieci>` to nazwa bazowa pary różnicowej.  Na przykład `inDiffPair('/"
-"CLK')`\n"
+"`<nazwa_sieci>` to nazwa bazowa pary różnicowej.  Na przykład "
+"`inDiffPair('/CLK')`\n"
 "odnosi się do sieci zarówno `/CLK_P` jak i `/CLK_N`.\n"
 "<br><br>\n"
 "\n"
@@ -41601,6 +41454,12 @@ msgstr ""
 "    A.memberOfSheet('<ścieżka_arkusza>')\n"
 "Prawda gdy `A` jest członkiem podanego arkusza. Ścieżka arkusza nie może "
 "zawierać znaków wieloznacznych.\n"
+"<br><br>\n"
+"\n"
+"    A.memberOfSheetOrChildren('<sheet_path>')\n"
+"Prawda gdy `A` jest członkiem podanego arkusza, lub dowolnego z jego "
+"potomków w hierarchii. Ścieżka arkusza może\n"
+"zawierać znaki wieloznaczne.\n"
 "<br><br>\n"
 "\n"
 
@@ -42710,14 +42569,13 @@ msgid "Missing ')'."
 msgstr "Brakuje ')'."
 
 #: pcbnew/drc/drc_rule_parser.cpp:353
-#, fuzzy
 msgid "Missing component class name."
-msgstr "Brak nazwy reguły."
+msgstr "Brak nazwy klasy komponentu."
 
 #: pcbnew/drc/drc_rule_parser.cpp:381
-#, fuzzy, c-format
+#, c-format
 msgid "Could not parse expression '%s'."
-msgstr "Nie można zaimportować arkusza z '%s'."
+msgstr "Nie można przetworzyć wyrażenia '%s'."
 
 #: pcbnew/drc/drc_rule_parser.cpp:444
 #, c-format
@@ -43098,9 +42956,9 @@ msgid "%s keep-out property differs."
 msgstr "%s właściwości brzegowej różni się."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:502
-#, fuzzy, c-format
+#, c-format
 msgid "%s keep out zone fill setting differs."
-msgstr "%s ustawień wypełnień strefy chronionej jest różne."
+msgstr "%s ustawień wypełnień strefy chronionej różni się."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:504
 #, c-format
@@ -43538,9 +43396,9 @@ msgid "(layer %s; %d spokes connected to isolated island)"
 msgstr "(warstwa %s; %d łącz połączonych z izolowanym polem)"
 
 #: pcbnew/drc/drc_test_provider_zone_connections.cpp:224
-#, fuzzy, c-format
+#, c-format
 msgid "(layer %s; %s custom spoke count %d; actual %d)"
-msgstr "(warstwa %s; %s min. liczba łącz %d; obecnie %d)"
+msgstr "(warstwa %s; %s własna liczba łącz %d; obecnie %d)"
 
 #: pcbnew/drc/drc_test_provider_zone_connections.cpp:290
 #, c-format
@@ -45019,22 +44877,22 @@ msgstr "Usunięto dla %s atrybut 'Nie montowane'."
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:753
 #, c-format
 msgid "Added %s 'duplicate pad numbers are jumpers' attribute."
-msgstr "Dodano %s atrybutów \"duplikujące się numery padów tworzą zwory\"."
+msgstr "Dodano %s atrybutów 'Powielone numery pól traktuj jako zwory'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:758
-#, fuzzy, c-format
+#, c-format
 msgid "Removed %s 'duplicate pad numbers are jumpers' attribute."
-msgstr "Usunięto dla %s atrybut 'Nie montowane'."
+msgstr "Usunięto %s atrybutów 'Powielone numery pól traktuj jako zwory'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:766
 #, c-format
 msgid "Add %s 'duplicate pad numbers are jumpers' attribute."
-msgstr "Dodaję %s atrybutów \"duplikujące się numery padów tworzą zwory\"."
+msgstr "Dodaję %s atrybutów 'Powielone numery pól traktuj jako zwory'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:771
-#, fuzzy, c-format
+#, c-format
 msgid "Remove %s 'duplicate pad numbers are jumpers' attribute."
-msgstr "Usuń dla %s atrybut 'Nie montowane'."
+msgstr "Usuwam %s atrybutów 'Powielone numery pól traktuj jako zwory'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:785
 #, c-format
@@ -45639,16 +45497,14 @@ msgid "Design block '%s' already has a layout."
 msgstr "Blok projektowy '%s' posiada już trasowanie."
 
 #: pcbnew/pcb_design_block_utils.cpp:70
-#, fuzzy
 msgid "Overwrite existing layout?"
-msgstr "Nadpisać istniejący projekt?"
+msgstr "Nadpisać istniejące trasowanie?"
 
 #: pcbnew/pcb_design_block_utils.cpp:153 pcbnew/pcb_design_block_utils.cpp:212
 #: pcbnew/pcb_design_block_utils.cpp:285
-#, fuzzy
 msgid "Error saving temporary board file to create design block."
 msgstr ""
-"Błąd podczas zapisywania tymczasowego pliku schematu przy tworzeniu bloku "
+"Błąd podczas zapisywania tymczasowego pliku PCB przy tworzeniu bloku "
 "projektowego."
 
 #: pcbnew/pcb_dimension.cpp:611 pcbnew/pcb_dimension.cpp:1826
@@ -47759,7 +47615,6 @@ msgid "Segment Length"
 msgstr "Długość segmentu"
 
 #: pcbnew/pcb_track.cpp:1754
-#, fuzzy
 msgid "Copper Area"
 msgstr "Strefa miedzi"
 
@@ -47866,24 +47721,20 @@ msgid "Back tenting"
 msgstr "Maskowanie po stronie dolnej"
 
 #: pcbnew/pcb_track.cpp:2302
-#, fuzzy
 msgid "Front covering"
-msgstr "Maskowanie po stronie górnej"
+msgstr "Zakrycie po stronie górnej"
 
 #: pcbnew/pcb_track.cpp:2304
-#, fuzzy
 msgid "Back covering"
-msgstr "Maskowanie po stronie dolnej"
+msgstr "Zakrycie po stronie dolnej"
 
 #: pcbnew/pcb_track.cpp:2306
-#, fuzzy
 msgid "Front plugging"
-msgstr "Maskowanie po stronie górnej"
+msgstr "Wypełnienie po stronie górnej"
 
 #: pcbnew/pcb_track.cpp:2308
-#, fuzzy
 msgid "Back plugging"
-msgstr "Maskowanie po stronie dolnej"
+msgstr "Wypełnienie po stronie dolnej"
 
 #: pcbnew/pcb_track.cpp:2310
 msgid "Capping"
@@ -48612,9 +48463,8 @@ msgid "A wire_via refers to missing padstack '%s'."
 msgstr "Wire_via odnosi się do brakującego stosu '%s'."
 
 #: pcbnew/toolbars_footprint_editor.cpp:103 pcbnew/toolbars_pcb_editor.cpp:217
-#, fuzzy
 msgid "Dimension objects"
-msgstr "Tekst wymiarowania"
+msgstr "Obiekty wymiarowania"
 
 #: pcbnew/toolbars_pcb_editor.cpp:124
 msgid "Track width selector"
@@ -48633,19 +48483,16 @@ msgid "Control to select the via diameter"
 msgstr "Kontrolka służąca do wyboru rozmiaru przelotki"
 
 #: pcbnew/toolbars_pcb_editor.cpp:195
-#, fuzzy
 msgid "Track routing tools"
-msgstr "Skrzyżowanie ścieżek"
+msgstr "Narzędzia trasowania"
 
 #: pcbnew/toolbars_pcb_editor.cpp:198
-#, fuzzy
 msgid "Track tuning tools"
-msgstr "Kąt ścieżki"
+msgstr "Narzędzia dostrajania"
 
 #: pcbnew/toolbars_pcb_editor.cpp:226
-#, fuzzy
 msgid "PCB origins"
-msgstr "Punkt odniesienia strony"
+msgstr "Punkty odniesienia"
 
 #: pcbnew/toolbars_pcb_editor.cpp:375
 msgid ""
@@ -50048,29 +49895,24 @@ msgid "Show the design rules checker window"
 msgstr "Pokazuje okno narzędzia do kontroli reguł projektowych PCB"
 
 #: pcbnew/tools/pcb_actions.cpp:453
-#, fuzzy
 msgid "Add selected design block to current board"
-msgstr "Dodaje wybrany blok projektowy do bieżącego arkusza"
+msgstr "Dodaje wybrany blok projektowy do bieżącego obwodu drukowanego"
 
 #: pcbnew/tools/pcb_actions.cpp:468
-#, fuzzy
 msgid "Save Current Board as Design Block..."
-msgstr "Zapisz bieżący arkusz jako blok projektowy..."
+msgstr "Zapisz bieżący obwód jako blok projektowy..."
 
 #: pcbnew/tools/pcb_actions.cpp:469
-#, fuzzy
 msgid "Create a new design block from the current board"
-msgstr "Tworzy nowy blok projektowy z aktualnego arkusza"
+msgstr "Tworzy nowy blok projektowy z aktualnego obwodu drukowanego"
 
 #: pcbnew/tools/pcb_actions.cpp:482
-#, fuzzy
 msgid "Save Current Board to Design Block..."
-msgstr "Zapisz bieżący arkusz jako blok projektowy..."
+msgstr "Zapisz bieżący obwód do bloku projektowego..."
 
 #: pcbnew/tools/pcb_actions.cpp:483
-#, fuzzy
 msgid "Add current board to design block"
-msgstr "Dodaj blok projektowy"
+msgstr "Dodaje obecny obwód do bloku projektowego"
 
 #: pcbnew/tools/pcb_actions.cpp:514
 msgid "Open in Footprint Editor"
@@ -50327,18 +50169,16 @@ msgid "Show the footprint checker window"
 msgstr "Pokazuje okno narzędzia do kontroli poprawności footprintów"
 
 #: pcbnew/tools/pcb_actions.cpp:864
-#, fuzzy
 msgid "Load footprint from current PCB"
-msgstr "Wczytaj footprint z bieżącej płytki do edytora"
+msgstr "Wczytaj footprint z bieżącego PCB"
 
 #: pcbnew/tools/pcb_actions.cpp:865
 msgid "Load footprint from current board"
 msgstr "Wczytaj footprint z bieżącej płytki do edytora"
 
 #: pcbnew/tools/pcb_actions.cpp:871
-#, fuzzy
 msgid "Insert footprint into PCB"
-msgstr "Wstaw footprint na płytkę"
+msgstr "Umieść footprint na PCB"
 
 #: pcbnew/tools/pcb_actions.cpp:872
 msgid "Insert footprint into current board"
@@ -50681,9 +50521,8 @@ msgid "Change via size to previous pre-defined size"
 msgstr "Zmień rozmiar przelotki na poprzedni zdefiniowany rozmiar"
 
 #: pcbnew/tools/pcb_actions.cpp:1223
-#, fuzzy
 msgid "Automatically select track width"
-msgstr "Powiększ automatycznie by zmieścić"
+msgstr "Automatycznie wybierz szerokość ścieżki"
 
 #: pcbnew/tools/pcb_actions.cpp:1224
 msgid ""
@@ -50966,9 +50805,8 @@ msgid "Cycle between showing zone fills and just their outlines"
 msgstr "Przełącza pomiędzy pokazywaniem stref wypełnionych a zarysów stref"
 
 #: pcbnew/tools/pcb_actions.cpp:1602
-#, fuzzy
 msgid "Automatic zoom"
-msgstr "Automatycznie"
+msgstr "Powiększaj automatycznie"
 
 #: pcbnew/tools/pcb_actions.cpp:1603
 msgid "Automatic Zoom on footprint change"
@@ -51826,34 +51664,28 @@ msgid "DP Gap Constraints: %s"
 msgstr "Ograniczenia prześwitu pary różnicowej: min %s"
 
 #: pcbnew/tools/pcb_control.cpp:1878
-#, fuzzy
 msgid "Resolved Clearance"
-msgstr "Rozpoznany prześwit"
+msgstr "Przeanalizowany prześwit"
 
 #: pcbnew/tools/pcb_control.cpp:1888
-#, fuzzy
 msgid "Actual Clearance"
 msgstr "Obecny prześwit"
 
 #: pcbnew/tools/pcb_control.cpp:1931
-#, fuzzy
 msgid "Resolved Hole Clearance"
-msgstr "Rozpoznany prześwit otworu"
+msgstr "Przeanalizowany prześwit otworu"
 
 #: pcbnew/tools/pcb_control.cpp:1936
-#, fuzzy
 msgid "Actual Hole Clearance"
 msgstr "Obecny prześwit otworu"
 
 #: pcbnew/tools/pcb_control.cpp:1969
-#, fuzzy
 msgid "Resolved Edge Clearance"
-msgstr "Rozpoznany prześwit względem krawędzi"
+msgstr "Przeanalizowany prześwit względem krawędzi"
 
 #: pcbnew/tools/pcb_control.cpp:1974
-#, fuzzy
 msgid "Resolved Margin Clearance"
-msgstr "Rozpoznany prześwit względem marginesu"
+msgstr "Przeanalizowany prześwit względem marginesu"
 
 #: pcbnew/tools/pcb_control.cpp:1985
 msgid "Selected Items"
@@ -51864,9 +51696,8 @@ msgid "Selected 2D Length"
 msgstr "Długość zaznaczonego 2D"
 
 #: pcbnew/tools/pcb_control.cpp:2132
-#, fuzzy
 msgid "Selected 2D Copper Area"
-msgstr "Wybierz parę warstw sygnałowych"
+msgstr "Pole miedzi zaznaczonego 2D"
 
 #: pcbnew/tools/pcb_point_editor.cpp:2366
 msgid "Resize Table Cells"
@@ -52787,22 +52618,18 @@ msgid "Dimensions"
 msgstr "Wymiary"
 
 #: pcbnew/widgets/pcb_design_block_pane.cpp:44
-#, fuzzy
 msgid "Place as group"
-msgstr "Umieść przelotki"
+msgstr "Umieść jako grupę"
 
 #: pcbnew/widgets/pcb_design_block_pane.cpp:107
-#, fuzzy
 msgid "Place the design block as a group."
-msgstr "Umieszcza blok projektowy jako nowy arkusz."
+msgstr "Umieszcza blok projektowy jako grupę."
 
 #: pcbnew/widgets/pcb_design_block_pane.cpp:113
-#, fuzzy
 msgid ""
 "Preserve reference designators in the source layout. Otherwise, clear them."
 msgstr ""
-"Zachowaj oznaczenia w schemacie źródłowym. W przeciwnym wypadku wyczyść, a "
-"następnie ponownie ponumeruj zgodnie z ustawieniami."
+"Zachowaj oznaczenia z dokumentu źródłowego. W przeciwnym wypadku wyczyść."
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:122
 #: pcbnew/widgets/pcb_net_inspector_panel_data_model.h:708
@@ -52987,9 +52814,8 @@ msgid "No pads"
 msgstr "Bez pól lutowniczych"
 
 #: pcbnew/zone.cpp:858
-#, fuzzy
 msgid "No zone fills"
-msgstr "Unikaj stref wypełnień"
+msgstr "Bez stref wypełnień"
 
 #: pcbnew/zone.cpp:861
 msgid "No footprints"
@@ -53090,9 +52916,8 @@ msgid "Keep Out Pads"
 msgstr "Wyklucz pola lutownicze"
 
 #: pcbnew/zone.cpp:1925
-#, fuzzy
 msgid "Keep Out Zone Fills"
-msgstr "Unikaj stref wypełnień"
+msgstr "Wyklucz strefy wypełnień"
 
 #: pcbnew/zone.cpp:1931
 msgid "Keep Out Footprints"
@@ -53165,11 +52990,12 @@ msgstr "Usuwanie izolowanych obszarów miedzi..."
 #: pcbnew/zone_filler.cpp:889
 msgid "Prototype zone fill enabled. Disable setting and refill?"
 msgstr ""
+"Wypełnianie prototypowych stref włączone. Wyłączyć ustawienie i wypełnić "
+"ponownie?"
 
 #: pcbnew/zone_filler.cpp:891
-#, fuzzy
 msgid "Disable and refill"
-msgstr "Wyłącz antyaliasing"
+msgstr "Wyłącz i wypełnij ponownie"
 
 #: pcbnew/zone_filler.cpp:891 pcbnew/zone_filler.cpp:908
 msgid "Continue without Refill"
