@@ -45,16 +45,26 @@
 class TEST_SCH_GROUP_FIXTURE : public KI_TEST::SCHEMATIC_TEST_FIXTURE
 {
 public:
-    TEST_SCH_GROUP_FIXTURE() :
-            m_schematic( nullptr ),
-            m_screen( &m_schematic )
+    TEST_SCH_GROUP_FIXTURE()
     {
+        //m_schematic = SCHEMATIC( nullptr );
+        //m_screen = SCH_SCREEN( &m_schematic );
+    }
+
+    ~TEST_SCH_GROUP_FIXTURE() {}
+
+    void CreateTestSchematic()
+    {
+        m_schematic.Reset();
         m_manager.LoadProject( "" );
         m_schematic.SetProject( &m_manager.Prj() );
 
+        m_screen = new SCH_SCREEN( &m_schematic );
+
         m_sheet = new SCH_SHEET( &m_schematic );
+        m_sheet->SetScreen( m_screen );
+
         m_schematic.SetRoot( m_sheet );
-        m_sheet->SetScreen( &m_screen );
 
         m_parent_part = new LIB_SYMBOL( "parent_part", nullptr );
 
@@ -74,15 +84,20 @@ public:
 
         m_sch_pin = m_parent_symbol->GetPins( &path )[0];
 
-        m_screen.Append( m_parent_symbol );
+        m_screen->Append( m_parent_symbol );
     }
 
-    ~TEST_SCH_GROUP_FIXTURE() {}
+    wxFileName GetSchematicPath( const wxString& aRelativePath ) override
+    {
+        wxFileName fn( KI_TEST::GetEeschemaTestDataDir() );
 
-    ///< Dummy schematic to attach the test sheet to
-    SCHEMATIC m_schematic;
+        wxString path = fn.GetFullPath();
+        path += aRelativePath + wxT( "." ) + FILEEXT::KiCadSchematicFileExtension;
 
-    SCH_SCREEN m_screen;
+        return wxFileName( path );
+    }
+
+    SCH_SCREEN* m_screen;
 
     SCH_SHEET* m_sheet;
 
@@ -91,6 +106,14 @@ public:
 
     SCH_SYMBOL* m_parent_symbol;
     SCH_PIN*    m_sch_pin; // owned by m_parent_symbol, not us
+
+    void CreateGroup()
+    {
+        SCH_GROUP* group = new SCH_GROUP( m_screen );
+        group->AddItem( m_parent_symbol );
+
+        m_screen->Append( group );
+    }
 };
 
 /**
@@ -104,6 +127,8 @@ BOOST_FIXTURE_TEST_SUITE( SchGroup, TEST_SCH_GROUP_FIXTURE )
  */
 BOOST_AUTO_TEST_CASE( Default )
 {
+    CreateTestSchematic();
+
     //BOOST_CHECK_NOT_EQUAL( m_sheet.GetParent(), nullptr );
     BOOST_CHECK_EQUAL( m_sheet->IsRootSheet(), true );
     BOOST_CHECK_EQUAL( m_sheet->GetPosition(), VECTOR2I( 0, 0 ) );
@@ -118,10 +143,29 @@ BOOST_AUTO_TEST_CASE( Default )
  */
 BOOST_AUTO_TEST_CASE( CreateGroup )
 {
-    SCH_GROUP* group = new SCH_GROUP( &m_screen );
+    CreateTestSchematic();
+
+    SCH_GROUP* group = new SCH_GROUP( m_screen );
     group->AddItem( m_parent_symbol );
 
-    m_screen.Append( group );
+    m_screen->Append( group );
+
+    EE_RTREE::EE_TYPE groups = m_screen->Items().OfType( SCH_GROUP_T );
+    BOOST_CHECK_EQUAL( std::distance( groups.begin(), groups.end() ), 1 );
+}
+
+BOOST_AUTO_TEST_CASE( LoadSchGroups )
+{
+    LoadSchematic( "groups_load_save" );
+
+    EE_RTREE::EE_TYPE groups = m_schematic.RootScreen()->Items().OfType( SCH_GROUP_T );
+
+    BOOST_CHECK_EQUAL( std::distance( groups.begin(), groups.end() ), 1 );
+
+    SCH_GROUP* group = static_cast<SCH_GROUP*>( *groups.begin() );
+    BOOST_CHECK_EQUAL( group->GetName(), "GroupName" );
+
+    BOOST_CHECK_EQUAL( group->GetItems().size(), 2 );
 }
 
 BOOST_AUTO_TEST_SUITE_END()

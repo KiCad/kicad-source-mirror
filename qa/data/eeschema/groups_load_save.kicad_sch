@@ -1,0 +1,52 @@
+(kicad_sch
+	(version 20250318)
+	(generator "eeschema")
+	(generator_version "9.99")
+	(uuid "dc4e6eda-4f87-40c6-86c6-c3830d80faf8")
+	(paper "A4")
+	(lib_symbols)
+	(rectangle
+		(start 110.744 72.136)
+		(end 124.714 86.106)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(fill
+			(type none)
+		)
+		(uuid 7e1da7e2-473f-48bf-b7bf-2eb79e1b1372)
+	)
+	(rectangle
+		(start 129.794 68.326)
+		(end 137.414 94.996)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(fill
+			(type none)
+		)
+		(uuid d26fc350-11e5-4917-ba78-4e25070d7aa8)
+	)
+	(text "Simple group of two items"
+		(exclude_from_sim no)
+		(at 120.65 60.96 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "bfdd127d-4457-4d05-a54c-21640a0097fe")
+	)
+	(group "GroupName"
+		(uuid "7267eac2-0eb2-494a-bc81-61295bcdf08c")
+		(members "7e1da7e2-473f-48bf-b7bf-2eb79e1b1372" "d26fc350-11e5-4917-ba78-4e25070d7aa8")
+	)
+	(sheet_instances
+		(path "/"
+			(page "1")
+		)
+	)
+	(embedded_fonts no)
+)
