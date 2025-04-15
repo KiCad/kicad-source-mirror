@@ -61,6 +61,7 @@ private:
     void OnUpdateUI( wxUpdateUIEvent &event ) override;
     void OnNetclassGridCellChanging( wxGridEvent& event );
     void OnNetclassGridMouseEvent( wxMouseEvent& event );
+    void OnNetclassAssignmentSort( wxGridEvent& event );
 
     void onUnitsChanged( wxCommandEvent& aEvent );
 
@@ -95,6 +96,9 @@ private:
 
     std::bitset<64>       m_shownColumns;
     int                   m_lastNetclassGridWidth;
+
+    bool                  m_sortAsc;
+    int                   m_sortCol;
 };
 
 #endif //PANEL_SETUP_NETCLASSES_H
