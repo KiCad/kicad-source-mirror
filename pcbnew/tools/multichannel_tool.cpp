@@ -754,6 +754,7 @@ bool MULTICHANNEL_TOOL::copyRuleAreaContents( TMATCH::COMPONENT_MATCHES& aMatche
             }
             copied->Move( disp );
             copied->SetParentGroup( nullptr );
+            const_cast<KIID&>( copied->m_Uuid ) = KIID();
             aGroupableItems.insert( copied );
             aCommit->Add( copied );
         }
@@ -864,6 +865,7 @@ bool MULTICHANNEL_TOOL::copyRuleAreaContents( TMATCH::COMPONENT_MATCHES& aMatche
             {
                 copied->ClearFlags();
                 copied->SetParentGroup( nullptr );
+                const_cast<KIID&>( copied->m_Uuid ) = KIID();
                 copied->Move( disp );
                 aGroupableItems.insert( copied );
                 aCommit->Add( copied );
