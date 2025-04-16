@@ -169,7 +169,9 @@ std::optional<TOOLBAR_CONFIGURATION> SCH_EDIT_TOOLBAR_SETTINGS::DefaultToolbarCo
               .AppendAction( SCH_ACTIONS::rotateCCW )
               .AppendAction( SCH_ACTIONS::rotateCW )
               .AppendAction( SCH_ACTIONS::mirrorV )
-              .AppendAction( SCH_ACTIONS::mirrorH );
+              .AppendAction( SCH_ACTIONS::mirrorH )
+              .AppendAction( ACTIONS::group )
+              .AppendAction( ACTIONS::ungroup );
 
         config.AppendSeparator()
               .AppendAction( ACTIONS::showSymbolEditor )

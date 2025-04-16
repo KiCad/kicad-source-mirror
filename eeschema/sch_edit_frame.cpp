@@ -653,6 +653,8 @@ void SCH_EDIT_FRAME::setupUIConditions()
     mgr->SetConditions( SCH_ACTIONS::rotateCCW,       ENABLE( hasElements ) );
     mgr->SetConditions( SCH_ACTIONS::mirrorH,         ENABLE( hasElements ) );
     mgr->SetConditions( SCH_ACTIONS::mirrorV,         ENABLE( hasElements ) );
+    mgr->SetConditions( ACTIONS::group,               ENABLE( SELECTION_CONDITIONS::NotEmpty ) );
+    mgr->SetConditions( ACTIONS::ungroup,             ENABLE( SELECTION_CONDITIONS::HasType( SCH_GROUP_T ) ) );
 
     mgr->SetConditions( ACTIONS::zoomTool,            CHECK( cond.CurrentTool( ACTIONS::zoomTool ) ) );
     mgr->SetConditions( ACTIONS::selectionTool,       CHECK( cond.CurrentTool( ACTIONS::selectionTool ) ) );
