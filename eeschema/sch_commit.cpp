@@ -262,6 +262,12 @@ void SCH_COMMIT::pushSchEdit( const wxString& aMessage, int aCommitFlags )
         {
         case CHT_ADD:
         {
+            if( selTool && selTool->GetEnteredGroup() && !schItem->GetParentGroup()
+                && SCH_GROUP::IsGroupableType( schItem->Type() ) )
+            {
+                selTool->GetEnteredGroup()->AddItem( schItem );
+            }
+
             updateConnectivityFlag();
 
             if( !( aCommitFlags & SKIP_UNDO ) )

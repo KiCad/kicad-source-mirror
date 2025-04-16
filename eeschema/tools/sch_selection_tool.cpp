@@ -3088,7 +3088,10 @@ void SCH_SELECTION_TOOL::ClearSelection( bool aQuietMode )
 
 void SCH_SELECTION_TOOL::select( EDA_ITEM* aItem )
 {
-    if( m_enteredGroup && !SCH_GROUP::WithinScope( static_cast<SCH_ITEM*>( aItem ), m_enteredGroup, m_isSymbolEditor ) )
+    // Don't group when we select new items, the schematic editor selects all new items for moving.
+    // The PCB editor doesn't need this logic because it doesn't select new items for moving.
+    if( m_enteredGroup && !aItem->IsNew()
+        && !SCH_GROUP::WithinScope( static_cast<SCH_ITEM*>( aItem ), m_enteredGroup, m_isSymbolEditor ) )
     {
         ExitGroup();
     }

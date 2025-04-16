@@ -90,6 +90,12 @@ SCH_LINE::SCH_LINE( const SCH_LINE& aLine ) :
     m_lastResolvedColor = aLine.m_lastResolvedColor;
 
     m_operatingPoint = aLine.m_operatingPoint;
+
+    // Don't apply groups to cloned lines. We have too many areas where we clone them
+    // temporarily, then modify/split/join them in the line movement routines after the
+    // segments are committed. Rely on the commit framework to add the lines to the
+    // entered group as appropriate.
+    m_group = nullptr;
 }
 
 

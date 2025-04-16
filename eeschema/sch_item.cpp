@@ -27,6 +27,7 @@
 #include <eeschema_settings.h>
 #include <eda_item.h>
 #include <sch_connection.h>
+#include <sch_group.h>
 #include <sch_item.h>
 #include <sch_screen.h>
 #include <sch_sheet_path.h>
@@ -134,6 +135,9 @@ SCH_ITEM* SCH_ITEM::Duplicate( bool doClone ) const
 
     if( !doClone )
         const_cast<KIID&>( newItem->m_Uuid ) = KIID();
+
+    if( newItem->GetParentGroup() )
+        newItem->GetParentGroup()->AddItem( newItem );
 
     newItem->ClearFlags( SELECTED | BRIGHTENED );
 
