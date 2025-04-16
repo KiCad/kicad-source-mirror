@@ -641,7 +641,6 @@ GR_TEXT_V_ALIGN_T SCH_FIELD::GetEffectiveVertJustify() const
 bool SCH_FIELD::Matches( const EDA_SEARCH_DATA& aSearchData, void* aAuxData ) const
 {
     bool searchHiddenFields = aSearchData.searchAllFields;
-    bool searchMetadata = aSearchData.searchMetadata;
     bool searchAndReplace = aSearchData.searchAndReplace;
     bool replaceReferences = false;
 
