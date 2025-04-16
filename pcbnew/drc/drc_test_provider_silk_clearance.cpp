@@ -84,7 +84,7 @@ bool DRC_TEST_PROVIDER_SILK_CLEARANCE::Run()
     bool checkIndividualMaskItems = m_board->GetDesignSettings().m_SolderMaskMinWidth <= 0;
 
     if( m_drcEngine->IsErrorLimitExceeded( DRCE_OVERLAPPING_SILK )
-            && ( m_drcEngine->IsErrorLimitExceeded( DRCE_SILK_MASK_CLEARANCE) || !checkIndividualMaskItems ) )
+            && m_drcEngine->IsErrorLimitExceeded( DRCE_SILK_MASK_CLEARANCE) )
     {
         return true;    // continue with other tests
     }
@@ -188,8 +188,8 @@ bool DRC_TEST_PROVIDER_SILK_CLEARANCE::Run()
 
                 std::shared_ptr<SHAPE> hole;
 
-                if( ( m_drcEngine->IsErrorLimitExceeded( DRCE_SILK_MASK_CLEARANCE) || !checkIndividualMaskItems )
-                        && m_drcEngine->IsErrorLimitExceeded( DRCE_OVERLAPPING_SILK ) )
+                if( m_drcEngine->IsErrorLimitExceeded( DRCE_OVERLAPPING_SILK )
+                        && m_drcEngine->IsErrorLimitExceeded( DRCE_SILK_MASK_CLEARANCE ) )
                 {
                     return false;
                 }
@@ -226,7 +226,7 @@ bool DRC_TEST_PROVIDER_SILK_CLEARANCE::Run()
                     errorCode = DRCE_SILK_MASK_CLEARANCE;
                 }
 
-                if( minClearance < 0 )
+                if( minClearance < 0 || m_drcEngine->IsErrorLimitExceeded( errorCode ) )
                     return true;
 
                 int      actual;
