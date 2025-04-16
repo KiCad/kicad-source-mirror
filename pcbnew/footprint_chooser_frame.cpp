@@ -128,7 +128,7 @@ FOOTPRINT_CHOOSER_FRAME::FOOTPRINT_CHOOSER_FRAME( KIWAY* aKiway, wxWindow* aPare
     frameSizer->Add( m_chooserPanel, 1, wxEXPAND );
 
     SetCanvas( m_chooserPanel->GetViewerPanel()->GetPreviewPanel()->GetCanvas() );
-    SetBoard( new BOARD() );
+    SetBoard( m_chooserPanel->GetViewerPanel()->GetPreviewPanel()->GetBoard() );
 
     // This board will only be used to hold a footprint for viewing
     GetBoard()->SetBoardUse( BOARD_USE::FPHOLDER );
@@ -236,6 +236,9 @@ FOOTPRINT_CHOOSER_FRAME::~FOOTPRINT_CHOOSER_FRAME()
     m_preview3DCanvas->Show();
     m_preview3DCanvas->OnCloseWindow( dummy );
 
+    // Disconnect board, which is owned by FOOTPRINT_PREVIEW_PANEL.
+    m_pcb = nullptr;
+
     // Disconnect Events
     m_grButton3DView->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED,
                                   wxCommandEventHandler( FOOTPRINT_CHOOSER_FRAME::on3DviewReq ),
@@ -302,8 +305,7 @@ void FOOTPRINT_CHOOSER_FRAME::Show3DViewerFrame()
 }
 
 
-void FOOTPRINT_CHOOSER_FRAME::Update3DView( bool aMarkDirty,
-                                            bool aRefresh, const wxString* aTitle )
+void FOOTPRINT_CHOOSER_FRAME::Update3DView( bool aMarkDirty, bool aRefresh, const wxString* aTitle )
 {
     LIB_ID fpID = m_chooserPanel->GetSelectedLibId();
     wxString footprintName;
