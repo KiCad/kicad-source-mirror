@@ -2108,25 +2108,6 @@ int DRAWING_TOOL::SetAnchor( const TOOL_EVENT& aEvent )
 }
 
 
-int DRAWING_TOOL::ToggleHV45Mode( const TOOL_EVENT& toolEvent )
-{
-#define TOGGLE( a ) a = !a
-
-    SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
-
-    if( frame()->IsType( FRAME_PCB_EDITOR ) )
-        TOGGLE( mgr.GetAppSettings<PCBNEW_SETTINGS>( "pcbnew" )->m_Use45DegreeLimit );
-    else
-        TOGGLE( mgr.GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>( "fpedit" )->m_Use45Limit );
-
-    UpdateStatusBar();
-
-    return 0;
-
-#undef TOGGLE
-}
-
-
 /**
  * Update a #PCB_SHAPE from the current state of a #TWO_POINT_GEOMETRY_MANAGER.
  */
@@ -4165,8 +4146,6 @@ void DRAWING_TOOL::setTransitions()
     Go( &DRAWING_TOOL::DrawRectangle,         PCB_ACTIONS::drawTextBox.MakeEvent() );
     Go( &DRAWING_TOOL::PlaceImportedGraphics, PCB_ACTIONS::placeImportedGraphics.MakeEvent() );
     Go( &DRAWING_TOOL::SetAnchor,             PCB_ACTIONS::setAnchor.MakeEvent() );
-
-    Go( &DRAWING_TOOL::ToggleHV45Mode,        PCB_ACTIONS::toggleHV45Mode.MakeEvent() );
 
     Go( &DRAWING_TOOL::PlaceTuningPattern,    PCB_ACTIONS::tuneSingleTrack.MakeEvent() );
     Go( &DRAWING_TOOL::PlaceTuningPattern,    PCB_ACTIONS::tuneDiffPair.MakeEvent() );
