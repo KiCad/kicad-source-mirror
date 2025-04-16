@@ -620,11 +620,13 @@ void FIELDS_EDITOR_GRID_DATA_MODEL::RebuildRows()
 
     m_rows.clear();
 
+    EDA_COMBINED_MATCHER matcher( m_filter.Lower(), CTX_SEARCH );
+
     for( unsigned i = 0; i < m_symbolsList.GetCount(); ++i )
     {
         SCH_REFERENCE ref = m_symbolsList[i];
 
-        if( !m_filter.IsEmpty() && !WildCompareString( m_filter, ref.GetFullRef(), false ) )
+        if( !m_filter.IsEmpty() && !matcher.Find( ref.GetFullRef().Lower() ) )
             continue;
 
         if( m_excludeDNP && ( ref.GetSymbol()->GetDNP()
