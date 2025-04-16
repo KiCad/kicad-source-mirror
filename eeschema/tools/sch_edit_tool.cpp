@@ -1630,7 +1630,8 @@ static std::vector<KICAD_T> deletableItems =
     SCH_SHEET_PIN_T,
     SCH_SYMBOL_T,
     SCH_FIELD_T,        // Will be hidden
-    SCH_BITMAP_T
+    SCH_BITMAP_T,
+    SCH_GROUP_T
 };
 
 
@@ -1696,6 +1697,27 @@ int SCH_EDIT_TOOL::DoDelete( const TOOL_EVENT& aEvent )
         {
             sch_item->SetFlags( STRUCT_DELETED );
             commit.Remove( item, m_frame->GetScreen() );
+        }
+        else if( sch_item->Type() == SCH_GROUP_T )
+        {
+            // Groups need to have all children ungrouped, then deleted
+            sch_item->RunOnChildren(
+                    [&]( SCH_ITEM* aChild )
+                    {
+                        commit.Stage( aChild, CHT_UNGROUP, m_frame->GetScreen() );
+                    },
+                    RECURSE_MODE::RECURSE );
+
+            sch_item->RunOnChildren(
+                    [&]( SCH_ITEM* aChild )
+                    {
+                        aChild->SetFlags( STRUCT_DELETED );
+                        commit.Remove( aChild, m_frame->GetScreen() );
+                    },
+                    RECURSE_MODE::RECURSE );
+
+            sch_item->SetFlags( STRUCT_DELETED );
+            commit.Remove( sch_item, m_frame->GetScreen() );
         }
         else
         {
