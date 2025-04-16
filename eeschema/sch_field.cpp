@@ -678,7 +678,7 @@ bool SCH_FIELD::Matches( const EDA_SEARCH_DATA& aSearchData, void* aAuxData ) co
 
         // Take sheet path into account which effects the reference field and the unit for
         // symbols with multiple parts.
-        if( parentSymbol && aAuxData )
+        if( aAuxData )
         {
             SCH_SHEET_PATH* sheet = (SCH_SHEET_PATH*) aAuxData;
             text = parentSymbol->GetRef( sheet );
@@ -883,12 +883,16 @@ void SCH_FIELD::Rotate( const VECTOR2I& aCenter, bool aRotateCCW )
                 SetHorizJustify( GR_TEXT_H_ALIGN_RIGHT );
 
             break;
+
         case GR_TEXT_H_ALIGN_RIGHT:
             if( aRotateCCW )
                 SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
+
             break;
+
         case GR_TEXT_H_ALIGN_CENTER:
-        case GR_TEXT_H_ALIGN_INDETERMINATE: break;
+        case GR_TEXT_H_ALIGN_INDETERMINATE:
+            break;
         }
 
         SetTextAngle( ANGLE_HORIZONTAL );
@@ -900,23 +904,26 @@ void SCH_FIELD::Rotate( const VECTOR2I& aCenter, bool aRotateCCW )
         case GR_TEXT_H_ALIGN_LEFT:
             if( !aRotateCCW )
                 SetHorizJustify( GR_TEXT_H_ALIGN_RIGHT );
+
             break;
+
         case GR_TEXT_H_ALIGN_RIGHT:
             if( !aRotateCCW )
                 SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
+
             break;
+
         case GR_TEXT_H_ALIGN_CENTER:
-        case GR_TEXT_H_ALIGN_INDETERMINATE: break;
+        case GR_TEXT_H_ALIGN_INDETERMINATE:
+            break;
         }
 
         SetTextAngle( ANGLE_VERTICAL );
     }
     else
     {
-        wxASSERT_MSG(
-                false,
-                wxString::Format( wxT( "SCH_FIELD text angle is not horizontal or vertical: %d" ),
-                                  GetTextAngle().AsDegrees() ) );
+        wxASSERT_MSG( false, wxString::Format( wxT( "SCH_FIELD text angle is not horizontal or vertical: %d" ),
+                                               GetTextAngle().AsDegrees() ) );
     }
 
     VECTOR2I pt = GetPosition();
