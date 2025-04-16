@@ -54,6 +54,9 @@ CVPCB_SETTINGS::CVPCB_SETTINGS() :
     m_params.emplace_back( new PARAM<bool>( "footprint_viewer.autozoom",
                                             &m_FootprintViewerAutoZoomOnSelect, true ) );
 
+    m_params.emplace_back( new PARAM<bool>( "footprint_viewer.use_45_limit",
+            &m_ViewersDisplay.m_Use45Limit, true ) );
+
     m_params.emplace_back( new PARAM<bool>( "footprint_viewer.show_pad_fill",
             &m_ViewersDisplay.m_DisplayPadFill, true ) );
 

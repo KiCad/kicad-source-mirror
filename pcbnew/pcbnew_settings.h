@@ -110,6 +110,7 @@ class PCB_VIEWERS_SETTINGS_BASE : public APP_SETTINGS_BASE
 public:
     struct VIEWERS_DISPLAY_OPTIONS
     {
+        bool    m_Use45Limit;
         bool    m_DisplayGraphicsFill;
         bool    m_DisplayTextFill;
         bool    m_DisplayPadNumbers;
