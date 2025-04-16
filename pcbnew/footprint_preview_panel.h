@@ -54,23 +54,23 @@ public:
 
     virtual ~FOOTPRINT_PREVIEW_PANEL( );
 
-    virtual void SetUserUnits( EDA_UNITS aUnits ) override { m_userUnits = aUnits; }
-    virtual void SetPinFunctions( const std::map<wxString, wxString>& aPinFunctions ) override
+    void SetUserUnits( EDA_UNITS aUnits ) override { m_userUnits = aUnits; }
+    void SetPinFunctions( const std::map<wxString, wxString>& aPinFunctions ) override
     {
         m_pinFunctions = aPinFunctions;
     }
 
-    virtual bool DisplayFootprint( const LIB_ID& aFPID ) override;
-    virtual void DisplayFootprints( std::shared_ptr<FOOTPRINT> aFootprintA,
-                                    std::shared_ptr<FOOTPRINT> aFootprintB ) override;
+    bool DisplayFootprint( const LIB_ID& aFPID ) override;
+    void DisplayFootprints( std::shared_ptr<FOOTPRINT> aFootprintA,
+                            std::shared_ptr<FOOTPRINT> aFootprintB ) override;
 
-    virtual const KIGFX::COLOR4D& GetBackgroundColor() const override;
-    virtual const KIGFX::COLOR4D& GetForegroundColor() const override;
+    const KIGFX::COLOR4D& GetBackgroundColor() const override;
+    const KIGFX::COLOR4D& GetForegroundColor() const override;
 
-    virtual EDA_DRAW_PANEL_GAL* GetCanvas() override { return this; };
-    BOARD* GetBoard() { return m_dummyBoard.get(); }
+    EDA_DRAW_PANEL_GAL* GetCanvas() override { return this; };
+    BOARD* GetBoard() override { return m_dummyBoard.get(); }
 
-    virtual void RefreshAll() override;
+    void RefreshAll() override;
 
     static FOOTPRINT_PREVIEW_PANEL* New( KIWAY* aKiway, wxWindow* aParent,
                                          UNITS_PROVIDER* aUnitsProvider );
