@@ -33,6 +33,7 @@
 #include <sch_actions.h>
 #include <sch_commit.h>
 #include <eda_item.h>
+#include <sch_group.h>
 #include <sch_item.h>
 #include <sch_symbol.h>
 #include <sch_sheet.h>

@@ -2199,6 +2199,24 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
 
     // Now clear the previous selection, select the pasted items, and fire up the "move" tool.
     m_toolMgr->RunAction( ACTIONS::selectionClear );
+
+    // If the item has a parent group, it will be part of the loadedItems, and will handle
+    // the move action. Iterate backwards to avoid invalidating the iterator.
+    for( int i = loadedItems.size() - 1; i >= 0; i-- )
+    {
+        EDA_ITEM* item = loadedItems[i];
+
+        if( item->GetParentGroup() )
+        {
+            loadedItems.erase( loadedItems.begin() + i );
+            // These were hidden before because they would be added to the move preview,
+            // but now they need to be shown as a preview so they appear to move when
+            // the group moves.
+            getView()->SetVisible( item );
+            getView()->AddToPreview( item, false );
+        }
+    }
+
     m_toolMgr->RunAction<EDA_ITEMS*>( ACTIONS::selectItems, &loadedItems );
 
     SCH_SELECTION& selection = selTool->GetSelection();
@@ -2317,6 +2335,8 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
         {
             commit.Revert();
         }
+
+        getView()->ClearPreview();
     }
 
     return 0;
