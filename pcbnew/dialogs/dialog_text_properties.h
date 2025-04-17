@@ -56,7 +56,7 @@ private:
     void onAlignButton( wxCommandEvent &aEvent ) override;
     void onValignButton( wxCommandEvent &aEvent ) override;
     void onThickness( wxCommandEvent &aEvent ) override;
-    void updateTextThickness( wxCommandEvent &aEvent ) override;
+    void updateTextThickness( wxCommandEvent& aEvent ) override;
 
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;

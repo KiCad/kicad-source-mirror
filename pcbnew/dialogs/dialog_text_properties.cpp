@@ -202,6 +202,8 @@ DIALOG_TEXT_PROPERTIES::DIALOG_TEXT_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, PC
     m_mirrored->SetIsCheckButton();
     m_mirrored->SetBitmap( KiBitmapBundle( BITMAPS::text_mirrored ) );
 
+    m_adjustTextThickness->SetBitmap( KiBitmapBundle( BITMAPS::refresh ) );
+
     SetTitle( title );
     m_hash_key = title;
 
@@ -369,7 +371,7 @@ void DIALOG_TEXT_PROPERTIES::onFontSelected( wxCommandEvent & aEvent )
     if( KIFONT::FONT::IsStroke( aEvent.GetString() ) )
     {
         m_thickness.Show( true );
-        m_buttonUpdateTh->Show( true );
+        m_adjustTextThickness->Show( true );
 
         int textSize = std::min( m_textWidth.GetValue(), m_textHeight.GetValue() );
         int thickness = m_thickness.GetValue();
@@ -380,7 +382,7 @@ void DIALOG_TEXT_PROPERTIES::onFontSelected( wxCommandEvent & aEvent )
     else
     {
         m_thickness.Show( false );
-        m_buttonUpdateTh->Show( false );
+        m_adjustTextThickness->Show( false );
     }
 }
 

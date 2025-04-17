@@ -99,12 +99,24 @@ DIALOG_TABLECELL_PROPERTIES::DIALOG_TABLECELL_PROPERTIES( PCB_BASE_EDIT_FRAME* a
     m_hAlignRight->SetIsRadioButton();
     m_hAlignRight->SetBitmap( KiBitmapBundle( BITMAPS::text_align_right ) );
 
+    m_separator0->SetIsSeparator();
+
     m_vAlignTop->SetIsRadioButton();
     m_vAlignTop->SetBitmap( KiBitmapBundle( BITMAPS::text_valign_top ) );
     m_vAlignCenter->SetIsRadioButton();
     m_vAlignCenter->SetBitmap( KiBitmapBundle( BITMAPS::text_valign_center ) );
     m_vAlignBottom->SetIsRadioButton();
     m_vAlignBottom->SetBitmap( KiBitmapBundle( BITMAPS::text_valign_bottom ) );
+
+    m_separator1->SetIsSeparator();
+
+    m_bold->SetIsCheckButton();
+    m_bold->SetBitmap( KiBitmapBundle( BITMAPS::text_bold ) );
+    m_italic->SetIsCheckButton();
+    m_italic->SetBitmap( KiBitmapBundle( BITMAPS::text_italic ) );
+
+    m_adjustTextThickness->SetIsRadioButton();
+    m_adjustTextThickness->SetBitmap( KiBitmapBundle( BITMAPS::refresh ) );
 
     SetupStandardButtons();
     Layout();
@@ -151,9 +163,6 @@ bool DIALOG_TABLECELL_PROPERTIES::TransferDataToWindow()
             m_textHeight.SetValue( cell->GetTextHeight() );
             m_textThickness.SetValue( cell->GetTextThickness() );
 
-            m_bold->Set3StateValue( cell->IsBold() ? wxCHK_CHECKED : wxCHK_UNCHECKED );
-            m_italic->Set3StateValue( cell->IsItalic() ? wxCHK_CHECKED : wxCHK_UNCHECKED );
-
             hAlign = cell->GetHorizJustify();
             vAlign = cell->GetVertJustify();
 
@@ -161,6 +170,12 @@ bool DIALOG_TABLECELL_PROPERTIES::TransferDataToWindow()
             m_marginTop.SetValue( cell->GetMarginTop() );
             m_marginRight.SetValue( cell->GetMarginRight() );
             m_marginBottom.SetValue( cell->GetMarginBottom() );
+
+            // wxCheckBoxState bold = cell->IsBold() ? wxCHK_CHECKED : wxCHK_UNCHECKED;
+            m_bold->Check( cell->IsBold() );
+
+            // wxCheckBoxState italic = cell->IsItalic() ? wxCHK_CHECKED : wxCHK_UNCHECKED;
+            m_italic->Check( cell->IsItalic() );
 
             firstCell = false;
         }
@@ -177,16 +192,6 @@ bool DIALOG_TABLECELL_PROPERTIES::TransferDataToWindow()
 
             if( cell->GetTextThickness() != m_textThickness.GetValue() )
                 m_textThickness.SetValue( INDETERMINATE_STATE );
-
-            wxCheckBoxState bold = cell->IsBold() ? wxCHK_CHECKED : wxCHK_UNCHECKED;
-
-            if( bold != m_bold->Get3StateValue() )
-                m_bold->Set3StateValue( wxCHK_UNDETERMINED );
-
-            wxCheckBoxState italic = cell->IsItalic() ? wxCHK_CHECKED : wxCHK_UNCHECKED;
-
-            if( italic != m_italic->Get3StateValue() )
-                m_italic->Set3StateValue( wxCHK_UNDETERMINED );
 
             if( cell->GetHorizJustify() != hAlign )
                 hAlign = GR_TEXT_H_ALIGN_INDETERMINATE;
@@ -225,6 +230,32 @@ bool DIALOG_TABLECELL_PROPERTIES::TransferDataToWindow()
     }
 
     return true;
+}
+
+void DIALOG_TABLECELL_PROPERTIES::onBoldToggle( wxCommandEvent& aEvent )
+{
+    int textSize = std::min( m_textWidth.GetValue(), m_textHeight.GetValue() );
+
+    if( aEvent.IsChecked() )
+        m_textThickness.ChangeValue( GetPenSizeForBold( textSize ) );
+    else
+        m_textThickness.ChangeValue( GetPenSizeForNormal( textSize ) );
+
+    aEvent.Skip();
+}
+
+void DIALOG_TABLECELL_PROPERTIES::onAdjustTextThickness( wxCommandEvent& aEvent )
+{
+    int textSize = std::min( m_textWidth.GetValue(), m_textHeight.GetValue() );
+    int thickness;
+
+    // Calculate the "best" thickness from text size and bold option:
+    if( m_bold->IsChecked() )
+        thickness = GetPenSizeForBold( textSize );
+    else
+        thickness = GetPenSizeForNormal( textSize );
+
+    m_textThickness.SetValue( thickness );
 }
 
 
@@ -281,15 +312,8 @@ bool DIALOG_TABLECELL_PROPERTIES::TransferDataFromWindow()
 
         cell->SetText( txt );
 
-        if( m_bold->Get3StateValue() == wxCHK_CHECKED )
-            cell->SetBold( true );
-        else if( m_bold->Get3StateValue() == wxCHK_UNCHECKED )
-            cell->SetBold( false );
-
-        if( m_italic->Get3StateValue() == wxCHK_CHECKED )
-            cell->SetItalic( true );
-        else if( m_italic->Get3StateValue() == wxCHK_UNCHECKED )
-            cell->SetItalic( false );
+        cell->SetBold( m_bold->IsChecked() );
+        cell->SetItalic( m_italic->IsChecked() );
 
         if( m_fontCtrl->HaveFontSelection() )
             cell->SetFont( m_fontCtrl->GetFontSelection( cell->IsBold(), cell->IsItalic() ) );

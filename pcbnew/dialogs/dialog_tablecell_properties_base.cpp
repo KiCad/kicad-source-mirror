@@ -78,69 +78,6 @@ DIALOG_TABLECELL_PROPERTIES_BASE::DIALOG_TABLECELL_PROPERTIES_BASE( wxWindow* pa
 	wxBoxSizer* bMargins;
 	bMargins = new wxBoxSizer( wxVERTICAL );
 
-	wxFlexGridSizer* fgTextStyleSizer;
-	fgTextStyleSizer = new wxFlexGridSizer( 0, 2, 5, 5 );
-	fgTextStyleSizer->SetFlexibleDirection( wxBOTH );
-	fgTextStyleSizer->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
-
-	wxStaticText* hAlignLabel;
-	hAlignLabel = new wxStaticText( this, wxID_ANY, _("Horizontal alignment:"), wxDefaultPosition, wxDefaultSize, 0 );
-	hAlignLabel->Wrap( -1 );
-	hAlignLabel->SetToolTip( _("Horizontal alignment") );
-
-	fgTextStyleSizer->Add( hAlignLabel, 0, wxALIGN_CENTER_VERTICAL, 5 );
-
-	wxBoxSizer* hAlignButtons;
-	hAlignButtons = new wxBoxSizer( wxHORIZONTAL );
-
-	m_hAlignLeft = new BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|wxBORDER_NONE );
-	m_hAlignLeft->SetToolTip( _("Align left") );
-
-	hAlignButtons->Add( m_hAlignLeft, 0, wxALIGN_CENTER_VERTICAL, 5 );
-
-	m_hAlignCenter = new BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|wxBORDER_NONE );
-	m_hAlignCenter->SetToolTip( _("Align horizontal center") );
-
-	hAlignButtons->Add( m_hAlignCenter, 0, wxALIGN_CENTER_VERTICAL, 5 );
-
-	m_hAlignRight = new BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|wxBORDER_NONE );
-	m_hAlignRight->SetToolTip( _("Align right") );
-
-	hAlignButtons->Add( m_hAlignRight, 0, wxALIGN_CENTER_VERTICAL, 5 );
-
-
-	fgTextStyleSizer->Add( hAlignButtons, 0, wxALIGN_CENTER_VERTICAL, 5 );
-
-	vAlignLabel = new wxStaticText( this, wxID_ANY, _("Vertical alignment:"), wxDefaultPosition, wxDefaultSize, 0 );
-	vAlignLabel->Wrap( -1 );
-	vAlignLabel->SetToolTip( _("Vertical alignment") );
-
-	fgTextStyleSizer->Add( vAlignLabel, 0, wxALIGN_CENTER_VERTICAL, 5 );
-
-	wxBoxSizer* vAlignButtons;
-	vAlignButtons = new wxBoxSizer( wxHORIZONTAL );
-
-	m_vAlignTop = new BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|wxBORDER_NONE );
-	m_vAlignTop->SetToolTip( _("Align top") );
-
-	vAlignButtons->Add( m_vAlignTop, 0, wxALIGN_CENTER_VERTICAL, 5 );
-
-	m_vAlignCenter = new BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|wxBORDER_NONE );
-	m_vAlignCenter->SetToolTip( _("Align vertical center") );
-
-	vAlignButtons->Add( m_vAlignCenter, 0, wxALIGN_CENTER_VERTICAL, 5 );
-
-	m_vAlignBottom = new BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|wxBORDER_NONE );
-	m_vAlignBottom->SetToolTip( _("Align bottom") );
-
-	vAlignButtons->Add( m_vAlignBottom, 0, wxALIGN_CENTER_VERTICAL, 5 );
-
-
-	fgTextStyleSizer->Add( vAlignButtons, 0, wxALIGN_CENTER_VERTICAL, 5 );
-
-
-	bMargins->Add( fgTextStyleSizer, 0, wxEXPAND, 5 );
-
 	wxGridBagSizer* gbFontSizer;
 	gbFontSizer = new wxGridBagSizer( 3, 5 );
 	gbFontSizer->SetFlexibleDirection( wxBOTH );
@@ -157,26 +94,70 @@ DIALOG_TABLECELL_PROPERTIES_BASE::DIALOG_TABLECELL_PROPERTIES_BASE( wxWindow* pa
 	m_fontCtrl->SetSelection( 0 );
 	gbFontSizer->Add( m_fontCtrl, wxGBPosition( 1, 1 ), wxGBSpan( 1, 3 ), wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
 
-	m_styleLabel = new wxStaticText( this, wxID_ANY, _("Style:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_styleLabel->Wrap( -1 );
-	gbFontSizer->Add( m_styleLabel, wxGBPosition( 2, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxTOP, 6 );
-
-	wxBoxSizer* bSizer14;
-	bSizer14 = new wxBoxSizer( wxHORIZONTAL );
-
-	m_bold = new wxCheckBox( this, wxID_ANY, _("Bold"), wxDefaultPosition, wxDefaultSize, wxCHK_3STATE|wxCHK_ALLOW_3RD_STATE_FOR_USER );
-	bSizer14->Add( m_bold, 0, wxALIGN_CENTER_VERTICAL, 5 );
-
-	m_italic = new wxCheckBox( this, wxID_ANY, _("Italic"), wxDefaultPosition, wxDefaultSize, wxCHK_3STATE|wxCHK_ALLOW_3RD_STATE_FOR_USER );
-	bSizer14->Add( m_italic, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 45 );
-
-
-	gbFontSizer->Add( bSizer14, wxGBPosition( 2, 1 ), wxGBSpan( 1, 1 ), wxEXPAND|wxTOP, 6 );
-
 
 	gbFontSizer->AddGrowableCol( 1 );
 
 	bMargins->Add( gbFontSizer, 0, wxEXPAND|wxBOTTOM, 5 );
+
+	wxFlexGridSizer* fgTextStyleSizer;
+	fgTextStyleSizer = new wxFlexGridSizer( 0, 2, 5, 5 );
+	fgTextStyleSizer->SetFlexibleDirection( wxBOTH );
+	fgTextStyleSizer->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+
+	wxBoxSizer* hAlignButtons;
+	hAlignButtons = new wxBoxSizer( wxHORIZONTAL );
+
+	m_bold = new BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|wxBORDER_NONE );
+	hAlignButtons->Add( m_bold, 0, wxALIGN_CENTER_VERTICAL, 5 );
+
+	m_italic = new BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|wxBORDER_NONE );
+	hAlignButtons->Add( m_italic, 0, wxALIGN_CENTER_VERTICAL, 5 );
+
+	m_separator0 = new BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|wxBORDER_NONE );
+	m_separator0->Enable( false );
+
+	hAlignButtons->Add( m_separator0, 0, wxALIGN_CENTER_VERTICAL, 5 );
+
+	m_hAlignLeft = new BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|wxBORDER_NONE );
+	m_hAlignLeft->SetToolTip( _("Align left") );
+
+	hAlignButtons->Add( m_hAlignLeft, 0, wxALIGN_CENTER_VERTICAL, 5 );
+
+	m_hAlignCenter = new BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|wxBORDER_NONE );
+	m_hAlignCenter->SetToolTip( _("Align horizontal center") );
+
+	hAlignButtons->Add( m_hAlignCenter, 0, wxALIGN_CENTER_VERTICAL, 5 );
+
+	m_hAlignRight = new BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|wxBORDER_NONE );
+	m_hAlignRight->SetToolTip( _("Align right") );
+
+	hAlignButtons->Add( m_hAlignRight, 0, wxALIGN_CENTER_VERTICAL, 5 );
+
+	m_separator1 = new BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|wxBORDER_NONE );
+	m_separator1->Enable( false );
+
+	hAlignButtons->Add( m_separator1, 0, wxALL, 5 );
+
+	m_vAlignTop = new BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|wxBORDER_NONE );
+	m_vAlignTop->SetToolTip( _("Align top") );
+
+	hAlignButtons->Add( m_vAlignTop, 0, wxALIGN_CENTER_VERTICAL, 5 );
+
+	m_vAlignCenter = new BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|wxBORDER_NONE );
+	m_vAlignCenter->SetToolTip( _("Align vertical center") );
+
+	hAlignButtons->Add( m_vAlignCenter, 0, wxALIGN_CENTER_VERTICAL, 5 );
+
+	m_vAlignBottom = new BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|wxBORDER_NONE );
+	m_vAlignBottom->SetToolTip( _("Align bottom") );
+
+	hAlignButtons->Add( m_vAlignBottom, 0, wxALIGN_CENTER_VERTICAL, 5 );
+
+
+	fgTextStyleSizer->Add( hAlignButtons, 0, wxALIGN_CENTER_VERTICAL, 5 );
+
+
+	bMargins->Add( fgTextStyleSizer, 1, wxEXPAND, 5 );
 
 	wxGridBagSizer* gbSizer1;
 	gbSizer1 = new wxGridBagSizer( 3, 5 );
@@ -222,6 +203,11 @@ DIALOG_TABLECELL_PROPERTIES_BASE::DIALOG_TABLECELL_PROPERTIES_BASE( wxWindow* pa
 	m_ThicknessUnits = new wxStaticText( this, wxID_ANY, _("unit"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_ThicknessUnits->Wrap( -1 );
 	gbSizer1->Add( m_ThicknessUnits, wxGBPosition( 2, 2 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
+
+	m_adjustTextThickness = new BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|wxBORDER_NONE );
+	m_adjustTextThickness->SetToolTip( _("Adjust the text thickness") );
+
+	gbSizer1->Add( m_adjustTextThickness, wxGBPosition( 2, 3 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
 
 
 	bMargins->Add( gbSizer1, 0, wxEXPAND|wxTOP, 5 );
@@ -300,18 +286,22 @@ DIALOG_TABLECELL_PROPERTIES_BASE::DIALOG_TABLECELL_PROPERTIES_BASE( wxWindow* pa
 	bMainSizer->Fit( this );
 
 	// Connect Events
+	m_bold->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_TABLECELL_PROPERTIES_BASE::onBoldToggle ), NULL, this );
 	m_SizeXCtrl->Connect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_TABLECELL_PROPERTIES_BASE::OnOkClick ), NULL, this );
 	m_SizeYCtrl->Connect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_TABLECELL_PROPERTIES_BASE::OnOkClick ), NULL, this );
 	m_ThicknessCtrl->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_TABLECELL_PROPERTIES_BASE::onThickness ), NULL, this );
+	m_adjustTextThickness->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_TABLECELL_PROPERTIES_BASE::onAdjustTextThickness ), NULL, this );
 	m_editTable->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_TABLECELL_PROPERTIES_BASE::onEditTable ), NULL, this );
 }
 
 DIALOG_TABLECELL_PROPERTIES_BASE::~DIALOG_TABLECELL_PROPERTIES_BASE()
 {
 	// Disconnect Events
+	m_bold->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_TABLECELL_PROPERTIES_BASE::onBoldToggle ), NULL, this );
 	m_SizeXCtrl->Disconnect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_TABLECELL_PROPERTIES_BASE::OnOkClick ), NULL, this );
 	m_SizeYCtrl->Disconnect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_TABLECELL_PROPERTIES_BASE::OnOkClick ), NULL, this );
 	m_ThicknessCtrl->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_TABLECELL_PROPERTIES_BASE::onThickness ), NULL, this );
+	m_adjustTextThickness->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_TABLECELL_PROPERTIES_BASE::onAdjustTextThickness ), NULL, this );
 	m_editTable->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_TABLECELL_PROPERTIES_BASE::onEditTable ), NULL, this );
 
 }

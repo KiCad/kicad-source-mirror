@@ -117,6 +117,8 @@ DIALOG_TEXTBOX_PROPERTIES::DIALOG_TEXTBOX_PROPERTIES( PCB_BASE_EDIT_FRAME* aPare
 
     m_separator4->SetIsSeparator();
 
+    m_adjustTextThickness->SetBitmap( KiBitmapBundle( BITMAPS::refresh ) );
+
     // Configure the layers list selector.  Note that footprints are built outside the current
     // board and so we may need to show all layers if the text is on an unactivated layer.
     if( !m_frame->GetBoard()->IsLayerEnabled( m_textBox->GetLayer() ) )
@@ -291,6 +293,21 @@ void DIALOG_TEXTBOX_PROPERTIES::onThickness( wxCommandEvent& event )
 
     m_bold->Check( abs( thickness - GetPenSizeForBold( textSize ) )
                     < abs( thickness - GetPenSizeForNormal( textSize ) ) );
+}
+
+
+void DIALOG_TEXTBOX_PROPERTIES::updateTextThickness( wxCommandEvent& aEvent )
+{
+    int textSize = std::min( m_textWidth.GetValue(), m_textHeight.GetValue() );
+    int thickness;
+
+    // Calculate the "best" thickness from text size and bold option:
+    if( m_bold->IsChecked() )
+        thickness = GetPenSizeForBold( textSize );
+    else
+        thickness = GetPenSizeForNormal( textSize );
+
+    m_thickness.SetValue( thickness );
 }
 
 

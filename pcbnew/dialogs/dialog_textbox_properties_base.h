@@ -77,6 +77,7 @@ class DIALOG_TEXTBOX_PROPERTIES_BASE : public DIALOG_SHIM
 		wxStaticText* m_ThicknessLabel;
 		wxTextCtrl* m_ThicknessCtrl;
 		wxStaticText* m_ThicknessUnits;
+		BITMAP_BUTTON* m_adjustTextThickness;
 		wxStaticText* m_OrientLabel;
 		wxComboBox* m_OrientCtrl;
 		wxStaticText* m_borderWidthLabel;
@@ -98,6 +99,7 @@ class DIALOG_TEXTBOX_PROPERTIES_BASE : public DIALOG_SHIM
 		virtual void OnOkClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onBorderChecked( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onThickness( wxCommandEvent& event ) { event.Skip(); }
+		virtual void updateTextThickness( wxCommandEvent& event ) { event.Skip(); }
 
 
 	public:

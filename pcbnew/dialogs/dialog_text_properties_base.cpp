@@ -197,18 +197,20 @@ DIALOG_TEXT_PROPERTIES_BASE::DIALOG_TEXT_PROPERTIES_BASE( wxWindow* parent, wxWi
 	m_SizeYUnits->Wrap( -1 );
 	gbSizer1->Add( m_SizeYUnits, wxGBPosition( 4, 2 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
 
-	m_ThicknessLabel = new wxStaticText( this, wxID_ANY, _("Thickness:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_ThicknessLabel->Wrap( -1 );
-	m_ThicknessLabel->SetToolTip( _("Text thickness") );
-
-	gbSizer1->Add( m_ThicknessLabel, wxGBPosition( 5, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 4 );
-
-	m_ThicknessCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER );
-	gbSizer1->Add( m_ThicknessCtrl, wxGBPosition( 5, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
+	wxBoxSizer* bSizer8;
+	bSizer8 = new wxBoxSizer( wxHORIZONTAL );
 
 	m_ThicknessUnits = new wxStaticText( this, wxID_ANY, _("unit"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_ThicknessUnits->Wrap( -1 );
-	gbSizer1->Add( m_ThicknessUnits, wxGBPosition( 5, 2 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
+	bSizer8->Add( m_ThicknessUnits, 0, wxALIGN_CENTER_VERTICAL, 5 );
+
+	m_adjustTextThickness = new BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|wxBORDER_NONE );
+	m_adjustTextThickness->SetToolTip( _("Adjust the text thickness") );
+
+	bSizer8->Add( m_adjustTextThickness, 0, wxALIGN_CENTER_VERTICAL, 5 );
+
+
+	gbSizer1->Add( bSizer8, wxGBPosition( 5, 2 ), wxGBSpan( 1, 2 ), wxALIGN_CENTER_VERTICAL, 0 );
 
 	m_PositionXLabel = new wxStaticText( this, wxID_ANY, _("Position X:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_PositionXLabel->Wrap( -1 );
@@ -249,11 +251,20 @@ DIALOG_TEXT_PROPERTIES_BASE::DIALOG_TEXT_PROPERTIES_BASE( wxWindow* parent, wxWi
 	m_OrientCtrl->Append( _("180.0") );
 	gbSizer1->Add( m_OrientCtrl, wxGBPosition( 5, 5 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
 
+	m_ThicknessLabel = new wxStaticText( this, wxID_ANY, _("Thickness:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_ThicknessLabel->Wrap( -1 );
+	m_ThicknessLabel->SetToolTip( _("Text thickness") );
+
+	gbSizer1->Add( m_ThicknessLabel, wxGBPosition( 5, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
+
+	m_ThicknessCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER );
+	gbSizer1->Add( m_ThicknessCtrl, wxGBPosition( 5, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT, 5 );
+
 
 	gbSizer1->AddGrowableCol( 1 );
 	gbSizer1->AddGrowableCol( 5 );
 
-	bMainSizer->Add( gbSizer1, 0, wxEXPAND|wxRIGHT|wxLEFT, 10 );
+	bMainSizer->Add( gbSizer1, 0, wxEXPAND|wxLEFT|wxRIGHT, 10 );
 
 
 	bMainSizer->Add( 0, 0, 0, wxTOP, 5 );
@@ -268,17 +279,6 @@ DIALOG_TEXT_PROPERTIES_BASE::DIALOG_TEXT_PROPERTIES_BASE( wxWindow* parent, wxWi
 
 	bMainSizer->Add( bMargins, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 12 );
 
-	wxBoxSizer* bSizerBottom;
-	bSizerBottom = new wxBoxSizer( wxHORIZONTAL );
-
-	m_buttonUpdateTh = new wxButton( this, wxID_ANY, _("Update Thickness According to Text Size"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_buttonUpdateTh->SetToolTip( _("Set the best text thickness from the text width and height\nNormal text: thickness is size/8\nBold text: thickness is size/5") );
-
-	bSizerBottom->Add( m_buttonUpdateTh, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 10 );
-
-
-	bSizerBottom->Add( 0, 0, 1, wxEXPAND, 5 );
-
 	m_sdbSizer = new wxStdDialogButtonSizer();
 	m_sdbSizerOK = new wxButton( this, wxID_OK );
 	m_sdbSizer->AddButton( m_sdbSizerOK );
@@ -286,10 +286,7 @@ DIALOG_TEXT_PROPERTIES_BASE::DIALOG_TEXT_PROPERTIES_BASE( wxWindow* parent, wxWi
 	m_sdbSizer->AddButton( m_sdbSizerCancel );
 	m_sdbSizer->Realize();
 
-	bSizerBottom->Add( m_sdbSizer, 0, wxEXPAND|wxTOP|wxBOTTOM|wxRIGHT, 5 );
-
-
-	bMainSizer->Add( bSizerBottom, 0, wxEXPAND, 5 );
+	bMainSizer->Add( m_sdbSizer, 0, wxEXPAND|wxTOP|wxBOTTOM|wxRIGHT, 5 );
 
 
 	this->SetSizer( bMainSizer );
@@ -313,11 +310,11 @@ DIALOG_TEXT_PROPERTIES_BASE::DIALOG_TEXT_PROPERTIES_BASE( wxWindow* parent, wxWi
 	m_valignBottom->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_TEXT_PROPERTIES_BASE::onValignButton ), NULL, this );
 	m_SizeXCtrl->Connect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_TEXT_PROPERTIES_BASE::OnOkClick ), NULL, this );
 	m_SizeYCtrl->Connect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_TEXT_PROPERTIES_BASE::OnOkClick ), NULL, this );
-	m_ThicknessCtrl->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_TEXT_PROPERTIES_BASE::onThickness ), NULL, this );
+	m_adjustTextThickness->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_TEXT_PROPERTIES_BASE::updateTextThickness ), NULL, this );
 	m_PositionXCtrl->Connect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_TEXT_PROPERTIES_BASE::OnOkClick ), NULL, this );
 	m_PositionYCtrl->Connect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_TEXT_PROPERTIES_BASE::OnOkClick ), NULL, this );
 	m_OrientCtrl->Connect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_TEXT_PROPERTIES_BASE::OnOkClick ), NULL, this );
-	m_buttonUpdateTh->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_TEXT_PROPERTIES_BASE::updateTextThickness ), NULL, this );
+	m_ThicknessCtrl->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_TEXT_PROPERTIES_BASE::onThickness ), NULL, this );
 	m_sdbSizerOK->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_TEXT_PROPERTIES_BASE::OnOkClick ), NULL, this );
 }
 
@@ -338,11 +335,11 @@ DIALOG_TEXT_PROPERTIES_BASE::~DIALOG_TEXT_PROPERTIES_BASE()
 	m_valignBottom->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_TEXT_PROPERTIES_BASE::onValignButton ), NULL, this );
 	m_SizeXCtrl->Disconnect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_TEXT_PROPERTIES_BASE::OnOkClick ), NULL, this );
 	m_SizeYCtrl->Disconnect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_TEXT_PROPERTIES_BASE::OnOkClick ), NULL, this );
-	m_ThicknessCtrl->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_TEXT_PROPERTIES_BASE::onThickness ), NULL, this );
+	m_adjustTextThickness->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_TEXT_PROPERTIES_BASE::updateTextThickness ), NULL, this );
 	m_PositionXCtrl->Disconnect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_TEXT_PROPERTIES_BASE::OnOkClick ), NULL, this );
 	m_PositionYCtrl->Disconnect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_TEXT_PROPERTIES_BASE::OnOkClick ), NULL, this );
 	m_OrientCtrl->Disconnect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_TEXT_PROPERTIES_BASE::OnOkClick ), NULL, this );
-	m_buttonUpdateTh->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_TEXT_PROPERTIES_BASE::updateTextThickness ), NULL, this );
+	m_ThicknessCtrl->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_TEXT_PROPERTIES_BASE::onThickness ), NULL, this );
 	m_sdbSizerOK->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_TEXT_PROPERTIES_BASE::OnOkClick ), NULL, this );
 
 }
