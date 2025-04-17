@@ -37,7 +37,7 @@ namespace CLI
 class PCB_EXPORT_GERBER_COMMAND : public PCB_EXPORT_BASE_COMMAND
 {
 public:
-    PCB_EXPORT_GERBER_COMMAND( const std::string& aName );
+    PCB_EXPORT_GERBER_COMMAND( const std::string& aName, bool aOutputIsDir = false );
     PCB_EXPORT_GERBER_COMMAND();
 
 protected:
