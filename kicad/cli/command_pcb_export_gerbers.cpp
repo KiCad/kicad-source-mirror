@@ -30,7 +30,7 @@
 
 
 CLI::PCB_EXPORT_GERBERS_COMMAND::PCB_EXPORT_GERBERS_COMMAND() :
-        PCB_EXPORT_GERBER_COMMAND( "gerbers" )
+        PCB_EXPORT_GERBER_COMMAND( "gerbers", true )
 {
     addCommonLayersArg();
 
