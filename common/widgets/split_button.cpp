@@ -243,9 +243,6 @@ void SPLIT_BUTTON::OnPaint( wxPaintEvent& WXUNUSED( aEvent ) )
                 wxColor fg = wxSystemSettings::GetColour( wxSYS_COLOUR_BTNTEXT );
                 wxColor bg = wxSystemSettings::GetColour( wxSYS_COLOUR_BTNFACE );
 
-                aRect.width += 1;
-                aRect.height += 1;
-
                 if( KIPLATFORM::UI::IsDarkTheme() )
                 {
                     bg = bg.ChangeLightness( m_bIsEnable ? 130 : 120 );
