@@ -86,7 +86,7 @@ public:
     BG_STYLE    m_bgStyle = BG_STYLE::DEFAULT;
     int         m_width = 0;
     int         m_height = 0;
-    std::string m_colorPreset;
+    std::string m_appearancePreset;
     SIDE        m_side = SIDE::TOP;
     double      m_zoom = 1.0;
     bool        m_perspective = false;

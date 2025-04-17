@@ -48,6 +48,8 @@ class DIALOG_RENDER_JOB_BASE : public DIALOG_SHIM
 		wxStaticText* m_staticText19;
 		wxSpinCtrl* m_spinCtrlHeight;
 		wxStaticText* m_staticText182;
+		wxStaticText* m_presetLabel;
+		wxChoice* m_presetCtrl;
 		wxStaticText* m_backgroundStyleLabel;
 		wxChoice* m_choiceBgStyle;
 		wxCheckBox* m_cbRaytracing_proceduralTextures;

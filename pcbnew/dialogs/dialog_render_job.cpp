@@ -22,6 +22,10 @@
 #include <jobs/job_pcb_render.h>
 #include <i18n_utility.h>
 #include <wx/display.h>
+#include <pgm_base.h>
+#include <settings/settings_manager.h>
+#include <3d_viewer/eda_3d_viewer_settings.h>
+
 
 static std::map<JOB_PCB_RENDER::BG_STYLE, wxString> bgStyleMap = {
     { JOB_PCB_RENDER::BG_STYLE::DEFAULT, _HKI( "Default" ) },
@@ -39,7 +43,8 @@ static std::map<JOB_PCB_RENDER::SIDE, wxString> sideMap = {
 };
 
 DIALOG_RENDER_JOB::DIALOG_RENDER_JOB( wxWindow* aParent, JOB_PCB_RENDER* aJob  ) :
-        DIALOG_RENDER_JOB_BASE( aParent ), m_job( aJob )
+        DIALOG_RENDER_JOB_BASE( aParent ),
+        m_job( aJob )
 {
     SetTitle( aJob->GetSettingsDialogTitle() );
 
@@ -51,6 +56,14 @@ DIALOG_RENDER_JOB::DIALOG_RENDER_JOB( wxWindow* aParent, JOB_PCB_RENDER* aJob  )
 
     for( const auto& [k, name] : sideMap )
         m_choiceSide->Append( wxGetTranslation( name ) );
+
+    SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
+
+    if( EDA_3D_VIEWER_SETTINGS* cfg = mgr.GetAppSettings<EDA_3D_VIEWER_SETTINGS>( "3d_viewer" ) )
+    {
+        for( const LAYER_PRESET_3D& preset : cfg->m_LayerPresets )
+            m_presetCtrl->Append( preset.name );
+    }
 
     SetupStandardButtons();
 }
@@ -125,6 +138,12 @@ bool DIALOG_RENDER_JOB::TransferDataFromWindow()
 
     m_job->m_format = getSelectedFormat();
     m_job->m_quality = JOB_PCB_RENDER::QUALITY::JOB_SETTINGS;
+
+    if( m_presetCtrl->GetSelection() == 0 )
+        m_job->m_appearancePreset = "";
+    else
+        m_job->m_appearancePreset = m_presetCtrl->GetStringSelection();
+
     m_job->m_bgStyle = getSelectedBgStyle();
     m_job->m_side = getSelectedSide();
     m_job->m_zoom = m_spinCtrlZoom->GetValue();
@@ -167,6 +186,10 @@ bool DIALOG_RENDER_JOB::TransferDataToWindow()
     m_textCtrlOutputFile->SetValue( m_job->GetConfiguredOutputPath() );
 
     setSelectedFormat( m_job->m_format );
+
+    if( !m_presetCtrl->SetStringSelection( m_job->m_appearancePreset ) )
+        m_presetCtrl->SetSelection( 0 );
+
     setSelectedBgStyle( m_job->m_bgStyle );
     setSelectedSide( m_job->m_side );
     m_spinCtrlZoom->SetValue( m_job->m_zoom );

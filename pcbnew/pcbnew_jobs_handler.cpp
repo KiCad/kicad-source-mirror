@@ -579,7 +579,9 @@ int PCBNEW_JOBS_HANDLER::JobExportRender( JOB* aJob )
 
     boardAdapter.SetBoard( brd );
     boardAdapter.m_IsBoardView = false;
-    boardAdapter.m_IsPreviewer = true; // Force display 3D models, regardless of 3D viewer options
+
+    if( aRenderJob->m_appearancePreset.empty() )
+        boardAdapter.m_IsPreviewer = true; // Force display 3D models, regardless of 3D viewer options
 
     SETTINGS_MANAGER&      mgr = Pgm().GetSettingsManager();
     EDA_3D_VIEWER_SETTINGS cfg;
@@ -660,7 +662,7 @@ int PCBNEW_JOBS_HANDLER::JobExportRender( JOB* aJob )
         45, 135, 225, 315, 45, 135, 225, 315,
     };
 
-    cfg.m_CurrentPreset = aRenderJob->m_colorPreset;
+    cfg.m_CurrentPreset = aRenderJob->m_appearancePreset;
     boardAdapter.m_Cfg = &cfg;
 
     if( aRenderJob->m_bgStyle == JOB_PCB_RENDER::BG_STYLE::TRANSPARENT

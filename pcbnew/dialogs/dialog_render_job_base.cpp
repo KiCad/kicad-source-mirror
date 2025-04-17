@@ -44,29 +44,39 @@ DIALOG_RENDER_JOB_BASE::DIALOG_RENDER_JOB_BASE( wxWindow* parent, wxWindowID id,
 	m_dimensionsLabel->Wrap( -1 );
 	fgSizerTop->Add( m_dimensionsLabel, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
-	wxBoxSizer* bSizer3;
-	bSizer3 = new wxBoxSizer( wxHORIZONTAL );
+	wxBoxSizer* bSizerDimensions;
+	bSizerDimensions = new wxBoxSizer( wxHORIZONTAL );
 
 	m_spinCtrlWidth = new wxSpinCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 128, 32767, 0 );
-	bSizer3->Add( m_spinCtrlWidth, 0, wxRIGHT|wxALIGN_CENTER_VERTICAL, 5 );
+	bSizerDimensions->Add( m_spinCtrlWidth, 0, wxRIGHT|wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_staticText17 = new wxStaticText( this, wxID_ANY, _("px"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText17->Wrap( -1 );
-	bSizer3->Add( m_staticText17, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+	bSizerDimensions->Add( m_staticText17, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 	m_staticText19 = new wxStaticText( this, wxID_ANY, _("x"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText19->Wrap( -1 );
-	bSizer3->Add( m_staticText19, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 10 );
+	bSizerDimensions->Add( m_staticText19, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 10 );
 
 	m_spinCtrlHeight = new wxSpinCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 128, 32767, 0 );
-	bSizer3->Add( m_spinCtrlHeight, 0, wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
+	bSizerDimensions->Add( m_spinCtrlHeight, 0, wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_staticText182 = new wxStaticText( this, wxID_ANY, _("px"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText182->Wrap( -1 );
-	bSizer3->Add( m_staticText182, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+	bSizerDimensions->Add( m_staticText182, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 
-	fgSizerTop->Add( bSizer3, 1, wxEXPAND, 5 );
+	fgSizerTop->Add( bSizerDimensions, 1, wxEXPAND, 5 );
+
+	m_presetLabel = new wxStaticText( this, wxID_ANY, _("Appearance preset:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_presetLabel->Wrap( -1 );
+	fgSizerTop->Add( m_presetLabel, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+
+	wxString m_presetCtrlChoices[] = { _("Default") };
+	int m_presetCtrlNChoices = sizeof( m_presetCtrlChoices ) / sizeof( wxString );
+	m_presetCtrl = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_presetCtrlNChoices, m_presetCtrlChoices, 0 );
+	m_presetCtrl->SetSelection( 0 );
+	fgSizerTop->Add( m_presetCtrl, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM, 5 );
 
 	m_backgroundStyleLabel = new wxStaticText( this, wxID_ANY, _("Background style:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_backgroundStyleLabel->Wrap( -1 );
