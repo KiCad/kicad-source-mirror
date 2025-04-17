@@ -88,6 +88,7 @@ class PANEL_DESTINATION_BASE : public wxPanel
 		wxStaticBitmap* m_bitmapOutputType;
 		wxStaticText* m_textOutputType;
 		wxStaticBitmap* m_statusBitmap;
+		wxStaticText* m_pathInfo;
 		STD_BITMAP_BUTTON* m_buttonProperties;
 		STD_BITMAP_BUTTON* m_buttonDelete;
 		wxButton* m_buttonGenerate;

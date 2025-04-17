@@ -182,7 +182,11 @@ PANEL_DESTINATION_BASE::PANEL_DESTINATION_BASE( wxWindow* parent, wxWindowID id,
 	fgSizer3->Add( m_statusBitmap, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
 
-	bSizerMain->Add( fgSizer3, 0, wxEXPAND|wxALL, 5 );
+	bSizerMain->Add( fgSizer3, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
+
+	m_pathInfo = new wxStaticText( this, wxID_ANY, _("path"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_pathInfo->Wrap( -1 );
+	bSizerMain->Add( m_pathInfo, 0, wxBOTTOM|wxRIGHT|wxLEFT, 10 );
 
 	wxBoxSizer* bSizerButtons;
 	bSizerButtons = new wxBoxSizer( wxHORIZONTAL );
@@ -200,7 +204,7 @@ PANEL_DESTINATION_BASE::PANEL_DESTINATION_BASE( wxWindow* parent, wxWindowID id,
 	bSizerButtons->Add( m_buttonGenerate, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
 
-	bSizerMain->Add( bSizerButtons, 0, wxEXPAND, 5 );
+	bSizerMain->Add( bSizerButtons, 0, wxEXPAND|wxTOP, 5 );
 
 
 	this->SetSizer( bSizerMain );

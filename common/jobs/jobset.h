@@ -92,6 +92,8 @@ struct KICOMMON_API JOBSET_DESTINATION
     wxString GetDescription() const;
     void SetDescription( const wxString& aDescription );
 
+    wxString GetPathInfo() const;
+
     ///< Transient property, not stored for now
     std::optional<bool>   m_lastRunSuccess;
     std::unordered_map<wxString, std::optional<bool>> m_lastRunSuccessMap;

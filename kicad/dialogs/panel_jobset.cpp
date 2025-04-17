@@ -33,6 +33,7 @@
 #include <widgets/wx_progress_reporters.h>
 #include <kicad_manager_frame.h>
 #include <vector>
+#include <wx/dcclient.h>
 
 #include <wildcards_and_files_ext.h>
 #include <widgets/std_bitmap_button.h>
@@ -201,6 +202,8 @@ public:
             m_bitmapOutputType->SetBitmap( KiBitmapBundle( jobTypeInfo.bitmap ) );
         }
 
+        m_pathInfo->SetFont( KIUI::GetInfoFont( this ).Italic() );
+        UpdatePathInfo( aDestination->GetPathInfo() );
         UpdateStatus();
     }
 
@@ -244,6 +247,15 @@ public:
         }
 
         m_buttonGenerate->Enable( !m_jobsFile->GetJobsForDestination( destination ).empty() );
+    }
+
+    void UpdatePathInfo( const wxString& aMsg )
+    {
+        wxClientDC dc( this );
+        int        width = GetSize().GetWidth();
+        wxString   msg = aMsg;
+
+        m_pathInfo->SetLabel( wxControl::Ellipsize( msg, dc, wxELLIPSIZE_MIDDLE, width ) );
     }
 
     virtual void OnGenerate( wxCommandEvent& event ) override
@@ -313,6 +325,7 @@ public:
         if( dialog.ShowModal() == wxID_OK )
         {
             m_textOutputType->SetLabel( destination->GetDescription() );
+            UpdatePathInfo( destination->GetPathInfo() );
             m_jobsFile->SetDirty();
             m_panelParent->UpdateTitle();
         }

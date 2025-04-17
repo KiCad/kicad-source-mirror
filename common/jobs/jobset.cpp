@@ -162,6 +162,12 @@ wxString JOBSET_DESTINATION::GetDescription() const
 }
 
 
+wxString JOBSET_DESTINATION::GetPathInfo() const
+{
+    return m_outputHandler->GetOutputPath();
+}
+
+
 void JOBSET_DESTINATION::SetDescription( const wxString& aDescription )
 {
     if( aDescription == m_outputHandler->GetDefaultDescription() )
