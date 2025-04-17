@@ -254,9 +254,10 @@ CLI::PCB_RENDER_COMMAND::PCB_RENDER_COMMAND() : COMMAND( "render" )
     m_argParser.add_argument( ARG_PRESET )
             .default_value( std::string( wxString( FOLLOW_PLOT_SETTINGS ) ) )
             .metavar( "PRESET" )
-            .help( UTF8STDSTR( wxString::Format( _( "Color preset. Options: %s, %s, %s, ..." ),
-                                                 FOLLOW_PCB, FOLLOW_PLOT_SETTINGS,
-                                                 LEGACY_PRESET_FLAG ) ) );
+            .help( UTF8STDSTR( wxString::Format( _( "Appearance preset. Options: %s, %s, or user-defined "
+                                                    "preset name" ),
+                                                 FOLLOW_PCB,
+                                                 FOLLOW_PLOT_SETTINGS ) ) );
 
     m_argParser.add_argument( ARG_FLOOR )
             .flag()
@@ -326,7 +327,14 @@ int CLI::PCB_RENDER_COMMAND::doPerform( KIWAY& aKiway )
     renderJob->m_filename = m_argInput;
     renderJob->SetVarOverrides( m_argDefineVars );
 
-    renderJob->m_colorPreset = m_argParser.get<std::string>( ARG_PRESET );
+    renderJob->m_appearancePreset = m_argParser.get<std::string>( ARG_PRESET );
+
+    if( renderJob->m_appearancePreset == LEGACY_PRESET_FLAG )
+    {
+        wxFprintf( stderr, _( "Invalid preset\n" ) );
+        return EXIT_CODES::ERR_ARGS;
+    }
+
     renderJob->m_width = m_argParser.get<int>( ARG_WIDTH );
     renderJob->m_height = m_argParser.get<int>( ARG_HEIGHT );
     renderJob->m_zoom = m_argParser.get<double>( ARG_ZOOM );
