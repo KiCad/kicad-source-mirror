@@ -458,9 +458,17 @@ void PANEL_SETUP_TIME_DOMAIN_PARAMETERS::OnAddViaOverrideClick( wxCommandEvent& 
     if( !m_viaPropagationGrid->CommitPendingChanges() )
         return;
 
+    // Check we have delay profiles to override
+    if( m_tracePropagationGrid->GetNumberRows() == 0 )
+    {
+        const wxString msg = _( "No delay profiles to override" );
+        PAGED_DIALOG::GetDialog( this )->SetError( msg, this, nullptr );
+        return;
+    }
+
     const int rowId = m_viaPropagationGrid->GetNumberRows();
     m_viaPropagationGrid->AppendRows();
-    m_viaPropagationGrid->SetCellValue( rowId, PROFILE_GRID_PROFILE_NAME, "" );
+    m_viaPropagationGrid->SetCellValue( rowId, VIA_GRID_PROFILE_NAME, getProfileNameForProfileGridRow( 0 ) );
     m_viaPropagationGrid->SetCellValue( rowId, VIA_GRID_SIGNAL_LAYER_FROM, m_layerNames.front() );
     m_viaPropagationGrid->SetCellValue( rowId, VIA_GRID_SIGNAL_LAYER_TO, m_layerNames.back() );
     m_viaPropagationGrid->SetCellValue( rowId, VIA_GRID_VIA_LAYER_FROM, m_layerNames.front() );
