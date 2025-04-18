@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-04-18 03:09+0300\n"
-"PO-Revision-Date: 2025-04-18 09:01+0000\n"
+"PO-Revision-Date: 2025-04-19 09:05+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/"
 "master-source/sv/>\n"
@@ -23237,7 +23237,7 @@ msgstr "Spara aktuellt ark till designblock..."
 
 #: eeschema/tools/sch_actions.cpp:144
 msgid "Add current sheet to design block"
-msgstr "Lägg till aktuellt ark till designblock..."
+msgstr "Lägg till aktuellt ark till designblock"
 
 #: eeschema/tools/sch_actions.cpp:150 pcbnew/tools/pcb_actions.cpp:489
 msgid "Save Selection to Design Block..."
@@ -42674,7 +42674,7 @@ msgstr "Slut på minne vid inläsning av mönsterkort '%s'"
 
 #: pcbnew/files.cpp:814 pcbnew/pcb_edit_frame.cpp:1402
 msgid "Could not load component class assignment rules"
-msgstr "Kunde inte läsa in regler för komponentklasstilldelning."
+msgstr "Kunde inte läsa in regler för komponentklasstilldelning"
 
 #: pcbnew/files.cpp:876
 #, c-format
@@ -43895,7 +43895,7 @@ msgstr "Uppdaterade %s grupper av sammankopplade lödytor"
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:792
 #, c-format
 msgid "Update %s jumper pad groups"
-msgstr "Uppdatera %s grupper av sammankopplade lödytor."
+msgstr "Uppdatera %s grupper av sammankopplade lödytor"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:872
 #, c-format
@@ -50784,19 +50784,16 @@ msgid "Locked Item Shadow"
 msgstr "Låsta objekts skuggning"
 
 #: pcbnew/widgets/appearance_controls.cpp:352
-#, fuzzy
 msgid "Show a shadow on locked items"
-msgstr "Visa en skuggad markör på låsta objekt"
+msgstr "Visa en skugga på låsta objekt"
 
 #: pcbnew/widgets/appearance_controls.cpp:353
-#, fuzzy
 msgid "Colliding Courtyards"
-msgstr "Gårdsplaner"
+msgstr "Gårdsplaner kolliderar"
 
 #: pcbnew/widgets/appearance_controls.cpp:353
-#, fuzzy
 msgid "Show colliding footprint courtyards"
-msgstr "Samlar fotavtryckens gårdsplaner..."
+msgstr "Visa kolliderande gårdsplaner för fotavtryck"
 
 #: pcbnew/widgets/appearance_controls.cpp:354
 msgid "Show drawing sheet borders and title block"
@@ -51439,9 +51436,8 @@ msgid "Netclass"
 msgstr "Nätklass"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:123
-#, fuzzy
 msgid "Total Delay"
-msgstr "Fördröjning"
+msgstr "Total fördröjning"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:128
 msgid "Total Length"
@@ -51452,19 +51448,16 @@ msgid "Via Count"
 msgstr "Vior"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:137
-#, fuzzy
 msgid "Via Delay"
-msgstr "Fördröjning"
+msgstr "Fördröjning för via"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:139
-#, fuzzy
 msgid "Track Delay"
-msgstr "Isolationsavstånd mellan ledare:"
+msgstr "Fördröjning för ledare"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:141
-#, fuzzy
 msgid "Die Delay"
-msgstr "Fördröjning"
+msgstr "Fördröjning till chip"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:146
 msgid "Via Length"
@@ -51552,9 +51545,8 @@ msgid "Show Unconnected Nets"
 msgstr "Visa icke anslutna nät"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1279
-#, fuzzy
 msgid "Show Time Domain Details"
-msgstr "Visa sidopanel"
+msgstr "Visa detaljer för tidsdomän"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1287
 msgid "Save Net Inspector Report..."
