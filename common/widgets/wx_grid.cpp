@@ -375,10 +375,7 @@ void WX_GRID::onCellEditorHidden( wxGridEvent& aEvent )
 
     if( alg::contains( m_autoEvalCols, col ) )
     {
-        UNITS_PROVIDER* unitsProvider = m_unitsProviders[ aEvent.GetCol() ];
-
-        if( !unitsProvider )
-            unitsProvider = m_unitsProviders.begin()->second;
+        UNITS_PROVIDER* unitsProvider = getUnitsProvider( col );
 
         auto [cellUnits, cellDataType] = getColumnUnits( col );
 
@@ -723,11 +720,6 @@ void WX_GRID::SetAutoEvalColUnits( const int col, EDA_UNITS aUnit )
 
 int WX_GRID::GetUnitValue( int aRow, int aCol )
 {
-    UNITS_PROVIDER* unitsProvider = m_unitsProviders[ aCol ];
-
-    if( !unitsProvider )
-        unitsProvider = m_unitsProviders.begin()->second;
-
     wxString stringValue = GetCellValue( aRow, aCol );
 
     auto [cellUnits, cellDataType] = getColumnUnits( aCol );
@@ -740,17 +732,12 @@ int WX_GRID::GetUnitValue( int aRow, int aCol )
             stringValue = m_eval->Result();
     }
 
-    return unitsProvider->ValueFromString( stringValue, cellDataType );
+    return getUnitsProvider( aCol )->ValueFromString( stringValue, cellDataType );
 }
 
 
 std::optional<int> WX_GRID::GetOptionalUnitValue( int aRow, int aCol )
 {
-    UNITS_PROVIDER* unitsProvider = m_unitsProviders[aCol];
-
-    if( !unitsProvider )
-        unitsProvider = m_unitsProviders.begin()->second;
-
     wxString stringValue = GetCellValue( aRow, aCol );
 
     auto [cellUnits, cellDataType] = getColumnUnits( aCol );
@@ -763,17 +750,12 @@ std::optional<int> WX_GRID::GetOptionalUnitValue( int aRow, int aCol )
             stringValue = m_eval->Result();
     }
 
-    return unitsProvider->OptionalValueFromString( stringValue, cellDataType );
+    return getUnitsProvider( aCol )->OptionalValueFromString( stringValue, cellDataType );
 }
 
 
 void WX_GRID::SetUnitValue( int aRow, int aCol, int aValue )
 {
-    UNITS_PROVIDER* unitsProvider = m_unitsProviders[ aCol ];
-
-    if( !unitsProvider )
-        unitsProvider = m_unitsProviders.begin()->second;
-
     EDA_DATA_TYPE cellDataType;
 
     if( m_autoEvalColsUnits.contains( aCol ) )
@@ -781,18 +763,13 @@ void WX_GRID::SetUnitValue( int aRow, int aCol, int aValue )
     else
         cellDataType = EDA_DATA_TYPE::DISTANCE;
 
-    SetCellValue( aRow, aCol, unitsProvider->StringFromValue( aValue, true, cellDataType ) );
+    SetCellValue( aRow, aCol, getUnitsProvider( aCol )->StringFromValue( aValue, true, cellDataType ) );
 }
 
 
 void WX_GRID::SetOptionalUnitValue( int aRow, int aCol, std::optional<int> aValue )
 {
-    UNITS_PROVIDER* unitsProvider = m_unitsProviders[aCol];
-
-    if( !unitsProvider )
-        unitsProvider = m_unitsProviders.begin()->second;
-
-    SetCellValue( aRow, aCol, unitsProvider->StringFromOptionalValue( aValue, true ) );
+    SetCellValue( aRow, aCol, getUnitsProvider( aCol )->StringFromOptionalValue( aValue, true ) );
 }
 
 
@@ -877,13 +854,6 @@ std::pair<EDA_UNITS, EDA_DATA_TYPE> WX_GRID::getColumnUnits( const int aCol ) co
     if( m_autoEvalColsUnits.contains( aCol ) )
         return { m_autoEvalColsUnits.at( aCol ).first, m_autoEvalColsUnits.at( aCol ).second };
 
-    UNITS_PROVIDER* unitsProvider;
-
-    if( m_unitsProviders.contains( aCol ) )
-        unitsProvider = m_unitsProviders.at( aCol );
-    else
-        unitsProvider = m_unitsProviders.begin()->second;
-
     // Legacy - default always DISTANCE
-    return { unitsProvider->GetUserUnits(), EDA_DATA_TYPE::DISTANCE };
+    return { getUnitsProvider( aCol )->GetUserUnits(), EDA_DATA_TYPE::DISTANCE };
 }

@@ -260,6 +260,14 @@ protected:
 
     void onDPIChanged(wxDPIChangedEvent& event);
 
+    UNITS_PROVIDER* getUnitsProvider( int aCol ) const
+    {
+        if( m_unitsProviders.contains( aCol ) )
+            return m_unitsProviders.at( aCol );
+        else
+            return m_unitsProviders.begin()->second;
+    }
+
     /**
      * Returns the units and data type associated with a given column
      */
