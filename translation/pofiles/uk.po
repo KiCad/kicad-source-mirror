@@ -11,10 +11,10 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-04-18 03:09+0300\n"
-"PO-Revision-Date: 2025-04-18 00:07+0000\n"
+"PO-Revision-Date: 2025-04-19 09:06+0000\n"
 "Last-Translator: Ivan Chuba <xtrvweb@gmail.com>\n"
-"Language-Team: Ukrainian <https://hosted.weblate.org/projects/kicad/master-"
-"source/uk/>\n"
+"Language-Team: Ukrainian <https://hosted.weblate.org/projects/kicad/"
+"master-source/uk/>\n"
 "Language: uk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1146,15 +1146,15 @@ msgid "Use board stackup colors"
 msgstr "Використовувати кольори з налаштувань шарів"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:182
-#, fuzzy
 msgid "Use PCB editor copper colors"
-msgstr "Використовуйте кольори міді з редактора плат"
+msgstr "Використати кольори міді з редактора плат"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:184
-#, fuzzy
 msgid ""
 "Use the board editor layer colors for copper layers (realtime renderer only)"
-msgstr "Використовуйте кольори міді з редактора плат (тільки openGL)"
+msgstr ""
+"Використати кольори міді з редактора плат для мідних шарів (тільки для "
+"рендера в реальному часі)"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:201
 #, c-format
@@ -1418,9 +1418,8 @@ msgid "Show model bounding boxes"
 msgstr "Показати обмежувальні рамки моделей"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:35
-#, fuzzy
 msgid "Show copper and tech layers thickness (slow)"
-msgstr "Показувати товщину міді та технічних шарів (дуже повільно)"
+msgstr "Показати товщину мідних та технічних шарів (дуже повільно)"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:38
 msgid "Highlight items on rollover"
@@ -2118,9 +2117,8 @@ msgid "Drawing Sheet (.kicad_wks file)"
 msgstr "Форматна рамка (файл .kicad_wks)"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:200
-#, fuzzy
 msgid "Export to File..."
-msgstr "Експорт у файл"
+msgstr "Експорт у файл..."
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:203
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:147
@@ -2130,6 +2128,7 @@ msgstr "Експорт до буфера обміну"
 #: bitmap2component/bitmap2component.cpp:406
 msgid "No shape in black and white image to convert: no outline created."
 msgstr ""
+"Немає форми в чорно-білому зображенні для перетворення: контур не створено."
 
 #: common/api/api_handler.cpp:27
 msgid "Modification from API"
@@ -2346,9 +2345,8 @@ msgid "Design block does not have a valid library ID."
 msgstr "Блок дизайну немає відповідного ідентифікатора бібліотеки."
 
 #: common/design_block_io.cpp:379
-#, fuzzy
 msgid "Design block does not have a schematic or board file."
-msgstr "Блок дизайну немає відповідного ідентифікатора бібліотеки."
+msgstr "Блок проекту не містить схеми або файлу плати."
 
 #: common/design_block_io.cpp:388
 #, c-format
@@ -2356,9 +2354,9 @@ msgid "Schematic source file '%s' does not exist."
 msgstr "Вихідний файл схеми '%s' не існує."
 
 #: common/design_block_io.cpp:393
-#, fuzzy, c-format
+#, c-format
 msgid "Board source file '%s' does not exist."
-msgstr "Вихідний файл схеми '%s' не існує."
+msgstr "Вихідний файл плати '%s' не існує."
 
 #: common/design_block_io.cpp:406
 #, c-format
@@ -2371,9 +2369,9 @@ msgid "Schematic file '%s' could not be saved as design block at '%s'."
 msgstr "Файл схеми '%s' не може бути збережений як блок дизайну '%s'."
 
 #: common/design_block_io.cpp:444
-#, fuzzy, c-format
+#, c-format
 msgid "Board file '%s' could not be saved as design block at '%s'."
-msgstr "Файл схеми '%s' не може бути збережений як блок дизайну '%s'."
+msgstr "Файл плати '%s' не може бути збережений як блок дизайну '%s'."
 
 #: common/design_block_io.cpp:478
 #, c-format
@@ -2422,9 +2420,9 @@ msgstr "Ключові слова"
 #: common/design_block_tree_model_adapter.cpp:148
 #: common/design_block_tree_model_adapter.cpp:196
 #: common/widgets/design_block_pane.cpp:125
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading design block %s from library '%s'."
-msgstr "Помилка завантаження символу %s з бібліотеки '%s'."
+msgstr "Помилка завантаження блоку дизайну %s з бібліотеки '%s'."
 
 #: common/dialog_about/AboutDialog_main.cpp:112
 #: common/dialogs/panel_design_block_lib_table_base.cpp:50
@@ -2860,14 +2858,12 @@ msgid "Untitled Field"
 msgstr "Поле без назви"
 
 #: common/dialogs/dialog_design_block_properties.cpp:234
-#, fuzzy
 msgid "Duplicate fields are not allowed."
-msgstr "Само-перетин полігонів не допускається."
+msgstr "Дублювання полів не допускається."
 
 #: common/dialogs/dialog_design_block_properties_base.cpp:26
-#, fuzzy
 msgid "Default Fields"
-msgstr "Початковий є 1"
+msgstr "Поля за замовчуванням"
 
 #: common/dialogs/dialog_design_block_properties_base.cpp:43
 #: common/dialogs/dialog_plugin_options_base.cpp:44
@@ -2928,9 +2924,8 @@ msgid "Description:"
 msgstr "Опис:"
 
 #: common/dialogs/dialog_design_block_properties_base.h:70
-#, fuzzy
 msgid "Design Block Properties"
-msgstr "Бібліотеки"
+msgstr "Властивості блоку дизайну"
 
 #: common/dialogs/dialog_global_design_block_lib_table_config.cpp:33
 msgid "design block"
@@ -3207,9 +3202,8 @@ msgid "Grid Settings"
 msgstr "Налаштування сітки"
 
 #: common/dialogs/dialog_group_properties.cpp:115
-#, fuzzy
 msgid "Edit Group Properties"
-msgstr "Властивості групи"
+msgstr "Редагування властивостей групи"
 
 #: common/dialogs/dialog_group_properties_base.cpp:30
 msgid "Group name:"
@@ -3301,9 +3295,9 @@ msgstr ""
 "можете знову ввімкнути це діалогове вікно в налаштуваннях Pcbnew."
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:30
-#, fuzzy, c-format
+#, c-format
 msgid "The selection contains %zu locked items."
-msgstr "Виділення містить %lu заблокованих елементів."
+msgstr "Виділення містить %zu заблокованих елементів."
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:34
 msgid "These items will be skipped unless you override the locks."
@@ -3938,7 +3932,7 @@ msgstr "Попередження"
 
 #: common/dialogs/dialog_rc_job_base.cpp:68
 msgid "Report job failure when violations present"
-msgstr ""
+msgstr "Повідомляти про невдачу завдання, якщо присутні порушення"
 
 #: common/dialogs/dialog_rc_job_base.cpp:74 kicad/cli/command_pcb_drc.cpp:56
 #: pcbnew/dialogs/dialog_drc_base.cpp:30
@@ -4168,9 +4162,8 @@ msgstr "Повідомлення для запису до репозиторію
 
 #: common/dialogs/git/dialog_git_repository.cpp:75
 #: common/dialogs/git/dialog_git_repository.cpp:310
-#, fuzzy
 msgid "Test Connection"
-msgstr "Тестування з'єднання"
+msgstr "Тест з'єднання"
 
 #: common/dialogs/git/dialog_git_repository.cpp:166
 #: common/dialogs/git/dialog_git_repository.cpp:361
@@ -4214,9 +4207,8 @@ msgstr "Будь ласка, введіть URL-адресу репозитор�
 
 #: common/dialogs/git/dialog_git_repository.cpp:421
 #: common/dialogs/git/dialog_git_repository_base.cpp:106
-#, fuzzy
 msgid "SSH key password:"
-msgstr "Пароль до SSH ключа"
+msgstr "Пароль до SSH ключа:"
 
 #: common/dialogs/git/dialog_git_repository.cpp:429
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:54
@@ -4224,14 +4216,12 @@ msgid "Password:"
 msgstr "Пароль:"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:42
-#, fuzzy
 msgid "Location:"
-msgstr "Положення"
+msgstr "Положення:"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:49
-#, fuzzy
 msgid "Connection type:"
-msgstr "Тип з'єднання"
+msgstr "Тип з'єднання:"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:58
 msgid "HTTPS"
@@ -4244,9 +4234,8 @@ msgid "Local"
 msgstr "Локально"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:91
-#, fuzzy
 msgid "SSH private key:     "
-msgstr "SSH приватний ключ"
+msgstr "SSH приватний ключ:     "
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:94
 msgid "Select SSH private key file"
@@ -4257,9 +4246,8 @@ msgid "*"
 msgstr "*"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:99
-#, fuzzy
 msgid "User name:"
-msgstr "Нове ім'я:"
+msgstr "Ім'я користувача:"
 
 #: common/dialogs/git/dialog_git_repository_base.h:76
 msgid "Git Repository"
@@ -4298,19 +4286,16 @@ msgid "Add"
 msgstr "Додати"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:20
-#, fuzzy
 msgid "Enable Git Tracking"
-msgstr "Ввімкнути анімацію"
+msgstr "Ввімкнути Git відслідковування"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:28
-#, fuzzy
 msgid "Remote Tracking"
-msgstr "Трасування доріжок"
+msgstr "Видалення слідкування за репозиторієм"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:41
-#, fuzzy
 msgid "Update interval:"
-msgstr "Оновити поля"
+msgstr "Інтервал оновлення:"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:46
 msgid ""
