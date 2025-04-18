@@ -1393,6 +1393,9 @@ void PCB_EDIT_FRAME::ShowBoardSetupDialog( const wxString& aInitialPage )
     // QuasiModal required for Scintilla auto-complete
     if( dlg.ShowQuasiModal() == wxID_OK )
     {
+        // Note: We must synchronise time domain properties before nets and classes, otherwise the updates
+        // called by the board listener events are using stale data
+        GetBoard()->SynchronizeTimeDomainProperties();
         GetBoard()->SynchronizeNetsAndNetClasses( true );
 
         if( !GetBoard()->SynchronizeComponentClasses( std::unordered_set<wxString>() ) )
@@ -1402,8 +1405,6 @@ void PCB_EDIT_FRAME::ShowBoardSetupDialog( const wxString& aInitialPage )
             m_infoBar->ShowMessage( _( "Could not load component class assignment rules" ),
                                     wxICON_WARNING, WX_INFOBAR::MESSAGE_TYPE::GENERIC );
         }
-
-        GetBoard()->SynchronizeTimeDomainProperties();
 
         // We don't know if anything was modified, so err on the side of requiring a save
         OnModify();
