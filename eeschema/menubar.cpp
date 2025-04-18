@@ -285,13 +285,13 @@ void SCH_EDIT_FRAME::doReCreateMenuBar()
     //
     ACTION_MENU* toolsMenu = new ACTION_MENU( false, selTool );
 
-    wxMenuItem* update = toolsMenu->Add( ACTIONS::updatePcbFromSchematic );
-    update->Enable( !Kiface().IsSingle() );
-
+    toolsMenu->Add( ACTIONS::updatePcbFromSchematic )->Enable( !Kiface().IsSingle() );
     toolsMenu->Add( SCH_ACTIONS::showPcbNew );
 
     if( !Kiface().IsSingle() )
         toolsMenu->Add( ACTIONS::showProjectManager );
+
+    toolsMenu->Add( ACTIONS::showCalculatorTools );
 
     toolsMenu->AppendSeparator();
     toolsMenu->Add( ACTIONS::showSymbolEditor );
@@ -318,8 +318,7 @@ void SCH_EDIT_FRAME::doReCreateMenuBar()
     toolsMenu->Add( SCH_ACTIONS::generateBOMLegacy );
 
     toolsMenu->AppendSeparator();
-    update = toolsMenu->Add( ACTIONS::updateSchematicFromPcb );
-    update->Enable( !Kiface().IsSingle() );
+    toolsMenu->Add( ACTIONS::updateSchematicFromPcb )->Enable( !Kiface().IsSingle() );
 
 #ifdef KICAD_IPC_API
     toolsMenu->AppendSeparator();

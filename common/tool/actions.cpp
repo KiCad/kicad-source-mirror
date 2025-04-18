@@ -1243,6 +1243,15 @@ TOOL_ACTION ACTIONS::showFootprintEditor( TOOL_ACTION_ARGS()
         .Flags( AF_NONE )
         .Parameter( FRAME_FOOTPRINT_EDITOR ) );
 
+TOOL_ACTION ACTIONS::showCalculatorTools( TOOL_ACTION_ARGS()
+        .Name( "common.Control.showCalculatorTools" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Calculator Tools" ) )
+        .Tooltip( _( "Run component calculations, track width calculations, etc." ) )
+        .Icon( BITMAPS::calculator )
+        .Flags( AF_NONE )
+        .Parameter( FRAME_CALC ) );
+
 TOOL_ACTION ACTIONS::showProperties( TOOL_ACTION_ARGS()
         .Name( "common.Control.showProperties" )
         .Scope( AS_GLOBAL )

@@ -255,6 +255,7 @@ public:
     static TOOL_ACTION showSymbolEditor;
     static TOOL_ACTION showFootprintBrowser;
     static TOOL_ACTION showFootprintEditor;
+    static TOOL_ACTION showCalculatorTools;
     static TOOL_ACTION updatePcbFromSchematic;
     static TOOL_ACTION updateSchematicFromPcb;
     static TOOL_ACTION showProperties;

@@ -399,13 +399,13 @@ void PCB_EDIT_FRAME::doReCreateMenuBar()
     //
     ACTION_MENU* toolsMenu = new ACTION_MENU( false, selTool );
 
-    wxMenuItem* update = toolsMenu->Add( ACTIONS::updatePcbFromSchematic );
-    update->Enable( !Kiface().IsSingle() );
-
+    toolsMenu->Add( ACTIONS::updatePcbFromSchematic )->Enable( !Kiface().IsSingle() );
     toolsMenu->Add( PCB_ACTIONS::showEeschema );
 
     if( !Kiface().IsSingle() )
         toolsMenu->Add( ACTIONS::showProjectManager );
+
+    toolsMenu->Add( ACTIONS::showCalculatorTools );
 
     toolsMenu->AppendSeparator();
     toolsMenu->Add( ACTIONS::showFootprintEditor );
@@ -431,8 +431,7 @@ void PCB_EDIT_FRAME::doReCreateMenuBar()
 
     toolsMenu->AppendSeparator();
     toolsMenu->Add( PCB_ACTIONS::boardReannotate );
-    update = toolsMenu->Add( ACTIONS::updateSchematicFromPcb );
-    update->Enable( !Kiface().IsSingle() );
+    toolsMenu->Add( ACTIONS::updateSchematicFromPcb )->Enable( !Kiface().IsSingle() );
 
     if( SCRIPTING::IsWxAvailable() )
     {
@@ -469,8 +468,10 @@ void PCB_EDIT_FRAME::doReCreateMenuBar()
 
     prefsMenu->Add( ACTIONS::configurePaths );
     prefsMenu->Add( ACTIONS::showFootprintLibTable );
+
     if( ADVANCED_CFG::GetCfg().m_EnablePcbDesignBlocks )
         prefsMenu->Add( ACTIONS::showDesignBlockLibTable );
+
     prefsMenu->Add( ACTIONS::openPreferences );
 
     prefsMenu->AppendSeparator();
