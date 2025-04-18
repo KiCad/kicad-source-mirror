@@ -30,16 +30,16 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-04-18 03:09+0300\n"
-"PO-Revision-Date: 2025-04-01 12:48+0000\n"
-"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
-"Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
-"source/de/>\n"
+"PO-Revision-Date: 2025-04-19 09:05+0000\n"
+"Last-Translator: Ettore Atalan <atalanttore@googlemail.com>\n"
+"Language-Team: German <https://hosted.weblate.org/projects/kicad/"
+"master-source/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.11-dev\n"
+"X-Generator: Weblate 5.11.1-dev\n"
 "X-Poedit-Basepath: ../../../../../../mnt/kicad\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -812,7 +812,7 @@ msgstr "Benutzerdefinierte Lage 9 anzeigen"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:76
 msgid "User.10"
-msgstr "User.10"
+msgstr "Nutzer.10"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:76
 msgid "Show user defined layer 10"
@@ -820,7 +820,7 @@ msgstr "Benutzerdefinierte Lage 10 anzeigen"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:77
 msgid "User.11"
-msgstr "User.11"
+msgstr "Nutzer.11"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:77
 msgid "Show user defined layer 11"
@@ -828,7 +828,7 @@ msgstr "Benutzerdefinierte Lage 11 anzeigen"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:78
 msgid "User.12"
-msgstr "User.12"
+msgstr "Nutzer.12"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:78
 msgid "Show user defined layer 12"
@@ -836,7 +836,7 @@ msgstr "Benutzerdefinierte Lage 12 anzeigen"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:79
 msgid "User.13"
-msgstr "User.13"
+msgstr "Nutzer.13"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:79
 msgid "Show user defined layer 13"
@@ -844,7 +844,7 @@ msgstr "Benutzerdefinierte Lage 13 anzeigen"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:80
 msgid "User.14"
-msgstr "User.14"
+msgstr "Nutzer.14"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:80
 msgid "Show user defined layer 14"
@@ -852,7 +852,7 @@ msgstr "Benutzerdefinierte Lage 14 anzeigen"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:81
 msgid "User.15"
-msgstr "User.15"
+msgstr "Nutzer.15"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:81
 msgid "Show user defined layer 15"
@@ -860,7 +860,7 @@ msgstr "Benutzerdefinierte Lage 15 anzeigen"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:82
 msgid "User.16"
-msgstr "User.16"
+msgstr "Nutzer.16"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:82
 msgid "Show user defined layer 16"
@@ -868,7 +868,7 @@ msgstr "Benutzerdefinierte Lage 16 anzeigen"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:83
 msgid "User.17"
-msgstr "User.17"
+msgstr "Nutzer.17"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:83
 msgid "Show user defined layer 17"
@@ -876,7 +876,7 @@ msgstr "Benutzerdefinierte Lage 17 anzeigen"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:84
 msgid "User.18"
-msgstr "User.18"
+msgstr "Nutzer.18"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:84
 msgid "Show user defined layer 18"
@@ -884,7 +884,7 @@ msgstr "Benutzerdefinierte Lage 18 anzeigen"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:85
 msgid "User.19"
-msgstr "User.19"
+msgstr "Nutzer.19"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:85
 msgid "Show user defined layer 19"
@@ -892,7 +892,7 @@ msgstr "Benutzerdefinierte Lage 19 anzeigen"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:86
 msgid "User.20"
-msgstr "User.20"
+msgstr "Nutzer.20"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:86
 msgid "Show user defined layer 20"
@@ -900,7 +900,7 @@ msgstr "Benutzerdefinierte Lage 20 anzeigen"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:87
 msgid "User.21"
-msgstr "User.21"
+msgstr "Nutzer.21"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:87
 msgid "Show user defined layer 21"
@@ -908,7 +908,7 @@ msgstr "Benutzerdefinierte Lage 21 anzeigen"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:88
 msgid "User.22"
-msgstr "User.22"
+msgstr "Nutzer.22"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:88
 msgid "Show user defined layer 22"
@@ -916,7 +916,7 @@ msgstr "Benutzerdefinierte Lage 22 anzeigen"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:89
 msgid "User.23"
-msgstr "User.23"
+msgstr "Nutzer.23"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:89
 msgid "Show user defined layer 23"
@@ -924,7 +924,7 @@ msgstr "Benutzerdefinierte Lage 23 anzeigen"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:90
 msgid "User.24"
-msgstr "User.24"
+msgstr "Nutzer.24"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:90
 msgid "Show user defined layer 24"
@@ -932,7 +932,7 @@ msgstr "Benutzerdefinierte Lage 24 anzeigen"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:91
 msgid "User.25"
-msgstr "User.25"
+msgstr "Nutzer.25"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:91
 msgid "Show user defined layer 25"
@@ -940,7 +940,7 @@ msgstr "Benutzerdefinierte Lage 25 anzeigen"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:92
 msgid "User.26"
-msgstr "User.26"
+msgstr "Nutzer.26"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:92
 msgid "Show user defined layer 26"
@@ -948,7 +948,7 @@ msgstr "Benutzerdefinierte Lage 26 anzeigen"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:93
 msgid "User.27"
-msgstr "User.27"
+msgstr "Nutzer.27"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:93
 msgid "Show user defined layer 27"
@@ -956,7 +956,7 @@ msgstr "Benutzerdefinierte Lage 27 anzeigen"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:94
 msgid "User.28"
-msgstr "User.28"
+msgstr "Nutzer.28"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:94
 msgid "Show user defined layer 28"
@@ -964,7 +964,7 @@ msgstr "Benutzerdefinierte Lage 28 anzeigen"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:95
 msgid "User.29"
-msgstr "User.29"
+msgstr "Nutzer.29"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:95
 msgid "Show user defined layer 29"
@@ -972,7 +972,7 @@ msgstr "Benutzerdefinierte Lage 29 anzeigen"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:96
 msgid "User.30"
-msgstr "User.30"
+msgstr "Nutzer.30"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:96
 msgid "Show user defined layer 30"
@@ -980,7 +980,7 @@ msgstr "Benutzerdefinierte Lage 30 anzeigen"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:97
 msgid "User.31"
-msgstr "User.31"
+msgstr "Nutzer.31"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:97
 msgid "Show user defined layer 31"
@@ -988,7 +988,7 @@ msgstr "Benutzerdefinierte Lage 31 anzeigen"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:98
 msgid "User.32"
-msgstr "User.32"
+msgstr "Nutzer.32"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:98
 msgid "Show user defined layer 32"
@@ -996,7 +996,7 @@ msgstr "Benutzerdefinierte Lage 32 anzeigen"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:99
 msgid "User.33"
-msgstr "User.33"
+msgstr "Nutzer.33"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:99
 msgid "Show user defined layer 33"
@@ -1004,15 +1004,15 @@ msgstr "Benutzerdefinierte Lage 33 anzeigen"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:100
 msgid "User.34"
-msgstr "User.34"
+msgstr "Nutzer.34"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:100
 msgid "Show user defined layer 34"
-msgstr "Benutzerdefinierte Lage 34 anzeigen"
+msgstr "Benutzerdefinierte Lage 34 anzeigenv"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:101
 msgid "User.35"
-msgstr "User.35"
+msgstr "Nutzer.35"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:101
 msgid "Show user defined layer 35"
@@ -1020,7 +1020,7 @@ msgstr "Benutzerdefinierte Lage 35 anzeigen"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:102
 msgid "User.36"
-msgstr "User.36"
+msgstr "Nutzer.36"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:102
 msgid "Show user defined layer 36"
@@ -1028,7 +1028,7 @@ msgstr "Benutzerdefinierte Lage 36 anzeigen"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:103
 msgid "User.37"
-msgstr "User.37"
+msgstr "Nutzer.37"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:103
 msgid "Show user defined layer 37"
@@ -1036,7 +1036,7 @@ msgstr "Benutzerdefinierte Lage 37 anzeigen"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:104
 msgid "User.38"
-msgstr "User.38"
+msgstr "Nutzer.38"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:104
 msgid "Show user defined layer 38"
@@ -1044,7 +1044,7 @@ msgstr "Benutzerdefinierte Lage 38 anzeigen"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:105
 msgid "User.39"
-msgstr "User.39"
+msgstr "Nutzer.39"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:105
 msgid "Show user defined layer 39"
@@ -1052,7 +1052,7 @@ msgstr "Benutzerdefinierte Lage 39 anzeigen"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:106
 msgid "User.40"
-msgstr "User.40"
+msgstr "Nutzer.40"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:106
 msgid "Show user defined layer 40"
@@ -1060,7 +1060,7 @@ msgstr "Benutzerdefinierte Lage 40 anzeigen"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:107
 msgid "User.41"
-msgstr "User.41"
+msgstr "Nutzer.41"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:107
 msgid "Show user defined layer 41"
@@ -1068,7 +1068,7 @@ msgstr "Benutzerdefinierte Lage 41 anzeigen"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:108
 msgid "User.42"
-msgstr "User.42"
+msgstr "Nutzer.42"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:108
 msgid "Show user defined layer 42"
@@ -1076,7 +1076,7 @@ msgstr "Benutzerdefinierte Lage 42 anzeigen"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:109
 msgid "User.43"
-msgstr "User.43"
+msgstr "Nutzer.43"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:109
 msgid "Show user defined layer 43"
@@ -1084,7 +1084,7 @@ msgstr "Benutzerdefinierte Lage 43 anzeigen"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:110
 msgid "User.44"
-msgstr "User.44"
+msgstr "Nutzer.44"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:110
 msgid "Show user defined layer 44"
@@ -1092,7 +1092,7 @@ msgstr "Benutzerdefinierte Lage 44 anzeigen"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:111
 msgid "User.45"
-msgstr "User.45"
+msgstr "Nutzer.45"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:111
 msgid "Show user defined layer 45"
@@ -1464,9 +1464,8 @@ msgid "Show model bounding boxes"
 msgstr "Modell-Begrenzungsrahmen anzeigen"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:35
-#, fuzzy
 msgid "Show copper and tech layers thickness (slow)"
-msgstr "Schichtdicke von Kupfer- und technischen Lagen anzeigen (sehr langsam)"
+msgstr "Schichtdicke von Kupfer- und technischen Lagen anzeigen (langsam)"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:38
 msgid "Highlight items on rollover"
@@ -3356,9 +3355,9 @@ msgstr ""
 "Dialogfeld kann in den Pcbnew-Einstellungen wieder aktiviert werden."
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:30
-#, fuzzy, c-format
+#, c-format
 msgid "The selection contains %zu locked items."
-msgstr "Die Auswahl enthält %lu gesperrte Elemente."
+msgstr "Die Auswahl enthält %zu gesperrte Elemente."
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:34
 msgid "These items will be skipped unless you override the locks."
@@ -6053,9 +6052,8 @@ msgid "DP Gap"
 msgstr "DP-Abstand"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:60
-#, fuzzy
 msgid "Delay Profile"
-msgstr "Verzögerungszeit:"
+msgstr "Verzögerungsprofil"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:61
 msgid "PCB Color"
@@ -47890,9 +47888,8 @@ msgid "Control to select the via diameter"
 msgstr "Steuerelement zum Wählen des Viadurchmessers"
 
 #: pcbnew/toolbars_pcb_editor.cpp:195
-#, fuzzy
 msgid "Track routing tools"
-msgstr "Leiterbahnkreuzung"
+msgstr ""
 
 #: pcbnew/toolbars_pcb_editor.cpp:198
 #, fuzzy
