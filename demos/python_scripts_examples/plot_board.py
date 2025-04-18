@@ -83,7 +83,6 @@ for layer_info in plot_plan:
 # (you'll see that even holes have designators, obviously)
 popt.SetPlotReference(True)
 popt.SetPlotValue(False)
-popt.SetPlotInvisibleText(False)
 
 pctl.SetLayer(F_SilkS)
 pctl.OpenPlotfile("AssyTop", PLOT_FORMAT_PDF, "Assembly top")
@@ -92,7 +91,6 @@ pctl.PlotLayer()
 # And a gerber with only the component outlines (really!)
 popt.SetPlotReference(False)
 popt.SetPlotValue(False)
-popt.SetPlotInvisibleText(False)
 pctl.SetLayer(F_SilkS)
 pctl.OpenPlotfile("AssyOutlinesTop", PLOT_FORMAT_PDF, "Assembly outline top")
 pctl.PlotLayer()
@@ -107,7 +105,6 @@ popt.SetUseAuxOrigin(False)
 
 popt.SetPlotReference(True)
 popt.SetPlotValue(True)
-popt.SetPlotInvisibleText(False)
 
 pctl.SetLayer(Cmts_User)
 pctl.PlotLayer()
