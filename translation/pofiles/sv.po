@@ -50501,9 +50501,8 @@ msgid "Dielectric"
 msgstr "Dielektrikum"
 
 #: pcbnew/tools/pcb_control.cpp:2364
-#, fuzzy
 msgid "Place Board Stackup Table"
-msgstr "Infoga mönsterkortets lageruppbyggnadstabell"
+msgstr "Placera ut lageruppbyggnadstabell för mönsterkort"
 
 #: pcbnew/tools/pcb_point_editor.cpp:2375
 msgid "Resize Table Cells"
