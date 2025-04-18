@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-04-18 03:10+0300\n"
-"PO-Revision-Date: 2025-04-18 09:01+0000\n"
+"PO-Revision-Date: 2025-04-19 09:05+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/v9/sv/>\n"
 "Language: sv\n"
@@ -49917,19 +49917,16 @@ msgid "Locked Item Shadow"
 msgstr "Låsta objekts skuggning"
 
 #: pcbnew/widgets/appearance_controls.cpp:350
-#, fuzzy
 msgid "Show a shadow on locked items"
-msgstr "Visa en skuggad markör på låsta objekt"
+msgstr "Visa en skugga på låsta objekt"
 
 #: pcbnew/widgets/appearance_controls.cpp:351
-#, fuzzy
 msgid "Colliding Courtyards"
-msgstr "Gårdsplaner"
+msgstr "Gårdsplaner kolliderar"
 
 #: pcbnew/widgets/appearance_controls.cpp:351
-#, fuzzy
 msgid "Show colliding footprint courtyards"
-msgstr "Samlar fotavtryckens gårdsplaner..."
+msgstr "Visa kolliderande gårdsplaner för fotavtryck"
 
 #: pcbnew/widgets/appearance_controls.cpp:352
 msgid "Show drawing sheet borders and title block"
