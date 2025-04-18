@@ -13,16 +13,16 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-04-18 03:09+0300\n"
-"PO-Revision-Date: 2025-03-30 16:07+0000\n"
+"PO-Revision-Date: 2025-04-18 08:43+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
-"Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/master-"
-"source/sv/>\n"
+"Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/"
+"master-source/sv/>\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.11-dev\n"
+"X-Generator: Weblate 5.11.1-dev\n"
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-Basepath: J:\\kicad-winbuilder-3.4\\src\\kicad\n"
 "X-Poedit-SourceCharset: iso-8859-1\n"
@@ -1462,9 +1462,8 @@ msgid "Show model bounding boxes"
 msgstr "Visa gränslådor för modell"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:35
-#, fuzzy
 msgid "Show copper and tech layers thickness (slow)"
-msgstr "Visa tjocklek på koppar och tekniska lager (mycket långsamt)"
+msgstr "Visa tjocklek på koppar och tekniska lager (långsamt)"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:38
 msgid "Highlight items on rollover"
@@ -3337,9 +3336,9 @@ msgstr ""
 "denna dialog i Mönsterkortsredigerarens inställningar."
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:30
-#, fuzzy, c-format
+#, c-format
 msgid "The selection contains %zu locked items."
-msgstr "Urvalet innehåller %lu låsta objekt."
+msgstr "Urvalet innehåller %zu låsta objekt."
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:34
 msgid "These items will be skipped unless you override the locks."
@@ -6009,9 +6008,8 @@ msgid "DP Gap"
 msgstr "Diff.pars gap"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:60
-#, fuzzy
 msgid "Delay Profile"
-msgstr "Försening:"
+msgstr "Fördröjningsprofil"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:61
 msgid "PCB Color"
@@ -10766,18 +10764,16 @@ msgid "Toggle panning to selections in the search pane"
 msgstr "Växla panorering till valda i sökfältet"
 
 #: common/widgets/search_pane.cpp:52
-#, fuzzy
 msgid "Search Hidden Fields"
-msgstr "Genomsök &dolda fält"
+msgstr "Genomsök dolda fält"
 
 #: common/widgets/search_pane.cpp:54
-#, fuzzy
 msgid "Search Metadata"
-msgstr "Metadata"
+msgstr "Genomsök metadata"
 
 #: common/widgets/search_pane.cpp:54
 msgid "Search library links, descriptions and keywords"
-msgstr ""
+msgstr "Genomsök bibliotekslänkar, beskrivningar och nyckelord"
 
 #: common/widgets/unit_binder.cpp:351
 #, c-format
@@ -15727,32 +15723,32 @@ msgid "Show datasheet in browser"
 msgstr "Visa datablad i webbläsaren"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:201
-#, fuzzy
 msgid "Column Label"
-msgstr "Tabell med %d kolumner"
+msgstr "Kolumnetikett"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:206
-#, fuzzy
 msgid "Show Column"
-msgstr "Visa / dölj kolumner"
+msgstr "Visa kolumn"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:207
 msgid "Group By"
 msgstr "Gruppera efter"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:209
-#, fuzzy
 msgid ""
 "Show\n"
 "Column"
-msgstr "Visa / dölj kolumner"
+msgstr ""
+"Visa\n"
+"kolumn"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:210
-#, fuzzy
 msgid ""
 "Group\n"
 "By"
-msgstr "Gruppera efter"
+msgstr ""
+"Gruppera\n"
+"efter"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:713
 msgid "Qty"
@@ -21558,9 +21554,8 @@ msgid "Cannot remove temporary output file"
 msgstr "Kan inte ta bort temporär utmatningsfil"
 
 #: eeschema/sim/kibis/kibis.cpp:682
-#, fuzzy
 msgid "Missing 'Values:' tag in temporary file"
-msgstr "Fel vid läsning av temporär fil"
+msgstr "Etiketten 'Värden:' saknas i temporär fil"
 
 #: eeschema/sim/kibis/kibis.cpp:710 eeschema/sim/kibis/kibis.cpp:718
 msgid "Error while reading temporary file"
@@ -27284,6 +27279,8 @@ msgstr "Renderingskvalitet. Alternativ: %s"
 #, c-format
 msgid "Appearance preset. Options: %s, %s, or user-defined preset name"
 msgstr ""
+"Förinställning för utseende. Alternativ: %s, %s eller användardefinierat "
+"namn på förinställning"
 
 #: kicad/cli/command_pcb_render.cpp:264
 msgid ""
@@ -27346,9 +27343,8 @@ msgid "Side lights elevation angle in degrees, range: 0-90"
 msgstr "Sidoljusens höjdvinkel i grader, område: 0-90"
 
 #: kicad/cli/command_pcb_render.cpp:334
-#, fuzzy
 msgid "Invalid preset\n"
-msgstr "Ogiltigt format\n"
+msgstr "Ogiltig förinställning\n"
 
 #: kicad/cli/command_pcb_render.cpp:350
 msgid "Invalid background\n"
@@ -32032,9 +32028,8 @@ msgid "mi/h"
 msgstr "miles/h"
 
 #: pcbnew/api/api_handler_pcb.cpp:505
-#, fuzzy
 msgid "Modified items via API"
-msgstr "Objekt tillagda via API"
+msgstr "Objekt modifierade via API"
 
 #: pcbnew/api/api_handler_pcb.cpp:668
 msgid "Deleted items via API"
@@ -33200,9 +33195,8 @@ msgid "Component Classes"
 msgstr "Komponentklasser"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:214
-#, fuzzy
 msgid "Time Domain Parameters"
-msgstr "Parametrar för namnruta"
+msgstr "Parametrar för tidsdomän"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:234
 msgid "Board Data"
@@ -36670,7 +36664,6 @@ msgid "Set Teardrops"
 msgstr "Ställ in kragförstärkningar"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:141
-#, fuzzy
 msgid "Text items"
 msgstr "Textobjekt"
 
@@ -36766,16 +36759,14 @@ msgid "PCB text items"
 msgstr "PCB-textobjekt"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:45
-#, fuzzy
 msgid "Other footprint fields"
-msgstr "Andra textobjekt tillhörande fotavtryck"
+msgstr "Andra fält tillhörande fotavtryck"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:46
 msgid "Footprint fields that are not the reference designator or value field"
 msgstr "Fotavtrycks fält som inte är fält för numrering eller värde"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:50
-#, fuzzy
 msgid "PCB dimensions"
 msgstr "Mönsterkortets måttsättningsobjekt"
 
@@ -36784,16 +36775,14 @@ msgid "Footprint graphic items"
 msgstr "Fotavtryck grafiska objekt"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:59
-#, fuzzy
 msgid "Footprint text items"
-msgstr "Andra textobjekt tillhörande fotavtryck"
+msgstr "Textobjekt tillhörande fotavtryck"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:60
 msgid "Footprint text items not associated with a field"
 msgstr "Fotavtrycks textobjekt som inte är associerade med ett fält"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:67
-#, fuzzy
 msgid "Footprint dimensions"
 msgstr "Fotavtrycks måttsättningsobjekt"
 
