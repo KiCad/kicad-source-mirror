@@ -4,16 +4,15 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-04-18 03:10+0300\n"
-"PO-Revision-Date: 2023-09-27 16:00+0000\n"
+"PO-Revision-Date: 2025-04-19 09:05+0000\n"
 "Last-Translator: Ivan Chuba <xtrvweb@gmail.com>\n"
-"Language-Team: Estonian <https://hosted.weblate.org/projects/kicad/master-"
-"source/et/>\n"
+"Language-Team: Estonian <https://hosted.weblate.org/projects/kicad/v9/et/>\n"
 "Language: et\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.1-dev\n"
+"X-Generator: Weblate 5.11.1-dev\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
 #: common/dialogs/panel_embedded_files.cpp:321
@@ -1054,27 +1053,24 @@ msgid "Show user defined layer 42"
 msgstr ""
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:110
-#, fuzzy
 msgid "User.43"
-msgstr "User3"
+msgstr "User.43"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:110
 msgid "Show user defined layer 43"
 msgstr ""
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:111
-#, fuzzy
 msgid "User.44"
-msgstr "User4"
+msgstr "User.44"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:111
 msgid "Show user defined layer 44"
 msgstr ""
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:112
-#, fuzzy
 msgid "User.45"
-msgstr "User4"
+msgstr "User.45"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:112
 msgid "Show user defined layer 45"
