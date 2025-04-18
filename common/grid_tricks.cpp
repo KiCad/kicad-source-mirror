@@ -232,13 +232,15 @@ void GRID_TRICKS::onGridCellLeftClick( wxGridEvent& aEvent )
 
             wxString newVal = m_grid->GetCellValue( row, col );
 
-            for( int affectedRow = m_sel_row_start; affectedRow < m_sel_row_count; ++affectedRow )
+            for( int otherRow = m_sel_row_start; otherRow < m_sel_row_start + m_sel_row_count; ++otherRow )
             {
-                if( affectedRow == row )
+                if( otherRow == row )
                     continue;
 
-                m_grid->SetCellValue( affectedRow, col, newVal );
+                m_grid->SetCellValue( otherRow, col, newVal );
             }
+
+            return;
         }
     }
 
