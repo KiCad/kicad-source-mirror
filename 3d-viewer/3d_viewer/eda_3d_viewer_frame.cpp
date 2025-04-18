@@ -474,6 +474,8 @@ void EDA_3D_VIEWER_FRAME::Process_Special_Functions( wxCommandEvent &event )
         SETTINGS_MANAGER&       mgr = Pgm().GetSettingsManager();
         EDA_3D_VIEWER_SETTINGS* cfg = mgr.GetAppSettings<EDA_3D_VIEWER_SETTINGS>( "3d_viewer" );
 
+        m_boardAdapter.SetLayerColors( m_boardAdapter.GetDefaultColors() );
+
         cfg->ResetToDefaults();
         LoadSettings( cfg );
 
