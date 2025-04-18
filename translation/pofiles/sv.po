@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-04-18 03:10+0300\n"
-"PO-Revision-Date: 2025-04-18 08:43+0000\n"
+"PO-Revision-Date: 2025-04-18 09:01+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/v9/sv/>\n"
 "Language: sv\n"
@@ -36202,19 +36202,16 @@ msgid "Footprint dimensions"
 msgstr "Fotavtrycks måttsättningsobjekt"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:85
-#, fuzzy
 msgid "By layer:"
-msgstr "Till lager:"
+msgstr "Enligt lager:"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:97
-#, fuzzy
 msgid "By parent reference designator:"
-msgstr "Referensbeteckning att börja från:"
+msgstr "Enligt det överordnade objektets referensbeteckning:"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:103
-#, fuzzy
 msgid "By parent footprint library link:"
-msgstr "Nytt id för fotavtrycksbibliotek:"
+msgstr "Enligt det överordnade objektets fotavtryckslänk:"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:124
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:133
@@ -38187,7 +38184,7 @@ msgstr "Ett unikt namn för detta regelområde för användning i designregler"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:86
 msgid "Distance between parallel lines used for hatching the area"
-msgstr ""
+msgstr "Avstånd mellan parallella linjer i områdets skraffering"
 
 #: pcbnew/dialogs/dialog_set_offset.cpp:66
 msgid "Reset this value to zero."
@@ -47026,16 +47023,17 @@ msgid "Physical Clearances"
 msgstr "Fysiska frigångsvärden"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1260
-#, fuzzy, c-format
+#, c-format
 msgid "No 'physical_clearance' constraints in effect on %s."
-msgstr "Ingen 'physical_clearance'-begränsning definierad."
+msgstr "Ingen 'physical_clearance'-begränsning aktiv på %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1279
-#, fuzzy
 msgid ""
 "Items share no relevant layers.  No 'physical_clearance' constraints will be "
 "applied."
-msgstr "Ingen 'physical_clearance'-begränsning definierad."
+msgstr ""
+"Objekt har inga gemensamma lager.  Ingen 'physical_clearance'-begränsning "
+"kommer att appliceras."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1341
 msgid "Select an item for a constraints resolution report."
