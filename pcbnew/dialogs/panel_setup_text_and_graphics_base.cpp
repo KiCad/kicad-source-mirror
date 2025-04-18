@@ -19,13 +19,19 @@ PANEL_SETUP_TEXT_AND_GRAPHICS_BASE::PANEL_SETUP_TEXT_AND_GRAPHICS_BASE( wxWindow
 
 	m_staticTextDefProp = new wxStaticText( this, wxID_ANY, _("Default Properties for New Graphics and Text"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextDefProp->Wrap( -1 );
-	m_gridSizer->Add( m_staticTextDefProp, 0, wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 8 );
+	m_gridSizer->Add( m_staticTextDefProp, 0, wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 13 );
+
+
+	m_gridSizer->Add( 0, 2, 0, 0, 5 );
 
 	m_staticline11 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	m_gridSizer->Add( m_staticline11, 0, wxEXPAND | wxALL, 5 );
+	m_gridSizer->Add( m_staticline11, 0, wxEXPAND|wxBOTTOM, 5 );
 
 
 	m_gridSizer->Add( 0, 3, 0, wxEXPAND, 5 );
+
+	wxBoxSizer* bMargins;
+	bMargins = new wxBoxSizer( wxVERTICAL );
 
 	m_grid = new WX_GRID( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 
@@ -69,13 +75,16 @@ PANEL_SETUP_TEXT_AND_GRAPHICS_BASE::PANEL_SETUP_TEXT_AND_GRAPHICS_BASE( wxWindow
 
 	// Cell Defaults
 	m_grid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_CENTER );
-	m_gridSizer->Add( m_grid, 0, wxBOTTOM, 15 );
+	bMargins->Add( m_grid, 0, wxBOTTOM, 15 );
+
+
+	m_gridSizer->Add( bMargins, 1, wxEXPAND|wxLEFT, 5 );
 
 
 	m_gridSizer->Add( 0, 0, 0, wxEXPAND|wxTOP|wxBOTTOM, 5 );
 
 
-	m_mainSizer->Add( m_gridSizer, 0, wxEXPAND|wxLEFT, 5 );
+	m_mainSizer->Add( m_gridSizer, 0, wxEXPAND, 5 );
 
 
 	this->SetSizer( m_mainSizer );
