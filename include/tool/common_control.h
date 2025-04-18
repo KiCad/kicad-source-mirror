@@ -50,6 +50,7 @@ public:
     int ShowLibraryTable( const TOOL_EVENT& aEvent );
 
     int ShowPlayer( const TOOL_EVENT& aEvent );
+    int Execute( const TOOL_EVENT& aEvent );
     int ShowProjectManager( const TOOL_EVENT& aEvent );
 
     int ShowHelp( const TOOL_EVENT& aEvent );
@@ -61,6 +62,8 @@ public:
 
     ///< Sets up handlers for various events.
     void setTransitions() override;
+
+    int Execute( const wxString& aExecutible, const wxString& aParam );
 
 private:
     ///< Pointer to the currently used edit frame.

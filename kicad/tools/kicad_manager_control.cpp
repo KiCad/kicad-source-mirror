@@ -36,6 +36,8 @@
 #include <settings/kicad_settings.h>
 #include <tool/selection.h>
 #include <tool/tool_event.h>
+#include <tool/tool_manager.h>
+#include <tool/common_control.h>
 #include <tools/kicad_manager_actions.h>
 #include <tools/kicad_manager_control.h>
 #include <dialogs/panel_design_block_lib_table.h>
@@ -920,19 +922,6 @@ int KICAD_MANAGER_CONTROL::ShowPlayer( const TOOL_EVENT& aEvent )
 }
 
 
-class TERMINATE_HANDLER : public wxProcess
-{
-public:
-    TERMINATE_HANDLER( const wxString& appName )
-    { }
-
-    void OnTerminate( int pid, int status ) override
-    {
-        delete this;
-    }
-};
-
-
 int KICAD_MANAGER_CONTROL::Execute( const TOOL_EVENT& aEvent )
 {
     wxString execFile;
@@ -963,35 +952,14 @@ int KICAD_MANAGER_CONTROL::Execute( const TOOL_EVENT& aEvent )
     else if( aEvent.IsAction( &KICAD_MANAGER_ACTIONS::viewGerbers ) && m_frame->IsProjectActive() )
         param = m_frame->Prj().GetProjectPath();
 
-    TERMINATE_HANDLER* callback = new TERMINATE_HANDLER( execFile );
-
-    long pid = ExecuteFile( execFile, param, callback );
-
-    if( pid > 0 )
-    {
-#ifdef __WXMAC__
-        wxString script = wxString::Format( wxS( "tell application \"System Events\"\n"
-                          "  set frontmost of the first process whose unix id is %l to true\n"
-                          "end tell" ), pid );
-
-        // This non-parameterized use of wxExecute is fine because script is not derived
-        // from user input.
-        wxExecute( wxString::Format( "osascript -e '%s'", script ) );
-#endif
-    }
-    else
-    {
-        delete callback;
-    }
-
-    return 0;
+    COMMON_CONTROL* commonControl = m_toolMgr->GetTool<COMMON_CONTROL>();
+    return commonControl->Execute( execFile, param );
 }
 
 
 int KICAD_MANAGER_CONTROL::ShowPluginManager( const TOOL_EVENT& aEvent )
 {
-    if( KIPLATFORM::POLICY::GetPolicyBool( POLICY_KEY_PCM )
-        == KIPLATFORM::POLICY::PBOOL::DISABLED )
+    if( KIPLATFORM::POLICY::GetPolicyBool( POLICY_KEY_PCM ) == KIPLATFORM::POLICY::PBOOL::DISABLED )
     {
         // policy disables the plugin manager
         return 0;
@@ -1059,34 +1027,34 @@ void KICAD_MANAGER_CONTROL::setTransitions()
     Go( &KICAD_MANAGER_CONTROL::NewProject,         KICAD_MANAGER_ACTIONS::newProject.MakeEvent() );
     Go( &KICAD_MANAGER_CONTROL::NewFromTemplate,    KICAD_MANAGER_ACTIONS::newFromTemplate.MakeEvent() );
     Go( &KICAD_MANAGER_CONTROL::NewFromRepository,  KICAD_MANAGER_ACTIONS::newFromRepository.MakeEvent() );
-    Go( &KICAD_MANAGER_CONTROL::NewJobsetFile,        KICAD_MANAGER_ACTIONS::newJobsetFile.MakeEvent() );
+    Go( &KICAD_MANAGER_CONTROL::NewJobsetFile,      KICAD_MANAGER_ACTIONS::newJobsetFile.MakeEvent() );
     Go( &KICAD_MANAGER_CONTROL::OpenDemoProject,    KICAD_MANAGER_ACTIONS::openDemoProject.MakeEvent() );
     Go( &KICAD_MANAGER_CONTROL::OpenProject,        KICAD_MANAGER_ACTIONS::openProject.MakeEvent() );
-    Go( &KICAD_MANAGER_CONTROL::OpenJobsetFile,        KICAD_MANAGER_ACTIONS::openJobsetFile.MakeEvent() );
+    Go( &KICAD_MANAGER_CONTROL::OpenJobsetFile,     KICAD_MANAGER_ACTIONS::openJobsetFile.MakeEvent() );
     Go( &KICAD_MANAGER_CONTROL::CloseProject,       KICAD_MANAGER_ACTIONS::closeProject.MakeEvent() );
     Go( &KICAD_MANAGER_CONTROL::SaveProjectAs,      ACTIONS::saveAs.MakeEvent() );
     Go( &KICAD_MANAGER_CONTROL::LoadProject,        KICAD_MANAGER_ACTIONS::loadProject.MakeEvent() );
     Go( &KICAD_MANAGER_CONTROL::ViewDroppedViewers, KICAD_MANAGER_ACTIONS::viewDroppedGerbers.MakeEvent() );
 
-    Go( &KICAD_MANAGER_CONTROL::ArchiveProject,                 KICAD_MANAGER_ACTIONS::archiveProject.MakeEvent() );
-    Go( &KICAD_MANAGER_CONTROL::UnarchiveProject,               KICAD_MANAGER_ACTIONS::unarchiveProject.MakeEvent() );
-    Go( &KICAD_MANAGER_CONTROL::ExploreProject,                 KICAD_MANAGER_ACTIONS::openProjectDirectory.MakeEvent() );
+    Go( &KICAD_MANAGER_CONTROL::ArchiveProject,     KICAD_MANAGER_ACTIONS::archiveProject.MakeEvent() );
+    Go( &KICAD_MANAGER_CONTROL::UnarchiveProject,   KICAD_MANAGER_ACTIONS::unarchiveProject.MakeEvent() );
+    Go( &KICAD_MANAGER_CONTROL::ExploreProject,     KICAD_MANAGER_ACTIONS::openProjectDirectory.MakeEvent() );
 
-    Go( &KICAD_MANAGER_CONTROL::Refresh,         ACTIONS::zoomRedraw.MakeEvent() );
-    Go( &KICAD_MANAGER_CONTROL::UpdateMenu,      ACTIONS::updateMenu.MakeEvent() );
+    Go( &KICAD_MANAGER_CONTROL::Refresh,            ACTIONS::zoomRedraw.MakeEvent() );
+    Go( &KICAD_MANAGER_CONTROL::UpdateMenu,         ACTIONS::updateMenu.MakeEvent() );
 
-    Go( &KICAD_MANAGER_CONTROL::ShowPlayer,      KICAD_MANAGER_ACTIONS::editSchematic.MakeEvent() );
-    Go( &KICAD_MANAGER_CONTROL::ShowPlayer,      KICAD_MANAGER_ACTIONS::editSymbols.MakeEvent() );
-    Go( &KICAD_MANAGER_CONTROL::ShowPlayer,      KICAD_MANAGER_ACTIONS::editPCB.MakeEvent() );
-    Go( &KICAD_MANAGER_CONTROL::ShowPlayer,      KICAD_MANAGER_ACTIONS::editFootprints.MakeEvent() );
-    Go( &KICAD_MANAGER_CONTROL::Execute,         KICAD_MANAGER_ACTIONS::viewGerbers.MakeEvent() );
-    Go( &KICAD_MANAGER_CONTROL::Execute,         KICAD_MANAGER_ACTIONS::convertImage.MakeEvent() );
-    Go( &KICAD_MANAGER_CONTROL::Execute,         KICAD_MANAGER_ACTIONS::showCalculator.MakeEvent() );
-    Go( &KICAD_MANAGER_CONTROL::Execute,         KICAD_MANAGER_ACTIONS::editDrawingSheet.MakeEvent() );
-    Go( &KICAD_MANAGER_CONTROL::Execute,         KICAD_MANAGER_ACTIONS::openTextEditor.MakeEvent() );
+    Go( &KICAD_MANAGER_CONTROL::ShowPlayer,         KICAD_MANAGER_ACTIONS::editSchematic.MakeEvent() );
+    Go( &KICAD_MANAGER_CONTROL::ShowPlayer,         KICAD_MANAGER_ACTIONS::editSymbols.MakeEvent() );
+    Go( &KICAD_MANAGER_CONTROL::ShowPlayer,         KICAD_MANAGER_ACTIONS::editPCB.MakeEvent() );
+    Go( &KICAD_MANAGER_CONTROL::ShowPlayer,         KICAD_MANAGER_ACTIONS::editFootprints.MakeEvent() );
+    Go( &KICAD_MANAGER_CONTROL::Execute,            KICAD_MANAGER_ACTIONS::viewGerbers.MakeEvent() );
+    Go( &KICAD_MANAGER_CONTROL::Execute,            KICAD_MANAGER_ACTIONS::convertImage.MakeEvent() );
+    Go( &KICAD_MANAGER_CONTROL::Execute,            KICAD_MANAGER_ACTIONS::showCalculator.MakeEvent() );
+    Go( &KICAD_MANAGER_CONTROL::Execute,            KICAD_MANAGER_ACTIONS::editDrawingSheet.MakeEvent() );
+    Go( &KICAD_MANAGER_CONTROL::Execute,            KICAD_MANAGER_ACTIONS::openTextEditor.MakeEvent() );
 
-    Go( &KICAD_MANAGER_CONTROL::Execute,         KICAD_MANAGER_ACTIONS::editOtherSch.MakeEvent() );
-    Go( &KICAD_MANAGER_CONTROL::Execute,         KICAD_MANAGER_ACTIONS::editOtherPCB.MakeEvent() );
+    Go( &KICAD_MANAGER_CONTROL::Execute,            KICAD_MANAGER_ACTIONS::editOtherSch.MakeEvent() );
+    Go( &KICAD_MANAGER_CONTROL::Execute,            KICAD_MANAGER_ACTIONS::editOtherPCB.MakeEvent() );
 
-    Go( &KICAD_MANAGER_CONTROL::ShowPluginManager, KICAD_MANAGER_ACTIONS::showPluginManager.MakeEvent() );
+    Go( &KICAD_MANAGER_CONTROL::ShowPluginManager,  KICAD_MANAGER_ACTIONS::showPluginManager.MakeEvent() );
 }

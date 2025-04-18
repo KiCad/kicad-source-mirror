@@ -42,6 +42,9 @@
 #include <dialogs/dialog_configure_paths.h>
 #include <eda_doc.h>
 #include <wx/msgdlg.h>
+#include <executable_names.h>
+#include <gestfich.h>
+#include <tools/kicad_manager_actions.h>
 
 #define URL_GET_INVOLVED wxS( "https://go.kicad.org/contribute/" )
 #define URL_DONATE wxS( "https://go.kicad.org/app-donate" )
@@ -185,6 +188,69 @@ int COMMON_CONTROL::ShowPlayer( const TOOL_EVENT& aEvent )
     showFrame( editor );
 
     return 0;
+}
+
+
+class TERMINATE_HANDLER : public wxProcess
+{
+public:
+    TERMINATE_HANDLER( const wxString& appName )
+    { }
+
+    void OnTerminate( int pid, int status ) override
+    {
+        delete this;
+    }
+};
+
+
+int COMMON_CONTROL::Execute( const wxString& aExecutible, const wxString& aParam )
+{
+    TERMINATE_HANDLER* callback = new TERMINATE_HANDLER( aExecutible );
+
+    long pid = ExecuteFile( aExecutible, aParam, callback );
+
+    if( pid > 0 )
+    {
+#ifdef __WXMAC__
+        wxString script;
+
+        script.Printf( wxS( "tell application \"System Events\" to tell application process \"%s\"\n"
+                            "   set frontmost to true\n"
+                            "end tell" ),
+                       aExecutible );
+
+        // This non-parameterized use of wxExecute is fine because script is not derived
+        // from user input.
+        wxExecute( wxString::Format( "osascript -e '%s'", script ) );
+#endif
+    }
+    else
+    {
+        delete callback;
+    }
+
+    return 0;
+}
+
+
+int COMMON_CONTROL::Execute( const TOOL_EVENT& aEvent )
+{
+    wxString execFile;
+    wxString param;
+
+    if( aEvent.IsAction( &ACTIONS::showCalculatorTools ) )
+        execFile = PCB_CALCULATOR_EXE;
+    else
+        wxFAIL_MSG( "Execute(): unexpected request" );
+
+    if( execFile.IsEmpty() )
+        return 0;
+
+    if( aEvent.Parameter<wxString*>() )
+        param = *aEvent.Parameter<wxString*>();
+
+    return Execute( execFile, param );
 }
 
 
@@ -356,7 +422,7 @@ void COMMON_CONTROL::setTransitions()
     Go( &COMMON_CONTROL::ShowPlayer,         ACTIONS::showSymbolEditor.MakeEvent() );
     Go( &COMMON_CONTROL::ShowPlayer,         ACTIONS::showFootprintBrowser.MakeEvent() );
     Go( &COMMON_CONTROL::ShowPlayer,         ACTIONS::showFootprintEditor.MakeEvent() );
-    Go( &COMMON_CONTROL::ShowPlayer,         ACTIONS::showCalculatorTools.MakeEvent() );
+    Go( &COMMON_CONTROL::Execute,            ACTIONS::showCalculatorTools.MakeEvent() );
     Go( &COMMON_CONTROL::ShowProjectManager, ACTIONS::showProjectManager.MakeEvent() );
 
     Go( &COMMON_CONTROL::ShowHelp,           ACTIONS::gettingStarted.MakeEvent() );
