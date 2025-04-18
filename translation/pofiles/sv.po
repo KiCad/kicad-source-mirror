@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-04-18 03:09+0300\n"
-"PO-Revision-Date: 2025-04-18 08:43+0000\n"
+"PO-Revision-Date: 2025-04-18 09:01+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/"
 "master-source/sv/>\n"
@@ -36787,19 +36787,16 @@ msgid "Footprint dimensions"
 msgstr "Fotavtrycks måttsättningsobjekt"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:85
-#, fuzzy
 msgid "By layer:"
-msgstr "Till lager:"
+msgstr "Enligt lager:"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:97
-#, fuzzy
 msgid "By parent reference designator:"
-msgstr "Referensbeteckning att börja från:"
+msgstr "Enligt det överordnade objektets referensbeteckning:"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:103
-#, fuzzy
 msgid "By parent footprint library link:"
-msgstr "Nytt id för fotavtrycksbibliotek:"
+msgstr "Enligt det överordnade objektets fotavtryckslänk:"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:124
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:133
@@ -37032,9 +37029,8 @@ msgid "Component classes"
 msgstr "Komponentklasser"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:81
-#, fuzzy
 msgid "Time domain parameters"
-msgstr "Parametrar för namnruta"
+msgstr "Parametrar för tidsdomän"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:84
 msgid "Custom rules"
@@ -37589,9 +37585,8 @@ msgid "Specify pad to die length"
 msgstr "Specificera längd från lödyta till chip"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:507
-#, fuzzy
 msgid "Specify pad to die delay"
-msgstr "Specificera längd från lödyta till chip"
+msgstr "Specificera fördröjning från lödyta till chip"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:542
 msgid ""
@@ -38643,16 +38638,14 @@ msgid "x"
 msgstr "x"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:71
-#, fuzzy
 msgid "Appearance preset:"
-msgstr "Utseende"
+msgstr "Förinställning för utseende:"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:81
 msgid "Background style:"
 msgstr "Bakgrundsstil:"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:96
-#, fuzzy
 msgid "Procedural textures"
 msgstr "Procedurella strukturer"
 
@@ -38768,7 +38761,7 @@ msgstr "Ett unikt namn för detta regelområde för användning i designregler"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:86
 msgid "Distance between parallel lines used for hatching the area"
-msgstr ""
+msgstr "Avstånd mellan parallella linjer i områdets skraffering"
 
 #: pcbnew/dialogs/dialog_set_offset.cpp:66
 msgid "Reset this value to zero."
@@ -38958,9 +38951,8 @@ msgstr "Byt lager"
 #: pcbnew/dialogs/dialog_tablecell_properties_base.cpp:208
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:208
 #: pcbnew/dialogs/dialog_textbox_properties_base.cpp:199
-#, fuzzy
 msgid "Adjust the text thickness"
-msgstr "Justera tjocklek på dielektrikum"
+msgstr "Justera textvikten"
 
 #: pcbnew/dialogs/dialog_target_properties.cpp:109
 msgid "Edit Alignment Target"
@@ -39272,14 +39264,12 @@ msgid "Track and Via Dimensions"
 msgstr "Fördefinierade ledar- och viadimensioner"
 
 #: pcbnew/dialogs/dialog_tuning_pattern_properties.cpp:56
-#, fuzzy
 msgid "Target Skew: "
-msgstr "Mål för skevhet: %s"
+msgstr "Önskad skevhet: "
 
 #: pcbnew/dialogs/dialog_tuning_pattern_properties.cpp:57
-#, fuzzy
 msgid "Target Skew Delay: "
-msgstr "Mål för skevhet: %s"
+msgstr "Önskad fördröjningsskevhet: "
 
 #: pcbnew/dialogs/dialog_tuning_pattern_properties.cpp:129
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2413
@@ -39296,14 +39286,12 @@ msgid "(from %s)"
 msgstr "(från %s)"
 
 #: pcbnew/dialogs/dialog_tuning_pattern_properties_base.cpp:38
-#, fuzzy
 msgid "Target Length:"
-msgstr "Önskad längd"
+msgstr "Önskad längd:"
 
 #: pcbnew/dialogs/dialog_tuning_pattern_properties_base.cpp:58
-#, fuzzy
 msgid "Target Delay:"
-msgstr "Målytor:"
+msgstr "Önskad fördröjning:"
 
 #: pcbnew/dialogs/dialog_tuning_pattern_properties_base.cpp:72
 msgid "Override custom rules"
@@ -40697,50 +40685,41 @@ msgid "Default Properties for New Graphics and Text"
 msgstr "Förinställda egenskaper för nya grafiska objekt och text"
 
 #: pcbnew/dialogs/panel_setup_time_domain_parameters.cpp:564
-#, fuzzy
 msgid "Tuning profile must have a name."
-msgstr "Fältet måste ha ett namn."
+msgstr "Längdjusteringsprofilen måste ha ett namn."
 
 #: pcbnew/dialogs/panel_setup_time_domain_parameters.cpp:573
-#, fuzzy
 msgid "Tuning profile name already in use."
-msgstr "Fältnamnet '%s' används redan."
+msgstr "Namnet för längdjusteringsprofilen används redan."
 
 #: pcbnew/dialogs/panel_setup_time_domain_parameters_base.cpp:31
-#, fuzzy
 msgid "Delay Profiles"
-msgstr "Försening:"
+msgstr "Fördröjningsprofiler"
 
 #: pcbnew/dialogs/panel_setup_time_domain_parameters_base.cpp:50
 #: pcbnew/dialogs/panel_setup_time_domain_parameters_base.cpp:111
-#, fuzzy
 msgid "Profile Name"
-msgstr "Filnamn"
+msgstr "Profilnamn"
 
 #: pcbnew/dialogs/panel_setup_time_domain_parameters_base.cpp:92
-#, fuzzy
 msgid "Via Delay Overrides"
-msgstr "Åsidosättanden för rutnät"
+msgstr "Åsidosättanden för fördröjning i vior"
 
 #: pcbnew/dialogs/panel_setup_time_domain_parameters_base.cpp:112
-#, fuzzy
 msgid "Signal Layer From"
-msgstr "Anvisningstryckslager"
+msgstr "Från signallager"
 
 #: pcbnew/dialogs/panel_setup_time_domain_parameters_base.cpp:113
-#, fuzzy
 msgid "Signal Layer To"
-msgstr "Anvisningstryckslager"
+msgstr "Till signallager"
 
 #: pcbnew/dialogs/panel_setup_time_domain_parameters_base.cpp:114
-#, fuzzy
 msgid "Via Layer From"
-msgstr "KiCad-lager"
+msgstr "Via från lager"
 
 #: pcbnew/dialogs/panel_setup_time_domain_parameters_base.cpp:115
-#, fuzzy
 msgid "Via Layer To"
-msgstr "Övre lager"
+msgstr "Via till lager"
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias.cpp:373
 msgid "No via hole size defined."
@@ -41533,14 +41512,12 @@ msgid "Could not parse expression '%s'."
 msgstr "Det gick inte att tolka uttrycket '%s'."
 
 #: pcbnew/drc/drc_rule_parser.cpp:434
-#, fuzzy
 msgid "Time based units not allowed for constraint type."
-msgstr "Alternativ within_diff_pairs ogiltig för begränsningstypen."
+msgstr "Tidsbaserade enheter ej tillåtna för begränsningstypen."
 
 #: pcbnew/drc/drc_rule_parser.cpp:438
-#, fuzzy
 msgid "Mixed units for constraint values."
-msgstr "Plotta fotavtrycks värden"
+msgstr "Blandade enheter för begränsningsvärden."
 
 #: pcbnew/drc/drc_rule_parser.cpp:478
 #, c-format
@@ -43181,9 +43158,8 @@ msgid "current skew"
 msgstr "aktuell skevhet"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2252
-#, fuzzy
 msgid "current delay"
-msgstr "Nuvarande lager:"
+msgstr "nuvarande fördröjning"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2254
 msgid "current length"
@@ -43194,18 +43170,16 @@ msgid "Routed Lengths"
 msgstr "Dragna längder"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2359
-#, fuzzy
 msgid "Routed Delays"
-msgstr "Dragna längder"
+msgstr "Dragna fördröjningar"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2368 pcbnew/pcb_track.cpp:1808
 msgid "Routed Length"
 msgstr "Dragen längd"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2372 pcbnew/pcb_track.cpp:1821
-#, fuzzy
 msgid "Routed Delay"
-msgstr "Dragen längd"
+msgstr "Dragen fördröjning"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2380 pcbnew/pad.cpp:2885
 #: pcbnew/pcb_track.cpp:1813
@@ -43218,14 +43192,12 @@ msgstr "Full längd"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2388 pcbnew/pad.cpp:2891
 #: pcbnew/pcb_track.cpp:1827
-#, fuzzy
 msgid "Pad To Die Delay"
-msgstr "Längd lödyta till chip"
+msgstr "Fördröjning lödyta till chip"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2391 pcbnew/pcb_track.cpp:1830
-#, fuzzy
 msgid "Full Delay"
-msgstr "Fördröjning"
+msgstr "Fullständig fördröjning"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2403
 #, c-format
@@ -43243,9 +43215,9 @@ msgid "Skew Constraints: %s"
 msgstr "Skevhetsbegränsningar: %s"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2427
-#, fuzzy, c-format
+#, c-format
 msgid "Target Delay: %s"
-msgstr "Mål för skevhet: %s"
+msgstr "Önskad fördröjning: %s"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2433
 #, c-format
@@ -43253,9 +43225,9 @@ msgid "Target Length: %s"
 msgstr "Önskad längd: %s"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2444
-#, fuzzy, c-format
+#, c-format
 msgid "Delay Constraints: %s"
-msgstr "Diffpars ledaravståndsbegränsningar: %s"
+msgstr "Fördröjningsbegränsningar: %s"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2444
 #, c-format
@@ -43324,18 +43296,16 @@ msgid "Target Length"
 msgstr "Önskad längd"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2942
-#, fuzzy
 msgid "Target Delay"
-msgstr "Målytor:"
+msgstr "Önskad fördröjning"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2949
 msgid "Target Skew"
 msgstr "Önskad längdskillnad"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2956
-#, fuzzy
 msgid "Target Skew Delay"
-msgstr "Önskad längdskillnad"
+msgstr "Önskad fördröjningsskillnad"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2963
 msgid "Override Custom Rules"
@@ -43689,9 +43659,8 @@ msgid "In Package"
 msgstr "I paketet"
 
 #: pcbnew/netinfo_item.cpp:150 pcbnew/widgets/pcb_net_inspector_panel.cpp:123
-#, fuzzy
 msgid "Net Delay"
-msgstr "Fördröjning"
+msgstr "Nätfördröjning"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:142
 #, c-format
@@ -46550,9 +46519,8 @@ msgid "Segment Length"
 msgstr "Segmentlängd"
 
 #: pcbnew/pcb_track.cpp:1791
-#, fuzzy
 msgid "Segment Delay"
-msgstr "Segment"
+msgstr "Segmentfördröjning"
 
 #: pcbnew/pcb_track.cpp:1837
 msgid "Copper Area"
@@ -46685,9 +46653,8 @@ msgid "Filling"
 msgstr "Fyllning"
 
 #: pcbnew/pcbexpr_evaluator.cpp:615
-#, fuzzy
 msgid "must be mm, in, mil, deg, fs, or ps"
-msgstr "måste vara mm, tum, mils (1/1000 tum) eller grader"
+msgstr "måste vara mm, tum, mils (1/1000 tum), grader, fs eller ps"
 
 #: pcbnew/pcbexpr_functions.cpp:76
 #, c-format
@@ -47928,16 +47895,17 @@ msgid "Physical Clearances"
 msgstr "Fysiska frigångsvärden"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1260
-#, fuzzy, c-format
+#, c-format
 msgid "No 'physical_clearance' constraints in effect on %s."
-msgstr "Ingen 'physical_clearance'-begränsning definierad."
+msgstr "Ingen 'physical_clearance'-begränsning aktiv på %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1279
-#, fuzzy
 msgid ""
 "Items share no relevant layers.  No 'physical_clearance' constraints will be "
 "applied."
-msgstr "Ingen 'physical_clearance'-begränsning definierad."
+msgstr ""
+"Objekt har inga gemensamma lager.  Ingen 'physical_clearance'-begränsning "
+"kommer att appliceras."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1341
 msgid "Select an item for a constraints resolution report."
@@ -50477,14 +50445,12 @@ msgid "BOARD CHARACTERISTICS"
 msgstr "MÖNSTERKORTSEGENSKAPER"
 
 #: pcbnew/tools/pcb_control.cpp:2199
-#, fuzzy
 msgid "Copper layer count: "
-msgstr "Kopparlager räknas:"
+msgstr "Antal kopparlager : "
 
 #: pcbnew/tools/pcb_control.cpp:2203
-#, fuzzy
 msgid "Board thickness: "
-msgstr "Mönsterkortets tjocklek:"
+msgstr "Mönsterkortets tjocklek: "
 
 #: pcbnew/tools/pcb_control.cpp:2210
 msgid "Board overall dimensions: "
@@ -50499,12 +50465,10 @@ msgid "Min hole diameter: "
 msgstr "Minsta håldiameter: "
 
 #: pcbnew/tools/pcb_control.cpp:2228
-#, fuzzy
 msgid "Copper finish: "
-msgstr "Oxidskydd på koppar:"
+msgstr "Oxidskydd på koppar: "
 
 #: pcbnew/tools/pcb_control.cpp:2231
-#, fuzzy
 msgid "Impedance control: "
 msgstr "Impedanskontroll: "
 
@@ -50513,9 +50477,8 @@ msgid "Castellated pads: "
 msgstr "Krenelerade lödytor: "
 
 #: pcbnew/tools/pcb_control.cpp:2237
-#, fuzzy
 msgid "Plated board edge: "
-msgstr "Pläterad mönsterkortskant"
+msgstr "Pläterad mönsterkortskant: "
 
 #: pcbnew/tools/pcb_control.cpp:2246
 msgid "Yes, Bevelled"
@@ -50526,9 +50489,8 @@ msgid "Edge card connectors: "
 msgstr "Kortkantskontakter: "
 
 #: pcbnew/tools/pcb_control.cpp:2265
-#, fuzzy
 msgid "Place Board Characteristics"
-msgstr "Mönsterkortsegenskaper"
+msgstr "Placera ut mönsterkortsegenskaper"
 
 #: pcbnew/tools/pcb_control.cpp:2318
 msgid "Loss Tangent"
