@@ -100,12 +100,12 @@ KICOMMON_API wxString ExpandTextVars( const wxString& aSource, const PROJECT* aP
 /**
  * Returns any variables unexpanded, e.g. ${VAR} -> VAR
  */
-KICOMMON_API wxString GetTextVars( const wxString& aSource );
+KICOMMON_API wxString GetGeneratedFieldDisplayName( const wxString& aSource );
 
 /**
- * Returns true if the string is a text var, e.g starts with ${
+ * Returns true if the string is generated, e.g contains a single text var reference
  */
-KICOMMON_API bool IsTextVar( const wxString& aSource );
+KICOMMON_API bool IsGeneratedField( const wxString& aSource );
 
 /**
  * Replace any environment and/or text variables in URIs
