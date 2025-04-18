@@ -297,7 +297,7 @@ void DIALOG_BOARD_SETUP::onPageChanged( wxBookCtrlEvent& aEvent )
         }
         else if( page == m_netclassesPage || m_currentPage == m_timeDomainParametersPage )
         {
-            m_netClasses->UpdateTuningProfileNames( m_timeDomainParameters->GetDelayProfileNames() );
+            m_netClasses->UpdateDelayProfileNames( m_timeDomainParameters->GetDelayProfileNames() );
         }
         else if( page == m_timeDomainParametersPage )
         {

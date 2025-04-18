@@ -118,16 +118,16 @@ private:
     bool validateViaRows();
 
     /// Adds a tuning profile row with the given persisted parameters
-    void addProfileRow( const TIME_DOMAIN_TUNING_PROFILE& aDelayProfile );
+    void addProfileRow( const DELAY_PROFILE& aDelayProfile );
 
     /// Gets a tuning profile row as a set of persistable parameters
-    TIME_DOMAIN_TUNING_PROFILE getProfileRow( int aRow );
+    DELAY_PROFILE getProfileRow( int aRow );
 
     /// Adds a via override row with the given persisted parameters
-    void addViaRow( const wxString& aProfileName, const TUNING_PROFILE_VIA_OVERRIDE_ENTRY& aViaOverrideEntry ) const;
+    void addViaRow( const wxString& aProfileName, const DELAY_PROFILE_VIA_OVERRIDE_ENTRY& aViaOverrideEntry ) const;
 
     /// Gets a via override row as a set of persistable parameters
-    TUNING_PROFILE_VIA_OVERRIDE_ENTRY getViaRow( int aRow );
+    DELAY_PROFILE_VIA_OVERRIDE_ENTRY getViaRow( int aRow );
 
     /// Gets the profile name for the given profile grid row
     wxString getProfileNameForProfileGridRow( int aRow ) const;

@@ -35,7 +35,7 @@ TIME_DOMAIN_PARAMETERS::TIME_DOMAIN_PARAMETERS( JSON_SETTINGS* aParent, const st
                          aPath, false )
 {
     auto saveViaOverrideConfigurationLine =
-            []( nlohmann::json& json_array, const TUNING_PROFILE_VIA_OVERRIDE_ENTRY& item )
+            []( nlohmann::json& json_array, const DELAY_PROFILE_VIA_OVERRIDE_ENTRY& item )
     {
         const nlohmann::json item_json = { { "signal_layer_from", LSET::Name( item.m_SignalLayerFrom ) },
                                            { "signal_layer_to", LSET::Name( item.m_SignalLayerTo ) },
@@ -62,16 +62,16 @@ TIME_DOMAIN_PARAMETERS::TIME_DOMAIN_PARAMETERS( JSON_SETTINGS* aParent, const st
 
         int delay = entry["delay"];
 
-        TUNING_PROFILE_VIA_OVERRIDE_ENTRY item{ static_cast<PCB_LAYER_ID>( signalLayerFromId ),
-                                                static_cast<PCB_LAYER_ID>( signalLayerToId ),
-                                                static_cast<PCB_LAYER_ID>( viaLayerFromId ),
-                                                static_cast<PCB_LAYER_ID>( viaLayerToId ), delay };
+        DELAY_PROFILE_VIA_OVERRIDE_ENTRY item{ static_cast<PCB_LAYER_ID>( signalLayerFromId ),
+                                               static_cast<PCB_LAYER_ID>( signalLayerToId ),
+                                               static_cast<PCB_LAYER_ID>( viaLayerFromId ),
+                                               static_cast<PCB_LAYER_ID>( viaLayerToId ), delay };
 
         return item;
     };
 
     auto saveUserDefinedProfileConfigurationLine =
-            [&saveViaOverrideConfigurationLine]( nlohmann::json& json_array, const TIME_DOMAIN_TUNING_PROFILE& item )
+            [&saveViaOverrideConfigurationLine]( nlohmann::json& json_array, const DELAY_PROFILE& item )
     {
         nlohmann::json layer_velocities = nlohmann::json::array();
 
@@ -83,7 +83,7 @@ TIME_DOMAIN_PARAMETERS::TIME_DOMAIN_PARAMETERS( JSON_SETTINGS* aParent, const st
 
         nlohmann::json via_overrides = nlohmann::json::array();
 
-        for( const TUNING_PROFILE_VIA_OVERRIDE_ENTRY& viaOverride : item.m_ViaOverrides )
+        for( const DELAY_PROFILE_VIA_OVERRIDE_ENTRY& viaOverride : item.m_ViaOverrides )
         {
             saveViaOverrideConfigurationLine( via_overrides, viaOverride );
         }
@@ -113,7 +113,7 @@ TIME_DOMAIN_PARAMETERS::TIME_DOMAIN_PARAMETERS( JSON_SETTINGS* aParent, const st
             traceDelays[static_cast<PCB_LAYER_ID>( layerId )] = velocity;
         }
 
-        std::vector<TUNING_PROFILE_VIA_OVERRIDE_ENTRY> viaOverrides;
+        std::vector<DELAY_PROFILE_VIA_OVERRIDE_ENTRY> viaOverrides;
 
         for( const nlohmann::json& viaEntry : entry["via_overrides"] )
         {
@@ -123,8 +123,7 @@ TIME_DOMAIN_PARAMETERS::TIME_DOMAIN_PARAMETERS( JSON_SETTINGS* aParent, const st
             viaOverrides.push_back( readViaOverrideConfigurationLine( viaEntry ) );
         }
 
-        TIME_DOMAIN_TUNING_PROFILE item{ profileName, viaPropDelay, std::move( traceDelays ),
-                                         std::move( viaOverrides ) };
+        DELAY_PROFILE item{ profileName, viaPropDelay, std::move( traceDelays ), std::move( viaOverrides ) };
 
         return item;
     };

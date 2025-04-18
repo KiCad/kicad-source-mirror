@@ -28,7 +28,7 @@
 /**
  * Represents a single line in the time domain configuration via overrides configuration grid
  */
-struct TUNING_PROFILE_VIA_OVERRIDE_ENTRY
+struct DELAY_PROFILE_VIA_OVERRIDE_ENTRY
 {
     PCB_LAYER_ID m_SignalLayerFrom;
     PCB_LAYER_ID m_SignalLayerTo;
@@ -36,7 +36,7 @@ struct TUNING_PROFILE_VIA_OVERRIDE_ENTRY
     PCB_LAYER_ID m_ViaLayerTo;
     int          m_Delay;
 
-    bool operator<( const TUNING_PROFILE_VIA_OVERRIDE_ENTRY& other ) const
+    bool operator<( const DELAY_PROFILE_VIA_OVERRIDE_ENTRY& other ) const
     {
         if( m_SignalLayerFrom != other.m_SignalLayerFrom )
             return IsCopperLayerLowerThan( m_SignalLayerFrom, other.m_SignalLayerFrom );
@@ -58,12 +58,12 @@ struct TUNING_PROFILE_VIA_OVERRIDE_ENTRY
 /**
  * Represents a single line in the time domain configuration net class configuration grid
  */
-struct TIME_DOMAIN_TUNING_PROFILE
+struct DELAY_PROFILE
 {
-    wxString                                       m_ProfileName;
-    int                         m_ViaPropagationDelay;
-    std::map<PCB_LAYER_ID, int> m_LayerPropagationDelays;
-    std::vector<TUNING_PROFILE_VIA_OVERRIDE_ENTRY> m_ViaOverrides;
+    wxString                                      m_ProfileName;
+    int                                           m_ViaPropagationDelay;
+    std::map<PCB_LAYER_ID, int>                   m_LayerPropagationDelays;
+    std::vector<DELAY_PROFILE_VIA_OVERRIDE_ENTRY> m_ViaOverrides;
 };
 
 
@@ -83,15 +83,12 @@ public:
 
     void ClearDelayProfiles() { m_delayProfiles.clear(); }
 
-    void AddDelayProfile( TIME_DOMAIN_TUNING_PROFILE&& aTraceEntry )
-    {
-        m_delayProfiles.emplace_back( std::move( aTraceEntry ) );
-    }
+    void AddDelayProfile( DELAY_PROFILE&& aTraceEntry ) { m_delayProfiles.emplace_back( std::move( aTraceEntry ) ); }
 
-    const std::vector<TIME_DOMAIN_TUNING_PROFILE>& GetDelayProfiles() const { return m_delayProfiles; }
+    const std::vector<DELAY_PROFILE>& GetDelayProfiles() const { return m_delayProfiles; }
 
 private:
-    std::vector<TIME_DOMAIN_TUNING_PROFILE> m_delayProfiles;
+    std::vector<DELAY_PROFILE> m_delayProfiles;
 };
 
 #endif // KICAD_NET_SETTINGS_H

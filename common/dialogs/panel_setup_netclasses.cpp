@@ -61,7 +61,7 @@ enum
     GRID_uVIADRILL,
     GRID_DIFF_PAIR_WIDTH,
     GRID_DIFF_PAIR_GAP,
-    GRID_TUNING_PROFILE,
+    GRID_DELAY_PROFILE,
     GRID_PCB_COLOR,
 
     GRID_FIRST_EESCHEMA,
@@ -298,7 +298,7 @@ void PANEL_SETUP_NETCLASSES::loadNetclasses()
             [&]( int aRow, const NETCLASS* nc )
             {
                 m_netclassGrid->SetCellValue( aRow, GRID_NAME, nc->GetName() );
-                m_netclassGrid->SetCellValue( aRow, GRID_TUNING_PROFILE, nc->GetTuningProfile() );
+                m_netclassGrid->SetCellValue( aRow, GRID_DELAY_PROFILE, nc->GetDelayProfile() );
 
                 m_netclassGrid->SetOptionalUnitValue( aRow, GRID_WIREWIDTH,
                                                       nc->GetWireWidthOpt() );
@@ -504,7 +504,7 @@ bool PANEL_SETUP_NETCLASSES::TransferDataFromWindow()
                     nc->SetPriority( aRow );
 
                 nc->SetName( m_netclassGrid->GetCellValue( aRow, GRID_NAME ) );
-                nc->SetTuningProfile( m_netclassGrid->GetCellValue( aRow, GRID_TUNING_PROFILE ) );
+                nc->SetDelayProfile( m_netclassGrid->GetCellValue( aRow, GRID_DELAY_PROFILE ) );
 
                 nc->SetWireWidth( m_netclassGrid->GetOptionalUnitValue( aRow, GRID_WIREWIDTH ) );
                 nc->SetBusWidth( m_netclassGrid->GetOptionalUnitValue( aRow, GRID_BUSWIDTH ) );
@@ -1105,7 +1105,7 @@ void PANEL_SETUP_NETCLASSES::OnMoveNetclassDownClick( wxCommandEvent& event )
 }
 
 
-void PANEL_SETUP_NETCLASSES::UpdateTuningProfileNames( const std::vector<wxString>& aNames ) const
+void PANEL_SETUP_NETCLASSES::UpdateDelayProfileNames( const std::vector<wxString>& aNames ) const
 {
     wxArrayString profileNames;
     profileNames.push_back( wxEmptyString );
@@ -1117,5 +1117,5 @@ void PANEL_SETUP_NETCLASSES::UpdateTuningProfileNames( const std::vector<wxStrin
 
     wxGridCellAttr* attr = new wxGridCellAttr;
     attr->SetEditor( new wxGridCellChoiceEditor( profileNames, false ) );
-    m_netclassGrid->SetColAttr( GRID_TUNING_PROFILE, attr );
+    m_netclassGrid->SetColAttr( GRID_DELAY_PROFILE, attr );
 }

@@ -118,22 +118,22 @@ private:
      *
      * @param aItem the board item to query propagation delay for
      * @param aContext the geometry context in which to query to propagation delay
-     * @param aTuningProfile the time domain tuning profile for the given item
+     * @param aDelayProfile the time domain tuning profile for the given item
      */
     int64_t getPropagationDelay( const LENGTH_DELAY_CALCULATION_ITEM& aItem,
                                  const TIME_DOMAIN_GEOMETRY_CONTEXT&  aContext,
-                                 const TIME_DOMAIN_TUNING_PROFILE*    aTuningProfile ) const;
+                                 const DELAY_PROFILE*                 aDelayProfile ) const;
 
     /**
      * Gets the tuning profile pointer for the given tuning profile name
      *
-     * @param aTuningProfileName the tuning profile name to return
+     * @param aDelayProfileName the tuning profile name to return
      * @returns Valid pointer to a tuning profile, or nullptr if no profile found
      */
-    const TIME_DOMAIN_TUNING_PROFILE* getTuningProfile( const wxString& aTuningProfileName );
+    const DELAY_PROFILE* GetDelayProfile( const wxString& aDelayProfileName );
 
     /// Cached map of tuning profile names to per-layer time domain parameters
-    std::map<wxString, const TIME_DOMAIN_TUNING_PROFILE*> m_tuningProfilesCache;
+    std::map<wxString, const DELAY_PROFILE*> m_delayProfilesCache;
 
     /// Cached per-tuning profile via overrides
     std::map<wxString, std::map<VIA_OVERRIDE_CACHE_KEY, int64_t>> m_viaOverridesCache;

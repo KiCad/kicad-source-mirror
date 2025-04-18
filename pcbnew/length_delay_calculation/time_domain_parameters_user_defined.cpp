@@ -39,17 +39,17 @@ TIME_DOMAIN_PARAMETERS_USER_DEFINED::GetPropagationDelays( const std::vector<LEN
     if( aItems.empty() )
         return {};
 
-    const wxString                    tuningProfileName = aItems.front().GetEffectiveNetClass()->GetTuningProfile();
-    const TIME_DOMAIN_TUNING_PROFILE* tuningProfile = getTuningProfile( tuningProfileName );
+    const wxString       delayProfileName = aItems.front().GetEffectiveNetClass()->GetDelayProfile();
+    const DELAY_PROFILE* delayProfile = GetDelayProfile( delayProfileName );
 
-    if( !tuningProfile )
+    if( !delayProfile )
         return std::vector<int64_t>( aItems.size(), 0 );
 
     std::vector<int64_t> propagationDelays;
     propagationDelays.reserve( aItems.size() );
 
     for( const LENGTH_DELAY_CALCULATION_ITEM& item : aItems )
-        propagationDelays.emplace_back( getPropagationDelay( item, aContext, tuningProfile ) );
+        propagationDelays.emplace_back( getPropagationDelay( item, aContext, delayProfile ) );
 
     return propagationDelays;
 }
@@ -61,20 +61,19 @@ int64_t TIME_DOMAIN_PARAMETERS_USER_DEFINED::GetPropagationDelay( const LENGTH_D
     if( aItem.GetMergeStatus() == LENGTH_DELAY_CALCULATION_ITEM::MERGE_STATUS::MERGED_RETIRED )
         return 0;
 
-    const wxString                    tuningProfileName = aItem.GetEffectiveNetClass()->GetTuningProfile();
-    const TIME_DOMAIN_TUNING_PROFILE* tuningProfile = getTuningProfile( tuningProfileName );
+    const wxString       delayProfileName = aItem.GetEffectiveNetClass()->GetDelayProfile();
+    const DELAY_PROFILE* delayProfile = GetDelayProfile( delayProfileName );
 
-    if( !tuningProfile )
+    if( !delayProfile )
         return 0;
 
-    return getPropagationDelay( aItem, aContext, tuningProfile );
+    return getPropagationDelay( aItem, aContext, delayProfile );
 }
 
 
-int64_t
-TIME_DOMAIN_PARAMETERS_USER_DEFINED::getPropagationDelay( const LENGTH_DELAY_CALCULATION_ITEM& aItem,
-                                                          const TIME_DOMAIN_GEOMETRY_CONTEXT&  aContext,
-                                                          const TIME_DOMAIN_TUNING_PROFILE*    aTuningProfile ) const
+int64_t TIME_DOMAIN_PARAMETERS_USER_DEFINED::getPropagationDelay( const LENGTH_DELAY_CALCULATION_ITEM& aItem,
+                                                                  const TIME_DOMAIN_GEOMETRY_CONTEXT&  aContext,
+                                                                  const DELAY_PROFILE* aDelayProfile ) const
 {
     if( aItem.GetMergeStatus() == LENGTH_DELAY_CALCULATION_ITEM::MERGE_STATUS::MERGED_RETIRED )
         return 0;
@@ -83,7 +82,7 @@ TIME_DOMAIN_PARAMETERS_USER_DEFINED::getPropagationDelay( const LENGTH_DELAY_CAL
 
     if( itemType == LENGTH_DELAY_CALCULATION_ITEM::TYPE::LINE )
     {
-        const double delayUnit = aTuningProfile->m_LayerPropagationDelays.at( aItem.GetStartLayer() );
+        const double delayUnit = aDelayProfile->m_LayerPropagationDelays.at( aItem.GetStartLayer() );
         return static_cast<int64_t>( delayUnit * ( static_cast<double>( aItem.GetLine().Length() ) / PCB_IU_PER_MM ) );
     }
 
@@ -95,7 +94,7 @@ TIME_DOMAIN_PARAMETERS_USER_DEFINED::getPropagationDelay( const LENGTH_DELAY_CAL
         const PCB_LAYER_ID viaEndLayer = aItem.GetVia()->Padstack().EndLayer();
 
         // First check for a layer-to-layer override - this assumes that the layers are already in CuStack() order
-        auto& viaOverrides = m_viaOverridesCache.at( aTuningProfile->m_ProfileName );
+        auto& viaOverrides = m_viaOverridesCache.at( aDelayProfile->m_ProfileName );
 
         const auto viaItr = viaOverrides.find(
                 VIA_OVERRIDE_CACHE_KEY{ signalStartLayer, signalEndLayer, viaStartLayer, viaEndLayer } );
@@ -105,7 +104,7 @@ TIME_DOMAIN_PARAMETERS_USER_DEFINED::getPropagationDelay( const LENGTH_DELAY_CAL
 
         // Otherwise, return the tuning profile default
         const double distance = m_lengthCalculation->StackupHeight( signalStartLayer, signalEndLayer );
-        return static_cast<int64_t>( aTuningProfile->m_ViaPropagationDelay * ( distance / PCB_IU_PER_MM ) );
+        return static_cast<int64_t>( aDelayProfile->m_ViaPropagationDelay * ( distance / PCB_IU_PER_MM ) );
     }
 
     if( itemType == LENGTH_DELAY_CALCULATION_ITEM::TYPE::PAD )
@@ -117,15 +116,14 @@ TIME_DOMAIN_PARAMETERS_USER_DEFINED::getPropagationDelay( const LENGTH_DELAY_CAL
 }
 
 
-const TIME_DOMAIN_TUNING_PROFILE*
-TIME_DOMAIN_PARAMETERS_USER_DEFINED::getTuningProfile( const wxString& aTuningProfileName )
+const DELAY_PROFILE* TIME_DOMAIN_PARAMETERS_USER_DEFINED::GetDelayProfile( const wxString& aDelayProfileName )
 {
     if( !m_cachesInitialised ) [[unlikely]]
         rebuildCaches();
 
-    auto itr = m_tuningProfilesCache.find( aTuningProfileName );
+    auto itr = m_delayProfilesCache.find( aDelayProfileName );
 
-    if( itr != m_tuningProfilesCache.end() )
+    if( itr != m_delayProfilesCache.end() )
         return itr->second;
 
     return nullptr;
@@ -136,8 +134,8 @@ int64_t
 TIME_DOMAIN_PARAMETERS_USER_DEFINED::GetTrackLengthForPropagationDelay( int64_t                             aDelay,
                                                                         const TIME_DOMAIN_GEOMETRY_CONTEXT& aContext )
 {
-    const wxString tuningProfileName = aContext.NetClass->GetTuningProfile();
-    const TIME_DOMAIN_TUNING_PROFILE* profile = getTuningProfile( tuningProfileName );
+    const wxString       delayProfileName = aContext.NetClass->GetDelayProfile();
+    const DELAY_PROFILE* profile = GetDelayProfile( delayProfileName );
 
     if( !profile )
         return 0;
@@ -151,8 +149,8 @@ TIME_DOMAIN_PARAMETERS_USER_DEFINED::GetTrackLengthForPropagationDelay( int64_t 
 int64_t TIME_DOMAIN_PARAMETERS_USER_DEFINED::CalculatePropagationDelayForShapeLineChain(
         const SHAPE_LINE_CHAIN& aShape, const TIME_DOMAIN_GEOMETRY_CONTEXT& aContext )
 {
-    const wxString tuningProfileName = aContext.NetClass->GetTuningProfile();
-    const TIME_DOMAIN_TUNING_PROFILE* profile = getTuningProfile( tuningProfileName );
+    const wxString       delayProfileName = aContext.NetClass->GetDelayProfile();
+    const DELAY_PROFILE* profile = GetDelayProfile( delayProfileName );
 
     if( !profile )
         return 0;
@@ -164,20 +162,20 @@ int64_t TIME_DOMAIN_PARAMETERS_USER_DEFINED::CalculatePropagationDelayForShapeLi
 
 void TIME_DOMAIN_PARAMETERS_USER_DEFINED::rebuildCaches()
 {
-    m_tuningProfilesCache.clear();
+    m_delayProfilesCache.clear();
     m_viaOverridesCache.clear();
 
     if( const PROJECT* project = m_board->GetProject() )
     {
         TIME_DOMAIN_PARAMETERS* params = project->GetProjectFile().TimeDomainParameters().get();
 
-        for( const TIME_DOMAIN_TUNING_PROFILE& profile : params->GetDelayProfiles() )
+        for( const DELAY_PROFILE& profile : params->GetDelayProfiles() )
         {
-            m_tuningProfilesCache[profile.m_ProfileName] = &profile;
+            m_delayProfilesCache[profile.m_ProfileName] = &profile;
 
             std::map<VIA_OVERRIDE_CACHE_KEY, int64_t>& viaOverrides = m_viaOverridesCache[profile.m_ProfileName];
 
-            for( const TUNING_PROFILE_VIA_OVERRIDE_ENTRY& viaOverride : profile.m_ViaOverrides )
+            for( const DELAY_PROFILE_VIA_OVERRIDE_ENTRY& viaOverride : profile.m_ViaOverrides )
             {
                 viaOverrides[VIA_OVERRIDE_CACHE_KEY{ viaOverride.m_SignalLayerFrom, viaOverride.m_SignalLayerTo,
                                                      viaOverride.m_ViaLayerFrom, viaOverride.m_ViaLayerTo }] =

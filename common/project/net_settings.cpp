@@ -75,7 +75,7 @@ NET_SETTINGS::NET_SETTINGS( JSON_SETTINGS* aParent, const std::string& aPath ) :
                                            { "priority", nc->GetPriority() },
                                            { "schematic_color", nc->GetSchematicColor( true ) },
                                            { "pcb_color", nc->GetPcbColor( true ) },
-                                           { "tuning_profile", nc->GetTuningProfile() } };
+                                           { "tuning_profile", nc->GetDelayProfile() } };
 
                 auto saveInPcbUnits =
                         []( nlohmann::json& json, const std::string& aKey, int aValue )
@@ -133,7 +133,7 @@ NET_SETTINGS::NET_SETTINGS( JSON_SETTINGS* aParent, const std::string& aPath ) :
                 int priority = entry["priority"];
                 nc->SetPriority( priority );
 
-                nc->SetTuningProfile( entry["tuning_profile"] );
+                nc->SetDelayProfile( entry["tuning_profile"] );
 
                 if( auto value = getInPcbUnits( entry, "clearance" ) )
                     nc->SetClearance( *value );
@@ -928,10 +928,10 @@ void NET_SETTINGS::makeEffectiveNetclass( std::shared_ptr<NETCLASS>& effectiveNe
             effectiveNetclass->SetSchematicColorParent( nc );
         }
 
-        if( nc->HasTuningProfile() )
+        if( nc->HasDelayProfile() )
         {
-            effectiveNetclass->SetTuningProfile( nc->GetTuningProfile() );
-            effectiveNetclass->SetTuningProfileParent( nc );
+            effectiveNetclass->SetDelayProfile( nc->GetDelayProfile() );
+            effectiveNetclass->SetDelayProfileParent( nc );
         }
     }
 
@@ -1024,11 +1024,11 @@ bool NET_SETTINGS::addMissingDefaults( NETCLASS* nc ) const
     }
 
     // The tuning profile can be empty - only fill if a default tuning profile is set
-    if( !nc->HasTuningProfile() && m_defaultNetClass->HasTuningProfile() )
+    if( !nc->HasDelayProfile() && m_defaultNetClass->HasDelayProfile() )
     {
         addedDefault = true;
-        nc->SetTuningProfile( m_defaultNetClass->GetTuningProfile() );
-        nc->SetTuningProfileParent( m_defaultNetClass.get() );
+        nc->SetDelayProfile( m_defaultNetClass->GetDelayProfile() );
+        nc->SetDelayProfileParent( m_defaultNetClass.get() );
     }
 
     return addedDefault;

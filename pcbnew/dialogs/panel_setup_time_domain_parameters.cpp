@@ -110,15 +110,15 @@ bool PANEL_SETUP_TIME_DOMAIN_PARAMETERS::TransferDataToWindow()
     m_tracePropagationGrid->ClearRows();
     m_viaPropagationGrid->ClearRows();
 
-    const std::vector<TIME_DOMAIN_TUNING_PROFILE>& delayProfiles = m_timeDomainParameters->GetDelayProfiles();
+    const std::vector<DELAY_PROFILE>& delayProfiles = m_timeDomainParameters->GetDelayProfiles();
 
     SyncCopperLayers( m_board->GetCopperLayerCount() );
 
-    for( const TIME_DOMAIN_TUNING_PROFILE& profile : delayProfiles )
+    for( const DELAY_PROFILE& profile : delayProfiles )
     {
         addProfileRow( profile );
 
-        for( const TUNING_PROFILE_VIA_OVERRIDE_ENTRY& viaOverride : profile.m_ViaOverrides )
+        for( const DELAY_PROFILE_VIA_OVERRIDE_ENTRY& viaOverride : profile.m_ViaOverrides )
             addViaRow( profile.m_ProfileName, viaOverride );
     }
 
@@ -137,7 +137,7 @@ bool PANEL_SETUP_TIME_DOMAIN_PARAMETERS::TransferDataFromWindow()
 
     for( int i = 0; i < m_tracePropagationGrid->GetNumberRows(); ++i )
     {
-        TIME_DOMAIN_TUNING_PROFILE profile = getProfileRow( i );
+        DELAY_PROFILE              profile = getProfileRow( i );
         wxString                   profileName = profile.m_ProfileName;
 
         for( int j = 0; j < m_viaPropagationGrid->GetNumberRows(); ++j )
@@ -153,7 +153,7 @@ bool PANEL_SETUP_TIME_DOMAIN_PARAMETERS::TransferDataFromWindow()
 }
 
 
-void PANEL_SETUP_TIME_DOMAIN_PARAMETERS::addProfileRow( const TIME_DOMAIN_TUNING_PROFILE& aDelayProfile )
+void PANEL_SETUP_TIME_DOMAIN_PARAMETERS::addProfileRow( const DELAY_PROFILE& aDelayProfile )
 {
     const int rowId = m_tracePropagationGrid->GetNumberRows();
     m_tracePropagationGrid->AppendRows();
@@ -176,9 +176,9 @@ void PANEL_SETUP_TIME_DOMAIN_PARAMETERS::addProfileRow( const TIME_DOMAIN_TUNING
 }
 
 
-TIME_DOMAIN_TUNING_PROFILE PANEL_SETUP_TIME_DOMAIN_PARAMETERS::getProfileRow( const int aRow )
+DELAY_PROFILE PANEL_SETUP_TIME_DOMAIN_PARAMETERS::getProfileRow( const int aRow )
 {
-    TIME_DOMAIN_TUNING_PROFILE entry;
+    DELAY_PROFILE entry;
     entry.m_ProfileName = getProfileNameForProfileGridRow( aRow );
     entry.m_ViaPropagationDelay = m_tracePropagationGrid->GetUnitValue( aRow, PROFILE_GRID_VIA_PROP_DELAY );
 
@@ -193,8 +193,8 @@ TIME_DOMAIN_TUNING_PROFILE PANEL_SETUP_TIME_DOMAIN_PARAMETERS::getProfileRow( co
 }
 
 
-void PANEL_SETUP_TIME_DOMAIN_PARAMETERS::addViaRow( const wxString&                          aProfileName,
-                                                    const TUNING_PROFILE_VIA_OVERRIDE_ENTRY& aViaOverrideEntry ) const
+void PANEL_SETUP_TIME_DOMAIN_PARAMETERS::addViaRow( const wxString&                         aProfileName,
+                                                    const DELAY_PROFILE_VIA_OVERRIDE_ENTRY& aViaOverrideEntry ) const
 {
     const int rowId = m_viaPropagationGrid->GetNumberRows();
     m_viaPropagationGrid->AppendRows();
@@ -211,7 +211,7 @@ void PANEL_SETUP_TIME_DOMAIN_PARAMETERS::addViaRow( const wxString&             
 }
 
 
-TUNING_PROFILE_VIA_OVERRIDE_ENTRY PANEL_SETUP_TIME_DOMAIN_PARAMETERS::getViaRow( const int aRow )
+DELAY_PROFILE_VIA_OVERRIDE_ENTRY PANEL_SETUP_TIME_DOMAIN_PARAMETERS::getViaRow( const int aRow )
 {
     // Get layer info
     const wxString signalLayerFrom = m_viaPropagationGrid->GetCellValue( aRow, VIA_GRID_SIGNAL_LAYER_FROM );
@@ -230,8 +230,8 @@ TUNING_PROFILE_VIA_OVERRIDE_ENTRY PANEL_SETUP_TIME_DOMAIN_PARAMETERS::getViaRow(
     if( IsCopperLayerLowerThan( viaLayerIdFrom, viaLayerIdTo ) )
         std::swap( viaLayerIdFrom, viaLayerIdTo );
 
-    const TUNING_PROFILE_VIA_OVERRIDE_ENTRY entry{ signalLayerIdFrom, signalLayerIdTo, viaLayerIdFrom, viaLayerIdTo,
-                                                   m_viaPropagationGrid->GetUnitValue( aRow, VIA_GRID_DELAY ) };
+    const DELAY_PROFILE_VIA_OVERRIDE_ENTRY entry{ signalLayerIdFrom, signalLayerIdTo, viaLayerIdFrom, viaLayerIdTo,
+                                                  m_viaPropagationGrid->GetUnitValue( aRow, VIA_GRID_DELAY ) };
 
     return entry;
 }
@@ -611,13 +611,13 @@ bool PANEL_SETUP_TIME_DOMAIN_PARAMETERS::Validate()
 
 bool PANEL_SETUP_TIME_DOMAIN_PARAMETERS::validateViaRows()
 {
-    std::map<wxString, std::set<TUNING_PROFILE_VIA_OVERRIDE_ENTRY>> rowCache;
+    std::map<wxString, std::set<DELAY_PROFILE_VIA_OVERRIDE_ENTRY>> rowCache;
 
     for( int row = 0; row < m_viaPropagationGrid->GetNumberRows(); row++ )
     {
-        TUNING_PROFILE_VIA_OVERRIDE_ENTRY entry = getViaRow( row );
+        DELAY_PROFILE_VIA_OVERRIDE_ENTRY entry = getViaRow( row );
         const wxString profileName = m_viaPropagationGrid->GetCellValue( row, VIA_GRID_PROFILE_NAME );
-        std::set<TUNING_PROFILE_VIA_OVERRIDE_ENTRY>& viaOverrides = rowCache[profileName];
+        std::set<DELAY_PROFILE_VIA_OVERRIDE_ENTRY>& viaOverrides = rowCache[profileName];
 
         if( viaOverrides.contains( entry ) )
         {
