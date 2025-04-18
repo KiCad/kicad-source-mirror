@@ -956,6 +956,9 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
     // Initialise caches used by component classes
     GetBoard()->GetComponentClassManager().RebuildRequiredCaches();
 
+    // Initialise time domain tuning caches
+    GetBoard()->GetLengthCalculation()->SynchronizeTimeDomainProperties();
+
     // Syncs the UI (appearance panel, etc) with the loaded board and project
     onBoardLoaded();
 

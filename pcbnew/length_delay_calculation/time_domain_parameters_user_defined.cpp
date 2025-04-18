@@ -118,9 +118,6 @@ int64_t TIME_DOMAIN_PARAMETERS_USER_DEFINED::getPropagationDelay( const LENGTH_D
 
 const DELAY_PROFILE* TIME_DOMAIN_PARAMETERS_USER_DEFINED::GetDelayProfile( const wxString& aDelayProfileName )
 {
-    if( !m_cachesInitialised ) [[unlikely]]
-        rebuildCaches();
-
     auto itr = m_delayProfilesCache.find( aDelayProfileName );
 
     if( itr != m_delayProfilesCache.end() )
@@ -183,6 +180,4 @@ void TIME_DOMAIN_PARAMETERS_USER_DEFINED::rebuildCaches()
             }
         }
     }
-
-    m_cachesInitialised = true;
 }

@@ -137,9 +137,6 @@ private:
 
     /// Cached per-tuning profile via overrides
     std::map<wxString, std::map<VIA_OVERRIDE_CACHE_KEY, int64_t>> m_viaOverridesCache;
-
-    /// Used to ensure caches are valid when board first loaded
-    bool m_cachesInitialised{ false };
 };
 
 #endif //PCB_NEW_TIME_DOMAIN_PARAMETERS_USER_DEFINED_H
