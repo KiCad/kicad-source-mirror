@@ -264,7 +264,7 @@ DIALOG_FIELD_PROPERTIES::DIALOG_FIELD_PROPERTIES( SCH_BASE_FRAME* aParent, const
 
     init();
 
-    if( m_isSheetFilename || m_field->IsNamedVariable() )
+    if( m_isSheetFilename || m_field->IsGeneratedField() )
     {
         m_StyledTextCtrl->Enable( false );
         m_TextCtrl->Enable( false );

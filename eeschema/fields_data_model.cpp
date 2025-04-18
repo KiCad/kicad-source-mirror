@@ -69,10 +69,10 @@ void FIELDS_EDITOR_GRID_DATA_MODEL::updateDataStoreSymbolField( const SCH_SYMBOL
         wxString value = aSymbol.Schematic()->ConvertKIIDsToRefs( field->GetText() );
         m_dataStore[aSymbol.m_Uuid][aFieldName] = value;
     }
-    else if( IsTextVar( aFieldName ) )
+    else if( IsGeneratedField( aFieldName ) )
     {
-        // Handle fields with variables as names that are not present in the symbol
-        // by giving them the correct value
+        // Handle generated fields with variables as names (e.g. ${QUANTITY}) that are not present in
+        // the symbol by giving them the correct value
         m_dataStore[aSymbol.m_Uuid][aFieldName] = aFieldName;
     }
     else
@@ -227,19 +227,28 @@ wxString FIELDS_EDITOR_GRID_DATA_MODEL::GetValue( const DATA_MODEL_ROW& group, i
                 return INDETERMINATE_STATE;
             }
 
-            wxString refFieldValue;
+            wxString refFieldValue = m_dataStore[symbolID][m_cols[aCol].m_fieldName];
 
-            // Only resolve vars on actual variables, otherwise we want to get
-            // our values out of the datastore so we can show/export un-applied values
-            if( resolveVars
-                && ( IsTextVar( m_cols[aCol].m_fieldName )
-                     || IsTextVar( m_dataStore[symbolID][m_cols[aCol].m_fieldName] ) ) )
+            if( resolveVars )
             {
-                refFieldValue = getFieldShownText( ref, m_cols[aCol].m_fieldName );
-            }
-            else
-            {
-                refFieldValue = m_dataStore[symbolID][m_cols[aCol].m_fieldName];
+                if( IsGeneratedField( m_cols[aCol].m_fieldName ) )
+                {
+                    // Generated fields (e.g. ${QUANTITY}) can't have un-applied values as they're
+                    // read-only.  Resolve them against the field.
+                    refFieldValue = getFieldShownText( ref, m_cols[aCol].m_fieldName );
+                }
+                else if( refFieldValue.Contains( wxT( "${" ) ) )
+                {
+                    // Resolve variables in the un-applied value using the parent symbol and instance
+                    // data.
+                    std::function<bool( wxString* )> symbolResolver =
+                            [&]( wxString* token ) -> bool
+                            {
+                                return ref.GetSymbol()->ResolveTextVar( &ref.GetSheetPath(), token );
+                            };
+
+                    refFieldValue = ExpandTextVars( refFieldValue, & symbolResolver );
+                }
             }
 
             if( listMixedValues )
@@ -308,9 +317,9 @@ void FIELDS_EDITOR_GRID_DATA_MODEL::SetValue( int aRow, int aCol, const wxString
 {
     wxCHECK_RET( aCol >= 0 && aCol < static_cast<int>( m_cols.size() ), wxS( "Invalid column number" ) );
 
-    // Can't modify references or text variables column, e.g. ${QUANTITY}
+    // Can't modify references or generated fields (e.g. ${QUANTITY})
     if( ColIsReference( aCol )
-        || ( IsTextVar( m_cols[aCol].m_fieldName ) && !ColIsAttribute( aCol ) ) )
+        || ( IsGeneratedField( m_cols[aCol].m_fieldName ) && !ColIsAttribute( aCol ) ) )
     {
         return;
     }
@@ -478,14 +487,13 @@ bool FIELDS_EDITOR_GRID_DATA_MODEL::groupMatch( const SCH_REFERENCE& lhRef,
         if( !m_cols[i].m_group )
             continue;
 
-        // If the field is a variable, we need to resolve it through the symbol
-        // to get the actual current value, otherwise we need to pull it out of the
-        // store so the refresh can regroup based on values that haven't been applied
-        // to the schematic yet.
+        // If the field is generated (e.g. ${QUANTITY}), we need to resolve it through the symbol
+        // to get the actual current value; otherwise we need to pull it out of the store so the
+        // refresh can regroup based on values that haven't been applied to the schematic yet.
         wxString lh, rh;
 
-        if( IsTextVar( m_cols[i].m_fieldName )
-            || IsTextVar( m_dataStore[lhRefID][m_cols[i].m_fieldName] ) )
+        if( IsGeneratedField( m_cols[i].m_fieldName )
+            || IsGeneratedField( m_dataStore[lhRefID][m_cols[i].m_fieldName] ) )
         {
             lh = getFieldShownText( lhRef, m_cols[i].m_fieldName );
         }
@@ -494,8 +502,8 @@ bool FIELDS_EDITOR_GRID_DATA_MODEL::groupMatch( const SCH_REFERENCE& lhRef,
             lh = m_dataStore[lhRefID][m_cols[i].m_fieldName];
         }
 
-        if( IsTextVar( m_cols[i].m_fieldName )
-            || IsTextVar( m_dataStore[rhRefID][m_cols[i].m_fieldName] ) )
+        if( IsGeneratedField( m_cols[i].m_fieldName )
+            || IsGeneratedField( m_dataStore[rhRefID][m_cols[i].m_fieldName] ) )
         {
             rh = getFieldShownText( rhRef, m_cols[i].m_fieldName );
         }
@@ -529,9 +537,9 @@ wxString FIELDS_EDITOR_GRID_DATA_MODEL::getFieldShownText( const SCH_REFERENCE& 
             return field->GetShownText( &aRef.GetSheetPath(), false );
     }
 
-    // Handle fields with variables as names that are not present in the symbol
-    // by giving them the correct value by resolving against the symbol
-    if( IsTextVar( aFieldName ) )
+    // Handle generated fields with variables as names (e.g. ${QUANTITY}) that are not present in
+    // the symbol by giving them the correct value by resolving against the symbol
+    if( IsGeneratedField( aFieldName ) )
     {
         int                   depth = 0;
         const SCH_SHEET_PATH& path = aRef.GetSheetPath();
@@ -811,9 +819,9 @@ void FIELDS_EDITOR_GRID_DATA_MODEL::ApplyData( SCH_COMMIT& aCommit )
                 continue;
             }
 
-            // Skip special fields with variables as names (e.g. ${QUANTITY}),
+            // Skip generated fields with variables as names (e.g. ${QUANTITY});
             // they can't be edited
-            if( IsTextVar( srcName ) )
+            if( IsGeneratedField( srcName ) )
                 continue;
 
             SCH_FIELD* destField = symbol.GetField( srcName );

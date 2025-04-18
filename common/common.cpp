@@ -118,11 +118,12 @@ wxString ExpandTextVars( const wxString& aSource,
 }
 
 
-wxString GetTextVars( const wxString& aSource )
+wxString GetGeneratedFieldDisplayName( const wxString& aSource )
 {
     std::function<bool( wxString* )> tokenExtractor =
             [&]( wxString* token ) -> bool
             {
+                *token = *token;    // token value is the token name
                 return true;
             };
 
@@ -130,9 +131,10 @@ wxString GetTextVars( const wxString& aSource )
 }
 
 
-bool IsTextVar( const wxString& aSource )
+bool IsGeneratedField( const wxString& aSource )
 {
-    return aSource.StartsWith( wxS( "${" ) );
+    static wxRegEx expr( wxS( "^\\$\\{\\w*\\}$" ) );
+    return expr.Matches( aSource );
 }
 
 

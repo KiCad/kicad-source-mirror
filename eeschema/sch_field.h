@@ -209,12 +209,12 @@ public:
     void SetNameShown( bool aShown = true ) { m_showName = aShown; }
 
     /**
-     * Named variables are fields whose names are variables like ${VAR}.
+     * Generated fields are fields whose names are variables like ${VAR}.
      *
      * The shown name of these fields is VAR and the value is resolved from
      * ${VAR}
      */
-    bool IsNamedVariable() const { return m_isNamedVariable; }
+    bool IsGeneratedField() const { return m_isGeneratedField; }
 
     bool CanAutoplace() const { return m_allowAutoPlace; }
     void SetCanAutoplace( bool aCanPlace ) { m_allowAutoPlace = aCanPlace; }
@@ -333,17 +333,17 @@ protected:
     void setId( FIELD_T aId );
 
 private:
-    FIELD_T  m_id;              ///< Field id, @see enum FIELD_T
-    int      m_ordinal;         ///< Sort order for non-mandatory fields
+    FIELD_T  m_id;               ///< Field id, @see enum FIELD_T
+    int      m_ordinal;          ///< Sort order for non-mandatory fields
     wxString m_name;
 
-    bool     m_showName;        ///< Render the field name in addition to its value
-    bool     m_allowAutoPlace;  ///< This field can be autoplaced
-    bool     m_isNamedVariable; ///< If the field name is a variable name, e.g. ${DNP}
-                                ///< then the value field is forced to be the same as the name
+    bool     m_showName;         ///< Render the field name in addition to its value
+    bool     m_allowAutoPlace;   ///< This field can be autoplaced
+    bool     m_isGeneratedField; ///< If the field name is a variable name (e.g. ${DNP}) then
+                                 ///<   the value field is forced to be the same as the name
 
-    bool     m_autoAdded;       ///< Was this field automatically added to a LIB_SYMBOL?
-    bool     m_showInChooser;   ///< This field is available as a data column for the chooser
+    bool     m_autoAdded;        ///< Was this field automatically added to a LIB_SYMBOL?
+    bool     m_showInChooser;    ///< This field is available as a data column for the chooser
 
     mutable bool                                        m_renderCacheValid;
     mutable VECTOR2I                                    m_renderCachePos;

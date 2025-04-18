@@ -51,7 +51,7 @@ SCH_FIELD::SCH_FIELD() :
         m_ordinal( 0 ),
         m_showName( false ),
         m_allowAutoPlace( true ),
-        m_isNamedVariable( false ),
+        m_isGeneratedField( false ),
         m_autoAdded( false ),
         m_showInChooser( true ),
         m_renderCacheValid( false ),
@@ -106,15 +106,15 @@ SCH_FIELD::SCH_FIELD( const SCH_FIELD& aField ) :
         SCH_ITEM( aField ),
         EDA_TEXT( aField )
 {
-    m_private         = aField.m_private;
+    m_private          = aField.m_private;
     setId( aField.m_id );  // will also set the layer
-    m_ordinal         = aField.m_ordinal;
-    m_name            = aField.m_name;
-    m_showName        = aField.m_showName;
-    m_allowAutoPlace  = aField.m_allowAutoPlace;
-    m_isNamedVariable = aField.m_isNamedVariable;
-    m_autoAdded       = aField.m_autoAdded;
-    m_showInChooser   = aField.m_showInChooser;
+    m_ordinal          = aField.m_ordinal;
+    m_name             = aField.m_name;
+    m_showName         = aField.m_showName;
+    m_allowAutoPlace   = aField.m_allowAutoPlace;
+    m_isGeneratedField = aField.m_isGeneratedField;
+    m_autoAdded        = aField.m_autoAdded;
+    m_showInChooser    = aField.m_showInChooser;
 
     m_renderCache.clear();
 
@@ -137,13 +137,13 @@ SCH_FIELD& SCH_FIELD::operator=( const SCH_FIELD& aField )
 {
     EDA_TEXT::operator=( aField );
 
-    m_private         = aField.m_private;
+    m_private          = aField.m_private;
     setId( aField.m_id );  // will also set the layer
-    m_ordinal         = aField.m_ordinal;
-    m_name            = aField.m_name;
-    m_showName        = aField.m_showName;
-    m_allowAutoPlace  = aField.m_allowAutoPlace;
-    m_isNamedVariable = aField.m_isNamedVariable;
+    m_ordinal          = aField.m_ordinal;
+    m_name             = aField.m_name;
+    m_showName         = aField.m_showName;
+    m_allowAutoPlace   = aField.m_allowAutoPlace;
+    m_isGeneratedField = aField.m_isGeneratedField;
 
     m_renderCache.clear();
 
@@ -185,7 +185,7 @@ void SCH_FIELD::setId( FIELD_T aId )
 
 wxString SCH_FIELD::GetShownName() const
 {
-    return m_isNamedVariable ? GetTextVars( GetName() ) : GetName();
+    return m_isGeneratedField ? GetGeneratedFieldDisplayName( GetName() ) : GetName();
 }
 
 
@@ -415,7 +415,7 @@ void SCH_FIELD::swapData( SCH_ITEM* aItem )
     std::swap( m_layer, item->m_layer );
     std::swap( m_showName, item->m_showName );
     std::swap( m_allowAutoPlace, item->m_allowAutoPlace );
-    std::swap( m_isNamedVariable, item->m_isNamedVariable );
+    std::swap( m_isGeneratedField, item->m_isGeneratedField );
     std::swap( m_private, item->m_private );
     SwapText( *item );
     SwapAttributes( *item );
@@ -1067,18 +1067,17 @@ void SCH_FIELD::DoHypertextAction( EDA_DRAW_FRAME* aFrame ) const
 void SCH_FIELD::SetName( const wxString& aName )
 {
     m_name = aName;
-    m_isNamedVariable = m_name.StartsWith( wxT( "${" ) );
+    m_isGeneratedField = ::IsGeneratedField( aName );
 
-    if( m_isNamedVariable )
+    if( m_isGeneratedField )
         EDA_TEXT::SetText( aName );
 }
 
 
 void SCH_FIELD::SetText( const wxString& aText )
 {
-    // Don't allow modification of text value when using named variables
-    // as field name.
-    if( m_isNamedVariable )
+    // Don't allow modification of text value of generated fields.
+    if( m_isGeneratedField )
         return;
 
     // Mandatory fields should not have leading or trailing whitespace.
@@ -1414,7 +1413,7 @@ bool SCH_FIELD::operator==( const SCH_FIELD& aOther ) const
     if( GetPosition() != aOther.GetPosition() )
         return false;
 
-    if( IsNamedVariable() != aOther.IsNamedVariable() )
+    if( IsGeneratedField() != aOther.IsGeneratedField() )
         return false;
 
     if( IsNameShown() != aOther.IsNameShown() )
@@ -1455,7 +1454,7 @@ double SCH_FIELD::Similarity( const SCH_ITEM& aOther ) const
     if( GetPosition() != field.GetPosition() )
         similarity *= 0.5;
 
-    if( IsNamedVariable() != field.IsNamedVariable() )
+    if( IsGeneratedField() != field.IsGeneratedField() )
         similarity *= 0.5;
 
     if( IsNameShown() != field.IsNameShown() )
@@ -1616,17 +1615,17 @@ static struct SCH_FIELD_DESC
 
         propMgr.Mask( TYPE_HASH( SCH_FIELD ), TYPE_HASH( EDA_TEXT ), _HKI( "Orientation" ) );
 
-        auto isNotNamedVariable =
+        auto isNotGeneratedField =
                 []( INSPECTABLE* aItem ) -> bool
                 {
                     if( SCH_FIELD* field = dynamic_cast<SCH_FIELD*>( aItem ) )
-                        return !field->IsNamedVariable();
+                        return !field->IsGeneratedField();
 
                     return true;
                 };
 
         propMgr.OverrideWriteability( TYPE_HASH( SCH_FIELD ), TYPE_HASH( EDA_TEXT ), _HKI( "Text" ),
-                                      isNotNamedVariable );
+                                      isNotGeneratedField );
 
 
         auto isNonMandatoryField =

@@ -319,8 +319,8 @@ DIALOG_SYMBOL_FIELDS_TABLE::DIALOG_SYMBOL_FIELDS_TABLE( SCH_EDIT_FRAME* parent,
 
             if( ( m_job->m_fieldsLabels.size() > i ) && !m_job->m_fieldsLabels[i].IsEmpty() )
                 field.label = m_job->m_fieldsLabels[i];
-            else if( IsTextVar( field.name ) )
-                field.label = GetTextVars( field.name );
+            else if( IsGeneratedField( field.name ) )
+                field.label = GetGeneratedFieldDisplayName( field.name );
             else
                 field.label = field.name;
 
@@ -460,7 +460,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::SetupColumnProperties( int aCol )
         attr->SetReadOnly();    // not really; we delegate interactivity to GRID_TRICKS
         m_dataModel->SetColAttr( attr, aCol );
     }
-    else if( IsTextVar( m_dataModel->GetColFieldName( aCol ) ) )
+    else if( IsGeneratedField( m_dataModel->GetColFieldName( aCol ) ) )
     {
         attr->SetReadOnly();
         m_dataModel->SetColAttr( attr, aCol );
@@ -728,7 +728,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::LoadFieldNames()
     }
 
     for( const wxString& fieldName : userFieldNames )
-        AddField( fieldName, GetTextVars( fieldName ), true, false );
+        AddField( fieldName, GetGeneratedFieldDisplayName( fieldName ), true, false );
 
     // Add any templateFieldNames which aren't already present in the userFieldNames
     for( const TEMPLATE_FIELDNAME& templateFieldname :
@@ -736,8 +736,8 @@ void DIALOG_SYMBOL_FIELDS_TABLE::LoadFieldNames()
     {
         if( userFieldNames.count( templateFieldname.m_Name ) == 0 )
         {
-            AddField( templateFieldname.m_Name, GetTextVars( templateFieldname.m_Name ), false,
-                      false );
+            AddField( templateFieldname.m_Name, GetGeneratedFieldDisplayName( templateFieldname.m_Name ),
+                      false, false );
         }
     }
 }
@@ -768,7 +768,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnAddField( wxCommandEvent& event )
         }
     }
 
-    AddField( fieldName, GetTextVars( fieldName ), true, false, true );
+    AddField( fieldName, GetGeneratedFieldDisplayName( fieldName ), true, false, true );
 
     SetupColumnProperties( m_dataModel->GetColsCount() - 1 );
 
@@ -1941,7 +1941,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::doApplyBomPreset( const BOM_PRESET& aPreset )
 
         // Properties like label, etc. will be added in the next loop
         if( !found )
-            AddField( fieldName, GetTextVars( fieldName ), false, false );
+            AddField( fieldName, GetGeneratedFieldDisplayName( fieldName ), false, false );
     }
 
     // Sync all fields
