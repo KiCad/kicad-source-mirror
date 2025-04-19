@@ -24,6 +24,7 @@
 #include <cli/exit_codes.h>
 #include <sch_plotter.h>
 #include <drawing_sheet/ds_proxy_view_item.h>
+#include <font/kicad_font_name.h>
 #include <jobs/job_export_sch_bom.h>
 #include <jobs/job_export_sch_pythonbom.h>
 #include <jobs/job_export_sch_netlist.h>
@@ -32,6 +33,7 @@
 #include <jobs/job_sym_export_svg.h>
 #include <jobs/job_sym_upgrade.h>
 #include <schematic.h>
+#include <schematic_settings.h>
 #include <wx/dir.h>
 #include <wx/file.h>
 #include <memory>
@@ -261,7 +263,22 @@ int EESCHEMA_JOBS_HANDLER::JobExportPlot( JOB* aJob )
 
     std::unique_ptr<SCH_RENDER_SETTINGS> renderSettings = std::make_unique<SCH_RENDER_SETTINGS>();
     InitRenderSettings( renderSettings.get(), aPlotJob->m_theme, sch, aPlotJob->m_drawingSheet );
-    renderSettings->SetDefaultFont( aPlotJob->m_defaultFont );
+
+    wxString font = aPlotJob->m_defaultFont;
+
+    if( font.IsEmpty() )
+    {
+        SETTINGS_MANAGER&  mgr = Pgm().GetSettingsManager();
+        EESCHEMA_SETTINGS* cfg =
+                dynamic_cast<EESCHEMA_SETTINGS*>( mgr.GetAppSettings<EESCHEMA_SETTINGS>( "eeschema" ) );
+
+        if( cfg )
+            font = cfg->m_Appearance.default_font;
+        else
+            font = KICAD_FONT_NAME;
+    }
+
+    renderSettings->SetDefaultFont( font );
     renderSettings->SetMinPenWidth( aPlotJob->m_minPenWidth );
 
     std::unique_ptr<SCH_PLOTTER> schPlotter = std::make_unique<SCH_PLOTTER>( sch );

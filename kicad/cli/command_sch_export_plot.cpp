@@ -80,7 +80,7 @@ CLI::SCH_EXPORT_PLOT_COMMAND::SCH_EXPORT_PLOT_COMMAND( const std::string& aName,
 
     m_argParser.add_argument( ARG_FONT_NAME )
             .help( UTF8STDSTR( _( "Default font name" ) ) )
-            .default_value( wxString( KICAD_FONT_NAME ).ToStdString() );
+            .default_value( wxString( "" ).ToStdString() );
 
     if( aPlotFormat == SCH_PLOT_FORMAT::PDF )
     {
