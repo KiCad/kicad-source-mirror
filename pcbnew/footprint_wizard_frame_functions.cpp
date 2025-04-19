@@ -37,42 +37,6 @@
 #include "footprint_wizard_frame.h"
 
 
-void FOOTPRINT_WIZARD_FRAME::Process_Special_Functions( wxCommandEvent& event )
-{
-    wxString    msg;
-    int         page;
-
-    switch( event.GetId() )
-    {
-    case ID_FOOTPRINT_WIZARD_NEXT:
-        page = m_pageList->GetSelection() + 1;
-
-        if( (int)m_pageList->GetCount() <= page )
-            page = m_pageList->GetCount() - 1;
-
-        m_pageList->SetSelection( page, true );
-        ClickOnPageList( event );
-        break;
-
-    case ID_FOOTPRINT_WIZARD_PREVIOUS:
-        page = m_pageList->GetSelection() - 1;
-
-        if( page < 0 )
-            page = 0;
-
-        m_pageList->SetSelection( page, true );
-        ClickOnPageList( event );
-        break;
-
-    default:
-        wxFAIL_MSG( wxString::Format( wxT( "FOOTPRINT_WIZARD_FRAME::Process_Special_Functions "
-                                           "error: id = %d" ),
-                                      event.GetId() ) );
-        break;
-    }
-}
-
-
 /* Displays the name of the current opened library in the caption */
 void FOOTPRINT_WIZARD_FRAME::DisplayWizardInfos()
 {
@@ -191,13 +155,13 @@ void FOOTPRINT_WIZARD_FRAME::SelectFootprintWizard()
 }
 
 
-void FOOTPRINT_WIZARD_FRAME::SelectCurrentWizard( wxCommandEvent& event )
+void FOOTPRINT_WIZARD_FRAME::SelectCurrentWizard( wxCommandEvent& aDummy )
 {
     SelectFootprintWizard();
     updateView();
 }
 
-void FOOTPRINT_WIZARD_FRAME::DefaultParameters( wxCommandEvent& event )
+void FOOTPRINT_WIZARD_FRAME::DefaultParameters()
 {
     FOOTPRINT_WIZARD* footprintWizard = GetMyWizard();
 
@@ -210,6 +174,33 @@ void FOOTPRINT_WIZARD_FRAME::DefaultParameters( wxCommandEvent& event )
     ReCreateParameterList();
     RegenerateFootprint();
     DisplayWizardInfos();
+}
+
+
+void FOOTPRINT_WIZARD_FRAME::SelectWizardPreviousPage()
+{
+    int page = m_pageList->GetSelection() - 1;
+
+    if( page < 0 )
+        page = 0;
+
+    m_pageList->SetSelection( page, true );
+
+    wxCommandEvent event;
+    ClickOnPageList( event );
+}
+
+void FOOTPRINT_WIZARD_FRAME::SelectWizardNextPage()
+{
+    int page = m_pageList->GetSelection() + 1;
+
+    if( (int)m_pageList->GetCount() <= page )
+        page = m_pageList->GetCount() - 1;
+
+    m_pageList->SetSelection( page, true );
+
+    wxCommandEvent event;
+    ClickOnPageList( event );
 }
 
 

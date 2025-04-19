@@ -38,27 +38,14 @@ std::optional<TOOLBAR_CONFIGURATION> FOOTPRINT_WIZARD_TOOLBAR_SETTINGS::DefaultT
         return std::nullopt;
 
     case TOOLBAR_LOC::TOP_MAIN:
-        /* TODO (ISM): Convert to action
-        m_tbTopMain->AddTool( ID_FOOTPRINT_WIZARD_SELECT_WIZARD, wxEmptyString,
-            KiBitmap( BITMAPS::module_wizard ),
-            _( "Select wizard script to run" ) );
-    */
+        config.AppendAction( PCB_ACTIONS::showWizards );
 
         config.AppendSeparator();
-        /* TODO (ISM): Convert to action
-        m_tbTopMain->AddTool( ID_FOOTPRINT_WIZARD_RESET_TO_DEFAULT, wxEmptyString,
-                KiBitmap( BITMAPS::reload ),
-                _( "Reset wizard parameters to default") );
-    */
+        config.AppendAction( PCB_ACTIONS::resetWizardPrms );
+
         config.AppendSeparator();
-        /* TODO (ISM): Convert to action
-        m_tbTopMain->AddTool( ID_FOOTPRINT_WIZARD_PREVIOUS, wxEmptyString,
-                KiBitmap( BITMAPS::lib_previous ),
-                _( "Select previous parameters page" ) );
-        m_tbTopMain->AddTool( ID_FOOTPRINT_WIZARD_NEXT, wxEmptyString,
-                KiBitmap( BITMAPS::lib_next ),
-                _( "Select next parameters page" ) );
-    */
+        config.AppendAction( PCB_ACTIONS::selectPreviousWizardPage );
+        config.AppendAction( PCB_ACTIONS::selectNextWizardPage );
 
         config.AppendSeparator()
             .AppendAction( ACTIONS::zoomRedraw )
@@ -68,11 +55,8 @@ std::optional<TOOLBAR_CONFIGURATION> FOOTPRINT_WIZARD_TOOLBAR_SETTINGS::DefaultT
 
         // The footprint wizard always can export the current footprint
         config.AppendSeparator();
-        /* TODO (ISM): Convert to action
-        m_tbTopMain->AddTool( ID_FOOTPRINT_WIZARD_DONE,
-                wxEmptyString, KiBitmap( BITMAPS::export_footprint_names ),
-                _( "Export footprint to editor" ) );
-    */
+        config.AppendAction( PCB_ACTIONS::exportFpToEditor );
+
         break;
     }
 

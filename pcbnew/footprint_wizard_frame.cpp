@@ -53,6 +53,7 @@
 #include "tools/pcb_selection_tool.h"
 #include "tools/pcb_control.h"
 #include "tools/pcb_actions.h"
+#include "tools/footprint_wizard_tools.h"
 #include <toolbars_footprint_wizard.h>
 #include <python/scripting/pcb_scripting_tool.h>
 
@@ -65,9 +66,6 @@ BEGIN_EVENT_TABLE( FOOTPRINT_WIZARD_FRAME, PCB_BASE_EDIT_FRAME )
 
      // Toolbar events
     EVT_TOOL( ID_FOOTPRINT_WIZARD_SELECT_WIZARD, FOOTPRINT_WIZARD_FRAME::SelectCurrentWizard )
-    EVT_TOOL( ID_FOOTPRINT_WIZARD_RESET_TO_DEFAULT, FOOTPRINT_WIZARD_FRAME::DefaultParameters )
-    EVT_TOOL( ID_FOOTPRINT_WIZARD_NEXT, FOOTPRINT_WIZARD_FRAME::Process_Special_Functions )
-    EVT_TOOL( ID_FOOTPRINT_WIZARD_PREVIOUS, FOOTPRINT_WIZARD_FRAME::Process_Special_Functions )
     EVT_TOOL( ID_FOOTPRINT_WIZARD_DONE, FOOTPRINT_WIZARD_FRAME::ExportSelectedFootprint )
 
     // listbox events
@@ -146,6 +144,7 @@ FOOTPRINT_WIZARD_FRAME::FOOTPRINT_WIZARD_FRAME( KIWAY* aKiway, wxWindow* aParent
     m_toolManager->RegisterTool( new PCB_SELECTION_TOOL );  // for std context menus (zoom & grid)
     m_toolManager->RegisterTool( new SCRIPTING_TOOL );
     m_toolManager->RegisterTool( new COMMON_TOOLS );
+    m_toolManager->RegisterTool( new FOOTPRINT_WIZARD_TOOLS );
     m_toolManager->InitTools();
 
     // Run the control tool, it is supposed to be always active

@@ -2580,6 +2580,42 @@ TOOL_ACTION PCB_ACTIONS::ddImportFootprint( TOOL_ACTION_ARGS()
         .Name( "pcbnew.Control.ddImportFootprint" )
         .Scope( AS_GLOBAL ) );
 
+// actions for footprint wizard frame
+TOOL_ACTION PCB_ACTIONS::showWizards( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.FpWizard.showWizards" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Show wizards selector" ) )
+        .Tooltip( _( "Select wizard script to run" ) )
+        .Icon( BITMAPS::module_wizard ) );
+
+TOOL_ACTION PCB_ACTIONS::resetWizardPrms( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.FpWizard.resetWizardPrms" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Reset wizard parameters" ) )
+        .Tooltip( _( "Reset wizard parameters to default" ) )
+        .Icon( BITMAPS::reload ) );
+
+TOOL_ACTION PCB_ACTIONS::selectPreviousWizardPage( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.FpWizard.selectPreviousWizardPage" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Select previous wizard page" ) )
+        .Tooltip( _( "Select previous parameters page" ) )
+        .Icon( BITMAPS::lib_previous ) );
+
+TOOL_ACTION PCB_ACTIONS::selectNextWizardPage( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.FpWizard.selectNextWizardPage" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Select next wizard page" ) )
+        .Tooltip( _( "Select next parameters page" ) )
+        .Icon( BITMAPS::lib_next ) );
+
+TOOL_ACTION PCB_ACTIONS::exportFpToEditor( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.FpWizard.exportFpToEditor" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Export footprint to editor" ) )
+        .Tooltip( _( "Export footprint to editor" ) )
+        .Icon( BITMAPS::export_footprint_names ) );
+
 
 const TOOL_EVENT& PCB_EVENTS::SnappingModeChangedByKeyEvent()
 {

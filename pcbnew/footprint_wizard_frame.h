@@ -69,6 +69,19 @@ public:
 
     COLOR_SETTINGS* GetColorSettings( bool aForceRefresh = false ) const override;
 
+    void SelectCurrentWizard( wxCommandEvent& aDummy ); // Open the wizard selector dialog
+
+    void DefaultParameters();           // Reset the initial (default) values of the wizard prms
+    void SelectWizardPreviousPage();    // Select the previous parameter page for wizards having
+                                        // more than one parameter page
+    void SelectWizardNextPage();        // Select the next parameter page for wizards having
+                                        // more than one parameter page
+
+    /**
+     * Will let the caller exit from the wait loop, and get the built footprint.
+     */
+    void ExportSelectedFootprint( wxCommandEvent& aEvent );
+
 private:
 
     void                OnSize( wxSizeEvent& event ) override;
@@ -86,12 +99,6 @@ private:
      * footprint change.
      */
     void updateView();
-
-    /**
-     * Will let the caller exit from the wait loop, and get the built footprint.
-     *
-     */
-    void ExportSelectedFootprint( wxCommandEvent& aEvent );
 
     /**
      * Resize the child windows when dragging a sash window border.
@@ -140,8 +147,6 @@ private:
      */
     FOOTPRINT_WIZARD* GetMyWizard();
 
-    void Process_Special_Functions( wxCommandEvent& event );
-
     /**
      * Show all the details about the current wizard.
      */
@@ -160,10 +165,6 @@ private:
      * that can be changed by the schematic editor or the library editor.
      */
     void OnActivate( wxActivateEvent& event );
-
-    void SelectCurrentWizard( wxCommandEvent& event );
-
-    void DefaultParameters( wxCommandEvent& event );
 
     /**
      * Update the footprint python parameters values from the values in grid.
