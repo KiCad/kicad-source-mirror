@@ -116,7 +116,7 @@ DIALOG_TABLECELL_PROPERTIES::DIALOG_TABLECELL_PROPERTIES( PCB_BASE_EDIT_FRAME* a
     m_italic->SetBitmap( KiBitmapBundle( BITMAPS::text_italic ) );
 
     m_adjustTextThickness->SetIsRadioButton();
-    m_adjustTextThickness->SetBitmap( KiBitmapBundle( BITMAPS::refresh ) );
+    m_adjustTextThickness->SetBitmap( KiBitmapBundle( BITMAPS::edit_cmp_symb_links ) );
 
     SetupStandardButtons();
     Layout();

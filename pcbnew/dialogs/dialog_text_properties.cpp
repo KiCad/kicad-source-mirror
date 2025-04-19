@@ -202,7 +202,7 @@ DIALOG_TEXT_PROPERTIES::DIALOG_TEXT_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, PC
     m_mirrored->SetIsCheckButton();
     m_mirrored->SetBitmap( KiBitmapBundle( BITMAPS::text_mirrored ) );
 
-    m_adjustTextThickness->SetBitmap( KiBitmapBundle( BITMAPS::refresh ) );
+    m_adjustTextThickness->SetBitmap( KiBitmapBundle( BITMAPS::edit_cmp_symb_links ) );
 
     SetTitle( title );
     m_hash_key = title;

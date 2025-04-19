@@ -198,10 +198,10 @@ DIALOG_TEXTBOX_PROPERTIES_BASE::DIALOG_TEXTBOX_PROPERTIES_BASE( wxWindow* parent
 	m_adjustTextThickness = new BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|wxBORDER_NONE );
 	m_adjustTextThickness->SetToolTip( _("Adjust the text thickness") );
 
-	bSizer5->Add( m_adjustTextThickness, 0, wxALIGN_CENTER_VERTICAL, 5 );
+	bSizer5->Add( m_adjustTextThickness, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 3 );
 
 
-	gbSizer1->Add( bSizer5, wxGBPosition( 7, 2 ), wxGBSpan( 1, 2 ), wxALIGN_CENTER_VERTICAL, 5 );
+	gbSizer1->Add( bSizer5, wxGBPosition( 7, 2 ), wxGBSpan( 1, 2 ), wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 	m_OrientLabel = new wxStaticText( this, wxID_ANY, _("Orientation:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_OrientLabel->Wrap( -1 );

@@ -94,7 +94,7 @@ DIALOG_TEXT_PROPERTIES_BASE::DIALOG_TEXT_PROPERTIES_BASE( wxWindow* parent, wxWi
 	bSizer7 = new wxBoxSizer( wxHORIZONTAL );
 
 	m_cbKnockout = new wxCheckBox( this, wxID_ANY, _("Knockout"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer7->Add( m_cbKnockout, 0, wxALIGN_CENTER_VERTICAL, 10 );
+	bSizer7->Add( m_cbKnockout, 1, wxTOP|wxBOTTOM|wxRIGHT, 15 );
 
 
 	bSizer7->Add( 20, 0, 1, wxEXPAND, 5 );
@@ -207,10 +207,10 @@ DIALOG_TEXT_PROPERTIES_BASE::DIALOG_TEXT_PROPERTIES_BASE( wxWindow* parent, wxWi
 	m_adjustTextThickness = new BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|wxBORDER_NONE );
 	m_adjustTextThickness->SetToolTip( _("Adjust the text thickness") );
 
-	bSizer8->Add( m_adjustTextThickness, 0, wxALIGN_CENTER_VERTICAL, 5 );
+	bSizer8->Add( m_adjustTextThickness, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 3 );
 
 
-	gbSizer1->Add( bSizer8, wxGBPosition( 5, 2 ), wxGBSpan( 1, 2 ), wxALIGN_CENTER_VERTICAL, 0 );
+	gbSizer1->Add( bSizer8, wxGBPosition( 5, 2 ), wxGBSpan( 1, 2 ), wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 	m_PositionXLabel = new wxStaticText( this, wxID_ANY, _("Position X:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_PositionXLabel->Wrap( -1 );
