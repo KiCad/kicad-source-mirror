@@ -25,6 +25,7 @@
 #define __DIALOG_MULTICHANNEL_REPEAT_LAYOUT__
 
 #include <vector>
+#include <board.h>
 #include <widgets/unit_binder.h>
 
 #include <dialogs/dialog_multichannel_repeat_layout_base.h>
@@ -54,6 +55,7 @@ private:
 
     std::vector<TABLE_ENTRY> m_targetRAs;
     MULTICHANNEL_TOOL* m_parentTool;
+    BOARD* m_board;
 };
 
 #endif

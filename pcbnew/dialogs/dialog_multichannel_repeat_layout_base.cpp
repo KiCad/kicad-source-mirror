@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6a)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -11,24 +11,21 @@
 
 DIALOG_MULTICHANNEL_REPEAT_LAYOUT_BASE::DIALOG_MULTICHANNEL_REPEAT_LAYOUT_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : DIALOG_SHIM( parent, id, title, pos, size, style )
 {
-	this->SetSizeHints( wxSize( 800,-1 ), wxDefaultSize );
+	this->SetSizeHints( wxSize( -1,-1 ), wxDefaultSize );
 
-	m_GeneralBoxSizer = new wxBoxSizer( wxVERTICAL );
-
-	m_GeneralBoxSizer->SetMinSize( wxSize( 800,300 ) );
 	wxFlexGridSizer* fgSizer3;
 	fgSizer3 = new wxFlexGridSizer( 0, 1, 0, 0 );
 	fgSizer3->AddGrowableCol( 0 );
-	fgSizer3->AddGrowableRow( 2 );
+	fgSizer3->AddGrowableRow( 1 );
 	fgSizer3->SetFlexibleDirection( wxBOTH );
 	fgSizer3->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
-	fgSizer3->SetMinSize( wxSize( 800,300 ) );
+	fgSizer3->SetMinSize( wxSize( 600,-1 ) );
 	m_staticText4 = new wxStaticText( this, wxID_ANY, _("Target areas:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText4->Wrap( -1 );
 	fgSizer3->Add( m_staticText4, 0, wxALL, 5 );
 
-	m_raGrid = new wxGrid( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
+	m_raGrid = new wxGrid( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxVSCROLL );
 
 	// Grid
 	m_raGrid->CreateGrid( 1, 3 );
@@ -39,8 +36,9 @@ DIALOG_MULTICHANNEL_REPEAT_LAYOUT_BASE::DIALOG_MULTICHANNEL_REPEAT_LAYOUT_BASE( 
 
 	// Columns
 	m_raGrid->AutoSizeColumns();
-	m_raGrid->EnableDragColMove( true );
+	m_raGrid->EnableDragColMove( false );
 	m_raGrid->EnableDragColSize( true );
+	m_raGrid->SetColLabelSize( wxGRID_AUTOSIZE );
 	m_raGrid->SetColLabelAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
 
 	// Rows
@@ -70,6 +68,24 @@ DIALOG_MULTICHANNEL_REPEAT_LAYOUT_BASE::DIALOG_MULTICHANNEL_REPEAT_LAYOUT_BASE( 
 
 
 	fgSizer3->Add( bSizer4, 1, wxEXPAND, 5 );
+
+	wxBoxSizer* bSizer41;
+	bSizer41 = new wxBoxSizer( wxHORIZONTAL );
+
+	m_staticText2 = new wxStaticText( this, wxID_ANY, _("Anchor footprint:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText2->Wrap( -1 );
+	bSizer41->Add( m_staticText2, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+
+	wxArrayString m_refAnchorFpChoices;
+	m_refAnchorFp = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_refAnchorFpChoices, 0 );
+	m_refAnchorFp->SetSelection( 0 );
+	m_refAnchorFp->SetToolTip( _("Optional, use for precise and/or rotated placement.\nSelect reference rule area footprint, place corresponding\ntarget rule area footprint(s).") );
+	m_refAnchorFp->SetMaxSize( wxSize( -1,400 ) );
+
+	bSizer41->Add( m_refAnchorFp, 0, wxALL, 5 );
+
+
+	fgSizer3->Add( bSizer41, 1, wxEXPAND, 5 );
 
 	wxBoxSizer* bSizer13;
 	bSizer13 = new wxBoxSizer( wxVERTICAL );
@@ -118,12 +134,9 @@ DIALOG_MULTICHANNEL_REPEAT_LAYOUT_BASE::DIALOG_MULTICHANNEL_REPEAT_LAYOUT_BASE( 
 	fgSizer3->Add( bottomButtonsSizer, 0, wxEXPAND|wxLEFT, 5 );
 
 
-	m_GeneralBoxSizer->Add( fgSizer3, 1, wxEXPAND, 5 );
-
-
-	this->SetSizer( m_GeneralBoxSizer );
+	this->SetSizer( fgSizer3 );
 	this->Layout();
-	m_GeneralBoxSizer->Fit( this );
+	fgSizer3->Fit( this );
 
 	// Connect Events
 	this->Connect( wxEVT_INIT_DIALOG, wxInitDialogEventHandler( DIALOG_MULTICHANNEL_REPEAT_LAYOUT_BASE::OnInitDlg ) );

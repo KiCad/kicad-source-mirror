@@ -528,7 +528,6 @@ int MULTICHANNEL_TOOL::RepeatLayout( const TOOL_EVENT& aEvent, ZONE* aRefZone )
     int totalCopied = 0;
 
     BOARD_COMMIT commit( GetManager(), true );
-
     for( auto& targetArea : m_areas.m_compatMap )
     {
         if( !targetArea.second.m_doCopy )
@@ -541,9 +540,8 @@ int MULTICHANNEL_TOOL::RepeatLayout( const TOOL_EVENT& aEvent, ZONE* aRefZone )
         if( !targetArea.second.m_isOk )
             continue;
 
-
-        if( !copyRuleAreaContents( targetArea.second.m_matchingComponents, &commit, m_areas.m_refRA,
-                                   targetArea.first, m_areas.m_options, targetArea.second.m_affectedItems,
+        if( !copyRuleAreaContents( targetArea.second.m_matchingComponents, &commit, m_areas.m_refRA, targetArea.first,
+                                   m_areas.m_options, targetArea.second.m_affectedItems,
                                    targetArea.second.m_groupableItems ) )
         {
             auto errMsg = wxString::Format(
@@ -561,6 +559,7 @@ int MULTICHANNEL_TOOL::RepeatLayout( const TOOL_EVENT& aEvent, ZONE* aRefZone )
             return -1;
         }
         totalCopied++;
+        wxSafeYield();
     }
 
     if( m_areas.m_options.m_groupItems )
@@ -707,10 +706,8 @@ int MULTICHANNEL_TOOL::findRoutedConnections( std::set<BOARD_ITEM*>&            
 }
 
 
-bool MULTICHANNEL_TOOL::copyRuleAreaContents( TMATCH::COMPONENT_MATCHES& aMatches,
-                                              BOARD_COMMIT* aCommit,
-                                              RULE_AREA* aRefArea, RULE_AREA* aTargetArea,
-                                              REPEAT_LAYOUT_OPTIONS aOpts,
+bool MULTICHANNEL_TOOL::copyRuleAreaContents( TMATCH::COMPONENT_MATCHES& aMatches, BOARD_COMMIT* aCommit,
+                                              RULE_AREA* aRefArea, RULE_AREA* aTargetArea, REPEAT_LAYOUT_OPTIONS aOpts,
                                               std::unordered_set<BOARD_ITEM*>& aAffectedItems,
                                               std::unordered_set<BOARD_ITEM*>& aGroupableItems )
 {
@@ -718,7 +715,29 @@ bool MULTICHANNEL_TOOL::copyRuleAreaContents( TMATCH::COMPONENT_MATCHES& aMatche
     SHAPE_LINE_CHAIN refOutline = aRefArea->m_area->Outline()->COutline( 0 );
     SHAPE_LINE_CHAIN targetOutline = aTargetArea->m_area->Outline()->COutline( 0 );
 
+    FOOTPRINT* targetAnchorFp = nullptr;
     VECTOR2I disp = aTargetArea->m_center - aRefArea->m_center;
+    EDA_ANGLE rot = EDA_ANGLE( 0 );
+
+    if( aOpts.m_anchorFp )
+    {
+        for( auto& fpPair : aMatches )
+        {
+            if( fpPair.first->GetReference() == aOpts.m_anchorFp->GetReference() )
+                targetAnchorFp = fpPair.second;
+        }
+
+        if( targetAnchorFp )
+        {
+            VECTOR2I oldpos = aOpts.m_anchorFp->GetPosition();
+            rot = EDA_ANGLE( targetAnchorFp->GetOrientationDegrees() - aOpts.m_anchorFp->GetOrientationDegrees() );
+            aOpts.m_anchorFp->Rotate( VECTOR2( 0, 0 ), EDA_ANGLE( rot ) );
+            oldpos = aOpts.m_anchorFp->GetPosition();
+            VECTOR2I newpos = targetAnchorFp->GetPosition();
+            disp = newpos - oldpos;
+            aOpts.m_anchorFp->Rotate( VECTOR2( 0, 0 ), EDA_ANGLE( -rot ) );
+        }
+    }
 
     SHAPE_POLY_SET refPoly;
     refPoly.AddOutline( refOutline );
@@ -727,6 +746,7 @@ bool MULTICHANNEL_TOOL::copyRuleAreaContents( TMATCH::COMPONENT_MATCHES& aMatche
     SHAPE_POLY_SET targetPoly;
 
     SHAPE_LINE_CHAIN newTargetOutline( refOutline );
+    newTargetOutline.Rotate( rot, VECTOR2( 0, 0 ) );
     newTargetOutline.Move( disp );
     targetPoly.AddOutline( newTargetOutline );
     targetPoly.CacheTriangulation( false );
@@ -786,6 +806,7 @@ bool MULTICHANNEL_TOOL::copyRuleAreaContents( TMATCH::COMPONENT_MATCHES& aMatche
                 fixupNet( static_cast<BOARD_CONNECTED_ITEM*>( item ), static_cast<BOARD_CONNECTED_ITEM*>( copied ),
                           aMatches );
             }
+            copied->Rotate( VECTOR2( 0, 0 ), rot );
             copied->Move( disp );
             copied->SetParentGroup( nullptr );
             const_cast<KIID&>( copied->m_Uuid ) = KIID();
@@ -900,17 +921,13 @@ bool MULTICHANNEL_TOOL::copyRuleAreaContents( TMATCH::COMPONENT_MATCHES& aMatche
                 copied->ClearFlags();
                 copied->SetParentGroup( nullptr );
                 const_cast<KIID&>( copied->m_Uuid ) = KIID();
+                copied->Rotate( VECTOR2( 0, 0 ), rot );
                 copied->Move( disp );
                 aGroupableItems.insert( copied );
                 aCommit->Add( copied );
             }
         }
     }
-
-    aTargetArea->m_area->RemoveAllContours();
-    aTargetArea->m_area->AddPolygon( newTargetOutline );
-    aTargetArea->m_area->UnHatchBorder();
-    aTargetArea->m_area->HatchBorder();
 
     if( aOpts.m_copyPlacement )
     {
@@ -943,9 +960,9 @@ bool MULTICHANNEL_TOOL::copyRuleAreaContents( TMATCH::COMPONENT_MATCHES& aMatche
 
             targetFP->SetLayerAndFlip( refFP->GetLayer() );
             targetFP->SetOrientation( refFP->GetOrientation() );
-            VECTOR2I targetPos = refFP->GetPosition() + disp;
-            targetFP->SetPosition( targetPos );
-
+            targetFP->SetPosition( refFP->GetPosition() );
+            targetFP->Rotate( VECTOR2( 0, 0 ), rot );
+            targetFP->Move( disp );
             for( PCB_FIELD* refField : refFP->GetFields() )
             {
                 if( !refField->IsVisible() )
@@ -955,7 +972,9 @@ bool MULTICHANNEL_TOOL::copyRuleAreaContents( TMATCH::COMPONENT_MATCHES& aMatche
                 wxCHECK2( targetField, continue );
 
                 targetField->SetAttributes( refField->GetAttributes() );
-                targetField->SetPosition( refField->GetPosition() + disp );
+                targetField->SetPosition( refField->GetPosition() );
+                targetField->Rotate( VECTOR2( 0, 0 ), rot );
+                targetField->Move( disp );
                 targetField->SetIsKnockout( refField->IsKnockout() );
             }
 
@@ -963,6 +982,11 @@ bool MULTICHANNEL_TOOL::copyRuleAreaContents( TMATCH::COMPONENT_MATCHES& aMatche
             aGroupableItems.insert( targetFP );
         }
     }
+
+    aTargetArea->m_area->RemoveAllContours();
+    aTargetArea->m_area->AddPolygon( newTargetOutline );
+    aTargetArea->m_area->UnHatchBorder();
+    aTargetArea->m_area->HatchBorder();
 
     return true;
 }

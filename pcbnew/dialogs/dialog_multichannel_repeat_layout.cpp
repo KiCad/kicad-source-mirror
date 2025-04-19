@@ -27,6 +27,8 @@
 #include <pcb_edit_frame.h>
 #include <tools/multichannel_tool.h>
 #include <zone.h>
+#include <board.h>
+
 
 DIALOG_MULTICHANNEL_REPEAT_LAYOUT::DIALOG_MULTICHANNEL_REPEAT_LAYOUT (
         PCB_BASE_FRAME* aFrame,
@@ -34,6 +36,7 @@ DIALOG_MULTICHANNEL_REPEAT_LAYOUT::DIALOG_MULTICHANNEL_REPEAT_LAYOUT (
         DIALOG_MULTICHANNEL_REPEAT_LAYOUT_BASE( aFrame ),
         m_parentTool( aParentTool )
 {
+    m_board = aFrame->GetBoard();
     auto data = m_parentTool->GetData();
     m_refRAName->SetLabelText( data->m_refRA->m_area->GetZoneName() );
 
@@ -69,6 +72,7 @@ DIALOG_MULTICHANNEL_REPEAT_LAYOUT::DIALOG_MULTICHANNEL_REPEAT_LAYOUT (
     m_raGrid->SetColLabelValue( 0, wxT("Copy") );
     m_raGrid->SetColLabelValue( 1, wxT("Target Rule Area") );
     m_raGrid->SetColLabelValue( 2, wxT("Status") );
+    m_raGrid->SetColLabelValue( 3, wxT( "RefFp" ) );
     m_raGrid->AutoSizeColumn( 1 );
     m_raGrid->AppendRows( m_targetRAs.size() - 1 );
 
@@ -82,8 +86,18 @@ DIALOG_MULTICHANNEL_REPEAT_LAYOUT::DIALOG_MULTICHANNEL_REPEAT_LAYOUT (
         i++;
     }
 
-    m_raGrid->SetMaxSize( wxSize( -1, 800 ) );
+    m_raGrid->SetMaxSize( wxSize( -1, 400 ) );
     m_raGrid->Fit();
+
+    wxArrayString refFpNames;
+    refFpNames.push_back( "" );
+
+    for( FOOTPRINT* fp : data->m_refRA->m_raFootprints )
+        refFpNames.push_back( fp->GetReference() );
+
+    refFpNames.Sort();
+    m_refAnchorFp->Set( refFpNames );
+    m_refAnchorFp->SetSelection( 0 );
 
     m_cbCopyPlacement->SetValue( data->m_options.m_copyPlacement );
     m_cbCopyRouting->SetValue( data->m_options.m_copyRouting );
@@ -116,6 +130,19 @@ bool DIALOG_MULTICHANNEL_REPEAT_LAYOUT::TransferDataFromWindow()
     data->m_options.m_groupItems = m_cbGroupItems->GetValue();
     data->m_options.m_includeLockedItems = m_cbIncludeLockedComponents->GetValue();
     data->m_options.m_moveOffRAComponents = m_cbIncludeOffRAComponents->GetValue();
+
+    if( m_refAnchorFp->GetString( m_refAnchorFp->GetSelection() ) == "" )
+    {
+        data->m_options.m_anchorFp = nullptr;
+    }
+    else
+    {
+        for( FOOTPRINT* fp : m_board->Footprints() )
+        {
+            if( fp->GetReference() == m_refAnchorFp->GetString( m_refAnchorFp->GetSelection() ) )
+                data->m_options.m_anchorFp = fp;
+        }
+    }
 
     return true;
 }

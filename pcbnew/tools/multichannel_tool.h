@@ -55,6 +55,7 @@ struct REPEAT_LAYOUT_OPTIONS
     bool                    m_includeLockedItems = true;
     bool                    m_keepOldRouting = false;
     bool                    m_copyOnlyMatchingRAShapes = false;
+    FOOTPRINT*              m_anchorFp = nullptr;
     REPEAT_LAYOUT_EDGE_MODE m_edgeMode = REPEAT_LAYOUT_EDGE_MODE::INSIDE;
 };
 
