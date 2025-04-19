@@ -664,7 +664,6 @@ int PCBNEW_JOBS_HANDLER::JobExportRender( JOB* aJob )
     };
 
     cfg.m_CurrentPreset = aRenderJob->m_appearancePreset;
-wxFprintf( stderr, wxString::Format( "Config preset: %s\n", cfg.m_CurrentPreset ) );
     boardAdapter.m_Cfg = &cfg;
 
     if( aRenderJob->m_bgStyle == JOB_PCB_RENDER::BG_STYLE::TRANSPARENT
