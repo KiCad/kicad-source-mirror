@@ -788,6 +788,7 @@ std::vector<LTSPICE_SCHEMATIC::LT_ASC> LTSPICE_SCHEMATIC::StructureBuilder()
         ascFile.SheetSize = VECTOR2I( 0, 0 );
         ascFile.Symbols = symbolArray;
         ascFile.Version = 0;
+        ascFile.VersionMinor = 0;
         ascFile.SheetNumber = 0;
 
         int lineNumber = 1;
@@ -1122,7 +1123,17 @@ std::vector<LTSPICE_SCHEMATIC::LT_ASC> LTSPICE_SCHEMATIC::StructureBuilder()
             else if( element == "VERSION" )
             {
                 wxString versionNumber = tokens[1];
-                ascFile.Version = integerCheck( versionNumber, lineNumber, fileName );
+                if( versionNumber.Contains( '.' ) )
+                {
+                    wxString majorStr = versionNumber.BeforeFirst( '.' );
+                    wxString minorStr = versionNumber.AfterFirst( '.' );
+                    ascFile.Version = integerCheck( majorStr, lineNumber, fileName );
+                    ascFile.VersionMinor = integerCheck( minorStr, lineNumber, fileName );
+                }
+                else
+                {
+                    ascFile.Version = integerCheck( versionNumber, lineNumber, fileName );
+                }
             }
 
             lineNumber++;

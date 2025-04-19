@@ -261,6 +261,7 @@ public:
     {
         VECTOR2I               SheetSize;
         int                    Version;
+        int                    VersionMinor;
         int                    SheetNumber;
         std::vector<LT_SYMBOL> Symbols;
         std::vector<LINE>      Lines;
