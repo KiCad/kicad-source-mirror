@@ -114,7 +114,6 @@ enum class BITMAPS : unsigned int
     bug,
     bus_definition_tool,
     c_microstrip,
-    calculator,
     cancel,
     chamfer,
     change_entry_orient,

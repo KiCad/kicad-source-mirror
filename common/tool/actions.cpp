@@ -1248,7 +1248,7 @@ TOOL_ACTION ACTIONS::showCalculatorTools( TOOL_ACTION_ARGS()
         .Scope( AS_GLOBAL )
         .FriendlyName( _( "Calculator Tools" ) )
         .Tooltip( _( "Run component calculations, track width calculations, etc." ) )
-        .Icon( BITMAPS::calculator )
+        .Icon( BITMAPS::icon_pcbcalculator_24 )
         .Flags( AF_NONE )
         .Parameter( FRAME_CALC ) );
 
