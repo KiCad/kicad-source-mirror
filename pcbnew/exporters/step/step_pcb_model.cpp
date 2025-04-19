@@ -689,13 +689,13 @@ static bool fuseShapes( auto& aInputShapes, TopoDS_Shape& aOutShape )
 }
 
 
-static TopoDS_Compound makeCompound( auto& aInputShapes )
+static TopoDS_Compound makeCompound( const auto& aInputShapes )
 {
     TopoDS_Compound compound;
     BRep_Builder    builder;
     builder.MakeCompound( compound );
 
-    for( TopoDS_Shape& shape : aInputShapes )
+    for( const TopoDS_Shape& shape : aInputShapes )
         builder.Add( compound, shape );
 
     return compound;
@@ -703,7 +703,7 @@ static TopoDS_Compound makeCompound( auto& aInputShapes )
 
 
 // Try to fuse shapes. If that fails, just add them to a compound
-static TopoDS_Shape fuseShapesOrCompound( TopTools_ListOfShape& aInputShapes )
+static TopoDS_Shape fuseShapesOrCompound( const TopTools_ListOfShape& aInputShapes )
 {
     TopoDS_Shape outShape;
 
@@ -946,12 +946,13 @@ bool STEP_PCB_MODEL::AddPadShape( const PAD* aPad, const VECTOR2D& aOrigin, bool
             for( const TopoDS_Shape& shape : padShapes )
                 padShapesList.Append( shape );
 
-            m_board_copper_pads.push_back( fuseShapesOrCompound( padShapesList ) );
+            m_board_copper_pads[aPad->GetNetname()].push_back(
+                    fuseShapesOrCompound( padShapesList ) );
         }
         else
         {
             for( const TopoDS_Shape& shape : padShapes )
-                m_board_copper_pads.push_back( shape );
+                m_board_copper_pads[aPad->GetNetname()].push_back( shape );
         }
     }
 
@@ -1016,7 +1017,8 @@ bool STEP_PCB_MODEL::AddHole( const SHAPE_SEGMENT& aShape, int aPlatingThickness
 
 
 bool STEP_PCB_MODEL::AddBarrel( const SHAPE_SEGMENT& aShape, PCB_LAYER_ID aLayerTop,
-                                PCB_LAYER_ID aLayerBot, bool aVia, const VECTOR2D& aOrigin )
+                                PCB_LAYER_ID aLayerBot, bool aVia, const VECTOR2D& aOrigin,
+                                const wxString& aNetname )
 {
     double f_pos, f_thickness;
     double b_pos, b_thickness;
@@ -1034,9 +1036,9 @@ bool STEP_PCB_MODEL::AddBarrel( const SHAPE_SEGMENT& aShape, PCB_LAYER_ID aLayer
     }
 
     if( aVia )
-        m_board_copper_vias.push_back( plating );
+        m_board_copper_vias[aNetname].push_back( plating );
     else
-        m_board_copper_pads.push_back( plating );
+        m_board_copper_pads[aNetname].push_back( plating );
 
     return true;
 }
@@ -1158,7 +1160,7 @@ void STEP_PCB_MODEL::getBoardBodyZPlacement( double& aZPos, double& aThickness )
 
 
 bool STEP_PCB_MODEL::AddPolygonShapes( const SHAPE_POLY_SET* aPolyShapes, PCB_LAYER_ID aLayer,
-                                       const VECTOR2D& aOrigin )
+                                       const VECTOR2D& aOrigin, const wxString& aNetname )
 {
     bool success = true;
 
@@ -1171,7 +1173,7 @@ bool STEP_PCB_MODEL::AddPolygonShapes( const SHAPE_POLY_SET* aPolyShapes, PCB_LA
     double z_pos, thickness;
     getLayerZPlacement( aLayer, z_pos, thickness );
 
-    std::vector<TopoDS_Shape>& targetVec = IsCopperLayer( aLayer ) ? m_board_copper
+    std::vector<TopoDS_Shape>& targetVec = IsCopperLayer( aLayer ) ? m_board_copper[aNetname]
                                            : aLayer == F_SilkS || aLayer == B_SilkS
                                                    ? m_board_silkscreen
                                                    : m_board_soldermask;
@@ -1968,71 +1970,96 @@ bool STEP_PCB_MODEL::CreatePCB( SHAPE_POLY_SET& aOutline, VECTOR2D aOrigin, bool
         bsbHoles.Initialize( brdWithHolesBndBox, holeBoxSet );
     };
 
-    auto subtractShapes = []( const wxString& aWhat, std::vector<TopoDS_Shape>& aShapesList,
-                              std::vector<TopoDS_Shape>& aHolesList, Bnd_BoundSortBox& aBSBHoles )
+    auto subtractShapesMap =
+            []( const wxString& aWhat, std::map<wxString, std::vector<TopoDS_Shape>>& aShapesMap,
+                std::vector<TopoDS_Shape>& aHolesList, Bnd_BoundSortBox& aBSBHoles )
     {
+        int totalCount = 0;
+
+        for( const auto& [netname, vec] : aShapesMap )
+            totalCount += vec.size();
+
         // Remove holes for each item (board body or bodies, one can have more than one board)
         int cnt = 0;
-        for( TopoDS_Shape& shape : aShapesList )
+
+        for( auto& [netname, vec] : aShapesMap )
         {
-            Bnd_Box shapeBbox;
-            BRepBndLib::Add( shape, shapeBbox );
-
-            const TColStd_ListOfInteger& indices = aBSBHoles.Compare( shapeBbox );
-
-            TopTools_ListOfShape holelist;
-
-            for( const Standard_Integer& index : indices )
-                holelist.Append( aHolesList[index] );
-
-            if( cnt == 0 )
-                ReportMessage( wxString::Format( _( "Build holes for %s\n" ), aWhat ) );
-
-            cnt++;
-
-            if( cnt % 10 == 0 )
-                ReportMessage( wxString::Format( _( "Cutting %d/%d %s\n" ), cnt,
-                                                 (int) aShapesList.size(), aWhat ) );
-
-            if( holelist.IsEmpty() )
-                continue;
-
-            TopTools_ListOfShape cutArgs;
-            cutArgs.Append( shape );
-
-            BRepAlgoAPI_Cut cut;
-
-            cut.SetRunParallel( true );
-            cut.SetToFillHistory( false );
-
-            cut.SetArguments( cutArgs );
-            cut.SetTools( holelist );
-            cut.Build();
-
-            if( cut.HasErrors() || cut.HasWarnings() )
+            for( TopoDS_Shape& shape : vec )
             {
-                ReportMessage( wxString::Format(
-                        _( "\n** Got problems while cutting %s number %d **\n" ), aWhat, cnt ) );
-                shapeBbox.Dump();
+                Bnd_Box shapeBbox;
+                BRepBndLib::Add( shape, shapeBbox );
 
-                if( cut.HasErrors() )
+                const TColStd_ListOfInteger& indices = aBSBHoles.Compare( shapeBbox );
+
+                TopTools_ListOfShape holelist;
+
+                for( const Standard_Integer& index : indices )
+                    holelist.Append( aHolesList[index] );
+
+                if( cnt == 0 )
+                    ReportMessage( wxString::Format( _( "Build holes for %s\n" ), aWhat ) );
+
+                cnt++;
+
+                if( cnt % 10 == 0 )
                 {
-                    ReportMessage( _( "Errors:\n" ) );
-                    cut.DumpErrors( std::cout );
+                    ReportMessage(
+                            wxString::Format( _( "Cutting %d/%d %s\n" ), cnt, totalCount, aWhat ) );
                 }
 
-                if( cut.HasWarnings() )
+                if( holelist.IsEmpty() )
+                    continue;
+
+                TopTools_ListOfShape cutArgs;
+                cutArgs.Append( shape );
+
+                BRepAlgoAPI_Cut cut;
+
+                cut.SetRunParallel( true );
+                cut.SetToFillHistory( false );
+
+                cut.SetArguments( cutArgs );
+                cut.SetTools( holelist );
+                cut.Build();
+
+                if( cut.HasErrors() || cut.HasWarnings() )
                 {
-                    ReportMessage( _( "Warnings:\n" ) );
-                    cut.DumpWarnings( std::cout );
+                    ReportMessage( wxString::Format(
+                            _( "\n** Got problems while cutting %s number %d **\n" ), aWhat,
+                            cnt ) );
+                    shapeBbox.Dump();
+
+                    if( cut.HasErrors() )
+                    {
+                        ReportMessage( _( "Errors:\n" ) );
+                        cut.DumpErrors( std::cout );
+                    }
+
+                    if( cut.HasWarnings() )
+                    {
+                        ReportMessage( _( "Warnings:\n" ) );
+                        cut.DumpWarnings( std::cout );
+                    }
+
+                    std::cout << "\n";
                 }
 
-                std::cout << "\n";
+                shape = cut.Shape();
             }
-
-            shape = cut.Shape();
         }
     };
+
+    auto subtractShapes = [subtractShapesMap]( const wxString&            aWhat,
+                                               std::vector<TopoDS_Shape>& aShapesList,
+                                               std::vector<TopoDS_Shape>& aHolesList,
+                                               Bnd_BoundSortBox&          aBSBHoles )
+    {
+        std::map<wxString, std::vector<TopoDS_Shape>> aShapesMap{ { wxEmptyString, aShapesList } };
+
+        subtractShapesMap( aWhat, aShapesMap, aHolesList, aBSBHoles );
+        aShapesList = aShapesMap[wxEmptyString];
+    };
+
 
     if( m_boardCutouts.size() )
     {
@@ -2047,34 +2074,44 @@ bool STEP_PCB_MODEL::CreatePCB( SHAPE_POLY_SET& aOutline, VECTOR2D aOrigin, bool
         Bnd_BoundSortBox bsbHoles;
         buildBSB( m_copperCutouts, bsbHoles );
 
-        subtractShapes( _( "pads" ), m_board_copper_pads, m_copperCutouts, bsbHoles );
-        subtractShapes( _( "vias" ), m_board_copper_vias, m_copperCutouts, bsbHoles );
+        subtractShapesMap( _( "pads" ), m_board_copper_pads, m_copperCutouts, bsbHoles );
+        subtractShapesMap( _( "vias" ), m_board_copper_vias, m_copperCutouts, bsbHoles );
     }
 
     if( m_fuseShapes )
     {
-        ReportMessage( wxT( "Fusing shapes\n" ) );
+        std::map<wxString, TopTools_ListOfShape> shapesToFuseMap;
 
-        TopTools_ListOfShape shapesToFuse;
-
-        for( TopoDS_Shape& shape : m_board_copper )
-            shapesToFuse.Append( shape );
-
-        for( TopoDS_Shape& shape : m_board_copper_pads )
-            shapesToFuse.Append( shape );
-
-        for( TopoDS_Shape& shape : m_board_copper_vias )
-            shapesToFuse.Append( shape );
-
-        TopoDS_Shape fusedShape = fuseShapesOrCompound( shapesToFuse );
-
-        if( !fusedShape.IsNull() )
+        auto addShapes = [&shapesToFuseMap]( const wxString&                  aNetname,
+                                             const std::vector<TopoDS_Shape>& aShapes )
         {
-            m_board_copper_fused.emplace_back( fusedShape );
+            for( const TopoDS_Shape& shape : aShapes )
+                shapesToFuseMap[aNetname].Append( shape );
+        };
 
-            m_board_copper.clear();
-            m_board_copper_pads.clear();
-            m_board_copper_vias.clear();
+        for( const auto& [netname, shapes] : m_board_copper )
+            addShapes( netname, shapes );
+
+        for( const auto& [netname, shapes] : m_board_copper_pads )
+            addShapes( netname, shapes );
+
+        for( const auto& [netname, shapes] : m_board_copper_vias )
+            addShapes( netname, shapes );
+
+        for( auto& [netname, toFuse] : shapesToFuseMap )
+        {
+            ReportMessage( wxString::Format( "Fusing net '%s'\n", UnescapeString( netname ) ) );
+
+            TopoDS_Shape fusedShape = fuseShapesOrCompound( toFuse );
+
+            if( !fusedShape.IsNull() )
+            {
+                m_board_copper_fused[netname].emplace_back( fusedShape );
+
+                m_board_copper[netname].clear();
+                m_board_copper_pads[netname].clear();
+                m_board_copper_vias[netname].clear();
+            }
         }
     }
 
@@ -2088,57 +2125,92 @@ bool STEP_PCB_MODEL::CreatePCB( SHAPE_POLY_SET& aOutline, VECTOR2D aOrigin, bool
     // identically named assemblies.  So we want to avoid having the PCB be generally defaulted
     // to "Component" or "Assembly".
 
-    auto pushToAssembly = [&]( std::vector<TopoDS_Shape>& aShapesList, Quantity_ColorRGBA aColor,
+    // aCompoundNets will place all geometry within a net into one compound.
+    // aCompoundAll will place all geometry into one compound.
+    auto pushToAssemblyMap = [&]( const std::map<wxString, std::vector<TopoDS_Shape>>& aShapesMap,
+                                  const TDF_Label& aVisMatLabel, const wxString& aShapeName,
+                                  bool aCompoundNets, bool aCompoundAll )
+    {
+        std::map<wxString, std::vector<TopoDS_Shape>> shapesMap;
+
+        if( aCompoundAll )
+        {
+            std::vector<TopoDS_Shape> allShapes;
+
+            for( const auto& [netname, shapesList] : aShapesMap )
+                allShapes.insert( allShapes.end(), shapesList.begin(), shapesList.end() );
+
+            if( !allShapes.empty() )
+                shapesMap[wxEmptyString].emplace_back( makeCompound( allShapes ) );
+        }
+        else
+        {
+            shapesMap = aShapesMap;
+        }
+
+        for( const auto& [netname, shapesList] : shapesMap )
+        {
+            std::vector<TopoDS_Shape> newList;
+
+            if( aCompoundNets )
+                newList.emplace_back( makeCompound( shapesList ) );
+            else
+                newList = shapesList;
+
+            int i = 1;
+            for( TopoDS_Shape& shape : newList )
+            {
+                Handle( TDataStd_TreeNode ) node;
+
+                // Dont expand the component or else coloring it gets hard
+                TDF_Label lbl = m_assy->AddComponent( m_assy_label, shape, false );
+                m_pcb_labels.push_back( lbl );
+
+                if( m_pcb_labels.back().IsNull() )
+                    return;
+
+                lbl.FindAttribute( XCAFDoc::ShapeRefGUID(), node );
+                TDF_Label shpLbl = node->Father()->Label();
+                if( !shpLbl.IsNull() )
+                {
+                    if( visMatTool && !aVisMatLabel.IsNull() )
+                        visMatTool->SetShapeMaterial( shpLbl, aVisMatLabel );
+
+                    wxString shapeName;
+
+                    shapeName << m_pcbName;
+                    shapeName << '_';
+                    shapeName << aShapeName;
+
+                    if( !netname.empty() )
+                    {
+                        shapeName << '_';
+                        shapeName << netname;
+                    }
+
+                    if( newList.size() > 1 )
+                    {
+                        shapeName << '_';
+                        shapeName << i;
+                    }
+
+                    TCollection_ExtendedString partname( shapeName.ToUTF8().data() );
+                    TDataStd_Name::Set( shpLbl, partname );
+                }
+
+                i++;
+            }
+        }
+    };
+
+    auto pushToAssembly = [&]( const std::vector<TopoDS_Shape>& aShapesList,
                                const TDF_Label& aVisMatLabel, const wxString& aShapeName,
                                bool aCompound )
     {
-        if( aShapesList.empty() )
-            return;
+        const std::map<wxString, std::vector<TopoDS_Shape>> shapesMap{ { wxEmptyString,
+                                                                         aShapesList } };
 
-        std::vector<TopoDS_Shape> newList;
-
-        if( aCompound )
-            newList.emplace_back( makeCompound( aShapesList ) );
-        else
-            newList = aShapesList;
-
-        int i = 1;
-        for( TopoDS_Shape& shape : newList )
-        {
-            Handle( TDataStd_TreeNode ) node;
-
-            // Dont expand the component or else coloring it gets hard
-            TDF_Label lbl = m_assy->AddComponent( m_assy_label, shape, false );
-            m_pcb_labels.push_back( lbl );
-
-            if( m_pcb_labels.back().IsNull() )
-                return;
-
-            lbl.FindAttribute( XCAFDoc::ShapeRefGUID(), node );
-            TDF_Label shpLbl = node->Father()->Label();
-            if( !shpLbl.IsNull() )
-            {
-                if( visMatTool && !aVisMatLabel.IsNull() )
-                    visMatTool->SetShapeMaterial( shpLbl, aVisMatLabel );
-
-                wxString shapeName;
-
-                if( newList.size() > 1 )
-                {
-                    shapeName = wxString::Format( wxT( "%s_%s_%d" ), m_pcbName, aShapeName, i );
-                }
-                else
-                {
-                    shapeName = wxString::Format( wxT( "%s_%s" ), m_pcbName, aShapeName );
-                }
-
-
-                TCollection_ExtendedString partname( shapeName.ToUTF8().data() );
-                TDataStd_Name::Set( shpLbl, partname );
-            }
-
-            i++;
-        }
+        pushToAssemblyMap( shapesMap, aVisMatLabel, aShapeName, aCompound, aCompound );
     };
 
     auto makeMaterial = [&]( const TCollection_AsciiString& aName,
@@ -2195,15 +2267,15 @@ bool STEP_PCB_MODEL::CreatePCB( SHAPE_POLY_SET& aOutline, VECTOR2D aOrigin, bool
     TDF_Label pad_mat = makeMaterial( "pad", pad_color, 1.0, 0.4 );
     TDF_Label board_mat = makeMaterial( "board", board_color, 0.0, 0.8 );
 
-    pushToAssembly( m_board_copper, copper_color, copper_mat, "copper", true );
-    pushToAssembly( m_board_copper_pads, pad_color, pad_mat, "pad", true );
-    pushToAssembly( m_board_copper_vias, copper_color, copper_mat, "via", true );
-    pushToAssembly( m_board_copper_fused, copper_color, copper_mat, "copper", true );
-    pushToAssembly( m_board_silkscreen, silk_color, silk_mat, "silkscreen", true );
-    pushToAssembly( m_board_soldermask, mask_color, mask_mat, "soldermask", true );
+    pushToAssemblyMap( m_board_copper, copper_mat, "copper", true, true );
+    pushToAssemblyMap( m_board_copper_pads, pad_mat, "pad", true, true );
+    pushToAssemblyMap( m_board_copper_vias, copper_mat, "via", true, true );
+    pushToAssemblyMap( m_board_copper_fused, copper_mat, "copper", true, true );
+    pushToAssembly( m_board_silkscreen, silk_mat, "silkscreen", true );
+    pushToAssembly( m_board_soldermask, mask_mat, "soldermask", true );
 
     if( aPushBoardBody )
-        pushToAssembly( m_board_outlines, board_color, board_mat, "PCB", false );
+        pushToAssembly( m_board_outlines, board_mat, "PCB", false );
 
 #if( defined OCC_VERSION_HEX ) && ( OCC_VERSION_HEX > 0x070101 )
     m_assy->UpdateAssemblies();

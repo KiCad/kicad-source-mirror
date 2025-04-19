@@ -109,11 +109,11 @@ public:
 
     // add a plated hole shape (without the hole)
     bool AddBarrel( const SHAPE_SEGMENT& aShape, PCB_LAYER_ID aLayerTop, PCB_LAYER_ID aLayerBot,
-                    bool aVia, const VECTOR2D& aOrigin );
+                    bool aVia, const VECTOR2D& aOrigin, const wxString& aNetname );
 
     // add a set of polygons (must be in final position)
     bool AddPolygonShapes( const SHAPE_POLY_SET* aPolyShapes, PCB_LAYER_ID aLayer,
-                           const VECTOR2D& aOrigin );
+                           const VECTOR2D& aOrigin, const wxString& aNetname );
 
     // add a component at the given position and orientation
     bool AddComponent( const std::string& aFileName, const std::string& aRefDes, bool aBottom,
@@ -285,10 +285,14 @@ private:
 
     // Main outlines (more than one board)
     std::vector<TopoDS_Shape> m_board_outlines;
-    std::vector<TopoDS_Shape> m_board_copper;
-    std::vector<TopoDS_Shape> m_board_copper_pads;
-    std::vector<TopoDS_Shape> m_board_copper_vias;
-    std::vector<TopoDS_Shape> m_board_copper_fused;
+
+    // Copper items. Key is netname.
+    std::map<wxString, std::vector<TopoDS_Shape>> m_board_copper;
+    std::map<wxString, std::vector<TopoDS_Shape>> m_board_copper_pads;
+    std::map<wxString, std::vector<TopoDS_Shape>> m_board_copper_vias;
+    std::map<wxString, std::vector<TopoDS_Shape>> m_board_copper_fused;
+
+    // Graphical items
     std::vector<TopoDS_Shape> m_board_silkscreen;
     std::vector<TopoDS_Shape> m_board_soldermask;
 

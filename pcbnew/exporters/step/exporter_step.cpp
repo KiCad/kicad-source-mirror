@@ -223,7 +223,7 @@ bool EXPORTER_STEP::buildFootprint3DShapes( FOOTPRINT* aFootprint, VECTOR2D aOri
                                                   pad->GetSolderMaskExpansion( cuLayer ), maxError,
                                                   ERROR_INSIDE );
 
-                    m_poly_shapes[pcblayer].Append( poly );
+                    m_poly_shapes[pcblayer][wxEmptyString].Append( poly );
                 }
             }
         }
@@ -244,13 +244,15 @@ bool EXPORTER_STEP::buildFootprint3DShapes( FOOTPRINT* aFootprint, VECTOR2D aOri
                                                 true, /* include shapes */
                                                 false /* include private items */ );
 
-        if( m_params.m_NetFilter.IsEmpty() || !IsCopperLayer( pcblayer ) )
+        if( !IsCopperLayer( pcblayer ) )
         {
-            m_poly_shapes[pcblayer].Append( buffer );
+            m_poly_shapes[pcblayer][wxEmptyString].Append( buffer );
         }
         else
         {
-            // Only add shapes colliding with any matching pads
+            std::map<const SHAPE_POLY_SET::POLYGON*, PAD*> polyPadMap;
+
+            // Only add polygons colliding with any matching pads
             for( const SHAPE_POLY_SET::POLYGON& poly : buffer.CPolygons() )
             {
                 for( PAD* pad : padsMatchingNetFilter )
@@ -263,9 +265,22 @@ bool EXPORTER_STEP::buildFootprint3DShapes( FOOTPRINT* aFootprint, VECTOR2D aOri
 
                     if( padPoly->Collide( &gfxPoly ) )
                     {
-                        m_poly_shapes[pcblayer].Append( gfxPoly );
+                        polyPadMap[&poly] = pad;
+                        m_poly_shapes[pcblayer][pad->GetNetname()].Append( gfxPoly );
                         break;
                     }
+                }
+            }
+
+            if( m_params.m_NetFilter.empty() )
+            {
+                // Add polygons with no net
+                for( const SHAPE_POLY_SET::POLYGON& poly : buffer.CPolygons() )
+                {
+                    auto it = polyPadMap.find( &poly );
+
+                    if( it == polyPadMap.end() )
+                        m_poly_shapes[pcblayer][wxEmptyString].Append( poly );
                 }
             }
         }
@@ -408,7 +423,7 @@ bool EXPORTER_STEP::buildTrack3DShape( PCB_TRACK* aTrack, VECTOR2D aOrigin )
             SHAPE_POLY_SET poly;
             aTrack->TransformShapeToPolygon( poly, F_Mask, 0, maxError, ERROR_INSIDE );
 
-            m_poly_shapes[F_Mask].Append( poly );
+            m_poly_shapes[F_Mask][wxEmptyString].Append( poly );
         }
 
         if( aTrack->IsOnLayer( B_Mask ) )
@@ -416,7 +431,7 @@ bool EXPORTER_STEP::buildTrack3DShape( PCB_TRACK* aTrack, VECTOR2D aOrigin )
             SHAPE_POLY_SET poly;
             aTrack->TransformShapeToPolygon( poly, B_Mask, 0, maxError, ERROR_INSIDE );
 
-            m_poly_shapes[B_Mask].Append( poly );
+            m_poly_shapes[B_Mask][wxEmptyString].Append( poly );
         }
     }
 
@@ -444,11 +459,12 @@ bool EXPORTER_STEP::buildTrack3DShape( PCB_TRACK* aTrack, VECTOR2D aOrigin )
 
                 SHAPE_POLY_SET poly;
                 shape->TransformToPolygon( poly, maxError, ERROR_INSIDE );
-                m_poly_shapes[pcblayer].Append( poly );
+                m_poly_shapes[pcblayer][via->GetNetname()].Append( poly );
                 m_poly_holes[pcblayer].Append( holePoly );
             }
 
-            m_pcbModel->AddBarrel( *holeShape, top_layer, bot_layer, true, aOrigin );
+            m_pcbModel->AddBarrel( *holeShape, top_layer, bot_layer, true, aOrigin,
+                                   via->GetNetname() );
         }
 
         //// Cut holes in silkscreen (buggy: insufficient polyset self-intersection checking)
@@ -472,7 +488,8 @@ bool EXPORTER_STEP::buildTrack3DShape( PCB_TRACK* aTrack, VECTOR2D aOrigin )
     if( !m_layersToExport.Contains( pcblayer ) )
         return false;
 
-    aTrack->TransformShapeToPolygon( m_poly_shapes[pcblayer], pcblayer, 0, maxError, ERROR_INSIDE );
+    aTrack->TransformShapeToPolygon( m_poly_shapes[pcblayer][aTrack->GetNetname()], pcblayer, 0,
+                                     maxError, ERROR_INSIDE );
 
     return true;
 }
@@ -498,7 +515,7 @@ void EXPORTER_STEP::buildZones3DShape( VECTOR2D aOrigin )
 
             fill_shape.SimplifyOutlines( ADVANCED_CFG::GetCfg().m_TriangulateSimplificationLevel );
 
-            m_poly_shapes[layer].Append( fill_shape );
+            m_poly_shapes[layer][zone->GetNetname()].Append( fill_shape );
         }
     }
 }
@@ -535,8 +552,8 @@ bool EXPORTER_STEP::buildGraphic3DShape( BOARD_ITEM* aItem, VECTOR2D aOrigin )
 
         if( lineStyle == LINE_STYLE::SOLID )
         {
-            graphic->TransformShapeToPolySet( m_poly_shapes[pcblayer], pcblayer, 0, maxError,
-                                              ERROR_INSIDE );
+            graphic->TransformShapeToPolySet( m_poly_shapes[pcblayer][graphic->GetNetname()],
+                                              pcblayer, 0, maxError, ERROR_INSIDE );
         }
         else
         {
@@ -553,8 +570,9 @@ bool EXPORTER_STEP::buildGraphic3DShape( BOARD_ITEM* aItem, VECTOR2D aOrigin )
                                        [&]( const VECTOR2I& a, const VECTOR2I& b )
                                        {
                                            SHAPE_SEGMENT seg( a, b, graphic->GetWidth() );
-                                           seg.TransformToPolygon( m_poly_shapes[pcblayer],
-                                                                   maxError, ERROR_INSIDE );
+                                           seg.TransformToPolygon(
+                                                   m_poly_shapes[pcblayer][graphic->GetNetname()],
+                                                   maxError, ERROR_INSIDE );
                                        } );
             }
 
@@ -563,7 +581,7 @@ bool EXPORTER_STEP::buildGraphic3DShape( BOARD_ITEM* aItem, VECTOR2D aOrigin )
         }
 
         if( graphic->IsHatchedFill() )
-            m_poly_shapes[pcblayer].Append( graphic->GetHatching() );
+            m_poly_shapes[pcblayer][graphic->GetNetname()].Append( graphic->GetHatching() );
 
         break;
     }
@@ -572,7 +590,8 @@ bool EXPORTER_STEP::buildGraphic3DShape( BOARD_ITEM* aItem, VECTOR2D aOrigin )
     {
         PCB_TEXT* text = static_cast<PCB_TEXT*>( aItem );
 
-        text->TransformTextToPolySet( m_poly_shapes[pcblayer], 0, maxError, ERROR_INSIDE );
+        text->TransformTextToPolySet( m_poly_shapes[pcblayer][wxEmptyString], 0, maxError,
+                                      ERROR_INSIDE );
         break;
     }
 
@@ -580,7 +599,8 @@ bool EXPORTER_STEP::buildGraphic3DShape( BOARD_ITEM* aItem, VECTOR2D aOrigin )
     {
         PCB_TEXTBOX* textbox = static_cast<PCB_TEXTBOX*>( aItem );
 
-        textbox->TransformTextToPolySet( m_poly_shapes[pcblayer], 0, maxError, ERROR_INSIDE );
+        textbox->TransformTextToPolySet( m_poly_shapes[pcblayer][wxEmptyString], 0, maxError,
+                                         ERROR_INSIDE );
         break;
     }
 
@@ -589,14 +609,17 @@ bool EXPORTER_STEP::buildGraphic3DShape( BOARD_ITEM* aItem, VECTOR2D aOrigin )
         PCB_TABLE* table = static_cast<PCB_TABLE*>( aItem );
 
         for( PCB_TABLECELL* cell : table->GetCells() )
-            cell->TransformTextToPolySet( m_poly_shapes[pcblayer], 0, maxError, ERROR_INSIDE );
+        {
+            cell->TransformTextToPolySet( m_poly_shapes[pcblayer][wxEmptyString], 0, maxError,
+                                          ERROR_INSIDE );
+        }
 
         table->DrawBorders(
-                [&]( const VECTOR2I& ptA, const VECTOR2I& ptB,
-                     const STROKE_PARAMS& stroke )
+                [&]( const VECTOR2I& ptA, const VECTOR2I& ptB, const STROKE_PARAMS& stroke )
                 {
-                    SHAPE_SEGMENT seg( ptA, ptB, stroke.GetWidth()  );
-                    seg.TransformToPolygon( m_poly_shapes[pcblayer], maxError, ERROR_INSIDE );
+                    SHAPE_SEGMENT seg( ptA, ptB, stroke.GetWidth() );
+                    seg.TransformToPolygon( m_poly_shapes[pcblayer][wxEmptyString], maxError,
+                                            ERROR_INSIDE );
                 } );
 
         break;
@@ -715,35 +738,37 @@ bool EXPORTER_STEP::buildBoard3DShapes()
 
     for( PCB_LAYER_ID pcblayer : m_layersToExport.Seq() )
     {
-        SHAPE_POLY_SET poly = m_poly_shapes[pcblayer];
-        poly.Simplify();
-
-        poly.SimplifyOutlines( pcbIUScale.mmToIU( 0.003 ) );
-        poly.Simplify();
-
         SHAPE_POLY_SET holes = m_poly_holes[pcblayer];
         holes.Simplify();
 
-        // Mask layer is negative
-        if( pcblayer == F_Mask || pcblayer == B_Mask )
+        for( auto& [netname, poly] : m_poly_shapes[pcblayer] )
         {
-            SHAPE_POLY_SET mask = pcbOutlinesNoArcs;
+            poly.Simplify();
 
-            mask.BooleanSubtract( poly );
-            mask.BooleanSubtract( holes );
+            poly.SimplifyOutlines( pcbIUScale.mmToIU( 0.003 ) );
+            poly.Simplify();
 
-            poly = mask;
+            // Mask layer is negative
+            if( pcblayer == F_Mask || pcblayer == B_Mask )
+            {
+                SHAPE_POLY_SET mask = pcbOutlinesNoArcs;
+
+                mask.BooleanSubtract( poly );
+                mask.BooleanSubtract( holes );
+
+                poly = mask;
+            }
+            else
+            {
+                // Subtract holes
+                poly.BooleanSubtract( holes );
+
+                // Clip to board outline
+                poly.BooleanIntersection( pcbOutlinesNoArcs );
+            }
+
+            m_pcbModel->AddPolygonShapes( &poly, pcblayer, origin, netname );
         }
-        else
-        {
-            // Subtract holes
-            poly.BooleanSubtract( holes );
-
-            // Clip to board outline
-            poly.BooleanIntersection( pcbOutlinesNoArcs );
-        }
-
-        m_pcbModel->AddPolygonShapes( &poly, pcblayer, origin );
     }
 
     ReportMessage( wxT( "Create PCB solid model\n" ) );

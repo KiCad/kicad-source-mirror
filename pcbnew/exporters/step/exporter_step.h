@@ -79,8 +79,9 @@ private:
     /// used to identify items in step file
     wxString        m_pcbBaseName;
 
-    std::map<PCB_LAYER_ID, SHAPE_POLY_SET> m_poly_shapes;
-    std::map<PCB_LAYER_ID, SHAPE_POLY_SET> m_poly_holes;
+    // wxString key is netname
+    std::map<PCB_LAYER_ID, std::map<wxString, SHAPE_POLY_SET>> m_poly_shapes;
+    std::map<PCB_LAYER_ID, SHAPE_POLY_SET>                     m_poly_holes;
 
     LSET m_layersToExport;
 
