@@ -735,33 +735,42 @@ bool EXPORTER_STEP::buildBoard3DShapes()
         SHAPE_POLY_SET holes = m_poly_holes[pcblayer];
         holes.Simplify();
 
-        for( auto& [netname, poly] : m_poly_shapes[pcblayer] )
+        if( pcblayer == F_Mask || pcblayer == B_Mask )
         {
-            poly.Simplify();
-
-            poly.SimplifyOutlines( pcbIUScale.mmToIU( 0.003 ) );
-            poly.Simplify();
-
             // Mask layer is negative
-            if( pcblayer == F_Mask || pcblayer == B_Mask )
+            SHAPE_POLY_SET mask = pcbOutlinesNoArcs;
+
+            for( auto& [netname, poly] : m_poly_shapes[pcblayer] )
             {
-                SHAPE_POLY_SET mask = pcbOutlinesNoArcs;
+                poly.Simplify();
+
+                poly.SimplifyOutlines( pcbIUScale.mmToIU( 0.003 ) );
+                poly.Simplify();
 
                 mask.BooleanSubtract( poly );
-                mask.BooleanSubtract( holes );
-
-                poly = mask;
             }
-            else
+
+            mask.BooleanSubtract( holes );
+
+            m_pcbModel->AddPolygonShapes( &mask, pcblayer, origin, wxEmptyString );
+        }
+        else
+        {
+            for( auto& [netname, poly] : m_poly_shapes[pcblayer] )
             {
+                poly.Simplify();
+
+                poly.SimplifyOutlines( pcbIUScale.mmToIU( 0.003 ) );
+                poly.Simplify();
+
                 // Subtract holes
                 poly.BooleanSubtract( holes );
 
                 // Clip to board outline
                 poly.BooleanIntersection( pcbOutlinesNoArcs );
-            }
 
-            m_pcbModel->AddPolygonShapes( &poly, pcblayer, origin, netname );
+                m_pcbModel->AddPolygonShapes( &poly, pcblayer, origin, netname );
+            }
         }
     }
 
