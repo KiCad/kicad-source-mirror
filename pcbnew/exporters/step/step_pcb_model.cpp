@@ -37,6 +37,7 @@
 
 #include <decompress.hpp>
 
+#include <thread_pool.h>
 #include <footprint.h>
 #include <pad.h>
 #include <pcb_track.h>
@@ -1820,6 +1821,8 @@ bool STEP_PCB_MODEL::CreatePCB( SHAPE_POLY_SET& aOutline, VECTOR2D aOrigin, bool
         return true;
     }
 
+    thread_pool& tp = GetKiCadThreadPool();
+
     Handle( XCAFDoc_VisMaterialTool ) visMatTool =
             XCAFDoc_DocumentTool::VisMaterialTool( m_doc->Main() );
 
@@ -1906,81 +1909,77 @@ bool STEP_PCB_MODEL::CreatePCB( SHAPE_POLY_SET& aOutline, VECTOR2D aOrigin, bool
     };
 
     auto subtractShapesMap =
-            []( const wxString& aWhat, std::map<wxString, std::vector<TopoDS_Shape>>& aShapesMap,
-                std::vector<TopoDS_Shape>& aHolesList, Bnd_BoundSortBox& aBSBHoles )
+            [&tp]( const wxString& aWhat, std::map<wxString, std::vector<TopoDS_Shape>>& aShapesMap,
+                   std::vector<TopoDS_Shape>& aHolesList, Bnd_BoundSortBox& aBSBHoles )
     {
-        int totalCount = 0;
-
-        for( const auto& [netname, vec] : aShapesMap )
-            totalCount += vec.size();
-
-        // Remove holes for each item (board body or bodies, one can have more than one board)
-        int cnt = 0;
+        ReportMessage( wxString::Format( _( "Subtracting holes for %s\n" ), aWhat ) );
 
         for( auto& [netname, vec] : aShapesMap )
         {
-            for( TopoDS_Shape& shape : vec )
+            std::mutex mutex;
+
+            auto subtractLoopFn = [&]( const int a, const int b )
             {
-                Bnd_Box shapeBbox;
-                BRepBndLib::Add( shape, shapeBbox );
-
-                const TColStd_ListOfInteger& indices = aBSBHoles.Compare( shapeBbox );
-
-                TopTools_ListOfShape holelist;
-
-                for( const Standard_Integer& index : indices )
-                    holelist.Append( aHolesList[index] );
-
-                if( cnt == 0 )
-                    ReportMessage( wxString::Format( _( "Build holes for %s\n" ), aWhat ) );
-
-                cnt++;
-
-                if( cnt % 10 == 0 )
+                for( int shapeId = a; shapeId < b; shapeId++ )
                 {
-                    ReportMessage(
-                            wxString::Format( _( "Cutting %d/%d %s\n" ), cnt, totalCount, aWhat ) );
-                }
+                    TopoDS_Shape& shape = vec[shapeId];
 
-                if( holelist.IsEmpty() )
-                    continue;
+                    Bnd_Box shapeBbox;
+                    BRepBndLib::Add( shape, shapeBbox );
 
-                TopTools_ListOfShape cutArgs;
-                cutArgs.Append( shape );
+                    TopTools_ListOfShape holelist;
 
-                BRepAlgoAPI_Cut cut;
-
-                cut.SetRunParallel( true );
-                cut.SetToFillHistory( false );
-
-                cut.SetArguments( cutArgs );
-                cut.SetTools( holelist );
-                cut.Build();
-
-                if( cut.HasErrors() || cut.HasWarnings() )
-                {
-                    ReportMessage( wxString::Format(
-                            _( "\n** Got problems while cutting %s number %d **\n" ), aWhat,
-                            cnt ) );
-                    shapeBbox.Dump();
-
-                    if( cut.HasErrors() )
                     {
-                        ReportMessage( _( "Errors:\n" ) );
-                        cut.DumpErrors( std::cout );
+                        std::unique_lock lock( mutex );
+
+                        const TColStd_ListOfInteger& indices = aBSBHoles.Compare( shapeBbox );
+
+                        for( const Standard_Integer& index : indices )
+                            holelist.Append( aHolesList[index] );
                     }
 
-                    if( cut.HasWarnings() )
+                    if( holelist.IsEmpty() )
+                        continue;
+
+                    TopTools_ListOfShape cutArgs;
+                    cutArgs.Append( shape );
+
+                    BRepAlgoAPI_Cut cut;
+
+                    cut.SetRunParallel( true );
+                    cut.SetToFillHistory( false );
+
+                    cut.SetArguments( cutArgs );
+                    cut.SetTools( holelist );
+                    cut.Build();
+
+                    if( cut.HasErrors() || cut.HasWarnings() )
                     {
-                        ReportMessage( _( "Warnings:\n" ) );
-                        cut.DumpWarnings( std::cout );
+                        ReportMessage( wxString::Format( _( "\n** Got problems while cutting "
+                                                            "%s net '%s' **\n" ),
+                                                         aWhat, UnescapeString( netname ) ) );
+                        shapeBbox.Dump();
+
+                        if( cut.HasErrors() )
+                        {
+                            ReportMessage( _( "Errors:\n" ) );
+                            cut.DumpErrors( std::cout );
+                        }
+
+                        if( cut.HasWarnings() )
+                        {
+                            ReportMessage( _( "Warnings:\n" ) );
+                            cut.DumpWarnings( std::cout );
+                        }
+
+                        std::cout << "\n";
                     }
 
-                    std::cout << "\n";
+                    shape = cut.Shape();
                 }
+            };
 
-                shape = cut.Shape();
-            }
+            tp.parallelize_loop( vec.size(), subtractLoopFn ).wait();
         }
     };
 
@@ -2033,21 +2032,34 @@ bool STEP_PCB_MODEL::CreatePCB( SHAPE_POLY_SET& aOutline, VECTOR2D aOrigin, bool
         for( const auto& [netname, shapes] : m_board_copper_vias )
             addShapes( netname, shapes );
 
-        for( auto& [netname, toFuse] : shapesToFuseMap )
-        {
-            ReportMessage( wxString::Format( "Fusing net '%s'\n", UnescapeString( netname ) ) );
+        ReportMessage( "Fusing shapes\n" );
 
+        // Do fusing in parallel
+        std::mutex mutex;
+
+        auto fuseLoopFn = [&]( const wxString& aNetname )
+        {
+            auto&        toFuse = shapesToFuseMap[aNetname];
             TopoDS_Shape fusedShape = fuseShapesOrCompound( toFuse );
 
             if( !fusedShape.IsNull() )
             {
-                m_board_copper_fused[netname].emplace_back( fusedShape );
+                std::unique_lock lock( mutex );
 
-                m_board_copper[netname].clear();
-                m_board_copper_pads[netname].clear();
-                m_board_copper_vias[netname].clear();
+                m_board_copper_fused[aNetname].emplace_back( fusedShape );
+
+                m_board_copper[aNetname].clear();
+                m_board_copper_pads[aNetname].clear();
+                m_board_copper_vias[aNetname].clear();
             }
-        }
+        };
+
+        BS::multi_future<void> mf;
+
+        for( const auto& [netname, _] : shapesToFuseMap )
+            mf.push_back( tp.submit( fuseLoopFn, netname ) );
+
+        mf.wait();
     }
 
     // push the board to the data structure
