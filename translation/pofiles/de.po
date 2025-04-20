@@ -30,7 +30,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-04-18 03:10+0300\n"
-"PO-Revision-Date: 2025-04-19 18:19+0000\n"
+"PO-Revision-Date: 2025-04-20 20:28+0000\n"
 "Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v9/de/>\n"
 "Language: de\n"
@@ -7416,9 +7416,8 @@ msgstr ""
 "Konnte Referenz \"%s\" nicht so aktualisieren, dass sie auf \"%s\" zeigt"
 
 #: common/git/git_pull_handler.cpp:325
-#, fuzzy
 msgid "Failed to clean up repository state after fast-forward."
-msgstr "Repository konnte nicht geklont werden."
+msgstr "Repository konnte nach letztem fast-forward nicht gesäubert werden."
 
 #: common/git/git_pull_handler.cpp:334
 #, fuzzy
@@ -15494,18 +15493,20 @@ msgid "Group By"
 msgstr "Gruppieren nach"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:208
-#, fuzzy
 msgid ""
 "Show\n"
 "Column"
-msgstr "Spalten anzeigen/ausblenden"
+msgstr ""
+"Spalte\n"
+"anzeigen"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:209
-#, fuzzy
 msgid ""
 "Group\n"
 "By"
-msgstr "Gruppieren nach"
+msgstr ""
+"Gruppieren\n"
+"nach"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:710
 msgid "Qty"
@@ -47423,9 +47424,9 @@ msgid "Physical Clearances"
 msgstr "Physische Freiräume"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1260
-#, fuzzy, c-format
+#, c-format
 msgid "No 'physical_clearance' constraints in effect on %s."
-msgstr "Keine \"physical_clearance\" Einschränkung definiert."
+msgstr "Für %s ist keine \"physical_clearance\" Einschränkung definiert."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1279
 #, fuzzy
@@ -50385,14 +50386,12 @@ msgid "Show a shadow on locked items"
 msgstr "Eine Schattenmarkierung auf gesperrten Elementen anzeigen"
 
 #: pcbnew/widgets/appearance_controls.cpp:351
-#, fuzzy
 msgid "Colliding Courtyards"
-msgstr "Abstandsflächen"
+msgstr "Kollidierende Abstandsflächen"
 
 #: pcbnew/widgets/appearance_controls.cpp:351
-#, fuzzy
 msgid "Show colliding footprint courtyards"
-msgstr "Ermittle Footprint-Abstandsflächen ..."
+msgstr "Zeige kollidierende Footprint-Abstandsflächen"
 
 #: pcbnew/widgets/appearance_controls.cpp:352
 msgid "Show drawing sheet borders and title block"
