@@ -120,5 +120,8 @@ SCH_SHEET* SCH_IO_LTSPICE::LoadSchematicFile( const wxString& aFileName, SCHEMAT
 
     aSchematic->CurrentSheet().UpdateAllScreenReferences();
 
+    // fixing all junctions at the end
+    aSchematic->FixupJunctions();
+
     return rootSheet;
 }
