@@ -18,7 +18,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-04-18 03:10+0300\n"
-"PO-Revision-Date: 2025-04-15 16:28+0000\n"
+"PO-Revision-Date: 2025-04-20 20:28+0000\n"
 "Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/kicad/v9/pl/>\n"
 "Language: pl\n"
@@ -27,7 +27,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 5.11-dev\n"
+"X-Generator: Weblate 5.11.1-dev\n"
 "X-Poedit-Basepath: ../../../kicad-source-mirror\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SearchPath-0: .\n"
@@ -3256,9 +3256,9 @@ msgstr ""
 "go włączyć ponownie w ustawieniach programu Pcbnew."
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:30
-#, fuzzy, c-format
+#, c-format
 msgid "The selection contains %zu locked items."
-msgstr "W wybranych elementach istnieje %lu zablokowanych elementów."
+msgstr "W wybranych elementach istnieje %zu zablokowanych elementów."
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:34
 msgid "These items will be skipped unless you override the locks."
@@ -10382,7 +10382,6 @@ msgstr ""
 "Przełącza opcję panoramowania na wybrane elementy w panelu wyszukiwania"
 
 #: common/widgets/search_pane.cpp:51
-#, fuzzy
 msgid "Search Hidden Fields"
 msgstr "Przeszukuj ukryte pola"
 
@@ -15475,32 +15474,32 @@ msgid "Show datasheet in browser"
 msgstr "Pokaż dokumentację w przeglądarce"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:200
-#, fuzzy
 msgid "Column Label"
-msgstr "%d kolumn tabeli"
+msgstr "Etykieta kolumny"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:205
-#, fuzzy
 msgid "Show Column"
-msgstr "Pokaż / Ukryj kolumny"
+msgstr "Pokaż kolumnę"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:206
 msgid "Group By"
 msgstr "Grupuj według"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:208
-#, fuzzy
 msgid ""
 "Show\n"
 "Column"
-msgstr "Pokaż / Ukryj kolumny"
+msgstr ""
+"Pokaż\n"
+"Kolumny"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:209
-#, fuzzy
 msgid ""
 "Group\n"
 "By"
-msgstr "Grupuj według"
+msgstr ""
+"Grupuj\n"
+"Według"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:710
 msgid "Qty"
@@ -18198,7 +18197,7 @@ msgstr "Wyklucz z BOM"
 #: eeschema/lib_symbol.cpp:583 eeschema/sch_sheet.cpp:319
 #: eeschema/sch_symbol.cpp:1603
 msgid "Excluded from board"
-msgstr "Wyklucz z płytki"
+msgstr "Wykluczono z płytki"
 
 #: eeschema/lib_symbol.cpp:588 eeschema/sch_sheet.cpp:328
 #: eeschema/sch_symbol.cpp:1612
@@ -31634,9 +31633,8 @@ msgid "mi/h"
 msgstr "mil/h"
 
 #: pcbnew/api/api_handler_pcb.cpp:505
-#, fuzzy
 msgid "Modified items via API"
-msgstr "Dodane elementy poprzez API"
+msgstr "Zmodyfikowane elementy poprzez API"
 
 #: pcbnew/api/api_handler_pcb.cpp:668
 msgid "Deleted items via API"
@@ -36211,7 +36209,6 @@ msgid "Set Teardrops"
 msgstr "Ustaw łezki"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:141
-#, fuzzy
 msgid "Text items"
 msgstr "Elementy tekstowe"
 
@@ -36307,51 +36304,44 @@ msgid "PCB text items"
 msgstr "Elementy tekstowe na PCB"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:45
-#, fuzzy
 msgid "Other footprint fields"
-msgstr "Inne elementy tekstowe footprintów"
+msgstr "Inne pola footprintów"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:46
 msgid "Footprint fields that are not the reference designator or value field"
 msgstr "Pola footprintów, które nie są oznaczeniem ani wartościami"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:50
-#, fuzzy
 msgid "PCB dimensions"
-msgstr "Linie wymiarowe na płytce"
+msgstr "Linie wymiarowe płytki"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:53
 msgid "Footprint graphic items"
 msgstr "Graficzne elementy footprintów"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:59
-#, fuzzy
 msgid "Footprint text items"
-msgstr "Inne elementy tekstowe footprintów"
+msgstr "Elementy tekstowe footprintów"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:60
 msgid "Footprint text items not associated with a field"
 msgstr "Elementy tekstowe footprintu nie mające powiązania z polem"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:67
-#, fuzzy
 msgid "Footprint dimensions"
 msgstr "Elementy wymiarowe footprintów"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:85
-#, fuzzy
 msgid "By layer:"
-msgstr "Na warstwę:"
+msgstr "Na podstawie warstwy:"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:97
-#, fuzzy
 msgid "By parent reference designator:"
-msgstr "Początkowe oznaczenie:"
+msgstr "Na podstawie nadrzędnego oznaczenia:"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:103
-#, fuzzy
 msgid "By parent footprint library link:"
-msgstr "Nowy identyfikator biblioteki footprintu:"
+msgstr "Na podstawie nadrzędnego łącza biblioteki:"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:124
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:133
@@ -38344,6 +38334,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:86
 msgid "Distance between parallel lines used for hatching the area"
 msgstr ""
+"Odległość między równoległymi liniami używanymi do wypełniania kreskowego"
 
 #: pcbnew/dialogs/dialog_set_offset.cpp:66
 msgid "Reset this value to zero."
@@ -47247,16 +47238,17 @@ msgid "Physical Clearances"
 msgstr "Ograniczenia fizyczne"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1260
-#, fuzzy, c-format
+#, c-format
 msgid "No 'physical_clearance' constraints in effect on %s."
-msgstr "Nie zdefiniowano ograniczenia 'physical_clearance'."
+msgstr "Brak ograniczeń 'physical_clearance' obowiązujących dla %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1279
-#, fuzzy
 msgid ""
 "Items share no relevant layers.  No 'physical_clearance' constraints will be "
 "applied."
-msgstr "Nie zdefiniowano ograniczenia 'physical_clearance'."
+msgstr ""
+"Elementy nie mają wspólnych warstw.  Nie zostaną zastosowane żadne "
+"ograniczenia 'physical_clearance'."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1341
 msgid "Select an item for a constraints resolution report."
@@ -50183,19 +50175,16 @@ msgid "Locked Item Shadow"
 msgstr "Wyszarzaj zablokowane elementy"
 
 #: pcbnew/widgets/appearance_controls.cpp:350
-#, fuzzy
 msgid "Show a shadow on locked items"
 msgstr "Pokaż wyszarzenie na zablokowanych elementach"
 
 #: pcbnew/widgets/appearance_controls.cpp:351
-#, fuzzy
 msgid "Colliding Courtyards"
-msgstr "Bryły brzegowe"
+msgstr "Kolidujące bryły brzegowe"
 
 #: pcbnew/widgets/appearance_controls.cpp:351
-#, fuzzy
 msgid "Show colliding footprint courtyards"
-msgstr "Określanie pól zajętości footprintów..."
+msgstr "Pokazuj kolidujące ze sobą pola zajętości footprintów"
 
 #: pcbnew/widgets/appearance_controls.cpp:352
 msgid "Show drawing sheet borders and title block"
