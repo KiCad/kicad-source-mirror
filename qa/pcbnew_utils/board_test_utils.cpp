@@ -114,6 +114,7 @@ void LoadBoard( SETTINGS_MANAGER& aSettingsManager, const wxString& aRelPath,
     aBoard->GetDesignSettings().m_DRCEngine = m_DRCEngine;
     aBoard->BuildListOfNets();
     aBoard->BuildConnectivity();
+    aBoard->GetLengthCalculation()->SynchronizeTimeDomainProperties();
 
     if( aBoard->GetProject() )
     {
