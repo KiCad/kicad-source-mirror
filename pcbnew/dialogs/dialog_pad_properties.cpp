@@ -1749,10 +1749,14 @@ bool DIALOG_PAD_PROPERTIES::transferDataToPad( PAD* aPad )
     else
         aPad->SetLocalSolderPasteMarginRatio( m_pasteMarginRatio.GetDoubleValue() / 100.0 );
 
-    if( !m_spokeWidth.IsNull() )
+    if( m_spokeWidth.IsNull() )
+        aPad->SetLocalThermalSpokeWidthOverride( {} );
+    else
         aPad->SetLocalThermalSpokeWidthOverride( m_spokeWidth.GetIntValue() );
 
-    if( !m_thermalGap.IsNull() )
+    if( m_thermalGap.IsNull() )
+        aPad->SetLocalThermalGapOverride( {} );
+    else
         aPad->SetLocalThermalGapOverride( m_thermalGap.GetIntValue() );
 
     aPad->SetThermalSpokeAngle( m_spokeAngle.GetAngleValue() );
