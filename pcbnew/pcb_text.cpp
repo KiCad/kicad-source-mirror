@@ -59,17 +59,15 @@ PCB_TEXT::PCB_TEXT( FOOTPRINT* aParent, KICAD_T idtype) :
 {
     SetKeepUpright( true );
 
-    // Set text thickness to a default value
-    SetTextThickness( pcbIUScale.mmToIU( DEFAULT_TEXT_WIDTH ) );
+    // N.B. Do not automatically set text effects
+    // These are optional in the file format and so need to be defaulted to off.
+
     SetLayer( F_SilkS );
 
     if( aParent )
     {
         SetTextPos( aParent->GetPosition() );
 
-        // N.B. Do not automatically set text effects
-        // These are optional in the file format and so need to be defaulted
-        // to off.
         if( IsBackLayer( aParent->GetLayer() ) )
             SetLayer( B_SilkS );
     }
@@ -292,7 +290,12 @@ void PCB_TEXT::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_IT
     aList.emplace_back( _( "Angle" ), wxString::Format( wxT( "%g" ), GetTextAngle().AsDegrees() ) );
 
     aList.emplace_back( _( "Font" ), GetFont() ? GetFont()->GetName() : _( "Default" ) );
-    aList.emplace_back( _( "Thickness" ), aFrame->MessageTextFromValue( GetTextThickness() ) );
+
+    if( GetTextThickness() )
+        aList.emplace_back( _( "Text Thickness" ), aFrame->MessageTextFromValue( GetEffectiveTextPenWidth() ) );
+    else
+        aList.emplace_back( _( "Text Thickness" ), _( "Auto" ) );
+
     aList.emplace_back( _( "Width" ), aFrame->MessageTextFromValue( GetTextWidth() ) );
     aList.emplace_back( _( "Height" ), aFrame->MessageTextFromValue( GetTextHeight() ) );
 }
@@ -300,7 +303,7 @@ void PCB_TEXT::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_IT
 
 int PCB_TEXT::getKnockoutMargin() const
 {
-    return GetKnockoutTextMargin( VECTOR2I( GetTextWidth(), GetTextHeight() ), GetTextThickness() );
+    return GetKnockoutTextMargin( VECTOR2I( GetTextWidth(), GetTextHeight() ), GetEffectiveTextPenWidth() );
 }
 
 
@@ -355,7 +358,7 @@ bool PCB_TEXT::TextHitTest( const VECTOR2I& aPoint, int aAccuracy ) const
     int accuracy = aAccuracy;
 
     if( IsKnockout() )
-        accuracy += GetKnockoutTextMargin( GetTextSize(), GetTextThickness() );
+        accuracy += GetKnockoutTextMargin( GetTextSize(), GetEffectiveTextPenWidth() );
 
     return EDA_TEXT::TextHitTest( aPoint, accuracy );
 }

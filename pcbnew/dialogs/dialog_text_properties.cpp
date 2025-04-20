@@ -202,7 +202,8 @@ DIALOG_TEXT_PROPERTIES::DIALOG_TEXT_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, PC
     m_mirrored->SetIsCheckButton();
     m_mirrored->SetBitmap( KiBitmapBundle( BITMAPS::text_mirrored ) );
 
-    m_adjustTextThickness->SetBitmap( KiBitmapBundle( BITMAPS::edit_cmp_symb_links ) );
+    m_autoTextThickness->SetIsCheckButton();
+    m_autoTextThickness->SetBitmap( KiBitmapBundle( BITMAPS::edit_cmp_symb_links ) );
 
     SetTitle( title );
     m_hash_key = title;
@@ -328,7 +329,18 @@ bool DIALOG_TEXT_PROPERTIES::TransferDataToWindow()
 
     m_textWidth.SetValue( m_item->GetTextSize().x );
     m_textHeight.SetValue( m_item->GetTextSize().y );
-    m_thickness.SetValue( m_item->GetTextThickness() );
+
+    if( m_item->GetAutoThickness() )
+    {
+        m_autoTextThickness->Check( m_item->GetAutoThickness() );
+        m_thickness.SetValue( m_item->GetEffectiveTextPenWidth() );
+        m_thickness.Enable( false );
+    }
+    else
+    {
+        m_thickness.SetValue( m_item->GetTextThickness() );
+    }
+
     m_posX.SetValue( m_item->GetFPRelativePosition().x );
     m_posY.SetValue( m_item->GetFPRelativePosition().y );
 
@@ -371,7 +383,7 @@ void DIALOG_TEXT_PROPERTIES::onFontSelected( wxCommandEvent & aEvent )
     if( KIFONT::FONT::IsStroke( aEvent.GetString() ) )
     {
         m_thickness.Show( true );
-        m_adjustTextThickness->Show( true );
+        m_autoTextThickness->Show( true );
 
         int textSize = std::min( m_textWidth.GetValue(), m_textHeight.GetValue() );
         int thickness = m_thickness.GetValue();
@@ -382,7 +394,7 @@ void DIALOG_TEXT_PROPERTIES::onFontSelected( wxCommandEvent & aEvent )
     else
     {
         m_thickness.Show( false );
-        m_adjustTextThickness->Show( false );
+        m_autoTextThickness->Show( false );
     }
 }
 
@@ -430,18 +442,39 @@ void DIALOG_TEXT_PROPERTIES::onThickness( wxCommandEvent& event )
 }
 
 
-void DIALOG_TEXT_PROPERTIES::updateTextThickness( wxCommandEvent &aEvent )
+void DIALOG_TEXT_PROPERTIES::onTextSize( wxCommandEvent& aEvent )
 {
-    int textSize = std::min( m_textWidth.GetValue(), m_textHeight.GetValue() );
-    int thickness;
+    if( m_autoTextThickness->IsChecked() )
+    {
+        int textSize = std::min( m_textWidth.GetValue(), m_textHeight.GetValue() );
+        int thickness;
 
-    // Calculate the "best" thickness from text size and bold option:
-    if( m_bold->IsChecked() )
-        thickness = GetPenSizeForBold( textSize );
+        // Calculate the "best" thickness from text size and bold option:
+        if( m_bold->IsChecked() )
+            thickness = GetPenSizeForBold( textSize );
+        else
+            thickness = GetPenSizeForNormal( textSize );
+
+        m_thickness.SetValue( thickness );
+    }
+}
+
+
+void DIALOG_TEXT_PROPERTIES::onAutoTextThickness( wxCommandEvent& aEvent )
+{
+    if( aEvent.IsChecked() )
+    {
+        m_autoTextThickness->Check( true );
+
+        wxCommandEvent dummy;
+        onTextSize( dummy );
+
+        m_thickness.Enable( false );
+    }
     else
-        thickness = GetPenSizeForNormal( textSize );
-
-    m_thickness.SetValue( thickness );
+    {
+        m_thickness.Enable( true );
+    }
 }
 
 
@@ -512,19 +545,27 @@ bool DIALOG_TEXT_PROPERTIES::TransferDataFromWindow()
     }
 
     m_item->SetTextSize( VECTOR2I( m_textWidth.GetValue(), m_textHeight.GetValue() ) );
-    m_item->SetTextThickness( m_thickness.GetValue() );
-    m_item->SetFPRelativePosition( VECTOR2I( m_posX.GetValue(), m_posY.GetValue() ) );
 
-    // Test for acceptable values for thickness and size and clamp if fails
-    int maxPenWidth = ClampTextPenSize( m_item->GetTextThickness(), m_item->GetTextSize() );
-
-    if( m_item->GetTextThickness() > maxPenWidth )
+    if( m_autoTextThickness->IsChecked() )
     {
-        DisplayError( this, _( "The text thickness is too large for the text size.\n"
-                               "It will be clamped." ) );
-        m_item->SetTextThickness( maxPenWidth );
+        m_item->SetAutoThickness( true );
+    }
+    else
+    {
+        m_item->SetTextThickness( m_thickness.GetValue() );
+
+        // Test for acceptable values for thickness and size and clamp if fails
+        int maxPenWidth = ClampTextPenSize( m_item->GetTextThickness(), m_item->GetTextSize() );
+
+        if( m_item->GetTextThickness() > maxPenWidth )
+        {
+            DisplayError( this, _( "The text thickness is too large for the text size.\n"
+                                   "It will be clamped." ) );
+            m_item->SetTextThickness( maxPenWidth );
+        }
     }
 
+    m_item->SetFPRelativePosition( VECTOR2I( m_posX.GetValue(), m_posY.GetValue() ) );
     m_item->SetTextAngle( m_orientation.GetAngleValue().Normalize() );
 
     if( m_Visible->IsShown() )

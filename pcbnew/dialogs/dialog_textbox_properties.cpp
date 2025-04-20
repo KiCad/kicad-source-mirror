@@ -117,7 +117,8 @@ DIALOG_TEXTBOX_PROPERTIES::DIALOG_TEXTBOX_PROPERTIES( PCB_BASE_EDIT_FRAME* aPare
 
     m_separator4->SetIsSeparator();
 
-    m_adjustTextThickness->SetBitmap( KiBitmapBundle( BITMAPS::edit_cmp_symb_links ) );
+    m_autoTextThickness->SetIsCheckButton();
+    m_autoTextThickness->SetBitmap( KiBitmapBundle( BITMAPS::edit_cmp_symb_links ) );
 
     // Configure the layers list selector.  Note that footprints are built outside the current
     // board and so we may need to show all layers if the text is on an unactivated layer.
@@ -173,8 +174,7 @@ int PCB_BASE_EDIT_FRAME::ShowTextBoxPropertiesDialog( PCB_TEXTBOX* aTextBox )
 bool DIALOG_TEXTBOX_PROPERTIES::TransferDataToWindow()
 {
     BOARD*   board = m_frame->GetBoard();
-    wxString converted = board->ConvertKIIDsToCrossReferences(
-                                                        UnescapeString( m_textBox->GetText() ) );
+    wxString converted = board->ConvertKIIDsToCrossReferences( UnescapeString( m_textBox->GetText() ) );
 
     m_MultiLineText->SetValue( converted );
     m_MultiLineText->SetSelection( -1, -1 );
@@ -188,7 +188,17 @@ bool DIALOG_TEXTBOX_PROPERTIES::TransferDataToWindow()
 
     m_textWidth.SetValue( m_textBox->GetTextSize().x );
     m_textHeight.SetValue( m_textBox->GetTextSize().y );
-    m_thickness.SetValue( m_textBox->GetTextThickness() );
+
+    if( m_textBox->GetAutoThickness() )
+    {
+        m_autoTextThickness->Check( m_textBox->GetAutoThickness() );
+        m_thickness.SetValue( m_textBox->GetEffectiveTextPenWidth() );
+        m_thickness.Enable( false );
+    }
+    else
+    {
+        m_thickness.SetValue( m_textBox->GetTextThickness() );
+    }
 
     m_bold->Check( m_textBox->IsBold() );
     m_italic->Check( m_textBox->IsItalic() );
@@ -296,18 +306,39 @@ void DIALOG_TEXTBOX_PROPERTIES::onThickness( wxCommandEvent& event )
 }
 
 
-void DIALOG_TEXTBOX_PROPERTIES::updateTextThickness( wxCommandEvent& aEvent )
+void DIALOG_TEXTBOX_PROPERTIES::onTextSize( wxCommandEvent& aEvent )
 {
-    int textSize = std::min( m_textWidth.GetValue(), m_textHeight.GetValue() );
-    int thickness;
+    if( m_autoTextThickness->IsChecked() )
+    {
+        int textSize = std::min( m_textWidth.GetValue(), m_textHeight.GetValue() );
+        int thickness;
 
-    // Calculate the "best" thickness from text size and bold option:
-    if( m_bold->IsChecked() )
-        thickness = GetPenSizeForBold( textSize );
+        // Calculate the "best" thickness from text size and bold option:
+        if( m_bold->IsChecked() )
+            thickness = GetPenSizeForBold( textSize );
+        else
+            thickness = GetPenSizeForNormal( textSize );
+
+        m_thickness.SetValue( thickness );
+    }
+}
+
+
+void DIALOG_TEXTBOX_PROPERTIES::onAutoTextThickness( wxCommandEvent& aEvent )
+{
+    if( aEvent.IsChecked() )
+    {
+        m_autoTextThickness->Check( true );
+
+        wxCommandEvent dummy;
+        onTextSize( dummy );
+
+        m_thickness.Enable( false );
+    }
     else
-        thickness = GetPenSizeForNormal( textSize );
-
-    m_thickness.SetValue( thickness );
+    {
+        m_thickness.Enable( true );
+    }
 }
 
 
@@ -374,16 +405,24 @@ bool DIALOG_TEXTBOX_PROPERTIES::TransferDataFromWindow()
     }
 
     m_textBox->SetTextSize( VECTOR2I( m_textWidth.GetValue(), m_textHeight.GetValue() ) );
-    m_textBox->SetTextThickness( m_thickness.GetValue() );
 
-    // Test for acceptable values for thickness and size and clamp if fails
-    int maxPenWidth = ClampTextPenSize( m_textBox->GetTextThickness(), m_textBox->GetTextSize() );
-
-    if( m_textBox->GetTextThickness() > maxPenWidth )
+    if( m_autoTextThickness->IsChecked() )
     {
-        DisplayError( this, _( "The text thickness is too large for the text size.\n"
-                               "It will be clamped." ) );
-        m_textBox->SetTextThickness( maxPenWidth );
+        m_textBox->SetAutoThickness( true );
+    }
+    else
+    {
+        m_textBox->SetTextThickness( m_thickness.GetValue() );
+
+        // Test for acceptable values for thickness and size and clamp if fails
+        int maxPenWidth = ClampTextPenSize( m_textBox->GetTextThickness(), m_textBox->GetTextSize() );
+
+        if( m_textBox->GetTextThickness() > maxPenWidth )
+        {
+            DisplayError( this, _( "The text thickness is too large for the text size.\n"
+                                   "It will be clamped." ) );
+            m_textBox->SetTextThickness( maxPenWidth );
+        }
     }
 
     m_textBox->SetTextAngle( m_orientation.GetAngleValue().Normalize() );

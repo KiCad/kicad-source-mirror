@@ -587,17 +587,11 @@ void PCB_IO_KICAD_SEXPR_PARSER::parseEDA_TEXT( EDA_TEXT* aText )
                     break;
 
                 case T_bold:
-                {
-                    bool value = parseMaybeAbsentBool( true );
-                    aText->SetBoldFlag( value );
-                }
+                    aText->SetBoldFlag( parseMaybeAbsentBool( true ) );
                     break;
 
                 case T_italic:
-                {
-                    bool value = parseMaybeAbsentBool( true );
-                    aText->SetItalicFlag( value );
-                }
+                    aText->SetItalicFlag( parseMaybeAbsentBool( true ) );
                     break;
 
                 default:
@@ -615,28 +609,12 @@ void PCB_IO_KICAD_SEXPR_PARSER::parseEDA_TEXT( EDA_TEXT* aText )
 
                 switch( token )
                 {
-                case T_left:
-                    aText->SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
-                    break;
-
-                case T_right:
-                    aText->SetHorizJustify( GR_TEXT_H_ALIGN_RIGHT );
-                    break;
-
-                case T_top:
-                    aText->SetVertJustify( GR_TEXT_V_ALIGN_TOP );
-                    break;
-
-                case T_bottom:
-                    aText->SetVertJustify( GR_TEXT_V_ALIGN_BOTTOM );
-                    break;
-
-                case T_mirror:
-                    aText->SetMirrored( true );
-                    break;
-
-                default:
-                    Expecting( "left, right, top, bottom, or mirror" );
+                case T_left:   aText->SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );     break;
+                case T_right:  aText->SetHorizJustify( GR_TEXT_H_ALIGN_RIGHT );    break;
+                case T_top:    aText->SetVertJustify( GR_TEXT_V_ALIGN_TOP );       break;
+                case T_bottom: aText->SetVertJustify( GR_TEXT_V_ALIGN_BOTTOM );    break;
+                case T_mirror: aText->SetMirrored( true );                         break;
+                default:       Expecting( "left, right, top, bottom, or mirror" );
                 }
 
             }

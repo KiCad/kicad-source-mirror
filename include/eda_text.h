@@ -125,6 +125,17 @@ public:
     void SetTextThickness( int aWidth );
     int GetTextThickness() const                { return m_attributes.m_StrokeWidth; };
 
+    int GetTextThicknessProperty() const
+    {
+        if( GetAutoThickness() )
+            return GetEffectiveTextPenWidth();
+        else
+            return GetTextThickness();
+    }
+
+    void SetAutoThickness( bool aAuto );
+    bool GetAutoThickness() const               { return GetTextThickness() == 0; };
+
     /**
      * The EffectiveTextPenWidth uses the text thickness if > 1 or aDefaultPenWidth.
      */

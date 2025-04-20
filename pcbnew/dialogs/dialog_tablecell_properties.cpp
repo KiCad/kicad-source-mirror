@@ -115,8 +115,8 @@ DIALOG_TABLECELL_PROPERTIES::DIALOG_TABLECELL_PROPERTIES( PCB_BASE_EDIT_FRAME* a
     m_italic->SetIsCheckButton();
     m_italic->SetBitmap( KiBitmapBundle( BITMAPS::text_italic ) );
 
-    m_adjustTextThickness->SetIsRadioButton();
-    m_adjustTextThickness->SetBitmap( KiBitmapBundle( BITMAPS::edit_cmp_symb_links ) );
+    m_autoTextThickness->SetIsCheckButton();
+    m_autoTextThickness->SetBitmap( KiBitmapBundle( BITMAPS::edit_cmp_symb_links ) );
 
     SetupStandardButtons();
     Layout();
@@ -152,16 +152,20 @@ bool DIALOG_TABLECELL_PROPERTIES::TransferDataToWindow()
     bool              firstCell = true;
     GR_TEXT_H_ALIGN_T hAlign = GR_TEXT_H_ALIGN_INDETERMINATE;
     GR_TEXT_V_ALIGN_T vAlign = GR_TEXT_V_ALIGN_INDETERMINATE;
+    int               textThickness = 0;
+    int               effectivePenWidth = 0;
 
     for( PCB_TABLECELL* cell : m_cells )
     {
-        m_cellTextCtrl->SetValue( cell->GetText() );
         if( firstCell )
         {
+            m_cellTextCtrl->SetValue( cell->GetText() );
+
             m_fontCtrl->SetFontSelection( cell->GetFont() );
             m_textWidth.SetValue( cell->GetTextWidth() );
             m_textHeight.SetValue( cell->GetTextHeight() );
-            m_textThickness.SetValue( cell->GetTextThickness() );
+            textThickness = cell->GetTextThickness();
+            effectivePenWidth = cell->GetEffectiveTextPenWidth();
 
             hAlign = cell->GetHorizJustify();
             vAlign = cell->GetVertJustify();
@@ -181,6 +185,9 @@ bool DIALOG_TABLECELL_PROPERTIES::TransferDataToWindow()
         }
         else
         {
+            if( cell->GetText() != m_cellTextCtrl->GetValue() )
+                m_cellTextCtrl->SetValue( INDETERMINATE_STATE );
+
             if( cell->GetFont() != m_fontCtrl->GetFontSelection( cell->IsBold(), cell->IsItalic() ) )
                 m_fontCtrl->SetSelection( -1 );
 
@@ -190,8 +197,11 @@ bool DIALOG_TABLECELL_PROPERTIES::TransferDataToWindow()
             if( cell->GetTextHeight() != m_textHeight.GetValue() )
                 m_textHeight.SetValue( INDETERMINATE_STATE );
 
-            if( cell->GetTextThickness() != m_textThickness.GetValue() )
-                m_textThickness.SetValue( INDETERMINATE_STATE );
+            if( cell->GetTextThickness() != textThickness )
+                textThickness = -1;
+
+            if( cell->GetEffectiveTextPenWidth() != effectivePenWidth )
+                effectivePenWidth = -1;
 
             if( cell->GetHorizJustify() != hAlign )
                 hAlign = GR_TEXT_H_ALIGN_INDETERMINATE;
@@ -229,6 +239,22 @@ bool DIALOG_TABLECELL_PROPERTIES::TransferDataToWindow()
         }
     }
 
+    m_textThickness.SetValue( INDETERMINATE_STATE );
+    m_autoTextThickness->Check( false );
+
+    if( textThickness == 0 )
+    {
+        if( effectivePenWidth > 0 )
+            m_textThickness.SetValue( effectivePenWidth );
+
+        m_autoTextThickness->Check( true );
+        m_textThickness.Enable( false );
+    }
+    else if( textThickness > 0 )
+    {
+        m_textThickness.SetValue( textThickness );
+    }
+
     return true;
 }
 
@@ -244,18 +270,42 @@ void DIALOG_TABLECELL_PROPERTIES::onBoldToggle( wxCommandEvent& aEvent )
     aEvent.Skip();
 }
 
-void DIALOG_TABLECELL_PROPERTIES::onAdjustTextThickness( wxCommandEvent& aEvent )
+void DIALOG_TABLECELL_PROPERTIES::onTextSize( wxCommandEvent& aEvent )
 {
-    int textSize = std::min( m_textWidth.GetValue(), m_textHeight.GetValue() );
-    int thickness;
+    if( m_autoTextThickness->IsChecked() )
+    {
+        int textSize = std::min( m_textWidth.GetValue(), m_textHeight.GetValue() );
+        int thickness;
 
-    // Calculate the "best" thickness from text size and bold option:
-    if( m_bold->IsChecked() )
-        thickness = GetPenSizeForBold( textSize );
+        // Calculate the "best" thickness from text size and bold option:
+        if( m_bold->IsChecked() )
+            thickness = GetPenSizeForBold( textSize );
+        else
+            thickness = GetPenSizeForNormal( textSize );
+
+        m_textThickness.SetValue( thickness );
+    }
+}
+
+
+void DIALOG_TABLECELL_PROPERTIES::onAutoTextThickness( wxCommandEvent& aEvent )
+{
+    if( aEvent.IsChecked() )
+    {
+        m_autoTextThickness->Check( true );
+
+        if( !m_textWidth.IsIndeterminate() && !m_textHeight.IsIndeterminate() )
+        {
+            wxCommandEvent dummy;
+            onTextSize( dummy );
+        }
+
+        m_textThickness.Enable( false );
+    }
     else
-        thickness = GetPenSizeForNormal( textSize );
-
-    m_textThickness.SetValue( thickness );
+    {
+        m_textThickness.Enable( true );
+    }
 }
 
 
@@ -298,19 +348,22 @@ bool DIALOG_TABLECELL_PROPERTIES::TransferDataFromWindow()
 
     for( PCB_TABLECELL* cell : m_cells )
     {
-        wxString txt = m_cellTextCtrl->GetValue();
+        if( m_cellTextCtrl->GetValue() != INDETERMINATE_STATE )
+        {
+            wxString txt = m_cellTextCtrl->GetValue();
 
 #ifdef __WXMAC__
-        // On macOS CTRL+Enter produces '\r' instead of '\n' regardless of EOL setting.
-        // Replace it now.
-        txt.Replace( "\r", "\n" );
+            // On macOS CTRL+Enter produces '\r' instead of '\n' regardless of EOL setting.
+            // Replace it now.
+            txt.Replace( "\r", "\n" );
 #elif defined( __WINDOWS__ )
-        // On Windows, a new line is coded as \r\n.  We use only \n in kicad files and in
-        // drawing routines so strip the \r char.
-        txt.Replace( "\r", "" );
+            // On Windows, a new line is coded as \r\n.  We use only \n in kicad files and in
+            // drawing routines so strip the \r char.
+            txt.Replace( "\r", "" );
 #endif
 
-        cell->SetText( txt );
+            cell->SetText( txt );
+        }
 
         cell->SetBold( m_bold->IsChecked() );
         cell->SetItalic( m_italic->IsChecked() );
@@ -324,7 +377,9 @@ bool DIALOG_TABLECELL_PROPERTIES::TransferDataFromWindow()
         if( !m_textHeight.IsIndeterminate() )
             cell->SetTextHeight( m_textHeight.GetIntValue() );
 
-        if( !m_textThickness.IsIndeterminate() )
+        if( m_autoTextThickness->IsChecked() )
+            cell->SetAutoThickness( true );
+        else if( !m_textThickness.IsIndeterminate() )
             cell->SetTextThickness( m_textThickness.GetIntValue() );
 
         if( m_hAlignLeft->IsChecked() )

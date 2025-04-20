@@ -305,8 +305,8 @@ wxString SCH_TEXTBOX::GetShownText( const SCH_SHEET_PATH* aPath, bool aAllowExtr
     else
         colWidth = abs( size.x ) - ( GetMarginLeft() + GetMarginRight() );
 
-    getDrawFont()->LinebreakText( text, colWidth, GetTextSize(), GetTextThickness(), IsBold(),
-                                  IsItalic() );
+    getDrawFont()->LinebreakText( text, colWidth, GetTextSize(), GetEffectiveTextPenWidth(),
+                                  IsBold(), IsItalic() );
 
     return text;
 }

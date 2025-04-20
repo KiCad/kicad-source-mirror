@@ -195,10 +195,10 @@ DIALOG_TEXTBOX_PROPERTIES_BASE::DIALOG_TEXTBOX_PROPERTIES_BASE( wxWindow* parent
 	m_ThicknessUnits->Wrap( -1 );
 	bSizer5->Add( m_ThicknessUnits, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
-	m_adjustTextThickness = new BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|wxBORDER_NONE );
-	m_adjustTextThickness->SetToolTip( _("Adjust the text thickness") );
+	m_autoTextThickness = new BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|wxBORDER_NONE );
+	m_autoTextThickness->SetToolTip( _("Adjust the text thickness") );
 
-	bSizer5->Add( m_adjustTextThickness, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 3 );
+	bSizer5->Add( m_autoTextThickness, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 3 );
 
 
 	gbSizer1->Add( bSizer5, wxGBPosition( 7, 2 ), wxGBSpan( 1, 2 ), wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
@@ -268,11 +268,13 @@ DIALOG_TEXTBOX_PROPERTIES_BASE::DIALOG_TEXTBOX_PROPERTIES_BASE( wxWindow* parent
 	m_vAlignTop->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_TEXTBOX_PROPERTIES_BASE::onValignButton ), NULL, this );
 	m_vAlignCenter->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_TEXTBOX_PROPERTIES_BASE::onValignButton ), NULL, this );
 	m_vAlignBottom->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_TEXTBOX_PROPERTIES_BASE::onValignButton ), NULL, this );
+	m_SizeXCtrl->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_TEXTBOX_PROPERTIES_BASE::onTextSize ), NULL, this );
 	m_SizeXCtrl->Connect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_TEXTBOX_PROPERTIES_BASE::OnOkClick ), NULL, this );
 	m_borderCheckbox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_TEXTBOX_PROPERTIES_BASE::onBorderChecked ), NULL, this );
+	m_SizeYCtrl->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_TEXTBOX_PROPERTIES_BASE::onTextSize ), NULL, this );
 	m_SizeYCtrl->Connect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_TEXTBOX_PROPERTIES_BASE::OnOkClick ), NULL, this );
 	m_ThicknessCtrl->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_TEXTBOX_PROPERTIES_BASE::onThickness ), NULL, this );
-	m_adjustTextThickness->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_TEXTBOX_PROPERTIES_BASE::updateTextThickness ), NULL, this );
+	m_autoTextThickness->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_TEXTBOX_PROPERTIES_BASE::onAutoTextThickness ), NULL, this );
 	m_OrientCtrl->Connect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_TEXTBOX_PROPERTIES_BASE::OnOkClick ), NULL, this );
 	m_sdbSizerOK->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_TEXTBOX_PROPERTIES_BASE::OnOkClick ), NULL, this );
 }
@@ -290,11 +292,13 @@ DIALOG_TEXTBOX_PROPERTIES_BASE::~DIALOG_TEXTBOX_PROPERTIES_BASE()
 	m_vAlignTop->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_TEXTBOX_PROPERTIES_BASE::onValignButton ), NULL, this );
 	m_vAlignCenter->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_TEXTBOX_PROPERTIES_BASE::onValignButton ), NULL, this );
 	m_vAlignBottom->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_TEXTBOX_PROPERTIES_BASE::onValignButton ), NULL, this );
+	m_SizeXCtrl->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_TEXTBOX_PROPERTIES_BASE::onTextSize ), NULL, this );
 	m_SizeXCtrl->Disconnect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_TEXTBOX_PROPERTIES_BASE::OnOkClick ), NULL, this );
 	m_borderCheckbox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_TEXTBOX_PROPERTIES_BASE::onBorderChecked ), NULL, this );
+	m_SizeYCtrl->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_TEXTBOX_PROPERTIES_BASE::onTextSize ), NULL, this );
 	m_SizeYCtrl->Disconnect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_TEXTBOX_PROPERTIES_BASE::OnOkClick ), NULL, this );
 	m_ThicknessCtrl->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_TEXTBOX_PROPERTIES_BASE::onThickness ), NULL, this );
-	m_adjustTextThickness->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_TEXTBOX_PROPERTIES_BASE::updateTextThickness ), NULL, this );
+	m_autoTextThickness->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_TEXTBOX_PROPERTIES_BASE::onAutoTextThickness ), NULL, this );
 	m_OrientCtrl->Disconnect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_TEXTBOX_PROPERTIES_BASE::OnOkClick ), NULL, this );
 	m_sdbSizerOK->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_TEXTBOX_PROPERTIES_BASE::OnOkClick ), NULL, this );
 

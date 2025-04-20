@@ -68,7 +68,7 @@ class DIALOG_TABLECELL_PROPERTIES_BASE : public DIALOG_SHIM
 		wxStaticText* m_ThicknessLabel;
 		wxTextCtrl* m_ThicknessCtrl;
 		wxStaticText* m_ThicknessUnits;
-		BITMAP_BUTTON* m_adjustTextThickness;
+		BITMAP_BUTTON* m_autoTextThickness;
 		wxTextCtrl* m_marginTopCtrl;
 		wxStaticText* m_marginTopUnits;
 		wxTextCtrl* m_marginLeftCtrl;
@@ -81,9 +81,10 @@ class DIALOG_TABLECELL_PROPERTIES_BASE : public DIALOG_SHIM
 
 		// Virtual event handlers, override them in your derived class
 		virtual void onBoldToggle( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onTextSize( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnOkClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onThickness( wxCommandEvent& event ) { event.Skip(); }
-		virtual void onAdjustTextThickness( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onAutoTextThickness( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onEditTable( wxCommandEvent& event ) { event.Skip(); }
 
 

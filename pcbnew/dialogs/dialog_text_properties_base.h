@@ -78,7 +78,7 @@ class DIALOG_TEXT_PROPERTIES_BASE : public DIALOG_SHIM
 		wxTextCtrl* m_SizeYCtrl;
 		wxStaticText* m_SizeYUnits;
 		wxStaticText* m_ThicknessUnits;
-		BITMAP_BUTTON* m_adjustTextThickness;
+		BITMAP_BUTTON* m_autoTextThickness;
 		wxStaticText* m_PositionXLabel;
 		wxTextCtrl* m_PositionXCtrl;
 		wxStaticText* m_PositionXUnits;
@@ -103,7 +103,8 @@ class DIALOG_TEXT_PROPERTIES_BASE : public DIALOG_SHIM
 		virtual void onBoldToggle( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onAlignButton( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onValignButton( wxCommandEvent& event ) { event.Skip(); }
-		virtual void updateTextThickness( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onTextSize( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onAutoTextThickness( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onThickness( wxCommandEvent& event ) { event.Skip(); }
 
 

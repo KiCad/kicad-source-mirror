@@ -289,6 +289,13 @@ void EDA_TEXT::SetTextThickness( int aWidth )
 }
 
 
+void EDA_TEXT::SetAutoThickness( bool aAuto )
+{
+    if( GetAutoThickness() != aAuto )
+        SetTextThickness( aAuto ? 0 : GetEffectiveTextPenWidth() );
+}
+
+
 void EDA_TEXT::SetTextAngle( const EDA_ANGLE& aAngle )
 {
     m_attributes.m_Angle = aAngle;
@@ -1041,7 +1048,7 @@ bool EDA_TEXT::IsDefaultFormatting() const
     return ( !IsMirrored()
              && GetHorizJustify() == GR_TEXT_H_ALIGN_CENTER
              && GetVertJustify() == GR_TEXT_V_ALIGN_CENTER
-             && GetTextThickness() == 0
+             && GetAutoThickness()
              && !IsItalic()
              && !IsBold()
              && !IsMultilineAllowed()
@@ -1070,7 +1077,7 @@ void EDA_TEXT::Format( OUTPUTFORMATTER* aFormatter, int aControlBits ) const
                            FormatDouble2Str( GetLineSpacing() ).c_str() );
     }
 
-    if( GetTextThickness() )
+    if( !GetAutoThickness() )
     {
         aFormatter->Print( "(thickness %s)",
                 EDA_UNIT_UTILS::FormatInternalUnits( m_IuScale, GetTextThickness() ).c_str() );
@@ -1357,8 +1364,11 @@ static struct EDA_TEXT_DESC
                 textProps )
             .SetIsHiddenFromRulesEditor();
 
+        propMgr.AddProperty( new PROPERTY<EDA_TEXT, bool>( _HKI( "Auto Thickness" ),
+                &EDA_TEXT::SetAutoThickness, &EDA_TEXT::GetAutoThickness ),
+                textProps );
         propMgr.AddProperty( new PROPERTY<EDA_TEXT, int>( _HKI( "Thickness" ),
-                &EDA_TEXT::SetTextThickness, &EDA_TEXT::GetTextThickness,
+                &EDA_TEXT::SetTextThickness, &EDA_TEXT::GetTextThicknessProperty,
                 PROPERTY_DISPLAY::PT_SIZE ),
                 textProps );
         propMgr.AddProperty( new PROPERTY<EDA_TEXT, bool>( _HKI( "Italic" ),
