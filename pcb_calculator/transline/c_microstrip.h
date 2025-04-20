@@ -55,6 +55,8 @@ private:
     double ang_l_o;            // odd-mode electrical length in angle
     double er_eff_e;           // even-mode effective dielectric constant
     double er_eff_o;           // odd-mode effective dielectric constant
+    double prop_delay_e;       // even-mode unit propagation delay (ps/cm)
+    double prop_delay_o;       // odd-mode unit propagation delay (ps/cm)
     double er_eff_e_0;         // static even-mode effective dielectric constant
     double er_eff_o_0;         // static odd-mode effective dielectric constant
     double w_eff;              // Effective width of line

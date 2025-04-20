@@ -35,6 +35,7 @@ COPLANAR::COPLANAR() : TRANSLINE()
 {
     m_Name    = "CoPlanar";
     backMetal = false;
+    unit_prop_delay = 0.0;
     Init();
 }
 
@@ -172,6 +173,8 @@ void COPLANAR::calcAnalyze()
 
     m_parameters[EPSILON_EFF_PRM] = sr_er_f * sr_er_f;
     m_parameters[Z0_PRM]          = zl_factor / sr_er_f;
+
+    unit_prop_delay = calcUnitPropagationDelay( m_parameters[EPSILON_EFF_PRM] );
 }
 
 
@@ -180,10 +183,11 @@ void COPLANAR::show_results()
 {
 
     setResult( 0, m_parameters[EPSILON_EFF_PRM], "" );
-    setResult( 1, m_parameters[LOSS_CONDUCTOR_PRM], "dB" );
-    setResult( 2, m_parameters[LOSS_DIELECTRIC_PRM], "dB" );
+    setResult( 1, unit_prop_delay, "ps/cm" );
+    setResult( 2, m_parameters[LOSS_CONDUCTOR_PRM], "dB" );
+    setResult( 3, m_parameters[LOSS_DIELECTRIC_PRM], "dB" );
 
-    setResult( 3, m_parameters[SKIN_DEPTH_PRM] / UNIT_MICRON, "µm" );
+    setResult( 4, m_parameters[SKIN_DEPTH_PRM] / UNIT_MICRON, "µm" );
 }
 
 

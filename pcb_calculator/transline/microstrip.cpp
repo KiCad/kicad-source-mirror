@@ -305,6 +305,9 @@ void MICROSTRIP::dispersion()
     D    = Z0_dispersion( u, e_r, e_r_eff_0, e_r_eff_f, f_n );
     Z0_f = Z0_0 * D;
 
+    // 1e10 factor is to convert from s/m to ps/cm
+    unit_prop_delay = calcUnitPropagationDelay( e_r_eff_f );
+
     m_parameters[EPSILON_EFF_PRM] = e_r_eff_f;
     m_parameters[Z0_PRM] = Z0_f;
 }
@@ -465,10 +468,11 @@ void MICROSTRIP::show_results()
     setProperty( ANG_L_PRM, m_parameters[ANG_L_PRM] );
 
     setResult( 0, m_parameters[EPSILON_EFF_PRM], "" );
-    setResult( 1, atten_cond, "dB" );
-    setResult( 2, atten_dielectric, "dB" );
+    setResult( 1, unit_prop_delay, "ps/cm" );
+    setResult( 2, atten_cond, "dB" );
+    setResult( 3, atten_dielectric, "dB" );
 
-    setResult( 3, m_parameters[SKIN_DEPTH_PRM] / UNIT_MICRON, "µm" );
+    setResult( 4, m_parameters[SKIN_DEPTH_PRM] / UNIT_MICRON, "µm" );
 }
 
 

@@ -135,6 +135,9 @@ protected:
     void   ellipke( double, double&, double& );
     double ellipk( double );
     void   setErrorLevel( PRMS_ID, char );
+
+    /// Calculates the unit propagation delay (in ps/cm) for the given effective dielectric constant
+    static double calcUnitPropagationDelay( double epsilonEff );
 };
 
 #endif /* __TRANSLINE_H */
