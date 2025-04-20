@@ -3,6 +3,7 @@
  *
  * Copyright (C) 2005 Stefan Jahn <stefan@lkcc.org>
  * Modifications 2018 for Kicad: Jean-Pierre Charras
+ * Copyright The KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,6 +26,7 @@
 #define __TRANSLINE_H
 
 #include <gal/color4d.h>
+#include <transline_calculations/transline_calculation_base.h>
 
 #define TRANSLINE_OK 0
 #define TRANSLINE_WARNING 1
@@ -86,7 +88,7 @@ public:
     double      getProperty( enum PRMS_ID aPrmId );
 
 
-    void getProperties();
+    virtual void getProperties();
     void checkProperties();
     void setResult( int, double, const char* );
     void setResult( int, const char* );
@@ -138,6 +140,9 @@ protected:
 
     /// Calculates the unit propagation delay (in ps/cm) for the given effective dielectric constant
     static double calcUnitPropagationDelay( double epsilonEff );
+
+    /// Converts a TRANSLINE_PARAMETER status to a PCB Calculation status
+    static char convertParameterStatusCode( TRANSLINE_STATUS aStatus );
 };
 
 #endif /* __TRANSLINE_H */

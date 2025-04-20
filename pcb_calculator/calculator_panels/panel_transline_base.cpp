@@ -20,14 +20,22 @@ PANEL_TRANSLINE_BASE::PANEL_TRANSLINE_BASE( wxWindow* parent, wxWindowID id, con
 	wxBoxSizer* bLeftSizer;
 	bLeftSizer = new wxBoxSizer( wxVERTICAL );
 
-	wxString m_TranslineSelectionChoices[] = { _("Microstrip Line"), _("Coplanar wave guide"), _("Coplanar wave guide w/ ground plane"), _("Rectangular Waveguide"), _("Coaxial Line"), _("Coupled Microstrip Line"), _("Stripline"), _("Twisted Pair") };
-	int m_TranslineSelectionNChoices = sizeof( m_TranslineSelectionChoices ) / sizeof( wxString );
-	m_TranslineSelection = new wxRadioBox( this, wxID_ANY, _("Transmission Line Type"), wxDefaultPosition, wxDefaultSize, m_TranslineSelectionNChoices, m_TranslineSelectionChoices, 1, wxRA_SPECIFY_COLS );
-	m_TranslineSelection->SetSelection( 1 );
-	bLeftSizer->Add( m_TranslineSelection, 0, wxTOP|wxRIGHT|wxLEFT|wxEXPAND, 5 );
+    wxString m_TranslineSelectionChoices[] = { _( "Microstrip Line" ),
+                                               _( "Coupled Microstrip Line" ),
+                                               _( "Stripline" ),
+                                               _( "Coupled Stripline" ),
+                                               _( "Coplanar wave guide" ),
+                                               _( "Coplanar wave guide w/ ground plane" ),
+                                               _( "Rectangular Waveguide" ),
+                                               _( "Coaxial Line" ),
+                                               _( "Twisted Pair" ) };
+    int      m_TranslineSelectionNChoices = sizeof( m_TranslineSelectionChoices ) / sizeof( wxString );
+    m_TranslineSelection = new wxRadioBox( this, wxID_ANY, _("Transmission Line Type"), wxDefaultPosition, wxDefaultSize, m_TranslineSelectionNChoices, m_TranslineSelectionChoices, 1, wxRA_SPECIFY_COLS );
+    m_TranslineSelection->SetSelection( 0 );
+    bLeftSizer->Add( m_TranslineSelection, 0, wxTOP | wxRIGHT | wxLEFT | wxEXPAND, 5 );
 
 
-	bLeftSizer->Add( 0, 5, 0, wxEXPAND, 5 );
+    bLeftSizer->Add( 0, 5, 0, wxEXPAND, 5 );
 
 	m_translineBitmap = new wxStaticBitmap( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
 	bLeftSizer->Add( m_translineBitmap, 0, wxALIGN_CENTER_HORIZONTAL|wxTOP|wxBOTTOM, 10 );

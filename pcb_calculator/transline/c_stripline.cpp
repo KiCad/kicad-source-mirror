@@ -20,31 +20,31 @@
  */
 
 
-#include "c_microstrip.h"
+#include "c_stripline.h"
 #include "transline.h"
 #include "units.h"
 
 
-C_MICROSTRIP::C_MICROSTRIP()
+C_STRIPLINE::C_STRIPLINE()
 {
     m_Name = "Coupled_MicroStrip";
     Init();
 }
 
 
-void C_MICROSTRIP::calcAnalyze()
+void C_STRIPLINE::calcAnalyze()
 {
     m_calc.Analyse();
 }
 
 
-void C_MICROSTRIP::calcSynthesize()
+void C_STRIPLINE::calcSynthesize()
 {
     m_calc.Synthesize( SYNTHESIZE_OPTS::DEFAULT );
 }
 
 
-void C_MICROSTRIP::showAnalyze()
+void C_STRIPLINE::showAnalyze()
 {
     std::unordered_map<TRANSLINE_PARAMETERS, std::pair<double, TRANSLINE_STATUS>>& results =
             m_calc.GetAnalysisResults();
@@ -57,12 +57,8 @@ void C_MICROSTRIP::showAnalyze()
     setResult( 1, results[TRANSLINE_PARAMETERS::EPSILON_EFF_ODD].first, "" );
     setResult( 2, results[TRANSLINE_PARAMETERS::UNIT_PROP_DELAY_EVEN].first, "ps/cm" );
     setResult( 3, results[TRANSLINE_PARAMETERS::UNIT_PROP_DELAY_ODD].first, "ps/cm" );
-    setResult( 4, results[TRANSLINE_PARAMETERS::ATTEN_COND_EVEN].first, "dB" );
-    setResult( 5, results[TRANSLINE_PARAMETERS::ATTEN_COND_ODD].first, "dB" );
-    setResult( 6, results[TRANSLINE_PARAMETERS::ATTEN_DILECTRIC_EVEN].first, "dB" );
-    setResult( 7, results[TRANSLINE_PARAMETERS::ATTEN_DILECTRIC_ODD].first, "dB" );
-    setResult( 8, results[TRANSLINE_PARAMETERS::SKIN_DEPTH].first / UNIT_MICRON, "µm" );
-    setResult( 9, results[TRANSLINE_PARAMETERS::Z_DIFF].first, "Ω" );
+    setResult( 4, results[TRANSLINE_PARAMETERS::SKIN_DEPTH].first / UNIT_MICRON, "µm" );
+    setResult( 5, results[TRANSLINE_PARAMETERS::Z_DIFF].first, "Ω" );
 
     setErrorLevel( Z0_E_PRM, convertParameterStatusCode( results[TRANSLINE_PARAMETERS::Z0_E].second ) );
     setErrorLevel( Z0_O_PRM, convertParameterStatusCode( results[TRANSLINE_PARAMETERS::Z0_O].second ) );
@@ -73,7 +69,7 @@ void C_MICROSTRIP::showAnalyze()
 }
 
 
-void C_MICROSTRIP::showSynthesize()
+void C_STRIPLINE::showSynthesize()
 {
     std::unordered_map<TRANSLINE_PARAMETERS, std::pair<double, TRANSLINE_STATUS>>& results =
             m_calc.GetAnalysisResults();
@@ -86,12 +82,8 @@ void C_MICROSTRIP::showSynthesize()
     setResult( 1, results[TRANSLINE_PARAMETERS::EPSILON_EFF_ODD].first, "" );
     setResult( 2, results[TRANSLINE_PARAMETERS::UNIT_PROP_DELAY_EVEN].first, "ps/cm" );
     setResult( 3, results[TRANSLINE_PARAMETERS::UNIT_PROP_DELAY_ODD].first, "ps/cm" );
-    setResult( 4, results[TRANSLINE_PARAMETERS::ATTEN_COND_EVEN].first, "dB" );
-    setResult( 5, results[TRANSLINE_PARAMETERS::ATTEN_COND_ODD].first, "dB" );
-    setResult( 6, results[TRANSLINE_PARAMETERS::ATTEN_DILECTRIC_EVEN].first, "dB" );
-    setResult( 7, results[TRANSLINE_PARAMETERS::ATTEN_DILECTRIC_ODD].first, "dB" );
-    setResult( 8, results[TRANSLINE_PARAMETERS::SKIN_DEPTH].first / UNIT_MICRON, "µm" );
-    setResult( 9, results[TRANSLINE_PARAMETERS::Z_DIFF].first, "Ω" );
+    setResult( 4, results[TRANSLINE_PARAMETERS::SKIN_DEPTH].first / UNIT_MICRON, "µm" );
+    setResult( 5, results[TRANSLINE_PARAMETERS::Z_DIFF].first, "Ω" );
 
     setErrorLevel( Z0_E_PRM, convertParameterStatusCode( results[TRANSLINE_PARAMETERS::Z0_E].second ) );
     setErrorLevel( Z0_O_PRM, convertParameterStatusCode( results[TRANSLINE_PARAMETERS::Z0_O].second ) );
@@ -102,7 +94,7 @@ void C_MICROSTRIP::showSynthesize()
 }
 
 
-void C_MICROSTRIP::getProperties()
+void C_STRIPLINE::getProperties()
 {
     TRANSLINE::getProperties();
 
@@ -114,16 +106,13 @@ void C_MICROSTRIP::getProperties()
     m_calc.SetParameter( TRANSLINE_PARAMETERS::PHYS_S, m_parameters[PHYS_S_PRM] );
     m_calc.SetParameter( TRANSLINE_PARAMETERS::H, m_parameters[H_PRM] );
     m_calc.SetParameter( TRANSLINE_PARAMETERS::T, m_parameters[T_PRM] );
-    m_calc.SetParameter( TRANSLINE_PARAMETERS::H_T, m_parameters[H_T_PRM] );
     m_calc.SetParameter( TRANSLINE_PARAMETERS::FREQUENCY, m_parameters[FREQUENCY_PRM] );
     m_calc.SetParameter( TRANSLINE_PARAMETERS::MURC, m_parameters[MURC_PRM] );
     m_calc.SetParameter( TRANSLINE_PARAMETERS::SKIN_DEPTH, m_parameters[SKIN_DEPTH_PRM] );
     m_calc.SetParameter( TRANSLINE_PARAMETERS::SIGMA, m_parameters[SIGMA_PRM] );
-    m_calc.SetParameter( TRANSLINE_PARAMETERS::ROUGH, m_parameters[ROUGH_PRM] );
-    m_calc.SetParameter( TRANSLINE_PARAMETERS::TAND, m_parameters[TAND_PRM] );
     m_calc.SetParameter( TRANSLINE_PARAMETERS::ANG_L, m_parameters[ANG_L_PRM] );
 }
 
-void C_MICROSTRIP::show_results()
+void C_STRIPLINE::show_results()
 {
 }

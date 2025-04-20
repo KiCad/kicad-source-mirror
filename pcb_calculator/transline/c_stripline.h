@@ -1,9 +1,4 @@
 /*
- * c_microstrip.h - coupled microstrip class definition
- *
- * Copyright (C) 2002 Claudio Girardi <in3otd@qsl.net>
- * Copyright (C) 2005 Stefan Jahn <stefan@lkcc.org>
- * Modifications for Kicad: 2015 Jean-Pierre Charras
  * Copyright The KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -22,18 +17,18 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef _C_MICROSTRIP_H_
-#define _C_MICROSTRIP_H_
+#ifndef C_STRIPLINE_H_
+#define C_STRIPLINE_H_
 
 
 #include "transline/transline.h"
-#include <transline_calculations/coupled_microstrip.h>
+#include <transline_calculations/coupled_stripline.h>
 
 
-class C_MICROSTRIP : public TRANSLINE
+class C_STRIPLINE : public TRANSLINE
 {
 public:
-    C_MICROSTRIP();
+    C_STRIPLINE();
 
 private:
     void calcAnalyze() override;
@@ -43,7 +38,7 @@ private:
     void show_results() override;
     void getProperties() override;
 
-    COUPLED_MICROSTRIP m_calc;
+    COUPLED_STRIPLINE m_calc;
 };
 
-#endif // _C_MICROSTRIP_H_
+#endif // C_STRIPLINE_H_

@@ -444,3 +444,16 @@ double TRANSLINE::calcUnitPropagationDelay( const double epsilonEff )
 {
     return std::sqrt( epsilonEff ) * ( 1.0e10 / 2.99e8 );
 }
+
+
+char TRANSLINE::convertParameterStatusCode( TRANSLINE_STATUS aStatus )
+{
+    switch( aStatus )
+    {
+    case TRANSLINE_STATUS::OK: return TRANSLINE_OK;
+    case TRANSLINE_STATUS::WARNING: return TRANSLINE_WARNING;
+    case TRANSLINE_STATUS::ERROR: return TRANSLINE_ERROR;
+    }
+
+    return TRANSLINE_OK;
+}

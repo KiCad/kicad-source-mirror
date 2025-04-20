@@ -3,6 +3,7 @@
  *
  * Copyright (C) 2011 Michael Margraf <michael.margraf@alumni.tu-berlin.de>
  * Modifications 2018 for Kicad: Jean-Pierre Charras
+ * Copyright The KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,162 +22,97 @@
  *
  */
 
-
-#include <cmath>
-#include <cstdio>
-#include <cstdlib>
-#include <cstring>
-
 #include "stripline.h"
-#include "units.h"
+#include <units_scales.h>
 
-STRIPLINE::STRIPLINE() : TRANSLINE(), unit_prop_delay( 0.0 )
+
+STRIPLINE_UI::STRIPLINE_UI()
 {
     m_Name = "StripLine";
     Init();
 }
 
 
-// -------------------------------------------------------------------
-// calculate characteristic impedance and conductor loss (in db/meter)
-double STRIPLINE::lineImpedance( double height, double& ac )
+void STRIPLINE_UI::calcAnalyze()
 {
-    double ZL;
-    double hmt = height - m_parameters[T_PRM];
-
-    ac = sqrt( m_parameters[FREQUENCY_PRM] / m_parameters[SIGMA_PRM] / 17.2 );
-
-    if( m_parameters[PHYS_WIDTH_PRM] / hmt >= 0.35 )
-    {
-        ZL = m_parameters[PHYS_WIDTH_PRM]
-             + ( 2.0 * height * log( ( 2.0 * height - m_parameters[T_PRM] ) / hmt )
-                       - m_parameters[T_PRM] * log( height * height / hmt / hmt - 1.0 ) )
-                       / M_PI;
-        ZL = ZF0 * hmt / sqrt( m_parameters[EPSILONR_PRM] ) / 4.0 / ZL;
-
-        ac *= 2.02e-6 * m_parameters[EPSILONR_PRM] * ZL / hmt;
-        ac *= 1.0 + 2.0 * m_parameters[PHYS_WIDTH_PRM] / hmt
-              + ( height + m_parameters[T_PRM] ) / hmt / M_PI
-                        * log( 2.0 * height / m_parameters[T_PRM] - 1.0 );
-    }
-    else
-    {
-        double tdw = m_parameters[T_PRM] / m_parameters[PHYS_WIDTH_PRM];
-        if( m_parameters[T_PRM] / m_parameters[PHYS_WIDTH_PRM] > 1.0 )
-            tdw = m_parameters[PHYS_WIDTH_PRM] / m_parameters[T_PRM];
-        double de = 1.0 + tdw / M_PI * ( 1.0 + log( 4.0 * M_PI / tdw ) ) + 0.236 * pow( tdw, 1.65 );
-        if( m_parameters[T_PRM] / m_parameters[PHYS_WIDTH_PRM] > 1.0 )
-            de *= m_parameters[T_PRM] / 2.0;
-        else
-            de *= m_parameters[PHYS_WIDTH_PRM] / 2.0;
-        ZL = ZF0 / 2.0 / M_PI / sqrt( m_parameters[EPSILONR_PRM] )
-             * log( 4.0 * height / M_PI / de );
-
-        ac *= 0.01141 / ZL / de;
-        ac *= de / height + 0.5 + tdw / 2.0 / M_PI + 0.5 / M_PI * log( 4.0 * M_PI / tdw )
-              + 0.1947 * pow( tdw, 0.65 ) - 0.0767 * pow( tdw, 1.65 );
-    }
-
-    return ZL;
+    m_calc.Analyse();
 }
 
 
-// -------------------------------------------------------------------
-void STRIPLINE::calcAnalyze()
+void STRIPLINE_UI::calcSynthesize()
 {
-    m_parameters[SKIN_DEPTH_PRM] = skin_depth();
-
-    m_parameters[EPSILON_EFF_PRM] = m_parameters[EPSILONR_PRM]; // no dispersion
-
-    double ac1, ac2;
-    double t             = m_parameters[T_PRM];
-    double a             = m_parameters[STRIPLINE_A_PRM];
-    double h             = m_parameters[H_PRM];
-    m_parameters[Z0_PRM] = 2.0
-                           / ( 1.0 / lineImpedance( 2.0 * a + t, ac1 )
-                                   + 1.0 / lineImpedance( 2.0 * ( h - a ) - t, ac2 ) );
-    m_parameters[LOSS_CONDUCTOR_PRM]  = m_parameters[PHYS_LEN_PRM] * ( ac1 + ac2 );
-    m_parameters[LOSS_DIELECTRIC_PRM] = LOG2DB * m_parameters[PHYS_LEN_PRM]
-                                        * ( M_PI / C0 ) * m_parameters[FREQUENCY_PRM]
-                                        * sqrt( m_parameters[EPSILONR_PRM] )
-                                        * m_parameters[TAND_PRM];
-
-    m_parameters[ANG_L_PRM] = 2.0 * M_PI * m_parameters[PHYS_LEN_PRM]
-                              * sqrt( m_parameters[EPSILONR_PRM] ) * m_parameters[FREQUENCY_PRM]
-                              / C0; // in radians
-
-    unit_prop_delay = calcUnitPropagationDelay( m_parameters[EPSILON_EFF_PRM] );
+    m_calc.Synthesize( SYNTHESIZE_OPTS::DEFAULT );
 }
 
 
-void STRIPLINE::showAnalyze()
+void STRIPLINE_UI::showAnalyze()
 {
-    setProperty( Z0_PRM, m_parameters[Z0_PRM] );
-    setProperty( ANG_L_PRM, m_parameters[ANG_L_PRM] );
+    std::unordered_map<TRANSLINE_PARAMETERS, std::pair<double, TRANSLINE_STATUS>>& results =
+            m_calc.GetAnalysisResults();
 
-    if( !std::isfinite( m_parameters[Z0_PRM] ) || m_parameters[Z0_PRM] < 0 )
-        setErrorLevel( Z0_PRM, TRANSLINE_ERROR );
+    setResult( 0, results[TRANSLINE_PARAMETERS::EPSILON_EFF].first, "" );
+    setResult( 1, results[TRANSLINE_PARAMETERS::UNIT_PROP_DELAY].first, "ps/cm" );
+    setResult( 2, results[TRANSLINE_PARAMETERS::LOSS_CONDUCTOR].first, "dB" );
+    setResult( 3, results[TRANSLINE_PARAMETERS::LOSS_DIELECTRIC].first, "dB" );
+    setResult( 4, results[TRANSLINE_PARAMETERS::SKIN_DEPTH].first / UNIT_MICRON, "µm" );
 
-    if( !std::isfinite( m_parameters[ANG_L_PRM] ) || m_parameters[ANG_L_PRM] < 0 )
-        setErrorLevel( ANG_L_PRM, TRANSLINE_ERROR );
+    setProperty( Z0_PRM, results[TRANSLINE_PARAMETERS::Z0].first );
+    setProperty( ANG_L_PRM, results[TRANSLINE_PARAMETERS::ANG_L].first );
 
-    if( !std::isfinite( m_parameters[PHYS_LEN_PRM] ) || m_parameters[PHYS_LEN_PRM] < 0 )
-        setErrorLevel( PHYS_LEN_PRM, TRANSLINE_WARNING );
-
-    if( !std::isfinite( m_parameters[PHYS_WIDTH_PRM] ) || m_parameters[PHYS_WIDTH_PRM] < 0 )
-        setErrorLevel( PHYS_WIDTH_PRM, TRANSLINE_WARNING );
-
-    if( m_parameters[STRIPLINE_A_PRM] + m_parameters[T_PRM] >= m_parameters[H_PRM] )
-    {
-        setErrorLevel( STRIPLINE_A_PRM, TRANSLINE_WARNING );
-        setErrorLevel( T_PRM, TRANSLINE_WARNING );
-        setErrorLevel( H_PRM, TRANSLINE_WARNING );
-        setErrorLevel( Z0_PRM, TRANSLINE_ERROR );
-    }
-}
-
-void STRIPLINE::showSynthesize()
-{
-    setProperty( PHYS_LEN_PRM, m_parameters[PHYS_LEN_PRM] );
-    setProperty( PHYS_WIDTH_PRM, m_parameters[PHYS_WIDTH_PRM] );
-
-    if( !std::isfinite( m_parameters[PHYS_LEN_PRM] ) || m_parameters[PHYS_LEN_PRM] < 0 )
-        setErrorLevel( PHYS_LEN_PRM, TRANSLINE_ERROR );
-
-    if( !std::isfinite( m_parameters[PHYS_WIDTH_PRM] ) || m_parameters[PHYS_WIDTH_PRM] < 0 )
-        setErrorLevel( PHYS_WIDTH_PRM, TRANSLINE_ERROR );
-
-    if( !std::isfinite( m_parameters[Z0_PRM] ) || m_parameters[Z0_PRM] < 0 )
-        setErrorLevel( Z0_PRM, TRANSLINE_WARNING );
-
-    if( !std::isfinite( m_parameters[ANG_L_PRM] ) || m_parameters[ANG_L_PRM] < 0 )
-        setErrorLevel( ANG_L_PRM, TRANSLINE_WARNING );
-
-    if( m_parameters[STRIPLINE_A_PRM] + m_parameters[T_PRM] >= m_parameters[H_PRM] )
-    {
-        setErrorLevel( STRIPLINE_A_PRM, TRANSLINE_WARNING );
-        setErrorLevel( T_PRM, TRANSLINE_WARNING );
-        setErrorLevel( H_PRM, TRANSLINE_WARNING );
-        setErrorLevel( PHYS_WIDTH_PRM, TRANSLINE_ERROR );
-    }
-}
-// -------------------------------------------------------------------
-void STRIPLINE::show_results()
-{
-
-    setResult( 0, m_parameters[EPSILON_EFF_PRM], "" );
-    setResult( 1, unit_prop_delay, "ps/cm" );
-    setResult( 2, m_parameters[LOSS_CONDUCTOR_PRM], "dB" );
-    setResult( 3, m_parameters[LOSS_DIELECTRIC_PRM], "dB" );
-
-    setResult( 4, m_parameters[SKIN_DEPTH_PRM] / UNIT_MICRON, "µm" );
+    setErrorLevel( Z0_PRM, convertParameterStatusCode( results[TRANSLINE_PARAMETERS::Z0].second ) );
+    setErrorLevel( ANG_L_PRM, convertParameterStatusCode( results[TRANSLINE_PARAMETERS::ANG_L].second ) );
+    setErrorLevel( PHYS_LEN_PRM, convertParameterStatusCode( results[TRANSLINE_PARAMETERS::PHYS_LEN].second ) );
+    setErrorLevel( PHYS_WIDTH_PRM, convertParameterStatusCode( results[TRANSLINE_PARAMETERS::PHYS_WIDTH].second ) );
+    setErrorLevel( STRIPLINE_A_PRM, convertParameterStatusCode( results[TRANSLINE_PARAMETERS::STRIPLINE_A].second ) );
+    setErrorLevel( T_PRM, convertParameterStatusCode( results[TRANSLINE_PARAMETERS::T].second ) );
+    setErrorLevel( H_PRM, convertParameterStatusCode( results[TRANSLINE_PARAMETERS::T].second ) );
 }
 
 
-#define MAX_ERROR 0.000001
-
-// -------------------------------------------------------------------
-void STRIPLINE::calcSynthesize()
+void STRIPLINE_UI::showSynthesize()
 {
-    minimizeZ0Error1D( &( m_parameters[PHYS_WIDTH_PRM] ) );
+    std::unordered_map<TRANSLINE_PARAMETERS, std::pair<double, TRANSLINE_STATUS>>& results =
+            m_calc.GetSynthesisResults();
+
+    setResult( 0, results[TRANSLINE_PARAMETERS::EPSILON_EFF].first, "" );
+    setResult( 1, results[TRANSLINE_PARAMETERS::UNIT_PROP_DELAY].first, "ps/cm" );
+    setResult( 2, results[TRANSLINE_PARAMETERS::LOSS_CONDUCTOR].first, "dB" );
+    setResult( 3, results[TRANSLINE_PARAMETERS::LOSS_DIELECTRIC].first, "dB" );
+    setResult( 4, results[TRANSLINE_PARAMETERS::SKIN_DEPTH].first / UNIT_MICRON, "µm" );
+
+    setProperty( PHYS_LEN_PRM, results[TRANSLINE_PARAMETERS::PHYS_LEN].first );
+    setProperty( PHYS_WIDTH_PRM, results[TRANSLINE_PARAMETERS::PHYS_WIDTH].first );
+
+    setErrorLevel( Z0_PRM, convertParameterStatusCode( results[TRANSLINE_PARAMETERS::Z0].second ) );
+    setErrorLevel( ANG_L_PRM, convertParameterStatusCode( results[TRANSLINE_PARAMETERS::ANG_L].second ) );
+    setErrorLevel( PHYS_LEN_PRM, convertParameterStatusCode( results[TRANSLINE_PARAMETERS::PHYS_LEN].second ) );
+    setErrorLevel( PHYS_WIDTH_PRM, convertParameterStatusCode( results[TRANSLINE_PARAMETERS::PHYS_WIDTH].second ) );
+    setErrorLevel( STRIPLINE_A_PRM, convertParameterStatusCode( results[TRANSLINE_PARAMETERS::STRIPLINE_A].second ) );
+    setErrorLevel( T_PRM, convertParameterStatusCode( results[TRANSLINE_PARAMETERS::T].second ) );
+    setErrorLevel( H_PRM, convertParameterStatusCode( results[TRANSLINE_PARAMETERS::T].second ) );
+}
+
+
+void STRIPLINE_UI::show_results()
+{
+}
+
+
+void STRIPLINE_UI::getProperties()
+{
+    TRANSLINE::getProperties();
+
+    m_calc.SetParameter( TRANSLINE_PARAMETERS::SKIN_DEPTH, m_parameters[SKIN_DEPTH_PRM] );
+    m_calc.SetParameter( TRANSLINE_PARAMETERS::EPSILONR, m_parameters[EPSILONR_PRM] );
+    m_calc.SetParameter( TRANSLINE_PARAMETERS::T, m_parameters[T_PRM] );
+    m_calc.SetParameter( TRANSLINE_PARAMETERS::STRIPLINE_A, m_parameters[STRIPLINE_A_PRM] );
+    m_calc.SetParameter( TRANSLINE_PARAMETERS::H, m_parameters[H_PRM] );
+    m_calc.SetParameter( TRANSLINE_PARAMETERS::Z0, m_parameters[Z0_PRM] );
+    m_calc.SetParameter( TRANSLINE_PARAMETERS::PHYS_LEN, m_parameters[PHYS_LEN_PRM] );
+    m_calc.SetParameter( TRANSLINE_PARAMETERS::FREQUENCY, m_parameters[FREQUENCY_PRM] );
+    m_calc.SetParameter( TRANSLINE_PARAMETERS::TAND, m_parameters[TAND_PRM] );
+    m_calc.SetParameter( TRANSLINE_PARAMETERS::PHYS_WIDTH, m_parameters[PHYS_WIDTH_PRM] );
+    m_calc.SetParameter( TRANSLINE_PARAMETERS::ANG_L, m_parameters[ANG_L_PRM] );
+    m_calc.SetParameter( TRANSLINE_PARAMETERS::SIGMA, m_parameters[SIGMA_PRM] );
+    m_calc.SetParameter( TRANSLINE_PARAMETERS::MURC, m_parameters[MURC_PRM] );
 }

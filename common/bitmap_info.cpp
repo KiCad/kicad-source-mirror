@@ -4893,6 +4893,7 @@ void BuildBitmapInfo( std::unordered_map<BITMAPS, std::vector<BITMAP_INFO>>& aBi
     aBitmapInfoCache[BITMAPS::color_code_tolerance].emplace_back( BITMAPS::color_code_tolerance, wxT( "color_code_tolerance.png" ), -1, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::color_code_value].emplace_back( BITMAPS::color_code_value, wxT( "color_code_value.png" ), -1, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::color_code_value_and_name].emplace_back( BITMAPS::color_code_value_and_name, wxT( "color_code_value_and_name.png" ), -1, wxT( "light" ) );
+    aBitmapInfoCache[BITMAPS::coupled_stripline].emplace_back( BITMAPS::coupled_stripline, wxT( "coupled_stripline.png" ), -1, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::creepage_clearance].emplace_back( BITMAPS::creepage_clearance, wxT( "creepage_clearance.png" ), -1, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::cpw].emplace_back( BITMAPS::cpw, wxT( "cpw.png" ), -1, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::cpw_back].emplace_back( BITMAPS::cpw_back, wxT( "cpw_back.png" ), -1, wxT( "light" ) );
@@ -4928,6 +4929,7 @@ void BuildBitmapInfo( std::unordered_map<BITMAPS, std::vector<BITMAP_INFO>>& aBi
     aBitmapInfoCache[BITMAPS::color_code_tolerance].emplace_back( BITMAPS::color_code_tolerance, wxT( "color_code_tolerance_dark.png" ), -1, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::color_code_value].emplace_back( BITMAPS::color_code_value, wxT( "color_code_value_dark.png" ), -1, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::color_code_value_and_name].emplace_back( BITMAPS::color_code_value_and_name, wxT( "color_code_value_and_name_dark.png" ), -1, wxT( "dark" ) );
+    aBitmapInfoCache[BITMAPS::coupled_stripline].emplace_back( BITMAPS::coupled_stripline, wxT( "coupled_stripline_dark.png" ), -1, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::creepage_clearance].emplace_back( BITMAPS::creepage_clearance, wxT( "creepage_clearance_dark.png" ), -1, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::cpw].emplace_back( BITMAPS::cpw, wxT( "cpw_dark.png" ), -1, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::cpw_back].emplace_back( BITMAPS::cpw_back, wxT( "cpw_back_dark.png" ), -1, wxT( "dark" ) );

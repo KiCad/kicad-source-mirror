@@ -139,6 +139,7 @@ enum class BITMAPS : unsigned int
     copper_layers_setup,
     copy,
     copy_pad_settings,
+    coupled_stripline,
     cpw,
     cpw_back,
     cursor,

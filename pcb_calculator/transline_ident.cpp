@@ -36,6 +36,7 @@
 #include "transline/c_microstrip.h"
 #include "transline/stripline.h"
 #include "transline/twistedpair.h"
+#include "transline/c_stripline.h"
 
 #include "pcb_calculator_settings.h"
 #include "widgets/unit_selector.h"
@@ -113,7 +114,7 @@ TRANSLINE_IDENT::TRANSLINE_IDENT( enum TRANSLINE_TYPE_ID aType )
     switch( m_Type )
     {
     case MICROSTRIP_TYPE:      // microstrip
-        m_TLine      = new MICROSTRIP();
+        m_TLine = new MICROSTRIP_UI();
         m_BitmapName = BITMAPS::microstrip;
 
         m_Messages.Add( wxString::Format( _( "Effective %s:" ), wxT( "εr" ) ) );
@@ -336,6 +337,37 @@ TRANSLINE_IDENT::TRANSLINE_IDENT( enum TRANSLINE_TYPE_ID aType )
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_PHYS, PHYS_LEN_PRM,
                                    "L", "L", _( "Line length" ), 50.0, true ) );
 
+        AddPrm( new TRANSLINE_PRM( PRM_TYPE_ELEC, Z0_E_PRM, "Zeven", _( "Zeven" ),
+                                   _( "Even mode impedance (lines driven by common voltages)" ), 50.0, true ) );
+        AddPrm( new TRANSLINE_PRM( PRM_TYPE_ELEC, Z0_O_PRM, "Zodd", _( "Zodd" ),
+                                   _( "Odd mode impedance (lines driven by opposite "
+                                      "(differential) voltages)" ),
+                                   50.0, true ) );
+        AddPrm( new TRANSLINE_PRM( PRM_TYPE_ELEC, ANG_L_PRM, "Ang_l", "Ang_l", _( "Electrical length" ), 0.0, true ) );
+        break;
+
+    case C_STRIPLINE_TYPE: // Coupled stripline
+        m_TLine = new C_STRIPLINE();
+        m_BitmapName = BITMAPS::coupled_stripline;
+        m_HasPrmSelection = true;
+
+        m_Messages.Add( wxString::Format( _( "Effective %s (even):" ), wxT( "εr" ) ) );
+        m_Messages.Add( wxString::Format( _( "Effective %s (odd):" ), wxT( "εr" ) ) );
+        m_Messages.Add( _( "Unit propagation delay (even):" ) );
+        m_Messages.Add( _( "Unit propagation delay (odd):" ) );
+        m_Messages.Add( _( "Skin depth:" ) );
+        m_Messages.Add( _( "Differential Impedance (Zd):" ) );
+
+        AddPrm( new TRANSLINE_PRM( PRM_TYPE_SUBS, H_PRM, "H", "H", _( "Height of substrate" ), 0.2, true ) );
+        AddPrm( new TRANSLINE_PRM( PRM_TYPE_SUBS, T_PRM, "T", "T", _( "Strip thickness" ), 0.035, true ) );
+        AddPrm( new TRANSLINE_PRM( PRM_TYPE_SUBS, MURC_PRM, "mu rel C",
+                                   wxString::Format( wxT( "μ(%s)" ), _( "conductor" ) ),
+                                   _( "Relative permeability (mu) of conductor" ), 1, false ) );
+
+        AddPrm( new TRANSLINE_PRM( PRM_TYPE_PHYS, PHYS_WIDTH_PRM, "W", "W", _( "Line width" ), 0.2, true ) );
+        AddPrm( new TRANSLINE_PRM( PRM_TYPE_PHYS, PHYS_S_PRM, "S", "S", _( "Gap width" ), 0.2, true ) );
+        AddPrm( new TRANSLINE_PRM( PRM_TYPE_PHYS, PHYS_LEN_PRM, "L", "L", _( "Line length" ), 50.0, true ) );
+
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_ELEC, Z0_E_PRM,
                                    "Zeven", _( "Zeven" ),
                                    _( "Even mode impedance (lines driven by common voltages)" ),
@@ -350,7 +382,7 @@ TRANSLINE_IDENT::TRANSLINE_IDENT( enum TRANSLINE_TYPE_ID aType )
         break;
 
     case STRIPLINE_TYPE:      // stripline
-        m_TLine      = new STRIPLINE();
+        m_TLine = new STRIPLINE_UI();
         m_BitmapName = BITMAPS::stripline;
 
         m_Messages.Add( wxString::Format( _( "Effective %s:" ), wxT( "εr" ) ) );

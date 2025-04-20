@@ -3,6 +3,7 @@
  *
  * Copyright (C) 2011 Michael Margraf <michael.margraf@alumni.tu-berlin.de>
  * Modifications 2011 for Kicad: Jean-Pierre Charras
+ * Copyright The KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,26 +22,27 @@
  *
  */
 
-#ifndef __STRIPLINE_H
-#define __STRIPLINE_H
+#ifndef STRIPLINE_UI_H
+#define STRIPLINE_UI_H
 
 
 #include "transline/transline.h"
+#include <transline_calculations/stripline.h>
 
-class STRIPLINE : public TRANSLINE
+class STRIPLINE_UI : public TRANSLINE
 {
 public:
-    STRIPLINE();
+    STRIPLINE_UI();
 
 private:
-    void   calcAnalyze() override;
-    void   calcSynthesize() override;
-    void   showSynthesize() override;
-    void   showAnalyze() override;
-    double lineImpedance( double, double& );
-    void   show_results() override;
+    void calcAnalyze() override;
+    void calcSynthesize() override;
+    void showSynthesize() override;
+    void showAnalyze() override;
+    void show_results() override;
+    void getProperties() override;
 
-    double unit_prop_delay;
+    STRIPLINE m_calc;
 };
 
-#endif
+#endif //STRIPLINE_UI_H

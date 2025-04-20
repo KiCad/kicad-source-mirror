@@ -57,6 +57,7 @@ set( PCB_CALCULATOR_SRCS
     transline/coax.cpp
     transline/rectwaveguide.cpp
     transline/stripline.cpp
+    transline/c_stripline.cpp
     transline/twistedpair.cpp
     transline_dlg_funct.cpp
     attenuators/attenuator_classes.cpp

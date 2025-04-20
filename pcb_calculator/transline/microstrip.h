@@ -4,6 +4,7 @@
  * Copyright (C) 2001 Gopal Narayanan <gopal@astro.umass.edu>
  * Copyright (C) 2005 Stefan Jahn <stefan@lkcc.org>
  * Modified for Kicad: 2015 jean-pierre.charras
+ * Copyright The KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,69 +22,30 @@
  * Boston, MA 02110-1301, USA.
  */
 
-
 #ifndef __MICROSTRIP_H
 #define __MICROSTRIP_H
 
-#include "transline/transline.h"
 
-class MICROSTRIP : public TRANSLINE
+#include "transline/transline.h"
+#include <transline_calculations/microstrip.h>
+
+
+class MICROSTRIP_UI : public TRANSLINE
 {
 public:
-    MICROSTRIP();
+    MICROSTRIP_UI();
 
     friend class C_MICROSTRIP;
 
 private:
-    double h;                // height of substrate
-    double ht;               // height to the top of box
-    double t;                // thickness of top metal
-    double rough;            // Roughness of top metal
-    double mur;              // magnetic permeability of substrate
-    double w;                // width of line
-    double l;                // length of line
-    double Z0_0;             // static characteristic impedance
-    double Z0;               // characteristic impedance
-    double er_eff_0;         // Static effective dielectric constant
-    double mur_eff;          // Effective mag. permeability
-    double w_eff;            // Effective width of line
-    double atten_dielectric; // Loss in dielectric (dB)
-    double atten_cond;       // Loss in conductors (dB)
-    double unit_prop_delay;  // Unit propagation delay (ps/cm)
+    MICROSTRIP m_calc;
 
-    // private params
-    double Z0_h_1; // homogeneous stripline impedance
-
-private:
-    double er_eff_freq();
-    double alpha_c();
-    double alpha_c_roughness();
-    double alpha_dielectric();
-    double char_impedance_ht();
-    double synth_width();
-    double ereff_dispersion();
-    double Z0_dispersion();
-    double Z0_homogeneous( double );
-    double delta_Z0_cover( double, double );
-    double filling_factor( double, double );
-    double delta_q_cover( double );
-    double delta_q_thickness( double, double );
-    double e_r_effective( double, double );
-    double delta_u_thickness( double, double, double );
-    double e_r_dispersion( double, double, double );
-    double Z0_dispersion( double, double, double, double, double );
-    double conductor_losses();
-    double dielectric_losses();
-    void   microstrip_Z0();
-    void   dispersion();
-    void   attenuation();
-    void   mur_eff_ms();
-    void   line_angle();
-    void   show_results() override;
-    void   showSynthesize() override;
-    void   showAnalyze() override;
-    void   calcAnalyze() override;
-    void   calcSynthesize() override;
+    void getProperties() override;
+    void show_results() override;
+    void showSynthesize() override;
+    void showAnalyze() override;
+    void calcAnalyze() override;
+    void calcSynthesize() override;
 };
 
 #endif // __MICROSTRIP_H

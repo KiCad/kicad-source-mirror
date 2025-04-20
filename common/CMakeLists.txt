@@ -557,6 +557,14 @@ set( COMMON_IO_SRCS
     io/easyedapro/easyedapro_import_utils.cpp
     )
 
+set ( COMMON_TRANSLINE_CALCULATION_SRCS
+    transline_calculations/transline_calculation_base.cpp
+    transline_calculations/microstrip.cpp
+    transline_calculations/coupled_microstrip.cpp
+    transline_calculations/stripline.cpp
+    transline_calculations/coupled_stripline.cpp
+    )
+
 set( COMMON_IMPORT_GFX_SRCS
     import_gfx/graphics_import_mgr.cpp
     import_gfx/graphics_importer.cpp
@@ -591,6 +599,7 @@ set( COMMON_SRCS
 	${FONT_SRCS}
     ${COMMON_IMPORT_GFX_SRCS}
     ${COMMON_GIT_SRCS}
+    ${COMMON_TRANSLINE_CALCULATION_SRCS}
     base_screen.cpp
     bin_mod.cpp
     bitmap_base.cpp
