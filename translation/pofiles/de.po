@@ -30,7 +30,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-04-18 03:09+0300\n"
-"PO-Revision-Date: 2025-04-19 18:19+0000\n"
+"PO-Revision-Date: 2025-04-20 20:28+0000\n"
 "Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
@@ -7648,9 +7648,8 @@ msgstr ""
 "Konnte Referenz \"%s\" nicht so aktualisieren, dass sie auf \"%s\" zeigt"
 
 #: common/git/git_pull_handler.cpp:348
-#, fuzzy
 msgid "Failed to clean up repository state after fast-forward."
-msgstr "Repository konnte nicht geklont werden."
+msgstr "Repository konnte nach letztem fast-forward nicht gesäubert werden."
 
 #: common/git/git_pull_handler.cpp:357
 #, fuzzy
@@ -15848,18 +15847,20 @@ msgid "Group By"
 msgstr "Gruppieren nach"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:209
-#, fuzzy
 msgid ""
 "Show\n"
 "Column"
-msgstr "Spalten anzeigen/ausblenden"
+msgstr ""
+"Spalte\n"
+"anzeigen"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:210
-#, fuzzy
 msgid ""
 "Group\n"
 "By"
-msgstr "Gruppieren nach"
+msgstr ""
+"Gruppieren\n"
+"nach"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:713
 msgid "Qty"
@@ -38972,9 +38973,8 @@ msgid "x"
 msgstr "x"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:71
-#, fuzzy
 msgid "Appearance preset:"
-msgstr "Darstellung"
+msgstr "Darstellungsvoreinstellung:"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:81
 msgid "Background style:"
@@ -39606,14 +39606,12 @@ msgid "Track and Via Dimensions"
 msgstr "Leiterbahn- und Via-Maße"
 
 #: pcbnew/dialogs/dialog_tuning_pattern_properties.cpp:56
-#, fuzzy
 msgid "Target Skew: "
-msgstr "Zielversatz: %s"
+msgstr "Zielversatz: "
 
 #: pcbnew/dialogs/dialog_tuning_pattern_properties.cpp:57
-#, fuzzy
 msgid "Target Skew Delay: "
-msgstr "Zielversatz: %s"
+msgstr "Zielversatzverzögerung: "
 
 #: pcbnew/dialogs/dialog_tuning_pattern_properties.cpp:129
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2413
@@ -39630,9 +39628,8 @@ msgid "(from %s)"
 msgstr "(aus %s)"
 
 #: pcbnew/dialogs/dialog_tuning_pattern_properties_base.cpp:38
-#, fuzzy
 msgid "Target Length:"
-msgstr "Ziellänge"
+msgstr "Ziellänge:"
 
 #: pcbnew/dialogs/dialog_tuning_pattern_properties_base.cpp:58
 #, fuzzy
@@ -41076,9 +41073,8 @@ msgid "Tuning profile name already in use."
 msgstr "Feldname \"%s\" wird bereits verwendet."
 
 #: pcbnew/dialogs/panel_setup_time_domain_parameters_base.cpp:31
-#, fuzzy
 msgid "Delay Profiles"
-msgstr "Verzögerungszeit:"
+msgstr "Verzögerungsprofile"
 
 #: pcbnew/dialogs/panel_setup_time_domain_parameters_base.cpp:50
 #: pcbnew/dialogs/panel_setup_time_domain_parameters_base.cpp:111
@@ -41908,9 +41904,8 @@ msgid "Time based units not allowed for constraint type."
 msgstr "within_diff_pairs-Option ist für den Einschränkungstyp ungültig."
 
 #: pcbnew/drc/drc_rule_parser.cpp:438
-#, fuzzy
 msgid "Mixed units for constraint values."
-msgstr "Footprintwerte plotten"
+msgstr "Beschränkungswerte in gemischten Einheiten."
 
 #: pcbnew/drc/drc_rule_parser.cpp:478
 #, c-format
@@ -43566,9 +43561,8 @@ msgid "current skew"
 msgstr "Aktueller Versatz"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2252
-#, fuzzy
 msgid "current delay"
-msgstr "Aktuelle Lage:"
+msgstr "Aktuelle Verzögerung"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2254
 msgid "current length"
@@ -43709,9 +43703,8 @@ msgid "Target Length"
 msgstr "Ziellänge"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2942
-#, fuzzy
 msgid "Target Delay"
-msgstr "Zielfläche:"
+msgstr "Zielverzögerung"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2949
 msgid "Target Skew"
@@ -48399,9 +48392,9 @@ msgid "Physical Clearances"
 msgstr "Physische Freiräume"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1260
-#, fuzzy, c-format
+#, c-format
 msgid "No 'physical_clearance' constraints in effect on %s."
-msgstr "Keine \"physical_clearance\" Einschränkung definiert."
+msgstr "Für %s ist keine \"physical_clearance\" Einschränkung definiert."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1279
 #, fuzzy
@@ -51021,14 +51014,12 @@ msgid "BOARD CHARACTERISTICS"
 msgstr "PLATINEN-EIGENSCHAFTEN"
 
 #: pcbnew/tools/pcb_control.cpp:2199
-#, fuzzy
 msgid "Copper layer count: "
-msgstr "Kupferlagenanzahl:"
+msgstr "Kupferlagenanzahl: "
 
 #: pcbnew/tools/pcb_control.cpp:2203
-#, fuzzy
 msgid "Board thickness: "
-msgstr "Platinen-Dicke:"
+msgstr "Platinen-Dicke: "
 
 #: pcbnew/tools/pcb_control.cpp:2210
 msgid "Board overall dimensions: "
@@ -51043,9 +51034,8 @@ msgid "Min hole diameter: "
 msgstr "Min Lochdurchmesser: "
 
 #: pcbnew/tools/pcb_control.cpp:2228
-#, fuzzy
 msgid "Copper finish: "
-msgstr "Kupferoberfläche:"
+msgstr "Kupferoberfläche: "
 
 #: pcbnew/tools/pcb_control.cpp:2231
 #, fuzzy
@@ -51057,9 +51047,8 @@ msgid "Castellated pads: "
 msgstr "Castellated Pads: "
 
 #: pcbnew/tools/pcb_control.cpp:2237
-#, fuzzy
 msgid "Plated board edge: "
-msgstr "Metallisierte Platinenkante"
+msgstr "Metallisierte Platinenkante: "
 
 #: pcbnew/tools/pcb_control.cpp:2246
 msgid "Yes, Bevelled"
@@ -51375,14 +51364,12 @@ msgid "Show a shadow on locked items"
 msgstr "Eine Schattenmarkierung auf gesperrten Elementen anzeigen"
 
 #: pcbnew/widgets/appearance_controls.cpp:353
-#, fuzzy
 msgid "Colliding Courtyards"
-msgstr "Abstandsflächen"
+msgstr "Kollidierende Abstandsflächen"
 
 #: pcbnew/widgets/appearance_controls.cpp:353
-#, fuzzy
 msgid "Show colliding footprint courtyards"
-msgstr "Ermittle Footprint-Abstandsflächen ..."
+msgstr "Zeige kollidierende Footprint-Abstandsflächen"
 
 #: pcbnew/widgets/appearance_controls.cpp:354
 msgid "Show drawing sheet borders and title block"
