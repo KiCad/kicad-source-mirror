@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6-dirty)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -121,6 +121,10 @@ class PANEL_TRANSLINE_BASE : public CALCULATOR_PANEL
 		wxStaticText* m_Message7;
 		wxStaticText* m_left_message8;
 		wxStaticText* m_Message8;
+		wxStaticText* m_left_message9;
+		wxStaticText* m_Message9;
+		wxStaticText* m_left_message10;
+		wxStaticText* m_Message10;
 		wxButton* m_buttonTransLineReset;
 
 		// Virtual event handlers, override them in your derived class

@@ -39,6 +39,8 @@ private:
     void   showAnalyze() override;
     double lineImpedance( double, double& );
     void   show_results() override;
+
+    double unit_prop_delay;
 };
 
 #endif

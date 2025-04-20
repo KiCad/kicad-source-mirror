@@ -452,6 +452,7 @@ void C_MICROSTRIP::er_eff_freq()
     F_e = P_1 * P_2 * pow( ( P_3 * P_4 + 0.1844 * P_7 ) * f_n, 1.5763 );
     /* even-mode effective dielectric constant */
     er_eff_e = m_parameters[EPSILONR_PRM] - ( m_parameters[EPSILONR_PRM] - er_eff ) / ( 1.0 + F_e );
+    prop_delay_e = calcUnitPropagationDelay( er_eff_e );
 
     er_eff = er_eff_o_0;
     P_8    = 0.7168 * ( 1.0 + 1.076 / ( 1.0 + 0.0576 * ( m_parameters[EPSILONR_PRM] - 1.0 ) ) );
@@ -468,6 +469,7 @@ void C_MICROSTRIP::er_eff_freq()
     F_o = P_1 * P_2 * pow( ( P_3 * P_4 + 0.1844 ) * f_n * P_15, 1.5763 );
     /* odd-mode effective dielectric constant */
     er_eff_o = m_parameters[EPSILONR_PRM] - ( m_parameters[EPSILONR_PRM] - er_eff ) / ( 1.0 + F_o );
+    prop_delay_o = calcUnitPropagationDelay( er_eff_o );
 }
 
 
@@ -874,13 +876,15 @@ void C_MICROSTRIP::show_results()
 
     setResult( 0, er_eff_e, "" );
     setResult( 1, er_eff_o, "" );
-    setResult( 2, atten_cond_e, "dB" );
-    setResult( 3, atten_cond_o, "dB" );
-    setResult( 4, atten_dielectric_e, "dB" );
-    setResult( 5, atten_dielectric_o, "dB" );
+    setResult( 2, prop_delay_e, "ps/cm" );
+    setResult( 3, prop_delay_o, "ps/cm" );
+    setResult( 4, atten_cond_e, "dB" );
+    setResult( 5, atten_cond_o, "dB" );
+    setResult( 6, atten_dielectric_e, "dB" );
+    setResult( 7, atten_dielectric_o, "dB" );
 
-    setResult( 6, m_parameters[SKIN_DEPTH_PRM] / UNIT_MICRON, "µm" );
-    setResult( 7, Zdiff, "Ω" );
+    setResult( 8, m_parameters[SKIN_DEPTH_PRM] / UNIT_MICRON, "µm" );
+    setResult( 9, Zdiff, "Ω" );
 }
 
 

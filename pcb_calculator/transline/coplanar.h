@@ -37,6 +37,7 @@ public:
 
 protected:
     bool backMetal;
+    double unit_prop_delay;
 
 private:
     void calcAnalyze() override;

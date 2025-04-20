@@ -438,3 +438,9 @@ void TRANSLINE::setErrorLevel( PRMS_ID aP, char aErrorLevel )
     default:                 SetPropertyBgColorInDialog( aP, &okCol );    break;
     }
 }
+
+
+double TRANSLINE::calcUnitPropagationDelay( const double epsilonEff )
+{
+    return std::sqrt( epsilonEff ) * ( 1.0e10 / 2.99e8 );
+}

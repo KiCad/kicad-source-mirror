@@ -49,6 +49,7 @@ private:
     double w_eff;            // Effective width of line
     double atten_dielectric; // Loss in dielectric (dB)
     double atten_cond;       // Loss in conductors (dB)
+    double unit_prop_delay;  // Unit propagation delay (ps/cm)
 
     // private params
     double Z0_h_1; // homogeneous stripline impedance

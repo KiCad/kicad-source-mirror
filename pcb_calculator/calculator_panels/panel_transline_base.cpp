@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6-dirty)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -372,7 +372,7 @@ PANEL_TRANSLINE_BASE::PANEL_TRANSLINE_BASE( wxWindow* parent, wxWindowID id, con
 	sbMessagesSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Results") ), wxVERTICAL );
 
 	wxFlexGridSizer* fgSizerTranslResults;
-	fgSizerTranslResults = new wxFlexGridSizer( 8, 2, 4, 0 );
+	fgSizerTranslResults = new wxFlexGridSizer( 10, 2, 4, 0 );
 	fgSizerTranslResults->AddGrowableCol( 1 );
 	fgSizerTranslResults->SetFlexibleDirection( wxBOTH );
 	fgSizerTranslResults->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
@@ -440,6 +440,22 @@ PANEL_TRANSLINE_BASE::PANEL_TRANSLINE_BASE( wxWindow* parent, wxWindowID id, con
 	m_Message8 = new wxStaticText( sbMessagesSizer->GetStaticBox(), wxID_ANY, _("dummy"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_Message8->Wrap( -1 );
 	fgSizerTranslResults->Add( m_Message8, 0, wxEXPAND|wxLEFT|wxRIGHT, 5 );
+
+	m_left_message9 = new wxStaticText( sbMessagesSizer->GetStaticBox(), wxID_ANY, _("dummy"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_left_message9->Wrap( -1 );
+	fgSizerTranslResults->Add( m_left_message9, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+
+	m_Message9 = new wxStaticText( sbMessagesSizer->GetStaticBox(), wxID_ANY, _("dummy"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_Message9->Wrap( -1 );
+	fgSizerTranslResults->Add( m_Message9, 0, wxEXPAND|wxLEFT|wxRIGHT, 5 );
+
+	m_left_message10 = new wxStaticText( sbMessagesSizer->GetStaticBox(), wxID_ANY, _("dummy"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_left_message10->Wrap( -1 );
+	fgSizerTranslResults->Add( m_left_message10, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+
+	m_Message10 = new wxStaticText( sbMessagesSizer->GetStaticBox(), wxID_ANY, _("dummy"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_Message10->Wrap( -1 );
+	fgSizerTranslResults->Add( m_Message10, 0, wxEXPAND|wxLEFT|wxRIGHT, 5 );
 
 
 	sbMessagesSizer->Add( fgSizerTranslResults, 1, wxALL|wxEXPAND, 5 );

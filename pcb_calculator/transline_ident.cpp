@@ -117,6 +117,7 @@ TRANSLINE_IDENT::TRANSLINE_IDENT( enum TRANSLINE_TYPE_ID aType )
         m_BitmapName = BITMAPS::microstrip;
 
         m_Messages.Add( wxString::Format( _( "Effective %s:" ), wxT( "εr" ) ) );
+        m_Messages.Add( _( "Unit propagation delay:" ) );
         m_Messages.Add( _( "Conductor losses:" ) );
         m_Messages.Add( _( "Dielectric losses:" ) );
         m_Messages.Add( _( "Skin depth:" ) );
@@ -159,6 +160,7 @@ TRANSLINE_IDENT::TRANSLINE_IDENT( enum TRANSLINE_TYPE_ID aType )
         m_HasPrmSelection = true;
 
         m_Messages.Add( wxString::Format( _( "Effective %s:" ), wxT( "εr" ) ) );
+        m_Messages.Add( _( "Unit propagation delay:" ) );
         m_Messages.Add( _( "Conductor losses:" ) );
         m_Messages.Add( _( "Dielectric losses:" ) );
         m_Messages.Add( _( "Skin depth:" ) );
@@ -193,6 +195,7 @@ TRANSLINE_IDENT::TRANSLINE_IDENT( enum TRANSLINE_TYPE_ID aType )
         m_HasPrmSelection = true;
 
         m_Messages.Add( wxString::Format( _( "Effective %s:" ), wxT( "εr" ) ) );
+        m_Messages.Add( _( "Unit propagation delay:" ) );
         m_Messages.Add( _( "Conductor losses:" ) );
         m_Messages.Add( _( "Dielectric losses:" ) );
         m_Messages.Add( _( "Skin depth:" ) );
@@ -302,6 +305,8 @@ TRANSLINE_IDENT::TRANSLINE_IDENT( enum TRANSLINE_TYPE_ID aType )
 
         m_Messages.Add( wxString::Format( _( "Effective %s (even):" ), wxT( "εr" ) ) );
         m_Messages.Add( wxString::Format( _( "Effective %s (odd):" ), wxT( "εr" ) ) );
+        m_Messages.Add( _( "Unit propagation delay (even):" ) );
+        m_Messages.Add( _( "Unit propagation delay (odd):" ) );
         m_Messages.Add( _( "Conductor losses (even):" ) );
         m_Messages.Add( _( "Conductor losses (odd):" ) );
         m_Messages.Add( _( "Dielectric losses (even):" ) );
@@ -349,6 +354,7 @@ TRANSLINE_IDENT::TRANSLINE_IDENT( enum TRANSLINE_TYPE_ID aType )
         m_BitmapName = BITMAPS::stripline;
 
         m_Messages.Add( wxString::Format( _( "Effective %s:" ), wxT( "εr" ) ) );
+        m_Messages.Add( _( "Unit propagation delay:" ) );
         m_Messages.Add( _( "Conductor losses:" ) );
         m_Messages.Add( _( "Dielectric losses:" ) );
         m_Messages.Add( _( "Skin depth:" ) );
