@@ -18,17 +18,17 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-04-18 03:09+0300\n"
-"PO-Revision-Date: 2025-04-15 16:28+0000\n"
+"PO-Revision-Date: 2025-04-20 20:28+0000\n"
 "Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
-"Language-Team: Polish <https://hosted.weblate.org/projects/kicad/master-"
-"source/pl/>\n"
+"Language-Team: Polish <https://hosted.weblate.org/projects/kicad/"
+"master-source/pl/>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 5.11-dev\n"
+"X-Generator: Weblate 5.11.1-dev\n"
 "X-Poedit-Basepath: ../../../kicad-source-mirror\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SearchPath-0: .\n"
@@ -1431,7 +1431,6 @@ msgid "Show model bounding boxes"
 msgstr "Pokaż bryły brzegowe modeli"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:35
-#, fuzzy
 msgid "Show copper and tech layers thickness (slow)"
 msgstr "Pokaż grubość warstw technicznych oraz miedzi (bardzo wolne)"
 
@@ -3317,9 +3316,9 @@ msgstr ""
 "go włączyć ponownie w ustawieniach programu Pcbnew."
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:30
-#, fuzzy, c-format
+#, c-format
 msgid "The selection contains %zu locked items."
-msgstr "W wybranych elementach istnieje %lu zablokowanych elementów."
+msgstr "W wybranych elementach istnieje %zu zablokowanych elementów."
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:34
 msgid "These items will be skipped unless you override the locks."
@@ -6009,9 +6008,8 @@ msgid "DP Gap"
 msgstr "Dystans DP"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:60
-#, fuzzy
 msgid "Delay Profile"
-msgstr "Czas opóźnienia:"
+msgstr "Profil opóźnienia"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:61
 msgid "PCB Color"
@@ -10766,18 +10764,16 @@ msgstr ""
 "Przełącza opcję panoramowania na wybrane elementy w panelu wyszukiwania"
 
 #: common/widgets/search_pane.cpp:52
-#, fuzzy
 msgid "Search Hidden Fields"
 msgstr "Przeszukuj ukryte pola"
 
 #: common/widgets/search_pane.cpp:54
-#, fuzzy
 msgid "Search Metadata"
-msgstr "Metadane"
+msgstr "Przeszukuj metadane"
 
 #: common/widgets/search_pane.cpp:54
 msgid "Search library links, descriptions and keywords"
-msgstr ""
+msgstr "Przeszukuj łącza biblioteki, oznaczenia o słowa kluczowe"
 
 #: common/widgets/unit_binder.cpp:351
 #, c-format
@@ -15752,32 +15748,32 @@ msgid "Show datasheet in browser"
 msgstr "Pokaż dokumentację w przeglądarce"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:201
-#, fuzzy
 msgid "Column Label"
-msgstr "%d kolumn tabeli"
+msgstr "Etykieta kolumny"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:206
-#, fuzzy
 msgid "Show Column"
-msgstr "Pokaż / Ukryj kolumny"
+msgstr "Pokaż kolumnę"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:207
 msgid "Group By"
 msgstr "Grupuj według"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:209
-#, fuzzy
 msgid ""
 "Show\n"
 "Column"
-msgstr "Pokaż / Ukryj kolumny"
+msgstr ""
+"Pokaż\n"
+"Kolumny"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:210
-#, fuzzy
 msgid ""
 "Group\n"
 "By"
-msgstr "Grupuj według"
+msgstr ""
+"Grupuj\n"
+"Według"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:713
 msgid "Qty"
@@ -18486,7 +18482,7 @@ msgstr "Wyklucz z BOM"
 #: eeschema/lib_symbol.cpp:620 eeschema/sch_sheet.cpp:285
 #: eeschema/sch_symbol.cpp:1493
 msgid "Excluded from board"
-msgstr "Wyklucz z płytki"
+msgstr "Wykluczono z płytki"
 
 #: eeschema/lib_symbol.cpp:625 eeschema/sch_sheet.cpp:294
 #: eeschema/sch_symbol.cpp:1502
@@ -21621,9 +21617,8 @@ msgid "Cannot remove temporary output file"
 msgstr "Nie można usunąć tymczasowego pliku wyjściowego"
 
 #: eeschema/sim/kibis/kibis.cpp:682
-#, fuzzy
 msgid "Missing 'Values:' tag in temporary file"
-msgstr "Błąd podczas odczytywania pliku tymczasowego"
+msgstr "Brak oznacznika 'Values:' w pliku tymczasowym"
 
 #: eeschema/sim/kibis/kibis.cpp:710 eeschema/sim/kibis/kibis.cpp:718
 msgid "Error while reading temporary file"
@@ -25271,7 +25266,6 @@ msgid "Edit Properties"
 msgstr "Edycja właściwości"
 
 #: eeschema/widgets/search_handlers.cpp:165
-#, fuzzy
 msgid "Excl. Sim"
 msgstr "Wyklucz z symulacji"
 
@@ -25280,7 +25274,6 @@ msgid "Excl. BOM"
 msgstr "Wyklucz z BOM"
 
 #: eeschema/widgets/search_handlers.cpp:167
-#, fuzzy
 msgid "Excl. Board"
 msgstr "Wyklucz z płytki"
 
@@ -27367,6 +27360,8 @@ msgstr "Jakość renderingu. Opcje: %s"
 #, c-format
 msgid "Appearance preset. Options: %s, %s, or user-defined preset name"
 msgstr ""
+"Predefiniowany wygląd. Opcje: %s, %s lub zdefiniowana przez użytkownika "
+"nazwa predefiniowanego wyglądu"
 
 #: kicad/cli/command_pcb_render.cpp:264
 msgid ""
@@ -27429,9 +27424,8 @@ msgid "Side lights elevation angle in degrees, range: 0-90"
 msgstr "Kąt padania bocznego światła w stopniach, liczba z zakresu: 0-90"
 
 #: kicad/cli/command_pcb_render.cpp:334
-#, fuzzy
 msgid "Invalid preset\n"
-msgstr "Nieprawidłowy format\n"
+msgstr "Nieprawidłowe ustawienie wstępne\n"
 
 #: kicad/cli/command_pcb_render.cpp:350
 msgid "Invalid background\n"
@@ -32114,9 +32108,8 @@ msgid "mi/h"
 msgstr "mil/h"
 
 #: pcbnew/api/api_handler_pcb.cpp:505
-#, fuzzy
 msgid "Modified items via API"
-msgstr "Dodane elementy poprzez API"
+msgstr "Zmodyfikowane elementy poprzez API"
 
 #: pcbnew/api/api_handler_pcb.cpp:668
 msgid "Deleted items via API"
@@ -33284,9 +33277,8 @@ msgid "Component Classes"
 msgstr "Klasy komponentu"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:214
-#, fuzzy
 msgid "Time Domain Parameters"
-msgstr "Parametry bloku tytułowego"
+msgstr "Parametry dziedziny czasu"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:234
 msgid "Board Data"
@@ -36767,7 +36759,6 @@ msgid "Set Teardrops"
 msgstr "Ustaw łezki"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:141
-#, fuzzy
 msgid "Text items"
 msgstr "Elementy tekstowe"
 
@@ -36863,51 +36854,44 @@ msgid "PCB text items"
 msgstr "Elementy tekstowe na PCB"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:45
-#, fuzzy
 msgid "Other footprint fields"
-msgstr "Inne elementy tekstowe footprintów"
+msgstr "Inne pola footprintów"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:46
 msgid "Footprint fields that are not the reference designator or value field"
 msgstr "Pola footprintów, które nie są oznaczeniem ani wartościami"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:50
-#, fuzzy
 msgid "PCB dimensions"
-msgstr "Linie wymiarowe na płytce"
+msgstr "Linie wymiarowe płytki"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:53
 msgid "Footprint graphic items"
 msgstr "Graficzne elementy footprintów"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:59
-#, fuzzy
 msgid "Footprint text items"
-msgstr "Inne elementy tekstowe footprintów"
+msgstr "Elementy tekstowe footprintów"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:60
 msgid "Footprint text items not associated with a field"
 msgstr "Elementy tekstowe footprintu nie mające powiązania z polem"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:67
-#, fuzzy
 msgid "Footprint dimensions"
 msgstr "Elementy wymiarowe footprintów"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:85
-#, fuzzy
 msgid "By layer:"
-msgstr "Na warstwę:"
+msgstr "Na podstawie warstwy:"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:97
-#, fuzzy
 msgid "By parent reference designator:"
-msgstr "Początkowe oznaczenie:"
+msgstr "Na podstawie nadrzędnego oznaczenia:"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:103
-#, fuzzy
 msgid "By parent footprint library link:"
-msgstr "Nowy identyfikator biblioteki footprintu:"
+msgstr "Na podstawie nadrzędnego łącza biblioteki:"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:124
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:133
@@ -37141,9 +37125,8 @@ msgid "Component classes"
 msgstr "Klasy komponentów"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:81
-#, fuzzy
 msgid "Time domain parameters"
-msgstr "Parametry bloku tytułowego"
+msgstr "Parametry domeny czasowej"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:84
 msgid "Custom rules"
@@ -37703,9 +37686,8 @@ msgid "Specify pad to die length"
 msgstr "Odległość od pola do krzemu"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:507
-#, fuzzy
 msgid "Specify pad to die delay"
-msgstr "Odległość od pola do krzemu"
+msgstr "Określa opóźnienie od pola do krzemu"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:542
 msgid ""
@@ -38769,9 +38751,8 @@ msgid "x"
 msgstr "x"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:71
-#, fuzzy
 msgid "Appearance preset:"
-msgstr "Wygląd"
+msgstr "Ustawienia wyglądu:"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:81
 msgid "Background style:"
@@ -38895,6 +38876,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:86
 msgid "Distance between parallel lines used for hatching the area"
 msgstr ""
+"Odległość między równoległymi liniami używanymi do wypełniania kreskowego"
 
 #: pcbnew/dialogs/dialog_set_offset.cpp:66
 msgid "Reset this value to zero."
@@ -39086,9 +39068,8 @@ msgstr "Zamień warstwy"
 #: pcbnew/dialogs/dialog_tablecell_properties_base.cpp:208
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:208
 #: pcbnew/dialogs/dialog_textbox_properties_base.cpp:199
-#, fuzzy
 msgid "Adjust the text thickness"
-msgstr "Dostosuj grubość dielektryka"
+msgstr "Dostosuj grubość tekstu"
 
 #: pcbnew/dialogs/dialog_target_properties.cpp:109
 msgid "Edit Alignment Target"
@@ -39401,14 +39382,12 @@ msgid "Track and Via Dimensions"
 msgstr "Rozmiary ścieżek i przelotek"
 
 #: pcbnew/dialogs/dialog_tuning_pattern_properties.cpp:56
-#, fuzzy
 msgid "Target Skew: "
-msgstr "Docelowa odchyłka: %s"
+msgstr "Docelowa odchyłka: "
 
 #: pcbnew/dialogs/dialog_tuning_pattern_properties.cpp:57
-#, fuzzy
 msgid "Target Skew Delay: "
-msgstr "Docelowa odchyłka: %s"
+msgstr "Docelowe opóźnienie odchyłki: "
 
 #: pcbnew/dialogs/dialog_tuning_pattern_properties.cpp:129
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2413
@@ -39425,14 +39404,12 @@ msgid "(from %s)"
 msgstr "(z %s)"
 
 #: pcbnew/dialogs/dialog_tuning_pattern_properties_base.cpp:38
-#, fuzzy
 msgid "Target Length:"
-msgstr "Docelowa długość"
+msgstr "Docelowa długość:"
 
 #: pcbnew/dialogs/dialog_tuning_pattern_properties_base.cpp:58
-#, fuzzy
 msgid "Target Delay:"
-msgstr "Docelowe strefy:"
+msgstr "Docelowe opóźnienie:"
 
 #: pcbnew/dialogs/dialog_tuning_pattern_properties_base.cpp:72
 msgid "Override custom rules"
@@ -40839,50 +40816,41 @@ msgid "Default Properties for New Graphics and Text"
 msgstr "Domyślne ustawienia dla nowych elementów graficznych oraz tekstów"
 
 #: pcbnew/dialogs/panel_setup_time_domain_parameters.cpp:564
-#, fuzzy
 msgid "Tuning profile must have a name."
-msgstr "Pole musi posiadać nazwę."
+msgstr "Profil dostrojenia musi posiadać nazwę."
 
 #: pcbnew/dialogs/panel_setup_time_domain_parameters.cpp:573
-#, fuzzy
 msgid "Tuning profile name already in use."
-msgstr "Pole o nazwie '%s' jest już używane."
+msgstr "Ta nazwa profilu dostrojenia już jest używana."
 
 #: pcbnew/dialogs/panel_setup_time_domain_parameters_base.cpp:31
-#, fuzzy
 msgid "Delay Profiles"
-msgstr "Czas opóźnienia:"
+msgstr "Profile opóźnień"
 
 #: pcbnew/dialogs/panel_setup_time_domain_parameters_base.cpp:50
 #: pcbnew/dialogs/panel_setup_time_domain_parameters_base.cpp:111
-#, fuzzy
 msgid "Profile Name"
-msgstr "Nazwa pliku"
+msgstr "Nazwa profilu"
 
 #: pcbnew/dialogs/panel_setup_time_domain_parameters_base.cpp:92
-#, fuzzy
 msgid "Via Delay Overrides"
-msgstr "Zastępowanie siatki"
+msgstr "Wymuszone wartości opóźnień przelotki"
 
 #: pcbnew/dialogs/panel_setup_time_domain_parameters_base.cpp:112
-#, fuzzy
 msgid "Signal Layer From"
-msgstr "Warstwy opisowe"
+msgstr "Sygnał z warstwy"
 
 #: pcbnew/dialogs/panel_setup_time_domain_parameters_base.cpp:113
-#, fuzzy
 msgid "Signal Layer To"
-msgstr "Warstwy opisowe"
+msgstr "Sygnał na warstwę"
 
 #: pcbnew/dialogs/panel_setup_time_domain_parameters_base.cpp:114
-#, fuzzy
 msgid "Via Layer From"
-msgstr "Warstwa programu KiCad"
+msgstr "Przelotka z warstwy"
 
 #: pcbnew/dialogs/panel_setup_time_domain_parameters_base.cpp:115
-#, fuzzy
 msgid "Via Layer To"
-msgstr "Warstwa górna"
+msgstr "Przelotka do warstwy"
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias.cpp:373
 msgid "No via hole size defined."
@@ -41673,14 +41641,13 @@ msgid "Could not parse expression '%s'."
 msgstr "Nie można przetworzyć wyrażenia '%s'."
 
 #: pcbnew/drc/drc_rule_parser.cpp:434
-#, fuzzy
 msgid "Time based units not allowed for constraint type."
-msgstr "opcja within_diff_pairs nie jest prawidłowa dla typu constraint."
+msgstr ""
+"Jednostki czasu nie mają zastosowania w przypadku tego typu ograniczenia."
 
 #: pcbnew/drc/drc_rule_parser.cpp:438
-#, fuzzy
 msgid "Mixed units for constraint values."
-msgstr "Rysuj wartości footprintów"
+msgstr "Jednostki mieszane dla wartości ograniczeń."
 
 #: pcbnew/drc/drc_rule_parser.cpp:478
 #, c-format
@@ -43324,9 +43291,8 @@ msgid "current skew"
 msgstr "bieżąca odchyłka"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2252
-#, fuzzy
 msgid "current delay"
-msgstr "Bieżąca warstwa:"
+msgstr "bieżące opóźnienie"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2254
 msgid "current length"
@@ -43337,18 +43303,16 @@ msgid "Routed Lengths"
 msgstr "Wytrasowane długości"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2359
-#, fuzzy
 msgid "Routed Delays"
-msgstr "Wytrasowane długości"
+msgstr "Wytrasowane opóźnienia"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2368 pcbnew/pcb_track.cpp:1808
 msgid "Routed Length"
 msgstr "Długość trasowania"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2372 pcbnew/pcb_track.cpp:1821
-#, fuzzy
 msgid "Routed Delay"
-msgstr "Długość trasowania"
+msgstr "Wytrasowane opóźnienie"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2380 pcbnew/pad.cpp:2885
 #: pcbnew/pcb_track.cpp:1813
@@ -43361,14 +43325,12 @@ msgstr "Pełna Długość"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2388 pcbnew/pad.cpp:2891
 #: pcbnew/pcb_track.cpp:1827
-#, fuzzy
 msgid "Pad To Die Delay"
-msgstr "Odległość od pola do krzemu"
+msgstr "Opóźnienie od pola do krzemu"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2391 pcbnew/pcb_track.cpp:1830
-#, fuzzy
 msgid "Full Delay"
-msgstr "Opóźnienie"
+msgstr "Opóźnienie całkowite"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2403
 #, c-format
@@ -43386,9 +43348,9 @@ msgid "Skew Constraints: %s"
 msgstr "Ograniczenia nachylenia: %s"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2427
-#, fuzzy, c-format
+#, c-format
 msgid "Target Delay: %s"
-msgstr "Docelowa odchyłka: %s"
+msgstr "Docelowe opóźnienie: %s"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2433
 #, c-format
@@ -43396,9 +43358,9 @@ msgid "Target Length: %s"
 msgstr "Docelowa długość: %s"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2444
-#, fuzzy, c-format
+#, c-format
 msgid "Delay Constraints: %s"
-msgstr "Ograniczenia prześwitu pary różnicowej: min %s"
+msgstr "Ograniczenia opóźnień: %s"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2444
 #, c-format
@@ -43467,18 +43429,16 @@ msgid "Target Length"
 msgstr "Docelowa długość"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2942
-#, fuzzy
 msgid "Target Delay"
-msgstr "Docelowe strefy:"
+msgstr "Docelowe opóźnienie"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2949
 msgid "Target Skew"
 msgstr "Docelowa odchyłka"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2956
-#, fuzzy
 msgid "Target Skew Delay"
-msgstr "Docelowa odchyłka"
+msgstr "Docelowa odchyłka opóźnienia"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2963
 msgid "Override Custom Rules"
@@ -43827,9 +43787,8 @@ msgid "In Package"
 msgstr "Wewnątrz obudowy"
 
 #: pcbnew/netinfo_item.cpp:150 pcbnew/widgets/pcb_net_inspector_panel.cpp:123
-#, fuzzy
 msgid "Net Delay"
-msgstr "Opóźnienie"
+msgstr "Opóźnienie danej sieci"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:142
 #, c-format
@@ -46736,9 +46695,8 @@ msgid "Segment Length"
 msgstr "Długość segmentu"
 
 #: pcbnew/pcb_track.cpp:1791
-#, fuzzy
 msgid "Segment Delay"
-msgstr "Segment"
+msgstr "Opóźnienie danego segmentu"
 
 #: pcbnew/pcb_track.cpp:1837
 msgid "Copper Area"
@@ -46871,9 +46829,8 @@ msgid "Filling"
 msgstr "Wypełnienie"
 
 #: pcbnew/pcbexpr_evaluator.cpp:615
-#, fuzzy
 msgid "must be mm, in, mil, deg, fs, or ps"
-msgstr "musi być mm, cal, milsy, lub stopine"
+msgstr "musi być mm, cal, milsy, stopine, fentosekundy, lub pikosekundy"
 
 #: pcbnew/pcbexpr_functions.cpp:76
 #, c-format
@@ -48116,16 +48073,17 @@ msgid "Physical Clearances"
 msgstr "Ograniczenia fizyczne"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1260
-#, fuzzy, c-format
+#, c-format
 msgid "No 'physical_clearance' constraints in effect on %s."
-msgstr "Nie zdefiniowano ograniczenia 'physical_clearance'."
+msgstr "Brak ograniczeń 'physical_clearance' obowiązujących dla %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1279
-#, fuzzy
 msgid ""
 "Items share no relevant layers.  No 'physical_clearance' constraints will be "
 "applied."
-msgstr "Nie zdefiniowano ograniczenia 'physical_clearance'."
+msgstr ""
+"Elementy nie mają wspólnych warstw.  Nie zostaną zastosowane żadne "
+"ograniczenia 'physical_clearance'."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1341
 msgid "Select an item for a constraints resolution report."
@@ -50707,14 +50665,12 @@ msgid "BOARD CHARACTERISTICS"
 msgstr "CHARAKTERYSTYKA PŁYTKI"
 
 #: pcbnew/tools/pcb_control.cpp:2199
-#, fuzzy
 msgid "Copper layer count: "
-msgstr "Liczba warstw sygnałowych:"
+msgstr "Liczba warstw sygnałowych: "
 
 #: pcbnew/tools/pcb_control.cpp:2203
-#, fuzzy
 msgid "Board thickness: "
-msgstr "Grubość płytki:"
+msgstr "Grubość płytki: "
 
 #: pcbnew/tools/pcb_control.cpp:2210
 msgid "Board overall dimensions: "
@@ -50729,12 +50685,10 @@ msgid "Min hole diameter: "
 msgstr "Minimalna średnica otworu: "
 
 #: pcbnew/tools/pcb_control.cpp:2228
-#, fuzzy
 msgid "Copper finish: "
-msgstr "Wykończenie miedzi:"
+msgstr "Wykończenie miedzi: "
 
 #: pcbnew/tools/pcb_control.cpp:2231
-#, fuzzy
 msgid "Impedance control: "
 msgstr "Kontrola impedancji: "
 
@@ -50743,9 +50697,8 @@ msgid "Castellated pads: "
 msgstr "Pola z kastelacją: "
 
 #: pcbnew/tools/pcb_control.cpp:2237
-#, fuzzy
 msgid "Plated board edge: "
-msgstr "Pokrycie brzegu płytki"
+msgstr "Pokrycie brzegu płytki: "
 
 #: pcbnew/tools/pcb_control.cpp:2246
 msgid "Yes, Bevelled"
@@ -50756,9 +50709,8 @@ msgid "Edge card connectors: "
 msgstr "Złącza krawędziowe: "
 
 #: pcbnew/tools/pcb_control.cpp:2265
-#, fuzzy
 msgid "Place Board Characteristics"
-msgstr "Charakterystyka płytki"
+msgstr "Umieść charakterystykę płytki"
 
 #: pcbnew/tools/pcb_control.cpp:2318
 msgid "Loss Tangent"
@@ -50769,9 +50721,8 @@ msgid "Dielectric"
 msgstr "Dielektryk"
 
 #: pcbnew/tools/pcb_control.cpp:2364
-#, fuzzy
 msgid "Place Board Stackup Table"
-msgstr "Wstawiam tabelę ze stosem warstw"
+msgstr "Umieść tabelę ze stosem warstw"
 
 #: pcbnew/tools/pcb_point_editor.cpp:2375
 msgid "Resize Table Cells"
@@ -51054,19 +51005,16 @@ msgid "Locked Item Shadow"
 msgstr "Wyszarzaj zablokowane elementy"
 
 #: pcbnew/widgets/appearance_controls.cpp:352
-#, fuzzy
 msgid "Show a shadow on locked items"
 msgstr "Pokaż wyszarzenie na zablokowanych elementach"
 
 #: pcbnew/widgets/appearance_controls.cpp:353
-#, fuzzy
 msgid "Colliding Courtyards"
-msgstr "Bryły brzegowe"
+msgstr "Kolidujące bryły brzegowe"
 
 #: pcbnew/widgets/appearance_controls.cpp:353
-#, fuzzy
 msgid "Show colliding footprint courtyards"
-msgstr "Określanie pól zajętości footprintów..."
+msgstr "Pokazuj kolidujące ze sobą pola zajętości footprintów"
 
 #: pcbnew/widgets/appearance_controls.cpp:354
 msgid "Show drawing sheet borders and title block"
@@ -51714,9 +51662,8 @@ msgid "Netclass"
 msgstr "Klasa sieci"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:123
-#, fuzzy
 msgid "Total Delay"
-msgstr "Opóźnienie"
+msgstr "Finalne opóźnienie"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:128
 msgid "Total Length"
@@ -51727,19 +51674,16 @@ msgid "Via Count"
 msgstr "Liczba przelotek"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:137
-#, fuzzy
 msgid "Via Delay"
-msgstr "Opóźnienie"
+msgstr "Opóźnienie przelotki"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:139
-#, fuzzy
 msgid "Track Delay"
-msgstr "Dystans pomiędzy ścieżkami:"
+msgstr "Opóźnienie ścieżki"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:141
-#, fuzzy
 msgid "Die Delay"
-msgstr "Opóźnienie"
+msgstr "Opóźnienie krzemu"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:146
 msgid "Via Length"
@@ -51827,9 +51771,8 @@ msgid "Show Unconnected Nets"
 msgstr "Pokaż niepołączone sieci"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1279
-#, fuzzy
 msgid "Show Time Domain Details"
-msgstr "Pokaż panel boczny"
+msgstr "Pokaż szczegóły domeny czasowej"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1287
 msgid "Save Net Inspector Report..."
