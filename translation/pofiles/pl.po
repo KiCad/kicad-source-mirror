@@ -18,10 +18,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-04-21 13:43+0300\n"
-"PO-Revision-Date: 2025-04-21 10:42+0000\n"
+"PO-Revision-Date: 2025-04-21 20:20+0000\n"
 "Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
-"Language-Team: Polish <https://hosted.weblate.org/projects/kicad/master-"
-"source/pl/>\n"
+"Language-Team: Polish <https://hosted.weblate.org/projects/kicad/"
+"master-source/pl/>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -19952,13 +19952,12 @@ msgid "Expecting R0, R90, R18, R270, M0, M90, M180 or M270"
 msgstr "Spodziewano się R0, R90, R18, R270, M0, M90, M180 lub M270"
 
 #: eeschema/sch_io/ltspice/ltspice_schematic.cpp:494
-#, fuzzy
 msgid ""
 "Expecting LEFT, CENTER, RIGHT, TOP, BOTTOM, VLEFT, VRIGHT, VCENTER, VTOP, "
 "VBOTTOM or INVISIBLE"
 msgstr ""
 "Spodziewano się LEFT, CENTER, RIGHT, TOP, BOTTOM, VLEFT, VRIGHT, VCENTER, "
-"VTOP lub VBOTTOM"
+"VTOP, VBOTTOM lub INVISIBLE"
 
 #: eeschema/sch_io/ltspice/ltspice_schematic.cpp:517
 msgid ""
@@ -42528,18 +42527,18 @@ msgid "** Face skipped **\n"
 msgstr "** Pominięto widok **\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1980
-#, fuzzy, c-format
+#, c-format
 msgid "Subtracting holes for %s\n"
-msgstr "Budowanie otworów dla %s\n"
+msgstr "Odejmowanie otworów dla %s\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2023
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "\n"
 "** Got problems while cutting %s net '%s' **\n"
 msgstr ""
 "\n"
-"** Napotkano problemy podczas wycinania %s w ilości %d **\n"
+"** Napotkano problemy podczas wycinania %s sieć '%s' **\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2068
 msgid "shapes"
