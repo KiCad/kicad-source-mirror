@@ -828,12 +828,20 @@ std::vector<LTSPICE_SCHEMATIC::LT_ASC> LTSPICE_SCHEMATIC::StructureBuilder()
 
                 symbolName.Replace( '\\', '/' );
 
-                LT_SYMBOL lt_symbol = SymbolBuilder( symbolName, ascFile );
-                lt_symbol.Offset = pointCheck( posX, posY, lineNumber, fileName );
-                lt_symbol.SymbolOrientation = getSymbolRotationOrMirror( rotate_mirror_option );
+                try
+                {
+                    LT_SYMBOL lt_symbol = SymbolBuilder( symbolName, ascFile );
+                    lt_symbol.Offset = pointCheck( posX, posY, lineNumber, fileName );
+                    lt_symbol.SymbolOrientation = getSymbolRotationOrMirror( rotate_mirror_option );
 
-                ascFile.Symbols.push_back( lt_symbol );
-                ascFile.BoundingBox.Merge( lt_symbol.Offset );
+                    ascFile.Symbols.push_back( lt_symbol );
+                    ascFile.BoundingBox.Merge( lt_symbol.Offset );
+                }
+                catch( IO_ERROR& e )
+                {
+                    if( m_reporter )
+                        m_reporter->Report( e.What(), RPT_SEVERITY_ERROR );
+                }
             }
             else if( element == "WIRE" )
             {
