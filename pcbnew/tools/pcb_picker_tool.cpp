@@ -247,6 +247,9 @@ int PCB_PICKER_TOOL::SelectPointInteractively( const TOOL_EVENT& aEvent )
 
     PCB_GRID_HELPER grid_helper( m_toolMgr, frame()->GetMagneticItemsSettings() );
 
+    // By pushing this tool, we stop the Selection tool popping a disambiuation menu
+    // in cases like returning to the Position Relative dialog after the selection.
+    frame()->PushTool( aEvent );
     Activate();
 
     statusPopup.SetText( wxGetTranslation( params.m_Prompt ) );
@@ -294,6 +297,7 @@ int PCB_PICKER_TOOL::SelectPointInteractively( const TOOL_EVENT& aEvent )
     Main( aEvent );
 
     canvas()->SetStatusPopup( nullptr );
+    frame()->PopTool( aEvent );
     return 0;
 }
 
@@ -306,6 +310,7 @@ int PCB_PICKER_TOOL::SelectItemInteractively( const TOOL_EVENT& aEvent )
 
     PCB_SELECTION_TOOL* selectionTool = m_toolMgr->GetTool<PCB_SELECTION_TOOL>();
 
+    frame()->PushTool( aEvent );
     Activate();
 
     statusPopup.SetText( wxGetTranslation( params.m_Prompt ) );
@@ -365,6 +370,7 @@ int PCB_PICKER_TOOL::SelectItemInteractively( const TOOL_EVENT& aEvent )
     Main( aEvent );
 
     canvas()->SetStatusPopup( nullptr );
+    frame()->PopTool( aEvent );
     return 0;
 }
 
