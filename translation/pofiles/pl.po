@@ -18,7 +18,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-04-18 03:10+0300\n"
-"PO-Revision-Date: 2025-04-20 20:28+0000\n"
+"PO-Revision-Date: 2025-04-21 07:43+0000\n"
 "Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/kicad/v9/pl/>\n"
 "Language: pl\n"
@@ -700,441 +700,360 @@ msgid "User.1"
 msgstr "Użytkownika 1"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:68
-#, fuzzy
 msgid "Show user defined layer 1"
-msgstr "Warstwa użytkownika 1"
+msgstr "Pokazuje warstwę użytkownika 1"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:69
 msgid "User.2"
 msgstr "Użytkownika 2"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:69
-#, fuzzy
 msgid "Show user defined layer 2"
-msgstr "Warstwa użytkownika 2"
+msgstr "Pokazuje warstwę użytkownika 2"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:70
 msgid "User.3"
 msgstr "Użytkownika 3"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:70
-#, fuzzy
 msgid "Show user defined layer 3"
-msgstr "Warstwa użytkownika 3"
+msgstr "Pokazuje warstwę użytkownika 3"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:71
 msgid "User.4"
 msgstr "Użytkownika 4"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:71
-#, fuzzy
 msgid "Show user defined layer 4"
-msgstr "Warstwa użytkownika 4"
+msgstr "Pokazuje warstwę użytkownika 4"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:72
 msgid "User.5"
 msgstr "Użytkownika 5"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:72
-#, fuzzy
 msgid "Show user defined layer 5"
-msgstr "Warstwa użytkownika 5"
+msgstr "Pokazuje warstwę użytkownika 5"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:73
 msgid "User.6"
 msgstr "Użytkownika 6"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:73
-#, fuzzy
 msgid "Show user defined layer 6"
-msgstr "Warstwa użytkownika 6"
+msgstr "Pokazuje warstwę użytkownika 6"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:74
 msgid "User.7"
 msgstr "Użytkownika 7"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:74
-#, fuzzy
 msgid "Show user defined layer 7"
-msgstr "Warstwa użytkownika 7"
+msgstr "Pokazuje warstwę użytkownika 7"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:75
 msgid "User.8"
 msgstr "Użytkownika 8"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:75
-#, fuzzy
 msgid "Show user defined layer 8"
-msgstr "Warstwa użytkownika 8"
+msgstr "Pokazuje warstwę użytkownika 8"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:76
 msgid "User.9"
 msgstr "Użytkownika 9"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:76
-#, fuzzy
 msgid "Show user defined layer 9"
-msgstr "Warstwa użytkownika 9"
+msgstr "Pokazuje warstwę użytkownika 9"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:77
-#, fuzzy
 msgid "User.10"
-msgstr "Użytkownika 1"
+msgstr "Użytkownika 10"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:77
-#, fuzzy
 msgid "Show user defined layer 10"
-msgstr "Warstwa użytkownika 10"
+msgstr "Pokazuje warstwę użytkownika 10"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:78
-#, fuzzy
 msgid "User.11"
-msgstr "Użytkownika 1"
+msgstr "Użytkownika 11"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:78
-#, fuzzy
 msgid "Show user defined layer 11"
-msgstr "Warstwa użytkownika 11"
+msgstr "Pokazuje warstwę użytkownika 11"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:79
-#, fuzzy
 msgid "User.12"
-msgstr "Użytkownika 1"
+msgstr "Użytkownika 12"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:79
-#, fuzzy
 msgid "Show user defined layer 12"
-msgstr "Warstwa użytkownika 12"
+msgstr "Pokazuje warstwę użytkownika 12"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:80
-#, fuzzy
 msgid "User.13"
-msgstr "Użytkownika 1"
+msgstr "Użytkownika 13"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:80
-#, fuzzy
 msgid "Show user defined layer 13"
-msgstr "Warstwa użytkownika 13"
+msgstr "Pokazuje warstwę użytkownika 13"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:81
-#, fuzzy
 msgid "User.14"
-msgstr "Użytkownika 1"
+msgstr "Uużytkownika 14"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:81
-#, fuzzy
 msgid "Show user defined layer 14"
-msgstr "Warstwa użytkownika 14"
+msgstr "Pokazuje warstwę użytkownika 14"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:82
-#, fuzzy
 msgid "User.15"
-msgstr "Użytkownika 1"
+msgstr "Użytkownika 15"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:82
-#, fuzzy
 msgid "Show user defined layer 15"
-msgstr "Warstwa użytkownika 15"
+msgstr "Pokazuje warstwę użytkownika 15"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:83
-#, fuzzy
 msgid "User.16"
-msgstr "Użytkownika 1"
+msgstr "Użytkownika 16"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:83
-#, fuzzy
 msgid "Show user defined layer 16"
-msgstr "Warstwa użytkownika 16"
+msgstr "Pokazuje warstwę użytkownika 16"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:84
-#, fuzzy
 msgid "User.17"
-msgstr "Użytkownika 1"
+msgstr "Użytkownika 17"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:84
-#, fuzzy
 msgid "Show user defined layer 17"
-msgstr "Warstwa użytkownika 17"
+msgstr "Pokazuje warstwę użytkownika 17"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:85
-#, fuzzy
 msgid "User.18"
-msgstr "Użytkownika 1"
+msgstr "Użytkownika 18"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:85
-#, fuzzy
 msgid "Show user defined layer 18"
-msgstr "Warstwa użytkownika 18"
+msgstr "Pokazuje warstwę użytkownika 18"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:86
-#, fuzzy
 msgid "User.19"
-msgstr "Użytkownika 1"
+msgstr "Użytkownika 19"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:86
-#, fuzzy
 msgid "Show user defined layer 19"
-msgstr "Warstwa użytkownika 19"
+msgstr "Pokazuje warstwę użytkownika 19"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:87
-#, fuzzy
 msgid "User.20"
-msgstr "Użytkownika 2"
+msgstr "Użytkownika 20"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:87
-#, fuzzy
 msgid "Show user defined layer 20"
-msgstr "Warstwa użytkownika 20"
+msgstr "Pokazuje warstwę użytkownika 20"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:88
-#, fuzzy
 msgid "User.21"
-msgstr "Użytkownika 2"
+msgstr "Użytkownika 21"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:88
-#, fuzzy
 msgid "Show user defined layer 21"
-msgstr "Warstwa użytkownika 21"
+msgstr "Pokazuje warstwę użytkownika 21"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:89
-#, fuzzy
 msgid "User.22"
-msgstr "Użytkownika 2"
+msgstr "Użytkownika 22"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:89
-#, fuzzy
 msgid "Show user defined layer 22"
-msgstr "Warstwa użytkownika 22"
+msgstr "Pokazuje warstwę użytkownika 22"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:90
-#, fuzzy
 msgid "User.23"
-msgstr "Użytkownika 2"
+msgstr "Użytkownika 23"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:90
-#, fuzzy
 msgid "Show user defined layer 23"
-msgstr "Warstwa użytkownika 23"
+msgstr "Pokazuje warstwę użytkownika 23"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:91
-#, fuzzy
 msgid "User.24"
-msgstr "Użytkownika 2"
+msgstr "Użytkownika 24"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:91
-#, fuzzy
 msgid "Show user defined layer 24"
-msgstr "Warstwa użytkownika 24"
+msgstr "Pokazuje warstwę użytkownika 24"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:92
-#, fuzzy
 msgid "User.25"
-msgstr "Użytkownika 2"
+msgstr "Użytkownika 25"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:92
-#, fuzzy
 msgid "Show user defined layer 25"
-msgstr "Warstwa użytkownika 25"
+msgstr "Pokazuje warstwę użytkownika 25"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:93
-#, fuzzy
 msgid "User.26"
-msgstr "Użytkownika 2"
+msgstr "Użytkownika 26"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:93
-#, fuzzy
 msgid "Show user defined layer 26"
-msgstr "Warstwa użytkownika 26"
+msgstr "Pokazuje warstwę użytkownika 26"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:94
-#, fuzzy
 msgid "User.27"
-msgstr "Użytkownika 2"
+msgstr "Użytkownika 27"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:94
-#, fuzzy
 msgid "Show user defined layer 27"
-msgstr "Warstwa użytkownika 27"
+msgstr "Pokazuje warstwę użytkownika 27"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:95
-#, fuzzy
 msgid "User.28"
-msgstr "Użytkownika 2"
+msgstr "Użytkownika 28"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:95
-#, fuzzy
 msgid "Show user defined layer 28"
-msgstr "Warstwa użytkownika 28"
+msgstr "Pokazuje warstwę użytkownika 28"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:96
-#, fuzzy
 msgid "User.29"
-msgstr "Użytkownika 2"
+msgstr "Użytkownika 29"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:96
-#, fuzzy
 msgid "Show user defined layer 29"
-msgstr "Warstwa użytkownika 29"
+msgstr "Pokazuje warstwę użytkownika 29"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:97
-#, fuzzy
 msgid "User.30"
-msgstr "Użytkownika 3"
+msgstr "Użytkownika 30"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:97
-#, fuzzy
 msgid "Show user defined layer 30"
-msgstr "Warstwa użytkownika 30"
+msgstr "Pokazuje warstwę użytkownika 30"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:98
-#, fuzzy
 msgid "User.31"
-msgstr "Użytkownika 3"
+msgstr "Użytkownika 31"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:98
-#, fuzzy
 msgid "Show user defined layer 31"
-msgstr "Warstwa użytkownika 31"
+msgstr "Pokazuje warstwę użytkownika 31"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:99
-#, fuzzy
 msgid "User.32"
-msgstr "Użytkownika 3"
+msgstr "Użytkownika 32"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:99
-#, fuzzy
 msgid "Show user defined layer 32"
-msgstr "Warstwa użytkownika 32"
+msgstr "Pokazuje warstwę użytkownika 32"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:100
-#, fuzzy
 msgid "User.33"
-msgstr "Użytkownika 3"
+msgstr "Użytkownika 33"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:100
-#, fuzzy
 msgid "Show user defined layer 33"
-msgstr "Warstwa użytkownika 33"
+msgstr "Pokazuje warstwę użytkownika 33"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:101
-#, fuzzy
 msgid "User.34"
-msgstr "Użytkownika 3"
+msgstr "Użytkownika 34"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:101
-#, fuzzy
 msgid "Show user defined layer 34"
-msgstr "Warstwa użytkownika 34"
+msgstr "Pokazuje warstwę użytkownika 34"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:102
-#, fuzzy
 msgid "User.35"
-msgstr "Użytkownika 3"
+msgstr "Użytkownika 35"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:102
-#, fuzzy
 msgid "Show user defined layer 35"
-msgstr "Warstwa użytkownika 35"
+msgstr "Pokazuje warstwę użytkownika 35"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:103
-#, fuzzy
 msgid "User.36"
-msgstr "Użytkownika 3"
+msgstr "Użytkownika 36"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:103
-#, fuzzy
 msgid "Show user defined layer 36"
-msgstr "Warstwa użytkownika 36"
+msgstr "Pokazuje warstwę użytkownika 36"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:104
-#, fuzzy
 msgid "User.37"
-msgstr "Użytkownika 3"
+msgstr "Użytkownika 37"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:104
-#, fuzzy
 msgid "Show user defined layer 37"
-msgstr "Warstwa użytkownika 37"
+msgstr "Pokazuje warstwę użytkownika 37"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:105
-#, fuzzy
 msgid "User.38"
-msgstr "Użytkownika 3"
+msgstr "Użytkownika 38"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:105
-#, fuzzy
 msgid "Show user defined layer 38"
-msgstr "Warstwa użytkownika 38"
+msgstr "Pokazuje warstwę użytkownika 38"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:106
-#, fuzzy
 msgid "User.39"
-msgstr "Użytkownika 3"
+msgstr "Użytkownika 39"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:106
-#, fuzzy
 msgid "Show user defined layer 39"
-msgstr "Warstwa użytkownika 39"
+msgstr "Pokazuje warstwę użytkownika 39"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:107
-#, fuzzy
 msgid "User.40"
-msgstr "Użytkownika 4"
+msgstr "Użytkownika 40"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:107
-#, fuzzy
 msgid "Show user defined layer 40"
-msgstr "Warstwa użytkownika 40"
+msgstr "Pokazuje warstwę użytkownika 40"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:108
-#, fuzzy
 msgid "User.41"
-msgstr "Użytkownika 4"
+msgstr "Użytkownika 41"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:108
-#, fuzzy
 msgid "Show user defined layer 41"
-msgstr "Warstwa użytkownika 41"
+msgstr "Pokazuje warstwę użytkownika 41"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:109
-#, fuzzy
 msgid "User.42"
-msgstr "Użytkownika 4"
+msgstr "Użytkownika 42"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:109
-#, fuzzy
 msgid "Show user defined layer 42"
-msgstr "Warstwa użytkownika 42"
+msgstr "Pokazuje warstwę użytkownika 42"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:110
-#, fuzzy
 msgid "User.43"
-msgstr "Użytkownika 4"
+msgstr "Użytkownika 43"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:110
-#, fuzzy
 msgid "Show user defined layer 43"
-msgstr "Warstwa użytkownika 43"
+msgstr "Pokazuje warstwę użytkownika 43"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:111
-#, fuzzy
 msgid "User.44"
-msgstr "Użytkownika 4"
+msgstr "Użytkownika 44"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:111
-#, fuzzy
 msgid "Show user defined layer 44"
-msgstr "Warstwa użytkownika 44"
+msgstr "Pokazuje warstwę użytkownika 44"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:112
-#, fuzzy
 msgid "User.45"
-msgstr "Użytkownika 4"
+msgstr "Użytkownika 45"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:112
-#, fuzzy
 msgid "Show user defined layer 45"
-msgstr "Warstwa użytkownika 45"
+msgstr "Pokazuje warstwę użytkownika 45"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:114
 msgid "Through-hole Models"
@@ -8762,7 +8681,6 @@ msgid "Select Preferred Editor"
 msgstr "Wybierz preferowany edytor"
 
 #: common/pgm_base.cpp:384
-#, fuzzy
 msgid ""
 "KiCad can anonymously report crashes and special event data to developers in "
 "order to aid identifying critical bugs and help profile functionality to "
@@ -8776,21 +8694,20 @@ msgstr ""
 "pomagać w usprawnianiu funkcji.\n"
 "Jeśli użytkownik zgodzi się na takie działanie, program KiCad będzie "
 "automatycznie wysyłał raporty gdy wystąpią awarie lub zdarzenia. \n"
-"Pliki projektów użytkownika, takie jak schematy lub PCB nie będą przesyłane."
+"Pliki projektów użytkownika, takie jak schematy lub PCB nie będą "
+"udostępniane."
 
 #: common/pgm_base.cpp:389
-#, fuzzy
 msgid "Data Collection Opt In"
-msgstr "Zbieranie danych"
+msgstr "Zapisz się do zbieranie danych"
 
 #: common/pgm_base.cpp:391
 msgid "Opt In"
-msgstr ""
+msgstr "Zapisz się"
 
 #: common/pgm_base.cpp:391
-#, fuzzy
 msgid "Decline"
-msgstr "Zarysy linii"
+msgstr "Odmów"
 
 #: common/pgm_base.cpp:498
 msgid "Environment variable HOME is empty.  Unable to continue."
@@ -26675,9 +26592,8 @@ msgid "The new behavior will match --mode-multi"
 msgstr "Nowy wygląd będzie odpowiadać --mode-multi"
 
 #: kicad/cli/command_pcb_export_gencad.cpp:33
-#, fuzzy
 msgid "Export the PCB in Gencad format"
-msgstr "Eksportuj listę sieci w formacie KiCad"
+msgstr "Eksportuj PCB w formacie Gencad"
 
 #: kicad/cli/command_pcb_export_gencad.cpp:39
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:134
@@ -30959,7 +30875,7 @@ msgstr "Błąd pliku danych."
 
 #: pcb_calculator/dialogs/dialog_regulator_form_base.cpp:37
 msgid "Vref (min/typ/max):"
-msgstr "Vref (min/typ/max):"
+msgstr "Vref (min/typ/maks):"
 
 #: pcb_calculator/dialogs/dialog_regulator_form_base.cpp:56
 msgid "Volt"
