@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-18 03:10+0300\n"
+"POT-Creation-Date: 2025-04-21 13:43+0300\n"
 "PO-Revision-Date: 2025-02-10 23:20+0000\n"
 "Last-Translator: Seth Hillbrand <seth@kipro-pcb.com>\n"
 "Language-Team: Vietnamese <https://hosted.weblate.org/projects/kicad/master-"
@@ -210,7 +210,7 @@ msgid "Export Current View as JPEG..."
 msgstr "Xuất khung hình hiện tại ra ảnh JPEG ..."
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:62
-#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:661
+#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:663
 #: common/eda_base_frame.cpp:1188 common/hotkey_store.cpp:80
 #: common/tool/actions.cpp:1074 pcbnew/footprint_chooser_frame.cpp:316
 #: pcbnew/footprint_viewer_frame.cpp:981 pcbnew/pcb_base_frame.cpp:682
@@ -288,7 +288,7 @@ msgid "KiCad 3D Viewer"
 msgstr "Trình xem 3D KiCad"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:164
-#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:667
+#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:669
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:77
 #: eeschema/dialogs/panel_sym_display_options_base.cpp:25
 #: pcbnew/footprint_edit_frame.cpp:256 pcbnew/footprint_edit_frame.cpp:1023
@@ -309,17 +309,17 @@ msgstr "Theo dõi trình chỉnh sửa bản mạch in"
 msgid "Follow PCB Plot Settings"
 msgstr "Theo dõi cài đặt in bản mạch in"
 
-#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:587
+#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:589
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:725
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:913
 msgid "legacy colors"
 msgstr "Màu kế thừa"
 
-#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:726
+#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:728
 msgid "3D Image File Name"
 msgstr "Tên File hình ảnh 3D"
 
-#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:747
+#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:749
 #: common/eda_base_frame.cpp:1335 common/eda_base_frame.cpp:1339
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:328
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:332
@@ -327,7 +327,7 @@ msgstr "Tên File hình ảnh 3D"
 msgid "Insufficient permissions to save file '%s'."
 msgstr "Không đủ quyền để lưu file '%s'."
 
-#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:748 common/confirm.cpp:211
+#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:750 common/confirm.cpp:211
 #: common/dialogs/dialog_grid_settings.cpp:82
 #: common/dialogs/dialog_grid_settings.cpp:89
 #: common/dialogs/panel_embedded_files.cpp:308
@@ -362,11 +362,11 @@ msgstr "Không đủ quyền để lưu file '%s'."
 msgid "Error"
 msgstr "Lỗi"
 
-#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:788
+#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:790
 msgid "Failed to copy image to clipboard"
 msgstr "Không sao chép được hình ảnh vào khay nhớ tạm"
 
-#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:799
+#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:801
 msgid "Can't save file"
 msgstr "Không thể lưu file"
 
@@ -581,17 +581,8 @@ msgid "Show board body"
 msgstr "Hiển thị thân bo mạch"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:56
-#: bitmap2component/bitmap2cmp_panel_base.cpp:179
-msgid "F.Cu"
-msgstr "F.Cu"
-
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:56
 msgid "Show front copper / surface finish color"
 msgstr "Lớp đồng/chuẩn cho bề mặt bản mạch"
-
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:57
-msgid "B.Cu"
-msgstr "B.Cu"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:57
 msgid "Show back copper / surface finish color"
@@ -614,79 +605,36 @@ msgid "Show solder paste"
 msgstr "Hiện lớp kem hàn"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:60
-#: bitmap2component/bitmap2cmp_panel_base.cpp:179
-msgid "F.Silkscreen"
-msgstr "Lớp chữ mặt trên"
-
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:60
 msgid "Show front silkscreen"
 msgstr "Hiển thị lớp in chữ trên cùng"
-
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:61
-msgid "B.Silkscreen"
-msgstr "Lớp chữ mặt đáy"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:61
 msgid "Show back silkscreen"
 msgstr "Hiển thị lớp nền in chữ"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:62
-#: bitmap2component/bitmap2cmp_panel_base.cpp:179
-msgid "F.Mask"
-msgstr "F.Mask"
-
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:62
 msgid "Show front solder mask"
 msgstr "Hiển thị lớp phủ che đồng trên cùng"
-
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:63
-msgid "B.Mask"
-msgstr "B.Mask"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:63
 msgid "Show back solder mask"
 msgstr "Hiển thị lớp phủ che đồng dưới cùng"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:64
-#: bitmap2component/bitmap2cmp_panel_base.cpp:179
-msgid "User.Drawings"
-msgstr "Lớp vẽ ghi chú kỹ thuật"
-
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:64
 msgid "Show user drawings layer"
 msgstr "Hiển thị các lớp vẽ ghi chú kỹ thuật"
-
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:65
-#: bitmap2component/bitmap2cmp_panel_base.cpp:179
-msgid "User.Comments"
-msgstr "Lớp vẽ ghi chú"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:65
 msgid "Show user comments layer"
 msgstr "Hiển thị các lớp vẽ ghi chú"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:66
-#: bitmap2component/bitmap2cmp_panel_base.cpp:179
-msgid "User.Eco1"
-msgstr "Lớp vẽ đường phay rãnh 1"
-
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:66
 msgid "Show user ECO1 layer"
 msgstr "Hiển thị lớp vẽ phay rãnh 1"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:67
-#: bitmap2component/bitmap2cmp_panel_base.cpp:179
-msgid "User.Eco2"
-msgstr "Lớp vẽ phay rãnh 2"
-
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:67
 msgid "Show user ECO2 layer"
 msgstr "Hiển thị lớp vẽ phay rãnh 2"
-
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:68
-#, fuzzy
-msgid "User.1"
-msgstr "User.1"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:68
 #, fuzzy
@@ -695,18 +643,8 @@ msgstr "Lưới do Người dùng định nghĩa"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:69
 #, fuzzy
-msgid "User.2"
-msgstr "User.2"
-
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:69
-#, fuzzy
 msgid "Show user defined layer 2"
 msgstr "Lưới do Người dùng định nghĩa"
-
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:70
-#, fuzzy
-msgid "User.3"
-msgstr "User.3"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:70
 #, fuzzy
@@ -715,18 +653,8 @@ msgstr "Lưới do Người dùng định nghĩa"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:71
 #, fuzzy
-msgid "User.4"
-msgstr "User.4"
-
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:71
-#, fuzzy
 msgid "Show user defined layer 4"
 msgstr "Lưới do Người dùng định nghĩa"
-
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:72
-#, fuzzy
-msgid "User.5"
-msgstr "User.5"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:72
 #, fuzzy
@@ -735,18 +663,8 @@ msgstr "Lưới do Người dùng định nghĩa"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:73
 #, fuzzy
-msgid "User.6"
-msgstr "User.6"
-
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:73
-#, fuzzy
 msgid "Show user defined layer 6"
 msgstr "Lưới do Người dùng định nghĩa"
-
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:74
-#, fuzzy
-msgid "User.7"
-msgstr "User.7"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:74
 #, fuzzy
@@ -755,18 +673,8 @@ msgstr "Lưới do Người dùng định nghĩa"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:75
 #, fuzzy
-msgid "User.8"
-msgstr "User.8"
-
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:75
-#, fuzzy
 msgid "Show user defined layer 8"
 msgstr "Lưới do Người dùng định nghĩa"
-
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:76
-#, fuzzy
-msgid "User.9"
-msgstr "User.9"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:76
 #, fuzzy
@@ -775,18 +683,8 @@ msgstr "Lưới do Người dùng định nghĩa"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:77
 #, fuzzy
-msgid "User.10"
-msgstr "User.1"
-
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:77
-#, fuzzy
 msgid "Show user defined layer 10"
 msgstr "Lưới do Người dùng định nghĩa"
-
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:78
-#, fuzzy
-msgid "User.11"
-msgstr "User.1"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:78
 #, fuzzy
@@ -795,18 +693,8 @@ msgstr "Lưới do Người dùng định nghĩa"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:79
 #, fuzzy
-msgid "User.12"
-msgstr "User.1"
-
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:79
-#, fuzzy
 msgid "Show user defined layer 12"
 msgstr "Lưới do Người dùng định nghĩa"
-
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:80
-#, fuzzy
-msgid "User.13"
-msgstr "User.1"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:80
 #, fuzzy
@@ -815,18 +703,8 @@ msgstr "Lưới do Người dùng định nghĩa"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:81
 #, fuzzy
-msgid "User.14"
-msgstr "User.1"
-
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:81
-#, fuzzy
 msgid "Show user defined layer 14"
 msgstr "Lưới do Người dùng định nghĩa"
-
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:82
-#, fuzzy
-msgid "User.15"
-msgstr "User.1"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:82
 #, fuzzy
@@ -835,18 +713,8 @@ msgstr "Lưới do Người dùng định nghĩa"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:83
 #, fuzzy
-msgid "User.16"
-msgstr "User.1"
-
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:83
-#, fuzzy
 msgid "Show user defined layer 16"
 msgstr "Lưới do Người dùng định nghĩa"
-
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:84
-#, fuzzy
-msgid "User.17"
-msgstr "User.1"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:84
 #, fuzzy
@@ -855,18 +723,8 @@ msgstr "Lưới do Người dùng định nghĩa"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:85
 #, fuzzy
-msgid "User.18"
-msgstr "User.1"
-
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:85
-#, fuzzy
 msgid "Show user defined layer 18"
 msgstr "Lưới do Người dùng định nghĩa"
-
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:86
-#, fuzzy
-msgid "User.19"
-msgstr "User.1"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:86
 #, fuzzy
@@ -875,18 +733,8 @@ msgstr "Lưới do Người dùng định nghĩa"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:87
 #, fuzzy
-msgid "User.20"
-msgstr "User.2"
-
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:87
-#, fuzzy
 msgid "Show user defined layer 20"
 msgstr "Lưới do Người dùng định nghĩa"
-
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:88
-#, fuzzy
-msgid "User.21"
-msgstr "User.1"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:88
 #, fuzzy
@@ -895,18 +743,8 @@ msgstr "Lưới do Người dùng định nghĩa"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:89
 #, fuzzy
-msgid "User.22"
-msgstr "User.2"
-
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:89
-#, fuzzy
 msgid "Show user defined layer 22"
 msgstr "Lưới do Người dùng định nghĩa"
-
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:90
-#, fuzzy
-msgid "User.23"
-msgstr "User.2"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:90
 #, fuzzy
@@ -915,18 +753,8 @@ msgstr "Lưới do Người dùng định nghĩa"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:91
 #, fuzzy
-msgid "User.24"
-msgstr "User.2"
-
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:91
-#, fuzzy
 msgid "Show user defined layer 24"
 msgstr "Lưới do Người dùng định nghĩa"
-
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:92
-#, fuzzy
-msgid "User.25"
-msgstr "User.2"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:92
 #, fuzzy
@@ -935,18 +763,8 @@ msgstr "Lưới do Người dùng định nghĩa"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:93
 #, fuzzy
-msgid "User.26"
-msgstr "User.2"
-
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:93
-#, fuzzy
 msgid "Show user defined layer 26"
 msgstr "Lưới do Người dùng định nghĩa"
-
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:94
-#, fuzzy
-msgid "User.27"
-msgstr "User.2"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:94
 #, fuzzy
@@ -955,18 +773,8 @@ msgstr "Lưới do Người dùng định nghĩa"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:95
 #, fuzzy
-msgid "User.28"
-msgstr "User.2"
-
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:95
-#, fuzzy
 msgid "Show user defined layer 28"
 msgstr "Lưới do Người dùng định nghĩa"
-
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:96
-#, fuzzy
-msgid "User.29"
-msgstr "User.2"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:96
 #, fuzzy
@@ -975,18 +783,8 @@ msgstr "Lưới do Người dùng định nghĩa"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:97
 #, fuzzy
-msgid "User.30"
-msgstr "User.3"
-
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:97
-#, fuzzy
 msgid "Show user defined layer 30"
 msgstr "Lưới do Người dùng định nghĩa"
-
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:98
-#, fuzzy
-msgid "User.31"
-msgstr "User.1"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:98
 #, fuzzy
@@ -995,18 +793,8 @@ msgstr "Lưới do Người dùng định nghĩa"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:99
 #, fuzzy
-msgid "User.32"
-msgstr "User.2"
-
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:99
-#, fuzzy
 msgid "Show user defined layer 32"
 msgstr "Lưới do Người dùng định nghĩa"
-
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:100
-#, fuzzy
-msgid "User.33"
-msgstr "User.3"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:100
 #, fuzzy
@@ -1015,18 +803,8 @@ msgstr "Lưới do Người dùng định nghĩa"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:101
 #, fuzzy
-msgid "User.34"
-msgstr "User.3"
-
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:101
-#, fuzzy
 msgid "Show user defined layer 34"
 msgstr "Lưới do Người dùng định nghĩa"
-
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:102
-#, fuzzy
-msgid "User.35"
-msgstr "User.3"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:102
 #, fuzzy
@@ -1035,18 +813,8 @@ msgstr "Lưới do Người dùng định nghĩa"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:103
 #, fuzzy
-msgid "User.36"
-msgstr "User.3"
-
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:103
-#, fuzzy
 msgid "Show user defined layer 36"
 msgstr "Lưới do Người dùng định nghĩa"
-
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:104
-#, fuzzy
-msgid "User.37"
-msgstr "User.3"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:104
 #, fuzzy
@@ -1055,18 +823,8 @@ msgstr "Lưới do Người dùng định nghĩa"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:105
 #, fuzzy
-msgid "User.38"
-msgstr "User.3"
-
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:105
-#, fuzzy
 msgid "Show user defined layer 38"
 msgstr "Lưới do Người dùng định nghĩa"
-
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:106
-#, fuzzy
-msgid "User.39"
-msgstr "User.3"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:106
 #, fuzzy
@@ -1075,18 +833,8 @@ msgstr "Lưới do Người dùng định nghĩa"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:107
 #, fuzzy
-msgid "User.40"
-msgstr "User.4"
-
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:107
-#, fuzzy
 msgid "Show user defined layer 40"
 msgstr "Lưới do Người dùng định nghĩa"
-
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:108
-#, fuzzy
-msgid "User.41"
-msgstr "User.1"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:108
 #, fuzzy
@@ -1095,18 +843,8 @@ msgstr "Lưới do Người dùng định nghĩa"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:109
 #, fuzzy
-msgid "User.42"
-msgstr "User.2"
-
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:109
-#, fuzzy
 msgid "Show user defined layer 42"
 msgstr "Lưới do Người dùng định nghĩa"
-
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:110
-#, fuzzy
-msgid "User.43"
-msgstr "User.3"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:110
 #, fuzzy
@@ -1115,18 +853,8 @@ msgstr "Lưới do Người dùng định nghĩa"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:111
 #, fuzzy
-msgid "User.44"
-msgstr "User.4"
-
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:111
-#, fuzzy
 msgid "Show user defined layer 44"
 msgstr "Lưới do Người dùng định nghĩa"
-
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:112
-#, fuzzy
-msgid "User.45"
-msgstr "User.4"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:112
 #, fuzzy
@@ -2175,6 +1903,34 @@ msgid "Layer:"
 msgstr "Các Lớp bo mạch"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:179
+msgid "F.Cu"
+msgstr "F.Cu"
+
+#: bitmap2component/bitmap2cmp_panel_base.cpp:179
+msgid "F.Silkscreen"
+msgstr "Lớp chữ mặt trên"
+
+#: bitmap2component/bitmap2cmp_panel_base.cpp:179
+msgid "F.Mask"
+msgstr "F.Mask"
+
+#: bitmap2component/bitmap2cmp_panel_base.cpp:179
+msgid "User.Drawings"
+msgstr "Lớp vẽ ghi chú kỹ thuật"
+
+#: bitmap2component/bitmap2cmp_panel_base.cpp:179
+msgid "User.Comments"
+msgstr "Lớp vẽ ghi chú"
+
+#: bitmap2component/bitmap2cmp_panel_base.cpp:179
+msgid "User.Eco1"
+msgstr "Lớp vẽ đường phay rãnh 1"
+
+#: bitmap2component/bitmap2cmp_panel_base.cpp:179
+msgid "User.Eco2"
+msgstr "Lớp vẽ phay rãnh 2"
+
+#: bitmap2component/bitmap2cmp_panel_base.cpp:179
 msgid "F.Fab"
 msgstr "F.Fab"
 
@@ -2208,37 +1964,37 @@ msgstr "Chỉnh sửa từ API"
 msgid "Background Jobs"
 msgstr "Tác vụ chạy nền"
 
-#: common/common.cpp:303
+#: common/common.cpp:305
 #, c-format
 msgid ""
 "Environment variables expansion failed: missing '%c' at position %u in '%s'."
 msgstr "Không thể Mở rộng biến môi trường : thiếu '%c' ở vị trí %u trong '%s'."
 
-#: common/common.cpp:385
+#: common/common.cpp:387
 #, c-format
 msgid "Cannot make path '%s' absolute with respect to '%s'."
 msgstr "Không thể làm cho đường dẫn '%s' tuyệt đối đối với '%s'."
 
-#: common/common.cpp:404
+#: common/common.cpp:406
 #, c-format
 msgid "Output directory '%s' created."
 msgstr "Thư mục đầu ra '%s' đã được tạo."
 
-#: common/common.cpp:413 pcbnew/dialogs/dialog_export_odbpp.cpp:315
+#: common/common.cpp:415 pcbnew/dialogs/dialog_export_odbpp.cpp:315
 #, c-format
 msgid "Cannot create output directory '%s'."
 msgstr "Không thể tạo thư mục đầu ra '%s'."
 
-#: common/common.cpp:704
+#: common/common.cpp:706
 msgid "This operating system is not supported by KiCad and its dependencies."
 msgstr ""
 "Phiên bản hệ điều hành không còn được hỗ trợ bởi KiCad và các tính năng phụ."
 
-#: common/common.cpp:706
+#: common/common.cpp:708
 msgid "Unsupported Operating System"
 msgstr "Hệ điều hành không được hỗ trợ"
 
-#: common/common.cpp:709
+#: common/common.cpp:711
 msgid ""
 "Any issues with KiCad on this system cannot be reported to the official "
 "bugtracker."
@@ -2880,7 +2636,7 @@ msgstr "Biến môi trường"
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:56
 #: eeschema/dialogs/panel_bom_presets_base.cpp:40
 #: eeschema/dialogs/panel_bom_presets_base.cpp:80
-#: eeschema/dialogs/panel_sym_lib_table.cpp:384
+#: eeschema/dialogs/panel_sym_lib_table.cpp:380
 #: eeschema/dialogs/panel_template_fieldnames_base.cpp:42
 #: eeschema/fields_grid_table.cpp:470 eeschema/sch_pin.cpp:1578
 #: eeschema/sch_symbol.cpp:2068 eeschema/sch_symbol.cpp:2121
@@ -2894,7 +2650,7 @@ msgstr "Biến môi trường"
 #: pcbnew/dialogs/dialog_footprint_wizard_list_base.cpp:42
 #: pcbnew/dialogs/panel_fp_editor_field_defaults.cpp:54
 #: pcbnew/dialogs/panel_fp_editor_field_defaults_base.cpp:168
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:438 pcbnew/pcb_field.cpp:291
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:436 pcbnew/pcb_field.cpp:291
 #: pcbnew/pcb_fields_grid_table.cpp:143 pcbnew/pcb_group.cpp:507
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:120
 #: pcbnew/widgets/search_handlers.cpp:187
@@ -3419,7 +3175,7 @@ msgid "Title Block"
 msgstr "Khối Tiêu đề"
 
 #: common/dialogs/dialog_page_settings.cpp:487
-#: eeschema/eeschema_jobs_handler.cpp:229 pagelayout_editor/files.cpp:243
+#: eeschema/eeschema_jobs_handler.cpp:231 pagelayout_editor/files.cpp:243
 #: pagelayout_editor/pl_editor_frame.cpp:359
 #: pcbnew/pcbnew_jobs_handler.cpp:2329
 #, c-format
@@ -3684,7 +3440,7 @@ msgstr "Tùy chọn"
 #: eeschema/dialogs/dialog_sim_format_value.cpp:66
 #: eeschema/dialogs/dialog_sim_format_value.cpp:75
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:57
-#: eeschema/dialogs/panel_sym_lib_table.cpp:385
+#: eeschema/dialogs/panel_sym_lib_table.cpp:381
 #: eeschema/fields_grid_table.cpp:471 eeschema/sch_symbol.cpp:1099
 #: eeschema/sch_symbol.cpp:2064 eeschema/sch_symbol.cpp:2117
 #: eeschema/sch_symbol.cpp:3004 eeschema/sim/simulator_frame_ui.cpp:616
@@ -3699,7 +3455,7 @@ msgstr "Tùy chọn"
 #: pcbnew/dialogs/panel_fp_editor_field_defaults.cpp:183
 #: pcbnew/dialogs/panel_fp_editor_field_defaults_base.cpp:48
 #: pcbnew/dialogs/panel_fp_editor_field_defaults_base.cpp:57
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:439 pcbnew/footprint.cpp:4163
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:437 pcbnew/footprint.cpp:4163
 #: pcbnew/footprint_wizard_frame.cpp:326 pcbnew/pcb_dimension.cpp:619
 #: pcbnew/pcb_fields_grid_table.cpp:144 pcbnew/plot_board_layers.cpp:181
 #: pcbnew/widgets/search_handlers.cpp:119
@@ -4830,102 +4586,102 @@ msgid "Reset Unique Id"
 msgstr "Đặt trở lại góc nhìn duy nhất"
 
 #: common/dialogs/panel_design_block_lib_table.cpp:464
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:492
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:490
 #, c-format
 msgid "folder with %s files"
 msgstr ""
 
 #: common/dialogs/panel_design_block_lib_table.cpp:541
-#: eeschema/dialogs/panel_sym_lib_table.cpp:455
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:569
+#: eeschema/dialogs/panel_sym_lib_table.cpp:445
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:563
 msgid "A library table row nickname and path cells are empty."
 msgstr ""
 
 #: common/dialogs/panel_design_block_lib_table.cpp:543
-#: eeschema/dialogs/panel_sym_lib_table.cpp:457
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:571
+#: eeschema/dialogs/panel_sym_lib_table.cpp:447
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:565
 msgid "A library table row nickname cell is empty."
 msgstr ""
 
 #: common/dialogs/panel_design_block_lib_table.cpp:545
-#: eeschema/dialogs/panel_sym_lib_table.cpp:459
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:573
+#: eeschema/dialogs/panel_sym_lib_table.cpp:449
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:567
 #, fuzzy
 msgid "A library table row path cell is empty."
 msgstr "Mã định danh thư viện symbol \"%s\" không hợp lệ."
 
 #: common/dialogs/panel_design_block_lib_table.cpp:549
-#: eeschema/dialogs/panel_sym_lib_table.cpp:463
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:577
+#: eeschema/dialogs/panel_sym_lib_table.cpp:453
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:571
 #, fuzzy
 msgid "Invalid Row Definition"
 msgstr "Tên tín hiệu không hợp lệ"
 
 #: common/dialogs/panel_design_block_lib_table.cpp:551
-#: eeschema/dialogs/panel_sym_lib_table.cpp:465
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:579
+#: eeschema/dialogs/panel_sym_lib_table.cpp:455
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:573
 msgid ""
 "Empty cells will result in all rows that are invalid to be removed from the "
 "table."
 msgstr ""
 
 #: common/dialogs/panel_design_block_lib_table.cpp:554
-#: eeschema/dialogs/panel_sym_lib_table.cpp:468
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:581
+#: eeschema/dialogs/panel_sym_lib_table.cpp:458
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:575
 msgid "Remove Invalid Cells"
 msgstr "Xóa các ô không hợp lệ"
 
 #: common/dialogs/panel_design_block_lib_table.cpp:555
-#: eeschema/dialogs/panel_sym_lib_table.cpp:469
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:582
+#: eeschema/dialogs/panel_sym_lib_table.cpp:459
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:576
 msgid "Cancel Table Update"
 msgstr ""
 
 #: common/dialogs/panel_design_block_lib_table.cpp:568
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:595
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:589
 #, c-format
 msgid "Illegal character '%c' in nickname '%s'."
 msgstr "Ký tự không hợp lệ '%c' trong biệt danh '%s'."
 
 #: common/dialogs/panel_design_block_lib_table.cpp:580
 #: common/dialogs/panel_design_block_lib_table.cpp:628
-#: eeschema/dialogs/panel_sym_lib_table.cpp:499
-#: eeschema/dialogs/panel_sym_lib_table.cpp:556
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:608
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:656
+#: eeschema/dialogs/panel_sym_lib_table.cpp:489
+#: eeschema/dialogs/panel_sym_lib_table.cpp:546
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:602
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:650
 #, fuzzy
 msgid "Library Nickname Error"
 msgstr "Tạo Biệt danh:"
 
 #: common/dialogs/panel_design_block_lib_table.cpp:614
-#: eeschema/dialogs/panel_sym_lib_table.cpp:542
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:642
+#: eeschema/dialogs/panel_sym_lib_table.cpp:532
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:636
 #, c-format
 msgid "Multiple libraries cannot share the same nickname ('%s')."
 msgstr ""
 
 #: common/dialogs/panel_design_block_lib_table.cpp:814
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:841
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:835
 msgid ""
 "Select one or more rows containing libraries to save as current KiCad format."
 msgstr ""
 
 #: common/dialogs/panel_design_block_lib_table.cpp:822
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:849
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:843
 #, c-format
 msgid "Save '%s' as current KiCad format and replace entry in table?"
 msgstr ""
 
 #: common/dialogs/panel_design_block_lib_table.cpp:828
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:855
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:849
 #, c-format
 msgid "Save %d libraries as current KiCad format and replace entries in table?"
 msgstr ""
 
 #: common/dialogs/panel_design_block_lib_table.cpp:846
 #: eeschema/dialogs/dialog_symbol_remap.cpp:222
-#: eeschema/dialogs/panel_sym_lib_table.cpp:973
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:873
+#: eeschema/dialogs/panel_sym_lib_table.cpp:963
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:867
 #, fuzzy, c-format
 msgid "Library '%s' not found."
 msgstr "không tìm thấy tệp tin \"%s\"."
@@ -4939,8 +4695,8 @@ msgstr ""
 "không?"
 
 #: common/dialogs/panel_design_block_lib_table.cpp:862
-#: eeschema/dialogs/panel_sym_lib_table.cpp:989
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:888
+#: eeschema/dialogs/panel_sym_lib_table.cpp:979
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:882
 msgid "Migrate Library"
 msgstr "Di chuyển thư viện"
 
@@ -4950,27 +4706,27 @@ msgid "Failed to save design block library file '%s'."
 msgstr "Không tải được thư viện kiface \"%s\"."
 
 #: common/dialogs/panel_design_block_lib_table.cpp:930
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:959
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:953
 #, c-format
 msgid "Select %s Library"
 msgstr "Chọn %s thư viện"
 
 #: common/dialogs/panel_design_block_lib_table.cpp:988
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:1016
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:1010
 #, fuzzy
 msgid "Warning: Duplicate Nicknames"
 msgstr "Cảnh báo: Số tỷ lệ co dãn xấu"
 
 #: common/dialogs/panel_design_block_lib_table.cpp:989
-#: eeschema/dialogs/panel_sym_lib_table.cpp:668
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:1017
+#: eeschema/dialogs/panel_sym_lib_table.cpp:658
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:1011
 #, c-format
 msgid "A library nicknamed '%s' already exists."
 msgstr "Thư viện có biệt danh '%s' đã tồn tại."
 
 #: common/dialogs/panel_design_block_lib_table.cpp:990
-#: eeschema/dialogs/panel_sym_lib_table.cpp:669
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:1018
+#: eeschema/dialogs/panel_sym_lib_table.cpp:659
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:1012
 msgid "One of the nicknames will need to be changed after adding this library."
 msgstr ""
 
@@ -4978,15 +4734,15 @@ msgstr ""
 #: common/dialogs/panel_embedded_files.cpp:404
 #: common/dialogs/panel_embedded_files.cpp:426
 #: eeschema/design_block_utils.cpp:89
-#: eeschema/dialogs/panel_sym_lib_table.cpp:688 eeschema/sch_base_frame.cpp:305
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:1038
+#: eeschema/dialogs/panel_sym_lib_table.cpp:678 eeschema/sch_base_frame.cpp:305
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:1032
 #: pcbnew/footprint_libraries_utils.cpp:429 pcbnew/tools/pcb_actions.cpp:585
 msgid "Skip"
 msgstr "Tạm qua bước này"
 
 #: common/dialogs/panel_design_block_lib_table.cpp:1010
-#: eeschema/dialogs/panel_sym_lib_table.cpp:688
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:1038
+#: eeschema/dialogs/panel_sym_lib_table.cpp:678
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:1032
 #, fuzzy
 msgid "Add Anyway"
 msgstr "Mở bằng mọi cách"
@@ -4997,9 +4753,9 @@ msgid "Design Block Libraries"
 msgstr "Quản lý thư viện"
 
 #: common/dialogs/panel_design_block_lib_table.cpp:1197
-#: eeschema/dialogs/panel_sym_lib_table.cpp:1245
+#: eeschema/dialogs/panel_sym_lib_table.cpp:1208
 #: eeschema/tools/sch_editor_control.cpp:504
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:1299
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:1267
 #, c-format
 msgid ""
 "Error saving global library table:\n"
@@ -5012,22 +4768,22 @@ msgstr ""
 
 #: common/dialogs/panel_design_block_lib_table.cpp:1198
 #: common/dialogs/panel_design_block_lib_table.cpp:1211
-#: eeschema/dialogs/panel_sym_lib_table.cpp:1246
-#: eeschema/dialogs/panel_sym_lib_table.cpp:1259
+#: eeschema/dialogs/panel_sym_lib_table.cpp:1209
+#: eeschema/dialogs/panel_sym_lib_table.cpp:1222
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1871
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1923
 #: eeschema/tools/sch_editor_control.cpp:505
 #: eeschema/tools/sch_editor_control.cpp:520
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:1300
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:1313
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:1268
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:1281
 #, fuzzy
 msgid "File Save Error"
 msgstr "Lỗi lưu tệp tin"
 
 #: common/dialogs/panel_design_block_lib_table.cpp:1210
-#: eeschema/dialogs/panel_sym_lib_table.cpp:1258
+#: eeschema/dialogs/panel_sym_lib_table.cpp:1221
 #: eeschema/tools/sch_editor_control.cpp:519
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:1312
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:1280
 #, c-format
 msgid ""
 "Error saving project-specific library table:\n"
@@ -5969,7 +5725,7 @@ msgid "Pattern"
 msgstr "Mẫu"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:153
-#: eeschema/sch_field.cpp:1362 eeschema/sch_label.cpp:207
+#: eeschema/sch_field.cpp:1361 eeschema/sch_label.cpp:207
 #: pcbnew/board_connected_item.cpp:200 pcbnew/pad.cpp:2767 pcbnew/zone.cpp:1945
 msgid "Net Class"
 msgstr "Lớp tín hiệu"
@@ -6058,7 +5814,7 @@ msgstr "Quá tải bộ nhớ."
 #: common/drawing_sheet/ds_draw_item.cpp:132 common/eda_item.cpp:355
 #: common/eda_item.cpp:356 common/eda_item.cpp:384 common/eda_text.cpp:1349
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:47
-#: eeschema/sch_field.cpp:1216 eeschema/sch_field.cpp:1888
+#: eeschema/sch_field.cpp:1216 eeschema/sch_field.cpp:1887
 #: eeschema/sch_label.cpp:2281 eeschema/sch_tablecell.cpp:120
 #: eeschema/sch_text.cpp:641 eeschema/sch_text.h:59 eeschema/schematic.cpp:69
 #: eeschema/widgets/panel_sch_selection_filter.cpp:203
@@ -6802,7 +6558,7 @@ msgstr "Điểm"
 
 #: common/eda_shape.cpp:1014 common/eda_shape.cpp:2399 common/eda_text.cpp:1389
 #: eeschema/sch_bitmap.cpp:201 eeschema/sch_bitmap.cpp:340
-#: eeschema/sch_field.cpp:1869 eeschema/sch_tablecell.cpp:202
+#: eeschema/sch_field.cpp:1868 eeschema/sch_tablecell.cpp:202
 #: eeschema/sch_text.cpp:785 eeschema/sch_textbox.cpp:681
 #: pcbnew/dialogs/dialog_board_statistics.cpp:685
 #: pcbnew/dialogs/dialog_board_statistics.cpp:695
@@ -6821,7 +6577,7 @@ msgstr "Chiều rộng"
 
 #: common/eda_shape.cpp:1017 common/eda_shape.cpp:2405 common/eda_text.cpp:1394
 #: eeschema/sch_bitmap.cpp:203 eeschema/sch_bitmap.cpp:347
-#: eeschema/sch_field.cpp:1870 eeschema/sch_tablecell.cpp:203
+#: eeschema/sch_field.cpp:1869 eeschema/sch_tablecell.cpp:203
 #: eeschema/sch_text.cpp:786 eeschema/sch_textbox.cpp:682
 #: pcbnew/dialogs/dialog_board_statistics.cpp:687
 #: pcbnew/dialogs/dialog_board_statistics.cpp:696
@@ -6955,7 +6711,7 @@ msgstr "Đậm + Nghiêng"
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:283
 #: eeschema/fields_grid_table.cpp:302 eeschema/fields_grid_table.cpp:717
 #: eeschema/fields_grid_table.cpp:861 eeschema/pin_type.cpp:118
-#: eeschema/sch_field.cpp:1228 eeschema/sch_field.cpp:1823
+#: eeschema/sch_field.cpp:1228 eeschema/sch_field.cpp:1822
 #: eeschema/sch_pin.cpp:2118 pcbnew/dialogs/dialog_render_job.cpp:42
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2603
 msgid "Left"
@@ -6968,7 +6724,7 @@ msgstr "Trái"
 #: eeschema/fields_grid_table.cpp:718 eeschema/fields_grid_table.cpp:729
 #: eeschema/fields_grid_table.cpp:863 eeschema/fields_grid_table.cpp:887
 #: eeschema/sch_field.cpp:1229 eeschema/sch_field.cpp:1239
-#: eeschema/sch_field.cpp:1824 eeschema/sch_field.cpp:1833
+#: eeschema/sch_field.cpp:1823 eeschema/sch_field.cpp:1832
 #: eeschema/sch_text.cpp:669 gerbview/gerber_file_image.cpp:361
 #: gerbview/gerber_file_image.cpp:364
 #: pcbnew/dialogs/dialog_shape_properties.cpp:886
@@ -6983,7 +6739,7 @@ msgstr "Giữa"
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:283
 #: eeschema/fields_grid_table.cpp:304 eeschema/fields_grid_table.cpp:719
 #: eeschema/fields_grid_table.cpp:865 eeschema/pin_type.cpp:117
-#: eeschema/sch_field.cpp:1230 eeschema/sch_field.cpp:1825
+#: eeschema/sch_field.cpp:1230 eeschema/sch_field.cpp:1824
 #: eeschema/sch_pin.cpp:2117 pcbnew/dialogs/dialog_render_job.cpp:43
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2604
 msgid "Right"
@@ -6993,7 +6749,7 @@ msgstr "Phải"
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:307
 #: eeschema/fields_grid_table.cpp:294 eeschema/fields_grid_table.cpp:728
 #: eeschema/fields_grid_table.cpp:885 eeschema/sch_field.cpp:1238
-#: eeschema/sch_field.cpp:1832 eeschema/sch_text.cpp:668
+#: eeschema/sch_field.cpp:1831 eeschema/sch_text.cpp:668
 #: pcbnew/dialogs/dialog_render_job.cpp:44
 msgid "Top"
 msgstr "Trên"
@@ -7002,7 +6758,7 @@ msgstr "Trên"
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:307
 #: eeschema/fields_grid_table.cpp:296 eeschema/fields_grid_table.cpp:730
 #: eeschema/fields_grid_table.cpp:889 eeschema/sch_field.cpp:1240
-#: eeschema/sch_field.cpp:1834 eeschema/sch_text.cpp:670
+#: eeschema/sch_field.cpp:1833 eeschema/sch_text.cpp:670
 #: pcbnew/dialogs/dialog_render_job.cpp:40
 msgid "Bottom"
 msgstr "Dưới"
@@ -7014,7 +6770,7 @@ msgstr "Dưới"
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:68
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:68
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:65
-#: eeschema/fields_grid_table.cpp:479 eeschema/sch_field.cpp:1877
+#: eeschema/fields_grid_table.cpp:479 eeschema/sch_field.cpp:1876
 #: eeschema/sch_pin.cpp:1588 eeschema/sch_pin.cpp:2163
 #: eeschema/sch_symbol.cpp:2975 eeschema/sch_tablecell.cpp:205
 #: eeschema/sch_text.cpp:794 eeschema/sch_textbox.cpp:709
@@ -7027,7 +6783,7 @@ msgid "Orientation"
 msgstr "Sự định hướng"
 
 #: common/eda_text.cpp:1347 eeschema/dialogs/dialog_text_properties_base.h:117
-#: eeschema/sch_field.cpp:1844 eeschema/sch_field.cpp:1875
+#: eeschema/sch_field.cpp:1843 eeschema/sch_field.cpp:1874
 #: eeschema/sch_text.cpp:791 eeschema/sch_textbox.cpp:707
 #: pcbnew/dialogs/dialog_text_properties.cpp:152
 #: pcbnew/dialogs/dialog_text_properties_base.h:112
@@ -7050,7 +6806,7 @@ msgstr "Thuộc tính Văn bản"
 msgid "Font"
 msgstr "Phông chữ"
 
-#: common/eda_text.cpp:1360 eeschema/sch_field.cpp:1867
+#: common/eda_text.cpp:1360 eeschema/sch_field.cpp:1866
 #: eeschema/sch_label.cpp:2282 eeschema/sch_tablecell.cpp:204
 #: eeschema/sch_text.cpp:787 eeschema/sch_textbox.cpp:683
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:91
@@ -7061,27 +6817,27 @@ msgstr "Phông chữ"
 msgid "Thickness"
 msgstr "Độ dày"
 
-#: common/eda_text.cpp:1371 eeschema/sch_field.cpp:1868
+#: common/eda_text.cpp:1371 eeschema/sch_field.cpp:1867
 #: eeschema/sch_tablecell.cpp:206 eeschema/sch_text.cpp:784
 #: pcbnew/microwave/microwave_polygon.cpp:127
 #: pcbnew/pcb_fields_grid_table.cpp:156
 msgid "Mirrored"
 msgstr "Lật đối xứng"
 
-#: common/eda_text.cpp:1400 eeschema/sch_field.cpp:1847
-#: eeschema/sch_field.cpp:1850 eeschema/sch_label.cpp:2286
+#: common/eda_text.cpp:1400 eeschema/sch_field.cpp:1846
+#: eeschema/sch_field.cpp:1849 eeschema/sch_label.cpp:2286
 msgid "Horizontal Justification"
 msgstr "Cân bằng chiều ngang"
 
-#: common/eda_text.cpp:1404 eeschema/sch_field.cpp:1854
-#: eeschema/sch_field.cpp:1857 eeschema/sch_label.cpp:2288
+#: common/eda_text.cpp:1404 eeschema/sch_field.cpp:1853
+#: eeschema/sch_field.cpp:1856 eeschema/sch_label.cpp:2288
 #: pcbnew/pcb_dimension.cpp:1924 pcbnew/pcb_dimension.cpp:1957
 #: pcbnew/pcb_dimension.cpp:1995 pcbnew/pcb_dimension.cpp:2037
 #: pcbnew/pcb_dimension.cpp:2071
 msgid "Vertical Justification"
 msgstr "Cân bằng dọc"
 
-#: common/eda_text.cpp:1412 eeschema/sch_field.cpp:1866
+#: common/eda_text.cpp:1412 eeschema/sch_field.cpp:1865
 #: eeschema/sch_label.cpp:2246 eeschema/sch_tablecell.cpp:208
 #: pcbnew/pcb_dimension.cpp:1927 pcbnew/pcb_dimension.cpp:1960
 #: pcbnew/pcb_dimension.cpp:1998 pcbnew/pcb_dimension.cpp:2040
@@ -7257,7 +7013,7 @@ msgstr "Lỗi tải phông chữ '%s'."
 msgid "Font '%s' not found; substituting '%s'."
 msgstr "Không tìm thấy phông chữ '%s'; thay thế '%s'."
 
-#: common/footprint_info.cpp:119 cvpcb/cvpcb_mainframe.cpp:965
+#: common/footprint_info.cpp:121 cvpcb/cvpcb_mainframe.cpp:965
 #: eeschema/symbol_library_manager.cpp:82
 #: eeschema/symbol_tree_model_adapter.cpp:107
 #: eeschema/symbol_viewer_frame.cpp:305
@@ -7265,7 +7021,7 @@ msgstr "Không tìm thấy phông chữ '%s'; thay thế '%s'."
 msgid "Load Error"
 msgstr "Lỗi Tải"
 
-#: common/footprint_info.cpp:121
+#: common/footprint_info.cpp:123
 #: eeschema/widgets/panel_design_block_chooser.cpp:430
 msgid "Errors were encountered loading footprints:"
 msgstr "Đã gặp lỗi khi tải footprint:"
@@ -7604,30 +7360,30 @@ msgstr "Không có footprint nào được nạp vào."
 msgid "No error"
 msgstr "Các Lỗi"
 
-#: common/grid_tricks.cpp:359 common/tool/actions.cpp:214
+#: common/grid_tricks.cpp:361 common/tool/actions.cpp:214
 #: common/widgets/listbox_tricks.cpp:52 eeschema/tools/sch_actions.cpp:249
 #: pcbnew/dialogs/panel_setup_rules.cpp:130 pcbnew/tools/edit_tool.cpp:2651
 msgid "Cut"
 msgstr "Cắt"
 
-#: common/grid_tricks.cpp:360
+#: common/grid_tricks.cpp:362
 #, fuzzy
 msgid "Clear selected cells placing original contents on clipboard"
 msgstr "Xóa các ô đã chọn đang đặt nội dung gốc trên bộ nhớ tạm"
 
-#: common/grid_tricks.cpp:361 common/tool/actions.cpp:225
+#: common/grid_tricks.cpp:363 common/tool/actions.cpp:225
 #: common/widgets/listbox_tricks.cpp:50 eeschema/tools/sch_actions.cpp:255
 #: kicad/dialogs/panel_jobset.cpp:392 pcbnew/dialogs/panel_setup_rules.cpp:131
 #, fuzzy
 msgid "Copy"
 msgstr "Sao Chép"
 
-#: common/grid_tricks.cpp:362 kicad/dialogs/panel_jobset.cpp:393
+#: common/grid_tricks.cpp:364 kicad/dialogs/panel_jobset.cpp:393
 #, fuzzy
 msgid "Copy selected cells to clipboard"
 msgstr "Sao chép các ô đã chọn vào bộ nhớ tạm"
 
-#: common/grid_tricks.cpp:366 common/tool/actions.cpp:245
+#: common/grid_tricks.cpp:368 common/tool/actions.cpp:245
 #: common/widgets/listbox_tricks.cpp:51
 #: eeschema/tools/sch_editor_control.cpp:2283
 #: eeschema/tools/symbol_editor_edit_tool.cpp:1022
@@ -7636,12 +7392,12 @@ msgstr "Sao chép các ô đã chọn vào bộ nhớ tạm"
 msgid "Paste"
 msgstr "Dán"
 
-#: common/grid_tricks.cpp:367
+#: common/grid_tricks.cpp:369
 #, fuzzy
 msgid "Paste clipboard cells to matrix at current cell"
 msgstr "Dán các ô bảng tạm vào ma trận tại ô hiện tại"
 
-#: common/grid_tricks.cpp:368 common/tool/actions.cpp:291
+#: common/grid_tricks.cpp:370 common/tool/actions.cpp:291
 #: common/widgets/listbox_tricks.cpp:54 eeschema/tools/sch_edit_tool.cpp:1720
 #: eeschema/tools/symbol_editor_edit_tool.cpp:478
 #: kicad/dialogs/panel_jobset.cpp:394 kicad/project_tree_pane.cpp:986
@@ -7649,12 +7405,12 @@ msgstr "Dán các ô bảng tạm vào ma trận tại ô hiện tại"
 msgid "Delete"
 msgstr "Xóa bỏ"
 
-#: common/grid_tricks.cpp:369
+#: common/grid_tricks.cpp:371
 #, fuzzy
 msgid "Clear contents of selected cells"
 msgstr "Xóa bỏ (các) khoản mục đã chọn"
 
-#: common/grid_tricks.cpp:372 common/tool/actions.cpp:255
+#: common/grid_tricks.cpp:374 common/tool/actions.cpp:255
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:106
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:80
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:47
@@ -7667,7 +7423,7 @@ msgstr "Xóa bỏ (các) khoản mục đã chọn"
 msgid "Select All"
 msgstr "Chọn tất cả"
 
-#: common/grid_tricks.cpp:373
+#: common/grid_tricks.cpp:375
 #, fuzzy
 msgid "Select all cells"
 msgstr "Chọn tất cả các ô"
@@ -7831,7 +7587,7 @@ msgstr ""
 msgid "Import offset adjusted to (%f, %f) to fit within numeric limits"
 msgstr ""
 
-#: common/io/altium/altium_binary_parser.cpp:62 common/richio.cpp:123
+#: common/io/altium/altium_binary_parser.cpp:62 common/richio.cpp:102
 #, c-format
 msgid "Cannot open file '%s'."
 msgstr "Không thể mở tệp '%s'."
@@ -8770,14 +8526,14 @@ msgstr "Đơn vị"
 msgid "Item"
 msgstr "Mục"
 
-#: common/lib_tree_model_adapter.cpp:422
+#: common/lib_tree_model_adapter.cpp:404
 #: eeschema/widgets/panel_design_block_chooser.cpp:416
 #: eeschema/widgets/panel_symbol_chooser.cpp:173
 #: pcbnew/widgets/panel_footprint_chooser.cpp:98
 msgid "Recently Used"
 msgstr ""
 
-#: common/lib_tree_model_adapter.cpp:424
+#: common/lib_tree_model_adapter.cpp:406
 #: eeschema/widgets/panel_symbol_chooser.cpp:180
 msgid "Already Placed"
 msgstr ""
@@ -9055,16 +8811,23 @@ msgstr "Cảnh báo: "
 msgid "Error: "
 msgstr "Lỗi: "
 
-#: common/richio.cpp:202
+#: common/richio.cpp:123 eeschema/sch_io/eagle/sch_io_eagle.cpp:600
+#: eeschema/sch_io/eagle/sch_io_eagle.cpp:617
+#: pcbnew/pcb_io/eagle/pcb_io_eagle.cpp:3230
+#, fuzzy, c-format
+msgid "Unable to read file '%s'."
+msgstr "Không thể tạo tệp báo cáo '%s'"
+
+#: common/richio.cpp:199
 #, c-format
 msgid "Unable to open %s for reading."
 msgstr "Không thể mở %s để đọc."
 
-#: common/richio.cpp:253 common/richio.cpp:351
+#: common/richio.cpp:250 common/richio.cpp:348
 msgid "Maximum line length exceeded"
 msgstr "Chiều dài dòng tối đa vượt quá"
 
-#: common/richio.cpp:316
+#: common/richio.cpp:313
 msgid "Line length exceeded"
 msgstr "Chiều dài dòng vượt quá"
 
@@ -11123,7 +10886,7 @@ msgstr "Đã xảy ra lỗi khi cố tải bảng thư viện footprint toàn c�
 msgid "Assign Footprints"
 msgstr "Chỉ định dấu chân"
 
-#: cvpcb/cvpcb_mainframe.cpp:114 pcbnew/dialogs/panel_fp_lib_table.cpp:1278
+#: cvpcb/cvpcb_mainframe.cpp:114 pcbnew/dialogs/panel_fp_lib_table.cpp:1246
 msgid "Footprint Libraries"
 msgstr "Thư viện Footprint"
 
@@ -13531,7 +13294,7 @@ msgstr "Căn chỉnh V"
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:67
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:64
 #: eeschema/fields_grid_table.cpp:478 eeschema/sch_field.cpp:1224
-#: eeschema/sch_field.cpp:1873 eeschema/sch_label.cpp:1203
+#: eeschema/sch_field.cpp:1872 eeschema/sch_label.cpp:1203
 #: eeschema/sch_tablecell.cpp:133 eeschema/sch_text.cpp:652
 #: eeschema/sch_text.cpp:789 eeschema/sch_textbox.cpp:543
 #: eeschema/sch_textbox.cpp:704 pcbnew/tools/board_inspection_tool.cpp:1442
@@ -17558,22 +17321,22 @@ msgstr "Các Tùy chọn Render"
 msgid "Keep pins attached when dragging edges"
 msgstr ""
 
-#: eeschema/dialogs/panel_sym_lib_table.cpp:486
+#: eeschema/dialogs/panel_sym_lib_table.cpp:476
 #, fuzzy, c-format
 msgid "Illegal character '%c' in nickname '%s'"
 msgstr "Ký tự không hợp lệ '%c' trong biệt hiệu '%s'"
 
-#: eeschema/dialogs/panel_sym_lib_table.cpp:592 eeschema/symbol_library.cpp:583
+#: eeschema/dialogs/panel_sym_lib_table.cpp:582 eeschema/symbol_library.cpp:583
 #, fuzzy, c-format
 msgid "Symbol library '%s' failed to load."
 msgstr "Không tải được thư viện biểu tượng '%s'."
 
-#: eeschema/dialogs/panel_sym_lib_table.cpp:597
+#: eeschema/dialogs/panel_sym_lib_table.cpp:587
 #, fuzzy
 msgid "Error Loading Library"
 msgstr "Sao chép bảng thư viện toàn cục %s tùy chỉnh"
 
-#: eeschema/dialogs/panel_sym_lib_table.cpp:640 eeschema/files-io.cpp:660
+#: eeschema/dialogs/panel_sym_lib_table.cpp:630 eeschema/files-io.cpp:660
 #: eeschema/import_gfx/dialog_import_gfx_sch.cpp:200
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:78
 #: pcbnew/files.cpp:156 pcbnew/footprint_libraries_utils.cpp:119
@@ -17582,62 +17345,62 @@ msgstr "Sao chép bảng thư viện toàn cục %s tùy chỉnh"
 msgid "All supported formats"
 msgstr "Tất cả các dạng tệp tin được hỗ trợ (%s)"
 
-#: eeschema/dialogs/panel_sym_lib_table.cpp:653
+#: eeschema/dialogs/panel_sym_lib_table.cpp:643
 msgid "Add Library"
 msgstr "Thêm Thư viện"
 
-#: eeschema/dialogs/panel_sym_lib_table.cpp:667
+#: eeschema/dialogs/panel_sym_lib_table.cpp:657
 #, fuzzy
 msgid "Warning: Duplicate Nickname"
 msgstr "Cảnh báo: Số tỷ lệ co dãn xấu"
 
-#: eeschema/dialogs/panel_sym_lib_table.cpp:872
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:1100
+#: eeschema/dialogs/panel_sym_lib_table.cpp:862
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:1094
 msgid ""
 "This action will reset your global library table on disk and cannot be "
 "undone."
 msgstr ""
 
-#: eeschema/dialogs/panel_sym_lib_table.cpp:941
+#: eeschema/dialogs/panel_sym_lib_table.cpp:931
 msgid ""
 "Select one or more rows containing libraries to save as current KiCad format "
 "(*.kicad_sym)."
 msgstr ""
 
-#: eeschema/dialogs/panel_sym_lib_table.cpp:949
+#: eeschema/dialogs/panel_sym_lib_table.cpp:939
 #, c-format
 msgid ""
 "Save '%s' as current KiCad format (*.kicad_sym) and replace legacy entry in "
 "table?"
 msgstr ""
 
-#: eeschema/dialogs/panel_sym_lib_table.cpp:955
+#: eeschema/dialogs/panel_sym_lib_table.cpp:945
 #, c-format
 msgid ""
 "Save %d libraries as current KiCad format (*.kicad_sym) and replace legacy "
 "entries in table?"
 msgstr ""
 
-#: eeschema/dialogs/panel_sym_lib_table.cpp:986
+#: eeschema/dialogs/panel_sym_lib_table.cpp:976
 #: pcbnew/dialogs/dialog_export_step.cpp:602
 #, c-format
 msgid "File '%s' already exists. Do you want overwrite this file?"
 msgstr "Tệp '%s' đã tồn tại. Bạn có muốn ghi đè lên tập tin này?"
 
-#: eeschema/dialogs/panel_sym_lib_table.cpp:1019 eeschema/libarch.cpp:129
+#: eeschema/dialogs/panel_sym_lib_table.cpp:1009 eeschema/libarch.cpp:129
 #: eeschema/libarch.cpp:135
 #, fuzzy, c-format
 msgid "Failed to save symbol library file '%s'."
 msgstr "Không tải được thư viện kiface \"%s\"."
 
-#: eeschema/dialogs/panel_sym_lib_table.cpp:1209
+#: eeschema/dialogs/panel_sym_lib_table.cpp:1172
 msgid ""
 "Modifications have been made to one or more symbol libraries.\n"
 "Changes must be saved or discarded before the symbol library table can be "
 "modified."
 msgstr ""
 
-#: eeschema/dialogs/panel_sym_lib_table.cpp:1223
+#: eeschema/dialogs/panel_sym_lib_table.cpp:1186
 #, fuzzy
 msgid "Symbol Libraries"
 msgstr "Đang tải thư viện symbol"
@@ -17713,16 +17476,16 @@ msgid ""
 "Cannot copy file '%s' as it will be overwritten by the new root sheet file."
 msgstr ""
 
-#: eeschema/eeschema_jobs_handler.cpp:190
+#: eeschema/eeschema_jobs_handler.cpp:192
 #, fuzzy
 msgid "Failed to load schematic\n"
 msgstr "Không thể tải tệp sơ đồ\n"
 
-#: eeschema/eeschema_jobs_handler.cpp:329
-#: eeschema/eeschema_jobs_handler.cpp:474
-#: eeschema/eeschema_jobs_handler.cpp:693
-#: eeschema/eeschema_jobs_handler.cpp:822
-#: eeschema/eeschema_jobs_handler.cpp:1138 pcbnew/pcbnew_jobs_handler.cpp:436
+#: eeschema/eeschema_jobs_handler.cpp:346
+#: eeschema/eeschema_jobs_handler.cpp:491
+#: eeschema/eeschema_jobs_handler.cpp:710
+#: eeschema/eeschema_jobs_handler.cpp:839
+#: eeschema/eeschema_jobs_handler.cpp:1155 pcbnew/pcbnew_jobs_handler.cpp:436
 #: pcbnew/pcbnew_jobs_handler.cpp:578 pcbnew/pcbnew_jobs_handler.cpp:810
 #: pcbnew/pcbnew_jobs_handler.cpp:909 pcbnew/pcbnew_jobs_handler.cpp:1000
 #: pcbnew/pcbnew_jobs_handler.cpp:1051 pcbnew/pcbnew_jobs_handler.cpp:1228
@@ -17732,90 +17495,90 @@ msgstr "Không thể tải tệp sơ đồ\n"
 msgid "Failed to create output directory\n"
 msgstr "Không tạo được thư mục đầu ra\n"
 
-#: eeschema/eeschema_jobs_handler.cpp:396
-#: eeschema/eeschema_jobs_handler.cpp:518
-#: eeschema/eeschema_jobs_handler.cpp:794
+#: eeschema/eeschema_jobs_handler.cpp:413
+#: eeschema/eeschema_jobs_handler.cpp:535
+#: eeschema/eeschema_jobs_handler.cpp:811
 msgid ""
 "Warning: schematic has annotation errors, please use the schematic editor to "
 "fix them\n"
 msgstr ""
 
-#: eeschema/eeschema_jobs_handler.cpp:406
-#: eeschema/eeschema_jobs_handler.cpp:528
-#: eeschema/eeschema_jobs_handler.cpp:804
+#: eeschema/eeschema_jobs_handler.cpp:423
+#: eeschema/eeschema_jobs_handler.cpp:545
+#: eeschema/eeschema_jobs_handler.cpp:821
 msgid "Warning: duplicate sheet names.\n"
 msgstr "Cảnh báo: trùng tên trang.\n"
 
-#: eeschema/eeschema_jobs_handler.cpp:457
+#: eeschema/eeschema_jobs_handler.cpp:474
 msgid "Unknown netlist format.\n"
 msgstr "Định dạng danh sách mạng không xác định.\n"
 
-#: eeschema/eeschema_jobs_handler.cpp:596
+#: eeschema/eeschema_jobs_handler.cpp:613
 #, fuzzy, c-format
 msgid "BOM preset '%s' not found"
 msgstr "Không tìm thấy cài đặt BOM trước '%s'"
 
-#: eeschema/eeschema_jobs_handler.cpp:701
-#: eeschema/eeschema_jobs_handler.cpp:909
+#: eeschema/eeschema_jobs_handler.cpp:718
+#: eeschema/eeschema_jobs_handler.cpp:926
 #, c-format
 msgid "Unable to open destination '%s'"
 msgstr "Không thể mở đích '%s'"
 
-#: eeschema/eeschema_jobs_handler.cpp:735
+#: eeschema/eeschema_jobs_handler.cpp:752
 #, fuzzy, c-format
 msgid "BOM format preset '%s' not found"
 msgstr "Footprint \"%s\" không tìm thấy."
 
-#: eeschema/eeschema_jobs_handler.cpp:760
-#: eeschema/eeschema_jobs_handler.cpp:831
+#: eeschema/eeschema_jobs_handler.cpp:777
+#: eeschema/eeschema_jobs_handler.cpp:848
 #, fuzzy, c-format
 msgid "Wrote bill of materials to '%s'."
 msgstr "Hóa đơn vật liệu"
 
-#: eeschema/eeschema_jobs_handler.cpp:883
+#: eeschema/eeschema_jobs_handler.cpp:900
 #, fuzzy, c-format
 msgid "Plotting symbol '%s' unit %d to '%s'\n"
 msgstr "Vẽ biểu tượng '%s' đơn vị %d thành '%s'\n"
 
-#: eeschema/eeschema_jobs_handler.cpp:963
-#: eeschema/eeschema_jobs_handler.cpp:1058 pcbnew/pcbnew_jobs_handler.cpp:1724
+#: eeschema/eeschema_jobs_handler.cpp:980
+#: eeschema/eeschema_jobs_handler.cpp:1075 pcbnew/pcbnew_jobs_handler.cpp:1724
 #: pcbnew/pcbnew_jobs_handler.cpp:1797
 msgid "Unable to load library\n"
 msgstr "Không thể tải thư viện\n"
 
-#: eeschema/eeschema_jobs_handler.cpp:976
+#: eeschema/eeschema_jobs_handler.cpp:993
 #: eeschema/symbol_editor/symbol_editor.cpp:1095
 msgid "There is no symbol selected to save."
 msgstr "Không có biểu tượng nào được chọn để lưu."
 
-#: eeschema/eeschema_jobs_handler.cpp:1033 pcbnew/pcbnew_jobs_handler.cpp:1693
+#: eeschema/eeschema_jobs_handler.cpp:1050 pcbnew/pcbnew_jobs_handler.cpp:1693
 msgid "Output path must not conflict with existing path\n"
 msgstr ""
 
-#: eeschema/eeschema_jobs_handler.cpp:1041 pcbnew/pcbnew_jobs_handler.cpp:1700
+#: eeschema/eeschema_jobs_handler.cpp:1058 pcbnew/pcbnew_jobs_handler.cpp:1700
 msgid ""
 "Output path must be specified to convert legacy and non-KiCad libraries\n"
 msgstr ""
 
-#: eeschema/eeschema_jobs_handler.cpp:1068
+#: eeschema/eeschema_jobs_handler.cpp:1085
 msgid "Saving symbol library in updated format\n"
 msgstr "Lưu thư viện biểu tượng ở định dạng đã cập nhật\n"
 
-#: eeschema/eeschema_jobs_handler.cpp:1089
+#: eeschema/eeschema_jobs_handler.cpp:1106
 msgid "Symbol library was not updated\n"
 msgstr "Thư viện biểu tượng chưa được cập nhật\n"
 
-#: eeschema/eeschema_jobs_handler.cpp:1163 pcbnew/pcbnew_jobs_handler.cpp:2052
+#: eeschema/eeschema_jobs_handler.cpp:1180 pcbnew/pcbnew_jobs_handler.cpp:2052
 #, c-format
 msgid "Found %d violations\n"
 msgstr "Đã tìm thấy %d vi phạm\n"
 
-#: eeschema/eeschema_jobs_handler.cpp:1178
+#: eeschema/eeschema_jobs_handler.cpp:1195
 #, c-format
 msgid "Unable to save ERC report to %s\n"
 msgstr "Không thể lưu báo cáo ERC vào %s\n"
 
-#: eeschema/eeschema_jobs_handler.cpp:1183
+#: eeschema/eeschema_jobs_handler.cpp:1200
 #, c-format
 msgid "Saved ERC Report to %s\n"
 msgstr "Đã lưu Báo cáo ERC vào %s\n"
@@ -18356,11 +18119,11 @@ msgstr "Ngang"
 msgid "Vertical"
 msgstr "Dọc"
 
-#: eeschema/fields_grid_table.cpp:484 eeschema/sch_field.cpp:1863
+#: eeschema/fields_grid_table.cpp:484 eeschema/sch_field.cpp:1862
 msgid "Allow Autoplacement"
 msgstr ""
 
-#: eeschema/fields_grid_table.cpp:485 eeschema/sch_field.cpp:1902
+#: eeschema/fields_grid_table.cpp:485 eeschema/sch_field.cpp:1901
 #: eeschema/sch_item.cpp:548 eeschema/sch_item.cpp:600
 #, fuzzy
 msgid "Private"
@@ -18782,31 +18545,31 @@ msgstr "Mặc định"
 msgid "Import Vector Graphics File"
 msgstr "Nhập tệp Đồ họa Vector"
 
-#: eeschema/lib_symbol.cpp:299 eeschema/sch_symbol.cpp:445
+#: eeschema/lib_symbol.cpp:301 eeschema/sch_symbol.cpp:445
 #: eeschema/tools/sch_edit_tool.cpp:109
 #, c-format
 msgid "Unit %s"
 msgstr "Đơn vị %s"
 
-#: eeschema/lib_symbol.cpp:578 eeschema/sch_sheet.cpp:310
+#: eeschema/lib_symbol.cpp:580 eeschema/sch_sheet.cpp:310
 #: eeschema/sch_symbol.cpp:1594
 #, fuzzy
 msgid "Excluded from BOM"
 msgstr "Loại trừ khỏi bo mạch"
 
-#: eeschema/lib_symbol.cpp:583 eeschema/sch_sheet.cpp:319
+#: eeschema/lib_symbol.cpp:585 eeschema/sch_sheet.cpp:319
 #: eeschema/sch_symbol.cpp:1603
 #, fuzzy
 msgid "Excluded from board"
 msgstr "Loại trừ khỏi bo mạch"
 
-#: eeschema/lib_symbol.cpp:588 eeschema/sch_sheet.cpp:328
+#: eeschema/lib_symbol.cpp:590 eeschema/sch_sheet.cpp:328
 #: eeschema/sch_symbol.cpp:1612
 #, fuzzy
 msgid "Excluded from simulation"
 msgstr "Loại trừ vi phạm này"
 
-#: eeschema/lib_symbol.cpp:593 eeschema/sch_sheet.cpp:337
+#: eeschema/lib_symbol.cpp:595 eeschema/sch_sheet.cpp:337
 #: eeschema/sch_sheet.cpp:881 eeschema/sch_symbol.cpp:1621
 #: eeschema/sch_symbol.cpp:2037 eeschema/widgets/search_handlers.cpp:169
 #: pcbnew/footprint.cpp:1763
@@ -18814,92 +18577,92 @@ msgstr "Loại trừ vi phạm này"
 msgid "DNP"
 msgstr "DPI"
 
-#: eeschema/lib_symbol.cpp:1604
+#: eeschema/lib_symbol.cpp:1606
 msgid "Power flag differs."
 msgstr ""
 
-#: eeschema/lib_symbol.cpp:1613
+#: eeschema/lib_symbol.cpp:1615
 #, fuzzy
 msgid "Unit count differs."
 msgstr "Thuộc tính mục văn bản"
 
-#: eeschema/lib_symbol.cpp:1653
+#: eeschema/lib_symbol.cpp:1655
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:743
 #, fuzzy
 msgid "Graphic item count differs."
 msgstr "Thuộc tính mục văn bản"
 
-#: eeschema/lib_symbol.cpp:1665
+#: eeschema/lib_symbol.cpp:1667
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:757
 #, c-format
 msgid "%s differs."
 msgstr ""
 
-#: eeschema/lib_symbol.cpp:1676
+#: eeschema/lib_symbol.cpp:1678
 #, fuzzy
 msgid "Pin count differs."
 msgstr "Số lượng chân khác nhau."
 
-#: eeschema/lib_symbol.cpp:1692
+#: eeschema/lib_symbol.cpp:1694
 #, fuzzy, c-format
 msgid "Pin %s not found."
 msgstr "không tìm thấy tệp tin \"%s\"."
 
-#: eeschema/lib_symbol.cpp:1700
+#: eeschema/lib_symbol.cpp:1702
 #, fuzzy, c-format
 msgid "Pin %s differs."
 msgstr "Chân %s khác."
 
-#: eeschema/lib_symbol.cpp:1727
+#: eeschema/lib_symbol.cpp:1729
 #, c-format
 msgid "%s field differs."
 msgstr ""
 
-#: eeschema/lib_symbol.cpp:1737
+#: eeschema/lib_symbol.cpp:1739
 #, fuzzy
 msgid "Field count differs."
 msgstr "Số lượng trường khác nhau."
 
-#: eeschema/lib_symbol.cpp:1746
+#: eeschema/lib_symbol.cpp:1748
 #, fuzzy
 msgid "Footprint filters differs."
 msgstr "Bộ lọc footprint:"
 
-#: eeschema/lib_symbol.cpp:1758
+#: eeschema/lib_symbol.cpp:1760
 #, fuzzy
 msgid "Footprint filters differ."
 msgstr "Bộ lọc footprint:"
 
-#: eeschema/lib_symbol.cpp:1769
+#: eeschema/lib_symbol.cpp:1771
 #, fuzzy
 msgid "Symbol keywords differ."
 msgstr "Từ khóa biểu tượng khác nhau."
 
-#: eeschema/lib_symbol.cpp:1778
+#: eeschema/lib_symbol.cpp:1780
 msgid "Symbol pin name offsets differ."
 msgstr ""
 
-#: eeschema/lib_symbol.cpp:1789
+#: eeschema/lib_symbol.cpp:1791
 #, fuzzy
 msgid "Show pin names settings differ."
 msgstr "Hiển thị văn bản tên pin"
 
-#: eeschema/lib_symbol.cpp:1798
+#: eeschema/lib_symbol.cpp:1800
 #, fuzzy
 msgid "Show pin numbers settings differ."
 msgstr "Hiển thị văn bản số pin"
 
-#: eeschema/lib_symbol.cpp:1807
+#: eeschema/lib_symbol.cpp:1809
 #, fuzzy
 msgid "Exclude from simulation settings differ."
 msgstr "Loại trừ khỏi bo mạch"
 
-#: eeschema/lib_symbol.cpp:1816
+#: eeschema/lib_symbol.cpp:1818
 #, fuzzy
 msgid "Exclude from bill of materials settings differ."
 msgstr "Loại trừ khỏi BOM sơ đồ mạch"
 
-#: eeschema/lib_symbol.cpp:1825
+#: eeschema/lib_symbol.cpp:1827
 #, fuzzy
 msgid "Exclude from board settings differ."
 msgstr "Loại trừ khỏi bo mạch"
@@ -19576,12 +19339,12 @@ msgstr "Lưới: %s (%s)"
 msgid "Back to Previous Selected Sheet"
 msgstr "Xem trước trang giấy"
 
-#: eeschema/sch_field.cpp:1366 eeschema/sch_label.cpp:205
+#: eeschema/sch_field.cpp:1365 eeschema/sch_label.cpp:205
 #, fuzzy
 msgid "Sheet References"
 msgstr "Tham chiếu"
 
-#: eeschema/sch_field.cpp:1860
+#: eeschema/sch_field.cpp:1859
 #, fuzzy
 msgid "Show Field Name"
 msgstr "Tên trường mới:"
@@ -19918,13 +19681,6 @@ msgstr ""
 #, fuzzy
 msgid "KiCad database library files"
 msgstr "Tệp thư viện symbol KiCad"
-
-#: eeschema/sch_io/eagle/sch_io_eagle.cpp:600
-#: eeschema/sch_io/eagle/sch_io_eagle.cpp:617
-#: pcbnew/pcb_io/eagle/pcb_io_eagle.cpp:3230
-#, fuzzy, c-format
-msgid "Unable to read file '%s'."
-msgstr "Không thể tạo tệp báo cáo '%s'"
 
 #: eeschema/sch_io/eagle/sch_io_eagle.cpp:609
 #, c-format
@@ -20339,23 +20095,23 @@ msgstr ""
 msgid "Expecting R0, R90, R18, R270, M0, M90, M180 or M270"
 msgstr ""
 
-#: eeschema/sch_io/ltspice/ltspice_schematic.cpp:493
+#: eeschema/sch_io/ltspice/ltspice_schematic.cpp:494
 msgid ""
-"Expecting LEFT, CENTER, RIGHT, TOP, BOTTOM, VLEFT, VRIGHT, VCENTER, VTOP or "
-"VBOTTOM"
+"Expecting LEFT, CENTER, RIGHT, TOP, BOTTOM, VLEFT, VRIGHT, VCENTER, VTOP, "
+"VBOTTOM or INVISIBLE"
 msgstr ""
 
-#: eeschema/sch_io/ltspice/ltspice_schematic.cpp:515
+#: eeschema/sch_io/ltspice/ltspice_schematic.cpp:517
 msgid ""
 "Expecting NONE, BOTTOM, TOP, LEFT, RIGHT, VBOTTOM, VTOP, VCENTER, VLEFT or "
 "VRIGHT"
 msgstr ""
 
-#: eeschema/sch_io/ltspice/ltspice_schematic.cpp:529
+#: eeschema/sch_io/ltspice/ltspice_schematic.cpp:531
 msgid "Expecting CELL or BLOCK"
 msgstr ""
 
-#: eeschema/sch_io/ltspice/ltspice_schematic.cpp:548
+#: eeschema/sch_io/ltspice/ltspice_schematic.cpp:550
 #, fuzzy, c-format
 msgid "Symbol '%s.asy' not found"
 msgstr "%s không tìm thấy"
@@ -33225,46 +32981,46 @@ msgstr ""
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:50
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:69
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:83
-#: pcbnew/exporters/step/step_pcb_model.cpp:1775
+#: pcbnew/exporters/step/step_pcb_model.cpp:1778
 #, fuzzy
 msgid "User defined"
 msgstr "Lưới do Người dùng định nghĩa"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:62
-#: pcbnew/exporters/step/step_pcb_model.cpp:1768
+#: pcbnew/exporters/step/step_pcb_model.cpp:1771
 #, fuzzy
 msgid "Green"
 msgstr "Xanh lá:"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:63
-#: pcbnew/exporters/step/step_pcb_model.cpp:1769
+#: pcbnew/exporters/step/step_pcb_model.cpp:1772
 #, fuzzy
 msgid "Red"
 msgstr "Đỏ:"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:64
-#: pcbnew/exporters/step/step_pcb_model.cpp:1770
+#: pcbnew/exporters/step/step_pcb_model.cpp:1773
 #, fuzzy
 msgid "Blue"
 msgstr "Xanh Da Trời:"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:65
-#: pcbnew/exporters/step/step_pcb_model.cpp:1771
+#: pcbnew/exporters/step/step_pcb_model.cpp:1774
 msgid "Purple"
 msgstr ""
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:66
-#: pcbnew/exporters/step/step_pcb_model.cpp:1772
+#: pcbnew/exporters/step/step_pcb_model.cpp:1775
 msgid "Black"
 msgstr ""
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:67
-#: pcbnew/exporters/step/step_pcb_model.cpp:1773
+#: pcbnew/exporters/step/step_pcb_model.cpp:1776
 msgid "White"
 msgstr ""
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:68
-#: pcbnew/exporters/step/step_pcb_model.cpp:1774
+#: pcbnew/exporters/step/step_pcb_model.cpp:1777
 msgid "Yellow"
 msgstr ""
 
@@ -40699,7 +40455,7 @@ msgstr "Chọn một con đường khác"
 msgid "Hidden footprint libraries are not yet supported."
 msgstr "Thư viện footprint không được cập nhật\n"
 
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:885
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:879
 #, c-format
 msgid ""
 "Folder '%s' already exists. Do you want overwrite any existing footprints?"
@@ -40707,7 +40463,7 @@ msgstr ""
 "Thư mục '%s' đã tồn tại. Bạn có muốn ghi đè lên bất kỳ dấu chân hiện có nào "
 "không?"
 
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:916
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:910
 #, fuzzy, c-format
 msgid "Failed to save footprint library file '%s'."
 msgstr "Không tải được thư viện kiface \"%s\"."
@@ -43404,7 +43160,7 @@ msgstr ""
 
 #: pcbnew/exporters/export_hyperlynx.cpp:291
 #: pcbnew/exporters/exporter_vrml.cpp:781
-#: pcbnew/exporters/step/exporter_step.cpp:654
+#: pcbnew/exporters/step/exporter_step.cpp:677
 #: pcbnew/specctra_import_export/specctra_export.cpp:119
 msgid "Board outline is malformed. Run DRC for a full analysis."
 msgstr "Đường viền bo mạch không đúng định dạng. Chạy DRC để phân tích đầy đủ."
@@ -43446,16 +43202,16 @@ msgstr "Tệp làm việc Gerber"
 msgid "Board stackup settings not up to date."
 msgstr ""
 
-#: pcbnew/exporters/step/exporter_step.cpp:768
+#: pcbnew/exporters/step/exporter_step.cpp:802
 msgid "Determining PCB data\n"
 msgstr "Xác định dữ liệu PCB\n"
 
-#: pcbnew/exporters/step/exporter_step.cpp:800
+#: pcbnew/exporters/step/exporter_step.cpp:834
 #, c-format
 msgid "Build %s data\n"
 msgstr "Dựng dữ liệu %s\n"
 
-#: pcbnew/exporters/step/exporter_step.cpp:804
+#: pcbnew/exporters/step/exporter_step.cpp:838
 msgid ""
 "\n"
 "** Error building STEP board model. Export aborted. **\n"
@@ -43463,12 +43219,12 @@ msgstr ""
 "\n"
 "** Lỗi xây dựng mô hình bảng STEP. Quá trình xuất bị hủy bỏ. **\n"
 
-#: pcbnew/exporters/step/exporter_step.cpp:808
+#: pcbnew/exporters/step/exporter_step.cpp:842
 #, c-format
 msgid "Writing %s file\n"
 msgstr "Đang ghi tệp %s\n"
 
-#: pcbnew/exporters/step/exporter_step.cpp:826
+#: pcbnew/exporters/step/exporter_step.cpp:860
 #, c-format
 msgid ""
 "\n"
@@ -43477,13 +43233,13 @@ msgstr ""
 "\n"
 "** Lỗi ghi tệp %s. **\n"
 
-#: pcbnew/exporters/step/exporter_step.cpp:832
+#: pcbnew/exporters/step/exporter_step.cpp:866
 #, fuzzy, c-format
 msgid "%s file '%s' created.\n"
 msgstr "Tệp báo cáo '%s' đã được tạo\n"
 
-#: pcbnew/exporters/step/exporter_step.cpp:839
-#: pcbnew/exporters/step/exporter_step.cpp:845
+#: pcbnew/exporters/step/exporter_step.cpp:873
+#: pcbnew/exporters/step/exporter_step.cpp:879
 #, c-format
 msgid ""
 "\n"
@@ -43492,19 +43248,19 @@ msgstr ""
 "\n"
 "** Lỗi xuất tập tin %s. Quá trình xuất bị hủy bỏ. **\n"
 
-#: pcbnew/exporters/step/exporter_step.cpp:856
+#: pcbnew/exporters/step/exporter_step.cpp:890
 #, c-format
 msgid ""
 "Unable to create %s file.\n"
 "Check that the board has a valid outline and models."
 msgstr ""
 
-#: pcbnew/exporters/step/exporter_step.cpp:862
+#: pcbnew/exporters/step/exporter_step.cpp:896
 #, c-format
 msgid "%s file has been created, but there are warnings."
 msgstr ""
 
-#: pcbnew/exporters/step/exporter_step.cpp:871
+#: pcbnew/exporters/step/exporter_step.cpp:905
 #, c-format
 msgid ""
 "\n"
@@ -43513,82 +43269,77 @@ msgstr ""
 "\n"
 "Thời gian xuất %.3f s\n"
 
-#: pcbnew/exporters/step/step_pcb_model.cpp:649
+#: pcbnew/exporters/step/step_pcb_model.cpp:650
 msgid "** Got problems while fusing shapes **\n"
 msgstr ""
 
-#: pcbnew/exporters/step/step_pcb_model.cpp:653
-#: pcbnew/exporters/step/step_pcb_model.cpp:1955
+#: pcbnew/exporters/step/step_pcb_model.cpp:654
+#: pcbnew/exporters/step/step_pcb_model.cpp:1965
 msgid "Errors:\n"
 msgstr "Lỗi:\n"
 
-#: pcbnew/exporters/step/step_pcb_model.cpp:659
-#: pcbnew/exporters/step/step_pcb_model.cpp:1961
+#: pcbnew/exporters/step/step_pcb_model.cpp:660
+#: pcbnew/exporters/step/step_pcb_model.cpp:1971
 msgid "Warnings:\n"
 msgstr "Cảnh báo:\n"
 
-#: pcbnew/exporters/step/step_pcb_model.cpp:678
+#: pcbnew/exporters/step/step_pcb_model.cpp:679
 msgid "** ShapeUpgrade_UnifySameDomain produced a null shape **\n"
 msgstr ""
 
-#: pcbnew/exporters/step/step_pcb_model.cpp:1644
+#: pcbnew/exporters/step/step_pcb_model.cpp:1647
 #, c-format
 msgid "Wire not done (contour points %d): OCC error %d\n"
 msgstr ""
 
-#: pcbnew/exporters/step/step_pcb_model.cpp:1648
-#: pcbnew/exporters/step/step_pcb_model.cpp:1661
+#: pcbnew/exporters/step/step_pcb_model.cpp:1651
+#: pcbnew/exporters/step/step_pcb_model.cpp:1664
 #, c-format
 msgid "z: %g; bounding box: %s\n"
 msgstr "z: %g; hộp giới hạn: %s\n"
 
-#: pcbnew/exporters/step/step_pcb_model.cpp:1658
+#: pcbnew/exporters/step/step_pcb_model.cpp:1661
 msgid ""
 "\n"
 "Wire self-interference check failed\n"
 msgstr ""
 
-#: pcbnew/exporters/step/step_pcb_model.cpp:1681
+#: pcbnew/exporters/step/step_pcb_model.cpp:1684
 msgid "Using non-simplified polygon.\n"
 msgstr ""
 
-#: pcbnew/exporters/step/step_pcb_model.cpp:1746
+#: pcbnew/exporters/step/step_pcb_model.cpp:1749
 #, fuzzy
 msgid "Failed to create a prismatic shape\n"
 msgstr "Không tải được thư viện kiface \"%s\"."
 
-#: pcbnew/exporters/step/step_pcb_model.cpp:1757
+#: pcbnew/exporters/step/step_pcb_model.cpp:1760
 msgid "** Face skipped **\n"
 msgstr ""
 
-#: pcbnew/exporters/step/step_pcb_model.cpp:1924
-#, c-format
-msgid "Build holes for %s\n"
+#: pcbnew/exporters/step/step_pcb_model.cpp:1915
+#, fuzzy, c-format
+msgid "Subtracting holes for %s\n"
 msgstr "Xây dựng các lỗ cho %s\n"
 
-#: pcbnew/exporters/step/step_pcb_model.cpp:1929
-#, c-format
-msgid "Cutting %d/%d %s\n"
-msgstr ""
-
-#: pcbnew/exporters/step/step_pcb_model.cpp:1950
+#: pcbnew/exporters/step/step_pcb_model.cpp:1958
 #, c-format
 msgid ""
 "\n"
-"** Got problems while cutting %s number %d **\n"
+"** Got problems while cutting %s net '%s' **\n"
 msgstr ""
 
-#: pcbnew/exporters/step/step_pcb_model.cpp:1977
+#: pcbnew/exporters/step/step_pcb_model.cpp:2003
 #, fuzzy
 msgid "shapes"
 msgstr "Hình dạng"
 
-#: pcbnew/exporters/step/step_pcb_model.cpp:1985
+#: pcbnew/exporters/step/step_pcb_model.cpp:2011
 #, fuzzy
 msgid "pads"
 msgstr "Pads Back"
 
-#: pcbnew/exporters/step/step_pcb_model.cpp:1986
+#: pcbnew/exporters/step/step_pcb_model.cpp:2012
 #, fuzzy
 msgid "vias"
 msgstr "Không có via"
@@ -53511,6 +53262,195 @@ msgstr "Tệp sơ đồ mạch Altium"
 #, fuzzy
 msgid "KiCad Drawing Sheet"
 msgstr "Worksheet"
+
+#~ msgid "B.Cu"
+#~ msgstr "B.Cu"
+
+#~ msgid "B.Silkscreen"
+#~ msgstr "Lớp chữ mặt đáy"
+
+#~ msgid "B.Mask"
+#~ msgstr "B.Mask"
+
+#, fuzzy
+#~ msgid "User.1"
+#~ msgstr "User.1"
+
+#, fuzzy
+#~ msgid "User.2"
+#~ msgstr "User.2"
+
+#, fuzzy
+#~ msgid "User.3"
+#~ msgstr "User.3"
+
+#, fuzzy
+#~ msgid "User.4"
+#~ msgstr "User.4"
+
+#, fuzzy
+#~ msgid "User.5"
+#~ msgstr "User.5"
+
+#, fuzzy
+#~ msgid "User.6"
+#~ msgstr "User.6"
+
+#, fuzzy
+#~ msgid "User.7"
+#~ msgstr "User.7"
+
+#, fuzzy
+#~ msgid "User.8"
+#~ msgstr "User.8"
+
+#, fuzzy
+#~ msgid "User.9"
+#~ msgstr "User.9"
+
+#, fuzzy
+#~ msgid "User.10"
+#~ msgstr "User.1"
+
+#, fuzzy
+#~ msgid "User.11"
+#~ msgstr "User.1"
+
+#, fuzzy
+#~ msgid "User.12"
+#~ msgstr "User.1"
+
+#, fuzzy
+#~ msgid "User.13"
+#~ msgstr "User.1"
+
+#, fuzzy
+#~ msgid "User.14"
+#~ msgstr "User.1"
+
+#, fuzzy
+#~ msgid "User.15"
+#~ msgstr "User.1"
+
+#, fuzzy
+#~ msgid "User.16"
+#~ msgstr "User.1"
+
+#, fuzzy
+#~ msgid "User.17"
+#~ msgstr "User.1"
+
+#, fuzzy
+#~ msgid "User.18"
+#~ msgstr "User.1"
+
+#, fuzzy
+#~ msgid "User.19"
+#~ msgstr "User.1"
+
+#, fuzzy
+#~ msgid "User.20"
+#~ msgstr "User.2"
+
+#, fuzzy
+#~ msgid "User.21"
+#~ msgstr "User.1"
+
+#, fuzzy
+#~ msgid "User.22"
+#~ msgstr "User.2"
+
+#, fuzzy
+#~ msgid "User.23"
+#~ msgstr "User.2"
+
+#, fuzzy
+#~ msgid "User.24"
+#~ msgstr "User.2"
+
+#, fuzzy
+#~ msgid "User.25"
+#~ msgstr "User.2"
+
+#, fuzzy
+#~ msgid "User.26"
+#~ msgstr "User.2"
+
+#, fuzzy
+#~ msgid "User.27"
+#~ msgstr "User.2"
+
+#, fuzzy
+#~ msgid "User.28"
+#~ msgstr "User.2"
+
+#, fuzzy
+#~ msgid "User.29"
+#~ msgstr "User.2"
+
+#, fuzzy
+#~ msgid "User.30"
+#~ msgstr "User.3"
+
+#, fuzzy
+#~ msgid "User.31"
+#~ msgstr "User.1"
+
+#, fuzzy
+#~ msgid "User.32"
+#~ msgstr "User.2"
+
+#, fuzzy
+#~ msgid "User.33"
+#~ msgstr "User.3"
+
+#, fuzzy
+#~ msgid "User.34"
+#~ msgstr "User.3"
+
+#, fuzzy
+#~ msgid "User.35"
+#~ msgstr "User.3"
+
+#, fuzzy
+#~ msgid "User.36"
+#~ msgstr "User.3"
+
+#, fuzzy
+#~ msgid "User.37"
+#~ msgstr "User.3"
+
+#, fuzzy
+#~ msgid "User.38"
+#~ msgstr "User.3"
+
+#, fuzzy
+#~ msgid "User.39"
+#~ msgstr "User.3"
+
+#, fuzzy
+#~ msgid "User.40"
+#~ msgstr "User.4"
+
+#, fuzzy
+#~ msgid "User.41"
+#~ msgstr "User.1"
+
+#, fuzzy
+#~ msgid "User.42"
+#~ msgstr "User.2"
+
+#, fuzzy
+#~ msgid "User.43"
+#~ msgstr "User.3"
+
+#, fuzzy
+#~ msgid "User.44"
+#~ msgstr "User.4"
+
+#, fuzzy
+#~ msgid "User.45"
+#~ msgstr "User.4"
 
 #, fuzzy
 #~ msgid "Data collection opt in request"
