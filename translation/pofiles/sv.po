@@ -12,11 +12,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-18 03:09+0300\n"
+"POT-Creation-Date: 2025-04-21 13:43+0300\n"
 "PO-Revision-Date: 2025-04-19 09:05+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
-"Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/"
-"master-source/sv/>\n"
+"Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/master-"
+"source/sv/>\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -209,7 +209,7 @@ msgid "Rendering: Post processing shader"
 msgstr "Rendering: Efterbearbetar skuggning"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:55
-#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:632
+#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:634
 #: common/eda_base_frame.cpp:1342 common/hotkey_store.cpp:80
 #: common/tool/actions.cpp:1208 pcbnew/footprint_chooser_frame.cpp:316
 #: pcbnew/footprint_viewer_frame.cpp:968 pcbnew/pcb_base_frame.cpp:694
@@ -226,30 +226,30 @@ msgstr "Återställ Standardinställningar"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:126
 #: bitmap2component/bitmap2cmp_frame.cpp:307 cvpcb/menubar.cpp:79
-#: eeschema/menubar.cpp:344 eeschema/sim/toolbars_simulator_frame.cpp:173
+#: eeschema/menubar.cpp:343 eeschema/sim/toolbars_simulator_frame.cpp:173
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:181
 #: eeschema/toolbars_symbol_viewer.cpp:143 gerbview/menubar.cpp:231
 #: kicad/menubar.cpp:220 pagelayout_editor/menubar.cpp:150
 #: pcb_calculator/pcb_calculator_frame.cpp:233
-#: pcbnew/menubar_footprint_editor.cpp:236 pcbnew/menubar_pcb_editor.cpp:482
+#: pcbnew/menubar_footprint_editor.cpp:236 pcbnew/menubar_pcb_editor.cpp:483
 #: pcbnew/toolbars_footprint_viewer.cpp:133
 msgid "&File"
 msgstr "&Arkiv"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:127 cvpcb/menubar.cpp:80
-#: eeschema/menubar.cpp:345
+#: eeschema/menubar.cpp:344
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:182 kicad/menubar.cpp:221
 #: pagelayout_editor/menubar.cpp:151 pcbnew/menubar_footprint_editor.cpp:237
-#: pcbnew/menubar_pcb_editor.cpp:483
+#: pcbnew/menubar_pcb_editor.cpp:484
 msgid "&Edit"
 msgstr "&Redigera"
 
-#: 3d-viewer/3d_viewer/3d_menubar.cpp:128 eeschema/menubar.cpp:346
+#: 3d-viewer/3d_viewer/3d_menubar.cpp:128 eeschema/menubar.cpp:345
 #: eeschema/sim/toolbars_simulator_frame.cpp:174
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:183
 #: eeschema/toolbars_symbol_viewer.cpp:144 gerbview/menubar.cpp:232
 #: kicad/menubar.cpp:222 pagelayout_editor/menubar.cpp:152
-#: pcbnew/menubar_footprint_editor.cpp:238 pcbnew/menubar_pcb_editor.cpp:484
+#: pcbnew/menubar_footprint_editor.cpp:238 pcbnew/menubar_pcb_editor.cpp:485
 #: pcbnew/toolbars_footprint_viewer.cpp:134
 msgid "&View"
 msgstr "&Visa"
@@ -267,11 +267,11 @@ msgid "KiCad 3D Viewer"
 msgstr "KiCad 3D-visare"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:166
-#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:638
+#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:640
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:77
 #: eeschema/dialogs/panel_sym_display_options_base.cpp:25
 #: pcbnew/footprint_edit_frame.cpp:245 pcbnew/footprint_edit_frame.cpp:980
-#: pcbnew/pcb_edit_frame.cpp:329 pcbnew/pcb_edit_frame.cpp:1789
+#: pcbnew/pcb_edit_frame.cpp:329 pcbnew/pcb_edit_frame.cpp:1790
 #: pcbnew/tools/pcb_actions.cpp:1422
 msgid "Appearance"
 msgstr "Utseende"
@@ -288,17 +288,17 @@ msgstr "Enligt mönsterkortsredigeraren"
 msgid "Follow PCB Plot Settings"
 msgstr "Enligt plottinställningar för mönsterkort"
 
-#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:561
+#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:563
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:718
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:903
 msgid "legacy colors"
 msgstr "färger som i äldre version"
 
-#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:697
+#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:699
 msgid "3D Image File Name"
 msgstr "Filnamn för 3D-Bild"
 
-#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:718
+#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:720
 #: common/eda_base_frame.cpp:1500 common/eda_base_frame.cpp:1504
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:328
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:332
@@ -306,7 +306,7 @@ msgstr "Filnamn för 3D-Bild"
 msgid "Insufficient permissions to save file '%s'."
 msgstr "Otillräckliga behörigheter för att spara filen '%s'."
 
-#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:719 common/confirm.cpp:186
+#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:721 common/confirm.cpp:186
 #: common/confirm.cpp:210 common/dialogs/dialog_grid_settings.cpp:82
 #: common/dialogs/dialog_grid_settings.cpp:89
 #: common/dialogs/panel_embedded_files.cpp:308
@@ -320,9 +320,9 @@ msgstr "Otillräckliga behörigheter för att spara filen '%s'."
 #: eeschema/erc/erc_item.cpp:81 eeschema/files-io.cpp:936
 #: eeschema/files-io.cpp:1004 eeschema/sch_marker.cpp:371
 #: kicad/import_proj.cpp:88 kicad/import_project.cpp:123 kicad/kicad.cpp:318
-#: kicad/tools/kicad_manager_control.cpp:275
-#: kicad/tools/kicad_manager_control.cpp:332
-#: kicad/tools/kicad_manager_control.cpp:378
+#: kicad/tools/kicad_manager_control.cpp:277
+#: kicad/tools/kicad_manager_control.cpp:334
+#: kicad/tools/kicad_manager_control.cpp:380
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664.cpp:143
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664.cpp:216
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664.cpp:225
@@ -341,11 +341,11 @@ msgstr "Otillräckliga behörigheter för att spara filen '%s'."
 msgid "Error"
 msgstr "Fel"
 
-#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:759
+#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:761
 msgid "Failed to copy image to clipboard"
 msgstr "Kopiering av bild till urklipp misslyckades"
 
-#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:770
+#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:772
 msgid "Can't save file"
 msgstr "Kan inte spara fil"
 
@@ -602,17 +602,8 @@ msgid "Show board body"
 msgstr "Visa basmaterial"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:55
-#: bitmap2component/bitmap2cmp_panel_base.cpp:179
-msgid "F.Cu"
-msgstr "F.Cu"
-
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:55
 msgid "Show front copper / surface finish color"
 msgstr "Visa färg för koppar / ytplätering på framsidan"
-
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:56
-msgid "B.Cu"
-msgstr "B.Cu"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:56
 msgid "Show back copper / surface finish color"
@@ -635,466 +626,212 @@ msgid "Show solder paste"
 msgstr "Visa lager för lodpasta"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:59
-#: bitmap2component/bitmap2cmp_panel_base.cpp:179
-msgid "F.Silkscreen"
-msgstr "F.Anvisningstryck"
-
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:59
 msgid "Show front silkscreen"
 msgstr "Visa framsidans anvisningstryck"
-
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:60
-msgid "B.Silkscreen"
-msgstr "B.Anvisningstryck"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:60
 msgid "Show back silkscreen"
 msgstr "Visa baksidans anvisningstryck"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:61
-#: bitmap2component/bitmap2cmp_panel_base.cpp:179
-msgid "F.Mask"
-msgstr "F.Mask"
-
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:61
 msgid "Show front solder mask"
 msgstr "Visa framsidans lödmask"
-
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:62
-msgid "B.Mask"
-msgstr "B.Mask"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:62
 msgid "Show back solder mask"
 msgstr "Visa baksidans lödmask"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:63
-#: bitmap2component/bitmap2cmp_panel_base.cpp:179
-msgid "User.Drawings"
-msgstr "Användar.Ritningar"
-
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:63
 msgid "Show user drawings layer"
 msgstr "Visa lager för användarens ritningar"
-
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:64
-#: bitmap2component/bitmap2cmp_panel_base.cpp:179
-msgid "User.Comments"
-msgstr "User.Comments"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:64
 msgid "Show user comments layer"
 msgstr "Visa lager för användarens kommentarer"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:65
-#: bitmap2component/bitmap2cmp_panel_base.cpp:179
-msgid "User.Eco1"
-msgstr "User.Eco1"
-
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:65
 msgid "Show user ECO1 layer"
 msgstr "Visa användardefinierat ECO1-lager"
-
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:66
-#: bitmap2component/bitmap2cmp_panel_base.cpp:179
-msgid "User.Eco2"
-msgstr "User.Eco2"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:66
 msgid "Show user ECO2 layer"
 msgstr "Visa användardefinierat ECO2-lager"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:67
-msgid "User.1"
-msgstr "User.1"
-
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:67
 msgid "Show user defined layer 1"
 msgstr "Visa användardefinierat lager 1"
-
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:68
-msgid "User.2"
-msgstr "User.2"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:68
 msgid "Show user defined layer 2"
 msgstr "Visa användardefinierat lager 2"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:69
-msgid "User.3"
-msgstr "User.3"
-
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:69
 msgid "Show user defined layer 3"
 msgstr "Visa användardefinierat lager 3"
-
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:70
-msgid "User.4"
-msgstr "User.4"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:70
 msgid "Show user defined layer 4"
 msgstr "Visa användardefinierat lager 4"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:71
-msgid "User.5"
-msgstr "User.5"
-
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:71
 msgid "Show user defined layer 5"
 msgstr "Visa användardefinierat lager 5"
-
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:72
-msgid "User.6"
-msgstr "User.6"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:72
 msgid "Show user defined layer 6"
 msgstr "Visa användardefinierat lager 6"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:73
-msgid "User.7"
-msgstr "User.7"
-
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:73
 msgid "Show user defined layer 7"
 msgstr "Visa användardefinierat lager 7"
-
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:74
-msgid "User.8"
-msgstr "User.8"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:74
 msgid "Show user defined layer 8"
 msgstr "Visa användardefinierat lager 8"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:75
-msgid "User.9"
-msgstr "User.9"
-
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:75
 msgid "Show user defined layer 9"
 msgstr "Visa användardefinierat lager 9"
-
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:76
-#, fuzzy
-msgid "User.10"
-msgstr "User.1"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:76
 msgid "Show user defined layer 10"
 msgstr "Visa användardefinierat lager 10"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:77
-#, fuzzy
-msgid "User.11"
-msgstr "User.1"
-
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:77
 msgid "Show user defined layer 11"
 msgstr "Visa användardefinierat lager 11"
-
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:78
-#, fuzzy
-msgid "User.12"
-msgstr "User.1"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:78
 msgid "Show user defined layer 12"
 msgstr "Visa användardefinierat lager 12"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:79
-#, fuzzy
-msgid "User.13"
-msgstr "User.1"
-
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:79
 msgid "Show user defined layer 13"
 msgstr "Visa användardefinierat lager 13"
-
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:80
-#, fuzzy
-msgid "User.14"
-msgstr "User.1"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:80
 msgid "Show user defined layer 14"
 msgstr "Visa användardefinierat lager 14"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:81
-#, fuzzy
-msgid "User.15"
-msgstr "User.1"
-
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:81
 msgid "Show user defined layer 15"
 msgstr "Visa användardefinierat lager 15"
-
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:82
-#, fuzzy
-msgid "User.16"
-msgstr "User.1"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:82
 msgid "Show user defined layer 16"
 msgstr "Visa användardefinierat lager 16"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:83
-#, fuzzy
-msgid "User.17"
-msgstr "User.1"
-
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:83
 msgid "Show user defined layer 17"
 msgstr "Visa användardefinierat lager 17"
-
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:84
-#, fuzzy
-msgid "User.18"
-msgstr "User.1"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:84
 msgid "Show user defined layer 18"
 msgstr "Visa användardefinierat lager 18"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:85
-#, fuzzy
-msgid "User.19"
-msgstr "User.1"
-
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:85
 msgid "Show user defined layer 19"
 msgstr "Visa användardefinierat lager 19"
-
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:86
-#, fuzzy
-msgid "User.20"
-msgstr "User.2"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:86
 msgid "Show user defined layer 20"
 msgstr "Visa användardefinierat lager 20"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:87
-#, fuzzy
-msgid "User.21"
-msgstr "User.2"
-
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:87
 msgid "Show user defined layer 21"
 msgstr "Visa användardefinierat lager 21"
-
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:88
-#, fuzzy
-msgid "User.22"
-msgstr "User.2"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:88
 msgid "Show user defined layer 22"
 msgstr "Visa användardefinierat lager 22"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:89
-#, fuzzy
-msgid "User.23"
-msgstr "User.2"
-
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:89
 msgid "Show user defined layer 23"
 msgstr "Visa användardefinierat lager 23"
-
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:90
-#, fuzzy
-msgid "User.24"
-msgstr "User.2"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:90
 msgid "Show user defined layer 24"
 msgstr "Visa användardefinierat lager 24"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:91
-#, fuzzy
-msgid "User.25"
-msgstr "User.2"
-
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:91
 msgid "Show user defined layer 25"
 msgstr "Visa användardefinierat lager 25"
-
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:92
-#, fuzzy
-msgid "User.26"
-msgstr "User.2"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:92
 msgid "Show user defined layer 26"
 msgstr "Visa användardefinierat lager 26"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:93
-#, fuzzy
-msgid "User.27"
-msgstr "User.2"
-
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:93
 msgid "Show user defined layer 27"
 msgstr "Visa användardefinierat lager 27"
-
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:94
-#, fuzzy
-msgid "User.28"
-msgstr "User.2"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:94
 msgid "Show user defined layer 28"
 msgstr "Visa användardefinierat lager 28"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:95
-#, fuzzy
-msgid "User.29"
-msgstr "User.2"
-
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:95
 msgid "Show user defined layer 29"
 msgstr "Visa användardefinierat lager 29"
-
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:96
-#, fuzzy
-msgid "User.30"
-msgstr "User.3"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:96
 msgid "Show user defined layer 30"
 msgstr "Visa användardefinierat lager 30"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:97
-#, fuzzy
-msgid "User.31"
-msgstr "User.3"
-
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:97
 msgid "Show user defined layer 31"
 msgstr "Visa användardefinierat lager 31"
-
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:98
-#, fuzzy
-msgid "User.32"
-msgstr "User.3"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:98
 msgid "Show user defined layer 32"
 msgstr "Visa användardefinierat lager 32"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:99
-#, fuzzy
-msgid "User.33"
-msgstr "User.3"
-
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:99
 msgid "Show user defined layer 33"
 msgstr "Visa användardefinierat lager 33"
-
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:100
-#, fuzzy
-msgid "User.34"
-msgstr "User.3"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:100
 msgid "Show user defined layer 34"
 msgstr "Visa användardefinierat lager 34"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:101
-#, fuzzy
-msgid "User.35"
-msgstr "User.3"
-
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:101
 msgid "Show user defined layer 35"
 msgstr "Visa användardefinierat lager 35"
-
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:102
-#, fuzzy
-msgid "User.36"
-msgstr "User.3"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:102
 msgid "Show user defined layer 36"
 msgstr "Visa användardefinierat lager 36"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:103
-#, fuzzy
-msgid "User.37"
-msgstr "User.3"
-
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:103
 msgid "Show user defined layer 37"
 msgstr "Visa användardefinierat lager 37"
-
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:104
-#, fuzzy
-msgid "User.38"
-msgstr "User.3"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:104
 msgid "Show user defined layer 38"
 msgstr "Visa användardefinierat lager 38"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:105
-#, fuzzy
-msgid "User.39"
-msgstr "User.3"
-
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:105
 msgid "Show user defined layer 39"
 msgstr "Visa användardefinierat lager 39"
-
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:106
-#, fuzzy
-msgid "User.40"
-msgstr "User.4"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:106
 msgid "Show user defined layer 40"
 msgstr "Visa användardefinierat lager 40"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:107
-#, fuzzy
-msgid "User.41"
-msgstr "User.4"
-
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:107
 msgid "Show user defined layer 41"
 msgstr "Visa avändardefinierat lager 41"
-
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:108
-#, fuzzy
-msgid "User.42"
-msgstr "User.4"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:108
 msgid "Show user defined layer 42"
 msgstr "Visa användardefinierat lager 42"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:109
-#, fuzzy
-msgid "User.43"
-msgstr "User.4"
-
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:109
 msgid "Show user defined layer 43"
 msgstr "Visa användardefinierat lager 43"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:110
-#, fuzzy
-msgid "User.44"
-msgstr "User.4"
-
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:110
 msgid "Show user defined layer 44"
 msgstr "Visa användardefinierat lager 44"
-
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:111
-#, fuzzy
-msgid "User.45"
-msgstr "User.4"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:111
 msgid "Show user defined layer 45"
@@ -2147,6 +1884,34 @@ msgid "Layer:"
 msgstr "Lager:"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:179
+msgid "F.Cu"
+msgstr "F.Cu"
+
+#: bitmap2component/bitmap2cmp_panel_base.cpp:179
+msgid "F.Silkscreen"
+msgstr "F.Anvisningstryck"
+
+#: bitmap2component/bitmap2cmp_panel_base.cpp:179
+msgid "F.Mask"
+msgstr "F.Mask"
+
+#: bitmap2component/bitmap2cmp_panel_base.cpp:179
+msgid "User.Drawings"
+msgstr "Användar.Ritningar"
+
+#: bitmap2component/bitmap2cmp_panel_base.cpp:179
+msgid "User.Comments"
+msgstr "User.Comments"
+
+#: bitmap2component/bitmap2cmp_panel_base.cpp:179
+msgid "User.Eco1"
+msgstr "User.Eco1"
+
+#: bitmap2component/bitmap2cmp_panel_base.cpp:179
+msgid "User.Eco2"
+msgstr "User.Eco2"
+
+#: bitmap2component/bitmap2cmp_panel_base.cpp:179
 msgid "F.Fab"
 msgstr "F.Fab"
 
@@ -2179,38 +1944,38 @@ msgstr "Ändring från API"
 msgid "Background Jobs"
 msgstr "Bakgrundsprocesser"
 
-#: common/common.cpp:303
+#: common/common.cpp:305
 #, c-format
 msgid ""
 "Environment variables expansion failed: missing '%c' at position %u in '%s'."
 msgstr ""
 "Expansion av miljövariabler misslyckades: saknar '%c' vid position %u i '%s'."
 
-#: common/common.cpp:385
+#: common/common.cpp:387
 #, c-format
 msgid "Cannot make path '%s' absolute with respect to '%s'."
 msgstr "Kan inte göra sökvägen '%s' absolut med avseende på '%s'."
 
-#: common/common.cpp:404
+#: common/common.cpp:406
 #, c-format
 msgid "Output directory '%s' created."
 msgstr "Utmatningskatalogen '%s' skapades."
 
-#: common/common.cpp:413 pcbnew/dialogs/dialog_export_odbpp.cpp:315
+#: common/common.cpp:415 pcbnew/dialogs/dialog_export_odbpp.cpp:315
 #, c-format
 msgid "Cannot create output directory '%s'."
 msgstr "Det går inte att skapa utmatningskatalogen '%s'."
 
-#: common/common.cpp:704
+#: common/common.cpp:706
 msgid "This operating system is not supported by KiCad and its dependencies."
 msgstr ""
 "Det här operativsystemet stöds inte längre av KiCad och dess beroenden."
 
-#: common/common.cpp:706
+#: common/common.cpp:708
 msgid "Unsupported Operating System"
 msgstr "Operativsystemet stöds inte"
 
-#: common/common.cpp:709
+#: common/common.cpp:711
 msgid ""
 "Any issues with KiCad on this system cannot be reported to the official "
 "bugtracker."
@@ -2289,7 +2054,7 @@ msgstr "Information"
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:139
 #: eeschema/tools/symbol_editor_control.cpp:494
 #: eeschema/tools/symbol_editor_pin_tool.cpp:242 kicad/import_project.cpp:109
-#: kicad/tools/kicad_manager_control.cpp:359
+#: kicad/tools/kicad_manager_control.cpp:361
 #: pcbnew/dialogs/dialog_export_idf.cpp:138
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:355
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:409
@@ -2668,16 +2433,16 @@ msgstr "Kopiera KiCad versionsinformation till Urklipp"
 msgid "&Report Bug"
 msgstr "&Rapportera fel"
 
-#: common/dialog_about/dialog_about_base.cpp:60 common/tool/actions.cpp:1363
+#: common/dialog_about/dialog_about_base.cpp:60 common/tool/actions.cpp:1372
 msgid "Report a problem with KiCad"
 msgstr "Rapportera ett problem med KiCad"
 
-#: common/dialog_about/dialog_about_base.cpp:64 common/tool/actions.cpp:1356
+#: common/dialog_about/dialog_about_base.cpp:64 common/tool/actions.cpp:1365
 msgid "Donate"
 msgstr "Donera"
 
 #: common/dialog_about/dialog_about_base.cpp:65
-#: common/tool/common_control.cpp:321
+#: common/tool/common_control.cpp:387
 msgid "Donate to KiCad"
 msgstr "Donera till KiCad"
 
@@ -2865,7 +2630,7 @@ msgstr "Miljövariabler"
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:56
 #: eeschema/dialogs/panel_bom_presets_base.cpp:40
 #: eeschema/dialogs/panel_bom_presets_base.cpp:80
-#: eeschema/dialogs/panel_sym_lib_table.cpp:384
+#: eeschema/dialogs/panel_sym_lib_table.cpp:380
 #: eeschema/dialogs/panel_template_fieldnames_base.cpp:42
 #: eeschema/fields_grid_table.cpp:470 eeschema/sch_group.cpp:497
 #: eeschema/sch_pin.cpp:1173 eeschema/sch_symbol.cpp:1957
@@ -2879,7 +2644,7 @@ msgstr "Miljövariabler"
 #: pcbnew/dialogs/dialog_footprint_wizard_list_base.cpp:42
 #: pcbnew/dialogs/panel_display_options.cpp:60
 #: pcbnew/dialogs/panel_display_options_base.cpp:56
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:438 pcbnew/pcb_field.cpp:285
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:436 pcbnew/pcb_field.cpp:285
 #: pcbnew/pcb_fields_grid_table.cpp:146 pcbnew/pcb_group.cpp:516
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:116
 #: pcbnew/widgets/search_handlers.cpp:202
@@ -2918,7 +2683,7 @@ msgstr "Förinställda fält"
 #: eeschema/dialogs/dialog_sim_format_value.cpp:66
 #: eeschema/dialogs/dialog_sim_format_value.cpp:75
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:57
-#: eeschema/dialogs/panel_sym_lib_table.cpp:385
+#: eeschema/dialogs/panel_sym_lib_table.cpp:381
 #: eeschema/fields_grid_table.cpp:471 eeschema/sch_symbol.cpp:980
 #: eeschema/sch_symbol.cpp:1954 eeschema/sch_symbol.cpp:2006
 #: eeschema/sch_symbol.cpp:2942 eeschema/sim/simulator_frame_ui.cpp:746
@@ -2934,8 +2699,8 @@ msgstr "Förinställda fält"
 #: pcbnew/dialogs/panel_fp_editor_field_defaults.cpp:80
 #: pcbnew/dialogs/panel_fp_editor_field_defaults_base.cpp:48
 #: pcbnew/dialogs/panel_fp_editor_field_defaults_base.cpp:57
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:439 pcbnew/footprint.cpp:4143
-#: pcbnew/footprint_wizard_frame.cpp:328 pcbnew/pcb_dimension.cpp:619
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:437 pcbnew/footprint.cpp:4143
+#: pcbnew/footprint_wizard_frame.cpp:327 pcbnew/pcb_dimension.cpp:619
 #: pcbnew/pcb_fields_grid_table.cpp:147 pcbnew/plot_board_layers.cpp:181
 #: pcbnew/widgets/search_handlers.cpp:119
 msgid "Value"
@@ -3122,6 +2887,10 @@ msgstr "Välj global bibliotekstabellfil för %s:"
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:432
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:436
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:440
+#: pcb_calculator/calculator_panels/panel_transline_base.cpp:444
+#: pcb_calculator/calculator_panels/panel_transline_base.cpp:448
+#: pcb_calculator/calculator_panels/panel_transline_base.cpp:452
+#: pcb_calculator/calculator_panels/panel_transline_base.cpp:456
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:230
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:242
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:254
@@ -3219,8 +2988,8 @@ msgstr "(valfritt)"
 #: pcbnew/dialogs/dialog_tuning_pattern_properties_base.cpp:86
 #: pcbnew/dialogs/dialog_tuning_pattern_properties_base.cpp:97
 #: pcbnew/dialogs/dialog_tuning_pattern_properties_base.cpp:110
-#: pcbnew/dialogs/panel_setup_dimensions_base.cpp:90
-#: pcbnew/dialogs/panel_setup_dimensions_base.cpp:106
+#: pcbnew/dialogs/panel_setup_dimensions_base.cpp:93
+#: pcbnew/dialogs/panel_setup_dimensions_base.cpp:109
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:48
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:62
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:78
@@ -3263,7 +3032,7 @@ msgstr "Gruppnamn:"
 #: pcbnew/footprint.cpp:1721 pcbnew/pad.cpp:1335 pcbnew/pad.cpp:2740
 #: pcbnew/pcb_dimension.cpp:673 pcbnew/pcb_group.cpp:419
 #: pcbnew/pcb_marker.cpp:381 pcbnew/pcb_shape.cpp:721
-#: pcbnew/pcb_tablecell.cpp:109 pcbnew/pcb_text.cpp:286
+#: pcbnew/pcb_tablecell.cpp:109 pcbnew/pcb_text.cpp:284
 #: pcbnew/pcb_textbox.cpp:468 pcbnew/pcb_track.cpp:1914
 #: pcbnew/tools/generator_tool.cpp:47 pcbnew/zone.cpp:897
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:52
@@ -3515,9 +3284,9 @@ msgid "Title Block"
 msgstr "Namnruta"
 
 #: common/dialogs/dialog_page_settings.cpp:487
-#: eeschema/eeschema_jobs_handler.cpp:229 pagelayout_editor/files.cpp:243
+#: eeschema/eeschema_jobs_handler.cpp:231 pagelayout_editor/files.cpp:243
 #: pagelayout_editor/pl_editor_frame.cpp:361
-#: pcbnew/pcbnew_jobs_handler.cpp:2340
+#: pcbnew/pcbnew_jobs_handler.cpp:2341
 #, c-format
 msgid "Error loading drawing sheet '%s'."
 msgstr "Fel vid inläsning av ritningsark '%s'."
@@ -3878,7 +3647,7 @@ msgid "Output mode:"
 msgstr "Utskriftsläge:"
 
 #: common/dialogs/dialog_print_generic_base.cpp:46
-#: common/dialogs/panel_setup_netclasses_base.cpp:64 common/eda_text.cpp:1408
+#: common/dialogs/panel_setup_netclasses_base.cpp:64 common/eda_text.cpp:1418
 #: eeschema/dialogs/dialog_label_properties_base.cpp:121
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:72
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:78
@@ -3892,8 +3661,8 @@ msgstr "Utskriftsläge:"
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:98
 #: pcbnew/dialogs/dialog_plot_base.cpp:380
 #: pcbnew/dialogs/dialog_plot_base.cpp:406 pcbnew/pcb_field.cpp:292
-#: pcbnew/pcb_tablecell.cpp:211 pcbnew/pcb_text.cpp:628
-#: pcbnew/pcb_textbox.cpp:819 pcbnew/tools/pcb_control.cpp:2316
+#: pcbnew/pcb_tablecell.cpp:216 pcbnew/pcb_text.cpp:631
+#: pcbnew/pcb_textbox.cpp:824 pcbnew/tools/pcb_control.cpp:2316
 msgid "Color"
 msgstr "Färg"
 
@@ -4168,7 +3937,7 @@ msgstr "Filnamn"
 #: pcbnew/dialogs/dialog_find_base.cpp:118 pcbnew/pad.cpp:1335
 #: pcbnew/pcb_dimension.cpp:673 pcbnew/pcb_group.cpp:419
 #: pcbnew/pcb_shape.cpp:721 pcbnew/pcb_tablecell.cpp:109
-#: pcbnew/pcb_text.cpp:286 pcbnew/pcb_textbox.cpp:468 pcbnew/pcb_track.cpp:1914
+#: pcbnew/pcb_text.cpp:284 pcbnew/pcb_textbox.cpp:468 pcbnew/pcb_track.cpp:1914
 #: pcbnew/zone.cpp:897
 msgid "Status"
 msgstr "Status"
@@ -4612,7 +4381,7 @@ msgstr "Använd ikoner framtagna för mörka fönsterbakgrunder"
 #: common/dialogs/panel_common_settings_base.cpp:245
 #: common/dialogs/panel_mouse_settings_base.cpp:66
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:122
-#: pcbnew/dialogs/panel_setup_dimensions_base.cpp:33
+#: pcbnew/dialogs/panel_setup_dimensions_base.cpp:36
 #: pcbnew/pcb_dimension.cpp:1789
 msgid "Automatic"
 msgstr "Automatisk"
@@ -4637,7 +4406,7 @@ msgstr "Liten"
 msgid "Use compact icons in the toolbars"
 msgstr "Använd kompakta ikoner i verktygslisterna"
 
-#: common/dialogs/panel_common_settings_base.cpp:220 common/eda_text.cpp:976
+#: common/dialogs/panel_common_settings_base.cpp:220 common/eda_text.cpp:983
 #: eeschema/sch_label.cpp:1240 eeschema/sch_tablecell.cpp:121
 #: eeschema/sch_text.cpp:558 eeschema/sch_textbox.cpp:463
 #: gerbview/gerber_file_image.cpp:356 gerbview/gerber_file_image.cpp:360
@@ -4895,38 +4664,38 @@ msgid "Reset Unique Id"
 msgstr "Återställ unikt id"
 
 #: common/dialogs/panel_design_block_lib_table.cpp:464
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:492
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:490
 #, c-format
 msgid "folder with %s files"
 msgstr "mapp med %s filer"
 
 #: common/dialogs/panel_design_block_lib_table.cpp:541
-#: eeschema/dialogs/panel_sym_lib_table.cpp:455
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:569
+#: eeschema/dialogs/panel_sym_lib_table.cpp:445
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:563
 msgid "A library table row nickname and path cells are empty."
 msgstr "Kortnamns- och sökvägsceller är tomma i en bibliotekstabellsrad."
 
 #: common/dialogs/panel_design_block_lib_table.cpp:543
-#: eeschema/dialogs/panel_sym_lib_table.cpp:457
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:571
+#: eeschema/dialogs/panel_sym_lib_table.cpp:447
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:565
 msgid "A library table row nickname cell is empty."
 msgstr "Kortnamnscellen i en bibliotekstabellsrad är tom."
 
 #: common/dialogs/panel_design_block_lib_table.cpp:545
-#: eeschema/dialogs/panel_sym_lib_table.cpp:459
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:573
+#: eeschema/dialogs/panel_sym_lib_table.cpp:449
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:567
 msgid "A library table row path cell is empty."
 msgstr "Sökvägscellen i en bibliotekstabellsrad är tom."
 
 #: common/dialogs/panel_design_block_lib_table.cpp:549
-#: eeschema/dialogs/panel_sym_lib_table.cpp:463
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:577
+#: eeschema/dialogs/panel_sym_lib_table.cpp:453
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:571
 msgid "Invalid Row Definition"
 msgstr "Ogiltig raddefinition"
 
 #: common/dialogs/panel_design_block_lib_table.cpp:551
-#: eeschema/dialogs/panel_sym_lib_table.cpp:465
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:579
+#: eeschema/dialogs/panel_sym_lib_table.cpp:455
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:573
 msgid ""
 "Empty cells will result in all rows that are invalid to be removed from the "
 "table."
@@ -4935,35 +4704,35 @@ msgstr ""
 "tabellen."
 
 #: common/dialogs/panel_design_block_lib_table.cpp:554
-#: eeschema/dialogs/panel_sym_lib_table.cpp:468
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:581
+#: eeschema/dialogs/panel_sym_lib_table.cpp:458
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:575
 msgid "Remove Invalid Cells"
 msgstr "Ta bort ogiltiga celler"
 
 #: common/dialogs/panel_design_block_lib_table.cpp:555
-#: eeschema/dialogs/panel_sym_lib_table.cpp:469
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:582
+#: eeschema/dialogs/panel_sym_lib_table.cpp:459
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:576
 msgid "Cancel Table Update"
 msgstr "Avbryt uppdatering av tabell"
 
 #: common/dialogs/panel_design_block_lib_table.cpp:568
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:595
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:589
 #, c-format
 msgid "Illegal character '%c' in nickname '%s'."
 msgstr "Olagligt tecken '%c' i kortnamn '%s'."
 
 #: common/dialogs/panel_design_block_lib_table.cpp:580
 #: common/dialogs/panel_design_block_lib_table.cpp:628
-#: eeschema/dialogs/panel_sym_lib_table.cpp:499
-#: eeschema/dialogs/panel_sym_lib_table.cpp:556
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:608
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:656
+#: eeschema/dialogs/panel_sym_lib_table.cpp:489
+#: eeschema/dialogs/panel_sym_lib_table.cpp:546
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:602
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:650
 msgid "Library Nickname Error"
 msgstr "Fel i bibliotekets kortnamn"
 
 #: common/dialogs/panel_design_block_lib_table.cpp:614
-#: eeschema/dialogs/panel_sym_lib_table.cpp:542
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:642
+#: eeschema/dialogs/panel_sym_lib_table.cpp:532
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:636
 #, c-format
 msgid "Multiple libraries cannot share the same nickname ('%s')."
 msgstr "Flera bibliotek kan inte dela samma kortnamn ('%s')."
@@ -4974,12 +4743,12 @@ msgid "Design block library '%s' failed to load."
 msgstr "Designblocksbiblioteket '%s' kunde inte läsas in."
 
 #: common/dialogs/panel_design_block_lib_table.cpp:666
-#: eeschema/dialogs/panel_sym_lib_table.cpp:597
+#: eeschema/dialogs/panel_sym_lib_table.cpp:587
 msgid "Error Loading Library"
 msgstr "Fel vid inläsning av bibliotek"
 
 #: common/dialogs/panel_design_block_lib_table.cpp:852
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:841
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:835
 msgid ""
 "Select one or more rows containing libraries to save as current KiCad format."
 msgstr ""
@@ -4987,21 +4756,21 @@ msgstr ""
 "KiCad-format."
 
 #: common/dialogs/panel_design_block_lib_table.cpp:860
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:849
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:843
 #, c-format
 msgid "Save '%s' as current KiCad format and replace entry in table?"
 msgstr "Spara '%s' som aktuellt KiCad-format och ersätt post i tabellen?"
 
 #: common/dialogs/panel_design_block_lib_table.cpp:866
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:855
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:849
 #, c-format
 msgid "Save %d libraries as current KiCad format and replace entries in table?"
 msgstr "Spara %d bibliotek som aktuellt format och ersätt poster i tabellen?"
 
 #: common/dialogs/panel_design_block_lib_table.cpp:884
 #: eeschema/dialogs/dialog_symbol_remap.cpp:222
-#: eeschema/dialogs/panel_sym_lib_table.cpp:973
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:873
+#: eeschema/dialogs/panel_sym_lib_table.cpp:963
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:867
 #, c-format
 msgid "Library '%s' not found."
 msgstr "Biblioteket '%s' hittades inte."
@@ -5015,8 +4784,8 @@ msgstr ""
 "designblock?"
 
 #: common/dialogs/panel_design_block_lib_table.cpp:900
-#: eeschema/dialogs/panel_sym_lib_table.cpp:989
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:888
+#: eeschema/dialogs/panel_sym_lib_table.cpp:979
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:882
 msgid "Migrate Library"
 msgstr "Migrera ett bibliotek"
 
@@ -5026,26 +4795,26 @@ msgid "Failed to save design block library file '%s'."
 msgstr "Det gick inte att spara designblocksbiblioteksfil '%s'."
 
 #: common/dialogs/panel_design_block_lib_table.cpp:968
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:959
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:953
 #, c-format
 msgid "Select %s Library"
 msgstr "Välj %s Bibliotek"
 
 #: common/dialogs/panel_design_block_lib_table.cpp:1026
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:1016
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:1010
 msgid "Warning: Duplicate Nicknames"
 msgstr "Varning: Dubbletter av kortnamn"
 
 #: common/dialogs/panel_design_block_lib_table.cpp:1027
-#: eeschema/dialogs/panel_sym_lib_table.cpp:668
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:1017
+#: eeschema/dialogs/panel_sym_lib_table.cpp:658
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:1011
 #, c-format
 msgid "A library nicknamed '%s' already exists."
 msgstr "Ett bibliotek med kortnamnet \"%s\" finns redan."
 
 #: common/dialogs/panel_design_block_lib_table.cpp:1028
-#: eeschema/dialogs/panel_sym_lib_table.cpp:669
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:1018
+#: eeschema/dialogs/panel_sym_lib_table.cpp:659
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:1012
 msgid "One of the nicknames will need to be changed after adding this library."
 msgstr "Ett av kortnamnen måste ändras när du har lagt till detta bibliotek."
 
@@ -5053,15 +4822,15 @@ msgstr "Ett av kortnamnen måste ändras när du har lagt till detta bibliotek."
 #: common/dialogs/panel_embedded_files.cpp:404
 #: common/dialogs/panel_embedded_files.cpp:426
 #: common/widgets/design_block_pane.cpp:499
-#: eeschema/dialogs/panel_sym_lib_table.cpp:688 eeschema/sch_base_frame.cpp:306
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:1038
+#: eeschema/dialogs/panel_sym_lib_table.cpp:678 eeschema/sch_base_frame.cpp:306
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:1032
 #: pcbnew/footprint_libraries_utils.cpp:429 pcbnew/tools/pcb_actions.cpp:667
 msgid "Skip"
 msgstr "Hoppa över"
 
 #: common/dialogs/panel_design_block_lib_table.cpp:1048
-#: eeschema/dialogs/panel_sym_lib_table.cpp:688
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:1038
+#: eeschema/dialogs/panel_sym_lib_table.cpp:678
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:1032
 msgid "Add Anyway"
 msgstr "Lägg till ändå"
 
@@ -5070,9 +4839,9 @@ msgid "Design Block Libraries"
 msgstr "Designblocksbibliotek"
 
 #: common/dialogs/panel_design_block_lib_table.cpp:1235
-#: eeschema/dialogs/panel_sym_lib_table.cpp:1245
+#: eeschema/dialogs/panel_sym_lib_table.cpp:1208
 #: eeschema/tools/sch_editor_control.cpp:498
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:1299
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:1267
 #, c-format
 msgid ""
 "Error saving global library table:\n"
@@ -5085,21 +4854,21 @@ msgstr ""
 
 #: common/dialogs/panel_design_block_lib_table.cpp:1236
 #: common/dialogs/panel_design_block_lib_table.cpp:1249
-#: eeschema/dialogs/panel_sym_lib_table.cpp:1246
-#: eeschema/dialogs/panel_sym_lib_table.cpp:1259
+#: eeschema/dialogs/panel_sym_lib_table.cpp:1209
+#: eeschema/dialogs/panel_sym_lib_table.cpp:1222
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1902
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1954
 #: eeschema/tools/sch_editor_control.cpp:499
 #: eeschema/tools/sch_editor_control.cpp:514
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:1300
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:1313
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:1268
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:1281
 msgid "File Save Error"
 msgstr "Fel vid försök att spara fil"
 
 #: common/dialogs/panel_design_block_lib_table.cpp:1248
-#: eeschema/cross-probing.cpp:878 eeschema/dialogs/panel_sym_lib_table.cpp:1258
+#: eeschema/cross-probing.cpp:878 eeschema/dialogs/panel_sym_lib_table.cpp:1221
 #: eeschema/tools/sch_editor_control.cpp:513
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:1312
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:1280
 #, c-format
 msgid ""
 "Error saving project-specific library table:\n"
@@ -5121,7 +4890,7 @@ msgstr "Aktiv"
 
 #: common/dialogs/panel_design_block_lib_table_base.cpp:45
 #: common/dialogs/panel_design_block_lib_table_base.cpp:94
-#: common/eda_text.cpp:1384
+#: common/eda_text.cpp:1394
 #: eeschema/dialogs/dialog_field_properties_base.cpp:97
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:296
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:130
@@ -5246,7 +5015,7 @@ msgstr "Filen '%s' finns redan."
 #: eeschema/symbol_editor/symbol_editor.cpp:1181
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:140
 #: eeschema/tools/symbol_editor_control.cpp:497
-#: kicad/tools/kicad_manager_control.cpp:362
+#: kicad/tools/kicad_manager_control.cpp:364
 #: pcbnew/dialogs/dialog_export_idf.cpp:139
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:357
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:411
@@ -5838,7 +5607,7 @@ msgstr "<Inte definierat>"
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:878
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:238
 #: pcbnew/footprint.cpp:4104 pcbnew/pad.cpp:2725 pcbnew/pcb_table.cpp:639
-#: pcbnew/pcb_textbox.cpp:795 pcbnew/zone.cpp:935 pcbnew/zone.cpp:1802
+#: pcbnew/pcb_textbox.cpp:800 pcbnew/zone.cpp:935 pcbnew/zone.cpp:1802
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:157
 msgid "Solid"
 msgstr "Heldragen"
@@ -5848,7 +5617,7 @@ msgstr "Heldragen"
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:372
 #: eeschema/sch_bus_entry.cpp:634 eeschema/sch_line.cpp:1017
 #: eeschema/sch_line.cpp:1029 pcbnew/pcb_table.cpp:640
-#: pcbnew/pcb_textbox.cpp:796
+#: pcbnew/pcb_textbox.cpp:801
 msgid "Dashed"
 msgstr "Streckad"
 
@@ -5857,7 +5626,7 @@ msgstr "Streckad"
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:372
 #: eeschema/sch_bus_entry.cpp:635 eeschema/sch_line.cpp:1018
 #: eeschema/sch_line.cpp:1030 pcbnew/pcb_table.cpp:641
-#: pcbnew/pcb_textbox.cpp:797
+#: pcbnew/pcb_textbox.cpp:802
 msgid "Dotted"
 msgstr "Prickad"
 
@@ -5866,7 +5635,7 @@ msgstr "Prickad"
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:372
 #: eeschema/sch_bus_entry.cpp:636 eeschema/sch_line.cpp:1019
 #: eeschema/sch_line.cpp:1031 pcbnew/pcb_table.cpp:642
-#: pcbnew/pcb_textbox.cpp:798
+#: pcbnew/pcb_textbox.cpp:803
 msgid "Dash-Dot"
 msgstr "Punktstreckad"
 
@@ -5875,7 +5644,7 @@ msgstr "Punktstreckad"
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:372
 #: eeschema/sch_bus_entry.cpp:637 eeschema/sch_line.cpp:1020
 #: eeschema/sch_line.cpp:1032 pcbnew/pcb_table.cpp:643
-#: pcbnew/pcb_textbox.cpp:799
+#: pcbnew/pcb_textbox.cpp:804
 msgid "Dash-Dot-Dot"
 msgstr "Dubbelpunktstreckad"
 
@@ -6027,7 +5796,7 @@ msgstr "Bussbredd"
 #: common/stroke_params.cpp:272 eeschema/sch_bus_entry.cpp:641
 #: eeschema/sch_line.cpp:905 eeschema/sch_line.cpp:1057
 #: eeschema/sch_line.cpp:1061 eeschema/sch_tablecell.cpp:191
-#: pcbnew/pcb_tablecell.cpp:203 pcbnew/pcb_textbox.cpp:817
+#: pcbnew/pcb_tablecell.cpp:208 pcbnew/pcb_textbox.cpp:822
 msgid "Line Style"
 msgstr "Linjestil"
 
@@ -6048,7 +5817,7 @@ msgstr "Linjestil"
 #: pcbnew/dialogs/dialog_render_job.cpp:31
 #: pcbnew/dialogs/dialog_render_job_base.cpp:75
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2835 pcbnew/pcb_dimension.cpp:642
-#: pcbnew/pcb_tablecell.cpp:119 pcbnew/pcb_text.cpp:294
+#: pcbnew/pcb_tablecell.cpp:119 pcbnew/pcb_text.cpp:292
 #: pcbnew/pcb_textbox.cpp:474
 msgid "Default"
 msgstr "Förinställning"
@@ -6070,7 +5839,7 @@ msgid "Pattern"
 msgstr "Mönster"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:154
-#: eeschema/sch_field.cpp:1111 eeschema/sch_label.cpp:207
+#: eeschema/sch_field.cpp:1110 eeschema/sch_label.cpp:207
 #: pcbnew/board_connected_item.cpp:200 pcbnew/pad.cpp:2779 pcbnew/zone.cpp:1903
 msgid "Net Class"
 msgstr "Nätklass"
@@ -6136,23 +5905,23 @@ msgstr "Variabelnamn"
 msgid "Text Substitution"
 msgstr "Textersättning"
 
-#: common/dialogs/panel_toolbar_customization.cpp:46 common/eda_text.cpp:1326
+#: common/dialogs/panel_toolbar_customization.cpp:46 common/eda_text.cpp:1333
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:242
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:283
 #: eeschema/fields_grid_table.cpp:302 eeschema/fields_grid_table.cpp:705
 #: eeschema/fields_grid_table.cpp:849 eeschema/pin_type.cpp:118
-#: eeschema/sch_field.cpp:998 eeschema/sch_field.cpp:1563
+#: eeschema/sch_field.cpp:998 eeschema/sch_field.cpp:1562
 #: eeschema/sch_pin.cpp:1710 pcbnew/dialogs/dialog_render_job.cpp:40
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2833
 msgid "Left"
 msgstr "Vänster"
 
-#: common/dialogs/panel_toolbar_customization.cpp:47 common/eda_text.cpp:1328
+#: common/dialogs/panel_toolbar_customization.cpp:47 common/eda_text.cpp:1335
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:242
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:283
 #: eeschema/fields_grid_table.cpp:304 eeschema/fields_grid_table.cpp:707
 #: eeschema/fields_grid_table.cpp:853 eeschema/pin_type.cpp:117
-#: eeschema/sch_field.cpp:1000 eeschema/sch_field.cpp:1565
+#: eeschema/sch_field.cpp:1000 eeschema/sch_field.cpp:1564
 #: eeschema/sch_pin.cpp:1709 pcbnew/dialogs/dialog_render_job.cpp:41
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2834
 msgid "Right"
@@ -6206,7 +5975,7 @@ msgstr "Fel vid byte av grafikabstraktionslagrets grundsystem"
 
 #: common/drawing_sheet/drawing_sheet_parser.cpp:558
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:3482
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:3385
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:3363
 msgid "Failed to read image data."
 msgstr "Det gick inte att läsa in bilddata."
 
@@ -6230,9 +5999,9 @@ msgstr "Minnet tog slut."
 
 #: common/drawing_sheet/ds_data_item.cpp:365
 #: common/drawing_sheet/ds_draw_item.cpp:132 common/eda_item.cpp:394
-#: common/eda_item.cpp:395 common/eda_item.cpp:423 common/eda_text.cpp:1349
+#: common/eda_item.cpp:395 common/eda_item.cpp:423 common/eda_text.cpp:1356
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:47
-#: eeschema/sch_field.cpp:986 eeschema/sch_field.cpp:1628
+#: eeschema/sch_field.cpp:986 eeschema/sch_field.cpp:1627
 #: eeschema/sch_label.cpp:2298 eeschema/sch_tablecell.cpp:112
 #: eeschema/sch_text.cpp:551 eeschema/sch_text.h:59 eeschema/schematic.cpp:69
 #: eeschema/widgets/panel_sch_selection_filter.cpp:203
@@ -6246,7 +6015,7 @@ msgstr "Minnet tog slut."
 #: pcbnew/pcb_dimension.cpp:1839 pcbnew/pcb_dimension.cpp:1921
 #: pcbnew/pcb_dimension.cpp:1954 pcbnew/pcb_dimension.cpp:1992
 #: pcbnew/pcb_dimension.cpp:2034 pcbnew/pcb_dimension.cpp:2068
-#: pcbnew/pcb_tablecell.cpp:106 pcbnew/pcb_text.cpp:278 pcbnew/pcb_text.cpp:432
+#: pcbnew/pcb_tablecell.cpp:106 pcbnew/pcb_text.cpp:276 pcbnew/pcb_text.cpp:435
 #: pcbnew/widgets/panel_selection_filter.cpp:197
 #: pcbnew/widgets/panel_selection_filter_base.cpp:33
 #: pcbnew/widgets/search_handlers.cpp:267
@@ -6536,7 +6305,7 @@ msgstr "Förinställningar för grafik"
 #: common/eda_base_frame.cpp:1327 common/hotkey_store.cpp:78
 #: common/tool/common_tools.cpp:616 kicad/tools/kicad_manager_actions.cpp:136
 #: pcbnew/menubar_pcb_editor.cpp:186 pcbnew/pcb_edit_frame.cpp:200
-#: pcbnew/pcb_edit_frame.cpp:1885 pcbnew/tools/zone_filler_tool.cpp:284
+#: pcbnew/pcb_edit_frame.cpp:1886 pcbnew/tools/zone_filler_tool.cpp:284
 msgid "PCB Editor"
 msgstr "Mönsterkortsredigerare"
 
@@ -6661,7 +6430,7 @@ msgid "mils"
 msgstr "mils (1/1000 tum)"
 
 #: common/eda_draw_frame.cpp:684 pcbnew/dialogs/dialog_export_vrml_base.cpp:111
-#: pcbnew/footprint_wizard_frame.cpp:329 pcbnew/pcb_dimension.cpp:640
+#: pcbnew/footprint_wizard_frame.cpp:328 pcbnew/pcb_dimension.cpp:640
 #: pcbnew/pcb_dimension.cpp:1844
 msgid "Units"
 msgstr "Enheter"
@@ -6676,7 +6445,7 @@ msgstr "Enheter"
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:69
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:157
 #: pcbnew/dialogs/dialog_plot_base.cpp:341
-#: pcbnew/dialogs/panel_setup_dimensions_base.cpp:33
+#: pcbnew/dialogs/panel_setup_dimensions_base.cpp:36
 #: pcbnew/import_gfx/dialog_import_graphics.cpp:53
 #: pcbnew/pcb_dimension.cpp:1786
 msgid "Inches"
@@ -6702,16 +6471,16 @@ msgstr "Nytt Bibliotek"
 msgid "Search"
 msgstr "Sök"
 
-#: common/eda_draw_frame.cpp:1218 common/tool/actions.cpp:1249
+#: common/eda_draw_frame.cpp:1218 common/tool/actions.cpp:1258
 #: eeschema/eeschema_settings.cpp:93 eeschema/sch_edit_frame.cpp:2203
 #: pagelayout_editor/pl_editor_frame.cpp:197
 #: pcbnew/footprint_edit_frame.cpp:236 pcbnew/pcb_edit_frame.cpp:364
-#: pcbnew/pcb_edit_frame.cpp:1791
+#: pcbnew/pcb_edit_frame.cpp:1792
 msgid "Properties"
 msgstr "Egenskaper"
 
 #: common/eda_draw_frame.cpp:1224 pcbnew/pcb_edit_frame.cpp:377
-#: pcbnew/pcb_edit_frame.cpp:1792 pcbnew/tools/pcb_actions.cpp:1430
+#: pcbnew/pcb_edit_frame.cpp:1793 pcbnew/tools/pcb_actions.cpp:1430
 msgid "Net Inspector"
 msgstr "Nätinspektör"
 
@@ -6723,7 +6492,7 @@ msgstr "Skärm"
 #: eeschema/widgets/search_handlers.cpp:161 pcbnew/build_BOM_from_board.cpp:111
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:141
 #: pcbnew/load_select_footprint.cpp:294 pcbnew/pad.cpp:1316
-#: pcbnew/pcb_shape.cpp:715 pcbnew/pcb_text.cpp:274
+#: pcbnew/pcb_shape.cpp:715 pcbnew/pcb_text.cpp:272
 #: pcbnew/plot_board_layers.cpp:185
 msgid "Footprint"
 msgstr "Fotavtryck"
@@ -6946,9 +6715,9 @@ msgstr "Segment"
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:228
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:120
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:44
-#: pcbnew/microwave/microwave_polygon.cpp:129 pcbnew/pcb_tablecell.cpp:199
+#: pcbnew/microwave/microwave_polygon.cpp:129 pcbnew/pcb_tablecell.cpp:204
 #: pcbnew/pcb_target.cpp:157 pcbnew/pcb_target.cpp:252
-#: pcbnew/pcb_textbox.cpp:809
+#: pcbnew/pcb_textbox.cpp:814
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:45
 msgid "Shape"
 msgstr "Form"
@@ -6969,7 +6738,7 @@ msgstr "Längd"
 
 #: common/eda_shape.cpp:1161 common/eda_shape.cpp:1191
 #: common/eda_shape.cpp:2633 pcbnew/dialogs/dialog_shape_properties.cpp:903
-#: pcbnew/pcb_text.cpp:292 pcbnew/pcb_textbox.cpp:472
+#: pcbnew/pcb_text.cpp:290 pcbnew/pcb_textbox.cpp:472
 msgid "Angle"
 msgstr "Vinkel"
 
@@ -6977,9 +6746,9 @@ msgstr "Vinkel"
 msgid "Points"
 msgstr "Punkter"
 
-#: common/eda_shape.cpp:1176 common/eda_shape.cpp:2608 common/eda_text.cpp:1389
+#: common/eda_shape.cpp:1176 common/eda_shape.cpp:2608 common/eda_text.cpp:1399
 #: eeschema/sch_bitmap.cpp:193 eeschema/sch_bitmap.cpp:332
-#: eeschema/sch_field.cpp:1609 eeschema/sch_tablecell.cpp:194
+#: eeschema/sch_field.cpp:1608 eeschema/sch_tablecell.cpp:194
 #: eeschema/sch_text.cpp:695 eeschema/sch_textbox.cpp:605
 #: pcbnew/dialogs/dialog_board_statistics.cpp:685
 #: pcbnew/dialogs/dialog_board_statistics.cpp:695
@@ -6989,16 +6758,16 @@ msgstr "Punkter"
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:169
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2324 pcbnew/pad.cpp:1384
 #: pcbnew/pcb_fields_grid_table.cpp:149 pcbnew/pcb_reference_image.cpp:222
-#: pcbnew/pcb_reference_image.cpp:375 pcbnew/pcb_tablecell.cpp:200
-#: pcbnew/pcb_tablecell.cpp:206 pcbnew/pcb_target.cpp:156
-#: pcbnew/pcb_target.cpp:249 pcbnew/pcb_text.cpp:296 pcbnew/pcb_textbox.cpp:814
+#: pcbnew/pcb_reference_image.cpp:375 pcbnew/pcb_tablecell.cpp:205
+#: pcbnew/pcb_tablecell.cpp:211 pcbnew/pcb_target.cpp:156
+#: pcbnew/pcb_target.cpp:249 pcbnew/pcb_text.cpp:299 pcbnew/pcb_textbox.cpp:819
 #: pcbnew/pcb_track.cpp:1774 pcbnew/pcb_track.cpp:2321
 msgid "Width"
 msgstr "Bredd"
 
-#: common/eda_shape.cpp:1179 common/eda_shape.cpp:2614 common/eda_text.cpp:1394
+#: common/eda_shape.cpp:1179 common/eda_shape.cpp:2614 common/eda_text.cpp:1404
 #: eeschema/sch_bitmap.cpp:195 eeschema/sch_bitmap.cpp:339
-#: eeschema/sch_field.cpp:1610 eeschema/sch_tablecell.cpp:195
+#: eeschema/sch_field.cpp:1609 eeschema/sch_tablecell.cpp:195
 #: eeschema/sch_text.cpp:696 eeschema/sch_textbox.cpp:606
 #: pcbnew/dialogs/dialog_board_statistics.cpp:687
 #: pcbnew/dialogs/dialog_board_statistics.cpp:696
@@ -7006,9 +6775,9 @@ msgstr "Bredd"
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:56
 #: pcbnew/pad.cpp:1385 pcbnew/pcb_dimension.cpp:1033
 #: pcbnew/pcb_fields_grid_table.cpp:150 pcbnew/pcb_reference_image.cpp:224
-#: pcbnew/pcb_reference_image.cpp:382 pcbnew/pcb_tablecell.cpp:201
-#: pcbnew/pcb_tablecell.cpp:207 pcbnew/pcb_text.cpp:297
-#: pcbnew/pcb_textbox.cpp:815
+#: pcbnew/pcb_reference_image.cpp:382 pcbnew/pcb_tablecell.cpp:206
+#: pcbnew/pcb_tablecell.cpp:212 pcbnew/pcb_text.cpp:300
+#: pcbnew/pcb_textbox.cpp:820
 msgid "Height"
 msgstr "Höjd"
 
@@ -7040,14 +6809,14 @@ msgstr "Formegenskaper"
 
 #: common/eda_shape.cpp:2567 eeschema/sch_table.cpp:507
 #: eeschema/sch_tablecell.cpp:184 pcbnew/pcb_table.cpp:654
-#: pcbnew/pcb_tablecell.cpp:195 pcbnew/pcb_textbox.cpp:810
+#: pcbnew/pcb_tablecell.cpp:200 pcbnew/pcb_textbox.cpp:815
 #: pcbnew/pcb_track.cpp:2324
 msgid "Start X"
 msgstr "Start X"
 
 #: common/eda_shape.cpp:2572 eeschema/sch_table.cpp:510
 #: eeschema/sch_tablecell.cpp:185 pcbnew/pcb_table.cpp:657
-#: pcbnew/pcb_tablecell.cpp:196 pcbnew/pcb_textbox.cpp:811
+#: pcbnew/pcb_tablecell.cpp:201 pcbnew/pcb_textbox.cpp:816
 #: pcbnew/pcb_track.cpp:2328
 msgid "Start Y"
 msgstr "Start Y"
@@ -7061,26 +6830,26 @@ msgid "Center Y"
 msgstr "Centrum Y"
 
 #: common/eda_shape.cpp:2596 eeschema/sch_tablecell.cpp:186
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2847 pcbnew/pcb_tablecell.cpp:197
-#: pcbnew/pcb_textbox.cpp:812 pcbnew/pcb_track.cpp:2331
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2847 pcbnew/pcb_tablecell.cpp:202
+#: pcbnew/pcb_textbox.cpp:817 pcbnew/pcb_track.cpp:2331
 msgid "End X"
 msgstr "Slut X"
 
 #: common/eda_shape.cpp:2602 eeschema/sch_tablecell.cpp:187
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2853 pcbnew/pcb_tablecell.cpp:198
-#: pcbnew/pcb_textbox.cpp:813 pcbnew/pcb_track.cpp:2334
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2853 pcbnew/pcb_tablecell.cpp:203
+#: pcbnew/pcb_textbox.cpp:818 pcbnew/pcb_track.cpp:2334
 msgid "End Y"
 msgstr "Slut Y"
 
 #: common/eda_shape.cpp:2620 common/stroke_params.cpp:276
 #: eeschema/sch_bus_entry.cpp:645 eeschema/sch_line.cpp:1065
-#: eeschema/sch_tablecell.cpp:190 pcbnew/pcb_tablecell.cpp:202
-#: pcbnew/pcb_textbox.cpp:816
+#: eeschema/sch_tablecell.cpp:190 pcbnew/pcb_tablecell.cpp:207
+#: pcbnew/pcb_textbox.cpp:821
 msgid "Line Width"
 msgstr "Linjebredd"
 
 #: common/eda_shape.cpp:2628 eeschema/sch_tablecell.cpp:192
-#: pcbnew/pcb_shape.cpp:995 pcbnew/pcb_tablecell.cpp:204
+#: pcbnew/pcb_shape.cpp:995 pcbnew/pcb_tablecell.cpp:209
 msgid "Line Color"
 msgstr "Linjefärg"
 
@@ -7097,7 +6866,7 @@ msgstr "Fyll"
 msgid "Fill Color"
 msgstr "Fyllningsfärg"
 
-#: common/eda_text.cpp:977 common/eda_text.cpp:1364
+#: common/eda_text.cpp:984 common/eda_text.cpp:1374
 #: eeschema/dialogs/dialog_field_properties_base.cpp:152
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:217
 #: eeschema/dialogs/dialog_label_properties_base.cpp:114
@@ -7117,12 +6886,12 @@ msgstr "Fyllningsfärg"
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:307
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:223
 #: pcbnew/dialogs/panel_fp_editor_graphics_defaults_base.cpp:57
-#: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:52
+#: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:58
 #: pcbnew/pcb_fields_grid_table.cpp:152
 msgid "Italic"
 msgstr "Kursiv"
 
-#: common/eda_text.cpp:978 common/eda_text.cpp:1368
+#: common/eda_text.cpp:985 common/eda_text.cpp:1378
 #: eeschema/dialogs/dialog_field_properties_base.cpp:147
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:214
 #: eeschema/dialogs/dialog_label_properties_base.cpp:115
@@ -7142,18 +6911,18 @@ msgstr "Kursiv"
 msgid "Bold"
 msgstr "Fet"
 
-#: common/eda_text.cpp:979
+#: common/eda_text.cpp:986
 msgid "Bold+Italic"
 msgstr "Fet+Kursiv"
 
-#: common/eda_text.cpp:1327 common/eda_text.cpp:1336
+#: common/eda_text.cpp:1334 common/eda_text.cpp:1343
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:283
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:307
 #: eeschema/fields_grid_table.cpp:295 eeschema/fields_grid_table.cpp:303
 #: eeschema/fields_grid_table.cpp:706 eeschema/fields_grid_table.cpp:717
 #: eeschema/fields_grid_table.cpp:851 eeschema/fields_grid_table.cpp:875
 #: eeschema/sch_field.cpp:999 eeschema/sch_field.cpp:1009
-#: eeschema/sch_field.cpp:1564 eeschema/sch_field.cpp:1573
+#: eeschema/sch_field.cpp:1563 eeschema/sch_field.cpp:1572
 #: eeschema/sch_text.cpp:579 gerbview/gerber_file_image.cpp:360
 #: gerbview/gerber_file_image.cpp:363
 #: pcbnew/dialogs/dialog_shape_properties.cpp:886
@@ -7163,32 +6932,32 @@ msgstr "Fet+Kursiv"
 msgid "Center"
 msgstr "Centrera"
 
-#: common/eda_text.cpp:1335
+#: common/eda_text.cpp:1342
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:307
 #: eeschema/fields_grid_table.cpp:294 eeschema/fields_grid_table.cpp:716
 #: eeschema/fields_grid_table.cpp:873 eeschema/sch_field.cpp:1008
-#: eeschema/sch_field.cpp:1572 eeschema/sch_text.cpp:578
+#: eeschema/sch_field.cpp:1571 eeschema/sch_text.cpp:578
 #: pcbnew/dialogs/dialog_render_job.cpp:42
 msgid "Top"
 msgstr "Överst"
 
-#: common/eda_text.cpp:1337
+#: common/eda_text.cpp:1344
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:307
 #: eeschema/fields_grid_table.cpp:296 eeschema/fields_grid_table.cpp:718
 #: eeschema/fields_grid_table.cpp:877 eeschema/sch_field.cpp:1010
-#: eeschema/sch_field.cpp:1574 eeschema/sch_text.cpp:580
+#: eeschema/sch_field.cpp:1573 eeschema/sch_text.cpp:580
 #: pcbnew/dialogs/dialog_render_job.cpp:38
 msgid "Bottom"
 msgstr "Nederst"
 
-#: common/eda_text.cpp:1343
+#: common/eda_text.cpp:1350
 #: eeschema/dialogs/dialog_label_properties_base.cpp:117
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:124
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:92
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:68
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:68
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:65
-#: eeschema/fields_grid_table.cpp:479 eeschema/sch_field.cpp:1617
+#: eeschema/fields_grid_table.cpp:479 eeschema/sch_field.cpp:1616
 #: eeschema/sch_pin.cpp:1183 eeschema/sch_pin.cpp:1755
 #: eeschema/sch_symbol.cpp:2913 eeschema/sch_tablecell.cpp:197
 #: eeschema/sch_text.cpp:704 eeschema/sch_textbox.cpp:633
@@ -7196,21 +6965,21 @@ msgstr "Nederst"
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:60
 #: pcbnew/footprint.cpp:4134 pcbnew/pad.cpp:2742 pcbnew/pcb_dimension.cpp:1804
 #: pcbnew/pcb_dimension.cpp:1879 pcbnew/pcb_fields_grid_table.cpp:154
-#: pcbnew/pcb_tablecell.cpp:209
+#: pcbnew/pcb_tablecell.cpp:214
 msgid "Orientation"
 msgstr "Orientering"
 
-#: common/eda_text.cpp:1347 eeschema/dialogs/dialog_text_properties_base.h:117
-#: eeschema/sch_field.cpp:1584 eeschema/sch_field.cpp:1615
+#: common/eda_text.cpp:1354 eeschema/dialogs/dialog_text_properties_base.h:117
+#: eeschema/sch_field.cpp:1583 eeschema/sch_field.cpp:1614
 #: eeschema/sch_text.cpp:701 eeschema/sch_textbox.cpp:631
 #: pcbnew/dialogs/dialog_text_properties.cpp:152
-#: pcbnew/dialogs/dialog_text_properties_base.h:112
-#: pcbnew/pcb_dimension.cpp:1866 pcbnew/pcb_text.cpp:632
-#: pcbnew/pcb_text.cpp:636 pcbnew/pcb_textbox.cpp:823
+#: pcbnew/dialogs/dialog_text_properties_base.h:113
+#: pcbnew/pcb_dimension.cpp:1866 pcbnew/pcb_text.cpp:635
+#: pcbnew/pcb_text.cpp:639 pcbnew/pcb_textbox.cpp:828
 msgid "Text Properties"
 msgstr "Textegenskaper"
 
-#: common/eda_text.cpp:1355
+#: common/eda_text.cpp:1362
 #: eeschema/dialogs/dialog_label_properties_base.cpp:120
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:71
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:71
@@ -7219,49 +6988,54 @@ msgstr "Textegenskaper"
 #: eeschema/sch_label.cpp:1238 eeschema/sch_tablecell.cpp:119
 #: eeschema/sch_text.cpp:556 eeschema/sch_textbox.cpp:461
 #: eeschema/widgets/sch_properties_panel.cpp:263 pcbnew/pcb_dimension.cpp:642
-#: pcbnew/pcb_tablecell.cpp:119 pcbnew/pcb_text.cpp:294
+#: pcbnew/pcb_tablecell.cpp:119 pcbnew/pcb_text.cpp:292
 #: pcbnew/pcb_textbox.cpp:474 pcbnew/widgets/pcb_properties_panel.cpp:295
 msgid "Font"
 msgstr "Typsnitt"
 
-#: common/eda_text.cpp:1360 eeschema/sch_field.cpp:1607
+#: common/eda_text.cpp:1367
+#, fuzzy
+msgid "Auto Thickness"
+msgstr "Bussbredd"
+
+#: common/eda_text.cpp:1370 eeschema/sch_field.cpp:1606
 #: eeschema/sch_label.cpp:2299 eeschema/sch_tablecell.cpp:196
 #: eeschema/sch_text.cpp:697 eeschema/sch_textbox.cpp:607
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:91
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:56
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:57
-#: pcbnew/pcb_fields_grid_table.cpp:151 pcbnew/pcb_tablecell.cpp:208
-#: pcbnew/pcb_text.cpp:295 pcbnew/tools/pcb_control.cpp:2315
+#: pcbnew/pcb_fields_grid_table.cpp:151 pcbnew/pcb_tablecell.cpp:213
+#: pcbnew/tools/pcb_control.cpp:2315
 msgid "Thickness"
 msgstr "Tjocklek"
 
-#: common/eda_text.cpp:1371 eeschema/sch_field.cpp:1608
+#: common/eda_text.cpp:1381 eeschema/sch_field.cpp:1607
 #: eeschema/sch_tablecell.cpp:198 eeschema/sch_text.cpp:694
 #: pcbnew/microwave/microwave_polygon.cpp:127
 #: pcbnew/pcb_fields_grid_table.cpp:159
 msgid "Mirrored"
 msgstr "Spegelvänd"
 
-#: common/eda_text.cpp:1400 eeschema/sch_field.cpp:1587
-#: eeschema/sch_field.cpp:1590 eeschema/sch_label.cpp:2303
+#: common/eda_text.cpp:1410 eeschema/sch_field.cpp:1586
+#: eeschema/sch_field.cpp:1589 eeschema/sch_label.cpp:2303
 msgid "Horizontal Justification"
 msgstr "Horisontell Justering"
 
-#: common/eda_text.cpp:1404 eeschema/sch_field.cpp:1594
-#: eeschema/sch_field.cpp:1597 eeschema/sch_label.cpp:2305
+#: common/eda_text.cpp:1414 eeschema/sch_field.cpp:1593
+#: eeschema/sch_field.cpp:1596 eeschema/sch_label.cpp:2305
 #: pcbnew/pcb_dimension.cpp:1924 pcbnew/pcb_dimension.cpp:1957
 #: pcbnew/pcb_dimension.cpp:1995 pcbnew/pcb_dimension.cpp:2037
 #: pcbnew/pcb_dimension.cpp:2071
 msgid "Vertical Justification"
 msgstr "Vertikal Justering"
 
-#: common/eda_text.cpp:1412 eeschema/sch_field.cpp:1606
+#: common/eda_text.cpp:1422 eeschema/sch_field.cpp:1605
 #: eeschema/sch_label.cpp:2263 eeschema/sch_tablecell.cpp:200
 #: pcbnew/pcb_dimension.cpp:1927 pcbnew/pcb_dimension.cpp:1960
 #: pcbnew/pcb_dimension.cpp:1998 pcbnew/pcb_dimension.cpp:2040
 #: pcbnew/pcb_dimension.cpp:2074 pcbnew/pcb_field.cpp:291
-#: pcbnew/pcb_tablecell.cpp:210 pcbnew/pcb_text.cpp:650
-#: pcbnew/pcb_textbox.cpp:862
+#: pcbnew/pcb_tablecell.cpp:215 pcbnew/pcb_text.cpp:653
+#: pcbnew/pcb_textbox.cpp:867
 msgid "Hyperlink"
 msgstr "Hyperlänk"
 
@@ -7774,27 +7548,27 @@ msgstr "Inget fel."
 msgid "No error"
 msgstr "Inget fel"
 
-#: common/grid_tricks.cpp:359 common/tool/actions.cpp:304
+#: common/grid_tricks.cpp:361 common/tool/actions.cpp:304
 #: common/widgets/listbox_tricks.cpp:52 eeschema/tools/sch_actions.cpp:236
 #: pcbnew/dialogs/panel_setup_rules.cpp:130 pcbnew/tools/edit_tool.cpp:2660
 msgid "Cut"
 msgstr "Klipp ut"
 
-#: common/grid_tricks.cpp:360
+#: common/grid_tricks.cpp:362
 msgid "Clear selected cells placing original contents on clipboard"
 msgstr "Töm markerade celler och placera originalinnehållet i urklipp"
 
-#: common/grid_tricks.cpp:361 common/tool/actions.cpp:315
+#: common/grid_tricks.cpp:363 common/tool/actions.cpp:315
 #: common/widgets/listbox_tricks.cpp:50 eeschema/tools/sch_actions.cpp:242
 #: kicad/dialogs/panel_jobset.cpp:405 pcbnew/dialogs/panel_setup_rules.cpp:131
 msgid "Copy"
 msgstr "Kopiera"
 
-#: common/grid_tricks.cpp:362 kicad/dialogs/panel_jobset.cpp:405
+#: common/grid_tricks.cpp:364 kicad/dialogs/panel_jobset.cpp:405
 msgid "Copy selected cells to clipboard"
 msgstr "Kopiera valda celler till urklipp"
 
-#: common/grid_tricks.cpp:366 common/tool/actions.cpp:335
+#: common/grid_tricks.cpp:368 common/tool/actions.cpp:335
 #: common/widgets/listbox_tricks.cpp:51
 #: eeschema/tools/sch_editor_control.cpp:2308
 #: eeschema/tools/symbol_editor_edit_tool.cpp:1022
@@ -7802,11 +7576,11 @@ msgstr "Kopiera valda celler till urklipp"
 msgid "Paste"
 msgstr "Klistra In"
 
-#: common/grid_tricks.cpp:367
+#: common/grid_tricks.cpp:369
 msgid "Paste clipboard cells to matrix at current cell"
 msgstr "Klistra in celler i urklipp vid aktuell cell i matris"
 
-#: common/grid_tricks.cpp:368 common/tool/actions.cpp:381
+#: common/grid_tricks.cpp:370 common/tool/actions.cpp:381
 #: common/widgets/listbox_tricks.cpp:54 eeschema/tools/sch_edit_tool.cpp:1719
 #: eeschema/tools/symbol_editor_edit_tool.cpp:478
 #: kicad/dialogs/panel_jobset.cpp:406 kicad/project_tree_pane.cpp:986
@@ -7814,11 +7588,11 @@ msgstr "Klistra in celler i urklipp vid aktuell cell i matris"
 msgid "Delete"
 msgstr "Radera"
 
-#: common/grid_tricks.cpp:369
+#: common/grid_tricks.cpp:371
 msgid "Clear contents of selected cells"
 msgstr "Radera innehåll i markerade celler"
 
-#: common/grid_tricks.cpp:372 common/tool/actions.cpp:345
+#: common/grid_tricks.cpp:374 common/tool/actions.cpp:345
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:106
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:80
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:47
@@ -7830,7 +7604,7 @@ msgstr "Radera innehåll i markerade celler"
 msgid "Select All"
 msgstr "Markera allt"
 
-#: common/grid_tricks.cpp:373
+#: common/grid_tricks.cpp:375
 msgid "Select all cells"
 msgstr "Markera alla celler"
 
@@ -7984,7 +7758,7 @@ msgstr ""
 "Offset för import ändrad till (%f, %f) för att rymmas inom numeriska "
 "begränsningar"
 
-#: common/io/altium/altium_binary_parser.cpp:62 common/richio.cpp:123
+#: common/io/altium/altium_binary_parser.cpp:62 common/richio.cpp:102
 #, c-format
 msgid "Cannot open file '%s'."
 msgstr "Det går inte att öppna filen '%s'."
@@ -8424,7 +8198,7 @@ msgid "undefined"
 msgstr "odefinierad"
 
 #: common/layer_id.cpp:67
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:1175
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:1153
 msgid "Rescue"
 msgstr "Rädda"
 
@@ -9086,16 +8860,23 @@ msgstr "Varning: "
 msgid "Error: "
 msgstr "Fel: "
 
-#: common/richio.cpp:202
+#: common/richio.cpp:123 eeschema/sch_io/eagle/sch_io_eagle.cpp:600
+#: eeschema/sch_io/eagle/sch_io_eagle.cpp:617
+#: pcbnew/pcb_io/eagle/pcb_io_eagle.cpp:3230
+#, c-format
+msgid "Unable to read file '%s'."
+msgstr "Kunde inte läsa fil '%s'."
+
+#: common/richio.cpp:199
 #, c-format
 msgid "Unable to open %s for reading."
 msgstr "Kunde inte öppna %s för läsning."
 
-#: common/richio.cpp:253 common/richio.cpp:351
+#: common/richio.cpp:250 common/richio.cpp:348
 msgid "Maximum line length exceeded"
 msgstr "Maximal radlängd överskriden"
 
-#: common/richio.cpp:316
+#: common/richio.cpp:313
 msgid "Line length exceeded"
 msgstr "Radens längd överskriden"
 
@@ -9937,7 +9718,7 @@ msgstr "Ange rutnätets origo"
 #: eeschema/import_gfx/dialog_import_gfx_sch.cpp:60
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:122
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:102
-#: pcbnew/dialogs/panel_setup_dimensions_base.cpp:33
+#: pcbnew/dialogs/panel_setup_dimensions_base.cpp:36
 #: pcbnew/import_gfx/dialog_import_graphics.cpp:55
 #: pcbnew/pcb_dimension.cpp:1787
 msgid "Mils"
@@ -9952,7 +9733,7 @@ msgstr "Mils (1/1000 tum)"
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:69
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:157
 #: pcbnew/dialogs/dialog_plot_base.cpp:341
-#: pcbnew/dialogs/panel_setup_dimensions_base.cpp:33
+#: pcbnew/dialogs/panel_setup_dimensions_base.cpp:36
 #: pcbnew/import_gfx/dialog_import_graphics.cpp:54
 #: pcbnew/pcb_dimension.cpp:1788
 msgid "Millimeters"
@@ -10061,88 +9842,100 @@ msgstr "Fotavtrycksbiblioteksläsaren"
 msgid "Create, delete and edit board footprints"
 msgstr "Skapa, ta bort och redigera mönsterkorts fotavtryck"
 
-#: common/tool/actions.cpp:1250
+#: common/tool/actions.cpp:1249 kicad/tools/kicad_manager_actions.cpp:177
+#: pcb_calculator/pcb_calculator_frame.cpp:63
+#: pcb_calculator/pcb_calculator_frame.cpp:218
+#: pcb_calculator/pcb_calculator_frame.cpp:219
+#: pcb_calculator/pcb_calculator_frame.cpp:246
+msgid "Calculator Tools"
+msgstr "Beräkningsverktyg"
+
+#: common/tool/actions.cpp:1250 kicad/tools/kicad_manager_actions.cpp:178
+msgid "Run component calculations, track width calculations, etc."
+msgstr "Beräkna komponentvärden, ledarbredder etc."
+
+#: common/tool/actions.cpp:1259
 msgid "Show/hide the properties manager"
 msgstr "Visa / dölj dialogruta för egenskaper"
 
-#: common/tool/actions.cpp:1259
+#: common/tool/actions.cpp:1268
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:103
 #: eeschema/fields_grid_table.cpp:1081
 msgid "Show Datasheet"
 msgstr "Visa datablad"
 
-#: common/tool/actions.cpp:1260
+#: common/tool/actions.cpp:1269
 msgid "Open the datasheet in a browser"
 msgstr "Öppna databladet i en webbläsare"
 
-#: common/tool/actions.cpp:1268
+#: common/tool/actions.cpp:1277
 msgid "Update PCB from Schematic..."
 msgstr "Uppdatera mönsterkort från kretsschemat..."
 
-#: common/tool/actions.cpp:1269
+#: common/tool/actions.cpp:1278
 msgid "Update PCB with changes made to schematic"
 msgstr "Uppdatera mönsterkort med ändringar som gjorts i kretsschemat"
 
-#: common/tool/actions.cpp:1275
+#: common/tool/actions.cpp:1284
 msgid "Update Schematic from PCB..."
 msgstr "Uppdatera kretsschema från mönsterkort..."
 
-#: common/tool/actions.cpp:1276
+#: common/tool/actions.cpp:1285
 msgid "Update schematic with changes made to PCB"
 msgstr "Uppdatera kretsschemat med ändringar gjorda på mönsterkortet"
 
-#: common/tool/actions.cpp:1283
+#: common/tool/actions.cpp:1292
 msgid "Preferences..."
 msgstr "Inställningar..."
 
-#: common/tool/actions.cpp:1284
+#: common/tool/actions.cpp:1293
 msgid "Show preferences for all open tools"
 msgstr "Visa inställningar för alla öppna verktyg"
 
-#: common/tool/actions.cpp:1291
+#: common/tool/actions.cpp:1300
 #: pcbnew/dialogs/panel_fp_properties_3d_model_base.cpp:78
 msgid "Configure Paths..."
 msgstr "Konfigurera sökvägar..."
 
-#: common/tool/actions.cpp:1292
+#: common/tool/actions.cpp:1301
 msgid "Edit path configuration environment variables"
 msgstr "Redigera miljövariabler för sökvägskonfiguration"
 
-#: common/tool/actions.cpp:1298
+#: common/tool/actions.cpp:1307
 msgid "Manage Symbol Libraries..."
 msgstr "Hantera symbolbibliotek..."
 
-#: common/tool/actions.cpp:1299
+#: common/tool/actions.cpp:1308
 msgid "Edit the global and project symbol library lists"
 msgstr "Redigera listorna över globala och projektspecifika symbolbibliotek"
 
-#: common/tool/actions.cpp:1305
+#: common/tool/actions.cpp:1314
 msgid "Manage Footprint Libraries..."
 msgstr "Hantera fotavtrycksbibliotek..."
 
-#: common/tool/actions.cpp:1306
+#: common/tool/actions.cpp:1315
 msgid "Edit the global and project footprint library lists"
 msgstr ""
 "Redigera listorna över globala och projektspecifika bibliotek för fotavtryck"
 
-#: common/tool/actions.cpp:1312
+#: common/tool/actions.cpp:1321
 msgid "Manage Design Block Libraries..."
 msgstr "Hantera designblocksbibliotek..."
 
-#: common/tool/actions.cpp:1313
+#: common/tool/actions.cpp:1322
 msgid "Edit the global and project design block library lists"
 msgstr ""
 "Redigera listorna över globala och projektspecifika designblocksbibliotek"
 
-#: common/tool/actions.cpp:1319
+#: common/tool/actions.cpp:1328
 msgid "Getting Started with KiCad"
 msgstr "Kom igång med KiCad"
 
-#: common/tool/actions.cpp:1320
+#: common/tool/actions.cpp:1329
 msgid "Open \"Getting Started in KiCad\" guide for beginners"
 msgstr "Öppna \"Kom igång med KiCad\"-guiden för nybörjare"
 
-#: common/tool/actions.cpp:1326
+#: common/tool/actions.cpp:1335
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:35
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:330
 #: pcb_calculator/calculator_panels/panel_fusing_current_base.cpp:136
@@ -10150,49 +9943,49 @@ msgstr "Öppna \"Kom igång med KiCad\"-guiden för nybörjare"
 msgid "Help"
 msgstr "Hjälp"
 
-#: common/tool/actions.cpp:1327
+#: common/tool/actions.cpp:1336
 msgid "Open product documentation in a web browser"
 msgstr "Öppna produktdokumentation i en webbläsare"
 
-#: common/tool/actions.cpp:1333
+#: common/tool/actions.cpp:1342
 msgid "About KiCad"
 msgstr "Om KiCad"
 
-#: common/tool/actions.cpp:1342
+#: common/tool/actions.cpp:1351
 msgid "List Hotkeys..."
 msgstr "Lista snabbtangenter ..."
 
-#: common/tool/actions.cpp:1343
+#: common/tool/actions.cpp:1352
 msgid "Displays current hotkeys table and corresponding commands"
 msgstr "Visar aktuell snabbtangentstabell och motsvarande kommandon"
 
-#: common/tool/actions.cpp:1349
+#: common/tool/actions.cpp:1358
 msgid "Get Involved"
 msgstr "Engagera dig"
 
-#: common/tool/actions.cpp:1350
+#: common/tool/actions.cpp:1359
 msgid "Open \"Contribute to KiCad\" in a web browser"
 msgstr "Öppna \"Bidra till KiCad\" i en webbläsare"
 
-#: common/tool/actions.cpp:1357
+#: common/tool/actions.cpp:1366
 msgid "Open \"Donate to KiCad\" in a web browser"
 msgstr "Öppna \"Donera till KiCad\" i en webbläsare"
 
-#: common/tool/actions.cpp:1362
+#: common/tool/actions.cpp:1371
 msgid "Report Bug"
 msgstr "Rapportera fel"
 
-#: common/tool/actions.cpp:1375
+#: common/tool/actions.cpp:1384
 msgid "Refresh Plugins"
 msgstr "Uppdatera insticksprogram"
 
-#: common/tool/actions.cpp:1376
+#: common/tool/actions.cpp:1385
 msgid "Reload all python plugins and refresh plugin menus"
 msgstr ""
 "Läs in alla python-insticksprogram på nytt och uppdatera "
 "insticksprogramsmenyer"
 
-#: common/tool/actions.cpp:1384
+#: common/tool/actions.cpp:1393
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:73
 #: eeschema/dialogs/dialog_schematic_setup.cpp:136
 #: pcbnew/dialogs/dialog_board_setup.cpp:241
@@ -10201,31 +9994,31 @@ msgstr ""
 msgid "Embedded Files"
 msgstr "Inbäddade filer"
 
-#: common/tool/actions.cpp:1385
+#: common/tool/actions.cpp:1394
 msgid "Manage embedded files"
 msgstr "Hantera inbäddade filer"
 
-#: common/tool/actions.cpp:1390
+#: common/tool/actions.cpp:1399
 msgid "Remove File"
 msgstr "Ta bort fil"
 
-#: common/tool/actions.cpp:1391
+#: common/tool/actions.cpp:1400
 msgid "Remove an embedded file"
 msgstr "Ta bort en inbäddad fil"
 
-#: common/tool/actions.cpp:1396
+#: common/tool/actions.cpp:1405
 msgid "Extract File"
 msgstr "Extrahera fil"
 
-#: common/tool/actions.cpp:1397
+#: common/tool/actions.cpp:1406
 msgid "Extract an embedded file"
 msgstr "Extrahera en inbäddad fil"
 
-#: common/tool/common_control.cpp:203
+#: common/tool/common_control.cpp:269
 msgid "Can not switch to project manager in stand-alone mode."
 msgstr "Kan inte byta till projekthanteraren i fristående läge."
 
-#: common/tool/common_control.cpp:245
+#: common/tool/common_control.cpp:311
 #, c-format
 msgid ""
 "Help file '%s' or\n"
@@ -10236,11 +10029,11 @@ msgstr ""
 "'%s' kunde inte hittas.\n"
 "Vill du öppna KiCads online-hjälp?"
 
-#: common/tool/common_control.cpp:248 common/tool/common_control.cpp:268
+#: common/tool/common_control.cpp:314 common/tool/common_control.cpp:334
 msgid "File Not Found"
 msgstr "Filen hittades Inte"
 
-#: common/tool/common_control.cpp:265
+#: common/tool/common_control.cpp:331
 #, c-format
 msgid ""
 "Help file '%s' could not be found.\n"
@@ -10249,7 +10042,7 @@ msgstr ""
 "Hjälpfilen '%s' kunde inte hittas.\n"
 "Vill du öppna KiCads online-hjälp?"
 
-#: common/tool/common_control.cpp:303
+#: common/tool/common_control.cpp:369
 #, c-format
 msgid ""
 "Could not launch the default browser.\n"
@@ -10258,11 +10051,11 @@ msgstr ""
 "Det gick inte att starta standardwebbläsaren.\n"
 "Information om hur du stödjer KiCad-projektet finns på %s"
 
-#: common/tool/common_control.cpp:306
+#: common/tool/common_control.cpp:372
 msgid "Get involved with KiCad"
 msgstr "Bli engagerad i KiCad"
 
-#: common/tool/common_control.cpp:318
+#: common/tool/common_control.cpp:384
 #, c-format
 msgid ""
 "Could not launch the default browser.\n"
@@ -10707,7 +10500,7 @@ msgstr "<skapa nät>"
 #: eeschema/dialogs/dialog_bom_base.cpp:114
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:367
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:288
-#: pcb_calculator/calculator_panels/panel_transline_base.cpp:456
+#: pcb_calculator/calculator_panels/panel_transline_base.cpp:472
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:365
 msgid "Reset to Defaults"
 msgstr "Återställ till standardinställningar"
@@ -11223,7 +11016,7 @@ msgstr ""
 msgid "Assign Footprints"
 msgstr "Tilldela fotavtryck"
 
-#: cvpcb/cvpcb_mainframe.cpp:118 pcbnew/dialogs/panel_fp_lib_table.cpp:1278
+#: cvpcb/cvpcb_mainframe.cpp:118 pcbnew/dialogs/panel_fp_lib_table.cpp:1246
 msgid "Footprint Libraries"
 msgstr "Fotavtrycksbibliotek"
 
@@ -13417,7 +13210,7 @@ msgstr "Vert. justering"
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:67
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:64
 #: eeschema/fields_grid_table.cpp:478 eeschema/sch_field.cpp:994
-#: eeschema/sch_field.cpp:1613 eeschema/sch_label.cpp:1244
+#: eeschema/sch_field.cpp:1612 eeschema/sch_label.cpp:1244
 #: eeschema/sch_tablecell.cpp:125 eeschema/sch_text.cpp:562
 #: eeschema/sch_text.cpp:699 eeschema/sch_textbox.cpp:467
 #: eeschema/sch_textbox.cpp:628 pcbnew/tools/board_inspection_tool.cpp:1442
@@ -13509,7 +13302,8 @@ msgstr "Diamant"
 #: eeschema/dialogs/dialog_sim_format_value_base.cpp:36
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:300
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:319
-#: pcbnew/dialogs/dialog_plot_base.cpp:128
+#: pcbnew/dialogs/dialog_plot_base.cpp:128 pcbnew/pcb_tablecell.cpp:124
+#: pcbnew/pcb_text.cpp:297 pcbnew/pcb_textbox.cpp:479
 msgid "Auto"
 msgstr "Auto"
 
@@ -13615,7 +13409,7 @@ msgstr "Stiftnummer:"
 #: pcbnew/dialogs/dialog_position_relative_base.cpp:90
 #: pcbnew/dialogs/dialog_set_offset_base.cpp:33
 #: pcbnew/dialogs/dialog_set_offset_base.cpp:50
-#: pcbnew/dialogs/panel_setup_dimensions_base.cpp:75
+#: pcbnew/dialogs/panel_setup_dimensions_base.cpp:78
 #: pcbnew/pcb_dimension.cpp:1769
 msgid "0"
 msgstr "0"
@@ -14805,7 +14599,7 @@ msgstr "Redigera %s"
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:177
 #: eeschema/dialogs/dialog_text_properties_base.cpp:217
 #: pcbnew/dialogs/dialog_textbox_properties_base.cpp:166
-#: pcbnew/pcb_tablecell.cpp:191 pcbnew/pcb_textbox.cpp:830
+#: pcbnew/pcb_tablecell.cpp:196 pcbnew/pcb_textbox.cpp:835
 msgid "Border"
 msgstr "Ram"
 
@@ -14925,7 +14719,7 @@ msgstr ""
 "'%s'."
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:519
-#: kicad/tools/kicad_manager_control.cpp:746
+#: kicad/tools/kicad_manager_control.cpp:748
 #, c-format
 msgid "'%s' already exists."
 msgstr "'%s' finns redan."
@@ -15552,7 +15346,7 @@ msgid "Save primary parameter in Value field"
 msgstr "Spara primär parameter i värdefältet"
 
 #: eeschema/dialogs/dialog_sim_model.cpp:610
-#: pcbnew/footprint_wizard_frame.cpp:327
+#: pcbnew/footprint_wizard_frame.cpp:326
 msgid "Parameter"
 msgstr "Parameter"
 
@@ -15566,7 +15360,7 @@ msgstr "Parameter"
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:29
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:83
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2279 pcbnew/pcb_marker.cpp:199
-#: pcbnew/pcb_shape.cpp:718 pcbnew/pcb_text.cpp:283 pcbnew/pcb_track.cpp:1768
+#: pcbnew/pcb_shape.cpp:718 pcbnew/pcb_text.cpp:281 pcbnew/pcb_track.cpp:1768
 #: pcbnew/pcb_track.cpp:1870 pcbnew/tools/pcb_control.cpp:2313
 #: pcbnew/widgets/search_handlers.cpp:269 pcbnew/zone.cpp:849
 msgid "Type"
@@ -15643,7 +15437,7 @@ msgstr "Sida"
 #: pcb_calculator/calculator_panels/panel_rf_attenuators_base.cpp:43
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:23
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:23
-#: pcbnew/footprint_wizard_frame.cpp:196
+#: pcbnew/footprint_wizard_frame.cpp:195
 msgid "Parameters"
 msgstr "Parametrar"
 
@@ -16251,7 +16045,7 @@ msgid "Table Properties"
 msgstr "Tabellegenskaper"
 
 #: eeschema/dialogs/dialog_tablecell_properties.cpp:417
-#: pcbnew/dialogs/dialog_tablecell_properties.cpp:358
+#: pcbnew/dialogs/dialog_tablecell_properties.cpp:413
 msgid "Edit Table Cell Properties"
 msgstr "Redigera egenskaper för tabellceller"
 
@@ -16297,12 +16091,12 @@ msgid "Edit table properties and cell contents"
 msgstr "Redigera tabellens egenskaper och cellinnehåll"
 
 #: eeschema/dialogs/dialog_tablecell_properties_base.h:100
-#: pcbnew/dialogs/dialog_tablecell_properties_base.h:92
+#: pcbnew/dialogs/dialog_tablecell_properties_base.h:93
 msgid "Table Cell Properties"
 msgstr "Egenskaper för tabellceller"
 
 #: eeschema/dialogs/dialog_text_properties.cpp:60
-#: pcbnew/dialogs/dialog_textbox_properties_base.h:107
+#: pcbnew/dialogs/dialog_textbox_properties_base.h:108
 msgid "Text Box Properties"
 msgstr "Egenskaper för textruta"
 
@@ -16330,7 +16124,7 @@ msgstr ""
 "hyperlänk till en sida i detta kretsschema."
 
 #: eeschema/dialogs/dialog_text_properties.cpp:586
-#: pcbnew/dialogs/dialog_text_properties.cpp:556
+#: pcbnew/dialogs/dialog_text_properties.cpp:597
 msgid "Edit Text Properties"
 msgstr "Redigera textegenskaper"
 
@@ -17235,17 +17029,17 @@ msgstr "Allmän redigering"
 msgid "Keep pins attached when dragging edges"
 msgstr "Håll stift anslutna vid förflyttning av konturer"
 
-#: eeschema/dialogs/panel_sym_lib_table.cpp:486
+#: eeschema/dialogs/panel_sym_lib_table.cpp:476
 #, c-format
 msgid "Illegal character '%c' in nickname '%s'"
 msgstr "Otillåtet tecken '%c' i kortnamn '%s'"
 
-#: eeschema/dialogs/panel_sym_lib_table.cpp:592 eeschema/symbol_library.cpp:583
+#: eeschema/dialogs/panel_sym_lib_table.cpp:582 eeschema/symbol_library.cpp:583
 #, c-format
 msgid "Symbol library '%s' failed to load."
 msgstr "Symbolbiblioteket '%s' kunde inte läsas in."
 
-#: eeschema/dialogs/panel_sym_lib_table.cpp:640 eeschema/files-io.cpp:660
+#: eeschema/dialogs/panel_sym_lib_table.cpp:630 eeschema/files-io.cpp:660
 #: eeschema/import_gfx/dialog_import_gfx_sch.cpp:200
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:78
 #: pcbnew/files.cpp:156 pcbnew/footprint_libraries_utils.cpp:119
@@ -17253,16 +17047,16 @@ msgstr "Symbolbiblioteket '%s' kunde inte läsas in."
 msgid "All supported formats"
 msgstr "Alla format som stöds"
 
-#: eeschema/dialogs/panel_sym_lib_table.cpp:653
+#: eeschema/dialogs/panel_sym_lib_table.cpp:643
 msgid "Add Library"
 msgstr "Lägg till bibliotek"
 
-#: eeschema/dialogs/panel_sym_lib_table.cpp:667
+#: eeschema/dialogs/panel_sym_lib_table.cpp:657
 msgid "Warning: Duplicate Nickname"
 msgstr "Varning: Dubblett av kortnamn"
 
-#: eeschema/dialogs/panel_sym_lib_table.cpp:872
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:1100
+#: eeschema/dialogs/panel_sym_lib_table.cpp:862
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:1094
 msgid ""
 "This action will reset your global library table on disk and cannot be "
 "undone."
@@ -17270,7 +17064,7 @@ msgstr ""
 "Denna åtgärd kommer att återställa din globala bibliotekstabell på disk och "
 "kan ej ångras."
 
-#: eeschema/dialogs/panel_sym_lib_table.cpp:941
+#: eeschema/dialogs/panel_sym_lib_table.cpp:931
 msgid ""
 "Select one or more rows containing libraries to save as current KiCad format "
 "(*.kicad_sym)."
@@ -17278,7 +17072,7 @@ msgstr ""
 "Välj en eller flera rader som innehåller bibliotek att spara som aktuellt "
 "KiCad-format (*.kicad_sym)."
 
-#: eeschema/dialogs/panel_sym_lib_table.cpp:949
+#: eeschema/dialogs/panel_sym_lib_table.cpp:939
 #, c-format
 msgid ""
 "Save '%s' as current KiCad format (*.kicad_sym) and replace legacy entry in "
@@ -17287,7 +17081,7 @@ msgstr ""
 "Spara '%s' som aktuellt KiCad-format (*.kicad_sym) och ersätt äldre post i "
 "tabellen?"
 
-#: eeschema/dialogs/panel_sym_lib_table.cpp:955
+#: eeschema/dialogs/panel_sym_lib_table.cpp:945
 #, c-format
 msgid ""
 "Save %d libraries as current KiCad format (*.kicad_sym) and replace legacy "
@@ -17296,19 +17090,19 @@ msgstr ""
 "Spara %d bibliotek som aktuellt KiCad-format (*.kicad_sym) och ersätt äldre "
 "versions poster i tabellen?"
 
-#: eeschema/dialogs/panel_sym_lib_table.cpp:986
+#: eeschema/dialogs/panel_sym_lib_table.cpp:976
 #: pcbnew/dialogs/dialog_export_step.cpp:602
 #, c-format
 msgid "File '%s' already exists. Do you want overwrite this file?"
 msgstr "Filen '%s' finns redan. Vill du skriva över den här filen?"
 
-#: eeschema/dialogs/panel_sym_lib_table.cpp:1019 eeschema/libarch.cpp:129
+#: eeschema/dialogs/panel_sym_lib_table.cpp:1009 eeschema/libarch.cpp:129
 #: eeschema/libarch.cpp:135
 #, c-format
 msgid "Failed to save symbol library file '%s'."
 msgstr "Det gick inte att spara symbolbiblioteksfil '%s'."
 
-#: eeschema/dialogs/panel_sym_lib_table.cpp:1209
+#: eeschema/dialogs/panel_sym_lib_table.cpp:1172
 msgid ""
 "Modifications have been made to one or more symbol libraries.\n"
 "Changes must be saved or discarded before the symbol library table can be "
@@ -17318,7 +17112,7 @@ msgstr ""
 "Ändringar måste sparas eller kasseras innan symbolbibliotekstabellen kan "
 "ändras."
 
-#: eeschema/dialogs/panel_sym_lib_table.cpp:1223
+#: eeschema/dialogs/panel_sym_lib_table.cpp:1186
 msgid "Symbol Libraries"
 msgstr "Symbolbibliotek"
 
@@ -17394,27 +17188,27 @@ msgstr ""
 "Kan inte kopiera fil '%s' eftersom den kommer att skrivas över av det nya "
 "rotarkets fil."
 
-#: eeschema/eeschema_jobs_handler.cpp:190
+#: eeschema/eeschema_jobs_handler.cpp:192
 msgid "Failed to load schematic\n"
 msgstr "Det gick inte att läsa in kretsschemat\n"
 
-#: eeschema/eeschema_jobs_handler.cpp:329
-#: eeschema/eeschema_jobs_handler.cpp:474
-#: eeschema/eeschema_jobs_handler.cpp:693
-#: eeschema/eeschema_jobs_handler.cpp:822
-#: eeschema/eeschema_jobs_handler.cpp:1138 pcbnew/pcbnew_jobs_handler.cpp:444
-#: pcbnew/pcbnew_jobs_handler.cpp:574 pcbnew/pcbnew_jobs_handler.cpp:809
-#: pcbnew/pcbnew_jobs_handler.cpp:906 pcbnew/pcbnew_jobs_handler.cpp:997
-#: pcbnew/pcbnew_jobs_handler.cpp:1048 pcbnew/pcbnew_jobs_handler.cpp:1225
-#: pcbnew/pcbnew_jobs_handler.cpp:1385 pcbnew/pcbnew_jobs_handler.cpp:1519
-#: pcbnew/pcbnew_jobs_handler.cpp:1802 pcbnew/pcbnew_jobs_handler.cpp:1940
-#: pcbnew/pcbnew_jobs_handler.cpp:2136 pcbnew/pcbnew_jobs_handler.cpp:2230
+#: eeschema/eeschema_jobs_handler.cpp:346
+#: eeschema/eeschema_jobs_handler.cpp:491
+#: eeschema/eeschema_jobs_handler.cpp:710
+#: eeschema/eeschema_jobs_handler.cpp:839
+#: eeschema/eeschema_jobs_handler.cpp:1155 pcbnew/pcbnew_jobs_handler.cpp:444
+#: pcbnew/pcbnew_jobs_handler.cpp:574 pcbnew/pcbnew_jobs_handler.cpp:810
+#: pcbnew/pcbnew_jobs_handler.cpp:907 pcbnew/pcbnew_jobs_handler.cpp:998
+#: pcbnew/pcbnew_jobs_handler.cpp:1049 pcbnew/pcbnew_jobs_handler.cpp:1226
+#: pcbnew/pcbnew_jobs_handler.cpp:1386 pcbnew/pcbnew_jobs_handler.cpp:1520
+#: pcbnew/pcbnew_jobs_handler.cpp:1803 pcbnew/pcbnew_jobs_handler.cpp:1941
+#: pcbnew/pcbnew_jobs_handler.cpp:2137 pcbnew/pcbnew_jobs_handler.cpp:2231
 msgid "Failed to create output directory\n"
 msgstr "Lyckades inte skapa utmatningskatalog\n"
 
-#: eeschema/eeschema_jobs_handler.cpp:396
-#: eeschema/eeschema_jobs_handler.cpp:518
-#: eeschema/eeschema_jobs_handler.cpp:794
+#: eeschema/eeschema_jobs_handler.cpp:413
+#: eeschema/eeschema_jobs_handler.cpp:535
+#: eeschema/eeschema_jobs_handler.cpp:811
 msgid ""
 "Warning: schematic has annotation errors, please use the schematic editor to "
 "fix them\n"
@@ -17422,84 +17216,84 @@ msgstr ""
 "Varning: Kretsschemat har fel i numreringen, vänligen använd "
 "kretsschemaredigeraren för att rätta dem\n"
 
-#: eeschema/eeschema_jobs_handler.cpp:406
-#: eeschema/eeschema_jobs_handler.cpp:528
-#: eeschema/eeschema_jobs_handler.cpp:804
+#: eeschema/eeschema_jobs_handler.cpp:423
+#: eeschema/eeschema_jobs_handler.cpp:545
+#: eeschema/eeschema_jobs_handler.cpp:821
 msgid "Warning: duplicate sheet names.\n"
 msgstr "Varning: dubblett av arknamn.\n"
 
-#: eeschema/eeschema_jobs_handler.cpp:457
+#: eeschema/eeschema_jobs_handler.cpp:474
 msgid "Unknown netlist format.\n"
 msgstr "Okänt format för nätlista.\n"
 
-#: eeschema/eeschema_jobs_handler.cpp:596
+#: eeschema/eeschema_jobs_handler.cpp:613
 #, c-format
 msgid "BOM preset '%s' not found"
 msgstr "Förinställning '%s' för komponentlistan hittades inte"
 
-#: eeschema/eeschema_jobs_handler.cpp:701
-#: eeschema/eeschema_jobs_handler.cpp:909
+#: eeschema/eeschema_jobs_handler.cpp:718
+#: eeschema/eeschema_jobs_handler.cpp:926
 #, c-format
 msgid "Unable to open destination '%s'"
 msgstr "Det går inte att öppna mål '%s'"
 
-#: eeschema/eeschema_jobs_handler.cpp:735
+#: eeschema/eeschema_jobs_handler.cpp:752
 #, c-format
 msgid "BOM format preset '%s' not found"
 msgstr "Förinställning '%s' för komponentlistans formatering hittades inte"
 
-#: eeschema/eeschema_jobs_handler.cpp:760
-#: eeschema/eeschema_jobs_handler.cpp:831
+#: eeschema/eeschema_jobs_handler.cpp:777
+#: eeschema/eeschema_jobs_handler.cpp:848
 #, c-format
 msgid "Wrote bill of materials to '%s'."
 msgstr "Skrev komponentlista till '%s'."
 
-#: eeschema/eeschema_jobs_handler.cpp:883
+#: eeschema/eeschema_jobs_handler.cpp:900
 #, c-format
 msgid "Plotting symbol '%s' unit %d to '%s'\n"
 msgstr "Plottar symbol '%s' enhet %d till '%s'\n"
 
-#: eeschema/eeschema_jobs_handler.cpp:963
-#: eeschema/eeschema_jobs_handler.cpp:1058 pcbnew/pcbnew_jobs_handler.cpp:1721
-#: pcbnew/pcbnew_jobs_handler.cpp:1794
+#: eeschema/eeschema_jobs_handler.cpp:980
+#: eeschema/eeschema_jobs_handler.cpp:1075 pcbnew/pcbnew_jobs_handler.cpp:1722
+#: pcbnew/pcbnew_jobs_handler.cpp:1795
 msgid "Unable to load library\n"
 msgstr "Det gick inte att läsa in biblioteket\n"
 
-#: eeschema/eeschema_jobs_handler.cpp:976
+#: eeschema/eeschema_jobs_handler.cpp:993
 #: eeschema/symbol_editor/symbol_editor.cpp:1093
 msgid "There is no symbol selected to save."
 msgstr "Det finns ingen vald symbol att spara."
 
-#: eeschema/eeschema_jobs_handler.cpp:1033 pcbnew/pcbnew_jobs_handler.cpp:1690
+#: eeschema/eeschema_jobs_handler.cpp:1050 pcbnew/pcbnew_jobs_handler.cpp:1691
 msgid "Output path must not conflict with existing path\n"
 msgstr "Utmatningssökvägen får inte vara i konflikt med existerande sökväg\n"
 
-#: eeschema/eeschema_jobs_handler.cpp:1041 pcbnew/pcbnew_jobs_handler.cpp:1697
+#: eeschema/eeschema_jobs_handler.cpp:1058 pcbnew/pcbnew_jobs_handler.cpp:1698
 msgid ""
 "Output path must be specified to convert legacy and non-KiCad libraries\n"
 msgstr ""
 "Utmatningssökväg måste specificeras för att konvertera äldre och icke-KiCad "
 "bibliotek\n"
 
-#: eeschema/eeschema_jobs_handler.cpp:1068
+#: eeschema/eeschema_jobs_handler.cpp:1085
 msgid "Saving symbol library in updated format\n"
 msgstr "Sparar symbolbibliotek i uppdaterat format\n"
 
-#: eeschema/eeschema_jobs_handler.cpp:1089
+#: eeschema/eeschema_jobs_handler.cpp:1106
 msgid "Symbol library was not updated\n"
 msgstr "Symbolbiblioteket uppdaterades inte\n"
 
-#: eeschema/eeschema_jobs_handler.cpp:1163 pcbnew/pcbnew_jobs_handler.cpp:2063
+#: eeschema/eeschema_jobs_handler.cpp:1180 pcbnew/pcbnew_jobs_handler.cpp:2064
 #, c-format
 msgid "Found %d violations\n"
 msgstr "Hittade %d regelbrott\n"
 
-#: eeschema/eeschema_jobs_handler.cpp:1178
+#: eeschema/eeschema_jobs_handler.cpp:1195
 #, c-format
 msgid "Unable to save ERC report to %s\n"
 msgstr "Kan inte spara rapport från kontroll av elektriska regler till %s\n"
 
-#: eeschema/eeschema_jobs_handler.cpp:1183
+#: eeschema/eeschema_jobs_handler.cpp:1200
 #, c-format
 msgid "Saved ERC Report to %s\n"
 msgstr "Spara rapport för elektrisk regelkontroll till fil %s\n"
@@ -17510,7 +17304,7 @@ msgstr "Nätnavigator"
 
 #: eeschema/eeschema_settings.cpp:115 eeschema/sch_edit_frame.cpp:2202
 #: pcbnew/footprint_edit_frame.cpp:249 pcbnew/footprint_edit_frame.cpp:982
-#: pcbnew/pcb_edit_frame.cpp:342 pcbnew/pcb_edit_frame.cpp:1790
+#: pcbnew/pcb_edit_frame.cpp:342 pcbnew/pcb_edit_frame.cpp:1791
 msgid "Selection Filter"
 msgstr "Urvalsfilter"
 
@@ -18004,11 +17798,11 @@ msgstr "Horisontell"
 msgid "Vertical"
 msgstr "Vertikal"
 
-#: eeschema/fields_grid_table.cpp:484 eeschema/sch_field.cpp:1603
+#: eeschema/fields_grid_table.cpp:484 eeschema/sch_field.cpp:1602
 msgid "Allow Autoplacement"
 msgstr "Tillåt automatisk placering"
 
-#: eeschema/fields_grid_table.cpp:485 eeschema/sch_field.cpp:1642
+#: eeschema/fields_grid_table.cpp:485 eeschema/sch_field.cpp:1641
 #: eeschema/sch_item.cpp:567 eeschema/sch_item.cpp:619
 msgid "Private"
 msgstr "Privat"
@@ -18187,7 +17981,7 @@ msgstr ""
 "Kunde inte spara kretsschemafil '%s'.\n"
 "%s"
 
-#: eeschema/files-io.cpp:811 pcbnew/files.cpp:1066 pcbnew/files.cpp:1361
+#: eeschema/files-io.cpp:811 pcbnew/files.cpp:1069 pcbnew/files.cpp:1364
 #, c-format
 msgid "Failed to create temporary file '%s'."
 msgstr "Det gick inte att skapa temporär fil '%s'."
@@ -18201,13 +17995,13 @@ msgstr ""
 "Fel när kretsschemafil '%s' sparades.\n"
 "Det gick inte att byta namn på den tillfälliga filen '%s'."
 
-#: eeschema/files-io.cpp:837 pcbnew/files.cpp:1087 pcbnew/files.cpp:1427
+#: eeschema/files-io.cpp:837 pcbnew/files.cpp:1090 pcbnew/files.cpp:1430
 #, c-format
 msgid "Failed to rename temporary file '%s'."
 msgstr "Det gick inte att byta namn på temporär fil '%s'."
 
 #: eeschema/files-io.cpp:860 pagelayout_editor/files.cpp:187
-#: pagelayout_editor/files.cpp:219 pcbnew/files.cpp:1120
+#: pagelayout_editor/files.cpp:219 pcbnew/files.cpp:1123
 #, c-format
 msgid "File '%s' saved."
 msgstr "Filen '%s' sparades."
@@ -18217,8 +18011,8 @@ msgid "File write operation failed."
 msgstr "Filskrivningen misslyckades."
 
 #: eeschema/files-io.cpp:932 eeschema/files-io.cpp:1000
-#: kicad/import_project.cpp:93 kicad/tools/kicad_manager_control.cpp:115
-#: kicad/tools/kicad_manager_control.cpp:319
+#: kicad/import_project.cpp:93 kicad/tools/kicad_manager_control.cpp:117
+#: kicad/tools/kicad_manager_control.cpp:321
 #, c-format
 msgid ""
 "Folder '%s' could not be created.\n"
@@ -18606,29 +18400,29 @@ msgstr "Symboler till nytt bibliotek..."
 msgid "Panels"
 msgstr "Paneler"
 
-#: eeschema/menubar.cpp:347
+#: eeschema/menubar.cpp:346
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:184
 #: pagelayout_editor/menubar.cpp:153 pcbnew/menubar_footprint_editor.cpp:239
-#: pcbnew/menubar_pcb_editor.cpp:485
+#: pcbnew/menubar_pcb_editor.cpp:486
 msgid "&Place"
 msgstr "&Placera"
 
-#: eeschema/menubar.cpp:348
+#: eeschema/menubar.cpp:347
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:185
 #: pagelayout_editor/menubar.cpp:154 pcbnew/menubar_footprint_editor.cpp:240
-#: pcbnew/menubar_pcb_editor.cpp:487
+#: pcbnew/menubar_pcb_editor.cpp:488
 msgid "&Inspect"
 msgstr "Inspe&ktera"
 
-#: eeschema/menubar.cpp:349 gerbview/menubar.cpp:233 kicad/menubar.cpp:223
-#: pcbnew/menubar_footprint_editor.cpp:241 pcbnew/menubar_pcb_editor.cpp:488
+#: eeschema/menubar.cpp:348 gerbview/menubar.cpp:233 kicad/menubar.cpp:223
+#: pcbnew/menubar_footprint_editor.cpp:241 pcbnew/menubar_pcb_editor.cpp:489
 msgid "&Tools"
 msgstr "&Verktyg"
 
-#: eeschema/menubar.cpp:350
+#: eeschema/menubar.cpp:349
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:186
 #: pagelayout_editor/menubar.cpp:155 pcbnew/menubar_footprint_editor.cpp:242
-#: pcbnew/menubar_pcb_editor.cpp:489
+#: pcbnew/menubar_pcb_editor.cpp:490
 msgid "P&references"
 msgstr "I&nställningar"
 
@@ -18717,7 +18511,7 @@ msgid "Failed to create directory 'devices' ."
 msgstr "Kunde inte skapa katalog 'devices'."
 
 #: eeschema/netlist_exporters/netlist_exporter_allegro.cpp:407
-#: pcbnew/pcbnew_jobs_handler.cpp:1231
+#: pcbnew/pcbnew_jobs_handler.cpp:1232
 #, c-format
 msgid "Failed to create file '%s'.\n"
 msgstr "Det gick inte att skapa filen '%s'.\n"
@@ -18994,7 +18788,7 @@ msgstr ""
 #: eeschema/sch_pin.cpp:1747 eeschema/sch_shape.cpp:542
 #: eeschema/sch_symbol.cpp:2905 pcbnew/board_item.cpp:406
 #: pcbnew/pcb_group.cpp:509 pcbnew/pcb_shape.cpp:991
-#: pcbnew/pcb_tablecell.cpp:185 pcbnew/pcb_track.cpp:2323 pcbnew/zone.cpp:1841
+#: pcbnew/pcb_tablecell.cpp:190 pcbnew/pcb_track.cpp:2323 pcbnew/zone.cpp:1841
 #: pcbnew/zone.cpp:1853
 msgid "Position X"
 msgstr "Position X"
@@ -19003,7 +18797,7 @@ msgstr "Position X"
 #: eeschema/sch_pin.cpp:1751 eeschema/sch_shape.cpp:544
 #: eeschema/sch_symbol.cpp:2908 pcbnew/board_item.cpp:409
 #: pcbnew/pcb_group.cpp:510 pcbnew/pcb_shape.cpp:993
-#: pcbnew/pcb_tablecell.cpp:186 pcbnew/pcb_track.cpp:2327 pcbnew/zone.cpp:1847
+#: pcbnew/pcb_tablecell.cpp:191 pcbnew/pcb_track.cpp:2327 pcbnew/zone.cpp:1847
 #: pcbnew/zone.cpp:1854
 msgid "Position Y"
 msgstr "Position Y"
@@ -19153,12 +18947,12 @@ msgstr "Det gick inte att öppna CvPcb"
 
 #: eeschema/sch_edit_frame.cpp:1735 eeschema/sim/simulator_frame.cpp:349
 #: kicad/kicad_manager_frame.cpp:1046 pcbnew/footprint_edit_frame.cpp:1048
-#: pcbnew/pcb_edit_frame.cpp:1880
+#: pcbnew/pcb_edit_frame.cpp:1881
 msgid "[Read Only]"
 msgstr "[Skrivskyddad]"
 
 #: eeschema/sch_edit_frame.cpp:1738 eeschema/sim/simulator_frame.cpp:352
-#: pcbnew/footprint_edit_frame.cpp:1057 pcbnew/pcb_edit_frame.cpp:1883
+#: pcbnew/footprint_edit_frame.cpp:1057 pcbnew/pcb_edit_frame.cpp:1884
 msgid "[Unsaved]"
 msgstr "[Osparat]"
 
@@ -19195,7 +18989,7 @@ msgstr "Symbolfält"
 #: eeschema/sch_field.cpp:988 eeschema/sch_pin.cpp:1178
 #: gerbview/gerber_draw_item.cpp:729 gerbview/gerber_draw_item.cpp:730
 #: pcbnew/board_stackup_manager/panel_board_finish_base.cpp:44
-#: pcbnew/pcb_tablecell.cpp:112 pcbnew/pcb_text.cpp:290
+#: pcbnew/pcb_tablecell.cpp:112 pcbnew/pcb_text.cpp:288
 #: pcbnew/pcb_textbox.cpp:471 pcbnew/tools/pcb_control.cpp:2232
 #: pcbnew/tools/pcb_control.cpp:2235 pcbnew/tools/pcb_control.cpp:2238
 #: pcbnew/tools/pcb_control.cpp:2245
@@ -19204,7 +18998,7 @@ msgstr "Ja"
 
 #: eeschema/sch_field.cpp:988 eeschema/sch_pin.cpp:1178
 #: gerbview/gerber_draw_item.cpp:729 gerbview/gerber_draw_item.cpp:730
-#: pcbnew/pcb_tablecell.cpp:112 pcbnew/pcb_text.cpp:290
+#: pcbnew/pcb_tablecell.cpp:112 pcbnew/pcb_text.cpp:288
 #: pcbnew/pcb_textbox.cpp:471 pcbnew/tools/pcb_control.cpp:2232
 #: pcbnew/tools/pcb_control.cpp:2235 pcbnew/tools/pcb_control.cpp:2238
 #: pcbnew/tools/pcb_control.cpp:2244
@@ -19228,7 +19022,7 @@ msgstr "Gå till Sida %s (%s)"
 msgid "Back to Previous Selected Sheet"
 msgstr "Tillbaka till tidigare valt ark"
 
-#: eeschema/sch_field.cpp:1600
+#: eeschema/sch_field.cpp:1599
 msgid "Show Field Name"
 msgstr "Visa fältnamn"
 
@@ -19644,13 +19438,6 @@ msgstr ""
 #: eeschema/sch_io/database/sch_io_database.h:51
 msgid "KiCad database library files"
 msgstr "KiCad databasbiblioteksfiler"
-
-#: eeschema/sch_io/eagle/sch_io_eagle.cpp:600
-#: eeschema/sch_io/eagle/sch_io_eagle.cpp:617
-#: pcbnew/pcb_io/eagle/pcb_io_eagle.cpp:3230
-#, c-format
-msgid "Unable to read file '%s'."
-msgstr "Kunde inte läsa fil '%s'."
 
 #: eeschema/sch_io/eagle/sch_io_eagle.cpp:609
 #, c-format
@@ -20072,15 +19859,16 @@ msgstr "Förväntar I, O, B, IN, OUT eller BIDIR"
 msgid "Expecting R0, R90, R18, R270, M0, M90, M180 or M270"
 msgstr "Förväntar R0, R90, R18, R270, M0, M90, M180 eller M270"
 
-#: eeschema/sch_io/ltspice/ltspice_schematic.cpp:493
+#: eeschema/sch_io/ltspice/ltspice_schematic.cpp:494
+#, fuzzy
 msgid ""
-"Expecting LEFT, CENTER, RIGHT, TOP, BOTTOM, VLEFT, VRIGHT, VCENTER, VTOP or "
-"VBOTTOM"
+"Expecting LEFT, CENTER, RIGHT, TOP, BOTTOM, VLEFT, VRIGHT, VCENTER, VTOP, "
+"VBOTTOM or INVISIBLE"
 msgstr ""
 "Förväntar LEFT, CENTER, RIGHT, TOP, BOTTOM, VLEFT, VRIGHT, VCENTER, VTOP "
 "eller VBOTTOM"
 
-#: eeschema/sch_io/ltspice/ltspice_schematic.cpp:515
+#: eeschema/sch_io/ltspice/ltspice_schematic.cpp:517
 msgid ""
 "Expecting NONE, BOTTOM, TOP, LEFT, RIGHT, VBOTTOM, VTOP, VCENTER, VLEFT or "
 "VRIGHT"
@@ -20088,11 +19876,11 @@ msgstr ""
 "Förväntar NONE, BOTTOM, TOP, LEFT, RIGHT, VBOTTOM, VTOP, VCENTER, VLEFT "
 "eller VRIGHT"
 
-#: eeschema/sch_io/ltspice/ltspice_schematic.cpp:529
+#: eeschema/sch_io/ltspice/ltspice_schematic.cpp:531
 msgid "Expecting CELL or BLOCK"
 msgstr "Förväntar CELL eller BLOCK"
 
-#: eeschema/sch_io/ltspice/ltspice_schematic.cpp:548
+#: eeschema/sch_io/ltspice/ltspice_schematic.cpp:550
 #, c-format
 msgid "Symbol '%s.asy' not found"
 msgstr "Symbolen '%s.asy' hittades inte"
@@ -20166,7 +19954,7 @@ msgstr "Justering"
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:39
 #: pcbnew/generators/pcb_tuning_pattern.cpp:505
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2314 pcbnew/pad.cpp:1329
-#: pcbnew/pad.cpp:2777 pcbnew/pcb_shape.cpp:1008 pcbnew/pcb_tablecell.cpp:189
+#: pcbnew/pad.cpp:2777 pcbnew/pcb_shape.cpp:1008 pcbnew/pcb_tablecell.cpp:194
 #: pcbnew/pcb_track.cpp:1898 pcbnew/tools/pcb_control.cpp:1996
 #: pcbnew/widgets/pcb_properties_panel.cpp:282
 #: pcbnew/widgets/search_handlers.cpp:203 pcbnew/zone.cpp:883
@@ -20328,7 +20116,7 @@ msgstr "Stiftnamn"
 msgid "No sheets to plot."
 msgstr "Inga ark att plotta."
 
-#: eeschema/sch_plotter.cpp:251 pcbnew/pcbnew_jobs_handler.cpp:1158
+#: eeschema/sch_plotter.cpp:251 pcbnew/pcbnew_jobs_handler.cpp:1159
 #, c-format
 msgid "Plotted to '%s'.\n"
 msgstr "Plottade till '%s'.\n"
@@ -20450,7 +20238,7 @@ msgid "Fill color"
 msgstr "Fyllningsfärg"
 
 #: eeschema/sch_shape.cpp:547 pcbnew/dialogs/dialog_plot_base.cpp:138
-#: pcbnew/pcb_textbox.cpp:818 pcbnew/pcb_track.cpp:2301
+#: pcbnew/pcb_textbox.cpp:823 pcbnew/pcb_track.cpp:2301
 msgid "Filled"
 msgstr "Fylld"
 
@@ -20492,8 +20280,8 @@ msgid "Hierarchical Sheet %s"
 msgstr "Hierarkiskt ark %s"
 
 #: eeschema/sch_sheet.cpp:1657 eeschema/sch_table.cpp:524
-#: pcbnew/pcb_table.cpp:671 pcbnew/pcb_tablecell.cpp:193
-#: pcbnew/pcb_textbox.cpp:838
+#: pcbnew/pcb_table.cpp:671 pcbnew/pcb_tablecell.cpp:198
+#: pcbnew/pcb_textbox.cpp:843
 msgid "Border Width"
 msgstr "Kantbredd"
 
@@ -20601,7 +20389,7 @@ msgid "Header Border"
 msgstr "Rubrikens inramning"
 
 #: eeschema/sch_table.cpp:529 pcbnew/pcb_table.cpp:676
-#: pcbnew/pcb_tablecell.cpp:192 pcbnew/pcb_textbox.cpp:834
+#: pcbnew/pcb_tablecell.cpp:197 pcbnew/pcb_textbox.cpp:839
 msgid "Border Style"
 msgstr "Kantstil"
 
@@ -20929,31 +20717,31 @@ msgstr ""
 "<i>OBS: markup har företräde över bussdefinitioner.</i>\n"
 "\n"
 
-#: eeschema/sch_textbox.cpp:469 pcbnew/pcb_textbox.cpp:479
+#: eeschema/sch_textbox.cpp:469 pcbnew/pcb_textbox.cpp:484
 msgid "Box Width"
 msgstr "Textrutans bredd"
 
-#: eeschema/sch_textbox.cpp:472 pcbnew/pcb_textbox.cpp:482
+#: eeschema/sch_textbox.cpp:472 pcbnew/pcb_textbox.cpp:487
 msgid "Box Height"
 msgstr "Textrutans höjd"
 
-#: eeschema/sch_textbox.cpp:609 pcbnew/pcb_textbox.cpp:843
+#: eeschema/sch_textbox.cpp:609 pcbnew/pcb_textbox.cpp:848
 msgid "Margins"
 msgstr "Marginaler"
 
-#: eeschema/sch_textbox.cpp:611 pcbnew/pcb_textbox.cpp:845
+#: eeschema/sch_textbox.cpp:611 pcbnew/pcb_textbox.cpp:850
 msgid "Margin Left"
 msgstr "Vänstermarginal"
 
-#: eeschema/sch_textbox.cpp:615 pcbnew/pcb_textbox.cpp:849
+#: eeschema/sch_textbox.cpp:615 pcbnew/pcb_textbox.cpp:854
 msgid "Margin Top"
 msgstr "Övre marginal"
 
-#: eeschema/sch_textbox.cpp:619 pcbnew/pcb_textbox.cpp:853
+#: eeschema/sch_textbox.cpp:619 pcbnew/pcb_textbox.cpp:858
 msgid "Margin Right"
 msgstr "Högermarginal"
 
-#: eeschema/sch_textbox.cpp:623 pcbnew/pcb_textbox.cpp:857
+#: eeschema/sch_textbox.cpp:623 pcbnew/pcb_textbox.cpp:862
 msgid "Margin Bottom"
 msgstr "Nedre marginal"
 
@@ -24669,7 +24457,7 @@ msgid "Rotate"
 msgstr "Rotera"
 
 #: eeschema/tools/sch_edit_tool.cpp:1250 gerbview/gerber_draw_item.cpp:731
-#: pcbnew/pcb_tablecell.cpp:112 pcbnew/pcb_text.cpp:290
+#: pcbnew/pcb_tablecell.cpp:112 pcbnew/pcb_text.cpp:288
 #: pcbnew/pcb_textbox.cpp:471 pcbnew/tools/edit_tool.cpp:2237
 msgid "Mirror"
 msgstr "Spegelvänd"
@@ -25484,8 +25272,8 @@ msgstr "Välj lager: %s"
 #: pcbnew/pcb_group.cpp:511 pcbnew/pcb_marker.cpp:378
 #: pcbnew/pcb_reference_image.cpp:226 pcbnew/pcb_reference_image.cpp:349
 #: pcbnew/pcb_shape.cpp:725 pcbnew/pcb_shape.cpp:975 pcbnew/pcb_shape.cpp:977
-#: pcbnew/pcb_tablecell.cpp:111 pcbnew/pcb_tablecell.cpp:187
-#: pcbnew/pcb_target.cpp:153 pcbnew/pcb_text.cpp:288 pcbnew/pcb_textbox.cpp:470
+#: pcbnew/pcb_tablecell.cpp:111 pcbnew/pcb_tablecell.cpp:192
+#: pcbnew/pcb_target.cpp:153 pcbnew/pcb_text.cpp:286 pcbnew/pcb_textbox.cpp:470
 #: pcbnew/pcb_track.cpp:1772 pcbnew/pcb_track.cpp:1874
 #: pcbnew/pcb_track.cpp:2368 pcbnew/tools/board_inspection_tool.cpp:237
 #: pcbnew/widgets/pcb_properties_panel.cpp:258
@@ -28990,18 +28778,6 @@ msgstr ""
 "Konvertera bitmappsbilder till kretsschemasymboler eller komponentfotavtryck "
 "för mönsterkort"
 
-#: kicad/tools/kicad_manager_actions.cpp:177
-#: pcb_calculator/pcb_calculator_frame.cpp:63
-#: pcb_calculator/pcb_calculator_frame.cpp:218
-#: pcb_calculator/pcb_calculator_frame.cpp:219
-#: pcb_calculator/pcb_calculator_frame.cpp:246
-msgid "Calculator Tools"
-msgstr "Beräkningsverktyg"
-
-#: kicad/tools/kicad_manager_actions.cpp:178
-msgid "Run component calculations, track width calculations, etc."
-msgstr "Beräkna komponentvärden, ledarbredder etc."
-
 #: kicad/tools/kicad_manager_actions.cpp:188
 msgid "Edit drawing sheet borders and title block"
 msgstr "Ändra ritningsarkets ram och namnruta"
@@ -29038,11 +28814,11 @@ msgstr "Avslöja projektmappen i Finder"
 msgid "Open project directory in file explorer"
 msgstr "Öppna projektkatalogen i filutforskaren"
 
-#: kicad/tools/kicad_manager_control.cpp:76
+#: kicad/tools/kicad_manager_control.cpp:78
 msgid "Create New Project"
 msgstr "Skapa nytt projekt"
 
-#: kicad/tools/kicad_manager_control.cpp:124
+#: kicad/tools/kicad_manager_control.cpp:126
 msgid ""
 "The selected folder is not empty.  It is recommended that you create "
 "projects in their own empty folder.\n"
@@ -29054,78 +28830,78 @@ msgstr ""
 "\n"
 "Vill du fortsätta?"
 
-#: kicad/tools/kicad_manager_control.cpp:155
+#: kicad/tools/kicad_manager_control.cpp:157
 msgid "Clone Project from Git Repository"
 msgstr "Klona projekt från Git-förvar"
 
-#: kicad/tools/kicad_manager_control.cpp:179
+#: kicad/tools/kicad_manager_control.cpp:181
 msgid "Cloning Repository"
 msgstr "Klonar förvar"
 
-#: kicad/tools/kicad_manager_control.cpp:191
+#: kicad/tools/kicad_manager_control.cpp:193
 msgid "No project files were found in the repository."
 msgstr "Inga projektfiler hittades i förvaret."
 
-#: kicad/tools/kicad_manager_control.cpp:218
+#: kicad/tools/kicad_manager_control.cpp:220
 msgid "Create New Jobset"
 msgstr "Skapa ny åtgärdsserie"
 
-#: kicad/tools/kicad_manager_control.cpp:248
+#: kicad/tools/kicad_manager_control.cpp:250
 msgid "System Templates"
 msgstr "Systemmallar"
 
-#: kicad/tools/kicad_manager_control.cpp:257
+#: kicad/tools/kicad_manager_control.cpp:259
 msgid "User Templates"
 msgstr "Egna mallar"
 
-#: kicad/tools/kicad_manager_control.cpp:274
+#: kicad/tools/kicad_manager_control.cpp:276
 msgid "No project template was selected.  Cannot generate new project."
 msgstr "Ingen projektmall valdes. Det går inte att skapa ett nytt projekt."
 
-#: kicad/tools/kicad_manager_control.cpp:282
+#: kicad/tools/kicad_manager_control.cpp:284
 msgid "New Project Folder"
 msgstr "Ny projektmapp"
 
-#: kicad/tools/kicad_manager_control.cpp:331
-#: kicad/tools/kicad_manager_control.cpp:762
+#: kicad/tools/kicad_manager_control.cpp:333
+#: kicad/tools/kicad_manager_control.cpp:764
 #, c-format
 msgid "Insufficient permissions to write to folder '%s'."
 msgstr "Otillräckliga behörigheter för att skriva till mappen '%s'."
 
-#: kicad/tools/kicad_manager_control.cpp:352
+#: kicad/tools/kicad_manager_control.cpp:354
 msgid "Overwriting files:"
 msgstr "Skriva över filer:"
 
-#: kicad/tools/kicad_manager_control.cpp:358
+#: kicad/tools/kicad_manager_control.cpp:360
 msgid "Similar files already exist in the destination folder."
 msgstr "Liknande filer finns redan i målmappen."
 
-#: kicad/tools/kicad_manager_control.cpp:377
+#: kicad/tools/kicad_manager_control.cpp:379
 msgid "A problem occurred creating new project from template."
 msgstr "Ett problem uppstod under skapandet av ett nytt projekt från mall."
 
-#: kicad/tools/kicad_manager_control.cpp:400
+#: kicad/tools/kicad_manager_control.cpp:402
 msgid "Open Existing Project"
 msgstr "Öppna befintligt projekt"
 
-#: kicad/tools/kicad_manager_control.cpp:435
+#: kicad/tools/kicad_manager_control.cpp:437
 msgid "Open Jobset"
 msgstr "Öppna åtgärdsserie"
 
-#: kicad/tools/kicad_manager_control.cpp:470
+#: kicad/tools/kicad_manager_control.cpp:472
 msgid "Archive Project Files"
 msgstr "Arkivera projektfiler"
 
-#: kicad/tools/kicad_manager_control.cpp:687
+#: kicad/tools/kicad_manager_control.cpp:689
 #, c-format
 msgid "Cannot copy folder '%s'."
 msgstr "Kan inte kopiera mappen '%s'."
 
-#: kicad/tools/kicad_manager_control.cpp:733
+#: kicad/tools/kicad_manager_control.cpp:735
 msgid "Save Project To"
 msgstr "Spara projekt till"
 
-#: kicad/tools/kicad_manager_control.cpp:753
+#: kicad/tools/kicad_manager_control.cpp:755
 #, c-format
 msgid ""
 "Folder '%s' could not be created.\n"
@@ -29136,23 +28912,23 @@ msgstr ""
 "\n"
 "Se till att du har skrivbehörighet och försök igen."
 
-#: kicad/tools/kicad_manager_control.cpp:764
+#: kicad/tools/kicad_manager_control.cpp:766
 msgid "Error!"
 msgstr "Fel!"
 
-#: kicad/tools/kicad_manager_control.cpp:820
+#: kicad/tools/kicad_manager_control.cpp:822
 msgid "Create (or open) a project to edit a schematic."
 msgstr "Skapa (eller öppna) ett projekt för att redigera ett kretsschema."
 
-#: kicad/tools/kicad_manager_control.cpp:826
+#: kicad/tools/kicad_manager_control.cpp:828
 msgid "Create (or open) a project to edit a pcb."
 msgstr "Skapa (eller öppna) ett projekt för att redigera ett mönsterkort."
 
-#: kicad/tools/kicad_manager_control.cpp:843
+#: kicad/tools/kicad_manager_control.cpp:845
 msgid "Application failed to load:\n"
 msgstr "Programmet kunde inte laddas:\n"
 
-#: kicad/tools/kicad_manager_control.cpp:849
+#: kicad/tools/kicad_manager_control.cpp:851
 msgid "Application cannot start."
 msgstr "Programmet kan inte starta."
 
@@ -31689,276 +31465,294 @@ msgid "Frequency of the input signal"
 msgstr "Ingångssignalens frekvens"
 
 #: pcb_calculator/transline_ident.cpp:119
-#: pcb_calculator/transline_ident.cpp:161
-#: pcb_calculator/transline_ident.cpp:195
-#: pcb_calculator/transline_ident.cpp:231
-#: pcb_calculator/transline_ident.cpp:266
-#: pcb_calculator/transline_ident.cpp:351
-#: pcb_calculator/transline_ident.cpp:385
+#: pcb_calculator/transline_ident.cpp:162
+#: pcb_calculator/transline_ident.cpp:197
+#: pcb_calculator/transline_ident.cpp:234
+#: pcb_calculator/transline_ident.cpp:269
+#: pcb_calculator/transline_ident.cpp:356
+#: pcb_calculator/transline_ident.cpp:391
 #, c-format
 msgid "Effective %s:"
 msgstr "Effektiv %s:"
 
 #: pcb_calculator/transline_ident.cpp:120
-#: pcb_calculator/transline_ident.cpp:162
-#: pcb_calculator/transline_ident.cpp:196
-#: pcb_calculator/transline_ident.cpp:232
-#: pcb_calculator/transline_ident.cpp:267
-#: pcb_calculator/transline_ident.cpp:352
-#: pcb_calculator/transline_ident.cpp:386
+#: pcb_calculator/transline_ident.cpp:163
+#: pcb_calculator/transline_ident.cpp:198
+#: pcb_calculator/transline_ident.cpp:357
+#, fuzzy
+msgid "Unit propagation delay:"
+msgstr "Utbredningsfördröjning"
+
+#: pcb_calculator/transline_ident.cpp:121
+#: pcb_calculator/transline_ident.cpp:164
+#: pcb_calculator/transline_ident.cpp:199
+#: pcb_calculator/transline_ident.cpp:235
+#: pcb_calculator/transline_ident.cpp:270
+#: pcb_calculator/transline_ident.cpp:358
+#: pcb_calculator/transline_ident.cpp:392
 msgid "Conductor losses:"
 msgstr "Ledningsförluster:"
 
-#: pcb_calculator/transline_ident.cpp:121
-#: pcb_calculator/transline_ident.cpp:163
-#: pcb_calculator/transline_ident.cpp:197
-#: pcb_calculator/transline_ident.cpp:233
-#: pcb_calculator/transline_ident.cpp:268
-#: pcb_calculator/transline_ident.cpp:353
-#: pcb_calculator/transline_ident.cpp:387
+#: pcb_calculator/transline_ident.cpp:122
+#: pcb_calculator/transline_ident.cpp:165
+#: pcb_calculator/transline_ident.cpp:200
+#: pcb_calculator/transline_ident.cpp:236
+#: pcb_calculator/transline_ident.cpp:271
+#: pcb_calculator/transline_ident.cpp:359
+#: pcb_calculator/transline_ident.cpp:393
 msgid "Dielectric losses:"
 msgstr "Dielektriska förluster:"
 
-#: pcb_calculator/transline_ident.cpp:122
-#: pcb_calculator/transline_ident.cpp:164
-#: pcb_calculator/transline_ident.cpp:198
-#: pcb_calculator/transline_ident.cpp:309
-#: pcb_calculator/transline_ident.cpp:354
-#: pcb_calculator/transline_ident.cpp:388
+#: pcb_calculator/transline_ident.cpp:123
+#: pcb_calculator/transline_ident.cpp:166
+#: pcb_calculator/transline_ident.cpp:201
+#: pcb_calculator/transline_ident.cpp:314
+#: pcb_calculator/transline_ident.cpp:360
+#: pcb_calculator/transline_ident.cpp:394
 msgid "Skin depth:"
 msgstr "Skinndjup:"
 
-#: pcb_calculator/transline_ident.cpp:125
-#: pcb_calculator/transline_ident.cpp:167
-#: pcb_calculator/transline_ident.cpp:201
-#: pcb_calculator/transline_ident.cpp:313
-#: pcb_calculator/transline_ident.cpp:357
+#: pcb_calculator/transline_ident.cpp:126
+#: pcb_calculator/transline_ident.cpp:169
+#: pcb_calculator/transline_ident.cpp:204
+#: pcb_calculator/transline_ident.cpp:318
+#: pcb_calculator/transline_ident.cpp:363
 msgid "Height of substrate"
 msgstr "Substratets höjd"
 
-#: pcb_calculator/transline_ident.cpp:127
-#: pcb_calculator/transline_ident.cpp:315
+#: pcb_calculator/transline_ident.cpp:128
+#: pcb_calculator/transline_ident.cpp:320
 msgid "Height of box top"
 msgstr "Kapslingens (apparatlåda/skärmbox) höjd över transmissionslinjen"
 
-#: pcb_calculator/transline_ident.cpp:130
-#: pcb_calculator/transline_ident.cpp:169
-#: pcb_calculator/transline_ident.cpp:203
-#: pcb_calculator/transline_ident.cpp:317
-#: pcb_calculator/transline_ident.cpp:362
+#: pcb_calculator/transline_ident.cpp:131
+#: pcb_calculator/transline_ident.cpp:171
+#: pcb_calculator/transline_ident.cpp:206
+#: pcb_calculator/transline_ident.cpp:322
+#: pcb_calculator/transline_ident.cpp:368
 msgid "Strip thickness"
 msgstr "Ledartjocklek"
 
-#: pcb_calculator/transline_ident.cpp:132
-#: pcb_calculator/transline_ident.cpp:319
+#: pcb_calculator/transline_ident.cpp:133
+#: pcb_calculator/transline_ident.cpp:324
 msgid "Roughness"
 msgstr "Grovhet"
 
-#: pcb_calculator/transline_ident.cpp:133
-#: pcb_calculator/transline_ident.cpp:320
+#: pcb_calculator/transline_ident.cpp:134
+#: pcb_calculator/transline_ident.cpp:325
 msgid "Conductor roughness"
 msgstr "Ledarens ytojämnhet"
 
-#: pcb_calculator/transline_ident.cpp:136
+#: pcb_calculator/transline_ident.cpp:137
 msgid "substrate"
 msgstr "substrat"
 
-#: pcb_calculator/transline_ident.cpp:137
+#: pcb_calculator/transline_ident.cpp:138
 msgid "Relative permeability (mu) of substrate"
 msgstr "Relativ permeabilitet (my) för substrat"
 
-#: pcb_calculator/transline_ident.cpp:140
-#: pcb_calculator/transline_ident.cpp:172
-#: pcb_calculator/transline_ident.cpp:206
-#: pcb_calculator/transline_ident.cpp:243
-#: pcb_calculator/transline_ident.cpp:278
-#: pcb_calculator/transline_ident.cpp:323
-#: pcb_calculator/transline_ident.cpp:365
-#: pcb_calculator/transline_ident.cpp:395
+#: pcb_calculator/transline_ident.cpp:141
+#: pcb_calculator/transline_ident.cpp:174
+#: pcb_calculator/transline_ident.cpp:209
+#: pcb_calculator/transline_ident.cpp:246
+#: pcb_calculator/transline_ident.cpp:281
+#: pcb_calculator/transline_ident.cpp:328
+#: pcb_calculator/transline_ident.cpp:371
+#: pcb_calculator/transline_ident.cpp:401
 msgid "conductor"
 msgstr "ledare"
 
-#: pcb_calculator/transline_ident.cpp:141
-#: pcb_calculator/transline_ident.cpp:173
-#: pcb_calculator/transline_ident.cpp:207
-#: pcb_calculator/transline_ident.cpp:244
-#: pcb_calculator/transline_ident.cpp:279
-#: pcb_calculator/transline_ident.cpp:324
-#: pcb_calculator/transline_ident.cpp:366
-#: pcb_calculator/transline_ident.cpp:396
+#: pcb_calculator/transline_ident.cpp:142
+#: pcb_calculator/transline_ident.cpp:175
+#: pcb_calculator/transline_ident.cpp:210
+#: pcb_calculator/transline_ident.cpp:247
+#: pcb_calculator/transline_ident.cpp:282
+#: pcb_calculator/transline_ident.cpp:329
+#: pcb_calculator/transline_ident.cpp:372
+#: pcb_calculator/transline_ident.cpp:402
 msgid "Relative permeability (mu) of conductor"
 msgstr "Relativ permeabilitet (my) för ledare"
 
-#: pcb_calculator/transline_ident.cpp:145
-#: pcb_calculator/transline_ident.cpp:177
-#: pcb_calculator/transline_ident.cpp:211
-#: pcb_calculator/transline_ident.cpp:328
-#: pcb_calculator/transline_ident.cpp:369
+#: pcb_calculator/transline_ident.cpp:146
+#: pcb_calculator/transline_ident.cpp:179
+#: pcb_calculator/transline_ident.cpp:214
+#: pcb_calculator/transline_ident.cpp:333
+#: pcb_calculator/transline_ident.cpp:375
 msgid "Line width"
 msgstr "Ledarbredd"
 
-#: pcb_calculator/transline_ident.cpp:147
-#: pcb_calculator/transline_ident.cpp:181
-#: pcb_calculator/transline_ident.cpp:215
-#: pcb_calculator/transline_ident.cpp:289
-#: pcb_calculator/transline_ident.cpp:332
-#: pcb_calculator/transline_ident.cpp:371
+#: pcb_calculator/transline_ident.cpp:148
+#: pcb_calculator/transline_ident.cpp:183
+#: pcb_calculator/transline_ident.cpp:218
+#: pcb_calculator/transline_ident.cpp:292
+#: pcb_calculator/transline_ident.cpp:337
+#: pcb_calculator/transline_ident.cpp:377
 msgid "Line length"
 msgstr "Ledarlängd"
 
-#: pcb_calculator/transline_ident.cpp:150
-#: pcb_calculator/transline_ident.cpp:184
-#: pcb_calculator/transline_ident.cpp:218
-#: pcb_calculator/transline_ident.cpp:255
-#: pcb_calculator/transline_ident.cpp:292
-#: pcb_calculator/transline_ident.cpp:374
-#: pcb_calculator/transline_ident.cpp:413
-msgid "Characteristic impedance"
-msgstr "Karaktäristisk impedans"
-
-#: pcb_calculator/transline_ident.cpp:153
-#: pcb_calculator/transline_ident.cpp:187
+#: pcb_calculator/transline_ident.cpp:151
+#: pcb_calculator/transline_ident.cpp:186
 #: pcb_calculator/transline_ident.cpp:221
 #: pcb_calculator/transline_ident.cpp:258
 #: pcb_calculator/transline_ident.cpp:295
-#: pcb_calculator/transline_ident.cpp:344
-#: pcb_calculator/transline_ident.cpp:377
-#: pcb_calculator/transline_ident.cpp:416
+#: pcb_calculator/transline_ident.cpp:380
+#: pcb_calculator/transline_ident.cpp:419
+msgid "Characteristic impedance"
+msgstr "Karaktäristisk impedans"
+
+#: pcb_calculator/transline_ident.cpp:154
+#: pcb_calculator/transline_ident.cpp:189
+#: pcb_calculator/transline_ident.cpp:224
+#: pcb_calculator/transline_ident.cpp:261
+#: pcb_calculator/transline_ident.cpp:298
+#: pcb_calculator/transline_ident.cpp:349
+#: pcb_calculator/transline_ident.cpp:383
+#: pcb_calculator/transline_ident.cpp:422
 msgid "Electrical length"
 msgstr "Elektrisk längd"
 
-#: pcb_calculator/transline_ident.cpp:179
-#: pcb_calculator/transline_ident.cpp:213
-#: pcb_calculator/transline_ident.cpp:330
+#: pcb_calculator/transline_ident.cpp:181
+#: pcb_calculator/transline_ident.cpp:216
+#: pcb_calculator/transline_ident.cpp:335
 msgid "Gap width"
 msgstr "Gapbredd"
 
-#: pcb_calculator/transline_ident.cpp:230
+#: pcb_calculator/transline_ident.cpp:233
 msgid "ZF(H10) = Ey / Hx:"
 msgstr "ZF (H10) = Ey / Hx:"
 
-#: pcb_calculator/transline_ident.cpp:234
-#: pcb_calculator/transline_ident.cpp:269
+#: pcb_calculator/transline_ident.cpp:237
+#: pcb_calculator/transline_ident.cpp:272
 msgid "TE-modes:"
 msgstr "TE-lägen:"
 
-#: pcb_calculator/transline_ident.cpp:235
-#: pcb_calculator/transline_ident.cpp:270
+#: pcb_calculator/transline_ident.cpp:238
+#: pcb_calculator/transline_ident.cpp:273
 msgid "TM-modes:"
 msgstr "TM-lägen:"
 
-#: pcb_calculator/transline_ident.cpp:239
-#: pcb_calculator/transline_ident.cpp:274
+#: pcb_calculator/transline_ident.cpp:242
+#: pcb_calculator/transline_ident.cpp:277
 msgid "insulator"
 msgstr "isolator"
 
-#: pcb_calculator/transline_ident.cpp:240
-#: pcb_calculator/transline_ident.cpp:275
+#: pcb_calculator/transline_ident.cpp:243
+#: pcb_calculator/transline_ident.cpp:278
 msgid "Relative permeability (mu) of insulator"
 msgstr "Relativ permeabilitet (my) för isolator"
 
-#: pcb_calculator/transline_ident.cpp:248
+#: pcb_calculator/transline_ident.cpp:251
 msgid "Width of waveguide"
 msgstr "Vågledarens bredd"
 
-#: pcb_calculator/transline_ident.cpp:250
+#: pcb_calculator/transline_ident.cpp:253
 msgid "Height of waveguide"
 msgstr "Vågledarens höjd"
 
-#: pcb_calculator/transline_ident.cpp:252
+#: pcb_calculator/transline_ident.cpp:255
 msgid "Waveguide length"
 msgstr "Vågledarens längd"
 
-#: pcb_calculator/transline_ident.cpp:283
-#: pcb_calculator/transline_ident.cpp:404
+#: pcb_calculator/transline_ident.cpp:286
+#: pcb_calculator/transline_ident.cpp:410
 msgid "Din"
 msgstr "Din"
 
-#: pcb_calculator/transline_ident.cpp:284
-#: pcb_calculator/transline_ident.cpp:405
+#: pcb_calculator/transline_ident.cpp:287
+#: pcb_calculator/transline_ident.cpp:411
 msgid "Inner diameter (conductor)"
 msgstr "Inre diameter (ledare)"
 
-#: pcb_calculator/transline_ident.cpp:286
-#: pcb_calculator/transline_ident.cpp:407
+#: pcb_calculator/transline_ident.cpp:289
+#: pcb_calculator/transline_ident.cpp:413
 msgid "Dout"
 msgstr "D-ut"
 
-#: pcb_calculator/transline_ident.cpp:287
-#: pcb_calculator/transline_ident.cpp:408
+#: pcb_calculator/transline_ident.cpp:290
+#: pcb_calculator/transline_ident.cpp:414
 msgid "Outer diameter (insulator)"
 msgstr "Yttre diameter (isolator)"
 
-#: pcb_calculator/transline_ident.cpp:303
+#: pcb_calculator/transline_ident.cpp:306
 #, c-format
 msgid "Effective %s (even):"
 msgstr "Effektiv %s (jämn):"
 
-#: pcb_calculator/transline_ident.cpp:304
+#: pcb_calculator/transline_ident.cpp:307
 #, c-format
 msgid "Effective %s (odd):"
 msgstr "Effektiv %s (udda):"
 
-#: pcb_calculator/transline_ident.cpp:305
+#: pcb_calculator/transline_ident.cpp:308
+#, fuzzy
+msgid "Unit propagation delay (even):"
+msgstr "Utbredningsfördröjning"
+
+#: pcb_calculator/transline_ident.cpp:309
+#, fuzzy
+msgid "Unit propagation delay (odd):"
+msgstr "Utbredningsfördröjning"
+
+#: pcb_calculator/transline_ident.cpp:310
 msgid "Conductor losses (even):"
 msgstr "Ledningsförluster (jämn):"
 
-#: pcb_calculator/transline_ident.cpp:306
+#: pcb_calculator/transline_ident.cpp:311
 msgid "Conductor losses (odd):"
 msgstr "Ledningsförluster (udda):"
 
-#: pcb_calculator/transline_ident.cpp:307
+#: pcb_calculator/transline_ident.cpp:312
 msgid "Dielectric losses (even):"
 msgstr "Dielektriska förluster (jämn):"
 
-#: pcb_calculator/transline_ident.cpp:308
+#: pcb_calculator/transline_ident.cpp:313
 msgid "Dielectric losses (odd):"
 msgstr "Dielektriska förluster (udda):"
 
-#: pcb_calculator/transline_ident.cpp:310
+#: pcb_calculator/transline_ident.cpp:315
 msgid "Differential Impedance (Zd):"
 msgstr "Differentiell impedans (Zd):"
 
-#: pcb_calculator/transline_ident.cpp:335
+#: pcb_calculator/transline_ident.cpp:340
 msgid "Zeven"
 msgstr "Zjämn"
 
-#: pcb_calculator/transline_ident.cpp:336
+#: pcb_calculator/transline_ident.cpp:341
 msgid "Even mode impedance (lines driven by common voltages)"
 msgstr ""
 "Jämn mod-impedans (för en linje i par som drivs av likfasiga spänningar)"
 
-#: pcb_calculator/transline_ident.cpp:339
+#: pcb_calculator/transline_ident.cpp:344
 msgid "Zodd"
 msgstr "Zudda"
 
-#: pcb_calculator/transline_ident.cpp:340
+#: pcb_calculator/transline_ident.cpp:345
 msgid "Odd mode impedance (lines driven by opposite (differential) voltages)"
 msgstr ""
 "Udda mod-impedans (för en linje i par som drivs av motsatta (differentiella) "
 "spänningar)"
 
-#: pcb_calculator/transline_ident.cpp:359
+#: pcb_calculator/transline_ident.cpp:365
 msgid "Distance between strip and top metal"
 msgstr "Avstånd mellan ledare och övre metall"
 
-#: pcb_calculator/transline_ident.cpp:391
+#: pcb_calculator/transline_ident.cpp:397
 msgid "Twists"
 msgstr "Vridningar"
 
-#: pcb_calculator/transline_ident.cpp:392
+#: pcb_calculator/transline_ident.cpp:398
 msgid "Number of twists per length"
 msgstr "Antal vridningar per längd"
 
-#: pcb_calculator/transline_ident.cpp:400
+#: pcb_calculator/transline_ident.cpp:406
 msgid "environment"
 msgstr "omgivning"
 
-#: pcb_calculator/transline_ident.cpp:401
+#: pcb_calculator/transline_ident.cpp:407
 msgid "Relative permittivity of environment"
 msgstr "Permittivitetstal för omgivning"
 
-#: pcb_calculator/transline_ident.cpp:410
+#: pcb_calculator/transline_ident.cpp:416
 msgid "Cable length"
 msgstr "Kabellängd"
 
@@ -32473,42 +32267,42 @@ msgstr "OSP"
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:50
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:69
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:83
-#: pcbnew/exporters/step/step_pcb_model.cpp:1840
+#: pcbnew/exporters/step/step_pcb_model.cpp:1843
 msgid "User defined"
 msgstr "Användardefinierad"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:62
-#: pcbnew/exporters/step/step_pcb_model.cpp:1833
+#: pcbnew/exporters/step/step_pcb_model.cpp:1836
 msgid "Green"
 msgstr "Grön"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:63
-#: pcbnew/exporters/step/step_pcb_model.cpp:1834
+#: pcbnew/exporters/step/step_pcb_model.cpp:1837
 msgid "Red"
 msgstr "Röd"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:64
-#: pcbnew/exporters/step/step_pcb_model.cpp:1835
+#: pcbnew/exporters/step/step_pcb_model.cpp:1838
 msgid "Blue"
 msgstr "Blå"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:65
-#: pcbnew/exporters/step/step_pcb_model.cpp:1836
+#: pcbnew/exporters/step/step_pcb_model.cpp:1839
 msgid "Purple"
 msgstr "Lila"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:66
-#: pcbnew/exporters/step/step_pcb_model.cpp:1837
+#: pcbnew/exporters/step/step_pcb_model.cpp:1840
 msgid "Black"
 msgstr "Svart"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:67
-#: pcbnew/exporters/step/step_pcb_model.cpp:1838
+#: pcbnew/exporters/step/step_pcb_model.cpp:1841
 msgid "White"
 msgstr "Vit"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:68
-#: pcbnew/exporters/step/step_pcb_model.cpp:1839
+#: pcbnew/exporters/step/step_pcb_model.cpp:1842
 msgid "Yellow"
 msgstr "Gul"
 
@@ -32660,7 +32454,7 @@ msgid "(arc has null or very small size: %d nm)"
 msgstr "(Båge har storlek noll eller är väldigt liten: %d nm)"
 
 #: pcbnew/cross-probing.cpp:106 pcbnew/dialogs/dialog_board_setup.cpp:222
-#: pcbnew/dialogs/dialog_drc.cpp:272 pcbnew/pcb_edit_frame.cpp:2648
+#: pcbnew/dialogs/dialog_drc.cpp:272 pcbnew/pcb_edit_frame.cpp:2649
 msgid "Custom Rules"
 msgstr "Användardefinierade regler"
 
@@ -34302,7 +34096,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:63
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:65
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:153
-#: pcbnew/dialogs/panel_setup_dimensions_base.cpp:29
+#: pcbnew/dialogs/panel_setup_dimensions_base.cpp:32
 msgid "Units:"
 msgstr "Enheter:"
 
@@ -34321,7 +34115,7 @@ msgid "Text to print before the dimension value"
 msgstr "Text som ska skrivas ut före måttvärdet"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:141
-#: pcbnew/dialogs/panel_setup_dimensions_base.cpp:56
+#: pcbnew/dialogs/panel_setup_dimensions_base.cpp:59
 msgid "Units format:"
 msgstr "Enhetsformat:"
 
@@ -34331,17 +34125,17 @@ msgid "Choose how to display the units"
 msgstr "Välj hur enheterna ska visas"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:147
-#: pcbnew/dialogs/panel_setup_dimensions_base.cpp:60
+#: pcbnew/dialogs/panel_setup_dimensions_base.cpp:63
 msgid "1234"
 msgstr "1234"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:147
-#: pcbnew/dialogs/panel_setup_dimensions_base.cpp:60
+#: pcbnew/dialogs/panel_setup_dimensions_base.cpp:63
 msgid "1234 mm"
 msgstr "1234 mm"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:147
-#: pcbnew/dialogs/panel_setup_dimensions_base.cpp:60
+#: pcbnew/dialogs/panel_setup_dimensions_base.cpp:63
 msgid "1234 (mm)"
 msgstr "1234 (mm)"
 
@@ -34355,7 +34149,7 @@ msgstr "Text som ska skrivas ut efter måttvärdet"
 #: pcbnew/dialogs/dialog_export_odbpp_base.cpp:58
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:179
 #: pcbnew/dialogs/dialog_plot_base.cpp:367
-#: pcbnew/dialogs/panel_setup_dimensions_base.cpp:71
+#: pcbnew/dialogs/panel_setup_dimensions_base.cpp:74
 msgid "Precision:"
 msgstr "Noggrannhet:"
 
@@ -34368,31 +34162,31 @@ msgstr "Välj hur många precisionssiffror som ska visas"
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:345
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:248
 #: pcbnew/dialogs/dialog_textbox_properties_base.cpp:213
-#: pcbnew/dialogs/panel_setup_dimensions_base.cpp:75
+#: pcbnew/dialogs/panel_setup_dimensions_base.cpp:78
 #: pcbnew/pcb_dimension.cpp:1770
 msgid "0.0"
 msgstr "0,0"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:172
-#: pcbnew/dialogs/panel_setup_dimensions_base.cpp:75
+#: pcbnew/dialogs/panel_setup_dimensions_base.cpp:78
 #: pcbnew/pcb_dimension.cpp:1771
 msgid "0.00"
 msgstr "0,00"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:172
-#: pcbnew/dialogs/panel_setup_dimensions_base.cpp:75
+#: pcbnew/dialogs/panel_setup_dimensions_base.cpp:78
 #: pcbnew/pcb_dimension.cpp:1772
 msgid "0.000"
 msgstr "0,000"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:172
-#: pcbnew/dialogs/panel_setup_dimensions_base.cpp:75
+#: pcbnew/dialogs/panel_setup_dimensions_base.cpp:78
 #: pcbnew/pcb_dimension.cpp:1773
 msgid "0.0000"
 msgstr "0,0000"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:172
-#: pcbnew/dialogs/panel_setup_dimensions_base.cpp:75
+#: pcbnew/dialogs/panel_setup_dimensions_base.cpp:78
 #: pcbnew/pcb_dimension.cpp:1774
 msgid "0.00000"
 msgstr "0,00000"
@@ -34418,7 +34212,7 @@ msgid "0.00000 / 0.00 / 0.0000"
 msgstr "0,00000 / 0,00 / 0,0000"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:187
-#: pcbnew/dialogs/panel_setup_dimensions_base.cpp:94
+#: pcbnew/dialogs/panel_setup_dimensions_base.cpp:97
 msgid "Suppress trailing zeroes"
 msgstr "Undertryck avslutande nollor"
 
@@ -34502,12 +34296,12 @@ msgid "Position mode:"
 msgstr "Positionsläge:"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:355
-#: pcbnew/dialogs/panel_setup_dimensions_base.cpp:48
+#: pcbnew/dialogs/panel_setup_dimensions_base.cpp:51
 msgid "Outside"
 msgstr "Utanför"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:355
-#: pcbnew/dialogs/panel_setup_dimensions_base.cpp:48
+#: pcbnew/dialogs/panel_setup_dimensions_base.cpp:51
 msgid "Inline"
 msgstr "I kö"
 
@@ -34537,12 +34331,12 @@ msgid "Thickness of the dimension lines"
 msgstr "Måttlinjernas tjocklek"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:401
-#: pcbnew/dialogs/panel_setup_dimensions_base.cpp:83
+#: pcbnew/dialogs/panel_setup_dimensions_base.cpp:86
 msgid "Arrow length:"
 msgstr "Pillängd:"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:412
-#: pcbnew/dialogs/panel_setup_dimensions_base.cpp:99
+#: pcbnew/dialogs/panel_setup_dimensions_base.cpp:102
 msgid "Extension line offset:"
 msgstr "Förlängningslinje offset:"
 
@@ -35639,9 +35433,9 @@ msgstr "Textobjekt"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:60
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:313
-#: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:53
-#: pcbnew/pcb_fields_grid_table.cpp:155 pcbnew/pcb_text.cpp:634
-#: pcbnew/pcb_text.cpp:648
+#: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:59
+#: pcbnew/pcb_fields_grid_table.cpp:155 pcbnew/pcb_text.cpp:637
+#: pcbnew/pcb_text.cpp:651
 msgid "Keep Upright"
 msgstr "Håll dig upprätt"
 
@@ -35915,8 +35709,8 @@ msgid "The text height must be between %s and %s."
 msgstr "Texthöjden måste vara mellan %s och %s."
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:535
-#: pcbnew/dialogs/dialog_text_properties.cpp:523
-#: pcbnew/dialogs/dialog_textbox_properties.cpp:384
+#: pcbnew/dialogs/dialog_text_properties.cpp:562
+#: pcbnew/dialogs/dialog_textbox_properties.cpp:422
 msgid ""
 "The text thickness is too large for the text size.\n"
 "It will be clamped."
@@ -36677,67 +36471,69 @@ msgstr "Måttsättningsobjekt"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:274
 #: pcbnew/dialogs/panel_fp_editor_graphics_defaults_base.cpp:63
-#: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:59
+#: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:65
 msgid "Silk Layers"
 msgstr "Anvisningstryckslager"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:275
 #: pcbnew/dialogs/panel_fp_editor_graphics_defaults_base.cpp:64
-#: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:60 pcbnew/pad.cpp:2881
+#: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:66 pcbnew/pad.cpp:2881
 msgid "Copper Layers"
 msgstr "Kopparlager"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:276
 #: pcbnew/dialogs/panel_fp_editor_graphics_defaults_base.cpp:65
-#: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:61
+#: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:67
 msgid "Edge Cuts"
 msgstr "Kantsnitt"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:277
 #: pcbnew/dialogs/panel_fp_editor_graphics_defaults_base.cpp:66
-#: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:62
+#: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:68
 msgid "Courtyards"
 msgstr "Gårdsplaner"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:278
 #: pcbnew/dialogs/panel_fp_editor_graphics_defaults_base.cpp:67
-#: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:63
+#: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:69
 msgid "Fab Layers"
 msgstr "Fab lager"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:279
 #: pcbnew/dialogs/panel_fp_editor_graphics_defaults_base.cpp:68
-#: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:64
+#: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:70
 msgid "Other Layers"
 msgstr "Andra lager"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:281
 #: pcbnew/dialogs/panel_fp_editor_graphics_defaults_base.cpp:53
-#: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:48
+#: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:54
 msgid "Line Thickness"
 msgstr "Linjetjocklek"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:289
 #: pcbnew/dialogs/panel_fp_editor_graphics_defaults_base.cpp:54
-#: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:49
-#: pcbnew/pcb_dimension.cpp:644 pcbnew/pcb_tablecell.cpp:121
-#: pcbnew/pcb_textbox.cpp:476
+#: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:55
+#: pcbnew/pcb_dimension.cpp:644 pcbnew/pcb_tablecell.cpp:126
+#: pcbnew/pcb_textbox.cpp:481
 msgid "Text Width"
 msgstr "Textbredd"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:295
 #: pcbnew/dialogs/panel_fp_editor_graphics_defaults_base.cpp:55
-#: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:50
-#: pcbnew/pcb_dimension.cpp:645 pcbnew/pcb_tablecell.cpp:122
-#: pcbnew/pcb_textbox.cpp:477 pcbnew/tools/board_inspection_tool.cpp:404
+#: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:56
+#: pcbnew/pcb_dimension.cpp:645 pcbnew/pcb_tablecell.cpp:127
+#: pcbnew/pcb_textbox.cpp:482 pcbnew/tools/board_inspection_tool.cpp:404
 msgid "Text Height"
 msgstr "Texthöjd"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:301
 #: pcbnew/dialogs/panel_fp_editor_graphics_defaults_base.cpp:56
-#: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:51
-#: pcbnew/pcb_dimension.cpp:643 pcbnew/pcb_tablecell.cpp:120
-#: pcbnew/pcb_textbox.cpp:475 pcbnew/tools/board_inspection_tool.cpp:419
+#: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:57
+#: pcbnew/pcb_dimension.cpp:643 pcbnew/pcb_tablecell.cpp:122
+#: pcbnew/pcb_tablecell.cpp:124 pcbnew/pcb_text.cpp:295 pcbnew/pcb_text.cpp:297
+#: pcbnew/pcb_textbox.cpp:477 pcbnew/pcb_textbox.cpp:479
+#: pcbnew/tools/board_inspection_tool.cpp:419
 msgid "Text Thickness"
 msgstr "Texttjocklek"
 
@@ -37338,12 +37134,12 @@ msgid "Footprint %s (%s), %s, rotated %g deg"
 msgstr "Fotavtryck %s (%s), %s, roterad %g grader"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:597
-#: pcbnew/dialogs/dialog_text_properties.cpp:313
+#: pcbnew/dialogs/dialog_text_properties.cpp:314
 msgid "back side (mirrored)"
 msgstr "baksida (spegelvänd)"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:597
-#: pcbnew/dialogs/dialog_text_properties.cpp:314
+#: pcbnew/dialogs/dialog_text_properties.cpp:315
 msgid "front side"
 msgstr "framsida"
 
@@ -38991,7 +38787,7 @@ msgstr "Fotavtrycksfältets egenskaper"
 msgid "Footprint Text Properties"
 msgstr "Egenskaper för fotavtrycks text"
 
-#: pcbnew/dialogs/dialog_text_properties.cpp:310
+#: pcbnew/dialogs/dialog_text_properties.cpp:311
 #, c-format
 msgid "Footprint %s (%s), %s, rotated %.1f deg"
 msgstr "Fotavtryck %s (%s), %s, roterad %.1f grader"
@@ -39000,7 +38796,7 @@ msgstr "Fotavtryck %s (%s), %s, roterad %.1f grader"
 #: pcbnew/pcb_dimension.cpp:1930 pcbnew/pcb_dimension.cpp:1963
 #: pcbnew/pcb_dimension.cpp:2001 pcbnew/pcb_dimension.cpp:2043
 #: pcbnew/pcb_dimension.cpp:2077 pcbnew/pcb_fields_grid_table.cpp:158
-#: pcbnew/pcb_text.cpp:630 pcbnew/pcb_textbox.cpp:821
+#: pcbnew/pcb_text.cpp:633 pcbnew/pcb_textbox.cpp:826
 msgid "Knockout"
 msgstr "Urtag"
 
@@ -39012,7 +38808,7 @@ msgstr "Håll texten upprätt"
 msgid "Parent footprint description"
 msgstr "Beskrivning av moderns fotavtryck"
 
-#: pcbnew/dialogs/dialog_textbox_properties.cpp:429
+#: pcbnew/dialogs/dialog_textbox_properties.cpp:468
 msgid "Edit Text Box Properties"
 msgstr "Redigera egenskaper för textruta"
 
@@ -39808,7 +39604,7 @@ msgstr "Förinställda egenskaper för nya grafiska objekt"
 msgid "Hidden footprint libraries are not yet supported."
 msgstr "Gömda fotavtrycksbiblioteket stöds inte ännu."
 
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:885
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:879
 #, c-format
 msgid ""
 "Folder '%s' already exists. Do you want overwrite any existing footprints?"
@@ -39816,7 +39612,7 @@ msgstr ""
 "Katalog '%s' finns redan. Vill du skriva över eventuella existerande "
 "fotavtryck?"
 
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:916
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:910
 #, c-format
 msgid "Failed to save footprint library file '%s'."
 msgstr "Det gick inte att spara fotavtrycksbiblioteksfil '%s'."
@@ -40230,34 +40026,34 @@ msgstr ""
 msgid "Default Properties for New Dimension Objects"
 msgstr "Förinställda egenskaper för nya måttsättningsobjekt"
 
-#: pcbnew/dialogs/panel_setup_dimensions_base.cpp:37
+#: pcbnew/dialogs/panel_setup_dimensions_base.cpp:40
 msgid ""
 "Default units for dimensions (\"automatic\" to follow the chosen UI units)"
 msgstr ""
 "Förinställda måttenheter för måttsättning (\"automatisk\" för att följa de "
 "enheter som valts i användargränssnittet)"
 
-#: pcbnew/dialogs/panel_setup_dimensions_base.cpp:44
+#: pcbnew/dialogs/panel_setup_dimensions_base.cpp:47
 msgid "Text position:"
 msgstr "Textposition:"
 
-#: pcbnew/dialogs/panel_setup_dimensions_base.cpp:52
+#: pcbnew/dialogs/panel_setup_dimensions_base.cpp:55
 msgid "Where to position the dimension text relative to the dimension line"
 msgstr "Var man placerar måttsättningstexten relativt måttlinjen"
 
-#: pcbnew/dialogs/panel_setup_dimensions_base.cpp:66
+#: pcbnew/dialogs/panel_setup_dimensions_base.cpp:69
 msgid "Keep text aligned"
 msgstr "Håll texten inriktad"
 
-#: pcbnew/dialogs/panel_setup_dimensions_base.cpp:67
+#: pcbnew/dialogs/panel_setup_dimensions_base.cpp:70
 msgid "When checked, dimension text will be kept aligned with dimension lines"
 msgstr "När det är markerat hålls måttsättningstexten i linje med måttlinjer"
 
-#: pcbnew/dialogs/panel_setup_dimensions_base.cpp:79
+#: pcbnew/dialogs/panel_setup_dimensions_base.cpp:82
 msgid "How many digits of precision to show"
 msgstr "Hur många precisionssiffror som ska visas"
 
-#: pcbnew/dialogs/panel_setup_dimensions_base.cpp:95
+#: pcbnew/dialogs/panel_setup_dimensions_base.cpp:98
 msgid ""
 "When checked, \"1.2300\" will be rendered as \"1.23\" even if precision is "
 "set to show more digits"
@@ -40684,13 +40480,23 @@ msgstr "Ledare med ungefär samma bedd behöver inte kragförstärkningar."
 msgid "Default Properties for New Graphics and Text"
 msgstr "Förinställda egenskaper för nya grafiska objekt och text"
 
-#: pcbnew/dialogs/panel_setup_time_domain_parameters.cpp:564
-msgid "Tuning profile must have a name."
+#: pcbnew/dialogs/panel_setup_time_domain_parameters.cpp:464
+msgid "No delay profiles to override"
+msgstr ""
+
+#: pcbnew/dialogs/panel_setup_time_domain_parameters.cpp:570
+#, fuzzy
+msgid "Tuning profile must have a name"
 msgstr "Längdjusteringsprofilen måste ha ett namn."
 
-#: pcbnew/dialogs/panel_setup_time_domain_parameters.cpp:573
-msgid "Tuning profile name already in use."
+#: pcbnew/dialogs/panel_setup_time_domain_parameters.cpp:579
+#, fuzzy
+msgid "Tuning profile name already in use"
 msgstr "Namnet för längdjusteringsprofilen används redan."
+
+#: pcbnew/dialogs/panel_setup_time_domain_parameters.cpp:624
+msgid "Via override configuration is duplicated"
+msgstr ""
 
 #: pcbnew/dialogs/panel_setup_time_domain_parameters_base.cpp:31
 msgid "Delay Profiles"
@@ -42392,7 +42198,7 @@ msgstr "De har exporterats som ovala lödytor."
 
 #: pcbnew/exporters/export_hyperlynx.cpp:291
 #: pcbnew/exporters/exporter_vrml.cpp:781
-#: pcbnew/exporters/step/exporter_step.cpp:628
+#: pcbnew/exporters/step/exporter_step.cpp:683
 #: pcbnew/specctra_import_export/specctra_export.cpp:119
 msgid "Board outline is malformed. Run DRC for a full analysis."
 msgstr ""
@@ -42438,16 +42244,16 @@ msgstr "Skapade Gerber-jobbfil '%s'."
 msgid "Board stackup settings not up to date."
 msgstr "Mönsterkortets lageruppbyggnadsinställningar är inte aktuella."
 
-#: pcbnew/exporters/step/exporter_step.cpp:742
+#: pcbnew/exporters/step/exporter_step.cpp:808
 msgid "Determining PCB data\n"
 msgstr "Tar reda på data för mönsterkort\n"
 
-#: pcbnew/exporters/step/exporter_step.cpp:774
+#: pcbnew/exporters/step/exporter_step.cpp:840
 #, c-format
 msgid "Build %s data\n"
 msgstr "Bygg %s-data\n"
 
-#: pcbnew/exporters/step/exporter_step.cpp:778
+#: pcbnew/exporters/step/exporter_step.cpp:844
 msgid ""
 "\n"
 "** Error building STEP board model. Export aborted. **\n"
@@ -42455,12 +42261,12 @@ msgstr ""
 "\n"
 "** Fel vid uppbyggnad av STEP mönsterkortsmodell. Export avbruten. **\n"
 
-#: pcbnew/exporters/step/exporter_step.cpp:782
+#: pcbnew/exporters/step/exporter_step.cpp:848
 #, c-format
 msgid "Writing %s file\n"
 msgstr "Skriver %s-fil\n"
 
-#: pcbnew/exporters/step/exporter_step.cpp:800
+#: pcbnew/exporters/step/exporter_step.cpp:866
 #, c-format
 msgid ""
 "\n"
@@ -42469,13 +42275,13 @@ msgstr ""
 "\n"
 "** Fel vid skrivning av %s-fil. **\n"
 
-#: pcbnew/exporters/step/exporter_step.cpp:806
+#: pcbnew/exporters/step/exporter_step.cpp:872
 #, c-format
 msgid "%s file '%s' created.\n"
 msgstr "%s-fil '%s' skapad.\n"
 
-#: pcbnew/exporters/step/exporter_step.cpp:813
-#: pcbnew/exporters/step/exporter_step.cpp:819
+#: pcbnew/exporters/step/exporter_step.cpp:879
+#: pcbnew/exporters/step/exporter_step.cpp:885
 #, c-format
 msgid ""
 "\n"
@@ -42484,7 +42290,7 @@ msgstr ""
 "\n"
 "** Fel vid export av %s-fil. Export avbruten. **\n"
 
-#: pcbnew/exporters/step/exporter_step.cpp:830
+#: pcbnew/exporters/step/exporter_step.cpp:896
 #, c-format
 msgid ""
 "Unable to create %s file.\n"
@@ -42493,12 +42299,12 @@ msgstr ""
 "Kunde inte skapa %s-fil.\n"
 "Kontrollera att mönserkortet har en giltig kontur och giltiga modeller."
 
-#: pcbnew/exporters/step/exporter_step.cpp:836
+#: pcbnew/exporters/step/exporter_step.cpp:902
 #, c-format
 msgid "%s file has been created, but there are warnings."
 msgstr "%s-fil har skapats, men det finns varningar."
 
-#: pcbnew/exporters/step/exporter_step.cpp:845
+#: pcbnew/exporters/step/exporter_step.cpp:911
 #, c-format
 msgid ""
 "\n"
@@ -42507,36 +42313,36 @@ msgstr ""
 "\n"
 "Export-tid %.3f s\n"
 
-#: pcbnew/exporters/step/step_pcb_model.cpp:650
+#: pcbnew/exporters/step/step_pcb_model.cpp:651
 msgid "** Got problems while fusing shapes **\n"
 msgstr "** Fick problem vid sammanslagning av former **\n"
 
-#: pcbnew/exporters/step/step_pcb_model.cpp:654
-#: pcbnew/exporters/step/step_pcb_model.cpp:2020
+#: pcbnew/exporters/step/step_pcb_model.cpp:655
+#: pcbnew/exporters/step/step_pcb_model.cpp:2030
 msgid "Errors:\n"
 msgstr "Fel:\n"
 
-#: pcbnew/exporters/step/step_pcb_model.cpp:660
-#: pcbnew/exporters/step/step_pcb_model.cpp:2026
+#: pcbnew/exporters/step/step_pcb_model.cpp:661
+#: pcbnew/exporters/step/step_pcb_model.cpp:2036
 msgid "Warnings:\n"
 msgstr "Varningar:\n"
 
-#: pcbnew/exporters/step/step_pcb_model.cpp:679
+#: pcbnew/exporters/step/step_pcb_model.cpp:680
 msgid "** ShapeUpgrade_UnifySameDomain produced a null shape **\n"
 msgstr "** ShapeUpgrade_UnifySameDomain producerade en noll-form **\n"
 
-#: pcbnew/exporters/step/step_pcb_model.cpp:1709
+#: pcbnew/exporters/step/step_pcb_model.cpp:1712
 #, c-format
 msgid "Wire not done (contour points %d): OCC error %d\n"
 msgstr "Ledare utfördes inte (konturpunkter %d): OCC-fel %d\n"
 
-#: pcbnew/exporters/step/step_pcb_model.cpp:1713
-#: pcbnew/exporters/step/step_pcb_model.cpp:1726
+#: pcbnew/exporters/step/step_pcb_model.cpp:1716
+#: pcbnew/exporters/step/step_pcb_model.cpp:1729
 #, c-format
 msgid "z: %g; bounding box: %s\n"
 msgstr "z: %g; avgränsningslåda: %s\n"
 
-#: pcbnew/exporters/step/step_pcb_model.cpp:1723
+#: pcbnew/exporters/step/step_pcb_model.cpp:1726
 msgid ""
 "\n"
 "Wire self-interference check failed\n"
@@ -42544,46 +42350,41 @@ msgstr ""
 "\n"
 "Kontroll för ledares inkräktande på sig själv fallerade\n"
 
-#: pcbnew/exporters/step/step_pcb_model.cpp:1746
+#: pcbnew/exporters/step/step_pcb_model.cpp:1749
 msgid "Using non-simplified polygon.\n"
 msgstr "Använder icke förenklad polygon.\n"
 
-#: pcbnew/exporters/step/step_pcb_model.cpp:1811
+#: pcbnew/exporters/step/step_pcb_model.cpp:1814
 msgid "Failed to create a prismatic shape\n"
 msgstr "Det gick inte att skapa en prismatisk form\n"
 
-#: pcbnew/exporters/step/step_pcb_model.cpp:1822
+#: pcbnew/exporters/step/step_pcb_model.cpp:1825
 msgid "** Face skipped **\n"
 msgstr "** Yta hoppades över **\n"
 
-#: pcbnew/exporters/step/step_pcb_model.cpp:1989
-#, c-format
-msgid "Build holes for %s\n"
+#: pcbnew/exporters/step/step_pcb_model.cpp:1980
+#, fuzzy, c-format
+msgid "Subtracting holes for %s\n"
 msgstr "Bygg upp hål för %s\n"
 
-#: pcbnew/exporters/step/step_pcb_model.cpp:1994
-#, c-format
-msgid "Cutting %d/%d %s\n"
-msgstr "Kapar ut %d/%d %s\n"
-
-#: pcbnew/exporters/step/step_pcb_model.cpp:2015
-#, c-format
+#: pcbnew/exporters/step/step_pcb_model.cpp:2023
+#, fuzzy, c-format
 msgid ""
 "\n"
-"** Got problems while cutting %s number %d **\n"
+"** Got problems while cutting %s net '%s' **\n"
 msgstr ""
 "\n"
 "** Fick problem vid skärning av %s nummer %d **\n"
 
-#: pcbnew/exporters/step/step_pcb_model.cpp:2042
+#: pcbnew/exporters/step/step_pcb_model.cpp:2068
 msgid "shapes"
 msgstr "former"
 
-#: pcbnew/exporters/step/step_pcb_model.cpp:2050
+#: pcbnew/exporters/step/step_pcb_model.cpp:2076
 msgid "pads"
 msgstr "lödytor"
 
-#: pcbnew/exporters/step/step_pcb_model.cpp:2051
+#: pcbnew/exporters/step/step_pcb_model.cpp:2077
 msgid "vias"
 msgstr "vior"
 
@@ -42672,7 +42473,7 @@ msgstr "Fel vid inläsning av mönsterkort '%s'."
 msgid "Memory exhausted loading PCB '%s'"
 msgstr "Slut på minne vid inläsning av mönsterkort '%s'"
 
-#: pcbnew/files.cpp:814 pcbnew/pcb_edit_frame.cpp:1402
+#: pcbnew/files.cpp:814 pcbnew/pcb_edit_frame.cpp:1405
 msgid "Could not load component class assignment rules"
 msgstr "Kunde inte läsa in regler för komponentklasstilldelning"
 
@@ -42689,19 +42490,19 @@ msgstr ""
 "Ett fel uppstod när den projektspecifika fotavtrycksbibliotekstabellen "
 "skulle sparas."
 
-#: pcbnew/files.cpp:1004 pcbnew/files.cpp:1145 pcbnew/files.cpp:1322
+#: pcbnew/files.cpp:1007 pcbnew/files.cpp:1148 pcbnew/files.cpp:1325
 #: pcbnew/footprint_libraries_utils.cpp:268
 #: pcbnew/pcb_design_block_utils.cpp:92
 #, c-format
 msgid "Insufficient permissions to write file '%s'."
 msgstr "Otillräckliga behörigheter för att spara filen '%s'."
 
-#: pcbnew/files.cpp:1036 pcbnew/files.cpp:1194
+#: pcbnew/files.cpp:1039 pcbnew/files.cpp:1197
 #, c-format
 msgid "Error saving custom rules file '%s'."
 msgstr "Fel när fil '%s' för användardefinierade regler sparades."
 
-#: pcbnew/files.cpp:1062 pcbnew/files.cpp:1169
+#: pcbnew/files.cpp:1065 pcbnew/files.cpp:1172
 #: pcbnew/pcb_design_block_utils.cpp:110
 #, c-format
 msgid ""
@@ -42711,7 +42512,7 @@ msgstr ""
 "Fel vid sparning av mönsterkortsfil '%s'.\n"
 "%s"
 
-#: pcbnew/files.cpp:1082
+#: pcbnew/files.cpp:1085
 #, c-format
 msgid ""
 "Error saving board file '%s'.\n"
@@ -42720,15 +42521,15 @@ msgstr ""
 "Fel vid försök att spara mönsterkortsfil '%s'.\n"
 "Kunde inte byta namn på temporär fil '%s."
 
-#: pcbnew/files.cpp:1316
+#: pcbnew/files.cpp:1319
 msgid "The board must be saved before generating IPC-2581 file."
 msgstr "Mönsterkortet måste sparas innan IPC2581-fil skapas."
 
-#: pcbnew/files.cpp:1332
+#: pcbnew/files.cpp:1335
 msgid "Generating IPC-2581 file"
 msgstr "Skapar IPC-2581-fil"
 
-#: pcbnew/files.cpp:1357 pcbnew/pcbnew_jobs_handler.cpp:2159
+#: pcbnew/files.cpp:1360 pcbnew/pcbnew_jobs_handler.cpp:2160
 #, c-format
 msgid ""
 "Error generating IPC-2581 file '%s'.\n"
@@ -42737,7 +42538,7 @@ msgstr ""
 "Fel vid generering av IPC2581-fil '%s'.\n"
 "%s"
 
-#: pcbnew/files.cpp:1422 pcbnew/pcbnew_jobs_handler.cpp:2192
+#: pcbnew/files.cpp:1425 pcbnew/pcbnew_jobs_handler.cpp:2193
 #, c-format
 msgid ""
 "Error generating IPC-2581 file '%s'.\n"
@@ -42746,7 +42547,7 @@ msgstr ""
 "Fel vid generering av IPC2581-fil '%s'.\n"
 "Kunde inte byta namn på temporär fil '%s."
 
-#: pcbnew/files.cpp:1454
+#: pcbnew/files.cpp:1457
 msgid "Generating ODB++ output files"
 msgstr "Skapar ODB++ utmatningsfiler"
 
@@ -43095,21 +42896,21 @@ msgstr ""
 "Söktermer är åtskilda av mellanslag. Alla söktermer måste matcha.\n"
 "En term som är ett nummer kommer också att matcha mot antalet lödytor."
 
-#: pcbnew/footprint_wizard_frame.cpp:84
-#: pcbnew/footprint_wizard_frame_functions.cpp:81
+#: pcbnew/footprint_wizard_frame.cpp:82
+#: pcbnew/footprint_wizard_frame_functions.cpp:45
 msgid "Footprint Wizard"
 msgstr "Fotavtrycksguiden"
 
-#: pcbnew/footprint_wizard_frame.cpp:569
+#: pcbnew/footprint_wizard_frame.cpp:568
 #, c-format
 msgid "ModView: 3D Viewer [%s]"
 msgstr "ModView: 3D-visare [%s]"
 
-#: pcbnew/footprint_wizard_frame_functions.cpp:87
+#: pcbnew/footprint_wizard_frame_functions.cpp:51
 msgid "no wizard selected"
 msgstr "ingen guide vald"
 
-#: pcbnew/footprint_wizard_frame_functions.cpp:139
+#: pcbnew/footprint_wizard_frame_functions.cpp:103
 msgid "Couldn't reload footprint wizard"
 msgstr "Det gick inte att ladda om fotavtrycksguiden"
 
@@ -43545,15 +43346,15 @@ msgstr "Rita måttsättning"
 msgid "Auto-Place Footprints"
 msgstr "Placera fotavtryck automatiskt"
 
-#: pcbnew/menubar_pcb_editor.cpp:444
+#: pcbnew/menubar_pcb_editor.cpp:443
 msgid "Multi-Channel"
 msgstr "Flerkanal"
 
-#: pcbnew/menubar_pcb_editor.cpp:452
+#: pcbnew/menubar_pcb_editor.cpp:451
 msgid "External Plugins"
 msgstr "Externa insticksprogram"
 
-#: pcbnew/menubar_pcb_editor.cpp:486
+#: pcbnew/menubar_pcb_editor.cpp:487
 msgid "Ro&ute"
 msgstr "&Dra ledare"
 
@@ -44574,19 +44375,19 @@ msgstr "Exportera nätlista för uppdatering av kretsschema"
 msgid "New PCB file is unsaved"
 msgstr "Ny PCB-fil sparas inte"
 
-#: pcbnew/pcb_edit_frame.cpp:1710
+#: pcbnew/pcb_edit_frame.cpp:1711
 msgid "Board file is read only."
 msgstr "Mönsterkortsfilen är skrivskyddad."
 
-#: pcbnew/pcb_edit_frame.cpp:1756
+#: pcbnew/pcb_edit_frame.cpp:1757
 msgid "PCB file changes are unsaved"
 msgstr "PCB-filändringar sparas inte"
 
-#: pcbnew/pcb_edit_frame.cpp:2059
+#: pcbnew/pcb_edit_frame.cpp:2060
 msgid "The schematic for this board cannot be found."
 msgstr "Kretsschemat för detta mönsterkort kan inte hittas."
 
-#: pcbnew/pcb_edit_frame.cpp:2085
+#: pcbnew/pcb_edit_frame.cpp:2086
 msgid ""
 "Cannot update the PCB because PCB editor is opened in stand-alone mode. In "
 "order to create or update PCBs from schematics, you must launch the KiCad "
@@ -44596,11 +44397,11 @@ msgstr ""
 "öppnad i fristående läge. För att skapa eller uppdatera mönsterkort från "
 "kretsschema måste du starta KiCads projekthanterare och skapa ett projekt."
 
-#: pcbnew/pcb_edit_frame.cpp:2110 pcbnew/pcbnew_jobs_handler.cpp:2016
+#: pcbnew/pcb_edit_frame.cpp:2111 pcbnew/pcbnew_jobs_handler.cpp:2017
 msgid "Eeschema netlist"
 msgstr "Eeschema-nätlista"
 
-#: pcbnew/pcb_edit_frame.cpp:2121
+#: pcbnew/pcb_edit_frame.cpp:2122
 msgid ""
 "Received an error while reading netlist.  Please report this issue to the "
 "KiCad team using the menu Help->Report Bug."
@@ -44608,40 +44409,40 @@ msgstr ""
 "Stötte på ett fel under inläsning av nätlistan. Vänligen rapportera detta "
 "problem till KiCad-teamet genom menyn Hjälp -> Rapportera fel."
 
-#: pcbnew/pcb_edit_frame.cpp:2148
+#: pcbnew/pcb_edit_frame.cpp:2149
 #, c-format
 msgid "Schematic file '%s' not found."
 msgstr "Kretsschemafil '%s' hittades inte."
 
-#: pcbnew/pcb_edit_frame.cpp:2179
+#: pcbnew/pcb_edit_frame.cpp:2180
 msgid "Eeschema failed to load."
 msgstr "Eeschema kunde inte ladda."
 
-#: pcbnew/pcb_edit_frame.cpp:2642
+#: pcbnew/pcb_edit_frame.cpp:2643
 msgid "Edit design rules"
 msgstr "Ändra designregler"
 
-#: pcbnew/pcb_edit_frame.cpp:2654
+#: pcbnew/pcb_edit_frame.cpp:2655
 msgid "Could not compile custom design rules."
 msgstr "Kunde inte kompilera användardefinierade designregler."
 
-#: pcbnew/pcb_edit_frame.cpp:2712
+#: pcbnew/pcb_edit_frame.cpp:2713
 msgid "Export Hyperlynx Layout"
 msgstr "Exportera Hyperlynx Layout"
 
-#: pcbnew/pcb_edit_frame.cpp:2770
+#: pcbnew/pcb_edit_frame.cpp:2771
 msgid "Violation Report"
 msgstr "Överträdelserapport"
 
-#: pcbnew/pcb_edit_frame.cpp:2780
+#: pcbnew/pcb_edit_frame.cpp:2781
 msgid "Clearance Report"
 msgstr "Isolationsavståndsrapport"
 
-#: pcbnew/pcb_edit_frame.cpp:2790
+#: pcbnew/pcb_edit_frame.cpp:2791
 msgid "Constraints Report"
 msgstr "Begränsningsrapport"
 
-#: pcbnew/pcb_edit_frame.cpp:2800 pcbnew/tools/pcb_actions.cpp:1975
+#: pcbnew/pcb_edit_frame.cpp:2801 pcbnew/tools/pcb_actions.cpp:1975
 msgid "Compare Footprint with Library"
 msgstr "Jämför fotavtryck med bibliotek"
 
@@ -45910,8 +45711,8 @@ msgid "Library '%s' has no footprint '%s'."
 msgstr "Biblioteket '%s' har inget fotavtryck '%s'."
 
 #: pcbnew/pcb_io/geda/pcb_io_geda.cpp:343
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:892
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:1141
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:870
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:1119
 #, c-format
 msgid "Unknown token '%s'"
 msgstr "Okänd token '%s'"
@@ -46023,7 +45824,7 @@ msgid "Bad ZSmoothing for CZONE_CONTAINER \"%s\""
 msgstr "Dålig ZSmoothing för CZONE_CONTAINER \"%s\""
 
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:2535
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:7529
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:7507
 msgid ""
 "The legacy segment zone fill mode is no longer supported.\n"
 "Zone fills will be converted on a best-effort basis."
@@ -46141,7 +45942,7 @@ msgstr "KiCad fotavtrycksfil"
 msgid "Cannot interpret date code %d"
 msgstr "Kan inte tolka datumkod %d"
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:1168
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:1146
 #, c-format
 msgid ""
 "Items found on undefined layers (%s).\n"
@@ -46154,37 +45955,37 @@ msgstr ""
 "\n"
 "Zoner kommer att behöva fyllas på nytt."
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:1174
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:1152
 msgid "Undefined Layers Warning"
 msgstr "Odefinierad varning för lager"
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:1323
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:1301
 #, c-format
 msgid "Cannot create generated object of type '%s'"
 msgstr "Det går inte att skapa genererat objekt av typ '%s'"
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:1460
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:1438
 #, c-format
 msgid "Page type '%s' is not valid."
 msgstr "Sidtyp '%s' är inte giltig."
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:2022
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:2000
 #, c-format
 msgid "Layer '%s' in file '%s' at line %d is not in fixed layer hash."
 msgstr "Lager '%s' i fil '%s' på rad %d finns inte i hash med fast lager."
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:2059
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:2037
 #, c-format
 msgid "%d is not a valid layer count"
 msgstr "%d är inte ett giltigt lagerantal"
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:2878
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:2856
 #, c-format
 msgid "Duplicate NETCLASS name '%s' in file '%s' at line %d, offset %d."
 msgstr "Dublett NETCLASS-namn '%s' i fil '%s' på rad %d, förskjutning %d."
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:3271
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6499
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:3249
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6477
 #, c-format
 msgid ""
 "Invalid net ID in\n"
@@ -46197,12 +45998,12 @@ msgstr ""
 "rad: %d\n"
 "förskjutning: %d."
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:3449
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:3427
 #, c-format
 msgid "Cannot handle footprint text type %s"
 msgstr "Kan inte hantera fotavtrycks texttyp %s"
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:4525
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:4503
 #, c-format
 msgid ""
 "Invalid footprint ID in\n"
@@ -46215,7 +46016,7 @@ msgstr ""
 "rad: %d\n"
 "förskjutning: %d."
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5329
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5307
 #, c-format
 msgid ""
 "Invalid net ID in\n"
@@ -46226,7 +46027,7 @@ msgstr ""
 "fil: %s\n"
 "rad: %d förskjutning: %d"
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5348
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5326
 #, c-format
 msgid ""
 "Net name doesn't match ID in\n"
@@ -46237,7 +46038,7 @@ msgstr ""
 "fil: %s\n"
 "rad: %d förskjutning: %d"
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5688
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5666
 #, c-format
 msgid ""
 "Invalid zero-sized pad pinned to %s in\n"
@@ -46250,8 +46051,8 @@ msgstr ""
 "rad: %d\n"
 "förskjutning: %d"
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5811
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6825
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5789
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6803
 #, c-format
 msgid ""
 "Invalid padstack layer in\n"
@@ -46264,13 +46065,13 @@ msgstr ""
 "rad: %d\n"
 "position: %d."
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5826
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6840
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5804
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6818
 #, c-format
 msgid "Invalid padstack layer '%s' in file '%s' at line %d, offset %d."
 msgstr "Ogiltigt kragstackslager '%s' i fil '%s' på rad %d, position %d."
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6404
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6382
 #, c-format
 msgid ""
 "Invalid net ID in\n"
@@ -46283,7 +46084,7 @@ msgstr ""
 "rad: %d\n"
 "position: %d."
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6604
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6582
 #, c-format
 msgid ""
 "Invalid net ID in\n"
@@ -46296,7 +46097,7 @@ msgstr ""
 "rad: %d\n"
 "position: %d"
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6931
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6909
 #, c-format
 msgid ""
 "Invalid net ID in\n"
@@ -46309,7 +46110,7 @@ msgstr ""
 "rad: %d\n"
 "position: %d."
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:7499
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:7477
 msgid ""
 "Legacy zone fill strategy is not supported anymore.\n"
 "Zone fills will be converted on best-effort basis."
@@ -46468,26 +46269,26 @@ msgstr "Lödmask"
 msgid "PCB Target"
 msgstr "PCB-mål"
 
-#: pcbnew/pcb_text.cpp:280
+#: pcbnew/pcb_text.cpp:278
 msgid "PCB Text"
 msgstr "PCB-text"
 
-#: pcbnew/pcb_text.cpp:443
+#: pcbnew/pcb_text.cpp:446
 #, c-format
 msgid "Footprint text of %s (%s)"
 msgstr "Textruta för fotavtryck %s (%s)"
 
-#: pcbnew/pcb_text.cpp:446
+#: pcbnew/pcb_text.cpp:449
 #, c-format
 msgid "PCB text '%s' on %s"
 msgstr "Mönsterkortstext '%s' på %s"
 
-#: pcbnew/pcb_textbox.cpp:576
+#: pcbnew/pcb_textbox.cpp:581
 #, c-format
 msgid "PCB Text Box '%s' on %s"
 msgstr "Mönsterkorts textruta '%s' på %s"
 
-#: pcbnew/pcb_textbox.cpp:825
+#: pcbnew/pcb_textbox.cpp:830
 msgid "Border Properties"
 msgstr "Ramens egenskaper"
 
@@ -46758,111 +46559,111 @@ msgstr "Fel vid export av VRML"
 msgid "Invalid image dimensions"
 msgstr "Ogiltig bildstorlek"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:768
+#: pcbnew/pcbnew_jobs_handler.cpp:769
 msgid "Successfully created 3D render image"
 msgstr "Lyckades skapa 3D-renderingsbild"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:773
+#: pcbnew/pcbnew_jobs_handler.cpp:774
 msgid "Error creating 3D render image"
 msgstr "Fel vid försök att skapa 3D-renderingsbild"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:825 pcbnew/pcbnew_jobs_handler.cpp:886
-#: pcbnew/pcbnew_jobs_handler.cpp:971 pcbnew/pcbnew_jobs_handler.cpp:1300
+#: pcbnew/pcbnew_jobs_handler.cpp:826 pcbnew/pcbnew_jobs_handler.cpp:887
+#: pcbnew/pcbnew_jobs_handler.cpp:972 pcbnew/pcbnew_jobs_handler.cpp:1301
 msgid "At least one layer must be specified\n"
 msgstr "Minst ett lager måste specificeras\n"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:1166 pcbnew/pcbnew_jobs_handler.cpp:1353
+#: pcbnew/pcbnew_jobs_handler.cpp:1167 pcbnew/pcbnew_jobs_handler.cpp:1354
 #, c-format
 msgid "Failed to plot to '%s'.\n"
 msgstr "Det gick inte att plotta till '%s'.\n"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:1237
+#: pcbnew/pcbnew_jobs_handler.cpp:1238
 msgid "Successfully created genCAD file\n"
 msgstr "Lyckades skapa genCAD-fil\n"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:1562 pcbnew/pcbnew_jobs_handler.cpp:1635
+#: pcbnew/pcbnew_jobs_handler.cpp:1563 pcbnew/pcbnew_jobs_handler.cpp:1636
 #, c-format
 msgid "Wrote front position data to '%s'.\n"
 msgstr "Skrev framsidans placeringsdata till '%s'.\n"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:1580 pcbnew/pcbnew_jobs_handler.cpp:1659
+#: pcbnew/pcbnew_jobs_handler.cpp:1581 pcbnew/pcbnew_jobs_handler.cpp:1660
 #, c-format
 msgid "Wrote back position data to '%s'.\n"
 msgstr "Skrev baksidans positionsdata till '%s'.\n"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:1609
+#: pcbnew/pcbnew_jobs_handler.cpp:1610
 #, c-format
 msgid "Wrote position data to '%s'.\n"
 msgstr "Skrev placeringsdata till '%s'.\n"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:1707
+#: pcbnew/pcbnew_jobs_handler.cpp:1708
 msgid "Footprint library path does not exist or is not accessible\n"
 msgstr ""
 "Sölvägen till fotavtrycksbiblioteket existerar inte eller är inte "
 "tillgänglig\n"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:1747
+#: pcbnew/pcbnew_jobs_handler.cpp:1748
 msgid "Unable to save library\n"
 msgstr "Kunde inte spara bibliotek\n"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:1753
+#: pcbnew/pcbnew_jobs_handler.cpp:1754
 msgid "Footprint library was not updated\n"
 msgstr "Fotavtrycksbiblioteket uppdaterades inte\n"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:1828
+#: pcbnew/pcbnew_jobs_handler.cpp:1829
 msgid "The given footprint could not be found to export."
 msgstr "Fotavtrycket som skulle exporteras, kunde inte hittas."
 
-#: pcbnew/pcbnew_jobs_handler.cpp:1870
+#: pcbnew/pcbnew_jobs_handler.cpp:1871
 #, c-format
 msgid "Plotting footprint '%s' to '%s'\n"
 msgstr "Plottar fotavtryck '%s' till '%s'\n"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:1899
+#: pcbnew/pcbnew_jobs_handler.cpp:1900
 msgid "Error creating svg file"
 msgstr "Fel vid försök att skapa svg-fil"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:1969 pcbnew/tools/drc_tool.cpp:160
+#: pcbnew/pcbnew_jobs_handler.cpp:1970 pcbnew/tools/drc_tool.cpp:160
 msgid "Schematic parity tests require a fully annotated schematic."
 msgstr ""
 "Kontroll av överensstämmelse med kretsschema kräver att detta är "
 "fullständigt numrerat."
 
-#: pcbnew/pcbnew_jobs_handler.cpp:1990 pcbnew/pcbnew_jobs_handler.cpp:2023
+#: pcbnew/pcbnew_jobs_handler.cpp:1991 pcbnew/pcbnew_jobs_handler.cpp:2024
 msgid "Failed to fetch schematic netlist for parity tests.\n"
 msgstr ""
 "Det gick inte att läsa in kretsschemats nätlista för kontroll av "
 "överensstämmelse.\n"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:2045 pcbnew/tools/drc_tool.cpp:200
+#: pcbnew/pcbnew_jobs_handler.cpp:2046 pcbnew/tools/drc_tool.cpp:200
 msgid "DRC"
 msgstr "DRC"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:2066
+#: pcbnew/pcbnew_jobs_handler.cpp:2067
 #, c-format
 msgid "Found %d unconnected items\n"
 msgstr "Hittade %d oanslutna objekt\n"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:2072
+#: pcbnew/pcbnew_jobs_handler.cpp:2073
 #, c-format
 msgid "Found %d schematic parity issues\n"
 msgstr "Hittade %d problem gällande överensstämmelse med kretsschema\n"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:2088
+#: pcbnew/pcbnew_jobs_handler.cpp:2089
 #, c-format
 msgid "Unable to save DRC report to %s\n"
 msgstr "Kan inte spara rapport från designregelkontroll till %s\n"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:2093
+#: pcbnew/pcbnew_jobs_handler.cpp:2094
 #, c-format
 msgid "Saved DRC Report to %s\n"
 msgstr "Sparade designregelkontrollrapport till %s\n"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:2240
+#: pcbnew/pcbnew_jobs_handler.cpp:2241
 msgid "Successfully created IPC-D-356 file\n"
 msgstr "Lyckades skapa IPC-D-356-fil\n"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:2245
+#: pcbnew/pcbnew_jobs_handler.cpp:2246
 msgid "Failed to create IPC-D-356 file\n"
 msgstr "Det gick inte att skapa IPC-D-356-fil\n"
 
@@ -50327,6 +50128,46 @@ msgstr "Inställningar för ledarlängdsjustering..."
 msgid "Displays tuning pattern properties dialog"
 msgstr "Visar dialogrutan för längdjusteringsmönsters egenskaper"
 
+#: pcbnew/tools/pcb_actions.cpp:2587
+#, fuzzy
+msgid "Show wizards selector"
+msgstr "ingen guide vald"
+
+#: pcbnew/tools/pcb_actions.cpp:2588
+msgid "Select wizard script to run"
+msgstr "Välj guiden manus att köra"
+
+#: pcbnew/tools/pcb_actions.cpp:2594
+#, fuzzy
+msgid "Reset wizard parameters"
+msgstr "Återställ parametrarna i guiden till standardvärden"
+
+#: pcbnew/tools/pcb_actions.cpp:2595
+msgid "Reset wizard parameters to default"
+msgstr "Återställ parametrarna i guiden till standardvärden"
+
+#: pcbnew/tools/pcb_actions.cpp:2601
+#, fuzzy
+msgid "Select previous wizard page"
+msgstr "Välj sidan för tidigare parametrar"
+
+#: pcbnew/tools/pcb_actions.cpp:2602
+msgid "Select previous parameters page"
+msgstr "Välj sidan för tidigare parametrar"
+
+#: pcbnew/tools/pcb_actions.cpp:2608
+#, fuzzy
+msgid "Select next wizard page"
+msgstr "Välj nästa parametersida"
+
+#: pcbnew/tools/pcb_actions.cpp:2609
+msgid "Select next parameters page"
+msgstr "Välj nästa parametersida"
+
+#: pcbnew/tools/pcb_actions.cpp:2615 pcbnew/tools/pcb_actions.cpp:2616
+msgid "Export footprint to editor"
+msgstr "Exportera fotavtryck till redigeraren"
+
 #: pcbnew/tools/pcb_control.cpp:273
 msgid "Don't show again"
 msgstr "Visa inte igen"
@@ -52022,6 +51863,190 @@ msgstr "KiCad Kretsschemasymbol"
 msgid "KiCad Drawing Sheet"
 msgstr "KiCad-ritningsark"
 
+#~ msgid "B.Cu"
+#~ msgstr "B.Cu"
+
+#~ msgid "B.Silkscreen"
+#~ msgstr "B.Anvisningstryck"
+
+#~ msgid "B.Mask"
+#~ msgstr "B.Mask"
+
+#~ msgid "User.1"
+#~ msgstr "User.1"
+
+#~ msgid "User.2"
+#~ msgstr "User.2"
+
+#~ msgid "User.3"
+#~ msgstr "User.3"
+
+#~ msgid "User.4"
+#~ msgstr "User.4"
+
+#~ msgid "User.5"
+#~ msgstr "User.5"
+
+#~ msgid "User.6"
+#~ msgstr "User.6"
+
+#~ msgid "User.7"
+#~ msgstr "User.7"
+
+#~ msgid "User.8"
+#~ msgstr "User.8"
+
+#~ msgid "User.9"
+#~ msgstr "User.9"
+
+#, fuzzy
+#~ msgid "User.10"
+#~ msgstr "User.1"
+
+#, fuzzy
+#~ msgid "User.11"
+#~ msgstr "User.1"
+
+#, fuzzy
+#~ msgid "User.12"
+#~ msgstr "User.1"
+
+#, fuzzy
+#~ msgid "User.13"
+#~ msgstr "User.1"
+
+#, fuzzy
+#~ msgid "User.14"
+#~ msgstr "User.1"
+
+#, fuzzy
+#~ msgid "User.15"
+#~ msgstr "User.1"
+
+#, fuzzy
+#~ msgid "User.16"
+#~ msgstr "User.1"
+
+#, fuzzy
+#~ msgid "User.17"
+#~ msgstr "User.1"
+
+#, fuzzy
+#~ msgid "User.18"
+#~ msgstr "User.1"
+
+#, fuzzy
+#~ msgid "User.19"
+#~ msgstr "User.1"
+
+#, fuzzy
+#~ msgid "User.20"
+#~ msgstr "User.2"
+
+#, fuzzy
+#~ msgid "User.21"
+#~ msgstr "User.2"
+
+#, fuzzy
+#~ msgid "User.22"
+#~ msgstr "User.2"
+
+#, fuzzy
+#~ msgid "User.23"
+#~ msgstr "User.2"
+
+#, fuzzy
+#~ msgid "User.24"
+#~ msgstr "User.2"
+
+#, fuzzy
+#~ msgid "User.25"
+#~ msgstr "User.2"
+
+#, fuzzy
+#~ msgid "User.26"
+#~ msgstr "User.2"
+
+#, fuzzy
+#~ msgid "User.27"
+#~ msgstr "User.2"
+
+#, fuzzy
+#~ msgid "User.28"
+#~ msgstr "User.2"
+
+#, fuzzy
+#~ msgid "User.29"
+#~ msgstr "User.2"
+
+#, fuzzy
+#~ msgid "User.30"
+#~ msgstr "User.3"
+
+#, fuzzy
+#~ msgid "User.31"
+#~ msgstr "User.3"
+
+#, fuzzy
+#~ msgid "User.32"
+#~ msgstr "User.3"
+
+#, fuzzy
+#~ msgid "User.33"
+#~ msgstr "User.3"
+
+#, fuzzy
+#~ msgid "User.34"
+#~ msgstr "User.3"
+
+#, fuzzy
+#~ msgid "User.35"
+#~ msgstr "User.3"
+
+#, fuzzy
+#~ msgid "User.36"
+#~ msgstr "User.3"
+
+#, fuzzy
+#~ msgid "User.37"
+#~ msgstr "User.3"
+
+#, fuzzy
+#~ msgid "User.38"
+#~ msgstr "User.3"
+
+#, fuzzy
+#~ msgid "User.39"
+#~ msgstr "User.3"
+
+#, fuzzy
+#~ msgid "User.40"
+#~ msgstr "User.4"
+
+#, fuzzy
+#~ msgid "User.41"
+#~ msgstr "User.4"
+
+#, fuzzy
+#~ msgid "User.42"
+#~ msgstr "User.4"
+
+#, fuzzy
+#~ msgid "User.43"
+#~ msgstr "User.4"
+
+#, fuzzy
+#~ msgid "User.44"
+#~ msgstr "User.4"
+
+#, fuzzy
+#~ msgid "User.45"
+#~ msgstr "User.4"
+
+#, c-format
+#~ msgid "Cutting %d/%d %s\n"
+#~ msgstr "Kapar ut %d/%d %s\n"
+
 #, c-format
 #~ msgid "Error: '%s'."
 #~ msgstr "Fel: '%s'."
@@ -53621,21 +53646,6 @@ msgstr "KiCad-ritningsark"
 
 #~ msgid "Minimum island size:"
 #~ msgstr "Minsta östorlek:"
-
-#~ msgid "Select wizard script to run"
-#~ msgstr "Välj guiden manus att köra"
-
-#~ msgid "Reset wizard parameters to default"
-#~ msgstr "Återställ parametrarna i guiden till standardvärden"
-
-#~ msgid "Select previous parameters page"
-#~ msgstr "Välj sidan för tidigare parametrar"
-
-#~ msgid "Select next parameters page"
-#~ msgstr "Välj nästa parametersida"
-
-#~ msgid "Export footprint to editor"
-#~ msgstr "Exportera fotavtryck till redigeraren"
 
 #~ msgid "&Load Footprint from PCB..."
 #~ msgstr "&Läs in fotavtryck från mönsterkort..."
@@ -60228,9 +60238,6 @@ msgstr "KiCad-ritningsark"
 
 #~ msgid "Random"
 #~ msgstr "Slumpmässig"
-
-#~ msgid "Propagation delay"
-#~ msgstr "Utbredningsfördröjning"
 
 #~ msgid "Length in wavelength"
 #~ msgstr "Längd i våglängder"
