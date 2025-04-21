@@ -934,6 +934,8 @@ SCH_IO_LTSPICE_PARSER::CreateSCH_LABEL( KICAD_T aType, const VECTOR2I& aOffset,
         label->SetVisible( true );
     }
 
+    std::vector<SPIN_STYLE> preferredSpins;
+
     for( LTSPICE_SCHEMATIC::WIRE& wire : aWires )
     {
         if( aOffset == wire.Start )
@@ -941,16 +943,16 @@ SCH_IO_LTSPICE_PARSER::CreateSCH_LABEL( KICAD_T aType, const VECTOR2I& aOffset,
             if( wire.Start.x == wire.End.x )
             {
                 if( wire.Start.y < wire.End.y )
-                    label->SetSpinStyle( SPIN_STYLE::UP );
+                    preferredSpins.emplace_back( SPIN_STYLE::UP );
                 else if( wire.Start.y > wire.End.y )
-                    label->SetSpinStyle( SPIN_STYLE::BOTTOM );
+                    preferredSpins.emplace_back( SPIN_STYLE::BOTTOM );
             }
             else
             {
                 if( wire.Start.x < wire.End.x )
-                    label->SetSpinStyle( SPIN_STYLE::LEFT );
+                    preferredSpins.emplace_back( SPIN_STYLE::LEFT );
                 else if( wire.Start.x > wire.End.x )
-                    label->SetSpinStyle( SPIN_STYLE::RIGHT );
+                    preferredSpins.emplace_back( SPIN_STYLE::RIGHT );
             }
         }
         else if( aOffset == wire.End )
@@ -958,19 +960,22 @@ SCH_IO_LTSPICE_PARSER::CreateSCH_LABEL( KICAD_T aType, const VECTOR2I& aOffset,
             if( wire.Start.x == wire.End.x )
             {
                 if( wire.Start.y > wire.End.y )
-                    label->SetSpinStyle( SPIN_STYLE::UP );
+                    preferredSpins.emplace_back( SPIN_STYLE::UP );
                 else if( wire.Start.y < wire.End.y )
-                    label->SetSpinStyle( SPIN_STYLE::BOTTOM );
+                    preferredSpins.emplace_back( SPIN_STYLE::BOTTOM );
             }
             else
             {
                 if( wire.Start.x > wire.End.x )
-                    label->SetSpinStyle( SPIN_STYLE::LEFT );
+                    preferredSpins.emplace_back( SPIN_STYLE::LEFT );
                 else if( wire.Start.x < wire.End.x )
-                    label->SetSpinStyle( SPIN_STYLE::RIGHT );
+                    preferredSpins.emplace_back( SPIN_STYLE::RIGHT );
             }
         }
     }
+
+    if( preferredSpins.size() == 1 )
+        label->SetSpinStyle( preferredSpins.front() );
 
     return label;
 }
