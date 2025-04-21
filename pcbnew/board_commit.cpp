@@ -703,7 +703,6 @@ void BOARD_COMMIT::Revert()
                 break;
 
             view->Remove( boardItem );
-            connectivity->Remove( boardItem );
 
             if( FOOTPRINT* parentFP = boardItem->GetParentFootprint() )
             {
@@ -723,7 +722,6 @@ void BOARD_COMMIT::Revert()
                 break;
 
             view->Add( boardItem );
-            connectivity->Add( boardItem );
 
             // Note: parent can be nullptr, because entry.m_parent is only set for children
             // of footprints.
