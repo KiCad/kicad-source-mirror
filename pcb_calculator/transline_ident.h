@@ -68,10 +68,9 @@ public:
      * @param aDlgLabel is a I18n string used to identify the parameter in dialog.
      *                  usually aDlgLabel is same as aKeywordCfg, but translatable.
      */
-    TRANSLINE_PRM( PRM_TYPE aType, PRMS_ID aId, const char* aKeywordCfg = "",
-                   const wxString& aDlgLabel = wxEmptyString,
-                   const wxString& aToolTip = wxEmptyString,
-                   double aValue = 0.0, bool aConvUnit = false );
+    TRANSLINE_PRM( PRM_TYPE aType, PRMS_ID aId, const char* aKeywordCfg = "", const wxString& aDlgLabel = wxEmptyString,
+                   const wxString& aToolTip = wxEmptyString, double aValue = 0.0, bool aConvUnit = false,
+                   int aDefaultUnit = 0 );
 
     double ToUserUnit();
     double FromUserUnit();
@@ -83,6 +82,7 @@ public:
     wxString    m_ToolTip;         // Tool tip for this parameter in dialog
     double      m_Value;           // Value for this parameter in dialog
     double      m_DefaultValue;    // Default value for this parameter from CTOR build
+    int         m_DefaultUnit;     // Default unit selection for this parameter
     double      m_NormalizedValue; // actual value for this parameter
     bool        m_ConvUnit;        // true if an unit selector must be used
     void*       m_ValueCtrl;       // The text ctrl containing the value in dialog

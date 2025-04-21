@@ -42,9 +42,8 @@
 #include "transline_ident.h"
 
 
-TRANSLINE_PRM::TRANSLINE_PRM( PRM_TYPE aType, PRMS_ID aId, const char* aKeywordCfg,
-                              const wxString& aDlgLabel, const wxString& aToolTip,
-                              double aValue, bool aConvUnit )
+TRANSLINE_PRM::TRANSLINE_PRM( PRM_TYPE aType, PRMS_ID aId, const char* aKeywordCfg, const wxString& aDlgLabel,
+                              const wxString& aToolTip, double aValue, bool aConvUnit, int aDefaultUnit )
 {
     m_Type          = aType;
     m_Id            = aId;
@@ -53,6 +52,7 @@ TRANSLINE_PRM::TRANSLINE_PRM( PRM_TYPE aType, PRMS_ID aId, const char* aKeywordC
     m_ToolTip       = aToolTip;
     m_Value         = aValue;
     m_DefaultValue  = aValue;
+    m_DefaultUnit = aDefaultUnit;
     m_ConvUnit      = aConvUnit;
     m_ValueCtrl     = nullptr;
     m_UnitCtrl      = nullptr;
