@@ -86,8 +86,25 @@ bool DIALOG_DESIGN_BLOCK_PROPERTIES::TransferDataToWindow()
 
 bool DIALOG_DESIGN_BLOCK_PROPERTIES::TransferDataFromWindow()
 {
-    m_designBlock->SetLibId(
-            LIB_ID( m_designBlock->GetLibId().GetLibNickname(), m_textName->GetValue() ) );
+    unsigned int illegalCh = LIB_ID::FindIllegalLibraryNameChar( m_textName->GetValue() );
+
+    // Also check for / in the name, since this is a path character which is illegal for
+    // design blocks and footprints but not symbols
+    if( illegalCh == 0 && m_textName->GetValue().Find( '/' ) != wxNOT_FOUND )
+        illegalCh = '/';
+
+    if( illegalCh )
+    {
+        wxString msg = wxString::Format( _( "Illegal character '%c' in name '%s'." ),
+                                illegalCh,
+                                m_textName->GetValue() );
+
+        wxMessageDialog errdlg( this, msg, _( "Error" ) );
+        errdlg.ShowModal();
+        return false;
+    }
+
+    m_designBlock->SetLibId( LIB_ID( m_designBlock->GetLibId().GetLibNickname(), m_textName->GetValue() ) );
     m_designBlock->SetLibDescription( m_textDescription->GetValue() );
     m_designBlock->SetKeywords( m_textKeywords->GetValue() );
 
