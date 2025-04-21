@@ -234,7 +234,7 @@ public:
      * @param aType Currently supported types: SCH_LABEL_T, SCH_DIRECTIVE_LABEL_T
      */
     SCH_LABEL_BASE* CreateSCH_LABEL( KICAD_T aType, const VECTOR2I& aOffset, const wxString& aValue,
-                                     int aFontSize );
+                                     int aFontSize, std::vector<LTSPICE_SCHEMATIC::WIRE>& aWires );
 
     void CreateFields( LTSPICE_SCHEMATIC::LT_SYMBOL& aLTSymbol, SCH_SYMBOL* aSymbol,
                        SCH_SHEET_PATH* aSheet );
