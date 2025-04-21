@@ -1458,14 +1458,13 @@ void PCB_GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos
             {
                 PCB_TABLE* table = static_cast<PCB_TABLE*>( aItem );
 
-                VECTOR2I topLeft = table->GetCell( 0, 0 )->GetCornersInSequence()[0];
-                VECTOR2I bottomLeft =
-                        table->GetCell( table->GetRowCount() - 1, 0 )->GetCornersInSequence()[3];
-                VECTOR2I topRight =
-                        table->GetCell( 0, table->GetColCount() - 1 )->GetCornersInSequence()[1];
-                VECTOR2I bottomRight =
-                        table->GetCell( table->GetRowCount() - 1, table->GetColCount() - 1 )
-                                ->GetCornersInSequence()[2];
+                EDA_ANGLE drawAngle = table->GetCell( 0, 0 )->GetDrawRotation();
+                VECTOR2I  topLeft = table->GetCell( 0, 0 )->GetCornersInSequence( drawAngle )[0];
+                VECTOR2I  bottomLeft =
+                        table->GetCell( table->GetRowCount() - 1, 0 )->GetCornersInSequence( drawAngle )[3];
+                VECTOR2I topRight = table->GetCell( 0, table->GetColCount() - 1 )->GetCornersInSequence( drawAngle )[1];
+                VECTOR2I bottomRight = table->GetCell( table->GetRowCount() - 1, table->GetColCount() - 1 )
+                                               ->GetCornersInSequence( drawAngle )[2];
 
                 addAnchor( topLeft, CORNER | SNAPPABLE, table, POINT_TYPE::PT_END );
                 addAnchor( bottomLeft, CORNER | SNAPPABLE, table, POINT_TYPE::PT_END );

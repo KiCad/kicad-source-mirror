@@ -273,7 +273,8 @@ VECTOR2I PCB_TEXTBOX::GetDrawPos() const
 
 VECTOR2I PCB_TEXTBOX::GetDrawPos( bool aIsFlipped ) const
 {
-    std::vector<VECTOR2I> corners = GetCornersInSequence();
+    EDA_ANGLE             drawAngle = GetDrawRotation();
+    std::vector<VECTOR2I> corners = GetCornersInSequence( drawAngle );
     GR_TEXT_H_ALIGN_T     horizontalAlignment = GetHorizJustify();
     GR_TEXT_V_ALIGN_T     verticalAlignment = GetVertJustify();
     VECTOR2I              textAnchor;
@@ -439,7 +440,8 @@ wxString PCB_TEXTBOX::GetShownText( bool aAllowExtraText, int aDepth ) const
     }
 
     KIFONT::FONT*         font = getDrawFont();
-    std::vector<VECTOR2I> corners = GetCornersInSequence();
+    EDA_ANGLE             drawAngle = GetDrawRotation();
+    std::vector<VECTOR2I> corners = GetCornersInSequence( drawAngle );
     int                   colWidth = ( corners[1] - corners[0] ).EuclideanNorm();
 
     if( GetTextAngle().IsHorizontal() )
@@ -505,12 +507,13 @@ void PCB_TEXTBOX::Rotate( const VECTOR2I& aRotCentre, const EDA_ANGLE& aAngle )
 
     if( GetTextAngle().IsCardinal() && GetShape() != SHAPE_T::RECTANGLE )
     {
-        // To convert the polygon to its equivalent rectangle, we use GetCornersInSequence()
+        // To convert the polygon to its equivalent rectangle, we use GetCornersInSequence( drawAngle )
         // but this method uses the polygon bounding box.
         // set the line thickness to 0 to get the actual rectangle corner
         int lineWidth = GetWidth();
         SetWidth( 0 );
-        std::vector<VECTOR2I> corners = GetCornersInSequence();
+        EDA_ANGLE             drawAngle = GetDrawRotation();
+        std::vector<VECTOR2I> corners = GetCornersInSequence( drawAngle );
         SetWidth( lineWidth );
         VECTOR2I              diag = corners[2] - corners[0];
         EDA_ANGLE             angle = GetTextAngle();

@@ -1597,40 +1597,39 @@ std::vector<VECTOR2I> EDA_SHAPE::GetRectCorners() const
 }
 
 
-std::vector<VECTOR2I> EDA_SHAPE::GetCornersInSequence() const
+std::vector<VECTOR2I> EDA_SHAPE::GetCornersInSequence( EDA_ANGLE angle ) const
 {
     std::vector<VECTOR2I> pts;
-    EDA_ANGLE             textAngle( getDrawRotation() );
 
-    textAngle.Normalize();
+    angle.Normalize();
 
     BOX2I bbox = getBoundingBox();
     bbox.Normalize();
 
-    if( textAngle.IsCardinal() )
+    if( angle.IsCardinal() )
     {
-        if( textAngle == ANGLE_0 )
+        if( angle == ANGLE_0 )
         {
             pts.emplace_back( VECTOR2I( bbox.GetLeft(), bbox.GetTop() ) );
             pts.emplace_back( VECTOR2I( bbox.GetRight(), bbox.GetTop() ) );
             pts.emplace_back( VECTOR2I( bbox.GetRight(), bbox.GetBottom() ) );
             pts.emplace_back( VECTOR2I( bbox.GetLeft(), bbox.GetBottom() ) );
         }
-        else if( textAngle == ANGLE_90 )
+        else if( angle == ANGLE_90 )
         {
             pts.emplace_back( VECTOR2I( bbox.GetLeft(), bbox.GetBottom() ) );
             pts.emplace_back( VECTOR2I( bbox.GetLeft(), bbox.GetTop() ) );
             pts.emplace_back( VECTOR2I( bbox.GetRight(), bbox.GetTop() ) );
             pts.emplace_back( VECTOR2I( bbox.GetRight(), bbox.GetBottom() ) );
         }
-        else if( textAngle == ANGLE_180 )
+        else if( angle == ANGLE_180 )
         {
             pts.emplace_back( VECTOR2I( bbox.GetRight(), bbox.GetBottom() ) );
             pts.emplace_back( VECTOR2I( bbox.GetLeft(), bbox.GetBottom() ) );
             pts.emplace_back( VECTOR2I( bbox.GetLeft(), bbox.GetTop() ) );
             pts.emplace_back( VECTOR2I( bbox.GetRight(), bbox.GetTop() ) );
         }
-        else if( textAngle == ANGLE_270 )
+        else if( angle == ANGLE_270 )
         {
             pts.emplace_back( VECTOR2I( bbox.GetRight(), bbox.GetTop() ) );
             pts.emplace_back( VECTOR2I( bbox.GetRight(), bbox.GetBottom() ) );
@@ -1640,7 +1639,25 @@ std::vector<VECTOR2I> EDA_SHAPE::GetCornersInSequence() const
     }
     else
     {
-        std::vector<VECTOR2I> corners = GetRectCorners();
+        // This function was originally located in pcb_textbox.cpp and was later moved to eda_shape.cpp.
+        // As a result of this move, access to getCorners was lost, since it is defined in the PCB_SHAPE
+        // class within pcb_shape.cpp and is not available in the current context.
+        //
+        // Additionally, GetRectCorners() cannot be used here, as it assumes the rectangle is rotated by
+        // a cardinal angle. In non-cardinal cases, it returns incorrect values (e.g., (0, 0)).
+        //
+        // To address this, a portion of the getCorners implementation for SHAPE_T::POLY elements
+        // has been replicated here to restore the correct behavior.
+        std::vector<VECTOR2I> corners;
+
+        for( int ii = 0; ii < GetPolyShape().OutlineCount(); ++ii )
+        {
+            for( const VECTOR2I& pt : GetPolyShape().Outline( ii ).CPoints() )
+                corners.emplace_back( pt );
+        }
+
+        while( corners.size() < 4 )
+            corners.emplace_back( corners.back() + VECTOR2I( 10, 10 ) );
 
         VECTOR2I minX = corners[0];
         VECTOR2I maxX = corners[0];
@@ -1662,21 +1679,21 @@ std::vector<VECTOR2I> EDA_SHAPE::GetCornersInSequence() const
                 maxY = corner;
         }
 
-        if( textAngle < ANGLE_90 )
+        if( angle < ANGLE_90 )
         {
             pts.emplace_back( minX );
             pts.emplace_back( minY );
             pts.emplace_back( maxX );
             pts.emplace_back( maxY );
         }
-        else if( textAngle < ANGLE_180 )
+        else if( angle < ANGLE_180 )
         {
             pts.emplace_back( maxY );
             pts.emplace_back( minX );
             pts.emplace_back( minY );
             pts.emplace_back( maxX );
         }
-        else if( textAngle < ANGLE_270 )
+        else if( angle < ANGLE_270 )
         {
             pts.emplace_back( maxX );
             pts.emplace_back( maxY );
