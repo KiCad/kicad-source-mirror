@@ -22,7 +22,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-04-21 13:43+0300\n"
-"PO-Revision-Date: 2025-04-21 10:42+0000\n"
+"PO-Revision-Date: 2025-04-21 20:20+0000\n"
 "Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/kicad/v9/ru/>\n"
 "Language: ru\n"
@@ -665,229 +665,184 @@ msgid "Show user ECO2 layer"
 msgstr "Показать пользовательский слой ECO2"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:68
-#, fuzzy
 msgid "Show user defined layer 1"
-msgstr "Пользовательский слой 1"
+msgstr "Показать пользовательский слой 1"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:69
-#, fuzzy
 msgid "Show user defined layer 2"
-msgstr "Пользовательский слой 2"
+msgstr "Показать пользовательский слой 2"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:70
-#, fuzzy
 msgid "Show user defined layer 3"
-msgstr "Пользовательский слой 3"
+msgstr "Показать пользовательский слой 3"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:71
-#, fuzzy
 msgid "Show user defined layer 4"
-msgstr "Пользовательский слой 4"
+msgstr "Показать пользовательский слой 4"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:72
-#, fuzzy
 msgid "Show user defined layer 5"
-msgstr "Пользовательский слой 5"
+msgstr "Показать пользовательский слой 5"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:73
-#, fuzzy
 msgid "Show user defined layer 6"
-msgstr "Пользовательский слой 6"
+msgstr "Показать пользовательский слой 6"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:74
-#, fuzzy
 msgid "Show user defined layer 7"
-msgstr "Пользовательский слой 7"
+msgstr "Показать пользовательский слой 7"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:75
-#, fuzzy
 msgid "Show user defined layer 8"
-msgstr "Пользовательский слой 8"
+msgstr "Показать пользовательский слой 8"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:76
-#, fuzzy
 msgid "Show user defined layer 9"
-msgstr "Пользовательский слой 9"
+msgstr "Показать пользовательский слой 9"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:77
-#, fuzzy
 msgid "Show user defined layer 10"
-msgstr "Пользовательский слой 10"
+msgstr "Показать пользовательский слой 10"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:78
-#, fuzzy
 msgid "Show user defined layer 11"
-msgstr "Пользовательский слой 11"
+msgstr "Показать пользовательский слой 11"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:79
-#, fuzzy
 msgid "Show user defined layer 12"
-msgstr "Пользовательский слой 12"
+msgstr "Показать пользовательский слой 12"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:80
-#, fuzzy
 msgid "Show user defined layer 13"
-msgstr "Пользовательский слой 13"
+msgstr "Показать пользовательский слой 13"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:81
-#, fuzzy
 msgid "Show user defined layer 14"
-msgstr "Пользовательский слой 14"
+msgstr "Показать пользовательский слой 14"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:82
-#, fuzzy
 msgid "Show user defined layer 15"
-msgstr "Пользовательский слой 15"
+msgstr "Показать пользовательский слой 15"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:83
-#, fuzzy
 msgid "Show user defined layer 16"
-msgstr "Пользовательский слой 16"
+msgstr "Показать пользовательский слой 16"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:84
-#, fuzzy
 msgid "Show user defined layer 17"
-msgstr "Пользовательский слой 17"
+msgstr "Показать пользовательский слой 17"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:85
-#, fuzzy
 msgid "Show user defined layer 18"
-msgstr "Пользовательский слой 18"
+msgstr "Показать пользовательский слой 18"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:86
-#, fuzzy
 msgid "Show user defined layer 19"
-msgstr "Пользовательский слой 19"
+msgstr "Показать пользовательский слой 19"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:87
-#, fuzzy
 msgid "Show user defined layer 20"
-msgstr "Пользовательский слой 20"
+msgstr "Показать пользовательский слой 20"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:88
-#, fuzzy
 msgid "Show user defined layer 21"
-msgstr "Пользовательский слой 21"
+msgstr "Показать пользовательский слой 21"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:89
-#, fuzzy
 msgid "Show user defined layer 22"
-msgstr "Пользовательский слой 22"
+msgstr "Показать пользовательский слой 22"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:90
-#, fuzzy
 msgid "Show user defined layer 23"
-msgstr "Пользовательский слой 23"
+msgstr "Показать пользовательский слой 23"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:91
-#, fuzzy
 msgid "Show user defined layer 24"
-msgstr "Пользовательский слой 24"
+msgstr "Показать пользовательский слой 24"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:92
-#, fuzzy
 msgid "Show user defined layer 25"
-msgstr "Пользовательский слой 25"
+msgstr "Показать пользовательский слой 25"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:93
-#, fuzzy
 msgid "Show user defined layer 26"
-msgstr "Пользовательский слой 26"
+msgstr "Показать пользовательский слой 26"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:94
-#, fuzzy
 msgid "Show user defined layer 27"
-msgstr "Пользовательский слой 27"
+msgstr "Показать пользовательский слой 27"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:95
-#, fuzzy
 msgid "Show user defined layer 28"
-msgstr "Пользовательский слой 28"
+msgstr "Показать пользовательский слой 28"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:96
-#, fuzzy
 msgid "Show user defined layer 29"
-msgstr "Пользовательский слой 29"
+msgstr "Показать пользовательский слой 29"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:97
-#, fuzzy
 msgid "Show user defined layer 30"
-msgstr "Пользовательский слой 30"
+msgstr "Показать пользовательский слой 30"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:98
-#, fuzzy
 msgid "Show user defined layer 31"
-msgstr "Пользовательский слой 31"
+msgstr "Показать пользовательский слой 31"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:99
-#, fuzzy
 msgid "Show user defined layer 32"
-msgstr "Пользовательский слой 32"
+msgstr "Показать пользовательский слой 32"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:100
-#, fuzzy
 msgid "Show user defined layer 33"
-msgstr "Пользовательский слой 33"
+msgstr "Показать пользовательский слой 33"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:101
-#, fuzzy
 msgid "Show user defined layer 34"
-msgstr "Пользовательский слой 34"
+msgstr "Показать пользовательский слой 34"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:102
-#, fuzzy
 msgid "Show user defined layer 35"
-msgstr "Пользовательский слой 35"
+msgstr "Показать пользовательский слой 35"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:103
-#, fuzzy
 msgid "Show user defined layer 36"
-msgstr "Пользовательский слой 36"
+msgstr "Показать пользовательский слой 36"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:104
-#, fuzzy
 msgid "Show user defined layer 37"
-msgstr "Пользовательский слой 37"
+msgstr "Показать пользовательский слой 37"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:105
-#, fuzzy
 msgid "Show user defined layer 38"
-msgstr "Пользовательский слой 38"
+msgstr "Показать пользовательский слой 38"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:106
-#, fuzzy
 msgid "Show user defined layer 39"
-msgstr "Пользовательский слой 39"
+msgstr "Показать пользовательский слой 39"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:107
-#, fuzzy
 msgid "Show user defined layer 40"
-msgstr "Пользовательский слой 40"
+msgstr "Показать пользовательский слой 40"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:108
-#, fuzzy
 msgid "Show user defined layer 41"
-msgstr "Пользовательский слой 41"
+msgstr "Показать пользовательский слой 41"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:109
-#, fuzzy
 msgid "Show user defined layer 42"
-msgstr "Пользовательский слой 42"
+msgstr "Показать пользовательский слой 42"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:110
-#, fuzzy
 msgid "Show user defined layer 43"
-msgstr "Пользовательский слой 43"
+msgstr "Показать пользовательский слой 43"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:111
-#, fuzzy
 msgid "Show user defined layer 44"
-msgstr "Пользовательский слой 44"
+msgstr "Показать пользовательский слой 44"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:112
-#, fuzzy
 msgid "Show user defined layer 45"
-msgstr "Пользовательский слой 45"
+msgstr "Показать пользовательский слой 45"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:114
 msgid "Through-hole Models"
@@ -3030,9 +2985,9 @@ msgstr ""
 "настройках Pcbnew."
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:30
-#, fuzzy, c-format
+#, c-format
 msgid "The selection contains %zu locked items."
-msgstr "Выделение содержит %lu заблокированных элементов."
+msgstr "Выделение содержит %zu заблокированных элементов."
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:34
 msgid "These items will be skipped unless you override the locks."
@@ -8527,7 +8482,6 @@ msgid "Select Preferred Editor"
 msgstr "Выбор предпочитаемого редактора"
 
 #: common/pgm_base.cpp:384
-#, fuzzy
 msgid ""
 "KiCad can anonymously report crashes and special event data to developers in "
 "order to aid identifying critical bugs and help profile functionality to "
@@ -8537,27 +8491,25 @@ msgid ""
 "Your design files such as schematic and PCB are not shared in this process."
 msgstr ""
 "KiCad может анонимно сообщать о сбоях и передавать некоторые данные о "
-"событии разработчиками чтобы помочь им более эффективно определить условия "
-"возникновения критической ошибки среди пользователей, отследить "
-"последовательность действий приведших к сбою и понять как это исправить.\n"
+"событии разработчиками чтобы помочь им определить условия возникновения "
+"критических ошибок, отследить последовательность действий приведших к сбою и "
+"понять как это исправить.\n"
 "Если Вы решите принять участие и помочь разработчикам, KiCad будет "
-"автоматически формировать и отправлять отчёт об ошибке при её "
-"возникновении.\n"
+"автоматически формировать и отправлять отчёт об ошибке при её возникновении."
+"\n"
 "Файлы проекта, такие как схема или печатная плата, не передаются при этом."
 
 #: common/pgm_base.cpp:389
-#, fuzzy
 msgid "Data Collection Opt In"
-msgstr "Сбор данных"
+msgstr "Согласие на сбор данных"
 
 #: common/pgm_base.cpp:391
 msgid "Opt In"
-msgstr ""
+msgstr "Согласиться"
 
 #: common/pgm_base.cpp:391
-#, fuzzy
 msgid "Decline"
-msgstr "Линии в контурном режиме"
+msgstr "Не согласиться"
 
 #: common/pgm_base.cpp:498
 msgid "Environment variable HOME is empty.  Unable to continue."
@@ -10160,7 +10112,6 @@ msgid "Toggle panning to selections in the search pane"
 msgstr "Переключение панорамирования на выделения в панели поиска"
 
 #: common/widgets/search_pane.cpp:51
-#, fuzzy
 msgid "Search Hidden Fields"
 msgstr "Искать в скрытых полях"
 
@@ -11015,11 +10966,11 @@ msgstr "Аннотация завершена."
 
 #: eeschema/api/api_handler_sch.cpp:259
 msgid "Added items via API"
-msgstr "Добавлены элементы посредством API"
+msgstr "Добавлены элементы через API"
 
 #: eeschema/api/api_handler_sch.cpp:277 pcbnew/api/api_handler_pcb.cpp:504
 msgid "Created items via API"
-msgstr "Созданы элементы посредством API"
+msgstr "Созданы элементы через API"
 
 #: eeschema/bom_plugins.cpp:47
 #, c-format
@@ -15205,32 +15156,32 @@ msgid "Show datasheet in browser"
 msgstr "Показать информацию о компоненте в вэб-браузере"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:200
-#, fuzzy
 msgid "Column Label"
-msgstr "Таблица с %d столб."
+msgstr "Заголовок столб."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:205
-#, fuzzy
 msgid "Show Column"
-msgstr "Показать/скрыть столбцы"
+msgstr "Показать столбец"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:206
 msgid "Group By"
 msgstr "Группировать по"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:208
-#, fuzzy
 msgid ""
 "Show\n"
 "Column"
-msgstr "Показать/скрыть столбцы"
+msgstr ""
+"Показать\n"
+"столбец"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:209
-#, fuzzy
 msgid ""
 "Group\n"
 "By"
-msgstr "Группировать по"
+msgstr ""
+"Группировать\n"
+"по"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:710
 msgid "Qty"
@@ -19440,13 +19391,12 @@ msgid "Expecting R0, R90, R18, R270, M0, M90, M180 or M270"
 msgstr "Ожидалось R0, R90, R18, R270, M0, M90, M180 или M270"
 
 #: eeschema/sch_io/ltspice/ltspice_schematic.cpp:494
-#, fuzzy
 msgid ""
 "Expecting LEFT, CENTER, RIGHT, TOP, BOTTOM, VLEFT, VRIGHT, VCENTER, VTOP, "
 "VBOTTOM or INVISIBLE"
 msgstr ""
-"Ожидалось LEFT, CENTER, RIGHT, TOP, BOTTOM, VLEFT, VRIGHT, VCENTER, VTOP или "
-"VBOTTOM"
+"Ожидалось LEFT, CENTER, RIGHT, TOP, BOTTOM, VLEFT, VRIGHT, VCENTER, VTOP, "
+"VBOTTOM или INVISIBLE"
 
 #: eeschema/sch_io/ltspice/ltspice_schematic.cpp:517
 msgid ""
@@ -26319,9 +26269,8 @@ msgid "The new behavior will match --mode-multi"
 msgstr "Новое поведение будет соответствовать --mode-multi"
 
 #: kicad/cli/command_pcb_export_gencad.cpp:33
-#, fuzzy
 msgid "Export the PCB in Gencad format"
-msgstr "Экспорт нетлиста в формат KiCad"
+msgstr "Экспорт PCB в формат GenCAD"
 
 #: kicad/cli/command_pcb_export_gencad.cpp:39
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:134
@@ -31255,13 +31204,12 @@ msgid "mi/h"
 msgstr "миль/ч"
 
 #: pcbnew/api/api_handler_pcb.cpp:505
-#, fuzzy
 msgid "Modified items via API"
-msgstr "Добавлены элементы посредством API"
+msgstr "Изменены элементы через API"
 
 #: pcbnew/api/api_handler_pcb.cpp:668
 msgid "Deleted items via API"
-msgstr "Удалённые элементы через API"
+msgstr "Удалены элементы через API"
 
 #: pcbnew/autorouter/ar_autoplacer.cpp:882
 msgid "Autoplacing components..."
@@ -35835,9 +35783,8 @@ msgid "Set Teardrops"
 msgstr "Задать каплевидные переходы"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:141
-#, fuzzy
 msgid "Text items"
-msgstr "Текстовые поля"
+msgstr "Текстовые элементы"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:142
 msgid "Graphic items"
@@ -35931,16 +35878,14 @@ msgid "PCB text items"
 msgstr "Надписи на плате"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:45
-#, fuzzy
 msgid "Other footprint fields"
-msgstr "Другие текстовые поля посад. места"
+msgstr "Другие поля посад. места"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:46
 msgid "Footprint fields that are not the reference designator or value field"
 msgstr "Поля посад. мест, не являющиеся обозначением или полем значения"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:50
-#, fuzzy
 msgid "PCB dimensions"
 msgstr "Размеры на плате"
 
@@ -35949,33 +35894,28 @@ msgid "Footprint graphic items"
 msgstr "Графические элементы посад. места"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:59
-#, fuzzy
 msgid "Footprint text items"
-msgstr "Другие текстовые поля посад. места"
+msgstr "Текстовые элем. посад. места"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:60
 msgid "Footprint text items not associated with a field"
 msgstr "Текстовые элементы посад. места, не связанные с полем"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:67
-#, fuzzy
 msgid "Footprint dimensions"
 msgstr "Размеры в посад. месте"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:85
-#, fuzzy
 msgid "By layer:"
-msgstr "На слой:"
+msgstr "По слою:"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:97
-#, fuzzy
 msgid "By parent reference designator:"
-msgstr "Начальное условное обозначение:"
+msgstr "По обозначению родителя:"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:103
-#, fuzzy
 msgid "By parent footprint library link:"
-msgstr "Новый идентификатор библиотеки:"
+msgstr "По библиотечной ссылке родительского посад. места:"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:124
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:133
@@ -37963,7 +37903,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:86
 msgid "Distance between parallel lines used for hatching the area"
-msgstr ""
+msgstr "Расстояние между параллельными линиями штриховки"
 
 #: pcbnew/dialogs/dialog_set_offset.cpp:66
 msgid "Reset this value to zero."
@@ -41563,18 +41503,18 @@ msgid "** Face skipped **\n"
 msgstr "** Грань пропущена **\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1915
-#, fuzzy, c-format
+#, c-format
 msgid "Subtracting holes for %s\n"
-msgstr "Построение отверстий для %s\n"
+msgstr "Вычитание отверстий для %s\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1958
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "\n"
 "** Got problems while cutting %s net '%s' **\n"
 msgstr ""
 "\n"
-"** Возникли проблемы при вырезании %s номер %d **\n"
+"** Возникли проблемы при вырезании %s цепи %s **\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2003
 msgid "shapes"
@@ -46820,16 +46760,17 @@ msgid "Physical Clearances"
 msgstr "Физические зазоры"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1260
-#, fuzzy, c-format
+#, c-format
 msgid "No 'physical_clearance' constraints in effect on %s."
-msgstr "Ограничения 'physical_clearance' не определены."
+msgstr "Ограничения 'physical_clearance' не действуют на %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1279
-#, fuzzy
 msgid ""
 "Items share no relevant layers.  No 'physical_clearance' constraints will be "
 "applied."
-msgstr "Ограничения 'physical_clearance' не определены."
+msgstr ""
+"У элементов нет подходящих слоев.  Ограничения 'physical_clearance' не "
+"применены."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1341
 msgid "Select an item for a constraints resolution report."
@@ -49720,19 +49661,16 @@ msgid "Locked Item Shadow"
 msgstr "Тень заблок. элемента"
 
 #: pcbnew/widgets/appearance_controls.cpp:350
-#, fuzzy
 msgid "Show a shadow on locked items"
-msgstr "Выделять заблокированные элементы подсветкой"
+msgstr "Подсвечивать заблокированные элементы"
 
 #: pcbnew/widgets/appearance_controls.cpp:351
-#, fuzzy
 msgid "Colliding Courtyards"
-msgstr "Обл.установки"
+msgstr "Перес.обл.установки"
 
 #: pcbnew/widgets/appearance_controls.cpp:351
-#, fuzzy
 msgid "Show colliding footprint courtyards"
-msgstr "Сбор данных об областях установки посад. мест..."
+msgstr "Показать пересечения областей установки посад. мест"
 
 #: pcbnew/widgets/appearance_controls.cpp:352
 msgid "Show drawing sheet borders and title block"
