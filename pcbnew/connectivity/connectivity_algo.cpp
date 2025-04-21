@@ -945,7 +945,7 @@ void CN_CONNECTIVITY_ALGO::updateJumperPads()
 
     for( CN_ITEM* item : m_itemList )
     {
-        if( item->Parent()->Type() != PCB_PAD_T )
+        if( !item->Valid() || item->Parent()->Type() != PCB_PAD_T )
             continue;
 
         auto pad = static_cast<const PAD*>( item->Parent() );
