@@ -360,6 +360,10 @@ void PANEL_TRANSLINE::OnTransLineResetButtonClick( wxCommandEvent& event )
     {
         TRANSLINE_PRM* prm = tr_ident->GetPrm( ii );
         prm->m_Value = prm->m_DefaultValue;
+        UNIT_SELECTOR* unit_ctrl = (UNIT_SELECTOR*) prm->m_UnitCtrl;
+
+        if( unit_ctrl )
+            prm->m_UnitSelection = prm->m_DefaultUnit;
     }
 
     // Reinit displayed values
