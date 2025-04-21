@@ -463,10 +463,13 @@ bool SCH_TABLE::HitTest( const BOX2I& aRect, bool aContained, int aAccuracy ) co
 void SCH_TABLE::DrawBorders( const std::function<void( const VECTOR2I& aPt1, const VECTOR2I& aPt2,
                                                        const STROKE_PARAMS& aStroke )>& aCallback ) const
 {
-    std::vector<VECTOR2I> topLeft     = GetCell( 0, 0 )->GetCornersInSequence();
-    std::vector<VECTOR2I> bottomLeft  = GetCell( GetRowCount() - 1, 0 )->GetCornersInSequence();
-    std::vector<VECTOR2I> topRight    = GetCell( 0, GetColCount() - 1 )->GetCornersInSequence();
-    std::vector<VECTOR2I> bottomRight = GetCell( GetRowCount() - 1, GetColCount() - 1 )->GetCornersInSequence();
+    EDA_ANGLE drawAngle = GetCell( 0, 0 )->GetTextAngle();
+
+    std::vector<VECTOR2I> topLeft = GetCell( 0, 0 )->GetCornersInSequence( drawAngle );
+    std::vector<VECTOR2I> bottomLeft = GetCell( GetRowCount() - 1, 0 )->GetCornersInSequence( drawAngle );
+    std::vector<VECTOR2I> topRight = GetCell( 0, GetColCount() - 1 )->GetCornersInSequence( drawAngle );
+    std::vector<VECTOR2I> bottomRight =
+            GetCell( GetRowCount() - 1, GetColCount() - 1 )->GetCornersInSequence( drawAngle );
     STROKE_PARAMS         stroke;
 
     for( int col = 0; col < GetColCount() - 1; ++col )
@@ -486,7 +489,7 @@ void SCH_TABLE::DrawBorders( const std::function<void( const VECTOR2I& aPt1, con
             if( col + cell->GetColSpan() == GetColCount() )
                 continue;
 
-            std::vector<VECTOR2I> corners = cell->GetCornersInSequence();
+            std::vector<VECTOR2I> corners = cell->GetCornersInSequence( drawAngle );
 
             if( corners.size() == 4 )
                 aCallback( corners[1], corners[2], stroke );
@@ -512,7 +515,7 @@ void SCH_TABLE::DrawBorders( const std::function<void( const VECTOR2I& aPt1, con
             if( row + cell->GetRowSpan() == GetRowCount() )
                 continue;
 
-            std::vector<VECTOR2I> corners = cell->GetCornersInSequence();
+            std::vector<VECTOR2I> corners = cell->GetCornersInSequence( drawAngle );
 
             if( corners.size() == 4 )
                 aCallback( corners[2], corners[3], stroke );

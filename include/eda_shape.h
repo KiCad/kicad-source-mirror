@@ -240,7 +240,7 @@ public:
 
     VECTOR2I              GetArcMid() const;
     std::vector<VECTOR2I> GetRectCorners() const;
-    std::vector<VECTOR2I> GetCornersInSequence() const;
+    std::vector<VECTOR2I> GetCornersInSequence( EDA_ANGLE angle ) const;
 
     /**
      * Calc arc start and end angles such that aStartAngle < aEndAngle.  Each may be between
