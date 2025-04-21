@@ -505,7 +505,7 @@ void SCH_IO_LTSPICE_PARSER::CreateKicadSCH_ITEMs( SCH_SHEET_PATH* aSheet,
             else
             {
                 screen->Append( CreateSCH_LABEL( SCH_GLOBAL_LABEL_T, lt_flag.Offset, lt_flag.Value,
-                                                 lt_flag.FontSize ) );
+                                                 lt_flag.FontSize, lt_asc.Wires ) );
             }
         }
 
@@ -527,7 +527,7 @@ void SCH_IO_LTSPICE_PARSER::CreateKicadSCH_ITEMs( SCH_SHEET_PATH* aSheet,
         for( const LTSPICE_SCHEMATIC::DATAFLAG& lt_flag : lt_asc.DataFlags )
         {
             screen->Append( CreateSCH_LABEL( SCH_DIRECTIVE_LABEL_T, lt_flag.Offset,
-                                             lt_flag.Expression, lt_flag.FontSize ) );
+                                             lt_flag.Expression, lt_flag.FontSize, lt_asc.Wires ) );
         }
     }
 }
@@ -694,6 +694,10 @@ void SCH_IO_LTSPICE_PARSER::setTextJustification( EDA_TEXT*                     
 {
     switch( aJustification )
     {
+    case LTSPICE_SCHEMATIC::JUSTIFICATION::INVISIBLE:
+        aText->SetVisible( false );
+        break;
+
     case LTSPICE_SCHEMATIC::JUSTIFICATION::LEFT:
     case LTSPICE_SCHEMATIC::JUSTIFICATION::VLEFT:
         aText->SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
@@ -890,8 +894,10 @@ SCH_SYMBOL* SCH_IO_LTSPICE_PARSER::CreatePowerSymbol( const VECTOR2I& aOffset,
 }
 
 
-SCH_LABEL_BASE* SCH_IO_LTSPICE_PARSER::CreateSCH_LABEL( KICAD_T aType, const VECTOR2I& aOffset,
-                                                        const wxString& aValue, int aFontSize )
+SCH_LABEL_BASE*
+SCH_IO_LTSPICE_PARSER::CreateSCH_LABEL( KICAD_T aType, const VECTOR2I& aOffset,
+                                        const wxString& aValue, int aFontSize,
+                                        std::vector<LTSPICE_SCHEMATIC::WIRE>& aWires )
 {
     SCH_LABEL_BASE* label = nullptr;
 
@@ -928,6 +934,44 @@ SCH_LABEL_BASE* SCH_IO_LTSPICE_PARSER::CreateSCH_LABEL( KICAD_T aType, const VEC
         label->SetVisible( true );
     }
 
+    for( LTSPICE_SCHEMATIC::WIRE& wire : aWires )
+    {
+        if( aOffset == wire.Start )
+        {
+            if( wire.Start.x == wire.End.x )
+            {
+                if( wire.Start.y < wire.End.y )
+                    label->SetSpinStyle( SPIN_STYLE::UP );
+                else if( wire.Start.y > wire.End.y )
+                    label->SetSpinStyle( SPIN_STYLE::BOTTOM );
+            }
+            else
+            {
+                if( wire.Start.x < wire.End.x )
+                    label->SetSpinStyle( SPIN_STYLE::LEFT );
+                else if( wire.Start.x > wire.End.x )
+                    label->SetSpinStyle( SPIN_STYLE::RIGHT );
+            }
+        }
+        else if( aOffset == wire.End )
+        {
+            if( wire.Start.x == wire.End.x )
+            {
+                if( wire.Start.y > wire.End.y )
+                    label->SetSpinStyle( SPIN_STYLE::UP );
+                else if( wire.Start.y < wire.End.y )
+                    label->SetSpinStyle( SPIN_STYLE::BOTTOM );
+            }
+            else
+            {
+                if( wire.Start.x > wire.End.x )
+                    label->SetSpinStyle( SPIN_STYLE::LEFT );
+                else if( wire.Start.x < wire.End.x )
+                    label->SetSpinStyle( SPIN_STYLE::RIGHT );
+            }
+        }
+    }
+
     return label;
 }
 
@@ -955,6 +999,7 @@ void SCH_IO_LTSPICE_PARSER::CreateFields( LTSPICE_SCHEMATIC::LT_SYMBOL& aLTSymbo
     if( !value2.IsEmpty() )
     {
         SCH_FIELD paramsField( { 0, 0 }, -1, aSymbol, wxS( "Value2" ) );
+        paramsField.SetVisible( false );
         paramsField.SetText( value2 );
         aSymbol->AddField( paramsField );
     }
@@ -962,10 +1007,12 @@ void SCH_IO_LTSPICE_PARSER::CreateFields( LTSPICE_SCHEMATIC::LT_SYMBOL& aLTSymbo
     auto setupNonInferredPassive = [&]( const wxString& aDevice, const wxString& aValueKey )
     {
         SCH_FIELD deviceField( { 0, 0 }, -1, aSymbol, wxS( "Sim.Device" ) );
+        deviceField.SetVisible( false );
         deviceField.SetText( aDevice );
         aSymbol->AddField( deviceField );
 
         SCH_FIELD paramsField( { 0, 0 }, -1, aSymbol, wxS( "Sim.Params" ) );
+        paramsField.SetVisible( false );
         paramsField.SetText( aValueKey + wxS( "=${VALUE}" ) );
         aSymbol->AddField( paramsField );
     };
@@ -975,14 +1022,17 @@ void SCH_IO_LTSPICE_PARSER::CreateFields( LTSPICE_SCHEMATIC::LT_SYMBOL& aLTSymbo
         aSymbol->SetValueFieldText( wxS( "${Sim.Params}" ) );
 
         SCH_FIELD deviceField( { 0, 0 }, -1, aSymbol, wxS( "Sim.Device" ) );
+        deviceField.SetVisible( false );
         deviceField.SetText( aDevice );
         aSymbol->AddField( deviceField );
 
         SCH_FIELD typeField( { 0, 0 }, -1, aSymbol, wxS( "Sim.Type" ) );
+        typeField.SetVisible( false );
         typeField.SetText( aType );
         aSymbol->AddField( typeField );
 
         SCH_FIELD paramsField( { 0, 0 }, -1, aSymbol, wxS( "Sim.Params" ) );
+        paramsField.SetVisible( false );
         paramsField.SetText( value );
         aSymbol->AddField( paramsField );
     };
@@ -1020,6 +1070,7 @@ void SCH_IO_LTSPICE_PARSER::CreateFields( LTSPICE_SCHEMATIC::LT_SYMBOL& aLTSymbo
     else if( prefix == wxS( "V" ) || symbolName == wxS( "I" ) )
     {
         SCH_FIELD deviceField( { 0, 0 }, -1, aSymbol, wxS( "Sim.Device" ) );
+        deviceField.SetVisible( false );
         deviceField.SetText( wxS( "SPICE" ) );
         aSymbol->AddField( deviceField );
 
@@ -1032,6 +1083,7 @@ void SCH_IO_LTSPICE_PARSER::CreateFields( LTSPICE_SCHEMATIC::LT_SYMBOL& aLTSymbo
             simParams << "model=" << '"' << "${VALUE} ${VALUE2}" << '"' << ' ';
 
         SCH_FIELD paramsField( { 0, 0 }, -1, aSymbol, wxS( "Sim.Params" ) );
+        paramsField.SetVisible( false );
         paramsField.SetText( simParams );
         aSymbol->AddField( paramsField );
     }
@@ -1065,6 +1117,7 @@ void SCH_IO_LTSPICE_PARSER::CreateFields( LTSPICE_SCHEMATIC::LT_SYMBOL& aLTSymbo
         if( !libFile.IsEmpty() )
         {
             SCH_FIELD libField( { 0, 0 }, -1, aSymbol, wxS( "Sim.Library" ) );
+            libField.SetVisible( false );
             libField.SetText( libFile );
             aSymbol->AddField( libField );
         }
@@ -1072,12 +1125,14 @@ void SCH_IO_LTSPICE_PARSER::CreateFields( LTSPICE_SCHEMATIC::LT_SYMBOL& aLTSymbo
         if( type == wxS( "X" ) )
         {
             SCH_FIELD deviceField( { 0, 0 }, -1, aSymbol, wxS( "Sim.Device" ) );
+            deviceField.SetVisible( false );
             deviceField.SetText( wxS( "SUBCKT" ) );
             aSymbol->AddField( deviceField );
         }
         else
         {
             SCH_FIELD deviceField( { 0, 0 }, -1, aSymbol, wxS( "Sim.Device" ) );
+            deviceField.SetVisible( false );
             deviceField.SetText( wxS( "SPICE" ) );
             aSymbol->AddField( deviceField );
         }
@@ -1088,12 +1143,14 @@ void SCH_IO_LTSPICE_PARSER::CreateFields( LTSPICE_SCHEMATIC::LT_SYMBOL& aLTSymbo
         {
             // TODO: append value
             SCH_FIELD paramsField( { 0, 0 }, -1, aSymbol, wxS( "Sim.Params" ) );
+            paramsField.SetVisible( false );
             paramsField.SetText( spiceLine );
             aSymbol->AddField( paramsField );
         }
         else
         {
             SCH_FIELD modelField( { 0, 0 }, -1, aSymbol, wxS( "Sim.Params" ) );
+            modelField.SetVisible( false );
             modelField.SetText( "model=\"" + value + "\"" );
             aSymbol->AddField( modelField );
         }
@@ -1325,8 +1382,8 @@ void SCH_IO_LTSPICE_PARSER::CreateArc( LTSPICE_SCHEMATIC::LT_SYMBOL& aLTSymbol, 
     LTSPICE_SCHEMATIC::ARC& lt_arc = aLTSymbol.Arcs[aIndex];
 
     aArc->SetCenter( ToKicadCoords( ( lt_arc.TopLeft + lt_arc.BotRight ) / 2 ) );
-    aArc->SetEnd( ToKicadCoords( lt_arc.ArcEnd ) );
-    aArc->SetStart( ToKicadCoords( lt_arc.ArcStart ) );
+    aArc->SetStart( ToKicadCoords( lt_arc.ArcEnd ) );
+    aArc->SetEnd( ToKicadCoords( lt_arc.ArcStart ) );
     aArc->SetStroke( getStroke( lt_arc.LineWidth, lt_arc.LineStyle ) );
 }
 
@@ -1338,8 +1395,8 @@ void SCH_IO_LTSPICE_PARSER::CreateArc( LTSPICE_SCHEMATIC::LT_SYMBOL& aLTSymbol, 
     SCH_SHAPE*              arc = new SCH_SHAPE( SHAPE_T::ARC );
 
     arc->SetCenter( ToKicadCoords( ( lt_arc.TopLeft + lt_arc.BotRight ) / 2 ) );
-    arc->SetEnd( ToKicadCoords( lt_arc.ArcEnd ) );
-    arc->SetStart( ToKicadCoords( lt_arc.ArcStart ) );
+    arc->SetStart( ToKicadCoords( lt_arc.ArcEnd ) );
+    arc->SetEnd( ToKicadCoords( lt_arc.ArcStart ) );
     arc->SetStroke( getStroke( lt_arc.LineWidth, lt_arc.LineStyle ) );
 
     arc->Move( ToKicadCoords( aLTSymbol.Offset ) + m_originOffset );

@@ -110,7 +110,8 @@ public:
         VLEFT,    // Vertical Left Justification
         VRIGHT,   // Vertical Right Justification
         VCENTER,  // Vertical Center Justification
-        VTOP      // Vertical Top Justification.
+        VTOP,      // Vertical Top Justification.
+        INVISIBLE
     };
 
     /**

@@ -488,9 +488,11 @@ LTSPICE_SCHEMATIC::JUSTIFICATION LTSPICE_SCHEMATIC::getTextJustification( const 
     justificationMap["TOP"] = JUSTIFICATION::TOP;
     justificationMap["VBOTTOM"] = JUSTIFICATION::VBOTTOM;
     justificationMap["VTOP"] = JUSTIFICATION::VTOP;
+    justificationMap["INVISIBLE"] = JUSTIFICATION::INVISIBLE;
 
     if( justificationMap.find( aValue.Upper() ) == justificationMap.end() )
-        THROW_IO_ERROR( _( "Expecting LEFT, CENTER, RIGHT, TOP, BOTTOM, VLEFT, VRIGHT, VCENTER, VTOP or VBOTTOM" ) );
+        THROW_IO_ERROR( _( "Expecting LEFT, CENTER, RIGHT, TOP, BOTTOM, VLEFT, VRIGHT, VCENTER, "
+                           "VTOP, VBOTTOM or INVISIBLE" ) );
 
     return justificationMap[ aValue.Upper() ];
 }

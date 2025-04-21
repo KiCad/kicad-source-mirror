@@ -34,6 +34,7 @@
 #include <io/kicad/kicad_io_utils.h>
 
 #include <wx/translation.h>
+#include <wx/ffile.h>
 
 
 // Fall back to getc() when getc_unlocked() is not available on the target platform.
@@ -94,40 +95,36 @@ std::string StrPrintf( const char* format, ... )
 
 wxString SafeReadFile( const wxString& aFilePath, const wxString& aReadType )
 {
-    auto From_UTF8_WINE =
-            []( const char* cstring )
-            {
-                wxString line = wxString::FromUTF8( cstring );
+    wxString contents;
+    wxFFile  ff( aFilePath );
 
-                if( line.IsEmpty() )  // happens when cstring is not a valid UTF8 sequence
-                    line = wxConvCurrent->cMB2WC( cstring );    // try to use locale conversion
-
-                // We have trouble here *probably* because Wine-hosted LTSpice writes out MSW
-                // encoded text on a macOS, where it isn't expected.  In any case, wxWidgets'
-                // wxSafeConvert() appears to get around it.
-
-                if( line.IsEmpty() )
-                    line = wxSafeConvertMB2WX( cstring );
-
-                // I'm not sure what the source of this style of line-endings is, but it can be
-                // found in some Fairchild Semiconductor SPICE files.
-                line.Replace( wxS( "\r\r\n" ), wxS( "\n" ) );
-
-                return line;
-            };
-
-    // Open file
-    FILE* fp = wxFopen( aFilePath, aReadType );
-
-    if( !fp )
+    if( !ff.IsOpened() )
         THROW_IO_ERROR( wxString::Format( _( "Cannot open file '%s'." ), aFilePath ) );
 
-    FILE_LINE_READER fileReader( fp, aFilePath );
+    // Try to determine encoding
+    char bytes[2]{ 0 };
+    ff.Read( bytes, 2 );
+    bool utf16le = bytes[1] == 0;
 
-    wxString contents;
+    ff.Seek( 0 );
 
-    while( fileReader.ReadLine() )
-        contents += From_UTF8_WINE( fileReader.Line() );
+    if( utf16le )
+        ff.ReadAll( &contents, wxMBConvUTF16LE() );
+    else
+        ff.ReadAll( &contents, wxMBConvUTF8() );
+
+    if( contents.empty() )
+    {
+        ff.Seek( 0 );
+        ff.ReadAll( &contents, wxConvAuto( wxFONTENCODING_CP1252 ) );
+    }
+
+    if( contents.empty() )
+        THROW_IO_ERROR( wxString::Format( _( "Unable to read file '%s'." ), aFilePath ) );
+
+    // I'm not sure what the source of this style of line-endings is, but it can be
+    // found in some Fairchild Semiconductor SPICE files.
+    contents.Replace( wxS( "\r\r\n" ), wxS( "\n" ) );
 
     return contents;
 }
