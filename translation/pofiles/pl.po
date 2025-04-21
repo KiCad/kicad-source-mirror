@@ -18,7 +18,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-04-18 03:09+0300\n"
-"PO-Revision-Date: 2025-04-20 20:28+0000\n"
+"PO-Revision-Date: 2025-04-21 10:42+0000\n"
 "Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/kicad/"
 "master-source/pl/>\n"
@@ -814,7 +814,7 @@ msgstr "Pokazuje warstwę użytkownika 13"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:80
 msgid "User.14"
-msgstr "Użytkownika 14"
+msgstr "Uużytkownika 14"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:80
 msgid "Show user defined layer 14"
@@ -8938,12 +8938,12 @@ msgstr ""
 "pomagać w usprawnianiu funkcji.\n"
 "Jeśli użytkownik zgodzi się na takie działanie, program KiCad będzie "
 "automatycznie wysyłał raporty gdy wystąpią awarie lub zdarzenia. \n"
-"Pliki projektów użytkownika, takie jak schematy lub PCB nie są przesyłane "
-"razem z takim zgłoszeniem."
+"Pliki projektów użytkownika, takie jak schematy lub PCB nie będą "
+"udostępniane."
 
 #: common/pgm_base.cpp:389
 msgid "Data Collection Opt In"
-msgstr "Weź udział w zbieraniu danych"
+msgstr "Zapisz się do zbieranie danych"
 
 #: common/pgm_base.cpp:391
 msgid "Opt In"
@@ -31434,7 +31434,7 @@ msgstr "Błąd pliku danych."
 
 #: pcb_calculator/dialogs/dialog_regulator_form_base.cpp:37
 msgid "Vref (min/typ/max):"
-msgstr "Vref (min/typ/max):"
+msgstr "Vref (min/typ/maks):"
 
 #: pcb_calculator/dialogs/dialog_regulator_form_base.cpp:56
 msgid "Volt"
