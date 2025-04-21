@@ -22,17 +22,17 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-04-18 03:09+0300\n"
-"PO-Revision-Date: 2025-03-24 22:43+0000\n"
+"PO-Revision-Date: 2025-04-21 10:42+0000\n"
 "Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
-"Language-Team: Russian <https://hosted.weblate.org/projects/kicad/master-"
-"source/ru/>\n"
+"Language-Team: Russian <https://hosted.weblate.org/projects/kicad/"
+"master-source/ru/>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 5.11-dev\n"
+"X-Generator: Weblate 5.11.1-dev\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-Basepath: ../../kicad\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -4439,7 +4439,7 @@ msgstr "минут"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:65
 msgid "Git Commit Data"
-msgstr "Закоммитить данные в Git"
+msgstr "Данные коммита Git"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:78
 msgid "Use default values"
@@ -5849,8 +5849,8 @@ msgid ""
 "When the KiCad API is enabled, plugins and other software running on this "
 "computer can connect to KiCad."
 msgstr ""
-"Когда API KiCad включён, модули и другое программное обеспечение, запущенное "
-"на этом компьютере, могут подключаться к KiCad."
+"Когда API KiCad включён, плагины и другое программное обеспечение, "
+"запущенное на этом компьютере, могут подключаться к KiCad."
 
 #: common/dialogs/panel_plugin_settings_base.cpp:27 kicad/pcm/pcm.cpp:781
 msgid "Enable KiCad API"
@@ -5887,7 +5887,7 @@ msgstr "Определить автоматически"
 #: common/dialogs/panel_plugin_settings_base.cpp:58
 msgid ""
 "No Python interpreter chosen; external Python plugins will not be available"
-msgstr "Интерпретатор Python не выбран; внешние модули Python будут недоступны"
+msgstr "Интерпретатор Python не выбран; внешние плагины Python будут недоступны"
 
 #: common/dialogs/panel_plugin_settings_base.cpp:60
 msgid "Python interpreter status"
@@ -6640,7 +6640,7 @@ msgstr "Редактор печатных плат"
 
 #: common/eda_base_frame.cpp:1337 common/eda_base_frame.cpp:1413
 msgid "Plugins"
-msgstr "Модули"
+msgstr "Плагины"
 
 #: common/eda_base_frame.cpp:1348
 msgid "Realtime Renderer"
@@ -16690,7 +16690,7 @@ msgstr "Показывать рабочие токи"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:128
 msgid "Show pin alternate mode indicator icons"
-msgstr "Показать значки индикаторов альтернативного режима работы контактов"
+msgstr "Показать индикаторы альтернативных режимов выводов"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:131
 msgid "Show page limi&ts"
@@ -16723,15 +16723,15 @@ msgstr "Толщина подсветки:"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:186
 msgid "Highlight netclass colors"
-msgstr "Выделите цвета нетклассов"
+msgstr "Подсветить цвета классов цепей"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:194
 msgid "Color highlight thickness:"
-msgstr "Толщина цветового блика:"
+msgstr "Толщина подсветки цветом:"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:202
 msgid "Color highlight opacity:"
-msgstr "Непрозрачность выделения цвета:"
+msgstr "Непрозрачность подсветки цветом:"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:33
 msgid "Line drawing mode:"
@@ -17337,7 +17337,7 @@ msgstr "Общие параметры редактирования"
 
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:147
 msgid "Keep pins attached when dragging edges"
-msgstr "Держите булавки при перетаскивании краев"
+msgstr "Перетаскивать выводы вместе с краями"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:486
 #, c-format
@@ -25122,7 +25122,7 @@ msgstr "Имя файла SVG"
 
 #: eeschema/tools/symbol_editor_drawing_tools.cpp:295
 msgid "Place Pin"
-msgstr "Место для булавки"
+msgstr "Разместить вывод"
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:470
 #: pcbnew/tools/edit_tool.cpp:2665
@@ -25166,7 +25166,7 @@ msgstr "Эта позиция уже занята другим выводом и
 
 #: eeschema/tools/symbol_editor_pin_tool.cpp:243
 msgid "Place Pin Anyway"
-msgstr "Разместить вывод"
+msgstr "Все равно разместить вывод"
 
 #: eeschema/tools/symbol_editor_pin_tool.cpp:459
 msgid "Repeat Pin"
