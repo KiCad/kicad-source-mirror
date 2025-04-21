@@ -510,9 +510,7 @@ bool EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, BOARD_COMMIT* aCommit
                     bboxMovement = VECTOR2D();
 
                     for( EDA_ITEM* item : sel_items )
-                    {
                         originalBBox.Merge( item->ViewBBox() );
-                    }
 
                     updateBBox = false;
                 }
@@ -530,7 +528,7 @@ bool EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, BOARD_COMMIT* aCommit
                 bboxMovement += movement;
 
                 // Drag items to the current cursor position
-                for( EDA_ITEM* item : sel_items )
+                for( BOARD_ITEM* item : sel_items )
                 {
                     // Don't double move child items.
                     if( !item->GetParent() || !item->GetParent()->IsSelected() )
@@ -564,7 +562,7 @@ bool EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, BOARD_COMMIT* aCommit
 
                 m_dragging = true;
 
-                for( EDA_ITEM* item : selection )
+                for( BOARD_ITEM* item : sel_items )
                 {
                     if( item->GetParent() && item->GetParent()->IsSelected() )
                         continue;
@@ -588,7 +586,7 @@ bool EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, BOARD_COMMIT* aCommit
                         if( item->Type() == PCB_SHAPE_T )
                             static_cast<PCB_SHAPE*>( item )->UpdateHatching();
 
-                        static_cast<BOARD_ITEM*>( item )->RunOnChildren(
+                        item->RunOnChildren(
                                 [&]( BOARD_ITEM* child )
                                 {
                                     child->SetFlags( IS_MOVING );
