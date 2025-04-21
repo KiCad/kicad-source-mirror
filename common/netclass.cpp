@@ -180,9 +180,6 @@ void NETCLASS::Serialize( google::protobuf::Any &aContainer ) const
     if( m_pcbColor != COLOR4D::UNSPECIFIED )
         PackColor( *board->mutable_color(), m_pcbColor );
 
-    if( HasDelayProfile() )
-        board->set_delay_profile( m_DelayProfile );
-
     project::NetClassSchematicSettings* schematic = nc.mutable_schematic();
 
     if( m_wireWidth )
@@ -248,9 +245,6 @@ bool NETCLASS::Deserialize( const google::protobuf::Any &aContainer )
 
     if( nc.board().has_color() )
         m_pcbColor = UnpackColor( nc.board().color() );
-
-    if( nc.board().has_delay_profile() )
-        m_DelayProfile = nc.board().delay_profile();
 
     if( nc.schematic().has_wire_width() )
         m_wireWidth = nc.schematic().wire_width().value_nm();

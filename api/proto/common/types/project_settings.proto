@@ -49,9 +49,6 @@ message NetClassBoardSettings
   optional kiapi.board.types.PadStack microvia_stack = 7;
 
   optional kiapi.common.types.Color color = 8;
-
-  // Since: 10.0.0
-  optional string delay_profile = 9;
 }
 
 message NetClassSchematicSettings
