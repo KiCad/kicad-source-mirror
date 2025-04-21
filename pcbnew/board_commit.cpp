@@ -38,6 +38,7 @@
 #include <tools/pcb_tool_base.h>
 #include <tools/pcb_actions.h>
 #include <connectivity/connectivity_data.h>
+#include <connectivity/connectivity_algo.h>
 #include <teardrop/teardrop.h>
 
 #include <functional>
@@ -767,6 +768,18 @@ void BOARD_COMMIT::Revert()
             itemsChanged.push_back( boardItem );
 
             updateComponentClasses( boardItem );
+
+#if 1  // !!!!!!!!!!!!! Temporary debugging code
+            if( BOARD_CONNECTED_ITEM* bci = dynamic_cast<BOARD_CONNECTED_ITEM*>( entry.m_copy ) )
+                wxASSERT( !connectivity->GetConnectivityAlgo()->ItemExists( bci ) );
+
+            static_cast<BOARD_ITEM*>( entry.m_copy )->RunOnChildren(
+                    [&]( BOARD_ITEM* child )
+                    {
+                        if( BOARD_CONNECTED_ITEM* bci = dynamic_cast<BOARD_CONNECTED_ITEM*>( child ) )
+                            wxASSERT( !connectivity->GetConnectivityAlgo()->ItemExists( bci ) );
+                    }, RECURSE_MODE::RECURSE );
+#endif
 
             delete entry.m_copy;
             break;
