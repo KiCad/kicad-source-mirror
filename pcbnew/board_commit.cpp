@@ -751,16 +751,6 @@ void BOARD_COMMIT::Revert()
             BOARD_ITEM* boardItemCopy = static_cast<BOARD_ITEM*>( entry.m_copy );
             boardItem->SwapItemData( boardItemCopy );
 
-            if( PCB_GROUP* group = dynamic_cast<PCB_GROUP*>( boardItem ) )
-            {
-                group->RunOnChildren(
-                        [&]( BOARD_ITEM* child )
-                        {
-                            child->SetParentGroup( group );
-                        },
-                        RECURSE_MODE::NO_RECURSE );
-            }
-
             view->Add( boardItem );
             connectivity->Add( boardItem );
             itemsChanged.push_back( boardItem );

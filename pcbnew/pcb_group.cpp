@@ -264,8 +264,23 @@ PCB_GROUP* PCB_GROUP::DeepDuplicate() const
 void PCB_GROUP::swapData( BOARD_ITEM* aImage )
 {
     assert( aImage->Type() == PCB_GROUP_T );
+    PCB_GROUP* image = static_cast<PCB_GROUP*>( aImage );
 
-    std::swap( *( (PCB_GROUP*) this ), *( (PCB_GROUP*) aImage ) );
+    std::swap( *this, *image );
+
+    RunOnChildren(
+            [&]( BOARD_ITEM* child )
+            {
+                child->SetParentGroup( this );
+            },
+            RECURSE_MODE::NO_RECURSE );
+
+    image->RunOnChildren(
+            [&]( BOARD_ITEM* child )
+            {
+                child->SetParentGroup( image );
+            },
+            RECURSE_MODE::NO_RECURSE );
 }
 
 
