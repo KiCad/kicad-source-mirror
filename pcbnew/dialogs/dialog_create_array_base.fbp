@@ -4445,7 +4445,7 @@
             <object class="sizeritem" expanded="true">
               <property name="border">5</property>
               <property name="flag">wxEXPAND | wxALL</property>
-              <property name="proportion">1</property>
+              <property name="proportion">0</property>
               <object class="wxPanel" expanded="true">
                 <property name="BottomDockable">1</property>
                 <property name="LeftDockable">1</property>
@@ -4505,7 +4505,7 @@
                   <property name="permission">none</property>
                   <object class="sizeritem" expanded="true">
                     <property name="border">5</property>
-                    <property name="flag">wxEXPAND | wxALL</property>
+                    <property name="flag">wxALL|wxEXPAND</property>
                     <property name="proportion">0</property>
                     <object class="wxPanel" expanded="true">
                       <property name="BottomDockable">1</property>
@@ -4758,7 +4758,7 @@
                       <property name="window_extra_style"></property>
                       <property name="window_name"></property>
                       <property name="window_style">wxTAB_TRAVERSAL</property>
-                      <object class="wxStaticBoxSizer" expanded="true">
+                      <object class="wxStaticBoxSizer" expanded="false">
                         <property name="id">wxID_ANY</property>
                         <property name="label">Footprint Annotation</property>
                         <property name="minimum_size"></property>

@@ -484,7 +484,7 @@ DIALOG_CREATE_ARRAY_BASE::DIALOG_CREATE_ARRAY_BASE( wxWindow* parent, wxWindowID
 	m_itemSourcePanel->SetSizer( sbSizerDuplicateOrArrange );
 	m_itemSourcePanel->Layout();
 	sbSizerDuplicateOrArrange->Fit( m_itemSourcePanel );
-	bSizer8->Add( m_itemSourcePanel, 0, wxEXPAND | wxALL, 5 );
+	bSizer8->Add( m_itemSourcePanel, 0, wxALL|wxEXPAND, 5 );
 
 	m_footprintReannotatePanel = new wxPanel( m_optionsPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxStaticBoxSizer* sbSizerFootprintAnnotation;
@@ -509,7 +509,7 @@ DIALOG_CREATE_ARRAY_BASE::DIALOG_CREATE_ARRAY_BASE( wxWindow* parent, wxWindowID
 	m_optionsPanel->SetSizer( bSizer8 );
 	m_optionsPanel->Layout();
 	bSizer8->Fit( m_optionsPanel );
-	bSizer7->Add( m_optionsPanel, 1, wxEXPAND | wxALL, 5 );
+	bSizer7->Add( m_optionsPanel, 0, wxEXPAND | wxALL, 5 );
 
 
 	bMainSizer->Add( bSizer7, 1, wxEXPAND, 5 );
