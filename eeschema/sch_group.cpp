@@ -250,8 +250,23 @@ SCH_GROUP* SCH_GROUP::DeepDuplicate() const
 void SCH_GROUP::swapData( SCH_ITEM* aImage )
 {
     assert( aImage->Type() == SCH_GROUP_T );
+    SCH_GROUP* image = static_cast<SCH_GROUP*>( aImage );
 
     std::swap( *( (SCH_GROUP*) this ), *( (SCH_GROUP*) aImage ) );
+
+    RunOnChildren(
+            [&]( SCH_ITEM* child )
+            {
+                child->SetParentGroup( this );
+            },
+            RECURSE_MODE::NO_RECURSE );
+
+    image->RunOnChildren(
+            [&]( SCH_ITEM* child )
+            {
+                child->SetParentGroup( image );
+            },
+            RECURSE_MODE::NO_RECURSE );
 }
 
 
