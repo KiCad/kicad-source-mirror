@@ -95,9 +95,12 @@ DRC_TEST_PROVIDER_CLEARANCE_BASE::GetGraphicsHandler( const std::vector<PCB_SHAP
 }
 
 
-void DRC_TEST_PROVIDER_CLEARANCE_BASE::ReportAndShowPathCuToCu(
-        std::shared_ptr<DRC_ITEM>& aDrce, const VECTOR2I& aMarkerPos, int aMarkerLayer,
-        const BOARD_ITEM* aItem1, const BOARD_ITEM* aItem2, PCB_LAYER_ID layer, int aDistance )
+void DRC_TEST_PROVIDER_CLEARANCE_BASE::ReportAndShowPathCuToCu( std::shared_ptr<DRC_ITEM>& aDrce,
+                                                                const VECTOR2I& aMarkerPos,
+                                                                int aMarkerLayer,
+                                                                const BOARD_ITEM* aItem1,
+                                                                const BOARD_ITEM* aItem2,
+                                                                PCB_LAYER_ID layer, int aDistance )
 {
     CREEPAGE_GRAPH graph( *m_board );
     std::shared_ptr<GRAPH_NODE> NetA = graph.AddNodeVirtual();
@@ -127,8 +130,7 @@ void DRC_TEST_PROVIDER_CLEARANCE_BASE::ReportAndShowPathCuToCu(
     if( minGc )
     {
         PATH_CONNECTION           pc = minGc->m_path;
-        DRC_CUSTOM_MARKER_HANDLER handler =
-                GetGraphicsHandler( minGc->GetShapes(), pc.a1, pc.a2, aDistance );
+        DRC_CUSTOM_MARKER_HANDLER handler = GetGraphicsHandler( minGc->GetShapes(), pc.a1, pc.a2, aDistance );
         reportViolation( aDrce, aMarkerPos, aMarkerLayer, &handler );
     }
     else
