@@ -1216,16 +1216,15 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testGraphicClearances( )
 
 void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testZonesToZones()
 {
-    bool           testClearance = !m_drcEngine->IsErrorLimitExceeded( DRCE_CLEARANCE );
-    bool           testIntersects = !m_drcEngine->IsErrorLimitExceeded( DRCE_ZONES_INTERSECT );
-    DRC_CONSTRAINT constraint;
+    bool testClearance = !m_drcEngine->IsErrorLimitExceeded( DRCE_CLEARANCE );
+    bool testIntersects = !m_drcEngine->IsErrorLimitExceeded( DRCE_ZONES_INTERSECT );
 
     std::vector<std::map<PCB_LAYER_ID, std::vector<SEG>>> poly_segments;
     poly_segments.resize( m_board->m_DRCCopperZones.size() );
 
     // Contains the index for zoneA, zoneB, the conflict point, the actual clearance, the
-    // required clearance, and the layer
-    using report_data = std::tuple<int, int, VECTOR2I, int, int, PCB_LAYER_ID>;
+    // constraint, and the layer
+    using report_data = std::tuple<int, int, VECTOR2I, int, DRC_CONSTRAINT, PCB_LAYER_ID>;
 
     std::vector<std::future<report_data>> futures;
     thread_pool&                          tp = GetKiCadThreadPool();
@@ -1233,72 +1232,79 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testZonesToZones()
 
     auto checkZones =
             [this, testClearance, testIntersects, &poly_segments, &done]
-            ( int zoneA, int zoneB, int clearance, PCB_LAYER_ID layer ) -> report_data
+            ( int zoneA_idx, int zoneB_idx, bool sameNet, PCB_LAYER_ID layer ) -> report_data
             {
-                // Iterate through all the segments of refSmoothedPoly
-                std::map<VECTOR2I, int> conflictPoints;
+                ZONE*    zoneA = m_board->m_DRCCopperZones[zoneA_idx];
+                ZONE*    zoneB = m_board->m_DRCCopperZones[zoneB_idx];
+                int      actual = 0;
+                VECTOR2I pt;
 
-                std::vector<SEG>& refSegments = poly_segments[zoneA][layer];
-                std::vector<SEG>& testSegments = poly_segments[zoneB][layer];
-                bool reported = false;
-                auto invalid_result = std::make_tuple( -1, -1, VECTOR2I(), 0, 0, F_Cu );
-
-                for( SEG& refSegment : refSegments )
+                if( sameNet && testIntersects )
                 {
-                    int ax1 = refSegment.A.x;
-                    int ay1 = refSegment.A.y;
-                    int ax2 = refSegment.B.x;
-                    int ay2 = refSegment.B.y;
-
-                    // Iterate through all the segments in smoothed_polys[ia2]
-                    for( SEG& testSegment : testSegments )
+                    if( zoneA->Outline()->Collide( zoneB->Outline(), 0, &actual, &pt ) )
                     {
-                        // Build test segment
-                        VECTOR2I pt;
+                        done.fetch_add( 1 );
+                        return std::make_tuple( zoneA_idx, zoneB_idx, pt, 0, DRC_CONSTRAINT(), layer );
+                    }
+                }
+                else if( !sameNet && testClearance )
+                {
+                    DRC_CONSTRAINT constraint = m_drcEngine->EvalRules( CLEARANCE_CONSTRAINT,
+                                                                        zoneA, zoneB, layer );
+                    int            clearance = constraint.GetValue().Min();
 
-                        int bx1 = testSegment.A.x;
-                        int by1 = testSegment.A.y;
-                        int bx2 = testSegment.B.x;
-                        int by2 = testSegment.B.y;
+                    if( constraint.GetSeverity() != RPT_SEVERITY_IGNORE && clearance > 0 )
+                    {
+                        std::map<VECTOR2I, int> conflictPoints;
 
-                        // We have ensured that the 'A' segment starts before the 'B' segment,
-                        // so if the 'A' segment ends before the 'B' segment starts, we can skip
-                        // to the next 'A'
-                        if( ax2 < bx1 )
-                            break;
+                        std::vector<SEG>& refSegments = poly_segments[zoneA_idx][layer];
+                        std::vector<SEG>& testSegments = poly_segments[zoneB_idx][layer];
 
-                        int d = GetClearanceBetweenSegments( bx1, by1, bx2, by2, 0,
-                                                             ax1, ay1, ax2, ay2, 0,
-                                                             clearance, &pt.x, &pt.y );
-
-                        if( d < clearance )
+                        // Iterate through all the segments in zoneA
+                        for( SEG& refSegment : refSegments )
                         {
-                            if( d == 0 && testIntersects )
-                                reported = true;
-                            else if( testClearance )
-                                reported = true;
+                            int ax1 = refSegment.A.x;
+                            int ay1 = refSegment.A.y;
+                            int ax2 = refSegment.B.x;
+                            int ay2 = refSegment.B.y;
 
-                            if( reported )
+                            // Iterate through all the segments in zoneB
+                            for( SEG& testSegment : testSegments )
                             {
-                                done.fetch_add( 1 );
-                                return std::make_tuple( zoneA, zoneB, pt, d, clearance, layer );
+                                // Build test segment
+                                int bx1 = testSegment.A.x;
+                                int by1 = testSegment.A.y;
+                                int bx2 = testSegment.B.x;
+                                int by2 = testSegment.B.y;
+
+                                // We have ensured that the 'A' segment starts before the 'B' segment,
+                                // so if the 'A' segment ends before the 'B' segment starts, we can skip
+                                // to the next 'A'
+                                if( ax2 < bx1 )
+                                    break;
+
+                                actual = GetClearanceBetweenSegments( bx1, by1, bx2, by2, 0,
+                                                                      ax1, ay1, ax2, ay2, 0,
+                                                                      clearance, &pt.x, &pt.y );
+
+                                if( actual < clearance )
+                                {
+                                    done.fetch_add( 1 );
+                                    return std::make_tuple( zoneA_idx, zoneB_idx, pt, actual, constraint,
+                                                            layer );
+                                }
                             }
                         }
-
-                        if( m_drcEngine->IsCancelled() )
-                            return invalid_result;
                     }
                 }
 
                 done.fetch_add( 1 );
-                return invalid_result;
+                return std::make_tuple( -1, -1, VECTOR2I(), 0, DRC_CONSTRAINT(), F_Cu );
             };
 
 
     for( PCB_LAYER_ID layer : LAYER_RANGE( F_Cu, B_Cu, m_board->GetCopperLayerCount() ) )
     {
-        int zone2zoneClearance;
-
         // Skip over layers not used on the current board
         if( !m_board->IsLayerEnabled( layer ) )
             continue;
@@ -1344,8 +1350,9 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testZonesToZones()
                 if( !zoneB->IsOnLayer( layer ) )
                     continue;
 
-                // Test for same net
-                if( zoneA->GetNetCode() == zoneB->GetNetCode() && zoneA->GetNetCode() >= 0 )
+                bool sameNet = zoneA->GetNetCode() == zoneB->GetNetCode() && zoneA->GetNetCode() >= 0;
+
+                if( sameNet && zoneA->GetAssignedPriority() != zoneB->GetAssignedPriority() )
                     continue;
 
                 // rule areas may overlap at will
@@ -1353,20 +1360,24 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testZonesToZones()
                     continue;
 
                 // Examine a candidate zone: compare zoneB to zoneA
-                SHAPE_POLY_SET* polyA = m_board->m_DRCCopperZones[ia]->GetFill( layer );
-                SHAPE_POLY_SET* polyB = m_board->m_DRCCopperZones[ia2]->GetFill( layer );
+                SHAPE_POLY_SET* polyA = nullptr;
+                SHAPE_POLY_SET* polyB = nullptr;
+
+                if( sameNet )
+                {
+                    polyA = zoneA->Outline();
+                    polyB = zoneB->Outline();
+                }
+                else
+                {
+                    polyA = zoneA->GetFill( layer );
+                    polyB = zoneB->GetFill( layer );
+                }
 
                 if( !polyA->BBoxFromCaches().Intersects( polyB->BBoxFromCaches() ) )
                     continue;
 
-                // Get clearance used in zone to zone test.
-                constraint = m_drcEngine->EvalRules( CLEARANCE_CONSTRAINT, zoneA, zoneB, layer );
-                zone2zoneClearance = constraint.GetValue().Min();
-
-                if( constraint.GetSeverity() == RPT_SEVERITY_IGNORE || zone2zoneClearance <= 0 )
-                    continue;
-
-                futures.push_back( tp.submit( checkZones, ia, ia2, zone2zoneClearance, layer ) );
+                futures.push_back( tp.submit( checkZones, ia, ia2, sameNet, layer ) );
             }
         }
     }
@@ -1391,39 +1402,38 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testZonesToZones()
 
             if( result == std::future_status::ready )
             {
-                report_data  data = task.get();
-                int          zoneA_idx = std::get<0>( data );
-                int          zoneB_idx = std::get<1>( data );
-                VECTOR2I     pt = std::get<2>( data );
-                int          actual = std::get<3>( data );
-                int          required = std::get<4>( data );
-                PCB_LAYER_ID layer = std::get<5>( data );
+                report_data    data = task.get();
+                int            zoneA_idx = std::get<0>( data );
+                int            zoneB_idx = std::get<1>( data );
+                VECTOR2I       pt = std::get<2>( data );
+                int            actual = std::get<3>( data );
+                DRC_CONSTRAINT constraint = std::get<4>( data );
+                PCB_LAYER_ID   layer = std::get<5>( data );
 
                 if( zoneA_idx >= 0 )
                 {
                     ZONE* zoneA = m_board->m_DRCCopperZones[zoneA_idx];
                     ZONE* zoneB = m_board->m_DRCCopperZones[zoneB_idx];
 
-                    constraint = m_drcEngine->EvalRules( CLEARANCE_CONSTRAINT, zoneA, zoneB, layer );
                     std::shared_ptr<DRC_ITEM> drce;
 
-                    if( actual <= 0 && testIntersects )
+                    if( constraint.IsNull() )
                     {
                         drce = DRC_ITEM::Create( DRCE_ZONES_INTERSECT );
+                        wxString msg = _( "(intersecting zones must have distinct priorities)" );
+                        drce->SetErrorMessage( drce->GetErrorText() + wxS( " " ) + msg );
+                        drce->SetItems( zoneA, zoneB );
+                        reportViolation( drce, pt, layer );
                     }
-                    else if( testClearance )
+                    else
                     {
                         drce = DRC_ITEM::Create( DRCE_CLEARANCE );
                         wxString msg = formatMsg( _( "(%s clearance %s; actual %s)" ),
                                                   constraint.GetName(),
-                                                  required,
+                                                  constraint.GetValue().Min(),
                                                   std::max( actual, 0 ) );
 
                         drce->SetErrorMessage( drce->GetErrorText() + wxS( " " ) + msg );
-                    }
-
-                    if( drce )
-                    {
                         drce->SetItems( zoneA, zoneB );
                         drce->SetViolatingRule( constraint.GetParentRule() );
                         ReportAndShowPathCuToCu( drce, pt, layer, zoneA, zoneB, layer, actual );

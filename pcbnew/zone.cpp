@@ -360,8 +360,7 @@ bool ZONE::Deserialize( const google::protobuf::Any& aContainer )
 
         m_hatchThickness = cu.hatch_settings().thickness().value_nm();
         m_hatchGap = cu.hatch_settings().gap().value_nm();
-        m_hatchOrientation =
-                EDA_ANGLE( cu.hatch_settings().orientation().value_degrees(), DEGREES_T );
+        m_hatchOrientation = EDA_ANGLE( cu.hatch_settings().orientation().value_degrees(), DEGREES_T );
         m_hatchSmoothingValue = cu.hatch_settings().hatch_smoothing_ratio();
         m_hatchHoleMinArea = cu.hatch_settings().hatch_hole_min_area_ratio();
 
@@ -1104,11 +1103,43 @@ wxString ZONE::GetItemDescription( UNITS_PROVIDER* aUnitsProvider, bool aFull ) 
     else
     {
         if( GetIsRuleArea() )
-            return wxString::Format( _( "Rule Area %s" ), layerDesc );
+        {
+            if( GetZoneName().IsEmpty() )
+            {
+                return wxString::Format( _( "Rule Area %s" ),
+                                         layerDesc );
+            }
+            else
+            {
+                return wxString::Format( _( "Rule Area '%s' %s" ),
+                                         GetZoneName(),
+                                         layerDesc );
+            }
+        }
         else if( IsTeardropArea() )
-            return wxString::Format( _( "Teardrop %s %s" ), GetNetnameMsg(), layerDesc );
+        {
+            return wxString::Format( _( "Teardrop %s %s" ),
+                                     GetNetnameMsg(),
+                                     layerDesc );
+        }
         else
-            return wxString::Format( _( "Zone %s %s" ), GetNetnameMsg(), layerDesc );
+        {
+            if( GetZoneName().IsEmpty() )
+            {
+                return wxString::Format( _( "Zone %s %s, priority %d" ),
+                                         GetNetnameMsg(),
+                                         layerDesc,
+                                         GetAssignedPriority() );
+            }
+            else
+            {
+                return wxString::Format( _( "Zone '%s' %s %s, priority %d" ),
+                                         GetZoneName(),
+                                         GetNetnameMsg(),
+                                         layerDesc,
+                                         GetAssignedPriority() );
+            }
+        }
     }
 }
 
@@ -1122,10 +1153,8 @@ int ZONE::GetBorderHatchPitch() const
 void ZONE::SetBorderDisplayStyle( ZONE_BORDER_DISPLAY_STYLE aBorderHatchStyle,
                                   int aBorderHatchPitch, bool aRebuildBorderHatch )
 {
-    aBorderHatchPitch = std::max( aBorderHatchPitch,
-                                  pcbIUScale.mmToIU( ZONE_BORDER_HATCH_MINDIST_MM ) );
-    aBorderHatchPitch = std::min( aBorderHatchPitch,
-                                  pcbIUScale.mmToIU( ZONE_BORDER_HATCH_MAXDIST_MM ) );
+    aBorderHatchPitch = std::max( aBorderHatchPitch, pcbIUScale.mmToIU( ZONE_BORDER_HATCH_MINDIST_MM ) );
+    aBorderHatchPitch = std::min( aBorderHatchPitch, pcbIUScale.mmToIU( ZONE_BORDER_HATCH_MAXDIST_MM ) );
     SetBorderHatchPitch( aBorderHatchPitch );
     m_borderStyle = aBorderHatchStyle;
 
@@ -1870,9 +1899,8 @@ static struct ZONE_DESC
         if( rapstMap.Choices().GetCount() == 0 )
         {
             rapstMap.Undefined( RULE_AREA_PLACEMENT_SOURCE_TYPE::SHEETNAME );
-            rapstMap.Map( RULE_AREA_PLACEMENT_SOURCE_TYPE::SHEETNAME, _HKI( "Sheet Name" ) )
-                    .Map( RULE_AREA_PLACEMENT_SOURCE_TYPE::COMPONENT_CLASS,
-                          _HKI( "Component Class" ) );
+            rapstMap.Map( RULE_AREA_PLACEMENT_SOURCE_TYPE::SHEETNAME,       _HKI( "Sheet Name" ) )
+                    .Map( RULE_AREA_PLACEMENT_SOURCE_TYPE::COMPONENT_CLASS, _HKI( "Component Class" ) );
         }
 
         PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
@@ -2095,8 +2123,7 @@ static struct ZONE_DESC
                     PROPERTY_DISPLAY::PT_SIZE );
         minWidth->SetAvailableFunc( isCopperZone );
         constexpr int minMinWidth = pcbIUScale.mmToIU( ZONE_THICKNESS_MIN_VALUE_MM );
-        minWidth->SetValidator( PROPERTY_VALIDATORS::RangeIntValidator<minMinWidth,
-                                                                       INT_MAX> );
+        minWidth->SetValidator( PROPERTY_VALIDATORS::RangeIntValidator<minMinWidth, INT_MAX> );
 
         auto padConnections = new PROPERTY_ENUM<ZONE, ZONE_CONNECTION>( _HKI( "Pad Connections" ),
                     &ZONE::SetPadConnection, &ZONE::GetPadConnection );
