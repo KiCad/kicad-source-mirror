@@ -43,7 +43,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-04-21 13:43+0300\n"
 "PO-Revision-Date: 2025-04-22 07:50+0000\n"
-"Last-Translator: Hubert Hu <qinghan.hu@gmail.com>\n"
+"Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/kicad/master-source/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -3086,9 +3086,9 @@ msgstr ""
 "用此对话框。"
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:30
-#, fuzzy, c-format
+#, c-format
 msgid "The selection contains %zu locked items."
-msgstr "选区中包含 %lu 个锁定项目。"
+msgstr "选区包含 %zu 个锁定项目。"
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:34
 msgid "These items will be skipped unless you override the locks."
@@ -10443,9 +10443,8 @@ msgid "Search Hidden Fields"
 msgstr "搜索隐藏的字段"
 
 #: common/widgets/search_pane.cpp:54
-#, fuzzy
 msgid "Search Metadata"
-msgstr "元数据"
+msgstr "搜索元数据"
 
 #: common/widgets/search_pane.cpp:54
 msgid "Search library links, descriptions and keywords"
@@ -30840,9 +30839,8 @@ msgstr "有效 %s:"
 #: pcb_calculator/transline_ident.cpp:163
 #: pcb_calculator/transline_ident.cpp:198
 #: pcb_calculator/transline_ident.cpp:357
-#, fuzzy
 msgid "Unit propagation delay:"
-msgstr "传播延迟"
+msgstr "单元传播延迟:"
 
 #: pcb_calculator/transline_ident.cpp:121
 #: pcb_calculator/transline_ident.cpp:164
@@ -31045,14 +31043,12 @@ msgid "Effective %s (odd):"
 msgstr "有效 %s (奇模):"
 
 #: pcb_calculator/transline_ident.cpp:308
-#, fuzzy
 msgid "Unit propagation delay (even):"
-msgstr "传播延迟"
+msgstr "单元传播延迟 (偶):"
 
 #: pcb_calculator/transline_ident.cpp:309
-#, fuzzy
 msgid "Unit propagation delay (odd):"
-msgstr "传播延迟"
+msgstr "单元传播延迟 (奇):"
 
 #: pcb_calculator/transline_ident.cpp:310
 msgid "Conductor losses (even):"
@@ -35838,9 +35834,8 @@ msgid "Footprint graphic items"
 msgstr "封装图形项"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:59
-#, fuzzy
 msgid "Footprint text items"
-msgstr "其他封装文本项目"
+msgstr "封装文本项目"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:60
 msgid "Footprint text items not associated with a field"
@@ -37655,9 +37650,8 @@ msgid "x"
 msgstr "x"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:71
-#, fuzzy
 msgid "Appearance preset:"
-msgstr "外观"
+msgstr "外观预设:"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:81
 msgid "Background style:"
@@ -37729,7 +37723,6 @@ msgid "°"
 msgstr "°"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:254
-#, fuzzy
 msgid "Lights Intensity"
 msgstr "光强"
 
@@ -37738,7 +37731,6 @@ msgid "Camera:"
 msgstr "相机:"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:303
-#, fuzzy
 msgid "Lights Position"
 msgstr "光源位置"
 
@@ -38283,9 +38275,8 @@ msgid "Track and Via Dimensions"
 msgstr "走线和过孔尺寸"
 
 #: pcbnew/dialogs/dialog_tuning_pattern_properties.cpp:56
-#, fuzzy
 msgid "Target Skew: "
-msgstr "目标 skew: %s"
+msgstr "目标 skew: "
 
 #: pcbnew/dialogs/dialog_tuning_pattern_properties.cpp:57
 #, fuzzy
@@ -38307,9 +38298,8 @@ msgid "(from %s)"
 msgstr "(来自 %s)"
 
 #: pcbnew/dialogs/dialog_tuning_pattern_properties_base.cpp:38
-#, fuzzy
 msgid "Target Length:"
-msgstr "目标长度"
+msgstr "目标长度:"
 
 #: pcbnew/dialogs/dialog_tuning_pattern_properties_base.cpp:58
 #, fuzzy
