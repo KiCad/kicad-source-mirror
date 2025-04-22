@@ -13,10 +13,10 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-04-21 13:43+0300\n"
-"PO-Revision-Date: 2025-04-19 09:05+0000\n"
+"PO-Revision-Date: 2025-04-23 08:01+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
-"Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/master-"
-"source/sv/>\n"
+"Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/"
+"master-source/sv/>\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -6994,9 +6994,8 @@ msgid "Font"
 msgstr "Typsnitt"
 
 #: common/eda_text.cpp:1367
-#, fuzzy
 msgid "Auto Thickness"
-msgstr "Bussbredd"
+msgstr "Automatisk textvikt"
 
 #: common/eda_text.cpp:1370 eeschema/sch_field.cpp:1606
 #: eeschema/sch_label.cpp:2299 eeschema/sch_tablecell.cpp:196
@@ -19860,13 +19859,12 @@ msgid "Expecting R0, R90, R18, R270, M0, M90, M180 or M270"
 msgstr "Förväntar R0, R90, R18, R270, M0, M90, M180 eller M270"
 
 #: eeschema/sch_io/ltspice/ltspice_schematic.cpp:494
-#, fuzzy
 msgid ""
 "Expecting LEFT, CENTER, RIGHT, TOP, BOTTOM, VLEFT, VRIGHT, VCENTER, VTOP, "
 "VBOTTOM or INVISIBLE"
 msgstr ""
-"Förväntar LEFT, CENTER, RIGHT, TOP, BOTTOM, VLEFT, VRIGHT, VCENTER, VTOP "
-"eller VBOTTOM"
+"Förväntar LEFT, CENTER, RIGHT, TOP, BOTTOM, VLEFT, VRIGHT, VCENTER, VTOP, "
+"VBOTTOM eller INVISIBLE"
 
 #: eeschema/sch_io/ltspice/ltspice_schematic.cpp:517
 msgid ""
@@ -31481,7 +31479,7 @@ msgstr "Effektiv %s:"
 #: pcb_calculator/transline_ident.cpp:357
 #, fuzzy
 msgid "Unit propagation delay:"
-msgstr "Utbredningsfördröjning"
+msgstr "Enhetsutbredningsfördröjning:"
 
 #: pcb_calculator/transline_ident.cpp:121
 #: pcb_calculator/transline_ident.cpp:164
@@ -31684,14 +31682,12 @@ msgid "Effective %s (odd):"
 msgstr "Effektiv %s (udda):"
 
 #: pcb_calculator/transline_ident.cpp:308
-#, fuzzy
 msgid "Unit propagation delay (even):"
-msgstr "Utbredningsfördröjning"
+msgstr "Enhetsutbredningsfördröjning (jämn):"
 
 #: pcb_calculator/transline_ident.cpp:309
-#, fuzzy
 msgid "Unit propagation delay (odd):"
-msgstr "Utbredningsfördröjning"
+msgstr "Enhetsutbredningsfördröjning (udda):"
 
 #: pcb_calculator/transline_ident.cpp:310
 msgid "Conductor losses (even):"
@@ -40482,21 +40478,19 @@ msgstr "Förinställda egenskaper för nya grafiska objekt och text"
 
 #: pcbnew/dialogs/panel_setup_time_domain_parameters.cpp:464
 msgid "No delay profiles to override"
-msgstr ""
+msgstr "Inga fördröjningsprofiler att åsidosätta"
 
 #: pcbnew/dialogs/panel_setup_time_domain_parameters.cpp:570
-#, fuzzy
 msgid "Tuning profile must have a name"
-msgstr "Längdjusteringsprofilen måste ha ett namn."
+msgstr "Längdjusteringsprofilen måste ha ett namn"
 
 #: pcbnew/dialogs/panel_setup_time_domain_parameters.cpp:579
-#, fuzzy
 msgid "Tuning profile name already in use"
-msgstr "Namnet för längdjusteringsprofilen används redan."
+msgstr "Namnet för längdjusteringsprofilen används redan"
 
 #: pcbnew/dialogs/panel_setup_time_domain_parameters.cpp:624
 msgid "Via override configuration is duplicated"
-msgstr ""
+msgstr "Duplicering av åsidosättningskonfiguration för via"
 
 #: pcbnew/dialogs/panel_setup_time_domain_parameters_base.cpp:31
 msgid "Delay Profiles"
@@ -42363,18 +42357,18 @@ msgid "** Face skipped **\n"
 msgstr "** Yta hoppades över **\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1980
-#, fuzzy, c-format
+#, c-format
 msgid "Subtracting holes for %s\n"
-msgstr "Bygg upp hål för %s\n"
+msgstr "Subtraherar hål för %s\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2023
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "\n"
 "** Got problems while cutting %s net '%s' **\n"
 msgstr ""
 "\n"
-"** Fick problem vid skärning av %s nummer %d **\n"
+"** Fick problem vid skärning av %s nät '%s' **\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2068
 msgid "shapes"
@@ -50129,36 +50123,32 @@ msgid "Displays tuning pattern properties dialog"
 msgstr "Visar dialogrutan för längdjusteringsmönsters egenskaper"
 
 #: pcbnew/tools/pcb_actions.cpp:2587
-#, fuzzy
 msgid "Show wizards selector"
-msgstr "ingen guide vald"
+msgstr "Visa guideväljare"
 
 #: pcbnew/tools/pcb_actions.cpp:2588
 msgid "Select wizard script to run"
 msgstr "Välj guiden manus att köra"
 
 #: pcbnew/tools/pcb_actions.cpp:2594
-#, fuzzy
 msgid "Reset wizard parameters"
-msgstr "Återställ parametrarna i guiden till standardvärden"
+msgstr "Återställ parametrarna i guiden"
 
 #: pcbnew/tools/pcb_actions.cpp:2595
 msgid "Reset wizard parameters to default"
 msgstr "Återställ parametrarna i guiden till standardvärden"
 
 #: pcbnew/tools/pcb_actions.cpp:2601
-#, fuzzy
 msgid "Select previous wizard page"
-msgstr "Välj sidan för tidigare parametrar"
+msgstr "Välj föregående sida i guiden"
 
 #: pcbnew/tools/pcb_actions.cpp:2602
 msgid "Select previous parameters page"
 msgstr "Välj sidan för tidigare parametrar"
 
 #: pcbnew/tools/pcb_actions.cpp:2608
-#, fuzzy
 msgid "Select next wizard page"
-msgstr "Välj nästa parametersida"
+msgstr "Välj nästa sida i guiden"
 
 #: pcbnew/tools/pcb_actions.cpp:2609
 msgid "Select next parameters page"
