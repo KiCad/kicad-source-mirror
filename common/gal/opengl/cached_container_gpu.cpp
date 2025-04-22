@@ -54,7 +54,7 @@ CACHED_CONTAINER_GPU::CACHED_CONTAINER_GPU( unsigned int aSize ) :
         m_isMapped( false ),
         m_glBufferHandle( -1 )
 {
-    m_useCopyBuffer = epoxy_has_gl_extension( "GL_ARB_copy_buffer" );
+    m_useCopyBuffer = GLEW_ARB_copy_buffer;
 
     wxString vendor( glGetString( GL_VENDOR ) );
 

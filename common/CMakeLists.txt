@@ -21,6 +21,9 @@ include_directories(
 # Get the GAL Target
 add_subdirectory( gal )
 
+# Only for win32 cross compilation using MXE
+add_compile_definitions( $<$<AND:$<BOOL:${WIN32}>,$<BOOL:${MSYS}>>:GLEW_STATIC> )
+
 
 # The build version string defaults to the value in the KiCadVersion.cmake file.
 # If being built inside a git repository, the git tag and commit hash are used to create

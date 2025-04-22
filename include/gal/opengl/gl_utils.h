@@ -24,7 +24,7 @@
 #ifndef GL_UTILS_H
 #define GL_UTILS_H
 
-#include <gal/opengl/kiepoxy.h> // Must be included first
+#include <gal/opengl/kiglew.h> // Must be included first
 #include <wx/glcanvas.h>
 #include <wx/utils.h>
 

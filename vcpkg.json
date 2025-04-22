@@ -19,7 +19,7 @@
     "boost-uuid",
     "cairo",
     "wxwidgets",
-    "libepoxy",
+    "glew",
     "curl",
     {
       "name": "gettext",

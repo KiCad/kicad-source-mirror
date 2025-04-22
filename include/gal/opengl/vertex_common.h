@@ -32,7 +32,7 @@
 #ifndef VERTEX_COMMON_H_
 #define VERTEX_COMMON_H_
 
-#include <gal/opengl/kiepoxy.h> // Must be included first
+#include <gal/opengl/kiglew.h>    // Must be included first
 
 #include <math/vector2d.h>
 

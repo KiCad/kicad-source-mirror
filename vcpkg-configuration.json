@@ -11,6 +11,7 @@
       "repository": "https://gitlab.com/kicad/packaging/kicad-vcpkg-registry.git",
       "baseline": "9c06375b6b62483d39ffe78e5fc2918365ee8ead",
       "packages": [
+        "glew",
         "python3",
         "opencascade",
         "wxpython",
