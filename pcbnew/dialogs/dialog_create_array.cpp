@@ -56,6 +56,8 @@ struct CREATE_ARRAY_DIALOG_ENTRIES
     long     m_GridStagger               = 1;
     bool     m_GridStaggerRows           = true;
     bool     m_GridPositionCentreOnItems = true;
+
+    bool     m_GridRenumberPads          = true;
     long     m_GridNumberingAxis         = 0;           // h then v
     bool     m_GridNumReverseAlt         = false;
     long     m_GridNumStartSet           = 1;           // use specified start
@@ -174,6 +176,7 @@ DIALOG_CREATE_ARRAY::DIALOG_CREATE_ARRAY( PCB_BASE_FRAME*                 aParen
 
     m_cfg_persister.Add( *m_rbCentreOnSource, s_arrayOptions.m_GridPositionCentreOnItems );
 
+    m_cfg_persister.Add( *m_cbRenumberPads, s_arrayOptions.m_GridRenumberPads );
     m_cfg_persister.Add( *m_radioBoxGridNumberingAxis, s_arrayOptions.m_GridNumberingAxis );
     m_cfg_persister.Add( *m_checkBoxGridReverseNumbering, s_arrayOptions.m_GridNumReverseAlt );
 
@@ -432,7 +435,7 @@ bool DIALOG_CREATE_ARRAY::TransferDataFromWindow()
         newGrid->m_horizontalThenVertical = m_radioBoxGridNumberingAxis->GetSelection() == 0;
         newGrid->m_reverseNumberingAlternate = m_checkBoxGridReverseNumbering->GetValue();
 
-        newGrid->SetShouldNumber( m_isFootprintEditor );
+        newGrid->SetShouldNumber( m_isFootprintEditor && m_cbRenumberPads->GetValue() );
 
         if( m_isFootprintEditor )
         {
@@ -563,9 +566,16 @@ void DIALOG_CREATE_ARRAY::setControlEnablement()
         m_gridPadNumberingPanel->Show( true );
         m_circularPadNumberingPanel->Show( true );
 
+        // In no pad re-numbering, everything is disabled
+        bool renumber_pads = m_cbRenumberPads->GetValue();
+
+        m_radioBoxGridNumberingAxis->Enable( renumber_pads );
+        m_checkBoxGridReverseNumbering->Enable( renumber_pads );
+        m_rbGridStartNumberingOpt->Enable( renumber_pads );
+
         // If we set the start number, we can set the other options,
         // otherwise it's a hardcoded linear array
-        const bool use_set_start_grid = m_rbGridStartNumberingOpt->GetSelection() == 1;
+        const bool use_set_start_grid = renumber_pads && m_rbGridStartNumberingOpt->GetSelection() == 1;
 
         m_radioBoxGridNumberingScheme->Enable( use_set_start_grid );
         m_labelPriAxisNumbering->Enable( use_set_start_grid );
@@ -580,12 +590,14 @@ void DIALOG_CREATE_ARRAY::setControlEnablement()
 
         // We can only set an offset if we're setting the start number
         m_labelGridNumberingOffset->Enable( use_set_start_grid );
+        m_labelGridNumberingStep->Enable( use_set_start_grid );
         m_entryGridPriNumberingOffset->Enable( use_set_start_grid );
+        m_entryGridPriNumberingStep->Enable( use_set_start_grid );
         m_entryGridSecNumberingOffset->Enable( use_set_start_grid && num2d );
         m_entryGridSecNumberingStep->Enable( use_set_start_grid && num2d );
 
         // disable the circular number offset in the same way
-        const bool use_set_start_circ = m_rbCircStartNumberingOpt->GetSelection() == 1;
+        const bool use_set_start_circ = renumber_pads && m_rbCircStartNumberingOpt->GetSelection() == 1;
         m_entryCircNumberingStart->Enable( use_set_start_circ );
     }
     else

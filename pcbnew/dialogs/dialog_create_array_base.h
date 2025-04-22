@@ -23,8 +23,8 @@ class TEXT_CTRL_EVAL;
 #include <wx/sizer.h>
 #include <wx/statbox.h>
 #include <wx/radiobut.h>
-#include <wx/radiobox.h>
 #include <wx/checkbox.h>
+#include <wx/radiobox.h>
 #include <wx/choice.h>
 #include <wx/panel.h>
 #include <wx/bitmap.h>
@@ -72,6 +72,7 @@ class DIALOG_CREATE_ARRAY_BASE : public DIALOG_SHIM
 		wxRadioButton* m_rbCentreOnSource;
 		wxPanel* m_gridPadNumberingPanel;
 		wxBoxSizer* m_gridPadNumberingSizer;
+		wxCheckBox* m_cbRenumberPads;
 		wxRadioBox* m_radioBoxGridNumberingAxis;
 		wxCheckBox* m_checkBoxGridReverseNumbering;
 		wxRadioBox* m_rbGridStartNumberingOpt;
