@@ -2694,44 +2694,27 @@ void OPENGL_GAL::init()
     // Check correct initialization from the constructor
     if( m_tesselator == nullptr )
         throw std::runtime_error( "Could not create the tesselator" );
-    GLenum err = glewInit();
-
-#ifdef KICAD_USE_EGL
-    // TODO: better way to check when EGL is ready (init fails at "getString(GL_VERSION)")
-    for( int i = 0; i < 10; i++ )
-    {
-        if( GLEW_OK == err )
-            break;
-
-        std::this_thread::sleep_for( std::chrono::milliseconds( 250 ) );
-        err = glewInit();
-    }
-
-#endif // KICAD_USE_EGL
 
     SetOpenGLInfo( (const char*) glGetString( GL_VENDOR ), (const char*) glGetString( GL_RENDERER ),
                    (const char*) glGetString( GL_VERSION ) );
 
-    if( GLEW_OK != err )
-        throw std::runtime_error( (const char*) glewGetErrorString( err ) );
-
     // Check the OpenGL version (minimum 2.1 is required)
-    if( !GLEW_VERSION_2_1 )
+    if( epoxy_gl_version() < 21 )
         throw std::runtime_error( "OpenGL 2.1 or higher is required!" );
 
 #if defined( __LINUX__ ) // calling enableGlDebug crashes opengl on some OS (OSX and some Windows)
 #ifdef DEBUG
-    if( GLEW_ARB_debug_output )
+    if( epoxy_has_gl_extension( "GL_ARB_debug_output" ) )
         enableGlDebug( true );
 #endif
 #endif
 
     // Framebuffers have to be supported
-    if( !GLEW_EXT_framebuffer_object )
+    if( !epoxy_has_gl_extension( "GL_EXT_framebuffer_object" ) )
         throw std::runtime_error( "Framebuffer objects are not supported!" );
 
     // Vertex buffer has to be supported
-    if( !GLEW_ARB_vertex_buffer_object )
+    if( !epoxy_has_gl_extension( "GL_ARB_vertex_buffer_object" ) )
         throw std::runtime_error( "Vertex buffer objects are not supported!" );
 
     // Prepare shaders

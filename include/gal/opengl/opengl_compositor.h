@@ -33,7 +33,7 @@
 #ifndef OPENGL_COMPOSITOR_H_
 #define OPENGL_COMPOSITOR_H_
 
-#include <gal/opengl/kiglew.h>    // Must be included first
+#include <gal/opengl/kiepoxy.h> // Must be included first
 
 #include <gal/compositor.h>
 #include <gal/opengl/antialiasing.h>

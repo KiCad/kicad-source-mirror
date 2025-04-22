@@ -29,7 +29,7 @@
 #ifndef SHADER_H_
 #define SHADER_H_
 
-#include <gal/opengl/kiglew.h>    // Must be included first
+#include <gal/opengl/kiepoxy.h> // Must be included first
 
 #include <math/vector2d.h>
 

@@ -27,7 +27,7 @@
  * 3d models that come in the original data from the files without any transformations.
  */
 
-#include <gal/opengl/kiglew.h>    // Must be included first
+#include <gal/opengl/kiepoxy.h> // Must be included first
 #include <iostream>
 #include "3d_rendering/opengl/3d_model.h"
 #include "eda_3d_model_viewer.h"
@@ -183,22 +183,16 @@ void EDA_3D_MODEL_VIEWER::Clear3DModel()
 
 void EDA_3D_MODEL_VIEWER::ogl_initialize()
 {
-    const GLenum err = glewInit();
-
-    if( GLEW_OK != err )
-    {
-        const wxString msgError = (const char*) glewGetErrorString( err );
-
-        wxLogMessage( msgError );
-    }
-    else
-    {
-        wxLogTrace( m_logTrace, wxT( "EDA_3D_MODEL_VIEWER::ogl_initialize Using GLEW version %s" ),
-                    From_UTF8( (char*) glewGetString( GLEW_VERSION ) ) );
-    }
+    // Check the OpenGL version (minimum 2.1 is required)
+    if( epoxy_gl_version() < 21 )
+        wxLogMessage( wxS( "OpenGL 2.1 or higher is required!" ) );
 
     SetOpenGLInfo( (const char*) glGetString( GL_VENDOR ), (const char*) glGetString( GL_RENDERER ),
                    (const char*) glGetString( GL_VERSION ) );
+
+    wxString version = From_UTF8( (char*) glGetString( GL_VERSION ) );
+
+    wxLogTrace( m_logTrace, wxS( "EDA_3D_MODEL_VIEWER::%s OpenGL version string %s." ), __WXFUNCTION__, version );
 
     glHint( GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST );
     glHint( GL_LINE_SMOOTH_HINT, GL_NICEST );
