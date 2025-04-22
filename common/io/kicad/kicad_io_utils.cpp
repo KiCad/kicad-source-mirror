@@ -172,7 +172,7 @@ void Prettify( std::string& aSource, bool aCompactSave )
                 while( ++seek != aSource.end() && isalpha( *seek ) )
                     token += *seek;
 
-                return token == "font" || token == "stroke" || token == "fill"
+                return token == "font" || token == "stroke" || token == "fill" || token == "teardrop"
                         || token == "offset" || token == "rotate" || token == "scale";
             };
 

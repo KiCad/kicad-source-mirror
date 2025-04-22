@@ -72,8 +72,6 @@ ZONE* TEARDROP_MANAGER::createTeardrop( TEARDROP_VARIANT aTeardropVariant,
     teardrop->SetMinThickness( pcbIUScale.mmToIU( 0.0254 ) );  // The minimum zone thickness
     teardrop->SetPadConnection( ZONE_CONNECTION::FULL );
     teardrop->SetIsFilled( false );
-    teardrop->SetZoneName( aTeardropVariant == TD_TYPE_PADVIA ? MAGIC_TEARDROP_PADVIA_NAME
-                                                              : MAGIC_TEARDROP_TRACK_NAME );
     teardrop->SetIslandRemovalMode( ISLAND_REMOVAL_MODE::NEVER );
     teardrop->SetBorderDisplayStyle( ZONE_BORDER_DISPLAY_STYLE::DIAGONAL_FULL,
                                      pcbIUScale.mmToIU( 0.1 ), true );

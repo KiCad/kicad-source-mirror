@@ -34,8 +34,6 @@
 #include <drc/drc_rtree.h>
 #include "teardrop_parameters.h"
 
-#define MAGIC_TEARDROP_PADVIA_NAME "$teardrop_padvia$"
-#define MAGIC_TEARDROP_TRACK_NAME "$teardrop_track$"
 
 // A class to store tracks grouped by layer and netcode
 class TRACK_BUFFER

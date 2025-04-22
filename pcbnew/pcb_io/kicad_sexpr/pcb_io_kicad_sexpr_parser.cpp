@@ -6872,7 +6872,10 @@ ZONE* PCB_IO_KICAD_SEXPR_PARSER::parseZONE( BOARD_ITEM_CONTAINER* aParent )
     std::map<PCB_LAYER_ID, std::vector<SEG>> legacySegs;
     PCB_LAYER_ID filledLayer;
     bool         addedFilledPolygons = false;
-    bool         isStrokedFill = true;
+
+    // This hasn't been supported since V6 or so, but we only stopped writing out the token
+    // in V10.
+    bool isStrokedFill = m_requiredVersion < 20250210;
 
     std::unique_ptr<ZONE> zone = std::make_unique<ZONE>( aParent );
 
@@ -7473,9 +7476,8 @@ ZONE* PCB_IO_KICAD_SEXPR_PARSER::parseZONE( BOARD_ITEM_CONTAINER* aParent )
         {
             if( m_showLegacy5ZoneWarning )
             {
-                wxLogWarning(
-                        _( "Legacy zone fill strategy is not supported anymore.\nZone fills will "
-                           "be converted on best-effort basis." ) );
+                wxLogWarning( _( "Legacy zone fill strategy is not supported anymore.\n"
+                                 "Zone fills will be converted on best-effort basis." ) );
 
                 m_showLegacy5ZoneWarning = false;
             }

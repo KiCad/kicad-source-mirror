@@ -2541,9 +2541,10 @@ void PCB_IO_KICAD_SEXPR::format( const ZONE* aZone ) const
     else
         formatLayer( aZone->GetFirstLayer() );
 
-    KICAD_FORMAT::FormatUuid( m_out, aZone->m_Uuid );
+    if( !aZone->IsTeardropArea() )
+        KICAD_FORMAT::FormatUuid( m_out, aZone->m_Uuid );
 
-    if( !aZone->GetZoneName().empty() )
+    if( !aZone->GetZoneName().empty() && !aZone->IsTeardropArea() )
         m_out->Print( "(name %s)", m_out->Quotew( aZone->GetZoneName() ).c_str() );
 
     // Save the outline aux info
@@ -2565,13 +2566,12 @@ void PCB_IO_KICAD_SEXPR::format( const ZONE* aZone ) const
     if( aZone->GetAssignedPriority() > 0 )
         m_out->Print( "(priority %d)", aZone->GetAssignedPriority() );
 
-    // Add teardrop keywords in file: (attr (teardrop (type xxx)))where xxx is the teardrop type
+    // Add teardrop keywords in file: (attr (teardrop (type xxx))) where xxx is the teardrop type
     if( aZone->IsTeardropArea() )
     {
         m_out->Print( "(attr (teardrop (type %s)))",
-                      aZone->GetTeardropAreaType() == TEARDROP_TYPE::TD_VIAPAD
-                            ? "padvia"
-                            : "track_end" );
+                      aZone->GetTeardropAreaType() == TEARDROP_TYPE::TD_VIAPAD ? "padvia"
+                                                                               : "track_end" );
     }
 
     m_out->Print( "(connect_pads" );
@@ -2602,9 +2602,6 @@ void PCB_IO_KICAD_SEXPR::format( const ZONE* aZone ) const
 
     m_out->Print( "(min_thickness %s)",
                   formatInternalUnits( aZone->GetMinThickness() ).c_str() );
-
-    // We continue to write this for 3rd-party parsers, but we no longer read it (as of V7).
-    m_out->Print( "(filled_areas_thickness no)" );
 
     if( aZone->GetIsRuleArea() )
     {
@@ -2645,9 +2642,12 @@ void PCB_IO_KICAD_SEXPR::format( const ZONE* aZone ) const
     if( aZone->GetFillMode() == ZONE_FILL_MODE::HATCH_PATTERN )
         m_out->Print( "(mode hatch)" );
 
-    m_out->Print( "(thermal_gap %s) (thermal_bridge_width %s)",
-                  formatInternalUnits( aZone->GetThermalReliefGap() ).c_str(),
-                  formatInternalUnits( aZone->GetThermalReliefSpokeWidth() ).c_str() );
+    if( !aZone->IsTeardropArea() )
+    {
+        m_out->Print( "(thermal_gap %s) (thermal_bridge_width %s)",
+                      formatInternalUnits( aZone->GetThermalReliefGap() ).c_str(),
+                      formatInternalUnits( aZone->GetThermalReliefSpokeWidth() ).c_str() );
+    }
 
     if( aZone->GetCornerSmoothingType() != ZONE_SETTINGS::SMOOTHING_NONE )
     {
@@ -2670,10 +2670,12 @@ void PCB_IO_KICAD_SEXPR::format( const ZONE* aZone ) const
             m_out->Print( "(radius %s)", formatInternalUnits( aZone->GetCornerRadius() ).c_str() );
     }
 
-    if( aZone->GetIslandRemovalMode() != ISLAND_REMOVAL_MODE::ALWAYS )
+    m_out->Print( "(island_removal_mode %d)",
+                  static_cast<int>( aZone->GetIslandRemovalMode() ) );
+
+    if( aZone->GetIslandRemovalMode() == ISLAND_REMOVAL_MODE::AREA )
     {
-        m_out->Print( "(island_removal_mode %d) (island_area_min %s)",
-                      static_cast<int>( aZone->GetIslandRemovalMode() ),
+        m_out->Print( "(island_area_min %s)",
                       formatInternalUnits( aZone->GetMinIslandArea() / pcbIUScale.IU_PER_MM ).c_str() );
     }
 
