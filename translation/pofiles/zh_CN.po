@@ -42,7 +42,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-04-21 13:43+0300\n"
-"PO-Revision-Date: 2025-04-22 07:50+0000\n"
+"PO-Revision-Date: 2025-04-23 08:01+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/kicad/master-source/zh_Hans/>\n"
@@ -634,7 +634,7 @@ msgstr "显示 底层 '铜/表面' 处理颜色"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:57
 msgid "Adhesive"
-msgstr "Adhesive"
+msgstr "红胶"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:57
 msgid "Show adhesive"
@@ -642,7 +642,7 @@ msgstr "显示点胶层"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:58
 msgid "Solder Paste"
-msgstr "阻焊"
+msgstr "锡膏"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:58
 msgid "Show solder paste"
@@ -1216,9 +1216,8 @@ msgid "Show model bounding boxes"
 msgstr "显示模型边框"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:35
-#, fuzzy
 msgid "Show copper and tech layers thickness (slow)"
-msgstr "显示铜层和技术层的厚度 (非常慢)"
+msgstr "显示铜层和技术层的厚度 (慢)"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:38
 msgid "Highlight items on rollover"
@@ -1726,7 +1725,7 @@ msgstr "mm"
 #: bitmap2component/bitmap2cmp_panel.cpp:48
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:109
 msgid "Inch"
-msgstr "英寸"
+msgstr "Inch"
 
 #: bitmap2component/bitmap2cmp_panel.cpp:48
 msgid "DPI"
@@ -1897,7 +1896,7 @@ msgstr "F.Cu"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:179
 msgid "F.Silkscreen"
-msgstr "顶层丝印"
+msgstr "F.Silkscreen"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:179
 msgid "F.Mask"
@@ -1956,7 +1955,7 @@ msgstr "后台作业"
 #, c-format
 msgid ""
 "Environment variables expansion failed: missing '%c' at position %u in '%s'."
-msgstr "环境变量展开失败: 字符串 '%s' 的位置 %u 处缺少字符 '%c'。"
+msgstr "环境变量展开失败: '%3$s' 中第 %2$u 处缺少 '%1$c'。"
 
 #: common/common.cpp:387
 #, c-format
@@ -2198,7 +2197,7 @@ msgstr "无法删除设计图块文件夹 '%s'。"
 msgid ""
 "Duplicate library nickname '%s' found in design block library table file "
 "line %d."
-msgstr "在设计图块库表文件的第 '%d' 行中出现了重复的库名称 '%s'。"
+msgstr "在设计图块库表文件的第 '%2$d' 行中出现了重复的库名称 '%1$s'。"
 
 #: common/design_block_lib_table.cpp:353
 #, c-format
@@ -7129,7 +7128,7 @@ msgstr "加载封装时出错:"
 msgid ""
 "Duplicate library nickname '%s' found in footprint library table file line "
 "%d."
-msgstr "在封装库表文件的第 %d 行中出现了重复的库名称 '%s'。"
+msgstr "在封装库表文件的第 %2$d 行中出现了重复的库名称 '%1$s'。"
 
 #: common/gestfich.cpp:248
 #, c-format
@@ -10440,7 +10439,7 @@ msgstr "切换平移至搜索面板中的选定内容"
 
 #: common/widgets/search_pane.cpp:52
 msgid "Search Hidden Fields"
-msgstr "搜索隐藏的字段"
+msgstr "搜索隐藏字段"
 
 #: common/widgets/search_pane.cpp:54
 msgid "Search Metadata"
@@ -15319,7 +15318,9 @@ msgstr "分组"
 msgid ""
 "Show\n"
 "Column"
-msgstr "显示列"
+msgstr ""
+"显示\n"
+"列"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:210
 #, fuzzy
@@ -19519,8 +19520,8 @@ msgid ""
 "Expecting LEFT, CENTER, RIGHT, TOP, BOTTOM, VLEFT, VRIGHT, VCENTER, VTOP, "
 "VBOTTOM or INVISIBLE"
 msgstr ""
-"应为 LEFT, CENTER, RIGHT, TOP, BOTTOM, VLEFT, VRIGHT, VCENTER, VTOP VBOTTOM "
-"或不可见"
+"应为 LEFT, CENTER, RIGHT, TOP, BOTTOM, VLEFT, VRIGHT, VCENTER, VTOP, VBOTTOM "
+"或INVISIBLE"
 
 #: eeschema/sch_io/ltspice/ltspice_schematic.cpp:517
 msgid ""
@@ -26332,7 +26333,7 @@ msgstr "新行为将与 --mode-multi 相匹配"
 
 #: kicad/cli/command_pcb_export_gencad.cpp:34
 msgid "Export the PCB in Gencad format"
-msgstr "将 PCB 导出为 GebCad 格式"
+msgstr "将 PCB 导出为 Gencad 格式"
 
 # Padstack  焊盘槽/孔
 #: kicad/cli/command_pcb_export_gencad.cpp:40
@@ -35722,11 +35723,11 @@ msgstr "设置泪滴"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:141
 msgid "Text items"
-msgstr "文本对象"
+msgstr "文本项目"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:142
 msgid "Graphic items"
-msgstr "图形项"
+msgstr "图形项目"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:143
 msgid "Dimension items"
@@ -49611,7 +49612,7 @@ msgstr "碰触到 Courtyards"
 
 #: pcbnew/widgets/appearance_controls.cpp:353
 msgid "Show colliding footprint courtyards"
-msgstr "显示碰撞到的封装courtyards"
+msgstr "显示碰撞到的封装 courtyards"
 
 #: pcbnew/widgets/appearance_controls.cpp:354
 msgid "Show drawing sheet borders and title block"
