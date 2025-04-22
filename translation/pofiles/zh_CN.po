@@ -42,7 +42,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-04-21 13:43+0300\n"
 "PO-Revision-Date: 2025-04-22 07:50+0000\n"
-"Last-Translator: CloverGit <w991593239@163.com>\n"
+"Last-Translator: Hubert Hu <qinghan.hu@gmail.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/kicad/v9/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -629,7 +629,7 @@ msgstr "显示点胶层"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:59
 msgid "Solder Paste"
-msgstr "Solder Paste"
+msgstr "阻焊"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:59
 msgid "Show solder paste"
@@ -1711,7 +1711,7 @@ msgstr "mm"
 #: bitmap2component/bitmap2cmp_panel.cpp:48
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:109
 msgid "Inch"
-msgstr "Inch"
+msgstr "英寸"
 
 #: bitmap2component/bitmap2cmp_panel.cpp:48
 msgid "DPI"
@@ -1882,7 +1882,7 @@ msgstr "F.Cu"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:179
 msgid "F.Silkscreen"
-msgstr "F.Silkscreen"
+msgstr "顶层丝印"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:179
 msgid "F.Mask"
@@ -1941,7 +1941,7 @@ msgstr "后台作业"
 #, c-format
 msgid ""
 "Environment variables expansion failed: missing '%c' at position %u in '%s'."
-msgstr "环境变量展开失败: 字符串 '%3$s' 的位置 %2$u 处缺少字符 '%1$c'。"
+msgstr "环境变量展开失败: 字符串 '%s' 的位置 %u 处缺少字符 '%c'。"
 
 #: common/common.cpp:387
 #, c-format
@@ -2183,7 +2183,7 @@ msgstr "无法删除设计图块文件夹 '%s'。"
 msgid ""
 "Duplicate library nickname '%s' found in design block library table file "
 "line %d."
-msgstr "在设计图块库表文件的第 '%2$d' 行中出现了重复的库名称 '%1$s'。"
+msgstr "在设计图块库表文件的第 '%d' 行中出现了重复的库名称 '%s'。"
 
 #: common/design_block_lib_table.cpp:336
 #, c-format
@@ -2534,7 +2534,7 @@ msgstr "3D 搜索路径不能为空。"
 msgid ""
 "This path was defined  externally to the running process and\n"
 "will only be temporarily overwritten."
-msgstr "此路径是在运行进程外部定义的, 只会被暂时覆盖。"
+msgstr "该路径是在运行进程外部定义的，只会被暂时覆盖。"
 
 #: common/dialogs/dialog_configure_paths.cpp:289
 msgid ""
@@ -2544,10 +2544,9 @@ msgid ""
 "this behavior, either rename any conflicting entries or remove\n"
 "the external environment variable(s) from your system."
 msgstr ""
-"下次启动KiCad时, 会优先使用所有环境变量中已定义的路径变量, 而忽略在 KiCad 的"
-"路径配置对话框中所做的设置。\n"
-"如果不希望发生这种情况, 可以选择重命名那些有冲突的条目, 抑或是从系统中删除相"
-"关的环境变量。"
+"下一次启动 KiCad "
+"时，任何已定义的路径都将被保留，路径配置对话框中定义的任何设置都将被忽略。 "
+"如果您不希望出现这种行为，请重命名冲突入口，或从系统中删除外部环境变量。"
 
 #: common/dialogs/dialog_configure_paths.cpp:307
 #, c-format
@@ -2683,7 +2682,7 @@ msgid ""
 "use the default selection."
 msgstr ""
 "KiCad 第一次运行时, 使用了新的 %s 库表来访问库文件。  \n"
-"为了让 KiCad 能正常访问 %s 库文件, 您需要配置全局%s库表。  \n"
+"为了让 KiCad 能正常访问 %s 库文件, 您需要配置全局 %s 库表。  \n"
 "请从以下选项中选择一项。如果您不确定选择哪一项, 请使用默认选项。"
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:51
@@ -4476,17 +4475,16 @@ msgid ""
 "sending said reports when crashes or events occur. Your design files such as "
 "schematic or PCB are never shared in this process."
 msgstr ""
-"允许 KiCad 匿名地向开发者报告崩溃和特殊事件数据, 从而更有效地识别用户群体中存"
-"在的关键问题, 并帮助分析功能以指导改进工作。\n"
+"允许 KiCad 匿名地向开发者报告崩溃和特殊事件数据, "
+"从而更有效地识别用户群体中存在的关键问题, 并帮助分析功能以指导改进工作。\n"
 "\n"
-"为了将来自同一 KiCad 安装的自动报告关联起来, 系统会生成一个完全随机的唯一标识"
-"符, 仅用于崩溃报告的目的, 不会存储或关联任何个人可识别信息 (PII), 包括 IP 地"
-"址。\n"
+"为了将来自同一 KiCad 安装的自动报告关联起来, "
+"系统会生成一个完全随机的唯一标识符, 仅用于崩溃报告的目的, "
+"不会存储或关联任何个人可识别信息 (PII), 包括 IP 地址。\n"
 "您可以随时通过提供的按钮重置该标识符。\n"
 "\n"
-"如果您选择自愿参与, 那么在发生崩溃或特殊事件时, KiCad 会自动处理并发送这些报"
-"告。\n"
-"\n"
+"如果您选择自愿参与, 那么在发生崩溃或特殊事件时, KiCad "
+"会自动处理并发送这些报告。\n"
 "在此过程中, 您的设计文件 (如原理图或PCB) 绝不会被共享。"
 
 #: common/dialogs/panel_data_collection_base.cpp:24
@@ -6894,7 +6892,7 @@ msgstr "加载封装时出错:"
 msgid ""
 "Duplicate library nickname '%s' found in footprint library table file line "
 "%d."
-msgstr "在封装库表文件的第 %2$d 行中出现了重复的库名称 '%1$s'。"
+msgstr "在封装库表文件的第 %d 行中出现了重复的库名称 '%s'。"
 
 #: common/gestfich.cpp:248
 #, c-format
@@ -8374,9 +8372,8 @@ msgid "Opt In"
 msgstr ""
 
 #: common/pgm_base.cpp:391
-#, fuzzy
 msgid "Decline"
-msgstr "线条草图"
+msgstr "Decline"
 
 #: common/pgm_base.cpp:498
 msgid "Environment variable HOME is empty.  Unable to continue."
@@ -9963,9 +9960,8 @@ msgid "Toggle panning to selections in the search pane"
 msgstr "切换平移至搜索面板中的选定内容"
 
 #: common/widgets/search_pane.cpp:51
-#, fuzzy
 msgid "Search Hidden Fields"
-msgstr "包括搜索隐藏的字段 (&H)"
+msgstr "搜索隐藏的字段"
 
 #: common/widgets/unit_binder.cpp:351
 #, c-format
@@ -14929,25 +14925,22 @@ msgid "Show datasheet in browser"
 msgstr "在浏览器中显示数据书册"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:200
-#, fuzzy
 msgid "Column Label"
-msgstr "%d 列表格"
+msgstr "列标签"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:205
-#, fuzzy
 msgid "Show Column"
-msgstr "显示 / 隐藏 列"
+msgstr "显示列"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:206
 msgid "Group By"
 msgstr "分组"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:208
-#, fuzzy
 msgid ""
 "Show\n"
 "Column"
-msgstr "显示 / 隐藏 列"
+msgstr "显示列"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:209
 #, fuzzy
@@ -19059,12 +19052,12 @@ msgid "Expecting R0, R90, R18, R270, M0, M90, M180 or M270"
 msgstr "应为 R0, R90, R18, R270, M0, M90, M180 或 M270"
 
 #: eeschema/sch_io/ltspice/ltspice_schematic.cpp:494
-#, fuzzy
 msgid ""
 "Expecting LEFT, CENTER, RIGHT, TOP, BOTTOM, VLEFT, VRIGHT, VCENTER, VTOP, "
 "VBOTTOM or INVISIBLE"
 msgstr ""
-"应为 LEFT, CENTER, RIGHT, TOP, BOTTOM, VLEFT, VRIGHT, VCENTER, VTOP 或 BOTTOM"
+"应为 LEFT, CENTER, RIGHT, TOP, BOTTOM, VLEFT, VRIGHT, VCENTER, VTOP VBOTTOM "
+"或不可见"
 
 #: eeschema/sch_io/ltspice/ltspice_schematic.cpp:517
 msgid ""
@@ -25786,9 +25779,8 @@ msgid "The new behavior will match --mode-multi"
 msgstr "新行为将与 --mode-multi 相匹配"
 
 #: kicad/cli/command_pcb_export_gencad.cpp:33
-#, fuzzy
 msgid "Export the PCB in Gencad format"
-msgstr "将网表导出为 KiCad 格式"
+msgstr "将 PCB 导出为 GebCad 格式"
 
 # Padstack  焊盘槽/孔
 #: kicad/cli/command_pcb_export_gencad.cpp:39
@@ -30611,9 +30603,8 @@ msgid "mi/h"
 msgstr "mi/h"
 
 #: pcbnew/api/api_handler_pcb.cpp:505
-#, fuzzy
 msgid "Modified items via API"
-msgstr "通过 API 添加项目"
+msgstr "通过 API 修改项目"
 
 #: pcbnew/api/api_handler_pcb.cpp:668
 msgid "Deleted items via API"
@@ -35079,9 +35070,8 @@ msgid "Set Teardrops"
 msgstr "设置泪滴"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:141
-#, fuzzy
 msgid "Text items"
-msgstr "文本项目"
+msgstr "文本对象"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:142
 msgid "Graphic items"
@@ -35175,18 +35165,16 @@ msgid "PCB text items"
 msgstr "PCB 文本项目"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:45
-#, fuzzy
 msgid "Other footprint fields"
-msgstr "其他封装文本项目"
+msgstr "其他封装字段"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:46
 msgid "Footprint fields that are not the reference designator or value field"
 msgstr "非参考位号或值字段的焊盘字段"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:50
-#, fuzzy
 msgid "PCB dimensions"
-msgstr "PCB标注项目"
+msgstr "PCB标注"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:53
 msgid "Footprint graphic items"
@@ -35201,24 +35189,20 @@ msgid "Footprint text items not associated with a field"
 msgstr "未关联字段的焊盘文本项"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:67
-#, fuzzy
 msgid "Footprint dimensions"
-msgstr "封装标注项目"
+msgstr "封装标注"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:85
-#, fuzzy
 msgid "By layer:"
-msgstr "层:"
+msgstr "按层:"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:97
-#, fuzzy
 msgid "By parent reference designator:"
-msgstr "起始位号:"
+msgstr "按父位号:"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:103
-#, fuzzy
 msgid "By parent footprint library link:"
-msgstr "新封装的库标识:"
+msgstr "按父封装的库链接:"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:124
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:133
@@ -37141,7 +37125,7 @@ msgstr "为规则域设置一个唯一的名称, 以便在 DRC 规则中使用"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:86
 msgid "Distance between parallel lines used for hatching the area"
-msgstr ""
+msgstr "用于网格区域的平行线距离"
 
 #: pcbnew/dialogs/dialog_set_offset.cpp:66
 msgid "Reset this value to zero."
@@ -40675,18 +40659,18 @@ msgid "** Face skipped **\n"
 msgstr "** 跳过 Face **\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1915
-#, fuzzy, c-format
+#, c-format
 msgid "Subtracting holes for %s\n"
-msgstr "构造孔洞 %s\n"
+msgstr "在 %s 去除孔\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1958
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "\n"
 "** Got problems while cutting %s net '%s' **\n"
 msgstr ""
 "\n"
-"** 切割 %s 数量 %d 时遇到问题 **\n"
+"** 切割 %s 网络 '%s' 时遇到问题 **\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2003
 msgid "shapes"
@@ -45768,16 +45752,15 @@ msgid "Physical Clearances"
 msgstr "物理间距"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1260
-#, fuzzy, c-format
+#, c-format
 msgid "No 'physical_clearance' constraints in effect on %s."
-msgstr "未定义 'physical_clearance' 约束。"
+msgstr "%s 上没有起作用的 'physical_clearance' 约束。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1279
-#, fuzzy
 msgid ""
 "Items share no relevant layers.  No 'physical_clearance' constraints will be "
 "applied."
-msgstr "未定义 'physical_clearance' 约束。"
+msgstr "对象没有分享相关的层， 'physical_clearance' 约束无法应用。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1341
 msgid "Select an item for a constraints resolution report."
@@ -48598,14 +48581,12 @@ msgid "Show a shadow on locked items"
 msgstr "在锁定的项目上显示阴影标记"
 
 #: pcbnew/widgets/appearance_controls.cpp:351
-#, fuzzy
 msgid "Colliding Courtyards"
-msgstr "元件外框"
+msgstr "碰触到 Courtyards"
 
 #: pcbnew/widgets/appearance_controls.cpp:351
-#, fuzzy
 msgid "Show colliding footprint courtyards"
-msgstr "正在收集封装外框..."
+msgstr "显示碰撞到的封装courtyards"
 
 #: pcbnew/widgets/appearance_controls.cpp:352
 msgid "Show drawing sheet borders and title block"
