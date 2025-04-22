@@ -35,8 +35,11 @@ DIALOG_MULTICHANNEL_GENERATE_RULE_AREAS::DIALOG_MULTICHANNEL_GENERATE_RULE_AREAS
         DIALOG_MULTICHANNEL_GENERATE_RULE_AREAS_BASE( aFrame ),
         m_parentTool( aParentTool )
 {
+    m_bSizer1 = new wxBoxSizer( wxVERTICAL );
+    m_bSizer2 = new wxBoxSizer( wxVERTICAL );
+
     // Generate the sheet source grid
-    m_sheetGrid = new WX_GRID( m_sourceNotebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
+    m_sheetGrid = new WX_GRID( m_panel1, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxVSCROLL );
     m_sheetGrid->PushEventHandler( new GRID_TRICKS( static_cast<WX_GRID*>( m_sheetGrid ) ) );
     m_sheetGrid->CreateGrid( 0, 3 );
     m_sheetGrid->EnableEditing( false );
@@ -61,11 +64,13 @@ DIALOG_MULTICHANNEL_GENERATE_RULE_AREAS::DIALOG_MULTICHANNEL_GENERATE_RULE_AREAS
     m_sheetGrid->SetColLabelValue( 1, _( "Sheet Path" ) );
     m_sheetGrid->SetColLabelValue( 2, _( "Sheet Name" ) );
     m_sheetGrid->AutoSizeColumn( 1 );
-    m_sourceNotebook->AddPage( m_sheetGrid, _( "Sheets" ) );
+    m_bSizer1->Add( m_sheetGrid, 1, wxEXPAND | wxALL, 5 );
+    m_panel1->SetSizer( m_bSizer1 );
+    m_panel1->Layout();
+    m_bSizer1->Fit( m_panel1 );
 
     // Generate the component class source grid
-    m_componentClassGrid =
-            new WX_GRID( m_sourceNotebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
+    m_componentClassGrid = new WX_GRID( m_panel2, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxVSCROLL );
     m_componentClassGrid->CreateGrid( 0, 2 );
     m_componentClassGrid->EnableEditing( false );
     m_componentClassGrid->EnableGridLines( true );
@@ -87,7 +92,10 @@ DIALOG_MULTICHANNEL_GENERATE_RULE_AREAS::DIALOG_MULTICHANNEL_GENERATE_RULE_AREAS
     m_componentClassGrid->SetColLabelValue( 0, _( "Generate" ) );
     m_componentClassGrid->SetColLabelValue( 1, _( "Component Class" ) );
     m_componentClassGrid->AutoSizeColumn( 1 );
-    m_sourceNotebook->AddPage( m_componentClassGrid, _( "Component Classes" ) );
+    m_bSizer2->Add( m_componentClassGrid, 1, wxEXPAND | wxALL, 5 );
+    m_panel2->SetSizer( m_bSizer2 );
+    m_panel2->Layout();
+    m_bSizer2->Fit( m_panel2 );
 
     RULE_AREAS_DATA* raData = m_parentTool->GetData();
 
@@ -137,13 +145,10 @@ DIALOG_MULTICHANNEL_GENERATE_RULE_AREAS::DIALOG_MULTICHANNEL_GENERATE_RULE_AREAS
         }
     }
 
-    m_sheetGrid->SetMaxSize( wxSize( -1, 800 ) );
     m_sheetGrid->Fit();
-    m_componentClassGrid->SetMaxSize( wxSize( -1, 800 ) );
     m_componentClassGrid->Fit();
     m_cbGroupItems->SetValue( raData->m_options.m_groupItems );
     m_cbReplaceExisting->SetValue( raData->m_replaceExisting );
-
     Layout();
 
     if( m_sheetGrid->GetNumberRows() == 1 && m_componentClassGrid->GetNumberRows() > 0 )
