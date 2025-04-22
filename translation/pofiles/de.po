@@ -30,7 +30,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-04-21 13:43+0300\n"
-"PO-Revision-Date: 2025-04-20 20:28+0000\n"
+"PO-Revision-Date: 2025-04-23 08:01+0000\n"
 "Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v9/de/>\n"
 "Language: de\n"
@@ -41905,13 +41905,13 @@ msgid "Subtracting holes for %s\n"
 msgstr "Erstelle Löcher für %s\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1958
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "\n"
 "** Got problems while cutting %s net '%s' **\n"
 msgstr ""
 "\n"
-"** Probleme beim Schneiden von %s Nummer %d **\n"
+"** Probleme beim Schneiden von %s Netz \"%s\" **\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2003
 msgid "shapes"
@@ -42472,7 +42472,7 @@ msgstr "Auswahl vorherige Parameterseite"
 
 #: pcbnew/footprint_wizard_frame.cpp:601
 msgid "Select next parameters page"
-msgstr "Auswahl nächste Parameterseite"
+msgstr "Nächste Parameterseite wählen"
 
 #: pcbnew/footprint_wizard_frame.cpp:618
 msgid "Export footprint to editor"
