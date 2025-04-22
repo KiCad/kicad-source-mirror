@@ -28,7 +28,7 @@
  */
 
 #include <stdexcept>
-#include <gal/opengl/kiepoxy.h> // Must be included first
+#include <gal/opengl/kiglew.h>    // Must be included first
 
 #include "openGL_includes.h"
 #include "ogl_utils.h"

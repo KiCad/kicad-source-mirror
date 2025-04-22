@@ -26,7 +26,7 @@
 
 #include <confirm.h> // DisplayError
 
-#include <gal/opengl/kiepoxy.h> // Must be included first
+#include <gal/opengl/kiglew.h> // Must be included first
 
 #include <stdexcept>
 #include <wx/log.h> // wxLogDebug

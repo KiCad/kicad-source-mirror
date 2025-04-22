@@ -23,7 +23,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <gal/opengl/kiepoxy.h> // Must be included first
+#include <gal/opengl/kiglew.h>    // Must be included first
 
 #include <algorithm>
 #include <atomic>
@@ -217,7 +217,7 @@ bool RENDER_3D_RAYTRACE_GL::Redraw( bool aIsMoving, REPORTER* aStatusReporter,
 
 void RENDER_3D_RAYTRACE_GL::initPbo()
 {
-    if( epoxy_has_gl_extension( "GL_ARB_pixel_buffer_object" ) )
+    if( GLEW_ARB_pixel_buffer_object )
     {
         m_openglSupportsVertexBufferObjects = true;
 
@@ -238,6 +238,7 @@ void RENDER_3D_RAYTRACE_GL::initPbo()
         glBufferDataARB( GL_PIXEL_UNPACK_BUFFER_ARB, m_pboDataSize, 0, GL_STREAM_DRAW_ARB );
         glBindBufferARB( GL_PIXEL_UNPACK_BUFFER_ARB, 0 );
 
-        wxLogTrace( m_logTrace, wxS( "RENDER_3D_RAYTRACE_GL:: GL_ARB_pixel_buffer_object is supported" ) );
+        wxLogTrace( m_logTrace,
+                    wxT( "RENDER_3D_RAYTRACE_GL:: GLEW_ARB_pixel_buffer_object is supported" ) );
     }
 }

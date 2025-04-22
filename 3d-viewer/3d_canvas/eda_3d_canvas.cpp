@@ -22,7 +22,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <gal/opengl/kiepoxy.h> // Must be included first
+#include <gal/opengl/kiglew.h>    // Must be included first
 #include <gal/opengl/gl_utils.h>
 #include <wx/tokenzr.h>
 
@@ -226,11 +226,20 @@ bool  EDA_3D_CANVAS::initializeOpenGL()
 {
     wxLogTrace( m_logTrace, wxT( "EDA_3D_CANVAS::initializeOpenGL" ) );
 
-    // Check the OpenGL version (minimum 2.1 is required)
-    if( epoxy_gl_version() < 21 )
+    const GLenum err = glewInit();
+
+    if( GLEW_OK != err )
     {
-        wxLogMessage( wxS( "OpenGL 2.1 or higher is required!" ) );
+        const wxString msgError = (const char*) glewGetErrorString( err );
+
+        wxLogMessage( msgError );
+
         return false;
+    }
+    else
+    {
+        wxLogTrace( m_logTrace, wxT( "EDA_3D_CANVAS::initializeOpenGL Using GLEW version %s" ),
+                    From_UTF8( (char*) glewGetString( GLEW_VERSION ) ) );
     }
 
     SetOpenGLInfo( (const char*) glGetString( GL_VENDOR ), (const char*) glGetString( GL_RENDERER ),

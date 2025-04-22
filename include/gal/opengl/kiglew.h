@@ -36,14 +36,13 @@
 // includes since they transitively include the OpenGL headers.
 #define GL_SILENCE_DEPRECATION 1
 
-#include <epoxy/gl.h>
-
 #if defined( __unix__ ) and not defined( __APPLE__ )
 
     #ifdef KICAD_USE_EGL
 
         #if wxUSE_GLCANVAS_EGL
-            #include <epoxy/egl.h>
+            // wxWidgets was compiled with the EGL canvas, so use the EGL header for GLEW
+            #include <GL/eglew.h>
         #else
             #error "KICAD_USE_EGL can only be used when wxWidgets is compiled with the EGL canvas"
         #endif
@@ -53,19 +52,23 @@
         #if wxUSE_GLCANVAS_EGL
             #error "KICAD_USE_EGL must be defined since wxWidgets has been compiled with the EGL canvas"
         #else
-            #include <epoxy/glx.h>
+            // wxWidgets wasn't compiled with the EGL canvas, so use the X11 GLEW
+            #include <GL/glxew.h>
         #endif
 
     #endif  // KICAD_USE_EGL
+
+#else   // defined( __unix__ ) and not defined( __APPLE__ )
+
+    // Non-GTK platforms only need the normal GLEW include
+    #include <GL/glew.h>
 
 #endif  // defined( __unix__ ) and not defined( __APPLE__ )
 
 #ifdef _WIN32
 
-    #include <epoxy/wgl.h>
+    #include <GL/wglew.h>
 
 #endif  // _WIN32
-
-#include <GL/glu.h>
 
 #endif  // KIGLEW_H_
