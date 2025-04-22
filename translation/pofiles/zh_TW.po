@@ -6,7 +6,7 @@
 # willliam <traderwilliam@gmail.com>, 2022.
 # Seth Hillbrand <seth@kipro-pcb.com>, 2023, 2025.
 # 撒景賢 <james.sa.2013@gmail.com>, 2024.
-# Oliver0804 <icetzsr@gmail.com>, 2024.
+# Oliver0804 <icetzsr@gmail.com>, 2024, 2025.
 # William Lin <unrealin01@gmail.com>, 2024.
 # pominglee <pominglee@gmail.com>, 2024, 2025.
 # Andrew <yenchang.lin@gmail.com>, 2024.
@@ -20,8 +20,8 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-04-21 13:43+0300\n"
-"PO-Revision-Date: 2025-04-03 12:49+0000\n"
-"Last-Translator: pominglee <pominglee@gmail.com>\n"
+"PO-Revision-Date: 2025-04-22 07:50+0000\n"
+"Last-Translator: Oliver0804 <icetzsr@gmail.com>\n"
 "Language-Team: Chinese (Traditional Han script) <https://hosted.weblate.org/"
 "projects/kicad/master-source/zh_Hant/>\n"
 "Language: zh_TW\n"
@@ -29,7 +29,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.11-dev\n"
+"X-Generator: Weblate 5.11.1-dev\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-Basepath: ../../../../../Downloads/kicad-master\n"
@@ -42416,7 +42416,7 @@ msgstr "從其它應用程序中匯入板檔案"
 
 #: pcbnew/menubar_pcb_editor.cpp:129
 msgid "Specctra DSN..."
-msgstr "光繪 DSN..."
+msgstr "Specctra DSN..."
 
 #: pcbnew/menubar_pcb_editor.cpp:130
 msgid "GenCAD..."
@@ -48021,11 +48021,11 @@ msgstr "匯入佈線器工作區間(*.ses)檔案"
 
 #: pcbnew/tools/pcb_actions.cpp:1127
 msgid "Export Specctra DSN..."
-msgstr "匯出無網格自動佈線器 DSN..."
+msgstr "匯出Specctra DSN..."
 
 #: pcbnew/tools/pcb_actions.cpp:1128
 msgid "Export Specctra DSN routing info"
-msgstr "匯出自動佈線 DSN 佈線資訊"
+msgstr "匯出Specctra DSN 佈線資訊"
 
 #: pcbnew/tools/pcb_actions.cpp:1134
 msgid "Gerbers (.gbr)..."
