@@ -50,6 +50,8 @@ public:
 private:
     MULTICHANNEL_TOOL* m_parentTool;
 
+    wxBoxSizer* m_bSizer1;
+    wxBoxSizer* m_bSizer2;
     wxGrid* m_sheetGrid;
     wxGrid* m_componentClassGrid;
     wxGrid* m_groupGrid;

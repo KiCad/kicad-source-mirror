@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6a)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -11,20 +11,30 @@
 
 DIALOG_MULTICHANNEL_GENERATE_RULE_AREAS_BASE::DIALOG_MULTICHANNEL_GENERATE_RULE_AREAS_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : DIALOG_SHIM( parent, id, title, pos, size, style )
 {
-	this->SetSizeHints( wxSize( 500,-1 ), wxDefaultSize );
-
-	m_GeneralBoxSizer = new wxBoxSizer( wxVERTICAL );
+	this->SetSizeHints( wxSize( -1,-1 ), wxSize( -1,-1 ) );
 
 	wxFlexGridSizer* fgSizer3;
-	fgSizer3 = new wxFlexGridSizer( 3, 1, 0, 0 );
+	fgSizer3 = new wxFlexGridSizer( 0, 1, 0, 0 );
 	fgSizer3->AddGrowableCol( 0 );
 	fgSizer3->AddGrowableRow( 0 );
 	fgSizer3->SetFlexibleDirection( wxBOTH );
 	fgSizer3->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
 	m_sourceNotebook = new wxNotebook( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
+	m_sourceNotebook->SetMinSize( wxSize( 600,400 ) );
+
+	m_panel1 = new wxPanel( m_sourceNotebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	m_sourceNotebook->AddPage( m_panel1, _("Sheets"), false );
+	m_panel2 = new wxPanel( m_sourceNotebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	m_sourceNotebook->AddPage( m_panel2, _("Component Classes"), false );
 
 	fgSizer3->Add( m_sourceNotebook, 1, wxEXPAND | wxALL, 5 );
+
+	wxBoxSizer* bSizer4;
+	bSizer4 = new wxBoxSizer( wxVERTICAL );
+
+
+	fgSizer3->Add( bSizer4, 1, wxEXPAND, 5 );
 
 	wxBoxSizer* bSizer13;
 	bSizer13 = new wxBoxSizer( wxVERTICAL );
@@ -57,11 +67,9 @@ DIALOG_MULTICHANNEL_GENERATE_RULE_AREAS_BASE::DIALOG_MULTICHANNEL_GENERATE_RULE_
 	fgSizer3->Add( bottomButtonsSizer, 0, wxEXPAND|wxLEFT, 5 );
 
 
-	m_GeneralBoxSizer->Add( fgSizer3, 1, wxEXPAND, 5 );
-
-
-	this->SetSizer( m_GeneralBoxSizer );
+	this->SetSizer( fgSizer3 );
 	this->Layout();
+	fgSizer3->Fit( this );
 
 	// Connect Events
 	this->Connect( wxEVT_INIT_DIALOG, wxInitDialogEventHandler( DIALOG_MULTICHANNEL_GENERATE_RULE_AREAS_BASE::OnInitDlg ) );
