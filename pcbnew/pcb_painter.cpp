@@ -2279,8 +2279,19 @@ void PCB_PAINTER::draw( const PCB_TEXT* aText, int aLayer )
 
         if( m_gal->IsFlippedX() && !aText->IsSideSpecific() )
         {
+            // We do not want to change the mirroring for this kind of text
+            // on the mirrored canvas
+            // (not mirrored is draw not mirrored and mirrored is draw mirrored)
+            // So we need to recalculate the text position to keep it at the same position
+            // on the canvas
             VECTOR2I textPos = aText->GetTextPos();
             VECTOR2I textWidth = VECTOR2I( aText->GetTextBox().GetWidth(), 0 );
+
+            if( aText->GetHorizJustify() == GR_TEXT_H_ALIGN_RIGHT )
+                textWidth.x = -textWidth.x;
+            else if( aText->GetHorizJustify() == GR_TEXT_H_ALIGN_CENTER )
+                textWidth.x = 0;
+
             RotatePoint( textWidth, VECTOR2I( 0, 0 ), aText->GetDrawRotation() );
 
             if( attrs.m_Mirrored )
