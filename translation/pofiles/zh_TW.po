@@ -19,8 +19,8 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-04-21 13:43+0300\n"
-"PO-Revision-Date: 2025-04-03 12:49+0000\n"
-"Last-Translator: pominglee <pominglee@gmail.com>\n"
+"PO-Revision-Date: 2025-04-22 07:50+0000\n"
+"Last-Translator: Oliver0804 <icetzsr@gmail.com>\n"
 "Language-Team: Chinese (Traditional Han script) <https://hosted.weblate.org/"
 "projects/kicad/v9/zh_Hant/>\n"
 "Language: zh_TW\n"
@@ -28,7 +28,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.11-dev\n"
+"X-Generator: Weblate 5.11.1-dev\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-Basepath: ../../../../../Downloads/kicad-master\n"
@@ -650,19 +650,16 @@ msgid "Show user ECO2 layer"
 msgstr "顯示使用者 ECO2 層"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:68
-#, fuzzy
 msgid "Show user defined layer 1"
-msgstr "使用者定義層 1"
+msgstr "顯示使用者定義層 1"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:69
-#, fuzzy
 msgid "Show user defined layer 2"
-msgstr "使用者定義層 2"
+msgstr "顯示使用者定義層 2"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:70
-#, fuzzy
 msgid "Show user defined layer 3"
-msgstr "使用者定義層 3"
+msgstr "顯示使用者定義層 3"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:71
 #, fuzzy
@@ -41578,7 +41575,7 @@ msgstr "從其它應用程序中匯入板檔案"
 
 #: pcbnew/menubar_pcb_editor.cpp:129
 msgid "Specctra DSN..."
-msgstr "光繪 DSN..."
+msgstr "Specctra DSN..."
 
 #: pcbnew/menubar_pcb_editor.cpp:130
 msgid "GenCAD..."
@@ -47148,11 +47145,11 @@ msgstr "匯入佈線器工作區間(*.ses)檔案"
 
 #: pcbnew/tools/pcb_actions.cpp:1016
 msgid "Export Specctra DSN..."
-msgstr "匯出無網格自動佈線器 DSN..."
+msgstr "匯出Specctra DSN..."
 
 #: pcbnew/tools/pcb_actions.cpp:1017
 msgid "Export Specctra DSN routing info"
-msgstr "匯出自動佈線 DSN 佈線資訊"
+msgstr "匯出Specctra DSN 佈線資訊"
 
 #: pcbnew/tools/pcb_actions.cpp:1023
 msgid "Gerbers (.gbr)..."
