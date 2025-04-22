@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-04-21 13:43+0300\n"
-"PO-Revision-Date: 2025-04-19 09:05+0000\n"
+"PO-Revision-Date: 2025-04-23 08:01+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/v9/sv/>\n"
 "Language: sv\n"
@@ -19438,13 +19438,12 @@ msgid "Expecting R0, R90, R18, R270, M0, M90, M180 or M270"
 msgstr "Förväntar R0, R90, R18, R270, M0, M90, M180 eller M270"
 
 #: eeschema/sch_io/ltspice/ltspice_schematic.cpp:494
-#, fuzzy
 msgid ""
 "Expecting LEFT, CENTER, RIGHT, TOP, BOTTOM, VLEFT, VRIGHT, VCENTER, VTOP, "
 "VBOTTOM or INVISIBLE"
 msgstr ""
-"Förväntar LEFT, CENTER, RIGHT, TOP, BOTTOM, VLEFT, VRIGHT, VCENTER, VTOP "
-"eller VBOTTOM"
+"Förväntar LEFT, CENTER, RIGHT, TOP, BOTTOM, VLEFT, VRIGHT, VCENTER, VTOP, "
+"VBOTTOM eller INVISIBLE"
 
 #: eeschema/sch_io/ltspice/ltspice_schematic.cpp:517
 msgid ""
@@ -41540,18 +41539,18 @@ msgid "** Face skipped **\n"
 msgstr "** Yta hoppades över **\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1915
-#, fuzzy, c-format
+#, c-format
 msgid "Subtracting holes for %s\n"
-msgstr "Bygg upp hål för %s\n"
+msgstr "Subtraherar hål för %s\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1958
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "\n"
 "** Got problems while cutting %s net '%s' **\n"
 msgstr ""
 "\n"
-"** Fick problem vid skärning av %s nummer %d **\n"
+"** Fick problem vid skärning av %s nät '%s' **\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2003
 msgid "shapes"
