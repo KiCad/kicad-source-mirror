@@ -600,50 +600,38 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
         }
     }
 
-    // Add footprints PADs objects to containers
+    // Add footprints copper items (pads, shapes and text) to containers
     for( PCB_LAYER_ID layer : layer_ids )
     {
         wxASSERT( m_layerMap.find( layer ) != m_layerMap.end() );
 
         BVH_CONTAINER_2D *layerContainer = m_layerMap[layer];
 
-        // ADD PADS
-        for( FOOTPRINT* footprint : m_board->Footprints() )
+        for( FOOTPRINT* fp : m_board->Footprints() )
         {
-            addPads( footprint, layerContainer, layer );
-            addFootprintShapes( footprint, layerContainer, layer, visibilityFlags );
+            addPads( fp, layerContainer, layer );
+            addFootprintShapes( fp, layerContainer, layer, visibilityFlags );
 
-            if( cfg.DifferentiatePlatedCopper() && layer == F_Cu )
+            // Add copper item to the plated copper polygon list if required
+            if( cfg.DifferentiatePlatedCopper() && ( layer == F_Cu || layer == B_Cu ) )
             {
-                footprint->TransformPadsToPolySet( *m_frontPlatedCopperPolys, F_Cu, 0, maxError,
-                                                   ERROR_INSIDE, true );
+                SHAPE_POLY_SET* layerPoly = layer == F_Cu ? m_frontPlatedCopperPolys : m_backPlatedCopperPolys;
+
+                fp->TransformPadsToPolySet( *layerPoly, layer, 0, maxError, ERROR_INSIDE, true );
+                transformFPTextToPolySet( fp, layer, visibilityFlags, *layerPoly, maxError, ERROR_INSIDE );
+                transformFPShapesToPolySet( fp, layer, *layerPoly, maxError, ERROR_INSIDE );
             }
-            else if( cfg.DifferentiatePlatedCopper() && layer == B_Cu )
+
+            // Add copper item to poly contours (vertical outlines) if required
+            if( cfg.opengl_copper_thickness && cfg.engine == RENDER_ENGINE::OPENGL )
             {
-                footprint->TransformPadsToPolySet( *m_backPlatedCopperPolys, B_Cu, 0, maxError,
-                                                   ERROR_INSIDE, true );
-            }
-        }
-    }
+                wxASSERT( m_layers_poly.contains( layer ) );
 
-    // Add footprints PADs poly contours (vertical outlines)
-    if( cfg.opengl_copper_thickness && cfg.engine == RENDER_ENGINE::OPENGL )
-    {
-        for( PCB_LAYER_ID layer : layer_ids )
-        {
-            wxASSERT( m_layers_poly.find( layer ) != m_layers_poly.end() );
+                SHAPE_POLY_SET* layerPoly = m_layers_poly[layer];
 
-            SHAPE_POLY_SET *layerPoly = m_layers_poly[layer];
-
-            // Add pads to polygon list
-            for( FOOTPRINT* footprint : m_board->Footprints() )
-            {
-                // Note: NPTH pads are not drawn on copper layers when the pad has same shape as
-                // its hole
-                footprint->TransformPadsToPolySet( *layerPoly, layer, 0, maxError, ERROR_INSIDE,
-                                                   true );
-
-                transformFPShapesToPolySet( footprint, layer, *layerPoly, maxError, ERROR_INSIDE );
+                fp->TransformPadsToPolySet( *layerPoly, layer, 0, maxError, ERROR_INSIDE, true );
+                transformFPTextToPolySet( fp, layer, visibilityFlags, *layerPoly, maxError, ERROR_INSIDE );
+                transformFPShapesToPolySet( fp, layer, *layerPoly, maxError, ERROR_INSIDE );
             }
         }
     }
@@ -688,16 +676,14 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
                 break;
 
             default:
-                wxLogTrace( m_logTrace, wxT( "createLayers: item type: %d not implemented" ),
-                            item->Type() );
+                wxLogTrace( m_logTrace, wxT( "createLayers: item type: %d not implemented" ), item->Type() );
                 break;
             }
 
-            // add also this shape to the plated copper polygon list if required
+            // Add copper item to the plated copper polygon list if required
             if( cfg.DifferentiatePlatedCopper() && ( layer == F_Cu || layer == B_Cu ) )
             {
-                SHAPE_POLY_SET* copperPolys = layer == F_Cu ? m_frontPlatedCopperPolys
-                                                            : m_backPlatedCopperPolys;
+                SHAPE_POLY_SET* copperPolys = layer == F_Cu ? m_frontPlatedCopperPolys : m_backPlatedCopperPolys;
 
                 // Note: for TEXT and TEXTBOX, TransformShapeToPolygon returns the bounding
                 // box shape, not the exact text shape. So it is not used for these items
@@ -719,23 +705,13 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
                     item->TransformShapeToPolygon( *copperPolys, layer, 0, maxError, ERROR_INSIDE );
                 }
             }
-        }
-    }
 
-    // Add graphic item on copper layers to poly contours (vertical outlines)
-    if( cfg.opengl_copper_thickness && cfg.engine == RENDER_ENGINE::OPENGL )
-    {
-        for( PCB_LAYER_ID layer : layer_ids )
-        {
-            wxASSERT( m_layers_poly.find( layer ) != m_layers_poly.end() );
-
-            SHAPE_POLY_SET *layerPoly = m_layers_poly[layer];
-
-            // Add graphic items on copper layers (texts and other )
-            for( BOARD_ITEM* item : m_board->Drawings() )
+            // Add copper item to poly contours (vertical outlines) if required
+            if( cfg.opengl_copper_thickness && cfg.engine == RENDER_ENGINE::OPENGL )
             {
-                if( !item->IsOnLayer( layer ) )
-                    continue;
+                wxASSERT( m_layers_poly.contains( layer ) );
+
+                SHAPE_POLY_SET *layerPoly = m_layers_poly[layer];
 
                 switch( item->Type() )
                 {
@@ -782,9 +758,24 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
                     break;
                 }
 
+                case PCB_DIM_ALIGNED_T:
+                case PCB_DIM_CENTER_T:
+                case PCB_DIM_RADIAL_T:
+                case PCB_DIM_ORTHOGONAL_T:
+                case PCB_DIM_LEADER_T:
+                {
+                    PCB_DIMENSION_BASE* dimension = static_cast<PCB_DIMENSION_BASE*>( item );
+
+                    dimension->TransformTextToPolySet( *layerPoly, 0, maxError, ERROR_INSIDE );
+
+                    for( const std::shared_ptr<SHAPE>& shape : dimension->GetShapes() )
+                        shape->TransformToPolygon( *layerPoly, maxError, ERROR_INSIDE );
+
+                    break;
+                }
+
                 default:
-                    wxLogTrace( m_logTrace, wxT( "createLayers: item type: %d not implemented" ),
-                                item->Type() );
+                    wxLogTrace( m_logTrace, wxT( "createLayers: item type: %d not implemented" ), item->Type() );
                     break;
                 }
             }
@@ -806,15 +797,11 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
                 zones.emplace_back( std::make_pair( zone, layer ) );
                 layer_lock.emplace( layer, std::make_unique<std::mutex>() );
 
-                if( cfg.DifferentiatePlatedCopper() && layer == F_Cu )
+                if( cfg.DifferentiatePlatedCopper() && ( layer == F_Cu || layer == B_Cu ) )
                 {
-                    zone->TransformShapeToPolygon( *m_frontPlatedCopperPolys, F_Cu, 0, maxError,
-                                                   ERROR_INSIDE );
-                }
-                else if( cfg.DifferentiatePlatedCopper() && layer == B_Cu )
-                {
-                    zone->TransformShapeToPolygon( *m_backPlatedCopperPolys, B_Cu, 0, maxError,
-                                                   ERROR_INSIDE );
+                    SHAPE_POLY_SET* copperPolys = layer == F_Cu ? m_frontPlatedCopperPolys : m_backPlatedCopperPolys;
+
+                    zone->TransformShapeToPolygon( *copperPolys, layer, 0, maxError, ERROR_INSIDE );
                 }
             }
         }
