@@ -729,7 +729,8 @@ int FOOTPRINT_EDITOR_CONTROL::ShowDatasheet( const TOOL_EVENT& aEvent )
         {
             // Only absolute URLs are supported
             SEARCH_STACK* searchStack = nullptr;
-            GetAssociatedDocument( m_frame, *url, &m_frame->Prj(), searchStack, footprint );
+            GetAssociatedDocument( m_frame, *url, &m_frame->Prj(), searchStack,
+                                   { m_frame->GetBoard(), footprint } );
         }
     }
     return 0;

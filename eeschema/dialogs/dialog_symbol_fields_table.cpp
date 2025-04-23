@@ -78,13 +78,13 @@ enum
 class FIELDS_EDITOR_GRID_TRICKS : public GRID_TRICKS
 {
 public:
-    FIELDS_EDITOR_GRID_TRICKS( DIALOG_SHIM* aParent, WX_GRID* aGrid,
-                               wxDataViewListCtrl*            aFieldsCtrl,
-                               FIELDS_EDITOR_GRID_DATA_MODEL* aDataModel ) :
+    FIELDS_EDITOR_GRID_TRICKS( DIALOG_SHIM* aParent, WX_GRID* aGrid, wxDataViewListCtrl* aFieldsCtrl,
+                               FIELDS_EDITOR_GRID_DATA_MODEL* aDataModel, EMBEDDED_FILES* aFiles ) :
             GRID_TRICKS( aGrid ),
             m_dlg( aParent ),
             m_fieldsCtrl( aFieldsCtrl ),
-            m_dataModel( aDataModel )
+            m_dataModel( aDataModel ),
+            m_files( aFiles )
     {}
 
 protected:
@@ -113,8 +113,7 @@ protected:
             // pick a footprint using the footprint picker.
             wxString fpid = m_grid->GetCellValue( m_grid->GetGridCursorRow(), FOOTPRINT_FIELD );
 
-            if( KIWAY_PLAYER* frame = m_dlg->Kiway().Player( FRAME_FOOTPRINT_CHOOSER, true,
-                                                             m_dlg ) )
+            if( KIWAY_PLAYER* frame = m_dlg->Kiway().Player( FRAME_FOOTPRINT_CHOOSER, true, m_dlg ) )
             {
                 if( frame->ShowModal( &fpid, m_dlg ) )
                     m_grid->SetCellValue( m_grid->GetGridCursorRow(), FOOTPRINT_FIELD, fpid );
@@ -124,10 +123,9 @@ protected:
         }
         else if (event.GetId() == MYID_SHOW_DATASHEET )
         {
-            wxString datasheet_uri = m_grid->GetCellValue( m_grid->GetGridCursorRow(),
-                                                           DATASHEET_FIELD );
+            wxString datasheet_uri = m_grid->GetCellValue( m_grid->GetGridCursorRow(), DATASHEET_FIELD );
             GetAssociatedDocument( m_dlg, datasheet_uri, &m_dlg->Prj(),
-                                   PROJECT_SCH::SchSearchS( &m_dlg->Prj() ) );
+                                   PROJECT_SCH::SchSearchS( &m_dlg->Prj() ), { m_files } );
         }
         else
         {
@@ -164,9 +162,11 @@ protected:
         }
     }
 
-    DIALOG_SHIM*        m_dlg;
-    wxDataViewListCtrl* m_fieldsCtrl;
+private:
+    DIALOG_SHIM*                   m_dlg;
+    wxDataViewListCtrl*            m_fieldsCtrl;
     FIELDS_EDITOR_GRID_DATA_MODEL* m_dataModel;
+    EMBEDDED_FILES*                m_files;
 };
 
 
@@ -243,7 +243,7 @@ DIALOG_SYMBOL_FIELDS_TABLE::DIALOG_SYMBOL_FIELDS_TABLE( SCH_EDIT_FRAME* parent,
 
     wxGridCellAttr* attr = new wxGridCellAttr;
     attr->SetEditor( new GRID_CELL_URL_EDITOR( this, PROJECT_SCH::SchSearchS( &Prj() ),
-                                               &m_parent->Schematic() ) );
+                                               { &m_parent->Schematic() } ) );
     m_dataModel = new FIELDS_EDITOR_GRID_DATA_MODEL( m_symbolsList, attr );
 
     LoadFieldNames();   // loads rows into m_fieldsCtrl and columns into m_dataModel
@@ -283,7 +283,7 @@ DIALOG_SYMBOL_FIELDS_TABLE::DIALOG_SYMBOL_FIELDS_TABLE( SCH_EDIT_FRAME* parent,
 
     // add Cut, Copy, and Paste to wxGrid
     m_grid->PushEventHandler( new FIELDS_EDITOR_GRID_TRICKS( this, m_grid, m_fieldsCtrl,
-                                                             m_dataModel ) );
+                                                             m_dataModel, &m_parent->Schematic() ) );
 
     // give a bit more room for comboboxes
     m_grid->SetDefaultRowSize( m_grid->GetDefaultRowSize() + 4 );
@@ -442,7 +442,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::SetupColumnProperties( int aCol )
     {
         // set datasheet column viewer button
         attr->SetEditor( new GRID_CELL_URL_EDITOR( this, PROJECT_SCH::SchSearchS( &Prj() ),
-                                                   &m_parent->Schematic() ) );
+                                                   { &m_parent->Schematic() } ) );
         m_dataModel->SetColAttr( attr, aCol );
     }
     else if( m_dataModel->ColIsQuantity( aCol ) || m_dataModel->ColIsItemNumber( aCol ) )

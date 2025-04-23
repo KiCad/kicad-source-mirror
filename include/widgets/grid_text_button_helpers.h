@@ -120,8 +120,10 @@ class GRID_CELL_URL_EDITOR : public GRID_CELL_TEXT_BUTTON
 {
 public:
     GRID_CELL_URL_EDITOR( DIALOG_SHIM* aParent, SEARCH_STACK* aSearchStack = nullptr,
-                          EMBEDDED_FILES* aFiles = nullptr ) :
-            m_dlg( aParent ), m_searchStack( aSearchStack ), m_files( aFiles )
+                          std::vector<EMBEDDED_FILES*> aFilesStack = {} ) :
+            m_dlg( aParent ),
+            m_searchStack( aSearchStack ),
+            m_filesStack( aFilesStack )
     { }
 
     wxGridCellEditor* Clone() const override
@@ -132,9 +134,9 @@ public:
     void Create( wxWindow* aParent, wxWindowID aId, wxEvtHandler* aEventHandler ) override;
 
 protected:
-    DIALOG_SHIM* m_dlg;
-    SEARCH_STACK* m_searchStack;
-    EMBEDDED_FILES* m_files;
+    DIALOG_SHIM*                 m_dlg;
+    SEARCH_STACK*                m_searchStack;
+    std::vector<EMBEDDED_FILES*> m_filesStack;
 };
 
 

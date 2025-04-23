@@ -60,7 +60,7 @@ static const wxFileTypeInfo EDAfallbacks[] =
 
 
 bool GetAssociatedDocument( wxWindow* aParent, const wxString& aDocName, PROJECT* aProject,
-                            SEARCH_STACK* aPaths, EMBEDDED_FILES* aFiles )
+                            SEARCH_STACK* aPaths, std::vector<EMBEDDED_FILES*> aFilesStack )
 {
     wxString      docname;
     wxString      fullfilename;
@@ -87,7 +87,7 @@ bool GetAssociatedDocument( wxWindow* aParent, const wxString& aDocName, PROJECT
             }
             else
             {
-                if( !aFiles )
+                if( aFilesStack.empty() )
                 {
                     wxLogTrace( wxT( "KICAD_EMBED" ),
                                 wxT( "No EMBEDDED_FILES object provided for kicad_embed URI" ) );
@@ -101,9 +101,13 @@ bool GetAssociatedDocument( wxWindow* aParent, const wxString& aDocName, PROJECT
                     return false;
                 }
 
-                docname = docname.Mid( 14 );
+                docname = docname.Mid( wxString( FILEEXT::KiCadUriPrefix + "://" ).length() );
 
-                wxFileName temp_file = aFiles->GetTemporaryFileName( docname );
+                wxFileName temp_file = aFilesStack[0]->GetTemporaryFileName( docname );
+                int        ii = 1;
+
+                while( !temp_file.IsOk() && ii < (int) aFilesStack.size() )
+                    temp_file = aFilesStack[ii++]->GetTemporaryFileName( docname );
 
                 if( !temp_file.IsOk() )
                 {
@@ -114,7 +118,8 @@ bool GetAssociatedDocument( wxWindow* aParent, const wxString& aDocName, PROJECT
 
                 wxLogTrace( wxT( "KICAD_EMBED" ),
                             wxT( "Opening embedded file '%s' as '%s'" ),
-                            docname, temp_file.GetFullPath() );
+                            docname,
+                            temp_file.GetFullPath() );
                 docname = temp_file.GetFullPath();
             }
         }

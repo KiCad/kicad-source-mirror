@@ -131,12 +131,12 @@ static wxString netList( LIB_SYMBOL* aSymbol )
 
 
 FIELDS_GRID_TABLE::FIELDS_GRID_TABLE( DIALOG_SHIM* aDialog, SCH_BASE_FRAME* aFrame, WX_GRID* aGrid,
-                                      LIB_SYMBOL* aSymbol, EMBEDDED_FILES* aFiles ) :
+                                      LIB_SYMBOL* aSymbol, std::vector<EMBEDDED_FILES*> aFilesStack ) :
         m_frame( aFrame ),
         m_dialog( aDialog ),
         m_parentType( SCH_SYMBOL_T ),
         m_part( aSymbol ),
-        m_files( aFiles ),
+        m_filesStack( aFilesStack ),
         m_symbolNetlist( netList( aSymbol ) ),
         m_fieldNameValidator( FIELD_NAME ),
         m_referenceValidator( REFERENCE_FIELD ),
@@ -150,12 +150,11 @@ FIELDS_GRID_TABLE::FIELDS_GRID_TABLE( DIALOG_SHIM* aDialog, SCH_BASE_FRAME* aFra
 
 
 FIELDS_GRID_TABLE::FIELDS_GRID_TABLE( DIALOG_SHIM* aDialog, SCH_EDIT_FRAME* aFrame, WX_GRID* aGrid,
-                                      SCH_SYMBOL* aSymbol, EMBEDDED_FILES* aFiles ) :
+                                      SCH_SYMBOL* aSymbol ) :
         m_frame( aFrame ),
         m_dialog( aDialog ),
         m_parentType( SCH_SYMBOL_T ),
         m_part( aSymbol->GetLibSymbolRef().get() ),
-        m_files( aFiles ),
         m_symbolNetlist( netList( aSymbol, aFrame->GetCurrentSheet() ) ),
         m_fieldNameValidator( FIELD_NAME ),
         m_referenceValidator( REFERENCE_FIELD ),
@@ -164,6 +163,11 @@ FIELDS_GRID_TABLE::FIELDS_GRID_TABLE( DIALOG_SHIM* aDialog, SCH_EDIT_FRAME* aFra
         m_nonUrlValidator( FIELD_VALUE ),
         m_filepathValidator( SHEETFILENAME )
 {
+    m_filesStack.push_back( aSymbol->Schematic() );
+
+    if( m_part )
+        m_filesStack.push_back( m_part );
+
     initGrid( aGrid );
 }
 
@@ -174,7 +178,6 @@ FIELDS_GRID_TABLE::FIELDS_GRID_TABLE( DIALOG_SHIM* aDialog, SCH_EDIT_FRAME* aFra
         m_dialog( aDialog ),
         m_parentType( SCH_SHEET_T ),
         m_part( nullptr ),
-        m_files( nullptr ),
         m_fieldNameValidator( FIELD_NAME ),
         m_referenceValidator( SHEETNAME_V ),
         m_valueValidator( VALUE_FIELD ),
@@ -182,6 +185,8 @@ FIELDS_GRID_TABLE::FIELDS_GRID_TABLE( DIALOG_SHIM* aDialog, SCH_EDIT_FRAME* aFra
         m_nonUrlValidator( FIELD_VALUE ),
         m_filepathValidator( SHEETFILENAME_V )
 {
+    m_filesStack.push_back( aSheet->Schematic() );
+
     initGrid( aGrid );
 }
 
@@ -199,6 +204,8 @@ FIELDS_GRID_TABLE::FIELDS_GRID_TABLE( DIALOG_SHIM* aDialog, SCH_EDIT_FRAME* aFra
         m_nonUrlValidator( FIELD_VALUE ),
         m_filepathValidator( 0 )
 {
+    m_filesStack.push_back( aLabel->Schematic() );
+
     initGrid( aGrid );
 }
 
@@ -263,7 +270,7 @@ void FIELDS_GRID_TABLE::initGrid( WX_GRID* aGrid )
 
     m_urlAttr = new wxGridCellAttr;
     SEARCH_STACK* prjSearchStack = PROJECT_SCH::SchSearchS( &m_frame->Prj() );
-    GRID_CELL_URL_EDITOR* urlEditor = new GRID_CELL_URL_EDITOR( m_dialog, prjSearchStack, m_files );
+    GRID_CELL_URL_EDITOR* urlEditor = new GRID_CELL_URL_EDITOR( m_dialog, prjSearchStack, m_filesStack );
     urlEditor->SetValidator( m_urlValidator );
     m_urlAttr->SetEditor( urlEditor );
 
@@ -1086,8 +1093,8 @@ void FIELDS_GRID_TRICKS::doPopupSelection( wxCommandEvent& event )
     {
         wxString datasheet_uri = m_grid->GetCellValue( DATASHEET_FIELD, FDC_VALUE );
 
-        GetAssociatedDocument( m_dlg, datasheet_uri, &m_dlg->Prj(),
-                               PROJECT_SCH::SchSearchS( &m_dlg->Prj() ), m_files );
+        GetAssociatedDocument( m_dlg, datasheet_uri, &m_dlg->Prj(), PROJECT_SCH::SchSearchS( &m_dlg->Prj() ),
+                               m_filesStack );
     }
     else
     {

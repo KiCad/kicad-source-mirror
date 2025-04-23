@@ -150,7 +150,7 @@ DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR(
     m_NoteBook->AddPage( m_3dPanel, _("3D Models"), false );
     m_NoteBook->AddPage( m_embeddedFiles, _( "Embedded Files" ) );
 
-    m_fields = new PCB_FIELDS_GRID_TABLE( m_frame, this, m_embeddedFiles->GetLocalFiles() );
+    m_fields = new PCB_FIELDS_GRID_TABLE( m_frame, this, { m_embeddedFiles->GetLocalFiles() } );
     m_privateLayers = new PRIVATE_LAYERS_GRID_TABLE( m_frame );
 
     m_delayedErrorMessage = wxEmptyString;

@@ -105,7 +105,7 @@ void SCH_NAVIGATE_TOOL::HypertextCommand( const wxString& aHref )
         menu.Append( 1, wxString::Format( _( "Open %s" ), href ) );
 
         if( m_frame->GetPopupMenuSelectionFromUser( menu ) == 1 )
-            GetAssociatedDocument( m_frame, href, &m_frame->Prj(), nullptr, &m_frame->Schematic() );
+            GetAssociatedDocument( m_frame, href, &m_frame->Prj(), nullptr, { &m_frame->Schematic() } );
     }
 }
 

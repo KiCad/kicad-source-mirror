@@ -327,7 +327,7 @@ DIALOG_SYMBOL_PROPERTIES::DIALOG_SYMBOL_PROPERTIES( SCH_EDIT_FRAME* aParent,
     // so we need to handle m_part == nullptr
     // wxASSERT( m_part );
 
-    m_fields = new FIELDS_GRID_TABLE( this, aParent, m_fieldsGrid, m_symbol, &aParent->Schematic() );
+    m_fields = new FIELDS_GRID_TABLE( this, aParent, m_fieldsGrid, m_symbol );
 
     // Give a bit more room for combobox editors
     m_fieldsGrid->SetDefaultRowSize( m_fieldsGrid->GetDefaultRowSize() + 4 );
@@ -335,7 +335,7 @@ DIALOG_SYMBOL_PROPERTIES::DIALOG_SYMBOL_PROPERTIES( SCH_EDIT_FRAME* aParent,
 
     m_fieldsGrid->SetTable( m_fields );
     m_fieldsGrid->PushEventHandler( new FIELDS_GRID_TRICKS( m_fieldsGrid, this,
-                                                            &aParent->Schematic(),
+                                                            { &aParent->Schematic(), m_part },
                                                             [&]( wxCommandEvent& aEvent )
                                                             {
                                                                 OnAddField( aEvent );

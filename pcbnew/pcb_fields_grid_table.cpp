@@ -48,10 +48,14 @@ wxArrayString g_menuOrientations;
 
 
 PCB_FIELDS_GRID_TABLE::PCB_FIELDS_GRID_TABLE( PCB_BASE_FRAME* aFrame, DIALOG_SHIM* aDialog,
-                                              EMBEDDED_FILES* aFiles ) :
-        m_frame( aFrame ), m_dialog( aDialog ), m_fieldNameValidator( FIELD_NAME ),
-        m_referenceValidator( REFERENCE_FIELD ), m_valueValidator( VALUE_FIELD ),
-        m_urlValidator( FIELD_VALUE ), m_nonUrlValidator( FIELD_VALUE )
+                                              std::vector<EMBEDDED_FILES*> aFilesStack ) :
+        m_frame( aFrame ),
+        m_dialog( aDialog ),
+        m_fieldNameValidator( FIELD_NAME ),
+        m_referenceValidator( REFERENCE_FIELD ),
+        m_valueValidator( VALUE_FIELD ),
+        m_urlValidator( FIELD_VALUE ),
+        m_nonUrlValidator( FIELD_VALUE )
 {
     // Build the column attributes.
 
@@ -89,7 +93,7 @@ PCB_FIELDS_GRID_TABLE::PCB_FIELDS_GRID_TABLE( PCB_BASE_FRAME* aFrame, DIALOG_SHI
     m_valueAttr->SetEditor( valueEditor );
 
     m_urlAttr = new wxGridCellAttr;
-    GRID_CELL_URL_EDITOR* urlEditor = new GRID_CELL_URL_EDITOR( m_dialog, nullptr, aFiles );
+    GRID_CELL_URL_EDITOR* urlEditor = new GRID_CELL_URL_EDITOR( m_dialog, nullptr, aFilesStack );
     urlEditor->SetValidator( m_urlValidator );
     m_urlAttr->SetEditor( urlEditor );
 
