@@ -40,7 +40,7 @@ public:
      * @param aFootprint the footprint to gather existing numbers from (nullptr for no footprint)
      * @param aArrayOpts the array options that provide the candidate numbers
      */
-    ARRAY_PAD_NUMBER_PROVIDER( const FOOTPRINT* aFootprint, const ARRAY_OPTIONS& aArrayOpts );
+    ARRAY_PAD_NUMBER_PROVIDER( const std::set<wxString>& aExistingPadNumbers, const ARRAY_OPTIONS& aArrayOpts );
 
     /**
      * Get the next available pad name.

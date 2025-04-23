@@ -26,7 +26,7 @@
 #include <pad.h>
 
 
-ARRAY_PAD_NUMBER_PROVIDER::ARRAY_PAD_NUMBER_PROVIDER( const FOOTPRINT* aFootprint,
+ARRAY_PAD_NUMBER_PROVIDER::ARRAY_PAD_NUMBER_PROVIDER( const std::set<wxString>& aExistingPadNumbers,
                                                       const ARRAY_OPTIONS& aArrayOpts )
         : m_arrayOpts( aArrayOpts )
 {
@@ -41,13 +41,7 @@ ARRAY_PAD_NUMBER_PROVIDER::ARRAY_PAD_NUMBER_PROVIDER( const FOOTPRINT* aFootprin
     }
     else
     {
-        // no footprint, no reserved names either
-        if( aFootprint )
-        {
-            // reserve the name of each existing pad
-            for( PAD* pad : aFootprint->Pads() )
-                m_existing_pad_numbers.insert( pad->GetNumber() );
-        }
+        m_existing_pad_numbers = aExistingPadNumbers;
     }
 }
 

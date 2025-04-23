@@ -130,7 +130,21 @@ void ARRAY_TOOL::onDialogClosed( wxCloseEvent& aEvent )
     FOOTPRINT* const fp =
             m_isFootprintEditor ? editFrame->GetBoard()->GetFirstFootprint() : nullptr;
 
-    ARRAY_PAD_NUMBER_PROVIDER pad_number_provider( fp, *m_array_opts );
+    // Collect a list of pad numbers that will _not_ be counted as "used"
+    // when finding the next pad numbers.
+    // Things that are selected are fair game, as they'll give up their numbers.
+    // Keeps numbers used by both selected and unselected pads as "reserved".
+    std::set<wxString> unchangingPadNumbers;
+    if( fp )
+    {
+        for( PAD* pad : fp->Pads() )
+        {
+            if( !pad->IsSelected() )
+                unchangingPadNumbers.insert( pad->GetNumber() );
+        }
+    }
+
+    ARRAY_PAD_NUMBER_PROVIDER pad_number_provider( unchangingPadNumbers, *m_array_opts );
 
     EDA_ITEMS all_added_items;
 
