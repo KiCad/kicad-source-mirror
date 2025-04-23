@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-04-23 21:24+0300\n"
-"PO-Revision-Date: 2025-04-21 20:21+0000\n"
+"PO-Revision-Date: 2025-04-23 19:50+0000\n"
 "Last-Translator: Ivan Chuba <xtrvweb@gmail.com>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/kicad/v9/uk/>\n"
 "Language: uk\n"
@@ -4698,10 +4698,10 @@ msgid "Library '%s' not found."
 msgstr "Бібліотека '%s' не знайдена."
 
 #: common/dialogs/panel_design_block_lib_table.cpp:858
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Folder '%s' already exists. Do you want overwrite any existing design blocks?"
-msgstr "Файл '%s' вже існує. Ви хочете перезаписати цей файл?"
+msgstr "Тека '%s' вже існує. Бажаєте перезаписати наявні блоки дизайну?"
 
 #: common/dialogs/panel_design_block_lib_table.cpp:862
 #: eeschema/dialogs/panel_sym_lib_table.cpp:979
@@ -4710,9 +4710,9 @@ msgid "Migrate Library"
 msgstr "Конвертувати бібліотеку"
 
 #: common/dialogs/panel_design_block_lib_table.cpp:891
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to save design block library file '%s'."
-msgstr "Не вдалося зберегти файл бібліотеці символів '%s'."
+msgstr "Не вдалося зберегти файл бібліотеки блоків дизайну '%s'."
 
 #: common/dialogs/panel_design_block_lib_table.cpp:930
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:953
@@ -4756,9 +4756,8 @@ msgid "Add Anyway"
 msgstr "Додати все одно"
 
 #: common/dialogs/panel_design_block_lib_table.cpp:1176
-#, fuzzy
 msgid "Design Block Libraries"
-msgstr "Бібліотеки"
+msgstr "Бібліотеки дизайн-блоків"
 
 #: common/dialogs/panel_design_block_lib_table.cpp:1197
 #: eeschema/dialogs/panel_sym_lib_table.cpp:1208
@@ -4912,19 +4911,18 @@ msgid "This is a read-only table which shows pertinent environment variables."
 msgstr "Це таблиця лише для читання, яка показує постійні змінні середовища."
 
 #: common/dialogs/panel_embedded_files.cpp:54
-#, fuzzy
 msgid "Copy Embedded Reference"
-msgstr "Копіювати з позначенням"
+msgstr "Скопіювати вбудоване посилання"
 
 #: common/dialogs/panel_embedded_files.cpp:55
 msgid "Copy the reference for this embedded file"
-msgstr ""
+msgstr "Скопіювати посилання на цей вбудований файл"
 
 #: common/dialogs/panel_embedded_files.cpp:284
 #: common/dialogs/panel_embedded_files.cpp:399
-#, fuzzy, c-format
+#, c-format
 msgid "File '%s' already exists."
-msgstr "Файл %s вже існує."
+msgstr "Файл '%s'вже існує."
 
 #: common/dialogs/panel_embedded_files.cpp:287
 #: common/dialogs/panel_embedded_files.cpp:404
@@ -4948,9 +4946,9 @@ msgid "Overwrite"
 msgstr "Перезаписати"
 
 #: common/dialogs/panel_embedded_files.cpp:306
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to add file '%s'."
-msgstr "Не вдалося створити файл '%s'."
+msgstr "Не вдалося додати файл '%s'."
 
 #: common/dialogs/panel_embedded_files.cpp:320
 #, fuzzy
@@ -12010,9 +12008,9 @@ msgid "Database Library Settings"
 msgstr "База даних бібліотек символів KiCad"
 
 #: eeschema/dialogs/dialog_design_block_properties.cpp:98
-#, fuzzy, c-format
+#, c-format
 msgid "Illegal character '%c' in name '%s'."
-msgstr "Недійсний символ '%c' в псевдонімі '%s'."
+msgstr "Некоректний символ '%c' у назві '%s'."
 
 #: eeschema/dialogs/dialog_design_block_properties.cpp:124
 #: eeschema/dialogs/panel_template_fieldnames.cpp:100
