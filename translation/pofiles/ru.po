@@ -22,7 +22,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-04-23 21:24+0300\n"
-"PO-Revision-Date: 2025-04-21 20:20+0000\n"
+"PO-Revision-Date: 2025-04-23 19:50+0000\n"
 "Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/kicad/v9/ru/>\n"
 "Language: ru\n"
@@ -11810,9 +11810,9 @@ msgid "Database Library Settings"
 msgstr "Настройки библиотеки из базы данных"
 
 #: eeschema/dialogs/dialog_design_block_properties.cpp:98
-#, fuzzy, c-format
+#, c-format
 msgid "Illegal character '%c' in name '%s'."
-msgstr "Неверный символ '%c' в уникальном имени '%s'."
+msgstr "Неверный символ '%c' в имени '%s'."
 
 #: eeschema/dialogs/dialog_design_block_properties.cpp:124
 #: eeschema/dialogs/panel_template_fieldnames.cpp:100
@@ -30890,9 +30890,8 @@ msgstr "Действующий %s:"
 #: pcb_calculator/transline_ident.cpp:163
 #: pcb_calculator/transline_ident.cpp:198
 #: pcb_calculator/transline_ident.cpp:357
-#, fuzzy
 msgid "Unit propagation delay:"
-msgstr "Задержка распространения"
+msgstr "Задержка распространения:"
 
 #: pcb_calculator/transline_ident.cpp:121
 #: pcb_calculator/transline_ident.cpp:164
@@ -31095,14 +31094,12 @@ msgid "Effective %s (odd):"
 msgstr "Действующий %s (нечётная мода):"
 
 #: pcb_calculator/transline_ident.cpp:308
-#, fuzzy
 msgid "Unit propagation delay (even):"
-msgstr "Задержка распространения"
+msgstr "Задержка распространения (чётная мода):"
 
 #: pcb_calculator/transline_ident.cpp:309
-#, fuzzy
 msgid "Unit propagation delay (odd):"
-msgstr "Задержка распространения"
+msgstr "Задержка распространения (нечётная мода):"
 
 #: pcb_calculator/transline_ident.cpp:310
 msgid "Conductor losses (even):"
