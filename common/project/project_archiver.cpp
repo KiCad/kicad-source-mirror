@@ -316,6 +316,8 @@ bool PROJECT_ARCHIVER::Archive( const wxString& aSrcDir, const wxString& aDestFi
                 msg.Printf( _( "Archived file '%s'." ), relativeFn );
                 aReporter.Report( msg, RPT_SEVERITY_INFO );
             }
+
+            delete infile;
         }
         else
         {
