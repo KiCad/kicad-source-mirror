@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-21 13:43+0300\n"
+"POT-Creation-Date: 2025-04-23 21:24+0300\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -7531,6 +7531,10 @@ msgstr "Time in seconds that database queries will be cached for"
 
 msgid "Database Library Settings"
 msgstr "Database Library Settings"
+
+#, c-format
+msgid "Illegal character '%c' in name '%s'."
+msgstr "Illegal character '%c' in name '%s'."
 
 msgid "Untitled Field"
 msgstr "Untitled Field"
@@ -21248,6 +21252,9 @@ msgstr "Frequency of the input signal"
 msgid "Effective %s:"
 msgstr "Effective %s:"
 
+msgid "Unit propagation delay:"
+msgstr "Unit propagation delay:"
+
 msgid "Conductor losses:"
 msgstr "Conductor losses:"
 
@@ -21342,6 +21349,12 @@ msgstr "Effective %s (even):"
 #, c-format
 msgid "Effective %s (odd):"
 msgstr "Effective %s (odd):"
+
+msgid "Unit propagation delay (even):"
+msgstr "Unit propagation delay (even):"
+
+msgid "Unit propagation delay (odd):"
+msgstr "Unit propagation delay (odd):"
 
 msgid "Conductor losses (even):"
 msgstr "Conductor losses (even):"
@@ -26929,6 +26942,32 @@ msgstr "Place items from sheet:"
 
 msgid "Place items matching component class:"
 msgstr "Place items matching component class:"
+
+msgid ""
+"### Clause\n"
+"\n"
+"    (condition \"<expression>\")\n"
+"\n"
+"<br>"
+msgstr ""
+"### Clause\n"
+"\n"
+"    (condition \"<expression>\")\n"
+"\n"
+"<br>"
+
+msgid ""
+"### Notes\n"
+"\n"
+"Use Ctrl+/ to comment or uncomment line(s).\n"
+"<br><br><br>\n"
+"\n"
+msgstr ""
+"### Notes\n"
+"\n"
+"Use Ctrl+/ to comment or uncomment line(s).\n"
+"<br><br><br>\n"
+"\n"
 
 msgid "Minimum clearance:"
 msgstr "Minimum clearance:"

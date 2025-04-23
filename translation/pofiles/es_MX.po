@@ -17,7 +17,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-21 13:43+0300\n"
+"POT-Creation-Date: 2025-04-23 21:24+0300\n"
 "PO-Revision-Date: 2025-03-25 19:16+0000\n"
 "Last-Translator: lylythechosenone <Lysander.mealy@gmail.com>\n"
 "Language-Team: Spanish (Mexico) <https://hosted.weblate.org/projects/kicad/"
@@ -70,37 +70,37 @@ msgstr ""
 msgid "Create tracks and vias"
 msgstr "Crear pistas y vías"
 
-#: 3d-viewer/3d_canvas/create_layer_items.cpp:797
+#: 3d-viewer/3d_canvas/create_layer_items.cpp:788
 msgid "Create zones"
 msgstr "Crear zonas"
 
-#: 3d-viewer/3d_canvas/create_layer_items.cpp:881
+#: 3d-viewer/3d_canvas/create_layer_items.cpp:868
 msgid "Build Tech layers"
 msgstr "Construir capas técnicas"
 
-#: 3d-viewer/3d_canvas/create_layer_items.cpp:958
+#: 3d-viewer/3d_canvas/create_layer_items.cpp:945
 #, c-format
 msgid "Build Tech layer %d"
 msgstr "Construir capa técnica %d"
 
-#: 3d-viewer/3d_canvas/create_layer_items.cpp:1208
+#: 3d-viewer/3d_canvas/create_layer_items.cpp:1195
 msgid "Simplifying copper layer polygons"
 msgstr "Simplificando polígonos de la capa de cobre"
 
-#: 3d-viewer/3d_canvas/create_layer_items.cpp:1213
+#: 3d-viewer/3d_canvas/create_layer_items.cpp:1200
 msgid "Calculating plated copper"
 msgstr "Calculando cobre plateado"
 
-#: 3d-viewer/3d_canvas/create_layer_items.cpp:1267
+#: 3d-viewer/3d_canvas/create_layer_items.cpp:1254
 #, c-format
 msgid "Simplifying %d copper layers"
 msgstr "Simplificando %d capas de cobre"
 
-#: 3d-viewer/3d_canvas/create_layer_items.cpp:1310
+#: 3d-viewer/3d_canvas/create_layer_items.cpp:1297
 msgid "Simplify holes contours"
 msgstr "Simplificar contorno de agujeros"
 
-#: 3d-viewer/3d_canvas/create_layer_items.cpp:1330
+#: 3d-viewer/3d_canvas/create_layer_items.cpp:1317
 msgid "Build BVH for holes and vias"
 msgstr "Construir BVH para agujeros y vías"
 
@@ -344,6 +344,7 @@ msgstr "Permisos insuficientes para guardar el archivo '%s'."
 #: common/dialogs/panel_embedded_files.cpp:457
 #: common/dialogs/panel_embedded_files.cpp:469
 #: common/dialogs/panel_setup_severities.cpp:44 common/kidialog.cpp:126
+#: eeschema/dialogs/dialog_design_block_properties.cpp:102
 #: eeschema/dialogs/dialog_erc.cpp:878
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1828
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2230
@@ -2669,7 +2670,7 @@ msgstr "Variables de entorno"
 #: eeschema/dialogs/panel_bom_presets_base.cpp:80
 #: eeschema/dialogs/panel_sym_lib_table.cpp:380
 #: eeschema/dialogs/panel_template_fieldnames_base.cpp:42
-#: eeschema/fields_grid_table.cpp:470 eeschema/sch_pin.cpp:1578
+#: eeschema/fields_grid_table.cpp:477 eeschema/sch_pin.cpp:1578
 #: eeschema/sch_symbol.cpp:2068 eeschema/sch_symbol.cpp:2121
 #: eeschema/symbol_editor/symbol_editor.cpp:1737
 #: eeschema/symbol_viewer_frame.cpp:457
@@ -2682,7 +2683,7 @@ msgstr "Variables de entorno"
 #: pcbnew/dialogs/panel_fp_editor_field_defaults.cpp:54
 #: pcbnew/dialogs/panel_fp_editor_field_defaults_base.cpp:168
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:436 pcbnew/pcb_field.cpp:291
-#: pcbnew/pcb_fields_grid_table.cpp:143 pcbnew/pcb_group.cpp:507
+#: pcbnew/pcb_fields_grid_table.cpp:147 pcbnew/pcb_group.cpp:507
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:120
 #: pcbnew/widgets/search_handlers.cpp:187
 #: pcbnew/widgets/search_handlers.cpp:325
@@ -2849,6 +2850,10 @@ msgstr "Seleccionar archivo de tabla global de bibliotecas %s:"
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:432
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:436
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:440
+#: pcb_calculator/calculator_panels/panel_transline_base.cpp:444
+#: pcb_calculator/calculator_panels/panel_transline_base.cpp:448
+#: pcb_calculator/calculator_panels/panel_transline_base.cpp:452
+#: pcb_calculator/calculator_panels/panel_transline_base.cpp:456
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:230
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:242
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:254
@@ -3483,7 +3488,7 @@ msgstr "Opción"
 #: eeschema/dialogs/dialog_sim_format_value.cpp:75
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:57
 #: eeschema/dialogs/panel_sym_lib_table.cpp:381
-#: eeschema/fields_grid_table.cpp:471 eeschema/sch_symbol.cpp:1099
+#: eeschema/fields_grid_table.cpp:478 eeschema/sch_symbol.cpp:1099
 #: eeschema/sch_symbol.cpp:2064 eeschema/sch_symbol.cpp:2117
 #: eeschema/sch_symbol.cpp:3004 eeschema/sim/simulator_frame_ui.cpp:616
 #: eeschema/sim/simulator_frame_ui.cpp:2709
@@ -3499,7 +3504,7 @@ msgstr "Opción"
 #: pcbnew/dialogs/panel_fp_editor_field_defaults_base.cpp:57
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:437 pcbnew/footprint.cpp:4163
 #: pcbnew/footprint_wizard_frame.cpp:326 pcbnew/pcb_dimension.cpp:619
-#: pcbnew/pcb_fields_grid_table.cpp:144 pcbnew/plot_board_layers.cpp:181
+#: pcbnew/pcb_fields_grid_table.cpp:148 pcbnew/plot_board_layers.cpp:181
 #: pcbnew/widgets/search_handlers.cpp:119
 msgid "Value"
 msgstr "Valor"
@@ -3619,7 +3624,7 @@ msgstr "Modo de salida:"
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:78
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:72
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:69
-#: eeschema/fields_grid_table.cpp:483
+#: eeschema/fields_grid_table.cpp:490
 #: eeschema/printing/dialog_print_base.cpp:35 eeschema/sch_bus_entry.cpp:678
 #: eeschema/sch_junction.cpp:383 eeschema/sch_line.cpp:1099
 #: eeschema/sim/simulator_frame_ui.cpp:609
@@ -3628,7 +3633,7 @@ msgstr "Modo de salida:"
 #: pcbnew/dialogs/dialog_plot_base.cpp:380
 #: pcbnew/dialogs/dialog_plot_base.cpp:406 pcbnew/pcb_field.cpp:298
 #: pcbnew/pcb_tablecell.cpp:208 pcbnew/pcb_text.cpp:628
-#: pcbnew/pcb_textbox.cpp:806 pcbnew/tools/drawing_stackup_table_tool.cpp:271
+#: pcbnew/pcb_textbox.cpp:809 pcbnew/tools/drawing_stackup_table_tool.cpp:271
 msgid "Color"
 msgstr "Color"
 
@@ -3902,7 +3907,7 @@ msgstr "Nombre de archivo"
 #: pcbnew/dialogs/dialog_find_base.cpp:118 pcbnew/pad.cpp:1333
 #: pcbnew/pcb_dimension.cpp:673 pcbnew/pcb_group.cpp:396
 #: pcbnew/pcb_shape.cpp:649 pcbnew/pcb_tablecell.cpp:106
-#: pcbnew/pcb_text.cpp:286 pcbnew/pcb_textbox.cpp:468 pcbnew/pcb_track.cpp:1707
+#: pcbnew/pcb_text.cpp:286 pcbnew/pcb_textbox.cpp:470 pcbnew/pcb_track.cpp:1707
 #: pcbnew/zone.cpp:826
 msgid "Status"
 msgstr "Estado"
@@ -5546,7 +5551,7 @@ msgstr ""
 msgid "<Not defined>"
 msgstr "No conectado"
 
-#: common/dialogs/panel_setup_netclasses.cpp:98 common/eda_shape.cpp:2312
+#: common/dialogs/panel_setup_netclasses.cpp:98 common/eda_shape.cpp:2329
 #: common/stroke_params.cpp:40
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:372
 #: eeschema/sch_bus_entry.cpp:661 eeschema/sch_line.cpp:1047
@@ -5555,45 +5560,45 @@ msgstr "No conectado"
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:363
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:332
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:858 pcbnew/footprint.cpp:4124
-#: pcbnew/pad.cpp:2713 pcbnew/pcb_table.cpp:597 pcbnew/pcb_textbox.cpp:782
+#: pcbnew/pad.cpp:2713 pcbnew/pcb_table.cpp:601 pcbnew/pcb_textbox.cpp:785
 #: pcbnew/zone.cpp:864 pcbnew/zone.cpp:1844
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:157
 msgid "Solid"
 msgstr "Sólida"
 
-#: common/dialogs/panel_setup_netclasses.cpp:100 common/eda_shape.cpp:2313
+#: common/dialogs/panel_setup_netclasses.cpp:100 common/eda_shape.cpp:2330
 #: common/stroke_params.cpp:41
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:372
 #: eeschema/sch_bus_entry.cpp:662 eeschema/sch_line.cpp:1048
-#: eeschema/sch_line.cpp:1060 pcbnew/pcb_table.cpp:598
-#: pcbnew/pcb_textbox.cpp:783
+#: eeschema/sch_line.cpp:1060 pcbnew/pcb_table.cpp:602
+#: pcbnew/pcb_textbox.cpp:786
 msgid "Dashed"
 msgstr "Discontinua"
 
-#: common/dialogs/panel_setup_netclasses.cpp:102 common/eda_shape.cpp:2314
+#: common/dialogs/panel_setup_netclasses.cpp:102 common/eda_shape.cpp:2331
 #: common/stroke_params.cpp:42
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:372
 #: eeschema/sch_bus_entry.cpp:663 eeschema/sch_line.cpp:1049
-#: eeschema/sch_line.cpp:1061 pcbnew/pcb_table.cpp:599
-#: pcbnew/pcb_textbox.cpp:784
+#: eeschema/sch_line.cpp:1061 pcbnew/pcb_table.cpp:603
+#: pcbnew/pcb_textbox.cpp:787
 msgid "Dotted"
 msgstr "Punteada"
 
-#: common/dialogs/panel_setup_netclasses.cpp:104 common/eda_shape.cpp:2315
+#: common/dialogs/panel_setup_netclasses.cpp:104 common/eda_shape.cpp:2332
 #: common/stroke_params.cpp:43
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:372
 #: eeschema/sch_bus_entry.cpp:664 eeschema/sch_line.cpp:1050
-#: eeschema/sch_line.cpp:1062 pcbnew/pcb_table.cpp:600
-#: pcbnew/pcb_textbox.cpp:785
+#: eeschema/sch_line.cpp:1062 pcbnew/pcb_table.cpp:604
+#: pcbnew/pcb_textbox.cpp:788
 msgid "Dash-Dot"
 msgstr "Raya-punto"
 
-#: common/dialogs/panel_setup_netclasses.cpp:106 common/eda_shape.cpp:2316
+#: common/dialogs/panel_setup_netclasses.cpp:106 common/eda_shape.cpp:2333
 #: common/stroke_params.cpp:44
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:372
 #: eeschema/sch_bus_entry.cpp:665 eeschema/sch_line.cpp:1051
-#: eeschema/sch_line.cpp:1063 pcbnew/pcb_table.cpp:601
-#: pcbnew/pcb_textbox.cpp:786
+#: eeschema/sch_line.cpp:1063 pcbnew/pcb_table.cpp:605
+#: pcbnew/pcb_textbox.cpp:789
 msgid "Dash-Dot-Dot"
 msgstr "Guión-Punto-Punto"
 
@@ -5738,11 +5743,11 @@ msgstr "Grosor de línea"
 msgid "Bus Thickness"
 msgstr "Grosor de bus"
 
-#: common/dialogs/panel_setup_netclasses_base.cpp:64 common/eda_shape.cpp:2415
+#: common/dialogs/panel_setup_netclasses_base.cpp:64 common/eda_shape.cpp:2432
 #: common/stroke_params.cpp:272 eeschema/sch_bus_entry.cpp:669
 #: eeschema/sch_line.cpp:936 eeschema/sch_line.cpp:1088
 #: eeschema/sch_line.cpp:1092 eeschema/sch_tablecell.cpp:199
-#: pcbnew/pcb_tablecell.cpp:200 pcbnew/pcb_textbox.cpp:804
+#: pcbnew/pcb_tablecell.cpp:200 pcbnew/pcb_textbox.cpp:807
 msgid "Line Style"
 msgstr "Estilo de línea"
 
@@ -5762,7 +5767,7 @@ msgstr "Estilo de línea"
 #: pcbnew/dialogs/dialog_render_job.cpp:27
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2605 pcbnew/pcb_dimension.cpp:642
 #: pcbnew/pcb_tablecell.cpp:116 pcbnew/pcb_text.cpp:294
-#: pcbnew/pcb_textbox.cpp:474
+#: pcbnew/pcb_textbox.cpp:476
 msgid "Default"
 msgstr "Por defecto"
 
@@ -5915,7 +5920,7 @@ msgstr "Línea"
 
 #: common/drawing_sheet/ds_data_item.cpp:367
 #: common/drawing_sheet/ds_draw_item.cpp:124 common/eda_shape.cpp:974
-#: common/eda_shape.cpp:2302
+#: common/eda_shape.cpp:2319
 #: eeschema/dialogs/dialog_label_properties_base.cpp:178
 #: eeschema/sch_label.cpp:2262
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:45 pcbnew/pad.cpp:2684
@@ -6249,16 +6254,16 @@ msgstr ""
 msgid "Set Language"
 msgstr "Seleccionar idioma"
 
-#: common/eda_doc.cpp:148
+#: common/eda_doc.cpp:153
 msgid "Documentation File"
 msgstr "Archivo de documentación"
 
-#: common/eda_doc.cpp:158
+#: common/eda_doc.cpp:163
 #, c-format
 msgid "Documentation file '%s' not found."
 msgstr "No se ha encontrado el archivo de documentación '%s'."
 
-#: common/eda_doc.cpp:204
+#: common/eda_doc.cpp:209
 #, c-format
 msgid "Unknown MIME type for documentation file '%s'"
 msgstr "Tipo de MIME desconocido para el archivo de documentación '%s'"
@@ -6392,12 +6397,12 @@ msgstr "Generador"
 
 #: common/eda_item.cpp:357 common/eda_item.cpp:385 eeschema/sch_textbox.cpp:439
 #: eeschema/sch_textbox.cpp:532 eeschema/widgets/search_handlers.cpp:391
-#: pcbnew/pcb_textbox.cpp:465 pcbnew/pcb_textbox.h:70
+#: pcbnew/pcb_textbox.cpp:467 pcbnew/pcb_textbox.h:70
 msgid "Text Box"
 msgstr "Caja de texto"
 
-#: common/eda_item.cpp:358 common/eda_item.cpp:386 eeschema/sch_table.cpp:579
-#: pcbnew/pcb_table.cpp:451
+#: common/eda_item.cpp:358 common/eda_item.cpp:386 eeschema/sch_table.cpp:582
+#: pcbnew/pcb_table.cpp:455
 #, fuzzy
 msgid "Table"
 msgstr "Tabla:"
@@ -6476,7 +6481,7 @@ msgid "Bitmap"
 msgstr "Mapa de bits"
 
 #: common/eda_item.cpp:383 eeschema/sch_rule_area.cpp:51
-#: eeschema/sch_rule_area.cpp:382 pcbnew/zone.cpp:927
+#: eeschema/sch_rule_area.cpp:380 pcbnew/zone.cpp:927
 msgid "Rule Area"
 msgstr "Área de Reglas"
 
@@ -6546,12 +6551,12 @@ msgstr "Cuadro numérico"
 msgid "Rect"
 msgstr "Rectángulo"
 
-#: common/eda_shape.cpp:330 common/eda_shape.cpp:971 common/eda_shape.cpp:2303
+#: common/eda_shape.cpp:330 common/eda_shape.cpp:971 common/eda_shape.cpp:2320
 #: gerbview/gerber_draw_item.cpp:230
 msgid "Arc"
 msgstr "Arco"
 
-#: common/eda_shape.cpp:331 common/eda_shape.cpp:970 common/eda_shape.cpp:2304
+#: common/eda_shape.cpp:331 common/eda_shape.cpp:970 common/eda_shape.cpp:2321
 #: eeschema/dialogs/dialog_label_properties_base.cpp:172
 #: eeschema/sch_label.cpp:2260 gerbview/gerber_draw_item.cpp:231
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:45 pcbnew/pad.cpp:1549
@@ -6563,7 +6568,7 @@ msgstr "Círculo"
 msgid "Bezier Curve"
 msgstr "Curva Bézier"
 
-#: common/eda_shape.cpp:333 common/eda_shape.cpp:973 common/eda_shape.cpp:2305
+#: common/eda_shape.cpp:333 common/eda_shape.cpp:973 common/eda_shape.cpp:2322
 msgid "Polygon"
 msgstr "Polígono"
 
@@ -6583,11 +6588,11 @@ msgstr "No reconocido"
 msgid "Curve"
 msgstr "Curva"
 
-#: common/eda_shape.cpp:975 common/eda_shape.cpp:2301
+#: common/eda_shape.cpp:975 common/eda_shape.cpp:2318
 msgid "Segment"
 msgstr "Segmento"
 
-#: common/eda_shape.cpp:986 common/eda_shape.cpp:2354
+#: common/eda_shape.cpp:986 common/eda_shape.cpp:2371
 #: eeschema/dialogs/dialog_label_properties_base.cpp:152
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:53
 #: eeschema/sch_label.cpp:2242 eeschema/sch_label.cpp:2274
@@ -6598,12 +6603,12 @@ msgstr "Segmento"
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:44
 #: pcbnew/microwave/microwave_polygon.cpp:129 pcbnew/pcb_tablecell.cpp:196
 #: pcbnew/pcb_target.cpp:157 pcbnew/pcb_target.cpp:252
-#: pcbnew/pcb_textbox.cpp:796
+#: pcbnew/pcb_textbox.cpp:799
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:45
 msgid "Shape"
 msgstr "Forma"
 
-#: common/eda_shape.cpp:992 common/eda_shape.cpp:1001 common/eda_shape.cpp:2381
+#: common/eda_shape.cpp:992 common/eda_shape.cpp:1001 common/eda_shape.cpp:2398
 #: pcbnew/dialogs/dialog_shape_properties.cpp:932 pcbnew/pcb_track.cpp:1603
 msgid "Radius"
 msgstr "Radio"
@@ -6616,17 +6621,17 @@ msgstr "Radio"
 msgid "Length"
 msgstr "Longitud"
 
-#: common/eda_shape.cpp:999 common/eda_shape.cpp:1029 common/eda_shape.cpp:2424
+#: common/eda_shape.cpp:999 common/eda_shape.cpp:1029 common/eda_shape.cpp:2441
 #: pcbnew/dialogs/dialog_shape_properties.cpp:903 pcbnew/pcb_text.cpp:292
-#: pcbnew/pcb_textbox.cpp:472
+#: pcbnew/pcb_textbox.cpp:474
 msgid "Angle"
 msgstr "Ángulo"
 
-#: common/eda_shape.cpp:1010 eeschema/sch_rule_area.cpp:386
+#: common/eda_shape.cpp:1010 eeschema/sch_rule_area.cpp:384
 msgid "Points"
 msgstr "Puntos"
 
-#: common/eda_shape.cpp:1014 common/eda_shape.cpp:2399 common/eda_text.cpp:1389
+#: common/eda_shape.cpp:1014 common/eda_shape.cpp:2416 common/eda_text.cpp:1389
 #: eeschema/sch_bitmap.cpp:201 eeschema/sch_bitmap.cpp:340
 #: eeschema/sch_field.cpp:1868 eeschema/sch_tablecell.cpp:202
 #: eeschema/sch_text.cpp:785 eeschema/sch_textbox.cpp:681
@@ -6637,15 +6642,15 @@ msgstr "Puntos"
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:40
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:169
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2140 pcbnew/pad.cpp:1382
-#: pcbnew/pcb_fields_grid_table.cpp:146 pcbnew/pcb_reference_image.cpp:222
+#: pcbnew/pcb_fields_grid_table.cpp:150 pcbnew/pcb_reference_image.cpp:222
 #: pcbnew/pcb_reference_image.cpp:375 pcbnew/pcb_tablecell.cpp:197
 #: pcbnew/pcb_tablecell.cpp:203 pcbnew/pcb_target.cpp:156
-#: pcbnew/pcb_target.cpp:249 pcbnew/pcb_text.cpp:296 pcbnew/pcb_textbox.cpp:801
+#: pcbnew/pcb_target.cpp:249 pcbnew/pcb_text.cpp:296 pcbnew/pcb_textbox.cpp:804
 #: pcbnew/pcb_track.cpp:1598 pcbnew/pcb_track.cpp:2088
 msgid "Width"
 msgstr "Ancho"
 
-#: common/eda_shape.cpp:1017 common/eda_shape.cpp:2405 common/eda_text.cpp:1394
+#: common/eda_shape.cpp:1017 common/eda_shape.cpp:2422 common/eda_text.cpp:1394
 #: eeschema/sch_bitmap.cpp:203 eeschema/sch_bitmap.cpp:347
 #: eeschema/sch_field.cpp:1869 eeschema/sch_tablecell.cpp:203
 #: eeschema/sch_text.cpp:786 eeschema/sch_textbox.cpp:682
@@ -6654,73 +6659,73 @@ msgstr "Ancho"
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:55
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:56
 #: pcbnew/pad.cpp:1383 pcbnew/pcb_dimension.cpp:1033
-#: pcbnew/pcb_fields_grid_table.cpp:147 pcbnew/pcb_reference_image.cpp:224
+#: pcbnew/pcb_fields_grid_table.cpp:151 pcbnew/pcb_reference_image.cpp:224
 #: pcbnew/pcb_reference_image.cpp:382 pcbnew/pcb_tablecell.cpp:198
 #: pcbnew/pcb_tablecell.cpp:204 pcbnew/pcb_text.cpp:297
-#: pcbnew/pcb_textbox.cpp:802
+#: pcbnew/pcb_textbox.cpp:805
 msgid "Height"
 msgstr "Alto"
 
-#: common/eda_shape.cpp:2306
+#: common/eda_shape.cpp:2323
 msgid "Bezier"
 msgstr "Bezier"
 
-#: common/eda_shape.cpp:2352 eeschema/sch_shape.cpp:761
+#: common/eda_shape.cpp:2369 eeschema/sch_shape.cpp:761
 msgid "Shape Properties"
 msgstr "Propiedades de la forma"
 
-#: common/eda_shape.cpp:2358 eeschema/sch_table.cpp:638
-#: eeschema/sch_tablecell.cpp:192 pcbnew/pcb_table.cpp:612
-#: pcbnew/pcb_tablecell.cpp:192 pcbnew/pcb_textbox.cpp:797
+#: common/eda_shape.cpp:2375 eeschema/sch_table.cpp:641
+#: eeschema/sch_tablecell.cpp:192 pcbnew/pcb_table.cpp:616
+#: pcbnew/pcb_tablecell.cpp:192 pcbnew/pcb_textbox.cpp:800
 #: pcbnew/pcb_track.cpp:2091
 msgid "Start X"
 msgstr "Inicio X"
 
-#: common/eda_shape.cpp:2363 eeschema/sch_table.cpp:641
-#: eeschema/sch_tablecell.cpp:193 pcbnew/pcb_table.cpp:615
-#: pcbnew/pcb_tablecell.cpp:193 pcbnew/pcb_textbox.cpp:798
+#: common/eda_shape.cpp:2380 eeschema/sch_table.cpp:644
+#: eeschema/sch_tablecell.cpp:193 pcbnew/pcb_table.cpp:619
+#: pcbnew/pcb_tablecell.cpp:193 pcbnew/pcb_textbox.cpp:801
 #: pcbnew/pcb_track.cpp:2095
 msgid "Start Y"
 msgstr "Inicio Y"
 
-#: common/eda_shape.cpp:2369
+#: common/eda_shape.cpp:2386
 msgid "Center X"
 msgstr "Centro X"
 
-#: common/eda_shape.cpp:2375
+#: common/eda_shape.cpp:2392
 msgid "Center Y"
 msgstr "Centro Y"
 
-#: common/eda_shape.cpp:2387 eeschema/sch_tablecell.cpp:194
+#: common/eda_shape.cpp:2404 eeschema/sch_tablecell.cpp:194
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2617 pcbnew/pcb_tablecell.cpp:194
-#: pcbnew/pcb_textbox.cpp:799 pcbnew/pcb_track.cpp:2098
+#: pcbnew/pcb_textbox.cpp:802 pcbnew/pcb_track.cpp:2098
 msgid "End X"
 msgstr "Final X"
 
-#: common/eda_shape.cpp:2393 eeschema/sch_tablecell.cpp:195
+#: common/eda_shape.cpp:2410 eeschema/sch_tablecell.cpp:195
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2623 pcbnew/pcb_tablecell.cpp:195
-#: pcbnew/pcb_textbox.cpp:800 pcbnew/pcb_track.cpp:2101
+#: pcbnew/pcb_textbox.cpp:803 pcbnew/pcb_track.cpp:2101
 msgid "End Y"
 msgstr "Final Y"
 
-#: common/eda_shape.cpp:2411 common/stroke_params.cpp:276
+#: common/eda_shape.cpp:2428 common/stroke_params.cpp:276
 #: eeschema/sch_bus_entry.cpp:673 eeschema/sch_line.cpp:1096
 #: eeschema/sch_tablecell.cpp:198 pcbnew/pcb_tablecell.cpp:199
-#: pcbnew/pcb_textbox.cpp:803
+#: pcbnew/pcb_textbox.cpp:806
 msgid "Line Width"
 msgstr "Ancho de línea"
 
-#: common/eda_shape.cpp:2419 eeschema/sch_tablecell.cpp:200
+#: common/eda_shape.cpp:2436 eeschema/sch_tablecell.cpp:200
 #: pcbnew/pcb_shape.cpp:915 pcbnew/pcb_tablecell.cpp:201
 msgid "Line Color"
 msgstr "Color de línea"
 
-#: common/eda_shape.cpp:2466 eeschema/sch_shape.cpp:751
-#: pcbnew/dialogs/dialog_plot_base.cpp:138 pcbnew/pcb_textbox.cpp:805
+#: common/eda_shape.cpp:2483 eeschema/sch_shape.cpp:751
+#: pcbnew/dialogs/dialog_plot_base.cpp:138 pcbnew/pcb_textbox.cpp:808
 msgid "Filled"
 msgstr "Relleno"
 
-#: common/eda_shape.cpp:2471 eeschema/sch_shape.cpp:754
+#: common/eda_shape.cpp:2488 eeschema/sch_shape.cpp:754
 #: pcbnew/pcb_shape.cpp:916
 msgid "Fill Color"
 msgstr "Color de relleno"
@@ -6736,7 +6741,7 @@ msgstr "Color de relleno"
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:62
 #: eeschema/dialogs/dialog_tablecell_properties_base.cpp:119
 #: eeschema/dialogs/dialog_text_properties_base.cpp:113
-#: eeschema/fields_grid_table.cpp:476 eeschema/sch_label.cpp:1199
+#: eeschema/fields_grid_table.cpp:483 eeschema/sch_label.cpp:1199
 #: eeschema/sch_label.cpp:2283 eeschema/sch_tablecell.cpp:129
 #: eeschema/sch_text.cpp:648 eeschema/sch_textbox.cpp:539
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:98
@@ -6747,7 +6752,7 @@ msgstr "Color de relleno"
 #: pcbnew/dialogs/dialog_tablecell_properties_base.cpp:125
 #: pcbnew/dialogs/panel_fp_editor_graphics_defaults_base.cpp:57
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:52
-#: pcbnew/pcb_fields_grid_table.cpp:149
+#: pcbnew/pcb_fields_grid_table.cpp:153
 msgid "Italic"
 msgstr "Cursiva"
 
@@ -6762,7 +6767,7 @@ msgstr "Cursiva"
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:63
 #: eeschema/dialogs/dialog_tablecell_properties_base.cpp:116
 #: eeschema/dialogs/dialog_text_properties_base.cpp:108
-#: eeschema/fields_grid_table.cpp:477 eeschema/sch_label.cpp:1199
+#: eeschema/fields_grid_table.cpp:484 eeschema/sch_label.cpp:1199
 #: eeschema/sch_label.cpp:2284 eeschema/sch_tablecell.cpp:129
 #: eeschema/sch_text.cpp:648 eeschema/sch_textbox.cpp:539
 #: eeschema/widgets/tuner_slider_base.cpp:48
@@ -6779,8 +6784,8 @@ msgstr "Negrita+Cursiva"
 #: common/eda_text.cpp:1326
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:242
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:283
-#: eeschema/fields_grid_table.cpp:302 eeschema/fields_grid_table.cpp:717
-#: eeschema/fields_grid_table.cpp:861 eeschema/pin_type.cpp:118
+#: eeschema/fields_grid_table.cpp:309 eeschema/fields_grid_table.cpp:724
+#: eeschema/fields_grid_table.cpp:868 eeschema/pin_type.cpp:118
 #: eeschema/sch_field.cpp:1228 eeschema/sch_field.cpp:1822
 #: eeschema/sch_pin.cpp:2118 pcbnew/dialogs/dialog_render_job.cpp:42
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2603
@@ -6790,9 +6795,9 @@ msgstr "Izquierda"
 #: common/eda_text.cpp:1327 common/eda_text.cpp:1336
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:283
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:307
-#: eeschema/fields_grid_table.cpp:295 eeschema/fields_grid_table.cpp:303
-#: eeschema/fields_grid_table.cpp:718 eeschema/fields_grid_table.cpp:729
-#: eeschema/fields_grid_table.cpp:863 eeschema/fields_grid_table.cpp:887
+#: eeschema/fields_grid_table.cpp:302 eeschema/fields_grid_table.cpp:310
+#: eeschema/fields_grid_table.cpp:725 eeschema/fields_grid_table.cpp:736
+#: eeschema/fields_grid_table.cpp:870 eeschema/fields_grid_table.cpp:894
 #: eeschema/sch_field.cpp:1229 eeschema/sch_field.cpp:1239
 #: eeschema/sch_field.cpp:1823 eeschema/sch_field.cpp:1832
 #: eeschema/sch_text.cpp:669 gerbview/gerber_file_image.cpp:361
@@ -6807,8 +6812,8 @@ msgstr "Centrado"
 #: common/eda_text.cpp:1328
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:242
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:283
-#: eeschema/fields_grid_table.cpp:304 eeschema/fields_grid_table.cpp:719
-#: eeschema/fields_grid_table.cpp:865 eeschema/pin_type.cpp:117
+#: eeschema/fields_grid_table.cpp:311 eeschema/fields_grid_table.cpp:726
+#: eeschema/fields_grid_table.cpp:872 eeschema/pin_type.cpp:117
 #: eeschema/sch_field.cpp:1230 eeschema/sch_field.cpp:1824
 #: eeschema/sch_pin.cpp:2117 pcbnew/dialogs/dialog_render_job.cpp:43
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2604
@@ -6817,8 +6822,8 @@ msgstr "Derecha"
 
 #: common/eda_text.cpp:1335
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:307
-#: eeschema/fields_grid_table.cpp:294 eeschema/fields_grid_table.cpp:728
-#: eeschema/fields_grid_table.cpp:885 eeschema/sch_field.cpp:1238
+#: eeschema/fields_grid_table.cpp:301 eeschema/fields_grid_table.cpp:735
+#: eeschema/fields_grid_table.cpp:892 eeschema/sch_field.cpp:1238
 #: eeschema/sch_field.cpp:1831 eeschema/sch_text.cpp:668
 #: pcbnew/dialogs/dialog_render_job.cpp:44
 msgid "Top"
@@ -6826,8 +6831,8 @@ msgstr "Superior"
 
 #: common/eda_text.cpp:1337
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:307
-#: eeschema/fields_grid_table.cpp:296 eeschema/fields_grid_table.cpp:730
-#: eeschema/fields_grid_table.cpp:889 eeschema/sch_field.cpp:1240
+#: eeschema/fields_grid_table.cpp:303 eeschema/fields_grid_table.cpp:737
+#: eeschema/fields_grid_table.cpp:896 eeschema/sch_field.cpp:1240
 #: eeschema/sch_field.cpp:1833 eeschema/sch_text.cpp:670
 #: pcbnew/dialogs/dialog_render_job.cpp:40
 msgid "Bottom"
@@ -6840,14 +6845,14 @@ msgstr "Inferior"
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:68
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:68
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:65
-#: eeschema/fields_grid_table.cpp:479 eeschema/sch_field.cpp:1876
+#: eeschema/fields_grid_table.cpp:486 eeschema/sch_field.cpp:1876
 #: eeschema/sch_pin.cpp:1588 eeschema/sch_pin.cpp:2163
 #: eeschema/sch_symbol.cpp:2975 eeschema/sch_tablecell.cpp:205
 #: eeschema/sch_text.cpp:794 eeschema/sch_textbox.cpp:709
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:59
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:60
 #: pcbnew/footprint.cpp:4154 pcbnew/pad.cpp:2730 pcbnew/pcb_dimension.cpp:1804
-#: pcbnew/pcb_dimension.cpp:1879 pcbnew/pcb_fields_grid_table.cpp:151
+#: pcbnew/pcb_dimension.cpp:1879 pcbnew/pcb_fields_grid_table.cpp:155
 #: pcbnew/pcb_tablecell.cpp:206
 msgid "Orientation"
 msgstr "Orientación"
@@ -6867,12 +6872,12 @@ msgstr "Propiedades del texto"
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:71
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:71
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:68
-#: eeschema/fields_grid_table.cpp:482 eeschema/sch_field.cpp:1220
+#: eeschema/fields_grid_table.cpp:489 eeschema/sch_field.cpp:1220
 #: eeschema/sch_label.cpp:1197 eeschema/sch_tablecell.cpp:127
 #: eeschema/sch_text.cpp:646 eeschema/sch_textbox.cpp:537
 #: eeschema/widgets/sch_properties_panel.cpp:263 pcbnew/pcb_dimension.cpp:642
 #: pcbnew/pcb_tablecell.cpp:116 pcbnew/pcb_text.cpp:294
-#: pcbnew/pcb_textbox.cpp:474 pcbnew/widgets/pcb_properties_panel.cpp:295
+#: pcbnew/pcb_textbox.cpp:476 pcbnew/widgets/pcb_properties_panel.cpp:295
 msgid "Font"
 msgstr "Fuente"
 
@@ -6882,7 +6887,7 @@ msgstr "Fuente"
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:91
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:56
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:57
-#: pcbnew/pcb_fields_grid_table.cpp:148 pcbnew/pcb_tablecell.cpp:205
+#: pcbnew/pcb_fields_grid_table.cpp:152 pcbnew/pcb_tablecell.cpp:205
 #: pcbnew/pcb_text.cpp:295
 msgid "Thickness"
 msgstr "Grosor"
@@ -6890,7 +6895,7 @@ msgstr "Grosor"
 #: common/eda_text.cpp:1371 eeschema/sch_field.cpp:1867
 #: eeschema/sch_tablecell.cpp:206 eeschema/sch_text.cpp:784
 #: pcbnew/microwave/microwave_polygon.cpp:127
-#: pcbnew/pcb_fields_grid_table.cpp:156
+#: pcbnew/pcb_fields_grid_table.cpp:160
 msgid "Mirrored"
 msgstr "Invertido"
 
@@ -6913,7 +6918,7 @@ msgstr "Justificación vertical"
 #: pcbnew/pcb_dimension.cpp:1998 pcbnew/pcb_dimension.cpp:2040
 #: pcbnew/pcb_dimension.cpp:2074 pcbnew/pcb_field.cpp:297
 #: pcbnew/pcb_tablecell.cpp:207 pcbnew/pcb_text.cpp:651
-#: pcbnew/pcb_textbox.cpp:845
+#: pcbnew/pcb_textbox.cpp:848
 msgid "Hyperlink"
 msgstr "Hipervínculo"
 
@@ -8768,12 +8773,12 @@ msgstr "Error eliminando directorio '%s':%s"
 msgid "Archived file '%s'."
 msgstr "Archivo de almacenado '%s'."
 
-#: common/project/project_archiver.cpp:324
+#: common/project/project_archiver.cpp:326
 #, c-format
 msgid "Failed to archive file '%s'."
 msgstr "No ha podido almacenar el archivo '%s'."
 
-#: common/project/project_archiver.cpp:348
+#: common/project/project_archiver.cpp:350
 #, c-format
 msgid "Zip archive '%s' created (%s uncompressed, %s compressed)."
 msgstr "Se ha creado archivo Zip '%s' (%s sin comprimir, %s comprimido)."
@@ -9755,7 +9760,7 @@ msgstr "Mostrar/ocultar el administrador de propiedades"
 
 #: common/tool/actions.cpp:1124
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:101
-#: eeschema/fields_grid_table.cpp:1061
+#: eeschema/fields_grid_table.cpp:1068
 msgid "Show Datasheet"
 msgstr "Mostrar hoja de datos"
 
@@ -10067,7 +10072,7 @@ msgid "The reference designator cannot contain text variable references"
 msgstr "El indicador de referencia no puede contener variables de texto"
 
 #: common/validators.cpp:452
-#: eeschema/dialogs/dialog_lib_symbol_properties.cpp:309
+#: eeschema/dialogs/dialog_lib_symbol_properties.cpp:310
 msgid "References must start with a letter."
 msgstr "Las referencias deben comenzar con una letra."
 
@@ -10080,8 +10085,8 @@ msgid "Mirroring for Y axis is not supported yet"
 msgstr "Aún no está implementado el reflejo sobre el eje Y"
 
 #: common/widgets/filter_combobox.cpp:72
-#: eeschema/dialogs/dialog_lib_symbol_properties.cpp:800
-#: eeschema/dialogs/dialog_lib_symbol_properties.cpp:827
+#: eeschema/dialogs/dialog_lib_symbol_properties.cpp:801
+#: eeschema/dialogs/dialog_lib_symbol_properties.cpp:828
 msgid "Filter:"
 msgstr "Filtro:"
 
@@ -10286,7 +10291,7 @@ msgstr "<create net>"
 #: eeschema/dialogs/dialog_bom_base.cpp:114
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:367
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:288
-#: pcb_calculator/calculator_panels/panel_transline_base.cpp:456
+#: pcb_calculator/calculator_panels/panel_transline_base.cpp:472
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:365
 msgid "Reset to Defaults"
 msgstr "Restablecer ajustes predeterminados"
@@ -12079,12 +12084,17 @@ msgstr ""
 msgid "Database Library Settings"
 msgstr "Configuración de la biblioteca de bases de datos"
 
-#: eeschema/dialogs/dialog_design_block_properties.cpp:107
+#: eeschema/dialogs/dialog_design_block_properties.cpp:98
+#, fuzzy, c-format
+msgid "Illegal character '%c' in name '%s'."
+msgstr "Carácter ilegal '%c' en el apodo: '%s'."
+
+#: eeschema/dialogs/dialog_design_block_properties.cpp:124
 #: eeschema/dialogs/panel_template_fieldnames.cpp:100
 msgid "Untitled Field"
 msgstr "Campo sin título"
 
-#: eeschema/dialogs/dialog_design_block_properties.cpp:234
+#: eeschema/dialogs/dialog_design_block_properties.cpp:251
 #, fuzzy
 msgid "Duplicate fields are not allowed."
 msgstr "No se permiten los nombres de clase de red duplicados."
@@ -13109,7 +13119,7 @@ msgid "Label can not be empty."
 msgstr "La etiqueta no puede estar vacía."
 
 #: eeschema/dialogs/dialog_label_properties.cpp:522
-#: eeschema/dialogs/dialog_lib_symbol_properties.cpp:442
+#: eeschema/dialogs/dialog_lib_symbol_properties.cpp:443
 #: eeschema/dialogs/dialog_sheet_properties.cpp:397
 #: eeschema/dialogs/dialog_symbol_properties.cpp:741 include/project.h:43
 msgid "untitled"
@@ -13163,21 +13173,21 @@ msgstr "Campos"
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:61
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:62
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:58
-#: eeschema/fields_grid_table.cpp:472
+#: eeschema/fields_grid_table.cpp:479
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:53
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:54
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:110
 #: pcbnew/dialogs/panel_fp_editor_field_defaults.cpp:162
 #: pcbnew/dialogs/panel_fp_editor_field_defaults_base.cpp:49
 #: pcbnew/dialogs/panel_fp_properties_3d_model_base.cpp:45
-#: pcbnew/pcb_fields_grid_table.cpp:145
+#: pcbnew/pcb_fields_grid_table.cpp:149
 msgid "Show"
 msgstr "Mostrar"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:90
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:62
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:59
-#: eeschema/fields_grid_table.cpp:473
+#: eeschema/fields_grid_table.cpp:480
 msgid "Show Name"
 msgstr "Mostrar nombre"
 
@@ -13185,7 +13195,7 @@ msgstr "Mostrar nombre"
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:63
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:63
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:60
-#: eeschema/fields_grid_table.cpp:474
+#: eeschema/fields_grid_table.cpp:481
 msgid "H Align"
 msgstr "Alineación H"
 
@@ -13193,7 +13203,7 @@ msgstr "Alineación H"
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:64
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:64
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:61
-#: eeschema/fields_grid_table.cpp:475
+#: eeschema/fields_grid_table.cpp:482
 msgid "V Align"
 msgstr "Alineación V"
 
@@ -13201,7 +13211,7 @@ msgstr "Alineación V"
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:67
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:67
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:64
-#: eeschema/fields_grid_table.cpp:478 eeschema/sch_field.cpp:1224
+#: eeschema/fields_grid_table.cpp:485 eeschema/sch_field.cpp:1224
 #: eeschema/sch_field.cpp:1872 eeschema/sch_label.cpp:1203
 #: eeschema/sch_tablecell.cpp:133 eeschema/sch_text.cpp:652
 #: eeschema/sch_text.cpp:789 eeschema/sch_textbox.cpp:543
@@ -13215,7 +13225,7 @@ msgstr "Tamaño texto"
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:69
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:69
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:66
-#: eeschema/fields_grid_table.cpp:480
+#: eeschema/fields_grid_table.cpp:487
 msgid "X Position"
 msgstr "Posición X"
 
@@ -13225,7 +13235,7 @@ msgstr "Posición X"
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:70
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:70
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:67
-#: eeschema/fields_grid_table.cpp:481
+#: eeschema/fields_grid_table.cpp:488
 msgid "Y Position"
 msgstr "Posición Y"
 
@@ -13360,7 +13370,7 @@ msgid "De Morgan"
 msgstr "De Morgan"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:845
-#: eeschema/dialogs/dialog_lib_symbol_properties.cpp:106
+#: eeschema/dialogs/dialog_lib_symbol_properties.cpp:107
 #: eeschema/dialogs/dialog_shape_properties.cpp:85
 msgid "Read Only"
 msgstr "Solo lectura"
@@ -13515,7 +13525,7 @@ msgstr "Nombre de pin en el interior"
 msgid "New Symbol"
 msgstr "Nuevo símbolo"
 
-#: eeschema/dialogs/dialog_lib_symbol_properties.cpp:333
+#: eeschema/dialogs/dialog_lib_symbol_properties.cpp:334
 #: eeschema/dialogs/dialog_sheet_properties.cpp:217
 #: eeschema/dialogs/dialog_symbol_properties.cpp:650
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:402
@@ -13523,42 +13533,42 @@ msgstr "Nuevo símbolo"
 msgid "Fields must have a name."
 msgstr "Los campos deben tener un nombre."
 
-#: eeschema/dialogs/dialog_lib_symbol_properties.cpp:350
+#: eeschema/dialogs/dialog_lib_symbol_properties.cpp:351
 msgid "Derived symbol must have a parent selected"
 msgstr "El símbolo derivado debe tener un padre seleccionado"
 
-#: eeschema/dialogs/dialog_lib_symbol_properties.cpp:362
+#: eeschema/dialogs/dialog_lib_symbol_properties.cpp:363
 msgid "Delete extra units from symbol?"
 msgstr "¿Eliminar las unidades extra del componente?"
 
-#: eeschema/dialogs/dialog_lib_symbol_properties.cpp:368
+#: eeschema/dialogs/dialog_lib_symbol_properties.cpp:369
 msgid "Delete alternate body style (De Morgan) from symbol?"
 msgstr "¿Eliminar el estilo de cuerpo alternativo (De Morgan) del símbolo?"
 
-#: eeschema/dialogs/dialog_lib_symbol_properties.cpp:389
+#: eeschema/dialogs/dialog_lib_symbol_properties.cpp:390
 #: eeschema/symbol_editor/symbol_editor.cpp:362
 #: eeschema/symbol_editor/symbol_editor.cpp:952
 #: eeschema/tools/symbol_editor_control.cpp:483
 msgid "Symbol must have a name."
 msgstr "El símbolo debe tener un nombre."
 
-#: eeschema/dialogs/dialog_lib_symbol_properties.cpp:401
+#: eeschema/dialogs/dialog_lib_symbol_properties.cpp:402
 #, c-format
 msgid "Symbol name '%s' already in use in library '%s'."
 msgstr "El nombre de símbolo '%s' ya está en uso en la biblioteca '%s'."
 
-#: eeschema/dialogs/dialog_lib_symbol_properties.cpp:408
-#: eeschema/dialogs/dialog_lib_symbol_properties.cpp:413
+#: eeschema/dialogs/dialog_lib_symbol_properties.cpp:409
+#: eeschema/dialogs/dialog_lib_symbol_properties.cpp:414
 #: eeschema/dialogs/dialog_symbol_properties.cpp:782
 msgid "Edit Symbol Properties"
 msgstr "Editar propiedades del símbolo"
 
-#: eeschema/dialogs/dialog_lib_symbol_properties.cpp:542
+#: eeschema/dialogs/dialog_lib_symbol_properties.cpp:543
 #, c-format
 msgid "The name '%s' is already in use."
 msgstr "El nombre '%s' ya está en uso."
 
-#: eeschema/dialogs/dialog_lib_symbol_properties.cpp:628
+#: eeschema/dialogs/dialog_lib_symbol_properties.cpp:629
 #: eeschema/dialogs/dialog_sheet_properties.cpp:788
 #: eeschema/dialogs/dialog_symbol_properties.cpp:883
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:716
@@ -13567,11 +13577,11 @@ msgstr "El nombre '%s' ya está en uso."
 msgid "The first %d fields are mandatory."
 msgstr "Los primeros %d campos son obligatorios."
 
-#: eeschema/dialogs/dialog_lib_symbol_properties.cpp:800
+#: eeschema/dialogs/dialog_lib_symbol_properties.cpp:801
 msgid "Add Footprint Filter"
 msgstr "Agregar filtro de huellas"
 
-#: eeschema/dialogs/dialog_lib_symbol_properties.cpp:827
+#: eeschema/dialogs/dialog_lib_symbol_properties.cpp:828
 msgid "Edit Footprint Filter"
 msgstr "Editar filtro de huellas"
 
@@ -13580,7 +13590,7 @@ msgid "Derive from symbol:"
 msgstr "Derivar del símbolo:"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:148
-#: eeschema/sch_rule_area.cpp:392
+#: eeschema/sch_rule_area.cpp:390
 msgid "<None>"
 msgstr "<Ninguno>"
 
@@ -14555,7 +14565,7 @@ msgstr "Editar %s"
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:177
 #: eeschema/dialogs/dialog_text_properties_base.cpp:217
 #: pcbnew/dialogs/dialog_textbox_properties_base.cpp:166
-#: pcbnew/pcb_tablecell.cpp:188 pcbnew/pcb_textbox.cpp:813
+#: pcbnew/pcb_tablecell.cpp:188 pcbnew/pcb_textbox.cpp:816
 msgid "Border"
 msgstr "Borde"
 
@@ -15468,17 +15478,17 @@ msgid "Sequentially place all units of the symbol."
 msgstr "Emplazar secuencialmente todas las unidades del símbolo."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:95
-#: eeschema/fields_grid_table.cpp:1054
+#: eeschema/fields_grid_table.cpp:1061
 msgid "Select Footprint..."
 msgstr "Seleccionar huella..."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:96
-#: eeschema/fields_grid_table.cpp:1055
+#: eeschema/fields_grid_table.cpp:1062
 msgid "Browse for footprint"
 msgstr "Explorar huellas"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:102
-#: eeschema/fields_grid_table.cpp:1062
+#: eeschema/fields_grid_table.cpp:1069
 msgid "Show datasheet in browser"
 msgstr "Mostrar hoja de datos en el explorador"
 
@@ -16013,8 +16023,8 @@ msgid "Column lines"
 msgstr "Columnas"
 
 #: eeschema/dialogs/dialog_table_properties_base.h:76
-#: eeschema/sch_table.cpp:645 pcbnew/dialogs/dialog_table_properties_base.h:73
-#: pcbnew/pcb_table.cpp:619
+#: eeschema/sch_table.cpp:648 pcbnew/dialogs/dialog_table_properties_base.h:73
+#: pcbnew/pcb_table.cpp:623
 #, fuzzy
 msgid "Table Properties"
 msgstr "Propiedades de la etiqueta"
@@ -17808,28 +17818,28 @@ msgstr ""
 "\n"
 "**Mensajes ERC: %d. Errores%d, Avisos %d\n"
 
-#: eeschema/fields_grid_table.cpp:279 eeschema/files-io.cpp:912
+#: eeschema/fields_grid_table.cpp:286 eeschema/files-io.cpp:912
 #: eeschema/tools/sch_editor_control.cpp:129
 msgid "Schematic Files"
 msgstr "Archivos de esquema"
 
-#: eeschema/fields_grid_table.cpp:310 eeschema/fields_grid_table.cpp:747
-#: eeschema/fields_grid_table.cpp:919
+#: eeschema/fields_grid_table.cpp:317 eeschema/fields_grid_table.cpp:754
+#: eeschema/fields_grid_table.cpp:926
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:157
 msgid "Horizontal"
 msgstr "Horizontal"
 
-#: eeschema/fields_grid_table.cpp:311 eeschema/fields_grid_table.cpp:749
-#: eeschema/fields_grid_table.cpp:921
+#: eeschema/fields_grid_table.cpp:318 eeschema/fields_grid_table.cpp:756
+#: eeschema/fields_grid_table.cpp:928
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:157
 msgid "Vertical"
 msgstr "Vertical"
 
-#: eeschema/fields_grid_table.cpp:484 eeschema/sch_field.cpp:1862
+#: eeschema/fields_grid_table.cpp:491 eeschema/sch_field.cpp:1862
 msgid "Allow Autoplacement"
 msgstr "Permitir autocolocación"
 
-#: eeschema/fields_grid_table.cpp:485 eeschema/sch_field.cpp:1901
+#: eeschema/fields_grid_table.cpp:492 eeschema/sch_field.cpp:1901
 #: eeschema/sch_item.cpp:548 eeschema/sch_item.cpp:600
 msgid "Private"
 msgstr "Privado"
@@ -18986,7 +18996,7 @@ msgstr "Campo de símbolo"
 #: gerbview/gerber_draw_item.cpp:729 gerbview/gerber_draw_item.cpp:730
 #: pcbnew/board_stackup_manager/panel_board_finish_base.cpp:44
 #: pcbnew/pcb_tablecell.cpp:109 pcbnew/pcb_text.cpp:290
-#: pcbnew/pcb_textbox.cpp:471 pcbnew/tools/drawing_stackup_table_tool.cpp:458
+#: pcbnew/pcb_textbox.cpp:473 pcbnew/tools/drawing_stackup_table_tool.cpp:458
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:489
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:497
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:508
@@ -18996,7 +19006,7 @@ msgstr "Sí"
 #: eeschema/sch_field.cpp:1218 eeschema/sch_pin.cpp:1583
 #: gerbview/gerber_draw_item.cpp:729 gerbview/gerber_draw_item.cpp:730
 #: pcbnew/pcb_tablecell.cpp:109 pcbnew/pcb_text.cpp:290
-#: pcbnew/pcb_textbox.cpp:471 pcbnew/tools/drawing_stackup_table_tool.cpp:458
+#: pcbnew/pcb_textbox.cpp:473 pcbnew/tools/drawing_stackup_table_tool.cpp:458
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:489
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:497
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:507
@@ -19911,7 +19921,7 @@ msgstr "Estilo de cuerpo"
 #: pcbnew/pcb_dimension.cpp:673 pcbnew/pcb_group.cpp:396
 #: pcbnew/pcb_marker.cpp:381 pcbnew/pcb_shape.cpp:649
 #: pcbnew/pcb_tablecell.cpp:106 pcbnew/pcb_text.cpp:286
-#: pcbnew/pcb_textbox.cpp:468 pcbnew/pcb_track.cpp:1707
+#: pcbnew/pcb_textbox.cpp:470 pcbnew/pcb_track.cpp:1707
 #: pcbnew/tools/generator_tool.cpp:47 pcbnew/zone.cpp:826
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:52
 msgid "Locked"
@@ -19968,7 +19978,7 @@ msgstr "Red"
 
 # Pendiente
 #: eeschema/sch_label.cpp:1346 eeschema/sch_line.cpp:894
-#: eeschema/sch_rule_area.cpp:397
+#: eeschema/sch_rule_area.cpp:395
 msgid "Resolved netclass"
 msgstr "Clase de red resuelta"
 
@@ -20280,14 +20290,14 @@ msgstr "Excluir de"
 msgid "Hierarchical Sheet %s"
 msgstr "Hoja jerárquica %s"
 
-#: eeschema/sch_sheet.cpp:1717 eeschema/sch_table.cpp:655
-#: pcbnew/pcb_table.cpp:629 pcbnew/pcb_tablecell.cpp:190
-#: pcbnew/pcb_textbox.cpp:821
+#: eeschema/sch_sheet.cpp:1717 eeschema/sch_table.cpp:658
+#: pcbnew/pcb_table.cpp:633 pcbnew/pcb_tablecell.cpp:190
+#: pcbnew/pcb_textbox.cpp:824
 msgid "Border Width"
 msgstr "Ancho del contorno"
 
-#: eeschema/sch_sheet.cpp:1721 eeschema/sch_table.cpp:664
-#: pcbnew/pcb_table.cpp:638
+#: eeschema/sch_sheet.cpp:1721 eeschema/sch_table.cpp:667
+#: pcbnew/pcb_table.cpp:642
 msgid "Border Color"
 msgstr "Color del contorno"
 
@@ -20370,51 +20380,51 @@ msgstr "Invertir Y"
 msgid "Library Link"
 msgstr "Enlace de biblioteca"
 
-#: eeschema/sch_table.cpp:424 pcbnew/pcb_table.cpp:415
+#: eeschema/sch_table.cpp:424 pcbnew/pcb_table.cpp:419
 #, c-format
 msgid "%d Column Table"
 msgstr "%d columna de tabla"
 
-#: eeschema/sch_table.cpp:579 pcbnew/pcb_table.cpp:451
+#: eeschema/sch_table.cpp:582 pcbnew/pcb_table.cpp:455
 #, c-format
 msgid "%d Columns"
 msgstr "%d columnas"
 
-#: eeschema/sch_table.cpp:647 pcbnew/pcb_table.cpp:621
+#: eeschema/sch_table.cpp:650 pcbnew/pcb_table.cpp:625
 #, fuzzy
 msgid "External Border"
 msgstr "Datos externos"
 
-#: eeschema/sch_table.cpp:651 pcbnew/pcb_table.cpp:625
+#: eeschema/sch_table.cpp:654 pcbnew/pcb_table.cpp:629
 #, fuzzy
 msgid "Header Border"
 msgstr "Límites de página"
 
-#: eeschema/sch_table.cpp:660 pcbnew/pcb_table.cpp:634
-#: pcbnew/pcb_tablecell.cpp:189 pcbnew/pcb_textbox.cpp:817
+#: eeschema/sch_table.cpp:663 pcbnew/pcb_table.cpp:638
+#: pcbnew/pcb_tablecell.cpp:189 pcbnew/pcb_textbox.cpp:820
 msgid "Border Style"
 msgstr "Estilo de borde"
 
-#: eeschema/sch_table.cpp:668 pcbnew/pcb_table.cpp:642
+#: eeschema/sch_table.cpp:671 pcbnew/pcb_table.cpp:646
 #, fuzzy
 msgid "Row Separators"
 msgstr "Eliminar generador"
 
-#: eeschema/sch_table.cpp:672 pcbnew/pcb_table.cpp:646
+#: eeschema/sch_table.cpp:675 pcbnew/pcb_table.cpp:650
 msgid "Cell Separators"
 msgstr "Separadores de celda"
 
-#: eeschema/sch_table.cpp:676 pcbnew/pcb_table.cpp:650
+#: eeschema/sch_table.cpp:679 pcbnew/pcb_table.cpp:654
 #, fuzzy
 msgid "Separators Width"
 msgstr "Ancho de pista"
 
-#: eeschema/sch_table.cpp:681 pcbnew/pcb_table.cpp:655
+#: eeschema/sch_table.cpp:684 pcbnew/pcb_table.cpp:659
 #, fuzzy
 msgid "Separators Style"
 msgstr "Archivo del generador"
 
-#: eeschema/sch_table.cpp:685 pcbnew/pcb_table.cpp:659
+#: eeschema/sch_table.cpp:688 pcbnew/pcb_table.cpp:663
 #, fuzzy
 msgid "Separators Color"
 msgstr "Eliminar color"
@@ -20725,35 +20735,35 @@ msgstr ""
 "<i>Note que el marcado tiene precedencia sobre las definiciones de bus.</i>\n"
 "\n"
 
-#: eeschema/sch_textbox.cpp:545 pcbnew/pcb_textbox.cpp:479
+#: eeschema/sch_textbox.cpp:545 pcbnew/pcb_textbox.cpp:481
 msgid "Box Width"
 msgstr "Ancho de caja"
 
-#: eeschema/sch_textbox.cpp:548 pcbnew/pcb_textbox.cpp:482
+#: eeschema/sch_textbox.cpp:548 pcbnew/pcb_textbox.cpp:484
 msgid "Box Height"
 msgstr "Altura de caja"
 
-#: eeschema/sch_textbox.cpp:685 pcbnew/pcb_textbox.cpp:826
+#: eeschema/sch_textbox.cpp:685 pcbnew/pcb_textbox.cpp:829
 #, fuzzy
 msgid "Margins"
 msgstr "Márgenes:"
 
-#: eeschema/sch_textbox.cpp:687 pcbnew/pcb_textbox.cpp:828
+#: eeschema/sch_textbox.cpp:687 pcbnew/pcb_textbox.cpp:831
 #, fuzzy
 msgid "Margin Left"
 msgstr "Barrido izquierda"
 
-#: eeschema/sch_textbox.cpp:691 pcbnew/pcb_textbox.cpp:832
+#: eeschema/sch_textbox.cpp:691 pcbnew/pcb_textbox.cpp:835
 #, fuzzy
 msgid "Margin Top"
 msgstr "Margen"
 
-#: eeschema/sch_textbox.cpp:695 pcbnew/pcb_textbox.cpp:836
+#: eeschema/sch_textbox.cpp:695 pcbnew/pcb_textbox.cpp:839
 #, fuzzy
 msgid "Margin Right"
 msgstr "Barrido derecha"
 
-#: eeschema/sch_textbox.cpp:699 pcbnew/pcb_textbox.cpp:840
+#: eeschema/sch_textbox.cpp:699 pcbnew/pcb_textbox.cpp:843
 #, fuzzy
 msgid "Margin Bottom"
 msgstr "Alinear abajo"
@@ -24523,7 +24533,7 @@ msgstr "Rotar"
 
 #: eeschema/tools/sch_edit_tool.cpp:1251 gerbview/gerber_draw_item.cpp:731
 #: pcbnew/pcb_tablecell.cpp:109 pcbnew/pcb_text.cpp:290
-#: pcbnew/pcb_textbox.cpp:471 pcbnew/tools/edit_tool.cpp:2233
+#: pcbnew/pcb_textbox.cpp:473 pcbnew/tools/edit_tool.cpp:2233
 msgid "Mirror"
 msgstr "Invertir"
 
@@ -24644,14 +24654,14 @@ msgstr "Eliminar anotación"
 
 #: eeschema/tools/sch_editor_control.cpp:2837
 #: pcbnew/tools/board_editor_control.cpp:614
-#: pcbnew/tools/footprint_editor_control.cpp:895
+#: pcbnew/tools/footprint_editor_control.cpp:896
 #, c-format
 msgid "%d duplicate IDs replaced.\n"
 msgstr "%d ID duplicados reemplazados.\n"
 
 #: eeschema/tools/sch_editor_control.cpp:2847
 #: pcbnew/tools/board_editor_control.cpp:629
-#: pcbnew/tools/footprint_editor_control.cpp:902
+#: pcbnew/tools/footprint_editor_control.cpp:903
 #, c-format
 msgid "%d potential problems repaired."
 msgstr "%d potenciales problemas reparados."
@@ -24754,11 +24764,11 @@ msgstr "No hay diferencias relevantes detectadas."
 msgid "Visual"
 msgstr "Visual"
 
-#: eeschema/tools/sch_inspection_tool.cpp:545
+#: eeschema/tools/sch_inspection_tool.cpp:548
 msgid "No datasheet defined."
 msgstr "No hay una hoja de datos definida."
 
-#: eeschema/tools/sch_inspection_tool.cpp:574
+#: eeschema/tools/sch_inspection_tool.cpp:577
 #: pagelayout_editor/tools/pl_editor_control.cpp:160
 #: pcbnew/tools/pcb_control.cpp:1681
 msgid "UUID"
@@ -25347,12 +25357,12 @@ msgstr "Seleccionar capa: %s"
 #: pcbnew/footprint.cpp:4149 pcbnew/footprint.cpp:4152
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2137 pcbnew/pad.cpp:1337
 #: pcbnew/pad.cpp:2727 pcbnew/pcb_dimension.cpp:675
-#: pcbnew/pcb_dimension.cpp:1491 pcbnew/pcb_fields_grid_table.cpp:150
+#: pcbnew/pcb_dimension.cpp:1491 pcbnew/pcb_fields_grid_table.cpp:154
 #: pcbnew/pcb_group.cpp:503 pcbnew/pcb_marker.cpp:378
 #: pcbnew/pcb_reference_image.cpp:226 pcbnew/pcb_reference_image.cpp:349
 #: pcbnew/pcb_shape.cpp:653 pcbnew/pcb_shape.cpp:895 pcbnew/pcb_shape.cpp:897
 #: pcbnew/pcb_tablecell.cpp:108 pcbnew/pcb_tablecell.cpp:184
-#: pcbnew/pcb_target.cpp:153 pcbnew/pcb_text.cpp:288 pcbnew/pcb_textbox.cpp:470
+#: pcbnew/pcb_target.cpp:153 pcbnew/pcb_text.cpp:288 pcbnew/pcb_textbox.cpp:472
 #: pcbnew/pcb_track.cpp:1596 pcbnew/pcb_track.cpp:1663
 #: pcbnew/pcb_track.cpp:2135 pcbnew/tools/board_inspection_tool.cpp:237
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:215
@@ -31638,275 +31648,293 @@ msgid "Frequency of the input signal"
 msgstr "Frecuencia de la señal de entrada"
 
 #: pcb_calculator/transline_ident.cpp:119
-#: pcb_calculator/transline_ident.cpp:161
-#: pcb_calculator/transline_ident.cpp:195
-#: pcb_calculator/transline_ident.cpp:231
-#: pcb_calculator/transline_ident.cpp:266
-#: pcb_calculator/transline_ident.cpp:351
-#: pcb_calculator/transline_ident.cpp:385
+#: pcb_calculator/transline_ident.cpp:162
+#: pcb_calculator/transline_ident.cpp:197
+#: pcb_calculator/transline_ident.cpp:234
+#: pcb_calculator/transline_ident.cpp:269
+#: pcb_calculator/transline_ident.cpp:356
+#: pcb_calculator/transline_ident.cpp:391
 #, c-format
 msgid "Effective %s:"
 msgstr "%s efectivo:"
 
 #: pcb_calculator/transline_ident.cpp:120
-#: pcb_calculator/transline_ident.cpp:162
-#: pcb_calculator/transline_ident.cpp:196
-#: pcb_calculator/transline_ident.cpp:232
-#: pcb_calculator/transline_ident.cpp:267
-#: pcb_calculator/transline_ident.cpp:352
-#: pcb_calculator/transline_ident.cpp:386
+#: pcb_calculator/transline_ident.cpp:163
+#: pcb_calculator/transline_ident.cpp:198
+#: pcb_calculator/transline_ident.cpp:357
+#, fuzzy
+msgid "Unit propagation delay:"
+msgstr "Retardo de propagación"
+
+#: pcb_calculator/transline_ident.cpp:121
+#: pcb_calculator/transline_ident.cpp:164
+#: pcb_calculator/transline_ident.cpp:199
+#: pcb_calculator/transline_ident.cpp:235
+#: pcb_calculator/transline_ident.cpp:270
+#: pcb_calculator/transline_ident.cpp:358
+#: pcb_calculator/transline_ident.cpp:392
 msgid "Conductor losses:"
 msgstr "Pérdidas del conductor:"
 
-#: pcb_calculator/transline_ident.cpp:121
-#: pcb_calculator/transline_ident.cpp:163
-#: pcb_calculator/transline_ident.cpp:197
-#: pcb_calculator/transline_ident.cpp:233
-#: pcb_calculator/transline_ident.cpp:268
-#: pcb_calculator/transline_ident.cpp:353
-#: pcb_calculator/transline_ident.cpp:387
+#: pcb_calculator/transline_ident.cpp:122
+#: pcb_calculator/transline_ident.cpp:165
+#: pcb_calculator/transline_ident.cpp:200
+#: pcb_calculator/transline_ident.cpp:236
+#: pcb_calculator/transline_ident.cpp:271
+#: pcb_calculator/transline_ident.cpp:359
+#: pcb_calculator/transline_ident.cpp:393
 msgid "Dielectric losses:"
 msgstr "Pérdidas dieléctricas:"
 
-#: pcb_calculator/transline_ident.cpp:122
-#: pcb_calculator/transline_ident.cpp:164
-#: pcb_calculator/transline_ident.cpp:198
-#: pcb_calculator/transline_ident.cpp:309
-#: pcb_calculator/transline_ident.cpp:354
-#: pcb_calculator/transline_ident.cpp:388
+#: pcb_calculator/transline_ident.cpp:123
+#: pcb_calculator/transline_ident.cpp:166
+#: pcb_calculator/transline_ident.cpp:201
+#: pcb_calculator/transline_ident.cpp:314
+#: pcb_calculator/transline_ident.cpp:360
+#: pcb_calculator/transline_ident.cpp:394
 msgid "Skin depth:"
 msgstr "Profundidad superficial:"
 
-#: pcb_calculator/transline_ident.cpp:125
-#: pcb_calculator/transline_ident.cpp:167
-#: pcb_calculator/transline_ident.cpp:201
-#: pcb_calculator/transline_ident.cpp:313
-#: pcb_calculator/transline_ident.cpp:357
+#: pcb_calculator/transline_ident.cpp:126
+#: pcb_calculator/transline_ident.cpp:169
+#: pcb_calculator/transline_ident.cpp:204
+#: pcb_calculator/transline_ident.cpp:318
+#: pcb_calculator/transline_ident.cpp:363
 msgid "Height of substrate"
 msgstr "Alto del sustrato"
 
-#: pcb_calculator/transline_ident.cpp:127
-#: pcb_calculator/transline_ident.cpp:315
+#: pcb_calculator/transline_ident.cpp:128
+#: pcb_calculator/transline_ident.cpp:320
 msgid "Height of box top"
 msgstr "Alto de la tapa de la caja"
 
-#: pcb_calculator/transline_ident.cpp:130
-#: pcb_calculator/transline_ident.cpp:169
-#: pcb_calculator/transline_ident.cpp:203
-#: pcb_calculator/transline_ident.cpp:317
-#: pcb_calculator/transline_ident.cpp:362
+#: pcb_calculator/transline_ident.cpp:131
+#: pcb_calculator/transline_ident.cpp:171
+#: pcb_calculator/transline_ident.cpp:206
+#: pcb_calculator/transline_ident.cpp:322
+#: pcb_calculator/transline_ident.cpp:368
 msgid "Strip thickness"
 msgstr "Grosor de la tira"
 
-#: pcb_calculator/transline_ident.cpp:132
-#: pcb_calculator/transline_ident.cpp:319
+#: pcb_calculator/transline_ident.cpp:133
+#: pcb_calculator/transline_ident.cpp:324
 msgid "Roughness"
 msgstr "Rugosidad"
 
-#: pcb_calculator/transline_ident.cpp:133
-#: pcb_calculator/transline_ident.cpp:320
+#: pcb_calculator/transline_ident.cpp:134
+#: pcb_calculator/transline_ident.cpp:325
 msgid "Conductor roughness"
 msgstr "Rugosidad del conductor"
 
-#: pcb_calculator/transline_ident.cpp:136
+#: pcb_calculator/transline_ident.cpp:137
 msgid "substrate"
 msgstr "sustrato"
 
-#: pcb_calculator/transline_ident.cpp:137
+#: pcb_calculator/transline_ident.cpp:138
 msgid "Relative permeability (mu) of substrate"
 msgstr "Permeabilidad relativa (mu) del sustrato"
 
-#: pcb_calculator/transline_ident.cpp:140
-#: pcb_calculator/transline_ident.cpp:172
-#: pcb_calculator/transline_ident.cpp:206
-#: pcb_calculator/transline_ident.cpp:243
-#: pcb_calculator/transline_ident.cpp:278
-#: pcb_calculator/transline_ident.cpp:323
-#: pcb_calculator/transline_ident.cpp:365
-#: pcb_calculator/transline_ident.cpp:395
+#: pcb_calculator/transline_ident.cpp:141
+#: pcb_calculator/transline_ident.cpp:174
+#: pcb_calculator/transline_ident.cpp:209
+#: pcb_calculator/transline_ident.cpp:246
+#: pcb_calculator/transline_ident.cpp:281
+#: pcb_calculator/transline_ident.cpp:328
+#: pcb_calculator/transline_ident.cpp:371
+#: pcb_calculator/transline_ident.cpp:401
 msgid "conductor"
 msgstr "conductor"
 
-#: pcb_calculator/transline_ident.cpp:141
-#: pcb_calculator/transline_ident.cpp:173
-#: pcb_calculator/transline_ident.cpp:207
-#: pcb_calculator/transline_ident.cpp:244
-#: pcb_calculator/transline_ident.cpp:279
-#: pcb_calculator/transline_ident.cpp:324
-#: pcb_calculator/transline_ident.cpp:366
-#: pcb_calculator/transline_ident.cpp:396
+#: pcb_calculator/transline_ident.cpp:142
+#: pcb_calculator/transline_ident.cpp:175
+#: pcb_calculator/transline_ident.cpp:210
+#: pcb_calculator/transline_ident.cpp:247
+#: pcb_calculator/transline_ident.cpp:282
+#: pcb_calculator/transline_ident.cpp:329
+#: pcb_calculator/transline_ident.cpp:372
+#: pcb_calculator/transline_ident.cpp:402
 msgid "Relative permeability (mu) of conductor"
 msgstr "Permeabilidad relativa (mu) del conductor"
 
-#: pcb_calculator/transline_ident.cpp:145
-#: pcb_calculator/transline_ident.cpp:177
-#: pcb_calculator/transline_ident.cpp:211
-#: pcb_calculator/transline_ident.cpp:328
-#: pcb_calculator/transline_ident.cpp:369
+#: pcb_calculator/transline_ident.cpp:146
+#: pcb_calculator/transline_ident.cpp:179
+#: pcb_calculator/transline_ident.cpp:214
+#: pcb_calculator/transline_ident.cpp:333
+#: pcb_calculator/transline_ident.cpp:375
 msgid "Line width"
 msgstr "Ancho de línea"
 
-#: pcb_calculator/transline_ident.cpp:147
-#: pcb_calculator/transline_ident.cpp:181
-#: pcb_calculator/transline_ident.cpp:215
-#: pcb_calculator/transline_ident.cpp:289
-#: pcb_calculator/transline_ident.cpp:332
-#: pcb_calculator/transline_ident.cpp:371
+#: pcb_calculator/transline_ident.cpp:148
+#: pcb_calculator/transline_ident.cpp:183
+#: pcb_calculator/transline_ident.cpp:218
+#: pcb_calculator/transline_ident.cpp:292
+#: pcb_calculator/transline_ident.cpp:337
+#: pcb_calculator/transline_ident.cpp:377
 msgid "Line length"
 msgstr "Longitud de línea"
 
-#: pcb_calculator/transline_ident.cpp:150
-#: pcb_calculator/transline_ident.cpp:184
-#: pcb_calculator/transline_ident.cpp:218
-#: pcb_calculator/transline_ident.cpp:255
-#: pcb_calculator/transline_ident.cpp:292
-#: pcb_calculator/transline_ident.cpp:374
-#: pcb_calculator/transline_ident.cpp:413
-msgid "Characteristic impedance"
-msgstr "Impedancia característica"
-
-#: pcb_calculator/transline_ident.cpp:153
-#: pcb_calculator/transline_ident.cpp:187
+#: pcb_calculator/transline_ident.cpp:151
+#: pcb_calculator/transline_ident.cpp:186
 #: pcb_calculator/transline_ident.cpp:221
 #: pcb_calculator/transline_ident.cpp:258
 #: pcb_calculator/transline_ident.cpp:295
-#: pcb_calculator/transline_ident.cpp:344
-#: pcb_calculator/transline_ident.cpp:377
-#: pcb_calculator/transline_ident.cpp:416
+#: pcb_calculator/transline_ident.cpp:380
+#: pcb_calculator/transline_ident.cpp:419
+msgid "Characteristic impedance"
+msgstr "Impedancia característica"
+
+#: pcb_calculator/transline_ident.cpp:154
+#: pcb_calculator/transline_ident.cpp:189
+#: pcb_calculator/transline_ident.cpp:224
+#: pcb_calculator/transline_ident.cpp:261
+#: pcb_calculator/transline_ident.cpp:298
+#: pcb_calculator/transline_ident.cpp:349
+#: pcb_calculator/transline_ident.cpp:383
+#: pcb_calculator/transline_ident.cpp:422
 msgid "Electrical length"
 msgstr "Longitud eléctrica"
 
-#: pcb_calculator/transline_ident.cpp:179
-#: pcb_calculator/transline_ident.cpp:213
-#: pcb_calculator/transline_ident.cpp:330
+#: pcb_calculator/transline_ident.cpp:181
+#: pcb_calculator/transline_ident.cpp:216
+#: pcb_calculator/transline_ident.cpp:335
 msgid "Gap width"
 msgstr "Ancho del espaciado"
 
-#: pcb_calculator/transline_ident.cpp:230
+#: pcb_calculator/transline_ident.cpp:233
 msgid "ZF(H10) = Ey / Hx:"
 msgstr "ZF(H10) = Ey / Hx:"
 
-#: pcb_calculator/transline_ident.cpp:234
-#: pcb_calculator/transline_ident.cpp:269
+#: pcb_calculator/transline_ident.cpp:237
+#: pcb_calculator/transline_ident.cpp:272
 msgid "TE-modes:"
 msgstr "Modos TE:"
 
-#: pcb_calculator/transline_ident.cpp:235
-#: pcb_calculator/transline_ident.cpp:270
+#: pcb_calculator/transline_ident.cpp:238
+#: pcb_calculator/transline_ident.cpp:273
 msgid "TM-modes:"
 msgstr "Modos TM:"
 
-#: pcb_calculator/transline_ident.cpp:239
-#: pcb_calculator/transline_ident.cpp:274
+#: pcb_calculator/transline_ident.cpp:242
+#: pcb_calculator/transline_ident.cpp:277
 msgid "insulator"
 msgstr "aislante"
 
-#: pcb_calculator/transline_ident.cpp:240
-#: pcb_calculator/transline_ident.cpp:275
+#: pcb_calculator/transline_ident.cpp:243
+#: pcb_calculator/transline_ident.cpp:278
 msgid "Relative permeability (mu) of insulator"
 msgstr "Permeabilidad relativa (mu) del aislante"
 
-#: pcb_calculator/transline_ident.cpp:248
+#: pcb_calculator/transline_ident.cpp:251
 msgid "Width of waveguide"
 msgstr "Ancho de la guía de ondas"
 
-#: pcb_calculator/transline_ident.cpp:250
+#: pcb_calculator/transline_ident.cpp:253
 msgid "Height of waveguide"
 msgstr "Alto de la guía de ondas"
 
-#: pcb_calculator/transline_ident.cpp:252
+#: pcb_calculator/transline_ident.cpp:255
 msgid "Waveguide length"
 msgstr "Longitud de la guía de ondas"
 
-#: pcb_calculator/transline_ident.cpp:283
-#: pcb_calculator/transline_ident.cpp:404
+#: pcb_calculator/transline_ident.cpp:286
+#: pcb_calculator/transline_ident.cpp:410
 msgid "Din"
 msgstr "Din"
 
-#: pcb_calculator/transline_ident.cpp:284
-#: pcb_calculator/transline_ident.cpp:405
+#: pcb_calculator/transline_ident.cpp:287
+#: pcb_calculator/transline_ident.cpp:411
 msgid "Inner diameter (conductor)"
 msgstr "Diámetro interno (conductor)"
 
-#: pcb_calculator/transline_ident.cpp:286
-#: pcb_calculator/transline_ident.cpp:407
+#: pcb_calculator/transline_ident.cpp:289
+#: pcb_calculator/transline_ident.cpp:413
 msgid "Dout"
 msgstr "Dout"
 
-#: pcb_calculator/transline_ident.cpp:287
-#: pcb_calculator/transline_ident.cpp:408
+#: pcb_calculator/transline_ident.cpp:290
+#: pcb_calculator/transline_ident.cpp:414
 msgid "Outer diameter (insulator)"
 msgstr "Diámetro externo (aislante)"
 
-#: pcb_calculator/transline_ident.cpp:303
+#: pcb_calculator/transline_ident.cpp:306
 #, c-format
 msgid "Effective %s (even):"
 msgstr "%s efectivo (par):"
 
-#: pcb_calculator/transline_ident.cpp:304
+#: pcb_calculator/transline_ident.cpp:307
 #, c-format
 msgid "Effective %s (odd):"
 msgstr "%s efectivo (inpar):"
 
-#: pcb_calculator/transline_ident.cpp:305
+#: pcb_calculator/transline_ident.cpp:308
+#, fuzzy
+msgid "Unit propagation delay (even):"
+msgstr "Retardo de propagación"
+
+#: pcb_calculator/transline_ident.cpp:309
+#, fuzzy
+msgid "Unit propagation delay (odd):"
+msgstr "Retardo de propagación"
+
+#: pcb_calculator/transline_ident.cpp:310
 msgid "Conductor losses (even):"
 msgstr "Pérdidas de conductor (par):"
 
-#: pcb_calculator/transline_ident.cpp:306
+#: pcb_calculator/transline_ident.cpp:311
 msgid "Conductor losses (odd):"
 msgstr "Pérdidas de conductor (inpar):"
 
-#: pcb_calculator/transline_ident.cpp:307
+#: pcb_calculator/transline_ident.cpp:312
 msgid "Dielectric losses (even):"
 msgstr "Pérdidas dieléctricas (par):"
 
-#: pcb_calculator/transline_ident.cpp:308
+#: pcb_calculator/transline_ident.cpp:313
 msgid "Dielectric losses (odd):"
 msgstr "Pérdidas dieléctricas (inpar):"
 
-#: pcb_calculator/transline_ident.cpp:310
+#: pcb_calculator/transline_ident.cpp:315
 msgid "Differential Impedance (Zd):"
 msgstr "Impedancia Diferencial (Zd):"
 
-#: pcb_calculator/transline_ident.cpp:335
+#: pcb_calculator/transline_ident.cpp:340
 msgid "Zeven"
 msgstr "Zpar"
 
-#: pcb_calculator/transline_ident.cpp:336
+#: pcb_calculator/transline_ident.cpp:341
 msgid "Even mode impedance (lines driven by common voltages)"
 msgstr "Impedancia de modo par (líneas alimentadas con voltajes comunes)"
 
-#: pcb_calculator/transline_ident.cpp:339
+#: pcb_calculator/transline_ident.cpp:344
 msgid "Zodd"
 msgstr "Zimp"
 
-#: pcb_calculator/transline_ident.cpp:340
+#: pcb_calculator/transline_ident.cpp:345
 msgid "Odd mode impedance (lines driven by opposite (differential) voltages)"
 msgstr ""
 "Impedancia de modo impar (líneas alimentadas con voltajes opuestos "
 "(diferenciales))"
 
-#: pcb_calculator/transline_ident.cpp:359
+#: pcb_calculator/transline_ident.cpp:365
 msgid "Distance between strip and top metal"
 msgstr "distancia entre la tira y el metal superior"
 
-#: pcb_calculator/transline_ident.cpp:391
+#: pcb_calculator/transline_ident.cpp:397
 msgid "Twists"
 msgstr "Vueltas"
 
-#: pcb_calculator/transline_ident.cpp:392
+#: pcb_calculator/transline_ident.cpp:398
 msgid "Number of twists per length"
 msgstr "Número de vueltas por longitud"
 
-#: pcb_calculator/transline_ident.cpp:400
+#: pcb_calculator/transline_ident.cpp:406
 msgid "environment"
 msgstr "entorno"
 
-#: pcb_calculator/transline_ident.cpp:401
+#: pcb_calculator/transline_ident.cpp:407
 msgid "Relative permittivity of environment"
 msgstr "Permitividad relativa del entorno"
 
-#: pcb_calculator/transline_ident.cpp:410
+#: pcb_calculator/transline_ident.cpp:416
 msgid "Cable length"
 msgstr "Longitud del cable"
 
@@ -35633,20 +35661,20 @@ msgstr "Elementos de texto"
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:60
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:313
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:53
-#: pcbnew/pcb_fields_grid_table.cpp:152 pcbnew/pcb_text.cpp:634
+#: pcbnew/pcb_fields_grid_table.cpp:156 pcbnew/pcb_text.cpp:634
 #: pcbnew/pcb_text.cpp:648
 msgid "Keep Upright"
 msgstr "Mantener hacia arriba"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:61
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:62
-#: pcbnew/pcb_fields_grid_table.cpp:153
+#: pcbnew/pcb_fields_grid_table.cpp:157
 msgid "X Offset"
 msgstr "Desplazamiento X"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:62
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:63
-#: pcbnew/pcb_fields_grid_table.cpp:154
+#: pcbnew/pcb_fields_grid_table.cpp:158
 msgid "Y Offset"
 msgstr "Desplazamiento Y"
 
@@ -36682,7 +36710,7 @@ msgstr "Grosor de línea"
 #: pcbnew/dialogs/panel_fp_editor_graphics_defaults_base.cpp:54
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:49
 #: pcbnew/pcb_dimension.cpp:644 pcbnew/pcb_tablecell.cpp:118
-#: pcbnew/pcb_textbox.cpp:476
+#: pcbnew/pcb_textbox.cpp:478
 msgid "Text Width"
 msgstr "Ancho del texto"
 
@@ -36690,7 +36718,7 @@ msgstr "Ancho del texto"
 #: pcbnew/dialogs/panel_fp_editor_graphics_defaults_base.cpp:55
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:50
 #: pcbnew/pcb_dimension.cpp:645 pcbnew/pcb_tablecell.cpp:119
-#: pcbnew/pcb_textbox.cpp:477 pcbnew/tools/board_inspection_tool.cpp:404
+#: pcbnew/pcb_textbox.cpp:479 pcbnew/tools/board_inspection_tool.cpp:404
 msgid "Text Height"
 msgstr "Alto del texto"
 
@@ -36698,7 +36726,7 @@ msgstr "Alto del texto"
 #: pcbnew/dialogs/panel_fp_editor_graphics_defaults_base.cpp:56
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:51
 #: pcbnew/pcb_dimension.cpp:643 pcbnew/pcb_tablecell.cpp:117
-#: pcbnew/pcb_textbox.cpp:475 pcbnew/tools/board_inspection_tool.cpp:419
+#: pcbnew/pcb_textbox.cpp:477 pcbnew/tools/board_inspection_tool.cpp:419
 msgid "Text Thickness"
 msgstr "Grosor del texto"
 
@@ -39077,7 +39105,7 @@ msgstr "Huella %s (%s), %s, rotado %.1f deg"
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:96
 #: pcbnew/pcb_dimension.cpp:1930 pcbnew/pcb_dimension.cpp:1963
 #: pcbnew/pcb_dimension.cpp:2001 pcbnew/pcb_dimension.cpp:2043
-#: pcbnew/pcb_dimension.cpp:2077 pcbnew/pcb_fields_grid_table.cpp:155
+#: pcbnew/pcb_dimension.cpp:2077 pcbnew/pcb_fields_grid_table.cpp:159
 #: pcbnew/pcb_text.cpp:630
 msgid "Knockout"
 msgstr "Knockout"
@@ -39955,6 +39983,24 @@ msgstr "Escribir texto"
 #, fuzzy
 msgid "Place items matching component class:"
 msgstr "Filtrar por clase de red:"
+
+#: pcbnew/dialogs/panel_setup_condition_help_1clauses.h:2
+msgid ""
+"### Clause\n"
+"\n"
+"    (condition \"<expression>\")\n"
+"\n"
+"<br>"
+msgstr ""
+
+#: pcbnew/dialogs/panel_setup_condition_help_6notes.h:2
+msgid ""
+"### Notes\n"
+"\n"
+"Use Ctrl+/ to comment or uncomment line(s).\n"
+"<br><br><br>\n"
+"\n"
+msgstr ""
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:46
 msgid "Minimum clearance:"
@@ -46376,7 +46422,7 @@ msgstr "Generar archivo IPC2581"
 msgid "Exporting board to ODB++"
 msgstr "Exportar la placa"
 
-#: pcbnew/pcb_io/odbpp/pcb_io_odbpp.h:63
+#: pcbnew/pcb_io/odbpp/pcb_io_odbpp.h:64
 #, fuzzy
 msgid "ODB++ Production File"
 msgstr "Archivo de producción IPC-2581"
@@ -46536,12 +46582,12 @@ msgstr "Texto de la huella de %s ( %s )"
 msgid "PCB text '%s' on %s"
 msgstr "Texto de placa '%s' en %s"
 
-#: pcbnew/pcb_textbox.cpp:576
+#: pcbnew/pcb_textbox.cpp:579
 #, fuzzy, c-format
 msgid "PCB Text Box '%s' on %s"
 msgstr "Texto de placa '%s' en %s"
 
-#: pcbnew/pcb_textbox.cpp:808
+#: pcbnew/pcb_textbox.cpp:811
 msgid "Border Properties"
 msgstr "Propiedades del borde"
 
@@ -48341,7 +48387,7 @@ msgstr "Como la huella madre"
 msgid "No datasheet found in the footprint."
 msgstr "No hay una hoja de datos definida."
 
-#: pcbnew/tools/footprint_editor_control.cpp:907
+#: pcbnew/tools/footprint_editor_control.cpp:908
 msgid "No footprint problems found."
 msgstr "No se han encontrado problemas en las huellas."
 
@@ -58970,9 +59016,6 @@ msgstr "Hoja de dibujo de KiCad"
 
 #~ msgid "Random"
 #~ msgstr "Aleatorio"
-
-#~ msgid "Propagation delay"
-#~ msgstr "Retardo de propagación"
 
 #~ msgid "Length in wavelength"
 #~ msgstr "Longitud en longitud de onda"
