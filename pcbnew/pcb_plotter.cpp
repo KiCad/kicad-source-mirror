@@ -33,9 +33,11 @@
 #include <jobs/job_export_pcb_dxf.h>
 #include <jobs/job_export_pcb_pdf.h>
 #include <jobs/job_export_pcb_plot.h>
+#include <jobs/job_export_pcb_ps.h>
 #include <jobs/job_export_pcb_svg.h>
 #include <pgm_base.h>
 #include <pcbnew_settings.h>
+#include <math/util.h> // for KiROUND
 
 
 PCB_PLOTTER::PCB_PLOTTER( BOARD* aBoard, REPORTER* aReporter, PCB_PLOT_PARAMS& aParams ) :
@@ -401,6 +403,15 @@ void PCB_PLOTTER::PlotJobToPlotOpts( PCB_PLOT_PARAMS& aOpts, JOB_EXPORT_PCB_PLOT
         aOpts.m_PDFBackFPPropertyPopups = pdfJob->m_pdfBackFPPropertyPopups;
         aOpts.m_PDFMetadata = pdfJob->m_pdfMetadata;
         aOpts.m_PDFSingle = pdfJob->m_pdfSingle;
+    }
+
+    if( aJob->m_plotFormat == JOB_EXPORT_PCB_PLOT::PLOT_FORMAT::POST )
+    {
+        JOB_EXPORT_PCB_PS* psJob = static_cast<JOB_EXPORT_PCB_PS*>( aJob );
+        aOpts.SetWidthAdjust( KiROUND( psJob->m_trackWidthCorrection * pcbIUScale.IU_PER_MM ) );
+        aOpts.SetFineScaleAdjustX( psJob->m_XScaleAdjust );
+        aOpts.SetFineScaleAdjustY( psJob->m_YScaleAdjust );
+        aOpts.SetA4Output( psJob->m_forceA4 );
     }
 
     aOpts.SetUseAuxOrigin( aJob->m_useDrillOrigin );

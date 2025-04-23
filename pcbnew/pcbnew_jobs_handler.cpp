@@ -38,6 +38,7 @@
 #include <jobs/job_export_pcb_gencad.h>
 #include <jobs/job_export_pcb_pdf.h>
 #include <jobs/job_export_pcb_pos.h>
+#include <jobs/job_export_pcb_ps.h>
 #include <jobs/job_export_pcb_svg.h>
 #include <jobs/job_export_pcb_3d.h>
 #include <jobs/job_pcb_render.h>
@@ -177,6 +178,19 @@ PCBNEW_JOBS_HANDLER::PCBNEW_JOBS_HANDLER( KIWAY* aKiway ) :
                   wxCHECK( pdfJob && editFrame, false );
 
                   DIALOG_PLOT dlg( editFrame, aParent, pdfJob );
+                  return dlg.ShowModal() == wxID_OK;
+              } );
+    Register( "ps", std::bind( &PCBNEW_JOBS_HANDLER::JobExportPs, this, std::placeholders::_1 ),
+              [aKiway]( JOB* job, wxWindow* aParent ) -> bool
+              {
+                  JOB_EXPORT_PCB_PS* psJob = dynamic_cast<JOB_EXPORT_PCB_PS*>( job );
+
+                  PCB_EDIT_FRAME* editFrame =
+                          dynamic_cast<PCB_EDIT_FRAME*>( aKiway->Player( FRAME_PCB_EDITOR, false ) );
+
+                  wxCHECK( psJob && editFrame, false );
+
+                  DIALOG_PLOT dlg( editFrame, aParent, psJob );
                   return dlg.ShowModal() == wxID_OK;
               } );
     Register( "gerber",
@@ -1020,6 +1034,90 @@ int PCBNEW_JOBS_HANDLER::JobExportPdf( JOB* aJob )
 
     if( !pcbPlotter.Plot( outPath, pdfJob->m_plotLayerSequence,
                           pdfJob->m_plotOnAllLayersSequence, false, plotAllLayersOneFile,
+                          layerName, sheetName, sheetPath ) )
+    {
+        return CLI::EXIT_CODES::ERR_UNKNOWN;
+    }
+
+    return CLI::EXIT_CODES::OK;
+}
+
+
+int PCBNEW_JOBS_HANDLER::JobExportPs( JOB* aJob )
+{
+    JOB_EXPORT_PCB_PS* psJob = dynamic_cast<JOB_EXPORT_PCB_PS*>( aJob );
+
+    if( psJob == nullptr )
+        return CLI::EXIT_CODES::ERR_UNKNOWN;
+
+    BOARD* brd = getBoard( psJob->m_filename );
+
+    if( !brd )
+        return CLI::EXIT_CODES::ERR_INVALID_INPUT_FILE;
+
+    psJob->SetTitleBlock( brd->GetTitleBlock() );
+    loadOverrideDrawingSheet( brd, psJob->m_drawingSheet );
+    brd->GetProject()->ApplyTextVars( psJob->GetVarOverrides() );
+    brd->SynchronizeProperties();
+
+    if( psJob->m_argLayers )
+        psJob->m_plotLayerSequence = convertLayerArg( psJob->m_argLayers.value(), brd );
+
+    if( psJob->m_argCommonLayers )
+        psJob->m_plotOnAllLayersSequence = convertLayerArg( psJob->m_argCommonLayers.value(), brd );
+
+    if( psJob->m_plotLayerSequence.size() < 1 )
+    {
+        m_reporter->Report( _( "At least one layer must be specified\n" ), RPT_SEVERITY_ERROR );
+        return CLI::EXIT_CODES::ERR_ARGS;
+    }
+
+    bool isSingle = psJob->m_genMode == JOB_EXPORT_PCB_PS::GEN_MODE::SINGLE;
+
+    if( isSingle )
+    {
+        if( psJob->GetConfiguredOutputPath().IsEmpty() )
+        {
+            wxFileName fn = brd->GetFileName();
+            fn.SetName( fn.GetName() );
+            fn.SetExt( GetDefaultPlotExtension( PLOT_FORMAT::POST ) );
+
+            psJob->SetWorkingOutputPath( fn.GetFullName() );
+        }
+    }
+
+    wxString outPath = psJob->GetFullOutputPath( brd->GetProject() );
+
+    if( !PATHS::EnsurePathExists( outPath, isSingle ) )
+    {
+        m_reporter->Report( _( "Failed to create output directory\n" ), RPT_SEVERITY_ERROR );
+        return CLI::EXIT_CODES::ERR_INVALID_OUTPUT_CONFLICT;
+    }
+
+    PCB_PLOT_PARAMS plotOpts;
+    PCB_PLOTTER::PlotJobToPlotOpts( plotOpts, psJob, *m_reporter );
+
+    PCB_PLOTTER pcbPlotter( brd, m_reporter, plotOpts );
+
+    std::optional<wxString> layerName;
+    std::optional<wxString> sheetName;
+    std::optional<wxString> sheetPath;
+
+    if( isSingle )
+    {
+        if( aJob->GetVarOverrides().contains( wxT( "LAYER" ) ) )
+            layerName = psJob->GetVarOverrides().at( wxT( "LAYER" ) );
+
+        if( aJob->GetVarOverrides().contains( wxT( "SHEETNAME" ) ) )
+            sheetName = psJob->GetVarOverrides().at( wxT( "SHEETNAME" ) );
+
+        if( aJob->GetVarOverrides().contains( wxT( "SHEETPATH" ) ) )
+            sheetPath = psJob->GetVarOverrides().at( wxT( "SHEETPATH" ) );
+    }
+
+    LOCALE_IO dummy;
+
+    if( !pcbPlotter.Plot( outPath, psJob->m_plotLayerSequence, psJob->m_plotOnAllLayersSequence, false, isSingle,
                           layerName, sheetName, sheetPath ) )
     {
         return CLI::EXIT_CODES::ERR_UNKNOWN;

@@ -49,6 +49,7 @@
 #include <jobs/job_export_pcb_gerbers.h>
 #include <jobs/job_export_pcb_dxf.h>
 #include <jobs/job_export_pcb_pdf.h>
+#include <jobs/job_export_pcb_ps.h>
 #include <jobs/job_export_pcb_svg.h>
 #include <plotters/plotters_pslike.h>
 #include <pcb_plotter.h>
@@ -272,16 +273,30 @@ void DIALOG_PLOT::init_Dialog()
     if( !m_job && !projectFile.m_PcbLastPath[ LAST_PATH_PLOT ].IsEmpty() )
         m_plotOpts.SetOutputDirectory( projectFile.m_PcbLastPath[ LAST_PATH_PLOT ] );
 
-    m_XScaleAdjust = cfg->m_Plot.fine_scale_x;
-    m_YScaleAdjust = cfg->m_Plot.fine_scale_y;
+    if( m_job
+        && !( m_job->m_plotFormat == JOB_EXPORT_PCB_PLOT::PLOT_FORMAT::POST
+              && dynamic_cast<JOB_EXPORT_PCB_PS*>( m_job )->m_useGlobalSettings ) )
+    {
+        // When we are using a job we get the PS adjust values from the plot options
+        // The exception is when this is a fresh job and we want to get the global values as defaults
+        m_XScaleAdjust = m_plotOpts.GetFineScaleAdjustX();
+        m_YScaleAdjust = m_plotOpts.GetFineScaleAdjustY();
+        m_PSWidthAdjust = m_plotOpts.GetWidthAdjust();
+    }
+    else
+    {
+        // The default is to use the global adjusts from the pcbnew settings
+        m_XScaleAdjust = cfg->m_Plot.fine_scale_x;
+        m_YScaleAdjust = cfg->m_Plot.fine_scale_y;
+        // m_PSWidthAdjust is stored in mm in user config
+        m_PSWidthAdjust = KiROUND( cfg->m_Plot.ps_fine_width_adjust * pcbIUScale.IU_PER_MM );
+    }
 
     m_zoneFillCheck->SetValue( cfg->m_Plot.check_zones_before_plotting );
 
     m_browseButton->SetBitmap( KiBitmapBundle( BITMAPS::small_folder ) );
     m_openDirButton->SetBitmap( KiBitmapBundle( BITMAPS::small_new_window ) );
 
-    // m_PSWidthAdjust is stored in mm in user config
-    m_PSWidthAdjust = KiROUND( cfg->m_Plot.ps_fine_width_adjust * pcbIUScale.IU_PER_MM );
 
     // The reasonable width correction value must be in a range of
     // [-(MinTrackWidth-1), +(MinClearanceValue-1)] decimils.
@@ -456,6 +471,19 @@ void DIALOG_PLOT::transferPlotParamsToJob()
         dxfJob->m_plotGraphicItemsUsingContours = m_plotOpts.GetPlotMode() == OUTLINE_MODE::SKETCH;
         dxfJob->m_polygonMode = m_plotOpts.GetDXFPlotPolygonMode();
         dxfJob->m_genMode = JOB_EXPORT_PCB_DXF::GEN_MODE::MULTI;
+    }
+
+    if( m_job->m_plotFormat == JOB_EXPORT_PCB_PLOT::PLOT_FORMAT::POST )
+    {
+        JOB_EXPORT_PCB_PS* psJob = static_cast<JOB_EXPORT_PCB_PS*>( m_job );
+        psJob->m_genMode = JOB_EXPORT_PCB_PS::GEN_MODE::MULTI;
+        psJob->m_XScaleAdjust = m_plotOpts.GetFineScaleAdjustX();
+        psJob->m_YScaleAdjust = m_plotOpts.GetFineScaleAdjustY();
+        psJob->m_trackWidthCorrection = pcbIUScale.IUTomm( m_plotOpts.GetWidthAdjust() );
+        psJob->m_forceA4 = m_plotOpts.GetA4Output();
+        // For a fresh job we got the adjusts from the global pcbnew settings
+        // After the user confirmed and/or changed them we stop using the global adjusts
+        psJob->m_useGlobalSettings = false;
     }
 
     if( m_job->m_plotFormat == JOB_EXPORT_PCB_PLOT::PLOT_FORMAT::PDF )
@@ -1120,8 +1148,18 @@ void DIALOG_PLOT::applyPlotSettings()
 
     auto cfg = m_editFrame->GetPcbNewSettings();
 
-    cfg->m_Plot.fine_scale_x = m_XScaleAdjust;
-    cfg->m_Plot.fine_scale_y = m_YScaleAdjust;
+    if( m_job )
+    {
+        // When using a job we store the adjusts in the plot options
+        tempOptions.SetFineScaleAdjustX( m_XScaleAdjust );
+        tempOptions.SetFineScaleAdjustY( m_YScaleAdjust );
+    }
+    else
+    {
+        // The default is to use the pcbnew settings, so here we modify them
+        cfg->m_Plot.fine_scale_x = m_XScaleAdjust;
+        cfg->m_Plot.fine_scale_y = m_YScaleAdjust;
+    }
 
     cfg->m_Plot.check_zones_before_plotting = m_zoneFillCheck->GetValue();
 
@@ -1137,8 +1175,17 @@ void DIALOG_PLOT::applyPlotSettings()
         reporter.Report( msg, RPT_SEVERITY_WARNING );
     }
 
-    // Store m_PSWidthAdjust in mm in user config
-    cfg->m_Plot.ps_fine_width_adjust = pcbIUScale.IUTomm( m_PSWidthAdjust );
+    if( m_job )
+    {
+        // When using a job we store the adjusts in the plot options
+        tempOptions.SetWidthAdjust( m_PSWidthAdjust );
+    }
+    else
+    {
+        // The default is to use the pcbnew settings, so here we modify them
+        // Store m_PSWidthAdjust in mm in user config
+        cfg->m_Plot.ps_fine_width_adjust = pcbIUScale.IUTomm( m_PSWidthAdjust );
+    }
 
     tempOptions.SetFormat( getPlotFormat() );
 

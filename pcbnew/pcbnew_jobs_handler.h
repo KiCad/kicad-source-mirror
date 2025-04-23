@@ -41,6 +41,7 @@ public:
     int JobExportSvg( JOB* aJob );
     int JobExportDxf( JOB* aJob );
     int JobExportPdf( JOB* aJob );
+    int JobExportPs( JOB* aJob );
     int JobExportGerber( JOB* aJob );
     int JobExportGerbers( JOB* aJob );
     int JobExportGencad( JOB* aJob );
