@@ -42,7 +42,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-04-21 13:43+0300\n"
-"PO-Revision-Date: 2025-04-23 08:01+0000\n"
+"PO-Revision-Date: 2025-04-23 10:24+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/kicad/master-source/zh_Hans/>\n"
@@ -6914,9 +6914,8 @@ msgid "Font"
 msgstr "字体"
 
 #: common/eda_text.cpp:1367
-#, fuzzy
 msgid "Auto Thickness"
-msgstr "总线线宽"
+msgstr "自动线宽"
 
 #: common/eda_text.cpp:1370 eeschema/sch_field.cpp:1606
 #: eeschema/sch_label.cpp:2299 eeschema/sch_tablecell.cpp:196
@@ -8595,7 +8594,6 @@ msgid "Select Preferred Editor"
 msgstr "选择首选编辑器"
 
 #: common/pgm_base.cpp:384
-#, fuzzy
 msgid ""
 "KiCad can anonymously report crashes and special event data to developers in "
 "order to aid identifying critical bugs and help profile functionality to "
@@ -8604,11 +8602,11 @@ msgid ""
 "reports when crashes or events occur. \n"
 "Your design files such as schematic and PCB are not shared in this process."
 msgstr ""
-"为了更有效地帮助开发人员识别软件在用户群体中存在的关键问题, 并帮助分析功能以"
-"指导改进工作, 开发者报告崩溃和特殊事件数据。\n"
-"如果您选择自愿参与, 那么在发生崩溃或特殊事件时, KiCad 会自动处理并向开发者发"
-"送这些报告。\n"
-"在此过程中, 您的设计文件 (如原理图或PCB) 绝不会被上传。"
+"为了更有效地帮助开发人员识别在用户群体中出现的重点程序问题并改进功能, KiCad "
+"可以匿名地向开发人员报告崩溃和特殊事件数据, 并帮助分析以指导改进工作。\n"
+"如果您选择自愿参与, 那么在发生崩溃或特殊事件时, KiCad "
+"会自动处理并发送这些报告。\n"
+"在此过程中, 您的设计文件 (如原理图或PCB) 绝不会被共享。"
 
 #: common/pgm_base.cpp:389
 msgid "Data Collection Opt In"
@@ -10447,7 +10445,7 @@ msgstr "搜索元数据"
 
 #: common/widgets/search_pane.cpp:54
 msgid "Search library links, descriptions and keywords"
-msgstr ""
+msgstr "搜索库链接, 描述和关键词"
 
 #: common/widgets/unit_binder.cpp:351
 #, c-format
@@ -15318,12 +15316,9 @@ msgstr "分组"
 msgid ""
 "Show\n"
 "Column"
-msgstr ""
-"显示\n"
-"列"
+msgstr "显示列"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:210
-#, fuzzy
 msgid ""
 "Group\n"
 "By"
@@ -20974,9 +20969,8 @@ msgid "Cannot remove temporary output file"
 msgstr "无法移除临时输出文件"
 
 #: eeschema/sim/kibis/kibis.cpp:682
-#, fuzzy
 msgid "Missing 'Values:' tag in temporary file"
-msgstr "读取临时文件时出错"
+msgstr "临时文件中缺少 'Values: ' 标签"
 
 #: eeschema/sim/kibis/kibis.cpp:710 eeschema/sim/kibis/kibis.cpp:718
 msgid "Error while reading temporary file"
@@ -21233,7 +21227,7 @@ msgstr "'OFF' 时间"
 #: eeschema/sim/sim_model_ibis.cpp:442 eeschema/sim/sim_model_ibis.cpp:475
 #: pcbnew/dialogs/panel_setup_time_domain_parameters_base.cpp:116
 msgid "Delay"
-msgstr "延时"
+msgstr "延迟"
 
 #: eeschema/sim/sim_model_ibis.cpp:450
 msgid "Number of cycles"
@@ -26530,7 +26524,7 @@ msgstr "图像高度"
 #: kicad/cli/command_pcb_render.cpp:237
 #, c-format
 msgid "Render from side. Options: %s"
-msgstr "从侧面渲染。选项: %s"
+msgstr "渲染面选择。选项: %s"
 
 #: kicad/cli/command_pcb_render.cpp:242
 #, c-format
@@ -26598,9 +26592,8 @@ msgid "Side lights elevation angle in degrees, range: 0-90"
 msgstr "侧光仰角, 单位为度, 取值范围: 0-90"
 
 #: kicad/cli/command_pcb_render.cpp:334
-#, fuzzy
 msgid "Invalid preset\n"
-msgstr "无效的格式\n"
+msgstr "无效预设\n"
 
 #: kicad/cli/command_pcb_render.cpp:350
 msgid "Invalid background\n"
@@ -26628,7 +26621,7 @@ msgstr "底部光强格式无效\n"
 
 #: kicad/cli/command_pcb_render.cpp:389
 msgid "Invalid light side intensity format\n"
-msgstr "侧面光强格式无效\n"
+msgstr "光源面光强格式无效\n"
 
 #: kicad/cli/command_pcb_render.cpp:396
 msgid "Invalid light camera intensity format\n"
@@ -32328,9 +32321,8 @@ msgid "Component Classes"
 msgstr "元件类"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:214
-#, fuzzy
 msgid "Time Domain Parameters"
-msgstr "标题栏参数"
+msgstr "时域参数"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:234
 msgid "Board Data"
@@ -34763,7 +34755,7 @@ msgstr "位号"
 #: pcbnew/dialogs/dialog_render_job_base.cpp:277
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:209
 msgid "Side:"
-msgstr "侧面:"
+msgstr "板面:"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:184
 msgid "Footprint type:"
@@ -36087,9 +36079,8 @@ msgid "Component classes"
 msgstr "元件类"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:81
-#, fuzzy
 msgid "Time domain parameters"
-msgstr "标题栏参数"
+msgstr "时域参数"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:84
 msgid "Custom rules"
@@ -37965,9 +37956,8 @@ msgstr "交换层"
 #: pcbnew/dialogs/dialog_tablecell_properties_base.cpp:208
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:208
 #: pcbnew/dialogs/dialog_textbox_properties_base.cpp:199
-#, fuzzy
 msgid "Adjust the text thickness"
-msgstr "调整电介质厚度"
+msgstr "调整文本线宽"
 
 #: pcbnew/dialogs/dialog_target_properties.cpp:109
 msgid "Edit Alignment Target"
@@ -38280,9 +38270,8 @@ msgid "Target Skew: "
 msgstr "目标 skew: "
 
 #: pcbnew/dialogs/dialog_tuning_pattern_properties.cpp:57
-#, fuzzy
 msgid "Target Skew Delay: "
-msgstr "目标 skew: %s"
+msgstr "目标 skew 延迟: "
 
 #: pcbnew/dialogs/dialog_tuning_pattern_properties.cpp:129
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2413
@@ -38305,7 +38294,7 @@ msgstr "目标长度:"
 #: pcbnew/dialogs/dialog_tuning_pattern_properties_base.cpp:58
 #, fuzzy
 msgid "Target Delay:"
-msgstr "目标域:"
+msgstr "目标延迟:"
 
 #: pcbnew/dialogs/dialog_tuning_pattern_properties_base.cpp:72
 msgid "Override custom rules"
@@ -38438,9 +38427,8 @@ msgid "Footprint..."
 msgstr "封装..."
 
 #: pcbnew/dialogs/panel_assign_component_classes.cpp:373
-#, fuzzy
 msgid "Side..."
-msgstr "侧面:"
+msgstr "板面..."
 
 #: pcbnew/dialogs/panel_assign_component_classes.cpp:374
 msgid "Rotation..."
@@ -42179,7 +42167,7 @@ msgstr "焊盘到 Die 长度"
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2391 pcbnew/pcb_track.cpp:1830
 #, fuzzy
 msgid "Full Delay"
-msgstr "延时"
+msgstr "完整延迟"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2403
 #, c-format
@@ -42633,7 +42621,7 @@ msgstr "在封装中"
 #: pcbnew/netinfo_item.cpp:150 pcbnew/widgets/pcb_net_inspector_panel.cpp:123
 #, fuzzy
 msgid "Net Delay"
-msgstr "延时"
+msgstr "网络延迟"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:142
 #, c-format
@@ -45527,9 +45515,8 @@ msgid "Filling"
 msgstr "填孔"
 
 #: pcbnew/pcbexpr_evaluator.cpp:615
-#, fuzzy
 msgid "must be mm, in, mil, deg, fs, or ps"
-msgstr "单位必须为 mm, in, mil 或 deg"
+msgstr "单位必须为 mm, in, mil, deg, fs 或 ps"
 
 #: pcbnew/pcbexpr_functions.cpp:76
 #, c-format
@@ -46243,7 +46230,6 @@ msgid "Control to select the via diameter"
 msgstr ""
 
 #: pcbnew/toolbars_pcb_editor.cpp:195
-#, fuzzy
 msgid "Track routing tools"
 msgstr "走线布置工具"
 
@@ -49101,36 +49087,32 @@ msgid "Displays tuning pattern properties dialog"
 msgstr "显示调整规则属性对话框"
 
 #: pcbnew/tools/pcb_actions.cpp:2587
-#, fuzzy
 msgid "Show wizards selector"
-msgstr "没有向导选择"
+msgstr "显示向导选择器"
 
 #: pcbnew/tools/pcb_actions.cpp:2588
 msgid "Select wizard script to run"
 msgstr "选择向导脚本运行"
 
 #: pcbnew/tools/pcb_actions.cpp:2594
-#, fuzzy
 msgid "Reset wizard parameters"
-msgstr "重置向导参数为默认值"
+msgstr "重置向导参数"
 
 #: pcbnew/tools/pcb_actions.cpp:2595
 msgid "Reset wizard parameters to default"
 msgstr "重置向导参数为默认值"
 
 #: pcbnew/tools/pcb_actions.cpp:2601
-#, fuzzy
 msgid "Select previous wizard page"
-msgstr "选择上一个参数页"
+msgstr "选择上一向导页"
 
 #: pcbnew/tools/pcb_actions.cpp:2602
 msgid "Select previous parameters page"
 msgstr "选择上一个参数页"
 
 #: pcbnew/tools/pcb_actions.cpp:2608
-#, fuzzy
 msgid "Select next wizard page"
-msgstr "选择下一个参数页"
+msgstr "选择下一向导页"
 
 #: pcbnew/tools/pcb_actions.cpp:2609
 msgid "Select next parameters page"
@@ -49258,14 +49240,12 @@ msgid "BOARD CHARACTERISTICS"
 msgstr "BOARD CHARACTERISTICS"
 
 #: pcbnew/tools/pcb_control.cpp:2199
-#, fuzzy
 msgid "Copper layer count: "
-msgstr "铜层数量:"
+msgstr "铜层数量: "
 
 #: pcbnew/tools/pcb_control.cpp:2203
-#, fuzzy
 msgid "Board thickness: "
-msgstr "板厚:"
+msgstr "板厚: "
 
 #: pcbnew/tools/pcb_control.cpp:2210
 msgid "Board overall dimensions: "
@@ -49280,12 +49260,10 @@ msgid "Min hole diameter: "
 msgstr "最小孔径: "
 
 #: pcbnew/tools/pcb_control.cpp:2228
-#, fuzzy
 msgid "Copper finish: "
-msgstr "镀铜处理:"
+msgstr "镀铜处理: "
 
 #: pcbnew/tools/pcb_control.cpp:2231
-#, fuzzy
 msgid "Impedance control: "
 msgstr "阻抗控制: "
 
@@ -49294,9 +49272,8 @@ msgid "Castellated pads: "
 msgstr "存在半孔焊盘: "
 
 #: pcbnew/tools/pcb_control.cpp:2237
-#, fuzzy
 msgid "Plated board edge: "
-msgstr "需要电镀板边"
+msgstr "电镀板边: "
 
 #: pcbnew/tools/pcb_control.cpp:2246
 msgid "Yes, Bevelled"
@@ -49602,7 +49579,6 @@ msgid "Locked Item Shadow"
 msgstr "锁定项目阴影"
 
 #: pcbnew/widgets/appearance_controls.cpp:352
-#, fuzzy
 msgid "Show a shadow on locked items"
 msgstr "在锁定的项目上显示阴影标记"
 
@@ -50251,7 +50227,7 @@ msgstr "网络类"
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:123
 #, fuzzy
 msgid "Total Delay"
-msgstr "延时"
+msgstr "总延迟"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:128
 msgid "Total Length"
@@ -50264,7 +50240,7 @@ msgstr "过孔数量"
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:137
 #, fuzzy
 msgid "Via Delay"
-msgstr "延时"
+msgstr "过孔延迟"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:139
 #, fuzzy
@@ -50274,7 +50250,7 @@ msgstr "走线间隙:"
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:141
 #, fuzzy
 msgid "Die Delay"
-msgstr "延时"
+msgstr "Die 延迟"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:146
 msgid "Via Length"
