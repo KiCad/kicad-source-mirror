@@ -30,24 +30,6 @@
 #include <footprint.h>
 #include <pad.h>
 
-/**
- * Make a footprint with a given list of named pads
- */
-static std::unique_ptr<FOOTPRINT> FootprintWithPads( const std::vector<wxString> aNames )
-{
-    std::unique_ptr<FOOTPRINT> footprint = std::make_unique<FOOTPRINT>( nullptr );
-
-    for( const wxString& name : aNames )
-    {
-        std::unique_ptr<PAD> pad = std::make_unique<PAD>( footprint.get() );
-
-        pad->SetNumber( name );
-
-        footprint->Add( pad.release() );
-    }
-
-    return footprint;
-}
 
 /**
  * Declare the test suite
@@ -58,8 +40,7 @@ BOOST_AUTO_TEST_SUITE( ArrayPadNumberProv )
 struct APNP_CASE
 {
     std::string                    m_case_name;
-    bool                           m_using_footprint;
-    std::vector<wxString>          m_existing_pads;
+    std::set<wxString>             m_existing_pad_numbers;
     std::unique_ptr<ARRAY_OPTIONS> m_arr_opts;
     std::vector<wxString>          m_expected_numbers;
 };
@@ -82,7 +63,6 @@ std::vector<APNP_CASE> GetFootprintAPNPCases()
 
     cases.push_back( {
             "Simple linear, skip some",
-            true,
             { "1", "3" },
             std::move( opts ),
             { "2", "4", "5", "6", "7" },
@@ -98,7 +78,6 @@ std::vector<APNP_CASE> GetFootprintAPNPCases()
 
     cases.push_back( {
             "Simple linear, no footprint",
-            false,
             {}, // not used
             std::move( opts ),
             { "1", "2", "3", "4", "5" },
@@ -137,10 +116,7 @@ BOOST_AUTO_TEST_CASE( FootprintCases )
         {
             std::unique_ptr<FOOTPRINT> footprint;
 
-            if( c.m_using_footprint )
-                footprint = FootprintWithPads( c.m_existing_pads );
-
-            ARRAY_PAD_NUMBER_PROVIDER apnp( footprint.get(), *c.m_arr_opts );
+            ARRAY_PAD_NUMBER_PROVIDER apnp( c.m_existing_pad_numbers, *c.m_arr_opts );
 
             CheckPadNumberProvider( apnp, c.m_expected_numbers );
         }
