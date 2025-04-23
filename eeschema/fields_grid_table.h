@@ -38,11 +38,12 @@ class SCH_LABEL_BASE;
 class FIELDS_GRID_TRICKS : public GRID_TRICKS
 {
 public:
-    FIELDS_GRID_TRICKS( WX_GRID* aGrid, DIALOG_SHIM* aDialog, EMBEDDED_FILES* aFiles,
+    FIELDS_GRID_TRICKS( WX_GRID* aGrid, DIALOG_SHIM* aDialog,
+                        std::vector<EMBEDDED_FILES*> aFilesStack,
                         std::function<void( wxCommandEvent& )> aAddHandler ) :
         GRID_TRICKS( aGrid, std::move( aAddHandler ) ),
         m_dlg( aDialog ),
-        m_files( aFiles )
+        m_filesStack( aFilesStack )
     {}
 
 protected:
@@ -52,8 +53,8 @@ protected:
     void doPopupSelection( wxCommandEvent& event ) override;
 
 protected:
-    DIALOG_SHIM*    m_dlg;
-    EMBEDDED_FILES* m_files;
+    DIALOG_SHIM*                 m_dlg;
+    std::vector<EMBEDDED_FILES*> m_filesStack;
 };
 
 
@@ -87,9 +88,9 @@ class FIELDS_GRID_TABLE : public WX_GRID_TABLE_BASE, public std::vector<SCH_FIEL
 {
 public:
     FIELDS_GRID_TABLE( DIALOG_SHIM* aDialog, SCH_BASE_FRAME* aFrame, WX_GRID* aGrid,
-                       LIB_SYMBOL* aSymbol, EMBEDDED_FILES* aFiles = nullptr );
+                       LIB_SYMBOL* aSymbol, std::vector<EMBEDDED_FILES*> aFilesStack = {} );
     FIELDS_GRID_TABLE( DIALOG_SHIM* aDialog, SCH_EDIT_FRAME* aFrame, WX_GRID* aGrid,
-                       SCH_SYMBOL* aSymbol, EMBEDDED_FILES* aFiles = nullptr );
+                       SCH_SYMBOL* aSymbol );
     FIELDS_GRID_TABLE( DIALOG_SHIM* aDialog, SCH_EDIT_FRAME* aFrame, WX_GRID* aGrid,
                        SCH_SHEET* aSheet );
     FIELDS_GRID_TABLE( DIALOG_SHIM* aDialog, SCH_EDIT_FRAME* aFrame, WX_GRID* aGrid,
@@ -137,13 +138,13 @@ protected:
     SCH_FIELD& getField( int aRow );
 
 private:
-    SCH_BASE_FRAME*   m_frame;
-    DIALOG_SHIM*      m_dialog;
-    KICAD_T           m_parentType;
-    LIB_SYMBOL*       m_part;
-    EMBEDDED_FILES*   m_files;
-    wxString          m_symbolNetlist;
-    wxString          m_curdir;
+    SCH_BASE_FRAME*              m_frame;
+    DIALOG_SHIM*                 m_dialog;
+    KICAD_T                      m_parentType;
+    LIB_SYMBOL*                  m_part;
+    std::vector<EMBEDDED_FILES*> m_filesStack;
+    wxString                     m_symbolNetlist;
+    wxString                     m_curdir;
 
     FIELD_VALIDATOR   m_fieldNameValidator;
     FIELD_VALIDATOR   m_referenceValidator;

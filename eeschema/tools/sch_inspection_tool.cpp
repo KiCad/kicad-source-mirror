@@ -502,7 +502,7 @@ int SCH_INSPECTION_TOOL::RunSimulation( const TOOL_EVENT& aEvent )
 int SCH_INSPECTION_TOOL::ShowDatasheet( const TOOL_EVENT& aEvent )
 {
     wxString datasheet;
-    EMBEDDED_FILES* files = nullptr;
+    std::vector<EMBEDDED_FILES*> filesStack;
 
     if( m_frame->IsType( FRAME_SCH_SYMBOL_EDITOR ) )
     {
@@ -512,7 +512,7 @@ int SCH_INSPECTION_TOOL::ShowDatasheet( const TOOL_EVENT& aEvent )
             return 0;
 
         datasheet = symbol->GetDatasheetField().GetText();
-        files = symbol;
+        filesStack.push_back( symbol );
     }
     else if( m_frame->IsType( FRAME_SCH_VIEWER ) )
     {
@@ -522,7 +522,7 @@ int SCH_INSPECTION_TOOL::ShowDatasheet( const TOOL_EVENT& aEvent )
             return 0;
 
         datasheet = entry->GetDatasheetField().GetText();
-        files = entry;
+        filesStack.push_back( entry );
     }
     else if( m_frame->IsType( FRAME_SCH ) )
     {
@@ -537,7 +537,10 @@ int SCH_INSPECTION_TOOL::ShowDatasheet( const TOOL_EVENT& aEvent )
         // Use GetShownText() to resolve any text variables, but don't allow adding extra text
         // (ie: the field name)
         datasheet = field->GetShownText( &symbol->Schematic()->CurrentSheet(), false );
-        files = symbol->Schematic();
+        filesStack.push_back( symbol->Schematic() );
+
+        if( symbol->GetLibSymbolRef() )
+            filesStack.push_back( symbol->GetLibSymbolRef().get() );
     }
 
     if( datasheet.IsEmpty() || datasheet == wxS( "~" ) )
@@ -547,7 +550,7 @@ int SCH_INSPECTION_TOOL::ShowDatasheet( const TOOL_EVENT& aEvent )
     else
     {
         GetAssociatedDocument( m_frame, datasheet, &m_frame->Prj(),
-                               PROJECT_SCH::SchSearchS( &m_frame->Prj() ), files );
+                               PROJECT_SCH::SchSearchS( &m_frame->Prj() ), filesStack );
     }
 
     return 0;

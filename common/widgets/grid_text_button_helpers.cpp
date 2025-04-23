@@ -331,12 +331,12 @@ class TEXT_BUTTON_URL : public wxComboCtrl
 {
 public:
     TEXT_BUTTON_URL( wxWindow* aParent, DIALOG_SHIM* aParentDlg, SEARCH_STACK* aSearchStack,
-                     EMBEDDED_FILES* aFiles ) :
+                     std::vector<EMBEDDED_FILES*> aFilesStack ) :
             wxComboCtrl( aParent, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 0, 0 ),
                          wxTE_PROCESS_ENTER | wxBORDER_NONE ),
             m_dlg( aParentDlg ),
             m_searchStack( aSearchStack ),
-            m_files( aFiles )
+            m_filesStack( aFilesStack )
     {
         UpdateButtonBitmaps();
 
@@ -381,7 +381,7 @@ protected:
 
                 if( customize.GetEmbed() )
                 {
-                    EMBEDDED_FILES::EMBEDDED_FILE* result = m_files->AddFile( fn, false );
+                    EMBEDDED_FILES::EMBEDDED_FILE* result = m_filesStack[0]->AddFile( fn, false );
                     SetValue( result->GetLink() );
                 }
                 else
@@ -392,7 +392,7 @@ protected:
         }
         else
         {
-            GetAssociatedDocument( m_dlg, GetValue(), &m_dlg->Prj(), m_searchStack, m_files );
+            GetAssociatedDocument( m_dlg, GetValue(), &m_dlg->Prj(), m_searchStack, m_filesStack );
         }
 
         m_dlg->CleanupAfterModalSubDialog();
@@ -413,15 +413,15 @@ protected:
     }
 
 protected:
-    DIALOG_SHIM*    m_dlg;
-    SEARCH_STACK*   m_searchStack;
-    EMBEDDED_FILES* m_files;
+    DIALOG_SHIM*                 m_dlg;
+    SEARCH_STACK*                m_searchStack;
+    std::vector<EMBEDDED_FILES*> m_filesStack;
 };
 
 
 void GRID_CELL_URL_EDITOR::Create( wxWindow* aParent, wxWindowID aId, wxEvtHandler* aEventHandler )
 {
-    m_control = new TEXT_BUTTON_URL( aParent, m_dlg, m_searchStack, m_files );
+    m_control = new TEXT_BUTTON_URL( aParent, m_dlg, m_searchStack, m_filesStack );
     WX_GRID::CellEditorSetMargins( Combo() );
 
 #if wxUSE_VALIDATORS
