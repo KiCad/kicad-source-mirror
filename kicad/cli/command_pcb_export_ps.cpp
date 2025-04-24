@@ -116,7 +116,7 @@ CLI::PCB_EXPORT_PS_COMMAND::PCB_EXPORT_PS_COMMAND() :
             .help( UTF8STDSTR( _( "Track width correction [mm]. Used to compensate errors in "
                                   "track widths, pad and via sizes." ) ) )
             .scan<'g', double>()
-            .default_value( 0 )
+            .default_value( 0.0 )
             .metavar( "TRACK_COR" );
 
     m_argParser.add_argument( "-X", ARG_X_SCALE_FACTOR )
