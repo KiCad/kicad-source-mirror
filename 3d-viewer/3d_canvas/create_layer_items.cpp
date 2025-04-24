@@ -1125,7 +1125,7 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
                     {
                         if( track->HasSolderMask() )
                         {
-                            track->TransformShapeToPolySet( *layerPoly, layer, maskExpansion, maxError,
+                            track->TransformShapeToPolygon( *layerPoly, layer, maskExpansion, maxError,
                                                             ERROR_INSIDE );
                         }
                     }
