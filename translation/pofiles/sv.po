@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-04-23 21:24+0300\n"
-"PO-Revision-Date: 2025-04-23 08:01+0000\n"
+"PO-Revision-Date: 2025-04-24 16:38+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/v9/sv/>\n"
 "Language: sv\n"
@@ -646,229 +646,184 @@ msgid "Show user ECO2 layer"
 msgstr "Visa användardefinierat ECO2-lager"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:68
-#, fuzzy
 msgid "Show user defined layer 1"
-msgstr "Användardefinierat lager 1"
+msgstr "Visa användardefinierat lager 1"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:69
-#, fuzzy
 msgid "Show user defined layer 2"
-msgstr "Användardefinierat lager 2"
+msgstr "Visa användardefinierat lager 2"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:70
-#, fuzzy
 msgid "Show user defined layer 3"
-msgstr "Användardefinierat lager 3"
+msgstr "Visa användardefinierat lager 3"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:71
-#, fuzzy
 msgid "Show user defined layer 4"
-msgstr "Användardefinierat lager 4"
+msgstr "Visa användardefinierat lager 4"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:72
-#, fuzzy
 msgid "Show user defined layer 5"
-msgstr "Användardefinierat lager 5"
+msgstr "Visa användardefinierat lager 5"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:73
-#, fuzzy
 msgid "Show user defined layer 6"
-msgstr "Användardefinierat lager 6"
+msgstr "Visa användardefinierat lager 6"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:74
-#, fuzzy
 msgid "Show user defined layer 7"
-msgstr "Användardefinierat lager 7"
+msgstr "Visa användardefinierat lager 7"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:75
-#, fuzzy
 msgid "Show user defined layer 8"
-msgstr "Användardefinierat lager 8"
+msgstr "Visa användardefinierat lager 8"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:76
-#, fuzzy
 msgid "Show user defined layer 9"
-msgstr "Användardefinierat lager 9"
+msgstr "Visa användardefinierat lager 9"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:77
-#, fuzzy
 msgid "Show user defined layer 10"
-msgstr "Användardefinierat lager 10"
+msgstr "Visa användardefinierat lager 10"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:78
-#, fuzzy
 msgid "Show user defined layer 11"
-msgstr "Användardefinierat lager 11"
+msgstr "Visa användardefinierat lager 11"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:79
-#, fuzzy
 msgid "Show user defined layer 12"
-msgstr "Användardefinierat lager 12"
+msgstr "Visa användardefinierat lager 12"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:80
-#, fuzzy
 msgid "Show user defined layer 13"
-msgstr "Användardefinierat lager 13"
+msgstr "Visa användardefinierat lager 13"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:81
-#, fuzzy
 msgid "Show user defined layer 14"
-msgstr "Användardefinierat lager 14"
+msgstr "Visa användardefinierat lager 14"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:82
-#, fuzzy
 msgid "Show user defined layer 15"
-msgstr "Användardefinierat lager 15"
+msgstr "Visa användardefinierat lager 15"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:83
-#, fuzzy
 msgid "Show user defined layer 16"
-msgstr "Användardefinierat lager 16"
+msgstr "Visa användardefinierat lager 16"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:84
-#, fuzzy
 msgid "Show user defined layer 17"
-msgstr "Användardefinierat lager 17"
+msgstr "Visa användardefinierat lager 17"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:85
-#, fuzzy
 msgid "Show user defined layer 18"
-msgstr "Användardefinierat lager 18"
+msgstr "Visa användardefinierat lager 18"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:86
-#, fuzzy
 msgid "Show user defined layer 19"
-msgstr "Användardefinierat lager 19"
+msgstr "Visa användardefinierat lager 19"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:87
-#, fuzzy
 msgid "Show user defined layer 20"
-msgstr "Användardefinierat lager 20"
+msgstr "Visa användardefinierat lager 20"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:88
-#, fuzzy
 msgid "Show user defined layer 21"
-msgstr "Användardefinierat lager 21"
+msgstr "Visa användardefinierat lager 21"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:89
-#, fuzzy
 msgid "Show user defined layer 22"
-msgstr "Användardefinierat lager 22"
+msgstr "Visa användardefinierat lager 22"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:90
-#, fuzzy
 msgid "Show user defined layer 23"
-msgstr "Användardefinierat lager 23"
+msgstr "Visa användardefinierat lager 23"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:91
-#, fuzzy
 msgid "Show user defined layer 24"
-msgstr "Användardefinierat lager 24"
+msgstr "Visa användardefinierat lager 24"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:92
-#, fuzzy
 msgid "Show user defined layer 25"
-msgstr "Användardefinierat lager 25"
+msgstr "Visa användardefinierat lager 25"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:93
-#, fuzzy
 msgid "Show user defined layer 26"
-msgstr "Användardefinierat lager 26"
+msgstr "Visa användardefinierat lager 26"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:94
-#, fuzzy
 msgid "Show user defined layer 27"
-msgstr "Användardefinierat lager 27"
+msgstr "Visa användardefinierat lager 27"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:95
-#, fuzzy
 msgid "Show user defined layer 28"
-msgstr "Användardefinierat lager 28"
+msgstr "Visa användardefinierat lager 28"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:96
-#, fuzzy
 msgid "Show user defined layer 29"
-msgstr "Användardefinierat lager 29"
+msgstr "Visa användardefinierat lager 29"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:97
-#, fuzzy
 msgid "Show user defined layer 30"
-msgstr "Användardefinierat lager 30"
+msgstr "Visa användardefinierat lager 30"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:98
-#, fuzzy
 msgid "Show user defined layer 31"
-msgstr "Användardefinierat lager 31"
+msgstr "Visa användardefinierat lager 31"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:99
-#, fuzzy
 msgid "Show user defined layer 32"
-msgstr "Användardefinierat lager 32"
+msgstr "Visa användardefinierat lager 32"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:100
-#, fuzzy
 msgid "Show user defined layer 33"
-msgstr "Användardefinierat lager 33"
+msgstr "Visa användardefinierat lager 33"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:101
-#, fuzzy
 msgid "Show user defined layer 34"
-msgstr "Användardefinierat lager 34"
+msgstr "Visa användardefinierat lager 34"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:102
-#, fuzzy
 msgid "Show user defined layer 35"
-msgstr "Användardefinierat lager 35"
+msgstr "Visa användardefinierat lager 35"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:103
-#, fuzzy
 msgid "Show user defined layer 36"
-msgstr "Användardefinierat lager 36"
+msgstr "Visa användardefinierat lager 36"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:104
-#, fuzzy
 msgid "Show user defined layer 37"
-msgstr "Användardefinierat lager 37"
+msgstr "Visa användardefinierat lager 37"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:105
-#, fuzzy
 msgid "Show user defined layer 38"
-msgstr "Användardefinierat lager 38"
+msgstr "Visa användardefinierat lager 38"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:106
-#, fuzzy
 msgid "Show user defined layer 39"
-msgstr "Användardefinierat lager 39"
+msgstr "Visa användardefinierat lager 39"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:107
-#, fuzzy
 msgid "Show user defined layer 40"
-msgstr "Användardefinierat lager 40"
+msgstr "Visa användardefinierat lager 40"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:108
-#, fuzzy
 msgid "Show user defined layer 41"
-msgstr "Användardefinierat lager 41"
+msgstr "Visa användardefinierat lager 41"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:109
-#, fuzzy
 msgid "Show user defined layer 42"
-msgstr "Användardefinierat lager 42"
+msgstr "Visa användardefinierat lager 42"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:110
-#, fuzzy
 msgid "Show user defined layer 43"
-msgstr "Användardefinierat lager 43"
+msgstr "Visa användardefinierat lager 43"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:111
-#, fuzzy
 msgid "Show user defined layer 44"
-msgstr "Användardefinierat lager 44"
+msgstr "Visa användardefinierat lager 44"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:112
-#, fuzzy
 msgid "Show user defined layer 45"
-msgstr "Användardefinierat lager 45"
+msgstr "Visa användardefinierat lager 45"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:114
 msgid "Through-hole Models"
@@ -8499,7 +8454,6 @@ msgid "Select Preferred Editor"
 msgstr "Välj önskad redigerare"
 
 #: common/pgm_base.cpp:384
-#, fuzzy
 msgid ""
 "KiCad can anonymously report crashes and special event data to developers in "
 "order to aid identifying critical bugs and help profile functionality to "
@@ -8509,28 +8463,25 @@ msgid ""
 "Your design files such as schematic and PCB are not shared in this process."
 msgstr ""
 "KiCad kan rapportera krascher och data för speciella händelser anonymt till "
-"utvecklare för att underlätta effektivare identifiering av kritiska buggar "
-"hos användarna och hjälpa till att profilera funktionalitet för att vägleda "
-"förbättringsarbetet.\n"
+"utvecklare för att underlätta identifiering av kritiska buggar och hjälpa "
+"till att profilera funktionalitet för att vägleda förbättringsarbetet.\n"
 "Om du väljer att delta frivilligt, kommer KiCad automatiskt att ta hand om "
-"sändning av dessa rapporter när krascher eller särskilda händelser "
-"inträffar.\n"
-"Dina designfiler såsom kretscchema och mönsterkort delas inte i denna "
+"sändning av dessa rapporter när krascher eller särskilda händelser inträffar."
+"\n"
+"Dina designfiler såsom kretsschema och mönsterkort delas inte i denna "
 "process."
 
 #: common/pgm_base.cpp:389
-#, fuzzy
 msgid "Data Collection Opt In"
-msgstr "Datainsamling"
+msgstr "Medgivande till datainsamling"
 
 #: common/pgm_base.cpp:391
 msgid "Opt In"
-msgstr ""
+msgstr "medgivande"
 
 #: common/pgm_base.cpp:391
-#, fuzzy
 msgid "Decline"
-msgstr "Skisslinjer"
+msgstr "Avböj"
 
 #: common/pgm_base.cpp:498
 msgid "Environment variable HOME is empty.  Unable to continue."
@@ -11832,9 +11783,9 @@ msgid "Database Library Settings"
 msgstr "Inställningar för databasbibliotek"
 
 #: eeschema/dialogs/dialog_design_block_properties.cpp:98
-#, fuzzy, c-format
+#, c-format
 msgid "Illegal character '%c' in name '%s'."
-msgstr "Olagligt tecken '%c' i kortnamn '%s'."
+msgstr "Otillåtet tecken '%c' i namn '%s'."
 
 #: eeschema/dialogs/dialog_design_block_properties.cpp:124
 #: eeschema/dialogs/panel_template_fieldnames.cpp:100
@@ -26326,9 +26277,8 @@ msgid "The new behavior will match --mode-multi"
 msgstr "Det nya beteendet kommer att överensstämma med --mode-multi"
 
 #: kicad/cli/command_pcb_export_gencad.cpp:33
-#, fuzzy
 msgid "Export the PCB in Gencad format"
-msgstr "Exportera nätlista i KiCad-format"
+msgstr "Exportera mönsterkortet i Gencad-format"
 
 #: kicad/cli/command_pcb_export_gencad.cpp:39
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:134
