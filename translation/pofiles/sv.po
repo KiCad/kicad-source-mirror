@@ -13,10 +13,10 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-04-23 21:23+0300\n"
-"PO-Revision-Date: 2025-04-23 08:01+0000\n"
+"PO-Revision-Date: 2025-04-24 16:37+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
-"Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/master-"
-"source/sv/>\n"
+"Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/"
+"master-source/sv/>\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -820,7 +820,7 @@ msgstr "Visa användardefinierat lager 40"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:107
 msgid "Show user defined layer 41"
-msgstr "Visa avändardefinierat lager 41"
+msgstr "Visa användardefinierat lager 41"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:108
 msgid "Show user defined layer 42"
@@ -2661,9 +2661,9 @@ msgid "Path"
 msgstr "Sökväg"
 
 #: common/dialogs/dialog_design_block_properties.cpp:99
-#, fuzzy, c-format
+#, c-format
 msgid "Illegal character '%c' in name '%s'."
-msgstr "Olagligt tecken '%c' i kortnamn '%s'."
+msgstr "Otillåtet tecken '%c' i namn '%s'."
 
 #: common/dialogs/dialog_design_block_properties.cpp:125
 #: eeschema/dialogs/panel_template_fieldnames.cpp:102
@@ -8023,9 +8023,8 @@ msgid "Export Postscript Job Settings"
 msgstr "Inställningar för åtgärden exportera Postscript"
 
 #: common/jobs/job_export_pcb_ps.cpp:66
-#, fuzzy
 msgid "PCB: Export Postscript"
-msgstr "Exportera Postscript"
+msgstr "Mönsterkort: Exportera Postscript"
 
 #: common/jobs/job_export_pcb_svg.cpp:49
 #: common/jobs/job_export_sch_plot.cpp:179 kicad/kicad_cli.cpp:149
@@ -8717,12 +8716,12 @@ msgid ""
 "Your design files such as schematic and PCB are not shared in this process."
 msgstr ""
 "KiCad kan rapportera krascher och data för speciella händelser anonymt till "
-"utvecklare för att underlätta effektivare identifiering av kritiska buggar "
-"och hjälpa till att profilera funktionalitet för att vägleda "
-"förbättringsarbetet.\n"
-"Om du väljer att delta frivilligt, kommer KiCad automatiskt att sända dessa "
-"rapporter när krascher eller särskilda händelser inträffar.\n"
-"Dina designfiler såsom kretscchema och mönsterkort delas inte i denna "
+"utvecklare för att underlätta identifiering av kritiska buggar och hjälpa "
+"till att profilera funktionalitet för att vägleda förbättringsarbetet.\n"
+"Om du väljer att delta frivilligt, kommer KiCad automatiskt att ta hand om "
+"sändning av dessa rapporter när krascher eller särskilda händelser inträffar."
+"\n"
+"Dina designfiler såsom kretsschema och mönsterkort delas inte i denna "
 "process."
 
 #: common/pgm_base.cpp:389
@@ -27026,30 +27025,28 @@ msgid "Invalid side specified\n"
 msgstr "Ogiltig sida specificerad\n"
 
 #: kicad/cli/command_pcb_export_ps.cpp:41
-#, fuzzy
 msgid "Generate Postscript from a list of layers"
-msgstr "Skapa PDF från en lista av lager"
+msgstr "Skapa Postscript från en lista av lager"
 
 #: kicad/cli/command_pcb_export_ps.cpp:116
 msgid ""
 "Track width correction [mm]. Used to compensate errors in track widths, pad "
 "and via sizes."
 msgstr ""
+"Ledarbreddskorrektion [mm]. Används för att kompensera fel i ledarbredd och "
+"storlek på lödytor och vior."
 
 #: kicad/cli/command_pcb_export_ps.cpp:123
-#, fuzzy
 msgid "X scale adjust for exact scale."
-msgstr "Ställ in korrekturfaktor för X-skala, för att plotta i exakt skala"
+msgstr "X-skalejustering för exakt skala."
 
 #: kicad/cli/command_pcb_export_ps.cpp:129
-#, fuzzy
 msgid "Y scale adjust for exact scale."
-msgstr "Ställ in korrekturfaktor för X-skala, för att plotta i exakt skala"
+msgstr "Y-skalejusterig för exakt skala."
 
 #: kicad/cli/command_pcb_export_ps.cpp:135
-#, fuzzy
 msgid "Force A4 paper size."
-msgstr "Anpassad pappersstorlek:"
+msgstr "Tvinga pappersstorlek A4."
 
 #: kicad/cli/command_pcb_export_svg.cpp:41
 msgid "Generate SVG outputs of a given layer list"
@@ -33901,7 +33898,6 @@ msgid "Centre on source items"
 msgstr "Centrera på källelement"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:197
-#, fuzzy
 msgid "Renumber pads"
 msgstr "Numrera om lödytor"
 
@@ -41512,9 +41508,8 @@ msgid "(%s clearance %s; actual < 0)"
 msgstr "(%s frigång %s; faktisk <0)"
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:1423
-#, fuzzy
 msgid "(intersecting zones must have distinct priorities)"
-msgstr "Båge måste vara bestämd med tre distinkta punkter"
+msgstr "(överlappande zoner måste ha distinkta prioritetsnivåer)"
 
 #: pcbnew/drc/drc_test_provider_courtyard_clearance.cpp:85
 msgid "Checking footprint courtyard definitions..."
@@ -51598,9 +51593,9 @@ msgid "Rule Area %s"
 msgstr "Regelområde %s"
 
 #: pcbnew/zone.cpp:1194
-#, fuzzy, c-format
+#, c-format
 msgid "Rule Area '%s' %s"
-msgstr "Regelområde %s"
+msgstr "Regelområde '%s' %s"
 
 #: pcbnew/zone.cpp:1201
 #, c-format
@@ -51608,14 +51603,14 @@ msgid "Teardrop %s %s"
 msgstr "Kragförstärkning %s %s"
 
 #: pcbnew/zone.cpp:1209
-#, fuzzy, c-format
+#, c-format
 msgid "Zone %s %s, priority %d"
-msgstr "Zonprioritetsnivå:"
+msgstr "Zon %s %s, prioritetsnivå %d"
 
 #: pcbnew/zone.cpp:1216
 #, c-format
 msgid "Zone '%s' %s %s, priority %d"
-msgstr ""
+msgstr "Zon '%s' %s %s, prioritetsnivå %d"
 
 #: pcbnew/zone.cpp:1938
 msgid "Keepout"
