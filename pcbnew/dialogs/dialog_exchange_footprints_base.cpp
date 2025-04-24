@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf-dirty)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -34,13 +34,13 @@ DIALOG_EXCHANGE_FOOTPRINTS_BASE::DIALOG_EXCHANGE_FOOTPRINTS_BASE( wxWindow* pare
 	m_specifiedRef = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER );
 	m_specifiedRef->SetMinSize( wxSize( 200,-1 ) );
 
-	m_upperSizer->Add( m_specifiedRef, wxGBPosition( 2, 1 ), wxGBSpan( 1, 1 ), wxBOTTOM|wxRIGHT|wxTOP|wxEXPAND, 5 );
+	m_upperSizer->Add( m_specifiedRef, wxGBPosition( 2, 1 ), wxGBSpan( 1, 1 ), wxBOTTOM|wxRIGHT|wxTOP|wxEXPAND, 2 );
 
 	m_matchSpecifiedValue = new wxRadioButton( this, wxID_ANY, _("Update footprints matching value:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_upperSizer->Add( m_matchSpecifiedValue, wxGBPosition( 3, 0 ), wxGBSpan( 1, 1 ), wxEXPAND|wxALL, 5 );
 
 	m_specifiedValue = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER );
-	m_upperSizer->Add( m_specifiedValue, wxGBPosition( 3, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxEXPAND|wxTOP|wxBOTTOM|wxRIGHT, 5 );
+	m_upperSizer->Add( m_specifiedValue, wxGBPosition( 3, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxEXPAND|wxTOP|wxBOTTOM|wxRIGHT, 2 );
 
 	m_matchSpecifiedID = new wxRadioButton( this, wxID_ANY, _("Update footprints with library id:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_upperSizer->Add( m_matchSpecifiedID, wxGBPosition( 4, 0 ), wxGBSpan( 1, 2 ), wxLEFT|wxRIGHT|wxTOP|wxEXPAND, 5 );
@@ -111,6 +111,9 @@ DIALOG_EXCHANGE_FOOTPRINTS_BASE::DIALOG_EXCHANGE_FOOTPRINTS_BASE( wxWindow* pare
 	m_resetFabricationAttrs = new wxCheckBox( m_updateOptionsSizer->GetStaticBox(), wxID_ANY, _("Update/reset fabrication attributes"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_updateOptionsSizer->Add( m_resetFabricationAttrs, 0, wxBOTTOM|wxRIGHT, 5 );
 
+	m_resetClearanceOverrides = new wxCheckBox( m_updateOptionsSizer->GetStaticBox(), wxID_ANY, _("Update/reset clearance overrides and settings"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_updateOptionsSizer->Add( m_resetClearanceOverrides, 0, wxBOTTOM|wxRIGHT, 5 );
+
 	m_reset3DModels = new wxCheckBox( m_updateOptionsSizer->GetStaticBox(), wxID_ANY, _("Update/reset 3D models"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_updateOptionsSizer->Add( m_reset3DModels, 0, wxBOTTOM|wxRIGHT, 5 );
 
@@ -118,7 +121,7 @@ DIALOG_EXCHANGE_FOOTPRINTS_BASE::DIALOG_EXCHANGE_FOOTPRINTS_BASE( wxWindow* pare
 	m_mainSizer->Add( m_updateOptionsSizer, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 10 );
 
 	m_MessageWindow = new WX_HTML_REPORT_PANEL( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
-	m_MessageWindow->SetMinSize( wxSize( -1,240 ) );
+	m_MessageWindow->SetMinSize( wxSize( -1,208 ) );
 
 	m_mainSizer->Add( m_MessageWindow, 5, wxEXPAND|wxRIGHT|wxLEFT, 10 );
 

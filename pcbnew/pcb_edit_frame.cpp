@@ -2420,7 +2420,8 @@ void PCB_EDIT_FRAME::ExchangeFootprint( FOOTPRINT* aExisting, FOOTPRINT* aNew,
                                         BOARD_COMMIT& aCommit, bool deleteExtraTexts,
                                         bool resetTextLayers, bool resetTextEffects,
                                         bool resetTextContent, bool resetFabricationAttrs,
-                                        bool reset3DModels, bool* aUpdated )
+                                        bool resetClearanceOverrides, bool reset3DModels,
+                                        bool* aUpdated )
 {
     EDA_GROUP* parentGroup = aExisting->GetParentGroup();
     bool       dummyBool   = false;
@@ -2562,6 +2563,8 @@ void PCB_EDIT_FRAME::ExchangeFootprint( FOOTPRINT* aExisting, FOOTPRINT* aNew,
     // as a fabrication attribute in the GUI....
     int existingFabAttrs = aExisting->GetAttributes() & ~FP_ALLOW_SOLDERMASK_BRIDGES;
     int libraryFabAttrs = aNew->GetAttributes() & ~FP_ALLOW_SOLDERMASK_BRIDGES;
+    int existingSolderMaskBridgesFlag = aExisting->GetAttributes() & FP_ALLOW_SOLDERMASK_BRIDGES;
+    int librarySolderMaskBridgesFlag = aNew->GetAttributes() & FP_ALLOW_SOLDERMASK_BRIDGES;
 
     if( resetFabricationAttrs )
     {
@@ -2572,8 +2575,36 @@ void PCB_EDIT_FRAME::ExchangeFootprint( FOOTPRINT* aExisting, FOOTPRINT* aNew,
     }
     else
     {
-        int solderMaskBridgesFlag = aNew->GetAttributes() & FP_ALLOW_SOLDERMASK_BRIDGES;
-        aNew->SetAttributes( existingFabAttrs | solderMaskBridgesFlag );
+        aNew->SetAttributes( existingFabAttrs | librarySolderMaskBridgesFlag );
+    }
+
+    if( resetClearanceOverrides )
+    {
+        if( ( aExisting->GetAttributes() & FP_ALLOW_SOLDERMASK_BRIDGES )
+            != ( aNew->GetAttributes() & FP_ALLOW_SOLDERMASK_BRIDGES ) )
+        {
+            *aUpdated = true;
+        }
+
+        if( ( aExisting->GetLocalClearance() != aNew->GetLocalClearance() )
+                || ( aExisting->GetLocalSolderMaskMargin() != aNew->GetLocalSolderMaskMargin() )
+                || ( aExisting->GetLocalSolderPasteMargin() != aNew->GetLocalSolderPasteMargin() )
+                || ( aExisting->GetLocalSolderPasteMarginRatio() != aNew->GetLocalSolderPasteMarginRatio() )
+                || ( aExisting->GetLocalZoneConnection() != aNew->GetLocalZoneConnection() ) )
+        {
+            *aUpdated = true;
+        }
+    }
+    else
+    {
+        aNew->SetLocalClearance( aExisting->GetLocalClearance() );
+        aNew->SetLocalSolderMaskMargin( aExisting->GetLocalSolderMaskMargin() );
+        aNew->SetLocalSolderPasteMargin( aExisting->GetLocalSolderPasteMargin() );
+        aNew->SetLocalSolderPasteMarginRatio( aExisting->GetLocalSolderPasteMarginRatio() );
+        aNew->SetLocalZoneConnection( aExisting->GetLocalZoneConnection() );
+
+        int otherFabAttrs = aNew->GetAttributes() & ~FP_ALLOW_SOLDERMASK_BRIDGES;
+        aNew->SetAttributes( otherFabAttrs | existingSolderMaskBridgesFlag );
     }
 
     if( reset3DModels )
