@@ -16,16 +16,16 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-04-23 21:23+0300\n"
-"PO-Revision-Date: 2025-04-13 06:06+0000\n"
-"Last-Translator: 2tama3 <2tama3@gmail.com>\n"
-"Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/master-"
-"source/ja/>\n"
+"PO-Revision-Date: 2025-04-24 16:37+0000\n"
+"Last-Translator: co8 j <co8@nifty.com>\n"
+"Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
+"master-source/ja/>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.11-dev\n"
+"X-Generator: Weblate 5.11.1-dev\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-Basepath: Source/kicad-master\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -798,6 +798,7 @@ msgid "Show user defined layer 35"
 msgstr "ユーザー定義レイヤー 35を表示"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:102
+#, fuzzy
 msgid "Show user defined layer 36"
 msgstr "ユーザー定義レイヤー 36を表示"
 
@@ -2660,9 +2661,9 @@ msgid "Path"
 msgstr "パス"
 
 #: common/dialogs/dialog_design_block_properties.cpp:99
-#, fuzzy, c-format
+#, c-format
 msgid "Illegal character '%c' in name '%s'."
-msgstr "不正な文字 '%c' がニックネーム '%s' に含まれています。"
+msgstr "不正な文字 '%c' が名前 '%s' に含まれています。"
 
 #: common/dialogs/dialog_design_block_properties.cpp:125
 #: eeschema/dialogs/panel_template_fieldnames.cpp:102
@@ -3114,9 +3115,9 @@ msgstr ""
 "のダイアログを再び有効にすることが可能です。"
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:30
-#, fuzzy, c-format
+#, c-format
 msgid "The selection contains %zu locked items."
-msgstr "選択対象に%lu 個のロックしたアイテムが含まれています。"
+msgstr "選択対象に%zu 個のロックしたアイテムが含まれています。"
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:34
 msgid "These items will be skipped unless you override the locks."
@@ -8720,9 +8721,8 @@ msgstr ""
 "はこの過程で共有されることはありません。"
 
 #: common/pgm_base.cpp:389
-#, fuzzy
 msgid "Data Collection Opt In"
-msgstr "データ収集"
+msgstr "データ収集のオプトイン"
 
 #: common/pgm_base.cpp:391
 msgid "Opt In"
@@ -10569,9 +10569,8 @@ msgid "Toggle panning to selections in the search pane"
 msgstr "検索ペインでの選択箇所にパンを切り替える"
 
 #: common/widgets/search_pane.cpp:52
-#, fuzzy
 msgid "Search Hidden Fields"
-msgstr "非表示フィールドを検索(&H)"
+msgstr "非表示フィールドを検索"
 
 #: common/widgets/search_pane.cpp:54
 #, fuzzy
@@ -15521,32 +15520,32 @@ msgid "Show datasheet in browser"
 msgstr "ブラウザーでデータシートを表示"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:202
-#, fuzzy
 msgid "Column Label"
-msgstr "%d列テーブル"
+msgstr "列ラベル"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:207
-#, fuzzy
 msgid "Show Column"
-msgstr "列の表示/非表示"
+msgstr "列の表示"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:208
 msgid "Group By"
 msgstr "グループ化"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:210
-#, fuzzy
 msgid ""
 "Show\n"
 "Column"
-msgstr "列の表示/非表示"
+msgstr ""
+"列\n"
+"表示"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:211
-#, fuzzy
 msgid ""
 "Group\n"
 "By"
-msgstr "グループ化"
+msgstr ""
+"グループ化\n"
+"属性"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:714
 msgid "Qty"
@@ -19852,13 +19851,12 @@ msgid "Expecting R0, R90, R18, R270, M0, M90, M180 or M270"
 msgstr "R0, R90, R18, R270, M0, M90, M180, M270 を期待しています"
 
 #: eeschema/sch_io/ltspice/ltspice_schematic.cpp:494
-#, fuzzy
 msgid ""
 "Expecting LEFT, CENTER, RIGHT, TOP, BOTTOM, VLEFT, VRIGHT, VCENTER, VTOP, "
 "VBOTTOM or INVISIBLE"
 msgstr ""
-"LEFT, CENTER, RIGHT, TOP, BOTTOM, VLEFT, VRIGHT, VCENTER, VTOP, VBOTTOM を期"
-"待しています"
+"LEFT, CENTER, RIGHT, TOP, BOTTOM, VLEFT, VRIGHT, VCENTER, VTOP, "
+"VBOTTOM,INVISIBLE を期待しています"
 
 #: eeschema/sch_io/ltspice/ltspice_schematic.cpp:517
 msgid ""
@@ -31782,9 +31780,8 @@ msgid "mi/h"
 msgstr "mi/h"
 
 #: pcbnew/api/api_handler_pcb.cpp:505
-#, fuzzy
 msgid "Modified items via API"
-msgstr "API からアイテムを追加しました"
+msgstr "API 経由でアイテムを変更しました"
 
 #: pcbnew/api/api_handler_pcb.cpp:668
 msgid "Deleted items via API"
@@ -36403,7 +36400,6 @@ msgid "Set Teardrops"
 msgstr "ティアドロップを設定"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:141
-#, fuzzy
 msgid "Text items"
 msgstr "テキスト アイテム"
 
@@ -36518,9 +36514,8 @@ msgid "Footprint graphic items"
 msgstr "フットプリント図形アイテム"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:59
-#, fuzzy
 msgid "Footprint text items"
-msgstr "その他のフットプリント テキスト アイテム"
+msgstr "フットプリント テキスト アイテム"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:60
 msgid "Footprint text items not associated with a field"
@@ -36532,9 +36527,8 @@ msgid "Footprint dimensions"
 msgstr "フットプリント 寸法線アイテム"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:85
-#, fuzzy
 msgid "By layer:"
-msgstr "移動先レイヤー:"
+msgstr "レイヤー:"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:97
 #, fuzzy
@@ -42341,13 +42335,13 @@ msgid "Subtracting holes for %s\n"
 msgstr "%s の穴を作成\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2023
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "\n"
 "** Got problems while cutting %s net '%s' **\n"
 msgstr ""
 "\n"
-"** %s 番号 %d 切断中に問題が発生しました **\n"
+"** %s ネット %s 切断中に問題が発生しました **\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2068
 msgid "shapes"
@@ -47695,9 +47689,9 @@ msgid "Physical Clearances"
 msgstr "物理的クリアランス"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1260
-#, fuzzy, c-format
+#, c-format
 msgid "No 'physical_clearance' constraints in effect on %s."
-msgstr "'physical_clearance' の制約が定義されていません。"
+msgstr "'physical_clearance' の制約が %s に定義されていません。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1279
 #, fuzzy
@@ -50606,7 +50600,6 @@ msgid "Locked Item Shadow"
 msgstr "ロックしたアイテムの領域"
 
 #: pcbnew/widgets/appearance_controls.cpp:352
-#, fuzzy
 msgid "Show a shadow on locked items"
 msgstr "ロックしたアイテムに影を表示する"
 
