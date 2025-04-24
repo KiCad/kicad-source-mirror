@@ -53,7 +53,7 @@ void PCB_EDIT_FRAME::LoadDrawingSheet()
 
     wxString filename = resolver.ResolvePath( project.m_BoardDrawingSheetFile,
                                               Prj().GetProjectPath(),
-                                              GetBoard()->GetEmbeddedFiles() );
+                                              { GetBoard()->GetEmbeddedFiles() } );
 
     wxString msg;
 

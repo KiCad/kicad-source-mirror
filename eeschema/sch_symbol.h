@@ -684,6 +684,12 @@ public:
     /// Set the selected unit of this symbol for all sheets.
     void SetUnitSelection( int aUnitSelection );
 
+    /**
+     * SCH_SYMBOLs don't currently support embedded files, but their LIB_SYMBOL counterparts
+     * do.
+     */
+    EMBEDDED_FILES* GetEmbeddedFiles() override;
+
     void Move( const VECTOR2I& aMoveVector ) override
     {
         if( aMoveVector == VECTOR2I( 0, 0 ) )

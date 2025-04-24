@@ -210,8 +210,8 @@ BOARD* LoadBoard( const wxString& aFileName, PCB_IO_MGR::PCB_FILE_T aFormat, boo
         resolver.SetProgramBase( PgmOrNull() );
 
         wxString filename = resolver.ResolvePath( BASE_SCREEN::m_DrawingSheetFileName,
-                                              project->GetProjectPath(),
-                                              brd->GetEmbeddedFiles() );
+                                                  project->GetProjectPath(),
+                                                  { brd->GetEmbeddedFiles() } );
 
         wxString msg;
 

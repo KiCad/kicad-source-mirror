@@ -451,7 +451,7 @@ void EDA_3D_CANVAS::DoRePaint()
         return;
     }
 
-    // Don't attend to ray trace if OpenGL doesn't support it.
+    // Don't attempt to ray trace if OpenGL doesn't support it.
     if( !m_opengl_supports_raytracing )
     {
         m_3d_render = m_3d_render_opengl;
@@ -459,7 +459,7 @@ void EDA_3D_CANVAS::DoRePaint()
         m_boardAdapter.m_Cfg->m_Render.engine = RENDER_ENGINE::OPENGL;
     }
 
-    // Check if a raytacing was requested and need to switch to raytracing mode
+    // Check if a raytracing was requested and need to switch to raytracing mode
     if( m_boardAdapter.m_Cfg->m_Render.engine == RENDER_ENGINE::OPENGL )
     {
         const bool was_camera_changed = m_camera.ParametersChanged();

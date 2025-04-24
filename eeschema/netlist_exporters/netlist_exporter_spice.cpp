@@ -63,8 +63,11 @@ std::string NAME_GENERATOR::Generate( const std::string& aProposedName )
 
 NETLIST_EXPORTER_SPICE::NETLIST_EXPORTER_SPICE( SCHEMATIC* aSchematic ) :
     NETLIST_EXPORTER_BASE( aSchematic ),
-    m_libMgr( &aSchematic->Prj(), aSchematic )
+    m_libMgr( &aSchematic->Prj() )
 {
+    std::vector<EMBEDDED_FILES*> embeddedFilesStack;
+    embeddedFilesStack.push_back( aSchematic->GetEmbeddedFiles() );
+    m_libMgr.SetFilesStack( embeddedFilesStack );
 }
 
 

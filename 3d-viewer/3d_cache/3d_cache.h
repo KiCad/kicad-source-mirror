@@ -95,11 +95,12 @@ public:
      *
      * @param aModelFile is the partial or full path to the model to be loaded.
      * @param aBasePath is the path to search for any relative files
-     * @param aEmbeddedFiles is a pointer to the embedded files list.
+     * @param aEmbeddedFilesStack is a list of pointers to the embedded files list.  They will
+     *                            be searched from the front of the list.
      * @return true if the model was successfully loaded, otherwise false.
      */
     SCENEGRAPH* Load( const wxString& aModelFile, const wxString& aBasePath,
-                      const EMBEDDED_FILES* aEmbeddedFiles );
+                      std::vector<const EMBEDDED_FILES*> aEmbeddedFilesStack );
 
     FILENAME_RESOLVER* GetResolver() noexcept;
 
@@ -128,11 +129,12 @@ public:
      *
      * @param aModelFileName is the full path to the model to be loaded.
      * @param aBasePath is the path to search for any relative files.
-     * @param aEmbeddedFiles is a pointer to the embedded files list.
+     * @param aEmbeddedFilesStack is a stack of pointers to the embedded files lists.  They will
+     *                            be searched from the bottom of the stack.
      * @return is a pointer to the render data or NULL if not available.
      */
     S3DMODEL* GetModel( const wxString& aModelFileName, const wxString& aBasePath,
-                        const EMBEDDED_FILES* aEmbeddedFiles );
+                        std::vector<const EMBEDDED_FILES*> aEmbeddedFilesStack );
 
     /**
      * Delete up old cache files in cache directory.
@@ -174,7 +176,7 @@ private:
     // the real load function (can supply a cache entry pointer to member functions)
     SCENEGRAPH* load( const wxString& aModelFile, const wxString& aBasePath,
                       S3D_CACHE_ENTRY** aCachePtr = nullptr,
-                      const EMBEDDED_FILES* aEmbeddedFiles = nullptr );
+                      std::vector<const EMBEDDED_FILES*> aEmbeddedFilesStack = {} );
 
     /// Cache entries.
     std::list< S3D_CACHE_ENTRY* > m_CacheList;

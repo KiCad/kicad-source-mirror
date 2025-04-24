@@ -74,11 +74,20 @@ VECTOR2I BOARD_ITEM::ZeroOffset( 0, 0 );
 
 
 BOARD::BOARD() :
-        BOARD_ITEM_CONTAINER( (BOARD_ITEM*) nullptr, PCB_T ), m_LegacyDesignSettingsLoaded( false ),
-        m_LegacyCopperEdgeClearanceLoaded( false ), m_LegacyNetclassesLoaded( false ), m_boardUse( BOARD_USE::NORMAL ),
-        m_timeStamp( 1 ), m_paper( PAGE_INFO::A4 ), m_project( nullptr ), m_userUnits( EDA_UNITS::MM ),
-        m_designSettings( new BOARD_DESIGN_SETTINGS( nullptr, "board.design_settings" ) ), m_NetInfo( this ),
-        m_embedFonts( false ), m_componentClassManager( std::make_unique<COMPONENT_CLASS_MANAGER>( this ) ),
+        BOARD_ITEM_CONTAINER( (BOARD_ITEM*) nullptr, PCB_T ),
+        m_LegacyDesignSettingsLoaded( false ),
+        m_LegacyCopperEdgeClearanceLoaded( false ),
+        m_LegacyNetclassesLoaded( false ),
+        m_boardUse( BOARD_USE::NORMAL ),
+        m_timeStamp( 1 ),
+        m_paper( PAGE_INFO::A4 ),
+        m_project( nullptr ),
+        m_userUnits( EDA_UNITS::MM ),
+        m_designSettings( new BOARD_DESIGN_SETTINGS( nullptr, "board.design_settings" ) ),
+        m_NetInfo( this ),
+        m_embedFonts( false ),
+        m_embeddedFilesDelegate( nullptr ),
+        m_componentClassManager( std::make_unique<COMPONENT_CLASS_MANAGER>( this ) ),
         m_lengthDelayCalc( std::make_unique<LENGTH_DELAY_CALCULATION>( this ) )
 {
     // A too small value do not allow connecting 2 shapes (i.e. segments) not exactly connected
@@ -2573,8 +2582,8 @@ bool BOARD::GetBoardPolygonOutlines( SHAPE_POLY_SET& aOutlines,
 
 EMBEDDED_FILES* BOARD::GetEmbeddedFiles()
 {
-    if( IsFootprintHolder() )
-        return static_cast<EMBEDDED_FILES*>( GetFirstFootprint() );
+    if( m_embeddedFilesDelegate )
+        return static_cast<EMBEDDED_FILES*>( m_embeddedFilesDelegate );
 
     return static_cast<EMBEDDED_FILES*>( this );
 }
@@ -2582,8 +2591,8 @@ EMBEDDED_FILES* BOARD::GetEmbeddedFiles()
 
 const EMBEDDED_FILES* BOARD::GetEmbeddedFiles() const
 {
-    if( IsFootprintHolder() )
-        return static_cast<const EMBEDDED_FILES*>( GetFirstFootprint() );
+    if( m_embeddedFilesDelegate )
+        return static_cast<const EMBEDDED_FILES*>( m_embeddedFilesDelegate );
 
     return static_cast<const EMBEDDED_FILES*>( this );
 }

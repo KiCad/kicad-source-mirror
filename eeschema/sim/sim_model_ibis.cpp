@@ -53,8 +53,7 @@ std::vector<std::string> SPICE_GENERATOR_IBIS::CurrentNames( const SPICE_ITEM& a
 
 
 std::string SPICE_GENERATOR_IBIS::IbisDevice( const SPICE_ITEM& aItem, SCHEMATIC* aSchematic,
-                                              const wxString& aCacheDir,
-                                              REPORTER&       aReporter ) const
+                                              const wxString& aCacheDir, REPORTER& aReporter ) const
 {
     std::string ibisLibFilename = GetFieldValue( &aItem.fields, SIM_LIBRARY::LIBRARY_FIELD );
     std::string ibisCompName    = GetFieldValue( &aItem.fields, SIM_LIBRARY::NAME_FIELD  );
@@ -63,8 +62,13 @@ std::string SPICE_GENERATOR_IBIS::IbisDevice( const SPICE_ITEM& aItem, SCHEMATIC
     bool        diffMode        = GetFieldValue( &aItem.fields, SIM_LIBRARY_IBIS::DIFF_FIELD ) == "1";
 
     WX_STRING_REPORTER reporter;
-    SIM_LIB_MGR        mgr( &aSchematic->Prj(), aSchematic );
-    wxString           path = mgr.ResolveLibraryPath( ibisLibFilename, reporter );
+    SIM_LIB_MGR        mgr( &aSchematic->Prj() );
+
+    std::vector<EMBEDDED_FILES*> embeddedFilesStack;
+    embeddedFilesStack.push_back( aSchematic->GetEmbeddedFiles() );
+    mgr.SetFilesStack( embeddedFilesStack );
+
+    wxString path = mgr.ResolveLibraryPath( ibisLibFilename, reporter );
 
     if( reporter.HasMessage() )
         THROW_IO_ERROR( reporter.GetMessages() );

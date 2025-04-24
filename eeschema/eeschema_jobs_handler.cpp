@@ -224,7 +224,7 @@ void EESCHEMA_JOBS_HANDLER::InitRenderSettings( SCH_RENDER_SETTINGS* aRenderSett
                 resolve.SetProgramBase( &Pgm() );
 
                 wxString absolutePath = resolve.ResolvePath( path, wxGetCwd(),
-                                                             aSch->GetEmbeddedFiles() );
+                                                             { aSch->GetEmbeddedFiles() } );
 
                 if( !DS_DATA_MODEL::GetTheInstance().LoadDrawingSheet( absolutePath, &msg ) )
                 {

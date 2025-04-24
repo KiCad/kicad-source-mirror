@@ -1668,14 +1668,20 @@ void SIM_MODEL::MigrateSimModel( T& aSymbol, const PROJECT* aProject )
 
     if( !lib.IsEmpty() )
     {
-        WX_STRING_REPORTER     reporter;
-        SIM_LIB_MGR            libMgr( aProject, nullptr );
-        std::vector<SCH_FIELD> emptyFields;
+        WX_STRING_REPORTER           reporter;
+        SIM_LIB_MGR                  libMgr( aProject );
+        std::vector<SCH_FIELD>       emptyFields;
+        std::vector<EMBEDDED_FILES*> embeddedFilesStack;
 
         if constexpr (std::is_same_v<T, SCH_SYMBOL>)
-            libMgr.SetFiles( aSymbol.Schematic() );
-        else
-            libMgr.SetFiles( &aSymbol );
+        {
+            SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( &aSymbol );
+            embeddedFilesStack.push_back( symbol->Schematic()->GetEmbeddedFiles() );
+        }
+
+        embeddedFilesStack.push_back( aSymbol.GetEmbeddedFiles() );
+
+        libMgr.SetFilesStack( embeddedFilesStack );
 
         // Pull out any following parameters from model name
         model = model.BeforeFirst( ' ', &modelLineParams );

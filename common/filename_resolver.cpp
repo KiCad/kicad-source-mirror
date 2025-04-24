@@ -244,7 +244,7 @@ bool FILENAME_RESOLVER::UpdatePathList( const std::vector< SEARCH_PATH >& aPathL
 
 
 wxString FILENAME_RESOLVER::ResolvePath( const wxString& aFileName, const wxString& aWorkingPath,
-                                         const EMBEDDED_FILES* aFiles )
+                                         std::vector<const EMBEDDED_FILES*> aEmbeddedFilesStack )
 {
     std::lock_guard<std::mutex> lock( mutex_resolver );
 
@@ -266,15 +266,20 @@ wxString FILENAME_RESOLVER::ResolvePath( const wxString& aFileName, const wxStri
     // Check to see if the file is a URI for an embedded file.
     if( tname.StartsWith( FILEEXT::KiCadUriPrefix + "://" ) )
     {
-        if( !aFiles )
+        if( aEmbeddedFilesStack.empty() )
         {
             wxLogTrace( wxT( "KICAD_EMBED" ),
                         wxT( "No EMBEDDED_FILES object provided for kicad_embed URI" ) );
             return wxEmptyString;
         }
 
-        wxString path = tname.Mid( 14 );
-        wxFileName temp_file = aFiles->GetTemporaryFileName( path );
+        wxString path = tname.Mid( wxString( FILEEXT::KiCadUriPrefix + "://" ).length() );
+
+        wxFileName temp_file = aEmbeddedFilesStack[0]->GetTemporaryFileName( path );
+        int        ii = 1;
+
+        while( !temp_file.IsOk() && ii < (int) aEmbeddedFilesStack.size() )
+            temp_file = aEmbeddedFilesStack[ii++]->GetTemporaryFileName( path );
 
         if( !temp_file.IsOk() )
         {

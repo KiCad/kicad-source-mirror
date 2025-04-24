@@ -27,6 +27,7 @@
 #include "panel_preview_3d_model.h"
 #include <dialogs/dialog_unit_entry.h>
 #include <3d_canvas/eda_3d_canvas.h>
+#include <3d_rendering/opengl/render_3d_opengl.h>
 #include <tool/tool_manager.h>
 #include <tool/tool_dispatcher.h>
 #include <tools/eda_3d_actions.h>
@@ -64,6 +65,7 @@ PANEL_PREVIEW_3D_MODEL::PANEL_PREVIEW_3D_MODEL( wxWindow* aParent, PCB_BASE_FRAM
     m_dummyBoard = new BOARD();
 
     m_dummyBoard->SetProject( &aFrame->Prj(), true );
+    m_dummyBoard->SetEmbeddedFilesDelegate( aFrame->GetBoard() );
 
     // This board will only be used to hold a footprint for viewing
     m_dummyBoard->SetBoardUse( BOARD_USE::FPHOLDER );

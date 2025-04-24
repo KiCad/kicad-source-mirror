@@ -1311,7 +1311,14 @@ bool SCH_SYMBOL::ResolveTextVar( const SCH_SHEET_PATH* aPath, wxString* token, i
         if( range.IsEmpty() )
             range = wxS( "~A" );
 
-        SIM_LIB_MGR   simLibMgr( &schematic->Prj(), schematic );
+        SIM_LIB_MGR simLibMgr( &schematic->Prj() );
+
+        std::vector<EMBEDDED_FILES*> embeddedFilesStack;
+        embeddedFilesStack.push_back( schematic->GetEmbeddedFiles() );
+        embeddedFilesStack.push_back( GetLibSymbolRef()->GetEmbeddedFiles() );
+
+        simLibMgr.SetFilesStack( embeddedFilesStack );
+
         NULL_REPORTER devnull;
         SIM_MODEL&    model = simLibMgr.CreateModel( aPath, const_cast<SCH_SYMBOL&>( *this ),
                                                      devnull ).model;
@@ -2024,6 +2031,12 @@ void SCH_SYMBOL::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_
 BITMAPS SCH_SYMBOL::GetMenuImage() const
 {
     return BITMAPS::add_component;
+}
+
+
+EMBEDDED_FILES* SCH_SYMBOL::GetEmbeddedFiles()
+{
+    return GetLibSymbolRef()->GetEmbeddedFiles();
 }
 
 

@@ -1516,7 +1516,7 @@ void SCH_EDIT_FRAME::OnExit( wxCommandEvent& event )
 void SCH_EDIT_FRAME::RefreshOperatingPointDisplay()
 {
     SCHEMATIC_SETTINGS& settings = m_schematic->Settings();
-    SIM_LIB_MGR         simLibMgr( &Prj(), &Schematic() );
+    SIM_LIB_MGR         simLibMgr( &Prj() );
     NULL_REPORTER       devnull;
 
     // Patch for bug early in V7.99 dev
@@ -1608,8 +1608,13 @@ void SCH_EDIT_FRAME::RefreshOperatingPointDisplay()
             }
             else
             {
-                SIM_MODEL& model = simLibMgr.CreateModel( &GetCurrentSheet(), *symbol,
-                                                          devnull ).model;
+                std::vector<EMBEDDED_FILES*> embeddedFilesStack;
+                embeddedFilesStack.push_back( m_schematic->GetEmbeddedFiles() );
+                embeddedFilesStack.push_back( symbol->GetEmbeddedFiles() );
+
+                simLibMgr.SetFilesStack( embeddedFilesStack );
+
+                SIM_MODEL& model = simLibMgr.CreateModel( &GetCurrentSheet(), *symbol, devnull ).model;
 
                 SPICE_ITEM spiceItem;
                 spiceItem.refName = ref;
