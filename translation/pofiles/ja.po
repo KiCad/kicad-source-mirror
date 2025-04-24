@@ -16,15 +16,15 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-04-23 21:24+0300\n"
-"PO-Revision-Date: 2025-04-13 06:06+0000\n"
-"Last-Translator: 2tama3 <2tama3@gmail.com>\n"
+"PO-Revision-Date: 2025-04-24 16:38+0000\n"
+"Last-Translator: co8 j <co8@nifty.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/v9/ja/>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.11-dev\n"
+"X-Generator: Weblate 5.11.1-dev\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-Basepath: Source/kicad-master\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -645,229 +645,185 @@ msgid "Show user ECO2 layer"
 msgstr "ユーザー ECO2 レイヤーを表示"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:68
-#, fuzzy
 msgid "Show user defined layer 1"
-msgstr "ユーザー定義レイヤー 1"
+msgstr "ユーザー定義レイヤー 1を表示"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:69
-#, fuzzy
 msgid "Show user defined layer 2"
-msgstr "ユーザー定義レイヤー 2"
+msgstr "ユーザー定義レイヤー 2を表示"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:70
-#, fuzzy
 msgid "Show user defined layer 3"
-msgstr "ユーザー定義レイヤー 3"
+msgstr "ユーザー定義レイヤー 3を表示"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:71
-#, fuzzy
 msgid "Show user defined layer 4"
-msgstr "ユーザー定義レイヤー 4"
+msgstr "ユーザー定義レイヤー 4を表示"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:72
-#, fuzzy
 msgid "Show user defined layer 5"
-msgstr "ユーザー定義レイヤー 5"
+msgstr "ユーザー定義レイヤー 5を表示"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:73
-#, fuzzy
 msgid "Show user defined layer 6"
-msgstr "ユーザー定義レイヤー 6"
+msgstr "ユーザー定義レイヤー 6を表示"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:74
-#, fuzzy
 msgid "Show user defined layer 7"
-msgstr "ユーザー定義レイヤー 7"
+msgstr "ユーザー定義レイヤー 7を表示"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:75
-#, fuzzy
 msgid "Show user defined layer 8"
-msgstr "ユーザー定義レイヤー 8"
+msgstr "ユーザー定義レイヤー 8を表示"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:76
-#, fuzzy
 msgid "Show user defined layer 9"
-msgstr "ユーザー定義レイヤー 9"
+msgstr "ユーザー定義レイヤー 9を表示"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:77
-#, fuzzy
 msgid "Show user defined layer 10"
-msgstr "ユーザー定義レイヤー 10"
+msgstr "ユーザー定義レイヤー 10を表示"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:78
-#, fuzzy
 msgid "Show user defined layer 11"
-msgstr "ユーザー定義レイヤー 11"
+msgstr "ユーザー定義レイヤー 11を表示"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:79
-#, fuzzy
 msgid "Show user defined layer 12"
-msgstr "ユーザー定義レイヤー 12"
+msgstr "ユーザー定義レイヤー 12を表示"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:80
-#, fuzzy
 msgid "Show user defined layer 13"
-msgstr "ユーザー定義レイヤー 13"
+msgstr "ユーザー定義レイヤー 13を表示"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:81
-#, fuzzy
 msgid "Show user defined layer 14"
-msgstr "ユーザー定義レイヤー 14"
+msgstr "ユーザー定義レイヤー 14を表示"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:82
-#, fuzzy
 msgid "Show user defined layer 15"
-msgstr "ユーザー定義レイヤー 15"
+msgstr "ユーザー定義レイヤー 15を表示"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:83
-#, fuzzy
 msgid "Show user defined layer 16"
-msgstr "ユーザー定義レイヤー 16"
+msgstr "ユーザー定義レイヤー 16を表示"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:84
-#, fuzzy
 msgid "Show user defined layer 17"
-msgstr "ユーザー定義レイヤー 17"
+msgstr "ユーザー定義レイヤー 17を表示"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:85
-#, fuzzy
 msgid "Show user defined layer 18"
-msgstr "ユーザー定義レイヤー 18"
+msgstr "ユーザー定義レイヤー 18を表示"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:86
-#, fuzzy
 msgid "Show user defined layer 19"
-msgstr "ユーザー定義レイヤー 19"
+msgstr "ユーザー定義レイヤー 19を表示"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:87
-#, fuzzy
 msgid "Show user defined layer 20"
-msgstr "ユーザー定義レイヤー 20"
+msgstr "ユーザー定義レイヤー 20を表示"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:88
-#, fuzzy
 msgid "Show user defined layer 21"
-msgstr "ユーザー定義レイヤー 21"
+msgstr "ユーザー定義レイヤー 21を表示"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:89
-#, fuzzy
 msgid "Show user defined layer 22"
-msgstr "ユーザー定義レイヤー 22"
+msgstr "ユーザー定義レイヤー 22を表示"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:90
-#, fuzzy
 msgid "Show user defined layer 23"
-msgstr "ユーザー定義レイヤー 23"
+msgstr "ユーザー定義レイヤー 23を表示"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:91
-#, fuzzy
 msgid "Show user defined layer 24"
-msgstr "ユーザー定義レイヤー 24"
+msgstr "ユーザー定義レイヤー 24を表示"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:92
-#, fuzzy
 msgid "Show user defined layer 25"
-msgstr "ユーザー定義レイヤー 25"
+msgstr "ユーザー定義レイヤー 25を表示"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:93
-#, fuzzy
 msgid "Show user defined layer 26"
-msgstr "ユーザー定義レイヤー 26"
+msgstr "ユーザー定義レイヤー 26を表示"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:94
-#, fuzzy
 msgid "Show user defined layer 27"
-msgstr "ユーザー定義レイヤー 27"
+msgstr "ユーザー定義レイヤー 27を表示"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:95
-#, fuzzy
 msgid "Show user defined layer 28"
-msgstr "ユーザー定義レイヤー 28"
+msgstr "ユーザー定義レイヤー 28を表示"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:96
-#, fuzzy
 msgid "Show user defined layer 29"
-msgstr "ユーザー定義レイヤー 29"
+msgstr "ユーザー定義レイヤー 29を表示"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:97
-#, fuzzy
 msgid "Show user defined layer 30"
-msgstr "ユーザー定義レイヤー 30"
+msgstr "ユーザー定義レイヤー 30を表示"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:98
-#, fuzzy
 msgid "Show user defined layer 31"
-msgstr "ユーザー定義レイヤー 31"
+msgstr "ユーザー定義レイヤー 31を表示"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:99
-#, fuzzy
 msgid "Show user defined layer 32"
-msgstr "ユーザー定義レイヤー 32"
+msgstr "ユーザー定義レイヤー 32を表示"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:100
-#, fuzzy
 msgid "Show user defined layer 33"
-msgstr "ユーザー定義レイヤー 33"
+msgstr "ユーザー定義レイヤー 33を表示"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:101
-#, fuzzy
 msgid "Show user defined layer 34"
-msgstr "ユーザー定義レイヤー 34"
+msgstr "ユーザー定義レイヤー 34を表示"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:102
-#, fuzzy
 msgid "Show user defined layer 35"
-msgstr "ユーザー定義レイヤー 35"
+msgstr "ユーザー定義レイヤー 35を表示"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:103
 #, fuzzy
 msgid "Show user defined layer 36"
-msgstr "ユーザー定義レイヤー 36"
+msgstr "ユーザー定義レイヤー 36を表示"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:104
-#, fuzzy
 msgid "Show user defined layer 37"
-msgstr "ユーザー定義レイヤー 37"
+msgstr "ユーザー定義レイヤー 37を表示"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:105
-#, fuzzy
 msgid "Show user defined layer 38"
-msgstr "ユーザー定義レイヤー 38"
+msgstr "ユーザー定義レイヤー 38を表示"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:106
-#, fuzzy
 msgid "Show user defined layer 39"
-msgstr "ユーザー定義レイヤー 39"
+msgstr "ユーザー定義レイヤー 39を表示"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:107
-#, fuzzy
 msgid "Show user defined layer 40"
-msgstr "ユーザー定義レイヤー 40"
+msgstr "ユーザー定義レイヤー 40を表示"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:108
-#, fuzzy
 msgid "Show user defined layer 41"
-msgstr "ユーザー定義レイヤー 41"
+msgstr "ユーザー定義レイヤー 41を表示"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:109
-#, fuzzy
 msgid "Show user defined layer 42"
-msgstr "ユーザー定義レイヤー 42"
+msgstr "ユーザー定義レイヤー 42を表示"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:110
-#, fuzzy
 msgid "Show user defined layer 43"
-msgstr "ユーザー定義レイヤー 43"
+msgstr "ユーザー定義レイヤー 43を表示"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:111
-#, fuzzy
 msgid "Show user defined layer 44"
-msgstr "ユーザー定義レイヤー 44"
+msgstr "ユーザー定義レイヤー 44を表示"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:112
-#, fuzzy
 msgid "Show user defined layer 45"
-msgstr "ユーザー定義レイヤー 45"
+msgstr "ユーザー定義レイヤー 45を表示"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:114
 msgid "Through-hole Models"
@@ -3013,9 +2969,9 @@ msgstr ""
 "のダイアログを再び有効にすることが可能です。"
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:30
-#, fuzzy, c-format
+#, c-format
 msgid "The selection contains %zu locked items."
-msgstr "選択対象に%lu 個のロックしたアイテムが含まれています。"
+msgstr "選択対象に%zu 個のロックしたアイテムが含まれています。"
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:34
 msgid "These items will be skipped unless you override the locks."
@@ -8499,13 +8455,12 @@ msgstr ""
 "はこの過程で共有されることはありません。"
 
 #: common/pgm_base.cpp:389
-#, fuzzy
 msgid "Data Collection Opt In"
-msgstr "データ収集"
+msgstr "データ収集のオプトイン"
 
 #: common/pgm_base.cpp:391
 msgid "Opt In"
-msgstr ""
+msgstr "オプトイン"
 
 #: common/pgm_base.cpp:391
 #, fuzzy
@@ -10102,9 +10057,8 @@ msgid "Toggle panning to selections in the search pane"
 msgstr "検索ペインでの選択箇所にパンを切り替える"
 
 #: common/widgets/search_pane.cpp:51
-#, fuzzy
 msgid "Search Hidden Fields"
-msgstr "非表示フィールドを検索(&H)"
+msgstr "非表示フィールドを検索"
 
 #: common/widgets/unit_binder.cpp:351
 #, c-format
@@ -11808,9 +11762,9 @@ msgid "Database Library Settings"
 msgstr "データベースライブラリの設定"
 
 #: eeschema/dialogs/dialog_design_block_properties.cpp:98
-#, fuzzy, c-format
+#, c-format
 msgid "Illegal character '%c' in name '%s'."
-msgstr "不正な文字 '%c' がニックネーム '%s' に含まれています。"
+msgstr "不正な文字 '%c' が名前 '%s' に含まれています。"
 
 #: eeschema/dialogs/dialog_design_block_properties.cpp:124
 #: eeschema/dialogs/panel_template_fieldnames.cpp:100
@@ -15160,32 +15114,32 @@ msgid "Show datasheet in browser"
 msgstr "ブラウザーでデータシートを表示"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:200
-#, fuzzy
 msgid "Column Label"
-msgstr "%d列テーブル"
+msgstr "列ラベル"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:205
-#, fuzzy
 msgid "Show Column"
-msgstr "列の表示/非表示"
+msgstr "列の表示"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:206
 msgid "Group By"
 msgstr "グループ化"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:208
-#, fuzzy
 msgid ""
 "Show\n"
 "Column"
-msgstr "列の表示/非表示"
+msgstr ""
+"列\n"
+"表示"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:209
-#, fuzzy
 msgid ""
 "Group\n"
 "By"
-msgstr "グループ化"
+msgstr ""
+"グループ化\n"
+"属性"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:710
 msgid "Qty"
@@ -19402,13 +19356,12 @@ msgid "Expecting R0, R90, R18, R270, M0, M90, M180 or M270"
 msgstr "R0, R90, R18, R270, M0, M90, M180, M270 を期待しています"
 
 #: eeschema/sch_io/ltspice/ltspice_schematic.cpp:494
-#, fuzzy
 msgid ""
 "Expecting LEFT, CENTER, RIGHT, TOP, BOTTOM, VLEFT, VRIGHT, VCENTER, VTOP, "
 "VBOTTOM or INVISIBLE"
 msgstr ""
-"LEFT, CENTER, RIGHT, TOP, BOTTOM, VLEFT, VRIGHT, VCENTER, VTOP, VBOTTOM を期"
-"待しています"
+"LEFT, CENTER, RIGHT, TOP, BOTTOM, VLEFT, VRIGHT, VCENTER, VTOP, "
+"VBOTTOM,INVISIBLE を期待しています"
 
 #: eeschema/sch_io/ltspice/ltspice_schematic.cpp:517
 msgid ""
@@ -31177,9 +31130,8 @@ msgid "mi/h"
 msgstr "mi/h"
 
 #: pcbnew/api/api_handler_pcb.cpp:505
-#, fuzzy
 msgid "Modified items via API"
-msgstr "API からアイテムを追加しました"
+msgstr "API 経由でアイテムを変更しました"
 
 #: pcbnew/api/api_handler_pcb.cpp:668
 msgid "Deleted items via API"
@@ -35711,7 +35663,6 @@ msgid "Set Teardrops"
 msgstr "ティアドロップを設定"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:141
-#, fuzzy
 msgid "Text items"
 msgstr "テキスト アイテム"
 
@@ -35824,9 +35775,8 @@ msgid "Footprint graphic items"
 msgstr "フットプリント図形アイテム"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:59
-#, fuzzy
 msgid "Footprint text items"
-msgstr "その他のフットプリント テキスト アイテム"
+msgstr "フットプリント テキスト アイテム"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:60
 msgid "Footprint text items not associated with a field"
@@ -35838,9 +35788,8 @@ msgid "Footprint dimensions"
 msgstr "フットプリント 寸法線アイテム"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:85
-#, fuzzy
 msgid "By layer:"
-msgstr "移動先レイヤー:"
+msgstr "レイヤー:"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:97
 #, fuzzy
@@ -41415,13 +41364,13 @@ msgid "Subtracting holes for %s\n"
 msgstr "%s の穴を作成\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1958
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "\n"
 "** Got problems while cutting %s net '%s' **\n"
 msgstr ""
 "\n"
-"** %s 番号 %d 切断中に問題が発生しました **\n"
+"** %s ネット %s 切断中に問題が発生しました **\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2003
 msgid "shapes"
@@ -46647,9 +46596,9 @@ msgid "Physical Clearances"
 msgstr "物理的クリアランス"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1260
-#, fuzzy, c-format
+#, c-format
 msgid "No 'physical_clearance' constraints in effect on %s."
-msgstr "'physical_clearance' の制約が定義されていません。"
+msgstr "'physical_clearance' の制約が %s に定義されていません。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1279
 #, fuzzy
@@ -49504,7 +49453,6 @@ msgid "Locked Item Shadow"
 msgstr "ロックしたアイテムの領域"
 
 #: pcbnew/widgets/appearance_controls.cpp:350
-#, fuzzy
 msgid "Show a shadow on locked items"
 msgstr "ロックしたアイテムに影を表示する"
 
