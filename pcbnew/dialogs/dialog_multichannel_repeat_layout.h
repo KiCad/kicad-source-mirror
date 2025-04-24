@@ -40,6 +40,7 @@ public:
     DIALOG_MULTICHANNEL_REPEAT_LAYOUT(
         PCB_BASE_FRAME* aFrame,
         MULTICHANNEL_TOOL* aParentTool );
+    ~DIALOG_MULTICHANNEL_REPEAT_LAYOUT();
 
     bool TransferDataFromWindow() override;
     bool TransferDataToWindow() override;

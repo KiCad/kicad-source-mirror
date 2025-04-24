@@ -24,6 +24,7 @@
 
 #include <dialogs/dialog_multichannel_repeat_layout.h>
 #include <widgets/wx_grid.h>
+#include <grid_tricks.h>
 #include <pcb_edit_frame.h>
 #include <tools/multichannel_tool.h>
 #include <zone.h>
@@ -66,6 +67,7 @@ DIALOG_MULTICHANNEL_REPEAT_LAYOUT::DIALOG_MULTICHANNEL_REPEAT_LAYOUT (
 
     int i = 0;
 
+    m_raGrid->PushEventHandler( new GRID_TRICKS( static_cast<WX_GRID*>( m_raGrid ) ) );
     m_raGrid->ClearGrid();
     m_raGrid->EnableEditing( true );
     m_raGrid->HideRowLabels();
@@ -111,6 +113,10 @@ DIALOG_MULTICHANNEL_REPEAT_LAYOUT::DIALOG_MULTICHANNEL_REPEAT_LAYOUT (
     finishDialogSettings();
 }
 
+DIALOG_MULTICHANNEL_REPEAT_LAYOUT::~DIALOG_MULTICHANNEL_REPEAT_LAYOUT()
+{
+    m_raGrid->PopEventHandler( true );
+}
 
 bool DIALOG_MULTICHANNEL_REPEAT_LAYOUT::TransferDataFromWindow()
 {
