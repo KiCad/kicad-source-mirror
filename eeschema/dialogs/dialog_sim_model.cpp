@@ -69,8 +69,8 @@ DIALOG_SIM_MODEL<T>::DIALOG_SIM_MODEL( wxWindow* aParent, EDA_BASE_FRAME* aFrame
         m_frame( aFrame ),
         m_symbol( aSymbol ),
         m_fields( aFields ),
-        m_libraryModelsMgr( &Prj(), nullptr ),
-        m_builtinModelsMgr( &Prj(), nullptr ),
+        m_libraryModelsMgr( &Prj() ),
+        m_builtinModelsMgr( &Prj() ),
         m_prevModel( nullptr ),
         m_curModelType( SIM_MODEL::TYPE::NONE ),
         m_scintillaTricksCode( nullptr ),
@@ -83,12 +83,15 @@ DIALOG_SIM_MODEL<T>::DIALOG_SIM_MODEL( wxWindow* aParent, EDA_BASE_FRAME* aFrame
     m_infoBar->AddCloseButton();
 
     if constexpr (std::is_same_v<T, SCH_SYMBOL>)
-        m_files = aSymbol.Schematic();
-    else
-        m_files = &aSymbol;
+    {
+        SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( &aSymbol );
+        m_filesStack.push_back( symbol->Schematic()->GetEmbeddedFiles() );
+    }
 
-    m_libraryModelsMgr.SetFiles( m_files );
-    m_builtinModelsMgr.SetFiles( m_files );
+    m_filesStack.push_back( aSymbol.GetEmbeddedFiles() );
+
+    m_libraryModelsMgr.SetFilesStack( m_filesStack );
+    m_builtinModelsMgr.SetFilesStack( m_filesStack );
 
     for( SCH_PIN* pin : aSymbol.GetPins() )
     {
@@ -1274,11 +1277,13 @@ void DIALOG_SIM_MODEL<T>::onBrowseButtonClick( wxCommandEvent& aEvent )
 
     if( customize.GetEmbed() )
     {
-        EMBEDDED_FILES::EMBEDDED_FILE* result = m_files->AddFile( fn, false );
+        EMBEDDED_FILES::EMBEDDED_FILE* result = m_filesStack[0]->AddFile( fn, false );
         path = result->GetLink();
     }
     else if( fn.MakeRelativeTo( Prj().GetProjectPath() ) && !fn.GetFullPath().StartsWith( wxS( ".." ) ) )
+    {
         path = fn.GetFullPath();
+    }
 
     WX_STRING_REPORTER reporter;
 

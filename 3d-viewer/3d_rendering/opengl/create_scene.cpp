@@ -926,8 +926,8 @@ void RENDER_3D_OPENGL::load3dModels( REPORTER* aStatusReporter )
     // Go for all footprints
     for( const FOOTPRINT* footprint : m_boardAdapter.GetBoard()->Footprints() )
     {
-        wxString                libraryName = footprint->GetFPID().GetLibNickname();
-        wxString                footprintBasePath = wxEmptyString;
+        wxString libraryName = footprint->GetFPID().GetLibNickname();
+        wxString footprintBasePath = wxEmptyString;
 
         if( m_boardAdapter.GetBoard()->GetProject() )
         {
@@ -965,10 +965,13 @@ void RENDER_3D_OPENGL::load3dModels( REPORTER* aStatusReporter )
                 if( m_3dModelMap.find( fp_model.m_Filename ) == m_3dModelMap.end() )
                 {
                     // It is not present, try get it from cache
-                    const S3DMODEL* modelPtr =
-                            m_boardAdapter.Get3dCacheManager()->GetModel( fp_model.m_Filename,
-                                                                          footprintBasePath,
-                                                                          footprint );
+                    std::vector<const EMBEDDED_FILES*> embeddedFilesStack;
+                    embeddedFilesStack.push_back( footprint->GetEmbeddedFiles() );
+                    embeddedFilesStack.push_back( m_boardAdapter.GetBoard()->GetEmbeddedFiles() );
+
+                    const S3DMODEL* modelPtr = m_boardAdapter.Get3dCacheManager()->GetModel( fp_model.m_Filename,
+                                                                                             footprintBasePath,
+                                                                                             embeddedFilesStack );
 
                     // only add it if the return is not NULL
                     if( modelPtr )

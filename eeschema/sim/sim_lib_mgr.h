@@ -39,14 +39,14 @@ class SCH_SYMBOL;
 class SIM_LIB_MGR
 {
 public:
-    SIM_LIB_MGR( const PROJECT* aPrj, EMBEDDED_FILES* aFiles );
+    SIM_LIB_MGR( const PROJECT* aPrj );
     virtual ~SIM_LIB_MGR() = default;
 
     void SetForceFullParse() { m_forceFullParse = true; }
 
     void Clear();
 
-    void SetFiles( EMBEDDED_FILES* aFiles ) { m_files = aFiles; }
+    void SetFilesStack( std::vector<EMBEDDED_FILES*> aFilesStack ) { m_embeddedFilesStack = aFilesStack; }
 
 
     void SetLibrary( const wxString& aLibraryPath, REPORTER& aReporter );
@@ -83,7 +83,7 @@ public:
                                          REPORTER& aReporter );
 
 private:
-    EMBEDDED_FILES*                                  m_files;
+    std::vector<EMBEDDED_FILES*>                     m_embeddedFilesStack;
     const PROJECT*                                   m_project;
     bool                                             m_forceFullParse;
     std::map<wxString, std::unique_ptr<SIM_LIBRARY>> m_libraries;

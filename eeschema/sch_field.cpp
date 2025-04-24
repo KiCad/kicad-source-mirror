@@ -943,8 +943,15 @@ void SCH_FIELD::OnScintillaCharAdded( SCINTILLA_TRICKS* aScintillaTricks,
                 {
                     NULL_REPORTER   devnull;
                     SCH_SHEET_PATH& sheet = schematic->CurrentSheet();
-                    SIM_LIB_MGR     mgr( &schematic->Prj(), schematic );
-                    SIM_MODEL&      model = mgr.CreateModel( &sheet, *symbol, devnull ).model;
+                    SIM_LIB_MGR     mgr( &schematic->Prj() );
+
+                    std::vector<EMBEDDED_FILES*> embeddedFilesStack;
+                    embeddedFilesStack.push_back( schematic->GetEmbeddedFiles() );
+                    embeddedFilesStack.push_back( symbol->GetEmbeddedFiles() );
+
+                    mgr.SetFilesStack( embeddedFilesStack );
+
+                    SIM_MODEL& model = mgr.CreateModel( &sheet, *symbol, devnull ).model;
 
                     for( wxString pin : model.GetPinNames() )
                     {

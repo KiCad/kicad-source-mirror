@@ -2321,7 +2321,7 @@ void PCBNEW_JOBS_HANDLER::loadOverrideDrawingSheet( BOARD* aBrd, const wxString&
 
                 wxString filename = resolver.ResolvePath( BASE_SCREEN::m_DrawingSheetFileName,
                                                           aBrd->GetProject()->GetProjectPath(),
-                                                          aBrd->GetEmbeddedFiles() );
+                                                          { aBrd->GetEmbeddedFiles() } );
                 wxString msg;
 
                 if( !DS_DATA_MODEL::GetTheInstance().LoadDrawingSheet( filename, &msg ) )

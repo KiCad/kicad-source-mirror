@@ -586,17 +586,22 @@ int SCH_EDITOR_CONTROL::SimProbe( const TOOL_EVENT& aEvent )
                         SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item->GetParent() );
 
                         WX_STRING_REPORTER reporter;
-                        SIM_LIB_MGR        mgr( &m_frame->Prj(), &m_frame->Schematic() );
+                        SIM_LIB_MGR        mgr( &m_frame->Prj() );
 
-                        SIM_MODEL&  model = mgr.CreateModel( &sheet, *symbol, reporter ).model;
+                        std::vector<EMBEDDED_FILES*> embeddedFilesStack;
+                        embeddedFilesStack.push_back( m_frame->Schematic().GetEmbeddedFiles() );
+                        embeddedFilesStack.push_back( symbol->GetEmbeddedFiles() );
+
+                        mgr.SetFilesStack( embeddedFilesStack );
+
+                        SIM_MODEL& model = mgr.CreateModel( &sheet, *symbol, reporter ).model;
 
                         if( reporter.HasMessage() )
                             THROW_IO_ERROR( reporter.GetMessages() );
 
                         SPICE_ITEM spiceItem;
                         spiceItem.refName = symbol->GetRef( &sheet ).ToStdString();
-                        std::vector<std::string> currentNames =
-                                model.SpiceGenerator().CurrentNames( spiceItem );
+                        std::vector<std::string> currentNames = model.SpiceGenerator().CurrentNames( spiceItem );
 
                         if( currentNames.size() == 0 )
                         {

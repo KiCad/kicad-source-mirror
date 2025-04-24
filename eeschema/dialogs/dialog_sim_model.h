@@ -125,17 +125,17 @@ private:
     bool isIbisLoaded() { return dynamic_cast<const SIM_LIBRARY_IBIS*>( library() ); }
 
 private:
-    EDA_BASE_FRAME*         m_frame;
-    T&                      m_symbol;
-    std::vector<SCH_FIELD>& m_fields;
+    EDA_BASE_FRAME*              m_frame;
+    T&                           m_symbol;
+    std::vector<SCH_FIELD>&      m_fields;
 
-    EMBEDDED_FILES*         m_files;
-    SIM_LIB_MGR             m_libraryModelsMgr;
-    SIM_LIB_MGR             m_builtinModelsMgr;
-    wxString                m_prevLibrary;
-    const SIM_MODEL*        m_prevModel;
+    std::vector<EMBEDDED_FILES*> m_filesStack;
+    SIM_LIB_MGR                  m_libraryModelsMgr;
+    SIM_LIB_MGR                  m_builtinModelsMgr;
+    wxString                     m_prevLibrary;
+    const SIM_MODEL*             m_prevModel;
 
-    std::map<wxString, int> m_modelListBoxEntryToLibraryIdx;
+    std::map<wxString, int>            m_modelListBoxEntryToLibraryIdx;
 
     std::vector<SCH_PIN*>                          m_sortedPartPins; ///< Pins of the current part.
     std::map<SIM_MODEL::DEVICE_T, SIM_MODEL::TYPE> m_curModelTypeOfDeviceType;

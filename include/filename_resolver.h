@@ -100,10 +100,11 @@ public:
      *
      * @param aFileName The configured file path to resolve.
      * @param aWorkingPath The current working path for relative path resolutions.
-     * @param aFiles The embedded files object to use for embedded file resolution.
+     * @param aEmbeddedFilesStack is a list of pointers to the embedded files list.  They will
+     *                            be searched from the front of the list.
      */
     wxString ResolvePath( const wxString& aFileName, const wxString& aWorkingPath,
-                          const EMBEDDED_FILES* aFiles );
+                          std::vector<const EMBEDDED_FILES*> aEmbeddedFilesStack );
 
     /**
      * Produce a relative path based on the existing search directories or returns the same path

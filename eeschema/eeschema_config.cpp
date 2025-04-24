@@ -93,7 +93,7 @@ void SCH_EDIT_FRAME::LoadDrawingSheet()
 
     wxString filename = resolver.ResolvePath( settings.m_SchDrawingSheetFileName,
                                               Prj().GetProjectPath(),
-                                              Schematic().GetEmbeddedFiles() );
+                                              { Schematic().GetEmbeddedFiles() } );
     wxString msg;
 
     if( !DS_DATA_MODEL::GetTheInstance().LoadDrawingSheet( filename, &msg ) )
@@ -220,7 +220,7 @@ void SCH_EDIT_FRAME::saveProjectSettings()
 
         wxFileName layoutfn( resolve.ResolvePath( BASE_SCREEN::m_DrawingSheetFileName,
                                                   Prj().GetProjectPath(),
-                                                  Schematic().GetEmbeddedFiles() ) );
+                                                  { Schematic().GetEmbeddedFiles() } ) );
 
         bool success = true;
 

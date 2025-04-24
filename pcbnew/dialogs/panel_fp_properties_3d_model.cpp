@@ -34,9 +34,9 @@
 #include <widgets/grid_text_button_helpers.h>
 #include <widgets/wx_grid.h>
 #include <widgets/std_bitmap_button.h>
+#include <board.h>
 #include <footprint.h>
 #include <fp_lib_table.h>
-#include <footprint.h>
 #include <footprint_edit_frame.h>
 #include <footprint_editor_settings.h>
 #include <dialog_footprint_properties_fp_editor.h>
@@ -379,8 +379,11 @@ void PANEL_FP_PROPERTIES_3D_MODEL::OnAdd3DModel( wxCommandEvent&  )
             // if libraryName is not found in table, do nothing
         }
 
+        std::vector<const EMBEDDED_FILES*> embeddedFilesStack;
+        embeddedFilesStack.push_back( m_filesPanel->GetLocalFiles() );
+        embeddedFilesStack.push_back( m_frame->GetBoard()->GetEmbeddedFiles() );
 
-        wxString fullPath = res->ResolvePath( model.m_Filename, footprintBasePath, nullptr );
+        wxString   fullPath = res->ResolvePath( model.m_Filename, footprintBasePath, embeddedFilesStack );
         wxFileName fname( fullPath );
 
         EMBEDDED_FILES::EMBEDDED_FILE* result = m_filesPanel->AddEmbeddedFile( fname.GetFullPath() );                                                                               ;
@@ -532,7 +535,11 @@ MODEL_VALIDATE_ERRORS PANEL_FP_PROPERTIES_3D_MODEL::validateModelExists( const w
     if( fpRow )
         footprintBasePath = fpRow->GetFullURI( true );
 
-    wxString fullPath = resolv->ResolvePath( aFilename, footprintBasePath, m_footprint );
+    std::vector<const EMBEDDED_FILES*> embeddedFilesStack;
+    embeddedFilesStack.push_back( m_filesPanel->GetLocalFiles() );
+    embeddedFilesStack.push_back( m_frame->GetBoard()->GetEmbeddedFiles() );
+
+    wxString fullPath = resolv->ResolvePath( aFilename, footprintBasePath, embeddedFilesStack );
 
     if( fullPath.IsEmpty() )
         return MODEL_VALIDATE_ERRORS::RESOLVE_FAIL;

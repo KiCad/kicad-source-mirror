@@ -1478,8 +1478,15 @@ void SIMULATOR_FRAME_UI::UpdateTunerValue( const SCH_SHEET_PATH& aSheetPath, con
     }
 
     NULL_REPORTER devnull;
-    SIM_LIB_MGR   mgr( &m_schematicFrame->Prj(), &m_schematicFrame->Schematic() );
-    SIM_MODEL&    model = mgr.CreateModel( &aSheetPath, *symbol, devnull ).model;
+    SIM_LIB_MGR   mgr( &m_schematicFrame->Prj() );
+
+    std::vector<EMBEDDED_FILES*> embeddedFilesStack;
+    embeddedFilesStack.push_back( m_schematicFrame->Schematic().GetEmbeddedFiles() );
+    embeddedFilesStack.push_back( symbol->GetEmbeddedFiles() );
+
+    mgr.SetFilesStack( embeddedFilesStack );
+
+    SIM_MODEL& model = mgr.CreateModel( &aSheetPath, *symbol, devnull ).model;
 
     const SIM_MODEL::PARAM* tunerParam = model.GetTunerParam();
 

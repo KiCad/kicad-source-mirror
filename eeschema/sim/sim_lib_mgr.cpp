@@ -41,8 +41,7 @@
 using namespace std::placeholders;
 
 
-SIM_LIB_MGR::SIM_LIB_MGR( const PROJECT* aPrj, EMBEDDED_FILES* aFiles ) :
-        m_files( aFiles ),
+SIM_LIB_MGR::SIM_LIB_MGR( const PROJECT* aPrj ) :
         m_project( aPrj ),
         m_forceFullParse( false )
 {
@@ -62,7 +61,12 @@ wxString SIM_LIB_MGR::ResolveLibraryPath( const wxString& aLibraryPath, REPORTER
 
     resolver.SetProject( m_project );
 
-    wxString expandedPath = resolver.ResolvePath( aLibraryPath, wxEmptyString, m_files );
+    std::vector<const EMBEDDED_FILES*> embeddedFilesStack;
+
+    for( const EMBEDDED_FILES* embeddedFiles : m_embeddedFilesStack )
+        embeddedFilesStack.push_back( embeddedFiles );
+
+    wxString expandedPath = resolver.ResolvePath( aLibraryPath, wxEmptyString, embeddedFilesStack );
 
     wxFileName fn( expandedPath );
 

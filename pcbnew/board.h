@@ -1277,6 +1277,8 @@ public:
     EMBEDDED_FILES* GetEmbeddedFiles() override;
     const EMBEDDED_FILES* GetEmbeddedFiles() const;
 
+    void SetEmbeddedFilesDelegate( EMBEDDED_FILES* aDelegate ) { m_embeddedFilesDelegate = aDelegate; }
+
     /**
      * Get the list of all outline fonts used in the board
      */
@@ -1407,6 +1409,10 @@ private:
     std::vector<BOARD_LISTENER*> m_listeners;
 
     bool                         m_embedFonts;
+
+    // Used for dummy boards, such as a footprint holder, where we don't want to make a copy
+    // of all the parent's embedded data.
+    EMBEDDED_FILES*              m_embeddedFilesDelegate;
 
     COMPONENT_CLASS_MANAGER m_componentClassManager;
 };

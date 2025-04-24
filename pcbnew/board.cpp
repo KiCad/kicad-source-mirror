@@ -84,7 +84,8 @@ BOARD::BOARD() :
         m_userUnits( EDA_UNITS::MM ),
         m_designSettings( new BOARD_DESIGN_SETTINGS( nullptr, "board.design_settings" ) ),
         m_NetInfo( this ),
-        m_embedFonts( false )
+        m_embedFonts( false ),
+        m_embeddedFilesDelegate( nullptr )
 {
     // A too small value do not allow connecting 2 shapes (i.e. segments) not exactly connected
     // A too large value do not allow safely connecting 2 shapes like very short segments.
@@ -2611,8 +2612,8 @@ bool BOARD::GetBoardPolygonOutlines( SHAPE_POLY_SET& aOutlines,
 
 EMBEDDED_FILES* BOARD::GetEmbeddedFiles()
 {
-    if( IsFootprintHolder() )
-        return static_cast<EMBEDDED_FILES*>( GetFirstFootprint() );
+    if( m_embeddedFilesDelegate )
+        return static_cast<EMBEDDED_FILES*>( m_embeddedFilesDelegate );
 
     return static_cast<EMBEDDED_FILES*>( this );
 }
@@ -2620,8 +2621,8 @@ EMBEDDED_FILES* BOARD::GetEmbeddedFiles()
 
 const EMBEDDED_FILES* BOARD::GetEmbeddedFiles() const
 {
-    if( IsFootprintHolder() )
-        return static_cast<const EMBEDDED_FILES*>( GetFirstFootprint() );
+    if( m_embeddedFilesDelegate )
+        return static_cast<const EMBEDDED_FILES*>( m_embeddedFilesDelegate );
 
     return static_cast<const EMBEDDED_FILES*>( this );
 }
