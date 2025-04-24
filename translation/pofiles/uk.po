@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-04-23 21:24+0300\n"
-"PO-Revision-Date: 2025-04-23 19:50+0000\n"
+"PO-Revision-Date: 2025-04-24 16:38+0000\n"
 "Last-Translator: Ivan Chuba <xtrvweb@gmail.com>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/kicad/v9/uk/>\n"
 "Language: uk\n"
@@ -4951,71 +4951,64 @@ msgid "Failed to add file '%s'."
 msgstr "Не вдалося додати файл '%s'."
 
 #: common/dialogs/panel_embedded_files.cpp:320
-#, fuzzy
 msgid "Select a file to embed"
-msgstr "Оберіть значення для точного налаштування"
+msgstr "Виберіть файл для вставки"
 
 #: common/dialogs/panel_embedded_files.cpp:386
-#, fuzzy
 msgid "Select a directory to export files"
-msgstr "Вибрати назву файлу для експорту в GenCAD"
+msgstr "Виберіть теку для експорту файлів"
 
 #: common/dialogs/panel_embedded_files.cpp:418
-#, fuzzy, c-format
+#, c-format
 msgid "Directory '%s' is not writable."
-msgstr "У бібліотеці символів '%s' недостатньо прав для запису."
+msgstr "Директорія '%s' недоступна для запису."
 
 #: common/dialogs/panel_embedded_files.cpp:421
-#, fuzzy, c-format
+#, c-format
 msgid "Folder '%s' is not writable."
-msgstr "У бібліотеці символів '%s' недостатньо прав для запису."
+msgstr "Тека '%s' недоступна для запису."
 
 #: common/dialogs/panel_embedded_files.cpp:426
 msgid "Retry"
-msgstr ""
+msgstr "Повторити спробу"
 
 #: common/dialogs/panel_embedded_files.cpp:454
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to open file '%s'."
-msgstr "Не вдалося створити файл '%s'."
+msgstr "Не вдалося відкрити файл '%s'."
 
 #: common/dialogs/panel_embedded_files.cpp:466
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to write file '%s'."
-msgstr "Не вдалося створити файл '%s'."
+msgstr "Не вдалося записати файл '%s'."
 
 #: common/dialogs/panel_embedded_files_base.cpp:38
-#, fuzzy
 msgid "Embedded Reference"
-msgstr "Копіювати з позначенням"
+msgstr "Вбудоване посилання"
 
 #: common/dialogs/panel_embedded_files_base.cpp:61
 msgid "Add embedded file"
-msgstr ""
+msgstr "Додати вбудований файл"
 
 #: common/dialogs/panel_embedded_files_base.cpp:69
-#, fuzzy
 msgid "Remove embedded file"
-msgstr "Зберегти завантажений файл"
+msgstr "Видалити вбудований файл"
 
 #: common/dialogs/panel_embedded_files_base.cpp:76
-#, fuzzy
 msgid "Embed fonts"
-msgstr "Вбудована модель"
+msgstr "Вбудовані шрифти"
 
 #: common/dialogs/panel_embedded_files_base.cpp:77
 msgid "Store a copy of all fonts used"
-msgstr ""
+msgstr "Зберегти копію всіх використаних шрифтів"
 
 #: common/dialogs/panel_embedded_files_base.cpp:84
-#, fuzzy
 msgid "&Export..."
-msgstr "Експортувати..."
+msgstr "&Експорт..."
 
 #: common/dialogs/panel_grid_settings.cpp:53
-#, fuzzy
 msgid "Footprints/pads:"
-msgstr "Посадкові місця"
+msgstr "Посадкові місця/конт. пл-ки:"
 
 #: common/dialogs/panel_grid_settings.cpp:54
 #: pcbnew/dialogs/panel_pcb_display_options_base.cpp:81
@@ -5392,9 +5385,8 @@ msgid "Check for package updates on startup"
 msgstr "Перевірте наявність оновлень пакетів під час запуску"
 
 #: common/dialogs/panel_packages_and_updates_base.cpp:60
-#, fuzzy
 msgid "Library Package Handling"
-msgstr "Обробка пакету бібліотеки"
+msgstr "Обробка пакетів бібліотеки"
 
 #: common/dialogs/panel_packages_and_updates_base.cpp:70
 msgid "Automatically add installed libraries to global library table"
@@ -5410,9 +5402,9 @@ msgid "Library nickname prefix:"
 msgstr "Префікс псевдоніму бібліотеки:"
 
 #: common/dialogs/panel_plugin_settings.cpp:104
-#, fuzzy, c-format
+#, c-format
 msgid "Listening at %s"
-msgstr "Існуючий шлях:"
+msgstr "Прослуховування в %s"
 
 #: common/dialogs/panel_plugin_settings.cpp:112
 msgid "This installation of KiCad does not have API support enabled."
@@ -20348,19 +20340,17 @@ msgid "External Border"
 msgstr "Зовнішні дані"
 
 #: eeschema/sch_table.cpp:654 pcbnew/pcb_table.cpp:629
-#, fuzzy
 msgid "Header Border"
-msgstr "Відновити плату"
+msgstr "Контур заголовку"
 
 #: eeschema/sch_table.cpp:663 pcbnew/pcb_table.cpp:638
 #: pcbnew/pcb_tablecell.cpp:189 pcbnew/pcb_textbox.cpp:820
 msgid "Border Style"
-msgstr "Стиль рамки"
+msgstr "Стиль контуру"
 
 #: eeschema/sch_table.cpp:671 pcbnew/pcb_table.cpp:646
-#, fuzzy
 msgid "Row Separators"
-msgstr "Видалити генератор"
+msgstr "Розділювачі рядків"
 
 #: eeschema/sch_table.cpp:675 pcbnew/pcb_table.cpp:650
 msgid "Cell Separators"
