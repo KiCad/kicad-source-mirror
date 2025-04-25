@@ -602,6 +602,14 @@ bool EXPORTER_STEP::buildGraphic3DShape( BOARD_ITEM* aItem, VECTOR2D aOrigin )
     {
         PCB_TEXTBOX* textbox = static_cast<PCB_TEXTBOX*>( aItem );
 
+        // border
+        if( textbox->IsBorderEnabled() )
+        {
+            textbox->PCB_SHAPE::TransformShapeToPolygon( m_poly_shapes[pcblayer][wxEmptyString],
+                                                         pcblayer, 0, maxError, ERROR_INSIDE );
+        }
+
+        // text
         textbox->TransformTextToPolySet( m_poly_shapes[pcblayer][wxEmptyString], 0, maxError,
                                          ERROR_INSIDE );
         break;
