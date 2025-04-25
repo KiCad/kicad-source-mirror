@@ -207,6 +207,9 @@ private:
     ZONE* createTeardrop( TEARDROP_VARIANT aTeardropVariant,
                           std::vector<VECTOR2I>& aPoints, PCB_TRACK* aTrack ) const;
 
+    ZONE* createTeardropMask( TEARDROP_VARIANT aTeardropVariant,
+                              std::vector<VECTOR2I>& aPoints, PCB_TRACK* aTrack ) const;
+
     /**
      * Set priority of created teardrops. smaller have bigger priority
      */

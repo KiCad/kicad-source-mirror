@@ -2695,6 +2695,9 @@ void PCB_PAINTER::draw( const ZONE* aZone, int aLayer )
     std::deque<VECTOR2D> corners;
     ZONE_DISPLAY_MODE    displayMode = m_pcbSettings.m_ZoneDisplayMode;
 
+    if( aZone->IsTeardropArea() )
+        displayMode = ZONE_DISPLAY_MODE::SHOW_FILLED;
+
     // Draw the outline
     if( !IsZoneFillLayer( aLayer ) )
     {
