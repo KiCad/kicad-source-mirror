@@ -111,7 +111,7 @@ public:
     virtual void SetParent( EDA_ITEM* aParent )   { m_parent = aParent; }
 
     virtual void SetParentGroup( EDA_GROUP* aGroup ) { m_group = aGroup; }
-    EDA_GROUP*   GetParentGroup() const { return m_group; }
+    virtual EDA_GROUP* GetParentGroup() const { return m_group; }
 
     virtual bool IsLocked() const { return false; }
     virtual void SetLocked( bool aLocked ) {}

@@ -26,6 +26,7 @@
 
 
 #include <pcb_textbox.h>
+#include <board_item_container.h>
 
 
 class PCB_TABLECELL : public PCB_TEXTBOX
@@ -51,6 +52,11 @@ public:
     EDA_ITEM* Clone() const override
     {
         return new PCB_TABLECELL( *this );
+    }
+
+    EDA_GROUP* GetParentGroup() const override
+    {
+        return GetParent()->GetParentGroup();
     }
 
     int GetRow() const;

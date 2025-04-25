@@ -50,6 +50,11 @@ public:
         return new SCH_TABLECELL( *this );
     }
 
+    EDA_GROUP* GetParentGroup() const override
+    {
+        return GetParent()->GetParentGroup();
+    }
+
     int GetRow() const;
     int GetColumn() const;
 
