@@ -203,14 +203,16 @@ DIALOG_EXPORT_STEP::DIALOG_EXPORT_STEP( PCB_EDIT_FRAME* aEditFrame, wxWindow* aP
     }
     else
     {
+        m_rbBoardCenterOrigin->SetValue( true );    // Default
+
         if( m_job->m_3dparams.m_UseDrillOrigin )
             m_rbDrillAndPlotOrigin->SetValue( true );
         else if( m_job->m_3dparams.m_UseGridOrigin )
             m_rbGridOrigin->SetValue( true );
-        else if( m_job->m_3dparams.m_Origin.x == 0.0 && m_job->m_3dparams.m_Origin.y == 0.0 )
-            m_rbBoardCenterOrigin->SetValue( true );
-        else
+        else if( m_job->m_3dparams.m_UseDefinedOrigin )
             m_rbUserDefinedOrigin->SetValue( true );
+        else if( m_job->m_3dparams.m_UsePcbCenterOrigin )
+            m_rbBoardCenterOrigin->SetValue( true );
 
         m_userOriginX = m_job->m_3dparams.m_Origin.x;
         m_userOriginY = m_job->m_3dparams.m_Origin.y;
@@ -834,6 +836,11 @@ void DIALOG_EXPORT_STEP::onExportButton( wxCommandEvent& aEvent )
             break;
         }
 
+        m_job->m_3dparams.m_UseDrillOrigin = false;
+        m_job->m_3dparams.m_UseGridOrigin = false;
+        m_job->m_3dparams.m_UseDefinedOrigin = false;
+        m_job->m_3dparams.m_UsePcbCenterOrigin = false;
+
         switch( GetOriginOption() )
         {
             case STEP_ORIGIN_0:
@@ -856,6 +863,7 @@ void DIALOG_EXPORT_STEP::onExportButton( wxCommandEvent& aEvent )
                     yOrg *= 25.4;
                 }
 
+                m_job->m_3dparams.m_UseDefinedOrigin = true;
                 m_job->m_3dparams.m_Origin = VECTOR2D( xOrg, yOrg );
                 break;
             }
@@ -867,6 +875,7 @@ void DIALOG_EXPORT_STEP::onExportButton( wxCommandEvent& aEvent )
                 double    yOrg = pcbIUScale.IUTomm( bbox.GetCenter().y );
                 LOCALE_IO dummy;
 
+                m_job->m_3dparams.m_UsePcbCenterOrigin = true;
                 m_job->m_3dparams.m_Origin = VECTOR2D( xOrg, yOrg );
                 break;
             }

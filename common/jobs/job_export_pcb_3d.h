@@ -38,6 +38,8 @@ public:
             m_Overwrite( false ),
             m_UseGridOrigin( false ),
             m_UseDrillOrigin( false ),
+            m_UseDefinedOrigin( false ),
+            m_UsePcbCenterOrigin( false ),
             m_IncludeUnspecified( true ),
             m_IncludeDNP( true ),
             m_SubstModels( true ),
@@ -77,6 +79,8 @@ public:
     bool     m_Overwrite;
     bool     m_UseGridOrigin;
     bool     m_UseDrillOrigin;
+    bool     m_UseDefinedOrigin;
+    bool     m_UsePcbCenterOrigin;
     bool     m_IncludeUnspecified;
     bool     m_IncludeDNP;
     bool     m_SubstModels;

@@ -88,6 +88,10 @@ JOB_EXPORT_PCB_3D::JOB_EXPORT_PCB_3D() :
                                                 m_3dparams.m_UseGridOrigin ) );
     m_params.emplace_back( new JOB_PARAM<bool>( "use_drill_origin", &m_3dparams.m_UseDrillOrigin,
                                                 m_3dparams.m_UseDrillOrigin ) );
+    m_params.emplace_back( new JOB_PARAM<bool>( "use_defined_origin", &m_3dparams.m_UseDefinedOrigin,
+                                                m_3dparams.m_UseDefinedOrigin ) );
+    m_params.emplace_back( new JOB_PARAM<bool>( "use_pcb_center_origin", &m_3dparams.m_UsePcbCenterOrigin,
+                                                m_3dparams.m_UsePcbCenterOrigin ) );
     m_params.emplace_back(
             new JOB_PARAM<bool>( "board_only", &m_3dparams.m_BoardOnly, m_3dparams.m_BoardOnly ) );
     m_params.emplace_back( new JOB_PARAM<bool>( "include_unspecified",
