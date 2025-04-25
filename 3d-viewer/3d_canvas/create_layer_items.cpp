@@ -330,11 +330,8 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
                 continue;
 
             // Skip vias annulus when not flashed on this layer
-            if( track->Type() == PCB_VIA_T
-                    && !static_cast<const PCB_VIA*>( track )->FlashLayer( layer ) )
-            {
+            if( track->Type() == PCB_VIA_T && !static_cast<const PCB_VIA*>( track )->FlashLayer( layer ) )
                 continue;
-            }
 
             // Add object item to layer container
             createTrackWithMargin( track, layerContainer, layer );
@@ -390,8 +387,7 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
                     }
 
                     // Add a hole for this layer
-                    layerHoleContainer->Add( new FILLED_CIRCLE_2D( via_center,
-                                                                   hole_inner_radius + thickness,
+                    layerHoleContainer->Add( new FILLED_CIRCLE_2D( via_center, hole_inner_radius + thickness,
                                                                    *track ) );
                 }
                 else if( layer == layer_ids[0] ) // it only adds once the THT holes
@@ -1115,12 +1111,23 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
 
                 for( PCB_TRACK* track : m_board->Tracks() )
                 {
-                    if( track->Type() == PCB_VIA_T
-                            && static_cast<const PCB_VIA*>( track )->FlashLayer( layer )
-                            && !static_cast<const PCB_VIA*>( track )->IsTented( layer ) )
+                    if( track->Type() == PCB_VIA_T )
                     {
-                        track->TransformShapeToPolygon( *layerPoly, layer, maskExpansion, maxError,
-                                                        ERROR_INSIDE );
+                        const PCB_VIA* via = static_cast<const PCB_VIA*>( track );
+
+                        if( via->FlashLayer( layer ) && !via->IsTented( layer ) )
+                        {
+                            track->TransformShapeToPolygon( *layerPoly, layer, maskExpansion, maxError,
+                                                            ERROR_INSIDE );
+                        }
+                    }
+                    else
+                    {
+                        if( track->HasSolderMask() )
+                        {
+                            track->TransformShapeToPolySet( *layerPoly, layer, maskExpansion, maxError,
+                                                            ERROR_INSIDE );
+                        }
                     }
                 }
             }

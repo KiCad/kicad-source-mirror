@@ -983,9 +983,8 @@ bool PCB_TRACK::IsOnLayer( PCB_LAYER_ID aLayer ) const
         return true;
     }
 
-    if( m_hasSolderMask
-            && ( ( aLayer == F_Mask && m_layer == F_Cu )
-                       || ( aLayer == B_Mask && m_layer == B_Cu ) ) )
+    if( m_hasSolderMask && (   ( aLayer == F_Mask && m_layer == F_Cu )
+                            || ( aLayer == B_Mask && m_layer == B_Cu ) ) )
     {
         return true;
     }
