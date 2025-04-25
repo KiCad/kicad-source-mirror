@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-04-23 21:24+0300\n"
-"PO-Revision-Date: 2025-04-24 16:38+0000\n"
+"PO-Revision-Date: 2025-04-25 18:01+0000\n"
 "Last-Translator: co8 j <co8@nifty.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/v9/ja/>\n"
 "Language: ja\n"
@@ -24,7 +24,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.11.1-dev\n"
+"X-Generator: Weblate 5.12-dev\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-Basepath: Source/kicad-master\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -785,7 +785,6 @@ msgid "Show user defined layer 35"
 msgstr "ユーザー定義レイヤー 35を表示"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:103
-#, fuzzy
 msgid "Show user defined layer 36"
 msgstr "ユーザー定義レイヤー 36を表示"
 
@@ -8437,7 +8436,6 @@ msgid "Select Preferred Editor"
 msgstr "優先するエディターを選択"
 
 #: common/pgm_base.cpp:384
-#, fuzzy
 msgid ""
 "KiCad can anonymously report crashes and special event data to developers in "
 "order to aid identifying critical bugs and help profile functionality to "
@@ -8446,13 +8444,12 @@ msgid ""
 "reports when crashes or events occur. \n"
 "Your design files such as schematic and PCB are not shared in this process."
 msgstr ""
-"KiCadはクラッシュや稀なイベントのデータを匿名で開発者に報告し、ユーザーベース"
-"全体を通じて重要なバグをより効果的に特定したり、機能改善のための分析の手がか"
-"りにします。\n"
+"KiCadはクラッシュや稀なイベントのデータを匿名で開発者に報告し、重要なバグをよ"
+"り効果的に特定したり、機能改善のための分析の手がかりにします。\n"
 "\n"
-"この活動に参加することを選択した場合、KiCadはクラッシュやイベントが発生した時"
+"この活動に協力することを選択した場合、KiCadはクラッシュやイベントが発生した時"
 "に自動的にレポートを送信します。回路図やPCBのようなユーザーが作成したファイル"
-"はこの過程で共有されることはありません。"
+"がこの過程で共有されることはありません。"
 
 #: common/pgm_base.cpp:389
 msgid "Data Collection Opt In"
@@ -8463,9 +8460,8 @@ msgid "Opt In"
 msgstr "オプトイン"
 
 #: common/pgm_base.cpp:391
-#, fuzzy
 msgid "Decline"
-msgstr "線をスケッチ モードで表示"
+msgstr "拒否"
 
 #: common/pgm_base.cpp:498
 msgid "Environment variable HOME is empty.  Unable to continue."
@@ -26210,9 +26206,8 @@ msgid "The new behavior will match --mode-multi"
 msgstr "新しい動作は --mode-multi と同じ動きです"
 
 #: kicad/cli/command_pcb_export_gencad.cpp:33
-#, fuzzy
 msgid "Export the PCB in Gencad format"
-msgstr "KiCad形式でネットリストをエクスポート"
+msgstr "Gencad 形式で基板(PCB)をエクスポート"
 
 #: kicad/cli/command_pcb_export_gencad.cpp:39
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:134
@@ -30790,9 +30785,8 @@ msgstr "実効 %s:"
 #: pcb_calculator/transline_ident.cpp:163
 #: pcb_calculator/transline_ident.cpp:198
 #: pcb_calculator/transline_ident.cpp:357
-#, fuzzy
 msgid "Unit propagation delay:"
-msgstr "伝播遅延"
+msgstr "ユニット伝播遅延:"
 
 #: pcb_calculator/transline_ident.cpp:121
 #: pcb_calculator/transline_ident.cpp:164
@@ -30995,14 +30989,12 @@ msgid "Effective %s (odd):"
 msgstr "実効 %s (odd):"
 
 #: pcb_calculator/transline_ident.cpp:308
-#, fuzzy
 msgid "Unit propagation delay (even):"
-msgstr "伝播遅延"
+msgstr "ユニット伝播遅延 (even):"
 
 #: pcb_calculator/transline_ident.cpp:309
-#, fuzzy
 msgid "Unit propagation delay (odd):"
-msgstr "伝播遅延"
+msgstr "ユニット伝播遅延 (odd):"
 
 #: pcb_calculator/transline_ident.cpp:310
 msgid "Conductor losses (even):"
@@ -35766,9 +35758,8 @@ msgid "Footprint fields that are not the reference designator or value field"
 msgstr "リファレンス指定子または値フィールドではないフットプリント フィールド"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:50
-#, fuzzy
 msgid "PCB dimensions"
-msgstr "PCB 寸法線アイテム"
+msgstr "PCB 寸法"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:53
 msgid "Footprint graphic items"
@@ -35783,23 +35774,20 @@ msgid "Footprint text items not associated with a field"
 msgstr "フィールドに関連付けられていないフットプリントテキスト項目"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:67
-#, fuzzy
 msgid "Footprint dimensions"
-msgstr "フットプリント 寸法線アイテム"
+msgstr "フットプリント 寸法"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:85
 msgid "By layer:"
 msgstr "レイヤー:"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:97
-#, fuzzy
 msgid "By parent reference designator:"
-msgstr "参照指定子の開始:"
+msgstr "リファレンス指定子の親:"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:103
-#, fuzzy
 msgid "By parent footprint library link:"
-msgstr "新しいフットプリント ライブラリID:"
+msgstr "フットプリント ライブラリ リンクの親:"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:124
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:133
@@ -37763,7 +37751,7 @@ msgstr "このゾーンに対する DRC で識別するための固有名"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:86
 msgid "Distance between parallel lines used for hatching the area"
-msgstr ""
+msgstr "領域ハッチング用の平行線間の距離"
 
 #: pcbnew/dialogs/dialog_set_offset.cpp:66
 msgid "Reset this value to zero."
@@ -38863,6 +38851,11 @@ msgid ""
 "\n"
 "<br>"
 msgstr ""
+"### 句\n"
+"\n"
+"    (condition \"<expression>\")\n"
+"\n"
+"<br>"
 
 #: pcbnew/dialogs/panel_setup_condition_help_6notes.h:2
 msgid ""
@@ -38872,6 +38865,11 @@ msgid ""
 "<br><br><br>\n"
 "\n"
 msgstr ""
+"### 注\n"
+"\n"
+"Use Ctrl+/ to comment or uncomment line(s).\n"
+"<br><br><br>\n"
+"\n"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:46
 msgid "Minimum clearance:"
@@ -41359,9 +41357,9 @@ msgid "** Face skipped **\n"
 msgstr "** Face はスキップされました **\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1915
-#, fuzzy, c-format
+#, c-format
 msgid "Subtracting holes for %s\n"
-msgstr "%s の穴を作成\n"
+msgstr "%s の穴を削除しています\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1958
 #, c-format
@@ -46601,11 +46599,11 @@ msgid "No 'physical_clearance' constraints in effect on %s."
 msgstr "'physical_clearance' の制約が %s に定義されていません。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1279
-#, fuzzy
 msgid ""
 "Items share no relevant layers.  No 'physical_clearance' constraints will be "
 "applied."
-msgstr "'physical_clearance' の制約が定義されていません。"
+msgstr "アイテムに関連するレイヤーがありません。'physical_clearance' "
+"の制約は適用されません。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1341
 msgid "Select an item for a constraints resolution report."
@@ -49457,14 +49455,12 @@ msgid "Show a shadow on locked items"
 msgstr "ロックしたアイテムに影を表示する"
 
 #: pcbnew/widgets/appearance_controls.cpp:351
-#, fuzzy
 msgid "Colliding Courtyards"
-msgstr "基板外形とコートヤード"
+msgstr "衝突しているコートヤード"
 
 #: pcbnew/widgets/appearance_controls.cpp:351
-#, fuzzy
 msgid "Show colliding footprint courtyards"
-msgstr "フットプリントのコートヤードを収集..."
+msgstr "衝突しているフットプリントのコートヤードを表示"
 
 #: pcbnew/widgets/appearance_controls.cpp:352
 msgid "Show drawing sheet borders and title block"
