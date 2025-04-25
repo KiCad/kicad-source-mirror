@@ -163,6 +163,9 @@ int CLI::PCB_EXPORT_PS_COMMAND::doPerform( KIWAY& aKiway )
     psJob->m_negative = m_argParser.get<bool>( ARG_NEGATIVE );
 
     psJob->m_sketchPadsOnFabLayers = m_argParser.get<bool>( ARG_SKETCH_PADS_ON_FAB_LAYERS );
+    psJob->m_hideDNPFPsOnFabLayers = m_argParser.get<bool>( ARG_HIDE_DNP_FPS_ON_FAB_LAYERS );
+    psJob->m_sketchDNPFPsOnFabLayers = m_argParser.get<bool>( ARG_SKETCH_DNP_FPS_ON_FAB_LAYERS );
+    psJob->m_crossoutDNPFPsOnFabLayers = m_argParser.get<bool>( ARG_CROSSOUT_DNP_FPS_ON_FAB_LAYERS );
 
     int drillShape = m_argParser.get<int>( ARG_DRILL_SHAPE_OPTION );
     psJob->m_drillShapeOption = static_cast<DRILL_MARKS>( drillShape );
