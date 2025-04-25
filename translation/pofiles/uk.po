@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-04-23 21:24+0300\n"
-"PO-Revision-Date: 2025-04-25 18:01+0000\n"
+"PO-Revision-Date: 2025-04-25 23:42+0000\n"
 "Last-Translator: Ivan Chuba <xtrvweb@gmail.com>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/kicad/v9/uk/>\n"
 "Language: uk\n"
@@ -5452,42 +5452,42 @@ msgid ""
 "Enable the KiCad API.  Doing so will allow third-party software running on "
 "your computer to access KiCad."
 msgstr ""
+"Увімкнути API KiCad.  Це дозволить сторонньому програмному забезпеченню, що "
+"працює на вашому комп’ютері, отримувати доступ до KiCad."
 
 #: common/dialogs/panel_plugin_settings_base.cpp:40
 msgid "Python Interpreter"
-msgstr ""
+msgstr "Інтерпретатор Python"
 
 #: common/dialogs/panel_plugin_settings_base.cpp:45
 msgid "Path to Python interpreter:"
-msgstr ""
+msgstr "Шлях до інтерпретатора Python:"
 
 #: common/dialogs/panel_plugin_settings_base.cpp:49
-#, fuzzy
 msgid "Select the path to a Python interpreter"
-msgstr "Видалити останню точку додано до поточного елемента"
+msgstr "Виберіть шлях до інтерпретатора Python"
 
 #: common/dialogs/panel_plugin_settings_base.cpp:49
 msgid "*.*"
-msgstr ""
+msgstr "*.*"
 
 #: common/dialogs/panel_plugin_settings_base.cpp:52
-#, fuzzy
 msgid "Detect Automatically"
-msgstr "Автоматична анотація"
+msgstr "Визначити автоматично"
 
 #: common/dialogs/panel_plugin_settings_base.cpp:58
 msgid ""
 "No Python interpreter chosen; external Python plugins will not be available"
 msgstr ""
+"Інтерпретатор Python не вибрано; зовнішні Python плагіни будуть недоступні"
 
 #: common/dialogs/panel_plugin_settings_base.cpp:60
 msgid "Python interpreter status"
-msgstr ""
+msgstr "Статус інтерпретатора Python"
 
 #: common/dialogs/panel_setup_netclasses.cpp:96
-#, fuzzy
 msgid "<Not defined>"
-msgstr "Не підключено"
+msgstr "<Не визначено>"
 
 #: common/dialogs/panel_setup_netclasses.cpp:98 common/eda_shape.cpp:2329
 #: common/stroke_params.cpp:40
@@ -5541,9 +5541,8 @@ msgid "Dash-Dot-Dot"
 msgstr "Штрих-пунктир подвійний"
 
 #: common/dialogs/panel_setup_netclasses.cpp:182
-#, fuzzy
 msgid "Set color to transparent to use layer default color."
-msgstr "Встановити прозорий колір для використання типового кольору KiCad."
+msgstr "Встановіть прозорий колір, щоб використовувати стандартний колір шару."
 
 #: common/dialogs/panel_setup_netclasses.cpp:418
 msgid ""
