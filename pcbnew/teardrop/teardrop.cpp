@@ -116,12 +116,9 @@ ZONE* TEARDROP_MANAGER::createTeardropMask( TEARDROP_VARIANT aTeardropVariant,
 
     if( int expansion = aTrack->GetSolderMaskExpansion() )
     {
-        // The zone-min-thickness deflate/reinflate is going to round corners, so it's more
-        // efficient to allow acute corners on the solder mask expansion here, and delegate the
-        // rounding to the deflate/reinflate.
         teardrop->SetMinThickness( std::max( teardrop->GetMinThickness(), expansion ) );
 
-        outline->Inflate( expansion, CORNER_STRATEGY::ALLOW_ACUTE_CORNERS,
+        outline->Inflate( expansion, CORNER_STRATEGY::CHAMFER_ALL_CORNERS,
                           m_board->GetDesignSettings().m_MaxError );
     }
 
