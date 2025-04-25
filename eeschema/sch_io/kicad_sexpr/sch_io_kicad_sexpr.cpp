@@ -1436,8 +1436,7 @@ void SCH_IO_KICAD_SEXPR::saveTable( SCH_TABLE* aTable )
     for( int col = 0; col < aTable->GetColCount(); ++col )
     {
         m_out->Print( " %s",
-                      EDA_UNIT_UTILS::FormatInternalUnits( schIUScale,
-                                                           aTable->GetColWidth( col ) ).c_str() );
+                      EDA_UNIT_UTILS::FormatInternalUnits( schIUScale, aTable->GetColWidth( col ) ).c_str() );
     }
 
     m_out->Print( ")" );
@@ -1447,11 +1446,12 @@ void SCH_IO_KICAD_SEXPR::saveTable( SCH_TABLE* aTable )
     for( int row = 0; row < aTable->GetRowCount(); ++row )
     {
         m_out->Print( " %s",
-                      EDA_UNIT_UTILS::FormatInternalUnits( schIUScale,
-                                                           aTable->GetRowHeight( row ) ).c_str() );
+                      EDA_UNIT_UTILS::FormatInternalUnits( schIUScale, aTable->GetRowHeight( row ) ).c_str() );
     }
 
     m_out->Print( ")" );
+
+    KICAD_FORMAT::FormatUuid( m_out, aTable->m_Uuid );
 
     m_out->Print( "(cells" );
 

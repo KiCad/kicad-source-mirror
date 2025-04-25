@@ -4748,8 +4748,14 @@ SCH_TABLE* SCH_IO_KICAD_SEXPR_PARSER::parseSchTable()
 
             break;
 
+        case T_uuid:
+            NeedSYMBOL();
+            const_cast<KIID&>( table->m_Uuid ) = parseKIID();
+            NeedRIGHT();
+            break;
+
         default:
-            Expecting( "columns, col_widths, row_heights, border, separators, header or cells" );
+            Expecting( "columns, col_widths, row_heights, border, separators, uuid, header or cells" );
         }
     }
 
