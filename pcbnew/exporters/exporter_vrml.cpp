@@ -1029,6 +1029,7 @@ void EXPORTER_PCB_VRML::ExportVrmlFootprint( FOOTPRINT* aFootprint, std::ostream
     if( !m_includeDNP && aFootprint->IsDNP() )
         return;
 
+    std::vector<const EMBEDDED_FILES*> embeddedFilesStack;
     bool isFlipped = aFootprint->GetLayer() == B_Cu;
 
     // Export the object VRML model(s)
@@ -1044,7 +1045,7 @@ void EXPORTER_PCB_VRML::ExportVrmlFootprint( FOOTPRINT* aFootprint, std::ostream
             continue;
         }
 
-        std::vector<const EMBEDDED_FILES*> embeddedFilesStack;
+        embeddedFilesStack.clear();
         embeddedFilesStack.push_back( aFootprint->GetEmbeddedFiles() );
         embeddedFilesStack.push_back( m_board->GetEmbeddedFiles() );
 
@@ -1113,7 +1114,7 @@ void EXPORTER_PCB_VRML::ExportVrmlFootprint( FOOTPRINT* aFootprint, std::ostream
             int old_precision = aOutputFile->precision();
             aOutputFile->precision( m_precision );
 
-            std::vector<const EMBEDDED_FILES*> embeddedFilesStack;
+            embeddedFilesStack.clear();
             embeddedFilesStack.push_back( aFootprint->GetEmbeddedFiles() );
             embeddedFilesStack.push_back( m_board->GetEmbeddedFiles() );
 
