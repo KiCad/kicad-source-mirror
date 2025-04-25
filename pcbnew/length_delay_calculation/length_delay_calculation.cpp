@@ -28,35 +28,6 @@
 #include <geometry/geometry_utils.h>
 
 
-void LENGTH_DELAY_CALCULATION_ITEM::CalculateViaLayers( const BOARD* aBoard )
-{
-    static std::initializer_list<KICAD_T> traceAndPadTypes = { PCB_TRACE_T, PCB_ARC_T, PCB_PAD_T };
-
-    PCB_LAYER_ID top_layer = UNDEFINED_LAYER;
-    PCB_LAYER_ID bottom_layer = UNDEFINED_LAYER;
-
-    const LSET layers = aBoard->GetDesignSettings().GetEnabledLayers();
-
-    for( auto layer_it = layers.copper_layers_begin(); layer_it != layers.copper_layers_end(); ++layer_it )
-    {
-        if( aBoard->GetConnectivity()->IsConnectedOnLayer( m_via, *layer_it, traceAndPadTypes ) )
-        {
-            if( top_layer == UNDEFINED_LAYER )
-                top_layer = *layer_it;
-            else
-                bottom_layer = *layer_it;
-        }
-    }
-
-    if( top_layer == UNDEFINED_LAYER )
-        top_layer = m_via->TopLayer();
-    if( bottom_layer == UNDEFINED_LAYER )
-        bottom_layer = m_via->BottomLayer();
-
-    SetLayers( top_layer, bottom_layer );
-}
-
-
 void LENGTH_DELAY_CALCULATION::clipLineToPad( SHAPE_LINE_CHAIN& aLine, const PAD* aPad, PCB_LAYER_ID aLayer,
                                               bool aForward )
 {

@@ -51,5 +51,5 @@ void LENGTH_DELAY_CALCULATION_ITEM::CalculateViaLayers( const BOARD* aBoard )
     if( bottom_layer == UNDEFINED_LAYER )
         bottom_layer = m_via->BottomLayer();
 
-    SetLayers( bottom_layer, top_layer );
+    SetLayers( top_layer, bottom_layer );
 }
