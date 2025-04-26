@@ -22,6 +22,7 @@
 #include <eda_base_frame.h>
 
 #include <widgets/ui_common.h>
+#include <wx/statline.h>
 
 NET_INSPECTOR_PANEL::NET_INSPECTOR_PANEL( wxWindow* parent, EDA_BASE_FRAME* aFrame, wxWindowID id,
                                           const wxPoint& pos, const wxSize& size, long style,
@@ -33,25 +34,27 @@ NET_INSPECTOR_PANEL::NET_INSPECTOR_PANEL( wxWindow* parent, EDA_BASE_FRAME* aFra
     m_sizerOuter->SetFlexibleDirection( wxBOTH );
     m_sizerOuter->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
-    m_searchCtrl = new wxSearchCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition,
-                                     wxDefaultSize, 0 );
+    m_searchCtrl = new wxSearchCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 #ifndef __WXMAC__
     m_searchCtrl->ShowSearchButton( true );
 #endif
     m_searchCtrl->ShowCancelButton( false );
     m_searchCtrl->SetDescriptiveText( _( "Filter" ) );
-    m_sizerOuter->Add( m_searchCtrl, wxGBPosition( 0, 0 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
+    m_sizerOuter->Add( m_searchCtrl, wxGBPosition( 0, 0 ), wxGBSpan( 1, 1 ),
+                       wxEXPAND|wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxRIGHT, 2 );
+
+    wxStaticLine* separator = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_VERTICAL );
+    m_sizerOuter->Add( separator, wxGBPosition( 0, 1 ), wxGBSpan( 1, 1 ), wxEXPAND|wxTOP|wxBOTTOM|wxLEFT, 3 );
 
     m_configureBtn = new BITMAP_BUTTON( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
     m_configureBtn->SetToolTip( _( "Configure netlist inspector" ) );
-    m_configureBtn->SetBitmap( KiBitmapBundle( BITMAPS::options_generic_16 ) );
+    m_configureBtn->SetBitmap( KiBitmapBundle( BITMAPS::config ) );
     m_configureBtn->SetPadding( 2 );
-    m_sizerOuter->Add( m_configureBtn, wxGBPosition( 0, 1 ), wxGBSpan( 1, 1 ), 0, 5 );
+    m_sizerOuter->Add( m_configureBtn, wxGBPosition( 0, 2 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 3 );
 
-    m_netsList = new wxDataViewCtrl( this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
-                                     wxDV_MULTIPLE );
+    m_netsList = new wxDataViewCtrl( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxDV_MULTIPLE );
     m_netsList->SetFont( KIUI::GetDockedPaneFont( this ) );
-    m_sizerOuter->Add( m_netsList, wxGBPosition( 1, 0 ), wxGBSpan( 1, 2 ), wxEXPAND, 5 );
+    m_sizerOuter->Add( m_netsList, wxGBPosition( 1, 0 ), wxGBSpan( 1, 3 ), wxEXPAND, 5 );
 
     m_sizerOuter->AddGrowableCol( 0 );
     m_sizerOuter->AddGrowableRow( 1 );

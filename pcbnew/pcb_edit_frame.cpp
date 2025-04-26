@@ -346,18 +346,18 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
                       .CloseButton( false ) );
 
     m_auimgr.AddPane( m_designBlocksPane, EDA_PANE().Name( DesignBlocksPaneName() )
-                        .Right().Layer( 5 )
-                        .Caption( _( "Design Blocks" ) )
-                        .CaptionVisible( true )
-                        .PaneBorder( true )
-                        .TopDockable( false )
-                        .BottomDockable( false )
-                        .CloseButton( true )
-                        .MinSize( FromDIP( wxSize( 240, 60 ) ) )
-                        .BestSize( FromDIP( wxSize( 300, 200 ) ) )
-                        .FloatingSize( FromDIP( wxSize( 800, 600 ) ) )
-                        .FloatingPosition( FromDIP( wxPoint( 50, 200 ) ) )
-                        .Show( true ) );
+                      .Right().Layer( 5 )
+                      .Caption( _( "Design Blocks" ) )
+                      .CaptionVisible( true )
+                      .PaneBorder( true )
+                      .TopDockable( false )
+                      .BottomDockable( false )
+                      .CloseButton( true )
+                      .MinSize( FromDIP( wxSize( 240, 60 ) ) )
+                      .BestSize( FromDIP( wxSize( 300, 200 ) ) )
+                      .FloatingSize( FromDIP( wxSize( 800, 600 ) ) )
+                      .FloatingPosition( FromDIP( wxPoint( 50, 200 ) ) )
+                      .Show( true ) );
 
     m_auimgr.AddPane( m_propertiesPanel, EDA_PANE().Name( PropertiesPaneName() )
                       .Left().Layer( 5 )
@@ -371,15 +371,14 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_auimgr.AddPane( GetCanvas(), EDA_PANE().Canvas().Name( wxS( "DrawFrame" ) )
                       .Center() );
 
-    m_auimgr.AddPane( m_netInspectorPanel, EDA_PANE()
-                                                   .Name( NetInspectorPanelName() )
-                                                   .Bottom()
-                                                   .Caption( _( "Net Inspector" ) )
-                                                   .PaneBorder( false )
-                                                   .MinSize( FromDIP( wxSize( 240, 60 ) ) )
-                                                   .BestSize( FromDIP( wxSize( 300, 200 ) ) )
-                                                   .FloatingSize( wxSize( 300, 200 ) )
-                                                   .CloseButton( true ) );
+    m_auimgr.AddPane( m_netInspectorPanel, EDA_PANE().Name( NetInspectorPanelName() )
+                      .Bottom()
+                      .Caption( _( "Net Inspector" ) )
+                      .PaneBorder( false )
+                      .MinSize( FromDIP( wxSize( 240, 60 ) ) )
+                      .BestSize( FromDIP( wxSize( 300, 200 ) ) )
+                      .FloatingSize( wxSize( 300, 200 ) )
+                      .CloseButton( true ) );
 
     m_auimgr.AddPane( m_searchPane, EDA_PANE().Name( SearchPaneName() )
                       .Bottom()

@@ -23,7 +23,7 @@
  */
 
 #include <widgets/lib_tree.h>
-#include <widgets/std_bitmap_button.h>
+#include <widgets/bitmap_button.h>
 #include <core/kicad_algo.h>
 #include <macros.h>
 #include <bitmaps.h>
@@ -37,6 +37,7 @@
 #include <wx/settings.h>
 #include <wx/sizer.h>
 #include <wx/srchctrl.h>
+#include <wx/statline.h>
 #include <wx/popupwin.h>
 
 #include <eda_doc.h>                    // for GetAssociatedDocument()
@@ -86,11 +87,14 @@ LIB_TREE::LIB_TREE( wxWindow* aParent, const wxString& aRecentSearchesKey, LIB_T
 
         m_debounceTimer = new wxTimer( this );
 
-        search_sizer->Add( m_query_ctrl, 1, wxEXPAND | wxRIGHT, 5 );
+        search_sizer->Add( m_query_ctrl, 1, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxRIGHT, 4 );
 
-        m_sort_ctrl = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition,
-                                             wxDefaultSize, wxBU_AUTODRAW|0 );
-        m_sort_ctrl->SetBitmap( KiBitmapBundle( BITMAPS::small_sort_desc ) );
+        wxStaticLine* separator = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_VERTICAL );
+        search_sizer->Add( separator, 0, wxEXPAND|wxTOP|wxBOTTOM, 3 );
+
+        m_sort_ctrl = new BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition,
+                                         wxDefaultSize, wxBU_AUTODRAW|0 );
+        m_sort_ctrl->SetBitmap( KiBitmapBundle( BITMAPS::config ) );
         m_sort_ctrl->Bind( wxEVT_LEFT_DOWN,
                 [&]( wxMouseEvent& aEvent )
                 {
@@ -132,10 +136,9 @@ LIB_TREE::LIB_TREE( wxWindow* aParent, const wxString& aRecentSearchesKey, LIB_T
                 } );
 
         m_sort_ctrl->Bind( wxEVT_CHAR_HOOK, &LIB_TREE::onTreeCharHook, this );
+        search_sizer->Add( m_sort_ctrl, 0, wxEXPAND|wxALIGN_CENTER_VERTICAL, 5 );
 
-        search_sizer->Add( m_sort_ctrl, 0, wxEXPAND, 5 );
-
-        sizer->Add( search_sizer, 0, wxEXPAND | wxBOTTOM, 5 );
+        sizer->Add( search_sizer, 0, wxEXPAND, 5 );
 
         m_query_ctrl->Bind( wxEVT_TEXT, &LIB_TREE::onQueryText, this );
 

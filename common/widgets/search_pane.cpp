@@ -26,7 +26,7 @@
 #include <bitmaps.h>
 #include <kiway.h>
 #include <widgets/search_pane_tab.h>
-#include <widgets/std_bitmap_button.h>
+#include <widgets/bitmap_button.h>
 
 
 #define ID_TOGGLE_ZOOM_TO_SELECTION    14000

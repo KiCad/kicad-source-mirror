@@ -256,7 +256,7 @@ protected:
     wxObjectDataPtr<LIB_TREE_MODEL_ADAPTER> m_adapter;
 
     wxSearchCtrl*      m_query_ctrl;
-    STD_BITMAP_BUTTON* m_sort_ctrl;
+    BITMAP_BUTTON*     m_sort_ctrl;
     WX_DATAVIEWCTRL*   m_tree_ctrl;
     HTML_WINDOW*       m_details_ctrl;
     wxTimer*           m_debounceTimer;
