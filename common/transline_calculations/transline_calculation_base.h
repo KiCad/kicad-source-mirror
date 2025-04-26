@@ -21,6 +21,7 @@
 #define TRANSLINE_CALCULATIONS_TRANSLINE_CALCULATION_BASE_H
 
 
+#include <cmath>
 #include <unordered_map>
 
 
