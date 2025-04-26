@@ -679,6 +679,9 @@ int COMMON_TOOLS::TogglePolarCoords( const TOOL_EVENT& aEvent )
 
 int COMMON_TOOLS::ResetLocalCoords( const TOOL_EVENT& aEvent )
 {
+    if( !m_frame->GetScreen() )     // Can happen in footprint chooser frame
+        return 0;
+
     const KIGFX::VC_SETTINGS& vcSettings = m_toolMgr->GetCurrentToolVC();
 
     // Use either the active tool forced cursor position or the general settings
