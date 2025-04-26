@@ -423,13 +423,12 @@ bool GERBVIEW_FRAME::LoadListOfGerberAndDrillFiles( const wxString&      aPath,
 }
 
 
-
-
 bool GERBVIEW_FRAME::unarchiveFiles( const wxString& aFullFileName, REPORTER* aReporter )
 {
     bool     foundX2Gerbers = false;
     wxString msg;
     int      firstLoadedLayer = NO_AVAILABLE_LAYERS;
+    LSET     visibility = GetVisibleLayers();
 
     // Extract the path of aFullFileName. We use it to store temporary files
     wxFileName fn( aFullFileName );
@@ -494,7 +493,7 @@ bool GERBVIEW_FRAME::unarchiveFiles( const wxString& aFullFileName, REPORTER* aR
         enum GERBER_ORDER_ENUM order;
         GERBER_FILE_IMAGE_LIST::GetGerberLayerFromFilename( fname, order, matchedExt );
 
-        int layer = GetActiveLayer();
+        int layer = getNextAvailableLayer();
 
         if( layer == NO_AVAILABLE_LAYERS )
         {
@@ -515,6 +514,8 @@ bool GERBVIEW_FRAME::unarchiveFiles( const wxString& aFullFileName, REPORTER* aR
             delete entry;
             continue;
         }
+
+        SetActiveLayer( layer, false );
 
         // Create the unzipped temporary file:
         {
@@ -599,6 +600,7 @@ bool GERBVIEW_FRAME::unarchiveFiles( const wxString& aFullFileName, REPORTER* aR
         else
         {
             GERBER_FILE_IMAGE* gerber_image = GetGbrImage( layer );
+            visibility[ layer ] = true;
 
             if( gerber_image )
             {
@@ -616,6 +618,8 @@ bool GERBVIEW_FRAME::unarchiveFiles( const wxString& aFullFileName, REPORTER* aR
         SortLayersByX2Attributes();
     else
         SortLayersByFileExtension();
+
+    SetVisibleLayers( visibility );
 
     // Select the first layer loaded so we don't show another layer on top after
     if( firstLoadedLayer != NO_AVAILABLE_LAYERS )
