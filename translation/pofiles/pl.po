@@ -18,17 +18,17 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-04-23 21:23+0300\n"
-"PO-Revision-Date: 2025-04-21 20:20+0000\n"
+"PO-Revision-Date: 2025-04-26 08:13+0000\n"
 "Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
-"Language-Team: Polish <https://hosted.weblate.org/projects/kicad/master-"
-"source/pl/>\n"
+"Language-Team: Polish <https://hosted.weblate.org/projects/kicad/"
+"master-source/pl/>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 5.11.1-dev\n"
+"X-Generator: Weblate 5.12-dev\n"
 "X-Poedit-Basepath: ../../../kicad-source-mirror\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SearchPath-0: .\n"
@@ -2676,9 +2676,9 @@ msgid "Path"
 msgstr "Ścieżka"
 
 #: common/dialogs/dialog_design_block_properties.cpp:99
-#, fuzzy, c-format
+#, c-format
 msgid "Illegal character '%c' in name '%s'."
-msgstr "Znaleziono nieprawidłowy znak '%c' w nazwie skrótowej '%s'."
+msgstr "Nieprawidłowy znak '%c' w nazwie '%s'."
 
 #: common/dialogs/dialog_design_block_properties.cpp:125
 #: eeschema/dialogs/panel_template_fieldnames.cpp:102
@@ -7035,9 +7035,8 @@ msgid "Font"
 msgstr "Czcionka"
 
 #: common/eda_text.cpp:1367
-#, fuzzy
 msgid "Auto Thickness"
-msgstr "Grubość magistrali"
+msgstr "Grubość automatyczna"
 
 #: common/eda_text.cpp:1370 eeschema/sch_field.cpp:1606
 #: eeschema/sch_label.cpp:2299 eeschema/sch_tablecell.cpp:196
@@ -8061,9 +8060,8 @@ msgid "Export Postscript Job Settings"
 msgstr "Ustawienia zadania eksportu Postscript"
 
 #: common/jobs/job_export_pcb_ps.cpp:66
-#, fuzzy
 msgid "PCB: Export Postscript"
-msgstr "Eksport Postscript"
+msgstr "PCB: Eksport Postscript"
 
 #: common/jobs/job_export_pcb_svg.cpp:49
 #: common/jobs/job_export_sch_plot.cpp:179 kicad/kicad_cli.cpp:149
@@ -27147,30 +27145,28 @@ msgid "Invalid side specified\n"
 msgstr "Określono nieprawidłową stronę\n"
 
 #: kicad/cli/command_pcb_export_ps.cpp:41
-#, fuzzy
 msgid "Generate Postscript from a list of layers"
-msgstr "Generuj plik PDF na podstawie listy warstw"
+msgstr "Generuj plik Postscript na podstawie listy warstw"
 
 #: kicad/cli/command_pcb_export_ps.cpp:116
 msgid ""
 "Track width correction [mm]. Used to compensate errors in track widths, pad "
 "and via sizes."
 msgstr ""
+"Śledzenie poprawek szerokości [mm]. Używana do kompensacji błędów w "
+"szerokościach ścieżek, rozmiarach pól i przelotek."
 
 #: kicad/cli/command_pcb_export_ps.cpp:123
-#, fuzzy
 msgid "X scale adjust for exact scale."
-msgstr "Dostosuj skalę w osi X dla dokładnej skali rysowania"
+msgstr "Dostosuj skalę w osi X dla dokładnej skali rysowania."
 
 #: kicad/cli/command_pcb_export_ps.cpp:129
-#, fuzzy
 msgid "Y scale adjust for exact scale."
-msgstr "Dostosuj skalę w osi X dla dokładnej skali rysowania"
+msgstr "Dostosuj skalę w osi Y dla dokładnej skali rysowania."
 
 #: kicad/cli/command_pcb_export_ps.cpp:135
-#, fuzzy
 msgid "Force A4 paper size."
-msgstr "Rozmiar papieru użytkownika:"
+msgstr "Wymuś rozmiar A4."
 
 #: kicad/cli/command_pcb_export_svg.cpp:41
 msgid "Generate SVG outputs of a given layer list"
@@ -31643,9 +31639,8 @@ msgstr "Skuteczne %s:"
 #: pcb_calculator/transline_ident.cpp:163
 #: pcb_calculator/transline_ident.cpp:198
 #: pcb_calculator/transline_ident.cpp:357
-#, fuzzy
 msgid "Unit propagation delay:"
-msgstr "Propagacja"
+msgstr "Opóźnienie propagacji jednostki:"
 
 #: pcb_calculator/transline_ident.cpp:121
 #: pcb_calculator/transline_ident.cpp:164
@@ -31848,14 +31843,12 @@ msgid "Effective %s (odd):"
 msgstr "Skuteczne %s (nieparzyste):"
 
 #: pcb_calculator/transline_ident.cpp:308
-#, fuzzy
 msgid "Unit propagation delay (even):"
-msgstr "Propagacja"
+msgstr "Opóźnienie propagacji jednostki (parzyste):"
 
 #: pcb_calculator/transline_ident.cpp:309
-#, fuzzy
 msgid "Unit propagation delay (odd):"
-msgstr "Propagacja"
+msgstr "Opóźnienie propagacji jednostki (nieparzyste):"
 
 #: pcb_calculator/transline_ident.cpp:310
 msgid "Conductor losses (even):"
@@ -34027,7 +34020,6 @@ msgid "Centre on source items"
 msgstr "Skoncentruj widok na elementach źródłowych"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:197
-#, fuzzy
 msgid "Renumber pads"
 msgstr "Renumeracja pól lutowniczych"
 
@@ -40700,21 +40692,19 @@ msgstr "Domyślne ustawienia dla nowych elementów graficznych oraz tekstów"
 
 #: pcbnew/dialogs/panel_setup_time_domain_parameters.cpp:464
 msgid "No delay profiles to override"
-msgstr ""
+msgstr "Brak profili opóźnień by je zastąpić"
 
 #: pcbnew/dialogs/panel_setup_time_domain_parameters.cpp:570
-#, fuzzy
 msgid "Tuning profile must have a name"
-msgstr "Profil dostrojenia musi posiadać nazwę."
+msgstr "Profil dostrojenia musi posiadać nazwę"
 
 #: pcbnew/dialogs/panel_setup_time_domain_parameters.cpp:579
-#, fuzzy
 msgid "Tuning profile name already in use"
-msgstr "Ta nazwa profilu dostrojenia już jest używana."
+msgstr "Ta nazwa profilu dostrojenia już jest używana"
 
 #: pcbnew/dialogs/panel_setup_time_domain_parameters.cpp:624
 msgid "Via override configuration is duplicated"
-msgstr ""
+msgstr "Konfiguracja nadpisywania przelotek jest zduplikowana"
 
 #: pcbnew/dialogs/panel_setup_time_domain_parameters_base.cpp:31
 msgid "Delay Profiles"
@@ -41683,9 +41673,8 @@ msgid "(%s clearance %s; actual < 0)"
 msgstr "(%s prześwit %s; obecnie < 0)"
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:1423
-#, fuzzy
 msgid "(intersecting zones must have distinct priorities)"
-msgstr "Łuk musi posiadać 3 wyróżniające punkty"
+msgstr "(strefy nachodzące na siebie muszą posiadać odrębne priorytety)"
 
 #: pcbnew/drc/drc_test_provider_courtyard_clearance.cpp:85
 msgid "Checking footprint courtyard definitions..."
@@ -50442,36 +50431,32 @@ msgid "Displays tuning pattern properties dialog"
 msgstr "Wyświetla okno dialogowe z opcjami dostrajania ścieżek"
 
 #: pcbnew/tools/pcb_actions.cpp:2587
-#, fuzzy
 msgid "Show wizards selector"
-msgstr "nie wybrano kreatora"
+msgstr "Wyświetla wybór kreatora"
 
 #: pcbnew/tools/pcb_actions.cpp:2588
 msgid "Select wizard script to run"
 msgstr "Wybierz skrypt kreatora do uruchomienia"
 
 #: pcbnew/tools/pcb_actions.cpp:2594
-#, fuzzy
 msgid "Reset wizard parameters"
-msgstr "Zresetuj parametry kreatora do ich wartości domyślnych"
+msgstr "Zresetuj parametry kreatora"
 
 #: pcbnew/tools/pcb_actions.cpp:2595
 msgid "Reset wizard parameters to default"
 msgstr "Zresetuj parametry kreatora do ich wartości domyślnych"
 
 #: pcbnew/tools/pcb_actions.cpp:2601
-#, fuzzy
 msgid "Select previous wizard page"
-msgstr "Wybierz poprzednią stronę z parametrami"
+msgstr "Wybierz poprzednią stronę z kreatorami"
 
 #: pcbnew/tools/pcb_actions.cpp:2602
 msgid "Select previous parameters page"
 msgstr "Wybierz poprzednią stronę z parametrami"
 
 #: pcbnew/tools/pcb_actions.cpp:2608
-#, fuzzy
 msgid "Select next wizard page"
-msgstr "Wybierz następną stronę z parametrami"
+msgstr "Wybierz następną stronę z kreatorami"
 
 #: pcbnew/tools/pcb_actions.cpp:2609
 msgid "Select next parameters page"
@@ -51869,9 +51854,9 @@ msgid "Rule Area %s"
 msgstr "Strefa z regułami %s"
 
 #: pcbnew/zone.cpp:1194
-#, fuzzy, c-format
+#, c-format
 msgid "Rule Area '%s' %s"
-msgstr "Strefa z regułami %s"
+msgstr "Strefa z regułami '%s' %s"
 
 #: pcbnew/zone.cpp:1201
 #, c-format
@@ -51879,14 +51864,14 @@ msgid "Teardrop %s %s"
 msgstr "Łezka %s %s"
 
 #: pcbnew/zone.cpp:1209
-#, fuzzy, c-format
+#, c-format
 msgid "Zone %s %s, priority %d"
-msgstr "Poziom priorytetu strefy:"
+msgstr "Strefa %s %s, priorytet %d"
 
 #: pcbnew/zone.cpp:1216
-#, fuzzy, c-format
+#, c-format
 msgid "Zone '%s' %s %s, priority %d"
-msgstr "%s, %s, %s lub %s"
+msgstr "Strefa '%s' %s %s, priorytet %d"
 
 #: pcbnew/zone.cpp:1938
 msgid "Keepout"
