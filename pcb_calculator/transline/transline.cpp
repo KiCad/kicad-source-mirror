@@ -452,7 +452,7 @@ char TRANSLINE::convertParameterStatusCode( TRANSLINE_STATUS aStatus )
     {
     case TRANSLINE_STATUS::OK: return TRANSLINE_OK;
     case TRANSLINE_STATUS::WARNING: return TRANSLINE_WARNING;
-    case TRANSLINE_STATUS::ERROR: return TRANSLINE_ERROR;
+    case TRANSLINE_STATUS::TS_ERROR: return TRANSLINE_ERROR;
     }
 
     return TRANSLINE_OK;

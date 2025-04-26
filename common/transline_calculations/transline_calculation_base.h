@@ -91,12 +91,13 @@ enum class TRANSLINE_STATUS
 {
     OK,
     WARNING,
-    ERROR
+    TS_ERROR        // ERROR name is colliding with a define on Windows
 };
 
 
 /**
-* The base class for all transmission line calculations. This is used by the PCB calculator, and by delay profiles
+* The base class for all transmission line calculations.
+* This is used by the PCB calculator, and by delay profiles
 */
 class TRANSLINE_CALCULATION_BASE
 {

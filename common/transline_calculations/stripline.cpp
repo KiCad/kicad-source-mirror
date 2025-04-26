@@ -81,8 +81,8 @@ void STRIPLINE::SetAnalysisResults()
     if( GetParameter( TCP::STRIPLINE_A ) + GetParameter( TCP::T ) >= GetParameter( TCP::H ) )
         invalid = true;
 
-    SetAnalysisResult( TCP::Z0, Z0, Z0_invalid || invalid ? TRANSLINE_STATUS::ERROR : TRANSLINE_STATUS::OK );
-    SetAnalysisResult( TCP::ANG_L, ANG_L, ANG_L_invalid ? TRANSLINE_STATUS::ERROR : TRANSLINE_STATUS::OK );
+    SetAnalysisResult( TCP::Z0, Z0, Z0_invalid || invalid ? TRANSLINE_STATUS::TS_ERROR : TRANSLINE_STATUS::OK );
+    SetAnalysisResult( TCP::ANG_L, ANG_L, ANG_L_invalid ? TRANSLINE_STATUS::TS_ERROR : TRANSLINE_STATUS::OK );
     SetAnalysisResult( TCP::PHYS_LEN, L, L_invalid ? TRANSLINE_STATUS::WARNING : TRANSLINE_STATUS::OK );
     SetAnalysisResult( TCP::PHYS_WIDTH, W, W_invalid ? TRANSLINE_STATUS::WARNING : TRANSLINE_STATUS::OK );
     SetAnalysisResult( TCP::STRIPLINE_A, GetParameter( TCP::STRIPLINE_A ),
@@ -118,8 +118,8 @@ void STRIPLINE::SetSynthesisResults()
 
     SetSynthesisResult( TCP::Z0, Z0, Z0_invalid ? TRANSLINE_STATUS::WARNING : TRANSLINE_STATUS::OK );
     SetSynthesisResult( TCP::ANG_L, ANG_L, ANG_L_invalid ? TRANSLINE_STATUS::WARNING : TRANSLINE_STATUS::OK );
-    SetSynthesisResult( TCP::PHYS_LEN, L, L_invalid ? TRANSLINE_STATUS::ERROR : TRANSLINE_STATUS::OK );
-    SetSynthesisResult( TCP::PHYS_WIDTH, W, W_invalid || invalid ? TRANSLINE_STATUS::ERROR : TRANSLINE_STATUS::OK );
+    SetSynthesisResult( TCP::PHYS_LEN, L, L_invalid ? TRANSLINE_STATUS::TS_ERROR : TRANSLINE_STATUS::OK );
+    SetSynthesisResult( TCP::PHYS_WIDTH, W, W_invalid || invalid ? TRANSLINE_STATUS::TS_ERROR : TRANSLINE_STATUS::OK );
     SetSynthesisResult( TCP::STRIPLINE_A, GetParameter( TCP::STRIPLINE_A ),
                         invalid ? TRANSLINE_STATUS::WARNING : TRANSLINE_STATUS::OK );
     SetSynthesisResult( TCP::T, GetParameter( TCP::T ), invalid ? TRANSLINE_STATUS::WARNING : TRANSLINE_STATUS::OK );
