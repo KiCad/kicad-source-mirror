@@ -1155,11 +1155,11 @@ void SCH_SELECTION_TOOL::EnterGroup()
     m_enteredGroup = aGroup;
     m_enteredGroup->SetFlags( ENTERED );
     m_enteredGroup->RunOnChildren(
-            [&]( SCH_ITEM* item )
+            [&]( SCH_ITEM* aChild )
             {
-                if( item->Type() == SCH_LINE_T )
-                    item->SetFlags( STARTPOINT | ENDPOINT );
-                select( item );
+                if( aChild->Type() == SCH_LINE_T )
+                    aChild->SetFlags( STARTPOINT | ENDPOINT );
+                select( aChild );
             },
             RECURSE_MODE::NO_RECURSE );
 
@@ -1893,10 +1893,10 @@ SCH_SELECTION& SCH_SELECTION_TOOL::RequestSelection( const std::vector<KICAD_T>&
             if( item->Type() == SCH_GROUP_T )
             {
                 static_cast<SCH_ITEM*>(item)
-                    ->RunOnChildren( [&]( SCH_ITEM* item )
+                    ->RunOnChildren( [&]( SCH_ITEM* aChild )
                                         {
-                                            if( item->IsType( aScanTypes ) )
-                                                selectedChildren.insert( item );
+                                            if( aChild->IsType( aScanTypes ) )
+                                                selectedChildren.insert( aChild );
                                         },
                                         RECURSE_MODE::RECURSE );
                 unselect( item );
