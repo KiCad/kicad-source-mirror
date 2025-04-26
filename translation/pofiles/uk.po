@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-04-23 21:24+0300\n"
-"PO-Revision-Date: 2025-04-25 23:42+0000\n"
+"PO-Revision-Date: 2025-04-27 05:30+0000\n"
 "Last-Translator: Ivan Chuba <xtrvweb@gmail.com>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/kicad/v9/uk/>\n"
 "Language: uk\n"
@@ -5609,9 +5609,8 @@ msgid "Schematic wire line style"
 msgstr "Стиль лінії провідника схеми"
 
 #: common/dialogs/panel_setup_netclasses.cpp:656
-#, fuzzy
 msgid "PCB netclass color"
-msgstr "Встановити колір класу звʼязків"
+msgstr "Колір класу зв'язків PCB"
 
 #: common/dialogs/panel_setup_netclasses.cpp:713
 msgid "The default net class is required."
@@ -5623,9 +5622,8 @@ msgid "<b>Nets matching '%s':</b>"
 msgstr "<b>Відповідність зв'язків '%s':</b>"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:32
-#, fuzzy
 msgid "Netclasses"
-msgstr "Класи звʼязків:"
+msgstr "Класи звʼязків"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:52
 #: pcbnew/tools/board_inspection_tool.cpp:642
@@ -5666,9 +5664,8 @@ msgid "DP Gap"
 msgstr "Відступ диференційної пари"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:60
-#, fuzzy
 msgid "PCB Color"
-msgstr "Колір"
+msgstr "Колір PCB"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:61
 msgid "Wire Thickness"
@@ -5711,14 +5708,12 @@ msgid "Set color to transparent to use KiCad default color."
 msgstr "Встановити прозорий колір для використання типового кольору KiCad."
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:111
-#, fuzzy
 msgid "Import colors from schematic"
-msgstr "Проби зі схем"
+msgstr "Імпорт кольорів зі схеми"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:128
-#, fuzzy
 msgid "Netclass Assignments"
-msgstr "Відповідність класу зв'язків:"
+msgstr "Відповідність класу зв'язків"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:152
 msgid "Pattern"
@@ -5785,7 +5780,7 @@ msgstr "Не вдалося використати OpenGL"
 
 #: common/draw_panel_gal.cpp:543
 msgid "Error switching GAL backend"
-msgstr ""
+msgstr "Помилка під час перемикання GAL бекенду"
 
 #: common/drawing_sheet/drawing_sheet_parser.cpp:558
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:3419
@@ -5800,18 +5795,16 @@ msgid "File not found."
 msgstr "Файл не знайдено."
 
 #: common/drawing_sheet/drawing_sheet_parser.cpp:995
-#, fuzzy
 msgid "File could not be opened."
-msgstr "Не вдалося створити файл '%s'."
+msgstr "Не вдалося відкрити файл."
 
 #: common/drawing_sheet/drawing_sheet_parser.cpp:1009
-#, fuzzy
 msgid "Drawing sheet was not fully read."
-msgstr "Форматна рамка '%s' була не повністю прочитана."
+msgstr "Форматна рамка не повністю прочитана."
 
 #: common/drawing_sheet/drawing_sheet_parser.cpp:1036
 msgid "Ran out of memory."
-msgstr ""
+msgstr "Недостатньо пам'яті."
 
 #: common/drawing_sheet/ds_data_item.cpp:365
 #: common/drawing_sheet/ds_draw_item.cpp:132 common/eda_item.cpp:355
@@ -6104,14 +6097,12 @@ msgid "Origins & Axes"
 msgstr "Початок координат & Осі"
 
 #: common/eda_base_frame.cpp:1170
-#, fuzzy
 msgid "Footprint Defaults"
-msgstr "Нове посадкове місце"
+msgstr "Типові для посадкового місця"
 
 #: common/eda_base_frame.cpp:1172
-#, fuzzy
 msgid "Graphics Defaults"
-msgstr "Очищення графіки"
+msgstr "Типові для графіків"
 
 #: common/eda_base_frame.cpp:1177 common/hotkey_store.cpp:78
 #: common/tool/common_tools.cpp:616 kicad/tools/kicad_manager_actions.cpp:136
@@ -6121,9 +6112,8 @@ msgid "PCB Editor"
 msgstr "Редактор друкованих плат"
 
 #: common/eda_base_frame.cpp:1183 common/eda_base_frame.cpp:1248
-#, fuzzy
 msgid "Plugins"
-msgstr "Плагіни (%d)"
+msgstr "Плагіни"
 
 #: common/eda_base_frame.cpp:1190
 msgid "Realtime Renderer"
@@ -6334,16 +6324,14 @@ msgstr "Блок тексту"
 
 #: common/eda_item.cpp:358 common/eda_item.cpp:386 eeschema/sch_table.cpp:582
 #: pcbnew/pcb_table.cpp:455
-#, fuzzy
 msgid "Table"
-msgstr "Таблиця виводів"
+msgstr "Таблиця"
 
 #: common/eda_item.cpp:359 common/eda_item.cpp:387
 #: eeschema/sch_tablecell.cpp:117 pcbnew/pcb_tablecell.cpp:100
 #: pcbnew/pcb_tablecell.h:48
-#, fuzzy
 msgid "Table Cell"
-msgstr "Розмір кабелю"
+msgstr "Чарунка таблиці"
 
 #: common/eda_item.cpp:360 common/eda_item.cpp:361 pcbnew/pcb_track.cpp:1582
 msgid "Track"
@@ -6602,9 +6590,8 @@ msgid "Bezier"
 msgstr "Безьє"
 
 #: common/eda_shape.cpp:2369 eeschema/sch_shape.cpp:761
-#, fuzzy
 msgid "Shape Properties"
-msgstr "Властивості листа"
+msgstr "Властивості форми"
 
 #: common/eda_shape.cpp:2375 eeschema/sch_table.cpp:641
 #: eeschema/sch_tablecell.cpp:192 pcbnew/pcb_table.cpp:616
@@ -6928,9 +6915,9 @@ msgid "A directory containing user-specific scripts installed with KiCad"
 msgstr "Тека, що містить скрипти користувача, встановлені з KiCad"
 
 #: common/env_vars.cpp:134
-#, fuzzy, c-format
+#, c-format
 msgid "Deprecated version of %s."
-msgstr "Застаріла версія KICAD_SYMBOL_DIR."
+msgstr "Застаріла версія %s."
 
 #: common/exceptions.cpp:78
 #, c-format
