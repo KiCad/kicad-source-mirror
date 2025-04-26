@@ -1495,17 +1495,11 @@ double PCB_VIA::ViewGetLOD( int aLayer, const KIGFX::VIEW* aView ) const
 {
     PCB_PAINTER*         painter = static_cast<PCB_PAINTER*>( aView->GetPainter() );
     PCB_RENDER_SETTINGS* renderSettings = painter->GetSettings();
-    LSET                 visible = LSET::AllLayersMask();
+    const BOARD*         board = GetBoard();
 
     // Meta control for hiding all vias
     if( !aView->IsLayerVisible( LAYER_VIAS ) )
         return LOD_HIDE;
-
-    // Handle board visibility
-    if( const BOARD* board = GetBoard() )
-        visible = board->GetVisibleLayers() & board->GetEnabledLayers();
-
-    int width = GetWidth( ToLAYER_ID( aLayer ) );
 
     // In high contrast mode don't show vias that don't cross the high-contrast layer
     if( renderSettings->GetHighContrast() )
@@ -1529,16 +1523,32 @@ double PCB_VIA::ViewGetLOD( int aLayer, const KIGFX::VIEW* aView ) const
 
     if( IsHoleLayer( aLayer ) )
     {
+        LSET visible;
+
+        if( board )
+        {
+            visible = board->GetVisibleLayers();
+            visible &= board->GetEnabledLayers();
+        }
+        else
+        {
+            visible = LSET::AllLayersMask();
+        }
+
         if( m_viaType == VIATYPE::THROUGH )
         {
             // Show a through via's hole if any physical layer is shown
-            if( !( visible & LSET::PhysicalLayersMask() ).any() )
+            visible &= LSET::PhysicalLayersMask();
+
+            if( !visible.any() )
                 return LOD_HIDE;
         }
         else
         {
             // Show a blind or micro via's hole if it crosses a visible layer
-            if( !( visible & GetLayerSet() ).any() )
+            visible &= GetLayerSet();
+
+            if( !visible.any() )
                 return LOD_HIDE;
         }
 
@@ -1555,17 +1565,35 @@ double PCB_VIA::ViewGetLOD( int aLayer, const KIGFX::VIEW* aView ) const
         }
         else
         {
+            LSET visible;
+
+            if( board )
+            {
+                visible = board->GetVisibleLayers();
+                visible &= board->GetEnabledLayers();
+            }
+            else
+            {
+                visible = LSET::AllLayersMask();
+            }
+
             // Hide netnames unless pad is flashed to a visible layer
             if( !FlashLayer( visible ) )
                 return LOD_HIDE;
         }
+
+        int width = GetWidth( ToLAYER_ID( aLayer ) );
 
         // Netnames will be shown only if zoom is appropriate
         return lodScaleForThreshold( aView, width, pcbIUScale.mmToIU( 10 ) );
     }
 
     if( !IsCopperLayer( aLayer ) )
+    {
+        int width = GetWidth( ToLAYER_ID( aLayer ) );
+
         return lodScaleForThreshold( aView, width, pcbIUScale.mmToIU( 0.6 ) );
+    }
 
     return LOD_SHOW;
 }
