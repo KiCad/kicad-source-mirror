@@ -389,6 +389,9 @@ void FOOTPRINT::Serialize( google::protobuf::Any &aContainer ) const
         itemMsg->PackFrom( modelMsg );
     }
 
+    // Serialized only (can't modify this from the API to change the symbol mapping)
+    kiapi::common::PackSheetPath( *footprint.mutable_symbol_path(), m_path );
+
     aContainer.PackFrom( footprint );
 }
 

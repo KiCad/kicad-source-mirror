@@ -34,6 +34,7 @@
 #include <gal/color4d.h>
 
 class SHAPE_LINE_CHAIN;
+class KIID_PATH;
 
 /**
  * Flag to enable debug output related to the IPC API and its plugin system
@@ -76,6 +77,8 @@ KICOMMON_API SHAPE_POLY_SET UnpackPolySet( const types::PolySet& aInput );
 KICOMMON_API void PackColor( types::Color& aOutput, const KIGFX::COLOR4D& aInput );
 
 KICOMMON_API KIGFX::COLOR4D UnpackColor( const types::Color& aInput );
+
+KICOMMON_API void PackSheetPath( types::SheetPath& aOutput, const KIID_PATH& aInput );
 
 } // namespace kiapi::common
 
