@@ -65,10 +65,10 @@ SCH_SHEET::SCH_SHEET( EDA_ITEM* aParent, const VECTOR2I& aPos, VECTOR2I aSize ) 
     m_backgroundColor = COLOR4D::UNSPECIFIED;
     m_fieldsAutoplaced = AUTOPLACE_AUTO;
 
-    m_fields.emplace_back( aPos, FIELD_T::SHEET_NAME, this,
+    m_fields.emplace_back( this, FIELD_T::SHEET_NAME,
                            GetDefaultFieldName( FIELD_T::SHEET_NAME, DO_TRANSLATE ) );
 
-    m_fields.emplace_back( aPos, FIELD_T::SHEET_FILENAME, this,
+    m_fields.emplace_back( this, FIELD_T::SHEET_FILENAME,
                            GetDefaultFieldName( FIELD_T::SHEET_FILENAME, DO_TRANSLATE ) );
 
     AutoplaceFields( nullptr, m_fieldsAutoplaced );

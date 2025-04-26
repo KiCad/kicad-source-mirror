@@ -43,13 +43,10 @@ class SCH_FIELD : public SCH_ITEM, public EDA_TEXT
 public:
     SCH_FIELD();    // For std::map::operator[]
 
-    SCH_FIELD( const VECTOR2I& aPos, FIELD_T aFieldId, SCH_ITEM* aParent,
-               const wxString& aName = wxEmptyString );
-
     SCH_FIELD( SCH_ITEM* aParent, FIELD_T aFieldId = FIELD_T::USER,
                const wxString& aName = wxEmptyString );
 
-    SCH_FIELD( SCH_TEXT* aText );
+    SCH_FIELD( SCH_ITEM* aParent, SCH_TEXT* aText );
 
     SCH_FIELD( const SCH_FIELD& aText );
 
@@ -447,7 +444,7 @@ inline void SetFieldValue( std::vector<SCH_FIELD>& aFields, const wxString& aFie
     }
 
     SCH_ITEM* parent = static_cast<SCH_ITEM*>( aFields.at( 0 ).GetParent() );
-    aFields.emplace_back( VECTOR2I(), FIELD_T::USER, parent, aFieldName );
+    aFields.emplace_back( parent, FIELD_T::USER, aFieldName );
     aFields.back().SetText( aValue );
     aFields.back().SetVisible( aIsVisible );
 }

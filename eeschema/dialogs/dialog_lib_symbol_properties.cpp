@@ -201,7 +201,7 @@ bool DIALOG_LIB_SYMBOL_PROPERTIES::TransferDataToWindow()
         {
             if( defined.count( templateFieldname.m_Name ) <= 0 )
             {
-                SCH_FIELD field( { 0, 0 }, FIELD_T::USER, m_libEntry, templateFieldname.m_Name );
+                SCH_FIELD field( m_libEntry, FIELD_T::USER, templateFieldname.m_Name );
                 field.SetVisible( templateFieldname.m_Visible );
                 m_fields->push_back( field );
                 m_addedTemplateFields.insert( templateFieldname.m_Name );

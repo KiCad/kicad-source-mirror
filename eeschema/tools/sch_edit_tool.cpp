@@ -2668,9 +2668,9 @@ int SCH_EDIT_TOOL::ChangeTextType( const TOOL_EVENT& aEvent )
                 // or not.
                 if( !dynamic_cast<SCH_LABEL_BASE*>( item ) )
                 {
-                    SCH_FIELD netclass( position, FIELD_T::USER, new_label, wxT( "Netclass" ) );
+                    SCH_FIELD netclass( new_label, FIELD_T::USER, wxT( "Netclass" ) );
                     netclass.SetText( txt );
-                    netclass.SetVisible( true );
+                    netclass.SetTextPos( position );
                     new_label->GetFields().push_back( netclass );
                 }
 

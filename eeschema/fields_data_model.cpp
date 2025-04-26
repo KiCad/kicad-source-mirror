@@ -803,8 +803,7 @@ void FIELDS_EDITOR_GRID_DATA_MODEL::ApplyData( SCH_COMMIT& aCommit )
 
     for( const SCH_REFERENCE& instance : m_symbolsList )
     {
-        SCH_SYMBOL&         symbol = *instance.GetSymbol();
-        SCHEMATIC_SETTINGS& settings = symbol.Schematic()->Settings();
+        SCH_SYMBOL& symbol = *instance.GetSymbol();
 
         aCommit.Modify( &symbol, instance.GetSheetPath().LastScreen() );
 
@@ -842,12 +841,10 @@ void FIELDS_EDITOR_GRID_DATA_MODEL::ApplyData( SCH_COMMIT& aCommit )
 
             if( createField )
             {
-                destField = symbol.AddField( SCH_FIELD( symbol.GetPosition(), FIELD_T::USER,
-                                                        &symbol, srcName ) );
+                destField = symbol.AddField( SCH_FIELD( &symbol, FIELD_T::USER, srcName ) );
                 destField->SetTextAngle( symbol.GetField( FIELD_T::REFERENCE )->GetTextAngle() );
-                destField->SetTextSize( VECTOR2I( settings.m_DefaultTextSize,
-                                                  settings.m_DefaultTextSize ) );
                 destField->SetVisible( false );
+                destField->SetTextPos( symbol.GetPosition() );
             }
 
             if( !destField )

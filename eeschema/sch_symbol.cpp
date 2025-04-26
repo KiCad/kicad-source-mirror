@@ -184,7 +184,8 @@ void SCH_SYMBOL::Init( const VECTOR2I& pos )
     auto addField =
             [&]( FIELD_T id, SCH_LAYER_ID layer )
             {
-                m_fields.emplace_back( pos, id, this, GetCanonicalFieldName( id ) );
+                m_fields.emplace_back( this, id, GetCanonicalFieldName( id ) );
+                m_fields.back().SetTextPos( pos );
                 m_fields.back().SetLayer( layer );
             };
 
@@ -924,8 +925,9 @@ void SCH_SYMBOL::UpdateFields( const SCH_SHEET_PATH* aPath, bool aUpdateStyle, b
 
                 if( !schField )
                 {
-                    schField = AddField( SCH_FIELD( { 0, 0 }, FIELD_T::USER, this,
-                                                    libField->GetCanonicalName() ) );
+                    schField = AddField( SCH_FIELD( this, FIELD_T::USER, libField->GetCanonicalName() ) );
+                    schField->ImportValues( *libField );
+                    schField->SetTextPos( m_pos + libField->GetTextPos() );
                 }
             }
 

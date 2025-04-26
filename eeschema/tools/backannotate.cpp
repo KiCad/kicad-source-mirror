@@ -527,9 +527,9 @@ void BACK_ANNOTATE::applyChangelist()
 
                     if( !m_dryRun )
                     {
-                        SCH_FIELD newField( symbol->GetPosition(), FIELD_T::USER, symbol,
-                                            fpFieldName );
+                        SCH_FIELD newField( symbol, FIELD_T::USER, fpFieldName );
                         newField.SetText( fpFieldValue );
+                        newField.SetTextPos( symbol->GetPosition() );
                         newField.SetVisible( false ); // Don't clutter up the schematic
                         symbol->AddField( newField );
                     }

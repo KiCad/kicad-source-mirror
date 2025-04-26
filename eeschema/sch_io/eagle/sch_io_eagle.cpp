@@ -1889,14 +1889,12 @@ void SCH_IO_EAGLE::loadInstance( const std::unique_ptr<EINSTANCE>& aInstance,
 
     for( const auto& [ attrName, attr ] : epart->attributes )
     {
-        VECTOR2I newFieldPosition( 0, 0 );
-
-        if( !symbol->GetFields().empty() )
-            newFieldPosition = symbol->GetFields().back().GetPosition();
-
-        SCH_FIELD newField( newFieldPosition, FIELD_T::USER, symbol.get() );
+        SCH_FIELD newField( symbol.get(), FIELD_T::USER );
 
         newField.SetName( attrName );
+
+        if( !symbol->GetFields().empty() )
+            newField.SetTextPos( symbol->GetFields().back().GetPosition() );
 
         if( attr->value )
             newField.SetText( *attr->value );

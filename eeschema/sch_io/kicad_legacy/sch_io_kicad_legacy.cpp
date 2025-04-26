@@ -1307,7 +1307,7 @@ SCH_SYMBOL* SCH_IO_KICAD_LEGACY::loadSymbol( LINE_READER& aReader )
             case 3:  field = symbol->GetField( FIELD_T::DATASHEET ); break;
 
             default:
-                field = symbol->AddField( SCH_FIELD( { 0, 0 }, FIELD_T::USER, symbol.get() ) );
+                field = symbol->AddField( SCH_FIELD( symbol.get(), FIELD_T::USER ) );
                 break;
             }
 

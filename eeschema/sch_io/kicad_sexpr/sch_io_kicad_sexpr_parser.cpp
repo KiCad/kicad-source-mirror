@@ -2315,10 +2315,8 @@ SCH_FIELD* SCH_IO_KICAD_SEXPR_PARSER::parseSchField( SCH_ITEM* aParent )
             fieldId = FIELD_T::INTERSHEET_REFS;
     }
 
-    std::unique_ptr<SCH_FIELD> field = std::make_unique<SCH_FIELD>( VECTOR2I( -1, -1 ), fieldId,
-                                                                    aParent, name );
+    std::unique_ptr<SCH_FIELD> field = std::make_unique<SCH_FIELD>( aParent, fieldId, name );
     field->SetText( value );
-    field->SetVisible( true );
 
     if( fieldId == FIELD_T::USER )
         field->SetPrivate( is_private );

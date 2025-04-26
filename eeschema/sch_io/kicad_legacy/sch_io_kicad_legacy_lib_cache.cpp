@@ -1003,7 +1003,7 @@ SCH_ITEM* SCH_IO_KICAD_LEGACY_LIB_CACHE::loadText( LINE_READER& aReader,
 
     if( !visible )
     {
-        SCH_FIELD* field = new SCH_FIELD( center, FIELD_T::USER, nullptr );
+        SCH_FIELD* field = new SCH_FIELD( nullptr, FIELD_T::USER );
         sch_item = field;
         eda_text = field;
     }
@@ -1016,6 +1016,7 @@ SCH_ITEM* SCH_IO_KICAD_LEGACY_LIB_CACHE::loadText( LINE_READER& aReader,
 
     eda_text->SetTextAngle( EDA_ANGLE( angleInTenths, TENTHS_OF_A_DEGREE_T ) );
     eda_text->SetTextSize( size );
+    eda_text->SetTextPos( center );
     eda_text->SetVisible( visible );
     sch_item->SetUnit( unit );
     sch_item->SetBodyStyle( bodyStyle );

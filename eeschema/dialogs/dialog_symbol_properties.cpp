@@ -468,7 +468,7 @@ bool DIALOG_SYMBOL_PROPERTIES::TransferDataToWindow()
     {
         if( defined.count( templateFieldname.m_Name ) <= 0 )
         {
-            SCH_FIELD field( { 0, 0 }, FIELD_T::USER, m_symbol, templateFieldname.m_Name );
+            SCH_FIELD field( m_symbol, FIELD_T::USER, templateFieldname.m_Name );
             field.SetVisible( templateFieldname.m_Visible );
             m_fields->push_back( field );
         }
@@ -859,12 +859,9 @@ void DIALOG_SYMBOL_PROPERTIES::OnAddField( wxCommandEvent& event )
     if( !m_fieldsGrid->CommitPendingChanges() )
         return;
 
-    SCHEMATIC_SETTINGS& settings = m_symbol->Schematic()->Settings();
-    SCH_FIELD           newField( { 0, 0 }, FIELD_T::USER, m_symbol,
-                                  GetUserFieldName( (int) m_fields->size(), DO_TRANSLATE ) );
+    SCH_FIELD newField( m_symbol, FIELD_T::USER, GetUserFieldName( (int) m_fields->size(), DO_TRANSLATE ) );
 
     newField.SetTextAngle( m_fields->GetField( FIELD_T::REFERENCE )->GetTextAngle() );
-    newField.SetTextSize( VECTOR2I( settings.m_DefaultTextSize, settings.m_DefaultTextSize ) );
     newField.SetVisible( false );
 
     m_fields->push_back( newField );

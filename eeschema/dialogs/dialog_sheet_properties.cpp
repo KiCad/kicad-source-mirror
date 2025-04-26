@@ -61,7 +61,7 @@ DIALOG_SHEET_PROPERTIES::DIALOG_SHEET_PROPERTIES( SCH_EDIT_FRAME* aParent, SCH_S
     m_sourceSheetFilename( aSourceSheetFilename ),
     m_borderWidth( aParent, m_borderWidthLabel, m_borderWidthCtrl, m_borderWidthUnits ),
     m_dummySheet( *aSheet ),
-    m_dummySheetNameField( VECTOR2I( -1, -1 ), FIELD_T::SHEET_NAME, &m_dummySheet )
+    m_dummySheetNameField( &m_dummySheet, FIELD_T::SHEET_NAME )
 {
     m_sheet = aSheet;
     m_fields = new FIELDS_GRID_TABLE( this, aParent, m_grid, m_sheet );
@@ -737,11 +737,10 @@ void DIALOG_SHEET_PROPERTIES::OnAddField( wxCommandEvent& event )
     if( !m_grid->CommitPendingChanges() )
         return;
 
-    SCH_FIELD newField( { 0, 0 }, FIELD_T::SHEET_USER, m_sheet,
-                        GetUserFieldName( (int) m_fields->size(), DO_TRANSLATE ) );
+    SCH_FIELD newField( m_sheet, FIELD_T::SHEET_USER, GetUserFieldName( (int) m_fields->size(), DO_TRANSLATE ) );
 
     newField.SetTextAngle( m_fields->GetField( FIELD_T::SHEET_NAME )->GetTextAngle() );
-
+    newField.SetVisible( false );
     m_fields->push_back( newField );
 
     // notify the grid

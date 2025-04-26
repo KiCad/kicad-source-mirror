@@ -1807,12 +1807,12 @@ SCH_GLOBALLABEL::SCH_GLOBALLABEL( const VECTOR2I& pos, const wxString& text ) :
 
     SetVertJustify( GR_TEXT_V_ALIGN_CENTER );
 
-    m_fields.emplace_back( SCH_FIELD( pos, FIELD_T::INTERSHEET_REFS, this,
+    m_fields.emplace_back( SCH_FIELD( this, FIELD_T::INTERSHEET_REFS,
                                       ::GetDefaultFieldName( FIELD_T::INTERSHEET_REFS, false ) ) );
     m_fields.back().SetText( wxT( "${INTERSHEET_REFS}" ) );
     m_fields.back().SetVisible( false );
-    m_fields.back().SetLayer( LAYER_INTERSHEET_REFS );
     m_fields.back().SetVertJustify( GR_TEXT_V_ALIGN_CENTER );
+    m_fields.back().SetTextPos( pos );
 }
 
 

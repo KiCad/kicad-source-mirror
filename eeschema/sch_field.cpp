@@ -60,8 +60,7 @@ SCH_FIELD::SCH_FIELD() :
 }
 
 
-SCH_FIELD::SCH_FIELD( const VECTOR2I& aPos, FIELD_T aFieldId, SCH_ITEM* aParent,
-                      const wxString& aName ) :
+SCH_FIELD::SCH_FIELD( SCH_ITEM* aParent, FIELD_T aFieldId, const wxString& aName ) :
         SCH_FIELD()
 {
     m_parent = aParent;
@@ -71,15 +70,15 @@ SCH_FIELD::SCH_FIELD( const VECTOR2I& aPos, FIELD_T aFieldId, SCH_ITEM* aParent,
     else
         SetName( GetDefaultFieldName( aFieldId, DO_TRANSLATE ) );
 
-    SetTextPos( aPos );
     setId( aFieldId );  // will also set the layer
     SetVisible( true );
-}
 
+    if( aParent && aParent->Schematic() )
+    {
+        SCHEMATIC_SETTINGS& settings = aParent->Schematic()->Settings();
+        SetTextSize( VECTOR2I( settings.m_DefaultTextSize, settings.m_DefaultTextSize ) );
+    }
 
-SCH_FIELD::SCH_FIELD( SCH_ITEM* aParent, FIELD_T aFieldId, const wxString& aName ) :
-        SCH_FIELD( VECTOR2I(), aFieldId, aParent, aName )
-{
     if( aFieldId == FIELD_T::USER && aParent )
     {
         if( aParent->Type() == SCH_SYMBOL_T )
@@ -94,8 +93,8 @@ SCH_FIELD::SCH_FIELD( SCH_ITEM* aParent, FIELD_T aFieldId, const wxString& aName
 }
 
 
-SCH_FIELD::SCH_FIELD( SCH_TEXT* aText ) :
-        SCH_FIELD( VECTOR2I(), FIELD_T::USER, nullptr, wxEmptyString )
+SCH_FIELD::SCH_FIELD( SCH_ITEM* aParent, SCH_TEXT* aText ) :
+        SCH_FIELD( aParent, FIELD_T::USER, wxEmptyString )
 {
     SCH_ITEM::operator=( *aText );
     EDA_TEXT::operator=( *aText );

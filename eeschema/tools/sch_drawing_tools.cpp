@@ -1643,8 +1643,8 @@ bool SCH_DRAWING_TOOLS::createNewLabel( const VECTOR2I& aPosition, int aType,
     case LAYER_NETCLASS_REFS:
         labelItem = new SCH_DIRECTIVE_LABEL( aPosition );
         labelItem->SetShape( m_lastNetClassFlagShape );
-        labelItem->GetFields().emplace_back( VECTOR2I(), FIELD_T::USER, labelItem, wxT( "Netclass" ) );
-        labelItem->GetFields().emplace_back( VECTOR2I(), FIELD_T::USER, labelItem, wxT( "Component Class" ) );
+        labelItem->GetFields().emplace_back( labelItem, FIELD_T::USER, wxT( "Netclass" ) );
+        labelItem->GetFields().emplace_back( labelItem, FIELD_T::USER, wxT( "Component Class" ) );
         labelItem->GetFields().back().SetItalic( true );
         labelItem->GetFields().back().SetVisible( true );
         break;

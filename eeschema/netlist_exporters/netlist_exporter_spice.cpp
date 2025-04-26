@@ -187,8 +187,7 @@ bool NETLIST_EXPORTER_SPICE::ReadSchematicAndLibraries( unsigned aNetlistOptions
 
                 for( const SCH_FIELD& field : symbol->GetFields() )
                 {
-                    spiceItem.fields.emplace_back( VECTOR2I(), FIELD_T::USER, symbol,
-                                                   field.GetName() );
+                    spiceItem.fields.emplace_back( symbol, FIELD_T::USER, field.GetName() );
 
                     if( field.GetId() == FIELD_T::REFERENCE )
                         spiceItem.fields.back().SetText( symbol->GetRef( &sheet ) );

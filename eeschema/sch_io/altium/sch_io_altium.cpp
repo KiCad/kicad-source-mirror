@@ -4382,7 +4382,7 @@ void SCH_IO_ALTIUM::ParseParameter( const std::map<wxString, wxString>& aPropert
                 fieldName = "ALTIUM_VALUE";
             }
 
-            field = symbol->AddField( SCH_FIELD( { 0, 0 }, FIELD_T::USER, symbol, fieldName ) );
+            field = symbol->AddField( SCH_FIELD( symbol, FIELD_T::USER, fieldName ) );
         }
 
         wxString kicadText = AltiumSchSpecialStringsToKiCadVariables( elem.text, variableMap );

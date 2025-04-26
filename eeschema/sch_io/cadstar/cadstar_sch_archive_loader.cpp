@@ -788,10 +788,7 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadSchematicSymbolInstances()
                 SCH_FIELD* partField = symbol->GetField( PartNameFieldName );
 
                 if( !partField )
-                {
-                    partField = symbol->AddField( SCH_FIELD( { 0, 0 }, FIELD_T::USER, symbol,
-                                                             PartNameFieldName ) );
-                }
+                    partField = symbol->AddField( SCH_FIELD( symbol, FIELD_T::USER, PartNameFieldName ) );
 
                 wxASSERT( partField->GetName() == PartNameFieldName );
 
@@ -816,10 +813,7 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadSchematicSymbolInstances()
                     SCH_FIELD* attrField = symbol->GetField( attrName );
 
                     if( !attrField )
-                    {
-                        attrField = symbol->AddField( SCH_FIELD( { 0, 0 }, FIELD_T::USER, symbol,
-                                                                 attrName ) );
-                    }
+                        attrField = symbol->AddField( SCH_FIELD( symbol, FIELD_T::USER, attrName ) );
 
                     wxASSERT( attrField->GetName() == attrName );
 

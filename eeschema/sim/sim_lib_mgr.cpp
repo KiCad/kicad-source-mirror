@@ -197,12 +197,12 @@ SIM_LIBRARY::MODEL SIM_LIB_MGR::CreateModel( const SCH_SHEET_PATH* aSheetPath, S
     {
         if( field.GetId() == FIELD_T::REFERENCE )
         {
-            fields.emplace_back( VECTOR2I(), FIELD_T::USER, &aSymbol, field.GetName() );
+            fields.emplace_back( &aSymbol, FIELD_T::USER, field.GetName() );
             fields.back().SetText( aSymbol.GetRef( aSheetPath ) );
         }
         else if( field.GetId() == FIELD_T::VALUE || field.GetName().StartsWith( wxS( "Sim." ) ) )
         {
-            fields.emplace_back( VECTOR2I(), FIELD_T::USER, &aSymbol, field.GetName() );
+            fields.emplace_back( &aSymbol, FIELD_T::USER, field.GetName() );
             fields.back().SetText( field.GetShownText( aSheetPath, false ) );
         }
     }

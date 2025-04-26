@@ -764,11 +764,11 @@ int DIALOG_CHANGE_SYMBOLS::processSymbols( SCH_COMMIT* aCommit,
 
             if( !symbol->GetField( libField->GetName() ) )
             {
-                SCH_FIELD* schField = symbol->AddField( SCH_FIELD( { 0, 0 }, FIELD_T::USER, symbol,
-                                                                   libField->GetName() ) );
+                SCH_FIELD* schField = symbol->AddField( SCH_FIELD( symbol, FIELD_T::USER, libField->GetName() ) );
 
-                // Careful: the visible bit and position are also set by SetAttributes()
+                // SetAttributes() also covers text angle, size, italic and bold
                 schField->SetAttributes( *libField );
+                schField->SetVisible( libField->IsVisible() );
                 schField->SetText( libField->GetText() );
                 schField->SetTextPos( symbol->GetPosition() + libField->GetTextPos() );
                 schField->SetPrivate( libField->IsPrivate() );

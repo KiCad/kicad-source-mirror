@@ -759,14 +759,13 @@ void DIALOG_LABEL_PROPERTIES::OnAddField( wxCommandEvent& event )
 
     fieldName = SCH_LABEL_BASE::GetDefaultFieldName( fieldName, true );
 
-    SCH_FIELD newField( VECTOR2I( 0, 0 ), FIELD_T::USER, m_currentLabel, fieldName );
+    SCH_FIELD newField( m_currentLabel, FIELD_T::USER, fieldName );
 
     if( m_fields->size() > 0 )
     {
+        // SetAttributes() also covers text angle, size, italic and bold
+        newField.SetAttributes( m_fields->at( m_fields->size() - 1 ) );
         newField.SetVisible( m_fields->at( m_fields->size() - 1 ).IsVisible() );
-        newField.SetTextAngle( m_fields->at( m_fields->size() - 1 ).GetTextAngle() );
-        newField.SetItalic( m_fields->at( m_fields->size() - 1 ).IsItalic() );
-        newField.SetBold( m_fields->at( m_fields->size() - 1 ).IsBold() );
     }
     else
     {
