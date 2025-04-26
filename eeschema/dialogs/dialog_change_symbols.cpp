@@ -761,6 +761,7 @@ int DIALOG_CHANGE_SYMBOLS::processSymbols( SCH_COMMIT* aCommit,
 
                 // Careful: the visible bit and position are also set by SetAttributes()
                 schField->SetAttributes( *libField );
+                schField->SetVisible( libField->IsVisible() );
                 schField->SetText( libField->GetText() );
                 schField->SetTextPos( symbol->GetPosition() + libField->GetTextPos() );
                 schField->SetPrivate( libField->IsPrivate() );
