@@ -17,7 +17,7 @@ PANEL_GIT_REPOS_BASE::PANEL_GIT_REPOS_BASE( wxWindow* parent, wxWindowID id, con
 	wxBoxSizer* bLeftSizer;
 	bLeftSizer = new wxBoxSizer( wxVERTICAL );
 
-	m_enableGit = new wxCheckBox( this, wxID_ANY, _("Enable Git Tracking"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_enableGit = new wxCheckBox( this, wxID_ANY, _("Enable Git tracking"), wxDefaultPosition, wxDefaultSize, 0 );
 	bLeftSizer->Add( m_enableGit, 0, wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 13 );
 
 	m_gitSizer = new wxBoxSizer( wxVERTICAL );
