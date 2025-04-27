@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-04-23 21:23+0300\n"
-"PO-Revision-Date: 2025-04-27 05:30+0000\n"
+"PO-Revision-Date: 2025-04-27 20:41+0000\n"
 "Last-Translator: Ivan Chuba <xtrvweb@gmail.com>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/kicad/"
 "master-source/uk/>\n"
@@ -7258,34 +7258,34 @@ msgid "Error removing directory '%s': %s"
 msgstr "Помилка під час видалення теки '%s':%s"
 
 #: common/gestfich.cpp:366 common/gestfich.cpp:440 common/gestfich.cpp:554
-#, fuzzy, c-format
+#, c-format
 msgid "Could not open source directory: %s"
-msgstr "Не вдалося створити вихідну теку '%s'"
+msgstr "Не вдалося відкрити вихідну теку: %s"
 
 #: common/gestfich.cpp:373 common/gestfich.cpp:511
-#, fuzzy, c-format
+#, c-format
 msgid "Could not create destination directory: %s"
-msgstr "Не вдалося створити вихідну теку '%s'"
+msgstr "Не вдалося створити теку призначення: %s"
 
 #: common/gestfich.cpp:397 common/gestfich.cpp:428
-#, fuzzy, c-format
+#, c-format
 msgid "Could not copy file: %s to %s"
-msgstr "Не вдалося приєднатися до '%s' "
+msgstr "Не вдалося скопіювати файл: %s до %s"
 
 #: common/gestfich.cpp:477
-#, fuzzy, c-format
+#, c-format
 msgid "Could not copy directory: %s to %s"
-msgstr "Не вдалося приєднатися до '%s' "
+msgstr "Не вдалося скопіювати теку: %s до %s"
 
 #: common/gestfich.cpp:529
-#, fuzzy, c-format
+#, c-format
 msgid "Source directory does not exist: %s"
-msgstr "Тека '%s' не існує"
+msgstr "Вихідна тека не існує: %s"
 
 #: common/gestfich.cpp:584
-#, fuzzy, c-format
+#, c-format
 msgid "Could not read file: %s"
-msgstr "Не вдалося прочитати файл "
+msgstr "Не вдалося прочитати файл: %s"
 
 #: common/git/git_clone_handler.cpp:58
 #, c-format
@@ -7303,14 +7303,14 @@ msgid "Could not lookup remote '%s'"
 msgstr "Не вдалося знайти віддалений репозиторій '%s'"
 
 #: common/git/git_pull_handler.cpp:87
-#, fuzzy, c-format
+#, c-format
 msgid "Could not connect to remote '%s': %s"
-msgstr "Не вдалося приєднатися до віддаленого репозиторію '%s'"
+msgstr "Не вдалося підключитися до віддаленого ресурсу '%s': %s"
 
 #: common/git/git_pull_handler.cpp:99
-#, fuzzy, c-format
+#, c-format
 msgid "Could not fetch data from remote '%s': %s"
-msgstr "Не вдалося отримати дані з віддаленого репозиторію '%s'"
+msgstr "Не вдалося отримати дані з віддаленого ресурсу '%s': %s"
 
 #: common/git/git_pull_handler.cpp:127
 msgid "Could not read 'FETCH_HEAD'"
@@ -7329,9 +7329,8 @@ msgid "Invalid HEAD.  Cannot merge."
 msgstr "Неправильний HEAD.  Неможливо провести злиття."
 
 #: common/git/git_pull_handler.cpp:181
-#, fuzzy
 msgid "Could not access repository configuration"
-msgstr "Не вдалося отримати індекс репозиторія"
+msgstr "Не вдалося отримати доступ до конфігурації репозиторію"
 
 #: common/git/git_pull_handler.cpp:251 common/git/git_push_handler.cpp:91
 msgid "Could not get repository head"
@@ -7343,43 +7342,40 @@ msgid "Could not get reference OID for reference '%s'"
 msgstr "Не вдалося знайти OID для посиланням на '%s'"
 
 #: common/git/git_pull_handler.cpp:275
-#, fuzzy
 msgid "Could not look up target commit"
-msgstr "Не вдалося знайти коміт"
+msgstr "Не вдалося знайти цільовий коміт"
 
 #: common/git/git_pull_handler.cpp:287
-#, fuzzy
 msgid "Could not get tree from target commit"
-msgstr "Не вдалося злити коміти"
+msgstr "Не вдалося отримати дерево з цільового коміту"
 
 #: common/git/git_pull_handler.cpp:329 common/git/kicad_git_errors.cpp:55
 msgid "Failed to perform checkout operation."
 msgstr "Не вдалося виконати операцію checkout."
 
 #: common/git/git_pull_handler.cpp:338
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to update reference '%s' to point to '%s'"
-msgstr "потрібно число для '%s'"
+msgstr "Не вдалося оновити посилання '%s' для вказівки на '%s'"
 
 #: common/git/git_pull_handler.cpp:348
-#, fuzzy
 msgid "Failed to clean up repository state after fast-forward."
-msgstr "Не вдалося клонувати репозиторій."
+msgstr ""
+"Не вдалося очистити стан репозиторію після прискореного злиття (fast-"
+"forward)."
 
 #: common/git/git_pull_handler.cpp:357
-#, fuzzy
 msgid "Failed to initialize revision walker."
-msgstr "Помилка виведення даних"
+msgstr "Не вдалося ініціалізувати обхід ревізій (revision walker)."
 
 #: common/git/git_pull_handler.cpp:366
-#, fuzzy
 msgid "Failed to push reference to revision walker."
-msgstr "Не вдалося записати зміни до віддаленого репозиторію."
+msgstr "Не вдалося передати посилання обхіднику ревізій (revision walker)."
 
 #: common/git/git_pull_handler.cpp:381
-#, fuzzy, c-format
+#, c-format
 msgid "Could not lookup commit '%s'"
-msgstr "Не вдалося знайти коміт '{}'"
+msgstr "Не вдалося знайти коміт '%s'"
 
 #: common/git/git_pull_handler.cpp:414
 msgid "Could not merge commits"
@@ -7403,21 +7399,21 @@ msgstr "Додано"
 
 #: common/git/git_pull_handler.cpp:550
 msgid "Conflicts detected during rebase"
-msgstr ""
+msgstr "Виявлені конфлікти під час відтворення бази"
 
 #: common/git/git_push_handler.cpp:56
 msgid "Could not lookup remote"
 msgstr "Не вдалося знайти віддалений репозиторій"
 
 #: common/git/git_push_handler.cpp:76
-#, fuzzy, c-format
+#, c-format
 msgid "Could not connect to remote: %s"
-msgstr "Не вдалося приєднатися до віддаленого репозиторію '%s'"
+msgstr "Не вдалося підключитися до віддаленого ресурсу: %s"
 
 #: common/git/git_push_handler.cpp:104
-#, fuzzy, c-format
+#, c-format
 msgid "Could not push to remote: %s"
-msgstr "Не вдалося записати у віддалений репозиторій"
+msgstr "Не вдалося надіслати на віддалений репозиторій: %s"
 
 #: common/git/kicad_git_common.cpp:844
 #, c-format
@@ -7450,9 +7446,8 @@ msgid "[updated] %s"
 msgstr "[оновлено]%s"
 
 #: common/git/kicad_git_common.cpp:981
-#, fuzzy
 msgid "Unable to authenticate"
-msgstr "Не вдалося відкрити файл"
+msgstr "Не вдалося пройти автентифікацію"
 
 #: common/git/kicad_git_errors.cpp:40
 msgid "Invalid repository."
@@ -7604,19 +7599,16 @@ msgid "Select all cells"
 msgstr "Виділити всі комірки"
 
 #: common/hotkey_store.cpp:44
-#, fuzzy
 msgid "Accept Autocomplete"
-msgstr "Анотування завершено."
+msgstr "Прийняти автозаповнення"
 
 #: common/hotkey_store.cpp:45
-#, fuzzy
 msgid "Cancel Autocomplete"
-msgstr "Скасувати поточний інструмент"
+msgstr "Скасувати автозаповнення"
 
 #: common/hotkey_store.cpp:46
-#, fuzzy
 msgid "Toggle Checkbox"
-msgstr "Перемикач блокування"
+msgstr "Перемкнути прапорець"
 
 #: common/hotkey_store.cpp:47
 msgid "Pan Left/Right"
@@ -7750,11 +7742,14 @@ msgstr "Зображення DXF наразі не підтримуються."
 #, c-format
 msgid "Imported graphic is too large. Maximum scale is %f"
 msgstr ""
+"Імпортоване зображення занадто велике. Максимальний масштаб становить %f"
 
 #: common/import_gfx/graphics_importer_buffer.cpp:186
 #, c-format
 msgid "Import offset adjusted to (%f, %f) to fit within numeric limits"
 msgstr ""
+"Зсув імпорту було відкориговано до (%f, %f), щоб вміститися в межах числових "
+"обмежень"
 
 #: common/io/altium/altium_binary_parser.cpp:62 common/richio.cpp:102
 #, c-format
@@ -7865,324 +7860,267 @@ msgid "Cannot parse JSON line %d in '%s': %s"
 msgstr "Не вдалося розпізнати JSON рядок %d в '%s':%s"
 
 #: common/io/io_base.cpp:139
-#, fuzzy
 msgid "Loading file canceled by user."
-msgstr "Відкриття скасовано користувачем."
+msgstr "Завантаження файлу скасовано користувачем."
 
 #: common/jobs/job.cpp:82
-#, fuzzy
 msgid "Job Settings"
-msgstr "Редагувати параметри..."
+msgstr "Параметри завдання"
 
 #: common/jobs/job_export_pcb_3d.cpp:144
-#, fuzzy
 msgid "3D model export"
-msgstr "Не експортувати"
+msgstr "Експорт 3D моделі"
 
 #: common/jobs/job_export_pcb_3d.cpp:150
-#, fuzzy
 msgid "Export 3D Model Job Settings"
-msgstr "Виберіть 3D-модель"
+msgstr "Налаштування завдання експорту 3D-моделі"
 
 #: common/jobs/job_export_pcb_3d.cpp:169
-#, fuzzy
 msgid "PCB: Export 3D Model"
-msgstr "Виберіть 3D-модель"
+msgstr "PCB: Експорт 3D моделі"
 
 #: common/jobs/job_export_pcb_drill.cpp:128
-#, fuzzy
 msgid "Export drill data"
-msgstr "Верхня паяльна паста"
+msgstr "Експорт даних свердлінь"
 
 #: common/jobs/job_export_pcb_drill.cpp:134
-#, fuzzy
 msgid "Export Drill Data Job Settings"
-msgstr "Редагувати параметри..."
+msgstr "Налаштування завдання експорту даних свердлінь"
 
 #: common/jobs/job_export_pcb_drill.cpp:137
-#, fuzzy
 msgid "PCB: Export Drill Data"
-msgstr "Верхня паяльна паста"
+msgstr "PCB: Експорт даних свердлінь"
 
 #: common/jobs/job_export_pcb_dxf.cpp:57
 #: common/jobs/job_export_sch_plot.cpp:160 kicad/kicad_cli.cpp:145
-#, fuzzy
 msgid "Export DXF"
-msgstr "Експорт IDFv3"
+msgstr "Експорт DXF"
 
 #: common/jobs/job_export_pcb_dxf.cpp:63
 #: common/jobs/job_export_sch_plot.cpp:166
-#, fuzzy
 msgid "Export DXF Job Settings"
-msgstr "Редагувати параметри..."
+msgstr "Налаштування завдання експорту DXF"
 
 #: common/jobs/job_export_pcb_dxf.cpp:67
-#, fuzzy
 msgid "PCB: Export DXF"
-msgstr "Експорт IDFv3"
+msgstr "PCB: Експорт DXF"
 
 #: common/jobs/job_export_pcb_gencad.cpp:49
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:128
-#, fuzzy
 msgid "Export GenCAD File"
-msgstr "Експорт файлу SVG"
+msgstr "Експорт GenCAD файлу"
 
 #: common/jobs/job_export_pcb_gencad.cpp:55
-#, fuzzy
 msgid "Export GenCAD Job Settings"
-msgstr "Налаштування експорту GenCAD"
+msgstr "Налаштування завдання експорту GenCAD"
 
 #: common/jobs/job_export_pcb_gencad.cpp:59
-#, fuzzy
 msgid "PCB: Export GenCAD"
-msgstr "Експорт IDFv3"
+msgstr "PCB: Експорт GenCAD"
 
 #: common/jobs/job_export_pcb_gerber.cpp:59
-#, fuzzy
 msgid "Export single Gerber"
-msgstr "Верхня шовкографія"
+msgstr "Експорт одного Gerber"
 
 #: common/jobs/job_export_pcb_gerber.cpp:65
-#, fuzzy
 msgid "Export Single Gerber Job Settings"
-msgstr "Налаштування експорту GenCAD"
+msgstr "Налаштування завдання експорту окремого Gerber"
 
 #: common/jobs/job_export_pcb_gerbers.cpp:37
-#, fuzzy
 msgid "Export Gerbers"
-msgstr "Експортувати зони"
+msgstr "Експорт Gerbers"
 
 #: common/jobs/job_export_pcb_gerbers.cpp:43
-#, fuzzy
 msgid "Export Gerbers Job Settings"
-msgstr "Налаштування експорту GenCAD"
+msgstr "Налаштування завдання експорту Gerber"
 
 #: common/jobs/job_export_pcb_gerbers.cpp:47
 msgid "PCB: Export Gerbers"
-msgstr ""
+msgstr "PCB: Експорт Gerber"
 
 #: common/jobs/job_export_pcb_ipc2581.cpp:72
 #: pcbnew/dialogs/dialog_export_2581_base.h:85
-#, fuzzy
 msgid "Export IPC-2581"
-msgstr "Експорт STEP"
+msgstr "Експорт IPC-2581"
 
 #: common/jobs/job_export_pcb_ipc2581.cpp:78
-#, fuzzy
 msgid "Export IPC-2581 Job Settings"
-msgstr "Експорт у файл"
+msgstr "Налаштування завдання експорту IPC-2581"
 
 #: common/jobs/job_export_pcb_ipc2581.cpp:91
-#, fuzzy
 msgid "PCB: Export IPC-2581"
-msgstr "Експорт STEP"
+msgstr "PCB: Експорт IPC-2581"
 
 #: common/jobs/job_export_pcb_ipcd356.cpp:35
-#, fuzzy
 msgid "Export IPC-D-356"
-msgstr "Експорт STEP"
+msgstr "Експорт IPC-D-356"
 
 #: common/jobs/job_export_pcb_ipcd356.cpp:41
-#, fuzzy
 msgid "Export IPC-D-356 Job Settings"
-msgstr "Експорт у файл"
+msgstr "Налаштування завдання експорту IPC-D-356"
 
 #: common/jobs/job_export_pcb_ipcd356.cpp:55
-#, fuzzy
 msgid "PCB: Export IPC-D-356"
-msgstr "Експорт STEP"
+msgstr "PCB: Експорт IPC-D-356"
 
 #: common/jobs/job_export_pcb_odb.cpp:57
 #: pcbnew/dialogs/dialog_export_odbpp_base.h:65
-#, fuzzy
 msgid "Export ODB++"
-msgstr "Експорт IDFv3"
+msgstr "Експорт ODB++"
 
 #: common/jobs/job_export_pcb_odb.cpp:63
-#, fuzzy
 msgid "Export ODB++ Job Settings"
-msgstr "Редагувати параметри..."
+msgstr "Налаштування завдання експорту ODB++"
 
 #: common/jobs/job_export_pcb_odb.cpp:76
-#, fuzzy
 msgid "PCB: Export ODB++"
-msgstr "Експорт IDFv3"
+msgstr "PCB: Експорт ODB++"
 
 #: common/jobs/job_export_pcb_pdf.cpp:58
 #: common/jobs/job_export_sch_plot.cpp:141 kicad/kicad_cli.cpp:147
-#, fuzzy
 msgid "Export PDF"
-msgstr "Експорт IDFv3"
+msgstr "Експорт PDF"
 
 #: common/jobs/job_export_pcb_pdf.cpp:64
 #: common/jobs/job_export_sch_plot.cpp:147
-#, fuzzy
 msgid "Export PDF Job Settings"
-msgstr "Редагувати параметри..."
+msgstr "Налаштування завдання експорту PDF"
 
 #: common/jobs/job_export_pcb_pdf.cpp:68
-#, fuzzy
 msgid "PCB: Export PDF"
-msgstr "Експорт IDFv3"
+msgstr "PCB: Експорт PDF"
 
 #: common/jobs/job_export_pcb_pos.cpp:97
-#, fuzzy
 msgid "Export position data"
-msgstr "Експорт посадкового місця"
+msgstr "Експорт даних про розміщення"
 
 #: common/jobs/job_export_pcb_pos.cpp:103
-#, fuzzy
 msgid "Export Position Data Job Settings"
-msgstr "Налаштування експорту GenCAD"
+msgstr "Налаштування завдання експорту даних позицій"
 
 #: common/jobs/job_export_pcb_pos.cpp:121
 msgid "PCB: Export Position Data"
-msgstr ""
+msgstr "PCB: Експорт позицій даних"
 
 #: common/jobs/job_export_pcb_ps.cpp:56 common/jobs/job_export_sch_plot.cpp:198
-#, fuzzy
 msgid "Export Postscript"
-msgstr "Postscript"
+msgstr "Експорт Postscript"
 
 #: common/jobs/job_export_pcb_ps.cpp:62 common/jobs/job_export_sch_plot.cpp:204
-#, fuzzy
 msgid "Export Postscript Job Settings"
-msgstr "Редагувати параметри..."
+msgstr "Налаштування завдання експорту Postscript"
 
 #: common/jobs/job_export_pcb_ps.cpp:66
-#, fuzzy
 msgid "PCB: Export Postscript"
-msgstr "Postscript"
+msgstr "PCB: Експорт Postscript"
 
 #: common/jobs/job_export_pcb_svg.cpp:49
 #: common/jobs/job_export_sch_plot.cpp:179 kicad/kicad_cli.cpp:149
-#, fuzzy
 msgid "Export SVG"
-msgstr "Експорт файлу SVG"
+msgstr "Експорт SVG"
 
 #: common/jobs/job_export_pcb_svg.cpp:55
 #: common/jobs/job_export_sch_plot.cpp:185
-#, fuzzy
 msgid "Export SVG Job Settings"
-msgstr "Редагувати параметри..."
+msgstr "Налаштування завдання експорту SVG"
 
 #: common/jobs/job_export_pcb_svg.cpp:59
-#, fuzzy
 msgid "PCB: Export SVG"
-msgstr "Експорт файлу SVG"
+msgstr "PCB: Експорт SVG"
 
 #: common/jobs/job_export_sch_bom.cpp:92
-#, fuzzy
 msgid "Generate bill of materials"
-msgstr "Зберегти список компонентів"
+msgstr "Сформувати список компонентів (BOM)"
 
 #: common/jobs/job_export_sch_bom.cpp:98
-#, fuzzy
 msgid "Generate Bill of Materials Job Settings"
-msgstr "Зберегти список компонентів"
+msgstr "Налаштування завдання експорту списку компонентів (BOM)"
 
 #: common/jobs/job_export_sch_bom.cpp:102
-#, fuzzy
 msgid "Schematic: Generate Bill of Materials"
-msgstr "Зберегти список компонентів"
+msgstr "Схема: Сформувати список компонентів (BOM)"
 
 #: common/jobs/job_export_sch_netlist.cpp:80
-#, fuzzy, c-format
+#, c-format
 msgid "Export %s netlist"
-msgstr "Експортувати список зв'язків"
+msgstr "Експорт списку зв'язків %s"
 
 #: common/jobs/job_export_sch_netlist.cpp:86
-#, fuzzy
 msgid "Export Netlist Job Settings"
-msgstr "Експортувати список зв'язків"
+msgstr "Налаштування завдання експорту списку зв'язків"
 
 #: common/jobs/job_export_sch_netlist.cpp:90
-#, fuzzy
 msgid "Schematic: Export Netlist"
-msgstr "Експортувати список зв'язків"
+msgstr "Схема: Список зв'язків"
 
 #: common/jobs/job_export_sch_plot.cpp:217 kicad/kicad_cli.cpp:146
-#, fuzzy
 msgid "Export HPGL"
-msgstr "Експорт STEP"
+msgstr "Експорт HPGL"
 
 #: common/jobs/job_export_sch_plot.cpp:223
-#, fuzzy
 msgid "Export HPGL Job Settings"
-msgstr "Редагувати параметри..."
+msgstr "Налаштування завдання експорту HPGL"
 
 #: common/jobs/job_export_sch_plot.cpp:227
-#, fuzzy
 msgid "Schematic: Export SVG"
-msgstr "Редактор схем"
+msgstr "Схема: Експорт SVG"
 
 #: common/jobs/job_export_sch_plot.cpp:229
-#, fuzzy
 msgid "Schematic: Export HPGL"
-msgstr "Редактор схем"
+msgstr "Схема: Експорт HPGL"
 
 #: common/jobs/job_export_sch_plot.cpp:231
-#, fuzzy
 msgid "Schematic: Export Postscript"
-msgstr "Експортувати список зв'язків"
+msgstr "Схема: Експорт Postscript"
 
 #: common/jobs/job_export_sch_plot.cpp:233
-#, fuzzy
 msgid "Schematic: Export DXF"
-msgstr "Редактор схем"
+msgstr "Схема: Експорт DXF"
 
 #: common/jobs/job_export_sch_plot.cpp:235
-#, fuzzy
 msgid "Schematic: Export PDF"
-msgstr "Редактор схем"
+msgstr "Схема: Експорт PDF"
 
 #: common/jobs/job_export_sch_pythonbom.cpp:35
-#, fuzzy
 msgid "Schematic PythonBOM export"
-msgstr "Відповідність схеми"
+msgstr "Експорт PythonBOM схеми"
 
 #: common/jobs/job_pcb_drc.cpp:37
-#, fuzzy
 msgid "Perform DRC"
-msgstr "Оновлення PCB з схеми"
+msgstr "Виконати DRC"
 
 #: common/jobs/job_pcb_drc.cpp:43 pcbnew/dialogs/dialog_drc_job_config.cpp:24
-#, fuzzy
 msgid "DRC Job Settings"
-msgstr "Редагувати параметри..."
+msgstr "Параметри завдання DRC"
 
 #: common/jobs/job_pcb_drc.cpp:47
 msgid "PCB: Perform DRC"
-msgstr ""
+msgstr "PCB: Виконати DRC"
 
 #: common/jobs/job_pcb_render.cpp:131
-#, fuzzy, c-format
+#, c-format
 msgid "Render %s"
-msgstr "Повторне анотування компонентів на PCB"
+msgstr "Рендер %s"
 
 #: common/jobs/job_pcb_render.cpp:137
-#, fuzzy
 msgid "Render PCB Job Settings"
-msgstr "Редагувати параметри..."
+msgstr "Параметри завдання рендеру PCB"
 
 #: common/jobs/job_pcb_render.cpp:141
 msgid "PCB: Render"
-msgstr ""
+msgstr "PCB: Рендер"
 
 #: common/jobs/job_sch_erc.cpp:33
-#, fuzzy
 msgid "Perform ERC"
-msgstr "Оновлення PCB з схеми"
+msgstr "Виконати ERC"
 
 #: common/jobs/job_sch_erc.cpp:39
-#, fuzzy
 msgid "Schematic ERC Job Settings"
-msgstr "Експортувати список зв'язків"
+msgstr "Параметри завдання перевірки ERC схеми"
 
 #: common/jobs/job_sch_erc.cpp:43
-#, fuzzy
 msgid "Schematic: Perform ERC"
-msgstr "Оновити схему з друкованої плати"
+msgstr "Схема: Виконати ERC"
 
 #: common/jobs/job_special_copyfiles.cpp:46
 #, fuzzy
