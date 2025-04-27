@@ -353,7 +353,7 @@ void PROPERTIES_FRAME::CopyPrmsFromItemToPanel( DS_DATA_ITEM* aItem )
     m_SizerItemProperties->Show( true );
 
     m_SizerTextOptions->Show( aItem->GetType() == DS_DATA_ITEM::DS_TEXT );
-    m_buttonHelp->Show( aItem->GetType() == DS_DATA_ITEM::DS_TEXT );
+    m_syntaxHelpLink->Show( aItem->GetType() == DS_DATA_ITEM::DS_TEXT );
 
     m_sbSizerEndPosition->Show( aItem->GetType() == DS_DATA_ITEM::DS_SEGMENT
                                 || aItem->GetType() == DS_DATA_ITEM::DS_RECT );
@@ -672,7 +672,7 @@ void PROPERTIES_FRAME::onScintillaFocusLost( wxFocusEvent& aEvent )
 }
 
 
-void PROPERTIES_FRAME::onHelp( wxCommandEvent& aEvent )
+void PROPERTIES_FRAME::onHelp( wxHyperlinkEvent& aEvent )
 {
     // Show the system variables for worksheet text:
     HTML_MESSAGE_BOX dlg( wxGetTopLevelParent( this ), _( "Predefined Keywords" ) );

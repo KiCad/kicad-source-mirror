@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -23,9 +23,10 @@ DIALOG_WIRE_BUS_PROPERTIES_BASE::DIALOG_WIRE_BUS_PROPERTIES_BASE( wxWindow* pare
 	mainSizer = new wxBoxSizer( wxVERTICAL );
 
 	wxGridBagSizer* gbSizer1;
-	gbSizer1 = new wxGridBagSizer( 3, 0 );
+	gbSizer1 = new wxGridBagSizer( 2, 0 );
 	gbSizer1->SetFlexibleDirection( wxBOTH );
 	gbSizer1->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+	gbSizer1->SetEmptyCellSize( wxSize( -1,7 ) );
 
 	m_staticTextWidth = new wxStaticText( this, wxID_ANY, _("Wire/bus width:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextWidth->Wrap( -1 );
@@ -84,19 +85,19 @@ DIALOG_WIRE_BUS_PROPERTIES_BASE::DIALOG_WIRE_BUS_PROPERTIES_BASE( wxWindow* pare
 
 	mainSizer->Add( gbSizer1, 1, wxEXPAND|wxALL, 10 );
 
-	wxBoxSizer* bSizer3;
-	bSizer3 = new wxBoxSizer( wxVERTICAL );
+	wxBoxSizer* bMargins;
+	bMargins = new wxBoxSizer( wxVERTICAL );
 
 	m_helpLabel1 = new wxStaticText( this, wxID_ANY, _("Set width to 0 to use netclass's wire/bus widths."), wxDefaultPosition, wxDefaultSize, 0 );
 	m_helpLabel1->Wrap( -1 );
-	bSizer3->Add( m_helpLabel1, 0, wxTOP|wxRIGHT|wxLEFT, 10 );
+	bMargins->Add( m_helpLabel1, 0, wxTOP|wxBOTTOM|wxRIGHT, 5 );
 
 	m_helpLabel2 = new wxStaticText( this, wxID_ANY, _("Clear color to use Schematic Editor colors."), wxDefaultPosition, wxDefaultSize, 0 );
 	m_helpLabel2->Wrap( -1 );
-	bSizer3->Add( m_helpLabel2, 0, wxRIGHT|wxLEFT, 10 );
+	bMargins->Add( m_helpLabel2, 0, wxBOTTOM|wxRIGHT, 5 );
 
 
-	mainSizer->Add( bSizer3, 0, wxBOTTOM|wxEXPAND|wxTOP, 5 );
+	mainSizer->Add( bMargins, 0, wxEXPAND|wxRIGHT|wxLEFT, 10 );
 
 	m_sdbSizer = new wxStdDialogButtonSizer();
 	m_sdbSizerOK = new wxButton( this, wxID_OK );

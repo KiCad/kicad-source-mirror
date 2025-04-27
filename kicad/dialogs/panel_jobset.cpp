@@ -202,7 +202,7 @@ public:
             m_bitmapOutputType->SetBitmap( KiBitmapBundle( jobTypeInfo.bitmap ) );
         }
 
-        m_pathInfo->SetFont( KIUI::GetInfoFont( this ).Italic() );
+        m_pathInfo->SetFont( KIUI::GetSmallInfoFont( this ).Italic() );
         UpdatePathInfo( aDestination->GetPathInfo() );
         UpdateStatus();
     }

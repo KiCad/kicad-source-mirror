@@ -68,6 +68,7 @@ KICOMMON_API wxFont GetMonospacedUIFont();
 
 KICOMMON_API wxFont GetControlFont( wxWindow* aWindow );
 KICOMMON_API wxFont GetInfoFont( wxWindow* aWindow );
+KICOMMON_API wxFont GetSmallInfoFont( wxWindow* aWindow );
 KICOMMON_API wxFont GetDockedPaneFont( wxWindow* aWindow );
 KICOMMON_API wxFont GetStatusFont( wxWindow* aWindow );
 

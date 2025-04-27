@@ -87,7 +87,7 @@ LIB_TREE::LIB_TREE( wxWindow* aParent, const wxString& aRecentSearchesKey, LIB_T
 
         m_debounceTimer = new wxTimer( this );
 
-        search_sizer->Add( m_query_ctrl, 1, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxRIGHT, 4 );
+        search_sizer->Add( m_query_ctrl, 1, wxALIGN_CENTER_VERTICAL|wxRIGHT, 4 );
 
         wxStaticLine* separator = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_VERTICAL );
         search_sizer->Add( separator, 0, wxEXPAND|wxTOP|wxBOTTOM, 3 );
@@ -136,7 +136,7 @@ LIB_TREE::LIB_TREE( wxWindow* aParent, const wxString& aRecentSearchesKey, LIB_T
                 } );
 
         m_sort_ctrl->Bind( wxEVT_CHAR_HOOK, &LIB_TREE::onTreeCharHook, this );
-        search_sizer->Add( m_sort_ctrl, 0, wxEXPAND|wxALIGN_CENTER_VERTICAL, 5 );
+        search_sizer->Add( m_sort_ctrl, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
         sizer->Add( search_sizer, 0, wxEXPAND, 5 );
 

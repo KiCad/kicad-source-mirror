@@ -78,6 +78,7 @@ class DIALOG_TRACK_VIA_PROPERTIES_BASE : public DIALOG_SHIM
 		wxStaticText* m_TrackLayerLabel;
 		PCB_LAYER_BOX_SELECTOR* m_TrackLayerCtrl;
 		wxStaticText* m_techLayersLabel;
+		wxStaticLine* m_staticline3;
 		wxCheckBox* m_trackHasSolderMask;
 		wxStaticText* m_trackMaskMarginLabel;
 		wxTextCtrl* m_trackMaskMarginCtrl;

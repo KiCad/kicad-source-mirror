@@ -248,35 +248,6 @@ DIALOG_SHAPE_PROPERTIES_BASE::DIALOG_SHAPE_PROPERTIES_BASE( wxWindow* parent, wx
 	m_LayerSelectionCtrl = new PCB_LAYER_BOX_SELECTOR( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, 0 );
 	gbSizer2->Add( m_LayerSelectionCtrl, wxGBPosition( 9, 1 ), wxGBSpan( 1, 2 ), wxALIGN_CENTER_VERTICAL|wxEXPAND|wxRIGHT, 5 );
 
-	m_techLayersLabel = new wxStaticText( this, wxID_ANY, _("Technical Layers:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_techLayersLabel->Wrap( -1 );
-	gbSizer2->Add( m_techLayersLabel, wxGBPosition( 10, 0 ), wxGBSpan( 1, 1 ), wxALIGN_BOTTOM|wxTOP|wxLEFT, 5 );
-
-	wxFlexGridSizer* fgSizer2;
-	fgSizer2 = new wxFlexGridSizer( 0, 4, 0, 0 );
-	fgSizer2->AddGrowableCol( 2 );
-	fgSizer2->SetFlexibleDirection( wxBOTH );
-	fgSizer2->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
-
-	m_hasSolderMask = new wxCheckBox( this, wxID_ANY, _("Solder mask"), wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer2->Add( m_hasSolderMask, 0, wxALL, 5 );
-
-	m_solderMaskMarginLabel = new wxStaticText( this, wxID_ANY, _("Expansion:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_solderMaskMarginLabel->Wrap( -1 );
-	fgSizer2->Add( m_solderMaskMarginLabel, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
-
-	m_solderMaskMarginCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_solderMaskMarginCtrl->SetToolTip( _("This is the local clearance between the shape and the solder mask opening.\nLeave blank to use the value defined in the Board Setup.") );
-
-	fgSizer2->Add( m_solderMaskMarginCtrl, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
-
-	m_solderMaskMarginUnit = new wxStaticText( this, wxID_ANY, _("unit"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_solderMaskMarginUnit->Wrap( -1 );
-	fgSizer2->Add( m_solderMaskMarginUnit, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
-
-
-	gbSizer2->Add( fgSizer2, wxGBPosition( 11, 0 ), wxGBSpan( 1, 3 ), wxEXPAND, 5 );
-
 	m_netLabel = new wxStaticText( this, wxID_ANY, _("Net:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_netLabel->Wrap( -1 );
 	gbSizer2->Add( m_netLabel, wxGBPosition( 7, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
@@ -288,6 +259,44 @@ DIALOG_SHAPE_PROPERTIES_BASE::DIALOG_SHAPE_PROPERTIES_BASE( wxWindow* parent, wx
 	gbSizer2->AddGrowableCol( 1 );
 
 	m_upperSizer->Add( gbSizer2, 0, wxEXPAND|wxTOP|wxBOTTOM, 5 );
+
+	wxBoxSizer* bSizer14;
+	bSizer14 = new wxBoxSizer( wxHORIZONTAL );
+
+	m_techLayersLabel = new wxStaticText( this, wxID_ANY, _("Technical Layers"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_techLayersLabel->Wrap( -1 );
+	bSizer14->Add( m_techLayersLabel, 0, wxALL, 5 );
+
+	m_staticline1 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
+	bSizer14->Add( m_staticline1, 1, wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT|wxLEFT, 4 );
+
+
+	m_upperSizer->Add( bSizer14, 1, wxEXPAND, 5 );
+
+	wxFlexGridSizer* fgSizer2;
+	fgSizer2 = new wxFlexGridSizer( 0, 4, 0, 0 );
+	fgSizer2->AddGrowableCol( 2 );
+	fgSizer2->SetFlexibleDirection( wxBOTH );
+	fgSizer2->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+
+	m_hasSolderMask = new wxCheckBox( this, wxID_ANY, _("Solder mask"), wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizer2->Add( m_hasSolderMask, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
+
+	m_solderMaskMarginLabel = new wxStaticText( this, wxID_ANY, _("Expansion:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_solderMaskMarginLabel->Wrap( -1 );
+	fgSizer2->Add( m_solderMaskMarginLabel, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
+
+	m_solderMaskMarginCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_solderMaskMarginCtrl->SetToolTip( _("This is the local clearance between the shape and the solder mask opening.\nLeave blank to use the value defined in the Board Setup.") );
+
+	fgSizer2->Add( m_solderMaskMarginCtrl, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
+
+	m_solderMaskMarginUnit = new wxStaticText( this, wxID_ANY, _("unit"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_solderMaskMarginUnit->Wrap( -1 );
+	fgSizer2->Add( m_solderMaskMarginUnit, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
+
+
+	m_upperSizer->Add( fgSizer2, 1, wxEXPAND, 5 );
 
 
 	bMainSizer->Add( m_upperSizer, 1, wxALL|wxEXPAND, 5 );

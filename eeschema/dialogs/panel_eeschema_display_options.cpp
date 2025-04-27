@@ -42,7 +42,7 @@ PANEL_EESCHEMA_DISPLAY_OPTIONS::PANEL_EESCHEMA_DISPLAY_OPTIONS( wxWindow* aParen
 
     m_galOptionsSizer->Add( m_galOptsPanel, 1, wxEXPAND|wxRIGHT, 0 );
 
-    m_highlightColorNote->SetFont( KIUI::GetInfoFont( this ).Italic() );
+    m_highlightColorNote->SetFont( KIUI::GetSmallInfoFont( this ).Italic() );
 }
 
 

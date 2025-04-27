@@ -47,7 +47,7 @@ PANEL_SETUP_FORMATTING::PANEL_SETUP_FORMATTING( wxWindow* aWindow, SCH_EDIT_FRAM
     m_dashLengthCtrl->SetMinSize( wxSize( minWidth, minSize.GetHeight() ) );
     m_gapLengthCtrl->SetMinSize( wxSize( minWidth, minSize.GetHeight() ) );
 
-    m_dashedLineHelp->SetFont( KIUI::GetInfoFont( this ).Italic() );
+    m_dashedLineHelp->SetFont( KIUI::GetSmallInfoFont( this ).Italic() );
 }
 
 

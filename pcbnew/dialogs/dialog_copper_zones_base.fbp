@@ -127,22 +127,22 @@
             <property name="window_style"></property>
           </object>
         </object>
-        <object class="sizeritem" expanded="false">
+        <object class="sizeritem" expanded="true">
           <property name="border">5</property>
           <property name="flag">wxEXPAND|wxRIGHT|wxLEFT</property>
           <property name="proportion">1</property>
-          <object class="wxBoxSizer" expanded="false">
+          <object class="wxBoxSizer" expanded="true">
             <property name="minimum_size"></property>
             <property name="name">m_OptionsBoxSizer</property>
             <property name="orient">wxHORIZONTAL</property>
             <property name="permission">none</property>
-            <object class="sizeritem" expanded="false">
+            <object class="sizeritem" expanded="true">
               <property name="border">5</property>
               <property name="flag">wxEXPAND|wxTOP|wxRIGHT|wxLEFT</property>
               <property name="proportion">0</property>
-              <object class="wxStaticBoxSizer" expanded="false">
+              <object class="wxStaticBoxSizer" expanded="true">
                 <property name="id">wxID_ANY</property>
-                <property name="label">Layer</property>
+                <property name="label">Layers</property>
                 <property name="minimum_size">180,-1</property>
                 <property name="name">sbSizer2</property>
                 <property name="orient">wxVERTICAL</property>

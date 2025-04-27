@@ -71,7 +71,7 @@ PANEL_SETUP_CONSTRAINTS::PANEL_SETUP_CONSTRAINTS( wxWindow* aParentWindow, PCB_E
     m_bitmapMinHoleClearance->SetBitmap( KiBitmapBundle( BITMAPS::hole_to_hole_clearance, 24 ) );
     m_bitmapEdgeClearance->SetBitmap( KiBitmapBundle( BITMAPS::edge_to_copper_clearance, 24 ) );
 
-    m_stCircleToPolyWarning->SetFont( KIUI::GetInfoFont( this ) );
+    m_stCircleToPolyWarning->SetFont( KIUI::GetSmallInfoFont( this ).Italic() );
 
     wxSize ctrlSize = m_minResolvedSpokeCountCtrl->GetSize();
     ctrlSize.x = KIUI::GetTextSize( wxT( "XXX" ), m_minResolvedSpokeCountCtrl ).x;

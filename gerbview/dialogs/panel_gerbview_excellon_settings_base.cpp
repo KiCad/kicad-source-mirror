@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -32,7 +32,7 @@ PANEL_GERBVIEW_EXCELLON_SETTINGS_BASE::PANEL_GERBVIEW_EXCELLON_SETTINGS_BASE( wx
 	int m_rbUnitsNChoices = sizeof( m_rbUnitsChoices ) / sizeof( wxString );
 	m_rbUnits = new wxRadioBox( this, wxID_ANY, _("File Units"), wxDefaultPosition, wxDefaultSize, m_rbUnitsNChoices, m_rbUnitsChoices, 1, wxRA_SPECIFY_COLS );
 	m_rbUnits->SetSelection( 0 );
-	bSizer5->Add( m_rbUnits, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
+	bSizer5->Add( m_rbUnits, 0, wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 5 );
 
 	wxString m_rbZeroFormatChoices[] = { _("No leading zeros (TZ format)"), _("No trailing zeros (LZ format)") };
 	int m_rbZeroFormatNChoices = sizeof( m_rbZeroFormatChoices ) / sizeof( wxString );

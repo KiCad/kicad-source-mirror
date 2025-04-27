@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -58,13 +58,19 @@ DIALOG_JUNCTION_PROPS_BASE::DIALOG_JUNCTION_PROPS_BASE( wxWindow* parent, wxWind
 
 	bSizer2->Add( fgSizer2, 1, wxALL|wxEXPAND, 10 );
 
+	wxBoxSizer* bMargins;
+	bMargins = new wxBoxSizer( wxVERTICAL );
+
 	m_helpLabel1 = new wxStaticText( this, wxID_ANY, _("Set diameter to 0 to use schematic's junction dot size."), wxDefaultPosition, wxDefaultSize, 0 );
 	m_helpLabel1->Wrap( 333 );
-	bSizer2->Add( m_helpLabel1, 0, wxRIGHT|wxLEFT, 10 );
+	bMargins->Add( m_helpLabel1, 0, wxBOTTOM|wxRIGHT, 5 );
 
 	m_helpLabel2 = new wxStaticText( this, wxID_ANY, _("Clear color to use Schematic Editor colors."), wxDefaultPosition, wxDefaultSize, 0 );
 	m_helpLabel2->Wrap( -1 );
-	bSizer2->Add( m_helpLabel2, 0, wxBOTTOM|wxRIGHT|wxLEFT, 10 );
+	bMargins->Add( m_helpLabel2, 0, wxBOTTOM|wxRIGHT, 5 );
+
+
+	bSizer2->Add( bMargins, 0, wxEXPAND|wxRIGHT|wxLEFT, 10 );
 
 	m_sdbSizer = new wxStdDialogButtonSizer();
 	m_sdbSizerOK = new wxButton( this, wxID_OK );

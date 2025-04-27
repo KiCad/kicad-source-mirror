@@ -229,13 +229,11 @@ DIALOG_PAD_PROPERTIES::DIALOG_PAD_PROPERTIES( PCB_BASE_FRAME* aParent, PAD* aPad
 
     initValues();
 
-    wxFont infoFont = KIUI::GetInfoFont( this );
-    m_copperLayersLabel->SetFont( infoFont );
-    m_techLayersLabel->SetFont( infoFont );
-    m_parentInfo->SetFont( infoFont );
-    m_teardropShapeLabel->SetFont( infoFont );
+    m_techLayersLabel->SetFont( KIUI::GetStatusFont( this ) );
+    m_parentInfo->SetFont( KIUI::GetSmallInfoFont( this ) );
+    m_teardropShapeLabel->SetFont( KIUI::GetStatusFont( this ) );
 
-    infoFont.SetStyle( wxFONTSTYLE_ITALIC );
+    wxFont infoFont = KIUI::GetSmallInfoFont( this ).Italic();
     m_nonCopperNote->SetFont( infoFont );
     m_staticTextInfoPaste->SetFont( infoFont );
 

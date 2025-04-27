@@ -42,7 +42,7 @@ PANEL_EESCHEMA_EDITING_OPTIONS::PANEL_EESCHEMA_EDITING_OPTIONS( wxWindow* aWindo
     m_borderColorSwatch->SetDefaultColor( COLOR4D::UNSPECIFIED );
     m_backgroundColorSwatch->SetDefaultColor( COLOR4D::UNSPECIFIED );
 
-    wxFont helpFont = KIUI::GetInfoFont( this ).Italic();
+    wxFont helpFont = KIUI::GetSmallInfoFont( this ).Italic();
     m_hint1->SetFont( helpFont );
     m_hint2->SetFont( helpFont );
 

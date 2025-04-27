@@ -159,6 +159,12 @@ wxFont KIUI::GetInfoFont( wxWindow* aWindow )
 }
 
 
+wxFont KIUI::GetSmallInfoFont( wxWindow* aWindow )
+{
+    return getGUIFont( aWindow, - 2 );
+}
+
+
 wxFont KIUI::GetControlFont( wxWindow* aWindow )
 {
     return getGUIFont( aWindow, 0 );

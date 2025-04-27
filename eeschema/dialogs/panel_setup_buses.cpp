@@ -43,7 +43,7 @@ PANEL_SETUP_BUSES::PANEL_SETUP_BUSES( wxWindow* aWindow, SCH_EDIT_FRAME* aFrame 
     m_addMember->SetBitmap( KiBitmapBundle( BITMAPS::small_plus ) );
     m_removeMember->SetBitmap( KiBitmapBundle( BITMAPS::small_trash ) );
 
-    m_source->SetFont( KIUI::GetInfoFont( aWindow ) );
+    m_source->SetFont( KIUI::GetSmallInfoFont( aWindow ) );
 
     m_aliasesGrid->OverrideMinSize( 0.6, 0.3 );
     m_membersGrid->OverrideMinSize( 0.6, 0.3 );

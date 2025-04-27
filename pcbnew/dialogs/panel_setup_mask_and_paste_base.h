@@ -21,6 +21,7 @@
 #include <wx/string.h>
 #include <wx/stattext.h>
 #include <wx/sizer.h>
+#include <wx/statline.h>
 #include <wx/textctrl.h>
 #include <wx/checkbox.h>
 #include <wx/gbsizer.h>
@@ -40,6 +41,7 @@ class PANEL_SETUP_MASK_AND_PASTE_BASE : public wxPanel
 		wxStaticText* m_staticTextInfoMaskMinWidth;
 		wxStaticText* m_staticTextInfoMaskMinWidth1;
 		wxStaticText* m_stSolderMaskSettings;
+		wxStaticLine* m_staticline1;
 		wxStaticText* m_maskMarginLabel;
 		wxTextCtrl* m_maskMarginCtrl;
 		wxStaticText* m_maskMarginUnits;
@@ -54,6 +56,7 @@ class PANEL_SETUP_MASK_AND_PASTE_BASE : public wxPanel
 		wxCheckBox* m_tentViasFront;
 		wxCheckBox* m_tentViasBack;
 		wxStaticText* m_stSolderPasteSettings;
+		wxStaticLine* m_staticline2;
 		wxStaticText* m_pasteMarginLabel;
 		wxTextCtrl* m_pasteMarginCtrl;
 		wxStaticText* m_pasteMarginUnits;

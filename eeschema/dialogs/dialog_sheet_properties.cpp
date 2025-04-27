@@ -104,8 +104,8 @@ DIALOG_SHEET_PROPERTIES::DIALOG_SHEET_PROPERTIES( SCH_EDIT_FRAME* aParent, SCH_S
     m_bpMoveDown->SetBitmap( KiBitmapBundle( BITMAPS::small_down ) );
 
     // Set font sizes
-    m_hierarchicalPathLabel->SetFont( KIUI::GetInfoFont( this ) );
-    m_hierarchicalPath->SetFont( KIUI::GetInfoFont( this ) );
+    m_hierarchicalPathLabel->SetFont( KIUI::GetSmallInfoFont( this ) );
+    m_hierarchicalPath->SetFont( KIUI::GetSmallInfoFont( this ) );
 
     // wxFormBuilder doesn't include this event...
     m_grid->Connect( wxEVT_GRID_CELL_CHANGING,

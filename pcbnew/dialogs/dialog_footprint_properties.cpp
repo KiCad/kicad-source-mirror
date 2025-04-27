@@ -122,11 +122,11 @@ DIALOG_FOOTPRINT_PROPERTIES::DIALOG_FOOTPRINT_PROPERTIES( PCB_EDIT_FRAME* aParen
         m_orientationCtrl->SetString( ii, wxString::Format( "%.1f", rot_list[ii] ) );
 
     // Set font size for items showing long strings:
-    wxFont infoFont = KIUI::GetInfoFont( this );
+    wxFont infoFont = KIUI::GetSmallInfoFont( this );
     m_libraryIDLabel->SetFont( infoFont );
     m_tcLibraryID->SetFont( infoFont );
 
-    infoFont.SetStyle( wxFONTSTYLE_ITALIC );
+    infoFont = KIUI::GetInfoFont( this ).Italic();
     m_staticTextInfoCopper->SetFont( infoFont );
     m_staticTextInfoPaste->SetFont( infoFont );
 

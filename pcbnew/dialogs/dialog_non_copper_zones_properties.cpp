@@ -158,7 +158,7 @@ DIALOG_NON_COPPER_ZONES_EDITOR::DIALOG_NON_COPPER_ZONES_EDITOR( PCB_BASE_FRAME* 
 
     bool fpEditorMode = m_parent->IsType( FRAME_FOOTPRINT_EDITOR );
 
-    m_staticTextLayerSelection->SetFont( KIUI::GetInfoFont( this ) );
+    m_staticTextLayerSelection->SetFont( KIUI::GetStatusFont( this ) );
 
     m_settings.SetupLayersList( m_layers, m_parent, LSET::AllNonCuMask(), fpEditorMode );
 

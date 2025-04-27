@@ -120,7 +120,7 @@ DIALOG_PRINT_PCBNEW::DIALOG_PRINT_PCBNEW( PCB_BASE_EDIT_FRAME* aParent,
     for( PCB_LAYER_ID layer : m_layerList )
         m_layerCheckListBox->Append( board->GetLayerName( layer ) );
 
-    m_infoText->SetFont( KIUI::GetInfoFont( this ) );
+    m_infoText->SetFont( KIUI::GetSmallInfoFont( this ).Italic() );
     m_infoText->SetLabel( _( "Right-click for layer selection commands." ) );
     m_infoText->Show( true );
 

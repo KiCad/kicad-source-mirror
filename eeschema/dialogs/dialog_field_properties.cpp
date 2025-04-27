@@ -238,9 +238,6 @@ DIALOG_FIELD_PROPERTIES::DIALOG_FIELD_PROPERTIES( SCH_BASE_FRAME* aParent, const
     if( aField->GetId() == FIELD_T::SHEET_FILENAME )
     {
         m_isSheetFilename = true;
-        m_note->SetLabel( wxString::Format( m_note->GetLabel(),
-                                            _( "Sheet filename can only be modified in Sheet "
-                                               "Properties dialog." ) ) );
         m_note->Show( true );
     }
 

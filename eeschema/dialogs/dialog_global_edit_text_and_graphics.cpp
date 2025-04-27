@@ -124,6 +124,12 @@ DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS( SCH_
     m_dotColorSwatch->SetSwatchColor( COLOR4D::UNSPECIFIED, false );
     m_dotColorSwatch->SetDefaultColor( COLOR4D::UNSPECIFIED );
 
+    m_staticText12->SetFont( KIUI::GetSmallInfoFont( this ).Italic() );
+    m_staticText13->SetFont( KIUI::GetSmallInfoFont( this ).Italic() );
+    m_staticText14->SetFont( KIUI::GetSmallInfoFont( this ).Italic() );
+    m_staticText15->SetFont( KIUI::GetSmallInfoFont( this ).Italic() );
+    m_staticText16->SetFont( KIUI::GetSmallInfoFont( this ).Italic() );
+
     SetupStandardButtons();
 
     finishDialogSettings();

@@ -43,8 +43,8 @@ PANEL_EDIT_OPTIONS::PANEL_EDIT_OPTIONS( wxWindow* aParent, UNITS_PROVIDER* aUnit
 
     m_rotationAngle.SetUnits( EDA_UNITS::DEGREES );
 
-    m_stHint1->SetFont( KIUI::GetInfoFont( this ).Italic() );
-    m_stHint2->SetFont( KIUI::GetInfoFont( this ).Italic() );
+    m_stHint1->SetFont( KIUI::GetSmallInfoFont( this ).Italic() );
+    m_stHint2->SetFont( KIUI::GetSmallInfoFont( this ).Italic() );
 
 #ifdef __WXOSX_MAC__
     m_mouseCmdsOSX->Show( true );

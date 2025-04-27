@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -26,20 +26,20 @@ PANEL_PROPERTIES_BASE::PANEL_PROPERTIES_BASE( wxWindow* parent, wxWindowID id, c
 	wxBoxSizer* bSizerButt;
 	bSizerButt = new wxBoxSizer( wxHORIZONTAL );
 
-	m_staticTextType = new wxStaticText( m_swItemProperties, wxID_ANY, _("Type"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextType = new wxStaticText( m_swItemProperties, wxID_ANY, _("Item Type"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextType->Wrap( -1 );
-	m_staticTextType->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_SLANT, wxFONTWEIGHT_BOLD, false, wxEmptyString ) );
+	m_staticTextType->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
 
-	bSizerButt->Add( m_staticTextType, 1, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 4 );
+	bSizerButt->Add( m_staticTextType, 1, wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT|wxLEFT, 3 );
 
-	m_buttonHelp = new wxButton( m_swItemProperties, wxID_ANY, _("Help"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizerButt->Add( m_buttonHelp, 0, wxEXPAND|wxLEFT|wxRIGHT, 5 );
+	m_syntaxHelpLink = new wxHyperlinkCtrl( m_swItemProperties, wxID_ANY, _("Syntax Help"), wxEmptyString, wxDefaultPosition, wxDefaultSize, wxHL_DEFAULT_STYLE );
+	bSizerButt->Add( m_syntaxHelpLink, 0, wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
 
 	wxString m_choicePageOptChoices[] = { _("Show on all pages"), _("First page only"), _("Subsequent pages only") };
 	int m_choicePageOptNChoices = sizeof( m_choicePageOptChoices ) / sizeof( wxString );
 	m_choicePageOpt = new wxChoice( m_swItemProperties, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_choicePageOptNChoices, m_choicePageOptChoices, 0 );
 	m_choicePageOpt->SetSelection( 2 );
-	bSizerButt->Add( m_choicePageOpt, 0, wxLEFT|wxRIGHT, 5 );
+	bSizerButt->Add( m_choicePageOpt, 0, wxLEFT|wxRIGHT|wxALIGN_CENTER_VERTICAL, 5 );
 
 
 	m_SizerItemProperties->Add( bSizerButt, 0, wxBOTTOM|wxEXPAND|wxTOP, 5 );
@@ -225,7 +225,7 @@ PANEL_PROPERTIES_BASE::PANEL_PROPERTIES_BASE( wxWindow* parent, wxWindowID id, c
 
 	m_staticTextSizeInfo = new wxStaticText( m_swItemProperties, wxID_ANY, _("Set to 0 to use default values"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextSizeInfo->Wrap( -1 );
-	m_SizerTextOptions->Add( m_staticTextSizeInfo, 0, wxALIGN_RIGHT|wxRIGHT|wxLEFT, 5 );
+	m_SizerTextOptions->Add( m_staticTextSizeInfo, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 
 	m_SizerItemProperties->Add( m_SizerTextOptions, 1, wxEXPAND, 5 );
@@ -620,7 +620,7 @@ PANEL_PROPERTIES_BASE::PANEL_PROPERTIES_BASE( wxWindow* parent, wxWindowID id, c
 
 	// Connect Events
 	this->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( PANEL_PROPERTIES_BASE::OnUpdateUI ) );
-	m_buttonHelp->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_PROPERTIES_BASE::onHelp ), NULL, this );
+	m_syntaxHelpLink->Connect( wxEVT_COMMAND_HYPERLINK, wxHyperlinkEventHandler( PANEL_PROPERTIES_BASE::onHelp ), NULL, this );
 	m_choicePageOpt->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( PANEL_PROPERTIES_BASE::onModify ), NULL, this );
 	m_stcText->Connect( wxEVT_KILL_FOCUS, wxFocusEventHandler( PANEL_PROPERTIES_BASE::onScintillaFocusLost ), NULL, this );
 	m_bold->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_PROPERTIES_BASE::onModify ), NULL, this );
@@ -661,7 +661,7 @@ PANEL_PROPERTIES_BASE::~PANEL_PROPERTIES_BASE()
 {
 	// Disconnect Events
 	this->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( PANEL_PROPERTIES_BASE::OnUpdateUI ) );
-	m_buttonHelp->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_PROPERTIES_BASE::onHelp ), NULL, this );
+	m_syntaxHelpLink->Disconnect( wxEVT_COMMAND_HYPERLINK, wxHyperlinkEventHandler( PANEL_PROPERTIES_BASE::onHelp ), NULL, this );
 	m_choicePageOpt->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( PANEL_PROPERTIES_BASE::onModify ), NULL, this );
 	m_stcText->Disconnect( wxEVT_KILL_FOCUS, wxFocusEventHandler( PANEL_PROPERTIES_BASE::onScintillaFocusLost ), NULL, this );
 	m_bold->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_PROPERTIES_BASE::onModify ), NULL, this );

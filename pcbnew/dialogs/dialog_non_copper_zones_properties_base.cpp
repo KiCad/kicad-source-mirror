@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -22,14 +22,17 @@ DIALOG_NONCOPPER_ZONES_PROPERTIES_BASE::DIALOG_NONCOPPER_ZONES_PROPERTIES_BASE( 
 	wxBoxSizer* bSizerLeft;
 	bSizerLeft = new wxBoxSizer( wxVERTICAL );
 
-	m_staticTextLayerSelection = new wxStaticText( this, wxID_ANY, _("Layer:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextLayerSelection = new wxStaticText( this, wxID_ANY, _("Layers"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextLayerSelection->Wrap( -1 );
-	bSizerLeft->Add( m_staticTextLayerSelection, 0, wxLEFT|wxRIGHT|wxTOP, 5 );
+	bSizerLeft->Add( m_staticTextLayerSelection, 0, wxLEFT|wxRIGHT|wxTOP, 7 );
+
+
+	bSizerLeft->Add( 0, 2, 0, wxEXPAND, 5 );
 
 	m_layers = new wxDataViewListCtrl( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxDV_NO_HEADER|wxBORDER_SIMPLE );
 	m_layers->SetMinSize( wxSize( 100,-1 ) );
 
-	bSizerLeft->Add( m_layers, 1, wxALL|wxEXPAND, 5 );
+	bSizerLeft->Add( m_layers, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 
 	bSizerLeft->Add( 0, 5, 0, wxEXPAND, 5 );

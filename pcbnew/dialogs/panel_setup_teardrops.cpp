@@ -41,8 +41,6 @@ PANEL_SETUP_TEARDROPS::PANEL_SETUP_TEARDROPS( wxWindow* aParentWindow, PCB_EDIT_
     m_bitmapTeardrop->SetBitmap( KiBitmapBundle( BITMAPS::teardrop_sizes ) );
     m_bitmapTeardrop1->SetBitmap( KiBitmapBundle( BITMAPS::teardrop_rect_sizes ) );
     m_bitmapTeardrop2->SetBitmap( KiBitmapBundle( BITMAPS::teardrop_track_sizes ) );
-
-    wxFont infoFont = KIUI::GetInfoFont( this ).Italic();
 }
 
 

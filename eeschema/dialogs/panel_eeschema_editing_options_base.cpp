@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6a-dirty)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -143,7 +143,7 @@ PANEL_EESCHEMA_EDITING_OPTIONS_BASE::PANEL_EESCHEMA_EDITING_OPTIONS_BASE( wxWind
 
 	m_hint1 = new wxStaticText( m_pageWinLin, wxID_ANY, _("Left click (and drag) actions depend on 2 modifier keys:\nShift and Ctrl"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_hint1->Wrap( -1 );
-	bSizer9->Add( m_hint1, 0, wxALL, 5 );
+	bSizer9->Add( m_hint1, 0, wxRIGHT|wxLEFT, 5 );
 
 	wxFlexGridSizer* fgSizerCmdsWinLin;
 	fgSizerCmdsWinLin = new wxFlexGridSizer( 0, 2, 0, 5 );
@@ -178,7 +178,7 @@ PANEL_EESCHEMA_EDITING_OPTIONS_BASE::PANEL_EESCHEMA_EDITING_OPTIONS_BASE( wxWind
 	bSizer9->Add( fgSizerCmdsWinLin, 0, wxEXPAND|wxTOP, 5 );
 
 
-	bSizer8->Add( bSizer9, 0, wxEXPAND|wxTOP|wxLEFT, 5 );
+	bSizer8->Add( bSizer9, 0, wxEXPAND|wxLEFT, 5 );
 
 
 	m_pageWinLin->SetSizer( bSizer8 );

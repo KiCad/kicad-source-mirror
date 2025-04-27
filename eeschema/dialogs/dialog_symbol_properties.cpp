@@ -378,7 +378,7 @@ DIALOG_SYMBOL_PROPERTIES::DIALOG_SYMBOL_PROPERTIES( SCH_EDIT_FRAME* aParent,
     m_pinGrid->PushEventHandler( new GRID_TRICKS( m_pinGrid ) );
     m_pinGrid->SetSelectionMode( wxGrid::wxGridSelectRows );
 
-    wxFont infoFont = KIUI::GetInfoFont( this );
+    wxFont infoFont = KIUI::GetSmallInfoFont( this );
     m_libraryIDLabel->SetFont( infoFont );
     m_tcLibraryID->SetFont( infoFont );
     m_tcLibraryID->SetBackgroundColour( KIPLATFORM::UI::GetDialogBGColour() );

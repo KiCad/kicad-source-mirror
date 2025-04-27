@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -26,12 +26,10 @@ class FONT_CHOICE;
 #include <wx/choice.h>
 #include <wx/stattext.h>
 #include <wx/statline.h>
-#include <wx/panel.h>
 #include <wx/button.h>
 #include <wx/dialog.h>
 
 ///////////////////////////////////////////////////////////////////////////
-
 
 ///////////////////////////////////////////////////////////////////////////////
 /// Class DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE
@@ -65,7 +63,6 @@ class DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE : public DIALOG_SHIM
 		wxCheckBox* m_netFilterOpt;
 		wxTextCtrl* m_netFilter;
 		wxCheckBox* m_selectedFilterOpt;
-		wxPanel* m_specifiedValues;
 		wxStaticText* m_fontLabel;
 		FONT_CHOICE* m_fontCtrl;
 		wxCheckBox* m_setTextColor;

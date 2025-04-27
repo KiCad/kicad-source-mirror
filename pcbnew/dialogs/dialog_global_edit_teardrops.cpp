@@ -164,7 +164,7 @@ DIALOG_GLOBAL_EDIT_TEARDROPS::DIALOG_GLOBAL_EDIT_TEARDROPS( PCB_EDIT_FRAME* aPar
     m_teardropLenPercent.SetUnits( EDA_UNITS::PERCENT );
     m_teardropHeightPercent.SetUnits( EDA_UNITS::PERCENT );
 
-    m_minTrackWidthHint->SetFont( KIUI::GetInfoFont( this ).Italic() );
+    m_minTrackWidthHint->SetFont( KIUI::GetStatusFont( this ).Italic() );
 
     buildFilterLists();
 

@@ -195,8 +195,7 @@ DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR(
     m_FootprintNameCtrl->SetValidator( FOOTPRINT_NAME_VALIDATOR() );
 
     // Set font sizes
-    wxFont infoFont = KIUI::GetInfoFont( this );
-    infoFont.SetStyle( wxFONTSTYLE_ITALIC );
+    wxFont infoFont = KIUI::GetInfoFont( this ).Italic();
     m_staticTextInfoCopper->SetFont( infoFont );
     m_staticTextInfoPaste->SetFont( infoFont );
 

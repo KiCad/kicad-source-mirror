@@ -17,9 +17,6 @@ PANEL_SETUP_MASK_AND_PASTE_BASE::PANEL_SETUP_MASK_AND_PASTE_BASE( wxWindow* pare
 	wxBoxSizer* bSizer3;
 	bSizer3 = new wxBoxSizer( wxVERTICAL );
 
-
-	bSizer3->Add( 0, 0, 1, wxEXPAND, 5 );
-
 	wxBoxSizer* bMessages;
 	bMessages = new wxBoxSizer( wxHORIZONTAL );
 
@@ -41,19 +38,22 @@ PANEL_SETUP_MASK_AND_PASTE_BASE::PANEL_SETUP_MASK_AND_PASTE_BASE( wxWindow* pare
 	bMessages->Add( bSizer4, 1, wxEXPAND|wxLEFT, 5 );
 
 
-	bSizer3->Add( bMessages, 0, wxEXPAND|wxTOP|wxBOTTOM, 5 );
+	bSizer3->Add( bMessages, 0, wxEXPAND|wxTOP|wxBOTTOM, 10 );
 
 
-	bSizer3->Add( 0, 0, 2, wxEXPAND, 5 );
+	bSizer3->Add( 0, 5, 0, wxEXPAND, 5 );
 
 	m_stSolderMaskSettings = new wxStaticText( this, wxID_ANY, _("Solder Mask Settings"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_stSolderMaskSettings->Wrap( -1 );
-	m_stSolderMaskSettings->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxEmptyString ) );
+	m_stSolderMaskSettings->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
 
-	bSizer3->Add( m_stSolderMaskSettings, 0, wxALL|wxEXPAND, 5 );
+	bSizer3->Add( m_stSolderMaskSettings, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 13 );
+
+	m_staticline1 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
+	bSizer3->Add( m_staticline1, 0, wxEXPAND|wxTOP|wxBOTTOM, 2 );
 
 	wxGridBagSizer* gbSizer1;
-	gbSizer1 = new wxGridBagSizer( 5, 5 );
+	gbSizer1 = new wxGridBagSizer( 3, 5 );
 	gbSizer1->SetFlexibleDirection( wxBOTH );
 	gbSizer1->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
@@ -105,14 +105,14 @@ PANEL_SETUP_MASK_AND_PASTE_BASE::PANEL_SETUP_MASK_AND_PASTE_BASE( wxWindow* pare
 	m_allowBridges = new wxCheckBox( this, wxID_ANY, _("Allow bridged solder mask apertures between pads within footprints"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_allowBridges->SetToolTip( _("Disable DRC error checking for solder mask aperture bridging between pads in the same footprint.") );
 
-	gbSizer1->Add( m_allowBridges, wxGBPosition( 3, 0 ), wxGBSpan( 1, 3 ), 0, 5 );
+	gbSizer1->Add( m_allowBridges, wxGBPosition( 3, 0 ), wxGBSpan( 1, 3 ), wxTOP|wxLEFT, 5 );
 
 	wxBoxSizer* bSizer6;
 	bSizer6 = new wxBoxSizer( wxHORIZONTAL );
 
 	m_stTenting = new wxStaticText( this, wxID_ANY, _("Tent vias:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_stTenting->Wrap( -1 );
-	bSizer6->Add( m_stTenting, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
+	bSizer6->Add( m_stTenting, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
 	m_tentViasFront = new wxCheckBox( this, wxID_ANY, _("Front"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_tentViasFront->SetToolTip( _("Tented: vias are covered with solder mask.\nNot tented: vias are not covered with solder mask.") );
@@ -125,22 +125,25 @@ PANEL_SETUP_MASK_AND_PASTE_BASE::PANEL_SETUP_MASK_AND_PASTE_BASE( wxWindow* pare
 	bSizer6->Add( m_tentViasBack, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 
-	gbSizer1->Add( bSizer6, wxGBPosition( 4, 0 ), wxGBSpan( 1, 3 ), wxEXPAND, 5 );
+	gbSizer1->Add( bSizer6, wxGBPosition( 4, 0 ), wxGBSpan( 1, 3 ), wxEXPAND|wxTOP|wxBOTTOM, 5 );
 
 
 	bSizer3->Add( gbSizer1, 0, wxBOTTOM|wxEXPAND|wxTOP, 5 );
 
 
-	bSizer3->Add( 0, 0, 2, wxEXPAND, 5 );
+	bSizer3->Add( 0, 10, 0, wxEXPAND, 5 );
 
 	m_stSolderPasteSettings = new wxStaticText( this, wxID_ANY, _("Solder Paste Settings"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_stSolderPasteSettings->Wrap( -1 );
-	m_stSolderPasteSettings->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxEmptyString ) );
+	m_stSolderPasteSettings->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
 
-	bSizer3->Add( m_stSolderPasteSettings, 0, wxALL|wxEXPAND, 5 );
+	bSizer3->Add( m_stSolderPasteSettings, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 13 );
+
+	m_staticline2 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
+	bSizer3->Add( m_staticline2, 0, wxEXPAND|wxTOP|wxBOTTOM, 2 );
 
 	wxGridBagSizer* gbSizer2;
-	gbSizer2 = new wxGridBagSizer( 5, 5 );
+	gbSizer2 = new wxGridBagSizer( 3, 5 );
 	gbSizer2->SetFlexibleDirection( wxBOTH );
 	gbSizer2->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
@@ -188,7 +191,7 @@ PANEL_SETUP_MASK_AND_PASTE_BASE::PANEL_SETUP_MASK_AND_PASTE_BASE( wxWindow* pare
 	bSizer3->Add( 0, 0, 1, wxEXPAND, 5 );
 
 
-	bMainSizer->Add( bSizer3, 1, wxRIGHT|wxLEFT|wxEXPAND, 5 );
+	bMainSizer->Add( bSizer3, 0, wxRIGHT|wxLEFT|wxEXPAND, 5 );
 
 
 	this->SetSizer( bMainSizer );

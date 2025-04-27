@@ -175,15 +175,24 @@ DIALOG_TRACK_VIA_PROPERTIES_BASE::DIALOG_TRACK_VIA_PROPERTIES_BASE( wxWindow* pa
 
 	bSizerTrackRightControl->Add( fgTrackRightSizer, 0, wxEXPAND|wxRIGHT, 3 );
 
-	wxBoxSizer* bSizerTrackRemoveSoldermask;
-	bSizerTrackRemoveSoldermask = new wxBoxSizer( wxVERTICAL );
+	wxBoxSizer* bSizerTechLayers;
+	bSizerTechLayers = new wxBoxSizer( wxVERTICAL );
 
 
-	bSizerTrackRemoveSoldermask->Add( 0, 15, 0, wxEXPAND, 5 );
+	bSizerTechLayers->Add( 0, 15, 0, wxEXPAND, 5 );
 
-	m_techLayersLabel = new wxStaticText( m_sbTrackSizer->GetStaticBox(), wxID_ANY, _("Technical Layers:"), wxDefaultPosition, wxDefaultSize, 0 );
+	wxBoxSizer* bSizer26;
+	bSizer26 = new wxBoxSizer( wxHORIZONTAL );
+
+	m_techLayersLabel = new wxStaticText( m_sbTrackSizer->GetStaticBox(), wxID_ANY, _("Technical Layers"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_techLayersLabel->Wrap( -1 );
-	bSizerTrackRemoveSoldermask->Add( m_techLayersLabel, 0, wxALL, 5 );
+	bSizer26->Add( m_techLayersLabel, 0, wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
+
+	m_staticline3 = new wxStaticLine( m_sbTrackSizer->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
+	bSizer26->Add( m_staticline3, 1, wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT|wxLEFT, 3 );
+
+
+	bSizerTechLayers->Add( bSizer26, 0, wxEXPAND, 5 );
 
 	wxFlexGridSizer* fgSizerTrackMaskMargin;
 	fgSizerTrackMaskMargin = new wxFlexGridSizer( 0, 4, 3, 5 );
@@ -192,7 +201,7 @@ DIALOG_TRACK_VIA_PROPERTIES_BASE::DIALOG_TRACK_VIA_PROPERTIES_BASE( wxWindow* pa
 	fgSizerTrackMaskMargin->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
 	m_trackHasSolderMask = new wxCheckBox( m_sbTrackSizer->GetStaticBox(), wxID_ANY, _("Solder mask"), wxDefaultPosition, wxDefaultSize, wxCHK_3STATE );
-	fgSizerTrackMaskMargin->Add( m_trackHasSolderMask, 0, wxALIGN_CENTER_VERTICAL, 5 );
+	fgSizerTrackMaskMargin->Add( m_trackHasSolderMask, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 	m_trackMaskMarginLabel = new wxStaticText( m_sbTrackSizer->GetStaticBox(), wxID_ANY, _("Expansion:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_trackMaskMarginLabel->Wrap( -1 );
@@ -208,10 +217,10 @@ DIALOG_TRACK_VIA_PROPERTIES_BASE::DIALOG_TRACK_VIA_PROPERTIES_BASE( wxWindow* pa
 	fgSizerTrackMaskMargin->Add( m_trackMaskMarginUnit, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 
-	bSizerTrackRemoveSoldermask->Add( fgSizerTrackMaskMargin, 1, wxEXPAND, 3 );
+	bSizerTechLayers->Add( fgSizerTrackMaskMargin, 1, wxEXPAND|wxTOP, 2 );
 
 
-	bSizerTrackRightControl->Add( bSizerTrackRemoveSoldermask, 1, wxEXPAND, 3 );
+	bSizerTrackRightControl->Add( bSizerTechLayers, 1, wxEXPAND, 3 );
 
 
 	m_sbTrackSizer->Add( bSizerTrackRightControl, 1, wxEXPAND, 5 );

@@ -141,7 +141,7 @@ DIALOG_SIM_MODEL<T>::DIALOG_SIM_MODEL( wxWindow* aParent, EDA_BASE_FRAME* aFrame
     m_pinAssignmentsGrid->ClearRows();
     m_pinAssignmentsGrid->PushEventHandler( new GRID_TRICKS( m_pinAssignmentsGrid ) );
 
-    m_subcktLabel->SetFont( KIUI::GetInfoFont( m_subcktLabel ) );
+    m_subcktLabel->SetFont( KIUI::GetStatusFont( m_subcktLabel ) );
     finishDialogSettings();
 }
 

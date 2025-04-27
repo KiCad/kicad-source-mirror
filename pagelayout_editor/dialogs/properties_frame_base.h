@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -20,14 +20,15 @@ class FONT_CHOICE;
 #include <wx/font.h>
 #include <wx/colour.h>
 #include <wx/settings.h>
-#include <wx/button.h>
-#include <wx/bitmap.h>
-#include <wx/image.h>
-#include <wx/icon.h>
+#include <wx/hyperlink.h>
 #include <wx/choice.h>
 #include <wx/sizer.h>
 #include <wx/stc/stc.h>
 #include <wx/bmpbuttn.h>
+#include <wx/bitmap.h>
+#include <wx/image.h>
+#include <wx/icon.h>
+#include <wx/button.h>
 #include <wx/panel.h>
 #include <wx/textctrl.h>
 #include <wx/gbsizer.h>
@@ -50,7 +51,7 @@ class PANEL_PROPERTIES_BASE : public wxPanel
 		wxScrolledWindow* m_swItemProperties;
 		wxBoxSizer* m_SizerItemProperties;
 		wxStaticText* m_staticTextType;
-		wxButton* m_buttonHelp;
+		wxHyperlinkCtrl* m_syntaxHelpLink;
 		wxChoice* m_choicePageOpt;
 		wxBoxSizer* m_SizerTextOptions;
 		wxStyledTextCtrl* m_stcText;
@@ -148,7 +149,7 @@ class PANEL_PROPERTIES_BASE : public wxPanel
 
 		// Virtual event handlers, override them in your derived class
 		virtual void OnUpdateUI( wxUpdateUIEvent& event ) { event.Skip(); }
-		virtual void onHelp( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onHelp( wxHyperlinkEvent& event ) { event.Skip(); }
 		virtual void onModify( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onScintillaFocusLost( wxFocusEvent& event ) { event.Skip(); }
 		virtual void onTextFocusLost( wxFocusEvent& event ) { event.Skip(); }

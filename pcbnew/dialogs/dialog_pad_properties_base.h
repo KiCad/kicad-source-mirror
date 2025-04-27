@@ -158,6 +158,7 @@ class DIALOG_PAD_PROPERTIES_BASE : public DIALOG_SHIM
 		wxStaticText* m_copperLayersLabel;
 		wxChoice* m_rbCopperLayersSel;
 		wxStaticText* m_techLayersLabel;
+		wxStaticLine* m_staticline52;
 		wxCheckBox* m_layerFrontAdhesive;
 		wxCheckBox* m_layerBackAdhesive;
 		wxCheckBox* m_layerFrontPaste;

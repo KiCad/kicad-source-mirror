@@ -90,7 +90,7 @@ public:
     void OnSetDefaultValues( wxCommandEvent& event ) override;
     void onScintillaCharAdded( wxStyledTextEvent &aEvent );
     void onScintillaFocusLost( wxFocusEvent& aEvent ) override;
-	void onHelp( wxCommandEvent& aEvent ) override;
+	void onHelp( wxHyperlinkEvent& aEvent ) override;
     void onHAlignButton( wxCommandEvent &aEvent );
     void onVAlignButton( wxCommandEvent &aEvent );
 

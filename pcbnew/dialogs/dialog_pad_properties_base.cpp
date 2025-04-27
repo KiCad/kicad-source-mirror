@@ -555,9 +555,18 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 	m_rbCopperLayersSel->SetSelection( 0 );
 	m_LayersSizer->Add( m_rbCopperLayersSel, 1, wxALL|wxEXPAND|wxTOP, 4 );
 
-	m_techLayersLabel = new wxStaticText( m_LayersSizer->GetStaticBox(), wxID_ANY, _("Technical layers:"), wxDefaultPosition, wxDefaultSize, 0 );
+	wxBoxSizer* bSizer444;
+	bSizer444 = new wxBoxSizer( wxHORIZONTAL );
+
+	m_techLayersLabel = new wxStaticText( m_LayersSizer->GetStaticBox(), wxID_ANY, _("Technical Layers"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_techLayersLabel->Wrap( -1 );
-	m_LayersSizer->Add( m_techLayersLabel, 0, wxALL, 5 );
+	bSizer444->Add( m_techLayersLabel, 0, wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
+
+	m_staticline52 = new wxStaticLine( m_LayersSizer->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
+	bSizer444->Add( m_staticline52, 1, wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT|wxLEFT, 3 );
+
+
+	m_LayersSizer->Add( bSizer444, 1, wxEXPAND|wxTOP, 5 );
 
 	m_layerFrontAdhesive = new wxCheckBox( m_LayersSizer->GetStaticBox(), wxID_ANY, _("Front adhesive"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_LayersSizer->Add( m_layerFrontAdhesive, 0, wxLEFT|wxRIGHT, 4 );
