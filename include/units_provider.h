@@ -241,6 +241,7 @@ public:
 
         wxString msg = wxString::Format( wxT( "Unhandled unit data type %d" ), static_cast<int>( aUnits ) );
         wxCHECK_MSG( false, EDA_DATA_TYPE::UNITLESS, msg );
+        return EDA_DATA_TYPE::UNITLESS; // Note that this is unreachable but g++-12 doesn't know that.
     }
 
     /// @brief The string that is used in the UI to represent a null value
