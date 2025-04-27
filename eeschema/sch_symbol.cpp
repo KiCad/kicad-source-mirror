@@ -1039,8 +1039,8 @@ void SCH_SYMBOL::UpdateFields( const SCH_SHEET_PATH* aPath, bool aUpdateStyle, b
                 {
                     SCH_FIELD newField( VECTOR2I( 0, 0 ), GetNextFieldId(), this,
                                         libField->GetCanonicalName() );
-                    schField->ImportValues( *libField );
                     schField = AddField( newField );
+                    schField->ImportValues( *libField );
                 }
             }
 
