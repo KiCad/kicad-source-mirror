@@ -633,14 +633,9 @@ void FOOTPRINT_CHOOSER_FRAME::onFpChanged( wxCommandEvent& event )
 
 void FOOTPRINT_CHOOSER_FRAME::build3DCanvas()
 {
-    // Create the dummy board used by the 3D canvas
-    m_dummyBoard = GetBoard();
-    m_dummyBoard->SetProject( &Prj(), true );
-
-    // This board will only be used to hold a footprint for viewing
-    m_dummyBoard->SetBoardUse( BOARD_USE::FPHOLDER );
-
-    m_boardAdapter.SetBoard( m_dummyBoard );
+    // initialize m_boardAdapter used by the 3D canvas
+    BOARD* dummyBoard = GetBoard();
+    m_boardAdapter.SetBoard( dummyBoard );
     m_boardAdapter.m_IsBoardView = false;
     m_boardAdapter.m_IsPreviewer = true;   // Force display 3D models, regardless the 3D viewer options
 
@@ -651,17 +646,17 @@ void FOOTPRINT_CHOOSER_FRAME::build3DCanvas()
 
     // Build the 3D canvas
     m_preview3DCanvas = new EDA_3D_CANVAS( m_chooserPanel->m_RightPanel,
-                                        OGL_ATT_LIST::GetAttributesList( ANTIALIASING_MODE::AA_8X ),
-                                        m_boardAdapter, m_currentCamera,
-                                        PROJECT_PCB::Get3DCacheManager( &Prj() ) );
+                                           OGL_ATT_LIST::GetAttributesList( ANTIALIASING_MODE::AA_8X ),
+                                           m_boardAdapter, m_currentCamera,
+                                           PROJECT_PCB::Get3DCacheManager( &Prj() ) );
 
     m_chooserPanel->m_RightPanelSizer->Add( m_preview3DCanvas, 1, wxEXPAND, 5 );
     m_chooserPanel->m_RightPanel->Layout();
 
-    BOARD_DESIGN_SETTINGS& dummy_bds = m_dummyBoard->GetDesignSettings();
+    BOARD_DESIGN_SETTINGS& dummy_bds = dummyBoard->GetDesignSettings();
     dummy_bds.SetBoardThickness( pcbIUScale.mmToIU( 1.6 ) );
     dummy_bds.SetEnabledLayers( LSET::FrontMask() | LSET::BackMask() );
-    BOARD_STACKUP& dummy_board_stackup = m_dummyBoard->GetDesignSettings().GetStackupDescriptor();
+    BOARD_STACKUP& dummy_board_stackup = dummyBoard->GetDesignSettings().GetStackupDescriptor();
     dummy_board_stackup.RemoveAll();
     dummy_board_stackup.BuildDefaultStackupList( &dummy_bds, 2 );
 }
@@ -722,16 +717,6 @@ void FOOTPRINT_CHOOSER_FRAME::onFpViewReq( wxCommandEvent& event )
 void FOOTPRINT_CHOOSER_FRAME::updateViews()
 {
     EDA_3D_VIEWER_FRAME* viewer3D = Get3DViewerFrame();
-    bool reloadFp = viewer3D || m_preview3DCanvas->IsShown();
-
-    if( reloadFp )
-    {
-        m_dummyBoard->DeleteAllFootprints();
-
-        if( m_chooserPanel->m_CurrFootprint )
-            m_dummyBoard->Add( (FOOTPRINT*)m_chooserPanel->m_CurrFootprint->Clone() );
-
-    }
 
     if( m_preview3DCanvas->IsShown() )
     {
