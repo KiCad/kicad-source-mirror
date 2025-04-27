@@ -351,6 +351,8 @@ public:
     LT_SYMBOL SymbolBuilder( const wxString& aAscFileName, const wxString& aAsyFileContent,
                              LT_ASC& aAscFile );
 
+    LT_SYMBOL MakeDummySymbol( const wxString& aAscFileName );
+
     const wxFileName& GetLTspiceDataDir() { return m_ltspiceDataDir; }
 
 private:
