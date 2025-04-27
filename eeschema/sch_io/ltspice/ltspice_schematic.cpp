@@ -776,6 +776,25 @@ LTSPICE_SCHEMATIC::LT_SYMBOL LTSPICE_SCHEMATIC::SymbolBuilder( const wxString& a
 }
 
 
+LTSPICE_SCHEMATIC::LT_SYMBOL LTSPICE_SCHEMATIC::MakeDummySymbol( const wxString& aAscFileName )
+{
+    LT_SYMBOL lt_symbol;
+
+    lt_symbol.Name = aAscFileName;
+    lt_symbol.SymbolType = LTSPICE_SCHEMATIC::SYMBOLTYPE::CELL;
+    lt_symbol.SymbolOrientation = LTSPICE_SCHEMATIC::ORIENTATION::R0;
+
+    RECTANGLE rect;
+    rect.LineWidth = getLineWidth( "NORMAL" );
+    rect.BotRight = VECTOR2I( 20, 20 );
+    rect.TopLeft = VECTOR2I( -20, -20 );
+
+    lt_symbol.Rectangles.push_back( rect );
+
+    return lt_symbol;
+}
+
+
 std::vector<LTSPICE_SCHEMATIC::LT_ASC> LTSPICE_SCHEMATIC::StructureBuilder()
 {
     // Initialising Symbol Struct
@@ -841,6 +860,14 @@ std::vector<LTSPICE_SCHEMATIC::LT_ASC> LTSPICE_SCHEMATIC::StructureBuilder()
                 {
                     if( m_reporter )
                         m_reporter->Report( e.What(), RPT_SEVERITY_ERROR );
+
+                    // Use dummy symbol
+                    LT_SYMBOL lt_symbol = MakeDummySymbol( symbolName );
+                    lt_symbol.Offset = pointCheck( posX, posY, lineNumber, fileName );
+                    lt_symbol.SymbolOrientation = getSymbolRotationOrMirror( rotate_mirror_option );
+
+                    ascFile.Symbols.push_back( lt_symbol );
+                    ascFile.BoundingBox.Merge( lt_symbol.Offset );
                 }
             }
             else if( element == "WIRE" )
