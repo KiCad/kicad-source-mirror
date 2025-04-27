@@ -56,7 +56,7 @@ DIALOG_MULTICHANNEL_REPEAT_LAYOUT_BASE::DIALOG_MULTICHANNEL_REPEAT_LAYOUT_BASE( 
 	wxBoxSizer* bSizer4;
 	bSizer4 = new wxBoxSizer( wxHORIZONTAL );
 
-	m_staticText1 = new wxStaticText( this, wxID_ANY, _("Reference Rule Area:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText1 = new wxStaticText( this, wxID_ANY, _("Reference rule area:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText1->Wrap( -1 );
 	bSizer4->Add( m_staticText1, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
@@ -93,8 +93,20 @@ DIALOG_MULTICHANNEL_REPEAT_LAYOUT_BASE::DIALOG_MULTICHANNEL_REPEAT_LAYOUT_BASE( 
 	m_cbCopyPlacement = new wxCheckBox( this, wxID_ANY, _("Copy footprint placement"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer13->Add( m_cbCopyPlacement, 0, wxALL, 5 );
 
+	wxBoxSizer* bSizer5;
+	bSizer5 = new wxBoxSizer( wxHORIZONTAL );
+
 	m_cbCopyRouting = new wxCheckBox( this, wxID_ANY, _("Copy routing"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer13->Add( m_cbCopyRouting, 0, wxALL, 5 );
+	bSizer5->Add( m_cbCopyRouting, 0, wxALL, 5 );
+
+	m_cbCopyOnlyConnectedRouting = new wxCheckBox( this, wxID_ANY, _("Restrict to routing connected within the area"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_cbCopyOnlyConnectedRouting->SetValue(true);
+	m_cbCopyOnlyConnectedRouting->SetToolTip( _("Can be useful if unrelated tracks pass through the area") );
+
+	bSizer5->Add( m_cbCopyOnlyConnectedRouting, 0, wxALL, 5 );
+
+
+	bSizer13->Add( bSizer5, 1, wxEXPAND, 5 );
 
 	m_cbCopyOtherItems = new wxCheckBox( this, wxID_ANY, _("Copy other items"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_cbCopyOtherItems->SetToolTip( _("Copy text, shapes, zones, and other items inside the source rule area") );
@@ -109,7 +121,9 @@ DIALOG_MULTICHANNEL_REPEAT_LAYOUT_BASE::DIALOG_MULTICHANNEL_REPEAT_LAYOUT_BASE( 
 	m_cbGroupItems = new wxCheckBox( this, wxID_ANY, _("Group items with their target rule areas"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer13->Add( m_cbGroupItems, 0, wxALL, 5 );
 
-	m_cbIncludeLockedComponents = new wxCheckBox( this, wxID_ANY, _("Remove locked items from target rule areas"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_cbIncludeLockedComponents = new wxCheckBox( this, wxID_ANY, _("Include locked items"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_cbIncludeLockedComponents->SetToolTip( _("Copy from reference area + delete / update in target area if included") );
+
 	bSizer13->Add( m_cbIncludeLockedComponents, 0, wxALL, 5 );
 
 

@@ -737,12 +737,26 @@ bool MULTICHANNEL_TOOL::copyRuleAreaContents( TMATCH::COMPONENT_MATCHES& aMatche
 
         wxLogTrace( traceMultichannelTool, wxT("copying routing: %d fps\n"), (int) aMatches.size() );
 
+        std::set<int> refc;
+        std::set<int> targc;
+
+        for( auto& fpPair : aMatches )
+        {
+            for( PAD* pad : fpPair.first->Pads() )
+                refc.insert( pad->GetNetCode() );
+
+            for( PAD* pad : fpPair.second->Pads() )
+                targc.insert( pad->GetNetCode() );
+        }
+
         findRouting( targetRouting, connectivity, targetPoly, aTargetArea, aOpts );
         findRouting( refRouting, connectivity, refPoly, aRefArea, aOpts );
 
         for( BOARD_ITEM* item : targetRouting )
         {
             if( item->IsLocked() && !aOpts.m_includeLockedItems )
+                continue;
+            if (aOpts.m_connectedRoutingOnly && !targc.contains(static_cast<BOARD_CONNECTED_ITEM*>( item )->GetNetCode()))
                 continue;
             // item already removed
             if( aCommit->GetStatus( item ) != 0 )
@@ -757,6 +771,10 @@ bool MULTICHANNEL_TOOL::copyRuleAreaContents( TMATCH::COMPONENT_MATCHES& aMatche
 
         for( BOARD_ITEM* item : refRouting )
         {
+            if( item->IsLocked() && !aOpts.m_includeLockedItems )
+                continue;
+            if (aOpts.m_connectedRoutingOnly && !refc.contains(static_cast<BOARD_CONNECTED_ITEM*>( item )->GetNetCode()))
+                continue;
             if( !aRefArea->m_area->GetLayerSet().Contains( item->GetLayer() ) )
                 continue;
 
@@ -834,6 +852,9 @@ bool MULTICHANNEL_TOOL::copyRuleAreaContents( TMATCH::COMPONENT_MATCHES& aMatche
         {
             if( item->Type() == PCB_TEXT_T && item->GetParent()
                 && item->GetParent()->Type() == PCB_FOOTPRINT_T )
+                continue;
+
+            if( item->IsLocked() && !aOpts.m_includeLockedItems )
                 continue;
 
             BOARD_ITEM* copied = nullptr;

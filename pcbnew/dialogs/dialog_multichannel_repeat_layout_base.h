@@ -42,6 +42,7 @@ class DIALOG_MULTICHANNEL_REPEAT_LAYOUT_BASE : public DIALOG_SHIM
 		wxChoice* m_refAnchorFp;
 		wxCheckBox* m_cbCopyPlacement;
 		wxCheckBox* m_cbCopyRouting;
+		wxCheckBox* m_cbCopyOnlyConnectedRouting;
 		wxCheckBox* m_cbCopyOtherItems;
 		wxCheckBox* m_cbIncludeOffRAComponents;
 		wxCheckBox* m_cbGroupItems;

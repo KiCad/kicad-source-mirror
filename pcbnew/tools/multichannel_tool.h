@@ -48,6 +48,7 @@ enum class REPEAT_LAYOUT_EDGE_MODE
 struct REPEAT_LAYOUT_OPTIONS
 {
     bool                    m_copyRouting = true;
+    bool                    m_connectedRoutingOnly = false;
     bool                    m_copyPlacement = true;
     bool                    m_copyOtherItems = true;
     bool                    m_groupItems = false;
