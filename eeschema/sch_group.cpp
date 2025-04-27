@@ -427,8 +427,8 @@ void SCH_GROUP::RunOnChildren( const std::function<void( SCH_ITEM* )>& aFunction
         {
             aFunction( static_cast<SCH_ITEM*>( item ) );
 
-            if( item->Type() == SCH_GROUP_T )
-                static_cast<SCH_ITEM*>( item )->RunOnChildren( aFunction, RECURSE_MODE::RECURSE );
+            if( item->Type() == SCH_GROUP_T && aMode == RECURSE_MODE::RECURSE )
+                static_cast<SCH_GROUP*>( item )->RunOnChildren( aFunction, RECURSE_MODE::RECURSE );
         }
     }
     catch( std::bad_function_call& )

@@ -53,6 +53,7 @@
 #include <sch_line.h>
 #include <sch_screen.h>
 #include <sch_sheet.h>
+#include <sch_group.h>
 #include <sch_sheet_pin.h>
 #include <schematic.h>
 #include <sch_commit.h>
@@ -1321,9 +1322,24 @@ int SCH_LINE_WIRE_BUS_TOOL::TrimOverLappingWires( SCH_COMMIT* aCommit, SCH_SELEC
 
 int SCH_LINE_WIRE_BUS_TOOL::AddJunctionsIfNeeded( SCH_COMMIT* aCommit, SCH_SELECTION* aSelection )
 {
-    SCH_SCREEN* screen = m_frame->GetScreen();
+    SCH_SCREEN*           screen = m_frame->GetScreen();
+    std::deque<EDA_ITEM*> allItems;
 
-    for( const VECTOR2I& point : screen->GetNeededJunctions( aSelection->Items() ) )
+    for( EDA_ITEM* item : aSelection->Items() )
+    {
+        allItems.push_back( item );
+
+        if( item->Type() == SCH_GROUP_T )
+        {
+            static_cast<SCH_GROUP*>( item )->RunOnChildren(
+                    [&]( SCH_ITEM* child )
+                    {
+                        allItems.push_back( child );
+                    }, RECURSE_MODE::RECURSE );
+        }
+    }
+
+    for( const VECTOR2I& point : screen->GetNeededJunctions( allItems ) )
         m_frame->AddJunction( aCommit, m_frame->GetScreen(), point );
 
     return 0;
