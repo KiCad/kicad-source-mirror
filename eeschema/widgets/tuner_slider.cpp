@@ -82,7 +82,7 @@ TUNER_SLIDER::TUNER_SLIDER( SIMULATOR_FRAME_UI* aFrame, wxWindow* aParent,
     if( !tunerParam )
     {
         throw KI_PARAM_ERROR( wxString::Format( _( "%s has simulation model of type '%s %s'.\n\n"
-                                                   "Only passvie R, L, C models and voltage and "
+                                                   "Only passive R, L, C models and voltage and "
                                                    "current sources may be tuned." ),
                                                 m_ref,
                                                 item->model->GetDeviceInfo().fieldValue,
