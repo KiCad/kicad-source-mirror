@@ -255,7 +255,7 @@ void DRC_ENGINE::loadImplicitRules()
                     _( "netclass '%s'" ), nc->GetClearanceParent()->GetHumanReadableName() );
             netclassRule->m_Implicit = true;
 
-            expr = wxString::Format( wxT( "A.NetClass == '%s'" ), ncName );
+            expr = wxString::Format( wxT( "A.hasExactNetclass('%s')" ), ncName );
             netclassRule->m_Condition = new DRC_RULE_CONDITION( expr );
             netclassClearanceRules.push_back( netclassRule );
 
