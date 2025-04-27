@@ -1301,6 +1301,46 @@ static void hasNetclassFunc( LIBEVAL::CONTEXT* aCtx, void* self )
             } );
 }
 
+
+static void hasExactNetclassFunc( LIBEVAL::CONTEXT* aCtx, void* self )
+{
+    LIBEVAL::VALUE* arg = aCtx->Pop();
+    LIBEVAL::VALUE* result = aCtx->AllocValue();
+
+    result->Set( 0.0 );
+    aCtx->Push( result );
+
+    if( !arg || arg->AsString().IsEmpty() )
+    {
+        if( aCtx->HasErrorCallback() )
+            aCtx->ReportError( _( "Missing netclass name argument to hasExactNetclass()" ) );
+
+        return;
+    }
+
+    PCBEXPR_VAR_REF* vref = static_cast<PCBEXPR_VAR_REF*>( self );
+    BOARD_ITEM*      item = vref ? vref->GetObject( aCtx ) : nullptr;
+
+    if( !item )
+        return;
+
+    result->SetDeferredEval(
+            [item, arg]() -> double
+            {
+                if( !item->IsConnected() )
+                    return 0.0;
+
+                BOARD_CONNECTED_ITEM* bcItem = static_cast<BOARD_CONNECTED_ITEM*>( item );
+                NETCLASS*             netclass = bcItem->GetEffectiveNetClass();
+
+                if( netclass->GetName() == arg->AsString() )
+                    return 1.0;
+
+                return 0.0;
+            } );
+}
+
+
 static void hasComponentClassFunc( LIBEVAL::CONTEXT* aCtx, void* self )
 {
     LIBEVAL::VALUE* arg = aCtx->Pop();
@@ -1388,5 +1428,6 @@ void PCBEXPR_BUILTIN_FUNCTIONS::RegisterAllFunctions()
     RegisterFunc( wxT( "getField('x')" ), getFieldFunc );
 
     RegisterFunc( wxT( "hasNetclass('x')" ), hasNetclassFunc );
+    RegisterFunc( wxT( "hasExactNetclass('x')" ), hasExactNetclassFunc );
     RegisterFunc( wxT( "hasComponentClass('x')" ), hasComponentClassFunc );
 }
