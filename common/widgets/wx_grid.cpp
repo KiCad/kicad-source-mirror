@@ -377,7 +377,9 @@ void WX_GRID::onCellEditorHidden( wxGridEvent& aEvent )
     {
         UNITS_PROVIDER* unitsProvider = getUnitsProvider( col );
 
-        auto [cellUnits, cellDataType] = getColumnUnits( col );
+        auto cellUnitsData = getColumnUnits( col );
+        EDA_UNITS cellUnits = cellUnitsData.first;
+        EDA_DATA_TYPE cellDataType = cellUnitsData.second;
 
         m_eval->SetDefaultUnits( cellUnits );
 
