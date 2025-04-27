@@ -56,6 +56,7 @@ MEANDER_SETTINGS::MEANDER_SETTINGS()
     m_lengthTolerance = 0;
     m_keepEndpoints = false;
     m_isTimeDomain = false;
+    m_netClass = nullptr;
 }
 
 

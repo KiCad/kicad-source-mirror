@@ -61,6 +61,7 @@ ACTION_GROUP::ACTION_GROUP( const std::string_view& aName )
 {
     m_name = aName;
     m_id   = ACTION_MANAGER::MakeActionId( m_name );
+    m_defaultAction = nullptr;
 }
 
 

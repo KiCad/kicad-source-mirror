@@ -63,6 +63,7 @@ DIALOG_BOARD_SETUP::DIALOG_BOARD_SETUP( PCB_EDIT_FRAME* aFrame ) :
         m_boardFinish( nullptr ),
         m_physicalStackup( nullptr ),
         m_timeDomainParameters( nullptr ),
+        m_netClasses( nullptr ),
         m_currentPage( 0 ),
         m_layersPage( 0 ),
         m_physicalStackupPage( 0 ),
@@ -78,7 +79,6 @@ DIALOG_BOARD_SETUP::DIALOG_BOARD_SETUP( PCB_EDIT_FRAME* aFrame ) :
         m_customRulesPage( 0 ),
         m_severitiesPage( 0 ),
         m_timeDomainParametersPage( 0 )
-
 {
     SetEvtHandlerEnabled( false );
 
