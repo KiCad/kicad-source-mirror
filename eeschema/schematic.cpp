@@ -756,7 +756,7 @@ void SCHEMATIC::FixupJunctions()
     {
         std::deque<EDA_ITEM*> allItems;
 
-        for( auto item : screen->Items() )
+        for( SCH_ITEM* item : screen->Items() )
             allItems.push_back( item );
 
         // Add missing junctions and breakup wires as needed
