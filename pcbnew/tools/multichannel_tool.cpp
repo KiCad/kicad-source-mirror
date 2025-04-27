@@ -615,43 +615,16 @@ wxString MULTICHANNEL_TOOL::stripComponentIndex( const wxString& aRef ) const
 }
 
 
-int MULTICHANNEL_TOOL::findRoutedConnections( std::set<BOARD_ITEM*>&             aOutput,
+int MULTICHANNEL_TOOL::findRouting( std::set<BOARD_ITEM*>&             aOutput,
                                               std::shared_ptr<CONNECTIVITY_DATA> aConnectivity,
                                               const SHAPE_POLY_SET&        aRAPoly,
                                               RULE_AREA*                   aRA,
-                                              FOOTPRINT*                   aFp,
                                               const REPEAT_LAYOUT_OPTIONS& aOpts ) const
 {
-    std::set<BOARD_ITEM*> conns;
-
-    for( PAD* pad : aFp->Pads() )
-    {
-        auto connectedItems = aConnectivity->GetConnectedItems( pad, EXCLUDE_ZONES | IGNORE_NETS );
-
-        for( BOARD_CONNECTED_ITEM* item : connectedItems )
-            conns.insert( item );
-    }
-
-    int count = 0;
-
-    for( BOARD_ITEM* item : conns )
-    {
-        // fixme: respect layer sets assigned to each RA
-
-        if( item->Type() == PCB_PAD_T )
-            continue;
-
-        std::shared_ptr<SHAPE> effShape = item->GetEffectiveShape( item->GetLayer() );
-
-        if( effShape->Collide( &aRAPoly, 0 ) )
-        {
-            aOutput.insert( item );
-            count++;
-        }
-    }
-
     // The user also will consider tracks and vias that are inside the source area but
     // not connected to any of the source pads to count as "routing" (e.g. stitching vias)
+
+    int count = 0;
 
     PCBEXPR_COMPILER compiler( new PCBEXPR_UNIT_RESOLVER );
     PCBEXPR_UCODE    ucode;
@@ -718,7 +691,6 @@ bool MULTICHANNEL_TOOL::copyRuleAreaContents( TMATCH::COMPONENT_MATCHES& aMatche
     FOOTPRINT* targetAnchorFp = nullptr;
     VECTOR2I disp = aTargetArea->m_center - aRefArea->m_center;
     EDA_ANGLE rot = EDA_ANGLE( 0 );
-
     if( aOpts.m_anchorFp )
     {
         for( auto& fpPair : aMatches )
@@ -765,21 +737,13 @@ bool MULTICHANNEL_TOOL::copyRuleAreaContents( TMATCH::COMPONENT_MATCHES& aMatche
 
         wxLogTrace( traceMultichannelTool, wxT("copying routing: %d fps\n"), (int) aMatches.size() );
 
-        for( auto& fpPair : aMatches )
-        {
-            findRoutedConnections( targetRouting, connectivity, targetPoly, aTargetArea,
-                                   fpPair.second, aOpts );
-            findRoutedConnections( refRouting, connectivity, refPoly, aRefArea, fpPair.first,
-                                   aOpts );
-
-            wxLogTrace( traceMultichannelTool, wxT("target-routes %d\n"), (int) targetRouting.size() );
-        }
+        findRouting( targetRouting, connectivity, targetPoly, aTargetArea, aOpts );
+        findRouting( refRouting, connectivity, refPoly, aRefArea, aOpts );
 
         for( BOARD_ITEM* item : targetRouting )
         {
             if( item->IsLocked() && !aOpts.m_includeLockedItems )
                 continue;
-
             // item already removed
             if( aCommit->GetStatus( item ) != 0 )
                 continue;

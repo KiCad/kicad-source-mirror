@@ -145,9 +145,8 @@ private:
     bool       copyRuleAreaContents( TMATCH::COMPONENT_MATCHES& aMatches, BOARD_COMMIT* aCommit, RULE_AREA* aRefArea,
                                      RULE_AREA* aTargetArea, REPEAT_LAYOUT_OPTIONS aOpts, std::unordered_set<BOARD_ITEM*>& aAffectedItems,
                                      std::unordered_set<BOARD_ITEM*>& aGroupableItems );
-    int        findRoutedConnections( std::set<BOARD_ITEM*>&             aOutput,
-                                      std::shared_ptr<CONNECTIVITY_DATA> aConnectivity,
-                                      const SHAPE_POLY_SET& aRAPoly, RULE_AREA* aRA, FOOTPRINT* aFp,
+    int        findRouting( std::set<BOARD_ITEM*>& aOutput, std::shared_ptr<CONNECTIVITY_DATA> aConnectivity,
+                                      const SHAPE_POLY_SET& aRAPoly, RULE_AREA* aRA,
                                       const REPEAT_LAYOUT_OPTIONS& aOpts ) const;
     void       fixupNet( BOARD_CONNECTED_ITEM* aRef, BOARD_CONNECTED_ITEM* aTarget,
                          TMATCH::COMPONENT_MATCHES& aComponentMatches );
