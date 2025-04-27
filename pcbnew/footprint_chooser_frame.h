@@ -131,7 +131,6 @@ private:
     EDA_3D_CANVAS*           m_preview3DCanvas;
     CAMERA&                  m_currentCamera;
     TRACK_BALL               m_trackBallCamera;
-    BOARD*                   m_dummyBoard;
     BITMAP_BUTTON*           m_grButtonFpView;
     BITMAP_BUTTON*           m_grButton3DView;
 
