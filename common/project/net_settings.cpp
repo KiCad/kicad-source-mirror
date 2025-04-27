@@ -29,6 +29,7 @@
 #include <settings/settings_manager.h>
 #include <string_utils.h>
 #include <base_units.h>
+#include <unordered_set>
 
 
 // const int netSettingsSchemaVersion = 0;
@@ -712,7 +713,7 @@ std::shared_ptr<NETCLASS> NET_SETTINGS::GetEffectiveNetClass( const wxString& aN
         return cacheItr->second;
 
     // No cache found - build a vector of all netclasses assigned to or matching this net
-    std::vector<std::shared_ptr<NETCLASS>> resolvedNetclasses;
+    std::unordered_set<std::shared_ptr<NETCLASS>> resolvedNetclasses;
 
     // First find explicit netclass assignments
     auto it = m_netClassLabelAssignments.find( aNetName );
@@ -725,12 +726,11 @@ std::shared_ptr<NETCLASS> NET_SETTINGS::GetEffectiveNetClass( const wxString& aN
 
             if( netclass )
             {
-                resolvedNetclasses.push_back( std::move( netclass ) );
+                resolvedNetclasses.insert( std::move( netclass ) );
             }
             else
             {
-                resolvedNetclasses.push_back(
-                        getOrAddImplicitNetcless( netclassName ) );
+                resolvedNetclasses.insert( getOrAddImplicitNetcless( netclassName ) );
             }
         }
     }
@@ -744,11 +744,11 @@ std::shared_ptr<NETCLASS> NET_SETTINGS::GetEffectiveNetClass( const wxString& aN
 
             if( netclass )
             {
-                resolvedNetclasses.push_back( std::move( netclass ) );
+                resolvedNetclasses.insert( std::move( netclass ) );
             }
             else
             {
-                resolvedNetclasses.push_back( getOrAddImplicitNetcless( netclassName ) );
+                resolvedNetclasses.insert( getOrAddImplicitNetcless( netclassName ) );
             }
         }
     }
@@ -766,7 +766,7 @@ std::shared_ptr<NETCLASS> NET_SETTINGS::GetEffectiveNetClass( const wxString& aN
     // will also sort resolvedNetclasses by priority order.
     std::vector<NETCLASS*> netclassPtrs;
 
-    for( std::shared_ptr<NETCLASS>& nc : resolvedNetclasses )
+    for( const std::shared_ptr<NETCLASS>& nc : resolvedNetclasses )
         netclassPtrs.push_back( nc.get() );
 
     wxString name;
@@ -777,8 +777,8 @@ std::shared_ptr<NETCLASS> NET_SETTINGS::GetEffectiveNetClass( const wxString& aN
     if( netclassPtrs.size() == 1 )
     {
         // No defaults were added - just return the primary netclass
-        m_effectiveNetclassCache[aNetName] = resolvedNetclasses[0];
-        return resolvedNetclasses[0];
+        m_effectiveNetclassCache[aNetName] = *resolvedNetclasses.begin();
+        return *resolvedNetclasses.begin();
     }
     else
     {
