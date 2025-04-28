@@ -71,6 +71,7 @@ set( KICOMMON_SRCS
     jobs/job_export_pcb_dxf.cpp
     jobs/job_export_pcb_gerber.cpp
     jobs/job_export_pcb_gerbers.cpp
+    jobs/job_export_pcb_hpgl.cpp
     jobs/job_export_pcb_ipc2581.cpp
     jobs/job_export_pcb_ipcd356.cpp
     jobs/job_export_pcb_odb.cpp

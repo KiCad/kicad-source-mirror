@@ -47,6 +47,7 @@
 #include <math/util.h>      // for KiROUND
 #include <macros.h>
 #include <jobs/job_export_pcb_gerbers.h>
+#include <jobs/job_export_pcb_hpgl.h>
 #include <jobs/job_export_pcb_dxf.h>
 #include <jobs/job_export_pcb_pdf.h>
 #include <jobs/job_export_pcb_ps.h>
@@ -452,6 +453,15 @@ void DIALOG_PLOT::transferPlotParamsToJob()
         gJob->m_createJobsFile = m_plotOpts.GetCreateGerberJobFile();
         gJob->m_precision = m_plotOpts.GetGerberPrecision();
         gJob->m_useBoardPlotParams = false;
+    }
+
+    if( m_job->m_plotFormat == JOB_EXPORT_PCB_PLOT::PLOT_FORMAT::HPGL )
+    {
+        JOB_EXPORT_PCB_HPGL* hpglJob = static_cast<JOB_EXPORT_PCB_HPGL*>( m_job );
+        hpglJob->m_genMode = JOB_EXPORT_PCB_HPGL::GEN_MODE::MULTI;
+        hpglJob->m_defaultPenSize = m_plotOpts.GetHPGLPenDiameter() / 1000.0 * 25.4; // mils to mm
+        hpglJob->m_penNumber = m_plotOpts.GetHPGLPenNum();
+        hpglJob->m_penSpeed = m_plotOpts.GetHPGLPenSpeed();
     }
 
     if( m_job->m_plotFormat == JOB_EXPORT_PCB_PLOT::PLOT_FORMAT::SVG )
@@ -1120,6 +1130,8 @@ void DIALOG_PLOT::applyPlotSettings()
     {
         tempOptions.SetHPGLPenDiameter( m_plotOpts.GetHPGLPenDiameter() );
     }
+    tempOptions.SetHPGLPenSpeed( m_plotOpts.GetHPGLPenSpeed() );
+    tempOptions.SetHPGLPenNum( m_plotOpts.GetHPGLPenNum() );
 
     // X scale
     double tmpDouble;

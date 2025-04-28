@@ -30,6 +30,7 @@
 #include <wx/filename.h>
 #include <gerber_jobfile_writer.h>
 #include <jobs/job_export_pcb_gerbers.h>
+#include <jobs/job_export_pcb_hpgl.h>
 #include <jobs/job_export_pcb_dxf.h>
 #include <jobs/job_export_pcb_pdf.h>
 #include <jobs/job_export_pcb_plot.h>
@@ -374,6 +375,14 @@ void PCB_PLOTTER::PlotJobToPlotOpts( PCB_PLOT_PARAMS& aOpts, JOB_EXPORT_PCB_PLOT
         aOpts.SetIncludeGerberNetlistInfo( gJob->m_includeNetlistAttributes );
         aOpts.SetCreateGerberJobFile( gJob->m_createJobsFile );
         aOpts.SetGerberPrecision( gJob->m_precision );
+    }
+
+    if( aJob->m_plotFormat == JOB_EXPORT_PCB_PLOT::PLOT_FORMAT::HPGL )
+    {
+        JOB_EXPORT_PCB_HPGL* hpglJob = static_cast<JOB_EXPORT_PCB_HPGL*>( aJob );
+        aOpts.SetHPGLPenDiameter( hpglJob->m_defaultPenSize / 25.4 * 1000.0 ); // mm to mils
+        aOpts.SetHPGLPenSpeed( hpglJob->m_penSpeed );
+        aOpts.SetHPGLPenNum( hpglJob->m_penNumber );
     }
 
     if( aJob->m_plotFormat == JOB_EXPORT_PCB_PLOT::PLOT_FORMAT::SVG )
