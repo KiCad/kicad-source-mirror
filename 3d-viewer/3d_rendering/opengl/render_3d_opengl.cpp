@@ -686,10 +686,6 @@ bool RENDER_3D_OPENGL::Redraw( bool aIsMoving, REPORTER* aStatusReporter,
 
             unsetDepthOffset();
         }
-        else if( isPasteLayer && skipRenderHoles )
-        {
-            // Do not render paste layers when skipRenderHoles is enabled or we get z-fight issues
-        }
         else
         {
             setLayerMaterial( layer );
@@ -698,10 +694,13 @@ bool RENDER_3D_OPENGL::Redraw( bool aIsMoving, REPORTER* aStatusReporter,
             OPENGL_RENDER_LIST* anti_board = nullptr;
             OPENGL_RENDER_LIST* solder_mask = nullptr;
 
-            if( isSilkLayer && cfg.clip_silk_on_via_annuli )
-                throughHolesOuter = m_outerThroughHoleRings;
-            else
-                throughHolesOuter = m_outerThroughHoles;
+            if( !skipRenderHoles )
+            {
+                if( isSilkLayer && cfg.clip_silk_on_via_annuli )
+                    throughHolesOuter = m_outerThroughHoleRings;
+                else
+                    throughHolesOuter = m_outerThroughHoles;
+            }
 
             if( isSilkLayer && cfg.show_off_board_silk )
                 anti_board = nullptr;
