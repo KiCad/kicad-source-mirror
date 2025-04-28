@@ -112,6 +112,20 @@ GERBER_FILE_IMAGE::~GERBER_FILE_IMAGE()
 }
 
 
+void GERBER_FILE_IMAGE::AddMessageToList( const wxString& aMessage )
+{
+    /* Add a message to the message list, but only if there are less than max_messages
+     * to avoid very long list (can happens if trying to read a non gerber file)
+     */
+    const int max_messages = 50;    // Arbitrary but reasonable value.
+
+    if( m_messagesList.size() < max_messages )
+        m_messagesList.Add( aMessage );
+    else if( m_messagesList.size() == max_messages )
+        m_messagesList.Add( _( "Too many messages, some are skipped" ) );
+}
+
+
 void GERBER_FILE_IMAGE::SetDrawOffetAndRotation( VECTOR2D aOffsetMM, EDA_ANGLE aRotation )
 {
     m_DisplayOffset.x = KiROUND( aOffsetMM.x * gerbIUScale.IU_PER_MM );

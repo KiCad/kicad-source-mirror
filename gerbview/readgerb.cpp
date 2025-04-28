@@ -323,7 +323,7 @@ bool GERBER_FILE_IMAGE::LoadGerberFile( const wxString& aFullFileName )
                 break;
 
             default:
-                msg.Printf( wxT( "Unexpected char 0x%2.2X" ), *text );
+                msg.Printf( wxT( "Unexpected char 0x%2.2X (%c)" ), *text, *text );
                 AddMessageToList( msg );
                 text++;
                 break;

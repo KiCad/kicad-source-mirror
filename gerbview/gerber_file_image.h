@@ -212,10 +212,7 @@ public:
     /**
      * Add a message to the message list
      */
-    void AddMessageToList( const wxString& aMessage )
-    {
-        m_messagesList.Add( aMessage );
-    }
+    void AddMessageToList( const wxString& aMessage );
 
     /**
      * Return the current coordinate type pointed to by XnnYnn Text (XnnnnYmmmm).
