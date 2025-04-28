@@ -644,7 +644,7 @@ bool DIALOG_SYMBOL_FIELDS_TABLE::TransferDataFromWindow()
     SCH_COMMIT     commit( m_parent );
     SCH_SHEET_PATH currentSheet = m_parent->GetCurrentSheet();
 
-    m_dataModel->ApplyData( commit );
+    m_dataModel->ApplyData( commit, m_schSettings.m_TemplateFieldNames );
 
     commit.Push( wxS( "Symbol Fields Table Edit" ) );
 

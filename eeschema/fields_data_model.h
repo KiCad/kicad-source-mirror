@@ -215,7 +215,7 @@ public:
     void CollapseForSort();
     void ExpandAfterSort();
 
-    void ApplyData( SCH_COMMIT& aCommit );
+    void ApplyData( SCH_COMMIT& aCommit, TEMPLATES& aTemplateFieldnames );
 
     bool IsEdited() { return m_edited; }
 

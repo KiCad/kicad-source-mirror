@@ -798,7 +798,7 @@ void FIELDS_EDITOR_GRID_DATA_MODEL::ExpandAfterSort()
 }
 
 
-void FIELDS_EDITOR_GRID_DATA_MODEL::ApplyData( SCH_COMMIT& aCommit )
+void FIELDS_EDITOR_GRID_DATA_MODEL::ApplyData( SCH_COMMIT& aCommit, TEMPLATES& aTemplateFieldnames )
 {
 
     for( const SCH_REFERENCE& instance : m_symbolsList )
@@ -843,7 +843,12 @@ void FIELDS_EDITOR_GRID_DATA_MODEL::ApplyData( SCH_COMMIT& aCommit )
             {
                 destField = symbol.AddField( SCH_FIELD( &symbol, FIELD_T::USER, srcName ) );
                 destField->SetTextAngle( symbol.GetField( FIELD_T::REFERENCE )->GetTextAngle() );
-                destField->SetVisible( false );
+
+                if( const TEMPLATE_FIELDNAME* srcTemplate = aTemplateFieldnames.GetFieldName( srcName ) )
+                    destField->SetVisible( srcTemplate->m_Visible );
+                else
+                    destField->SetVisible( false );
+
                 destField->SetTextPos( symbol.GetPosition() );
             }
 
