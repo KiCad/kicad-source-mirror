@@ -62,6 +62,15 @@ set( CMAKE_MODULE_PATH       "${KICAD_CMAKE_MODULE_PATH}" )
 
 include( ConfigurePlatform )
 
+if( WIN32 )
+    # Without WIN32_LEAN_AND_MEAN defined including windows.h pulls in legacy
+    # winsocks.h which conflicts with winsocks2.h used by modern libraries such
+    # as curl.
+    # There is no harm in defining this globally, at worst some additional
+    # headers have to be included explicitly.
+    add_compile_definitions( WIN32_LEAN_AND_MEAN )
+endif()
+
 # Create a flag to identify the non-Apple unix systems
 if( UNIX AND NOT APPLE )
     set( UNIX_NOT_APPLE ON )
