@@ -132,6 +132,8 @@ bool DIALOG_GENDRILL::TransferDataFromWindow()
     {
         genDrillAndMapFiles( true, m_cbGenerateMap->GetValue(),
                              m_generateTentingLayers->GetValue() );
+        // Keep the window open so that the user can see the result
+        return false;
     }
     else
     {
