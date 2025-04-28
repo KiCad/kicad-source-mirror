@@ -16,8 +16,8 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-04-23 21:23+0300\n"
-"PO-Revision-Date: 2025-04-25 18:01+0000\n"
-"Last-Translator: co8 j <co8@nifty.com>\n"
+"PO-Revision-Date: 2025-04-28 11:59+0000\n"
+"Last-Translator: \"Tokita, Hiroshi\" <tokita.hiroshi@fujitsu.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
 "Language: ja\n"
@@ -26992,14 +26992,12 @@ msgid ""
 msgstr ""
 
 #: kicad/cli/command_pcb_export_ps.cpp:123
-#, fuzzy
 msgid "X scale adjust for exact scale."
-msgstr "実際の作画倍率にXスケールを調整"
+msgstr "実際の作画倍率にXスケールを調整する。"
 
 #: kicad/cli/command_pcb_export_ps.cpp:129
-#, fuzzy
 msgid "Y scale adjust for exact scale."
-msgstr "実際に作画倍率にYスケールを調整"
+msgstr "実際に作画倍率にYスケールを調整する。"
 
 #: kicad/cli/command_pcb_export_ps.cpp:135
 #, fuzzy
@@ -38362,9 +38360,8 @@ msgid "x"
 msgstr "かける(x)"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:71
-#, fuzzy
 msgid "Appearance preset:"
-msgstr "外観"
+msgstr "外観のプリセット:"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:81
 msgid "Background style:"
@@ -39002,9 +38999,8 @@ msgid "Track and Via Dimensions"
 msgstr "配線とビアの寸法"
 
 #: pcbnew/dialogs/dialog_tuning_pattern_properties.cpp:56
-#, fuzzy
 msgid "Target Skew: "
-msgstr "目標の遅延: %s"
+msgstr "目標の遅延: "
 
 #: pcbnew/dialogs/dialog_tuning_pattern_properties.cpp:57
 #, fuzzy
@@ -39026,9 +39022,8 @@ msgid "(from %s)"
 msgstr "(%s から)"
 
 #: pcbnew/dialogs/dialog_tuning_pattern_properties_base.cpp:38
-#, fuzzy
 msgid "Target Length:"
-msgstr "目標の長さ"
+msgstr "目標の長さ:"
 
 #: pcbnew/dialogs/dialog_tuning_pattern_properties_base.cpp:58
 #, fuzzy
@@ -50240,14 +50235,12 @@ msgid "BOARD CHARACTERISTICS"
 msgstr "基板の特性"
 
 #: pcbnew/tools/pcb_control.cpp:2199
-#, fuzzy
 msgid "Copper layer count: "
-msgstr "導体レイヤー数:"
+msgstr "導体レイヤー数: "
 
 #: pcbnew/tools/pcb_control.cpp:2203
-#, fuzzy
 msgid "Board thickness: "
-msgstr "基板厚:"
+msgstr "基板厚: "
 
 #: pcbnew/tools/pcb_control.cpp:2210
 msgid "Board overall dimensions: "
@@ -50262,9 +50255,8 @@ msgid "Min hole diameter: "
 msgstr "最小穴径: "
 
 #: pcbnew/tools/pcb_control.cpp:2228
-#, fuzzy
 msgid "Copper finish: "
-msgstr "銅箔仕上げ:"
+msgstr "銅箔仕上げ: "
 
 #: pcbnew/tools/pcb_control.cpp:2231
 #, fuzzy
@@ -50276,9 +50268,8 @@ msgid "Castellated pads: "
 msgstr "端面スルーホール パッド: "
 
 #: pcbnew/tools/pcb_control.cpp:2237
-#, fuzzy
 msgid "Plated board edge: "
-msgstr "基板端メッキ"
+msgstr "基板端メッキ: "
 
 #: pcbnew/tools/pcb_control.cpp:2246
 msgid "Yes, Bevelled"
@@ -51521,9 +51512,9 @@ msgid "Rule Area %s"
 msgstr "ルールエリア %s"
 
 #: pcbnew/zone.cpp:1194
-#, fuzzy, c-format
+#, c-format
 msgid "Rule Area '%s' %s"
-msgstr "ルールエリア %s"
+msgstr "ルールエリア '%s' %s"
 
 #: pcbnew/zone.cpp:1201
 #, c-format
@@ -51531,14 +51522,14 @@ msgid "Teardrop %s %s"
 msgstr "ティアドロップ %s %s"
 
 #: pcbnew/zone.cpp:1209
-#, fuzzy, c-format
+#, c-format
 msgid "Zone %s %s, priority %d"
-msgstr "ゾーン優先度:"
+msgstr "ゾーン %s %s, 優先度 %d"
 
 #: pcbnew/zone.cpp:1216
-#, fuzzy, c-format
+#, c-format
 msgid "Zone '%s' %s %s, priority %d"
-msgstr "%s, %s, %s, または %s"
+msgstr "ゾーン '%s' %s %s, 優先度 %d"
 
 #: pcbnew/zone.cpp:1938
 msgid "Keepout"
