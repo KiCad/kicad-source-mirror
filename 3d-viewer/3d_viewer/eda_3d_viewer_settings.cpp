@@ -253,7 +253,7 @@ EDA_3D_VIEWER_SETTINGS::EDA_3D_VIEWER_SETTINGS() :
     m_params.emplace_back( new PARAM<bool>( "render.opengl_thickness_disableOnMove",
                                             &m_Render.opengl_thickness_disableOnMove, false ) );
     m_params.emplace_back( new PARAM<bool>( "render.opengl_vias_disableOnMove",
-                                            &m_Render.opengl_vias_disableOnMove, false ) );
+                                            &m_Render.opengl_microvias_disableOnMove, false ) );
     m_params.emplace_back( new PARAM<bool>( "render.opengl_holes_disableOnMove",
                                             &m_Render.opengl_holes_disableOnMove, false ) );
     m_params.emplace_back( new PARAM<bool>( "render.opengl_render_bbox_only_OnMove",

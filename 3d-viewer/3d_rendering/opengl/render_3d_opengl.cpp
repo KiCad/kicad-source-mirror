@@ -71,7 +71,7 @@ RENDER_3D_OPENGL::RENDER_3D_OPENGL( EDA_3D_CANVAS* aCanvas, BOARD_ADAPTER& aAdap
     m_outerThroughHoles = nullptr;
     m_outerThroughHoleRings = nullptr;
     m_outerViaThroughHoles = nullptr;
-    m_vias = nullptr;
+    m_microviaHoles = nullptr;
     m_padHoles = nullptr;
 
     m_circleTexture = 0;
@@ -595,15 +595,15 @@ bool RENDER_3D_OPENGL::Redraw( bool aIsMoving, REPORTER* aStatusReporter,
 
     bool skipThickness = aIsMoving && cfg.opengl_thickness_disableOnMove;
     bool skipRenderHoles = aIsMoving && cfg.opengl_holes_disableOnMove;
-    bool skipRenderVias = aIsMoving && cfg.opengl_vias_disableOnMove;
+    bool skipRenderMicroVias = aIsMoving && cfg.opengl_microvias_disableOnMove;
     bool showThickness = !skipThickness;
 
     std::bitset<LAYER_3D_END> layerFlags = m_boardAdapter.GetVisibleLayers();
 
     setLayerMaterial( B_Cu );
 
-    if( !( skipRenderVias || skipRenderHoles ) && m_vias )
-        m_vias->DrawAll();
+    if( !( skipRenderMicroVias || skipRenderHoles ) && m_microviaHoles )
+        m_microviaHoles->DrawAll();
 
     if( !skipRenderHoles && m_padHoles )
         m_padHoles->DrawAll();
@@ -947,7 +947,7 @@ void RENDER_3D_OPENGL::freeAllLists()
     DELETE_AND_FREE( m_outerViaThroughHoles )
     DELETE_AND_FREE( m_outerThroughHoleRings )
 
-    DELETE_AND_FREE( m_vias )
+    DELETE_AND_FREE( m_microviaHoles )
     DELETE_AND_FREE( m_padHoles )
 }
 

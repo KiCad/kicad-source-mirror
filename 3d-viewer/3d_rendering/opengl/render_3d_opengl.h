@@ -230,7 +230,7 @@ private:
     GLuint              m_grid;             ///< oGL list that stores current grid
     GRID3D_TYPE         m_lastGridType;     ///< Stores the last grid type.
 
-    OPENGL_RENDER_LIST* m_vias;
+    OPENGL_RENDER_LIST* m_microviaHoles;
     OPENGL_RENDER_LIST* m_padHoles;
 
     // Caches

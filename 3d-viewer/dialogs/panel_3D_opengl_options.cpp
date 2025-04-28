@@ -49,7 +49,7 @@ void PANEL_3D_OPENGL_OPTIONS::loadSettings( EDA_3D_VIEWER_SETTINGS* aCfg )
 
     m_checkBoxDisableAAMove->SetValue( aCfg->m_Render.opengl_AA_disableOnMove );
     m_checkBoxDisableMoveThickness->SetValue( aCfg->m_Render.opengl_thickness_disableOnMove );
-    m_checkBoxDisableMoveVias->SetValue( aCfg->m_Render.opengl_vias_disableOnMove );
+    m_checkBoxDisableMoveVias->SetValue( aCfg->m_Render.opengl_microvias_disableOnMove );
     m_checkBoxDisableMoveHoles->SetValue( aCfg->m_Render.opengl_holes_disableOnMove );
 }
 
@@ -80,7 +80,7 @@ bool PANEL_3D_OPENGL_OPTIONS::TransferDataFromWindow()
 
     cfg->m_Render.opengl_AA_disableOnMove = m_checkBoxDisableAAMove->GetValue();
     cfg->m_Render.opengl_thickness_disableOnMove = m_checkBoxDisableMoveThickness->GetValue();
-    cfg->m_Render.opengl_vias_disableOnMove = m_checkBoxDisableMoveVias->GetValue();
+    cfg->m_Render.opengl_microvias_disableOnMove = m_checkBoxDisableMoveVias->GetValue();
     cfg->m_Render.opengl_holes_disableOnMove = m_checkBoxDisableMoveHoles->GetValue();
 
     return true;

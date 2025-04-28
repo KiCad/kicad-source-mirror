@@ -481,9 +481,8 @@ void RENDER_3D_OPENGL::reload( REPORTER* aStatusReporter, REPORTER* aWarningRepo
 
     SHAPE_POLY_SET board_poly_with_holes = m_boardAdapter.GetBoardPoly().CloneDropTriangulation();
     board_poly_with_holes.BooleanSubtract( m_boardAdapter.GetTH_ODPolys() );
-    board_poly_with_holes.BooleanSubtract( m_boardAdapter.GetNPTH_ODPolys() );
 
-    m_boardWithHoles = createBoard( board_poly_with_holes );
+    m_boardWithHoles = createBoard( board_poly_with_holes, &m_boardAdapter.GetTH_IDs() );
 
     if( m_antiBoard )
         m_antiBoard->SetItIsTransparent( true );
@@ -778,7 +777,7 @@ void RENDER_3D_OPENGL::generateViasAndPads()
             }
         }
 
-        m_vias = new OPENGL_RENDER_LIST( *layerTriangleVIA, 0, 0.0f, 0.0f );
+        m_microviaHoles = new OPENGL_RENDER_LIST( *layerTriangleVIA, 0, 0.0f, 0.0f );
 
         delete layerTriangleVIA;
     }

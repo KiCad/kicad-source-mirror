@@ -90,7 +90,7 @@ public:
 
         bool opengl_AA_disableOnMove;
         bool opengl_thickness_disableOnMove;
-        bool opengl_vias_disableOnMove;
+        bool opengl_microvias_disableOnMove;
         bool opengl_holes_disableOnMove;
         bool opengl_render_bbox_only_OnMove;
         bool opengl_copper_thickness;

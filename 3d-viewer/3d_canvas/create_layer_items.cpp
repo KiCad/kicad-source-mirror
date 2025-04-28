@@ -515,7 +515,7 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
             // The hole in the body is inflated by copper thickness, if not plated, no copper
             int inflate = 0;
 
-            if( pad->GetAttribute () != PAD_ATTRIB::NPTH )
+            if( pad->GetAttribute() != PAD_ATTRIB::NPTH )
                 inflate = KiROUND( GetHolePlatingThickness() / 2.0 );
 
             m_holeCount++;
@@ -547,7 +547,7 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
             // The hole in the body is inflated by copper thickness.
             const int inflate = GetHolePlatingThickness();
 
-            if( pad->GetAttribute () != PAD_ATTRIB::NPTH )
+            if( pad->GetAttribute() != PAD_ATTRIB::NPTH )
             {
                 if( cfg.clip_silk_on_via_annuli )
                     pad->TransformHoleToPolygon( m_viaAnnuliPolys, inflate, maxError, ERROR_INSIDE );
