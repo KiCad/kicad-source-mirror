@@ -116,7 +116,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-04-23 21:24+0300\n"
-"PO-Revision-Date: 2025-04-15 16:28+0000\n"
+"PO-Revision-Date: 2025-04-28 11:59+0000\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/v9/it/>\n"
 "Language: it\n"
@@ -124,7 +124,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.11-dev\n"
+"X-Generator: Weblate 5.12-dev\n"
 "X-Poedit-Basepath: /home/marco/git/github/kicad/kicad-source-mirror\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SearchPath-0: kicad\n"
@@ -761,229 +761,184 @@ msgid "Show user ECO2 layer"
 msgstr "Mostra strato utente ECO2"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:68
-#, fuzzy
 msgid "Show user defined layer 1"
-msgstr "Strato definito dall'utente 1"
+msgstr "Mostra strato definito dall'utente 1"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:69
-#, fuzzy
 msgid "Show user defined layer 2"
-msgstr "Strato definito dall'utente 2"
+msgstr "Mostra strato definito dall'utente 2"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:70
-#, fuzzy
 msgid "Show user defined layer 3"
-msgstr "Strato definito dall'utente 3"
+msgstr "Mostra strato definito dall'utente 3"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:71
-#, fuzzy
 msgid "Show user defined layer 4"
-msgstr "Strato definito dall'utente 4"
+msgstr "Mostra strato definito dall'utente 4"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:72
-#, fuzzy
 msgid "Show user defined layer 5"
-msgstr "Strato definito dall'utente 5"
+msgstr "Mostra strato definito dall'utente 5"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:73
-#, fuzzy
 msgid "Show user defined layer 6"
-msgstr "Strato definito dall'utente 6"
+msgstr "Mostra strato definito dall'utente 6"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:74
-#, fuzzy
 msgid "Show user defined layer 7"
-msgstr "Strato definito dall'utente 7"
+msgstr "Mostra strato definito dall'utente 7"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:75
-#, fuzzy
 msgid "Show user defined layer 8"
-msgstr "Strato definito dall'utente 8"
+msgstr "Mostra strato definito dall'utente 8"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:76
-#, fuzzy
 msgid "Show user defined layer 9"
-msgstr "Strato definito dall'utente 9"
+msgstr "Mostra strato definito dall'utente 9"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:77
-#, fuzzy
 msgid "Show user defined layer 10"
-msgstr "Strato definito dall'utente 10"
+msgstr "Mostra strato definito dall'utente 10"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:78
-#, fuzzy
 msgid "Show user defined layer 11"
-msgstr "Strato definito dall'utente 11"
+msgstr "Mostra strato definito dall'utente 11"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:79
-#, fuzzy
 msgid "Show user defined layer 12"
-msgstr "Strato definito dall'utente 12"
+msgstr "Mostra strato definito dall'utente 12"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:80
-#, fuzzy
 msgid "Show user defined layer 13"
-msgstr "Strato definito dall'utente 13"
+msgstr "Mostra strato definito dall'utente 13"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:81
-#, fuzzy
 msgid "Show user defined layer 14"
-msgstr "Strato definito dall'utente 14"
+msgstr "Mostra strato definito dall'utente 14"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:82
-#, fuzzy
 msgid "Show user defined layer 15"
-msgstr "Strato definito dall'utente 15"
+msgstr "Mostra strato definito dall'utente 15"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:83
-#, fuzzy
 msgid "Show user defined layer 16"
-msgstr "Strato definito dall'utente 16"
+msgstr "Mostra strato definito dall'utente 16"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:84
-#, fuzzy
 msgid "Show user defined layer 17"
-msgstr "Strato definito dall'utente 17"
+msgstr "Mostra strato definito dall'utente 17"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:85
-#, fuzzy
 msgid "Show user defined layer 18"
-msgstr "Strato definito dall'utente 18"
+msgstr "Mostra strato definito dall'utente 18"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:86
-#, fuzzy
 msgid "Show user defined layer 19"
-msgstr "Strato definito dall'utente 19"
+msgstr "Mostra strato definito dall'utente 19"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:87
-#, fuzzy
 msgid "Show user defined layer 20"
-msgstr "Strato definito dall'utente 20"
+msgstr "Mostra strato definito dall'utente 20"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:88
-#, fuzzy
 msgid "Show user defined layer 21"
-msgstr "Strato definito dall'utente 21"
+msgstr "Mostra strato definito dall'utente 21"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:89
-#, fuzzy
 msgid "Show user defined layer 22"
-msgstr "Strato definito dall'utente 22"
+msgstr "Mostra strato definito dall'utente 22"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:90
-#, fuzzy
 msgid "Show user defined layer 23"
-msgstr "Strato definito dall'utente 23"
+msgstr "Mostra strato definito dall'utente 23"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:91
-#, fuzzy
 msgid "Show user defined layer 24"
-msgstr "Strato definito dall'utente 24"
+msgstr "Mostra strato definito dall'utente 24"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:92
-#, fuzzy
 msgid "Show user defined layer 25"
-msgstr "Strato definito dall'utente 25"
+msgstr "Mostra strato definito dall'utente 25"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:93
-#, fuzzy
 msgid "Show user defined layer 26"
-msgstr "Strato definito dall'utente 26"
+msgstr "Mostra strato definito dall'utente 26"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:94
-#, fuzzy
 msgid "Show user defined layer 27"
-msgstr "Strato definito dall'utente 27"
+msgstr "Mostra strato definito dall'utente 27"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:95
-#, fuzzy
 msgid "Show user defined layer 28"
-msgstr "Strato definito dall'utente 28"
+msgstr "Mostra strato definito dall'utente 28"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:96
-#, fuzzy
 msgid "Show user defined layer 29"
-msgstr "Strato definito dall'utente 29"
+msgstr "Mostra strato definito dall'utente 29"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:97
-#, fuzzy
 msgid "Show user defined layer 30"
-msgstr "Strato definito dall'utente 30"
+msgstr "Mostra strato definito dall'utente 30"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:98
-#, fuzzy
 msgid "Show user defined layer 31"
-msgstr "Strato definito dall'utente 31"
+msgstr "Mostra strato definito dall'utente 31"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:99
-#, fuzzy
 msgid "Show user defined layer 32"
-msgstr "Strato definito dall'utente 32"
+msgstr "Mostra strato definito dall'utente 32"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:100
-#, fuzzy
 msgid "Show user defined layer 33"
-msgstr "Strato definito dall'utente 33"
+msgstr "Mostra strato definito dall'utente 33"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:101
-#, fuzzy
 msgid "Show user defined layer 34"
-msgstr "Strato definito dall'utente 34"
+msgstr "Mostra strato definito dall'utente 34"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:102
-#, fuzzy
 msgid "Show user defined layer 35"
-msgstr "Strato definito dall'utente 35"
+msgstr "Mostra strato definito dall'utente 35"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:103
-#, fuzzy
 msgid "Show user defined layer 36"
-msgstr "Strato definito dall'utente 36"
+msgstr "Mostra strato definito dall'utente 36"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:104
-#, fuzzy
 msgid "Show user defined layer 37"
-msgstr "Strato definito dall'utente 37"
+msgstr "Mostra strato definito dall'utente 37"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:105
-#, fuzzy
 msgid "Show user defined layer 38"
-msgstr "Strato definito dall'utente 38"
+msgstr "Mostra strato definito dall'utente 38"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:106
-#, fuzzy
 msgid "Show user defined layer 39"
-msgstr "Strato definito dall'utente 39"
+msgstr "Mostra strato definito dall'utente 39"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:107
-#, fuzzy
 msgid "Show user defined layer 40"
-msgstr "Strato definito dall'utente 40"
+msgstr "Mostra strato definito dall'utente 40"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:108
-#, fuzzy
 msgid "Show user defined layer 41"
-msgstr "Strato definito dall'utente 41"
+msgstr "Mostra strato definito dall'utente 41"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:109
-#, fuzzy
 msgid "Show user defined layer 42"
-msgstr "Strato definito dall'utente 42"
+msgstr "Mostra strato definito dall'utente 42"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:110
-#, fuzzy
 msgid "Show user defined layer 43"
-msgstr "Strato definito dall'utente 43"
+msgstr "Mostra strato definito dall'utente 43"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:111
-#, fuzzy
 msgid "Show user defined layer 44"
-msgstr "Strato definito dall'utente 44"
+msgstr "Mostra strato definito dall'utente 44"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:112
-#, fuzzy
 msgid "Show user defined layer 45"
-msgstr "Strato definito dall'utente 45"
+msgstr "Mostra strato definito dall'utente 45"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:114
 msgid "Through-hole Models"
@@ -3133,9 +3088,9 @@ msgstr ""
 "riattivare questa finestra di dialogo nelle preferenze di Pcbnew."
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:30
-#, fuzzy, c-format
+#, c-format
 msgid "The selection contains %zu locked items."
-msgstr "La selezione contiene %lu elementi bloccati."
+msgstr "La selezione contiene %zu elementi bloccati."
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:34
 msgid "These items will be skipped unless you override the locks."
@@ -7241,14 +7196,14 @@ msgid "Could not copy file: %s to %s"
 msgstr "Impossibile copiare il file: %s su %s"
 
 #: common/gestfich.cpp:477
-#, fuzzy, c-format
+#, c-format
 msgid "Could not copy directory: %s to %s"
-msgstr "Impossibile copiare il file: %s su %s"
+msgstr "Impossibile copiare la cartella: %s su %s"
 
 #: common/gestfich.cpp:529
-#, fuzzy, c-format
+#, c-format
 msgid "Source directory does not exist: %s"
-msgstr "La cartella '%s' non esiste"
+msgstr "La cartella sorgente non esiste: %s"
 
 #: common/gestfich.cpp:584
 #, c-format
@@ -8641,7 +8596,6 @@ msgid "Select Preferred Editor"
 msgstr "Scegli editor preferito"
 
 #: common/pgm_base.cpp:384
-#, fuzzy
 msgid ""
 "KiCad can anonymously report crashes and special event data to developers in "
 "order to aid identifying critical bugs and help profile functionality to "
@@ -8651,9 +8605,8 @@ msgid ""
 "Your design files such as schematic and PCB are not shared in this process."
 msgstr ""
 "KiCad può segnalare in modo anonimo arresti o eventi anomali agli "
-"sviluppatori, per aiutare a identificare i difetti critici occorrenti alla "
-"base utenti, in modo più efficace e per aiutare ad individuare i profili di "
-"utilizzo per guidarne i miglioramenti.\n"
+"sviluppatori in modo da aiutare a identificare i difetti critici e aiutare a "
+"individuare i profili di utilizzo per orientarne i miglioramenti.\n"
 "Se si sceglie di partecipare volontariamente, KiCad gestirà automaticamente "
 "l'invio di detti rapporti quando si verificano arresti anomali o eventi "
 "particolari.\n"
@@ -8661,18 +8614,16 @@ msgstr ""
 "condivisi in questo processo."
 
 #: common/pgm_base.cpp:389
-#, fuzzy
 msgid "Data Collection Opt In"
-msgstr "Raccolta dati"
+msgstr "Opt-in raccolta dati"
 
 #: common/pgm_base.cpp:391
 msgid "Opt In"
-msgstr ""
+msgstr "Opt In"
 
 #: common/pgm_base.cpp:391
-#, fuzzy
 msgid "Decline"
-msgstr "Schizza linee"
+msgstr "Rifiuta"
 
 #: common/pgm_base.cpp:498
 msgid "Environment variable HOME is empty.  Unable to continue."
@@ -10264,9 +10215,8 @@ msgid "Toggle panning to selections in the search pane"
 msgstr "Attiva/disattiva la panoramica delle selezioni nel pannello cerca"
 
 #: common/widgets/search_pane.cpp:51
-#, fuzzy
 msgid "Search Hidden Fields"
-msgstr "Cerca campi &nascosti"
+msgstr "Cerca campi nascosti"
 
 #: common/widgets/unit_binder.cpp:351
 #, c-format
@@ -11975,9 +11925,9 @@ msgid "Database Library Settings"
 msgstr "Impostazioni librerie database"
 
 #: eeschema/dialogs/dialog_design_block_properties.cpp:98
-#, fuzzy, c-format
+#, c-format
 msgid "Illegal character '%c' in name '%s'."
-msgstr "Carattere illegale '%c' in denominazione '%s'."
+msgstr "Carattere illegale '%c' nel nome '%s'."
 
 #: eeschema/dialogs/dialog_design_block_properties.cpp:124
 #: eeschema/dialogs/panel_template_fieldnames.cpp:100
@@ -15342,32 +15292,32 @@ msgid "Show datasheet in browser"
 msgstr "Mostra datasheet nel browser"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:200
-#, fuzzy
 msgid "Column Label"
-msgstr "Tabella colonne %d"
+msgstr "Etichetta colonna"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:205
-#, fuzzy
 msgid "Show Column"
-msgstr "Mostra / Nascondi colonne"
+msgstr "Mostra colonna"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:206
 msgid "Group By"
 msgstr "Raggruppati per"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:208
-#, fuzzy
 msgid ""
 "Show\n"
 "Column"
-msgstr "Mostra / Nascondi colonne"
+msgstr ""
+"Mostra\n"
+"colonna"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:209
-#, fuzzy
 msgid ""
 "Group\n"
 "By"
-msgstr "Raggruppati per"
+msgstr ""
+"Raggruppa\n"
+"per"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:710
 msgid "Qty"
@@ -19616,13 +19566,12 @@ msgid "Expecting R0, R90, R18, R270, M0, M90, M180 or M270"
 msgstr "Era previsto R0, R90, R18, R270, M0, M90, M180 o M270"
 
 #: eeschema/sch_io/ltspice/ltspice_schematic.cpp:494
-#, fuzzy
 msgid ""
 "Expecting LEFT, CENTER, RIGHT, TOP, BOTTOM, VLEFT, VRIGHT, VCENTER, VTOP, "
 "VBOTTOM or INVISIBLE"
 msgstr ""
-"Era previsto LEFT, CENTER, RIGHT, TOP, BOTTOM, VLEFT, VRIGHT, VCENTER, VTOP "
-"o VBOTTOM"
+"Era previsto LEFT, CENTER, RIGHT, TOP, BOTTOM, VLEFT, VRIGHT, VCENTER, VTOP, "
+"VBOTTOM o INVISIBLE"
 
 #: eeschema/sch_io/ltspice/ltspice_schematic.cpp:517
 msgid ""
@@ -22517,16 +22466,17 @@ msgid "Delete Hierarchical Labels"
 msgstr "Elimina etichette gerarchiche"
 
 #: eeschema/sync_sheet_pin/panel_sync_sheet_pins_base.cpp:99
-#, fuzzy
 msgid ""
 "Associate selected sheet pin and hierarchical label using the label name"
-msgstr "Sincronizza pin foglio ed etichette gerarchiche"
+msgstr ""
+"Associa il pin del foglio selezionato e l'etichetta gerarchica utilizzando "
+"il nome dell'etichetta"
 
 #: eeschema/sync_sheet_pin/panel_sync_sheet_pins_base.cpp:104
-#, fuzzy
 msgid "Associate selected sheet pin and hierarchical label using the pin name"
 msgstr ""
-"Associazione(i) di pin di interruzione foglio e di etichette gerarchiche"
+"Associa il pin del foglio selezionato e l'etichetta gerarchica utilizzando "
+"il nome del pin"
 
 #: eeschema/sync_sheet_pin/panel_sync_sheet_pins_base.cpp:109
 msgid "Break sheet pin and hierarchical label association(s)"
@@ -23075,14 +23025,12 @@ msgid "Place Sheet Pins"
 msgstr "Piazza pin fogli"
 
 #: eeschema/tools/sch_actions.cpp:559 eeschema/tools/sch_actions.cpp:567
-#, fuzzy
 msgid "Sync Sheet Pins..."
-msgstr "Sincronizza pin fogli"
+msgstr "Sincronizza pin fogli..."
 
 #: eeschema/tools/sch_actions.cpp:575
-#, fuzzy
 msgid "Import Sheet..."
-msgstr "Importa foglio"
+msgstr "Importa foglio..."
 
 #: eeschema/tools/sch_actions.cpp:576
 msgid "Import sheet into project"
@@ -26518,9 +26466,8 @@ msgid "The new behavior will match --mode-multi"
 msgstr "Il nuovo comportamento corrisponderà a --mode-multi"
 
 #: kicad/cli/command_pcb_export_gencad.cpp:33
-#, fuzzy
 msgid "Export the PCB in Gencad format"
-msgstr "Esporta netlist in formato KiCad"
+msgstr "Esporta C.S. in formato Gencad"
 
 #: kicad/cli/command_pcb_export_gencad.cpp:39
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:134
@@ -28126,9 +28073,9 @@ msgid "Create New Directory"
 msgstr "Crea nuova cartella"
 
 #: kicad/project_tree_pane.cpp:761
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to get status list: %s"
-msgstr "Fallito recupero commit: %s"
+msgstr "Fallito recupero elenco stato: %s"
 
 #: kicad/project_tree_pane.cpp:896
 msgid "Switch to this Project"
@@ -28298,18 +28245,16 @@ msgid "Local path: monitoring folder changes"
 msgstr "Percorso locale: monitora i cambiamenti cartelle"
 
 #: kicad/project_tree_pane.cpp:1644
-#, fuzzy
 msgid "The selected directory is already a Git project."
-msgstr "La cartella selezionata è già un progetto git."
+msgstr "La cartella selezionata è già un progetto Git."
 
 #: kicad/project_tree_pane.cpp:1652
 msgid "Set default remote"
 msgstr "Imposta remoto predefinito"
 
 #: kicad/project_tree_pane.cpp:1663
-#, fuzzy
 msgid "Failed to initialize Git project."
-msgstr "Fallita inizializzazione progetto git."
+msgstr "Fallita inizializzazione progetto Git."
 
 #: kicad/project_tree_pane.cpp:1721
 msgid "Failed to set default remote."
@@ -28349,19 +28294,16 @@ msgid "Failed to update HEAD reference for branch '%s'"
 msgstr "Fallito aggiornamento riferimento HEAD per la diramazione '%s'"
 
 #: kicad/project_tree_pane.cpp:1923
-#, fuzzy
 msgid "Are you sure you want to remove Git tracking from this project?"
-msgstr "Sicuri di voler rimuovere il versionamento git da questo progetto?"
+msgstr "Sicuri di voler rimuovere il versionamento Git da questo progetto?"
 
 #: kicad/project_tree_pane.cpp:1940
-#, fuzzy
 msgid "Failed to remove Git directory"
-msgstr "Fallita rimozione cartella git"
+msgstr "Fallita rimozione cartella Git"
 
 #: kicad/project_tree_pane.cpp:2307
-#, fuzzy
 msgid "The selected directory is not a Git project."
-msgstr "La cartella selezionata è già un progetto git."
+msgstr "La cartella selezionata non è un progetto Git."
 
 #: kicad/project_tree_pane.cpp:2453
 msgid "Discarding commit due to empty commit message."
@@ -31161,7 +31103,7 @@ msgstr "Effettivo %s:"
 #: pcb_calculator/transline_ident.cpp:198
 #: pcb_calculator/transline_ident.cpp:357
 msgid "Unit propagation delay:"
-msgstr ""
+msgstr "Ritardo di propagazione dell'unità:"
 
 #: pcb_calculator/transline_ident.cpp:121
 #: pcb_calculator/transline_ident.cpp:164
@@ -31365,11 +31307,11 @@ msgstr "Efficace %s (odd):"
 
 #: pcb_calculator/transline_ident.cpp:308
 msgid "Unit propagation delay (even):"
-msgstr ""
+msgstr "Ritardo di propagazione dell'unità (pari):"
 
 #: pcb_calculator/transline_ident.cpp:309
 msgid "Unit propagation delay (odd):"
-msgstr ""
+msgstr "Ritardo di propagazione dell'unità (dispari):"
 
 #: pcb_calculator/transline_ident.cpp:310
 msgid "Conductor losses (even):"
@@ -31498,9 +31440,8 @@ msgid "mi/h"
 msgstr "mi/h"
 
 #: pcbnew/api/api_handler_pcb.cpp:505
-#, fuzzy
 msgid "Modified items via API"
-msgstr "Elementi aggiunti tramite API"
+msgstr "Elementi modificati tramite API"
 
 #: pcbnew/api/api_handler_pcb.cpp:668
 msgid "Deleted items via API"
@@ -36073,9 +36014,8 @@ msgid "Set Teardrops"
 msgstr "Imposta lacrime"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:141
-#, fuzzy
 msgid "Text items"
-msgstr "Elementi di testo"
+msgstr "Elementi testo"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:142
 msgid "Graphic items"
@@ -36169,51 +36109,44 @@ msgid "PCB text items"
 msgstr "Elementi di testo del C.S."
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:45
-#, fuzzy
 msgid "Other footprint fields"
-msgstr "Altri elementi testo impronte"
+msgstr "Altri campi impronte"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:46
 msgid "Footprint fields that are not the reference designator or value field"
 msgstr "I campi impronta che non sono valore o designatore di riferimento"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:50
-#, fuzzy
 msgid "PCB dimensions"
-msgstr "Elementi dimensione C.S."
+msgstr "Dimensioni C.S."
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:53
 msgid "Footprint graphic items"
 msgstr "Elementi grafici impronte"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:59
-#, fuzzy
 msgid "Footprint text items"
-msgstr "Altri elementi testo impronte"
+msgstr "Elementi testo impronte"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:60
 msgid "Footprint text items not associated with a field"
 msgstr "Elementi di testo dell'impronta non associati a un campo"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:67
-#, fuzzy
 msgid "Footprint dimensions"
-msgstr "Elementi dimensione impronte"
+msgstr "Dimensioni impronte"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:85
-#, fuzzy
 msgid "By layer:"
-msgstr "Allo strato:"
+msgstr "Per strato:"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:97
-#, fuzzy
 msgid "By parent reference designator:"
-msgstr "Inizia riferimento:"
+msgstr "Per riferimento genitore:"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:103
-#, fuzzy
 msgid "By parent footprint library link:"
-msgstr "Nuovo id libreria impronte:"
+msgstr "Per collegamento libreria impronte genitore:"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:124
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:133
@@ -37916,9 +37849,9 @@ msgid "Reference item: %s"
 msgstr "Elemento riferimento: %s"
 
 #: pcbnew/dialogs/dialog_position_relative.cpp:267
-#, fuzzy, c-format
+#, c-format
 msgid "Reference location: selected point (%s, %s)"
-msgstr "Posizione riferimento: origine griglia"
+msgstr "Posizione riferimento: punto selezionato (%s, %s)"
 
 #: pcbnew/dialogs/dialog_position_relative_base.cpp:22
 msgid "Reference item: <none selected>"
@@ -38069,9 +38002,8 @@ msgid "Opaque"
 msgstr "Opaco"
 
 #: pcbnew/dialogs/dialog_render_job.cpp:29
-#, fuzzy
 msgid "Transparent"
-msgstr "Traduttori"
+msgstr "Trasparente"
 
 #: pcbnew/dialogs/dialog_render_job.cpp:34
 msgid "High"
@@ -38095,43 +38027,36 @@ msgid "x"
 msgstr "x"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:70
-#, fuzzy
 msgid "Quality preset:"
-msgstr "Seleziona preimpostazione:"
+msgstr "Preimpostazione qualità:"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:79
-#, fuzzy
 msgid "Background style:"
-msgstr "Inizio sfondo"
+msgstr "Stile sfondo:"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:103
-#, fuzzy
 msgid "View"
-msgstr "&Visualizza"
+msgstr "Vista"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:119
-#, fuzzy
 msgid "Add floor"
-msgstr "Aggiungi pavimento (lento)"
+msgstr "Aggiungi pavimento"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:128
-#, fuzzy
 msgid "Perspective"
-msgstr "Direttiva"
+msgstr "Prospettiva"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:128
 msgid "Orthogonal"
 msgstr "Ortogonale"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:130
-#, fuzzy
 msgid "Projection"
-msgstr "Progetto"
+msgstr "Proiezione"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:138
-#, fuzzy
 msgid "Positioning"
-msgstr "Posizione"
+msgstr "Posizionamento"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:148
 #: pcbnew/dialogs/dialog_shape_properties.cpp:772
@@ -38141,19 +38066,16 @@ msgstr "X"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:152
 #: pcbnew/dialogs/dialog_shape_properties.cpp:772
-#, fuzzy
 msgid "Y"
-msgstr "Y:"
+msgstr "Y"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:156
-#, fuzzy
 msgid "Z"
-msgstr "Z:"
+msgstr "Z"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:163
-#, fuzzy
 msgid "Pivot:"
-msgstr "Imposta perno"
+msgstr "Perno:"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:183
 msgid "Pan:"
@@ -38165,19 +38087,16 @@ msgid "°"
 msgstr "°"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:233
-#, fuzzy
 msgid "Lights intensity"
-msgstr "Intensità"
+msgstr "Intensità luci"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:264
-#, fuzzy
 msgid "Camera:"
-msgstr "Opzioni fotocamera"
+msgstr "Fotocamera:"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:282
-#, fuzzy
 msgid "Lights position"
-msgstr "Configurazione luci"
+msgstr "Posizione luci"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:290
 msgid "Side lights elevation:"
@@ -38219,7 +38138,7 @@ msgstr "Un nome univoco per questa area regole per l'uso in DRC"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:86
 msgid "Distance between parallel lines used for hatching the area"
-msgstr ""
+msgstr "Distanza tra le linee parallele utilizzate per tratteggiare l'area"
 
 #: pcbnew/dialogs/dialog_set_offset.cpp:66
 msgid "Reset this value to zero."
@@ -38230,24 +38149,20 @@ msgid "Reset this value to the original value."
 msgstr "Reimposta al valore originale."
 
 #: pcbnew/dialogs/dialog_set_offset_base.cpp:19
-#, fuzzy
 msgid "Set a new value for this offset:"
-msgstr "Crea una nuova cartella per il progetto"
+msgstr "Imposta nuovo valore per questo scostamento:"
 
 #: pcbnew/dialogs/dialog_set_offset_base.h:63
-#, fuzzy
 msgid "Set Offset"
-msgstr "Scostamento X"
+msgstr "Imposta scostamento"
 
 #: pcbnew/dialogs/dialog_shape_properties.cpp:192
-#, fuzzy
 msgid "Rectangle cannot be zero-sized."
-msgstr "L'angolo dell'arco non può essere zero."
+msgstr "Il rettangolo non può avere dimensione zero."
 
 #: pcbnew/dialogs/dialog_shape_properties.cpp:451
-#, fuzzy
 msgid "Arc angle must be greater than 0"
-msgstr "Lo spazio piste deve essere maggiore di 0."
+msgstr "L'angolo dell'arco deve essere maggiore di 0"
 
 #: pcbnew/dialogs/dialog_shape_properties.cpp:461
 msgid "Arc must have 3 distinct points"
@@ -38259,9 +38174,8 @@ msgid "Invalid Arc with radius %f and angle %f."
 msgstr "Arco non valido con raggio %f e angolo %f."
 
 #: pcbnew/dialogs/dialog_shape_properties.cpp:587
-#, fuzzy
 msgid "Radius must be greater than 0"
-msgstr "Il raggio deve essere maggiore di zero."
+msgstr "Il raggio deve essere maggiore di 0"
 
 #: pcbnew/dialogs/dialog_shape_properties.cpp:880
 #: pcbnew/dialogs/dialog_shape_properties.cpp:883
@@ -38283,33 +38197,28 @@ msgstr "Punto finale"
 
 #: pcbnew/dialogs/dialog_shape_properties.cpp:906
 #: pcbnew/dialogs/dialog_shape_properties.cpp:921
-#, fuzzy
 msgid "Mid Point"
-msgstr "Punto finale"
+msgstr "Punto mediano"
 
 #: pcbnew/dialogs/dialog_shape_properties.cpp:918
-#, fuzzy
 msgid "Start Angle"
-msgstr "Strato iniziale:"
+msgstr "Angolo iniziale"
 
 #: pcbnew/dialogs/dialog_shape_properties.cpp:935
 msgid "Point on Circle"
 msgstr "Punto sul cerchio"
 
 #: pcbnew/dialogs/dialog_shape_properties.cpp:946
-#, fuzzy
 msgid "Control Point 1"
-msgstr "Punto di controllo Bezier"
+msgstr "Punto di controllo 1"
 
 #: pcbnew/dialogs/dialog_shape_properties.cpp:947
-#, fuzzy
 msgid "Control Point 2"
-msgstr "Punto di controllo Bezier"
+msgstr "Punto di controllo 2"
 
 #: pcbnew/dialogs/dialog_shape_properties.cpp:1172
-#, fuzzy
 msgid "Edit Shape Properties"
-msgstr "Modifica proprietà piedino"
+msgstr "Modifica proprietà forma"
 
 #: pcbnew/dialogs/dialog_shape_properties.cpp:1200
 #: pcbnew/dialogs/dialog_shape_properties.cpp:1223
@@ -38337,33 +38246,28 @@ msgid "Error List"
 msgstr "Elenco errori"
 
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:37
-#, fuzzy
 msgid "By Corners"
-msgstr "Aggiungi angolo"
+msgstr "Per angoli"
 
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:53
-#, fuzzy
 msgid "By Corner and Size"
-msgstr "Dimensione vertice:"
+msgstr "Per angolo e dimensione"
 
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:69
 msgid "By Center and Size"
 msgstr "Per centro e dimensione"
 
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:85
-#, fuzzy
 msgid "By Endpoints"
-msgstr "Punto finale"
+msgstr "Per estremità"
 
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:101
-#, fuzzy
 msgid "By Length and Angle"
-msgstr "Regolazione lunghezza"
+msgstr "Per lunghezza e angolo"
 
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:117
-#, fuzzy
 msgid "By Start/Midpoint"
-msgstr "Per inizio/metà/fine"
+msgstr "Per punto di inizio/mediano"
 
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:133
 msgid "By Center/Start/Angle"
@@ -38374,37 +38278,31 @@ msgid "By Start/Mid/End"
 msgstr "Per inizio/metà/fine"
 
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:165
-#, fuzzy
 msgid "By Center/Radius"
-msgstr "Raggio angolo %"
+msgstr "Per centro/raggio"
 
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:181
-#, fuzzy
 msgid "By Center/Point"
-msgstr "Punto centrale"
+msgstr "Per centro/punto"
 
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:197
-#, fuzzy
 msgid "Bezier Control Points"
-msgstr "Punto di controllo Bezier"
+msgstr "Punti di controllo Bezier"
 
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:244
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:184
-#, fuzzy
 msgid "Technical Layers:"
 msgstr "Strati tecnici:"
 
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:254
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:194
-#, fuzzy
 msgid "Solder mask"
-msgstr "Pasta salda"
+msgstr "Maschera di saldatura"
 
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:257
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:197
-#, fuzzy
 msgid "Expansion:"
-msgstr "Esclusioni"
+msgstr "Espansione:"
 
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:262
 msgid ""
@@ -38515,22 +38413,20 @@ msgstr "Stile bordo:"
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:546
 #, c-format
 msgid "Applying these changes will short net %s with %s."
-msgstr ""
+msgstr "Applicando queste modifiche il collegamento %s verrà connesso con %s."
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:552
 #, c-format
 msgid "Applying these changes will short net %s with other nets."
-msgstr ""
+msgstr "L'applicazione di queste modifiche connetterà la net %s ad altre net."
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:557
-#, fuzzy
 msgid "Apply Anyway"
-msgstr "Aggiungi comunque"
+msgstr "Applica comunque"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:557
-#, fuzzy
 msgid "Cancel Changes"
-msgstr "Annullare i cambiamenti?"
+msgstr "Annulla i cambiamenti"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:571
 #, c-format
@@ -39341,6 +39237,11 @@ msgid ""
 "\n"
 "<br>"
 msgstr ""
+"### Formula\n"
+"\n"
+"    (condition \"<espressione>\")\n"
+"\n"
+"<br>"
 
 #: pcbnew/dialogs/panel_setup_condition_help_6notes.h:2
 msgid ""
@@ -39350,6 +39251,11 @@ msgid ""
 "<br><br><br>\n"
 "\n"
 msgstr ""
+"### Note\n"
+"\n"
+"Usare Ctrl+/ per commentare o decommentare le righe.\n"
+"<br><br><br>\n"
+"\n"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:46
 msgid "Minimum clearance:"
@@ -39938,7 +39844,7 @@ msgstr ""
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:113
 msgid "Tent vias:"
-msgstr ""
+msgstr "Via coperti dalla maschera di saldatura:"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:118
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:123
@@ -40192,9 +40098,8 @@ msgid "Net tie on %s; clearance: 0."
 msgstr "Net tie su %s; clearance: 0."
 
 #: pcbnew/drc/drc_engine.cpp:793
-#, fuzzy
 msgid "net tie"
-msgstr "Titoli fogli"
+msgstr "net tie"
 
 #: pcbnew/drc/drc_engine.cpp:820 pcbnew/drc/drc_engine.cpp:830
 #, c-format
@@ -41866,18 +41771,18 @@ msgid "** Face skipped **\n"
 msgstr "** Faccia saltata **\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1915
-#, fuzzy, c-format
+#, c-format
 msgid "Subtracting holes for %s\n"
-msgstr "Crea fori per %s\n"
+msgstr "Sottrazione fori per %s\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1958
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "\n"
 "** Got problems while cutting %s net '%s' **\n"
 msgstr ""
 "\n"
-"** Problemi durante il taglio %s numero %d **\n"
+"** Problemi durante il taglio di %s net '%s' **\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2003
 msgid "shapes"
@@ -47137,16 +47042,17 @@ msgid "Physical Clearances"
 msgstr "Clearance fisiche"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1260
-#, fuzzy, c-format
+#, c-format
 msgid "No 'physical_clearance' constraints in effect on %s."
-msgstr "Nessun vincolo 'physical_clearance' definito."
+msgstr "Nessun vincolo 'physical_clearance' in vigore su %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1279
-#, fuzzy
 msgid ""
 "Items share no relevant layers.  No 'physical_clearance' constraints will be "
 "applied."
-msgstr "Nessun vincolo 'physical_clearance' definito."
+msgstr ""
+"Gli elementi non condividono strati rilevanti.  Non verranno applicati "
+"vincoli di 'physical_clearance'."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1341
 msgid "Select an item for a constraints resolution report."
@@ -47722,17 +47628,14 @@ msgid "Some of the polygons could not be intersected."
 msgstr "Alcuni dei poligoni potrebbero non essere stati intersecati."
 
 #: pcbnew/tools/item_modification_routine.cpp:663
-#, fuzzy
 msgid "Outset items."
 msgstr "Elementi outset."
 
 #: pcbnew/tools/item_modification_routine.cpp:670
-#, fuzzy
 msgid "Unable to outset the selected items."
 msgstr "Impossibile rendere outset gli elementi selezionati."
 
 #: pcbnew/tools/item_modification_routine.cpp:674
-#, fuzzy
 msgid "Some of the items could not be outset."
 msgstr "Alcuni degli elementi potrebbero non essere stati resi outset."
 
@@ -47884,12 +47787,10 @@ msgid "Creates tracks from the selected graphic lines"
 msgstr "Crea piste dalle linee grafiche selezionate"
 
 #: pcbnew/tools/pcb_actions.cpp:96
-#, fuzzy
 msgid "Create Outsets from Selection"
 msgstr "Crea outset dalla selezione"
 
 #: pcbnew/tools/pcb_actions.cpp:97
-#, fuzzy
 msgid "Create outset lines from the selected item"
 msgstr "Crea linee outset dagli elementi selezionati"
 
@@ -47970,7 +47871,6 @@ msgid "Draw Orthogonal Dimensions"
 msgstr "Disegna dimensioni ortogonali"
 
 #: pcbnew/tools/pcb_actions.cpp:273
-#, fuzzy
 msgid "Draw Leaders"
 msgstr "Disegna leaders"
 
@@ -50085,19 +49985,16 @@ msgid "Locked Item Shadow"
 msgstr "Ombra elemento bloccato"
 
 #: pcbnew/widgets/appearance_controls.cpp:350
-#, fuzzy
 msgid "Show a shadow on locked items"
-msgstr "Mostra un marcatore ombra sugli elementi bloccati"
+msgstr "Mostra un'ombra sugli elementi bloccati"
 
 #: pcbnew/widgets/appearance_controls.cpp:351
-#, fuzzy
 msgid "Colliding Courtyards"
-msgstr "Ingombri"
+msgstr "Ingombri in collisione"
 
 #: pcbnew/widgets/appearance_controls.cpp:351
-#, fuzzy
 msgid "Show colliding footprint courtyards"
-msgstr "Raccolta ingombri impronte..."
+msgstr "Mostra gli ingombri impronte in collisione"
 
 #: pcbnew/widgets/appearance_controls.cpp:352
 msgid "Show drawing sheet borders and title block"
@@ -50755,18 +50652,16 @@ msgid "Highlight Selected Net"
 msgstr "Evidenzia collegamento selezionato"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1233
-#, fuzzy
 msgid "Rename Selected Net"
-msgstr "Rigenera selezione"
+msgstr "Rinomina il collegamento selezionato"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1237
 msgid "Delete Selected Net"
 msgstr "Elimina collegamento selezionato"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1243
-#, fuzzy
 msgid "Add Net"
-msgstr "Aggiungi testo"
+msgstr "Aggiungi collegamento"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1257
 msgid "Highlight Selected Nets"
@@ -50806,9 +50701,8 @@ msgid "Group by Netclass"
 msgstr "Raggruppa per netclass"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1395
-#, fuzzy
 msgid "Add Custom Group"
-msgstr "Regole personalizzate"
+msgstr "Aggiungi gruppo personalizzato"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1408
 msgid "Remove All Custom Groups"
@@ -50823,9 +50717,8 @@ msgid "Show Unconnected Nets"
 msgstr "Mostra net non connesse"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1431
-#, fuzzy
 msgid "Save Net Inspector Report"
-msgstr "Ispettore collegamenti"
+msgstr "Salva rapporto ispezione collegamenti"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1440
 msgid "Show / Hide Columns"
