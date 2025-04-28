@@ -31,11 +31,6 @@
 // Pull in the configuration options for wxWidgets
 #include <wx/platform.h>
 
-// Apple, in their infinite wisdom, has decided to mark OpenGL as deprecated.
-// Luckily we can silence warnings about its deprecation. This is needed on the GLEW
-// includes since they transitively include the OpenGL headers.
-#define GL_SILENCE_DEPRECATION 1
-
 #if defined( __unix__ ) and not defined( __APPLE__ )
 
     #ifdef KICAD_USE_EGL

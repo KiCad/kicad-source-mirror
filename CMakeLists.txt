@@ -71,6 +71,12 @@ if( WIN32 )
     add_compile_definitions( WIN32_LEAN_AND_MEAN )
 endif()
 
+if( APPLE )
+    # Apple, in their infinite wisdom, has decided to mark OpenGL as deprecated.
+    # Luckily we can silence warnings about its deprecation.
+    add_compile_definitions( GL_SILENCE_DEPRECATION=1 )
+endif()
+
 # Create a flag to identify the non-Apple unix systems
 if( UNIX AND NOT APPLE )
     set( UNIX_NOT_APPLE ON )
