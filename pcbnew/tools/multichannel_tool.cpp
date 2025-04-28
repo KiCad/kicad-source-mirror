@@ -615,7 +615,7 @@ wxString MULTICHANNEL_TOOL::stripComponentIndex( const wxString& aRef ) const
 }
 
 
-int MULTICHANNEL_TOOL::findRouting( std::set<BOARD_ITEM*>&             aOutput,
+int MULTICHANNEL_TOOL::findRouting( std::set<BOARD_CONNECTED_ITEM*>&             aOutput,
                                               std::shared_ptr<CONNECTIVITY_DATA> aConnectivity,
                                               const SHAPE_POLY_SET&        aRAPoly,
                                               RULE_AREA*                   aRA,
@@ -651,7 +651,7 @@ int MULTICHANNEL_TOOL::findRouting( std::set<BOARD_ITEM*>&             aOutput,
                                           aRA->m_area->GetZoneName() );
 
     auto testAndAdd =
-        [&]( BOARD_ITEM* aItem )
+        [&]( BOARD_CONNECTED_ITEM* aItem )
         {
             if( aOutput.contains( aItem ) )
                 return;
@@ -732,8 +732,8 @@ bool MULTICHANNEL_TOOL::copyRuleAreaContents( TMATCH::COMPONENT_MATCHES& aMatche
 
     if( aOpts.m_copyRouting )
     {
-        std::set<BOARD_ITEM*> refRouting;
-        std::set<BOARD_ITEM*> targetRouting;
+        std::set<BOARD_CONNECTED_ITEM*> refRouting;
+        std::set<BOARD_CONNECTED_ITEM*> targetRouting;
 
         wxLogTrace( traceMultichannelTool, wxT("copying routing: %d fps\n"), (int) aMatches.size() );
 
@@ -752,11 +752,11 @@ bool MULTICHANNEL_TOOL::copyRuleAreaContents( TMATCH::COMPONENT_MATCHES& aMatche
         findRouting( targetRouting, connectivity, targetPoly, aTargetArea, aOpts );
         findRouting( refRouting, connectivity, refPoly, aRefArea, aOpts );
 
-        for( BOARD_ITEM* item : targetRouting )
+        for( BOARD_CONNECTED_ITEM* item : targetRouting )
         {
             if( item->IsLocked() && !aOpts.m_includeLockedItems )
                 continue;
-            if (aOpts.m_connectedRoutingOnly && !targc.contains(static_cast<BOARD_CONNECTED_ITEM*>( item )->GetNetCode()))
+            if( aOpts.m_connectedRoutingOnly && !targc.contains( item->GetNetCode() ) )
                 continue;
             // item already removed
             if( aCommit->GetStatus( item ) != 0 )
@@ -769,11 +769,11 @@ bool MULTICHANNEL_TOOL::copyRuleAreaContents( TMATCH::COMPONENT_MATCHES& aMatche
             }
         }
 
-        for( BOARD_ITEM* item : refRouting )
+        for( BOARD_CONNECTED_ITEM* item : refRouting )
         {
             if( item->IsLocked() && !aOpts.m_includeLockedItems )
                 continue;
-            if (aOpts.m_connectedRoutingOnly && !refc.contains(static_cast<BOARD_CONNECTED_ITEM*>( item )->GetNetCode()))
+            if( aOpts.m_connectedRoutingOnly && !refc.contains( item->GetNetCode() ) )
                 continue;
             if( !aRefArea->m_area->GetLayerSet().Contains( item->GetLayer() ) )
                 continue;
@@ -781,13 +781,10 @@ bool MULTICHANNEL_TOOL::copyRuleAreaContents( TMATCH::COMPONENT_MATCHES& aMatche
             if( !aTargetArea->m_area->GetLayerSet().Contains( item->GetLayer() ) )
                 continue;
 
-            BOARD_ITEM* copied = static_cast<BOARD_ITEM*>( item->Clone() );
+            BOARD_CONNECTED_ITEM* copied = static_cast<BOARD_CONNECTED_ITEM*>( item->Clone() );
 
-            if( item->Type() == PCB_VIA_T )
-            {
-                fixupNet( static_cast<BOARD_CONNECTED_ITEM*>( item ), static_cast<BOARD_CONNECTED_ITEM*>( copied ),
-                          aMatches );
-            }
+            fixupNet( item, copied, aMatches );
+
             copied->Rotate( VECTOR2( 0, 0 ), rot );
             copied->Move( disp );
             copied->SetParentGroup( nullptr );
@@ -977,7 +974,7 @@ bool MULTICHANNEL_TOOL::copyRuleAreaContents( TMATCH::COMPONENT_MATCHES& aMatche
 }
 
 /**
- * @brief Attempts to modify the assigned net of copied items, especially intended for zones and vias
+ * @brief Attempts to make sure copied items are assigned the right net
  *
  */
 void MULTICHANNEL_TOOL::fixupNet( BOARD_CONNECTED_ITEM* aRef, BOARD_CONNECTED_ITEM* aTarget,
