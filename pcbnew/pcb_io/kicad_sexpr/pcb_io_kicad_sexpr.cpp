@@ -2499,7 +2499,7 @@ void PCB_IO_KICAD_SEXPR::format( const PCB_TRACK* aTrack ) const
 
         if( aTrack->HasSolderMask()
                 && aTrack->GetLocalSolderMaskMargin().has_value()
-                && ( aTrack->IsOnLayer( F_Cu ) || aTrack->IsOnLayer( B_Cu ) ) )
+                && IsExternalCopperLayer( aTrack->GetLayer() ) )
         {
             m_out->Print( "(solder_mask_margin %s)",
                           formatInternalUnits( aTrack->GetLocalSolderMaskMargin().value() ).c_str() );

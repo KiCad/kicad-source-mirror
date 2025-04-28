@@ -256,7 +256,7 @@ void TEARDROP_MANAGER::UpdateTeardrops( BOARD_COMMIT& aCommit,
 
                 aCommit.Added( new_teardrop );
 
-                if( track->HasSolderMask() && ( track->GetLayer() == F_Cu || track->GetLayer() == B_Cu ) )
+                if( track->HasSolderMask() && IsExternalCopperLayer( track->GetLayer() ) )
                 {
                     ZONE* new_teardrop_mask = createTeardropMask( TD_TYPE_PADVIA, points, track );
                     m_board->Add( new_teardrop_mask, ADD_MODE::BULK_INSERT );
@@ -299,7 +299,7 @@ void TEARDROP_MANAGER::UpdateTeardrops( BOARD_COMMIT& aCommit,
 
                 aCommit.Added( new_teardrop );
 
-                if( track->HasSolderMask() && ( track->GetLayer() == F_Cu || track->GetLayer() == B_Cu ) )
+                if( track->HasSolderMask() && IsExternalCopperLayer( track->GetLayer() ) )
                 {
                     ZONE* new_teardrop_mask = createTeardropMask( TD_TYPE_PADVIA, points, track );
                     m_board->Add( new_teardrop_mask, ADD_MODE::BULK_INSERT );
@@ -481,7 +481,7 @@ void TEARDROP_MANAGER::AddTeardropsOnTracks( BOARD_COMMIT& aCommit,
 
                     aCommit.Added( new_teardrop );
 
-                    if( track->HasSolderMask() && ( track->GetLayer() == F_Cu || track->GetLayer() == B_Cu ) )
+                    if( track->HasSolderMask() && IsExternalCopperLayer( track->GetLayer() ) )
                     {
                         ZONE* new_teardrop_mask = createTeardropMask( TD_TYPE_TRACKEND, points, track );
                         m_board->Add( new_teardrop_mask, ADD_MODE::BULK_INSERT );

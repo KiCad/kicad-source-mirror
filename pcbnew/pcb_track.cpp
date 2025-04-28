@@ -2367,8 +2367,8 @@ static struct TRACK_VIA_DESC
         auto isExternalLayerTrack =
             []( INSPECTABLE* aItem )
             {
-                if( auto track = dynamic_cast<PCB_TRACK*>( aItem ) )
-                    return track->GetLayer() == F_Cu || track->GetLayer() == B_Cu;
+                if( PCB_TRACK* track = dynamic_cast<PCB_TRACK*>( aItem ) )
+                    return IsExternalCopperLayer( track->GetLayer() );
 
                 return false;
             };

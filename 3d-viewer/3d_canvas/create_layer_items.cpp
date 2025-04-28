@@ -578,7 +578,7 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
             addFootprintShapes( fp, layerContainer, layer, visibilityFlags );
 
             // Add copper item to the plated copper polygon list if required
-            if( cfg.DifferentiatePlatedCopper() && ( layer == F_Cu || layer == B_Cu ) )
+            if( cfg.DifferentiatePlatedCopper() && IsExternalCopperLayer( layer ) )
             {
                 SHAPE_POLY_SET* layerPoly = layer == F_Cu ? m_frontPlatedCopperPolys : m_backPlatedCopperPolys;
 
@@ -646,7 +646,7 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
             }
 
             // Add copper item to the plated copper polygon list if required
-            if( cfg.DifferentiatePlatedCopper() && ( layer == F_Cu || layer == B_Cu ) )
+            if( cfg.DifferentiatePlatedCopper() && IsExternalCopperLayer( layer ) )
             {
                 SHAPE_POLY_SET* copperPolys = layer == F_Cu ? m_frontPlatedCopperPolys : m_backPlatedCopperPolys;
 
@@ -758,7 +758,7 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
                 zones.emplace_back( std::make_pair( zone, layer ) );
                 layer_lock.emplace( layer, std::make_unique<std::mutex>() );
 
-                if( cfg.DifferentiatePlatedCopper() && ( layer == F_Cu || layer == B_Cu ) )
+                if( cfg.DifferentiatePlatedCopper() && IsExternalCopperLayer( layer ) )
                 {
                     SHAPE_POLY_SET* copperPolys = layer == F_Cu ? m_frontPlatedCopperPolys : m_backPlatedCopperPolys;
 
@@ -959,7 +959,7 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
                         continue;
 
                     // Only vias on a external copper layer can have a solder mask
-                    PCB_LAYER_ID copper_layer = layer == F_Mask ? F_Cu : B_Cu;
+                    PCB_LAYER_ID copper_layer = ( layer == F_Mask ) ? F_Cu : B_Cu;
 
                     if( track->Type() == PCB_VIA_T )
                     {

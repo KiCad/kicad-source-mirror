@@ -595,9 +595,11 @@ void BOARD_ADAPTER::createArcSegments( const VECTOR2I& aCentre, const VECTOR2I& 
 void BOARD_ADAPTER::addShape( const PCB_SHAPE* aShape, CONTAINER_2D_BASE* aContainer,
                               const BOARD_ITEM* aOwner, PCB_LAYER_ID aLayer )
 {
-    // The full width of the lines to create
-    int linewidth = aShape->GetWidth();
-    int margin = 0;
+    LINE_STYLE lineStyle = aShape->GetStroke().GetLineStyle();
+    int        linewidth = aShape->GetWidth();
+    int        margin = 0;
+    bool       isSolidFill = aShape->IsSolidFill();
+    bool       isHatchedFill = aShape->IsHatchedFill();
 
     if( IsSolderMaskLayer( aLayer )
             && aShape->HasSolderMask()
@@ -605,10 +607,16 @@ void BOARD_ADAPTER::addShape( const PCB_SHAPE* aShape, CONTAINER_2D_BASE* aConta
     {
         margin = aShape->GetSolderMaskExpansion();
         linewidth += margin * 2;
+        lineStyle = LINE_STYLE::SOLID;
+
+        if( isHatchedFill )
+        {
+            isSolidFill = true;
+            isHatchedFill = false;
+        }
     }
 
-    float      linewidth3DU = TO_3DU( linewidth );
-    LINE_STYLE lineStyle = aShape->GetStroke().GetLineStyle();
+    float linewidth3DU = TO_3DU( linewidth );
 
     if( lineStyle <= LINE_STYLE::FIRST_TYPE )
     {
@@ -620,7 +628,7 @@ void BOARD_ADAPTER::addShape( const PCB_SHAPE* aShape, CONTAINER_2D_BASE* aConta
             float   innerR3DU = TO_3DU( aShape->GetRadius() ) - linewidth3DU / 2.0;
             float   outerR3DU = TO_3DU( aShape->GetRadius() ) + linewidth3DU / 2.0;
 
-            if( aShape->IsSolidFill() || innerR3DU <= 0.0 )
+            if( isSolidFill || innerR3DU <= 0.0 )
                 addFILLED_CIRCLE_2D( aContainer, center3DU, outerR3DU, *aOwner );
             else
                 addRING_2D( aContainer, center3DU, innerR3DU, outerR3DU, *aOwner );
@@ -629,7 +637,7 @@ void BOARD_ADAPTER::addShape( const PCB_SHAPE* aShape, CONTAINER_2D_BASE* aConta
         }
 
         case SHAPE_T::RECTANGLE:
-            if( aShape->IsSolidFill() )
+            if( isSolidFill )
             {
                 SHAPE_POLY_SET polyList;
 
@@ -733,7 +741,7 @@ void BOARD_ADAPTER::addShape( const PCB_SHAPE* aShape, CONTAINER_2D_BASE* aConta
             delete shape;
     }
 
-    if( aShape->IsHatchedFill() )
+    if( isHatchedFill )
         ConvertPolygonToTriangles( aShape->GetHatching(), *aContainer, m_biuTo3Dunits, *aOwner );
 }
 

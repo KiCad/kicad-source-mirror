@@ -419,23 +419,16 @@ bool EXPORTER_STEP::buildTrack3DShape( PCB_TRACK* aTrack, VECTOR2D aOrigin )
 
     int maxError = m_board->GetDesignSettings().m_MaxError;
 
-    if( m_params.m_ExportSoldermask )
+    if( m_params.m_ExportSoldermask && aTrack->IsOnLayer( F_Mask ) )
     {
-        if( aTrack->IsOnLayer( F_Mask ) )
-        {
-            SHAPE_POLY_SET poly;
-            aTrack->TransformShapeToPolygon( poly, F_Mask, 0, maxError, ERROR_INSIDE );
+        aTrack->TransformShapeToPolygon( m_poly_shapes[F_Mask][wxEmptyString], F_Mask,
+                                         aTrack->GetSolderMaskExpansion(), maxError, ERROR_INSIDE );
+    }
 
-            m_poly_shapes[F_Mask][wxEmptyString].Append( poly );
-        }
-
-        if( aTrack->IsOnLayer( B_Mask ) )
-        {
-            SHAPE_POLY_SET poly;
-            aTrack->TransformShapeToPolygon( poly, B_Mask, 0, maxError, ERROR_INSIDE );
-
-            m_poly_shapes[B_Mask][wxEmptyString].Append( poly );
-        }
+    if( m_params.m_ExportSoldermask && aTrack->IsOnLayer( B_Mask ) )
+    {
+        aTrack->TransformShapeToPolygon( m_poly_shapes[B_Mask][wxEmptyString], B_Mask,
+                                         aTrack->GetSolderMaskExpansion(), maxError, ERROR_INSIDE );
     }
 
     if( aTrack->Type() == PCB_VIA_T )
@@ -466,8 +459,7 @@ bool EXPORTER_STEP::buildTrack3DShape( PCB_TRACK* aTrack, VECTOR2D aOrigin )
                 m_poly_holes[pcblayer].Append( holePoly );
             }
 
-            m_pcbModel->AddBarrel( *holeShape, top_layer, bot_layer, true, aOrigin,
-                                   via->GetNetname() );
+            m_pcbModel->AddBarrel( *holeShape, top_layer, bot_layer, true, aOrigin, via->GetNetname() );
         }
 
         //// Cut holes in silkscreen (buggy: insufficient polyset self-intersection checking)
@@ -570,13 +562,12 @@ bool EXPORTER_STEP::buildGraphic3DShape( BOARD_ITEM* aItem, VECTOR2D aOrigin )
             for( SHAPE* shape : shapes )
             {
                 STROKE_PARAMS::Stroke( shape, lineStyle, graphic->GetWidth(), &renderSettings,
-                                       [&]( const VECTOR2I& a, const VECTOR2I& b )
-                                       {
-                                           SHAPE_SEGMENT seg( a, b, graphic->GetWidth() );
-                                           seg.TransformToPolygon(
-                                                   m_poly_shapes[pcblayer][graphic->GetNetname()],
-                                                   maxError, ERROR_INSIDE );
-                                       } );
+                        [&]( const VECTOR2I& a, const VECTOR2I& b )
+                        {
+                            SHAPE_SEGMENT seg( a, b, graphic->GetWidth() );
+                            seg.TransformToPolygon( m_poly_shapes[pcblayer][graphic->GetNetname()],
+                                                    maxError, ERROR_INSIDE );
+                        } );
             }
 
             for( SHAPE* shape : shapes )
@@ -585,6 +576,18 @@ bool EXPORTER_STEP::buildGraphic3DShape( BOARD_ITEM* aItem, VECTOR2D aOrigin )
 
         if( graphic->IsHatchedFill() )
             m_poly_shapes[pcblayer][graphic->GetNetname()].Append( graphic->GetHatching() );
+
+        if( m_params.m_ExportSoldermask && graphic->IsOnLayer( F_Mask ) )
+        {
+            graphic->TransformShapeToPolygon( m_poly_shapes[F_Mask][wxEmptyString], F_Mask,
+                                              graphic->GetSolderMaskExpansion(), maxError, ERROR_INSIDE );
+        }
+
+        if( m_params.m_ExportSoldermask && graphic->IsOnLayer( B_Mask ) )
+        {
+            graphic->TransformShapeToPolygon( m_poly_shapes[B_Mask][wxEmptyString], B_Mask,
+                                              graphic->GetSolderMaskExpansion(), maxError, ERROR_INSIDE );
+        }
 
         break;
     }

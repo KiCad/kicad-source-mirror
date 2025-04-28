@@ -184,7 +184,7 @@ std::string PLACE_FILE_EXPORTER::GenPositionData()
             footprint_pos -= m_place_Offset;
 
             int layer = list[ii].m_Footprint->GetLayer();
-            wxASSERT( layer == F_Cu || layer == B_Cu );
+            wxASSERT( IsExternalCopperLayer( layer ) );
 
             if( layer == B_Cu && m_negateBottomX )
                 footprint_pos.x = - footprint_pos.x;
@@ -253,7 +253,7 @@ std::string PLACE_FILE_EXPORTER::GenPositionData()
             footprint_pos -= m_place_Offset;
 
             int layer = list[ii].m_Footprint->GetLayer();
-            wxASSERT( layer == F_Cu || layer == B_Cu );
+            wxASSERT( IsExternalCopperLayer( layer ) );
 
             if( layer == B_Cu && m_negateBottomX )
                 footprint_pos.x = - footprint_pos.x;

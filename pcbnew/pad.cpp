@@ -402,7 +402,7 @@ bool PAD::FlashLayer( int aLayer, bool aOnlyCheckIfPermitted ) const
         // Plated through hole pads need copper on the top/bottom layers for proper soldering
         // Unless the user has removed them in the pad dialog
         if( mode == PADSTACK::UNCONNECTED_LAYER_MODE::REMOVE_EXCEPT_START_AND_END
-            && ( aLayer == F_Cu || aLayer == B_Cu ) )
+            && IsExternalCopperLayer( aLayer ) )
         {
             return true;
         }

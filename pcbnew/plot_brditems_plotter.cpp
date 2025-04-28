@@ -874,19 +874,27 @@ void BRDITEMS_PLOTTER::PlotShape( const PCB_SHAPE* aShape )
     if( !( m_layerMask & aShape->GetLayerSet() ).any() )
         return;
 
-    OUTLINE_MODE  plotMode = GetPlotMode();
+    OUTLINE_MODE plotMode = GetPlotMode();
     int          thickness = aShape->GetWidth();
-    int             margin = thickness; // unclamped thickness (can be negative)
+    int          margin = thickness; // unclamped thickness (can be negative)
     LINE_STYLE   lineStyle = aShape->GetStroke().GetLineStyle();
-    bool     onCopperLayer = ( LSET::AllCuMask() & m_layerMask ).any();
-    bool onSolderMaskLayer = ( LSET( { F_Mask, B_Mask } ) & m_layerMask ).any();
+    bool         onCopperLayer = ( LSET::AllCuMask() & m_layerMask ).any();
+    bool         onSolderMaskLayer = ( LSET( { F_Mask, B_Mask } ) & m_layerMask ).any();
+    bool         isSolidFill = aShape->IsSolidFill();
+    bool         isHatchedFill = aShape->IsHatchedFill();
 
     if( onSolderMaskLayer
         && aShape->HasSolderMask()
         && IsExternalCopperLayer( aShape->GetLayer() ) )
     {
-        margin   += 2 * aShape->GetSolderMaskExpansion();
+        margin += 2 * aShape->GetSolderMaskExpansion();
         thickness = std::max( margin, 0 );
+
+        if( isHatchedFill )
+        {
+            isSolidFill = true;
+            isHatchedFill = false;
+        }
     }
 
     m_plotter->SetColor( getColor( aShape->GetLayer() ) );
@@ -943,7 +951,7 @@ void BRDITEMS_PLOTTER::PlotShape( const PCB_SHAPE* aShape )
             break;
 
         case SHAPE_T::CIRCLE:
-            if( aShape->IsSolidFill() )
+            if( isSolidFill )
             {
                 int diameter = aShape->GetRadius() * 2 + thickness;
 
@@ -1014,7 +1022,7 @@ void BRDITEMS_PLOTTER::PlotShape( const PCB_SHAPE* aShape )
                                          m_board->GetDesignSettings().m_MaxError );
                     }
 
-                    FILL_T fill = aShape->IsSolidFill() ? FILL_T::FILLED_SHAPE : FILL_T::NO_FILL;
+                    FILL_T fill = isSolidFill ? FILL_T::FILLED_SHAPE : FILL_T::NO_FILL;
 
                     for( int jj = 0; jj < tmpPoly.OutlineCount(); ++jj )
                     {
@@ -1065,7 +1073,7 @@ void BRDITEMS_PLOTTER::PlotShape( const PCB_SHAPE* aShape )
                                   m_board->GetDesignSettings().m_MaxError );
                 }
 
-                FILL_T fill_mode = aShape->IsSolidFill() ? FILL_T::FILLED_SHAPE : FILL_T::NO_FILL;
+                FILL_T fill_mode = isSolidFill ? FILL_T::FILLED_SHAPE : FILL_T::NO_FILL;
 
                 if( poly.OutlineCount() > 0 )
                 {
@@ -1077,8 +1085,7 @@ void BRDITEMS_PLOTTER::PlotShape( const PCB_SHAPE* aShape )
                     }
                     else
                     {
-                        m_plotter->PlotPoly( poly.COutline( 0 ), fill_mode, thickness,
-                                             &gbr_metadata );
+                        m_plotter->PlotPoly( poly.COutline( 0 ), fill_mode, thickness, &gbr_metadata );
                     }
                 }
             }
@@ -1109,7 +1116,7 @@ void BRDITEMS_PLOTTER::PlotShape( const PCB_SHAPE* aShape )
             delete shape;
     }
 
-    if( aShape->IsHatchedFill() )
+    if( isHatchedFill )
     {
         for( int ii = 0; ii < aShape->GetHatching().OutlineCount(); ++ii )
         {

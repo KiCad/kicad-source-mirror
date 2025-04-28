@@ -1831,6 +1831,8 @@ void PCB_PAINTER::draw( const PCB_SHAPE* aShape, int aLayer )
     bool       outline_mode = !viewer_settings()->m_ViewersDisplay.m_DisplayGraphicsFill;
     int        thickness = getLineThickness( aShape->GetWidth() );
     LINE_STYLE lineStyle = aShape->GetStroke().GetLineStyle();
+    bool       isSolidFill = aShape->IsSolidFill();
+    bool       isHatchedFill = aShape->IsHatchedFill();
 
     if( lineStyle == LINE_STYLE::DEFAULT )
         lineStyle = LINE_STYLE::SOLID;
@@ -1841,6 +1843,12 @@ void PCB_PAINTER::draw( const PCB_SHAPE* aShape, int aLayer )
     {
         lineStyle = LINE_STYLE::SOLID;
         thickness += aShape->GetSolderMaskExpansion() * 2;
+
+        if( isHatchedFill )
+        {
+            isSolidFill = true;
+            isHatchedFill = false;
+        }
     }
 
     if( IsNetnameLayer( aLayer ) )
@@ -1966,7 +1974,7 @@ void PCB_PAINTER::draw( const PCB_SHAPE* aShape, int aLayer )
                     m_gal->DrawSegment( pts[3], pts[0], thickness );
                 }
 
-                if( aShape->IsSolidFill() )
+                if( isSolidFill )
                 {
                     SHAPE_POLY_SET poly;
                     poly.NewOutline();
@@ -1975,10 +1983,7 @@ void PCB_PAINTER::draw( const PCB_SHAPE* aShape, int aLayer )
                         poly.Append( pt );
 
                     if( thickness < 0 )
-                    {
-                        poly.Inflate( thickness / 2, CORNER_STRATEGY::ROUND_ALL_CORNERS,
-                                      m_maxError );
-                    }
+                        poly.Inflate( thickness / 2, CORNER_STRATEGY::ROUND_ALL_CORNERS, m_maxError );
 
                     m_gal->DrawPolygon( poly );
                 }
@@ -2027,7 +2032,7 @@ void PCB_PAINTER::draw( const PCB_SHAPE* aShape, int aLayer )
                 {
                     m_gal->DrawCircle( aShape->GetStart(), radius );
                 }
-                else if( aShape->IsSolidFill() )
+                else if( isSolidFill )
                 {
                     if( thickness < 0 )
                     {
@@ -2063,7 +2068,7 @@ void PCB_PAINTER::draw( const PCB_SHAPE* aShape, int aLayer )
                         m_gal->DrawSegmentChain( shape.Outline( ii ), thickness );
                 }
 
-                if( aShape->IsSolidFill() )
+                if( isSolidFill )
                 {
                     if( thickness < 0 )
                     {
@@ -2155,7 +2160,7 @@ void PCB_PAINTER::draw( const PCB_SHAPE* aShape, int aLayer )
             delete shape;
     }
 
-    if( aShape->IsHatchedFill() )
+    if( isHatchedFill )
     {
         m_gal->SetIsStroke( false );
         m_gal->SetIsFill( true );
