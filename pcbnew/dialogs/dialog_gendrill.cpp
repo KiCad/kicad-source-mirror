@@ -130,6 +130,7 @@ bool DIALOG_GENDRILL::TransferDataFromWindow()
     if( !m_job )
     {
         genDrillAndMapFiles( true, m_cbGenerateMap->GetValue() );
+        return false;
     }
     else
     {
