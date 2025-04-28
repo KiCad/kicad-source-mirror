@@ -10,8 +10,8 @@ msgstr ""
 "Project-Id-Version: 5.99\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-04-23 21:24+0300\n"
-"PO-Revision-Date: 2025-03-24 15:13+0000\n"
-"Last-Translator: Håvard Syslak <haavard.syslak@gmail.com>\n"
+"PO-Revision-Date: 2025-04-29 17:11+0000\n"
+"Last-Translator: Stian Kristensen <stiank@gmail.com>\n"
 "Language-Team: Norwegian Bokmål <https://hosted.weblate.org/projects/kicad/"
 "v9/nb_NO/>\n"
 "Language: no\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.11-dev\n"
+"X-Generator: Weblate 5.12-dev\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
 #: common/dialogs/panel_embedded_files.cpp:321
@@ -78,7 +78,7 @@ msgstr "Forenkling av polygoner av kobberlag"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:1200
 msgid "Calculating plated copper"
-msgstr ""
+msgstr "Beregner kobberbelegg"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:1254
 #, c-format
@@ -87,21 +87,19 @@ msgstr "%d kobberlag forenkles"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:1297
 msgid "Simplify holes contours"
-msgstr "Forenkle hullkonturene"
+msgstr "Forenkle hullkonturer"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:1317
 msgid "Build BVH for holes and vias"
-msgstr "Bygg BVH for hull og vias"
+msgstr "Bygg BVH for hull og forbindelser"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:403
-#, fuzzy
 msgid "OpenGL context creation error"
-msgstr "Keepout-oppløsning for:"
+msgstr "Feil i oppretting av OpenGL-kontekst"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:434
-#, fuzzy
 msgid "Your OpenGL version is not supported. Minimum required is 1.5."
-msgstr "Din OpenGL-versjon støttes ikke. Minimum kreves er 1,5"
+msgstr "Din OpenGL-versjon støttes ikke. Minimumsversjon er 1,5."
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:568
 #, c-format
@@ -109,19 +107,19 @@ msgid "Last render time %.0f ms"
 msgstr "Siste opptegningstid %.0f ms"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:743
-#, fuzzy, c-format
+#, c-format
 msgid "Net %s\tNet class %s"
-msgstr "Net %s NetClass %s"
+msgstr "Net %s \tNetClass %s"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:766
-#, fuzzy, c-format
+#, c-format
 msgid "Pad %s\t"
-msgstr "%s og %s"
+msgstr "Blokk %s\t"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:797
-#, fuzzy, c-format
+#, c-format
 msgid "Rule area %s\t"
-msgstr "Regelområde på %s"
+msgstr "Regelområde %s\t"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:799
 #, c-format
@@ -134,23 +132,22 @@ msgstr "Last OpenGL: brett"
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:493
 msgid "Load OpenGL: holes and vias"
-msgstr "Last OpenGL: hull og vias"
+msgstr "Last OpenGL: hull og forbindelser"
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:546
 msgid "Load OpenGL: layers"
 msgstr "Last OpenGL: lag"
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:560
-#, fuzzy, c-format
+#, c-format
 msgid "Load OpenGL layer %s"
-msgstr "Last OpenGL lag %d"
+msgstr "Last OpenGL lag %s"
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:654
 #: 3d-viewer/3d_rendering/raytracing/create_scene.cpp:795
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1989
-#, fuzzy
 msgid "Loading 3D models..."
-msgstr "Laster 3D-modeller"
+msgstr "Laster 3D-modeller..."
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:663
 #: 3d-viewer/3d_rendering/raytracing/create_scene.cpp:976
@@ -169,9 +166,9 @@ msgstr "Lastetid %.3f s"
 #: pcbnew/pcb_io/fabmaster/pcb_io_fabmaster.cpp:59
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:503
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2697
-#, fuzzy, c-format
+#, c-format
 msgid "Loading %s..."
-msgstr "Laster %s"
+msgstr "Laster %s..."
 
 #: 3d-viewer/3d_rendering/opengl/render_3d_opengl.cpp:511
 #: 3d-viewer/3d_rendering/raytracing/render_3d_raytrace_gl.cpp:107
@@ -185,7 +182,7 @@ msgstr "Last Raytracing: brett"
 
 #: 3d-viewer/3d_rendering/raytracing/create_scene.cpp:565
 msgid "Load Raytracing: layers"
-msgstr "Load Raytracing: lag"
+msgstr "Last Raytracing: lag"
 
 #: 3d-viewer/3d_rendering/raytracing/render_3d_raytrace_base.cpp:240
 #, c-format
@@ -203,11 +200,11 @@ msgstr "Gjengivelse: Etterbehandling shader"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:51
 msgid "Export Current View as PNG..."
-msgstr "Eksporter gjeldende visning som PNG ..."
+msgstr "Eksporter gjeldende visning som PNG..."
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:56
 msgid "Export Current View as JPEG..."
-msgstr "Eksporter gjeldende visning som JPEG ..."
+msgstr "Eksporter gjeldende visning som JPEG..."
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:62
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:663
@@ -276,7 +273,7 @@ msgstr "Last inn kretskort på nytt"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:64
 msgid "Copy 3D image to clipboard"
-msgstr "Kopier QR-bilde til utklippstavle"
+msgstr "Kopier 3D-bilde til utklippstavle"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:69
 msgid "Render current view using Raytracing"
@@ -284,9 +281,8 @@ msgstr "Gjengi gjeldende visning ved hjelp av Raytracing"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:102
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:68
-#, fuzzy
 msgid "KiCad 3D Viewer"
-msgstr "3D-visning"
+msgstr "KiCad 3D-visning"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:164
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:669
@@ -301,37 +297,32 @@ msgstr "Utseende"
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:328
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:699
 #: 3d-viewer/dialogs/appearance_controls_3D_base.cpp:43
-#, fuzzy
 msgid "Follow PCB Editor"
-msgstr "Bytt til PCB Editor"
+msgstr "Følg kretskort-redigerer"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:330
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:700
 #: 3d-viewer/dialogs/appearance_controls_3D_base.cpp:43
-#, fuzzy
 msgid "Follow PCB Plot Settings"
-msgstr "Filterinnstillinger"
+msgstr "Følg kretskort-plotter-innstillinger"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:589
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:725
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:913
-#, fuzzy
 msgid "legacy colors"
-msgstr "Netto farger:"
+msgstr "gamle farger"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:728
 msgid "3D Image File Name"
-msgstr "3D-filfilnavn"
+msgstr "3D-bildefilnavn"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:749
 #: common/eda_base_frame.cpp:1335 common/eda_base_frame.cpp:1339
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:328
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:332
-#, fuzzy, c-format
+#, c-format
 msgid "Insufficient permissions to save file '%s'."
-msgstr ""
-"Utilstrekkelige tillatelser kreves for å lagre filen\n"
-"%s"
+msgstr "Utilstrekkelige tillatelser til å lagre filen '%s'."
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:750 common/confirm.cpp:211
 #: common/dialogs/dialog_grid_settings.cpp:82
@@ -378,14 +369,12 @@ msgid "Can't save file"
 msgstr "Kan ikke lagre fil"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:47
-#, fuzzy
 msgid "Set Pivot"
-msgstr "Arkpinne"
+msgstr "Sett omdreiningspunkt"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:48
-#, fuzzy
 msgid "Place point around which the board will be rotated (middle mouse click)"
-msgstr "Senter dreierotasjon (midtre museklikk)"
+msgstr "Plasser punktet kortet skal dreies rundt (midtre museklikk)"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:55
 msgid "Rotate X Clockwise"
@@ -393,7 +382,7 @@ msgstr "Roter X med klokken"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:63
 msgid "Rotate X Counterclockwise"
-msgstr "Roter mot klokken"
+msgstr "Roter X mot klokken"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:71
 msgid "Rotate Y Clockwise"
@@ -401,7 +390,7 @@ msgstr "Roter Y med klokken"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:79
 msgid "Rotate Y Counterclockwise"
-msgstr "Roter mot klokken"
+msgstr "Roter Y mot klokken"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:87
 msgid "Rotate Z Clockwise"
@@ -409,27 +398,23 @@ msgstr "Roter Z med klokken"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:95
 msgid "Rotate Z Counterclockwise"
-msgstr "Roter mot klokken"
+msgstr "Roter Z mot klokken"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:104
-#, fuzzy
 msgid "Move Board Left"
-msgstr "Flytt brettet til venstre"
+msgstr "Flytt kortet til venstre"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:113
-#, fuzzy
 msgid "Move Board Right"
-msgstr "Flytt brettet til høyre"
+msgstr "Flytt kortet til høyre"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:122
-#, fuzzy
 msgid "Move Board Up"
-msgstr "Flytt brettet opp"
+msgstr "Flytt kortet opp"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:131
-#, fuzzy
 msgid "Move Board Down"
-msgstr "Flytt brettet ned"
+msgstr "Flytt kortet ned"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:140
 #, fuzzy
@@ -438,15 +423,15 @@ msgstr "Hjemvisning"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:141
 msgid "Redraw at the home position and zoom"
-msgstr ""
+msgstr "Tegn igjen på hjemposisjonen og zoom inn"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:149
 msgid "Flip Board"
-msgstr "Vend kretskort"
+msgstr "Vend kretskortet"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:150
 msgid "Flip the board view"
-msgstr "Snu tavlevisningen"
+msgstr "Snu kretskortvisningen"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:158
 #, fuzzy
@@ -460,15 +445,15 @@ msgstr "Aktiver / deaktiver ortografisk projeksjon"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:166
 msgid "View Front"
-msgstr "Utsikt foran"
+msgstr "Se front"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:175
 msgid "View Back"
-msgstr "Se tilbake"
+msgstr "Se bakside"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:184
 msgid "View Left"
-msgstr "Vis til venstre"
+msgstr "Se venstre"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:193
 msgid "View Right"
@@ -476,11 +461,11 @@ msgstr "Se høyre"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:202
 msgid "View Top"
-msgstr "Vis topp"
+msgstr "Se topp"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:211
 msgid "View Bottom"
-msgstr "Vis bunnen"
+msgstr "Se bunn"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:219
 msgid "No 3D Grid"
@@ -503,42 +488,36 @@ msgid "3D Grid 1mm"
 msgstr "3D-rutenett 1mm"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:254
-#, fuzzy
 msgid "Render Realistic Materials"
-msgstr "Dielektriske materialer"
+msgstr "Gjengi realistiske materialer"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:255
 msgid "Use all material properties from each 3D model file"
 msgstr "Bruk alle materialegenskaper fra hver 3D-modellfil"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:262
-#, fuzzy
 msgid "Render Solid Colors"
-msgstr "Gjengi skygger"
+msgstr "Gjengi heldekkende farger"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:263
-#, fuzzy
 msgid "Use only the diffuse color property from 3D model file"
-msgstr "Bruk bare den diffuse fargeegenskapen fra modell 3D-modellfilen"
+msgstr "Bruk bare den diffuse fargeegenskapen fra 3D-modellfilen"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:270
-#, fuzzy
 msgid "Render CAD Colors"
-msgstr "Definerte farger"
+msgstr "Gjengi CAD-farger"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:271
 msgid "Use a CAD color style based on the diffuse color of the material"
 msgstr "Bruk en CAD-fargestil basert på den diffuse fargen på materialet"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:279
-#, fuzzy
 msgid "Show Through Hole 3D Models"
-msgstr "Bytt gjennom hull 3D-modeller"
+msgstr "Vis 3D-modeller med gjennomgående hull"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:280
-#, fuzzy
 msgid "Show 3D models for 'Through hole' type footprints"
-msgstr "Bytt 3D-modeller med attributtet 'Through hole'"
+msgstr "Vis 3D-modeller for fotavtrykk av typen 'gjennomgående hull'"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:288
 #, fuzzy
@@ -546,48 +525,40 @@ msgid "Show SMD 3D Models"
 msgstr "Vis 3D SMD-modeller"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:289
-#, fuzzy
 msgid "Show 3D models for 'Surface mount' type footprints"
-msgstr "Bytt 3D-modeller med 'Surface mount' attributt"
+msgstr "Vis 3D-modeller for fotavtrykk av 'overflatemonterings'-typen"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:297
-#, fuzzy
 msgid "Show Unspecified 3D Models"
-msgstr "Bytt SMD 3D-modeller"
+msgstr "Vis uspesifiserte 3D-modeller"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:298
-#, fuzzy
 msgid "Show 3D models for 'unspecified' type footprints"
-msgstr "Veksle 3D-modeller for komponenter av «Annen» type"
+msgstr "Vis 3D-modeller for fotavtrykk av 'uspesifisert' type"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:306
-#, fuzzy
 msgid "Show 3D Models not in POS File"
-msgstr "Veksle 3D-modeller for komponenter av «Annen» type"
+msgstr "Vis 3D-modeller som ikke er i en POS-fil"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:307
-#, fuzzy
 msgid "Show 3D models even if not found in .pos file"
-msgstr "Veksle 3D-modeller for komponenter av «Annen» type"
+msgstr "Vis 3D-modeller selv om de ikke finnes i en .pos-fil"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:315
-#, fuzzy
 msgid "Show 3D Models marked DNP"
-msgstr "Bytt SMD 3D-modeller"
+msgstr "Vis 3D-modeller merket DNP"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:316
-#, fuzzy
 msgid "Show 3D models even if marked 'Do Not Place'"
-msgstr "Bytt 3D-modeller med 'Virtual' attributt"
+msgstr "Vis 3D-modeller selv om de er merket 'Do Not Place'"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:323
 msgid "Show Model Bounding Boxes"
-msgstr "Vis modellboksene"
+msgstr "Vis modellens avgrensningsboks"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:324
-#, fuzzy
 msgid "Show 3D model bounding boxes in realtime renderer"
-msgstr "Vis avgrensningsbokser for modeller"
+msgstr "Vis 3D-avgrensningsbokser i sanntidsgjengivelse"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:331
 msgid "Show 3D Axis"
@@ -595,346 +566,280 @@ msgstr "Vis 3D-akse"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:338
 msgid "Show Appearance Manager"
-msgstr "Vis utseende Manager"
+msgstr "Vis utseendeinnstillinger"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:339
 #: pcbnew/tools/pcb_actions.cpp:1333
 msgid "Show/hide the appearance manager"
-msgstr "Vis / skjul utseendemanageren"
+msgstr "Vis / skjul utseendeinnstillingene"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:55
-#, fuzzy
 msgid "Board Body"
-msgstr "Vis brettkropp"
+msgstr "Kortkropp"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:55
 msgid "Show board body"
-msgstr "Vis brettkropp"
+msgstr "Vis kortkropp"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:56
-#, fuzzy
 msgid "Show front copper / surface finish color"
-msgstr "Kobber / overflatebehandlingsfarge ..."
+msgstr "Vis kobber-/overflatebehandlingsfarge på forsiden"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:57
-#, fuzzy
 msgid "Show back copper / surface finish color"
-msgstr "Kobber / overflatebehandlingsfarge ..."
+msgstr "Vis kobber-/overflatebehandlingsfarge på baksiden"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:58
-#, fuzzy
 msgid "Adhesive"
-msgstr "B. Lim"
+msgstr "Adhesive"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:58
-#, fuzzy
 msgid "Show adhesive"
-msgstr "Vis limlag"
+msgstr "Vis adhesive"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:59
-#, fuzzy
 msgid "Solder Paste"
-msgstr "Topp loddetinn"
+msgstr "Loddepasta"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:59
-#, fuzzy
 msgid "Show solder paste"
-msgstr "Vis loddeplastlag"
+msgstr "Vis loddepasta"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:60
-#, fuzzy
 msgid "Show front silkscreen"
-msgstr "Front silke"
+msgstr "Vis silketrykk på fronten"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:61
-#, fuzzy
 msgid "Show back silkscreen"
-msgstr "Silkeskjerm bak"
+msgstr "Vis silketrykk på baksiden"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:62
-#, fuzzy
 msgid "Show front solder mask"
-msgstr "Loddemaske foran"
+msgstr "Vis loddemaske på forsiden"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:63
-#, fuzzy
 msgid "Show back solder mask"
-msgstr "Rygg loddemaske"
+msgstr "Vis loddemaske på baksiden"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:64
-#, fuzzy
 msgid "Show user drawings layer"
-msgstr "Vis kommentarer og tegningslag"
+msgstr "Vis brukertegningslag"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:65
-#, fuzzy
 msgid "Show user comments layer"
-msgstr "Vis loddemaskelag"
+msgstr "Vis brukerkommentar-lag"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:66
-#, fuzzy
 msgid "Show user ECO1 layer"
-msgstr "Vis ECO-lag"
+msgstr "Vis bruker-ECO1-lag"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:67
-#, fuzzy
 msgid "Show user ECO2 layer"
-msgstr "Vis ECO-lag"
+msgstr "Vis bruker-ECO2-lag"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:68
-#, fuzzy
 msgid "Show user defined layer 1"
-msgstr "Brukerdefinert lag 1"
+msgstr "Vis brukerdefinert lag 1"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:69
-#, fuzzy
 msgid "Show user defined layer 2"
-msgstr "Brukerdefinert lag 2"
+msgstr "Vis brukerdefinert lag 2"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:70
-#, fuzzy
 msgid "Show user defined layer 3"
-msgstr "Brukerdefinert lag 3"
+msgstr "Vis brukerdefinert lag 3"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:71
-#, fuzzy
 msgid "Show user defined layer 4"
-msgstr "Brukerdefinert lag 4"
+msgstr "Vis brukerdefinert lag 4"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:72
-#, fuzzy
 msgid "Show user defined layer 5"
-msgstr "Brukerdefinert lag 5"
+msgstr "Vis brukerdefinert lag 5"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:73
-#, fuzzy
 msgid "Show user defined layer 6"
-msgstr "Brukerdefinert lag 6"
+msgstr "Vis brukerdefinert lag 6"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:74
-#, fuzzy
 msgid "Show user defined layer 7"
-msgstr "Brukerdefinert lag 7"
+msgstr "Vis brukerdefinert lag 7"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:75
-#, fuzzy
 msgid "Show user defined layer 8"
-msgstr "Brukerdefinert lag 8"
+msgstr "Vis brukerdefinert lag 8"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:76
-#, fuzzy
 msgid "Show user defined layer 9"
-msgstr "Brukerdefinert lag 9"
+msgstr "Vis brukerdefinert lag 9"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:77
-#, fuzzy
 msgid "Show user defined layer 10"
-msgstr "Brukerdefinert lag 1"
+msgstr "Vis brukerdefinert lag 10"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:78
-#, fuzzy
 msgid "Show user defined layer 11"
-msgstr "Brukerdefinert lag 1"
+msgstr "Vis brukerdefinert lag 11"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:79
-#, fuzzy
 msgid "Show user defined layer 12"
-msgstr "Brukerdefinert lag 1"
+msgstr "Vis brukerdefinert lag 12"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:80
-#, fuzzy
 msgid "Show user defined layer 13"
-msgstr "Brukerdefinert lag 1"
+msgstr "Vis brukerdefinert lag 13"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:81
-#, fuzzy
 msgid "Show user defined layer 14"
-msgstr "Brukerdefinert lag 1"
+msgstr "Vis brukerdefinert lag 14"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:82
-#, fuzzy
 msgid "Show user defined layer 15"
-msgstr "Brukerdefinert lag 1"
+msgstr "Vis brukerdefinert lag 15"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:83
-#, fuzzy
 msgid "Show user defined layer 16"
-msgstr "Brukerdefinert lag 1"
+msgstr "Vis brukerdefinert lag 16"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:84
-#, fuzzy
 msgid "Show user defined layer 17"
-msgstr "Brukerdefinert lag 1"
+msgstr "Vis brukerdefinert lag 17"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:85
-#, fuzzy
 msgid "Show user defined layer 18"
-msgstr "Brukerdefinert lag 1"
+msgstr "Vis brukerdefinert lag 18"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:86
-#, fuzzy
 msgid "Show user defined layer 19"
-msgstr "Brukerdefinert lag 1"
+msgstr "Vis brukerdefinert lag 19"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:87
-#, fuzzy
 msgid "Show user defined layer 20"
-msgstr "Brukerdefinert lag 2"
+msgstr "Vis brukerdefinert lag 20"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:88
-#, fuzzy
 msgid "Show user defined layer 21"
-msgstr "Brukerdefinert lag 2"
+msgstr "Vis brukerdefinert lag 21"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:89
-#, fuzzy
 msgid "Show user defined layer 22"
-msgstr "Brukerdefinert lag 2"
+msgstr "Vis brukerdefinert lag 22"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:90
-#, fuzzy
 msgid "Show user defined layer 23"
-msgstr "Brukerdefinert lag 2"
+msgstr "Vis brukerdefinert lag 23"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:91
-#, fuzzy
 msgid "Show user defined layer 24"
-msgstr "Brukerdefinert lag 2"
+msgstr "Vis brukerdefinert lag 24"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:92
-#, fuzzy
 msgid "Show user defined layer 25"
-msgstr "Brukerdefinert lag 2"
+msgstr "Vis brukerdefinert lag 25"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:93
-#, fuzzy
 msgid "Show user defined layer 26"
-msgstr "Brukerdefinert lag 2"
+msgstr "Vis brukerdefinert lag 26"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:94
-#, fuzzy
 msgid "Show user defined layer 27"
-msgstr "Brukerdefinert lag 2"
+msgstr "Vis brukerdefinert lag 27"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:95
-#, fuzzy
 msgid "Show user defined layer 28"
-msgstr "Brukerdefinert lag 2"
+msgstr "Vis brukerdefinert lag 28"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:96
-#, fuzzy
 msgid "Show user defined layer 29"
-msgstr "Brukerdefinert lag 2"
+msgstr "Vis brukerdefinert lag 29"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:97
-#, fuzzy
 msgid "Show user defined layer 30"
-msgstr "Brukerdefinert lag 3"
+msgstr "Vis brukerdefinert lag 30"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:98
-#, fuzzy
 msgid "Show user defined layer 31"
-msgstr "Brukerdefinert lag 3"
+msgstr "Vis brukerdefinert lag 31"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:99
-#, fuzzy
 msgid "Show user defined layer 32"
-msgstr "Brukerdefinert lag 3"
+msgstr "Vis brukerdefinert lag 32"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:100
-#, fuzzy
 msgid "Show user defined layer 33"
-msgstr "Brukerdefinert lag 3"
+msgstr "Vis brukerdefinert lag 33"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:101
-#, fuzzy
 msgid "Show user defined layer 34"
-msgstr "Brukerdefinert lag 3"
+msgstr "Vis brukerdefinert lag 34"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:102
-#, fuzzy
 msgid "Show user defined layer 35"
-msgstr "Brukerdefinert lag 3"
+msgstr "Vis brukerdefinert lag 35"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:103
-#, fuzzy
 msgid "Show user defined layer 36"
-msgstr "Brukerdefinert lag 3"
+msgstr "Vis brukerdefinert lag 36"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:104
-#, fuzzy
 msgid "Show user defined layer 37"
-msgstr "Brukerdefinert lag 3"
+msgstr "Vis brukerdefinert lag 37"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:105
-#, fuzzy
 msgid "Show user defined layer 38"
-msgstr "Brukerdefinert lag 3"
+msgstr "Vis brukerdefinert lag 38"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:106
-#, fuzzy
 msgid "Show user defined layer 39"
-msgstr "Brukerdefinert lag 3"
+msgstr "Vis brukerdefinert lag 39"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:107
-#, fuzzy
 msgid "Show user defined layer 40"
-msgstr "Brukerdefinert lag 4"
+msgstr "Vis brukerdefinert lag 40"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:108
-#, fuzzy
 msgid "Show user defined layer 41"
-msgstr "Brukerdefinert lag 4"
+msgstr "Vis brukerdefinert lag 41"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:109
-#, fuzzy
 msgid "Show user defined layer 42"
-msgstr "Brukerdefinert lag 4"
+msgstr "Vis brukerdefinert lag 42"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:110
-#, fuzzy
 msgid "Show user defined layer 43"
-msgstr "Brukerdefinert lag 4"
+msgstr "Vis brukerdefinert lag 43"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:111
-#, fuzzy
 msgid "Show user defined layer 44"
-msgstr "Brukerdefinert lag 4"
+msgstr "Vis brukerdefinert lag 44"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:112
-#, fuzzy
 msgid "Show user defined layer 45"
-msgstr "Brukerdefinert lag 4"
+msgstr "Vis brukerdefinert lag 45"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:114
-#, fuzzy
 msgid "Through-hole Models"
-msgstr "Gjennomgående hull"
+msgstr "Modeller med gjennomgående hull"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:115
-#, fuzzy
 msgid "SMD Models"
-msgstr "3D-modell (er)"
+msgstr "SMD-modeller"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:116
-#, fuzzy
 msgid "Virtual Models"
-msgstr "Bytt virtuelle 3D-modeller"
+msgstr "Virtuelle modeller"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:117
-#, fuzzy
 msgid "Models not in POS File"
-msgstr "Veksle 3D-modeller for komponenter av «Annen» type"
+msgstr "Modeller som ikke er i POS-filen"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:118
-#, fuzzy
 msgid "Models marked DNP"
-msgstr "Bytt SMD 3D-modeller"
+msgstr "Modeller merket DNP"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:119
-#, fuzzy
 msgid "Model Bounding Boxes"
-msgstr "Vis modellboksene"
+msgstr "Modellens avgrensningsbokser"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:121 common/layer_id.cpp:125
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:30
@@ -971,55 +876,46 @@ msgid "Show all footprint text"
 msgstr "Vis all fotavtrykkstekst"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:124
-#, fuzzy
 msgid "Off-board Silkscreen"
-msgstr "Silketrykk"
+msgstr "Silketrykk utenfor kortet"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:124
 msgid "Do not clip silk layers to board outline"
-msgstr ""
+msgstr "Ikke kutt silketrykklag etter kortets omriss"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:126
-#, fuzzy
 msgid "3D Axis"
-msgstr "X-akse"
+msgstr "3D-akse"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:127
-#, fuzzy
 msgid "Background Start"
-msgstr "Bakgrunn"
+msgstr "Bakgrunnsstart"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:127
-#, fuzzy
 msgid "Background gradient start color"
-msgstr "Startreferanse start:"
+msgstr "Startfarge for bakgrunnsgradient"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:128
-#, fuzzy
 msgid "Background End"
-msgstr "Bakgrunn"
+msgstr "Slutt på bakgrunn"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:128
-#, fuzzy
 msgid "Background gradient end color"
-msgstr "Bakgrunn"
+msgstr "Avsluttende gradientfarge for bakgrunn"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:170
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:272
-#, fuzzy
 msgid "Use board stackup colors"
-msgstr "begrensninger for brettoppsett"
+msgstr "Bruk stablefarger for kort"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:184
-#, fuzzy
 msgid "Use PCB editor copper colors"
-msgstr "begrensninger for brettoppsett"
+msgstr "Bruk Kretskortredigererens kobberfarger"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:186
-#, fuzzy
 msgid ""
 "Use the board editor layer colors for copper layers (realtime renderer only)"
-msgstr "Bruk kobberfarge kun for uplettert kobber"
+msgstr "Bruk kretskortredigererens lagfarger for kobberlag"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:203
 #, c-format
@@ -1029,6 +925,10 @@ msgid ""
 "Successive Tabs while holding %s down will cycle through presets in the "
 "popup."
 msgstr ""
+"Lagre og gjenopprett farge- og synlighetskombinasjoner.\n"
+"Bruk %s+Tab for å aktivere velgeren.\n"
+"Gjentatte Tab-er mens du holder nede %s vil gå gjennom forhåndsvalgene i "
+"popup-en."
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:211
 #, c-format
@@ -1038,15 +938,18 @@ msgid ""
 "Successive Tabs while holding %s down will cycle through viewports in the "
 "popup."
 msgstr ""
+"Lagre og gjenopprett kameraposisjon og zoom.\n"
+"Bruk Tab+%s for å aktivere velgeren.\n"
+"Gjentatte Tab-er kombinert med %s vil gå gjennom de ulike visningsfeltene i "
+"popup-en."
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:548
-#, fuzzy
 msgid "Left double click or middle click to change color"
-msgstr "Venstre dobbeltklikk eller midtklikk for fargeendring"
+msgstr "Venstre dobbeltklikk eller midtklikk for å endre farge"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:558
 msgid "Uncheck 'Use board stackup colors' to allow color editing."
-msgstr ""
+msgstr "Fjern haken på 'Bruk kortstablefarge' for å redigere farger."
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:613
 #: pcbnew/widgets/appearance_controls.cpp:2237
@@ -1056,41 +959,40 @@ msgstr "Vis eller skjul %s"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:692
 #: pcbnew/widgets/appearance_controls.cpp:2610
-#, fuzzy, c-format
+#, c-format
 msgid "Presets (%s+Tab):"
-msgstr "(Ctrl+Tab)"
+msgstr "Forhåndsinnstillinger (%s+Tab):"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:706
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1660
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2094
 #: pcbnew/widgets/appearance_controls.cpp:2635
 msgid "Save preset..."
-msgstr "Lagre forhåndsinnstilling ..."
+msgstr "Lagre forhåndsinnstilling..."
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:707
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1661
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2095
 #: pcbnew/widgets/appearance_controls.cpp:2636
 msgid "Delete preset..."
-msgstr "Slett forhåndsinnstilling ..."
+msgstr "Slett forhåndsinnstilling..."
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:807
 #: pcbnew/widgets/appearance_controls.cpp:2741
 msgid "Layer preset name:"
-msgstr "Lagets forhåndsinnstilte navn:"
+msgstr "Lagets forhåndsinnstillingsnavn:"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:808
 #: pcbnew/widgets/appearance_controls.cpp:2742
 msgid "Save Layer Preset"
-msgstr "Lagre laginnstilling"
+msgstr "Lagre lagforhåndsinnstilling"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:823
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1835
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2237
 #: pcbnew/widgets/appearance_controls.cpp:2775
-#, fuzzy
 msgid "Overwrite existing preset?"
-msgstr "Åpne et eksisterende prosjekt"
+msgstr "Overskrive eksisterende prosjekt?"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:849
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1860
@@ -1115,72 +1017,62 @@ msgstr "Velg forhåndsinnstilling:"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:928
 #: pcbnew/widgets/appearance_controls.cpp:2914
-#, fuzzy, c-format
+#, c-format
 msgid "Viewports (%s+Tab):"
-msgstr "(Ctrl+Tab)"
+msgstr "Visningsfelt (%s+Tab):"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:937
 #: pcbnew/widgets/appearance_controls.cpp:2923
-#, fuzzy
 msgid "Save viewport..."
-msgstr "Lagre forhåndsinnstilling ..."
+msgstr "Lagre visningsfelt..."
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:938
 #: pcbnew/widgets/appearance_controls.cpp:2924
-#, fuzzy
 msgid "Delete viewport..."
-msgstr "Slett forhåndsinnstilling ..."
+msgstr "Slett visningsfelt..."
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:969
 #: pcbnew/widgets/appearance_controls.cpp:2973
-#, fuzzy
 msgid "Viewport name:"
-msgstr "Netto navn:"
+msgstr "Navn på visningsfelt:"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:970
 #: pcbnew/widgets/appearance_controls.cpp:2973
-#, fuzzy
 msgid "Save Viewport"
-msgstr "Lagre rapportfil"
+msgstr "Lagre visningsfelt"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:1010
 #: pcbnew/widgets/appearance_controls.cpp:3012
-#, fuzzy
 msgid "Viewports"
-msgstr "Rapporter"
+msgstr "Visningsfelt"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:1019
 #: pcbnew/widgets/appearance_controls.cpp:3021
-#, fuzzy
 msgid "Delete Viewport"
-msgstr "Slett katalog"
+msgstr "Slett visningsfelt"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:1020
 #: pcbnew/widgets/appearance_controls.cpp:3022
-#, fuzzy
 msgid "Select viewport:"
-msgstr "Velg forhåndsinnstilling:"
+msgstr "Velg visningsfelt:"
 
 #: 3d-viewer/dialogs/appearance_controls_3D_base.cpp:39
 #: pcbnew/widgets/appearance_controls_base.cpp:161
-#, fuzzy
 msgid "Presets (Ctrl+Tab):"
-msgstr "(Ctrl+Tab)"
+msgstr "Forhåndsinnstillinger (Ctrl+Tab):"
 
 #: 3d-viewer/dialogs/appearance_controls_3D_base.cpp:58
 #: pcbnew/widgets/appearance_controls_base.cpp:180
-#, fuzzy
 msgid "Viewports (Alt+Tab):"
-msgstr "(Ctrl+Tab)"
+msgstr "Visningsfelt (Alt+Tab):"
 
 #: 3d-viewer/dialogs/appearance_controls_3D_base.cpp:62
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:67
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:265
 #: pcbnew/widgets/appearance_controls_base.cpp:165
 #: pcbnew/widgets/appearance_controls_base.cpp:184
-#, fuzzy
 msgid "(unsaved)"
-msgstr "[Ikke lagret]"
+msgstr "(ikke lagret)"
 
 #: 3d-viewer/dialogs/dialog_select_3d_model.cpp:94
 #, c-format
@@ -1189,17 +1081,16 @@ msgstr "Alle støttede filer (%s)"
 
 #: 3d-viewer/dialogs/dialog_select_3d_model_base.cpp:64
 msgid "Available paths:"
-msgstr "Tilgjengelige stier:"
+msgstr "Tilgjengelige baner:"
 
 #: 3d-viewer/dialogs/dialog_select_3d_model_base.cpp:73
 #: common/dialogs/dialog_configure_paths_base.h:60
 msgid "Configure Paths"
-msgstr "Sett opp stier"
+msgstr "Sett opp baner"
 
 #: 3d-viewer/dialogs/dialog_select_3d_model_base.cpp:82
-#, fuzzy
 msgid "Embed model"
-msgstr "Modell"
+msgstr "Bygg inn modell"
 
 #: 3d-viewer/dialogs/dialog_select_3d_model_base.h:64
 msgid "Select 3D Model"
@@ -1207,12 +1098,11 @@ msgstr "Velg 3D-modell"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:23
 msgid "Render Options"
-msgstr "Påminnelsesvalg"
+msgstr "Gjengivelsesvalg"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:35
-#, fuzzy
 msgid "Clip silkscreen at via annuli"
-msgstr "Klipp silketrykk ved via ringrommet"
+msgstr "Kutt silketrykk ved gjennomføringsringrommet"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:38
 #, fuzzy
@@ -1224,33 +1114,28 @@ msgid "Show filled areas in zones"
 msgstr "Vis fylte områder i soner"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:44
-#, fuzzy
 msgid "Use bare copper color for unplated copper (slow)"
-msgstr "Bruk kobberfarge kun for uplettert kobber"
+msgstr "Bruk kobberfarge kun for uplettert kobber (treg)"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:45
 msgid "Use different colors for plated and unplated copper. (Slow)"
 msgstr "Bruk forskjellige farger for plettert og uplettert kobber. (Tregt)"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:52
-#, fuzzy
 msgid "Material properties:"
-msgstr "Materielle egenskaper"
+msgstr "Materielle egenskaper:"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:56
-#, fuzzy
 msgid "Realistic"
-msgstr "Realistisk modus"
+msgstr "Realistisk"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:56
-#, fuzzy
 msgid "Solid colors"
-msgstr "Velg farge"
+msgstr "Heldekkende farge"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:56
-#, fuzzy
 msgid "CAD colors"
-msgstr "Farger"
+msgstr "CAD-farger"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:74
 msgid "Camera Options"
@@ -1274,19 +1159,17 @@ msgid "deg"
 msgstr "grader"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:102
-#, fuzzy
 msgid "Redraw while moving"
-msgstr "Mens du beveger deg"
+msgstr "Tegn opp under bevegelse"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:106
 msgid "Redraw speed:"
-msgstr ""
+msgstr "Tegnefart:"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:19
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:17
-#, fuzzy
 msgid "Rendering Options"
-msgstr "Påminnelsesvalg"
+msgstr "Opptegningsvalg"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:32
 msgid "Show model bounding boxes"
