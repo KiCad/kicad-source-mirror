@@ -19,7 +19,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-23 21:24+0300\n"
+"POT-Creation-Date: 2025-04-29 20:12+0300\n"
 "PO-Revision-Date: 2025-03-06 23:18+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/v9/fi/>\n"
@@ -80,37 +80,37 @@ msgstr ""
 msgid "Create tracks and vias"
 msgstr "Luo johdinraitoja ja läpivientejä"
 
-#: 3d-viewer/3d_canvas/create_layer_items.cpp:788
+#: 3d-viewer/3d_canvas/create_layer_items.cpp:784
 msgid "Create zones"
 msgstr "Luo vyöhykkeet"
 
-#: 3d-viewer/3d_canvas/create_layer_items.cpp:868
+#: 3d-viewer/3d_canvas/create_layer_items.cpp:864
 msgid "Build Tech layers"
 msgstr "Rakenna Teknisiä tasoja"
 
-#: 3d-viewer/3d_canvas/create_layer_items.cpp:945
+#: 3d-viewer/3d_canvas/create_layer_items.cpp:941
 #, c-format
 msgid "Build Tech layer %d"
 msgstr "Rakenna Tekninen taso %d"
 
-#: 3d-viewer/3d_canvas/create_layer_items.cpp:1195
+#: 3d-viewer/3d_canvas/create_layer_items.cpp:1202
 msgid "Simplifying copper layer polygons"
 msgstr "Yksinkertaistetaan kuparikerroksen monikulmioita"
 
-#: 3d-viewer/3d_canvas/create_layer_items.cpp:1200
+#: 3d-viewer/3d_canvas/create_layer_items.cpp:1207
 msgid "Calculating plated copper"
 msgstr "Lasketaan pinnoitettua kuparia"
 
-#: 3d-viewer/3d_canvas/create_layer_items.cpp:1254
+#: 3d-viewer/3d_canvas/create_layer_items.cpp:1261
 #, c-format
 msgid "Simplifying %d copper layers"
 msgstr "Yksinkertaistetaan %d kuparikerroksia"
 
-#: 3d-viewer/3d_canvas/create_layer_items.cpp:1297
+#: 3d-viewer/3d_canvas/create_layer_items.cpp:1304
 msgid "Simplify holes contours"
 msgstr "Yksinkertaista reikien muotoja"
 
-#: 3d-viewer/3d_canvas/create_layer_items.cpp:1317
+#: 3d-viewer/3d_canvas/create_layer_items.cpp:1324
 msgid "Build BVH for holes and vias"
 msgstr "Rakenna BVH reikiä ja läpivientejä varten"
 
@@ -375,7 +375,7 @@ msgstr "Ei riittäviä käyttöoikeuksia tiedoston '%s' tallentamiseen."
 #: pcb_calculator/calculator_panels/panel_fusing_current.cpp:191
 #: pcb_calculator/calculator_panels/panel_fusing_current.cpp:203
 #: pcbnew/dialogs/dialog_drc.cpp:984
-#: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:392
+#: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:395
 #: pcbnew/drc/drc_item.cpp:228 pcbnew/pcb_marker.cpp:211
 #: pcbnew/widgets/appearance_controls.cpp:2768
 msgid "Error"
@@ -1429,11 +1429,11 @@ msgstr "Valo 4:"
 msgid "Light 8:"
 msgstr "Valo 8:"
 
-#: 3d-viewer/dialogs/panel_preview_3d_model.cpp:408
+#: 3d-viewer/dialogs/panel_preview_3d_model.cpp:410
 msgid "3D Preview Options"
 msgstr "3D-Esikatselun Valinnat"
 
-#: 3d-viewer/dialogs/panel_preview_3d_model.cpp:408
+#: 3d-viewer/dialogs/panel_preview_3d_model.cpp:410
 msgid "Board thickness:"
 msgstr "Piirilevyn paksuus:"
 
@@ -1890,7 +1890,7 @@ msgid ""
 msgstr "Muuta harmaasävykuva mustavalkoiseksi säätämällä tasoa."
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:152
-#: gerbview/gerber_file_image.cpp:357
+#: gerbview/gerber_file_image.cpp:371
 msgid "Negative"
 msgstr "Negatiivi"
 
@@ -2266,7 +2266,7 @@ msgstr "Ei voida luoda yleistä kirjastotaulukon polkua '%s'."
 #: common/widgets/widget_hotkey_list.cpp:529
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:50
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:100
-#: eeschema/sch_symbol.cpp:2107 eeschema/symbol_editor/symbol_editor.cpp:828
+#: eeschema/sch_symbol.cpp:2115 eeschema/symbol_editor/symbol_editor.cpp:828
 #: eeschema/symbol_editor/symbol_editor.cpp:1767
 #: eeschema/symbol_viewer_frame.cpp:459 include/lib_table_grid.h:214
 #: kicad/pcm/dialogs/panel_package_base.cpp:59
@@ -2339,29 +2339,29 @@ msgstr "Johtava Kehittäjä Alumni"
 msgid "Additional Contributions By"
 msgstr "Muut työpanoksia antaneet"
 
-#: common/dialog_about/AboutDialog_main.cpp:627
+#: common/dialog_about/AboutDialog_main.cpp:628
 msgid "Documentation Team"
 msgstr "Dokumentointitiimi"
 
-#: common/dialog_about/AboutDialog_main.cpp:853
+#: common/dialog_about/AboutDialog_main.cpp:854
 msgid "Librarian Team"
 msgstr "Kirjastotiimi"
 
-#: common/dialog_about/AboutDialog_main.cpp:906
+#: common/dialog_about/AboutDialog_main.cpp:907
 msgid "3D models"
 msgstr "3D-mallit"
 
-#: common/dialog_about/AboutDialog_main.cpp:907
+#: common/dialog_about/AboutDialog_main.cpp:908
 #: eeschema/dialogs/dialog_edit_symbols_libid_base.cpp:37
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:114
-#: eeschema/sch_symbol.cpp:2696
+#: eeschema/sch_symbol.cpp:2710
 #: eeschema/widgets/panel_sch_selection_filter.cpp:202
 #: eeschema/widgets/panel_sch_selection_filter_base.cpp:29
 #: eeschema/widgets/search_handlers.cpp:158
 msgid "Symbols"
 msgstr "Symbolit"
 
-#: common/dialog_about/AboutDialog_main.cpp:908
+#: common/dialog_about/AboutDialog_main.cpp:909
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:37
 #: pcbnew/plot_board_layers.cpp:224
 #: pcbnew/widgets/panel_selection_filter.cpp:196
@@ -2370,11 +2370,11 @@ msgstr "Symbolit"
 msgid "Footprints"
 msgstr "Jalanjäljet"
 
-#: common/dialog_about/AboutDialog_main.cpp:928
+#: common/dialog_about/AboutDialog_main.cpp:929
 msgid "Icons"
 msgstr "Kuvakkeet"
 
-#: common/dialog_about/AboutDialog_main.cpp:935
+#: common/dialog_about/AboutDialog_main.cpp:936
 msgid "Package Developers"
 msgstr "Paketin kehittäjät"
 
@@ -2660,7 +2660,7 @@ msgstr "Ympäristömuuttujat"
 #: eeschema/dialogs/panel_sym_lib_table.cpp:380
 #: eeschema/dialogs/panel_template_fieldnames_base.cpp:42
 #: eeschema/fields_grid_table.cpp:477 eeschema/sch_pin.cpp:1578
-#: eeschema/sch_symbol.cpp:2068 eeschema/sch_symbol.cpp:2121
+#: eeschema/sch_symbol.cpp:2076 eeschema/sch_symbol.cpp:2129
 #: eeschema/symbol_editor/symbol_editor.cpp:1737
 #: eeschema/symbol_viewer_frame.cpp:457
 #: eeschema/sync_sheet_pin/sheet_synchronization_model.h:66
@@ -2983,7 +2983,7 @@ msgid "Project Name"
 msgstr "Projektin nimi"
 
 #: common/dialogs/dialog_import_choose_project.cpp:34
-#: kicad/cli/command_pcb.h:31 pcbnew/board.cpp:1401
+#: kicad/cli/command_pcb.h:31 pcbnew/board.cpp:1402
 msgid "PCB"
 msgstr "Piirilevy"
 
@@ -3473,10 +3473,10 @@ msgstr "Asetus"
 #: eeschema/dialogs/dialog_sim_format_value.cpp:75
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:57
 #: eeschema/dialogs/panel_sym_lib_table.cpp:381
-#: eeschema/fields_grid_table.cpp:478 eeschema/sch_symbol.cpp:1099
-#: eeschema/sch_symbol.cpp:2064 eeschema/sch_symbol.cpp:2117
-#: eeschema/sch_symbol.cpp:3004 eeschema/sim/simulator_frame_ui.cpp:616
-#: eeschema/sim/simulator_frame_ui.cpp:2709
+#: eeschema/fields_grid_table.cpp:478 eeschema/sch_symbol.cpp:1100
+#: eeschema/sch_symbol.cpp:2072 eeschema/sch_symbol.cpp:2125
+#: eeschema/sch_symbol.cpp:3018 eeschema/sim/simulator_frame_ui.cpp:616
+#: eeschema/sim/simulator_frame_ui.cpp:2716
 #: eeschema/sim/simulator_frame_ui_base.cpp:170
 #: eeschema/sim/simulator_frame_ui_base.cpp:222
 #: eeschema/widgets/search_handlers.cpp:161
@@ -3839,7 +3839,7 @@ msgstr "Testaa"
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1360
 #: gerbview/dialogs/dialog_select_one_pcb_layer.cpp:147
 #: pcbnew/dialogs/dialog_multichannel_repeat_layout.cpp:78
-#: pcbnew/tools/multichannel_tool.cpp:978
+#: pcbnew/tools/multichannel_tool.cpp:984
 msgid "OK"
 msgstr "Hyväksy"
 
@@ -3890,7 +3890,7 @@ msgstr "Tiedostonimi"
 #: pcbnew/dialogs/dialog_find_base.cpp:118 pcbnew/pad.cpp:1333
 #: pcbnew/pcb_dimension.cpp:673 pcbnew/pcb_group.cpp:396
 #: pcbnew/pcb_shape.cpp:649 pcbnew/pcb_tablecell.cpp:106
-#: pcbnew/pcb_text.cpp:286 pcbnew/pcb_textbox.cpp:470 pcbnew/pcb_track.cpp:1707
+#: pcbnew/pcb_text.cpp:286 pcbnew/pcb_textbox.cpp:470 pcbnew/pcb_track.cpp:1734
 #: pcbnew/zone.cpp:826
 msgid "Status"
 msgstr "Tilanne"
@@ -4363,8 +4363,8 @@ msgstr "Käytä työkaluriveissä kompakteja kuvakkeita"
 #: common/dialogs/panel_common_settings_base.cpp:220 common/eda_text.cpp:976
 #: eeschema/sch_label.cpp:1199 eeschema/sch_tablecell.cpp:129
 #: eeschema/sch_text.cpp:648 eeschema/sch_textbox.cpp:539
-#: gerbview/gerber_file_image.cpp:357 gerbview/gerber_file_image.cpp:361
-#: gerbview/gerber_file_image.cpp:364
+#: gerbview/gerber_file_image.cpp:371 gerbview/gerber_file_image.cpp:375
+#: gerbview/gerber_file_image.cpp:378
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:96
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:283
 #: pcbnew/microwave/microwave_polygon.cpp:127 pcbnew/tools/pcb_control.cpp:348
@@ -4844,7 +4844,7 @@ msgstr "Aktiivinen"
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:45
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:95
 #: eeschema/dialogs/panel_template_fieldnames_base.cpp:43
-#: eeschema/sch_field.cpp:1218 eeschema/sch_pin.cpp:1583
+#: eeschema/sch_field.cpp:1225 eeschema/sch_pin.cpp:1583
 #: eeschema/sch_pin.cpp:2182 eeschema/sch_tablecell.cpp:207
 #: include/lib_table_grid.h:216 pcbnew/dialogs/panel_fp_lib_table_base.cpp:45
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:94
@@ -5513,11 +5513,11 @@ msgstr ""
 msgid "Python interpreter status"
 msgstr "Python-tulkin tila"
 
-#: common/dialogs/panel_setup_netclasses.cpp:96
+#: common/dialogs/panel_setup_netclasses.cpp:98
 msgid "<Not defined>"
 msgstr "<Ei määritelty>"
 
-#: common/dialogs/panel_setup_netclasses.cpp:98 common/eda_shape.cpp:2329
+#: common/dialogs/panel_setup_netclasses.cpp:100 common/eda_shape.cpp:2329
 #: common/stroke_params.cpp:40
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:372
 #: eeschema/sch_bus_entry.cpp:661 eeschema/sch_line.cpp:1047
@@ -5532,7 +5532,7 @@ msgstr "<Ei määritelty>"
 msgid "Solid"
 msgstr "Kiinteä"
 
-#: common/dialogs/panel_setup_netclasses.cpp:100 common/eda_shape.cpp:2330
+#: common/dialogs/panel_setup_netclasses.cpp:102 common/eda_shape.cpp:2330
 #: common/stroke_params.cpp:41
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:372
 #: eeschema/sch_bus_entry.cpp:662 eeschema/sch_line.cpp:1048
@@ -5541,7 +5541,7 @@ msgstr "Kiinteä"
 msgid "Dashed"
 msgstr "Katkoviiva"
 
-#: common/dialogs/panel_setup_netclasses.cpp:102 common/eda_shape.cpp:2331
+#: common/dialogs/panel_setup_netclasses.cpp:104 common/eda_shape.cpp:2331
 #: common/stroke_params.cpp:42
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:372
 #: eeschema/sch_bus_entry.cpp:663 eeschema/sch_line.cpp:1049
@@ -5550,7 +5550,7 @@ msgstr "Katkoviiva"
 msgid "Dotted"
 msgstr "Pisteviiva"
 
-#: common/dialogs/panel_setup_netclasses.cpp:104 common/eda_shape.cpp:2332
+#: common/dialogs/panel_setup_netclasses.cpp:106 common/eda_shape.cpp:2332
 #: common/stroke_params.cpp:43
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:372
 #: eeschema/sch_bus_entry.cpp:664 eeschema/sch_line.cpp:1050
@@ -5559,7 +5559,7 @@ msgstr "Pisteviiva"
 msgid "Dash-Dot"
 msgstr "Viiva-Piste"
 
-#: common/dialogs/panel_setup_netclasses.cpp:106 common/eda_shape.cpp:2333
+#: common/dialogs/panel_setup_netclasses.cpp:108 common/eda_shape.cpp:2333
 #: common/stroke_params.cpp:44
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:372
 #: eeschema/sch_bus_entry.cpp:665 eeschema/sch_line.cpp:1051
@@ -5568,11 +5568,11 @@ msgstr "Viiva-Piste"
 msgid "Dash-Dot-Dot"
 msgstr "Viiva-Piste-Piste"
 
-#: common/dialogs/panel_setup_netclasses.cpp:182
+#: common/dialogs/panel_setup_netclasses.cpp:184
 msgid "Set color to transparent to use layer default color."
 msgstr "Aseta väri läpinäkyväksi käyttääksesi tason oletusväriä."
 
-#: common/dialogs/panel_setup_netclasses.cpp:418
+#: common/dialogs/panel_setup_netclasses.cpp:429
 msgid ""
 "The netclasses have been changed outside the Setup dialog.\n"
 "Do you wish to reload them?"
@@ -5580,71 +5580,71 @@ msgstr ""
 "Verkkoluokat on muutettu Asetukset-valintaikkunan ulkopuolella.\n"
 "Haluatko ladata ne uudelleen?"
 
-#: common/dialogs/panel_setup_netclasses.cpp:573
+#: common/dialogs/panel_setup_netclasses.cpp:584
 msgid "Netclass must have a name."
 msgstr "Verkkoluokalla on oltava nimi."
 
-#: common/dialogs/panel_setup_netclasses.cpp:582
+#: common/dialogs/panel_setup_netclasses.cpp:593
 msgid "Netclass name already in use."
 msgstr "Verkkoluokan nimi on jo käytössä."
 
-#: common/dialogs/panel_setup_netclasses.cpp:644
+#: common/dialogs/panel_setup_netclasses.cpp:706
 msgid "Minimum copper clearance"
 msgstr "Pienin kuparivälys"
 
-#: common/dialogs/panel_setup_netclasses.cpp:645
+#: common/dialogs/panel_setup_netclasses.cpp:707
 msgid "Minimum track width"
 msgstr "Pienin piirilevyn johtimen leveys"
 
-#: common/dialogs/panel_setup_netclasses.cpp:646
+#: common/dialogs/panel_setup_netclasses.cpp:708
 msgid "Via pad diameter"
 msgstr "Läpiviennin anturan halkaisija"
 
-#: common/dialogs/panel_setup_netclasses.cpp:647
+#: common/dialogs/panel_setup_netclasses.cpp:709
 msgid "Via plated hole diameter"
 msgstr "Pinnoitetun läpiviennin reiän halkaisija"
 
-#: common/dialogs/panel_setup_netclasses.cpp:648
+#: common/dialogs/panel_setup_netclasses.cpp:710
 msgid "Microvia pad diameter"
 msgstr "Mikroläpiviennin anturan halkaisija"
 
-#: common/dialogs/panel_setup_netclasses.cpp:649
+#: common/dialogs/panel_setup_netclasses.cpp:711
 msgid "Microvia plated hole diameter"
 msgstr "Mikroläpiviennin pinnoitetun reiän halkaisija"
 
-#: common/dialogs/panel_setup_netclasses.cpp:650
+#: common/dialogs/panel_setup_netclasses.cpp:712
 msgid "Differential pair track width"
 msgstr "Differentiaaliparin johtimien leveys"
 
-#: common/dialogs/panel_setup_netclasses.cpp:651
+#: common/dialogs/panel_setup_netclasses.cpp:713
 msgid "Differential pair gap"
 msgstr "Differentiaaliparin johtimien väli"
 
-#: common/dialogs/panel_setup_netclasses.cpp:652
+#: common/dialogs/panel_setup_netclasses.cpp:714
 msgid "Schematic wire thickness"
 msgstr "Kytkentäkaavionjohdon paksuus"
 
-#: common/dialogs/panel_setup_netclasses.cpp:653
+#: common/dialogs/panel_setup_netclasses.cpp:715
 msgid "Bus wire thickness"
 msgstr "Väyläjohdon paksuus"
 
-#: common/dialogs/panel_setup_netclasses.cpp:654
+#: common/dialogs/panel_setup_netclasses.cpp:716
 msgid "Schematic wire color"
 msgstr "Kytkentäkaavion johdon väri"
 
-#: common/dialogs/panel_setup_netclasses.cpp:655
+#: common/dialogs/panel_setup_netclasses.cpp:717
 msgid "Schematic wire line style"
 msgstr "Kytkentäkaaviojohdon viivatyyli"
 
-#: common/dialogs/panel_setup_netclasses.cpp:656
+#: common/dialogs/panel_setup_netclasses.cpp:718
 msgid "PCB netclass color"
 msgstr "Piirilevyn verkkoluokan väri"
 
-#: common/dialogs/panel_setup_netclasses.cpp:713
+#: common/dialogs/panel_setup_netclasses.cpp:775
 msgid "The default net class is required."
 msgstr "Oletusarvoinen verkkoluokka vaaditaan."
 
-#: common/dialogs/panel_setup_netclasses.cpp:883
+#: common/dialogs/panel_setup_netclasses.cpp:945
 #, c-format
 msgid "<b>Nets matching '%s':</b>"
 msgstr "<b>Verkot, jotka vastaavat '%s':</b>'"
@@ -5715,12 +5715,12 @@ msgstr "Viivatyyli"
 #: common/stroke_params.cpp:261 common/widgets/footprint_select_widget.cpp:140
 #: eeschema/dialogs/dialog_junction_props.cpp:47
 #: eeschema/dialogs/dialog_line_properties.cpp:55
-#: eeschema/dialogs/dialog_sim_model.cpp:630
+#: eeschema/dialogs/dialog_sim_model.cpp:633
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:67
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:265
 #: eeschema/dialogs/dialog_wire_bus_properties.cpp:60
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:162
-#: eeschema/sch_bus_entry.cpp:660 eeschema/sch_field.cpp:1220
+#: eeschema/sch_bus_entry.cpp:660 eeschema/sch_field.cpp:1227
 #: eeschema/sch_label.cpp:1197 eeschema/sch_line.cpp:1058
 #: eeschema/sch_tablecell.cpp:127 eeschema/sch_text.cpp:646
 #: eeschema/sch_textbox.cpp:537 include/stroke_params.h:86
@@ -5748,7 +5748,7 @@ msgid "Pattern"
 msgstr "Kuvio"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:153
-#: eeschema/sch_field.cpp:1361 eeschema/sch_label.cpp:207
+#: eeschema/sch_field.cpp:1368 eeschema/sch_label.cpp:207
 #: pcbnew/board_connected_item.cpp:200 pcbnew/pad.cpp:2767 pcbnew/zone.cpp:1945
 msgid "Net Class"
 msgstr "Verkkoluokka"
@@ -5793,19 +5793,19 @@ msgstr "Muuttujan nimi"
 msgid "Text Substitution"
 msgstr "Tekstin korvaaminen"
 
-#: common/draw_panel_gal.cpp:321 common/draw_panel_gal.cpp:508
+#: common/draw_panel_gal.cpp:317 common/draw_panel_gal.cpp:506
 msgid "Could not use OpenGL, falling back to software rendering"
 msgstr "OpenGL: ää ei voitu käyttää, palataan takaisin ohjelmistorenderöintiin"
 
-#: common/draw_panel_gal.cpp:329
+#: common/draw_panel_gal.cpp:325
 msgid "Graphics error"
 msgstr "Grafiikkavirhe"
 
-#: common/draw_panel_gal.cpp:515
+#: common/draw_panel_gal.cpp:513
 msgid "Could not use OpenGL"
 msgstr "OpenGL: ää ei voitu käyttää"
 
-#: common/draw_panel_gal.cpp:543
+#: common/draw_panel_gal.cpp:541
 msgid "Error switching GAL backend"
 msgstr "Virhe vaihdettaessa GAL-taustajärjestelmää"
 
@@ -5837,7 +5837,7 @@ msgstr "Muisti loppui."
 #: common/drawing_sheet/ds_draw_item.cpp:132 common/eda_item.cpp:355
 #: common/eda_item.cpp:356 common/eda_item.cpp:384 common/eda_text.cpp:1349
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:47
-#: eeschema/sch_field.cpp:1216 eeschema/sch_field.cpp:1887
+#: eeschema/sch_field.cpp:1223 eeschema/sch_field.cpp:1894
 #: eeschema/sch_label.cpp:2281 eeschema/sch_tablecell.cpp:120
 #: eeschema/sch_text.cpp:641 eeschema/sch_text.h:59 eeschema/schematic.cpp:69
 #: eeschema/widgets/panel_sch_selection_filter.cpp:203
@@ -6093,7 +6093,7 @@ msgstr "Värit"
 
 #: common/eda_base_frame.cpp:1138 common/hotkey_store.cpp:77
 #: common/tool/common_tools.cpp:614 eeschema/menubar.cpp:133
-#: eeschema/sch_edit_frame.cpp:1748 kicad/tools/kicad_manager_actions.cpp:114
+#: eeschema/sch_edit_frame.cpp:1753 kicad/tools/kicad_manager_actions.cpp:114
 msgid "Schematic Editor"
 msgstr "Kytkentäkaavioeditori"
 
@@ -6302,7 +6302,7 @@ msgid "Search"
 msgstr "Etsi"
 
 #: common/eda_draw_frame.cpp:1226 common/tool/actions.cpp:1115
-#: eeschema/eeschema_settings.cpp:93 eeschema/sch_edit_frame.cpp:2205
+#: eeschema/eeschema_settings.cpp:93 eeschema/sch_edit_frame.cpp:2210
 #: pagelayout_editor/pl_editor_frame.cpp:195
 #: pcbnew/footprint_edit_frame.cpp:247 pcbnew/pcb_edit_frame.cpp:349
 #: pcbnew/pcb_edit_frame.cpp:1715
@@ -6318,7 +6318,7 @@ msgstr "Verkkotarkastaja"
 msgid "Screen"
 msgstr "Näyttö"
 
-#: common/eda_item.cpp:350 eeschema/sch_symbol.cpp:2104
+#: common/eda_item.cpp:350 eeschema/sch_symbol.cpp:2112
 #: eeschema/widgets/search_handlers.cpp:162 pcbnew/build_BOM_from_board.cpp:111
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:141
 #: pcbnew/load_select_footprint.cpp:293 pcbnew/pad.cpp:1314
@@ -6362,12 +6362,12 @@ msgstr "Taulukko"
 msgid "Table Cell"
 msgstr "Taulukon solu"
 
-#: common/eda_item.cpp:360 common/eda_item.cpp:361 pcbnew/pcb_track.cpp:1582
+#: common/eda_item.cpp:360 common/eda_item.cpp:361 pcbnew/pcb_track.cpp:1609
 msgid "Track"
 msgstr "Johdinraita"
 
 #: common/eda_item.cpp:362 pcbnew/dialogs/dialog_board_statistics.cpp:515
-#: pcbnew/pcb_track.cpp:1580 pcbnew/pcb_track.cpp:1656
+#: pcbnew/pcb_track.cpp:1607 pcbnew/pcb_track.cpp:1683
 msgid "Via"
 msgstr "Läpivienti"
 
@@ -6557,7 +6557,7 @@ msgid "Shape"
 msgstr "Muoto"
 
 #: common/eda_shape.cpp:992 common/eda_shape.cpp:1001 common/eda_shape.cpp:2398
-#: pcbnew/dialogs/dialog_shape_properties.cpp:932 pcbnew/pcb_track.cpp:1603
+#: pcbnew/dialogs/dialog_shape_properties.cpp:932 pcbnew/pcb_track.cpp:1630
 msgid "Radius"
 msgstr "Säde"
 
@@ -6581,7 +6581,7 @@ msgstr "Pisteet"
 
 #: common/eda_shape.cpp:1014 common/eda_shape.cpp:2416 common/eda_text.cpp:1389
 #: eeschema/sch_bitmap.cpp:201 eeschema/sch_bitmap.cpp:340
-#: eeschema/sch_field.cpp:1868 eeschema/sch_tablecell.cpp:202
+#: eeschema/sch_field.cpp:1875 eeschema/sch_tablecell.cpp:202
 #: eeschema/sch_text.cpp:785 eeschema/sch_textbox.cpp:681
 #: pcbnew/dialogs/dialog_board_statistics.cpp:685
 #: pcbnew/dialogs/dialog_board_statistics.cpp:695
@@ -6594,13 +6594,13 @@ msgstr "Pisteet"
 #: pcbnew/pcb_reference_image.cpp:375 pcbnew/pcb_tablecell.cpp:197
 #: pcbnew/pcb_tablecell.cpp:203 pcbnew/pcb_target.cpp:156
 #: pcbnew/pcb_target.cpp:249 pcbnew/pcb_text.cpp:296 pcbnew/pcb_textbox.cpp:804
-#: pcbnew/pcb_track.cpp:1598 pcbnew/pcb_track.cpp:2088
+#: pcbnew/pcb_track.cpp:1625 pcbnew/pcb_track.cpp:2115
 msgid "Width"
 msgstr "Leveys"
 
 #: common/eda_shape.cpp:1017 common/eda_shape.cpp:2422 common/eda_text.cpp:1394
 #: eeschema/sch_bitmap.cpp:203 eeschema/sch_bitmap.cpp:347
-#: eeschema/sch_field.cpp:1869 eeschema/sch_tablecell.cpp:203
+#: eeschema/sch_field.cpp:1876 eeschema/sch_tablecell.cpp:203
 #: eeschema/sch_text.cpp:786 eeschema/sch_textbox.cpp:682
 #: pcbnew/dialogs/dialog_board_statistics.cpp:687
 #: pcbnew/dialogs/dialog_board_statistics.cpp:696
@@ -6625,14 +6625,14 @@ msgstr "Muodon ominaisuudet"
 #: common/eda_shape.cpp:2375 eeschema/sch_table.cpp:641
 #: eeschema/sch_tablecell.cpp:192 pcbnew/pcb_table.cpp:616
 #: pcbnew/pcb_tablecell.cpp:192 pcbnew/pcb_textbox.cpp:800
-#: pcbnew/pcb_track.cpp:2091
+#: pcbnew/pcb_track.cpp:2118
 msgid "Start X"
 msgstr "Alku X"
 
 #: common/eda_shape.cpp:2380 eeschema/sch_table.cpp:644
 #: eeschema/sch_tablecell.cpp:193 pcbnew/pcb_table.cpp:619
 #: pcbnew/pcb_tablecell.cpp:193 pcbnew/pcb_textbox.cpp:801
-#: pcbnew/pcb_track.cpp:2095
+#: pcbnew/pcb_track.cpp:2122
 msgid "Start Y"
 msgstr "Alku Y"
 
@@ -6646,13 +6646,13 @@ msgstr "Keskipiste Y"
 
 #: common/eda_shape.cpp:2404 eeschema/sch_tablecell.cpp:194
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2617 pcbnew/pcb_tablecell.cpp:194
-#: pcbnew/pcb_textbox.cpp:802 pcbnew/pcb_track.cpp:2098
+#: pcbnew/pcb_textbox.cpp:802 pcbnew/pcb_track.cpp:2125
 msgid "End X"
 msgstr "Loppu X"
 
 #: common/eda_shape.cpp:2410 eeschema/sch_tablecell.cpp:195
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2623 pcbnew/pcb_tablecell.cpp:195
-#: pcbnew/pcb_textbox.cpp:803 pcbnew/pcb_track.cpp:2101
+#: pcbnew/pcb_textbox.cpp:803 pcbnew/pcb_track.cpp:2128
 msgid "End Y"
 msgstr "Loppu Y"
 
@@ -6734,7 +6734,7 @@ msgstr "Lihavoitu+Kursiivi"
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:283
 #: eeschema/fields_grid_table.cpp:309 eeschema/fields_grid_table.cpp:724
 #: eeschema/fields_grid_table.cpp:868 eeschema/pin_type.cpp:118
-#: eeschema/sch_field.cpp:1228 eeschema/sch_field.cpp:1822
+#: eeschema/sch_field.cpp:1235 eeschema/sch_field.cpp:1829
 #: eeschema/sch_pin.cpp:2118 pcbnew/dialogs/dialog_render_job.cpp:42
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2603
 msgid "Left"
@@ -6746,10 +6746,10 @@ msgstr "Vasen"
 #: eeschema/fields_grid_table.cpp:302 eeschema/fields_grid_table.cpp:310
 #: eeschema/fields_grid_table.cpp:725 eeschema/fields_grid_table.cpp:736
 #: eeschema/fields_grid_table.cpp:870 eeschema/fields_grid_table.cpp:894
-#: eeschema/sch_field.cpp:1229 eeschema/sch_field.cpp:1239
-#: eeschema/sch_field.cpp:1823 eeschema/sch_field.cpp:1832
-#: eeschema/sch_text.cpp:669 gerbview/gerber_file_image.cpp:361
-#: gerbview/gerber_file_image.cpp:364
+#: eeschema/sch_field.cpp:1236 eeschema/sch_field.cpp:1246
+#: eeschema/sch_field.cpp:1830 eeschema/sch_field.cpp:1839
+#: eeschema/sch_text.cpp:669 gerbview/gerber_file_image.cpp:375
+#: gerbview/gerber_file_image.cpp:378
 #: pcbnew/dialogs/dialog_shape_properties.cpp:886
 #: pcbnew/dialogs/dialog_shape_properties.cpp:916
 #: pcbnew/dialogs/dialog_shape_properties.cpp:931
@@ -6762,7 +6762,7 @@ msgstr "Keskitetty"
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:283
 #: eeschema/fields_grid_table.cpp:311 eeschema/fields_grid_table.cpp:726
 #: eeschema/fields_grid_table.cpp:872 eeschema/pin_type.cpp:117
-#: eeschema/sch_field.cpp:1230 eeschema/sch_field.cpp:1824
+#: eeschema/sch_field.cpp:1237 eeschema/sch_field.cpp:1831
 #: eeschema/sch_pin.cpp:2117 pcbnew/dialogs/dialog_render_job.cpp:43
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2604
 msgid "Right"
@@ -6771,8 +6771,8 @@ msgstr "Oikea"
 #: common/eda_text.cpp:1335
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:307
 #: eeschema/fields_grid_table.cpp:301 eeschema/fields_grid_table.cpp:735
-#: eeschema/fields_grid_table.cpp:892 eeschema/sch_field.cpp:1238
-#: eeschema/sch_field.cpp:1831 eeschema/sch_text.cpp:668
+#: eeschema/fields_grid_table.cpp:892 eeschema/sch_field.cpp:1245
+#: eeschema/sch_field.cpp:1838 eeschema/sch_text.cpp:668
 #: pcbnew/dialogs/dialog_render_job.cpp:44
 msgid "Top"
 msgstr "Ylä"
@@ -6780,8 +6780,8 @@ msgstr "Ylä"
 #: common/eda_text.cpp:1337
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:307
 #: eeschema/fields_grid_table.cpp:303 eeschema/fields_grid_table.cpp:737
-#: eeschema/fields_grid_table.cpp:896 eeschema/sch_field.cpp:1240
-#: eeschema/sch_field.cpp:1833 eeschema/sch_text.cpp:670
+#: eeschema/fields_grid_table.cpp:896 eeschema/sch_field.cpp:1247
+#: eeschema/sch_field.cpp:1840 eeschema/sch_text.cpp:670
 #: pcbnew/dialogs/dialog_render_job.cpp:40
 msgid "Bottom"
 msgstr "Ala"
@@ -6793,9 +6793,9 @@ msgstr "Ala"
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:68
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:68
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:65
-#: eeschema/fields_grid_table.cpp:486 eeschema/sch_field.cpp:1876
+#: eeschema/fields_grid_table.cpp:486 eeschema/sch_field.cpp:1883
 #: eeschema/sch_pin.cpp:1588 eeschema/sch_pin.cpp:2163
-#: eeschema/sch_symbol.cpp:2975 eeschema/sch_tablecell.cpp:205
+#: eeschema/sch_symbol.cpp:2989 eeschema/sch_tablecell.cpp:205
 #: eeschema/sch_text.cpp:794 eeschema/sch_textbox.cpp:709
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:59
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:60
@@ -6806,7 +6806,7 @@ msgid "Orientation"
 msgstr "Asento"
 
 #: common/eda_text.cpp:1347 eeschema/dialogs/dialog_text_properties_base.h:117
-#: eeschema/sch_field.cpp:1843 eeschema/sch_field.cpp:1874
+#: eeschema/sch_field.cpp:1850 eeschema/sch_field.cpp:1881
 #: eeschema/sch_text.cpp:791 eeschema/sch_textbox.cpp:707
 #: pcbnew/dialogs/dialog_text_properties.cpp:152
 #: pcbnew/dialogs/dialog_text_properties_base.h:112
@@ -6820,7 +6820,7 @@ msgstr "Tekstin Ominaisuudet"
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:71
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:71
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:68
-#: eeschema/fields_grid_table.cpp:489 eeschema/sch_field.cpp:1220
+#: eeschema/fields_grid_table.cpp:489 eeschema/sch_field.cpp:1227
 #: eeschema/sch_label.cpp:1197 eeschema/sch_tablecell.cpp:127
 #: eeschema/sch_text.cpp:646 eeschema/sch_textbox.cpp:537
 #: eeschema/widgets/sch_properties_panel.cpp:263 pcbnew/pcb_dimension.cpp:642
@@ -6829,7 +6829,7 @@ msgstr "Tekstin Ominaisuudet"
 msgid "Font"
 msgstr "Kirjasin"
 
-#: common/eda_text.cpp:1360 eeschema/sch_field.cpp:1866
+#: common/eda_text.cpp:1360 eeschema/sch_field.cpp:1873
 #: eeschema/sch_label.cpp:2282 eeschema/sch_tablecell.cpp:204
 #: eeschema/sch_text.cpp:787 eeschema/sch_textbox.cpp:683
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:91
@@ -6840,27 +6840,27 @@ msgstr "Kirjasin"
 msgid "Thickness"
 msgstr "Paksuus"
 
-#: common/eda_text.cpp:1371 eeschema/sch_field.cpp:1867
+#: common/eda_text.cpp:1371 eeschema/sch_field.cpp:1874
 #: eeschema/sch_tablecell.cpp:206 eeschema/sch_text.cpp:784
 #: pcbnew/microwave/microwave_polygon.cpp:127
 #: pcbnew/pcb_fields_grid_table.cpp:160
 msgid "Mirrored"
 msgstr "Peilattu"
 
-#: common/eda_text.cpp:1400 eeschema/sch_field.cpp:1846
-#: eeschema/sch_field.cpp:1849 eeschema/sch_label.cpp:2286
+#: common/eda_text.cpp:1400 eeschema/sch_field.cpp:1853
+#: eeschema/sch_field.cpp:1856 eeschema/sch_label.cpp:2286
 msgid "Horizontal Justification"
 msgstr "Vaakatasaus"
 
-#: common/eda_text.cpp:1404 eeschema/sch_field.cpp:1853
-#: eeschema/sch_field.cpp:1856 eeschema/sch_label.cpp:2288
+#: common/eda_text.cpp:1404 eeschema/sch_field.cpp:1860
+#: eeschema/sch_field.cpp:1863 eeschema/sch_label.cpp:2288
 #: pcbnew/pcb_dimension.cpp:1924 pcbnew/pcb_dimension.cpp:1957
 #: pcbnew/pcb_dimension.cpp:1995 pcbnew/pcb_dimension.cpp:2037
 #: pcbnew/pcb_dimension.cpp:2071
 msgid "Vertical Justification"
 msgstr "Pystytasaus"
 
-#: common/eda_text.cpp:1412 eeschema/sch_field.cpp:1865
+#: common/eda_text.cpp:1412 eeschema/sch_field.cpp:1872
 #: eeschema/sch_label.cpp:2246 eeschema/sch_tablecell.cpp:208
 #: pcbnew/pcb_dimension.cpp:1927 pcbnew/pcb_dimension.cpp:1960
 #: pcbnew/pcb_dimension.cpp:1998 pcbnew/pcb_dimension.cpp:2040
@@ -6993,23 +6993,23 @@ msgstr "Koko virheteksti:"
 msgid "No Files"
 msgstr "Ei tiedostoja"
 
-#: common/filename_resolver.cpp:484
+#: common/filename_resolver.cpp:489
 msgid "The given path does not exist"
 msgstr "Annettua polkua ei ole olemassa"
 
-#: common/filename_resolver.cpp:512
+#: common/filename_resolver.cpp:517
 msgid "Alias: "
 msgstr "Alias: "
 
-#: common/filename_resolver.cpp:515
+#: common/filename_resolver.cpp:520
 msgid "This path:"
 msgstr "Tämä polku:"
 
-#: common/filename_resolver.cpp:518
+#: common/filename_resolver.cpp:523
 msgid "Existing path:"
 msgstr "Nykyinen polku:"
 
-#: common/filename_resolver.cpp:520
+#: common/filename_resolver.cpp:525
 msgid "Bad alias (duplicate name)"
 msgstr "Virheellinen alias (kaksoisnimi)"
 
@@ -7400,7 +7400,7 @@ msgstr "Kopioi valitut solut leikepöydälle"
 
 #: common/grid_tricks.cpp:368 common/tool/actions.cpp:245
 #: common/widgets/listbox_tricks.cpp:51
-#: eeschema/tools/sch_editor_control.cpp:2283
+#: eeschema/tools/sch_editor_control.cpp:2305
 #: eeschema/tools/symbol_editor_edit_tool.cpp:1022
 #: pcbnew/dialogs/panel_setup_rules.cpp:132 pcbnew/tools/pcb_control.cpp:1249
 msgid "Paste"
@@ -7411,7 +7411,7 @@ msgid "Paste clipboard cells to matrix at current cell"
 msgstr "Liitä leikepöydän solut matriisiin nykyisessä solussa"
 
 #: common/grid_tricks.cpp:370 common/tool/actions.cpp:291
-#: common/widgets/listbox_tricks.cpp:54 eeschema/tools/sch_edit_tool.cpp:1720
+#: common/widgets/listbox_tricks.cpp:54 eeschema/tools/sch_edit_tool.cpp:1715
 #: eeschema/tools/symbol_editor_edit_tool.cpp:478
 #: kicad/dialogs/panel_jobset.cpp:394 kicad/project_tree_pane.cpp:986
 #: pcbnew/dialogs/panel_setup_rules.cpp:133 pcbnew/tools/edit_tool.cpp:2664
@@ -7707,15 +7707,15 @@ msgstr "Käyttäjä peruutti tiedoston lataamisen."
 msgid "Job Settings"
 msgstr "Työasetukset"
 
-#: common/jobs/job_export_pcb_3d.cpp:144
+#: common/jobs/job_export_pcb_3d.cpp:148
 msgid "3D model export"
 msgstr "3D-mallin vienti"
 
-#: common/jobs/job_export_pcb_3d.cpp:150
+#: common/jobs/job_export_pcb_3d.cpp:154
 msgid "Export 3D Model Job Settings"
 msgstr "Vie 3D-mallin työasetukset"
 
-#: common/jobs/job_export_pcb_3d.cpp:169
+#: common/jobs/job_export_pcb_3d.cpp:173
 msgid "PCB: Export 3D Model"
 msgstr "PCB:Vie 3D-malli"
 
@@ -8058,11 +8058,11 @@ msgstr "Globaali nimiö"
 msgid "Hierarchical labels"
 msgstr "Hierarkinen nimiö"
 
-#: common/layer_id.cpp:78 eeschema/sch_symbol.cpp:2991
+#: common/layer_id.cpp:78 eeschema/sch_symbol.cpp:3005
 msgid "Pin numbers"
 msgstr "Nastojen numerot"
 
-#: common/layer_id.cpp:79 eeschema/sch_symbol.cpp:2995
+#: common/layer_id.cpp:79 eeschema/sch_symbol.cpp:3009
 msgid "Pin names"
 msgstr "Nastojen nimet"
 
@@ -8179,7 +8179,7 @@ msgid "Helper items"
 msgstr "Avustajakohteet"
 
 #: common/layer_id.cpp:107 common/layer_id.cpp:149 common/tool/grid_menu.cpp:56
-#: eeschema/tools/sch_editor_control.cpp:2880
+#: eeschema/tools/sch_editor_control.cpp:2902
 #: gerbview/dialogs/panel_gerbview_color_settings.cpp:103
 #: gerbview/widgets/gerbview_layer_widget.cpp:135
 #: pcbnew/widgets/appearance_controls.cpp:353
@@ -8398,9 +8398,9 @@ msgstr "Kirjastoasetukset kohteelle %s..."
 #: common/lib_tree_model.cpp:153
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:131
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:99
-#: eeschema/dialogs/dialog_sim_model.cpp:629 eeschema/sch_item.cpp:541
+#: eeschema/dialogs/dialog_sim_model.cpp:632 eeschema/sch_item.cpp:541
 #: eeschema/sch_item.cpp:590 eeschema/sch_pin.cpp:1567
-#: eeschema/sch_symbol.cpp:3035 eeschema/symbol_editor/symbol_editor.cpp:1750
+#: eeschema/sch_symbol.cpp:3049 eeschema/symbol_editor/symbol_editor.cpp:1750
 msgid "Unit"
 msgstr "Yksikkö"
 
@@ -8595,7 +8595,7 @@ msgstr "Virhe ladatessa projektin jalanjälkikirjastotaulua."
 msgid "Error loading project design block library table."
 msgstr "Virhe ladattaessa projektin suunnittelulohkon kirjastotaulukkoa."
 
-#: common/project/net_settings.cpp:65 pcbnew/board.cpp:131
+#: common/project/net_settings.cpp:66 pcbnew/board.cpp:132
 msgid "This is the default net class."
 msgstr "Tämä on oletus verkkoluokka."
 
@@ -8712,8 +8712,8 @@ msgstr "Oletusmuokkaus"
 #: common/settings/bom_settings.cpp:126 common/settings/bom_settings.cpp:147
 #: common/settings/bom_settings.cpp:166 common/settings/bom_settings.cpp:186
 #: eeschema/dialogs/dialog_rescue_each.cpp:131
-#: eeschema/dialogs/dialog_sim_model_base.cpp:271 eeschema/sch_symbol.cpp:2060
-#: eeschema/sch_symbol.cpp:2114 eeschema/sch_symbol.cpp:3001
+#: eeschema/dialogs/dialog_sim_model_base.cpp:271 eeschema/sch_symbol.cpp:2068
+#: eeschema/sch_symbol.cpp:2122 eeschema/sch_symbol.cpp:3015
 #: eeschema/widgets/search_handlers.cpp:160
 #: eeschema/widgets/search_handlers.cpp:249 pcbnew/footprint.cpp:4160
 #: pcbnew/widgets/search_handlers.cpp:118
@@ -8733,7 +8733,7 @@ msgstr "Ryhmitetty Arvon ja Jalanjäljen mukaan"
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:128
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:199
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:72 eeschema/menubar.cpp:166
-#: eeschema/sch_sheet.cpp:1727 eeschema/sch_symbol.cpp:3043
+#: eeschema/sch_sheet.cpp:1727 eeschema/sch_symbol.cpp:3057
 #: eeschema/tools/sch_edit_tool.cpp:597
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:179
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:184
@@ -8970,7 +8970,7 @@ msgstr "Interaktiivinen Poistotyökalu"
 msgid "Delete clicked items"
 msgstr "Poista napsautetut kohteet"
 
-#: common/tool/actions.cpp:307 eeschema/tools/sch_edit_tool.cpp:2880
+#: common/tool/actions.cpp:307 eeschema/tools/sch_edit_tool.cpp:2875
 #: pcbnew/tools/edit_tool.cpp:2306
 msgid "Left Justify"
 msgstr "Tasaa vasemmalle"
@@ -8979,7 +8979,7 @@ msgstr "Tasaa vasemmalle"
 msgid "Left-justify fields and text items"
 msgstr "Tasaa kentät ja tekstikohteet vasemmalle"
 
-#: common/tool/actions.cpp:314 eeschema/tools/sch_edit_tool.cpp:2882
+#: common/tool/actions.cpp:314 eeschema/tools/sch_edit_tool.cpp:2877
 #: pcbnew/tools/edit_tool.cpp:2308
 msgid "Center Justify"
 msgstr "Tasaa keskelle"
@@ -8988,7 +8988,7 @@ msgstr "Tasaa keskelle"
 msgid "Center-justify fields and text items"
 msgstr "Tasaa kentät ja tekstikohteet keskelle"
 
-#: common/tool/actions.cpp:321 eeschema/tools/sch_edit_tool.cpp:2884
+#: common/tool/actions.cpp:321 eeschema/tools/sch_edit_tool.cpp:2879
 #: pcbnew/tools/edit_tool.cpp:2310
 msgid "Right Justify"
 msgstr "Tasaa oikealle"
@@ -9005,7 +9005,7 @@ msgstr "Laajenna kaikki"
 msgid "Collapse All"
 msgstr "Kokoa kaikki"
 
-#: common/tool/actions.cpp:342 eeschema/tools/sch_edit_tool.cpp:3136
+#: common/tool/actions.cpp:342 eeschema/tools/sch_edit_tool.cpp:3131
 #: eeschema/tools/symbol_editor_edit_tool.cpp:1216
 #: pcbnew/tools/edit_tool.cpp:3101
 msgid "Increment"
@@ -9906,13 +9906,13 @@ msgid "<not found>"
 msgstr "<ei löytynyt>"
 
 #: common/widgets/footprint_diff_widget.cpp:41 eeschema/sch_sheet.cpp:878
-#: eeschema/sch_symbol.cpp:2034 pcbnew/dialogs/dialog_board_statistics.cpp:681
+#: eeschema/sch_symbol.cpp:2042 pcbnew/dialogs/dialog_board_statistics.cpp:681
 msgid "Board"
 msgstr "Piirilevy"
 
 #: common/widgets/footprint_diff_widget.cpp:42 cvpcb/cvpcb_mainframe.cpp:814
-#: eeschema/sch_base_frame.cpp:593 eeschema/sch_symbol.cpp:2090
-#: eeschema/sch_symbol.cpp:2094 eeschema/sch_symbol.cpp:2131
+#: eeschema/sch_base_frame.cpp:593 eeschema/sch_symbol.cpp:2098
+#: eeschema/sch_symbol.cpp:2102 eeschema/sch_symbol.cpp:2139
 #: eeschema/widgets/symbol_diff_widget.cpp:45 pcbnew/footprint.cpp:1715
 msgid "Library"
 msgstr "Kirjasto"
@@ -10627,8 +10627,8 @@ msgstr "'%s' ei ole kelvollinen jalanjälki."
 
 #: cvpcb/cvpcb_mainframe.cpp:785
 #: eeschema/design_block_tree_model_adapter.cpp:130
-#: eeschema/generate_alias_info.cpp:40 eeschema/sch_symbol.cpp:2109
-#: eeschema/sch_symbol.cpp:2685 eeschema/sch_symbol.cpp:3013
+#: eeschema/generate_alias_info.cpp:40 eeschema/sch_symbol.cpp:2117
+#: eeschema/sch_symbol.cpp:2699 eeschema/sch_symbol.cpp:3027
 #: eeschema/symbol_editor/symbol_editor.cpp:1768
 #: eeschema/symbol_viewer_frame.cpp:460 pcbnew/footprint.cpp:4173
 #: pcbnew/generate_footprint_info.cpp:37 pcbnew/plot_board_layers.cpp:206
@@ -11072,7 +11072,7 @@ msgid "%s found"
 msgstr "%s löydetty"
 
 #: eeschema/cross-probing.cpp:168 eeschema/sim/simulator_frame_ui.cpp:1476
-#: eeschema/sim/simulator_frame_ui.cpp:1944
+#: eeschema/sim/simulator_frame_ui.cpp:1951
 #: eeschema/widgets/tuner_slider.cpp:65
 #, c-format
 msgid "%s not found"
@@ -11146,7 +11146,7 @@ msgstr "Kirjasto %s on jo olemassa."
 msgid "Enter a description for the library:"
 msgstr "Anna kirjaston kuvaus:"
 
-#: eeschema/design_block_utils.cpp:240 eeschema/sch_symbol.cpp:3010
+#: eeschema/design_block_utils.cpp:240 eeschema/sch_symbol.cpp:3024
 #: pcbnew/footprint.cpp:4170 pcbnew/plot_board_layers.cpp:203
 msgid "Library Description"
 msgstr "Kirjastokuvaus"
@@ -11661,22 +11661,22 @@ msgstr "*** symbolia ei löydy ***"
 msgid "*** new symbol has too few units ***"
 msgstr "*** uudessa symbolissa on liian vähän yksiköitä ***"
 
-#: eeschema/dialogs/dialog_change_symbols.cpp:838
+#: eeschema/dialogs/dialog_change_symbols.cpp:839
 #, c-format
 msgid "Update symbol %s from '%s' to '%s'"
 msgstr "Päivitä symboli %s %s: sta %s: ksi"
 
-#: eeschema/dialogs/dialog_change_symbols.cpp:845
+#: eeschema/dialogs/dialog_change_symbols.cpp:846
 #, c-format
 msgid "Update symbols %s from '%s' to '%s'"
 msgstr "Päivitä symbolit %s %s: sta %s: ksi"
 
-#: eeschema/dialogs/dialog_change_symbols.cpp:855
+#: eeschema/dialogs/dialog_change_symbols.cpp:856
 #, c-format
 msgid "Change symbol %s from '%s' to '%s'"
 msgstr "Muuta symboli %s arvosta '%s' arvoon '%s'"
 
-#: eeschema/dialogs/dialog_change_symbols.cpp:862
+#: eeschema/dialogs/dialog_change_symbols.cpp:863
 #, c-format
 msgid "Change symbols %s from '%s' to '%s'"
 msgstr "Muuta symbolit %s arvosta '%s' arvoon '%s'"
@@ -12387,7 +12387,7 @@ msgid "Sheet filename can only be modified in Sheet Properties dialog."
 msgstr "Lehden tiedostonimeä voi muokata vain Lehden ominaisuudet -dialogista."
 
 #: eeschema/dialogs/dialog_field_properties.cpp:625
-#: eeschema/dialogs/dialog_label_properties.cpp:478
+#: eeschema/dialogs/dialog_label_properties.cpp:483
 msgid ""
 "Intersheet reference visibility is controlled globally from Schematic Setup "
 "> General > Formatting"
@@ -12854,22 +12854,22 @@ msgstr "Ohjaavan Nimikkeen Ominaisuudet"
 msgid "Hierarchical Sheet Pin Properties"
 msgstr "Hierarkkisen lehden nastan ominaisuudet"
 
-#: eeschema/dialogs/dialog_label_properties.cpp:458
+#: eeschema/dialogs/dialog_label_properties.cpp:463
 msgid "Label can not be empty."
 msgstr "Etiketti ei voi olla tyhjä."
 
-#: eeschema/dialogs/dialog_label_properties.cpp:522
+#: eeschema/dialogs/dialog_label_properties.cpp:527
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:443
 #: eeschema/dialogs/dialog_sheet_properties.cpp:397
 #: eeschema/dialogs/dialog_symbol_properties.cpp:741 include/project.h:43
 msgid "untitled"
 msgstr "nimetön"
 
-#: eeschema/dialogs/dialog_label_properties.cpp:598
+#: eeschema/dialogs/dialog_label_properties.cpp:603
 msgid "Edit Label Properties"
 msgstr "Muokkaa nimiön ominaisuuksia"
 
-#: eeschema/dialogs/dialog_label_properties.cpp:681
+#: eeschema/dialogs/dialog_label_properties.cpp:686
 msgid "The first field is mandatory."
 msgstr "Ensimmäinen kenttä on pakollinen."
 
@@ -12902,7 +12902,7 @@ msgstr "Näytä syntaksin apuikkuna"
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:31
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:33
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:28
-#: eeschema/sch_symbol.cpp:2999
+#: eeschema/sch_symbol.cpp:3013
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:27
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:28
 #: pcbnew/footprint.cpp:4158
@@ -12951,8 +12951,8 @@ msgstr "V Kohdista"
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:67
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:67
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:64
-#: eeschema/fields_grid_table.cpp:485 eeschema/sch_field.cpp:1224
-#: eeschema/sch_field.cpp:1872 eeschema/sch_label.cpp:1203
+#: eeschema/fields_grid_table.cpp:485 eeschema/sch_field.cpp:1231
+#: eeschema/sch_field.cpp:1879 eeschema/sch_label.cpp:1203
 #: eeschema/sch_tablecell.cpp:133 eeschema/sch_text.cpp:652
 #: eeschema/sch_text.cpp:789 eeschema/sch_textbox.cpp:543
 #: eeschema/sch_textbox.cpp:704 pcbnew/tools/board_inspection_tool.cpp:1442
@@ -13267,7 +13267,7 @@ msgstr "Uusi symboli"
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:334
 #: eeschema/dialogs/dialog_sheet_properties.cpp:217
 #: eeschema/dialogs/dialog_symbol_properties.cpp:650
-#: pcbnew/dialogs/dialog_footprint_properties.cpp:402
+#: pcbnew/dialogs/dialog_footprint_properties.cpp:406
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:458
 msgid "Fields must have a name."
 msgstr "Kentillä on oltava nimi."
@@ -13310,7 +13310,7 @@ msgstr "Nimi %s on jo käytössä."
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:629
 #: eeschema/dialogs/dialog_sheet_properties.cpp:788
 #: eeschema/dialogs/dialog_symbol_properties.cpp:883
-#: pcbnew/dialogs/dialog_footprint_properties.cpp:716
+#: pcbnew/dialogs/dialog_footprint_properties.cpp:720
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:748
 #, c-format
 msgid "The first %d fields are mandatory."
@@ -14491,7 +14491,7 @@ msgid "Do not populate"
 msgstr "Ei asenneta"
 
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:169
-#: eeschema/sch_field.cpp:1222 eeschema/sch_label.cpp:1201
+#: eeschema/sch_field.cpp:1229 eeschema/sch_label.cpp:1201
 #: eeschema/sch_pin.cpp:1581 eeschema/sch_tablecell.cpp:131
 #: eeschema/sch_text.cpp:650 eeschema/sch_textbox.cpp:541
 msgid "Style"
@@ -15015,43 +15015,43 @@ msgstr "P"
 msgid "Format %s"
 msgstr "Muoto %s"
 
-#: eeschema/dialogs/dialog_sim_model.cpp:234
+#: eeschema/dialogs/dialog_sim_model.cpp:237
 msgid "<unknown>"
 msgstr "<tuntematon>"
 
-#: eeschema/dialogs/dialog_sim_model.cpp:244
+#: eeschema/dialogs/dialog_sim_model.cpp:247
 #, c-format
 msgid "No model named '%s' in library."
 msgstr "Ei mallia nimeltä '%s' kirjastossa."
 
-#: eeschema/dialogs/dialog_sim_model.cpp:333
+#: eeschema/dialogs/dialog_sim_model.cpp:336
 msgid "Failed to read simulation model from fields."
 msgstr "Simulaatiomallin lukeminen kentistä epäonnistui."
 
-#: eeschema/dialogs/dialog_sim_model.cpp:539
+#: eeschema/dialogs/dialog_sim_model.cpp:542
 msgid "Component:"
 msgstr "Komponentti:"
 
-#: eeschema/dialogs/dialog_sim_model.cpp:539
+#: eeschema/dialogs/dialog_sim_model.cpp:542
 #: eeschema/dialogs/dialog_sim_model_base.cpp:62
 msgid "Model:"
 msgstr "Malli:"
 
-#: eeschema/dialogs/dialog_sim_model.cpp:603
+#: eeschema/dialogs/dialog_sim_model.cpp:606
 #, c-format
 msgid "Save parameter '%s (%s)' in Value field"
 msgstr "Tallenna parametri '%s (%s)' Arvo-kenttään"
 
-#: eeschema/dialogs/dialog_sim_model.cpp:611
+#: eeschema/dialogs/dialog_sim_model.cpp:614
 msgid "Save primary parameter in Value field"
 msgstr "Tallenna ensisijainen parametri Arvo-kenttään"
 
-#: eeschema/dialogs/dialog_sim_model.cpp:628
+#: eeschema/dialogs/dialog_sim_model.cpp:631
 #: pcbnew/footprint_wizard_frame.cpp:325
 msgid "Parameter"
 msgstr "Parametri"
 
-#: eeschema/dialogs/dialog_sim_model.cpp:631 eeschema/sch_item.cpp:536
+#: eeschema/dialogs/dialog_sim_model.cpp:634 eeschema/sch_item.cpp:536
 #: eeschema/sch_label.cpp:1195 eeschema/sch_marker.cpp:364
 #: eeschema/sch_pin.cpp:1561 eeschema/sch_pin.cpp:1580
 #: eeschema/symbol_editor/symbol_editor.cpp:1766
@@ -15061,27 +15061,27 @@ msgstr "Parametri"
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:29
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:83
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2095 pcbnew/pcb_marker.cpp:199
-#: pcbnew/pcb_shape.cpp:646 pcbnew/pcb_text.cpp:283 pcbnew/pcb_track.cpp:1592
-#: pcbnew/pcb_track.cpp:1659 pcbnew/tools/drawing_stackup_table_tool.cpp:251
+#: pcbnew/pcb_shape.cpp:646 pcbnew/pcb_text.cpp:283 pcbnew/pcb_track.cpp:1619
+#: pcbnew/pcb_track.cpp:1686 pcbnew/tools/drawing_stackup_table_tool.cpp:251
 #: pcbnew/widgets/search_handlers.cpp:253 pcbnew/zone.cpp:778
 msgid "Type"
 msgstr "Tyyppi"
 
-#: eeschema/dialogs/dialog_sim_model.cpp:758
-#: eeschema/dialogs/dialog_sim_model.cpp:795
+#: eeschema/dialogs/dialog_sim_model.cpp:761
+#: eeschema/dialogs/dialog_sim_model.cpp:798
 msgid "Not Connected"
 msgstr "Ei Kytketty"
 
-#: eeschema/dialogs/dialog_sim_model.cpp:877
+#: eeschema/dialogs/dialog_sim_model.cpp:880
 #, c-format
 msgid "No model named '%s' in '%s'."
 msgstr "Ei mallia nimeltä '%s' kirjastossa '%s'."
 
-#: eeschema/dialogs/dialog_sim_model.cpp:1261
+#: eeschema/dialogs/dialog_sim_model.cpp:1264
 msgid "Browse Models"
 msgstr "Selaa malleja"
 
-#: eeschema/dialogs/dialog_sim_model.cpp:1397
+#: eeschema/dialogs/dialog_sim_model.cpp:1402
 #, c-format
 msgid ""
 "Failed to parse:\n"
@@ -16776,7 +16776,7 @@ msgstr ""
 "korvataanko taulukon vanhat merkinnät?"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:976
-#: pcbnew/dialogs/dialog_export_step.cpp:602
+#: pcbnew/dialogs/dialog_export_step.cpp:604
 #, c-format
 msgid "File '%s' already exists. Do you want overwrite this file?"
 msgstr "Tiedosto %s on jo olemassa. Haluatko korvata tämän tiedoston?"
@@ -16983,14 +16983,14 @@ msgstr "ERC-raportti tallennettu kohteeseen %s\n"
 msgid "Net Navigator"
 msgstr "Verkkonavigaattori"
 
-#: eeschema/eeschema_settings.cpp:115 eeschema/sch_edit_frame.cpp:2204
+#: eeschema/eeschema_settings.cpp:115 eeschema/sch_edit_frame.cpp:2209
 #: pcbnew/footprint_edit_frame.cpp:260 pcbnew/footprint_edit_frame.cpp:1025
 #: pcbnew/pcb_edit_frame.cpp:341 pcbnew/pcb_edit_frame.cpp:1714
 msgid "Selection Filter"
 msgstr "Valintasuodatin"
 
 #: eeschema/eeschema_settings.cpp:135 eeschema/menubar.cpp:192
-#: eeschema/sch_edit_frame.cpp:2200 eeschema/sch_edit_frame.cpp:2206
+#: eeschema/sch_edit_frame.cpp:2205 eeschema/sch_edit_frame.cpp:2211
 #: eeschema/tools/sch_actions.cpp:149
 msgid "Design Blocks"
 msgstr "Suunnittelulohkot"
@@ -17476,11 +17476,11 @@ msgstr "Vaakasuora"
 msgid "Vertical"
 msgstr "Pystysuunta"
 
-#: eeschema/fields_grid_table.cpp:491 eeschema/sch_field.cpp:1862
+#: eeschema/fields_grid_table.cpp:491 eeschema/sch_field.cpp:1869
 msgid "Allow Autoplacement"
 msgstr "Salli Automaattinen sijoittelu"
 
-#: eeschema/fields_grid_table.cpp:492 eeschema/sch_field.cpp:1901
+#: eeschema/fields_grid_table.cpp:492 eeschema/sch_field.cpp:1908
 #: eeschema/sch_item.cpp:548 eeschema/sch_item.cpp:600
 msgid "Private"
 msgstr "Yksityinen"
@@ -17805,7 +17805,7 @@ msgstr "Seuraavia automaattisesti tallennettuja tiedostoja ei voitu poistaa\n"
 msgid "Manual removal will be required for the file(s) above."
 msgstr "Yllä olevat tiedostot vaativat manuaalisen poiston."
 
-#: eeschema/generate_alias_info.cpp:37 eeschema/sch_symbol.cpp:2086
+#: eeschema/generate_alias_info.cpp:37 eeschema/sch_symbol.cpp:2094
 msgid "Derived from"
 msgstr "Johdettu kohteesta"
 
@@ -17837,7 +17837,7 @@ msgstr "Jalat"
 
 #: eeschema/import_gfx/dialog_import_gfx_sch.cpp:202
 #: pcbnew/import_gfx/dialog_import_graphics.cpp:215
-#: pcbnew/tools/drawing_tool.cpp:1908 pcbnew/tools/drawing_tool.cpp:2000
+#: pcbnew/tools/drawing_tool.cpp:1913 pcbnew/tools/drawing_tool.cpp:2005
 msgid "Import Graphics"
 msgstr "Tuo Grafiikka"
 
@@ -17914,23 +17914,23 @@ msgid "Unit %s"
 msgstr "Yksikkö %s"
 
 #: eeschema/lib_symbol.cpp:580 eeschema/sch_sheet.cpp:310
-#: eeschema/sch_symbol.cpp:1594
+#: eeschema/sch_symbol.cpp:1602
 msgid "Excluded from BOM"
 msgstr "Poissuljettu materiaaliluettelosta"
 
 #: eeschema/lib_symbol.cpp:585 eeschema/sch_sheet.cpp:319
-#: eeschema/sch_symbol.cpp:1603
+#: eeschema/sch_symbol.cpp:1611
 msgid "Excluded from board"
 msgstr "Poissuljettu piirilevyltä"
 
 #: eeschema/lib_symbol.cpp:590 eeschema/sch_sheet.cpp:328
-#: eeschema/sch_symbol.cpp:1612
+#: eeschema/sch_symbol.cpp:1620
 msgid "Excluded from simulation"
 msgstr "Suljettu pois simulaatiosta"
 
 #: eeschema/lib_symbol.cpp:595 eeschema/sch_sheet.cpp:337
-#: eeschema/sch_sheet.cpp:881 eeschema/sch_symbol.cpp:1621
-#: eeschema/sch_symbol.cpp:2037 eeschema/widgets/search_handlers.cpp:169
+#: eeschema/sch_sheet.cpp:881 eeschema/sch_symbol.cpp:1629
+#: eeschema/sch_symbol.cpp:2045 eeschema/widgets/search_handlers.cpp:169
 #: pcbnew/footprint.cpp:1763
 msgid "DNP"
 msgstr "DNP"
@@ -18173,7 +18173,7 @@ msgstr "Verkkoluokan nimiö '%s' > %s, %s"
 msgid "Unhandled item type %d"
 msgstr "Käsittelemätön kohdetyyppi %d"
 
-#: eeschema/net_navigator.cpp:318 pcbnew/board.cpp:1849
+#: eeschema/net_navigator.cpp:318 pcbnew/board.cpp:1850
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2124
 #: pcbnew/pcb_draw_panel_gal.cpp:718
 #: pcbnew/widgets/appearance_controls.cpp:1032
@@ -18194,17 +18194,17 @@ msgstr "Hakemiston \"laitteet\" luominen epäonnistui."
 msgid "Failed to create file '%s'.\n"
 msgstr "Tiedoston '%s' luominen epäonnistui.\n"
 
-#: eeschema/netlist_exporters/netlist_exporter_spice.cpp:451
+#: eeschema/netlist_exporters/netlist_exporter_spice.cpp:454
 #, c-format
 msgid "Could not open file '%s' to write IBIS model"
 msgstr "Tiedostoa %s ei voitu avata IBIS-mallin kirjoittamista varten"
 
-#: eeschema/netlist_exporters/netlist_exporter_spice.cpp:527
+#: eeschema/netlist_exporters/netlist_exporter_spice.cpp:530
 #, c-format
 msgid "Error in parsing model '%s', error: '%s'"
 msgstr "Virhe jäsennettäessä mallia '%s', virhe: '%s'"
 
-#: eeschema/netlist_exporters/netlist_exporter_spice.cpp:541
+#: eeschema/netlist_exporters/netlist_exporter_spice.cpp:544
 #, c-format
 msgid ""
 "Error in parsing model '%s', wrong number of nodes '?' in Sim.NodesFormat "
@@ -18213,7 +18213,7 @@ msgstr ""
 "Virhe jäsennettäessä mallia '%s', väärä määrä solmuja '?' Sim."
 "NodesFormatissa verrattuna yhteyksiin"
 
-#: eeschema/netlist_exporters/netlist_exporter_spice.cpp:577
+#: eeschema/netlist_exporters/netlist_exporter_spice.cpp:580
 #, c-format
 msgid "Could not find library file '%s'"
 msgstr "Kirjastotiedostoa %s ei löydy"
@@ -18267,7 +18267,7 @@ msgstr "Vaihda Yksikköä"
 msgid "No alternate body style found for symbol '%s' in library '%s'."
 msgstr "Vaihtoehtoista rungon tyyliä ei löydy symbolille '%s' kirjastossa'%s'."
 
-#: eeschema/picksymbol.cpp:217 eeschema/tools/sch_edit_tool.cpp:2042
+#: eeschema/picksymbol.cpp:217 eeschema/tools/sch_edit_tool.cpp:2037
 msgid "Change Body Style"
 msgstr "Vaihda rungon tyyliä"
 
@@ -18464,17 +18464,17 @@ msgstr ""
 "Haluatko ladata kirjaston uudelleen?"
 
 #: eeschema/sch_bitmap.cpp:309 eeschema/sch_pin.cpp:2155
-#: eeschema/sch_shape.cpp:746 eeschema/sch_symbol.cpp:2967
+#: eeschema/sch_shape.cpp:746 eeschema/sch_symbol.cpp:2981
 #: pcbnew/board_item.cpp:412 pcbnew/pcb_group.cpp:501 pcbnew/pcb_shape.cpp:911
-#: pcbnew/pcb_tablecell.cpp:182 pcbnew/pcb_track.cpp:2090 pcbnew/zone.cpp:1883
+#: pcbnew/pcb_tablecell.cpp:182 pcbnew/pcb_track.cpp:2117 pcbnew/zone.cpp:1883
 #: pcbnew/zone.cpp:1895
 msgid "Position X"
 msgstr "Sijainti X"
 
 #: eeschema/sch_bitmap.cpp:314 eeschema/sch_pin.cpp:2159
-#: eeschema/sch_shape.cpp:748 eeschema/sch_symbol.cpp:2970
+#: eeschema/sch_shape.cpp:748 eeschema/sch_symbol.cpp:2984
 #: pcbnew/board_item.cpp:415 pcbnew/pcb_group.cpp:502 pcbnew/pcb_shape.cpp:913
-#: pcbnew/pcb_tablecell.cpp:183 pcbnew/pcb_track.cpp:2094 pcbnew/zone.cpp:1889
+#: pcbnew/pcb_tablecell.cpp:183 pcbnew/pcb_track.cpp:2121 pcbnew/zone.cpp:1889
 #: pcbnew/zone.cpp:1896
 msgid "Position Y"
 msgstr "Sijainti Y"
@@ -18512,7 +18512,7 @@ msgstr "Väylän Liitäntätyyppi"
 #: eeschema/sch_bus_entry.cpp:543 eeschema/sch_junction.cpp:319
 #: eeschema/sch_label.cpp:1227 eeschema/sch_line.cpp:951
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2134 pcbnew/pad.cpp:1329
-#: pcbnew/pcb_track.cpp:1689 pcbnew/tools/pcb_control.cpp:1890
+#: pcbnew/pcb_track.cpp:1716 pcbnew/tools/pcb_control.cpp:1890
 #: pcbnew/zone.cpp:814
 msgid "Resolved Netclass"
 msgstr "Ratkaistu Verkkoluokka"
@@ -18531,7 +18531,7 @@ msgstr "Väylän vaihtoehto %s -Jäsenet"
 msgid "KiCad Schematic Editor"
 msgstr "KiCad Kytkentäkaavioeditori"
 
-#: eeschema/sch_edit_frame.cpp:235 eeschema/sch_edit_frame.cpp:2203
+#: eeschema/sch_edit_frame.cpp:235 eeschema/sch_edit_frame.cpp:2208
 msgid "Schematic Hierarchy"
 msgstr "Kytkentäkaaviohierarkkia"
 
@@ -18582,48 +18582,48 @@ msgstr ""
 msgid "Could not open CvPcb"
 msgstr "CvPcb: tä ei voitu avata"
 
-#: eeschema/sch_edit_frame.cpp:1738 eeschema/sim/simulator_frame.cpp:341
+#: eeschema/sch_edit_frame.cpp:1743 eeschema/sim/simulator_frame.cpp:341
 #: kicad/kicad_manager_frame.cpp:1055 pcbnew/footprint_edit_frame.cpp:1091
 #: pcbnew/pcb_edit_frame.cpp:1804
 msgid "[Read Only]"
 msgstr "[Lue ainoastaan]"
 
-#: eeschema/sch_edit_frame.cpp:1741 eeschema/sim/simulator_frame.cpp:344
+#: eeschema/sch_edit_frame.cpp:1746 eeschema/sim/simulator_frame.cpp:344
 #: pcbnew/footprint_edit_frame.cpp:1100 pcbnew/pcb_edit_frame.cpp:1807
 msgid "[Unsaved]"
 msgstr "[Tallentamaton]"
 
-#: eeschema/sch_edit_frame.cpp:1745
+#: eeschema/sch_edit_frame.cpp:1750
 msgid "[no schematic loaded]"
 msgstr "[Kytkentäkaaviota ei ole ladattu]"
 
-#: eeschema/sch_edit_frame.cpp:2101
+#: eeschema/sch_edit_frame.cpp:2106
 msgid "Schematic Cleanup"
 msgstr "Kytkentäkaavion Siivous"
 
-#: eeschema/sch_edit_frame.cpp:2229
+#: eeschema/sch_edit_frame.cpp:2234
 #, c-format
 msgid "Highlighted net: %s"
 msgstr "Korostettu verkko: %s"
 
-#: eeschema/sch_edit_frame.cpp:2407
+#: eeschema/sch_edit_frame.cpp:2412
 msgid "Save Symbol to Schematic"
 msgstr "Tallenna Symboli Kytkentäkaavioon"
 
-#: eeschema/sch_edit_frame.cpp:2513 eeschema/tools/sch_actions.cpp:61
+#: eeschema/sch_edit_frame.cpp:2518 eeschema/tools/sch_actions.cpp:61
 msgid "Compare Symbol with Library"
 msgstr "Vertaa symbolia kirjastoon"
 
-#: eeschema/sch_field.cpp:1203
+#: eeschema/sch_field.cpp:1210
 #, c-format
 msgid "Field %s '%s'"
 msgstr "Kenttä %s '%s'"
 
-#: eeschema/sch_field.cpp:1213
+#: eeschema/sch_field.cpp:1220
 msgid "Symbol Field"
 msgstr "Symbolikenttä"
 
-#: eeschema/sch_field.cpp:1218 eeschema/sch_pin.cpp:1583
+#: eeschema/sch_field.cpp:1225 eeschema/sch_pin.cpp:1583
 #: gerbview/gerber_draw_item.cpp:729 gerbview/gerber_draw_item.cpp:730
 #: pcbnew/board_stackup_manager/panel_board_finish_base.cpp:44
 #: pcbnew/pcb_tablecell.cpp:109 pcbnew/pcb_text.cpp:290
@@ -18634,7 +18634,7 @@ msgstr "Symbolikenttä"
 msgid "Yes"
 msgstr "Kyllä"
 
-#: eeschema/sch_field.cpp:1218 eeschema/sch_pin.cpp:1583
+#: eeschema/sch_field.cpp:1225 eeschema/sch_pin.cpp:1583
 #: gerbview/gerber_draw_item.cpp:729 gerbview/gerber_draw_item.cpp:730
 #: pcbnew/pcb_tablecell.cpp:109 pcbnew/pcb_text.cpp:290
 #: pcbnew/pcb_textbox.cpp:473 pcbnew/tools/drawing_stackup_table_tool.cpp:458
@@ -18644,28 +18644,28 @@ msgstr "Kyllä"
 msgid "No"
 msgstr "Ei"
 
-#: eeschema/sch_field.cpp:1234 eeschema/sch_text.cpp:664
+#: eeschema/sch_field.cpp:1241 eeschema/sch_text.cpp:664
 msgid "H Justification"
 msgstr "Vaakatasaus"
 
-#: eeschema/sch_field.cpp:1244 eeschema/sch_text.cpp:674
+#: eeschema/sch_field.cpp:1251 eeschema/sch_text.cpp:674
 msgid "V Justification"
 msgstr "Pystytasaus"
 
-#: eeschema/sch_field.cpp:1268
+#: eeschema/sch_field.cpp:1275
 #, c-format
 msgid "Go to Page %s (%s)"
 msgstr "Siirry sivulle %s (%s)"
 
-#: eeschema/sch_field.cpp:1274
+#: eeschema/sch_field.cpp:1281
 msgid "Back to Previous Selected Sheet"
 msgstr "Takaisin viimeksi valittuun lehteen"
 
-#: eeschema/sch_field.cpp:1365 eeschema/sch_label.cpp:205
+#: eeschema/sch_field.cpp:1372 eeschema/sch_label.cpp:205
 msgid "Sheet References"
 msgstr "Sivun Viitteet"
 
-#: eeschema/sch_field.cpp:1859
+#: eeschema/sch_field.cpp:1866
 msgid "Show Field Name"
 msgstr "Näytä Kentän Nimi"
 
@@ -19506,7 +19506,7 @@ msgid "Unknown SCH_FILE_T value: %d"
 msgstr "Tuntematon SCH_FILE_T-arvo: %d"
 
 #: eeschema/sch_item.cpp:544 eeschema/sch_item.cpp:595
-#: eeschema/sch_pin.cpp:1574 eeschema/sch_symbol.cpp:3039
+#: eeschema/sch_pin.cpp:1574 eeschema/sch_symbol.cpp:3053
 #: eeschema/tools/sch_edit_tool.cpp:143
 msgid "Body Style"
 msgstr "Rungon tyyli"
@@ -19527,7 +19527,7 @@ msgstr "Rungon tyyli"
 #: pcbnew/pcb_dimension.cpp:673 pcbnew/pcb_group.cpp:396
 #: pcbnew/pcb_marker.cpp:381 pcbnew/pcb_shape.cpp:649
 #: pcbnew/pcb_tablecell.cpp:106 pcbnew/pcb_text.cpp:286
-#: pcbnew/pcb_textbox.cpp:470 pcbnew/pcb_track.cpp:1707
+#: pcbnew/pcb_textbox.cpp:470 pcbnew/pcb_track.cpp:1734
 #: pcbnew/tools/generator_tool.cpp:47 pcbnew/zone.cpp:826
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:52
 msgid "Locked"
@@ -19542,7 +19542,7 @@ msgstr "Koko"
 
 #: eeschema/sch_junction.cpp:379
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:104 pcbnew/pad.cpp:1378
-#: pcbnew/pcb_track.cpp:1665 pcbnew/pcb_track.cpp:2137
+#: pcbnew/pcb_track.cpp:1692 pcbnew/pcb_track.cpp:2164
 msgid "Diameter"
 msgstr "Halkaisija"
 
@@ -19574,7 +19574,7 @@ msgstr "Tasaus"
 #: pcbnew/generators/pcb_tuning_pattern.cpp:478
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2130 pcbnew/pad.cpp:1327
 #: pcbnew/pad.cpp:2765 pcbnew/pcb_shape.cpp:928 pcbnew/pcb_tablecell.cpp:186
-#: pcbnew/pcb_track.cpp:1687 pcbnew/tools/pcb_control.cpp:1887
+#: pcbnew/pcb_track.cpp:1714 pcbnew/tools/pcb_control.cpp:1887
 #: pcbnew/widgets/pcb_properties_panel.cpp:282
 #: pcbnew/widgets/search_handlers.cpp:188 pcbnew/zone.cpp:812
 #: pcbnew/zone.cpp:1943 pcbnew/zone_manager/dialog_zone_manager_base.cpp:42
@@ -19870,16 +19870,16 @@ msgstr "Hierarkkinen polku"
 msgid "File Name"
 msgstr "Tiedoston nimi"
 
-#: eeschema/sch_sheet.cpp:872 eeschema/sch_symbol.cpp:2028
+#: eeschema/sch_sheet.cpp:872 eeschema/sch_symbol.cpp:2036
 #: eeschema/sch_text.cpp:644 eeschema/sch_textbox.cpp:535
 msgid "Simulation"
 msgstr "Simulointi"
 
-#: eeschema/sch_sheet.cpp:875 eeschema/sch_symbol.cpp:2031
+#: eeschema/sch_sheet.cpp:875 eeschema/sch_symbol.cpp:2039
 msgid "BOM"
 msgstr "materiaaliluettelo"
 
-#: eeschema/sch_sheet.cpp:887 eeschema/sch_symbol.cpp:2043
+#: eeschema/sch_sheet.cpp:887 eeschema/sch_symbol.cpp:2051
 #: eeschema/sch_text.cpp:644 eeschema/sch_textbox.cpp:535
 msgid "Exclude from"
 msgstr "Sulje pois kohteesta"
@@ -19904,22 +19904,22 @@ msgstr "Reunan Väri"
 msgid "Background Color"
 msgstr "Taustaväri"
 
-#: eeschema/sch_sheet.cpp:1729 eeschema/sch_symbol.cpp:1100
-#: eeschema/sch_symbol.cpp:3045
+#: eeschema/sch_sheet.cpp:1729 eeschema/sch_symbol.cpp:1101
+#: eeschema/sch_symbol.cpp:3059
 msgid "Exclude From Board"
 msgstr "Sulje pois piirilevyltä"
 
-#: eeschema/sch_sheet.cpp:1732 eeschema/sch_symbol.cpp:3048
+#: eeschema/sch_sheet.cpp:1732 eeschema/sch_symbol.cpp:3062
 msgid "Exclude From Simulation"
 msgstr "Sulje pois simulaatiosta"
 
-#: eeschema/sch_sheet.cpp:1736 eeschema/sch_symbol.cpp:1101
-#: eeschema/sch_symbol.cpp:3051 pcbnew/footprint.cpp:4190
+#: eeschema/sch_sheet.cpp:1736 eeschema/sch_symbol.cpp:1102
+#: eeschema/sch_symbol.cpp:3065 pcbnew/footprint.cpp:4190
 msgid "Exclude From Bill of Materials"
 msgstr "Jätä pois materiaaliluettelosta"
 
-#: eeschema/sch_sheet.cpp:1740 eeschema/sch_symbol.cpp:1102
-#: eeschema/sch_symbol.cpp:3054 eeschema/tools/sch_actions.cpp:991
+#: eeschema/sch_sheet.cpp:1740 eeschema/sch_symbol.cpp:1103
+#: eeschema/sch_symbol.cpp:3068 eeschema/tools/sch_actions.cpp:991
 #: pcbnew/footprint.cpp:4193
 msgid "Do not Populate"
 msgstr "Ei asenneta"
@@ -19933,49 +19933,49 @@ msgstr "(Poistettu kohde)"
 msgid "Hierarchical Sheet Pin %s"
 msgstr "Hierarkinen lehtinasta %s"
 
-#: eeschema/sch_symbol.cpp:2054
+#: eeschema/sch_symbol.cpp:2062
 msgid "Power symbol"
 msgstr "Teholähde-symboli"
 
-#: eeschema/sch_symbol.cpp:2074
+#: eeschema/sch_symbol.cpp:2082
 msgid "flags"
 msgstr "liput"
 
-#: eeschema/sch_symbol.cpp:2079
+#: eeschema/sch_symbol.cpp:2087
 msgid "Missing parent"
 msgstr "Lähde puuttuu"
 
-#: eeschema/sch_symbol.cpp:2094
+#: eeschema/sch_symbol.cpp:2102
 msgid "Undefined!!!"
 msgstr "Määrittelemätön !!!"
 
-#: eeschema/sch_symbol.cpp:2102
+#: eeschema/sch_symbol.cpp:2110
 msgid "<Unknown>"
 msgstr "<Tuntematon>"
 
-#: eeschema/sch_symbol.cpp:2127
+#: eeschema/sch_symbol.cpp:2135
 msgid "No library defined!"
 msgstr "Kirjastoa ei ole määritelty!"
 
-#: eeschema/sch_symbol.cpp:2129
+#: eeschema/sch_symbol.cpp:2137
 #, c-format
 msgid "Symbol not found in %s!"
 msgstr "Symbolia ei löydy kohdasta %s!"
 
-#: eeschema/sch_symbol.cpp:2382
+#: eeschema/sch_symbol.cpp:2396
 #, c-format
 msgid "Symbol %s [%s]"
 msgstr "Symboli %s [%s]"
 
-#: eeschema/sch_symbol.cpp:2977
+#: eeschema/sch_symbol.cpp:2991
 msgid "Mirror X"
 msgstr "Peilaa X"
 
-#: eeschema/sch_symbol.cpp:2979
+#: eeschema/sch_symbol.cpp:2993
 msgid "Mirror Y"
 msgstr "Peilaa Y"
 
-#: eeschema/sch_symbol.cpp:3007 pcbnew/footprint.cpp:4167
+#: eeschema/sch_symbol.cpp:3021 pcbnew/footprint.cpp:4167
 msgid "Library Link"
 msgstr "Kirjastolinkki"
 
@@ -21089,22 +21089,22 @@ msgstr "odottaa mittausmäärittelyä"
 msgid "expecting measurement format definition"
 msgstr "odottaa mittausmuodon määritystä"
 
-#: eeschema/sim/sim_lib_mgr.cpp:87 eeschema/sim/sim_lib_mgr.cpp:140
+#: eeschema/sim/sim_lib_mgr.cpp:91 eeschema/sim/sim_lib_mgr.cpp:144
 #, c-format
 msgid "Simulation model library not found at '%s'"
 msgstr "Simulaatiomallikirjastoa ei löydy kohteesta '%s'"
 
-#: eeschema/sim/sim_lib_mgr.cpp:92
+#: eeschema/sim/sim_lib_mgr.cpp:96
 #, c-format
 msgid "Simulation model library not found at '%s' or '%s'"
 msgstr "Simulaatiomallikirjastoa ei löydy kohteesta '%s' tai '%s'"
 
-#: eeschema/sim/sim_lib_mgr.cpp:303
+#: eeschema/sim/sim_lib_mgr.cpp:307
 #, c-format
 msgid "Error loading simulation model: no '%s' field"
 msgstr "Virhe ladattaessa simulaatiomallia: ei %s-kenttää"
 
-#: eeschema/sim/sim_lib_mgr.cpp:308
+#: eeschema/sim/sim_lib_mgr.cpp:312
 #: pcbnew/dialogs/dialog_board_statistics.cpp:462
 #: pcbnew/dialogs/dialog_board_statistics.cpp:463
 #: pcbnew/dialogs/dialog_board_statistics.cpp:464
@@ -21115,7 +21115,7 @@ msgstr "Virhe ladattaessa simulaatiomallia: ei %s-kenttää"
 msgid "unknown"
 msgstr "tuntematon"
 
-#: eeschema/sim/sim_lib_mgr.cpp:317
+#: eeschema/sim/sim_lib_mgr.cpp:321
 #, c-format
 msgid ""
 "Error loading simulation model: could not find base model '%s' in library "
@@ -21124,7 +21124,7 @@ msgstr ""
 "Virhe ladattaessa simulaatiomallia: perusmallia '%s' ei löytynyt kirjastosta "
 "'%s'"
 
-#: eeschema/sim/sim_library_ibis.cpp:39 eeschema/sim/sim_model_ibis.cpp:77
+#: eeschema/sim/sim_library_ibis.cpp:39 eeschema/sim/sim_model_ibis.cpp:81
 #, c-format
 msgid "Invalid IBIS file '%s'"
 msgstr "Virheellinen IBIS-tiedosto '%s'"
@@ -21152,77 +21152,77 @@ msgstr ""
 msgid "Unknown simulation model pin '%s'"
 msgstr "Tuntematon simulaatiomallin nasta '%s'"
 
-#: eeschema/sim/sim_model_ibis.cpp:82
+#: eeschema/sim/sim_model_ibis.cpp:86
 #, c-format
 msgid "Could not find IBIS component '%s'"
 msgstr "IBIS-komponenttia '%s' ei löytynyt"
 
-#: eeschema/sim/sim_model_ibis.cpp:88
+#: eeschema/sim/sim_model_ibis.cpp:92
 #, c-format
 msgid "Invalid IBIS component '%s'"
 msgstr "Virheellinen IBIS-komponentti %s"
 
-#: eeschema/sim/sim_model_ibis.cpp:92
+#: eeschema/sim/sim_model_ibis.cpp:96
 #, c-format
 msgid "Could not find IBIS pin '%s' in component '%s'"
 msgstr "IBIS-nastaa '%s' ei löytynyt komponentista '%s'"
 
-#: eeschema/sim/sim_model_ibis.cpp:99
+#: eeschema/sim/sim_model_ibis.cpp:103
 #, c-format
 msgid "Invalid IBIS pin '%s' in component '%s'"
 msgstr "Virheellinen IBIS-pinni '%s' komponentissa '%s'"
 
-#: eeschema/sim/sim_model_ibis.cpp:107
+#: eeschema/sim/sim_model_ibis.cpp:111
 #, c-format
 msgid "Could not find IBIS model '%s'"
 msgstr "IBIS-mallia '%s' ei löytynyt"
 
-#: eeschema/sim/sim_model_ibis.cpp:110
+#: eeschema/sim/sim_model_ibis.cpp:114
 #, c-format
 msgid "Invalid IBIS model '%s'"
 msgstr "Virheellinen IBIS-malli '%s'"
 
-#: eeschema/sim/sim_model_ibis.cpp:334
+#: eeschema/sim/sim_model_ibis.cpp:338
 msgid "Power supply"
 msgstr "Virtalähde"
 
-#: eeschema/sim/sim_model_ibis.cpp:344
+#: eeschema/sim/sim_model_ibis.cpp:348
 msgid "Parasitic pin resistance"
 msgstr "Parasiittinastan resistanssi"
 
-#: eeschema/sim/sim_model_ibis.cpp:354
+#: eeschema/sim/sim_model_ibis.cpp:358
 msgid "Parasitic pin inductance"
 msgstr "Parasiittinastan induktanssi"
 
-#: eeschema/sim/sim_model_ibis.cpp:364
+#: eeschema/sim/sim_model_ibis.cpp:368
 msgid "Parasitic pin capacitance"
 msgstr "Parasiittinastan kapasitanssi"
 
-#: eeschema/sim/sim_model_ibis.cpp:408
+#: eeschema/sim/sim_model_ibis.cpp:412
 msgid "DC Value"
 msgstr "DC Arvo"
 
-#: eeschema/sim/sim_model_ibis.cpp:426
+#: eeschema/sim/sim_model_ibis.cpp:430
 msgid "ON time"
 msgstr "PÄÄLLÄ-aika"
 
-#: eeschema/sim/sim_model_ibis.cpp:434
+#: eeschema/sim/sim_model_ibis.cpp:438
 msgid "OFF time"
 msgstr "Sammutusaika"
 
-#: eeschema/sim/sim_model_ibis.cpp:442 eeschema/sim/sim_model_ibis.cpp:475
+#: eeschema/sim/sim_model_ibis.cpp:446 eeschema/sim/sim_model_ibis.cpp:479
 msgid "Delay"
 msgstr "Viive"
 
-#: eeschema/sim/sim_model_ibis.cpp:450
+#: eeschema/sim/sim_model_ibis.cpp:454
 msgid "Number of cycles"
 msgstr "Jaksojen lukumäärä"
 
-#: eeschema/sim/sim_model_ibis.cpp:467
+#: eeschema/sim/sim_model_ibis.cpp:471
 msgid "Bitrate"
 msgstr "Bittinopeus"
 
-#: eeschema/sim/sim_model_ibis.cpp:483
+#: eeschema/sim/sim_model_ibis.cpp:487
 msgid "Number of bits"
 msgstr "Bittien määrä"
 
@@ -21276,8 +21276,8 @@ msgstr "Jännite (mitattu)"
 #: eeschema/sim/simulator_frame_ui.cpp:765
 #: eeschema/sim/simulator_frame_ui.cpp:871
 #: eeschema/sim/simulator_frame_ui.cpp:1047
-#: eeschema/sim/simulator_frame_ui.cpp:2269
-#: eeschema/sim/simulator_frame_ui.cpp:2270
+#: eeschema/sim/simulator_frame_ui.cpp:2276
+#: eeschema/sim/simulator_frame_ui.cpp:2277
 msgid " (gain)"
 msgstr " (vahvistus)"
 
@@ -21287,8 +21287,8 @@ msgstr " (vahvistus)"
 #: eeschema/sim/simulator_frame_ui.cpp:872
 #: eeschema/sim/simulator_frame_ui.cpp:877
 #: eeschema/sim/simulator_frame_ui.cpp:1048
-#: eeschema/sim/simulator_frame_ui.cpp:2267
-#: eeschema/sim/simulator_frame_ui.cpp:2268
+#: eeschema/sim/simulator_frame_ui.cpp:2274
+#: eeschema/sim/simulator_frame_ui.cpp:2275
 msgid " (phase)"
 msgstr " (vaihe)"
 
@@ -21453,37 +21453,37 @@ msgid "Cursor 2"
 msgstr "Kohdistin 2"
 
 #: eeschema/sim/simulator_frame_ui.cpp:1210
-#: eeschema/sim/simulator_frame_ui.cpp:2700
+#: eeschema/sim/simulator_frame_ui.cpp:2707
 msgid "Diff"
 msgstr "Differentiaali"
 
 #: eeschema/sim/simulator_frame_ui.cpp:1475
-#: eeschema/sim/simulator_frame_ui.cpp:1488
-#: eeschema/sim/simulator_frame_ui.cpp:1962
+#: eeschema/sim/simulator_frame_ui.cpp:1495
+#: eeschema/sim/simulator_frame_ui.cpp:1969
 msgid "Could not apply tuned value(s):"
 msgstr "Ei voitu asettaa virettyä arvoa(s):"
 
-#: eeschema/sim/simulator_frame_ui.cpp:1489
-#: eeschema/sim/simulator_frame_ui.cpp:1952
+#: eeschema/sim/simulator_frame_ui.cpp:1496
+#: eeschema/sim/simulator_frame_ui.cpp:1959
 #, c-format
 msgid "%s is not tunable"
 msgstr "%s ei ole viritettävä"
 
-#: eeschema/sim/simulator_frame_ui.cpp:1573
+#: eeschema/sim/simulator_frame_ui.cpp:1580
 msgid "Error: no current simulation.\n"
 msgstr "Virhe: ei nykyistä simulaatiota.\n"
 
-#: eeschema/sim/simulator_frame_ui.cpp:1582
+#: eeschema/sim/simulator_frame_ui.cpp:1589
 msgid "Error: simulation type not defined.\n"
 msgstr "Virhe: simulointityyppiä ei ole määritelty.\n"
 
-#: eeschema/sim/simulator_frame_ui.cpp:1588
+#: eeschema/sim/simulator_frame_ui.cpp:1595
 msgid "Error: simulation type doesn't support plotting.\n"
 msgstr "Virhe: simulointityyppi ei tue piirtämistä.\n"
 
-#: eeschema/sim/simulator_frame_ui.cpp:2806
-#: eeschema/sim/simulator_frame_ui.cpp:2921
-#: eeschema/sim/simulator_frame_ui.cpp:2964
+#: eeschema/sim/simulator_frame_ui.cpp:2813
+#: eeschema/sim/simulator_frame_ui.cpp:2928
+#: eeschema/sim/simulator_frame_ui.cpp:2971
 msgid ""
 "\n"
 "\n"
@@ -21500,7 +21500,7 @@ msgid "Measurement"
 msgstr "Mittaus"
 
 #: eeschema/sim/simulator_frame_ui_base.cpp:223
-#: gerbview/gerber_file_image.cpp:340
+#: gerbview/gerber_file_image.cpp:354
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:42
 msgid "Format"
 msgstr "Muoto"
@@ -22780,7 +22780,7 @@ msgstr "Piirrä nastat"
 
 #: eeschema/tools/sch_actions.cpp:363 eeschema/tools/sch_actions.cpp:595
 #: eeschema/tools/symbol_editor_drawing_tools.cpp:301
-#: pagelayout_editor/tools/pl_actions.cpp:61 pcbnew/tools/drawing_tool.cpp:1044
+#: pagelayout_editor/tools/pl_actions.cpp:61 pcbnew/tools/drawing_tool.cpp:1049
 #: pcbnew/tools/pcb_actions.cpp:185
 msgid "Draw Text"
 msgstr "Piirrä tekstilaatikko"
@@ -23022,7 +23022,7 @@ msgstr "Muokkaa arvoa ..."
 msgid "Edit Footprint..."
 msgstr "Muokkaa Jalanjälkeä ..."
 
-#: eeschema/tools/sch_actions.cpp:768 eeschema/tools/sch_edit_tool.cpp:1972
+#: eeschema/tools/sch_actions.cpp:768 eeschema/tools/sch_edit_tool.cpp:1967
 msgid "Autoplace Fields"
 msgstr "Sijoita Automaatisesti Kentät"
 
@@ -23140,7 +23140,7 @@ msgstr "Vaihda tekstiruutuun"
 msgid "Change existing item to a text box"
 msgstr "Muuta olemassa oleva kohde tekstiruutuun"
 
-#: eeschema/tools/sch_actions.cpp:885 eeschema/tools/sch_edit_tool.cpp:2977
+#: eeschema/tools/sch_actions.cpp:885 eeschema/tools/sch_edit_tool.cpp:2972
 msgid "Cleanup Sheet Pins"
 msgstr "Siivoa lehtinastat"
 
@@ -23850,7 +23850,7 @@ msgstr "Aseta Kuva"
 
 #: eeschema/tools/sch_drawing_tools.cpp:1178
 #: eeschema/tools/symbol_editor_drawing_tools.cpp:691
-#: pcbnew/tools/drawing_tool.cpp:1825
+#: pcbnew/tools/drawing_tool.cpp:1830
 msgid "No graphic items found in file."
 msgstr "Tiedostosta ei löydy tuotavia grafiikkakohteita."
 
@@ -23925,7 +23925,7 @@ msgstr "Lisää %s"
 msgid "Draw %s"
 msgstr "Piirrä %s"
 
-#: eeschema/tools/sch_drawing_tools.cpp:2783 pcbnew/tools/drawing_tool.cpp:1250
+#: eeschema/tools/sch_drawing_tools.cpp:2783 pcbnew/tools/drawing_tool.cpp:1255
 msgid "Draw Table"
 msgstr "Piirrä taulukko"
 
@@ -23974,78 +23974,78 @@ msgstr "Muunna Valinta"
 msgid "Edit Main Fields"
 msgstr "Muokkaa Pääkenttiä"
 
-#: eeschema/tools/sch_edit_tool.cpp:624 eeschema/tools/sch_edit_tool.cpp:2787
+#: eeschema/tools/sch_edit_tool.cpp:624 eeschema/tools/sch_edit_tool.cpp:2782
 msgid "Change To"
 msgstr "Muuta"
 
-#: eeschema/tools/sch_edit_tool.cpp:1053
+#: eeschema/tools/sch_edit_tool.cpp:1048
 #: eeschema/tools/symbol_editor_edit_tool.cpp:210
 #: pcbnew/tools/edit_tool.cpp:2066
 msgid "Rotate"
 msgstr "Käännä"
 
-#: eeschema/tools/sch_edit_tool.cpp:1251 gerbview/gerber_draw_item.cpp:731
+#: eeschema/tools/sch_edit_tool.cpp:1246 gerbview/gerber_draw_item.cpp:731
 #: pcbnew/pcb_tablecell.cpp:109 pcbnew/pcb_text.cpp:290
 #: pcbnew/pcb_textbox.cpp:473 pcbnew/tools/edit_tool.cpp:2233
 msgid "Mirror"
 msgstr "Peilaa"
 
-#: eeschema/tools/sch_edit_tool.cpp:1518
+#: eeschema/tools/sch_edit_tool.cpp:1513
 msgid "Label value cannot go below zero"
 msgstr "Arvo ei voi olla nollaa pienempi"
 
-#: eeschema/tools/sch_edit_tool.cpp:1597
+#: eeschema/tools/sch_edit_tool.cpp:1592
 msgid "Repeat Item"
 msgstr "Toista Kohde"
 
-#: eeschema/tools/sch_edit_tool.cpp:1818 eeschema/tools/sch_edit_tool.cpp:1822
+#: eeschema/tools/sch_edit_tool.cpp:1813 eeschema/tools/sch_edit_tool.cpp:1817
 #: eeschema/tools/symbol_editor_edit_tool.cpp:692
 #, c-format
 msgid "Edit %s Field"
 msgstr "Muokkaa %s kenttää"
 
-#: eeschema/tools/sch_edit_tool.cpp:1826
+#: eeschema/tools/sch_edit_tool.cpp:1821
 #: eeschema/tools/symbol_editor_edit_tool.cpp:694
 #, c-format
 msgid "Edit '%s' Field"
 msgstr "Muokkaa '%s' Kenttää"
 
-#: eeschema/tools/sch_edit_tool.cpp:2196
+#: eeschema/tools/sch_edit_tool.cpp:2191
 msgid "Edit Sheet Properties"
 msgstr "Muokkaa lehden ominaisuuksia"
 
-#: eeschema/tools/sch_edit_tool.cpp:2343
+#: eeschema/tools/sch_edit_tool.cpp:2338
 #: pcbnew/dialogs/dialog_rule_area_properties_base.h:64
 msgid "Rule Area Properties"
 msgstr "Sääntöalueen ominaisuudet"
 
-#: eeschema/tools/sch_edit_tool.cpp:2465 eeschema/tools/sch_edit_tool.cpp:2556
+#: eeschema/tools/sch_edit_tool.cpp:2460 eeschema/tools/sch_edit_tool.cpp:2551
 msgid "<empty>"
 msgstr "<tyhjä>"
 
-#: eeschema/tools/sch_edit_tool.cpp:2947
+#: eeschema/tools/sch_edit_tool.cpp:2942
 msgid "Slice Wire"
 msgstr "Halkaise Johto"
 
-#: eeschema/tools/sch_edit_tool.cpp:2947
+#: eeschema/tools/sch_edit_tool.cpp:2942
 msgid "Break Wire"
 msgstr "Katkaise Johto"
 
-#: eeschema/tools/sch_edit_tool.cpp:2968
+#: eeschema/tools/sch_edit_tool.cpp:2963
 msgid "Do you wish to delete the unreferenced pins from this sheet?"
 msgstr "Haluatko poistaa viittaamattomat nastat tältä taulukolta?"
 
-#: eeschema/tools/sch_edit_tool.cpp:3029
+#: eeschema/tools/sch_edit_tool.cpp:3024
 #, c-format
 msgid "Enter page number for sheet path%s"
 msgstr "Syötä arkin polun sivunumero %s"
 
-#: eeschema/tools/sch_edit_tool.cpp:3032
+#: eeschema/tools/sch_edit_tool.cpp:3027
 #: eeschema/widgets/hierarchy_pane.cpp:417
 msgid "Edit Sheet Page Number"
 msgstr "Muokkaa arkin sivunumeroa"
 
-#: eeschema/tools/sch_edit_tool.cpp:3226
+#: eeschema/tools/sch_edit_tool.cpp:3221
 msgid "Toggle Attribute"
 msgstr "Kytke Määrite (päälle/pois)"
 
@@ -24068,19 +24068,19 @@ msgstr "Kirjastoa '%s' ei voitu lisätä."
 msgid "Update symbols in schematic to refer to new library?"
 msgstr "Päivitetäänkö kytkentäkaavion symbolit viittaamaan uuteen kirjastoon?"
 
-#: eeschema/tools/sch_editor_control.cpp:826
+#: eeschema/tools/sch_editor_control.cpp:831
 msgid "Error: duplicate sub-sheet names found in current sheet."
 msgstr "Virhe: päällekkäiset aliarkinimet löytyvät nykyiseltä taulukolta."
 
-#: eeschema/tools/sch_editor_control.cpp:933
+#: eeschema/tools/sch_editor_control.cpp:938
 msgid "No net selected."
 msgstr "Kytkentäverkko valitsematta."
 
-#: eeschema/tools/sch_editor_control.cpp:959
+#: eeschema/tools/sch_editor_control.cpp:964
 msgid "Net must be labeled to assign a netclass."
 msgstr "Verkko on merkittävä verkkoluokan määrittämiseksi."
 
-#: eeschema/tools/sch_editor_control.cpp:1814
+#: eeschema/tools/sch_editor_control.cpp:1825
 #, c-format
 msgid ""
 "The pasted sheet '%s'\n"
@@ -24091,30 +24091,30 @@ msgstr ""
 "hylättiin, koska kohteella on jo taulukko tai yksi sen alilomakkeista "
 "vanhempana."
 
-#: eeschema/tools/sch_editor_control.cpp:2329
+#: eeschema/tools/sch_editor_control.cpp:2351
 msgid "Symbols with broken library symbol links cannot be edited."
 msgstr ""
 "Symboleja, joissa on rikkinäiset kirjastosymbolilinkit, ei voi muokata."
 
-#: eeschema/tools/sch_editor_control.cpp:2417
+#: eeschema/tools/sch_editor_control.cpp:2439
 msgid "Increment Annotations"
 msgstr "Lisää huomautuksia"
 
-#: eeschema/tools/sch_editor_control.cpp:2837
+#: eeschema/tools/sch_editor_control.cpp:2859
 #: pcbnew/tools/board_editor_control.cpp:614
 #: pcbnew/tools/footprint_editor_control.cpp:896
 #, c-format
 msgid "%d duplicate IDs replaced.\n"
 msgstr "%d kaksoiskappaleet vaihdettu.\n"
 
-#: eeschema/tools/sch_editor_control.cpp:2847
+#: eeschema/tools/sch_editor_control.cpp:2869
 #: pcbnew/tools/board_editor_control.cpp:629
 #: pcbnew/tools/footprint_editor_control.cpp:903
 #, c-format
 msgid "%d potential problems repaired."
 msgstr "%d mahdolliset ongelmat korjattu."
 
-#: eeschema/tools/sch_editor_control.cpp:2854
+#: eeschema/tools/sch_editor_control.cpp:2876
 #: pcbnew/drc/drc_rule_parser.cpp:179
 msgid "No errors found."
 msgstr "Ei virheitä."
@@ -24797,8 +24797,8 @@ msgstr "Valitse kerros: %s"
 #: pcbnew/pcb_shape.cpp:653 pcbnew/pcb_shape.cpp:895 pcbnew/pcb_shape.cpp:897
 #: pcbnew/pcb_tablecell.cpp:108 pcbnew/pcb_tablecell.cpp:184
 #: pcbnew/pcb_target.cpp:153 pcbnew/pcb_text.cpp:288 pcbnew/pcb_textbox.cpp:472
-#: pcbnew/pcb_track.cpp:1596 pcbnew/pcb_track.cpp:1663
-#: pcbnew/pcb_track.cpp:2135 pcbnew/tools/board_inspection_tool.cpp:237
+#: pcbnew/pcb_track.cpp:1623 pcbnew/pcb_track.cpp:1690
+#: pcbnew/pcb_track.cpp:2162 pcbnew/tools/board_inspection_tool.cpp:237
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:215
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:226
 #: pcbnew/widgets/pcb_properties_panel.cpp:258
@@ -25179,36 +25179,36 @@ msgstr "Ladataan tiedostoja..."
 msgid "Loading %u/%zu %s..."
 msgstr "Ladataan %u/%zu %s..."
 
-#: gerbview/files.cpp:444
+#: gerbview/files.cpp:443
 #, c-format
 msgid "Zip file '%s' cannot be opened."
 msgstr "Zip-tiedostoa '%s' ei voitu avata."
 
-#: gerbview/files.cpp:486
+#: gerbview/files.cpp:485
 #, c-format
 msgid "Skipped file '%s' (gerber job file)."
 msgstr "Ohitettu tiedosto '%s' (gerber työtiedosto)."
 
-#: gerbview/files.cpp:531
+#: gerbview/files.cpp:532
 #, c-format
 msgid "<b>Unable to create temporary file '%s'.</b>"
 msgstr "<b>Väliaikaisen tiedoston '%s' luominen epäonnistui. </b>"
 
-#: gerbview/files.cpp:556
+#: gerbview/files.cpp:557
 #, c-format
 msgid "Skipped file '%s' (unknown type)."
 msgstr "Ohitettu tiedosto '%s' (tuntematon tyyppi)."
 
-#: gerbview/files.cpp:595
+#: gerbview/files.cpp:596
 #, c-format
 msgid "<b>unzipped file %s read error</b>"
 msgstr "<b> purettu zip.tiedosto %s lukuvirhe </b>"
 
-#: gerbview/files.cpp:643
+#: gerbview/files.cpp:647
 msgid "Open Zip File"
 msgstr "Avaa Zip Tiedosto"
 
-#: gerbview/files.cpp:677 gerbview/job_file_reader.cpp:241
+#: gerbview/files.cpp:681 gerbview/job_file_reader.cpp:241
 #: pcb_calculator/calculator_panels/panel_rf_attenuators_base.cpp:164
 #: pcbnew/dialogs/dialog_footprint_wizard_list_base.cpp:91
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:183
@@ -25244,7 +25244,7 @@ msgstr "Loppu"
 msgid "Clear"
 msgstr "Tyhjennä"
 
-#: gerbview/gerber_draw_item.cpp:726 gerbview/gerber_file_image.cpp:358
+#: gerbview/gerber_draw_item.cpp:726 gerbview/gerber_file_image.cpp:372
 msgid "Polarity"
 msgstr "Polariteetti"
 
@@ -25279,27 +25279,32 @@ msgstr "CMP:"
 msgid "%s (D%d) on layer %d: %s"
 msgstr "%s (D %d) kerroksella %d: %s"
 
-#: gerbview/gerber_file_image.cpp:345
+#: gerbview/gerber_file_image.cpp:125
+#, fuzzy
+msgid "Too many messages, some are skipped"
+msgstr "Liikaa virheitä: osa on ohitettu"
+
+#: gerbview/gerber_file_image.cpp:359
 msgid "Image name"
 msgstr "Kuvan nimi"
 
-#: gerbview/gerber_file_image.cpp:350
+#: gerbview/gerber_file_image.cpp:364
 msgid "Graphic layer"
 msgstr "Grafiikkakerros"
 
-#: gerbview/gerber_file_image.cpp:354
+#: gerbview/gerber_file_image.cpp:368
 msgid "Img Rot."
 msgstr "Kuvan Kääntö."
 
-#: gerbview/gerber_file_image.cpp:362
+#: gerbview/gerber_file_image.cpp:376
 msgid "X Justify"
 msgstr "X-Tasaus"
 
-#: gerbview/gerber_file_image.cpp:365
+#: gerbview/gerber_file_image.cpp:379
 msgid "Y Justify"
 msgstr "Y-Tasaus"
 
-#: gerbview/gerber_file_image.cpp:371
+#: gerbview/gerber_file_image.cpp:385
 msgid "Image Justify Offset"
 msgstr "Kuvantasaus Offset"
 
@@ -31327,11 +31332,11 @@ msgstr "Levyn reunat on määriteltävä %s kerroksessa."
 msgid "Autoplace Components"
 msgstr "Sijoita komponentit automaattisesti"
 
-#: pcbnew/board.cpp:997 pcbnew/drc/drc_cache_generator.cpp:157
+#: pcbnew/board.cpp:998 pcbnew/drc/drc_cache_generator.cpp:157
 msgid "Tessellating copper zones..."
 msgstr "Kuparivyöhykkeiden osioiden yhteensovittaminen..."
 
-#: pcbnew/board.cpp:1846 pcbnew/dialogs/dialog_board_statistics.cpp:701
+#: pcbnew/board.cpp:1847 pcbnew/dialogs/dialog_board_statistics.cpp:701
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:78
 #: pcbnew/dialogs/dialog_unused_pad_layers_base.cpp:27
 #: pcbnew/footprint.cpp:1719 pcbnew/netinfo_item.cpp:108
@@ -31341,7 +31346,7 @@ msgstr "Kuparivyöhykkeiden osioiden yhteensovittaminen..."
 msgid "Pads"
 msgstr "Anturat"
 
-#: pcbnew/board.cpp:1847 pcbnew/dialogs/dialog_board_statistics.cpp:707
+#: pcbnew/board.cpp:1848 pcbnew/dialogs/dialog_board_statistics.cpp:707
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:155
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:80
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:35
@@ -31356,11 +31361,11 @@ msgstr "Anturat"
 msgid "Vias"
 msgstr "Läpiviennit"
 
-#: pcbnew/board.cpp:1848 pcbnew/pcb_draw_panel_gal.cpp:717
+#: pcbnew/board.cpp:1849 pcbnew/pcb_draw_panel_gal.cpp:717
 msgid "Track Segments"
 msgstr "Johdinraitaosiot"
 
-#: pcbnew/board.cpp:1850 pcbnew/pcb_draw_panel_gal.cpp:719
+#: pcbnew/board.cpp:1851 pcbnew/pcb_draw_panel_gal.cpp:719
 msgid "Unrouted"
 msgstr "Reitittämättä"
 
@@ -33487,7 +33492,7 @@ msgstr ""
 "ei vielä ole synkronisoitu kortille."
 
 #: pcbnew/dialogs/dialog_create_array_base.h:130
-#: pcbnew/tools/array_tool.cpp:299
+#: pcbnew/tools/array_tool.cpp:313
 msgid "Create Array"
 msgstr "Luo taulukko"
 
@@ -34322,58 +34327,58 @@ msgstr "ZIP"
 msgid "TGZ"
 msgstr "TGZ"
 
-#: pcbnew/dialogs/dialog_export_step.cpp:277
+#: pcbnew/dialogs/dialog_export_step.cpp:279
 msgid "Non-unity scaled models:"
 msgstr "Ei-yhtenäis skaalatut mallit:"
 
-#: pcbnew/dialogs/dialog_export_step.cpp:279
+#: pcbnew/dialogs/dialog_export_step.cpp:281
 msgid ""
 "Scaled models detected.  Model scaling is not reliable for mechanical export."
 msgstr ""
 "Skaalattuja malleja havaittu.  Mallien skaalaaminen ei ole luotettava "
 "mekaanisiin vienteihin."
 
-#: pcbnew/dialogs/dialog_export_step.cpp:281
+#: pcbnew/dialogs/dialog_export_step.cpp:283
 msgid "Model Scale Warning"
 msgstr "Mallin Skaalavaroitus"
 
-#: pcbnew/dialogs/dialog_export_step.cpp:397
+#: pcbnew/dialogs/dialog_export_step.cpp:399
 msgid "STEP export failed!  Please save the PCB and try again"
 msgstr "STEP vienti epäonnistui!  Tallenna piirilevy ja yritä uudelleen"
 
-#: pcbnew/dialogs/dialog_export_step.cpp:446
+#: pcbnew/dialogs/dialog_export_step.cpp:448
 msgid "STEP files"
 msgstr "STEP tiedostot"
 
-#: pcbnew/dialogs/dialog_export_step.cpp:448
+#: pcbnew/dialogs/dialog_export_step.cpp:450
 msgid "Binary glTF files"
 msgstr "Binääriset glLF-tiedostot"
 
-#: pcbnew/dialogs/dialog_export_step.cpp:450
+#: pcbnew/dialogs/dialog_export_step.cpp:452
 msgid "XAO files"
 msgstr "XAO-tiedostot"
 
-#: pcbnew/dialogs/dialog_export_step.cpp:452
+#: pcbnew/dialogs/dialog_export_step.cpp:454
 msgid "BREP (OCCT) files"
 msgstr "BREP (OCCT) tiedostot"
 
-#: pcbnew/dialogs/dialog_export_step.cpp:454
+#: pcbnew/dialogs/dialog_export_step.cpp:456
 msgid "PLY files"
 msgstr "PLY-tiedostot"
 
-#: pcbnew/dialogs/dialog_export_step.cpp:456
+#: pcbnew/dialogs/dialog_export_step.cpp:458
 msgid "STL files"
 msgstr "STL-tiedostot"
 
-#: pcbnew/dialogs/dialog_export_step.cpp:464
+#: pcbnew/dialogs/dialog_export_step.cpp:466
 msgid "3D Model Output File"
 msgstr "3D-mallin tulostustiedosto"
 
-#: pcbnew/dialogs/dialog_export_step.cpp:541
+#: pcbnew/dialogs/dialog_export_step.cpp:543
 msgid "No filename for output file"
 msgstr "Tulostiedostolle ei ole tiedostonimeä"
 
-#: pcbnew/dialogs/dialog_export_step.cpp:593
+#: pcbnew/dialogs/dialog_export_step.cpp:595
 #, c-format
 msgid ""
 "Board outline is missing or not closed using %.3f mm tolerance.\n"
@@ -34382,7 +34387,7 @@ msgstr ""
 "Piirilevyn ääriviiva puuttuu tai se ei ole suljettu %.3f mm toleranssilla.\n"
 "Suorita suunnittelusääntöjen tarkistus saadaksesi täydellisen analyysin."
 
-#: pcbnew/dialogs/dialog_export_step.cpp:605
+#: pcbnew/dialogs/dialog_export_step.cpp:607
 msgid "STEP/GLTF Export"
 msgstr "STEP/GLTF-vienti"
 
@@ -34831,7 +34836,7 @@ msgstr "Jalanjälkitarkistin"
 msgid "3D Models"
 msgstr "3D-Mallit"
 
-#: pcbnew/dialogs/dialog_footprint_properties.cpp:300
+#: pcbnew/dialogs/dialog_footprint_properties.cpp:304
 msgid ""
 "Locked footprints cannot be freely moved and oriented on the canvas and can "
 "only be selected when the 'Locked items' checkbox is checked in the "
@@ -34841,27 +34846,27 @@ msgstr ""
 "voidaan ainoastaan valita, kun 'Lukitut kohteet' valintaruutu on kytketty "
 "valintasuodattimessa."
 
-#: pcbnew/dialogs/dialog_footprint_properties.cpp:421
+#: pcbnew/dialogs/dialog_footprint_properties.cpp:425
 #, c-format
 msgid "Text width must be at least %s."
 msgstr "Tekstin leveyden on oltava vähintään %s."
 
-#: pcbnew/dialogs/dialog_footprint_properties.cpp:434
+#: pcbnew/dialogs/dialog_footprint_properties.cpp:438
 #, c-format
 msgid "Text width must be at most %s."
 msgstr "Tekstin leveys saa olla enintään %s."
 
-#: pcbnew/dialogs/dialog_footprint_properties.cpp:448
+#: pcbnew/dialogs/dialog_footprint_properties.cpp:452
 #, c-format
 msgid "Text height must be at least %s."
 msgstr "Tekstin korkeuden on oltava vähintään %s."
 
-#: pcbnew/dialogs/dialog_footprint_properties.cpp:461
+#: pcbnew/dialogs/dialog_footprint_properties.cpp:465
 #, c-format
 msgid "Text height must be at most %s."
 msgstr "Tekstin korkeuden on oltava enintään %s."
 
-#: pcbnew/dialogs/dialog_footprint_properties.cpp:478
+#: pcbnew/dialogs/dialog_footprint_properties.cpp:482
 #, c-format
 msgid ""
 "Text thickness is too large for the text size.\n"
@@ -34870,7 +34875,7 @@ msgstr ""
 "Tekstin paksuus on liian suuri tekstin kokoon nähden.\n"
 "Se kiinnitetään kohtaan %s."
 
-#: pcbnew/dialogs/dialog_footprint_properties.cpp:661
+#: pcbnew/dialogs/dialog_footprint_properties.cpp:665
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:688
 msgid "Edit Footprint Properties"
 msgstr "Muokkaa jalanjälkiominaisuuksia"
@@ -38366,17 +38371,17 @@ msgid "Via type:"
 msgstr "Läpivientityyppi:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:350
-#: pcbnew/pcb_track.cpp:2062
+#: pcbnew/pcb_track.cpp:2089
 msgid "Through"
 msgstr "Läpimenevä"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:350
-#: pcbnew/pcb_track.cpp:2064
+#: pcbnew/pcb_track.cpp:2091
 msgid "Micro"
 msgstr "Mikro"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:350
-#: pcbnew/pcb_track.cpp:2063
+#: pcbnew/pcb_track.cpp:2090
 msgid "Blind/buried"
 msgstr "Sokea / haudattu"
 
@@ -38394,19 +38399,19 @@ msgstr "Peittäminen edestä:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:398
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:419
-#: pcbnew/pcb_track.cpp:2068
+#: pcbnew/pcb_track.cpp:2095
 msgid "From design rules"
 msgstr "Suunnittelusäännöistä"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:398
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:419
-#: pcbnew/pcb_track.cpp:2069
+#: pcbnew/pcb_track.cpp:2096
 msgid "Tented"
 msgstr "Peitetty"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:398
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:419
-#: pcbnew/pcb_track.cpp:2070
+#: pcbnew/pcb_track.cpp:2097
 msgid "Not tented"
 msgstr "Ei peitetty"
 
@@ -38459,8 +38464,8 @@ msgstr "Kohteen vinous: "
 #: pcbnew/dialogs/dialog_tuning_pattern_properties.cpp:95
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2197
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2219 pcbnew/pad.cpp:1429
-#: pcbnew/pcb_track.cpp:1634 pcbnew/pcb_track.cpp:1642
-#: pcbnew/pcb_track.cpp:1674 pcbnew/pcb_track.cpp:1680
+#: pcbnew/pcb_track.cpp:1661 pcbnew/pcb_track.cpp:1669
+#: pcbnew/pcb_track.cpp:1701 pcbnew/pcb_track.cpp:1707
 #: pcbnew/router/router_tool.cpp:2759 pcbnew/router/router_tool.cpp:2764
 #: pcbnew/router/router_tool.cpp:2769 pcbnew/router/router_tool.cpp:2780
 #: pcbnew/router/router_tool.cpp:2788 pcbnew/router/router_tool.cpp:2793
@@ -38833,28 +38838,28 @@ msgstr ""
 msgid "Failed to save footprint library file '%s'."
 msgstr "Jalanjälkikirjastotiedoston '%s' tallentaminen epäonnistui."
 
-#: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:391
+#: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:394
 msgid "Error adding 3D model"
 msgstr "Virhe 3D-mallin lisäämisessä"
 
-#: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:475
+#: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:478
 msgid "No filename entered"
 msgstr "Tiedostonimeä ei ole annettu"
 
-#: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:480
+#: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:483
 msgid "Illegal filename"
 msgstr "Laiton tiedostonimi"
 
-#: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:485
+#: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:488
 #: pcbnew/microwave/microwave_polygon.cpp:223
 msgid "File not found"
 msgstr "Tiedostoa ei löytynyt"
 
-#: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:490
+#: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:493
 msgid "Unable to open file"
 msgstr "Tiedoston avaaminen ei onnistunut"
 
-#: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:495
+#: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:498
 msgid "Unknown error"
 msgstr "Tuntematon virhe"
 
@@ -39812,7 +39817,7 @@ msgid "7"
 msgstr "7"
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:105 pcbnew/pad.cpp:1409
-#: pcbnew/pcb_track.cpp:1667 pcbnew/pcb_track.cpp:2139
+#: pcbnew/pcb_track.cpp:1694 pcbnew/pcb_track.cpp:2166
 #: pcbnew/tools/board_inspection_tool.cpp:1125
 #: pcbnew/tools/board_inspection_tool.cpp:1154
 msgid "Hole"
@@ -41441,15 +41446,15 @@ msgstr "Ne on nyt viety ovaalianturoina."
 
 #: pcbnew/exporters/export_hyperlynx.cpp:291
 #: pcbnew/exporters/exporter_vrml.cpp:781
-#: pcbnew/exporters/step/exporter_step.cpp:677
+#: pcbnew/exporters/step/exporter_step.cpp:688
 #: pcbnew/specctra_import_export/specctra_export.cpp:119
 msgid "Board outline is malformed. Run DRC for a full analysis."
 msgstr ""
 "Piirilevyn ääriviivat ovat epämuodostuneet. Suorita suunnittelusääntöjen "
 "tarkistus saadaksesi täydellisen analyysin."
 
-#: pcbnew/exporters/export_idf.cpp:661 pcbnew/exporters/export_idf.cpp:670
-#: pcbnew/exporters/export_idf.cpp:678
+#: pcbnew/exporters/export_idf.cpp:665 pcbnew/exporters/export_idf.cpp:674
+#: pcbnew/exporters/export_idf.cpp:682
 msgid "IDF Export Failed:\n"
 msgstr "IDF-vienti epäonnistui:\n"
 
@@ -41457,11 +41462,11 @@ msgstr "IDF-vienti epäonnistui:\n"
 msgid "VRML Export Failed: Could not add holes to contours."
 msgstr "VRML-vienti epäonnistui: reikiä ei voitu lisätä muotoihin."
 
-#: pcbnew/exporters/exporter_vrml.cpp:1251
+#: pcbnew/exporters/exporter_vrml.cpp:1259
 msgid "No project when exporting the VRML file"
 msgstr "Ei projektia vietäessä VRML tiedostoa"
 
-#: pcbnew/exporters/exporter_vrml.cpp:1317
+#: pcbnew/exporters/exporter_vrml.cpp:1325
 msgid "VRML Export Failed:\n"
 msgstr "VRML Vienti Epäonnistui:\n"
 
@@ -41485,16 +41490,16 @@ msgstr "Luo Gerber työtiedosto '%s'."
 msgid "Board stackup settings not up to date."
 msgstr "Piirilevyn kerrospinon asetukset eivät ole ajantasalla."
 
-#: pcbnew/exporters/step/exporter_step.cpp:802
+#: pcbnew/exporters/step/exporter_step.cpp:813
 msgid "Determining PCB data\n"
 msgstr "Määritellään piirilevytietoja\n"
 
-#: pcbnew/exporters/step/exporter_step.cpp:834
+#: pcbnew/exporters/step/exporter_step.cpp:845
 #, c-format
 msgid "Build %s data\n"
 msgstr "Rakenna %s tiedot\n"
 
-#: pcbnew/exporters/step/exporter_step.cpp:838
+#: pcbnew/exporters/step/exporter_step.cpp:849
 msgid ""
 "\n"
 "** Error building STEP board model. Export aborted. **\n"
@@ -41502,12 +41507,12 @@ msgstr ""
 "\n"
 "** Virhe rakennettaessa STEP-piirilevymallia. Vienti keskeytetty. **\n"
 
-#: pcbnew/exporters/step/exporter_step.cpp:842
+#: pcbnew/exporters/step/exporter_step.cpp:853
 #, c-format
 msgid "Writing %s file\n"
 msgstr "Kirjoitetaan tiedostoa %s\n"
 
-#: pcbnew/exporters/step/exporter_step.cpp:860
+#: pcbnew/exporters/step/exporter_step.cpp:871
 #, c-format
 msgid ""
 "\n"
@@ -41516,13 +41521,13 @@ msgstr ""
 "\n"
 "** Virhe kirjoitettaessa tiedostoa %s. **\n"
 
-#: pcbnew/exporters/step/exporter_step.cpp:866
+#: pcbnew/exporters/step/exporter_step.cpp:877
 #, c-format
 msgid "%s file '%s' created.\n"
 msgstr "%s tiedosto '%s' luotu.\n"
 
-#: pcbnew/exporters/step/exporter_step.cpp:873
-#: pcbnew/exporters/step/exporter_step.cpp:879
+#: pcbnew/exporters/step/exporter_step.cpp:884
+#: pcbnew/exporters/step/exporter_step.cpp:890
 #, c-format
 msgid ""
 "\n"
@@ -41531,7 +41536,7 @@ msgstr ""
 "\n"
 "** Virhe vietäessä tiedostoa %s. Vienti keskeytetty. **\n"
 
-#: pcbnew/exporters/step/exporter_step.cpp:890
+#: pcbnew/exporters/step/exporter_step.cpp:901
 #, c-format
 msgid ""
 "Unable to create %s file.\n"
@@ -41540,12 +41545,12 @@ msgstr ""
 "Tiedostoa %s ei voi luoda.\n"
 "Tarkista, että levyssä on oikein ääriviivat ja mallit."
 
-#: pcbnew/exporters/step/exporter_step.cpp:896
+#: pcbnew/exporters/step/exporter_step.cpp:907
 #, c-format
 msgid "%s file has been created, but there are warnings."
 msgstr "%s tiedosto on luotu, mutta siinä on varoituksia."
 
-#: pcbnew/exporters/step/exporter_step.cpp:905
+#: pcbnew/exporters/step/exporter_step.cpp:916
 #, c-format
 msgid ""
 "\n"
@@ -42231,16 +42236,16 @@ msgstr "nykyinen pituus"
 msgid "Routed Lengths"
 msgstr "Reititetyt pituudet"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2166 pcbnew/pcb_track.cpp:1617
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2166 pcbnew/pcb_track.cpp:1644
 msgid "Routed Length"
 msgstr "Reititetty Pituus"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2172 pcbnew/pad.cpp:2873
-#: pcbnew/pcb_track.cpp:1622
+#: pcbnew/pcb_track.cpp:1649
 msgid "Pad To Die Length"
 msgstr "Pituus Anturasta Mikropiiriin"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2175 pcbnew/pcb_track.cpp:1625
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2175 pcbnew/pcb_track.cpp:1652
 msgid "Full Length"
 msgstr "Täysipituinen"
 
@@ -43185,7 +43190,7 @@ msgstr "Pituus pakkauksessa"
 msgid "Hole X / Y"
 msgstr "Reikä X / Y"
 
-#: pcbnew/pad.cpp:1427 pcbnew/pcb_track.cpp:1632 pcbnew/pcb_track.cpp:1672
+#: pcbnew/pad.cpp:1427 pcbnew/pcb_track.cpp:1659 pcbnew/pcb_track.cpp:1699
 #: pcbnew/router/router_tool.cpp:2762 pcbnew/router/router_tool.cpp:2791
 #: pcbnew/zone.cpp:879
 #, c-format
@@ -43461,7 +43466,7 @@ msgstr "Reiän Koko Y"
 msgid "Fabrication Property"
 msgstr "Valmistusominaisuus"
 
-#: pcbnew/pad.cpp:2887 pcbnew/pcb_shape.cpp:1006 pcbnew/pcb_track.cpp:2119
+#: pcbnew/pad.cpp:2887 pcbnew/pcb_shape.cpp:1006 pcbnew/pcb_track.cpp:2146
 msgid "Soldermask Margin Override"
 msgstr "Juotosmaskireunan Ohitus"
 
@@ -45494,11 +45499,11 @@ msgstr "%s päällä %s"
 msgid "Pad Primitives"
 msgstr "Anturan Primitiiviit"
 
-#: pcbnew/pcb_shape.cpp:988 pcbnew/pcb_track.cpp:2105
+#: pcbnew/pcb_shape.cpp:988 pcbnew/pcb_track.cpp:2132
 msgid "Technical Layers"
 msgstr "Tekniset kerrokset"
 
-#: pcbnew/pcb_shape.cpp:999 pcbnew/pcb_track.cpp:2116
+#: pcbnew/pcb_shape.cpp:999 pcbnew/pcb_track.cpp:2143
 msgid "Soldermask"
 msgstr "Juotosmaski"
 
@@ -45548,72 +45553,72 @@ msgstr "Läpivienti %s päällä %s"
 msgid "removed annular ring"
 msgstr "poistettu rengasmainen kehä"
 
-#: pcbnew/pcb_track.cpp:1579
+#: pcbnew/pcb_track.cpp:1606
 msgid "Track (arc)"
 msgstr "Johdin (kaari)"
 
-#: pcbnew/pcb_track.cpp:1606
+#: pcbnew/pcb_track.cpp:1633
 msgid "Segment Length"
 msgstr "Segmentin Pituus"
 
-#: pcbnew/pcb_track.cpp:1641
+#: pcbnew/pcb_track.cpp:1668
 #, c-format
 msgid "Width Constraints: %s"
 msgstr "Leveysrajoitukset: %s"
 
-#: pcbnew/pcb_track.cpp:1653
+#: pcbnew/pcb_track.cpp:1680
 msgid "Micro Via"
 msgstr "Mikroläpivienti"
 
-#: pcbnew/pcb_track.cpp:1654
+#: pcbnew/pcb_track.cpp:1681
 msgid "Blind/Buried Via"
 msgstr "Piiloläpivienti"
 
-#: pcbnew/pcb_track.cpp:1655
+#: pcbnew/pcb_track.cpp:1682
 msgid "Through Via"
 msgstr "Läpiviennin kautta"
 
-#: pcbnew/pcb_track.cpp:1678
+#: pcbnew/pcb_track.cpp:1705
 #, c-format
 msgid "Min Annular Width: %s"
 msgstr "Pienin rengasleveys: %s"
 
-#: pcbnew/pcb_track.cpp:1694
+#: pcbnew/pcb_track.cpp:1721
 msgid "NetCode"
 msgstr "Verkkotunnus"
 
-#: pcbnew/pcb_track.cpp:1846
+#: pcbnew/pcb_track.cpp:1873
 #, c-format
 msgid "Track (arc) %s on %s, length %s"
 msgstr "Johdinraita (kaari) %s > %s, pituus %s"
 
-#: pcbnew/pcb_track.cpp:1847
+#: pcbnew/pcb_track.cpp:1874
 #, c-format
 msgid "Track %s on %s, length %s"
 msgstr "Johdinraita %s > %s, pituus %s"
 
-#: pcbnew/pcb_track.cpp:2133
+#: pcbnew/pcb_track.cpp:2160
 msgid "Via Properties"
 msgstr "Läpiviennin Ominaisuudet"
 
-#: pcbnew/pcb_track.cpp:2141 pcbnew/widgets/pcb_properties_panel.cpp:263
+#: pcbnew/pcb_track.cpp:2168 pcbnew/widgets/pcb_properties_panel.cpp:263
 msgid "Layer Top"
 msgstr "Kerroksen yläosa"
 
-#: pcbnew/pcb_track.cpp:2143 pcbnew/widgets/pcb_properties_panel.cpp:264
+#: pcbnew/pcb_track.cpp:2170 pcbnew/widgets/pcb_properties_panel.cpp:264
 msgid "Layer Bottom"
 msgstr "Kerroksen pohja"
 
-#: pcbnew/pcb_track.cpp:2145
+#: pcbnew/pcb_track.cpp:2172
 msgid "Via Type"
 msgstr "Läpiviennin Tyyppi"
 
-#: pcbnew/pcb_track.cpp:2147
+#: pcbnew/pcb_track.cpp:2174
 #, fuzzy
 msgid "Front tenting"
 msgstr "Tenttaus edestä"
 
-#: pcbnew/pcb_track.cpp:2149
+#: pcbnew/pcb_track.cpp:2176
 #, fuzzy
 msgid "Back tenting"
 msgstr "Tenttaus takaa"
@@ -45684,6 +45689,11 @@ msgid "Missing netclass name argument to hasNetclass()"
 msgstr "hasNetclass() Puuttuva verkkoluokkanimen argumentti"
 
 #: pcbnew/pcbexpr_functions.cpp:1315
+#, fuzzy
+msgid "Missing netclass name argument to hasExactNetclass()"
+msgstr "hasNetclass() Puuttuva verkkoluokkanimen argumentti"
+
+#: pcbnew/pcbexpr_functions.cpp:1355
 msgid "Missing component class name argument to hasComponentClass()"
 msgstr "Komponenttiluokan nimen argumentti puuttuu arvosta hasComponentClass()"
 
@@ -47067,7 +47077,7 @@ msgstr "Aseta kohteita"
 msgid "Select Via Size"
 msgstr "Valitse Läpiviennin Koko"
 
-#: pcbnew/tools/drawing_tool.cpp:381 pcbnew/tools/drawing_tool.cpp:2369
+#: pcbnew/tools/drawing_tool.cpp:381 pcbnew/tools/drawing_tool.cpp:2374
 msgid "Draw Line"
 msgstr "Piirrä Viiva"
 
@@ -47091,23 +47101,23 @@ msgstr "Piirrä Kaari"
 msgid "Draw Bezier"
 msgstr "Piirrä Bézier"
 
-#: pcbnew/tools/drawing_tool.cpp:1597
+#: pcbnew/tools/drawing_tool.cpp:1602
 msgid "Draw Dimension"
 msgstr "Piirrä Mitta"
 
-#: pcbnew/tools/drawing_tool.cpp:2082
+#: pcbnew/tools/drawing_tool.cpp:2087
 msgid "Move Footprint Anchor"
 msgstr "Siirrä Jalanjälkiankkuri"
 
-#: pcbnew/tools/drawing_tool.cpp:3781
+#: pcbnew/tools/drawing_tool.cpp:3786
 msgid "Select Net:"
 msgstr "Valitse verkko:"
 
-#: pcbnew/tools/drawing_tool.cpp:4023
+#: pcbnew/tools/drawing_tool.cpp:4028
 msgid "Via location violates DRC."
 msgstr "Läpiviennin sijainti rikkoo suunnittelusääntöjä."
 
-#: pcbnew/tools/drawing_tool.cpp:4113
+#: pcbnew/tools/drawing_tool.cpp:4118
 msgid "Place via"
 msgstr "Aseta läpivienti"
 
@@ -47473,23 +47483,23 @@ msgstr "Ryhmittele tuodut kohteet"
 msgid "Copied to %d Rule Areas."
 msgstr "Kopioitu %d sääntöalueelle."
 
-#: pcbnew/tools/multichannel_tool.cpp:982
+#: pcbnew/tools/multichannel_tool.cpp:988
 msgid "One or both of the areas has no components assigned."
 msgstr "Yhdelle tai molemmille alueille ei ole määritetty osia."
 
-#: pcbnew/tools/multichannel_tool.cpp:986
+#: pcbnew/tools/multichannel_tool.cpp:992
 msgid "Component count mismatch"
 msgstr "Komponenttien lukumäärä ei täsmää"
 
-#: pcbnew/tools/multichannel_tool.cpp:990
+#: pcbnew/tools/multichannel_tool.cpp:996
 msgid "Iteration count exceeded (timeout)"
 msgstr "Iteraatioiden määrä ylitetty (aikakatkaisu)"
 
-#: pcbnew/tools/multichannel_tool.cpp:994
+#: pcbnew/tools/multichannel_tool.cpp:1000
 msgid "Topology mismatch"
 msgstr "Topologian yhteensopimattomuus"
 
-#: pcbnew/tools/multichannel_tool.cpp:1051
+#: pcbnew/tools/multichannel_tool.cpp:1057
 #, fuzzy
 msgid ""
 "Cannot auto-generate any placement areas because the schematic has only one "
@@ -47498,11 +47508,11 @@ msgstr ""
 "Sijoitusalueita ei voi luoda automaattisesti, koska kytkentäkaaviossa on "
 "vain yksi tai ei yhtään hierarkkista taulukkoa."
 
-#: pcbnew/tools/multichannel_tool.cpp:1169
+#: pcbnew/tools/multichannel_tool.cpp:1175
 msgid "Auto-generate placement rule areas"
 msgstr "Luo sijoittelusääntöalueet automaattisesti"
 
-#: pcbnew/tools/multichannel_tool.cpp:1207
+#: pcbnew/tools/multichannel_tool.cpp:1213
 msgid "Group components with their placement rule areas"
 msgstr "Ryhmittele komponentit niiden sijoitussääntöalueista"
 
@@ -63205,9 +63215,6 @@ msgstr "KiCad Piirustuslehti"
 
 #~ msgid "Not in Netlist:"
 #~ msgstr "Ei liitostiedostossa:"
-
-#~ msgid "Too many errors: some are skipped"
-#~ msgstr "Liikaa virheitä: osa on ohitettu"
 
 #, fuzzy
 #~ msgid ""

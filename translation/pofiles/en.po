@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-23 21:24+0300\n"
+"POT-Creation-Date: 2025-04-29 20:12+0300\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -16999,6 +16999,9 @@ msgstr "Cmp:"
 msgid "%s (D%d) on layer %d: %s"
 msgstr "%s (D%d) on layer %d: %s"
 
+msgid "Too many messages, some are skipped"
+msgstr "Too many messages, some are skipped"
+
 msgid "Image name"
 msgstr "Image name"
 
@@ -32038,6 +32041,9 @@ msgstr "Missing field name argument to %s."
 
 msgid "Missing netclass name argument to hasNetclass()"
 msgstr "Missing netclass name argument to hasNetclass()"
+
+msgid "Missing netclass name argument to hasExactNetclass()"
+msgstr "Missing netclass name argument to hasExactNetclass()"
 
 msgid "Missing component class name argument to hasComponentClass()"
 msgstr "Missing component class name argument to hasComponentClass()"
