@@ -946,10 +946,8 @@ void DIALOG_LABEL_PROPERTIES::OnLabelFilter( wxCommandEvent& event )
     wxString currentLabelText = m_valueCombo->GetValue();
 
     // Check if the text has changed compared to the previous value
-    if( currentLabelText != m_previousLabelText )
+    if( currentLabelText.length() > m_previousLabelText.length() )
     {
-        m_previousLabelText = currentLabelText;
-
         long insertionPoint = m_valueCombo->GetInsertionPoint();
 
         wxArrayString filteredLabels;
@@ -998,6 +996,7 @@ void DIALOG_LABEL_PROPERTIES::OnLabelFilter( wxCommandEvent& event )
         }
     }
 
+    m_previousLabelText = currentLabelText;
     isFiltering = false;
 }
 
