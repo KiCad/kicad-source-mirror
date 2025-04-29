@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-23 21:23+0300\n"
+"POT-Creation-Date: 2025-04-29 20:11+0300\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -816,11 +816,11 @@ msgstr "Disable anti-aliasing"
 msgid "Disable thickness"
 msgstr "Disable thickness"
 
-msgid "Disable vias"
-msgstr "Disable vias"
+msgid "Disable uVia holes"
+msgstr "Disable uVia holes"
 
-msgid "Disable holes"
-msgstr "Disable holes"
+msgid "Disable all plated holes"
+msgstr "Disable all plated holes"
 
 msgid "Procedural textures (slow)"
 msgstr "Procedural textures (slow)"
@@ -2384,8 +2384,8 @@ msgstr "Switch"
 msgid "Add"
 msgstr "Add"
 
-msgid "Enable Git Tracking"
-msgstr "Enable Git Tracking"
+msgid "Enable Git tracking"
+msgstr "Enable Git tracking"
 
 msgid "Remote Tracking"
 msgstr "Remote Tracking"
@@ -4763,6 +4763,15 @@ msgstr "Export Gerbers Job Settings"
 msgid "PCB: Export Gerbers"
 msgstr "PCB: Export Gerbers"
 
+msgid "Export HPGL"
+msgstr "Export HPGL"
+
+msgid "Export HPGL Job Settings"
+msgstr "Export HPGL Job Settings"
+
+msgid "PCB: Export HPGL"
+msgstr "PCB: Export HPGL"
+
 msgid "Export IPC-2581"
 msgstr "Export IPC-2581"
 
@@ -4844,12 +4853,6 @@ msgstr "Export Netlist Job Settings"
 
 msgid "Schematic: Export Netlist"
 msgstr "Schematic: Export Netlist"
-
-msgid "Export HPGL"
-msgstr "Export HPGL"
-
-msgid "Export HPGL Job Settings"
-msgstr "Export HPGL Job Settings"
 
 msgid "Schematic: Export SVG"
 msgstr "Schematic: Export SVG"
@@ -8076,9 +8079,6 @@ msgstr "Browse Scripts..."
 msgid "Add Script-based Netlist Exporter"
 msgstr "Add Script-based Netlist Exporter"
 
-msgid "Sheet filename can only be modified in Sheet Properties dialog."
-msgstr "Sheet filename can only be modified in Sheet Properties dialog."
-
 msgid ""
 "Intersheet reference visibility is controlled globally from Schematic Setup "
 "> General > Formatting"
@@ -8089,9 +8089,8 @@ msgstr ""
 msgid "Unit:"
 msgstr "Unit:"
 
-#, c-format
-msgid "(%s)"
-msgstr "(%s)"
+msgid "Sheet filename can only be modified in Sheet Properties dialog."
+msgstr "Sheet filename can only be modified in Sheet Properties dialog."
 
 msgid "Show field name"
 msgstr "Show field name"
@@ -8180,20 +8179,20 @@ msgstr "Other sheet fields"
 msgid "Sheet borders && backgrounds"
 msgstr "Sheet borders && backgrounds"
 
-msgid "Filters"
-msgstr "Filters"
+msgid "Filter Items"
+msgstr "Filter Items"
 
-msgid "Filter fields by name:"
-msgstr "Filter fields by name:"
+msgid "By field name:"
+msgstr "By field name:"
 
-msgid "Filter items by parent reference designator:"
-msgstr "Filter items by parent reference designator:"
+msgid "By parent reference designator:"
+msgstr "By parent reference designator:"
 
-msgid "Filter items by parent symbol library id:"
-msgstr "Filter items by parent symbol library id:"
+msgid "By parent symbol library id:"
+msgstr "By parent symbol library id:"
 
-msgid "Filter items by parent symbol type:"
-msgstr "Filter items by parent symbol type:"
+msgid "By parent symbol type:"
+msgstr "By parent symbol type:"
 
 msgid "Non-power symbols"
 msgstr "Non-power symbols"
@@ -8201,8 +8200,8 @@ msgstr "Non-power symbols"
 msgid "Power symbols"
 msgstr "Power symbols"
 
-msgid "Filter items by net:"
-msgstr "Filter items by net:"
+msgid "By net:"
+msgstr "By net:"
 
 msgid "Selected items only"
 msgstr "Selected items only"
@@ -16871,11 +16870,11 @@ msgstr "Tune %s"
 msgid ""
 "%s has simulation model of type '%s %s'.\n"
 "\n"
-"Only passvie R, L, C models and voltage and current sources may be tuned."
+"Only passive R, L, C models and voltage and current sources may be tuned."
 msgstr ""
 "%s has simulation model of type '%s %s'.\n"
 "\n"
-"Only passvie R, L, C models and voltage and current sources may be tuned."
+"Only passive R, L, C models and voltage and current sources may be tuned."
 
 msgid "Limit to E24 series values."
 msgstr "Limit to E24 series values."
@@ -17345,6 +17344,9 @@ msgstr "Cmp:"
 #, c-format
 msgid "%s (D%d) on layer %d: %s"
 msgstr "%s (D%d) on layer %d: %s"
+
+msgid "Too many messages, some are skipped"
+msgstr "Too many messages, some are skipped"
 
 msgid "Image name"
 msgstr "Image name"
@@ -18181,11 +18183,23 @@ msgstr ""
 msgid "Use the Gerber plot settings already configured in the board file"
 msgstr "Use the Gerber plot settings already configured in the board file"
 
-msgid "Generate PDF from a list of layers"
-msgstr "Generate PDF from a list of layers"
+msgid "Generate HPGL from a list of layers"
+msgstr "Generate HPGL from a list of layers"
 
 msgid "Mirror the board (useful for trying to show bottom layers)"
 msgstr "Mirror the board (useful for trying to show bottom layers)"
+
+msgid "Size for the default pen [mm]"
+msgstr "Size for the default pen [mm]"
+
+msgid "Pen number selection (1 to 9)"
+msgstr "Pen number selection (1 to 9)"
+
+msgid "Pen speed [cm/s] (1 to 99 cm/s)"
+msgstr "Pen speed [cm/s] (1 to 99 cm/s)"
+
+msgid "Generate PDF from a list of layers"
+msgstr "Generate PDF from a list of layers"
 
 msgid "Color theme to use (will default to PCB Editor settings)"
 msgstr "Color theme to use (will default to PCB Editor settings)"
@@ -19820,6 +19834,9 @@ msgstr "(sheet count)"
 msgid "(paper size)"
 msgstr "(paper size)"
 
+msgid "Item Type"
+msgstr "Item Type"
+
 msgid "Show on all pages"
 msgstr "Show on all pages"
 
@@ -21109,6 +21126,15 @@ msgstr "Internal Layer Tracks"
 msgid "Microstrip Line"
 msgstr "Microstrip Line"
 
+msgid "Coupled Microstrip Line"
+msgstr "Coupled Microstrip Line"
+
+msgid "Stripline"
+msgstr "Stripline"
+
+msgid "Coupled Stripline"
+msgstr "Coupled Stripline"
+
 msgid "Coplanar wave guide"
 msgstr "Coplanar wave guide"
 
@@ -21120,12 +21146,6 @@ msgstr "Rectangular Waveguide"
 
 msgid "Coaxial Line"
 msgstr "Coaxial Line"
-
-msgid "Coupled Microstrip Line"
-msgstr "Coupled Microstrip Line"
-
-msgid "Stripline"
-msgstr "Stripline"
 
 msgid "Twisted Pair"
 msgstr "Twisted Pair"
@@ -22939,8 +22959,8 @@ msgstr "Delete tracks fully inside pads"
 msgid "Delete tracks that have both start and end positions inside of a pad"
 msgstr "Delete tracks that have both start and end positions inside of a pad"
 
-msgid "Filter Items"
-msgstr "Filter Items"
+msgid "Filter items by net:"
+msgstr "Filter items by net:"
 
 msgid "Filter items by net class:"
 msgstr "Filter items by net class:"
@@ -23728,6 +23748,9 @@ msgstr "Update text content"
 msgid "Update fabrication attributes"
 msgstr "Update fabrication attributes"
 
+msgid "Update clearance overrides and settings"
+msgstr "Update clearance overrides and settings"
+
 msgid "Update 3D models"
 msgstr "Update 3D models"
 
@@ -23794,6 +23817,9 @@ msgstr "Update/reset text content"
 
 msgid "Update/reset fabrication attributes"
 msgstr "Update/reset fabrication attributes"
+
+msgid "Update/reset clearance overrides and settings"
+msgstr "Update/reset clearance overrides and settings"
 
 msgid "Update/reset 3D models"
 msgstr "Update/reset 3D models"
@@ -25151,9 +25177,6 @@ msgstr "Footprint dimensions"
 msgid "By layer:"
 msgstr "By layer:"
 
-msgid "By parent reference designator:"
-msgstr "By parent reference designator:"
-
 msgid "By parent footprint library link:"
 msgstr "By parent footprint library link:"
 
@@ -25726,8 +25749,8 @@ msgstr ""
 "Parent footprint on board is flipped.\n"
 "Layers will be reversed."
 
-msgid "Technical layers:"
-msgstr "Technical layers:"
+msgid "Technical Layers"
+msgstr "Technical Layers"
 
 msgid "Front adhesive"
 msgstr "Front adhesive"
@@ -26716,9 +26739,6 @@ msgstr "By Center/Point"
 
 msgid "Bezier Control Points"
 msgstr "Bezier Control Points"
-
-msgid "Technical Layers:"
-msgstr "Technical Layers:"
 
 msgid "Solder mask"
 msgstr "Solder mask"
@@ -32465,9 +32485,6 @@ msgstr "%s on %s"
 msgid "Pad Primitives"
 msgstr "Pad Primitives"
 
-msgid "Technical Layers"
-msgstr "Technical Layers"
-
 msgid "Soldermask"
 msgstr "Soldermask"
 
@@ -32663,6 +32680,9 @@ msgstr "Missing field name argument to %s."
 
 msgid "Missing netclass name argument to hasNetclass()"
 msgstr "Missing netclass name argument to hasNetclass()"
+
+msgid "Missing netclass name argument to hasExactNetclass()"
+msgstr "Missing netclass name argument to hasExactNetclass()"
 
 msgid "Missing component class name argument to hasComponentClass()"
 msgstr "Missing component class name argument to hasComponentClass()"
@@ -36651,6 +36671,50 @@ msgstr "KiCad Schematic Symbol"
 
 msgid "KiCad Drawing Sheet"
 msgstr "KiCad Drawing Sheet"
+
+#~ msgid "Disable vias"
+#~ msgstr "Disable vias"
+
+#~ msgid "Disable holes"
+#~ msgstr "Disable holes"
+
+#~ msgid "Enable Git Tracking"
+#~ msgstr "Enable Git Tracking"
+
+#, c-format
+#~ msgid "(%s)"
+#~ msgstr "(%s)"
+
+#~ msgid "Filters"
+#~ msgstr "Filters"
+
+#~ msgid "Filter fields by name:"
+#~ msgstr "Filter fields by name:"
+
+#~ msgid "Filter items by parent reference designator:"
+#~ msgstr "Filter items by parent reference designator:"
+
+#~ msgid "Filter items by parent symbol library id:"
+#~ msgstr "Filter items by parent symbol library id:"
+
+#~ msgid "Filter items by parent symbol type:"
+#~ msgstr "Filter items by parent symbol type:"
+
+#, c-format
+#~ msgid ""
+#~ "%s has simulation model of type '%s %s'.\n"
+#~ "\n"
+#~ "Only passvie R, L, C models and voltage and current sources may be tuned."
+#~ msgstr ""
+#~ "%s has simulation model of type '%s %s'.\n"
+#~ "\n"
+#~ "Only passvie R, L, C models and voltage and current sources may be tuned."
+
+#~ msgid "Technical layers:"
+#~ msgstr "Technical layers:"
+
+#~ msgid "Technical Layers:"
+#~ msgstr "Technical Layers:"
 
 #, c-format
 #~ msgid "Zone %s %s"
