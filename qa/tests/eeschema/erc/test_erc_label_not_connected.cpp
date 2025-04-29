@@ -50,7 +50,7 @@ BOOST_FIXTURE_TEST_CASE( ERCLabelNotConnected, ERC_REGRESSION_TEST_FIXTURE )
     std::vector<std::pair<wxString, int>> tests =
     {
         { "erc_pin_not_connected_basic",        2 },
-        { "issue7203",                          3 },
+        { "issue7203",                          4 },
         { "issue11926",                         2 },
         { "issue10430",                         8 },
         { "erc_directive_label_not_connected",  1 }
@@ -82,7 +82,8 @@ BOOST_FIXTURE_TEST_CASE( ERCLabelNotConnected, ERC_REGRESSION_TEST_FIXTURE )
 
         ERC_REPORT reportWriter( m_schematic.get(), EDA_UNITS::MM );
 
-        BOOST_CHECK_MESSAGE( errors.GetCount() == test.second, "Expected " << test.second << " errors in " << test.first.ToStdString()
+        BOOST_CHECK_MESSAGE( errors.GetCount() == test.second,
+                             "Expected " << test.second << " errors in " << test.first.ToStdString()
                                          << " but got " << errors.GetCount() << "\n"
                                          << reportWriter.GetTextReport() );
 

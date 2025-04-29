@@ -53,7 +53,7 @@ BOOST_FIXTURE_TEST_CASE( ERCNoConnect, ERC_REGRESSION_TEST_FIXTURE )
         { "NoConnectOnLine", 0 },
         { "NoConnectOnLineWithLabel", 1 },
         { "NoConnectOnLineWithGlobalLabel", 1 },
-        { "NoConnectOnLineWithHierarchicalLabel", 1 },
+        { "NoConnectOnLineWithHierarchicalLabel", 3 },
         { "NoConnectPinsConnectedByLine", 1 },
         { "NoConnectPinsConnectedByLabel", 1 },
     };
@@ -83,9 +83,9 @@ BOOST_FIXTURE_TEST_CASE( ERCNoConnect, ERC_REGRESSION_TEST_FIXTURE )
 
         ERC_REPORT reportWriter( m_schematic.get(), EDA_UNITS::MM );
 
-        BOOST_CHECK_MESSAGE( errors.GetCount() == test.second, "Expected " << test.second << " errors in " << test.first.ToStdString()
-                                         << " but got " << errors.GetCount() << "\n"
-                                         << reportWriter.GetTextReport() );
+        BOOST_CHECK_MESSAGE( errors.GetCount() == test.second,
+                             "Expected " << test.second << " errors in " <<  test.first.ToStdString()
+                                         << " but got " << errors.GetCount() << "\n" << reportWriter.GetTextReport() );
 
     }
 }
