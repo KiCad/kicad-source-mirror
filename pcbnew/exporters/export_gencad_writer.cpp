@@ -976,13 +976,20 @@ void GENCAD_EXPORTER::createRoutesSection()
         }
         else if( track->Type() == PCB_ARC_T )
         {
+            if( old_layer != track->GetLayer() )
+            {
+                old_layer = track->GetLayer();
+                fprintf( m_file, "LAYER %s\n",
+                         genCADLayerName( cu_count, track->GetLayer() ).c_str() );
+            }
+
             VECTOR2I start = track->GetStart();
             VECTOR2I end = track->GetEnd();
 
             const PCB_ARC* arc = static_cast<const PCB_ARC*>( track );
 
-            // GenCAD arcs are always drawn counter-clockwise.
-            if( !arc->IsCCW() )
+            // GenCAD arcs are always drawn counter-clockwise (IsCCW works backwards because Y-axis is up in GenCAD).
+            if( arc->IsCCW() )
                 std::swap( start, end );
 
             VECTOR2I center = arc->GetCenter();
