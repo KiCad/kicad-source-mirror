@@ -72,6 +72,7 @@
 
 #define IS_DANGLING    (1 << 29)   ///< indicates a pin is dangling
 #define ENTERED        (1 << 30)   ///< indicates a group has been entered
+#define SELECTION_CANDIDATE ( 1 << 31 ) ///< indicates an item is a candidate for selection
 
 // WARNING: if you add flags, you'll probably need to adjust the masks in GetEditFlags() and
 // ClearTempFlags().

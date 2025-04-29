@@ -2268,7 +2268,7 @@ bool SCH_SELECTION_TOOL::selectMultiple()
             {
                 EDA_ITEM_FLAGS flags = 0;
 
-                item->SetFlags( CANDIDATE );
+                item->SetFlags( SELECTION_CANDIDATE );
                 flaggedItems.push_back( item );
 
                 if( m_frame->GetRenderSettings()->m_ShowPinsElectricalType )
@@ -2304,10 +2304,8 @@ bool SCH_SELECTION_TOOL::selectMultiple()
                 if( m_frame->GetRenderSettings()->m_ShowPinsElectricalType )
                     item->SetFlags( SHOW_ELEC_TYPE );
 
-                if( Selectable( item )
-                        && itemPassesFilter( item )
-                        && !item->GetParent()->HasFlag( CANDIDATE )
-                        && item->HitTest( selectionRect, !isGreedy ) )
+                if( Selectable( item ) && itemPassesFilter( item ) && !item->GetParent()->HasFlag( SELECTION_CANDIDATE )
+                    && item->HitTest( selectionRect, !isGreedy ) )
                 {
                     selectItem( item, 0 );
                 }
@@ -2316,7 +2314,7 @@ bool SCH_SELECTION_TOOL::selectMultiple()
             }
 
             for( EDA_ITEM* item : flaggedItems )
-                item->ClearFlags( CANDIDATE );
+                item->ClearFlags( SELECTION_CANDIDATE );
 
             m_selection.SetIsHover( false );
 
@@ -2359,21 +2357,21 @@ void SCH_SELECTION_TOOL::filterCollectorForHierarchy( SCH_COLLECTOR& aCollector,
 {
     std::unordered_set<EDA_ITEM*> toAdd;
 
-    // Set CANDIDATE on all parents which are included in the GENERAL_COLLECTOR.  This
+    // Set SELECTION_CANDIDATE on all parents which are included in the GENERAL_COLLECTOR.  This
     // algorithm is O(3n), whereas checking for the parent inclusion could potentially be O(n^2).
     for( int j = 0; j < aCollector.GetCount(); j++ )
     {
         if( aCollector[j]->GetParent() )
-            aCollector[j]->GetParent()->ClearFlags( CANDIDATE );
+            aCollector[j]->GetParent()->ClearFlags( SELECTION_CANDIDATE );
 
         if( aCollector[j]->GetParentSymbol() )
-            aCollector[j]->GetParentSymbol()->ClearFlags( CANDIDATE );
+            aCollector[j]->GetParentSymbol()->ClearFlags( SELECTION_CANDIDATE );
     }
 
     if( aMultiselect )
     {
         for( int j = 0; j < aCollector.GetCount(); j++ )
-            aCollector[j]->SetFlags( CANDIDATE );
+            aCollector[j]->SetFlags( SELECTION_CANDIDATE );
     }
 
     for( int j = 0; j < aCollector.GetCount(); )
@@ -2399,7 +2397,7 @@ void SCH_SELECTION_TOOL::filterCollectorForHierarchy( SCH_COLLECTOR& aCollector,
             if( top->AsEdaItem() != item )
             {
                 toAdd.insert( top->AsEdaItem() );
-                top->AsEdaItem()->SetFlags( CANDIDATE );
+                top->AsEdaItem()->SetFlags( SELECTION_CANDIDATE );
 
                 aCollector.Remove( item );
                 continue;
@@ -2407,7 +2405,7 @@ void SCH_SELECTION_TOOL::filterCollectorForHierarchy( SCH_COLLECTOR& aCollector,
         }
 
         // Symbols are a bit easier as they can't be nested.
-        if( sym && ( sym->GetFlags() & CANDIDATE ) )
+        if( sym && ( sym->GetFlags() & SELECTION_CANDIDATE ) )
         {
             // Remove children of selected items
             aCollector.Remove( item );
@@ -2439,9 +2437,9 @@ void SCH_SELECTION_TOOL::InitializeSelectionState( SCH_TABLE* aTable )
     for( SCH_TABLECELL* cell : aTable->GetCells() )
     {
         if( cell->IsSelected() )
-            cell->SetFlags( CANDIDATE );
+            cell->SetFlags( SELECTION_CANDIDATE );
         else
-            cell->ClearFlags( CANDIDATE );
+            cell->ClearFlags( SELECTION_CANDIDATE );
     }
 }
 
@@ -2450,11 +2448,10 @@ void SCH_SELECTION_TOOL::SelectCellsBetween( const VECTOR2D& start, const VECTOR
     BOX2I selectionRect( start, end );
     selectionRect.Normalize();
 
-    auto wasSelected =
-        []( EDA_ITEM* aItem )
-        {
-            return ( aItem->GetFlags() & CANDIDATE ) > 0;
-        };
+    auto wasSelected = []( EDA_ITEM* aItem )
+    {
+        return ( aItem->GetFlags() & SELECTION_CANDIDATE ) > 0;
+    };
 
     for( SCH_TABLECELL* cell : aTable->GetCells() )
     {
@@ -2509,9 +2506,9 @@ bool SCH_SELECTION_TOOL::selectTableCells( SCH_TABLE* aTable )
 
             for( SCH_TABLECELL* cell : aTable->GetCells() )
             {
-                if( cell->IsSelected() && ( cell->GetFlags() & CANDIDATE ) <= 0 )
+                if( cell->IsSelected() && ( cell->GetFlags() & SELECTION_CANDIDATE ) <= 0 )
                     anyAdded = true;
-                else if( ( cell->GetFlags() & CANDIDATE ) > 0 && !cell->IsSelected() )
+                else if( ( cell->GetFlags() & SELECTION_CANDIDATE ) > 0 && !cell->IsSelected() )
                     anySubtracted = true;
             }
 
