@@ -176,6 +176,7 @@
     "show_text_fill": true,
     "size_x": 0,
     "size_y": 0,
+    "use_45_limit": true,
     "zoom": 1.0,
     "zoom_factors": []
   },
