@@ -108,6 +108,27 @@ SCH_SHEET* SCH_IO_LTSPICE::LoadSchematicFile( const wxString& aFileName, SCHEMAT
         }
     }
 
+    if( !ltspiceDataDir.DirExists() )
+    {
+        wxFileName fn( aFileName );
+        fn.SetFullName( wxEmptyString );
+        fn.AppendDir( "lib" );
+
+        wxString localLibPath = fn.GetFullPath();
+
+        if( wxDirExists( localLibPath ) )
+        {
+            ltspiceDataDir = localLibPath;
+        }
+        else
+        {
+            m_reporter->Report( wxString::Format( _( "Unable to find LTspice symbols.\nInstall "
+                                                     "LTspice or put its library files into %s" ),
+                                                  localLibPath ),
+                                RPT_SEVERITY_WARNING );
+        }
+    }
+
     try
     {
         LTSPICE_SCHEMATIC ascFile( aFileName, ltspiceDataDir, m_reporter, m_progressReporter );
