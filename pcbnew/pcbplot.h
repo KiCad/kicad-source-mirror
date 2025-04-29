@@ -162,7 +162,7 @@ PLOTTER* StartPlotBoard( BOARD* aBoard, const PCB_PLOT_PARAMS* aPlotOpts, int aL
                          const wxString& aPageNumber = wxEmptyString,
                          const int aPageCount = 1);
 
-void setupPlotterNewPDFPage( PLOTTER* aPlotter, BOARD* aBoard, const PCB_PLOT_PARAMS* aPlotOpts,
+void setupPlotterNewPDFPage( PLOTTER* aPlotter, BOARD* aBoard, PCB_PLOT_PARAMS* aPlotOpts,
                              const wxString& aLayerName, const wxString& aSheetName,
                              const wxString& aSheetPath, const wxString& aPageNumber,
                              int aPageCount );

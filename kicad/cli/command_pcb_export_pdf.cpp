@@ -113,6 +113,12 @@ CLI::PCB_EXPORT_PDF_COMMAND::PCB_EXPORT_PDF_COMMAND() :
     m_argParser.add_argument( ARG_MODE_MULTIPAGE )
             .help( UTF8STDSTR( _( "Plot the layers to a single PDF file with multiple pages" ) ) )
             .flag();
+
+    m_argParser.add_argument( ARG_SCALE )
+            .help( UTF8STDSTR( _( ARG_SCALE_DESC ) ) )
+            .scan<'g', double>()
+            .default_value( 1.0 )
+            .metavar( "SCALE" );
 }
 
 
@@ -144,6 +150,7 @@ int CLI::PCB_EXPORT_PDF_COMMAND::doPerform( KIWAY& aKiway )
     pdfJob->m_blackAndWhite = m_argParser.get<bool>( ARG_BLACKANDWHITE );
     pdfJob->m_colorTheme = From_UTF8( m_argParser.get<std::string>( ARG_THEME ).c_str() );
     pdfJob->m_negative = m_argParser.get<bool>( ARG_NEGATIVE );
+    pdfJob->m_scale = m_argParser.get<double>( ARG_SCALE );
 
     pdfJob->m_sketchPadsOnFabLayers = m_argParser.get<bool>( ARG_SKETCH_PADS_ON_FAB_LAYERS );
     pdfJob->m_hideDNPFPsOnFabLayers = m_argParser.get<bool>( ARG_HIDE_DNP_FPS_ON_FAB_LAYERS );

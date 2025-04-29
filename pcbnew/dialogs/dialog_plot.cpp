@@ -64,6 +64,20 @@ LSET DIALOG_PLOT::s_lastAllLayersSet;
 LSEQ DIALOG_PLOT::s_lastAllLayersOrder;
 
 
+static double selectionToScale( int selection )
+{
+    switch( selection )
+    {
+    default: return 1;
+    case 0: return 0;
+    case 2: return 1.5;
+    case 3: return 2;
+    case 4: return 3;
+    }
+    return 1;
+}
+
+
 /**
  * A helper wxWidgets control client data object to store layer IDs.
  */
@@ -437,7 +451,6 @@ void DIALOG_PLOT::init_Dialog()
     // Update options values:
     wxCommandEvent cmd_event;
     SetPlotFormat( cmd_event );
-    OnSetScaleOpt( cmd_event );
 }
 
 
@@ -453,6 +466,10 @@ void DIALOG_PLOT::transferPlotParamsToJob()
         gJob->m_createJobsFile = m_plotOpts.GetCreateGerberJobFile();
         gJob->m_precision = m_plotOpts.GetGerberPrecision();
         gJob->m_useBoardPlotParams = false;
+    }
+    else
+    {
+        m_job->m_scale = selectionToScale( m_plotOpts.GetScaleSelection() );
     }
 
     if( m_job->m_plotFormat == JOB_EXPORT_PCB_PLOT::PLOT_FORMAT::HPGL )
@@ -780,18 +797,6 @@ void DIALOG_PLOT::OnChangeDXFPlotMode( wxCommandEvent& event )
 }
 
 
-void DIALOG_PLOT::OnSetScaleOpt( wxCommandEvent& event )
-{
-    /* Disable sheet reference for scale != 1:1 */
-    bool scale1 = ( m_scaleOpt->GetSelection() == 1 );
-
-    m_plotSheetRef->Enable( scale1 );
-
-    if( !scale1 )
-        m_plotSheetRef->SetValue( false );
-}
-
-
 void DIALOG_PLOT::onOutputDirectoryBrowseClicked( wxCommandEvent& event )
 {
     // Build the absolute path of current output directory to preselect it in the file browser.
@@ -881,8 +886,7 @@ void DIALOG_PLOT::SetPlotFormat( wxCommandEvent& event )
         m_plotMirrorOpt->Enable( true );
         m_useAuxOriginCheckBox->Enable( true );
         m_defaultPenSize.Enable( false );
-        m_scaleOpt->Enable( false );
-        m_scaleOpt->SetSelection( 1 );
+        m_scaleOpt->Enable( true );
         m_fineAdjustXCtrl->Enable( false );
         m_fineAdjustYCtrl->Enable( false );
         m_trackWidthCorrection.Enable( false );
@@ -987,8 +991,7 @@ void DIALOG_PLOT::SetPlotFormat( wxCommandEvent& event )
         m_plotMirrorOpt->SetValue( false );
         m_useAuxOriginCheckBox->Enable( true );
         m_defaultPenSize.Enable( false );
-        m_scaleOpt->Enable( false );
-        m_scaleOpt->SetSelection( 1 );
+        m_scaleOpt->Enable( true );
         m_fineAdjustXCtrl->Enable( false );
         m_fineAdjustYCtrl->Enable( false );
         m_trackWidthCorrection.Enable( false );
@@ -1010,10 +1013,6 @@ void DIALOG_PLOT::SetPlotFormat( wxCommandEvent& event )
     case PLOT_FORMAT::UNDEFINED:
         break;
     }
-
-    /* Update the interlock between scale and frame reference
-     * (scaling would mess up the frame border...) */
-    OnSetScaleOpt( event );
 
     Layout();
     m_MainSizer->SetSizeHints( this );

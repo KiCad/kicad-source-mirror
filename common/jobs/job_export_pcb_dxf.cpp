@@ -43,6 +43,7 @@ JOB_EXPORT_PCB_DXF::JOB_EXPORT_PCB_DXF() :
 {
     m_plotDrawingSheet = false;
 
+    m_params.emplace_back( new JOB_PARAM<double>( "scale", &m_scale, m_scale ) );
     m_params.emplace_back( new JOB_PARAM<bool>( "plot_graphic_items_using_contours",
                                                 &m_plotGraphicItemsUsingContours,
                                                 m_plotGraphicItemsUsingContours ) );

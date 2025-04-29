@@ -65,6 +65,9 @@ namespace CLI
 
 #define ARG_COMMON_LAYERS "--common-layers"
 
+#define ARG_SCALE "--scale"
+#define ARG_SCALE_DESC "Scale for the PCB, not for the border and title. Use 0 for autoscale"
+
 struct PCB_EXPORT_BASE_COMMAND : public COMMAND
 {
     PCB_EXPORT_BASE_COMMAND( const std::string& aName, bool aInputCanBeDir = false,

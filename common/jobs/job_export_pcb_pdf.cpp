@@ -37,6 +37,7 @@ JOB_EXPORT_PCB_PDF::JOB_EXPORT_PCB_PDF() :
 {
     m_plotDrawingSheet = false;
 
+    m_params.emplace_back( new JOB_PARAM<double>( "scale", &m_scale, m_scale ) );
     m_params.emplace_back( new JOB_PARAM<wxString>( "color_theme",
             &m_colorTheme, m_colorTheme ) );
 

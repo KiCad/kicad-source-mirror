@@ -58,6 +58,7 @@ public:
     bool m_mirror;
     bool m_blackAndWhite;
     bool m_negative;
+    double m_scale;
 
     bool m_sketchPadsOnFabLayers;
     bool m_hideDNPFPsOnFabLayers;

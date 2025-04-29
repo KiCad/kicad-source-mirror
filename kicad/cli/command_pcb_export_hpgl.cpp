@@ -98,6 +98,12 @@ CLI::PCB_EXPORT_HPGL_COMMAND::PCB_EXPORT_HPGL_COMMAND() :
                                   "which files may be output." ) ) )
             .flag();
 
+    m_argParser.add_argument( ARG_SCALE )
+            .help( UTF8STDSTR( _( ARG_SCALE_DESC ) ) )
+            .scan<'g', double>()
+            .default_value( 1.0 )
+            .metavar( "SCALE" );
+
     m_argParser.add_argument( "-P", ARG_DEFAULT_PEN_SIZE )
             .help( UTF8STDSTR( _( "Size for the default pen [mm]" ) ) )
             .scan<'g', double>()
@@ -159,6 +165,7 @@ int CLI::PCB_EXPORT_HPGL_COMMAND::doPerform( KIWAY& aKiway )
     else if( m_argParser.get<bool>( ARG_MODE_SINGLE ) )
         hpglJob->m_genMode = JOB_EXPORT_PCB_HPGL::GEN_MODE::SINGLE;
 
+    hpglJob->m_scale = m_argParser.get<double>( ARG_SCALE );
     hpglJob->m_defaultPenSize = m_argParser.get<double>( ARG_DEFAULT_PEN_SIZE );
     hpglJob->m_penNumber = m_argParser.get<int>( ARG_PEN_NUMBER );
     hpglJob->m_penSpeed = m_argParser.get<int>( ARG_PEN_SPEED );

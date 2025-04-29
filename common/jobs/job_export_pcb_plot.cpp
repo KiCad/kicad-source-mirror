@@ -36,6 +36,7 @@ JOB_EXPORT_PCB_PLOT::JOB_EXPORT_PCB_PLOT( PLOT_FORMAT aFormat, const std::string
         m_mirror( false ),
         m_blackAndWhite( false ),
         m_negative( false ),
+        m_scale( 1.0 ),
         m_sketchPadsOnFabLayers( false ),
         m_hideDNPFPsOnFabLayers( false ),
         m_sketchDNPFPsOnFabLayers( true ),

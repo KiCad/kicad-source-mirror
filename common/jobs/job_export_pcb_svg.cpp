@@ -36,6 +36,7 @@ JOB_EXPORT_PCB_SVG::JOB_EXPORT_PCB_SVG() :
 {
     m_plotDrawingSheet = true;
 
+    m_params.emplace_back( new JOB_PARAM<double>( "scale", &m_scale, m_scale ) );
     m_params.emplace_back( new JOB_PARAM<wxString>( "color_theme", &m_colorTheme, m_colorTheme ) );
     m_params.emplace_back(
             new JOB_PARAM<bool>( "fit_page_to_board", &m_fitPageToBoard, m_fitPageToBoard ) );

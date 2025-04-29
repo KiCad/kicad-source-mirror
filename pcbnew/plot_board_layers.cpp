@@ -1292,8 +1292,15 @@ PLOTTER* StartPlotBoard( BOARD *aBoard, const PCB_PLOT_PARAMS *aPlotOpts, int aL
     // page layout is not mirrored, so temporarily change mirror option for the page layout
     PCB_PLOT_PARAMS plotOpts = *aPlotOpts;
 
-    if( plotOpts.GetPlotFrameRef() && plotOpts.GetMirror() )
-        plotOpts.SetMirror( false );
+    if( plotOpts.GetPlotFrameRef() )
+    {
+        if( plotOpts.GetMirror() )
+            plotOpts.SetMirror( false );
+        if( plotOpts.GetScale() != 1.0 )
+            plotOpts.SetScale( 1.0 );
+        if( plotOpts.GetAutoScale() )
+            plotOpts.SetAutoScale( false );
+    }
 
     initializePlotter( plotter, aBoard, &plotOpts );
 
@@ -1339,7 +1346,7 @@ PLOTTER* StartPlotBoard( BOARD *aBoard, const PCB_PLOT_PARAMS *aPlotOpts, int aL
                                   aPageCount, aSheetName, aSheetPath, aBoard->GetFileName(),
                                   renderSettings->GetLayerColor( LAYER_DRAWINGSHEET ) );
 
-                if( aPlotOpts->GetMirror() )
+                if( aPlotOpts->GetMirror() || aPlotOpts->GetScale() != 1.0 || aPlotOpts->GetAutoScale() )
                     initializePlotter( plotter, aBoard, aPlotOpts );
             }
 
@@ -1362,7 +1369,7 @@ PLOTTER* StartPlotBoard( BOARD *aBoard, const PCB_PLOT_PARAMS *aPlotOpts, int aL
 }
 
 
-void setupPlotterNewPDFPage( PLOTTER* aPlotter, BOARD* aBoard, const PCB_PLOT_PARAMS* aPlotOpts,
+void setupPlotterNewPDFPage( PLOTTER* aPlotter, BOARD* aBoard, PCB_PLOT_PARAMS* aPlotOpts,
                              const wxString& aLayerName, const wxString& aSheetName,
                              const wxString& aSheetPath, const wxString& aPageNumber,
                              int aPageCount )
@@ -1370,14 +1377,33 @@ void setupPlotterNewPDFPage( PLOTTER* aPlotter, BOARD* aBoard, const PCB_PLOT_PA
     // Plot the frame reference if requested
     if( aPlotOpts->GetPlotFrameRef() )
     {
+        // Mirror and scale shouldn't be applied to the drawing sheet
+        bool   revertOps = false;
+        bool   oldMirror = aPlotOpts->GetMirror();
+        bool   oldAutoScale = aPlotOpts->GetAutoScale();
+        double oldScale = aPlotOpts->GetScale();
+        if( oldMirror || oldAutoScale || oldScale != 1.0 )
+        {
+            aPlotOpts->SetMirror( false );
+            aPlotOpts->SetScale( 1.0 );
+            aPlotOpts->SetAutoScale( false );
+            initializePlotter( aPlotter, aBoard, aPlotOpts );
+            revertOps = true;
+        }
+
         PlotDrawingSheet( aPlotter, aBoard->GetProject(), aBoard->GetTitleBlock(),
                           aBoard->GetPageSettings(), &aBoard->GetProperties(), aPageNumber,
                           aPageCount,
                           aSheetName, aSheetPath, aBoard->GetFileName(),
                           aPlotter->RenderSettings()->GetLayerColor( LAYER_DRAWINGSHEET ) );
 
-        if( aPlotOpts->GetMirror() )
+        if( revertOps )
+        {
+            aPlotOpts->SetMirror( oldMirror );
+            aPlotOpts->SetScale( oldScale );
+            aPlotOpts->SetAutoScale( oldAutoScale );
             initializePlotter( aPlotter, aBoard, aPlotOpts );
+        }
     }
 
     aPlotter->RenderSettings()->SetLayerName( aLayerName );

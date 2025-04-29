@@ -119,6 +119,12 @@ CLI::PCB_EXPORT_SVG_COMMAND::PCB_EXPORT_SVG_COMMAND() :
     m_argParser.add_argument( DEPRECATED_ARG_PLOT_INVISIBLE_TEXT )
             .help( UTF8STDSTR( _( DEPRECATED_ARG_PLOT_INVISIBLE_TEXT_DESC ) ) )
             .flag();
+
+    m_argParser.add_argument( ARG_SCALE )
+            .help( UTF8STDSTR( _( ARG_SCALE_DESC ) ) )
+            .scan<'g', double>()
+            .default_value( 1.0 )
+            .metavar( "SCALE" );
 }
 
 
@@ -137,6 +143,7 @@ int CLI::PCB_EXPORT_SVG_COMMAND::doPerform( KIWAY& aKiway )
     svgJob->m_drillShapeOption = static_cast<DRILL_MARKS>( drillShape );
     svgJob->m_drawingSheet = m_argDrawingSheet;
     svgJob->m_subtractSolderMaskFromSilk = m_argParser.get<bool>( ARG_SUBTRACT_SOLDERMASK );
+    svgJob->m_scale = m_argParser.get<double>( ARG_SCALE );
 
     if( m_argParser.get<bool>( DEPRECATED_ARG_PLOT_INVISIBLE_TEXT ) )
         wxFprintf( stdout, DEPRECATED_ARD_PLOT_INVISIBLE_TEXT_WARNING );

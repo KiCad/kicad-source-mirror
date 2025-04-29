@@ -41,6 +41,29 @@
 #include <math/util.h> // for KiROUND
 
 
+static int scaleToSelection( double scale )
+{
+    int selection = 1;
+    if( scale == 0.0 )
+    {
+        selection = 0;
+    }
+    else if( scale == 1.5 )
+    {
+        selection = 2;
+    }
+    else if( scale == 2.0 )
+    {
+        selection = 3;
+    }
+    else if( scale == 3.0 )
+    {
+        selection = 4;
+    }
+    return selection;
+}
+
+
 PCB_PLOTTER::PCB_PLOTTER( BOARD* aBoard, REPORTER* aReporter, PCB_PLOT_PARAMS& aParams ) :
         m_board( aBoard ),
         m_plotOpts( aParams ),
@@ -375,6 +398,13 @@ void PCB_PLOTTER::PlotJobToPlotOpts( PCB_PLOT_PARAMS& aOpts, JOB_EXPORT_PCB_PLOT
         aOpts.SetIncludeGerberNetlistInfo( gJob->m_includeNetlistAttributes );
         aOpts.SetCreateGerberJobFile( gJob->m_createJobsFile );
         aOpts.SetGerberPrecision( gJob->m_precision );
+    }
+    else
+    {
+        // Scale, doesn't apply to GERBER
+        aOpts.SetScale( aJob->m_scale );
+        aOpts.SetAutoScale( !aJob->m_scale );
+        aOpts.SetScaleSelection( scaleToSelection( aJob->m_scale ) );
     }
 
     if( aJob->m_plotFormat == JOB_EXPORT_PCB_PLOT::PLOT_FORMAT::HPGL )

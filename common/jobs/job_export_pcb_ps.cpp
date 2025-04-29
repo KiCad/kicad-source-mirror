@@ -38,6 +38,7 @@ JOB_EXPORT_PCB_PS::JOB_EXPORT_PCB_PS() :
 {
     m_plotDrawingSheet = false;
 
+    m_params.emplace_back( new JOB_PARAM<double>( "scale", &m_scale, m_scale ) );
     m_params.emplace_back( new JOB_PARAM<wxString>( "color_theme",
             &m_colorTheme, m_colorTheme ) );
     m_params.emplace_back( new JOB_PARAM<GEN_MODE>( "gen_mode", &m_genMode, m_genMode ) );

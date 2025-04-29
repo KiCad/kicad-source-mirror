@@ -55,7 +55,6 @@ private:
     void OnRightClickAllLayers( wxMouseEvent& event );
     void SetPlotFormat( wxCommandEvent& event ) override;
     void OnChangeDXFPlotMode( wxCommandEvent& event ) override;
-    void OnSetScaleOpt( wxCommandEvent& event ) override;
     void CreateDrillFile( wxCommandEvent& event ) override;
     void OnGerberX2Checked( wxCommandEvent& event ) override;
     void onRunDRC( wxCommandEvent& event ) override;
