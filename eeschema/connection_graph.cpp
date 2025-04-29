@@ -2253,7 +2253,7 @@ void CONNECTION_GRAPH::buildConnectionGraph( std::function<void( SCH_ITEM* )>* a
                     subgraph->m_code, conn->Name() );
 
         // Should we skip everything after this if this is not a net?
-        wxASSERT( conn->IsNet() );
+        wxCHECK2( conn->IsNet(), continue );
 
         for( const auto& ii : subgraph->m_bus_parents )
         {
@@ -2710,8 +2710,11 @@ void CONNECTION_GRAPH::propagateToNeighbors( CONNECTION_SUBGRAPH* aSubgraph, boo
                     continue;
                 }
 
-                auto neighbor_conn = neighbor->m_driver_connection;
-                auto neighbor_name = neighbor_conn->Name();
+                SCH_CONNECTION* neighbor_conn = neighbor->m_driver_connection;
+
+                wxCHECK2( neighbor_conn, continue );
+
+                wxString neighbor_name = neighbor_conn->Name();
 
                 // Matching name: no update needed
                 if( neighbor_name == member->Name() )
