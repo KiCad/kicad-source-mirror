@@ -787,6 +787,7 @@ LTSPICE_SCHEMATIC::LT_SYMBOL LTSPICE_SCHEMATIC::MakeDummySymbol( const wxString&
 
     RECTANGLE rect;
     rect.LineWidth = getLineWidth( "NORMAL" );
+    rect.LineStyle = LINESTYLE::SOLID;
     rect.BotRight = VECTOR2I( 20, 20 );
     rect.TopLeft = VECTOR2I( -20, -20 );
 
