@@ -33,6 +33,7 @@
 #include <project/project_file.h>
 #include <symbol_editor/symbol_editor_settings.h>
 #include <sch_draw_panel.h>
+#include <sch_group.h>
 #include <sch_view.h>
 #include <sch_painter.h>
 #include <sch_shape.h>
@@ -419,7 +420,23 @@ void SCH_BASE_FRAME::UpdateItem( EDA_ITEM* aItem, bool isAddOrDelete, bool aUpda
      * call this while doing things like `for( SCH_ITEM* item : screen->Items() )`
      */
     if( aUpdateRtree && dynamic_cast<SCH_ITEM*>( aItem ) )
+    {
         GetScreen()->Update( static_cast<SCH_ITEM*>( aItem ) );
+
+        /*
+         * If we are updating the group, we also need to update all the children otherwise
+         * their positions will remain stale in the RTree
+        */
+        if( SCH_GROUP* group = dynamic_cast<SCH_GROUP*>( aItem ) )
+        {
+            group->RunOnChildren(
+                    [&]( SCH_ITEM* item )
+                    {
+                        GetScreen()->Update( item );
+                    },
+                    RECURSE_MODE::RECURSE );
+        }
+    }
 
     // Calling Refresh() here introduces a bi-stable state: when doing operations on a
     // large number of items if at some point the refresh timer times out and does a
