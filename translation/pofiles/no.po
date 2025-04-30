@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: 5.99\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-04-29 20:11+0300\n"
-"PO-Revision-Date: 2025-04-29 17:11+0000\n"
+"PO-Revision-Date: 2025-05-01 03:03+0000\n"
 "Last-Translator: Stian Kristensen <stiank@gmail.com>\n"
 "Language-Team: Norwegian Bokmål <https://hosted.weblate.org/projects/kicad/"
 "master-source/nb_NO/>\n"
@@ -1195,9 +1195,8 @@ msgid "Show copper and tech layers thickness (slow)"
 msgstr "Vis tykkelse for kobber- og tekniske lag (treg)"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:38
-#, fuzzy
 msgid "Highlight items on rollover"
-msgstr "Fremhevede gjenstander"
+msgstr "Uthev elementer når peker er over"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:44
 #, fuzzy
@@ -1222,20 +1221,19 @@ msgstr "8x"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:52
 msgid "3D-Viewer must be closed and re-opened to apply this setting"
-msgstr "3D-Viewer må lukkes og åpnes på nytt for å bruke denne innstillingen"
+msgstr "3D-viseren må lukkes og åpnes på nytt for å bruke denne innstillingen"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:56
-#, fuzzy
 msgid "Selection color:"
-msgstr "Velg farge"
+msgstr "Farge på valg:"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:72
 msgid "While Moving"
-msgstr "Mens du beveger deg"
+msgstr "Mens den beveges"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:85
 msgid "Disable anti-aliasing"
-msgstr "Deaktiver anti-aliasing"
+msgstr "Deaktiver kantutjevning"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:88
 msgid "Disable thickness"
@@ -1247,32 +1245,25 @@ msgid "Disable uVia holes"
 msgstr "Deaktiver hull"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:94
-#, fuzzy
 msgid "Disable all plated holes"
-msgstr "Deaktiver hull"
+msgstr "Deaktiver alle belagte hull"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:27
-#, fuzzy
 msgid "Procedural textures (slow)"
-msgstr "Prosedyrestrukturer"
+msgstr "Prosedyreteksturer (treg)"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:31
-#, fuzzy
 msgid "Add floor (slow)"
-msgstr "Legg til gulv"
+msgstr "Legg til gulv (treg)"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:35
-#, fuzzy
 msgid "Anti-aliasing (slow)"
-msgstr "Kantutjevning:"
+msgstr "Kantutjevning (treg)"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:39
-#, fuzzy
 msgid ""
 "Screen space ambient occlusions and global illumination reflections (slow)"
-msgstr ""
-"Bruk refleksjoner på Screen Space Ambient Occlusion og Global Illumination "
-"på endelig gjengivelse (sakte)"
+msgstr "Skjermrommets omgivelsesokklusjoner og globale lysrefleksjoner (treg)"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:54
 msgid "Number of Samples"
@@ -1280,7 +1271,7 @@ msgstr "Antall prøver"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:58
 msgid "Spread Factor %"
-msgstr "Spredningsfaktor%"
+msgstr "Spredningsfaktor %"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:62
 #, fuzzy
@@ -1288,39 +1279,37 @@ msgid "Recursion Level"
 msgstr "Rekursivt nivå"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:66
-#, fuzzy
 msgid "Shadows:"
-msgstr "Skygge"
+msgstr "Skygge:"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:71
 msgid ""
 "Number of rays that will be cast, into light direction, to evaluate a shadow "
 "point"
 msgstr ""
-"Antall stråler som vil bli kastet, i lys retning for å evaluere et "
+"Antall lysstråler som vil bli kastet i lysretningen for å evaluere et "
 "skyggepunkt"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:81
-#, fuzzy
 msgid "Reflections:"
-msgstr "Refleksjoner"
+msgstr "Refleksjoner:"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:86
 msgid "Number of rays that will be cast to evaluate a reflection point"
-msgstr "Antall stråler som skal kastes for å evaluere et refleksjonspunkt"
+msgstr "Antall lysstråler som skal kastes for å evaluere et refleksjonspunkt"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:94
 msgid ""
 "Interactions number that a ray can travel through objects. (higher number of "
 "levels improve results, specially on very transparent boards)"
 msgstr ""
-"Interaksjoner nummer som en stråle kan reise gjennom objekter. (høyere "
-"antall nivåer forbedrer resultatene, spesielt på veldig gjennomsiktige brett)"
+"Interaksjoner angir hvor mange ganger en stråle kan gjennomskinne objekter. ("
+"høyere antall nivåer forbedrer resultatene, særlig på svært gjennomsiktige "
+"kort)"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:98
-#, fuzzy
 msgid "Refractions:"
-msgstr "Brytninger"
+msgstr "Brytninger:"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:103
 msgid "Number of rays that will be cast to evaluate a refraction point"
@@ -1363,61 +1352,51 @@ msgid "Azimuth (deg)"
 msgstr "Azimut (grader)"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:209
-#, fuzzy
 msgid "Light 1:"
-msgstr "Høyre"
+msgstr "Lys 1:"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:227
-#, fuzzy
 msgid "Light 5:"
-msgstr "Høyre"
+msgstr "Lys 5:"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:242
-#, fuzzy
 msgid "Light 2:"
-msgstr "Høyre"
+msgstr "Lys 2:"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:260
-#, fuzzy
 msgid "Light 6:"
-msgstr "Høyre"
+msgstr "Lys 6:"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:275
-#, fuzzy
 msgid "Light 3:"
-msgstr "Høyre"
+msgstr "Lys 3:"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:293
-#, fuzzy
 msgid "Light 7:"
-msgstr "Høyre"
+msgstr "Lys 7:"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:308
-#, fuzzy
 msgid "Light 4:"
-msgstr "Høyre"
+msgstr "Lys 4:"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:326
-#, fuzzy
 msgid "Light 8:"
-msgstr "Høyre"
+msgstr "Lys 8:"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model.cpp:410
-#, fuzzy
 msgid "3D Preview Options"
-msgstr "Innstillinger for forhåndsvisning"
+msgstr "Innstillinger for forhåndsvisning av 3D"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model.cpp:410
-#, fuzzy
 msgid "Board thickness:"
-msgstr "Bretttykkelse:"
+msgstr "Korttykkelse:"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:23
 #: common/dialogs/dialog_print_generic_base.cpp:67 eeschema/sch_bitmap.cpp:190
 #: eeschema/sch_bitmap.cpp:312 pcbnew/pcb_reference_image.cpp:219
 #: pcbnew/pcb_reference_image.cpp:355
 msgid "Scale"
-msgstr "Skaler"
+msgstr "Skala"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:31
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:76
@@ -2401,9 +2380,8 @@ msgid "Icons"
 msgstr "Ikon"
 
 #: common/dialog_about/AboutDialog_main.cpp:936
-#, fuzzy
 msgid "Package Developers"
-msgstr "Utviklere"
+msgstr "Pakkeutviklere"
 
 #: common/dialog_about/dialog_about.cpp:114
 #, c-format
@@ -3170,9 +3148,9 @@ msgid ""
 msgstr ""
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:30
-#, fuzzy, c-format
+#, c-format
 msgid "The selection contains %zu locked items."
-msgstr "Utvalget inneholder %d låste elementer."
+msgstr "Utvalget inneholder %zu låste elementer."
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:34
 msgid "These items will be skipped unless you override the locks."
@@ -38367,9 +38345,8 @@ msgstr ""
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:78
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:248
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:418
-#, fuzzy
 msgid "Maximum length (L):"
-msgstr "Via lengde:"
+msgstr "Maksimal lengde (L):"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:278
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:812
@@ -38377,9 +38354,8 @@ msgstr "Via lengde:"
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:89
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:259
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:429
-#, fuzzy
 msgid "Best width (W):"
-msgstr "Sporbredde:"
+msgstr "Beste bredde (W):"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:305
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:840
@@ -38387,9 +38363,8 @@ msgstr "Sporbredde:"
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:120
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:290
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:460
-#, fuzzy
 msgid "Maximum width (W):"
-msgstr "Maksimal bredde:"
+msgstr "Maksimal bredde (W):"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:325
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:857
@@ -38397,9 +38372,8 @@ msgstr "Maksimal bredde:"
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:177
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:347
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:512
-#, fuzzy
 msgid "Curved edges"
-msgstr "Kurve"
+msgstr "Kurvede kanter"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.h:108
 #, fuzzy
@@ -38412,9 +38386,8 @@ msgid "Text items"
 msgstr "Tekstelementer"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:142
-#, fuzzy
 msgid "Graphic items"
-msgstr "PCB grafiske gjenstander"
+msgstr "Grafiske elementer"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:143
 #, fuzzy
@@ -38425,7 +38398,7 @@ msgstr "Dimensjonslinje"
 #: pcbnew/dialogs/panel_fp_editor_graphics_defaults_base.cpp:63
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:65
 msgid "Silk Layers"
-msgstr "Silkelag"
+msgstr "Silketrykklag"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:275
 #: pcbnew/dialogs/panel_fp_editor_graphics_defaults_base.cpp:64
@@ -38437,11 +38410,12 @@ msgstr "Kobberlag"
 #: pcbnew/dialogs/panel_fp_editor_graphics_defaults_base.cpp:65
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:67
 msgid "Edge Cuts"
-msgstr "Edge Cuts"
+msgstr "Kantkutt"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:277
 #: pcbnew/dialogs/panel_fp_editor_graphics_defaults_base.cpp:66
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:68
+#, fuzzy
 msgid "Courtyards"
 msgstr "Gårdsplasser"
 
@@ -38449,7 +38423,7 @@ msgstr "Gårdsplasser"
 #: pcbnew/dialogs/panel_fp_editor_graphics_defaults_base.cpp:67
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:69
 msgid "Fab Layers"
-msgstr "Fab lag"
+msgstr "Fab-lag"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:279
 #: pcbnew/dialogs/panel_fp_editor_graphics_defaults_base.cpp:68
@@ -38490,9 +38464,8 @@ msgid "Text Thickness"
 msgstr "Teksttykkelse"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:359
-#, fuzzy
 msgid "Set to layer and dimension default values:"
-msgstr "Sett til standardverdier for lag:"
+msgstr "Sett til standardverdier for lag og størrelser:"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:361
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:272
@@ -38501,16 +38474,15 @@ msgstr "Sett til standardverdier for lag:"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:36
 msgid "PCB graphic items"
-msgstr "PCB grafiske gjenstander"
+msgstr "Grafiske elementer på kretskort"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:42
 msgid "PCB text items"
-msgstr "PCB-tekstelementer"
+msgstr "Tekstelementer på kretskort"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:45
-#, fuzzy
 msgid "Other footprint fields"
-msgstr "Andre tekstavtrykk"
+msgstr "Andre fotavtrykkfelter"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:46
 #, fuzzy
