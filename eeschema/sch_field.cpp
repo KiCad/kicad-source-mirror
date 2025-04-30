@@ -1283,9 +1283,9 @@ void SCH_FIELD::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS& 
 
     aPlotter->PlotText( textpos, color, text, attrs, font, GetFontMetrics() );
 
-    if( IsHypertext() && Schematic() )
+    if( m_id == FIELD_T::INTERSHEET_REFS && Schematic() )
     {
-        SCH_LABEL_BASE*                            label = static_cast<SCH_LABEL_BASE*>( m_parent );
+        SCH_LABEL_BASE*                            label = dynamic_cast<SCH_LABEL_BASE*>( m_parent );
         std::vector<std::pair<wxString, wxString>> pages;
         std::vector<wxString>                      pageHrefs;
         BOX2I                                      bbox = GetBoundingBox();
