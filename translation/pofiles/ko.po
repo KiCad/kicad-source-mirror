@@ -37,8 +37,8 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-04-29 20:11+0300\n"
-"PO-Revision-Date: 2025-04-30 13:48+0000\n"
-"Last-Translator: DevAny KR <devany.kr@gmail.com>\n"
+"PO-Revision-Date: 2025-05-01 03:03+0000\n"
+"Last-Translator: DevAny <devany.kr@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
 "Language: ko\n"
@@ -22988,19 +22988,16 @@ msgid "Save Current Sheet to Design Block..."
 msgstr "현재 시트를 디자인 블록으로 저장..."
 
 #: eeschema/tools/sch_actions.cpp:144
-#, fuzzy
 msgid "Add current sheet to design block"
-msgstr "현재 시트를 디자인 블록으로 저장..."
+msgstr "현재 시트를 디자인 블록에 추가"
 
 #: eeschema/tools/sch_actions.cpp:150 pcbnew/tools/pcb_actions.cpp:489
-#, fuzzy
 msgid "Save Selection to Design Block..."
-msgstr "선택한 항목을 풋프린트로 저장합니다."
+msgstr "선택한 항목을 디자인 블록에 저장..."
 
 #: eeschema/tools/sch_actions.cpp:151 pcbnew/tools/pcb_actions.cpp:490
-#, fuzzy
 msgid "Add current selection to design block"
-msgstr "현재 선택을 아래로 이동"
+msgstr "현재 선택 항목을 디자인 블록에 추가"
 
 #: eeschema/tools/sch_actions.cpp:157 pcbnew/tools/pcb_actions.cpp:496
 msgid "Delete Design Block"
@@ -23052,7 +23049,6 @@ msgid "Show selected symbol on editor canvas"
 msgstr "편집기 캔버스에 선택한 심볼 표시"
 
 #: eeschema/tools/sch_actions.cpp:203
-#, fuzzy
 msgid "Duplicate Symbol"
 msgstr "심볼 복제"
 
@@ -23077,7 +23073,6 @@ msgid "Remove the selected symbol from its library"
 msgstr "라이브러리에서 선택한 심볼 제거"
 
 #: eeschema/tools/sch_actions.cpp:248
-#, fuzzy
 msgid "Paste Symbol"
 msgstr "심볼 붙여넣기"
 
