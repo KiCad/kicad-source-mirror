@@ -410,11 +410,13 @@ public:
      * @param aStopAtLockedJoints will terminate the line at the first locked joint encountered
      * @param aFollowLockedSegments will consider a joint between a locked segment and an unlocked
      *                              segment of the same width as a trivial joint.
+     * @param aAllowSegmentSizeMismatch will allow segments of different widths to be connected
      * @return the line
      */
     const LINE AssembleLine( LINKED_ITEM* aSeg, int* aOriginSegmentIndex = nullptr,
                              bool aStopAtLockedJoints = false,
-                             bool aFollowLockedSegments = false );
+                             bool aFollowLockedSegments = false,
+                             bool aAllowSegmentSizeMismatch = true );
 
     ///< Print the contents and joints structure.
     void Dump( bool aLong = false );

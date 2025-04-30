@@ -1915,7 +1915,7 @@ void LINE_PLACER::simplifyNewLine( NODE* aNode, LINKED_ITEM* aLatest )
 
     // And now we can proceed with assembling the final line and optimizing it.
 
-    LINE l_orig = aNode->AssembleLine( aLatest );
+    LINE l_orig = aNode->AssembleLine( aLatest, nullptr, false, false, false );
     LINE l( l_orig );
 
     bool optimized = OPTIMIZER::Optimize( &l, OPTIMIZER::MERGE_COLINEAR, aNode );

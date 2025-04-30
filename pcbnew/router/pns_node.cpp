@@ -1044,8 +1044,8 @@ void NODE::followLine( LINKED_ITEM* aCurrent, bool aScanDirection, int& aPos, in
 }
 
 
-const LINE NODE::AssembleLine( LINKED_ITEM* aSeg, int* aOriginSegmentIndex,
-                               bool aStopAtLockedJoints, bool aFollowLockedSegments )
+const LINE NODE::AssembleLine( LINKED_ITEM* aSeg, int* aOriginSegmentIndex, bool aStopAtLockedJoints,
+                               bool aFollowLockedSegments, bool aAllowSegmentSizeMismatch )
 {
     const int MaxVerts = 1024 * 16;
 
@@ -1086,6 +1086,9 @@ const LINE NODE::AssembleLine( LINKED_ITEM* aSeg, int* aOriginSegmentIndex,
     {
         const VECTOR2I& p  = corners[i];
         LINKED_ITEM*    li = segs[i];
+
+        if( !aAllowSegmentSizeMismatch && ( li && li->Width() != aSeg->Width() ) )
+            continue;
 
         if( !li || li->Kind() != ITEM::ARC_T )
             line.Append( p );
