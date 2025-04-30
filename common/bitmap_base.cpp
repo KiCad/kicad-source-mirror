@@ -208,7 +208,7 @@ bool BITMAP_BASE::SaveImageData( wxOutputStream& aOutStream ) const
     else
     {
         // Write the contents of m_imageData to the stream.
-        aOutStream.Write( m_imageData.GetData(), m_imageData.GetBufSize() );
+        aOutStream.Write( m_imageData.GetData(), m_imageData.GetDataLen() );
     }
 
     return true;
