@@ -563,7 +563,7 @@
                         <property name="caption"></property>
                         <property name="caption_visible">1</property>
                         <property name="center_pane">0</property>
-                        <property name="choices">&quot;Keep center, adjust radius&quot; &quot;Keep endpoints or direction of starting point&quot;</property>
+                        <property name="choices">&quot;Keep center, adjust radius&quot; &quot;Keep endpoints or direction of starting point&quot; &quot;Keep center and radius, adjust endpoints&quot;</property>
                         <property name="close_button">1</property>
                         <property name="context_help"></property>
                         <property name="context_menu">1</property>

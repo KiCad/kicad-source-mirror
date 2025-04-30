@@ -437,34 +437,53 @@ public:
 
         if( isModified( aEditedPoint, aPoints.Point( ARC_CENTER ) ) )
         {
-            if( m_arcEditMode == ARC_EDIT_MODE::KEEP_ENDPOINTS_OR_START_DIRECTION )
+            switch( m_arcEditMode )
             {
+            case ARC_EDIT_MODE::KEEP_ENDPOINTS_OR_START_DIRECTION:
                 editArcCenterKeepEndpoints( m_arc, center, start, mid, end );
-            }
-            else
+                break;
+            case ARC_EDIT_MODE::KEEP_CENTER_ADJUST_ANGLE_RADIUS:
+            case ARC_EDIT_MODE::KEEP_CENTER_ENDS_ADJUST_ANGLE:
             {
+                // Both these modes just move the arc
                 VECTOR2I moveVector = VECTOR2I( center.x, center.y ) - m_arc.GetCenter();
                 m_arc.Move( moveVector );
+                break;
+            }
             }
         }
         else if( isModified( aEditedPoint, aPoints.Point( ARC_MID ) ) )
         {
             const VECTOR2I& cursorPos = m_viewControls.GetCursorPosition( false );
 
-            if( m_arcEditMode == ARC_EDIT_MODE::KEEP_ENDPOINTS_OR_START_DIRECTION )
+            switch( m_arcEditMode )
+            {
+            case ARC_EDIT_MODE::KEEP_ENDPOINTS_OR_START_DIRECTION:
                 editArcMidKeepEndpoints( m_arc, start, end, cursorPos );
-            else
+                break;
+            case ARC_EDIT_MODE::KEEP_CENTER_ENDS_ADJUST_ANGLE:
+            case ARC_EDIT_MODE::KEEP_CENTER_ADJUST_ANGLE_RADIUS:
                 editArcMidKeepCenter( m_arc, center, start, mid, end, cursorPos );
+                break;
+            }
         }
         else if( isModified( aEditedPoint, aPoints.Point( ARC_START ) )
                  || isModified( aEditedPoint, aPoints.Point( ARC_END ) ) )
         {
             const VECTOR2I& cursorPos = m_viewControls.GetCursorPosition();
 
-            if( m_arcEditMode == ARC_EDIT_MODE::KEEP_ENDPOINTS_OR_START_DIRECTION )
-                editArcEndpointKeepTangent( m_arc, center, start, mid, end, cursorPos );
-            else
+            switch( m_arcEditMode )
+            {
+            case ARC_EDIT_MODE::KEEP_CENTER_ADJUST_ANGLE_RADIUS:
                 editArcEndpointKeepCenter( m_arc, center, start, mid, end, cursorPos );
+                break;
+            case ARC_EDIT_MODE::KEEP_CENTER_ENDS_ADJUST_ANGLE:
+                editArcEndpointKeepCenterAndRadius( m_arc, center, start, mid, end );
+                break;
+            case ARC_EDIT_MODE::KEEP_ENDPOINTS_OR_START_DIRECTION:
+                editArcEndpointKeepTangent( m_arc, center, start, mid, end, cursorPos );
+                break;
+            }
         }
     }
 
@@ -731,6 +750,40 @@ private:
         else
         {
             aArc.SetStart( p2 );
+            aArc.SetEnd( p1 );
+        }
+    }
+
+    static void editArcEndpointKeepCenterAndRadius( PCB_SHAPE& aArc, const VECTOR2I& aCenter, const VECTOR2I& aStart,
+                                                    const VECTOR2I& aMid, const VECTOR2I& aEnd )
+    {
+        VECTOR2I p1;
+        bool movingStart = false;
+
+        // User is moving p1, we need to update whichever end that is
+        // The other end won't move.
+
+        if( aStart != aArc.GetStart() )
+        {
+            p1          = aStart;
+            movingStart = true;
+        }
+        else
+        {
+            p1          = aEnd;
+            movingStart = false;
+        }
+
+        // Do not change the radius
+        p1 = p1 - aCenter;
+        p1 = aCenter + p1.Resize( aArc.GetRadius() );
+
+        if( movingStart )
+        {
+            aArc.SetStart( p1 );
+        }
+        else
+        {
             aArc.SetEnd( p1 );
         }
     }
@@ -3085,6 +3138,9 @@ int PCB_POINT_EDITOR::changeArcEditMode( const TOOL_EVENT& aEvent )
             m_arcEditMode = ARC_EDIT_MODE::KEEP_ENDPOINTS_OR_START_DIRECTION;
             break;
         case ARC_EDIT_MODE::KEEP_ENDPOINTS_OR_START_DIRECTION:
+            m_arcEditMode = ARC_EDIT_MODE::KEEP_CENTER_ENDS_ADJUST_ANGLE;
+            break;
+        case ARC_EDIT_MODE::KEEP_CENTER_ENDS_ADJUST_ANGLE:
             m_arcEditMode = ARC_EDIT_MODE::KEEP_CENTER_ADJUST_ANGLE_RADIUS;
             break;
         }
@@ -3113,6 +3169,7 @@ void PCB_POINT_EDITOR::setTransitions()
     Go( &PCB_POINT_EDITOR::chamferCorner,     PCB_ACTIONS::pointEditorChamferCorner.MakeEvent() );
     Go( &PCB_POINT_EDITOR::changeArcEditMode, PCB_ACTIONS::pointEditorArcKeepCenter.MakeEvent() );
     Go( &PCB_POINT_EDITOR::changeArcEditMode, PCB_ACTIONS::pointEditorArcKeepEndpoint.MakeEvent() );
+    Go( &PCB_POINT_EDITOR::changeArcEditMode, PCB_ACTIONS::pointEditorArcKeepRadius.MakeEvent() );
     Go( &PCB_POINT_EDITOR::changeArcEditMode, ACTIONS::cycleArcEditMode.MakeEvent() );
     Go( &PCB_POINT_EDITOR::modifiedSelection, EVENTS::SelectedItemsModified );
     Go( &PCB_POINT_EDITOR::modifiedSelection, EVENTS::SelectedItemsMoved );

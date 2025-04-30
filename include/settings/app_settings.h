@@ -50,8 +50,24 @@ struct KICOMMON_API CURSOR_SETTINGS
 */
 enum class ARC_EDIT_MODE
 {
+    /**
+     * When editing endpoints, the angle and radius are adjusted.
+     * When editing the midpoint, the radius is adjusted.
+     * When editing the center, the arcs is moved
+     */
     KEEP_CENTER_ADJUST_ANGLE_RADIUS,
-    KEEP_ENDPOINTS_OR_START_DIRECTION
+    /**
+     * Whe editing endpoints, the other end remains in place.
+     * When editing the midpoint, both endpoints remain in place.
+     * When editing the center, the endpoints remain in place.
+     */
+    KEEP_ENDPOINTS_OR_START_DIRECTION,
+    /**
+     * When editing endpoints, only the angle is adjusted.
+     * The midpoint adjusts only radius.
+     * When editing the center, the arc is moved.
+     */
+    KEEP_CENTER_ENDS_ADJUST_ANGLE,
 };
 
 /**

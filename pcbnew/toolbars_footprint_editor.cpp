@@ -122,6 +122,7 @@ std::optional<TOOLBAR_CONFIGURATION> FOOTPRINT_EDIT_TOOLBAR_SETTINGS::DefaultToo
 
             arcMenu->Add( PCB_ACTIONS::pointEditorArcKeepCenter, ACTION_MENU::CHECK );
             arcMenu->Add( PCB_ACTIONS::pointEditorArcKeepEndpoint, ACTION_MENU::CHECK );
+            arcMenu->Add( PCB_ACTIONS::pointEditorArcKeepRadius, ACTION_MENU::CHECK );
 
             return arcMenu;
         };

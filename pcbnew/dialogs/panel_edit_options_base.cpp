@@ -60,7 +60,7 @@ PANEL_EDIT_OPTIONS_BASE::PANEL_EDIT_OPTIONS_BASE( wxWindow* parent, wxWindowID i
 
 	bSizerUniversal->Add( 0, 3, 0, wxEXPAND, 5 );
 
-	wxString m_arcEditModeChoices[] = { _("Keep center, adjust radius"), _("Keep endpoints or direction of starting point") };
+	wxString m_arcEditModeChoices[] = { _("Keep center, adjust radius"), _("Keep endpoints or direction of starting point"), _("Keep center and radius, adjust endpoints") };
 	int m_arcEditModeNChoices = sizeof( m_arcEditModeChoices ) / sizeof( wxString );
 	m_arcEditMode = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_arcEditModeNChoices, m_arcEditModeChoices, 0 );
 	m_arcEditMode->SetSelection( 0 );

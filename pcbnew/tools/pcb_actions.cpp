@@ -2124,6 +2124,13 @@ TOOL_ACTION PCB_ACTIONS::pointEditorArcKeepEndpoint( TOOL_ACTION_ARGS()
         .Tooltip( _( "Switch arc editing mode to keep endpoints, or to keep direction of the other point" ) )
         .Parameter( ARC_EDIT_MODE::KEEP_ENDPOINTS_OR_START_DIRECTION ) );
 
+TOOL_ACTION PCB_ACTIONS::pointEditorArcKeepRadius( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.PointEditor.arcKeepRadius" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Keep Arc Radius and Center, adjust angle" ) )
+        .Tooltip( _( "Switch arc editing mode to maintainign radius when endpoint are moved" ) )
+        .Parameter( ARC_EDIT_MODE::KEEP_CENTER_ENDS_ADJUST_ANGLE ) );
+
 // POSITION_RELATIVE_TOOL
 //
 TOOL_ACTION PCB_ACTIONS::positionRelative( TOOL_ACTION_ARGS()

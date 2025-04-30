@@ -62,11 +62,46 @@ PANEL_EDIT_OPTIONS::PANEL_EDIT_OPTIONS( wxWindow* aParent, UNITS_PROVIDER* aUnit
 }
 
 
+static int arcEditModeToComboIndex( ARC_EDIT_MODE aMode )
+{
+    switch( aMode )
+    {
+        case ARC_EDIT_MODE::KEEP_CENTER_ADJUST_ANGLE_RADIUS:
+            return 0;
+        case ARC_EDIT_MODE::KEEP_ENDPOINTS_OR_START_DIRECTION:
+            return 1;
+        case ARC_EDIT_MODE::KEEP_CENTER_ENDS_ADJUST_ANGLE:
+            return 2;
+        // No default
+    }
+    wxFAIL_MSG( "Invalid ARC_EDIT_MODE" );
+    return 0;
+};
+
+
+static ARC_EDIT_MODE arcEditModeToEnum( int aIndex )
+{
+    switch( aIndex )
+    {
+        case 0:
+            return ARC_EDIT_MODE::KEEP_CENTER_ADJUST_ANGLE_RADIUS;
+        case 1:
+            return ARC_EDIT_MODE::KEEP_ENDPOINTS_OR_START_DIRECTION;
+        case 2:
+            return ARC_EDIT_MODE::KEEP_CENTER_ENDS_ADJUST_ANGLE;
+        default:
+            wxFAIL_MSG( wxString::Format( "Invalid index for ARC_EDIT_MODE: %d", aIndex ) );
+            break;
+    }
+    return ARC_EDIT_MODE::KEEP_CENTER_ADJUST_ANGLE_RADIUS;
+};
+
+
 void PANEL_EDIT_OPTIONS::loadPCBSettings( PCBNEW_SETTINGS* aCfg )
 {
     m_cbConstrainHV45Mode->SetValue( aCfg->m_Use45DegreeLimit );
     m_rotationAngle.SetAngleValue( aCfg->m_RotationAngle );
-    m_arcEditMode->SetSelection( (int) aCfg->m_ArcEditMode );
+    m_arcEditMode->SetSelection( arcEditModeToComboIndex( aCfg->m_ArcEditMode ) );
     m_trackMouseDragCtrl->SetSelection( (int) aCfg->m_TrackDragAction );
 
     if( aCfg->m_FlipDirection == FLIP_DIRECTION::LEFT_RIGHT )
@@ -105,8 +140,7 @@ void PANEL_EDIT_OPTIONS::loadFPSettings( FOOTPRINT_EDITOR_SETTINGS* aCfg )
     m_magneticPads->SetValue( aCfg->m_MagneticItems.pads == MAGNETIC_OPTIONS::CAPTURE_ALWAYS );
     m_magneticGraphics->SetValue( aCfg->m_MagneticItems.graphics );
     m_cbConstrainHV45Mode->SetValue( aCfg->m_Use45Limit );
-    m_arcEditMode->SetSelection(
-            aCfg->m_ArcEditMode == ARC_EDIT_MODE::KEEP_CENTER_ADJUST_ANGLE_RADIUS ? 0 : 1 );
+    m_arcEditMode->SetSelection( arcEditModeToComboIndex( aCfg->m_ArcEditMode ) );
 }
 
 
@@ -146,7 +180,7 @@ bool PANEL_EDIT_OPTIONS::TransferDataFromWindow()
         cfg->m_MagneticItems.graphics = m_magneticGraphics->GetValue();
 
         cfg->m_Use45Limit = m_cbConstrainHV45Mode->GetValue();
-        cfg->m_ArcEditMode = (ARC_EDIT_MODE) m_arcEditMode->GetSelection();
+        cfg->m_ArcEditMode = arcEditModeToEnum( m_arcEditMode->GetSelection() );
     }
     else
     {
@@ -158,7 +192,7 @@ bool PANEL_EDIT_OPTIONS::TransferDataFromWindow()
 
         cfg->m_Use45DegreeLimit = m_cbConstrainHV45Mode->GetValue();
         cfg->m_RotationAngle = m_rotationAngle.GetAngleValue();
-        cfg->m_ArcEditMode = (ARC_EDIT_MODE) m_arcEditMode->GetSelection();
+        cfg->m_ArcEditMode = arcEditModeToEnum( m_arcEditMode->GetSelection() );
         cfg->m_TrackDragAction = (TRACK_DRAG_ACTION) m_trackMouseDragCtrl->GetSelection();
 
         cfg->m_FlipDirection = m_rbFlipLeftRight->GetValue() ? FLIP_DIRECTION::LEFT_RIGHT
@@ -205,5 +239,3 @@ void PANEL_EDIT_OPTIONS::ResetPanel()
         loadPCBSettings( &cfg );
     }
 }
-
-

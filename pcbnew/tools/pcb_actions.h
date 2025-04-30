@@ -284,6 +284,7 @@ public:
 
     static TOOL_ACTION pointEditorArcKeepCenter;
     static TOOL_ACTION pointEditorArcKeepEndpoint;
+    static TOOL_ACTION pointEditorArcKeepRadius;
 
     static TOOL_ACTION pointEditorMoveCorner;
     static TOOL_ACTION pointEditorMoveMidpoint;
