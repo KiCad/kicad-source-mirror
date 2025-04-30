@@ -1252,6 +1252,18 @@ void SCH_FIELD::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_I
 }
 
 
+bool SCH_FIELD::IsHypertext() const
+{
+    if( GetCanonicalName() == wxT( "Intersheetrefs" ) )
+        return true;
+
+    if( m_name == SIM_LIBRARY::LIBRARY_FIELD )
+        return true;
+
+    return IsURL( GetShownText( false ) );
+}
+
+
 void SCH_FIELD::DoHypertextAction( EDA_DRAW_FRAME* aFrame ) const
 {
     constexpr int START_ID = 1;
@@ -1287,7 +1299,7 @@ void SCH_FIELD::DoHypertextAction( EDA_DRAW_FRAME* aFrame ) const
             else if( sel == 999 )
                 href = SCH_NAVIGATE_TOOL::g_BackLink;
         }
-        else if( IsURL( GetShownText( false ) ) )
+        else if( IsURL( GetShownText( false ) ) || m_name == SIM_LIBRARY::LIBRARY_FIELD )
         {
             href = GetShownText( false );
         }

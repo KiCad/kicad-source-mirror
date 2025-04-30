@@ -43,7 +43,7 @@ static const wxString FieldFormat = wxS(
     "   <td><b>__NAME__</b></td>"
     "   <td>__VALUE__</td>"
     "</tr>" );
-static const wxString DatasheetLinkFormat = wxS( "<a href=\"__HREF__\">__TEXT__</a>" );
+static const wxString LinkFormat = wxS( "<a href=\"__HREF__\">__TEXT__</a>" );
 
 
 class FOOTPRINT_INFO_GENERATOR
@@ -183,7 +183,7 @@ protected:
             }
             else
             {
-                wxString datasheetlink = DatasheetLinkFormat;
+                wxString datasheetlink = LinkFormat;
                 datasheetlink.Replace( wxS( "__HREF__" ), EscapeHTML( text ) );
 
                 if( text.Length() > 75 )
@@ -207,7 +207,23 @@ protected:
 
         default:
             text = aField.GetShownText( false );
-            fieldhtml.Replace( wxS( "__VALUE__" ), EscapeHTML( text ) );
+
+            if( aField.IsHypertext() )
+            {
+                wxString link = LinkFormat;
+                link.Replace( wxS( "__HREF__" ), EscapeHTML( text ) );
+
+                if( text.Length() > 75 )
+                    text = text.Left( 72 ) + wxT( "..." );
+
+                link.Replace( wxS( "__TEXT__" ), EscapeHTML( text ) );
+
+                fieldhtml.Replace( wxS( "__VALUE__" ), link );
+            }
+            else
+            {
+                fieldhtml.Replace( wxS( "__VALUE__" ), EscapeHTML( text ) );
+            }
         }
 
         return fieldhtml;

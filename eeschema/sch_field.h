@@ -102,13 +102,7 @@ public:
         return _( "Field" );
     }
 
-    bool IsHypertext() const override
-    {
-        if( GetCanonicalName() == wxT( "Intersheetrefs" ) )
-            return true;
-
-        return IsURL( GetShownText( false ) );
-    }
+    bool IsHypertext() const override;
 
     void DoHypertextAction( EDA_DRAW_FRAME* aFrame ) const override;
 
