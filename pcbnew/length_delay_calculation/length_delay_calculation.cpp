@@ -182,7 +182,7 @@ LENGTH_DELAY_STATS LENGTH_DELAY_CALCULATION::CalculateLengthDetails( std::vector
     }
 
     // Calculate the time domain statistics if required
-    if( aDomain == LENGTH_DELAY_DOMAIN_OPT::WITH_DELAY_DETAIL )
+    if( aDomain == LENGTH_DELAY_DOMAIN_OPT::WITH_DELAY_DETAIL && !aItems.empty() )
     {
         // TODO(JJ): Populate this
         TIME_DOMAIN_GEOMETRY_CONTEXT ctx;
