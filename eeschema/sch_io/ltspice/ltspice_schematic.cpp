@@ -202,7 +202,7 @@ void LTSPICE_SCHEMATIC::Load( SCHEMATIC* aSchematic, SCH_SHEET* aRootSheet,
 void LTSPICE_SCHEMATIC::GetAscAndAsyFilePaths( const wxDir& aDir, bool aRecursive,
                                                std::map<wxString, wxString>& aMapOfAscFiles,
                                                std::map<wxString, wxString>& aMapOfAsyFiles,
-                                               const wxString&               aBase )
+                                               const std::vector<wxString>&  aBaseDirs )
 {
     wxString filename;
 
@@ -231,23 +231,22 @@ void LTSPICE_SCHEMATIC::GetAscAndAsyFilePaths( const wxDir& aDir, bool aRecursiv
                 }
             };
 
-            wxString elementName1 = ( aBase + path.GetName() ).Lower();
-            wxString elementName2 = path.GetName().Lower();
+            // Add dir1/dir2/cmp, dir2/cmp, cmp
             wxString extension = path.GetExt().Lower();
 
-            if( extension == wxS( "asc" ) )
+            for( size_t i = 0; i < aBaseDirs.size() + 1; i++ )
             {
-                logToMap( aMapOfAscFiles, elementName1 );
+                wxString alias;
 
-                if( !aBase.IsEmpty() )
-                    logToMap( aMapOfAscFiles, elementName2 );
-            }
-            else if( extension == wxS( "asy" ) )
-            {
-                logToMap( aMapOfAsyFiles, elementName1 );
+                for( size_t j = i; j < aBaseDirs.size(); j++ )
+                    alias << aBaseDirs[j].Lower() << '/';
 
-                if( !aBase.IsEmpty() )
-                    logToMap( aMapOfAsyFiles, elementName2 );
+                alias << path.GetName().Lower();
+
+                if( extension == wxS( "asc" ) )
+                    logToMap( aMapOfAscFiles, alias );
+                else if( extension == wxS( "asy" ) )
+                    logToMap( aMapOfAsyFiles, alias );
             }
 
             cont = aDir.GetNext( &filename );
@@ -263,8 +262,10 @@ void LTSPICE_SCHEMATIC::GetAscAndAsyFilePaths( const wxDir& aDir, bool aRecursiv
             wxFileName path( aDir.GetName(), filename );
             wxDir      subDir( path.GetFullPath() );
 
-            GetAscAndAsyFilePaths( subDir, true, aMapOfAscFiles, aMapOfAsyFiles,
-                                   filename + wxS( "/" ) );
+            std::vector<wxString> newBase = aBaseDirs;
+            newBase.push_back( filename );
+
+            GetAscAndAsyFilePaths( subDir, true, aMapOfAscFiles, aMapOfAsyFiles, newBase );
 
             cont = aDir.GetNext( &filename );
         }
