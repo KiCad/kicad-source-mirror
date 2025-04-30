@@ -1061,9 +1061,16 @@ int PCB_CONTROL::Paste( const TOOL_EVENT& aEvent )
             if( clipText.empty() )
                 return 0;
 
-            std::unique_ptr<PCB_TEXT> item;
+            // If it wasn't content, then paste as a text object.
+            if( clipText.size() > static_cast<size_t>( ADVANCED_CFG::GetCfg().m_MaxPastedTextLength ) )
+            {
+                int result = IsOK( m_frame, _( "Pasting a long text text string may be very slow.  "
+                                       "Do you want to continue?" ) );
+                if( !result )
+                    return 0;
+            }
 
-            item = std::make_unique<PCB_TEXT>( m_frame->GetModel() );
+            std::unique_ptr<PCB_TEXT> item = std::make_unique<PCB_TEXT>( m_frame->GetModel() );
             item->SetText( clipText );
 
             newItems.push_back( item.release() );

@@ -1709,13 +1709,14 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
         catch( IO_ERROR& )
         {
             // If it wasn't content, then paste as a text object.
-            if( content.size() > ADVANCED_CFG::GetCfg().m_MaxPastedTextLength )
+            if( content.size() > static_cast<size_t>( ADVANCED_CFG::GetCfg().m_MaxPastedTextLength ) )
             {
                 int result = IsOK( m_frame, _( "Pasting a long text text string may be very slow.  "
                                        "Do you want to continue?" ) );
                 if( !result )
                     return 0;
             }
+
             SCH_TEXT* text_item = new SCH_TEXT( VECTOR2I( 0, 0 ), content );
             tempScreen->Append( text_item );
         }
