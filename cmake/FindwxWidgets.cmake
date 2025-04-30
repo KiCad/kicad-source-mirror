@@ -784,6 +784,14 @@ else()
 
         DBG_MSG_V("wxWidgets_CXX_FLAGS=${wxWidgets_CXX_FLAGS}")
 
+        execute_process(
+          COMMAND sh -c "echo '#include <wx/platform.h>' ; echo CMAKE_WXTEST_RESULT wxUSE_GLCANVAS_EGL"
+          COMMAND ${CMAKE_CXX_COMPILER} ${wxWidgets_CXX_FLAGS} -E -
+          COMMAND grep CMAKE_WXTEST_RESULT
+          COMMAND cut "-d " -f2
+          OUTPUT_STRIP_TRAILING_WHITESPACE
+          OUTPUT_VARIABLE   wxWidgets_GLCANVAS_EGL )
+
         # parse definitions from cxxflags;
         #   drop -D* from CXXFLAGS and the -D prefix
         string(REGEX MATCHALL "-D[^;]+"
