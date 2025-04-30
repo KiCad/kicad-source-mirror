@@ -31,21 +31,22 @@
 # John Beard <john.j.beard@gmail.com>, 2025.
 # dsa-t <dudesuchamazing@gmail.com>, 2025.
 # Seth Hillbrand <seth@kipro-pcb.com>, 2025.
+# DevAny KR <devany.kr@gmail.com>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-04-29 20:11+0300\n"
-"PO-Revision-Date: 2025-03-30 00:01+0000\n"
-"Last-Translator: Anonymous <noreply@weblate.org>\n"
-"Language-Team: Korean <https://hosted.weblate.org/projects/kicad/master-"
-"source/ko/>\n"
+"PO-Revision-Date: 2025-04-30 13:48+0000\n"
+"Last-Translator: DevAny KR <devany.kr@gmail.com>\n"
+"Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
+"master-source/ko/>\n"
 "Language: ko\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.11-dev\n"
+"X-Generator: Weblate 5.12-dev\n"
 "X-Poedit-Country: KOREA, REPUBLIC OF\n"
 "X-Poedit-Basepath: f:\\kicad-dev\n"
 "X-Poedit-KeywordsList: _\n"
@@ -23051,8 +23052,9 @@ msgid "Show selected symbol on editor canvas"
 msgstr "편집기 캔버스에 선택한 심볼 표시"
 
 #: eeschema/tools/sch_actions.cpp:203
+#, fuzzy
 msgid "Duplicate Symbol"
-msgstr "중복 심볼"
+msgstr "심볼 복제"
 
 #: eeschema/tools/sch_actions.cpp:209
 msgid "Rename Symbol..."
@@ -23075,8 +23077,9 @@ msgid "Remove the selected symbol from its library"
 msgstr "라이브러리에서 선택한 심볼 제거"
 
 #: eeschema/tools/sch_actions.cpp:248
+#, fuzzy
 msgid "Paste Symbol"
-msgstr "붙여넣기 심볼"
+msgstr "심볼 붙여넣기"
 
 #: eeschema/tools/sch_actions.cpp:254
 msgid "Import Symbol..."
