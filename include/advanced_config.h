@@ -757,6 +757,16 @@ public:
      */
     int m_GitIconRefreshInterval;
 
+    /**
+     * Set the maximum number of characters that can be pasted without warning.  Long
+     * text strings can cause the application to freeze for a long time and are probably
+     * not what the user intended.
+     *
+     * Setting name: "MaxPastedTextLength"
+     * Default value: 100
+     */
+    int m_MaxPastedTextLength;
+
     ///@}
 
 private:
