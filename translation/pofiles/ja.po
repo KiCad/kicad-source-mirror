@@ -16,10 +16,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-04-29 20:11+0300\n"
-"PO-Revision-Date: 2025-04-28 11:59+0000\n"
-"Last-Translator: \"Tokita, Hiroshi\" <tokita.hiroshi@fujitsu.com>\n"
-"Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/master-"
-"source/ja/>\n"
+"PO-Revision-Date: 2025-04-30 13:48+0000\n"
+"Last-Translator: 2tama3 <2tama3@gmail.com>\n"
+"Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
+"master-source/ja/>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -12865,9 +12865,8 @@ msgid "Filter Items"
 msgstr "フィルター"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:87
-#, fuzzy
 msgid "By field name:"
-msgstr "フィールド名"
+msgstr "フィールド名:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:99
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:97
@@ -27041,9 +27040,8 @@ msgid "Y scale adjust for exact scale."
 msgstr "実際に作画倍率にYスケールを調整する。"
 
 #: kicad/cli/command_pcb_export_ps.cpp:135
-#, fuzzy
 msgid "Force A4 paper size."
-msgstr "カスタム用紙サイズ:"
+msgstr "カスタム用紙サイズ."
 
 #: kicad/cli/command_pcb_export_svg.cpp:41
 msgid "Generate SVG outputs of a given layer list"
@@ -39075,9 +39073,8 @@ msgid "Target Skew: "
 msgstr "目標の遅延: "
 
 #: pcbnew/dialogs/dialog_tuning_pattern_properties.cpp:57
-#, fuzzy
 msgid "Target Skew Delay: "
-msgstr "目標の遅延: %s"
+msgstr "スキュー遅延: "
 
 #: pcbnew/dialogs/dialog_tuning_pattern_properties.cpp:129
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2413
@@ -40496,14 +40493,12 @@ msgid "No delay profiles to override"
 msgstr ""
 
 #: pcbnew/dialogs/panel_setup_time_domain_parameters.cpp:570
-#, fuzzy
 msgid "Tuning profile must have a name"
-msgstr "フィールドは名前を持たなければなりません。"
+msgstr "チューニングプロファイルには名前を付ける必要があります"
 
 #: pcbnew/dialogs/panel_setup_time_domain_parameters.cpp:579
-#, fuzzy
 msgid "Tuning profile name already in use"
-msgstr "フィールド名 '%s' はすでに使われています。"
+msgstr "チューニングプロファイル名はすでに使用されています"
 
 #: pcbnew/dialogs/panel_setup_time_domain_parameters.cpp:624
 msgid "Via override configuration is duplicated"
@@ -41341,9 +41336,8 @@ msgid "Time based units not allowed for constraint type."
 msgstr "制約タイプに対して、within_diff_pairs オプションが無効です。"
 
 #: pcbnew/drc/drc_rule_parser.cpp:438
-#, fuzzy
 msgid "Mixed units for constraint values."
-msgstr "フットプリントの値をプロット"
+msgstr "値の単位が混在しています。"
 
 #: pcbnew/drc/drc_rule_parser.cpp:478
 #, c-format
