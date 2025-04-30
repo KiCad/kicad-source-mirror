@@ -20,16 +20,16 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-04-29 20:11+0300\n"
-"PO-Revision-Date: 2025-03-06 23:18+0000\n"
-"Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
-"Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/master-"
-"source/fi/>\n"
+"PO-Revision-Date: 2025-05-01 03:03+0000\n"
+"Last-Translator: Toni Laiho <apelegeos@gmail.com>\n"
+"Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/"
+"master-source/fi/>\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.10.3-dev\n"
+"X-Generator: Weblate 5.12-dev\n"
 "X-Poedit-Language: Finnish\n"
 "X-Poedit-Country: FINLAND\n"
 "X-Poedit-SourceCharset: utf-8\n"
@@ -367,14 +367,12 @@ msgid "Reload board"
 msgstr "Lataa piirilevy uudestaan"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:49
-#, fuzzy
 msgid "Reload board and refresh 3D view"
-msgstr "Lataa levy ja 3D-mallit uudelleen"
+msgstr "Lataa piirilevy uudelleen ja päivitä 3D-näkymä"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:55
-#, fuzzy
 msgid "Use raytracing"
-msgstr "Säteenseuranta"
+msgstr "Käytä säteenseurantaa"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:56
 msgid "Render current view using Raytracing"
@@ -385,9 +383,8 @@ msgid "Copy 3D image to clipboard"
 msgstr "Kopioi 3D-kuva leikepöydälle"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:64
-#, fuzzy
 msgid "Copy the current 3D image to the clipboard"
-msgstr "Kopioi 3D-kuva leikepöydälle"
+msgstr "Kopioi nykyinen 3D-kuva leikepöydälle"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:71
 msgid "Export Current View as PNG..."
@@ -4191,6 +4188,8 @@ msgid ""
 "Number of minutes between remote update checks.  Zero disables automatic "
 "checks."
 msgstr ""
+"Minuuttimäärä etäpäivitysten välillä.  Nolla poistaa automaattiset "
+"tarkistukset käytöstä."
 
 #: common/dialogs/git/panel_git_repos_base.cpp:50
 #: common/dialogs/panel_common_settings_base.cpp:347
@@ -10690,7 +10689,7 @@ msgstr "Metadata"
 
 #: common/widgets/search_pane.cpp:54
 msgid "Search library links, descriptions and keywords"
-msgstr ""
+msgstr "Hae kirjaston linkkejä, kuvauksia ja avainsanoja"
 
 #: common/widgets/unit_binder.cpp:351
 #, c-format
@@ -13799,6 +13798,8 @@ msgid ""
 "Local power symbols create labels that are limited to the sheet in which "
 "they are used"
 msgstr ""
+"Paikalliset tehosymbolit luovat tarroja, jotka rajoittuvat arkille, jolla "
+"niitä käytetään"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:221
 msgid "Pin Text Options"
@@ -13902,7 +13903,7 @@ msgstr "Jalanjälkisuodattimet"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:356
 msgid "Pins with duplicate numbers are jumpers"
-msgstr ""
+msgstr "Nastat, joissa on kaksoisnumerot, ovat jumppereita"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:357
 msgid ""
