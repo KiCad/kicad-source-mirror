@@ -308,7 +308,7 @@ public:
     void GetAscAndAsyFilePaths( const wxDir& aDir, bool aRecursive,
                                 std::map<wxString, wxString>& aMapOfAscFiles,
                                 std::map<wxString, wxString>& aMapOfAsyFiles,
-                                const wxString&               aBase = wxEmptyString );
+                                const std::vector<wxString>&  aBaseDirs = {} );
 
     /**
      * Used to get symbols list present in asc file.
