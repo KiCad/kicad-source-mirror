@@ -694,6 +694,10 @@ void PDF_PLOTTER::StartPage( const wxString& aPageNumber, const wxString& aPageN
     m_paperSize.x *= 10.0 / m_iuPerDeviceUnit;
     m_paperSize.y *= 10.0 / m_iuPerDeviceUnit;
 
+    // Set m_currentPenWidth to a unused value to ensure the pen width
+    // will be initialized to a the right value in pdf file by the first item to plot
+    m_currentPenWidth = 0;
+
     // Open the content stream; the page object will go later
     m_pageStreamHandle = startPdfStream();
 
