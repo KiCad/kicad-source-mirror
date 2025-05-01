@@ -886,7 +886,7 @@ void GERBER_PLOTTER::Arc( const VECTOR2D& aCenter, const EDA_ANGLE& aStartAngle,
     {
         // Prevent plotting very short arcs as full circles, especially with 4.5 mm precision.
         // Also reduce the risk of integer overflow issues.
-        polyArc( aCenter, aStartAngle, aAngle, aRadius, aFill, aWidth );
+        polyArc( aCenter, aStartAngle, aAngle, aRadius, aFill, GetCurrentLineWidth() );
     }
     else
     {
@@ -1095,8 +1095,7 @@ void GERBER_PLOTTER::PlotPoly( const SHAPE_LINE_CHAIN& aPoly, FILL_T aFill, int 
 
         fmt::println( m_outputFile, "G37*" );
     }
-
-    if( aWidth > 0 || aFill == FILL_T::NO_FILL )    // Draw the polyline/polygon outline
+    else if( aWidth != 0 )    // Draw the polyline/polygon outline
     {
         SetCurrentLineWidth( aWidth, gbr_metadata );
 
@@ -1125,8 +1124,7 @@ void GERBER_PLOTTER::PlotPoly( const SHAPE_LINE_CHAIN& aPoly, FILL_T aFill, int 
 
         // Ensure the thick outline is closed for filled polygons
         // (if not filled, could be only a polyline)
-        if( ( aPoly.CPoint( 0 ) != aPoly.CPoint( -1 ) )
-            && ( aPoly.IsClosed() || aFill != FILL_T::NO_FILL ) )
+        if( ( aPoly.CPoint( 0 ) != aPoly.CPoint( -1 ) ) && ( aPoly.IsClosed() || aFill != FILL_T::NO_FILL ) )
             LineTo( VECTOR2I( aPoly.CPoint( 0 ) ) );
 
         PenFinish();
@@ -1165,7 +1163,7 @@ void GERBER_PLOTTER::PlotPoly( const std::vector<VECTOR2I>& aCornerList, FILL_T 
         fmt::println( m_outputFile, "G37*" );
     }
 
-    if( aWidth > 0 || aFill == FILL_T::NO_FILL )    // Draw the polyline/polygon outline
+    if( aWidth != 0 || aFill == FILL_T::NO_FILL )    // Draw the polyline/polygon outline
     {
         SetCurrentLineWidth( aWidth, gbr_metadata );
 
@@ -1201,7 +1199,7 @@ void GERBER_PLOTTER::ThickSegment( const VECTOR2I& start, const VECTOR2I& end, i
     else
     {
         SetCurrentLineWidth( USE_DEFAULT_LINE_WIDTH );
-        segmentAsOval( start, end, width, tracemode );
+        segmentAsOval( start, end, GetCurrentLineWidth(), tracemode );
     }
 }
 
@@ -1232,7 +1230,7 @@ void GERBER_PLOTTER::ThickArc( const VECTOR2D& aCentre, const EDA_ANGLE& aStartA
 
 
 void GERBER_PLOTTER::ThickRect( const VECTOR2I& p1, const VECTOR2I& p2, int width,
-                            OUTLINE_MODE tracemode, void* aData )
+                                OUTLINE_MODE tracemode, void* aData )
 {
     GBR_METADATA *gbr_metadata = static_cast<GBR_METADATA*>( aData );
     SetCurrentLineWidth( width, gbr_metadata );
@@ -1247,15 +1245,15 @@ void GERBER_PLOTTER::ThickRect( const VECTOR2I& p1, const VECTOR2I& p2, int widt
     else
     {
         SetCurrentLineWidth( USE_DEFAULT_LINE_WIDTH );
-        VECTOR2I offsetp1( p1.x - ( width - m_currentPenWidth ) / 2,
-                           p1.y - (width - m_currentPenWidth) / 2 );
-        VECTOR2I offsetp2( p2.x + ( width - m_currentPenWidth ) / 2,
-                           p2.y + (width - m_currentPenWidth) / 2 );
+        VECTOR2I offsetp1( p1.x - ( width - GetCurrentLineWidth() ) / 2,
+                           p1.y - (width - GetCurrentLineWidth()) / 2 );
+        VECTOR2I offsetp2( p2.x + ( width - GetCurrentLineWidth() ) / 2,
+                           p2.y + (width - GetCurrentLineWidth()) / 2 );
         Rect( offsetp1, offsetp2, FILL_T::NO_FILL, -1 );
-        offsetp1.x += (width - m_currentPenWidth);
-        offsetp1.y += (width - m_currentPenWidth);
-        offsetp2.x -= (width - m_currentPenWidth);
-        offsetp2.y -= (width - m_currentPenWidth);
+        offsetp1.x += (width - GetCurrentLineWidth());
+        offsetp1.y += (width - GetCurrentLineWidth());
+        offsetp2.x -= (width - GetCurrentLineWidth());
+        offsetp2.y -= (width - GetCurrentLineWidth());
         Rect( offsetp1, offsetp2, FILL_T::NO_FILL, DO_NOT_SET_LINE_WIDTH );
     }
 }
@@ -1395,7 +1393,7 @@ void GERBER_PLOTTER::FlashPadOval( const VECTOR2I& aPos, const VECTOR2I& aSize,
                     orient -= ANGLE_270;
             }
 
-            sketchOval( aPos, size, orient, -1 );
+            sketchOval( aPos, size, orient, USE_DEFAULT_LINE_WIDTH );
         }
     }
 }

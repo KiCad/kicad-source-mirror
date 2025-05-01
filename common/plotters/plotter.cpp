@@ -267,7 +267,7 @@ void PLOTTER::PlotImage( const wxImage& aImage, const VECTOR2I& aPos, double aSc
     end.x += size.x;
     end.y += size.y;
 
-    Rect( start, end, FILL_T::NO_FILL );
+    Rect( start, end, FILL_T::NO_FILL, USE_DEFAULT_LINE_WIDTH );
 }
 
 
@@ -541,12 +541,12 @@ void PLOTTER::sketchOval( const VECTOR2I& aPos, const VECTOR2I& aSize, const EDA
     MoveTo( corners[0] );
     FinishTo( corners[1] );
 
-    Arc( corners[2], -orient, ANGLE_180, radius, FILL_T::NO_FILL );
+    Arc( corners[2], -orient, ANGLE_180, radius, FILL_T::NO_FILL, aWidth );
 
     MoveTo( corners[3] );
     FinishTo( corners[4] );
 
-    Arc( corners[5], -orient, -ANGLE_180, radius, FILL_T::NO_FILL );
+    Arc( corners[5], -orient, -ANGLE_180, radius, FILL_T::NO_FILL, aWidth );
 }
 
 
@@ -584,11 +584,11 @@ void PLOTTER::ThickArc( const VECTOR2D& centre, const EDA_ANGLE& aStartAngle,
     }
     else
     {
-        SetCurrentLineWidth( -1 );
-        Arc( centre, aStartAngle, aAngle, aRadius - ( aWidth - m_currentPenWidth ) / 2,
-             FILL_T::NO_FILL, -1 );
-        Arc( centre, aStartAngle, aAngle, aRadius + ( aWidth - m_currentPenWidth ) / 2,
-             FILL_T::NO_FILL, -1 );
+        SetCurrentLineWidth( USE_DEFAULT_LINE_WIDTH );
+        Arc( centre, aStartAngle, aAngle, aRadius - KiROUND( ( aWidth - m_currentPenWidth ) / 2 ),
+             FILL_T::NO_FILL, USE_DEFAULT_LINE_WIDTH );
+        Arc( centre, aStartAngle, aAngle, aRadius + KiROUND( ( aWidth - m_currentPenWidth ) / 2 ),
+             FILL_T::NO_FILL, USE_DEFAULT_LINE_WIDTH );
     }
 }
 

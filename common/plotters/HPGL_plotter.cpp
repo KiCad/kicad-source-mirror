@@ -449,19 +449,13 @@ void HPGL_PLOTTER::Circle( const VECTOR2I& aCenter, int aDiameter, FILL_T aFill,
 void HPGL_PLOTTER::PlotPoly( const std::vector<VECTOR2I>& aCornerList, FILL_T aFill, int aWidth,
                              void* aData )
 {
-    if( aFill == FILL_T::NO_FILL && aWidth <= 0 )
+    if( aFill == FILL_T::NO_FILL && aWidth == 0 )
         return;
+
+    SetCurrentLineWidth( aWidth );
 
     if( aCornerList.size() <= 1 )
         return;
-
-    // Width less than zero is occasionally used to create background-only
-    // polygons. Don't set that as the plotter line width, that'll cause
-    // trouble. Also, later, skip plotting the outline if this is the case.
-    if( aWidth > 0 )
-    {
-        SetCurrentLineWidth( aWidth );
-    }
 
     MoveTo( aCornerList[0] );
     startItem( userToDeviceCoordinates( aCornerList[0] ) );
@@ -484,20 +478,11 @@ void HPGL_PLOTTER::PlotPoly( const std::vector<VECTOR2I>& aCornerList, FILL_T aF
         m_current_item->content += hpgl_end_polygon_cmd; // Close, fill polygon and draw outlines
         m_current_item->pen_returns = true;
     }
-    else if( aWidth != 0 )
+    else
     {
         // Plot only the polygon outline.
         for( unsigned ii = 1; ii < aCornerList.size(); ii++ )
             LineTo( aCornerList[ii] );
-
-        // Always close polygon if filled.
-        if( aFill != FILL_T::NO_FILL )
-        {
-            int ii = aCornerList.size() - 1;
-
-            if( aCornerList[ii] != aCornerList[0] )
-                LineTo( aCornerList[0] );
-        }
     }
 
     PenFinish();

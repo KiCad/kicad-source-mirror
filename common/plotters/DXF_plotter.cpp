@@ -542,10 +542,9 @@ void DXF_PLOTTER::PlotPoly( const std::vector<VECTOR2I>& aCornerList, FILL_T aFi
 
         return;
     }
-
     // if the polygon outline has thickness, and is not filled
     // (i.e. is a polyline) plot outlines with thick segments
-    if( aWidth > 0 && aFill == FILL_T::NO_FILL )
+    else if( aFill == FILL_T::NO_FILL )
     {
         MoveTo( aCornerList[0] );
 
@@ -734,7 +733,7 @@ void DXF_PLOTTER::FlashPadOval( const VECTOR2I& aPos, const VECTOR2I& aSize,
         orient += ANGLE_90;
     }
 
-    sketchOval( aPos, size, orient, -1 );
+    sketchOval( aPos, size, orient, USE_DEFAULT_LINE_WIDTH );
 }
 
 

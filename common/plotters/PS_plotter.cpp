@@ -245,13 +245,9 @@ void PSLIKE_PLOTTER::FlashPadTrapez( const VECTOR2I& aPadPos, const VECTOR2I* aC
         cornerList.push_back( aCorners[ii] );
 
     if( aTraceMode == FILLED )
-    {
         SetCurrentLineWidth( 0 );
-    }
     else
-    {
         SetCurrentLineWidth( USE_DEFAULT_LINE_WIDTH );
-    }
 
     for( int ii = 0; ii < 4; ii++ )
     {
@@ -499,13 +495,14 @@ void PS_PLOTTER::SetDash( int aLineWidth, LINE_STYLE aLineStyle )
 
 void PS_PLOTTER::Rect( const VECTOR2I& p1, const VECTOR2I& p2, FILL_T fill, int width )
 {
-    if( fill == FILL_T::NO_FILL && width <= 0 )
+    SetCurrentLineWidth( width );
+
+    if( fill == FILL_T::NO_FILL && GetCurrentLineWidth() <= 0 )
         return;
 
     VECTOR2D p1_dev = userToDeviceCoordinates( p1 );
     VECTOR2D p2_dev = userToDeviceCoordinates( p2 );
 
-    SetCurrentLineWidth( width );
     fmt::print( m_outputFile, "{:g} {:g} {:g} {:g} rect{}\n", p1_dev.x, p1_dev.y,
              p2_dev.x - p1_dev.x, p2_dev.y - p1_dev.y, getFillId( fill ) );
 }
@@ -513,14 +510,15 @@ void PS_PLOTTER::Rect( const VECTOR2I& p1, const VECTOR2I& p2, FILL_T fill, int 
 
 void PS_PLOTTER::Circle( const VECTOR2I& pos, int diametre, FILL_T fill, int width )
 {
-    if( fill == FILL_T::NO_FILL && width <= 0 )
+    SetCurrentLineWidth( width );
+
+    if( fill == FILL_T::NO_FILL && GetCurrentLineWidth() <= 0 )
         return;
 
     wxASSERT( m_outputFile );
     VECTOR2D pos_dev = userToDeviceCoordinates( pos );
     double   radius = userToDeviceSize( diametre / 2.0 );
 
-    SetCurrentLineWidth( width );
     fmt::print( m_outputFile, "{:g} {:g} {:g} cir{}\n", pos_dev.x, pos_dev.y, radius, getFillId( fill ) );
 }
 
@@ -559,13 +557,13 @@ void PS_PLOTTER::Arc( const VECTOR2D& aCenter, const EDA_ANGLE& aStartAngle,
 void PS_PLOTTER::PlotPoly( const std::vector<VECTOR2I>& aCornerList, FILL_T aFill, int aWidth,
                            void* aData )
 {
-    if( aFill == FILL_T::NO_FILL && aWidth <= 0 )
+    SetCurrentLineWidth( aWidth );
+
+    if( aFill == FILL_T::NO_FILL && GetCurrentLineWidth() <= 0 )
         return;
 
     if( aCornerList.size() <= 1 )
         return;
-
-    SetCurrentLineWidth( aWidth );
 
     VECTOR2D pos = userToDeviceCoordinates( aCornerList[0] );
     fmt::print( m_outputFile, "newpath\n{:g} {:g} moveto\n", pos.x, pos.y );
@@ -914,8 +912,8 @@ void PS_PLOTTER::Text( const VECTOR2I&        aPos,
         fmt::print( m_outputFile, "{} {:g} {:g} phantomshow\n", ps_test.c_str(), pos_dev.x, pos_dev.y );
     }
 
-    PLOTTER::Text( aPos, aColor, aText, aOrient, aSize, aH_justify, aV_justify, aWidth, aItalic,
-                   aBold, aMultilineAllowed, aFont, aFontMetrics, aData );
+    PLOTTER::Text( aPos, aColor, aText, aOrient, aSize, aH_justify, aV_justify, GetCurrentLineWidth(),
+                   aItalic, aBold, aMultilineAllowed, aFont, aFontMetrics, aData );
 }
 
 

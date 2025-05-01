@@ -212,17 +212,15 @@ public:
     int GetPlotterArcHighDef() const { return m_IUsPerDecimil * 2; }
 
     // Low level primitives
-    virtual void Rect( const VECTOR2I& p1, const VECTOR2I& p2, FILL_T fill,
-                       int width = USE_DEFAULT_LINE_WIDTH ) = 0;
-    virtual void Circle( const VECTOR2I& pos, int diametre, FILL_T fill,
-                         int width = USE_DEFAULT_LINE_WIDTH ) = 0;
+    virtual void Rect( const VECTOR2I& p1, const VECTOR2I& p2, FILL_T fill, int width ) = 0;
+    virtual void Circle( const VECTOR2I& pos, int diametre, FILL_T fill, int width ) = 0;
 
     virtual void Arc( const VECTOR2D& aStart, const VECTOR2D& aMid, const VECTOR2D& aEnd,
-                      FILL_T aFill, int aWidth = USE_DEFAULT_LINE_WIDTH );
+                      FILL_T aFill, int aWidth );
 
     virtual void Arc( const VECTOR2D& aCenter, const EDA_ANGLE& aStartAngle,
                       const EDA_ANGLE& aAngle, double aRadius, FILL_T aFill,
-                      int aWidth = USE_DEFAULT_LINE_WIDTH );
+                      int aWidth );
 
     /**
      * Generic fallback: Cubic Bezier curve rendered as a polyline.
@@ -231,7 +229,7 @@ public:
      */
     virtual void BezierCurve( const VECTOR2I& aStart, const VECTOR2I& aControl1,
                               const VECTOR2I& aControl2, const VECTOR2I& aEnd,
-                              int aTolerance, int aLineThickness = USE_DEFAULT_LINE_WIDTH );
+                              int aTolerance, int aLineThickness );
 
     /**
      * Moveto/lineto primitive, moves the 'pen' to the specified direction.

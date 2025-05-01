@@ -429,9 +429,10 @@ void SVG_PLOTTER::Circle( const VECTOR2I& pos, int diametre, FILL_T fill, int wi
         setSVGPlotStyle( GetCurrentLineWidth() );
 
     // If diameter is less than width, switch to filled mode
-    if( fill == FILL_T::NO_FILL && diametre < width )
+    if( fill == FILL_T::NO_FILL && diametre < GetCurrentLineWidth() )
     {
         setFillMode( FILL_T::FILLED_SHAPE );
+        width = GetCurrentLineWidth();
         SetCurrentLineWidth( 0 );
 
         radius = userToDeviceSize( ( diametre / 2.0 ) + ( width / 2.0 ) );
@@ -867,7 +868,7 @@ void SVG_PLOTTER::Text( const VECTOR2I&        aPos,
 
     // aSize.x or aSize.y is < 0 for mirrored texts.
     // The actual text size value is the absolute value
-    text_size.x = std::abs( GRTextWidth( aText, aFont, aSize, aWidth, aBold, aItalic,
+    text_size.x = std::abs( GRTextWidth( aText, aFont, aSize, GetCurrentLineWidth(), aBold, aItalic,
                                          aFontMetrics ) );
     text_size.y = std::abs( aSize.x * 4/3 ); // Hershey font height to em size conversion
     VECTOR2D anchor_pos_dev = userToDeviceCoordinates( aPos );
@@ -922,7 +923,7 @@ void SVG_PLOTTER::Text( const VECTOR2I&        aPos,
                     "<g class=\"stroked-text\"><desc>{}</desc>\n",
                     TO_UTF8( XmlEsc( aText ) ) );
 
-        PLOTTER::Text( aPos, aColor, aText, aOrient, aSize, aH_justify, aV_justify, aWidth,
+        PLOTTER::Text( aPos, aColor, aText, aOrient, aSize, aH_justify, aV_justify, GetCurrentLineWidth(),
                        aItalic, aBold, aMultilineAllowed, aFont, aFontMetrics );
 
         fmt::print( m_outputFile, "</g>" );

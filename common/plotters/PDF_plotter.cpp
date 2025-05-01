@@ -223,10 +223,10 @@ void PDF_PLOTTER::Rect( const VECTOR2I& p1, const VECTOR2I& p2, FILL_T fill, int
 {
     wxASSERT( m_workFile );
 
-    if( fill == FILL_T::NO_FILL && width <= 0 )
-        return;
-
     SetCurrentLineWidth( width );
+
+    if( fill == FILL_T::NO_FILL && GetCurrentLineWidth() <= 0 )
+        return;
 
     VECTOR2I size = p2 - p1;
 
@@ -274,28 +274,28 @@ void PDF_PLOTTER::Circle( const VECTOR2I& pos, int diametre, FILL_T aFill, int w
 {
     wxASSERT( m_workFile );
 
-    if( aFill == FILL_T::NO_FILL && width <= 0 )
+    SetCurrentLineWidth( width );
+
+    if( aFill == FILL_T::NO_FILL && GetCurrentLineWidth() <= 0 )
         return;
 
     VECTOR2D pos_dev = userToDeviceCoordinates( pos );
     double   radius = userToDeviceSize( diametre / 2.0 );
 
-    /* OK. Here's a trick. PDF doesn't support circles or circular angles, that's
-       a fact. You'll have to do with cubic beziers. These *can't* represent
-       circular arcs (NURBS can, beziers don't). But there is a widely known
-       approximation which is really good
-    */
-
-    SetCurrentLineWidth( width );
-
     // If diameter is less than width, switch to filled mode
-    if( aFill == FILL_T::NO_FILL && diametre < width )
+    if( aFill == FILL_T::NO_FILL && diametre < GetCurrentLineWidth() )
     {
         aFill = FILL_T::FILLED_SHAPE;
         SetCurrentLineWidth( 0 );
 
         radius = userToDeviceSize( ( diametre / 2.0 ) + ( width / 2.0 ) );
     }
+
+    /* OK. Here's a trick. PDF doesn't support circles or circular angles, that's
+       a fact. You'll have to do with cubic beziers. These *can't* represent
+       circular arcs (NURBS can, beziers don't). But there is a widely known
+       approximation which is really good
+    */
 
     double magic = radius * 0.551784; // You don't want to know where this come from
 
@@ -333,9 +333,11 @@ void PDF_PLOTTER::Arc( const VECTOR2D& aCenter, const EDA_ANGLE& aStartAngle,
 {
     wxASSERT( m_workFile );
 
+    SetCurrentLineWidth( aWidth );
+
     if( aRadius <= 0 )
     {
-        Circle( aCenter, aWidth, FILL_T::FILLED_SHAPE, 0 );
+        Circle( aCenter, GetCurrentLineWidth(), FILL_T::FILLED_SHAPE, 0 );
         return;
     }
 
@@ -351,8 +353,6 @@ void PDF_PLOTTER::Arc( const VECTOR2D& aCenter, const EDA_ANGLE& aStartAngle,
 
     if( startAngle > endAngle )
         std::swap( startAngle, endAngle );
-
-    SetCurrentLineWidth( aWidth );
 
     // Usual trig arc plotting routine...
     start.x = KiROUND( aCenter.x + aRadius * ( -startAngle ).Cos() );
@@ -392,13 +392,13 @@ void PDF_PLOTTER::PlotPoly( const std::vector<VECTOR2I>& aCornerList, FILL_T aFi
 {
     wxASSERT( m_workFile );
 
-    if( aFill == FILL_T::NO_FILL && aWidth <= 0 )
-        return;
-
     if( aCornerList.size() <= 1 )
         return;
 
     SetCurrentLineWidth( aWidth );
+
+    if( aFill == FILL_T::NO_FILL && GetCurrentLineWidth() <= 0 )
+        return;
 
     VECTOR2D pos = userToDeviceCoordinates( aCornerList[0] );
     fmt::println( m_workFile, "{:f} {:f} m", pos.x, pos.y );
@@ -412,7 +412,7 @@ void PDF_PLOTTER::PlotPoly( const std::vector<VECTOR2I>& aCornerList, FILL_T aFi
     // Close path and stroke and/or fill
     if( aFill == FILL_T::NO_FILL )
         fmt::println( m_workFile, "S" );
-    else if( aWidth == 0 )
+    else if( GetCurrentLineWidth() == 0 )
         fmt::println( m_workFile, "f" );
     else
         fmt::println( m_workFile, "b" );
@@ -440,8 +440,9 @@ void PDF_PLOTTER::PenTo( const VECTOR2I& pos, char plume )
     {
         VECTOR2D pos_dev = userToDeviceCoordinates( pos );
         fmt::println( m_workFile, "{:f} {:f} {}",
-                 pos_dev.x, pos_dev.y,
-                 ( plume=='D' ) ? 'l' : 'm' );
+                      pos_dev.x,
+                      pos_dev.y,
+                      plume == 'D' ? 'l' : 'm' );
     }
 
     m_penState   = plume;
@@ -571,14 +572,13 @@ int PDF_PLOTTER::startPdfStream( int handle )
 
     if( ADVANCED_CFG::GetCfg().m_DebugPDFWriter )
     {
-        fmt::println( m_outputFile,
-                 "<< /Length {} 0 R >>\nstream", handle + 1 );
+        fmt::println( m_outputFile, "<< /Length {} 0 R >>\nstream",
+                      handle + 1 );
     }
     else
     {
-        fmt::println( m_outputFile,
-                 "<< /Length {} 0 R /Filter /FlateDecode >>\n"
-                 "stream", handle + 1 );
+        fmt::println( m_outputFile, "<< /Length {} 0 R /Filter /FlateDecode >>\nstream",
+                      handle + 1 );
     }
 
     // Open a temporary file to accumulate the stream
@@ -1622,12 +1622,12 @@ void PDF_PLOTTER::Text( const VECTOR2I&        aPos,
     VECTOR2I t_size( std::abs( aSize.x ), std::abs( aSize.y ) );
     bool     textMirrored = aSize.x < 0;
 
-    computeTextParameters( aPos, aText, aOrient, t_size, textMirrored, aH_justify, aV_justify,
-                           aWidth, aItalic, aBold, &wideningFactor, &ctm_a, &ctm_b, &ctm_c, &ctm_d,
-                           &ctm_e, &ctm_f, &heightFactor );
-
     SetColor( aColor );
     SetCurrentLineWidth( aWidth, aData );
+
+    computeTextParameters( aPos, aText, aOrient, t_size, textMirrored, aH_justify, aV_justify,
+                           GetCurrentLineWidth(), aItalic, aBold, &wideningFactor,
+                           &ctm_a, &ctm_b,  &ctm_c, &ctm_d, &ctm_e, &ctm_f, &heightFactor );
 
     wxStringTokenizer str_tok( aText, " ", wxTOKEN_RET_DELIMS );
 
@@ -1635,8 +1635,8 @@ void PDF_PLOTTER::Text( const VECTOR2I&        aPos,
     if( !aFont )
         aFont = KIFONT::FONT::GetFont();
 
-    VECTOR2I full_box( aFont->StringBoundaryLimits( aText, t_size, aWidth, aBold, aItalic,
-                                                    aFontMetrics ) );
+    VECTOR2I full_box( aFont->StringBoundaryLimits( aText, t_size, GetCurrentLineWidth(),
+                                                    aBold, aItalic, aFontMetrics ) );
 
     if( textMirrored )
         full_box.x *= -1;
@@ -1662,12 +1662,12 @@ void PDF_PLOTTER::Text( const VECTOR2I&        aPos,
         wxString word = str_tok.GetNextToken();
 
         computeTextParameters( pos, word, aOrient, t_size, textMirrored, GR_TEXT_H_ALIGN_LEFT,
-                               GR_TEXT_V_ALIGN_BOTTOM, aWidth, aItalic, aBold, &wideningFactor,
+                               GR_TEXT_V_ALIGN_BOTTOM, GetCurrentLineWidth(), aItalic, aBold, &wideningFactor,
                                &ctm_a, &ctm_b, &ctm_c, &ctm_d, &ctm_e, &ctm_f, &heightFactor );
 
         // Extract the changed width and rotate by the orientation to get the offset for the
         // next word
-        VECTOR2I bbox( aFont->StringBoundaryLimits( word, t_size, aWidth,
+        VECTOR2I bbox( aFont->StringBoundaryLimits( word, t_size, GetCurrentLineWidth(),
                                                     aBold, aItalic, aFontMetrics ).x, 0 );
 
         if( textMirrored )
@@ -1695,8 +1695,8 @@ void PDF_PLOTTER::Text( const VECTOR2I&        aPos,
     }
 
     // Plot the stroked text (if requested)
-    PLOTTER::Text( aPos, aColor, aText, aOrient, aSize, aH_justify, aV_justify, aWidth, aItalic,
-                   aBold, aMultilineAllowed, aFont, aFontMetrics );
+    PLOTTER::Text( aPos, aColor, aText, aOrient, aSize, aH_justify, aV_justify, GetCurrentLineWidth(),
+                   aItalic, aBold, aMultilineAllowed, aFont, aFontMetrics );
 }
 
 
