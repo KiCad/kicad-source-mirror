@@ -13,16 +13,16 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-04-29 20:11+0300\n"
-"PO-Revision-Date: 2025-04-24 16:37+0000\n"
+"PO-Revision-Date: 2025-05-02 03:56+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
-"Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/master-"
-"source/sv/>\n"
+"Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/"
+"master-source/sv/>\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.11.1-dev\n"
+"X-Generator: Weblate 5.12-dev\n"
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-Basepath: J:\\kicad-winbuilder-3.4\\src\\kicad\n"
 "X-Poedit-SourceCharset: iso-8859-1\n"
@@ -1250,14 +1250,12 @@ msgid "Disable thickness"
 msgstr "Inaktivera tjocklek"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:91
-#, fuzzy
 msgid "Disable uVia holes"
-msgstr "Inaktivera hål"
+msgstr "Inaktivera mikroviahål"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:94
-#, fuzzy
 msgid "Disable all plated holes"
-msgstr "Inaktivera hål"
+msgstr "Inaktivera alla pläterade hål"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:27
 msgid "Procedural textures (slow)"
@@ -7963,9 +7961,8 @@ msgid "Export HPGL Job Settings"
 msgstr "Inställningar för åtgärden exportera HPGL"
 
 #: common/jobs/job_export_pcb_hpgl.cpp:61
-#, fuzzy
 msgid "PCB: Export HPGL"
-msgstr "Mönsterkort: Exportera PDF"
+msgstr "Mönsterkort: Exportera HPGL"
 
 #: common/jobs/job_export_pcb_ipc2581.cpp:72
 #: pcbnew/dialogs/dialog_export_2581_base.h:85
@@ -12871,9 +12868,8 @@ msgid "Filter Items"
 msgstr "Filtrera objekt"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:87
-#, fuzzy
 msgid "By field name:"
-msgstr "Nytt fältnamn:"
+msgstr "Efter fältnamn:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:99
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:97
@@ -12881,14 +12877,12 @@ msgid "By parent reference designator:"
 msgstr "Enligt det överordnade objektets referensbeteckning:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:107
-#, fuzzy
 msgid "By parent symbol library id:"
-msgstr "Filtrera objekt efter överordnat symbolbiblioteks-id:"
+msgstr "Efter överordnat symbolbiblioteks-id:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:113
-#, fuzzy
 msgid "By parent symbol type:"
-msgstr "Filtrera objekt efter överordnad symboltyp:"
+msgstr "Efter överordnad symboltyp:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:116
 msgid "Non-power symbols"
@@ -12900,7 +12894,7 @@ msgstr "Strömförsörjningssymbol"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:128
 msgid "By net:"
-msgstr ""
+msgstr "Efter nät:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:140
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:123
@@ -25041,7 +25035,7 @@ msgid "Tune %s"
 msgstr "Ställ in %s"
 
 #: eeschema/widgets/tuner_slider.cpp:84
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s has simulation model of type '%s %s'.\n"
 "\n"
@@ -25049,7 +25043,8 @@ msgid ""
 msgstr ""
 "%s har simulationsmodell av typ '%s %s'.\n"
 "\n"
-"Endast passiva RLC-modeller samt spännings- och strömkällor kan justeras."
+"Endast passiva R-, L-, C-modeller samt spännings- och strömkällor kan "
+"justeras."
 
 #: eeschema/widgets/tuner_slider_base.cpp:43
 msgid "Limit to E24 series values."
@@ -25772,7 +25767,7 @@ msgstr "%s (D %d) på skikt %d: %s"
 
 #: gerbview/gerber_file_image.cpp:125
 msgid "Too many messages, some are skipped"
-msgstr ""
+msgstr "För många meddelanden, vissa har hoppats över"
 
 #: gerbview/gerber_file_image.cpp:358
 msgid "Image name"
@@ -26950,9 +26945,8 @@ msgstr ""
 "mönsterkortsfilen"
 
 #: kicad/cli/command_pcb_export_hpgl.cpp:40
-#, fuzzy
 msgid "Generate HPGL from a list of layers"
-msgstr "Skapa PDF från en lista av lager"
+msgstr "Skapa HPGL från en lista av lager"
 
 #: kicad/cli/command_pcb_export_hpgl.cpp:48
 #: kicad/cli/command_pcb_export_pdf.cpp:45
@@ -26964,16 +26958,15 @@ msgstr ""
 
 #: kicad/cli/command_pcb_export_hpgl.cpp:102
 msgid "Size for the default pen [mm]"
-msgstr ""
+msgstr "Storlek för förvald penna [mm]"
 
 #: kicad/cli/command_pcb_export_hpgl.cpp:108
-#, fuzzy
 msgid "Pen number selection (1 to 9)"
-msgstr "Föredra valet framför att dra"
+msgstr "Pennummerval (1 till 9)"
 
 #: kicad/cli/command_pcb_export_hpgl.cpp:114
 msgid "Pen speed [cm/s] (1 to 99 cm/s)"
-msgstr ""
+msgstr "Pennhastighet [cm/s] (1 till 99 cm/s)"
 
 #: kicad/cli/command_pcb_export_pdf.cpp:37
 msgid "Generate PDF from a list of layers"
@@ -29153,9 +29146,8 @@ msgid "(paper size)"
 msgstr "(pappersstorlek)"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:29
-#, fuzzy
 msgid "Item Type"
-msgstr "Ändra objekttyp"
+msgstr "Objekttyp"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:38
 msgid "Show on all pages"
@@ -34642,9 +34634,8 @@ msgid "Update fabrication attributes"
 msgstr "Uppdatera tillverkningsattribut"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:87
-#, fuzzy
 msgid "Update clearance overrides and settings"
-msgstr "Lokala undantag och inställningar för frigång"
+msgstr "Uppdatera undantag och inställningar för frigång"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:88
 msgid "Update 3D models"
@@ -34733,9 +34724,8 @@ msgid "Update/reset fabrication attributes"
 msgstr "Uppdatera / återställ tillverkningsattribut"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:114
-#, fuzzy
 msgid "Update/reset clearance overrides and settings"
-msgstr "Lokala undantag och inställningar för frigång"
+msgstr "Uppdatera/återställ undantag och inställningar för frigång"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:117
 msgid "Update/reset 3D models"
@@ -46633,9 +46623,8 @@ msgid "Missing netclass name argument to hasNetclass()"
 msgstr "Argumentet för nätklassnamn saknas för hasNetclass()"
 
 #: pcbnew/pcbexpr_functions.cpp:1316
-#, fuzzy
 msgid "Missing netclass name argument to hasExactNetclass()"
-msgstr "Argumentet för nätklassnamn saknas för hasNetclass()"
+msgstr "Argumentet för nätklassnamn saknas för hasExactNetclass()"
 
 #: pcbnew/pcbexpr_functions.cpp:1356
 msgid "Missing component class name argument to hasComponentClass()"
