@@ -299,9 +299,13 @@ public:
 
     /**
      * Return all wires and junctions connected to \a aSegment which are not connected any
-     * symbol pin.
+     * symbol pin or all graphical lines connected to \a aSegement.
+     *
+     * @note This only works for line segments.  It will need to be modified for connected arcs and/or
+     *       Bezier curves.
      *
      * @param aSegment The segment to test for connections.
+     * @return a set of all #SCH_ITEM objects connected to \a aSegment.
      */
     std::set<SCH_ITEM*> MarkConnections( SCH_LINE* aSegment, bool aSecondPass );
 

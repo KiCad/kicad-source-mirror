@@ -87,7 +87,7 @@ public:
         return false;
     }
 
-    bool IsEndPoint( const VECTOR2I& aPoint ) const
+    bool IsEndPoint( const VECTOR2I& aPoint ) const override
     {
         return aPoint == m_start || aPoint == m_end;
     }

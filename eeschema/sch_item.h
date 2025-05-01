@@ -451,6 +451,20 @@ public:
         return false;
     }
 
+    /**
+     * Test if \a aPt is an end point of this schematic object.
+     *
+     * @note The end point test doe **not** imply electrical connectivity.  See IsConnectable().
+     *       In other words all connection points are end points but not all end points are
+     *       connection points such as graphical lines and arcs.  Override this method for all
+     *       objects that have end points.
+     *
+     * @param aPt is the coordinate to test for an end point.
+     * @retval true if \a aPt is an end point.
+     * @retval false if \a aPt is not an end point.
+     */
+    virtual bool IsEndPoint( const VECTOR2I& aPt ) const { return false; }
+
     virtual bool IsDangling() const { return false; }
 
     virtual bool CanConnect( const SCH_ITEM* aItem ) const { return m_layer == aItem->GetLayer(); }
