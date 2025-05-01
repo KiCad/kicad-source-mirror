@@ -2582,8 +2582,6 @@ int SCH_SELECTION_TOOL::SelectConnection( const TOOL_EVENT& aEvent )
     if( m_selection.Empty() )
         return 0;
 
-    unsigned  done = false;
-
     m_frame->GetScreen()->ClearDrawingState();
 
     for( EDA_ITEM* selItem : m_selection.GetItems() )
@@ -2593,26 +2591,10 @@ int SCH_SELECTION_TOOL::SelectConnection( const TOOL_EVENT& aEvent )
 
         SCH_LINE* line = static_cast<SCH_LINE*>( selItem );
 
-        std::set<SCH_ITEM*> conns = m_frame->GetScreen()->MarkConnections( line, false );
+        std::set<SCH_ITEM*> conns = m_frame->GetScreen()->MarkConnections( line, line->IsConnectable() );
+
         for( SCH_ITEM* item : conns )
-        {
-            if( item->IsType( { SCH_ITEM_LOCATE_WIRE_T, SCH_ITEM_LOCATE_BUS_T,
-                                SCH_ITEM_LOCATE_GRAPHIC_LINE_T } )
-                && !item->IsSelected() )
-            {
-                done = true;
-            }
-
             select( item );
-        }
-
-        if( !done )
-        {
-            conns = m_frame->GetScreen()->MarkConnections( line, true );
-
-            for( SCH_ITEM* item : conns )
-                select( item );
-        }
     }
 
     if( m_selection.GetSize() > 1 )
@@ -3291,5 +3273,3 @@ void SCH_SELECTION_TOOL::setTransitions()
 
     Go( &SCH_SELECTION_TOOL::disambiguateCursor,  EVENTS::DisambiguatePoint );
 }
-
-

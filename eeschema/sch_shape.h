@@ -48,6 +48,8 @@ public:
     bool HitTest( const VECTOR2I& aPosition, int aAccuracy = 0 ) const override;
     bool HitTest( const BOX2I& aRect, bool aContained, int aAccuracy = 0 ) const override;
 
+    bool IsEndPoint( const VECTOR2I& aPoint ) const override;
+
     int GetPenWidth() const override                  { return GetStroke().GetWidth(); }
 
     bool HasLineStroke() const override               { return true; }

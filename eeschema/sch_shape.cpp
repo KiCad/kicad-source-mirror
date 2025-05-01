@@ -137,6 +137,17 @@ bool SCH_SHAPE::HitTest( const BOX2I& aRect, bool aContained, int aAccuracy ) co
 }
 
 
+bool SCH_SHAPE::IsEndPoint( const VECTOR2I& aPt ) const
+{
+    SHAPE_T shape = GetShape();
+
+    if( ( shape == SHAPE_T::ARC ) || ( shape == SHAPE_T::BEZIER ) )
+        return ( aPt == GetStart() ) || ( aPt == GetEnd() );
+
+    return false;
+}
+
+
 void SCH_SHAPE::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS& aPlotOpts,
                       int aUnit, int aBodyStyle, const VECTOR2I& aOffset, bool aDimmed )
 {

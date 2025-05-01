@@ -447,33 +447,21 @@ std::set<SCH_ITEM*> SCH_SCREEN::MarkConnections( SCH_LINE* aSegment, bool aSecon
             if( item->GetLayer() != line->GetLayer() )
                 continue;
 
+            // SCH_RTREE::Overlapping() included crossing lines.
+            if( !item->IsEndPoint( line->GetStartPoint() ) && !item->IsEndPoint( line->GetEndPoint() ) )
+                continue;
+
+            to_search.push( line );
+            retval.insert( line );
+
             for( VECTOR2I pt : { line->GetStartPoint(), line->GetEndPoint() } )
             {
                 if( item->IsConnected( pt ) )
                 {
                     SCH_ITEM* junction = GetItem( pt, 0, SCH_JUNCTION_T );
-                    SCH_ITEM*      pin = GetItem( pt, 0, SCH_PIN_T );
 
-                    if( item->IsSelected() && aSecondPass )
-                    {
-                        if( junction )
-                            retval.insert( junction );
-
-                        retval.insert( line );
-                        to_search.push( line );
-                    }
-                    else if( !junction && !pin )
-                    {
-                        retval.insert( line );
-                        to_search.push( line );
-                    }
-
-                    break;
-                }
-                else if( line->GetLayer() == LAYER_NOTES && item->GetLayer() == LAYER_NOTES )
-                {
-                    retval.insert( line );
-                    to_search.push( line );
+                    if( aSecondPass && junction )
+                        retval.insert( junction );
                 }
             }
         }
