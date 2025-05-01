@@ -26,8 +26,10 @@
 
 #include <wx/debug.h>
 
+#include <settings/app_settings.h>
 #include <eda_shape.h>
 #include <tool/edit_points.h>
+#include <view/view_controls.h>
 
 class SHAPE_POLY_SET;
 
@@ -329,4 +331,38 @@ protected:
 
 private:
     EDA_SHAPE& m_cell;
+};
+
+
+/**
+ * "Standard" arc editing behavior.
+ */
+class EDA_ARC_POINT_EDIT_BEHAVIOR : public POINT_EDIT_BEHAVIOR
+{
+public:
+    EDA_ARC_POINT_EDIT_BEHAVIOR( EDA_SHAPE& aArc, const ARC_EDIT_MODE& aArcEditMode,
+                                 KIGFX::VIEW_CONTROLS& aViewContols );
+
+    void MakePoints( EDIT_POINTS& aPoints ) override;
+
+    void UpdatePoints( EDIT_POINTS& aPoints ) override;
+
+    void UpdateItem( const EDIT_POINT& aEditedPoint, EDIT_POINTS& aPoints, COMMIT& aCommit,
+                     std::vector<EDA_ITEM*>& aUpdatedItems ) override;
+
+    OPT_VECTOR2I Get45DegreeConstrainer( const EDIT_POINT& aEditedPoint, EDIT_POINTS& aPoints ) const override;
+
+private:
+    enum ARC_POINTS
+    {
+        ARC_START,
+        ARC_MID,
+        ARC_END,
+        ARC_CENTER,
+    };
+
+    EDA_SHAPE& m_arc;
+    // The arc edit mode, which is injected from the editor
+    const ARC_EDIT_MODE&  m_arcEditMode;
+    KIGFX::VIEW_CONTROLS& m_viewControls;
 };
