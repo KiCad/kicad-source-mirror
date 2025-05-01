@@ -68,6 +68,7 @@ EDA_SHAPE::EDA_SHAPE( const SHAPE& aShape ) :
         m_endsSwapped( false ),
         m_stroke( 0, LINE_STYLE::DEFAULT, COLOR4D::UNSPECIFIED ),
         m_fill(),
+        m_hatchingDirty( true ),
         m_rectangleHeight( 0 ),
         m_rectangleWidth( 0 ),
         m_segmentLength( 0 ),

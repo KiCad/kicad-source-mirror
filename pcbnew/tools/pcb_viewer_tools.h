@@ -42,7 +42,8 @@ class PCB_VIEWER_TOOLS : public TOOL_INTERACTIVE
 public:
     PCB_VIEWER_TOOLS() :
         TOOL_INTERACTIVE( "pcbnew.PCBViewerTools" ),
-        m_footprintFrame( false )
+        m_footprintFrame( false ),
+        m_isDefaultTool( false )
     {}
 
     ~PCB_VIEWER_TOOLS() override {}

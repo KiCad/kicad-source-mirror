@@ -676,6 +676,7 @@ PCBEXPR_COMPILER::PCBEXPR_COMPILER( LIBEVAL::UNIT_RESOLVER* aUnitResolver )
 
 PCBEXPR_EVALUATOR::PCBEXPR_EVALUATOR( LIBEVAL::UNIT_RESOLVER* aUnitResolver ) :
     m_result( 0 ),
+    m_units( EDA_UNITS::MM ),
     m_compiler( aUnitResolver ),
     m_ucode(),
     m_errorStatus()

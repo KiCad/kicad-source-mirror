@@ -127,6 +127,7 @@ public:
         m_FootprintViewerZoom( 1.0 ),
         m_FootprintViewerAutoZoomOnSelect( true )
     {
+        m_ViewersDisplay.m_Use45Limit = false;
         m_ViewersDisplay.m_DisplayGraphicsFill = true;
         m_ViewersDisplay.m_DisplayTextFill = true;
         m_ViewersDisplay.m_DisplayPadNumbers = true;
