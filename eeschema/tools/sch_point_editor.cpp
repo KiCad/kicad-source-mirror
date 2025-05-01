@@ -181,60 +181,6 @@ private:
     SCH_SCREEN& m_screen;
 };
 
-
-class ARC_POINT_EDIT_BEHAVIOR : public POINT_EDIT_BEHAVIOR
-{
-public:
-    ARC_POINT_EDIT_BEHAVIOR( SCH_SHAPE& aArc ) :
-            m_arc( aArc )
-    {
-        wxASSERT( m_arc.GetShape() == SHAPE_T::ARC );
-    }
-
-    void MakePoints( EDIT_POINTS& aPoints ) override
-    {
-        aPoints.AddPoint( m_arc.GetStart() );
-        aPoints.AddPoint( m_arc.GetEnd() );
-        aPoints.AddPoint( m_arc.GetPosition() );
-
-        aPoints.AddIndicatorLine( aPoints.Point( ARC_CENTER ), aPoints.Point( ARC_START ) );
-        aPoints.AddIndicatorLine( aPoints.Point( ARC_CENTER ), aPoints.Point( ARC_END ) );
-    }
-
-    void UpdatePoints( EDIT_POINTS& aPoints ) override
-    {
-        aPoints.Point( ARC_START ).SetPosition( m_arc.GetStart() );
-        aPoints.Point( ARC_END ).SetPosition( m_arc.GetEnd() );
-        aPoints.Point( ARC_CENTER ).SetPosition( m_arc.GetPosition() );
-    }
-
-    void UpdateItem( const EDIT_POINT& aEditedPoint, EDIT_POINTS& aPoints, COMMIT& aCommit,
-                     std::vector<EDA_ITEM*>& aUpdatedItems ) override
-    {
-        if( isModified( aEditedPoint, aPoints.Point( ARC_START ) ) )
-
-        {
-            m_arc.SetEditState( 2 );
-            m_arc.CalcEdit( aPoints.Point( ARC_START ).GetPosition() );
-        }
-        else if( isModified( aEditedPoint, aPoints.Point( ARC_END ) ) )
-        {
-            m_arc.SetEditState( 3 );
-            m_arc.CalcEdit( aPoints.Point( ARC_END ).GetPosition() );
-        }
-        else if( isModified( aEditedPoint, aPoints.Point( ARC_CENTER ) ) )
-        {
-            m_arc.SetEditState( 4 );
-            m_arc.CalcEdit( aPoints.Point( ARC_CENTER ).GetPosition() );
-        }
-
-        aUpdatedItems.push_back( &m_arc );
-    }
-private:
-    SCH_SHAPE& m_arc;
-};
-
-
 class BITMAP_POINT_EDIT_BEHAVIOR : public POINT_EDIT_BEHAVIOR
 {
 public:
@@ -906,7 +852,8 @@ void SCH_POINT_EDITOR::makePointsAndBehavior( EDA_ITEM* aItem )
         switch( shape->GetShape() )
         {
         case SHAPE_T::ARC:
-            m_editBehavior = std::make_unique<ARC_POINT_EDIT_BEHAVIOR>( *shape );
+            m_editBehavior = std::make_unique<EDA_ARC_POINT_EDIT_BEHAVIOR>(
+                    *shape, ARC_EDIT_MODE::KEEP_CENTER_ADJUST_ANGLE_RADIUS, *getViewControls() );
             break;
         case SHAPE_T::CIRCLE:
             m_editBehavior = std::make_unique<EDA_CIRCLE_POINT_EDIT_BEHAVIOR>( *shape );
@@ -1428,5 +1375,3 @@ void SCH_POINT_EDITOR::setTransitions()
     Go( &SCH_POINT_EDITOR::modifiedSelection, EVENTS::SelectedItemsModified );
     Go( &SCH_POINT_EDITOR::clearEditedPoints, EVENTS::ClearedEvent );
 }
-
-
