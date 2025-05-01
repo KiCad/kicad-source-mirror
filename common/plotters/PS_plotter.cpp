@@ -466,25 +466,32 @@ void PS_PLOTTER::SetDash( int aLineWidth, LINE_STYLE aLineStyle )
     {
     case LINE_STYLE::DASH:
         fmt::print( m_outputFile, "[{} {}] 0 setdash\n",
-                    (int) GetDashMarkLenIU( aLineWidth ), (int) GetDashGapLenIU( aLineWidth ) );
+                    (int) GetDashMarkLenIU( aLineWidth ),
+                    (int) GetDashGapLenIU( aLineWidth ) );
         break;
 
     case LINE_STYLE::DOT:
         fmt::print( m_outputFile, "[{} {}] 0 setdash\n",
-                    (int) GetDotMarkLenIU( aLineWidth ), (int) GetDashGapLenIU( aLineWidth ) );
+                    (int) GetDotMarkLenIU( aLineWidth ),
+                    (int) GetDashGapLenIU( aLineWidth ) );
         break;
 
     case LINE_STYLE::DASHDOT:
         fmt::print( m_outputFile, "[{} {} {} {}] 0 setdash\n",
-                    (int) GetDashMarkLenIU( aLineWidth ), (int) GetDashGapLenIU( aLineWidth ),
-                    (int) GetDotMarkLenIU( aLineWidth ), (int) GetDashGapLenIU( aLineWidth ) );
+                    (int) GetDashMarkLenIU( aLineWidth ),
+                    (int) GetDashGapLenIU( aLineWidth ),
+                    (int) GetDotMarkLenIU( aLineWidth ),
+                    (int) GetDashGapLenIU( aLineWidth ) );
         break;
 
     case LINE_STYLE::DASHDOTDOT:
         fmt::print( m_outputFile, "[{} {} {} {} {} {}] 0 setdash\n",
-                    (int) GetDashMarkLenIU( aLineWidth ), (int) GetDashGapLenIU( aLineWidth ),
-                    (int) GetDotMarkLenIU( aLineWidth ), (int) GetDashGapLenIU( aLineWidth ),
-                    (int) GetDotMarkLenIU( aLineWidth ), (int) GetDashGapLenIU( aLineWidth ) );
+                    (int) GetDashMarkLenIU( aLineWidth ),
+                    (int) GetDashGapLenIU( aLineWidth ),
+                    (int) GetDotMarkLenIU( aLineWidth ),
+                    (int) GetDashGapLenIU( aLineWidth ),
+                    (int) GetDotMarkLenIU( aLineWidth ),
+                    (int) GetDashGapLenIU( aLineWidth ) );
         break;
 
     default:
@@ -503,8 +510,12 @@ void PS_PLOTTER::Rect( const VECTOR2I& p1, const VECTOR2I& p2, FILL_T fill, int 
     VECTOR2D p1_dev = userToDeviceCoordinates( p1 );
     VECTOR2D p2_dev = userToDeviceCoordinates( p2 );
 
-    fmt::print( m_outputFile, "{:g} {:g} {:g} {:g} rect{}\n", p1_dev.x, p1_dev.y,
-             p2_dev.x - p1_dev.x, p2_dev.y - p1_dev.y, getFillId( fill ) );
+    fmt::print( m_outputFile, "{:g} {:g} {:g} {:g} rect{}\n",
+                p1_dev.x,
+                p1_dev.y,
+                p2_dev.x - p1_dev.x,
+                p2_dev.y - p1_dev.y,
+                getFillId( fill ) );
 }
 
 
@@ -519,7 +530,11 @@ void PS_PLOTTER::Circle( const VECTOR2I& pos, int diametre, FILL_T fill, int wid
     VECTOR2D pos_dev = userToDeviceCoordinates( pos );
     double   radius = userToDeviceSize( diametre / 2.0 );
 
-    fmt::print( m_outputFile, "{:g} {:g} {:g} cir{}\n", pos_dev.x, pos_dev.y, radius, getFillId( fill ) );
+    fmt::print( m_outputFile, "{:g} {:g} {:g} cir{}\n",
+                pos_dev.x,
+                pos_dev.y,
+                radius,
+                getFillId( fill ) );
 }
 
 
@@ -549,8 +564,13 @@ void PS_PLOTTER::Arc( const VECTOR2D& aCenter, const EDA_ANGLE& aStartAngle,
 
     SetCurrentLineWidth( aWidth );
 
-    fmt::print( m_outputFile, "{:g} {:g} {:g} {:g} {:g} arc{}\n", center_device.x, center_device.y,
-                radius_device, startAngle.AsDegrees(), endAngle.AsDegrees(), getFillId( aFill ) );
+    fmt::print( m_outputFile, "{:g} {:g} {:g} {:g} {:g} arc{}\n",
+                center_device.x,
+                center_device.y,
+                radius_device,
+                startAngle.AsDegrees(),
+                endAngle.AsDegrees(),
+                getFillId( aFill ) );
 }
 
 
@@ -713,7 +733,8 @@ void PS_PLOTTER::PenTo( const VECTOR2I& pos, char plume )
     {
         VECTOR2D pos_dev = userToDeviceCoordinates( pos );
         fmt::print( m_outputFile, "{:g} {:g} {}to\n",
-                    pos_dev.x, pos_dev.y,
+                    pos_dev.x,
+                    pos_dev.y,
                     ( plume=='D' ) ? "line" : "move" );
     }
 
@@ -804,8 +825,8 @@ bool PS_PLOTTER::StartPlot( const wxString& aPageNumber )
     }
 
     fmt::print( m_outputFile, "%%BoundingBox: 0 0 {} {}\n",
-             (int) ceil( psPaperSize.x * BIGPTsPERMIL ),
-             (int) ceil( psPaperSize.y * BIGPTsPERMIL ) );
+                (int) ceil( psPaperSize.x * BIGPTsPERMIL ),
+                (int) ceil( psPaperSize.y * BIGPTsPERMIL ) );
 
     // Specify the size of the sheet and the name associated with that size.
     // (If the "User size" option has been selected for the sheet size,
@@ -865,7 +886,7 @@ bool PS_PLOTTER::StartPlot( const wxString& aPageNumber )
 
     // Set default line width
     fmt::print( m_outputFile, "{:g} setlinewidth\n",
-             userToDeviceSize( m_renderSettings->GetDefaultPenWidth() ) );
+                userToDeviceSize( m_renderSettings->GetDefaultPenWidth() ) );
     fmt::print( m_outputFile, "%%EndPageSetup\n" );
 
     return true;
@@ -933,7 +954,10 @@ void PS_PLOTTER::PlotText( const VECTOR2I&        aPos,
     {
         std::string ps_test = encodeStringForPlotter( aText );
         VECTOR2D pos_dev = userToDeviceCoordinates( aPos );
-        fmt::print( m_outputFile, "{} {:g} {:g} phantomshow\n", ps_test, pos_dev.x, pos_dev.y );
+        fmt::print( m_outputFile, "{} {:g} {:g} phantomshow\n",
+                    ps_test,
+                    pos_dev.x,
+                    pos_dev.y );
     }
 
     PLOTTER::PlotText( aPos, aColor, aText, aAttributes, aFont, aFontMetrics, aData );

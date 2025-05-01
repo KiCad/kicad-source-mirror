@@ -511,7 +511,9 @@ void HPGL_PLOTTER::PenTo( const VECTOR2I& pos, char plume )
     else if( plume == 'D' )
     {
         m_penState = 'D';
-        startOrAppendItem( lastpos_dev, fmt::format( "PA {:.0f},{:.0f};", pos_dev.x, pos_dev.y ) );
+        startOrAppendItem( lastpos_dev, fmt::format( "PA {:.0f},{:.0f};",
+                                                     pos_dev.x,
+                                                     pos_dev.y ) );
         m_current_item->loc_end = pos_dev;
         m_current_item->bbox.Merge( pos_dev );
     }
@@ -657,7 +659,10 @@ void HPGL_PLOTTER::FlashPadCircle( const VECTOR2I& pos, int diametre,
         // Plot filled area and its outline
         startOrAppendItem( userToDeviceCoordinates( VECTOR2I( pos.x + radius, pos.y ) ),
                            fmt::format( "PM 0; PA {:.0f},{:.0f};CI {:.0f};{}",
-                                        pos_dev.x, pos_dev.y, rsize, hpgl_end_polygon_cmd ) );
+                                        pos_dev.x,
+                                        pos_dev.y,
+                                        rsize,
+                                        hpgl_end_polygon_cmd ) );
         m_current_item->lift_before = true;
         m_current_item->pen_returns = true;
     }
@@ -701,10 +706,10 @@ void HPGL_PLOTTER::FlashPadRect( const VECTOR2I& aPos, const VECTOR2I& aPadSize,
     // Close polygon
     corners.emplace_back( - dx, - dy );
 
-    for( unsigned ii = 0; ii < corners.size(); ii++ )
+    for( VECTOR2I& corner : corners )
     {
-        RotatePoint( corners[ii], aOrient );
-        corners[ii] += aPos;
+        RotatePoint( corner, aOrient );
+        corner += aPos;
     }
 
     PlotPoly( corners, aTraceMode == FILLED ? FILL_T::FILLED_SHAPE : FILL_T::NO_FILL );

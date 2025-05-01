@@ -570,10 +570,8 @@ void DXF_PLOTTER::PlotPoly( const std::vector<VECTOR2I>& aCornerList, FILL_T aFi
     }
 
     // enter the initial polygon:
-    for( unsigned ii = 0; ii < aCornerList.size(); ii++ )
-    {
-        bufferPolybase.Append( aCornerList[ii] );
-    }
+    for( const VECTOR2I& corner : aCornerList )
+        bufferPolybase.Append( corner );
 
     // Merge polygons to build the polygon which contains the initial
     // polygon and its thick outline
@@ -635,11 +633,12 @@ void DXF_PLOTTER::PenTo( const VECTOR2I& pos, char plume )
         wxString    cname = getDXFColorName( m_currentColor );
         const char* lname = getDXFLineType( static_cast<LINE_STYLE>( m_currentLineType ) );
         fmt::print( m_outputFile, "0\nLINE\n8\n{}\n6\n{}\n10\n{}\n20\n{}\n11\n{}\n21\n{}\n",
-                 TO_UTF8( cname ), lname,
-                 formatCoord( pen_lastpos_dev.x ),
-                 formatCoord( pen_lastpos_dev.y ),
-                 formatCoord( pos_dev.x ),
-                 formatCoord( pos_dev.y ) );
+                    TO_UTF8( cname ),
+                    lname,
+                    formatCoord( pen_lastpos_dev.x ),
+                    formatCoord( pen_lastpos_dev.y ),
+                    formatCoord( pos_dev.x ),
+                    formatCoord( pos_dev.y ) );
     }
 
     m_penLastpos = pos;

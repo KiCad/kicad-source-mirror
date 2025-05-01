@@ -192,25 +192,32 @@ void PDF_PLOTTER::SetDash( int aLineWidth, LINE_STYLE aLineStyle )
     {
     case LINE_STYLE::DASH:
         fmt::println( m_workFile, "[{} {}] 0 d",
-                (int) GetDashMarkLenIU( aLineWidth ), (int) GetDashGapLenIU( aLineWidth ) );
+                      (int) GetDashMarkLenIU( aLineWidth ),
+                      (int) GetDashGapLenIU( aLineWidth ) );
         break;
 
     case LINE_STYLE::DOT:
         fmt::println( m_workFile, "[{} {}] 0 d",
-                (int) GetDotMarkLenIU( aLineWidth ), (int) GetDashGapLenIU( aLineWidth ) );
+                      (int) GetDotMarkLenIU( aLineWidth ),
+                      (int) GetDashGapLenIU( aLineWidth ) );
         break;
 
     case LINE_STYLE::DASHDOT:
         fmt::println( m_workFile, "[{} {} {} {}] 0 d",
-                (int) GetDashMarkLenIU( aLineWidth ), (int) GetDashGapLenIU( aLineWidth ),
-                (int) GetDotMarkLenIU( aLineWidth ), (int) GetDashGapLenIU( aLineWidth ) );
+                      (int) GetDashMarkLenIU( aLineWidth ),
+                      (int) GetDashGapLenIU( aLineWidth ),
+                      (int) GetDotMarkLenIU( aLineWidth ),
+                      (int) GetDashGapLenIU( aLineWidth ) );
         break;
 
     case LINE_STYLE::DASHDOTDOT:
         fmt::println( m_workFile, "[{} {} {} {} {} {}] 0 d",
-                (int) GetDashMarkLenIU( aLineWidth ), (int) GetDashGapLenIU( aLineWidth ),
-                (int) GetDotMarkLenIU( aLineWidth ), (int) GetDashGapLenIU( aLineWidth ),
-                (int) GetDotMarkLenIU( aLineWidth ), (int) GetDashGapLenIU( aLineWidth ) );
+                      (int) GetDashMarkLenIU( aLineWidth ),
+                      (int) GetDashGapLenIU( aLineWidth ),
+                      (int) GetDotMarkLenIU( aLineWidth ),
+                      (int) GetDashGapLenIU( aLineWidth ),
+                      (int) GetDotMarkLenIU( aLineWidth ),
+                      (int) GetDashGapLenIU( aLineWidth ) );
         break;
 
     default:
@@ -265,8 +272,12 @@ void PDF_PLOTTER::Rect( const VECTOR2I& p1, const VECTOR2I& p2, FILL_T fill, int
     else
         paintOp = width > 0 ? 'B' : 'f';
 
-    fmt::println( m_workFile, "{:g} {:g} {:g} {:g} re {}", p1_dev.x, p1_dev.y, p2_dev.x - p1_dev.x,
-             p2_dev.y - p1_dev.y, paintOp );
+    fmt::println( m_workFile, "{:g} {:g} {:g} {:g} re {}",
+                  p1_dev.x,
+                  p1_dev.y,
+                  p2_dev.x - p1_dev.x,
+                  p2_dev.y - p1_dev.y,
+                  paintOp );
 }
 
 
@@ -493,8 +504,7 @@ void PDF_PLOTTER::PlotImage( const wxImage& aImage, const VECTOR2I& aPos, double
             if( memcmp( image.GetData(), aCurrImage.GetData(), pixCount * 3 ) != 0 )
                 continue;
 
-            if( image.HasAlpha()
-              && memcmp( image.GetAlpha(), aCurrImage.GetAlpha(), pixCount ) != 0 )
+            if( image.HasAlpha() && memcmp( image.GetAlpha(), aCurrImage.GetAlpha(), pixCount ) != 0 )
                 continue;
 
             return imgHandle;
@@ -522,9 +532,10 @@ void PDF_PLOTTER::PlotImage( const wxImage& aImage, const VECTOR2I& aPos, double
        4) profit
      */
     fmt::println( m_workFile, "q {:g} 0 0 {:g} {:g} {:g} cm", // Step 1
-             userToDeviceSize( drawsize.x ),
-             userToDeviceSize( drawsize.y ),
-             dev_start.x, dev_start.y );
+                  userToDeviceSize( drawsize.x ),
+                  userToDeviceSize( drawsize.y ),
+                  dev_start.x,
+                  dev_start.y );
 
     fmt::println( m_workFile, "/Im{} Do", imgHandle );
     fmt::println( m_workFile, "Q" );
@@ -572,12 +583,16 @@ int PDF_PLOTTER::startPdfStream( int handle )
 
     if( ADVANCED_CFG::GetCfg().m_DebugPDFWriter )
     {
-        fmt::println( m_outputFile, "<< /Length {} 0 R >>\nstream",
+        fmt::println( m_outputFile,
+                      "<< /Length {} 0 R >>\n"
+                      "stream",
                       handle + 1 );
     }
     else
     {
-        fmt::println( m_outputFile, "<< /Length {} 0 R /Filter /FlateDecode >>\nstream",
+        fmt::println( m_outputFile,
+                      "<< /Length {} 0 R /Filter /FlateDecode >>\n"
+                      "stream",
                       handle + 1 );
     }
 
@@ -663,12 +678,16 @@ void PDF_PLOTTER::StartPage( const wxString& aPageNumber, const wxString& aPageN
     wxASSERT( !m_workFile );
 
     m_pageNumbers.push_back( aPageNumber );
-    m_pageName = aPageName.IsEmpty()
-                    ? wxString::Format( _( "Page %s" ), aPageNumber )
-                    : wxString::Format( _( "%s (Page %s)" ), aPageName, aPageNumber );
-    m_parentPageName = aParentPageName.IsEmpty()
-                    ? wxString::Format( _( "Page %s" ), aParentPageNumber )
-                    : wxString::Format( _( "%s (Page %s)" ), aParentPageName, aParentPageNumber );
+    m_pageName = aPageName.IsEmpty() ? wxString::Format( _( "Page %s" ),
+                                                         aPageNumber )
+                                     : wxString::Format( _( "%s (Page %s)" ),
+                                                         aPageName,
+                                                         aPageNumber );
+    m_parentPageName = aParentPageName.IsEmpty() ? wxString::Format( _( "Page %s" ),
+                                                                     aParentPageNumber )
+                                                 : wxString::Format( _( "%s (Page %s)" ),
+                                                                     aParentPageName,
+                                                                     aParentPageNumber );
 
     // Compute the paper size in IUs
     m_paperSize = m_pageInfo.GetSizeMils();
@@ -1008,9 +1027,13 @@ int PDF_PLOTTER::emitGoToAction( int aPageHandle, const VECTOR2I& aBottomLeft,
     startPdfObject( actionHandle );
 
     fmt::print( m_outputFile,
-             "<</S /GoTo /D [{} 0 R /FitR {} {} {} {}]\n"
-             ">>\n",
-             aPageHandle, aBottomLeft.x, aBottomLeft.y, aTopRight.x, aTopRight.y );
+                "<</S /GoTo /D [{} 0 R /FitR {} {} {} {}]\n"
+                ">>\n",
+                aPageHandle,
+                aBottomLeft.x,
+                aBottomLeft.y,
+                aTopRight.x,
+                aTopRight.y );
 
     closePdfObject();
 
@@ -1024,9 +1047,9 @@ int PDF_PLOTTER::emitGoToAction( int aPageHandle )
     startPdfObject( actionHandle );
 
     fmt::println( m_outputFile,
-             "<</S /GoTo /D [{} 0 R /Fit]\n"
-             ">>",
-             aPageHandle );
+                  "<</S /GoTo /D [{} 0 R /Fit]\n"
+                  ">>",
+                  aPageHandle );
 
     closePdfObject();
 
@@ -1170,8 +1193,12 @@ bool PDF_PLOTTER::EndPlot()
     {
         fontdefs[i].font_handle = startPdfObject();
         fmt::println( m_outputFile,
-                 "<< /BaseFont {}\n   /Type /Font\n   /Subtype /Type1\n   /Encoding /WinAnsiEncoding\n>>",
-                 fontdefs[i].psname );
+                      "<< /BaseFont {}\n"
+                      "   /Type /Font\n"
+                      "   /Subtype /Type1\n"
+                      "   /Encoding /WinAnsiEncoding\n"
+                      ">>",
+                      fontdefs[i].psname );
         closePdfObject();
     }
 
@@ -1221,7 +1248,9 @@ bool PDF_PLOTTER::EndPlot()
                     "/Height {}\n"
                     "/Filter /FlateDecode\n"
                     "/Length {} 0 R\n", // Length is deferred
-                    m_colorMode ? "/DeviceRGB" : "/DeviceGray", image.GetWidth(), image.GetHeight(),
+                    m_colorMode ? "/DeviceRGB" : "/DeviceGray",
+                    image.GetWidth(),
+                    image.GetHeight(),
                     imgLenHandle );
 
         if( smaskHandle != -1 )
@@ -1267,7 +1296,9 @@ bool PDF_PLOTTER::EndPlot()
                         "/Length {} 0 R\n"
                         "/Filter /FlateDecode\n"
                         ">>\n", // Length is deferred
-                        image.GetWidth(), image.GetHeight(), smaskLenHandle );
+                        image.GetWidth(),
+                        image.GetHeight(),
+                        smaskLenHandle );
 
             fmt::println( m_outputFile, "stream" );
 
@@ -1307,7 +1338,10 @@ bool PDF_PLOTTER::EndPlot()
                     "/Subtype /Link\n"
                     "/Rect [{:g} {:g} {:g} {:g}]\n"
                     "/Border [16 16 0]\n",
-                    box.GetLeft(), box.GetBottom(), box.GetRight(), box.GetTop() );
+                    box.GetLeft(),
+                    box.GetBottom(),
+                    box.GetRight(),
+                    box.GetTop() );
 
         wxString pageNumber;
         bool     pageFound = false;
@@ -1544,16 +1578,30 @@ function ShM(aEntries) {
     if( outlineHandle > 0 )
     {
         fmt::println( m_outputFile,
-                 "<<\n/Type /Catalog\n/Pages {} 0 R\n/Version /1.5\n/PageMode /UseOutlines\n/Outlines {} 0 R\n/Names {} 0 R\n/PageLayout /SinglePage\n>>",
-                 m_pageTreeHandle,
-                 outlineHandle,
-                 m_jsNamesHandle );
+                      "<<\n"
+                      "/Type /Catalog\n"
+                      "/Pages {} 0 R\n"
+                      "/Version /1.5\n"
+                      "/PageMode /UseOutlines\n"
+                      "/Outlines {} 0 R\n"
+                      "/Names {} 0 R\n"
+                      "/PageLayout /SinglePage\n"
+                      ">>",
+                      m_pageTreeHandle,
+                      outlineHandle,
+                      m_jsNamesHandle );
     }
     else
     {
         fmt::println( m_outputFile,
-                 "<<\n/Type /Catalog\n/Pages {} 0 R\n/Version /1.5\n/PageMode /UseNone\n/PageLayout /SinglePage\n>>",
-                 m_pageTreeHandle );
+                      "<<\n"
+                      "/Type /Catalog\n"
+                      "/Pages {} 0 R\n"
+                      "/Version /1.5\n"
+                      "/PageMode /UseNone\n"
+                      "/PageLayout /SinglePage\n"
+                      ">>",
+                      m_pageTreeHandle );
     }
 
     closePdfObject();
@@ -1565,7 +1613,8 @@ function ShM(aEntries) {
     fmt::print( m_outputFile,
                 "xref\n"
                 "0 {}\n"
-                "0000000000 65535 f \n", m_xrefTable.size() );
+                "0000000000 65535 f \n",
+                m_xrefTable.size() );
 
     for( unsigned i = 1; i < m_xrefTable.size(); i++ )
     {
@@ -1579,7 +1628,10 @@ function ShM(aEntries) {
                 "startxref\n"
                 "{}\n" // The offset we saved before
                 "%%EOF\n",
-                m_xrefTable.size(), catalogHandle, infoDictHandle, xref_start );
+                m_xrefTable.size(),
+                catalogHandle,
+                infoDictHandle,
+                xref_start );
 
     fclose( m_outputFile );
     m_outputFile = nullptr;
@@ -1685,8 +1737,11 @@ void PDF_PLOTTER::Text( const VECTOR2I&        aPos,
            for the trig part of the matrix to avoid %g going in exponential
            format (which is not supported) */
         fmt::print( m_workFile, "q {:f} {:f} {:f} {:f} {:f} {:f} cm BT {} {:g} Tf {} Tr {:g} Tz ",
-                 ctm_a, ctm_b, ctm_c, ctm_d, ctm_e, ctm_f,
-                 fontname, heightFactor, render_mode, wideningFactor * 100 );
+                    ctm_a, ctm_b, ctm_c, ctm_d, ctm_e, ctm_f,
+                    fontname,
+                    heightFactor,
+                    render_mode,
+                    wideningFactor * 100 );
 
         std::string txt_pdf = encodeStringForPlotter( word );
         fmt::println( m_workFile, "{} Tj ET", txt_pdf );

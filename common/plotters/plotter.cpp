@@ -531,10 +531,10 @@ void PLOTTER::sketchOval( const VECTOR2I& aPos, const VECTOR2I& aSize, const EDA
     corners.emplace_back( 0, -half_height );
 
     // Rotate and move to the actual position
-    for( size_t ii = 0; ii < corners.size(); ii++ )
+    for( VECTOR2I& corner : corners )
     {
-        RotatePoint( corners[ii], orient );
-        corners[ii] += aPos;
+        RotatePoint( corner, orient );
+        corner += aPos;
     }
 
     // Gen shape (2 lines and 2 180 deg arcs):
@@ -568,7 +568,7 @@ void PLOTTER::ThickSegment( const VECTOR2I& start, const VECTOR2I& end, int widt
     }
     else
     {
-        SetCurrentLineWidth( -1 );
+        SetCurrentLineWidth( USE_DEFAULT_LINE_WIDTH );
         segmentAsOval( start, end, width, tracemode );
     }
 }
@@ -628,17 +628,17 @@ void PLOTTER::ThickRect( const VECTOR2I& p1, const VECTOR2I& p2, int width,
     }
     else
     {
-        SetCurrentLineWidth( -1 );
-        VECTOR2I offsetp1( p1.x - ( width - m_currentPenWidth ) / 2,
-                           p1.y - ( width - m_currentPenWidth ) / 2 );
-        VECTOR2I offsetp2( p2.x + ( width - m_currentPenWidth ) / 2,
-                           p2.y + ( width - m_currentPenWidth ) / 2 );
-        Rect( offsetp1, offsetp2, FILL_T::NO_FILL, -1 );
-        offsetp1.x += ( width - m_currentPenWidth );
-        offsetp1.y += ( width - m_currentPenWidth );
-        offsetp2.x -= ( width - m_currentPenWidth );
-        offsetp2.y -= ( width - m_currentPenWidth );
-        Rect( offsetp1, offsetp2, FILL_T::NO_FILL, -1 );
+        SetCurrentLineWidth( USE_DEFAULT_LINE_WIDTH );
+        VECTOR2I offsetp1( p1.x - ( width - GetCurrentLineWidth() ) / 2,
+                           p1.y - ( width - GetCurrentLineWidth() ) / 2 );
+        VECTOR2I offsetp2( p2.x + ( width - GetCurrentLineWidth() ) / 2,
+                           p2.y + ( width - GetCurrentLineWidth() ) / 2 );
+        Rect( offsetp1, offsetp2, FILL_T::NO_FILL, USE_DEFAULT_LINE_WIDTH );
+        offsetp1.x += ( width - GetCurrentLineWidth() );
+        offsetp1.y += ( width - GetCurrentLineWidth() );
+        offsetp2.x -= ( width - GetCurrentLineWidth() );
+        offsetp2.y -= ( width - GetCurrentLineWidth() );
+        Rect( offsetp1, offsetp2, FILL_T::NO_FILL, USE_DEFAULT_LINE_WIDTH );
     }
 }
 
@@ -652,9 +652,9 @@ void PLOTTER::ThickCircle( const VECTOR2I& pos, int diametre, int width, OUTLINE
     }
     else
     {
-        SetCurrentLineWidth( -1 );
-        Circle( pos, diametre - width + m_currentPenWidth, FILL_T::NO_FILL, -1 );
-        Circle( pos, diametre + width - m_currentPenWidth, FILL_T::NO_FILL, -1 );
+        SetCurrentLineWidth( USE_DEFAULT_LINE_WIDTH );
+        Circle( pos, diametre - width + GetCurrentLineWidth(), FILL_T::NO_FILL, USE_DEFAULT_LINE_WIDTH );
+        Circle( pos, diametre + width - GetCurrentLineWidth(), FILL_T::NO_FILL, USE_DEFAULT_LINE_WIDTH );
     }
 }
 
@@ -667,8 +667,8 @@ void PLOTTER::FilledCircle( const VECTOR2I& pos, int diametre, OUTLINE_MODE trac
     }
     else
     {
-        SetCurrentLineWidth( -1 );
-        Circle( pos, diametre, FILL_T::NO_FILL, -1 );
+        SetCurrentLineWidth( USE_DEFAULT_LINE_WIDTH );
+        Circle( pos, diametre, FILL_T::NO_FILL, USE_DEFAULT_LINE_WIDTH );
     }
 }
 
