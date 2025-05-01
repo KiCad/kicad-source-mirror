@@ -38,6 +38,7 @@
 #include <pcb_target.h>
 #include <pcb_dimension.h>
 #include <pcbplot.h>
+#include <plotters/plotter.h>
 #include <plotters/plotter_dxf.h>
 #include <plotters/plotter_hpgl.h>
 #include <plotters/plotter_gerber.h>
@@ -420,9 +421,9 @@ void PlotStandardLayer( BOARD* aBoard, PLOTTER* aPlotter, const LSET& aLayerMask
                     color = aPlotOpt.ColorSettings()->GetColor( B_Fab );
             }
 
-            if( sketchPads &&
-                    ( ( onFrontFab && pad->GetLayerSet().Contains( F_Cu ) ) ||
-                      ( onBackFab && pad->GetLayerSet().Contains( B_Cu ) ) ) )
+            if( sketchPads
+                    && (   ( onFrontFab && pad->GetLayerSet().Contains( F_Cu ) )
+                        || ( onBackFab && pad->GetLayerSet().Contains( B_Cu ) ) ) )
             {
                 if( aPlotOpt.GetPlotPadNumbers() )
                     itemplotter.PlotPadNumber( pad, color );
@@ -450,8 +451,7 @@ void PlotStandardLayer( BOARD* aBoard, PLOTTER* aPlotter, const LSET& aLayerMask
                     int mask_clearance = margin.x;
 
                     // Now offset the pad size by margin + width_adj
-                    VECTOR2I padPlotsSize =
-                            pad->GetSize( aLayer ) + margin * 2 + VECTOR2I( width_adj, width_adj );
+                    VECTOR2I padPlotsSize = pad->GetSize( aLayer ) + margin * 2 + VECTOR2I( width_adj, width_adj );
 
                     // Store these parameters that can be modified to plot inflated/deflated pads shape
                     PAD_SHAPE padShape = pad->GetShape( aLayer );
@@ -621,8 +621,10 @@ void PlotStandardLayer( BOARD* aBoard, PLOTTER* aPlotter, const LSET& aLayerMask
                         // anchor will be added to the pad shape when plotting the pad. So now the
                         // polygonal shape is built, we can clamp the anchor size
                         if( mask_clearance < 0 )  // we expect margin.x = margin.y for custom pads
+                        {
                             dummy.SetSize( aLayer, VECTOR2I( std::max( 0, padPlotsSize.x ),
                                                              std::max( 0, padPlotsSize.y ) ) );
+                        }
 
                         itemplotter.PlotPad( &dummy, aLayer, color, padPlotMode );
                         break;
@@ -643,8 +645,8 @@ void PlotStandardLayer( BOARD* aBoard, PLOTTER* aPlotter, const LSET& aLayerMask
         if( footprint->IsDNP()
                 && !itemplotter.GetHideDNPFPsOnFabLayers()
                 && itemplotter.GetCrossoutDNPFPsOnFabLayers()
-                && ( ( onFrontFab && footprint->GetLayer() == F_Cu ) ||
-                     ( onBackFab && footprint->GetLayer() == B_Cu ) ) )
+                && (   ( onFrontFab && footprint->GetLayer() == F_Cu )
+                    || ( onBackFab && footprint->GetLayer() == B_Cu ) ) )
         {
             BOX2I rect = footprint->GetBoundingHull().BBox();
             int   width = aBoard->GetDesignSettings().m_LineThickness[ LAYER_CLASS_FAB ];
@@ -718,14 +720,9 @@ void PlotStandardLayer( BOARD* aBoard, PLOTTER* aPlotter, const LSET& aLayerMask
 
         // If we're plotting a single layer, the color for that layer can be used directly.
         if( aLayerMask.count() == 1 )
-        {
             color = aPlotOpt.ColorSettings()->GetColor( aLayerMask.Seq()[0] );
-        }
         else
-        {
-            color = aPlotOpt.ColorSettings()->GetColor(
-                LAYER_VIAS + static_cast<int>( via->GetViaType() ) );
-        }
+            color = aPlotOpt.ColorSettings()->GetColor( LAYER_VIAS + static_cast<int>( via->GetViaType() ) );
 
         // Change UNSPECIFIED or WHITE to LIGHTGRAY because the white items are not seen on a
         // white paper or screen
@@ -900,7 +897,8 @@ void PlotLayerOutlines( BOARD* aBoard, PLOTTER* aPlotter, const LSET& aLayerMask
                         if( slot->GetSeg().A == slot->GetSeg().B )  // circular hole
                         {
                             int drill = std::min( smallDrill, slot->GetWidth() );
-                            aPlotter->Circle( pad->GetPosition(), drill, FILL_T::NO_FILL );
+                            aPlotter->Circle( pad->GetPosition(), drill, FILL_T::NO_FILL,
+                                              PLOTTER::USE_DEFAULT_LINE_WIDTH );
                         }
                         else
                         {
@@ -922,7 +920,10 @@ void PlotLayerOutlines( BOARD* aBoard, PLOTTER* aPlotter, const LSET& aLayerMask
             const PCB_VIA* via = static_cast<const PCB_VIA*>( track );
 
             if( via->GetLayerSet().Contains( layer ) )   // via holes can be not through holes
-                aPlotter->Circle( via->GetPosition(), via->GetDrillValue(), FILL_T::NO_FILL );
+            {
+                aPlotter->Circle( via->GetPosition(), via->GetDrillValue(), FILL_T::NO_FILL,
+                                  PLOTTER::USE_DEFAULT_LINE_WIDTH );
+            }
         }
     }
 }
@@ -1263,9 +1264,8 @@ PLOTTER* StartPlotBoard( BOARD *aBoard, const PCB_PLOT_PARAMS *aPlotOpts, int aL
         // Gerber header, especially the TF.FileFunction and .FilePolarity data
         if( aLayer < PCBNEW_LAYER_ID_START || aLayer >= PCB_LAYER_ID_COUNT )
         {
-            wxLogError( wxString::Format(
-                        "Invalid board layer %d, cannot build a valid Gerber file header",
-                        aLayer ) );
+            wxLogError( wxString::Format( "Invalid board layer %d, cannot build a valid Gerber file header",
+                                          aLayer ) );
         }
 
         plotter = new GERBER_PLOTTER();
@@ -1319,14 +1319,9 @@ PLOTTER* StartPlotBoard( BOARD *aBoard, const PCB_PLOT_PARAMS *aPlotOpts, int aL
         try
         {
             if( plotter->GetPlotterType() == PLOT_FORMAT::PDF )
-            {
-                startPlotSuccess =
-                        static_cast<PDF_PLOTTER*>( plotter )->StartPlot( aPageNumber, aPageName );
-            }
+                startPlotSuccess = static_cast<PDF_PLOTTER*>( plotter )->StartPlot( aPageNumber, aPageName );
             else
-            {
                 startPlotSuccess = plotter->StartPlot( aPageName );
-            }
         }
         catch( ... )
         {
