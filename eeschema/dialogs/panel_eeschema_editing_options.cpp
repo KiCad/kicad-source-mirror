@@ -31,6 +31,42 @@
 #include <widgets/ui_common.h>
 
 
+static int arcEditModeToComboIndex( ARC_EDIT_MODE aMode )
+{
+    switch( aMode )
+    {
+        case ARC_EDIT_MODE::KEEP_CENTER_ADJUST_ANGLE_RADIUS:
+            return 0;
+        case ARC_EDIT_MODE::KEEP_ENDPOINTS_OR_START_DIRECTION:
+            return 1;
+        case ARC_EDIT_MODE::KEEP_CENTER_ENDS_ADJUST_ANGLE:
+            return 2;
+        // No default
+    }
+    wxFAIL_MSG( "Invalid ARC_EDIT_MODE" );
+    return 0;
+};
+
+
+static ARC_EDIT_MODE arcEditModeToEnum( int aIndex )
+{
+    switch( aIndex )
+    {
+        case 0:
+            return ARC_EDIT_MODE::KEEP_CENTER_ADJUST_ANGLE_RADIUS;
+        case 1:
+            return ARC_EDIT_MODE::KEEP_ENDPOINTS_OR_START_DIRECTION;
+        case 2:
+            return ARC_EDIT_MODE::KEEP_CENTER_ENDS_ADJUST_ANGLE;
+        default:
+            wxFAIL_MSG( wxString::Format( "Invalid index for ARC_EDIT_MODE: %d", aIndex ) );
+            break;
+    }
+
+    return ARC_EDIT_MODE::KEEP_CENTER_ADJUST_ANGLE_RADIUS;
+};
+
+
 PANEL_EESCHEMA_EDITING_OPTIONS::PANEL_EESCHEMA_EDITING_OPTIONS( wxWindow* aWindow,
                                                                 UNITS_PROVIDER* aUnitsProvider,
                                                                 wxWindow* aEventSource ) :
@@ -77,6 +113,7 @@ void PANEL_EESCHEMA_EDITING_OPTIONS::loadEEschemaSettings( EESCHEMA_SETTINGS* aC
                                              false );
 
     m_choiceLineMode->SetSelection( aCfg->m_Drawing.line_mode );
+    m_choiceArcMode->SetSelection( arcEditModeToComboIndex( aCfg->m_Drawing.arc_edit_mode ) );
     m_footprintPreview->SetValue( aCfg->m_Appearance.footprint_preview );
     m_neverShowRescue->SetValue( aCfg->m_RescueNeverShow );
 
@@ -119,6 +156,7 @@ bool PANEL_EESCHEMA_EDITING_OPTIONS::TransferDataFromWindow()
     cfg->m_Drawing.repeat_label_increment = m_spinLabelRepeatStep->GetValue();
 
     cfg->m_Drawing.line_mode = m_choiceLineMode->GetSelection();
+    cfg->m_Drawing.arc_edit_mode = arcEditModeToEnum( m_choiceArcMode->GetSelection() );
     cfg->m_Appearance.footprint_preview = m_footprintPreview->GetValue();
     cfg->m_RescueNeverShow = m_neverShowRescue->GetValue();
 
@@ -142,5 +180,3 @@ void PANEL_EESCHEMA_EDITING_OPTIONS::ResetPanel()
 
     loadEEschemaSettings( &cfg );
 }
-
-

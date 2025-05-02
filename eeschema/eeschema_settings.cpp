@@ -359,6 +359,10 @@ EESCHEMA_SETTINGS::EESCHEMA_SETTINGS() :
     m_params.emplace_back( new PARAM<int>( "drawing.line_mode", &m_Drawing.line_mode,
                                            LINE_MODE::LINE_MODE_90 ) );
 
+    m_params.emplace_back( new PARAM<int>( "editing.arc_edit_mode",
+            reinterpret_cast<int*>( &m_Drawing.arc_edit_mode ),
+            static_cast<int>( ARC_EDIT_MODE::KEEP_CENTER_ADJUST_ANGLE_RADIUS ) ) );
+
     m_params.emplace_back( new PARAM<bool>( "drawing.auto_start_wires",
             &m_Drawing.auto_start_wires, true ) );
 

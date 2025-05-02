@@ -42,6 +42,8 @@ class PANEL_EESCHEMA_EDITING_OPTIONS_BASE : public RESETTABLE_PANEL
 		wxStaticLine* m_staticline3;
 		wxStaticText* m_staticText24;
 		wxChoice* m_choiceLineMode;
+		wxStaticText* m_staticTextArcEdit;
+		wxChoice* m_choiceArcMode;
 		wxCheckBox* m_mouseDragIsDrag;
 		wxCheckBox* m_cbAutoStartWires;
 		wxCheckBox* m_escClearsNetHighlight;

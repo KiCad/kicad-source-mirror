@@ -43,6 +43,16 @@ PANEL_EESCHEMA_EDITING_OPTIONS_BASE::PANEL_EESCHEMA_EDITING_OPTIONS_BASE( wxWind
 
 	bSizer5->Add( bSizer61, 1, wxEXPAND, 5 );
 
+	m_staticTextArcEdit = new wxStaticText( this, wxID_ANY, _("Arc editing mode:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextArcEdit->Wrap( -1 );
+	bSizer5->Add( m_staticTextArcEdit, 0, wxALL, 5 );
+
+	wxString m_choiceArcModeChoices[] = { _("Keep center, adjust radius"), _("Keep endpoints or direction of starting point"), _("Keep center and radius, adjust endpoints") };
+	int m_choiceArcModeNChoices = sizeof( m_choiceArcModeChoices ) / sizeof( wxString );
+	m_choiceArcMode = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_choiceArcModeNChoices, m_choiceArcModeChoices, 0 );
+	m_choiceArcMode->SetSelection( 1 );
+	bSizer5->Add( m_choiceArcMode, 0, wxALL|wxEXPAND, 5 );
+
 	m_mouseDragIsDrag = new wxCheckBox( this, wxID_ANY, _("Mouse drag performs Drag (G) operation"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_mouseDragIsDrag->SetToolTip( _("If unchecked, mouse drag will perform move (M) operation") );
 

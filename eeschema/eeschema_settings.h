@@ -168,6 +168,7 @@ public:
         POWER_SYMBOLS       new_power_symbols;
         wxString            field_names;
         int                 line_mode;
+        ARC_EDIT_MODE       arc_edit_mode;
         int                 repeat_label_increment;
         bool                intersheets_ref_show;
         bool                intersheets_ref_own_page;
