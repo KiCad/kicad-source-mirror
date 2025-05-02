@@ -118,6 +118,7 @@ public:
         wxFFile file( GetNetlistPath( true ), "rt" );
         wxString netlist;
 
+        BOOST_REQUIRE( file.IsOpened() );
         file.ReadAll( &netlist );
 
         //ngspice->Init();
