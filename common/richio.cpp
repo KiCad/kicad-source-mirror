@@ -95,6 +95,12 @@ std::string StrPrintf( const char* format, ... )
 
 wxString SafeReadFile( const wxString& aFilePath, const wxString& aReadType )
 {
+    // Check the path exists as a file first
+    // the IsOpened check would be logical, but on linux you can fopen (in read mode) a directory
+    // And then everything else in here will barf
+    if( !wxFileExists( aFilePath ) )
+        THROW_IO_ERROR( wxString::Format( _( "File '%s' does not exist." ), aFilePath ) );
+
     wxString contents;
     wxFFile  ff( aFilePath );
 
