@@ -4,3 +4,4 @@ pytest-image-diff
 fastapi
 uvicorn
 pydantic
+numpy
