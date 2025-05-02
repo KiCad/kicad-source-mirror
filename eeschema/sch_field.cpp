@@ -1543,12 +1543,10 @@ void SCH_FIELD::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS& 
     // Plot intersheet refs (only global labels have them)
     if( m_parent && m_parent->Type() == SCH_GLOBAL_LABEL_T && m_id == INTERSHEET_REFS && Schematic() )
     {
-        SCH_LABEL_BASE*                            label = dynamic_cast<SCH_LABEL_BASE*>( m_parent );
+        SCH_LABEL_BASE*                            label = static_cast<SCH_LABEL_BASE*>( m_parent );
         std::vector<std::pair<wxString, wxString>> pages;
         std::vector<wxString>                      pageHrefs;
         BOX2I                                      bbox = GetBoundingBox();
-
-        wxCHECK( label, /* void */ );
 
         label->GetIntersheetRefs( &Schematic()->CurrentSheet(), &pages );
 
