@@ -170,7 +170,7 @@ PANEL_DESTINATION_BASE::PANEL_DESTINATION_BASE( wxWindow* parent, wxWindowID id,
 	fgSizer3->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
 	m_bitmapOutputType = new wxStaticBitmap( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer3->Add( m_bitmapOutputType, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+	fgSizer3->Add( m_bitmapOutputType, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
 	m_textOutputType = new wxStaticText( this, wxID_ANY, _("dummy"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_textOutputType->Wrap( -1 );
@@ -179,14 +179,17 @@ PANEL_DESTINATION_BASE::PANEL_DESTINATION_BASE( wxWindow* parent, wxWindowID id,
 	fgSizer3->Add( m_textOutputType, 0, wxALIGN_CENTER_VERTICAL|wxTOP, 1 );
 
 	m_statusBitmap = new wxStaticBitmap( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer3->Add( m_statusBitmap, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+	fgSizer3->Add( m_statusBitmap, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
 
-	bSizerMain->Add( fgSizer3, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
+	bSizerMain->Add( fgSizer3, 0, wxEXPAND|wxTOP, 6 );
+
+
+	bSizerMain->Add( 0, 2, 0, 0, 5 );
 
 	m_pathInfo = new wxStaticText( this, wxID_ANY, _("path"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_pathInfo->Wrap( -1 );
-	bSizerMain->Add( m_pathInfo, 0, wxBOTTOM|wxRIGHT|wxLEFT, 10 );
+	bSizerMain->Add( m_pathInfo, 0, wxRIGHT|wxLEFT, 6 );
 
 	wxBoxSizer* bSizerButtons;
 	bSizerButtons = new wxBoxSizer( wxHORIZONTAL );
@@ -204,7 +207,7 @@ PANEL_DESTINATION_BASE::PANEL_DESTINATION_BASE( wxWindow* parent, wxWindowID id,
 	bSizerButtons->Add( m_buttonGenerate, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
 
-	bSizerMain->Add( bSizerButtons, 0, wxEXPAND|wxTOP, 5 );
+	bSizerMain->Add( bSizerButtons, 0, wxEXPAND|wxTOP, 10 );
 
 
 	this->SetSizer( bSizerMain );
