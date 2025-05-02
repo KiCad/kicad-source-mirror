@@ -1540,7 +1540,8 @@ void SCH_FIELD::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS& 
 
     aPlotter->PlotText( textpos, color, text, attrs, font, GetFontMetrics() );
 
-    if( m_id == INTERSHEET_REFS && Schematic() )
+    // Plot intersheet refs (only global labels have them)
+    if( m_parent && m_parent->Type() == SCH_GLOBAL_LABEL_T && m_id == INTERSHEET_REFS && Schematic() )
     {
         SCH_LABEL_BASE*                            label = dynamic_cast<SCH_LABEL_BASE*>( m_parent );
         std::vector<std::pair<wxString, wxString>> pages;
