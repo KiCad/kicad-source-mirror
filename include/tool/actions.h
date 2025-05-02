@@ -265,6 +265,9 @@ public:
     static TOOL_ACTION updateMenu;
     static TOOL_ACTION activatePointEditor;
     static TOOL_ACTION cycleArcEditMode;
+    static TOOL_ACTION pointEditorArcKeepCenter;
+    static TOOL_ACTION pointEditorArcKeepEndpoint;
+    static TOOL_ACTION pointEditorArcKeepRadius;
     static TOOL_ACTION updatePreferences;
     static TOOL_ACTION selectLibTreeColumns;
 

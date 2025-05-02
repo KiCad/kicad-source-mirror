@@ -24,9 +24,6 @@
 
 #include "sch_point_editor.h"
 
-#include <functional>
-using namespace std::placeholders;
-
 #include <ee_grid_helper.h>
 #include <tool/tool_manager.h>
 #include <sch_commit.h>
@@ -853,7 +850,7 @@ void SCH_POINT_EDITOR::makePointsAndBehavior( EDA_ITEM* aItem )
         {
         case SHAPE_T::ARC:
             m_editBehavior = std::make_unique<EDA_ARC_POINT_EDIT_BEHAVIOR>(
-                    *shape, m_frame->eeconfig()->m_Drawing.arc_edit_mode, *getViewControls() );
+                    *shape, m_arcEditMode, *getViewControls() );
             break;
         case SHAPE_T::CIRCLE:
             m_editBehavior = std::make_unique<EDA_CIRCLE_POINT_EDIT_BEHAVIOR>( *shape );
@@ -945,13 +942,34 @@ void SCH_POINT_EDITOR::Reset( RESET_REASON aReason )
 
 bool SCH_POINT_EDITOR::Init()
 {
+    using S_C = SELECTION_CONDITIONS;
+
     SCH_TOOL_BASE::Init();
 
+    const auto addCornerCondition = [&]( const SELECTION& aSelection ) -> bool
+    {
+        return SCH_POINT_EDITOR::addCornerCondition( aSelection );
+    };
+
+    const auto removeCornerCondition = [&]( const SELECTION& aSelection ) -> bool
+    {
+        return SCH_POINT_EDITOR::removeCornerCondition( aSelection );
+    };
+
+    const auto arcIsEdited = [&]( const SELECTION& aSelection ) -> bool
+    {
+        const EDA_ITEM* item = aSelection.Front();
+        return ( item != nullptr ) && ( item->Type() == SCH_SHAPE_T )
+               && static_cast<const SCH_SHAPE*>( item )->GetShape() == SHAPE_T::ARC;
+    };
+
     auto& menu = m_selectionTool->GetToolMenu().GetMenu();
-    menu.AddItem( SCH_ACTIONS::pointEditorAddCorner,
-                  std::bind( &SCH_POINT_EDITOR::addCornerCondition, this, _1 ) );
-    menu.AddItem( SCH_ACTIONS::pointEditorRemoveCorner,
-                  std::bind( &SCH_POINT_EDITOR::removeCornerCondition, this, _1 ) );
+
+    // clang-format off
+    menu.AddItem( SCH_ACTIONS::pointEditorAddCorner,     S_C::Count( 1 ) && addCornerCondition );
+    menu.AddItem( SCH_ACTIONS::pointEditorRemoveCorner,  S_C::Count( 1 ) && removeCornerCondition );
+    menu.AddItem( ACTIONS::cycleArcEditMode,             S_C::Count( 1 ) && arcIsEdited );
+    // clang-format on
 
     return true;
 }
@@ -1358,6 +1376,24 @@ int SCH_POINT_EDITOR::removeCorner( const TOOL_EVENT& aEvent )
 }
 
 
+int SCH_POINT_EDITOR::changeArcEditMode( const TOOL_EVENT& aEvent )
+{
+    if( aEvent.Matches( ACTIONS::cycleArcEditMode.MakeEvent() ) )
+    {
+        m_arcEditMode = m_frame->eeconfig()->m_Drawing.arc_edit_mode;
+        m_arcEditMode = IncrementArcEditMode( m_arcEditMode );
+    }
+    else
+    {
+        m_arcEditMode = aEvent.Parameter<ARC_EDIT_MODE>();
+    }
+
+    m_frame->eeconfig()->m_Drawing.arc_edit_mode = m_arcEditMode;
+
+    return 0;
+}
+
+
 int SCH_POINT_EDITOR::modifiedSelection( const TOOL_EVENT& aEvent )
 {
     updatePoints();
@@ -1372,6 +1408,10 @@ void SCH_POINT_EDITOR::setTransitions()
     Go( &SCH_POINT_EDITOR::Main,              ACTIONS::activatePointEditor.MakeEvent() );
     Go( &SCH_POINT_EDITOR::addCorner,         SCH_ACTIONS::pointEditorAddCorner.MakeEvent() );
     Go( &SCH_POINT_EDITOR::removeCorner,      SCH_ACTIONS::pointEditorRemoveCorner.MakeEvent() );
+    Go( &SCH_POINT_EDITOR::changeArcEditMode, ACTIONS::pointEditorArcKeepCenter.MakeEvent() );
+    Go( &SCH_POINT_EDITOR::changeArcEditMode, ACTIONS::pointEditorArcKeepEndpoint.MakeEvent() );
+    Go( &SCH_POINT_EDITOR::changeArcEditMode, ACTIONS::pointEditorArcKeepRadius.MakeEvent() );
+    Go( &SCH_POINT_EDITOR::changeArcEditMode, ACTIONS::cycleArcEditMode.MakeEvent() );
     Go( &SCH_POINT_EDITOR::modifiedSelection, EVENTS::SelectedItemsModified );
     Go( &SCH_POINT_EDITOR::clearEditedPoints, EVENTS::ClearedEvent );
 }

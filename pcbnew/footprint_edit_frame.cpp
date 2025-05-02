@@ -1410,11 +1410,11 @@ void FOOTPRINT_EDIT_FRAME::setupUIConditions()
                 return GetSettings()->m_ArcEditMode == ARC_EDIT_MODE::KEEP_CENTER_ENDS_ADJUST_ANGLE;
             };
 
-
-    mgr->SetConditions( PCB_ACTIONS::pointEditorArcKeepCenter,   CHECK( isArcKeepCenterMode ) );
-    mgr->SetConditions( PCB_ACTIONS::pointEditorArcKeepEndpoint, CHECK( isArcKeepEndpointMode ) );
-    mgr->SetConditions( PCB_ACTIONS::pointEditorArcKeepRadius,   CHECK( isArcKeepRadiusMode ) );
-
+    // clang-format off
+    mgr->SetConditions( ACTIONS::pointEditorArcKeepCenter,   CHECK( isArcKeepCenterMode ) );
+    mgr->SetConditions( ACTIONS::pointEditorArcKeepEndpoint, CHECK( isArcKeepEndpointMode ) );
+    mgr->SetConditions( ACTIONS::pointEditorArcKeepRadius,   CHECK( isArcKeepRadiusMode ) );
+    // clang-format on
 
 // Only enable a tool if the part is edtable
 #define CURRENT_EDIT_TOOL( action )                                                               \

@@ -105,6 +105,7 @@ private:
     /// TOOL_ACTION handlers
     int addCorner( const TOOL_EVENT& aEvent );
     int removeCorner( const TOOL_EVENT& aEvent );
+    int changeArcEditMode( const TOOL_EVENT& aEvent );
     int modifiedSelection( const TOOL_EVENT& aEvent );
 
 private:
@@ -112,6 +113,8 @@ private:
 
     ///< Currently edited point, NULL if there is none.
     EDIT_POINT* m_editedPoint;
+
+    ARC_EDIT_MODE m_arcEditMode;
 
     ///< Re-entrancy guards
     bool m_inPointEditor;

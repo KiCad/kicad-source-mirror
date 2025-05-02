@@ -697,3 +697,20 @@ void EDA_TABLECELL_POINT_EDIT_BEHAVIOR::UpdatePoints( EDIT_POINTS& aPoints )
     aPoints.Point( ROW_HEIGHT )
             .SetPosition( m_cell.GetEnd() - VECTOR2I( m_cell.GetRectangleWidth() / 2, 0 ) );
 }
+
+
+ARC_EDIT_MODE IncrementArcEditMode( ARC_EDIT_MODE aMode )
+{
+    switch( aMode )
+    {
+    case ARC_EDIT_MODE::KEEP_CENTER_ADJUST_ANGLE_RADIUS:
+        return ARC_EDIT_MODE::KEEP_CENTER_ENDS_ADJUST_ANGLE;
+    case ARC_EDIT_MODE::KEEP_CENTER_ENDS_ADJUST_ANGLE:
+        return ARC_EDIT_MODE::KEEP_ENDPOINTS_OR_START_DIRECTION;
+    case ARC_EDIT_MODE::KEEP_ENDPOINTS_OR_START_DIRECTION:
+        return ARC_EDIT_MODE::KEEP_CENTER_ADJUST_ANGLE_RADIUS;
+    default:
+        wxFAIL_MSG( "Invalid arc edit mode" );
+        return aMode;
+    }
+}

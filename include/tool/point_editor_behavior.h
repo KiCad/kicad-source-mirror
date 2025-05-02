@@ -366,3 +366,6 @@ private:
     const ARC_EDIT_MODE&  m_arcEditMode;
     KIGFX::VIEW_CONTROLS& m_viewControls;
 };
+
+
+ARC_EDIT_MODE IncrementArcEditMode( ARC_EDIT_MODE aMode );

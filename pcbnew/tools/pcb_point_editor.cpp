@@ -1556,6 +1556,13 @@ bool PCB_POINT_EDITOR::Init()
         return PCB_POINT_EDITOR::removeCornerCondition( aSelection );
     };
 
+    const auto arcIsEdited = [&]( const SELECTION& aSelection ) -> bool
+    {
+        const EDA_ITEM* item = aSelection.Front();
+        return ( item != nullptr ) && ( item->Type() == PCB_SHAPE_T )
+               && static_cast<const PCB_SHAPE*>( item )->GetShape() == SHAPE_T::ARC;
+    };
+
     using S_C = SELECTION_CONDITIONS;
 
     auto& menu = m_selectionTool->GetToolMenu().GetMenu();
@@ -1564,6 +1571,7 @@ bool PCB_POINT_EDITOR::Init()
     menu.AddItem( PCB_ACTIONS::pointEditorAddCorner,        S_C::Count( 1 ) && addCornerCondition );
     menu.AddItem( PCB_ACTIONS::pointEditorRemoveCorner,     S_C::Count( 1 ) && removeCornerCondition );
     menu.AddItem( PCB_ACTIONS::pointEditorChamferCorner,    S_C::Count( 1 ) && addChamferCondition );
+    menu.AddItem( PCB_ACTIONS::cycleArcEditMode,            S_C::Count( 1 ) && arcIsEdited );
     // clang-format on
 
     return true;
@@ -2674,18 +2682,7 @@ int PCB_POINT_EDITOR::changeArcEditMode( const TOOL_EVENT& aEvent )
         else
             m_arcEditMode = editFrame->GetFootprintEditorSettings()->m_ArcEditMode;
 
-        switch( m_arcEditMode )
-        {
-        case ARC_EDIT_MODE::KEEP_CENTER_ADJUST_ANGLE_RADIUS:
-            m_arcEditMode = ARC_EDIT_MODE::KEEP_ENDPOINTS_OR_START_DIRECTION;
-            break;
-        case ARC_EDIT_MODE::KEEP_ENDPOINTS_OR_START_DIRECTION:
-            m_arcEditMode = ARC_EDIT_MODE::KEEP_CENTER_ENDS_ADJUST_ANGLE;
-            break;
-        case ARC_EDIT_MODE::KEEP_CENTER_ENDS_ADJUST_ANGLE:
-            m_arcEditMode = ARC_EDIT_MODE::KEEP_CENTER_ADJUST_ANGLE_RADIUS;
-            break;
-        }
+        m_arcEditMode = IncrementArcEditMode( m_arcEditMode );
     }
     else
     {
@@ -2709,9 +2706,9 @@ void PCB_POINT_EDITOR::setTransitions()
     Go( &PCB_POINT_EDITOR::addCorner,         PCB_ACTIONS::pointEditorAddCorner.MakeEvent() );
     Go( &PCB_POINT_EDITOR::removeCorner,      PCB_ACTIONS::pointEditorRemoveCorner.MakeEvent() );
     Go( &PCB_POINT_EDITOR::chamferCorner,     PCB_ACTIONS::pointEditorChamferCorner.MakeEvent() );
-    Go( &PCB_POINT_EDITOR::changeArcEditMode, PCB_ACTIONS::pointEditorArcKeepCenter.MakeEvent() );
-    Go( &PCB_POINT_EDITOR::changeArcEditMode, PCB_ACTIONS::pointEditorArcKeepEndpoint.MakeEvent() );
-    Go( &PCB_POINT_EDITOR::changeArcEditMode, PCB_ACTIONS::pointEditorArcKeepRadius.MakeEvent() );
+    Go( &PCB_POINT_EDITOR::changeArcEditMode, ACTIONS::pointEditorArcKeepCenter.MakeEvent() );
+    Go( &PCB_POINT_EDITOR::changeArcEditMode, ACTIONS::pointEditorArcKeepEndpoint.MakeEvent() );
+    Go( &PCB_POINT_EDITOR::changeArcEditMode, ACTIONS::pointEditorArcKeepRadius.MakeEvent() );
     Go( &PCB_POINT_EDITOR::changeArcEditMode, ACTIONS::cycleArcEditMode.MakeEvent() );
     Go( &PCB_POINT_EDITOR::modifiedSelection, EVENTS::SelectedItemsModified );
     Go( &PCB_POINT_EDITOR::modifiedSelection, EVENTS::SelectedItemsMoved );

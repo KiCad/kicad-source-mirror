@@ -235,9 +235,9 @@ std::optional<TOOLBAR_CONFIGURATION> PCB_EDIT_TOOLBAR_SETTINGS::DefaultToolbarCo
         {
             std::unique_ptr<ACTION_MENU> arcMenu = std::make_unique<ACTION_MENU>( false, selTool );
 
-            arcMenu->Add( PCB_ACTIONS::pointEditorArcKeepCenter, ACTION_MENU::CHECK );
-            arcMenu->Add( PCB_ACTIONS::pointEditorArcKeepEndpoint, ACTION_MENU::CHECK );
-            arcMenu->Add( PCB_ACTIONS::pointEditorArcKeepRadius, ACTION_MENU::CHECK );
+            arcMenu->Add( ACTIONS::pointEditorArcKeepCenter, ACTION_MENU::CHECK );
+            arcMenu->Add( ACTIONS::pointEditorArcKeepEndpoint, ACTION_MENU::CHECK );
+            arcMenu->Add( ACTIONS::pointEditorArcKeepRadius, ACTION_MENU::CHECK );
 
             return arcMenu;
         };

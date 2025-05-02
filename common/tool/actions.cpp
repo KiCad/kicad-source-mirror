@@ -26,6 +26,7 @@
 #include <common.h>
 #include <eda_units.h>
 #include <frame_type.h>
+#include <settings/app_settings.h>
 #include <tool/actions.h>
 #include <tool/tool_action.h>
 #include <tool/tool_event.h>
@@ -549,6 +550,27 @@ TOOL_ACTION ACTIONS::activatePointEditor( TOOL_ACTION_ARGS()
         .Name( "common.Control.activatePointEditor" )
         .ToolbarState( TOOLBAR_STATE::HIDDEN )
         .Scope( AS_GLOBAL ) );
+
+TOOL_ACTION ACTIONS::pointEditorArcKeepCenter( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.PointEditor.arcKeepCenter" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Keep Arc Center, Adjust Radius" ) )
+        .Tooltip( _( "Switch arc editing mode to keep center, adjust radius and endpoints" ) )
+        .Parameter( ARC_EDIT_MODE::KEEP_CENTER_ADJUST_ANGLE_RADIUS ) );
+
+TOOL_ACTION ACTIONS::pointEditorArcKeepEndpoint( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.PointEditor.arcKeepEndpoint" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Keep Arc Endpoints or Direction of Starting Point" ) )
+        .Tooltip( _( "Switch arc editing mode to keep endpoints, or to keep direction of the other point" ) )
+        .Parameter( ARC_EDIT_MODE::KEEP_ENDPOINTS_OR_START_DIRECTION ) );
+
+TOOL_ACTION ACTIONS::pointEditorArcKeepRadius( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.PointEditor.arcKeepRadius" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Keep Arc Radius and Center, adjust angle" ) )
+        .Tooltip( _( "Switch arc editing mode to maintainign radius when endpoint are moved" ) )
+        .Parameter( ARC_EDIT_MODE::KEEP_CENTER_ENDS_ADJUST_ANGLE ) );
 
 TOOL_ACTION ACTIONS::cycleArcEditMode( TOOL_ACTION_ARGS()
         .Name( "common.Interactive.cycleArcEditMode" )
