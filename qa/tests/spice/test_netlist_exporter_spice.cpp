@@ -216,6 +216,13 @@ BOOST_AUTO_TEST_CASE( LegacyLaserDriver )
 }
 #endif
 
+BOOST_AUTO_TEST_CASE( LegacyPotentiometer )
+{
+    TestNetlist( "legacy_pot" );
+    TestOpPoint( 0.5, "V(/out1)" );
+    TestOpPoint( 0.7, "V(/out2)" );
+    TestOpPoint( 0.9, "V(/out3)" );
+}
 
 BOOST_AUTO_TEST_CASE( LegacyPspice )
 {
