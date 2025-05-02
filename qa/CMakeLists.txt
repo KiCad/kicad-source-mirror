@@ -22,7 +22,6 @@
 include( KiCadQABuildUtils )
 
 macro(setup_qa_env target_name)
-if( MSVC )
     set( MACOS_BIN "" )
     if( APPLE AND ${target_name} STREQUAL "qa_cli" )
         set( MACOS_BIN "PATH=path_list_prepend:${CMAKE_INSTALL_PREFIX}/KiCad.app/Contents/MacOS" )
@@ -53,7 +52,6 @@ if( MSVC )
         PROPERTIES
             ENVIRONMENT_MODIFICATION "${PATH_MODIFICATION}"
     )
-endif()
 endmacro()
 
 # Shared QA helper libraries
