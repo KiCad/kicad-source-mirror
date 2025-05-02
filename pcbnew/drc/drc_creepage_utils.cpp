@@ -2047,9 +2047,12 @@ double CREEPAGE_GRAPH::Solve(
 
     auto cmp = [&distances]( GRAPH_NODE* left, GRAPH_NODE* right )
     {
-        if( distances[left] == distances[right] )
+        double distLeft = distances[left];
+        double distRight = distances[right];
+
+        if( distLeft == distRight )
             return left > right; // Compare addresses to avoid ties.
-        return distances[left] > distances[right];
+        return distLeft > distRight;
     };
     std::priority_queue<GRAPH_NODE*, std::vector<GRAPH_NODE*>, decltype( cmp )> pq( cmp );
 
@@ -2110,7 +2113,7 @@ double CREEPAGE_GRAPH::Solve(
     {
         GRAPH_NODE* prevNode = previous[step];
 
-        for( std::shared_ptr<GRAPH_CONNECTION> node_conn : step->m_node_conns )
+        for( const std::shared_ptr<GRAPH_CONNECTION>& node_conn : step->m_node_conns )
         {
             if( ( ( node_conn->n1 ).get() == prevNode && ( node_conn->n2 ).get() == step )
                 || ( ( node_conn->n1 ).get() == step && ( node_conn->n2 ).get() == prevNode ) )
