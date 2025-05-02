@@ -23,10 +23,16 @@ include( KiCadQABuildUtils )
 
 macro(setup_qa_env target_name)
 if( MSVC )
+    if( CMAKE_BUILD_TYPE STREQUAL "Debug" )
+        set( VCPKG_BIN "PATH=path_list_prepend:${VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET}/debug/bin" )
+    else()
+        set( VCPKG_BIN "PATH=path_list_prepend:${VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET}/bin" )
+    endif()
+
     # Once we move the cmake minimum to 3.22, we can use this for all platforms and not just MSVC
     # the old method only worked on MSVC due to a bug in cmake which was later fixed after ENVIRONMENT_MODIFICATION was added
     set( PATH_MODIFICATION
-      "PATH=path_list_prepend:${VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET}/debug/bin"
+      "${VCPKG_BIN}"
       "PATH=path_list_prepend:${CMAKE_BINARY_DIR}/kicad/"
       "PATH=path_list_prepend:${CMAKE_BINARY_DIR}/common/"
       "PATH=path_list_prepend:${CMAKE_BINARY_DIR}/api/"

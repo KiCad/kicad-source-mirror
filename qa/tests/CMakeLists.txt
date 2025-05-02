@@ -59,17 +59,6 @@ ${NEW_PATHS};" )
     set( EXTRA_PYTEST_ENVIRONMENT "DYLD_FALLBACK_LIBRARY_PATH=${CAIRO_LIB_BASE}" )
 elseif ( MSVC )
 
-
-    if( CMAKE_BUILD_TYPE STREQUAL "Debug" )
-        set( NEW_PATHS
-        "${VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET}/debug/bin;\
-${NEW_PATHS};" )
-    else()
-        set( NEW_PATHS
-        "${VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET}/bin;\
-${NEW_PATHS};" )
-    endif()
-
     set( EXTRA_PYTEST_ENVIRONMENT "FONTCONFIG_PATH=${CMAKE_SOURCE_DIR}/qa/resources/windows/fonts/" )
 endif()
 
