@@ -23,16 +23,25 @@ include( KiCadQABuildUtils )
 
 macro(setup_qa_env target_name)
 if( MSVC )
-    if( CMAKE_BUILD_TYPE STREQUAL "Debug" )
-        set( VCPKG_BIN "PATH=path_list_prepend:${VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET}/debug/bin" )
-    else()
-        set( VCPKG_BIN "PATH=path_list_prepend:${VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET}/bin" )
+    set( MACOS_BIN "" )
+    if( APPLE AND ${target_name} STREQUAL "qa_cli" )
+        set( MACOS_BIN "PATH=path_list_prepend:${CMAKE_INSTALL_PREFIX}/KiCad.app/Contents/MacOS" )
+    endif()
+
+    set( VCPKG_BIN "" )
+    if( MSVC )
+        if( CMAKE_BUILD_TYPE STREQUAL "Debug" )
+            set( VCPKG_BIN "PATH=path_list_prepend:${VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET}/debug/bin" )
+        else()
+            set( VCPKG_BIN "PATH=path_list_prepend:${VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET}/bin" )
+        endif()
     endif()
 
     # Once we move the cmake minimum to 3.22, we can use this for all platforms and not just MSVC
     # the old method only worked on MSVC due to a bug in cmake which was later fixed after ENVIRONMENT_MODIFICATION was added
     set( PATH_MODIFICATION
       "${VCPKG_BIN}"
+      "${MACOS_BIN}"
       "PATH=path_list_prepend:${CMAKE_BINARY_DIR}/kicad/"
       "PATH=path_list_prepend:${CMAKE_BINARY_DIR}/common/"
       "PATH=path_list_prepend:${CMAKE_BINARY_DIR}/api/"

@@ -37,35 +37,15 @@ if( KICAD_TEST_XML_OUTPUT )
     set( PYTEST_ARGS_QACLI --junitxml=${CMAKE_CURRENT_BINARY_DIR}/qacli.junit-results.xml )
 endif()
 
-# avoid formatting this otherwise you will introduce whitespace into the PATH string
-    set( NEW_PATHS
-"${CMAKE_BINARY_DIR}/kicad/;\
-${CMAKE_BINARY_DIR}/common/;\
-${CMAKE_BINARY_DIR}/api/;\
-${CMAKE_BINARY_DIR}/common/gal/;\
-${CMAKE_BINARY_DIR}/pcbnew/;\
-${CMAKE_BINARY_DIR}/eeschema/;\
-${CMAKE_BINARY_DIR}/cvpcb/;\
-" )
-
 set( EXTRA_PYTEST_ENVIRONMENT "" )
 
 if( APPLE )
     # We need to use the installed kicad-cli not the build dir to run these tests
-    set( NEW_PATHS
-"${CMAKE_INSTALL_PREFIX}/KiCad.app/Contents/MacOS;\
-${NEW_PATHS};" )
     get_filename_component( CAIRO_LIB_BASE "${CAIRO_LIBRARY}" DIRECTORY )
     set( EXTRA_PYTEST_ENVIRONMENT "DYLD_FALLBACK_LIBRARY_PATH=${CAIRO_LIB_BASE}" )
+
 elseif ( MSVC )
-
     set( EXTRA_PYTEST_ENVIRONMENT "FONTCONFIG_PATH=${CMAKE_SOURCE_DIR}/qa/resources/windows/fonts/" )
-endif()
-
-set( QA_PATH_REPLACEMENT "PATH=${NEW_PATHS};$ENV{PATH}" )
-
-if (UNIX)
-  string(REPLACE ";" ":" QA_PATH_REPLACEMENT "${QA_PATH_REPLACEMENT}")
 endif()
 
 if( NOT (MSVC AND CMAKE_BUILD_TYPE STREQUAL "Debug") )
@@ -79,8 +59,10 @@ add_test(NAME qa_python
 
 set_tests_properties( qa_python
     PROPERTIES
-        ENVIRONMENT "${QA_PATH_REPLACEMENT};PYTHONPATH=${CMAKE_BINARY_DIR}/pcbnew;${PYTHON_QA_PATH};${EXTRA_PYTEST_ENVIRONMENT}"
+        ENVIRONMENT "PYTHONPATH=${CMAKE_BINARY_DIR}/pcbnew;${PYTHON_QA_PATH};${EXTRA_PYTEST_ENVIRONMENT}"
 )
+
+setup_qa_env( qa_python )
 endif()
 
 add_test(NAME qa_cli
@@ -88,16 +70,9 @@ add_test(NAME qa_cli
     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
 )
 
-if( NOT MSVC )
-    set_tests_properties( qa_cli
-        PROPERTIES
-            ENVIRONMENT "${QA_PATH_REPLACEMENT};KICAD_RUN_FROM_BUILD_DIR=1;PYTHONPATH=${CMAKE_BINARY_DIR}/pcbnew;${PYTHON_QA_PATH};${EXTRA_PYTEST_ENVIRONMENT}"
-    )
-else()
-    set_tests_properties( qa_cli
-        PROPERTIES
-            ENVIRONMENT "KICAD_RUN_FROM_BUILD_DIR=1;PYTHONPATH=${CMAKE_BINARY_DIR}/pcbnew;${PYTHON_QA_PATH};${EXTRA_PYTEST_ENVIRONMENT}"
-    )
+set_tests_properties( qa_cli
+    PROPERTIES
+        ENVIRONMENT "KICAD_RUN_FROM_BUILD_DIR=1;PYTHONPATH=${CMAKE_BINARY_DIR}/pcbnew;${PYTHON_QA_PATH};${EXTRA_PYTEST_ENVIRONMENT}"
+)
 
-    setup_qa_env( qa_cli )
-endif()
+setup_qa_env( qa_cli )
