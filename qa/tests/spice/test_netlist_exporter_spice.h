@@ -79,7 +79,11 @@ public:
         test_results    results = results_collector.results( id );
 
         // Output a log if the test has failed.
-        BOOST_CHECK_MESSAGE( results.passed(), "\nNGSPICE LOG\n===========\n" << *m_log );
+        // Don't use BOOST_CHECK_MESSAGE because it triggers a checkpoint which affects debugging
+        if( !results.passed() )
+        {
+            BOOST_TEST_MESSAGE( "\nNGSPICE LOG\n===========\n" << *m_log );
+        }
     }
 
     wxFileName GetSchematicPath( const wxString& aBaseName ) override
