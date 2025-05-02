@@ -57,7 +57,7 @@ void KI_TEST::SCHEMATIC_TEST_FIXTURE::LoadSchematic( const wxString& aBaseName )
 {
     wxFileName fn = GetSchematicPath( aBaseName );
 
-    BOOST_TEST_MESSAGE( fn.GetFullPath() );
+    BOOST_TEST_CHECKPOINT( "Loading schematic " << fn.GetFullPath() );
 
     wxFileName pro( fn );
     pro.SetExt( FILEEXT::ProjectFileExtension );
@@ -147,14 +147,17 @@ wxString TEST_NETLIST_EXPORTER_FIXTURE<Exporter>::GetNetlistPath( bool aTest )
 template <typename Exporter>
 void TEST_NETLIST_EXPORTER_FIXTURE<Exporter>::WriteNetlist()
 {
+    wxString netlistPath = GetNetlistPath( true );
+    BOOST_TEST_CHECKPOINT( "Writing netlist " << netlistPath );
+
     // In case of a crash the file may not have been deleted.
-    if( wxFileExists( GetNetlistPath( true ) ) )
-        wxRemoveFile( GetNetlistPath( true ) );
+    if( wxFileExists( netlistPath ) )
+        wxRemoveFile( netlistPath );
 
     WX_STRING_REPORTER        reporter;
     std::unique_ptr<Exporter> exporter = std::make_unique<Exporter>( &m_schematic );
 
-    bool success = exporter->WriteNetlist( GetNetlistPath( true ), GetNetlistOptions(), reporter );
+    bool success = exporter->WriteNetlist( netlistPath, GetNetlistOptions(), reporter );
 
     BOOST_REQUIRE( success && reporter.GetMessages().IsEmpty() );
 }

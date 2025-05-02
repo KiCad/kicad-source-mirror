@@ -110,6 +110,9 @@ public:
 
     void CompareNetlists() override
     {
+        wxString netlistPath = GetNetlistPath( true );
+        BOOST_TEST_CHECKPOINT( "Comparing netlist " << netlistPath );
+
         m_abort = false;
 
         // Our simulator is actually Ngspice.
@@ -118,7 +121,7 @@ public:
 
         ngspice->SetReporter( m_reporter.get() );
 
-        wxFFile file( GetNetlistPath( true ), "rt" );
+        wxFFile  file( netlistPath, "rt" );
         wxString netlist;
 
         BOOST_REQUIRE( file.IsOpened() );
