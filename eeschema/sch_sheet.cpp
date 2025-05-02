@@ -738,7 +738,8 @@ int SCH_SHEET::SymbolCount() const
         {
             SCH_SYMBOL* symbol = (SCH_SYMBOL*) aItem;
 
-            if( symbol->GetField( FIELD_T::VALUE )->GetText().GetChar( 0 ) != '#' )
+            wxString value = symbol->GetField( FIELD_T::VALUE )->GetText();
+            if( !value.empty() && value.GetChar( 0 ) != '#' )
                 n++;
         }
 
