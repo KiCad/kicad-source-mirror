@@ -358,6 +358,27 @@ inline void AccumulateDescription( wxString& aDesc, const wxString& aItem )
     aDesc << aItem;
 }
 
+
+/**
+ * Build a comma-separated list from a collection of wxStrings.
+ * (e.g. std::vector, wxArrayString, etc).
+ */
+template <typename T>
+inline void AccumulateDescriptions( wxString& aDesc, const T& aItemCollection )
+{
+    for( const auto& item : aItemCollection )
+        AccumulateDescription( aDesc, item );
+}
+
+
+template <typename T>
+inline wxString AccumulateDescriptions( const T& aItemCollection )
+{
+    wxString desc;
+    AccumulateDescriptions( desc, aItemCollection );
+    return desc;
+}
+
 /**
  * Split \a aString to a string list separated at \a aSplitter.
  *

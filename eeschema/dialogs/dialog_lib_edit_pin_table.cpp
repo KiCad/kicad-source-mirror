@@ -22,29 +22,299 @@
  */
 
 #include "dialog_lib_edit_pin_table.h"
+
+#include <wx/filedlg.h>
+#include <wx/wfstream.h>
+#include <wx/msgdlg.h>
+#include <wx/tokenzr.h>
+
 #include "grid_tricks.h"
+#include <richio.h>
 #include <sch_pin.h>
 #include <pin_numbers.h>
 #include "pgm_base.h"
 #include <base_units.h>
 #include <bitmaps.h>
+#include <clipboard.h>
 #include <confirm.h>
 #include <symbol_edit_frame.h>
 #include <symbol_editor_settings.h>
+#include <io/csv.h>
 #include <kiplatform/ui.h>
 #include <widgets/grid_icon_text_helpers.h>
 #include <widgets/grid_combobox.h>
 #include <widgets/wx_grid.h>
 #include <widgets/bitmap_button.h>
 #include <widgets/std_bitmap_button.h>
+#include <wildcards_and_files_ext.h>
 #include <settings/settings_manager.h>
-#include <wx/tokenzr.h>
+#include <tool/action_menu.h>
 #include <string_utils.h>
 
 #define UNITS_ALL _( "ALL" )
 #define DEMORGAN_ALL _( "ALL" )
 #define DEMORGAN_STD _( "Standard" )
 #define DEMORGAN_ALT _( "Alternate" )
+
+
+static wxString GetPinTableColLabel( int aCol )
+{
+    switch( aCol )
+    {
+    case COL_PIN_COUNT:    return _( "Count" );
+    case COL_NUMBER:       return _( "Number" );
+    case COL_NAME:         return _( "Name" );
+    case COL_TYPE:         return _( "Electrical Type" );
+    case COL_SHAPE:        return _( "Graphic Style" );
+    case COL_ORIENTATION:  return _( "Orientation" );
+    case COL_NUMBER_SIZE:  return _( "Number Text Size" );
+    case COL_NAME_SIZE:    return _( "Name Text Size" );
+    case COL_LENGTH:       return _( "Length" );
+    case COL_POSX:         return _( "X Position" );
+    case COL_POSY:         return _( "Y Position" );
+    case COL_VISIBLE:      return _( "Visible" );
+    case COL_UNIT:         return _( "Unit" );
+    case COL_DEMORGAN:     return _( "De Morgan" );
+    default:               wxFAIL; return wxEmptyString;
+    }
+}
+
+
+static COL_ORDER GetColTypeForString( const wxString& aStr )
+{
+    for( int i = 0; i < COL_COUNT; i++ )
+    {
+        if( GetPinTableColLabel( i ).IsSameAs( aStr, false ) )
+            return (COL_ORDER) i;
+    }
+    return COL_COUNT;
+}
+
+/**
+ * Class that handles conversion of various pin data fields into strings for display in the
+ * UI or serialisation to formats like CSV.
+ */
+class PIN_INFO_FORMATTER
+{
+public:
+    enum class BOOL_FORMAT
+    {
+        ZERO_ONE,
+        TRUE_FALSE,
+    };
+
+    PIN_INFO_FORMATTER( UNITS_PROVIDER& aUnitsProvider, bool aIncludeUnits, BOOL_FORMAT aBoolFormat ) :
+        m_unitsProvider( aUnitsProvider ),
+        m_includeUnits( aIncludeUnits ),
+        m_boolFormat( aBoolFormat )
+    {
+    }
+
+    wxString Format( const SCH_PIN& aPin, int aFieldId ) const
+    {
+        wxString val;
+        switch( aFieldId )
+        {
+        case COL_NAME:
+            val << aPin.GetName();
+            break;
+        case COL_NUMBER:
+            val << aPin.GetNumber();
+            break;
+        case COL_TYPE:
+            val << PinTypeNames()[static_cast<int>( aPin.GetType() )];
+            break;
+        case COL_SHAPE:
+            val << PinShapeNames()[static_cast<int>( aPin.GetShape() )];
+            break;
+        case COL_ORIENTATION:
+        {
+            const int index = PinOrientationIndex( aPin.GetOrientation() );
+            if( index >= 0)
+                val << PinOrientationNames()[ index ];
+            break;
+        }
+        case COL_NUMBER_SIZE:
+            val << m_unitsProvider.StringFromValue( aPin.GetNumberTextSize(), m_includeUnits );
+            break;
+        case COL_NAME_SIZE:
+            val << m_unitsProvider.StringFromValue( aPin.GetNameTextSize(), m_includeUnits );
+            break;
+        case COL_LENGTH:
+            val << m_unitsProvider.StringFromValue( aPin.GetLength(), m_includeUnits );
+            break;
+        case COL_POSX:
+            val << m_unitsProvider.StringFromValue( aPin.GetPosition().x, m_includeUnits );
+            break;
+        case COL_POSY:
+            val << m_unitsProvider.StringFromValue( aPin.GetPosition().y, m_includeUnits );
+            break;
+        case COL_VISIBLE:
+            val << stringFromBool( aPin.IsVisible() );
+            break;
+        case COL_UNIT:
+            if( aPin.GetUnit() )
+                val << LIB_SYMBOL::LetterSubReference( aPin.GetUnit(), 'A' );
+            else
+                val << UNITS_ALL;
+            break;
+        case COL_DEMORGAN:
+            switch( aPin.GetBodyStyle() )
+            {
+            case BODY_STYLE::BASE:
+                val << DEMORGAN_STD;
+                break;
+            case BODY_STYLE::DEMORGAN:
+                val << DEMORGAN_ALT;
+                break;
+            default:
+                val << DEMORGAN_ALL;
+                break;
+            }
+            break;
+        default:
+            wxFAIL_MSG( wxString::Format( "Invalid field id %d", aFieldId ) );
+            break;
+        }
+        return val;
+    }
+
+    /**
+     * Update the pin from the given col/string.
+     *
+     * How much this should follow the format is debatable, but for now it's fairly permissive
+     * (e.g. bools import as 0/1 and no/yes).
+     */
+    void UpdatePin( SCH_PIN& aPin, const wxString& aValue, int aFieldId, const LIB_SYMBOL& aSymbol ) const
+    {
+        switch( aFieldId )
+        {
+        case COL_NUMBER:
+            aPin.SetNumber( aValue );
+            break;
+
+        case COL_NAME:
+            aPin.SetName( aValue );
+            break;
+
+        case COL_TYPE:
+            if( PinTypeNames().Index( aValue, false ) != wxNOT_FOUND )
+                aPin.SetType( (ELECTRICAL_PINTYPE) PinTypeNames().Index( aValue ) );
+            break;
+
+        case COL_SHAPE:
+            if( PinShapeNames().Index( aValue, false ) != wxNOT_FOUND )
+                aPin.SetShape( (GRAPHIC_PINSHAPE) PinShapeNames().Index( aValue ) );
+            break;
+
+        case COL_ORIENTATION:
+            if( PinOrientationNames().Index( aValue, false ) != wxNOT_FOUND )
+                aPin.SetOrientation( (PIN_ORIENTATION) PinOrientationNames().Index( aValue ) );
+            break;
+
+        case COL_NUMBER_SIZE:
+            aPin.SetNumberTextSize( m_unitsProvider.ValueFromString( aValue ) );
+            break;
+
+        case COL_NAME_SIZE:
+            aPin.SetNameTextSize( m_unitsProvider.ValueFromString( aValue ) );
+            break;
+
+        case COL_LENGTH:
+            aPin.ChangeLength( m_unitsProvider.ValueFromString( aValue ) );
+            break;
+
+        case COL_POSX:
+            aPin.SetPosition( VECTOR2I( m_unitsProvider.ValueFromString( aValue ),
+                                        aPin.GetPosition().y ) );
+            break;
+
+        case COL_POSY:
+            aPin.SetPosition( VECTOR2I( aPin.GetPosition().x, m_unitsProvider.ValueFromString( aValue ) ) );
+            break;
+
+        case COL_VISIBLE:
+            aPin.SetVisible(boolFromString( aValue ));
+            break;
+
+        case COL_UNIT:
+            if( aValue == UNITS_ALL )
+            {
+                aPin.SetUnit( 0 );
+            }
+            else
+            {
+                for( int i = 1; i <= aSymbol.GetUnitCount(); i++ )
+                {
+                    if( aValue == LIB_SYMBOL::LetterSubReference( i, 'A' ) )
+                    {
+                        aPin.SetUnit( i );
+                        break;
+                    }
+                }
+            }
+
+            break;
+
+        case COL_DEMORGAN:
+            if( aValue == DEMORGAN_STD )
+                aPin.SetBodyStyle( 1 );
+            else if( aValue == DEMORGAN_ALT )
+                aPin.SetBodyStyle( 2 );
+            else
+                aPin.SetBodyStyle( 0 );
+            break;
+
+        default:
+            wxFAIL_MSG( wxString::Format( "Invalid field id %d", aFieldId ) );
+            break;
+        }
+    }
+
+private:
+    wxString stringFromBool( bool aValue ) const
+    {
+        switch( m_boolFormat )
+        {
+        case BOOL_FORMAT::ZERO_ONE: return aValue ? wxT( "1" ) : wxT( "0" );
+        case BOOL_FORMAT::TRUE_FALSE:
+            return aValue ? _( "True" ) : _( "False" );
+            // no default
+        }
+        wxCHECK_MSG( false, wxEmptyString, "Invalid BOOL_FORMAT" );
+    }
+
+    bool boolFromString( const wxString& aValue ) const
+    {
+        if( aValue == wxS( "1" ) )
+        {
+            return true;
+        }
+        else if( aValue == wxS( "0" ) )
+        {
+            return false;
+        }
+        else if( aValue.IsSameAs( _( "True" ), false ) )
+        {
+            return true;
+        }
+        else if( aValue.IsSameAs( _( "False" ), false ) )
+        {
+            return false;
+        }
+        else
+        {
+            wxFAIL_MSG( wxString::Format( "string '%s' can't be converted to boolean correctly, "
+                                          "it will have been perceived as FALSE",
+                                          aValue ) );
+            return false;
+        }
+    }
+
+    UNITS_PROVIDER& m_unitsProvider;
+    bool            m_includeUnits;
+    BOOL_FORMAT     m_boolFormat;
+};
 
 
 void getSelectedArea( WX_GRID* aGrid, int* aRowStart, int* aRowCount )
@@ -114,24 +384,7 @@ public:
 
     wxString GetColLabelValue( int aCol ) override
     {
-        switch( aCol )
-        {
-        case COL_PIN_COUNT:    return _( "Count" );
-        case COL_NUMBER:       return _( "Number" );
-        case COL_NAME:         return _( "Name" );
-        case COL_TYPE:         return _( "Electrical Type" );
-        case COL_SHAPE:        return _( "Graphic Style" );
-        case COL_ORIENTATION:  return _( "Orientation" );
-        case COL_NUMBER_SIZE:  return _( "Number Text Size" );
-        case COL_NAME_SIZE:    return _( "Name Text Size" );
-        case COL_LENGTH:       return _( "Length" );
-        case COL_POSX:         return _( "X Position" );
-        case COL_POSY:         return _( "Y Position" );
-        case COL_VISIBLE:      return _( "Visible" );
-        case COL_UNIT:         return _( "Unit" );
-        case COL_DEMORGAN:     return _( "De Morgan" );
-        default:               wxFAIL; return wxEmptyString;
-        }
+        return GetPinTableColLabel( aCol );
     }
 
     bool IsEmptyCell( int row, int col ) override
@@ -163,87 +416,18 @@ public:
         if( pins.empty() )
             return fieldValue;
 
-        for( SCH_PIN* pin : pins )
+        PIN_INFO_FORMATTER formatter( *aParentFrame, true, PIN_INFO_FORMATTER::BOOL_FORMAT::ZERO_ONE );
+
+        for( const SCH_PIN* pin : pins )
         {
             wxString val;
-
             switch( aCol )
             {
             case COL_PIN_COUNT:
                 val << pins.size();
                 break;
-
-            case COL_NUMBER:
-                val = pin->GetNumber();
-                break;
-
-            case COL_NAME:
-                val = pin->GetName();
-                break;
-
-            case COL_TYPE:
-                val = PinTypeNames()[static_cast<int>( pin->GetType() )];
-                break;
-
-            case COL_SHAPE:
-                val = PinShapeNames()[static_cast<int>( pin->GetShape() )];
-                break;
-
-            case COL_ORIENTATION:
-                if( PinOrientationIndex( pin->GetOrientation() ) >= 0 )
-                    val = PinOrientationNames()[ PinOrientationIndex( pin->GetOrientation() ) ];
-
-                break;
-
-            case COL_NUMBER_SIZE:
-                val = aParentFrame->StringFromValue( pin->GetNumberTextSize(), true );
-                break;
-
-            case COL_NAME_SIZE:
-                val = aParentFrame->StringFromValue( pin->GetNameTextSize(), true );
-                break;
-
-            case COL_LENGTH:
-                val = aParentFrame->StringFromValue( pin->GetLength(), true );
-                break;
-
-            case COL_POSX:
-                val = aParentFrame->StringFromValue( pin->GetPosition().x, true );
-                break;
-
-            case COL_POSY:
-                val = aParentFrame->StringFromValue( pin->GetPosition().y, true );
-                break;
-
-            case COL_VISIBLE:
-                val = StringFromBool( pin->IsVisible() );
-                break;
-
-            case COL_UNIT:
-                if( pin->GetUnit() )
-                    val = LIB_SYMBOL::LetterSubReference( pin->GetUnit(), 'A' );
-                else
-                    val = UNITS_ALL;
-
-                break;
-
-            case COL_DEMORGAN:
-                switch( pin->GetBodyStyle() )
-                {
-                case BODY_STYLE::BASE:
-                    val = DEMORGAN_STD;
-                    break;
-                case BODY_STYLE::DEMORGAN:
-                    val = DEMORGAN_ALT;
-                    break;
-                default:
-                    val = DEMORGAN_ALL;
-                    break;
-                }
-                break;
-
             default:
-                wxFAIL;
+                val << formatter.Format( *pin, aCol );
                 break;
             }
 
@@ -365,96 +549,11 @@ public:
             return;
         }
 
+        PIN_INFO_FORMATTER formatter( *m_frame, true, PIN_INFO_FORMATTER::BOOL_FORMAT::ZERO_ONE );
+
         for( SCH_PIN* pin : pins )
         {
-            switch( aCol )
-            {
-            case COL_NUMBER:
-                if( !m_pinTable->IsDisplayGrouped() )
-                    pin->SetNumber( value );
-
-                break;
-
-            case COL_NAME:
-                pin->SetName( value );
-                break;
-
-            case COL_TYPE:
-                if( PinTypeNames().Index( value ) != wxNOT_FOUND )
-                    pin->SetType( (ELECTRICAL_PINTYPE) PinTypeNames().Index( value ) );
-
-                break;
-
-            case COL_SHAPE:
-                if( PinShapeNames().Index( value ) != wxNOT_FOUND )
-                    pin->SetShape( (GRAPHIC_PINSHAPE) PinShapeNames().Index( value ) );
-
-                break;
-
-            case COL_ORIENTATION:
-                if( PinOrientationNames().Index( value ) != wxNOT_FOUND )
-                    pin->SetOrientation(
-                            PinOrientationCode( PinOrientationNames().Index( value ) ) );
-                break;
-
-            case COL_NUMBER_SIZE:
-                pin->SetNumberTextSize( m_frame->ValueFromString( value ) );
-                break;
-
-            case COL_NAME_SIZE:
-                pin->SetNameTextSize( m_frame->ValueFromString( value ) );
-                break;
-
-            case COL_LENGTH:
-                pin->ChangeLength( m_frame->ValueFromString( value ) );
-                break;
-
-            case COL_POSX:
-                pin->SetPosition( VECTOR2I( m_frame->ValueFromString( value ),
-                                            pin->GetPosition().y ) );
-                break;
-
-            case COL_POSY:
-                pin->SetPosition( VECTOR2I( pin->GetPosition().x,
-                                            m_frame->ValueFromString( value ) ) );
-                break;
-
-            case COL_VISIBLE:
-                pin->SetVisible(BoolFromString( value ));
-                break;
-
-            case COL_UNIT:
-                if( value == UNITS_ALL )
-                {
-                    pin->SetUnit( 0 );
-                }
-                else
-                {
-                    for( int i = 1; i <= m_symbol->GetUnitCount(); i++ )
-                    {
-                        if( value == LIB_SYMBOL::LetterSubReference( i, 'A' ) )
-                        {
-                            pin->SetUnit( i );
-                            break;
-                        }
-                    }
-                }
-
-                break;
-
-            case COL_DEMORGAN:
-                if( value == DEMORGAN_STD )
-                    pin->SetBodyStyle( 1 );
-                else if( value == DEMORGAN_ALT )
-                    pin->SetBodyStyle( 2 );
-                else
-                    pin->SetBodyStyle( 0 );
-                break;
-
-            default:
-                wxFAIL;
-                break;
-            }
+            formatter.UpdatePin( *pin, value, aCol, *m_symbol );
         }
 
         m_edited = true;
@@ -673,34 +772,6 @@ public:
     }
 
 private:
-    static wxString StringFromBool( bool aValue )
-    {
-        if( aValue )
-            return wxT( "1" );
-        else
-            return wxT( "0" );
-    }
-
-    static bool BoolFromString( wxString aValue )
-    {
-        if( aValue == wxS( "1" ) )
-        {
-            return true;
-        }
-        else if( aValue == wxS( "0" ) )
-        {
-            return false;
-        }
-        else
-        {
-            wxFAIL_MSG( wxString::Format( "string '%s' can't be converted to boolean correctly, "
-                                          "it will have been perceived as FALSE",
-                                          aValue ) );
-            return false;
-        }
-    }
-
-private:
     SYMBOL_EDIT_FRAME*                 m_frame;
 
     // Because the rows of the grid can either be a single pin or a group of pins, the
@@ -716,6 +787,185 @@ private:
 
     std::unique_ptr<NUMERIC_EVALUATOR> m_eval;
     std::map< std::pair<std::vector<SCH_PIN*>, int>, wxString > m_evalOriginal;
+};
+
+
+class PIN_TABLE_EXPORT
+{
+public:
+    PIN_TABLE_EXPORT( UNITS_PROVIDER& aUnitsProvider ) :
+            m_unitsProvider( aUnitsProvider )
+    {
+    }
+
+    void ExportData( std::vector<SCH_PIN*>& aPins, const wxString& aToFile ) const
+    {
+        std::vector<int> exportCols {
+            COL_NUMBER,
+            COL_NAME,
+            COL_TYPE,
+            COL_SHAPE,
+            COL_ORIENTATION,
+            COL_NUMBER_SIZE,
+            COL_NAME_SIZE,
+            COL_LENGTH,
+            COL_POSX,
+            COL_POSY,
+            COL_VISIBLE,
+            COL_UNIT,
+            COL_DEMORGAN,
+        };
+
+        std::vector<std::vector<wxString>> exportTable;
+        exportTable.reserve( aPins.size() + 1 );
+
+        std::vector<wxString> headers;
+        for( int col : exportCols )
+        {
+            headers.push_back( GetPinTableColLabel( col ) );
+        }
+        exportTable.emplace_back( std::move( headers ) );
+
+        PIN_INFO_FORMATTER formatter( m_unitsProvider, false, PIN_INFO_FORMATTER::BOOL_FORMAT::TRUE_FALSE );
+
+        for( const SCH_PIN* pin : aPins )
+        {
+            std::vector<wxString>& cols = exportTable.emplace_back( 0 );
+            cols.reserve( exportCols.size() );
+            for( int col : exportCols )
+            {
+                cols.emplace_back( formatter.Format( *pin, col ) );
+            }
+        }
+
+        if( !aToFile.IsEmpty() )
+        {
+            wxFileOutputStream os( aToFile );
+            CSV_WRITER         writer( os );
+            writer.WriteLines( exportTable );
+        }
+        else
+        {
+            SaveTabularDataToClipboard( exportTable );
+        }
+    }
+
+private:
+    UNITS_PROVIDER& m_unitsProvider;
+};
+
+
+class PIN_TABLE_IMPORT
+{
+public:
+    PIN_TABLE_IMPORT( EDA_BASE_FRAME& aFrame ) :
+            m_frame( aFrame )
+    {
+    }
+
+    std::vector<std::unique_ptr<SCH_PIN>> ImportData( bool aFromFile, LIB_SYMBOL& aSym ) const
+    {
+        wxString path;
+
+        if( aFromFile )
+        {
+            path = promptForFile();
+            if( path.IsEmpty() )
+                return {};
+        }
+
+        std::vector<std::vector<wxString>> csvData;
+        bool                               ok = false;
+
+        if( !path.IsEmpty() )
+        {
+            // Read file content
+            wxString csvFileContent = SafeReadFile( path, "r" );
+            ok = AutoDecodeCSV( csvFileContent, csvData );
+        }
+        else
+        {
+            ok = GetTabularDataFromClipboard( csvData );
+        }
+
+        std::vector<std::unique_ptr<SCH_PIN>> pins;
+
+        PIN_INFO_FORMATTER formatter( m_frame, false, PIN_INFO_FORMATTER::BOOL_FORMAT::TRUE_FALSE );
+
+        if( ok )
+        {
+            // The first thing we need to do is map the CSV columns to the pin table columns
+            // (in case the user reorders them)
+            std::vector<COL_ORDER> headerCols = getColOrderFromCSV( csvData[0] );
+
+            for( size_t i = 1; i < csvData.size(); ++i )
+            {
+                std::vector<wxString>& cols = csvData[i];
+
+                auto pin = std::make_unique<SCH_PIN>( &aSym );
+
+                // Ignore cells that stick out to the right of the headers
+                size_t maxCol = std::min( headerCols.size(), cols.size() );
+
+                for( size_t j = 0; j < maxCol; ++j )
+                {
+                    // Skip unrecognised columns
+                    if( headerCols[j] == COL_COUNT )
+                        continue;
+
+                    formatter.UpdatePin( *pin, cols[j], headerCols[j], aSym );
+                }
+
+                pins.emplace_back( std::move( pin ) );
+            }
+        }
+        return pins;
+    }
+
+private:
+    wxString promptForFile() const
+    {
+        wxFileDialog dlg( &m_frame, _( "Select pin data file" ), "", "", FILEEXT::CsvTsvFileWildcard(),
+                          wxFD_OPEN | wxFD_FILE_MUST_EXIST );
+
+        if( dlg.ShowModal() == wxID_CANCEL )
+            return wxEmptyString;
+
+        return dlg.GetPath();
+    }
+
+    std::vector<COL_ORDER> getColOrderFromCSV( const std::vector<wxString>& aHeaderRow ) const
+    {
+        std::vector<COL_ORDER> colOrder;
+        wxArrayString          unknownHeaders;
+
+        for( size_t i = 0; i < aHeaderRow.size(); ++i )
+        {
+            COL_ORDER col = GetColTypeForString( aHeaderRow[i] );
+
+            if( col >= COL_COUNT )
+                unknownHeaders.push_back( aHeaderRow[i] );
+
+            colOrder.push_back( col );
+        }
+
+        if( unknownHeaders.size() )
+        {
+            wxString msg = wxString::Format( _( "Unknown columns in data: %s. These columns will be ignored." ),
+                                             AccumulateDescriptions( unknownHeaders ) );
+
+            showWarning( msg );
+        }
+
+        return colOrder;
+    }
+
+    void showWarning( const wxString& aMsg ) const
+    {
+        wxMessageBox( aMsg, _( "CSV import warning" ), wxOK | wxICON_WARNING );
+    }
+
+    EDA_BASE_FRAME& m_frame;
 };
 
 
@@ -1131,6 +1381,82 @@ void DIALOG_LIB_EDIT_PIN_TABLE::OnFilterChoice( wxCommandEvent& event )
     m_dataModel->SetUnitFilter( m_unitFilter->GetSelection() );
 
     OnRebuildRows( event );
+}
+
+
+void DIALOG_LIB_EDIT_PIN_TABLE::OnImportButtonClick( wxCommandEvent& event )
+{
+    bool fromFile = event.GetEventObject() == m_btnImportFromFile;
+    bool replaceAll = m_rbReplaceAll->GetValue();
+
+    PIN_TABLE_IMPORT                      importer( *m_editFrame );
+    std::vector<std::unique_ptr<SCH_PIN>> newPins = importer.ImportData( fromFile, *m_symbol );
+
+    if( !newPins.size() )
+    {
+        return;
+    }
+
+    if( replaceAll )
+    {
+        // This is quite a dance with a segfault without smart pointers
+        for( SCH_PIN* pin : m_pins )
+            delete pin;
+        m_pins.clear();
+    }
+
+    for( auto& newPin : newPins )
+    {
+        m_pins.push_back( newPin.release() );
+    }
+
+    m_cbGroup->SetValue( false );
+    m_dataModel->RebuildRows( m_pins, false, false );
+
+    updateSummary();
+}
+
+
+void DIALOG_LIB_EDIT_PIN_TABLE::OnExportButtonClick( wxCommandEvent& event )
+{
+    bool toFile = event.GetEventObject() == m_btnExportToFile;
+    bool onlyShown = m_rbExportOnlyShownPins->GetValue();
+
+    wxString filePath = wxEmptyString;
+
+    if( toFile )
+    {
+        wxFileName fn( m_symbol->GetName() );
+        fn.SetExt( FILEEXT::CsvFileExtension );
+        wxFileDialog dlg( this, _( "Select pin data file" ), "", fn.GetFullName(), FILEEXT::CsvFileWildcard(),
+                          wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
+
+        if( dlg.ShowModal() == wxID_CANCEL )
+            return;
+
+        filePath = dlg.GetPath();
+    }
+
+    std::vector<SCH_PIN*> pinsToExport;
+
+    if( onlyShown )
+    {
+        for( int i = 0; i < m_dataModel->GetNumberRows(); ++i )
+        {
+            for( SCH_PIN* pin : m_dataModel->GetRowPins( i ) )
+            {
+                pinsToExport.push_back( pin );
+            }
+        }
+    }
+    else
+    {
+        pinsToExport = m_pins;
+    }
+
+
+    PIN_TABLE_EXPORT exporter( *m_editFrame );
+    exporter.ExportData( pinsToExport, filePath );
 }
 
 

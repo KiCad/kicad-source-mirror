@@ -26,6 +26,12 @@
 #include <wx/clipbrd.h>
 #include <wx/image.h>
 #include <wx/log.h>
+#include <wx/string.h>
+#include <wx/sstream.h>
+
+#include <sstream>
+
+#include <io/csv.h>
 
 
 bool SaveClipboard( const std::string& aTextUTF8 )
@@ -106,4 +112,66 @@ std::unique_ptr<wxImage> GetImageFromClipboard()
     }
 
     return image;
+}
+
+
+bool SaveTabularDataToClipboard( const std::vector<std::vector<wxString>>& aData )
+{
+    wxLogNull doNotLog; // disable logging of failed clipboard actions
+
+    if( wxTheClipboard->Open() )
+    {
+        wxDataObjectComposite* data = new wxDataObjectComposite();
+
+        // Set plain text CSV
+        {
+            wxStringOutputStream os;
+            CSV_WRITER           writer( os );
+            writer.WriteLines( aData );
+
+            data->Add( new wxTextDataObject( os.GetString() ), true );
+        }
+
+        // At this point, it would be great if we could add some format that spreadsheet
+        // programs can understand without asking the user for options: perhaps SYLK or DIF.
+        // But it doesn't seem like WX allows to put arbitrary MIME types on the clipboard,
+        // even with wxCustomDataObject( wxDataFormat( "mime/type" ) ), which just ends up as
+        // wxDF_PRIVATE, and wxDF_SYLK/DIF aren't mapped on GTK.
+
+        wxTheClipboard->SetData( data );
+        wxTheClipboard->Flush(); // Allow data to be available after closing KiCad
+        wxTheClipboard->Close();
+
+        return true;
+    }
+
+    return false;
+}
+
+
+bool GetTabularDataFromClipboard( std::vector<std::vector<wxString>>& aData )
+{
+    // Again, it would be ideal if we could detect a spreadsheet mimetype here,
+    // but WX doesn't seem to do that on Linux, at least.
+
+    bool ok = false;
+
+    // First try for text data
+    if( wxTheClipboard->Open() )
+    {
+        if( wxTheClipboard->IsSupported( wxDF_TEXT ) )
+        {
+            wxTextDataObject data;
+            if( wxTheClipboard->GetData( data ) )
+            {
+                ok = AutoDecodeCSV( data.GetText(), aData );
+            }
+        }
+
+        // We could also handle .csv wxDF_FILENAMEs here
+
+        wxTheClipboard->Close();
+    }
+
+    return ok;
 }

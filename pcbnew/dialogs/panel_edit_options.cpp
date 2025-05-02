@@ -93,6 +93,7 @@ static ARC_EDIT_MODE arcEditModeToEnum( int aIndex )
             wxFAIL_MSG( wxString::Format( "Invalid index for ARC_EDIT_MODE: %d", aIndex ) );
             break;
     }
+
     return ARC_EDIT_MODE::KEEP_CENTER_ADJUST_ANGLE_RADIUS;
 };
 

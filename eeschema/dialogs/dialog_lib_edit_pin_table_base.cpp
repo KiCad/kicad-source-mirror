@@ -20,6 +20,12 @@ DIALOG_LIB_EDIT_PIN_TABLE_BASE::DIALOG_LIB_EDIT_PIN_TABLE_BASE( wxWindow* parent
 	wxBoxSizer* top_sizer;
 	top_sizer = new wxBoxSizer( wxVERTICAL );
 
+	wxBoxSizer* bSizer6;
+	bSizer6 = new wxBoxSizer( wxHORIZONTAL );
+
+	wxBoxSizer* bLeftGridSizer;
+	bLeftGridSizer = new wxBoxSizer( wxVERTICAL );
+
 	wxBoxSizer* bSummarySizer;
 	bSummarySizer = new wxBoxSizer( wxHORIZONTAL );
 
@@ -54,7 +60,7 @@ DIALOG_LIB_EDIT_PIN_TABLE_BASE::DIALOG_LIB_EDIT_PIN_TABLE_BASE( wxWindow* parent
 	bSummarySizer->Add( m_duplicate_pins, 0, wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
 
 
-	top_sizer->Add( bSummarySizer, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 10 );
+	bLeftGridSizer->Add( bSummarySizer, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 10 );
 
 	wxBoxSizer* bGridMarginsSizer;
 	bGridMarginsSizer = new wxBoxSizer( wxVERTICAL );
@@ -115,7 +121,79 @@ DIALOG_LIB_EDIT_PIN_TABLE_BASE::DIALOG_LIB_EDIT_PIN_TABLE_BASE( wxWindow* parent
 	bGridMarginsSizer->Add( m_grid, 1, wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 10 );
 
 
-	top_sizer->Add( bGridMarginsSizer, 1, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	bLeftGridSizer->Add( bGridMarginsSizer, 1, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+
+
+	bSizer6->Add( bLeftGridSizer, 1, wxEXPAND, 5 );
+
+	wxBoxSizer* bRightPaneSizer;
+	bRightPaneSizer = new wxBoxSizer( wxVERTICAL );
+
+	m_exportPane = new wxCollapsiblePane( this, wxID_ANY, _("Export"), wxDefaultPosition, wxDefaultSize, wxCP_DEFAULT_STYLE );
+	m_exportPane->Collapse( false );
+
+	wxBoxSizer* bExportSizer;
+	bExportSizer = new wxBoxSizer( wxVERTICAL );
+
+	m_rbExportAllPins = new wxRadioButton( m_exportPane->GetPane(), wxID_ANY, _("Export all pins"), wxDefaultPosition, wxDefaultSize, 0 );
+	bExportSizer->Add( m_rbExportAllPins, 0, wxALL, 5 );
+
+	m_rbExportOnlyShownPins = new wxRadioButton( m_exportPane->GetPane(), wxID_ANY, _("Export only shown pins"), wxDefaultPosition, wxDefaultSize, 0 );
+	bExportSizer->Add( m_rbExportOnlyShownPins, 0, wxALL, 5 );
+
+	wxBoxSizer* bExportBtnSizer;
+	bExportBtnSizer = new wxBoxSizer( wxHORIZONTAL );
+
+	m_btnExportToFile = new wxButton( m_exportPane->GetPane(), wxID_ANY, _("To File..."), wxDefaultPosition, wxDefaultSize, 0 );
+	bExportBtnSizer->Add( m_btnExportToFile, 0, wxALL, 5 );
+
+	m_btnExportToClipboard = new wxButton( m_exportPane->GetPane(), wxID_ANY, _("To Clipboard"), wxDefaultPosition, wxDefaultSize, 0 );
+	bExportBtnSizer->Add( m_btnExportToClipboard, 0, wxALL, 5 );
+
+
+	bExportSizer->Add( bExportBtnSizer, 1, wxEXPAND, 5 );
+
+
+	m_exportPane->GetPane()->SetSizer( bExportSizer );
+	m_exportPane->GetPane()->Layout();
+	bExportSizer->Fit( m_exportPane->GetPane() );
+	bRightPaneSizer->Add( m_exportPane, 1, wxEXPAND | wxALL, 5 );
+
+	m_importPane = new wxCollapsiblePane( this, wxID_ANY, _("Import"), wxDefaultPosition, wxDefaultSize, wxCP_DEFAULT_STYLE );
+	m_importPane->Collapse( false );
+
+	wxBoxSizer* bImportSizer;
+	bImportSizer = new wxBoxSizer( wxVERTICAL );
+
+	m_rbReplaceAll = new wxRadioButton( m_importPane->GetPane(), wxID_ANY, _("Replace all existing pins"), wxDefaultPosition, wxDefaultSize, 0 );
+	bImportSizer->Add( m_rbReplaceAll, 0, wxALL, 5 );
+
+	m_radioBtn1 = new wxRadioButton( m_importPane->GetPane(), wxID_ANY, _("Append to existing pins"), wxDefaultPosition, wxDefaultSize, 0 );
+	bImportSizer->Add( m_radioBtn1, 0, wxALL, 5 );
+
+	wxBoxSizer* bImportBtnSizer;
+	bImportBtnSizer = new wxBoxSizer( wxHORIZONTAL );
+
+	m_btnImportFromFile = new wxButton( m_importPane->GetPane(), wxID_ANY, _("From File..."), wxDefaultPosition, wxDefaultSize, 0 );
+	bImportBtnSizer->Add( m_btnImportFromFile, 0, wxALL, 5 );
+
+	m_btnImportFromClipboard = new wxButton( m_importPane->GetPane(), wxID_ANY, _("From Clipboard"), wxDefaultPosition, wxDefaultSize, 0 );
+	bImportBtnSizer->Add( m_btnImportFromClipboard, 0, wxALL, 5 );
+
+
+	bImportSizer->Add( bImportBtnSizer, 1, wxEXPAND, 5 );
+
+
+	m_importPane->GetPane()->SetSizer( bImportSizer );
+	m_importPane->GetPane()->Layout();
+	bImportSizer->Fit( m_importPane->GetPane() );
+	bRightPaneSizer->Add( m_importPane, 1, wxEXPAND | wxALL, 5 );
+
+
+	bSizer6->Add( bRightPaneSizer, 0, wxEXPAND, 5 );
+
+
+	top_sizer->Add( bSizer6, 1, wxEXPAND, 5 );
 
 	wxBoxSizer* bBottomSizer;
 	bBottomSizer = new wxBoxSizer( wxHORIZONTAL );
@@ -188,6 +266,10 @@ DIALOG_LIB_EDIT_PIN_TABLE_BASE::DIALOG_LIB_EDIT_PIN_TABLE_BASE( wxWindow* parent
 	m_grid->Connect( wxEVT_GRID_CELL_LEFT_CLICK, wxGridEventHandler( DIALOG_LIB_EDIT_PIN_TABLE_BASE::OnCellSelected ), NULL, this );
 	m_grid->Connect( wxEVT_GRID_EDITOR_SHOWN, wxGridEventHandler( DIALOG_LIB_EDIT_PIN_TABLE_BASE::OnCellSelected ), NULL, this );
 	m_grid->Connect( wxEVT_SIZE, wxSizeEventHandler( DIALOG_LIB_EDIT_PIN_TABLE_BASE::OnSize ), NULL, this );
+	m_btnExportToFile->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_LIB_EDIT_PIN_TABLE_BASE::OnExportButtonClick ), NULL, this );
+	m_btnExportToClipboard->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_LIB_EDIT_PIN_TABLE_BASE::OnExportButtonClick ), NULL, this );
+	m_btnImportFromFile->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_LIB_EDIT_PIN_TABLE_BASE::OnImportButtonClick ), NULL, this );
+	m_btnImportFromClipboard->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_LIB_EDIT_PIN_TABLE_BASE::OnImportButtonClick ), NULL, this );
 	m_addButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_LIB_EDIT_PIN_TABLE_BASE::OnAddRow ), NULL, this );
 	m_deleteButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_LIB_EDIT_PIN_TABLE_BASE::OnDeleteRow ), NULL, this );
 	m_cbGroup->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LIB_EDIT_PIN_TABLE_BASE::OnRebuildRows ), NULL, this );
@@ -207,6 +289,10 @@ DIALOG_LIB_EDIT_PIN_TABLE_BASE::~DIALOG_LIB_EDIT_PIN_TABLE_BASE()
 	m_grid->Disconnect( wxEVT_GRID_CELL_LEFT_CLICK, wxGridEventHandler( DIALOG_LIB_EDIT_PIN_TABLE_BASE::OnCellSelected ), NULL, this );
 	m_grid->Disconnect( wxEVT_GRID_EDITOR_SHOWN, wxGridEventHandler( DIALOG_LIB_EDIT_PIN_TABLE_BASE::OnCellSelected ), NULL, this );
 	m_grid->Disconnect( wxEVT_SIZE, wxSizeEventHandler( DIALOG_LIB_EDIT_PIN_TABLE_BASE::OnSize ), NULL, this );
+	m_btnExportToFile->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_LIB_EDIT_PIN_TABLE_BASE::OnExportButtonClick ), NULL, this );
+	m_btnExportToClipboard->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_LIB_EDIT_PIN_TABLE_BASE::OnExportButtonClick ), NULL, this );
+	m_btnImportFromFile->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_LIB_EDIT_PIN_TABLE_BASE::OnImportButtonClick ), NULL, this );
+	m_btnImportFromClipboard->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_LIB_EDIT_PIN_TABLE_BASE::OnImportButtonClick ), NULL, this );
 	m_addButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_LIB_EDIT_PIN_TABLE_BASE::OnAddRow ), NULL, this );
 	m_deleteButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_LIB_EDIT_PIN_TABLE_BASE::OnDeleteRow ), NULL, this );
 	m_cbGroup->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LIB_EDIT_PIN_TABLE_BASE::OnRebuildRows ), NULL, this );

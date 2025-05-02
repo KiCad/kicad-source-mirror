@@ -187,6 +187,7 @@ public:
     static const std::string TextFileExtension;
     static const std::string MarkdownFileExtension;
     static const std::string CsvFileExtension;
+    static const std::string TsvFileExtension;
     static const std::string XmlFileExtension;
     static const std::string JsonFileExtension;
     static const std::string PythonFileExtension;
@@ -245,6 +246,7 @@ public:
     static wxString PADSNetlistFileWildcard();
     static wxString HtmlFileWildcard();
     static wxString CsvFileWildcard();
+    static wxString CsvTsvFileWildcard();
     static wxString PcbFileWildcard();
     static wxString CadstarArchiveFilesWildcard();
     static wxString AltiumProjectFilesWildcard();

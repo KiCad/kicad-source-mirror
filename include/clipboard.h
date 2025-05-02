@@ -25,8 +25,10 @@
 
 #include <memory>
 #include <string>
+#include <vector>
 
 class wxImage;
+class wxString;
 
 /**
  * Store information to the system clipboard.
@@ -36,6 +38,16 @@ class wxImage;
  * @return False if error occurred.
  */
 bool SaveClipboard( const std::string& aTextUTF8 );
+
+/**
+ * Store tabular data to the system clipboard.
+ */
+bool SaveTabularDataToClipboard( const std::vector<std::vector<wxString>>& aData );
+
+/**
+ * Attempt to get tabular data from the clipboard.
+ */
+bool GetTabularDataFromClipboard( std::vector<std::vector<wxString>>& aData );
 
 /**
  * Return the information currently stored in the system clipboard.

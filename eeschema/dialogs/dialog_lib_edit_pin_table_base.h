@@ -23,11 +23,13 @@ class WX_GRID;
 #include <wx/settings.h>
 #include <wx/sizer.h>
 #include <wx/grid.h>
-#include <wx/bmpbuttn.h>
+#include <wx/radiobut.h>
+#include <wx/button.h>
 #include <wx/bitmap.h>
 #include <wx/image.h>
 #include <wx/icon.h>
-#include <wx/button.h>
+#include <wx/collpane.h>
+#include <wx/bmpbuttn.h>
 #include <wx/checkbox.h>
 #include <wx/choice.h>
 #include <wx/dialog.h>
@@ -49,6 +51,16 @@ class DIALOG_LIB_EDIT_PIN_TABLE_BASE : public DIALOG_SHIM
 		wxStaticText* m_staticTextDuplicatePins;
 		wxStaticText* m_duplicate_pins;
 		WX_GRID* m_grid;
+		wxCollapsiblePane* m_exportPane;
+		wxRadioButton* m_rbExportAllPins;
+		wxRadioButton* m_rbExportOnlyShownPins;
+		wxButton* m_btnExportToFile;
+		wxButton* m_btnExportToClipboard;
+		wxCollapsiblePane* m_importPane;
+		wxRadioButton* m_rbReplaceAll;
+		wxRadioButton* m_radioBtn1;
+		wxButton* m_btnImportFromFile;
+		wxButton* m_btnImportFromClipboard;
 		STD_BITMAP_BUTTON* m_addButton;
 		STD_BITMAP_BUTTON* m_deleteButton;
 		BITMAP_BUTTON* m_divider1;
@@ -68,6 +80,8 @@ class DIALOG_LIB_EDIT_PIN_TABLE_BASE : public DIALOG_SHIM
 		virtual void OnCellEdited( wxGridEvent& event ) = 0;
 		virtual void OnCellSelected( wxGridEvent& event ) = 0;
 		virtual void OnSize( wxSizeEvent& event ) = 0;
+		virtual void OnExportButtonClick( wxCommandEvent& event ) = 0;
+		virtual void OnImportButtonClick( wxCommandEvent& event ) = 0;
 		virtual void OnAddRow( wxCommandEvent& event ) = 0;
 		virtual void OnDeleteRow( wxCommandEvent& event ) = 0;
 		virtual void OnRebuildRows( wxCommandEvent& event ) = 0;

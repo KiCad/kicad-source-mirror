@@ -60,6 +60,7 @@ set( QA_COMMON_SRCS
 
     libeval/test_numeric_evaluator.cpp
 
+    io/test_csv.cpp
     io/altium/test_altium_parser.cpp
     io/altium/test_altium_parser_utils.cpp
     io/cadstar/test_cadstar_parts_parser.cpp

@@ -198,6 +198,7 @@ const std::string FILEEXT::JpegFileExtension( "jpg" );
 const std::string FILEEXT::TextFileExtension( "txt" );
 const std::string FILEEXT::MarkdownFileExtension( "md" );
 const std::string FILEEXT::CsvFileExtension( "csv" );
+const std::string FILEEXT::TsvFileExtension( "tsv" );
 const std::string FILEEXT::XmlFileExtension( "xml" );
 const std::string FILEEXT::JsonFileExtension( "json" );
 const std::string FILEEXT::PythonFileExtension( "py" );
@@ -412,6 +413,12 @@ wxString FILEEXT::HtmlFileWildcard()
 wxString FILEEXT::CsvFileWildcard()
 {
     return _( "CSV Files" ) + AddFileExtListToFilter( { CsvFileExtension } );
+}
+
+
+wxString FILEEXT::CsvTsvFileWildcard()
+{
+    return _( "CSV/TSV Files" ) + AddFileExtListToFilter( { CsvFileExtension, TsvFileExtension } );
 }
 
 

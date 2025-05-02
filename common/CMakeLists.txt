@@ -244,6 +244,7 @@ target_link_libraries( kicommon
     fmt::fmt
     CURL::libcurl
     picosha2
+    rapidcsv
     ${ZSTD_LIBRARY}
     ${wxWidgets_LIBRARIES}
     ${LIBGIT2_LIBRARIES}
@@ -556,6 +557,8 @@ set( COMMON_IO_SRCS
     # EasyEDA pro
     io/easyedapro/easyedapro_parser.cpp
     io/easyedapro/easyedapro_import_utils.cpp
+
+    io/csv.cpp
     )
 
 set ( COMMON_TRANSLINE_CALCULATION_SRCS

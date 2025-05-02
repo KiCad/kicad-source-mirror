@@ -46,6 +46,7 @@ enum COL_ORDER
 };
 
 
+class ACTION_MENU;
 class PIN_TABLE_DATA_MODEL;
 class SYMBOL_EDIT_FRAME;
 
@@ -69,6 +70,8 @@ public:
     void OnGroupSelected( wxCommandEvent& event ) override;
     void OnFilterCheckBox( wxCommandEvent& event ) override;
     void OnFilterChoice( wxCommandEvent& event ) override;
+    void OnImportButtonClick( wxCommandEvent& event ) override;
+    void OnExportButtonClick( wxCommandEvent& event ) override;
     void OnUpdateUI( wxUpdateUIEvent& event ) override;
     void OnCancel( wxCommandEvent& event ) override;
     void OnClose( wxCloseEvent& event ) override;
