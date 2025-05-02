@@ -88,6 +88,13 @@ BOOST_FIXTURE_TEST_CASE( DRCFalsePositiveRegressions, DRC_REGRESSION_TEST_FIXTUR
         bds.m_DRCSeverities[ DRCE_LIB_FOOTPRINT_ISSUES ] = SEVERITY::RPT_SEVERITY_IGNORE;
         bds.m_DRCSeverities[ DRCE_LIB_FOOTPRINT_MISMATCH ] = SEVERITY::RPT_SEVERITY_IGNORE;
 
+        if( relPath.EndsWith( "issue11814" ) )
+        {
+            // This board contains 36 teardrops (likely added by a plugin), all with the same
+            // zone priority.
+            bds.m_DRCSeverities[ DRCE_ZONES_INTERSECT ] = SEVERITY::RPT_SEVERITY_IGNORE;
+        }
+
         bds.m_DRCEngine->SetViolationHandler(
                 [&]( const std::shared_ptr<DRC_ITEM>& aItem, VECTOR2I aPos, int aLayer,
                      DRC_CUSTOM_MARKER_HANDLER* aCustomHandler )
