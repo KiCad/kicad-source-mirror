@@ -1297,21 +1297,21 @@ void SCH_FIELD::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS& 
 
     if( m_id == FIELD_T::INTERSHEET_REFS && Schematic() )
     {
-        SCH_LABEL_BASE*                            label = dynamic_cast<SCH_LABEL_BASE*>( m_parent );
-        std::vector<std::pair<wxString, wxString>> pages;
-        std::vector<wxString>                      pageHrefs;
-        BOX2I                                      bbox = GetBoundingBox();
+        if( SCH_LABEL_BASE* label = dynamic_cast<SCH_LABEL_BASE*>( m_parent ) )
+        {
+            std::vector<std::pair<wxString, wxString>> pages;
+            std::vector<wxString>                      pageHrefs;
 
-        wxCHECK( label, /* void */ );
+            label->GetIntersheetRefs( &Schematic()->CurrentSheet(), &pages );
 
-        label->GetIntersheetRefs( &Schematic()->CurrentSheet(), &pages );
+            for( const auto& [ pageNumber, sheetName ] : pages )
+                pageHrefs.push_back( wxT( "#" ) + pageNumber );
 
-        for( const auto& [ pageNumber, sheetName ] : pages )
-            pageHrefs.push_back( wxT( "#" ) + pageNumber );
+            BOX2I bbox = GetBoundingBox();
+            bbox.Offset( label->GetSchematicTextOffset( renderSettings ) );
 
-        bbox.Offset( label->GetSchematicTextOffset( renderSettings ) );
-
-        aPlotter->HyperlinkMenu( bbox, pageHrefs );
+            aPlotter->HyperlinkMenu( bbox, pageHrefs );
+        }
     }
 }
 
