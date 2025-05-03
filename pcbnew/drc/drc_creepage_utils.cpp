@@ -1,4 +1,3 @@
-
 /*
     * Copyright The KiCad Developers.
     * Copyright (C) 2024 Fabien Corona f.corona<at>laposte.net
@@ -783,7 +782,7 @@ void BE_SHAPE_CIRCLE::ConnectChildren( std::shared_ptr<GRAPH_NODE>& a1,
         PATH_CONNECTION pc;
         pc.a1 = a1->m_pos;
         pc.a2 = a2->m_pos;
-        pc.weight = weight;
+        pc.weight = std::max( weight, 0.0 );
 
         aG.AddConnection( a1, a2, pc );
         return;
@@ -1213,7 +1212,7 @@ std::vector<PATH_CONNECTION> CU_SHAPE_CIRCLE::Paths( const BE_SHAPE_POINT& aS2, 
         return result;
 
     PATH_CONNECTION pc;
-    pc.weight = weight;
+    pc.weight = std::max( weight, 0.0 );
     pc.a2 = point;
     pc.a1 = center + ( point - center ).Resize( R );
 
@@ -1244,7 +1243,7 @@ std::vector<PATH_CONNECTION> CU_SHAPE_CIRCLE::Paths( const CU_SHAPE_CIRCLE& aS2,
         return result;
 
     PATH_CONNECTION pc;
-    pc.weight = weight;
+    pc.weight = std::max( weight, 0.0 );
     pc.a1 = ( C2 - C1 ).Resize( R1 ) + C1;
     pc.a2 = ( C1 - C2 ).Resize( R2 ) + C2;
     result.push_back( pc );
@@ -1362,7 +1361,7 @@ std::vector<PATH_CONNECTION> CU_SHAPE_CIRCLE::Paths( const CU_SHAPE_ARC& aS2, do
 
             if( testAngle < aS2.GetEndAngle() )
             {
-                pc3.weight = arcRadius - ( circlePos - arcPos ).EuclideanNorm() - circleRadius;
+                pc3.weight = std::max( arcRadius - ( circlePos - arcPos ).EuclideanNorm() - circleRadius, 0.0 );
                 pc3.a1 = circlePos + ( circlePos - arcPos ).Resize( circleRadius );
                 pc3.a2 = arcPos + ( circlePos - arcPos ).Resize( arcRadius - aS2.GetWidth() / 2 );
 
@@ -1550,7 +1549,7 @@ std::vector<PATH_CONNECTION> CU_SHAPE_SEGMENT::Paths( const CU_SHAPE_SEGMENT& aS
     PATH_CONNECTION pc;
     pc.a1 = closest1 + ( closest2 - closest1 ).Resize( halfWidth1 );
     pc.a2 = closest2 + ( closest1 - closest2 ).Resize( halfWidth2 );
-    pc.weight = sqrt( min_dist ) - halfWidth1 - halfWidth2;
+    pc.weight = std::max( sqrt( min_dist ) - halfWidth1 - halfWidth2, 0.0 );
 
     if( pc.weight <= aMaxWeight )
     {
@@ -1586,7 +1585,7 @@ std::vector<PATH_CONNECTION> CU_SHAPE_CIRCLE::Paths( const BE_SHAPE_CIRCLE& aS2,
     }
 
     PATH_CONNECTION pc;
-    pc.weight = weight;
+    pc.weight = std::max( weight, 0.0 );
 
     double circleAngle = EDA_ANGLE( center2 - center1 ).AsRadians();
 
@@ -1643,7 +1642,7 @@ std::vector<PATH_CONNECTION> CU_SHAPE_ARC::Paths( const BE_SHAPE_POINT& aS2, dou
         else
         {
             PATH_CONNECTION pc;
-            pc.weight = ( radius - width / 2 ) - ( point - arcCenter ).EuclideanNorm();
+            pc.weight = std::max( ( radius - width / 2 ) - ( point - arcCenter ).EuclideanNorm(), 0.0 );
             pc.a1 = ( point - arcCenter ).Resize( radius - width / 2 ) + arcCenter;
             pc.a2 = point;
 
@@ -2085,6 +2084,15 @@ double CREEPAGE_GRAPH::Solve(
 
             if( !neighbor )
                 continue;
+
+            // Ignore connections with negative weights as Dijkstra doesn't support them.
+            if( connection->m_path.weight < 0.0 )
+            {
+                wxLogTrace( "CREEPAGE",
+                            "Negative weight connection found. Ignoring connection." );
+                continue;
+            }
+
 
             double alt = distances[current]
                          + connection->m_path.weight; // Calculate alternative path cost
