@@ -28,10 +28,11 @@ class WX_GRID;
 #include <wx/bitmap.h>
 #include <wx/image.h>
 #include <wx/icon.h>
-#include <wx/collpane.h>
-#include <wx/bmpbuttn.h>
+#include <wx/statbox.h>
 #include <wx/checkbox.h>
 #include <wx/choice.h>
+#include <wx/gbsizer.h>
+#include <wx/bmpbuttn.h>
 #include <wx/dialog.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -51,25 +52,24 @@ class DIALOG_LIB_EDIT_PIN_TABLE_BASE : public DIALOG_SHIM
 		wxStaticText* m_staticTextDuplicatePins;
 		wxStaticText* m_duplicate_pins;
 		WX_GRID* m_grid;
-		wxCollapsiblePane* m_exportPane;
 		wxRadioButton* m_rbExportAllPins;
 		wxRadioButton* m_rbExportOnlyShownPins;
 		wxButton* m_btnExportToFile;
 		wxButton* m_btnExportToClipboard;
-		wxCollapsiblePane* m_importPane;
 		wxRadioButton* m_rbReplaceAll;
 		wxRadioButton* m_radioBtn1;
 		wxButton* m_btnImportFromFile;
 		wxButton* m_btnImportFromClipboard;
+		wxCheckBox* m_cbFilterByUnit;
+		wxChoice* m_unitFilter;
+		wxCheckBox* m_cbFilterByBodyStyle;
+		wxChoice* m_bodyStyleFilter;
 		STD_BITMAP_BUTTON* m_addButton;
 		STD_BITMAP_BUTTON* m_deleteButton;
 		BITMAP_BUTTON* m_divider1;
 		wxCheckBox* m_cbGroup;
 		wxButton* m_groupSelected;
 		STD_BITMAP_BUTTON* m_refreshButton;
-		BITMAP_BUTTON* m_divider2;
-		wxCheckBox* m_cbFilterByUnit;
-		wxChoice* m_unitFilter;
 		wxStdDialogButtonSizer* m_Buttons;
 		wxButton* m_ButtonsOK;
 		wxButton* m_ButtonsCancel;
@@ -82,12 +82,12 @@ class DIALOG_LIB_EDIT_PIN_TABLE_BASE : public DIALOG_SHIM
 		virtual void OnSize( wxSizeEvent& event ) = 0;
 		virtual void OnExportButtonClick( wxCommandEvent& event ) = 0;
 		virtual void OnImportButtonClick( wxCommandEvent& event ) = 0;
+		virtual void OnFilterCheckBox( wxCommandEvent& event ) = 0;
+		virtual void OnFilterChoice( wxCommandEvent& event ) = 0;
 		virtual void OnAddRow( wxCommandEvent& event ) = 0;
 		virtual void OnDeleteRow( wxCommandEvent& event ) = 0;
 		virtual void OnRebuildRows( wxCommandEvent& event ) = 0;
 		virtual void OnGroupSelected( wxCommandEvent& event ) = 0;
-		virtual void OnFilterCheckBox( wxCommandEvent& event ) = 0;
-		virtual void OnFilterChoice( wxCommandEvent& event ) = 0;
 		virtual void OnCancel( wxCommandEvent& event ) = 0;
 
 

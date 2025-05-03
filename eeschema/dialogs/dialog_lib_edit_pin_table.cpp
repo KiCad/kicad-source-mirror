@@ -355,6 +355,7 @@ public:
                           LIB_SYMBOL* aSymbol ) :
             m_frame( aFrame ),
             m_unitFilter( -1 ),
+            m_bodyStyleFilter( -1 ),
             m_edited( false ),
             m_pinTable( aPinTable ),
             m_symbol( aSymbol )
@@ -378,6 +379,7 @@ public:
     }
 
     void SetUnitFilter( int aFilter ) { m_unitFilter = aFilter; }
+    void SetBodyStyleFilter( int aFilter ) { m_bodyStyleFilter = aFilter; }
 
     int GetNumberRows() override { return (int) m_rows.size(); }
     int GetNumberCols() override { return COL_COUNT; }
@@ -667,7 +669,12 @@ public:
 
         for( SCH_PIN* pin : aPins )
         {
-            if( m_unitFilter == -1 || pin->GetUnit() == 0 || pin->GetUnit() == m_unitFilter )
+            const bool includedByUnit =
+                    ( m_unitFilter == -1 ) || ( pin->GetUnit() == 0 ) || ( pin->GetUnit() == m_unitFilter );
+            const bool includedByBodyStyle =
+                    ( m_bodyStyleFilter == -1 ) || ( pin->GetBodyStyle() == m_bodyStyleFilter );
+
+            if( includedByUnit && includedByBodyStyle )
             {
                 int rowIndex = -1;
 
@@ -778,7 +785,8 @@ private:
     // data model is a 2D vector.  If we're in the single pin case, each row's SCH_PINs
     // contains only a single pin.
     std::vector<std::vector<SCH_PIN*>> m_rows;
-    int                                m_unitFilter;     // 0 to show pins for all units
+    int                                m_unitFilter;      // -1 to show pins for all units
+    int                                m_bodyStyleFilter; // -1 to show all body styles
 
     bool                               m_edited;
 
@@ -1067,7 +1075,6 @@ DIALOG_LIB_EDIT_PIN_TABLE::DIALOG_LIB_EDIT_PIN_TABLE( SYMBOL_EDIT_FRAME* parent,
     m_refreshButton->SetBitmap( KiBitmapBundle( BITMAPS::small_refresh ) );
 
     m_divider1->SetIsSeparator();
-    m_divider2->SetIsSeparator();
 
     GetSizer()->SetSizeHints(this);
     Centre();
@@ -1083,8 +1090,22 @@ DIALOG_LIB_EDIT_PIN_TABLE::DIALOG_LIB_EDIT_PIN_TABLE( SYMBOL_EDIT_FRAME* parent,
     }
     else
     {
-        m_cbFilterByUnit->Show( false );
-        m_unitFilter->Show( false );
+        m_cbFilterByUnit->Enable( false );
+        m_unitFilter->Enable( false );
+    }
+
+    if( aSymbol->HasAlternateBodyStyle() )
+    {
+        m_bodyStyleFilter->Append( DEMORGAN_ALL );
+        m_bodyStyleFilter->Append( DEMORGAN_STD );
+        m_bodyStyleFilter->Append( DEMORGAN_ALT );
+
+        m_bodyStyleFilter->SetSelection( -1 );
+    }
+    else
+    {
+        m_cbFilterByBodyStyle->Enable( false );
+        m_bodyStyleFilter->Enable( false );
     }
 
     SetupStandardButtons();
@@ -1361,14 +1382,39 @@ void DIALOG_LIB_EDIT_PIN_TABLE::OnRebuildRows( wxCommandEvent&  )
 
 void DIALOG_LIB_EDIT_PIN_TABLE::OnFilterCheckBox( wxCommandEvent& event )
 {
-    if( event.IsChecked() )
+    if( event.GetEventObject() == m_cbFilterByUnit )
     {
-        m_dataModel->SetUnitFilter( m_unitFilter->GetSelection() );
+        if( event.IsChecked() )
+        {
+            if( m_unitFilter->GetSelection() == -1 )
+            {
+                m_unitFilter->SetSelection( 0 );
+            }
+
+            m_dataModel->SetUnitFilter( m_unitFilter->GetSelection() );
+        }
+        else
+        {
+            m_dataModel->SetUnitFilter( -1 );
+            m_unitFilter->SetSelection( -1 );
+        }
     }
-    else
+    else if( event.GetEventObject() == m_cbFilterByBodyStyle )
     {
-        m_dataModel->SetUnitFilter( -1 );
-        m_unitFilter->SetSelection( -1 );
+        if( event.IsChecked() )
+        {
+            if( m_bodyStyleFilter->GetSelection() == -1 )
+            {
+                m_bodyStyleFilter->SetSelection( 0 );
+            }
+
+            m_dataModel->SetBodyStyleFilter( m_bodyStyleFilter->GetSelection() );
+        }
+        else
+        {
+            m_dataModel->SetBodyStyleFilter( -1 );
+            m_bodyStyleFilter->SetSelection( -1 );
+        }
     }
 
     OnRebuildRows( event );
@@ -1377,8 +1423,16 @@ void DIALOG_LIB_EDIT_PIN_TABLE::OnFilterCheckBox( wxCommandEvent& event )
 
 void DIALOG_LIB_EDIT_PIN_TABLE::OnFilterChoice( wxCommandEvent& event )
 {
-    m_cbFilterByUnit->SetValue( true );
-    m_dataModel->SetUnitFilter( m_unitFilter->GetSelection() );
+    if( event.GetEventObject() == m_unitFilter )
+    {
+        m_cbFilterByUnit->SetValue( true );
+        m_dataModel->SetUnitFilter( m_unitFilter->GetSelection() );
+    }
+    else if( event.GetEventObject() == m_bodyStyleFilter )
+    {
+        m_cbFilterByBodyStyle->SetValue( true );
+        m_dataModel->SetBodyStyleFilter( m_bodyStyleFilter->GetSelection() );
+    }
 
     OnRebuildRows( event );
 }
