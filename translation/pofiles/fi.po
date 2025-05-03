@@ -19,7 +19,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-29 20:12+0300\n"
+"POT-Creation-Date: 2025-05-03 18:13+0300\n"
 "PO-Revision-Date: 2025-05-01 03:03+0000\n"
 "Last-Translator: Toni Laiho <apelegeos@gmail.com>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/v9/fi/>\n"
@@ -5839,7 +5839,7 @@ msgstr "Muisti loppui."
 #: common/drawing_sheet/ds_draw_item.cpp:132 common/eda_item.cpp:355
 #: common/eda_item.cpp:356 common/eda_item.cpp:384 common/eda_text.cpp:1349
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:47
-#: eeschema/sch_field.cpp:1223 eeschema/sch_field.cpp:1894
+#: eeschema/sch_field.cpp:1223 eeschema/sch_field.cpp:1893
 #: eeschema/sch_label.cpp:2281 eeschema/sch_tablecell.cpp:120
 #: eeschema/sch_text.cpp:641 eeschema/sch_text.h:59 eeschema/schematic.cpp:69
 #: eeschema/widgets/panel_sch_selection_filter.cpp:203
@@ -6583,7 +6583,7 @@ msgstr "Pisteet"
 
 #: common/eda_shape.cpp:1014 common/eda_shape.cpp:2416 common/eda_text.cpp:1389
 #: eeschema/sch_bitmap.cpp:201 eeschema/sch_bitmap.cpp:340
-#: eeschema/sch_field.cpp:1875 eeschema/sch_tablecell.cpp:202
+#: eeschema/sch_field.cpp:1874 eeschema/sch_tablecell.cpp:202
 #: eeschema/sch_text.cpp:785 eeschema/sch_textbox.cpp:681
 #: pcbnew/dialogs/dialog_board_statistics.cpp:685
 #: pcbnew/dialogs/dialog_board_statistics.cpp:695
@@ -6602,7 +6602,7 @@ msgstr "Leveys"
 
 #: common/eda_shape.cpp:1017 common/eda_shape.cpp:2422 common/eda_text.cpp:1394
 #: eeschema/sch_bitmap.cpp:203 eeschema/sch_bitmap.cpp:347
-#: eeschema/sch_field.cpp:1876 eeschema/sch_tablecell.cpp:203
+#: eeschema/sch_field.cpp:1875 eeschema/sch_tablecell.cpp:203
 #: eeschema/sch_text.cpp:786 eeschema/sch_textbox.cpp:682
 #: pcbnew/dialogs/dialog_board_statistics.cpp:687
 #: pcbnew/dialogs/dialog_board_statistics.cpp:696
@@ -6736,7 +6736,7 @@ msgstr "Lihavoitu+Kursiivi"
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:283
 #: eeschema/fields_grid_table.cpp:309 eeschema/fields_grid_table.cpp:724
 #: eeschema/fields_grid_table.cpp:868 eeschema/pin_type.cpp:118
-#: eeschema/sch_field.cpp:1235 eeschema/sch_field.cpp:1829
+#: eeschema/sch_field.cpp:1235 eeschema/sch_field.cpp:1828
 #: eeschema/sch_pin.cpp:2118 pcbnew/dialogs/dialog_render_job.cpp:42
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2603
 msgid "Left"
@@ -6749,7 +6749,7 @@ msgstr "Vasen"
 #: eeschema/fields_grid_table.cpp:725 eeschema/fields_grid_table.cpp:736
 #: eeschema/fields_grid_table.cpp:870 eeschema/fields_grid_table.cpp:894
 #: eeschema/sch_field.cpp:1236 eeschema/sch_field.cpp:1246
-#: eeschema/sch_field.cpp:1830 eeschema/sch_field.cpp:1839
+#: eeschema/sch_field.cpp:1829 eeschema/sch_field.cpp:1838
 #: eeschema/sch_text.cpp:669 gerbview/gerber_file_image.cpp:375
 #: gerbview/gerber_file_image.cpp:378
 #: pcbnew/dialogs/dialog_shape_properties.cpp:886
@@ -6764,7 +6764,7 @@ msgstr "Keskitetty"
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:283
 #: eeschema/fields_grid_table.cpp:311 eeschema/fields_grid_table.cpp:726
 #: eeschema/fields_grid_table.cpp:872 eeschema/pin_type.cpp:117
-#: eeschema/sch_field.cpp:1237 eeschema/sch_field.cpp:1831
+#: eeschema/sch_field.cpp:1237 eeschema/sch_field.cpp:1830
 #: eeschema/sch_pin.cpp:2117 pcbnew/dialogs/dialog_render_job.cpp:43
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2604
 msgid "Right"
@@ -6774,7 +6774,7 @@ msgstr "Oikea"
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:307
 #: eeschema/fields_grid_table.cpp:301 eeschema/fields_grid_table.cpp:735
 #: eeschema/fields_grid_table.cpp:892 eeschema/sch_field.cpp:1245
-#: eeschema/sch_field.cpp:1838 eeschema/sch_text.cpp:668
+#: eeschema/sch_field.cpp:1837 eeschema/sch_text.cpp:668
 #: pcbnew/dialogs/dialog_render_job.cpp:44
 msgid "Top"
 msgstr "Ylä"
@@ -6783,7 +6783,7 @@ msgstr "Ylä"
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:307
 #: eeschema/fields_grid_table.cpp:303 eeschema/fields_grid_table.cpp:737
 #: eeschema/fields_grid_table.cpp:896 eeschema/sch_field.cpp:1247
-#: eeschema/sch_field.cpp:1840 eeschema/sch_text.cpp:670
+#: eeschema/sch_field.cpp:1839 eeschema/sch_text.cpp:670
 #: pcbnew/dialogs/dialog_render_job.cpp:40
 msgid "Bottom"
 msgstr "Ala"
@@ -6795,7 +6795,7 @@ msgstr "Ala"
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:68
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:68
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:65
-#: eeschema/fields_grid_table.cpp:486 eeschema/sch_field.cpp:1883
+#: eeschema/fields_grid_table.cpp:486 eeschema/sch_field.cpp:1882
 #: eeschema/sch_pin.cpp:1588 eeschema/sch_pin.cpp:2163
 #: eeschema/sch_symbol.cpp:2989 eeschema/sch_tablecell.cpp:205
 #: eeschema/sch_text.cpp:794 eeschema/sch_textbox.cpp:709
@@ -6808,7 +6808,7 @@ msgid "Orientation"
 msgstr "Asento"
 
 #: common/eda_text.cpp:1347 eeschema/dialogs/dialog_text_properties_base.h:117
-#: eeschema/sch_field.cpp:1850 eeschema/sch_field.cpp:1881
+#: eeschema/sch_field.cpp:1849 eeschema/sch_field.cpp:1880
 #: eeschema/sch_text.cpp:791 eeschema/sch_textbox.cpp:707
 #: pcbnew/dialogs/dialog_text_properties.cpp:152
 #: pcbnew/dialogs/dialog_text_properties_base.h:112
@@ -6831,7 +6831,7 @@ msgstr "Tekstin Ominaisuudet"
 msgid "Font"
 msgstr "Kirjasin"
 
-#: common/eda_text.cpp:1360 eeschema/sch_field.cpp:1873
+#: common/eda_text.cpp:1360 eeschema/sch_field.cpp:1872
 #: eeschema/sch_label.cpp:2282 eeschema/sch_tablecell.cpp:204
 #: eeschema/sch_text.cpp:787 eeschema/sch_textbox.cpp:683
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:91
@@ -6842,27 +6842,27 @@ msgstr "Kirjasin"
 msgid "Thickness"
 msgstr "Paksuus"
 
-#: common/eda_text.cpp:1371 eeschema/sch_field.cpp:1874
+#: common/eda_text.cpp:1371 eeschema/sch_field.cpp:1873
 #: eeschema/sch_tablecell.cpp:206 eeschema/sch_text.cpp:784
 #: pcbnew/microwave/microwave_polygon.cpp:127
 #: pcbnew/pcb_fields_grid_table.cpp:160
 msgid "Mirrored"
 msgstr "Peilattu"
 
-#: common/eda_text.cpp:1400 eeschema/sch_field.cpp:1853
-#: eeschema/sch_field.cpp:1856 eeschema/sch_label.cpp:2286
+#: common/eda_text.cpp:1400 eeschema/sch_field.cpp:1852
+#: eeschema/sch_field.cpp:1855 eeschema/sch_label.cpp:2286
 msgid "Horizontal Justification"
 msgstr "Vaakatasaus"
 
-#: common/eda_text.cpp:1404 eeschema/sch_field.cpp:1860
-#: eeschema/sch_field.cpp:1863 eeschema/sch_label.cpp:2288
+#: common/eda_text.cpp:1404 eeschema/sch_field.cpp:1859
+#: eeschema/sch_field.cpp:1862 eeschema/sch_label.cpp:2288
 #: pcbnew/pcb_dimension.cpp:1924 pcbnew/pcb_dimension.cpp:1957
 #: pcbnew/pcb_dimension.cpp:1995 pcbnew/pcb_dimension.cpp:2037
 #: pcbnew/pcb_dimension.cpp:2071
 msgid "Vertical Justification"
 msgstr "Pystytasaus"
 
-#: common/eda_text.cpp:1412 eeschema/sch_field.cpp:1872
+#: common/eda_text.cpp:1412 eeschema/sch_field.cpp:1871
 #: eeschema/sch_label.cpp:2246 eeschema/sch_tablecell.cpp:208
 #: pcbnew/pcb_dimension.cpp:1927 pcbnew/pcb_dimension.cpp:1960
 #: pcbnew/pcb_dimension.cpp:1998 pcbnew/pcb_dimension.cpp:2040
@@ -8577,12 +8577,12 @@ msgstr "Sivu %s"
 msgid "%s (Page %s)"
 msgstr "%s (Sivu %s)"
 
-#: common/plotters/PDF_plotter.cpp:1421
+#: common/plotters/PDF_plotter.cpp:1425
 #, c-format
 msgid "Show Page %s"
 msgstr "Näytä Sivu %s"
 
-#: common/plotters/PDF_plotter.cpp:1441
+#: common/plotters/PDF_plotter.cpp:1445
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:925
 #: eeschema/tools/sch_navigate_tool.cpp:105
 #, c-format
@@ -11026,34 +11026,34 @@ msgstr ""
 "%s\n"
 "ei löydetty. Skripti ei ole käytettävissä."
 
-#: eeschema/connection_graph.cpp:3288
+#: eeschema/connection_graph.cpp:3291
 #, c-format
 msgid ""
 "Both %s and %s are attached to the same items; %s will be used in the netlist"
 msgstr ""
 "Sekä %s että %s on kiinnitetty samoihin kohteisiin; %s käytetään netlistissa"
 
-#: eeschema/connection_graph.cpp:3526
+#: eeschema/connection_graph.cpp:3529
 #, c-format
 msgid ""
 "Net %s is graphically connected to bus %s but is not a member of that bus"
 msgstr ""
 "Net %s on graafisesti kytketty väylään %s, mutta ei ole kyseisen väylän jäsen"
 
-#: eeschema/connection_graph.cpp:3831 eeschema/erc/erc_item.cpp:229
+#: eeschema/connection_graph.cpp:3834 eeschema/erc/erc_item.cpp:229
 msgid "Unconnected wire endpoint"
 msgstr "Kytkemätön johdon päätepiste"
 
-#: eeschema/connection_graph.cpp:3856
+#: eeschema/connection_graph.cpp:3859
 msgid "Unconnected wire to bus entry"
 msgstr "Kytkemätön johto väyläliitäntään"
 
-#: eeschema/connection_graph.cpp:4231
+#: eeschema/connection_graph.cpp:4234
 #, c-format
 msgid "Sheet pin %s has no matching hierarchical label inside the sheet"
 msgstr "Sivun nastassa %s ei ole vastaavaa hierarkkista nimiötä lehden sisällä"
 
-#: eeschema/connection_graph.cpp:4249
+#: eeschema/connection_graph.cpp:4252
 #, c-format
 msgid "Hierarchical label %s has no matching sheet pin in the parent sheet"
 msgstr "Hierarkisella nimiöllä %s ei ole vastaavaa lehtinastaa emolehdellä"
@@ -12954,7 +12954,7 @@ msgstr "V Kohdista"
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:67
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:64
 #: eeschema/fields_grid_table.cpp:485 eeschema/sch_field.cpp:1231
-#: eeschema/sch_field.cpp:1879 eeschema/sch_label.cpp:1203
+#: eeschema/sch_field.cpp:1878 eeschema/sch_label.cpp:1203
 #: eeschema/sch_tablecell.cpp:133 eeschema/sch_text.cpp:652
 #: eeschema/sch_text.cpp:789 eeschema/sch_textbox.cpp:543
 #: eeschema/sch_textbox.cpp:704 pcbnew/tools/board_inspection_tool.cpp:1442
@@ -17478,11 +17478,11 @@ msgstr "Vaakasuora"
 msgid "Vertical"
 msgstr "Pystysuunta"
 
-#: eeschema/fields_grid_table.cpp:491 eeschema/sch_field.cpp:1869
+#: eeschema/fields_grid_table.cpp:491 eeschema/sch_field.cpp:1868
 msgid "Allow Autoplacement"
 msgstr "Salli Automaattinen sijoittelu"
 
-#: eeschema/fields_grid_table.cpp:492 eeschema/sch_field.cpp:1908
+#: eeschema/fields_grid_table.cpp:492 eeschema/sch_field.cpp:1907
 #: eeschema/sch_item.cpp:548 eeschema/sch_item.cpp:600
 msgid "Private"
 msgstr "Yksityinen"
@@ -18667,7 +18667,7 @@ msgstr "Takaisin viimeksi valittuun lehteen"
 msgid "Sheet References"
 msgstr "Sivun Viitteet"
 
-#: eeschema/sch_field.cpp:1866
+#: eeschema/sch_field.cpp:1865
 msgid "Show Field Name"
 msgstr "Näytä Kentän Nimi"
 
@@ -19431,38 +19431,38 @@ msgstr ""
 "Tiedosto kohteessa '%s' ohitettiin. Sen sijaan käytetään aiemmin löydettyä "
 "tiedostoa %s."
 
-#: eeschema/sch_io/ltspice/ltspice_schematic.cpp:363
+#: eeschema/sch_io/ltspice/ltspice_schematic.cpp:364
 #, c-format
 msgid "Expecting integer at line %d in file %s"
 msgstr "Odotetaan kokonaislukua rivillä %d tiedostossa %s"
 
-#: eeschema/sch_io/ltspice/ltspice_schematic.cpp:386
+#: eeschema/sch_io/ltspice/ltspice_schematic.cpp:387
 #, c-format
 msgid "Expected data missing on line %d in file %s"
 msgstr "Odotetut tiedot puuttuvat riviltä %d tiedostossa %s"
 
-#: eeschema/sch_io/ltspice/ltspice_schematic.cpp:392
+#: eeschema/sch_io/ltspice/ltspice_schematic.cpp:393
 #, c-format
 msgid "Extra data found on line %d in file %s"
 msgstr "Ylimääräistä dataa löytyi riviltä %d tiedostosta %s"
 
-#: eeschema/sch_io/ltspice/ltspice_schematic.cpp:418
+#: eeschema/sch_io/ltspice/ltspice_schematic.cpp:419
 msgid "Expecting 0, 1, 2, 3 or 4"
 msgstr "Odotetaan 0, 1, 2, 3 tai 4"
 
-#: eeschema/sch_io/ltspice/ltspice_schematic.cpp:432
+#: eeschema/sch_io/ltspice/ltspice_schematic.cpp:433
 msgid "Expecting NORMAL or WIDE"
 msgstr "Odotetaan NORMAL tai WIDE"
 
-#: eeschema/sch_io/ltspice/ltspice_schematic.cpp:450
+#: eeschema/sch_io/ltspice/ltspice_schematic.cpp:451
 msgid "Expecting I, O, B, IN, OUT or BIDIR"
 msgstr "Odotetaan I, O, B, IN, OUT tai BIDIR"
 
-#: eeschema/sch_io/ltspice/ltspice_schematic.cpp:471
+#: eeschema/sch_io/ltspice/ltspice_schematic.cpp:472
 msgid "Expecting R0, R90, R18, R270, M0, M90, M180 or M270"
 msgstr "Odotetaan R0, R90, R18, R270, M0, M90, M180 tai M270"
 
-#: eeschema/sch_io/ltspice/ltspice_schematic.cpp:494
+#: eeschema/sch_io/ltspice/ltspice_schematic.cpp:495
 #, fuzzy
 msgid ""
 "Expecting LEFT, CENTER, RIGHT, TOP, BOTTOM, VLEFT, VRIGHT, VCENTER, VTOP, "
@@ -19471,7 +19471,7 @@ msgstr ""
 "Odotetaan LEFT, CENTER, RIGHT, TOP, BOTTOM, VLEFT, VRIGHT, VCENTER, VTOP tai "
 "VBOTTOM"
 
-#: eeschema/sch_io/ltspice/ltspice_schematic.cpp:517
+#: eeschema/sch_io/ltspice/ltspice_schematic.cpp:518
 msgid ""
 "Expecting NONE, BOTTOM, TOP, LEFT, RIGHT, VBOTTOM, VTOP, VCENTER, VLEFT or "
 "VRIGHT"
@@ -19479,14 +19479,21 @@ msgstr ""
 "Odotetaan NONE, BOTTOM, TOP, LEFT, RIGHT, VBOTTOM, VTOP, VCENTER, VLEFT tai "
 "VRIGHT"
 
-#: eeschema/sch_io/ltspice/ltspice_schematic.cpp:531
+#: eeschema/sch_io/ltspice/ltspice_schematic.cpp:532
 msgid "Expecting CELL or BLOCK"
 msgstr "Odotetaan CELL tai BLOCK"
 
-#: eeschema/sch_io/ltspice/ltspice_schematic.cpp:550
+#: eeschema/sch_io/ltspice/ltspice_schematic.cpp:551
 #, c-format
 msgid "Symbol '%s.asy' not found"
 msgstr "Symbolia '%s.asy' ei löydy"
+
+#: eeschema/sch_io/ltspice/sch_io_ltspice.cpp:125
+#, c-format
+msgid ""
+"Unable to find LTspice symbols.\n"
+"Install LTspice or put its library files into %s"
+msgstr ""
 
 #: eeschema/sch_io/ltspice/sch_io_ltspice.h:49
 msgid "LTspice schematic files"

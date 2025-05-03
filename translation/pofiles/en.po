@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-29 20:12+0300\n"
+"POT-Creation-Date: 2025-05-03 18:13+0300\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -12718,6 +12718,14 @@ msgstr "Expecting CELL or BLOCK"
 #, c-format
 msgid "Symbol '%s.asy' not found"
 msgstr "Symbol '%s.asy' not found"
+
+#, c-format
+msgid ""
+"Unable to find LTspice symbols.\n"
+"Install LTspice or put its library files into %s"
+msgstr ""
+"Unable to find LTspice symbols.\n"
+"Install LTspice or put its library files into %s"
 
 msgid "LTspice schematic files"
 msgstr "LTspice schematic files"

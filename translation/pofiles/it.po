@@ -115,7 +115,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-29 20:12+0300\n"
+"POT-Creation-Date: 2025-05-03 18:13+0300\n"
 "PO-Revision-Date: 2025-04-28 11:59+0000\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/v9/it/>\n"
@@ -5919,7 +5919,7 @@ msgstr "Memoria esaurita."
 #: common/drawing_sheet/ds_draw_item.cpp:132 common/eda_item.cpp:355
 #: common/eda_item.cpp:356 common/eda_item.cpp:384 common/eda_text.cpp:1349
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:47
-#: eeschema/sch_field.cpp:1223 eeschema/sch_field.cpp:1894
+#: eeschema/sch_field.cpp:1223 eeschema/sch_field.cpp:1893
 #: eeschema/sch_label.cpp:2281 eeschema/sch_tablecell.cpp:120
 #: eeschema/sch_text.cpp:641 eeschema/sch_text.h:59 eeschema/schematic.cpp:69
 #: eeschema/widgets/panel_sch_selection_filter.cpp:203
@@ -6663,7 +6663,7 @@ msgstr "Punti"
 
 #: common/eda_shape.cpp:1014 common/eda_shape.cpp:2416 common/eda_text.cpp:1389
 #: eeschema/sch_bitmap.cpp:201 eeschema/sch_bitmap.cpp:340
-#: eeschema/sch_field.cpp:1875 eeschema/sch_tablecell.cpp:202
+#: eeschema/sch_field.cpp:1874 eeschema/sch_tablecell.cpp:202
 #: eeschema/sch_text.cpp:785 eeschema/sch_textbox.cpp:681
 #: pcbnew/dialogs/dialog_board_statistics.cpp:685
 #: pcbnew/dialogs/dialog_board_statistics.cpp:695
@@ -6682,7 +6682,7 @@ msgstr "Larghezza"
 
 #: common/eda_shape.cpp:1017 common/eda_shape.cpp:2422 common/eda_text.cpp:1394
 #: eeschema/sch_bitmap.cpp:203 eeschema/sch_bitmap.cpp:347
-#: eeschema/sch_field.cpp:1876 eeschema/sch_tablecell.cpp:203
+#: eeschema/sch_field.cpp:1875 eeschema/sch_tablecell.cpp:203
 #: eeschema/sch_text.cpp:786 eeschema/sch_textbox.cpp:682
 #: pcbnew/dialogs/dialog_board_statistics.cpp:687
 #: pcbnew/dialogs/dialog_board_statistics.cpp:696
@@ -6816,7 +6816,7 @@ msgstr "Grassetto+corsivo"
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:283
 #: eeschema/fields_grid_table.cpp:309 eeschema/fields_grid_table.cpp:724
 #: eeschema/fields_grid_table.cpp:868 eeschema/pin_type.cpp:118
-#: eeschema/sch_field.cpp:1235 eeschema/sch_field.cpp:1829
+#: eeschema/sch_field.cpp:1235 eeschema/sch_field.cpp:1828
 #: eeschema/sch_pin.cpp:2118 pcbnew/dialogs/dialog_render_job.cpp:42
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2603
 msgid "Left"
@@ -6829,7 +6829,7 @@ msgstr "Sinistra"
 #: eeschema/fields_grid_table.cpp:725 eeschema/fields_grid_table.cpp:736
 #: eeschema/fields_grid_table.cpp:870 eeschema/fields_grid_table.cpp:894
 #: eeschema/sch_field.cpp:1236 eeschema/sch_field.cpp:1246
-#: eeschema/sch_field.cpp:1830 eeschema/sch_field.cpp:1839
+#: eeschema/sch_field.cpp:1829 eeschema/sch_field.cpp:1838
 #: eeschema/sch_text.cpp:669 gerbview/gerber_file_image.cpp:375
 #: gerbview/gerber_file_image.cpp:378
 #: pcbnew/dialogs/dialog_shape_properties.cpp:886
@@ -6844,7 +6844,7 @@ msgstr "Centra"
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:283
 #: eeschema/fields_grid_table.cpp:311 eeschema/fields_grid_table.cpp:726
 #: eeschema/fields_grid_table.cpp:872 eeschema/pin_type.cpp:117
-#: eeschema/sch_field.cpp:1237 eeschema/sch_field.cpp:1831
+#: eeschema/sch_field.cpp:1237 eeschema/sch_field.cpp:1830
 #: eeschema/sch_pin.cpp:2117 pcbnew/dialogs/dialog_render_job.cpp:43
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2604
 msgid "Right"
@@ -6854,7 +6854,7 @@ msgstr "Destra"
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:307
 #: eeschema/fields_grid_table.cpp:301 eeschema/fields_grid_table.cpp:735
 #: eeschema/fields_grid_table.cpp:892 eeschema/sch_field.cpp:1245
-#: eeschema/sch_field.cpp:1838 eeschema/sch_text.cpp:668
+#: eeschema/sch_field.cpp:1837 eeschema/sch_text.cpp:668
 #: pcbnew/dialogs/dialog_render_job.cpp:44
 msgid "Top"
 msgstr "Alto"
@@ -6863,7 +6863,7 @@ msgstr "Alto"
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:307
 #: eeschema/fields_grid_table.cpp:303 eeschema/fields_grid_table.cpp:737
 #: eeschema/fields_grid_table.cpp:896 eeschema/sch_field.cpp:1247
-#: eeschema/sch_field.cpp:1840 eeschema/sch_text.cpp:670
+#: eeschema/sch_field.cpp:1839 eeschema/sch_text.cpp:670
 #: pcbnew/dialogs/dialog_render_job.cpp:40
 msgid "Bottom"
 msgstr "Basso"
@@ -6875,7 +6875,7 @@ msgstr "Basso"
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:68
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:68
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:65
-#: eeschema/fields_grid_table.cpp:486 eeschema/sch_field.cpp:1883
+#: eeschema/fields_grid_table.cpp:486 eeschema/sch_field.cpp:1882
 #: eeschema/sch_pin.cpp:1588 eeschema/sch_pin.cpp:2163
 #: eeschema/sch_symbol.cpp:2989 eeschema/sch_tablecell.cpp:205
 #: eeschema/sch_text.cpp:794 eeschema/sch_textbox.cpp:709
@@ -6888,7 +6888,7 @@ msgid "Orientation"
 msgstr "Orientamento"
 
 #: common/eda_text.cpp:1347 eeschema/dialogs/dialog_text_properties_base.h:117
-#: eeschema/sch_field.cpp:1850 eeschema/sch_field.cpp:1881
+#: eeschema/sch_field.cpp:1849 eeschema/sch_field.cpp:1880
 #: eeschema/sch_text.cpp:791 eeschema/sch_textbox.cpp:707
 #: pcbnew/dialogs/dialog_text_properties.cpp:152
 #: pcbnew/dialogs/dialog_text_properties_base.h:112
@@ -6911,7 +6911,7 @@ msgstr "Proprietà testo"
 msgid "Font"
 msgstr "Font"
 
-#: common/eda_text.cpp:1360 eeschema/sch_field.cpp:1873
+#: common/eda_text.cpp:1360 eeschema/sch_field.cpp:1872
 #: eeschema/sch_label.cpp:2282 eeschema/sch_tablecell.cpp:204
 #: eeschema/sch_text.cpp:787 eeschema/sch_textbox.cpp:683
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:91
@@ -6922,27 +6922,27 @@ msgstr "Font"
 msgid "Thickness"
 msgstr "Spessore"
 
-#: common/eda_text.cpp:1371 eeschema/sch_field.cpp:1874
+#: common/eda_text.cpp:1371 eeschema/sch_field.cpp:1873
 #: eeschema/sch_tablecell.cpp:206 eeschema/sch_text.cpp:784
 #: pcbnew/microwave/microwave_polygon.cpp:127
 #: pcbnew/pcb_fields_grid_table.cpp:160
 msgid "Mirrored"
 msgstr "Speculare"
 
-#: common/eda_text.cpp:1400 eeschema/sch_field.cpp:1853
-#: eeschema/sch_field.cpp:1856 eeschema/sch_label.cpp:2286
+#: common/eda_text.cpp:1400 eeschema/sch_field.cpp:1852
+#: eeschema/sch_field.cpp:1855 eeschema/sch_label.cpp:2286
 msgid "Horizontal Justification"
 msgstr "Spaziatura orizzontale"
 
-#: common/eda_text.cpp:1404 eeschema/sch_field.cpp:1860
-#: eeschema/sch_field.cpp:1863 eeschema/sch_label.cpp:2288
+#: common/eda_text.cpp:1404 eeschema/sch_field.cpp:1859
+#: eeschema/sch_field.cpp:1862 eeschema/sch_label.cpp:2288
 #: pcbnew/pcb_dimension.cpp:1924 pcbnew/pcb_dimension.cpp:1957
 #: pcbnew/pcb_dimension.cpp:1995 pcbnew/pcb_dimension.cpp:2037
 #: pcbnew/pcb_dimension.cpp:2071
 msgid "Vertical Justification"
 msgstr "Spaziatura verticale"
 
-#: common/eda_text.cpp:1412 eeschema/sch_field.cpp:1872
+#: common/eda_text.cpp:1412 eeschema/sch_field.cpp:1871
 #: eeschema/sch_label.cpp:2246 eeschema/sch_tablecell.cpp:208
 #: pcbnew/pcb_dimension.cpp:1927 pcbnew/pcb_dimension.cpp:1960
 #: pcbnew/pcb_dimension.cpp:1998 pcbnew/pcb_dimension.cpp:2040
@@ -8647,12 +8647,12 @@ msgstr "Pagina %s"
 msgid "%s (Page %s)"
 msgstr "%s (pagina %s)"
 
-#: common/plotters/PDF_plotter.cpp:1421
+#: common/plotters/PDF_plotter.cpp:1425
 #, c-format
 msgid "Show Page %s"
 msgstr "Mostra pagina %s"
 
-#: common/plotters/PDF_plotter.cpp:1441
+#: common/plotters/PDF_plotter.cpp:1445
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:925
 #: eeschema/tools/sch_navigate_tool.cpp:105
 #, c-format
@@ -11088,7 +11088,7 @@ msgstr ""
 "%s\n"
 "non trovato. Script non disponibile."
 
-#: eeschema/connection_graph.cpp:3288
+#: eeschema/connection_graph.cpp:3291
 #, c-format
 msgid ""
 "Both %s and %s are attached to the same items; %s will be used in the netlist"
@@ -11096,7 +11096,7 @@ msgstr ""
 "Sia %s che %s sono collegati agli stessi elementi; nella netlist verrà usata "
 "%s"
 
-#: eeschema/connection_graph.cpp:3526
+#: eeschema/connection_graph.cpp:3529
 #, c-format
 msgid ""
 "Net %s is graphically connected to bus %s but is not a member of that bus"
@@ -11104,21 +11104,21 @@ msgstr ""
 "La connessione %s è collegata graficamente al bus %s ma non è membro di quel "
 "bus"
 
-#: eeschema/connection_graph.cpp:3831 eeschema/erc/erc_item.cpp:229
+#: eeschema/connection_graph.cpp:3834 eeschema/erc/erc_item.cpp:229
 msgid "Unconnected wire endpoint"
 msgstr "Capo filo non connesso"
 
-#: eeschema/connection_graph.cpp:3856
+#: eeschema/connection_graph.cpp:3859
 msgid "Unconnected wire to bus entry"
 msgstr "Voce da filo a bus non connessa"
 
-#: eeschema/connection_graph.cpp:4231
+#: eeschema/connection_graph.cpp:4234
 #, c-format
 msgid "Sheet pin %s has no matching hierarchical label inside the sheet"
 msgstr ""
 "Al pin foglio %s manca la corrispondente etichetta gerarchica nel foglio"
 
-#: eeschema/connection_graph.cpp:4249
+#: eeschema/connection_graph.cpp:4252
 #, c-format
 msgid "Hierarchical label %s has no matching sheet pin in the parent sheet"
 msgstr ""
@@ -13029,7 +13029,7 @@ msgstr "All. Vert."
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:67
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:64
 #: eeschema/fields_grid_table.cpp:485 eeschema/sch_field.cpp:1231
-#: eeschema/sch_field.cpp:1879 eeschema/sch_label.cpp:1203
+#: eeschema/sch_field.cpp:1878 eeschema/sch_label.cpp:1203
 #: eeschema/sch_tablecell.cpp:133 eeschema/sch_text.cpp:652
 #: eeschema/sch_text.cpp:789 eeschema/sch_textbox.cpp:543
 #: eeschema/sch_textbox.cpp:704 pcbnew/tools/board_inspection_tool.cpp:1442
@@ -17568,11 +17568,11 @@ msgstr "Orizzontale"
 msgid "Vertical"
 msgstr "Verticale"
 
-#: eeschema/fields_grid_table.cpp:491 eeschema/sch_field.cpp:1869
+#: eeschema/fields_grid_table.cpp:491 eeschema/sch_field.cpp:1868
 msgid "Allow Autoplacement"
 msgstr "Permetti autopiazzamento"
 
-#: eeschema/fields_grid_table.cpp:492 eeschema/sch_field.cpp:1908
+#: eeschema/fields_grid_table.cpp:492 eeschema/sch_field.cpp:1907
 #: eeschema/sch_item.cpp:548 eeschema/sch_item.cpp:600
 msgid "Private"
 msgstr "Privato"
@@ -18759,7 +18759,7 @@ msgstr "Indietro al foglio precedentemente selezionato"
 msgid "Sheet References"
 msgstr "Riferimenti foglio"
 
-#: eeschema/sch_field.cpp:1866
+#: eeschema/sch_field.cpp:1865
 msgid "Show Field Name"
 msgstr "Mostra nome campo"
 
@@ -19534,38 +19534,38 @@ msgid "File at '%s' was ignored. Using previously found file at '%s' instead."
 msgstr ""
 "File in '%s' ignorato. Uso invece il file trovato in precedenza in '%s'."
 
-#: eeschema/sch_io/ltspice/ltspice_schematic.cpp:363
+#: eeschema/sch_io/ltspice/ltspice_schematic.cpp:364
 #, c-format
 msgid "Expecting integer at line %d in file %s"
 msgstr "Era previsto un numero intero alla riga %d nel file %s"
 
-#: eeschema/sch_io/ltspice/ltspice_schematic.cpp:386
+#: eeschema/sch_io/ltspice/ltspice_schematic.cpp:387
 #, c-format
 msgid "Expected data missing on line %d in file %s"
 msgstr "Dati previsti mancanti sulla riga %d nel file %s"
 
-#: eeschema/sch_io/ltspice/ltspice_schematic.cpp:392
+#: eeschema/sch_io/ltspice/ltspice_schematic.cpp:393
 #, c-format
 msgid "Extra data found on line %d in file %s"
 msgstr "Dati aggiuntivi trovati sulla riga %d nel file %s"
 
-#: eeschema/sch_io/ltspice/ltspice_schematic.cpp:418
+#: eeschema/sch_io/ltspice/ltspice_schematic.cpp:419
 msgid "Expecting 0, 1, 2, 3 or 4"
 msgstr "Era previsto 0, 1, 2, 3 o 4"
 
-#: eeschema/sch_io/ltspice/ltspice_schematic.cpp:432
+#: eeschema/sch_io/ltspice/ltspice_schematic.cpp:433
 msgid "Expecting NORMAL or WIDE"
 msgstr "Era previsto NORMAL o WIDE"
 
-#: eeschema/sch_io/ltspice/ltspice_schematic.cpp:450
+#: eeschema/sch_io/ltspice/ltspice_schematic.cpp:451
 msgid "Expecting I, O, B, IN, OUT or BIDIR"
 msgstr "Era previsto I, O, B, IN, OUT o BIDIR"
 
-#: eeschema/sch_io/ltspice/ltspice_schematic.cpp:471
+#: eeschema/sch_io/ltspice/ltspice_schematic.cpp:472
 msgid "Expecting R0, R90, R18, R270, M0, M90, M180 or M270"
 msgstr "Era previsto R0, R90, R18, R270, M0, M90, M180 o M270"
 
-#: eeschema/sch_io/ltspice/ltspice_schematic.cpp:494
+#: eeschema/sch_io/ltspice/ltspice_schematic.cpp:495
 msgid ""
 "Expecting LEFT, CENTER, RIGHT, TOP, BOTTOM, VLEFT, VRIGHT, VCENTER, VTOP, "
 "VBOTTOM or INVISIBLE"
@@ -19573,7 +19573,7 @@ msgstr ""
 "Era previsto LEFT, CENTER, RIGHT, TOP, BOTTOM, VLEFT, VRIGHT, VCENTER, VTOP, "
 "VBOTTOM o INVISIBLE"
 
-#: eeschema/sch_io/ltspice/ltspice_schematic.cpp:517
+#: eeschema/sch_io/ltspice/ltspice_schematic.cpp:518
 msgid ""
 "Expecting NONE, BOTTOM, TOP, LEFT, RIGHT, VBOTTOM, VTOP, VCENTER, VLEFT or "
 "VRIGHT"
@@ -19581,14 +19581,21 @@ msgstr ""
 "Era previsto NONE, BOTTOM, TOP, LEFT, RIGHT, VBOTTOM, VTOP, VCENTER, VLEFT o "
 "VRIGHT"
 
-#: eeschema/sch_io/ltspice/ltspice_schematic.cpp:531
+#: eeschema/sch_io/ltspice/ltspice_schematic.cpp:532
 msgid "Expecting CELL or BLOCK"
 msgstr "Era previsto CELL o BLOCK"
 
-#: eeschema/sch_io/ltspice/ltspice_schematic.cpp:550
+#: eeschema/sch_io/ltspice/ltspice_schematic.cpp:551
 #, c-format
 msgid "Symbol '%s.asy' not found"
 msgstr "Simbolo '%s.asy' non trovato"
+
+#: eeschema/sch_io/ltspice/sch_io_ltspice.cpp:125
+#, c-format
+msgid ""
+"Unable to find LTspice symbols.\n"
+"Install LTspice or put its library files into %s"
+msgstr ""
 
 #: eeschema/sch_io/ltspice/sch_io_ltspice.h:49
 msgid "LTspice schematic files"

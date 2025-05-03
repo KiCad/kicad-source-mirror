@@ -40,7 +40,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-29 20:12+0300\n"
+"POT-Creation-Date: 2025-05-03 18:13+0300\n"
 "PO-Revision-Date: 2025-04-23 10:24+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
@@ -5692,7 +5692,7 @@ msgstr "内存不足。"
 #: common/drawing_sheet/ds_draw_item.cpp:132 common/eda_item.cpp:355
 #: common/eda_item.cpp:356 common/eda_item.cpp:384 common/eda_text.cpp:1349
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:47
-#: eeschema/sch_field.cpp:1223 eeschema/sch_field.cpp:1894
+#: eeschema/sch_field.cpp:1223 eeschema/sch_field.cpp:1893
 #: eeschema/sch_label.cpp:2281 eeschema/sch_tablecell.cpp:120
 #: eeschema/sch_text.cpp:641 eeschema/sch_text.h:59 eeschema/schematic.cpp:69
 #: eeschema/widgets/panel_sch_selection_filter.cpp:203
@@ -6434,7 +6434,7 @@ msgstr "点"
 
 #: common/eda_shape.cpp:1014 common/eda_shape.cpp:2416 common/eda_text.cpp:1389
 #: eeschema/sch_bitmap.cpp:201 eeschema/sch_bitmap.cpp:340
-#: eeschema/sch_field.cpp:1875 eeschema/sch_tablecell.cpp:202
+#: eeschema/sch_field.cpp:1874 eeschema/sch_tablecell.cpp:202
 #: eeschema/sch_text.cpp:785 eeschema/sch_textbox.cpp:681
 #: pcbnew/dialogs/dialog_board_statistics.cpp:685
 #: pcbnew/dialogs/dialog_board_statistics.cpp:695
@@ -6453,7 +6453,7 @@ msgstr "宽度"
 
 #: common/eda_shape.cpp:1017 common/eda_shape.cpp:2422 common/eda_text.cpp:1394
 #: eeschema/sch_bitmap.cpp:203 eeschema/sch_bitmap.cpp:347
-#: eeschema/sch_field.cpp:1876 eeschema/sch_tablecell.cpp:203
+#: eeschema/sch_field.cpp:1875 eeschema/sch_tablecell.cpp:203
 #: eeschema/sch_text.cpp:786 eeschema/sch_textbox.cpp:682
 #: pcbnew/dialogs/dialog_board_statistics.cpp:687
 #: pcbnew/dialogs/dialog_board_statistics.cpp:696
@@ -6587,7 +6587,7 @@ msgstr "粗体+斜体"
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:283
 #: eeschema/fields_grid_table.cpp:309 eeschema/fields_grid_table.cpp:724
 #: eeschema/fields_grid_table.cpp:868 eeschema/pin_type.cpp:118
-#: eeschema/sch_field.cpp:1235 eeschema/sch_field.cpp:1829
+#: eeschema/sch_field.cpp:1235 eeschema/sch_field.cpp:1828
 #: eeschema/sch_pin.cpp:2118 pcbnew/dialogs/dialog_render_job.cpp:42
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2603
 msgid "Left"
@@ -6600,7 +6600,7 @@ msgstr "向左"
 #: eeschema/fields_grid_table.cpp:725 eeschema/fields_grid_table.cpp:736
 #: eeschema/fields_grid_table.cpp:870 eeschema/fields_grid_table.cpp:894
 #: eeschema/sch_field.cpp:1236 eeschema/sch_field.cpp:1246
-#: eeschema/sch_field.cpp:1830 eeschema/sch_field.cpp:1839
+#: eeschema/sch_field.cpp:1829 eeschema/sch_field.cpp:1838
 #: eeschema/sch_text.cpp:669 gerbview/gerber_file_image.cpp:375
 #: gerbview/gerber_file_image.cpp:378
 #: pcbnew/dialogs/dialog_shape_properties.cpp:886
@@ -6615,7 +6615,7 @@ msgstr "居中"
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:283
 #: eeschema/fields_grid_table.cpp:311 eeschema/fields_grid_table.cpp:726
 #: eeschema/fields_grid_table.cpp:872 eeschema/pin_type.cpp:117
-#: eeschema/sch_field.cpp:1237 eeschema/sch_field.cpp:1831
+#: eeschema/sch_field.cpp:1237 eeschema/sch_field.cpp:1830
 #: eeschema/sch_pin.cpp:2117 pcbnew/dialogs/dialog_render_job.cpp:43
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2604
 msgid "Right"
@@ -6625,7 +6625,7 @@ msgstr "向右"
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:307
 #: eeschema/fields_grid_table.cpp:301 eeschema/fields_grid_table.cpp:735
 #: eeschema/fields_grid_table.cpp:892 eeschema/sch_field.cpp:1245
-#: eeschema/sch_field.cpp:1838 eeschema/sch_text.cpp:668
+#: eeschema/sch_field.cpp:1837 eeschema/sch_text.cpp:668
 #: pcbnew/dialogs/dialog_render_job.cpp:44
 msgid "Top"
 msgstr "向上"
@@ -6634,7 +6634,7 @@ msgstr "向上"
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:307
 #: eeschema/fields_grid_table.cpp:303 eeschema/fields_grid_table.cpp:737
 #: eeschema/fields_grid_table.cpp:896 eeschema/sch_field.cpp:1247
-#: eeschema/sch_field.cpp:1840 eeschema/sch_text.cpp:670
+#: eeschema/sch_field.cpp:1839 eeschema/sch_text.cpp:670
 #: pcbnew/dialogs/dialog_render_job.cpp:40
 msgid "Bottom"
 msgstr "向下"
@@ -6646,7 +6646,7 @@ msgstr "向下"
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:68
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:68
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:65
-#: eeschema/fields_grid_table.cpp:486 eeschema/sch_field.cpp:1883
+#: eeschema/fields_grid_table.cpp:486 eeschema/sch_field.cpp:1882
 #: eeschema/sch_pin.cpp:1588 eeschema/sch_pin.cpp:2163
 #: eeschema/sch_symbol.cpp:2989 eeschema/sch_tablecell.cpp:205
 #: eeschema/sch_text.cpp:794 eeschema/sch_textbox.cpp:709
@@ -6659,7 +6659,7 @@ msgid "Orientation"
 msgstr "方向"
 
 #: common/eda_text.cpp:1347 eeschema/dialogs/dialog_text_properties_base.h:117
-#: eeschema/sch_field.cpp:1850 eeschema/sch_field.cpp:1881
+#: eeschema/sch_field.cpp:1849 eeschema/sch_field.cpp:1880
 #: eeschema/sch_text.cpp:791 eeschema/sch_textbox.cpp:707
 #: pcbnew/dialogs/dialog_text_properties.cpp:152
 #: pcbnew/dialogs/dialog_text_properties_base.h:112
@@ -6682,7 +6682,7 @@ msgstr "文本属性"
 msgid "Font"
 msgstr "字体"
 
-#: common/eda_text.cpp:1360 eeschema/sch_field.cpp:1873
+#: common/eda_text.cpp:1360 eeschema/sch_field.cpp:1872
 #: eeschema/sch_label.cpp:2282 eeschema/sch_tablecell.cpp:204
 #: eeschema/sch_text.cpp:787 eeschema/sch_textbox.cpp:683
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:91
@@ -6693,27 +6693,27 @@ msgstr "字体"
 msgid "Thickness"
 msgstr "线宽"
 
-#: common/eda_text.cpp:1371 eeschema/sch_field.cpp:1874
+#: common/eda_text.cpp:1371 eeschema/sch_field.cpp:1873
 #: eeschema/sch_tablecell.cpp:206 eeschema/sch_text.cpp:784
 #: pcbnew/microwave/microwave_polygon.cpp:127
 #: pcbnew/pcb_fields_grid_table.cpp:160
 msgid "Mirrored"
 msgstr "镜像"
 
-#: common/eda_text.cpp:1400 eeschema/sch_field.cpp:1853
-#: eeschema/sch_field.cpp:1856 eeschema/sch_label.cpp:2286
+#: common/eda_text.cpp:1400 eeschema/sch_field.cpp:1852
+#: eeschema/sch_field.cpp:1855 eeschema/sch_label.cpp:2286
 msgid "Horizontal Justification"
 msgstr "水平对齐"
 
-#: common/eda_text.cpp:1404 eeschema/sch_field.cpp:1860
-#: eeschema/sch_field.cpp:1863 eeschema/sch_label.cpp:2288
+#: common/eda_text.cpp:1404 eeschema/sch_field.cpp:1859
+#: eeschema/sch_field.cpp:1862 eeschema/sch_label.cpp:2288
 #: pcbnew/pcb_dimension.cpp:1924 pcbnew/pcb_dimension.cpp:1957
 #: pcbnew/pcb_dimension.cpp:1995 pcbnew/pcb_dimension.cpp:2037
 #: pcbnew/pcb_dimension.cpp:2071
 msgid "Vertical Justification"
 msgstr "垂直对齐"
 
-#: common/eda_text.cpp:1412 eeschema/sch_field.cpp:1872
+#: common/eda_text.cpp:1412 eeschema/sch_field.cpp:1871
 #: eeschema/sch_label.cpp:2246 eeschema/sch_tablecell.cpp:208
 #: pcbnew/pcb_dimension.cpp:1927 pcbnew/pcb_dimension.cpp:1960
 #: pcbnew/pcb_dimension.cpp:1998 pcbnew/pcb_dimension.cpp:2040
@@ -8399,12 +8399,12 @@ msgstr "第 %s 页"
 msgid "%s (Page %s)"
 msgstr "%s (第 %s 页)"
 
-#: common/plotters/PDF_plotter.cpp:1421
+#: common/plotters/PDF_plotter.cpp:1425
 #, c-format
 msgid "Show Page %s"
 msgstr "显示页面 %s"
 
-#: common/plotters/PDF_plotter.cpp:1441
+#: common/plotters/PDF_plotter.cpp:1445
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:925
 #: eeschema/tools/sch_navigate_tool.cpp:105
 #, c-format
@@ -10815,32 +10815,32 @@ msgstr ""
 "%s\n"
 "找不到。脚本不可用。"
 
-#: eeschema/connection_graph.cpp:3288
+#: eeschema/connection_graph.cpp:3291
 #, c-format
 msgid ""
 "Both %s and %s are attached to the same items; %s will be used in the netlist"
 msgstr "%s 和 %s 都连接到同一项上; 将使用 %s 作为网表中的网络名称"
 
-#: eeschema/connection_graph.cpp:3526
+#: eeschema/connection_graph.cpp:3529
 #, c-format
 msgid ""
 "Net %s is graphically connected to bus %s but is not a member of that bus"
 msgstr "网络 %s 以图形方式连接到总线 %s, 但不是总线的成员"
 
-#: eeschema/connection_graph.cpp:3831 eeschema/erc/erc_item.cpp:229
+#: eeschema/connection_graph.cpp:3834 eeschema/erc/erc_item.cpp:229
 msgid "Unconnected wire endpoint"
 msgstr "未连接的连线端点"
 
-#: eeschema/connection_graph.cpp:3856
+#: eeschema/connection_graph.cpp:3859
 msgid "Unconnected wire to bus entry"
 msgstr "导线没有连到总线入口"
 
-#: eeschema/connection_graph.cpp:4231
+#: eeschema/connection_graph.cpp:4234
 #, c-format
 msgid "Sheet pin %s has no matching hierarchical label inside the sheet"
 msgstr "图纸引脚 %s 在子图纸内没有匹配的层次标签"
 
-#: eeschema/connection_graph.cpp:4249
+#: eeschema/connection_graph.cpp:4252
 #, c-format
 msgid "Hierarchical label %s has no matching sheet pin in the parent sheet"
 msgstr "层次标签 %s 在父图纸内没有匹配的图纸引脚"
@@ -12700,7 +12700,7 @@ msgstr "垂直对齐"
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:67
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:64
 #: eeschema/fields_grid_table.cpp:485 eeschema/sch_field.cpp:1231
-#: eeschema/sch_field.cpp:1879 eeschema/sch_label.cpp:1203
+#: eeschema/sch_field.cpp:1878 eeschema/sch_label.cpp:1203
 #: eeschema/sch_tablecell.cpp:133 eeschema/sch_text.cpp:652
 #: eeschema/sch_text.cpp:789 eeschema/sch_textbox.cpp:543
 #: eeschema/sch_textbox.cpp:704 pcbnew/tools/board_inspection_tool.cpp:1442
@@ -17136,11 +17136,11 @@ msgstr "水平"
 msgid "Vertical"
 msgstr "垂直"
 
-#: eeschema/fields_grid_table.cpp:491 eeschema/sch_field.cpp:1869
+#: eeschema/fields_grid_table.cpp:491 eeschema/sch_field.cpp:1868
 msgid "Allow Autoplacement"
 msgstr "允许自动布置"
 
-#: eeschema/fields_grid_table.cpp:492 eeschema/sch_field.cpp:1908
+#: eeschema/fields_grid_table.cpp:492 eeschema/sch_field.cpp:1907
 #: eeschema/sch_item.cpp:548 eeschema/sch_item.cpp:600
 msgid "Private"
 msgstr "专有"
@@ -18302,7 +18302,7 @@ msgstr "回到先前选中的图纸"
 msgid "Sheet References"
 msgstr "图纸位号"
 
-#: eeschema/sch_field.cpp:1866
+#: eeschema/sch_field.cpp:1865
 msgid "Show Field Name"
 msgstr "显示字段名称"
 
@@ -19026,38 +19026,38 @@ msgstr "无效的符号的库标识"
 msgid "File at '%s' was ignored. Using previously found file at '%s' instead."
 msgstr "文件 '%s' 已忽略。使用之前找到的文件 '%s' 替代。"
 
-#: eeschema/sch_io/ltspice/ltspice_schematic.cpp:363
+#: eeschema/sch_io/ltspice/ltspice_schematic.cpp:364
 #, c-format
 msgid "Expecting integer at line %d in file %s"
 msgstr "第 %d 行应为整型 (文件 %s)"
 
-#: eeschema/sch_io/ltspice/ltspice_schematic.cpp:386
+#: eeschema/sch_io/ltspice/ltspice_schematic.cpp:387
 #, c-format
 msgid "Expected data missing on line %d in file %s"
 msgstr "第 %d 行缺少预期数据 (文件 %s)"
 
-#: eeschema/sch_io/ltspice/ltspice_schematic.cpp:392
+#: eeschema/sch_io/ltspice/ltspice_schematic.cpp:393
 #, c-format
 msgid "Extra data found on line %d in file %s"
 msgstr "第 %d 行找到额外数据 (文件 %s)"
 
-#: eeschema/sch_io/ltspice/ltspice_schematic.cpp:418
+#: eeschema/sch_io/ltspice/ltspice_schematic.cpp:419
 msgid "Expecting 0, 1, 2, 3 or 4"
 msgstr "应为 0, 1, 2, 3 或 4"
 
-#: eeschema/sch_io/ltspice/ltspice_schematic.cpp:432
+#: eeschema/sch_io/ltspice/ltspice_schematic.cpp:433
 msgid "Expecting NORMAL or WIDE"
 msgstr "应为 NORMAL 或 WIDE"
 
-#: eeschema/sch_io/ltspice/ltspice_schematic.cpp:450
+#: eeschema/sch_io/ltspice/ltspice_schematic.cpp:451
 msgid "Expecting I, O, B, IN, OUT or BIDIR"
 msgstr "应为 I, O, B, IN, OUT 或 BIDIR"
 
-#: eeschema/sch_io/ltspice/ltspice_schematic.cpp:471
+#: eeschema/sch_io/ltspice/ltspice_schematic.cpp:472
 msgid "Expecting R0, R90, R18, R270, M0, M90, M180 or M270"
 msgstr "应为 R0, R90, R18, R270, M0, M90, M180 或 M270"
 
-#: eeschema/sch_io/ltspice/ltspice_schematic.cpp:494
+#: eeschema/sch_io/ltspice/ltspice_schematic.cpp:495
 msgid ""
 "Expecting LEFT, CENTER, RIGHT, TOP, BOTTOM, VLEFT, VRIGHT, VCENTER, VTOP, "
 "VBOTTOM or INVISIBLE"
@@ -19065,21 +19065,28 @@ msgstr ""
 "应为 LEFT, CENTER, RIGHT, TOP, BOTTOM, VLEFT, VRIGHT, VCENTER, VTOP, VBOTTOM "
 "或INVISIBLE"
 
-#: eeschema/sch_io/ltspice/ltspice_schematic.cpp:517
+#: eeschema/sch_io/ltspice/ltspice_schematic.cpp:518
 msgid ""
 "Expecting NONE, BOTTOM, TOP, LEFT, RIGHT, VBOTTOM, VTOP, VCENTER, VLEFT or "
 "VRIGHT"
 msgstr ""
 "应为 NONE, BOTTOM, TOP, LEFT, RIGHT, VBOTTOM, VTOP, VCENTER, VLEFT 或 VRIGHT"
 
-#: eeschema/sch_io/ltspice/ltspice_schematic.cpp:531
+#: eeschema/sch_io/ltspice/ltspice_schematic.cpp:532
 msgid "Expecting CELL or BLOCK"
 msgstr "应为 CELL 或 BLOCK"
 
-#: eeschema/sch_io/ltspice/ltspice_schematic.cpp:550
+#: eeschema/sch_io/ltspice/ltspice_schematic.cpp:551
 #, c-format
 msgid "Symbol '%s.asy' not found"
 msgstr "找不到符号 '%s.asy'"
+
+#: eeschema/sch_io/ltspice/sch_io_ltspice.cpp:125
+#, c-format
+msgid ""
+"Unable to find LTspice symbols.\n"
+"Install LTspice or put its library files into %s"
+msgstr ""
 
 #: eeschema/sch_io/ltspice/sch_io_ltspice.h:49
 msgid "LTspice schematic files"
