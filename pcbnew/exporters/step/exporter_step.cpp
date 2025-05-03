@@ -110,6 +110,9 @@ private:
         case Message_Warning: return RPT_SEVERITY_WARNING;
         case Message_Alarm:   return RPT_SEVERITY_ERROR;
         case Message_Fail:    return RPT_SEVERITY_ERROR;
+
+        // There are no other values, but gcc doesn't appear to be able to work that out.
+        default:              return RPT_SEVERITY_UNDEFINED;
         }
     }
 
