@@ -16,8 +16,8 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-05-03 18:13+0300\n"
-"PO-Revision-Date: 2025-04-25 18:01+0000\n"
-"Last-Translator: co8 j <co8@nifty.com>\n"
+"PO-Revision-Date: 2025-05-04 22:08+0000\n"
+"Last-Translator: 2tama3 <2tama3@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/v9/ja/>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
@@ -19382,6 +19382,8 @@ msgid ""
 "Unable to find LTspice symbols.\n"
 "Install LTspice or put its library files into %s"
 msgstr ""
+"LTspiceシンボルが見つかりません。\n"
+"LTspiceをインストールするか、ライブラリファイルを%sに置いてください"
 
 #: eeschema/sch_io/ltspice/sch_io_ltspice.h:49
 msgid "LTspice schematic files"
@@ -25172,9 +25174,8 @@ msgid "%s (D%d) on layer %d: %s"
 msgstr "%s (D%d) - レイヤー %d: %s"
 
 #: gerbview/gerber_file_image.cpp:125
-#, fuzzy
 msgid "Too many messages, some are skipped"
-msgstr "大量のエラー: いくつか省略されています"
+msgstr "メッセージが多すぎるため、一部はスキップされます"
 
 #: gerbview/gerber_file_image.cpp:359
 msgid "Image name"
@@ -45452,7 +45453,6 @@ msgid "Missing netclass name argument to hasNetclass()"
 msgstr "hasNetclass() へのネットクラス名の引数がありません"
 
 #: pcbnew/pcbexpr_functions.cpp:1315
-#, fuzzy
 msgid "Missing netclass name argument to hasExactNetclass()"
 msgstr "hasNetclass() へのネットクラス名の引数がありません"
 
