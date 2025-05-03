@@ -14,10 +14,10 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-05-03 18:13+0300\n"
-"PO-Revision-Date: 2025-05-03 15:09+0000\n"
-"Last-Translator: Joakim Lundborg <joakim.lundborg@gmail.com>\n"
-"Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/master-"
-"source/sv/>\n"
+"PO-Revision-Date: 2025-05-04 22:07+0000\n"
+"Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
+"Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/"
+"master-source/sv/>\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -9446,16 +9446,12 @@ msgstr ""
 "av den andra punkten"
 
 #: common/tool/actions.cpp:571
-#, fuzzy
 msgid "Keep Arc Radius and Center, adjust angle"
-msgstr "Behåll bågens centrum, justera radien"
+msgstr "Behåll bågens radie och centrum, justera vinkeln"
 
 #: common/tool/actions.cpp:572
-#, fuzzy
 msgid "Switch arc editing mode to maintainign radius when endpoint are moved"
-msgstr ""
-"Byt bågredigeringsläge till att behålla centrum och justera radie och "
-"slutpunkter"
+msgstr "Byt bågredigeringsläge till att behålla radie när slutpunkter flyttas"
 
 #: common/tool/actions.cpp:579
 msgid "Cycle Arc Editing Mode"
@@ -11511,12 +11507,13 @@ msgid "Unconnected wire to bus entry"
 msgstr "Ej ansluten ledningsanslutning på buss"
 
 #: eeschema/connection_graph.cpp:4255
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Hierarchical label \"%s\" in root sheet cannot be connected to non-existent "
 "parent sheet"
 msgstr ""
-"Hierarkisk etikett %s har inget matchande arkstift i det överordnade arket"
+"Hierarkisk etikett \"%s\" i rotarket kan inte anslutas till icke existerande "
+"överordnat ark"
 
 #: eeschema/connection_graph.cpp:4320
 #, c-format
@@ -16511,9 +16508,8 @@ msgstr "Behåll ändpunkter eller riktning för startpunkt"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:50
 #: pcbnew/dialogs/panel_edit_options_base.cpp:63
-#, fuzzy
 msgid "Keep center and radius, adjust endpoints"
-msgstr "Behåll centrum, justera radie"
+msgstr "Behåll centrum och radie, justera ändpunkter"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:56
 msgid "Mouse drag performs Drag (G) operation"
@@ -17218,7 +17214,7 @@ msgstr "Globala fältnamnsmallar"
 #, c-format
 msgid "The field name '%s' contains trailing and/or leading white space."
 msgstr ""
-"Fältnamnet '%s' innehåller efterföljande och/eller inledande blanksteg."
+"Fältnamnet '%s' innehåller efterföljande och/eller inledande mellanslag."
 
 #: eeschema/dialogs/panel_template_fieldnames.cpp:276
 msgid ""
@@ -17227,17 +17223,17 @@ msgid ""
 "space characters will have no effect on existing symbol field names."
 msgstr ""
 "Detta kan leda till fältnamn som ser ut som dubbletter men som faktiskt är "
-"unika namn som skiljer endast med avseende på mellanslagstecken.  "
-"Borttagning av mellanslagstecken kommer inte att ha någon effekt på redan "
-"befintliga symbolfältsnamn."
+"unika namn som skiljer endast med avseende på mellanslag.  Borttagning av "
+"mellanslag kommer inte att ha någon effekt på redan befintliga "
+"symbolfältsnamn."
 
 #: eeschema/dialogs/panel_template_fieldnames.cpp:282
 msgid "Remove White Space"
-msgstr "Radera blanktecken"
+msgstr "Ta bort mellanslag"
 
 #: eeschema/dialogs/panel_template_fieldnames.cpp:283
 msgid "Keep White Space"
-msgstr "Ha kvar mellanslag"
+msgstr "Behåll mellanslag"
 
 #: eeschema/dialogs/panel_template_fieldnames_base.cpp:44
 #: kicad/pcm/dialogs/dialog_manage_repositories_base.cpp:40
@@ -19972,6 +19968,8 @@ msgid ""
 "Unable to find LTspice symbols.\n"
 "Install LTspice or put its library files into %s"
 msgstr ""
+"Kan inte hitt LTspice-symboler.\n"
+"Installera LTspice eller placera dess biblioteksfiler i %s"
 
 #: eeschema/sch_io/ltspice/sch_io_ltspice.h:49
 msgid "LTspice schematic files"
@@ -24637,12 +24635,11 @@ msgid "Net must be labeled to assign a netclass."
 msgstr "Nätet måste märkas för att tilldela en nätklass."
 
 #: eeschema/tools/sch_editor_control.cpp:1719 pcbnew/tools/pcb_control.cpp:1094
-#, fuzzy
 msgid ""
 "Pasting a long text text string may be very slow.  Do you want to continue?"
 msgstr ""
-"Ändring av filändelsen medför ändrad filtyp.\n"
-"Vill du fortsätta ?"
+"Det kan gå väldigt långsamt att klistra in en lång textsträng.  Vill du "
+"fortsätta ?"
 
 #: eeschema/tools/sch_editor_control.cpp:1841
 #, c-format
@@ -31642,6 +31639,7 @@ msgstr "Effektiv %s:"
 #: pcb_calculator/transline_ident.cpp:164
 #: pcb_calculator/transline_ident.cpp:199
 #: pcb_calculator/transline_ident.cpp:389
+#, fuzzy
 msgid "Unit propagation delay:"
 msgstr "Utbredningsfördröjning:"
 
@@ -31858,11 +31856,13 @@ msgstr "Effektiv %s (udda):"
 
 #: pcb_calculator/transline_ident.cpp:309
 #: pcb_calculator/transline_ident.cpp:356
+#, fuzzy
 msgid "Unit propagation delay (even):"
 msgstr "Utbredningsfördröjning (jämn):"
 
 #: pcb_calculator/transline_ident.cpp:310
 #: pcb_calculator/transline_ident.cpp:357
+#, fuzzy
 msgid "Unit propagation delay (odd):"
 msgstr "Utbredningsfördröjning (udda):"
 
@@ -36769,7 +36769,7 @@ msgstr "Fotavtrycks textobjekt som inte är associerade med ett fält"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:67
 msgid "Footprint dimensions"
-msgstr "Fotavtrycks måttsättning"
+msgstr "Fotavtrycks måttsättningsobjekt"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:85
 msgid "By layer:"
@@ -40827,7 +40827,7 @@ msgstr "Lödytan är inte för hålmontering; anslutningen blir: %s."
 #: pcbnew/drc/drc_engine.cpp:813
 #, c-format
 msgid "Net tie on %s; clearance: 0."
-msgstr "Lokalt undantag för %s; frigång: 0."
+msgstr "Nätbrygga på %s; frigång: 0."
 
 #: pcbnew/drc/drc_engine.cpp:816
 msgid "net tie"
@@ -41708,7 +41708,7 @@ msgstr "(%s minsta hålstorlek %s; faktisk %s)"
 #: pcbnew/drc/drc_test_provider_hole_size.cpp:242
 #, c-format
 msgid "(%s max hole %s; actual %s)"
-msgstr "(%s maximal höjd %s; faktisk %s)"
+msgstr "(%s maximal hålstorlek %s; faktisk %s)"
 
 #: pcbnew/drc/drc_test_provider_hole_to_hole.cpp:120
 msgid "Checking hole to hole clearances..."
@@ -45850,7 +45850,7 @@ msgid ""
 "is %s"
 msgstr ""
 "Konturen verkar vara avbruten: senaste punkt var %s, startpunkt för nästa "
-"segment är %s."
+"segment är %s"
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:3488
 #, c-format
