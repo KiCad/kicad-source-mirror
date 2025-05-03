@@ -18,10 +18,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-04-29 20:11+0300\n"
-"PO-Revision-Date: 2025-04-26 08:13+0000\n"
+"PO-Revision-Date: 2025-05-03 15:09+0000\n"
 "Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
-"Language-Team: Polish <https://hosted.weblate.org/projects/kicad/master-"
-"source/pl/>\n"
+"Language-Team: Polish <https://hosted.weblate.org/projects/kicad/"
+"master-source/pl/>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1255,14 +1255,12 @@ msgid "Disable thickness"
 msgstr "Wyłącz pogrubienia"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:91
-#, fuzzy
 msgid "Disable uVia holes"
-msgstr "Wyłącz otwory"
+msgstr "Wyłącz otwory mikroprzelotek"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:94
-#, fuzzy
 msgid "Disable all plated holes"
-msgstr "Wyłącz otwory"
+msgstr "Wyłącz wszystkie otwory metalizowane"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:27
 msgid "Procedural textures (slow)"
@@ -4123,9 +4121,8 @@ msgid "Add"
 msgstr "Dodaj"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:20
-#, fuzzy
 msgid "Enable Git tracking"
-msgstr "Aktywuj śledzenie przez Git"
+msgstr "Włącz śledzenie przez Git"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:28
 msgid "Remote Tracking"
@@ -8000,9 +7997,8 @@ msgid "Export HPGL Job Settings"
 msgstr "Ustawienia zadania eksportu HPGL"
 
 #: common/jobs/job_export_pcb_hpgl.cpp:61
-#, fuzzy
 msgid "PCB: Export HPGL"
-msgstr "PCB: Eksport PDF"
+msgstr "PCB: Eksport HPGL"
 
 #: common/jobs/job_export_pcb_ipc2581.cpp:72
 #: pcbnew/dialogs/dialog_export_2581_base.h:85
@@ -12920,9 +12916,8 @@ msgid "Filter Items"
 msgstr "Filtrowanie elementów"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:87
-#, fuzzy
 msgid "By field name:"
-msgstr "nazwa pola"
+msgstr "Na postawie nazwy pola:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:99
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:97
@@ -12930,15 +12925,12 @@ msgid "By parent reference designator:"
 msgstr "Na podstawie nadrzędnego oznaczenia:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:107
-#, fuzzy
 msgid "By parent symbol library id:"
-msgstr ""
-"Filtrowane elementów na podstawie nadrzędnego identyfikatora w bibliotece:"
+msgstr "Na podstawie nadrzędnego identyfikatora w bibliotece:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:113
-#, fuzzy
 msgid "By parent symbol type:"
-msgstr "Filtrowane elementów na podstawie typu symbolu:"
+msgstr "Na podstawie nadrzędnego typu symbolu:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:116
 msgid "Non-power symbols"
@@ -12950,7 +12942,7 @@ msgstr "Symbole zasilania"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:128
 msgid "By net:"
-msgstr ""
+msgstr "Na podstawie sieci:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:140
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:123
@@ -25150,7 +25142,7 @@ msgid "Tune %s"
 msgstr "Dostrajanie %s"
 
 #: eeschema/widgets/tuner_slider.cpp:84
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s has simulation model of type '%s %s'.\n"
 "\n"
@@ -25885,7 +25877,7 @@ msgstr "%s (D%d) na warstwie %d: %s"
 
 #: gerbview/gerber_file_image.cpp:125
 msgid "Too many messages, some are skipped"
-msgstr ""
+msgstr "Zbyt dużo wiadomości, niektóre zostały pominięte"
 
 #: gerbview/gerber_file_image.cpp:358
 msgid "Image name"
@@ -27074,9 +27066,8 @@ msgid "Use the Gerber plot settings already configured in the board file"
 msgstr "Użyj ustawień rysunku w formacie Gerber skonfigurowanych już na płytce"
 
 #: kicad/cli/command_pcb_export_hpgl.cpp:40
-#, fuzzy
 msgid "Generate HPGL from a list of layers"
-msgstr "Generuj plik PDF na podstawie listy warstw"
+msgstr "Generuj plik HPGL na podstawie listy warstw"
 
 #: kicad/cli/command_pcb_export_hpgl.cpp:48
 #: kicad/cli/command_pcb_export_pdf.cpp:45
@@ -27087,16 +27078,15 @@ msgstr "Odbij płytkę (przydatne ukazania dolnych warstw)"
 
 #: kicad/cli/command_pcb_export_hpgl.cpp:102
 msgid "Size for the default pen [mm]"
-msgstr ""
+msgstr "Rozmiar domyślnego pisaka [mm]"
 
 #: kicad/cli/command_pcb_export_hpgl.cpp:108
-#, fuzzy
 msgid "Pen number selection (1 to 9)"
-msgstr "Preferuj tryb wyboru by przesunąć"
+msgstr "Wybór numeru pisaka (1 do 9)"
 
 #: kicad/cli/command_pcb_export_hpgl.cpp:114
 msgid "Pen speed [cm/s] (1 to 99 cm/s)"
-msgstr ""
+msgstr "Prędkość pisaka [cm/s] (1 do 99 cm/s)"
 
 #: kicad/cli/command_pcb_export_pdf.cpp:37
 msgid "Generate PDF from a list of layers"
@@ -29270,9 +29260,8 @@ msgid "(paper size)"
 msgstr "(rozmiar papieru)"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:29
-#, fuzzy
 msgid "Item Type"
-msgstr "Zmień typ elementu"
+msgstr "Typ elementu"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:38
 msgid "Show on all pages"
@@ -31024,9 +31013,8 @@ msgid "Stripline"
 msgstr "Linia paskowa"
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:26
-#, fuzzy
 msgid "Coupled Stripline"
-msgstr "Linia mikropaskowa podwójna"
+msgstr "Sprzężona linia paskowa"
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:27
 msgid "Coplanar wave guide"
@@ -34763,9 +34751,8 @@ msgid "Update fabrication attributes"
 msgstr "Uaktualnij atrybuty fabrykacji"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:87
-#, fuzzy
 msgid "Update clearance overrides and settings"
-msgstr "Lokalny prześwit i ustawienia"
+msgstr "Uaktualnij podmiany prześwitu i ustawienia"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:88
 msgid "Update 3D models"
@@ -34854,9 +34841,8 @@ msgid "Update/reset fabrication attributes"
 msgstr "Uaktualnij/zresetuj atrybuty fabrykacji"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:114
-#, fuzzy
 msgid "Update/reset clearance overrides and settings"
-msgstr "Lokalny prześwit i ustawienia"
+msgstr "Uaktualnia/resetuje podmiany prześwitu i ustawienia"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:117
 msgid "Update/reset 3D models"
@@ -46845,9 +46831,8 @@ msgid "Missing netclass name argument to hasNetclass()"
 msgstr "Brak argumentu z nazwą klasy sieci dla hasNetclass()"
 
 #: pcbnew/pcbexpr_functions.cpp:1316
-#, fuzzy
 msgid "Missing netclass name argument to hasExactNetclass()"
-msgstr "Brak argumentu z nazwą klasy sieci dla hasNetclass()"
+msgstr "Brak argumentu z nazwą klasy sieci dla hasExactNetclass()"
 
 #: pcbnew/pcbexpr_functions.cpp:1356
 msgid "Missing component class name argument to hasComponentClass()"
