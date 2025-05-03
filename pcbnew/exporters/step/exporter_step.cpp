@@ -40,6 +40,7 @@
 #include "step_pcb_model.h"
 
 #include <pgm_base.h>
+#include <reporter.h>
 #include <base_units.h>
 #include <filename_resolver.h>
 #include <trace_helpers.h>
@@ -63,16 +64,12 @@
 #endif
 
 
-void ReportMessage( const wxString& aMessage )
-{
-    wxPrintf( aMessage );
-    fflush( stdout ); // Force immediate printing (needed on mingw)
-}
-
-class KiCadPrinter : public Message_Printer
+class KICAD_PRINTER : public Message_Printer
 {
 public:
-    KiCadPrinter( EXPORTER_STEP* aConverter ) : m_converter( aConverter ) {}
+    KICAD_PRINTER( REPORTER* aReporter ) :
+            m_reporter( aReporter )
+    {}
 
 protected:
 #if OCC_VERSION_HEX < OCC_VERSION_MIN
@@ -88,44 +85,45 @@ protected:
                        const Standard_Boolean theToPutEol ) const override
 #else
     virtual void send( const TCollection_AsciiString& theString,
-                        const Message_Gravity theGravity ) const override
+                       const Message_Gravity theGravity ) const override
 #endif
     {
-        if( theGravity >= Message_Warning
-            || ( wxLog::IsAllowedTraceMask( traceKiCad2Step ) && theGravity == Message_Info ) )
-      {
-          ReportMessage( theString.ToCString() );
+        wxString msg( theString.ToCString() );
 
 #if OCC_VERSION_HEX < OCC_VERSION_MIN
-          if( theToPutEol )
-              ReportMessage( wxT( "\n" ) );
+        if( theToPutEol )
+            msg += wxT( "\n" );
 #else
-          ReportMessage( wxT( "\n" ) );
+        msg += wxT( "\n" );
 #endif
-      }
 
-      if( theGravity == Message_Warning )
-          m_converter->SetWarn();
-
-      if( theGravity >= Message_Alarm )
-          m_converter->SetError();
-
-      if( theGravity == Message_Fail )
-          m_converter->SetFail();
+        m_reporter->Report( msg, getSeverity( theGravity ) );
     }
 
 private:
-    EXPORTER_STEP* m_converter;
+    SEVERITY getSeverity( const Message_Gravity theGravity ) const
+    {
+        switch( theGravity )
+        {
+        case Message_Trace:   return RPT_SEVERITY_DEBUG;
+        case Message_Info:    return RPT_SEVERITY_DEBUG;
+        case Message_Warning: return RPT_SEVERITY_WARNING;
+        case Message_Alarm:   return RPT_SEVERITY_ERROR;
+        case Message_Fail:    return RPT_SEVERITY_ERROR;
+        }
+    }
+
+private:
+    REPORTER* m_reporter;
 };
 
 
-EXPORTER_STEP::EXPORTER_STEP( BOARD* aBoard, const EXPORTER_STEP_PARAMS& aParams ) :
-    m_params( aParams ),
-    m_error( false ),
-    m_fail( false ),
-    m_warn( false ),
-    m_board( aBoard ),
-    m_pcbModel( nullptr )
+EXPORTER_STEP::EXPORTER_STEP( BOARD* aBoard, const EXPORTER_STEP_PARAMS& aParams,
+                              REPORTER* aReporter ) :
+        m_params( aParams ),
+        m_reporter( aReporter ),
+        m_board( aBoard ),
+        m_pcbModel( nullptr )
 {
     m_copperColor = COLOR4D( 0.7, 0.61, 0.0, 1.0 );
 
@@ -369,9 +367,11 @@ bool EXPORTER_STEP::buildFootprint3DShapes( FOOTPRINT* aFootprint, VECTOR2D aOri
             if( mname.empty() )
                 mname = fp_model.m_Filename;
 
-            ReportMessage( wxString::Format( wxT( "Could not add 3D model to %s.\n"
-                                                  "File not found: %s\n" ),
-                                             aFootprint->GetReference(), mname ) );
+            m_reporter->Report( wxString::Format( _( "Could not add 3D model for %s.\n"
+                                                     "File not found: %s\n" ),
+                                                  aFootprint->GetReference(),
+                                                  mname ),
+                                RPT_SEVERITY_ERROR );
             continue;
         }
 
@@ -397,9 +397,11 @@ bool EXPORTER_STEP::buildFootprint3DShapes( FOOTPRINT* aFootprint, VECTOR2D aOri
         }
         catch( const Standard_Failure& e )
         {
-            ReportMessage( wxString::Format( wxT( "Could not add 3D model to %s.\n"
-                                                  "OpenCASCADE error: %s\n" ),
-                                             aFootprint->GetReference(), e.GetMessageString() ) );
+            m_reporter->Report( wxString::Format( _( "Could not add 3D model for %s.\n"
+                                                     "OpenCASCADE error: %s\n" ),
+                                                  aFootprint->GetReference(),
+                                                  e.GetMessageString() ),
+                                RPT_SEVERITY_ERROR );
         }
 
     }
@@ -699,7 +701,7 @@ bool EXPORTER_STEP::buildBoard3DShapes()
     else
         origin = m_params.m_Origin;
 
-    m_pcbModel = std::make_unique<STEP_PCB_MODEL>( m_pcbBaseName );
+    m_pcbModel = std::make_unique<STEP_PCB_MODEL>( m_pcbBaseName, m_reporter );
 
     initOutputVariant();
 
@@ -785,15 +787,15 @@ bool EXPORTER_STEP::buildBoard3DShapes()
         }
     }
 
-    ReportMessage( wxT( "Create PCB solid model\n" ) );
+    m_reporter->Report( wxT( "Create PCB solid model.\n" ), RPT_SEVERITY_DEBUG );
 
-    wxString msg;
-    msg.Printf( wxT( "Board outline: find %d initial points\n" ), pcbOutlines.FullPointCount() );
-    ReportMessage( msg );
+    m_reporter->Report( wxString::Format( wxT( "Board outline: found %d initial points.\n" ),
+                                          pcbOutlines.FullPointCount() ),
+                        RPT_SEVERITY_DEBUG );
 
     if( !m_pcbModel->CreatePCB( pcbOutlines, origin, m_params.m_ExportBoardBody ) )
     {
-        ReportMessage( wxT( "could not create PCB solid model\n" ) );
+        m_reporter->Report( _( "Could not create PCB solid model.\n" ), RPT_SEVERITY_ERROR );
         return false;
     }
 
@@ -808,9 +810,9 @@ bool EXPORTER_STEP::Export()
 
     // setup opencascade message log
     Message::DefaultMessenger()->RemovePrinters( STANDARD_TYPE( Message_PrinterOStream ) );
-    Message::DefaultMessenger()->AddPrinter( new KiCadPrinter( this ) );
+    Message::DefaultMessenger()->AddPrinter( new KICAD_PRINTER( m_reporter ) );
 
-    ReportMessage( _( "Determining PCB data\n" ) );
+    m_reporter->Report( wxT( "Determining PCB data.\n" ), RPT_SEVERITY_DEBUG );
 
     if( m_params.m_OutputFile.IsEmpty() )
     {
@@ -842,15 +844,19 @@ bool EXPORTER_STEP::Export()
 
     try
     {
-        ReportMessage( wxString::Format( _( "Build %s data\n" ), m_params.GetFormatName() ) );
+        m_reporter->Report( wxString::Format( wxT( "Build %s data.\n" ), m_params.GetFormatName() ),
+                            RPT_SEVERITY_DEBUG );
 
         if( !buildBoard3DShapes() )
         {
-            ReportMessage( _( "\n** Error building STEP board model. Export aborted. **\n" ) );
+            m_reporter->Report( _( "\n"
+                                   "** Error building STEP board model. Export aborted. **\n" ),
+                                RPT_SEVERITY_ERROR );
             return false;
         }
 
-        ReportMessage( wxString::Format( _( "Writing %s file\n" ), m_params.GetFormatName() ) );
+        m_reporter->Report( wxString::Format( wxT( "Writing %s file.\n" ), m_params.GetFormatName() ),
+                            RPT_SEVERITY_DEBUG );
 
         bool success = true;
         if( m_params.m_Format == EXPORTER_STEP_PARAMS::FORMAT::STEP )
@@ -868,52 +874,44 @@ bool EXPORTER_STEP::Export()
 
         if( !success )
         {
-            ReportMessage( wxString::Format( _( "\n** Error writing %s file. **\n" ),
-                                             m_params.GetFormatName() ) );
+            m_reporter->Report( wxString::Format( _( "\n"
+                                                     "** Error writing %s file. **\n" ),
+                                                  m_params.GetFormatName() ),
+                                RPT_SEVERITY_ERROR );
             return false;
         }
         else
         {
-            ReportMessage( wxString::Format( _( "%s file '%s' created.\n" ),
-                                             m_params.GetFormatName(), m_outputFile ) );
+            m_reporter->Report( wxString::Format( wxT( "%s file '%s' created.\n" ),
+                                                  m_params.GetFormatName(),
+                                                  m_outputFile ),
+                                RPT_SEVERITY_ACTION );
         }
     }
     catch( const Standard_Failure& e )
     {
-        ReportMessage( e.GetMessageString() );
-        ReportMessage( wxString::Format( _( "\n** Error exporting %s file. Export aborted. **\n" ),
-                                         m_params.GetFormatName() ) );
+        m_reporter->Report( e.GetMessageString(), RPT_SEVERITY_ERROR );
+        m_reporter->Report( wxString::Format( _( "\n"
+                                                 "** Error exporting %s file. Export aborted. **\n" ),
+                                              m_params.GetFormatName() ),
+                            RPT_SEVERITY_ERROR );
         return false;
     }
     catch( ... )
     {
-        ReportMessage( wxString::Format( _( "\n** Error exporting %s file. Export aborted. **\n" ),
-                                         m_params.GetFormatName() ) );
+        m_reporter->Report( wxString::Format( _( "\n"
+                                                 "** Error exporting %s file. Export aborted. **\n" ),
+                                              m_params.GetFormatName() ),
+                            RPT_SEVERITY_ERROR );
         return false;
-    }
-
-    if( m_fail || m_error )
-    {
-        wxString msg;
-
-        if( m_fail )
-        {
-            msg = wxString::Format( _( "Unable to create %s file.\n"
-                                       "Check that the board has a valid outline and models." ),
-                                    m_params.GetFormatName() );
-        }
-        else if( m_error || m_warn )
-        {
-            msg = wxString::Format( _( "%s file has been created, but there are warnings." ),
-                                    m_params.GetFormatName() );
-        }
-
-        ReportMessage( msg );
     }
 
     // Display calculation time in seconds
     double calculation_time = (double)( GetRunningMicroSecs() - stats_startExportTime) / 1e6;
-    ReportMessage( wxString::Format( _( "\nExport time %.3f s\n" ), calculation_time ) );
+    m_reporter->Report( wxString::Format( _( "\n"
+                                             "Export time %.3f s\n" ),
+                                          calculation_time ),
+                        RPT_SEVERITY_INFO );
 
-    return true;
+    return !m_reporter->HasMessageOfSeverity( RPT_SEVERITY_ERROR );
 }

@@ -42,9 +42,7 @@ JOBS_RUNNER::JOBS_RUNNER( KIWAY* aKiway, JOBSET* aJobsFile, PROJECT* aProject,
         m_project( aProject )
 {
     if( !m_reporter )
-    {
         m_reporter = &NULL_REPORTER::GetInstance();
-    }
 }
 
 
@@ -62,7 +60,6 @@ bool JOBS_RUNNER::RunJobsAllDestinations( bool aBail )
 int JOBS_RUNNER::runSpecialExecute( const JOBSET_JOB* aJob, PROJECT* aProject )
 {
     JOB_SPECIAL_EXECUTE* specialJob = static_cast<JOB_SPECIAL_EXECUTE*>( aJob->m_job.get() );
-
     wxString             cmd = ExpandEnvVarSubstitutions( specialJob->m_command, m_project );
 
     // static cast required because wx uses `long` which is 64-bit on Linux but 32-bit on Windows
@@ -85,18 +82,16 @@ int JOBS_RUNNER::runSpecialExecute( const JOBSET_JOB* aJob, PROJECT* aProject )
         if( !procOutput.IsOk() )
             return CLI::EXIT_CODES::ERR_INVALID_OUTPUT_CONFLICT;
 
-        wxInputStream*      inputStream = process.GetInputStream();
+        wxInputStream* inputStream = process.GetInputStream();
+
         if( inputStream )
-        {
             inputStream->Read( procOutput );
-        }
+
         procOutput.Close();
     }
 
     if( specialJob->m_ignoreExitcode )
-    {
         return CLI::EXIT_CODES::OK;
-    }
 
     return result;
 }
@@ -152,6 +147,9 @@ public:
     {
         wxString text( aText );
 
+        if( aSeverity == RPT_SEVERITY_DEBUG && !m_includeDebug )
+            return *this;
+
         if( aSeverity == RPT_SEVERITY_ACTION )
             text.Replace( m_tempDirPath, wxEmptyString );
 
@@ -160,6 +158,7 @@ public:
 
 private:
     wxString m_tempDirPath;
+    bool     m_includeDebug;
 };
 
 
@@ -215,7 +214,7 @@ bool JOBS_RUNNER::RunJobsForDestination( JOBSET_DESTINATION* aDestination, bool 
     {
         msg += wxT( "|--------------------------------\n" );
         msg += wxT( "| " );
-        msg += wxString::Format( "Performing jobs for output %s", aDestination->m_id );
+        msg += wxString::Format( wxT( "Performing jobs for output %s" ), aDestination->m_id );
         msg += wxT( "\n" );
         msg += wxT( "|--------------------------------\n" );
 

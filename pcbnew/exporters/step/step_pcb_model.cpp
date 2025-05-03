@@ -30,10 +30,12 @@
 #include <utility>
 #include <wx/filename.h>
 #include <wx/filefn.h>
+#include <wx/sstream.h>
 #include <wx/stdpaths.h>
 #include <wx/wfstream.h>
 #include <wx/zipstrm.h>
 #include <wx/stdstream.h>
+#include <wx/crt.h>
 
 #include <decompress.hpp>
 
@@ -48,6 +50,7 @@
 #include <geometry/shape_circle.h>
 #include <board_stackup_manager/board_stackup.h>
 #include <board_stackup_manager/stackup_predefined_prms.h>
+#include <reporter.h>
 
 #include "step_pcb_model.h"
 #include "streamwrapper.h"
@@ -152,14 +155,7 @@ MODEL3D_FORMAT_TYPE fileType( const char* aFileName )
     wxFileName lfile( wxString::FromUTF8Unchecked( aFileName ) );
 
     if( !lfile.FileExists() )
-    {
-        wxString msg;
-        msg.Printf( wxT( " * fileType(): no such file: %s\n" ),
-                    wxString::FromUTF8Unchecked( aFileName ) );
-
-        ReportMessage( msg );
         return FMT_NONE;
-    }
 
     wxString ext = lfile.GetExt().Lower();
 
@@ -623,7 +619,7 @@ static Standard_Boolean rescaleShapes( const TDF_Label& theLabel, const gp_XYZ& 
 }
 
 
-static bool fuseShapes( auto& aInputShapes, TopoDS_Shape& aOutShape )
+static bool fuseShapes( auto& aInputShapes, TopoDS_Shape& aOutShape, REPORTER* aReporter )
 {
     BRepAlgoAPI_Fuse     mkFuse;
     TopTools_ListOfShape shapeArguments, shapeTools;
@@ -647,21 +643,27 @@ static bool fuseShapes( auto& aInputShapes, TopoDS_Shape& aOutShape )
 
     if( mkFuse.HasErrors() || mkFuse.HasWarnings() )
     {
-        ReportMessage( _( "** Got problems while fusing shapes **\n" ) );
+        aReporter->Report( _( "** Got problems while fusing shapes **\n" ), RPT_SEVERITY_ERROR );
 
         if( mkFuse.HasErrors() )
         {
-            ReportMessage( _( "Errors:\n" ) );
-            mkFuse.DumpErrors( std::cout );
+            wxString             msg = _( "Errors:\n" );
+            wxStringOutputStream os_stream( &msg );
+            wxStdOutputStream    out( os_stream );
+
+            mkFuse.DumpErrors( out );
+            aReporter->Report( msg, RPT_SEVERITY_ERROR );
         }
 
         if( mkFuse.HasWarnings() )
         {
-            ReportMessage( _( "Warnings:\n" ) );
-            mkFuse.DumpWarnings( std::cout );
-        }
+            wxString             msg = _( "Warnings:\n" );
+            wxStringOutputStream os_stream( &msg );
+            wxStdOutputStream    out( os_stream );
 
-        std::cout << "\n";
+            mkFuse.DumpWarnings( out );
+            aReporter->Report( msg, RPT_SEVERITY_WARNING );
+        }
     }
 
     if( mkFuse.IsDone() )
@@ -676,7 +678,8 @@ static bool fuseShapes( auto& aInputShapes, TopoDS_Shape& aOutShape )
 
         if( unifiedShapes.IsNull() )
         {
-            ReportMessage( _( "** ShapeUpgrade_UnifySameDomain produced a null shape **\n" ) );
+            aReporter->Report( _( "** ShapeUpgrade_UnifySameDomain produced a null shape **\n" ),
+                               RPT_SEVERITY_ERROR );
         }
         else
         {
@@ -703,14 +706,15 @@ static TopoDS_Compound makeCompound( const auto& aInputShapes )
 
 
 // Try to fuse shapes. If that fails, just add them to a compound
-static TopoDS_Shape fuseShapesOrCompound( const TopTools_ListOfShape& aInputShapes )
+static TopoDS_Shape fuseShapesOrCompound( const TopTools_ListOfShape& aInputShapes,
+                                          REPORTER* aReporter )
 {
     TopoDS_Shape outShape;
 
     if( aInputShapes.Size() == 1 )
         return aInputShapes.First();
 
-    if( fuseShapes( aInputShapes, outShape ) )
+    if( fuseShapes( aInputShapes, outShape, aReporter ) )
         return outShape;
 
     return makeCompound( aInputShapes );
@@ -757,7 +761,8 @@ static Standard_Boolean prefixNames( const TDF_Label&                  aLabel,
 }
 
 
-STEP_PCB_MODEL::STEP_PCB_MODEL( const wxString& aPcbName )
+STEP_PCB_MODEL::STEP_PCB_MODEL( const wxString& aPcbName, REPORTER* aReporter ) :
+        m_reporter( aReporter )
 {
     m_app = XCAFApp_Application::GetApplication();
     m_app->NewDocument( "MDTV-XCAF", m_doc );
@@ -890,7 +895,7 @@ bool STEP_PCB_MODEL::AddPadShape( const PAD* aPad, const VECTOR2D& aOrigin, bool
     }
 
     if( !success ) // Error
-        ReportMessage( wxT( "OCC error adding pad/via polygon.\n" ) );
+        m_reporter->Report( _( "OCC error adding pad/via polygon.\n" ), RPT_SEVERITY_ERROR );
 
     if( !padShapes.empty() )
     {
@@ -902,8 +907,7 @@ bool STEP_PCB_MODEL::AddPadShape( const PAD* aPad, const VECTOR2D& aOrigin, bool
             for( const TopoDS_Shape& shape : padShapes )
                 padShapesList.Append( shape );
 
-            m_board_copper_pads[aPad->GetNetname()].push_back(
-                    fuseShapesOrCompound( padShapesList ) );
+            m_board_copper_pads[aPad->GetNetname()].push_back( fuseShapesOrCompound( padShapesList, m_reporter ) );
         }
         else
         {
@@ -1136,9 +1140,10 @@ bool STEP_PCB_MODEL::AddPolygonShapes( const SHAPE_POLY_SET* aPolyShapes, PCB_LA
 
     if( !MakeShapes( targetVec, *aPolyShapes, m_simplifyShapes, thickness, z_pos, aOrigin ) )
     {
-        ReportMessage(
-                wxString::Format( wxT( "Could not add shape (%d points) to copper layer on %s.\n" ),
-                                  aPolyShapes->FullPointCount(), LayerName( aLayer ) ) );
+        m_reporter->Report( wxString::Format( _( "Could not add shape (%d points) to copper layer %s.\n" ),
+                                              aPolyShapes->FullPointCount(),
+                                              LayerName( aLayer ) ),
+                            RPT_SEVERITY_ERROR );
 
         success = false;
     }
@@ -1153,12 +1158,13 @@ bool STEP_PCB_MODEL::AddComponent( const std::string& aFileNameUTF8, const std::
 {
     if( aFileNameUTF8.empty() )
     {
-        ReportMessage( wxString::Format( wxT( "No model defined for component %s.\n" ), aRefDes ) );
+        m_reporter->Report( wxString::Format( _( "No model defined for %s.\n" ), aRefDes ),
+                            RPT_SEVERITY_WARNING );
         return false;
     }
 
     wxString fileName( wxString::FromUTF8( aFileNameUTF8.c_str() ) );
-    ReportMessage( wxString::Format( wxT( "Adding component %s.\n" ), aRefDes ) );
+    m_reporter->Report( wxString::Format( wxT( "Adding component %s.\n" ), aRefDes ), RPT_SEVERITY_DEBUG );
 
     // first retrieve a label
     TDF_Label lmodel;
@@ -1167,10 +1173,9 @@ bool STEP_PCB_MODEL::AddComponent( const std::string& aFileNameUTF8, const std::
     if( !getModelLabel( aFileNameUTF8, aScale, lmodel, aSubstituteModels, &errorMessage ) )
     {
         if( errorMessage.IsEmpty() )
-            ReportMessage( wxString::Format( wxT( "No model for filename '%s'.\n" ), fileName ) );
-        else
-            ReportMessage( errorMessage );
+            errorMessage.Printf( _( "No model for filename '%s'.\n" ), fileName );
 
+        m_reporter->Report( errorMessage, RPT_SEVERITY_ERROR );
         return false;
     }
 
@@ -1179,8 +1184,8 @@ bool STEP_PCB_MODEL::AddComponent( const std::string& aFileNameUTF8, const std::
 
     if( !getModelLocation( aBottom, aPosition, aRotation, aOffset, aOrientation, toploc ) )
     {
-        ReportMessage(
-                wxString::Format( wxT( "No location data for filename '%s'.\n" ), fileName ) );
+        m_reporter->Report( wxString::Format( _( "No location data for filename '%s'.\n" ), fileName ),
+                            RPT_SEVERITY_ERROR );
         return false;
     }
 
@@ -1189,8 +1194,8 @@ bool STEP_PCB_MODEL::AddComponent( const std::string& aFileNameUTF8, const std::
 
     if( llabel.IsNull() )
     {
-        ReportMessage( wxString::Format( wxT( "Could not add component with filename '%s'.\n" ),
-                                         fileName ) );
+        m_reporter->Report( wxString::Format( _( "Could not add component with filename '%s'.\n" ), fileName ),
+                            RPT_SEVERITY_ERROR );
         return false;
     }
 
@@ -1359,8 +1364,9 @@ bool STEP_PCB_MODEL::MakeShapeAsThickSegment( TopoDS_Shape& aShape,
     }
     catch( const Standard_Failure& e )
     {
-        ReportMessage( wxString::Format( wxT( "build shape segment: OCC exception: %s\n" ),
-                                         e.GetMessageString() ) );
+        m_reporter->Report( wxString::Format( _( "OCC exception building shape segment: %s\n" ),
+                                              e.GetMessageString() ),
+                            RPT_SEVERITY_ERROR );
         return false;
     }
 
@@ -1373,8 +1379,9 @@ bool STEP_PCB_MODEL::MakeShapeAsThickSegment( TopoDS_Shape& aShape,
     }
     catch( const Standard_Failure& e )
     {
-        ReportMessage( wxString::Format( wxT( "MakeShapeThickSegment: OCC exception: %s\n" ),
-                                         e.GetMessageString() ) );
+        m_reporter->Report( wxString::Format( _( "OCC exception building face: %s\n" ),
+                                              e.GetMessageString() ),
+                            RPT_SEVERITY_ERROR );
         return false;
     }
 
@@ -1384,7 +1391,8 @@ bool STEP_PCB_MODEL::MakeShapeAsThickSegment( TopoDS_Shape& aShape,
 
         if( aShape.IsNull() )
         {
-            ReportMessage( wxT( "failed to create a prismatic shape\n" ) );
+            m_reporter->Report( _( "Failed to create a prismatic shape\n" ),
+                                RPT_SEVERITY_ERROR );
             return false;
         }
     }
@@ -1412,7 +1420,8 @@ static wxString formatBBox( const BOX2I& aBBox )
 
 
 static bool makeWireFromChain( BRepLib_MakeWire& aMkWire, const SHAPE_LINE_CHAIN& aChain,
-                               double aMergeOCCMaxDist, double aZposition, const VECTOR2D& aOrigin )
+                               double aMergeOCCMaxDist, double aZposition, const VECTOR2D& aOrigin,
+                               REPORTER* aReporter )
 {
     auto toPoint = [&]( const VECTOR2D& aKiCoords ) -> gp_Pnt
     {
@@ -1430,13 +1439,15 @@ static bool makeWireFromChain( BRepLib_MakeWire& aMkWire, const SHAPE_LINE_CHAIN
             gp_Pnt start = toPoint( aPt0 );
             gp_Pnt end = toPoint( aPt1 );
 
-                    BRepBuilderAPI_MakeEdge mkEdge( start, end );
+            BRepBuilderAPI_MakeEdge mkEdge( start, end );
 
             if( !mkEdge.IsDone() || mkEdge.Edge().IsNull() )
             {
-                ReportMessage( wxString::Format( wxT( "failed to make segment edge at (%d "
-                                                      "%d) -> (%d %d), skipping\n" ),
-                                                 aPt0.x, aPt0.y, aPt1.x, aPt1.y ) );
+                aReporter->Report( wxString::Format( _( "Failed to make segment edge (%d %d) -> (%d %d), "
+                                                        "skipping\n" ),
+                                                     aPt0.x, aPt0.y,
+                                                     aPt1.x, aPt1.y ),
+                                   RPT_SEVERITY_ERROR );
             }
             else
             {
@@ -1444,9 +1455,10 @@ static bool makeWireFromChain( BRepLib_MakeWire& aMkWire, const SHAPE_LINE_CHAIN
 
                 if( aMkWire.Error() != BRepLib_WireDone )
                 {
-                    ReportMessage( wxString::Format( wxT( "failed to add segment edge "
-                                                          "at (%d %d) -> (%d %d)\n" ),
-                                                     aPt0.x, aPt0.y, aPt1.x, aPt1.y ) );
+                    aReporter->Report( wxString::Format( _( "Failed to add segment edge (%d %d) -> (%d %d)\n" ),
+                                                         aPt0.x, aPt0.y,
+                                                         aPt1.x, aPt1.y ),
+                                       RPT_SEVERITY_ERROR );
                     return false;
                 }
             }
@@ -1469,8 +1481,7 @@ static bool makeWireFromChain( BRepLib_MakeWire& aMkWire, const SHAPE_LINE_CHAIN
             else
             {
                 curve = GC_MakeArcOfCircle( toPoint( aPt0 ), toPoint( aArc.GetArcMid() ),
-                                            toPoint( aArc.GetP1() ) )
-                                .Value();
+                                            toPoint( aArc.GetP1() ) ).Value();
             }
 
             if( curve.IsNull() )
@@ -1480,11 +1491,13 @@ static bool makeWireFromChain( BRepLib_MakeWire& aMkWire, const SHAPE_LINE_CHAIN
 
             if( !aMkWire.IsDone() )
             {
-                ReportMessage( wxString::Format(
-                        wxT( "failed to add arc curve from (%d %d), arc p0 "
-                             "(%d %d), mid (%d %d), p1 (%d %d)\n" ),
-                        aPt0.x, aPt0.y, aArc.GetP0().x, aArc.GetP0().y, aArc.GetArcMid().x,
-                        aArc.GetArcMid().y, aArc.GetP1().x, aArc.GetP1().y ) );
+                aReporter->Report( wxString::Format( _( "Failed to add arc curve from (%d %d), arc p0 "
+                                                        "(%d %d), mid (%d %d), p1 (%d %d)\n" ),
+                                                     aPt0.x, aPt0.y,
+                                                     aArc.GetP0().x, aArc.GetP0().y,
+                                                     aArc.GetArcMid().x, aArc.GetArcMid().y,
+                                                     aArc.GetP1().x, aArc.GetP1().y ),
+                                   RPT_SEVERITY_ERROR );
                 return false;
             }
 
@@ -1554,17 +1567,19 @@ static bool makeWireFromChain( BRepLib_MakeWire& aMkWire, const SHAPE_LINE_CHAIN
 
         if( lastPt != firstPt && !addSegment( lastPt, firstPt ) )
         {
-            ReportMessage(
-                    wxString::Format( wxT( "** Failed to close wire at %d, %d -> %d, %d **\n" ),
-                                      lastPt.x, lastPt.y, firstPt.x, firstPt.y ) );
+            aReporter->Report( wxString::Format( _( "Failed to close wire at %d, %d -> %d, %d **\n" ),
+                                                 lastPt.x, lastPt.y,
+                                                 firstPt.x, firstPt.y ),
+                               RPT_SEVERITY_ERROR );
 
             return false;
         }
     }
     catch( const Standard_Failure& e )
     {
-        ReportMessage( wxString::Format( wxT( "makeWireFromChain: OCC exception: %s\n" ),
-                                         e.GetMessageString() ) );
+        aReporter->Report( wxString::Format( _( "OCC exception creating wire: %s\n" ),
+                                             e.GetMessageString() ),
+                           RPT_SEVERITY_ERROR );
         return false;
     }
 
@@ -1601,11 +1616,11 @@ bool STEP_PCB_MODEL::MakeShapes( std::vector<TopoDS_Shape>& aShapes, const SHAPE
         // TODO: this is not accurate because it doesn't check arcs.
         /*if( approximated.IsSelfIntersecting() )
         {
-            ReportMessage( wxString::Format( _( "\nApproximated polygon self-intersection check "
-                                                "failed\n" ) ) );
-
-            ReportMessage( wxString::Format( _( "z: %g; bounding box: %s\n" ), aZposition,
-                                             formatBBox( workingPoly.BBox() ) ) );
+            m_reporter->Report( wxString::Format( _( "Approximated polygon self-intersection check failed\n"
+                                                     "z: %g; bounding box: %s\n" ) ),
+                                                  aZposition,
+                                                  formatBBox( workingPoly.BBox() ) ),
+                                RPT_SEVERITY_ERROR );
         }
         else
         {
@@ -1635,7 +1650,7 @@ bool STEP_PCB_MODEL::MakeShapes( std::vector<TopoDS_Shape>& aShapes, const SHAPE
             TopoDS_Wire      wire;
             BRepLib_MakeWire mkWire;
 
-            makeWireFromChain( mkWire, aContour, m_mergeOCCMaxDist, aZposition, aOrigin );
+            makeWireFromChain( mkWire, aContour, m_mergeOCCMaxDist, aZposition, aOrigin, m_reporter );
 
             if( mkWire.IsDone() )
             {
@@ -1643,13 +1658,12 @@ bool STEP_PCB_MODEL::MakeShapes( std::vector<TopoDS_Shape>& aShapes, const SHAPE
             }
             else
             {
-                ReportMessage(
-                        wxString::Format( _( "Wire not done (contour points %d): OCC error %d\n" ),
-                                          static_cast<int>( aContour.PointCount() ),
-                                          static_cast<int>( mkWire.Error() ) ) );
-
-                ReportMessage( wxString::Format( _( "z: %g; bounding box: %s\n" ), aZposition,
-                                                 formatBBox( aContour.BBox() ) ) );
+                m_reporter->Report( wxString::Format( _( "Wire not done (contour points %d): OCC error %d\n"
+                                                         "z: %g; bounding box: %s\n" ),
+                                                      static_cast<int>( aContour.PointCount() ),
+                                                      static_cast<int>( mkWire.Error() ),
+                                                      formatBBox( aContour.BBox() ) ),
+                                    RPT_SEVERITY_ERROR );
             }
 
             if( !wire.IsNull() )
@@ -1658,12 +1672,11 @@ bool STEP_PCB_MODEL::MakeShapes( std::vector<TopoDS_Shape>& aShapes, const SHAPE
 
                 if( !check.IsValid() )
                 {
-                    ReportMessage( wxString::Format( _( "\nWire self-interference check "
-                                                        "failed\n" ) ) );
-
-                    ReportMessage( wxString::Format( _( "z: %g; bounding box: %s\n" ), aZposition,
-                                                     formatBBox( aContour.BBox() ) ) );
-
+                    m_reporter->Report( wxString::Format( _( "Wire self-interference check failed\n"
+                                                             "z: %g; bounding box: %s\n" ),
+                                                          aZposition,
+                                                          formatBBox( aContour.BBox() ) ),
+                                        RPT_SEVERITY_ERROR );
                     wire.Nullify();
                 }
             }
@@ -1681,7 +1694,8 @@ bool STEP_PCB_MODEL::MakeShapes( std::vector<TopoDS_Shape>& aShapes, const SHAPE
 
                 if( aConvertToArcs && wire.IsNull() )
                 {
-                    ReportMessage( wxString::Format( _( "Using non-simplified polygon.\n" ) ) );
+                    m_reporter->Report( wxString::Format( _( "Using non-simplified polygon.\n" ) ),
+                                        RPT_SEVERITY_DEBUG );
 
                     // Fall back to original shape
                     wire = tryMakeWire( fallbackPoly.CPolygon( polyId )[contId] );
@@ -1698,12 +1712,11 @@ bool STEP_PCB_MODEL::MakeShapes( std::vector<TopoDS_Shape>& aShapes, const SHAPE
                     }
                     else
                     {
-                        ReportMessage( wxString::Format( wxT( "\n** Outline skipped **\n" ) ) );
-
-                        ReportMessage( wxString::Format( wxT( "z: %g; bounding box: %s\n" ),
-                                                         aZposition,
-                                                         formatBBox( polygon[contId].BBox() ) ) );
-
+                        m_reporter->Report( wxString::Format( wxT( "** Outline skipped **\n"
+                                                                   "z: %g; bounding box: %s\n" ),
+                                                              aZposition,
+                                                              formatBBox( polygon[contId].BBox() ) ),
+                                            RPT_SEVERITY_DEBUG );
                         break;
                     }
                 }
@@ -1718,19 +1731,20 @@ bool STEP_PCB_MODEL::MakeShapes( std::vector<TopoDS_Shape>& aShapes, const SHAPE
                     }
                     else
                     {
-                        ReportMessage( wxString::Format( wxT( "\n** Hole skipped **\n" ) ) );
-
-                        ReportMessage( wxString::Format( wxT( "z: %g; bounding box: %s\n" ),
-                                                         aZposition,
-                                                         formatBBox( polygon[contId].BBox() ) ) );
+                        m_reporter->Report( wxString::Format( wxT( "** Hole skipped **\n"
+                                                                   "z: %g; bounding box: %s\n" ),
+                                                              aZposition,
+                                                              formatBBox( polygon[contId].BBox() ) ),
+                                            RPT_SEVERITY_DEBUG );
                     }
                 }
             }
             catch( const Standard_Failure& e )
             {
-                ReportMessage(
-                        wxString::Format( wxT( "MakeShapes (contour %d): OCC exception: %s\n" ),
-                                          static_cast<int>( contId ), e.GetMessageString() ) );
+                m_reporter->Report( wxString::Format( _( "OCC exception creating contour %d: %s\n" ),
+                                                      static_cast<int>( contId ),
+                                                      e.GetMessageString() ),
+                                    RPT_SEVERITY_ERROR );
                 return false;
             }
         }
@@ -1746,7 +1760,7 @@ bool STEP_PCB_MODEL::MakeShapes( std::vector<TopoDS_Shape>& aShapes, const SHAPE
 
                 if( prism.IsNull() )
                 {
-                    ReportMessage( _( "Failed to create a prismatic shape\n" ) );
+                    m_reporter->Report( _( "Failed to create a prismatic shape\n" ), RPT_SEVERITY_ERROR );
                     return false;
                 }
             }
@@ -1757,7 +1771,7 @@ bool STEP_PCB_MODEL::MakeShapes( std::vector<TopoDS_Shape>& aShapes, const SHAPE
         }
         else
         {
-            ReportMessage( wxString::Format( _( "** Face skipped **\n" ) ) );
+            m_reporter->Report( _( "** Face skipped **\n" ), RPT_SEVERITY_DEBUG );
         }
     }
 
@@ -1823,14 +1837,15 @@ bool STEP_PCB_MODEL::CreatePCB( SHAPE_POLY_SET& aOutline, VECTOR2D aOrigin, bool
 
     thread_pool& tp = GetKiCadThreadPool();
 
-    Handle( XCAFDoc_VisMaterialTool ) visMatTool =
-            XCAFDoc_DocumentTool::VisMaterialTool( m_doc->Main() );
+    Handle( XCAFDoc_VisMaterialTool ) visMatTool = XCAFDoc_DocumentTool::VisMaterialTool( m_doc->Main() );
 
     m_hasPCB = true; // whether or not operations fail we note that CreatePCB has been invoked
 
     // Support for more than one main outline (more than one board)
-    ReportMessage( wxString::Format( wxT( "Build board outlines (%d outlines) with %d points.\n" ),
-                                     aOutline.OutlineCount(), aOutline.FullPointCount() ) );
+    m_reporter->Report( wxString::Format( wxT( "Build board outlines (%d outlines) with %d points.\n" ),
+                                          aOutline.OutlineCount(),
+                                          aOutline.FullPointCount() ),
+                        RPT_SEVERITY_DEBUG );
 
     double boardThickness;
     double boardZPos;
@@ -1846,8 +1861,7 @@ bool STEP_PCB_MODEL::CreatePCB( SHAPE_POLY_SET& aOutline, VECTOR2D aOrigin, bool
     if( !MakeShapes( m_board_outlines, aOutline, false, boardThickness, boardZPos, aOrigin ) )
     {
         // Error
-        ReportMessage( wxString::Format(
-                wxT( "OCC error creating main outline.\n" ) ) );
+        m_reporter->Report( _( "OCC error creating main outline.\n" ), RPT_SEVERITY_ERROR );
     }
 #else
     // Workaround for bug #17446 Holes are missing from STEP export with circular PCB outline
@@ -1864,7 +1878,8 @@ bool STEP_PCB_MODEL::CreatePCB( SHAPE_POLY_SET& aOutline, VECTOR2D aOrigin, bool
                 if( !MakeShapes( m_board_outlines, polyset, false, boardThickness, boardZPos,
                                  aOrigin ) )
                 {
-                    ReportMessage( wxT( "OCC error creating main outline.\n" ) );
+                    m_reporter->Report( _( "OCC error creating main outline.\n" ),
+                                        RPT_SEVERITY_ERROR );
                 }
             }
             else // Hole inside the main outline
@@ -1872,7 +1887,8 @@ bool STEP_PCB_MODEL::CreatePCB( SHAPE_POLY_SET& aOutline, VECTOR2D aOrigin, bool
                 if( !MakeShapes( m_boardCutouts, polyset, false, boardThickness, boardZPos,
                                  aOrigin ) )
                 {
-                    ReportMessage( wxT( "OCC error creating hole in main outline.\n" ) );
+                    m_reporter->Report( _( "OCC error creating hole in main outline.\n" ),
+                                        RPT_SEVERITY_ERROR );
                 }
             }
         }
@@ -1886,8 +1902,9 @@ bool STEP_PCB_MODEL::CreatePCB( SHAPE_POLY_SET& aOutline, VECTOR2D aOrigin, bool
         BRepBndLib::Add( brdShape, brdBndBox );
 
     // subtract cutouts (if any)
-    ReportMessage( wxString::Format( wxT( "Build board cutouts and holes (%d hole(s)).\n" ),
-                                     (int) ( m_boardCutouts.size() + m_copperCutouts.size() ) ) );
+    m_reporter->Report( wxString::Format( wxT( "Build board cutouts and holes (%d hole(s)).\n" ),
+                                          (int) ( m_boardCutouts.size() + m_copperCutouts.size() ) ),
+                        RPT_SEVERITY_DEBUG );
 
     auto buildBSB = [&brdBndBox]( std::vector<TopoDS_Shape>& input, Bnd_BoundSortBox& bsbHoles )
     {
@@ -1909,79 +1926,88 @@ bool STEP_PCB_MODEL::CreatePCB( SHAPE_POLY_SET& aOutline, VECTOR2D aOrigin, bool
     };
 
     auto subtractShapesMap =
-            [&tp]( const wxString& aWhat, std::map<wxString, std::vector<TopoDS_Shape>>& aShapesMap,
-                   std::vector<TopoDS_Shape>& aHolesList, Bnd_BoundSortBox& aBSBHoles )
-    {
-        ReportMessage( wxString::Format( _( "Subtracting holes for %s\n" ), aWhat ) );
-
-        for( auto& [netname, vec] : aShapesMap )
-        {
-            std::mutex mutex;
-
-            auto subtractLoopFn = [&]( const int a, const int b )
+            [&tp, this]( const wxString& aWhat, std::map<wxString, std::vector<TopoDS_Shape>>& aShapesMap,
+                         std::vector<TopoDS_Shape>& aHolesList, Bnd_BoundSortBox& aBSBHoles )
             {
-                for( int shapeId = a; shapeId < b; shapeId++ )
+                m_reporter->Report( wxString::Format( _( "Subtracting holes for %s\n" ), aWhat ),
+                                    RPT_SEVERITY_DEBUG );
+
+                for( auto& [netname, vec] : aShapesMap )
                 {
-                    TopoDS_Shape& shape = vec[shapeId];
+                    std::mutex mutex;
 
-                    Bnd_Box shapeBbox;
-                    BRepBndLib::Add( shape, shapeBbox );
-
-                    TopTools_ListOfShape holelist;
-
+                    auto subtractLoopFn = [&]( const int a, const int b )
                     {
-                        std::unique_lock lock( mutex );
-
-                        const TColStd_ListOfInteger& indices = aBSBHoles.Compare( shapeBbox );
-
-                        for( const Standard_Integer& index : indices )
-                            holelist.Append( aHolesList[index] );
-                    }
-
-                    if( holelist.IsEmpty() )
-                        continue;
-
-                    TopTools_ListOfShape cutArgs;
-                    cutArgs.Append( shape );
-
-                    BRepAlgoAPI_Cut cut;
-
-                    cut.SetRunParallel( true );
-                    cut.SetToFillHistory( false );
-
-                    cut.SetArguments( cutArgs );
-                    cut.SetTools( holelist );
-                    cut.Build();
-
-                    if( cut.HasErrors() || cut.HasWarnings() )
-                    {
-                        ReportMessage( wxString::Format( _( "\n** Got problems while cutting "
-                                                            "%s net '%s' **\n" ),
-                                                         aWhat, UnescapeString( netname ) ) );
-                        shapeBbox.Dump();
-
-                        if( cut.HasErrors() )
+                        for( int shapeId = a; shapeId < b; shapeId++ )
                         {
-                            ReportMessage( _( "Errors:\n" ) );
-                            cut.DumpErrors( std::cout );
+                            TopoDS_Shape& shape = vec[shapeId];
+
+                            Bnd_Box shapeBbox;
+                            BRepBndLib::Add( shape, shapeBbox );
+
+                            TopTools_ListOfShape holelist;
+
+                            {
+                                std::unique_lock lock( mutex );
+
+                                const TColStd_ListOfInteger& indices = aBSBHoles.Compare( shapeBbox );
+
+                                for( const Standard_Integer& index : indices )
+                                    holelist.Append( aHolesList[index] );
+                            }
+
+                            if( holelist.IsEmpty() )
+                                continue;
+
+                            TopTools_ListOfShape cutArgs;
+                            cutArgs.Append( shape );
+
+                            BRepAlgoAPI_Cut cut;
+
+                            cut.SetRunParallel( true );
+                            cut.SetToFillHistory( false );
+
+                            cut.SetArguments( cutArgs );
+                            cut.SetTools( holelist );
+                            cut.Build();
+
+                            if( cut.HasErrors() || cut.HasWarnings() )
+                            {
+                                m_reporter->Report( wxString::Format( _( "** Got problems while cutting "
+                                                                         "%s net '%s' **\n" ),
+                                                                      aWhat,
+                                                                      UnescapeString( netname ) ),
+                                                    RPT_SEVERITY_ERROR );
+                                shapeBbox.Dump();
+
+                                if( cut.HasErrors() )
+                                {
+                                    wxString             msg = _( "Errors:\n" );
+                                    wxStringOutputStream os_stream( &msg );
+                                    wxStdOutputStream    out( os_stream );
+
+                                    cut.DumpErrors( out );
+                                    m_reporter->Report( msg, RPT_SEVERITY_ERROR );
+                                }
+
+                                if( cut.HasWarnings() )
+                                {
+                                    wxString             msg = _( "Warnings:\n" );
+                                    wxStringOutputStream os_stream( &msg );
+                                    wxStdOutputStream    out( os_stream );
+
+                                    cut.DumpWarnings( out );
+                                    m_reporter->Report( msg, RPT_SEVERITY_WARNING );
+                                }
+                            }
+
+                            shape = cut.Shape();
                         }
+                    };
 
-                        if( cut.HasWarnings() )
-                        {
-                            ReportMessage( _( "Warnings:\n" ) );
-                            cut.DumpWarnings( std::cout );
-                        }
-
-                        std::cout << "\n";
-                    }
-
-                    shape = cut.Shape();
+                    tp.parallelize_loop( vec.size(), subtractLoopFn ).wait();
                 }
             };
-
-            tp.parallelize_loop( vec.size(), subtractLoopFn ).wait();
-        }
-    };
 
     auto subtractShapes = [subtractShapesMap]( const wxString&            aWhat,
                                                std::vector<TopoDS_Shape>& aShapesList,
@@ -2032,7 +2058,7 @@ bool STEP_PCB_MODEL::CreatePCB( SHAPE_POLY_SET& aOutline, VECTOR2D aOrigin, bool
         for( const auto& [netname, shapes] : m_board_copper_vias )
             addShapes( netname, shapes );
 
-        ReportMessage( "Fusing shapes\n" );
+        m_reporter->Report( wxT( "Fusing shapes\n" ), RPT_SEVERITY_DEBUG );
 
         // Do fusing in parallel
         std::mutex mutex;
@@ -2040,7 +2066,7 @@ bool STEP_PCB_MODEL::CreatePCB( SHAPE_POLY_SET& aOutline, VECTOR2D aOrigin, bool
         auto fuseLoopFn = [&]( const wxString& aNetname )
         {
             auto&        toFuse = shapesToFuseMap[aNetname];
-            TopoDS_Shape fusedShape = fuseShapesOrCompound( toFuse );
+            TopoDS_Shape fusedShape = fuseShapesOrCompound( toFuse, m_reporter );
 
             if( !fusedShape.IsNull() )
             {
@@ -2063,7 +2089,7 @@ bool STEP_PCB_MODEL::CreatePCB( SHAPE_POLY_SET& aOutline, VECTOR2D aOrigin, bool
     }
 
     // push the board to the data structure
-    ReportMessage( wxT( "\nGenerate board full shape.\n" ) );
+    m_reporter->Report( wxT( "Generate board full shape.\n" ), RPT_SEVERITY_DEBUG );
 
     // AddComponent adds a label that has a reference (not a parent/child relation) to the real
     // label.  We need to extract that real label to name it for the STEP output cleanly
@@ -2074,104 +2100,106 @@ bool STEP_PCB_MODEL::CreatePCB( SHAPE_POLY_SET& aOutline, VECTOR2D aOrigin, bool
 
     // aCompoundNets will place all geometry within a net into one compound.
     // aCompoundAll will place all geometry into one compound.
-    auto pushToAssemblyMap = [&]( const std::map<wxString, std::vector<TopoDS_Shape>>& aShapesMap,
-                                  const TDF_Label& aVisMatLabel, const wxString& aShapeName,
-                                  bool aCompoundNets, bool aCompoundAll )
-    {
-        std::map<wxString, std::vector<TopoDS_Shape>> shapesMap;
-
-        if( aCompoundAll )
-        {
-            std::vector<TopoDS_Shape> allShapes;
-
-            for( const auto& [netname, shapesList] : aShapesMap )
-                allShapes.insert( allShapes.end(), shapesList.begin(), shapesList.end() );
-
-            if( !allShapes.empty() )
-                shapesMap[wxEmptyString].emplace_back( makeCompound( allShapes ) );
-        }
-        else
-        {
-            shapesMap = aShapesMap;
-        }
-
-        for( const auto& [netname, shapesList] : shapesMap )
-        {
-            std::vector<TopoDS_Shape> newList;
-
-            if( aCompoundNets )
-                newList.emplace_back( makeCompound( shapesList ) );
-            else
-                newList = shapesList;
-
-            int i = 1;
-            for( TopoDS_Shape& shape : newList )
+    auto pushToAssemblyMap =
+            [&]( const std::map<wxString, std::vector<TopoDS_Shape>>& aShapesMap,
+                 const TDF_Label& aVisMatLabel, const wxString& aShapeName, bool aCompoundNets,
+                 bool aCompoundAll )
             {
-                Handle( TDataStd_TreeNode ) node;
+                std::map<wxString, std::vector<TopoDS_Shape>> shapesMap;
 
-                // Dont expand the component or else coloring it gets hard
-                TDF_Label lbl = m_assy->AddComponent( m_assy_label, shape, false );
-                m_pcb_labels.push_back( lbl );
-
-                if( m_pcb_labels.back().IsNull() )
-                    return;
-
-                lbl.FindAttribute( XCAFDoc::ShapeRefGUID(), node );
-                TDF_Label shpLbl = node->Father()->Label();
-                if( !shpLbl.IsNull() )
+                if( aCompoundAll )
                 {
-                    if( visMatTool && !aVisMatLabel.IsNull() )
-                        visMatTool->SetShapeMaterial( shpLbl, aVisMatLabel );
+                    std::vector<TopoDS_Shape> allShapes;
 
-                    wxString shapeName;
+                    for( const auto& [netname, shapesList] : aShapesMap )
+                        allShapes.insert( allShapes.end(), shapesList.begin(), shapesList.end() );
 
-                    shapeName << m_pcbName;
-                    shapeName << '_';
-                    shapeName << aShapeName;
-
-                    if( !netname.empty() )
-                    {
-                        shapeName << '_';
-                        shapeName << netname;
-                    }
-
-                    if( newList.size() > 1 )
-                    {
-                        shapeName << '_';
-                        shapeName << i;
-                    }
-
-                    TCollection_ExtendedString partname( shapeName.ToUTF8().data() );
-                    TDataStd_Name::Set( shpLbl, partname );
+                    if( !allShapes.empty() )
+                        shapesMap[wxEmptyString].emplace_back( makeCompound( allShapes ) );
+                }
+                else
+                {
+                    shapesMap = aShapesMap;
                 }
 
-                i++;
-            }
-        }
-    };
+                for( const auto& [netname, shapesList] : shapesMap )
+                {
+                    std::vector<TopoDS_Shape> newList;
 
-    auto pushToAssembly = [&]( const std::vector<TopoDS_Shape>& aShapesList,
-                               const TDF_Label& aVisMatLabel, const wxString& aShapeName,
-                               bool aCompound )
-    {
-        const std::map<wxString, std::vector<TopoDS_Shape>> shapesMap{ { wxEmptyString,
-                                                                         aShapesList } };
+                    if( aCompoundNets )
+                        newList.emplace_back( makeCompound( shapesList ) );
+                    else
+                        newList = shapesList;
 
-        pushToAssemblyMap( shapesMap, aVisMatLabel, aShapeName, aCompound, aCompound );
-    };
+                    int i = 1;
 
-    auto makeMaterial = [&]( const TCollection_AsciiString& aName,
-                             const Quantity_ColorRGBA& aBaseColor, double aMetallic,
-                             double aRoughness ) -> TDF_Label
-    {
-        Handle( XCAFDoc_VisMaterial ) vismat = new XCAFDoc_VisMaterial;
-        XCAFDoc_VisMaterialPBR pbr;
-        pbr.BaseColor = aBaseColor;
-        pbr.Metallic = aMetallic;
-        pbr.Roughness = aRoughness;
-        vismat->SetPbrMaterial( pbr );
-        return visMatTool->AddMaterial( vismat, aName );
-    };
+                    for( TopoDS_Shape& shape : newList )
+                    {
+                        Handle( TDataStd_TreeNode ) node;
+
+                        // Dont expand the component or else coloring it gets hard
+                        TDF_Label lbl = m_assy->AddComponent( m_assy_label, shape, false );
+                        m_pcb_labels.push_back( lbl );
+
+                        if( m_pcb_labels.back().IsNull() )
+                            return;
+
+                        lbl.FindAttribute( XCAFDoc::ShapeRefGUID(), node );
+                        TDF_Label shpLbl = node->Father()->Label();
+
+                        if( !shpLbl.IsNull() )
+                        {
+                            if( visMatTool && !aVisMatLabel.IsNull() )
+                                visMatTool->SetShapeMaterial( shpLbl, aVisMatLabel );
+
+                            wxString shapeName;
+
+                            shapeName << m_pcbName;
+                            shapeName << '_';
+                            shapeName << aShapeName;
+
+                            if( !netname.empty() )
+                            {
+                                shapeName << '_';
+                                shapeName << netname;
+                            }
+
+                            if( newList.size() > 1 )
+                            {
+                                shapeName << '_';
+                                shapeName << i;
+                            }
+
+                            TCollection_ExtendedString partname( shapeName.ToUTF8().data() );
+                            TDataStd_Name::Set( shpLbl, partname );
+                        }
+
+                        i++;
+                    }
+                }
+            };
+
+    auto pushToAssembly =
+            [&]( const std::vector<TopoDS_Shape>& aShapesList, const TDF_Label& aVisMatLabel,
+                 const wxString& aShapeName, bool aCompound )
+            {
+                const std::map<wxString, std::vector<TopoDS_Shape>> shapesMap{ { wxEmptyString, aShapesList } };
+
+                pushToAssemblyMap( shapesMap, aVisMatLabel, aShapeName, aCompound, aCompound );
+            };
+
+    auto makeMaterial =
+            [&]( const TCollection_AsciiString& aName, const Quantity_ColorRGBA& aBaseColor,
+                 double aMetallic, double aRoughness ) -> TDF_Label
+            {
+                Handle( XCAFDoc_VisMaterial ) vismat = new XCAFDoc_VisMaterial;
+                XCAFDoc_VisMaterialPBR pbr;
+                pbr.BaseColor = aBaseColor;
+                pbr.Metallic = aMetallic;
+                pbr.Roughness = aRoughness;
+                vismat->SetPbrMaterial( pbr );
+                return visMatTool->AddMaterial( vismat, aName );
+            };
 
     // Init colors for the board items
     Quantity_ColorRGBA copper_color( m_copperColor[0], m_copperColor[1], m_copperColor[2], 1.0 );
@@ -2238,9 +2266,9 @@ bool STEP_PCB_MODEL::WriteIGES( const wxString& aFileName )
 {
     if( !isBoardOutlineValid() )
     {
-        ReportMessage( wxString::Format( wxT( "No valid PCB assembly; cannot create output file "
-                                              "'%s'.\n" ),
-                                         aFileName ) );
+        m_reporter->Report( wxString::Format( _( "No valid PCB assembly; cannot create output file '%s'.\n" ),
+                                              aFileName ),
+                            RPT_SEVERITY_ERROR );
         return false;
     }
 
@@ -2254,10 +2282,8 @@ bool STEP_PCB_MODEL::WriteIGES( const wxString& aFileName )
     IGESData_GlobalSection header = writer.Model()->GlobalSection();
     header.SetFileName( new TCollection_HAsciiString( fn.GetFullName().ToAscii() ) );
     header.SetSendName( new TCollection_HAsciiString( "KiCad electronic assembly" ) );
-    header.SetAuthorName(
-            new TCollection_HAsciiString( Interface_Static::CVal( "write.iges.header.author" ) ) );
-    header.SetCompanyName(
-            new TCollection_HAsciiString( Interface_Static::CVal( "write.iges.header.company" ) ) );
+    header.SetAuthorName( new TCollection_HAsciiString( Interface_Static::CVal( "write.iges.header.author" ) ) );
+    header.SetCompanyName( new TCollection_HAsciiString( Interface_Static::CVal( "write.iges.header.company" ) ) );
     writer.Model()->SetGlobalSection( header );
 
     if( Standard_False == writer.Perform( m_doc, aFileName.c_str() ) )
@@ -2272,9 +2298,9 @@ bool STEP_PCB_MODEL::WriteSTEP( const wxString& aFileName, bool aOptimize )
 {
     if( !isBoardOutlineValid() )
     {
-        ReportMessage( wxString::Format( wxT( "No valid PCB assembly; cannot create output file "
-                                              "'%s'.\n" ),
-                                         aFileName ) );
+        m_reporter->Report( wxString::Format( _( "No valid PCB assembly; cannot create output file '%s'.\n" ),
+                                              aFileName ),
+                            RPT_SEVERITY_ERROR );
         return false;
     }
 
@@ -2292,12 +2318,18 @@ bool STEP_PCB_MODEL::WriteSTEP( const wxString& aFileName, bool aOptimize )
     // target is still better than "open cascade step translter v..."
     // UTF8 should be ok from ISO 10303-21:2016, but... older stuff? use boring ascii
     if( !Interface_Static::SetCVal( "write.step.product.name", fn.GetName().ToAscii() ) )
-        ReportMessage( wxT( "Failed to set step product name, but will attempt to continue." ) );
+    {
+        m_reporter->Report( _( "Failed to set STEP product name, but will attempt to continue." ),
+                            RPT_SEVERITY_WARNING );
+    }
 
     // Setting write.surfacecurve.mode to 0 reduces file size and write/read times.
     // But there are reports that this mode might be less compatible in some cases.
     if( !Interface_Static::SetIVal( "write.surfacecurve.mode", aOptimize ? 0 : 1 ) )
-        ReportMessage( wxT( "Failed to set surface curve mode, but will attempt to continue." ) );
+    {
+        m_reporter->Report( _( "Failed to set surface curve mode, but will attempt to continue." ),
+                            RPT_SEVERITY_WARNING );
+    }
 
     if( Standard_False == writer.Transfer( m_doc, STEPControl_AsIs ) )
         return false;
@@ -2336,9 +2368,10 @@ bool STEP_PCB_MODEL::WriteSTEP( const wxString& aFileName, bool aOptimize )
 
         if( !wxRenameFile( tmpfname, fn.GetFullName(), true ) )
         {
-            ReportMessage( wxString::Format( wxT( "Cannot rename temporary file '%s' to '%s'.\n" ),
-                                             tmpfname,
-                                             fn.GetFullName() ) );
+            m_reporter->Report( wxString::Format( _( "Cannot rename temporary file '%s' to '%s'.\n" ),
+                                                  tmpfname,
+                                                  fn.GetFullName() ),
+                                RPT_SEVERITY_ERROR );
             success = false;
         }
     }
@@ -2353,9 +2386,9 @@ bool STEP_PCB_MODEL::WriteBREP( const wxString& aFileName )
 {
     if( !isBoardOutlineValid() )
     {
-        ReportMessage( wxString::Format( wxT( "No valid PCB assembly; cannot create output file "
-                                              "'%s'.\n" ),
-                                         aFileName ) );
+        m_reporter->Report( wxString::Format( _( "No valid PCB assembly; cannot create output file '%s'.\n" ),
+                                              aFileName ),
+                            RPT_SEVERITY_ERROR );
         return false;
     }
 
@@ -2391,7 +2424,8 @@ bool STEP_PCB_MODEL::WriteXAO( const wxString& aFileName )
 
     if( !ffStream.IsOk() )
     {
-        ReportMessage( wxString::Format( "Could not open file '%s'", fn.GetFullPath() ) );
+        m_reporter->Report( wxString::Format( "Could not open file '%s'", fn.GetFullPath() ),
+                            RPT_SEVERITY_ERROR );
         return false;
     }
 
@@ -2515,8 +2549,8 @@ bool STEP_PCB_MODEL::WriteXAO( const wxString& aFileName )
 
     int groupNumber = 1;
 
-    ReportMessage( "Pad definitions:\n" );
-    ReportMessage( "Number\tName\tArea (m^2)\n" );
+    m_reporter->Report( wxT( "Pad definitions:\n" ), RPT_SEVERITY_DEBUG );
+    m_reporter->Report( wxT( "Number\tName\tArea (m^2)\n" ), RPT_SEVERITY_DEBUG );
 
     for( int dim = 0; dim <= 3; dim++ )
     {
@@ -2540,19 +2574,23 @@ bool STEP_PCB_MODEL::WriteXAO( const wxString& aFileName )
 //            file << "\" tag=\"" << g.first;
 //#endif
             file << "\" count=\"" << g.second.size() << "\">" << std::endl;
+
             for( auto index : g.second )
-            {
                 file << "      <element index=\"" << index << "\"/>" << std::endl;
-            }
+
             file << "    </group>" << std::endl;
 
-            ReportMessage( wxString::Format( "%d\t%s\t%g\n", groupNumber, name, groupAreas[name] ) );
+            m_reporter->Report( wxString::Format( "%d\t%s\t%g\n",
+                                                  groupNumber,
+                                                  name,
+                                                  groupAreas[name] ),
+                                RPT_SEVERITY_DEBUG );
 
             groupNumber++;
         }
     }
 
-    ReportMessage( "\n" );
+    m_reporter->Report( wxT( "\n" ), RPT_SEVERITY_DEBUG );
 
     file << "  </groups>" << std::endl;
     file << "  <fields count=\"0\"/>" << std::endl;
@@ -2589,8 +2627,9 @@ bool STEP_PCB_MODEL::getModelLabel( const std::string& aFileNameUTF8, VECTOR3D a
     case FMT_IGES:
         if( !readIGES( doc, aFileNameUTF8.c_str() ) )
         {
-            ReportMessage( wxString::Format( wxT( "readIGES() failed on filename '%s'.\n" ),
-                                             fileName ) );
+            m_reporter->Report( wxString::Format( wxT( "readIGES() failed on filename '%s'.\n" ),
+                                                  fileName ),
+                                RPT_SEVERITY_ERROR );
             return false;
         }
         break;
@@ -2598,8 +2637,9 @@ bool STEP_PCB_MODEL::getModelLabel( const std::string& aFileNameUTF8, VECTOR3D a
     case FMT_STEP:
         if( !readSTEP( doc, aFileNameUTF8.c_str() ) )
         {
-            ReportMessage( wxString::Format( wxT( "readSTEP() failed on filename '%s'.\n" ),
-                                             fileName ) );
+            m_reporter->Report( wxString::Format( wxT( "readSTEP() failed on filename '%s'.\n" ),
+                                                  fileName ),
+                                RPT_SEVERITY_ERROR );
             return false;
         }
         break;
@@ -2617,8 +2657,9 @@ bool STEP_PCB_MODEL::getModelLabel( const std::string& aFileNameUTF8, VECTOR3D a
 
         if( size == wxInvalidOffset )
         {
-            ReportMessage( wxString::Format( wxT( "getModelLabel() failed on filename '%s'.\n" ),
-                                             fileName ) );
+            m_reporter->Report( wxString::Format( wxT( "getModelLabel() failed on filename '%s'.\n" ),
+                                                  fileName ),
+                                RPT_SEVERITY_ERROR );
             return false;
         }
 
@@ -2641,8 +2682,9 @@ bool STEP_PCB_MODEL::getModelLabel( const std::string& aFileNameUTF8, VECTOR3D a
             }
             catch( ... )
             {
-                ReportMessage( wxString::Format( wxT( "failed to decompress '%s'.\n" ),
-                                                 fileName ) );
+                m_reporter->Report( wxString::Format( wxT( "failed to decompress '%s'.\n" ),
+                                                      fileName ),
+                                    RPT_SEVERITY_ERROR );
             }
 
             if( expanded.empty() )
@@ -2669,8 +2711,7 @@ bool STEP_PCB_MODEL::getModelLabel( const std::string& aFileNameUTF8, VECTOR3D a
             if( success )
             {
                 std::string altFileNameUTF8 = TO_UTF8( outFile.GetFullPath() );
-                success =
-                        getModelLabel( altFileNameUTF8, VECTOR3D( 1.0, 1.0, 1.0 ), aLabel, false );
+                success = getModelLabel( altFileNameUTF8, VECTOR3D( 1.0, 1.0, 1.0 ), aLabel, false );
             }
 
             return success;
@@ -2758,8 +2799,9 @@ bool STEP_PCB_MODEL::getModelLabel( const std::string& aFileNameUTF8, VECTOR3D a
                 }
                 else
                 {
-                    ReportMessage( wxString::Format( wxT( "readVRML() failed on filename '%s'.\n" ),
-                                                     fileName ) );
+                    m_reporter->Report( wxString::Format( wxT( "readVRML() failed on filename '%s'.\n" ),
+                                                          fileName ),
+                                        RPT_SEVERITY_ERROR );
                     return false;
                 }
             }
@@ -2777,8 +2819,9 @@ bool STEP_PCB_MODEL::getModelLabel( const std::string& aFileNameUTF8, VECTOR3D a
         // TODO: implement IDF and EMN converters
 
     default:
-        ReportMessage( wxString::Format( wxT( "Cannot identify actual file type for '%s'.\n" ),
-                                         fileName ) );
+        m_reporter->Report( wxString::Format( _( "Cannot identify actual file type for '%s'.\n" ),
+                                              fileName ),
+                            RPT_SEVERITY_ERROR );
         return false;
     }
 
@@ -2786,8 +2829,9 @@ bool STEP_PCB_MODEL::getModelLabel( const std::string& aFileNameUTF8, VECTOR3D a
 
     if( aLabel.IsNull() )
     {
-        ReportMessage( wxString::Format( wxT( "Could not transfer model data from file '%s'.\n" ),
-                                         fileName  ) );
+        m_reporter->Report( wxString::Format( _( "Could not transfer model data from file '%s'.\n" ),
+                                              fileName  ),
+                            RPT_SEVERITY_ERROR );
         return false;
     }
 
@@ -3028,7 +3072,7 @@ bool STEP_PCB_MODEL::performMeshing( Handle( XCAFDoc_ShapeTool ) & aShapeTool )
     TDF_LabelSequence freeShapes;
     aShapeTool->GetFreeShapes( freeShapes );
 
-    ReportMessage( wxT( "Meshing model\n" ) );
+    m_reporter->Report( wxT( "Meshing model\n" ), RPT_SEVERITY_DEBUG );
 
     // GLTF is a mesh format, we have to trigger opencascade to mesh the shapes we composited into the asesmbly
     // To mesh models, lets just grab the free shape root and execute on them
@@ -3055,9 +3099,9 @@ bool STEP_PCB_MODEL::WriteGLTF( const wxString& aFileName )
 {
     if( !isBoardOutlineValid() )
     {
-        ReportMessage( wxString::Format( wxT( "No valid PCB assembly; cannot create output file "
-                                              "'%s'.\n" ),
-                                         aFileName ) );
+        m_reporter->Report( wxString::Format( _( "No valid PCB assembly; cannot create output file '%s'.\n" ),
+                                              aFileName ),
+                            RPT_SEVERITY_ERROR );
         return false;
     }
 
@@ -3106,8 +3150,10 @@ bool STEP_PCB_MODEL::WriteGLTF( const wxString& aFileName )
 
         if( !wxRenameFile( tmpGltfname, fn.GetFullName(), true ) )
         {
-            ReportMessage( wxString::Format( wxT( "Cannot rename temporary file '%s' to '%s'.\n" ),
-                                             tmpGltfname, fn.GetFullName() ) );
+            m_reporter->Report( wxString::Format( _( "Cannot rename temporary file '%s' to '%s'.\n" ),
+                                                  tmpGltfname,
+                                                  fn.GetFullName() ),
+                                RPT_SEVERITY_ERROR );
             success = false;
         }
     }
@@ -3127,9 +3173,9 @@ bool STEP_PCB_MODEL::WritePLY( const wxString& aFileName )
 
     if( !isBoardOutlineValid() )
     {
-        ReportMessage( wxString::Format( wxT( "No valid PCB assembly; cannot create output file "
-                                              "'%s'.\n" ),
-                                         aFileName ) );
+        m_reporter->Report( wxString::Format( _( "No valid PCB assembly; cannot create output file '%s'.\n" ),
+                                              aFileName ),
+                            RPT_SEVERITY_ERROR );
         return false;
     }
 
@@ -3177,8 +3223,10 @@ bool STEP_PCB_MODEL::WritePLY( const wxString& aFileName )
 
         if( !wxRenameFile( tmpFname, fn.GetFullName(), true ) )
         {
-            ReportMessage( wxString::Format( wxT( "Cannot rename temporary file '%s' to '%s'.\n" ),
-                                             tmpFname, fn.GetFullName() ) );
+            m_reporter->Report( wxString::Format( _( "Cannot rename temporary file '%s' to '%s'.\n" ),
+                                                  tmpFname,
+                                                  fn.GetFullName() ),
+                                RPT_SEVERITY_ERROR );
             success = false;
         }
     }
@@ -3194,9 +3242,9 @@ bool STEP_PCB_MODEL::WriteSTL( const wxString& aFileName )
 {
     if( !isBoardOutlineValid() )
     {
-        ReportMessage( wxString::Format( wxT( "No valid PCB assembly; cannot create output file "
-                                              "'%s'.\n" ),
-                                         aFileName ) );
+        m_reporter->Report( wxString::Format( _( "No valid PCB assembly; cannot create output file '%s'.\n" ),
+                                              aFileName ),
+                            RPT_SEVERITY_ERROR );
         return false;
     }
 
@@ -3224,8 +3272,10 @@ bool STEP_PCB_MODEL::WriteSTL( const wxString& aFileName )
 
         if( !wxRenameFile( tmpFname, fn.GetFullName(), true ) )
         {
-            ReportMessage( wxString::Format( wxT( "Cannot rename temporary file '%s' to '%s'.\n" ),
-                                             tmpFname, fn.GetFullName() ) );
+            m_reporter->Report( wxString::Format( _( "Cannot rename temporary file '%s' to '%s'.\n" ),
+                                                  tmpFname,
+                                                  fn.GetFullName() ),
+                                RPT_SEVERITY_ERROR );
             success = false;
         }
     }

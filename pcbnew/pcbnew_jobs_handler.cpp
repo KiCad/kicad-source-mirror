@@ -515,7 +515,7 @@ int PCBNEW_JOBS_HANDLER::JobExportStep( JOB* aJob )
             return CLI::EXIT_CODES::ERR_UNKNOWN; // shouldnt have gotten here
         }
 
-        EXPORTER_STEP stepExporter( brd, params );
+        EXPORTER_STEP stepExporter( brd, params, m_reporter );
         stepExporter.m_outputFile = aStepJob->GetFullOutputPath( brd->GetProject() );
 
         if( !stepExporter.Export() )

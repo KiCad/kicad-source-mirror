@@ -31,6 +31,7 @@
 #include <jobs/job_export_pcb_3d.h>     // For EXPORTER_STEP_PARAMS
 #include <layer_ids.h>
 #include <lset.h>
+#include <reporter.h>
 
 
 class PCBMODEL;
@@ -45,16 +46,12 @@ class STEP_PCB_MODEL;
 class EXPORTER_STEP
 {
 public:
-    EXPORTER_STEP( BOARD* aBoard, const EXPORTER_STEP_PARAMS& aParams );
+    EXPORTER_STEP( BOARD* aBoard, const EXPORTER_STEP_PARAMS& aParams, REPORTER* aReporter );
     ~EXPORTER_STEP();
 
     bool Export();
 
     wxString m_outputFile;
-
-    void SetError() { m_error = true; }
-    void SetFail() { m_fail = true; }
-    void SetWarn() { m_warn = true; }
 
 private:
     bool buildBoard3DShapes();
@@ -68,9 +65,7 @@ private:
     std::unique_ptr<FILENAME_RESOLVER> m_resolver;
 
 private:
-    bool            m_error;
-    bool            m_fail;
-    bool            m_warn;
+    REPORTER*       m_reporter;
 
     BOARD*          m_board;
     std::unique_ptr<STEP_PCB_MODEL> m_pcbModel;
