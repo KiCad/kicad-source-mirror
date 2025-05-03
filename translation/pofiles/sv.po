@@ -13,8 +13,8 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-04-29 20:12+0300\n"
-"PO-Revision-Date: 2025-05-02 03:56+0000\n"
-"Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
+"PO-Revision-Date: 2025-05-03 15:09+0000\n"
+"Last-Translator: Joakim Lundborg <joakim.lundborg@gmail.com>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/v9/sv/>\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
@@ -16753,8 +16753,7 @@ msgstr "Globala fältnamnsmallar"
 #: eeschema/dialogs/panel_template_fieldnames.cpp:209
 #, c-format
 msgid "The field name \"%s\" contains trailing and/or leading whitespace."
-msgstr ""
-"Fältnamnet \"%s\" innehåller efterföljande och/eller inledande blanksteg."
+msgstr "Posten \"%s\" innehåller efterföljande eller inledande blanksteg."
 
 #: eeschema/dialogs/panel_template_fieldnames.cpp:215
 msgid ""
@@ -16769,7 +16768,7 @@ msgstr ""
 
 #: eeschema/dialogs/panel_template_fieldnames.cpp:221
 msgid "Remove White Space"
-msgstr "Ta bort mellanslag"
+msgstr "Radera blanktecken"
 
 #: eeschema/dialogs/panel_template_fieldnames.cpp:222
 msgid "Keep White Space"
@@ -17555,8 +17554,8 @@ msgid ""
 "This schematic contains symbols that have leading and/or trailing white "
 "space field names."
 msgstr ""
-"Detta kretsschema innehåller symboler som har ledande och/eller avslutande "
-"mellanslag i fältnamnen."
+"Detta kretsschema innehåller symboler med inledande eller efterföljande "
+"blanktecken i postnamn."
 
 #: eeschema/files-io.cpp:602
 msgid "Schematic is read only."
@@ -25672,11 +25671,11 @@ msgstr "Visa alla lager"
 #: gerbview/widgets/gerbview_layer_widget.cpp:164
 #: pcbnew/widgets/appearance_controls.cpp:1869
 msgid "Hide All Layers But Active"
-msgstr "Dölj alla lager men aktiva"
+msgstr "Dölj alla lager utom aktiva"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:168
 msgid "Always Hide All Layers But Active"
-msgstr "Dölj alltid alla lager men aktiva"
+msgstr "Dölj alltid alla lager utom aktiva"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:171
 #: pcbnew/widgets/appearance_controls.cpp:1886
@@ -30921,9 +30920,8 @@ msgstr "Effektiv %s:"
 #: pcb_calculator/transline_ident.cpp:163
 #: pcb_calculator/transline_ident.cpp:198
 #: pcb_calculator/transline_ident.cpp:357
-#, fuzzy
 msgid "Unit propagation delay:"
-msgstr "Utbredningsfördröjning"
+msgstr "Utbredningsfördröjning:"
 
 #: pcb_calculator/transline_ident.cpp:121
 #: pcb_calculator/transline_ident.cpp:164
@@ -31126,14 +31124,12 @@ msgid "Effective %s (odd):"
 msgstr "Effektiv %s (udda):"
 
 #: pcb_calculator/transline_ident.cpp:308
-#, fuzzy
 msgid "Unit propagation delay (even):"
-msgstr "Utbredningsfördröjning"
+msgstr "Utbredningsfördröjning (jämn):"
 
 #: pcb_calculator/transline_ident.cpp:309
-#, fuzzy
 msgid "Unit propagation delay (odd):"
-msgstr "Utbredningsfördröjning"
+msgstr "Utbredningsfördröjning (udda):"
 
 #: pcb_calculator/transline_ident.cpp:310
 msgid "Conductor losses (even):"
@@ -35946,7 +35942,7 @@ msgstr "Fotavtrycks textobjekt som inte är associerade med ett fält"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:67
 msgid "Footprint dimensions"
-msgstr "Fotavtrycks måttsättningsobjekt"
+msgstr "Fotavtrycks måttsättning"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:85
 msgid "By layer:"
@@ -39866,7 +39862,7 @@ msgstr "Lödytan är inte för hålmontering; anslutningen blir: %s."
 #: pcbnew/drc/drc_engine.cpp:790
 #, c-format
 msgid "Net tie on %s; clearance: 0."
-msgstr "Nätbrygga på %s; frigång: 0."
+msgstr "Lokalt undantag för %s; frigång: 0."
 
 #: pcbnew/drc/drc_engine.cpp:793
 msgid "net tie"
@@ -40714,13 +40710,13 @@ msgstr "Kontrollerar viahål..."
 #: pcbnew/drc/drc_test_provider_hole_size.cpp:235
 #, c-format
 msgid "(%s min hole %s; actual %s)"
-msgstr "(%s min hål %s; faktiskt %s)"
+msgstr "(%s minsta hålstorlek %s; faktisk %s)"
 
 #: pcbnew/drc/drc_test_provider_hole_size.cpp:169
 #: pcbnew/drc/drc_test_provider_hole_size.cpp:242
 #, c-format
 msgid "(%s max hole %s; actual %s)"
-msgstr "(%s maximalt hål %s; faktiskt %s)"
+msgstr "(%s maximal höjd %s; faktisk %s)"
 
 #: pcbnew/drc/drc_test_provider_hole_to_hole.cpp:120
 msgid "Checking hole to hole clearances..."
@@ -44819,7 +44815,7 @@ msgid ""
 "is %s"
 msgstr ""
 "Konturen verkar vara avbruten: senaste punkt var %s, startpunkt för nästa "
-"segment är %s"
+"segment är %s."
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:3488
 #, c-format
