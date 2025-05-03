@@ -16,10 +16,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-05-03 18:13+0300\n"
-"PO-Revision-Date: 2025-04-30 13:48+0000\n"
+"PO-Revision-Date: 2025-05-04 22:07+0000\n"
 "Last-Translator: 2tama3 <2tama3@gmail.com>\n"
-"Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/master-"
-"source/ja/>\n"
+"Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
+"master-source/ja/>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1195,9 +1195,8 @@ msgid "Show model bounding boxes"
 msgstr "モデルのバウンディング ボックスを表示"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:35
-#, fuzzy
 msgid "Show copper and tech layers thickness (slow)"
-msgstr "銅箔の厚みを表示（遅い）"
+msgstr "各レイヤーの厚みを表示（遅い）"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:38
 msgid "Highlight items on rollover"
@@ -1244,14 +1243,12 @@ msgid "Disable thickness"
 msgstr "厚さを無効化"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:91
-#, fuzzy
 msgid "Disable uVia holes"
-msgstr "機構穴を無効化"
+msgstr "極小径のビア穴を無効化"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:94
-#, fuzzy
 msgid "Disable all plated holes"
-msgstr "機構穴を無効化"
+msgstr "すべてのメッキ穴を無効化"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:27
 msgid "Procedural textures (slow)"
@@ -2154,9 +2151,9 @@ msgid "Schematic source file '%s' does not exist."
 msgstr "回路図ソース ファイル ' %s ' が存在しません。"
 
 #: common/design_block_io.cpp:393
-#, fuzzy, c-format
+#, c-format
 msgid "Board source file '%s' does not exist."
-msgstr "回路図ソース ファイル ' %s ' が存在しません。"
+msgstr "基板ソース ファイル ' %s ' が存在しません。"
 
 #: common/design_block_io.cpp:406
 #, c-format
@@ -2171,11 +2168,9 @@ msgstr ""
 "た。"
 
 #: common/design_block_io.cpp:444
-#, fuzzy, c-format
+#, c-format
 msgid "Board file '%s' could not be saved as design block at '%s'."
-msgstr ""
-"回路図ファイル ' %s ' を ' %s ' にデザインブロックとして保存できませんでし"
-"た。"
+msgstr "基板ファイル ' %s ' を ' %s ' にデザインブロックとして保存できませんでした。"
 
 #: common/design_block_io.cpp:478
 #, c-format
@@ -4106,7 +4101,6 @@ msgid "Add"
 msgstr "追加"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:20
-#, fuzzy
 msgid "Enable Git tracking"
 msgstr "Gitトラッキングを有効化"
 
@@ -5773,9 +5767,8 @@ msgid "DP Gap"
 msgstr "DP ギャップ"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:60
-#, fuzzy
 msgid "Delay Profile"
-msgstr "遅延時間:"
+msgstr "遅延プロファイル"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:61
 msgid "PCB Color"
@@ -6785,23 +6778,20 @@ msgstr "ベジェ曲線"
 #: common/eda_shape.cpp:2541
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:119
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:238
-#, fuzzy
 msgid "Hatch"
-msgstr "ハッチング"
+msgstr "ハッチ"
 
 #: common/eda_shape.cpp:2542
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:119
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:238
-#, fuzzy
 msgid "Reverse Hatch"
-msgstr "反転"
+msgstr "逆ハッチ"
 
 #: common/eda_shape.cpp:2543
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:119
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:238
-#, fuzzy
 msgid "Cross-hatch"
-msgstr "取り消し線"
+msgstr "クロスハッチ"
 
 #: common/eda_shape.cpp:2579 eeschema/sch_shape.cpp:568
 msgid "Shape Properties"
@@ -6994,9 +6984,8 @@ msgid "Font"
 msgstr "フォント"
 
 #: common/eda_text.cpp:1367
-#, fuzzy
 msgid "Auto Thickness"
-msgstr "バス線幅"
+msgstr "自動厚さ"
 
 #: common/eda_text.cpp:1370 eeschema/sch_field.cpp:1624
 #: eeschema/sch_label.cpp:2299 eeschema/sch_tablecell.cpp:196
@@ -7339,9 +7328,8 @@ msgid "Invalid HEAD.  Cannot merge."
 msgstr "不正なHEADです。  マージできません。"
 
 #: common/git/git_pull_handler.cpp:181
-#, fuzzy
 msgid "Could not access repository configuration"
-msgstr "リポジトリのインデックスを取得できません"
+msgstr "リポジト構成にアクセスできませんでした"
 
 #: common/git/git_pull_handler.cpp:251 common/git/git_push_handler.cpp:91
 msgid "Could not get repository head"
@@ -7957,9 +7945,8 @@ msgid "Export HPGL Job Settings"
 msgstr "HPGLのエクスポートジョブ設定"
 
 #: common/jobs/job_export_pcb_hpgl.cpp:61
-#, fuzzy
 msgid "PCB: Export HPGL"
-msgstr "PCB: PDFとしてエクスポート"
+msgstr "PCB: HPGLとしてエクスポート"
 
 #: common/jobs/job_export_pcb_ipc2581.cpp:72
 #: pcbnew/dialogs/dialog_export_2581_base.h:85
@@ -8034,9 +8021,8 @@ msgid "Export Postscript Job Settings"
 msgstr "Postscriptのエクスポートジョブ設定"
 
 #: common/jobs/job_export_pcb_ps.cpp:66
-#, fuzzy
 msgid "PCB: Export Postscript"
-msgstr "PostScriptとしてエクスポート"
+msgstr "PCB: PostScriptとしてエクスポート"
 
 #: common/jobs/job_export_pcb_svg.cpp:49
 #: common/jobs/job_export_sch_plot.cpp:179 kicad/kicad_cli.cpp:151
@@ -8972,53 +8958,44 @@ msgid "Quit %s"
 msgstr "%s を終了する"
 
 #: common/tool/action_toolbar.cpp:1037
-#, fuzzy
 msgid "Grid Selector"
-msgstr "グリッド スタイル"
+msgstr "グリッド選択"
 
 #: common/tool/action_toolbar.cpp:1038
-#, fuzzy
 msgid "Grid Selection box"
-msgstr "選択対象のみ"
+msgstr "グリッド選択ボックス"
 
 #: common/tool/action_toolbar.cpp:1040
-#, fuzzy
 msgid "Zoom Selector"
-msgstr "選択範囲をズーム"
+msgstr "ズーム選択"
 
 #: common/tool/action_toolbar.cpp:1041
-#, fuzzy
 msgid "Zoom Selection box"
-msgstr "選択範囲をズーム"
+msgstr "ズーム選択ボックス"
 
 #: common/tool/action_toolbar.cpp:1043
-#, fuzzy
 msgid "IPC/Scripting plugins"
-msgstr "スクリプト コンソール"
+msgstr "PIC/スクリプトプラグイン"
 
 #: common/tool/action_toolbar.cpp:1044
 msgid "Region to hold the IPC/Scripting action buttons"
-msgstr ""
+msgstr "PIC/スクリプトアクションボタンを保持する"
 
 #: common/tool/action_toolbar.cpp:1046
-#, fuzzy
 msgid "Layer selector"
-msgstr "レイヤー選択:"
+msgstr "レイヤー選択"
 
 #: common/tool/action_toolbar.cpp:1047
-#, fuzzy
 msgid "Control to select the layer"
-msgstr "選択したグラフィック レイヤーをクリア"
+msgstr "コントロール対象のレイヤーを選択"
 
 #: common/tool/action_toolbar.cpp:1049
-#, fuzzy
 msgid "Symbol unit selector"
-msgstr "シンボル ユニットの表記方法:"
+msgstr "シンボル ユニット選択"
 
 #: common/tool/action_toolbar.cpp:1050
-#, fuzzy
 msgid "Displays the current unit"
-msgstr "現在のエディターを閉じる"
+msgstr "現在のユニットを表示"
 
 #: common/tool/actions.cpp:46
 msgid "New..."
@@ -10618,7 +10595,7 @@ msgstr "メタデータ"
 
 #: common/widgets/search_pane.cpp:54
 msgid "Search library links, descriptions and keywords"
-msgstr ""
+msgstr "ライブラリのリンク、説明、キーワードを検索"
 
 #: common/widgets/unit_binder.cpp:351
 #, c-format
@@ -12935,7 +12912,7 @@ msgstr "電源シンボル"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:128
 msgid "By net:"
-msgstr ""
+msgstr "ネット:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:140
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:123
@@ -13720,7 +13697,7 @@ msgstr "電源シンボルとして定義"
 msgid ""
 "Local power symbols create labels that are limited to the sheet in which "
 "they are used"
-msgstr ""
+msgstr "ローカル電源シンボルは、使用されているシートに限定されたラベルを作成"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:221
 msgid "Pin Text Options"
@@ -13824,18 +13801,19 @@ msgstr "フットプリント フィルター"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:356
 msgid "Pins with duplicate numbers are jumpers"
-msgstr ""
+msgstr "重複する番号のピンはジャンパー接続"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:357
 msgid ""
 "When enabled, this symbol can have more than one pin with the same number, "
 "and pins with the same number will be considered to be jumpered together "
 "internally."
-msgstr ""
+msgstr "有効化すると、このシンボルは同じ番号のピンを複数持つことができ、同じ番号のピ"
+"ンは内部でジャンパー接続されているものと見なさる。"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:362
 msgid "Jumper Pin Groups"
-msgstr ""
+msgstr "ジャンパーピングループ"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:370
 #, fuzzy
@@ -16553,6 +16531,10 @@ msgid ""
 "Global will convert new power symbols to global power symbols.\n"
 "Local will convert new power symbols to a local power symbols."
 msgstr ""
+"新しい電源シンボルに割り当てるタイプを選択します。\n"
+"デフォルトはシンボル定義に従います。\n"
+"グローバルは、新しい電源シンボルをグローバル電源シンボルに変換します。\n"
+"ローカルは、新しい電源シンボルをローカル電源シンボルに変換します。"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:144
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:202
@@ -19948,6 +19930,8 @@ msgid ""
 "Unable to find LTspice symbols.\n"
 "Install LTspice or put its library files into %s"
 msgstr ""
+"LTspiceシンボルが見つかりません。\n"
+"LTspiceをインストールするか、ライブラリファイルを%sに置いてください"
 
 #: eeschema/sch_io/ltspice/sch_io_ltspice.h:49
 msgid "LTspice schematic files"
@@ -21946,7 +21930,8 @@ msgstr "差"
 msgid ""
 "The current analysis must have a plot in order to tune the value of a "
 "passive R, L, C model or voltage or current source."
-msgstr ""
+msgstr "電流解析には、パッシブ R、L、C "
+"モデルまたは電圧または電流源の値の調整が必要です。"
 
 #: eeschema/sim/simulator_frame_ui.cpp:1661
 #: eeschema/sim/simulator_frame_ui.cpp:1681
@@ -24596,12 +24581,10 @@ msgid "Net must be labeled to assign a netclass."
 msgstr "ネットクラスを割り当てるには、ネットへのラベル付けが必要です。"
 
 #: eeschema/tools/sch_editor_control.cpp:1719 pcbnew/tools/pcb_control.cpp:1094
-#, fuzzy
 msgid ""
 "Pasting a long text text string may be very slow.  Do you want to continue?"
-msgstr ""
-"ファイル拡張子を変更するとファイルのタイプが変更されます。 \n"
-"続けますか？"
+msgstr "長いテキスト文字列を貼り付けると、非常に時間がかかる場合があります。  "
+"続けますか?"
 
 #: eeschema/tools/sch_editor_control.cpp:1841
 #, c-format
@@ -25812,9 +25795,8 @@ msgid "%s (D%d) on layer %d: %s"
 msgstr "%s (D%d) - レイヤー %d: %s"
 
 #: gerbview/gerber_file_image.cpp:125
-#, fuzzy
 msgid "Too many messages, some are skipped"
-msgstr "大量のエラー: いくつか省略されています"
+msgstr "メッセージが多すぎるため、一部はスキップされます"
 
 #: gerbview/gerber_file_image.cpp:358
 msgid "Image name"
@@ -26999,16 +26981,15 @@ msgstr "基板を反転 (裏面から表示するのに便利です)"
 
 #: kicad/cli/command_pcb_export_hpgl.cpp:102
 msgid "Size for the default pen [mm]"
-msgstr ""
+msgstr "デフォルトペンサイズ [mm]"
 
 #: kicad/cli/command_pcb_export_hpgl.cpp:108
-#, fuzzy
 msgid "Pen number selection (1 to 9)"
-msgstr "ドラッグより選択を優先"
+msgstr "ペン番号（1～9）の選択"
 
 #: kicad/cli/command_pcb_export_hpgl.cpp:114
 msgid "Pen speed [cm/s] (1 to 99 cm/s)"
-msgstr ""
+msgstr "ペン速度 [cm/s] (1～99 cm/s)"
 
 #: kicad/cli/command_pcb_export_pdf.cpp:37
 msgid "Generate PDF from a list of layers"
@@ -46631,7 +46612,6 @@ msgid "Missing netclass name argument to hasNetclass()"
 msgstr "hasNetclass() へのネットクラス名の引数がありません"
 
 #: pcbnew/pcbexpr_functions.cpp:1316
-#, fuzzy
 msgid "Missing netclass name argument to hasExactNetclass()"
 msgstr "hasNetclass() へのネットクラス名の引数がありません"
 
