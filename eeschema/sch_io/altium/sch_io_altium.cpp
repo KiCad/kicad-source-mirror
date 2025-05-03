@@ -1460,7 +1460,7 @@ void SCH_IO_ALTIUM::ParseComponent( int aIndex, const std::map<wxString, wxStrin
     if( ksymbol->GetUnitCount() > 1 )
         symbol->SetUnit( std::max( 1, elem.currentpartid ) );
     else
-        symbol->SetUnit( 0 );
+        symbol->SetUnit( 1 );
 
     symbol->GetField( DESCRIPTION_FIELD )->SetText( elem.componentdescription );
 
