@@ -531,6 +531,7 @@ static Standard_Boolean rescaleShapes( const TDF_Label& theLabel, const gp_XYZ& 
     }
 
     Handle( XCAFDoc_ShapeTool ) aShapeTool = XCAFDoc_DocumentTool::ShapeTool( theLabel );
+
     if( aShapeTool.IsNull() )
     {
         Message::SendFail( "Couldn't find XCAFDoc_ShapeTool attribute." );
@@ -538,6 +539,7 @@ static Standard_Boolean rescaleShapes( const TDF_Label& theLabel, const gp_XYZ& 
     }
 
     Handle( KI_XCAFDoc_AssemblyGraph ) aG = new KI_XCAFDoc_AssemblyGraph( theLabel );
+
     if( aG.IsNull() )
     {
         Message::SendFail( "Couldn't create assembly graph." );
@@ -914,14 +916,13 @@ bool STEP_PCB_MODEL::AddPadShape( const PAD* aPad, const VECTOR2D& aOrigin, bool
 
             if( seg_hole->GetSeg().A == seg_hole->GetSeg().B )  // Hole is a circle
             {
-                TransformCircleToPolygon( polyHole, seg_hole->GetSeg().A, width/2,
-                                          ARC_HIGH_DEF, ERROR_OUTSIDE );
+                TransformCircleToPolygon( polyHole, seg_hole->GetSeg().A, width/2, ARC_HIGH_DEF,
+                                          ERROR_OUTSIDE );
 
             }
             else
             {
-                TransformOvalToPolygon( polyHole,
-                                        seg_hole->GetSeg().A, seg_hole->GetSeg().B,
+                TransformOvalToPolygon( polyHole, seg_hole->GetSeg().A, seg_hole->GetSeg().B,
                                         width, ARC_HIGH_DEF, ERROR_OUTSIDE );
             }
 
@@ -1487,11 +1488,12 @@ static bool makeWireFromChain( BRepLib_MakeWire& aMkWire, const SHAPE_LINE_CHAIN
                                double aMergeOCCMaxDist, double aZposition, const VECTOR2D& aOrigin,
                                REPORTER* aReporter )
 {
-    auto toPoint = [&]( const VECTOR2D& aKiCoords ) -> gp_Pnt
-    {
-        return gp_Pnt( pcbIUScale.IUTomm( aKiCoords.x - aOrigin.x ),
-                       -pcbIUScale.IUTomm( aKiCoords.y - aOrigin.y ), aZposition );
-    };
+    auto toPoint =
+            [&]( const VECTOR2D& aKiCoords ) -> gp_Pnt
+            {
+                return gp_Pnt( pcbIUScale.IUTomm( aKiCoords.x - aOrigin.x ),
+                               -pcbIUScale.IUTomm( aKiCoords.y - aOrigin.y ), aZposition );
+            };
 
     try
     {
@@ -1652,8 +1654,8 @@ static bool makeWireFromChain( BRepLib_MakeWire& aMkWire, const SHAPE_LINE_CHAIN
 
 
 bool STEP_PCB_MODEL::MakeShapes( std::vector<TopoDS_Shape>& aShapes, const SHAPE_POLY_SET& aPolySet,
-                                 bool aConvertToArcs,
-                                 double aThickness, double aZposition, const VECTOR2D& aOrigin )
+                                 bool aConvertToArcs, double aThickness, double aZposition,
+                                 const VECTOR2D& aOrigin )
 {
     SHAPE_POLY_SET workingPoly = aPolySet;
     workingPoly.Simplify();
@@ -1694,13 +1696,13 @@ bool STEP_PCB_MODEL::MakeShapes( std::vector<TopoDS_Shape>& aShapes, const SHAPE
         }*/
     }
 
-    #if 0   // No longer in use
+#if 0   // No longer in use
     auto toPoint = [&]( const VECTOR2D& aKiCoords ) -> gp_Pnt
     {
         return gp_Pnt( pcbIUScale.IUTomm( aKiCoords.x - aOrigin.x ),
                        -pcbIUScale.IUTomm( aKiCoords.y - aOrigin.y ), aZposition );
     };
-    #endif
+#endif
 
     gp_Pln basePlane( gp_Pnt( 0.0, 0.0, aZposition ),
                       std::signbit( aThickness ) ? -gp::DZ() : gp::DZ() );
@@ -1971,24 +1973,25 @@ bool STEP_PCB_MODEL::CreatePCB( SHAPE_POLY_SET& aOutline, VECTOR2D aOrigin, bool
                                           (int) ( m_boardCutouts.size() + m_copperCutouts.size() ) ),
                         RPT_SEVERITY_DEBUG );
 
-    auto buildBSB = [&brdBndBox]( std::vector<TopoDS_Shape>& input, Bnd_BoundSortBox& bsbHoles )
-    {
-        // We need to encompass every location we'll need to test in the global bbox,
-        // otherwise Bnd_BoundSortBox doesn't work near the boundaries.
-        Bnd_Box brdWithHolesBndBox = brdBndBox;
+    auto buildBSB =
+            [&brdBndBox]( std::vector<TopoDS_Shape>& input, Bnd_BoundSortBox& bsbHoles )
+            {
+                // We need to encompass every location we'll need to test in the global bbox,
+                // otherwise Bnd_BoundSortBox doesn't work near the boundaries.
+                Bnd_Box brdWithHolesBndBox = brdBndBox;
 
-        Handle( Bnd_HArray1OfBox ) holeBoxSet = new Bnd_HArray1OfBox( 0, input.size() - 1 );
+                Handle( Bnd_HArray1OfBox ) holeBoxSet = new Bnd_HArray1OfBox( 0, input.size() - 1 );
 
-        for( size_t i = 0; i < input.size(); i++ )
-        {
-            Bnd_Box bbox;
-            BRepBndLib::Add( input[i], bbox );
-            brdWithHolesBndBox.Add( bbox );
-            ( *holeBoxSet )[i] = bbox;
-        }
+                for( size_t i = 0; i < input.size(); i++ )
+                {
+                    Bnd_Box bbox;
+                    BRepBndLib::Add( input[i], bbox );
+                    brdWithHolesBndBox.Add( bbox );
+                    ( *holeBoxSet )[i] = bbox;
+                }
 
-        bsbHoles.Initialize( brdWithHolesBndBox, holeBoxSet );
-    };
+                bsbHoles.Initialize( brdWithHolesBndBox, holeBoxSet );
+            };
 
     auto subtractShapesMap =
             [&tp, this]( const wxString& aWhat, std::map<wxString, std::vector<TopoDS_Shape>>& aShapesMap,
@@ -2074,16 +2077,15 @@ bool STEP_PCB_MODEL::CreatePCB( SHAPE_POLY_SET& aOutline, VECTOR2D aOrigin, bool
                 }
             };
 
-    auto subtractShapes = [subtractShapesMap]( const wxString&            aWhat,
-                                               std::vector<TopoDS_Shape>& aShapesList,
-                                               std::vector<TopoDS_Shape>& aHolesList,
-                                               Bnd_BoundSortBox&          aBSBHoles )
-    {
-        std::map<wxString, std::vector<TopoDS_Shape>> aShapesMap{ { wxEmptyString, aShapesList } };
+    auto subtractShapes =
+            [subtractShapesMap]( const wxString& aWhat, std::vector<TopoDS_Shape>& aShapesList,
+                                 std::vector<TopoDS_Shape>& aHolesList, Bnd_BoundSortBox& aBSBHoles )
+            {
+                std::map<wxString, std::vector<TopoDS_Shape>> aShapesMap{ { wxEmptyString, aShapesList } };
 
-        subtractShapesMap( aWhat, aShapesMap, aHolesList, aBSBHoles );
-        aShapesList = aShapesMap[wxEmptyString];
-    };
+                subtractShapesMap( aWhat, aShapesMap, aHolesList, aBSBHoles );
+                aShapesList = aShapesMap[wxEmptyString];
+            };
 
 
     if( m_boardCutouts.size() )
@@ -2913,8 +2915,9 @@ bool STEP_PCB_MODEL::getModelLabel( const std::string& aFileNameUTF8, VECTOR3D a
 }
 
 
-bool STEP_PCB_MODEL::getModelLocation( bool aBottom, VECTOR2D aPosition, double aRotation, VECTOR3D aOffset, VECTOR3D aOrientation,
-                                 TopLoc_Location& aLocation )
+bool STEP_PCB_MODEL::getModelLocation( bool aBottom, VECTOR2D aPosition, double aRotation,
+                                       VECTOR3D aOffset, VECTOR3D aOrientation,
+                                       TopLoc_Location& aLocation )
 {
     // Order of operations:
     // a. aOrientation is applied -Z*-Y*-X
@@ -2970,14 +2973,11 @@ bool STEP_PCB_MODEL::getModelLocation( bool aBottom, VECTOR2D aPosition, double 
     lPos.Multiply( lOff );
 
     gp_Trsf lOrient;
-    lOrient.SetRotation( gp_Ax1( gp_Pnt( 0.0, 0.0, 0.0 ), gp_Dir( 0.0, 0.0, 1.0 ) ),
-                         -aOrientation.z );
+    lOrient.SetRotation( gp_Ax1( gp_Pnt( 0.0, 0.0, 0.0 ), gp_Dir( 0.0, 0.0, 1.0 ) ), -aOrientation.z );
     lPos.Multiply( lOrient );
-    lOrient.SetRotation( gp_Ax1( gp_Pnt( 0.0, 0.0, 0.0 ), gp_Dir( 0.0, 1.0, 0.0 ) ),
-                         -aOrientation.y );
+    lOrient.SetRotation( gp_Ax1( gp_Pnt( 0.0, 0.0, 0.0 ), gp_Dir( 0.0, 1.0, 0.0 ) ), -aOrientation.y );
     lPos.Multiply( lOrient );
-    lOrient.SetRotation( gp_Ax1( gp_Pnt( 0.0, 0.0, 0.0 ), gp_Dir( 1.0, 0.0, 0.0 ) ),
-                         -aOrientation.x );
+    lOrient.SetRotation( gp_Ax1( gp_Pnt( 0.0, 0.0, 0.0 ), gp_Dir( 1.0, 0.0, 0.0 ) ), -aOrientation.x );
     lPos.Multiply( lOrient );
 
     aLocation = TopLoc_Location( lPos );
@@ -3255,8 +3255,7 @@ bool STEP_PCB_MODEL::WritePLY( const wxString& aFileName )
 
     cafWriter.SetFaceId( true ); // TODO: configurable SetPartId/SetFaceId
     cafWriter.ChangeCoordinateSystemConverter().SetInputLengthUnit( 0.001 );
-    cafWriter.ChangeCoordinateSystemConverter().SetInputCoordinateSystem(
-            RWMesh_CoordinateSystem_Zup );
+    cafWriter.ChangeCoordinateSystemConverter().SetInputCoordinateSystem( RWMesh_CoordinateSystem_Zup );
 
     TColStd_IndexedDataMapOfStringString metadata;
 
@@ -3265,8 +3264,8 @@ bool STEP_PCB_MODEL::WritePLY( const wxString& aFileName )
     metadata.Add( TCollection_AsciiString( "source_pcb_file" ),
                   TCollection_ExtendedString( fn.GetFullName().wc_str() ) );
     metadata.Add( TCollection_AsciiString( "generator" ),
-                  TCollection_AsciiString(
-                          wxString::Format( wxS( "KiCad %s" ), GetSemanticVersion() ).ToAscii() ) );
+                  TCollection_AsciiString( wxString::Format( wxS( "KiCad %s" ),
+                                                             GetSemanticVersion() ).ToAscii() ) );
     metadata.Add( TCollection_AsciiString( "generated_at" ),
                   TCollection_AsciiString( GetISO8601CurrentDateTime().ToAscii() ) );
 
