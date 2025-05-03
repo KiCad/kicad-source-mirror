@@ -22,7 +22,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-04-29 20:11+0300\n"
-"PO-Revision-Date: 2025-04-30 13:48+0000\n"
+"PO-Revision-Date: 2025-05-03 15:09+0000\n"
 "Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/kicad/"
 "master-source/ru/>\n"
@@ -25831,7 +25831,7 @@ msgstr "%s (D%d) на слое %d: %s"
 
 #: gerbview/gerber_file_image.cpp:125
 msgid "Too many messages, some are skipped"
-msgstr ""
+msgstr "Слишком много сообщений, некоторые были пропущены"
 
 #: gerbview/gerber_file_image.cpp:358
 msgid "Image name"
