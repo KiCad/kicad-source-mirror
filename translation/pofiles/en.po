@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-29 20:11+0300\n"
+"POT-Creation-Date: 2025-05-03 18:13+0300\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -5395,6 +5395,10 @@ msgid "Error: "
 msgstr "Error: "
 
 #, c-format
+msgid "File '%s' does not exist."
+msgstr "File '%s' does not exist."
+
+#, c-format
 msgid "Unable to read file '%s'."
 msgstr "Unable to read file '%s'."
 
@@ -5772,6 +5776,28 @@ msgstr "Turn merged table cells back into separate cells."
 
 msgid "Edit Table..."
 msgstr "Edit Table..."
+
+msgid "Keep Arc Center, Adjust Radius"
+msgstr "Keep Arc Center, Adjust Radius"
+
+msgid "Switch arc editing mode to keep center, adjust radius and endpoints"
+msgstr "Switch arc editing mode to keep center, adjust radius and endpoints"
+
+msgid "Keep Arc Endpoints or Direction of Starting Point"
+msgstr "Keep Arc Endpoints or Direction of Starting Point"
+
+msgid ""
+"Switch arc editing mode to keep endpoints, or to keep direction of the other "
+"point"
+msgstr ""
+"Switch arc editing mode to keep endpoints, or to keep direction of the other "
+"point"
+
+msgid "Keep Arc Radius and Center, adjust angle"
+msgstr "Keep Arc Radius and Center, adjust angle"
+
+msgid "Switch arc editing mode to maintainign radius when endpoint are moved"
+msgstr "Switch arc editing mode to maintainign radius when endpoint are moved"
 
 msgid "Cycle Arc Editing Mode"
 msgstr "Cycle Arc Editing Mode"
@@ -7235,6 +7261,14 @@ msgstr "Unconnected wire endpoint"
 
 msgid "Unconnected wire to bus entry"
 msgstr "Unconnected wire to bus entry"
+
+#, c-format
+msgid ""
+"Hierarchical label \"%s\" in root sheet cannot be connected to non-existent "
+"parent sheet"
+msgstr ""
+"Hierarchical label \"%s\" in root sheet cannot be connected to non-existent "
+"parent sheet"
 
 #, c-format
 msgid "Sheet pin %s has no matching hierarchical label inside the sheet"
@@ -10526,6 +10560,18 @@ msgstr "90 deg Angle"
 msgid "45 deg Angle"
 msgstr "45 deg Angle"
 
+msgid "Arc editing mode:"
+msgstr "Arc editing mode:"
+
+msgid "Keep center, adjust radius"
+msgstr "Keep center, adjust radius"
+
+msgid "Keep endpoints or direction of starting point"
+msgstr "Keep endpoints or direction of starting point"
+
+msgid "Keep center and radius, adjust endpoints"
+msgstr "Keep center and radius, adjust endpoints"
+
 msgid "Mouse drag performs Drag (G) operation"
 msgstr "Mouse drag performs Drag (G) operation"
 
@@ -13008,6 +13054,14 @@ msgstr "Expecting CELL or BLOCK"
 #, c-format
 msgid "Symbol '%s.asy' not found"
 msgstr "Symbol '%s.asy' not found"
+
+#, c-format
+msgid ""
+"Unable to find LTspice symbols.\n"
+"Install LTspice or put its library files into %s"
+msgstr ""
+"Unable to find LTspice symbols.\n"
+"Install LTspice or put its library files into %s"
 
 msgid "LTspice schematic files"
 msgstr "LTspice schematic files"
@@ -16440,10 +16494,6 @@ msgstr "Draw %s"
 msgid "Draw Table"
 msgstr "Draw Table"
 
-#, c-format
-msgid "File '%s' does not exist."
-msgstr "File '%s' does not exist."
-
 msgid "Press <ESC> to cancel sheet creation."
 msgstr "Press <ESC> to cancel sheet creation."
 
@@ -16547,6 +16597,11 @@ msgstr "No net selected."
 
 msgid "Net must be labeled to assign a netclass."
 msgstr "Net must be labeled to assign a netclass."
+
+msgid ""
+"Pasting a long text text string may be very slow.  Do you want to continue?"
+msgstr ""
+"Pasting a long text text string may be very slow.  Do you want to continue?"
 
 #, c-format
 msgid ""
@@ -27219,15 +27274,6 @@ msgstr "Step for &rotate commands:"
 msgid "Set increment (in degrees) for context menu and hotkey rotation."
 msgstr "Set increment (in degrees) for context menu and hotkey rotation."
 
-msgid "Arc editing mode:"
-msgstr "Arc editing mode:"
-
-msgid "Keep center, adjust radius"
-msgstr "Keep center, adjust radius"
-
-msgid "Keep endpoints or direction of starting point"
-msgstr "Keep endpoints or direction of starting point"
-
 msgid "Track mouse-drag mode:"
 msgstr "Track mouse-drag mode:"
 
@@ -35077,22 +35123,6 @@ msgstr "Chamfer Corner"
 
 msgid "Chamfer corner"
 msgstr "Chamfer corner"
-
-msgid "Keep Arc Center, Adjust Radius"
-msgstr "Keep Arc Center, Adjust Radius"
-
-msgid "Switch arc editing mode to keep center, adjust radius and endpoints"
-msgstr "Switch arc editing mode to keep center, adjust radius and endpoints"
-
-msgid "Keep Arc Endpoints or Direction of Starting Point"
-msgstr "Keep Arc Endpoints or Direction of Starting Point"
-
-msgid ""
-"Switch arc editing mode to keep endpoints, or to keep direction of the other "
-"point"
-msgstr ""
-"Switch arc editing mode to keep endpoints, or to keep direction of the other "
-"point"
 
 msgid "Position Relative To..."
 msgstr "Position Relative To…"

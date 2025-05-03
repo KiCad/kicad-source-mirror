@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-29 20:11+0300\n"
+"POT-Creation-Date: 2025-05-03 18:13+0300\n"
 "PO-Revision-Date: 2025-01-23 15:38+0000\n"
 "Last-Translator: John Beard <john.j.beard@gmail.com>\n"
 "Language-Team: Thai <https://hosted.weblate.org/projects/kicad/master-source/"
@@ -194,7 +194,7 @@ msgstr "กำลังเรนเดอร์: Post processing shader"
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:55
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:634
 #: common/eda_base_frame.cpp:1342 common/hotkey_store.cpp:80
-#: common/tool/actions.cpp:1208 pcbnew/footprint_chooser_frame.cpp:316
+#: common/tool/actions.cpp:1230 pcbnew/footprint_chooser_frame.cpp:316
 #: pcbnew/footprint_viewer_frame.cpp:968 pcbnew/pcb_base_frame.cpp:694
 msgid "3D Viewer"
 msgstr "โปรแกรมดู3มิติ"
@@ -254,7 +254,7 @@ msgstr "เครื่องมือแสดง3มิติของ KiCad"
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:77
 #: eeschema/dialogs/panel_sym_display_options_base.cpp:25
 #: pcbnew/footprint_edit_frame.cpp:245 pcbnew/footprint_edit_frame.cpp:980
-#: pcbnew/pcb_edit_frame.cpp:329 pcbnew/pcb_edit_frame.cpp:1789
+#: pcbnew/pcb_edit_frame.cpp:329 pcbnew/pcb_edit_frame.cpp:1796
 #: pcbnew/tools/pcb_actions.cpp:1422
 msgid "Appearance"
 msgstr "ภาพปรากฏ"
@@ -1492,7 +1492,7 @@ msgstr "อัตรา"
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:405
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:102
 #: pcbnew/microwave/microwave_polygon.cpp:144
-#: pcbnew/tools/pcb_point_editor.cpp:2487
+#: pcbnew/tools/pcb_point_editor.cpp:2090
 msgid "X:"
 msgstr "X:"
 
@@ -1516,7 +1516,7 @@ msgstr "X:"
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:253
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:119
 #: pcbnew/microwave/microwave_polygon.cpp:153
-#: pcbnew/tools/pcb_point_editor.cpp:2487
+#: pcbnew/tools/pcb_point_editor.cpp:2090
 msgid "Y:"
 msgstr "Y:"
 
@@ -2298,7 +2298,7 @@ msgstr "ไม่สามารถสร้างเส้นทาง ตา�
 #: eeschema/sch_symbol.cpp:2604 eeschema/sch_symbol.cpp:2966
 #: eeschema/symbol_editor/symbol_editor.cpp:1768
 #: eeschema/symbol_viewer_frame.cpp:463 pcbnew/footprint.cpp:4156
-#: pcbnew/generate_footprint_info.cpp:37 pcbnew/plot_board_layers.cpp:206
+#: pcbnew/generate_footprint_info.cpp:37 pcbnew/plot_board_layers.cpp:207
 msgid "Keywords"
 msgstr "คำสำคัญ"
 
@@ -2415,7 +2415,7 @@ msgstr "สัญลักษณ์"
 
 #: common/dialog_about/AboutDialog_main.cpp:909
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:37
-#: pcbnew/plot_board_layers.cpp:224
+#: pcbnew/plot_board_layers.cpp:225
 #: pcbnew/widgets/panel_selection_filter.cpp:196
 #: pcbnew/widgets/panel_selection_filter_base.cpp:29
 #: pcbnew/widgets/search_handlers.cpp:116
@@ -2512,11 +2512,11 @@ msgstr "สำเนาเลขรุ่น KiCad เข้าคลิปบ�
 msgid "&Report Bug"
 msgstr "รายงานข้อผิดพลาด(&R)"
 
-#: common/dialog_about/dialog_about_base.cpp:60 common/tool/actions.cpp:1372
+#: common/dialog_about/dialog_about_base.cpp:60 common/tool/actions.cpp:1394
 msgid "Report a problem with KiCad"
 msgstr "รายงานปัญหากับ KiCad"
 
-#: common/dialog_about/dialog_about_base.cpp:64 common/tool/actions.cpp:1365
+#: common/dialog_about/dialog_about_base.cpp:64 common/tool/actions.cpp:1387
 msgid "Donate"
 msgstr "บริจาค"
 
@@ -2788,7 +2788,7 @@ msgstr "ค่าปริยายคือ 1"
 #: pcbnew/dialogs/panel_fp_editor_field_defaults_base.cpp:57
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:437 pcbnew/footprint.cpp:4146
 #: pcbnew/footprint_wizard_frame.cpp:327 pcbnew/pcb_dimension.cpp:619
-#: pcbnew/pcb_fields_grid_table.cpp:148 pcbnew/plot_board_layers.cpp:181
+#: pcbnew/pcb_fields_grid_table.cpp:148 pcbnew/plot_board_layers.cpp:182
 #: pcbnew/widgets/search_handlers.cpp:119
 msgid "Value"
 msgstr "ค่า"
@@ -3609,7 +3609,7 @@ msgstr "ตัวเลือกปลั๊กอิน"
 
 #: common/dialogs/dialog_plugin_options_base.cpp:43
 #: common/dialogs/panel_mouse_settings.cpp:47
-#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:235
+#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:245
 #: eeschema/dialogs/panel_simulator_preferences.cpp:33
 #: pcbnew/dialogs/panel_edit_options_base.cpp:254
 msgid "Option"
@@ -3739,7 +3739,7 @@ msgstr "โหมดทางออก:"
 #: pcbnew/dialogs/dialog_plot_base.cpp:380
 #: pcbnew/dialogs/dialog_plot_base.cpp:406 pcbnew/pcb_field.cpp:292
 #: pcbnew/pcb_tablecell.cpp:216 pcbnew/pcb_text.cpp:631
-#: pcbnew/pcb_textbox.cpp:827 pcbnew/tools/pcb_control.cpp:2316
+#: pcbnew/pcb_textbox.cpp:827 pcbnew/tools/pcb_control.cpp:2325
 msgid "Color"
 msgstr "สี"
 
@@ -3978,7 +3978,7 @@ msgstr "ตกลง"
 #: common/dialogs/git/dialog_git_auth.cpp:54
 #: common/dialogs/git/dialog_git_commit.cpp:152
 #: common/dialogs/git/dialog_git_switch.cpp:73
-#: common/dialogs/panel_embedded_files.cpp:426 common/tool/actions.cpp:246
+#: common/dialogs/panel_embedded_files.cpp:426 common/tool/actions.cpp:247
 #: eeschema/dialogs/dialog_erc.cpp:426
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1342 eeschema/sheet.cpp:776
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:987
@@ -4141,7 +4141,7 @@ msgid "HTTPS"
 msgstr ""
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:58
-#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:101
+#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:111
 #: eeschema/widgets/search_handlers.cpp:473
 #, fuzzy
 msgid "Local"
@@ -4199,7 +4199,7 @@ msgid "Switch"
 msgstr "สลับ"
 
 #: common/dialogs/git/dialog_git_switch.cpp:223
-#: common/widgets/design_block_pane.cpp:500 eeschema/sch_base_frame.cpp:307
+#: common/widgets/design_block_pane.cpp:500 eeschema/sch_base_frame.cpp:308
 #: pcbnew/footprint_libraries_utils.cpp:430
 msgid "Add"
 msgstr "บวก"
@@ -4899,7 +4899,7 @@ msgstr "ชื่อเล่นจะต้องแก้ไข หลัง�
 #: common/dialogs/panel_embedded_files.cpp:404
 #: common/dialogs/panel_embedded_files.cpp:426
 #: common/widgets/design_block_pane.cpp:499
-#: eeschema/dialogs/panel_sym_lib_table.cpp:678 eeschema/sch_base_frame.cpp:306
+#: eeschema/dialogs/panel_sym_lib_table.cpp:678 eeschema/sch_base_frame.cpp:307
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:1032
 #: pcbnew/footprint_libraries_utils.cpp:429 pcbnew/tools/pcb_actions.cpp:667
 msgid "Skip"
@@ -5229,7 +5229,7 @@ msgstr "(คีย์ร้อน)"
 msgid "Grid 2:"
 msgstr "กริด 2:"
 
-#: common/dialogs/panel_grid_settings_base.cpp:109 common/tool/actions.cpp:1038
+#: common/dialogs/panel_grid_settings_base.cpp:109 common/tool/actions.cpp:1060
 #, fuzzy
 msgid "Grid Overrides"
 msgstr "เขียนทับ"
@@ -5421,11 +5421,11 @@ msgid "Zoom"
 msgstr "ขยาย"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:139
-#: common/dialogs/panel_mouse_settings_base.cpp:152 common/eda_shape.cpp:2538
+#: common/dialogs/panel_mouse_settings_base.cpp:152 common/eda_shape.cpp:2539
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:119
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:186
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:162
-#: eeschema/sch_shape.cpp:485
+#: eeschema/sch_shape.cpp:496
 #: pcbnew/board_stackup_manager/panel_board_finish_base.cpp:44
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:49
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:158
@@ -5480,8 +5480,8 @@ msgid "Ctrl"
 msgstr "Ctrl"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:216
-#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:161
-#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:219
+#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:171
+#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:229
 #: pcbnew/dialogs/panel_edit_options_base.cpp:155
 #: pcbnew/dialogs/panel_edit_options_base.cpp:223
 msgid "Shift"
@@ -5683,8 +5683,8 @@ msgstr "ข้อมูล:"
 msgid "<Not defined>"
 msgstr "เชื่อมต่อไม่ได้"
 
-#: common/dialogs/panel_setup_netclasses.cpp:102 common/eda_shape.cpp:2527
-#: common/eda_shape.cpp:2539 common/stroke_params.cpp:40
+#: common/dialogs/panel_setup_netclasses.cpp:102 common/eda_shape.cpp:2528
+#: common/eda_shape.cpp:2540 common/stroke_params.cpp:40
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:368
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:119
 #: eeschema/sch_bus_entry.cpp:633 eeschema/sch_line.cpp:1022
@@ -5700,7 +5700,7 @@ msgstr "เชื่อมต่อไม่ได้"
 msgid "Solid"
 msgstr "เส้นทึบ"
 
-#: common/dialogs/panel_setup_netclasses.cpp:104 common/eda_shape.cpp:2528
+#: common/dialogs/panel_setup_netclasses.cpp:104 common/eda_shape.cpp:2529
 #: common/stroke_params.cpp:41
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:368
 #: eeschema/sch_bus_entry.cpp:634 eeschema/sch_line.cpp:1023
@@ -5709,7 +5709,7 @@ msgstr "เส้นทึบ"
 msgid "Dashed"
 msgstr "เส้นประ"
 
-#: common/dialogs/panel_setup_netclasses.cpp:106 common/eda_shape.cpp:2529
+#: common/dialogs/panel_setup_netclasses.cpp:106 common/eda_shape.cpp:2530
 #: common/stroke_params.cpp:42
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:368
 #: eeschema/sch_bus_entry.cpp:635 eeschema/sch_line.cpp:1024
@@ -5718,7 +5718,7 @@ msgstr "เส้นประ"
 msgid "Dotted"
 msgstr "เส้นจุด"
 
-#: common/dialogs/panel_setup_netclasses.cpp:108 common/eda_shape.cpp:2530
+#: common/dialogs/panel_setup_netclasses.cpp:108 common/eda_shape.cpp:2531
 #: common/stroke_params.cpp:43
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:368
 #: eeschema/sch_bus_entry.cpp:636 eeschema/sch_line.cpp:1025
@@ -5727,7 +5727,7 @@ msgstr "เส้นจุด"
 msgid "Dash-Dot"
 msgstr "เส้นประ-จุด"
 
-#: common/dialogs/panel_setup_netclasses.cpp:110 common/eda_shape.cpp:2531
+#: common/dialogs/panel_setup_netclasses.cpp:110 common/eda_shape.cpp:2532
 #: common/stroke_params.cpp:44
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:368
 #: eeschema/sch_bus_entry.cpp:637 eeschema/sch_line.cpp:1026
@@ -5883,7 +5883,7 @@ msgstr "ความหนาเส้นลวด"
 msgid "Bus Thickness"
 msgstr "ความหนาบัส"
 
-#: common/dialogs/panel_setup_netclasses_base.cpp:65 common/eda_shape.cpp:2641
+#: common/dialogs/panel_setup_netclasses_base.cpp:65 common/eda_shape.cpp:2642
 #: common/stroke_params.cpp:272 eeschema/sch_bus_entry.cpp:641
 #: eeschema/sch_line.cpp:911 eeschema/sch_line.cpp:1063
 #: eeschema/sch_line.cpp:1067 eeschema/sch_tablecell.cpp:191
@@ -5899,7 +5899,7 @@ msgstr "สไตล์เส้น"
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:67
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:265
 #: eeschema/dialogs/dialog_wire_bus_properties.cpp:60
-#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:101
+#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:111
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:162
 #: eeschema/sch_bus_entry.cpp:632 eeschema/sch_field.cpp:996
 #: eeschema/sch_label.cpp:1238 eeschema/sch_line.cpp:1033
@@ -5932,7 +5932,7 @@ msgid "Pattern"
 msgstr "รูปแบบ"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:148
-#: eeschema/sch_field.cpp:1116 eeschema/sch_label.cpp:207
+#: eeschema/sch_field.cpp:1128 eeschema/sch_label.cpp:207
 #: pcbnew/board_connected_item.cpp:200 pcbnew/pad.cpp:2779 pcbnew/zone.cpp:1929
 msgid "Net Class"
 msgstr "เน็ตคลาส"
@@ -5998,7 +5998,7 @@ msgstr "ทดแทนข้อความ"
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:279
 #: eeschema/fields_grid_table.cpp:309 eeschema/fields_grid_table.cpp:712
 #: eeschema/fields_grid_table.cpp:856 eeschema/pin_type.cpp:118
-#: eeschema/sch_field.cpp:1004 eeschema/sch_field.cpp:1568
+#: eeschema/sch_field.cpp:1004 eeschema/sch_field.cpp:1580
 #: eeschema/sch_pin.cpp:1710 pcbnew/dialogs/dialog_render_job.cpp:40
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2833
 msgid "Left"
@@ -6009,7 +6009,7 @@ msgstr "ซ้าย"
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:279
 #: eeschema/fields_grid_table.cpp:311 eeschema/fields_grid_table.cpp:714
 #: eeschema/fields_grid_table.cpp:860 eeschema/pin_type.cpp:117
-#: eeschema/sch_field.cpp:1006 eeschema/sch_field.cpp:1570
+#: eeschema/sch_field.cpp:1006 eeschema/sch_field.cpp:1582
 #: eeschema/sch_pin.cpp:1709 pcbnew/dialogs/dialog_render_job.cpp:41
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2834
 msgid "Right"
@@ -6098,7 +6098,7 @@ msgstr ""
 #: common/drawing_sheet/ds_draw_item.cpp:132 common/eda_item.cpp:394
 #: common/eda_item.cpp:395 common/eda_item.cpp:423 common/eda_text.cpp:1356
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:47
-#: eeschema/sch_field.cpp:992 eeschema/sch_field.cpp:1633
+#: eeschema/sch_field.cpp:992 eeschema/sch_field.cpp:1645
 #: eeschema/sch_label.cpp:2298 eeschema/sch_tablecell.cpp:112
 #: eeschema/sch_text.cpp:551 eeschema/sch_text.h:59 eeschema/schematic.cpp:69
 #: eeschema/widgets/panel_sch_selection_filter.cpp:203
@@ -6123,7 +6123,7 @@ msgstr "ข้อความ"
 
 #: common/drawing_sheet/ds_data_item.cpp:366
 #: common/drawing_sheet/ds_draw_item.cpp:120 common/eda_item.cpp:419
-#: common/eda_shape.cpp:328 eeschema/pin_type.cpp:101 eeschema/sch_pin.cpp:1694
+#: common/eda_shape.cpp:329 eeschema/pin_type.cpp:101 eeschema/sch_pin.cpp:1694
 #: gerbview/gerber_draw_item.cpp:229
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:134
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:62
@@ -6133,8 +6133,8 @@ msgid "Line"
 msgstr "เส้นตรง"
 
 #: common/drawing_sheet/ds_data_item.cpp:367
-#: common/drawing_sheet/ds_draw_item.cpp:124 common/eda_shape.cpp:1136
-#: common/eda_shape.cpp:2517
+#: common/drawing_sheet/ds_draw_item.cpp:124 common/eda_shape.cpp:1137
+#: common/eda_shape.cpp:2518
 #: eeschema/dialogs/dialog_label_properties_base.cpp:199
 #: eeschema/sch_label.cpp:2279
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:45 pcbnew/pad.cpp:2696
@@ -6199,7 +6199,7 @@ msgstr "ความคิดเห็น"
 msgid "Text '%s'"
 msgstr "ข้อความ '%s'"
 
-#: common/drawing_sheet/ds_draw_item.cpp:439 eeschema/sch_shape.cpp:333
+#: common/drawing_sheet/ds_draw_item.cpp:439 eeschema/sch_shape.cpp:344
 #, c-format
 msgid "Rectangle, width %s height %s"
 msgstr "สี่เหลี่ยม, กว้าง %s สูง %s"
@@ -6287,12 +6287,12 @@ msgstr ""
 msgid "Invalid floating point number"
 msgstr "หมายเลขทศนิยมไม่ถูกต้อง"
 
-#: common/eda_base_frame.cpp:436 common/tool/actions.cpp:280
+#: common/eda_base_frame.cpp:436 common/tool/actions.cpp:281
 #: pcbnew/dialogs/panel_setup_rules.cpp:125
 msgid "Undo"
 msgstr "ย้อนทำ"
 
-#: common/eda_base_frame.cpp:445 common/tool/actions.cpp:292
+#: common/eda_base_frame.cpp:445 common/tool/actions.cpp:293
 #: pcbnew/dialogs/panel_setup_rules.cpp:126
 msgid "Redo"
 msgstr "ทำอีกครั้ง"
@@ -6328,7 +6328,7 @@ msgstr "เลือกเท่านั้น"
 msgid "Data Collection"
 msgstr "การเก็บข้อมูล"
 
-#: common/eda_base_frame.cpp:1268 common/tool/actions.cpp:1223
+#: common/eda_base_frame.cpp:1268 common/tool/actions.cpp:1245
 #: common/tool/common_tools.cpp:615 eeschema/symbol_editor/symbol_editor.cpp:84
 #: kicad/tools/kicad_manager_actions.cpp:125
 msgid "Symbol Editor"
@@ -6384,7 +6384,7 @@ msgstr "แม่แบบชื่อช่อง"
 msgid "Simulator"
 msgstr "เครื่องจำลอง..."
 
-#: common/eda_base_frame.cpp:1310 common/tool/actions.cpp:1240
+#: common/eda_base_frame.cpp:1310 common/tool/actions.cpp:1262
 #: common/tool/common_tools.cpp:617 kicad/tools/kicad_manager_actions.cpp:147
 #: pcbnew/footprint_edit_frame.cpp:1064 pcbnew/menubar_footprint_editor.cpp:92
 msgid "Footprint Editor"
@@ -6407,7 +6407,7 @@ msgstr "การล้างกราฟิก"
 #: common/eda_base_frame.cpp:1327 common/hotkey_store.cpp:78
 #: common/tool/common_tools.cpp:616 kicad/tools/kicad_manager_actions.cpp:136
 #: pcbnew/menubar_pcb_editor.cpp:186 pcbnew/pcb_edit_frame.cpp:200
-#: pcbnew/pcb_edit_frame.cpp:1885 pcbnew/tools/zone_filler_tool.cpp:284
+#: pcbnew/pcb_edit_frame.cpp:1892 pcbnew/tools/zone_filler_tool.cpp:284
 msgid "PCB Editor"
 msgstr "เครื่องมือแก้ไขพีซีบอร์ด"
 
@@ -6491,7 +6491,7 @@ msgstr "ไม่พบไฟล์เอกสาร '%s'"
 msgid "Unknown MIME type for documentation file '%s'"
 msgstr "ไม่รู้จักชนิด MIME ของไฟล์เอกสาร '%s'"
 
-#: common/eda_draw_frame.cpp:417 common/tool/actions.cpp:1046
+#: common/eda_draw_frame.cpp:417 common/tool/actions.cpp:1068
 #, fuzzy
 msgid "Edit Grids..."
 msgstr "แก้ไขกริดผู้ใช้กำหนด…"
@@ -6517,8 +6517,8 @@ msgstr "นิ้ว"
 #: common/eda_draw_frame.cpp:682
 #: eeschema/dialogs/dialog_junction_props_base.cpp:34
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:116
-#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:310
-#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:321
+#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:320
+#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:331
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:62
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:129
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:140
@@ -6539,7 +6539,7 @@ msgstr "มิล"
 msgid "Units"
 msgstr "หน่วย"
 
-#: common/eda_draw_frame.cpp:726 common/tool/actions.cpp:1060
+#: common/eda_draw_frame.cpp:726 common/tool/actions.cpp:1082
 #: eeschema/import_gfx/dialog_import_gfx_sch.cpp:58
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:31
 #: pagelayout_editor/pl_editor_frame.cpp:170
@@ -6569,23 +6569,23 @@ msgstr "เลือกไลบรารี"
 msgid "New Library"
 msgstr "ไลบรารีใหม่"
 
-#: common/eda_draw_frame.cpp:1212 common/tool/actions.cpp:565
+#: common/eda_draw_frame.cpp:1212 common/tool/actions.cpp:587
 #: common/widgets/search_pane.cpp:148 eeschema/sch_edit_frame.cpp:269
 #: pcbnew/pcb_edit_frame.cpp:385
 #, fuzzy
 msgid "Search"
 msgstr "ค้นหาข้อความ"
 
-#: common/eda_draw_frame.cpp:1218 common/tool/actions.cpp:1258
+#: common/eda_draw_frame.cpp:1218 common/tool/actions.cpp:1280
 #: eeschema/eeschema_settings.cpp:93 eeschema/sch_edit_frame.cpp:2208
 #: pagelayout_editor/pl_editor_frame.cpp:197
 #: pcbnew/footprint_edit_frame.cpp:236 pcbnew/pcb_edit_frame.cpp:364
-#: pcbnew/pcb_edit_frame.cpp:1791
+#: pcbnew/pcb_edit_frame.cpp:1798
 msgid "Properties"
 msgstr "คุณสมบัติ"
 
 #: common/eda_draw_frame.cpp:1224 pcbnew/pcb_edit_frame.cpp:376
-#: pcbnew/pcb_edit_frame.cpp:1792 pcbnew/tools/pcb_actions.cpp:1430
+#: pcbnew/pcb_edit_frame.cpp:1799 pcbnew/tools/pcb_actions.cpp:1430
 msgid "Net Inspector"
 msgstr "ตัวตรวจสอบเน็ต"
 
@@ -6598,7 +6598,7 @@ msgstr "จอภาพ"
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:141
 #: pcbnew/load_select_footprint.cpp:294 pcbnew/pad.cpp:1316
 #: pcbnew/pcb_shape.cpp:715 pcbnew/pcb_text.cpp:272
-#: pcbnew/plot_board_layers.cpp:185
+#: pcbnew/plot_board_layers.cpp:186
 msgid "Footprint"
 msgstr "ฟุ้ทพรินท์"
 
@@ -6746,7 +6746,7 @@ msgid "Sheet Pin"
 msgstr "ขาในแผ่นวงจร"
 
 #: common/eda_item.cpp:435 eeschema/dialogs/dialog_migrate_buses.cpp:114
-#: pcbnew/tools/pcb_actions.cpp:2213
+#: pcbnew/tools/pcb_actions.cpp:2199
 msgid "Sheet"
 msgstr "แผ่นกระดาษ"
 
@@ -6762,25 +6762,25 @@ msgstr "เลเอาท์เกอร์เบอร์"
 msgid "Draw Item"
 msgstr "วาดชิ้นส่วน"
 
-#: common/eda_shape.cpp:319
+#: common/eda_shape.cpp:320
 #, fuzzy
 msgid "Thermal Spoke"
 msgstr "ความกว้างของซี่ล้อบรรเทาความร้อน:"
 
-#: common/eda_shape.cpp:320 pcbnew/pcb_shape.cpp:1054
+#: common/eda_shape.cpp:321 pcbnew/pcb_shape.cpp:1054
 msgid "Number Box"
 msgstr "กล่องตัวเลข"
 
-#: common/eda_shape.cpp:329 pcbnew/pad.cpp:1553
+#: common/eda_shape.cpp:330 pcbnew/pad.cpp:1553
 msgid "Rect"
 msgstr "Rect"
 
-#: common/eda_shape.cpp:330 common/eda_shape.cpp:1133 common/eda_shape.cpp:2518
+#: common/eda_shape.cpp:331 common/eda_shape.cpp:1134 common/eda_shape.cpp:2519
 #: gerbview/gerber_draw_item.cpp:230
 msgid "Arc"
 msgstr "โค้ง"
 
-#: common/eda_shape.cpp:331 common/eda_shape.cpp:1132 common/eda_shape.cpp:2519
+#: common/eda_shape.cpp:332 common/eda_shape.cpp:1133 common/eda_shape.cpp:2520
 #: eeschema/dialogs/dialog_label_properties_base.cpp:193
 #: eeschema/sch_label.cpp:2277 gerbview/gerber_draw_item.cpp:231
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:45 pcbnew/pad.cpp:1551
@@ -6788,36 +6788,36 @@ msgstr "โค้ง"
 msgid "Circle"
 msgstr "วงกลม"
 
-#: common/eda_shape.cpp:332
+#: common/eda_shape.cpp:333
 msgid "Bezier Curve"
 msgstr "เส้นโค้งเบซิเย่ร์"
 
-#: common/eda_shape.cpp:333 common/eda_shape.cpp:1135 common/eda_shape.cpp:2520
+#: common/eda_shape.cpp:334 common/eda_shape.cpp:1136 common/eda_shape.cpp:2521
 msgid "Polygon"
 msgstr "รูปหลายเหลี่ยม"
 
-#: common/eda_shape.cpp:1123
+#: common/eda_shape.cpp:1124
 msgid "Pad Number Box"
 msgstr "กล่องหมายเลขแพ็ด"
 
-#: common/eda_shape.cpp:1124 pcbnew/pcb_shape.cpp:1061
+#: common/eda_shape.cpp:1125 pcbnew/pcb_shape.cpp:1061
 #, fuzzy
 msgid "Thermal Spoke Template"
 msgstr "ช่องว่างบรรเทาความร้อน"
 
-#: common/eda_shape.cpp:1125 common/eda_shape.cpp:1138
+#: common/eda_shape.cpp:1126 common/eda_shape.cpp:1139
 msgid "Unrecognized"
 msgstr "ไม่รู้จัก"
 
-#: common/eda_shape.cpp:1134
+#: common/eda_shape.cpp:1135
 msgid "Curve"
 msgstr "เส้นโค้ง"
 
-#: common/eda_shape.cpp:1137 common/eda_shape.cpp:2516
+#: common/eda_shape.cpp:1138 common/eda_shape.cpp:2517
 msgid "Segment"
 msgstr "เซ็กเมนต์"
 
-#: common/eda_shape.cpp:1148 common/eda_shape.cpp:2580
+#: common/eda_shape.cpp:1149 common/eda_shape.cpp:2581
 #: eeschema/dialogs/dialog_label_properties_base.cpp:173
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:53
 #: eeschema/sch_label.cpp:2259 eeschema/sch_label.cpp:2291
@@ -6833,33 +6833,33 @@ msgstr "เซ็กเมนต์"
 msgid "Shape"
 msgstr "รูปร่าง"
 
-#: common/eda_shape.cpp:1154 common/eda_shape.cpp:1163
-#: common/eda_shape.cpp:2607 pcbnew/dialogs/dialog_shape_properties.cpp:932
+#: common/eda_shape.cpp:1155 common/eda_shape.cpp:1164
+#: common/eda_shape.cpp:2608 pcbnew/dialogs/dialog_shape_properties.cpp:932
 #: pcbnew/pcb_track.cpp:1806
 msgid "Radius"
 msgstr "รัศมี"
 
-#: common/eda_shape.cpp:1158 common/eda_shape.cpp:1167
-#: common/eda_shape.cpp:1185 eeschema/dialogs/dialog_lib_edit_pin_table.cpp:127
+#: common/eda_shape.cpp:1159 common/eda_shape.cpp:1168
+#: common/eda_shape.cpp:1186 eeschema/dialogs/dialog_lib_edit_pin_table.cpp:127
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:95
 #: eeschema/sch_pin.cpp:1181 eeschema/sch_pin.cpp:1759
 #: pcbnew/dialogs/dialog_shape_properties.cpp:902
 msgid "Length"
 msgstr "ความยาว"
 
-#: common/eda_shape.cpp:1161 common/eda_shape.cpp:1191
-#: common/eda_shape.cpp:2650 pcbnew/dialogs/dialog_shape_properties.cpp:903
+#: common/eda_shape.cpp:1162 common/eda_shape.cpp:1192
+#: common/eda_shape.cpp:2651 pcbnew/dialogs/dialog_shape_properties.cpp:903
 #: pcbnew/pcb_text.cpp:290 pcbnew/pcb_textbox.cpp:474
 msgid "Angle"
 msgstr "มุม"
 
-#: common/eda_shape.cpp:1172 eeschema/sch_rule_area.cpp:384
+#: common/eda_shape.cpp:1173 eeschema/sch_rule_area.cpp:384
 msgid "Points"
 msgstr "คะแนน"
 
-#: common/eda_shape.cpp:1176 common/eda_shape.cpp:2625 common/eda_text.cpp:1399
+#: common/eda_shape.cpp:1177 common/eda_shape.cpp:2626 common/eda_text.cpp:1399
 #: eeschema/sch_bitmap.cpp:193 eeschema/sch_bitmap.cpp:332
-#: eeschema/sch_field.cpp:1614 eeschema/sch_tablecell.cpp:194
+#: eeschema/sch_field.cpp:1626 eeschema/sch_tablecell.cpp:194
 #: eeschema/sch_text.cpp:695 eeschema/sch_textbox.cpp:605
 #: pcbnew/dialogs/dialog_board_statistics.cpp:685
 #: pcbnew/dialogs/dialog_board_statistics.cpp:695
@@ -6876,9 +6876,9 @@ msgstr "คะแนน"
 msgid "Width"
 msgstr "ความหนา"
 
-#: common/eda_shape.cpp:1179 common/eda_shape.cpp:2631 common/eda_text.cpp:1404
+#: common/eda_shape.cpp:1180 common/eda_shape.cpp:2632 common/eda_text.cpp:1404
 #: eeschema/sch_bitmap.cpp:195 eeschema/sch_bitmap.cpp:339
-#: eeschema/sch_field.cpp:1615 eeschema/sch_tablecell.cpp:195
+#: eeschema/sch_field.cpp:1627 eeschema/sch_tablecell.cpp:195
 #: eeschema/sch_text.cpp:696 eeschema/sch_textbox.cpp:606
 #: pcbnew/dialogs/dialog_board_statistics.cpp:687
 #: pcbnew/dialogs/dialog_board_statistics.cpp:696
@@ -6892,86 +6892,86 @@ msgstr "ความหนา"
 msgid "Height"
 msgstr "ความสูง"
 
-#: common/eda_shape.cpp:2521
+#: common/eda_shape.cpp:2522
 msgid "Bezier"
 msgstr "เบซิเยร์"
 
-#: common/eda_shape.cpp:2540
+#: common/eda_shape.cpp:2541
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:119
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:238
 #, fuzzy
 msgid "Hatch"
 msgstr "แรเงาแล้ว"
 
-#: common/eda_shape.cpp:2541
+#: common/eda_shape.cpp:2542
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:119
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:238
 #, fuzzy
 msgid "Reverse Hatch"
 msgstr "ย้อนกลับ"
 
-#: common/eda_shape.cpp:2542
+#: common/eda_shape.cpp:2543
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:119
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:238
 #, fuzzy
 msgid "Cross-hatch"
 msgstr "ครอส-โพรบ"
 
-#: common/eda_shape.cpp:2578 eeschema/sch_shape.cpp:557
+#: common/eda_shape.cpp:2579 eeschema/sch_shape.cpp:568
 #, fuzzy
 msgid "Shape Properties"
 msgstr "คุณสมบัติชีต"
 
-#: common/eda_shape.cpp:2584 eeschema/sch_table.cpp:510
+#: common/eda_shape.cpp:2585 eeschema/sch_table.cpp:510
 #: eeschema/sch_tablecell.cpp:184 pcbnew/pcb_table.cpp:658
 #: pcbnew/pcb_tablecell.cpp:200 pcbnew/pcb_textbox.cpp:818
 #: pcbnew/pcb_track.cpp:2351
 msgid "Start X"
 msgstr "เริ่ม X"
 
-#: common/eda_shape.cpp:2589 eeschema/sch_table.cpp:513
+#: common/eda_shape.cpp:2590 eeschema/sch_table.cpp:513
 #: eeschema/sch_tablecell.cpp:185 pcbnew/pcb_table.cpp:661
 #: pcbnew/pcb_tablecell.cpp:201 pcbnew/pcb_textbox.cpp:819
 #: pcbnew/pcb_track.cpp:2355
 msgid "Start Y"
 msgstr "เริ่ม Y"
 
-#: common/eda_shape.cpp:2595
+#: common/eda_shape.cpp:2596
 #, fuzzy
 msgid "Center X"
 msgstr "กลาง"
 
-#: common/eda_shape.cpp:2601
+#: common/eda_shape.cpp:2602
 #, fuzzy
 msgid "Center Y"
 msgstr "กลาง"
 
-#: common/eda_shape.cpp:2613 eeschema/sch_tablecell.cpp:186
+#: common/eda_shape.cpp:2614 eeschema/sch_tablecell.cpp:186
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2847 pcbnew/pcb_tablecell.cpp:202
 #: pcbnew/pcb_textbox.cpp:820 pcbnew/pcb_track.cpp:2358
 msgid "End X"
 msgstr "สิ้นสุด X"
 
-#: common/eda_shape.cpp:2619 eeschema/sch_tablecell.cpp:187
+#: common/eda_shape.cpp:2620 eeschema/sch_tablecell.cpp:187
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2853 pcbnew/pcb_tablecell.cpp:203
 #: pcbnew/pcb_textbox.cpp:821 pcbnew/pcb_track.cpp:2361
 msgid "End Y"
 msgstr "สิ้นสุด Y"
 
-#: common/eda_shape.cpp:2637 common/stroke_params.cpp:276
+#: common/eda_shape.cpp:2638 common/stroke_params.cpp:276
 #: eeschema/sch_bus_entry.cpp:645 eeschema/sch_line.cpp:1071
 #: eeschema/sch_tablecell.cpp:190 pcbnew/pcb_tablecell.cpp:207
 #: pcbnew/pcb_textbox.cpp:824
 msgid "Line Width"
 msgstr "ความกว้างของเส้น"
 
-#: common/eda_shape.cpp:2645 eeschema/sch_tablecell.cpp:192
+#: common/eda_shape.cpp:2646 eeschema/sch_tablecell.cpp:192
 #: pcbnew/pcb_shape.cpp:995 pcbnew/pcb_tablecell.cpp:209
 #, fuzzy
 msgid "Line Color"
 msgstr "สีเส้นตรง:"
 
-#: common/eda_shape.cpp:2692
+#: common/eda_shape.cpp:2693
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:217
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:278
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:120
@@ -6979,7 +6979,7 @@ msgstr "สีเส้นตรง:"
 msgid "Fill"
 msgstr "เติม"
 
-#: common/eda_shape.cpp:2697 eeschema/sch_shape.cpp:550
+#: common/eda_shape.cpp:2698 eeschema/sch_shape.cpp:561
 #: pcbnew/pcb_shape.cpp:996
 #, fuzzy
 msgid "Fill Color"
@@ -7041,7 +7041,7 @@ msgstr "หนา+เอียง"
 #: eeschema/fields_grid_table.cpp:713 eeschema/fields_grid_table.cpp:724
 #: eeschema/fields_grid_table.cpp:858 eeschema/fields_grid_table.cpp:882
 #: eeschema/sch_field.cpp:1005 eeschema/sch_field.cpp:1015
-#: eeschema/sch_field.cpp:1569 eeschema/sch_field.cpp:1578
+#: eeschema/sch_field.cpp:1581 eeschema/sch_field.cpp:1590
 #: eeschema/sch_text.cpp:579 gerbview/gerber_file_image.cpp:374
 #: gerbview/gerber_file_image.cpp:377
 #: pcbnew/dialogs/dialog_shape_properties.cpp:886
@@ -7055,7 +7055,7 @@ msgstr "กลาง"
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:303
 #: eeschema/fields_grid_table.cpp:301 eeschema/fields_grid_table.cpp:723
 #: eeschema/fields_grid_table.cpp:880 eeschema/sch_field.cpp:1014
-#: eeschema/sch_field.cpp:1577 eeschema/sch_text.cpp:578
+#: eeschema/sch_field.cpp:1589 eeschema/sch_text.cpp:578
 #: pcbnew/dialogs/dialog_render_job.cpp:42
 msgid "Top"
 msgstr "บน"
@@ -7064,7 +7064,7 @@ msgstr "บน"
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:303
 #: eeschema/fields_grid_table.cpp:303 eeschema/fields_grid_table.cpp:725
 #: eeschema/fields_grid_table.cpp:884 eeschema/sch_field.cpp:1016
-#: eeschema/sch_field.cpp:1579 eeschema/sch_text.cpp:580
+#: eeschema/sch_field.cpp:1591 eeschema/sch_text.cpp:580
 #: pcbnew/dialogs/dialog_render_job.cpp:38
 msgid "Bottom"
 msgstr "ล่าง"
@@ -7076,7 +7076,7 @@ msgstr "ล่าง"
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:68
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:68
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:65
-#: eeschema/fields_grid_table.cpp:486 eeschema/sch_field.cpp:1622
+#: eeschema/fields_grid_table.cpp:486 eeschema/sch_field.cpp:1634
 #: eeschema/sch_pin.cpp:1183 eeschema/sch_pin.cpp:1755
 #: eeschema/sch_symbol.cpp:2928 eeschema/sch_tablecell.cpp:197
 #: eeschema/sch_text.cpp:704 eeschema/sch_textbox.cpp:633
@@ -7089,7 +7089,7 @@ msgid "Orientation"
 msgstr "ทิศทางจัดเรียง"
 
 #: common/eda_text.cpp:1354 eeschema/dialogs/dialog_text_properties_base.h:117
-#: eeschema/sch_field.cpp:1589 eeschema/sch_field.cpp:1620
+#: eeschema/sch_field.cpp:1601 eeschema/sch_field.cpp:1632
 #: eeschema/sch_text.cpp:701 eeschema/sch_textbox.cpp:631
 #: pcbnew/dialogs/dialog_text_properties.cpp:152
 #: pcbnew/dialogs/dialog_text_properties_base.h:113
@@ -7117,38 +7117,38 @@ msgstr "ฟ้อนท์"
 msgid "Auto Thickness"
 msgstr "ความหนาบัส"
 
-#: common/eda_text.cpp:1370 eeschema/sch_field.cpp:1612
+#: common/eda_text.cpp:1370 eeschema/sch_field.cpp:1624
 #: eeschema/sch_label.cpp:2299 eeschema/sch_tablecell.cpp:196
 #: eeschema/sch_text.cpp:697 eeschema/sch_textbox.cpp:607
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:91
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:56
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:57
 #: pcbnew/pcb_fields_grid_table.cpp:152 pcbnew/pcb_tablecell.cpp:213
-#: pcbnew/tools/pcb_control.cpp:2315
+#: pcbnew/tools/pcb_control.cpp:2324
 msgid "Thickness"
 msgstr "ความหนา"
 
-#: common/eda_text.cpp:1381 eeschema/sch_field.cpp:1613
+#: common/eda_text.cpp:1381 eeschema/sch_field.cpp:1625
 #: eeschema/sch_tablecell.cpp:198 eeschema/sch_text.cpp:694
 #: pcbnew/microwave/microwave_polygon.cpp:127
 #: pcbnew/pcb_fields_grid_table.cpp:160
 msgid "Mirrored"
 msgstr "กลับกระจกแล้ว"
 
-#: common/eda_text.cpp:1410 eeschema/sch_field.cpp:1592
-#: eeschema/sch_field.cpp:1595 eeschema/sch_label.cpp:2303
+#: common/eda_text.cpp:1410 eeschema/sch_field.cpp:1604
+#: eeschema/sch_field.cpp:1607 eeschema/sch_label.cpp:2303
 msgid "Horizontal Justification"
 msgstr "ปรับตำแหน่งตามแนวนอน"
 
-#: common/eda_text.cpp:1414 eeschema/sch_field.cpp:1599
-#: eeschema/sch_field.cpp:1602 eeschema/sch_label.cpp:2305
+#: common/eda_text.cpp:1414 eeschema/sch_field.cpp:1611
+#: eeschema/sch_field.cpp:1614 eeschema/sch_label.cpp:2305
 #: pcbnew/pcb_dimension.cpp:1924 pcbnew/pcb_dimension.cpp:1957
 #: pcbnew/pcb_dimension.cpp:1995 pcbnew/pcb_dimension.cpp:2037
 #: pcbnew/pcb_dimension.cpp:2071
 msgid "Vertical Justification"
 msgstr "ปรับตำแหน่งตามแนวตั้ง"
 
-#: common/eda_text.cpp:1422 eeschema/sch_field.cpp:1611
+#: common/eda_text.cpp:1422 eeschema/sch_field.cpp:1623
 #: eeschema/sch_label.cpp:2263 eeschema/sch_tablecell.cpp:200
 #: pcbnew/pcb_dimension.cpp:1927 pcbnew/pcb_dimension.cpp:1960
 #: pcbnew/pcb_dimension.cpp:1998 pcbnew/pcb_dimension.cpp:2040
@@ -7274,23 +7274,23 @@ msgstr "ข้อความผิดพลาด:"
 msgid "No Files"
 msgstr "ไม่มีไฟล์"
 
-#: common/filename_resolver.cpp:489
+#: common/filename_resolver.cpp:494
 msgid "The given path does not exist"
 msgstr "เส้นทางที่ให้มาไม่มี"
 
-#: common/filename_resolver.cpp:517
+#: common/filename_resolver.cpp:522
 msgid "Alias: "
 msgstr "แฝง: "
 
-#: common/filename_resolver.cpp:520
+#: common/filename_resolver.cpp:525
 msgid "This path:"
 msgstr "เส้นทางนี้:"
 
-#: common/filename_resolver.cpp:523
+#: common/filename_resolver.cpp:528
 msgid "Existing path:"
 msgstr "เส้นทางที่มีอยู่:"
 
-#: common/filename_resolver.cpp:525
+#: common/filename_resolver.cpp:530
 msgid "Bad alias (duplicate name)"
 msgstr "ชื่อแฝงไม่ดี (ชื่อซ้ำ)"
 
@@ -7686,7 +7686,7 @@ msgstr "ไม่พบข้อผิดพลาด"
 msgid "No error"
 msgstr "ผิดพลาด"
 
-#: common/grid_tricks.cpp:361 common/tool/actions.cpp:304
+#: common/grid_tricks.cpp:361 common/tool/actions.cpp:305
 #: common/widgets/listbox_tricks.cpp:52 eeschema/tools/sch_actions.cpp:236
 #: pcbnew/dialogs/panel_setup_rules.cpp:130 pcbnew/tools/edit_tool.cpp:2660
 msgid "Cut"
@@ -7696,7 +7696,7 @@ msgstr "ตัด"
 msgid "Clear selected cells placing original contents on clipboard"
 msgstr "ล้างเซลส์ที่เลือก วางเนื้อหาเริ่มต้น ในคลิปบอร์ด"
 
-#: common/grid_tricks.cpp:363 common/tool/actions.cpp:315
+#: common/grid_tricks.cpp:363 common/tool/actions.cpp:316
 #: common/widgets/listbox_tricks.cpp:50 eeschema/tools/sch_actions.cpp:242
 #: kicad/dialogs/panel_jobset.cpp:405 pcbnew/dialogs/panel_setup_rules.cpp:131
 msgid "Copy"
@@ -7706,11 +7706,11 @@ msgstr "สำเนา"
 msgid "Copy selected cells to clipboard"
 msgstr "สำเนาเซลส์ที่เลือกไปคลิปบอร์ด"
 
-#: common/grid_tricks.cpp:368 common/tool/actions.cpp:335
+#: common/grid_tricks.cpp:368 common/tool/actions.cpp:336
 #: common/widgets/listbox_tricks.cpp:51
-#: eeschema/tools/sch_editor_control.cpp:2331
+#: eeschema/tools/sch_editor_control.cpp:2339
 #: eeschema/tools/symbol_editor_edit_tool.cpp:1022
-#: pcbnew/dialogs/panel_setup_rules.cpp:132 pcbnew/tools/pcb_control.cpp:1276
+#: pcbnew/dialogs/panel_setup_rules.cpp:132 pcbnew/tools/pcb_control.cpp:1285
 msgid "Paste"
 msgstr "วางสำเนา"
 
@@ -7718,7 +7718,7 @@ msgstr "วางสำเนา"
 msgid "Paste clipboard cells to matrix at current cell"
 msgstr "วางสำเนาจากเซลส์คลิปบอร์ด ไปยังเมทริกซ์เซลส์ปัจจุบัน"
 
-#: common/grid_tricks.cpp:370 common/tool/actions.cpp:381
+#: common/grid_tricks.cpp:370 common/tool/actions.cpp:382
 #: common/widgets/listbox_tricks.cpp:54 eeschema/tools/sch_edit_tool.cpp:1741
 #: eeschema/tools/symbol_editor_edit_tool.cpp:478
 #: kicad/dialogs/panel_jobset.cpp:406 kicad/project_tree_pane.cpp:986
@@ -7731,7 +7731,7 @@ msgstr "ลบ"
 msgid "Clear contents of selected cells"
 msgstr "ลบเซลส์ที่ถูกเลือก"
 
-#: common/grid_tricks.cpp:374 common/tool/actions.cpp:345
+#: common/grid_tricks.cpp:374 common/tool/actions.cpp:346
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:106
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:80
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:47
@@ -7797,7 +7797,7 @@ msgid "Ignore Other Snaps"
 msgstr "ละเลยการเข้าหาอื่นๆ"
 
 #: common/hotkey_store.cpp:61 common/tool/action_menu.cpp:233
-#: common/tool/action_menu.cpp:249 common/tool/actions.cpp:150
+#: common/tool/action_menu.cpp:249 common/tool/actions.cpp:151
 msgid "Quit"
 msgstr "ออก"
 
@@ -7906,7 +7906,7 @@ msgstr ""
 msgid "Import offset adjusted to (%f, %f) to fit within numeric limits"
 msgstr ""
 
-#: common/io/altium/altium_binary_parser.cpp:62 common/richio.cpp:102
+#: common/io/altium/altium_binary_parser.cpp:62 common/richio.cpp:108
 #, c-format
 msgid "Cannot open file '%s'."
 msgstr "ไม่สามารถเปิดไฟล์ '%s'"
@@ -8576,7 +8576,7 @@ msgid "Helper items"
 msgstr "ชิ้นส่วนผู้ช่วย"
 
 #: common/layer_id.cpp:107 common/layer_id.cpp:149 common/tool/grid_menu.cpp:56
-#: eeschema/tools/sch_editor_control.cpp:2932
+#: eeschema/tools/sch_editor_control.cpp:2940
 #: gerbview/dialogs/panel_gerbview_color_settings.cpp:103
 #: gerbview/widgets/gerbview_layer_widget.cpp:135
 #: pcbnew/widgets/appearance_controls.cpp:355
@@ -8973,22 +8973,22 @@ msgstr "ระบบปฏิบัติการไม่สนับสนุ
 msgid "The KiCad language file for this language is not installed."
 msgstr "ไฟล์ภาษาของ KiCad ไม่ได้ติดตั้ง"
 
-#: common/plotters/PDF_plotter.cpp:667 common/plotters/PDF_plotter.cpp:670
+#: common/plotters/PDF_plotter.cpp:681 common/plotters/PDF_plotter.cpp:686
 #, c-format
 msgid "Page %s"
 msgstr "หน้า %s"
 
-#: common/plotters/PDF_plotter.cpp:668 common/plotters/PDF_plotter.cpp:671
+#: common/plotters/PDF_plotter.cpp:683 common/plotters/PDF_plotter.cpp:688
 #, c-format
 msgid "%s (Page %s)"
 msgstr "%s (หน้า %s)"
 
-#: common/plotters/PDF_plotter.cpp:1413
+#: common/plotters/PDF_plotter.cpp:1451
 #, c-format
 msgid "Show Page %s"
 msgstr "แสดงหน้าที่ %s"
 
-#: common/plotters/PDF_plotter.cpp:1433
+#: common/plotters/PDF_plotter.cpp:1471
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:953
 #: eeschema/tools/sch_navigate_tool.cpp:105
 #, c-format
@@ -9095,23 +9095,28 @@ msgstr "ระวัง: "
 msgid "Error: "
 msgstr "ผิดพลาด: "
 
-#: common/richio.cpp:123 eeschema/sch_io/eagle/sch_io_eagle.cpp:600
+#: common/richio.cpp:102 eeschema/tools/sch_drawing_tools.cpp:2942
+#, fuzzy, c-format
+msgid "File '%s' does not exist."
+msgstr "หน่วย '%s' ไม่สิ้นสุดด้วย 'มิล'"
+
+#: common/richio.cpp:129 eeschema/sch_io/eagle/sch_io_eagle.cpp:600
 #: eeschema/sch_io/eagle/sch_io_eagle.cpp:617
 #: pcbnew/pcb_io/eagle/pcb_io_eagle.cpp:3230
 #, c-format
 msgid "Unable to read file '%s'."
 msgstr "ไม่สามารถอ่านไฟล์ '%s'"
 
-#: common/richio.cpp:199
+#: common/richio.cpp:205
 #, c-format
 msgid "Unable to open %s for reading."
 msgstr "ไม่เปิดไฟล์ %s สำหรับอ่าน"
 
-#: common/richio.cpp:250 common/richio.cpp:348
+#: common/richio.cpp:256 common/richio.cpp:354
 msgid "Maximum line length exceeded"
 msgstr "ความยาวบรรทัดเกินค่าสูงสุด"
 
-#: common/richio.cpp:313
+#: common/richio.cpp:319
 msgid "Line length exceeded"
 msgstr "ความยาวบรรทัดเกิน"
 
@@ -9241,449 +9246,449 @@ msgstr "แสดงหน่วยในสัญลักษณ์:"
 msgid "Displays the current unit"
 msgstr "ปิดเครื่องมือแก้ไขที่กำลังใช้"
 
-#: common/tool/actions.cpp:45
+#: common/tool/actions.cpp:46
 msgid "New..."
 msgstr "ใหม่…"
 
-#: common/tool/actions.cpp:46
+#: common/tool/actions.cpp:47
 msgid "Create a new document in the editor"
 msgstr "สร้างเอกสารใหม่ในเครื่องมือแก้ไข"
 
-#: common/tool/actions.cpp:52 eeschema/symbol_editor/symbol_editor.cpp:865
+#: common/tool/actions.cpp:53 eeschema/symbol_editor/symbol_editor.cpp:865
 #: pcbnew/footprint_libraries_utils.cpp:1061
 msgid "New Library..."
 msgstr "ไลบรารีใหม่…"
 
-#: common/tool/actions.cpp:53
+#: common/tool/actions.cpp:54
 msgid "Create a new library folder"
 msgstr "สร้างโฟลเดอร์ไลบรารีใหม่"
 
-#: common/tool/actions.cpp:59
+#: common/tool/actions.cpp:60
 msgid "Add Library..."
 msgstr "เพิ่มไลบรารี…"
 
-#: common/tool/actions.cpp:60
+#: common/tool/actions.cpp:61
 msgid "Add an existing library folder"
 msgstr "เพิ่มไลบรารีโฟลเดอร์มีอยู่แล้ว"
 
-#: common/tool/actions.cpp:68
+#: common/tool/actions.cpp:69
 msgid "Open..."
 msgstr "เปิด…"
 
-#: common/tool/actions.cpp:69
+#: common/tool/actions.cpp:70
 msgid "Open existing document"
 msgstr "เปิดเอกสารที่มีอยู่"
 
-#: common/tool/actions.cpp:75
+#: common/tool/actions.cpp:76
 #, fuzzy
 msgid "Edit in a Text Editor..."
 msgstr "แก้ไขในตัวแก้ไขข้อความ"
 
-#: common/tool/actions.cpp:76
+#: common/tool/actions.cpp:77
 #, fuzzy
 msgid "Open a library file with a text editor"
 msgstr "เปิดไฟล์ในตัวแก้ไขข้อความ"
 
-#: common/tool/actions.cpp:82
+#: common/tool/actions.cpp:83
 #, fuzzy
 msgid "Open in file explorer..."
 msgstr "เปิดไดเรกทอรีในไฟล์เอ็กพลอเรอร์"
 
-#: common/tool/actions.cpp:83
+#: common/tool/actions.cpp:84
 #, fuzzy
 msgid "Open a library file with system file explorer"
 msgstr "เปิดไฟล์ในตัวแก้ไขข้อความ"
 
-#: common/tool/actions.cpp:91 eeschema/symbol_editor/symbol_editor.cpp:855
+#: common/tool/actions.cpp:92 eeschema/symbol_editor/symbol_editor.cpp:855
 #: eeschema/widgets/tuner_slider_base.cpp:117
 #: pcbnew/footprint_libraries_utils.cpp:1047
 msgid "Save"
 msgstr "บันทึก"
 
-#: common/tool/actions.cpp:92
+#: common/tool/actions.cpp:93
 msgid "Save changes"
 msgstr "บันทึกการเปลี่ยนแปลง"
 
-#: common/tool/actions.cpp:100 eeschema/tools/sch_actions.cpp:215
+#: common/tool/actions.cpp:101 eeschema/tools/sch_actions.cpp:215
 msgid "Save As..."
 msgstr "บันทึกเป็น…"
 
-#: common/tool/actions.cpp:101
+#: common/tool/actions.cpp:102
 msgid "Save current document to another location"
 msgstr "บันทึกเอกสารปัจจุบันไปที่ตำแหน่งอื่น"
 
-#: common/tool/actions.cpp:107
+#: common/tool/actions.cpp:108
 msgid "Save a Copy..."
 msgstr "บันทึกเป็นสำเนา…"
 
-#: common/tool/actions.cpp:108
+#: common/tool/actions.cpp:109
 msgid "Save a copy of the current document to another location"
 msgstr "บันทึกสำเนาเอกสารปัจจุบันไปที่ตำแหน่งอื่น"
 
-#: common/tool/actions.cpp:114
+#: common/tool/actions.cpp:115
 msgid "Save All"
 msgstr "บันทึกทั้งหมด"
 
-#: common/tool/actions.cpp:115
+#: common/tool/actions.cpp:116
 msgid "Save all changes"
 msgstr "บันทึกการเปลี่ยนแปลงทั้งหมด"
 
-#: common/tool/actions.cpp:121
+#: common/tool/actions.cpp:122
 msgid "Revert"
 msgstr "ย้อนกลับ"
 
-#: common/tool/actions.cpp:122
+#: common/tool/actions.cpp:123
 msgid "Throw away changes"
 msgstr "คว้างทิ้งการเปลี่ยนแปลง"
 
-#: common/tool/actions.cpp:129
+#: common/tool/actions.cpp:130
 msgid "Page Settings..."
 msgstr "ตั้งค่าหน้ากระดาษ…"
 
-#: common/tool/actions.cpp:130
+#: common/tool/actions.cpp:131
 msgid "Settings for paper size and title block info"
 msgstr "ตั้งค่าขนาดกระดาษและข้อมูลบล็อกหัวเรื่อง"
 
-#: common/tool/actions.cpp:138
+#: common/tool/actions.cpp:139
 msgid "Print..."
 msgstr "พิมพ์…"
 
-#: common/tool/actions.cpp:144
+#: common/tool/actions.cpp:145
 msgid "Plot..."
 msgstr "พล็อต…"
 
-#: common/tool/actions.cpp:151
+#: common/tool/actions.cpp:152
 msgid "Close the current editor"
 msgstr "ปิดเครื่องมือแก้ไขที่กำลังใช้"
 
-#: common/tool/actions.cpp:200 eeschema/tools/sch_group_tool.cpp:159
-#: pcbnew/tools/pcb_control.cpp:1661 pcbnew/tools/pcb_group_tool.cpp:183
+#: common/tool/actions.cpp:201 eeschema/tools/sch_group_tool.cpp:159
+#: pcbnew/tools/pcb_control.cpp:1670 pcbnew/tools/pcb_group_tool.cpp:183
 #, fuzzy
 msgid "Group Items"
 msgstr "สมาชิกกลุ่ม:"
 
-#: common/tool/actions.cpp:201
+#: common/tool/actions.cpp:202
 msgid "Group the selected items so that they are treated as a single item"
 msgstr "จัดกลุ่มชิ้นส่วนที่เลือกเพื่อให้รวมเป็นชิ้นส่วนเดียวกัน"
 
-#: common/tool/actions.cpp:207 common/tool/group_tool.cpp:167
+#: common/tool/actions.cpp:208 common/tool/group_tool.cpp:167
 #, fuzzy
 msgid "Ungroup Items"
 msgstr "ยกเลิกการจัดกลุ่ม"
 
-#: common/tool/actions.cpp:208
+#: common/tool/actions.cpp:209
 msgid "Ungroup any selected groups"
 msgstr "ยกเลิกการจัดกลุ่มที่เลือกใดๆ"
 
-#: common/tool/actions.cpp:214
+#: common/tool/actions.cpp:215
 msgid "Remove Items"
 msgstr "เอาชิ้นส่วนออก"
 
-#: common/tool/actions.cpp:215
+#: common/tool/actions.cpp:216
 msgid "Remove items from group"
 msgstr "ลบชิ้นส่วนออกจากกลุ่ม"
 
-#: common/tool/actions.cpp:221
+#: common/tool/actions.cpp:222
 msgid "Enter Group"
 msgstr "เข้ากลุ่ม"
 
-#: common/tool/actions.cpp:222
+#: common/tool/actions.cpp:223
 msgid "Enter the group to edit items"
 msgstr "เข้ากลุ่มเพื่อแก้ไขชิ้นส่วน"
 
-#: common/tool/actions.cpp:228
+#: common/tool/actions.cpp:229
 msgid "Leave Group"
 msgstr "ออกจากกลุ่ม"
 
-#: common/tool/actions.cpp:229
+#: common/tool/actions.cpp:230
 msgid "Leave the current group"
 msgstr "ออกจากกลุ่มปัจจุบัน"
 
-#: common/tool/actions.cpp:247
+#: common/tool/actions.cpp:248
 msgid "Cancel current tool"
 msgstr "ยกเลิกเครื่องมือปัจจุบัน"
 
-#: common/tool/actions.cpp:255
+#: common/tool/actions.cpp:256
 #, fuzzy
 msgid "Finish"
 msgstr "สิ้นสุดบัส"
 
-#: common/tool/actions.cpp:256
+#: common/tool/actions.cpp:257
 #, fuzzy
 msgid "Finish current tool"
 msgstr "ยกเลิกเครื่องมือปัจจุบัน"
 
-#: common/tool/actions.cpp:264
+#: common/tool/actions.cpp:265
 msgid "Show Context Menu"
 msgstr "แสดงเมนูขวา"
 
-#: common/tool/actions.cpp:265
+#: common/tool/actions.cpp:266
 msgid "Perform the right-mouse-button action"
 msgstr "ปฏิบัติกิจกรรมเมื่อคลิกเมาส์ปุ่มขวา"
 
-#: common/tool/actions.cpp:305
+#: common/tool/actions.cpp:306
 msgid "Cut selected item(s) to clipboard"
 msgstr "ตัดชิ้นส่วนที่ถูกเลือกเข้าคลิปบอร์ด"
 
-#: common/tool/actions.cpp:316
+#: common/tool/actions.cpp:317
 msgid "Copy selected item(s) to clipboard"
 msgstr "สำเนาชิ้นส่วนที่ถูกเลือกเข้าคลิปบอร์ด"
 
-#: common/tool/actions.cpp:325
+#: common/tool/actions.cpp:326
 #, fuzzy
 msgid "Copy as Text"
 msgstr "ข้อความบนบอร์ด"
 
-#: common/tool/actions.cpp:326
+#: common/tool/actions.cpp:327
 #, fuzzy
 msgid "Copy selected item(s) to clipboard as text"
 msgstr "สำเนาชิ้นส่วนที่ถูกเลือกเข้าคลิปบอร์ด"
 
-#: common/tool/actions.cpp:336
+#: common/tool/actions.cpp:337
 msgid "Paste item(s) from clipboard"
 msgstr "วางสำเนาชิ้นส่วนจากคลิปบอร์ด"
 
-#: common/tool/actions.cpp:346
+#: common/tool/actions.cpp:347
 msgid "Select all items on screen"
 msgstr "เลือกทุกชิ้นส่วนบนจอภาพ"
 
-#: common/tool/actions.cpp:352
+#: common/tool/actions.cpp:353
 #, fuzzy
 msgid "Unselect All"
 msgstr "ยกเลิกการเลือกทั้งหมด"
 
-#: common/tool/actions.cpp:353
+#: common/tool/actions.cpp:354
 #, fuzzy
 msgid "Unselect all items on screen"
 msgstr "เลือกทุกชิ้นส่วนบนจอภาพ"
 
-#: common/tool/actions.cpp:359
+#: common/tool/actions.cpp:360
 msgid "Paste Special..."
 msgstr "วางสำเนาแบบพิเศษ…"
 
-#: common/tool/actions.cpp:360
+#: common/tool/actions.cpp:361
 #, fuzzy
 msgid "Paste item(s) from clipboard with options"
 msgstr "วางสำเนาชิ้นส่วนจากคลิปบอร์ดแบบมีทางเลือกคำอธิบายประกอบ"
 
-#: common/tool/actions.cpp:368 common/widgets/listbox_tricks.cpp:53
+#: common/tool/actions.cpp:369 common/widgets/listbox_tricks.cpp:53
 #: eeschema/tools/symbol_editor_edit_tool.cpp:1103
 #: pcbnew/tools/edit_tool.cpp:3006
 msgid "Duplicate"
 msgstr "ทำซ้ำ"
 
-#: common/tool/actions.cpp:369
+#: common/tool/actions.cpp:370
 msgid "Duplicates the selected item(s)"
 msgstr "ทำซ้ำชิ้นส่วนที่เลือก"
 
-#: common/tool/actions.cpp:382
+#: common/tool/actions.cpp:383
 #, fuzzy
 msgid "Delete selected item(s)"
 msgstr "ลบชิ้นส่วนที่เลือก"
 
-#: common/tool/actions.cpp:389
+#: common/tool/actions.cpp:390
 msgid "Interactive Delete Tool"
 msgstr "เครื่องมือลบแบบโต้ตอบ"
 
-#: common/tool/actions.cpp:390
+#: common/tool/actions.cpp:391
 msgid "Delete clicked items"
 msgstr "ลบชิ้นส่วนที่คลิก"
 
-#: common/tool/actions.cpp:398 eeschema/tools/sch_edit_tool.cpp:2899
+#: common/tool/actions.cpp:399 eeschema/tools/sch_edit_tool.cpp:2899
 #: pcbnew/tools/edit_tool.cpp:2310
 #, fuzzy
 msgid "Left Justify"
 msgstr "เหมาะสม X"
 
-#: common/tool/actions.cpp:399
+#: common/tool/actions.cpp:400
 msgid "Left-justify fields and text items"
 msgstr ""
 
-#: common/tool/actions.cpp:405 eeschema/tools/sch_edit_tool.cpp:2901
+#: common/tool/actions.cpp:406 eeschema/tools/sch_edit_tool.cpp:2901
 #: pcbnew/tools/edit_tool.cpp:2312
 #, fuzzy
 msgid "Center Justify"
 msgstr "เหมาะสม X"
 
-#: common/tool/actions.cpp:406
+#: common/tool/actions.cpp:407
 msgid "Center-justify fields and text items"
 msgstr ""
 
-#: common/tool/actions.cpp:412 eeschema/tools/sch_edit_tool.cpp:2903
+#: common/tool/actions.cpp:413 eeschema/tools/sch_edit_tool.cpp:2903
 #: pcbnew/tools/edit_tool.cpp:2314
 #, fuzzy
 msgid "Right Justify"
 msgstr "เหมาะสม X"
 
-#: common/tool/actions.cpp:413
+#: common/tool/actions.cpp:414
 msgid "Right-justify fields and text items"
 msgstr ""
 
-#: common/tool/actions.cpp:419
+#: common/tool/actions.cpp:420
 #, fuzzy
 msgid "Expand All"
 msgstr "ปรับปรุง"
 
-#: common/tool/actions.cpp:425
+#: common/tool/actions.cpp:426
 #, fuzzy
 msgid "Collapse All"
 msgstr "ทดแทนทั้งหมด"
 
-#: common/tool/actions.cpp:433 eeschema/tools/sch_edit_tool.cpp:3155
+#: common/tool/actions.cpp:434 eeschema/tools/sch_edit_tool.cpp:3155
 #: eeschema/tools/symbol_editor_edit_tool.cpp:1216
 #: pcbnew/tools/edit_tool.cpp:3111
 #, fuzzy
 msgid "Increment"
 msgstr "เพิ่มขั้นละ:"
 
-#: common/tool/actions.cpp:434
+#: common/tool/actions.cpp:435
 #, fuzzy
 msgid "Increment the selected item(s)"
 msgstr "ลบชิ้นส่วนที่เลือก"
 
-#: common/tool/actions.cpp:439
+#: common/tool/actions.cpp:440
 #, fuzzy
 msgid "Increment Primary"
 msgstr "เพิ่มขั้นละ:"
 
-#: common/tool/actions.cpp:440
+#: common/tool/actions.cpp:441
 #, fuzzy
 msgid "Increment the primary field of the selected item(s)"
 msgstr "สร้างเส้นตรงกราฟิกจากสิ่งที่เลือก"
 
-#: common/tool/actions.cpp:446
+#: common/tool/actions.cpp:447
 #, fuzzy
 msgid "Decrement Primary"
 msgstr "เพิ่มขั้นละ:"
 
-#: common/tool/actions.cpp:447
+#: common/tool/actions.cpp:448
 #, fuzzy
 msgid "Decrement the primary field of the selected item(s)"
 msgstr "ทำซ้ำชิ้นส่วนที่เลือก"
 
-#: common/tool/actions.cpp:453
+#: common/tool/actions.cpp:454
 #, fuzzy
 msgid "Increment Secondary"
 msgstr "เพิ่มขั้นละ:"
 
-#: common/tool/actions.cpp:454
+#: common/tool/actions.cpp:455
 #, fuzzy
 msgid "Increment the secondary field of the selected item(s)"
 msgstr "สร้างเส้นตรงกราฟิกจากสิ่งที่เลือก"
 
-#: common/tool/actions.cpp:460
+#: common/tool/actions.cpp:461
 msgid "Decrement Secondary"
 msgstr ""
 
-#: common/tool/actions.cpp:461
+#: common/tool/actions.cpp:462
 #, fuzzy
 msgid "Decrement the secondary field of the selected item(s)"
 msgstr "สร้างเส้นตรงกราฟิกจากสิ่งที่เลือก"
 
-#: common/tool/actions.cpp:467
+#: common/tool/actions.cpp:468
 #, fuzzy
 msgid "Select Column(s)"
 msgstr "เลือกคอลัมน์"
 
-#: common/tool/actions.cpp:468
+#: common/tool/actions.cpp:469
 msgid "Select complete column(s) containing the current selected cell(s)"
 msgstr ""
 
-#: common/tool/actions.cpp:474
+#: common/tool/actions.cpp:475
 #, fuzzy
 msgid "Select Row(s)"
 msgstr "เลือกชิ้นส่วน"
 
-#: common/tool/actions.cpp:475
+#: common/tool/actions.cpp:476
 msgid "Select complete row(s) containing the current selected cell(s)"
 msgstr ""
 
-#: common/tool/actions.cpp:481
+#: common/tool/actions.cpp:482
 #, fuzzy
 msgid "Select Table"
 msgstr "เลือกทั้งหมด"
 
-#: common/tool/actions.cpp:482
+#: common/tool/actions.cpp:483
 #, fuzzy
 msgid "Select parent table of selected cell(s)"
 msgstr "ลบเซลส์ที่ถูกเลือก"
 
-#: common/tool/actions.cpp:488 include/tool/edit_table_tool_base.h:168
+#: common/tool/actions.cpp:489 include/tool/edit_table_tool_base.h:168
 #, fuzzy
 msgid "Add Row Above"
 msgstr "เพิ่มเพาว์เวอร์"
 
-#: common/tool/actions.cpp:489
+#: common/tool/actions.cpp:490
 #, fuzzy
 msgid "Insert a new table row above the selected cell(s)"
 msgstr "ไม่สามารถพอกมุมสำหรับส่วนของแทร็กที่เลือก"
 
-#: common/tool/actions.cpp:495 include/tool/edit_table_tool_base.h:220
+#: common/tool/actions.cpp:496 include/tool/edit_table_tool_base.h:220
 #, fuzzy
 msgid "Add Row Below"
 msgstr "เพิ่มเพาว์เวอร์"
 
-#: common/tool/actions.cpp:496
+#: common/tool/actions.cpp:497
 msgid "Insert a new table row below the selected cell(s)"
 msgstr ""
 
-#: common/tool/actions.cpp:502 include/tool/edit_table_tool_base.h:271
+#: common/tool/actions.cpp:503 include/tool/edit_table_tool_base.h:271
 #, fuzzy
 msgid "Add Column Before"
 msgstr "เพิ่มเพาว์เวอร์"
 
-#: common/tool/actions.cpp:503
+#: common/tool/actions.cpp:504
 msgid "Insert a new table column before the selected cell(s)"
 msgstr ""
 
-#: common/tool/actions.cpp:509 include/tool/edit_table_tool_base.h:322
+#: common/tool/actions.cpp:510 include/tool/edit_table_tool_base.h:322
 #, fuzzy
 msgid "Add Column After"
 msgstr "เพิ่มเพาว์เวอร์"
 
-#: common/tool/actions.cpp:510
+#: common/tool/actions.cpp:511
 #, fuzzy
 msgid "Insert a new table column after the selected cell(s)"
 msgstr "ไม่สามารถพอกมุมสำหรับส่วนของแทร็กที่เลือก"
 
-#: common/tool/actions.cpp:516
+#: common/tool/actions.cpp:517
 #, fuzzy
 msgid "Delete Row(s)"
 msgstr "ลบชิ้นส่วน"
 
-#: common/tool/actions.cpp:517
+#: common/tool/actions.cpp:518
 #, fuzzy
 msgid "Delete rows containing the currently selected cell(s)"
 msgstr "ลบเซลส์ที่ถูกเลือก"
 
-#: common/tool/actions.cpp:523
+#: common/tool/actions.cpp:524
 #, fuzzy
 msgid "Delete Column(s)"
 msgstr "เลือกคอลัมน์"
 
-#: common/tool/actions.cpp:524
+#: common/tool/actions.cpp:525
 #, fuzzy
 msgid "Delete columns containing the currently selected cell(s)"
 msgstr "ลบเน็ตที่มีแพ็ดเพียงหนึ่งเดียว"
 
-#: common/tool/actions.cpp:530 include/tool/edit_table_tool_base.h:544
+#: common/tool/actions.cpp:531 include/tool/edit_table_tool_base.h:544
 #, fuzzy
 msgid "Merge Cells"
 msgstr "รวมโซน"
 
-#: common/tool/actions.cpp:531
+#: common/tool/actions.cpp:532
 msgid "Turn selected table cells into a single cell"
 msgstr ""
 
-#: common/tool/actions.cpp:537 include/tool/edit_table_tool_base.h:585
+#: common/tool/actions.cpp:538 include/tool/edit_table_tool_base.h:585
 msgid "Unmerge Cells"
 msgstr ""
 
-#: common/tool/actions.cpp:538
+#: common/tool/actions.cpp:539
 msgid "Turn merged table cells back into separate cells."
 msgstr ""
 
-#: common/tool/actions.cpp:545
+#: common/tool/actions.cpp:546
 #: eeschema/dialogs/dialog_tablecell_properties_base.cpp:373
 #: pcbnew/dialogs/dialog_tablecell_properties_base.cpp:263
 #, fuzzy
@@ -9692,338 +9697,366 @@ msgstr "แก้ไขค่า..."
 
 #: common/tool/actions.cpp:557
 #, fuzzy
+msgid "Keep Arc Center, Adjust Radius"
+msgstr "ใส่รัศมีพอกมุม:"
+
+#: common/tool/actions.cpp:558
+msgid "Switch arc editing mode to keep center, adjust radius and endpoints"
+msgstr ""
+
+#: common/tool/actions.cpp:564
+msgid "Keep Arc Endpoints or Direction of Starting Point"
+msgstr ""
+
+#: common/tool/actions.cpp:565
+msgid ""
+"Switch arc editing mode to keep endpoints, or to keep direction of the other "
+"point"
+msgstr ""
+
+#: common/tool/actions.cpp:571
+#, fuzzy
+msgid "Keep Arc Radius and Center, adjust angle"
+msgstr "ใส่รัศมีพอกมุม:"
+
+#: common/tool/actions.cpp:572
+msgid "Switch arc editing mode to maintainign radius when endpoint are moved"
+msgstr ""
+
+#: common/tool/actions.cpp:579
+#, fuzzy
 msgid "Cycle Arc Editing Mode"
 msgstr "สลับเปิดปิดโหมดแก้ไขส่วนโค้ง"
 
-#: common/tool/actions.cpp:558
+#: common/tool/actions.cpp:580
 msgid "Switch to a different method of editing arcs"
 msgstr "สลับไปยังวิธีอื่นในการแก้ไขส่วนโค้ง"
 
-#: common/tool/actions.cpp:566
+#: common/tool/actions.cpp:588
 msgid "Show/hide the search panel"
 msgstr "แสดง/ซ่อนแผงการค้นหา"
 
-#: common/tool/actions.cpp:574 eeschema/dialogs/dialog_schematic_find.cpp:33
+#: common/tool/actions.cpp:596 eeschema/dialogs/dialog_schematic_find.cpp:33
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:122
 #: eeschema/dialogs/dialog_schematic_find_base.h:87
 #: pcbnew/dialogs/dialog_find.cpp:56
 msgid "Find"
 msgstr "ค้นหา"
 
-#: common/tool/actions.cpp:582 eeschema/dialogs/dialog_schematic_find.cpp:44
+#: common/tool/actions.cpp:604 eeschema/dialogs/dialog_schematic_find.cpp:44
 msgid "Find and Replace"
 msgstr "ค้นหาและทดแทน"
 
-#: common/tool/actions.cpp:590 pcbnew/dialogs/dialog_find_base.cpp:91
+#: common/tool/actions.cpp:612 pcbnew/dialogs/dialog_find_base.cpp:91
 msgid "Find Next"
 msgstr "ค้นหาข้อความ"
 
-#: common/tool/actions.cpp:598 pcbnew/dialogs/dialog_find_base.cpp:96
+#: common/tool/actions.cpp:620 pcbnew/dialogs/dialog_find_base.cpp:96
 msgid "Find Previous"
 msgstr "ค้นหาก่อนหน้า"
 
-#: common/tool/actions.cpp:606
+#: common/tool/actions.cpp:628
 msgid "Find Next Marker"
 msgstr "ค้นหามาร์คเกอร์ถัดไป"
 
-#: common/tool/actions.cpp:612
+#: common/tool/actions.cpp:634
 msgid "Replace and Find Next"
 msgstr "ทดแทนและค้นหาต่อ"
 
-#: common/tool/actions.cpp:618
+#: common/tool/actions.cpp:640
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:132
 msgid "Replace All"
 msgstr "ทดแทนทั้งหมด"
 
-#: common/tool/actions.cpp:631
+#: common/tool/actions.cpp:653
 msgid "Previous Marker"
 msgstr "มาร์คเกอร์ก่อนหน้า"
 
-#: common/tool/actions.cpp:637
+#: common/tool/actions.cpp:659
 msgid "Next Marker"
 msgstr "มาร์คเกอร์ต่อไป"
 
-#: common/tool/actions.cpp:643
+#: common/tool/actions.cpp:665
 msgid "Exclude Marker"
 msgstr "ไม่รวมมาร์คเกอร์"
 
-#: common/tool/actions.cpp:644
+#: common/tool/actions.cpp:666
 msgid "Mark current violation in Checker window as an exclusion"
 msgstr "กำหนดตำแหน่งละเมิดในหน้าต่างตรวจสอบเป็นไม่รวม"
 
-#: common/tool/actions.cpp:657 kicad/pcm/dialogs/dialog_pcm_base.cpp:131
+#: common/tool/actions.cpp:679 kicad/pcm/dialogs/dialog_pcm_base.cpp:131
 msgid "Refresh"
 msgstr "รีเฟรช"
 
-#: common/tool/actions.cpp:669
+#: common/tool/actions.cpp:691
 msgid "Zoom to Fit"
 msgstr "ซูมให้เต็มจอภาพ"
 
-#: common/tool/actions.cpp:676
+#: common/tool/actions.cpp:698
 msgid "Zoom to Objects"
 msgstr "ซูมให้คลุมวัตถุ"
 
-#: common/tool/actions.cpp:682
+#: common/tool/actions.cpp:704
 #, fuzzy
 msgid "Zoom to Selected Objects"
 msgstr "ซูมให้คลุมวัตถุ"
 
-#: common/tool/actions.cpp:693
+#: common/tool/actions.cpp:715
 msgid "Zoom In at Cursor"
 msgstr "ซูมเข้าที่เคอร์เซอร์"
 
-#: common/tool/actions.cpp:705
+#: common/tool/actions.cpp:727
 msgid "Zoom Out at Cursor"
 msgstr "ซูมออกที่เคอร์เซอร์"
 
-#: common/tool/actions.cpp:711 common/widgets/mathplot.cpp:1399
+#: common/tool/actions.cpp:733 common/widgets/mathplot.cpp:1399
 #: pcbnew/dialogs/panel_setup_rules.cpp:141
 msgid "Zoom In"
 msgstr "ขยายเข้า"
 
-#: common/tool/actions.cpp:717 common/widgets/mathplot.cpp:1400
+#: common/tool/actions.cpp:739 common/widgets/mathplot.cpp:1400
 #: pcbnew/dialogs/panel_setup_rules.cpp:142
 msgid "Zoom Out"
 msgstr "ย่อออก"
 
-#: common/tool/actions.cpp:723
+#: common/tool/actions.cpp:745
 #, fuzzy
 msgid "Zoom In Horizontally"
 msgstr "กลับกระจกตามแนวนอน"
 
-#: common/tool/actions.cpp:724
+#: common/tool/actions.cpp:746
 #, fuzzy
 msgid "Zoom in horizontally the plot area"
 msgstr "กลับกระจกตามแนวนอน"
 
-#: common/tool/actions.cpp:730
+#: common/tool/actions.cpp:752
 #, fuzzy
 msgid "Zoom Out Horizontally"
 msgstr "กลับกระจกตามแนวนอน"
 
-#: common/tool/actions.cpp:731
+#: common/tool/actions.cpp:753
 #, fuzzy
 msgid "Zoom out horizontally the plot area"
 msgstr "กลับกระจกตามแนวนอน"
 
-#: common/tool/actions.cpp:737
+#: common/tool/actions.cpp:759
 #, fuzzy
 msgid "Zoom In Vertically"
 msgstr "กลับกระจกในแนวตั้ง"
 
-#: common/tool/actions.cpp:738
+#: common/tool/actions.cpp:760
 #, fuzzy
 msgid "Zoom in vertically the plot area"
 msgstr "กลับกระจกในแนวตั้ง"
 
-#: common/tool/actions.cpp:744
+#: common/tool/actions.cpp:766
 #, fuzzy
 msgid "Zoom Out Vertically"
 msgstr "กลับกระจกในแนวตั้ง"
 
-#: common/tool/actions.cpp:745
+#: common/tool/actions.cpp:767
 #, fuzzy
 msgid "Zoom out vertically the plot area"
 msgstr "กลับกระจกในแนวตั้ง"
 
-#: common/tool/actions.cpp:753 common/widgets/mathplot.cpp:1401
+#: common/tool/actions.cpp:775 common/widgets/mathplot.cpp:1401
 msgid "Center on Cursor"
 msgstr "ศูนย์กลางบนเคอร์เซอร์"
 
-#: common/tool/actions.cpp:761 common/widgets/search_pane.cpp:46
+#: common/tool/actions.cpp:783 common/widgets/search_pane.cpp:46
 msgid "Zoom to Selection"
 msgstr "ซูมที่การเลือก"
 
-#: common/tool/actions.cpp:769 common/widgets/mathplot.cpp:1394
+#: common/tool/actions.cpp:791 common/widgets/mathplot.cpp:1394
 #, fuzzy
 msgid "Undo Last Zoom"
 msgstr "ยกเลิกบางส่วนช่วงสุดท้าย"
 
-#: common/tool/actions.cpp:770 common/widgets/mathplot.cpp:1395
+#: common/tool/actions.cpp:792 common/widgets/mathplot.cpp:1395
 msgid "Return zoom to level prior to last zoom action"
 msgstr ""
 
-#: common/tool/actions.cpp:776 common/widgets/mathplot.cpp:1396
+#: common/tool/actions.cpp:798 common/widgets/mathplot.cpp:1396
 #, fuzzy
 msgid "Redo Last Zoom"
 msgstr "ทำการแก้ไขล่าสุดอีกครั้ง"
 
-#: common/tool/actions.cpp:777 common/widgets/mathplot.cpp:1397
+#: common/tool/actions.cpp:799 common/widgets/mathplot.cpp:1397
 msgid "Return zoom to level prior to last zoom undo"
 msgstr ""
 
-#: common/tool/actions.cpp:792
+#: common/tool/actions.cpp:814
 #, fuzzy
 msgid "Pan to Center Selected Objects"
 msgstr "ลบชิ้นส่วนที่เลือก"
 
-#: common/tool/actions.cpp:799
+#: common/tool/actions.cpp:821
 msgid "Cursor Up"
 msgstr "เลื่อนเคอร์เซอร์ขึ้น"
 
-#: common/tool/actions.cpp:808
+#: common/tool/actions.cpp:830
 msgid "Cursor Down"
 msgstr "เลื่อนเคอร์เซอร์ลง"
 
-#: common/tool/actions.cpp:817
+#: common/tool/actions.cpp:839
 msgid "Cursor Left"
 msgstr "เลื่อนเคอร์เซอร์ซ้าย"
 
-#: common/tool/actions.cpp:826
+#: common/tool/actions.cpp:848
 msgid "Cursor Right"
 msgstr "เลื่อนเคอร์เซอร์ขวา"
 
-#: common/tool/actions.cpp:836
+#: common/tool/actions.cpp:858
 msgid "Cursor Up Fast"
 msgstr "เลื่อนเคอร์เซอร์ขึ้นเร็ว"
 
-#: common/tool/actions.cpp:845
+#: common/tool/actions.cpp:867
 msgid "Cursor Down Fast"
 msgstr "เลื่อนเคอร์เซอร์ลงเร็ว"
 
-#: common/tool/actions.cpp:854
+#: common/tool/actions.cpp:876
 msgid "Cursor Left Fast"
 msgstr "เลื่อนเคอร์เซอร์ซ้ายเร็ว"
 
-#: common/tool/actions.cpp:863
+#: common/tool/actions.cpp:885
 msgid "Cursor Right Fast"
 msgstr "เลื่อนเคอร์เซอร์ขวาเร็ว"
 
-#: common/tool/actions.cpp:873 pcbnew/dialogs/panel_edit_options_base.cpp:135
+#: common/tool/actions.cpp:895 pcbnew/dialogs/panel_edit_options_base.cpp:135
 #: pcbnew/dialogs/panel_edit_options_base.cpp:203
 msgid "Click"
 msgstr "คลิก"
 
-#: common/tool/actions.cpp:874
+#: common/tool/actions.cpp:896
 msgid "Performs left mouse button click"
 msgstr "ดำเนินการตามคลิกเมาส์ซ้าย"
 
-#: common/tool/actions.cpp:884
+#: common/tool/actions.cpp:906
 msgid "Double-click"
 msgstr "ดับเบิ้ลคลิก"
 
-#: common/tool/actions.cpp:885
+#: common/tool/actions.cpp:907
 msgid "Performs left mouse button double-click"
 msgstr "ดำเนินการดับเบิ้ลคลิกเมาส์ซ้าย"
 
-#: common/tool/actions.cpp:898
+#: common/tool/actions.cpp:920
 msgid "Pin Library"
 msgstr "ไลบรารีขา"
 
-#: common/tool/actions.cpp:899
+#: common/tool/actions.cpp:921
 msgid "Keep the library at the top of the list"
 msgstr "ให้ไลบรารีอยู่บนสุดของรายการ"
 
-#: common/tool/actions.cpp:904
+#: common/tool/actions.cpp:926
 msgid "Unpin Library"
 msgstr "ไลบรารีอันพิน"
 
-#: common/tool/actions.cpp:905
+#: common/tool/actions.cpp:927
 msgid "No longer keep the library at the top of the list"
 msgstr "ไม่ต้องวางไลบรารีบนสุดของรายการ"
 
-#: common/tool/actions.cpp:910
+#: common/tool/actions.cpp:932
 #, fuzzy
 msgid "Library Tree"
 msgstr "ไลบรารีอ้างอิงใหม่"
 
-#: common/tool/actions.cpp:917
+#: common/tool/actions.cpp:939
 #, fuzzy
 msgid "Hide Library Tree"
 msgstr "ไลบรารีอ้างอิงใหม่"
 
-#: common/tool/actions.cpp:923
+#: common/tool/actions.cpp:945
 #, fuzzy
 msgid "Show Side Panel"
 msgstr "แสดงขาที่ซ่อน"
 
-#: common/tool/actions.cpp:928
+#: common/tool/actions.cpp:950
 #, fuzzy
 msgid "Show Console Panel"
 msgstr "แสดงหน้าต่างคอนโซล"
 
-#: common/tool/actions.cpp:933
+#: common/tool/actions.cpp:955
 #, fuzzy
 msgid "Focus Library Tree Search Field"
 msgstr "ย้ายจุดยึดชื่ออ้างอิงฟุ้ทพรินท์"
 
-#: common/tool/actions.cpp:941
+#: common/tool/actions.cpp:963
 msgid "Pan Up"
 msgstr "เลื่อนขึ้น"
 
-#: common/tool/actions.cpp:949
+#: common/tool/actions.cpp:971
 msgid "Pan Down"
 msgstr "เลื่อนลง"
 
-#: common/tool/actions.cpp:957
+#: common/tool/actions.cpp:979
 msgid "Pan Left"
 msgstr "เลื่อนซ้าย"
 
-#: common/tool/actions.cpp:965
+#: common/tool/actions.cpp:987
 msgid "Pan Right"
 msgstr "เลื่อนขวา"
 
-#: common/tool/actions.cpp:975
+#: common/tool/actions.cpp:997
 msgid "Switch to Fast Grid 1"
 msgstr "เปลี่ยนไปที่กริดเร็ว 1"
 
-#: common/tool/actions.cpp:982
+#: common/tool/actions.cpp:1004
 msgid "Switch to Fast Grid 2"
 msgstr "เปลี่ยนไปที่กริดเร็ว 2"
 
-#: common/tool/actions.cpp:989
+#: common/tool/actions.cpp:1011
 #, fuzzy
 msgid "Cycle Fast Grid"
 msgstr "เปลี่ยนไปที่กริดเร็ว 1"
 
-#: common/tool/actions.cpp:996
+#: common/tool/actions.cpp:1018
 msgid "Switch to Next Grid"
 msgstr "เปลี่ยนไปกริดถัดไป"
 
-#: common/tool/actions.cpp:1003
+#: common/tool/actions.cpp:1025
 msgid "Switch to Previous Grid"
 msgstr "เปลี่ยนกลับไปกริดก่อนหน้า"
 
-#: common/tool/actions.cpp:1009 common/tool/common_tools.cpp:630
+#: common/tool/actions.cpp:1031 common/tool/common_tools.cpp:630
 msgid "Grid Origin"
 msgstr "จุดกำเนิดกริด"
 
-#: common/tool/actions.cpp:1010
+#: common/tool/actions.cpp:1032
 #, fuzzy
 msgid "Place the grid origin point"
 msgstr "ตั้งจุดกำเนิดของกริด"
 
-#: common/tool/actions.cpp:1019
+#: common/tool/actions.cpp:1041
 msgid "Reset Grid Origin"
 msgstr "ล้างจุดกำเนิดกริด"
 
-#: common/tool/actions.cpp:1029
+#: common/tool/actions.cpp:1051
 msgid "Show Grid"
 msgstr "แสดงกริด"
 
-#: common/tool/actions.cpp:1030
+#: common/tool/actions.cpp:1052
 msgid "Display background grid in the edit window"
 msgstr "แสดงจุดกริดบนพื้นหลังในหน้าต่างแก้ไข"
 
-#: common/tool/actions.cpp:1039
+#: common/tool/actions.cpp:1061
 msgid "Enables item-specific grids that override the current grid"
 msgstr ""
 
-#: common/tool/actions.cpp:1047
+#: common/tool/actions.cpp:1069
 #, fuzzy
 msgid "Edit grid definitions"
 msgstr "กำหนดวัดขนาดของกริด"
 
-#: common/tool/actions.cpp:1053
+#: common/tool/actions.cpp:1075
 #, fuzzy
 msgid "Grid Origin..."
 msgstr "จุดกำเนิดกริด"
 
-#: common/tool/actions.cpp:1054
+#: common/tool/actions.cpp:1076
 msgid "Set the grid origin point"
 msgstr "ตั้งจุดกำเนิดของกริด"
 
-#: common/tool/actions.cpp:1069
+#: common/tool/actions.cpp:1091
 #: eeschema/import_gfx/dialog_import_gfx_sch.cpp:60
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:122
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:102
@@ -10033,7 +10066,7 @@ msgstr "ตั้งจุดกำเนิดของกริด"
 msgid "Mils"
 msgstr "มิล"
 
-#: common/tool/actions.cpp:1078
+#: common/tool/actions.cpp:1100
 #: eeschema/import_gfx/dialog_import_gfx_sch.cpp:59
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:122
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:61
@@ -10048,117 +10081,117 @@ msgstr "มิล"
 msgid "Millimeters"
 msgstr "มิลลิเมตร"
 
-#: common/tool/actions.cpp:1098
+#: common/tool/actions.cpp:1120
 #, fuzzy
 msgid "Select Columns..."
 msgstr "เลือกคอลัมน์"
 
-#: common/tool/actions.cpp:1105
+#: common/tool/actions.cpp:1127
 msgid "Switch units"
 msgstr "สลับหน่วย"
 
-#: common/tool/actions.cpp:1106
+#: common/tool/actions.cpp:1128
 msgid "Switch between imperial and metric units"
 msgstr "สลับหน่วยระหว่างอิมพีเรียลและเมตริก"
 
-#: common/tool/actions.cpp:1112
+#: common/tool/actions.cpp:1134
 msgid "Polar Coordinates"
 msgstr "พิกัดเชิงมุม"
 
-#: common/tool/actions.cpp:1113
+#: common/tool/actions.cpp:1135
 msgid "Switch between polar and cartesian coordinate systems"
 msgstr "สลับระหว่างพิกัดเชิงมุมและพิกัดเชิงเส้น"
 
-#: common/tool/actions.cpp:1122
+#: common/tool/actions.cpp:1144
 msgid "Reset Local Coordinates"
 msgstr "ล้างพิกัดเฉพาะที่"
 
-#: common/tool/actions.cpp:1129
+#: common/tool/actions.cpp:1151
 #, fuzzy
 msgid "Always Show Crosshairs"
 msgstr "แสดงกากบาทเสมอ"
 
-#: common/tool/actions.cpp:1130
+#: common/tool/actions.cpp:1152
 #, fuzzy
 msgid "Display crosshairs even when not drawing objects"
 msgstr "แสดงเส้นกากบาทแม้อยู่ในเครื่องมือเลือก"
 
-#: common/tool/actions.cpp:1136
+#: common/tool/actions.cpp:1158
 msgid "Full-Window Crosshairs"
 msgstr "กากบาทเต็มหน้าต่าง"
 
-#: common/tool/actions.cpp:1137
+#: common/tool/actions.cpp:1159
 msgid "Switch display of full-window crosshairs"
 msgstr "สลับการแสดงกากบาทเต็มหน้าต่าง"
 
-#: common/tool/actions.cpp:1145
+#: common/tool/actions.cpp:1167
 msgid "Inactive Layer View Mode"
 msgstr "โหมดเลเยอร์ไม่แอ็คทีฟ"
 
-#: common/tool/actions.cpp:1146
+#: common/tool/actions.cpp:1168
 msgid "Toggle inactive layers between normal and dimmed"
 msgstr "สลับเปิดปิดเลเยอร์ไม่ใช้ระหว่างสีปกติและสีจาง"
 
-#: common/tool/actions.cpp:1154
+#: common/tool/actions.cpp:1176
 msgid "Inactive Layer View Mode (3-state)"
 msgstr "โหมดเลเยอร์ไม่แอ็คทีฟ (3 สถานะ)"
 
-#: common/tool/actions.cpp:1155
+#: common/tool/actions.cpp:1177
 msgid "Cycle inactive layers between normal, dimmed, and hidden"
 msgstr "วนวงกลมเลเยอร์ไม่ทำงานระหว่าง ปกติ,จางและซ่อน"
 
-#: common/tool/actions.cpp:1161
+#: common/tool/actions.cpp:1183
 msgid "Draw Bounding Boxes"
 msgstr "วาดกรอบล้อมรอบ"
 
-#: common/tool/actions.cpp:1168 pcbnew/dialogs/panel_edit_options_base.cpp:140
+#: common/tool/actions.cpp:1190 pcbnew/dialogs/panel_edit_options_base.cpp:140
 #: pcbnew/dialogs/panel_edit_options_base.cpp:208
 msgid "Select item(s)"
 msgstr "เลือกชิ้นส่วน"
 
-#: common/tool/actions.cpp:1179
+#: common/tool/actions.cpp:1201
 msgid "Measure Tool"
 msgstr "เครื่องมือวัด"
 
-#: common/tool/actions.cpp:1180
+#: common/tool/actions.cpp:1202
 msgid "Interactively measure distance between points"
 msgstr "วัดระยะระหว่างจุดแบบโต้ตอบ"
 
-#: common/tool/actions.cpp:1199
+#: common/tool/actions.cpp:1221
 #, fuzzy
 msgid "Switch to Project Manager"
 msgstr "ผู้จัดการโครงการ"
 
-#: common/tool/actions.cpp:1200
+#: common/tool/actions.cpp:1222
 #, fuzzy
 msgid "Show project window"
 msgstr "แสดงหน้าต่างคอนโซล"
 
-#: common/tool/actions.cpp:1209
+#: common/tool/actions.cpp:1231
 msgid "Show 3D viewer window"
 msgstr "แสดงหน้าต่าง3มิติ"
 
-#: common/tool/actions.cpp:1215 eeschema/symbol_diff_frame.cpp:57
+#: common/tool/actions.cpp:1237 eeschema/symbol_diff_frame.cpp:57
 #: eeschema/symbol_viewer_frame.cpp:105 eeschema/symbol_viewer_frame.cpp:1114
 msgid "Symbol Library Browser"
 msgstr "แสดงไลบรารีสัญลักษณ์"
 
-#: common/tool/actions.cpp:1224 kicad/tools/kicad_manager_actions.cpp:126
+#: common/tool/actions.cpp:1246 kicad/tools/kicad_manager_actions.cpp:126
 #, fuzzy
 msgid "Create, delete and edit schematic symbols"
 msgstr "สร้าง,ลบและแก้ไขสัญลักษณ์"
 
-#: common/tool/actions.cpp:1232 pcbnew/footprint_viewer_frame.cpp:101
+#: common/tool/actions.cpp:1254 pcbnew/footprint_viewer_frame.cpp:101
 #: pcbnew/footprint_viewer_frame.cpp:1002
 msgid "Footprint Library Browser"
 msgstr "เลือกไลบรารีฟุ้ทพรินท์"
 
-#: common/tool/actions.cpp:1241
+#: common/tool/actions.cpp:1263
 #, fuzzy
 msgid "Create, delete and edit board footprints"
 msgstr "สร้าง,ลบ และแก้ไข ฟุ้ทพรินท์"
 
-#: common/tool/actions.cpp:1249 kicad/tools/kicad_manager_actions.cpp:177
+#: common/tool/actions.cpp:1271 kicad/tools/kicad_manager_actions.cpp:177
 #: pcb_calculator/pcb_calculator_frame.cpp:63
 #: pcb_calculator/pcb_calculator_frame.cpp:218
 #: pcb_calculator/pcb_calculator_frame.cpp:219
@@ -10166,142 +10199,142 @@ msgstr "สร้าง,ลบ และแก้ไข ฟุ้ทพริน
 msgid "Calculator Tools"
 msgstr "เครื่องคิดเลข"
 
-#: common/tool/actions.cpp:1250 kicad/tools/kicad_manager_actions.cpp:178
+#: common/tool/actions.cpp:1272 kicad/tools/kicad_manager_actions.cpp:178
 msgid "Run component calculations, track width calculations, etc."
 msgstr "เรียกใช้การคำนวณอุปกรณ์ การคำนวณความกว้างของแทร็ก ฯลฯ"
 
-#: common/tool/actions.cpp:1259
+#: common/tool/actions.cpp:1281
 #, fuzzy
 msgid "Show/hide the properties manager"
 msgstr "แสดง/ซ่อนตัวจัดการลักษณะที่ปรากฏ"
 
-#: common/tool/actions.cpp:1268
+#: common/tool/actions.cpp:1290
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:102
 #: eeschema/fields_grid_table.cpp:1088
 msgid "Show Datasheet"
 msgstr "แสดงดาต้าชีต"
 
-#: common/tool/actions.cpp:1269
+#: common/tool/actions.cpp:1291
 #, fuzzy
 msgid "Open the datasheet in a browser"
 msgstr "เปิดแผ่นข้อมูลในเบราว์เซอร์"
 
-#: common/tool/actions.cpp:1277
+#: common/tool/actions.cpp:1299
 msgid "Update PCB from Schematic..."
 msgstr "ปรับปรุงพีซีบีจากวงจร…"
 
-#: common/tool/actions.cpp:1278
+#: common/tool/actions.cpp:1300
 msgid "Update PCB with changes made to schematic"
 msgstr "ปรับปรุงพีซีบีด้วยการเปลี่ยนแปลงจากวงจร"
 
-#: common/tool/actions.cpp:1284
+#: common/tool/actions.cpp:1306
 msgid "Update Schematic from PCB..."
 msgstr "ปรับปรุงวงจรจากพีซีบี…"
 
-#: common/tool/actions.cpp:1285
+#: common/tool/actions.cpp:1307
 msgid "Update schematic with changes made to PCB"
 msgstr "ปรับปรุงวงจรด้วยการเปลี่ยนแปลงที่พีซีบี"
 
-#: common/tool/actions.cpp:1292
+#: common/tool/actions.cpp:1314
 msgid "Preferences..."
 msgstr "ตั้งความชอบ…"
 
-#: common/tool/actions.cpp:1293
+#: common/tool/actions.cpp:1315
 msgid "Show preferences for all open tools"
 msgstr "แสดงตั้งความชอบเครื่องมือทั้งหมด"
 
-#: common/tool/actions.cpp:1300
+#: common/tool/actions.cpp:1322
 #: pcbnew/dialogs/panel_fp_properties_3d_model_base.cpp:78
 msgid "Configure Paths..."
 msgstr "ปรับแต่งเส้นทาง…"
 
-#: common/tool/actions.cpp:1301
+#: common/tool/actions.cpp:1323
 msgid "Edit path configuration environment variables"
 msgstr "แก้ไขเส้นทางปรับแต่งตัวแปรสภาพแวดล้อม"
 
-#: common/tool/actions.cpp:1307
+#: common/tool/actions.cpp:1329
 msgid "Manage Symbol Libraries..."
 msgstr "จัดการไลบรารีสัญลักษณ์…"
 
-#: common/tool/actions.cpp:1308
+#: common/tool/actions.cpp:1330
 msgid "Edit the global and project symbol library lists"
 msgstr "แก้ไขไลบรารีสัญลักษณ์ทั้งส่วนกลางและของโครงการ"
 
-#: common/tool/actions.cpp:1314
+#: common/tool/actions.cpp:1336
 msgid "Manage Footprint Libraries..."
 msgstr "จัดการไลบรารีฟุ้ทพรินท์…"
 
-#: common/tool/actions.cpp:1315
+#: common/tool/actions.cpp:1337
 msgid "Edit the global and project footprint library lists"
 msgstr "แก้ไขรายการไลบรารีฟุ้ทพรินท์ทั้งระดับส่วนกลางและระดับโครงการ"
 
-#: common/tool/actions.cpp:1321
+#: common/tool/actions.cpp:1343
 #, fuzzy
 msgid "Manage Design Block Libraries..."
 msgstr "จัดการไลบรารีสัญลักษณ์…"
 
-#: common/tool/actions.cpp:1322
+#: common/tool/actions.cpp:1344
 #, fuzzy
 msgid "Edit the global and project design block library lists"
 msgstr "แก้ไขไลบรารีสัญลักษณ์ทั้งส่วนกลางและของโครงการ"
 
-#: common/tool/actions.cpp:1328
+#: common/tool/actions.cpp:1350
 msgid "Getting Started with KiCad"
 msgstr "เริ่มต้นกับ KiCad"
 
-#: common/tool/actions.cpp:1329
+#: common/tool/actions.cpp:1351
 msgid "Open \"Getting Started in KiCad\" guide for beginners"
 msgstr "เปิดคู่มือสำหรับผู้เริ่มต้น \"เริ่มต้นกับ KiCad\""
 
-#: common/tool/actions.cpp:1335
+#: common/tool/actions.cpp:1357
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:330
 #: pcb_calculator/calculator_panels/panel_fusing_current_base.cpp:136
 #: pcb_calculator/calculator_panels/panel_r_calculator_base.cpp:187
 msgid "Help"
 msgstr "ช่วยเหลือ"
 
-#: common/tool/actions.cpp:1336
+#: common/tool/actions.cpp:1358
 msgid "Open product documentation in a web browser"
 msgstr "เปิดเอกสารผลิตภัณฑ์ในเว็บบราวซ์เซอร์"
 
-#: common/tool/actions.cpp:1342
+#: common/tool/actions.cpp:1364
 #, fuzzy
 msgid "About KiCad"
 msgstr "เกี่ยวกับ KiCad(&A)"
 
-#: common/tool/actions.cpp:1351
+#: common/tool/actions.cpp:1373
 msgid "List Hotkeys..."
 msgstr "รายการคีย์ร้อน…"
 
-#: common/tool/actions.cpp:1352
+#: common/tool/actions.cpp:1374
 msgid "Displays current hotkeys table and corresponding commands"
 msgstr "แสดงตารางคีย์ร้อนปัจจุบันและคําสั่งที่สอดคล้องกัน"
 
-#: common/tool/actions.cpp:1358
+#: common/tool/actions.cpp:1380
 msgid "Get Involved"
 msgstr "ต้องการมีส่วนร่วม"
 
-#: common/tool/actions.cpp:1359
+#: common/tool/actions.cpp:1381
 msgid "Open \"Contribute to KiCad\" in a web browser"
 msgstr "เปิดหน้า \"Contribute to KiCad\" ในเว็บบราวส์เซอร์"
 
-#: common/tool/actions.cpp:1366
+#: common/tool/actions.cpp:1388
 msgid "Open \"Donate to KiCad\" in a web browser"
 msgstr "เปิดหน้า \"Donate to KiCad\" ให้เว็บบราวส์เซอร์"
 
-#: common/tool/actions.cpp:1371
+#: common/tool/actions.cpp:1393
 msgid "Report Bug"
 msgstr "รายงานซอฟต์แวร์ผิดพลาด"
 
-#: common/tool/actions.cpp:1384
+#: common/tool/actions.cpp:1406
 msgid "Refresh Plugins"
 msgstr "รีเฟรชปลั๊กอิน"
 
-#: common/tool/actions.cpp:1385
+#: common/tool/actions.cpp:1407
 msgid "Reload all python plugins and refresh plugin menus"
 msgstr "อ่านใหม่ปลั๊กอินไพธอนและรีเฟรชเมนูปลั๊กอิน"
 
-#: common/tool/actions.cpp:1393
+#: common/tool/actions.cpp:1415
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:73
 #: eeschema/dialogs/dialog_schematic_setup.cpp:136
 #: pcbnew/dialogs/dialog_board_setup.cpp:241
@@ -10311,27 +10344,27 @@ msgstr "อ่านใหม่ปลั๊กอินไพธอนและ
 msgid "Embedded Files"
 msgstr "เลือกไฟล์"
 
-#: common/tool/actions.cpp:1394
+#: common/tool/actions.cpp:1416
 #, fuzzy
 msgid "Manage embedded files"
 msgstr "เปลี่ยนชื่อไฟล์"
 
-#: common/tool/actions.cpp:1399
+#: common/tool/actions.cpp:1421
 #, fuzzy
 msgid "Remove File"
 msgstr "เปลี่ยนชื่อไฟล์"
 
-#: common/tool/actions.cpp:1400
+#: common/tool/actions.cpp:1422
 #, fuzzy
 msgid "Remove an embedded file"
 msgstr "ลบเลเยอร์ที่ตรงกันทั้งหมด"
 
-#: common/tool/actions.cpp:1405
+#: common/tool/actions.cpp:1427
 #, fuzzy
 msgid "Extract File"
 msgstr "ส่งออกเป็นไฟล์"
 
-#: common/tool/actions.cpp:1406
+#: common/tool/actions.cpp:1428
 #, fuzzy
 msgid "Extract an embedded file"
 msgstr "ไฟล์ทำงานได้"
@@ -10532,7 +10565,7 @@ msgstr "ตัวเลือกสําหรับไลบรารี '%s'"
 
 #: common/widgets/design_block_pane.cpp:274 eeschema/sch_symbol.cpp:2963
 #: eeschema/widgets/search_handlers.cpp:170 pcbnew/footprint.cpp:4153
-#: pcbnew/plot_board_layers.cpp:203 pcbnew/widgets/search_handlers.cpp:124
+#: pcbnew/plot_board_layers.cpp:204 pcbnew/widgets/search_handlers.cpp:124
 #, fuzzy
 msgid "Library Description"
 msgstr "คำอธิบาย"
@@ -10587,37 +10620,37 @@ msgstr "สัญลักษณ์ '%s' มีอยู่แล้วในไ
 msgid "Overwrite existing design block?"
 msgstr "เปิดโครงการที่มี"
 
-#: common/widgets/design_block_pane.cpp:480 eeschema/sch_base_frame.cpp:287
+#: common/widgets/design_block_pane.cpp:480 eeschema/sch_base_frame.cpp:288
 #: pcbnew/footprint_libraries_utils.cpp:410
 msgid "Add the library to the global library table?"
 msgstr "เพิ่มไลบรารีลงในตารางไลบรารีส่วนกลางหรือไม่?"
 
-#: common/widgets/design_block_pane.cpp:481 eeschema/sch_base_frame.cpp:288
+#: common/widgets/design_block_pane.cpp:481 eeschema/sch_base_frame.cpp:289
 #: pcbnew/footprint_libraries_utils.cpp:411
 msgid "Add To Global Library Table"
 msgstr "เพิ่มลงในตารางไลบรารีส่วนกลาง"
 
 #: common/widgets/design_block_pane.cpp:491
-#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:101
-#: eeschema/sch_base_frame.cpp:298 eeschema/widgets/search_handlers.cpp:475
+#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:111
+#: eeschema/sch_base_frame.cpp:299 eeschema/widgets/search_handlers.cpp:475
 #: pcbnew/footprint_libraries_utils.cpp:421
 msgid "Global"
 msgstr "ส่วนกลาง"
 
 #: common/widgets/design_block_pane.cpp:492
 #: eeschema/dialogs/dialog_schematic_setup.cpp:101
-#: eeschema/sch_base_frame.cpp:299
+#: eeschema/sch_base_frame.cpp:300
 #: pcbnew/dialogs/dialog_board_statistics.cpp:677
 #: pcbnew/footprint_libraries_utils.cpp:422
 msgid "Project"
 msgstr "โครงการ"
 
-#: common/widgets/design_block_pane.cpp:494 eeschema/sch_base_frame.cpp:301
+#: common/widgets/design_block_pane.cpp:494 eeschema/sch_base_frame.cpp:302
 #: pcbnew/footprint_libraries_utils.cpp:424
 msgid "Choose the Library Table to add the library to:"
 msgstr "เลือกตารางไลบรารีเพื่อเพิ่มไลบรารีเข้าไป:"
 
-#: common/widgets/design_block_pane.cpp:495 eeschema/sch_base_frame.cpp:302
+#: common/widgets/design_block_pane.cpp:495 eeschema/sch_base_frame.cpp:303
 #: pcbnew/footprint_libraries_utils.cpp:425
 msgid "Add To Library Table"
 msgstr "เพิ่มลงในตารางไลบรารี"
@@ -10638,7 +10671,7 @@ msgid "Board"
 msgstr "บอร์ด"
 
 #: common/widgets/footprint_diff_widget.cpp:42 cvpcb/cvpcb_mainframe.cpp:818
-#: eeschema/sch_base_frame.cpp:601 eeschema/sch_symbol.cpp:1988
+#: eeschema/sch_base_frame.cpp:618 eeschema/sch_symbol.cpp:1988
 #: eeschema/sch_symbol.cpp:1992 eeschema/sch_symbol.cpp:2028
 #: eeschema/widgets/symbol_diff_widget.cpp:45 pcbnew/footprint.cpp:1691
 msgid "Library"
@@ -11788,34 +11821,41 @@ msgstr ""
 "%s\n"
 "ไม่พบ. สคริปต์ไม่พร้อมใช้งาน"
 
-#: eeschema/connection_graph.cpp:3350
+#: eeschema/connection_graph.cpp:3353
 #, c-format
 msgid ""
 "Both %s and %s are attached to the same items; %s will be used in the netlist"
 msgstr "ทั้ง %s และ %s ติดเข้ากับชิ้นส่วนเดียวกัน; %s จะถูกใช้ในรายการเน็ต"
 
-#: eeschema/connection_graph.cpp:3588
+#: eeschema/connection_graph.cpp:3591
 #, c-format
 msgid ""
 "Net %s is graphically connected to bus %s but is not a member of that bus"
 msgstr "เน็ต %s เชื่อมต่อกับบัสแบบกราฟิก %s แต่ไม่ได้เป็นสมาชิกของบัส"
 
-#: eeschema/connection_graph.cpp:3893 eeschema/erc/erc_item.cpp:229
+#: eeschema/connection_graph.cpp:3896 eeschema/erc/erc_item.cpp:229
 #, fuzzy
 msgid "Unconnected wire endpoint"
 msgstr "ไม่เชื่อมต่อ"
 
-#: eeschema/connection_graph.cpp:3918
+#: eeschema/connection_graph.cpp:3921
 #, fuzzy
 msgid "Unconnected wire to bus entry"
 msgstr "ไม่เชื่อมต่อ"
 
-#: eeschema/connection_graph.cpp:4293
+#: eeschema/connection_graph.cpp:4255
+#, fuzzy, c-format
+msgid ""
+"Hierarchical label \"%s\" in root sheet cannot be connected to non-existent "
+"parent sheet"
+msgstr "ป้ายชื่อตามลำดับขั้น %s ไม่มีชีตพินที่ตรงกันในแผ่นวงจรต้นกำเนิด"
+
+#: eeschema/connection_graph.cpp:4320
 #, c-format
 msgid "Sheet pin %s has no matching hierarchical label inside the sheet"
 msgstr "ชีตพิน %s ไม่มีป้ายชื่อลำดับขั้นที่ตรงกันภายในแผ่นวงจร"
 
-#: eeschema/connection_graph.cpp:4311
+#: eeschema/connection_graph.cpp:4337
 #, c-format
 msgid "Hierarchical label %s has no matching sheet pin in the parent sheet"
 msgstr "ป้ายชื่อตามลำดับขั้น %s ไม่มีชีตพินที่ตรงกันในแผ่นวงจรต้นกำเนิด"
@@ -12756,8 +12796,8 @@ msgstr "ทดสอบการทํางาน..."
 #: eeschema/dialogs/dialog_tablecell_properties_base.cpp:266
 #: eeschema/dialogs/dialog_tablecell_properties_base.cpp:290
 #: eeschema/dialogs/dialog_tablecell_properties_base.cpp:312
-#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:187
-#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:253
+#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:197
+#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:263
 #: eeschema/dialogs/panel_setup_buses_base.cpp:150
 #: eeschema/dialogs/panel_setup_buses_base.cpp:154
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:155
@@ -13592,7 +13632,7 @@ msgstr "เรียงตาม V"
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:67
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:64
 #: eeschema/fields_grid_table.cpp:485 eeschema/sch_field.cpp:1000
-#: eeschema/sch_field.cpp:1618 eeschema/sch_label.cpp:1244
+#: eeschema/sch_field.cpp:1630 eeschema/sch_label.cpp:1244
 #: eeschema/sch_tablecell.cpp:125 eeschema/sch_text.cpp:562
 #: eeschema/sch_text.cpp:699 eeschema/sch_textbox.cpp:467
 #: eeschema/sch_textbox.cpp:628 pcbnew/tools/board_inspection_tool.cpp:1442
@@ -13816,7 +13856,7 @@ msgstr "กลุ่มที่เลือก"
 msgid "Filter by unit:"
 msgstr "กรองโดยหน่วย:"
 
-#: eeschema/dialogs/dialog_lib_edit_pin_table_base.h:83
+#: eeschema/dialogs/dialog_lib_edit_pin_table_base.h:82
 msgid "Pin Table"
 msgstr "ตารางขา"
 
@@ -15779,7 +15819,7 @@ msgstr "พารามิเตอร์"
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:83
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2279 pcbnew/pcb_marker.cpp:199
 #: pcbnew/pcb_shape.cpp:718 pcbnew/pcb_text.cpp:281 pcbnew/pcb_track.cpp:1795
-#: pcbnew/pcb_track.cpp:1897 pcbnew/tools/pcb_control.cpp:2313
+#: pcbnew/pcb_track.cpp:1897 pcbnew/tools/pcb_control.cpp:2322
 #: pcbnew/widgets/search_handlers.cpp:269 pcbnew/zone.cpp:846
 msgid "Type"
 msgstr "ประเภท"
@@ -16893,53 +16933,75 @@ msgid "45 deg Angle"
 msgstr "มุม 45 องศา"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:46
+#: pcbnew/dialogs/panel_edit_options_base.cpp:56
+#, fuzzy
+msgid "Arc editing mode:"
+msgstr "โหมดตําแหน่ง:"
+
+#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:50
+#: pcbnew/dialogs/panel_edit_options_base.cpp:63
+msgid "Keep center, adjust radius"
+msgstr ""
+
+#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:50
+#: pcbnew/dialogs/panel_edit_options_base.cpp:63
+msgid "Keep endpoints or direction of starting point"
+msgstr ""
+
+#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:50
+#: pcbnew/dialogs/panel_edit_options_base.cpp:63
+#, fuzzy
+msgid "Keep center and radius, adjust endpoints"
+msgstr "ใส่รัศมีพอกมุม:"
+
+#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:56
 msgid "Mouse drag performs Drag (G) operation"
 msgstr "ใช้เมาส์กดค้างลาก จะทำคำสั่งลาก(G)"
 
-#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:47
+#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:57
 msgid "If unchecked, mouse drag will perform move (M) operation"
 msgstr "ถ้าไม่ติก, คลิกลากเมาส์ จะทำคำสั่งย้าย(M)"
 
-#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:51
+#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:61
 msgid "Automatically start wires on unconnected pins"
 msgstr "เริ่มวางเส้นลวดอัตโนมัติบนขาที่ไม่เชื่อมต่อ"
 
-#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:52
+#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:62
 msgid ""
 "When enabled, you can start wiring by clicking on unconnected pins even when "
 "the wire tool is not active"
 msgstr ""
 "เมื่อเปิดใช้งาน,คุณเริ่มวางเส้นลวดโดยคลิกบนขาที่ไม่เชื่อมต่อ ถึงแม้ว่าจะไม่เลือกคำสั่งวางเส้นลวดไว้"
 
-#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:56
+#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:66
 #: pcbnew/dialogs/panel_edit_options_base.cpp:414
 msgid "<ESC> clears net highlighting"
 msgstr "<ESC> ล้างการเน้นสีเน็ต"
 
-#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:57
+#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:67
 msgid ""
 "First <ESC> in selection tool clears selection, next clears net highlighting"
 msgstr "อันดับแรกกด <ESC> จะล้างการเลือก ถัดไปจะล้างการเน้นของเน็ต"
 
-#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:67
+#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:77
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:20
 msgid "Defaults for New Objects"
 msgstr "ค่าปริยายสำหรับวัตถุใหม่"
 
-#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:79
+#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:89
 msgid "Sheet border:"
 msgstr "ขอบนอกกระดาษ:"
 
-#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:88
+#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:98
 msgid "Sheet background:"
 msgstr "สีพื้นหลังชีต:"
 
-#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:97
+#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:107
 #, fuzzy
 msgid "Power Symbols:"
 msgstr "สัญลักษณ์เพาเวอร์"
 
-#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:105
+#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:115
 msgid ""
 "Select the assigned type of new power symbol.\n"
 "Default will follow the symbol definition.\n"
@@ -16947,13 +17009,13 @@ msgid ""
 "Local will convert new power symbols to a local power symbols."
 msgstr ""
 
-#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:134
-#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:192
+#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:144
+#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:202
 #: pcbnew/dialogs/panel_edit_options_base.cpp:116
 msgid "Left Click Mouse Commands"
 msgstr "คำสั่งเมื่อคลิกเมาส์ซ้าย"
 
-#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:144
+#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:154
 #: pcbnew/dialogs/panel_edit_options_base.cpp:125
 msgid ""
 "Left click (and drag) actions depend on 2 modifier keys:\n"
@@ -16962,42 +17024,42 @@ msgstr ""
 "คลิกซ้าย(และลาก) การกระทำจะแปรไปตาม2คีย์ร่วม:\n"
 "Shift และ Ctrl"
 
-#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:153
-#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:211
+#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:163
+#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:221
 #: pcbnew/dialogs/panel_edit_options_base.cpp:145
 #: pcbnew/dialogs/panel_edit_options_base.cpp:213
 msgid "Long Click"
 msgstr "คลิกค้างนาน"
 
-#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:157
-#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:215
-#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:239
+#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:167
+#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:225
+#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:249
 #: pcbnew/dialogs/panel_edit_options_base.cpp:150
 #: pcbnew/dialogs/panel_edit_options_base.cpp:218
 #: pcbnew/dialogs/panel_edit_options_base.cpp:259
 msgid "Clarify selection from menu"
 msgstr "เมนูแก้ไขการเลือกกำกวม"
 
-#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:165
-#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:223
+#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:175
+#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:233
 #: pcbnew/dialogs/panel_edit_options_base.cpp:160
 #: pcbnew/dialogs/panel_edit_options_base.cpp:228
 msgid "Add item(s) to selection"
 msgstr "เพิ่มชิ้นส่วนเข้าไปการเลือก"
 
-#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:169
+#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:179
 #: pcbnew/dialogs/panel_edit_options_base.cpp:165
 msgid "Ctrl+Shift"
 msgstr "Ctrl+Shift"
 
-#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:173
-#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:231
+#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:183
+#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:241
 #: pcbnew/dialogs/panel_edit_options_base.cpp:170
 #: pcbnew/dialogs/panel_edit_options_base.cpp:238
 msgid "Remove item(s) from selection"
 msgstr "นำชิ้นส่วนออกจากการเลือก"
 
-#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:202
+#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:212
 #: pcbnew/dialogs/panel_edit_options_base.cpp:193
 msgid ""
 "Left click (and drag) actions depend on 3 modifier keys:\n"
@@ -17006,54 +17068,54 @@ msgstr ""
 "คลิกซ้าย(และลาก) การกระทำจะแปรไปตาม3คีย์ร่วม:\n"
 "Alt, Shift และ Cmd"
 
-#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:227
+#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:237
 #: pcbnew/dialogs/panel_edit_options_base.cpp:233
 msgid "Shift+Cmd"
 msgstr "Shift+Cmd"
 
-#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:263
+#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:273
 msgid "Symbol Field Automatic Placement"
 msgstr "ช่องสัญลักษณ์จัดวางอัตโนมัติ"
 
-#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:273
+#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:283
 msgid "A&utomatically place symbol fields"
 msgstr "จัดวางช่องสัญลักษณ์อัตโนมัติ(&u)"
 
-#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:276
+#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:286
 msgid "A&llow field autoplace to change justification"
 msgstr "ยอมให้ช่องวางอัตโนมัติเปลี่ยนการจัดเรียง(&l)"
 
-#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:279
+#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:289
 msgid "Al&ways align autoplaced fields to the 50 mil grid"
 msgstr "จัดเรียงช่องวางอัตโนมัติให้อยู่บนกริด50มิลเสมอ(&w)"
 
-#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:288
+#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:298
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:98
 msgid "Repeated Items"
 msgstr "ชิ้นส่วนซ้ำ"
 
-#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:303
+#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:313
 msgid "&Horizontal pitch:"
 msgstr "ระยะแนวนอน(&H):"
 
-#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:314
+#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:324
 msgid "&Vertical pitch:"
 msgstr "ระยะแนวตั้ง(&V):"
 
-#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:325
+#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:335
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:121
 msgid "Label increment:"
 msgstr "การเพิ่มของป้ายชื่อ:"
 
-#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:344
+#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:354
 msgid "Dialog Preferences"
 msgstr "ความชอบกรอบสนทนา"
 
-#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:354
+#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:364
 msgid "Show footprint previews in Symbol Chooser"
 msgstr "แสดงพรีวิวฟุ้ทพรินท์ในตัวเลือกสัญลักษณ์"
 
-#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:357
+#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:367
 #, fuzzy
 msgid "Never show Rescue Symbols tool"
 msgstr "สัญลักษณ์กู้ภัย"
@@ -17786,7 +17848,7 @@ msgstr "ตัวนําทางลำดับขั้น"
 
 #: eeschema/eeschema_settings.cpp:115 eeschema/sch_edit_frame.cpp:2207
 #: pcbnew/footprint_edit_frame.cpp:249 pcbnew/footprint_edit_frame.cpp:982
-#: pcbnew/pcb_edit_frame.cpp:342 pcbnew/pcb_edit_frame.cpp:1790
+#: pcbnew/pcb_edit_frame.cpp:342 pcbnew/pcb_edit_frame.cpp:1797
 msgid "Selection Filter"
 msgstr "ตัวกรองการเลือก"
 
@@ -18293,12 +18355,12 @@ msgstr "แนวนอน"
 msgid "Vertical"
 msgstr "แนวตั้ง"
 
-#: eeschema/fields_grid_table.cpp:491 eeschema/sch_field.cpp:1608
+#: eeschema/fields_grid_table.cpp:491 eeschema/sch_field.cpp:1620
 #, fuzzy
 msgid "Allow Autoplacement"
 msgstr "ยอมให้วางตำแหน่งอัตโนมัติ"
 
-#: eeschema/fields_grid_table.cpp:492 eeschema/sch_field.cpp:1647
+#: eeschema/fields_grid_table.cpp:492 eeschema/sch_field.cpp:1659
 #: eeschema/sch_item.cpp:571 eeschema/sch_item.cpp:623
 msgid "Private"
 msgstr "ส่วนตัว"
@@ -18608,7 +18670,7 @@ msgstr "ต้องทำการลบไฟล์ด้านบน ด้�
 msgid "Derived from"
 msgstr "ได้มาจาก"
 
-#: eeschema/generate_alias_info.cpp:82 eeschema/sch_base_frame.cpp:85
+#: eeschema/generate_alias_info.cpp:82 eeschema/sch_base_frame.cpp:86
 #: eeschema/symbol_editor/symbol_editor.cpp:170
 #: eeschema/symbol_editor/symbol_editor.cpp:236
 #: eeschema/symbol_library_manager.cpp:459
@@ -19250,7 +19312,7 @@ msgstr "ไม่พบไลบรารีต่อไปนี้:"
 msgid "Error loading the symbol library table '%s'."
 msgstr "ผิดพลาดอ่านตารางไลบรารีสัญลักษณ์ '%s'"
 
-#: eeschema/sch_base_frame.cpp:252
+#: eeschema/sch_base_frame.cpp:253
 #, c-format
 msgid ""
 "Error saving global symbol library table:\n"
@@ -19259,7 +19321,7 @@ msgstr ""
 "ข้อผิดพลาดในการบันทึกตารางไลบรารีสัญลักษณ์ส่วนกลาง:\n"
 "%s"
 
-#: eeschema/sch_base_frame.cpp:268
+#: eeschema/sch_base_frame.cpp:269
 #, c-format
 msgid ""
 "Error saving project-specific symbol library table:\n"
@@ -19268,15 +19330,15 @@ msgstr ""
 "ผิดพลาดระหว่างบันทึกตารางไลบรารีของโครงการ:\n"
 "%s"
 
-#: eeschema/sch_base_frame.cpp:595
+#: eeschema/sch_base_frame.cpp:612
 msgid "No symbol libraries are loaded."
 msgstr "ไม่มีไลบรารีสัญลักษณ์ถูกโหลด"
 
-#: eeschema/sch_base_frame.cpp:640
+#: eeschema/sch_base_frame.cpp:657
 msgid "Select Symbol Library"
 msgstr "เลือกไลบรารีสัญลักษณ์"
 
-#: eeschema/sch_base_frame.cpp:761
+#: eeschema/sch_base_frame.cpp:778
 #, fuzzy
 msgid ""
 "The library containing the current symbol has changed.\n"
@@ -19286,7 +19348,7 @@ msgstr ""
 "คุณต้องการลบออกจากไลบรารีหรือไม่?"
 
 #: eeschema/sch_bitmap.cpp:301 eeschema/sch_group.cpp:506
-#: eeschema/sch_pin.cpp:1747 eeschema/sch_shape.cpp:542
+#: eeschema/sch_pin.cpp:1747 eeschema/sch_shape.cpp:553
 #: eeschema/sch_symbol.cpp:2920 pcbnew/board_item.cpp:406
 #: pcbnew/pcb_group.cpp:529 pcbnew/pcb_shape.cpp:991
 #: pcbnew/pcb_tablecell.cpp:190 pcbnew/pcb_track.cpp:2350 pcbnew/zone.cpp:1867
@@ -19295,7 +19357,7 @@ msgid "Position X"
 msgstr "ตำแหน่ง X"
 
 #: eeschema/sch_bitmap.cpp:306 eeschema/sch_group.cpp:507
-#: eeschema/sch_pin.cpp:1751 eeschema/sch_shape.cpp:544
+#: eeschema/sch_pin.cpp:1751 eeschema/sch_shape.cpp:555
 #: eeschema/sch_symbol.cpp:2923 pcbnew/board_item.cpp:409
 #: pcbnew/pcb_group.cpp:530 pcbnew/pcb_shape.cpp:993
 #: pcbnew/pcb_tablecell.cpp:191 pcbnew/pcb_track.cpp:2354 pcbnew/zone.cpp:1873
@@ -19338,7 +19400,7 @@ msgstr "ชนิดทางเข้าบัส"
 #: eeschema/sch_bus_entry.cpp:515 eeschema/sch_junction.cpp:304
 #: eeschema/sch_label.cpp:1268 eeschema/sch_line.cpp:926
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2318 pcbnew/pad.cpp:1331
-#: pcbnew/pcb_track.cpp:1927 pcbnew/tools/pcb_control.cpp:1999
+#: pcbnew/pcb_track.cpp:1927 pcbnew/tools/pcb_control.cpp:2008
 #: pcbnew/zone.cpp:882
 #, fuzzy
 msgid "Resolved Netclass"
@@ -19419,7 +19481,7 @@ msgstr "ไม่ได้บันทึกไฟล์วงจรใหม่
 #: eeschema/symbol_editor/symbol_editor.cpp:1669
 #: kicad/dialogs/panel_jobset.cpp:840 pagelayout_editor/pl_editor_frame.cpp:416
 #: pcbnew/footprint_edit_frame.cpp:866 pcbnew/footprint_edit_frame.cpp:906
-#: pcbnew/pcb_edit_frame.cpp:1229
+#: pcbnew/pcb_edit_frame.cpp:1236
 #, c-format
 msgid "Save changes to '%s' before closing?"
 msgstr "บันทึกการเปลี่ยนแปลงไปยัง '%s' ก่อนปิดหรือไม่?"
@@ -19456,12 +19518,12 @@ msgstr "ไม่สามารถเปิด CvPcb"
 
 #: eeschema/sch_edit_frame.cpp:1740 eeschema/sim/simulator_frame.cpp:349
 #: kicad/kicad_manager_frame.cpp:1046 pcbnew/footprint_edit_frame.cpp:1048
-#: pcbnew/pcb_edit_frame.cpp:1880
+#: pcbnew/pcb_edit_frame.cpp:1887
 msgid "[Read Only]"
 msgstr "[อ่านเท่านั้น]"
 
 #: eeschema/sch_edit_frame.cpp:1743 eeschema/sim/simulator_frame.cpp:352
-#: pcbnew/footprint_edit_frame.cpp:1057 pcbnew/pcb_edit_frame.cpp:1883
+#: pcbnew/footprint_edit_frame.cpp:1057 pcbnew/pcb_edit_frame.cpp:1890
 msgid "[Unsaved]"
 msgstr "[ยังไม่ได้บันทึก]"
 
@@ -19502,18 +19564,18 @@ msgstr "ช่องสัญลักษณ์"
 #: gerbview/gerber_draw_item.cpp:729 gerbview/gerber_draw_item.cpp:730
 #: pcbnew/board_stackup_manager/panel_board_finish_base.cpp:44
 #: pcbnew/pcb_tablecell.cpp:112 pcbnew/pcb_text.cpp:288
-#: pcbnew/pcb_textbox.cpp:473 pcbnew/tools/pcb_control.cpp:2232
-#: pcbnew/tools/pcb_control.cpp:2235 pcbnew/tools/pcb_control.cpp:2238
-#: pcbnew/tools/pcb_control.cpp:2245
+#: pcbnew/pcb_textbox.cpp:473 pcbnew/tools/pcb_control.cpp:2241
+#: pcbnew/tools/pcb_control.cpp:2244 pcbnew/tools/pcb_control.cpp:2247
+#: pcbnew/tools/pcb_control.cpp:2254
 msgid "Yes"
 msgstr "ใช่"
 
 #: eeschema/sch_field.cpp:994 eeschema/sch_pin.cpp:1178
 #: gerbview/gerber_draw_item.cpp:729 gerbview/gerber_draw_item.cpp:730
 #: pcbnew/pcb_tablecell.cpp:112 pcbnew/pcb_text.cpp:288
-#: pcbnew/pcb_textbox.cpp:473 pcbnew/tools/pcb_control.cpp:2232
-#: pcbnew/tools/pcb_control.cpp:2235 pcbnew/tools/pcb_control.cpp:2238
-#: pcbnew/tools/pcb_control.cpp:2244
+#: pcbnew/pcb_textbox.cpp:473 pcbnew/tools/pcb_control.cpp:2241
+#: pcbnew/tools/pcb_control.cpp:2244 pcbnew/tools/pcb_control.cpp:2247
+#: pcbnew/tools/pcb_control.cpp:2253
 msgid "No"
 msgstr "ไม่ใช่"
 
@@ -19525,16 +19587,16 @@ msgstr "จัดพอเหมาะตาม H"
 msgid "V Justification"
 msgstr "จัดพอเหมาะตาม V"
 
-#: eeschema/sch_field.cpp:1044
+#: eeschema/sch_field.cpp:1056
 #, c-format
 msgid "Go to Page %s (%s)"
 msgstr "ไปที่หน้า %s (%s)"
 
-#: eeschema/sch_field.cpp:1050
+#: eeschema/sch_field.cpp:1062
 msgid "Back to Previous Selected Sheet"
 msgstr "กลับไปที่วงจรที่เลือกก่อนหน้า"
 
-#: eeschema/sch_field.cpp:1605
+#: eeschema/sch_field.cpp:1617
 #, fuzzy
 msgid "Show Field Name"
 msgstr "แสดงชื่อช่อง"
@@ -20303,57 +20365,64 @@ msgstr "รหัสไลบรารีสัญลักษณ์ไม่ถ
 msgid "File at '%s' was ignored. Using previously found file at '%s' instead."
 msgstr ""
 
-#: eeschema/sch_io/ltspice/ltspice_schematic.cpp:363
+#: eeschema/sch_io/ltspice/ltspice_schematic.cpp:364
 #, c-format
 msgid "Expecting integer at line %d in file %s"
 msgstr ""
 
-#: eeschema/sch_io/ltspice/ltspice_schematic.cpp:386
+#: eeschema/sch_io/ltspice/ltspice_schematic.cpp:387
 #, c-format
 msgid "Expected data missing on line %d in file %s"
 msgstr ""
 
-#: eeschema/sch_io/ltspice/ltspice_schematic.cpp:392
+#: eeschema/sch_io/ltspice/ltspice_schematic.cpp:393
 #, c-format
 msgid "Extra data found on line %d in file %s"
 msgstr ""
 
-#: eeschema/sch_io/ltspice/ltspice_schematic.cpp:418
+#: eeschema/sch_io/ltspice/ltspice_schematic.cpp:419
 msgid "Expecting 0, 1, 2, 3 or 4"
 msgstr ""
 
-#: eeschema/sch_io/ltspice/ltspice_schematic.cpp:432
+#: eeschema/sch_io/ltspice/ltspice_schematic.cpp:433
 msgid "Expecting NORMAL or WIDE"
 msgstr ""
 
-#: eeschema/sch_io/ltspice/ltspice_schematic.cpp:450
+#: eeschema/sch_io/ltspice/ltspice_schematic.cpp:451
 msgid "Expecting I, O, B, IN, OUT or BIDIR"
 msgstr ""
 
-#: eeschema/sch_io/ltspice/ltspice_schematic.cpp:471
+#: eeschema/sch_io/ltspice/ltspice_schematic.cpp:472
 msgid "Expecting R0, R90, R18, R270, M0, M90, M180 or M270"
 msgstr ""
 
-#: eeschema/sch_io/ltspice/ltspice_schematic.cpp:494
+#: eeschema/sch_io/ltspice/ltspice_schematic.cpp:495
 msgid ""
 "Expecting LEFT, CENTER, RIGHT, TOP, BOTTOM, VLEFT, VRIGHT, VCENTER, VTOP, "
 "VBOTTOM or INVISIBLE"
 msgstr ""
 
-#: eeschema/sch_io/ltspice/ltspice_schematic.cpp:517
+#: eeschema/sch_io/ltspice/ltspice_schematic.cpp:518
 msgid ""
 "Expecting NONE, BOTTOM, TOP, LEFT, RIGHT, VBOTTOM, VTOP, VCENTER, VLEFT or "
 "VRIGHT"
 msgstr ""
 
-#: eeschema/sch_io/ltspice/ltspice_schematic.cpp:531
+#: eeschema/sch_io/ltspice/ltspice_schematic.cpp:532
 msgid "Expecting CELL or BLOCK"
 msgstr ""
 
-#: eeschema/sch_io/ltspice/ltspice_schematic.cpp:550
+#: eeschema/sch_io/ltspice/ltspice_schematic.cpp:551
 #, fuzzy, c-format
 msgid "Symbol '%s.asy' not found"
 msgstr "ไม่พบสัญลักษณ์"
+
+#: eeschema/sch_io/ltspice/sch_io_ltspice.cpp:125
+#, c-format
+msgid ""
+"Unable to find LTspice symbols.\n"
+"Install LTspice or put its library files into %s"
+msgstr ""
 
 #: eeschema/sch_io/ltspice/sch_io_ltspice.h:49
 #, fuzzy
@@ -20427,7 +20496,7 @@ msgstr "จัดพอเหมาะ"
 #: pcbnew/generators/pcb_tuning_pattern.cpp:505
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2314 pcbnew/pad.cpp:1329
 #: pcbnew/pad.cpp:2777 pcbnew/pcb_shape.cpp:1008 pcbnew/pcb_tablecell.cpp:194
-#: pcbnew/pcb_track.cpp:1925 pcbnew/tools/pcb_control.cpp:1996
+#: pcbnew/pcb_track.cpp:1925 pcbnew/tools/pcb_control.cpp:2005
 #: pcbnew/widgets/pcb_properties_panel.cpp:282
 #: pcbnew/widgets/search_handlers.cpp:203 pcbnew/zone.cpp:880
 #: pcbnew/zone.cpp:1927 pcbnew/zone_manager/dialog_zone_manager_base.cpp:42
@@ -20645,19 +20714,19 @@ msgstr "ค่าที่แตกต่างกันสําหรับ %s
 msgid "Schematic rule area"
 msgstr "มาร์คเกอร์ในวงจร"
 
-#: eeschema/sch_screen.cpp:713 eeschema/sch_screen.cpp:805
+#: eeschema/sch_screen.cpp:701 eeschema/sch_screen.cpp:793
 #, c-format
 msgid "Setting schematic symbol '%s %s' library identifier to '%s'."
 msgstr "การตั้งค่าสัญลักษณ์วงจร '%s %s' ตัวระบุไลบรารีเป็น '%s'"
 
-#: eeschema/sch_screen.cpp:729
+#: eeschema/sch_screen.cpp:717
 #, c-format
 msgid ""
 "Schematic symbol reference '%s' library identifier is not valid. Unable to "
 "link library symbol."
 msgstr "การอ้างอิงสัญลักษณ์วงจร '%s' ตัวระบุไลบรารีไม่ถูกต้อง ไม่สามารถเชื่อมโยงไลบรารีสัญลักษณ์"
 
-#: eeschema/sch_screen.cpp:745
+#: eeschema/sch_screen.cpp:733
 #, c-format
 msgid ""
 "Symbol library '%s' not found and no fallback cache library available.  "
@@ -20665,62 +20734,62 @@ msgid ""
 msgstr ""
 "ไม่พบไลบรารีสัญลักษณ์ '%s' และไม่มีไลบรารีแคชแบ็คอัพ  ไม่สามารถเชื่อมโยงไลบรารีสัญลักษณ์"
 
-#: eeschema/sch_screen.cpp:764
+#: eeschema/sch_screen.cpp:752
 #, c-format
 msgid "I/O error %s resolving library symbol %s"
 msgstr "ข้อผิดพลาด I/O %s กำลังแก้ไขไลบรารีสัญลักษณ์ %s"
 
-#: eeschema/sch_screen.cpp:784
+#: eeschema/sch_screen.cpp:772
 #, c-format
 msgid "Falling back to cache to set symbol '%s:%s' link '%s'."
 msgstr "ถอยกลับไปที่แคชเพื่อตั้งสัญลักษณ์ '%s: %s' ลิงก์ '%s'"
 
-#: eeschema/sch_screen.cpp:816
+#: eeschema/sch_screen.cpp:804
 #, c-format
 msgid "No library symbol found for schematic symbol '%s %s'."
 msgstr "ไม่พบไลบรารีสัญลักษณ์สําหรับสัญลักษณ์วงจร '%s %s'"
 
-#: eeschema/sch_shape.cpp:325
+#: eeschema/sch_shape.cpp:336
 #, c-format
 msgid "Arc, radius %s"
 msgstr "ส่วนโค้ง รัศมี %s"
 
-#: eeschema/sch_shape.cpp:329
+#: eeschema/sch_shape.cpp:340
 #, c-format
 msgid "Circle, radius %s"
 msgstr "วงกลม รัศมี %s"
 
-#: eeschema/sch_shape.cpp:338
+#: eeschema/sch_shape.cpp:349
 #, c-format
 msgid "Polyline, %d points"
 msgstr "เส้นหลายเหลี่ยม %d จุด"
 
-#: eeschema/sch_shape.cpp:342
+#: eeschema/sch_shape.cpp:353
 #, c-format
 msgid "Bezier Curve, %d points"
 msgstr "เส้นโค้งเบซิเย่ร์, %d จุด"
 
-#: eeschema/sch_shape.cpp:486
+#: eeschema/sch_shape.cpp:497
 #, fuzzy
 msgid "Body outline color"
 msgstr "เติมลำตัวด้วยสีเค้าโครง"
 
-#: eeschema/sch_shape.cpp:487
+#: eeschema/sch_shape.cpp:498
 #, fuzzy
 msgid "Body background color"
 msgstr "พล็อตสีพื้นเบื้องหลัง"
 
-#: eeschema/sch_shape.cpp:488
+#: eeschema/sch_shape.cpp:499
 #, fuzzy
 msgid "Fill color"
 msgstr "สีเติมเต็ม:"
 
-#: eeschema/sch_shape.cpp:547 pcbnew/dialogs/dialog_plot_base.cpp:138
+#: eeschema/sch_shape.cpp:558 pcbnew/dialogs/dialog_plot_base.cpp:138
 #: pcbnew/pcb_textbox.cpp:826 pcbnew/pcb_track.cpp:2328
 msgid "Filled"
 msgstr "เต็มแล้ว"
 
-#: eeschema/sch_shape.cpp:555 pcbnew/zone.cpp:937 pcbnew/zone.cpp:1994
+#: eeschema/sch_shape.cpp:566 pcbnew/zone.cpp:937 pcbnew/zone.cpp:1994
 msgid "Fill Mode"
 msgstr "โหมดเติม"
 
@@ -23544,7 +23613,7 @@ msgstr ""
 msgid "Create Corner"
 msgstr "สร้างมุม"
 
-#: eeschema/tools/sch_actions.cpp:92 eeschema/tools/sch_point_editor.cpp:1409
+#: eeschema/tools/sch_actions.cpp:92 eeschema/tools/sch_point_editor.cpp:1374
 #: pcbnew/tools/pcb_actions.cpp:2102
 msgid "Remove Corner"
 msgstr "ลบมุม"
@@ -24765,7 +24834,7 @@ msgstr "กางออกจากบัส"
 msgid "Break a wire out of a bus"
 msgstr "แตกเส้นลวดออกจากบัส"
 
-#: eeschema/tools/sch_actions.cpp:1451 pcbnew/tools/pcb_actions.cpp:2435
+#: eeschema/tools/sch_actions.cpp:1451 pcbnew/tools/pcb_actions.cpp:2421
 msgid "Undo Last Segment"
 msgstr "ยกเลิกบางส่วนช่วงสุดท้าย"
 
@@ -25083,11 +25152,6 @@ msgstr "เขียนแบบ"
 msgid "Draw Table"
 msgstr "การวาดเส้น"
 
-#: eeschema/tools/sch_drawing_tools.cpp:2942
-#, fuzzy, c-format
-msgid "File '%s' does not exist."
-msgstr "หน่วย '%s' ไม่สิ้นสุดด้วย 'มิล'"
-
 #: eeschema/tools/sch_drawing_tools.cpp:3026
 msgid "Press <ESC> to cancel sheet creation."
 msgstr "กด <ESC>เพื่อยกเลิกการสร้างแผ่นชีต"
@@ -25250,7 +25314,15 @@ msgstr "ไม่ได้เลือกเลเยอร์"
 msgid "Net must be labeled to assign a netclass."
 msgstr "เน็ตต้องมีป้ายกำกับเพื่อกำหนดเน็ตคลาส"
 
-#: eeschema/tools/sch_editor_control.cpp:1833
+#: eeschema/tools/sch_editor_control.cpp:1719 pcbnew/tools/pcb_control.cpp:1094
+#, fuzzy
+msgid ""
+"Pasting a long text text string may be very slow.  Do you want to continue?"
+msgstr ""
+"การเปลี่ยนนามสกุลไฟล์จะเปลี่ยนประเภทไฟล์ด้วย\n"
+"คุณต้องการทำต่อหรือไม่?"
+
+#: eeschema/tools/sch_editor_control.cpp:1841
 #, c-format
 msgid ""
 "The pasted sheet '%s'\n"
@@ -25260,31 +25332,31 @@ msgstr ""
 "แผ่นชีตที่วางสำเนา '%s'\n"
 "ถูกหลุดเนื่องจากปลายทางมีแผ่นงานหรือแผ่นงานย่อยเป็นต้นกำเนิดอยู่แล้ว"
 
-#: eeschema/tools/sch_editor_control.cpp:2379
+#: eeschema/tools/sch_editor_control.cpp:2387
 #, fuzzy
 msgid "Symbols with broken library symbol links cannot be edited."
 msgstr "ไลบรารีสัญลักษณ์ ' %s' ไม่สามารถลบ"
 
-#: eeschema/tools/sch_editor_control.cpp:2467
+#: eeschema/tools/sch_editor_control.cpp:2475
 #, fuzzy
 msgid "Increment Annotations"
 msgstr "ล้างคำอธิบายประกอบ"
 
-#: eeschema/tools/sch_editor_control.cpp:2889
+#: eeschema/tools/sch_editor_control.cpp:2897
 #: pcbnew/tools/board_editor_control.cpp:614
 #: pcbnew/tools/footprint_editor_control.cpp:896
 #, c-format
 msgid "%d duplicate IDs replaced.\n"
 msgstr "%d แทนที่ไอดีซ้ำกัน\n"
 
-#: eeschema/tools/sch_editor_control.cpp:2899
+#: eeschema/tools/sch_editor_control.cpp:2907
 #: pcbnew/tools/board_editor_control.cpp:629
 #: pcbnew/tools/footprint_editor_control.cpp:903
 #, c-format
 msgid "%d potential problems repaired."
 msgstr "%d ปัญหาที่อาจเกิดขึ้นได้รับการแก้ไขแล้ว"
 
-#: eeschema/tools/sch_editor_control.cpp:2906
+#: eeschema/tools/sch_editor_control.cpp:2914
 #: pcbnew/drc/drc_rule_parser.cpp:180 pcbnew/drc/drc_rule_parser.cpp:255
 msgid "No errors found."
 msgstr "ไม่พบข้อผิดพลาด"
@@ -25399,7 +25471,7 @@ msgstr "ไม่ได้กำหนดดาต้าชีต"
 
 #: eeschema/tools/sch_inspection_tool.cpp:577
 #: pagelayout_editor/tools/pl_editor_control.cpp:160
-#: pcbnew/tools/pcb_control.cpp:1791
+#: pcbnew/tools/pcb_control.cpp:1800
 msgid "UUID"
 msgstr ""
 
@@ -25429,13 +25501,13 @@ msgstr "กด <ESC> เพื่อยกเลิกการย้าย"
 msgid "Page '%s' not found."
 msgstr "ไม่พบหน้า '%s'"
 
-#: eeschema/tools/sch_point_editor.cpp:1143
-#: pcbnew/tools/pcb_point_editor.cpp:2379
+#: eeschema/tools/sch_point_editor.cpp:1108
+#: pcbnew/tools/pcb_point_editor.cpp:1982
 #, fuzzy
 msgid "Move Point"
 msgstr "เลื่อนลง"
 
-#: eeschema/tools/sch_point_editor.cpp:1365
+#: eeschema/tools/sch_point_editor.cpp:1330
 #, fuzzy
 msgid "Add Corner"
 msgstr "เพิ่มเพาว์เวอร์"
@@ -25503,7 +25575,7 @@ msgid "No symbol to export"
 msgstr "ไม่มีสัญลักษณ์ที่จะส่งออก"
 
 #: eeschema/tools/symbol_editor_control.cpp:711
-#: pcbnew/footprint_edit_frame.cpp:1506
+#: pcbnew/footprint_edit_frame.cpp:1514
 #, fuzzy
 msgid "Export View as PNG"
 msgstr "ส่งออกมุมมองเป็น PNG..."
@@ -32861,13 +32933,13 @@ msgstr "ค่าที่ไม่ถูกต้อง การสูญเ�
 
 #: pcbnew/board_stackup_manager/dialog_dielectric_list_manager.cpp:93
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:87
-#: pcbnew/tools/pcb_control.cpp:2314
+#: pcbnew/tools/pcb_control.cpp:2323
 msgid "Material"
 msgstr "วัสดุ"
 
 #: pcbnew/board_stackup_manager/dialog_dielectric_list_manager.cpp:94
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:102
-#: pcbnew/tools/pcb_control.cpp:2317
+#: pcbnew/tools/pcb_control.cpp:2326
 msgid "Epsilon R"
 msgstr "เอปซิลอน R"
 
@@ -33322,7 +33394,7 @@ msgid "(arc has null or very small size: %d nm)"
 msgstr ""
 
 #: pcbnew/cross-probing.cpp:106 pcbnew/dialogs/dialog_board_setup.cpp:222
-#: pcbnew/dialogs/dialog_drc.cpp:272 pcbnew/pcb_edit_frame.cpp:2679
+#: pcbnew/dialogs/dialog_drc.cpp:272 pcbnew/pcb_edit_frame.cpp:2686
 msgid "Custom Rules"
 msgstr "กฎที่กำหนดเอง"
 
@@ -33874,7 +33946,7 @@ msgstr ""
 "ไฟล์โปรเจ็คที่เกี่ยวข้อง %s อ่านไม่ได้"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:354 pcbnew/files.cpp:583
-#: pcbnew/tools/pcb_control.cpp:1586
+#: pcbnew/tools/pcb_control.cpp:1595
 #: pcbnew/widgets/pcb_design_block_preview_widget.cpp:187
 msgid "Loading PCB"
 msgstr "กำลังโหลดพีซีบี"
@@ -36409,7 +36481,7 @@ msgstr "ออฟเซต Y"
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:69
 #: pcbnew/dialogs/panel_fp_editor_field_defaults.cpp:79
 #: pcbnew/dialogs/panel_fp_editor_field_defaults_base.cpp:56
-#: pcbnew/plot_board_layers.cpp:177
+#: pcbnew/plot_board_layers.cpp:178
 msgid "Reference designator"
 msgstr "อักษรอ้างอิง"
 
@@ -40154,7 +40226,7 @@ msgstr "เป้าหมายบิดเบือน:"
 #: pcbnew/router/router_tool.cpp:2759 pcbnew/router/router_tool.cpp:2764
 #: pcbnew/router/router_tool.cpp:2769 pcbnew/router/router_tool.cpp:2780
 #: pcbnew/router/router_tool.cpp:2788 pcbnew/router/router_tool.cpp:2793
-#: pcbnew/tools/pcb_control.cpp:1828 pcbnew/tools/pcb_control.cpp:1838
+#: pcbnew/tools/pcb_control.cpp:1837 pcbnew/tools/pcb_control.cpp:1847
 #: pcbnew/zone.cpp:949
 #, c-format
 msgid "(from %s)"
@@ -40506,19 +40578,6 @@ msgstr "ขั้นองศา สำหรับคำสั่งหมุ�
 #: pcbnew/dialogs/panel_edit_options_base.cpp:44
 msgid "Set increment (in degrees) for context menu and hotkey rotation."
 msgstr "ตั้งค่าการเพิ่มขึ้น (เป็นองศา) สำหรับเมนูบริบทและการหมุนคีย์ร้อน"
-
-#: pcbnew/dialogs/panel_edit_options_base.cpp:56
-#, fuzzy
-msgid "Arc editing mode:"
-msgstr "โหมดตําแหน่ง:"
-
-#: pcbnew/dialogs/panel_edit_options_base.cpp:63
-msgid "Keep center, adjust radius"
-msgstr ""
-
-#: pcbnew/dialogs/panel_edit_options_base.cpp:63
-msgid "Keep endpoints or direction of starting point"
-msgstr ""
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:74
 #, fuzzy
@@ -41299,7 +41358,7 @@ msgid "Use the Physical Stackup page to change the number of copper layers."
 msgstr "ใช้หน้าสแต็กอัพทางกายภาพ เพื่อเปลี่ยนจำนวนเลเยอร์ทองแดง"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:426
-#: pcbnew/dialogs/panel_setup_layers.cpp:478 pcbnew/tools/pcb_control.cpp:2312
+#: pcbnew/dialogs/panel_setup_layers.cpp:478 pcbnew/tools/pcb_control.cpp:2321
 msgid "Layer Name"
 msgstr "ชื่อเลเยอร์"
 
@@ -43672,7 +43731,7 @@ msgstr "เกิดข้อผิดพลาดในการโหลดพ
 msgid "Memory exhausted loading PCB '%s'"
 msgstr "หน่วยความจำหมด ระหว่างอ่านพีซีบี ' %s'"
 
-#: pcbnew/files.cpp:814 pcbnew/pcb_edit_frame.cpp:1404
+#: pcbnew/files.cpp:814 pcbnew/pcb_edit_frame.cpp:1411
 #, fuzzy
 msgid "Could not load component class assignment rules"
 msgstr "ไม่สามารถรวบรวมกฎการออกแบบที่กำหนดเอง"
@@ -43947,7 +44006,7 @@ msgstr "[ไม่โหลดฟุ้ทพรินท์]"
 msgid "Updating Footprint Libraries"
 msgstr "การปรับปรุงไลบรารีฟุ้ทพรินท์"
 
-#: pcbnew/footprint_edit_frame.cpp:1497
+#: pcbnew/footprint_edit_frame.cpp:1505
 msgid "No footprint selected."
 msgstr "ไม่เลือกฟุ้ทพรินท์"
 
@@ -45524,8 +45583,8 @@ msgstr "ช่องว่างบรรเทาความร้อน"
 msgid "Thermal Relief Gap"
 msgstr "ช่องว่างบรรเทาความร้อน"
 
-#: pcbnew/pcb_base_edit_frame.cpp:379 pcbnew/toolbars_footprint_editor.cpp:191
-#: pcbnew/toolbars_pcb_editor.cpp:569
+#: pcbnew/pcb_base_edit_frame.cpp:379 pcbnew/toolbars_footprint_editor.cpp:192
+#: pcbnew/toolbars_pcb_editor.cpp:570
 msgid "+/- to switch"
 msgstr "+/- เพื่อสลับ"
 
@@ -45643,19 +45702,19 @@ msgstr "ส่งออกรายชื่อเน็ตที่เคยใ
 msgid "New PCB file is unsaved"
 msgstr "ยังไม่บันทึกไฟล์พีซีบอร์ดใหม่"
 
-#: pcbnew/pcb_edit_frame.cpp:1710
+#: pcbnew/pcb_edit_frame.cpp:1717
 msgid "Board file is read only."
 msgstr "ไฟล์บอร์ดอ่านอย่างเดียวเท่านั้น"
 
-#: pcbnew/pcb_edit_frame.cpp:1756
+#: pcbnew/pcb_edit_frame.cpp:1763
 msgid "PCB file changes are unsaved"
 msgstr "การเปลี่ยนแปลงไฟล์พีซีบีไม่ได้รับการบันทึก"
 
-#: pcbnew/pcb_edit_frame.cpp:2059
+#: pcbnew/pcb_edit_frame.cpp:2066
 msgid "The schematic for this board cannot be found."
 msgstr "ไม่พบแผนวงจรสำหรับบอร์ดนี้"
 
-#: pcbnew/pcb_edit_frame.cpp:2085
+#: pcbnew/pcb_edit_frame.cpp:2092
 msgid ""
 "Cannot update the PCB because PCB editor is opened in stand-alone mode. In "
 "order to create or update PCBs from schematics, you must launch the KiCad "
@@ -45664,11 +45723,11 @@ msgstr ""
 "ไม่สามารถปรับปรุงพีซีบี เนื่องจากตัวแก้ไขพีซีบีถูกเปิดในโหมดโดดเดี่ยว ในการสร้างหรืออัปเดตพีซีบี "
 "จากวงจรคุณต้องเปิดตัวจัดการโครงการ KiCad และสร้างโปรเจ็ก"
 
-#: pcbnew/pcb_edit_frame.cpp:2110 pcbnew/pcbnew_jobs_handler.cpp:2214
+#: pcbnew/pcb_edit_frame.cpp:2117 pcbnew/pcbnew_jobs_handler.cpp:2214
 msgid "Eeschema netlist"
 msgstr "รายชื่อเน็ตของ Eeschema"
 
-#: pcbnew/pcb_edit_frame.cpp:2121
+#: pcbnew/pcb_edit_frame.cpp:2128
 msgid ""
 "Received an error while reading netlist.  Please report this issue to the "
 "KiCad team using the menu Help->Report Bug."
@@ -45676,41 +45735,41 @@ msgstr ""
 "ได้รับแจ้งข้อผิดพลาดระหว่างอ่านรายชื่อเน็ต   กรุณารายงานปัญหานี้แก่ทีมงาน KiCad โดยใช้เมนู "
 "ช่วยเหลือ->รายงานข้อผิดพลาด"
 
-#: pcbnew/pcb_edit_frame.cpp:2148
+#: pcbnew/pcb_edit_frame.cpp:2155
 #, c-format
 msgid "Schematic file '%s' not found."
 msgstr "ไฟล์วงจร '%s' หาไม่พบ"
 
-#: pcbnew/pcb_edit_frame.cpp:2179
+#: pcbnew/pcb_edit_frame.cpp:2186
 msgid "Eeschema failed to load."
 msgstr "Eeschema ไม่สามารถโหลด"
 
-#: pcbnew/pcb_edit_frame.cpp:2673
+#: pcbnew/pcb_edit_frame.cpp:2680
 msgid "Edit design rules"
 msgstr "แก้ไขกฏการออกแบบ"
 
-#: pcbnew/pcb_edit_frame.cpp:2685
+#: pcbnew/pcb_edit_frame.cpp:2692
 msgid "Could not compile custom design rules."
 msgstr "ไม่สามารถรวบรวมกฎการออกแบบที่กำหนดเอง"
 
-#: pcbnew/pcb_edit_frame.cpp:2743
+#: pcbnew/pcb_edit_frame.cpp:2750
 msgid "Export Hyperlynx Layout"
 msgstr "ส่งออกเค้าโครงไฮเปอร์ลินซ์"
 
-#: pcbnew/pcb_edit_frame.cpp:2801
+#: pcbnew/pcb_edit_frame.cpp:2808
 #, fuzzy
 msgid "Violation Report"
 msgstr "ระดับการละเมิด"
 
-#: pcbnew/pcb_edit_frame.cpp:2811
+#: pcbnew/pcb_edit_frame.cpp:2818
 msgid "Clearance Report"
 msgstr "รายงานเรื่องระยะห่าง"
 
-#: pcbnew/pcb_edit_frame.cpp:2821
+#: pcbnew/pcb_edit_frame.cpp:2828
 msgid "Constraints Report"
 msgstr "รายงานข้อจํากัด"
 
-#: pcbnew/pcb_edit_frame.cpp:2831 pcbnew/tools/pcb_actions.cpp:1975
+#: pcbnew/pcb_edit_frame.cpp:2838 pcbnew/tools/pcb_actions.cpp:1975
 #, fuzzy
 msgid "Compare Footprint with Library"
 msgstr "ส่งฟุ้ทพรินท์ไปที่ไลบรารี่…"
@@ -48251,7 +48310,7 @@ msgstr ""
 msgid "Track violates DRC."
 msgstr "ตำแหน่งเวียละเมิด DRC"
 
-#: pcbnew/router/router_tool.cpp:2607 pcbnew/tools/pcb_actions.cpp:2483
+#: pcbnew/router/router_tool.cpp:2607 pcbnew/tools/pcb_actions.cpp:2469
 msgid "Break Track"
 msgstr "แตกแทร็ก"
 
@@ -48312,7 +48371,7 @@ msgstr "ขนาดแทร็ก:%s"
 msgid "Diff Pair Gap: %s"
 msgstr "แก็บระหว่างดิฟแพร์:%s"
 
-#: pcbnew/router/router_tool.cpp:2778 pcbnew/tools/pcb_control.cpp:1837
+#: pcbnew/router/router_tool.cpp:2778 pcbnew/tools/pcb_control.cpp:1846
 #, fuzzy, c-format
 msgid "DP Max Uncoupled-length: %s"
 msgstr "ลบเน็ตที่ไม่ได้ใช้ %s"
@@ -48437,7 +48496,7 @@ msgstr "มุมโค้ง:"
 msgid "PCB origins"
 msgstr "จุดกำเนิดของหน้า"
 
-#: pcbnew/toolbars_pcb_editor.cpp:375
+#: pcbnew/toolbars_pcb_editor.cpp:376
 msgid ""
 "Select the default width for new tracks. Note that this width can be "
 "overridden by the board minimum width, or by the width of an existing track "
@@ -48447,24 +48506,24 @@ msgstr ""
 "โปรดทราบว่าความกว้างนี้ถูกทับได้ด้วยความกว้างขั้นต่ำจากบอร์ด,หรือจากความกว้างของแทร็กที่มีอยู่ "
 "หากเปิดใช้งานคุณสมบัติ 'ใช้ความกว้างของแทร็กที่มีอยู่'"
 
-#: pcbnew/toolbars_pcb_editor.cpp:480
+#: pcbnew/toolbars_pcb_editor.cpp:481
 msgid "Track: use netclass width"
 msgstr "แทร็ก: ใช้ความกว้างจากเน็ตคลาส"
 
-#: pcbnew/toolbars_pcb_editor.cpp:486
+#: pcbnew/toolbars_pcb_editor.cpp:487
 #, c-format
 msgid "Track: %s (%s)"
 msgstr "แทร็ก: %s (%s)"
 
-#: pcbnew/toolbars_pcb_editor.cpp:495 pcbnew/toolbars_pcb_editor.cpp:554
+#: pcbnew/toolbars_pcb_editor.cpp:496 pcbnew/toolbars_pcb_editor.cpp:555
 msgid "Edit Pre-defined Sizes..."
 msgstr "แก้ไขขนาดที่กําหนดไว้ล่วงหน้า..."
 
-#: pcbnew/toolbars_pcb_editor.cpp:523
+#: pcbnew/toolbars_pcb_editor.cpp:524
 msgid "Via: use netclass sizes"
 msgstr "เวีย: ใช้ขนาดเน็ตคลาส"
 
-#: pcbnew/toolbars_pcb_editor.cpp:546
+#: pcbnew/toolbars_pcb_editor.cpp:547
 #, c-format
 msgid "Via: %s (%s)"
 msgstr "เวีย: %s (%s)"
@@ -51139,447 +51198,428 @@ msgstr "มุมลบมุม:"
 msgid "Chamfer corner"
 msgstr "มุมลบมุม:"
 
-#: pcbnew/tools/pcb_actions.cpp:2116
-#, fuzzy
-msgid "Keep Arc Center, Adjust Radius"
-msgstr "ใส่รัศมีพอกมุม:"
-
-#: pcbnew/tools/pcb_actions.cpp:2117
-msgid "Switch arc editing mode to keep center, adjust radius and endpoints"
-msgstr ""
-
-#: pcbnew/tools/pcb_actions.cpp:2123
-msgid "Keep Arc Endpoints or Direction of Starting Point"
-msgstr ""
-
-#: pcbnew/tools/pcb_actions.cpp:2124
-msgid ""
-"Switch arc editing mode to keep endpoints, or to keep direction of the other "
-"point"
-msgstr ""
-
-#: pcbnew/tools/pcb_actions.cpp:2134
+#: pcbnew/tools/pcb_actions.cpp:2120
 msgid "Position Relative To..."
 msgstr "ตําแหน่งที่สัมพันธ์กับ..."
 
-#: pcbnew/tools/pcb_actions.cpp:2135
+#: pcbnew/tools/pcb_actions.cpp:2121
 msgid "Positions the selected item(s) by an exact amount relative to another"
 msgstr "วางตําแหน่งชิ้นส่วนที่เลือกตามจํานวนที่แน่นอนเมื่อเทียบกับตัวอื่น"
 
-#: pcbnew/tools/pcb_actions.cpp:2141
+#: pcbnew/tools/pcb_actions.cpp:2127
 #, fuzzy
 msgid "Position Interactively..."
 msgstr "ตําแหน่งที่สัมพันธ์กับ..."
 
-#: pcbnew/tools/pcb_actions.cpp:2142
+#: pcbnew/tools/pcb_actions.cpp:2128
 #, fuzzy
 msgid ""
 "Positions the selected item(s) by an exact amount relative to another, "
 "interactively"
 msgstr "วางตําแหน่งชิ้นส่วนที่เลือกตามจํานวนที่แน่นอนเมื่อเทียบกับตัวอื่น"
 
-#: pcbnew/tools/pcb_actions.cpp:2163
+#: pcbnew/tools/pcb_actions.cpp:2149
 msgid "Select/Expand Connection"
 msgstr "เลือก/ขยายการเชื่อมต่อ"
 
-#: pcbnew/tools/pcb_actions.cpp:2164
+#: pcbnew/tools/pcb_actions.cpp:2150
 msgid ""
 "Selects a connection or expands an existing selection to junctions, pads, or "
 "entire connections"
 msgstr "เลือกการเชื่อมต่อหรือขยายส่วนที่เลือกที่มีอยู่ไปยังจุดเชื่อมต่อ,แพ็ดหรือการเชื่อมต่อทั้งหมด"
 
-#: pcbnew/tools/pcb_actions.cpp:2170
+#: pcbnew/tools/pcb_actions.cpp:2156
 #, fuzzy
 msgid "Unroute Selected"
 msgstr "ไม่ได้เลือกบัส"
 
-#: pcbnew/tools/pcb_actions.cpp:2171
+#: pcbnew/tools/pcb_actions.cpp:2157
 #, fuzzy
 msgid "Unroutes selected items to the nearest pad."
 msgstr "จัดแนวชิ้นส่วนที่เลือกไว้ที่ขอบด้านซ้าย"
 
-#: pcbnew/tools/pcb_actions.cpp:2185
+#: pcbnew/tools/pcb_actions.cpp:2171
 msgid "Select All Tracks in Net"
 msgstr "เลือกแทร็กทั้งหมดในเน็ต"
 
-#: pcbnew/tools/pcb_actions.cpp:2186
+#: pcbnew/tools/pcb_actions.cpp:2172
 msgid "Selects all tracks & vias belonging to the same net."
 msgstr "เลือกแทร็กทั้งหมด & เวียที่เป็นของเน็ตเดียวกัน"
 
-#: pcbnew/tools/pcb_actions.cpp:2192
+#: pcbnew/tools/pcb_actions.cpp:2178
 msgid "Deselect All Tracks in Net"
 msgstr "ยกเลิกการเลือกแทร็กทั้งหมดในเน็ต"
 
-#: pcbnew/tools/pcb_actions.cpp:2193
+#: pcbnew/tools/pcb_actions.cpp:2179
 msgid "Deselects all tracks & vias belonging to the same net."
 msgstr "ยกเลิกการเลือกแทร็ก & เวียทั้งหมดที่เป็นของเน็ตเดียวกัน"
 
-#: pcbnew/tools/pcb_actions.cpp:2200
+#: pcbnew/tools/pcb_actions.cpp:2186
 #, fuzzy
 msgid "Select All Unconnected Footprints"
 msgstr "วางฟุ้ทพรินท์ที่เลือกไว้"
 
-#: pcbnew/tools/pcb_actions.cpp:2201
+#: pcbnew/tools/pcb_actions.cpp:2187
 #, fuzzy
 msgid "Selects all unconnected footprints belonging to each selected net."
 msgstr "เลือกแทร็กทั้งหมด & เวียที่เป็นของเน็ตเดียวกัน"
 
-#: pcbnew/tools/pcb_actions.cpp:2207
+#: pcbnew/tools/pcb_actions.cpp:2193
 #, fuzzy
 msgid "Grab Nearest Unconnected Footprints"
 msgstr "วางฟุ้ทพรินท์ที่เลือกไว้"
 
-#: pcbnew/tools/pcb_actions.cpp:2208
+#: pcbnew/tools/pcb_actions.cpp:2194
 #, fuzzy
 msgid ""
 "Selects and initiates moving the nearest unconnected footprint on each "
 "selected net."
 msgstr "เลือกแทร็กทั้งหมด & เวียที่เป็นของเน็ตเดียวกัน"
 
-#: pcbnew/tools/pcb_actions.cpp:2214
+#: pcbnew/tools/pcb_actions.cpp:2200
 msgid "Selects all footprints and tracks in the schematic sheet"
 msgstr "เลือกฟุ้ทพรินท์และแทร็กทั้งหมดในแผ่นงานวงจร"
 
-#: pcbnew/tools/pcb_actions.cpp:2220
+#: pcbnew/tools/pcb_actions.cpp:2206
 msgid "Items in Same Hierarchical Sheet"
 msgstr "ชิ้นส่วนในชีตลำดับขั้นเดียวกัน"
 
-#: pcbnew/tools/pcb_actions.cpp:2221
+#: pcbnew/tools/pcb_actions.cpp:2207
 msgid "Selects all footprints and tracks in the same schematic sheet"
 msgstr "เลือกฟุ้ทพรินท์และแทร็กทั้งหมดในแผ่นงานวงจรเดียวกัน"
 
-#: pcbnew/tools/pcb_actions.cpp:2227
+#: pcbnew/tools/pcb_actions.cpp:2213
 #, fuzzy
 msgid "Select on Schematic"
 msgstr "บันทึกในวงจร"
 
-#: pcbnew/tools/pcb_actions.cpp:2228
+#: pcbnew/tools/pcb_actions.cpp:2214
 #, fuzzy
 msgid "Selects corresponding items in Schematic editor"
 msgstr "เลือกชิ้นส่วนที่สอดคล้องกันในตัวแก้ไขพีซีบี"
 
-#: pcbnew/tools/pcb_actions.cpp:2234
+#: pcbnew/tools/pcb_actions.cpp:2220
 msgid "Filter Selected Items..."
 msgstr "กรองชิ้นส่วนที่เลือก..."
 
-#: pcbnew/tools/pcb_actions.cpp:2235
+#: pcbnew/tools/pcb_actions.cpp:2221
 msgid "Remove items from the selection by type"
 msgstr "ลบชิ้นส่วนออกจากการเลือกตามประเภท"
 
-#: pcbnew/tools/pcb_actions.cpp:2244
+#: pcbnew/tools/pcb_actions.cpp:2230
 #, fuzzy
 msgid "Draft Fill Selected Zone(s)"
 msgstr "ปรับปรุงการเติมทองแดงในโซนที่เลือก"
 
-#: pcbnew/tools/pcb_actions.cpp:2245
+#: pcbnew/tools/pcb_actions.cpp:2231
 #, fuzzy
 msgid ""
 "Update copper fill of selected zone(s) without regard to other interacting "
 "zones"
 msgstr "ปรับปรุงการเติมทองแดงในโซนที่เลือก"
 
-#: pcbnew/tools/pcb_actions.cpp:2254 pcbnew/tools/zone_filler_tool.cpp:166
+#: pcbnew/tools/pcb_actions.cpp:2240 pcbnew/tools/zone_filler_tool.cpp:166
 #: pcbnew/zone_manager/dialog_zone_manager.cpp:390
 msgid "Fill All Zones"
 msgstr "เติมโซนทั้งหมด"
 
-#: pcbnew/tools/pcb_actions.cpp:2255
+#: pcbnew/tools/pcb_actions.cpp:2241
 msgid "Update copper fill of all zones"
 msgstr "ปรับปรุงการเติมทองแดงของทุกโซน"
 
-#: pcbnew/tools/pcb_actions.cpp:2265
+#: pcbnew/tools/pcb_actions.cpp:2251
 #, fuzzy
 msgid "Unfill Selected Zone(s)"
 msgstr "ยกเลิกเติมโซนทั้งหมด"
 
-#: pcbnew/tools/pcb_actions.cpp:2266
+#: pcbnew/tools/pcb_actions.cpp:2252
 msgid "Remove copper fill from selected zone(s)"
 msgstr "ลบการเติมทองแดงออกจากโซนที่เลือก"
 
-#: pcbnew/tools/pcb_actions.cpp:2274 pcbnew/tools/zone_filler_tool.cpp:429
+#: pcbnew/tools/pcb_actions.cpp:2260 pcbnew/tools/zone_filler_tool.cpp:429
 msgid "Unfill All Zones"
 msgstr "ยกเลิกเติมโซนทั้งหมด"
 
-#: pcbnew/tools/pcb_actions.cpp:2275
+#: pcbnew/tools/pcb_actions.cpp:2261
 msgid "Remove copper fill from all zones"
 msgstr "ลบการเติมทองแดงออกจากโซนทั้งหมด"
 
-#: pcbnew/tools/pcb_actions.cpp:2284
+#: pcbnew/tools/pcb_actions.cpp:2270
 msgid "Place Selected Footprints"
 msgstr "วางฟุ้ทพรินท์ที่เลือกไว้"
 
-#: pcbnew/tools/pcb_actions.cpp:2285
+#: pcbnew/tools/pcb_actions.cpp:2271
 msgid "Performs automatic placement of selected components"
 msgstr "ดําเนินการจัดวางส่วนอุปกรณ์ที่เลือกโดยอัตโนมัติ"
 
-#: pcbnew/tools/pcb_actions.cpp:2290
+#: pcbnew/tools/pcb_actions.cpp:2276
 msgid "Place Off-Board Footprints"
 msgstr "ย้ายฟุ้ทพรินท์นอกบอร์ด"
 
-#: pcbnew/tools/pcb_actions.cpp:2291
+#: pcbnew/tools/pcb_actions.cpp:2277
 msgid "Performs automatic placement of components outside board area"
 msgstr "ดําเนินการจัดวางส่วนอุปกรณ์ภายนอกพื้นที่บอร์ดโดยอัตโนมัติ"
 
-#: pcbnew/tools/pcb_actions.cpp:2296
+#: pcbnew/tools/pcb_actions.cpp:2282
 #, fuzzy
 msgid "Generate Placement Rule Areas..."
 msgstr "สร้างไฟล์ตำแหน่ง"
 
-#: pcbnew/tools/pcb_actions.cpp:2297
+#: pcbnew/tools/pcb_actions.cpp:2283
 #, fuzzy
 msgid "Creates best-fit placement rule areas"
 msgstr "สร้างไฟล์ตำแหน่ง"
 
-#: pcbnew/tools/pcb_actions.cpp:2304
+#: pcbnew/tools/pcb_actions.cpp:2290
 #, fuzzy
 msgid "Repeat Layout..."
 msgstr "ทำซ้ำการนับ"
 
-#: pcbnew/tools/pcb_actions.cpp:2305
+#: pcbnew/tools/pcb_actions.cpp:2291
 msgid "Clones placement & routing across multiple identical channels"
 msgstr ""
 
-#: pcbnew/tools/pcb_actions.cpp:2316
+#: pcbnew/tools/pcb_actions.cpp:2302
 msgid "Route Single Track"
 msgstr "เดินแทร็กเส้นเดียว"
 
-#: pcbnew/tools/pcb_actions.cpp:2317
+#: pcbnew/tools/pcb_actions.cpp:2303
 msgid "Route tracks"
 msgstr "เดินแทร็ก"
 
-#: pcbnew/tools/pcb_actions.cpp:2329
+#: pcbnew/tools/pcb_actions.cpp:2315
 msgid "Route Differential Pair"
 msgstr "เดินเส้นดิฟแพร์"
 
-#: pcbnew/tools/pcb_actions.cpp:2330
+#: pcbnew/tools/pcb_actions.cpp:2316
 msgid "Route differential pairs"
 msgstr "เดินเส้นดิฟแพร์"
 
-#: pcbnew/tools/pcb_actions.cpp:2341
+#: pcbnew/tools/pcb_actions.cpp:2327
 msgid "Interactive Router Settings..."
 msgstr "ตั้งค่าเดินเส้นทองแดงแบบโต้ตอบ..."
 
-#: pcbnew/tools/pcb_actions.cpp:2342
+#: pcbnew/tools/pcb_actions.cpp:2328
 msgid "Open Interactive Router settings"
 msgstr "เปิดการตั้งค่าเร้าท์เตอร์แบบโต้ตอบ"
 
-#: pcbnew/tools/pcb_actions.cpp:2348
+#: pcbnew/tools/pcb_actions.cpp:2334
 msgid "Differential Pair Dimensions..."
 msgstr "วัดขนาดคู่ดิฟแพร์..."
 
-#: pcbnew/tools/pcb_actions.cpp:2349
+#: pcbnew/tools/pcb_actions.cpp:2335
 msgid "Open Differential Pair Dimension settings"
 msgstr "เปิดการตั้งค่าขนาดคู่ส่วนต่างดิฟแพร์"
 
-#: pcbnew/tools/pcb_actions.cpp:2355
+#: pcbnew/tools/pcb_actions.cpp:2341
 msgid "Router Highlight Mode"
 msgstr "เน้นสีในโหมดเร้าท์เตอร์"
 
-#: pcbnew/tools/pcb_actions.cpp:2356
+#: pcbnew/tools/pcb_actions.cpp:2342
 msgid "Switch router to highlight mode"
 msgstr "เปลี่ยนเร้าท์เตอร์เป็นโหมดเน้นสี"
 
-#: pcbnew/tools/pcb_actions.cpp:2363
+#: pcbnew/tools/pcb_actions.cpp:2349
 msgid "Router Shove Mode"
 msgstr "โหมดเร้าเตอร์ดันลายเส้น"
 
-#: pcbnew/tools/pcb_actions.cpp:2364
+#: pcbnew/tools/pcb_actions.cpp:2350
 msgid "Switch router to shove mode"
 msgstr "เปลี่ยนเร้าท์เตอร์ไปเป็นโหมดผลักดัน"
 
-#: pcbnew/tools/pcb_actions.cpp:2371
+#: pcbnew/tools/pcb_actions.cpp:2357
 msgid "Router Walkaround Mode"
 msgstr "โหมดเร้าท์เตอร์เดินรอบๆ"
 
-#: pcbnew/tools/pcb_actions.cpp:2372
+#: pcbnew/tools/pcb_actions.cpp:2358
 msgid "Switch router to walkaround mode"
 msgstr "เปลี่ยนเร้าท์เตอร์เป็นโหมดเดินรอบๆ"
 
-#: pcbnew/tools/pcb_actions.cpp:2379
+#: pcbnew/tools/pcb_actions.cpp:2365
 msgid "Cycle Router Mode"
 msgstr "หมุนวนไปตามโหมดเดินเส้น"
 
-#: pcbnew/tools/pcb_actions.cpp:2380
+#: pcbnew/tools/pcb_actions.cpp:2366
 msgid "Cycle router to the next mode"
 msgstr "เลื่อนไปโหมดการเดินเส้นถัดต่อไป"
 
-#: pcbnew/tools/pcb_actions.cpp:2385
+#: pcbnew/tools/pcb_actions.cpp:2371
 msgid "Set Layer Pair..."
 msgstr "ตั้งค่าคู่เลเยอร์..."
 
-#: pcbnew/tools/pcb_actions.cpp:2386
+#: pcbnew/tools/pcb_actions.cpp:2372
 msgid "Change active layer pair for routing"
 msgstr "เปลี่ยนคู่เลเยอร์ที่ใช้งานสำหรับการเดินลายเส้น"
 
-#: pcbnew/tools/pcb_actions.cpp:2396
+#: pcbnew/tools/pcb_actions.cpp:2382
 #, fuzzy
 msgid "Tune Length of a Single Track"
 msgstr "ปรับความยาวของแทร็กเส้นเดียว"
 
-#: pcbnew/tools/pcb_actions.cpp:2408
+#: pcbnew/tools/pcb_actions.cpp:2394
 #, fuzzy
 msgid "Tune Length of a Differential Pair"
 msgstr "ปรับบิดเบือนของคู่ดิฟเฟอเรนเชียล"
 
-#: pcbnew/tools/pcb_actions.cpp:2420
+#: pcbnew/tools/pcb_actions.cpp:2406
 #, fuzzy
 msgid "Tune Skew of a Differential Pair"
 msgstr "ปรับบิดเบือนของคู่ดิฟเฟอเรนเชียล"
 
-#: pcbnew/tools/pcb_actions.cpp:2436
+#: pcbnew/tools/pcb_actions.cpp:2422
 msgid "Walks the current track back one segment."
 msgstr "เดินแทร็กปัจจุบันย้อนกลับไปหนึ่งส่วน"
 
-#: pcbnew/tools/pcb_actions.cpp:2442
+#: pcbnew/tools/pcb_actions.cpp:2428
 msgid "Route From Other End"
 msgstr ""
 
-#: pcbnew/tools/pcb_actions.cpp:2443
+#: pcbnew/tools/pcb_actions.cpp:2429
 msgid ""
 "Commits current segments and starts next segment from nearest ratsnest end."
 msgstr ""
 
-#: pcbnew/tools/pcb_actions.cpp:2449
+#: pcbnew/tools/pcb_actions.cpp:2435
 msgid "Attempt Finish"
 msgstr ""
 
-#: pcbnew/tools/pcb_actions.cpp:2450
+#: pcbnew/tools/pcb_actions.cpp:2436
 msgid "Attempts to complete current route to nearest ratsnest end."
 msgstr ""
 
-#: pcbnew/tools/pcb_actions.cpp:2457
+#: pcbnew/tools/pcb_actions.cpp:2443
 #, fuzzy
 msgid "Route Selected"
 msgstr "ไม่ได้เลือกบัส"
 
-#: pcbnew/tools/pcb_actions.cpp:2458
+#: pcbnew/tools/pcb_actions.cpp:2444
 #, fuzzy
 msgid "Sequentially route selected items from ratsnest anchor."
 msgstr "จัดแนวชิ้นส่วนที่เลือกไว้ที่ขอบด้านซ้าย"
 
-#: pcbnew/tools/pcb_actions.cpp:2466
+#: pcbnew/tools/pcb_actions.cpp:2452
 #, fuzzy
 msgid "Route Selected From Other End"
 msgstr "ไม่ได้เลือกบัส"
 
-#: pcbnew/tools/pcb_actions.cpp:2467
+#: pcbnew/tools/pcb_actions.cpp:2453
 #, fuzzy
 msgid "Sequentially route selected items from other end of ratsnest anchor."
 msgstr "จัดแนวชิ้นส่วนที่เลือกไว้ที่ขอบด้านซ้าย"
 
-#: pcbnew/tools/pcb_actions.cpp:2475
+#: pcbnew/tools/pcb_actions.cpp:2461
 msgid "Attempt Finish Selected (Autoroute)"
 msgstr ""
 
-#: pcbnew/tools/pcb_actions.cpp:2476
+#: pcbnew/tools/pcb_actions.cpp:2462
 msgid "Sequentially attempt to automatically route all selected pads."
 msgstr ""
 
-#: pcbnew/tools/pcb_actions.cpp:2484
+#: pcbnew/tools/pcb_actions.cpp:2470
 msgid ""
 "Splits the track segment into two segments connected at the cursor position."
 msgstr "แยกส่วนของแทร็กออกเป็นสองส่วนย่อยเชื่อมต่อกันที่ตำแหน่งเคอร์เซอร์"
 
-#: pcbnew/tools/pcb_actions.cpp:2492
+#: pcbnew/tools/pcb_actions.cpp:2478
 #, fuzzy
 msgid "Drag 45 Degree Mode"
 msgstr "ลาก (โหมด 45 องศา)"
 
-#: pcbnew/tools/pcb_actions.cpp:2493
+#: pcbnew/tools/pcb_actions.cpp:2479
 msgid "Drags the track segment while keeping connected tracks at 45 degrees."
 msgstr "ลากส่วนแทร็กในขณะที่รักษาแทร็กที่เชื่อมต่อไว้ที่ 45 องศา"
 
-#: pcbnew/tools/pcb_actions.cpp:2501
+#: pcbnew/tools/pcb_actions.cpp:2487
 #, fuzzy
 msgid "Drag Free Angle"
 msgstr "ลาก (มุมอิสระ)"
 
-#: pcbnew/tools/pcb_actions.cpp:2502
+#: pcbnew/tools/pcb_actions.cpp:2488
 msgid ""
 "Drags the nearest joint in the track without restricting the track angle."
 msgstr "ลากข้อต่อที่ใกล้ที่สุดในแทร็ก โดยไม่จำกัดมุมของแทร็ก"
 
-#: pcbnew/tools/pcb_actions.cpp:2512
+#: pcbnew/tools/pcb_actions.cpp:2498
 msgid "Update All Tuning Patterns"
 msgstr ""
 
-#: pcbnew/tools/pcb_actions.cpp:2513
+#: pcbnew/tools/pcb_actions.cpp:2499
 msgid "Attempt to re-tune existing tuning patterns within their bounds"
 msgstr ""
 
-#: pcbnew/tools/pcb_actions.cpp:2520
+#: pcbnew/tools/pcb_actions.cpp:2506
 #, fuzzy
 msgid "Rebuild All Generators"
 msgstr "นำออกผู้สร้าง"
 
-#: pcbnew/tools/pcb_actions.cpp:2521
+#: pcbnew/tools/pcb_actions.cpp:2507
 msgid "Rebuilds geometry of all generators"
 msgstr ""
 
-#: pcbnew/tools/pcb_actions.cpp:2528
+#: pcbnew/tools/pcb_actions.cpp:2514
 #, fuzzy
 msgid "Rebuild Selected Generators"
 msgstr "นำออกผู้สร้าง"
 
-#: pcbnew/tools/pcb_actions.cpp:2529
+#: pcbnew/tools/pcb_actions.cpp:2515
 msgid "Rebuilds geometry of selected generator(s)"
 msgstr ""
 
-#: pcbnew/tools/pcb_actions.cpp:2557
+#: pcbnew/tools/pcb_actions.cpp:2543
 #, fuzzy
 msgid "Generators Manager"
 msgstr "สร้างชื่อเล่น:"
 
-#: pcbnew/tools/pcb_actions.cpp:2558
+#: pcbnew/tools/pcb_actions.cpp:2544
 msgid "Show a manager dialog for Generator objects"
 msgstr ""
 
-#: pcbnew/tools/pcb_actions.cpp:2570
+#: pcbnew/tools/pcb_actions.cpp:2556
 msgid "Length Tuning Settings..."
 msgstr "การตั้งค่าการปรับความยาว..."
 
-#: pcbnew/tools/pcb_actions.cpp:2571
+#: pcbnew/tools/pcb_actions.cpp:2557
 #, fuzzy
 msgid "Displays tuning pattern properties dialog"
 msgstr "แสดงกรอบสนทนาคุณสมบัติชิ้นส่วน"
 
-#: pcbnew/tools/pcb_actions.cpp:2587
+#: pcbnew/tools/pcb_actions.cpp:2573
 #, fuzzy
 msgid "Show wizards selector"
 msgstr "ไม่ได้เลือกตัวช่วยมหัศจรรย์"
 
-#: pcbnew/tools/pcb_actions.cpp:2588
+#: pcbnew/tools/pcb_actions.cpp:2574
 msgid "Select wizard script to run"
 msgstr "เลือกสคริปต์ตัวช่วยมหัศจรรย์ทำงาน"
 
-#: pcbnew/tools/pcb_actions.cpp:2594
+#: pcbnew/tools/pcb_actions.cpp:2580
 #, fuzzy
 msgid "Reset wizard parameters"
 msgstr "ล้างค่าพารามิเตอร์ตัวช่วยมหัศจรรย์เป็นค่าปริยาย"
 
-#: pcbnew/tools/pcb_actions.cpp:2595
+#: pcbnew/tools/pcb_actions.cpp:2581
 msgid "Reset wizard parameters to default"
 msgstr "ล้างค่าพารามิเตอร์ตัวช่วยมหัศจรรย์เป็นค่าปริยาย"
 
-#: pcbnew/tools/pcb_actions.cpp:2601
+#: pcbnew/tools/pcb_actions.cpp:2587
 #, fuzzy
 msgid "Select previous wizard page"
 msgstr "เลือกหน้าพารามิเตอร์ก่อนหน้านี้"
 
-#: pcbnew/tools/pcb_actions.cpp:2602
+#: pcbnew/tools/pcb_actions.cpp:2588
 msgid "Select previous parameters page"
 msgstr "เลือกหน้าพารามิเตอร์ก่อนหน้านี้"
 
-#: pcbnew/tools/pcb_actions.cpp:2608
+#: pcbnew/tools/pcb_actions.cpp:2594
 #, fuzzy
 msgid "Select next wizard page"
 msgstr "เลือกหน้าพารามิเตอร์ถัดไป"
 
-#: pcbnew/tools/pcb_actions.cpp:2609
+#: pcbnew/tools/pcb_actions.cpp:2595
 msgid "Select next parameters page"
 msgstr "เลือกหน้าพารามิเตอร์ถัดไป"
 
-#: pcbnew/tools/pcb_actions.cpp:2615 pcbnew/tools/pcb_actions.cpp:2616
+#: pcbnew/tools/pcb_actions.cpp:2601 pcbnew/tools/pcb_actions.cpp:2602
 msgid "Export footprint to editor"
 msgstr "ส่งออกฟุ้ทพรินท์ไปที่เครื่องมือแก้ไข"
 
@@ -51624,216 +51664,216 @@ msgid ""
 "These items could not be pasted.\n"
 msgstr ""
 
-#: pcbnew/tools/pcb_control.cpp:1102
+#: pcbnew/tools/pcb_control.cpp:1111
 #, fuzzy
 msgid "Paste Text"
 msgstr "วางข้อความ"
 
-#: pcbnew/tools/pcb_control.cpp:1269
+#: pcbnew/tools/pcb_control.cpp:1278
 msgid "Invalid clipboard contents"
 msgstr "เนื้อหาคลิปบอร์ดไม่ถูกต้อง"
 
-#: pcbnew/tools/pcb_control.cpp:1594
+#: pcbnew/tools/pcb_control.cpp:1603
 #, fuzzy
 msgid "Error loading board."
 msgstr ""
 "เกิดข้อผิดพลาดในการโหลดบอร์ด\n"
 "%s"
 
-#: pcbnew/tools/pcb_control.cpp:1633
+#: pcbnew/tools/pcb_control.cpp:1642
 #, fuzzy
 msgid "Append Board"
 msgstr "ต่อท้ายบอร์ด..."
 
-#: pcbnew/tools/pcb_control.cpp:1736
+#: pcbnew/tools/pcb_control.cpp:1745
 #, fuzzy
 msgid "Active Layer"
 msgstr "เลเยอร์ไม่ใช้งาน:"
 
-#: pcbnew/tools/pcb_control.cpp:1737 pcbnew/widgets/appearance_controls.cpp:378
+#: pcbnew/tools/pcb_control.cpp:1746 pcbnew/widgets/appearance_controls.cpp:378
 #: pcbnew/widgets/appearance_controls_base.cpp:165
 msgid "All Layers"
 msgstr "เลเยอร์ทั้งหมด"
 
-#: pcbnew/tools/pcb_control.cpp:1748
+#: pcbnew/tools/pcb_control.cpp:1757
 msgid "Object Snapping"
 msgstr ""
 
-#: pcbnew/tools/pcb_control.cpp:1827
+#: pcbnew/tools/pcb_control.cpp:1836
 #, fuzzy, c-format
 msgid "DP Gap Constraints: %s"
 msgstr "ข้อจำกัดของรู: ขั้นต่ำ %s"
 
-#: pcbnew/tools/pcb_control.cpp:1868
+#: pcbnew/tools/pcb_control.cpp:1877
 #, fuzzy
 msgid "Resolved Clearance"
 msgstr "แก้ไขระยะห่าง: %s"
 
-#: pcbnew/tools/pcb_control.cpp:1878
+#: pcbnew/tools/pcb_control.cpp:1887
 #, fuzzy
 msgid "Actual Clearance"
 msgstr "ระยะห่างที่แท้จริง"
 
-#: pcbnew/tools/pcb_control.cpp:1921
+#: pcbnew/tools/pcb_control.cpp:1930
 #, fuzzy
 msgid "Resolved Hole Clearance"
 msgstr "แก้ไขระยะห่าง: %s"
 
-#: pcbnew/tools/pcb_control.cpp:1926
+#: pcbnew/tools/pcb_control.cpp:1935
 #, fuzzy
 msgid "Actual Hole Clearance"
 msgstr "ค่าระยะห่างรูเจาะที่แท้จริง"
 
-#: pcbnew/tools/pcb_control.cpp:1959
+#: pcbnew/tools/pcb_control.cpp:1968
 #, fuzzy
 msgid "Resolved Edge Clearance"
 msgstr "แก้ไขระยะห่าง: %s"
 
-#: pcbnew/tools/pcb_control.cpp:1964
+#: pcbnew/tools/pcb_control.cpp:1973
 #, fuzzy
 msgid "Resolved Margin Clearance"
 msgstr "แก้ไขระยะห่าง: %s"
 
-#: pcbnew/tools/pcb_control.cpp:1975
+#: pcbnew/tools/pcb_control.cpp:1984
 msgid "Selected Items"
 msgstr "ชิ้นส่วนที่เลือก"
 
-#: pcbnew/tools/pcb_control.cpp:2056
+#: pcbnew/tools/pcb_control.cpp:2065
 #, fuzzy
 msgid "Selected 2D Length"
 msgstr "เน็ตที่เลือก:"
 
-#: pcbnew/tools/pcb_control.cpp:2122
+#: pcbnew/tools/pcb_control.cpp:2131
 #, fuzzy
 msgid "Selected 2D Copper Area"
 msgstr "เลือกคู่เลเยอร์ทองแดง"
 
-#: pcbnew/tools/pcb_control.cpp:2191
+#: pcbnew/tools/pcb_control.cpp:2200
 msgid "BOARD CHARACTERISTICS"
 msgstr "คุณลักษณะของบอร์ด"
 
-#: pcbnew/tools/pcb_control.cpp:2199
+#: pcbnew/tools/pcb_control.cpp:2208
 #, fuzzy
 msgid "Copper layer count: "
 msgstr "นับจำนวนเลเยอร์ทองแดง:"
 
-#: pcbnew/tools/pcb_control.cpp:2203
+#: pcbnew/tools/pcb_control.cpp:2212
 #, fuzzy
 msgid "Board thickness: "
 msgstr "ความหนาบอร์ด: "
 
-#: pcbnew/tools/pcb_control.cpp:2210
+#: pcbnew/tools/pcb_control.cpp:2219
 msgid "Board overall dimensions: "
 msgstr "วัดขนาดโดยรวมของบอร์ด: "
 
-#: pcbnew/tools/pcb_control.cpp:2218
+#: pcbnew/tools/pcb_control.cpp:2227
 msgid "Min track/spacing: "
 msgstr "แทร็ก/ระยะห่าง ขั้นต่ำ: "
 
-#: pcbnew/tools/pcb_control.cpp:2225
+#: pcbnew/tools/pcb_control.cpp:2234
 msgid "Min hole diameter: "
 msgstr "เส้นผ่าศูนย์กลางรูต่ำสุด: "
 
-#: pcbnew/tools/pcb_control.cpp:2228
+#: pcbnew/tools/pcb_control.cpp:2237
 #, fuzzy
 msgid "Copper finish: "
 msgstr "เคลือบทองแดงก่อนเสร็จ:"
 
-#: pcbnew/tools/pcb_control.cpp:2231
+#: pcbnew/tools/pcb_control.cpp:2240
 #, fuzzy
 msgid "Impedance control: "
 msgstr "การควบคุมอิมพีแดนซ์: "
 
-#: pcbnew/tools/pcb_control.cpp:2234
+#: pcbnew/tools/pcb_control.cpp:2243
 msgid "Castellated pads: "
 msgstr "แพ็ดคาสเทลเลต: "
 
-#: pcbnew/tools/pcb_control.cpp:2237
+#: pcbnew/tools/pcb_control.cpp:2246
 #, fuzzy
 msgid "Plated board edge: "
 msgstr "ชุบขอบบอร์ด"
 
-#: pcbnew/tools/pcb_control.cpp:2246
+#: pcbnew/tools/pcb_control.cpp:2255
 msgid "Yes, Bevelled"
 msgstr "ใช่, ขอบเอียง"
 
-#: pcbnew/tools/pcb_control.cpp:2249
+#: pcbnew/tools/pcb_control.cpp:2258
 msgid "Edge card connectors: "
 msgstr "คอนเน็กเตอร์ชนิดบอร์ดเสียบ: "
 
-#: pcbnew/tools/pcb_control.cpp:2265
+#: pcbnew/tools/pcb_control.cpp:2274
 #, fuzzy
 msgid "Place Board Characteristics"
 msgstr "เพิ่มคุณสมบัติของบอร์ด"
 
-#: pcbnew/tools/pcb_control.cpp:2318
+#: pcbnew/tools/pcb_control.cpp:2327
 msgid "Loss Tangent"
 msgstr "สูญเสียแทนเจนต์"
 
-#: pcbnew/tools/pcb_control.cpp:2338
+#: pcbnew/tools/pcb_control.cpp:2347
 msgid "Dielectric"
 msgstr "Dielectric"
 
-#: pcbnew/tools/pcb_control.cpp:2364
+#: pcbnew/tools/pcb_control.cpp:2373
 #, fuzzy
 msgid "Place Board Stackup Table"
 msgstr "แทรกตารางสแต็กอัพของบอร์ด"
 
-#: pcbnew/tools/pcb_point_editor.cpp:2375
+#: pcbnew/tools/pcb_point_editor.cpp:1978
 #, fuzzy
 msgid "Resize Table Cells"
 msgstr "นำเซลส์ไม่สมบูรณ์ออก"
 
-#: pcbnew/tools/pcb_point_editor.cpp:2478
+#: pcbnew/tools/pcb_point_editor.cpp:2081
 #, fuzzy
 msgid "Move Midpoint to Location"
 msgstr "ที่ตั้งฟุ้ทพรินท์"
 
-#: pcbnew/tools/pcb_point_editor.cpp:2479
+#: pcbnew/tools/pcb_point_editor.cpp:2082
 #, fuzzy
 msgid "Move Midpoint"
 msgstr "เลื่อนลง"
 
-#: pcbnew/tools/pcb_point_editor.cpp:2483
+#: pcbnew/tools/pcb_point_editor.cpp:2086
 #, fuzzy
 msgid "Move Corner to Location"
 msgstr "ที่ตั้งฟุ้ทพรินท์"
 
-#: pcbnew/tools/pcb_point_editor.cpp:2484
+#: pcbnew/tools/pcb_point_editor.cpp:2087
 #, fuzzy
 msgid "Move Corner"
 msgstr "ลบมุม"
 
-#: pcbnew/tools/pcb_point_editor.cpp:2829
+#: pcbnew/tools/pcb_point_editor.cpp:2432
 #, fuzzy
 msgid "Add Zone Corner"
 msgstr "เพิ่มมุมโซน"
 
-#: pcbnew/tools/pcb_point_editor.cpp:2853
+#: pcbnew/tools/pcb_point_editor.cpp:2456
 #, fuzzy
 msgid "Split Segment"
 msgstr "แยกส่วน"
 
-#: pcbnew/tools/pcb_point_editor.cpp:2875
+#: pcbnew/tools/pcb_point_editor.cpp:2478
 msgid "Split Arc"
 msgstr ""
 
-#: pcbnew/tools/pcb_point_editor.cpp:2952
+#: pcbnew/tools/pcb_point_editor.cpp:2555
 #, fuzzy
 msgid "Remove Zone Corner"
 msgstr "ลบมุม"
 
-#: pcbnew/tools/pcb_point_editor.cpp:2954
+#: pcbnew/tools/pcb_point_editor.cpp:2557
 #, fuzzy
 msgid "Remove Polygon Corner"
 msgstr "ลบมุมโซน/รูปหลายเหลี่ยม"
 
-#: pcbnew/tools/pcb_point_editor.cpp:3051
+#: pcbnew/tools/pcb_point_editor.cpp:2654
 #, fuzzy
 msgid "Break Zone Corner"
 msgstr "เพิ่มมุมโซน"
 
-#: pcbnew/tools/pcb_point_editor.cpp:3053
+#: pcbnew/tools/pcb_point_editor.cpp:2656
 #, fuzzy
 msgid "Break Polygon Corner"
 msgstr "ลบมุมโซน/รูปหลายเหลี่ยม"
