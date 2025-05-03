@@ -1442,10 +1442,10 @@ void SCH_PIN::ChangeLength( int aLength )
         offsetX = -1 * lengthChange;
         break;
     case PIN_ORIENTATION::PIN_UP:
-        offsetY = lengthChange;
+        offsetY = -1 * lengthChange;
         break;
     case PIN_ORIENTATION::PIN_DOWN:
-        offsetY = -1 * lengthChange;
+        offsetY = lengthChange;
         break;
     }
 
@@ -2158,7 +2158,7 @@ static struct SCH_PIN_DESC
                 .SetWriteableFunc( isSymbolEditor );
 
         propMgr.AddProperty( new PROPERTY<SCH_PIN, int>( _HKI( "Length" ),
-                    &SCH_PIN::SetLength, &SCH_PIN::GetLength,
+                    &SCH_PIN::ChangeLength, &SCH_PIN::GetLength,
                     PROPERTY_DISPLAY::PT_SIZE ) )
                 .SetWriteableFunc( isSymbolEditor );
 
