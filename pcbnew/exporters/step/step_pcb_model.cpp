@@ -3232,7 +3232,7 @@ bool STEP_PCB_MODEL::WriteGLTF( const wxString& aFileName )
 bool STEP_PCB_MODEL::WritePLY( const wxString& aFileName )
 {
 #if OCC_VERSION_HEX < 0x070700
-    ReportMessage( wxT( "PLY export is not supported before OCCT 7.7.0\n" ) );
+    m_reporter->Report( wxT( "PLY export is not supported before OCCT 7.7.0\n" ), RPT_SEVERITY_ERROR );
     return false;
 #else
 
