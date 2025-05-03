@@ -772,8 +772,6 @@ int SYMBOL_EDITOR_EDIT_TOOL::PinTable( const TOOL_EVENT& aEvent )
 
     commit.Modify( symbol );
 
-    m_toolMgr->RunAction( ACTIONS::selectionClear );
-
     DIALOG_LIB_EDIT_PIN_TABLE dlg( m_frame, symbol );
 
     if( dlg.ShowModal() == wxID_CANCEL )

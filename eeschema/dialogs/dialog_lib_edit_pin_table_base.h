@@ -64,6 +64,7 @@ class DIALOG_LIB_EDIT_PIN_TABLE_BASE : public DIALOG_SHIM
 		wxChoice* m_unitFilter;
 		wxCheckBox* m_cbFilterByBodyStyle;
 		wxChoice* m_bodyStyleFilter;
+		wxCheckBox* m_cbFilterSelected;
 		STD_BITMAP_BUTTON* m_addButton;
 		STD_BITMAP_BUTTON* m_deleteButton;
 		BITMAP_BUTTON* m_divider1;

@@ -49,6 +49,8 @@
 #include <wildcards_and_files_ext.h>
 #include <settings/settings_manager.h>
 #include <tool/action_menu.h>
+#include <tool/tool_manager.h>
+#include <tools/sch_selection_tool.h>
 #include <string_utils.h>
 
 #define UNITS_ALL _( "ALL" )
@@ -352,13 +354,15 @@ class PIN_TABLE_DATA_MODEL : public wxGridTableBase
 {
 public:
     PIN_TABLE_DATA_MODEL( SYMBOL_EDIT_FRAME* aFrame, DIALOG_LIB_EDIT_PIN_TABLE* aPinTable,
-                          LIB_SYMBOL* aSymbol ) :
+                          LIB_SYMBOL* aSymbol, SCH_SELECTION_TOOL& aSelectionTool ) :
             m_frame( aFrame ),
             m_unitFilter( -1 ),
             m_bodyStyleFilter( -1 ),
+            m_filterBySelection( false ),
             m_edited( false ),
             m_pinTable( aPinTable ),
-            m_symbol( aSymbol )
+            m_symbol( aSymbol ),
+            m_selectionTool( aSelectionTool )
     {
         m_eval = std::make_unique<NUMERIC_EVALUATOR>( m_frame->GetUserUnits() );
 
@@ -380,6 +384,7 @@ public:
 
     void SetUnitFilter( int aFilter ) { m_unitFilter = aFilter; }
     void SetBodyStyleFilter( int aFilter ) { m_bodyStyleFilter = aFilter; }
+    void SetFilterBySelection( bool aFilter ) { m_filterBySelection = aFilter; }
 
     int GetNumberRows() override { return (int) m_rows.size(); }
     int GetNumberCols() override { return COL_COUNT; }
@@ -667,14 +672,59 @@ public:
         if( groupBySelection )
             m_rows.emplace_back( std::vector<SCH_PIN*>() );
 
+        std::set<SCH_PIN*> selectedPins;
+        std::set<wxString> selectedNumbers;
+        if( m_filterBySelection )
+        {
+            SCH_SELECTION& selection = m_selectionTool.GetSelection();
+
+            for( EDA_ITEM* item : selection )
+            {
+                if( item->Type() == SCH_PIN_T )
+                {
+                    SCH_PIN* pinItem = static_cast<SCH_PIN*>( item );
+                    selectedPins.insert( pinItem );
+                    selectedNumbers.insert( pinItem->GetNumber() );
+                }
+            }
+        }
+
+        const auto pinIsInEditorSelection = [&]( SCH_PIN* pin )
+        {
+            // Quick check before we iterate the whole thing
+            if( selectedNumbers.count( pin->GetNumber() ) == 0 )
+            {
+                return false;
+            }
+
+            for( SCH_PIN* selectedPin : selectedPins )
+            {
+                // The selected pin is in the editor, but the pins in the table
+                // are copies. We will mark the pin as selected if it's a match
+                // on the critical items.
+                if( selectedPin->GetNumber() == pin->GetNumber()
+                    && selectedPin->GetName() == pin->GetName()
+                    && selectedPin->GetUnit() == pin->GetUnit()
+                    && selectedPin->GetBodyStyle() == pin->GetBodyStyle()
+                )
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        };
+
+
         for( SCH_PIN* pin : aPins )
         {
             const bool includedByUnit =
                     ( m_unitFilter == -1 ) || ( pin->GetUnit() == 0 ) || ( pin->GetUnit() == m_unitFilter );
             const bool includedByBodyStyle =
                     ( m_bodyStyleFilter == -1 ) || ( pin->GetBodyStyle() == m_bodyStyleFilter );
+            const bool includedBySelection = !m_filterBySelection || pinIsInEditorSelection( pin );
 
-            if( includedByUnit && includedByBodyStyle )
+            if( includedByUnit && includedByBodyStyle && includedBySelection )
             {
                 int rowIndex = -1;
 
@@ -787,12 +837,14 @@ private:
     std::vector<std::vector<SCH_PIN*>> m_rows;
     int                                m_unitFilter;      // -1 to show pins for all units
     int                                m_bodyStyleFilter; // -1 to show all body styles
+    bool                               m_filterBySelection;
 
     bool                               m_edited;
 
     DIALOG_LIB_EDIT_PIN_TABLE*         m_pinTable;
     LIB_SYMBOL*                        m_symbol;    // Parent symbol that the pins belong to.
 
+    SCH_SELECTION_TOOL&                m_selectionTool; // Selection tool for the selection filter
     std::unique_ptr<NUMERIC_EVALUATOR> m_eval;
     std::map< std::pair<std::vector<SCH_PIN*>, int>, wxString > m_evalOriginal;
 };
@@ -983,7 +1035,9 @@ DIALOG_LIB_EDIT_PIN_TABLE::DIALOG_LIB_EDIT_PIN_TABLE( SYMBOL_EDIT_FRAME* parent,
         m_editFrame( parent ),
         m_symbol( aSymbol )
 {
-    m_dataModel = new PIN_TABLE_DATA_MODEL( m_editFrame, this, this->m_symbol );
+    SCH_SELECTION_TOOL* selTool = parent->GetToolManager()->GetTool<SCH_SELECTION_TOOL>();
+
+    m_dataModel = new PIN_TABLE_DATA_MODEL( m_editFrame, this, this->m_symbol, *selTool );
 
     // Save original columns widths so we can do proportional sizing.
     for( int i = 0; i < COL_COUNT; ++i )
@@ -1415,6 +1469,10 @@ void DIALOG_LIB_EDIT_PIN_TABLE::OnFilterCheckBox( wxCommandEvent& event )
             m_dataModel->SetBodyStyleFilter( -1 );
             m_bodyStyleFilter->SetSelection( -1 );
         }
+    }
+    else if( event.GetEventObject() == m_cbFilterSelected )
+    {
+        m_dataModel->SetFilterBySelection( event.IsChecked() );
     }
 
     OnRebuildRows( event );

@@ -213,6 +213,9 @@ DIALOG_LIB_EDIT_PIN_TABLE_BASE::DIALOG_LIB_EDIT_PIN_TABLE_BASE( wxWindow* parent
 	m_bodyStyleFilter->SetSelection( 0 );
 	gbSizer1->Add( m_bodyStyleFilter, wxGBPosition( 1, 1 ), wxGBSpan( 1, 1 ), wxALL, 5 );
 
+	m_cbFilterSelected = new wxCheckBox( sbSizer1->GetStaticBox(), wxID_ANY, _("Filter by selection"), wxDefaultPosition, wxDefaultSize, 0 );
+	gbSizer1->Add( m_cbFilterSelected, wxGBPosition( 2, 0 ), wxGBSpan( 1, 2 ), wxALL, 5 );
+
 
 	sbSizer1->Add( gbSizer1, 1, wxEXPAND, 5 );
 
@@ -291,6 +294,7 @@ DIALOG_LIB_EDIT_PIN_TABLE_BASE::DIALOG_LIB_EDIT_PIN_TABLE_BASE( wxWindow* parent
 	m_unitFilter->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_LIB_EDIT_PIN_TABLE_BASE::OnFilterChoice ), NULL, this );
 	m_cbFilterByBodyStyle->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LIB_EDIT_PIN_TABLE_BASE::OnFilterCheckBox ), NULL, this );
 	m_bodyStyleFilter->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_LIB_EDIT_PIN_TABLE_BASE::OnFilterChoice ), NULL, this );
+	m_cbFilterSelected->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LIB_EDIT_PIN_TABLE_BASE::OnFilterCheckBox ), NULL, this );
 	m_addButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_LIB_EDIT_PIN_TABLE_BASE::OnAddRow ), NULL, this );
 	m_deleteButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_LIB_EDIT_PIN_TABLE_BASE::OnDeleteRow ), NULL, this );
 	m_cbGroup->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LIB_EDIT_PIN_TABLE_BASE::OnRebuildRows ), NULL, this );
@@ -316,6 +320,7 @@ DIALOG_LIB_EDIT_PIN_TABLE_BASE::~DIALOG_LIB_EDIT_PIN_TABLE_BASE()
 	m_unitFilter->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_LIB_EDIT_PIN_TABLE_BASE::OnFilterChoice ), NULL, this );
 	m_cbFilterByBodyStyle->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LIB_EDIT_PIN_TABLE_BASE::OnFilterCheckBox ), NULL, this );
 	m_bodyStyleFilter->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_LIB_EDIT_PIN_TABLE_BASE::OnFilterChoice ), NULL, this );
+	m_cbFilterSelected->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LIB_EDIT_PIN_TABLE_BASE::OnFilterCheckBox ), NULL, this );
 	m_addButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_LIB_EDIT_PIN_TABLE_BASE::OnAddRow ), NULL, this );
 	m_deleteButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_LIB_EDIT_PIN_TABLE_BASE::OnDeleteRow ), NULL, this );
 	m_cbGroup->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LIB_EDIT_PIN_TABLE_BASE::OnRebuildRows ), NULL, this );
