@@ -18,7 +18,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-04-29 20:12+0300\n"
-"PO-Revision-Date: 2025-04-26 08:13+0000\n"
+"PO-Revision-Date: 2025-05-03 15:09+0000\n"
 "Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/kicad/v9/pl/>\n"
 "Language: pl\n"
@@ -25342,7 +25342,7 @@ msgstr "%s (D%d) na warstwie %d: %s"
 
 #: gerbview/gerber_file_image.cpp:125
 msgid "Too many messages, some are skipped"
-msgstr ""
+msgstr "Zbyt dużo wiadomości, niektóre zostały pominięte"
 
 #: gerbview/gerber_file_image.cpp:359
 msgid "Image name"
@@ -45831,9 +45831,8 @@ msgid "Missing netclass name argument to hasNetclass()"
 msgstr "Brak argumentu z nazwą klasy sieci dla hasNetclass()"
 
 #: pcbnew/pcbexpr_functions.cpp:1315
-#, fuzzy
 msgid "Missing netclass name argument to hasExactNetclass()"
-msgstr "Brak argumentu z nazwą klasy sieci dla hasNetclass()"
+msgstr "Brak argumentu z nazwą klasy sieci dla hasExactNetclass()"
 
 #: pcbnew/pcbexpr_functions.cpp:1355
 msgid "Missing component class name argument to hasComponentClass()"
