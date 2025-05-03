@@ -73,7 +73,6 @@ class XCAFDoc_ShapeTool;
 typedef std::pair< std::string, TDF_Label > MODEL_DATUM;
 typedef std::map< std::string, TDF_Label > MODEL_MAP;
 
-extern void ReportMessage( const wxString& aMessage );
 
 enum class OUTPUT_FORMAT
 {
@@ -90,7 +89,7 @@ enum class OUTPUT_FORMAT
 class STEP_PCB_MODEL
 {
 public:
-    STEP_PCB_MODEL( const wxString& aPcbName );
+    STEP_PCB_MODEL( const wxString& aPcbName, REPORTER* aReporter );
     virtual ~STEP_PCB_MODEL();
 
     // Update m_outFmt to aVariant, giving the output format variant
@@ -306,6 +305,7 @@ private:
 
     /// The current output format for created file
     OUTPUT_FORMAT m_outFmt;
+    REPORTER*     m_reporter;
 };
 
 #endif // OCE_VIS_OCE_UTILS_H
