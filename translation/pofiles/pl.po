@@ -18,10 +18,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-05-03 18:13+0300\n"
-"PO-Revision-Date: 2025-05-03 15:09+0000\n"
+"PO-Revision-Date: 2025-05-04 22:07+0000\n"
 "Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
-"Language-Team: Polish <https://hosted.weblate.org/projects/kicad/master-"
-"source/pl/>\n"
+"Language-Team: Polish <https://hosted.weblate.org/projects/kicad/"
+"master-source/pl/>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -5096,7 +5096,7 @@ msgstr "Powtórz"
 #: common/dialogs/panel_embedded_files.cpp:454
 #, c-format
 msgid "Failed to open file '%s'."
-msgstr "Nie można otworzyć pliku '%s'."
+msgstr "Nie udało się otworzyć pliku '%s'."
 
 #: common/dialogs/panel_embedded_files.cpp:466
 #, c-format
@@ -9476,16 +9476,14 @@ msgstr ""
 "innego punktu"
 
 #: common/tool/actions.cpp:571
-#, fuzzy
 msgid "Keep Arc Radius and Center, adjust angle"
-msgstr "Zachowaj punkt centralny łuku, reguluj promień"
+msgstr "Zachowaj promień i punkt centralny łuku, reguluj kąt"
 
 #: common/tool/actions.cpp:572
-#, fuzzy
 msgid "Switch arc editing mode to maintainign radius when endpoint are moved"
 msgstr ""
-"Przełącza tryb edycji łuku, aby zachować środek, dostosowuje promień i "
-"punkty końcowe"
+"Przełącza tryb edycji łuku, aby zachować promień podczas przesuwania punktów "
+"końcowych"
 
 #: common/tool/actions.cpp:579
 msgid "Cycle Arc Editing Mode"
@@ -11553,13 +11551,13 @@ msgid "Unconnected wire to bus entry"
 msgstr "Niepodłączone wejście do magistrali"
 
 #: eeschema/connection_graph.cpp:4255
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Hierarchical label \"%s\" in root sheet cannot be connected to non-existent "
 "parent sheet"
 msgstr ""
-"Etykieta hierarchiczna %s nie ma odpowiednika w pinach arkusza na arkuszu "
-"nadrzędnym"
+"Etykieta hierarchiczna \"%s\" arkusza głównego nie może zostać połączona do "
+"nieistniejącego arkusza nadrzędnego"
 
 #: eeschema/connection_graph.cpp:4320
 #, c-format
@@ -16567,9 +16565,8 @@ msgstr "Zachowaj punkty końcowe lub kierunek z punktu początkowego"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:50
 #: pcbnew/dialogs/panel_edit_options_base.cpp:63
-#, fuzzy
 msgid "Keep center and radius, adjust endpoints"
-msgstr "Zachowaj punkt centralny, reguluj promień"
+msgstr "Zachowaj punkt centralny i promień, reguluj punkty końcowe"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:56
 msgid "Mouse drag performs Drag (G) operation"
@@ -20062,6 +20059,8 @@ msgid ""
 "Unable to find LTspice symbols.\n"
 "Install LTspice or put its library files into %s"
 msgstr ""
+"Nie można odnaleźć symboli LTspice.\n"
+"Zainstaluj LTspice lub umieść jego biblioteki w %s"
 
 #: eeschema/sch_io/ltspice/sch_io_ltspice.h:49
 msgid "LTspice schematic files"
@@ -24744,12 +24743,10 @@ msgid "Net must be labeled to assign a netclass."
 msgstr "Sieci muszą być nazwane by je dołączyć do klas sieci."
 
 #: eeschema/tools/sch_editor_control.cpp:1719 pcbnew/tools/pcb_control.cpp:1094
-#, fuzzy
 msgid ""
 "Pasting a long text text string may be very slow.  Do you want to continue?"
 msgstr ""
-"Zmiana rozszerzenia pliku zmieni typ pliku.\n"
-"Czy chcesz kontynuować?"
+"Wklejanie długich ciągów znaków może być powolne.  Czy chcesz kontynuować?"
 
 #: eeschema/tools/sch_editor_control.cpp:1841
 #, c-format
