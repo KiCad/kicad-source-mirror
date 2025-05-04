@@ -327,7 +327,9 @@ bool DRC_TEST_PROVIDER_COURTYARD_CLEARANCE::testCourtyardClearances()
                     {
                         int errorCode = 0;
 
-                        if( pad->GetAttribute() == PAD_ATTRIB::PTH )
+                        if( pad->GetProperty() == PAD_PROP::HEATSINK )
+                            return;
+                        else if( pad->GetAttribute() == PAD_ATTRIB::PTH )
                             errorCode = DRCE_PTH_IN_COURTYARD;
                         else if( pad->GetAttribute() == PAD_ATTRIB::NPTH )
                             errorCode = DRCE_NPTH_IN_COURTYARD;
