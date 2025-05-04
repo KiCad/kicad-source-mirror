@@ -252,19 +252,24 @@ void SCH_GROUP::swapData( SCH_ITEM* aImage )
     assert( aImage->Type() == SCH_GROUP_T );
     SCH_GROUP* image = static_cast<SCH_GROUP*>( aImage );
 
-    std::swap( *( (SCH_GROUP*) this ), *( (SCH_GROUP*) aImage ) );
+    std::swap( *this, *image );
+
+    // A group doesn't own its children (they're owned by the schematic), so undo doesn't do a
+    // deep clone when making an image.  However, it's still safest to update the parentGroup
+    // pointers of the group's children -- we just have to be careful to do it in the right
+    // order in case any of the children are shared (ie: image first, "this" second so that
+    // any shared children end up with "this").
+    image->RunOnChildren(
+            [&]( SCH_ITEM* child )
+            {
+                child->SetParentGroup( image );
+            },
+            RECURSE_MODE::NO_RECURSE );
 
     RunOnChildren(
             [&]( SCH_ITEM* child )
             {
                 child->SetParentGroup( this );
-            },
-            RECURSE_MODE::NO_RECURSE );
-
-    image->RunOnChildren(
-            [&]( SCH_ITEM* child )
-            {
-                child->SetParentGroup( image );
             },
             RECURSE_MODE::NO_RECURSE );
 }
