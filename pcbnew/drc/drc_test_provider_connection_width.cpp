@@ -49,6 +49,7 @@
 #include <pcb_track.h>
 #include <pad.h>
 #include <zone.h>
+#include <advanced_config.h>
 
 /*
     Checks for copper connections that are less than the specified minimum width
@@ -317,12 +318,16 @@ bool DRC_TEST_PROVIDER_CONNECTION_WIDTH::Run()
     if( !reportPhase( _( "Checking nets for minimum connection width..." ) ) )
         return false;   // DRC cancelled
 
-    LSET   copperLayerSet = m_drcEngine->GetBoard()->GetEnabledLayers() & LSET::AllCuMask();
-    LSEQ   copperLayers = copperLayerSet.Seq();
     BOARD* board = m_drcEngine->GetBoard();
+    LSET   copperLayerSet = board->GetEnabledLayers() & LSET::AllCuMask();
+    LSEQ   copperLayers = copperLayerSet.Seq();
     int    epsilon = board->GetDesignSettings().GetDRCEpsilon();
 
-    // A neck in a zone fill will be DRCEpsilon smaller on *each* side
+    // Zone knockouts can be approximated, and always have extra clearance built in
+    epsilon += board->GetDesignSettings().m_MaxError + pcbIUScale.mmToIU( ADVANCED_CFG::GetCfg().m_ExtraClearance );
+
+    // A neck in a zone fill can be between two knockouts. In this case it will be epsilon smaller
+    // on -each- side.
     epsilon *= 2;
 
     /*
@@ -330,8 +335,7 @@ bool DRC_TEST_PROVIDER_CONNECTION_WIDTH::Run()
      * each distinct minWidth, and then decide if any copper which failed that minWidth actually
      * was required to abide by it or not.
      */
-    std::set<int> distinctMinWidths
-                        = m_drcEngine->QueryDistinctConstraints( CONNECTION_WIDTH_CONSTRAINT );
+    std::set<int> distinctMinWidths = m_drcEngine->QueryDistinctConstraints( CONNECTION_WIDTH_CONSTRAINT );
 
     if( m_drcEngine->IsCancelled() )
         return false;   // DRC cancelled
