@@ -772,7 +772,27 @@ int SYMBOL_EDITOR_EDIT_TOOL::PinTable( const TOOL_EVENT& aEvent )
 
     commit.Modify( symbol );
 
-    DIALOG_LIB_EDIT_PIN_TABLE dlg( m_frame, symbol );
+    SCH_SELECTION_TOOL* selTool = m_toolMgr->GetTool<SCH_SELECTION_TOOL>();
+    wxCHECK( selTool, -1 );
+
+    std::vector<SCH_PIN*> selectedPins;
+
+    SCH_SELECTION& selection = selTool->GetSelection();
+
+    for( EDA_ITEM* item : selection )
+    {
+        if( item->Type() == SCH_PIN_T )
+        {
+            SCH_PIN* pinItem = static_cast<SCH_PIN*>( item );
+            selectedPins.push_back( pinItem );
+        }
+    }
+
+    // And now clear the selection so if we change the pins we don't have dangling pointers
+    // in the selection.
+    m_toolMgr->RunAction( ACTIONS::selectionClear );
+
+    DIALOG_LIB_EDIT_PIN_TABLE dlg( m_frame, symbol, selectedPins );
 
     if( dlg.ShowModal() == wxID_CANCEL )
         return -1;

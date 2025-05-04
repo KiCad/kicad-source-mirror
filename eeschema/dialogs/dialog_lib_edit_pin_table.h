@@ -54,7 +54,8 @@ class SYMBOL_EDIT_FRAME;
 class DIALOG_LIB_EDIT_PIN_TABLE : public DIALOG_LIB_EDIT_PIN_TABLE_BASE
 {
 public:
-    DIALOG_LIB_EDIT_PIN_TABLE( SYMBOL_EDIT_FRAME* parent, LIB_SYMBOL* aSymbol );
+    DIALOG_LIB_EDIT_PIN_TABLE( SYMBOL_EDIT_FRAME* parent, LIB_SYMBOL* aSymbol,
+                               const std::vector<SCH_PIN*>& aSelectedPins );
     ~DIALOG_LIB_EDIT_PIN_TABLE() override;
 
     bool TransferDataToWindow() override;
@@ -89,9 +90,11 @@ protected:
     int                   m_originalColWidths[ COL_COUNT ];
     std::bitset<64>       m_columnsShown;
     LIB_SYMBOL*           m_symbol;
-    std::vector<SCH_PIN*> m_pins;       // a copy of the pins owned by me
+    std::vector<SCH_PIN*> m_pins;       // a copy of the pins owned by the dialog
     bool                  m_modified;   ///< true when there are unsaved changes
     wxSize                m_size;
 
     PIN_TABLE_DATA_MODEL* m_dataModel;
+
+    std::unique_ptr<ACTION_MENU> m_menu;
 };

@@ -353,8 +353,10 @@ void getSelectedArea( WX_GRID* aGrid, int* aRowStart, int* aRowCount )
 class PIN_TABLE_DATA_MODEL : public wxGridTableBase
 {
 public:
-    PIN_TABLE_DATA_MODEL( SYMBOL_EDIT_FRAME* aFrame, DIALOG_LIB_EDIT_PIN_TABLE* aPinTable,
-                          LIB_SYMBOL* aSymbol, SCH_SELECTION_TOOL& aSelectionTool ) :
+    PIN_TABLE_DATA_MODEL( SYMBOL_EDIT_FRAME* aFrame,
+                          DIALOG_LIB_EDIT_PIN_TABLE* aPinTable,
+                          LIB_SYMBOL* aSymbol,
+                          const std::vector<SCH_PIN*>& aOrigSelectedPins ) :
             m_frame( aFrame ),
             m_unitFilter( -1 ),
             m_bodyStyleFilter( -1 ),
@@ -362,7 +364,7 @@ public:
             m_edited( false ),
             m_pinTable( aPinTable ),
             m_symbol( aSymbol ),
-            m_selectionTool( aSelectionTool )
+            m_origSelectedPins( aOrigSelectedPins )
     {
         m_eval = std::make_unique<NUMERIC_EVALUATOR>( m_frame->GetUserUnits() );
 
@@ -672,32 +674,22 @@ public:
         if( groupBySelection )
             m_rows.emplace_back( std::vector<SCH_PIN*>() );
 
-        std::set<SCH_PIN*> selectedPins;
         std::set<wxString> selectedNumbers;
-        if( m_filterBySelection )
+        for( SCH_PIN* pin : m_origSelectedPins )
         {
-            SCH_SELECTION& selection = m_selectionTool.GetSelection();
-
-            for( EDA_ITEM* item : selection )
-            {
-                if( item->Type() == SCH_PIN_T )
-                {
-                    SCH_PIN* pinItem = static_cast<SCH_PIN*>( item );
-                    selectedPins.insert( pinItem );
-                    selectedNumbers.insert( pinItem->GetNumber() );
-                }
-            }
+            selectedNumbers.insert( pin->GetNumber() );
         }
 
         const auto pinIsInEditorSelection = [&]( SCH_PIN* pin )
         {
-            // Quick check before we iterate the whole thing
+            // Quick check before we iterate the whole thing in N^2 time.
+            // (3000^2 = FPGAs causing issues down the road).
             if( selectedNumbers.count( pin->GetNumber() ) == 0 )
             {
                 return false;
             }
 
-            for( SCH_PIN* selectedPin : selectedPins )
+            for( SCH_PIN* selectedPin : m_origSelectedPins )
             {
                 // The selected pin is in the editor, but the pins in the table
                 // are copies. We will mark the pin as selected if it's a match
@@ -844,7 +836,9 @@ private:
     DIALOG_LIB_EDIT_PIN_TABLE*         m_pinTable;
     LIB_SYMBOL*                        m_symbol;    // Parent symbol that the pins belong to.
 
-    SCH_SELECTION_TOOL&                m_selectionTool; // Selection tool for the selection filter
+    /// The pins in the symbol that are selected at dialog start
+    const std::vector<SCH_PIN*>&       m_origSelectedPins;
+
     std::unique_ptr<NUMERIC_EVALUATOR> m_eval;
     std::map< std::pair<std::vector<SCH_PIN*>, int>, wxString > m_evalOriginal;
 };
@@ -1030,14 +1024,13 @@ private:
 
 
 DIALOG_LIB_EDIT_PIN_TABLE::DIALOG_LIB_EDIT_PIN_TABLE( SYMBOL_EDIT_FRAME* parent,
-                                                      LIB_SYMBOL* aSymbol ) :
+                                                      LIB_SYMBOL* aSymbol,
+                                                      const std::vector<SCH_PIN*>& aSelectedPins ) :
         DIALOG_LIB_EDIT_PIN_TABLE_BASE( parent ),
         m_editFrame( parent ),
         m_symbol( aSymbol )
 {
-    SCH_SELECTION_TOOL* selTool = parent->GetToolManager()->GetTool<SCH_SELECTION_TOOL>();
-
-    m_dataModel = new PIN_TABLE_DATA_MODEL( m_editFrame, this, this->m_symbol, *selTool );
+    m_dataModel = new PIN_TABLE_DATA_MODEL( m_editFrame, this, this->m_symbol, aSelectedPins );
 
     // Save original columns widths so we can do proportional sizing.
     for( int i = 0; i < COL_COUNT; ++i )
