@@ -34,6 +34,7 @@
 
 class ALTIUM_PCB_COMPOUND_FILE;
 
+
 class PCB_IO_ALTIUM_DESIGNER : public PCB_IO, public LAYER_MAPPABLE_PLUGIN
 {
 public:
@@ -87,8 +88,13 @@ public:
             const std::vector<INPUT_LAYER_DESC>& aInputLayerDescriptionVector );
 
 private:
-    std::map<wxString, std::vector<std::unique_ptr<ALTIUM_PCB_COMPOUND_FILE>>> m_fplibFiles;
+    struct ALTIUM_FILE_CACHE
+    {
+        std::vector<std::unique_ptr<ALTIUM_PCB_COMPOUND_FILE>> m_Files;
+        long long                                              m_Timestamp;
+    };
 
+    std::map<wxString, ALTIUM_FILE_CACHE> m_fplibFiles;
 
     void loadAltiumLibrary( const wxString& aLibraryPath );
 };
