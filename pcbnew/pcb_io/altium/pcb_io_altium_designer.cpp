@@ -178,34 +178,33 @@ void PCB_IO_ALTIUM_DESIGNER::loadAltiumLibrary( const wxString& aLibraryPath )
 {
     fontconfig::FONTCONFIG::SetReporter( nullptr );
 
+    long long timestamp = GetLibraryTimestamp( aLibraryPath );
+
+    if( m_fplibFiles.contains( aLibraryPath ) && m_fplibFiles[aLibraryPath].m_Timestamp == timestamp )
+        return; // Already loaded
+
     try
     {
-        auto it = m_fplibFiles.find( aLibraryPath );
-
-        if( it != m_fplibFiles.end() )
-            return; // Already loaded
+        ALTIUM_FILE_CACHE& libFiles = m_fplibFiles[aLibraryPath];
 
         if( aLibraryPath.Lower().EndsWith( wxS( ".pcblib" ) ) )
         {
-            m_fplibFiles[aLibraryPath].emplace_back(
-                    std::make_unique<ALTIUM_PCB_COMPOUND_FILE>( aLibraryPath ) );
+            libFiles.m_Files.emplace_back( std::make_unique<ALTIUM_PCB_COMPOUND_FILE>( aLibraryPath ) );
         }
         else if( aLibraryPath.Lower().EndsWith( wxS( ".intlib" ) ) )
         {
-            std::unique_ptr<ALTIUM_PCB_COMPOUND_FILE> intCom =
-                    std::make_unique<ALTIUM_PCB_COMPOUND_FILE>( aLibraryPath );
+            std::unique_ptr<ALTIUM_PCB_COMPOUND_FILE> lib = std::make_unique<ALTIUM_PCB_COMPOUND_FILE>( aLibraryPath );
 
-            std::map<wxString, const CFB::COMPOUND_FILE_ENTRY*> pcbLibFiles =
-                    intCom->EnumDir( L"PCBLib" );
-
-            for( const auto& [pcbLibName, pcbCfe] : pcbLibFiles )
+            for( const auto& [pcbLibName, pcbCfe] : lib->EnumDir( L"PCBLib" ) )
             {
-                auto decodedStream = std::make_unique<ALTIUM_PCB_COMPOUND_FILE>();
+                std::unique_ptr<ALTIUM_PCB_COMPOUND_FILE> libFile = std::make_unique<ALTIUM_PCB_COMPOUND_FILE>();
 
-                if( intCom->DecodeIntLibStream( *pcbCfe, decodedStream.get() ) )
-                    m_fplibFiles[aLibraryPath].emplace_back( std::move( decodedStream ) );
+                if( lib->DecodeIntLibStream( *pcbCfe, libFile.get() ) )
+                    libFiles.m_Files.emplace_back( std::move( libFile ) );
             }
         }
+
+        libFiles.m_Timestamp = timestamp;
     }
     catch( CFB::CFBException& exception )
     {
@@ -220,14 +219,12 @@ void PCB_IO_ALTIUM_DESIGNER::FootprintEnumerate( wxArrayString&  aFootprintNames
 {
     loadAltiumLibrary( aLibraryPath );
 
-    auto it = m_fplibFiles.find( aLibraryPath );
-
-    if( it == m_fplibFiles.end() )
+    if( !m_fplibFiles.contains( aLibraryPath ) )
         return; // No footprint libraries in file, ignore.
 
     try
     {
-        for( auto& altiumLibFile : it->second )
+        for( std::unique_ptr<ALTIUM_PCB_COMPOUND_FILE>& altiumLibFile : m_fplibFiles[aLibraryPath].m_Files )
         {
             // Map code-page-dependent names to unicode names
             CASE_INSENSITIVE_MAP<wxString> patternMap = altiumLibFile->ListLibFootprints();
@@ -279,8 +276,7 @@ void PCB_IO_ALTIUM_DESIGNER::FootprintEnumerate( wxArrayString&  aFootprintNames
                 }
                 else
                 {
-                    THROW_IO_ERROR(
-                            wxString::Format( "Component name not found: '%s'", fpPattern ) );
+                    THROW_IO_ERROR( wxString::Format( "Component name not found: '%s'", fpPattern ) );
                 }
 
                 parser.SkipSubrecord();
@@ -312,14 +308,12 @@ FOOTPRINT* PCB_IO_ALTIUM_DESIGNER::FootprintLoad( const wxString& aLibraryPath,
 {
     loadAltiumLibrary( aLibraryPath );
 
-    auto it = m_fplibFiles.find( aLibraryPath );
-
-    if( it == m_fplibFiles.end() )
+    if( !m_fplibFiles.contains( aLibraryPath ) )
         THROW_IO_ERROR( wxString::Format( _( "No footprints in library '%s'" ), aLibraryPath ) );
 
     try
     {
-        for( std::unique_ptr<ALTIUM_PCB_COMPOUND_FILE>& altiumLibFile : it->second )
+        for( std::unique_ptr<ALTIUM_PCB_COMPOUND_FILE>& altiumLibFile : m_fplibFiles[aLibraryPath].m_Files )
         {
             altiumLibFile->CacheLibModels();
             auto [dirName, fpCfe] = altiumLibFile->FindLibFootprintDirName( aFootprintName );
