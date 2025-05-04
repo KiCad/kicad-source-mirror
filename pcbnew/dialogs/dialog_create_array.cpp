@@ -56,6 +56,7 @@ struct CREATE_ARRAY_DIALOG_ENTRIES
     long     m_GridStagger               = 1;
     bool     m_GridStaggerRows           = true;
     bool     m_GridPositionCentreOnItems = true;
+    bool     m_GridPositionItemsInPlace  = false;
     long     m_GridNumberingAxis         = 0;           // h then v
     bool     m_GridNumReverseAlt         = false;
     long     m_GridNumStartSet           = 1;           // use specified start
@@ -170,6 +171,7 @@ DIALOG_CREATE_ARRAY::DIALOG_CREATE_ARRAY( PCB_BASE_FRAME*                 aParen
 
     m_cfg_persister.Add( *m_staggerRows, s_arrayOptions.m_GridStaggerRows );
 
+    m_cfg_persister.Add( *m_rbItemsRemainInPlace, s_arrayOptions.m_GridPositionItemsInPlace );
     m_cfg_persister.Add( *m_rbCentreOnSource, s_arrayOptions.m_GridPositionCentreOnItems );
 
     m_cfg_persister.Add( *m_radioBoxGridNumberingAxis, s_arrayOptions.m_GridNumberingAxis );
