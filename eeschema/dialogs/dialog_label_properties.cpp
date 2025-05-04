@@ -51,7 +51,8 @@ DIALOG_LABEL_PROPERTIES::DIALOG_LABEL_PROPERTIES( SCH_EDIT_FRAME* aParent,
         m_netNameValidator( true ),
         m_fields( nullptr ),
         m_textSize( aParent, m_textSizeLabel, m_textSizeCtrl, m_textSizeUnits, false ),
-        m_helpWindow( nullptr )
+        m_helpWindow( nullptr ),
+        m_labelList( nullptr )
 {
     COLOR_SETTINGS* colorSettings = m_Parent->GetColorSettings();
     COLOR4D         schematicBackground = colorSettings->GetColor( LAYER_SCHEMATIC_BACKGROUND );
