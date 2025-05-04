@@ -1899,9 +1899,9 @@ void PAD::ImportSettingsFrom( const PAD& aMasterPad )
     Padstack().ForEachUniqueLayer(
             [&]( PCB_LAYER_ID aLayer )
             {
+                // Ensure that circles are circles
                 if( aMasterPad.GetShape( aLayer ) == PAD_SHAPE::CIRCLE )
-                    SetSize( F_Cu, VECTOR2I( GetSize( PADSTACK::ALL_LAYERS ).x,
-                                             GetSize( PADSTACK::ALL_LAYERS ).x ) );
+                    SetSize( aLayer, VECTOR2I( GetSize( aLayer ).x, GetSize( aLayer ).x ) );
             } );
 
     switch( aMasterPad.GetAttribute() )
