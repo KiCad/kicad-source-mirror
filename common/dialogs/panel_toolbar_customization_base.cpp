@@ -27,7 +27,6 @@ PANEL_TOOLBAR_CUSTOMIZATION_BASE::PANEL_TOOLBAR_CUSTOMIZATION_BASE( wxWindow* pa
 	m_customizeControls->AddGrowableCol( 0 );
 	m_customizeControls->AddGrowableCol( 2 );
 	m_customizeControls->AddGrowableRow( 0 );
-	m_customizeControls->AddGrowableRow( 2 );
 	m_customizeControls->SetFlexibleDirection( wxHORIZONTAL );
 	m_customizeControls->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
@@ -96,7 +95,7 @@ PANEL_TOOLBAR_CUSTOMIZATION_BASE::PANEL_TOOLBAR_CUSTOMIZATION_BASE( wxWindow* pa
 	wxBoxSizer* bSizer9;
 	bSizer9 = new wxBoxSizer( wxHORIZONTAL );
 
-	m_actionsList = new wxListCtrl( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLC_ICON|wxLC_NO_HEADER|wxLC_REPORT|wxLC_SINGLE_SEL );
+	m_actionsList = new wxListCtrl( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLC_NO_HEADER|wxLC_REPORT|wxLC_SINGLE_SEL );
 	bSizer9->Add( m_actionsList, 0, wxALL|wxEXPAND, 5 );
 
 
