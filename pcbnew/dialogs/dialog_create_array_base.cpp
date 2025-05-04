@@ -357,6 +357,18 @@ DIALOG_CREATE_ARRAY_BASE::DIALOG_CREATE_ARRAY_BASE( wxWindow* parent, wxWindowID
 	m_checkBoxFullCircle->SetValue(true);
 	sbSizerDupPrms->Add( m_checkBoxFullCircle, 0, wxALL, 5 );
 
+	wxString m_rbCircDirectionChoices[] = { _("Clockwise"), _("Anti-clockwise") };
+	int m_rbCircDirectionNChoices = sizeof( m_rbCircDirectionChoices ) / sizeof( wxString );
+	m_rbCircDirection = new wxRadioBox( sbSizerDupPrms->GetStaticBox(), wxID_ANY, _("Direction"), wxDefaultPosition, wxDefaultSize, m_rbCircDirectionNChoices, m_rbCircDirectionChoices, 1, wxRA_SPECIFY_COLS );
+	m_rbCircDirection->SetSelection( 0 );
+	sbSizerDupPrms->Add( m_rbCircDirection, 0, wxEXPAND|wxLEFT|wxRIGHT, 5 );
+
+	m_entryRotateItemsCb1 = new wxCheckBox( sbSizerDupPrms->GetStaticBox(), wxID_ANY, _("Rotate items"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_entryRotateItemsCb1->SetValue(true);
+	m_entryRotateItemsCb1->SetToolTip( _("Rotate the item as well as move it - multi-selections will be rotated together") );
+
+	sbSizerDupPrms->Add( m_entryRotateItemsCb1, 0, wxALL, 5 );
+
 	wxFlexGridSizer* fgSizerDupPrms;
 	fgSizerDupPrms = new wxFlexGridSizer( 0, 3, 5, 5 );
 	fgSizerDupPrms->AddGrowableCol( 1 );
@@ -384,6 +396,22 @@ DIALOG_CREATE_ARRAY_BASE::DIALOG_CREATE_ARRAY_BASE( wxWindow* parent, wxWindowID
 	m_entryCircCount->SetToolTip( _("How many items in the array.") );
 
 	fgSizerDupPrms->Add( m_entryCircCount, 0, wxEXPAND, 5 );
+
+
+	fgSizerDupPrms->Add( 0, 0, 1, wxEXPAND, 5 );
+
+	m_labelCircOffset = new wxStaticText( sbSizerDupPrms->GetStaticBox(), wxID_ANY, _("First item angle:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_labelCircOffset->Wrap( -1 );
+	fgSizerDupPrms->Add( m_labelCircOffset, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
+
+	m_entryCircOffset = new TEXT_CTRL_EVAL( sbSizerDupPrms->GetStaticBox(), wxID_ANY, _("0"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_entryCircOffset->SetToolTip( _("Angle offset of the first item in the array") );
+
+	fgSizerDupPrms->Add( m_entryCircOffset, 0, wxEXPAND, 5 );
+
+	m_unitLabelCircOffset = new wxStaticText( sbSizerDupPrms->GetStaticBox(), wxID_ANY, _("deg"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_unitLabelCircOffset->Wrap( -1 );
+	fgSizerDupPrms->Add( m_unitLabelCircOffset, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 
 	sbSizerDupPrms->Add( fgSizerDupPrms, 0, wxBOTTOM|wxEXPAND, 5 );
@@ -552,6 +580,7 @@ DIALOG_CREATE_ARRAY_BASE::DIALOG_CREATE_ARRAY_BASE( wxWindow* parent, wxWindowID
 	m_checkBoxFullCircle->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_CREATE_ARRAY_BASE::OnParameterChanged ), NULL, this );
 	m_entryCircAngle->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_CREATE_ARRAY_BASE::OnParameterChanged ), NULL, this );
 	m_entryCircCount->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_CREATE_ARRAY_BASE::OnParameterChanged ), NULL, this );
+	m_entryCircOffset->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_CREATE_ARRAY_BASE::OnParameterChanged ), NULL, this );
 	m_rbCircStartNumberingOpt->Connect( wxEVT_COMMAND_RADIOBOX_SELECTED, wxCommandEventHandler( DIALOG_CREATE_ARRAY_BASE::OnParameterChanged ), NULL, this );
 	m_choiceCircNumbering->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_CREATE_ARRAY_BASE::OnAxisNumberingChange ), NULL, this );
 	m_radioBtnDuplicateSelection->Connect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( DIALOG_CREATE_ARRAY_BASE::OnParameterChanged ), NULL, this );
@@ -581,6 +610,7 @@ DIALOG_CREATE_ARRAY_BASE::~DIALOG_CREATE_ARRAY_BASE()
 	m_checkBoxFullCircle->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_CREATE_ARRAY_BASE::OnParameterChanged ), NULL, this );
 	m_entryCircAngle->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_CREATE_ARRAY_BASE::OnParameterChanged ), NULL, this );
 	m_entryCircCount->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_CREATE_ARRAY_BASE::OnParameterChanged ), NULL, this );
+	m_entryCircOffset->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_CREATE_ARRAY_BASE::OnParameterChanged ), NULL, this );
 	m_rbCircStartNumberingOpt->Disconnect( wxEVT_COMMAND_RADIOBOX_SELECTED, wxCommandEventHandler( DIALOG_CREATE_ARRAY_BASE::OnParameterChanged ), NULL, this );
 	m_choiceCircNumbering->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_CREATE_ARRAY_BASE::OnAxisNumberingChange ), NULL, this );
 	m_radioBtnDuplicateSelection->Disconnect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( DIALOG_CREATE_ARRAY_BASE::OnParameterChanged ), NULL, this );

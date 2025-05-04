@@ -90,7 +90,7 @@ private:
     UNIT_BINDER m_hSpacing, m_vSpacing;
     UNIT_BINDER m_hOffset, m_vOffset;
     UNIT_BINDER m_hCentre, m_vCentre;
-    UNIT_BINDER m_circAngle;
+    UNIT_BINDER m_circAngle, m_circOffset;
 
     WIDGET_SAVE_RESTORE m_cfg_persister;
 };

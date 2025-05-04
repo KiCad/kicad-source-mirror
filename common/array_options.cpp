@@ -133,6 +133,11 @@ ARRAY_OPTIONS::TRANSFORM ARRAY_CIRCULAR_OPTIONS::GetTransform( int n, const VECT
         // n'th step
         angle = EDA_ANGLE( m_angle.AsDegrees() * n, DEGREES_T );
 
+    angle += m_angleOffset;
+
+    if( m_clockwise )
+        angle = -angle;
+
     VECTOR2I new_pos = aPos;
     RotatePoint( new_pos, m_centre, angle );
 

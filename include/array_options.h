@@ -203,6 +203,8 @@ struct KICOMMON_API ARRAY_CIRCULAR_OPTIONS : public ARRAY_OPTIONS
             : ARRAY_OPTIONS( ARRAY_CIRCULAR ),
               m_nPts( 0 ),
               m_angle( ANGLE_0 ),
+              m_angleOffset( ANGLE_0 ),
+              m_clockwise( false ),
               m_rotateItems( false )
     {
     }
@@ -212,6 +214,8 @@ struct KICOMMON_API ARRAY_CIRCULAR_OPTIONS : public ARRAY_OPTIONS
 
     /// angle between points, or 0 for each point separated by this value (decideg)
     EDA_ANGLE        m_angle;
+    EDA_ANGLE        m_angleOffset;
+    bool             m_clockwise;
     VECTOR2I         m_centre;
     bool             m_rotateItems;
     ARRAY_AXIS       m_axis;

@@ -72,6 +72,8 @@ struct CREATE_ARRAY_DIALOG_ENTRIES
     long      m_CircCentreX              = 0;
     long      m_CircCentreY              = 0;
     EDA_ANGLE m_CircAngle                = ANGLE_90;
+    long      m_CircleDirection          = 0;        // clockwise
+    EDA_ANGLE m_CircOffsetAngle          = ANGLE_0;
     long      m_CircCount                = 4;
     bool      m_CircFullCircle           = 0;
     long      m_CircNumStartSet          = 1;        // use specified start
@@ -135,6 +137,7 @@ DIALOG_CREATE_ARRAY::DIALOG_CREATE_ARRAY( PCB_BASE_FRAME*                 aParen
         m_hCentre( aParent, m_labelCentreX, m_entryCentreX, m_unitLabelCentreX ),
         m_vCentre( aParent, m_labelCentreY, m_entryCentreY, m_unitLabelCentreY ),
         m_circAngle( aParent, m_labelCircAngle, m_entryCircAngle, m_unitLabelCircAngle ),
+        m_circOffset( aParent, m_labelCircOffset, m_entryCircOffset, m_unitLabelCircOffset ),
         m_cfg_persister( pcbIUScale, s_arrayOptions.m_OptionsSet )
 {
     // Configure display origin transforms
@@ -161,6 +164,7 @@ DIALOG_CREATE_ARRAY::DIALOG_CREATE_ARRAY( PCB_BASE_FRAME*                 aParen
     m_choiceCircNumbering->SetSelection( 0 );
 
     m_circAngle.SetUnits( EDA_UNITS::DEGREES );
+    m_circOffset.SetUnits( EDA_UNITS::DEGREES );
 
     // bind grid options to persister
     m_cfg_persister.Add( *m_entryNx, s_arrayOptions.m_GridNx );
@@ -196,6 +200,8 @@ DIALOG_CREATE_ARRAY::DIALOG_CREATE_ARRAY( PCB_BASE_FRAME*                 aParen
 
     m_cfg_persister.Add( *m_checkBoxFullCircle, s_arrayOptions.m_CircFullCircle );
     m_cfg_persister.Add( m_circAngle, s_arrayOptions.m_CircAngle );
+    m_cfg_persister.Add( m_circOffset, s_arrayOptions.m_CircOffsetAngle );
+    m_cfg_persister.Add( *m_rbCircDirection, s_arrayOptions.m_CircleDirection );
     m_cfg_persister.Add( *m_entryCircCount, s_arrayOptions.m_CircCount );
     m_cfg_persister.Add( *m_entryRotateItemsCb, s_arrayOptions.m_CircRotatationStep );
 
@@ -479,10 +485,13 @@ bool DIALOG_CREATE_ARRAY::TransferDataFromWindow()
         auto   newCirc = std::make_unique<ARRAY_CIRCULAR_OPTIONS>();
         bool   ok = true;
         double angle = EDA_UNIT_UTILS::UI::DoubleValueFromString( m_entryCircAngle->GetValue() );
+        double offset = EDA_UNIT_UTILS::UI::DoubleValueFromString( m_entryCircOffset->GetValue() );
 
         newCirc->m_centre.x = m_hCentre.GetIntValue();
         newCirc->m_centre.y = m_vCentre.GetIntValue();
         newCirc->m_angle = EDA_ANGLE( angle, DEGREES_T );
+        newCirc->m_angleOffset = EDA_ANGLE( offset, DEGREES_T );
+        newCirc->m_clockwise = m_rbCircDirection->GetSelection() == 0;
 
         ok = validateLongEntry(*m_entryCircCount, newCirc->m_nPts, _("point count"), errors);
 

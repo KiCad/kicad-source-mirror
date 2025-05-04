@@ -97,11 +97,16 @@ class DIALOG_CREATE_ARRAY_BASE : public DIALOG_SHIM
 		wxButton* m_btnSelectCenterPoint;
 		wxButton* m_btnSelectCenterItem;
 		wxCheckBox* m_checkBoxFullCircle;
+		wxRadioBox* m_rbCircDirection;
+		wxCheckBox* m_entryRotateItemsCb1;
 		wxStaticText* m_labelCircAngle;
 		wxTextCtrl* m_entryCircAngle;
 		wxStaticText* m_unitLabelCircAngle;
 		wxStaticText* m_labelCircCount;
 		TEXT_CTRL_EVAL* m_entryCircCount;
+		wxStaticText* m_labelCircOffset;
+		TEXT_CTRL_EVAL* m_entryCircOffset;
+		wxStaticText* m_unitLabelCircOffset;
 		wxCheckBox* m_entryRotateItemsCb;
 		wxPanel* m_circularPadNumberingPanel;
 		wxStaticBoxSizer* m_circPadNumberingSizer;
