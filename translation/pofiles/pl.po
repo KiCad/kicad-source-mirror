@@ -18,7 +18,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-05-03 18:13+0300\n"
-"PO-Revision-Date: 2025-05-03 15:09+0000\n"
+"PO-Revision-Date: 2025-05-04 22:08+0000\n"
 "Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/kicad/v9/pl/>\n"
 "Language: pl\n"
@@ -4967,7 +4967,7 @@ msgstr "Powtórz"
 #: common/dialogs/panel_embedded_files.cpp:454
 #, c-format
 msgid "Failed to open file '%s'."
-msgstr "Nie można otworzyć pliku '%s'."
+msgstr "Nie udało się otworzyć pliku '%s'."
 
 #: common/dialogs/panel_embedded_files.cpp:466
 #, c-format
@@ -19519,6 +19519,8 @@ msgid ""
 "Unable to find LTspice symbols.\n"
 "Install LTspice or put its library files into %s"
 msgstr ""
+"Nie można odnaleźć symboli LTspice.\n"
+"Zainstaluj LTspice lub umieść jego biblioteki w %s"
 
 #: eeschema/sch_io/ltspice/sch_io_ltspice.h:49
 msgid "LTspice schematic files"
