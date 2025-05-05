@@ -1450,10 +1450,10 @@ void CONNECTION_GRAPH::buildItemSubGraphs()
                         [&]( SCH_ITEM* aItem ) -> bool
                         {
                             SCH_CONNECTION* conn = aItem->GetOrInitConnection( sheet, this );
-                            bool unique = !( aItem->GetFlags() & CANDIDATE );
+                            bool            unique = !( aItem->GetFlags() & CONNECTIVITY_CANDIDATE );
 
                             if( conn && !conn->SubgraphCode() )
-                                aItem->SetFlags( CANDIDATE );
+                                aItem->SetFlags( CONNECTIVITY_CANDIDATE );
 
                             return ( unique && conn && ( conn->SubgraphCode() == 0 ) );
                         };
@@ -1480,7 +1480,7 @@ void CONNECTION_GRAPH::buildItemSubGraphs()
 
                         for( SCH_ITEM* citem : citemset )
                         {
-                            if( citem->HasFlag( CANDIDATE ) )
+                            if( citem->HasFlag( CONNECTIVITY_CANDIDATE ) )
                                 continue;
 
                             if( get_items( citem ) )
@@ -1490,7 +1490,7 @@ void CONNECTION_GRAPH::buildItemSubGraphs()
                 }
 
                 for( SCH_ITEM* connected_item : memberlist )
-                    connected_item->ClearFlags( CANDIDATE );
+                    connected_item->ClearFlags( CONNECTIVITY_CANDIDATE );
 
                 subgraph->m_dirty = true;
                 m_subgraphs.push_back( subgraph );

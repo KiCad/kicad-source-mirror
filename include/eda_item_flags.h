@@ -60,7 +60,7 @@
 
 #define ROUTER_TRANSIENT      (1 << 22)     ///< transient items that should NOT be cached
 
-// 23 is unused
+#define CONNECTIVITY_CANDIDATE ( 1 << 23 ) ///< flag indicating that the structure is connected for connectivity
 
 #define HOLE_PROXY     (1 << 24)   ///< Indicates the BOARD_ITEM is a proxy for its hole
 #define SHOW_ELEC_TYPE (1 << 25)   ///< Show pin electrical type

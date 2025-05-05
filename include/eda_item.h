@@ -156,7 +156,8 @@ public:
 
     EDA_ITEM_FLAGS GetTempFlags() const
     {
-        constexpr int mask = ( CANDIDATE | SELECTED_BY_DRAG | IS_LINKED | SKIP_STRUCT | SELECTION_CANDIDATE );
+        constexpr int mask = ( CANDIDATE | SELECTED_BY_DRAG | IS_LINKED | SKIP_STRUCT | SELECTION_CANDIDATE
+                               | CONNECTIVITY_CANDIDATE );
 
         return m_flags & mask;
     }
