@@ -55,6 +55,18 @@ public:
         m_timer.Bind( wxEVT_TIMER, &ACTIVATION_HELPER::onTimerExpiry, this );
     }
 
+    ~ACTIVATION_HELPER()
+    {
+        // Hold the lock while shutting down to prevent a propoal being accepted
+        // while state is being destroyed.
+        std::unique_lock<std::mutex> lock( m_mutex );
+        m_timer.Stop();
+        m_timer.Unbind( wxEVT_TIMER, &ACTIVATION_HELPER::onTimerExpiry, this );
+
+        // Should be redundant to inhibiting timer callbacks, but make it explicit.
+        m_pendingProposalTag.reset();
+    }
+
     void ProposeActivation( T&& aProposal, std::size_t aProposalTag, bool aAcceptImmediately )
     {
         std::unique_lock<std::mutex> lock( m_mutex );
@@ -160,6 +172,10 @@ CONSTRUCTION_MANAGER::CONSTRUCTION_MANAGER( CONSTRUCTION_VIEW_HANDLER& aHelper )
             acceptanceTimeout,
             [this]( std::unique_ptr<PENDING_BATCH>&& aAccepted )
             {
+                // This shouldn't be possible (probably indicates a race in destruction of something)
+                // but at least avoid blowing up acceptConstructionItems.
+                wxCHECK_MSG( aAccepted != nullptr, void(), "Null proposal accepted" );
+
                 acceptConstructionItems( std::move( aAccepted ) );
             } );
 }
