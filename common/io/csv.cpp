@@ -4,12 +4,12 @@
 
 #include <wx/txtstrm.h>
 
-
 #include <rapidcsv/rapidcsv.h>
 
 
 CSV_WRITER::CSV_WRITER( wxOutputStream& aStream ) :
-        m_stream( aStream ), m_delimiter( wxT( "," ) ), m_quote( wxT( "\"" ) ), m_lineTerminator( wxT( "\n" ) ),
+        m_stream( aStream ), m_delimiter( wxT( "," ) ),
+        m_quote( wxT( "\"" ) ), m_lineTerminator( wxT( "\n" ) ),
         m_escape( wxEmptyString )
 {
 }
@@ -27,6 +27,7 @@ void CSV_WRITER::WriteLines( const std::vector<std::vector<wxString>>& aRows )
 void CSV_WRITER::WriteLine( const std::vector<wxString>& cols )
 {
     wxString line;
+
     for( size_t i = 0; i < cols.size(); ++i )
     {
         wxString colVal = cols[i];
@@ -35,6 +36,7 @@ void CSV_WRITER::WriteLine( const std::vector<wxString>& cols )
             line += m_delimiter;
 
         double test;
+
         if( !colVal.ToDouble( &test ) )
         {
             bool useEscape = m_escape.size();
@@ -53,9 +55,12 @@ void CSV_WRITER::WriteLine( const std::vector<wxString>& cols )
 
         line += colVal;
     }
+
     line += m_lineTerminator;
 
-    m_stream.Write( line.c_str(), line.length() );
+    // Always write text on file using UTF8 encoding
+    std::string utf8str( line.utf8_string() );
+    m_stream.Write( utf8str.data(), utf8str.length() );
 }
 
 
