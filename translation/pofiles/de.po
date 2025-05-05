@@ -30,15 +30,15 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-05-03 18:13+0300\n"
-"PO-Revision-Date: 2025-04-24 16:37+0000\n"
-"Last-Translator: Ettore Atalan <atalanttore@googlemail.com>\n"
+"PO-Revision-Date: 2025-05-06 09:51+0000\n"
+"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v9/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.11.1-dev\n"
+"X-Generator: Weblate 5.12-dev\n"
 "X-Poedit-Basepath: ../../../../../../mnt/kicad\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -31436,14 +31436,12 @@ msgid "Effective %s (odd):"
 msgstr "Effektive %s (odd):"
 
 #: pcb_calculator/transline_ident.cpp:308
-#, fuzzy
 msgid "Unit propagation delay (even):"
-msgstr "Gatterlaufzeit"
+msgstr "Einheit Ausbreitungsverzögerung (gerade):"
 
 #: pcb_calculator/transline_ident.cpp:309
-#, fuzzy
 msgid "Unit propagation delay (odd):"
-msgstr "Gatterlaufzeit"
+msgstr "Einheit Ausbreitungsverzögerung (ungerade):"
 
 #: pcb_calculator/transline_ident.cpp:310
 msgid "Conductor losses (even):"
