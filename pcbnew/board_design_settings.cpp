@@ -992,6 +992,12 @@ void BOARD_DESIGN_SETTINGS::initFromOther( const BOARD_DESIGN_SETTINGS& aOther )
     m_AllowSoldermaskBridgesInFPs = aOther.m_AllowSoldermaskBridgesInFPs;
     m_TentViasFront               = aOther.m_TentViasFront;
     m_TentViasBack                = aOther.m_TentViasBack;
+    m_CoverViasFront              = aOther.m_CoverViasFront;
+    m_CoverViasBack               = aOther.m_CoverViasBack;
+    m_PlugViasFront               = aOther.m_PlugViasFront;
+    m_PlugViasBack                = aOther.m_PlugViasBack;
+    m_CapVias                     = aOther.m_CapVias;
+    m_FillVias                    = aOther.m_FillVias;
     m_DefaultFPTextItems          = aOther.m_DefaultFPTextItems;
     m_UserLayerNames              = aOther.m_UserLayerNames;
 
@@ -1085,6 +1091,12 @@ bool BOARD_DESIGN_SETTINGS::operator==( const BOARD_DESIGN_SETTINGS& aOther ) co
     if( m_AllowSoldermaskBridgesInFPs != aOther.m_AllowSoldermaskBridgesInFPs ) return false;
     if( m_TentViasFront               != aOther.m_TentViasFront ) return false;
     if( m_TentViasBack                != aOther.m_TentViasBack ) return false;
+    if( m_CoverViasFront              != aOther.m_CoverViasFront ) return false;
+    if( m_CoverViasBack               != aOther.m_CoverViasBack ) return false;
+    if( m_PlugViasFront               != aOther.m_PlugViasFront ) return false;
+    if( m_PlugViasBack                != aOther.m_PlugViasBack ) return false;
+    if( m_CapVias                     != aOther.m_CapVias ) return false;
+    if( m_FillVias                    != aOther.m_FillVias ) return false;
     if( m_DefaultFPTextItems          != aOther.m_DefaultFPTextItems ) return false;
     if( m_UserLayerNames              != aOther.m_UserLayerNames ) return false;
 
