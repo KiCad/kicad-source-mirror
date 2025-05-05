@@ -784,6 +784,7 @@ endif()
 
 
 add_subdirectory( pcb_io/pcad )
+add_subdirectory( pcb_io/allegro )
 add_subdirectory( pcb_io/altium )
 add_subdirectory( pcb_io/cadstar )
 add_subdirectory( pcb_io/easyeda )
