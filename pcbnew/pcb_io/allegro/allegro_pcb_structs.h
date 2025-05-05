@@ -380,6 +380,34 @@ struct BLK_0x10
 
 
 /**
+ * 0x1B objects are nets.
+ *
+ * They have names and pointers to various other objects.
+ */
+struct BLK_0x1B_NET
+{
+    uint32_t m_Key;
+    uint32_t m_Next;
+    uint32_t m_NetName;
+
+    uint32_t m_Unknown1;
+
+    COND_GE<FMT_VER::V_172, uint32_t> m_Unknown2;
+
+    uint32_t m_Type;
+
+    uint32_t m_UnknownPtr1;
+    uint32_t m_UnknownPtr2;
+    uint32_t m_PathStrPtr;
+    uint32_t m_UnknownPtr3;
+    uint32_t m_ModelPtr;
+    uint32_t m_UnknownPtr4;
+    uint32_t m_UnknownPtr5;
+    uint32_t m_UnknownPtr6;
+};
+
+
+/**
  * 0x2B objects.
  */
 struct BLK_0x2B

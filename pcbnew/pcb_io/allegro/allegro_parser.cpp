@@ -317,6 +317,35 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x10( FILE_STREAM& stream, FMT_VER
 }
 
 
+static std::unique_ptr<BLOCK_BASE> ParseBlock_0x1B_NET( FILE_STREAM& stream, FMT_VER aVer )
+{
+    auto block = std::make_unique<BLOCK<BLK_0x1B_NET>>( 0x1B, stream.Position() );
+
+    auto& data = block->GetData();
+
+    stream.Skip( 3 );
+
+    data.m_Key = stream.ReadU32();
+    data.m_Next = stream.ReadU32();
+    data.m_NetName = stream.ReadU32();
+    data.m_Unknown1 = stream.ReadU32();
+
+    ReadCond( stream, aVer, data.m_Unknown2 );
+
+    data.m_Type = stream.ReadU32();
+    data.m_UnknownPtr1 = stream.ReadU32();
+    data.m_UnknownPtr2 = stream.ReadU32();
+    data.m_PathStrPtr = stream.ReadU32();
+    data.m_UnknownPtr3 = stream.ReadU32();
+    data.m_ModelPtr = stream.ReadU32();
+    data.m_UnknownPtr4 = stream.ReadU32();
+    data.m_UnknownPtr5 = stream.ReadU32();
+    data.m_UnknownPtr6 = stream.ReadU32();
+
+    return block;
+}
+
+
 static std::unique_ptr<BLOCK_BASE> ParseBlock_0x2B( FILE_STREAM& stream, FMT_VER aVer )
 {
     auto block = std::make_unique<BLOCK<BLK_0x2B>>( 0x2B, stream.Position() );
@@ -390,6 +419,7 @@ static std::optional<uint32_t> GetBlockKey( const BLOCK_BASE& block )
     case 0x07: return static_cast<const BLOCK<BLK_0x07>&>( block ).GetData().m_Key;
     case 0x0F: return static_cast<const BLOCK<BLK_0x0F>&>( block ).GetData().m_Key;
     case 0x10: return static_cast<const BLOCK<BLK_0x10>&>( block ).GetData().m_Key;
+    case 0x1B: return static_cast<const BLOCK<BLK_0x1B_NET>&>( block ).GetData().m_Key;
     case 0x2B: return static_cast<const BLOCK<BLK_0x2B>&>( block ).GetData().m_Key;
     case 0x2D: return static_cast<const BLOCK<BLK_0x2B>&>( block ).GetData().m_Key;
     default: break;
@@ -437,6 +467,11 @@ void ALLEGRO::PARSER::readObjects( RAW_BOARD& aBoard )
         case 0x10:
         {
             block = ParseBlock_0x10( m_stream, ver );
+            break;
+        }
+        case 0x1B:
+        {
+            block = ParseBlock_0x1B_NET( m_stream, ver );
             break;
         }
         case 0x2B:
