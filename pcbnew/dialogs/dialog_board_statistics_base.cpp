@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -35,10 +35,12 @@ DIALOG_BOARD_STATISTICS_BASE::DIALOG_BOARD_STATISTICS_BASE( wxWindow* parent, wx
 	wxBoxSizer* bSizerComponents;
 	bSizerComponents = new wxBoxSizer( wxVERTICAL );
 
-	wxStaticText* componentsLabel;
-	componentsLabel = new wxStaticText( m_generalPanel, wxID_ANY, _("Components"), wxDefaultPosition, wxDefaultSize, 0 );
-	componentsLabel->Wrap( -1 );
-	bSizerComponents->Add( componentsLabel, 0, wxALL, 5 );
+	m_componentsLabel = new wxStaticText( m_generalPanel, wxID_ANY, _("Components"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_componentsLabel->Wrap( -1 );
+	bSizerComponents->Add( m_componentsLabel, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+
+
+	bSizerComponents->Add( 0, 2, 0, 0, 5 );
 
 	m_gridComponents = new wxGrid( m_generalPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxVSCROLL );
 
@@ -74,10 +76,12 @@ DIALOG_BOARD_STATISTICS_BASE::DIALOG_BOARD_STATISTICS_BASE( wxWindow* parent, wx
 	wxBoxSizer* bSizerPads;
 	bSizerPads = new wxBoxSizer( wxVERTICAL );
 
-	wxStaticText* padsLabel;
-	padsLabel = new wxStaticText( m_generalPanel, wxID_ANY, _("Pads"), wxDefaultPosition, wxDefaultSize, 0 );
-	padsLabel->Wrap( -1 );
-	bSizerPads->Add( padsLabel, 0, wxALL, 5 );
+	m_padsLabel = new wxStaticText( m_generalPanel, wxID_ANY, _("Pads"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_padsLabel->Wrap( -1 );
+	bSizerPads->Add( m_padsLabel, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+
+
+	bSizerPads->Add( 0, 2, 0, 0, 5 );
 
 	m_gridPads = new wxGrid( m_generalPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxVSCROLL );
 
@@ -113,15 +117,17 @@ DIALOG_BOARD_STATISTICS_BASE::DIALOG_BOARD_STATISTICS_BASE( wxWindow* parent, wx
 	wxBoxSizer* bSizerBrdSize;
 	bSizerBrdSize = new wxBoxSizer( wxVERTICAL );
 
-	wxStaticText* boardLabel;
-	boardLabel = new wxStaticText( m_generalPanel, wxID_ANY, _("Board Size"), wxDefaultPosition, wxDefaultSize, 0 );
-	boardLabel->Wrap( -1 );
-	bSizerBrdSize->Add( boardLabel, 0, wxALL, 5 );
+	m_boardLabel = new wxStaticText( m_generalPanel, wxID_ANY, _("Board Size"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_boardLabel->Wrap( -1 );
+	bSizerBrdSize->Add( m_boardLabel, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+
+
+	bSizerBrdSize->Add( 0, 2, 0, 0, 5 );
 
 	m_gridBoard = new wxGrid( m_generalPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxVSCROLL );
 
 	// Grid
-	m_gridBoard->CreateGrid( 3, 2 );
+	m_gridBoard->CreateGrid( 4, 2 );
 	m_gridBoard->EnableEditing( false );
 	m_gridBoard->EnableGridLines( false );
 	m_gridBoard->EnableDragGridSize( false );
@@ -152,9 +158,12 @@ DIALOG_BOARD_STATISTICS_BASE::DIALOG_BOARD_STATISTICS_BASE( wxWindow* parent, wx
 	wxBoxSizer* bSizerVias;
 	bSizerVias = new wxBoxSizer( wxVERTICAL );
 
-	viasLabel = new wxStaticText( m_generalPanel, wxID_ANY, _("Vias"), wxDefaultPosition, wxDefaultSize, 0 );
-	viasLabel->Wrap( -1 );
-	bSizerVias->Add( viasLabel, 0, wxALL, 5 );
+	m_viasLabel = new wxStaticText( m_generalPanel, wxID_ANY, _("Vias"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_viasLabel->Wrap( -1 );
+	bSizerVias->Add( m_viasLabel, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+
+
+	bSizerVias->Add( 0, 2, 0, 0, 5 );
 
 	m_gridVias = new wxGrid( m_generalPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxVSCROLL );
 
@@ -191,16 +200,19 @@ DIALOG_BOARD_STATISTICS_BASE::DIALOG_BOARD_STATISTICS_BASE( wxWindow* parent, wx
 	bGeneralPanelSizer->Add( fgSizerContents, 1, wxEXPAND, 5 );
 
 	wxGridSizer* gOptionsSizer;
-	gOptionsSizer = new wxGridSizer( 0, 1, 0, 0 );
+	gOptionsSizer = new wxGridSizer( 0, 1, 4, 0 );
 
 	m_checkBoxSubtractHoles = new wxCheckBox( m_generalPanel, wxID_ANY, _("Subtract holes from board area"), wxDefaultPosition, wxDefaultSize, 0 );
-	gOptionsSizer->Add( m_checkBoxSubtractHoles, 0, wxEXPAND|wxTOP|wxBOTTOM|wxRIGHT, 4 );
+	gOptionsSizer->Add( m_checkBoxSubtractHoles, 0, wxEXPAND|wxRIGHT, 4 );
+
+	m_checkBoxSubtractHolesFromCopper = new wxCheckBox( m_generalPanel, wxID_ANY, _("Subtract holes from copper areas"), wxDefaultPosition, wxDefaultSize, 0 );
+	gOptionsSizer->Add( m_checkBoxSubtractHolesFromCopper, 0, wxRIGHT, 5 );
 
 	m_checkBoxExcludeComponentsNoPins = new wxCheckBox( m_generalPanel, wxID_ANY, _("Exclude footprints with no pads"), wxDefaultPosition, wxDefaultSize, 0 );
-	gOptionsSizer->Add( m_checkBoxExcludeComponentsNoPins, 0, wxEXPAND|wxBOTTOM|wxRIGHT, 4 );
+	gOptionsSizer->Add( m_checkBoxExcludeComponentsNoPins, 0, wxEXPAND|wxRIGHT, 5 );
 
 
-	bGeneralPanelSizer->Add( gOptionsSizer, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 2 );
+	bGeneralPanelSizer->Add( gOptionsSizer, 0, wxEXPAND|wxALL, 5 );
 
 
 	m_generalPanel->SetSizer( bGeneralPanelSizer );
@@ -280,6 +292,7 @@ DIALOG_BOARD_STATISTICS_BASE::DIALOG_BOARD_STATISTICS_BASE( wxWindow* parent, wx
 	// Connect Events
 	this->Connect( wxEVT_SIZE, wxSizeEventHandler( DIALOG_BOARD_STATISTICS_BASE::windowSize ) );
 	m_checkBoxSubtractHoles->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_BOARD_STATISTICS_BASE::checkboxClicked ), NULL, this );
+	m_checkBoxSubtractHolesFromCopper->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_BOARD_STATISTICS_BASE::checkboxClicked ), NULL, this );
 	m_checkBoxExcludeComponentsNoPins->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_BOARD_STATISTICS_BASE::checkboxClicked ), NULL, this );
 	m_gridDrills->Connect( wxEVT_SIZE, wxSizeEventHandler( DIALOG_BOARD_STATISTICS_BASE::drillGridSize ), NULL, this );
 	m_buttonSaveReport->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_BOARD_STATISTICS_BASE::saveReportClicked ), NULL, this );
@@ -290,6 +303,7 @@ DIALOG_BOARD_STATISTICS_BASE::~DIALOG_BOARD_STATISTICS_BASE()
 	// Disconnect Events
 	this->Disconnect( wxEVT_SIZE, wxSizeEventHandler( DIALOG_BOARD_STATISTICS_BASE::windowSize ) );
 	m_checkBoxSubtractHoles->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_BOARD_STATISTICS_BASE::checkboxClicked ), NULL, this );
+	m_checkBoxSubtractHolesFromCopper->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_BOARD_STATISTICS_BASE::checkboxClicked ), NULL, this );
 	m_checkBoxExcludeComponentsNoPins->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_BOARD_STATISTICS_BASE::checkboxClicked ), NULL, this );
 	m_gridDrills->Disconnect( wxEVT_SIZE, wxSizeEventHandler( DIALOG_BOARD_STATISTICS_BASE::drillGridSize ), NULL, this );
 	m_buttonSaveReport->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_BOARD_STATISTICS_BASE::saveReportClicked ), NULL, this );

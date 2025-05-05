@@ -202,11 +202,13 @@ private:
 
     void drillGridSort( wxGridEvent& aEvent );
 
-    PCB_EDIT_FRAME* m_parentFrame;
+    PCB_EDIT_FRAME* m_frame;
 
     int             m_boardWidth;
     int             m_boardHeight;
     double          m_boardArea;
+    double          m_frontCopperArea;
+    double          m_backCopperArea;
 
     bool            m_hasOutline;          ///< Show if board outline properly defined.
 

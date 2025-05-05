@@ -31,6 +31,7 @@
 #include <wildcards_and_files_ext.h>
 #include <widgets/wx_grid.h>
 #include <wx/filedlg.h>
+#include <convert_basic_shapes_to_polygon.h>
 
 #define COL_LABEL 0
 #define COL_AMOUNT 1
@@ -42,9 +43,10 @@
 #define COL_TOTAL 3
 
 // Defines for board view
-#define ROW_BOARD_WIDTH 0
-#define ROW_BOARD_HEIGHT 1
-#define ROW_BOARD_AREA 2
+#define ROW_BOARD_DIMS 0
+#define ROW_BOARD_AREA 1
+#define ROW_FRONT_COPPER_AREA 2
+#define ROW_BACK_COPPER_AREA 3
 
 
 /**
@@ -55,6 +57,7 @@ struct DIALOG_BOARD_STATISTICS_SAVED_STATE
     DIALOG_BOARD_STATISTICS_SAVED_STATE() :
             excludeNoPins( false ),
             subtractHoles( false ),
+            subtractHolesFromCopper( false ),
             saveReportInitialized(false)
     {
     }
@@ -62,6 +65,7 @@ struct DIALOG_BOARD_STATISTICS_SAVED_STATE
     // Flags to remember last checkboxes state
     bool excludeNoPins;
     bool subtractHoles;
+    bool subtractHolesFromCopper;
 
     // Variables to save last report file name and folder
     bool     saveReportInitialized; // true after the 3 next string are initialized
@@ -76,10 +80,12 @@ static DIALOG_BOARD_STATISTICS_SAVED_STATE s_savedDialogState;
 
 DIALOG_BOARD_STATISTICS::DIALOG_BOARD_STATISTICS( PCB_EDIT_FRAME* aParentFrame ) :
         DIALOG_BOARD_STATISTICS_BASE( aParentFrame ),
-        m_parentFrame(aParentFrame),
+        m_frame( aParentFrame ),
         m_boardWidth( 0 ),
         m_boardHeight( 0 ),
         m_boardArea( 0.0 ),
+        m_frontCopperArea( 0.0 ),
+        m_backCopperArea( 0.0 ),
         m_hasOutline( false ),
         m_startLayerColInitialSize( 1 ),
         m_stopLayerColInitialSize( 1 )
@@ -90,35 +96,45 @@ DIALOG_BOARD_STATISTICS::DIALOG_BOARD_STATISTICS( PCB_EDIT_FRAME* aParentFrame )
 
     m_checkBoxExcludeComponentsNoPins->SetValue( s_savedDialogState.excludeNoPins );
     m_checkBoxSubtractHoles->SetValue( s_savedDialogState.subtractHoles );
+    m_checkBoxSubtractHolesFromCopper->SetValue( s_savedDialogState.subtractHolesFromCopper );
+
+    wxFont labelFont = KIUI::GetSmallInfoFont( this );
+    m_componentsLabel->SetFont( labelFont );
+    m_boardLabel->SetFont( labelFont );
+    m_padsLabel->SetFont( labelFont );
+    m_viasLabel->SetFont( labelFont );
 
     // Make labels for grids
-    wxFont headingFont = KIUI::GetStatusFont( this );
-    m_gridComponents->SetCellValue( ROW_LABEL, COL_FRONT_SIDE, _( "Front Side" ) );
-    m_gridComponents->SetCellFont( ROW_LABEL, COL_FRONT_SIDE, headingFont );
+    m_gridComponents->SetCellValue( ROW_LABEL, COL_FRONT_SIDE,  _( "Front Side" ) );
     m_gridComponents->SetCellValue( ROW_LABEL, COL_BOTTOM_SIDE, _( "Back Side" ) );
-    m_gridComponents->SetCellFont( ROW_LABEL, COL_BOTTOM_SIDE, headingFont );
-    m_gridComponents->SetCellValue( ROW_LABEL, COL_TOTAL, _( "Total" ) );
-    m_gridComponents->SetCellFont( ROW_LABEL, COL_TOTAL, headingFont );
+    m_gridComponents->SetCellValue( ROW_LABEL, COL_TOTAL,       _( "Total" ) );
 
-    m_gridBoard->SetCellValue( 0, 0, _( "Width:" ) );
-    m_gridBoard->SetCellAlignment( 0, 0, wxALIGN_LEFT, wxALIGN_CENTRE );
-    m_gridBoard->SetCellValue( 1, 0, _( "Height:" ) );
-    m_gridBoard->SetCellAlignment( 1, 0, wxALIGN_LEFT, wxALIGN_CENTRE );
-    m_gridBoard->SetCellValue( 2, 0, _( "Area:" ) );
-    m_gridBoard->SetCellAlignment( 2, 0, wxALIGN_LEFT, wxALIGN_CENTRE );
+    wxFont headingFont = KIUI::GetStatusFont( this );
 
-    wxGrid* grids[] = { m_gridComponents, m_gridPads, m_gridVias, m_gridBoard };
+    for( int col = COL_AMOUNT; col < m_gridComponents->GetNumberCols(); col++ )
+        m_gridComponents->SetCellFont( ROW_LABEL, col, headingFont );
 
-    for( auto& grid : grids )
+    m_gridBoard->SetCellValue( ROW_BOARD_DIMS,        COL_LABEL, _( "Dimensions:" ) );
+    m_gridBoard->SetCellValue( ROW_BOARD_AREA,        COL_LABEL, _( "Area:" ) );
+    m_gridBoard->SetCellValue( ROW_FRONT_COPPER_AREA, COL_LABEL, _( "Front copper area:" ) );
+    m_gridBoard->SetCellValue( ROW_BACK_COPPER_AREA,  COL_LABEL, _( "Back copper area:" ) );
+
+    for( wxGrid* grid : { m_gridComponents, m_gridPads, m_gridVias, m_gridBoard } )
     {
         // Remove wxgrid's selection boxes
         grid->SetCellHighlightPenWidth( 0 );
         grid->SetColMinimalAcceptableWidth( 80 );
-        for( int i = 0; i < grid->GetNumberRows(); i++ )
-            grid->SetCellAlignment( i, COL_LABEL, wxALIGN_LEFT, wxALIGN_CENTRE );
+
+        for( int row = 0; row < grid->GetNumberRows(); row++ )
+        {
+            grid->SetCellAlignment( row, COL_LABEL, wxALIGN_LEFT, wxALIGN_CENTRE );
+
+            for( int col = COL_AMOUNT; col < grid->GetNumberCols(); col++ )
+                grid->SetCellAlignment( row, col, wxALIGN_RIGHT, wxALIGN_CENTER );
+        }
     }
 
-    wxFileName fn = m_parentFrame->GetBoard()->GetFileName();
+    wxFileName fn = m_frame->GetBoard()->GetFileName();
 
     if( !s_savedDialogState.saveReportInitialized
             || s_savedDialogState.m_project != Prj().GetProjectFullName() )
@@ -202,7 +218,12 @@ bool DIALOG_BOARD_STATISTICS::TransferDataToWindow()
 
 void DIALOG_BOARD_STATISTICS::getDataFromPCB()
 {
-    BOARD* board = m_parentFrame->GetBoard();
+    BOARD* board = m_frame->GetBoard();
+    SHAPE_POLY_SET frontCopper;
+    SHAPE_POLY_SET backCopper;
+    SHAPE_POLY_SET frontHoles;
+    SHAPE_POLY_SET backHoles;
+
     m_drillTypes.clear();
     m_gridDrills->ClearRows();
 
@@ -385,6 +406,48 @@ void DIALOG_BOARD_STATISTICS::getDataFromPCB()
         m_boardWidth = bbox.GetWidth();
         m_boardHeight = bbox.GetHeight();
     }
+
+    board->RunOnChildren(
+            [&]( BOARD_ITEM* child )
+            {
+                if( child->IsOnLayer( F_Cu ) )
+                    child->TransformShapeToPolySet( frontCopper, F_Cu, 0, ARC_LOW_DEF, ERROR_INSIDE );
+
+                if( child->IsOnLayer( B_Cu ) )
+                    child->TransformShapeToPolySet( backCopper, B_Cu, 0, ARC_LOW_DEF, ERROR_INSIDE );
+
+                if( child->Type() == PCB_PAD_T )
+                {
+                    PAD* pad = static_cast<PAD*>( child );
+
+                    if( pad->HasHole() )
+                    {
+                        pad->TransformHoleToPolygon( frontHoles, 0, ARC_LOW_DEF, ERROR_OUTSIDE );
+                        pad->TransformHoleToPolygon( backHoles, 0, ARC_LOW_DEF, ERROR_OUTSIDE );
+                    }
+                }
+                else if( child->Type() == PCB_VIA_T )
+                {
+                    PCB_VIA* via = static_cast<PCB_VIA*>( child );
+                    VECTOR2I center = via->GetPosition();
+                    int      R = via->GetDrillValue() / 2;
+
+                    if( via->IsOnLayer( F_Cu ) )
+                        TransformCircleToPolygon( frontHoles, center, R, ARC_LOW_DEF, ERROR_OUTSIDE );
+
+                    if( via->IsOnLayer( B_Cu ) )
+                        TransformCircleToPolygon( backHoles, center, R, ARC_LOW_DEF, ERROR_OUTSIDE );
+                }
+            }, RECURSE_MODE::RECURSE );
+
+    if( m_checkBoxSubtractHolesFromCopper->GetValue() )
+    {
+        frontCopper.BooleanSubtract( frontHoles );
+        backCopper.BooleanSubtract( backHoles );
+    }
+
+    m_frontCopperArea = frontCopper.Area();
+    m_backCopperArea = backCopper.Area();
 }
 
 
@@ -449,20 +512,23 @@ void DIALOG_BOARD_STATISTICS::updateWidets()
 
     if( m_hasOutline )
     {
-        m_gridBoard->SetCellValue( ROW_BOARD_WIDTH, COL_AMOUNT,
-                                   m_parentFrame->MessageTextFromValue( m_boardWidth ) );
-        m_gridBoard->SetCellValue( ROW_BOARD_HEIGHT, COL_AMOUNT,
-                                   m_parentFrame->MessageTextFromValue( m_boardHeight ) );
+        m_gridBoard->SetCellValue( ROW_BOARD_DIMS, COL_AMOUNT,
+                                   wxString::Format( wxT( "%s x %s" ),
+                                                     m_frame->MessageTextFromValue( m_boardWidth, false ),
+                                                     m_frame->MessageTextFromValue( m_boardHeight, true ) ) );
         m_gridBoard->SetCellValue( ROW_BOARD_AREA, COL_AMOUNT,
-                                   m_parentFrame->MessageTextFromValue( m_boardArea, true,
-                                                                        EDA_DATA_TYPE::AREA ) );
+                                   m_frame->MessageTextFromValue( m_boardArea, true, EDA_DATA_TYPE::AREA ) );
     }
     else
     {
-        m_gridBoard->SetCellValue( ROW_BOARD_WIDTH, COL_AMOUNT, _( "unknown" ) );
-        m_gridBoard->SetCellValue( ROW_BOARD_HEIGHT, COL_AMOUNT, _( "unknown" ) );
+        m_gridBoard->SetCellValue( ROW_BOARD_DIMS, COL_AMOUNT, _( "unknown" ) );
         m_gridBoard->SetCellValue( ROW_BOARD_AREA, COL_AMOUNT, _( "unknown" ) );
     }
+
+    m_gridBoard->SetCellValue( ROW_FRONT_COPPER_AREA, COL_AMOUNT,
+                               m_frame->MessageTextFromValue( m_frontCopperArea, true, EDA_DATA_TYPE::AREA ) );
+    m_gridBoard->SetCellValue( ROW_BACK_COPPER_AREA, COL_AMOUNT,
+                               m_frame->MessageTextFromValue( m_backCopperArea, true, EDA_DATA_TYPE::AREA ) );
 
     updateDrillGrid();
 
@@ -477,7 +543,7 @@ void DIALOG_BOARD_STATISTICS::updateWidets()
 
 void DIALOG_BOARD_STATISTICS::updateDrillGrid()
 {
-    BOARD* board = m_parentFrame->GetBoard();
+    BOARD* board = m_frame->GetBoard();
     int    row = 0;
 
     for( const DRILL_LINE_ITEM& line : m_drillTypes )
@@ -490,7 +556,7 @@ void DIALOG_BOARD_STATISTICS::updateDrillGrid()
         {
         case PAD_DRILL_SHAPE::CIRCLE: shapeStr = _( "Round" ); break;
         case PAD_DRILL_SHAPE::OBLONG: shapeStr = _( "Slot" );  break;
-        default:                     shapeStr = _( "???" );   break;
+        default:                      shapeStr = _( "???" );   break;
         }
 
         if( line.startLayer == UNDEFINED_LAYER )
@@ -505,14 +571,10 @@ void DIALOG_BOARD_STATISTICS::updateDrillGrid()
 
         m_gridDrills->SetCellValue( row, DRILL_LINE_ITEM::COL_COUNT, formatCount( line.qty ) );
         m_gridDrills->SetCellValue( row, DRILL_LINE_ITEM::COL_SHAPE, shapeStr );
-        m_gridDrills->SetCellValue( row, DRILL_LINE_ITEM::COL_X_SIZE,
-                                    m_parentFrame->MessageTextFromValue( line.xSize ) );
-        m_gridDrills->SetCellValue( row, DRILL_LINE_ITEM::COL_Y_SIZE,
-                                    m_parentFrame->MessageTextFromValue( line.ySize ) );
-        m_gridDrills->SetCellValue( row, DRILL_LINE_ITEM::COL_PLATED,
-                                    line.isPlated ? _( "PTH" ) : _( "NPTH" ) );
-        m_gridDrills->SetCellValue( row, DRILL_LINE_ITEM::COL_VIA_PAD,
-                                    line.isPad ? _( "Pad" ) : _( "Via" ) );
+        m_gridDrills->SetCellValue( row, DRILL_LINE_ITEM::COL_X_SIZE, m_frame->MessageTextFromValue( line.xSize ) );
+        m_gridDrills->SetCellValue( row, DRILL_LINE_ITEM::COL_Y_SIZE, m_frame->MessageTextFromValue( line.ySize ) );
+        m_gridDrills->SetCellValue( row, DRILL_LINE_ITEM::COL_PLATED, line.isPlated ? _( "PTH" ) : _( "NPTH" ) );
+        m_gridDrills->SetCellValue( row, DRILL_LINE_ITEM::COL_VIA_PAD, line.isPad ? _( "Pad" ) : _( "Via" ) );
         m_gridDrills->SetCellValue( row, DRILL_LINE_ITEM::COL_START_LAYER, startLayerStr );
         m_gridDrills->SetCellValue( row, DRILL_LINE_ITEM::COL_STOP_LAYER, stopLayerStr );
 
@@ -623,8 +685,7 @@ void DIALOG_BOARD_STATISTICS::adjustDrillGridColumns()
     }
 
     double scalingFactor = std::max( 1.0,
-                                     remainingWidth
-                                     / ( m_startLayerColInitialSize + m_stopLayerColInitialSize ) );
+                                     remainingWidth / ( m_startLayerColInitialSize + m_stopLayerColInitialSize ) );
     int startLayerColWidth = static_cast<int>( m_startLayerColInitialSize * scalingFactor );
     int stopLayerColWidth = static_cast<int>( m_stopLayerColInitialSize * scalingFactor );
 
@@ -637,6 +698,7 @@ void DIALOG_BOARD_STATISTICS::checkboxClicked( wxCommandEvent& aEvent )
 {
     s_savedDialogState.excludeNoPins = m_checkBoxExcludeComponentsNoPins->GetValue();
     s_savedDialogState.subtractHoles = m_checkBoxSubtractHoles->GetValue();
+    s_savedDialogState.subtractHolesFromCopper = m_checkBoxSubtractHolesFromCopper->GetValue();
     refreshItemsTypes();
     getDataFromPCB();
     updateWidets();
@@ -651,7 +713,7 @@ void DIALOG_BOARD_STATISTICS::saveReportClicked( wxCommandEvent& aEvent )
     wxString msg;
     wxString boardName;
 
-    wxFileName fn = m_parentFrame->GetBoard()->GetFileName();
+    wxFileName fn = m_frame->GetBoard()->GetFileName();
     boardName = fn.GetName();
     wxFileDialog dlg( this, _( "Save Report File" ), s_savedDialogState.saveReportFolder,
                       s_savedDialogState.saveReportName, FILEEXT::TextFileWildcard(),
@@ -683,19 +745,22 @@ void DIALOG_BOARD_STATISTICS::saveReportClicked( wxCommandEvent& aEvent )
     if( m_hasOutline )
     {
         msg << wxS( "- " ) << _( "Width" ) << wxS( ": " )
-                << m_parentFrame->MessageTextFromValue( m_boardWidth ) << wxT( "\n" );
+                << m_frame->MessageTextFromValue( m_boardWidth ) << wxT( "\n" );
         msg << wxS( "- " ) << _( "Height" ) << wxS( ": " )
-                << m_parentFrame->MessageTextFromValue( m_boardHeight ) << wxT( "\n" );
+                << m_frame->MessageTextFromValue( m_boardHeight ) << wxT( "\n" );
         msg << wxS( "- " ) << _( "Area" ) + wxS( ": " )
-                << m_parentFrame->MessageTextFromValue( m_boardArea, true, EDA_DATA_TYPE::AREA );
-        msg << wxT( "\n" );
+                << m_frame->MessageTextFromValue( m_boardArea, true, EDA_DATA_TYPE::AREA ) << wxT( "\n" );
     }
     else
     {
-        msg << wxS( "- " ) << _( "Width" ) << wxS( ": " ) << _( "unknown" ) << wxT( "\n" );
-        msg << wxS( "- " ) << _( "Height" ) << wxS( ": " ) << _( "unknown" ) << wxT( "\n" );
+        msg << wxS( "- " ) << _( "Dimensions" ) << wxS( ": " ) << _( "unknown" ) << wxT( "\n" );
         msg << wxS( "- " ) << _( "Area" ) << wxS( ": " ) << _( "unknown" ) << wxT( "\n" );
     }
+
+    msg << wxS( "- " ) << _( "Front copper area" ) + wxS( ": " )
+            << m_frame->MessageTextFromValue( m_frontCopperArea, true, EDA_DATA_TYPE::AREA ) << wxT( "\n" );
+    msg << wxS( "- " ) << _( "Back copper area" ) + wxS( ": " )
+            << m_frame->MessageTextFromValue( m_backCopperArea, true, EDA_DATA_TYPE::AREA ) << wxT( "\n" );
 
     msg << wxT( "\n" );
     msg << _( "Pads" ) << wxT( "\n----\n" );

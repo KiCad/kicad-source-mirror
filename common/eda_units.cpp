@@ -344,7 +344,6 @@ wxString EDA_UNIT_UTILS::UI::StringFromValue( const EDA_IU_SCALE& aIuScale, EDA_
 
     switch( aUnits )
     {
-
     case EDA_UNITS::MILS:        format = is_eeschema ? wxT( "%.3f" ) : wxT( "%.5f" ); break;
     case EDA_UNITS::INCH:        format = is_eeschema ? wxT( "%.6f" ) : wxT( "%.8f" ); break;
     case EDA_UNITS::DEGREES:     format = wxT( "%.4f" );                               break;
@@ -409,7 +408,8 @@ wxString EDA_UNIT_UTILS::UI::MessageTextFromValue( const EDA_IU_SCALE& aIuScale,
     wxString      text;
     const wxChar* format;
     double        value = aValue;
-    bool          is_eeschema = ( aIuScale.IU_PER_MM == SCH_IU_PER_MM );
+    bool          short_form = ( aIuScale.IU_PER_MM == SCH_IU_PER_MM )
+                                || ( aType == EDA_DATA_TYPE::VOLUME || aType == EDA_DATA_TYPE::AREA );
 
     switch( aType )
     {
@@ -442,18 +442,18 @@ wxString EDA_UNIT_UTILS::UI::MessageTextFromValue( const EDA_IU_SCALE& aIuScale,
     switch( aUnits )
     {
     default:
-    case EDA_UNITS::UM:          format = is_eeschema ? wxT( "%.0f" ) : wxT( "%.1f" ); break;
-    case EDA_UNITS::MM:          format = is_eeschema ? wxT( "%.2f" ) : wxT( "%.4f" ); break;
-    case EDA_UNITS::CM:          format = is_eeschema ? wxT( "%.3f" ) : wxT( "%.5f" ); break;
-    case EDA_UNITS::MILS:        format = is_eeschema ? wxT( "%.0f" ) : wxT( "%.2f" ); break;
-    case EDA_UNITS::INCH:        format = is_eeschema ? wxT( "%.3f" ) : wxT( "%.4f" ); break;
-    case EDA_UNITS::DEGREES:     format = wxT( "%.3f" );                               break;
-    case EDA_UNITS::UNSCALED:    format = wxT( "%.0f" );                               break;
-    case EDA_UNITS::FS:          format = wxT( "%.4f" );                               break;
-    case EDA_UNITS::PS: format = wxT( "%.2f" ); break;
-    case EDA_UNITS::PS_PER_INCH: format = wxT( "%.2f" ); break;
-    case EDA_UNITS::PS_PER_CM: format = wxT( "%.2f" ); break;
-    case EDA_UNITS::PS_PER_MM: format = wxT( "%.2f" ); break;
+    case EDA_UNITS::UM:          format = short_form ? wxT( "%.0f" ) : wxT( "%.1f" ); break;
+    case EDA_UNITS::MM:          format = short_form ? wxT( "%.2f" ) : wxT( "%.4f" ); break;
+    case EDA_UNITS::CM:          format = short_form ? wxT( "%.3f" ) : wxT( "%.5f" ); break;
+    case EDA_UNITS::MILS:        format = short_form ? wxT( "%.0f" ) : wxT( "%.2f" ); break;
+    case EDA_UNITS::INCH:        format = short_form ? wxT( "%.3f" ) : wxT( "%.4f" ); break;
+    case EDA_UNITS::DEGREES:     format = wxT( "%.3f" );                              break;
+    case EDA_UNITS::UNSCALED:    format = wxT( "%.0f" );                              break;
+    case EDA_UNITS::FS:          format = wxT( "%.4f" );                              break;
+    case EDA_UNITS::PS:          format = wxT( "%.2f" );                              break;
+    case EDA_UNITS::PS_PER_INCH: format = wxT( "%.2f" );                              break;
+    case EDA_UNITS::PS_PER_CM:   format = wxT( "%.2f" );                              break;
+    case EDA_UNITS::PS_PER_MM:   format = wxT( "%.2f" );                              break;
     }
 
     text.Printf( format, value );

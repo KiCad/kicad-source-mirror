@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -32,7 +32,6 @@ class WX_GRID;
 
 ///////////////////////////////////////////////////////////////////////////
 
-
 ///////////////////////////////////////////////////////////////////////////////
 /// Class DIALOG_BOARD_STATISTICS_BASE
 ///////////////////////////////////////////////////////////////////////////////
@@ -43,12 +42,16 @@ class DIALOG_BOARD_STATISTICS_BASE : public DIALOG_SHIM
 	protected:
 		wxNotebook* topNotebook;
 		wxPanel* m_generalPanel;
+		wxStaticText* m_componentsLabel;
 		wxGrid* m_gridComponents;
+		wxStaticText* m_padsLabel;
 		wxGrid* m_gridPads;
+		wxStaticText* m_boardLabel;
 		wxGrid* m_gridBoard;
-		wxStaticText* viasLabel;
+		wxStaticText* m_viasLabel;
 		wxGrid* m_gridVias;
 		wxCheckBox* m_checkBoxSubtractHoles;
+		wxCheckBox* m_checkBoxSubtractHolesFromCopper;
 		wxCheckBox* m_checkBoxExcludeComponentsNoPins;
 		wxPanel* m_drillsPanel;
 		WX_GRID* m_gridDrills;
