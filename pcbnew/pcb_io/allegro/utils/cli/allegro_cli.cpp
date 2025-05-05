@@ -54,6 +54,11 @@ int main( int argc, char** argv )
     argParser.add_argument( "--bc", "--block-counts" )
         .help( "Print counts of each discovered block type" )
         .flag();
+
+    argParser.add_argument( "-k", "--block-key" )
+        .help( "Find a block with a given key" )
+        .metavar( "KEY" )
+        .scan<'i', uint32_t>();
     // clang-format on
 
     try
@@ -155,6 +160,22 @@ int main( int argc, char** argv )
         for( const auto& [blockType, count] : blockCounts )
         {
             fmt::print( "Block type {:#04x}: {:5d}\n", blockType, count );
+        }
+    }
+    else if( argParser.is_used( "block-key" ) )
+    {
+        uint32_t blockKey = argParser.get<uint32_t>( "block-key" );
+
+        if( board->m_ObjectKeyMap.count( blockKey ) )
+        {
+            auto* block = board->m_ObjectKeyMap.at( blockKey );
+
+            fmt::print( "Block key {:#010x}: {:#04x} at offset {:#010x}\n", blockKey, block->GetBlockType(),
+                        block->GetOffset() );
+        }
+        else
+        {
+            fmt::print( "Block key {:#010x} not found\n", blockKey );
         }
     }
 

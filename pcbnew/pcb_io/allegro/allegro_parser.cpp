@@ -317,6 +317,29 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x10( FILE_STREAM& stream, FMT_VER
 }
 
 
+static std::optional<uint32_t> GetBlockKey( const BLOCK_BASE& block )
+{
+    if( block.GetBlockType() == 0x06 )
+    {
+        return static_cast<const BLOCK<BLK_0x06>&>( block ).GetData().m_Key;
+    }
+    else if( block.GetBlockType() == 0x07 )
+    {
+        return static_cast<const BLOCK<BLK_0x07>&>( block ).GetData().m_Key;
+    }
+    else if( block.GetBlockType() == 0x0F )
+    {
+        return static_cast<const BLOCK<BLK_0x0F>&>( block ).GetData().m_Key;
+    }
+    else if( block.GetBlockType() == 0x10 )
+    {
+        return static_cast<const BLOCK<BLK_0x10>&>( block ).GetData().m_Key;
+    }
+
+    return std::nullopt;
+}
+
+
 void ALLEGRO::PARSER::readObjects( RAW_BOARD& aBoard )
 {
     const uint32_t magic = aBoard.m_Header->m_Magic;
@@ -377,6 +400,9 @@ void ALLEGRO::PARSER::readObjects( RAW_BOARD& aBoard )
 
             // Creates the vector if it doesn't exist
             aBoard.m_ObjectLists[type].push_back( block.get() );
+
+            if( std::optional<uint32_t> blockKey = GetBlockKey( *block ) )
+                aBoard.m_ObjectKeyMap[*blockKey] = block.get();
 
             aBoard.m_Objects.push_back( std::move( block ) );
         }
