@@ -90,13 +90,13 @@ private:
  */
 enum class FMT_VER
 {
-    V_160, // Allegro 16.0
-    V_164, // Allegro 16.4
-    V_165,
-    V_166,
-    V_172,
-    V_174,
-    V_175,
+    V_160, // Allegro 16.0, 0x00130000
+    V_164, // Allegro 16.4, 0x00130C00
+    V_165, // Allegro 16.5, 0x00131000
+    V_166, // Allegro 16.6, 0x00131500
+    V_172, // Allegro 17.2, 0x00140400
+    V_174, // Allegro 17.4, 0x00140900
+    V_175, // Allegro 17.5, 0x00141500
 };
 
 constexpr bool operator>=( FMT_VER lhs, FMT_VER rhs )
@@ -376,6 +376,34 @@ struct BLK_0x10
     uint32_t m_UnknownPtr4;
     uint32_t m_UnknownPtr5; // 0x0F?
     uint32_t m_PathStr;     // Presumably a pointer to a string
+};
+
+
+/**
+ * 0x2B objects.
+ */
+struct BLK_0x2B
+{
+    uint32_t m_Key;
+
+    uint32_t m_FpStrRef;
+    uint32_t m_Unknown1;
+
+    // Could these be signed?
+    std::array<uint32_t, 4> m_Coords;
+
+    uint32_t m_Next;
+    uint32_t m_UnknownPtr2;
+    uint32_t m_UnknownPtr3;
+    uint32_t m_UnknownPtr4;
+    uint32_t m_UnknownPtr5;
+    uint32_t m_StrPtr;
+    uint32_t m_UnknownPtr6;
+    uint32_t m_UnknownPtr7;
+    uint32_t m_UnknownPtr8;
+
+    COND_GE<FMT_VER::V_164, uint32_t> m_Unknown2;
+    COND_GE<FMT_VER::V_172, uint32_t> m_Unknown3;
 };
 
 
