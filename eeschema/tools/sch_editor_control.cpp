@@ -50,6 +50,7 @@
 #include <sch_edit_frame.h>
 #include <sch_io/kicad_sexpr/sch_io_kicad_sexpr.h>
 #include <sch_bitmap.h>
+#include <sch_group.h>
 #include <sch_line.h>
 #include <sch_junction.h>
 #include <sch_bus_entry.h>
@@ -2325,6 +2326,29 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
             }
 
             selection.SetIsHover( m_duplicateIsHoverSelection );
+        }
+        // We want to the first non-group item in the selection to be the reference point.
+        else if( selection.GetTopLeftItem()->Type() == SCH_GROUP_T )
+        {
+            SCH_GROUP* group = static_cast<SCH_GROUP*>( selection.GetTopLeftItem() );
+
+            bool      found = false;
+            SCH_ITEM* item = nullptr;
+
+            group->RunOnChildren(
+                [&]( SCH_ITEM* schItem )
+                {
+                    if( !found && schItem->Type() != SCH_GROUP_T )
+                    {
+                        item = schItem;
+                        found = true;
+                    }
+                }, RECURSE_MODE::RECURSE );
+
+            if( found )
+                selection.SetReferencePoint( item->GetPosition() );
+            else
+                selection.SetReferencePoint( group->GetPosition() );
         }
         else
         {

@@ -26,6 +26,7 @@
 #include <functional>
 #include <macros.h>
 #include <gal/graphics_abstraction_layer.h>
+#include <sch_group.h>
 #include <sch_item.h>
 #include <sch_line.h>
 #include <sch_table.h>
@@ -406,6 +407,28 @@ GRID_HELPER_GRIDS EE_GRID_HELPER::GetItemGrid( const EDA_ITEM* aItem ) const
     case SCH_BUS_WIRE_ENTRY_T:
         return GRID_WIRES;
 
+    // Groups need to get the grid of their children
+    case SCH_GROUP_T:
+    {
+        const SCH_GROUP* group = static_cast<const SCH_GROUP*>( aItem );
+
+        // Shouldn't happen
+        if( group->GetItems().empty() )
+            return GRID_CURRENT;
+
+        GRID_HELPER_GRIDS grid = GetItemGrid( *group->GetItems().begin() );
+
+        for( EDA_ITEM* item : static_cast<const SCH_GROUP*>( aItem )->GetItems() )
+        {
+            GRID_HELPER_GRIDS itemGrid = GetItemGrid( item );
+
+            if( GetGridSize( itemGrid ) > GetGridSize( grid ) )
+                grid = itemGrid;
+        }
+
+        return grid;
+    }
+
     default:
         return GRID_CURRENT;
     }
@@ -486,6 +509,14 @@ void EE_GRID_HELPER::computeAnchors( SCH_ITEM *aItem, const VECTOR2I &aRefPos, b
         addAnchor( pin->GetPosition(), SNAPPABLE | ORIGIN, aItem );
         break;
     }
+
+    case SCH_GROUP_T:
+        for( EDA_ITEM* item : static_cast<SCH_GROUP*>( aItem )->GetItems() )
+        {
+            computeAnchors( static_cast<SCH_ITEM*>( item ), aRefPos, aFrom, aIncludeText );
+        }
+
+        break;
 
     default:
         break;
