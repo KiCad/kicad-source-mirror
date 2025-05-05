@@ -668,7 +668,10 @@ int SCH_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
             {
                 m_toolMgr->RunAction( SCH_ACTIONS::move );
             }
-            else if( CollectHits( collector, evt->DragOrigin(), { SCH_TABLECELL_T } ) )
+            // Allow drag selecting table cells, except when they're inside a group that we haven't entered
+            else if( CollectHits( collector, evt->DragOrigin(), { SCH_TABLECELL_T } )
+                     && ( collector[0]->GetParent()->GetParentGroup() == nullptr
+                          || collector[0]->GetParent()->GetParentGroup() == m_enteredGroup ) )
             {
                 selectTableCells( static_cast<SCH_TABLE*>( collector[0]->GetParent() ) );
             }
