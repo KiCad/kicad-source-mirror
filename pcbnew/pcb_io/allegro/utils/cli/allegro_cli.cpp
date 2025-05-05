@@ -50,6 +50,10 @@ int main( int argc, char** argv )
     argParser.add_argument( "--sm", "--string-match" )
         .help( "Print strings that match a substring" )
         .metavar( "SUBSTRING" );
+
+    argParser.add_argument( "--bc", "--block-counts" )
+        .help( "Print counts of each discovered block type" )
+        .flag();
     // clang-format on
 
     try
@@ -71,6 +75,7 @@ int main( int argc, char** argv )
     ALLEGRO::FILE_STREAM allegroStream( fin );
 
     ALLEGRO::PARSER parser( allegroStream );
+    parser.EndAtUnknownBlock( true );
 
     PROF_TIMER parseTimer;
 
@@ -136,6 +141,20 @@ int main( int argc, char** argv )
         else
         {
             fmt::print( "String ID {:#010x} not found\n", stringId );
+        }
+    }
+    else if( argParser.get<bool>( "block-counts" ) )
+    {
+        std::map<uint8_t, size_t> blockCounts;
+
+        for( const auto& obj : board->m_ObjectLists )
+        {
+            blockCounts[obj.first] = obj.second.size();
+        }
+
+        for( const auto& [blockType, count] : blockCounts )
+        {
+            fmt::print( "Block type {:#04x}: {:5d}\n", blockType, count );
         }
     }
 

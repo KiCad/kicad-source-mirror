@@ -359,13 +359,25 @@ void ALLEGRO::PARSER::readObjects( RAW_BOARD& aBoard )
         }
         default:
         {
-            THROW_IO_ERROR(
-                    wxString::Format( "Do not have parser for type %#02x available at offset %#010lx", type, offset ) );
+            if( !m_endAtUnknownBlock )
+            {
+                THROW_IO_ERROR( wxString::Format( "Do not have parser for type %#02x available at offset %#010lx", type,
+                                                  offset ) );
+            }
+
+            wxLogTrace( traceAllegroParser,
+                        wxString::Format( "Ending at unknown block type %#02x at offset %#010lx", type, offset ) );
+            return;
         }
         }
 
         if( block )
         {
+            uint8_t type = block->GetBlockType();
+
+            // Creates the vector if it doesn't exist
+            aBoard.m_ObjectLists[type].push_back( block.get() );
+
             aBoard.m_Objects.push_back( std::move( block ) );
         }
     }

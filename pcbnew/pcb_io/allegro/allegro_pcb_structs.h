@@ -304,6 +304,9 @@ struct BLK_0x06
 };
 
 
+/**
+ * 0x07 objects.
+ */
 struct BLK_0x07
 {
     uint32_t m_Key;
@@ -330,6 +333,8 @@ struct BLK_0x07
  * 0x0F objects.
  *
  * Exact purpose not clear yet.
+ *
+ * Number of 0x0F objects in a file seems to match 0x06 objects.
  */
 struct BLK_0x0F
 {
@@ -353,6 +358,8 @@ struct BLK_0x0F
  * 0x10 objects.
  *
  * Use unclear for now.
+ *
+ * Number of 0x10 objects in a file seems to match 0x07 objects.
  */
 struct BLK_0x10
 {
@@ -391,6 +398,9 @@ public:
 
     // Map of keys to objects (for the objects we can get keys for)
     std::unordered_map<uint32_t, BLOCK_BASE*> m_ObjectKeyMap;
+
+    // Lists of the objects by type
+    std::unordered_map<uint8_t, std::vector<BLOCK_BASE*>> m_ObjectLists;
 
     static const size_t STRING_TABLE_OFFSET = 0x1200;
 };

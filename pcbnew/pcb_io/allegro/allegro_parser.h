@@ -17,12 +17,26 @@ public:
         m_stream( aStream )
     {}
 
+    /**
+     * When set to true, the parser will stop at the first unknown block, rather
+     * than throwing an error.
+     *
+     * This is mostly useful for debugging, as at least you can dump the blocks
+     * and see what they are. But in real life, this would result in a very incomplete
+     * board state.
+     */
+    void EndAtUnknownBlock( bool aEndAtUnknownBlock )
+    {
+        m_endAtUnknownBlock = aEndAtUnknownBlock;
+    }
+
     std::unique_ptr<RAW_BOARD> Parse();
 
 private:
     void readObjects( RAW_BOARD& aBoard );
 
     FILE_STREAM& m_stream;
+    bool         m_endAtUnknownBlock = false;
 };
 
 } // namespace ALLEGRO
