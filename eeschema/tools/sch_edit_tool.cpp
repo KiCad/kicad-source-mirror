@@ -891,7 +891,6 @@ int SCH_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
         case SCH_NO_CONNECT_T:
         case SCH_BUS_BUS_ENTRY_T:
         case SCH_BUS_WIRE_ENTRY_T:
-        case SCH_GROUP_T:
             head->Rotate( rotPoint, !clockwise );
 
             break;
@@ -917,6 +916,19 @@ int SCH_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
             head->Rotate( rotPoint, !clockwise );
 
             break;
+
+        case SCH_GROUP_T:
+        {
+            // Rotate the group on itself. Groups do not have an anchor point.
+            SCH_GROUP* group = static_cast<SCH_GROUP*>( head );
+            rotPoint = m_frame->GetNearestHalfGridPosition( group->GetPosition() );
+
+            group->Rotate( rotPoint, !clockwise );
+
+            group->Move( rotPoint - m_frame->GetNearestHalfGridPosition( group->GetPosition() ) );
+
+            break;
+        }
 
         case SCH_TABLE_T:
         {
