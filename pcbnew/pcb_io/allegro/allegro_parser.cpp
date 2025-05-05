@@ -346,6 +346,42 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x2B( FILE_STREAM& stream, FMT_VER
 }
 
 
+static std::unique_ptr<BLOCK_BASE> ParseBlock_0x2D( FILE_STREAM& stream, FMT_VER aVer )
+{
+    auto block = std::make_unique<BLOCK<BLK_0x2D>>( 0x2D, stream.Position() );
+
+    auto& data = block->GetData();
+
+    stream.Skip( 3 );
+
+    data.m_Key = stream.ReadU32();
+    data.m_Next = stream.ReadU32();
+    data.m_Unknown1 = stream.ReadU32();
+
+    ReadCond( stream, aVer, data.m_InstRef16x );
+
+    data.m_Unknown2 = stream.ReadU16();
+    data.m_Unknown3 = stream.ReadU16();
+
+    ReadCond( stream, aVer, data.m_Unknown );
+
+    data.m_Flags = stream.ReadU32();
+
+    data.m_Rotation = stream.ReadU32();
+    data.m_CoordX = stream.ReadS16();
+    data.m_CoordY = stream.ReadS16();
+
+    ReadCond( stream, aVer, data.m_InstRef );
+
+    data.m_UnknownPtr1 = stream.ReadU32();
+    data.m_FirstPadPtr = stream.ReadU32();
+    data.m_UnknownPtr2 = stream.ReadU32();
+    ReadArrayU32( stream, data.m_UnknownPtrs1 );
+
+    return block;
+}
+
+
 static std::optional<uint32_t> GetBlockKey( const BLOCK_BASE& block )
 {
     switch( block.GetBlockType() )
@@ -355,6 +391,7 @@ static std::optional<uint32_t> GetBlockKey( const BLOCK_BASE& block )
     case 0x0F: return static_cast<const BLOCK<BLK_0x0F>&>( block ).GetData().m_Key;
     case 0x10: return static_cast<const BLOCK<BLK_0x10>&>( block ).GetData().m_Key;
     case 0x2B: return static_cast<const BLOCK<BLK_0x2B>&>( block ).GetData().m_Key;
+    case 0x2D: return static_cast<const BLOCK<BLK_0x2B>&>( block ).GetData().m_Key;
     default: break;
     }
 
@@ -405,6 +442,11 @@ void ALLEGRO::PARSER::readObjects( RAW_BOARD& aBoard )
         case 0x2B:
         {
             block = ParseBlock_0x2B( m_stream, ver );
+            break;
+        }
+        case 0x2D:
+        {
+            block = ParseBlock_0x2D( m_stream, ver );
             break;
         }
         default:

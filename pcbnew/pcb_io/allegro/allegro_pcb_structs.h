@@ -408,6 +408,42 @@ struct BLK_0x2B
 
 
 /**
+ * 0x2D objects.
+ */
+struct BLK_0x2D
+{
+    uint32_t m_Key;
+
+    uint32_t m_Next;
+
+    COND_GE<FMT_VER::V_172, uint32_t> m_Unknown1;
+
+    // Unsure what 16x means
+    COND_LT<FMT_VER::V_172, uint32_t> m_InstRef16x;
+
+    uint16_t m_Unknown2;
+    uint16_t m_Unknown3;
+
+    COND_GE<FMT_VER::V_172, uint32_t> m_Unknown;
+
+    uint32_t m_Flags;
+
+    uint32_t m_Rotation;
+    int32_t  m_CoordX;
+    int32_t  m_CoordY;
+
+    // Presumably equivalent to m_InstRef16x
+    COND_GE<FMT_VER::V_172, uint32_t> m_InstRef;
+
+    uint32_t m_UnknownPtr1;
+    uint32_t m_FirstPadPtr;
+    uint32_t m_UnknownPtr2;
+
+    std::array<uint32_t, 4> m_UnknownPtrs1;
+};
+
+
+/**
  * Raw board structure that we will build as we parse the file.
  */
 struct RAW_BOARD
