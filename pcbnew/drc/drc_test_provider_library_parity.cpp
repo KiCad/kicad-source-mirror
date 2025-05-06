@@ -297,7 +297,8 @@ bool padNeedsUpdate( const PAD* a, const PAD* b, REPORTER* aReporter )
     if( a->GetRemoveUnconnected() )
         layerSettingsDiffer |= a->GetKeepTopBottom() != b->GetKeepTopBottom();
 
-    if( layerSettingsDiffer || a->GetLayerSet() != getBoardNormalizedLayerSet( b, a->GetBoard() ) )
+    if( layerSettingsDiffer
+            || getBoardNormalizedLayerSet( a, a->GetBoard() ) != getBoardNormalizedLayerSet( b, a->GetBoard() ) )
     {
         diff = true;
 
