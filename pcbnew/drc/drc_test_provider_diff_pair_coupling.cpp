@@ -22,6 +22,7 @@
 #include <board.h>
 #include <board_design_settings.h>
 #include <pcb_track.h>
+#include <pcb_generator.h>
 
 #include <drc/drc_engine.h>
 #include <drc/drc_item.h>
@@ -277,9 +278,24 @@ struct DIFF_PAIR_ITEMS
 
 static void extractDiffPairCoupledItems( DIFF_PAIR_ITEMS& aDp )
 {
+    auto isInTuningPattern =
+            []( BOARD_ITEM* track )
+            {
+                if( EDA_GROUP* parent = track->GetParentGroup() )
+                {
+                    if( PCB_GENERATOR* generator = dynamic_cast<PCB_GENERATOR*>( parent ) )
+                    {
+                        if( generator->GetGeneratorType() == wxS( "tuning_pattern" ) )
+                            return true;
+                    }
+                }
+
+                return false;
+            };
+
     for( BOARD_CONNECTED_ITEM* itemP : aDp.itemsP )
     {
-        if( !itemP || itemP->Type() != PCB_TRACE_T )
+        if( !itemP || itemP->Type() != PCB_TRACE_T || isInTuningPattern( itemP ) )
             continue;
 
         PCB_TRACK* sp = static_cast<PCB_TRACK*>( itemP );
@@ -287,7 +303,7 @@ static void extractDiffPairCoupledItems( DIFF_PAIR_ITEMS& aDp )
 
         for( BOARD_CONNECTED_ITEM* itemN : aDp.itemsN )
         {
-            if( !itemN || itemN->Type() != PCB_TRACE_T )
+            if( !itemN || itemN->Type() != PCB_TRACE_T || isInTuningPattern( itemN ) )
                 continue;
 
             PCB_TRACK* sn = static_cast<PCB_TRACK*>( itemN );
@@ -320,7 +336,7 @@ static void extractDiffPairCoupledItems( DIFF_PAIR_ITEMS& aDp )
             }
         }
 
-        for( auto coupled : coupled_vec )
+        for( const std::optional<DIFF_PAIR_COUPLED_SEGMENTS>& coupled : coupled_vec )
         {
             auto excludeSelf =
                     [&]( BOARD_ITEM* aItem )
@@ -358,18 +374,18 @@ static void extractDiffPairCoupledItems( DIFF_PAIR_ITEMS& aDp )
 
     for( BOARD_CONNECTED_ITEM* itemP : aDp.itemsP )
     {
-        if( !itemP || itemP->Type() != PCB_ARC_T )
+        if( !itemP || itemP->Type() != PCB_ARC_T || isInTuningPattern( itemP ) )
             continue;
 
         PCB_ARC* sp = static_cast<PCB_ARC*>( itemP );
         std::vector<std::optional<DIFF_PAIR_COUPLED_SEGMENTS>> coupled_vec;
 
-        for ( BOARD_CONNECTED_ITEM* itemN : aDp.itemsN )
+        for( BOARD_CONNECTED_ITEM* itemN : aDp.itemsN )
         {
-            if( !itemN || itemN->Type() != PCB_ARC_T )
+            if( !itemN || itemN->Type() != PCB_ARC_T || isInTuningPattern( itemN ) )
                 continue;
 
-            PCB_ARC* sn = dyn_cast<PCB_ARC*> ( itemN );
+            PCB_ARC* sn = static_cast<PCB_ARC*>( itemN );
 
             if( ( sn->GetLayerSet() & sp->GetLayerSet() ).none() )
                 continue;
@@ -400,7 +416,7 @@ static void extractDiffPairCoupledItems( DIFF_PAIR_ITEMS& aDp )
             }
         }
 
-        for( auto coupled : coupled_vec )
+        for( const std::optional<DIFF_PAIR_COUPLED_SEGMENTS>& coupled : coupled_vec )
         {
             auto excludeSelf =
                     [&] ( BOARD_ITEM *aItem )
