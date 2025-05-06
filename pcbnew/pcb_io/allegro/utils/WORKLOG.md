@@ -57,3 +57,4 @@ The materials used for this work are:
     * 0x08 - brings PreAmp to 0x000277ec (next is 0x11)
     * 0x11 - brings PreAmp to 0x00027834 (next is 0x32)
     * 0x26 - bring CutiePi to 0x28ee4 (next is 0x31)
+    * 0x32 (placed pad) - brings PreAmp to 0x278cc (next is 0x12)

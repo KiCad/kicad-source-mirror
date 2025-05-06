@@ -992,11 +992,43 @@ struct LAYER_INFO
         BOARD_GEOM,
         COPPER,
         SILK,
-        UNKNOWN_0x12,
+        UNKNOWN,
     };
 
     FAMILY  m_Family;
     uint8_t m_Ordinal;
+};
+
+
+/**
+ * 0x32 objects represent placed pads.
+ */
+struct BLK_0x32_PLACED_PAD
+{
+    uint8_t    m_Type;
+    LAYER_INFO m_Layer;
+    uint32_t   m_Key;
+    uint32_t   m_Unknown1;
+    uint32_t   m_NetPtr;
+    uint32_t   m_Flags;
+
+    COND_GE<FMT_VER::V_172, uint32_t> m_Prev;
+
+    uint32_t m_Next;
+    uint32_t m_Ptr3;
+    uint32_t m_Ptr4;
+    uint32_t m_PadPtr;
+    uint32_t m_Ptr6;
+    uint32_t m_Ptr7;
+    uint32_t m_Ptr8;
+    uint32_t m_Previous;
+
+    COND_GE<FMT_VER::V_172, uint32_t> m_Unknown2;
+
+    uint32_t m_Ptr10;
+    uint32_t m_Ptr11;
+
+    std::array<int32_t, 4> m_Coords;
 };
 
 
