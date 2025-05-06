@@ -1035,6 +1035,39 @@ struct LAYER_INFO
 
 
 /**
+ * 0x31 objects represent string graphics.
+ */
+struct BLK_0x31_SGRAPHIC
+{
+    enum class STRING_LAYER : uint16_t
+    {
+        BOT_TEXT,
+        TOP_TEXT,
+        BOT_PIN,
+        TOP_PIN,
+        TOP_PIN_LABEL,
+        BOT_REFDES,
+        TOP_REFDES,
+        UNKNOWN,
+    };
+
+    uint8_t      m_T;
+    STRING_LAYER m_Layer;
+    uint32_t     m_Key;
+    uint32_t     m_StrGraphicWrapperPtr;
+
+    std::array<int32_t, 2> m_Coords;
+
+    uint16_t m_Unknown;
+    uint16_t m_Len;
+
+    COND_GE<FMT_VER::V_174, uint32_t> m_Un2;
+
+    std::string m_Value;
+};
+
+
+/**
  * 0x32 objects represent placed pads.
  */
 struct BLK_0x32_PLACED_PAD

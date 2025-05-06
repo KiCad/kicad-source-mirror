@@ -1189,6 +1189,49 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x2D( FILE_STREAM& stream, FMT_VER
 }
 
 
+static std::unique_ptr<BLOCK_BASE> ParseBlock_0x31_SGRAPHIC( FILE_STREAM& aStream, FMT_VER aVer )
+{
+    auto block = std::make_unique<BLOCK<BLK_0x31_SGRAPHIC>>( 0x31, aStream.Position() );
+
+    auto& data = block->GetData();
+
+    data.m_T = aStream.ReadU8();
+
+    {
+        const uint16_t layer = aStream.ReadU16();
+
+        switch( layer )
+        {
+        case 0xF001: data.m_Layer = BLK_0x31_SGRAPHIC::STRING_LAYER::BOT_TEXT; break;
+        case 0xF101: data.m_Layer = BLK_0x31_SGRAPHIC::STRING_LAYER::TOP_TEXT; break;
+        case 0xF609: data.m_Layer = BLK_0x31_SGRAPHIC::STRING_LAYER::BOT_PIN; break;
+        case 0xF709: data.m_Layer = BLK_0x31_SGRAPHIC::STRING_LAYER::TOP_PIN; break;
+        case 0xF801: data.m_Layer = BLK_0x31_SGRAPHIC::STRING_LAYER::TOP_PIN_LABEL; break;
+        case 0xFA0D: data.m_Layer = BLK_0x31_SGRAPHIC::STRING_LAYER::BOT_REFDES; break;
+        case 0xFB0D: data.m_Layer = BLK_0x31_SGRAPHIC::STRING_LAYER::TOP_REFDES; break;
+        default: data.m_Layer = BLK_0x31_SGRAPHIC::STRING_LAYER::UNKNOWN; break;
+        }
+    }
+
+    data.m_Key = aStream.ReadU32();
+    data.m_StrGraphicWrapperPtr = aStream.ReadU32();
+
+    for( size_t i = 0; i < data.m_Coords.size(); ++i )
+    {
+        data.m_Coords[i] = aStream.ReadS32();
+    }
+
+    data.m_Unknown = aStream.ReadU16();
+    data.m_Len = aStream.ReadU16();
+
+    ReadCond( aStream, aVer, data.m_Un2 );
+
+    data.m_Value = aStream.ReadString( true );
+
+    return block;
+}
+
+
 static std::unique_ptr<BLOCK_BASE> ParseBlock_0x32_PLACED_PAD( FILE_STREAM& aStream, FMT_VER aVer )
 {
     auto block = std::make_unique<BLOCK<BLK_0x32_PLACED_PAD>>( 0x32, aStream.Position() );
@@ -1519,6 +1562,7 @@ static std::optional<uint32_t> GetBlockKey( const BLOCK_BASE& block )
     case 0x2A: return static_cast<const BLOCK<BLK_0x2A>&>( block ).GetData().m_Key;
     case 0x2B: return static_cast<const BLOCK<BLK_0x2B>&>( block ).GetData().m_Key;
     case 0x2D: return static_cast<const BLOCK<BLK_0x2D>&>( block ).GetData().m_Key;
+    case 0x31: return static_cast<const BLOCK<BLK_0x31_SGRAPHIC>&>( block ).GetData().m_Key;
     case 0x32: return static_cast<const BLOCK<BLK_0x32_PLACED_PAD>&>( block ).GetData().m_Key;
     case 0x33: return static_cast<const BLOCK<BLK_0x33_VIA>&>( block ).GetData().m_Key;
     case 0x36: return static_cast<const BLOCK<BLK_0x36>&>( block ).GetData().m_Key;
@@ -1680,6 +1724,11 @@ void ALLEGRO::PARSER::readObjects( RAW_BOARD& aBoard )
         case 0x2D:
         {
             block = ParseBlock_0x2D( m_stream, ver );
+            break;
+        }
+        case 0x31:
+        {
+            block = ParseBlock_0x31_SGRAPHIC( m_stream, ver );
             break;
         }
         case 0x32:
