@@ -21,6 +21,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <layer_range.h>
 #include <kiway.h>
 #include <macros.h>
 #include <netlist_reader/pcb_netlist.h>
@@ -124,6 +125,17 @@ public:
 
 
 UNITS_PROVIDER g_unitsProvider( pcbIUScale, EDA_UNITS::MM );
+
+
+LSET getBoardNormalizedLayerSet( const BOARD_ITEM* aLibItem, const BOARD* aBoard )
+{
+    LSET lset = aLibItem->GetLayerSet();
+
+    if( aBoard )
+        lset &= aBoard->GetEnabledLayers();
+
+    return lset;
+}
 
 
 bool primitiveNeedsUpdate( const std::shared_ptr<PCB_SHAPE>& a,
@@ -285,12 +297,7 @@ bool padNeedsUpdate( const PAD* a, const PAD* b, REPORTER* aReporter )
     if( a->GetRemoveUnconnected() )
         layerSettingsDiffer |= a->GetKeepTopBottom() != b->GetKeepTopBottom();
 
-    // Trim layersets to the current board before comparing
-    LSET enabledLayers = a->GetBoard() ? a->GetBoard()->GetEnabledLayers() : LSET::AllLayersMask();
-    LSET aLayers = a->GetLayerSet() & enabledLayers;
-    LSET bLayers = b->GetLayerSet() & enabledLayers;
-
-    if( layerSettingsDiffer || aLayers != bLayers )
+    if( layerSettingsDiffer || a->GetLayerSet() != getBoardNormalizedLayerSet( b, a->GetBoard() ) )
     {
         diff = true;
 
@@ -319,34 +326,42 @@ bool padNeedsUpdate( const PAD* a, const PAD* b, REPORTER* aReporter )
         layerName = board ? board->GetLayerName( layer ) : LayerName( layer );
 
         TEST( a->GetShape( layer ), b->GetShape( layer ),
-                  wxString::Format( _( "%s pad shape type differs on layer %s." ), PAD_DESC( a ),
-                                    layerName ) );
+              wxString::Format( _( "%s pad shape type differs on layer %s." ),
+                                PAD_DESC( a ),
+                                layerName ) );
 
         TEST( a->GetSize( layer ), b->GetSize( layer ),
-              wxString::Format( _( "%s size differs on layer %s." ), PAD_DESC( a ), layerName ) );
+              wxString::Format( _( "%s size differs on layer %s." ),
+                                PAD_DESC( a ),
+                                layerName ) );
 
         TEST( a->GetDelta( layer ), b->GetDelta( layer ),
-              wxString::Format( _( "%s trapezoid delta differs on layer %s." ), PAD_DESC( a ),
+              wxString::Format( _( "%s trapezoid delta differs on layer %s." ),
+                                PAD_DESC( a ),
                                 layerName ) );
 
         TEST_D( a->GetRoundRectRadiusRatio( layer ),
                 b->GetRoundRectRadiusRatio( layer ),
-                wxString::Format( _( "%s rounded corners differ on layer %s." ), PAD_DESC( a ),
+                wxString::Format( _( "%s rounded corners differ on layer %s." ),
+                                  PAD_DESC( a ),
                                   layerName ) );
 
         TEST_D( a->GetChamferRectRatio( layer ),
                 b->GetChamferRectRatio( layer ),
                 wxString::Format( _( "%s chamfered corner sizes differ on layer %s." ),
-                                  PAD_DESC( a ), layerName ) );
+                                  PAD_DESC( a ),
+                                  layerName ) );
 
         TEST( a->GetChamferPositions( layer ),
               b->GetChamferPositions( layer ),
-              wxString::Format( _( "%s chamfered corners differ on layer %s." ), PAD_DESC( a ),
+              wxString::Format( _( "%s chamfered corners differ on layer %s." ),
+                                PAD_DESC( a ),
                                 layerName ) );
 
         TEST_PT( a->GetOffset( layer ), b->GetOffset( layer ),
                  wxString::Format( _( "%s shape offset from hole differs on layer %s." ),
-                                   PAD_DESC( a ), layerName ) );
+                                   PAD_DESC( a ),
+                                   layerName ) );
     }
 
     TEST( a->GetDrillShape(), b->GetDrillShape(),
@@ -509,7 +524,7 @@ bool zoneNeedsUpdate( const ZONE* a, const ZONE* b, REPORTER* aReporter )
     TEST( a->GetDoNotAllowVias(), b->GetDoNotAllowVias(),
           wxString::Format( _( "%s keep out vias setting differs." ), ITEM_DESC( a ) ) );
 
-    TEST( a->GetLayerSet(), b->GetLayerSet(),
+    TEST( a->GetLayerSet(), getBoardNormalizedLayerSet( b, a->GetBoard() ),
           wxString::Format( _( "%s layers differ." ), ITEM_DESC( a ) ) );
 
     TEST( a->GetPadConnection(), b->GetPadConnection(),
