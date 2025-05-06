@@ -677,6 +677,52 @@ struct BLK_0x2D
 };
 
 
+struct LAYER_INFO
+{
+    enum class FAMILY
+    {
+        BOARD_GEOM,
+        COPPER,
+        SILK,
+        UNKNOWN_0x12,
+    };
+
+    FAMILY  m_Family;
+    uint8_t m_Ordinal;
+};
+
+
+/**
+ * 0x33 objects are vias.
+ */
+struct BLK_0x33_VIA
+{
+    LAYER_INFO m_LayerInfo;
+    uint32_t   m_Key;
+    uint32_t   m_Unknown1;
+    uint32_t   m_NetPtr;
+    uint32_t   m_Unknown2;
+
+    COND_GE<FMT_VER::V_172, uint32_t> m_Unknown3;
+
+    uint32_t m_UnknownPtr1;
+
+    COND_GE<FMT_VER::V_172, uint32_t> m_UnknownPtr2;
+
+    std::array<int32_t, 2> m_Coords;
+
+    uint32_t m_UnknownPtr3;
+    uint32_t m_UnknownPtr4;
+    uint32_t m_UnknownPtr5;
+    uint32_t m_UnknownPtr6;
+
+    uint32_t m_Unknown4;
+    uint32_t m_Unknown5;
+
+    std::array<int32_t, 4> m_BoundingBoxCoords;
+};
+
+
 /**
  * Raw board structure that we will build as we parse the file.
  */

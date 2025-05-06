@@ -236,6 +236,31 @@ static void ReadStringMap( FILE_STREAM& stream, RAW_BOARD& aBoard, uint32_t coun
 }
 
 
+static LAYER_INFO ParseLayerInfo( FILE_STREAM& aStream )
+{
+    uint8_t famCode = aStream.ReadU8();
+    uint8_t ord = aStream.ReadU8();
+
+
+    LAYER_INFO::FAMILY family = LAYER_INFO::FAMILY::BOARD_GEOM;
+
+    switch( famCode )
+    {
+    case 0x01: family = LAYER_INFO::FAMILY::BOARD_GEOM; break;
+    case 0x06: family = LAYER_INFO::FAMILY::COPPER; break;
+    case 0x09: family = LAYER_INFO::FAMILY::SILK; break;
+    // In the PreAmp board - TODO: come back to this
+    case 0x12: family = LAYER_INFO::FAMILY::UNKNOWN_0x12; break;
+    default: THROW_IO_ERROR( wxString::Format( "Unknown LAYER_INFO family code: %#04x", famCode ) );
+    };
+
+    return LAYER_INFO{
+        .m_Family = family,
+        .m_Ordinal = ord,
+    };
+}
+
+
 static std::unique_ptr<BLOCK_BASE> ParseBlock_0x06( FILE_STREAM& stream, FMT_VER aVer )
 {
     auto block = std::make_unique<BLOCK<BLK_0x06>>( 0x06, stream.Position() );
@@ -646,6 +671,48 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x2D( FILE_STREAM& stream, FMT_VER
 }
 
 
+static std::unique_ptr<BLOCK_BASE> ParseBlock_0x33_VIA( FILE_STREAM& aStream, FMT_VER aVer )
+{
+    auto block = std::make_unique<BLOCK<BLK_0x33_VIA>>( 0x33, aStream.Position() );
+
+    auto& data = block->GetData();
+
+    aStream.Skip( 1 );
+
+    data.m_LayerInfo = ParseLayerInfo( aStream );
+    data.m_Key = aStream.ReadU32();
+    data.m_Unknown1 = aStream.ReadU32();
+    data.m_NetPtr = aStream.ReadU32();
+    data.m_Unknown2 = aStream.ReadU32();
+
+    ReadCond( aStream, aVer, data.m_Unknown3 );
+
+    data.m_UnknownPtr1 = aStream.ReadU32();
+
+    ReadCond( aStream, aVer, data.m_UnknownPtr2 );
+
+    for( size_t i = 0; i < data.m_Coords.size(); ++i )
+    {
+        data.m_Coords[i] = aStream.ReadS32();
+    }
+
+    data.m_UnknownPtr3 = aStream.ReadU32();
+    data.m_UnknownPtr4 = aStream.ReadU32();
+    data.m_UnknownPtr5 = aStream.ReadU32();
+    data.m_UnknownPtr6 = aStream.ReadU32();
+
+    data.m_Unknown4 = aStream.ReadU32();
+    data.m_Unknown5 = aStream.ReadU32();
+
+    for( size_t i = 0; i < data.m_BoundingBoxCoords.size(); ++i )
+    {
+        data.m_BoundingBoxCoords[i] = aStream.ReadS32();
+    }
+
+    return block;
+}
+
+
 static std::optional<uint32_t> GetBlockKey( const BLOCK_BASE& block )
 {
     switch( block.GetBlockType() )
@@ -660,7 +727,8 @@ static std::optional<uint32_t> GetBlockKey( const BLOCK_BASE& block )
     case 0x1F: return static_cast<const BLOCK<BLK_0x1F>&>( block ).GetData().m_Key;
     case 0x21: return static_cast<const BLOCK<BLK_0x21>&>( block ).GetData().m_Key;
     case 0x2B: return static_cast<const BLOCK<BLK_0x2B>&>( block ).GetData().m_Key;
-    case 0x2D: return static_cast<const BLOCK<BLK_0x2B>&>( block ).GetData().m_Key;
+    case 0x2D: return static_cast<const BLOCK<BLK_0x2D>&>( block ).GetData().m_Key;
+    case 0x33: return static_cast<const BLOCK<BLK_0x33_VIA>&>( block ).GetData().m_Key;
     default: break;
     }
 
@@ -741,6 +809,11 @@ void ALLEGRO::PARSER::readObjects( RAW_BOARD& aBoard )
         case 0x2D:
         {
             block = ParseBlock_0x2D( m_stream, ver );
+            break;
+        }
+        case 0x33:
+        {
+            block = ParseBlock_0x33_VIA( m_stream, ver );
             break;
         }
         default:
