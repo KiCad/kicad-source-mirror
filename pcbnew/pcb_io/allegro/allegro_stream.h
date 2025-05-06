@@ -113,6 +113,7 @@ public:
     uint16_t ReadU16() { return Read<uint16_t>(); }
     int16_t  ReadS16() { return Read<int16_t>(); }
     uint32_t ReadU32() { return Read<uint32_t>(); }
+    int16_t  ReadS32() { return Read<int32_t>(); }
 
     void SkipU32( size_t n = 1 ) { Skip( sizeof( uint32_t ) * n ); }
 

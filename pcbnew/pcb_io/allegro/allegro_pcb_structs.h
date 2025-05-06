@@ -167,6 +167,19 @@ struct COND_LT : public COND_FIELD_BASE<T>
 };
 
 
+/**
+ * This is a conditional field that only exists in versions of a file
+ * less than a certain version.
+ */
+template <FMT_VER GEVersion, FMT_VER LTVersion, typename T>
+struct COND_GE_LT : public COND_FIELD_BASE<T>
+{
+    constexpr bool exists( FMT_VER ver ) const { return ver >= ver && ver < LTVersion; }
+
+    using COND_FIELD_BASE<T>::operator=;
+};
+
+
 enum BOARD_UNITS
 {
     IMPERIAL = 0x01,
@@ -404,6 +417,127 @@ struct BLK_0x1B_NET
     uint32_t m_UnknownPtr4;
     uint32_t m_UnknownPtr5;
     uint32_t m_UnknownPtr6;
+};
+
+
+/**
+ * The type of the padstack.
+ *
+ * This seems a little uncertain in places (there seems to be 2 codes for SMD for example)
+ */
+enum class PAD_TYPE
+{
+    THROUGH_VIA,
+    VIA,
+    SMD_PIN,
+    SLOT,
+    NPTH,
+};
+
+
+/**
+ * Substruct in a padstack object.
+ *
+ * It's not quite clear what the fields actually mean, but presumably
+ * relate to per layer(?) structures.
+ */
+struct PADSTACK_COMPONENT
+{
+    uint8_t m_Type;
+    uint8_t m_UnknownByte1;
+    uint8_t m_UnknownByte2;
+    uint8_t m_UnknownByte3;
+
+    COND_GE<FMT_VER::V_172, uint32_t> m_Unknown1;
+
+    int32_t m_W;
+    int32_t m_H;
+
+    COND_GE<FMT_VER::V_172, int16_t> m_Z1;
+
+    int32_t m_X3;
+    int32_t m_X4;
+
+    COND_GE<FMT_VER::V_172, int16_t> m_Z;
+
+    /**
+     * Seems to point to various things:
+     *
+     * * 0x0F objects when the type is 0x06
+     * * 0x28 objects when the type is 0x16
+     */
+    uint32_t m_StrPtr;
+
+    // In versions < 17.2, seems to be not present in the last entry.
+    std::optional<uint32_t> m_Z2;
+};
+
+
+struct BLK_0x1C_PADSTACK
+{
+    uint8_t m_UnknownByte1;
+
+    /**
+     * The number of something. Drives the size of an array (with a multiplier).
+     */
+    uint8_t  m_N;
+    uint8_t  m_UnknownByte2;
+    uint32_t m_Key;
+    uint32_t m_Next;
+    uint32_t m_PadStr;
+    uint32_t m_Unknown1;
+    uint32_t m_Unknown2;
+    uint32_t m_PadPath;
+
+    COND_LT<FMT_VER::V_172, uint32_t> m_Unknown3;
+    COND_LT<FMT_VER::V_172, uint32_t> m_Unknown4;
+    COND_LT<FMT_VER::V_172, uint32_t> m_Unknown5;
+    COND_LT<FMT_VER::V_172, uint32_t> m_Unknown6;
+
+    PAD_TYPE m_Type;
+
+    // Not sure if this is really a substruct
+    // Only lower 4 bits (top 4 are type)
+    uint8_t m_A;
+    uint8_t m_B;
+    uint8_t m_C;
+    uint8_t m_D;
+
+    COND_GE<FMT_VER::V_172, uint32_t> m_Unknown7;
+    COND_GE<FMT_VER::V_172, uint32_t> m_Unknown8;
+    COND_GE<FMT_VER::V_172, uint32_t> m_Unknown9;
+
+    COND_LT<FMT_VER::V_172, uint16_t> m_Unknown10;
+
+    uint16_t m_LayerCount;
+
+    // Presumably the counterpart to m_Unknown10
+    // Or just padding (?)
+    COND_GE<FMT_VER::V_172, uint16_t> m_Unknown11;
+
+    std::array<uint32_t, 8> m_UnknownArr8;
+
+    COND_GE<FMT_VER::V_172, std::array<uint32_t, 28>> m_UnknownArr28;
+
+    COND_GE_LT<FMT_VER::V_165, FMT_VER::V_172, std::array<uint32_t, 8>> m_UnknownArr8_2;
+
+    /**
+     * Collection of components that make up the padstack.
+     *
+     * The number of components appears to be fixed by version:
+     *
+     * *  < 17.2: 10 + layer_count * 3
+     * * >= 17.2: 21 + layer_count * 4
+     */
+    std::vector<PADSTACK_COMPONENT> m_Components;
+
+    /**
+     * Some structure of m_N * 8 or 10:
+     *
+     * *  < 17.2: 8
+     * * >= 17.2: 10
+     */
+    std::vector<uint32_t> m_UnknownArrN;
 };
 
 

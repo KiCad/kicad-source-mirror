@@ -107,6 +107,20 @@ static T ReadField( FILE_STREAM& aStream )
     {
         field = aStream.ReadS16();
     }
+    else if constexpr( std::is_same_v<T, std::array<uint32_t, 28>> )
+    {
+        for( size_t i = 0; i < field.size(); ++i )
+        {
+            field[i] = aStream.ReadU32();
+        }
+    }
+    else if constexpr( std::is_same_v<T, std::array<uint32_t, 8>> )
+    {
+        for( size_t i = 0; i < field.size(); ++i )
+        {
+            field[i] = aStream.ReadU32();
+        }
+    }
     else
     {
         static_assert( always_false<T>::value, "Unsupported type for ReadField" );
@@ -346,6 +360,122 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x1B_NET( FILE_STREAM& stream, FMT
 }
 
 
+static std::unique_ptr<BLOCK_BASE> ParseBlock_0x1C_PADSTACK( FILE_STREAM& aStream, FMT_VER aVer )
+{
+    auto block = std::make_unique<BLOCK<BLK_0x1C_PADSTACK>>( 0x1C, aStream.Position() );
+
+    auto& data = block->GetData();
+
+    data.m_UnknownByte1 = aStream.ReadU8();
+    data.m_N = aStream.ReadU8();
+    data.m_UnknownByte2 = aStream.ReadU8();
+
+    data.m_Key = aStream.ReadU32();
+    data.m_Next = aStream.ReadU32();
+
+    data.m_PadStr = aStream.ReadU32();
+    data.m_Unknown1 = aStream.ReadU32();
+    data.m_Unknown2 = aStream.ReadU32();
+    data.m_PadPath = aStream.ReadU32();
+
+    ReadCond( aStream, aVer, data.m_Unknown3 );
+    ReadCond( aStream, aVer, data.m_Unknown4 );
+    ReadCond( aStream, aVer, data.m_Unknown5 );
+    ReadCond( aStream, aVer, data.m_Unknown6 );
+
+    {
+        const uint8_t t = aStream.ReadU8();
+
+        // clang-format off
+        switch( (t & 0xF0) >> 4 )
+        {
+        case 0x00:
+            data.m_Type = PAD_TYPE::THROUGH_VIA;
+            break;
+        case 0x01:
+            data.m_Type = PAD_TYPE::VIA;
+            break;
+        case 0x02:
+        case 0x0a: // Unclear what the difference is
+            data.m_Type = PAD_TYPE::SMD_PIN;
+            break;
+        case 0x03:
+            data.m_Type = PAD_TYPE::SLOT;
+            break;
+        case 0x08:
+            data.m_Type = PAD_TYPE::NPTH;
+            break;
+        default:
+            THROW_IO_ERROR( wxString::Format( "Unknown padstack type 0x%x", t ) );
+            break;
+        }
+        // clang-format on
+        data.m_A = ( t & 0x0F );
+    }
+
+    data.m_B = aStream.ReadU8();
+    data.m_C = aStream.ReadU8();
+    data.m_D = aStream.ReadU8();
+
+    ReadCond( aStream, aVer, data.m_Unknown7 );
+    ReadCond( aStream, aVer, data.m_Unknown8 );
+    ReadCond( aStream, aVer, data.m_Unknown9 );
+
+    ReadCond( aStream, aVer, data.m_Unknown10 );
+    data.m_LayerCount = aStream.ReadU16();
+    ReadCond( aStream, aVer, data.m_Unknown11 );
+
+    ReadArrayU32( aStream, data.m_UnknownArr8 );
+
+    ReadCond( aStream, aVer, data.m_UnknownArr28 );
+    ReadCond( aStream, aVer, data.m_UnknownArr8_2 );
+
+    const size_t nComps = aVer < FMT_VER::V_172 ? ( 10 + data.m_LayerCount * 3 ) : ( 21 + data.m_LayerCount * 4 );
+
+    data.m_Components.reserve( nComps );
+    for( size_t i = 0; i < nComps; ++i )
+    {
+        PADSTACK_COMPONENT& comp = data.m_Components.emplace_back();
+
+        comp.m_Type = aStream.ReadU8();
+        comp.m_UnknownByte1 = aStream.ReadU8();
+        comp.m_UnknownByte2 = aStream.ReadU8();
+        comp.m_UnknownByte3 = aStream.ReadU8();
+
+        ReadCond( aStream, aVer, comp.m_Unknown1 );
+
+        comp.m_W = aStream.ReadS32();
+        comp.m_H = aStream.ReadS32();
+
+        ReadCond( aStream, aVer, comp.m_Z1 );
+
+        comp.m_X3 = aStream.ReadS32();
+        comp.m_X4 = aStream.ReadS32();
+
+        ReadCond( aStream, aVer, comp.m_Z );
+
+        comp.m_StrPtr = aStream.ReadU32();
+
+        if( aVer < FMT_VER::V_172 && i < nComps - 1 )
+        {
+            comp.m_Z2 = aStream.ReadU32();
+        }
+    }
+
+    {
+        const size_t nElems = data.m_N * ( ( aVer < FMT_VER::V_172 ) ? 8 : 10 );
+
+        data.m_UnknownArrN.reserve( nElems );
+        for( size_t i = 0; i < nElems; ++i )
+        {
+            data.m_UnknownArrN.push_back( aStream.ReadU32() );
+        }
+    }
+
+    return block;
+}
+
+
 static std::unique_ptr<BLOCK_BASE> ParseBlock_0x2B( FILE_STREAM& stream, FMT_VER aVer )
 {
     auto block = std::make_unique<BLOCK<BLK_0x2B>>( 0x2B, stream.Position() );
@@ -420,6 +550,7 @@ static std::optional<uint32_t> GetBlockKey( const BLOCK_BASE& block )
     case 0x0F: return static_cast<const BLOCK<BLK_0x0F>&>( block ).GetData().m_Key;
     case 0x10: return static_cast<const BLOCK<BLK_0x10>&>( block ).GetData().m_Key;
     case 0x1B: return static_cast<const BLOCK<BLK_0x1B_NET>&>( block ).GetData().m_Key;
+    case 0x1c: return static_cast<const BLOCK<BLK_0x1C_PADSTACK>&>( block ).GetData().m_Key;
     case 0x2B: return static_cast<const BLOCK<BLK_0x2B>&>( block ).GetData().m_Key;
     case 0x2D: return static_cast<const BLOCK<BLK_0x2B>&>( block ).GetData().m_Key;
     default: break;
@@ -472,6 +603,11 @@ void ALLEGRO::PARSER::readObjects( RAW_BOARD& aBoard )
         case 0x1B:
         {
             block = ParseBlock_0x1B_NET( m_stream, ver );
+            break;
+        }
+        case 0x1C:
+        {
+            block = ParseBlock_0x1C_PADSTACK( m_stream, ver );
             break;
         }
         case 0x2B:

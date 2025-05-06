@@ -42,3 +42,8 @@ The materials used for this work are:
 * Implemented structs against the PreAmp project (file version 16.6) as a first step:
     * 0x06, 0x07, 0x0F, 0x10, which gets to offset 0x2a98 in the file.
     * 0x2B, 0x2D, 0x1B (nets) gets to 0x3B00
+
+### 2024-05-06
+
+* Implemented structs:
+    * 0x1C (padstacks) and substructs - gets to 0x3CB0 (0x04 type)
