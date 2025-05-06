@@ -253,10 +253,14 @@ static LAYER_INFO ParseLayerInfo( FILE_STREAM& aStream )
     case 0x01: family = LAYER_INFO::FAMILY::BOARD_GEOM; break;
     case 0x06: family = LAYER_INFO::FAMILY::COPPER; break;
     case 0x09: family = LAYER_INFO::FAMILY::SILK; break;
-    // In the PreAmp board - TODO: come back to this
+    // Found in the PreAmp board - TODO: come back to this
     case 0x0C:
-    case 0x12: family = LAYER_INFO::FAMILY::UNKNOWN; break;
-    default: THROW_IO_ERROR( wxString::Format( "Unknown LAYER_INFO family code: %#04x", famCode ) );
+    case 0x0D:
+    case 0x12:
+    default:
+        family = LAYER_INFO::FAMILY::UNKNOWN;
+        break;
+        // THROW_IO_ERROR( wxString::Format( "Unknown LAYER_INFO family code: %#04x", famCode ) );
     };
 
     return LAYER_INFO{
@@ -732,6 +736,29 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x12( FILE_STREAM& aStream, FMT_VE
 }
 
 
+static std::unique_ptr<BLOCK_BASE> ParseBlock_0x14( FILE_STREAM& aStream, FMT_VER aVer )
+{
+    auto block = std::make_unique<BLOCK<BLK_0x14>>( 0x14, aStream.Position() );
+
+    auto& data = block->GetData();
+
+    data.m_Type = aStream.ReadU8();
+    data.m_Layer = ParseLayerInfo( aStream );
+    data.m_Key = aStream.ReadU32();
+    data.m_Next = aStream.ReadU32();
+    data.m_Ptr1 = aStream.ReadU32();
+    data.m_Unknown1 = aStream.ReadU32();
+
+    ReadCond( aStream, aVer, data.m_Unknown2 );
+
+    data.m_Ptr2 = aStream.ReadU32();
+    data.m_Ptr3 = aStream.ReadU32();
+    data.m_Ptr4 = aStream.ReadU32();
+
+    return block;
+}
+
+
 static std::unique_ptr<BLOCK_BASE> ParseBlock_0x15_SEGMENT( FILE_STREAM& aStream, FMT_VER aVer )
 {
     auto block = std::make_unique<BLOCK<BLK_0x15_SEGMENT>>( 0x15, aStream.Position() );
@@ -1081,6 +1108,44 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x26( FILE_STREAM& aStream, FMT_VE
 }
 
 
+static std::unique_ptr<BLOCK_BASE> ParseBlock_0x28_SHAPE( FILE_STREAM& aStream, FMT_VER aVer )
+{
+    auto block = std::make_unique<BLOCK<BLK_0x28_SHAPE>>( 0x28, aStream.Position() );
+
+    auto& data = block->GetData();
+
+    data.m_Type = aStream.ReadU8();
+    data.m_Layer = ParseLayerInfo( aStream );
+    data.m_Key = aStream.ReadU32();
+    data.m_Next = aStream.ReadU32();
+    data.m_Ptr1 = aStream.ReadU32();
+    data.m_Unknown1 = aStream.ReadU32();
+
+    ReadCond( aStream, aVer, data.m_Unknown2 );
+    ReadCond( aStream, aVer, data.m_Unknown3 );
+
+    data.m_Ptr2 = aStream.ReadU32();
+    data.m_Ptr3 = aStream.ReadU32();
+    data.m_Ptr4 = aStream.ReadU32();
+    data.m_FirstSegmentPtr = aStream.ReadU32();
+    data.m_Unknown4 = aStream.ReadU32();
+    data.m_Unknown5 = aStream.ReadU32();
+
+    ReadCond( aStream, aVer, data.m_Ptr7 );
+
+    data.m_Ptr6 = aStream.ReadU32();
+
+    ReadCond( aStream, aVer, data.m_Ptr7_16x );
+
+    for( size_t i = 0; i < data.m_Coords.size(); ++i )
+    {
+        data.m_Coords[i] = aStream.ReadS32();
+    }
+
+    return block;
+}
+
+
 static std::unique_ptr<BLOCK_BASE> ParseBlock_0x2A( FILE_STREAM& aStream, FMT_VER aVer )
 {
     auto block = std::make_unique<BLOCK<BLK_0x2A>>( 0x2A, aStream.Position() );
@@ -1184,6 +1249,79 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x2D( FILE_STREAM& stream, FMT_VER
     data.m_FirstPadPtr = stream.ReadU32();
     data.m_UnknownPtr2 = stream.ReadU32();
     ReadArrayU32( stream, data.m_UnknownPtrs1 );
+
+    return block;
+}
+
+
+static BLK_0x30_STR_WRAPPER::TEXT_PROPERTIES ParseTextProps( FILE_STREAM& aStream )
+{
+    BLK_0x30_STR_WRAPPER::TEXT_PROPERTIES props;
+
+    props.m_Key = aStream.ReadU8();
+    props.m_Flags = aStream.ReadU8();
+
+    uint8_t alignment = aStream.ReadU8();
+    switch( alignment )
+    {
+    case 0x01: props.m_Alignment = BLK_0x30_STR_WRAPPER::TEXT_ALIGNMENT::LEFT; break;
+    case 0x02: props.m_Alignment = BLK_0x30_STR_WRAPPER::TEXT_ALIGNMENT::RIGHT; break;
+    case 0x03: props.m_Alignment = BLK_0x30_STR_WRAPPER::TEXT_ALIGNMENT::CENTER; break;
+    default: THROW_IO_ERROR( wxString::Format( "Unknown text alignment value: %#02x", alignment ) );
+    }
+
+    uint8_t reversal = aStream.ReadU8();
+    switch( reversal )
+    {
+    case 0x00: props.m_Reversal = BLK_0x30_STR_WRAPPER::TEXT_REVERSAL::STRAIGHT; break;
+    case 0x01: props.m_Reversal = BLK_0x30_STR_WRAPPER::TEXT_REVERSAL::REVERSED; break;
+    default: THROW_IO_ERROR( wxString::Format( "Unknown text reversal value: %#02x", reversal ) );
+    }
+    return props;
+}
+
+
+static std::unique_ptr<BLOCK_BASE> ParseBlock_0x30_STR_WRAPPER( FILE_STREAM& aStream, FMT_VER aVer )
+{
+    auto block = std::make_unique<BLOCK<BLK_0x30_STR_WRAPPER>>( 0x30, aStream.Position() );
+
+    auto& data = block->GetData();
+
+    data.m_Type = aStream.ReadU8();
+    data.m_Layer = ParseLayerInfo( aStream );
+    data.m_Key = aStream.ReadU32();
+    data.m_Next = aStream.ReadU32();
+
+    ReadCond( aStream, aVer, data.m_Unknown1 );
+    ReadCond( aStream, aVer, data.m_Unknown2 );
+
+    if( data.m_Font.exists( aVer ) )
+    {
+        data.m_Font = ParseTextProps( aStream );
+    }
+
+    ReadCond( aStream, aVer, data.m_Ptr1 );
+    ReadCond( aStream, aVer, data.m_Unknown3 );
+
+    data.m_StrGraphicPtr = aStream.ReadU32();
+    data.m_Unknown4 = aStream.ReadU32();
+
+    if( data.m_Font16x.exists( aVer ) )
+    {
+        data.m_Font16x = ParseTextProps( aStream );
+    }
+
+    ReadCond( aStream, aVer, data.m_Ptr2 );
+
+    for( size_t i = 0; i < data.m_Coords.size(); ++i )
+    {
+        data.m_Coords[i] = aStream.ReadS32();
+    }
+
+    data.m_Unknown5 = aStream.ReadU32();
+    data.m_Rotation = aStream.ReadU32();
+
+    ReadCond( aStream, aVer, data.m_Ptr3_16x );
 
     return block;
 }
@@ -1573,6 +1711,7 @@ static std::optional<uint32_t> GetBlockKey( const BLOCK_BASE& block )
     case 0x10: return static_cast<const BLOCK<BLK_0x10>&>( block ).GetData().m_Key;
     case 0x11: return static_cast<const BLOCK<BLK_0x11>&>( block ).GetData().m_Key;
     case 0x12: return static_cast<const BLOCK<BLK_0x12>&>( block ).GetData().m_Key;
+    case 0x14: return static_cast<const BLOCK<BLK_0x14>&>( block ).GetData().m_Key;
     case 0x15: return static_cast<const BLOCK<BLK_0x15_SEGMENT>&>( block ).GetData().m_Key;
     case 0x16: return static_cast<const BLOCK<BLK_0x16_SEGMENT>&>( block ).GetData().m_Key;
     case 0x17: return static_cast<const BLOCK<BLK_0x17_SEGMENT>&>( block ).GetData().m_Key;
@@ -1582,9 +1721,11 @@ static std::optional<uint32_t> GetBlockKey( const BLOCK_BASE& block )
     case 0x1F: return static_cast<const BLOCK<BLK_0x1F>&>( block ).GetData().m_Key;
     case 0x21: return static_cast<const BLOCK<BLK_0x21>&>( block ).GetData().m_Key;
     case 0x26: return static_cast<const BLOCK<BLK_0x26>&>( block ).GetData().m_Key;
+    case 0x28: return static_cast<const BLOCK<BLK_0x28_SHAPE>&>( block ).GetData().m_Key;
     case 0x2A: return static_cast<const BLOCK<BLK_0x2A>&>( block ).GetData().m_Key;
     case 0x2B: return static_cast<const BLOCK<BLK_0x2B>&>( block ).GetData().m_Key;
     case 0x2D: return static_cast<const BLOCK<BLK_0x2D>&>( block ).GetData().m_Key;
+    case 0x30: return static_cast<const BLOCK<BLK_0x30_STR_WRAPPER>&>( block ).GetData().m_Key;
     case 0x31: return static_cast<const BLOCK<BLK_0x31_SGRAPHIC>&>( block ).GetData().m_Key;
     case 0x32: return static_cast<const BLOCK<BLK_0x32_PLACED_PAD>&>( block ).GetData().m_Key;
     case 0x33: return static_cast<const BLOCK<BLK_0x33_VIA>&>( block ).GetData().m_Key;
@@ -1690,6 +1831,11 @@ void ALLEGRO::PARSER::readObjects( RAW_BOARD& aBoard )
             block = ParseBlock_0x12( m_stream, ver );
             break;
         }
+        case 0x14:
+        {
+            block = ParseBlock_0x14( m_stream, ver );
+            break;
+        }
         case 0x15:
         {
             block = ParseBlock_0x15_SEGMENT( m_stream, ver );
@@ -1735,6 +1881,11 @@ void ALLEGRO::PARSER::readObjects( RAW_BOARD& aBoard )
             block = ParseBlock_0x26( m_stream, ver );
             break;
         }
+        case 0x28:
+        {
+            block = ParseBlock_0x28_SHAPE( m_stream, ver );
+            break;
+        }
         case 0x2A:
         {
             block = ParseBlock_0x2A( m_stream, ver );
@@ -1748,6 +1899,11 @@ void ALLEGRO::PARSER::readObjects( RAW_BOARD& aBoard )
         case 0x2D:
         {
             block = ParseBlock_0x2D( m_stream, ver );
+            break;
+        }
+        case 0x30:
+        {
+            block = ParseBlock_0x30_STR_WRAPPER( m_stream, ver );
             break;
         }
         case 0x31:

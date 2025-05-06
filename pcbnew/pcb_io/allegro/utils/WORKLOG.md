@@ -62,3 +62,6 @@ The materials used for this work are:
     * 0x04 - brings PreAmp to 0x0002c334 (next is 0x30)
     * 0x31 - brings CutiePi 0x28f00 (next is 0x34)
     * 0x34 - brings CutiePi to 0x28f20 (next is 0x30)
+    * 0x30 - brings PreAmp to 0x2c438 (next is 0x14), CutiePi to 0x0002930c (next is 0x28)
+    * 0x14 - brings PreAmp to 0x0002c6b8 (next is 0x28)
+    * 0x28 - brings PreAmp to 0x0002e004 (next is 0x24), CutiePi to 0x00046b38 (next is 0x3C)

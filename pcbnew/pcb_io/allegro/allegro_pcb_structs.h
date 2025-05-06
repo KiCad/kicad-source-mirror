@@ -293,6 +293,21 @@ struct FILE_HEADER
 };
 
 
+struct LAYER_INFO
+{
+    enum class FAMILY
+    {
+        BOARD_GEOM,
+        COPPER,
+        SILK,
+        UNKNOWN,
+    };
+
+    FAMILY  m_Family;
+    uint8_t m_Ordinal;
+};
+
+
 /**
  * 0x01 objects are arcs
  */
@@ -635,6 +650,26 @@ struct BLK_0x12
 
 
 /**
+ * 0x14 objects.
+ */
+struct BLK_0x14
+{
+    uint8_t    m_Type;
+    LAYER_INFO m_Layer;
+    uint32_t   m_Key;
+    uint32_t   m_Next;
+    uint32_t   m_Ptr1;
+    uint32_t   m_Unknown1;
+
+    COND_GE<FMT_VER::V_172, uint32_t> m_Unknown2;
+
+    uint32_t m_Ptr2;
+    uint32_t m_Ptr3;
+    uint32_t m_Ptr4;
+};
+
+
+/**
  * 0x15 is a segment object.
  *
  * As for 0x16, unsure of the distinction between 0x15 and 0x16/0x17
@@ -930,6 +965,38 @@ struct BLK_0x26
 };
 
 
+/**
+ * 0x28 objects represent shapes.
+ */
+struct BLK_0x28_SHAPE
+{
+    uint8_t    m_Type;
+    LAYER_INFO m_Layer;
+    uint32_t   m_Key;
+    uint32_t   m_Next;
+    uint32_t   m_Ptr1;
+    uint32_t   m_Unknown1;
+
+    COND_GE<FMT_VER::V_174, uint32_t> m_Unknown2;
+    COND_GE<FMT_VER::V_174, uint32_t> m_Unknown3;
+
+    uint32_t m_Ptr2;
+    uint32_t m_Ptr3;
+    uint32_t m_Ptr4;
+    uint32_t m_FirstSegmentPtr;
+    uint32_t m_Unknown4;
+    uint32_t m_Unknown5;
+
+    COND_GE<FMT_VER::V_174, uint32_t> m_Ptr7;
+
+    uint32_t m_Ptr6;
+
+    COND_LT<FMT_VER::V_174, uint32_t> m_Ptr7_16x;
+
+    std::array<int32_t, 4> m_Coords;
+};
+
+
 struct BLK_0x2A
 {
     struct NONREF_ENTRY
@@ -1019,18 +1086,56 @@ struct BLK_0x2D
 };
 
 
-struct LAYER_INFO
+/**
+ * 0x30 objects represent string wrappers.
+ */
+struct BLK_0x30_STR_WRAPPER
 {
-    enum class FAMILY
+    enum class TEXT_REVERSAL
     {
-        BOARD_GEOM,
-        COPPER,
-        SILK,
-        UNKNOWN,
+        STRAIGHT,
+        REVERSED,
     };
 
-    FAMILY  m_Family;
-    uint8_t m_Ordinal;
+    enum class TEXT_ALIGNMENT
+    {
+        LEFT,
+        RIGHT,
+        CENTER,
+    };
+
+    struct TEXT_PROPERTIES
+    {
+        uint8_t        m_Key;
+        uint8_t        m_Flags;
+        TEXT_ALIGNMENT m_Alignment;
+        TEXT_REVERSAL  m_Reversal;
+    };
+
+    uint8_t    m_Type;
+    LAYER_INFO m_Layer;
+    uint32_t   m_Key;
+    uint32_t   m_Next;
+
+    COND_GE<FMT_VER::V_174, uint32_t>        m_Unknown1;
+    COND_GE<FMT_VER::V_174, uint32_t>        m_Unknown2;
+    COND_GE<FMT_VER::V_174, TEXT_PROPERTIES> m_Font;
+    COND_GE<FMT_VER::V_174, uint32_t>        m_Ptr1;
+    COND_GE<FMT_VER::V_175, uint32_t>        m_Unknown3;
+
+    uint32_t m_StrGraphicPtr;
+    uint32_t m_Unknown4;
+
+    COND_LT<FMT_VER::V_174, TEXT_PROPERTIES> m_Font16x;
+
+    COND_GE<FMT_VER::V_174, uint32_t> m_Ptr2;
+
+    std::array<int32_t, 2> m_Coords;
+
+    uint32_t m_Unknown5;
+    uint32_t m_Rotation;
+
+    COND_LT<FMT_VER::V_174, uint32_t> m_Ptr3_16x;
 };
 
 
