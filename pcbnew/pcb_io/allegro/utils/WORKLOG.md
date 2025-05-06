@@ -46,4 +46,5 @@ The materials used for this work are:
 ### 2024-05-06
 
 * Implemented structs:
-    * 0x1C (padstacks) and substructs - gets to 0x3CB0 (0x04 type)
+    * 0x1C (padstacks) and substructs - gets to 0x4e40 (next is 0x21 type)
+    * 0x21 (headered block) - gets to 0xa9dc (next is 0x1D type)

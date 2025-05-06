@@ -542,6 +542,30 @@ struct BLK_0x1C_PADSTACK
 
 
 /**
+ * 0x21 objects.
+ *
+ * Some kind of headered data structure.
+ *
+ * The contained data appears to be quite substantial - hundreds or
+ * thousands of bytes.
+ */
+struct BLK_0x21
+{
+    uint8_t  m_Type;
+    uint16_t m_R;
+    uint32_t m_Size;
+    uint32_t m_Key;
+
+    /**
+     * An array of bytes that seems to be a variable length
+     *
+     * Size = m_Size - 12 (i.e. size is the whole header size)
+     */
+    std::vector<uint8_t> m_Data;
+};
+
+
+/**
  * 0x2B objects.
  */
 struct BLK_0x2B
