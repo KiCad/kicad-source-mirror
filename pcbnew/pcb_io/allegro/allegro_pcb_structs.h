@@ -442,6 +442,30 @@ struct BLK_0x07
 
 
 /**
+ * 0x08 objects.
+ */
+struct BLK_0x08
+{
+    uint8_t  m_Type;
+    uint16_t m_R;
+    uint32_t m_Key;
+
+    COND_GE<FMT_VER::V_172, uint32_t> m_Ptr1;
+    COND_LT<FMT_VER::V_172, uint32_t> m_StrPtr16x;
+
+    uint32_t m_Ptr2;
+
+    COND_GE<FMT_VER::V_172, uint32_t> m_StrPtr;
+
+    uint32_t m_Ptr3;
+
+    COND_GE<FMT_VER::V_172, uint32_t> m_Unknown1;
+
+    uint32_t m_Ptr4;
+};
+
+
+/**
  * 0x09 objects.
  */
 struct BLK_0x09
