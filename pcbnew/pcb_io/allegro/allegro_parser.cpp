@@ -419,6 +419,25 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x03( FILE_STREAM& aStream, FMT_VE
 }
 
 
+static std::unique_ptr<BLOCK_BASE> ParseBlock_0x04_NET_ASSIGNMENT( FILE_STREAM& aStream, FMT_VER aVer )
+{
+    auto block = std::make_unique<BLOCK<BLK_0x04_NET_ASSIGNMENT>>( 0x04, aStream.Position() );
+
+    auto& data = block->GetData();
+
+    data.m_Type = aStream.ReadU8();
+    data.m_R = aStream.ReadU16();
+    data.m_Key = aStream.ReadU32();
+    data.m_Next = aStream.ReadU32();
+    data.m_Ptr1 = aStream.ReadU32();
+    data.m_Ptr2 = aStream.ReadU32();
+
+    ReadCond( aStream, aVer, data.m_Unknown );
+
+    return block;
+}
+
+
 static std::unique_ptr<BLOCK_BASE> ParseBlock_0x05_TRACK( FILE_STREAM& aStream, FMT_VER aVer )
 {
     auto block = std::make_unique<BLOCK<BLK_0x05_TRACK>>( 0x05, aStream.Position() );
@@ -1294,7 +1313,7 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x36( FILE_STREAM& aStream, FMT_VE
         {
             BLK_0x36::X02 item;
 
-            item.m_String = aStream.ReadStringFixed( 64 );
+            item.m_String = aStream.ReadStringFixed( 32 );
             ReadArrayU32( aStream, item.m_Xs );
             ReadCond( aStream, aVer, item.m_Ys );
             ReadCond( aStream, aVer, item.m_Zs );
@@ -1457,7 +1476,7 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x3A_FILM_LIST_NODE( FILE_STREAM& 
 
     auto& data = block->GetData();
 
-    aStream.Skip( 3 );
+    aStream.Skip( 1 );
 
     data.m_Layer = ParseLayerInfo( aStream );
     data.m_Key = aStream.ReadU32();
@@ -1476,6 +1495,7 @@ static std::optional<uint32_t> GetBlockKey( const BLOCK_BASE& block )
     {
     case 0x01: return static_cast<const BLOCK<BLK_0x01_ARC>&>( block ).GetData().m_Key;
     case 0x03: return static_cast<const BLOCK<BLK_0x03>&>( block ).GetData().m_Key;
+    case 0x04: return static_cast<const BLOCK<BLK_0x04_NET_ASSIGNMENT>&>( block ).GetData().m_Key;
     case 0x05: return static_cast<const BLOCK<BLK_0x05_TRACK>&>( block ).GetData().m_Key;
     case 0x06: return static_cast<const BLOCK<BLK_0x06>&>( block ).GetData().m_Key;
     case 0x07: return static_cast<const BLOCK<BLK_0x07>&>( block ).GetData().m_Key;
@@ -1540,6 +1560,11 @@ void ALLEGRO::PARSER::readObjects( RAW_BOARD& aBoard )
         case 0x03:
         {
             block = ParseBlock_0x03( m_stream, ver );
+            break;
+        }
+        case 0x04:
+        {
+            block = ParseBlock_0x04_NET_ASSIGNMENT( m_stream, ver );
             break;
         }
         case 0x05:
@@ -1708,8 +1733,9 @@ void ALLEGRO::PARSER::readObjects( RAW_BOARD& aBoard )
 
         if( block )
         {
-            wxLogTrace( traceAllegroParser, wxString::Format( "Added block type %#04x from %#010lx to %#010lx", type,
-                                                              offset, m_stream.Position() ) );
+            wxLogTrace( traceAllegroParser,
+                        wxString::Format( "Added block %lu, type %#04x from %#010lx to %#010lx",
+                                          aBoard.m_Objects.size(), type, offset, m_stream.Position() ) );
 
 
             uint8_t type = block->GetBlockType();

@@ -357,6 +357,22 @@ struct BLK_0x03
 
 
 /**
+ * 0x04 objects represent net assignments.
+ */
+struct BLK_0x04_NET_ASSIGNMENT
+{
+    uint8_t  m_Type;
+    uint16_t m_R;
+    uint32_t m_Key;
+    uint32_t m_Next;
+    uint32_t m_Ptr1;
+    uint32_t m_Ptr2;
+
+    COND_GE<FMT_VER::V_174, uint32_t> m_Unknown;
+};
+
+
+/**
  * 0x05 objects represent tracks
  *
  * They then refer out to, say, 0x17 segments
