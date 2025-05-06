@@ -601,6 +601,24 @@ struct BLK_0x11
 
 
 /**
+ * 0x12 objects.
+ */
+struct BLK_0x12
+{
+    uint8_t  m_Type;
+    uint16_t m_R;
+    uint32_t m_Key;
+    uint32_t m_Ptr1;
+    uint32_t m_Ptr2;
+    uint32_t m_Ptr3;
+    uint32_t m_Unknown1;
+
+    COND_GE<FMT_VER::V_165, uint32_t> m_Unknown2;
+    COND_GE<FMT_VER::V_174, uint32_t> m_Unknown3;
+};
+
+
+/**
  * 0x15 is a segment object.
  *
  * As for 0x16, unsure of the distinction between 0x15 and 0x16/0x17
