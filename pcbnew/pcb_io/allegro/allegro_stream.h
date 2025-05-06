@@ -30,6 +30,7 @@
 #include <cstdint>
 #include <algorithm>
 
+#include <ki_exception.h>
 #include <allegro_pcb_structs.h>
 
 namespace ALLEGRO
@@ -63,7 +64,7 @@ public:
         m_stream.read( static_cast<char*>( dest ), size );
         if( m_stream.gcount() != static_cast<std::streamsize>( size ) )
         {
-            throw std::runtime_error( "Failed to read requested bytes" );
+            THROW_IO_ERROR( "Failed to read requested bytes" );
         }
     }
 

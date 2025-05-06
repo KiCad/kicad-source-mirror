@@ -518,6 +518,27 @@ struct BLK_0x09
 
 
 /**
+ * 0x0A objects represent DRC (Design Rule Check) elements.
+ */
+struct BLK_0x0A_DRC
+{
+    uint8_t    m_T;
+    LAYER_INFO m_Layer;
+    uint32_t   m_Key;
+    uint32_t   m_Next;
+    uint32_t   m_Unknown1;
+
+    COND_GE<FMT_VER::V_172, uint32_t> m_Unknown2;
+
+    std::array<int32_t, 4>  m_Coords;
+    std::array<uint32_t, 4> m_Unknown4;
+    std::array<uint32_t, 5> m_Unknown5;
+
+    COND_GE<FMT_VER::V_174, uint32_t> m_Unknown6;
+};
+
+
+/**
  * 0x0C objects.
  */
 struct BLK_0x0C
@@ -628,7 +649,7 @@ struct BLK_0x10
 
     uint32_t m_UnknownPtr2;
 
-    COND_GE<FMT_VER::V_172, uint32_t> m_Unknown1;
+    COND_GE<FMT_VER::V_174, uint32_t> m_Unknown1;
 
     uint32_t m_UnknownPtr3;
     uint32_t m_Unknown2;
@@ -927,6 +948,28 @@ struct BLK_0x1D
 
 
 /**
+ * 0x1E objects.
+ */
+struct BLK_0x1E
+{
+    uint8_t  m_Type;
+    uint32_t m_Key;
+    uint32_t m_Unknown1;
+
+    // Versioning seems unsure here
+    COND_GE<FMT_VER::V_172, uint16_t> m_Unknown2;
+    COND_GE<FMT_VER::V_172, uint16_t> m_Unknown3;
+
+    uint32_t m_StrPtr;
+    uint32_t m_Size;
+
+    std::string m_String;
+
+    COND_GE<FMT_VER::V_172, uint32_t> m_Unknown4;
+};
+
+
+/**
  * 0x1F objects
  */
 struct BLK_0x1F
@@ -971,6 +1014,47 @@ struct BLK_0x21
 
 
 /**
+ * 0x22 objects.
+ */
+struct BLK_0x22
+{
+    uint8_t  m_Type;
+    uint16_t m_T2;
+    uint32_t m_Key;
+
+    COND_GE<FMT_VER::V_174, uint32_t> m_Unknown1;
+
+    std::array<uint32_t, 8> m_UnknownArray;
+};
+
+
+/**
+ * 0x23 objects represent ratlines.
+ */
+struct BLK_0x23_RATLINE
+{
+    uint8_t    m_Type;
+    LAYER_INFO m_Layer;
+    uint32_t   m_Key;
+    uint32_t   m_Next;
+
+    std::array<uint32_t, 2> m_Flags;
+
+    uint32_t m_Ptr1;
+    uint32_t m_Ptr2;
+    uint32_t m_Ptr3;
+
+    std::array<int32_t, 5> m_Coords;
+
+    std::array<uint32_t, 4> m_Unknown1;
+
+    COND_GE<FMT_VER::V_164, std::array<uint32_t, 4>> m_Unknown2;
+
+    COND_GE<FMT_VER::V_174, uint32_t> m_Unknown3;
+};
+
+
+/**
  * 0x24 objects represent rectangles.
  */
 struct BLK_0x24_RECT
@@ -982,7 +1066,7 @@ struct BLK_0x24_RECT
     uint32_t   m_Ptr1;
     uint32_t   m_Unknown1;
 
-    COND_GE<FMT_VER::V_174, uint32_t> m_Unknown2;
+    COND_GE<FMT_VER::V_172, uint32_t> m_Unknown2;
 
     std::array<int32_t, 4> m_Coords;
 
@@ -1014,6 +1098,17 @@ struct BLK_0x26
 
 
 /**
+ * 0x27 objects extend to some offset defined in the header.
+ *
+* They do appear to contain a lot of data.
+ */
+struct BLK_0x27
+{
+    std::vector<uint8_t> m_Data;
+};
+
+
+/**
  * 0x28 objects represent shapes.
  */
 struct BLK_0x28_SHAPE
@@ -1025,8 +1120,8 @@ struct BLK_0x28_SHAPE
     uint32_t   m_Ptr1;
     uint32_t   m_Unknown1;
 
-    COND_GE<FMT_VER::V_174, uint32_t> m_Unknown2;
-    COND_GE<FMT_VER::V_174, uint32_t> m_Unknown3;
+    COND_GE<FMT_VER::V_172, uint32_t> m_Unknown2;
+    COND_GE<FMT_VER::V_172, uint32_t> m_Unknown3;
 
     uint32_t m_Ptr2;
     uint32_t m_Ptr3;
@@ -1035,13 +1130,48 @@ struct BLK_0x28_SHAPE
     uint32_t m_Unknown4;
     uint32_t m_Unknown5;
 
-    COND_GE<FMT_VER::V_174, uint32_t> m_Ptr7;
+    COND_GE<FMT_VER::V_172, uint32_t> m_Ptr7;
 
     uint32_t m_Ptr6;
 
-    COND_LT<FMT_VER::V_174, uint32_t> m_Ptr7_16x;
+    COND_LT<FMT_VER::V_172, uint32_t> m_Ptr7_16x;
 
     std::array<int32_t, 4> m_Coords;
+};
+
+
+/**
+ * 0x29 objects may represent pins in .dra files.
+ *
+ * Full version-specific structures not clear yet.
+ */
+struct BLK_0x29_PIN
+{
+    uint8_t  m_Type;
+    uint16_t m_T;
+    uint32_t m_Key;
+
+    // Points to something in the header
+    uint32_t m_Ptr1;
+    uint32_t m_Ptr2;
+
+    uint32_t m_Null; // Null value
+
+    uint32_t m_Ptr3;
+
+    int32_t m_Coord1;
+    int32_t m_Coord2;
+
+    uint32_t m_PtrPadstack;
+
+    uint32_t m_Unknown1;
+
+    // Pointer to a string, e.g., "2" in R0603
+    uint32_t m_PtrX30;
+
+    uint32_t m_Unknown2;
+    uint32_t m_Unknown3;
+    uint32_t m_Unknown4;
 };
 
 
@@ -1063,8 +1193,8 @@ struct BLK_0x2A
 
     COND_GE<FMT_VER::V_174, uint32_t> m_Unknown;
 
-    COND_LT<FMT_VER::V_164, std::vector<NONREF_ENTRY>> m_NonRefEntries;
-    COND_GE<FMT_VER::V_164, std::vector<REF_ENTRY>>    m_RefEntries;
+    COND_LT<FMT_VER::V_165, std::vector<NONREF_ENTRY>> m_NonRefEntries;
+    COND_GE<FMT_VER::V_165, std::vector<REF_ENTRY>>    m_RefEntries;
 
     uint32_t m_Key;
 };
@@ -1099,6 +1229,32 @@ struct BLK_0x2B
 
 
 /**
+ * 0x2C objects represent a type table.
+ */
+struct BLK_0x2C_TABLE
+{
+    uint8_t  m_Type;
+    uint16_t m_T2;
+    uint32_t m_Key;
+    uint32_t m_Next;
+
+    COND_GE<FMT_VER::V_172, uint32_t> m_Unknown1;
+    COND_GE<FMT_VER::V_172, uint32_t> m_Unknown2;
+    COND_GE<FMT_VER::V_172, uint32_t> m_Unknown3;
+
+    uint32_t m_StringPtr;
+
+    COND_LT<FMT_VER::V_172, uint32_t> m_Unknown4;
+
+    uint32_t m_Ptr1;
+    uint32_t m_Ptr2;
+    uint32_t m_Ptr3;
+
+    uint32_t m_Flags;
+};
+
+
+/**
  * 0x2D objects.
  */
 struct BLK_0x2D
@@ -1115,7 +1271,7 @@ struct BLK_0x2D
     uint16_t m_Unknown2;
     uint16_t m_Unknown3;
 
-    COND_GE<FMT_VER::V_172, uint32_t> m_Unknown;
+    COND_GE<FMT_VER::V_172, uint32_t> m_Unknown4;
 
     uint32_t m_Flags;
 
@@ -1131,6 +1287,37 @@ struct BLK_0x2D
     uint32_t m_UnknownPtr2;
 
     std::array<uint32_t, 4> m_UnknownPtrs1;
+
+    // Not 100% sure of verson here, but seems to be in BeagleBoneAi
+    COND_GE<FMT_VER::V_172, uint32_t> m_groupAssignmentPtr;
+};
+
+
+/**
+ * 0x2E objects.
+ */
+struct BLK_0x2E
+{
+    uint8_t  m_Type;
+    uint16_t m_T2;
+    uint32_t m_Key;
+
+    std::array<uint32_t, 7> m_UnknownArray;
+
+    COND_GE<FMT_VER::V_172, uint32_t> m_Unknown1;
+};
+
+
+/**
+ * 0x2F objects.
+ */
+struct BLK_0x2F
+{
+    uint8_t  m_Type;
+    uint16_t m_T2;
+    uint32_t m_Key;
+
+    std::array<uint32_t, 6> m_UnknownArray;
 };
 
 
@@ -1143,6 +1330,7 @@ struct BLK_0x30_STR_WRAPPER
     {
         STRAIGHT,
         REVERSED,
+        UNKNOWN,
     };
 
     enum class TEXT_ALIGNMENT
@@ -1150,6 +1338,7 @@ struct BLK_0x30_STR_WRAPPER
         LEFT,
         RIGHT,
         CENTER,
+        UNKNOWN,
     };
 
     struct TEXT_PROPERTIES
@@ -1165,25 +1354,25 @@ struct BLK_0x30_STR_WRAPPER
     uint32_t   m_Key;
     uint32_t   m_Next;
 
-    COND_GE<FMT_VER::V_174, uint32_t>        m_Unknown1;
-    COND_GE<FMT_VER::V_174, uint32_t>        m_Unknown2;
-    COND_GE<FMT_VER::V_174, TEXT_PROPERTIES> m_Font;
-    COND_GE<FMT_VER::V_174, uint32_t>        m_Ptr1;
-    COND_GE<FMT_VER::V_175, uint32_t>        m_Unknown3;
+    COND_GE<FMT_VER::V_172, uint32_t>        m_Unknown1;
+    COND_GE<FMT_VER::V_172, uint32_t>        m_Unknown2;
+    COND_GE<FMT_VER::V_172, TEXT_PROPERTIES> m_Font;
+    COND_GE<FMT_VER::V_172, uint32_t>        m_Ptr1;
+    COND_GE<FMT_VER::V_174, uint32_t>        m_Unknown3;
 
     uint32_t m_StrGraphicPtr;
     uint32_t m_Unknown4;
 
-    COND_LT<FMT_VER::V_174, TEXT_PROPERTIES> m_Font16x;
+    COND_LT<FMT_VER::V_172, TEXT_PROPERTIES> m_Font16x;
 
-    COND_GE<FMT_VER::V_174, uint32_t> m_Ptr2;
+    COND_GE<FMT_VER::V_172, uint32_t> m_Ptr2;
 
     std::array<int32_t, 2> m_Coords;
 
     uint32_t m_Unknown5;
     uint32_t m_Rotation;
 
-    COND_LT<FMT_VER::V_174, uint32_t> m_Ptr3_16x;
+    COND_LT<FMT_VER::V_172, uint32_t> m_Ptr3_16x;
 };
 
 
@@ -1408,6 +1597,26 @@ struct BLK_0x36
     using SubstructVariant = std::variant<X02, X03, X05, X06, X08, X0B, X0C, X0D, X0F, X10>;
 
     std::vector<SubstructVariant> m_Items;
+};
+
+
+/**
+ * 0x37 objects.
+ */
+struct BLK_0x37
+{
+    uint8_t  m_T;
+    uint16_t m_T2;
+    uint32_t m_Key;
+    uint32_t m_Ptr1;
+    uint32_t m_Unknown1;
+    uint32_t m_Capacity;
+    uint32_t m_Count;
+    uint32_t m_Unknown2;
+
+    std::array<uint32_t, 100> m_Ptrs;
+
+    COND_GE<FMT_VER::V_174, uint32_t> m_UnknownArr;
 };
 
 
