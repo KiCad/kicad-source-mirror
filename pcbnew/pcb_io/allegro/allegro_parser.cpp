@@ -78,6 +78,17 @@ static FILE_HEADER::LINKED_LIST ReadLL( FILE_STREAM& aStream )
 }
 
 
+static double ReadAllegroFloat( FILE_STREAM& aStream )
+{
+    uint32_t a = aStream.ReadU32();
+    uint32_t b = aStream.ReadU32();
+
+    // TODO: not quite sure how this works
+    // Start here and figure it out later
+    return double( a ) + ( double( b ) / 2e31 );
+}
+
+
 template <typename ARRAY>
 static void ReadArrayU32( FILE_STREAM& aStream, ARRAY& aArray )
 {
@@ -258,6 +269,159 @@ static LAYER_INFO ParseLayerInfo( FILE_STREAM& aStream )
         .m_Family = family,
         .m_Ordinal = ord,
     };
+}
+
+
+static std::unique_ptr<BLOCK_BASE> ParseBlock_0x01_ARC( FILE_STREAM& aStream, FMT_VER aVer )
+{
+    auto block = std::make_unique<BLOCK<BLK_0x01_ARC>>( 0x01, aStream.Position() );
+
+    auto& data = block->GetData();
+
+    aStream.Skip( 1 );
+
+    data.m_UnknownByte = aStream.ReadU8();
+    data.m_SubType = aStream.ReadU8();
+    data.m_Key = aStream.ReadU32();
+    data.m_Next = aStream.ReadU32();
+    data.m_Parent = aStream.ReadU32();
+    data.m_Unknown1 = aStream.ReadU32();
+
+    ReadCond( aStream, aVer, data.m_Unknown6 );
+
+    data.m_Width = aStream.ReadU32();
+
+    for( size_t i = 0; i < data.m_Coords.size(); ++i )
+    {
+        data.m_Coords[i] = aStream.ReadS32();
+    }
+
+    data.m_X = ReadAllegroFloat( aStream );
+    data.m_Y = ReadAllegroFloat( aStream );
+    data.m_R = ReadAllegroFloat( aStream );
+
+    for( size_t i = 0; i < data.m_BoundingBoxCoords.size(); ++i )
+    {
+        data.m_BoundingBoxCoords[i] = aStream.ReadS32();
+    }
+
+    return block;
+}
+
+
+static std::unique_ptr<BLOCK_BASE> ParseBlock_0x03( FILE_STREAM& aStream, FMT_VER aVer )
+{
+    auto block = std::make_unique<BLOCK<BLK_0x03>>( 0x03, aStream.Position() );
+
+    auto& data = block->GetData();
+
+    aStream.Skip( 3 );
+
+    data.m_Key = aStream.ReadU32();
+    data.m_Next = aStream.ReadU32();
+
+    ReadCond( aStream, aVer, data.m_Unknown1 );
+
+    data.m_SubType = aStream.ReadU8();
+    data.m_UnknownByte = aStream.ReadU8();
+    data.m_Size = aStream.ReadU16();
+
+    ReadCond( aStream, aVer, data.m_Unknown2 );
+
+    switch( data.m_SubType )
+    {
+    case 0x64:
+    case 0x66:
+    case 0x67:
+    case 0x6A:
+    {
+        data.m_Substruct = aStream.ReadU32();
+        break;
+    }
+    case 0x69:
+    {
+        data.m_Substruct = std::array<uint32_t, 2>{
+            aStream.ReadU32(),
+            aStream.ReadU32(),
+        };
+        break;
+    }
+    case 0x68:
+    case 0x6B:
+    case 0x6D:
+    case 0x6E:
+    case 0x6F:
+    case 0x71:
+    case 0x73:
+    case 0x78:
+    {
+        data.m_Substruct = aStream.ReadString( true );
+        break;
+    }
+    case 0x6C:
+    {
+        BLK_0x03::SUB_0x6C sub;
+        sub.m_NumEntries = aStream.ReadU32();
+
+        sub.m_Entries.reserve( sub.m_NumEntries );
+        for( uint32_t i = 0; i < sub.m_NumEntries; ++i )
+        {
+            sub.m_Entries.push_back( aStream.ReadU32() );
+        }
+
+        data.m_Substruct = std::move( sub );
+        break;
+    }
+    case 0x70:
+    case 0x74:
+    {
+        BLK_0x03::SUB_0x70_0x74 sub;
+
+        sub.m_X0 = aStream.ReadU16();
+        sub.m_X1 = aStream.ReadU16();
+
+        const size_t numEntries = ( sub.m_X1 + 4 * sub.m_X0 );
+        sub.m_Entries.reserve( numEntries );
+        for( size_t i = 0; i < numEntries; ++i )
+        {
+            sub.m_Entries.push_back( aStream.ReadU8() );
+        }
+        data.m_Substruct = std::move( sub );
+        break;
+    }
+    case 0xF6:
+    {
+        BLK_0x03::SUB_0xF6 sub;
+        for( size_t i = 0; i < sub.m_Entries.size(); ++i )
+        {
+            sub.m_Entries[i] = aStream.ReadU32();
+        }
+        data.m_Substruct = std::move( sub );
+        break;
+    }
+    default:
+    {
+        if( data.m_Size == 4 )
+        {
+            data.m_Substruct = aStream.ReadU32();
+        }
+        else if( data.m_Size == 8 )
+        {
+            std::array<uint32_t, 2> sub;
+            sub[0] = aStream.ReadU32();
+            sub[1] = aStream.ReadU32();
+            data.m_Substruct = std::move( sub );
+        }
+        else
+        {
+            THROW_IO_ERROR(
+                    wxString::Format( "Unknown substruct type %#02x with size %d", data.m_SubType, data.m_Size ) );
+        }
+        break;
+    }
+    }
+
+    return block;
 }
 
 
@@ -799,10 +963,45 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x33_VIA( FILE_STREAM& aStream, FM
 }
 
 
+static std::unique_ptr<BLOCK_BASE> ParseBlock_0x38_FILM( FILE_STREAM& aStream, FMT_VER aVer )
+{
+    auto block = std::make_unique<BLOCK<BLK_0x38_FILM>>( 0x38, aStream.Position() );
+
+    auto& data = block->GetData();
+
+    aStream.Skip( 3 );
+
+    data.m_Key = aStream.ReadU32();
+    data.m_Next = aStream.ReadU32();
+    data.m_LayerList = aStream.ReadU32();
+
+    if( data.m_FilmName.exists( aVer ) )
+    {
+        std::array<char, 20> name;
+        aStream.ReadBytes( name.data(), name.size() );
+        data.m_FilmName = std::string( name.data(), strnlen( name.data(), name.size() ) );
+    }
+
+    ReadCond( aStream, aVer, data.m_LayerNameStr );
+    ReadCond( aStream, aVer, data.m_Unknown2 );
+
+    for( size_t i = 0; i < data.m_UnknownArray1.size(); ++i )
+    {
+        data.m_UnknownArray1[i] = aStream.ReadU32();
+    }
+
+    ReadCond( aStream, aVer, data.m_Unknown3 );
+
+    return block;
+}
+
+
 static std::optional<uint32_t> GetBlockKey( const BLOCK_BASE& block )
 {
     switch( block.GetBlockType() )
     {
+    case 0x01: return static_cast<const BLOCK<BLK_0x01_ARC>&>( block ).GetData().m_Key;
+    case 0x03: return static_cast<const BLOCK<BLK_0x03>&>( block ).GetData().m_Key;
     case 0x05: return static_cast<const BLOCK<BLK_0x05_TRACK>&>( block ).GetData().m_Key;
     case 0x06: return static_cast<const BLOCK<BLK_0x06>&>( block ).GetData().m_Key;
     case 0x07: return static_cast<const BLOCK<BLK_0x07>&>( block ).GetData().m_Key;
@@ -818,6 +1017,7 @@ static std::optional<uint32_t> GetBlockKey( const BLOCK_BASE& block )
     case 0x2B: return static_cast<const BLOCK<BLK_0x2B>&>( block ).GetData().m_Key;
     case 0x2D: return static_cast<const BLOCK<BLK_0x2D>&>( block ).GetData().m_Key;
     case 0x33: return static_cast<const BLOCK<BLK_0x33_VIA>&>( block ).GetData().m_Key;
+    case 0x38: return static_cast<const BLOCK<BLK_0x38_FILM>&>( block ).GetData().m_Key;
     default: break;
     }
 
@@ -845,6 +1045,16 @@ void ALLEGRO::PARSER::readObjects( RAW_BOARD& aBoard )
 
         switch( type )
         {
+        case 0x01:
+        {
+            block = ParseBlock_0x01_ARC( m_stream, ver );
+            break;
+        }
+        case 0x03:
+        {
+            block = ParseBlock_0x03( m_stream, ver );
+            break;
+        }
         case 0x05:
         {
             block = ParseBlock_0x05_TRACK( m_stream, ver );
@@ -918,6 +1128,11 @@ void ALLEGRO::PARSER::readObjects( RAW_BOARD& aBoard )
         case 0x33:
         {
             block = ParseBlock_0x33_VIA( m_stream, ver );
+            break;
+        }
+        case 0x38:
+        {
+            block = ParseBlock_0x38_FILM( m_stream, ver );
             break;
         }
         default:

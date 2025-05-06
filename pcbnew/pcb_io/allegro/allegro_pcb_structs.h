@@ -28,6 +28,7 @@
 #include <memory>
 #include <string>
 #include <unordered_map>
+#include <variant>
 #include <vector>
 
 
@@ -286,6 +287,69 @@ struct FILE_HEADER
      * is a universal value. But there's no obvious nearby value of '25'.
      */
     std::array<LAYER_MAP_ENTRY, 25> m_LayerMap;
+};
+
+
+/**
+ * 0x01 objects are arcs
+ */
+struct BLK_0x01_ARC
+{
+    uint8_t  m_UnknownByte;
+    uint8_t  m_SubType;
+    uint32_t m_Key;
+    uint32_t m_Next;
+    uint32_t m_Parent;
+    uint32_t m_Unknown1;
+
+    COND_GE<FMT_VER::V_172, uint32_t> m_Unknown6;
+
+    uint32_t               m_Width;
+    std::array<int32_t, 4> m_Coords;
+
+    float m_X;
+    float m_Y;
+    float m_R;
+
+    std::array<int32_t, 4> m_BoundingBoxCoords;
+};
+
+
+/**
+ * 0x03 objects has some kind of variable substruct
+ */
+struct BLK_0x03
+{
+    struct SUB_0x6C
+    {
+        uint32_t              m_NumEntries;
+        std::vector<uint32_t> m_Entries;
+    };
+
+    struct SUB_0x70_0x74
+    {
+        uint16_t              m_X0;
+        uint16_t              m_X1;
+        std::vector<uint32_t> m_Entries;
+    };
+
+    struct SUB_0xF6
+    {
+        std::array<uint32_t, 20> m_Entries;
+    };
+
+    uint32_t m_Key;
+    uint32_t m_Next;
+
+    COND_GE<FMT_VER::V_172, uint32_t> m_Unknown1;
+
+    uint8_t  m_SubType;
+    uint8_t  m_UnknownByte;
+    uint16_t m_Size;
+
+    COND_GE<FMT_VER::V_172, uint32_t> m_Unknown2;
+
+    std::variant<uint32_t, std::array<uint32_t, 2>, std::string, SUB_0x6C, SUB_0x70_0x74, SUB_0xF6> m_Substruct;
 };
 
 
@@ -789,6 +853,26 @@ struct BLK_0x33_VIA
     uint32_t m_Unknown5;
 
     std::array<int32_t, 4> m_BoundingBoxCoords;
+};
+
+
+/**
+ * 0x38 objects represent films.
+ */
+struct BLK_0x38_FILM
+{
+    uint32_t m_Key;
+    uint32_t m_Next;
+    uint32_t m_LayerList;
+
+    COND_LT<FMT_VER::V_166, std::string> m_FilmName;
+
+    COND_GE<FMT_VER::V_166, uint32_t> m_LayerNameStr;
+    COND_GE<FMT_VER::V_166, uint32_t> m_Unknown2;
+
+    std::array<uint32_t, 7> m_UnknownArray1;
+
+    COND_GE<FMT_VER::V_174, uint32_t> m_Unknown3;
 };
 
 
