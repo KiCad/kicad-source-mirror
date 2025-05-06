@@ -55,3 +55,5 @@ The materials used for this work are:
     * 0x0D - brings PreAmp to 0x000276e0 (next is 0x0C)
     * 0x0C, 0x34 - brings PreAmp to 0x000277d4 (next is 0x08)
     * 0x08 - brings PreAmp to 0x000277ec (next is 0x11)
+    * 0x11 - brings PreAmp to 0x00027834 (next is 0x32)
+    * 0x26 - bring CutiePi to 0x28ee4 (next is 0x31)

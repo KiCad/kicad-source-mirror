@@ -584,6 +584,23 @@ struct BLK_0x10
 
 
 /**
+ * 0x11 objects.
+ */
+struct BLK_0x11
+{
+    uint8_t  m_Type;
+    uint16_t m_R;
+    uint32_t m_Key;
+    uint32_t m_Ptr1;
+    uint32_t m_Ptr2;
+    uint32_t m_Ptr3;
+    uint32_t m_Unknown1;
+
+    COND_GE<FMT_VER::V_174, uint32_t> m_Unknown2;
+};
+
+
+/**
  * 0x15 is a segment object.
  *
  * As for 0x16, unsure of the distinction between 0x15 and 0x16/0x17
@@ -857,6 +874,25 @@ struct BLK_0x21
      * Size = m_Size - 12 (i.e. size is the whole header size)
      */
     std::vector<uint8_t> m_Data;
+};
+
+
+/**
+ * 0x26 objects.
+ */
+struct BLK_0x26
+{
+    uint8_t  m_Type;
+    uint16_t m_R;
+    uint32_t m_Key;
+    uint32_t m_MemberPtr;
+
+    COND_GE<FMT_VER::V_172, uint32_t> m_Unknown1;
+
+    uint32_t m_GroupPtr;
+    uint32_t m_ConstPtr;
+
+    COND_GE<FMT_VER::V_174, uint32_t> m_Unknown2;
 };
 
 
