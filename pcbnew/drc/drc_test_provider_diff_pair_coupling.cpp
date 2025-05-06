@@ -194,8 +194,10 @@ static bool commonParallelProjection( const PCB_ARC& p, const PCB_ARC& n, SHAPE_
     nClip = SHAPE_ARC( n_center, n_start_pt, clip_total_angle );
 
     if( std::abs( pClip.GetP0().x - pClip.GetArcMid().x ) < 10
-     || std::abs( nClip.GetP0().x - nClip.GetArcMid().x ) < 10 )
+            || std::abs( nClip.GetP0().x - nClip.GetArcMid().x ) < 10 )
+    {
         return false;
+    }
 
     return true;
 }
@@ -277,24 +279,24 @@ static void extractDiffPairCoupledItems( DIFF_PAIR_ITEMS& aDp )
 {
     for( BOARD_CONNECTED_ITEM* itemP : aDp.itemsP )
     {
-        PCB_TRACK* sp = dyn_cast<PCB_TRACK*>( itemP );
-        std::vector<std::optional<DIFF_PAIR_COUPLED_SEGMENTS>> coupled_vec;
-
-        if( !sp )
+        if( !itemP || itemP->Type() != PCB_TRACE_T )
             continue;
 
-        for ( BOARD_CONNECTED_ITEM* itemN : aDp.itemsN )
-        {
-            PCB_TRACK* sn = dyn_cast<PCB_TRACK*> ( itemN );
+        PCB_TRACK* sp = static_cast<PCB_TRACK*>( itemP );
+        std::vector<std::optional<DIFF_PAIR_COUPLED_SEGMENTS>> coupled_vec;
 
-            if( !sn )
+        for( BOARD_CONNECTED_ITEM* itemN : aDp.itemsN )
+        {
+            if( !itemN || itemN->Type() != PCB_TRACE_T )
                 continue;
+
+            PCB_TRACK* sn = static_cast<PCB_TRACK*>( itemN );
 
             if( ( sn->GetLayerSet() & sp->GetLayerSet() ).none() )
                 continue;
 
-            SEG ssp ( sp->GetStart(), sp->GetEnd() );
-            SEG ssn ( sn->GetStart(), sn->GetEnd() );
+            SEG ssp( sp->GetStart(), sp->GetEnd() );
+            SEG ssn( sn->GetStart(), sn->GetEnd() );
 
             // Segments that are ~ 1 IU in length per side are approximately parallel (tolerance is 1 IU)
             // with everything and their parallel projection is < 1 IU, leading to bad distance calculations
@@ -320,28 +322,28 @@ static void extractDiffPairCoupledItems( DIFF_PAIR_ITEMS& aDp )
 
         for( auto coupled : coupled_vec )
         {
-            auto excludeSelf = [&]( BOARD_ITEM* aItem )
-            {
-                if( aItem == coupled->parentN || aItem == coupled->parentP )
-                    return false;
-
-                if( aItem->Type() == PCB_TRACE_T || aItem->Type() == PCB_VIA_T
-                    || aItem->Type() == PCB_ARC_T )
-                {
-                    PCB_TRACK* bci = static_cast<PCB_TRACK*>( aItem );
-
-                    // Directly connected items don't count
-                    if( bci->HitTest( coupled->coupledN.A, 0 )
-                        || bci->HitTest( coupled->coupledN.B, 0 )
-                        || bci->HitTest( coupled->coupledP.A, 0 )
-                        || bci->HitTest( coupled->coupledP.B, 0 ) )
+            auto excludeSelf =
+                    [&]( BOARD_ITEM* aItem )
                     {
-                        return false;
-                    }
-                }
+                        if( aItem == coupled->parentN || aItem == coupled->parentP )
+                            return false;
 
-                return true;
-            };
+                        if( aItem->Type() == PCB_TRACE_T || aItem->Type() == PCB_VIA_T || aItem->Type() == PCB_ARC_T )
+                        {
+                            PCB_TRACK* bci = static_cast<PCB_TRACK*>( aItem );
+
+                            // Directly connected items don't count
+                            if( bci->HitTest( coupled->coupledN.A, 0 )
+                                || bci->HitTest( coupled->coupledN.B, 0 )
+                                || bci->HitTest( coupled->coupledP.A, 0 )
+                                || bci->HitTest( coupled->coupledP.B, 0 ) )
+                            {
+                                return false;
+                            }
+                        }
+
+                        return true;
+                    };
 
             SHAPE_SEGMENT checkSeg( coupled->nearestN, coupled->nearestP );
             DRC_RTREE*    tree = coupled->parentP->GetBoard()->m_CopperItemRTreeCache.get();
@@ -356,18 +358,18 @@ static void extractDiffPairCoupledItems( DIFF_PAIR_ITEMS& aDp )
 
     for( BOARD_CONNECTED_ITEM* itemP : aDp.itemsP )
     {
-        PCB_ARC* sp = dyn_cast<PCB_ARC*>( itemP );
-        std::vector<std::optional<DIFF_PAIR_COUPLED_SEGMENTS>> coupled_vec;
-
-        if( !sp )
+        if( !itemP || itemP->Type() != PCB_ARC_T )
             continue;
+
+        PCB_ARC* sp = static_cast<PCB_ARC*>( itemP );
+        std::vector<std::optional<DIFF_PAIR_COUPLED_SEGMENTS>> coupled_vec;
 
         for ( BOARD_CONNECTED_ITEM* itemN : aDp.itemsN )
         {
-            PCB_ARC* sn = dyn_cast<PCB_ARC*> ( itemN );
-
-            if( !sn )
+            if( !itemN || itemN->Type() != PCB_ARC_T )
                 continue;
+
+            PCB_ARC* sn = dyn_cast<PCB_ARC*> ( itemN );
 
             if( ( sn->GetLayerSet() & sp->GetLayerSet() ).none() )
                 continue;
@@ -376,7 +378,9 @@ static void extractDiffPairCoupledItems( DIFF_PAIR_ITEMS& aDp )
             // with everything and their parallel projection is < 1 IU, leading to bad distance calculations
             int64_t sqWidth = static_cast<int64_t>( sp->GetWidth() ) * sp->GetWidth();
 
-            if( sp->GetLength() > 2 && sn->GetLength() > 2 && sp->GetCenter().SquaredDistance( sn->GetCenter() ) < sqWidth )
+            if( sp->GetLength() > 2
+                    && sn->GetLength() > 2
+                    && sp->GetCenter().SquaredDistance( sn->GetCenter() ) < sqWidth )
             {
                 DIFF_PAIR_COUPLED_SEGMENTS cpair;
                 cpair.isArc = true;
@@ -388,7 +392,7 @@ static void extractDiffPairCoupledItems( DIFF_PAIR_ITEMS& aDp )
                     cpair.parentN = sn;
                     cpair.layer = sp->GetLayer();
                     cpair.coupledArcP.NearestPoints( cpair.coupledArcN, cpair.nearestP, cpair.nearestN,
-                                                  cpair.computedGap );
+                                                     cpair.computedGap );
                     cpair.computedGap = std::sqrt( cpair.computedGap );  // NearestPoints returns squared distance
                     cpair.computedGap -= ( sp->GetWidth() + sn->GetWidth() ) / 2;
                     coupled_vec.push_back( cpair );
