@@ -904,6 +904,49 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x21( FILE_STREAM& aStream, FMT_VE
 }
 
 
+static std::unique_ptr<BLOCK_BASE> ParseBlock_0x2A( FILE_STREAM& aStream, FMT_VER aVer )
+{
+    auto block = std::make_unique<BLOCK<BLK_0x2A>>( 0x2A, aStream.Position() );
+
+    auto& data = block->GetData();
+
+    aStream.Skip( 1 );
+
+    data.m_NumEntries = aStream.ReadU16();
+
+    ReadCond( aStream, aVer, data.m_Unknown );
+
+    if( data.m_NonRefEntries.exists( aVer ) )
+    {
+        data.m_NonRefEntries = std::vector<BLK_0x2A::NONREF_ENTRY>();
+        data.m_NonRefEntries->reserve( data.m_NumEntries );
+        for( size_t i = 0; i < data.m_NumEntries; ++i )
+        {
+            BLK_0x2A::NONREF_ENTRY& entry = data.m_NonRefEntries->emplace_back();
+
+            aStream.ReadBytes( entry.m_Unknown.data(), entry.m_Unknown.size() );
+        }
+    }
+    else
+    {
+        data.m_RefEntries = std::vector<BLK_0x2A::REF_ENTRY>();
+        data.m_RefEntries->reserve( data.m_NumEntries );
+        for( size_t i = 0; i < data.m_NumEntries; ++i )
+        {
+            BLK_0x2A::REF_ENTRY& entry = data.m_RefEntries->emplace_back();
+
+            entry.mPtr = aStream.ReadU32();
+            entry.m_Properties = aStream.ReadU32();
+            entry.m_Unknown = aStream.ReadU32();
+        }
+    }
+
+    data.m_Key = aStream.ReadU32();
+
+    return block;
+}
+
+
 static std::unique_ptr<BLOCK_BASE> ParseBlock_0x2B( FILE_STREAM& stream, FMT_VER aVer )
 {
     auto block = std::make_unique<BLOCK<BLK_0x2B>>( 0x2B, stream.Position() );
@@ -1237,6 +1280,7 @@ static std::optional<uint32_t> GetBlockKey( const BLOCK_BASE& block )
     case 0x1D: return static_cast<const BLOCK<BLK_0x1D>&>( block ).GetData().m_Key;
     case 0x1F: return static_cast<const BLOCK<BLK_0x1F>&>( block ).GetData().m_Key;
     case 0x21: return static_cast<const BLOCK<BLK_0x21>&>( block ).GetData().m_Key;
+    case 0x2A: return static_cast<const BLOCK<BLK_0x2A>&>( block ).GetData().m_Key;
     case 0x2B: return static_cast<const BLOCK<BLK_0x2B>&>( block ).GetData().m_Key;
     case 0x2D: return static_cast<const BLOCK<BLK_0x2D>&>( block ).GetData().m_Key;
     case 0x33: return static_cast<const BLOCK<BLK_0x33_VIA>&>( block ).GetData().m_Key;
@@ -1349,6 +1393,11 @@ void ALLEGRO::PARSER::readObjects( RAW_BOARD& aBoard )
         case 0x21:
         {
             block = ParseBlock_0x21( m_stream, ver );
+            break;
+        }
+        case 0x2A:
+        {
+            block = ParseBlock_0x2A( m_stream, ver );
             break;
         }
         case 0x2B:

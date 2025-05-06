@@ -126,6 +126,9 @@ struct COND_FIELD_BASE
     T&       operator*() { return *m_Value; }
     const T& operator*() const { return *m_Value; }
 
+    T*       operator->() { return m_Value.operator->(); }
+    const T* operator->() const { return m_Value.operator->(); }
+
     // Assigmnent operator
     COND_FIELD_BASE& operator=( const T& value )
     {
@@ -783,6 +786,31 @@ struct BLK_0x21
      * Size = m_Size - 12 (i.e. size is the whole header size)
      */
     std::vector<uint8_t> m_Data;
+};
+
+
+struct BLK_0x2A
+{
+    struct NONREF_ENTRY
+    {
+        std::array<uint8_t, 36> m_Unknown;
+    };
+
+    struct REF_ENTRY
+    {
+        uint32_t mPtr;
+        uint32_t m_Properties;
+        uint32_t m_Unknown;
+    };
+
+    uint16_t m_NumEntries;
+
+    COND_GE<FMT_VER::V_174, uint32_t> m_Unknown;
+
+    COND_LT<FMT_VER::V_164, std::vector<NONREF_ENTRY>> m_NonRefEntries;
+    COND_GE<FMT_VER::V_164, std::vector<REF_ENTRY>>    m_RefEntries;
+
+    uint32_t m_Key;
 };
 
 
