@@ -600,6 +600,7 @@ void PCB_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
             updater.SetLookupByTimestamp( false );
             updater.SetDeleteUnusedFootprints( false );
             updater.SetReplaceFootprints( false );
+            updater.SetTransferGroups( false );
             updater.UpdateNetlist( netlist );
 
             bool dummy;

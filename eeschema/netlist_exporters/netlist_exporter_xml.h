@@ -106,6 +106,11 @@ protected:
     XNODE* makeSymbols( unsigned aCtl );
 
     /**
+     * @return a sub-tree holding all the schematic groups.
+     */
+    XNODE* makeGroups();
+
+    /**
      * Fill out a project "design" header into an XML node.
      * @return the design header
      */

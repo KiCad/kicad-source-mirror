@@ -45,6 +45,7 @@ DIALOG_UPDATE_PCB::DIALOG_UPDATE_PCB( PCB_EDIT_FRAME* aParent, NETLIST* aNetlist
 
     m_cbRelinkFootprints->SetValue( cfg->m_NetlistDialog.associate_by_ref_sch );
     m_cbUpdateFootprints->SetValue( cfg->m_NetlistDialog.update_footprints );
+    m_cbTransferGroups->SetValue( cfg->m_NetlistDialog.transfer_groups );
     m_cbDeleteExtraFootprints->SetValue( cfg->m_NetlistDialog.delete_extra_footprints );
 
     m_messagePanel->SetLabel( _("Changes to Be Applied") );
@@ -84,6 +85,7 @@ DIALOG_UPDATE_PCB::~DIALOG_UPDATE_PCB()
     {
         cfg->m_NetlistDialog.associate_by_ref_sch    = m_cbRelinkFootprints->GetValue();
         cfg->m_NetlistDialog.update_footprints       = m_cbUpdateFootprints->GetValue();
+        cfg->m_NetlistDialog.transfer_groups         = m_cbTransferGroups->GetValue();
         cfg->m_NetlistDialog.delete_extra_footprints = m_cbDeleteExtraFootprints->GetValue();
         cfg->m_NetlistDialog.report_filter           = m_messagePanel->GetVisibleSeverities();
     }
@@ -120,6 +122,7 @@ void DIALOG_UPDATE_PCB::PerformUpdate( bool aDryRun )
     updater.SetLookupByTimestamp( !m_cbRelinkFootprints->GetValue() );
     updater.SetDeleteUnusedFootprints( m_cbDeleteExtraFootprints->GetValue());
     updater.SetReplaceFootprints( m_cbUpdateFootprints->GetValue() );
+    updater.SetTransferGroups( m_cbTransferGroups->GetValue() );
     updater.SetOverrideLocks( m_cbOverrideLocks->GetValue() );
     updater.UpdateNetlist( *m_netlist );
 

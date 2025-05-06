@@ -16,6 +16,7 @@ footprint
 footprints
 fp
 group
+groups
 jumper_pin_groups
 lib
 libpart
@@ -23,6 +24,8 @@ libparts
 libraries
 library
 libsource
+member
+members
 name
 names
 net
@@ -42,6 +45,7 @@ tool
 tstamp
 tstamps
 uri
+uuid
 value
 version
 aliases

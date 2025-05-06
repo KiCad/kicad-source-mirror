@@ -117,6 +117,20 @@ void KICAD_NETLIST_PARSER::Parse()
 
             break;
 
+        case T_groups:  // The section groups starts here.
+            while( ( token = NextTok() ) != T_EOF )
+            {
+                if( token == T_RIGHT )
+                    break;
+                else if( token == T_LEFT )
+                    token = NextTok();
+
+                if( token == T_group )       // A group section found. Read it
+                    parseGroup();
+            }
+
+            break;
+
         case T_nets:    // The section nets starts here.
             while( ( token = NextTok() ) != T_EOF )
             {
@@ -165,6 +179,9 @@ void KICAD_NETLIST_PARSER::Parse()
             break;
         }
     }
+
+    // Go back and apply group information to the components
+    m_netlist->ApplyGroupMembership();
 
     if( plevel != 0 )
     {
@@ -562,6 +579,88 @@ void KICAD_NETLIST_PARSER::parseComponent()
     std::ranges::copy( jumperPinGroups,
                        std::inserter( component->JumperPadGroups(), component->JumperPadGroups().end() ) );
     m_netlist->AddComponent( component );
+}
+
+
+void KICAD_NETLIST_PARSER::parseGroup()
+{
+    /* Parses a section like
+     * (groups
+     *      (group (name "") (uuid "7b1488be-4c43-4004-94fc-e4a26dda8f5b")
+     *      (member (uuid "dfef752d-e203-4feb-91de-483b44bc4062"))
+     */
+
+    wxString   name;
+    KIID       uuid;
+    std::vector<KIID> members;
+
+    // The token net was read, so the next data is (code <number>)
+    while( (token = NextTok() ) != T_EOF )
+    {
+        if( token == T_RIGHT )
+            break;
+        else if( token == T_LEFT )
+            token = NextTok();
+
+        switch( token )
+        {
+        case T_name:
+            NeedSYMBOLorNUMBER();
+            name = From_UTF8( CurText() );
+            NeedRIGHT();
+            break;
+
+        case T_uuid:
+            NeedSYMBOLorNUMBER();
+            uuid = From_UTF8( CurText() );
+            NeedRIGHT();
+            break;
+
+        case T_members:
+            while( ( token = NextTok() ) != T_RIGHT )
+            {
+                if( token == T_LEFT )
+                    token = NextTok();
+
+                if( token == T_member )
+                {
+                    wxString memberUuid;
+
+                    while( ( token = NextTok() ) != T_RIGHT )
+                    {
+                        if( token == T_LEFT )
+                            token = NextTok();
+
+                        if( token == T_uuid )
+                        {
+                            NeedSYMBOLorNUMBER();
+                            memberUuid = From_UTF8( CurText() );
+                            NeedRIGHT();
+                        }
+                        else
+                        {
+                            Expecting( "uuid" );
+                        }
+                    }
+
+                    members.emplace_back( memberUuid );
+                }
+                else
+                {
+                    Expecting( "member" );
+                }
+
+            }
+            break;
+
+        default:
+            skipCurrent();
+            break;
+        }
+    }
+
+    NETLIST_GROUP* group = new NETLIST_GROUP { name, uuid, members };
+    m_netlist->AddGroup( group );
 }
 
 

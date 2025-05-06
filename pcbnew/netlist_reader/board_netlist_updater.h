@@ -85,6 +85,8 @@ public:
 
     void SetReplaceFootprints( bool aEnabled ) { m_replaceFootprints = aEnabled; }
 
+    void SetTransferGroups( bool aEnabled ) { m_transferGroups = aEnabled; }
+
     void SetOverrideLocks( bool aOverride ) { m_overrideLocks = aOverride; }
 
     void SetDeleteUnusedFootprints( bool aEnabled ) { m_deleteUnusedFootprints = aEnabled; }
@@ -109,6 +111,8 @@ private:
 
     bool updateFootprintParameters( FOOTPRINT* aPcbFootprint, COMPONENT* aNetlistComponent );
 
+    bool updateFootprintGroup( FOOTPRINT* aPcbFootprint, COMPONENT* aNetlistComponent );
+
     bool updateComponentPadConnections( FOOTPRINT* aFootprint, COMPONENT* aNewComponent );
 
     void updateComponentClass( FOOTPRINT* aFootprint, COMPONENT* aNewComponent );
@@ -116,6 +120,8 @@ private:
     void cacheCopperZoneConnections();
 
     bool updateCopperZoneNets( NETLIST& aNetlist );
+
+    bool updateGroups( NETLIST& aNetlist );
 
     bool testConnectivity( NETLIST& aNetlist, std::map<COMPONENT*, FOOTPRINT*>& aFootprintMap );
 
@@ -134,6 +140,7 @@ private:
     bool m_deleteUnusedFootprints;
     bool m_isDryRun;
     bool m_replaceFootprints;
+    bool m_transferGroups; // copy component group associations from schematic to PCB
     bool m_lookupByTimestamp;
     bool m_overrideLocks;
 

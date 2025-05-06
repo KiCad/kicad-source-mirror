@@ -165,6 +165,23 @@ void NETLIST::AddComponent( COMPONENT* aComponent )
 }
 
 
+void NETLIST::AddGroup( NETLIST_GROUP* aComponent )
+{
+    m_groups.push_back( aComponent );
+}
+
+NETLIST_GROUP* NETLIST::GetGroupByUuid( const KIID& aUuid )
+{
+    for( NETLIST_GROUP& group : m_groups )
+    {
+        if( group.uuid == aUuid )
+            return &group;
+    }
+
+    return nullptr;
+}
+
+
 COMPONENT* NETLIST::GetComponentByReference( const wxString& aReference )
 {
     COMPONENT* component = nullptr;
@@ -202,6 +219,24 @@ COMPONENT* NETLIST::GetComponentByPath( const KIID_PATH& aUuidPath )
 
         if( std::find( kiids.begin(), kiids.end(), comp_uuid ) != kiids.end() )
             return &component;
+    }
+
+    return nullptr;
+}
+
+
+COMPONENT* NETLIST::GetComponentByUuid( const KIID& aUuid)
+{
+    if( aUuid == 0 )
+        return nullptr;
+
+    for( COMPONENT& component : m_components )
+    {
+        for( const KIID& compUuid : component.GetKIIDs() )
+        {
+            if( aUuid == compUuid )
+                return &component;
+        }
     }
 
     return nullptr;
@@ -250,3 +285,16 @@ bool NETLIST::AnyFootprintsLinked() const
 }
 
 
+void NETLIST::ApplyGroupMembership()
+{
+    for( NETLIST_GROUP& group : m_groups )
+    {
+        for( KIID& member : group.members )
+        {
+            COMPONENT* component = GetComponentByUuid( member );
+
+            if( component )
+                component->SetGroup( &group );
+        }
+    }
+}

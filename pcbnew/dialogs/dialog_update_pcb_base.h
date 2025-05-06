@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf-dirty)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -38,6 +38,7 @@ class DIALOG_UPDATE_PCB_BASE : public DIALOG_SHIM
 		wxCheckBox* m_cbRelinkFootprints;
 		wxCheckBox* m_cbDeleteExtraFootprints;
 		wxCheckBox* m_cbUpdateFootprints;
+		wxCheckBox* m_cbTransferGroups;
 		wxCheckBox* m_cbOverrideLocks;
 		WX_HTML_REPORT_PANEL* m_messagePanel;
 		wxStdDialogButtonSizer* m_sdbSizer1;

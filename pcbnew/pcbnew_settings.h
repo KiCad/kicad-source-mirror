@@ -274,6 +274,7 @@ public:
     {
         int  report_filter;
         bool update_footprints;
+        bool transfer_groups;
         bool delete_shorting_tracks;
         bool delete_extra_footprints;
         bool associate_by_ref_sch;

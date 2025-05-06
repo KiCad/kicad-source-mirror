@@ -80,13 +80,6 @@ public:
      */
     virtual EDA_GROUP* DeepDuplicate() const = 0;
 
-    /**
-     * Check if the proposed type can be added to a group
-     * @param aType KICAD_T type to check
-     * @return true if the type can belong to a group, false otherwise
-     */
-    //virtual static bool IsGroupableType( KICAD_T aType );
-
 protected:
     std::unordered_set<EDA_ITEM*> m_items; // Members of the group
     wxString                      m_name;  // Optional group name

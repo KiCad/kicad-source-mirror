@@ -81,6 +81,17 @@ private:
 
 typedef std::vector< COMPONENT_NET > COMPONENT_NETS;
 
+
+struct NETLIST_GROUP
+{
+    wxString name;
+    KIID uuid;
+    std::vector<KIID> members;
+};
+
+typedef boost::ptr_vector< NETLIST_GROUP > NETLIST_GROUPS;
+
+
 /**
  * Store all of the related footprint information found in a netlist.
  */
@@ -100,6 +111,7 @@ public:
         m_path             = aPath;
         m_kiids            = aKiids;
         m_duplicatePadNumbersAreJumpers = false;
+        m_group            = nullptr;
     }
 
     virtual ~COMPONENT() { };
@@ -190,6 +202,9 @@ public:
     std::vector<std::set<wxString>>& JumperPadGroups() { return m_jumperPadGroups; }
     const std::vector<std::set<wxString>>& JumperPadGroups() const { return m_jumperPadGroups; }
 
+    NETLIST_GROUP* GetGroup() const { return m_group; }
+    void SetGroup( NETLIST_GROUP* aGroup ) { m_group = aGroup; }
+
 private:
     std::vector<COMPONENT_NET>   m_nets;  ///< list of nets shared by the component pins
 
@@ -239,6 +254,9 @@ private:
     /// Flag that this footprint should automatically treat sets of two or more pads with the same
     /// number as jumpered pin groups
     bool m_duplicatePadNumbersAreJumpers;
+
+    /// Group membership for this footprint. Nullptr if none.
+    NETLIST_GROUP*               m_group;
 
     static COMPONENT_NET         m_emptyNet;
 };
@@ -294,6 +312,29 @@ public:
     void AddComponent( COMPONENT* aComponent );
 
     /**
+     * @note If \a aGroup already exists in the NETLIST, \a aGroup is deleted
+     *       to prevent memory leaks.  An assertion is raised in debug builds.
+     *
+     * @param aGroup is the NETLIST_GROUP to save to the NETLIST.
+     */
+    void AddGroup( NETLIST_GROUP* aGroup );
+
+    /**
+     * @brief Return a #NETLIST_GROUP by \a aUuid.
+     *
+     * @param aUuid is the KIID of the #NETLIST_GROUP.
+     *
+     * @return a pointer to the #NETLIST_GROUP that matches \a aUuid if found.  Otherwise NULL.
+     */
+    NETLIST_GROUP* GetGroupByUuid( const KIID& aUuid );
+
+    /**
+     * After groups and components are parsed, apply the group memberships to the
+     * internal components based on the group member UUIDs.
+     */
+    void ApplyGroupMembership();
+
+    /**
      * Return a #COMPONENT by \a aReference.
      *
      * @param aReference is the reference designator the #COMPONENT.
@@ -308,6 +349,14 @@ public:
      * @return a pointer to the #COMPONENT that matches \a aPath if found.  Otherwise NULL.
      */
     COMPONENT* GetComponentByPath( const KIID_PATH& aPath );
+
+    /**
+     * Return a #COMPONENT by \a aUuid.
+     *
+     * @param aUuid is the KIID of the #COMPONENT.
+     * @return a pointer to the #COMPONENT that matches \a aUuid if found.  Otherwise NULL.
+     */
+    COMPONENT* GetComponentByUuid( const KIID& aUuid );
 
     void SortByFPID();
     void SortByReference();
@@ -334,6 +383,8 @@ public:
 
 private:
     COMPONENTS m_components;          // Components found in the netlist.
+    NETLIST_GROUPS m_groups;          // Groups found in the netlist.
+
 
     bool       m_findByTimeStamp;     // Associate components by KIID (or refdes if false)
     bool       m_replaceFootprints;   // Update footprints to match footprints defined in netlist

@@ -74,6 +74,15 @@ private:
     void parseNet();
 
     /**
+     * Parse a group section
+     *   (group (name "GroupName")
+     *      (member (uuid "..."))))
+     *
+     * and set the corresponding pads netnames
+     */
+    void parseGroup();
+
+    /**
      * Read the section "libparts" in the netlist:
      * (libparts
      *   (libpart (lib device) (part C)

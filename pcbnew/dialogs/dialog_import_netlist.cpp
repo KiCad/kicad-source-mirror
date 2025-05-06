@@ -71,6 +71,7 @@ DIALOG_IMPORT_NETLIST::DIALOG_IMPORT_NETLIST( PCB_EDIT_FRAME* aParent,
     auto cfg = m_parent->GetPcbNewSettings();
 
     m_cbUpdateFootprints->SetValue( cfg->m_NetlistDialog.update_footprints );
+    m_cbTransferGroups->SetValue( cfg->m_NetlistDialog.transfer_groups );
     m_cbDeleteShortingTracks->SetValue( cfg->m_NetlistDialog.delete_shorting_tracks );
     m_cbDeleteExtraFootprints->SetValue( cfg->m_NetlistDialog.delete_extra_footprints );
 
@@ -108,6 +109,7 @@ DIALOG_IMPORT_NETLIST::~DIALOG_IMPORT_NETLIST()
     {
         cfg->m_NetlistDialog.report_filter           = m_MessageWindow->GetVisibleSeverities();
         cfg->m_NetlistDialog.update_footprints       = m_cbUpdateFootprints->GetValue();
+        cfg->m_NetlistDialog.transfer_groups         = m_cbTransferGroups->GetValue();
         cfg->m_NetlistDialog.delete_shorting_tracks  = m_cbDeleteShortingTracks->GetValue();
         cfg->m_NetlistDialog.delete_extra_footprints = m_cbDeleteExtraFootprints->GetValue();
     }
@@ -264,6 +266,7 @@ void DIALOG_IMPORT_NETLIST::loadNetlist( bool aDryRun )
     updater.SetLookupByTimestamp( m_matchByUUID );
     updater.SetDeleteUnusedFootprints( m_cbDeleteExtraFootprints->GetValue());
     updater.SetReplaceFootprints( m_cbUpdateFootprints->GetValue() );
+    updater.SetTransferGroups( m_cbTransferGroups->GetValue() );
     updater.SetOverrideLocks( m_cbOverrideLocks->GetValue() );
     updater.UpdateNetlist( netlist );
 

@@ -28,6 +28,7 @@
 #include <build_version.h>
 #include <common.h>     // for ExpandTextVars
 #include <sch_base_frame.h>
+#include <sch_group.h>
 #include <symbol_library.h>
 #include <string_utils.h>
 #include <connection_graph.h>
@@ -73,7 +74,12 @@ XNODE* NETLIST_EXPORTER_XML::makeRoot( unsigned aCtl )
         xroot->AddChild( makeDesignHeader() );
 
     if( aCtl & GNL_SYMBOLS )
+    {
         xroot->AddChild( makeSymbols( aCtl ) );
+
+        if( aCtl & GNL_OPT_KICAD )
+            xroot->AddChild( makeGroups() );
+    }
 
     if( aCtl & GNL_PARTS )
         xroot->AddChild( makeLibParts() );
@@ -475,6 +481,53 @@ XNODE* NETLIST_EXPORTER_XML::makeSymbols( unsigned aCtl )
             // Output the primary UUID
             uuid = symbol->m_Uuid.AsString();
             xunits->AddChild( new XNODE( wxXML_TEXT_NODE, wxEmptyString, uuid ) );
+        }
+    }
+
+    m_schematic->SetCurrentSheet( currentSheet );
+
+    return xcomps;
+}
+
+
+XNODE* NETLIST_EXPORTER_XML::makeGroups()
+{
+    XNODE* xcomps = node( wxT( "groups" ) );
+
+    m_referencesAlreadyFound.Clear();
+    m_libParts.clear();
+
+    SCH_SHEET_PATH currentSheet = m_schematic->CurrentSheet();
+    SCH_SHEET_LIST sheetList = m_schematic->Hierarchy();
+
+    for( const SCH_SHEET_PATH& sheet : sheetList )
+    {
+        // Change schematic CurrentSheet in each iteration to allow hierarchical
+        // resolution of text variables in sheet fields.
+        m_schematic->SetCurrentSheet( sheet );
+
+        for( SCH_ITEM* item : sheet.LastScreen()->Items().OfType( SCH_GROUP_T ) )
+        {
+            SCH_GROUP* group = static_cast<SCH_GROUP*>( item );
+
+            XNODE* xgroup;  // current symbol being constructed
+            xcomps->AddChild( xgroup = node( wxT( "group" ) ) );
+
+            xgroup->AddAttribute( wxT( "name" ), group->GetName() );
+            xgroup->AddAttribute( wxT( "uuid" ), group->m_Uuid.AsString() );
+
+            XNODE* xmembers;
+            xgroup->AddChild( xmembers = node( wxT( "members" ) ) );
+
+            for( EDA_ITEM* member : group->GetItems() )
+            {
+                if( member->Type() == SCH_SYMBOL_T )
+                {
+                    XNODE* xmember;
+                    xmembers->AddChild( xmember = node( wxT( "member" ) ) );
+                    xmember->AddAttribute( wxT( "uuid" ), member->m_Uuid.AsString() );
+                }
+            }
         }
     }
 

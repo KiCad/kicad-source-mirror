@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf-dirty)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -56,6 +56,9 @@ DIALOG_IMPORT_NETLIST_BASE::DIALOG_IMPORT_NETLIST_BASE( wxWindow* parent, wxWind
 	m_cbUpdateFootprints = new wxCheckBox( sbSizer1->GetStaticBox(), wxID_ANY, _("Replace footprints with those specified in netlist"), wxDefaultPosition, wxDefaultSize, 0 );
 	sbSizer1->Add( m_cbUpdateFootprints, 0, wxBOTTOM, 5 );
 
+	m_cbTransferGroups = new wxCheckBox( sbSizer1->GetStaticBox(), wxID_ANY, _("Group footprints based on symbol group"), wxDefaultPosition, wxDefaultSize, 0 );
+	sbSizer1->Add( m_cbTransferGroups, 0, wxBOTTOM, 5 );
+
 	m_cbOverrideLocks = new wxCheckBox( sbSizer1->GetStaticBox(), wxID_ANY, _("Delete/replace footprints even if locked"), wxDefaultPosition, wxDefaultSize, 0 );
 	sbSizer1->Add( m_cbOverrideLocks, 0, wxBOTTOM|wxRIGHT, 5 );
 
@@ -105,6 +108,7 @@ DIALOG_IMPORT_NETLIST_BASE::DIALOG_IMPORT_NETLIST_BASE( wxWindow* parent, wxWind
 	m_matchByTimestamp->Connect( wxEVT_COMMAND_RADIOBOX_SELECTED, wxCommandEventHandler( DIALOG_IMPORT_NETLIST_BASE::OnMatchChanged ), NULL, this );
 	m_cbDeleteExtraFootprints->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_IMPORT_NETLIST_BASE::OnOptionChanged ), NULL, this );
 	m_cbUpdateFootprints->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_IMPORT_NETLIST_BASE::OnOptionChanged ), NULL, this );
+	m_cbTransferGroups->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_IMPORT_NETLIST_BASE::OnOptionChanged ), NULL, this );
 	m_cbOverrideLocks->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_IMPORT_NETLIST_BASE::OnOptionChanged ), NULL, this );
 	m_cbDeleteShortingTracks->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_IMPORT_NETLIST_BASE::OnOptionChanged ), NULL, this );
 	m_sdbSizerApply->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_IMPORT_NETLIST_BASE::onUpdatePCB ), NULL, this );
@@ -119,6 +123,7 @@ DIALOG_IMPORT_NETLIST_BASE::~DIALOG_IMPORT_NETLIST_BASE()
 	m_matchByTimestamp->Disconnect( wxEVT_COMMAND_RADIOBOX_SELECTED, wxCommandEventHandler( DIALOG_IMPORT_NETLIST_BASE::OnMatchChanged ), NULL, this );
 	m_cbDeleteExtraFootprints->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_IMPORT_NETLIST_BASE::OnOptionChanged ), NULL, this );
 	m_cbUpdateFootprints->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_IMPORT_NETLIST_BASE::OnOptionChanged ), NULL, this );
+	m_cbTransferGroups->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_IMPORT_NETLIST_BASE::OnOptionChanged ), NULL, this );
 	m_cbOverrideLocks->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_IMPORT_NETLIST_BASE::OnOptionChanged ), NULL, this );
 	m_cbDeleteShortingTracks->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_IMPORT_NETLIST_BASE::OnOptionChanged ), NULL, this );
 	m_sdbSizerApply->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_IMPORT_NETLIST_BASE::onUpdatePCB ), NULL, this );

@@ -36,6 +36,7 @@
 #include <netinfo.h>
 #include <footprint.h>
 #include <pad.h>
+#include <pcb_group.h>
 #include <pcb_track.h>
 #include <zone.h>
 #include <string_utils.h>
@@ -59,6 +60,7 @@ BOARD_NETLIST_UPDATER::BOARD_NETLIST_UPDATER( PCB_EDIT_FRAME* aFrame, BOARD* aBo
     m_isDryRun = false;
     m_replaceFootprints = true;
     m_lookupByTimestamp = false;
+    m_transferGroups = false;
     m_overrideLocks = false;
 
     m_warningCount = 0;
@@ -804,6 +806,120 @@ bool BOARD_NETLIST_UPDATER::updateFootprintParameters( FOOTPRINT* aPcbFootprint,
 }
 
 
+bool BOARD_NETLIST_UPDATER::updateFootprintGroup( FOOTPRINT* aPcbFootprint,
+                                                  COMPONENT* aNetlistComponent )
+{
+    if( !m_transferGroups )
+        return false;
+
+    wxString msg;
+
+    // Create a copy only if the footprint has not been added during this update
+    FOOTPRINT* copy = nullptr;
+
+    if( !m_commit.GetStatus( aPcbFootprint ) )
+    {
+        copy = static_cast<FOOTPRINT*>( aPcbFootprint->Clone() );
+        copy->SetParentGroup( nullptr );
+    }
+
+    bool changed = false;
+
+    // These hold the info for group and group KIID coming from the netlist
+    // newGroup may point to an existing group on the board if we find an
+    // incoming group UUID that matches an existing group
+    PCB_GROUP* newGroup = nullptr;
+    KIID       newGroupKIID = aNetlistComponent->GetGroup() ? aNetlistComponent->GetGroup()->uuid : 0;
+
+    PCB_GROUP* existingGroup = static_cast<PCB_GROUP*>( aPcbFootprint->GetParentGroup() );
+    KIID       existingGroupKIID = existingGroup ? existingGroup->m_Uuid : 0;
+
+    // Find existing group based on matching UUIDs
+    auto it = std::find_if( m_board->Groups().begin(), m_board->Groups().end(),
+                [&](PCB_GROUP* group) {
+                    return group->m_Uuid == newGroupKIID;
+                });
+
+    // If we find a group with the same UUID, use it
+    if( it != m_board->Groups().end() )
+        newGroup = *it;
+
+    // No changes, nothing to do
+    if( newGroupKIID == existingGroupKIID )
+        return changed;
+
+    // Remove from existing group
+    if( existingGroupKIID != 0 )
+    {
+        if( m_isDryRun )
+        {
+            msg.Printf( _( "Remove %s from group \"%s\"." ),
+                        aPcbFootprint->GetReference(),
+                        EscapeHTML( existingGroup->GetName() ) );
+        }
+        else
+        {
+            msg.Printf( _( "Removed %s from group \"%s\"." ),
+                        aPcbFootprint->GetReference(),
+                        EscapeHTML( existingGroup->GetName() ) );
+
+            changed = true;
+            m_commit.Modify( aPcbFootprint->GetParentGroup()->AsEdaItem() );
+            aPcbFootprint->GetParentGroup()->RemoveItem( aPcbFootprint );
+            aPcbFootprint->SetParentGroup( nullptr );
+        }
+
+        m_reporter->Report( msg, RPT_SEVERITY_ACTION );
+    }
+
+    // Add to new group
+    if( newGroupKIID != 0 )
+    {
+        if( m_isDryRun )
+        {
+            msg.Printf( _( "Add %s to group \"%s\"." ),
+                        aPcbFootprint->GetReference(),
+                        EscapeHTML( aNetlistComponent->GetGroup()->name ) );
+        }
+        else
+        {
+            msg.Printf( _( "Added %s group \"%s\"." ),
+                        aPcbFootprint->GetReference(),
+                        EscapeHTML( aNetlistComponent->GetGroup()->name ) );
+
+            changed = true;
+
+            if( newGroup == nullptr )
+            {
+                newGroup = new PCB_GROUP( m_board );
+                const_cast<KIID&>( newGroup->m_Uuid ) = newGroupKIID;
+                newGroup->SetName( aNetlistComponent->GetGroup()->name );
+
+                m_board->Add( newGroup );
+                newGroup->AddItem( aPcbFootprint );
+                m_commit.Add( newGroup );
+            }
+            else
+            {
+                newGroup->AddItem( aPcbFootprint );
+                m_commit.Modify( newGroup->AsEdaItem() );
+            }
+
+            aPcbFootprint->SetParentGroup( newGroup );
+        }
+
+        m_reporter->Report( msg, RPT_SEVERITY_ACTION );
+    }
+
+    if( changed && copy )
+        m_commit.Modified( aPcbFootprint, copy );
+    else if( copy )
+        delete copy;
+
+    return changed;
+}
+
+
 bool BOARD_NETLIST_UPDATER::updateComponentPadConnections( FOOTPRINT* aFootprint,
                                                            COMPONENT* aNewComponent )
 {
@@ -1228,6 +1344,44 @@ bool BOARD_NETLIST_UPDATER::updateCopperZoneNets( NETLIST& aNetlist )
 }
 
 
+bool BOARD_NETLIST_UPDATER::updateGroups( NETLIST& aNetlist )
+{
+    if( !m_transferGroups )
+        return false;
+
+    for( PCB_GROUP* pcbGroup : m_board->Groups() )
+    {
+        NETLIST_GROUP* netlistGroup = aNetlist.GetGroupByUuid( pcbGroup->m_Uuid );
+
+        if( netlistGroup == nullptr )
+            continue;
+
+        if( netlistGroup->name == pcbGroup->GetName() )
+            continue;
+
+        if( m_isDryRun )
+        {
+            wxString msg;
+            msg.Printf( _( "Change group name to '%s' to '%s'." ),
+                        EscapeHTML( pcbGroup->GetName() ),
+                        EscapeHTML( netlistGroup->name ) );
+            m_reporter->Report( msg, RPT_SEVERITY_ACTION );
+        }
+        else
+        {
+            wxString msg;
+            msg.Printf( _( "Changed group name to '%s' to '%s'." ),
+                        EscapeHTML( pcbGroup->GetName() ),
+                        EscapeHTML( netlistGroup->name ) );
+            m_commit.Modify( pcbGroup->AsEdaItem() );
+            pcbGroup->SetName( netlistGroup->name );
+        }
+    }
+
+    return true;
+}
+
+
 bool BOARD_NETLIST_UPDATER::testConnectivity( NETLIST& aNetlist,
                                               std::map<COMPONENT*, FOOTPRINT*>& aFootprintMap )
 {
@@ -1361,6 +1515,7 @@ bool BOARD_NETLIST_UPDATER::UpdateNetlist( NETLIST& aNetlist )
                     footprintMap[ component ] = tmp;
 
                     updateFootprintParameters( tmp, component );
+                    updateFootprintGroup( tmp, component );
                     updateComponentPadConnections( tmp, component );
                     updateComponentClass( tmp, component );
 
@@ -1386,6 +1541,7 @@ bool BOARD_NETLIST_UPDATER::UpdateNetlist( NETLIST& aNetlist )
                 footprintMap[ component ] = footprint;
 
                 updateFootprintParameters( footprint, component );
+                updateFootprintGroup( footprint, component );
                 updateComponentPadConnections( footprint, component );
                 updateComponentClass( footprint, component );
 
@@ -1402,6 +1558,7 @@ bool BOARD_NETLIST_UPDATER::UpdateNetlist( NETLIST& aNetlist )
     }
 
     updateCopperZoneNets( aNetlist );
+    updateGroups( aNetlist );
 
     // Finally go through the board footprints and update all those that *don't* have matching
     // component entries.

@@ -492,6 +492,9 @@ PCBNEW_SETTINGS::PCBNEW_SETTINGS()
     m_params.emplace_back( new PARAM<bool>( "netlist.update_footprints",
             &m_NetlistDialog.update_footprints, true ) );
 
+    m_params.emplace_back( new PARAM<bool>( "netlist.transfer_groups",
+            &m_NetlistDialog.transfer_groups, true ) );
+
     m_params.emplace_back( new PARAM<bool>( "netlist.delete_shorting_tracks",
             &m_NetlistDialog.delete_shorting_tracks, false ) );
 
