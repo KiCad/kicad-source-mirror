@@ -91,6 +91,7 @@ private:
 enum class FMT_VER
 {
     V_160, // Allegro 16.0, 0x00130000
+    V_162, // Allegro 16.2  0x00130400
     V_164, // Allegro 16.4, 0x00130C00
     V_165, // Allegro 16.5, 0x00131000
     V_166, // Allegro 16.6, 0x00131500
@@ -538,6 +539,53 @@ struct BLK_0x1C_PADSTACK
      * * >= 17.2: 10
      */
     std::vector<uint32_t> m_UnknownArrN;
+};
+
+
+/**
+ * 0x1D objects.
+ */
+struct BLK_0x1D
+{
+    uint32_t m_Key;
+    uint32_t m_Unknown1;
+    uint32_t m_Unknown2;
+    uint32_t m_Unknown3;
+    uint16_t m_SizeA;
+    uint16_t m_SizeB;
+
+    /**
+     * Size of this is m_SizeB * 56
+     *
+     * Presumably blocks of 56?
+     */
+    std::vector<std::array<uint8_t, 56>> m_DataB;
+    /**
+     * Size of this is m_SizeA * 256
+     */
+    std::vector<std::array<uint8_t, 256>> m_DataA;
+
+    COND_GE<FMT_VER::V_172, uint32_t> m_Unknown4;
+};
+
+
+/**
+ * 0x1F objects
+ */
+struct BLK_0x1F
+{
+    uint32_t m_Key;
+    uint32_t m_Unknown1;
+    uint32_t m_Unknown2;
+    uint32_t m_Unknown3;
+    uint32_t m_Unknown4;
+    uint16_t m_Unknown5;
+    uint16_t m_Size;
+
+    /**
+     * Some kind of quite substantial substruct that varies in version
+     */
+    std::vector<uint8_t> m_Substruct;
 };
 
 

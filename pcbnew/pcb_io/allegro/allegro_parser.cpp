@@ -51,6 +51,7 @@ static FMT_VER GetFormatVer( uint32_t aMagic )
     switch( masked )
     {
     case 0x00130000: return FMT_VER::V_160;
+    case 0x00130400: return FMT_VER::V_162;
     case 0x00130C00: return FMT_VER::V_164;
     case 0x00131000: return FMT_VER::V_165;
     case 0x00131500: return FMT_VER::V_166;
@@ -476,24 +477,104 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x1C_PADSTACK( FILE_STREAM& aStrea
 }
 
 
-static std::unique_ptr<BLOCK_BASE> ParseBlock_0x21( FILE_STREAM& stream, FMT_VER aVer )
+static std::unique_ptr<BLOCK_BASE> ParseBlock_0x1D( FILE_STREAM& aStream, FMT_VER aVer )
 {
-    auto block = std::make_unique<BLOCK<BLK_0x21>>( 0x21, stream.Position() );
+    auto block = std::make_unique<BLOCK<BLK_0x1D>>( 0x1D, aStream.Position() );
 
     auto& data = block->GetData();
 
-    data.m_Type = stream.ReadU8();
-    data.m_R = stream.ReadU16();
+    aStream.Skip( 3 );
 
-    data.m_Size = stream.ReadU32();
+    data.m_Key = aStream.ReadU32();
+    data.m_Unknown1 = aStream.ReadU32();
+    data.m_Unknown2 = aStream.ReadU32();
+    data.m_Unknown3 = aStream.ReadU32();
 
-    data.m_Key = stream.ReadU32();
+    data.m_SizeA = aStream.ReadU16();
+    data.m_SizeB = aStream.ReadU16();
+
+    data.m_DataB.reserve( data.m_SizeB );
+    for( size_t i = 0; i < data.m_SizeB; ++i )
+    {
+        auto& item = data.m_DataB.emplace_back();
+        for( size_t j = 0; j < item.size(); ++j )
+        {
+            item[j] = aStream.ReadU8();
+        }
+    }
+
+    data.m_DataA.reserve( data.m_SizeA );
+    for( size_t i = 0; i < data.m_SizeA; ++i )
+    {
+        auto& item = data.m_DataA.emplace_back();
+        for( size_t j = 0; j < item.size(); ++j )
+        {
+            item[j] = aStream.ReadU8();
+        }
+    }
+
+    ReadCond( aStream, aVer, data.m_Unknown4 );
+
+    return block;
+}
+
+
+static std::unique_ptr<BLOCK_BASE> ParseBlock_0x1F( FILE_STREAM& aStream, FMT_VER aVer )
+{
+    auto block = std::make_unique<BLOCK<BLK_0x1F>>( 0x1F, aStream.Position() );
+
+    auto& data = block->GetData();
+
+    aStream.Skip( 3 );
+
+    data.m_Key = aStream.ReadU32();
+
+    data.m_Unknown1 = aStream.ReadU32();
+    data.m_Unknown2 = aStream.ReadU32();
+    data.m_Unknown3 = aStream.ReadU32();
+    data.m_Unknown4 = aStream.ReadU32();
+    data.m_Unknown5 = aStream.ReadU16();
+
+    data.m_Size = aStream.ReadU16();
+
+    size_t substructSize = 0;
+    if( aVer >= FMT_VER::V_175 )
+        substructSize = data.m_Size * 384 + 8;
+    else if( aVer >= FMT_VER::V_172 )
+        substructSize = data.m_Size * 280 + 8;
+    else if( aVer >= FMT_VER::V_162 )
+        substructSize = data.m_Size * 280 + 4;
+    else
+        substructSize = data.m_Size * 240 + 4;
+
+    data.m_Substruct.reserve( substructSize );
+    for( size_t i = 0; i < substructSize; i++ )
+    {
+        data.m_Substruct.push_back( aStream.ReadU8() );
+    }
+
+    return block;
+}
+
+
+static std::unique_ptr<BLOCK_BASE> ParseBlock_0x21( FILE_STREAM& aStream, FMT_VER aVer )
+{
+    auto block = std::make_unique<BLOCK<BLK_0x21>>( 0x21, aStream.Position() );
+
+    auto& data = block->GetData();
+
+    data.m_Type = aStream.ReadU8();
+    data.m_R = aStream.ReadU16();
+
+    data.m_Size = aStream.ReadU32();
+
+    data.m_Key = aStream.ReadU32();
 
     const size_t nBytes = data.m_Size - 12;
     data.m_Data.reserve( nBytes );
     for( size_t i = 0; i < nBytes; ++i )
     {
-        data.m_Data.push_back( stream.ReadU8() );
+        data.m_Data.push_back( aStream.ReadU8() );
     }
 
     return block;
@@ -574,7 +655,9 @@ static std::optional<uint32_t> GetBlockKey( const BLOCK_BASE& block )
     case 0x0F: return static_cast<const BLOCK<BLK_0x0F>&>( block ).GetData().m_Key;
     case 0x10: return static_cast<const BLOCK<BLK_0x10>&>( block ).GetData().m_Key;
     case 0x1B: return static_cast<const BLOCK<BLK_0x1B_NET>&>( block ).GetData().m_Key;
-    case 0x1c: return static_cast<const BLOCK<BLK_0x1C_PADSTACK>&>( block ).GetData().m_Key;
+    case 0x1C: return static_cast<const BLOCK<BLK_0x1C_PADSTACK>&>( block ).GetData().m_Key;
+    case 0x1D: return static_cast<const BLOCK<BLK_0x1D>&>( block ).GetData().m_Key;
+    case 0x1F: return static_cast<const BLOCK<BLK_0x1F>&>( block ).GetData().m_Key;
     case 0x21: return static_cast<const BLOCK<BLK_0x21>&>( block ).GetData().m_Key;
     case 0x2B: return static_cast<const BLOCK<BLK_0x2B>&>( block ).GetData().m_Key;
     case 0x2D: return static_cast<const BLOCK<BLK_0x2B>&>( block ).GetData().m_Key;
@@ -635,6 +718,16 @@ void ALLEGRO::PARSER::readObjects( RAW_BOARD& aBoard )
             block = ParseBlock_0x1C_PADSTACK( m_stream, ver );
             break;
         }
+        case 0x1D:
+        {
+            block = ParseBlock_0x1D( m_stream, ver );
+            break;
+        }
+        case 0x1F:
+        {
+            block = ParseBlock_0x1F( m_stream, ver );
+            break;
+        }
         case 0x21:
         {
             block = ParseBlock_0x21( m_stream, ver );
@@ -659,13 +752,17 @@ void ALLEGRO::PARSER::readObjects( RAW_BOARD& aBoard )
             }
 
             wxLogTrace( traceAllegroParser,
-                        wxString::Format( "Ending at unknown block type %#02x at offset %#010lx", type, offset ) );
+                        wxString::Format( "Ending at unknown block type %#04x at offset %#010lx", type, offset ) );
             return;
         }
         }
 
         if( block )
         {
+            wxLogTrace( traceAllegroParser, wxString::Format( "Added block type %#04x from %#010lx to %#010lx", type,
+                                                              offset, m_stream.Position() ) );
+
+
             uint8_t type = block->GetBlockType();
 
             // Creates the vector if it doesn't exist
