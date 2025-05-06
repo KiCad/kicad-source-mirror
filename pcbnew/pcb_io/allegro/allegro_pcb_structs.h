@@ -463,6 +463,30 @@ struct BLK_0x09
 
 
 /**
+ * 0x0C objects.
+ */
+struct BLK_0x0C
+{
+    uint32_t m_Key;
+    uint32_t m_Next;
+
+    COND_GE<FMT_VER::V_172, uint32_t> m_Unknown1;
+    COND_GE<FMT_VER::V_172, uint32_t> m_Unknown2;
+
+    uint32_t m_Unknown3;
+    uint32_t m_Unknown4;
+    uint32_t m_KeyInd;
+
+    uint32_t               m_Unknown5;
+    std::array<int32_t, 4> m_Coords;
+
+    std::array<uint32_t, 3> m_UnknownArray;
+
+    COND_GE<FMT_VER::V_174, uint32_t> m_Unknown6;
+};
+
+
+/**
  * 0x0D objects represent pads.
  */
 struct BLK_0x0D_PAD
@@ -944,6 +968,18 @@ struct BLK_0x33_VIA
     uint32_t m_Unknown5;
 
     std::array<int32_t, 4> m_BoundingBoxCoords;
+};
+
+
+/**
+ * 0x35 objects.
+ */
+struct BLK_0x35
+{
+    uint8_t  m_T2;
+    uint16_t m_T3;
+
+    std::array<uint8_t, 120> m_Content;
 };
 
 

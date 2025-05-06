@@ -532,6 +532,42 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x09( FILE_STREAM& aStream, FMT_VE
 }
 
 
+static std::unique_ptr<BLOCK_BASE> ParseBlock_0x0C( FILE_STREAM& aStream, FMT_VER aVer )
+{
+    auto block = std::make_unique<BLOCK<BLK_0x0C>>( 0x0C, aStream.Position() );
+
+    auto& data = block->GetData();
+
+    aStream.Skip( 3 );
+
+    data.m_Key = aStream.ReadU32();
+    data.m_Next = aStream.ReadU32();
+
+    ReadCond( aStream, aVer, data.m_Unknown1 );
+    ReadCond( aStream, aVer, data.m_Unknown2 );
+
+    data.m_Unknown3 = aStream.ReadU32();
+    data.m_Unknown4 = aStream.ReadU32();
+    data.m_KeyInd = aStream.ReadU32();
+
+    data.m_Unknown5 = aStream.ReadU32();
+
+    for( size_t i = 0; i < data.m_Coords.size(); ++i )
+    {
+        data.m_Coords[i] = aStream.ReadS32();
+    }
+
+    for( size_t i = 0; i < data.m_UnknownArray.size(); ++i )
+    {
+        data.m_UnknownArray[i] = aStream.ReadU32();
+    }
+
+    ReadCond( aStream, aVer, data.m_Unknown6 );
+
+    return block;
+}
+
+
 static std::unique_ptr<BLOCK_BASE> ParseBlock_0x0D_PAD( FILE_STREAM& aStream, FMT_VER aVer )
 {
     auto block = std::make_unique<BLOCK<BLK_0x0D_PAD>>( 0x0D, aStream.Position() );
@@ -1085,6 +1121,20 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x33_VIA( FILE_STREAM& aStream, FM
 }
 
 
+static std::unique_ptr<BLOCK_BASE> ParseBlock_0x35( FILE_STREAM& aStream, FMT_VER aVer )
+{
+    auto block = std::make_unique<BLOCK<BLK_0x35>>( 0x35, aStream.Position() );
+
+    auto& data = block->GetData();
+
+    data.m_T2 = aStream.ReadU8();
+    data.m_T3 = aStream.ReadU16();
+    aStream.ReadBytes( data.m_Content.data(), data.m_Content.size() );
+
+    return block;
+}
+
+
 static std::unique_ptr<BLOCK_BASE> ParseBlock_0x36( FILE_STREAM& aStream, FMT_VER aVer )
 {
     auto block = std::make_unique<BLOCK<BLK_0x36>>( 0x36, aStream.Position() );
@@ -1301,6 +1351,7 @@ static std::optional<uint32_t> GetBlockKey( const BLOCK_BASE& block )
     case 0x06: return static_cast<const BLOCK<BLK_0x06>&>( block ).GetData().m_Key;
     case 0x07: return static_cast<const BLOCK<BLK_0x07>&>( block ).GetData().m_Key;
     case 0x09: return static_cast<const BLOCK<BLK_0x09>&>( block ).GetData().m_Key;
+    case 0x0C: return static_cast<const BLOCK<BLK_0x0C>&>( block ).GetData().m_Key;
     case 0x0D: return static_cast<const BLOCK<BLK_0x0D_PAD>&>( block ).GetData().m_Key;
     case 0x0F: return static_cast<const BLOCK<BLK_0x0F>&>( block ).GetData().m_Key;
     case 0x10: return static_cast<const BLOCK<BLK_0x10>&>( block ).GetData().m_Key;
@@ -1377,6 +1428,11 @@ void ALLEGRO::PARSER::readObjects( RAW_BOARD& aBoard )
             block = ParseBlock_0x09( m_stream, ver );
             break;
         }
+        case 0x0C:
+        {
+            block = ParseBlock_0x0C( m_stream, ver );
+            break;
+        }
         case 0x0D:
         {
             block = ParseBlock_0x0D_PAD( m_stream, ver );
@@ -1450,6 +1506,11 @@ void ALLEGRO::PARSER::readObjects( RAW_BOARD& aBoard )
         case 0x33:
         {
             block = ParseBlock_0x33_VIA( m_stream, ver );
+            break;
+        }
+        case 0x35:
+        {
+            block = ParseBlock_0x35( m_stream, ver );
             break;
         }
         case 0x36:
