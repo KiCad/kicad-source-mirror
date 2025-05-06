@@ -109,6 +109,15 @@ public:
         return str;
     }
 
+    std::string ReadStringFixed( size_t aLen )
+    {
+        std::vector<char> buffer( aLen + 1 );
+        ReadBytes( buffer.data(), aLen );
+        buffer.push_back( '\0' ); // Null-terminate the string
+
+        return std::string( buffer.data() );
+    }
+
     uint8_t  ReadU8() { return Read<uint8_t>(); }
     uint16_t ReadU16() { return Read<uint16_t>(); }
     int16_t  ReadS16() { return Read<int16_t>(); }

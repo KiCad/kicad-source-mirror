@@ -897,6 +897,102 @@ struct BLK_0x33_VIA
 
 
 /**
+ * 0x36 objects.
+ */
+struct BLK_0x36
+{
+    uint16_t m_Code;
+    uint32_t m_Key;
+    uint32_t m_Next;
+
+    COND_GE<FMT_VER::V_172, uint32_t> m_Unknown1;
+
+    uint32_t m_NumItems;
+    uint32_t m_Count;
+    uint32_t m_LastIdx;
+    uint32_t m_Unknown2;
+
+    COND_GE<FMT_VER::V_174, uint32_t> m_Unknown3;
+
+    struct X02
+    {
+        std::string              m_String;
+        std::array<uint32_t, 14> m_Xs;
+
+        COND_GE<FMT_VER::V_164, std::array<uint32_t, 3>> m_Ys;
+        COND_GE<FMT_VER::V_172, std::array<uint32_t, 2>> m_Zs;
+    };
+
+    struct X03
+    {
+        COND_GE<FMT_VER::V_172, std::string> m_Str;
+        COND_LT<FMT_VER::V_172, std::string> m_Str16x;
+        COND_GE<FMT_VER::V_174, uint32_t>    m_Unknown1;
+    };
+
+    struct X05
+    {
+        std::array<uint8_t, 28> m_Unknown;
+    };
+
+    struct X06
+    {
+        uint16_t m_N;
+        uint8_t  m_R;
+        uint8_t  m_S;
+        uint32_t m_Unknown1;
+
+        COND_LT<FMT_VER::V_172, std::array<uint32_t, 50>> m_Unknown2;
+    };
+
+    struct X08
+    {
+        uint32_t m_A;
+        uint32_t m_B;
+        uint32_t m_CharHeight;
+        uint32_t m_CharWidth;
+
+        COND_GE<FMT_VER::V_174, uint32_t> m_Unknown2;
+
+        std::array<uint32_t, 4> m_Xs;
+
+        COND_GE<FMT_VER::V_172, std::array<uint32_t, 8>> m_Ys;
+    };
+
+    struct X0B
+    {
+        std::array<uint8_t, 1016> m_Unknown;
+    };
+
+    struct X0C
+    {
+        std::array<uint8_t, 232> m_Unknown;
+    };
+
+    struct X0D
+    {
+        std::array<uint8_t, 200> m_Unknown;
+    };
+
+    struct X0F
+    {
+        uint32_t                m_Key;
+        std::array<uint32_t, 3> m_Ptrs;
+        uint32_t                m_Ptr2;
+    };
+
+    struct X10
+    {
+        std::array<uint8_t, 108> m_Unknown;
+    };
+
+    using SubstructVariant = std::variant<X02, X03, X05, X06, X08, X0B, X0C, X0D, X0F, X10>;
+
+    std::vector<SubstructVariant> m_Items;
+};
+
+
+/**
  * 0x38 objects represent films.
  */
 struct BLK_0x38_FILM

@@ -119,14 +119,7 @@ static T ReadField( FILE_STREAM& aStream )
     {
         field = aStream.ReadS16();
     }
-    else if constexpr( std::is_same_v<T, std::array<uint32_t, 28>> )
-    {
-        for( size_t i = 0; i < field.size(); ++i )
-        {
-            field[i] = aStream.ReadU32();
-        }
-    }
-    else if constexpr( std::is_same_v<T, std::array<uint32_t, 8>> )
+    else if constexpr( std::is_same_v<T, std::array<uint32_t, field.size()>> )
     {
         for( size_t i = 0; i < field.size(); ++i )
         {
@@ -1018,6 +1011,141 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x33_VIA( FILE_STREAM& aStream, FM
 }
 
 
+static std::unique_ptr<BLOCK_BASE> ParseBlock_0x36( FILE_STREAM& aStream, FMT_VER aVer )
+{
+    auto block = std::make_unique<BLOCK<BLK_0x36>>( 0x36, aStream.Position() );
+
+    auto& data = block->GetData();
+
+    aStream.Skip( 1 );
+
+    data.m_Code = aStream.ReadU16();
+    data.m_Key = aStream.ReadU32();
+    data.m_Next = aStream.ReadU32();
+
+    ReadCond( aStream, aVer, data.m_Unknown1 );
+
+    data.m_NumItems = aStream.ReadU32();
+    data.m_Count = aStream.ReadU32();
+    data.m_LastIdx = aStream.ReadU32();
+    data.m_Unknown2 = aStream.ReadU32();
+
+    ReadCond( aStream, aVer, data.m_Unknown3 );
+
+    data.m_Items.reserve( data.m_NumItems );
+    for( uint32_t i = 0; i < data.m_NumItems; ++i )
+    {
+        switch( data.m_Code )
+        {
+        case 0x02:
+        {
+            BLK_0x36::X02 item;
+
+            item.m_String = aStream.ReadStringFixed( 64 );
+            ReadArrayU32( aStream, item.m_Xs );
+            ReadCond( aStream, aVer, item.m_Ys );
+            ReadCond( aStream, aVer, item.m_Zs );
+
+            data.m_Items.emplace_back( std::move( item ) );
+            break;
+        }
+        case 0x03:
+        {
+            BLK_0x36::X03 item;
+            if( aVer >= FMT_VER::V_172 )
+                item.m_Str = aStream.ReadStringFixed( 64 );
+            else
+                item.m_Str16x = aStream.ReadStringFixed( 32 );
+
+            ReadCond( aStream, aVer, item.m_Unknown1 );
+
+            data.m_Items.emplace_back( std::move( item ) );
+            break;
+        }
+        case 0x05:
+        {
+            BLK_0x36::X05 item;
+
+            aStream.ReadBytes( item.m_Unknown.data(), item.m_Unknown.size() );
+
+            data.m_Items.emplace_back( std::move( item ) );
+            break;
+        }
+        case 0x06:
+        {
+            BLK_0x36::X06 item;
+
+            item.m_N = aStream.ReadU16();
+            item.m_R = aStream.ReadU8();
+            item.m_S = aStream.ReadU8();
+            item.m_Unknown1 = aStream.ReadU32();
+
+            ReadCond( aStream, aVer, item.m_Unknown2 );
+
+            data.m_Items.emplace_back( std::move( item ) );
+            break;
+        }
+        case 0x08:
+        {
+            BLK_0x36::X08 item;
+
+            item.m_A = aStream.ReadU32();
+            item.m_B = aStream.ReadU32();
+            item.m_CharHeight = aStream.ReadU32();
+            item.m_CharWidth = aStream.ReadU32();
+
+            ReadCond( aStream, aVer, item.m_Unknown2 );
+            ReadArrayU32( aStream, item.m_Xs );
+            ReadCond( aStream, aVer, item.m_Ys );
+
+            data.m_Items.emplace_back( std::move( item ) );
+            break;
+        }
+        case 0x0B:
+        {
+            BLK_0x36::X0B item;
+            aStream.ReadBytes( item.m_Unknown.data(), item.m_Unknown.size() );
+            data.m_Items.emplace_back( std::move( item ) );
+            break;
+        }
+        case 0x0C:
+        {
+            BLK_0x36::X0C item;
+            aStream.ReadBytes( item.m_Unknown.data(), item.m_Unknown.size() );
+            data.m_Items.emplace_back( std::move( item ) );
+            break;
+        }
+        case 0x0D:
+        {
+            BLK_0x36::X0D item;
+            aStream.ReadBytes( item.m_Unknown.data(), item.m_Unknown.size() );
+            data.m_Items.emplace_back( std::move( item ) );
+            break;
+        }
+        case 0x0F:
+        {
+            BLK_0x36::X0F item;
+            item.m_Key = aStream.ReadU32();
+            ReadArrayU32( aStream, item.m_Ptrs );
+            item.m_Ptr2 = aStream.ReadU32();
+            data.m_Items.emplace_back( std::move( item ) );
+            break;
+        }
+        case 0x10:
+        {
+            BLK_0x36::X10 item;
+            aStream.ReadBytes( item.m_Unknown.data(), item.m_Unknown.size() );
+            data.m_Items.emplace_back( std::move( item ) );
+            break;
+        }
+        default: THROW_IO_ERROR( wxString::Format( "Unknown substruct type %#02x in block 0x36", data.m_Code ) );
+        }
+    }
+
+    return block;
+}
+
+
 static std::unique_ptr<BLOCK_BASE> ParseBlock_0x38_FILM( FILE_STREAM& aStream, FMT_VER aVer )
 {
     auto block = std::make_unique<BLOCK<BLK_0x38_FILM>>( 0x38, aStream.Position() );
@@ -1032,9 +1160,7 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x38_FILM( FILE_STREAM& aStream, F
 
     if( data.m_FilmName.exists( aVer ) )
     {
-        std::array<char, 20> name;
-        aStream.ReadBytes( name.data(), name.size() );
-        data.m_FilmName = std::string( name.data(), strnlen( name.data(), name.size() ) );
+        data.m_FilmName = aStream.ReadStringFixed( 20 );
     }
 
     ReadCond( aStream, aVer, data.m_LayerNameStr );
@@ -1114,6 +1240,7 @@ static std::optional<uint32_t> GetBlockKey( const BLOCK_BASE& block )
     case 0x2B: return static_cast<const BLOCK<BLK_0x2B>&>( block ).GetData().m_Key;
     case 0x2D: return static_cast<const BLOCK<BLK_0x2D>&>( block ).GetData().m_Key;
     case 0x33: return static_cast<const BLOCK<BLK_0x33_VIA>&>( block ).GetData().m_Key;
+    case 0x36: return static_cast<const BLOCK<BLK_0x36>&>( block ).GetData().m_Key;
     case 0x38: return static_cast<const BLOCK<BLK_0x38_FILM>&>( block ).GetData().m_Key;
     case 0x39: return static_cast<const BLOCK<BLK_0x39_FILM_LAYER_LIST>&>( block ).GetData().m_Key;
     case 0x3A: return static_cast<const BLOCK<TYPE_3A_FILM_LIST_NODE>&>( block ).GetData().m_Key;
@@ -1237,6 +1364,11 @@ void ALLEGRO::PARSER::readObjects( RAW_BOARD& aBoard )
         case 0x33:
         {
             block = ParseBlock_0x33_VIA( m_stream, ver );
+            break;
+        }
+        case 0x36:
+        {
+            block = ParseBlock_0x36( m_stream, ver );
             break;
         }
         case 0x38:

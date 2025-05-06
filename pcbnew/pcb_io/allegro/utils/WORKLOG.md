@@ -50,3 +50,4 @@ The materials used for this work are:
     * 0x21 (headered block) - gets to 0xa9dc (next is 0x1D type)
     * 0x39, 0x3A - brings CutiePi up to 0x28e2c (next is 0x09)
     * 0x09 - brings CutiePi up to 0x28e58 (next is 0x0D)
+    * 0x36 - some kind of of multi-type graphics (PreAmp to 0x130d4, next is 0x2a)
