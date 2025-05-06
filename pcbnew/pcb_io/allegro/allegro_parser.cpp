@@ -1312,6 +1312,29 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x33_VIA( FILE_STREAM& aStream, FM
 }
 
 
+static std::unique_ptr<BLOCK_BASE> ParseBlock_0x34_KEEPOUT( FILE_STREAM& aStream, FMT_VER aVer )
+{
+    auto block = std::make_unique<BLOCK<BLK_0x34_KEEPOUT>>( 0x34, aStream.Position() );
+
+    auto& data = block->GetData();
+
+    data.m_T = aStream.ReadU8();
+    data.m_Layer = ParseLayerInfo( aStream );
+    data.m_Key = aStream.ReadU32();
+    data.m_Next = aStream.ReadU32();
+    data.m_Ptr1 = aStream.ReadU32();
+
+    ReadCond( aStream, aVer, data.m_Unknown1 );
+
+    data.m_Flags = aStream.ReadU32();
+    data.m_Ptr2 = aStream.ReadU32();
+    data.m_Ptr3 = aStream.ReadU32();
+    data.m_Unknown2 = aStream.ReadU32();
+
+    return block;
+}
+
+
 static std::unique_ptr<BLOCK_BASE> ParseBlock_0x35( FILE_STREAM& aStream, FMT_VER aVer )
 {
     auto block = std::make_unique<BLOCK<BLK_0x35>>( 0x35, aStream.Position() );
@@ -1565,6 +1588,7 @@ static std::optional<uint32_t> GetBlockKey( const BLOCK_BASE& block )
     case 0x31: return static_cast<const BLOCK<BLK_0x31_SGRAPHIC>&>( block ).GetData().m_Key;
     case 0x32: return static_cast<const BLOCK<BLK_0x32_PLACED_PAD>&>( block ).GetData().m_Key;
     case 0x33: return static_cast<const BLOCK<BLK_0x33_VIA>&>( block ).GetData().m_Key;
+    case 0x34: return static_cast<const BLOCK<BLK_0x34_KEEPOUT>&>( block ).GetData().m_Key;
     case 0x36: return static_cast<const BLOCK<BLK_0x36>&>( block ).GetData().m_Key;
     case 0x38: return static_cast<const BLOCK<BLK_0x38_FILM>&>( block ).GetData().m_Key;
     case 0x39: return static_cast<const BLOCK<BLK_0x39_FILM_LAYER_LIST>&>( block ).GetData().m_Key;
@@ -1739,6 +1763,11 @@ void ALLEGRO::PARSER::readObjects( RAW_BOARD& aBoard )
         case 0x33:
         {
             block = ParseBlock_0x33_VIA( m_stream, ver );
+            break;
+        }
+        case 0x34:
+        {
+            block = ParseBlock_0x34_KEEPOUT( m_stream, ver );
             break;
         }
         case 0x35:

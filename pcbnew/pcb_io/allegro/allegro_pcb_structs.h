@@ -1131,6 +1131,26 @@ struct BLK_0x33_VIA
 
 
 /**
+ * 0x34 objects represent keepouts.
+ */
+struct BLK_0x34_KEEPOUT
+{
+    uint8_t    m_T;
+    LAYER_INFO m_Layer;
+    uint32_t   m_Key;
+    uint32_t   m_Next;
+    uint32_t   m_Ptr1;
+
+    COND_GE<FMT_VER::V_172, uint32_t> m_Unknown1;
+
+    uint32_t m_Flags;
+    uint32_t m_Ptr2;
+    uint32_t m_Ptr3;
+    uint32_t m_Unknown2;
+};
+
+
+/**
  * 0x35 objects.
  */
 struct BLK_0x35
