@@ -51,4 +51,5 @@ The materials used for this work are:
     * 0x39, 0x3A - brings CutiePi up to 0x28e2c (next is 0x09)
     * 0x09 - brings CutiePi up to 0x28e58 (next is 0x0D)
     * 0x36 - some kind of of multi-type graphics (PreAmp to 0x130d4, next is 0x2a)
-    * 0x2A - prings both PreAmp and CutiePi to the next 0x0D (pad)
+    * 0x2A - brings both PreAmp and CutiePi to the next 0x0D (pad)
+    * 0x0D - brings PreAmp to 0x000276e0 (next is 0x0C)

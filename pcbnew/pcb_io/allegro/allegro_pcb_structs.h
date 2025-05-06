@@ -463,6 +463,29 @@ struct BLK_0x09
 
 
 /**
+ * 0x0D objects represent pads.
+ */
+struct BLK_0x0D_PAD
+{
+    uint32_t m_Key;
+    uint32_t m_StrPtr;
+    uint32_t m_UnknownPtr;
+
+    COND_GE<FMT_VER::V_174, uint32_t> m_Unknown1;
+
+    std::array<int32_t, 2> m_Coords;
+
+    uint32_t m_PadPtr;
+    uint32_t m_Unknown2;
+
+    COND_GE<FMT_VER::V_172, uint32_t> m_Unknown3;
+
+    uint32_t m_Flags;
+    uint32_t m_Rotation;
+};
+
+
+/**
  * 0x0F objects.
  *
  * Exact purpose not clear yet.
