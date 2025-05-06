@@ -13,5 +13,5 @@ public:
     int Group( const TOOL_EVENT& aEvent ) override;
 
 protected:
-    std::unique_ptr<COMMIT> createCommit() override { return std::make_unique<BOARD_COMMIT>( this ); }
+    std::shared_ptr<COMMIT> createCommit() override { return std::make_shared<BOARD_COMMIT>( this ); }
 };

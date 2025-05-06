@@ -66,12 +66,12 @@ protected:
     void setTransitions() override;
 
     ///< Subclasses implement to provide correct *_COMMIT object type
-    virtual std::unique_ptr<COMMIT> createCommit() = 0;
+    virtual std::shared_ptr<COMMIT> createCommit() = 0;
 
     EDA_DRAW_FRAME*          m_frame = nullptr;
     DIALOG_GROUP_PROPERTIES* m_propertiesDialog = nullptr;
     SELECTION_TOOL*          m_selectionTool = nullptr;
-    std::unique_ptr<COMMIT>  m_commit = nullptr;
+    std::shared_ptr<COMMIT>  m_commit;
     bool                     m_isFootprintEditor = false;
 };
 

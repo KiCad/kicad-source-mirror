@@ -128,7 +128,7 @@ int GROUP_TOOL::GroupProperties( const TOOL_EVENT& aEvent )
     if( m_propertiesDialog )
         m_propertiesDialog->Destroy();
 
-    m_propertiesDialog = new DIALOG_GROUP_PROPERTIES( m_frame, group, *m_commit );
+    m_propertiesDialog = new DIALOG_GROUP_PROPERTIES( m_frame, group, m_commit );
 
     m_propertiesDialog->Show( true );
 

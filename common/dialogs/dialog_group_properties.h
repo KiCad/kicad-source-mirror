@@ -24,6 +24,7 @@
 #ifndef DIALOG_GROUP_PROPERTIES_H
 #define DIALOG_GROUP_PROPERTIES_H
 
+#include <memory>
 #include <dialogs/dialog_group_properties_base.h>
 
 class EDA_DRAW_FRAME;
@@ -37,7 +38,7 @@ class BASE_SCREEN;
 class DIALOG_GROUP_PROPERTIES : public DIALOG_GROUP_PROPERTIES_BASE
 {
 public:
-    DIALOG_GROUP_PROPERTIES( EDA_DRAW_FRAME* aParent, EDA_GROUP* aTarget, COMMIT& aCommit );
+    DIALOG_GROUP_PROPERTIES( EDA_DRAW_FRAME* aParent, EDA_GROUP* aTarget, const std::shared_ptr<COMMIT>& aCommit );
     ~DIALOG_GROUP_PROPERTIES() override;
 
     void OnMemberSelected( wxCommandEvent& event ) override;
@@ -53,7 +54,7 @@ private:
     EDA_DRAW_FRAME* m_frame;
     TOOL_MANAGER*   m_toolMgr;
     EDA_GROUP*      m_group;
-    COMMIT&         m_commit;
+    std::shared_ptr<COMMIT> m_commit;
 };
 
 #endif  // DIALOG_GROUP_PROPERTIES_H

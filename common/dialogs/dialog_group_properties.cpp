@@ -32,9 +32,8 @@
 #include <dialogs/dialog_group_properties.h>
 
 
-DIALOG_GROUP_PROPERTIES::DIALOG_GROUP_PROPERTIES( EDA_DRAW_FRAME* aParent,
-                                                  EDA_GROUP* aGroup,
-                                                  COMMIT& aCommit ) :
+DIALOG_GROUP_PROPERTIES::DIALOG_GROUP_PROPERTIES( EDA_DRAW_FRAME* aParent, EDA_GROUP* aGroup,
+                                                  const std::shared_ptr<COMMIT>& aCommit ) :
         DIALOG_GROUP_PROPERTIES_BASE( aParent ),
         m_frame( aParent ),
         m_toolMgr( aParent->GetToolManager() ),
@@ -82,7 +81,7 @@ bool DIALOG_GROUP_PROPERTIES::TransferDataToWindow()
 
 bool DIALOG_GROUP_PROPERTIES::TransferDataFromWindow()
 {
-    m_commit.Modify( m_group->AsEdaItem(), m_frame->GetScreen() );
+    m_commit->Modify( m_group->AsEdaItem(), m_frame->GetScreen() );
 
     for( size_t ii = 0; ii < m_membersList->GetCount(); ++ii )
     {
@@ -91,10 +90,10 @@ bool DIALOG_GROUP_PROPERTIES::TransferDataFromWindow()
 
         if( existingGroup != m_group )
         {
-            m_commit.Modify( item, m_frame->GetScreen() );
+            m_commit->Modify( item, m_frame->GetScreen() );
 
             if( existingGroup )
-                m_commit.Modify( existingGroup->AsEdaItem(), m_frame->GetScreen() );
+                m_commit->Modify( existingGroup->AsEdaItem(), m_frame->GetScreen() );
         }
     }
 
@@ -112,7 +111,7 @@ bool DIALOG_GROUP_PROPERTIES::TransferDataFromWindow()
 
     m_toolMgr->RunAction<EDA_ITEM*>( ACTIONS::selectItem, m_group->AsEdaItem() );
 
-    m_commit.Push( _( "Edit Group Properties" ) );
+    m_commit->Push( _( "Edit Group Properties" ) );
     return true;
 }
 
