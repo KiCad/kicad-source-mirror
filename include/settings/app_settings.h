@@ -162,6 +162,7 @@ public:
         int  sort_mode;
         bool repeated_placement;
         bool place_as_sheet;
+        bool place_as_group;
         bool keep_annotations;
 
         // For saving tree columns and widths

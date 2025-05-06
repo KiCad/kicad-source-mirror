@@ -50,6 +50,7 @@ protected:
 
 protected:
     wxCheckBox* m_repeatedPlacement;
+    wxCheckBox* m_placeAsGroup;
     wxCheckBox* m_placeAsSheet;
     wxCheckBox* m_keepAnnotations;
 };
@@ -70,6 +71,7 @@ private:
     EESCHEMA_SETTINGS* m_settings;
 
     wxFileDialogCheckBox* m_cbRepeatedPlacement;
+    wxFileDialogCheckBox* m_cbPlaceAsGroup;
     wxFileDialogCheckBox* m_cbPlaceAsSheet;
     wxFileDialogCheckBox* m_cbKeepAnnotations;
 

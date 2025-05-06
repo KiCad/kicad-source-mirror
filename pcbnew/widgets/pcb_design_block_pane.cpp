@@ -120,7 +120,7 @@ void PCB_DESIGN_BLOCK_PANE::OnCheckBox( wxCommandEvent& aEvent )
     if( PCBNEW_SETTINGS* cfg = dynamic_cast<PCBNEW_SETTINGS*>( Kiface().KifaceSettings() ) )
     {
         cfg->m_DesignBlockChooserPanel.repeated_placement = m_repeatedPlacement->GetValue();
-        cfg->m_DesignBlockChooserPanel.place_as_sheet = m_placeAsGroup->GetValue();
+        cfg->m_DesignBlockChooserPanel.place_as_group = m_placeAsGroup->GetValue();
         cfg->m_DesignBlockChooserPanel.keep_annotations = m_keepAnnotations->GetValue();
     }
 }
@@ -131,34 +131,34 @@ void PCB_DESIGN_BLOCK_PANE::UpdateCheckboxes()
     if( PCBNEW_SETTINGS* cfg = dynamic_cast<PCBNEW_SETTINGS*>( Kiface().KifaceSettings() ) )
     {
         m_repeatedPlacement->SetValue( cfg->m_DesignBlockChooserPanel.repeated_placement );
-        m_placeAsGroup->SetValue( cfg->m_DesignBlockChooserPanel.place_as_sheet );
+        m_placeAsGroup->SetValue( cfg->m_DesignBlockChooserPanel.place_as_group );
         m_keepAnnotations->SetValue( cfg->m_DesignBlockChooserPanel.keep_annotations );
     }
 }
 
 
-FILEDLG_IMPORT_SHEET_CONTENTS::FILEDLG_IMPORT_SHEET_CONTENTS( PCBNEW_SETTINGS* aSettings ) :
-        m_cbRepeatedPlacement( nullptr ), m_cbPlaceAsSheet( nullptr ), m_cbKeepAnnotations( nullptr )
+FILEDLG_IMPORT_BOARD_CONTENTS::FILEDLG_IMPORT_BOARD_CONTENTS( PCBNEW_SETTINGS* aSettings ) :
+        m_cbRepeatedPlacement( nullptr ), m_cbPlaceAsGroup( nullptr ), m_cbKeepAnnotations( nullptr )
 {
     wxASSERT( aSettings );
     m_settings = aSettings;
 };
 
 
-void FILEDLG_IMPORT_SHEET_CONTENTS::TransferDataFromCustomControls()
+void FILEDLG_IMPORT_BOARD_CONTENTS::TransferDataFromCustomControls()
 {
     m_settings->m_DesignBlockChooserPanel.repeated_placement = m_cbRepeatedPlacement->GetValue();
-    m_settings->m_DesignBlockChooserPanel.place_as_sheet = m_cbPlaceAsSheet->GetValue();
+    m_settings->m_DesignBlockChooserPanel.place_as_group = m_cbPlaceAsGroup->GetValue();
     m_settings->m_DesignBlockChooserPanel.keep_annotations = m_cbKeepAnnotations->GetValue();
 }
 
 
-void FILEDLG_IMPORT_SHEET_CONTENTS::AddCustomControls( wxFileDialogCustomize& customizer )
+void FILEDLG_IMPORT_BOARD_CONTENTS::AddCustomControls( wxFileDialogCustomize& customizer )
 {
     m_cbRepeatedPlacement = customizer.AddCheckBox( REPEATED_PLACEMENT );
     m_cbRepeatedPlacement->SetValue( m_settings->m_DesignBlockChooserPanel.repeated_placement );
-    m_cbPlaceAsSheet = customizer.AddCheckBox( PLACE_AS_GROUP );
-    m_cbPlaceAsSheet->SetValue( m_settings->m_DesignBlockChooserPanel.place_as_sheet );
+    m_cbPlaceAsGroup = customizer.AddCheckBox( PLACE_AS_GROUP );
+    m_cbPlaceAsGroup->SetValue( m_settings->m_DesignBlockChooserPanel.place_as_group );
     m_cbKeepAnnotations = customizer.AddCheckBox( KEEP_ANNOTATIONS );
     m_cbKeepAnnotations->SetValue( m_settings->m_DesignBlockChooserPanel.keep_annotations );
 }

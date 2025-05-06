@@ -44,7 +44,7 @@ public:
     void OnCheckBox( wxCommandEvent& aEvent );
     void UpdateCheckboxes();
 
-    void OnSaveSheetAsDesignBlock( wxCommandEvent& aEvent );
+    void OnSaveBoardAsDesignBlock( wxCommandEvent& aEvent );
     void OnSaveSelectionAsDesignBlock( wxCommandEvent& aEvent );
 
 protected:
@@ -57,11 +57,11 @@ protected:
 
 
 // This is a helper class for the file dialog to allow the user to choose similar options
-// as the design block chooser when importing a sheet.
-class FILEDLG_IMPORT_SHEET_CONTENTS : public wxFileDialogCustomizeHook
+// as the design block chooser when importing a board.
+class FILEDLG_IMPORT_BOARD_CONTENTS : public wxFileDialogCustomizeHook
 {
 public:
-    FILEDLG_IMPORT_SHEET_CONTENTS( PCBNEW_SETTINGS* aSettings );
+    FILEDLG_IMPORT_BOARD_CONTENTS( PCBNEW_SETTINGS* aSettings );
 
     void AddCustomControls( wxFileDialogCustomize& customizer ) override;
 
@@ -71,10 +71,10 @@ private:
     PCBNEW_SETTINGS* m_settings;
 
     wxFileDialogCheckBox* m_cbRepeatedPlacement;
-    wxFileDialogCheckBox* m_cbPlaceAsSheet;
+    wxFileDialogCheckBox* m_cbPlaceAsGroup;
     wxFileDialogCheckBox* m_cbKeepAnnotations;
 
-    wxDECLARE_NO_COPY_CLASS( FILEDLG_IMPORT_SHEET_CONTENTS );
+    wxDECLARE_NO_COPY_CLASS( FILEDLG_IMPORT_BOARD_CONTENTS );
 };
 
 #endif

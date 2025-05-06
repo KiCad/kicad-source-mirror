@@ -1635,7 +1635,7 @@ int PCB_CONTROL::AppendBoard( PCB_IO& pi, const wxString& fileName )
 
     int ret = 0;
 
-    bool placeAsGroup = editFrame->config() ? editFrame->config()->m_DesignBlockChooserPanel.place_as_sheet : false;
+    bool placeAsGroup = editFrame->config() ? editFrame->config()->m_DesignBlockChooserPanel.place_as_group : false;
 
     if( placeBoardItems( &commit, brd, false, false /* Don't reannotate dupes on Append Board */ ) )
     {

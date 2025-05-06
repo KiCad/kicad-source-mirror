@@ -40,6 +40,7 @@
 // Do not make these static wxStrings; they need to respond to language changes
 #define REPEATED_PLACEMENT _( "Place repeated copies" )
 #define PLACE_AS_SHEET     _( "Place as sheet" )
+#define PLACE_AS_GROUP     _( "Place as group" )
 #define KEEP_ANNOTATIONS   _( "Keep annotations" )
 
 SCH_DESIGN_BLOCK_PANE::SCH_DESIGN_BLOCK_PANE( SCH_EDIT_FRAME* aParent, const LIB_ID* aPreselect,
@@ -70,6 +71,7 @@ SCH_DESIGN_BLOCK_PANE::SCH_DESIGN_BLOCK_PANE( SCH_EDIT_FRAME* aParent, const LIB
     wxBoxSizer* cbSizer = new wxBoxSizer( wxVERTICAL );
 
     m_repeatedPlacement = new wxCheckBox( this, wxID_ANY, REPEATED_PLACEMENT );
+    m_placeAsGroup = new wxCheckBox( this, wxID_ANY, PLACE_AS_GROUP );
     m_placeAsSheet = new wxCheckBox( this, wxID_ANY, PLACE_AS_SHEET );
     m_keepAnnotations = new wxCheckBox( this, wxID_ANY, KEEP_ANNOTATIONS );
     setLabelsAndTooltips();
@@ -77,10 +79,12 @@ SCH_DESIGN_BLOCK_PANE::SCH_DESIGN_BLOCK_PANE( SCH_EDIT_FRAME* aParent, const LIB
 
     // Set all checkbox handlers to the same function
     m_repeatedPlacement->Bind( wxEVT_CHECKBOX, &SCH_DESIGN_BLOCK_PANE::OnCheckBox, this );
+    m_placeAsGroup->Bind( wxEVT_CHECKBOX, &SCH_DESIGN_BLOCK_PANE::OnCheckBox, this );
     m_placeAsSheet->Bind( wxEVT_CHECKBOX, &SCH_DESIGN_BLOCK_PANE::OnCheckBox, this );
     m_keepAnnotations->Bind( wxEVT_CHECKBOX, &SCH_DESIGN_BLOCK_PANE::OnCheckBox, this );
 
     cbSizer->Add( m_repeatedPlacement, 0, wxTOP | wxLEFT, 2 );
+    cbSizer->Add( m_placeAsGroup, 0, wxTOP | wxLEFT, 2 );
     cbSizer->Add( m_placeAsSheet, 0, wxTOP | wxLEFT, 2 );
     cbSizer->Add( m_keepAnnotations, 0, wxTOP | wxLEFT | wxBOTTOM, 2 );
 
@@ -101,6 +105,12 @@ void SCH_DESIGN_BLOCK_PANE::setLabelsAndTooltips()
         m_repeatedPlacement->SetLabel( REPEATED_PLACEMENT );
         m_repeatedPlacement->SetToolTip( _( "Place copies of the design block on subsequent "
                                             "clicks." ) );
+    }
+
+    if( m_placeAsGroup )
+    {
+        m_placeAsGroup->SetLabel( PLACE_AS_GROUP );
+        m_placeAsGroup->SetToolTip( _( "Place the design block as a group." ) );
     }
 
     if( m_placeAsSheet )
@@ -124,6 +134,7 @@ void SCH_DESIGN_BLOCK_PANE::OnCheckBox( wxCommandEvent& aEvent )
     if( EESCHEMA_SETTINGS* cfg = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() ) )
     {
         cfg->m_DesignBlockChooserPanel.repeated_placement = m_repeatedPlacement->GetValue();
+        cfg->m_DesignBlockChooserPanel.place_as_group = m_placeAsGroup->GetValue();
         cfg->m_DesignBlockChooserPanel.place_as_sheet = m_placeAsSheet->GetValue();
         cfg->m_DesignBlockChooserPanel.keep_annotations = m_keepAnnotations->GetValue();
     }
@@ -135,6 +146,7 @@ void SCH_DESIGN_BLOCK_PANE::UpdateCheckboxes()
     if( EESCHEMA_SETTINGS* cfg = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() ) )
     {
         m_repeatedPlacement->SetValue( cfg->m_DesignBlockChooserPanel.repeated_placement );
+        m_placeAsGroup->SetValue( cfg->m_DesignBlockChooserPanel.place_as_group );
         m_placeAsSheet->SetValue( cfg->m_DesignBlockChooserPanel.place_as_sheet );
         m_keepAnnotations->SetValue( cfg->m_DesignBlockChooserPanel.keep_annotations );
     }
@@ -142,7 +154,8 @@ void SCH_DESIGN_BLOCK_PANE::UpdateCheckboxes()
 
 
 FILEDLG_IMPORT_SHEET_CONTENTS::FILEDLG_IMPORT_SHEET_CONTENTS( EESCHEMA_SETTINGS* aSettings ) :
-        m_cbRepeatedPlacement( nullptr ), m_cbPlaceAsSheet( nullptr ), m_cbKeepAnnotations( nullptr )
+        m_cbRepeatedPlacement( nullptr ), m_cbPlaceAsGroup( nullptr ), m_cbPlaceAsSheet( nullptr ),
+        m_cbKeepAnnotations( nullptr )
 {
     wxASSERT( aSettings );
     m_settings = aSettings;
@@ -152,6 +165,7 @@ FILEDLG_IMPORT_SHEET_CONTENTS::FILEDLG_IMPORT_SHEET_CONTENTS( EESCHEMA_SETTINGS*
 void FILEDLG_IMPORT_SHEET_CONTENTS::TransferDataFromCustomControls()
 {
     m_settings->m_DesignBlockChooserPanel.repeated_placement = m_cbRepeatedPlacement->GetValue();
+    m_settings->m_DesignBlockChooserPanel.place_as_group = m_cbPlaceAsGroup->GetValue();
     m_settings->m_DesignBlockChooserPanel.place_as_sheet = m_cbPlaceAsSheet->GetValue();
     m_settings->m_DesignBlockChooserPanel.keep_annotations = m_cbKeepAnnotations->GetValue();
 }
@@ -161,6 +175,8 @@ void FILEDLG_IMPORT_SHEET_CONTENTS::AddCustomControls( wxFileDialogCustomize& cu
 {
     m_cbRepeatedPlacement = customizer.AddCheckBox( REPEATED_PLACEMENT );
     m_cbRepeatedPlacement->SetValue( m_settings->m_DesignBlockChooserPanel.repeated_placement );
+    m_cbPlaceAsGroup = customizer.AddCheckBox( PLACE_AS_GROUP );
+    m_cbPlaceAsGroup->SetValue( m_settings->m_DesignBlockChooserPanel.place_as_group );
     m_cbPlaceAsSheet = customizer.AddCheckBox( PLACE_AS_SHEET );
     m_cbPlaceAsSheet->SetValue( m_settings->m_DesignBlockChooserPanel.place_as_sheet );
     m_cbKeepAnnotations = customizer.AddCheckBox( KEEP_ANNOTATIONS );

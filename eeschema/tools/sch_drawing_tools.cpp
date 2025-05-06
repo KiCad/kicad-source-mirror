@@ -47,6 +47,7 @@
 #include <view/view.h>
 #include <sch_symbol.h>
 #include <sch_no_connect.h>
+#include <sch_group.h>
 #include <sch_line.h>
 #include <sch_junction.h>
 #include <sch_bus_entry.h>
@@ -702,6 +703,7 @@ int SCH_DRAWING_TOOLS::ImportSheet( const TOOL_EVENT& aEvent )
 
                 EDA_ITEMS newItems;
                 bool      keepAnnotations = cfg->m_DesignBlockChooserPanel.keep_annotations;
+                bool      placeAsGroup = cfg->m_DesignBlockChooserPanel.place_as_group;
 
                 selectionTool->ClearSelection();
 
@@ -719,6 +721,17 @@ int SCH_DRAWING_TOOLS::ImportSheet( const TOOL_EVENT& aEvent )
                 m_frame->OnModify();
                 m_frame->HardRedraw(); // Full reinit of the current screen and the display.
 
+
+                SCH_GROUP* group = nullptr;
+
+                if( placeAsGroup )
+                {
+                    group = new SCH_GROUP( screen );
+
+                    if( designBlock )
+                        group->SetName( designBlock->GetLibId().GetLibItemName() );
+                }
+
                 // Select all new items
                 for( EDA_ITEM* item : screen->Items() )
                 {
@@ -730,6 +743,9 @@ int SCH_DRAWING_TOOLS::ImportSheet( const TOOL_EVENT& aEvent )
                         if( item->Type() == SCH_LINE_T )
                             item->SetFlags( STARTPOINT | ENDPOINT );
 
+                        if( placeAsGroup )
+                            group->AddItem( item );
+
                         commit.Added( item, screen );
                         newItems.emplace_back( item );
                     }
@@ -737,7 +753,13 @@ int SCH_DRAWING_TOOLS::ImportSheet( const TOOL_EVENT& aEvent )
                         item->ClearFlags( SKIP_STRUCT );
                 }
 
-                selectionTool->AddItemsToSel( &newItems, true );
+                if( placeAsGroup )
+                {
+                    commit.Add( group, screen );
+                    selectionTool->AddItemToSel( group );
+                }
+                else
+                    selectionTool->AddItemsToSel( &newItems, true );
 
                 cursorPos = grid.Align( controls->GetMousePosition(),
                                         grid.GetSelectionGrid( selectionTool->GetSelection() ) );
