@@ -109,11 +109,18 @@ public:
         return str;
     }
 
-    std::string ReadStringFixed( size_t aLen )
+    std::string ReadStringFixed( size_t aLen, bool aRoundToNextU32 )
     {
         std::vector<char> buffer( aLen + 1 );
         ReadBytes( buffer.data(), aLen );
         buffer.push_back( '\0' ); // Null-terminate the string
+
+        const size_t pos = Position();
+        if( aRoundToNextU32 && pos % sizeof( uint32_t ) != 0 )
+        {
+            const size_t padding = sizeof( uint32_t ) - ( pos % sizeof( uint32_t ) );
+            Skip( padding );
+        }
 
         return std::string( buffer.data() );
     }

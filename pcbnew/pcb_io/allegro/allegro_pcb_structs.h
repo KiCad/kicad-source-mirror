@@ -565,6 +565,30 @@ struct BLK_0x0D_PAD
 
 
 /**
+ * 0x0E objects.
+ */
+struct BLK_0x0E
+{
+    uint8_t  m_T;
+    uint16_t m_T2;
+    uint32_t m_Key;
+    uint32_t m_Next;
+    uint32_t m_FpPtr;
+
+    uint32_t m_Unknown1;
+    uint32_t m_Unknown2;
+    uint32_t m_Unknown3;
+
+    COND_GE<FMT_VER::V_172, uint32_t> m_Unknown4;
+    COND_GE<FMT_VER::V_172, uint32_t> m_Unknown5;
+
+    std::array<int32_t, 4> m_Coords;
+
+    std::array<uint32_t, 4> m_UnknownArr;
+};
+
+
+/**
  * 0x0F objects.
  *
  * Exact purpose not clear yet.
@@ -943,6 +967,30 @@ struct BLK_0x21
      * Size = m_Size - 12 (i.e. size is the whole header size)
      */
     std::vector<uint8_t> m_Data;
+};
+
+
+/**
+ * 0x24 objects represent rectangles.
+ */
+struct BLK_0x24_RECT
+{
+    uint8_t    m_Type;
+    LAYER_INFO m_Layer;
+    uint32_t   m_Key;
+    uint32_t   m_Next;
+    uint32_t   m_Ptr1;
+    uint32_t   m_Unknown1;
+
+    COND_GE<FMT_VER::V_174, uint32_t> m_Unknown2;
+
+    std::array<int32_t, 4> m_Coords;
+
+    uint32_t m_Ptr2;
+
+    uint32_t m_Unknown3;
+    uint32_t m_Unknown4;
+    uint32_t m_Unknown5;
 };
 
 
@@ -1408,6 +1456,43 @@ struct TYPE_3A_FILM_LIST_NODE
     uint32_t   m_Unknown;
 
     COND_GE<FMT_VER::V_174, uint32_t> m_Unknown1;
+};
+
+
+/**
+ * 0x3B objects.
+ */
+struct BLK_0x3B
+{
+    uint8_t  m_T;
+    uint16_t m_SubType;
+    uint32_t m_Len;
+
+    std::string m_Name;
+    std::string m_Type;
+
+    uint32_t m_Unknown1;
+    uint32_t m_Unknown2;
+
+    COND_GE<FMT_VER::V_172, uint32_t> m_Unknown3;
+
+    std::string m_Value;
+};
+
+
+/**
+ * 0x3C objects.
+ */
+struct BLK_0x3C
+{
+    uint8_t  m_T;
+    uint16_t m_T2;
+    uint32_t m_Key;
+
+    COND_GE<FMT_VER::V_174, uint32_t> m_Unknown;
+
+    uint32_t              m_NumEntries;
+    std::vector<uint32_t> m_Entries;
 };
 
 

@@ -326,8 +326,13 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x03( FILE_STREAM& aStream, FMT_VE
 
     ReadCond( aStream, aVer, data.m_Unknown2 );
 
+    wxLogTrace( traceAllegroParser, wxT( "  Parsed block 0x03: subtype %#02x, size %d" ), data.m_SubType, data.m_Size );
+
     switch( data.m_SubType )
     {
+    case 0x65:
+        // Nothing for this one?
+        break;
     case 0x64:
     case 0x66:
     case 0x67:
@@ -353,7 +358,7 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x03( FILE_STREAM& aStream, FMT_VE
     case 0x73:
     case 0x78:
     {
-        data.m_Substruct = aStream.ReadString( true );
+        data.m_Substruct = aStream.ReadStringFixed( data.m_Size, true );
         break;
     }
     case 0x6C:
@@ -645,6 +650,39 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x0D_PAD( FILE_STREAM& aStream, FM
 
     data.m_Flags = aStream.ReadU32();
     data.m_Rotation = aStream.ReadU32();
+
+    return block;
+}
+
+
+static std::unique_ptr<BLOCK_BASE> ParseBlock_0x0E( FILE_STREAM& aStream, FMT_VER aVer )
+{
+    auto block = std::make_unique<BLOCK<BLK_0x0E>>( 0x0E, aStream.Position() );
+
+    auto& data = block->GetData();
+
+    data.m_T = aStream.ReadU8();
+    data.m_T2 = aStream.ReadU16();
+    data.m_Key = aStream.ReadU32();
+    data.m_Next = aStream.ReadU32();
+    data.m_FpPtr = aStream.ReadU32();
+
+    data.m_Unknown1 = aStream.ReadU32();
+    data.m_Unknown2 = aStream.ReadU32();
+    data.m_Unknown3 = aStream.ReadU32();
+
+    ReadCond( aStream, aVer, data.m_Unknown4 );
+    ReadCond( aStream, aVer, data.m_Unknown5 );
+
+    for( size_t i = 0; i < data.m_Coords.size(); ++i )
+    {
+        data.m_Coords[i] = aStream.ReadS32();
+    }
+
+    for( size_t i = 0; i < data.m_UnknownArr.size(); ++i )
+    {
+        data.m_UnknownArr[i] = aStream.ReadU32();
+    }
 
     return block;
 }
@@ -1086,6 +1124,36 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x21( FILE_STREAM& aStream, FMT_VE
 }
 
 
+static std::unique_ptr<BLOCK_BASE> ParseBlock_0x24_RECT( FILE_STREAM& aStream, FMT_VER aVer )
+{
+    auto block = std::make_unique<BLOCK<BLK_0x24_RECT>>( 0x24, aStream.Position() );
+
+    auto& data = block->GetData();
+
+    data.m_Type = aStream.ReadU8();
+    data.m_Layer = ParseLayerInfo( aStream );
+    data.m_Key = aStream.ReadU32();
+    data.m_Next = aStream.ReadU32();
+    data.m_Ptr1 = aStream.ReadU32();
+    data.m_Unknown1 = aStream.ReadU32();
+
+    ReadCond( aStream, aVer, data.m_Unknown2 );
+
+    for( size_t i = 0; i < data.m_Coords.size(); ++i )
+    {
+        data.m_Coords[i] = aStream.ReadS32();
+    }
+
+    data.m_Ptr2 = aStream.ReadU32();
+
+    data.m_Unknown3 = aStream.ReadU32();
+    data.m_Unknown4 = aStream.ReadU32();
+    data.m_Unknown5 = aStream.ReadU32();
+
+    return block;
+}
+
+
 static std::unique_ptr<BLOCK_BASE> ParseBlock_0x26( FILE_STREAM& aStream, FMT_VER aVer )
 {
     auto block = std::make_unique<BLOCK<BLK_0x26>>( 0x26, aStream.Position() );
@@ -1364,7 +1432,7 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x31_SGRAPHIC( FILE_STREAM& aStrea
 
     ReadCond( aStream, aVer, data.m_Un2 );
 
-    data.m_Value = aStream.ReadString( true );
+    data.m_Value = aStream.ReadStringFixed( data.m_Len, true );
 
     return block;
 }
@@ -1517,7 +1585,7 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x36( FILE_STREAM& aStream, FMT_VE
         {
             BLK_0x36::X02 item;
 
-            item.m_String = aStream.ReadStringFixed( 32 );
+            item.m_String = aStream.ReadStringFixed( 32, true );
             ReadArrayU32( aStream, item.m_Xs );
             ReadCond( aStream, aVer, item.m_Ys );
             ReadCond( aStream, aVer, item.m_Zs );
@@ -1529,9 +1597,9 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x36( FILE_STREAM& aStream, FMT_VE
         {
             BLK_0x36::X03 item;
             if( aVer >= FMT_VER::V_172 )
-                item.m_Str = aStream.ReadStringFixed( 64 );
+                item.m_Str = aStream.ReadStringFixed( 64, true );
             else
-                item.m_Str16x = aStream.ReadStringFixed( 32 );
+                item.m_Str16x = aStream.ReadStringFixed( 32, true );
 
             ReadCond( aStream, aVer, item.m_Unknown1 );
 
@@ -1636,7 +1704,7 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x38_FILM( FILE_STREAM& aStream, F
 
     if( data.m_FilmName.exists( aVer ) )
     {
-        data.m_FilmName = aStream.ReadStringFixed( 20 );
+        data.m_FilmName = aStream.ReadStringFixed( 20, true );
     }
 
     ReadCond( aStream, aVer, data.m_LayerNameStr );
@@ -1693,6 +1761,53 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x3A_FILM_LIST_NODE( FILE_STREAM& 
 }
 
 
+static std::unique_ptr<BLOCK_BASE> ParseBlock_0x3B( FILE_STREAM& aStream, FMT_VER aVer )
+{
+    auto block = std::make_unique<BLOCK<BLK_0x3B>>( 0x3B, aStream.Position() );
+
+    auto& data = block->GetData();
+
+    data.m_T = aStream.ReadU8();
+    data.m_SubType = aStream.ReadU16();
+    data.m_Len = aStream.ReadU32();
+
+    data.m_Name = aStream.ReadStringFixed( 128, true );
+    data.m_Type = aStream.ReadStringFixed( 32, true );
+
+    data.m_Unknown1 = aStream.ReadU32();
+    data.m_Unknown2 = aStream.ReadU32();
+
+    ReadCond( aStream, aVer, data.m_Unknown3 );
+
+    data.m_Value = aStream.ReadStringFixed( data.m_Len, true );
+
+    return block;
+}
+
+
+static std::unique_ptr<BLOCK_BASE> ParseBlock_0x3C( FILE_STREAM& aStream, FMT_VER aVer )
+{
+    auto block = std::make_unique<BLOCK<BLK_0x3C>>( 0x3C, aStream.Position() );
+
+    auto& data = block->GetData();
+
+    data.m_T = aStream.ReadU8();
+    data.m_T2 = aStream.ReadU16();
+    data.m_Key = aStream.ReadU32();
+
+    ReadCond( aStream, aVer, data.m_Unknown );
+
+    data.m_NumEntries = aStream.ReadU32();
+    data.m_Entries.reserve( data.m_NumEntries );
+    for( uint32_t i = 0; i < data.m_NumEntries; ++i )
+    {
+        data.m_Entries.push_back( aStream.ReadU32() );
+    }
+
+    return block;
+}
+
+
 static std::optional<uint32_t> GetBlockKey( const BLOCK_BASE& block )
 {
     switch( block.GetBlockType() )
@@ -1707,6 +1822,7 @@ static std::optional<uint32_t> GetBlockKey( const BLOCK_BASE& block )
     case 0x09: return static_cast<const BLOCK<BLK_0x09>&>( block ).GetData().m_Key;
     case 0x0C: return static_cast<const BLOCK<BLK_0x0C>&>( block ).GetData().m_Key;
     case 0x0D: return static_cast<const BLOCK<BLK_0x0D_PAD>&>( block ).GetData().m_Key;
+    case 0x0E: return static_cast<const BLOCK<BLK_0x0E>&>( block ).GetData().m_Key;
     case 0x0F: return static_cast<const BLOCK<BLK_0x0F>&>( block ).GetData().m_Key;
     case 0x10: return static_cast<const BLOCK<BLK_0x10>&>( block ).GetData().m_Key;
     case 0x11: return static_cast<const BLOCK<BLK_0x11>&>( block ).GetData().m_Key;
@@ -1720,6 +1836,7 @@ static std::optional<uint32_t> GetBlockKey( const BLOCK_BASE& block )
     case 0x1D: return static_cast<const BLOCK<BLK_0x1D>&>( block ).GetData().m_Key;
     case 0x1F: return static_cast<const BLOCK<BLK_0x1F>&>( block ).GetData().m_Key;
     case 0x21: return static_cast<const BLOCK<BLK_0x21>&>( block ).GetData().m_Key;
+    case 0x24: return static_cast<const BLOCK<BLK_0x24_RECT>&>( block ).GetData().m_Key;
     case 0x26: return static_cast<const BLOCK<BLK_0x26>&>( block ).GetData().m_Key;
     case 0x28: return static_cast<const BLOCK<BLK_0x28_SHAPE>&>( block ).GetData().m_Key;
     case 0x2A: return static_cast<const BLOCK<BLK_0x2A>&>( block ).GetData().m_Key;
@@ -1734,6 +1851,7 @@ static std::optional<uint32_t> GetBlockKey( const BLOCK_BASE& block )
     case 0x38: return static_cast<const BLOCK<BLK_0x38_FILM>&>( block ).GetData().m_Key;
     case 0x39: return static_cast<const BLOCK<BLK_0x39_FILM_LAYER_LIST>&>( block ).GetData().m_Key;
     case 0x3A: return static_cast<const BLOCK<TYPE_3A_FILM_LIST_NODE>&>( block ).GetData().m_Key;
+    case 0x3C: return static_cast<const BLOCK<BLK_0x3C>&>( block ).GetData().m_Key;
     default: break;
     }
 
@@ -1811,6 +1929,11 @@ void ALLEGRO::PARSER::readObjects( RAW_BOARD& aBoard )
             block = ParseBlock_0x0D_PAD( m_stream, ver );
             break;
         }
+        case 0x0E:
+        {
+            block = ParseBlock_0x0E( m_stream, ver );
+            break;
+        }
         case 0x0F:
         {
             block = ParseBlock_0x0F( m_stream, ver );
@@ -1874,6 +1997,11 @@ void ALLEGRO::PARSER::readObjects( RAW_BOARD& aBoard )
         case 0x21:
         {
             block = ParseBlock_0x21( m_stream, ver );
+            break;
+        }
+        case 0x24:
+        {
+            block = ParseBlock_0x24_RECT( m_stream, ver );
             break;
         }
         case 0x26:
@@ -1949,6 +2077,16 @@ void ALLEGRO::PARSER::readObjects( RAW_BOARD& aBoard )
         case 0x3A:
         {
             block = ParseBlock_0x3A_FILM_LIST_NODE( m_stream, ver );
+            break;
+        }
+        case 0x3B:
+        {
+            block = ParseBlock_0x3B( m_stream, ver );
+            break;
+        }
+        case 0x3C:
+        {
+            block = ParseBlock_0x3C( m_stream, ver );
             break;
         }
         default:
