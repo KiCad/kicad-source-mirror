@@ -439,6 +439,27 @@ struct BLK_0x07
 
 
 /**
+ * 0x09 objects.
+ */
+struct BLK_0x09
+{
+    uint32_t m_Key;
+
+    std::array<uint32_t, 4> m_UnknownArray;
+
+    COND_GE<FMT_VER::V_172, uint32_t> m_Unknown1;
+
+    uint32_t m_UnknownPtr1;
+    uint32_t m_UnknownPtr2;
+    uint32_t m_Unknown2;
+    uint32_t m_UnknownPtr3;
+    uint32_t m_UnknownPtr4;
+
+    COND_GE<FMT_VER::V_174, uint32_t> m_Unknown3;
+};
+
+
+/**
  * 0x0F objects.
  *
  * Exact purpose not clear yet.

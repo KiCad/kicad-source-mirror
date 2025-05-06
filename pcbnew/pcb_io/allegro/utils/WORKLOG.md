@@ -49,3 +49,4 @@ The materials used for this work are:
     * 0x1C (padstacks) and substructs - gets to 0x4e40 (next is 0x21 type)
     * 0x21 (headered block) - gets to 0xa9dc (next is 0x1D type)
     * 0x39, 0x3A - brings CutiePi up to 0x28e2c (next is 0x09)
+    * 0x09 - brings CutiePi up to 0x28e58 (next is 0x0D)
