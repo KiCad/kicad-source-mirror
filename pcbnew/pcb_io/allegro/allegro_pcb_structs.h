@@ -290,6 +290,37 @@ struct FILE_HEADER
 
 
 /**
+ * 0x05 objects represent tracks
+ *
+ * They then refer out to, say, 0x17 segments
+ */
+struct BLK_0x05_TRACK
+{
+    uint32_t m_Key;
+    uint32_t m_Unknown1;
+    uint32_t m_UnknownPtr1;
+    uint32_t m_UnknownPtr2;
+    uint32_t m_Unknown2a;
+    uint32_t m_Unknown2b;
+    uint32_t m_UnknownPtr3;
+    uint32_t m_UnknownPtr4;
+    uint32_t m_Unknown3;
+
+    uint32_t m_Ptr0x3A;
+
+    COND_LT<FMT_VER::V_172, uint32_t> m_Ptr0x3B;
+
+    COND_GE<FMT_VER::V_172, uint32_t> m_PtrA;
+    COND_GE<FMT_VER::V_172, uint32_t> m_PtrB;
+    COND_GE<FMT_VER::V_172, uint32_t> m_PtrC;
+
+    uint32_t m_FirstSegPtr;
+    uint32_t m_UnknownPtr5;
+    uint32_t m_Unknown4;
+};
+
+
+/**
  * 0x06 objects are usually the first objects in the file.
  *
  * Exact purpose not clear yet.
@@ -390,6 +421,44 @@ struct BLK_0x10
     uint32_t m_UnknownPtr4;
     uint32_t m_UnknownPtr5; // 0x0F?
     uint32_t m_PathStr;     // Presumably a pointer to a string
+};
+
+
+/**
+ * 0x16 is a segment object.
+ *
+ * It has flags, that 0x17 objects call "unknown". The two may be the same?
+ */
+struct BLK_0x16_SEGMENT
+{
+    uint32_t m_Key;
+    uint32_t m_Next;
+    uint32_t m_Parent;
+    uint32_t m_Flags;
+
+    COND_GE<FMT_VER::V_172, uint32_t> m_Unknown2;
+
+    uint32_t               m_Width;
+    std::array<int32_t, 4> m_Coords;
+};
+
+
+/**
+ * 0x17 is a segment object.
+ *
+ * Tracks (0x05) refer to segments.
+ */
+struct BLK_0x17_SEGMENT
+{
+    uint32_t m_Key;
+    uint32_t m_Next;
+    uint32_t m_Parent;
+    uint32_t m_Unknown1;
+
+    COND_GE<FMT_VER::V_172, uint32_t> m_Unknown2;
+
+    uint32_t               m_Width;
+    std::array<int32_t, 4> m_Coords;
 };
 
 
