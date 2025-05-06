@@ -489,6 +489,25 @@ struct BLK_0x10
 
 
 /**
+ * 0x15 is a segment object.
+ *
+ * As for 0x16, unsure of the distinction between 0x15 and 0x16/0x17
+ */
+struct BLK_0x15_SEGMENT
+{
+    uint32_t m_Key;
+    uint32_t m_Next;
+    uint32_t m_Parent;
+    uint32_t m_Unknown1;
+
+    COND_GE<FMT_VER::V_172, uint32_t> m_Unknown2;
+
+    uint32_t               m_Width;
+    std::array<int32_t, 4> m_Coords;
+};
+
+
+/**
  * 0x16 is a segment object.
  *
  * It has flags, that 0x17 objects call "unknown". The two may be the same?
@@ -873,6 +892,34 @@ struct BLK_0x38_FILM
     std::array<uint32_t, 7> m_UnknownArray1;
 
     COND_GE<FMT_VER::V_174, uint32_t> m_Unknown3;
+};
+
+
+/**
+ * 0x39 objects represent a film layer list.
+ */
+struct BLK_0x39_FILM_LAYER_LIST
+{
+    uint32_t m_Key;
+    uint32_t m_Parent;
+    uint32_t m_Head;
+
+    // Array of 22 uint16_t values
+    std::array<uint16_t, 22> m_X;
+};
+
+
+/**
+ * 0x3A objects represent a list of films
+ */
+struct TYPE_3A_FILM_LIST_NODE
+{
+    LAYER_INFO m_Layer;
+    uint32_t   m_Key;
+    uint32_t   m_Next;
+    uint32_t   m_Unknown;
+
+    COND_GE<FMT_VER::V_174, uint32_t> m_Unknown1;
 };
 
 

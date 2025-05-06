@@ -555,6 +555,32 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x10( FILE_STREAM& stream, FMT_VER
 }
 
 
+static std::unique_ptr<BLOCK_BASE> ParseBlock_0x15_SEGMENT( FILE_STREAM& aStream, FMT_VER aVer )
+{
+    auto block = std::make_unique<BLOCK<BLK_0x15_SEGMENT>>( 0x15, aStream.Position() );
+
+    auto& data = block->GetData();
+
+    aStream.Skip( 3 );
+
+    data.m_Key = aStream.ReadU32();
+    data.m_Next = aStream.ReadU32();
+    data.m_Parent = aStream.ReadU32();
+    data.m_Unknown1 = aStream.ReadU32();
+
+    ReadCond( aStream, aVer, data.m_Unknown2 );
+
+    data.m_Width = aStream.ReadU32();
+
+    for( size_t i = 0; i < data.m_Coords.size(); ++i )
+    {
+        data.m_Coords[i] = aStream.ReadS32();
+    }
+
+    return block;
+}
+
+
 static std::unique_ptr<BLOCK_BASE> ParseBlock_0x16_SEGMENT( FILE_STREAM& aStream, FMT_VER aVer )
 {
     auto block = std::make_unique<BLOCK<BLK_0x16_SEGMENT>>( 0x16, aStream.Position() );
@@ -996,6 +1022,46 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x38_FILM( FILE_STREAM& aStream, F
 }
 
 
+static std::unique_ptr<BLOCK_BASE> ParseBlock_0x39_FILM_LAYER_LIST( FILE_STREAM& aStream, FMT_VER aVer )
+{
+    auto block = std::make_unique<BLOCK<BLK_0x39_FILM_LAYER_LIST>>( 0x39, aStream.Position() );
+
+    auto& data = block->GetData();
+
+    aStream.Skip( 3 );
+
+    data.m_Key = aStream.ReadU32();
+    data.m_Parent = aStream.ReadU32();
+    data.m_Head = aStream.ReadU32();
+
+    for( size_t i = 0; i < data.m_X.size(); ++i )
+    {
+        data.m_X[i] = aStream.ReadU16();
+    }
+
+    return block;
+}
+
+
+static std::unique_ptr<BLOCK_BASE> ParseBlock_0x3A_FILM_LIST_NODE( FILE_STREAM& aStream, FMT_VER aVer )
+{
+    auto block = std::make_unique<BLOCK<TYPE_3A_FILM_LIST_NODE>>( 0x3A, aStream.Position() );
+
+    auto& data = block->GetData();
+
+    aStream.Skip( 3 );
+
+    data.m_Layer = ParseLayerInfo( aStream );
+    data.m_Key = aStream.ReadU32();
+    data.m_Next = aStream.ReadU32();
+    data.m_Unknown = aStream.ReadU32();
+
+    ReadCond( aStream, aVer, data.m_Unknown1 );
+
+    return block;
+}
+
+
 static std::optional<uint32_t> GetBlockKey( const BLOCK_BASE& block )
 {
     switch( block.GetBlockType() )
@@ -1007,6 +1073,7 @@ static std::optional<uint32_t> GetBlockKey( const BLOCK_BASE& block )
     case 0x07: return static_cast<const BLOCK<BLK_0x07>&>( block ).GetData().m_Key;
     case 0x0F: return static_cast<const BLOCK<BLK_0x0F>&>( block ).GetData().m_Key;
     case 0x10: return static_cast<const BLOCK<BLK_0x10>&>( block ).GetData().m_Key;
+    case 0x15: return static_cast<const BLOCK<BLK_0x15_SEGMENT>&>( block ).GetData().m_Key;
     case 0x16: return static_cast<const BLOCK<BLK_0x16_SEGMENT>&>( block ).GetData().m_Key;
     case 0x17: return static_cast<const BLOCK<BLK_0x17_SEGMENT>&>( block ).GetData().m_Key;
     case 0x1B: return static_cast<const BLOCK<BLK_0x1B_NET>&>( block ).GetData().m_Key;
@@ -1018,6 +1085,8 @@ static std::optional<uint32_t> GetBlockKey( const BLOCK_BASE& block )
     case 0x2D: return static_cast<const BLOCK<BLK_0x2D>&>( block ).GetData().m_Key;
     case 0x33: return static_cast<const BLOCK<BLK_0x33_VIA>&>( block ).GetData().m_Key;
     case 0x38: return static_cast<const BLOCK<BLK_0x38_FILM>&>( block ).GetData().m_Key;
+    case 0x39: return static_cast<const BLOCK<BLK_0x39_FILM_LAYER_LIST>&>( block ).GetData().m_Key;
+    case 0x3A: return static_cast<const BLOCK<TYPE_3A_FILM_LIST_NODE>&>( block ).GetData().m_Key;
     default: break;
     }
 
@@ -1080,6 +1149,11 @@ void ALLEGRO::PARSER::readObjects( RAW_BOARD& aBoard )
             block = ParseBlock_0x10( m_stream, ver );
             break;
         }
+        case 0x15:
+        {
+            block = ParseBlock_0x15_SEGMENT( m_stream, ver );
+            break;
+        }
         case 0x16:
         {
             block = ParseBlock_0x16_SEGMENT( m_stream, ver );
@@ -1133,6 +1207,16 @@ void ALLEGRO::PARSER::readObjects( RAW_BOARD& aBoard )
         case 0x38:
         {
             block = ParseBlock_0x38_FILM( m_stream, ver );
+            break;
+        }
+        case 0x39:
+        {
+            block = ParseBlock_0x39_FILM_LAYER_LIST( m_stream, ver );
+            break;
+        }
+        case 0x3A:
+        {
+            block = ParseBlock_0x3A_FILM_LIST_NODE( m_stream, ver );
             break;
         }
         default:
