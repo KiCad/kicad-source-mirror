@@ -563,30 +563,51 @@ types:
       - id: key
         type: u4
       - type: u4
-      - id: ptr0
+      - id: ptr_1
         type: u4
         if: _root.ver >= 0x00140400
-      - id: un4
+        doc: |
+          Points to a 0x06.
+      - id: unknown_1
         type: u4
         if: _root.ver >= 0x00140400
-      - id: un2
+        doc: |
+          Null?
+      - id: unknown_2
         type: u4
         if: _root.ver >= 0x00140400
+        doc: |
+          Null?
       - id: ptr_0x2d
         type: u4
-      - id: un5
+        doc: |
+          Points to a 0x2D
+      - id: unknown_3
         type: u4
         if: _root.ver < 0x00140400
       - id: ref_des_ref
         type: u4
-      - id: ptr2
+        doc: |
+          String ID of a reference designator.
+
+          Examples: 'R1', 'TP3'
+      - id: ptr_2
         type: u4
-      - id: ptr3
-        type: u4 # 0x03 or null
+        doc: |
+          Points to a 0x10.
+          Reverse of the 0x07 pointer in 0x10.
+      - id: ptr_3
+        type: u4
+        doc: |
+          Points to a 0x03 or null.
       - id: un3
         type: u4
-      - id: ptr4 # 0x32 or null
+        doc: |
+          Null so far.
+      - id: ptr_4
         type: u4
+        doc: |
+          Points to a 0x32 or null.
 
   type_08:
     doc: |
@@ -595,22 +616,26 @@ types:
 
       They form some kind of chain with interlinks
 
-          0x11 -> 0x11 -> 0x11 -> 0x0F
-            ^       ^       ^
-            v       v       v
-          0x08 -> 0x08 -> 0x08 -> 0x06
+          0x11 -> 0x11 -> 0x11 <-> 0x0F
+            ^       ^       ^       ^
+            v       v       v       v
+          0x08 -> 0x08 -> 0x08 <-> 0x06
+
+      From 17.2, there is a backlink too.
     seq:
       - type: u1
       - type: u2
       - id: key
         type: u4
-      - id: ptr1
+      - id: prev_ptr
         type: u4
         if: _root.ver >= 0x00140400
+        doc: |
+          Points to the previous 0x08 (i.e. the reverse of next_ptr)
       - id: str_ptr_16x
         type: u4
         if: _root.ver < 0x00140400
-      - id: ptr2
+      - id: next_ptr
         type: u4
         doc: |
           Points to 0x06 or another 0x08.
@@ -784,23 +809,35 @@ types:
       - type: u2
       - id: key
         type: u4
-      - id: ptr1
+      - id: str_unk
         type: u4
+        doc: |
+          String ID.
+          Seems to always be 'Gn': G1, G7, etc.
       - id: s
         type: str
         size: 32
         encoding: ASCII
+        doc: |
+          Footprint name and value together. In the .alg, this is COMP_DEVICE_TYPE.
+          E.g.:
+          PreAmp: R_RES2012X50N_0805_510, R_RES2012X50N_0805_1K
       - id: ptr_x06
         type: u4
+        doc:
+          Points to a 0x06.
       - id: ptr_x11
         type: u4
-        # Always null - doesn't seem so
-      - id: query
+        doc: |
+          Points to a 0x11 (a comment here said it can be null?)
+      - id: unknown_1
         type: u4
-      - id: un2
+        doc: |
+          Null?
+      - id: unknown_2
         type: u4
         if: _root.ver >= 0x00140400
-      - id: un3
+      - id: unknown_3
         type: u4
         if: _root.ver >= 0x00140900
 

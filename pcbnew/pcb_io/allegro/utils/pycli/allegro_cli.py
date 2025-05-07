@@ -152,22 +152,51 @@ class AllegroBoard:
             if hasattr(d, "unknown_1"):
                 print_v("unknown_1", d.unknown_1)
 
+        elif t == 0x07:
+            if hasattr(d, "ptr_1"):
+                print_ptr("Ptr 1", d.ptr_1)
+            print_ptr("Ptr 2", d.ptr_2)
+            print_ptr("Ptr 3", d.ptr_3)
+            print_ptr("Ptr 4", d.ptr_4)
+            print_ptr("ptr_0x2d", d.ptr_0x2d)
+
+            if hasattr(d, "unknown_1"):
+                print_v("unknown_1", d.unknown_1)
+            if hasattr(d, "unknown_2"):
+                print_v("unknown_2", d.unknown_2)
+            if hasattr(d, "unknown_3"):
+                print_v("unknown_3", d.unknown_3)
+
+            print_s("ref_des_ref", d.ref_des_ref)
+
 
         elif t == 0x08:
 
-            if hasattr(d, "ptr1"):
-                print_ptr("Ptr 1", d.ptr1)
             if hasattr(d, "str_ptr_16x"):
                 print_s("Str ptr", d.str_ptr_16x)
             if hasattr(d, "str_ptr"):
                 print_s("Str ptr", d.str_ptr)
 
-            print_ptr("Ptr 2", d.ptr2)
+            if hasattr(d, "prev_ptr"):
+                print_ptr("Prev", d.prev_ptr)
+            print_ptr("Next", d.next_ptr)
             print_ptr("Ptr 3", d.ptr3)
             print_ptr("Ptr 4", d.ptr4)
 
             if hasattr(d, "unknown_1"):
                 print_ptr("unknown_1", d.unknown_1)
+
+        elif t == 0x0f:
+            print_s("str_unk", d.str_unk)
+            print_v("s", d.s)
+            print_ptr("Ptr x06", d.ptr_x06)
+            print_ptr("Ptr x11", d.ptr_x11)
+
+            print_v("unknown_1", d.unknown_1)
+            if hasattr(d, "unknown_2"):
+                print_v("unknown_2", d.unknown_2)
+            if hasattr(d, "unknown_3"):
+                print_v("unknown_3", d.unknown_3)
 
         elif t == 0x10:
             print_ptr("Ptr 1", d.ptr1)

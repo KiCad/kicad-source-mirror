@@ -89,3 +89,10 @@ S!SOT23!PACKAGE!2N2221_SOT23_QBC846B!Q2!PIN!TOP!259 1!FIG_RECTANGLE!6!635!777!20
 ```
 
 * 0x10 unsure, something to do with 0x07, 0x12, and 0x0F. And strings like F0, F101, etc. And an 0x03, which has strings that might be schematics (symbols?). E.g. @preampl_schem.schematic1(sch_1):page1_ins20635@discrete.\r.normal\(chips).
+
+* 0x07 is something to do with a footprint:
+  * ptr -> 0x10, which has ptr -> 0x0F
+  * ptr -> 0x06 in >= V17.2 (presumably a backlik, haven't looked yet)
+  * ptr -> 0x32 = placed pad (maybe a list of them, there's a next field?)
+  * ptr -> 0x2D = something with a position
+  * has a refdes string e.g. 'R6'
