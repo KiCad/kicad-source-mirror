@@ -30,10 +30,10 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-05-06 12:52+0300\n"
-"PO-Revision-Date: 2025-05-06 09:06+0000\n"
+"PO-Revision-Date: 2025-05-07 12:01+0000\n"
 "Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
-"Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
-"source/de/>\n"
+"Language-Team: German <https://hosted.weblate.org/projects/kicad/"
+"master-source/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -43078,9 +43078,9 @@ msgid "No model defined for %s.\n"
 msgstr "Es wurde kein Footprint für das Symbol \"%s\" definiert."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1222
-#, fuzzy, c-format
+#, c-format
 msgid "No model for filename '%s'.\n"
-msgstr "Kein Modell namens \"%s\" in \"%s\"."
+msgstr "Kein Modell für Dateiname \"%s\".\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1233
 #, fuzzy, c-format
@@ -43135,20 +43135,22 @@ msgid "OCC exception creating wire: %s\n"
 msgstr ""
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1728
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Wire not done (contour points %d): OCC error %d\n"
 "z: %g; bounding box: %s\n"
-msgstr "Verbindung nicht fertiggestellt (Konturpunkte %d): OCC-Fehler %d\n"
+msgstr ""
+"Verbindung nicht fertiggestellt (Konturpunkte %d): OCC-Fehler %d\n"
+"z: %g; Begrenzungsrahmen: %s\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1742
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Wire self-interference check failed\n"
 "z: %g; bounding box: %s\n"
 msgstr ""
-"\n"
 "Prüfung auf Selbststörung der Verbindung fehlgeschlagen\n"
+"z: %g; Begrenzungsrahmen: %s\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1764
 msgid "Using non-simplified polygon.\n"
@@ -43179,11 +43181,9 @@ msgid "Subtracting holes for %s\n"
 msgstr "Erstelle Löcher für %s\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2044
-#, fuzzy, c-format
+#, c-format
 msgid "** Got problems while cutting %s net '%s' **\n"
-msgstr ""
-"\n"
-"** Probleme beim Schneiden von %s Netz \"%s\" **\n"
+msgstr "** Probleme beim Schneiden von %s Netz \"%s\" **\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2096
 msgid "shapes"
