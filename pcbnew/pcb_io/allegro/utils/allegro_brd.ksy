@@ -911,23 +911,41 @@ types:
         type: u4
       - id: net_name
         type: u4
-      - type: u4
-      - type: u4
+        doc: |
+          String ID for the net name.
+      - id: unknown_1
+        type: u4
+        doc: |
+          This seems like a mask:
+            PreAmp N13829: 0x20000020
+      - id: unknown_2
+        type: u4
         if: _root.ver >= 0x00140400
       - id: type
         type: u4
+        doc: |
+          Could be a mask:
+            PreAmp N13829: 0x202
       - id: ptr1
         type: u4
+        doc: |
+          PreAmp N13829 -> 0x04
       - id: ptr2
         type: u4
+        doc: |
+          Points to 0x23 (ratline)
       - id: path_str_ptr
         type: u4
+        doc: |
+          Points to 0x03 (not to a string ID)
       - id: ptr4
         type: u4
       - id: model_ptr
         type: u4
-      - type: u4
-      - type: u4
+      - id: unknown_3
+        type: u4
+      - id: unknown_4
+        type: u4
       - id: ptr6
         type: u4
 
@@ -943,6 +961,10 @@ types:
         type: u4
       - id: pad_str
         type: u4
+        doc: |
+          String ID for the padstack name.
+
+          Examples: 'R110_95', 'S_SQU_0-95_P_V0', 'VIA26'
       - type: u4
       - type: u4
       - id: pad_path
@@ -996,7 +1018,7 @@ types:
 
     enums:
       pad_type:
-        0x00: though_via
+        0x00: through_via # Not sure about this, PreAmp all padstacks have this
         0x01: via
         0x02: smt_pin
         0x03: slot
@@ -1027,6 +1049,9 @@ types:
         seq:
           - id: t
             type: u1
+            doc: |
+              0x00: empty?
+              0x06: ?
           - type: u1
           - type: u1
           - type: u1
@@ -1057,8 +1082,6 @@ types:
             if: _root.ver < 0x00140400 and not (total_count - 1 == index)
             doc: |
               Seems to be missing from the last entry in version < 17.2.
-
-
 
   type_1d:
     seq:

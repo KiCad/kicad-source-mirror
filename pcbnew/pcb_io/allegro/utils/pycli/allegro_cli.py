@@ -37,6 +37,7 @@ class AllegroBoard:
         self.kt_brd = kt_brd
 
         self.keys = self._build_key_map()
+        self.strs = self._build_string_map()
 
     def _build_key_map(self):
         """
@@ -51,6 +52,18 @@ class AllegroBoard:
 
         return keys
 
+    def _build_string_map(self):
+        """
+        Build a string map for the Allegro board file.
+        The string map is a dictionary that maps the keys to the strings in the
+        Allegro board file.
+        """
+        strings = {}
+        for obj in self.kt_brd.string_map.entries:
+            strings[obj.string_id] = obj.value
+
+        return strings
+
     def object(self, key: int) -> allegro_brd.AllegroBrd.BoardObject:
         """
         Get an object from the Allegro board file by key.
@@ -60,6 +73,84 @@ class AllegroBoard:
         else:
             raise KeyError(f"Key {key:#01x} not found in Allegro board file.")
 
+    def string(self, key: int) -> str:
+        """
+        Get a string from the Allegro board file by key.
+        """
+        if key in self.strs:
+            return self.strs[key]
+        else:
+            raise KeyError(f"Key {key:#01x} not found in Allegro board file.")
+
+
+    def print_obj(self, obj):
+        """
+        Print some object as best as possible.
+        """
+
+        def print_ptr(name, pkey):
+            try:
+                obj = self.object(pkey)
+            except KeyError:
+                print(f"  {name:12}: {pkey:#010x} (not found)")
+                return
+
+            print(f"  {name:12}: {pkey:#010x} ({obj.type:#04x})")
+
+        def print_v(name, value):
+            if isinstance(value, int):
+                print(f"  {name:12}: {value:#x}")
+            else:
+                print(f"  {name:12}: {value}")
+
+        def print_s(name, k : int):
+            try:
+                s = self.string(k)
+                print(f"  {name:12}: {s} (key: {k:#010x})")
+            except KeyError:
+                print(f"  {name:12}: {k:#010x} (not found)")
+                return
+
+        t = obj.type
+        d = obj.data
+
+        print(f"  Object type: {t:#04x}")
+
+        if hasattr(d, "key"):
+            print_v("Key", d.key)
+
+        if t == 0x1b: # Net
+            print_s("Net", d.net_name)
+
+            print_ptr("Path str", d.path_str_ptr)
+            print_ptr("Model str", d.model_ptr)
+            print_ptr("Ptr1", d.ptr1)
+            print_ptr("Ptr2", d.ptr2)
+            print_ptr("Ptr4", d.ptr4)
+            print_ptr("Ptr6", d.ptr6)
+
+            print_v("Type", d.type)
+
+            print_v("unknown_1", d.unknown_1)
+            if hasattr(d, "unknown_2"):
+                print_v("unknown_1", d.unknown_2)
+
+            print_v("unknown_3", d.unknown_3)
+            print_v("unknown_4", d.unknown_4)
+
+        elif t == 0x1c: # Padstack
+            print_s("Pad str", d.pad_str)
+            print_v("Pad path", d.pad_path)
+            print_v("Layer count", d.layer_count)
+            print_v("Pad type", d.pad_info.pad_type)
+
+            for i, pc in  enumerate(d.components):
+                print_v(f"  Comp {i} type", pc.t)
+                print_v(f"  Comp {i} w", pc.w)
+                print_v(f"  Comp {i} h", pc.h)
+        else:
+
+            print(f"  Object data: {d}")
 
 class IntIsh:
 
@@ -126,6 +217,9 @@ if __name__ == "__main__":
     parser.add_argument("--walk-list", "--wl", type=str,
                         help="Walk a list of objects in the Allegro board file")
 
+    parser.add_argument("--dump-obj", "--do", action="store_true",
+                        help="Dump the objects in detailed format when walking a list, etc")
+
     args = parser.parse_args()
 
     # Load the Allegro board file via Kaitai
@@ -166,6 +260,8 @@ if __name__ == "__main__":
         print(f"Object size:   {end - start:#010x}")
         # Good for looking up in the Kaitai Web IDE, for example
         print(f"Object index:  {index} (of {len(kt_brd_struct.objects)})")
+        print("")
+        brd.print_obj(obj)
 
     if args.walk_list is not None:
         # Walk a list of objects in the Allegro board file
@@ -214,6 +310,11 @@ if __name__ == "__main__":
             obj = brd.object(node_key)
             objs.append(obj)
             print(f"  Object: {obj.type:#04x}")
+
+            if args.dump_obj:
+                print("")
+                brd.print_obj(obj)
+                print("")
 
             node_key = obj.data.next
             index += 1

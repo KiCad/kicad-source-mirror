@@ -858,7 +858,7 @@ class AllegroBrd(KaitaiStruct):
 
 
     class Type1bNet(KaitaiStruct):
-        SEQ_FIELDS = ["_unnamed0", "_unnamed1", "key", "next", "net_name", "_unnamed5", "_unnamed6", "type", "ptr1", "ptr2", "path_str_ptr", "ptr4", "model_ptr", "_unnamed13", "_unnamed14", "ptr6"]
+        SEQ_FIELDS = ["_unnamed0", "_unnamed1", "key", "next", "net_name", "unknown_1", "unknown_2", "type", "ptr1", "ptr2", "path_str_ptr", "ptr4", "model_ptr", "unknown_3", "unknown_4", "ptr6"]
         def __init__(self, _io, _parent=None, _root=None):
             self._io = _io
             self._parent = _parent
@@ -882,13 +882,13 @@ class AllegroBrd(KaitaiStruct):
             self._debug['net_name']['start'] = self._io.pos()
             self.net_name = self._io.read_u4le()
             self._debug['net_name']['end'] = self._io.pos()
-            self._debug['_unnamed5']['start'] = self._io.pos()
-            self._unnamed5 = self._io.read_u4le()
-            self._debug['_unnamed5']['end'] = self._io.pos()
+            self._debug['unknown_1']['start'] = self._io.pos()
+            self.unknown_1 = self._io.read_u4le()
+            self._debug['unknown_1']['end'] = self._io.pos()
             if self._root.ver >= 1311744:
-                self._debug['_unnamed6']['start'] = self._io.pos()
-                self._unnamed6 = self._io.read_u4le()
-                self._debug['_unnamed6']['end'] = self._io.pos()
+                self._debug['unknown_2']['start'] = self._io.pos()
+                self.unknown_2 = self._io.read_u4le()
+                self._debug['unknown_2']['end'] = self._io.pos()
 
             self._debug['type']['start'] = self._io.pos()
             self.type = self._io.read_u4le()
@@ -908,12 +908,12 @@ class AllegroBrd(KaitaiStruct):
             self._debug['model_ptr']['start'] = self._io.pos()
             self.model_ptr = self._io.read_u4le()
             self._debug['model_ptr']['end'] = self._io.pos()
-            self._debug['_unnamed13']['start'] = self._io.pos()
-            self._unnamed13 = self._io.read_u4le()
-            self._debug['_unnamed13']['end'] = self._io.pos()
-            self._debug['_unnamed14']['start'] = self._io.pos()
-            self._unnamed14 = self._io.read_u4le()
-            self._debug['_unnamed14']['end'] = self._io.pos()
+            self._debug['unknown_3']['start'] = self._io.pos()
+            self.unknown_3 = self._io.read_u4le()
+            self._debug['unknown_3']['end'] = self._io.pos()
+            self._debug['unknown_4']['start'] = self._io.pos()
+            self.unknown_4 = self._io.read_u4le()
+            self._debug['unknown_4']['end'] = self._io.pos()
             self._debug['ptr6']['start'] = self._io.pos()
             self.ptr6 = self._io.read_u4le()
             self._debug['ptr6']['end'] = self._io.pos()
@@ -2184,7 +2184,7 @@ class AllegroBrd(KaitaiStruct):
     class Type1cPadStack(KaitaiStruct):
 
         class PadType(Enum):
-            though_via = 0
+            through_via = 0
             via = 1
             smt_pin = 2
             slot = 3
