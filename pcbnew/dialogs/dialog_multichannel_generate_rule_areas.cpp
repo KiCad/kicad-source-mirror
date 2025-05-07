@@ -241,7 +241,7 @@ bool DIALOG_MULTICHANNEL_GENERATE_RULE_AREAS::TransferDataFromWindow()
     raData->m_replaceExisting = m_cbReplaceExisting->GetValue();
 
     // Don't allow grouping for groups
-    if( m_sourceNotebook->GetNotebookPage( 2 ) )
+    if( m_sourceNotebook->GetSelection() == 2 )
         raData->m_options.m_groupItems = false;
     else
         raData->m_options.m_groupItems = m_cbGroupItems->GetValue();
