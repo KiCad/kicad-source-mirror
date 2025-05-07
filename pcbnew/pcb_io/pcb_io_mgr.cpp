@@ -36,6 +36,7 @@
 #include <pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.h>
 #include <pcb_io/kicad_legacy/pcb_io_kicad_legacy.h>
 #include <pcb_io/pcad/pcb_io_pcad.h>
+#include <pcb_io/allegro/pcb_io_allegro.h>
 #include <pcb_io/altium/pcb_io_altium_circuit_maker.h>
 #include <pcb_io/altium/pcb_io_altium_circuit_studio.h>
 #include <pcb_io/altium/pcb_io_altium_designer.h>
@@ -280,6 +281,11 @@ static PCB_IO_MGR::REGISTER_PLUGIN registerLegacyPlugin(
         []() -> PCB_IO* { return new PCB_IO_KICAD_LEGACY; } );
 
 // Keep non-KiCad plugins in alphabetical order
+
+static PCB_IO_MGR::REGISTER_PLUGIN registerAllegroPlugin(
+    PCB_IO_MGR::ALLEGRO,
+    wxT( "Allegro" ),
+    []() -> PCB_IO* { return new PCB_IO_ALLEGRO; } );
 
 static PCB_IO_MGR::REGISTER_PLUGIN registerAltiumCircuitMakerPlugin(
         PCB_IO_MGR::ALTIUM_CIRCUIT_MAKER,

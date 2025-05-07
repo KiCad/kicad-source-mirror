@@ -107,3 +107,5 @@ S!SOT23!PACKAGE!2N2221_SOT23_QBC846B!Q2!PIN!TOP!259 1!FIG_RECTANGLE!6!635!777!20
 * Add a decoding walker for the x2B list
 
 * Tables are 0x2C and seem to refer to some kind of group/list in 0x37 which then refer to graphics.
+
+* Started Allegro PCB_IO plugin as we have enough details to start an attempt at importing.

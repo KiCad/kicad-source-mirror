@@ -57,6 +57,7 @@ public:
         PCB_FILE_UNKNOWN = 0,   ///< 0 is not a legal menu id on Mac
         KICAD_SEXP,             ///< S-expression Pcbnew file format.
         LEGACY,                 ///< Legacy Pcbnew file formats prior to s-expression.
+        ALLEGRO,
         ALTIUM_CIRCUIT_MAKER,
         ALTIUM_CIRCUIT_STUDIO,
         ALTIUM_DESIGNER,

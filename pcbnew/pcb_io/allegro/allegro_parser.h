@@ -8,7 +8,11 @@ namespace ALLEGRO
 
 /**
  * Class that parses a single FILE_STREAM into a RAW_BOARD,
- * and handles any state involved in parsing.
+ * and handles any state involved in that parsing
+ *
+ * This only handles converting rawfile stream data into
+ * structs that represent a near-verbatim representation of the
+ * data, with a few small conversions and conveniences.
  */
 class PARSER
 {

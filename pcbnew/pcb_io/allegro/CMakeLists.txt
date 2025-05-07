@@ -4,6 +4,7 @@
 set( ALLEGRO2PCBNEW_SRCS
     allegro_builder.cpp
     allegro_parser.cpp
+    pcb_io_allegro.cpp
 )
 
 add_library( allegro2pcbnew STATIC ${ALLEGRO2PCBNEW_SRCS} )
