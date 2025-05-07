@@ -44,17 +44,25 @@ seq:
     type: linked_list
   - id: ll_x1b
     type: linked_list
+    doc: |
+      List of nets in the board.
   - id: ll_x1c
     type: linked_list
+    doc: |
+      List of padstacks in the board.
   - id: ll_x24_x28
     type: linked_list
+    doc: |
+      List of rectangles and shapes.
   - id: ll_unused_1
     type: linked_list
   - id: ll_x2b
     type: linked_list
   - id: ll_x03_x30
     type: linked_list
-  - id: ll_x0a_2
+    doc: |
+      List of text items in the board.
+  - id: ll_x0a
     type: linked_list
   - id: ll_x1d_x1e_x1f
     type: linked_list
@@ -72,14 +80,21 @@ seq:
     type: u4
   - id: x35_end
     type: u4
-  - id: ll_unknown_4
+  - id: ll_x36
     type: linked_list
-  - id: ll_unknown_5
+  - id: ll_unused_4
     type: linked_list
-  - id: ll_unknown_6
+    doc: |
+      This appears to be empty in all files checked.
+  - id: ll_unused_5
     type: linked_list
-  - id: ll_unknown_7
+    doc: |
+      This appears to be empty in all files checked.
+  - id: ll_x0a_2
     type: linked_list
+    doc: |
+      This appears to be empty in some files (PreAmp, CutiePi)
+      Exists in BeagleBone-AI. Presumably related to DRC.
   - type: u4
   - id: allegro_version
     type: str

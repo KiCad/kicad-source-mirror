@@ -75,4 +75,6 @@ The materials used for this work are:
 * Added a CLI tool based on Kaitai and Python, as it's a little awkward to use the C++ version experimentally now we will start wiring it into a rela parser
 
 * Start to look at the linked lists in the header. These seem to be the key to the high-level structure of the file.
-  * ll_unknown_4 seems to be all 0x38 (film), for example
+  * what was `ll_unknown_4` seems to be all 0x36 (film), for example
+  * ll_unknown_5: seems to have a key that doesn't exist in the file (PreAmp, CutiePi), but is 0x0A (DRC?) in the BeagleBone AI board.
+  * ll_unknown_6/7: seems to be null always.

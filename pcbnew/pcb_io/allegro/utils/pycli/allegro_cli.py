@@ -76,6 +76,39 @@ class IntIsh:
         return self.value
 
 
+def print_obj_counts_by_type(objs):
+    """
+    Print the object counts by type.
+    """
+    counts = {}
+
+    for obj in objs:
+        obj_type = obj.type
+        if obj_type not in counts:
+            counts[obj_type] = 0
+        counts[obj_type] += 1
+
+    # Print the counts in a table
+    table = []
+    for obj_type, count in counts.items():
+        table.append([f"{obj_type:#04x}", count])
+
+    # sort on type
+    table.sort(key=lambda x: x[0])
+
+    total = sum(counts.values())
+    if total > 0:
+        table.append(tabulate.SEPARATING_LINE)
+    table.append(["Total", total])
+
+    print(
+        tabulate.tabulate(
+            table,
+            headers=["Type", "Count"],
+        )
+    )
+
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Allegro file CLI explorer")
     parser.add_argument("brd", type=Path,
@@ -116,28 +149,7 @@ if __name__ == "__main__":
 
         objs = kt_brd_struct.objects
 
-        counts = {}
-
-        for obj in objs:
-            obj_type = obj.type
-            if obj_type not in counts:
-                counts[obj_type] = 0
-            counts[obj_type] += 1
-
-        # Print the counts in a table
-        table = []
-        for obj_type, count in counts.items():
-            table.append([f"{obj_type:#04x}", count])
-
-        # sort on type
-        table.sort(key=lambda x: x[0])
-
-        print(
-            tabulate.tabulate(
-                table,
-                headers=["Type", "Count"],
-            )
-        )
+        print_obj_counts_by_type(objs)
 
     if args.key is not None:
         obj = brd.object(int(args.key))
@@ -170,19 +182,17 @@ if __name__ == "__main__":
             "unused_1": kt_brd_struct.ll_unused_1,
             "x2b": kt_brd_struct.ll_x2b,
             "x03_x30": kt_brd_struct.ll_x03_x30,
-            "x0a_2": kt_brd_struct.ll_x0a_2,
+            "x0a": kt_brd_struct.ll_x0a,
             "x1d_x1e_x1f": kt_brd_struct.ll_x1d_x1e_x1f,
             "unused_2": kt_brd_struct.ll_unused_2,
             "x38": kt_brd_struct.ll_x38,
             "x2c": kt_brd_struct.ll_x2c,
             "x0c": kt_brd_struct.ll_x0c,
             "unused_3": kt_brd_struct.ll_unused_3,
-            "unknown_4": kt_brd_struct.ll_unknown_4,
-            "unknown_5": kt_brd_struct.ll_unknown_5,
-            "unknown_6": kt_brd_struct.ll_unknown_6,
-            "unknown_7": kt_brd_struct.ll_unknown_7,
-
-
+            "x36": kt_brd_struct.ll_x36,
+            "unused_4": kt_brd_struct.ll_unused_4,
+            "unused_5": kt_brd_struct.ll_unused_5,
+            "x0a_2": kt_brd_struct.ll_x0a_2,
         }
 
         try:
@@ -196,10 +206,17 @@ if __name__ == "__main__":
         node_key = ll.head
         index = 0
 
+        objs = []
+
         while(node_key and node_key != ll.tail):
             print(f"Entry {index}, Key: {node_key:#01x}")
 
             obj = brd.object(node_key)
+            objs.append(obj)
             print(f"  Object: {obj.type:#04x}")
 
             node_key = obj.data.next
+            index += 1
+
+        print("")
+        print_obj_counts_by_type(objs)
