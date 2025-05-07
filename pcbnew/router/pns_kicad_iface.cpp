@@ -306,10 +306,15 @@ static bool isEdge( const PNS::ITEM* aItem )
 
 bool PNS_PCBNEW_RULE_RESOLVER::IsDrilledHole( const PNS::ITEM* aItem )
 {
-    if( isHole( aItem ) && aItem->Parent() )
-        return aItem->Parent()->HasDrilledHole();
+    if( !isHole( aItem ) )
+        return false;
 
-    return false;
+    BOARD_ITEM* parent = aItem->Parent();
+
+    if( !parent && aItem->ParentPadVia() )
+        parent = aItem->ParentPadVia()->Parent();
+
+    return parent && parent->HasDrilledHole();
 }
 
 
