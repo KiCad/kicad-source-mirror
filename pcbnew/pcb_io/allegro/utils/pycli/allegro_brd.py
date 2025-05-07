@@ -422,6 +422,24 @@ class AllegroBrd(KaitaiStruct):
             self._debug['coords']['end'] = self._io.pos()
 
 
+    class Coords(KaitaiStruct):
+        SEQ_FIELDS = ["x", "y"]
+        def __init__(self, _io, _parent=None, _root=None):
+            self._io = _io
+            self._parent = _parent
+            self._root = _root if _root else self
+            self._debug = collections.defaultdict(dict)
+            self._read()
+
+        def _read(self):
+            self._debug['x']['start'] = self._io.pos()
+            self.x = self._io.read_s4le()
+            self._debug['x']['end'] = self._io.pos()
+            self._debug['y']['start'] = self._io.pos()
+            self.y = self._io.read_s4le()
+            self._debug['y']['end'] = self._io.pos()
+
+
     class Type08(KaitaiStruct):
         SEQ_FIELDS = ["_unnamed0", "_unnamed1", "key", "ptr1", "str_ptr_16x", "ptr2", "str_ptr", "ptr3", "un1", "ptr4"]
         def __init__(self, _io, _parent=None, _root=None):
@@ -2506,7 +2524,7 @@ class AllegroBrd(KaitaiStruct):
 
 
     class Type03(KaitaiStruct):
-        SEQ_FIELDS = ["_unnamed0", "_unnamed1", "key", "next", "un1", "subtype", "unhdr", "size", "un2", "data"]
+        SEQ_FIELDS = ["_unnamed0", "_unnamed1", "key", "next", "unknown_1", "subtype", "unknown_hdr", "size", "unknown_2", "data"]
         def __init__(self, _io, _parent=None, _root=None):
             self._io = _io
             self._parent = _parent
@@ -2528,23 +2546,23 @@ class AllegroBrd(KaitaiStruct):
             self.next = self._io.read_u4le()
             self._debug['next']['end'] = self._io.pos()
             if self._root.ver >= 1311744:
-                self._debug['un1']['start'] = self._io.pos()
-                self.un1 = self._io.read_u4le()
-                self._debug['un1']['end'] = self._io.pos()
+                self._debug['unknown_1']['start'] = self._io.pos()
+                self.unknown_1 = self._io.read_u4le()
+                self._debug['unknown_1']['end'] = self._io.pos()
 
             self._debug['subtype']['start'] = self._io.pos()
             self.subtype = self._io.read_u1()
             self._debug['subtype']['end'] = self._io.pos()
-            self._debug['unhdr']['start'] = self._io.pos()
-            self.unhdr = self._io.read_u1()
-            self._debug['unhdr']['end'] = self._io.pos()
+            self._debug['unknown_hdr']['start'] = self._io.pos()
+            self.unknown_hdr = self._io.read_u1()
+            self._debug['unknown_hdr']['end'] = self._io.pos()
             self._debug['size']['start'] = self._io.pos()
             self.size = self._io.read_u2le()
             self._debug['size']['end'] = self._io.pos()
             if self._root.ver >= 1311744:
-                self._debug['un2']['start'] = self._io.pos()
-                self.un2 = self._io.read_u4le()
-                self._debug['un2']['end'] = self._io.pos()
+                self._debug['unknown_2']['start'] = self._io.pos()
+                self.unknown_2 = self._io.read_u4le()
+                self._debug['unknown_2']['end'] = self._io.pos()
 
             if self.subtype != 101:
                 self._debug['data']['start'] = self._io.pos()
@@ -3421,7 +3439,7 @@ class AllegroBrd(KaitaiStruct):
 
 
     class Type24Rect(KaitaiStruct):
-        SEQ_FIELDS = ["t", "layer", "key", "next", "ptr1", "un1", "un2", "coords", "ptr2", "un"]
+        SEQ_FIELDS = ["t", "layer", "key", "next", "ptr1", "un1", "un2", "coords_0", "coords_1", "ptr2", "un"]
         def __init__(self, _io, _parent=None, _root=None):
             self._io = _io
             self._parent = _parent
@@ -3453,16 +3471,12 @@ class AllegroBrd(KaitaiStruct):
                 self.un2 = self._io.read_u4le()
                 self._debug['un2']['end'] = self._io.pos()
 
-            self._debug['coords']['start'] = self._io.pos()
-            self.coords = []
-            for i in range(4):
-                if not 'arr' in self._debug['coords']:
-                    self._debug['coords']['arr'] = []
-                self._debug['coords']['arr'].append({'start': self._io.pos()})
-                self.coords.append(self._io.read_s4le())
-                self._debug['coords']['arr'][i]['end'] = self._io.pos()
-
-            self._debug['coords']['end'] = self._io.pos()
+            self._debug['coords_0']['start'] = self._io.pos()
+            self.coords_0 = AllegroBrd.Coords(self._io, self, self._root)
+            self._debug['coords_0']['end'] = self._io.pos()
+            self._debug['coords_1']['start'] = self._io.pos()
+            self.coords_1 = AllegroBrd.Coords(self._io, self, self._root)
+            self._debug['coords_1']['end'] = self._io.pos()
             self._debug['ptr2']['start'] = self._io.pos()
             self.ptr2 = self._io.read_u4le()
             self._debug['ptr2']['end'] = self._io.pos()
@@ -4147,7 +4161,7 @@ class AllegroBrd(KaitaiStruct):
 
 
     class Type28Shape(KaitaiStruct):
-        SEQ_FIELDS = ["type", "layer", "key", "next", "ptr1", "un2", "un5", "ptr2", "ptr3", "ptr4", "first_segment_ptr", "un3", "un4", "ptr7", "ptr6", "ptr7_16x", "coords"]
+        SEQ_FIELDS = ["type", "layer", "key", "next", "ptr1", "unknown_1", "unknown_2", "unknown_3", "ptr2", "ptr3", "ptr4", "first_segment_ptr", "unknown_4", "unknown_5", "ptr5", "ptr6", "ptr7_16x", "coords_0", "coords_1"]
         def __init__(self, _io, _parent=None, _root=None):
             self._io = _io
             self._parent = _parent
@@ -4171,20 +4185,18 @@ class AllegroBrd(KaitaiStruct):
             self._debug['ptr1']['start'] = self._io.pos()
             self.ptr1 = self._io.read_u4le()
             self._debug['ptr1']['end'] = self._io.pos()
-            self._debug['un2']['start'] = self._io.pos()
-            self.un2 = self._io.read_u4le()
-            self._debug['un2']['end'] = self._io.pos()
+            self._debug['unknown_1']['start'] = self._io.pos()
+            self.unknown_1 = self._io.read_u4le()
+            self._debug['unknown_1']['end'] = self._io.pos()
             if self._root.ver >= 1311744:
-                self._debug['un5']['start'] = self._io.pos()
-                self.un5 = []
-                for i in range(2):
-                    if not 'arr' in self._debug['un5']:
-                        self._debug['un5']['arr'] = []
-                    self._debug['un5']['arr'].append({'start': self._io.pos()})
-                    self.un5.append(self._io.read_u4le())
-                    self._debug['un5']['arr'][i]['end'] = self._io.pos()
+                self._debug['unknown_2']['start'] = self._io.pos()
+                self.unknown_2 = self._io.read_u4le()
+                self._debug['unknown_2']['end'] = self._io.pos()
 
-                self._debug['un5']['end'] = self._io.pos()
+            if self._root.ver >= 1311744:
+                self._debug['unknown_3']['start'] = self._io.pos()
+                self.unknown_3 = self._io.read_u4le()
+                self._debug['unknown_3']['end'] = self._io.pos()
 
             self._debug['ptr2']['start'] = self._io.pos()
             self.ptr2 = self._io.read_u4le()
@@ -4198,16 +4210,16 @@ class AllegroBrd(KaitaiStruct):
             self._debug['first_segment_ptr']['start'] = self._io.pos()
             self.first_segment_ptr = self._io.read_u4le()
             self._debug['first_segment_ptr']['end'] = self._io.pos()
-            self._debug['un3']['start'] = self._io.pos()
-            self.un3 = self._io.read_u4le()
-            self._debug['un3']['end'] = self._io.pos()
-            self._debug['un4']['start'] = self._io.pos()
-            self.un4 = self._io.read_u4le()
-            self._debug['un4']['end'] = self._io.pos()
+            self._debug['unknown_4']['start'] = self._io.pos()
+            self.unknown_4 = self._io.read_u4le()
+            self._debug['unknown_4']['end'] = self._io.pos()
+            self._debug['unknown_5']['start'] = self._io.pos()
+            self.unknown_5 = self._io.read_u4le()
+            self._debug['unknown_5']['end'] = self._io.pos()
             if self._root.ver >= 1311744:
-                self._debug['ptr7']['start'] = self._io.pos()
-                self.ptr7 = self._io.read_u4le()
-                self._debug['ptr7']['end'] = self._io.pos()
+                self._debug['ptr5']['start'] = self._io.pos()
+                self.ptr5 = self._io.read_u4le()
+                self._debug['ptr5']['end'] = self._io.pos()
 
             self._debug['ptr6']['start'] = self._io.pos()
             self.ptr6 = self._io.read_u4le()
@@ -4217,16 +4229,12 @@ class AllegroBrd(KaitaiStruct):
                 self.ptr7_16x = self._io.read_u4le()
                 self._debug['ptr7_16x']['end'] = self._io.pos()
 
-            self._debug['coords']['start'] = self._io.pos()
-            self.coords = []
-            for i in range(4):
-                if not 'arr' in self._debug['coords']:
-                    self._debug['coords']['arr'] = []
-                self._debug['coords']['arr'].append({'start': self._io.pos()})
-                self.coords.append(self._io.read_s4le())
-                self._debug['coords']['arr'][i]['end'] = self._io.pos()
-
-            self._debug['coords']['end'] = self._io.pos()
+            self._debug['coords_0']['start'] = self._io.pos()
+            self.coords_0 = AllegroBrd.Coords(self._io, self, self._root)
+            self._debug['coords_0']['end'] = self._io.pos()
+            self._debug['coords_1']['start'] = self._io.pos()
+            self.coords_1 = AllegroBrd.Coords(self._io, self, self._root)
+            self._debug['coords_1']['end'] = self._io.pos()
 
 
     class Type35(KaitaiStruct):

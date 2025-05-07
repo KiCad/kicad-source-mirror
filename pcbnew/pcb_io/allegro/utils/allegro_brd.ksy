@@ -34,6 +34,7 @@ seq:
     repeat-expr: 9
   - id: ll_x04
     type: linked_list
+    doc: Often empty.
   - id: ll_x06
     type: linked_list
   - id: ll_x0c_2
@@ -244,6 +245,13 @@ types:
       repeat-until: _io.pos % 4 == 0
       if: _io.pos % 4 != 0
 
+  coords:
+    seq:
+      - id: 'x'
+        type: s4
+      - id: 'y'
+        type: s4
+
   board_object:
     doc: |
       The basic object types that make up most of a .brd file.
@@ -375,16 +383,16 @@ types:
         type: u4
       - id: next
         type: u4
-      - id: un1
+      - id: unknown_1
         type: u4
         if: _root.ver >= 0x00140400
       - id: subtype
         type: u1
-      - id: unhdr
+      - id: unknown_hdr
         type: u1
       - id: size
         type: u2
-      - id: un2
+      - id: unknown_2
         type: u4
         if: _root.ver >= 0x00140400
       - id: data
@@ -1077,6 +1085,8 @@ types:
               Points to 0x0F (sometimes, possibly when t = 0x06)
 
               If t is 0x16, points to 0x28 (shape)?
+
+              Can also be 0x00
           - id: z2
             type: u4
             if: _root.ver < 0x00140400 and not (total_count - 1 == index)
@@ -1253,15 +1263,18 @@ types:
         type: u4
       - id: ptr1
         type: u4
+        doc: |
+          In PreAmp, all rectangles set this to 0x09a272d4, which is the tail of the x24_x28
+          linked list.
       - id: un1
         type: u4
       - id: un2
         type: u4
         if: _root.ver >= 0x00140400
-      - id: coords
-        type: s4
-        repeat: expr
-        repeat-expr: 4
+      - id: coords_0
+        type: coords
+      - id: coords_1
+        type: coords
       - id: ptr2
         type: u4
       - id: un
@@ -1307,37 +1320,51 @@ types:
         type: u4
       - id: ptr1
         type: u4
-      - id: un2
+        doc: As for 0x24, points to the tail of the x24_x28 linked list.
+      - id: unknown_1
         type: u4
-      - id: un5
+        doc: Always 0x00 so far.
+      - id: unknown_2
         type: u4
-        repeat: expr
-        repeat-expr: 2
+        if: _root.ver >= 0x00140400
+      - id: unknown_3
+        type: u4
         if: _root.ver >= 0x00140400
       - id: ptr2
         type: u4
+        doc: Always 0x00 so far.
       - id: ptr3
         type: u4
+        doc: Always 0x00 so far.
       - id: ptr4
         type: u4
+        doc: Always 0x00 so far.
       - id: first_segment_ptr
         type: u4
-      - id: un3
+        doc: points to 0x16 or 0x17 segments
+      - id: unknown_4
         type: u4
-      - id: un4
+      - id: unknown_5
         type: u4
-      - id: ptr7
+      - id: ptr5
         type: u4
         if: _root.ver >= 0x00140400
       - id: ptr6
         type: u4
+        doc: |
+          Points to 0x03, which is of a a text subtype.
+
+          Examples:
+            CutiePi: 0x28 k=0xc0c0558 -> 0x03 k=0x0c0c07d0, subtype=0x68 = 'CLIP_1'
       - id: ptr7_16x
         type: u4
         if: _root.ver < 0x00140400
-      - id: coords
-        type: s4
-        repeat: expr
-        repeat-expr: 4
+        doc: Always 0x00 so far.
+      # Suspect this is a bounding box
+      - id: coords_0
+        type: coords
+      - id: coords_1
+        type: coords
 
   # Only in .dra files.
   # Looks like the pin number

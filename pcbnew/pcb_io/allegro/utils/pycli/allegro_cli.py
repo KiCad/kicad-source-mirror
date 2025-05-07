@@ -83,43 +83,64 @@ class AllegroBoard:
             raise KeyError(f"Key {key:#01x} not found in Allegro board file.")
 
 
-    def print_obj(self, obj):
+    def print_obj(self, obj, indent="  "):
         """
         Print some object as best as possible.
         """
+
+        def prnt(s):
+            print(indent + s)
 
         def print_ptr(name, pkey):
             try:
                 obj = self.object(pkey)
             except KeyError:
-                print(f"  {name:12}: {pkey:#010x} (not found)")
+                prnt(f"{name:12}: {pkey:#010x} (not found)")
                 return
 
-            print(f"  {name:12}: {pkey:#010x} ({obj.type:#04x})")
+            prnt(f"{name:12}: {pkey:#010x} ({obj.type:#04x})")
 
-        def print_v(name, value):
-            if isinstance(value, int):
-                print(f"  {name:12}: {value:#x}")
+        def print_v(name, value, hex: bool=True):
+            if isinstance(value, int) and hex:
+                prnt(f"{name:12}: {value:#x}")
             else:
-                print(f"  {name:12}: {value}")
+                prnt(f"{name:12}: {value}")
 
         def print_s(name, k : int):
             try:
                 s = self.string(k)
-                print(f"  {name:12}: {s} (key: {k:#010x})")
+                prnt(f"{name:12}: {s} (key: {k:#010x})")
             except KeyError:
-                print(f"  {name:12}: {k:#010x} (not found)")
+                prnt(f"{name:12}: {k:#010x} (not found)")
                 return
+
+        def print_coords(name, coords):
+            prnt(f"{name:12}: ({coords.x}, {coords.y})")
 
         t = obj.type
         d = obj.data
 
-        print(f"  Object type: {t:#04x}")
+        print_v(f"Object type", t)
 
         if hasattr(d, "key"):
             print_v("Key", d.key)
 
-        if t == 0x1b: # Net
+        if t == 0x03:
+            print_v("subtype", d.subtype)
+            print_v("unknown_hdr", d.unknown_hdr)
+            print_v("size", d.size)
+
+            if hasattr(d, "unknown_1"):
+                print_v("unknown_1", d.unknown_1)
+            if hasattr(d, "unknown_2"):
+                print_v("unknown_2", d.unknown_2)
+
+            if d.subtype in [0x68, 0x6B, 0x6D, 0x6E, 0x6F, 0x71, 0x73, 0x78]:
+                bytes = bytearray(d.data.chars)
+                s = bytes.decode("utf-8", errors="ignore")
+                print_v("string data", s)
+
+        elif t == 0x1b: # Net
             print_s("Net", d.net_name)
 
             print_ptr("Path str", d.path_str_ptr)
@@ -145,9 +166,46 @@ class AllegroBoard:
             print_v("Pad type", d.pad_info.pad_type)
 
             for i, pc in  enumerate(d.components):
-                print_v(f"  Comp {i} type", pc.t)
-                print_v(f"  Comp {i} w", pc.w)
-                print_v(f"  Comp {i} h", pc.h)
+                prnt(f"- Component {i}")
+
+                print_v(f"  type", pc.t)
+
+                if pc.t == 0x00:
+                    continue
+
+                print_v(f"  w", pc.w, hex=False)
+                print_v(f"  h", pc.h, hex=False)
+                print_v(f"  x3", pc.h, hex=False)
+                print_v(f"  x4", pc.h, hex=False)
+                print_ptr("  str_ptr", pc.str_ptr)
+
+        elif t == 0x24: # Rectangle
+            print_coords("pt0", d.coords_0)
+            print_coords("pt1", d.coords_1)
+            print_ptr("ptr1", d.ptr1)
+
+        elif t == 0x28: # Polygon?
+            print_coords("pt0", d.coords_0)
+            print_coords("pt1", d.coords_1)
+            print_ptr("ptr1", d.ptr1)
+            print_ptr("ptr2", d.ptr2)
+            print_ptr("ptr3", d.ptr3)
+            print_ptr("ptr4", d.ptr4)
+            if hasattr(d, "ptr5"):
+                print_ptr("ptr4", d.ptr5)
+            print_ptr("ptr6", d.ptr6)
+            if hasattr(d, "ptr7_16x"):
+                print_ptr("ptr7_16x", d.ptr7_16x)
+
+            print_ptr("first_seg", d.first_segment_ptr)
+
+            print_v("unknown_1", d.unknown_1)
+            if hasattr(d, "unknown_2"):
+                print_v("unknown_2", d.unknown_2)
+            if hasattr(d, "unknown_3"):
+                print_v("unknown_3", d.unknown_3)
+            print_v("unknown_4", d.unknown_4)
+            print_v("unknown_5", d.unknown_5)
         else:
 
             print(f"  Object data: {d}")
