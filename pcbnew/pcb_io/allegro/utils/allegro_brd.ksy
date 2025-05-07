@@ -1563,34 +1563,37 @@ types:
         type: u4
       - id: fp_str_ref
         type: u4
-      - type: u4
-      - id: corrds
+        doc: |
+          E.g. RES2012X50N_0805
+      - id: unknown_1
         type: u4
-        repeat: expr
-        repeat-expr: 4
+      - id: coords0
+        type: coords
+      - id: coords1
+        type: coords
       - id: next
         type: u4
-      - id: ptr2
+      - id: first_inst_ptr
         type: u4
-      - id: ptr3
+      - id: ptr_2
         type: u4
-      - id: ptr4
+      - id: ptr_3
         type: u4
-      - id: ptr5
+      - id: ptr_4
         type: u4
       - id: str_ptr1
         type: u4
-      - id: ptr6
+      - id: ptr_5
         type: u4
-      - id: ptr7
+      - id: ptr_6
         type: u4
-      - id: ptr8
+      - id: ptr_7
         type: u4
 
-      - id: un2
+      - id: unknown_2
         type: u4
         if: _root.ver >= 0x00130C00
-      - id: un3
+      - id: unknown_3
         type: u4
         if: _root.ver >= 0x0140400
 
@@ -1602,20 +1605,38 @@ types:
         type: u4
       - id: next
         type: u4
-      - type: u4
+      - id: unknown_1
+        type: u4
         if: _root.ver >= 0x00140400
-        repeat: expr
-        repeat-expr: 3
-      - id: string_ptr
+      - id: unknown_2
         type: u4
-      - type: u4
+        if: _root.ver >= 0x00140400
+      - id: unknown_3
+        type: u4
+        if: _root.ver >= 0x00140400
+      - id: subclass_str
+        type: u4
+        doc: |
+          String ID for the table SUBCLASS output in the .alg from AllegroGeometryView.txt
+          E.g.:
+            PreAmp: XSECTION_CHART, DRILL_LEGEND_1_2
+
+          Can be null.
+      - id: unknown_4
+        type: u4
         if: _root.ver < 0x00140400
-      - id: ptr1
+      - id: ptr_1
         type: u4
-      - id: ptr2
+        doc: |
+          Points to a 0x37 or 0x3c
+      - id: ptr_2
         type: u4
-      - id: ptr3
+        doc: |
+          Null?
+      - id: ptr_3
         type: u4
+        doc: |
+          Null?
       - id: flags
         type: b32
 
@@ -1627,37 +1648,67 @@ types:
         type: u4
       - id: next
         type: u4
-      - id: un4
+        doc: |
+          Points to a chain of 0x2d and finally 0x2b
+      - id: unknown_1
         type: u4
         if: _root.ver >= 0x0140400
       - id: inst_ref_16x
         type: u4
         if: _root.ver < 0x0140400
-      - type: u2
-      - type: u2
+        doc: |
+          Points to a 0x07
+      - id: unknown_2
+        type: u2
+        doc:
+          E.g. 0x0020
+      - id: unknown_3
+        type: u2
+        doc: |
+          E.g. 0x2000
       - type: u4
         if: _root.ver >= 0x0140400
       - id: flags
         type: b32
+        doc: |
+          E.g. 0x20000000
       - id: rotation
         type: u4
-      - id: coord_x
-        type: s4
-      - id: coord_y
-        type: s4
+        doc: |
+          In millidegrees: 90000 = 90 degrees
+      - id: coords
+        type: coords
       - id: inst_ref
         type: u4
         if: _root.ver >= 0x0140400
-      - id: ptr1
+      - id: ptr_1
         type: u4
+        doc: |
+          Points to a 0x14
       - id: first_pad_ptr
         type: u4
-      - id: ptr3
+        doc: |
+          Points to a 0x32
+      - id: ptr_2
         type: u4
-      - id: ptr4
+        doc: |
+          Points to a 0x30
+      - id: ptr_3
         type: u4
-        repeat: expr
-        repeat-expr: 4
+        doc: |
+          Null?
+      - id: ptr_4
+        type: u4
+        doc: |
+          Points to a 0x28 (shape? - courtyard?)
+      - id: ptr_5
+        type: u4
+        doc: |
+          Null?
+      - id: ptr_6
+        type: u4
+        doc: |
+          Null?
       # - id: group_assignment_ptr
       #   type: u4
 
@@ -2082,21 +2133,30 @@ types:
         type: u2
       - id: key
         type: u4
-      - id: ptr1
+      - id: ptr_1
         type: u4
-      - id: un2
+        doc: |
+          Points back to 0x2c (table)
+      - id: unknown_1
         type: u4
       - id: capacity
         type: u4
       - id: count
         type: u4
-      - id: un3
+      - id: unknown_2
         type: u4
       - id: ptrs
         type: u4
         repeat: expr
-        repeat-expr: 100
-      - id: un4
+        repeat-expr: capacity
+        doc: |
+          List of:
+            - 0x14 - segment
+            - 0x30 - text
+            - 0x0c - ?
+            - 0x0e - ?
+            - 0x24 - rectangle
+      - id: unknown_3
         type: u4
         if: _root.ver >= 0x00140900
 
@@ -2196,7 +2256,7 @@ types:
         type: u2
       - id: key
         type: u4
-      - id: un
+      - id: unknown_1
         type: u4
         if: _root.ver >= 0x00140900
       - id: num_entries
@@ -2205,3 +2265,9 @@ types:
         type: u4
         repeat: expr
         repeat-expr: num_entries
+        doc: |
+          Entries can be:
+            - null
+            - 0x32
+            - 0x1b
+            - 0x24

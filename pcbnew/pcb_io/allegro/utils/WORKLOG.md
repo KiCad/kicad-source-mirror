@@ -96,3 +96,14 @@ S!SOT23!PACKAGE!2N2221_SOT23_QBC846B!Q2!PIN!TOP!259 1!FIG_RECTANGLE!6!635!777!20
   * ptr -> 0x32 = placed pad (maybe a list of them, there's a next field?)
   * ptr -> 0x2D = something with a position
   * has a refdes string e.g. 'R6'
+
+* 0x2D looks like a real footprint instance - it has a position and:
+  * 0x07 (KSY calls this inst_ref)
+  * 0x14 (list of segments, 0x14 has a next)
+  * 0x30 (text? refdes?)
+  * 0x28 (shape - courtyard?)
+  * 0x2D/0x2B - a chain of other instances ending in 0x2B
+
+* Add a decoding walker for the x2B list
+
+* Tables are 0x2C and seem to refer to some kind of group/list in 0x37 which then refer to graphics.

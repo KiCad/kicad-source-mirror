@@ -281,6 +281,95 @@ class AllegroBoard:
                 print_v("unknown_3", d.unknown_3)
             print_v("unknown_4", d.unknown_4)
             print_v("unknown_5", d.unknown_5)
+
+        elif t == 0x2b:
+            print_ptr("next", d.next)
+            print_s("fp_str", d.fp_str_ref)
+
+            print_ptr("first_inst_ptr", d.first_inst_ptr)
+            print_ptr("ptr_2", d.ptr_2)
+            print_ptr("ptr_3", d.ptr_3)
+            print_ptr("ptr_4", d.ptr_4)
+            print_ptr("str_ptr1", d.str_ptr1)
+            print_ptr("ptr_5", d.ptr_5)
+            print_ptr("ptr_6", d.ptr_6)
+            print_ptr("ptr_7", d.ptr_7)
+
+            print_coords("coords0", d.coords0)
+            print_coords("coords1", d.coords1)
+
+            print_v("unknown_1", d.unknown_1)
+
+        elif t == 0x2c:
+            print_ptr("next", d.next)
+            print_v("flags", d.flags)
+            print_ptr("ptr_1", d.ptr_1)
+            print_ptr("ptr_2", d.ptr_2)
+            print_ptr("ptr_3", d.ptr_3)
+            print_s("subclass_str", d.subclass_str)
+
+            if hasattr(d, "unknown_1"):
+                print_v("unknown_1", d.unknown_1)
+            if hasattr(d, "unknown_2"):
+                print_v("unknown_2", d.unknown_2)
+            if hasattr(d, "unknown_3"):
+                print_v("unknown_3", d.unknown_3)
+            print_v("unknown_4", d.unknown_4)
+
+        elif t == 0x2d:
+            print_ptr("next", d.next)
+            print_ptr("first_pad_ptr", d.first_pad_ptr)
+            print_ptr("ptr_1", d.ptr_1)
+            print_ptr("ptr_2", d.ptr_2)
+            print_ptr("ptr_3", d.ptr_3)
+            print_ptr("ptr_4", d.ptr_4)
+            print_ptr("ptr_5", d.ptr_5)
+            print_ptr("ptr_6", d.ptr_6)
+
+            if hasattr(d, "unknown_1"):
+                print_v("unknown_1", d.unknown_1)
+
+            print_v("unknown_2", d.unknown_2)
+            print_v("unknown_3", d.unknown_3)
+            print_v("flags", d.flags)
+            print_v(f"rotation", d.rotation / 1000., hex=False)
+            print_coords("coords", d.coords)
+
+            if hasattr(d, "inst_ref_16x"):
+                print_ptr("inst_ref", d.inst_ref_16x)
+            if hasattr(d, "inst_ref"):
+                print_ptr("inst_ref", d.inst_ref)
+
+        elif t == 0x37:
+
+            print_ptr("ptr_1", d.ptr_1)
+
+            print_v("capacity", d.capacity)
+            print_v("count", d.count)
+
+            print_v("unknown_1", d.unknown_1)
+
+            if hasattr(d, "unknown_2"):
+                print_v("unknown_2", d.unknown_2)
+            if hasattr(d, "unknown_3"):
+                print_v("unknown_3", d.unknown_3)
+
+            for i in range(d.count):
+                entry = d.ptrs[i]
+                print_ptr(f"entry {i}", entry)
+
+        elif t == 0x3c:
+
+            if hasattr(d, "unknown_1"):
+                print_v("unknown_1", d.unknown_1)
+
+            num_entries = d.num_entries
+            print_v("num_entries", num_entries)
+
+            for i in range(num_entries):
+                entry = d.entries[i]
+                print_ptr(f"entry {i}", entry)
+
         else:
 
             print(f"  Object data: {d}")
@@ -333,6 +422,25 @@ def print_obj_counts_by_type(objs):
     )
 
 
+def walk_list(brd: AllegroBoard, ll):
+    """
+    Generate a list of objects from a linked list
+
+    yield index, node_key, object
+    """
+
+    node_key = ll.head
+    index = 0
+
+    # Walk the list until we reach the end or the next is null
+    while(node_key and node_key != ll.tail):
+        obj = brd.object(node_key)
+        yield index, node_key, obj
+
+        node_key = obj.data.next
+        index += 1
+
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Allegro file CLI explorer")
     parser.add_argument("brd", type=Path,
@@ -358,6 +466,9 @@ if __name__ == "__main__":
 
     parser.add_argument("--dump-by-type", "--dt", type=IntIsh,
                         help="Dump all the objects of the given type.")
+
+    parser.add_argument("--footprints", "--fp", nargs="*", default=None,
+                        help="Dump footprint info for the given ref designators, or all if none given")
 
     args = parser.parse_args()
 
@@ -462,25 +573,48 @@ if __name__ == "__main__":
                 f"Valid options are: {', '.join(lists.keys())}"
             )
 
-        node_key = ll.head
-        index = 0
-
         objs = []
 
-        while(node_key and node_key != ll.tail):
-            print(f"Entry {index}, Key: {node_key:#01x}")
+        for index, key, obj in walk_list(brd, ll):
+            print(f"Entry {index}, Key: {key:#01x}")
 
-            obj = brd.object(node_key)
             objs.append(obj)
-            print(f"  Object: {obj.type:#04x}")
 
             if args.dump_obj:
                 print("")
                 brd.print_obj(obj)
                 print("")
 
-            node_key = obj.data.next
-            index += 1
-
         print("")
         print_obj_counts_by_type(objs)
+
+    if args.footprints is not None:
+
+        for index, key, obj  in walk_list(brd, kt_brd_struct.ll_x2b):
+            print(f"FP index: {index}, Key: {key:#01x}")
+
+            fp_ref = brd.string(obj.data.fp_str_ref)
+            print(f"  Ref: {fp_ref}")
+
+            next = obj.data.first_inst_ptr
+
+            if next == 0:
+                print("  No instances")
+                continue
+
+            inst_num = 0
+            while next and next != key:
+                inst_obj = brd.object(next)
+
+                print(f"  Instance {inst_num}: {next:#010x} ({inst_obj.type:#04x})")
+
+                if hasattr(inst_obj.data, "inst_ref_16x"):
+                    inst_ref = inst_obj.data.inst_ref_16x
+                else:
+                    inst_ref = inst_obj.data.inst_ref
+
+                print(f"    Instance 0x07: {inst_ref:#010x}")
+                print(f"    First pad: {inst_obj.data.first_pad_ptr:#010x}")
+
+                next = inst_obj.data.next
+                inst_num += 1
