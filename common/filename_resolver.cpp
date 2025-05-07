@@ -257,6 +257,11 @@ wxString FILENAME_RESOLVER::ResolvePath( const wxString& aFileName, const wxStri
     // first attempt to use the name as specified:
     wxString tname = aFileName;
 
+    // Swap separators for non-Windows, in case a Windows path is being passed
+#ifndef __WIN32__
+    tname.Replace( "\\", "/" );
+#endif
+
     // Note: variable expansion must preferably be performed via a threadsafe wrapper for the
     // getenv() system call. If we allow the wxFileName::Normalize() routine to perform expansion
     // then we will have a race condition since wxWidgets does not assure a threadsafe wrapper
