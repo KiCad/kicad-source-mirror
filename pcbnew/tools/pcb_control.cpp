@@ -2080,7 +2080,7 @@ int PCB_CONTROL::UpdateMessagePanel( const TOOL_EVENT& aEvent )
             accumulateArea =
                     [&]( EDA_ITEM* aItem )
                     {
-                        if( aItem->Type() == PCB_FOOTPRINT_T )
+                        if( aItem->Type() == PCB_FOOTPRINT_T || aItem->Type() == PCB_MARKER_T )
                         {
                             areaValid = false;
                             return;
