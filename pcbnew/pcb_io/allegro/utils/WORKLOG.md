@@ -73,3 +73,6 @@ The materials used for this work are:
 #### 2025-05-07
 
 * Added a CLI tool based on Kaitai and Python, as it's a little awkward to use the C++ version experimentally now we will start wiring it into a rela parser
+
+* Start to look at the linked lists in the header. These seem to be the key to the high-level structure of the file.
+  * ll_unknown_4 seems to be all 0x38 (film), for example

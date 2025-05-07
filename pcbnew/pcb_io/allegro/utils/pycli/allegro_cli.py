@@ -159,10 +159,30 @@ if __name__ == "__main__":
         # Walk a list of objects in the Allegro board file
 
         lists = {
-            "x24_x28": kt_brd_struct.ll_x24_x28,
             "x04": kt_brd_struct.ll_x04,
             "x06": kt_brd_struct.ll_x06,
             "x0c_2": kt_brd_struct.ll_x0c_2,
+            "x0e_x28": kt_brd_struct.ll_x0e_x28,
+            "x14": kt_brd_struct.ll_x14,
+            "x1b": kt_brd_struct.ll_x1b,
+            "x1c": kt_brd_struct.ll_x1c,
+            "x24_x28": kt_brd_struct.ll_x24_x28,
+            "unused_1": kt_brd_struct.ll_unused_1,
+            "x2b": kt_brd_struct.ll_x2b,
+            "x03_x30": kt_brd_struct.ll_x03_x30,
+            "x0a_2": kt_brd_struct.ll_x0a_2,
+            "x1d_x1e_x1f": kt_brd_struct.ll_x1d_x1e_x1f,
+            "unused_2": kt_brd_struct.ll_unused_2,
+            "x38": kt_brd_struct.ll_x38,
+            "x2c": kt_brd_struct.ll_x2c,
+            "x0c": kt_brd_struct.ll_x0c,
+            "unused_3": kt_brd_struct.ll_unused_3,
+            "unknown_4": kt_brd_struct.ll_unknown_4,
+            "unknown_5": kt_brd_struct.ll_unknown_5,
+            "unknown_6": kt_brd_struct.ll_unknown_6,
+            "unknown_7": kt_brd_struct.ll_unknown_7,
+
+
         }
 
         try:

@@ -72,9 +72,14 @@ seq:
     type: u4
   - id: x35_end
     type: u4
-  - type: linked_list
-    repeat: expr
-    repeat-expr: 4
+  - id: ll_unknown_4
+    type: linked_list
+  - id: ll_unknown_5
+    type: linked_list
+  - id: ll_unknown_6
+    type: linked_list
+  - id: ll_unknown_7
+    type: linked_list
   - type: u4
   - id: allegro_version
     type: str
