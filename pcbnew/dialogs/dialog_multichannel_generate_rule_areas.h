@@ -45,11 +45,14 @@ public:
     bool TransferDataFromWindow() override;
     bool TransferDataToWindow() override;
 
+    void OnNotebookPageChanged( wxNotebookEvent& event ) override;
+
 private:
     MULTICHANNEL_TOOL* m_parentTool;
 
     wxGrid* m_sheetGrid;
     wxGrid* m_componentClassGrid;
+    wxGrid* m_groupGrid;
 };
 
 #endif

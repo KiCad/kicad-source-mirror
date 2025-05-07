@@ -107,6 +107,9 @@ bool MULTICHANNEL_TOOL::identifyComponentsInRuleArea( ZONE*                 aRul
         ruleText = wxT( "A.hasComponentClass('" ) + aRuleArea->GetRuleAreaPlacementSource()
                    + wxT( "')" );
         break;
+    case RULE_AREA_PLACEMENT_SOURCE_TYPE::GROUP:
+        ruleText = wxT( "A.memberOfGroup('" ) + aRuleArea->GetRuleAreaPlacementSource() + wxT( "')" );
+        break;
     }
 
     auto ok = compiler.Compile( ruleText, &ucode, &preflightCtx );
@@ -256,6 +259,27 @@ MULTICHANNEL_TOOL::queryComponentsInComponentClass( const wxString& aComponentCl
 }
 
 
+std::set<FOOTPRINT*>
+MULTICHANNEL_TOOL::queryComponentsInGroup( const wxString& aGroupName ) const
+{
+    std::set<FOOTPRINT*> rv;
+
+    for( auto& group : board()->Groups() )
+    {
+        if( group->GetName() == aGroupName )
+        {
+            for( EDA_ITEM* item : group->GetItems() )
+            {
+                if( item->Type() == PCB_FOOTPRINT_T )
+                    rv.insert( static_cast<FOOTPRINT*>( item ) );
+            }
+        }
+    }
+
+    return rv;
+}
+
+
 const SHAPE_LINE_CHAIN MULTICHANNEL_TOOL::buildRAOutline( std::set<FOOTPRINT*>& aFootprints,
                                                           int                   aMargin )
 {
@@ -283,6 +307,7 @@ void MULTICHANNEL_TOOL::QuerySheetsAndComponentClasses()
     using PathAndName = std::pair<wxString, wxString>;
     std::set<PathAndName> uniqueSheets;
     std::set<wxString>    uniqueComponentClasses;
+    std::set<wxString>    uniqueGroups;
 
     m_areas.m_areas.clear();
 
@@ -294,6 +319,9 @@ void MULTICHANNEL_TOOL::QuerySheetsAndComponentClasses()
 
         for( const COMPONENT_CLASS* singleClass : compClass->GetConstituentClasses() )
             uniqueComponentClasses.insert( singleClass->GetName() );
+
+        if( fp->GetParentGroup() && !fp->GetParentGroup()->GetName().IsEmpty() )
+            uniqueGroups.insert( fp->GetParentGroup()->GetName() );
     }
 
     for( const PathAndName& sheet : uniqueSheets )
@@ -322,6 +350,20 @@ void MULTICHANNEL_TOOL::QuerySheetsAndComponentClasses()
         m_areas.m_areas.push_back( ent );
 
         wxLogTrace( traceMultichannelTool, wxT( "found component class '%s' s %d\n" ),
+                    ent.m_componentClass, static_cast<int>( m_areas.m_areas.size() ) );
+    }
+
+    for( const wxString& groupName : uniqueGroups )
+    {
+        RULE_AREA ent;
+
+        ent.m_sourceType = RULE_AREA_PLACEMENT_SOURCE_TYPE::GROUP;
+        ent.m_generateEnabled = false;
+        ent.m_groupName = groupName;
+        ent.m_components = queryComponentsInGroup( ent.m_groupName );
+        m_areas.m_areas.push_back( ent );
+
+        wxLogTrace( traceMultichannelTool, wxT( "found group '%s' s %d\n" ),
                     ent.m_componentClass, static_cast<int>( m_areas.m_areas.size() ) );
     }
 }
@@ -1094,12 +1136,20 @@ int MULTICHANNEL_TOOL::AutogenerateRuleAreas( const TOOL_EVENT& aEvent )
                             wxT( "Placement rule area for sheet '%s' already exists as '%s'\n" ),
                             ra.m_sheetPath, zone->GetZoneName() );
                 }
-                else
+                else if( zone->GetRuleAreaPlacementSourceType()
+                        == RULE_AREA_PLACEMENT_SOURCE_TYPE::COMPONENT_CLASS )
                 {
                     wxLogTrace( traceMultichannelTool,
                                 wxT( "Placement rule area for component class '%s' already exists "
                                      "as '%s'\n" ),
                                 ra.m_componentClass, zone->GetZoneName() );
+                }
+                else
+                {
+                    wxLogTrace( traceMultichannelTool,
+                                wxT( "Placement rule area for group '%s' already exists "
+                                     "as '%s'\n" ),
+                                ra.m_groupName, zone->GetZoneName() );
                 }
 
                 ra.m_oldArea = zone;
@@ -1130,10 +1180,14 @@ int MULTICHANNEL_TOOL::AutogenerateRuleAreas( const TOOL_EVENT& aEvent )
             newZone->SetZoneName(
                     wxString::Format( wxT( "auto-placement-area-%s" ), ra.m_sheetPath ) );
         }
-        else
+        else if( ra.m_sourceType == RULE_AREA_PLACEMENT_SOURCE_TYPE::COMPONENT_CLASS )
         {
             newZone->SetZoneName(
                     wxString::Format( wxT( "auto-placement-area-%s" ), ra.m_componentClass ) );
+        }
+        else
+        {
+            newZone->SetZoneName( wxString::Format( wxT( "auto-placement-area-%s" ), ra.m_groupName ) );
         }
 
         wxLogTrace( traceMultichannelTool, wxT( "Generated rule area '%s' (%d components)\n" ),
@@ -1153,11 +1207,16 @@ int MULTICHANNEL_TOOL::AutogenerateRuleAreas( const TOOL_EVENT& aEvent )
             newZone->SetRuleAreaPlacementSourceType( RULE_AREA_PLACEMENT_SOURCE_TYPE::SHEETNAME );
             newZone->SetRuleAreaPlacementSource( ra.m_sheetPath );
         }
-        else
+        else if( ra.m_sourceType == RULE_AREA_PLACEMENT_SOURCE_TYPE::COMPONENT_CLASS )
         {
             newZone->SetRuleAreaPlacementSourceType(
                     RULE_AREA_PLACEMENT_SOURCE_TYPE::COMPONENT_CLASS );
             newZone->SetRuleAreaPlacementSource( ra.m_componentClass );
+        }
+        else
+        {
+            newZone->SetRuleAreaPlacementSourceType( RULE_AREA_PLACEMENT_SOURCE_TYPE::GROUP );
+            newZone->SetRuleAreaPlacementSource( ra.m_groupName );
         }
 
         newZone->AddPolygon( raOutline );

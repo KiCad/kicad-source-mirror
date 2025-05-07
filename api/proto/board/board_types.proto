@@ -609,6 +609,7 @@ enum PlacementRuleSourceType
   PRST_UNKNOWN = 0;
   PRST_SHEET_NAME = 1;
   PRST_COMPONENT_CLASS = 2;
+  PRST_GROUP = 3;
 }
 
 message RuleAreaSettings

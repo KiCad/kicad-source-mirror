@@ -74,7 +74,8 @@ enum class ISLAND_REMOVAL_MODE
 enum class RULE_AREA_PLACEMENT_SOURCE_TYPE
 {
     SHEETNAME = 0,
-    COMPONENT_CLASS
+    COMPONENT_CLASS,
+    GROUP
 };
 
 /**
@@ -201,7 +202,7 @@ public:
     /**
      * Function CopyFrom
      * copy settings from a different ZONE_SETTINGS object
-     * 
+     *
      * @param aOther the other ZONE_SETTINGS
      * @param aCopyFull if false: some parameters are not copied.
      * This option is used specifically to copy zone settings from

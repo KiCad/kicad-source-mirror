@@ -17,9 +17,9 @@ PANEL_RULE_AREA_PROPERTIES_PLACEMENT_BASE::PANEL_RULE_AREA_PROPERTIES_PLACEMENT_
 	wxBoxSizer* bMarginsSizer;
 	bMarginsSizer = new wxBoxSizer( wxVERTICAL );
 
-	m_DisabedlRb = new wxRadioButton( this, wxID_ANY, _("No placement"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_DisabedlRb->SetValue( true );
-	bMarginsSizer->Add( m_DisabedlRb, 0, wxALL, 5 );
+	m_DisabledRb = new wxRadioButton( this, wxID_ANY, _("No placement"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_DisabledRb->SetValue( true );
+	bMarginsSizer->Add( m_DisabledRb, 0, wxALL, 5 );
 
 	m_SheetRb = new wxRadioButton( this, wxID_ANY, _("Place items from sheet:"), wxDefaultPosition, wxDefaultSize, 0 );
 	bMarginsSizer->Add( m_SheetRb, 0, wxALL, 5 );
@@ -37,7 +37,16 @@ PANEL_RULE_AREA_PROPERTIES_PLACEMENT_BASE::PANEL_RULE_AREA_PROPERTIES_PLACEMENT_
 	bMarginsSizer->Add( m_componentClassCombo, 0, wxLEFT|wxEXPAND, 25 );
 
 
-	bMarginsSizer->Add( 0, 5, 0, 0, 5 );
+	bMarginsSizer->Add( 0, 15, 0, 0, 5 );
+
+	m_GroupRb = new wxRadioButton( this, wxID_ANY, _("Place items in group:"), wxDefaultPosition, wxDefaultSize, 0 );
+	bMarginsSizer->Add( m_GroupRb, 0, wxALL, 5 );
+
+	m_groupCombo = new wxComboBox( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_READONLY );
+	bMarginsSizer->Add( m_groupCombo, 0, wxEXPAND|wxLEFT, 25 );
+
+
+	bMarginsSizer->Add( 0, 5, 1, wxEXPAND, 5 );
 
 
 	bMainSizer->Add( bMarginsSizer, 1, wxEXPAND|wxBOTTOM|wxRIGHT, 5 );

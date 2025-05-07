@@ -32,11 +32,13 @@ class PANEL_RULE_AREA_PROPERTIES_PLACEMENT_BASE : public wxPanel
 	protected:
 
 	public:
-		wxRadioButton* m_DisabedlRb;
+		wxRadioButton* m_DisabledRb;
 		wxRadioButton* m_SheetRb;
 		wxComboBox* m_sheetCombo;
 		wxRadioButton* m_ComponentsRb;
 		wxComboBox* m_componentClassCombo;
+		wxRadioButton* m_GroupRb;
+		wxComboBox* m_groupCombo;
 
 		PANEL_RULE_AREA_PROPERTIES_PLACEMENT_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
 

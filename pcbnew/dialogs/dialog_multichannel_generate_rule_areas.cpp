@@ -89,17 +89,45 @@ DIALOG_MULTICHANNEL_GENERATE_RULE_AREAS::DIALOG_MULTICHANNEL_GENERATE_RULE_AREAS
     m_componentClassGrid->AutoSizeColumn( 1 );
     m_sourceNotebook->AddPage( m_componentClassGrid, _( "Component Classes" ) );
 
+    // Generate the group source grid
+    m_groupGrid = new WX_GRID( m_sourceNotebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
+    m_groupGrid->CreateGrid( 0, 2 );
+    m_groupGrid->EnableEditing( false );
+    m_groupGrid->EnableGridLines( true );
+    m_groupGrid->EnableDragGridSize( false );
+    m_groupGrid->SetMargins( 0, 0 );
+    m_groupGrid->SetColSize( 0, 100 );
+    m_groupGrid->SetColSize( 1, 300 );
+    m_groupGrid->AutoSizeColumns();
+    m_groupGrid->EnableDragColMove( true );
+    m_groupGrid->EnableDragColSize( true );
+    m_groupGrid->SetColLabelAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
+    m_groupGrid->AutoSizeRows();
+    m_groupGrid->EnableDragRowSize( true );
+    m_groupGrid->SetRowLabelSize( wxGRID_AUTOSIZE );
+    m_groupGrid->SetRowLabelAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
+    m_groupGrid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_TOP );
+    m_groupGrid->EnableEditing( true );
+    m_groupGrid->HideRowLabels();
+    m_groupGrid->SetColLabelValue( 0, _( "Generate" ) );
+    m_groupGrid->SetColLabelValue( 1, _( "Name" ) );
+    m_groupGrid->AutoSizeColumn( 1 );
+    m_sourceNotebook->AddPage( m_groupGrid, _( "Groups" ) );
+
     RULE_AREAS_DATA* raData = m_parentTool->GetData();
 
     int sheetRowIdx = 0;
     int componentClassRowIdx = 0;
+    int groupIdx = 0;
 
     for( RULE_AREA& ruleArea : raData->m_areas )
     {
         if( ruleArea.m_sourceType == RULE_AREA_PLACEMENT_SOURCE_TYPE::SHEETNAME )
             sheetRowIdx++;
-        else
+        else if( ruleArea.m_sourceType == RULE_AREA_PLACEMENT_SOURCE_TYPE::COMPONENT_CLASS )
             componentClassRowIdx++;
+        else if( ruleArea.m_sourceType == RULE_AREA_PLACEMENT_SOURCE_TYPE::GROUP )
+            groupIdx++;
     }
 
     if( sheetRowIdx > 0 )
@@ -108,8 +136,12 @@ DIALOG_MULTICHANNEL_GENERATE_RULE_AREAS::DIALOG_MULTICHANNEL_GENERATE_RULE_AREAS
     if( componentClassRowIdx > 0 )
         m_componentClassGrid->AppendRows( componentClassRowIdx );
 
+    if( groupIdx > 0 )
+        m_groupGrid->AppendRows( groupIdx );
+
     sheetRowIdx = 0;
     componentClassRowIdx = 0;
+    groupIdx = 0;
 
     for( RULE_AREA& ruleArea : raData->m_areas )
     {
@@ -123,7 +155,7 @@ DIALOG_MULTICHANNEL_GENERATE_RULE_AREAS::DIALOG_MULTICHANNEL_GENERATE_RULE_AREAS
                                        ruleArea.m_generateEnabled ? wxT( "1" ) : wxT( "" ) );
             sheetRowIdx++;
         }
-        else
+        else if( ruleArea.m_sourceType == RULE_AREA_PLACEMENT_SOURCE_TYPE::COMPONENT_CLASS )
         {
             m_componentClassGrid->SetCellValue( componentClassRowIdx, 1,
                                                 ruleArea.m_componentClass );
@@ -135,19 +167,34 @@ DIALOG_MULTICHANNEL_GENERATE_RULE_AREAS::DIALOG_MULTICHANNEL_GENERATE_RULE_AREAS
                     componentClassRowIdx, 0, ruleArea.m_generateEnabled ? wxT( "1" ) : wxT( "" ) );
             componentClassRowIdx++;
         }
+        else
+        {
+            m_groupGrid->SetCellValue( groupIdx, 1, ruleArea.m_groupName );
+            m_groupGrid->SetCellRenderer( groupIdx, 0, new wxGridCellBoolRenderer );
+            m_groupGrid->SetCellEditor( groupIdx, 0, new wxGridCellBoolEditor );
+            m_groupGrid->SetCellValue( groupIdx, 0, ruleArea.m_generateEnabled ? wxT( "1" ) : wxT( "" ) );
+            groupIdx++;
+        }
     }
 
     m_sheetGrid->SetMaxSize( wxSize( -1, 800 ) );
     m_sheetGrid->Fit();
     m_componentClassGrid->SetMaxSize( wxSize( -1, 800 ) );
     m_componentClassGrid->Fit();
+    m_groupGrid->SetMaxSize( wxSize( -1, 800 ) );
+    m_groupGrid->Fit();
     m_cbGroupItems->SetValue( raData->m_options.m_groupItems );
     m_cbReplaceExisting->SetValue( raData->m_replaceExisting );
 
     Layout();
 
-    if( m_sheetGrid->GetNumberRows() == 1 && m_componentClassGrid->GetNumberRows() > 0 )
-        m_sourceNotebook->SetSelection( 1 );
+    if( m_sheetGrid->GetNumberRows() == 1 )
+    {
+        if( m_componentClassGrid->GetNumberRows() > 0 )
+            m_sourceNotebook->SetSelection( 1 );
+        else if( m_groupGrid->GetNumberRows() > 0 )
+            m_sourceNotebook->SetSelection( 2 );
+    }
 
     SetupStandardButtons();
     finishDialogSettings();
@@ -166,6 +213,7 @@ bool DIALOG_MULTICHANNEL_GENERATE_RULE_AREAS::TransferDataFromWindow()
 
     int sheetRowIdx = 0;
     int componentClassRowIdx = 0;
+    int groupIdx = 0;
 
     for( size_t i = 0; i < raData->m_areas.size(); i++ )
     {
@@ -176,17 +224,27 @@ bool DIALOG_MULTICHANNEL_GENERATE_RULE_AREAS::TransferDataFromWindow()
             enabled = m_sheetGrid->GetCellValue( sheetRowIdx, 0 );
             sheetRowIdx++;
         }
-        else
+        else if( raData->m_areas[i].m_sourceType == RULE_AREA_PLACEMENT_SOURCE_TYPE::COMPONENT_CLASS )
         {
             enabled = m_componentClassGrid->GetCellValue( componentClassRowIdx, 0 );
             componentClassRowIdx++;
+        }
+        else
+        {
+            enabled = m_groupGrid->GetCellValue( groupIdx, 0 );
+            groupIdx++;
         }
 
         raData->m_areas[i].m_generateEnabled = ( !enabled.CompareTo( wxT( "1" ) ) ) ? true : false;
     }
 
     raData->m_replaceExisting = m_cbReplaceExisting->GetValue();
-    raData->m_options.m_groupItems = m_cbGroupItems->GetValue();
+
+    // Don't allow grouping for groups
+    if( m_sourceNotebook->GetNotebookPage( 2 ) )
+        raData->m_options.m_groupItems = false;
+    else
+        raData->m_options.m_groupItems = m_cbGroupItems->GetValue();
 
     return true;
 }
@@ -199,3 +257,11 @@ bool DIALOG_MULTICHANNEL_GENERATE_RULE_AREAS::TransferDataToWindow()
     return true;
 }
 
+
+void DIALOG_MULTICHANNEL_GENERATE_RULE_AREAS::OnNotebookPageChanged( wxNotebookEvent& event )
+{
+    if( event.GetSelection() == 2 )
+        m_cbGroupItems->Disable();
+    else
+        m_cbGroupItems->Enable();
+}

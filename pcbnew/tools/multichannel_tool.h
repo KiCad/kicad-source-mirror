@@ -85,6 +85,8 @@ struct RULE_AREA
     wxString                         m_sheetName;
     wxString                         m_ruleName;
     wxString                         m_componentClass;
+    KIID                             m_group;
+    wxString                         m_groupName;
     VECTOR2I                         m_center;
 };
 
@@ -135,6 +137,7 @@ private:
     std::set<FOOTPRINT*>   queryComponentsInSheet( wxString aSheetName ) const;
     std::set<FOOTPRINT*>
                queryComponentsInComponentClass( const wxString& aComponentClassName ) const;
+    std::set<FOOTPRINT*> queryComponentsInGroup( const wxString& aGroupName ) const;
     RULE_AREA* findRAByName( const wxString& aName );
     bool       resolveConnectionTopology( RULE_AREA* aRefArea, RULE_AREA* aTargetArea,
                                           RULE_AREA_COMPAT_DATA& aMatches );

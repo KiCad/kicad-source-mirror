@@ -27,6 +27,7 @@
 #include <kiface_base.h>
 #include <confirm.h>
 #include <board.h>
+#include <eda_group.h>
 #include <footprint.h>
 #include <pcb_edit_frame.h>
 #include <pcbnew_settings.h>
@@ -59,6 +60,7 @@ private:
     void OnLayerSelection( wxDataViewEvent& event ) override;
     void OnSheetNameClicked( wxCommandEvent& event );
     void OnComponentClassClicked( wxCommandEvent& event );
+    void OnGroupClicked( wxCommandEvent& event );
 
 private:
     BOARD*            m_board;
@@ -136,6 +138,10 @@ DIALOG_RULE_AREA_PROPERTIES::DIALOG_RULE_AREA_PROPERTIES( PCB_BASE_FRAME*   aPar
             wxEVT_CHECKBOX,
             wxCommandEventHandler( DIALOG_RULE_AREA_PROPERTIES::OnComponentClassClicked ), nullptr,
             this );
+    m_placementProperties->m_GroupRb->Connect(
+            wxEVT_CHECKBOX,
+            wxCommandEventHandler( DIALOG_RULE_AREA_PROPERTIES::OnGroupClicked ), nullptr,
+            this );
 
     if( aConvertSettings )
     {
@@ -200,6 +206,10 @@ DIALOG_RULE_AREA_PROPERTIES::~DIALOG_RULE_AREA_PROPERTIES()
             wxEVT_CHECKBOX,
             wxCommandEventHandler( DIALOG_RULE_AREA_PROPERTIES::OnComponentClassClicked ), nullptr,
             this );
+    m_placementProperties->m_GroupRb->Disconnect(
+            wxEVT_CHECKBOX,
+            wxCommandEventHandler( DIALOG_RULE_AREA_PROPERTIES::OnGroupClicked ), nullptr,
+            this );
 }
 
 
@@ -212,6 +222,12 @@ void DIALOG_RULE_AREA_PROPERTIES::OnSheetNameClicked( wxCommandEvent& event )
 void DIALOG_RULE_AREA_PROPERTIES::OnComponentClassClicked( wxCommandEvent& event )
 {
     m_lastPlacementSourceType = RULE_AREA_PLACEMENT_SOURCE_TYPE::COMPONENT_CLASS;
+}
+
+
+void DIALOG_RULE_AREA_PROPERTIES::OnGroupClicked( wxCommandEvent& event )
+{
+    m_lastPlacementSourceType = RULE_AREA_PLACEMENT_SOURCE_TYPE::GROUP;
 }
 
 
@@ -235,12 +251,15 @@ bool DIALOG_RULE_AREA_PROPERTIES::TransferDataToWindow()
     m_keepoutProperties->m_cbCopperPourCtrl->SetValue( m_zonesettings.GetDoNotAllowZoneFills() );
 
     // Init placement parameters:
-    m_placementProperties->m_DisabedlRb->SetValue( true );
+    m_placementProperties->m_DisabledRb->SetValue( true );
     m_placementProperties->m_SheetRb->SetValue( false );
     m_placementProperties->m_sheetCombo->Clear();
 
     m_placementProperties->m_ComponentsRb->SetValue( false );
     m_placementProperties->m_componentClassCombo->Clear();
+
+    m_placementProperties->m_GroupRb->SetValue( false );
+    m_placementProperties->m_groupCombo->Clear();
 
     wxString curSourceName = m_zonesettings.GetRuleAreaPlacementSource();
 
@@ -259,17 +278,29 @@ bool DIALOG_RULE_AREA_PROPERTIES::TransferDataToWindow()
         if( !classNames.empty() )
             m_placementProperties->m_componentClassCombo->Select( 0 );
 
-        // Fetch sheet names
+        // Fetch sheet names and groups
         std::set<wxString> sheetNames;
+        std::set<wxString> groupNames;
 
         for( FOOTPRINT* fp : m_board->Footprints() )
+        {
             sheetNames.insert( fp->GetSheetname() );
+
+            if( fp->GetParentGroup() && !fp->GetParentGroup()->GetName().IsEmpty() )
+                groupNames.insert( fp->GetParentGroup()->GetName() );
+        }
 
         for( const wxString& sourceName : sheetNames )
             m_placementProperties->m_sheetCombo->Append( sourceName );
 
+        for( const wxString& groupName : groupNames )
+            m_placementProperties->m_groupCombo->Append( groupName );
+
         if( !sheetNames.empty() )
             m_placementProperties->m_sheetCombo->Select( 0 );
+
+        if( !groupNames.empty() )
+            m_placementProperties->m_groupCombo->Select( 0 );
     }
 
     auto setupCurrentSourceSelection = [&]( wxComboBox* cb )
@@ -297,7 +328,8 @@ bool DIALOG_RULE_AREA_PROPERTIES::TransferDataToWindow()
         m_originalPlacementSourceType = RULE_AREA_PLACEMENT_SOURCE_TYPE::SHEETNAME;
         m_lastPlacementSourceType = RULE_AREA_PLACEMENT_SOURCE_TYPE::SHEETNAME;
     }
-    else
+    else if( m_zonesettings.GetRuleAreaPlacementSourceType()
+             == RULE_AREA_PLACEMENT_SOURCE_TYPE::COMPONENT_CLASS )
     {
         if( m_zonesettings.GetRuleAreaPlacementEnabled() )
             m_placementProperties->m_ComponentsRb->SetValue( true );
@@ -305,6 +337,15 @@ bool DIALOG_RULE_AREA_PROPERTIES::TransferDataToWindow()
         setupCurrentSourceSelection( m_placementProperties->m_componentClassCombo );
         m_originalPlacementSourceType = RULE_AREA_PLACEMENT_SOURCE_TYPE::COMPONENT_CLASS;
         m_lastPlacementSourceType = RULE_AREA_PLACEMENT_SOURCE_TYPE::COMPONENT_CLASS;
+    }
+    else
+    {
+        if( m_zonesettings.GetRuleAreaPlacementEnabled() )
+            m_placementProperties->m_GroupRb->SetValue( true );
+
+        setupCurrentSourceSelection( m_placementProperties->m_groupCombo );
+        m_originalPlacementSourceType = RULE_AREA_PLACEMENT_SOURCE_TYPE::GROUP;
+        m_lastPlacementSourceType = RULE_AREA_PLACEMENT_SOURCE_TYPE::GROUP;
     }
 
     // Handle most-useful notebook page selection
@@ -400,8 +441,10 @@ bool DIALOG_RULE_AREA_PROPERTIES::TransferDataFromWindow()
 
         if( sourceType == RULE_AREA_PLACEMENT_SOURCE_TYPE::SHEETNAME )
             cb = m_placementProperties->m_sheetCombo;
-        else
+        else if( sourceType == RULE_AREA_PLACEMENT_SOURCE_TYPE::COMPONENT_CLASS )
             cb = m_placementProperties->m_componentClassCombo;
+        else
+            cb = m_placementProperties->m_groupCombo;
 
         int selectedSourceIdx = cb->GetSelection();
 
@@ -428,6 +471,11 @@ bool DIALOG_RULE_AREA_PROPERTIES::TransferDataFromWindow()
     {
         m_zonesettings.SetRuleAreaPlacementEnabled( true );
         setPlacementSource( RULE_AREA_PLACEMENT_SOURCE_TYPE::COMPONENT_CLASS );
+    }
+    else if( m_placementProperties->m_GroupRb->GetValue() )
+    {
+        m_zonesettings.SetRuleAreaPlacementEnabled( true );
+        setPlacementSource( RULE_AREA_PLACEMENT_SOURCE_TYPE::GROUP );
     }
     else
     {

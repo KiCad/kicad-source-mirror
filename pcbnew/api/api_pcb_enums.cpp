@@ -396,6 +396,9 @@ types::PlacementRuleSourceType ToProtoEnum( RULE_AREA_PLACEMENT_SOURCE_TYPE aVal
     case RULE_AREA_PLACEMENT_SOURCE_TYPE::COMPONENT_CLASS:
         return types::PlacementRuleSourceType::PRST_COMPONENT_CLASS;
 
+    case RULE_AREA_PLACEMENT_SOURCE_TYPE::GROUP:
+        return types::PlacementRuleSourceType::PRST_GROUP;
+
     default:
         wxCHECK_MSG( false, types::PlacementRuleSourceType::PRST_UNKNOWN,
                      "Unhandled case in ToProtoEnum<RULE_AREA_PLACEMENT_SOURCE_TYPE>");
@@ -414,6 +417,9 @@ RULE_AREA_PLACEMENT_SOURCE_TYPE FromProtoEnum( types::PlacementRuleSourceType aV
 
     case types::PlacementRuleSourceType::PRST_COMPONENT_CLASS:
         return RULE_AREA_PLACEMENT_SOURCE_TYPE::COMPONENT_CLASS;
+
+    case types::PlacementRuleSourceType::PRST_GROUP:
+        return RULE_AREA_PLACEMENT_SOURCE_TYPE::GROUP;
 
     default:
         wxCHECK_MSG( false, RULE_AREA_PLACEMENT_SOURCE_TYPE::SHEETNAME,

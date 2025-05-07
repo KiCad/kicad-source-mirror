@@ -7195,6 +7195,13 @@ ZONE* PCB_IO_KICAD_SEXPR_PARSER::parseZONE( BOARD_ITEM_CONTAINER* aParent )
                     zone->SetRuleAreaPlacementSource( FromUTF8() );
                     break;
                 }
+                case T_group:
+                {
+                    zone->SetRuleAreaPlacementSourceType( RULE_AREA_PLACEMENT_SOURCE_TYPE::GROUP );
+                    NeedSYMBOL();
+                    zone->SetRuleAreaPlacementSource( FromUTF8() );
+                    break;
+                }
                 case T_enabled:
                 {
                     token = NextTok();
@@ -7210,7 +7217,7 @@ ZONE* PCB_IO_KICAD_SEXPR_PARSER::parseZONE( BOARD_ITEM_CONTAINER* aParent )
                 }
                 default:
                 {
-                    Expecting( "enabled, sheetname or component_class" );
+                    Expecting( "enabled, sheetname, component_class, or group" );
                     break;
                 }
                 }

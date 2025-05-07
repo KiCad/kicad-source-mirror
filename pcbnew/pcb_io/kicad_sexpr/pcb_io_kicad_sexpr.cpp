@@ -2627,6 +2627,10 @@ void PCB_IO_KICAD_SEXPR::format( const ZONE* aZone ) const
             m_out->Print( "(component_class %s)",
                           m_out->Quotew( aZone->GetRuleAreaPlacementSource() ).c_str() );
             break;
+        case RULE_AREA_PLACEMENT_SOURCE_TYPE::GROUP:
+            m_out->Print( "(group %s)",
+                          m_out->Quotew( aZone->GetRuleAreaPlacementSource() ).c_str() );
+            break;
         }
 
         m_out->Print( ")" );
