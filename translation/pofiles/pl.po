@@ -18,10 +18,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-05-06 12:52+0300\n"
-"PO-Revision-Date: 2025-05-04 22:07+0000\n"
+"PO-Revision-Date: 2025-05-07 12:01+0000\n"
 "Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
-"Language-Team: Polish <https://hosted.weblate.org/projects/kicad/master-"
-"source/pl/>\n"
+"Language-Team: Polish <https://hosted.weblate.org/projects/kicad/"
+"master-source/pl/>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -10933,9 +10933,8 @@ msgid "CSV Files"
 msgstr "Pliki CSV"
 
 #: common/wildcards_and_files_ext.cpp:421
-#, fuzzy
 msgid "CSV/TSV Files"
-msgstr "Pliki CSV"
+msgstr "Pliki CSV/TSV"
 
 #: common/wildcards_and_files_ext.cpp:427
 msgid "Portable document format files"
@@ -13480,29 +13479,26 @@ msgstr "De Morgan"
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:283
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:299
 msgid "True"
-msgstr ""
+msgstr "Prawda"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:283
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:303
-#, fuzzy
 msgid "False"
-msgstr "fałsz"
+msgstr "Fałsz"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:982
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:1536
-#, fuzzy
 msgid "Select pin data file"
-msgstr "Wybierz plik"
+msgstr "Wybierz plik z danymi o pinach"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:1008
 #, c-format
 msgid "Unknown columns in data: %s. These columns will be ignored."
-msgstr ""
+msgstr "Nieznane kolumny w danych: %s. Kolumny te zostaną zignorowane."
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:1019
-#, fuzzy
 msgid "CSV import warning"
-msgstr "Ostrzeżenia symboli"
+msgstr "Ostrzeżenia przy imporcie CSV"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:1163
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:113
@@ -13570,24 +13566,20 @@ msgid "Export"
 msgstr "Eksport"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:138
-#, fuzzy
 msgid "Export all pins"
-msgstr "Eksportuj listę sieci"
+msgstr "Eksportuj wszystkie piny"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:141
-#, fuzzy
 msgid "Export only shown pins"
-msgstr "Eksportuj footprint"
+msgstr "Eksportuj tylko widoczne piny"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:147
-#, fuzzy
 msgid "To File..."
-msgstr "Wprowadź plik..."
+msgstr "Do pliku..."
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:150
-#, fuzzy
 msgid "To Clipboard"
-msgstr "schowek"
+msgstr "Do schowka"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:163
 #: eeschema/menubar.cpp:100 eeschema/symbol_editor/menubar_symbol_editor.cpp:67
@@ -13596,38 +13588,32 @@ msgid "Import"
 msgstr "Importuj"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:168
-#, fuzzy
 msgid "Replace all existing pins"
-msgstr "Zamień istniejące strefy z regułami"
+msgstr "Zamień wszystkie istniejące piny"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:171
-#, fuzzy
 msgid "Append to existing pins"
-msgstr "Dodaj istniejący rysunek definicji strony"
+msgstr "Dołącz do istniejących pinów"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:180
-#, fuzzy
 msgid "From File..."
-msgstr "Wprowadź plik..."
+msgstr "Z pliku..."
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:183
-#, fuzzy
 msgid "From Clipboard"
-msgstr "Eksportuj do schowka"
+msgstr "Ze schowka"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:200
 msgid "Filter by unit:"
 msgstr "Filtruj według liczby części składowych:"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:208
-#, fuzzy
 msgid "Filter by body style:"
-msgstr "Filtrowane przelotek na podstawie rozmiaru:"
+msgstr "Filtrowane na podstawie stylu:"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:216
-#, fuzzy
 msgid "Filter by selection"
-msgstr "Wybór filtra"
+msgstr "Filtrowanie na podstawie zaznaczenia"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:248
 msgid "Group by name"
@@ -33418,14 +33404,12 @@ msgid "Dimensions:"
 msgstr "Wymiary:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:119
-#, fuzzy
 msgid "Front copper area:"
-msgstr "Górna warstwa ścieżek"
+msgstr "Górna warstwa miedzi:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:120
-#, fuzzy
 msgid "Back copper area:"
-msgstr "Dolna warstwa ścieżek"
+msgstr "Dolna warstwa miedzi:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:161
 msgid "THT:"
@@ -33530,14 +33514,12 @@ msgid "Dimensions"
 msgstr "Wymiary"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:760
-#, fuzzy
 msgid "Front copper area"
-msgstr "Górna warstwa ścieżek"
+msgstr "Górna warstwa miedzi"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:762
-#, fuzzy
 msgid "Back copper area"
-msgstr "Dolna warstwa ścieżek"
+msgstr "Dolna warstwa miedzi"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:809
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:38
@@ -33562,9 +33544,8 @@ msgid "Subtract holes from board area"
 msgstr "Odejmij otwory od powierzchni płytki"
 
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:208
-#, fuzzy
 msgid "Subtract holes from copper areas"
-msgstr "Odejmij otwory od powierzchni płytki"
+msgstr "Odejmij otwory od powierzchni miedzi"
 
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:211
 msgid "Exclude footprints with no pads"
@@ -34366,19 +34347,16 @@ msgid "Full circle"
 msgstr "Pełen okrąg"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:360
-#, fuzzy
 msgid "Clockwise"
-msgstr "Obróć w prawo"
+msgstr "W prawo"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:360
-#, fuzzy
 msgid "Anti-clockwise"
-msgstr "Obróć w prawo"
+msgstr "W lewo"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:362
-#, fuzzy
 msgid "Direction"
-msgstr "Kierunek:"
+msgstr "Kierunek"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:366
 #: pcbnew/dialogs/dialog_create_array_base.cpp:419
@@ -34420,13 +34398,12 @@ msgid "How many items in the array."
 msgstr "Określa jak dużo elementów znajdzie się w szyku."
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:403
-#, fuzzy
 msgid "First item angle:"
-msgstr "Filtrowane na podstawie sieci:"
+msgstr "Kąt obrotu pierwszego elementu:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:408
 msgid "Angle offset of the first item in the array"
-msgstr ""
+msgstr "Ustala kąt o jaki należy obrócić pierwszy element w szyku"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:440
 msgid "Numbering Options"
@@ -42720,18 +42697,21 @@ msgid ""
 "Could not add 3D model for %s.\n"
 "File not found: %s\n"
 msgstr ""
+"Nie można dodać modelu 3D dla %s.\n"
+"Nie znaleziono pliku: %s\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:406
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Could not add 3D model for %s.\n"
 "OpenCASCADE error: %s\n"
-msgstr "Nie można połączyć się z %s. Błędy: %s"
+msgstr ""
+"Nie można dodać modelu 3D dla %s.\n"
+"Błąd OpenCASCADE: %s\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:810
-#, fuzzy
 msgid "Could not create PCB solid model.\n"
-msgstr "Nie można utworzyć listy materiałowej '%s'."
+msgstr "Nie można utworzyć kompletnego modelu PCB.\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:864
 msgid ""
@@ -42789,42 +42769,42 @@ msgstr "** ShapeUpgrade_UnifySameDomain wygenerowało pusty kształt **\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:944
 msgid "OCC error adding pad/via polygon.\n"
-msgstr ""
+msgstr "Błąd OCC podczas dodawania pola/przelotki strefy.\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1189
 #, c-format
 msgid "Could not add shape (%d points) to copper layer %s.\n"
-msgstr ""
+msgstr "Nie można dodać kształtu (%d punktów) do warstwy miedzi %s.\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1207
-#, fuzzy, c-format
+#, c-format
 msgid "No model defined for %s.\n"
-msgstr "Nie ma zdefiniowanego footprintu dla symbolu %s."
+msgstr "Nie ma zdefiniowanego modelu dla %s.\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1222
-#, fuzzy, c-format
+#, c-format
 msgid "No model for filename '%s'.\n"
-msgstr "Nie ma modelu o nazwie '%s' w '%s'."
+msgstr "Nie ma modelu dla pliku '%s'.\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1233
-#, fuzzy, c-format
+#, c-format
 msgid "No location data for filename '%s'.\n"
-msgstr "Zapisano dane o pozycjach elementów do '%s'.\n"
+msgstr "Brak danych o pozycji dla pliku '%s'.\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1243
-#, fuzzy, c-format
+#, c-format
 msgid "Could not add component with filename '%s'.\n"
-msgstr "Nie można odnaleźć elementu SPICE z oznaczeniem '%s'"
+msgstr "Nie można dodać komponentu z nazwą pliku '%s'.\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1413
 #, c-format
 msgid "OCC exception building shape segment: %s\n"
-msgstr ""
+msgstr "Wystąpił wyjątek OCC podczas budowania segmentu kształtu: %s\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1428
 #, c-format
 msgid "OCC exception building face: %s\n"
-msgstr ""
+msgstr "Wystąpił wyjątek OCC podczas budowania postaci: %s\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1440
 #: pcbnew/exporters/step/step_pcb_model.cpp:1830
@@ -42835,11 +42815,14 @@ msgstr "Nie udało się utworzyć kształtu pryzmatycznego\n"
 #, c-format
 msgid "Failed to make segment edge (%d %d) -> (%d %d), skipping\n"
 msgstr ""
+"Niepowodzenie podczas tworzenia krawędzi segmentu (%d %d) -> (%d %d), "
+"pomijam\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1524
 #, c-format
 msgid "Failed to add segment edge (%d %d) -> (%d %d)\n"
 msgstr ""
+"Niepowodzenie podczas umieszczania krawędzi segmentu (%d %d) -> (%d %d)\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1560
 #, c-format
@@ -42847,32 +42830,37 @@ msgid ""
 "Failed to add arc curve from (%d %d), arc p0 (%d %d), mid (%d %d), p1 (%d "
 "%d)\n"
 msgstr ""
+"Niepowodzenie podczas umieszczania krzywej łuku z (%d %d), łuk p0 (%d %d), "
+"centrum (%d %d), p1 (%d %d)\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1636
 #, c-format
 msgid "Failed to close wire at %d, %d -> %d, %d **\n"
 msgstr ""
+"Niepowodzenie podczas kończenia połączenia na pozycji %d, %d -> %d, %d **\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1646
 #, c-format
 msgid "OCC exception creating wire: %s\n"
-msgstr ""
+msgstr "Wystąpił wyjątek OCC podczas tworzenia połączenia: %s\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1728
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Wire not done (contour points %d): OCC error %d\n"
 "z: %g; bounding box: %s\n"
-msgstr "Połączenie niedokończone (%d punktów konturu): błąd OCC %d\n"
+msgstr ""
+"Połączenie niedokończone (%d punktów konturu): błąd OCC %d\n"
+"z: %g; obszar %s\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1742
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Wire self-interference check failed\n"
 "z: %g; bounding box: %s\n"
 msgstr ""
-"\n"
 "Sprawdzenie zakłóceń własnych przewodu nie powiodło się\n"
+"z: %g; obszar: %s\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1764
 msgid "Using non-simplified polygon.\n"
@@ -42881,7 +42869,7 @@ msgstr "Użycie nieuproszczonego wielokąta.\n"
 #: pcbnew/exporters/step/step_pcb_model.cpp:1811
 #, c-format
 msgid "OCC exception creating contour %d: %s\n"
-msgstr ""
+msgstr "Wystąpił wyjątek OCC podczas tworzenia konturu %d: %s\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1841
 msgid "** Face skipped **\n"
@@ -42889,13 +42877,12 @@ msgstr "** Pominięto widok **\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1931
 #: pcbnew/exporters/step/step_pcb_model.cpp:1948
-#, fuzzy
 msgid "OCC error creating main outline.\n"
-msgstr "Błąd podczas odczytywania pliku."
+msgstr "Wystąpił błąd OCC podczas tworzenia głównego obrysu.\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1957
 msgid "OCC error creating hole in main outline.\n"
-msgstr ""
+msgstr "Wystąpił błąd OCC podczas tworzenia otworu w głównym obrysie.\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2000
 #, c-format
@@ -42903,11 +42890,9 @@ msgid "Subtracting holes for %s\n"
 msgstr "Odejmowanie otworów dla %s\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2044
-#, fuzzy, c-format
+#, c-format
 msgid "** Got problems while cutting %s net '%s' **\n"
-msgstr ""
-"\n"
-"** Napotkano problemy podczas wycinania %s sieć '%s' **\n"
+msgstr "** Napotkano problemy podczas wycinania %s sieć '%s' **\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2096
 msgid "shapes"
@@ -42927,35 +42912,41 @@ msgstr "przelotki"
 #: pcbnew/exporters/step/step_pcb_model.cpp:3167
 #: pcbnew/exporters/step/step_pcb_model.cpp:3241
 #: pcbnew/exporters/step/step_pcb_model.cpp:3309
-#, fuzzy, c-format
+#, c-format
 msgid "No valid PCB assembly; cannot create output file '%s'.\n"
-msgstr "Nie można utworzyć folderu wyjściowego '%s'."
+msgstr ""
+"Nieprawidłowe dane o montażu PCB; nie można utworzyć pliku wyjściowego '%s'."
+"\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2389
 msgid "Failed to set STEP product name, but will attempt to continue."
 msgstr ""
+"Niepowodzenie podczas ustawienia nazwy produktu STEP, nastąpi próba "
+"kontynuacji mimo to."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2397
 msgid "Failed to set surface curve mode, but will attempt to continue."
 msgstr ""
+"Niepowodzenie podczas ustawienia trybu krzywizny powierzchni, nastąpi próba "
+"kontynuacji mimo to."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2438
 #: pcbnew/exporters/step/step_pcb_model.cpp:3218
 #: pcbnew/exporters/step/step_pcb_model.cpp:3290
 #: pcbnew/exporters/step/step_pcb_model.cpp:3339
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot rename temporary file '%s' to '%s'.\n"
-msgstr "Nie można zmienić nazwy pliku tymczasowego '%s' na '%s'"
+msgstr "Nie można zmienić nazwy pliku tymczasowego '%s' na '%s'.\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2889
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot identify actual file type for '%s'.\n"
-msgstr "Nie można otworzyć pliku listy sieci '%s'."
+msgstr "Nie można zidentyfikować typu pliku dla '%s'.\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2899
-#, fuzzy, c-format
+#, c-format
 msgid "Could not transfer model data from file '%s'.\n"
-msgstr "Nie udało się wywnioskować modelu z Wartości '%s'"
+msgstr "Nie udało się przenieść danych o modelu z pliku '%s'.\n"
 
 #: pcbnew/files.cpp:152
 msgid "All KiCad Board Files"
