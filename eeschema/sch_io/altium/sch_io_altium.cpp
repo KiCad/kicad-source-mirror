@@ -268,7 +268,7 @@ int SCH_IO_ALTIUM::GetModifyHash() const
 bool SCH_IO_ALTIUM::isBinaryFile( const wxString& aFileName )
 {
     // Compound File Binary Format header
-    return IO_UTILS::fileStartsWithBinaryHeader( aFileName, IO_UTILS::COMPOUND_FILE_HEADER );
+    return IO_UTILS::fileHasBinaryHeader( aFileName, IO_UTILS::COMPOUND_FILE_HEADER );
 }
 
 

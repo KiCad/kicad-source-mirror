@@ -56,14 +56,22 @@ bool fileStartsWithPrefix( const wxString& aFilePath, const wxString& aPrefix,
 }
 
 
-bool fileStartsWithBinaryHeader( const wxString& aFilePath, const std::vector<uint8_t>& aHeader )
+bool fileHasBinaryHeader( const wxString& aFilePath, const std::vector<uint8_t>& aHeader,
+    size_t aOffset )
 {
     wxFFileInputStream input( aFilePath );
 
     if( input.IsOk() && !input.Eof() )
     {
-        if( static_cast<size_t>( input.GetLength() ) < aHeader.size() )
+        if( static_cast<size_t>( input.GetLength() ) < aOffset + aHeader.size() )
             return false;
+
+        // Move the stream to the offset
+        if( aOffset )
+        {
+            if( !input.SeekI( aOffset, wxFromStart ) )
+                return false;
+        }
 
         std::vector<uint8_t> parsedHeader( aHeader.size() );
 

@@ -50,9 +50,11 @@ KICOMMON_API bool fileStartsWithPrefix( const wxString& aFilePath, const wxStrin
  *
  * @param aFilePath path to the file where we want to check the prefix.
  * @param aHeader vector of bytes which need to match with the start of the file.
+ * @param aOffset offset in the file where the header should be checked.
  */
-KICOMMON_API bool fileStartsWithBinaryHeader( const wxString&             aFilePath,
-                                              const std::vector<uint8_t>& aHeader );
+KICOMMON_API bool fileHasBinaryHeader( const wxString&             aFilePath,
+                                       const std::vector<uint8_t>& aHeader,
+                                       size_t                      aOffset = 0 );
 
 }
 

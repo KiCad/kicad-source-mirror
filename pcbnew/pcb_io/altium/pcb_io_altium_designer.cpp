@@ -74,7 +74,7 @@ std::map<wxString, PCB_LAYER_ID> PCB_IO_ALTIUM_DESIGNER::DefaultLayerMappingCall
 bool PCB_IO_ALTIUM_DESIGNER::checkFileHeader( const wxString& aFileName )
 {
     // Compound File Binary Format header
-    return IO_UTILS::fileStartsWithBinaryHeader( aFileName, IO_UTILS::COMPOUND_FILE_HEADER );
+    return IO_UTILS::fileHasBinaryHeader( aFileName, IO_UTILS::COMPOUND_FILE_HEADER );
 }
 
 
