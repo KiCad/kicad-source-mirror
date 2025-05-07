@@ -1171,6 +1171,9 @@ int MULTICHANNEL_TOOL::AutogenerateRuleAreas( const TOOL_EVENT& aEvent )
         if( ra.m_existsAlready && !m_areas.m_replaceExisting )
             continue;
 
+        if( ra.m_components.empty() )
+            continue;
+
         SHAPE_LINE_CHAIN raOutline = buildRAOutline( ra.m_components, 100000 );
 
         std::unique_ptr<ZONE> newZone( new ZONE( board() ) );
@@ -1229,7 +1232,6 @@ int MULTICHANNEL_TOOL::AutogenerateRuleAreas( const TOOL_EVENT& aEvent )
 
         ra.m_area = newZone.get();
         commit.Add( newZone.release() );
-
     }
 
     commit.Push( _( "Auto-generate placement rule areas" ) );
