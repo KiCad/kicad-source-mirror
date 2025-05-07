@@ -135,7 +135,6 @@ enums:
     0x00130000: a160  # Allegro 16.0
     0x00130400: a162
     0x00130C00: a164
-    0x00131000: a165
     0x00131500: a166
     0x00140400: a172
     0x00140900: a174
@@ -488,8 +487,11 @@ types:
       - type: u2
       - id: key
         type: u4
-      - id: next_x06
+      - id: next
         type: u4
+        doc: |
+          Pointer to the next object in the 'x06' linked list that starts in
+          the header.
       - id: ptr_str
         type: u4
       - id: ptr_2

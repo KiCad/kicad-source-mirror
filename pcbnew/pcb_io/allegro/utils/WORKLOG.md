@@ -43,7 +43,7 @@ The materials used for this work are:
     * 0x06, 0x07, 0x0F, 0x10, which gets to offset 0x2a98 in the file.
     * 0x2B, 0x2D, 0x1B (nets) gets to 0x3B00
 
-### 2024-05-06
+### 2025-05-06
 
 * Implemented structs:
     * 0x1C (padstacks) and substructs - gets to 0x4e40 (next is 0x21 type)
@@ -67,3 +67,9 @@ The materials used for this work are:
     * 0x28 - brings PreAmp to 0x0002e004 (next is 0x24), CutiePi to 0x00046b38 (next is 0x3C)
     * 0x24 - brings PreAmp to 0x00030910 (next is 0x0E)
     * 0x0E, 0x3B, 0x3C - brings PreAmp to 0x0004119c (next is 0x2E)
+    * And finally all the rest of the objects, and a few tidy ups of mistakes, mostly in the versioning (I mistook 172's code for 174's)
+    * Fix the last byte reading.
+
+#### 2025-05-07
+
+* Added a CLI tool based on Kaitai and Python, as it's a little awkward to use the C++ version experimentally now we will start wiring it into a rela parser

@@ -2,6 +2,7 @@
 # Sources for the ALLEGRO Pcbnew plugin
 
 set( ALLEGRO2PCBNEW_SRCS
+    allegro_builder.cpp
     allegro_parser.cpp
 )
 
@@ -29,3 +30,5 @@ target_link_libraries( allegro_cli PRIVATE
     magic_enum
     argparse
 )
+
+add_subdirectory(utils/pycli)
