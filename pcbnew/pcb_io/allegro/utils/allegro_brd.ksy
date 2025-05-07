@@ -34,7 +34,8 @@ seq:
     repeat-expr: 9
   - id: ll_x04
     type: linked_list
-    doc: Often empty.
+    doc: |
+      Seems empty, even if there are many 0x04 objects in the file.
   - id: ll_x06
     type: linked_list
   - id: ll_x0c_2
@@ -520,19 +521,38 @@ types:
         doc: |
           Pointer to the next object in the 'x06' linked list that starts in
           the header.
-      - id: ptr_str
+      - id: str
         type: u4
-      - id: ptr_2
+        doc: |
+          String ID
+
+          Examples:
+            PreAmp: R_RES2012X50N_0805_510
+
+      - id: str_2
         type: u4
+        doc: |
+          String ID
+
+          Examples:
+            PreAmp: RES2012X50N_0805
       - id: ptr_instance
         type: u4
+        doc: |
+          Points to an 0x07
       - id: ptr_fp
         type: u4
+        doc: |
+          Points to a 0x0F
       - id: ptr_x08
         type: u4
+        doc: |
+          Points to a 0x08. Reverse of the 0x06/0x08 pointer in 0x08, if it's an 0x06.
       - id: ptr_x03_symbol
         type: u4
-      - id: unk
+        doc: |
+          Points to a 0x03
+      - id: unknown_1
         type: u4
         if: _root.ver >= 0x00140000
 
@@ -569,6 +589,16 @@ types:
         type: u4
 
   type_08:
+    doc: |
+      Seems to be a counterpart to 0x11 - the counts are the same and they have 1:1
+      pointers to each other.
+
+      They form some kind of chain with interlinks
+
+          0x11 -> 0x11 -> 0x11 -> 0x0F
+            ^       ^       ^
+            v       v       v
+          0x08 -> 0x08 -> 0x08 -> 0x06
     seq:
       - type: u1
       - type: u2
@@ -582,16 +612,28 @@ types:
         if: _root.ver < 0x00140400
       - id: ptr2
         type: u4
+        doc: |
+          Points to 0x06 or another 0x08.
+
+          When the 0x11 counterpart has a pointer to 0x0F, this points to 0x06.
       - id: str_ptr
         type: u4
         if: _root.ver >= 0x00140400
+        doc: |
+          String ID
+
+          Same ID as the 0x11 counterpart.
       - id: ptr3
         type: u4
-      - id: un1
+        doc: |
+          Points to 0x11. Seems to be the reverse of the 0x08 pointer in 0x11.
+      - id: unknown_1
         type: u4
         if: _root.ver >= 0x00140400
       - id: ptr4
         type: u4
+        doc: |
+          Null?
 
   type_09:
     seq:
@@ -772,18 +814,38 @@ types:
         if: _root.ver >= 0x00140400
       - id: ptr1
         type: u4
+        doc: |
+          Points to 0x07
       - type: u4
         if: _root.ver >= 0x00140900
       - id: ptr2
         type: u4
+        doc: |
+          Points to 0x12.
       - id: un1
         type: u4
-      - id: ptr3
+      - id: str
         type: u4
-      - id: ptr4 # 0x0F?
+        doc: |
+          String id. Always seems to be Fn, where n is a number, which can be from 0
+          to several hundred.
+
+          Examples:
+            PreAmp: F0, F1, ...
+            CutiePi: F3, F4, ...
+            BeagleBone-AI: F57, F55, ...
+
+          These strings seem not to be in the .alg export
+      - id: ptr4
         type: u4
+        doc: |
+          Points to 0x0F
       - id: path_str
         type: u4
+        doc: |
+          Points to 0x03 (not to a string ID)
+
+          PreAmp: k=0xf7900e0 -> 0x03/0x68 @preampl_schem.schematic1(sch_1):page1_ins20635@discrete.\r.normal\(chips)
 
   type_11:
     seq:
@@ -791,14 +853,32 @@ types:
       - type: u2
       - id: key
         type: u4
+      - id: name
+        type: u4
+        doc: |
+          String ID
+
+          Examples:
+            PreAmp: CATHODE, ANODE, 1, 2
+
+          Could be a pin name.
       - id: ptr1
         type: u4
+        doc: |
+          Points to other 0x11s or 0x0F.
+
+          In a "Group" (e.g. 1/2, C/A, B/C/E), one of them points to 0x0F and the others
+          form a list ending in that one. So far the first in the file seems to be the 0x0F one.
       - id: ptr2
         type: u4
-      - id: ptr3
+        doc: |
+          Points to 0x08
+      - id: unknown_1
         type: u4
-      - type: u4
-      - type: u4
+        doc: |
+          Always 0x00?
+      - id: unknown_2
+        type: u4
         if: _root.ver >= 0x00140900
 
   type_12:
@@ -1356,6 +1436,9 @@ types:
 
           Examples:
             CutiePi: 0x28 k=0xc0c0558 -> 0x03 k=0x0c0c07d0, subtype=0x68 = 'CLIP_1'
+
+          This string doesn't seem to get exported in the .alg file, so maybe it's not useful
+          (or maybe Altium is dropping it on the floor)
       - id: ptr7_16x
         type: u4
         if: _root.ver < 0x00140400

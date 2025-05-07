@@ -78,3 +78,14 @@ The materials used for this work are:
   * what was `ll_unknown_4` seems to be all 0x36 (film), for example
   * ll_unknown_5: seems to have a key that doesn't exist in the file (PreAmp, CutiePi), but is 0x0A (DRC?) in the BeagleBone AI board.
   * ll_unknown_6/7: seems to be null always.
+
+* Improve decoding of 0x1B, 0x1C, 0x24, 0x28, 0x03 in the Python CLI tool.
+  * Signed co-ord format in some of these seems to be x0, y1, x1, y1
+
+* 0x11 and 0x08 seem to be some kind of pair of concepts. They appear to be related to the PIN_NAME in the .alg output. E.g. EMITTER:
+
+```
+S!SOT23!PACKAGE!2N2221_SOT23_QBC846B!Q2!PIN!TOP!259 1!FIG_RECTANGLE!6!635!777!20!17!!!!!!!1!EMITTER!UNSPEC!SMD20_17!FIG_RECTANGLE!REGULAR!!!!N130491!635!777!
+```
+
+* 0x10 unsure, something to do with 0x07, 0x12, and 0x0F. And strings like F0, F101, etc. And an 0x03, which has strings that might be schematics (symbols?). E.g. @preampl_schem.schematic1(sch_1):page1_ins20635@discrete.\r.normal\(chips).

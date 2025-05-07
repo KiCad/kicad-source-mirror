@@ -140,6 +140,52 @@ class AllegroBoard:
                 s = bytes.decode("utf-8", errors="ignore")
                 print_v("string data", s)
 
+        elif t == 0x06:
+
+            print_s("String", d.str)
+            print_s("Ptr 1", d.ptr_1)
+            print_ptr("Ptr instance", d.ptr_instance)
+            print_ptr("Ptr FP", d.ptr_fp)
+            print_ptr("Ptr x08", d.ptr_x08)
+            print_ptr("Ptr x03", d.ptr_x03_symbol)
+
+            if hasattr(d, "unknown_1"):
+                print_v("unknown_1", d.unknown_1)
+
+
+        elif t == 0x08:
+
+            if hasattr(d, "ptr1"):
+                print_ptr("Ptr 1", d.ptr1)
+            if hasattr(d, "str_ptr_16x"):
+                print_s("Str ptr", d.str_ptr_16x)
+            if hasattr(d, "str_ptr"):
+                print_s("Str ptr", d.str_ptr)
+
+            print_ptr("Ptr 2", d.ptr2)
+            print_ptr("Ptr 3", d.ptr3)
+            print_ptr("Ptr 4", d.ptr4)
+
+            if hasattr(d, "unknown_1"):
+                print_ptr("unknown_1", d.unknown_1)
+
+        elif t == 0x10:
+            print_ptr("Ptr 1", d.ptr1)
+            print_ptr("Ptr 2", d.ptr2)
+            print_s("String", d.str)
+            print_ptr("Ptr 4", d.ptr4)
+            print_ptr("Path str", d.path_str)
+
+        elif t == 0x11:
+            print_s("Name", d.name)
+            print_ptr("Ptr 1", d.ptr1)
+            print_ptr("Ptr 2", d.ptr2)
+
+            print_v("unknown_1", d.unknown_1)
+            if hasattr(d, "unknown_2"):
+                print_v("unknown_2", d.unknown_2)
+
+
         elif t == 0x1b: # Net
             print_s("Net", d.net_name)
 
@@ -266,6 +312,9 @@ if __name__ == "__main__":
     parser.add_argument("-S", "--summary", action="store_true",
                         help="Print a summary of the Allegro board file")
 
+    parser.add_argument("-s", "--string", type=IntIsh,
+                        help="Print a string from the string map")
+
     parser.add_argument("-k", "--key", type=IntIsh,
                         help="Print the object with the given key")
 
@@ -277,6 +326,9 @@ if __name__ == "__main__":
 
     parser.add_argument("--dump-obj", "--do", action="store_true",
                         help="Dump the objects in detailed format when walking a list, etc")
+
+    parser.add_argument("--dump-by-type", "--dt", type=IntIsh,
+                        help="Dump all the objects of the given type.")
 
     args = parser.parse_args()
 
@@ -303,6 +355,15 @@ if __name__ == "__main__":
 
         print_obj_counts_by_type(objs)
 
+    if args.string is not None:
+        # Print a string from the string map
+        key = int(args.string)
+        try:
+            s = brd.string(key)
+            print(f"String {key:#010x}: {s}")
+        except KeyError:
+            print(f"String with key {key:#010x} not found")
+
     if args.key is not None:
         obj = brd.object(int(args.key))
 
@@ -320,6 +381,21 @@ if __name__ == "__main__":
         print(f"Object index:  {index} (of {len(kt_brd_struct.objects)})")
         print("")
         brd.print_obj(obj)
+
+    if args.dump_by_type is not None:
+        # Dump all the objects of the given type.
+        obj_type = int(args.dump_by_type)
+
+        objs = []
+
+        for obj in kt_brd_struct.objects:
+            if obj.type == obj_type:
+                objs.append(obj)
+
+        for obj in objs:
+            print("")
+            brd.print_obj(obj)
+            print("")
 
     if args.walk_list is not None:
         # Walk a list of objects in the Allegro board file
