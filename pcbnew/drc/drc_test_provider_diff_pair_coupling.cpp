@@ -130,75 +130,109 @@ static bool commonParallelProjection( const PCB_ARC& p, const PCB_ARC& n, SHAPE_
     VECTOR2I n_center = n.GetCenter();
     double p_radius = p.GetRadius();
     double n_radius = n.GetRadius();
+    bool p_is_ccw = p.IsCCW();
+    bool n_is_ccw = n.IsCCW();
+
+    // Quick check to ensure arcs are of similar size and close enough to be considered coupled
+    double radiusDiffRatio = std::abs(p_radius - n_radius) / std::max(p_radius, n_radius);
+    double centerDistance = (p_center - n_center).EuclideanNorm();
+
+    if (radiusDiffRatio > 0.5 || centerDistance > std::max(p_radius, n_radius) * 0.5)
+        return false;
 
     VECTOR2I p_start( p.GetStart() );
     VECTOR2I p_end( p.GetEnd() );
 
-    if( !p.IsCCW() )
+    if( !p_is_ccw )
         std::swap( p_start, p_end );
 
     VECTOR2I n_start( n.GetStart() );
     VECTOR2I n_end( n.GetEnd() );
 
-    if( !n.IsCCW() )
+    if( !n_is_ccw )
         std::swap( n_start, n_end );
 
     SHAPE_ARC p_arc( p_start, p.GetMid(), p_end, 0 );
     SHAPE_ARC n_arc( n_start, n.GetMid(), n_end, 0 );
 
+    printf("p start angle: %f\n", p_arc.GetStartAngle().AsDegrees());
+    printf("n start angle: %f\n", n_arc.GetStartAngle().AsDegrees());
+    printf("p end angle: %f\n", p_arc.GetEndAngle().AsDegrees());
+    printf("n end angle: %f\n", n_arc.GetEndAngle().AsDegrees());
+
     EDA_ANGLE p_start_angle = p_arc.GetStartAngle();
 
     // Rotate the arcs to a common 0 starting angle
-    p_arc.Rotate( -p_start_angle, p_center );
-    n_arc.Rotate( -p_start_angle, n_center );
+    p_arc.Rotate( p_start_angle, p_center );
+    n_arc.Rotate( p_start_angle, n_center );
+
+    printf("Post-rotation p start angle: %f\n", p_arc.GetStartAngle().AsDegrees());
+    printf("Post-rotation n start angle: %f\n", n_arc.GetStartAngle().AsDegrees());
+    printf("Post-rotation p end angle: %f\n", p_arc.GetEndAngle().AsDegrees());
+    printf("Post-rotation n end angle: %f\n", n_arc.GetEndAngle().AsDegrees());
 
     EDA_ANGLE p_end_angle = p_arc.GetEndAngle();
     EDA_ANGLE n_start_angle = n_arc.GetStartAngle();
     EDA_ANGLE n_end_angle = n_arc.GetEndAngle();
 
+    // Determine overlap region
+    EDA_ANGLE clip_start_angle, clip_end_angle;
 
-    EDA_ANGLE clip_total_angle;
-    EDA_ANGLE clip_start_angle;
+    // No overlap when n starts after p ends or n ends before p starts
+    if( n_start_angle >= p_end_angle || n_end_angle <= EDA_ANGLE(0) )
+        return false;
 
-    if( n_start_angle > p_end_angle )
-    {
-        // n is fully outside of p
-        if( n_end_angle > p_end_angle )
-            return false;
+    // Calculate the start and end angles of the overlap
+    clip_start_angle = std::max( EDA_ANGLE(0), n_start_angle );
+    clip_end_angle = std::min( p_end_angle, n_end_angle );
 
-        // n starts before angle 0 and ends in the middle of p
-        clip_total_angle = n_end_angle + p_start_angle;
-        clip_start_angle = p_start_angle;
-    }
-    else
-    {
-        clip_start_angle = n_start_angle + p_start_angle;
+    // Calculate the total angle of the overlap
+    EDA_ANGLE clip_total_angle = clip_end_angle - clip_start_angle;
 
-        // n is fully inside of p
-        if( n_end_angle < p_end_angle )
-            clip_total_angle = n_end_angle - n_start_angle;
-        else // n starts after 0 and ends after p
-            clip_total_angle = p_end_angle - n_start_angle;
-    }
+    // Now we reset the angles.  However, note that the convention here for adding angles
+    // is OPPOSITE the Rotate convention above.  So this undoes the rotation.
+    clip_start_angle += p_start_angle;
+    clip_end_angle += p_start_angle;
+    clip_start_angle.Normalize();
+    clip_end_angle.Normalize();
 
-    // One arc starts approximately where the other ends
+    // One arc starts approximately where the other ends or overlap is too small
     if( clip_total_angle <= EDA_ANGLE( ADVANCED_CFG::GetCfg().m_MinParallelAngle ) )
         return false;
 
-    VECTOR2I n_start_pt = n_center + VECTOR2I( KiROUND( n_radius ), 0 );
-    VECTOR2I p_start_pt = p_center + VECTOR2I( KiROUND( p_radius ), 0 );
+    // For CCW arcs, we start at clip_start_angle and sweep through clip_total_angle
+    // For CW arcs, we start at clip_end_angle and sweep through -clip_total_angle
+    VECTOR2I p_clip_point, n_clip_point;
 
-    RotatePoint( n_start_pt, n_center, clip_start_angle );
-    RotatePoint( p_start_pt, p_center, clip_start_angle );
-
-    pClip = SHAPE_ARC( p_center, p_start_pt, clip_total_angle );
-    nClip = SHAPE_ARC( n_center, n_start_pt, clip_total_angle );
-
-    if( std::abs( pClip.GetP0().x - pClip.GetArcMid().x ) < 10
-            || std::abs( nClip.GetP0().x - nClip.GetArcMid().x ) < 10 )
+    if( p_is_ccw )
     {
-        return false;
+        p_clip_point = p_center + VECTOR2I( KiROUND( p_radius * clip_start_angle.Cos() ),
+                                            KiROUND( p_radius * clip_start_angle.Sin() ) );
+        pClip = SHAPE_ARC( p_center, p_clip_point, clip_total_angle );
     }
+    else
+    {
+        p_clip_point = p_center + VECTOR2I( KiROUND( p_radius * clip_end_angle.Cos() ),
+                                            KiROUND( p_radius * clip_end_angle.Sin() ) );
+        pClip = SHAPE_ARC( p_center, p_clip_point, -clip_total_angle );
+    }
+
+    if( n_is_ccw )
+    {
+        n_clip_point = n_center + VECTOR2I( KiROUND( n_radius * clip_start_angle.Cos() ),
+                                            KiROUND( n_radius * clip_start_angle.Sin() ) );
+        nClip = SHAPE_ARC( n_center, n_clip_point, clip_total_angle );
+    }
+    else
+    {
+        n_clip_point = n_center + VECTOR2I( KiROUND( n_radius * clip_end_angle.Cos() ),
+                                            KiROUND( n_radius * clip_end_angle.Sin() ) );
+        nClip = SHAPE_ARC( n_center, n_clip_point, -clip_total_angle );
+    }
+
+    // Ensure the resulting arcs are not degenerate
+    if( pClip.GetLength() < 1.0 || nClip.GetLength() < 1.0 )
+        return false;
 
     return true;
 }
