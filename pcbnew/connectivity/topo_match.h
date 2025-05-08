@@ -48,7 +48,7 @@ class COMPONENT
     friend class CONNECTION_GRAPH;
 
 public:
-    COMPONENT( const wxString& aRef, FOOTPRINT* aParentFp, std::optional<VECTOR2I> aRaOffset = std::optional<VECTOR2I>() );
+    COMPONENT( const wxString& aRef, const wxString& aValue, FOOTPRINT* aParentFp, std::optional<VECTOR2I> aRaOffset = std::optional<VECTOR2I>() );
     ~COMPONENT();
 
     bool               IsSameKind( const COMPONENT& b ) const;
@@ -68,6 +68,7 @@ private:
     std::optional<VECTOR2I> m_raOffset;
     wxString          m_reference;
     wxString          m_prefix;
+    wxString          m_value;
     FOOTPRINT*        m_parentFootprint = nullptr;
     std::vector<PIN*> m_pins;
 };
