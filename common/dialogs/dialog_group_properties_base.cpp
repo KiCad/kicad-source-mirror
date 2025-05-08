@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -33,6 +33,13 @@ DIALOG_GROUP_PROPERTIES_BASE::DIALOG_GROUP_PROPERTIES_BASE( wxWindow* parent, wx
 
 	m_nameCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizer1->Add( m_nameCtrl, 0, wxALL|wxEXPAND|wxALIGN_CENTER_VERTICAL, 5 );
+
+	m_libraryLinkLabel = new wxStaticText( this, wxID_ANY, _("Library link:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_libraryLinkLabel->Wrap( -1 );
+	fgSizer1->Add( m_libraryLinkLabel, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+
+	m_libraryLink = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizer1->Add( m_libraryLink, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 5 );
 
 
 	bSizerUpper->Add( fgSizer1, 0, wxEXPAND, 5 );

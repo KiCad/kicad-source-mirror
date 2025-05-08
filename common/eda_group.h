@@ -25,6 +25,7 @@
 #define EDA_GROUP_H
 
 #include <eda_item.h>
+#include <lib_id.h>
 #include <lset.h>
 #include <unordered_set>
 
@@ -80,9 +81,18 @@ public:
      */
     virtual EDA_GROUP* DeepDuplicate() const = 0;
 
+    bool HasDesignBlockLink() const { return m_designBlockLibId.IsValid(); }
+
+    void SetDesignBlockLibId( const LIB_ID& aLibId ) { m_designBlockLibId = aLibId; }
+
+    const LIB_ID& GetDesignBlockLibId() const { return m_designBlockLibId; }
+
 protected:
     std::unordered_set<EDA_ITEM*> m_items; // Members of the group
     wxString                      m_name;  // Optional group name
+
+    // Optional link to a design block
+    LIB_ID m_designBlockLibId;
 };
 
 #endif // CLASS_PCB_GROUP_H_

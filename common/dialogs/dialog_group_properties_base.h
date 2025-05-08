@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -32,7 +32,6 @@ class STD_BITMAP_BUTTON;
 
 ///////////////////////////////////////////////////////////////////////////
 
-
 ///////////////////////////////////////////////////////////////////////////////
 /// Class DIALOG_GROUP_PROPERTIES_BASE
 ///////////////////////////////////////////////////////////////////////////////
@@ -43,6 +42,8 @@ class DIALOG_GROUP_PROPERTIES_BASE : public DIALOG_SHIM
 	protected:
 		wxStaticText* m_nameLabel;
 		wxTextCtrl* m_nameCtrl;
+		wxStaticText* m_libraryLinkLabel;
+		wxTextCtrl* m_libraryLink;
 		wxCheckBox* m_locked;
 		wxStaticText* m_membersLabel;
 		wxListBox* m_membersList;

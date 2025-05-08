@@ -107,7 +107,8 @@ public:
     int Paste( const TOOL_EVENT& aEvent );
     int AppendBoardFromFile( const TOOL_EVENT& aEvent );
     int AppendDesignBlock( const TOOL_EVENT& aEvent );
-    int AppendBoard( PCB_IO& pi, const wxString& fileName );
+    int PlaceLinkedDesignBlock( const TOOL_EVENT& aEvent );
+    int AppendBoard( PCB_IO& pi, const wxString& fileName, DESIGN_BLOCK* aDesignBlock = nullptr );
     int UpdateMessagePanel( const TOOL_EVENT& aEvent );
     int PlaceCharacteristics( const TOOL_EVENT& aEvent );
     int PlaceStackup( const TOOL_EVENT& aEvent );

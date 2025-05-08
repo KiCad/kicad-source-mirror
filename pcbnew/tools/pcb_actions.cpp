@@ -455,6 +455,15 @@ TOOL_ACTION PCB_ACTIONS::placeDesignBlock( TOOL_ACTION_ARGS()
         .Flags( AF_ACTIVATE )
         .Parameter<DESIGN_BLOCK*>( nullptr ) );
 
+TOOL_ACTION PCB_ACTIONS::placeLinkedDesignBlock( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.InteractiveDrawing.placeLinkedDesignBlock" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Place Linked Design Block" ) )
+        .Tooltip( _( "Place design block linked to selected group" ) )
+        .Icon( BITMAPS::add_component )
+        .Flags( AF_ACTIVATE ) );
+
+
 TOOL_ACTION PCB_ACTIONS::showDesignBlockPanel( TOOL_ACTION_ARGS()
         .Name( "pcbnew.PcbDesignBlockControl.showDesignBlockPanel" )
         .Scope( AS_GLOBAL )

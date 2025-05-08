@@ -32,6 +32,7 @@
 
 #include <core/wx_stl_compat.h>
 #include <hashtables.h>
+#include <lib_id.h>
 #include <layer_ids.h>     // PCB_LAYER_ID
 #include <lset.h>
 #include <pcb_lexer.h>
@@ -141,6 +142,7 @@ private:
         wxString          name;
         bool              locked;
         KIID              uuid;
+        LIB_ID            libId;
         std::vector<KIID> memberUuids;
     };
 

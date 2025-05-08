@@ -817,6 +817,20 @@ void PCB_EDIT_FRAME::setupUIConditions()
                 return GetUndoCommandCount() > 0;
             };
 
+    auto groupWithDesignBlockLink =
+            [] ( const SELECTION& aSel )
+            {
+                if( aSel.Size() != 1 )
+                    return false;
+
+                if( aSel[0]->Type() != PCB_GROUP_T )
+                    return false;
+
+                PCB_GROUP* group = static_cast<PCB_GROUP*>( aSel.GetItem( 0 ) );
+
+                return group->HasDesignBlockLink();
+            };
+
     wxASSERT( mgr );
 
 #define ENABLE( x ) ACTION_CONDITIONS().Enable( x )
@@ -843,6 +857,8 @@ void PCB_EDIT_FRAME::setupUIConditions()
     mgr->SetConditions( ACTIONS::unselectAll,  ENABLE( cond.HasItems() ) );
     mgr->SetConditions( ACTIONS::doDelete,     ENABLE( cond.HasItems() ) );
     mgr->SetConditions( ACTIONS::duplicate,    ENABLE( cond.HasItems() ) );
+
+    mgr->SetConditions( PCB_ACTIONS::placeLinkedDesignBlock, ENABLE( groupWithDesignBlockLink) );
 
     static const std::vector<KICAD_T> groupTypes = { PCB_GROUP_T, PCB_GENERATOR_T };
 

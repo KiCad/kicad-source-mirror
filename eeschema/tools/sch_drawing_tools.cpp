@@ -729,7 +729,14 @@ int SCH_DRAWING_TOOLS::ImportSheet( const TOOL_EVENT& aEvent )
                     group = new SCH_GROUP( screen );
 
                     if( designBlock )
+                    {
                         group->SetName( designBlock->GetLibId().GetLibItemName() );
+                        group->SetDesignBlockLibId( designBlock->GetLibId() );
+                    }
+                    else
+                    {
+                        group->SetName( wxFileName( sheetFileName ).GetName() );
+                    }
                 }
 
                 // Select all new items

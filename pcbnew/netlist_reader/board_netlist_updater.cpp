@@ -895,15 +895,13 @@ bool BOARD_NETLIST_UPDATER::updateFootprintGroup( FOOTPRINT* aPcbFootprint,
                 const_cast<KIID&>( newGroup->m_Uuid ) = newGroupKIID;
                 newGroup->SetName( aNetlistComponent->GetGroup()->name );
 
+                // Add the group to the board manually so we can find it by checking
+                // board groups for later footprints that are checking for existing groups
                 m_board->Add( newGroup );
-                newGroup->AddItem( aPcbFootprint );
-                m_commit.Add( newGroup );
+                m_commit.Added( newGroup );
             }
-            else
-            {
-                newGroup->AddItem( aPcbFootprint );
-                m_commit.Modify( newGroup->AsEdaItem() );
-            }
+
+            m_commit.Stage( aPcbFootprint, CHT_GROUP );
 
             aPcbFootprint->SetParentGroup( newGroup );
         }
@@ -1356,25 +1354,42 @@ bool BOARD_NETLIST_UPDATER::updateGroups( NETLIST& aNetlist )
         if( netlistGroup == nullptr )
             continue;
 
-        if( netlistGroup->name == pcbGroup->GetName() )
-            continue;
-
-        if( m_isDryRun )
+        if( netlistGroup->name != pcbGroup->GetName() )
         {
-            wxString msg;
-            msg.Printf( _( "Change group name to '%s' to '%s'." ),
-                        EscapeHTML( pcbGroup->GetName() ),
-                        EscapeHTML( netlistGroup->name ) );
-            m_reporter->Report( msg, RPT_SEVERITY_ACTION );
+            if( m_isDryRun )
+            {
+                wxString msg;
+                msg.Printf( _( "Change group name to '%s' to '%s'." ), EscapeHTML( pcbGroup->GetName() ),
+                            EscapeHTML( netlistGroup->name ) );
+                m_reporter->Report( msg, RPT_SEVERITY_ACTION );
+            }
+            else
+            {
+                wxString msg;
+                msg.Printf( _( "Changed group name to '%s' to '%s'." ), EscapeHTML( pcbGroup->GetName() ),
+                            EscapeHTML( netlistGroup->name ) );
+                m_commit.Modify( pcbGroup->AsEdaItem() );
+                pcbGroup->SetName( netlistGroup->name );
+            }
         }
-        else
+
+        if( netlistGroup->libId != pcbGroup->GetDesignBlockLibId() )
         {
-            wxString msg;
-            msg.Printf( _( "Changed group name to '%s' to '%s'." ),
-                        EscapeHTML( pcbGroup->GetName() ),
-                        EscapeHTML( netlistGroup->name ) );
-            m_commit.Modify( pcbGroup->AsEdaItem() );
-            pcbGroup->SetName( netlistGroup->name );
+            if( m_isDryRun )
+            {
+                wxString msg;
+                msg.Printf( _( "Change group library link to '%s'." ),
+                            EscapeHTML( netlistGroup->libId.GetUniStringLibId() ) );
+                m_reporter->Report( msg, RPT_SEVERITY_ACTION );
+            }
+            else
+            {
+                wxString msg;
+                msg.Printf( _( "Changed group library link to '%s'." ),
+                            EscapeHTML( netlistGroup->libId.GetUniStringLibId() ) );
+                m_commit.Modify( pcbGroup->AsEdaItem() );
+                pcbGroup->SetDesignBlockLibId( netlistGroup->libId );
+            }
         }
     }
 

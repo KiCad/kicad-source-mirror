@@ -19,6 +19,7 @@ group
 groups
 jumper_pin_groups
 lib
+lib_id
 libpart
 libparts
 libraries

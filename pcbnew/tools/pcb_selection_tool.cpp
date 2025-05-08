@@ -212,6 +212,7 @@ bool PCB_SELECTION_TOOL::Init()
     menu.AddItem( ACTIONS::cancelInteractive,  activeToolCondition, 1 );
     menu.AddItem( ACTIONS::groupEnter,         groupEnterCondition, 1 );
     menu.AddItem( ACTIONS::groupLeave,         inGroupCondition,    1 );
+    menu.AddItem( PCB_ACTIONS::placeLinkedDesignBlock, groupEnterCondition, 1 );
     menu.AddItem( PCB_ACTIONS::clearHighlight, haveHighlight,       1 );
     menu.AddSeparator(                         haveHighlight,       1 );
 

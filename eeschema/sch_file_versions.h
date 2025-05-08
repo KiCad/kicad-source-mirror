@@ -121,4 +121,5 @@
 //#define SEXPR_SCHEMATIC_FILE_VERSION 20250222  // Hatched fills for shapes
 //#define SEXPR_SCHEMATIC_FILE_VERSION 20250227  // Support for local power symbols
 //#define SEXPR_SCHEMATIC_FILE_VERSION 20250318  // ~ no longer means empty text
-#define   SEXPR_SCHEMATIC_FILE_VERSION 20250425  // uuids for tables
+//#define SEXPR_SCHEMATIC_FILE_VERSION 20250425  // uuids for tables
+#define   SEXPR_SCHEMATIC_FILE_VERSION 20250513  // Groups can have design block lib_id

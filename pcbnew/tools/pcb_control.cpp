@@ -1353,6 +1353,59 @@ int PCB_CONTROL::AppendDesignBlock( const TOOL_EVENT& aEvent )
 }
 
 
+int PCB_CONTROL::PlaceLinkedDesignBlock( const TOOL_EVENT& aEvent )
+{
+    PCB_EDIT_FRAME* editFrame = dynamic_cast<PCB_EDIT_FRAME*>( m_frame );
+
+    if( !editFrame )
+        return 1;
+
+    // Need to have a group selected and it needs to have a linked design block
+    PCB_SELECTION_TOOL* selTool = m_toolMgr->GetTool<PCB_SELECTION_TOOL>();
+    PCB_SELECTION       selection = selTool->GetSelection();
+
+    if( selection.Size() != 1 || selection[0]->Type() != PCB_GROUP_T )
+        return 1;
+
+    PCB_GROUP* group = static_cast<PCB_GROUP*>( selection[0] );
+
+    if( !group->HasDesignBlockLink() )
+        return 1;
+
+    // Get the associated design block
+    DESIGN_BLOCK* designBlock =
+            editFrame->GetDesignBlockPane()->GetDesignBlock( group->GetDesignBlockLibId(), true, true );
+
+    if( !designBlock )
+    {
+        wxString msg;
+        msg.Printf( _( "Could not find design block %s." ), group->GetDesignBlockLibId().GetUniStringLibId() );
+        m_frame->GetInfoBar()->ShowMessageFor( msg, 5000, wxICON_WARNING );
+        return 1;
+    }
+
+    if( designBlock->GetBoardFile().IsEmpty() )
+    {
+        wxString msg;
+        msg.Printf( _( "Design block %s does not have a board file." ),
+                    group->GetDesignBlockLibId().GetUniStringLibId() );
+        m_frame->GetInfoBar()->ShowMessageFor( msg, 5000, wxICON_WARNING );
+        return 1;
+    }
+
+
+    PCB_IO_MGR::PCB_FILE_T pluginType = PCB_IO_MGR::KICAD_SEXP;
+    IO_RELEASER<PCB_IO>    pi( PCB_IO_MGR::PluginFind( pluginType ) );
+
+    if( !pi )
+        return 1;
+
+    int ret = AppendBoard( *pi, designBlock->GetBoardFile() );
+
+    return ret;
+}
+
+
 template<typename T>
 static void moveUnflaggedItems( const std::deque<T>& aList, std::vector<BOARD_ITEM*>& aTarget,
                                 bool aIsNew )
@@ -1525,7 +1578,7 @@ bool PCB_CONTROL::placeBoardItems( BOARD_COMMIT* aCommit, std::vector<BOARD_ITEM
 }
 
 
-int PCB_CONTROL::AppendBoard( PCB_IO& pi, const wxString& fileName )
+int PCB_CONTROL::AppendBoard( PCB_IO& pi, const wxString& fileName, DESIGN_BLOCK* aDesignBlock )
 {
     PCB_EDIT_FRAME* editFrame = dynamic_cast<PCB_EDIT_FRAME*>( m_frame );
 
@@ -1645,6 +1698,16 @@ int PCB_CONTROL::AppendBoard( PCB_IO& pi, const wxString& fileName )
         {
             BOARD_COMMIT grpCommit( m_toolMgr );
             PCB_GROUP*   group = new PCB_GROUP( brd );
+
+            if( aDesignBlock )
+            {
+                group->SetName( aDesignBlock->GetLibId().GetLibItemName() );
+                group->SetDesignBlockLibId( aDesignBlock->GetLibId() );
+            }
+            else
+            {
+                group->SetName( wxFileName( fileName ).GetName() );
+            }
 
             // Get the selection tool selection
             PCB_SELECTION_TOOL* selTool = m_toolMgr->GetTool<PCB_SELECTION_TOOL>();
@@ -2512,6 +2575,7 @@ void PCB_CONTROL::setTransitions()
 
     // Append control
     Go( &PCB_CONTROL::AppendDesignBlock,    PCB_ACTIONS::placeDesignBlock.MakeEvent() );
+    Go( &PCB_CONTROL::PlaceLinkedDesignBlock, PCB_ACTIONS::placeLinkedDesignBlock.MakeEvent() );
     Go( &PCB_CONTROL::AppendBoardFromFile,  PCB_ACTIONS::appendBoard.MakeEvent() );
     Go( &PCB_CONTROL::DdAppendBoard,        PCB_ACTIONS::ddAppendBoard.MakeEvent() );
     Go( &PCB_CONTROL::PlaceCharacteristics, PCB_ACTIONS::placeCharacteristics.MakeEvent() );

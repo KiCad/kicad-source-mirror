@@ -4858,6 +4858,38 @@ void SCH_IO_KICAD_SEXPR_PARSER::parseGroup()
             NeedRIGHT();
             break;
 
+        case T_lib_id:
+        {
+            token = NextTok();
+
+            if( !IsSymbol( token ) && token != T_NUMBER )
+                Expecting( "symbol|number" );
+
+            wxString name = FromUTF8();
+            // Some symbol LIB_IDs have the '/' character escaped which can break
+            // symbol links.  The '/' character is no longer an illegal LIB_ID character so
+            // it doesn't need to be escaped.
+            name.Replace( "{slash}", "/" );
+
+            int bad_pos = groupInfo.libId.Parse( name );
+
+            if( bad_pos >= 0 )
+            {
+                if( static_cast<int>( name.size() ) > bad_pos )
+                {
+                    wxString msg = wxString::Format( _( "Group library link %s contains invalid character '%c'" ), name,
+                                                     name[bad_pos] );
+
+                    THROW_PARSE_ERROR( msg, CurSource(), CurLine(), CurLineNumber(), CurOffset() );
+                }
+
+                THROW_PARSE_ERROR( _( "Invalid library ID" ), CurSource(), CurLine(), CurLineNumber(), CurOffset() );
+            }
+
+            NeedRIGHT();
+            break;
+        }
+
         case T_members:
         {
             parseGroupMembers( groupInfo );
@@ -4865,7 +4897,7 @@ void SCH_IO_KICAD_SEXPR_PARSER::parseGroup()
         }
 
         default:
-            Expecting( "uuid, members" );
+            Expecting( "uuid, lib_id, members" );
         }
     }
 }
@@ -4905,6 +4937,9 @@ void SCH_IO_KICAD_SEXPR_PARSER::resolveGroups( SCH_SCREEN* aParent )
         group->SetName( groupInfo.name );
 
         const_cast<KIID&>( group->m_Uuid ) = groupInfo.uuid;
+
+        if( groupInfo.libId.IsValid() )
+            group->SetDesignBlockLibId( groupInfo.libId );
 
         aParent->Append( group );
     }

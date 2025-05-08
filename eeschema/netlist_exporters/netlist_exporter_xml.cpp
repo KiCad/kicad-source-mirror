@@ -515,6 +515,7 @@ XNODE* NETLIST_EXPORTER_XML::makeGroups()
 
             xgroup->AddAttribute( wxT( "name" ), group->GetName() );
             xgroup->AddAttribute( wxT( "uuid" ), group->m_Uuid.AsString() );
+            xgroup->AddAttribute( wxT( "lib_id" ), group->GetDesignBlockLibId().Format() );
 
             XNODE* xmembers;
             xgroup->AddChild( xmembers = node( wxT( "members" ) ) );

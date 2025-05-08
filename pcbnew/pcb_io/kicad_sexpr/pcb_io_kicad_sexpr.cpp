@@ -2223,6 +2223,9 @@ void PCB_IO_KICAD_SEXPR::format( const PCB_GROUP* aGroup ) const
     if( aGroup->IsLocked() )
         KICAD_FORMAT::FormatBool( m_out, "locked", true );
 
+    if( aGroup->HasDesignBlockLink() )
+        m_out->Print( "(lib_id \"%s\")", aGroup->GetDesignBlockLibId().Format().c_str() );
+
     wxArrayString memberIds;
 
     for( EDA_ITEM* member : aGroup->GetItems() )

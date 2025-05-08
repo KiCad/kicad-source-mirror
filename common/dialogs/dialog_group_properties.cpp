@@ -30,6 +30,7 @@
 #include <bitmaps.h>
 #include <widgets/std_bitmap_button.h>
 #include <dialogs/dialog_group_properties.h>
+#include <wx/msgdlg.h>
 
 
 DIALOG_GROUP_PROPERTIES::DIALOG_GROUP_PROPERTIES( EDA_DRAW_FRAME* aParent, EDA_GROUP* aGroup,
@@ -45,6 +46,7 @@ DIALOG_GROUP_PROPERTIES::DIALOG_GROUP_PROPERTIES( EDA_DRAW_FRAME* aParent, EDA_G
 
     m_nameCtrl->SetValue( m_group->GetName() );
     m_locked->SetValue( aGroup->AsEdaItem()->IsLocked() );
+    m_libraryLink->SetValue( m_group->GetDesignBlockLibId().Format() );
 
     if( aGroup->AsEdaItem()->Type() != PCB_GROUP_T )
         m_locked->Hide();
@@ -99,6 +101,23 @@ bool DIALOG_GROUP_PROPERTIES::TransferDataFromWindow()
 
     m_group->SetName( m_nameCtrl->GetValue() );
     m_group->AsEdaItem()->SetLocked( m_locked->GetValue() );
+
+    if( !m_libraryLink->GetValue().IsEmpty() )
+    {
+        LIB_ID libId;
+
+        if( libId.Parse( m_libraryLink->GetValue(), true ) >= 0 )
+        {
+            wxString error;
+            error.Printf( _( "Invalid library link: '%s'" ), m_libraryLink->GetValue() );
+            wxMessageBox( error, _( "Error" ), wxOK | wxICON_ERROR, m_frame );
+            return false;
+        }
+
+        m_group->SetDesignBlockLibId( libId );
+    }
+    else
+        m_group->SetDesignBlockLibId( LIB_ID() );
 
     m_toolMgr->RunAction( ACTIONS::selectionClear );
     m_group->RemoveAll();

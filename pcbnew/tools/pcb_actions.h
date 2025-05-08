@@ -437,6 +437,7 @@ public:
 
     // Design Block management
     static TOOL_ACTION placeDesignBlock;
+    static TOOL_ACTION placeLinkedDesignBlock;
     static TOOL_ACTION showDesignBlockPanel;
     static TOOL_ACTION saveBoardAsDesignBlock;
     static TOOL_ACTION saveSelectionAsDesignBlock;

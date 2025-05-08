@@ -86,6 +86,7 @@ struct NETLIST_GROUP
 {
     wxString name;
     KIID uuid;
+    LIB_ID            libId;
     std::vector<KIID> members;
 };
 

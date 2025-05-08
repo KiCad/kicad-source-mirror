@@ -586,12 +586,14 @@ void KICAD_NETLIST_PARSER::parseGroup()
 {
     /* Parses a section like
      * (groups
-     *      (group (name "") (uuid "7b1488be-4c43-4004-94fc-e4a26dda8f5b")
-     *      (member (uuid "dfef752d-e203-4feb-91de-483b44bc4062"))
+     *      (group (name "") (lib_id "DesignBlock:Block") (uuid "7b1488be-4c43-4004-94fc-e4a26dda8f5b")
+     *      (members
+     *          (member (uuid "dfef752d-e203-4feb-91de-483b44bc4062"))
      */
 
     wxString   name;
     KIID       uuid;
+    wxString          libId; // Design block library link
     std::vector<KIID> members;
 
     // The token net was read, so the next data is (code <number>)
@@ -613,6 +615,12 @@ void KICAD_NETLIST_PARSER::parseGroup()
         case T_uuid:
             NeedSYMBOLorNUMBER();
             uuid = From_UTF8( CurText() );
+            NeedRIGHT();
+            break;
+
+        case T_lib_id:
+            NeedSYMBOLorNUMBER();
+            libId = FromUTF8();
             NeedRIGHT();
             break;
 
@@ -659,7 +667,18 @@ void KICAD_NETLIST_PARSER::parseGroup()
         }
     }
 
-    NETLIST_GROUP* group = new NETLIST_GROUP { name, uuid, members };
+    LIB_ID groupLibId;
+
+    if( !libId.IsEmpty() && groupLibId.Parse( libId, true ) >= 0 )
+    {
+        wxString error;
+        error.Printf( _( "Invalid lib_id ID in\nfile: '%s'\nline: %d\nofff: %d" ), CurSource(), CurLineNumber(),
+                      CurOffset() );
+
+        THROW_IO_ERROR( error );
+    }
+
+    NETLIST_GROUP* group = new NETLIST_GROUP{ name, uuid, groupLibId, members };
     m_netlist->AddGroup( group );
 }
 
