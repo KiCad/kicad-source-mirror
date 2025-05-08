@@ -1567,6 +1567,8 @@ types:
           E.g. RES2012X50N_0805
       - id: unknown_1
         type: u4
+        doc: |
+          E.g. 0x00000000
       - id: coords0
         type: coords
       - id: coords1
@@ -1577,18 +1579,31 @@ types:
         type: u4
       - id: ptr_2
         type: u4
+        doc: Points to 0x0d
       - id: ptr_3
         type: u4
+        doc: |
+          Points to a 0x32 (pad?)
       - id: ptr_4
         type: u4
+        doc: |
+          Points to a 0x14 (segment - list of graphics?)
       - id: str_ptr1
         type: u4
+        doc: |
+          Points to a 0x03
       - id: ptr_5
         type: u4
+        doc: |
+          Points to a 0x28 - courtyard?
       - id: ptr_6
         type: u4
+        doc: |
+          Null?
       - id: ptr_7
         type: u4
+        doc: |
+          Null?
 
       - id: unknown_2
         type: u4

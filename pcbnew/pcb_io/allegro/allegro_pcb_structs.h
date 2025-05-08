@@ -1214,7 +1214,7 @@ struct BLK_0x2B
     std::array<uint32_t, 4> m_Coords;
 
     uint32_t m_Next;
-    uint32_t m_UnknownPtr2;
+    uint32_t m_FirstInstPtr;
     uint32_t m_UnknownPtr3;
     uint32_t m_UnknownPtr4;
     uint32_t m_UnknownPtr5;
@@ -1729,6 +1729,14 @@ public:
     std::unordered_map<uint8_t, std::vector<BLOCK_BASE*>> m_ObjectLists;
 
     static const size_t STRING_TABLE_OFFSET = 0x1200;
+
+    const BLOCK_BASE* GetObjectByKey( uint32_t aKey ) const
+    {
+        auto it = m_ObjectKeyMap.find( aKey );
+        if( it != m_ObjectKeyMap.end() )
+            return it->second;
+        return nullptr;
+    }
 };
 
 } // namespace ALLEGRO

@@ -45,11 +45,11 @@ class FILE_STREAM
     static constexpr bool m_kNeedsSwap = std::endian::native != std::endian::little;
 
 public:
-    FILE_STREAM( std::istream& stream ) : m_stream( stream ) {}
+    explicit FILE_STREAM( std::istream& stream ) : m_stream( stream ) {}
 
     size_t Position() const { return m_stream.tellg(); }
-    void   Seek( size_t pos ) { m_stream.seekg( pos ); }
-    void   Skip( size_t bytes ) { m_stream.seekg( bytes, std::ios::cur ); }
+    void   Seek( size_t aPos ) { m_stream.seekg( aPos ); }
+    void   Skip( size_t aBytes ) { m_stream.seekg( aBytes, std::ios::cur ); }
 
     bool Eof() const { return m_stream.eof(); }
 
@@ -59,12 +59,12 @@ public:
      * It is your responsibility to ensure that the destination buffer is large enough
      * to hold the requested number of bytes.
      */
-    void ReadBytes( void* dest, size_t size )
+    void ReadBytes( void* aDest, size_t aSize )
     {
-        m_stream.read( static_cast<char*>( dest ), size );
-        if( m_stream.gcount() != static_cast<std::streamsize>( size ) )
+        m_stream.read( static_cast<char*>( aDest ), static_cast<std::streamsize>( aSize ) );
+        if( m_stream.gcount() != static_cast<std::streamsize>( aSize ) )
         {
-            THROW_IO_ERROR( "Failed to read requested bytes" );
+            THROW_IO_ERROR( wxString::Format( "Failed to read requested %lu bytes at offset %lu", aSize, Position() ) );
         }
     }
 
@@ -77,12 +77,9 @@ public:
         T value;
         ReadBytes( &value, sizeof( T ) );
 
-        if constexpr( sizeof( T ) > 1 )
+        if constexpr( ( sizeof( T ) > 1 ) && m_kNeedsSwap )
         {
-            if( m_kNeedsSwap )
-            {
-                swapBytes( value );
-            }
+            swapBytes( value );
         }
 
         return value;
@@ -93,7 +90,7 @@ public:
         std::string str;
         while( true )
         {
-            char c = Read<char>();
+            const char c = Read<char>();
             if( c == '\0' )
                 break;
             str += c;
@@ -123,20 +120,34 @@ public:
             Skip( padding );
         }
 
-        return std::string( buffer.data() );
+        return { buffer.data() };
+    }
+
+    // Read a single byte from the stream, returning false if the stream is at EOF
+    bool GetU8( uint8_t& value )
+    {
+        const int ch = m_stream.get();
+
+        if( m_stream.eof() )
+        {
+            return false;
+        }
+
+        value = static_cast<uint8_t>( ch );
+        return true;
     }
 
     uint8_t  ReadU8() { return Read<uint8_t>(); }
     uint16_t ReadU16() { return Read<uint16_t>(); }
     int16_t  ReadS16() { return Read<int16_t>(); }
     uint32_t ReadU32() { return Read<uint32_t>(); }
-    int16_t  ReadS32() { return Read<int32_t>(); }
+    int32_t  ReadS32() { return Read<int32_t>(); }
 
     void SkipU32( size_t n = 1 ) { Skip( sizeof( uint32_t ) * n ); }
 
 private:
     template <typename T>
-    void swapBytes( T& value )
+    static void swapBytes( T& value )
     {
         char* bytes = reinterpret_cast<char*>( &value );
         std::reverse( bytes, bytes + sizeof( T ) );

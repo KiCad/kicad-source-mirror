@@ -27,7 +27,10 @@
 
 #include <allegro_pcb_structs.h>
 
-// #include <board.h>
+#include <board.h>
+#include <reporter.h>
+#include <progress_reporter.h>
+
 
 class BOARD;
 
@@ -41,12 +44,17 @@ namespace ALLEGRO
 class BOARD_BUILDER
 {
 public:
-    BOARD_BUILDER( const RAW_BOARD& aRawBoard );
+    BOARD_BUILDER(const RAW_BOARD& aRawBoard, BOARD& aBoard, REPORTER& aReporter, PROGRESS_REPORTER* aProgressReporter );
 
-    // std::unique_ptr<BOARD> BuildBoard();
+    bool BuildBoard();
 
 private:
-    const RAW_BOARD& m_rawBoard;
+    std::unique_ptr<FOOTPRINT> buildFootprint( const BLK_0x2D& aFpInstance );
+
+    const RAW_BOARD&   m_rawBoard;
+    BOARD&             m_board;
+    REPORTER&          m_reporter;
+    PROGRESS_REPORTER* m_progressReporter;
 };
 
 } // namespace ALLEGRO

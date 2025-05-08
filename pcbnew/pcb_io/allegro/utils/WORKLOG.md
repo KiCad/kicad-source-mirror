@@ -109,3 +109,9 @@ S!SOT23!PACKAGE!2N2221_SOT23_QBC846B!Q2!PIN!TOP!259 1!FIG_RECTANGLE!6!635!777!20
 * Tables are 0x2C and seem to refer to some kind of group/list in 0x37 which then refer to graphics.
 
 * Started Allegro PCB_IO plugin as we have enough details to start an attempt at importing.
+
+### 2025-05-08
+
+* More work on the framework of the Allegro PCB_IO plugin.
+
+* Started integrating the 0x2B / 0x2D info into the Allegro PCB_IO plugin as FOOTPRINTS, but need to decode text better first to get the refdes.

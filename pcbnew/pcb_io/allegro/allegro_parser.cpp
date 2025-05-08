@@ -25,6 +25,7 @@
 
 #include <wx/sstream.h>
 #include <wx/log.h>
+#include <wx/translation.h>
 
 #include <allegro_pcb_structs.h>
 
@@ -1421,7 +1422,7 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x2B( FILE_STREAM& stream, FMT_VER
     data.m_Unknown1 = stream.ReadU32();
     ReadArrayU32( stream, data.m_Coords );
     data.m_Next = stream.ReadU32();
-    data.m_UnknownPtr2 = stream.ReadU32();
+    data.m_FirstInstPtr = stream.ReadU32();
     data.m_UnknownPtr3 = stream.ReadU32();
     data.m_UnknownPtr4 = stream.ReadU32();
     data.m_UnknownPtr5 = stream.ReadU32();
@@ -2112,28 +2113,33 @@ static std::optional<uint32_t> GetBlockKey( const BLOCK_BASE& block )
     return std::nullopt;
 }
 
+#include <iostream>
+
 
 void ALLEGRO::PARSER::readObjects( RAW_BOARD& aBoard )
 {
     const uint32_t magic = aBoard.m_Header->m_Magic;
     FMT_VER        ver = GetFormatVer( magic );
 
-    while( !m_stream.Eof() )
+    if( m_progressReporter )
     {
-        size_t offset = m_stream.Position();
+        m_progressReporter->AdvancePhase( _( "Parsing Allegro objects" ) );
+        // This isn't exactly the number we seem to parse, but it's very close
+        m_progressReporter->SetMaxProgress( static_cast<int>( aBoard.m_Header->m_ObjectCount ) );
+    }
 
-        // This seems to be always true and is quite useful for debugging oit-of-sync objects
+    while( true )
+    {
+        const size_t offset = m_stream.Position();
+
+        // This seems to be always true and is quite useful for debugging out-of-sync objects
         wxASSERT_MSG( offset % 4 == 0,
                       wxString::Format( "Allegro object at %#010lx, offset not aligned to 4 bytes", offset ) );
 
         // Read the type of the object
-        // The file can end here without error/
-        uint8_t type;
-        try
-        {
-            type = m_stream.ReadU8();
-        }
-        catch( const IO_ERROR& e )
+        // The file can end here without error.
+        uint8_t type = 0x00;
+        if( !m_stream.GetU8( type ) )
         {
             break;
         }
@@ -2403,6 +2409,7 @@ void ALLEGRO::PARSER::readObjects( RAW_BOARD& aBoard )
             block = ParseBlock_0x3C( m_stream, ver );
             break;
         }
+        case 0x00:
         default:
         {
             if( !m_endAtUnknownBlock )
@@ -2423,9 +2430,6 @@ void ALLEGRO::PARSER::readObjects( RAW_BOARD& aBoard )
                         wxString::Format( "Added block %lu, type %#04x from %#010lx to %#010lx",
                                           aBoard.m_Objects.size(), type, offset, m_stream.Position() ) );
 
-
-            uint8_t type = block->GetBlockType();
-
             // Creates the vector if it doesn't exist
             aBoard.m_ObjectLists[type].push_back( block.get() );
 
@@ -2433,6 +2437,11 @@ void ALLEGRO::PARSER::readObjects( RAW_BOARD& aBoard )
                 aBoard.m_ObjectKeyMap[*blockKey] = block.get();
 
             aBoard.m_Objects.push_back( std::move( block ) );
+
+            if( m_progressReporter )
+            {
+                m_progressReporter->AdvanceProgress();
+            }
         }
     }
 }
@@ -2441,6 +2450,12 @@ void ALLEGRO::PARSER::readObjects( RAW_BOARD& aBoard )
 std::unique_ptr<RAW_BOARD> ALLEGRO::PARSER::Parse()
 {
     std::unique_ptr<RAW_BOARD> board = std::make_unique<RAW_BOARD>();
+
+    if( m_progressReporter )
+    {
+        m_progressReporter->AddPhases( 2 );
+        m_progressReporter->AdvancePhase( "Reading file header" );
+    }
 
     try
     {

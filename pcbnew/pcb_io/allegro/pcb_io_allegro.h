@@ -44,7 +44,7 @@ public:
     bool CanReadLibrary( const wxString& aFileName ) const override;
 
     BOARD* LoadBoard( const wxString& aFileName, BOARD* aAppendToMe, const std::map<std::string, UTF8>* aProperties,
-                      PROJECT* aProject = nullptr ) override;
+                      PROJECT* aProject ) override;
 
     long long GetLibraryTimestamp( const wxString& aLibraryPath ) const override { return 0; }
 
@@ -63,5 +63,4 @@ public:
     // -----</PUBLIC PCB_IO API>-------------------------------------------------
 
     PCB_IO_ALLEGRO();
-    ~PCB_IO_ALLEGRO();
 };

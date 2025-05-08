@@ -106,7 +106,14 @@ class AllegroBoard:
             else:
                 prnt(f"{name:12}: {value}")
 
-        def print_s(name, k : int):
+        def print_s(name, k : int | list):
+
+            if isinstance(k, list):
+                bs = bytearray(k)
+                s = bs.decode("utf-8", errors="ignore")
+                prnt(f"{name:12}: {s}")
+                return
+
             try:
                 s = self.string(k)
                 prnt(f"{name:12}: {s} (key: {k:#010x})")
@@ -339,6 +346,22 @@ class AllegroBoard:
                 print_ptr("inst_ref", d.inst_ref_16x)
             if hasattr(d, "inst_ref"):
                 print_ptr("inst_ref", d.inst_ref)
+
+        elif t == 0x30:
+
+            print_ptr("next", d.next)
+            print_ptr("str_graphic_ptr", d.str_graphic_ptr)
+
+            if hasattr(d, "ptr3"):
+                print_ptr("ptr_3", d.ptr_3)
+
+            if hasattr(d, "un4"):
+                print_ptr("un4", d.un4)
+
+        elif t == 0x31:
+            print_ptr("str_graphic_wrapper_ptr", d.str_graphic_wrapper_ptr)
+
+            print_s("value", d.value.chars)
 
         elif t == 0x37:
 

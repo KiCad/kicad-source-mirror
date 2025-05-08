@@ -32,6 +32,11 @@
 #include <reporter.h>
 #include <io/io_utils.h>
 
+#include <allegro_parser.h>
+#include <allegro_builder.h>
+
+#include <core/profile.h>
+
 
 static bool checkFileHeader( const wxString& aFileName )
 {
@@ -50,8 +55,8 @@ allegroDefaultLayerMappingCallback( const std::vector<INPUT_LAYER_DESC>& aInputL
 {
     std::map<wxString, PCB_LAYER_ID> retval;
 
-    // Just return a the auto-mapped layers
-    for( INPUT_LAYER_DESC layerDesc : aInputLayerDescriptionVector )
+    // Just return the auto-mapped layers
+    for( const INPUT_LAYER_DESC& layerDesc : aInputLayerDescriptionVector )
     {
         retval.insert( { layerDesc.Name, layerDesc.AutoMapLayer } );
     }
@@ -64,12 +69,7 @@ PCB_IO_ALLEGRO::PCB_IO_ALLEGRO() : PCB_IO( wxS( "Allegro" ) )
 {
     m_reporter = &WXLOG_REPORTER::GetInstance();
 
-    RegisterCallback( allegroDefaultLayerMappingCallback );
-}
-
-
-PCB_IO_ALLEGRO::~PCB_IO_ALLEGRO()
-{
+    LAYER_MAPPABLE_PLUGIN::RegisterCallback( allegroDefaultLayerMappingCallback );
 }
 
 
@@ -96,6 +96,29 @@ BOARD* PCB_IO_ALLEGRO::LoadBoard( const wxString& aFileName, BOARD* aAppendToMe,
 {
     m_props = aProperties;
     m_board = aAppendToMe ? aAppendToMe : new BOARD();
+
+    std::ifstream fin( aFileName, std::ios::binary );
+
+    ALLEGRO::FILE_STREAM allegroStream( fin );
+
+    ALLEGRO::PARSER parser( allegroStream, m_progressReporter );
+
+    // When parsing a file "for real", encountering an unknown block is fatal, as we then
+    // cannot know how long that block is, and thus can't proceed to find any later blocks.
+    parser.EndAtUnknownBlock( false );
+
+    PROF_TIMER timer( "allegro_file_parse" );
+
+    // Import phase 1: turn the file into the C++ structs
+    std::unique_ptr<ALLEGRO::RAW_BOARD> rawBoard = parser.Parse();
+
+    m_reporter->Report( wxString::Format( "Phase 1 parse took %fms", timer.msecs() ), RPT_SEVERITY_DEBUG );
+    // Import Phase 2: turn the C++ structs into the KiCad BOARD
+    ALLEGRO::BOARD_BUILDER builder( *rawBoard, *m_board, *m_reporter, m_progressReporter );
+
+    const bool phase2Ok = builder.BuildBoard();
+
+    m_reporter->Report( wxString::Format( "Phase 2 parse took %fms", timer.msecs( true ) ), RPT_SEVERITY_DEBUG );
 
     return m_board;
 }

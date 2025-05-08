@@ -1,7 +1,12 @@
 
 #pragma once
 
+#include <memory>
+
 #include <allegro_stream.h>
+#include <allegro_pcb_structs.h>
+
+#include <progress_reporter.h>
 
 namespace ALLEGRO
 {
@@ -17,9 +22,12 @@ namespace ALLEGRO
 class PARSER
 {
 public:
-    PARSER( FILE_STREAM& aStream ) :
-        m_stream( aStream )
-    {}
+    PARSER( FILE_STREAM& aStream, PROGRESS_REPORTER* aProgressReporter ) :
+        m_stream( aStream ),
+        m_progressReporter( aProgressReporter )
+    {
+
+    }
 
     /**
      * When set to true, the parser will stop at the first unknown block, rather
@@ -39,8 +47,9 @@ public:
 private:
     void readObjects( RAW_BOARD& aBoard );
 
-    FILE_STREAM& m_stream;
-    bool         m_endAtUnknownBlock = false;
+    FILE_STREAM&       m_stream;
+    bool               m_endAtUnknownBlock = false;
+    PROGRESS_REPORTER* m_progressReporter = nullptr;
 };
 
 } // namespace ALLEGRO
