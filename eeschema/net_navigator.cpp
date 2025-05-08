@@ -572,7 +572,8 @@ void SCH_EDIT_FRAME::onNetNavigatorSelection( wxTreeEvent& aEvent )
 
 void SCH_EDIT_FRAME::onNetNavigatorSelChanging( wxTreeEvent& aEvent )
 {
-    wxCHECK( m_netNavigator && !m_netNavigator->IsFrozen(), /* void */ );
+    if( !m_netNavigator || m_netNavigator->IsFrozen() )
+        return;
 
     aEvent.Skip();
 }
