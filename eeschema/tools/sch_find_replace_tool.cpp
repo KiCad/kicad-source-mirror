@@ -58,7 +58,7 @@ int SCH_FIND_REPLACE_TOOL::UpdateFind( const TOOL_EVENT& aEvent )
                     m_selectionTool->BrightenItem( aItem );
                     m_foundItemHighlighted = true;
                 }
-                else if( aItem->IsBrightened() )
+                else if( aItem->IsBrightened() || aItem->IsForceVisible() )
                 {
                     aItem->SetForceVisible( false );
                     m_selectionTool->UnbrightenItem( aItem );
