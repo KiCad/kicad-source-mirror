@@ -531,15 +531,6 @@ void SCH_EDIT_FRAME::ToggleNetNavigator()
     }
     else
     {
-        NET_NAVIGATOR_ITEM_DATA* itemData = nullptr;
-
-        wxTreeItemId selection = m_netNavigator->GetSelection();
-
-        if( selection.IsOk() )
-            itemData = dynamic_cast<NET_NAVIGATOR_ITEM_DATA*>( m_netNavigator->GetItemData( selection ) );
-
-        RefreshNetNavigator( itemData );
-
         if( netNavigatorPane.IsFloating() )
         {
             cfg->m_AuiPanels.net_nav_panel_float_size  = netNavigatorPane.floating_size;
@@ -550,6 +541,18 @@ void SCH_EDIT_FRAME::ToggleNetNavigator()
         }
 
         m_auimgr.Update();
+    }
+
+    if( netNavigatorPane.IsShown() )
+    {
+        NET_NAVIGATOR_ITEM_DATA* itemData = nullptr;
+
+        wxTreeItemId selection = m_netNavigator->GetSelection();
+
+        if( selection.IsOk() )
+            itemData = dynamic_cast<NET_NAVIGATOR_ITEM_DATA*>( m_netNavigator->GetItemData( selection ) );
+
+        RefreshNetNavigator( itemData );
     }
 }
 
