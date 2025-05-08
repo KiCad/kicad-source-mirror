@@ -934,15 +934,24 @@ HANDLER_RESULT<Empty> API_HANDLER_PCB::handleSetBoardOrigin(
         return tl::unexpected( documentValidation.error() );
     }
 
-    BOARD_DESIGN_SETTINGS& settings = frame()->GetBoard()->GetDesignSettings();
     VECTOR2I origin = UnpackVector2( aCtx.Request.origin() );
 
     switch( aCtx.Request.type() )
     {
     case BOT_GRID:
-        settings.SetGridOrigin( origin );
-        frame()->Refresh();
+    {
+        PCB_EDIT_FRAME* f = frame();
+
+        frame()->CallAfter( [f, origin]()
+                            {
+                                // gridSetOrigin takes ownership and frees this
+                                VECTOR2D* dorigin = new VECTOR2D( origin );
+                                TOOL_MANAGER* mgr = f->GetToolManager();
+                                mgr->RunAction( PCB_ACTIONS::gridSetOrigin, dorigin );
+                                f->Refresh();
+                            } );
         break;
+    }
 
     case BOT_DRILL:
     {
