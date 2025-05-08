@@ -154,21 +154,11 @@ static bool commonParallelProjection( const PCB_ARC& p, const PCB_ARC& n, SHAPE_
     SHAPE_ARC p_arc( p_start, p.GetMid(), p_end, 0 );
     SHAPE_ARC n_arc( n_start, n.GetMid(), n_end, 0 );
 
-    printf("p start angle: %f\n", p_arc.GetStartAngle().AsDegrees());
-    printf("n start angle: %f\n", n_arc.GetStartAngle().AsDegrees());
-    printf("p end angle: %f\n", p_arc.GetEndAngle().AsDegrees());
-    printf("n end angle: %f\n", n_arc.GetEndAngle().AsDegrees());
-
     EDA_ANGLE p_start_angle = p_arc.GetStartAngle();
 
     // Rotate the arcs to a common 0 starting angle
     p_arc.Rotate( p_start_angle, p_center );
     n_arc.Rotate( p_start_angle, n_center );
-
-    printf("Post-rotation p start angle: %f\n", p_arc.GetStartAngle().AsDegrees());
-    printf("Post-rotation n start angle: %f\n", n_arc.GetStartAngle().AsDegrees());
-    printf("Post-rotation p end angle: %f\n", p_arc.GetEndAngle().AsDegrees());
-    printf("Post-rotation n end angle: %f\n", n_arc.GetEndAngle().AsDegrees());
 
     EDA_ANGLE p_end_angle = p_arc.GetEndAngle();
     EDA_ANGLE n_start_angle = n_arc.GetStartAngle();
