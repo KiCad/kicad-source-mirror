@@ -227,7 +227,7 @@ void DIALOG_RULE_AREA_PROPERTIES::OnComponentClassClicked( wxCommandEvent& event
 
 void DIALOG_RULE_AREA_PROPERTIES::OnGroupClicked( wxCommandEvent& event )
 {
-    m_lastPlacementSourceType = RULE_AREA_PLACEMENT_SOURCE_TYPE::GROUP;
+    m_lastPlacementSourceType = RULE_AREA_PLACEMENT_SOURCE_TYPE::GROUP_PLACEMENT;
 }
 
 
@@ -344,8 +344,8 @@ bool DIALOG_RULE_AREA_PROPERTIES::TransferDataToWindow()
             m_placementProperties->m_GroupRb->SetValue( true );
 
         setupCurrentSourceSelection( m_placementProperties->m_groupCombo );
-        m_originalPlacementSourceType = RULE_AREA_PLACEMENT_SOURCE_TYPE::GROUP;
-        m_lastPlacementSourceType = RULE_AREA_PLACEMENT_SOURCE_TYPE::GROUP;
+        m_originalPlacementSourceType = RULE_AREA_PLACEMENT_SOURCE_TYPE::GROUP_PLACEMENT;
+        m_lastPlacementSourceType = RULE_AREA_PLACEMENT_SOURCE_TYPE::GROUP_PLACEMENT;
     }
 
     // Handle most-useful notebook page selection
@@ -475,7 +475,7 @@ bool DIALOG_RULE_AREA_PROPERTIES::TransferDataFromWindow()
     else if( m_placementProperties->m_GroupRb->GetValue() )
     {
         m_zonesettings.SetRuleAreaPlacementEnabled( true );
-        setPlacementSource( RULE_AREA_PLACEMENT_SOURCE_TYPE::GROUP );
+        setPlacementSource( RULE_AREA_PLACEMENT_SOURCE_TYPE::GROUP_PLACEMENT );
     }
     else
     {

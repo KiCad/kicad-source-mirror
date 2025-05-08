@@ -7197,7 +7197,7 @@ ZONE* PCB_IO_KICAD_SEXPR_PARSER::parseZONE( BOARD_ITEM_CONTAINER* aParent )
                 }
                 case T_group:
                 {
-                    zone->SetRuleAreaPlacementSourceType( RULE_AREA_PLACEMENT_SOURCE_TYPE::GROUP );
+                    zone->SetRuleAreaPlacementSourceType( RULE_AREA_PLACEMENT_SOURCE_TYPE::GROUP_PLACEMENT );
                     NeedSYMBOL();
                     zone->SetRuleAreaPlacementSource( FromUTF8() );
                     break;

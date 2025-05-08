@@ -107,7 +107,7 @@ bool MULTICHANNEL_TOOL::identifyComponentsInRuleArea( ZONE*                 aRul
         ruleText = wxT( "A.hasComponentClass('" ) + aRuleArea->GetRuleAreaPlacementSource()
                    + wxT( "')" );
         break;
-    case RULE_AREA_PLACEMENT_SOURCE_TYPE::GROUP:
+    case RULE_AREA_PLACEMENT_SOURCE_TYPE::GROUP_PLACEMENT:
         ruleText = wxT( "A.memberOfGroup('" ) + aRuleArea->GetRuleAreaPlacementSource() + wxT( "')" );
         break;
     }
@@ -357,7 +357,7 @@ void MULTICHANNEL_TOOL::QuerySheetsAndComponentClasses()
     {
         RULE_AREA ent;
 
-        ent.m_sourceType = RULE_AREA_PLACEMENT_SOURCE_TYPE::GROUP;
+        ent.m_sourceType = RULE_AREA_PLACEMENT_SOURCE_TYPE::GROUP_PLACEMENT;
         ent.m_generateEnabled = false;
         ent.m_groupName = groupName;
         ent.m_components = queryComponentsInGroup( ent.m_groupName );
@@ -1218,7 +1218,7 @@ int MULTICHANNEL_TOOL::AutogenerateRuleAreas( const TOOL_EVENT& aEvent )
         }
         else
         {
-            newZone->SetRuleAreaPlacementSourceType( RULE_AREA_PLACEMENT_SOURCE_TYPE::GROUP );
+            newZone->SetRuleAreaPlacementSourceType( RULE_AREA_PLACEMENT_SOURCE_TYPE::GROUP_PLACEMENT );
             newZone->SetRuleAreaPlacementSource( ra.m_groupName );
         }
 

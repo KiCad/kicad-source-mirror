@@ -126,7 +126,7 @@ DIALOG_MULTICHANNEL_GENERATE_RULE_AREAS::DIALOG_MULTICHANNEL_GENERATE_RULE_AREAS
             sheetRowIdx++;
         else if( ruleArea.m_sourceType == RULE_AREA_PLACEMENT_SOURCE_TYPE::COMPONENT_CLASS )
             componentClassRowIdx++;
-        else if( ruleArea.m_sourceType == RULE_AREA_PLACEMENT_SOURCE_TYPE::GROUP )
+        else if( ruleArea.m_sourceType == RULE_AREA_PLACEMENT_SOURCE_TYPE::GROUP_PLACEMENT )
             groupIdx++;
     }
 

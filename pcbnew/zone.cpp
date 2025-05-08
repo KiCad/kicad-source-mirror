@@ -1857,7 +1857,7 @@ static struct ZONE_DESC
             rapstMap.Undefined( RULE_AREA_PLACEMENT_SOURCE_TYPE::SHEETNAME );
             rapstMap.Map( RULE_AREA_PLACEMENT_SOURCE_TYPE::SHEETNAME,       _HKI( "Sheet Name" ) )
                     .Map( RULE_AREA_PLACEMENT_SOURCE_TYPE::COMPONENT_CLASS, _HKI( "Component Class" ) )
-                    .Map( RULE_AREA_PLACEMENT_SOURCE_TYPE::GROUP, _HKI( "Group" ) );
+                    .Map( RULE_AREA_PLACEMENT_SOURCE_TYPE::GROUP_PLACEMENT, _HKI( "Group" ) );
         }
 
         PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
