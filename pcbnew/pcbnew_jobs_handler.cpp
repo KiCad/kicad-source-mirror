@@ -1126,7 +1126,7 @@ int PCBNEW_JOBS_HANDLER::JobExportGerbers( JOB* aJob )
         if( aGerberJob->m_useBoardPlotParams )
             plotOpts = boardPlotOptions;
         else
-            populateGerberPlotOptionsFromJob( plotOpts, aGerberJob );
+            PCB_PLOTTER::PlotJobToPlotOpts( plotOpts, aGerberJob, *m_reporter );
 
         if( plotOpts.GetUseGerberProtelExtensions() )
             fileExt = GetGerberProtelExtension( layer );
@@ -1247,38 +1247,6 @@ int PCBNEW_JOBS_HANDLER::JobExportGencad( JOB* aJob )
 }
 
 
-void PCBNEW_JOBS_HANDLER::populateGerberPlotOptionsFromJob( PCB_PLOT_PARAMS& aPlotOpts,
-                                                            JOB_EXPORT_PCB_GERBER* aJob )
-{
-    aPlotOpts.SetFormat( PLOT_FORMAT::GERBER );
-
-    aPlotOpts.SetPlotFrameRef( aJob->m_plotDrawingSheet );
-    aPlotOpts.SetPlotValue( aJob->m_plotFootprintValues );
-    aPlotOpts.SetPlotReference( aJob->m_plotRefDes );
-
-    aPlotOpts.SetSubtractMaskFromSilk( aJob->m_subtractSolderMaskFromSilk );
-
-    // Always disable plot pad holes
-    aPlotOpts.SetDrillMarksType( DRILL_MARKS::NO_DRILL_SHAPE );
-
-    aPlotOpts.SetDisableGerberMacros( aJob->m_disableApertureMacros );
-    aPlotOpts.SetUseGerberX2format( aJob->m_useX2Format );
-    aPlotOpts.SetIncludeGerberNetlistInfo( aJob->m_includeNetlistAttributes );
-    aPlotOpts.SetUseAuxOrigin( aJob->m_useDrillOrigin );
-    aPlotOpts.SetUseGerberProtelExtensions( aJob->m_useProtelFileExtension );
-    aPlotOpts.SetGerberPrecision( aJob->m_precision );
-}
-
-
-void PCBNEW_JOBS_HANDLER::populateGerberPlotOptionsFromJob( PCB_PLOT_PARAMS& aPlotOpts,
-                                                            JOB_EXPORT_PCB_GERBERS* aJob )
-{
-    populateGerberPlotOptionsFromJob( aPlotOpts, static_cast<JOB_EXPORT_PCB_GERBER*>( aJob ) );
-
-    aPlotOpts.SetCreateGerberJobFile( aJob->m_createJobsFile );
-}
-
-
 int PCBNEW_JOBS_HANDLER::JobExportGerber( JOB* aJob )
 {
     int                    exitCode = CLI::EXIT_CODES::OK;
@@ -1318,7 +1286,7 @@ int PCBNEW_JOBS_HANDLER::JobExportGerber( JOB* aJob )
     }
 
     PCB_PLOT_PARAMS plotOpts;
-    populateGerberPlotOptionsFromJob( plotOpts, aGerberJob );
+    PCB_PLOTTER::PlotJobToPlotOpts( plotOpts, aGerberJob, *m_reporter );
     plotOpts.SetLayerSelection( aGerberJob->m_plotLayerSequence );
     plotOpts.SetPlotOnAllLayersSequence( aGerberJob->m_plotOnAllLayersSequence );
 

@@ -357,6 +357,19 @@ void PCB_PLOTTER::PlotJobToPlotOpts( PCB_PLOT_PARAMS& aOpts, JOB_EXPORT_PCB_PLOT
         aOpts.SetIncludeGerberNetlistInfo( gJob->m_includeNetlistAttributes );
         aOpts.SetCreateGerberJobFile( gJob->m_createJobsFile );
         aOpts.SetGerberPrecision( gJob->m_precision );
+        // Always disable plot pad holes
+        aOpts.SetDrillMarksType( DRILL_MARKS::NO_DRILL_SHAPE );
+    }
+    else
+    {
+        // Drill marks doesn't apply to GERBER
+        switch( aJob->m_drillShapeOption )
+        {
+        case DRILL_MARKS::NO_DRILL_SHAPE:    aOpts.SetDrillMarksType( DRILL_MARKS::NO_DRILL_SHAPE );    break;
+        case DRILL_MARKS::SMALL_DRILL_SHAPE: aOpts.SetDrillMarksType( DRILL_MARKS::SMALL_DRILL_SHAPE ); break;
+        default:
+        case DRILL_MARKS::FULL_DRILL_SHAPE:  aOpts.SetDrillMarksType( DRILL_MARKS::FULL_DRILL_SHAPE );  break;
+        }
     }
 
     if( aJob->m_plotFormat == JOB_EXPORT_PCB_PLOT::PLOT_FORMAT::SVG )
@@ -415,14 +428,6 @@ void PCB_PLOTTER::PlotJobToPlotOpts( PCB_PLOT_PARAMS& aOpts, JOB_EXPORT_PCB_PLOT
     case JOB_EXPORT_PCB_PLOT::PLOT_FORMAT::DXF:    aOpts.SetFormat( PLOT_FORMAT::DXF );    break;
     case JOB_EXPORT_PCB_PLOT::PLOT_FORMAT::HPGL:   aOpts.SetFormat( PLOT_FORMAT::HPGL );   break;
     case JOB_EXPORT_PCB_PLOT::PLOT_FORMAT::PDF:    aOpts.SetFormat( PLOT_FORMAT::PDF );    break;
-    }
-
-    switch( aJob->m_drillShapeOption )
-    {
-    case DRILL_MARKS::NO_DRILL_SHAPE:    aOpts.SetDrillMarksType( DRILL_MARKS::NO_DRILL_SHAPE );    break;
-    case DRILL_MARKS::SMALL_DRILL_SHAPE: aOpts.SetDrillMarksType( DRILL_MARKS::SMALL_DRILL_SHAPE ); break;
-    default:
-    case DRILL_MARKS::FULL_DRILL_SHAPE:  aOpts.SetDrillMarksType( DRILL_MARKS::FULL_DRILL_SHAPE );  break;
     }
 
     SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
