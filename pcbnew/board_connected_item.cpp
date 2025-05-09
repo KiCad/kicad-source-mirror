@@ -223,7 +223,7 @@ static struct BOARD_CONNECTED_ITEM_DESC
                 {
                     if( BOARD_CONNECTED_ITEM* bci = dynamic_cast<BOARD_CONNECTED_ITEM*>( aItem ) )
                     {
-                        if( bci->GetBoard()->LegacyTeardrops() )
+                        if( !bci->GetBoard() || bci->GetBoard()->LegacyTeardrops() )
                             return false;
 
                         return bci->Type() == PCB_PAD_T || bci->Type() == PCB_VIA_T;
@@ -237,7 +237,7 @@ static struct BOARD_CONNECTED_ITEM_DESC
                 {
                     if( BOARD_CONNECTED_ITEM* bci = dynamic_cast<BOARD_CONNECTED_ITEM*>( aItem ) )
                     {
-                        if( bci->GetBoard()->LegacyTeardrops() )
+                        if( !bci->GetBoard() || bci->GetBoard()->LegacyTeardrops() )
                             return false;
 
                         return bci->Type() == PCB_PAD_T;
