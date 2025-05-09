@@ -565,8 +565,6 @@ void DIALOG_SHIM::EndQuasiModal( int retCode )
             m_qmodal_loop->Exit( 0 );
         else
             m_qmodal_loop->ScheduleExit( 0 );
-
-        m_qmodal_loop = nullptr;
     }
 
     delete m_qmodal_parent_disabler;
