@@ -11,10 +11,10 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-05-06 12:52+0300\n"
-"PO-Revision-Date: 2025-04-27 20:41+0000\n"
+"PO-Revision-Date: 2025-05-10 13:03+0000\n"
 "Last-Translator: Ivan Chuba <xtrvweb@gmail.com>\n"
-"Language-Team: Ukrainian <https://hosted.weblate.org/projects/kicad/master-"
-"source/uk/>\n"
+"Language-Team: Ukrainian <https://hosted.weblate.org/projects/kicad/"
+"master-source/uk/>\n"
 "Language: uk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1243,14 +1243,12 @@ msgid "Disable thickness"
 msgstr "Вимкнути товщину міді"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:91
-#, fuzzy
 msgid "Disable uVia holes"
-msgstr "Вимкнути отвори"
+msgstr "Вимкнути мікро отвори"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:94
-#, fuzzy
 msgid "Disable all plated holes"
-msgstr "Вимкнути отвори"
+msgstr "Вимкнути всі металізовані отвори"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:27
 msgid "Procedural textures (slow)"
@@ -4098,9 +4096,8 @@ msgid "Add"
 msgstr "Додати"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:20
-#, fuzzy
 msgid "Enable Git tracking"
-msgstr "Ввімкнути Git відслідковування"
+msgstr "Увімкнути відстеження через Git"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:28
 msgid "Remote Tracking"
@@ -7949,9 +7946,8 @@ msgid "Export HPGL Job Settings"
 msgstr "Налаштування завдання експорту HPGL"
 
 #: common/jobs/job_export_pcb_hpgl.cpp:61
-#, fuzzy
 msgid "PCB: Export HPGL"
-msgstr "PCB: Експорт PDF"
+msgstr "PCB: Експорт HPGL"
 
 #: common/jobs/job_export_pcb_ipc2581.cpp:72
 #: pcbnew/dialogs/dialog_export_2581_base.h:85
@@ -8130,22 +8126,20 @@ msgid "Schematic: Perform ERC"
 msgstr "Схема: Виконати ERC"
 
 #: common/jobs/job_special_copyfiles.cpp:46
-#, fuzzy
 msgid "Special: Copy Files"
-msgstr "Файл Specctra DSN"
+msgstr "Спеціальна дія: Копіювати файли"
 
 #: common/jobs/job_special_execute.cpp:42
 msgid "Special: Execute Command"
-msgstr ""
+msgstr "Спеціальна дія: Виконати команду"
 
 #: common/jobs/jobs_output_archive.cpp:93 common/jobs/jobset.cpp:44
 msgid "Archive"
-msgstr ""
+msgstr "Архів"
 
 #: common/jobs/jobs_output_folder.cpp:80 common/jobs/jobset.cpp:42
-#, fuzzy
 msgid "Folder"
-msgstr "Тека:"
+msgstr "Тека"
 
 #: common/json_schema_validator.cpp:48
 #, c-format
@@ -8269,9 +8263,8 @@ msgid "Net class references"
 msgstr "Характеристики класу зв'язків"
 
 #: common/layer_id.cpp:85
-#, fuzzy
 msgid "Rule areas"
-msgstr "Області з правилами"
+msgstr "Області правил"
 
 #: common/layer_id.cpp:86
 msgid "Symbol body outlines"
@@ -8282,9 +8275,8 @@ msgid "Symbol body fills"
 msgstr "Заповнення тіла символів"
 
 #: common/layer_id.cpp:88
-#, fuzzy
 msgid "Shape fills"
-msgstr "Файли зображень"
+msgstr "Заповнення контурів"
 
 #: common/layer_id.cpp:89
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:72
@@ -8338,9 +8330,8 @@ msgid "DNP markers"
 msgstr "Маркери \"Не монтувати\""
 
 #: common/layer_id.cpp:101
-#, fuzzy
 msgid "Excluded-from-simulation markers"
-msgstr "Виключити з моделювання"
+msgstr "Маркери для виключення із симуляції"
 
 #: common/layer_id.cpp:102
 msgid "ERC warnings"
@@ -8406,9 +8397,8 @@ msgid "Selection highlight"
 msgstr "Виділення підсвіченого"
 
 #: common/layer_id.cpp:115
-#, fuzzy
 msgid "Net color highlight"
-msgstr "Виділення підсвіченого"
+msgstr "Підсвічування кольором зав'язків"
 
 #: common/layer_id.cpp:116 common/layer_id.cpp:145
 msgid "Drawing sheet"
@@ -8504,14 +8494,12 @@ msgid "DRC errors"
 msgstr "Помилки DRC"
 
 #: common/layer_id.cpp:140
-#, fuzzy
 msgid "DRC shape 1"
-msgstr "Прямокутні форми:"
+msgstr "DRC фігура 1"
 
 #: common/layer_id.cpp:141
-#, fuzzy
 msgid "DRC shape 2"
-msgstr "Прямокутні форми:"
+msgstr "DRC фігура 2"
 
 #: common/layer_id.cpp:142
 msgid "DRC exclusions"
