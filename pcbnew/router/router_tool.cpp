@@ -798,7 +798,13 @@ void ROUTER_TOOL::updateSizesAfterRouterEvent( int aTargetLayer, const VECTOR2I&
 
         if( !constraint.IsNull() )
         {
-            sizes.SetDiffPairWidth( std::max( bds.m_TrackMinWidth, constraint.m_Value.Opt() ) );
+            if( bds.UseNetClassDiffPair()
+                    || ( sizes.DiffPairWidth() < bds.m_TrackMinWidth )
+                    || ( sizes.DiffPairWidth() < constraint.m_Value.Min() )
+                    || ( sizes.DiffPairWidth() > constraint.m_Value.Max() ) )
+            {
+                sizes.SetDiffPairWidth( std::max( bds.m_TrackMinWidth, constraint.m_Value.Opt() ) );
+            }
 
             if( sizes.DiffPairWidth() == constraint.m_Value.Opt() )
                 sizes.SetDiffPairWidthSource( constraint.GetName() );
@@ -811,7 +817,13 @@ void ROUTER_TOOL::updateSizesAfterRouterEvent( int aTargetLayer, const VECTOR2I&
 
         if( !constraint.IsNull() )
         {
-            sizes.SetDiffPairGap( std::max( bds.m_MinClearance, constraint.m_Value.Opt() ) );
+            if( bds.UseNetClassDiffPair()
+                    || ( sizes.DiffPairGap() < bds.m_MinClearance )
+                    || ( sizes.DiffPairGap() < constraint.m_Value.Min() )
+                    || ( sizes.DiffPairGap() > constraint.m_Value.Max() ) )
+            {
+                sizes.SetDiffPairGap( std::max( bds.m_MinClearance, constraint.m_Value.Opt() ) );
+            }
 
             if( sizes.DiffPairGap() == constraint.m_Value.Opt() )
                 sizes.SetDiffPairGapSource( constraint.GetName() );
