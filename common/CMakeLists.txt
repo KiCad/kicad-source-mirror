@@ -528,7 +528,6 @@ set( PLOTTERS_CONTROL_SRCS
     plotters/plotter.cpp
     plotters/DXF_plotter.cpp
     plotters/GERBER_plotter.cpp
-    plotters/HPGL_plotter.cpp
     plotters/PDF_plotter.cpp
     plotters/PS_plotter.cpp
     plotters/SVG_plotter.cpp

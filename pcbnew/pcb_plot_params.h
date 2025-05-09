@@ -178,18 +178,6 @@ public:
     void        SetA4Output( int aForce ) { m_A4Output = aForce; }
     bool        GetA4Output() const { return m_A4Output; }
 
-    // For historical reasons, this parameter is stored in mils
-    // (but is in mm in hpgl files...)
-    double      GetHPGLPenDiameter() const { return m_HPGLPenDiam; }
-    bool        SetHPGLPenDiameter( double aValue );
-
-    // This parameter is always in cm, due to hpgl file format constraint
-    int         GetHPGLPenSpeed() const { return m_HPGLPenSpeed; }
-    bool        SetHPGLPenSpeed( int aValue );
-
-    void        SetHPGLPenNum( int aVal ) { m_HPGLPenNum = aVal; }
-    int         GetHPGLPenNum() const { return m_HPGLPenNum; }
-
     void        SetDashedLineDashRatio( double aVal ) { m_dashedLineDashRatio = aVal; }
     double      GetDashedLineDashRatio() const { return m_dashedLineDashRatio; }
 
@@ -292,11 +280,6 @@ private:
     int        m_widthAdjust;           ///< Compensation for PS printers/plotters that do not
                                         ///<   strictly obey line width settings. Only used to plot
                                         ///<   pads and tracks.
-
-    int        m_HPGLPenNum;            ///< HPGL only: pen number selection(1 to 9)
-    int        m_HPGLPenSpeed;          ///< HPGL only: pen speed, always in cm/s (1 to 99 cm/s)
-    double     m_HPGLPenDiam;           ///< HPGL only: pen diameter in MILS, useful to fill areas
-                                        ///< However, it is in mm in hpgl files.
 
     double     m_dashedLineDashRatio;
     double     m_dashedLineGapRatio;

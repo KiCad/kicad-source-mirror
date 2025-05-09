@@ -28,7 +28,6 @@
 #include <common.h>
 #include <sch_plotter.h>
 #include <locale_io.h>
-#include <plotters/plotter_hpgl.h>
 #include <plotters/plotter_dxf.h>
 #include <plotters/plotters_pslike.h>
 
@@ -47,27 +46,6 @@
 // Do not use SCH_EDIT_FRAME::SetCurrentSheet( xxx ) to switch to a sheet, because the new sheet
 // is not displayed, but SCH_EDIT_FRAME::SetCurrentSheet() has side effects to the current VIEW
 // (clear some data used to show the sheet on screen) and does not fully restore the "old" screen
-
-
-static const wxChar* plot_sheet_list( HPGL_PAGE_SIZE aSize )
-{
-    switch( aSize )
-    {
-    default:
-    case HPGL_PAGE_SIZE::DEFAULT: return nullptr;
-    case HPGL_PAGE_SIZE::SIZE_A5: return wxT( "A5" );
-    case HPGL_PAGE_SIZE::SIZE_A4: return wxT( "A4" );
-    case HPGL_PAGE_SIZE::SIZE_A3: return wxT( "A3" );
-    case HPGL_PAGE_SIZE::SIZE_A2: return wxT( "A2" );
-    case HPGL_PAGE_SIZE::SIZE_A1: return wxT( "A1" );
-    case HPGL_PAGE_SIZE::SIZE_A0: return wxT( "A0" );
-    case HPGL_PAGE_SIZE::SIZE_A: return wxT( "A" );
-    case HPGL_PAGE_SIZE::SIZE_B: return wxT( "B" );
-    case HPGL_PAGE_SIZE::SIZE_C: return wxT( "C" );
-    case HPGL_PAGE_SIZE::SIZE_D: return wxT( "D" );
-    case HPGL_PAGE_SIZE::SIZE_E: return wxT( "E" );
-    }
-}
 
 
 SCH_PLOTTER::SCH_PLOTTER( SCHEMATIC* aSchematic ) :
@@ -694,192 +672,6 @@ bool SCH_PLOTTER::plotOneSheetSVG( const wxString& aFileName, SCH_SCREEN* aScree
 }
 
 
-void SCH_PLOTTER::createHPGLFiles( const SCH_PLOT_OPTS& aPlotOpts,
-                                   SCH_RENDER_SETTINGS* aRenderSettings, REPORTER* aReporter )
-{
-    SCH_SCREEN*    screen = m_schematic->RootScreen();
-    SCH_SHEET_PATH oldsheetpath = m_schematic->CurrentSheet();
-
-    /* When printing all pages, the printed page is not the current page.  In complex hierarchies,
-     * we must update symbol references and other parameters in the given printed SCH_SCREEN,
-     * according to the sheet path because in complex hierarchies a SCH_SCREEN (a drawing ) is
-     * shared between many sheets and symbol references depend on the actual sheet path used.
-     */
-    SCH_SHEET_LIST  sheetList;
-
-    if( aPlotOpts.m_plotAll )
-    {
-        sheetList.BuildSheetList( &m_schematic->Root(), true );
-        sheetList.SortByPageNumbers();
-
-        // remove the non-selected pages if we are in plot pages mode
-        if( aPlotOpts.m_plotPages.size() > 0 )
-        {
-            sheetList.TrimToPageNumbers( aPlotOpts.m_plotPages );
-        }
-    }
-    else
-    {
-        // in Eeschema, this prints the current page
-        sheetList.push_back( m_schematic->CurrentSheet() );
-    }
-
-    for( unsigned i = 0; i < sheetList.size(); i++ )
-    {
-        m_schematic->SetCurrentSheet( sheetList[i] );
-        m_schematic->CurrentSheet().UpdateAllScreenReferences();
-        m_schematic->SetSheetNumberAndCount();
-
-        screen = m_schematic->CurrentSheet().LastScreen();
-
-        if( !screen ) // LastScreen() may return NULL
-            screen = m_schematic->RootScreen();
-
-        const PAGE_INFO&    curPage = screen->GetPageSettings();
-
-        PAGE_INFO           plotPage = curPage;
-
-        // if plotting on a page size other than curPage
-        plotPage.SetType( plot_sheet_list( aPlotOpts.m_HPGLPaperSizeSelect ) );
-
-        // Calculation of conversion scales.
-        double  plot_scale = (double) plotPage.GetWidthMils() / curPage.GetWidthMils();
-
-        // Calculate offsets
-        VECTOR2I plotOffset;
-        wxString msg;
-
-        if( aPlotOpts.m_HPGLPlotOrigin == HPGL_PLOT_ORIGIN_AND_UNITS::PLOTTER_CENTER )
-        {
-            plotOffset.x = plotPage.GetWidthIU( schIUScale.IU_PER_MILS ) / 2;
-            plotOffset.y = -plotPage.GetHeightIU( schIUScale.IU_PER_MILS ) / 2;
-        }
-
-        try
-        {
-            wxString fname = m_schematic->GetUniqueFilenameForCurrentSheet();
-            // The sub sheet can be in a sub_hierarchy, but we plot the file in the
-            // main project folder (or the folder specified by the caller),
-            // so replace separators to create a unique filename:
-            fname.Replace( "/", "_" );
-            fname.Replace( "\\", "_" );
-            wxString ext = HPGL_PLOTTER::GetDefaultFileExtension();
-            wxFileName plotFileName = createPlotFileName( aPlotOpts, fname, ext, aReporter );
-
-            if( !plotFileName.IsOk() )
-                return;
-
-            LOCALE_IO toggle;
-
-            if( plotOneSheetHpgl( plotFileName.GetFullPath(), screen, curPage, aRenderSettings,
-                                  plotOffset, plot_scale, aPlotOpts ) )
-            {
-                if( aReporter )
-                {
-                    msg.Printf( _( "Plotted to '%s'." ), plotFileName.GetFullPath() );
-                    aReporter->Report( msg, RPT_SEVERITY_ACTION );
-                }
-            }
-            else
-            {
-                if( aReporter )
-                {
-                    msg.Printf( _( "Failed to create file '%s'." ), plotFileName.GetFullPath() );
-                    aReporter->Report( msg, RPT_SEVERITY_ERROR );
-                }
-            }
-        }
-        catch( IO_ERROR& e )
-        {
-            if( aReporter )
-            {
-                msg.Printf( wxT( "HPGL Plotter exception: %s" ), e.What() );
-                aReporter->Report( msg, RPT_SEVERITY_ERROR );
-            }
-        }
-    }
-
-    if( aReporter )
-    {
-        aReporter->ReportTail( _( "Done." ), RPT_SEVERITY_INFO );
-    }
-
-    restoreEnvironment( nullptr, oldsheetpath );
-}
-
-
-bool SCH_PLOTTER::plotOneSheetHpgl( const wxString& aFileName, SCH_SCREEN* aScreen,
-                                    const PAGE_INFO& aPageInfo, RENDER_SETTINGS* aRenderSettings,
-                                    const VECTOR2I& aPlot0ffset, double aScale,
-                                    const SCH_PLOT_OPTS& aPlotOpts )
-{
-    HPGL_PLOTTER* plotter = new HPGL_PLOTTER();
-    // Currently, plot units are in decimil
-
-    plotter->SetPageSettings( aPageInfo );
-    plotter->SetRenderSettings( aRenderSettings );
-    plotter->RenderSettings()->LoadColors( m_colorSettings );
-    plotter->SetViewport( aPlot0ffset, schIUScale.IU_PER_MILS/10, aScale, false );
-
-    // TODO this could be configurable
-    plotter->SetTargetChordLength( schIUScale.mmToIU( 0.6 ) );
-
-    switch( aPlotOpts.m_HPGLPlotOrigin )
-    {
-    case HPGL_PLOT_ORIGIN_AND_UNITS::PLOTTER_BOT_LEFT:
-    case HPGL_PLOT_ORIGIN_AND_UNITS::PLOTTER_CENTER:
-    default:
-        plotter->SetUserCoords( false );
-        break;
-    case HPGL_PLOT_ORIGIN_AND_UNITS::USER_FIT_PAGE:
-        plotter->SetUserCoords( true );
-        plotter->SetUserCoordsFit( false );
-        break;
-    case HPGL_PLOT_ORIGIN_AND_UNITS::USER_FIT_CONTENT:
-        plotter->SetUserCoords( true );
-        plotter->SetUserCoordsFit( true );
-        break;
-    }
-
-    // Init :
-    plotter->SetCreator( wxT( "Eeschema-HPGL" ) );
-
-    if( !plotter->OpenFile( aFileName ) )
-    {
-        delete plotter;
-        return false;
-    }
-
-    LOCALE_IO toggle;
-
-    // Pen num and pen speed are not initialized here.
-    // Default HPGL driver values are used
-    plotter->SetPenDiameter( aPlotOpts.m_HPGLPenSize );
-    plotter->StartPlot( m_schematic->CurrentSheet().GetPageNumber() );
-
-    if( aPlotOpts.m_plotDrawingSheet )
-    {
-        wxString sheetName = m_schematic->CurrentSheet().Last()->GetName();
-        wxString sheetPath = m_schematic->CurrentSheet().PathHumanReadable();
-
-        PlotDrawingSheet( plotter, &m_schematic->Prj(),
-                          aScreen->GetTitleBlock(),
-                          aPageInfo,
-                          aScreen->Schematic()->GetProperties(), aScreen->GetPageNumber(),
-                          aScreen->GetPageCount(), sheetName, sheetPath, aScreen->GetFileName(),
-                          COLOR4D::BLACK, aScreen->GetVirtualPageNumber() == 1 );
-    }
-
-    aScreen->Plot( plotter, aPlotOpts );
-
-    plotter->EndPlot();
-
-    delete plotter;
-
-    return true;
-}
-
-
 void SCH_PLOTTER::createDXFFiles( const SCH_PLOT_OPTS& aPlotOpts,
                                   SCH_RENDER_SETTINGS* aRenderSettings, REPORTER* aReporter )
 {
@@ -1100,6 +892,6 @@ void SCH_PLOTTER::Plot( PLOT_FORMAT aPlotFormat, const SCH_PLOT_OPTS& aPlotOpts,
     case PLOT_FORMAT::DXF:  createDXFFiles( aPlotOpts, aRenderSettings, aReporter );  break;
     case PLOT_FORMAT::PDF:  createPDFFile( aPlotOpts, aRenderSettings, aReporter );   break;
     case PLOT_FORMAT::SVG:  createSVGFiles( aPlotOpts, aRenderSettings, aReporter );  break;
-    case PLOT_FORMAT::HPGL: createHPGLFiles( aPlotOpts, aRenderSettings, aReporter ); break;
+    case PLOT_FORMAT::HPGL: /* no longer supported */                                 break;
     }
 }

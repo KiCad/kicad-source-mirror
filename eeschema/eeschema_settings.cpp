@@ -561,15 +561,6 @@ EESCHEMA_SETTINGS::EESCHEMA_SETTINGS() :
     m_params.emplace_back( new PARAM<bool>( "plot.pdf_metadata",
             &m_PlotPanel.pdf_metadata, true ) );
 
-    m_params.emplace_back( new PARAM<int>( "plot.hpgl_paper_size",
-            &m_PlotPanel.hpgl_paper_size, 0 ) );
-
-    m_params.emplace_back( new PARAM<double>( "plot.hpgl_pen_size",
-            &m_PlotPanel.hpgl_pen_size, 0.5 ) );
-
-    m_params.emplace_back( new PARAM<int>( "plot.hpgl_origin",
-            &m_PlotPanel.hpgl_origin, 0 ) );
-
     m_params.emplace_back( new PARAM<bool>( "plot.other_open_file_after_plot",
             &m_PlotPanel.open_file_after_plot, false ) );
 
@@ -913,9 +904,6 @@ bool EESCHEMA_SETTINGS::MigrateFromLegacy( wxConfigBase* aCfg )
     ret &= fromLegacy<bool>(   aCfg, "PlotModeColor",     "plot.color" );
     ret &= fromLegacy<int>(    aCfg, "PlotFormat",        "plot.format" );
     ret &= fromLegacy<bool>(   aCfg, "PlotFrameRef",      "plot.frame_reference" );
-    ret &= fromLegacy<bool>(   aCfg, "PlotHPGLOrg",       "plot.hpgl_origin" );
-    ret &= fromLegacy<int>(    aCfg, "PlotHPGLPaperSize", "plot.hpgl_paper_size" );
-    ret &= fromLegacy<double>( aCfg, "PlotHPGLPenSize",   "plot.hpgl_pen_size" );
 
     ret &= fromLegacy<int>(    aCfg, "SIM_PLOT_FRAMEPos_x",       "simulator.window.pos_x" );
     ret &= fromLegacy<int>(    aCfg, "SIM_PLOT_FRAMEPos_y",       "simulator.window.pos_y" );

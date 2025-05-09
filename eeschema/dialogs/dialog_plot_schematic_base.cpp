@@ -39,10 +39,10 @@ DIALOG_PLOT_SCHEMATIC_BASE::DIALOG_PLOT_SCHEMATIC_BASE( wxWindow* parent, wxWind
 
 	m_optionsSizer = new wxBoxSizer( wxHORIZONTAL );
 
-	wxString m_plotFormatOptChoices[] = { _("Postscript"), _("PDF"), _("SVG"), _("DXF"), _("HPGL") };
+	wxString m_plotFormatOptChoices[] = { _("Postscript"), _("PDF"), _("SVG"), _("DXF") };
 	int m_plotFormatOptNChoices = sizeof( m_plotFormatOptChoices ) / sizeof( wxString );
 	m_plotFormatOpt = new wxRadioBox( this, wxID_ANY, _("Output Format"), wxDefaultPosition, wxDefaultSize, m_plotFormatOptNChoices, m_plotFormatOptChoices, 1, wxRA_SPECIFY_COLS );
-	m_plotFormatOpt->SetSelection( 2 );
+	m_plotFormatOpt->SetSelection( 1 );
 	m_optionsSizer->Add( m_plotFormatOpt, 0, wxALIGN_TOP|wxEXPAND|wxLEFT|wxRIGHT, 5 );
 
 	wxStaticBoxSizer* sbOptions;
@@ -120,42 +120,6 @@ DIALOG_PLOT_SCHEMATIC_BASE::DIALOG_PLOT_SCHEMATIC_BASE( wxWindow* parent, wxWind
 
 	wxBoxSizer* bOptionsRight;
 	bOptionsRight = new wxBoxSizer( wxVERTICAL );
-
-	m_HPGLOptionsSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("HPGL Options") ), wxVERTICAL );
-
-	wxGridBagSizer* gbSizer2;
-	gbSizer2 = new wxGridBagSizer( 3, 3 );
-	gbSizer2->SetFlexibleDirection( wxBOTH );
-	gbSizer2->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
-
-	m_plotOriginTitle = new wxStaticText( m_HPGLOptionsSizer->GetStaticBox(), wxID_ANY, _("Position and units:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_plotOriginTitle->Wrap( -1 );
-	gbSizer2->Add( m_plotOriginTitle, wxGBPosition( 0, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
-
-	wxString m_plotOriginOptChoices[] = { _("Bottom left, plotter units"), _("Centered, plotter units"), _("Page fit, user units"), _("Content fit, user units") };
-	int m_plotOriginOptNChoices = sizeof( m_plotOriginOptChoices ) / sizeof( wxString );
-	m_plotOriginOpt = new wxChoice( m_HPGLOptionsSizer->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_plotOriginOptNChoices, m_plotOriginOptChoices, 0 );
-	m_plotOriginOpt->SetSelection( 0 );
-	gbSizer2->Add( m_plotOriginOpt, wxGBPosition( 0, 1 ), wxGBSpan( 1, 2 ), wxEXPAND, 5 );
-
-	m_penWidthLabel = new wxStaticText( m_HPGLOptionsSizer->GetStaticBox(), wxID_ANY, _("Pen width:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_penWidthLabel->Wrap( -1 );
-	gbSizer2->Add( m_penWidthLabel, wxGBPosition( 1, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
-
-	m_penWidthCtrl = new wxTextCtrl( m_HPGLOptionsSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	gbSizer2->Add( m_penWidthCtrl, wxGBPosition( 1, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
-
-	m_penWidthUnits = new wxStaticText( m_HPGLOptionsSizer->GetStaticBox(), wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_penWidthUnits->Wrap( -1 );
-	gbSizer2->Add( m_penWidthUnits, wxGBPosition( 1, 2 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
-
-
-	gbSizer2->AddGrowableCol( 1 );
-
-	m_HPGLOptionsSizer->Add( gbSizer2, 1, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
-
-
-	bOptionsRight->Add( m_HPGLOptionsSizer, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 
 	wxStaticBoxSizer* sbSizer4;
 	sbSizer4 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("PDF Options") ), wxVERTICAL );

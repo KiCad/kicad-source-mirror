@@ -27,32 +27,6 @@
 #include "job.h"
 
 
-enum class JOB_HPGL_PLOT_ORIGIN_AND_UNITS
-{
-    PLOTTER_BOT_LEFT,
-    PLOTTER_CENTER,
-    USER_FIT_PAGE,
-    USER_FIT_CONTENT,
-};
-
-
-enum class JOB_HPGL_PAGE_SIZE
-{
-    DEFAULT = 0,
-    SIZE_A5,
-    SIZE_A4,
-    SIZE_A3,
-    SIZE_A2,
-    SIZE_A1,
-    SIZE_A0,
-    SIZE_A,
-    SIZE_B,
-    SIZE_C,
-    SIZE_D,
-    SIZE_E,
-};
-
-
 enum class JOB_PAGE_SIZE
 {
     PAGE_SIZE_AUTO,
@@ -89,14 +63,10 @@ public:
     JOB_PAGE_SIZE         m_pageSizeSelect;
     bool                  m_useBackgroundColor;
     int                   m_minPenWidth;
-    double                m_HPGLPenSize; // for HPGL format only: pen size
-    JOB_HPGL_PAGE_SIZE    m_HPGLPaperSizeSelect;
     bool                  m_PDFPropertyPopups;
     bool                  m_PDFHierarchicalLinks;
     bool                  m_PDFMetadata;
     wxString              m_theme;
-
-    JOB_HPGL_PLOT_ORIGIN_AND_UNITS m_HPGLPlotOrigin;
 };
 
 
@@ -141,7 +111,6 @@ class KICOMMON_API JOB_EXPORT_SCH_PLOT_HPGL : public JOB_EXPORT_SCH_PLOT
 public:
     JOB_EXPORT_SCH_PLOT_HPGL();
     wxString GetDefaultDescription() const override;
-    wxString GetSettingsDialogTitle() const override;
 };
 
 #endif

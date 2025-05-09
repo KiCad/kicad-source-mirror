@@ -52,7 +52,7 @@ class PROJECT;
  *  - rect
  *  - polygons (for logos)
  *  - graphic texts
- *  - bitmaps (also for logos, but they cannot be plot by SVG, GERBER or HPGL plotters
+ *  - bitmaps (also for logos, but they cannot be plot by SVG or GERBER plotters
  *    where we just plot the bounding box)
  */
 class DS_DRAW_ITEM_BASE : public EDA_ITEM

@@ -25,7 +25,6 @@
 #include <eda_item.h>
 #include <font/font.h>
 #include <plotters/plotter_dxf.h>
-#include <plotters/plotter_hpgl.h>
 #include <plotters/plotters_pslike.h>
 #include <plotters/plotter_gerber.h>
 #include <drawing_sheet/ds_data_item.h>
@@ -41,7 +40,6 @@ wxString GetDefaultPlotExtension( PLOT_FORMAT aFormat )
     case PLOT_FORMAT::DXF:    return DXF_PLOTTER::GetDefaultFileExtension();
     case PLOT_FORMAT::POST:   return PS_PLOTTER::GetDefaultFileExtension();
     case PLOT_FORMAT::PDF:    return PDF_PLOTTER::GetDefaultFileExtension();
-    case PLOT_FORMAT::HPGL:   return HPGL_PLOTTER::GetDefaultFileExtension();
     case PLOT_FORMAT::GERBER: return GERBER_PLOTTER::GetDefaultFileExtension();
     case PLOT_FORMAT::SVG:    return SVG_PLOTTER::GetDefaultFileExtension();
     default:    wxFAIL;       return wxEmptyString;

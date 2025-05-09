@@ -40,7 +40,6 @@
 #include <pcbplot.h>
 #include <plotters/plotter.h>
 #include <plotters/plotter_dxf.h>
-#include <plotters/plotter_hpgl.h>
 #include <plotters/plotter_gerber.h>
 #include <plotters/plotters_pslike.h>
 #include <pcb_painter.h>
@@ -1196,22 +1195,6 @@ static void FillNegativeKnockout( PLOTTER *aPlotter, const BOX2I &aBbbox )
 
 
 /**
- * Calculate the effective size of HPGL pens and set them in the plotter object
- */
-static void ConfigureHPGLPenSizes( HPGL_PLOTTER *aPlotter, const PCB_PLOT_PARAMS *aPlotOpts )
-{
-    // Compute penDiam (the value is given in mils) in pcb units, with plot scale (if Scale is 2,
-    // penDiam value is always m_HPGLPenDiam so apparent penDiam is actually penDiam / Scale
-    int penDiam = KiROUND( aPlotOpts->GetHPGLPenDiameter() * pcbIUScale.IU_PER_MILS / aPlotOpts->GetScale() );
-
-    // Set HPGL-specific options and start
-    aPlotter->SetPenSpeed( aPlotOpts->GetHPGLPenSpeed() );
-    aPlotter->SetPenNumber( aPlotOpts->GetHPGLPenNum() );
-    aPlotter->SetPenDiameter( penDiam );
-}
-
-
-/**
  * Open a new plotfile using the options (and especially the format) specified in the options
  * and prepare the page for plotting.
  *
@@ -1251,13 +1234,8 @@ PLOTTER* StartPlotBoard( BOARD *aBoard, const PCB_PLOT_PARAMS *aPlotOpts, int aL
         break;
 
     case PLOT_FORMAT::HPGL:
-        HPGL_PLOTTER* HPGL_plotter;
-        HPGL_plotter = new HPGL_PLOTTER();
-
-        // HPGL options are a little more convoluted to compute, so they get their own function
-        ConfigureHPGLPenSizes( HPGL_plotter, aPlotOpts );
-        plotter = HPGL_plotter;
-        break;
+        wxLogError( _( "HPGL plotting is no longer supported as of KiCad 10.0" ) );
+        return nullptr;
 
     case PLOT_FORMAT::GERBER:
         // For Gerber plotter, a valid board layer must be set, in order to create a valid

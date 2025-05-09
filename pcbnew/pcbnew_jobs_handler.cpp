@@ -95,6 +95,7 @@
 
 #include "pcbnew_scripting_helpers.h"
 #include <locale_io.h>
+#include <confirm.h>
 
 
 #ifdef _WIN32
@@ -222,18 +223,23 @@ PCBNEW_JOBS_HANDLER::PCBNEW_JOBS_HANDLER( KIWAY* aKiway ) :
                   DIALOG_PLOT dlg( editFrame, aParent, gJob );
                   return dlg.ShowModal() == wxID_OK;
               } );
-    Register( "hpgl", std::bind( &PCBNEW_JOBS_HANDLER::JobExportHpgl, this, std::placeholders::_1 ),
+    Register( "hpgl",
+              [&]( JOB* aJob )
+              {
+                  m_reporter->Report( _( "Plotting to HPGL is no longer supported as of KiCad 10.0.\n" ),
+                                      RPT_SEVERITY_ERROR );
+                  return CLI::EXIT_CODES::ERR_ARGS;
+              },
               [aKiway]( JOB* job, wxWindow* aParent ) -> bool
               {
-                  JOB_EXPORT_PCB_HPGL* hpglJob = dynamic_cast<JOB_EXPORT_PCB_HPGL*>( job );
-
                   PCB_EDIT_FRAME* editFrame =
                           dynamic_cast<PCB_EDIT_FRAME*>( aKiway->Player( FRAME_PCB_EDITOR, false ) );
 
-                  wxCHECK( hpglJob && editFrame, false );
+                  wxCHECK( editFrame, false );
 
-                  DIALOG_PLOT dlg( editFrame, aParent, hpglJob );
-                  return dlg.ShowModal() == wxID_OK;
+                  DisplayErrorMessage( editFrame,
+                                       _( "Plotting to HPGL is no longer supported as of KiCad 10.0." ) );
+                  return false;
               } );
     Register( "drill",
               std::bind( &PCBNEW_JOBS_HANDLER::JobExportDrill, this, std::placeholders::_1 ),
@@ -1295,90 +1301,6 @@ int PCBNEW_JOBS_HANDLER::JobExportGerbers( JOB* aJob )
     }
 
     return exitCode;
-}
-
-
-int PCBNEW_JOBS_HANDLER::JobExportHpgl( JOB* aJob )
-{
-    JOB_EXPORT_PCB_HPGL* hpglJob = dynamic_cast<JOB_EXPORT_PCB_HPGL*>( aJob );
-
-    if( hpglJob == nullptr )
-        return CLI::EXIT_CODES::ERR_UNKNOWN;
-
-    BOARD* brd = getBoard( hpglJob->m_filename );
-
-    if( !brd )
-        return CLI::EXIT_CODES::ERR_INVALID_INPUT_FILE;
-
-    hpglJob->SetTitleBlock( brd->GetTitleBlock() );
-    loadOverrideDrawingSheet( brd, hpglJob->m_drawingSheet );
-    brd->GetProject()->ApplyTextVars( hpglJob->GetVarOverrides() );
-    brd->SynchronizeProperties();
-
-    if( hpglJob->m_argLayers )
-        hpglJob->m_plotLayerSequence = convertLayerArg( hpglJob->m_argLayers.value(), brd );
-
-    if( hpglJob->m_argCommonLayers )
-        hpglJob->m_plotOnAllLayersSequence = convertLayerArg( hpglJob->m_argCommonLayers.value(), brd );
-
-    if( hpglJob->m_plotLayerSequence.size() < 1 )
-    {
-        m_reporter->Report( _( "At least one layer must be specified\n" ), RPT_SEVERITY_ERROR );
-        return CLI::EXIT_CODES::ERR_ARGS;
-    }
-
-    bool isSingle = hpglJob->m_genMode == JOB_EXPORT_PCB_HPGL::GEN_MODE::SINGLE;
-
-    if( isSingle )
-    {
-        if( hpglJob->GetConfiguredOutputPath().IsEmpty() )
-        {
-            wxFileName fn = brd->GetFileName();
-            fn.SetName( fn.GetName() );
-            fn.SetExt( GetDefaultPlotExtension( PLOT_FORMAT::POST ) );
-
-            hpglJob->SetWorkingOutputPath( fn.GetFullName() );
-        }
-    }
-
-    wxString outPath = hpglJob->GetFullOutputPath( brd->GetProject() );
-
-    if( !PATHS::EnsurePathExists( outPath, isSingle ) )
-    {
-        m_reporter->Report( _( "Failed to create output directory\n" ), RPT_SEVERITY_ERROR );
-        return CLI::EXIT_CODES::ERR_INVALID_OUTPUT_CONFLICT;
-    }
-
-    PCB_PLOT_PARAMS plotOpts;
-    PCB_PLOTTER::PlotJobToPlotOpts( plotOpts, hpglJob, *m_reporter );
-
-    PCB_PLOTTER pcbPlotter( brd, m_reporter, plotOpts );
-
-    std::optional<wxString> layerName;
-    std::optional<wxString> sheetName;
-    std::optional<wxString> sheetPath;
-
-    if( isSingle )
-    {
-        if( aJob->GetVarOverrides().contains( wxT( "LAYER" ) ) )
-            layerName = hpglJob->GetVarOverrides().at( wxT( "LAYER" ) );
-
-        if( aJob->GetVarOverrides().contains( wxT( "SHEETNAME" ) ) )
-            sheetName = hpglJob->GetVarOverrides().at( wxT( "SHEETNAME" ) );
-
-        if( aJob->GetVarOverrides().contains( wxT( "SHEETPATH" ) ) )
-            sheetPath = hpglJob->GetVarOverrides().at( wxT( "SHEETPATH" ) );
-    }
-
-    LOCALE_IO dummy;
-
-    if( !pcbPlotter.Plot( outPath, hpglJob->m_plotLayerSequence, hpglJob->m_plotOnAllLayersSequence, false, isSingle,
-                          layerName, sheetName, sheetPath ) )
-    {
-        return CLI::EXIT_CODES::ERR_UNKNOWN;
-    }
-
-    return CLI::EXIT_CODES::OK;
 }
 
 

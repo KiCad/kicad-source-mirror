@@ -658,7 +658,7 @@ protected:      // variables used in most of plotters:
                                             // usually decimils)
     VECTOR2I         m_plotOffset;          // Plot offset (in IUs)
     bool             m_plotMirror;          // X axis orientation (SVG)
-                                            // and plot mirrored (only for PS, PDF HPGL and SVG)
+                                            // and plot mirrored (only for PS, PDF and SVG)
     bool             m_mirrorIsHorizontal;  // true to mirror horizontally (else vertically)
     bool             m_yaxisReversed;       // true if the Y axis is top to bottom (SVG)
 

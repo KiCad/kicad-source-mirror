@@ -266,9 +266,6 @@ public:
         wxString color_theme;
         int      format;
         bool     frame_reference;
-        int      hpgl_paper_size;
-        double   hpgl_pen_size;
-        int      hpgl_origin;
         bool     pdf_property_popups;
         bool     pdf_hierarchical_links;
         bool     pdf_metadata;

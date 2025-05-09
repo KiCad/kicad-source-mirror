@@ -21,11 +21,6 @@
 #ifndef JOB_EXPORT_PCB_HPGL_H
 #define JOB_EXPORT_PCB_HPGL_H
 
-#include <kicommon.h>
-#include <kicommon.h>
-#include <layer_ids.h>
-#include <lseq.h>
-#include <wx/string.h>
 #include <jobs/job_export_pcb_plot.h>
 
 
@@ -34,18 +29,6 @@ class KICOMMON_API JOB_EXPORT_PCB_HPGL : public JOB_EXPORT_PCB_PLOT
 public:
     JOB_EXPORT_PCB_HPGL();
     wxString GetDefaultDescription() const override;
-    wxString GetSettingsDialogTitle() const override;
-
-    enum class GEN_MODE
-    {
-        SINGLE,
-        MULTI
-    };
-
-    GEN_MODE  m_genMode;
-    double    m_defaultPenSize;
-    int       m_penSpeed;
-    int       m_penNumber;
 };
 
 #endif

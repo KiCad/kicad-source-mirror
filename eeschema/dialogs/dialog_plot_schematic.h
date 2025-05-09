@@ -107,10 +107,7 @@ private:
     bool                  m_configChanged;        // true if a project config param has changed
     PLOT_FORMAT           m_plotFormat;
     static int            m_pageSizeSelect;       // Static to keep last option for some format
-    static HPGL_PAGE_SIZE m_HPGLPaperSizeSelect; // for HPGL format only: last selected paper size
-    double                m_HPGLPenSize;
     UNIT_BINDER           m_defaultLineWidth;
-    UNIT_BINDER           m_penWidth;
     JOB_EXPORT_SCH_PLOT*  m_job;
 };
 

@@ -74,6 +74,7 @@
 #include <dialogs/dialog_plot_schematic.h>
 #include <dialogs/dialog_erc_job_config.h>
 #include <dialogs/dialog_symbol_fields_table.h>
+#include <confirm.h>
 
 
 EESCHEMA_JOBS_HANDLER::EESCHEMA_JOBS_HANDLER( KIWAY* aKiway ) :
@@ -124,6 +125,13 @@ EESCHEMA_JOBS_HANDLER::EESCHEMA_JOBS_HANDLER( KIWAY* aKiway ) :
                           static_cast<SCH_EDIT_FRAME*>( aKiway->Player( FRAME_SCH, false ) );
 
                   wxCHECK( plotJob && editFrame, false );
+
+                  if( plotJob->m_plotFormat == SCH_PLOT_FORMAT::HPGL )
+                  {
+                      DisplayErrorMessage( editFrame,
+                                           _( "Plotting to HPGL is no longer supported as of KiCad 10.0." ) );
+                      return false;
+                  }
 
                   DIALOG_PLOT_SCHEMATIC dlg( editFrame, aParent, plotJob );
                   return dlg.ShowModal() == wxID_OK;
@@ -177,8 +185,7 @@ SCHEMATIC* EESCHEMA_JOBS_HANDLER::getSchematic( const wxString& aPath )
     }
     else if( Pgm().IsGUI() && Pgm().GetSettingsManager().IsProjectOpen() )
     {
-        SCH_EDIT_FRAME* editFrame = static_cast<SCH_EDIT_FRAME*>( m_kiway->Player( FRAME_SCH,
-                                                                                   false ) );
+        SCH_EDIT_FRAME* editFrame = static_cast<SCH_EDIT_FRAME*>( m_kiway->Player( FRAME_SCH, false ) );
 
         if( editFrame )
             sch = &editFrame->Schematic();
@@ -253,6 +260,13 @@ int EESCHEMA_JOBS_HANDLER::JobExportPlot( JOB* aJob )
 
     wxCHECK( aPlotJob, CLI::EXIT_CODES::ERR_UNKNOWN );
 
+    if( aPlotJob->m_plotFormat == SCH_PLOT_FORMAT::HPGL )
+    {
+        m_reporter->Report( _( "Plotting to HPGL is no longer supported as of KiCad 10.0.\n" ),
+                            RPT_SEVERITY_ERROR );
+        return CLI::EXIT_CODES::ERR_ARGS;
+    }
+
     SCHEMATIC* sch = getSchematic( aPlotJob->m_filename );
 
     if( !sch )
@@ -291,43 +305,7 @@ int EESCHEMA_JOBS_HANDLER::JobExportPlot( JOB* aJob )
     case SCH_PLOT_FORMAT::PDF:    format = PLOT_FORMAT::PDF;    break;
     case SCH_PLOT_FORMAT::SVG:    format = PLOT_FORMAT::SVG;    break;
     case SCH_PLOT_FORMAT::POST:   format = PLOT_FORMAT::POST;   break;
-    case SCH_PLOT_FORMAT::HPGL:   format = PLOT_FORMAT::HPGL;   break;
-    }
-
-    HPGL_PAGE_SIZE hpglPageSize = HPGL_PAGE_SIZE::DEFAULT;
-
-    switch( aPlotJob->m_HPGLPaperSizeSelect )
-    {
-    case JOB_HPGL_PAGE_SIZE::DEFAULT: hpglPageSize = HPGL_PAGE_SIZE::DEFAULT; break;
-    case JOB_HPGL_PAGE_SIZE::SIZE_A:  hpglPageSize = HPGL_PAGE_SIZE::SIZE_A;  break;
-    case JOB_HPGL_PAGE_SIZE::SIZE_A0: hpglPageSize = HPGL_PAGE_SIZE::SIZE_A0; break;
-    case JOB_HPGL_PAGE_SIZE::SIZE_A1: hpglPageSize = HPGL_PAGE_SIZE::SIZE_A1; break;
-    case JOB_HPGL_PAGE_SIZE::SIZE_A2: hpglPageSize = HPGL_PAGE_SIZE::SIZE_A2; break;
-    case JOB_HPGL_PAGE_SIZE::SIZE_A3: hpglPageSize = HPGL_PAGE_SIZE::SIZE_A3; break;
-    case JOB_HPGL_PAGE_SIZE::SIZE_A4: hpglPageSize = HPGL_PAGE_SIZE::SIZE_A4; break;
-    case JOB_HPGL_PAGE_SIZE::SIZE_A5: hpglPageSize = HPGL_PAGE_SIZE::SIZE_A5; break;
-    case JOB_HPGL_PAGE_SIZE::SIZE_B:  hpglPageSize = HPGL_PAGE_SIZE::SIZE_B;  break;
-    case JOB_HPGL_PAGE_SIZE::SIZE_C:  hpglPageSize = HPGL_PAGE_SIZE::SIZE_C;  break;
-    case JOB_HPGL_PAGE_SIZE::SIZE_D:  hpglPageSize = HPGL_PAGE_SIZE::SIZE_D;  break;
-    case JOB_HPGL_PAGE_SIZE::SIZE_E:  hpglPageSize = HPGL_PAGE_SIZE::SIZE_E;  break;
-    }
-
-    HPGL_PLOT_ORIGIN_AND_UNITS hpglOrigin = HPGL_PLOT_ORIGIN_AND_UNITS::USER_FIT_PAGE;
-
-    switch( aPlotJob->m_HPGLPlotOrigin )
-    {
-    case JOB_HPGL_PLOT_ORIGIN_AND_UNITS::PLOTTER_BOT_LEFT:
-        hpglOrigin = HPGL_PLOT_ORIGIN_AND_UNITS::PLOTTER_BOT_LEFT;
-        break;
-    case JOB_HPGL_PLOT_ORIGIN_AND_UNITS::PLOTTER_CENTER:
-        hpglOrigin = HPGL_PLOT_ORIGIN_AND_UNITS::PLOTTER_CENTER;
-        break;
-    case JOB_HPGL_PLOT_ORIGIN_AND_UNITS::USER_FIT_CONTENT:
-        hpglOrigin = HPGL_PLOT_ORIGIN_AND_UNITS::USER_FIT_CONTENT;
-        break;
-    case JOB_HPGL_PLOT_ORIGIN_AND_UNITS::USER_FIT_PAGE:
-        hpglOrigin = HPGL_PLOT_ORIGIN_AND_UNITS::USER_FIT_PAGE;
-        break;
+    case SCH_PLOT_FORMAT::HPGL:   /* no longer supported */     break;
     }
 
     int pageSizeSelect = PageFormatReq::PAGE_SIZE_AUTO;
@@ -349,9 +327,6 @@ int EESCHEMA_JOBS_HANDLER::JobExportPlot( JOB* aJob )
 
     SCH_PLOT_OPTS plotOpts;
     plotOpts.m_blackAndWhite = aPlotJob->m_blackAndWhite;
-    plotOpts.m_HPGLPaperSizeSelect = hpglPageSize;
-    plotOpts.m_HPGLPenSize = aPlotJob->m_HPGLPenSize;
-    plotOpts.m_HPGLPlotOrigin = hpglOrigin;
     plotOpts.m_PDFPropertyPopups = aPlotJob->m_PDFPropertyPopups;
     plotOpts.m_PDFHierarchicalLinks = aPlotJob->m_PDFHierarchicalLinks;
     plotOpts.m_PDFMetadata = aPlotJob->m_PDFMetadata;
@@ -749,8 +724,7 @@ int EESCHEMA_JOBS_HANDLER::JobExportBom( JOB* aJob )
 
         if( !schFmtPreset )
         {
-            m_reporter->Report( wxString::Format( _( "BOM format preset '%s' not found" )
-                                                  + wxS( "\n" ),
+            m_reporter->Report( wxString::Format( _( "BOM format preset '%s' not found" ) + wxS( "\n" ),
                                                   aBomJob->m_bomFmtPresetName ),
                                 RPT_SEVERITY_ERROR );
 
@@ -898,12 +872,14 @@ int EESCHEMA_JOBS_HANDLER::doSymExportSvg( JOB_SYM_EXPORT_SVG*  aSvgJob,
 
             fn.SetName( filename );
             m_reporter->Report( wxString::Format( _( "Plotting symbol '%s' unit %d to '%s'\n" ),
-                                                  symbol->GetName(), unit, fn.GetFullPath() ),
+                                                  symbol->GetName(),
+                                                  unit,
+                                                  fn.GetFullPath() ),
                                 RPT_SEVERITY_ACTION );
 
             // Get the symbol bounding box to fit the plot page to it
-            BOX2I symbolBB = symbol->Flatten()->GetUnitBoundingBox(
-                    unit, bodyStyle, !aSvgJob->m_includeHiddenFields );
+            BOX2I symbolBB = symbol->Flatten()->GetUnitBoundingBox( unit, bodyStyle,
+                                                                    !aSvgJob->m_includeHiddenFields );
             PAGE_INFO pageInfo( PAGE_INFO::Custom );
             pageInfo.SetHeightMils( schIUScale.IUToMils( symbolBB.GetHeight() * 1.2 ) );
             pageInfo.SetWidthMils( schIUScale.IUToMils( symbolBB.GetWidth() * 1.2 ) );
@@ -923,8 +899,7 @@ int EESCHEMA_JOBS_HANDLER::doSymExportSvg( JOB_SYM_EXPORT_SVG*  aSvgJob,
 
             if( !plotter->OpenFile( fn.GetFullPath() ) )
             {
-                m_reporter->Report( wxString::Format( _( "Unable to open destination '%s'" )
-                                                      + wxS( "\n" ),
+                m_reporter->Report( wxString::Format( _( "Unable to open destination '%s'" ) + wxS( "\n" ),
                                                       fn.GetFullPath() ),
                                     RPT_SEVERITY_ERROR );
 
@@ -1055,8 +1030,7 @@ int EESCHEMA_JOBS_HANDLER::JobSymUpgrade( JOB* aJob )
     }
     else if( fileType != SCH_IO_MGR::SCH_KICAD )
     {
-        m_reporter->Report( _( "Output path must be specified to convert legacy and non-KiCad "
-                               "libraries\n" ),
+        m_reporter->Report( _( "Output path must be specified to convert legacy and non-KiCad libraries\n" ),
                             RPT_SEVERITY_ERROR );
 
         return CLI::EXIT_CODES::ERR_INVALID_OUTPUT_CONFLICT;
@@ -1082,8 +1056,7 @@ int EESCHEMA_JOBS_HANDLER::JobSymUpgrade( JOB* aJob )
 
         if( shouldSave )
         {
-            m_reporter->Report( _( "Saving symbol library in updated format\n" ),
-                                RPT_SEVERITY_ACTION );
+            m_reporter->Report( _( "Saving symbol library in updated format\n" ), RPT_SEVERITY_ACTION );
 
             try
             {
@@ -1177,8 +1150,7 @@ int EESCHEMA_JOBS_HANDLER::JobSchErc( JOB* aJob )
 
     markersProvider->SetSeverities( ercJob->m_severity );
 
-    m_reporter->Report( wxString::Format( _( "Found %d violations\n" ),
-                                          markersProvider->GetCount() ),
+    m_reporter->Report( wxString::Format( _( "Found %d violations\n" ), markersProvider->GetCount() ),
                         RPT_SEVERITY_INFO );
 
     ERC_REPORT reportWriter( sch, units );

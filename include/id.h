@@ -87,7 +87,6 @@ enum main_id
 
     ID_GEN_PLOT,
     ID_GEN_PLOT_PS,
-    ID_GEN_PLOT_HPGL,
     ID_GEN_PLOT_GERBER,
     ID_GEN_PLOT_SVG,
     ID_GEN_PLOT_DXF,

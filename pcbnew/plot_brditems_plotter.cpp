@@ -1213,7 +1213,6 @@ void BRDITEMS_PLOTTER::PlotDrillMarks()
     /* In the filled trace mode drill marks are drawn white-on-black to knock-out the underlying
        pad.  This works only for drivers supporting color change, obviously... it means that:
        - PS, SVG and PDF output is correct (i.e. you have a 'donut' pad)
-       - In HPGL you can't see them
        - In gerbers you can't see them, too. This is arguably the right thing to do since having
          drill marks and high speed drill stations is a sure recipe for broken tools and angry
          manufacturers. If you *really* want them you could start a layer with negative polarity

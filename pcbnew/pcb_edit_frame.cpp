@@ -2008,9 +2008,6 @@ void PCB_EDIT_FRAME::ToPlotter( int aID )
     case ID_GEN_PLOT_DXF:
         plotSettings.SetFormat( PLOT_FORMAT::DXF );
         break;
-    case ID_GEN_PLOT_HPGL:
-        plotSettings.SetFormat( PLOT_FORMAT::HPGL );
-        break;
     case ID_GEN_PLOT_PDF:
         plotSettings.SetFormat( PLOT_FORMAT::PDF );
         break;

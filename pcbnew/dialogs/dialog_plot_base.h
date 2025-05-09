@@ -75,8 +75,6 @@ class DIALOG_PLOT_BASE : public DIALOG_SHIM
 		wxChoice* m_drillShapeOpt;
 		wxStaticText* scalingLabel;
 		wxChoice* m_scaleOpt;
-		wxStaticText* plotModeLabel;
-		wxChoice* m_plotModeOpt;
 		wxCheckBox* m_useAuxOriginCheckBox;
 		wxCheckBox* m_plotMirrorOpt;
 		wxCheckBox* m_plotPSNegativeOpt;
@@ -93,10 +91,6 @@ class DIALOG_PLOT_BASE : public DIALOG_SHIM
 		wxCheckBox* m_useGerberX2Format;
 		wxCheckBox* m_useGerberNetAttributes;
 		wxCheckBox* m_disableApertMacros;
-		wxStaticBoxSizer* m_HPGLOptionsSizer;
-		wxStaticText* m_hpglPenLabel;
-		wxTextCtrl* m_hpglPenCtrl;
-		wxStaticText* m_hpglPenUnits;
 		wxStaticBoxSizer* m_PSOptionsSizer;
 		wxStaticText* m_fineAdjustXLabel;
 		wxTextCtrl* m_fineAdjustXCtrl;

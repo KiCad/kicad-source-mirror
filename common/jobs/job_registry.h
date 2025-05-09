@@ -29,6 +29,7 @@ public:
     KIWAY::FACE_T         kifaceType;
     std::function<JOB*()> createFunc;
     wxString              title;
+    bool                  deprecated = false;
 };
 
 class KICOMMON_API JOB_REGISTRY
@@ -36,7 +37,7 @@ class KICOMMON_API JOB_REGISTRY
 public:
     typedef std::unordered_map<wxString, JOB_REGISTRY_ENTRY> REGISTRY_MAP_T;
 
-    static bool Add( const wxString& aName, JOB_REGISTRY_ENTRY entry );
+    static bool Add( const wxString& aName, JOB_REGISTRY_ENTRY entry, bool aDeprecated = false );
 
     static KIWAY::FACE_T GetKifaceType( const wxString& aName );
 
@@ -44,10 +45,9 @@ public:
     static T* CreateInstance( const wxString& aName )
     {
         REGISTRY_MAP_T& registry = getRegistry();
+
         if( registry.find( aName ) == registry.end() )
-        {
             return nullptr;
-        }
 
         return registry[aName].createFunc();
     }
@@ -68,3 +68,11 @@ private:
                                                             },                                         \
                                                             title } )
 // newline required to appease warning for REGISTER_JOB macro
+
+#define REGISTER_DEPRECATED_JOB( job_name, title, face, T ) bool job_name##_entry = JOB_REGISTRY::Add( #job_name, \
+                                                            { face, []()                                          \
+                                                            {                                                     \
+                                                                return new T();                                   \
+                                                            },                                                    \
+                                                            title }, true )
+// newline required to appease warning for REGISTER_DEPRECATED_JOB macro

@@ -36,13 +36,6 @@
 
 #define PLOT_LINEWIDTH_DEFAULT    ( DEFAULT_TEXT_WIDTH * IU_PER_MM )
 
-#define HPGL_PEN_DIAMETER_MIN     0
-#define HPGL_PEN_DIAMETER_MAX     100.0     // Unit = mil
-#define HPGL_PEN_SPEED_MIN        1         // this param is always in cm/s
-#define HPGL_PEN_SPEED_MAX        99        // this param is always in cm/s
-#define HPGL_PEN_NUMBER_MIN       1
-#define HPGL_PEN_NUMBER_MAX       16
-
 #define SVG_PRECISION_MIN         3U
 #define SVG_PRECISION_MAX         6U
 #define SVG_PRECISION_DEFAULT     4
@@ -59,34 +52,6 @@ using namespace PCBPLOTPARAMS_T;
 static const char* getTokenName( T aTok )
 {
     return PCB_PLOT_PARAMS_LEXER::TokenName( aTok );
-}
-
-
-static bool setInt( int* aTarget, int aValue, int aMin, int aMax )
-{
-    int temp = aValue;
-
-    if( aValue < aMin )
-        temp = aMin;
-    else if( aValue > aMax )
-        temp = aMax;
-
-    *aTarget = temp;
-    return ( temp == aValue );
-}
-
-
-static bool setDouble( double* aTarget, double aValue, double aMin, double aMax )
-{
-    double temp = aValue;
-
-    if( aValue < aMin )
-        temp = aMin;
-    else if( aValue > aMax )
-        temp = aMax;
-
-    *aTarget = temp;
-    return ( temp == aValue );
 }
 
 
@@ -109,9 +74,6 @@ PCB_PLOT_PARAMS::PCB_PLOT_PARAMS()
     m_DXFPolygonMode             = true;
     m_DXFUnits                   = DXF_UNITS::INCH;
     m_useAuxOrigin               = false;
-    m_HPGLPenNum                 = 1;
-    m_HPGLPenSpeed               = 20;        // this param is always in cm/s
-    m_HPGLPenDiam                = 15;        // in mils
     m_negative                   = false;
     m_A4Output                   = false;
     m_plotReference              = true;
@@ -209,11 +171,6 @@ void PCB_PLOT_PARAMS::Format( OUTPUTFORMATTER* aFormatter ) const
     aFormatter->Print( "(mode %d)", GetPlotMode() == SKETCH ? 2 : 1 );
     KICAD_FORMAT::FormatBool( aFormatter, "useauxorigin", m_useAuxOrigin );
 
-    // HPGL options
-    aFormatter->Print( "(hpglpennumber %d)", m_HPGLPenNum );
-    aFormatter->Print( "(hpglpenspeed %d)", m_HPGLPenSpeed );
-    aFormatter->Print( "(hpglpendiameter %f)", m_HPGLPenDiam );
-
     // PDF options
     KICAD_FORMAT::FormatBool( aFormatter, getTokenName( T_pdf_front_fp_property_popups ),
                               m_PDFFrontFPPropertyPopups );
@@ -305,15 +262,6 @@ bool PCB_PLOT_PARAMS::IsSameAs( const PCB_PLOT_PARAMS &aPcbPlotParams ) const
     if( m_useAuxOrigin != aPcbPlotParams.m_useAuxOrigin )
         return false;
 
-    if( m_HPGLPenNum != aPcbPlotParams.m_HPGLPenNum )
-        return false;
-
-    if( m_HPGLPenSpeed != aPcbPlotParams.m_HPGLPenSpeed )
-        return false;
-
-    if( m_HPGLPenDiam != aPcbPlotParams.m_HPGLPenDiam )
-        return false;
-
     if( m_negative != aPcbPlotParams.m_negative )
         return false;
 
@@ -393,18 +341,6 @@ bool PCB_PLOT_PARAMS::IsSameAs( const PCB_PLOT_PARAMS &aPcbPlotParams ) const
         return false;
 
     return true;
-}
-
-
-bool PCB_PLOT_PARAMS::SetHPGLPenDiameter( double aValue )
-{
-    return setDouble( &m_HPGLPenDiam, aValue, HPGL_PEN_DIAMETER_MIN, HPGL_PEN_DIAMETER_MAX );
-}
-
-
-bool PCB_PLOT_PARAMS::SetHPGLPenSpeed( int aValue )
-{
-    return setInt( &m_HPGLPenSpeed, aValue, HPGL_PEN_SPEED_MIN, HPGL_PEN_SPEED_MAX );
 }
 
 
@@ -741,29 +677,16 @@ void PCB_PLOT_PARAMS_PARSER::Parse( PCB_PLOT_PARAMS* aPcbPlotParams )
             aPcbPlotParams->m_plotViaOnMaskLayer = parseBool();
             break;
 
-        case T_mode:
-            aPcbPlotParams->SetPlotMode( parseInt( 0, 2 ) > 1 ? SKETCH : FILLED );
-            break;
-
         case T_useauxorigin:
             aPcbPlotParams->m_useAuxOrigin = parseBool();
             break;
 
+        case T_mode:
         case T_hpglpennumber:
-            aPcbPlotParams->m_HPGLPenNum = parseInt( HPGL_PEN_NUMBER_MIN, HPGL_PEN_NUMBER_MAX );
-            break;
-
         case T_hpglpenspeed:
-            aPcbPlotParams->m_HPGLPenSpeed = parseInt( HPGL_PEN_SPEED_MIN, HPGL_PEN_SPEED_MAX );
-            break;
-
-        case T_hpglpendiameter:
-            aPcbPlotParams->m_HPGLPenDiam = parseDouble();
-            break;
-
         case T_hpglpenoverlay:
-            // No more used. just here for compatibility with old versions
-            parseInt( 0, HPGL_PEN_DIAMETER_MAX );
+            // HPGL is no longer supported
+            parseInt( std::numeric_limits<int>::min(), std::numeric_limits<int>::max() );
             break;
 
         case T_pdf_front_fp_property_popups:

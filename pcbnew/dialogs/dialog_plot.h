@@ -73,11 +73,6 @@ private:
     void applyPlotSettings();
     PLOT_FORMAT getPlotFormat();
 
-    void setPlotModeChoiceSelection( OUTLINE_MODE aPlotMode )
-    {
-        m_plotModeOpt->SetSelection( aPlotMode == SKETCH ? 1 : 0 );
-    }
-
     void arrangeAllLayersList( const LSEQ& aSeq );
     void loadPlotParamsFromJob();
     void transferPlotParamsToJob();
@@ -96,7 +91,6 @@ private:
     int                 m_widthAdjustMinValue;      // Global track width limits
     int                 m_widthAdjustMaxValue;      // tracks width will be "clipped" whenever the
                                                     // m_PSWidthAdjust to these limits.
-    UNIT_BINDER         m_defaultPenSize;
     UNIT_BINDER         m_trackWidthCorrection;
 
     wxString            m_DRCWarningTemplate;

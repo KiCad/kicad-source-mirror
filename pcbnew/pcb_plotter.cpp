@@ -44,22 +44,12 @@
 static int scaleToSelection( double scale )
 {
     int selection = 1;
-    if( scale == 0.0 )
-    {
-        selection = 0;
-    }
-    else if( scale == 1.5 )
-    {
-        selection = 2;
-    }
-    else if( scale == 2.0 )
-    {
-        selection = 3;
-    }
-    else if( scale == 3.0 )
-    {
-        selection = 4;
-    }
+
+    if( scale == 0.0 )      selection = 0;
+    else if( scale == 1.5 ) selection = 2;
+    else if( scale == 2.0 ) selection = 3;
+    else if( scale == 3.0 ) selection = 4;
+
     return selection;
 }
 
@@ -72,14 +62,10 @@ PCB_PLOTTER::PCB_PLOTTER( BOARD* aBoard, REPORTER* aReporter, PCB_PLOT_PARAMS& a
 }
 
 
-bool PCB_PLOTTER::Plot( const wxString& aOutputPath,
-                        const LSEQ& aLayersToPlot,
-                        const LSEQ& aCommonLayers,
-                        bool aUseGerberFileExtensions,
-                        bool aOutputPathIsSingle,
-                        std::optional<wxString> aLayerName,
-                        std::optional<wxString> aSheetName,
-                        std::optional<wxString> aSheetPath )
+bool PCB_PLOTTER::Plot( const wxString& aOutputPath, const LSEQ& aLayersToPlot,
+                        const LSEQ& aCommonLayers, bool aUseGerberFileExtensions,
+                        bool aOutputPathIsSingle, std::optional<wxString> aLayerName,
+                        std::optional<wxString> aSheetName, std::optional<wxString> aSheetPath )
 {
     std::function<bool( wxString* )> textResolver = [&]( wxString* token ) -> bool
     {
@@ -121,10 +107,7 @@ bool PCB_PLOTTER::Plot( const wxString& aOutputPath,
         layersToPlot.push_back( aLayersToPlot[0] );
 
         if( aLayersToPlot.size() > 1 )
-        {
-            commonLayers.insert( commonLayers.end(), aLayersToPlot.begin() + 1,
-                                 aLayersToPlot.end() );
-        }
+            commonLayers.insert( commonLayers.end(), aLayersToPlot.begin() + 1, aLayersToPlot.end() );
     }
     else
     {
@@ -245,10 +228,11 @@ bool PCB_PLOTTER::Plot( const wxString& aOutputPath,
                 break;
             }
 
-            if( m_plotOpts.GetFormat() == PLOT_FORMAT::PDF && m_plotOpts.m_PDFSingle
-                && i != layersToPlot.size() - 1 )
+            if( m_plotOpts.GetFormat() == PLOT_FORMAT::PDF
+                    && m_plotOpts.m_PDFSingle
+                    && i != layersToPlot.size() - 1 )
             {
-                wxString     pageNumber = wxString::Format( "%zu", pageNum + 1 );
+                wxString     pageNumber = wxString::Format( "%d", pageNum + 1 );
                 size_t       nextI = i + 1;
                 PCB_LAYER_ID nextLayer = layersToPlot[nextI];
 
@@ -407,14 +391,6 @@ void PCB_PLOTTER::PlotJobToPlotOpts( PCB_PLOT_PARAMS& aOpts, JOB_EXPORT_PCB_PLOT
         aOpts.SetScaleSelection( scaleToSelection( aJob->m_scale ) );
     }
 
-    if( aJob->m_plotFormat == JOB_EXPORT_PCB_PLOT::PLOT_FORMAT::HPGL )
-    {
-        JOB_EXPORT_PCB_HPGL* hpglJob = static_cast<JOB_EXPORT_PCB_HPGL*>( aJob );
-        aOpts.SetHPGLPenDiameter( hpglJob->m_defaultPenSize / 25.4 * 1000.0 ); // mm to mils
-        aOpts.SetHPGLPenSpeed( hpglJob->m_penSpeed );
-        aOpts.SetHPGLPenNum( hpglJob->m_penNumber );
-    }
-
     if( aJob->m_plotFormat == JOB_EXPORT_PCB_PLOT::PLOT_FORMAT::SVG )
     {
         JOB_EXPORT_PCB_SVG* svgJob = static_cast<JOB_EXPORT_PCB_SVG*>( aJob );
@@ -425,9 +401,8 @@ void PCB_PLOTTER::PlotJobToPlotOpts( PCB_PLOT_PARAMS& aOpts, JOB_EXPORT_PCB_PLOT
     if( aJob->m_plotFormat == JOB_EXPORT_PCB_PLOT::PLOT_FORMAT::DXF )
     {
         JOB_EXPORT_PCB_DXF* dxfJob = static_cast<JOB_EXPORT_PCB_DXF*>( aJob );
-        aOpts.SetDXFPlotUnits( dxfJob->m_dxfUnits == JOB_EXPORT_PCB_DXF::DXF_UNITS::INCH
-                                                                                ? DXF_UNITS::INCH
-                                                                                : DXF_UNITS::MM );
+        aOpts.SetDXFPlotUnits( dxfJob->m_dxfUnits == JOB_EXPORT_PCB_DXF::DXF_UNITS::INCH ? DXF_UNITS::INCH
+                                                                                         : DXF_UNITS::MM );
 
         aOpts.SetPlotMode( dxfJob->m_plotGraphicItemsUsingContours ? OUTLINE_MODE::SKETCH
                                                                    : OUTLINE_MODE::FILLED );
@@ -478,7 +453,7 @@ void PCB_PLOTTER::PlotJobToPlotOpts( PCB_PLOT_PARAMS& aOpts, JOB_EXPORT_PCB_PLOT
     case JOB_EXPORT_PCB_PLOT::PLOT_FORMAT::POST:   aOpts.SetFormat( PLOT_FORMAT::POST );   break;
     case JOB_EXPORT_PCB_PLOT::PLOT_FORMAT::SVG:    aOpts.SetFormat( PLOT_FORMAT::SVG );    break;
     case JOB_EXPORT_PCB_PLOT::PLOT_FORMAT::DXF:    aOpts.SetFormat( PLOT_FORMAT::DXF );    break;
-    case JOB_EXPORT_PCB_PLOT::PLOT_FORMAT::HPGL:   aOpts.SetFormat( PLOT_FORMAT::HPGL );   break;
+    case JOB_EXPORT_PCB_PLOT::PLOT_FORMAT::HPGL:   /* no longer supported */               break;
     case JOB_EXPORT_PCB_PLOT::PLOT_FORMAT::PDF:    aOpts.SetFormat( PLOT_FORMAT::PDF );    break;
     }
 
@@ -504,10 +479,9 @@ void PCB_PLOTTER::PlotJobToPlotOpts( PCB_PLOT_PARAMS& aOpts, JOB_EXPORT_PCB_PLOT
 
     if( colors->GetFilename() != theme )
     {
-        aReporter.Report( wxString::Format(
-                _( "Color theme '%s' not found, will use theme from PCB Editor settings.\n" ),
-                theme ),
-            RPT_SEVERITY_WARNING );
+        aReporter.Report( wxString::Format( _( "Color theme '%s' not found, will use theme from PCB Editor.\n" ),
+                                            theme ),
+                          RPT_SEVERITY_WARNING );
     }
 
     aOpts.SetColorSettings( colors );

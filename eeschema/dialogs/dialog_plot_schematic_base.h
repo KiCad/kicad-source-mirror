@@ -60,12 +60,6 @@ class DIALOG_PLOT_SCHEMATIC_BASE : public DIALOG_SHIM
 		wxStaticText* m_lineWidthLabel;
 		wxTextCtrl* m_lineWidthCtrl;
 		wxStaticText* m_lineWidthUnits;
-		wxStaticBoxSizer* m_HPGLOptionsSizer;
-		wxStaticText* m_plotOriginTitle;
-		wxChoice* m_plotOriginOpt;
-		wxStaticText* m_penWidthLabel;
-		wxTextCtrl* m_penWidthCtrl;
-		wxStaticText* m_penWidthUnits;
 		wxCheckBox* m_plotPDFPropertyPopups;
 		wxCheckBox* m_plotPDFHierarchicalLinks;
 		wxCheckBox* m_plotPDFMetadata;

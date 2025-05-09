@@ -113,7 +113,7 @@ private:
 
     bool                  m_drillOriginIsAuxAxis;     // Axis selection (main / auxiliary)
                                                       //   for drill origin coordinates
-    static int            g_mapFileType;              // format of map file: HPGL, PS ...
+    static int            g_mapFileType;              // format of map file: PS, PDF ...
     static int            g_drillFileType;            // for Excellon, Gerber
 };
 

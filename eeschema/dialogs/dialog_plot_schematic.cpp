@@ -53,7 +53,6 @@
 
 // static members (static to remember last state):
 int DIALOG_PLOT_SCHEMATIC::m_pageSizeSelect = PAGE_SIZE_AUTO;
-HPGL_PAGE_SIZE DIALOG_PLOT_SCHEMATIC::m_HPGLPaperSizeSelect = HPGL_PAGE_SIZE::DEFAULT;
 
 
 DIALOG_PLOT_SCHEMATIC::DIALOG_PLOT_SCHEMATIC( SCH_EDIT_FRAME* aEditFrame ) :
@@ -67,9 +66,8 @@ DIALOG_PLOT_SCHEMATIC::DIALOG_PLOT_SCHEMATIC( SCH_EDIT_FRAME* aEditFrame, wxWind
         DIALOG_PLOT_SCHEMATIC_BASE( aEditFrame ),
         m_editFrame( aEditFrame ),
         m_plotFormat( PLOT_FORMAT::UNDEFINED ),
-        m_HPGLPenSize( 1.0 ),
         m_defaultLineWidth( aEditFrame, m_lineWidthLabel, m_lineWidthCtrl, m_lineWidthUnits ),
-        m_penWidth( aEditFrame, m_penWidthLabel, m_penWidthCtrl, m_penWidthUnits ), m_job( aJob )
+        m_job( aJob )
 {
     m_configChanged = false;
 
@@ -140,39 +138,27 @@ void DIALOG_PLOT_SCHEMATIC::initDlg()
             m_plotPDFHierarchicalLinks->SetValue( cfg->m_PlotPanel.pdf_hierarchical_links );
             m_plotPDFMetadata->SetValue( cfg->m_PlotPanel.pdf_metadata );
 
-            // HPGL plot origin and unit system configuration
-            m_plotOriginOpt->SetSelection( cfg->m_PlotPanel.hpgl_origin );
-
-            m_HPGLPaperSizeSelect = static_cast<HPGL_PAGE_SIZE>( cfg->m_PlotPanel.hpgl_paper_size );
-
-            // HPGL Pen Size is stored in mm in config
-            m_HPGLPenSize = cfg->m_PlotPanel.hpgl_pen_size * schIUScale.IU_PER_MM;
-
             // Switch to the last save plot format
             PLOT_FORMAT fmt = static_cast<PLOT_FORMAT>( cfg->m_PlotPanel.format );
 
-            switch( fmt  )
+            switch( fmt )
             {
             default:
             case PLOT_FORMAT::POST: m_plotFormatOpt->SetSelection( 0 ); break;
             case PLOT_FORMAT::PDF:  m_plotFormatOpt->SetSelection( 1 ); break;
             case PLOT_FORMAT::SVG:  m_plotFormatOpt->SetSelection( 2 ); break;
             case PLOT_FORMAT::DXF:  m_plotFormatOpt->SetSelection( 3 ); break;
-            case PLOT_FORMAT::HPGL: m_plotFormatOpt->SetSelection( 4 ); break;
+            case PLOT_FORMAT::HPGL: /* no longer supported */           break;
             }
 
-            if( fmt == PLOT_FORMAT::DXF || fmt == PLOT_FORMAT::HPGL )
+            if( fmt == PLOT_FORMAT::DXF )
                 m_plotBackgroundColor->Disable();
 
             // Set the default line width (pen width which should be used for
             // items that do not have a pen size defined (like frame ref)
             // the default line width is stored in mils in config
-            m_defaultLineWidth.SetValue(
-                    schIUScale.MilsToIU( cfg->m_Drawing.default_line_thickness ) );
+            m_defaultLineWidth.SetValue( schIUScale.MilsToIU( cfg->m_Drawing.default_line_thickness ) );
         }
-
-        // Initialize HPGL specific widgets
-        m_penWidth.SetDoubleValue( m_HPGLPenSize );
 
         // Plot directory
         SCHEMATIC_SETTINGS& settings = m_editFrame->Schematic().Settings();
@@ -197,14 +183,9 @@ void DIALOG_PLOT_SCHEMATIC::initDlg()
 
         m_plotBackgroundColor->SetValue( m_job->m_useBackgroundColor );
         m_defaultLineWidth.SetValue( m_job->m_minPenWidth );
-        m_penWidth.SetDoubleValue( m_job->m_HPGLPenSize );
-        m_HPGLPaperSizeSelect = static_cast<HPGL_PAGE_SIZE>( m_job->m_HPGLPaperSizeSelect );
         m_plotPDFPropertyPopups->SetValue( m_job->m_PDFPropertyPopups );
         m_plotPDFHierarchicalLinks->SetValue( m_job->m_PDFHierarchicalLinks );
         m_plotPDFMetadata->SetValue( m_job->m_PDFMetadata );
-        m_colorTheme->Enable( m_job->m_plotFormat != SCH_PLOT_FORMAT::HPGL );
-        m_ModeColorOption->Enable( m_job->m_plotFormat != SCH_PLOT_FORMAT::HPGL );
-        m_plotOriginOpt->SetSelection( static_cast<int>( m_job->m_HPGLPlotOrigin ) );
         m_pageSizeSelect = static_cast<int>( m_job->m_pageSizeSelect );
         m_plotDrawingSheet->SetValue( m_job->m_plotDrawingSheet );
         setModeColor( !m_job->m_blackAndWhite );
@@ -217,7 +198,7 @@ void DIALOG_PLOT_SCHEMATIC::initDlg()
         case SCH_PLOT_FORMAT::PDF:  m_plotFormatOpt->SetSelection( 1 ); break;
         case SCH_PLOT_FORMAT::SVG:  m_plotFormatOpt->SetSelection( 2 ); break;
         case SCH_PLOT_FORMAT::DXF:  m_plotFormatOpt->SetSelection( 3 ); break;
-        case SCH_PLOT_FORMAT::HPGL: m_plotFormatOpt->SetSelection( 4 ); break;
+        case SCH_PLOT_FORMAT::HPGL: /* no longer supported */           break;
         }
 
         // And then hide it
@@ -284,22 +265,18 @@ PLOT_FORMAT DIALOG_PLOT_SCHEMATIC::GetPlotFileFormat()
 {
     switch( m_plotFormatOpt->GetSelection() )
     {
-    default:
     case 0: return PLOT_FORMAT::POST;
+    default:
     case 1: return PLOT_FORMAT::PDF;
     case 2: return PLOT_FORMAT::SVG;
     case 3: return PLOT_FORMAT::DXF;
-    case 4: return PLOT_FORMAT::HPGL;
     }
 }
 
 
 void DIALOG_PLOT_SCHEMATIC::OnPageSizeSelected( wxCommandEvent& event )
 {
-    if( GetPlotFileFormat() == PLOT_FORMAT::HPGL )
-        m_HPGLPaperSizeSelect = static_cast<HPGL_PAGE_SIZE>( m_paperSizeOption->GetSelection() );
-    else
-        m_pageSizeSelect = m_paperSizeOption->GetSelection();
+    m_pageSizeSelect = m_paperSizeOption->GetSelection();
 }
 
 
@@ -316,29 +293,10 @@ void DIALOG_PLOT_SCHEMATIC::OnUpdateUI( wxUpdateUIEvent& event )
 
         int selection;
 
-        if( fmt == PLOT_FORMAT::HPGL )
-        {
-            paperSizes.push_back( _( "A5" ) );
-            paperSizes.push_back( _( "A4" ) );
-            paperSizes.push_back( _( "A3" ) );
-            paperSizes.push_back( _( "A2" ) );
-            paperSizes.push_back( _( "A1" ) );
-            paperSizes.push_back( _( "A0" ) );
-            paperSizes.push_back( _( "A" ) );
-            paperSizes.push_back( _( "B" ) );
-            paperSizes.push_back( _( "C" ) );
-            paperSizes.push_back( _( "D" ) );
-            paperSizes.push_back( _( "E" ) );
+        paperSizes.push_back( _( "A4" ) );
+        paperSizes.push_back( _( "A" ) );
 
-            selection = static_cast<int>( m_HPGLPaperSizeSelect );
-        }
-        else
-        {
-            paperSizes.push_back( _( "A4" ) );
-            paperSizes.push_back( _( "A" ) );
-
-            selection = m_pageSizeSelect;
-        }
+        selection = m_pageSizeSelect;
 
         m_openFileAfterPlot->Enable( fmt == PLOT_FORMAT::PDF );
         m_plotPDFPropertyPopups->Enable( fmt == PLOT_FORMAT::PDF );
@@ -348,26 +306,19 @@ void DIALOG_PLOT_SCHEMATIC::OnUpdateUI( wxUpdateUIEvent& event )
         m_paperSizeOption->Set( paperSizes );
         m_paperSizeOption->SetSelection( selection );
 
-        m_defaultLineWidth.Enable(
-                fmt == PLOT_FORMAT::POST || fmt == PLOT_FORMAT::PDF || fmt == PLOT_FORMAT::SVG );
+        m_defaultLineWidth.Enable( fmt == PLOT_FORMAT::POST
+                                   || fmt == PLOT_FORMAT::PDF
+                                   || fmt == PLOT_FORMAT::SVG );
 
-        m_plotOriginTitle->Enable( fmt == PLOT_FORMAT::HPGL );
-        m_plotOriginOpt->Enable( fmt == PLOT_FORMAT::HPGL );
-        m_penWidth.Enable( fmt == PLOT_FORMAT::HPGL );
-
-        m_plotBackgroundColor->Enable(
-                fmt == PLOT_FORMAT::POST || fmt == PLOT_FORMAT::PDF || fmt == PLOT_FORMAT::SVG );
-
-        m_colorTheme->Enable( fmt != PLOT_FORMAT::HPGL );
-        m_ModeColorOption->Enable( fmt != PLOT_FORMAT::HPGL );
+        m_plotBackgroundColor->Enable( fmt == PLOT_FORMAT::POST
+                                       || fmt == PLOT_FORMAT::PDF
+                                       || fmt == PLOT_FORMAT::SVG );
     }
 }
 
 
 void DIALOG_PLOT_SCHEMATIC::getPlotOptions( RENDER_SETTINGS* aSettings )
 {
-    m_HPGLPenSize = m_penWidth.GetDoubleValue();
-
     EESCHEMA_SETTINGS* cfg = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
     wxASSERT( cfg );
 
@@ -380,15 +331,10 @@ void DIALOG_PLOT_SCHEMATIC::getPlotOptions( RENDER_SETTINGS* aSettings )
         cfg->m_PlotPanel.color_theme      = colors->GetFilename();
         cfg->m_PlotPanel.frame_reference  = getPlotDrawingSheet();
         cfg->m_PlotPanel.format           = static_cast<int>( GetPlotFileFormat() );
-        cfg->m_PlotPanel.hpgl_origin      = m_plotOriginOpt->GetSelection();
-        cfg->m_PlotPanel.hpgl_paper_size  = static_cast<int>( m_HPGLPaperSizeSelect );
         cfg->m_PlotPanel.pdf_property_popups    = m_plotPDFPropertyPopups->GetValue();
         cfg->m_PlotPanel.pdf_hierarchical_links = m_plotPDFHierarchicalLinks->GetValue();
         cfg->m_PlotPanel.pdf_metadata           = m_plotPDFMetadata->GetValue();
         cfg->m_PlotPanel.open_file_after_plot   = getOpenFileAfterPlot();
-
-        // HPGL Pen Size is stored in mm in config
-        cfg->m_PlotPanel.hpgl_pen_size = m_HPGLPenSize / schIUScale.IU_PER_MM;
 
         aSettings->SetDefaultFont( cfg->m_Appearance.default_font );
     }
@@ -445,9 +391,7 @@ void DIALOG_PLOT_SCHEMATIC::OnPlotAll( wxCommandEvent& event )
         m_job->m_blackAndWhite = !getModeColor();
         m_job->m_useBackgroundColor = m_plotBackgroundColor->GetValue();
         m_job->m_minPenWidth = m_defaultLineWidth.GetIntValue();
-        m_job->m_HPGLPenSize = m_penWidth.GetDoubleValue();
 
-        //  m_job->m_HPGLPaperSizeSelect = m_HPGLPaperSizeSelect;
         m_job->m_pageSizeSelect = static_cast<JOB_PAGE_SIZE>( m_pageSizeSelect );
         m_job->m_PDFPropertyPopups = m_plotPDFPropertyPopups->GetValue();
         m_job->m_PDFHierarchicalLinks = m_plotPDFHierarchicalLinks->GetValue();
@@ -455,9 +399,6 @@ void DIALOG_PLOT_SCHEMATIC::OnPlotAll( wxCommandEvent& event )
         m_job->m_plotDrawingSheet = m_plotDrawingSheet->GetValue();
         m_job->m_plotAll = true;
         m_job->SetConfiguredOutputPath( m_outputPath->GetValue() );
-
-        m_job->m_HPGLPlotOrigin =
-                static_cast<JOB_HPGL_PLOT_ORIGIN_AND_UNITS>( m_plotOriginOpt->GetSelection() );
 
         COLOR_SETTINGS* colors = getColorSettings();
         m_job->m_theme = colors->GetName();
@@ -490,10 +431,6 @@ void DIALOG_PLOT_SCHEMATIC::plotSchematic( bool aPlotAll )
     plotOpts.m_PDFPropertyPopups = m_plotPDFPropertyPopups->GetValue();
     plotOpts.m_PDFHierarchicalLinks = m_plotPDFHierarchicalLinks->GetValue();
     plotOpts.m_PDFMetadata = m_plotPDFMetadata->GetValue();
-    plotOpts.m_HPGLPaperSizeSelect = static_cast<HPGL_PAGE_SIZE>( m_HPGLPaperSizeSelect );
-    plotOpts.m_HPGLPlotOrigin =
-            static_cast<HPGL_PLOT_ORIGIN_AND_UNITS>( m_plotOriginOpt->GetSelection() );
-    plotOpts.m_HPGLPenSize = m_HPGLPenSize;
     plotOpts.m_outputDirectory = getOutputPath();
     plotOpts.m_pageSizeSelect = m_pageSizeSelect;
 

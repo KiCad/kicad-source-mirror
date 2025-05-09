@@ -116,7 +116,6 @@ DIALOG_PLOT::DIALOG_PLOT( PCB_EDIT_FRAME* aEditFrame, wxWindow* aParent,
                           JOB_EXPORT_PCB_PLOT* aJob ) :
     DIALOG_PLOT_BASE( aParent ),
     m_editFrame( aEditFrame ),
-    m_defaultPenSize( m_editFrame, m_hpglPenLabel, m_hpglPenCtrl, m_hpglPenUnits ),
     m_trackWidthCorrection( m_editFrame, m_widthAdjustLabel, m_widthAdjustCtrl, m_widthAdjustUnits ),
     m_job( aJob )
 {
@@ -325,12 +324,9 @@ void DIALOG_PLOT::init_Dialog()
     case PLOT_FORMAT::POST:   m_plotFormatOpt->SetSelection( 1 ); break;
     case PLOT_FORMAT::SVG:    m_plotFormatOpt->SetSelection( 2 ); break;
     case PLOT_FORMAT::DXF:    m_plotFormatOpt->SetSelection( 3 ); break;
-    case PLOT_FORMAT::HPGL:   m_plotFormatOpt->SetSelection( 4 ); break;
-    case PLOT_FORMAT::PDF:    m_plotFormatOpt->SetSelection( 5 ); break;
+    case PLOT_FORMAT::HPGL:   /* no longer supported */           break;
+    case PLOT_FORMAT::PDF:    m_plotFormatOpt->SetSelection( 4 ); break;
     }
-
-    // Set units and value for HPGL pen size (this param is in mils).
-    m_defaultPenSize.SetValue( m_plotOpts.GetHPGLPenDiameter() * pcbIUScale.IU_PER_MILS );
 
     // Test for a reasonable scale value. Set to 1 if problem
     if( m_XScaleAdjust < PLOT_MIN_SCALE || m_YScaleAdjust < PLOT_MIN_SCALE
@@ -420,9 +416,6 @@ void DIALOG_PLOT::init_Dialog()
     // Scale option
     m_scaleOpt->SetSelection( m_plotOpts.GetScaleSelection() );
 
-    // Plot mode
-    setPlotModeChoiceSelection( m_plotOpts.GetPlotMode() );
-
     // DXF outline mode
     m_DXF_plotModeOpt->SetValue( m_plotOpts.GetDXFPlotPolygonMode() );
 
@@ -470,15 +463,6 @@ void DIALOG_PLOT::transferPlotParamsToJob()
     else
     {
         m_job->m_scale = selectionToScale( m_plotOpts.GetScaleSelection() );
-    }
-
-    if( m_job->m_plotFormat == JOB_EXPORT_PCB_PLOT::PLOT_FORMAT::HPGL )
-    {
-        JOB_EXPORT_PCB_HPGL* hpglJob = static_cast<JOB_EXPORT_PCB_HPGL*>( m_job );
-        hpglJob->m_genMode = JOB_EXPORT_PCB_HPGL::GEN_MODE::MULTI;
-        hpglJob->m_defaultPenSize = m_plotOpts.GetHPGLPenDiameter() / 1000.0 * 25.4; // mils to mm
-        hpglJob->m_penNumber = m_plotOpts.GetHPGLPenNum();
-        hpglJob->m_penSpeed = m_plotOpts.GetHPGLPenSpeed();
     }
 
     if( m_job->m_plotFormat == JOB_EXPORT_PCB_PLOT::PLOT_FORMAT::SVG )
@@ -849,7 +833,6 @@ PLOT_FORMAT DIALOG_PLOT::getPlotFormat()
             PLOT_FORMAT::POST,
             PLOT_FORMAT::SVG,
             PLOT_FORMAT::DXF,
-            PLOT_FORMAT::HPGL,
             PLOT_FORMAT::PDF };
 
     return plotFmt[m_plotFormatOpt->GetSelection()];
@@ -881,11 +864,8 @@ void DIALOG_PLOT::SetPlotFormat( wxCommandEvent& event )
     case PLOT_FORMAT::SVG:
     case PLOT_FORMAT::PDF:
         m_drillShapeOpt->Enable( true );
-        m_plotModeOpt->Enable( false );
-        setPlotModeChoiceSelection( FILLED );
         m_plotMirrorOpt->Enable( true );
         m_useAuxOriginCheckBox->Enable( true );
-        m_defaultPenSize.Enable( false );
         m_scaleOpt->Enable( true );
         m_fineAdjustXCtrl->Enable( false );
         m_fineAdjustYCtrl->Enable( false );
@@ -906,18 +886,15 @@ void DIALOG_PLOT::SetPlotFormat( wxCommandEvent& event )
         }
 
         m_PlotOptionsSizer->Hide( m_GerberOptionsSizer );
-        m_PlotOptionsSizer->Hide( m_HPGLOptionsSizer );
         m_PlotOptionsSizer->Hide( m_PSOptionsSizer );
         m_PlotOptionsSizer->Hide( m_SizerDXF_options );
         break;
 
     case PLOT_FORMAT::POST:
         m_drillShapeOpt->Enable( true );
-        m_plotModeOpt->Enable( true );
         m_plotMirrorOpt->Enable( true );
         m_useAuxOriginCheckBox->Enable( false );
         m_useAuxOriginCheckBox->SetValue( false );
-        m_defaultPenSize.Enable( false );
         m_scaleOpt->Enable( true );
         m_fineAdjustXCtrl->Enable( true );
         m_fineAdjustYCtrl->Enable( true );
@@ -926,7 +903,6 @@ void DIALOG_PLOT::SetPlotFormat( wxCommandEvent& event )
         m_forcePSA4OutputOpt->Enable( true );
 
         m_PlotOptionsSizer->Hide( m_GerberOptionsSizer );
-        m_PlotOptionsSizer->Hide( m_HPGLOptionsSizer );
         m_PlotOptionsSizer->Show( m_PSOptionsSizer );
         m_PlotOptionsSizer->Hide( m_SizerDXF_options );
         m_PlotOptionsSizer->Hide( m_svgOptionsSizer );
@@ -936,12 +912,9 @@ void DIALOG_PLOT::SetPlotFormat( wxCommandEvent& event )
     case PLOT_FORMAT::GERBER:
         m_drillShapeOpt->Enable( false );
         m_drillShapeOpt->SetSelection( 0 );
-        m_plotModeOpt->Enable( false );
-        setPlotModeChoiceSelection( FILLED );
         m_plotMirrorOpt->Enable( false );
         m_plotMirrorOpt->SetValue( false );
         m_useAuxOriginCheckBox->Enable( true );
-        m_defaultPenSize.Enable( false );
         m_scaleOpt->Enable( false );
         m_scaleOpt->SetSelection( 1 );
         m_fineAdjustXCtrl->Enable( false );
@@ -953,30 +926,6 @@ void DIALOG_PLOT::SetPlotFormat( wxCommandEvent& event )
         m_forcePSA4OutputOpt->SetValue( false );
 
         m_PlotOptionsSizer->Show( m_GerberOptionsSizer );
-        m_PlotOptionsSizer->Hide( m_HPGLOptionsSizer );
-        m_PlotOptionsSizer->Hide( m_PSOptionsSizer );
-        m_PlotOptionsSizer->Hide( m_SizerDXF_options );
-        m_PlotOptionsSizer->Hide( m_svgOptionsSizer );
-        m_PlotOptionsSizer->Hide( m_PDFOptionsSizer );
-        break;
-
-    case PLOT_FORMAT::HPGL:
-        m_drillShapeOpt->Enable( true );
-        m_plotModeOpt->Enable( true );
-        m_plotMirrorOpt->Enable( true );
-        m_useAuxOriginCheckBox->Enable( false );
-        m_useAuxOriginCheckBox->SetValue( false );
-        m_defaultPenSize.Enable( true );
-        m_scaleOpt->Enable( true );
-        m_fineAdjustXCtrl->Enable( false );
-        m_fineAdjustYCtrl->Enable( false );
-        m_trackWidthCorrection.Enable( false );
-        m_plotPSNegativeOpt->SetValue( false );
-        m_plotPSNegativeOpt->Enable( false );
-        m_forcePSA4OutputOpt->Enable( true );
-
-        m_PlotOptionsSizer->Hide( m_GerberOptionsSizer );
-        m_PlotOptionsSizer->Show( m_HPGLOptionsSizer );
         m_PlotOptionsSizer->Hide( m_PSOptionsSizer );
         m_PlotOptionsSizer->Hide( m_SizerDXF_options );
         m_PlotOptionsSizer->Hide( m_svgOptionsSizer );
@@ -985,12 +934,9 @@ void DIALOG_PLOT::SetPlotFormat( wxCommandEvent& event )
 
     case PLOT_FORMAT::DXF:
         m_drillShapeOpt->Enable( true );
-        m_plotModeOpt->Enable( false );
-        setPlotModeChoiceSelection( FILLED );
         m_plotMirrorOpt->Enable( false );
         m_plotMirrorOpt->SetValue( false );
         m_useAuxOriginCheckBox->Enable( true );
-        m_defaultPenSize.Enable( false );
         m_scaleOpt->Enable( true );
         m_fineAdjustXCtrl->Enable( false );
         m_fineAdjustYCtrl->Enable( false );
@@ -1001,7 +947,6 @@ void DIALOG_PLOT::SetPlotFormat( wxCommandEvent& event )
         m_forcePSA4OutputOpt->SetValue( false );
 
         m_PlotOptionsSizer->Hide( m_GerberOptionsSizer );
-        m_PlotOptionsSizer->Hide( m_HPGLOptionsSizer );
         m_PlotOptionsSizer->Hide( m_PSOptionsSizer );
         m_PlotOptionsSizer->Show( m_SizerDXF_options );
         m_PlotOptionsSizer->Hide( m_svgOptionsSizer );
@@ -1010,6 +955,8 @@ void DIALOG_PLOT::SetPlotFormat( wxCommandEvent& event )
         OnChangeDXFPlotMode( event );
         break;
 
+    default:
+    case PLOT_FORMAT::HPGL:
     case PLOT_FORMAT::UNDEFINED:
         break;
     }
@@ -1079,7 +1026,6 @@ void DIALOG_PLOT::applyPlotSettings()
     tempOptions.SetDrillMarksType( static_cast<DRILL_MARKS>( sel ) );
 
     tempOptions.SetMirror( m_plotMirrorOpt->GetValue() );
-    tempOptions.SetPlotMode( m_plotModeOpt->GetSelection() == 1 ? SKETCH : FILLED );
     tempOptions.SetDXFPlotPolygonMode( m_DXF_plotModeOpt->GetValue() );
 
     sel = m_DXF_plotUnits->GetSelection();
@@ -1110,31 +1056,10 @@ void DIALOG_PLOT::applyPlotSettings()
 
     // Update settings from text fields. Rewrite values back to the fields,
     // since the values may have been constrained by the setters.
-    wxString    msg;
-
-    // read HPLG pen size (this param is stored in mils)
-    // However, due to issues when converting this value from or to mm
-    // that can slightly change the value, update this param only if it
-    // is in use
-    if( getPlotFormat() == PLOT_FORMAT::HPGL )
-    {
-        if( !tempOptions.SetHPGLPenDiameter( m_defaultPenSize.GetValue() / pcbIUScale.IU_PER_MILS ) )
-        {
-            m_defaultPenSize.SetValue( tempOptions.GetHPGLPenDiameter() * pcbIUScale.IU_PER_MILS );
-            msg.Printf( _( "HPGL pen size constrained." ) );
-            reporter.Report( msg, RPT_SEVERITY_INFO );
-        }
-    }
-    else    // keep the last value (initial value if no HPGL plot made)
-    {
-        tempOptions.SetHPGLPenDiameter( m_plotOpts.GetHPGLPenDiameter() );
-    }
-    tempOptions.SetHPGLPenSpeed( m_plotOpts.GetHPGLPenSpeed() );
-    tempOptions.SetHPGLPenNum( m_plotOpts.GetHPGLPenNum() );
 
     // X scale
-    double tmpDouble;
-    msg = m_fineAdjustXCtrl->GetValue();
+    double   tmpDouble;
+    wxString msg = m_fineAdjustXCtrl->GetValue();
     msg.ToDouble( &tmpDouble );
 
     if( !setDouble( &m_XScaleAdjust, tmpDouble, PLOT_MIN_SCALE, PLOT_MAX_SCALE ) )

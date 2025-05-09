@@ -223,8 +223,8 @@ public:
     /**
      * Initialize the format for the drill map file.
      *
-     * @param aMapFmt a PlotFormat value (one of PLOT_FORMAT_HPGL, PLOT_FORMAT_POST,
-     *                PLOT_FORMAT_GERBER, PLOT_FORMAT_DXF, PLOT_FORMAT_SVG, PLOT_FORMAT_PDF
+     * @param aMapFmt a PlotFormat value (one of PLOT_FORMAT_POST, PLOT_FORMAT_GERBER, PLOT_FORMAT_DXF,
+     *                PLOT_FORMAT_SVG, PLOT_FORMAT_PDF
      *                the most useful are PLOT_FORMAT_PDF and PLOT_FORMAT_POST.
      */
     void SetMapFileFormat( PLOT_FORMAT aMapFmt )
@@ -329,13 +329,13 @@ protected:
     int  getHolesCount() const { return m_holeListBuffer.size(); }
 
     /**
-     * Write the drill marks in HPGL, POSTSCRIPT or other supported formats/
+     * Write the drill marks in PDF, POSTSCRIPT or other supported formats/
      *
      * Each hole size has a symbol (circle, cross X, cross + ...) up to PLOTTER::MARKER_COUNT
      * different values.  If more than PLOTTER::MARKER_COUNT different values, these other
      * values share the same mark shape.
      *
-     * @param aPlotter is a PLOTTER instance (HPGL, POSTSCRIPT ... plotter).
+     * @param aPlotter is a PLOTTER instance (PDF, POSTSCRIPT ... plotter).
      */
     bool plotDrillMarks( PLOTTER* aPlotter );
 

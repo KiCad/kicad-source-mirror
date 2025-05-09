@@ -20,14 +20,14 @@
 
 #include <jobs/job_registry.h>
 
-bool JOB_REGISTRY::Add( const wxString& aName, JOB_REGISTRY_ENTRY entry )
+bool JOB_REGISTRY::Add( const wxString& aName, JOB_REGISTRY_ENTRY entry, bool aDeprecated )
 {
+    entry.deprecated = aDeprecated;
+
     REGISTRY_MAP_T& registry = getRegistry();
 
     if( registry.find( aName ) != registry.end() )
-    {
         return false;
-    }
 
     registry[aName] = entry;
     return true;

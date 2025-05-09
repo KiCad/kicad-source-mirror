@@ -703,6 +703,9 @@ void PANEL_JOBSET::OnAddJobClick( wxCommandEvent& aEvent )
 
     for( const std::pair<const wxString, JOB_REGISTRY_ENTRY>& entry : jobMap )
     {
+        if( entry.second.deprecated )
+            continue;
+
         wxArrayString item;
         item.Add( wxGetTranslation( entry.second.title ) );
         items.emplace_back( item );
@@ -721,6 +724,9 @@ void PANEL_JOBSET::OnAddJobClick( wxCommandEvent& aEvent )
         {
             for( const std::pair<const wxString, JOB_REGISTRY_ENTRY>& entry : jobMap )
             {
+                if( entry.second.deprecated )
+                    continue;
+
                 if( wxGetTranslation( entry.second.title ) == selectedString )
                 {
                     jobKey = entry.first;

@@ -29,30 +29,6 @@ NLOHMANN_JSON_SERIALIZE_ENUM( JOB_PAGE_SIZE,
                                       { JOB_PAGE_SIZE::PAGE_SIZE_A, "A" },
                               } )
 
-NLOHMANN_JSON_SERIALIZE_ENUM( JOB_HPGL_PAGE_SIZE,
-                              {
-                                      { JOB_HPGL_PAGE_SIZE::DEFAULT, "default" },
-                                      { JOB_HPGL_PAGE_SIZE::SIZE_A5, "A5" },
-                                      { JOB_HPGL_PAGE_SIZE::SIZE_A4, "A4" },
-                                      { JOB_HPGL_PAGE_SIZE::SIZE_A3, "A3" },
-                                      { JOB_HPGL_PAGE_SIZE::SIZE_A2, "A2" },
-                                      { JOB_HPGL_PAGE_SIZE::SIZE_A1, "A1" },
-                                      { JOB_HPGL_PAGE_SIZE::SIZE_A0, "A0" },
-                                      { JOB_HPGL_PAGE_SIZE::SIZE_A, "A" },
-                                      { JOB_HPGL_PAGE_SIZE::SIZE_B, "B" },
-                                      { JOB_HPGL_PAGE_SIZE::SIZE_C, "C" },
-                                      { JOB_HPGL_PAGE_SIZE::SIZE_D, "D" },
-                                      { JOB_HPGL_PAGE_SIZE::SIZE_E, "E" },
-                              } )
-
-NLOHMANN_JSON_SERIALIZE_ENUM( JOB_HPGL_PLOT_ORIGIN_AND_UNITS,
-                              {
-                                      { JOB_HPGL_PLOT_ORIGIN_AND_UNITS::PLOTTER_BOT_LEFT, "default" },
-                                      { JOB_HPGL_PLOT_ORIGIN_AND_UNITS::PLOTTER_CENTER, "A5" },
-                                      { JOB_HPGL_PLOT_ORIGIN_AND_UNITS::USER_FIT_PAGE, "A4" },
-                                      { JOB_HPGL_PLOT_ORIGIN_AND_UNITS::USER_FIT_CONTENT, "A3" },
-                              } )
-
 NLOHMANN_JSON_SERIALIZE_ENUM( SCH_PLOT_FORMAT,
                               {
                                       { SCH_PLOT_FORMAT::HPGL, "hpgl" },
@@ -73,13 +49,10 @@ JOB_EXPORT_SCH_PLOT::JOB_EXPORT_SCH_PLOT( bool aOutputIsDirectory ) :
         m_pageSizeSelect( JOB_PAGE_SIZE::PAGE_SIZE_AUTO ),
         m_useBackgroundColor( true ),
         m_minPenWidth( 847 /* hairline @ 300dpi */ ),
-        m_HPGLPenSize( 1.0 ),
-        m_HPGLPaperSizeSelect( JOB_HPGL_PAGE_SIZE::DEFAULT ),
         m_PDFPropertyPopups( true ),
         m_PDFHierarchicalLinks( true ),
         m_PDFMetadata( true ),
-        m_theme(),
-        m_HPGLPlotOrigin( JOB_HPGL_PLOT_ORIGIN_AND_UNITS::USER_FIT_CONTENT )
+        m_theme()
 {
     m_params.emplace_back( new JOB_PARAM<SCH_PLOT_FORMAT>( "format",
             &m_plotFormat, m_plotFormat ) );
@@ -105,12 +78,6 @@ JOB_EXPORT_SCH_PLOT::JOB_EXPORT_SCH_PLOT( bool aOutputIsDirectory ) :
     m_params.emplace_back( new JOB_PARAM<int>( "min_pen_width",
             &m_minPenWidth, m_minPenWidth ) );
 
-    m_params.emplace_back( new JOB_PARAM<double>( "hpgl_pen_size",
-            &m_HPGLPenSize, m_HPGLPenSize ) );
-
-    m_params.emplace_back( new JOB_PARAM<JOB_HPGL_PAGE_SIZE>( "hpgl_page_size",
-            &m_HPGLPaperSizeSelect, m_HPGLPaperSizeSelect ) );
-
     m_params.emplace_back( new JOB_PARAM<bool>( "pdf_property_popups",
             &m_PDFPropertyPopups, m_PDFPropertyPopups ) );
 
@@ -122,10 +89,6 @@ JOB_EXPORT_SCH_PLOT::JOB_EXPORT_SCH_PLOT( bool aOutputIsDirectory ) :
 
     m_params.emplace_back( new JOB_PARAM<wxString>( "color_theme",
             &m_theme, m_theme ) );
-
-    m_params.emplace_back( new JOB_PARAM<JOB_HPGL_PLOT_ORIGIN_AND_UNITS>( "hpgl_plot_origin",
-            &m_HPGLPlotOrigin, m_HPGLPlotOrigin ) );
-
 }
 
 
@@ -218,15 +181,9 @@ wxString JOB_EXPORT_SCH_PLOT_HPGL::GetDefaultDescription() const
 }
 
 
-wxString JOB_EXPORT_SCH_PLOT_HPGL::GetSettingsDialogTitle() const
-{
-    return _( "Export HPGL Job Settings" );
-}
-
-
 REGISTER_JOB( sch_export_plot_svg, _HKI( "Schematic: Export SVG" ), KIWAY::FACE_SCH,
               JOB_EXPORT_SCH_PLOT_SVG );
-REGISTER_JOB( sch_export_plot_hpgl, _HKI( "Schematic: Export HPGL" ), KIWAY::FACE_SCH,
+REGISTER_DEPRECATED_JOB( sch_export_plot_hpgl, _HKI( "Schematic: Export HPGL" ), KIWAY::FACE_SCH,
               JOB_EXPORT_SCH_PLOT_HPGL );
 REGISTER_JOB( sch_export_plot_ps, _HKI( "Schematic: Export Postscript" ), KIWAY::FACE_SCH,
               JOB_EXPORT_SCH_PLOT_PS );

@@ -23,28 +23,9 @@
 #include <i18n_utility.h>
 
 
-NLOHMANN_JSON_SERIALIZE_ENUM( JOB_EXPORT_PCB_HPGL::GEN_MODE,
-                              {
-                                      { JOB_EXPORT_PCB_HPGL::GEN_MODE::MULTI, "multi" },
-                                      { JOB_EXPORT_PCB_HPGL::GEN_MODE::SINGLE, "single" },
-                              } )
-
-
 JOB_EXPORT_PCB_HPGL::JOB_EXPORT_PCB_HPGL() :
-        JOB_EXPORT_PCB_PLOT( JOB_EXPORT_PCB_PLOT::PLOT_FORMAT::HPGL, "hpgl", false ),
-        m_genMode( GEN_MODE::MULTI ), m_defaultPenSize( 0.381 ), m_penSpeed( 20 ), m_penNumber( 1 )
-{
-    m_plotDrawingSheet = false;
-
-    m_params.emplace_back( new JOB_PARAM<wxString>( "color_theme",
-            &m_colorTheme, m_colorTheme ) );
-    m_params.emplace_back( new JOB_PARAM<GEN_MODE>( "gen_mode", &m_genMode, m_genMode ) );
-    m_params.emplace_back( new JOB_PARAM<double>( "scale", &m_scale, m_scale ) );
-    m_params.emplace_back( new JOB_PARAM<double>( "default_pen_size",
-            &m_defaultPenSize, m_defaultPenSize ) );
-    m_params.emplace_back( new JOB_PARAM<int>( "pen_speed", &m_penSpeed, m_penSpeed ) );
-    m_params.emplace_back( new JOB_PARAM<int>( "pen_number", &m_penNumber, m_penNumber ) );
-}
+        JOB_EXPORT_PCB_PLOT( JOB_EXPORT_PCB_PLOT::PLOT_FORMAT::HPGL, "hpgl", false )
+{}
 
 
 wxString JOB_EXPORT_PCB_HPGL::GetDefaultDescription() const
@@ -53,10 +34,4 @@ wxString JOB_EXPORT_PCB_HPGL::GetDefaultDescription() const
 }
 
 
-wxString JOB_EXPORT_PCB_HPGL::GetSettingsDialogTitle() const
-{
-    return wxString::Format( _( "Export HPGL Job Settings" ) );
-}
-
-
-REGISTER_JOB( pcb_export_hpgl, _HKI( "PCB: Export HPGL" ), KIWAY::FACE_PCB, JOB_EXPORT_PCB_HPGL );
+REGISTER_DEPRECATED_JOB( pcb_export_hpgl, _HKI( "PCB: Export HPGL" ), KIWAY::FACE_PCB, JOB_EXPORT_PCB_HPGL );
