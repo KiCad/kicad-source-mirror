@@ -124,6 +124,11 @@ class AllegroBoard:
         def print_coords(name, coords):
             prnt(f"{name:12}: ({coords.x}, {coords.y})")
 
+        def print_layer(layer):
+            name = "Layer"
+            v = f"{layer.family} {layer.ordinal}"
+            print_v(name, v)
+
         t = obj.type
         d = obj.data
 
@@ -221,6 +226,32 @@ class AllegroBoard:
             if hasattr(d, "unknown_2"):
                 print_v("unknown_2", d.unknown_2)
 
+        elif t == 0x14:
+
+            print_ptr("Next", d.next)
+            print_ptr("Parent", d.parent_ptr)
+            print_ptr("Segment", d.segment_ptr)
+            print_ptr("Ptr 0x03", d.ptr_0x03)
+            print_ptr("Ptr x026", d.ptr_0x26)
+
+            print_v("unknown_1", d.unknown_1)
+            if hasattr(d, "unknown_2"):
+                print_v("unknown_2", d.unknown_2)
+
+            print_layer(d.layer)
+
+        elif t in [0x15, 0x16, 0x17]:
+
+            print_ptr("Next", d.next)
+            print_ptr("Parent", d.parent_ptr)
+
+            print_v("unknown_1", d.unknown_1)
+            if hasattr(d, "unknown_2"):
+                print_v("unknown_2", d.unknown_2)
+
+            print_v("Width", d.width, hex=False)
+            print_coords("pt0", d.coords_0)
+            print_coords("pt1", d.coords_1)
 
         elif t == 0x1b: # Net
             print_s("Net", d.net_name)
@@ -490,8 +521,14 @@ if __name__ == "__main__":
     parser.add_argument("--dump-by-type", "--dt", type=IntIsh,
                         help="Dump all the objects of the given type.")
 
+    parser.add_argument( "--dump-layer-map", "--dlm", action="store_true",
+                        help="Dump all the layers in the layer map structure")
+
     parser.add_argument("--footprints", "--fp", nargs="*", default=None,
                         help="Dump footprint info for the given ref designators, or all if none given")
+
+    parser.add_argument( "--dump-layers", "--dl", action="store_true",
+                         help="Dump all the layers in the layer 0x2A structures")
 
     args = parser.parse_args()
 
@@ -559,6 +596,15 @@ if __name__ == "__main__":
             print("")
             brd.print_obj(obj)
             print("")
+
+    if args.dump_layer_map:
+
+        lm = kt_brd_struct.layer_map
+
+        for i, layer in enumerate(lm.entries):
+            print(f"Layer {i}:")
+            print(f"  A: {layer.a:#010x}")
+            print(f"  B: {layer.b:#010x}")
 
     if args.walk_list is not None:
         # Walk a list of objects in the Allegro board file
@@ -641,3 +687,5 @@ if __name__ == "__main__":
 
                 next = inst_obj.data.next
                 inst_num += 1
+
+    # if args.dump_layers:

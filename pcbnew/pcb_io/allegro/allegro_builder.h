@@ -33,6 +33,8 @@
 
 
 class BOARD;
+class FOOTPRINT;
+class PCB_TEXT;
 
 namespace ALLEGRO
 {
@@ -49,12 +51,19 @@ public:
     bool BuildBoard();
 
 private:
+    VECTOR2I scale( const VECTOR2I& aVector ) const;
+
     std::unique_ptr<FOOTPRINT> buildFootprint( const BLK_0x2D& aFpInstance );
+    std::unique_ptr<PCB_TEXT>  buildPcbText( const BLK_0x30_STR_WRAPPER& aStrWrapper );
 
     const RAW_BOARD&   m_rawBoard;
     BOARD&             m_board;
     REPORTER&          m_reporter;
     PROGRESS_REPORTER* m_progressReporter;
+
+    // The computed scale factor for the board
+    // (based on units and divisor)
+    int m_scale;
 };
 
 } // namespace ALLEGRO

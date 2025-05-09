@@ -115,3 +115,6 @@ S!SOT23!PACKAGE!2N2221_SOT23_QBC846B!Q2!PIN!TOP!259 1!FIG_RECTANGLE!6!635!777!20
 * More work on the framework of the Allegro PCB_IO plugin.
 
 * Started integrating the 0x2B / 0x2D info into the Allegro PCB_IO plugin as FOOTPRINTS, but need to decode text better first to get the refdes.
+
+* Following the 0x14 pointer from a 0x2D allows to get some graphic lines importing to Kicad.
+* The layers seem to be related to 0x2A, based on the string "DIMENSIONS" in the Altium import, which is in the string table in PreAmp and only referred to by one 0x2A.

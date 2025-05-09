@@ -125,6 +125,7 @@ seq:
     repeat-expr: 53
   - id: unit_divisor
     type: u4
+  - type: u4
   - id: layer_map
     type: layer_map
 
@@ -228,6 +229,7 @@ types:
       layer_family:
         0x01: board_geometry
         0x06: copper
+        0x07: unknown
         0x09: silk
 
   string_aligned:
@@ -949,19 +951,35 @@ types:
         type: u4
       - id: next
         type: u4
-      - id: ptr1
+        doc: |
+          Points to the next item in the list.
+
+          In the ll_x14 header list, this continues to the tail of that list.
+          For items in footprint instances, this continues until the FP instance's key.
+      - id: parent_ptr
         type: u4
-      - id: un2
+        doc: |
+          Points to 0x2d (parent FP). Can also point to the 'tail' of the ll_x14 list, even if next is another 0x14
+          (the last entry has next == ptr1 == ll_x14.tail ).
+      - id: unknown_1
         type: u4
+        doc: |
+          0x00 or 0x20 - flags?
       - id: un3
         type: u4
         if: _root.ver >= 0x00140400
-      - id: ptr2
+      - id: segment_ptr
         type: u4
-      - id: ptr3
+        doc: |
+          Points to a 0x15 or 0x16 or 0x17.
+      - id: ptr_0x03
         type: u4
-      - id: ptr4
+        doc: |
+          Null, or 0x03
+      - id: ptr_0x26
         type: u4
+        doc: |
+          Null, or 0x26 (group?)
 
   type_15_segment:
     seq:
@@ -971,19 +989,25 @@ types:
         type: u4
       - id: next
         type: u4
-      - id: parent
+        doc: |
+          Can be 0x15, 0x16, 0x17, 0x05
+      - id: parent_ptr
         type: u4
-      - id: un3
+        doc: |
+          Can be 0x05, 0x14, 0x28
+      - id: unknown_1
         type: u4
-      - id: un4
+        doc: |
+          0x00 or 0x20 - flags?
+      - id: unknown_2
         type: u4
         if: _root.ver >= 0x00140400
       - id: width
         type: u4
-      - id: coords
-        type: s4
-        repeat: expr
-        repeat-expr: 4
+      - id: coords_0
+        type: coords
+      - id: coords_1
+        type: coords
 
   type_16_segment:
     seq:
@@ -993,18 +1017,25 @@ types:
         type: u4
       - id: next
         type: u4
-      - id: parent
+        doc: |
+          Can be 0x15, 0x16, 0x17, 0x05
+      - id: parent_ptr
         type: u4
-      - id: flags
-        type: b32
-      - type: u4
+        doc: |
+          Can be 0x05, 0x14, 0x28
+      - id: unknown_1
+        type: u4
+        doc: |
+          0x00 or 0x20 - flags?
+      - id: unknown_2
+        type: u4
         if: _root.ver >= 0x00140400
       - id: width
         type: u4
-      - id: coords
-        type: s4
-        repeat: expr
-        repeat-expr: 4
+      - id: coords_0
+        type: coords
+      - id: coords_1
+        type: coords
 
   type_17_segment:
     seq:
@@ -1014,17 +1045,25 @@ types:
         type: u4
       - id: next
         type: u4
-      - id: parent
+        doc: |
+          Can be 0x15, 0x16, 0x17, 0x05
+      - id: parent_ptr
         type: u4
-      - type: u4
-      - type: u4
+        doc: |
+          Can be 0x05, 0x14, 0x28
+      - id: unknown_1
+        type: u4
+        doc: |
+          0x00 or 0x20 - flags?
+      - id: unknown_2
+        type: u4
         if: _root.ver >= 0x00140400
       - id: width
         type: u4
-      - id: coords
-        type: s4
-        repeat: expr
-        repeat-expr: 4
+      - id: coords_0
+        type: coords
+      - id: coords_1
+        type: coords
 
   type_1b_net:
     seq:
@@ -1681,7 +1720,8 @@ types:
         type: u2
         doc: |
           E.g. 0x2000
-      - type: u4
+      - id: unknown_4
+        type: u4
         if: _root.ver >= 0x0140400
       - id: flags
         type: b32

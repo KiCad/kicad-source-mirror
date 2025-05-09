@@ -703,14 +703,14 @@ struct BLK_0x14
     LAYER_INFO m_Layer;
     uint32_t   m_Key;
     uint32_t   m_Next;
-    uint32_t   m_Ptr1;
-    uint32_t   m_Unknown1;
+    uint32_t   m_Parent;
+    uint32_t   m_Flags;
 
     COND_GE<FMT_VER::V_172, uint32_t> m_Unknown2;
 
-    uint32_t m_Ptr2;
-    uint32_t m_Ptr3;
-    uint32_t m_Ptr4;
+    uint32_t m_SegmentPtr;
+    uint32_t m_Ptr0x03;
+    uint32_t m_Ptr0x26;
 };
 
 
@@ -728,8 +728,12 @@ struct BLK_0x15_SEGMENT
 
     COND_GE<FMT_VER::V_172, uint32_t> m_Unknown2;
 
-    uint32_t               m_Width;
-    std::array<int32_t, 4> m_Coords;
+    uint32_t m_Width;
+
+    int32_t m_StartX;
+    int32_t m_StartY;
+    int32_t m_EndX;
+    int32_t m_EndY;
 };
 
 
@@ -747,8 +751,12 @@ struct BLK_0x16_SEGMENT
 
     COND_GE<FMT_VER::V_172, uint32_t> m_Unknown2;
 
-    uint32_t               m_Width;
-    std::array<int32_t, 4> m_Coords;
+    uint32_t m_Width;
+
+    int32_t m_StartX;
+    int32_t m_StartY;
+    int32_t m_EndX;
+    int32_t m_EndY;
 };
 
 
@@ -766,8 +774,12 @@ struct BLK_0x17_SEGMENT
 
     COND_GE<FMT_VER::V_172, uint32_t> m_Unknown2;
 
-    uint32_t               m_Width;
-    std::array<int32_t, 4> m_Coords;
+    uint32_t m_Width;
+
+    int32_t m_StartX;
+    int32_t m_StartY;
+    int32_t m_EndX;
+    int32_t m_EndY;
 };
 
 
@@ -1282,7 +1294,7 @@ struct BLK_0x2D
     // Presumably equivalent to m_InstRef16x
     COND_GE<FMT_VER::V_172, uint32_t> m_InstRef;
 
-    uint32_t m_UnknownPtr1;
+    uint32_t m_GraphicPtr;
     uint32_t m_FirstPadPtr;
     uint32_t m_UnknownPtr2;
 

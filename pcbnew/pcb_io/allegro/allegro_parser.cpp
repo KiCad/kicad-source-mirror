@@ -813,14 +813,14 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x14( FILE_STREAM& aStream, FMT_VE
     data.m_Layer = ParseLayerInfo( aStream );
     data.m_Key = aStream.ReadU32();
     data.m_Next = aStream.ReadU32();
-    data.m_Ptr1 = aStream.ReadU32();
-    data.m_Unknown1 = aStream.ReadU32();
+    data.m_Parent = aStream.ReadU32();
+    data.m_Flags = aStream.ReadU32();
 
     ReadCond( aStream, aVer, data.m_Unknown2 );
 
-    data.m_Ptr2 = aStream.ReadU32();
-    data.m_Ptr3 = aStream.ReadU32();
-    data.m_Ptr4 = aStream.ReadU32();
+    data.m_SegmentPtr = aStream.ReadU32();
+    data.m_Ptr0x03 = aStream.ReadU32();
+    data.m_Ptr0x26 = aStream.ReadU32();
 
     return block;
 }
@@ -843,10 +843,10 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x15_SEGMENT( FILE_STREAM& aStream
 
     data.m_Width = aStream.ReadU32();
 
-    for( size_t i = 0; i < data.m_Coords.size(); ++i )
-    {
-        data.m_Coords[i] = aStream.ReadS32();
-    }
+    data.m_StartX = aStream.ReadS32();
+    data.m_StartY = aStream.ReadS32();
+    data.m_EndX = aStream.ReadS32();
+    data.m_EndY = aStream.ReadS32();
 
     return block;
 }
@@ -869,10 +869,10 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x16_SEGMENT( FILE_STREAM& aStream
 
     data.m_Width = aStream.ReadU32();
 
-    for( size_t i = 0; i < data.m_Coords.size(); ++i )
-    {
-        data.m_Coords[i] = aStream.ReadS32();
-    }
+    data.m_StartX = aStream.ReadS32();
+    data.m_StartY = aStream.ReadS32();
+    data.m_EndX = aStream.ReadS32();
+    data.m_EndY = aStream.ReadS32();
 
     return block;
 }
@@ -895,10 +895,10 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x17_SEGMENT( FILE_STREAM& aStream
 
     data.m_Width = aStream.ReadU32();
 
-    for( size_t i = 0; i < data.m_Coords.size(); ++i )
-    {
-        data.m_Coords[i] = aStream.ReadS32();
-    }
+    data.m_StartX = aStream.ReadS32();
+    data.m_StartY = aStream.ReadS32();
+    data.m_EndX = aStream.ReadS32();
+    data.m_EndY = aStream.ReadS32();
 
     return block;
 }
@@ -1477,7 +1477,8 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x2D( FILE_STREAM& stream, FMT_VER
 
     data.m_Key = stream.ReadU32();
     data.m_Next = stream.ReadU32();
-    data.m_Unknown1 = stream.ReadU32();
+
+    ReadCond( stream, aVer, data.m_Unknown1 );
 
     ReadCond( stream, aVer, data.m_InstRef16x );
 
@@ -1489,12 +1490,12 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x2D( FILE_STREAM& stream, FMT_VER
     data.m_Flags = stream.ReadU32();
 
     data.m_Rotation = stream.ReadU32();
-    data.m_CoordX = stream.ReadS16();
-    data.m_CoordY = stream.ReadS16();
+    data.m_CoordX = stream.ReadS32();
+    data.m_CoordY = stream.ReadS32();
 
     ReadCond( stream, aVer, data.m_InstRef );
 
-    data.m_UnknownPtr1 = stream.ReadU32();
+    data.m_GraphicPtr = stream.ReadU32();
     data.m_FirstPadPtr = stream.ReadU32();
     data.m_UnknownPtr2 = stream.ReadU32();
     ReadArrayU32( stream, data.m_UnknownPtrs1 );
