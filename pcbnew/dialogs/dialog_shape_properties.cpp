@@ -970,7 +970,8 @@ DIALOG_SHAPE_PROPERTIES::DIALOG_SHAPE_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, 
 
     // Used the last saved tab if any
     if( s_lastTabForShape.count( m_item->GetShape() ) > 0
-            && s_lastTabForShape[m_item->GetShape()] < (int) m_notebookShapeDefs->GetPageCount() )
+            && s_lastTabForShape[m_item->GetShape()] < (int) m_notebookShapeDefs->GetPageCount()
+            && s_lastTabForShape[m_item->GetShape()] >= 0 )
     {
         m_notebookShapeDefs->SetSelection( s_lastTabForShape[m_item->GetShape()] );
     }
