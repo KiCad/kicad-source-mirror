@@ -53,6 +53,7 @@
 #include <thread_pool.h>
 #include <launch_ext.h>
 #include <wx/dcclient.h>
+#include <wx/progdlg.h>
 #include <wx/settings.h>
 
 #include <git/git_commit_handler.h>
@@ -1584,6 +1585,32 @@ void PROJECT_TREE_PANE::EmptyTreePrj()
     // Remove the git repository when the project is unloaded
     if( m_TreeProject->GetGitRepo() )
     {
+        // We need to lock the mutex to ensure that no other thread is using the git repository
+        std::unique_lock<std::mutex> lock( m_TreeProject->GitCommon()->m_gitActionMutex, std::try_to_lock );
+
+        if( !lock.owns_lock() )
+        {
+            // Block until any in-flight Git actions complete, showing a pulsing progress dialog
+            {
+                wxProgressDialog progress(
+                    _("Please wait"),
+                    _("Waiting for Git operations to finish..."),
+                    100,
+                    this,
+                    wxPD_APP_MODAL | wxPD_AUTO_HIDE | wxPD_SMOOTH
+                );
+
+                // Keep trying to acquire the lock, pulsing the dialog every 100 ms
+                while ( !lock.try_lock() )
+                {
+                    progress.Pulse();
+                    std::this_thread::sleep_for( std::chrono::milliseconds(100) );
+                    // allow UI events to process so dialog remains responsive
+                    wxYield();
+                }
+            }
+        }
+
         git_repository_free( m_TreeProject->GetGitRepo() );
         m_TreeProject->SetGitRepo( nullptr );
     }

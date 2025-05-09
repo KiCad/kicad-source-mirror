@@ -163,6 +163,7 @@ protected:
     friend class GIT_PUSH_HANDLER;
     friend class GIT_PULL_HANDLER;
     friend class GIT_CLONE_HANDLER;
+    friend class PROJECT_TREE_PANE;
 
 private:
     void updatePublicKeys();
