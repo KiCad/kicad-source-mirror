@@ -32,7 +32,7 @@
 
 #if _WIN32
 /* windows */
-#include <Windows.h>
+#include <windows.h>
 #include <errno.h>
 #elif __APPLE__
 #include <dlfcn.h>

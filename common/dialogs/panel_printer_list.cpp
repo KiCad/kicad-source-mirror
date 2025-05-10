@@ -28,7 +28,7 @@
 //#define CUPS_LIST_PRINTERS
 
 #ifdef __WXMSW__
-    #include <Windows.h>
+    #include <windows.h>
 #elif defined( CUPS_LIST_PRINTERS )
     #include <cups/cups.h>
 #endif

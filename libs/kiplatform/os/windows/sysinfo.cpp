@@ -21,7 +21,7 @@
 * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
 */
 
-#include <Wbemidl.h>
+#include <wbemidl.h>
 #include <cstdio>
 #define _WIN32_DCOM
 #include <comdef.h>

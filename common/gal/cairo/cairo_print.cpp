@@ -35,7 +35,7 @@ using std::min;
 
 #ifdef __WXMSW__
 #include <windows.h>
-#include <ObjIdl.h>
+#include <objidl.h>
 #include <gdiplus.h>
 #include <cairo-win32.h>
 #include <wx/msw/enhmeta.h>

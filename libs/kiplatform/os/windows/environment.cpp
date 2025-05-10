@@ -27,7 +27,7 @@
 #include <wx/app.h>
 #include <wx/uri.h>
 
-#include <Windows.h>
+#include <windows.h>
 #include <shellapi.h>
 #include <shlwapi.h>
 #if defined( __MINGW32__ )
@@ -37,7 +37,7 @@
 #endif
 #include <winhttp.h>
 
-#include <Softpub.h>
+#include <softpub.h>
 #include <wincrypt.h>
 #include <wintrust.h>
 

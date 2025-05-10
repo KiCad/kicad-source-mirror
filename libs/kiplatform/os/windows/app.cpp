@@ -27,7 +27,7 @@
 #include <windows.h>
 #include <strsafe.h>
 #include <config.h>
-#include <VersionHelpers.h>
+#include <versionhelpers.h>
 #include <iostream>
 #include <cstdio>
 

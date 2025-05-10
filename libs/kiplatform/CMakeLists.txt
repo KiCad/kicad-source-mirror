@@ -71,10 +71,10 @@ elseif( WIN32 )
         )
 
     set( PLATFORM_LIBS
-        "Shlwapi"
+        "shlwapi"
         "winhttp"
         "wintrust"
-        "Imm32"
+        "imm32"
         )
 elseif( UNIX )
     list( APPEND PLATFORM_SRCS
