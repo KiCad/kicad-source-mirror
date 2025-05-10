@@ -853,6 +853,8 @@ void PlotLayerOutlines( BOARD* aBoard, PLOTTER* aPlotter, const LSET& aLayerMask
     BRDITEMS_PLOTTER itemplotter( aPlotter, aBoard, aPlotOpt );
     itemplotter.SetLayerSet( aLayerMask );
 
+    int smallDrill = pcbIUScale.mmToIU( ADVANCED_CFG::GetCfg().m_SmallDrillMarkSize );
+
     SHAPE_POLY_SET outlines;
 
     for( PCB_LAYER_ID layer : aLayerMask.Seq( aLayerMask.SeqStackupForPlotting() ) )
@@ -874,36 +876,36 @@ void PlotLayerOutlines( BOARD* aBoard, PLOTTER* aPlotter, const LSET& aLayerMask
                 const SHAPE_LINE_CHAIN& path = ( kk == 0 ) ? outlines.COutline( ii )
                                                            : outlines.CHole( ii, kk - 1 );
 
-                aPlotter->PlotPoly( path, FILL_T::NO_FILL );
+                aPlotter->PlotPoly( path, FILL_T::NO_FILL, PLOTTER::USE_DEFAULT_LINE_WIDTH, nullptr );
             }
         }
 
         // Plot pad holes
         if( aPlotOpt.GetDrillMarksType() != DRILL_MARKS::NO_DRILL_SHAPE )
         {
-            int smallDrill = ( aPlotOpt.GetDrillMarksType() == DRILL_MARKS::SMALL_DRILL_SHAPE )
-                                  ? pcbIUScale.mmToIU( ADVANCED_CFG::GetCfg().m_SmallDrillMarkSize )
-                                  : INT_MAX;
-
             for( FOOTPRINT* footprint : aBoard->Footprints() )
             {
                 for( PAD* pad : footprint->Pads() )
                 {
                     if( pad->HasHole() )
                     {
-                        std::shared_ptr<SHAPE_SEGMENT> slot = pad->GetEffectiveHoleShape();
-
-                        if( slot->GetSeg().A == slot->GetSeg().B )  // circular hole
+                        if( pad->GetDrillSizeX() == pad->GetDrillSizeY() )
                         {
-                            int drill = std::min( smallDrill, slot->GetWidth() );
-                            aPlotter->Circle( pad->GetPosition(), drill, FILL_T::NO_FILL,
-                                              PLOTTER::USE_DEFAULT_LINE_WIDTH );
+                            int drill = pad->GetDrillSizeX();
+
+                            if( aPlotOpt.GetDrillMarksType() == DRILL_MARKS::SMALL_DRILL_SHAPE )
+                                drill = std::min( smallDrill, drill );
+
+                            aPlotter->ThickCircle( pad->ShapePos( layer ), drill,
+                                                   PLOTTER::USE_DEFAULT_LINE_WIDTH, FILLED, nullptr );
                         }
                         else
                         {
                             // Note: small drill marks have no significance when applied to slots
-                            aPlotter->ThickSegment( slot->GetSeg().A, slot->GetSeg().B,
-                                                    slot->GetWidth(), SKETCH, nullptr );
+
+                            aPlotter->ThickOval( pad->ShapePos( layer ), pad->GetSize( layer ),
+                                                 pad->GetOrientation(), PLOTTER::USE_DEFAULT_LINE_WIDTH,
+                                                 nullptr );
                         }
                     }
                 }

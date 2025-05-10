@@ -1198,8 +1198,7 @@ void GERBER_PLOTTER::ThickSegment( const VECTOR2I& start, const VECTOR2I& end, i
     }
     else
     {
-        SetCurrentLineWidth( USE_DEFAULT_LINE_WIDTH );
-        segmentAsOval( start, end, GetCurrentLineWidth(), tracemode );
+        PLOTTER::ThickSegment( start, end, width, tracemode, aData );
     }
 }
 
@@ -1383,17 +1382,7 @@ void GERBER_PLOTTER::FlashPadOval( const VECTOR2I& aPos, const VECTOR2I& aSize,
         }
         else    // Non filled shape: plot outlines:
         {
-            if( size.x > size.y )
-            {
-                std::swap( size.x, size.y );
-
-                if( orient < ANGLE_270 )
-                    orient += ANGLE_90;
-                else
-                    orient -= ANGLE_270;
-            }
-
-            sketchOval( aPos, size, orient, USE_DEFAULT_LINE_WIDTH );
+            ThickOval( aPos, size, orient, USE_DEFAULT_LINE_WIDTH, aData );
         }
     }
 }

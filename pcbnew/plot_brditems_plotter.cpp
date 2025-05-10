@@ -277,7 +277,50 @@ void BRDITEMS_PLOTTER::PlotPad( const PAD* aPad, PCB_LAYER_ID aLayer, const COLO
     m_plotter->SetColor( aColor != WHITE ? aColor : LIGHTGRAY );
 
     if( aPlotMode == SKETCH )
-        m_plotter->SetCurrentLineWidth( GetSketchPadLineWidth(), &metadata );
+    {
+        switch( aPad->GetShape( aLayer ) )
+        {
+        case PAD_SHAPE::CIRCLE:
+            m_plotter->ThickCircle( shape_pos, aPad->GetSize( aLayer ).x, GetSketchPadLineWidth(),
+                                    FILLED, &metadata );
+            break;
+
+        case PAD_SHAPE::OVAL:
+        {
+            m_plotter->ThickOval( shape_pos, aPad->GetSize( aLayer ), aPad->GetOrientation(),
+                                  GetSketchPadLineWidth(), &metadata );
+            break;
+        }
+
+        case PAD_SHAPE::RECTANGLE:
+        {
+            VECTOR2I size = aPad->GetSize( aLayer );
+
+            m_plotter->ThickRect( VECTOR2I( shape_pos.x - ( size.x / 2 ), shape_pos.y - (size.y / 2 ) ),
+                                  VECTOR2I( shape_pos.x + ( size.x / 2 ), shape_pos.y + (size.y / 2 ) ),
+                                  GetSketchPadLineWidth(), FILLED, &metadata );
+            break;
+        }
+
+        case PAD_SHAPE::ROUNDRECT:
+        case PAD_SHAPE::TRAPEZOID:
+        case PAD_SHAPE::CHAMFERED_RECT:
+        case PAD_SHAPE::CUSTOM:
+        {
+            SHAPE_POLY_SET outline;
+            aPad->TransformShapeToPolygon( outline, aLayer, 0, m_plotter->GetPlotterArcHighDef(),
+                                           ERROR_INSIDE, true );
+
+            m_plotter->ThickPoly( outline, GetSketchPadLineWidth(), &metadata );
+            break;
+        }
+
+        default:
+            UNIMPLEMENTED_FOR( aPad->ShowPadShape( PADSTACK::ALL_LAYERS ) );
+        }
+
+        return;
+    }
 
     switch( aPad->GetShape( aLayer ) )
     {

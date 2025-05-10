@@ -29,7 +29,6 @@
  * with different plot formats.
  *
  * There are currently engines for:
- * HPGL
  * POSTSCRIPT
  * GERBER
  * DXF
@@ -43,6 +42,7 @@
 #include <bezier_curves.h>
 #include <callback_gal.h>
 #include <math/util.h>      // for KiROUND
+#include <convert_basic_shapes_to_polygon.h>
 
 PLOTTER::PLOTTER( const PROJECT* aProject ) :
     m_project( aProject )
@@ -482,25 +482,10 @@ void PLOTTER::Marker( const VECTOR2I& position, int diametre, unsigned aShapeId 
 }
 
 
-void PLOTTER::segmentAsOval( const VECTOR2I& start, const VECTOR2I& end, int aWidth,
-                             OUTLINE_MODE aTraceMode )
+void PLOTTER::ThickOval( const VECTOR2I& aPos, const VECTOR2I& aSize, const EDA_ANGLE& aOrient,
+                         int aWidth, void* aData )
 {
-    VECTOR2I  center( ( start.x + end.x ) / 2, ( start.y + end.y ) / 2 );
-    VECTOR2I  size( end.x - start.x, end.y - start.y );
-    EDA_ANGLE orient( size );
-    orient = -orient;       // this is due to our Y axis orientation
-
-    size.x = size.EuclideanNorm() + aWidth;
-    size.y = aWidth;
-
-    FlashPadOval( center, size, orient, aTraceMode, nullptr );
-}
-
-
-void PLOTTER::sketchOval( const VECTOR2I& aPos, const VECTOR2I& aSize, const EDA_ANGLE& aOrient,
-                          int aWidth )
-{
-    SetCurrentLineWidth( aWidth );
+    SetCurrentLineWidth( aWidth, aData );
 
     EDA_ANGLE orient( aOrient );
     VECTOR2I  size( aSize );
@@ -568,8 +553,21 @@ void PLOTTER::ThickSegment( const VECTOR2I& start, const VECTOR2I& end, int widt
     }
     else
     {
-        SetCurrentLineWidth( USE_DEFAULT_LINE_WIDTH );
-        segmentAsOval( start, end, width, tracemode );
+        std::vector<VECTOR2I> cornerList;
+        SHAPE_POLY_SET outlineBuffer;
+        TransformOvalToPolygon( outlineBuffer, start, end, width, GetPlotterArcHighDef(), ERROR_INSIDE );
+        const SHAPE_LINE_CHAIN& path = outlineBuffer.COutline( 0 );
+
+        cornerList.reserve( path.PointCount() );
+
+        for( int jj = 0; jj < path.PointCount(); jj++ )
+            cornerList.emplace_back( path.CPoint( jj ).x, path.CPoint( jj ).y );
+
+        // Ensure the polygon is closed
+        if( cornerList[0] != cornerList[cornerList.size() - 1] )
+            cornerList.push_back( cornerList[0] );
+
+        PlotPoly( cornerList, FILL_T::NO_FILL, USE_DEFAULT_LINE_WIDTH, aData );
     }
 }
 
@@ -670,6 +668,12 @@ void PLOTTER::FilledCircle( const VECTOR2I& pos, int diametre, OUTLINE_MODE trac
         SetCurrentLineWidth( USE_DEFAULT_LINE_WIDTH );
         Circle( pos, diametre, FILL_T::NO_FILL, USE_DEFAULT_LINE_WIDTH );
     }
+}
+
+
+void PLOTTER::ThickPoly( const SHAPE_POLY_SET& aPoly, int aWidth, void* aData )
+{
+    PlotPoly( aPoly.COutline( 0 ), FILL_T::NO_FILL, aWidth, aData );
 }
 
 

@@ -319,6 +319,10 @@ public:
     virtual void FilledCircle( const VECTOR2I& pos, int diametre, OUTLINE_MODE tracemode,
                                void* aData );
 
+    virtual void ThickOval( const VECTOR2I& aPos, const VECTOR2I& aSize, const EDA_ANGLE& aOrient,
+                            int aWidth, void* aData );
+
+    virtual void ThickPoly( const SHAPE_POLY_SET& aPoly, int aWidth, void* aData );
 
     // Flash primitives
 

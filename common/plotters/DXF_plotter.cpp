@@ -732,7 +732,7 @@ void DXF_PLOTTER::FlashPadOval( const VECTOR2I& aPos, const VECTOR2I& aSize,
         orient += ANGLE_90;
     }
 
-    sketchOval( aPos, size, orient, USE_DEFAULT_LINE_WIDTH );
+    ThickOval( aPos, size, orient, USE_DEFAULT_LINE_WIDTH, aData );
 }
 
 
