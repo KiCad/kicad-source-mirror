@@ -126,6 +126,8 @@ seq:
   - id: unit_divisor
     type: u4
   - type: u4
+    repeat: expr
+    repeat-expr: 110
   - id: layer_map
     type: layer_map
 
@@ -183,8 +185,10 @@ types:
         seq:
           - id: a
             type: u4
+            doc: Seems small
           - id: b
             type: u4
+            doc: Pointer?
 
   string_map:
     params:

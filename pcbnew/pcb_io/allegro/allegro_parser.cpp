@@ -216,6 +216,8 @@ static std::unique_ptr<ALLEGRO::FILE_HEADER> ReadHeader( FILE_STREAM& stream )
 
     header->m_UnitsDivisor = stream.ReadU32();
 
+    stream.SkipU32( 110 );
+
     for( size_t i = 0; i < header->m_LayerMap.size(); ++i )
     {
         header->m_LayerMap[i].m_A = stream.ReadU32();
