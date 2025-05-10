@@ -663,10 +663,24 @@ void PCB_IO_KICAD_SEXPR::formatBoardLayers( const BOARD* aBoard ) const
 
     for( PCB_LAYER_ID layer : seq )
     {
+        bool print_type = false;
+
+        // User layers (layer id >= User_1) have a qualifier
+        // default is "user", but other qualifiers exist
+        if( layer >= User_1 )
+        {
+            if( IsCopperLayer( layer ) )
+                print_type = true;
+
+            if( aBoard->GetLayerType( layer ) == LT_FRONT
+                || aBoard->GetLayerType( layer ) == LT_BACK )
+                print_type = true;
+        }
+
         m_out->Print( "(%d %s %s %s)",
                       layer,
                       m_out->Quotew( LSET::Name( layer ) ).c_str(),
-                      layer >= User_1 && IsCopperLayer( layer )
+                      print_type
                             ? LAYER::ShowType( aBoard->GetLayerType( layer ) )
                             : "user",
                       m_board->GetLayerName( layer ) == LSET::Name( layer )
