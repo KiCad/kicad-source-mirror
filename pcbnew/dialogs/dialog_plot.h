@@ -104,10 +104,6 @@ private:
 
     JOB_EXPORT_PCB_PLOT* m_job;
 
-    /// The plot layer set that last time the dialog was opened.
-    static LSET         s_lastLayerSet;
-    static LSET         s_lastAllLayersSet;
-
     /// The plot on all layers ordering the last time the dialog was opened.
     static LSEQ         s_lastAllLayersOrder;
 };

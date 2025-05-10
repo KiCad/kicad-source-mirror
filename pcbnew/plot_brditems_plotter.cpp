@@ -723,6 +723,11 @@ void BRDITEMS_PLOTTER::PlotFootprintGraphicItems( const FOOTPRINT* aFootprint )
 }
 
 
+#define getMetadata() ( m_plotter->GetPlotterType() == PLOT_FORMAT::GERBER ? (void*) &gbr_metadata   \
+                         : m_plotter->GetPlotterType() == PLOT_FORMAT::DXF ? (void*) this            \
+                                                                           : (void*) nullptr )
+
+
 void BRDITEMS_PLOTTER::PlotText( const EDA_TEXT* aText, PCB_LAYER_ID aLayer, bool aIsKnockout,
                                  const KIFONT::METRICS& aFontMetrics, bool aStrikeout )
 {
@@ -751,17 +756,6 @@ void BRDITEMS_PLOTTER::PlotText( const EDA_TEXT* aText, PCB_LAYER_ID aLayer, boo
 
     if( IsCopperLayer( aLayer ) )
         gbr_metadata.SetApertureAttrib( GBR_APERTURE_METADATA::GBR_APERTURE_ATTRIB_NONCONDUCTOR );
-
-    auto getMetadata =
-            [&]() -> void*
-            {
-                if( m_plotter->GetPlotterType() == PLOT_FORMAT::DXF )
-                    return this;
-                else if( m_plotter->GetPlotterType() == PLOT_FORMAT::GERBER )
-                    return &gbr_metadata;
-                else
-                    return nullptr;
-            };
 
     COLOR4D color = getColor( aLayer );
     m_plotter->SetColor( color );
@@ -885,17 +879,6 @@ void BRDITEMS_PLOTTER::PlotZone( const ZONE* aZone, PCB_LAYER_ID aLayer,
         }
     }
 
-    auto getMetadata =
-            [&]() -> void*
-            {
-                if( m_plotter->GetPlotterType() == PLOT_FORMAT::DXF )
-                    return this;
-                else if( m_plotter->GetPlotterType() == PLOT_FORMAT::GERBER )
-                    return &gbr_metadata;
-                else
-                    return nullptr;
-            };
-
     m_plotter->SetColor( getColor( aLayer ) );
 
     m_plotter->StartBlock( nullptr );    // Clean current object attributes
@@ -913,9 +896,10 @@ void BRDITEMS_PLOTTER::PlotZone( const ZONE* aZone, PCB_LAYER_ID aLayer,
         {
             static_cast<GERBER_PLOTTER*>( m_plotter )->PlotGerberRegion( outline, &gbr_metadata );
         }
-        else if( m_plotter->GetPlotterType() == PLOT_FORMAT::DXF && GetDXFPlotMode() == SKETCH )
+        else if( m_plotter->GetPlotterType() == PLOT_FORMAT::DXF )
         {
-            m_plotter->SetCurrentLineWidth( PLOTTER::USE_DEFAULT_LINE_WIDTH );
+            if( GetDXFPlotMode() == FILLED )
+                m_plotter->PlotPoly( outline, FILL_T::FILLED_SHAPE, 0, getMetadata() );
         }
         else
         {
@@ -1001,17 +985,6 @@ void BRDITEMS_PLOTTER::PlotShape( const PCB_SHAPE* aShape )
             gbr_metadata.SetApertureAttrib( GBR_APERTURE_METADATA::GBR_APERTURE_ATTRIB_NONCONDUCTOR );
         }
     }
-
-    auto getMetadata =
-            [&]() -> void*
-            {
-                if( m_plotter->GetPlotterType() == PLOT_FORMAT::DXF )
-                    return this;
-                else if( m_plotter->GetPlotterType() == PLOT_FORMAT::GERBER )
-                    return &gbr_metadata;
-                else
-                    return nullptr;
-            };
 
     if( lineStyle <= LINE_STYLE::FIRST_TYPE )
     {
@@ -1212,17 +1185,6 @@ void BRDITEMS_PLOTTER::PlotTableBorders( const PCB_TABLE* aTable )
         gbr_metadata.SetNetAttribType( GBR_NETLIST_METADATA::GBR_NETINFO_CMP );
     }
 
-    auto getMetadata =
-            [&]() -> void*
-            {
-                if( m_plotter->GetPlotterType() == PLOT_FORMAT::DXF )
-                    return this;
-                else if( m_plotter->GetPlotterType() == PLOT_FORMAT::GERBER )
-                    return &gbr_metadata;
-                else
-                    return nullptr;
-            };
-
     aTable->DrawBorders(
             [&]( const VECTOR2I& ptA, const VECTOR2I& ptB, const STROKE_PARAMS& stroke )
             {
@@ -1277,8 +1239,7 @@ void BRDITEMS_PLOTTER::plotOneDrillMark( PAD_DRILL_SHAPE aDrillShape, const VECT
 
 void BRDITEMS_PLOTTER::PlotDrillMarks()
 {
-    bool onCopperLayer = ( LSET::AllCuMask() & m_layerMask ).any();
-    int  smallDrill =  0;
+    int smallDrill = 0;
 
     if( GetDrillMarksType() == DRILL_MARKS::SMALL_DRILL_SHAPE )
         smallDrill = pcbIUScale.mmToIU( ADVANCED_CFG::GetCfg().m_SmallDrillMarkSize );
@@ -1286,13 +1247,13 @@ void BRDITEMS_PLOTTER::PlotDrillMarks()
     /* Drill marks are drawn white-on-black to knock-out the underlying pad.  This works only
      * for drivers supporting color change, obviously... it means that:
        - PS, SVG and PDF output is correct (i.e. you have a 'donut' pad)
-       - In gerbers you can't see them, too. This is arguably the right thing to do since having
+       - In gerbers you can't see them. This is arguably the right thing to do since having
          drill marks and high speed drill stations is a sure recipe for broken tools and angry
-         manufacturers. If you *really* want them you could start a layer with negative polarity
-         to knock-out the film.
+         manufacturers. If you *really* want them you could start a layer with negative
+         polarity to knock-out the film.
        - In DXF they go into the 'WHITE' layer. This could be useful.
      */
-    if( onCopperLayer && ( m_plotter->GetPlotterType() != PLOT_FORMAT::DXF || GetDXFPlotMode() == FILLED ) )
+    if( m_plotter->GetPlotterType() != PLOT_FORMAT::DXF || GetDXFPlotMode() == FILLED )
          m_plotter->SetColor( WHITE );
 
     for( PCB_TRACK* track : m_board->Tracks() )
@@ -1319,11 +1280,14 @@ void BRDITEMS_PLOTTER::PlotDrillMarks()
             if( pad->GetDrillSize().x == 0 )
                 continue;
 
+            if( m_plotter->GetPlotterType() != PLOT_FORMAT::DXF || GetDXFPlotMode() == FILLED )
+                m_plotter->SetColor( ( pad->GetLayerSet() & m_layerMask ).any() ? WHITE : BLACK );
+
             plotOneDrillMark( pad->GetDrillShape(), pad->GetPosition(), pad->GetDrillSize(),
                               pad->GetSize( PADSTACK::ALL_LAYERS ), pad->GetOrientation(), smallDrill );
         }
     }
 
-    if( onCopperLayer && ( m_plotter->GetPlotterType() != PLOT_FORMAT::DXF || GetDXFPlotMode() == FILLED ) )
+    if( m_plotter->GetPlotterType() != PLOT_FORMAT::DXF || GetDXFPlotMode() == FILLED )
         m_plotter->SetColor( BLACK );
 }
