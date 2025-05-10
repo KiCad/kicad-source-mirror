@@ -723,34 +723,13 @@ struct BLK_0x14
 
 
 /**
- * 0x15 is a segment object.
+ * 0x15 , 0x16, 0x17 are segments:
  *
- * As for 0x16, unsure of the distinction between 0x15 and 0x16/0x17
+ *  - 0x15: horizontal
+ *  - 0x16: not horizontal or vertical
+ *  - 0x17: vertical
  */
-struct BLK_0x15_SEGMENT
-{
-    uint32_t m_Key;
-    uint32_t m_Next;
-    uint32_t m_Parent;
-    uint32_t m_Unknown1;
-
-    COND_GE<FMT_VER::V_172, uint32_t> m_Unknown2;
-
-    uint32_t m_Width;
-
-    int32_t m_StartX;
-    int32_t m_StartY;
-    int32_t m_EndX;
-    int32_t m_EndY;
-};
-
-
-/**
- * 0x16 is a segment object.
- *
- * It has flags, that 0x17 objects call "unknown". The two may be the same?
- */
-struct BLK_0x16_SEGMENT
+struct BLK_0x15_16_17_SEGMENT
 {
     uint32_t m_Key;
     uint32_t m_Next;
@@ -766,30 +745,6 @@ struct BLK_0x16_SEGMENT
     int32_t m_EndX;
     int32_t m_EndY;
 };
-
-
-/**
- * 0x17 is a segment object.
- *
- * Tracks (0x05) refer to segments.
- */
-struct BLK_0x17_SEGMENT
-{
-    uint32_t m_Key;
-    uint32_t m_Next;
-    uint32_t m_Parent;
-    uint32_t m_Unknown1;
-
-    COND_GE<FMT_VER::V_172, uint32_t> m_Unknown2;
-
-    uint32_t m_Width;
-
-    int32_t m_StartX;
-    int32_t m_StartY;
-    int32_t m_EndX;
-    int32_t m_EndY;
-};
-
 
 /**
  * 0x1B objects are nets.

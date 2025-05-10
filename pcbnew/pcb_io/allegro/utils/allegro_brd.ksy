@@ -297,9 +297,9 @@ types:
             0x11: type_11
             0x12: type_12
             0x14: type_14
-            0x15: type_15_segment
-            0x16: type_16_segment
-            0x17: type_17_segment
+            0x15: type_15_16_17_segment
+            0x16: type_15_16_17_segment
+            0x17: type_15_16_17_segment
             0x1b: type_1b_net
             0x1c: type_1c_pad_stack
             0x1d: type_1d
@@ -985,35 +985,13 @@ types:
         doc: |
           Null, or 0x26 (group?)
 
-  type_15_segment:
-    seq:
-      - type: u1
-      - type: u2
-      - id: key
-        type: u4
-      - id: next
-        type: u4
-        doc: |
-          Can be 0x15, 0x16, 0x17, 0x05
-      - id: parent_ptr
-        type: u4
-        doc: |
-          Can be 0x05, 0x14, 0x28
-      - id: unknown_1
-        type: u4
-        doc: |
-          0x00 or 0x20 - flags?
-      - id: unknown_2
-        type: u4
-        if: _root.ver >= 0x00140400
-      - id: width
-        type: u4
-      - id: coords_0
-        type: coords
-      - id: coords_1
-        type: coords
+  type_15_16_17_segment:
+    doc: |
+      The difference between 15,16,17 seems to be:
 
-  type_16_segment:
+      - 15: horizontal
+      - 16: oblique
+      - 17: vertical
     seq:
       - type: u1
       - type: u2
@@ -1027,39 +1005,11 @@ types:
         type: u4
         doc: |
           Can be 0x05, 0x14, 0x28
-      - id: unknown_1
+      - id: flags
         type: u4
         doc: |
           0x00 or 0x20 - flags?
-      - id: unknown_2
-        type: u4
-        if: _root.ver >= 0x00140400
-      - id: width
-        type: u4
-      - id: coords_0
-        type: coords
-      - id: coords_1
-        type: coords
-
-  type_17_segment:
-    seq:
-      - type: u1
-      - type: u2
-      - id: key
-        type: u4
-      - id: next
-        type: u4
-        doc: |
-          Can be 0x15, 0x16, 0x17, 0x05
-      - id: parent_ptr
-        type: u4
-        doc: |
-          Can be 0x05, 0x14, 0x28
       - id: unknown_1
-        type: u4
-        doc: |
-          0x00 or 0x20 - flags?
-      - id: unknown_2
         type: u4
         if: _root.ver >= 0x00140400
       - id: width

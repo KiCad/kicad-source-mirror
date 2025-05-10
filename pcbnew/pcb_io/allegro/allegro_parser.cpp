@@ -812,35 +812,9 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x14( FILE_STREAM& aStream, FMT_VE
 }
 
 
-static std::unique_ptr<BLOCK_BASE> ParseBlock_0x15_SEGMENT( FILE_STREAM& aStream, FMT_VER aVer )
+static std::unique_ptr<BLOCK_BASE> ParseBlock_0x15_16_17_SEGMENT( FILE_STREAM& aStream, FMT_VER aVer, uint8_t aType )
 {
-    auto block = std::make_unique<BLOCK<BLK_0x15_SEGMENT>>( 0x15, aStream.Position() );
-
-    auto& data = block->GetData();
-
-    aStream.Skip( 3 );
-
-    data.m_Key = aStream.ReadU32();
-    data.m_Next = aStream.ReadU32();
-    data.m_Parent = aStream.ReadU32();
-    data.m_Unknown1 = aStream.ReadU32();
-
-    ReadCond( aStream, aVer, data.m_Unknown2 );
-
-    data.m_Width = aStream.ReadU32();
-
-    data.m_StartX = aStream.ReadS32();
-    data.m_StartY = aStream.ReadS32();
-    data.m_EndX = aStream.ReadS32();
-    data.m_EndY = aStream.ReadS32();
-
-    return block;
-}
-
-
-static std::unique_ptr<BLOCK_BASE> ParseBlock_0x16_SEGMENT( FILE_STREAM& aStream, FMT_VER aVer )
-{
-    auto block = std::make_unique<BLOCK<BLK_0x16_SEGMENT>>( 0x16, aStream.Position() );
+    auto block = std::make_unique<BLOCK<BLK_0x15_16_17_SEGMENT>>( aType, aStream.Position() );
 
     auto& data = block->GetData();
 
@@ -850,32 +824,6 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x16_SEGMENT( FILE_STREAM& aStream
     data.m_Next = aStream.ReadU32();
     data.m_Parent = aStream.ReadU32();
     data.m_Flags = aStream.ReadU32();
-
-    ReadCond( aStream, aVer, data.m_Unknown2 );
-
-    data.m_Width = aStream.ReadU32();
-
-    data.m_StartX = aStream.ReadS32();
-    data.m_StartY = aStream.ReadS32();
-    data.m_EndX = aStream.ReadS32();
-    data.m_EndY = aStream.ReadS32();
-
-    return block;
-}
-
-
-static std::unique_ptr<BLOCK_BASE> ParseBlock_0x17_SEGMENT( FILE_STREAM& aStream, FMT_VER aVer )
-{
-    auto block = std::make_unique<BLOCK<BLK_0x17_SEGMENT>>( 0x17, aStream.Position() );
-
-    auto& data = block->GetData();
-
-    aStream.Skip( 3 );
-
-    data.m_Key = aStream.ReadU32();
-    data.m_Next = aStream.ReadU32();
-    data.m_Parent = aStream.ReadU32();
-    data.m_Unknown1 = aStream.ReadU32();
 
     ReadCond( aStream, aVer, data.m_Unknown2 );
 
@@ -2043,6 +1991,7 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x3C( FILE_STREAM& aStream, FMT_VE
 
 static std::optional<uint32_t> GetBlockKey( const BLOCK_BASE& block )
 {
+    // clang-format off
     switch( block.GetBlockType() )
     {
     case 0x01: return static_cast<const BLOCK<BLK_0x01_ARC>&>( block ).GetData().m_Key;
@@ -2062,9 +2011,9 @@ static std::optional<uint32_t> GetBlockKey( const BLOCK_BASE& block )
     case 0x11: return static_cast<const BLOCK<BLK_0x11>&>( block ).GetData().m_Key;
     case 0x12: return static_cast<const BLOCK<BLK_0x12>&>( block ).GetData().m_Key;
     case 0x14: return static_cast<const BLOCK<BLK_0x14>&>( block ).GetData().m_Key;
-    case 0x15: return static_cast<const BLOCK<BLK_0x15_SEGMENT>&>( block ).GetData().m_Key;
-    case 0x16: return static_cast<const BLOCK<BLK_0x16_SEGMENT>&>( block ).GetData().m_Key;
-    case 0x17: return static_cast<const BLOCK<BLK_0x17_SEGMENT>&>( block ).GetData().m_Key;
+    case 0x15:
+    case 0x16:
+    case 0x17: return static_cast<const BLOCK<BLK_0x15_16_17_SEGMENT>&>( block ).GetData().m_Key;
     case 0x1B: return static_cast<const BLOCK<BLK_0x1B_NET>&>( block ).GetData().m_Key;
     case 0x1C: return static_cast<const BLOCK<BLK_0x1C_PADSTACK>&>( block ).GetData().m_Key;
     case 0x1D: return static_cast<const BLOCK<BLK_0x1D>&>( block ).GetData().m_Key;
@@ -2096,6 +2045,7 @@ static std::optional<uint32_t> GetBlockKey( const BLOCK_BASE& block )
     case 0x3C: return static_cast<const BLOCK<BLK_0x3C>&>( block ).GetData().m_Key;
     default: break;
     }
+    // clang-format off
 
     return std::nullopt;
 }
@@ -2221,18 +2171,10 @@ void ALLEGRO::PARSER::readObjects( RAW_BOARD& aBoard )
             break;
         }
         case 0x15:
-        {
-            block = ParseBlock_0x15_SEGMENT( m_stream, ver );
-            break;
-        }
         case 0x16:
-        {
-            block = ParseBlock_0x16_SEGMENT( m_stream, ver );
-            break;
-        }
         case 0x17:
         {
-            block = ParseBlock_0x17_SEGMENT( m_stream, ver );
+            block = ParseBlock_0x15_16_17_SEGMENT( m_stream, ver, type );
             break;
         }
         case 0x1B:

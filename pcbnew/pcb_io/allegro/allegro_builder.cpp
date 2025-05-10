@@ -54,9 +54,9 @@ static uint32_t GetPrimaryNext( const BLOCK_BASE& aBlock )
     switch( type )
     {
     case 0x14: return BLK_FIELD( BLK_0x14, m_Next );
-    case 0x15: return BLK_FIELD( BLK_0x15_SEGMENT, m_Next );
-    case 0x16: return BLK_FIELD( BLK_0x16_SEGMENT, m_Next );
-    case 0x17: return BLK_FIELD( BLK_0x17_SEGMENT, m_Next );
+    case 0x15:
+    case 0x16:
+    case 0x17: return BLK_FIELD( BLK_0x15_16_17_SEGMENT, m_Next );
     case 0x2B: return BLK_FIELD( BLK_0x2B, m_Next );
     case 0x2D: return BLK_FIELD( BLK_0x2D, m_Next );
     default: return 0;
@@ -258,12 +258,16 @@ std::unique_ptr<FOOTPRINT> BOARD_BUILDER::buildFootprint( const BLK_0x2D& aFpIns
 
                 std::cout << "    Seg: " << wxString::Format( "%#04x", segBlock->GetBlockType() ) << std::endl;
 
-                if( segBlock->GetBlockType() == 0x17 )
+                switch( segBlock->GetBlockType() )
                 {
-                    const auto& seg = static_cast<const BLOCK<BLK_0x17_SEGMENT>&>( *segBlock ).GetData();
+                case 0x15:
+                case 0x16:
+                case 0x17:
+                {
+                    const auto& seg = static_cast<const BLOCK<BLK_0x15_16_17_SEGMENT>&>( *segBlock ).GetData();
                     VECTOR2I    start = scale( { seg.m_StartX, seg.m_StartY } );
                     VECTOR2I    end = scale( { seg.m_EndX, seg.m_EndY } );
-                    const int   width = seg.m_Width;
+                    const int   width = static_cast<int>( seg.m_Width );
 
                     // The positions are pre-rotation, but in KiCad, they're post-rotation
                     RotatePoint( start, fpPos, rotation );
@@ -275,39 +279,10 @@ std::unique_ptr<FOOTPRINT> BOARD_BUILDER::buildFootprint( const BLK_0x2D& aFpIns
 
                     fp->Add( shape.release() );
                 }
-                else if( segBlock->GetBlockType() == 0x16 )
+                default:
                 {
-                    const auto& seg = static_cast<const BLOCK<BLK_0x16_SEGMENT>&>( *segBlock ).GetData();
-                    VECTOR2I    start = scale( { seg.m_StartX, seg.m_StartY } );
-                    VECTOR2I    end = scale( { seg.m_EndX, seg.m_EndY } );
-                    const int   width = seg.m_Width;
-
-                    // The positions are pre-rotation, but in KiCad, they're post-rotation
-                    RotatePoint( start, fpPos, rotation );
-                    RotatePoint( end, fpPos, rotation );
-
-                    shape->SetStart( start );
-                    shape->SetEnd( end );
-                    shape->SetWidth( width * m_scale );
-
-                    fp->Add( shape.release() );
+                    break;
                 }
-                else if( segBlock->GetBlockType() == 0x15 )
-                {
-                    const auto& seg = static_cast<const BLOCK<BLK_0x15_SEGMENT>&>( *segBlock ).GetData();
-                    VECTOR2I    start = scale( { seg.m_StartX, seg.m_StartY } );
-                    VECTOR2I    end = scale( { seg.m_EndX, seg.m_EndY } );
-                    const int   width = seg.m_Width;
-
-                    // The positions are pre-rotation, but in KiCad, they're post-rotation
-                    RotatePoint( start, fpPos, rotation );
-                    RotatePoint( end, fpPos, rotation );
-
-                    shape->SetStart( start );
-                    shape->SetEnd( end );
-                    shape->SetWidth( width * m_scale );
-
-                    fp->Add( shape.release() );
                 }
             }
             // shape->SetStart( scale( VECTOR2I{ graphics.m_}) )

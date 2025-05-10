@@ -297,16 +297,15 @@ class AllegroBoard:
             prntr.print_layer(d.layer)
 
         elif t in [0x15, 0x16, 0x17]:
-
             prntr.print_ptr("Next", d.next)
             prntr.print_ptr("Parent", d.parent_ptr)
 
-            prntr.print_v("unknown_1", d)
-            prntr.print_v("unknown_2", d)
-
+            prntr.print_v("flags", d)
             prntr.print_v("Width", d.width, as_hex=False)
             prntr.print_coords("pt0", d.coords_0)
             prntr.print_coords("pt1", d.coords_1)
+
+            prntr.print_v("unknown_1", d)
 
         elif t == 0x1b: # Net
             prntr.print_s("Net", d.net_name)
