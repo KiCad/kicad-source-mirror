@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-05-06 12:52+0300\n"
-"PO-Revision-Date: 2025-05-10 13:03+0000\n"
+"PO-Revision-Date: 2025-05-11 14:02+0000\n"
 "Last-Translator: Adolfo Jayme Barrientos <fitojb@ubuntu.com>\n"
 "Language-Team: Catalan <https://hosted.weblate.org/projects/kicad/"
 "master-source/ca/>\n"
@@ -25113,9 +25113,8 @@ msgid "Show Directive Labels"
 msgstr "Etiqueta de directiva"
 
 #: eeschema/tools/sch_actions.cpp:1211
-#, fuzzy
 msgid "Show ERC Warnings"
-msgstr "Advertències"
+msgstr "Mostra els advertiments d'ERC"
 
 #: eeschema/tools/sch_actions.cpp:1212
 msgid "Show markers for electrical rules checker warnings"
@@ -39754,11 +39753,11 @@ msgstr "Sense seleccionar la capa"
 
 #: pcbnew/dialogs/dialog_plot.cpp:1366
 msgid "Warning: Scale option set to a very small value"
-msgstr "Advertència: l'opció de l'escala està establerta a un valor molt baix"
+msgstr "Advertiment: l'opció de l'escala està definida a un valor molt baix"
 
 #: pcbnew/dialogs/dialog_plot.cpp:1369
 msgid "Warning: Scale option set to a very large value"
-msgstr "Advertència: l'opció de l'escala està establerta a un valor molt gran"
+msgstr "Advertiment: l'opció de l'escala està definida a un valor molt gran"
 
 #: pcbnew/dialogs/dialog_plot.cpp:1438
 #, fuzzy, c-format
@@ -44603,9 +44602,8 @@ msgstr "Errors:"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:663
 #: pcbnew/exporters/step/step_pcb_model.cpp:2063
-#, fuzzy
 msgid "Warnings:\n"
-msgstr "Advertències:"
+msgstr "Advertiments:\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:684
 msgid "** ShapeUpgrade_UnifySameDomain produced a null shape **\n"
@@ -46309,7 +46307,7 @@ msgstr "Actualitza el netlist"
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1523
 #, c-format
 msgid "Total warnings: %d, errors: %d."
-msgstr "Nombre total d'advertències: %d, errors: %d."
+msgstr "Nombre total d'advertiments: %d, errors: %d."
 
 #: pcbnew/netlist_reader/kicad_netlist_reader.cpp:548
 #, fuzzy, c-format
@@ -53533,9 +53531,8 @@ msgid "Show unconnected nets as a ratsnest"
 msgstr "Mostra les xarxes no connectades com un embolic"
 
 #: pcbnew/widgets/appearance_controls.cpp:348
-#, fuzzy
 msgid "DRC Warnings"
-msgstr "Advertències"
+msgstr "Advertiments de DRC"
 
 #: pcbnew/widgets/appearance_controls.cpp:348
 msgid "DRC violations with a Warning severity"
