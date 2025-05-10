@@ -311,7 +311,7 @@ void BRDITEMS_PLOTTER::PlotPad( const PAD* aPad, PCB_LAYER_ID aLayer, const COLO
             aPad->TransformShapeToPolygon( outline, aLayer, 0, m_plotter->GetPlotterArcHighDef(),
                                            ERROR_INSIDE, true );
 
-            m_plotter->ThickPoly( outline, GetSketchPadLineWidth(), &metadata );
+            m_plotter->ThickPoly( outline, GetSketchPadLineWidth(), FILLED, &metadata );
             break;
         }
 
@@ -917,7 +917,6 @@ void BRDITEMS_PLOTTER::PlotShape( const PCB_SHAPE* aShape )
     if( !( m_layerMask & aShape->GetLayerSet() ).any() )
         return;
 
-    OUTLINE_MODE plotMode = GetPlotMode();
     int          thickness = aShape->GetWidth();
     int          margin = thickness; // unclamped thickness (can be negative)
     LINE_STYLE   lineStyle = aShape->GetStroke().GetLineStyle();
@@ -954,7 +953,11 @@ void BRDITEMS_PLOTTER::PlotShape( const PCB_SHAPE* aShape )
     if( parentFP && parentFP->IsDNP() && GetSketchDNPFPsOnFabLayers() )
     {
         if( aShape->GetLayer() == F_Fab || aShape->GetLayer() == B_Fab )
-            plotMode = SKETCH;
+        {
+            thickness = GetSketchPadLineWidth();
+            isSolidFill = false;
+            isHatchedFill = false;
+        }
     }
 
     if( aShape->GetLayer() == Edge_Cuts )
@@ -989,7 +992,7 @@ void BRDITEMS_PLOTTER::PlotShape( const PCB_SHAPE* aShape )
         switch( aShape->GetShape() )
         {
         case SHAPE_T::SEGMENT:
-            m_plotter->ThickSegment( aShape->GetStart(), aShape->GetEnd(), thickness, plotMode,
+            m_plotter->ThickSegment( aShape->GetStart(), aShape->GetEnd(), thickness, GetPlotMode(),
                                      &gbr_metadata );
             break;
 
@@ -1004,12 +1007,12 @@ void BRDITEMS_PLOTTER::PlotShape( const PCB_SHAPE* aShape )
                     diameter = std::max( diameter, 0 );
                 }
 
-                m_plotter->FilledCircle( aShape->GetStart(), diameter, plotMode, &gbr_metadata );
+                m_plotter->FilledCircle( aShape->GetStart(), diameter, GetPlotMode(), &gbr_metadata );
             }
             else
             {
                 m_plotter->ThickCircle( aShape->GetStart(), aShape->GetRadius() * 2, thickness,
-                                        plotMode, &gbr_metadata );
+                                        GetPlotMode(), &gbr_metadata );
             }
 
             break;
@@ -1021,11 +1024,11 @@ void BRDITEMS_PLOTTER::PlotShape( const PCB_SHAPE* aShape )
             if( std::abs( aShape->GetArcAngle().AsDegrees() ) == 360.0 )
             {
                 m_plotter->ThickCircle( aShape->GetCenter(), aShape->GetRadius() * 2, thickness,
-                                        plotMode, &gbr_metadata );
+                                        GetPlotMode(), &gbr_metadata );
             }
             else
             {
-                m_plotter->ThickArc( *aShape, plotMode, &gbr_metadata, thickness );
+                m_plotter->ThickArc( *aShape, GetPlotMode(), &gbr_metadata, thickness );
             }
 
             break;
@@ -1039,13 +1042,9 @@ void BRDITEMS_PLOTTER::PlotShape( const PCB_SHAPE* aShape )
         case SHAPE_T::POLY:
             if( aShape->IsPolyShapeValid() )
             {
-                if( plotMode == SKETCH )
+                if( GetPlotMode() == SKETCH )
                 {
-                    for( auto it = aShape->GetPolyShape().CIterateSegments( 0 ); it; it++ )
-                    {
-                        const SEG& seg = it.Get();
-                        m_plotter->ThickSegment( seg.A, seg.B, thickness, SKETCH, &gbr_metadata );
-                    }
+                    m_plotter->ThickPoly( aShape->GetPolyShape(), thickness, GetPlotMode(), &gbr_metadata );
                 }
                 else
                 {
@@ -1095,12 +1094,9 @@ void BRDITEMS_PLOTTER::PlotShape( const PCB_SHAPE* aShape )
         {
             std::vector<VECTOR2I> pts = aShape->GetRectCorners();
 
-            if( plotMode == SKETCH )
+            if( GetPlotMode() == SKETCH )
             {
-                m_plotter->ThickSegment( pts[0], pts[1], thickness, SKETCH, &gbr_metadata );
-                m_plotter->ThickSegment( pts[1], pts[2], thickness, SKETCH, &gbr_metadata );
-                m_plotter->ThickSegment( pts[2], pts[3], thickness, SKETCH, &gbr_metadata );
-                m_plotter->ThickSegment( pts[3], pts[0], thickness, SKETCH, &gbr_metadata );
+                m_plotter->ThickRect( pts[0], pts[2], thickness, GetPlotMode(), &gbr_metadata );
             }
             else
             {
@@ -1150,7 +1146,7 @@ void BRDITEMS_PLOTTER::PlotShape( const PCB_SHAPE* aShape )
                                    m_plotter->RenderSettings(),
                                    [&]( const VECTOR2I& a, const VECTOR2I& b )
                                    {
-                                       m_plotter->ThickSegment( a, b, thickness, plotMode,
+                                       m_plotter->ThickSegment( a, b, thickness, GetPlotMode(),
                                                                 &gbr_metadata );
                                    } );
         }

@@ -671,9 +671,24 @@ void PLOTTER::FilledCircle( const VECTOR2I& pos, int diametre, OUTLINE_MODE trac
 }
 
 
-void PLOTTER::ThickPoly( const SHAPE_POLY_SET& aPoly, int aWidth, void* aData )
+void PLOTTER::ThickPoly( const SHAPE_POLY_SET& aPoly, int aWidth, OUTLINE_MODE tracemode, void* aData )
 {
-    PlotPoly( aPoly.COutline( 0 ), FILL_T::NO_FILL, aWidth, aData );
+    if( tracemode == SKETCH )
+    {
+        SHAPE_POLY_SET outline = aPoly.CloneDropTriangulation();
+        outline.Inflate( GetCurrentLineWidth() / 2, CORNER_STRATEGY::ROUND_ALL_CORNERS,
+                         GetPlotterArcHighDef() );
+        PlotPoly( outline.COutline( 0 ), FILL_T::NO_FILL, USE_DEFAULT_LINE_WIDTH, nullptr );
+
+        outline = aPoly.CloneDropTriangulation();
+        outline.Deflate( GetCurrentLineWidth() / 2, CORNER_STRATEGY::ROUND_ALL_CORNERS,
+                         GetPlotterArcHighDef() );
+        PlotPoly( outline.COutline( 0 ), FILL_T::NO_FILL, USE_DEFAULT_LINE_WIDTH, nullptr );
+    }
+    else
+    {
+        PlotPoly( aPoly.COutline( 0 ), FILL_T::NO_FILL, aWidth, aData );
+    }
 }
 
 
