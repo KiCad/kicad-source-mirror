@@ -132,30 +132,16 @@ void PlotBoardLayers( BOARD* aBoard, PLOTTER* aPlotter, const LSEQ& aLayers,
     if( !aBoard || !aPlotter || aLayers.empty() )
         return;
 
-    // if a drill mark must be plotted,it must be plotted as a filled
-    // white shape *after* all other shapes are plotted, provided that
-    // the other shapes are not copper layers
-    int copperLayers = 0;
-    int nonCopperLayers = 0;
-
-    for( PCB_LAYER_ID layer : aLayers )
-    {
-        if( IsCopperLayer( layer ) )
-            copperLayers++;
-        else
-            nonCopperLayers++;
-    }
-
-    bool plot_mark = ( aPlotOptions.GetDrillMarksType() != DRILL_MARKS::NO_DRILL_SHAPE
-                       && copperLayers > 0 && nonCopperLayers > 0 );
-
     for( PCB_LAYER_ID layer : aLayers )
         PlotOneBoardLayer( aBoard, aPlotter, layer, aPlotOptions, layer == aLayers[0] );
 
-    if( plot_mark )
+    // Drill marks are plotted in white to knockout the pad if any layers of the pad are
+    // being plotted, and in black if the pad is not being plotted. For the former, this
+    // must happen after all other layers are plotted.
+    if( aPlotOptions.GetDrillMarksType() != DRILL_MARKS::NO_DRILL_SHAPE )
     {
-        aPlotter->SetColor( WHITE );
         BRDITEMS_PLOTTER itemplotter( aPlotter, aBoard, aPlotOptions );
+        itemplotter.SetLayerSet( aLayers );
         itemplotter.PlotDrillMarks();
     }
 }
@@ -256,9 +242,6 @@ void PlotOneBoardLayer( BOARD *aBoard, PLOTTER* aPlotter, PCB_LAYER_ID aLayer,
         {
         case B_Mask:
         case F_Mask:
-            // Disable plot pad holes
-            plotOpt.SetDrillMarksType( DRILL_MARKS::NO_DRILL_SHAPE );
-
             // Use outline mode for DXF
             plotOpt.SetDXFPlotPolygonMode( true );
 
@@ -841,10 +824,6 @@ void PlotStandardLayer( BOARD* aBoard, PLOTTER* aPlotter, LSET aLayerMask,
     }
 
     aPlotter->EndBlock( nullptr );
-
-    // Adding drill marks, if required and if the plotter is able to plot them:
-    if( aPlotOpt.GetDrillMarksType() != DRILL_MARKS::NO_DRILL_SHAPE )
-        itemplotter.PlotDrillMarks();
 }
 
 

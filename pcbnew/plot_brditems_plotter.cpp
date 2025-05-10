@@ -1178,8 +1178,7 @@ void BRDITEMS_PLOTTER::plotOneDrillMark( PAD_DRILL_SHAPE aDrillShape, const VECT
 
 void BRDITEMS_PLOTTER::PlotDrillMarks()
 {
-    bool onCopperLayer = ( LSET::AllCuMask() & m_layerMask ).any();
-    int  smallDrill =  0;
+    int smallDrill = 0;
 
     if( GetDrillMarksType() == DRILL_MARKS::SMALL_DRILL_SHAPE )
         smallDrill = pcbIUScale.mmToIU( ADVANCED_CFG::GetCfg().m_SmallDrillMarkSize );
@@ -1190,11 +1189,11 @@ void BRDITEMS_PLOTTER::PlotDrillMarks()
        - In HPGL you can't see them
        - In gerbers you can't see them, too. This is arguably the right thing to do since having
          drill marks and high speed drill stations is a sure recipe for broken tools and angry
-         manufacturers. If you *really* want them you could start a layer with negative polarity
-         to knock-out the film.
+         manufacturers. If you *really* want them you could start a layer with negative
+         polarity to knock-out the film.
        - In DXF they go into the 'WHITE' layer. This could be useful.
      */
-    if( GetPlotMode() == FILLED && onCopperLayer )
+    if( GetPlotMode() == FILLED )
          m_plotter->SetColor( WHITE );
 
     for( PCB_TRACK* track : m_board->Tracks() )
@@ -1221,11 +1220,14 @@ void BRDITEMS_PLOTTER::PlotDrillMarks()
             if( pad->GetDrillSize().x == 0 )
                 continue;
 
+            if( GetPlotMode() == FILLED )
+                m_plotter->SetColor( ( pad->GetLayerSet() & m_layerMask ).any() ? WHITE : BLACK );
+
             plotOneDrillMark( pad->GetDrillShape(), pad->GetPosition(), pad->GetDrillSize(),
                               pad->GetSize( PADSTACK::ALL_LAYERS ), pad->GetOrientation(), smallDrill );
         }
     }
 
-    if( GetPlotMode() == FILLED && onCopperLayer )
+    if( GetPlotMode() == FILLED )
         m_plotter->SetColor( BLACK );
 }

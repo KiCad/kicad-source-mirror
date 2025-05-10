@@ -57,8 +57,6 @@
 #include <wx/msgdlg.h>
 
 
-LSET DIALOG_PLOT::s_lastLayerSet;
-LSET DIALOG_PLOT::s_lastAllLayersSet;
 LSEQ DIALOG_PLOT::s_lastAllLayersOrder;
 
 
