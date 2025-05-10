@@ -1185,21 +1185,14 @@ void GERBER_PLOTTER::PlotPoly( const std::vector<VECTOR2I>& aCornerList, FILL_T 
 void GERBER_PLOTTER::ThickSegment( const VECTOR2I& start, const VECTOR2I& end, int width,
                                    OUTLINE_MODE tracemode, void* aData )
 {
-    if( tracemode == FILLED )
-    {
-        GBR_METADATA *gbr_metadata = static_cast<GBR_METADATA*>( aData );
-        SetCurrentLineWidth( width, gbr_metadata );
+    GBR_METADATA *gbr_metadata = static_cast<GBR_METADATA*>( aData );
+    SetCurrentLineWidth( width, gbr_metadata );
 
-        if( gbr_metadata )
-            formatNetAttribute( &gbr_metadata->m_NetlistMetadata );
+    if( gbr_metadata )
+        formatNetAttribute( &gbr_metadata->m_NetlistMetadata );
 
-        MoveTo( start );
-        FinishTo( end );
-    }
-    else
-    {
-        PLOTTER::ThickSegment( start, end, width, tracemode, aData );
-    }
+    MoveTo( start );
+    FinishTo( end );
 }
 
 
@@ -1213,18 +1206,7 @@ void GERBER_PLOTTER::ThickArc( const VECTOR2D& aCentre, const EDA_ANGLE& aStartA
     if( gbr_metadata )
         formatNetAttribute( &gbr_metadata->m_NetlistMetadata );
 
-    if( aTraceMode == FILLED )
-    {
-        Arc( aCentre, aStartAngle, aAngle, aRadius, FILL_T::NO_FILL, DO_NOT_SET_LINE_WIDTH );
-    }
-    else
-    {
-        SetCurrentLineWidth( USE_DEFAULT_LINE_WIDTH );
-        Arc( aCentre, aStartAngle, aAngle, aRadius - ( aWidth - m_currentPenWidth ) / 2,
-             FILL_T::NO_FILL, DO_NOT_SET_LINE_WIDTH );
-        Arc( aCentre, aStartAngle, aAngle, aRadius + ( aWidth - m_currentPenWidth ) / 2,
-             FILL_T::NO_FILL, DO_NOT_SET_LINE_WIDTH );
-    }
+    Arc( aCentre, aStartAngle, aAngle, aRadius, FILL_T::NO_FILL, DO_NOT_SET_LINE_WIDTH );
 }
 
 
@@ -1237,24 +1219,7 @@ void GERBER_PLOTTER::ThickRect( const VECTOR2I& p1, const VECTOR2I& p2, int widt
     if( gbr_metadata )
         formatNetAttribute( &gbr_metadata->m_NetlistMetadata );
 
-    if( tracemode == FILLED )
-    {
-        Rect( p1, p2, FILL_T::NO_FILL, DO_NOT_SET_LINE_WIDTH );
-    }
-    else
-    {
-        SetCurrentLineWidth( USE_DEFAULT_LINE_WIDTH );
-        VECTOR2I offsetp1( p1.x - ( width - GetCurrentLineWidth() ) / 2,
-                           p1.y - (width - GetCurrentLineWidth()) / 2 );
-        VECTOR2I offsetp2( p2.x + ( width - GetCurrentLineWidth() ) / 2,
-                           p2.y + (width - GetCurrentLineWidth()) / 2 );
-        Rect( offsetp1, offsetp2, FILL_T::NO_FILL, -1 );
-        offsetp1.x += (width - GetCurrentLineWidth());
-        offsetp1.y += (width - GetCurrentLineWidth());
-        offsetp2.x -= (width - GetCurrentLineWidth());
-        offsetp2.y -= (width - GetCurrentLineWidth());
-        Rect( offsetp1, offsetp2, FILL_T::NO_FILL, DO_NOT_SET_LINE_WIDTH );
-    }
+    Rect( p1, p2, FILL_T::NO_FILL, DO_NOT_SET_LINE_WIDTH );
 }
 
 
@@ -1267,18 +1232,7 @@ void GERBER_PLOTTER::ThickCircle( const VECTOR2I& pos, int diametre, int width,
     if( gbr_metadata )
         formatNetAttribute( &gbr_metadata->m_NetlistMetadata );
 
-    if( tracemode == FILLED )
-    {
-        Circle( pos, diametre, FILL_T::NO_FILL, DO_NOT_SET_LINE_WIDTH );
-    }
-    else
-    {
-        SetCurrentLineWidth( USE_DEFAULT_LINE_WIDTH, gbr_metadata );
-        Circle( pos, diametre - (width - m_currentPenWidth), FILL_T::NO_FILL,
-                DO_NOT_SET_LINE_WIDTH );
-        Circle( pos, diametre + (width - m_currentPenWidth), FILL_T::NO_FILL,
-                DO_NOT_SET_LINE_WIDTH );
-    }
+    Circle( pos, diametre, FILL_T::NO_FILL, DO_NOT_SET_LINE_WIDTH );
 }
 
 
@@ -1292,18 +1246,10 @@ void GERBER_PLOTTER::FilledCircle( const VECTOR2I& pos, int diametre,
     if( gbr_metadata )
         formatNetAttribute( &gbr_metadata->m_NetlistMetadata );
 
-    if( tracemode == FILLED )
-    {
-        // Draw a circle of diameter = diameter/2 with a line thickness = radius,
-        // To create a filled circle
-        SetCurrentLineWidth( diametre/2, gbr_metadata );
-        Circle( pos, diametre/2, FILL_T::NO_FILL, DO_NOT_SET_LINE_WIDTH );
-    }
-    else
-    {
-        SetCurrentLineWidth( USE_DEFAULT_LINE_WIDTH, gbr_metadata );
-        Circle( pos, diametre, FILL_T::NO_FILL, DO_NOT_SET_LINE_WIDTH );
-    }
+    // Draw a circle of diameter = diameter/2 with a line thickness = radius,
+    // To create a filled circle
+    SetCurrentLineWidth( diametre/2, gbr_metadata );
+    Circle( pos, diametre/2, FILL_T::NO_FILL, DO_NOT_SET_LINE_WIDTH );
 }
 
 
@@ -1313,19 +1259,7 @@ void GERBER_PLOTTER::FlashPadCircle( const VECTOR2I& pos, int diametre, OUTLINE_
     VECTOR2I      size( diametre, diametre );
     GBR_METADATA* gbr_metadata = static_cast<GBR_METADATA*>( aData );
 
-    if( trace_mode == SKETCH )
-    {
-        if( gbr_metadata )
-            formatNetAttribute( &gbr_metadata->m_NetlistMetadata );
-
-        SetCurrentLineWidth( USE_DEFAULT_LINE_WIDTH );
-
-        Circle( pos, diametre, FILL_T::NO_FILL, DO_NOT_SET_LINE_WIDTH );
-    }
-    else
-    {
-        selectApertureWithAttributes( pos, gbr_metadata, size, 0, ANGLE_0, APERTURE::AT_CIRCLE );
-    }
+    selectApertureWithAttributes( pos, gbr_metadata, size, 0, ANGLE_0, APERTURE::AT_CIRCLE );
 }
 
 
@@ -1340,7 +1274,7 @@ void GERBER_PLOTTER::FlashPadOval( const VECTOR2I& aPos, const VECTOR2I& aSize,
     GBR_METADATA* gbr_metadata = static_cast<GBR_METADATA*>( aData );
 
     // Flash a vertical or horizontal shape (this is a basic aperture).
-    if( orient.IsCardinal() && aTraceMode == FILLED )
+    if( orient.IsCardinal() )
     {
         if( orient.IsCardinal90() )
             std::swap( size.x, size.y );
@@ -1350,40 +1284,33 @@ void GERBER_PLOTTER::FlashPadOval( const VECTOR2I& aPos, const VECTOR2I& aSize,
     else    // Plot pad as region.
             // Only regions and flashed items accept a object attribute TO.P for the pin name
     {
-        if( aTraceMode == FILLED )
+#ifdef GBR_USE_MACROS_FOR_ROTATED_OVAL
+        if( !m_gerberDisableApertMacros )
+#endif
         {
-        #ifdef GBR_USE_MACROS_FOR_ROTATED_OVAL
-            if( !m_gerberDisableApertMacros )
-        #endif
+            m_hasApertureRotOval = true;
+            // We are using a aperture macro that expect size.y < size.x
+            // i.e draw a horizontal line for rotation = 0.0
+            // size.x = length, size.y = width
+            if( size.x < size.y )
             {
-                m_hasApertureRotOval = true;
-                // We are using a aperture macro that expect size.y < size.x
-                // i.e draw a horizontal line for rotation = 0.0
-                // size.x = length, size.y = width
-                if( size.x < size.y )
-                {
-                    std::swap( size.x, size.y );
-                    orient += ANGLE_90;
+                std::swap( size.x, size.y );
+                orient += ANGLE_90;
 
-                    if( orient > ANGLE_180 )
-                        orient -= ANGLE_180;
-                }
-
-                selectApertureWithAttributes( aPos, gbr_metadata, size, 0, orient,
-                                              APERTURE::AM_ROTATED_OVAL );
-                return;
+                if( orient > ANGLE_180 )
+                    orient -= ANGLE_180;
             }
 
-            // Draw the oval as round rect pad with a radius = 50% min size)
-            // In gerber file, it will be drawn as a region with arcs, and can be
-            // detected as pads (similar to a flashed pad)
-            FlashPadRoundRect( aPos, aSize, std::min( aSize.x, aSize.y ) / 2, orient, FILLED,
-                               aData );
+            selectApertureWithAttributes( aPos, gbr_metadata, size, 0, orient,
+                                          APERTURE::AM_ROTATED_OVAL );
+            return;
         }
-        else    // Non filled shape: plot outlines:
-        {
-            ThickOval( aPos, size, orient, USE_DEFAULT_LINE_WIDTH, aData );
-        }
+
+        // Draw the oval as round rect pad with a radius = 50% min size)
+        // In gerber file, it will be drawn as a region with arcs, and can be
+        // detected as pads (similar to a flashed pad)
+        FlashPadRoundRect( aPos, aSize, std::min( aSize.x, aSize.y ) / 2, orient, aTraceMode,
+                           aData );
     }
 }
 
@@ -1405,25 +1332,12 @@ void GERBER_PLOTTER::FlashPadRect( const VECTOR2I& pos, const VECTOR2I& aSize,
         if( aOrient.IsCardinal90() )
             std::swap( size.x, size.y );
 
-        if( aTraceMode == SKETCH )
-        {
-            if( gbr_metadata )
-                formatNetAttribute( &gbr_metadata->m_NetlistMetadata );
-
-            SetCurrentLineWidth( USE_DEFAULT_LINE_WIDTH );
-            Rect( VECTOR2I( pos.x - ( size.x / 2 ), pos.y - (size.y / 2 ) ),
-                  VECTOR2I( pos.x + ( size.x / 2 ), pos.y + (size.y / 2 ) ),
-                  FILL_T::NO_FILL, GetCurrentLineWidth() );
-        }
-        else
-        {
-            selectApertureWithAttributes( pos, gbr_metadata, size, 0, ANGLE_0, APERTURE::AT_RECT );
-        }
+        selectApertureWithAttributes( pos, gbr_metadata, size, 0, ANGLE_0, APERTURE::AT_RECT );
     }
     else
     {
-    #ifdef GBR_USE_MACROS_FOR_ROTATED_RECT
-        if( aTraceMode != SKETCH && !m_gerberDisableApertMacros )
+#ifdef GBR_USE_MACROS_FOR_ROTATED_RECT
+        if( !m_gerberDisableApertMacros )
         {
             m_hasApertureRotRect = true;
 
@@ -1431,7 +1345,7 @@ void GERBER_PLOTTER::FlashPadRect( const VECTOR2I& pos, const VECTOR2I& aSize,
                                           APERTURE::AM_ROT_RECT );
         }
         else
-    #endif
+#endif
         {
             // plot pad shape as Gerber region
             VECTOR2I coord[4];
@@ -1462,69 +1376,43 @@ void GERBER_PLOTTER::FlashPadRoundRect( const VECTOR2I& aPadPos, const VECTOR2I&
 {
     GBR_METADATA* gbr_metadata = static_cast<GBR_METADATA*>( aData );
 
-    if( aTraceMode != FILLED )
+#ifdef GBR_USE_MACROS_FOR_ROUNDRECT
+    if( !m_gerberDisableApertMacros )
+#endif
     {
-        SHAPE_POLY_SET outline;
-        TransformRoundChamferedRectToPolygon( outline, aPadPos, aSize, aOrient, aCornerRadius, 0.0,
-                                              0, 0, GetPlotterArcHighDef(), ERROR_INSIDE );
+        m_hasApertureRoundRect = true;
 
-        SetCurrentLineWidth( USE_DEFAULT_LINE_WIDTH, &gbr_metadata );
-
-        std::vector<VECTOR2I> cornerList;
-
-        // TransformRoundRectToPolygon creates only one convex polygon
-        SHAPE_LINE_CHAIN& poly = outline.Outline( 0 );
-        cornerList.reserve( poly.PointCount() + 1 );
-
-        for( int ii = 0; ii < poly.PointCount(); ++ii )
-            cornerList.emplace_back( poly.CPoint( ii ).x, poly.CPoint( ii ).y );
-
-        // Close polygon
-        cornerList.push_back( cornerList[0] );
-
-        // plot outlines
-        PlotPoly( cornerList, FILL_T::NO_FILL, GetCurrentLineWidth(), gbr_metadata );
+        selectApertureWithAttributes( aPadPos, gbr_metadata, aSize, aCornerRadius, aOrient,
+                                      APERTURE::AM_ROUND_RECT );
+        return;
     }
-    else
+
+    // A Pad RoundRect is plotted as a Gerber region.
+    // Initialize region metadata:
+    bool clearTA_AperFunction = false;     // true if a TA.AperFunction is used
+
+    if( gbr_metadata )
     {
-    #ifdef GBR_USE_MACROS_FOR_ROUNDRECT
-        if( !m_gerberDisableApertMacros )
-    #endif
+        formatNetAttribute( &gbr_metadata->m_NetlistMetadata );
+        std::string attrib = gbr_metadata->m_ApertureMetadata.FormatAttribute( !m_useX2format );
+
+        if( !attrib.empty() )
         {
-            m_hasApertureRoundRect = true;
-
-            selectApertureWithAttributes( aPadPos, gbr_metadata, aSize, aCornerRadius, aOrient,
-                                          APERTURE::AM_ROUND_RECT );
-            return;
+            fmt::print( m_outputFile, "{}", attrib );
+            clearTA_AperFunction = true;
         }
+    }
 
-        // A Pad RoundRect is plotted as a Gerber region.
-        // Initialize region metadata:
-        bool clearTA_AperFunction = false;     // true if a TA.AperFunction is used
+    // Plot the region using arcs in corners.
+    plotRoundRectAsRegion( aPadPos, aSize, aCornerRadius, aOrient );
 
-        if( gbr_metadata )
-        {
-            formatNetAttribute( &gbr_metadata->m_NetlistMetadata );
-            std::string attrib = gbr_metadata->m_ApertureMetadata.FormatAttribute( !m_useX2format );
-
-            if( !attrib.empty() )
-            {
-                fmt::print( m_outputFile, "{}", attrib );
-                clearTA_AperFunction = true;
-            }
-        }
-
-        // Plot the region using arcs in corners.
-        plotRoundRectAsRegion( aPadPos, aSize, aCornerRadius, aOrient );
-
-        // Clear the TA attribute, to avoid the next item to inherit it:
-        if( clearTA_AperFunction )
-        {
-            if( m_useX2format )
-                fmt::println( m_outputFile, "%TD.AperFunction*%" );
-            else
-                fmt::println( m_outputFile, "G04 #@! TD.AperFunction*" );
-        }
+    // Clear the TA attribute, to avoid the next item to inherit it:
+    if( clearTA_AperFunction )
+    {
+        if( m_useX2format )
+            fmt::println( m_outputFile, "%TD.AperFunction*%" );
+        else
+            fmt::println( m_outputFile, "G04 #@! TD.AperFunction*" );
     }
 }
 
@@ -1671,11 +1559,6 @@ void GERBER_PLOTTER::FlashPadCustom( const VECTOR2I& aPadPos, const VECTOR2I& aS
 
     SHAPE_POLY_SET polyshape = aPolygons->CloneDropTriangulation();
 
-    if( aTraceMode != FILLED )
-    {
-        SetCurrentLineWidth( USE_DEFAULT_LINE_WIDTH, &gbr_metadata );
-    }
-
     std::vector<VECTOR2I> cornerList;
 
     for( int cnt = 0; cnt < polyshape.OutlineCount(); ++cnt )
@@ -1690,40 +1573,32 @@ void GERBER_PLOTTER::FlashPadCustom( const VECTOR2I& aPadPos, const VECTOR2I& aS
         // Close polygon
         cornerList.push_back( cornerList[0] );
 
-        if( aTraceMode == SKETCH )
+#ifdef GBR_USE_MACROS_FOR_CUSTOM_PAD
+        if( m_gerberDisableApertMacros || cornerList.size() > GBR_MACRO_FOR_CUSTOM_PAD_MAX_CORNER_COUNT )
         {
-            PlotPoly( cornerList, FILL_T::NO_FILL, GetCurrentLineWidth(), &gbr_metadata );
+            PlotGerberRegion( cornerList, &gbr_metadata );
         }
         else
         {
-#ifdef GBR_USE_MACROS_FOR_CUSTOM_PAD
-            if( m_gerberDisableApertMacros
-                    || cornerList.size() > GBR_MACRO_FOR_CUSTOM_PAD_MAX_CORNER_COUNT )
+            // An AM will be created. the shape must be in position 0,0 and orientation 0
+            // to be able to reuse the same AM for pads having the same shape
+            for( size_t ii = 0; ii < cornerList.size(); ii++ )
             {
-                PlotGerberRegion( cornerList, &gbr_metadata );
+                cornerList[ii] -= aPadPos;
+                RotatePoint( cornerList[ii], -aOrient );
             }
-            else
-            {
-                // An AM will be created. the shape must be in position 0,0 and orientation 0
-                // to be able to reuse the same AM for pads having the same shape
-                for( size_t ii = 0; ii < cornerList.size(); ii++ )
-                {
-                    cornerList[ii] -= aPadPos;
-                    RotatePoint( cornerList[ii], -aOrient );
-                }
 
-                VECTOR2D pos_dev = userToDeviceCoordinates( aPadPos );
-                selectAperture( cornerList, aOrient, APERTURE::AM_FREE_POLYGON,
-                                gbr_metadata.GetApertureAttrib(),
-                                gbr_metadata.GetCustomAttribute() );
-                formatNetAttribute( &gbr_metadata.m_NetlistMetadata );
+            VECTOR2D pos_dev = userToDeviceCoordinates( aPadPos );
+            selectAperture( cornerList, aOrient, APERTURE::AM_FREE_POLYGON,
+                            gbr_metadata.GetApertureAttrib(),
+                            gbr_metadata.GetCustomAttribute() );
+            formatNetAttribute( &gbr_metadata.m_NetlistMetadata );
 
-                emitDcode( pos_dev, 3 );
-            }
-#else
-            PlotGerberRegion( cornerList, &gbr_metadata );
-#endif
+            emitDcode( pos_dev, 3 );
         }
+#else
+        PlotGerberRegion( cornerList, &gbr_metadata );
+#endif
     }
 }
 
@@ -1746,8 +1621,8 @@ void GERBER_PLOTTER::FlashPadChamferRoundRect( const VECTOR2I& aShapePos, const 
     bool hasRoundedCorner = aCornerRadius != 0 && aChamferPositions != 15;
 
 #ifdef GBR_USE_MACROS_FOR_CHAMFERED_RECT
-    // Sketch mode or round rect shape or Apert Macros disabled
-    if( aPlotMode != FILLED || hasRoundedCorner || m_gerberDisableApertMacros )
+    // Round rect shape or Apert Macros disabled
+    if( hasRoundedCorner || m_gerberDisableApertMacros )
 #endif
     {
         TransformRoundChamferedRectToPolygon( outline, aShapePos, aPadSize, aPadOrient,
@@ -1763,38 +1638,31 @@ void GERBER_PLOTTER::FlashPadChamferRoundRect( const VECTOR2I& aShapePos, const 
         // Close the polygon
         cornerList.push_back( cornerList[0] );
 
-        if( aPlotMode == SKETCH )
+#ifdef GBR_USE_MACROS_FOR_CHAMFERED_ROUND_RECT
+        if( m_gerberDisableApertMacros )
         {
-            PlotPoly( cornerList, FILL_T::NO_FILL, GetCurrentLineWidth(), &gbr_metadata );
+            PlotGerberRegion( cornerList, &gbr_metadata );
         }
         else
         {
-#ifdef GBR_USE_MACROS_FOR_CHAMFERED_ROUND_RECT
-            if( m_gerberDisableApertMacros )
+            // An AM will be created. the shape must be in position 0,0 and orientation 0
+            // to be able to reuse the same AM for pads having the same shape
+            for( size_t ii = 0; ii < cornerList.size(); ii++ )
             {
-                PlotGerberRegion( cornerList, &gbr_metadata );
+                cornerList[ii] -= aShapePos;
+                RotatePoint( cornerList[ii], -aPadOrient );
             }
-            else
-            {
-                // An AM will be created. the shape must be in position 0,0 and orientation 0
-                // to be able to reuse the same AM for pads having the same shape
-                for( size_t ii = 0; ii < cornerList.size(); ii++ )
-                {
-                    cornerList[ii] -= aShapePos;
-                    RotatePoint( cornerList[ii], -aPadOrient );
-                }
 
-                selectAperture( cornerList, aPadOrient, APERTURE::AM_FREE_POLYGON,
-                                gbr_metadata.GetApertureAttrib(),
-                                gbr_metadata.GetCustomAttribute() );
-                formatNetAttribute( &gbr_metadata.m_NetlistMetadata );
+            selectAperture( cornerList, aPadOrient, APERTURE::AM_FREE_POLYGON,
+                            gbr_metadata.GetApertureAttrib(),
+                            gbr_metadata.GetCustomAttribute() );
+            formatNetAttribute( &gbr_metadata.m_NetlistMetadata );
 
-                emitDcode( pos_device, 3 );
-            }
-#else
-            PlotGerberRegion( cornerList, &gbr_metadata );
-#endif
+            emitDcode( pos_device, 3 );
         }
+#else
+        PlotGerberRegion( cornerList, &gbr_metadata );
+#endif
 
         return;
     }
@@ -1878,12 +1746,6 @@ void GERBER_PLOTTER::FlashPadTrapez( const VECTOR2I& aPadPos, const VECTOR2I* aC
 
     if( gbr_metadata )
         metadata = *gbr_metadata;
-
-    if( aTraceMode == SKETCH )
-    {
-        PlotPoly( cornerList, FILL_T::NO_FILL, GetCurrentLineWidth(), &metadata );
-        return;
-    }
 
     // Plot a filled polygon:
     #ifdef GBR_USE_MACROS_FOR_TRAPEZOID

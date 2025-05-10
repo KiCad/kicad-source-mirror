@@ -112,25 +112,14 @@ void PSLIKE_PLOTTER::FlashPadOval( const VECTOR2I& aPadPos, const VECTOR2I& aSiz
     RotatePoint( a, orient );
     RotatePoint( b, orient );
 
-    if( aTraceMode == FILLED )
-        ThickSegment( a + aPadPos, b + aPadPos, size.x, aTraceMode, nullptr );
-    else
-        ThickOval( aPadPos, size, orient, USE_DEFAULT_LINE_WIDTH, nullptr );
+    ThickSegment( a + aPadPos, b + aPadPos, size.x, aTraceMode, nullptr );
 }
 
 
 void PSLIKE_PLOTTER::FlashPadCircle( const VECTOR2I& aPadPos, int aDiameter,
                                      OUTLINE_MODE aTraceMode, void* aData )
 {
-    if( aTraceMode == FILLED )
-    {
-        Circle( aPadPos, aDiameter, FILL_T::FILLED_SHAPE, 0 );
-    }
-    else    // Plot a ring:
-    {
-        SetCurrentLineWidth( USE_DEFAULT_LINE_WIDTH );
-        Circle( aPadPos, aDiameter, FILL_T::NO_FILL, GetCurrentLineWidth() );
-    }
+    Circle( aPadPos, aDiameter, FILL_T::FILLED_SHAPE, 0 );
 
     SetCurrentLineWidth( USE_DEFAULT_LINE_WIDTH );
 }
@@ -143,11 +132,6 @@ void PSLIKE_PLOTTER::FlashPadRect( const VECTOR2I& aPadPos, const VECTOR2I& aSiz
     std::vector<VECTOR2I> cornerList;
     VECTOR2I size( aSize );
     cornerList.reserve( 4 );
-
-    if( aTraceMode == FILLED )
-        SetCurrentLineWidth( 0 );
-    else
-        SetCurrentLineWidth( USE_DEFAULT_LINE_WIDTH );
 
     int dx = size.x / 2;
     int dy = size.y / 2;
@@ -171,8 +155,7 @@ void PSLIKE_PLOTTER::FlashPadRect( const VECTOR2I& aPadPos, const VECTOR2I& aSiz
 
     cornerList.push_back( cornerList[0] );
 
-    PlotPoly( cornerList, ( aTraceMode == FILLED ) ? FILL_T::FILLED_SHAPE : FILL_T::NO_FILL,
-              GetCurrentLineWidth() );
+    PlotPoly( cornerList, FILL_T::FILLED_SHAPE, 0 );
 }
 
 
@@ -180,11 +163,6 @@ void PSLIKE_PLOTTER::FlashPadRoundRect( const VECTOR2I& aPadPos, const VECTOR2I&
                                         int aCornerRadius, const EDA_ANGLE& aOrient,
                                         OUTLINE_MODE aTraceMode, void* aData )
 {
-    if( aTraceMode == FILLED )
-        SetCurrentLineWidth( 0 );
-    else
-        SetCurrentLineWidth( USE_DEFAULT_LINE_WIDTH );
-
     SHAPE_POLY_SET outline;
     TransformRoundChamferedRectToPolygon( outline, aPadPos, aSize, aOrient, aCornerRadius, 0.0, 0,
                                           0, GetPlotterArcHighDef(), ERROR_INSIDE );
@@ -201,8 +179,7 @@ void PSLIKE_PLOTTER::FlashPadRoundRect( const VECTOR2I& aPadPos, const VECTOR2I&
     // Close polygon
     cornerList.push_back( cornerList[0] );
 
-    PlotPoly( cornerList, ( aTraceMode == FILLED ) ? FILL_T::FILLED_SHAPE : FILL_T::NO_FILL,
-              GetCurrentLineWidth() );
+    PlotPoly( cornerList, FILL_T::FILLED_SHAPE, 0 );
 }
 
 
@@ -210,11 +187,6 @@ void PSLIKE_PLOTTER::FlashPadCustom( const VECTOR2I& aPadPos, const VECTOR2I& aS
                                      const EDA_ANGLE& aOrient, SHAPE_POLY_SET* aPolygons,
                                      OUTLINE_MODE aTraceMode, void* aData )
 {
-    if( aTraceMode == FILLED )
-        SetCurrentLineWidth( 0 );
-    else
-        SetCurrentLineWidth( USE_DEFAULT_LINE_WIDTH );
-
     std::vector<VECTOR2I> cornerList;
 
     for( int cnt = 0; cnt < aPolygons->OutlineCount(); ++cnt )
@@ -228,8 +200,7 @@ void PSLIKE_PLOTTER::FlashPadCustom( const VECTOR2I& aPadPos, const VECTOR2I& aS
         // Close polygon
         cornerList.push_back( cornerList[0] );
 
-        PlotPoly( cornerList, ( aTraceMode == FILLED ) ? FILL_T::FILLED_SHAPE : FILL_T::NO_FILL,
-                  GetCurrentLineWidth() );
+        PlotPoly( cornerList, FILL_T::FILLED_SHAPE, 0 );
     }
 }
 
@@ -244,11 +215,6 @@ void PSLIKE_PLOTTER::FlashPadTrapez( const VECTOR2I& aPadPos, const VECTOR2I* aC
     for( int ii = 0; ii < 4; ii++ )
         cornerList.push_back( aCorners[ii] );
 
-    if( aTraceMode == FILLED )
-        SetCurrentLineWidth( 0 );
-    else
-        SetCurrentLineWidth( USE_DEFAULT_LINE_WIDTH );
-
     for( int ii = 0; ii < 4; ii++ )
     {
         RotatePoint( cornerList[ii], aPadOrient );
@@ -256,8 +222,7 @@ void PSLIKE_PLOTTER::FlashPadTrapez( const VECTOR2I& aPadPos, const VECTOR2I* aC
     }
 
     cornerList.push_back( cornerList[0] );
-    PlotPoly( cornerList, ( aTraceMode == FILLED ) ? FILL_T::FILLED_SHAPE : FILL_T::NO_FILL,
-              GetCurrentLineWidth() );
+    PlotPoly( cornerList, FILL_T::FILLED_SHAPE, 0 );
 }
 
 
