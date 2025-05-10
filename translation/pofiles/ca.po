@@ -6,15 +6,15 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-05-06 12:53+0300\n"
-"PO-Revision-Date: 2025-04-07 15:08+0000\n"
-"Last-Translator: \"rsr.private\" <rsr.private@gmail.com>\n"
+"PO-Revision-Date: 2025-05-10 13:03+0000\n"
+"Last-Translator: Adolfo Jayme Barrientos <fitojb@ubuntu.com>\n"
 "Language-Team: Catalan <https://hosted.weblate.org/projects/kicad/v9/ca/>\n"
 "Language: ca\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.11-dev\n"
+"X-Generator: Weblate 5.12-dev\n"
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-Basepath: f:/kicad-svn/kicad\n"
 "X-Poedit-SearchPath-0: pcbnew\n"
@@ -3765,7 +3765,7 @@ msgstr "Inclou:"
 #: pcbnew/dialogs/dialog_drc_base.cpp:190
 #: pcbnew/dialogs/dialog_footprint_checker_base.cpp:49
 msgid "Warnings"
-msgstr "Advertències"
+msgstr "Advertiments"
 
 #: common/dialogs/dialog_rc_job_base.cpp:68
 msgid "Report job failure when violations present"
@@ -8425,7 +8425,7 @@ msgstr "Deshabilita el símbol per a la simulació"
 
 #: common/layer_id.cpp:102
 msgid "ERC warnings"
-msgstr "Advertències d'ERC"
+msgstr "Advertiments d'ERC"
 
 #: common/layer_id.cpp:103
 msgid "ERC errors"
@@ -8581,7 +8581,7 @@ msgstr "Embolic"
 
 #: common/layer_id.cpp:138
 msgid "DRC warnings"
-msgstr "Advertències de DRC"
+msgstr "Advertiments de DRC"
 
 #: common/layer_id.cpp:139
 msgid "DRC errors"
@@ -8956,7 +8956,7 @@ msgstr "S'ha creat el fitxer Zip '%s' (%s sense comprimir, %s comprimit)."
 
 #: common/rc_item.cpp:425 eeschema/erc/erc_item.cpp:404
 msgid "Excluded warning: "
-msgstr "Advertència exclosa: "
+msgstr "Advertiment exclòs: "
 
 #: common/rc_item.cpp:427 eeschema/erc/erc_item.cpp:406
 msgid "Excluded error: "
@@ -8965,7 +8965,7 @@ msgstr "Error exclòs : "
 #: common/rc_item.cpp:431 eeschema/erc/erc_item.cpp:410
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1422
 msgid "Warning: "
-msgstr "Advertència: "
+msgstr "Advertiment: "
 
 #: common/rc_item.cpp:435 eeschema/erc/erc_item.cpp:414
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1420
@@ -10647,7 +10647,7 @@ msgstr "Error:"
 #: common/widgets/wx_html_report_panel.cpp:218
 #: common/widgets/wx_html_report_panel.cpp:245
 msgid "Warning:"
-msgstr "Advertència:"
+msgstr "Advertiment:"
 
 #: common/widgets/wx_html_report_panel.cpp:246
 msgid "Info:"
@@ -10965,7 +10965,7 @@ msgstr ""
 
 #: cvpcb/auto_associate.cpp:309
 msgid "CvPcb Warning"
-msgstr "Advertència de CvPcb"
+msgstr "Advertiment de CvPcb"
 
 #: cvpcb/cvpcb.cpp:190
 msgid ""
@@ -17194,7 +17194,7 @@ msgstr "A"
 
 #: eeschema/dialogs/panel_setup_pinmap.cpp:228
 msgid "No error or warning"
-msgstr "Cap error o advertència"
+msgstr "Cap error o advertiment"
 
 #: eeschema/dialogs/panel_setup_pinmap.cpp:233
 msgid "Generate warning"
