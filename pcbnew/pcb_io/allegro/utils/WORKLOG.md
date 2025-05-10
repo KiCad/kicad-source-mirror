@@ -220,3 +220,22 @@ S!RES2012X50N_0805!PACKAGE!RESISTOR_RES2012X50N_0805_1K!R16!PACKAGE GEOMETRY!PLA
   y           : 0x4080e000, 0  (540)
   r           : 0x402c0000, 0  (14)
 ```
+
+* Decoding all the lines in 0x14 pointer of R16 in PreAmp (0x2B = 0xF790220 -> 0x2D 0xf790550)
+  * I think 0x17 is a vertical line, 0x15 is horizontal. but they both have full coords.
+  * They all have layer family = 0x09, but, these are the ASCII file layer names:
+    * 0xF2 -> DISPLAY_TOP (w = 0, slightly outside ASSEMBLY_TOP)
+    * 0xFB -> PLACE_BOUND_TOP (central bullseye)
+    * 0xFD -> ASSEMBLY_TOP (looks like fab outline: 80x50 mil for 0805 resistor)
+    * 0xF7 -> SILKSCREEN_TOP (silkscreen line)
+
+* Looking at https://www.artwork.com/all2dxf/alleggeo.htm, it then seems that family 9 is PACKAGE_GEOMETRY, so the layer info "family" is the CLASS, and the ordinal might be the subclass.
+
+* The PLACE_BOUND_TOP and DFA_BOUND_TOP polys are not in the 0x14 list, they're in the 'ptr_4' one as 0x28s
+  * List is two nodes long:
+    * 0x28 0xf7ceae8 - Layer 9:0xfb -> PLACE_BOUND_TOP
+    * 0x28 0xf7ceae8 - Layer 9:0xef -> DFA_BOUND_TOP (presumably)
+
+* Presumably, then 0x6 is class = ETCH and the subclass is the copper layer index.
+
+* It's still not quite clear how to get to the layer name - presumably there's a fixed mapping into the header layer map somehow - the same entries largely have the same functions between all the files.

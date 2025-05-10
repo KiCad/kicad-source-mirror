@@ -1478,9 +1478,11 @@ types:
         type: u4
       - id: next
         type: u4
-      - id: ptr1
+      - id: parent
         type: u4
-        doc: As for 0x24, points to the tail of the x24_x28 linked list.
+        doc: |
+          As for 0x24, points to the tail of the x24_x28 linked list for
+          top level items, or the footprint if a child item.
       - id: unknown_1
         type: u4
         doc: Always 0x00 so far.

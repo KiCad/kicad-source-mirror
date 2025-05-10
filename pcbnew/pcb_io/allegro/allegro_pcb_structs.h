@@ -295,16 +295,24 @@ struct FILE_HEADER
 
 struct LAYER_INFO
 {
-    enum class FAMILY
+    enum CLASS
     {
-        BOARD_GEOM,
-        COPPER,
-        SILK,
-        UNKNOWN,
+        PACKAGE_GEOMETRY = 0x09,
+        ETCH = 0x06,
     };
 
-    FAMILY  m_Family;
-    uint8_t m_Ordinal;
+    enum SUBCLASS
+    {
+        SILKSCREEN_TOP = 0xF7,
+        PLACE_BOUND_TOP = 0xFB,
+        ASSEMBLY_TOP = 0xFD,
+        DFA_BOUND_TOP = 0xEF,
+    };
+
+    uint8_t m_Class;
+    uint8_t m_Subclass;
+
+    bool operator==( const LAYER_INFO& ) const = default;
 };
 
 

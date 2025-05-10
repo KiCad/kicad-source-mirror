@@ -4158,7 +4158,7 @@ class AllegroBrd(KaitaiStruct):
 
 
     class Type28Shape(KaitaiStruct):
-        SEQ_FIELDS = ["type", "layer", "key", "next", "ptr1", "unknown_1", "unknown_2", "unknown_3", "ptr2", "ptr3", "ptr4", "first_segment_ptr", "unknown_4", "unknown_5", "ptr5", "ptr6", "ptr7_16x", "coords_0", "coords_1"]
+        SEQ_FIELDS = ["type", "layer", "key", "next", "parent", "unknown_1", "unknown_2", "unknown_3", "ptr2", "ptr3", "ptr4", "first_segment_ptr", "unknown_4", "unknown_5", "ptr5", "ptr6", "ptr7_16x", "coords_0", "coords_1"]
         def __init__(self, _io, _parent=None, _root=None):
             self._io = _io
             self._parent = _parent
@@ -4179,9 +4179,9 @@ class AllegroBrd(KaitaiStruct):
             self._debug['next']['start'] = self._io.pos()
             self.next = self._io.read_u4le()
             self._debug['next']['end'] = self._io.pos()
-            self._debug['ptr1']['start'] = self._io.pos()
-            self.ptr1 = self._io.read_u4le()
-            self._debug['ptr1']['end'] = self._io.pos()
+            self._debug['parent']['start'] = self._io.pos()
+            self.parent = self._io.read_u4le()
+            self._debug['parent']['end'] = self._io.pos()
             self._debug['unknown_1']['start'] = self._io.pos()
             self.unknown_1 = self._io.read_u4le()
             self._debug['unknown_1']['end'] = self._io.pos()

@@ -245,30 +245,14 @@ static void ReadStringMap( FILE_STREAM& stream, RAW_BOARD& aBoard, uint32_t coun
 
 static LAYER_INFO ParseLayerInfo( FILE_STREAM& aStream )
 {
-    uint8_t famCode = aStream.ReadU8();
-    uint8_t ord = aStream.ReadU8();
+    uint8_t classCode = aStream.ReadU8();
+    uint8_t subclassCode = aStream.ReadU8();
 
-
-    LAYER_INFO::FAMILY family = LAYER_INFO::FAMILY::BOARD_GEOM;
-
-    switch( famCode )
-    {
-    case 0x01: family = LAYER_INFO::FAMILY::BOARD_GEOM; break;
-    case 0x06: family = LAYER_INFO::FAMILY::COPPER; break;
-    case 0x09: family = LAYER_INFO::FAMILY::SILK; break;
-    // Found in the PreAmp board - TODO: come back to this
-    case 0x0C:
-    case 0x0D:
-    case 0x12:
-    default:
-        family = LAYER_INFO::FAMILY::UNKNOWN;
-        break;
-        // THROW_IO_ERROR( wxString::Format( "Unknown LAYER_INFO family code: %#04x", famCode ) );
-    };
-
+    // Don't try to be clever and assign enums here - there are loads of them,
+    // and we don't have a perfect map yet.
     return LAYER_INFO{
-        .m_Family = family,
-        .m_Ordinal = ord,
+        .m_Class = classCode,
+        .m_Subclass = subclassCode,
     };
 }
 

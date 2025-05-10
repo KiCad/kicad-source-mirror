@@ -21,6 +21,9 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include "allegro_pcb_structs.h"
+
+
 #include <allegro_builder.h>
 
 #include <footprint.h>
@@ -182,6 +185,28 @@ std::unique_ptr<PCB_TEXT> BOARD_BUILDER::buildPcbText( const BLK_0x30_STR_WRAPPE
 }
 
 
+template <>
+struct std::hash<LAYER_INFO>
+{
+    size_t operator()( const LAYER_INFO& aLayerInfo ) const noexcept
+    {
+        return ( aLayerInfo.m_Class << 8 ) + aLayerInfo.m_Subclass;
+    }
+};
+
+
+/**
+ * Map of the pre-set class:subclass pairs to standard layers
+ */
+// clang-format off
+static const std::unordered_map<LAYER_INFO, PCB_LAYER_ID> s_LayerKiMap = {
+    { { LAYER_INFO::CLASS::PACKAGE_GEOMETRY, LAYER_INFO::SUBCLASS::SILKSCREEN_TOP},     F_SilkS},
+    { { LAYER_INFO::CLASS::PACKAGE_GEOMETRY, LAYER_INFO::SUBCLASS::ASSEMBLY_TOP},       F_Fab},
+    { { LAYER_INFO::CLASS::PACKAGE_GEOMETRY, LAYER_INFO::SUBCLASS::PLACE_BOUND_TOP},    F_CrtYd},
+};
+// clang-format on
+
+
 std::unique_ptr<FOOTPRINT> BOARD_BUILDER::buildFootprint( const BLK_0x2D& aFpInstance )
 {
     auto fp = std::make_unique<FOOTPRINT>( &m_board );
@@ -206,26 +231,30 @@ std::unique_ptr<FOOTPRINT> BOARD_BUILDER::buildFootprint( const BLK_0x2D& aFpIns
 
             const auto& layerInfo = graphics.m_Layer;
 
-            PCB_LAYER_ID l = User_1;
+            PCB_LAYER_ID layer = User_1;
 
-            if( layerInfo.m_Family == LAYER_INFO::FAMILY::SILK )
-                l = F_SilkS;
-            else if( layerInfo.m_Family == LAYER_INFO::FAMILY::COPPER )
-                l = F_Cu;
-            else if( layerInfo.m_Family == LAYER_INFO::FAMILY::BOARD_GEOM )
-                l = User_3;
+            // Look up the layer in the presets list
+            if( s_LayerKiMap.count( graphics.m_Layer ) )
+            {
+                layer = s_LayerKiMap.at( graphics.m_Layer );
+            }
             else
             {
-                // Good question!
-                // 0x07 means something here
+                // Etch?
             }
+
+            // Within the graphics list, we can get various lines and arcs on PLACE_BOUND_TOP, which
+            // aren't actually the courtyard, which is a polygon in the 0x28 list. So, if we see such items,
+            // remap them now to a specific other layer
+            if( layer == F_CrtYd )
+                layer = User_2;
 
             const LL_WALKER segWalker{ graphics.m_SegmentPtr, graphics.m_Key, m_rawBoard };
 
             for( const BLOCK_BASE* segBlock : segWalker )
             {
                 std::unique_ptr<PCB_SHAPE> shape = std::make_unique<PCB_SHAPE>( &m_board );
-                shape->SetLayer( l );
+                shape->SetLayer( layer );
 
                 std::cout << "    Seg: " << wxString::Format( "%#04x", segBlock->GetBlockType() ) << std::endl;
 
