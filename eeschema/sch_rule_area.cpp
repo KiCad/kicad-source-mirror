@@ -186,7 +186,7 @@ void SCH_RULE_AREA::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OP
     aPlotter->SetCurrentLineWidth( pen_size );
     aPlotter->SetDash( pen_size, lineStyle );
 
-    aPlotter->PlotPoly( ptList, fill, pen_size );
+    aPlotter->PlotPoly( ptList, fill, pen_size, nullptr );
 
     aPlotter->SetDash( pen_size, LINE_STYLE::SOLID );
 }

@@ -112,7 +112,7 @@ void PSLIKE_PLOTTER::FlashPadOval( const VECTOR2I& aPadPos, const VECTOR2I& aSiz
     RotatePoint( a, orient );
     RotatePoint( b, orient );
 
-    ThickSegment( a + aPadPos, b + aPadPos, size.x, aTraceMode, nullptr );
+    ThickSegment( a + aPadPos, b + aPadPos, size.x, aTraceMode, aData );
 }
 
 
@@ -155,7 +155,7 @@ void PSLIKE_PLOTTER::FlashPadRect( const VECTOR2I& aPadPos, const VECTOR2I& aSiz
 
     cornerList.push_back( cornerList[0] );
 
-    PlotPoly( cornerList, FILL_T::FILLED_SHAPE, 0 );
+    PlotPoly( cornerList, FILL_T::FILLED_SHAPE, 0, aData );
 }
 
 
@@ -179,7 +179,7 @@ void PSLIKE_PLOTTER::FlashPadRoundRect( const VECTOR2I& aPadPos, const VECTOR2I&
     // Close polygon
     cornerList.push_back( cornerList[0] );
 
-    PlotPoly( cornerList, FILL_T::FILLED_SHAPE, 0 );
+    PlotPoly( cornerList, FILL_T::FILLED_SHAPE, 0, aData );
 }
 
 
@@ -200,7 +200,7 @@ void PSLIKE_PLOTTER::FlashPadCustom( const VECTOR2I& aPadPos, const VECTOR2I& aS
         // Close polygon
         cornerList.push_back( cornerList[0] );
 
-        PlotPoly( cornerList, FILL_T::FILLED_SHAPE, 0 );
+        PlotPoly( cornerList, FILL_T::FILLED_SHAPE, 0, aData );
     }
 }
 
@@ -222,7 +222,7 @@ void PSLIKE_PLOTTER::FlashPadTrapez( const VECTOR2I& aPadPos, const VECTOR2I* aC
     }
 
     cornerList.push_back( cornerList[0] );
-    PlotPoly( cornerList, FILL_T::FILLED_SHAPE, 0 );
+    PlotPoly( cornerList, FILL_T::FILLED_SHAPE, 0, aData );
 }
 
 

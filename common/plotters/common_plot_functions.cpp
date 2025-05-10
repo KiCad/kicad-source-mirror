@@ -69,7 +69,7 @@ void PlotDrawingSheet( PLOTTER* plotter, const PROJECT* aProject, const TITLE_BL
     wxFileName fn( aFilename );
 
     // Prepare plot parameters
-    drawList.SetDefaultPenSize( PLOTTER::USE_DEFAULT_LINE_WIDTH );
+    drawList.SetDefaultPenSize( defaultPenWidth );
     drawList.SetPlotterMilsToIUfactor( iusPerMil );
     drawList.SetPageNumber( aSheetNumber );
     drawList.SetSheetCount( aSheetCount );
@@ -97,7 +97,7 @@ void PlotDrawingSheet( PLOTTER* plotter, const PROJECT* aProject, const TITLE_BL
                     continue;
 
                 bitmap->m_ImageBitmap->PlotImage( plotter, drawItem->GetPosition(), plotColor,
-                                                  PLOTTER::USE_DEFAULT_LINE_WIDTH );
+                                                  defaultPenWidth );
             }
         }
 
@@ -108,7 +108,6 @@ void PlotDrawingSheet( PLOTTER* plotter, const PROJECT* aProject, const TITLE_BL
                 continue;
 
             plotter->SetColor( plotColor );
-            plotter->SetCurrentLineWidth( PLOTTER::USE_DEFAULT_LINE_WIDTH );
 
             switch( item->Type() )
             {
@@ -118,8 +117,8 @@ void PlotDrawingSheet( PLOTTER* plotter, const PROJECT* aProject, const TITLE_BL
                 plotter->SetCurrentLineWidth( std::max( line->GetPenWidth(), defaultPenWidth ) );
                 plotter->MoveTo( line->GetStart() );
                 plotter->FinishTo( line->GetEnd() );
+                break;
             }
-            break;
 
             case WSG_RECT_T:
             {
@@ -130,8 +129,8 @@ void PlotDrawingSheet( PLOTTER* plotter, const PROJECT* aProject, const TITLE_BL
                 plotter->LineTo( VECTOR2I( rect->GetEnd().x, rect->GetEnd().y ) );
                 plotter->LineTo( VECTOR2I( rect->GetStart().x, rect->GetEnd().y ) );
                 plotter->FinishTo( rect->GetStart() );
+                break;
             }
-            break;
 
             case WSG_TEXT_T:
             {
@@ -154,13 +153,13 @@ void PlotDrawingSheet( PLOTTER* plotter, const PROJECT* aProject, const TITLE_BL
                                text->GetTextAngle(), text->GetTextSize(), text->GetHorizJustify(),
                                text->GetVertJustify(), penWidth, text->IsItalic(), text->IsBold(),
                                text->IsMultilineAllowed(), font, text->GetFontMetrics() );
+                break;
             }
-            break;
 
             case WSG_POLY_T:
             {
                 DS_DRAW_ITEM_POLYPOLYGONS* poly = (DS_DRAW_ITEM_POLYPOLYGONS*) item;
-                int                        penWidth = poly->GetPenWidth();
+                int                        penWidth = std::max( poly->GetPenWidth(), defaultPenWidth );
                 std::vector<VECTOR2I>      points;
 
                 for( int idx = 0; idx < poly->GetPolygons().OutlineCount(); ++idx )
@@ -171,12 +170,15 @@ void PlotDrawingSheet( PLOTTER* plotter, const PROJECT* aProject, const TITLE_BL
                     for( int ii = 0; ii < outline.PointCount(); ii++ )
                         points.emplace_back( outline.CPoint( ii ).x, outline.CPoint( ii ).y );
 
-                    plotter->PlotPoly( points, FILL_T::FILLED_SHAPE, penWidth );
+                    plotter->PlotPoly( points, FILL_T::FILLED_SHAPE, penWidth, nullptr );
                 }
-            }
-            break;
 
-            default: wxFAIL_MSG( wxT( "PlotDrawingSheet(): Unknown drawing sheet item." ) ); break;
+                break;
+            }
+
+            default:
+                wxFAIL_MSG( wxT( "PlotDrawingSheet(): Unknown drawing sheet item." ) );
+                break;
             }
         }
     }

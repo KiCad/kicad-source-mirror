@@ -272,8 +272,8 @@ public:
      * @param aWidth is the line width.
      * @param aData is an auxiliary info (mainly for gerber format).
      */
-    virtual void PlotPoly( const std::vector<VECTOR2I>& aCornerList, FILL_T aFill,
-                           int aWidth = USE_DEFAULT_LINE_WIDTH, void* aData = nullptr ) = 0;
+    virtual void PlotPoly( const std::vector<VECTOR2I>& aCornerList, FILL_T aFill, int aWidth,
+                           void* aData ) = 0;
 
     /**
      * Draw a polygon ( filled or not ).
@@ -284,8 +284,8 @@ public:
      * @param aWidth is the line width.
      * @param aData is an auxiliary info (mainly for gerber format).
      */
-    virtual void PlotPoly( const SHAPE_LINE_CHAIN& aCornerList, FILL_T aFill,
-                           int aWidth = USE_DEFAULT_LINE_WIDTH, void* aData = nullptr );
+    virtual void PlotPoly( const SHAPE_LINE_CHAIN& aCornerList, FILL_T aFill, int aWidth,
+                           void* aData );
 
     /**
      * Only PostScript plotters can plot bitmaps.
@@ -612,14 +612,6 @@ protected:
 
     // Helper function for sketched filler segment
 
-    /**
-     * Convert a thick segment and plot it as an oval
-     */
-    void segmentAsOval( const VECTOR2I& start, const VECTOR2I& end, int width,
-                        OUTLINE_MODE tracemode );
-
-    void sketchOval( const VECTOR2I& aPos, const VECTOR2I& aSize, const EDA_ANGLE& aOrient,
-                     int aWidth );
 
     // Coordinate and scaling conversion functions
 

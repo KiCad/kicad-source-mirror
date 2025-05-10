@@ -252,7 +252,7 @@ void SCH_SHAPE::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS& 
     if( aBackground && IsHatchedFill() )
     {
         for( int ii = 0; ii < GetHatching().OutlineCount(); ++ii )
-            aPlotter->PlotPoly( GetHatching().COutline( ii ), FILL_T::FILLED_SHAPE, 0 );
+            aPlotter->PlotPoly( GetHatching().COutline( ii ), FILL_T::FILLED_SHAPE, 0, nullptr );
 
         return;
     }
@@ -282,7 +282,7 @@ void SCH_SHAPE::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS& 
 
     case SHAPE_T::POLY:
     case SHAPE_T::BEZIER:
-        aPlotter->PlotPoly( ptList, fill, pen_size );
+        aPlotter->PlotPoly( ptList, fill, pen_size, nullptr );
         break;
 
     default:

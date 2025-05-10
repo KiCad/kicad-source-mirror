@@ -1342,7 +1342,7 @@ void SCH_LABEL_BASE::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_O
         else
         {
             if( !s_poly.empty() )
-                aPlotter->PlotPoly( s_poly, FILL_T::NO_FILL, penWidth );
+                aPlotter->PlotPoly( s_poly, FILL_T::NO_FILL, penWidth, nullptr );
         }
 
         // Make sheet pins and hierarchical labels clickable hyperlinks

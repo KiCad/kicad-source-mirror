@@ -295,7 +295,7 @@ void PLOTTER::markerSquare( const VECTOR2I& position, int radius )
     corner.y = position.y + r;
     corner_list.push_back( corner );
 
-    PlotPoly( corner_list, FILL_T::NO_FILL, GetCurrentLineWidth() );
+    PlotPoly( corner_list, FILL_T::NO_FILL, GetCurrentLineWidth(), nullptr );
 }
 
 
@@ -328,7 +328,7 @@ void PLOTTER::markerLozenge( const VECTOR2I& position, int radius )
     corner.y = position.y + radius;
     corner_list.push_back( corner );
 
-    PlotPoly( corner_list, FILL_T::NO_FILL, GetCurrentLineWidth() );
+    PlotPoly( corner_list, FILL_T::NO_FILL, GetCurrentLineWidth(), nullptr );
 }
 
 
