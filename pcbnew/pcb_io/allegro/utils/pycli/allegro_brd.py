@@ -1337,7 +1337,7 @@ class AllegroBrd(KaitaiStruct):
 
 
     class Type2a(KaitaiStruct):
-        SEQ_FIELDS = ["_unnamed0", "num_entries", "unk", "nonrefs", "refs", "key"]
+        SEQ_FIELDS = ["_unnamed0", "num_entries", "unknown_1", "nonrefs", "refs", "key"]
         def __init__(self, _io, _parent=None, _root=None):
             self._io = _io
             self._parent = _parent
@@ -1353,9 +1353,9 @@ class AllegroBrd(KaitaiStruct):
             self.num_entries = self._io.read_u2le()
             self._debug['num_entries']['end'] = self._io.pos()
             if self._root.ver >= 1313024:
-                self._debug['unk']['start'] = self._io.pos()
-                self.unk = self._io.read_u4le()
-                self._debug['unk']['end'] = self._io.pos()
+                self._debug['unknown_1']['start'] = self._io.pos()
+                self.unknown_1 = self._io.read_u4le()
+                self._debug['unknown_1']['end'] = self._io.pos()
 
             if self._root.ver <= 1248256:
                 self._debug['nonrefs']['start'] = self._io.pos()
@@ -1386,7 +1386,7 @@ class AllegroBrd(KaitaiStruct):
             self._debug['key']['end'] = self._io.pos()
 
         class Nonref(KaitaiStruct):
-            SEQ_FIELDS = ["d"]
+            SEQ_FIELDS = ["name"]
             def __init__(self, _io, _parent=None, _root=None):
                 self._io = _io
                 self._parent = _parent
@@ -1395,16 +1395,9 @@ class AllegroBrd(KaitaiStruct):
                 self._read()
 
             def _read(self):
-                self._debug['d']['start'] = self._io.pos()
-                self.d = []
-                for i in range(36):
-                    if not 'arr' in self._debug['d']:
-                        self._debug['d']['arr'] = []
-                    self._debug['d']['arr'].append({'start': self._io.pos()})
-                    self.d.append(self._io.read_u1())
-                    self._debug['d']['arr'][i]['end'] = self._io.pos()
-
-                self._debug['d']['end'] = self._io.pos()
+                self._debug['name']['start'] = self._io.pos()
+                self.name = AllegroBrd.StringAligned(36, self._io, self, self._root)
+                self._debug['name']['end'] = self._io.pos()
 
 
         class RefEntry(KaitaiStruct):
@@ -3338,12 +3331,12 @@ class AllegroBrd(KaitaiStruct):
             self._debug['un1']['start'] = self._io.pos()
             self.un1 = self._io.read_u4le()
             self._debug['un1']['end'] = self._io.pos()
-            if self._root.ver >= 1311744:
+            if self._root.ver >= 1248256:
                 self._debug['un2']['start'] = self._io.pos()
                 self.un2 = self._io.read_u2le()
                 self._debug['un2']['end'] = self._io.pos()
 
-            if self._root.ver >= 1311744:
+            if self._root.ver >= 1248256:
                 self._debug['un3']['start'] = self._io.pos()
                 self.un3 = self._io.read_u2le()
                 self._debug['un3']['end'] = self._io.pos()

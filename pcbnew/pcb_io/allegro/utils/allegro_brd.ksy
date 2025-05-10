@@ -1285,10 +1285,10 @@ types:
         type: u4
       - id: un2
         type: u2
-        if: _root.ver >= 0x00140400 # unsire, not in Preamp
+        if: _root.ver >= 0x00130C00 # unsure, but in Kinoma, not in Preamp
       - id: un3
         type: u2
-        if: _root.ver >= 0x00140400 # unsire, not in Preamp
+        if: _root.ver >= 0x00130C00 # unsure, but in Kinoma, not in Preamp
       - id: str_ptr
         type: u4
       - id: size
@@ -1566,7 +1566,7 @@ types:
       - type: u1
       - id: num_entries
         type: u2
-      - id: unk
+      - id: unknown_1
         type: u4
         if: _root.ver >= 0x00140900
       - id: nonrefs
@@ -1585,18 +1585,51 @@ types:
     types:
       nonref:
         seq:
-          - id: d
-            type: u1
-            repeat: expr
-            repeat-expr: 36
+          - id: name
+            type: string_aligned(36)
+            doc: |
+              String, zero terminated.
+              There doesn't seem to be any other data in here.
       ref_entry:
         seq:
           - id: ptr
             type: u4
+            doc: |
+              String ID - name
+              E.g. 'DIMENSIONS', 'NCLEGEND-1-1'
           - id: properties
             type: u4
+            doc: |
+              Some kind of mask:
+               E.g. TOP:        0x088001 (PreAmp)
+                    BOTTOM:     0x108002 (PreAmp)
+
+                    CutiePi copper layers;
+                        TOP:            0x088001
+                        GND02/05:       0x000103
+                        L03:            0x008003
+                        L04:            0x008003
+                        BOTTOM:         0x108002
+
+                    BeagleBone-AI:
+                        TOP:            0x088000
+                        GND_L2/4/9/11:  0x000700
+                        INT_L3:         0x008600
+                        SIG_L5/8/10:    0x008600
+                        PWR_L6/7:       0x000700
+                        BOTTOM:         0x108000
+
+                    DIMENSIONS: 0x000000 (PreAmp)
+                    IMGOLD, IPC_L_03: 0 (CutiePi)
+                    GND02       0x000103 (CutiePi)
+
+
+
+
           - id: un1
             type: u4
+            doc: |
+              Always seems to be 0
 
   type_2b:
     seq:

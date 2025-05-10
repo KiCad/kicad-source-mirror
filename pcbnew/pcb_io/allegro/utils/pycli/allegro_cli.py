@@ -341,6 +341,23 @@ class AllegroBoard:
             prntr.print_v("unknown_4", d)
             prntr.print_v("unknown_5", d)
 
+        elif t == 0x2a:
+            assert isinstance(d, allegro_brd.AllegroBrd.Type2a)
+            prntr.print_v("unknown_1", d)
+            prntr.print_v("Entries", d, "num_entries")
+
+            subprntr = self.Printer(self, indent=indent + 2)
+            if hasattr(d, "refs"):
+                for i, ref in enumerate(d.refs):
+                    prntr.prnt(f"- Ref {i}")
+                    subprntr.print_s("ptr", ref)
+                    subprntr.print_v("properties", ref)
+                    subprntr.print_v("un1", ref)
+            else:
+                for i, entry in enumerate(d.nonrefs):
+                    prntr.prnt(f"- Entry {i}")
+                    subprntr.print_v("name", entry.name)
+
         elif t == 0x2b:
             prntr.print_ptr("next", d.next)
             prntr.print_s("fp_str", d.fp_str_ref)
