@@ -138,7 +138,9 @@ class AllegroBoard:
             if value is None:
                 return
 
-            if isinstance(value, int) and hex:
+            if isinstance(value, allegro_brd.AllegroBrd.CadenceFp):
+                self.prnt(f"{name:12}: {value.a}, {value.b}")
+            elif isinstance(value, int) and as_hex:
                 self.prnt(f"{name:12}: {value:#x}")
             else:
                 self.prnt(f"{name:12}: {value}")
@@ -166,7 +168,7 @@ class AllegroBoard:
 
         def print_layer(self, layer):
             name = "Layer"
-            v = f"{layer.family} {layer.ordinal}"
+            v = f"{layer.family} {layer.ordinal:#04x}"
             self.print_v(name, v)
 
     def print_obj(self, obj, indent=2):
@@ -183,7 +185,23 @@ class AllegroBoard:
         if hasattr(d, "key"):
             prntr.print_v("Key", d, "key")
 
-        if t == 0x03:
+        if t == 0x01:
+            prntr.print_v("un0", d)
+            prntr.print_v("subtype", d)
+
+            prntr.print_ptr("next", d)
+            prntr.print_ptr("parent", d)
+            prntr.print_v("un1", d)
+            prntr.print_v("un6", d)
+            prntr.print_v("width", d, as_hex=False)
+
+            prntr.print_coords("P0", d.coords_0)
+            prntr.print_coords("P1", d.coords_1)
+            prntr.print_v("x", d)
+            prntr.print_v("y", d)
+            prntr.print_v("r", d)
+
+        elif t == 0x03:
             prntr.print_v("subtype", d)
             prntr.print_v("unknown_hdr", d)
             prntr.print_v("size", d)
@@ -195,7 +213,6 @@ class AllegroBoard:
                 prntr.print_v("string data", d.data)
 
         elif t == 0x06:
-
             prntr.print_s("String", d.str)
             prntr.print_s("Ptr 1", d.str_2),
             prntr.print_ptr("Ptr instance", d.ptr_instance)
@@ -229,6 +246,9 @@ class AllegroBoard:
             prntr.print_ptr("Ptr 4", d, "ptr4")
 
             prntr.print_ptr("unknown_1", d)
+
+        elif t == 0x0a:
+            prntr.print_layer(d.layer)
 
         elif t == 0x0f:
             prntr.print_s("str_unk", d.str_unk)
@@ -317,12 +337,21 @@ class AllegroBoard:
                 prntr.print_v(f"  x4", pc.x4, as_hex=False)
                 prntr.print_ptr("  str_ptr", pc.str_ptr)
 
+        elif t == 0x23:
+            prntr.print_ptr("next", d)
+            prntr.print_layer(d.layer)
+
         elif t == 0x24: # Rectangle
+            prntr.print_layer(d.layer)
             prntr.print_coords("pt0", d.coords_0)
             prntr.print_coords("pt1", d.coords_1)
             prntr.print_ptr("ptr1", d.ptr1)
 
+            prntr.print_v("unknown_1", d)
+            prntr.print_v("unknown_2", d)
+
         elif t == 0x28: # Polygon?
+            prntr.print_layer(d.layer)
             prntr.print_coords("pt0", d.coords_0)
             prntr.print_coords("pt1", d.coords_1)
             prntr.print_ptr("ptr1", d)
@@ -499,7 +528,7 @@ def print_obj_counts_by_type(objs):
     )
 
 
-def walk_list(brd: AllegroBoard, ll, next_attr="next"):
+def walk_list(brd: AllegroBoard, head: int, tail: int, next_attr="next"):
     """
     Generate a list of objects from a linked list, following the "next"
     entry on each object.
@@ -507,11 +536,11 @@ def walk_list(brd: AllegroBoard, ll, next_attr="next"):
     yield index, node_key, object
     """
 
-    node_key = ll.head
+    node_key = head
     index = 0
 
     # Walk the list until we reach the end or the next is null
-    while(node_key and node_key != ll.tail):
+    while node_key and node_key != tail:
         obj = brd.object(node_key)
         yield index, node_key, obj
 
@@ -536,8 +565,9 @@ if __name__ == "__main__":
     parser.add_argument("--oc", "--object-count", action="store_true",
                         help="Print the object counts of the Allegro board file")
 
-    parser.add_argument("--walk-list", "--wl", type=str,
-                        help="Walk a list of objects in the Allegro board file")
+    parser.add_argument("--walk-list", "--wl", nargs="+",
+                        help="Walk a list of objects in the Allegro board file. "
+                             "Either the name of a header list, or a head and tail pointer")
 
     parser.add_argument("--dump-obj", "--do", action="store_true",
                         help="Dump the objects in detailed format when walking a list, etc")
@@ -621,11 +651,12 @@ if __name__ == "__main__":
     if args.dump_layers:
 
         lm = kt_brd_struct.layer_map
+        prntr = AllegroBoard.Printer(brd, 4)
 
         for i, layer in enumerate(lm.entries):
             print(f"Layer {i}:")
-            print(f"  A: {layer.a:#010x}")
-            print(f"  B: {layer.b:#010x}")
+            prntr.print_v("A", layer.a)
+            prntr.print_ptr("B", layer.b)
 
     if args.walk_list is not None:
         # Walk a list of objects in the Allegro board file
@@ -655,17 +686,25 @@ if __name__ == "__main__":
             "x0a_2": kt_brd_struct.ll_x0a_2,
         }
 
-        try:
-            ll = lists[args.walk_list]
-        except KeyError:
-            raise ValueError(
-                f"Unknown walk list: {args.walk_list}. "
-                f"Valid options are: {', '.join(lists.keys())}"
-            )
+        if len(args.walk_list) == 1:
+            try:
+                ll = lists[args.walk_list[0]]
+                head = ll.head
+                tail = ll.tail
+            except KeyError:
+                raise ValueError(
+                    f"Unknown walk list: {args.walk_list}. "
+                    f"Valid options are: {', '.join(lists.keys())}"
+                )
+        elif len(args.walk_list) == 2:
+            head = IntIsh(args.walk_list[0]).value
+            tail = IntIsh(args.walk_list[1]).value
+        else:
+            raise ValueError("Expected 1 or 2 walk_list parameters")
 
         objs = []
 
-        for index, key, obj in walk_list(brd, ll):
+        for index, key, obj in walk_list(brd, head, tail):
             print(f"Entry {index}, Key: {key:#01x}")
 
             objs.append(obj)
@@ -680,7 +719,7 @@ if __name__ == "__main__":
 
     if args.footprints is not None:
 
-        for index, key, obj  in walk_list(brd, kt_brd_struct.ll_x2b):
+        for index, key, obj in walk_list(brd, kt_brd_struct.ll_x2b.head, kt_brd_struct.ll_x2b.tail):
             print(f"FP index: {index}, Key: {key:#01x}")
 
             fp_ref = brd.string(obj.data.fp_str_ref)

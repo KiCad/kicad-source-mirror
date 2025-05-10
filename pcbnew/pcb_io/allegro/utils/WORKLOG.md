@@ -122,3 +122,91 @@ S!SOT23!PACKAGE!2N2221_SOT23_QBC846B!Q2!PIN!TOP!259 1!FIG_RECTANGLE!6!635!777!20
 * The layers seem to be related to 0x2A, based on the string "DIMENSIONS" in the Altium import, which is in the string table in PreAmp and only referred to by one 0x2A.
 
 * Fixed wrong offset in the header layer map
+
+* Fixed wrong version in 0x1E that broke Kinoma (which is ver 0x00130c00)
+
+* So we seem to have:
+```
+Header map: list of:
+  Some ID:  e.g. 0, 6, 4, 1, 8, 14, 19
+  Pointer to 0x2A or null
+  
+IDs can repeat within the map, so they're not unique. Null pointers don't necessarily have ID = 0.
+
+For example, preamp has these header maps to 0x2A. Multiple entires point to the same 0x2A:
+
+    Index   ID    0x2A Ptr
+  - 0x00:    0 -> 0
+  - 0x01: 0x13 -> [NCROUTE_PATH]
+  - 0x02: 0x08 -> 0
+  - 0x03: 0x08 -> 0
+  - 0x04: 0x06 -> 0
+  - 0x05: 0x08 -> [TOP, BOTTOM]
+  - 0x06: 0x01 -> [TOP, BOTTOM]
+  - 0x07: 0x0e -> [NCLEGEND-1-1, NCLEGEND-1-2, NCLEGEND-BL-1-2]
+  - 0x08: 0x06 -> 0
+  - 0x09: 0x12 -> [DIMENSIONS]
+  - 0x0a: 0x01 -> 0
+  - 0x0b: 0x03 -> 0
+  - 0x0c: 0x06 -> [TOP, BOTTOM]
+  - 0x0d: 0x08 -> 0
+  - 0x0e: 0x01 -> 0
+  - 0x0f: 0x01 -> [TOP, BOTTOM]
+  - 0x10: 0x08 -> 0
+  - 0x11: 0x08 -> 0
+  - 0x12: 0x06 -> [TOP, BOTTOM]
+  - 0x13: 0x01 -> [TOP, BOTTOM]
+  - 0x14: 0x01 -> [TOP, BOTTOM]
+  - 0x15: 0x01 -> [TOP, BOTTOM]
+  - 0x16: 0x04 -> [TOP, BOTTOM]
+  - 0x17: 0x06 -> [TOP, BOTTOM]
+  - 0x18:    0 -> [TOP, BOTTOM]
+  
+CutiePi:
+
+  - 0x00:    0 -> 0
+  - 0x01  0x13 -> [NCROUTE_PATH, DXF_TOP, DXF_BOTTOM, ENIG_TOP, ENIG_BOTTOM, PAGELINE, FP_QAMARK, DXF0228, DRILL_HOLE_SHAPE, QA_CHECK_PCB_TEMP, DXF1012, DXF1014A, DXF1014B, CUTOUT, DESIGN_CUTLINE, QT_CHECKPCB_TEMP]
+  - 0x02: 0x08 -> 0
+  - 0x03: 0x08 -> 0
+  - 0x04: 0x06 -> [CONSTRUCTION] (not in ASCII export?)
+  - 0x05: 0x08 -> [TOP, GND02, L03, L04, GND05, BOTTOM]
+  - 0x06: 0x01 -> [TOP, ...]
+  - 0x07: 0x0e -> [IPC_TOP, IPC_GND02, IPC_L03, IPC_L04, IPC_VCC05, IPC_BOTTOM, IMM_GLD_TOP, IMM_GOLD_BOTTOM, OSP_TOP, OSP_BOTTOM, NCLEGEND-1-6]
+  - 0x08: 0x06 - 0
+  - 0x09: 0x12 - [SYMDIM_TOP]
+  - 0x0a: 0x01 - 0
+  - 0x0b: 0x03 - 0
+  - 0x0c: 0x06 - [TOP, ...]
+  - 0x0d: 0x08 - 0
+  - 0x0e: 0x01 - 0
+  - 0x0f: 0x01 - [TOP, ...]
+  - 0x10: 0x08 - 0
+  - 0x11: 0x08 - 0
+  - 0x12: 0x06 - [TOP, ...]
+  - 0x13: 0x01 - [TOP, ...]
+  - 0x14: 0x01 - [TOP, ...]
+  - 0x15: 0x01 - [TOP, ...]
+  - 0x16: 0x04 - [TOP, ...]
+  - 0x17: 0x06 - [TOP, ...]
+  - 0x18:    0 - [TOP, ...]
+  
+BeagleBone:
+
+  - 0x09: 0x12 - [LEADS, MECH_DIMENSION, REWORK_PKG_BOTTOM, REWORK_PKG_TOP, MFG_KEEPOUT_TOP, SYMBOL_INFO, LIB_REV, DIMENSION, VIACAP_TOP, PART_DIM, TEST_TOP, TEST_BOTTOM]
+ 
+0x2a only has a list of entries. In older versions and entry is just a string. In newer versions there are some flags. Presumably then the string is the only crucial thing here.
+
+Things like 0x14 have a layer info that have a "family" and an "ordinal". The ordinal can be small (0, 10), or often large (247, 253, 253)
+
+Family is a small number like:
+ 
+- In 0x14 / Segment:  0, 1, 6, 7, 9.
+- In 0x0a / DRC:      5
+- In 0x23 / ratline:  1
+- In 0x24 / rect:     1, 9
+- In 0x28 / shape:    1, 6
+
+0x28s often point to 0x06 (KSY calls this copper) with ordinals in the range of the copper layer count (0 - 5).
+
+The 0x09 map entry (-> [DIMENSION], [SYMDIM_TOP], [LEADS, ...., DIMENSION]) seems to be for auxiliary data. But also seems to be used by silkscreen in footprints?
+```

@@ -367,10 +367,10 @@ types:
         if: _root.ver >= 0x00140400
       - id: width
         type: u4
-      - id: coords
-        type: s4
-        repeat: expr
-        repeat-expr: 4
+      - id: coords_0
+        type: coords
+      - id: coords_1
+        type: coords
       - id: x
         type: cadence_fp
       - id: y
@@ -1426,9 +1426,9 @@ types:
         doc: |
           In PreAmp, all rectangles set this to 0x09a272d4, which is the tail of the x24_x28
           linked list.
-      - id: un1
+      - id: unknown_1
         type: u4
-      - id: un2
+      - id: unknown_2
         type: u4
         if: _root.ver >= 0x00140400
       - id: coords_0

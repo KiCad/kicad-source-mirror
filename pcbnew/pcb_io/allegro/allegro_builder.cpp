@@ -168,6 +168,14 @@ VECTOR2I BOARD_BUILDER::scale( const VECTOR2I& aVector ) const
 }
 
 
+/**
+ * Set up the layers on the board.
+ */
+static void SetupBoardLayers( const RAW_BOARD& aRawBoard, BOARD& aBoard )
+{
+}
+
+
 std::unique_ptr<PCB_TEXT> BOARD_BUILDER::buildPcbText( const BLK_0x30_STR_WRAPPER& aStrWrapper )
 {
     return nullptr;
