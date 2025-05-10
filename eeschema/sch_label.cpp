@@ -1328,7 +1328,7 @@ void SCH_LABEL_BASE::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_O
             aPlotter->PenFinish();
 
             int diameter = ( s_poly[2] - s_poly[1] ).EuclideanNorm() * 2;
-            aPlotter->FilledCircle( s_poly[2], diameter , FILLED, nullptr );
+            aPlotter->FilledCircle( s_poly[2], diameter, nullptr );
         }
         else if( GetShape() == LABEL_FLAG_SHAPE::F_ROUND )
         {
@@ -1337,7 +1337,7 @@ void SCH_LABEL_BASE::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_O
             aPlotter->PenFinish();
 
             int diameter = ( s_poly[2] - s_poly[1] ).EuclideanNorm() * 2;
-            aPlotter->ThickCircle( s_poly[2], diameter, penWidth, FILLED, nullptr );
+            aPlotter->ThickCircle( s_poly[2], diameter, penWidth, nullptr );
         }
         else
         {

@@ -60,36 +60,33 @@ public:
                               double aScale, bool aMirror ) override;
 
     // Basic plot primitives
-    virtual void Rect( const VECTOR2I& p1, const VECTOR2I& p2, FILL_T fill,
-                       int width = USE_DEFAULT_LINE_WIDTH ) override;
-    virtual void Circle( const VECTOR2I& pos, int diametre, FILL_T fill,
-                         int width = USE_DEFAULT_LINE_WIDTH ) override;
+    virtual void Rect( const VECTOR2I& p1, const VECTOR2I& p2, FILL_T fill, int width ) override;
+    virtual void Circle( const VECTOR2I& pos, int diametre, FILL_T fill, int width ) override;
     virtual void Arc( const VECTOR2D& aCenter, const EDA_ANGLE& aStartAngle,
-                      const EDA_ANGLE& aAngle, double aRadius, FILL_T aFill,
-                      int aWidth = USE_DEFAULT_LINE_WIDTH ) override;
+                      const EDA_ANGLE& aAngle, double aRadius, FILL_T aFill, int aWidth ) override;
 
     // These functions plot an item and manage X2 gerber attributes
     virtual void ThickSegment( const VECTOR2I& start, const VECTOR2I& end, int width,
-                               OUTLINE_MODE tracemode, void* aData ) override;
+                               void* aData ) override;
 
     virtual void ThickRect( const VECTOR2I& p1, const VECTOR2I& p2, int width,
-                            OUTLINE_MODE tracemode, void* aData ) override;
+                            void* aData ) override;
 
-    virtual void ThickCircle( const VECTOR2I& pos, int diametre, int width,
-                              OUTLINE_MODE tracemode, void* aData ) override;
+    virtual void ThickCircle( const VECTOR2I& pos, int diametre, int width, void* aData ) override;
 
-    virtual void FilledCircle( const VECTOR2I& pos, int diametre,
-                              OUTLINE_MODE tracemode, void* aData ) override;
+    virtual void FilledCircle( const VECTOR2I& pos, int diametre, void* aData ) override;
+
+    virtual void ThickPoly( const SHAPE_POLY_SET& aPoly, int aWidth, void* aData ) override;
 
     /**
      * Gerber polygon: they can (and *should*) be filled with the
      * appropriate G36/G37 sequence
      */
-    virtual void PlotPoly( const std::vector<VECTOR2I>& aCornerList, FILL_T aFill,
-                           int aWidth = USE_DEFAULT_LINE_WIDTH, void* aData = nullptr ) override;
+    virtual void PlotPoly( const std::vector<VECTOR2I>& aCornerList, FILL_T aFill, int aWidth,
+                           void* aData ) override;
 
-    virtual void PlotPoly( const SHAPE_LINE_CHAIN& aCornerList, FILL_T aFill,
-                           int aWidth = USE_DEFAULT_LINE_WIDTH, void* aData = nullptr ) override;
+    virtual void PlotPoly( const SHAPE_LINE_CHAIN& aCornerList, FILL_T aFill, int aWidth,
+                           void* aData ) override;
 
     /**
      * Similar to PlotPoly(), plot a filled polygon using Gerber region,
@@ -127,31 +124,26 @@ public:
     /**
      * Filled circular flashes are stored as apertures
      */
-    virtual void FlashPadCircle( const VECTOR2I& pos, int diametre,
-                                 OUTLINE_MODE trace_mode, void* aData ) override;
+    virtual void FlashPadCircle( const VECTOR2I& pos, int diametre, void* aData ) override;
 
     virtual void FlashPadOval( const VECTOR2I& aPadPos, const VECTOR2I& aSize,
-                               const EDA_ANGLE& aOrient, OUTLINE_MODE aTraceMode,
-                               void* aData ) override;
+                               const EDA_ANGLE& aOrient, void* aData ) override;
 
     virtual void FlashPadRect( const VECTOR2I& aPadPos, const VECTOR2I& aSize,
-                               const EDA_ANGLE& aOrient, OUTLINE_MODE aTraceMode,
-                               void* aData ) override;
+                               const EDA_ANGLE& aOrient, void* aData ) override;
 
     virtual void FlashPadRoundRect( const VECTOR2I& aPadPos, const VECTOR2I& aSize,
                                     int aCornerRadius, const EDA_ANGLE& aOrient,
-                                    OUTLINE_MODE aTraceMode, void* aData ) override;
+                                    void* aData ) override;
     virtual void FlashPadCustom( const VECTOR2I& aPadPos, const VECTOR2I& aSize,
                                  const EDA_ANGLE& aPadOrient, SHAPE_POLY_SET* aPolygons,
-                                 OUTLINE_MODE aTraceMode, void* aData ) override;
-
-    virtual void FlashPadTrapez( const VECTOR2I& aPadPos, const VECTOR2I* aCorners,
-                                 const EDA_ANGLE& aPadOrient, OUTLINE_MODE aTraceMode,
                                  void* aData ) override;
 
+    virtual void FlashPadTrapez( const VECTOR2I& aPadPos, const VECTOR2I* aCorners,
+                                 const EDA_ANGLE& aPadOrient, void* aData ) override;
+
     virtual void FlashRegularPolygon( const VECTOR2I& aShapePos, int aDiameter, int aCornerCount,
-                                      const EDA_ANGLE& aOrient, OUTLINE_MODE aTraceMode,
-                                      void* aData ) override;
+                                      const EDA_ANGLE& aOrient, void* aData ) override;
 
     /**
      * Flash a chamfered round rect pad.
@@ -167,13 +159,11 @@ public:
      *  4 = BOTTOM_LEFT
      *  8 = BOTTOM_RIGHT
      * @param aPadOrient is the rotation of the shape.
-     * @param aPlotMode is the drawing mode, FILLED or SKETCH.
      * @param aData is the a reference to Gerber attributes descr.
      */
     void FlashPadChamferRoundRect( const VECTOR2I& aShapePos, const VECTOR2I& aPadSize,
-                                   int aCornerRadius, double aChamferRatio,
-                                   int aChamferPositions, const EDA_ANGLE& aPadOrient,
-                                   OUTLINE_MODE aPlotMode, void* aData );
+                                   int aCornerRadius, double aChamferRatio, int aChamferPositions,
+                                   const EDA_ANGLE& aPadOrient, void* aData );
 
     /**
      * Plot a Gerber region: similar to PlotPoly but plot only filled polygon,
@@ -269,8 +259,7 @@ public:
 
 protected:
     virtual void ThickArc( const VECTOR2D& aCentre, const EDA_ANGLE& aStartAngle,
-                           const EDA_ANGLE& aAngle, double aRadius, int aWidth,
-                           OUTLINE_MODE aTraceMode, void* aData ) override;
+                           const EDA_ANGLE& aAngle, double aRadius, int aWidth, void* aData ) override;
 
     /**
      * Plot a round rect (a round rect shape in fact) as a Gerber region using lines and arcs

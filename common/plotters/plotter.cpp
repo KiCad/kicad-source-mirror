@@ -535,64 +535,29 @@ void PLOTTER::ThickOval( const VECTOR2I& aPos, const VECTOR2I& aSize, const EDA_
 }
 
 
-void PLOTTER::ThickSegment( const VECTOR2I& start, const VECTOR2I& end, int width,
-                            OUTLINE_MODE tracemode, void* aData )
+void PLOTTER::ThickSegment( const VECTOR2I& start, const VECTOR2I& end, int width, void* aData )
 {
-    if( tracemode == FILLED )
+    if( start == end )
     {
-        if( start == end )
-        {
-            Circle( start, width, FILL_T::FILLED_SHAPE, 0 );
-        }
-        else
-        {
-            SetCurrentLineWidth( width );
-            MoveTo( start );
-            FinishTo( end );
-        }
+        Circle( start, width, FILL_T::FILLED_SHAPE, 0 );
     }
     else
     {
-        std::vector<VECTOR2I> cornerList;
-        SHAPE_POLY_SET outlineBuffer;
-        TransformOvalToPolygon( outlineBuffer, start, end, width, GetPlotterArcHighDef(), ERROR_INSIDE );
-        const SHAPE_LINE_CHAIN& path = outlineBuffer.COutline( 0 );
-
-        cornerList.reserve( path.PointCount() );
-
-        for( int jj = 0; jj < path.PointCount(); jj++ )
-            cornerList.emplace_back( path.CPoint( jj ).x, path.CPoint( jj ).y );
-
-        // Ensure the polygon is closed
-        if( cornerList[0] != cornerList[cornerList.size() - 1] )
-            cornerList.push_back( cornerList[0] );
-
-        PlotPoly( cornerList, FILL_T::NO_FILL, USE_DEFAULT_LINE_WIDTH, aData );
+        SetCurrentLineWidth( width );
+        MoveTo( start );
+        FinishTo( end );
     }
 }
 
 
 void PLOTTER::ThickArc( const VECTOR2D& centre, const EDA_ANGLE& aStartAngle,
-                        const EDA_ANGLE& aAngle, double aRadius, int aWidth,
-                        OUTLINE_MODE aTraceMode, void* aData )
+                        const EDA_ANGLE& aAngle, double aRadius, int aWidth, void* aData )
 {
-    if( aTraceMode == FILLED )
-    {
-        Arc( centre, aStartAngle, aAngle, aRadius, FILL_T::NO_FILL, aWidth );
-    }
-    else
-    {
-        SetCurrentLineWidth( USE_DEFAULT_LINE_WIDTH );
-        Arc( centre, aStartAngle, aAngle, aRadius - KiROUND( ( aWidth - m_currentPenWidth ) / 2 ),
-             FILL_T::NO_FILL, USE_DEFAULT_LINE_WIDTH );
-        Arc( centre, aStartAngle, aAngle, aRadius + KiROUND( ( aWidth - m_currentPenWidth ) / 2 ),
-             FILL_T::NO_FILL, USE_DEFAULT_LINE_WIDTH );
-    }
+    Arc( centre, aStartAngle, aAngle, aRadius, FILL_T::NO_FILL, aWidth );
 }
 
 
-void PLOTTER::ThickArc( const EDA_SHAPE& aArcShape, OUTLINE_MODE aTraceMode, void* aData,
-                        int aWidth )
+void PLOTTER::ThickArc( const EDA_SHAPE& aArcShape, void* aData, int aWidth )
 {
     VECTOR2D center = aArcShape.getCenter();
     VECTOR2D mid = aArcShape.GetArcMid();
@@ -613,82 +578,31 @@ void PLOTTER::ThickArc( const EDA_SHAPE& aArcShape, OUTLINE_MODE aTraceMode, voi
 
     double radius = ( start - center ).EuclideanNorm();
 
-    ThickArc( center, startAngle, angle, radius, aWidth, aTraceMode, aData );
+    ThickArc( center, startAngle, angle, radius, aWidth, aData );
 }
 
 
-void PLOTTER::ThickRect( const VECTOR2I& p1, const VECTOR2I& p2, int width,
-                         OUTLINE_MODE tracemode, void* aData )
+void PLOTTER::ThickRect( const VECTOR2I& p1, const VECTOR2I& p2, int width, void* aData )
 {
-    if( tracemode == FILLED )
-    {
-        Rect( p1, p2, FILL_T::NO_FILL, width );
-    }
-    else
-    {
-        SetCurrentLineWidth( USE_DEFAULT_LINE_WIDTH );
-        VECTOR2I offsetp1( p1.x - ( width - GetCurrentLineWidth() ) / 2,
-                           p1.y - ( width - GetCurrentLineWidth() ) / 2 );
-        VECTOR2I offsetp2( p2.x + ( width - GetCurrentLineWidth() ) / 2,
-                           p2.y + ( width - GetCurrentLineWidth() ) / 2 );
-        Rect( offsetp1, offsetp2, FILL_T::NO_FILL, USE_DEFAULT_LINE_WIDTH );
-        offsetp1.x += ( width - GetCurrentLineWidth() );
-        offsetp1.y += ( width - GetCurrentLineWidth() );
-        offsetp2.x -= ( width - GetCurrentLineWidth() );
-        offsetp2.y -= ( width - GetCurrentLineWidth() );
-        Rect( offsetp1, offsetp2, FILL_T::NO_FILL, USE_DEFAULT_LINE_WIDTH );
-    }
+    Rect( p1, p2, FILL_T::NO_FILL, width );
 }
 
 
-void PLOTTER::ThickCircle( const VECTOR2I& pos, int diametre, int width, OUTLINE_MODE tracemode,
-                           void* aData )
+void PLOTTER::ThickCircle( const VECTOR2I& pos, int diametre, int width, void* aData )
 {
-    if( tracemode == FILLED )
-    {
-        Circle( pos, diametre, FILL_T::NO_FILL, width );
-    }
-    else
-    {
-        SetCurrentLineWidth( USE_DEFAULT_LINE_WIDTH );
-        Circle( pos, diametre - width + GetCurrentLineWidth(), FILL_T::NO_FILL, USE_DEFAULT_LINE_WIDTH );
-        Circle( pos, diametre + width - GetCurrentLineWidth(), FILL_T::NO_FILL, USE_DEFAULT_LINE_WIDTH );
-    }
+    Circle( pos, diametre, FILL_T::NO_FILL, width );
 }
 
 
-void PLOTTER::FilledCircle( const VECTOR2I& pos, int diametre, OUTLINE_MODE tracemode, void* aData )
+void PLOTTER::FilledCircle( const VECTOR2I& pos, int diametre, void* aData )
 {
-    if( tracemode == FILLED )
-    {
-        Circle( pos, diametre, FILL_T::FILLED_SHAPE, 0 );
-    }
-    else
-    {
-        SetCurrentLineWidth( USE_DEFAULT_LINE_WIDTH );
-        Circle( pos, diametre, FILL_T::NO_FILL, USE_DEFAULT_LINE_WIDTH );
-    }
+    Circle( pos, diametre, FILL_T::FILLED_SHAPE, 0 );
 }
 
 
-void PLOTTER::ThickPoly( const SHAPE_POLY_SET& aPoly, int aWidth, OUTLINE_MODE tracemode, void* aData )
+void PLOTTER::ThickPoly( const SHAPE_POLY_SET& aPoly, int aWidth, void* aData )
 {
-    if( tracemode == SKETCH )
-    {
-        SHAPE_POLY_SET outline = aPoly.CloneDropTriangulation();
-        outline.Inflate( GetCurrentLineWidth() / 2, CORNER_STRATEGY::ROUND_ALL_CORNERS,
-                         GetPlotterArcHighDef() );
-        PlotPoly( outline.COutline( 0 ), FILL_T::NO_FILL, USE_DEFAULT_LINE_WIDTH, nullptr );
-
-        outline = aPoly.CloneDropTriangulation();
-        outline.Deflate( GetCurrentLineWidth() / 2, CORNER_STRATEGY::ROUND_ALL_CORNERS,
-                         GetPlotterArcHighDef() );
-        PlotPoly( outline.COutline( 0 ), FILL_T::NO_FILL, USE_DEFAULT_LINE_WIDTH, nullptr );
-    }
-    else
-    {
-        PlotPoly( aPoly.COutline( 0 ), FILL_T::NO_FILL, aWidth, aData );
-    }
+    PlotPoly( aPoly.COutline( 0 ), FILL_T::NO_FILL, aWidth, aData );
 }
 
 

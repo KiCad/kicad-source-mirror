@@ -178,7 +178,7 @@ void DS_DRAW_ITEM_TEXT::PrintWsItem( const RENDER_SETTINGS* aSettings, const VEC
     if( color == COLOR4D::UNSPECIFIED )
         color = aSettings->GetLayerColor( LAYER_DRAWINGSHEET );
 
-    Print( aSettings, aOffset, color, FILLED );
+    Print( aSettings, aOffset, color );
 }
 
 

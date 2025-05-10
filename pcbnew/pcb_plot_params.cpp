@@ -70,7 +70,7 @@ PCB_PLOT_PARAMS::PCB_PLOT_PARAMS()
     m_svgPrecision               = SVG_PRECISION_DEFAULT;
     m_svgFitPageToBoard          = false;
     m_plotDrawingSheet           = false;
-    m_plotMode                   = FILLED;
+    m_DXFPlotMode                = FILLED;
     m_DXFPolygonMode             = true;
     m_DXFUnits                   = DXF_UNITS::INCH;
     m_useAuxOrigin               = false;
@@ -168,7 +168,7 @@ void PCB_PLOT_PARAMS::Format( OUTPUTFORMATTER* aFormatter ) const
     aFormatter->Print( "(svgprecision %d)", m_svgPrecision );
 
     KICAD_FORMAT::FormatBool( aFormatter, "plotframeref", m_plotDrawingSheet );
-    aFormatter->Print( "(mode %d)", GetPlotMode() == SKETCH ? 2 : 1 );
+    aFormatter->Print( "(mode %d)", GetDXFPlotMode() == SKETCH ? 2 : 1 );
     KICAD_FORMAT::FormatBool( aFormatter, "useauxorigin", m_useAuxOrigin );
 
     // PDF options
@@ -247,7 +247,7 @@ bool PCB_PLOT_PARAMS::IsSameAs( const PCB_PLOT_PARAMS &aPcbPlotParams ) const
     if( m_plotDrawingSheet != aPcbPlotParams.m_plotDrawingSheet )
         return false;
 
-    if( m_plotMode != aPcbPlotParams.m_plotMode )
+    if( m_DXFPlotMode != aPcbPlotParams.m_DXFPlotMode )
         return false;
 
     if( m_DXFPolygonMode != aPcbPlotParams.m_DXFPolygonMode )

@@ -304,7 +304,7 @@ int GERBER_WRITER::createProtectionFile( const wxString& aFullFilename, IPC4761_
 
         gbr_metadata.SetApertureAttrib( attrib );
 
-        plotter.FlashPadCircle( hole_descr.m_Hole_Pos, diameter, FILLED, &gbr_metadata );
+        plotter.FlashPadCircle( hole_descr.m_Hole_Pos, diameter, &gbr_metadata );
 
         holes_count++;
     }
@@ -418,7 +418,7 @@ int GERBER_WRITER::createDrillFile( wxString& aFullFilename, bool aIsNpth,
 #if FLASH_OVAL_HOLE     // set to 1 to use flashed oblong holes,
                         // 0 to draw them as a line.
             plotter.FlashPadOval( hole_pos, hole_descr.m_Hole_Size, hole_descr.m_Hole_Orient,
-                                  FILLED, &gbr_metadata );
+                                  &gbr_metadata );
 #else
             // Use routing for oblong hole (Slots)
             VECTOR2I start, end;
@@ -428,13 +428,13 @@ int GERBER_WRITER::createDrillFile( wxString& aFullFilename, bool aIsNpth,
             if ( width == 0 )
                 continue;
 
-            plotter.ThickSegment( start+hole_pos, end+hole_pos, width, FILLED, &gbr_metadata );
+            plotter.ThickSegment( start+hole_pos, end+hole_pos, width, &gbr_metadata );
 #endif
         }
         else
         {
             int diam = std::min( hole_descr.m_Hole_Size.x, hole_descr.m_Hole_Size.y );
-            plotter.FlashPadCircle( hole_pos, diam, FILLED, &gbr_metadata );
+            plotter.FlashPadCircle( hole_pos, diam, &gbr_metadata );
         }
 
         holes_count++;

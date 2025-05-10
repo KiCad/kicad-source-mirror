@@ -102,7 +102,7 @@ public:
      * although the plot mode is filled color and plot mode are needed by this function.
      */
     void PlotPad( const PAD* aPad, PCB_LAYER_ID aLayer, const COLOR4D& aColor,
-                  OUTLINE_MODE aPlotMode );
+                  bool aSketchMode );
 
     void PlotPadNumber( const PAD* aPad, const COLOR4D& aColor );
 

@@ -28,7 +28,6 @@
 #include <memory>
 #include <vector>
 
-#include <outline_mode.h>
 #include <eda_search_data.h>
 #include <font/glyph.h>
 #include <font/text_attributes.h>
@@ -286,10 +285,8 @@ public:
      * @param aDC the current Device Context.
      * @param aOffset draw offset (usually (0,0)).
      * @param aColor text color.
-     * @param aDisplay_mode #FILLED or #SKETCH.
      */
-    void Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset, const COLOR4D& aColor,
-                OUTLINE_MODE aDisplay_mode = FILLED );
+    void Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset, const COLOR4D& aColor );
 
     /**
      * build a list of segments (SHAPE_SEGMENT) to describe a text shape.
@@ -437,13 +434,11 @@ protected:
      *
      * @param aOffset draw offset (usually (0,0)).
      * @param aColor text color.
-     * @param aFillMode FILLED or SKETCH
      * @param aText the single line of text to draw.
      * @param aPos the position of this line ).
      */
     void printOneLineOfText( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset,
-                             const COLOR4D& aColor, OUTLINE_MODE aFillMode, const wxString& aText,
-                             const VECTOR2I& aPos );
+                             const COLOR4D& aColor, const wxString& aText, const VECTOR2I& aPos );
 
 protected:
     /**

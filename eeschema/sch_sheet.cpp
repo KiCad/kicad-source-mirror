@@ -1280,11 +1280,11 @@ void SCH_SHEET::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS& 
 
         aPlotter->SetColor( colors->GetColor( LAYER_DNP_MARKER ) );
 
-        aPlotter->ThickSegment( bbox.GetOrigin(), bbox.GetEnd(), strokeWidth, FILLED, nullptr );
+        aPlotter->ThickSegment( bbox.GetOrigin(), bbox.GetEnd(), strokeWidth, nullptr );
 
         aPlotter->ThickSegment( bbox.GetOrigin() + VECTOR2I( bbox.GetWidth(), 0 ),
                                 bbox.GetOrigin() + VECTOR2I( 0, bbox.GetHeight() ),
-                                strokeWidth, FILLED, nullptr );
+                                strokeWidth, nullptr );
     }
 }
 

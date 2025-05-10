@@ -30,7 +30,6 @@
 #include <math/box2.h>
 #include <gr_text.h>
 #include <page_info.h>
-#include <outline_mode.h>
 #include <gal/color4d.h>
 #include <stroke_params.h>
 #include <render_settings.h>
@@ -75,6 +74,15 @@ enum class PLOT_FORMAT
 };
 
 /**
+ * Options to draw items with thickness ( segments, arcs, circles, texts...)
+ */
+enum DXF_OUTLINE_MODE
+{
+    SKETCH = 0,     // sketch mode: draw segments outlines only
+    FILLED = 1      // normal mode: solid segments
+};
+
+/**
  * Which kind of text to output with the PSLIKE plotters.
  *
  * You can:
@@ -94,6 +102,14 @@ enum class PLOT_TEXT_MODE
     PHANTOM,
     DEFAULT
 };
+
+class PLOT_PARAMS
+{
+public:
+    virtual DXF_OUTLINE_MODE GetDXFPlotMode() const { wxFAIL; return DXF_OUTLINE_MODE::FILLED; }
+    virtual PLOT_TEXT_MODE GetTextMode() const { return PLOT_TEXT_MODE::DEFAULT; }
+};
+
 
 /**
  * Base plotter engine class. General rule: all the interface with the caller
@@ -300,86 +316,72 @@ public:
     virtual void PlotImage( const wxImage& aImage, const VECTOR2I& aPos, double aScaleFactor );
 
     // Higher level primitives -- can be drawn as line, sketch or 'filled'
-    virtual void ThickSegment( const VECTOR2I& start, const VECTOR2I& end, int width,
-                               OUTLINE_MODE tracemode, void* aData );
+    virtual void ThickSegment( const VECTOR2I& start, const VECTOR2I& end, int width, void* aData );
 
-    virtual void ThickArc( const EDA_SHAPE& aArcShape, OUTLINE_MODE aTraceMode, void* aData,
-                           int aWidth );
+    virtual void ThickArc( const EDA_SHAPE& aArcShape, void* aData, int aWidth );
 
     virtual void ThickArc( const VECTOR2D& aCentre, const EDA_ANGLE& aStAngle,
-                           const EDA_ANGLE& aAngle, double aRadius, int aWidth,
-                           OUTLINE_MODE aTraceMode, void* aData );
+                           const EDA_ANGLE& aAngle, double aRadius, int aWidth, void* aData );
 
-    virtual void ThickRect( const VECTOR2I& p1, const VECTOR2I& p2, int width,
-                            OUTLINE_MODE tracemode, void* aData );
+    virtual void ThickRect( const VECTOR2I& p1, const VECTOR2I& p2, int width, void* aData );
 
-    virtual void ThickCircle( const VECTOR2I& pos, int diametre, int width, OUTLINE_MODE tracemode,
-                              void* aData );
+    virtual void ThickCircle( const VECTOR2I& pos, int diametre, int width, void* aData );
 
-    virtual void FilledCircle( const VECTOR2I& pos, int diametre, OUTLINE_MODE tracemode,
-                               void* aData );
+    virtual void FilledCircle( const VECTOR2I& pos, int diametre, void* aData );
 
     virtual void ThickOval( const VECTOR2I& aPos, const VECTOR2I& aSize, const EDA_ANGLE& aOrient,
                             int aWidth, void* aData );
 
-    virtual void ThickPoly( const SHAPE_POLY_SET& aPoly, int aWidth, OUTLINE_MODE tracemode, void* aData );
+    virtual void ThickPoly( const SHAPE_POLY_SET& aPoly, int aWidth, void* aData );
 
     // Flash primitives
 
     /**
      * @param aPadPos Position of the shape (center of the rectangle.
      * @param aDiameter is the diameter of round pad.
-     * @param aTraceMode is the drawing mode, FILLED or SKETCH.
      * @param aData is an auxiliary info (mainly for gerber format attributes).
      */
-    virtual void FlashPadCircle( const VECTOR2I& aPadPos, int aDiameter, OUTLINE_MODE aTraceMode,
-                                 void* aData ) = 0;
+    virtual void FlashPadCircle( const VECTOR2I& aPadPos, int aDiameter, void* aData ) = 0;
 
     /**
      * @param aPadPos Position of the shape (center of the rectangle.
      * @param aSize is the size of oblong shape.
      * @param aPadOrient The rotation of the shape.
-     * @param aTraceMode is the drawing mode, FILLED or SKETCH.
      * @param aData an auxiliary info (mainly for gerber format attributes).
      */
     virtual void FlashPadOval( const VECTOR2I& aPadPos, const VECTOR2I& aSize,
-                               const EDA_ANGLE& aPadOrient, OUTLINE_MODE aTraceMode,
-                               void* aData ) = 0;
+                               const EDA_ANGLE& aPadOrient, void* aData ) = 0;
 
     /**
      * @param aPadPos Position of the shape (center of the rectangle).
      * @param aSize is the size of rounded rect.
      * @param aPadOrient The rotation of the shape.
-     * @param aTraceMode is the drawing mode, FILLED or SKETCH.
      * @param aData an auxiliary info (mainly for gerber format attributes).
      */
     virtual void FlashPadRect( const VECTOR2I& aPadPos, const VECTOR2I& aSize,
-                               const EDA_ANGLE& aPadOrient, OUTLINE_MODE aTraceMode,
-                               void* aData ) = 0;
+                               const EDA_ANGLE& aPadOrient, void* aData ) = 0;
 
     /**
      * @param aPadPos Position of the shape (center of the rectangle.
      * @param aSize is the size of rounded rect.
      * @param aCornerRadius Radius of the rounded corners.
      * @param aOrient The rotation of the shape.
-     * @param aTraceMode is the drawing mode, FILLED or SKETCH.
      * @param aData an auxiliary info (mainly for gerber format attributes).
      */
     virtual void FlashPadRoundRect( const VECTOR2I& aPadPos, const VECTOR2I& aSize,
                                     int aCornerRadius, const EDA_ANGLE& aOrient,
-                                    OUTLINE_MODE aTraceMode, void* aData ) = 0;
+                                    void* aData ) = 0;
 
     /**
      * @param aPadPos Position of the shape.
      * @param aSize is the size of round reference pad.
      * @param aPadOrient is the pad rotation, used only with aperture macros (Gerber plotter).
      * @param aPolygons the shape as polygon set.
-     * @param aTraceMode is the drawing mode, FILLED or SKETCH.
      * @param aData an auxiliary info (mainly for gerber format attributes).
      */
     virtual void FlashPadCustom( const VECTOR2I& aPadPos, const VECTOR2I& aSize,
                                  const EDA_ANGLE& aPadOrient, SHAPE_POLY_SET* aPolygons,
-                                 OUTLINE_MODE aTraceMode, void* aData ) = 0;
+                                 void* aData ) = 0;
 
     /**
      * Flash a trapezoidal pad.
@@ -388,12 +390,10 @@ public:
      * @param aCorners is the list of 4 corners positions, relative to the shape position,
      *                 pad orientation 0.
      * @param aPadOrient is the rotation of the shape.
-     * @param aTraceMode is the drawing mode, FILLED or SKETCH.
      * @param aData an auxiliary info (mainly for gerber format attributes).
      */
     virtual void FlashPadTrapez( const VECTOR2I& aPadPos, const VECTOR2I* aCorners,
-                                 const EDA_ANGLE& aPadOrient, OUTLINE_MODE aTraceMode,
-                                 void* aData ) = 0;
+                                 const EDA_ANGLE& aPadOrient, void* aData ) = 0;
 
     /**
      * Flash a regular polygon. Useful only in Gerber files to flash a regular polygon.
@@ -406,8 +406,7 @@ public:
      *              specific to the plotter.
      */
     virtual void FlashRegularPolygon( const VECTOR2I& aShapePos, int aDiameter, int aCornerCount,
-                                      const EDA_ANGLE& aOrient, OUTLINE_MODE aTraceMode,
-                                      void* aData ) = 0;
+                                      const EDA_ANGLE& aOrient, void* aData ) = 0;
 
     /**
      * Draw text with the plotter.
@@ -571,8 +570,7 @@ protected:
      * Winding direction: counter-clockwise in right-down coordinate system.
      */
     virtual void polyArc( const VECTOR2D& aCentre, const EDA_ANGLE& aStartAngle,
-                          const EDA_ANGLE& aAngle, double aRadius, FILL_T aFill,
-                          int aWidth = USE_DEFAULT_LINE_WIDTH );
+                          const EDA_ANGLE& aAngle, double aRadius, FILL_T aFill, int aWidth );
 
     // These are marker subcomponents
     /**

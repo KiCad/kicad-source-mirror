@@ -876,8 +876,7 @@ bool EDA_TEXT::TextHitTest( const BOX2I& aRect, bool aContains, int aAccuracy ) 
 }
 
 
-void EDA_TEXT::Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset,
-                      const COLOR4D& aColor, OUTLINE_MODE aFillMode )
+void EDA_TEXT::Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset, const COLOR4D& aColor )
 {
     if( IsMultilineAllowed() )
     {
@@ -890,12 +889,11 @@ void EDA_TEXT::Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset,
         GetLinePositions( positions, (int) strings.Count() );
 
         for( unsigned ii = 0; ii < strings.Count(); ii++ )
-            printOneLineOfText( aSettings, aOffset, aColor, aFillMode, strings[ii], positions[ii] );
+            printOneLineOfText( aSettings, aOffset, aColor, strings[ii], positions[ii] );
     }
     else
     {
-        printOneLineOfText( aSettings, aOffset, aColor, aFillMode, GetShownText( true ),
-                            GetDrawPos() );
+        printOneLineOfText( aSettings, aOffset, aColor, GetShownText( true ), GetDrawPos() );
     }
 }
 
@@ -945,14 +943,10 @@ void EDA_TEXT::GetLinePositions( std::vector<VECTOR2I>& aPositions, int aLineCou
 
 
 void EDA_TEXT::printOneLineOfText( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset,
-                                   const COLOR4D& aColor, OUTLINE_MODE aFillMode,
-                                   const wxString& aText, const VECTOR2I& aPos )
+                                   const COLOR4D& aColor, const wxString& aText, const VECTOR2I& aPos )
 {
     wxDC* DC = aSettings->GetPrintDC();
     int   penWidth = GetEffectiveTextPenWidth( aSettings->GetDefaultPenWidth() );
-
-    if( aFillMode == SKETCH )
-        penWidth = -penWidth;
 
     VECTOR2I size = GetTextSize();
 

@@ -476,10 +476,9 @@ void DIALOG_PLOT::transferPlotParamsToJob()
     if( m_job->m_plotFormat == JOB_EXPORT_PCB_PLOT::PLOT_FORMAT::DXF )
     {
         JOB_EXPORT_PCB_DXF* dxfJob = static_cast<JOB_EXPORT_PCB_DXF*>( m_job );
-        dxfJob->m_dxfUnits = m_plotOpts.GetDXFPlotUnits() == DXF_UNITS::INCH
-                                                             ? JOB_EXPORT_PCB_DXF::DXF_UNITS::INCH
-                                                             : JOB_EXPORT_PCB_DXF::DXF_UNITS::MM;
-        dxfJob->m_plotGraphicItemsUsingContours = m_plotOpts.GetPlotMode() == OUTLINE_MODE::SKETCH;
+        dxfJob->m_dxfUnits = m_plotOpts.GetDXFPlotUnits() == DXF_UNITS::INCH ? JOB_EXPORT_PCB_DXF::DXF_UNITS::INCH
+                                                                             : JOB_EXPORT_PCB_DXF::DXF_UNITS::MM;
+        dxfJob->m_plotGraphicItemsUsingContours = m_plotOpts.GetDXFPlotMode() == DXF_OUTLINE_MODE::SKETCH;
         dxfJob->m_polygonMode = m_plotOpts.GetDXFPlotPolygonMode();
         dxfJob->m_genMode = JOB_EXPORT_PCB_DXF::GEN_MODE::MULTI;
     }

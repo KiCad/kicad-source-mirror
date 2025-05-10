@@ -34,7 +34,7 @@ class PCB_PLOT_PARAMS_PARSER;
 /**
  * Parameters and options when plotting/printing a board.
  */
-class PCB_PLOT_PARAMS
+class PCB_PLOT_PARAMS : public PLOT_PARAMS
 {
 public:
     PCB_PLOT_PARAMS();
@@ -64,13 +64,13 @@ public:
         m_textMode = aVal;
     }
 
-    PLOT_TEXT_MODE GetTextMode() const
+    PLOT_TEXT_MODE GetTextMode() const override
     {
         return m_textMode;
     }
 
-    void        SetPlotMode( OUTLINE_MODE aPlotMode ) { m_plotMode = aPlotMode; }
-    OUTLINE_MODE GetPlotMode() const { return m_plotMode; }
+    void        SetDXFPlotMode( DXF_OUTLINE_MODE aPlotMode ) { m_DXFPlotMode = aPlotMode; }
+    DXF_OUTLINE_MODE GetDXFPlotMode() const override { return m_DXFPlotMode; }
 
     void        SetPlotPadNumbers( bool aFlag ) { m_plotPadNumbers = aFlag; }
     bool        GetPlotPadNumbers() const { return m_plotPadNumbers; }
@@ -193,19 +193,18 @@ public:
 private:
     friend class PCB_PLOT_PARAMS_PARSER;
 
-    PLOT_FORMAT     m_format;           /// Plot format type (chooses the driver to be used)
-    LSET            m_layerSelection;
-    LSEQ            m_plotOnAllLayersSequence;
+    PLOT_FORMAT      m_format;           /// Plot format type (chooses the driver to be used)
+    LSET             m_layerSelection;
+    LSEQ             m_plotOnAllLayersSequence;
 
-    bool            m_skipNPTH_Pads;    /// Used to disable NPTH pads plotting on copper layers
-    OUTLINE_MODE    m_plotMode;         /// FILLED or SKETCH for filled objects.
-    bool            m_plotPadNumbers;   /// Plot pad numbers when sketching pads on fab layers
-    DRILL_MARKS     m_drillMarks;       /// Holes can be not plotted, have a small mark, or be
+    bool             m_skipNPTH_Pads;   /// Used to disable NPTH pads plotting on copper layers
+    bool             m_plotPadNumbers;  /// Plot pad numbers when sketching pads on fab layers
+    DRILL_MARKS      m_drillMarks;      /// Holes can be not plotted, have a small mark, or be
                                         ///   plotted in actual size
-    PLOT_TEXT_MODE  m_textMode;
-
-    DXF_UNITS       m_DXFUnits;
-    bool            m_DXFPolygonMode;   /// In polygon mode, each item to plot is converted to a
+    PLOT_TEXT_MODE   m_textMode;
+    DXF_OUTLINE_MODE m_DXFPlotMode;     /// FILLED or SKETCH for filled objects.
+    DXF_UNITS        m_DXFUnits;
+    bool             m_DXFPolygonMode;  /// In polygon mode, each item to plot is converted to a
                                         ///   polygon and all polygons are merged.
 
     bool       m_A4Output;              /// Autoscale the plot to fit an A4 (landscape?) sheet

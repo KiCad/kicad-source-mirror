@@ -519,8 +519,10 @@ bool GENDRILL_WRITER_BASE::plotDrillMarks( PLOTTER* aPlotter )
         aPlotter->Marker( hole.m_Hole_Pos, hole.m_Hole_Diameter, hole.m_Tool_Reference - 1 );
 
         if( hole.m_Hole_Shape != 0 )
+        {
             aPlotter->ThickOval( hole.m_Hole_Pos, hole.m_Hole_Size, hole.m_Hole_Orient,
                                  getSketchOvalBestPenSize(), nullptr );
+        }
     }
 
     aPlotter->SetCurrentLineWidth( PLOTTER::USE_DEFAULT_LINE_WIDTH );

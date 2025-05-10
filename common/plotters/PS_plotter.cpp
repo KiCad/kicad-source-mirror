@@ -90,8 +90,7 @@ void PSLIKE_PLOTTER::SetColor( const COLOR4D& color )
 
 
 void PSLIKE_PLOTTER::FlashPadOval( const VECTOR2I& aPadPos, const VECTOR2I& aSize,
-                                   const EDA_ANGLE& aPadOrient, OUTLINE_MODE aTraceMode,
-                                   void* aData )
+                                   const EDA_ANGLE& aPadOrient, void* aData )
 {
     wxASSERT( m_outputFile );
 
@@ -112,22 +111,18 @@ void PSLIKE_PLOTTER::FlashPadOval( const VECTOR2I& aPadPos, const VECTOR2I& aSiz
     RotatePoint( a, orient );
     RotatePoint( b, orient );
 
-    ThickSegment( a + aPadPos, b + aPadPos, size.x, aTraceMode, aData );
+    ThickSegment( a + aPadPos, b + aPadPos, size.x, aData );
 }
 
 
-void PSLIKE_PLOTTER::FlashPadCircle( const VECTOR2I& aPadPos, int aDiameter,
-                                     OUTLINE_MODE aTraceMode, void* aData )
+void PSLIKE_PLOTTER::FlashPadCircle( const VECTOR2I& aPadPos, int aDiameter, void* aData )
 {
     Circle( aPadPos, aDiameter, FILL_T::FILLED_SHAPE, 0 );
-
-    SetCurrentLineWidth( USE_DEFAULT_LINE_WIDTH );
 }
 
 
 void PSLIKE_PLOTTER::FlashPadRect( const VECTOR2I& aPadPos, const VECTOR2I& aSize,
-                                   const EDA_ANGLE& aPadOrient, OUTLINE_MODE aTraceMode,
-                                   void* aData )
+                                   const EDA_ANGLE& aPadOrient, void* aData )
 {
     std::vector<VECTOR2I> cornerList;
     VECTOR2I size( aSize );
@@ -160,8 +155,7 @@ void PSLIKE_PLOTTER::FlashPadRect( const VECTOR2I& aPadPos, const VECTOR2I& aSiz
 
 
 void PSLIKE_PLOTTER::FlashPadRoundRect( const VECTOR2I& aPadPos, const VECTOR2I& aSize,
-                                        int aCornerRadius, const EDA_ANGLE& aOrient,
-                                        OUTLINE_MODE aTraceMode, void* aData )
+                                        int aCornerRadius, const EDA_ANGLE& aOrient, void* aData )
 {
     SHAPE_POLY_SET outline;
     TransformRoundChamferedRectToPolygon( outline, aPadPos, aSize, aOrient, aCornerRadius, 0.0, 0,
@@ -185,7 +179,7 @@ void PSLIKE_PLOTTER::FlashPadRoundRect( const VECTOR2I& aPadPos, const VECTOR2I&
 
 void PSLIKE_PLOTTER::FlashPadCustom( const VECTOR2I& aPadPos, const VECTOR2I& aSize,
                                      const EDA_ANGLE& aOrient, SHAPE_POLY_SET* aPolygons,
-                                     OUTLINE_MODE aTraceMode, void* aData )
+                                     void* aData )
 {
     std::vector<VECTOR2I> cornerList;
 
@@ -206,8 +200,7 @@ void PSLIKE_PLOTTER::FlashPadCustom( const VECTOR2I& aPadPos, const VECTOR2I& aS
 
 
 void PSLIKE_PLOTTER::FlashPadTrapez( const VECTOR2I& aPadPos, const VECTOR2I* aCorners,
-                                     const EDA_ANGLE& aPadOrient, OUTLINE_MODE aTraceMode,
-                                     void* aData )
+                                     const EDA_ANGLE& aPadOrient, void* aData )
 {
     static std::vector<VECTOR2I> cornerList;
     cornerList.clear();
@@ -227,8 +220,7 @@ void PSLIKE_PLOTTER::FlashPadTrapez( const VECTOR2I& aPadPos, const VECTOR2I* aC
 
 
 void PSLIKE_PLOTTER::FlashRegularPolygon( const VECTOR2I& aShapePos, int aRadius, int aCornerCount,
-                                          const EDA_ANGLE& aOrient, OUTLINE_MODE aTraceMode,
-                                          void* aData )
+                                          const EDA_ANGLE& aOrient, void* aData )
 {
     // Do nothing
     wxASSERT( 0 );

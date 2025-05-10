@@ -30,7 +30,6 @@
 #include <wx/filename.h>
 #include <gerber_jobfile_writer.h>
 #include <jobs/job_export_pcb_gerbers.h>
-#include <jobs/job_export_pcb_hpgl.h>
 #include <jobs/job_export_pcb_dxf.h>
 #include <jobs/job_export_pcb_pdf.h>
 #include <jobs/job_export_pcb_plot.h>
@@ -403,10 +402,8 @@ void PCB_PLOTTER::PlotJobToPlotOpts( PCB_PLOT_PARAMS& aOpts, JOB_EXPORT_PCB_PLOT
         JOB_EXPORT_PCB_DXF* dxfJob = static_cast<JOB_EXPORT_PCB_DXF*>( aJob );
         aOpts.SetDXFPlotUnits( dxfJob->m_dxfUnits == JOB_EXPORT_PCB_DXF::DXF_UNITS::INCH ? DXF_UNITS::INCH
                                                                                          : DXF_UNITS::MM );
-
-        aOpts.SetPlotMode( dxfJob->m_plotGraphicItemsUsingContours ? OUTLINE_MODE::SKETCH
-                                                                   : OUTLINE_MODE::FILLED );
-
+        aOpts.SetDXFPlotMode( dxfJob->m_plotGraphicItemsUsingContours ? DXF_OUTLINE_MODE::SKETCH
+                                                                      : DXF_OUTLINE_MODE::FILLED );
         aOpts.SetDXFPlotPolygonMode( dxfJob->m_polygonMode );
     }
 

@@ -38,6 +38,9 @@
  */
 static const double DXF_OBLIQUE_ANGLE = 15;
 
+// No support for linewidths in DXF
+#define DXF_LINE_WIDTH DO_NOT_SET_LINE_WIDTH
+
 /**
  * The layer/colors palette.
  *
@@ -524,7 +527,7 @@ void DXF_PLOTTER::PlotPoly( const std::vector<VECTOR2I>& aCornerList, FILL_T aFi
     unsigned last = aCornerList.size() - 1;
 
     // Plot outlines with lines (thickness = 0) to define the polygon
-    if( aWidth <= 0  )
+    if( aWidth <= 0 || aFill == FILL_T::NO_FILL  )
     {
         MoveTo( aCornerList[0] );
 
@@ -539,18 +542,6 @@ void DXF_PLOTTER::PlotPoly( const std::vector<VECTOR2I>& aCornerList, FILL_T aFi
         }
 
         PenFinish();
-
-        return;
-    }
-    // if the polygon outline has thickness, and is not filled
-    // (i.e. is a polyline) plot outlines with thick segments
-    else if( aFill == FILL_T::NO_FILL )
-    {
-        MoveTo( aCornerList[0] );
-
-        for( unsigned ii = 1; ii < aCornerList.size(); ii++ )
-            ThickSegment( aCornerList[ii-1], aCornerList[ii], aWidth, FILLED, nullptr );
-
         return;
     }
 
@@ -654,36 +645,6 @@ void DXF_PLOTTER::SetDash( int aLineWidth, LINE_STYLE aLineStyle )
 }
 
 
-void DXF_PLOTTER::ThickSegment( const VECTOR2I& aStart, const VECTOR2I& aEnd, int aWidth,
-                                OUTLINE_MODE aPlotMode, void* aData )
-{
-    if( aPlotMode == SKETCH )
-    {
-        std::vector<VECTOR2I> cornerList;
-        SHAPE_POLY_SET outlineBuffer;
-        TransformOvalToPolygon( outlineBuffer, aStart, aEnd, aWidth, GetPlotterArcHighDef(),
-                                ERROR_INSIDE );
-        const SHAPE_LINE_CHAIN& path = outlineBuffer.COutline( 0 );
-
-        cornerList.reserve( path.PointCount() );
-
-        for( int jj = 0; jj < path.PointCount(); jj++ )
-            cornerList.emplace_back( path.CPoint( jj ).x, path.CPoint( jj ).y );
-
-        // Ensure the polygon is closed
-        if( cornerList[0] != cornerList[cornerList.size() - 1] )
-            cornerList.push_back( cornerList[0] );
-
-        PlotPoly( cornerList, FILL_T::NO_FILL );
-    }
-    else
-    {
-        MoveTo( aStart );
-        FinishTo( aEnd );
-    }
-}
-
-
 void DXF_PLOTTER::Arc( const VECTOR2D& aCenter, const EDA_ANGLE& aStartAngle,
                        const EDA_ANGLE& aAngle, double aRadius, FILL_T aFill, int aWidth )
 {
@@ -716,8 +677,127 @@ void DXF_PLOTTER::Arc( const VECTOR2D& aCenter, const EDA_ANGLE& aStartAngle,
 }
 
 
+void DXF_PLOTTER::ThickSegment( const VECTOR2I& aStart, const VECTOR2I& aEnd, int aWidth, void* aData )
+{
+    const PLOT_PARAMS* cfg = static_cast<const PLOT_PARAMS*>( aData );
+
+    if( cfg && cfg->GetDXFPlotMode() == SKETCH )
+    {
+        std::vector<VECTOR2I> cornerList;
+        SHAPE_POLY_SET outlineBuffer;
+        TransformOvalToPolygon( outlineBuffer, aStart, aEnd, aWidth, GetPlotterArcHighDef(),
+                                ERROR_INSIDE );
+        const SHAPE_LINE_CHAIN& path = outlineBuffer.COutline( 0 );
+
+        cornerList.reserve( path.PointCount() );
+
+        for( int jj = 0; jj < path.PointCount(); jj++ )
+            cornerList.emplace_back( path.CPoint( jj ).x, path.CPoint( jj ).y );
+
+        // Ensure the polygon is closed
+        if( cornerList[0] != cornerList[cornerList.size() - 1] )
+            cornerList.push_back( cornerList[0] );
+
+        PlotPoly( cornerList, FILL_T::NO_FILL, DXF_LINE_WIDTH );
+    }
+    else
+    {
+        MoveTo( aStart );
+        FinishTo( aEnd );
+    }
+}
+
+
+void DXF_PLOTTER::ThickArc( const VECTOR2D& centre, const EDA_ANGLE& aStartAngle,
+                            const EDA_ANGLE& aAngle, double aRadius, int aWidth, void* aData )
+{
+    const PLOT_PARAMS* cfg = static_cast<const PLOT_PARAMS*>( aData );
+
+    if( cfg && cfg->GetDXFPlotMode() == SKETCH )
+    {
+        Arc( centre, aStartAngle, aAngle, aRadius - aWidth/2, FILL_T::NO_FILL, DXF_LINE_WIDTH );
+        Arc( centre, aStartAngle, aAngle, aRadius + aWidth/2, FILL_T::NO_FILL, DXF_LINE_WIDTH );
+    }
+    else
+    {
+        Arc( centre, aStartAngle, aAngle, aRadius, FILL_T::NO_FILL, DXF_LINE_WIDTH );
+    }
+}
+
+
+void DXF_PLOTTER::ThickRect( const VECTOR2I& p1, const VECTOR2I& p2, int width, void* aData )
+{
+    const PLOT_PARAMS* cfg = static_cast<const PLOT_PARAMS*>( aData );
+
+    if( cfg && cfg->GetDXFPlotMode() == SKETCH )
+    {
+        VECTOR2I offsetp1( p1.x - width/2, p1.y - width/2 );
+        VECTOR2I offsetp2( p2.x + width/2, p2.y + width/2 );
+        Rect( offsetp1, offsetp2, FILL_T::NO_FILL, DXF_LINE_WIDTH );
+
+        offsetp1.x += width;
+        offsetp1.y += width;
+        offsetp2.x -= width;
+        offsetp2.y -= width;
+        Rect( offsetp1, offsetp2, FILL_T::NO_FILL, DXF_LINE_WIDTH );
+    }
+    else
+    {
+        Rect( p1, p2, FILL_T::NO_FILL, DXF_LINE_WIDTH );
+    }
+}
+
+
+void DXF_PLOTTER::ThickCircle( const VECTOR2I& pos, int diametre, int width, void* aData )
+{
+    const PLOT_PARAMS* cfg = static_cast<const PLOT_PARAMS*>( aData );
+
+    if( cfg && cfg->GetDXFPlotMode() == SKETCH )
+    {
+        Circle( pos, diametre - width, FILL_T::NO_FILL, DXF_LINE_WIDTH );
+        Circle( pos, diametre + width, FILL_T::NO_FILL, DXF_LINE_WIDTH );
+    }
+    else
+    {
+        Circle( pos, diametre, FILL_T::NO_FILL, DXF_LINE_WIDTH );
+    }
+}
+
+
+void DXF_PLOTTER::FilledCircle( const VECTOR2I& pos, int diametre, void* aData )
+{
+    const PLOT_PARAMS* cfg = static_cast<const PLOT_PARAMS*>( aData );
+
+    if( cfg && cfg->GetDXFPlotMode() == SKETCH )
+        Circle( pos, diametre, FILL_T::NO_FILL, DXF_LINE_WIDTH );
+    else
+        Circle( pos, diametre, FILL_T::FILLED_SHAPE, 0 );
+}
+
+
+void DXF_PLOTTER::ThickPoly( const SHAPE_POLY_SET& aPoly, int aWidth, void* aData )
+{
+    const PLOT_PARAMS* cfg = static_cast<const PLOT_PARAMS*>( aData );
+
+    if( cfg && cfg->GetDXFPlotMode() == SKETCH )
+    {
+        SHAPE_POLY_SET outline = aPoly.CloneDropTriangulation();
+        outline.Inflate( aWidth / 2, CORNER_STRATEGY::ROUND_ALL_CORNERS, GetPlotterArcHighDef() );
+        PLOTTER::PlotPoly( outline.COutline( 0 ), FILL_T::NO_FILL, DXF_LINE_WIDTH, aData );
+
+        outline = aPoly.CloneDropTriangulation();
+        outline.Deflate( aWidth / 2, CORNER_STRATEGY::ROUND_ALL_CORNERS, GetPlotterArcHighDef() );
+        PLOTTER::PlotPoly( outline.COutline( 0 ), FILL_T::NO_FILL, DXF_LINE_WIDTH, aData );
+    }
+    else
+    {
+        PLOTTER::PlotPoly( aPoly.COutline( 0 ), FILL_T::NO_FILL, aWidth, aData );
+    }
+}
+
+
 void DXF_PLOTTER::FlashPadOval( const VECTOR2I& aPos, const VECTOR2I& aSize,
-                                const EDA_ANGLE& aOrient, OUTLINE_MODE aTraceMode, void* aData )
+                                const EDA_ANGLE& aOrient, void* aData )
 {
     wxASSERT( m_outputFile );
 
@@ -732,20 +812,19 @@ void DXF_PLOTTER::FlashPadOval( const VECTOR2I& aPos, const VECTOR2I& aSize,
         orient += ANGLE_90;
     }
 
-    ThickOval( aPos, size, orient, USE_DEFAULT_LINE_WIDTH, aData );
+    ThickOval( aPos, size, orient, DXF_LINE_WIDTH, aData );
 }
 
 
-void DXF_PLOTTER::FlashPadCircle( const VECTOR2I& pos, int diametre,
-                                  OUTLINE_MODE trace_mode, void* aData )
+void DXF_PLOTTER::FlashPadCircle( const VECTOR2I& pos, int diametre, void* aData )
 {
     wxASSERT( m_outputFile );
-    Circle( pos, diametre, FILL_T::NO_FILL );
+    Circle( pos, diametre, FILL_T::NO_FILL, DXF_LINE_WIDTH );
 }
 
 
 void DXF_PLOTTER::FlashPadRect( const VECTOR2I& aPos, const VECTOR2I& aPadSize,
-                                const EDA_ANGLE& aOrient, OUTLINE_MODE aTraceMode, void* aData )
+                                const EDA_ANGLE& aOrient, void* aData )
 {
     wxASSERT( m_outputFile );
 
@@ -804,8 +883,7 @@ void DXF_PLOTTER::FlashPadRect( const VECTOR2I& aPos, const VECTOR2I& aPadSize,
 
 
 void DXF_PLOTTER::FlashPadRoundRect( const VECTOR2I& aPadPos, const VECTOR2I& aSize,
-                                     int aCornerRadius, const EDA_ANGLE& aOrient,
-                                     OUTLINE_MODE aTraceMode, void* aData )
+                                     int aCornerRadius, const EDA_ANGLE& aOrient, void* aData )
 {
     SHAPE_POLY_SET outline;
     TransformRoundChamferedRectToPolygon( outline, aPadPos, aSize, aOrient, aCornerRadius, 0.0, 0,
@@ -825,7 +903,7 @@ void DXF_PLOTTER::FlashPadRoundRect( const VECTOR2I& aPadPos, const VECTOR2I& aS
 
 void DXF_PLOTTER::FlashPadCustom( const VECTOR2I& aPadPos, const VECTOR2I& aSize,
                                   const EDA_ANGLE& aOrient, SHAPE_POLY_SET* aPolygons,
-                                  OUTLINE_MODE aTraceMode, void* aData )
+                                  void* aData )
 {
     for( int cnt = 0; cnt < aPolygons->OutlineCount(); ++cnt )
     {
@@ -842,8 +920,7 @@ void DXF_PLOTTER::FlashPadCustom( const VECTOR2I& aPadPos, const VECTOR2I& aSize
 
 
 void DXF_PLOTTER::FlashPadTrapez( const VECTOR2I& aPadPos, const VECTOR2I* aCorners,
-                                  const EDA_ANGLE& aPadOrient, OUTLINE_MODE aTraceMode,
-                                  void* aData )
+                                  const EDA_ANGLE& aPadOrient, void* aData )
 {
     wxASSERT( m_outputFile );
     VECTOR2I coord[4]; /* coord actual corners of a trapezoidal trace */
@@ -865,8 +942,7 @@ void DXF_PLOTTER::FlashPadTrapez( const VECTOR2I& aPadPos, const VECTOR2I* aCorn
 
 
 void DXF_PLOTTER::FlashRegularPolygon( const VECTOR2I& aShapePos, int aRadius, int aCornerCount,
-                                       const EDA_ANGLE& aOrient, OUTLINE_MODE aTraceMode,
-                                       void* aData )
+                                       const EDA_ANGLE& aOrient, void* aData )
 {
     // Do nothing
     wxASSERT( 0 );
@@ -984,9 +1060,7 @@ void DXF_PLOTTER::plotOneLineOfText( const VECTOR2I& aPos, const COLOR4D& aColor
     case GR_TEXT_H_ALIGN_LEFT:   h_code = 0; break;
     case GR_TEXT_H_ALIGN_CENTER: h_code = 1; break;
     case GR_TEXT_H_ALIGN_RIGHT:  h_code = 2; break;
-    case GR_TEXT_H_ALIGN_INDETERMINATE:
-        wxFAIL_MSG( wxT( "Indeterminate state legal only in dialogs." ) );
-        break;
+    case GR_TEXT_H_ALIGN_INDETERMINATE: wxFAIL_MSG( wxT( "Indeterminate state legal only in dialogs." ) ); break;
     }
 
     switch( aAttributes.m_Valign )
@@ -994,9 +1068,7 @@ void DXF_PLOTTER::plotOneLineOfText( const VECTOR2I& aPos, const COLOR4D& aColor
     case GR_TEXT_V_ALIGN_TOP:    v_code = 3; break;
     case GR_TEXT_V_ALIGN_CENTER: v_code = 2; break;
     case GR_TEXT_V_ALIGN_BOTTOM: v_code = 1; break;
-    case GR_TEXT_V_ALIGN_INDETERMINATE:
-        wxFAIL_MSG( wxT( "Indeterminate state legal only in dialogs." ) );
-        break;
+    case GR_TEXT_V_ALIGN_INDETERMINATE: wxFAIL_MSG( wxT( "Indeterminate state legal only in dialogs." ) ); break;
     }
 
     std::string textStyle = "KICAD";

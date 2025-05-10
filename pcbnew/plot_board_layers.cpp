@@ -347,7 +347,6 @@ void PlotStandardLayer( BOARD* aBoard, PLOTTER* aPlotter, const LSET& aLayerMask
 
     itemplotter.SetLayerSet( aLayerMask );
 
-    OUTLINE_MODE plotMode = aPlotOpt.GetPlotMode();
     bool onCopperLayer = ( LSET::AllCuMask() & aLayerMask ).any();
     bool onSolderMaskLayer = ( LSET( { F_Mask, B_Mask } ) & aLayerMask ).any();
     bool onSolderPasteLayer = ( LSET( { F_Paste, B_Paste } ) & aLayerMask ).any();
@@ -374,15 +373,14 @@ void PlotStandardLayer( BOARD* aBoard, PLOTTER* aPlotter, const LSET& aLayerMask
 
         for( PAD* pad : footprint->Pads() )
         {
-            OUTLINE_MODE padPlotMode = plotMode;
+            bool doSketchPads = false;
 
             if( !( pad->GetLayerSet() & aLayerMask ).any() )
             {
-                if( sketchPads &&
-                        ( ( onFrontFab && pad->GetLayerSet().Contains( F_Cu ) ) ||
-                          ( onBackFab && pad->GetLayerSet().Contains( B_Cu ) ) ) )
+                if( sketchPads && (   ( onFrontFab && pad->GetLayerSet().Contains( F_Cu ) )
+                                    || ( onBackFab && pad->GetLayerSet().Contains( B_Cu ) ) ) )
                 {
-                    padPlotMode = SKETCH;
+                    doSketchPads = true;
                 }
                 else
                 {
@@ -420,9 +418,8 @@ void PlotStandardLayer( BOARD* aBoard, PLOTTER* aPlotter, const LSET& aLayerMask
                     color = aPlotOpt.ColorSettings()->GetColor( B_Fab );
             }
 
-            if( sketchPads
-                    && (   ( onFrontFab && pad->GetLayerSet().Contains( F_Cu ) )
-                        || ( onBackFab && pad->GetLayerSet().Contains( B_Cu ) ) ) )
+            if( sketchPads && (   ( onFrontFab && pad->GetLayerSet().Contains( F_Cu ) )
+                                || ( onBackFab && pad->GetLayerSet().Contains( B_Cu ) ) ) )
             {
                 if( aPlotOpt.GetPlotPadNumbers() )
                     itemplotter.PlotPadNumber( pad, color );
@@ -482,7 +479,7 @@ void PlotStandardLayer( BOARD* aBoard, PLOTTER* aPlotter, const LSET& aLayerMask
                             break;
                         }
 
-                        itemplotter.PlotPad( pad, aLayer, color, padPlotMode );
+                        itemplotter.PlotPad( pad, aLayer, color, doSketchPads );
                         break;
 
                     case PAD_SHAPE::RECTANGLE:
@@ -494,7 +491,7 @@ void PlotStandardLayer( BOARD* aBoard, PLOTTER* aPlotter, const LSET& aLayerMask
                             pad->SetRoundRectCornerRadius( aLayer, mask_clearance );
                         }
 
-                        itemplotter.PlotPad( pad, aLayer, color, padPlotMode );
+                        itemplotter.PlotPad( pad, aLayer, color, doSketchPads );
                         break;
 
                     case PAD_SHAPE::TRAPEZOID:
@@ -505,7 +502,7 @@ void PlotStandardLayer( BOARD* aBoard, PLOTTER* aPlotter, const LSET& aLayerMask
                         // we are using only margin.x as inflate/deflate value
                         if( mask_clearance == 0 )
                         {
-                            itemplotter.PlotPad( pad, aLayer, color, padPlotMode );
+                            itemplotter.PlotPad( pad, aLayer, color, doSketchPads );
                         }
                         else
                         {
@@ -536,7 +533,7 @@ void PlotStandardLayer( BOARD* aBoard, PLOTTER* aPlotter, const LSET& aLayerMask
                             // polygonal shape is built, we can clamp the anchor size
                             dummy.SetSize( aLayer, VECTOR2I( 0, 0 ) );
 
-                            itemplotter.PlotPad( &dummy, aLayer, color, padPlotMode );
+                            itemplotter.PlotPad( &dummy, aLayer, color, doSketchPads );
                         }
 
                         break;
@@ -550,7 +547,7 @@ void PlotStandardLayer( BOARD* aBoard, PLOTTER* aPlotter, const LSET& aLayerMask
                         pad->SetSize( aLayer, padPlotsSize );
                         pad->SetRoundRectRadiusRatio( aLayer, radius_ratio );
 
-                        itemplotter.PlotPad( pad, aLayer, color, padPlotMode );
+                        itemplotter.PlotPad( pad, aLayer, color, doSketchPads );
                         break;
                     }
 
@@ -559,7 +556,7 @@ void PlotStandardLayer( BOARD* aBoard, PLOTTER* aPlotter, const LSET& aLayerMask
                         {
                             // the size can be slightly inflated by width_adj (PS/PDF only)
                             pad->SetSize( aLayer, padPlotsSize );
-                            itemplotter.PlotPad( pad, aLayer, color, padPlotMode );
+                            itemplotter.PlotPad( pad, aLayer, color, doSketchPads );
                         }
                         else
                         {
@@ -594,7 +591,7 @@ void PlotStandardLayer( BOARD* aBoard, PLOTTER* aPlotter, const LSET& aLayerMask
                             dummy.SetOffset( aLayer, pad->GetOffset( aLayer ) );
                             dummy.SetOrientation( pad->GetOrientation() );
 
-                            itemplotter.PlotPad( &dummy, aLayer, color, padPlotMode );
+                            itemplotter.PlotPad( &dummy, aLayer, color, doSketchPads );
                         }
 
                         break;
@@ -625,7 +622,7 @@ void PlotStandardLayer( BOARD* aBoard, PLOTTER* aPlotter, const LSET& aLayerMask
                                                              std::max( 0, padPlotsSize.y ) ) );
                         }
 
-                        itemplotter.PlotPad( &dummy, aLayer, color, padPlotMode );
+                        itemplotter.PlotPad( &dummy, aLayer, color, doSketchPads );
                         break;
                     }
                     }
@@ -650,10 +647,10 @@ void PlotStandardLayer( BOARD* aBoard, PLOTTER* aPlotter, const LSET& aLayerMask
             BOX2I rect = footprint->GetBoundingHull().BBox();
             int   width = aBoard->GetDesignSettings().m_LineThickness[ LAYER_CLASS_FAB ];
 
-            aPlotter->ThickSegment( rect.GetOrigin(), rect.GetEnd(), width, FILLED, nullptr );
+            aPlotter->ThickSegment( rect.GetOrigin(), rect.GetEnd(), width, nullptr );
             aPlotter->ThickSegment( VECTOR2I( rect.GetLeft(), rect.GetBottom() ),
                                     VECTOR2I( rect.GetRight(), rect.GetTop() ),
-                                    width, FILLED, nullptr );
+                                    width, nullptr );
         }
 
         aPlotter->EndBlock( nullptr );
@@ -668,6 +665,17 @@ void PlotStandardLayer( BOARD* aBoard, PLOTTER* aPlotter, const LSET& aLayerMask
         gbr_metadata.SetApertureAttrib( GBR_APERTURE_METADATA::GBR_APERTURE_ATTRIB_VIAPAD );
         gbr_metadata.SetNetAttribType( GBR_NETLIST_METADATA::GBR_NETINFO_NET );
     }
+
+    auto getMetadata =
+            [&]() -> void*
+            {
+                if( aPlotter->GetPlotterType() == PLOT_FORMAT::DXF )
+                    return (void*) &aPlotOpt;
+                else if( aPlotter->GetPlotterType() == PLOT_FORMAT::GERBER )
+                    return &gbr_metadata;
+                else
+                    return nullptr;
+            };
 
     aPlotter->StartBlock( nullptr );
 
@@ -729,7 +737,7 @@ void PlotStandardLayer( BOARD* aBoard, PLOTTER* aPlotter, const LSET& aLayerMask
             color = LIGHTGRAY;
 
         aPlotter->SetColor( color );
-        aPlotter->FlashPadCircle( via->GetStart(), diameter, plotMode, &gbr_metadata );
+        aPlotter->FlashPadCircle( via->GetStart(), diameter, getMetadata() );
     }
 
     aPlotter->EndBlock( nullptr );
@@ -780,19 +788,17 @@ void PlotStandardLayer( BOARD* aBoard, PLOTTER* aPlotter, const LSET& aLayerMask
             if( !arc->IsDegenerated( 10 /* in IU */ ) )
             {
                 aPlotter->ThickArc( arc->GetCenter(), arc->GetArcAngleStart(), arc->GetAngle(),
-                                    arc->GetRadius(), width, plotMode, &gbr_metadata );
+                                    arc->GetRadius(), width, getMetadata() );
             }
             else
             {
                 // Approximate this very small arc by a segment.
-                aPlotter->ThickSegment( track->GetStart(), track->GetEnd(), width, plotMode,
-                                        &gbr_metadata );
+                aPlotter->ThickSegment( track->GetStart(), track->GetEnd(), width, getMetadata() );
             }
         }
         else
         {
-            aPlotter->ThickSegment( track->GetStart(), track->GetEnd(), width, plotMode,
-                                    &gbr_metadata );
+            aPlotter->ThickSegment( track->GetStart(), track->GetEnd(), width, getMetadata() );
         }
     }
 
@@ -897,7 +903,7 @@ void PlotLayerOutlines( BOARD* aBoard, PLOTTER* aPlotter, const LSET& aLayerMask
                                 drill = std::min( smallDrill, drill );
 
                             aPlotter->ThickCircle( pad->ShapePos( layer ), drill,
-                                                   PLOTTER::USE_DEFAULT_LINE_WIDTH, FILLED, nullptr );
+                                                   PLOTTER::USE_DEFAULT_LINE_WIDTH, nullptr );
                         }
                         else
                         {

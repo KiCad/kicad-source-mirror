@@ -29,7 +29,6 @@
 
 #include <eda_units.h>
 #include <eda_draw_frame.h>
-#include <outline_mode.h>
 #include <lib_id.h>
 #include <pcb_display_options.h>
 #include <pcb_draw_panel_gal.h>

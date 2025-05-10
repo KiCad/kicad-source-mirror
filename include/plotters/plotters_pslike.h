@@ -62,26 +62,21 @@ public:
     }
 
     // Pad routines are handled with lower level primitives
-    virtual void FlashPadCircle( const VECTOR2I& aPadPos, int aDiameter,
-                                 OUTLINE_MODE aTraceMode, void* aData ) override;
+    virtual void FlashPadCircle( const VECTOR2I& aPadPos, int aDiameter, void* aData ) override;
     virtual void FlashPadOval( const VECTOR2I& aPadPos, const VECTOR2I& aSize,
-                               const EDA_ANGLE& aPadOrient, OUTLINE_MODE aTraceMode,
-                               void* aData ) override;
+                               const EDA_ANGLE& aPadOrient, void* aData ) override;
     virtual void FlashPadRect( const VECTOR2I& aPadPos, const VECTOR2I& aSize,
-                               const EDA_ANGLE& aPadOrient, OUTLINE_MODE aTraceMode,
-                               void* aData ) override;
+                               const EDA_ANGLE& aPadOrient, void* aData ) override;
     virtual void FlashPadRoundRect( const VECTOR2I& aPadPos, const VECTOR2I& aSize,
                                     int aCornerRadius, const EDA_ANGLE& aOrient,
-                                    OUTLINE_MODE aTraceMode, void* aData ) override;
+                                    void* aData ) override;
     virtual void FlashPadCustom( const VECTOR2I& aPadPos, const VECTOR2I& aSize,
                                  const EDA_ANGLE& aOrient, SHAPE_POLY_SET* aPolygons,
-                                 OUTLINE_MODE aTraceMode, void* aData ) override;
-    virtual void FlashPadTrapez( const VECTOR2I& aPadPos, const VECTOR2I* aCorners,
-                                 const EDA_ANGLE& aPadOrient, OUTLINE_MODE aTraceMode,
                                  void* aData ) override;
+    virtual void FlashPadTrapez( const VECTOR2I& aPadPos, const VECTOR2I* aCorners,
+                                 const EDA_ANGLE& aPadOrient, void* aData ) override;
     virtual void FlashRegularPolygon( const VECTOR2I& aShapePos, int aDiameter, int aCornerCount,
-                                      const EDA_ANGLE& aOrient, OUTLINE_MODE aTraceMode,
-                                      void* aData ) override;
+                                      const EDA_ANGLE& aOrient, void* aData ) override;
 
     /**
      * The SetColor implementation is split with the subclasses: the PSLIKE computes the rgb
@@ -190,16 +185,13 @@ public:
 
     virtual void SetViewport( const VECTOR2I& aOffset, double aIusPerDecimil,
                               double aScale, bool aMirror ) override;
-    virtual void Rect( const VECTOR2I& p1, const VECTOR2I& p2, FILL_T fill,
-                       int width = USE_DEFAULT_LINE_WIDTH ) override;
-    virtual void Circle( const VECTOR2I& pos, int diametre, FILL_T fill,
-                         int width = USE_DEFAULT_LINE_WIDTH ) override;
+    virtual void Rect( const VECTOR2I& p1, const VECTOR2I& p2, FILL_T fill, int width ) override;
+    virtual void Circle( const VECTOR2I& pos, int diametre, FILL_T fill, int width ) override;
     virtual void Arc( const VECTOR2D& aCenter, const EDA_ANGLE& aStartAngle,
-                      const EDA_ANGLE& aAngle, double aRadius, FILL_T aFill,
-                      int aWidth = USE_DEFAULT_LINE_WIDTH ) override;
+                      const EDA_ANGLE& aAngle, double aRadius, FILL_T aFill, int aWidth ) override;
 
     virtual void PlotPoly( const std::vector<VECTOR2I>& aCornerList, FILL_T aFill,
-                           int aWidth = USE_DEFAULT_LINE_WIDTH, void* aData = nullptr ) override;
+                           int aWidth, void* aData = nullptr ) override;
 
     /**
      * PostScript-likes at the moment are the only plot engines supporting bitmaps.
@@ -323,21 +315,19 @@ public:
     /**
      * Rectangles in PDF. Supported by the native operator.
      */
-    virtual void Rect( const VECTOR2I& p1, const VECTOR2I& p2, FILL_T fill,
-                       int width = USE_DEFAULT_LINE_WIDTH ) override;
+    virtual void Rect( const VECTOR2I& p1, const VECTOR2I& p2, FILL_T fill, int width ) override;
 
     /**
      * Circle drawing for PDF. They're approximated by curves, but fill is supported
      */
-    virtual void Circle( const VECTOR2I& pos, int diametre, FILL_T fill,
-                         int width = USE_DEFAULT_LINE_WIDTH ) override;
+    virtual void Circle( const VECTOR2I& pos, int diametre, FILL_T fill, int width ) override;
 
     /**
      * The PDF engine can't directly plot arcs so we use polygonization.
      */
     virtual void Arc( const VECTOR2D& aCenter, const EDA_ANGLE& aStartAngle,
                       const EDA_ANGLE& aAngle, double aRadius, FILL_T aFill,
-                      int aWidth = USE_DEFAULT_LINE_WIDTH ) override;
+                      int aWidth ) override;
 
     /**
      * Polygon plotting for PDF. Everything is supported
@@ -559,23 +549,20 @@ public:
      */
     virtual void SetDash( int aLineWidth, LINE_STYLE aLineStyle ) override;
 
-    virtual void SetViewport( const VECTOR2I& aOffset, double aIusPerDecimil,
-                              double aScale, bool aMirror ) override;
-    virtual void Rect( const VECTOR2I& p1, const VECTOR2I& p2, FILL_T fill,
-                       int width = USE_DEFAULT_LINE_WIDTH ) override;
-    virtual void Circle( const VECTOR2I& pos, int diametre, FILL_T fill,
-                         int width = USE_DEFAULT_LINE_WIDTH ) override;
+    virtual void SetViewport( const VECTOR2I& aOffset, double aIusPerDecimil, double aScale,
+                              bool aMirror ) override;
+    virtual void Rect( const VECTOR2I& p1, const VECTOR2I& p2, FILL_T fill, int width ) override;
+    virtual void Circle( const VECTOR2I& pos, int diametre, FILL_T fill, int width ) override;
     virtual void Arc( const VECTOR2D& aCenter, const EDA_ANGLE& aStartAngle,
                       const EDA_ANGLE& aAngle, double aRadius, FILL_T aFill,
-                      int aWidth = USE_DEFAULT_LINE_WIDTH ) override;
+                      int aWidth ) override;
 
     virtual void BezierCurve( const VECTOR2I& aStart, const VECTOR2I& aControl1,
                               const VECTOR2I& aControl2, const VECTOR2I& aEnd,
-                              int aTolerance,
-                              int aLineThickness = USE_DEFAULT_LINE_WIDTH ) override;
+                              int aTolerance, int aLineThickness ) override;
 
     virtual void PlotPoly( const std::vector<VECTOR2I>& aCornerList, FILL_T aFill,
-                           int aWidth = USE_DEFAULT_LINE_WIDTH, void * aData = nullptr ) override;
+                           int aWidth, void * aData ) override;
 
     /**
      * PostScript-likes at the moment are the only plot engines supporting bitmaps.

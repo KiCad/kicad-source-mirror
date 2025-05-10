@@ -147,7 +147,7 @@ void BRDITEMS_PLOTTER::PlotPadNumber( const PAD* aPad, const COLOR4D& aColor )
 
 
 void BRDITEMS_PLOTTER::PlotPad( const PAD* aPad, PCB_LAYER_ID aLayer, const COLOR4D& aColor,
-                                OUTLINE_MODE aPlotMode )
+                                bool aSketchMode )
 {
     VECTOR2I     shape_pos = aPad->ShapePos( aLayer );
     GBR_METADATA metadata;
@@ -276,19 +276,19 @@ void BRDITEMS_PLOTTER::PlotPad( const PAD* aPad, PCB_LAYER_ID aLayer, const COLO
     // the white items are not seen on a white paper or screen
     m_plotter->SetColor( aColor != WHITE ? aColor : LIGHTGRAY );
 
-    if( aPlotMode == SKETCH )
+    if( aSketchMode )
     {
         switch( aPad->GetShape( aLayer ) )
         {
         case PAD_SHAPE::CIRCLE:
             m_plotter->ThickCircle( shape_pos, aPad->GetSize( aLayer ).x, GetSketchPadLineWidth(),
-                                    FILLED, &metadata );
+                                    nullptr );
             break;
 
         case PAD_SHAPE::OVAL:
         {
             m_plotter->ThickOval( shape_pos, aPad->GetSize( aLayer ), aPad->GetOrientation(),
-                                  GetSketchPadLineWidth(), &metadata );
+                                  GetSketchPadLineWidth(), nullptr );
             break;
         }
 
@@ -298,7 +298,7 @@ void BRDITEMS_PLOTTER::PlotPad( const PAD* aPad, PCB_LAYER_ID aLayer, const COLO
 
             m_plotter->ThickRect( VECTOR2I( shape_pos.x - ( size.x / 2 ), shape_pos.y - (size.y / 2 ) ),
                                   VECTOR2I( shape_pos.x + ( size.x / 2 ), shape_pos.y + (size.y / 2 ) ),
-                                  GetSketchPadLineWidth(), FILLED, &metadata );
+                                  GetSketchPadLineWidth(), nullptr );
             break;
         }
 
@@ -311,7 +311,7 @@ void BRDITEMS_PLOTTER::PlotPad( const PAD* aPad, PCB_LAYER_ID aLayer, const COLO
             aPad->TransformShapeToPolygon( outline, aLayer, 0, m_plotter->GetPlotterArcHighDef(),
                                            ERROR_INSIDE, true );
 
-            m_plotter->ThickPoly( outline, GetSketchPadLineWidth(), FILLED, &metadata );
+            m_plotter->ThickPoly( outline, GetSketchPadLineWidth(), nullptr );
             break;
         }
 
@@ -325,24 +325,23 @@ void BRDITEMS_PLOTTER::PlotPad( const PAD* aPad, PCB_LAYER_ID aLayer, const COLO
     switch( aPad->GetShape( aLayer ) )
     {
     case PAD_SHAPE::CIRCLE:
-        m_plotter->FlashPadCircle( shape_pos, aPad->GetSize( aLayer ).x,
-                                   aPlotMode, &metadata );
+        m_plotter->FlashPadCircle( shape_pos, aPad->GetSize( aLayer ).x, &metadata );
         break;
 
     case PAD_SHAPE::OVAL:
         m_plotter->FlashPadOval( shape_pos, aPad->GetSize( aLayer ),
-                                 aPad->GetOrientation(), aPlotMode, &metadata );
+                                 aPad->GetOrientation(), &metadata );
         break;
 
     case PAD_SHAPE::RECTANGLE:
         m_plotter->FlashPadRect( shape_pos, aPad->GetSize( aLayer ),
-                                 aPad->GetOrientation(), aPlotMode, &metadata );
+                                 aPad->GetOrientation(), &metadata );
         break;
 
     case PAD_SHAPE::ROUNDRECT:
         m_plotter->FlashPadRoundRect( shape_pos, aPad->GetSize( aLayer ),
                                       aPad->GetRoundRectCornerRadius( aLayer ),
-                                      aPad->GetOrientation(), aPlotMode, &metadata );
+                                      aPad->GetOrientation(), &metadata );
         break;
 
     case PAD_SHAPE::TRAPEZOID:
@@ -361,7 +360,7 @@ void BRDITEMS_PLOTTER::PlotPad( const PAD* aPad, PCB_LAYER_ID aLayer, const COLO
         coord[2] = VECTOR2I( half_size.x - trap_delta.y, -half_size.y + trap_delta.x );
         coord[3] = VECTOR2I( -half_size.x + trap_delta.y, -half_size.y - trap_delta.x );
 
-        m_plotter->FlashPadTrapez( shape_pos, coord, aPad->GetOrientation(), aPlotMode, &metadata );
+        m_plotter->FlashPadTrapez( shape_pos, coord, aPad->GetOrientation(), &metadata );
     }
         break;
 
@@ -370,12 +369,11 @@ void BRDITEMS_PLOTTER::PlotPad( const PAD* aPad, PCB_LAYER_ID aLayer, const COLO
         {
             GERBER_PLOTTER* gerberPlotter = static_cast<GERBER_PLOTTER*>( m_plotter );
 
-            gerberPlotter->FlashPadChamferRoundRect( shape_pos,
-                    aPad->GetSize( aLayer ),
-                    aPad->GetRoundRectCornerRadius( aLayer ),
-                    aPad->GetChamferRectRatio( aLayer ),
-                    aPad->GetChamferPositions( aLayer ), aPad->GetOrientation(),
-                    aPlotMode, &metadata );
+            gerberPlotter->FlashPadChamferRoundRect( shape_pos, aPad->GetSize( aLayer ),
+                                                     aPad->GetRoundRectCornerRadius( aLayer ),
+                                                     aPad->GetChamferRectRatio( aLayer ),
+                                                     aPad->GetChamferPositions( aLayer ),
+                                                     aPad->GetOrientation(), &metadata );
             break;
         }
 
@@ -390,7 +388,7 @@ void BRDITEMS_PLOTTER::PlotPad( const PAD* aPad, PCB_LAYER_ID aLayer, const COLO
         if( polygons->OutlineCount() )
         {
             m_plotter->FlashPadCustom( shape_pos, aPad->GetSize( aLayer ), aPad->GetOrientation(),
-                                       polygons.get(), aPlotMode, &metadata );
+                                       polygons.get(), &metadata );
         }
     }
         break;
@@ -754,6 +752,17 @@ void BRDITEMS_PLOTTER::PlotText( const EDA_TEXT* aText, PCB_LAYER_ID aLayer, boo
     if( IsCopperLayer( aLayer ) )
         gbr_metadata.SetApertureAttrib( GBR_APERTURE_METADATA::GBR_APERTURE_ATTRIB_NONCONDUCTOR );
 
+    auto getMetadata =
+            [&]() -> void*
+            {
+                if( m_plotter->GetPlotterType() == PLOT_FORMAT::DXF )
+                    return this;
+                else if( m_plotter->GetPlotterType() == PLOT_FORMAT::GERBER )
+                    return &gbr_metadata;
+                else
+                    return nullptr;
+            };
+
     COLOR4D color = getColor( aLayer );
     m_plotter->SetColor( color );
 
@@ -783,7 +792,7 @@ void BRDITEMS_PLOTTER::PlotText( const EDA_TEXT* aText, PCB_LAYER_ID aLayer, boo
                 RotatePoint( start, text->GetDrawPos(), text->GetDrawRotation() );
                 RotatePoint( end, text->GetDrawPos(), text->GetDrawRotation() );
 
-                m_plotter->ThickSegment( start, end, attrs.m_StrokeWidth, FILLED, nullptr );
+                m_plotter->ThickSegment( start, end, attrs.m_StrokeWidth, getMetadata() );
             };
 
     if( aIsKnockout )
@@ -798,7 +807,7 @@ void BRDITEMS_PLOTTER::PlotText( const EDA_TEXT* aText, PCB_LAYER_ID aLayer, boo
         finalPoly.Fracture();
 
         for( int ii = 0; ii < finalPoly.OutlineCount(); ++ii )
-            m_plotter->PlotPoly( finalPoly.Outline( ii ), FILL_T::FILLED_SHAPE, 0, &gbr_metadata );
+            m_plotter->PlotPoly( finalPoly.Outline( ii ), FILL_T::FILLED_SHAPE, 0, getMetadata() );
     }
     else
     {
@@ -810,12 +819,12 @@ void BRDITEMS_PLOTTER::PlotText( const EDA_TEXT* aText, PCB_LAYER_ID aLayer, boo
                     // Stroke callback
                     [&]( const VECTOR2I& aPt1, const VECTOR2I& aPt2 )
                     {
-                        m_plotter->ThickSegment( aPt1, aPt2, attrs.m_StrokeWidth, FILLED, nullptr );
+                        m_plotter->ThickSegment( aPt1, aPt2, attrs.m_StrokeWidth, getMetadata() );
                     },
                     // Polygon callback
                     [&]( const SHAPE_LINE_CHAIN& aPoly )
                     {
-                        m_plotter->PlotPoly( aPoly, FILL_T::FILLED_SHAPE, 0, &gbr_metadata );
+                        m_plotter->PlotPoly( aPoly, FILL_T::FILLED_SHAPE, 0, getMetadata() );
                     } );
 
             callback_gal.DrawGlyphs( *aText->GetRenderCache( font, shownText ) );
@@ -832,8 +841,7 @@ void BRDITEMS_PLOTTER::PlotText( const EDA_TEXT* aText, PCB_LAYER_ID aLayer, boo
             for( unsigned ii = 0; ii < strings_list.Count(); ii++ )
             {
                 wxString& txt =  strings_list.Item( ii );
-                m_plotter->PlotText( positions[ii], color, txt, attrs, font, aFontMetrics,
-                                     &gbr_metadata );
+                m_plotter->PlotText( positions[ii], color, txt, attrs, font, aFontMetrics, getMetadata() );
             }
 
             if( aStrikeout && strings_list.Count() == 1 )
@@ -841,7 +849,7 @@ void BRDITEMS_PLOTTER::PlotText( const EDA_TEXT* aText, PCB_LAYER_ID aLayer, boo
         }
         else
         {
-            m_plotter->PlotText( pos, color, shownText, attrs, font, aFontMetrics, &gbr_metadata );
+            m_plotter->PlotText( pos, color, shownText, attrs, font, aFontMetrics, getMetadata() );
 
             if( aStrikeout )
                 strikeoutText( static_cast<const PCB_TEXT*>( aText ) );
@@ -877,6 +885,17 @@ void BRDITEMS_PLOTTER::PlotZone( const ZONE* aZone, PCB_LAYER_ID aLayer,
         }
     }
 
+    auto getMetadata =
+            [&]() -> void*
+            {
+                if( m_plotter->GetPlotterType() == PLOT_FORMAT::DXF )
+                    return this;
+                else if( m_plotter->GetPlotterType() == PLOT_FORMAT::GERBER )
+                    return &gbr_metadata;
+                else
+                    return nullptr;
+            };
+
     m_plotter->SetColor( getColor( aLayer ) );
 
     m_plotter->StartBlock( nullptr );    // Clean current object attributes
@@ -890,21 +909,17 @@ void BRDITEMS_PLOTTER::PlotZone( const ZONE* aZone, PCB_LAYER_ID aLayer,
         const SHAPE_LINE_CHAIN& outline = aPolysList.Outline( idx );
 
         // Plot the current filled area (as region for Gerber plotter to manage attributes)
-        if( GetPlotMode() == FILLED )
+        if( m_plotter->GetPlotterType() == PLOT_FORMAT::GERBER )
         {
-            if( m_plotter->GetPlotterType() == PLOT_FORMAT::GERBER )
-            {
-                static_cast<GERBER_PLOTTER*>( m_plotter )->PlotGerberRegion( outline,
-                                                                             &gbr_metadata );
-            }
-            else
-            {
-                m_plotter->PlotPoly( outline, FILL_T::FILLED_SHAPE, 0, &gbr_metadata );
-            }
+            static_cast<GERBER_PLOTTER*>( m_plotter )->PlotGerberRegion( outline, &gbr_metadata );
+        }
+        else if( m_plotter->GetPlotterType() == PLOT_FORMAT::DXF && GetDXFPlotMode() == SKETCH )
+        {
+            m_plotter->SetCurrentLineWidth( PLOTTER::USE_DEFAULT_LINE_WIDTH );
         }
         else
         {
-            m_plotter->SetCurrentLineWidth( -1 );
+            m_plotter->PlotPoly( outline, FILL_T::FILLED_SHAPE, 0, getMetadata() );
         }
     }
 
@@ -987,13 +1002,23 @@ void BRDITEMS_PLOTTER::PlotShape( const PCB_SHAPE* aShape )
         }
     }
 
+    auto getMetadata =
+            [&]() -> void*
+            {
+                if( m_plotter->GetPlotterType() == PLOT_FORMAT::DXF )
+                    return this;
+                else if( m_plotter->GetPlotterType() == PLOT_FORMAT::GERBER )
+                    return &gbr_metadata;
+                else
+                    return nullptr;
+            };
+
     if( lineStyle <= LINE_STYLE::FIRST_TYPE )
     {
         switch( aShape->GetShape() )
         {
         case SHAPE_T::SEGMENT:
-            m_plotter->ThickSegment( aShape->GetStart(), aShape->GetEnd(), thickness, GetPlotMode(),
-                                     &gbr_metadata );
+            m_plotter->ThickSegment( aShape->GetStart(), aShape->GetEnd(), thickness, getMetadata() );
             break;
 
         case SHAPE_T::CIRCLE:
@@ -1007,12 +1032,12 @@ void BRDITEMS_PLOTTER::PlotShape( const PCB_SHAPE* aShape )
                     diameter = std::max( diameter, 0 );
                 }
 
-                m_plotter->FilledCircle( aShape->GetStart(), diameter, GetPlotMode(), &gbr_metadata );
+                m_plotter->FilledCircle( aShape->GetStart(), diameter, getMetadata() );
             }
             else
             {
                 m_plotter->ThickCircle( aShape->GetStart(), aShape->GetRadius() * 2, thickness,
-                                        GetPlotMode(), &gbr_metadata );
+                                        getMetadata() );
             }
 
             break;
@@ -1024,11 +1049,11 @@ void BRDITEMS_PLOTTER::PlotShape( const PCB_SHAPE* aShape )
             if( std::abs( aShape->GetArcAngle().AsDegrees() ) == 360.0 )
             {
                 m_plotter->ThickCircle( aShape->GetCenter(), aShape->GetRadius() * 2, thickness,
-                                        GetPlotMode(), &gbr_metadata );
+                                        getMetadata() );
             }
             else
             {
-                m_plotter->ThickArc( *aShape, GetPlotMode(), &gbr_metadata, thickness );
+                m_plotter->ThickArc( *aShape, getMetadata(), thickness );
             }
 
             break;
@@ -1042,9 +1067,9 @@ void BRDITEMS_PLOTTER::PlotShape( const PCB_SHAPE* aShape )
         case SHAPE_T::POLY:
             if( aShape->IsPolyShapeValid() )
             {
-                if( GetPlotMode() == SKETCH )
+                if( m_plotter->GetPlotterType() == PLOT_FORMAT::DXF && GetDXFPlotMode() == SKETCH )
                 {
-                    m_plotter->ThickPoly( aShape->GetPolyShape(), thickness, GetPlotMode(), &gbr_metadata );
+                    m_plotter->ThickPoly( aShape->GetPolyShape(), thickness, getMetadata() );
                 }
                 else
                 {
@@ -1082,7 +1107,7 @@ void BRDITEMS_PLOTTER::PlotShape( const PCB_SHAPE* aShape )
                         }
                         else
                         {
-                            m_plotter->PlotPoly( poly, fill, thickness, &gbr_metadata );
+                            m_plotter->PlotPoly( poly, fill, thickness, getMetadata() );
                         }
                     }
                 }
@@ -1094,9 +1119,9 @@ void BRDITEMS_PLOTTER::PlotShape( const PCB_SHAPE* aShape )
         {
             std::vector<VECTOR2I> pts = aShape->GetRectCorners();
 
-            if( GetPlotMode() == SKETCH )
+            if( m_plotter->GetPlotterType() == PLOT_FORMAT::DXF && GetDXFPlotMode() == SKETCH )
             {
-                m_plotter->ThickRect( pts[0], pts[2], thickness, GetPlotMode(), &gbr_metadata );
+                m_plotter->ThickRect( pts[0], pts[2], thickness, getMetadata() );
             }
             else
             {
@@ -1124,7 +1149,7 @@ void BRDITEMS_PLOTTER::PlotShape( const PCB_SHAPE* aShape )
                     }
                     else
                     {
-                        m_plotter->PlotPoly( poly.COutline( 0 ), fill_mode, thickness, &gbr_metadata );
+                        m_plotter->PlotPoly( poly.COutline( 0 ), fill_mode, thickness, getMetadata() );
                     }
                 }
             }
@@ -1146,8 +1171,7 @@ void BRDITEMS_PLOTTER::PlotShape( const PCB_SHAPE* aShape )
                                    m_plotter->RenderSettings(),
                                    [&]( const VECTOR2I& a, const VECTOR2I& b )
                                    {
-                                       m_plotter->ThickSegment( a, b, thickness, GetPlotMode(),
-                                                                &gbr_metadata );
+                                       m_plotter->ThickSegment( a, b, thickness, getMetadata() );
                                    } );
         }
 
@@ -1168,7 +1192,7 @@ void BRDITEMS_PLOTTER::PlotShape( const PCB_SHAPE* aShape )
             else
             {
                 m_plotter->PlotPoly( aShape->GetHatching().Outline( ii ), FILL_T::FILLED_SHAPE,
-                                     0, &gbr_metadata );
+                                     0, getMetadata() );
             }
         }
     }
@@ -1188,6 +1212,17 @@ void BRDITEMS_PLOTTER::PlotTableBorders( const PCB_TABLE* aTable )
         gbr_metadata.SetNetAttribType( GBR_NETLIST_METADATA::GBR_NETINFO_CMP );
     }
 
+    auto getMetadata =
+            [&]() -> void*
+            {
+                if( m_plotter->GetPlotterType() == PLOT_FORMAT::DXF )
+                    return this;
+                else if( m_plotter->GetPlotterType() == PLOT_FORMAT::GERBER )
+                    return &gbr_metadata;
+                else
+                    return nullptr;
+            };
+
     aTable->DrawBorders(
             [&]( const VECTOR2I& ptA, const VECTOR2I& ptB, const STROKE_PARAMS& stroke )
             {
@@ -1196,7 +1231,7 @@ void BRDITEMS_PLOTTER::PlotTableBorders( const PCB_TABLE* aTable )
 
                 if( lineStyle <= LINE_STYLE::FIRST_TYPE )
                 {
-                    m_plotter->ThickSegment( ptA, ptB, lineWidth, GetPlotMode(), &gbr_metadata );
+                    m_plotter->ThickSegment( ptA, ptB, lineWidth, getMetadata() );
                 }
                 else
                 {
@@ -1205,8 +1240,7 @@ void BRDITEMS_PLOTTER::PlotTableBorders( const PCB_TABLE* aTable )
                     STROKE_PARAMS::Stroke( &seg, lineStyle, lineWidth, m_plotter->RenderSettings(),
                             [&]( const VECTOR2I& a, const VECTOR2I& b )
                             {
-                                m_plotter->ThickSegment( a, b, lineWidth, GetPlotMode(),
-                                                         &gbr_metadata );
+                                m_plotter->ThickSegment( a, b, lineWidth, getMetadata() );
                             } );
                 }
             } );
@@ -1232,11 +1266,11 @@ void BRDITEMS_PLOTTER::plotOneDrillMark( PAD_DRILL_SHAPE aDrillShape, const VECT
         drillSize.y -= getFineWidthAdj();
         drillSize.y = std::clamp( drillSize.y, 1, aPadSize.y - 1 );
 
-        m_plotter->FlashPadOval( aDrillPos, drillSize, aOrientation, GetPlotMode(), nullptr );
+        m_plotter->FlashPadOval( aDrillPos, drillSize, aOrientation, nullptr );
     }
     else
     {
-        m_plotter->FlashPadCircle( aDrillPos, drillSize.x, GetPlotMode(), nullptr );
+        m_plotter->FlashPadCircle( aDrillPos, drillSize.x, nullptr );
     }
 }
 
@@ -1249,8 +1283,8 @@ void BRDITEMS_PLOTTER::PlotDrillMarks()
     if( GetDrillMarksType() == DRILL_MARKS::SMALL_DRILL_SHAPE )
         smallDrill = pcbIUScale.mmToIU( ADVANCED_CFG::GetCfg().m_SmallDrillMarkSize );
 
-    /* In the filled trace mode drill marks are drawn white-on-black to knock-out the underlying
-       pad.  This works only for drivers supporting color change, obviously... it means that:
+    /* Drill marks are drawn white-on-black to knock-out the underlying pad.  This works only
+     * for drivers supporting color change, obviously... it means that:
        - PS, SVG and PDF output is correct (i.e. you have a 'donut' pad)
        - In gerbers you can't see them, too. This is arguably the right thing to do since having
          drill marks and high speed drill stations is a sure recipe for broken tools and angry
@@ -1258,7 +1292,7 @@ void BRDITEMS_PLOTTER::PlotDrillMarks()
          to knock-out the film.
        - In DXF they go into the 'WHITE' layer. This could be useful.
      */
-    if( GetPlotMode() == FILLED && onCopperLayer )
+    if( onCopperLayer && ( m_plotter->GetPlotterType() != PLOT_FORMAT::DXF || GetDXFPlotMode() == FILLED ) )
          m_plotter->SetColor( WHITE );
 
     for( PCB_TRACK* track : m_board->Tracks() )
@@ -1290,6 +1324,6 @@ void BRDITEMS_PLOTTER::PlotDrillMarks()
         }
     }
 
-    if( GetPlotMode() == FILLED && onCopperLayer )
+    if( onCopperLayer && ( m_plotter->GetPlotterType() != PLOT_FORMAT::DXF || GetDXFPlotMode() == FILLED ) )
         m_plotter->SetColor( BLACK );
 }
