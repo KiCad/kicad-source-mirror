@@ -24,6 +24,8 @@ or you may write to the Free Software Foundation, Inc.,
 
 import argparse
 import logging
+
+import kaitaistruct
 import tabulate
 from pathlib import Path
 
@@ -82,350 +84,354 @@ class AllegroBoard:
         else:
             raise KeyError(f"Key {key:#01x} not found in Allegro board file.")
 
+    class Printer:
 
-    def print_obj(self, obj, indent="  "):
+        def __init__(self, board, indent: int):
+            self.board = board
+            self.indent = indent
+
+        def prnt(self, string: str):
+            print(" " * self.indent + string)
+
+        def _value_or_by_attr(self, struct_or_v, attr_name):
+
+            if isinstance(struct_or_v, kaitaistruct.KaitaiStruct):
+                if hasattr(struct_or_v, attr_name):
+                    value = getattr(struct_or_v, attr_name)
+                else:
+                    return
+            else:
+                value = struct_or_v
+
+            return value
+
+        def print_ptr(self, name, struct_or_key: int, attr_name: str | None = None):
+
+            attr_name = attr_name or name
+
+            key_val = self._value_or_by_attr(struct_or_key, attr_name)
+
+            # Doesn't exist
+            if key_val is None:
+                return
+
+            try:
+                obj = self.board.object(key_val)
+                self.prnt(f"{name:12}: {key_val:#010x} ({obj.type:#04x})")
+            except KeyError:
+                self.prnt(f"{name:12}: {key_val:#010x} (not found)")
+                return
+
+
+        def print_v(self, name, block_or_value, attr_name: str | None = None, as_hex: bool = True):
+
+            # if the caller didn't give an attr name, just use the name
+            attr_name = attr_name or name
+
+            if isinstance(block_or_value, allegro_brd.AllegroBrd.StringAligned):
+                bs = bytearray(block_or_value.chars)
+                value = bs.decode("utf-8", errors="ignore")
+
+            else:
+                value = self._value_or_by_attr(block_or_value, attr_name)
+
+            if value is None:
+                return
+
+            if isinstance(value, int) and hex:
+                self.prnt(f"{name:12}: {value:#x}")
+            else:
+                self.prnt(f"{name:12}: {value}")
+
+        def print_s(self, name, struct_or_sid: int, attr_name: str | None = None):
+            """
+            Print a string by ID
+            """
+
+            attr_name = attr_name or name
+
+            string_id = self._value_or_by_attr(struct_or_sid, attr_name)
+            
+            if string_id is None:
+                return
+
+            try:
+                string_val = self.board.string(string_id)
+                self.prnt(f"{name:12}: {string_val} (key: {string_id:#010x})")
+            except KeyError:
+                self.prnt(f"{name:12}: {string_id:#010x} (not found)")
+
+        def print_coords(self, name, coords):
+            self.prnt(f"{name:12}: ({coords.x}, {coords.y})")
+
+        def print_layer(self, layer):
+            name = "Layer"
+            v = f"{layer.family} {layer.ordinal}"
+            self.print_v(name, v)
+
+    def print_obj(self, obj, indent=2):
         """
         Print some object as best as possible.
         """
-
-        def prnt(s):
-            print(indent + s)
-
-        def print_ptr(name, pkey):
-            try:
-                obj = self.object(pkey)
-            except KeyError:
-                prnt(f"{name:12}: {pkey:#010x} (not found)")
-                return
-
-            prnt(f"{name:12}: {pkey:#010x} ({obj.type:#04x})")
-
-        def print_v(name, value, hex: bool=True):
-            if isinstance(value, int) and hex:
-                prnt(f"{name:12}: {value:#x}")
-            else:
-                prnt(f"{name:12}: {value}")
-
-        def print_s(name, k : int | list):
-
-            if isinstance(k, list):
-                bs = bytearray(k)
-                s = bs.decode("utf-8", errors="ignore")
-                prnt(f"{name:12}: {s}")
-                return
-
-            try:
-                s = self.string(k)
-                prnt(f"{name:12}: {s} (key: {k:#010x})")
-            except KeyError:
-                prnt(f"{name:12}: {k:#010x} (not found)")
-                return
-
-        def print_coords(name, coords):
-            prnt(f"{name:12}: ({coords.x}, {coords.y})")
-
-        def print_layer(layer):
-            name = "Layer"
-            v = f"{layer.family} {layer.ordinal}"
-            print_v(name, v)
+        prntr = self.Printer(self, indent)
 
         t = obj.type
         d = obj.data
 
-        print_v(f"Object type", t)
+        prntr.print_v(f"Object type", t)
 
         if hasattr(d, "key"):
-            print_v("Key", d.key)
+            prntr.print_v("Key", d, "key")
 
         if t == 0x03:
-            print_v("subtype", d.subtype)
-            print_v("unknown_hdr", d.unknown_hdr)
-            print_v("size", d.size)
+            prntr.print_v("subtype", d)
+            prntr.print_v("unknown_hdr", d)
+            prntr.print_v("size", d)
 
-            if hasattr(d, "unknown_1"):
-                print_v("unknown_1", d.unknown_1)
-            if hasattr(d, "unknown_2"):
-                print_v("unknown_2", d.unknown_2)
+            prntr.print_v("unknown_1", d)
+            prntr.print_v("unknown_2", d)
 
             if d.subtype in [0x68, 0x6B, 0x6D, 0x6E, 0x6F, 0x71, 0x73, 0x78]:
-                bytes = bytearray(d.data.chars)
-                s = bytes.decode("utf-8", errors="ignore")
-                print_v("string data", s)
+                prntr.print_v("string data", d.data)
 
         elif t == 0x06:
 
-            print_s("String", d.str)
-            print_s("Ptr 1", d.ptr_1)
-            print_ptr("Ptr instance", d.ptr_instance)
-            print_ptr("Ptr FP", d.ptr_fp)
-            print_ptr("Ptr x08", d.ptr_x08)
-            print_ptr("Ptr x03", d.ptr_x03_symbol)
+            prntr.print_s("String", d.str)
+            prntr.print_s("Ptr 1", d.str_2),
+            prntr.print_ptr("Ptr instance", d.ptr_instance)
+            prntr.print_ptr("Ptr FP", d.ptr_fp)
+            prntr.print_ptr("Ptr x08", d.ptr_x08)
+            prntr.print_ptr("Ptr x03", d.ptr_x03_symbol)
 
-            if hasattr(d, "unknown_1"):
-                print_v("unknown_1", d.unknown_1)
+            prntr.print_v("unknown_1", d)
 
         elif t == 0x07:
-            if hasattr(d, "ptr_1"):
-                print_ptr("Ptr 1", d.ptr_1)
-            print_ptr("Ptr 2", d.ptr_2)
-            print_ptr("Ptr 3", d.ptr_3)
-            print_ptr("Ptr 4", d.ptr_4)
-            print_ptr("ptr_0x2d", d.ptr_0x2d)
+            prntr.print_ptr("ptr_1", d)
+            prntr.print_ptr("ptr_2", d)
+            prntr.print_ptr("ptr_3", d)
+            prntr.print_ptr("ptr_4", d)
+            prntr.print_ptr("ptr_0x2d", d)
 
-            if hasattr(d, "unknown_1"):
-                print_v("unknown_1", d.unknown_1)
-            if hasattr(d, "unknown_2"):
-                print_v("unknown_2", d.unknown_2)
-            if hasattr(d, "unknown_3"):
-                print_v("unknown_3", d.unknown_3)
+            prntr.print_v("unknown_1", d)
+            prntr.print_v("unknown_2", d)
+            prntr.print_v("unknown_3", d)
 
-            print_s("ref_des_ref", d.ref_des_ref)
-
+            prntr.print_s("ref_des_ref", d)
 
         elif t == 0x08:
 
-            if hasattr(d, "str_ptr_16x"):
-                print_s("Str ptr", d.str_ptr_16x)
-            if hasattr(d, "str_ptr"):
-                print_s("Str ptr", d.str_ptr)
+            prntr.print_s("Str ptr", d, "str_ptr_16x")
+            prntr.print_s("Str ptr", d, "str_ptr")
 
-            if hasattr(d, "prev_ptr"):
-                print_ptr("Prev", d.prev_ptr)
-            print_ptr("Next", d.next_ptr)
-            print_ptr("Ptr 3", d.ptr3)
-            print_ptr("Ptr 4", d.ptr4)
+            prntr.print_ptr("Prev", d, "prev_ptr")
+            prntr.print_ptr("Next", d, "next_ptr")
+            prntr.print_ptr("Ptr 3", d, "ptr3")
+            prntr.print_ptr("Ptr 4", d, "ptr4")
 
-            if hasattr(d, "unknown_1"):
-                print_ptr("unknown_1", d.unknown_1)
+            prntr.print_ptr("unknown_1", d)
 
         elif t == 0x0f:
-            print_s("str_unk", d.str_unk)
-            print_v("s", d.s)
-            print_ptr("Ptr x06", d.ptr_x06)
-            print_ptr("Ptr x11", d.ptr_x11)
+            prntr.print_s("str_unk", d.str_unk)
+            prntr.print_v("s", d.s)
+            prntr.print_ptr("Ptr x06", d.ptr_x06)
+            prntr.print_ptr("Ptr x11", d.ptr_x11)
 
-            print_v("unknown_1", d.unknown_1)
-            if hasattr(d, "unknown_2"):
-                print_v("unknown_2", d.unknown_2)
-            if hasattr(d, "unknown_3"):
-                print_v("unknown_3", d.unknown_3)
+            prntr.print_v("unknown_1", d)
+            prntr.print_v("unknown_2", d)
+            prntr.print_v("unknown_3", d)
 
         elif t == 0x10:
-            print_ptr("Ptr 1", d.ptr1)
-            print_ptr("Ptr 2", d.ptr2)
-            print_s("String", d.str)
-            print_ptr("Ptr 4", d.ptr4)
-            print_ptr("Path str", d.path_str)
+            prntr.print_ptr("Ptr 1", d.ptr1)
+            prntr.print_ptr("Ptr 2", d.ptr2)
+            prntr.print_s("String", d.str)
+            prntr.print_ptr("Ptr 4", d.ptr4)
+            prntr.print_ptr("Path str", d.path_str)
 
         elif t == 0x11:
-            print_s("Name", d.name)
-            print_ptr("Ptr 1", d.ptr1)
-            print_ptr("Ptr 2", d.ptr2)
+            prntr.print_s("Name", d.name)
+            prntr.print_ptr("Ptr 1", d.ptr1)
+            prntr.print_ptr("Ptr 2", d.ptr2)
 
-            print_v("unknown_1", d.unknown_1)
-            if hasattr(d, "unknown_2"):
-                print_v("unknown_2", d.unknown_2)
+            prntr.print_v("unknown_1", d)
+            prntr.print_v("unknown_2", d)
 
         elif t == 0x14:
 
-            print_ptr("Next", d.next)
-            print_ptr("Parent", d.parent_ptr)
-            print_ptr("Segment", d.segment_ptr)
-            print_ptr("Ptr 0x03", d.ptr_0x03)
-            print_ptr("Ptr x026", d.ptr_0x26)
+            prntr.print_ptr("Next", d.next)
+            prntr.print_ptr("Parent", d.parent_ptr)
+            prntr.print_ptr("Segment", d.segment_ptr)
+            prntr.print_ptr("Ptr 0x03", d.ptr_0x03)
+            prntr.print_ptr("Ptr x026", d.ptr_0x26)
 
-            print_v("unknown_1", d.unknown_1)
-            if hasattr(d, "unknown_2"):
-                print_v("unknown_2", d.unknown_2)
+            prntr.print_v("unknown_1", d)
+            prntr.print_v("unknown_2", d)
 
-            print_layer(d.layer)
+            prntr.print_layer(d.layer)
 
         elif t in [0x15, 0x16, 0x17]:
 
-            print_ptr("Next", d.next)
-            print_ptr("Parent", d.parent_ptr)
+            prntr.print_ptr("Next", d.next)
+            prntr.print_ptr("Parent", d.parent_ptr)
 
-            print_v("unknown_1", d.unknown_1)
-            if hasattr(d, "unknown_2"):
-                print_v("unknown_2", d.unknown_2)
+            prntr.print_v("unknown_1", d)
+            prntr.print_v("unknown_2", d)
 
-            print_v("Width", d.width, hex=False)
-            print_coords("pt0", d.coords_0)
-            print_coords("pt1", d.coords_1)
+            prntr.print_v("Width", d.width, as_hex=False)
+            prntr.print_coords("pt0", d.coords_0)
+            prntr.print_coords("pt1", d.coords_1)
 
         elif t == 0x1b: # Net
-            print_s("Net", d.net_name)
+            prntr.print_s("Net", d.net_name)
 
-            print_ptr("Path str", d.path_str_ptr)
-            print_ptr("Model str", d.model_ptr)
-            print_ptr("Ptr1", d.ptr1)
-            print_ptr("Ptr2", d.ptr2)
-            print_ptr("Ptr4", d.ptr4)
-            print_ptr("Ptr6", d.ptr6)
+            prntr.print_ptr("Path str", d.path_str_ptr)
+            prntr.print_ptr("Model str", d.model_ptr)
+            prntr.print_ptr("Ptr1", d.ptr1)
+            prntr.print_ptr("Ptr2", d.ptr2)
+            prntr.print_ptr("Ptr4", d.ptr4)
+            prntr.print_ptr("Ptr6", d.ptr6)
 
-            print_v("Type", d.type)
+            prntr.print_v("Type", d.type)
 
-            print_v("unknown_1", d.unknown_1)
-            if hasattr(d, "unknown_2"):
-                print_v("unknown_1", d.unknown_2)
-
-            print_v("unknown_3", d.unknown_3)
-            print_v("unknown_4", d.unknown_4)
+            prntr.print_v("unknown_1", d)
+            prntr.print_v("unknown_1", d)
+            prntr.print_v("unknown_3", d)
+            prntr.print_v("unknown_4", d)
 
         elif t == 0x1c: # Padstack
-            print_s("Pad str", d.pad_str)
-            print_v("Pad path", d.pad_path)
-            print_v("Layer count", d.layer_count)
-            print_v("Pad type", d.pad_info.pad_type)
+            prntr.print_s("Pad str", d.pad_str)
+            prntr.print_v("Pad path", d.pad_path)
+            prntr.print_v("Layer count", d.layer_count)
+            prntr.print_v("Pad type", d.pad_info.pad_type)
 
             for i, pc in  enumerate(d.components):
-                prnt(f"- Component {i}")
+                prntr.prnt(f"- Component {i}")
 
-                print_v(f"  type", pc.t)
+                prntr.print_v(f"  type", pc.t)
 
                 if pc.t == 0x00:
                     continue
 
-                print_v(f"  w", pc.w, hex=False)
-                print_v(f"  h", pc.h, hex=False)
-                print_v(f"  x3", pc.h, hex=False)
-                print_v(f"  x4", pc.h, hex=False)
-                print_ptr("  str_ptr", pc.str_ptr)
+                prntr.print_v(f"  w", pc.w, as_hex=False)
+                prntr.print_v(f"  h", pc.h, as_hex=False)
+                prntr.print_v(f"  x3", pc.x3, as_hex=False)
+                prntr.print_v(f"  x4", pc.x4, as_hex=False)
+                prntr.print_ptr("  str_ptr", pc.str_ptr)
 
         elif t == 0x24: # Rectangle
-            print_coords("pt0", d.coords_0)
-            print_coords("pt1", d.coords_1)
-            print_ptr("ptr1", d.ptr1)
+            prntr.print_coords("pt0", d.coords_0)
+            prntr.print_coords("pt1", d.coords_1)
+            prntr.print_ptr("ptr1", d.ptr1)
 
         elif t == 0x28: # Polygon?
-            print_coords("pt0", d.coords_0)
-            print_coords("pt1", d.coords_1)
-            print_ptr("ptr1", d.ptr1)
-            print_ptr("ptr2", d.ptr2)
-            print_ptr("ptr3", d.ptr3)
-            print_ptr("ptr4", d.ptr4)
-            if hasattr(d, "ptr5"):
-                print_ptr("ptr4", d.ptr5)
-            print_ptr("ptr6", d.ptr6)
-            if hasattr(d, "ptr7_16x"):
-                print_ptr("ptr7_16x", d.ptr7_16x)
+            prntr.print_coords("pt0", d.coords_0)
+            prntr.print_coords("pt1", d.coords_1)
+            prntr.print_ptr("ptr1", d)
+            prntr.print_ptr("ptr2", d)
+            prntr.print_ptr("ptr3", d)
+            prntr.print_ptr("ptr4", d)
+            prntr.print_ptr("ptr4", d)
+            prntr.print_ptr("ptr6", d)
+            prntr.print_ptr("ptr7_16x", d)
 
-            print_ptr("first_seg", d.first_segment_ptr)
+            prntr.print_ptr("first_seg", d.first_segment_ptr)
 
-            print_v("unknown_1", d.unknown_1)
-            if hasattr(d, "unknown_2"):
-                print_v("unknown_2", d.unknown_2)
-            if hasattr(d, "unknown_3"):
-                print_v("unknown_3", d.unknown_3)
-            print_v("unknown_4", d.unknown_4)
-            print_v("unknown_5", d.unknown_5)
+            prntr.print_v("unknown_1", d)
+            prntr.print_v("unknown_2", d)
+            prntr.print_v("unknown_3", d)
+            prntr.print_v("unknown_4", d)
+            prntr.print_v("unknown_5", d)
 
         elif t == 0x2b:
-            print_ptr("next", d.next)
-            print_s("fp_str", d.fp_str_ref)
+            prntr.print_ptr("next", d.next)
+            prntr.print_s("fp_str", d.fp_str_ref)
 
-            print_ptr("first_inst_ptr", d.first_inst_ptr)
-            print_ptr("ptr_2", d.ptr_2)
-            print_ptr("ptr_3", d.ptr_3)
-            print_ptr("ptr_4", d.ptr_4)
-            print_ptr("str_ptr1", d.str_ptr1)
-            print_ptr("ptr_5", d.ptr_5)
-            print_ptr("ptr_6", d.ptr_6)
-            print_ptr("ptr_7", d.ptr_7)
+            prntr.print_ptr("first_inst_ptr", d.first_inst_ptr)
+            prntr.print_ptr("ptr_2", d.ptr_2)
+            prntr.print_ptr("ptr_3", d.ptr_3)
+            prntr.print_ptr("ptr_4", d.ptr_4)
+            prntr.print_ptr("str_ptr1", d.str_ptr1)
+            prntr.print_ptr("ptr_5", d.ptr_5)
+            prntr.print_ptr("ptr_6", d.ptr_6)
+            prntr.print_ptr("ptr_7", d.ptr_7)
 
-            print_coords("coords0", d.coords0)
-            print_coords("coords1", d.coords1)
+            prntr.print_coords("coords0", d.coords0)
+            prntr.print_coords("coords1", d.coords1)
 
-            print_v("unknown_1", d.unknown_1)
+            prntr.print_v("unknown_1", d.unknown_1)
 
         elif t == 0x2c:
-            print_ptr("next", d.next)
-            print_v("flags", d.flags)
-            print_ptr("ptr_1", d.ptr_1)
-            print_ptr("ptr_2", d.ptr_2)
-            print_ptr("ptr_3", d.ptr_3)
-            print_s("subclass_str", d.subclass_str)
+            prntr.print_ptr("next", d.next)
+            prntr.print_v("flags", d.flags)
+            prntr.print_ptr("ptr_1", d.ptr_1)
+            prntr.print_ptr("ptr_2", d.ptr_2)
+            prntr.print_ptr("ptr_3", d.ptr_3)
+            prntr.print_s("subclass_str", d.subclass_str)
 
-            if hasattr(d, "unknown_1"):
-                print_v("unknown_1", d.unknown_1)
-            if hasattr(d, "unknown_2"):
-                print_v("unknown_2", d.unknown_2)
-            if hasattr(d, "unknown_3"):
-                print_v("unknown_3", d.unknown_3)
-            print_v("unknown_4", d.unknown_4)
+            prntr.print_v("unknown_1", d)
+            prntr.print_v("unknown_2", d)
+            prntr.print_v("unknown_3", d)
+            prntr.print_v("unknown_4", d)
 
         elif t == 0x2d:
-            print_ptr("next", d.next)
-            print_ptr("first_pad_ptr", d.first_pad_ptr)
-            print_ptr("ptr_1", d.ptr_1)
-            print_ptr("ptr_2", d.ptr_2)
-            print_ptr("ptr_3", d.ptr_3)
-            print_ptr("ptr_4", d.ptr_4)
-            print_ptr("ptr_5", d.ptr_5)
-            print_ptr("ptr_6", d.ptr_6)
+            prntr.print_ptr("next", d.next)
+            prntr.print_ptr("first_pad_ptr", d.first_pad_ptr)
+            prntr.print_ptr("ptr_1", d)
+            prntr.print_ptr("ptr_2", d)
+            prntr.print_ptr("ptr_3", d)
+            prntr.print_ptr("ptr_4", d)
+            prntr.print_ptr("ptr_5", d)
+            prntr.print_ptr("ptr_6", d)
 
-            if hasattr(d, "unknown_1"):
-                print_v("unknown_1", d.unknown_1)
+            prntr.print_v("unknown_1", d)
+            prntr.print_v("unknown_2", d)
+            prntr.print_v("unknown_3", d)
+            prntr.print_v("flags", d.flags)
+            prntr.print_v(f"rotation", d.rotation / 1000., as_hex=False)
+            prntr.print_coords("coords", d.coords)
 
-            print_v("unknown_2", d.unknown_2)
-            print_v("unknown_3", d.unknown_3)
-            print_v("flags", d.flags)
-            print_v(f"rotation", d.rotation / 1000., hex=False)
-            print_coords("coords", d.coords)
-
-            if hasattr(d, "inst_ref_16x"):
-                print_ptr("inst_ref", d.inst_ref_16x)
-            if hasattr(d, "inst_ref"):
-                print_ptr("inst_ref", d.inst_ref)
+            prntr.print_ptr("inst_ref", d, "inst_ref_16x")
+            prntr.print_ptr("inst_ref", d, "inst_ref")
 
         elif t == 0x30:
 
-            print_ptr("next", d.next)
-            print_ptr("str_graphic_ptr", d.str_graphic_ptr)
+            prntr.print_ptr("next", d.next)
+            prntr.print_ptr("str_graphic_ptr", d.str_graphic_ptr)
 
-            if hasattr(d, "ptr3"):
-                print_ptr("ptr_3", d.ptr_3)
-
-            if hasattr(d, "un4"):
-                print_ptr("un4", d.un4)
+            prntr.print_ptr("ptr_3", d)
+            prntr.print_ptr("un4", d)
 
         elif t == 0x31:
-            print_ptr("str_graphic_wrapper_ptr", d.str_graphic_wrapper_ptr)
+            prntr.print_ptr("str_graphic_wrapper_ptr", d.str_graphic_wrapper_ptr)
 
-            print_s("value", d.value.chars)
+            prntr.print_v("value", d.value)
 
         elif t == 0x37:
 
-            print_ptr("ptr_1", d.ptr_1)
+            prntr.print_ptr("ptr_1", d.ptr_1)
 
-            print_v("capacity", d.capacity)
-            print_v("count", d.count)
+            prntr.print_v("capacity", d.capacity)
+            prntr.print_v("count", d.count)
 
-            print_v("unknown_1", d.unknown_1)
-
-            if hasattr(d, "unknown_2"):
-                print_v("unknown_2", d.unknown_2)
-            if hasattr(d, "unknown_3"):
-                print_v("unknown_3", d.unknown_3)
+            prntr.print_v("unknown_1", d)
+            prntr.print_v("unknown_2", d)
+            prntr.print_v("unknown_3", d)
 
             for i in range(d.count):
                 entry = d.ptrs[i]
-                print_ptr(f"entry {i}", entry)
+                prntr.print_ptr(f"entry {i}", entry)
 
         elif t == 0x3c:
 
-            if hasattr(d, "unknown_1"):
-                print_v("unknown_1", d.unknown_1)
+            prntr.print_v("unknown_1", d)
 
             num_entries = d.num_entries
-            print_v("num_entries", num_entries)
+            prntr.print_v("num_entries", num_entries)
 
             for i in range(num_entries):
                 entry = d.entries[i]
-                print_ptr(f"entry {i}", entry)
+                prntr.print_ptr(f"entry {i}", entry)
 
         else:
-
             print(f"  Object data: {d}")
 
 class IntIsh:
@@ -476,9 +482,10 @@ def print_obj_counts_by_type(objs):
     )
 
 
-def walk_list(brd: AllegroBoard, ll):
+def walk_list(brd: AllegroBoard, ll, next_attr="next"):
     """
-    Generate a list of objects from a linked list
+    Generate a list of objects from a linked list, following the "next"
+    entry on each object.
 
     yield index, node_key, object
     """
@@ -491,7 +498,7 @@ def walk_list(brd: AllegroBoard, ll):
         obj = brd.object(node_key)
         yield index, node_key, obj
 
-        node_key = obj.data.next
+        node_key = getattr(obj.data, next_attr)
         index += 1
 
 
@@ -521,14 +528,11 @@ if __name__ == "__main__":
     parser.add_argument("--dump-by-type", "--dt", type=IntIsh,
                         help="Dump all the objects of the given type.")
 
-    parser.add_argument( "--dump-layer-map", "--dlm", action="store_true",
+    parser.add_argument( "--dump-layers", "--dl", action="store_true",
                         help="Dump all the layers in the layer map structure")
 
     parser.add_argument("--footprints", "--fp", nargs="*", default=None,
                         help="Dump footprint info for the given ref designators, or all if none given")
-
-    parser.add_argument( "--dump-layers", "--dl", action="store_true",
-                         help="Dump all the layers in the layer 0x2A structures")
 
     args = parser.parse_args()
 
@@ -597,7 +601,7 @@ if __name__ == "__main__":
             brd.print_obj(obj)
             print("")
 
-    if args.dump_layer_map:
+    if args.dump_layers:
 
         lm = kt_brd_struct.layer_map
 
@@ -687,5 +691,3 @@ if __name__ == "__main__":
 
                 next = inst_obj.data.next
                 inst_num += 1
-
-    # if args.dump_layers:
