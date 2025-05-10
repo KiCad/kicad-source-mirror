@@ -24,6 +24,7 @@ or you may write to the Free Software Foundation, Inc.,
 
 import argparse
 import logging
+import struct
 
 import kaitaistruct
 import tabulate
@@ -124,6 +125,13 @@ class AllegroBoard:
 
 
         def print_v(self, name, block_or_value, attr_name: str | None = None, as_hex: bool = True):
+            def cfp_to_double(cfp):
+                high_32 = cfp.a
+                low_32 = cfp.b
+                combined = (high_32 << 32) | (low_32 & 0xFFFFFFFF)
+                packed = struct.pack('<Q', combined)  # Little-endian
+                double, = struct.unpack('<d', packed)  # Little-endian
+                return double
 
             # if the caller didn't give an attr name, just use the name
             attr_name = attr_name or name
@@ -139,7 +147,7 @@ class AllegroBoard:
                 return
 
             if isinstance(value, allegro_brd.AllegroBrd.CadenceFp):
-                self.prnt(f"{name:12}: {value.a}, {value.b}")
+                self.prnt(f"{name:12}: {cfp_to_double(value)}")
             elif isinstance(value, int) and as_hex:
                 self.prnt(f"{name:12}: {value:#x}")
             else:

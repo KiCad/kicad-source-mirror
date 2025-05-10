@@ -210,3 +210,13 @@ Family is a small number like:
 
 The 0x09 map entry (-> [DIMENSION], [SYMDIM_TOP], [LEADS, ...., DIMENSION]) seems to be for auxiliary data. But also seems to be used by silkscreen in footprints?
 ```
+
+* The "Cadence FP" type seems to be a word swapped double:
+
+```
+S!RES2012X50N_0805!PACKAGE!RESISTOR_RES2012X50N_0805_1K!R16!PACKAGE GEOMETRY!PLACE_BOUND_TOP!483 1!ARC!256!1274!540!1274!540!1260!540!14!2!COUNTERCLOCKWISE!NOTCONNECT!!!!!!!!!!!!!
+
+  x           : 0x4093b000, 0  (1260)
+  y           : 0x4080e000, 0  (540)
+  r           : 0x402c0000, 0  (14)
+```
