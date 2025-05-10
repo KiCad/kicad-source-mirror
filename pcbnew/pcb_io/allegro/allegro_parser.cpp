@@ -23,6 +23,8 @@
 
 #include <allegro_parser.h>
 
+#include <cstring>
+
 #include <wx/sstream.h>
 #include <wx/log.h>
 #include <wx/translation.h>
@@ -81,12 +83,16 @@ static FILE_HEADER::LINKED_LIST ReadLL( FILE_STREAM& aStream )
 
 static double ReadAllegroFloat( FILE_STREAM& aStream )
 {
-    uint32_t a = aStream.ReadU32();
-    uint32_t b = aStream.ReadU32();
+    const uint32_t a = aStream.ReadU32();
+    const uint32_t b = aStream.ReadU32();
 
-    // TODO: not quite sure how this works
-    // Start here and figure it out later
-    return double( a ) + ( double( b ) / 2e31 );
+    // Combine into a 64-bit integer
+    const uint64_t combined = ( static_cast<uint64_t>( a ) << 32 ) + b;
+
+    // Copy the bits into a double
+    double result = 0;
+    std::memcpy( &result, &combined, sizeof( result ) );
+    return result;
 }
 
 
@@ -276,14 +282,14 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x01_ARC( FILE_STREAM& aStream, FM
 
     data.m_Width = aStream.ReadU32();
 
-    for( size_t i = 0; i < data.m_Coords.size(); ++i )
-    {
-        data.m_Coords[i] = aStream.ReadS32();
-    }
+    data.m_StartX = aStream.ReadS32();
+    data.m_StartY = aStream.ReadS32();
+    data.m_EndX = aStream.ReadS32();
+    data.m_EndY = aStream.ReadS32();
 
-    data.m_X = ReadAllegroFloat( aStream );
-    data.m_Y = ReadAllegroFloat( aStream );
-    data.m_R = ReadAllegroFloat( aStream );
+    data.m_CenterX = ReadAllegroFloat( aStream );
+    data.m_CenterY = ReadAllegroFloat( aStream );
+    data.m_Radius = ReadAllegroFloat( aStream );
 
     for( size_t i = 0; i < data.m_BoundingBoxCoords.size(); ++i )
     {

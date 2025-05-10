@@ -224,7 +224,6 @@ std::unique_ptr<FOOTPRINT> BOARD_BUILDER::buildFootprint( const BLK_0x2D& aFpIns
     const LL_WALKER graphicsWalker( aFpInstance.m_GraphicPtr, aFpInstance.m_Key, m_rawBoard );
     for( const BLOCK_BASE* graphicsBlock : graphicsWalker )
     {
-        std::cout << "  Graphics: " << wxString::Format( "%#04x", graphicsBlock->GetBlockType() ) << std::endl;
         if( graphicsBlock->GetBlockType() == 0x14 )
         {
             const auto& graphics = static_cast<const BLOCK<BLK_0x14>&>( *graphicsBlock ).GetData();
@@ -256,14 +255,69 @@ std::unique_ptr<FOOTPRINT> BOARD_BUILDER::buildFootprint( const BLK_0x2D& aFpIns
                 std::unique_ptr<PCB_SHAPE> shape = std::make_unique<PCB_SHAPE>( &m_board );
                 shape->SetLayer( layer );
 
-                std::cout << "    Seg: " << wxString::Format( "%#04x", segBlock->GetBlockType() ) << std::endl;
-
                 switch( segBlock->GetBlockType() )
                 {
+                case 0x01:
+                {
+                    const auto& arc = static_cast<const BLOCK<BLK_0x01_ARC>&>( *segBlock ).GetData();
+
+                    VECTOR2I start{ arc.m_StartX, arc.m_StartY };
+                    VECTOR2I end{ arc.m_EndX, arc.m_EndY };
+
+                    start = scale( start );
+                    end = scale( end );
+
+                    VECTOR2I c = scale( KiROUND( VECTOR2D{ arc.m_CenterX, arc.m_CenterY } ) );
+
+                    int radius = static_cast<int>( arc.m_Radius * m_scale );
+
+                    std::cout << "start " << start << " end " << end << ", c " << c << " r " << radius << std::endl;
+
+                    bool clockwise = false; // TODO - flag?
+                    // Probably follow fabmaster here for flipping, as I guess it's identical.
+
+                    shape->SetWidth( m_scale * arc.m_Width );
+
+                    if( start == end )
+                    {
+                        shape->SetShape( SHAPE_T::CIRCLE );
+                        shape->SetCenter( c );
+                        shape->SetRadius( radius );
+                    }
+                    else
+                    {
+                        shape->SetShape( SHAPE_T::ARC );
+                        EDA_ANGLE startangle( start - c );
+                        EDA_ANGLE endangle( end - c );
+
+                        startangle.Normalize();
+                        endangle.Normalize();
+
+                        EDA_ANGLE angle = endangle - startangle;
+
+                        if( clockwise && angle < ANGLE_0 )
+                            angle += ANGLE_360;
+                        if( !clockwise && angle > ANGLE_0 )
+                            angle -= ANGLE_360;
+
+                        if( start == end )
+                            angle = -ANGLE_360;
+
+                        VECTOR2I mid = start;
+                        RotatePoint( mid, c, -angle / 2.0 );
+
+                        shape->SetArcGeometry( start, mid, end );
+                    }
+                    fp->Add( shape.release() );
+
+                    break;
+                }
                 case 0x15:
                 case 0x16:
                 case 0x17:
                 {
+                    shape->SetShape( SHAPE_T::SEGMENT );
+
                     const auto& seg = static_cast<const BLOCK<BLK_0x15_16_17_SEGMENT>&>( *segBlock ).GetData();
                     VECTOR2I    start = scale( { seg.m_StartX, seg.m_StartY } );
                     VECTOR2I    end = scale( { seg.m_EndX, seg.m_EndY } );
@@ -278,6 +332,7 @@ std::unique_ptr<FOOTPRINT> BOARD_BUILDER::buildFootprint( const BLK_0x2D& aFpIns
                     shape->SetWidth( width * m_scale );
 
                     fp->Add( shape.release() );
+                    break;
                 }
                 default:
                 {

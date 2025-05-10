@@ -239,3 +239,7 @@ S!RES2012X50N_0805!PACKAGE!RESISTOR_RES2012X50N_0805_1K!R16!PACKAGE GEOMETRY!PLA
 * Presumably, then 0x6 is class = ETCH and the subclass is the copper layer index.
 
 * It's still not quite clear how to get to the layer name - presumably there's a fixed mapping into the header layer map somehow - the same entries largely have the same functions between all the files.
+
+* It looks like 0x15 is H line, 0x17 is V, and 0x16 is neither, so we can just merge the handling.
+
+* Arcs can now be imported, following some logic from the Fabmaster importer. For start = end, we can just use a circle anyway.

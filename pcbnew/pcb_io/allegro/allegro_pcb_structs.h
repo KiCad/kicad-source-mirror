@@ -330,12 +330,16 @@ struct BLK_0x01_ARC
 
     COND_GE<FMT_VER::V_172, uint32_t> m_Unknown6;
 
-    uint32_t               m_Width;
-    std::array<int32_t, 4> m_Coords;
+    uint32_t m_Width;
 
-    float m_X;
-    float m_Y;
-    float m_R;
+    int32_t m_StartX;
+    int32_t m_StartY;
+    int32_t m_EndX;
+    int32_t m_EndY;
+
+    double m_CenterX; // Center
+    double m_CenterY;
+    double m_Radius;
 
     std::array<int32_t, 4> m_BoundingBoxCoords;
 };
