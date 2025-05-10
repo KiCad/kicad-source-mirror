@@ -41,9 +41,9 @@
 static bool checkFileHeader( const wxString& aFileName )
 {
     // The files start with a version string that can vary (a bit),
-    // But the header seems always to contain the string "allv" at the
+    // But the header seems always to contain the string "all" at the
     // start of the version string at 0xF8.
-    static const std::vector<uint8_t> allegroVString = { 'a', 'l', 'l', 'v' };
+    static const std::vector<uint8_t> allegroVString = { 'a', 'l', 'l' };
     static const size_t               allegroVStringOffset = 0xf8;
 
     return IO_UTILS::fileHasBinaryHeader( aFileName, allegroVString, allegroVStringOffset );

@@ -160,7 +160,7 @@ BOARD_BUILDER::BOARD_BUILDER( const RAW_BOARD& aRawBoard, BOARD& aBoard, REPORTE
     if( m_rawBoard.m_Header->m_UnitsDivisor == 0 )
         THROW_IO_ERROR( "Board units divisor is 0" );
 
-    m_scale = scale * m_rawBoard.m_Header->m_UnitsDivisor;
+    m_scale = scale / m_rawBoard.m_Header->m_UnitsDivisor;
 }
 
 
