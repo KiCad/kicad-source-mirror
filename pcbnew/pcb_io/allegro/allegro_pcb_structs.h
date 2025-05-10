@@ -1268,7 +1268,7 @@ struct BLK_0x2D
     std::array<uint32_t, 4> m_UnknownPtrs1;
 
     // Not 100% sure of verson here, but seems to be in BeagleBoneAi
-    COND_GE<FMT_VER::V_172, uint32_t> m_groupAssignmentPtr;
+    // COND_GE<FMT_VER::V_172, uint32_t> m_groupAssignmentPtr;
 };
 
 
