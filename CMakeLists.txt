@@ -1007,7 +1007,7 @@ include( ${wxWidgets_USE_FILE} )
 
 # Detect wxWidgets port being used
 if( wxWidgets_FIND_STYLE STREQUAL "win32" )
-    string(REGEX MATCH "^[msw|qt|gtk]*" KICAD_WX_PORT "${WX_CONFIGURATION}")
+    string(REGEX MATCH "(msw|qt|gtk)" KICAD_WX_PORT "${WX_CONFIGURATION}")
 
     if( KICAD_WX_PORT STREQUAL "qt" )
         add_compile_definitions( __WXQT__ )
@@ -1015,7 +1015,7 @@ if( wxWidgets_FIND_STYLE STREQUAL "win32" )
         add_compile_definitions( __WXGTK__ )
     endif()
 elseif( _wx_selected_config )
-    string(REGEX MATCH "^[msw|qt|gtk|osx]*" KICAD_WX_PORT "${_wx_selected_config}")
+    string(REGEX MATCH "(msw|qt|gtk|osx)" KICAD_WX_PORT "${_wx_selected_config}")
 endif()
 
 if( KICAD_WX_PORT )
