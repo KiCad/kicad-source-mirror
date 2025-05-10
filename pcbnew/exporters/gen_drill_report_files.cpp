@@ -508,33 +508,22 @@ bool GENDRILL_WRITER_BASE::GenDrillReportFile( const wxString& aFullFileName )
 bool GENDRILL_WRITER_BASE::plotDrillMarks( PLOTTER* aPlotter )
 {
     // Plot the drill map:
-    VECTOR2I pos;
-
     for( unsigned ii = 0; ii < m_holeListBuffer.size(); ii++ )
     {
         const HOLE_INFO& hole = m_holeListBuffer[ii];
-        pos = hole.m_Hole_Pos;
 
         // Gives a good line thickness to have a good marker shape:
         aPlotter->SetCurrentLineWidth( getMarkerBestPenSize( hole.m_Hole_Diameter ) );
 
         // Always plot the drill symbol (for slots identifies the needed cutter!
-        aPlotter->Marker( pos, hole.m_Hole_Diameter, hole.m_Tool_Reference - 1 );
+        aPlotter->Marker( hole.m_Hole_Pos, hole.m_Hole_Diameter, hole.m_Tool_Reference - 1 );
 
         if( hole.m_Hole_Shape != 0 )
-        {
-            aPlotter->SetCurrentLineWidth( getSketchOvalBestPenSize() );
-            // FlashPadOval uses also the render settings default pen size, so we need
-            // to initialize it:
-            KIGFX::RENDER_SETTINGS* renderSettings = aPlotter->RenderSettings();
-            int curr_default_pensize = renderSettings->GetDefaultPenWidth();
-            renderSettings->SetDefaultPenWidth( getSketchOvalBestPenSize() );
-            aPlotter->FlashPadOval( pos, hole.m_Hole_Size, hole.m_Hole_Orient, SKETCH, nullptr );
-            renderSettings->SetDefaultPenWidth( curr_default_pensize );
-        }
+            aPlotter->ThickOval( hole.m_Hole_Pos, hole.m_Hole_Size, hole.m_Hole_Orient,
+                                 getSketchOvalBestPenSize(), nullptr );
     }
 
-    aPlotter->SetCurrentLineWidth( -1 );
+    aPlotter->SetCurrentLineWidth( PLOTTER::USE_DEFAULT_LINE_WIDTH );
 
     return true;
 }
