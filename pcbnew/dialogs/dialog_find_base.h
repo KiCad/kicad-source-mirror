@@ -45,10 +45,11 @@ class DIALOG_FIND_BASE : public DIALOG_SHIM
 		wxCheckBox* m_wildcards;
 		wxCheckBox* m_wrap;
 		wxCheckBox* m_includeReferences;
-		wxCheckBox* m_includeValues;
-		wxCheckBox* m_includeTexts;
 		wxCheckBox* m_includeMarkers;
+		wxCheckBox* m_includeValues;
 		wxCheckBox* m_includeNets;
+		wxCheckBox* m_checkAllFields;
+		wxCheckBox* m_includeTexts;
 		wxButton* m_findNext;
 		wxButton* m_findPrevious;
 		wxButton* m_searchAgain;
@@ -59,6 +60,7 @@ class DIALOG_FIND_BASE : public DIALOG_SHIM
 		// Virtual event handlers, override them in your derived class
 		virtual void OnClose( wxCloseEvent& event ) { event.Skip(); }
 		virtual void onTextEnter( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnOptions( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onFindNextClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onFindPreviousClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onSearchAgainClick( wxCommandEvent& event ) { event.Skip(); }

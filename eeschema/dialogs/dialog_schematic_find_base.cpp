@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6a-dirty)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -93,7 +93,7 @@ DIALOG_SCH_FIND_BASE::DIALOG_SCH_FIND_BASE( wxWindow* parent, wxWindowID id, con
 	m_checkAllPins = new wxCheckBox( this, wxID_ANY, _("Search pin &names and numbers"), wxDefaultPosition, wxDefaultSize, 0 );
 	gbSizer2->Add( m_checkAllPins, wxGBPosition( 2, 0 ), wxGBSpan( 1, 2 ), wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
-	m_checkAllFields = new wxCheckBox( this, wxID_ANY, _("Search &hidden fields"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_checkAllFields = new wxCheckBox( this, wxID_ANY, _("Include &hidden fields"), wxDefaultPosition, wxDefaultSize, 0 );
 	gbSizer2->Add( m_checkAllFields, wxGBPosition( 3, 0 ), wxGBSpan( 1, 3 ), wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 	m_checkCurrentSheetOnly = new wxCheckBox( this, wxID_ANY, _("Search the current &sheet only"), wxDefaultPosition, wxDefaultSize, 0 );

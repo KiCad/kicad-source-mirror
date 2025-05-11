@@ -48,6 +48,7 @@ bool g_FindOptionWrap = true;
 bool g_FindIncludeTexts = true;
 bool g_FindIncludeValues = true;
 bool g_FindIncludeReferences = true;
+bool g_FindIncludeHiddenFields = false;
 bool g_FindIncludeMarkers = true;
 bool g_FindIncludeNets = true;
 
@@ -80,6 +81,7 @@ DIALOG_FIND::DIALOG_FIND( PCB_EDIT_FRAME *aFrame ) :
     m_includeTexts->SetValue( g_FindIncludeTexts );
     m_includeValues->SetValue( g_FindIncludeValues );
     m_includeReferences->SetValue( g_FindIncludeReferences );
+    m_checkAllFields->SetValue( g_FindIncludeHiddenFields );
     m_includeMarkers->SetValue( g_FindIncludeMarkers );
     m_includeNets->SetValue( g_FindIncludeNets );
 
@@ -241,6 +243,12 @@ void DIALOG_FIND::search( bool aDirection )
         m_upToDate = false;
     }
 
+    if( g_FindIncludeHiddenFields != m_checkAllFields->GetValue() )
+    {
+        g_FindIncludeHiddenFields = m_checkAllFields->GetValue();
+        m_upToDate = false;
+    }
+
     if( g_FindIncludeMarkers != m_includeMarkers->GetValue() )
     {
         g_FindIncludeMarkers = m_includeMarkers->GetValue();
@@ -264,6 +272,8 @@ void DIALOG_FIND::search( bool aDirection )
         frd.matchMode = EDA_SEARCH_MATCH_MODE::WILDCARD;
     else
         frd.matchMode = EDA_SEARCH_MATCH_MODE::PLAIN;
+
+    frd.searchAllFields = g_FindIncludeHiddenFields;
 
     // Search parameters
     frd.findString = searchString;
