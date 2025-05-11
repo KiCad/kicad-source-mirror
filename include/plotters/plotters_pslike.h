@@ -229,6 +229,15 @@ protected:
 };
 
 
+struct PDF_3D_VIEW
+{
+    std::string m_name;
+    float       m_cameraMatrix[12];
+    float       m_cameraCenter;
+    float       m_fov;
+};
+
+
 class PDF_PLOTTER : public PSLIKE_PLOTTER
 {
 public:
@@ -238,10 +247,12 @@ public:
             m_fontResDictHandle( 0 ),
             m_imgResDictHandle( 0 ),
             m_jsNamesHandle( 0 ),
-            m_pageStreamHandle( 0 ),
+            m_pageStreamHandle( -1 ),
             m_streamLengthHandle( 0 ),
             m_workFile( nullptr ),
-            m_totalOutlineNodes( 0 )
+            m_totalOutlineNodes( 0 ),
+            m_3dModelHandle( -1 ),
+            m_3dExportMode( false )
     {
     }
 
@@ -367,6 +378,10 @@ public:
     void Bookmark( const BOX2I& aBox, const wxString& aName,
                    const wxString& aGroupName = wxEmptyString ) override;
 
+    void Plot3DModel( const wxString& aSourcePath, const std::vector<PDF_3D_VIEW>& a3DViews );
+
+    void Set3DExport( bool aYes ) { m_3dExportMode = aYes; }
+
     /**
      * PDF images are handles as inline, not XObject streams...
      */
@@ -444,7 +459,7 @@ protected:
      * Open a new PDF object and returns the handle if the parameter is -1.
      * Otherwise fill in the xref entry for the passed object
      */
-    int startPdfObject( int handle = -1 );
+    int startPdfObject( int aHandle = -1 );
 
     /**
      * Close the current PDF object
@@ -458,7 +473,7 @@ protected:
      *               a lot of things, but for the moment we only handle page content.
      * @eturn The object handle opened
      */
-    int startPdfStream( int handle = -1 );
+    int startPdfStream( int aHandle = -1 );
 
     /**
      * Finish the current PDF stream (writes the deferred length, too).
@@ -482,6 +497,9 @@ protected:
      */
     int emitGoToAction( int aPageHandle, const VECTOR2I& aBottomLeft, const VECTOR2I& aTopRight );
     int emitGoToAction( int aPageHandle );
+
+
+    void endPlotEmitResources();
 
     int m_pageTreeHandle;           ///< Handle to the root of the page tree object.
     int m_fontResDictHandle;        ///< Font resource dictionary.
@@ -515,6 +533,9 @@ protected:
 
     std::unique_ptr<OUTLINE_NODE> m_outlineRoot;        ///< Root outline node.
     int                           m_totalOutlineNodes;  ///< Total number of outline nodes.
+
+    int  m_3dModelHandle;
+    bool m_3dExportMode;
 };
 
 

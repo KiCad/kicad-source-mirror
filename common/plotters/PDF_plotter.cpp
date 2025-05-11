@@ -48,6 +48,7 @@
 #include <string_utils.h>
 #include <fmt/format.h>
 #include <fmt/chrono.h>
+#include <fmt/ranges.h>
 
 #include <plotters/plotters_pslike.h>
 
@@ -549,17 +550,17 @@ int PDF_PLOTTER::allocPdfObject()
 }
 
 
-int PDF_PLOTTER::startPdfObject(int handle)
+int PDF_PLOTTER::startPdfObject( int aHandle )
 {
     wxASSERT( m_outputFile );
     wxASSERT( !m_workFile );
 
-    if( handle < 0)
-        handle = allocPdfObject();
+    if( aHandle < 0 )
+        aHandle = allocPdfObject();
 
-    m_xrefTable[handle] = ftell( m_outputFile );
-    fmt::println( m_outputFile, "{} 0 obj", handle );
-    return handle;
+    m_xrefTable[aHandle] = ftell( m_outputFile );
+    fmt::println( m_outputFile, "{} 0 obj", aHandle );
+    return aHandle;
 }
 
 
@@ -571,11 +572,11 @@ void PDF_PLOTTER::closePdfObject()
 }
 
 
-int PDF_PLOTTER::startPdfStream( int handle )
+int PDF_PLOTTER::startPdfStream( int aHandle )
 {
     wxASSERT( m_outputFile );
     wxASSERT( !m_workFile );
-    handle = startPdfObject( handle );
+    int handle = startPdfObject( aHandle );
 
     // This is guaranteed to be handle+1 but needs to be allocated since
     // you could allocate more object during stream preparation
@@ -698,17 +699,20 @@ void PDF_PLOTTER::StartPage( const wxString& aPageNumber, const wxString& aPageN
     // will be initialized to a the right value in pdf file by the first item to plot
     m_currentPenWidth = 0;
 
-    // Open the content stream; the page object will go later
-    m_pageStreamHandle = startPdfStream();
+    if( !m_3dExportMode )
+    {
+        // Open the content stream; the page object will go later
+        m_pageStreamHandle = startPdfStream();
 
-    /* Now, until ClosePage *everything* must be wrote in workFile, to be
-       compressed later in closePdfStream */
+        /* Now, until ClosePage *everything* must be wrote in workFile, to be
+           compressed later in closePdfStream */
 
-    // Default graphic settings (coordinate system, default color and line style)
-    fmt::println( m_workFile,
-                  "{:g} 0 0 {:g} 0 0 cm 1 J 1 j 0 0 0 rg 0 0 0 RG {:g} w",
-                  0.0072 * plotScaleAdjX, 0.0072 * plotScaleAdjY,
-                  userToDeviceSize( m_renderSettings->GetDefaultPenWidth() ) );
+        // Default graphic settings (coordinate system, default color and line style)
+        fmt::println( m_workFile,
+                      "{:g} 0 0 {:g} 0 0 cm 1 J 1 j 0 0 0 rg 0 0 0 RG {:g} w",
+                      0.0072 * plotScaleAdjX, 0.0072 * plotScaleAdjY,
+                      userToDeviceSize( m_renderSettings->GetDefaultPenWidth() ) );
+    }
 }
 
 
@@ -790,10 +794,14 @@ void WriteImageSMaskStream( const wxImage& aImage, wxDataOutputStream& aOut )
 
 void PDF_PLOTTER::ClosePage()
 {
-    wxASSERT( m_workFile );
+    // non 3d exports need this
+    if( m_pageStreamHandle != -1 )
+    {
+        wxASSERT( m_workFile );
 
-    // Close the page stream (and compress it)
-    closePdfStream();
+        // Close the page stream (and compress it)
+        closePdfStream();
+    }
 
     // Page size is in 1/72 of inch (default user space units).  Works like the bbox in postscript
     // but there is no need for swapping the sizes, since PDF doesn't require a portrait page.
@@ -885,6 +893,14 @@ void PDF_PLOTTER::ClosePage()
         closePdfObject();
     }
 
+    int annot3DHandle = -1;
+
+    if( m_3dExportMode )
+    {
+        annot3DHandle = allocPdfObject();
+    }
+
+
     // Emit the page object and put it in the page list for later
     int pageHandle = startPdfObject();
     m_pageHandles.push_back( pageHandle );
@@ -893,28 +909,55 @@ void PDF_PLOTTER::ClosePage()
                 "<<\n"
                 "/Type /Page\n"
                 "/Parent {} 0 R\n"
-                "/Resources <<\n"
-                "    /ProcSet [/PDF /Text /ImageC /ImageB]\n"
-                "    /Font {} 0 R\n"
-                "    /XObject {} 0 R >>\n"
-                "/MediaBox [0 0 {:g} {:g}]\n"
-                "/Contents {} 0 R\n",
+                "/MediaBox [0 0 {:g} {:g}]\n",
                 m_pageTreeHandle,
-                m_fontResDictHandle,
-                m_imgResDictHandle,
                 psPaperSize.x,
-                psPaperSize.y,
-                m_pageStreamHandle );
+                psPaperSize.y );
+
+    if( m_pageStreamHandle != -1 )
+    {
+        fmt::print( m_outputFile, "/Contents {} 0 R\n", m_pageStreamHandle );
+    }
+
+    std::vector<std::string> annots;
+    if( m_3dModelHandle != -1 )
+    {
+        annots.push_back( fmt::format( "{} 0 R", annot3DHandle ) );
+    }
 
     if( hyperlinkHandles.size() > 0 )
-        fmt::print( m_outputFile, "/Annots {} 0 R", hyperLinkArrayHandle );
+    {
+        annots.push_back( fmt::format( "{} 0 R", hyperLinkArrayHandle ) );
+    }
+
+    fmt::print( m_outputFile, "/Annots [{}]\n", fmt::join( annots, " " ) );
 
     fmt::print( m_outputFile, ">>\n" );
 
     closePdfObject();
 
+    if( m_3dExportMode )
+    {
+        startPdfObject( annot3DHandle );
+        fmt::print( m_outputFile,
+                    "<<\n"
+                    "/Type /Annot\n"
+                    "/Subtype /3D\n"
+                    "/Rect [0 0 {:g} {:g}]\n"
+                    "/NM (3D Annotation)\n"
+                    "/3DD {} 0 R\n"
+                    "/3DV 0\n"
+                    "/3DA<</A/PO/D/PC/TB true/NP true>>\n"
+                    "/3DI true\n"
+                    "/P {} 0 R\n"
+                    ">>\n",
+                    psPaperSize.x, psPaperSize.y, m_3dModelHandle, pageHandle );
+
+        closePdfObject();
+    }
+
     // Mark the page stream as idle
-    m_pageStreamHandle = 0;
+    m_pageStreamHandle = -1;
 
     int                        actionHandle = emitGoToAction( pageHandle );
     PDF_PLOTTER::OUTLINE_NODE* parent_node = m_outlineRoot.get();
@@ -1166,16 +1209,8 @@ int PDF_PLOTTER::emitOutline()
     return -1;
 }
 
-
-bool PDF_PLOTTER::EndPlot()
+void PDF_PLOTTER::endPlotEmitResources()
 {
-    // We can end up here if there was nothing to plot
-    if( !m_outputFile )
-        return false;
-
-    // Close the current page (often the only one)
-    ClosePage();
-
     /* We need to declare the resources we're using (fonts in particular)
        The useful standard one is the Helvetica family. Adding external fonts
        is *very* involved! */
@@ -1526,6 +1561,21 @@ function ShM(aEntries) {
 
         closePdfObject();
     }
+}
+
+bool PDF_PLOTTER::EndPlot()
+{
+    // We can end up here if there was nothing to plot
+    if( !m_outputFile )
+        return false;
+
+    // Close the current page (often the only one)
+    ClosePage();
+
+    if( !m_3dExportMode )
+    {
+        endPlotEmitResources();
+    }
 
     /* The page tree: it's a B-tree but luckily we only have few pages!
        So we use just an array... The handle was allocated at the beginning,
@@ -1574,7 +1624,11 @@ function ShM(aEntries) {
     closePdfObject();
 
     // Let's dump in the outline
-    int outlineHandle = emitOutline();
+    int outlineHandle = -1;
+    if( !m_3dExportMode )
+    {
+        outlineHandle = emitOutline();
+    }
 
     // The catalog, at last
     int catalogHandle = startPdfObject();
@@ -1799,4 +1853,135 @@ void PDF_PLOTTER::Bookmark( const BOX2I& aLocation, const wxString& aSymbolRefer
 {
 
     m_bookmarksInPage[aGroupName].push_back( std::make_pair( aLocation, aSymbolReference ) );
+}
+
+
+void PDF_PLOTTER::Plot3DModel( const wxString&                 aSourcePath,
+                               const std::vector<PDF_3D_VIEW>& a3DViews )
+{
+    std::map<float, int> m_fovMap;
+    std::vector<int>     m_viewHandles;
+
+    for( const PDF_3D_VIEW& view : a3DViews )
+    {
+        int fovHandle = -1;
+        if( !m_fovMap.contains( view.m_fov ) )
+        {
+            fovHandle = allocPdfObject();
+            m_fovMap[view.m_fov] = fovHandle;
+
+            startPdfObject( fovHandle );
+            fmt::print( m_outputFile,
+                        "<<\n"
+                        "/FOV {}\n"
+                        "/PS /Min\n"
+                        "/Subtype /P\n"
+                        ">>\n",
+                        view.m_fov );
+            closePdfObject();
+        }
+        else
+        {
+            fovHandle = m_fovMap[view.m_fov];
+        }
+
+        int viewHandle = allocPdfObject();
+        startPdfObject( viewHandle );
+
+        fmt::print( m_outputFile,
+                    "<<\n"
+                    "/Type /3DView\n"
+                    "/XN ({})\n"
+                    "/IN ({})\n"
+                    "/MS /M\n"
+                    "/C2W [{:f} {:f} {:f} {:f} {:f} {:f} {:f} {:f} {:f} {:f} {:f} {:f}]\n"
+                    "/CO {:f}\n"
+                    "/NR false\n"
+                    "/BG<<\n"
+                    "/Type /3DBG\n"
+                    "/Subtype /SC\n"
+                    "/CS /DeviceRGB\n"
+                    "/C [1.000000 1.000000 1.000000]>>\n"
+                    "/P {} 0 R\n"
+                    "/LS<<\n"
+                    "/Type /3DLightingScheme\n"
+                    "/Subtype /CAD>>\n"
+                    ">>\n",
+                    view.m_name, view.m_name, view.m_cameraMatrix[0],
+                    view.m_cameraMatrix[1],
+                    view.m_cameraMatrix[2], view.m_cameraMatrix[3], view.m_cameraMatrix[4],
+                    view.m_cameraMatrix[5], view.m_cameraMatrix[6], view.m_cameraMatrix[7],
+                    view.m_cameraMatrix[8], view.m_cameraMatrix[9], view.m_cameraMatrix[10],
+                    view.m_cameraMatrix[11],
+                    view.m_cameraCenter,
+                    fovHandle );
+
+        closePdfObject();
+
+        m_viewHandles.push_back( viewHandle );
+    }
+
+    m_3dModelHandle = startPdfObject();
+
+    // so we can get remotely stuff the length afterwards
+    int modelLenHandle = allocPdfObject();
+
+    fmt::print( m_outputFile,
+                "<<\n"
+                "/Type /3D\n"
+                "/Subtype /U3D\n"
+                "/DV 0\n" );
+
+    fmt::print( m_outputFile, "/VA [" );
+    for( int viewHandle : m_viewHandles )
+    {
+        fmt::print( m_outputFile, "{} 0 R ", viewHandle );
+    }
+    fmt::print( m_outputFile, "]\n" );
+
+    fmt::print( m_outputFile,
+                "/Length {} 0 R\n"
+                "/Filter /FlateDecode\n"
+                ">>\n", // Length is deferred
+                modelLenHandle );
+
+    fmt::println( m_outputFile, "stream" );
+
+    wxFFile outputFFile( m_outputFile );
+
+    fflush( m_outputFile );
+    long imgStreamStart = ftell( m_outputFile );
+
+    size_t model_stored_size = 0;
+    {
+        wxFFileOutputStream ffos( outputFFile );
+        wxZlibOutputStream  zos( ffos, wxZ_BEST_COMPRESSION, wxZLIB_ZLIB );
+        wxDataOutputStream  dos( zos );
+
+        wxFFileInputStream fileStream( aSourcePath );
+        if( !fileStream.IsOk() )
+        {
+            wxLogError( _( "Failed to open 3D model file: %s" ), aSourcePath );
+        }
+
+        const size_t bufferSize = 4096;
+        char         buffer[bufferSize];
+        while( !fileStream.Eof() )
+        {
+            fileStream.Read( buffer, bufferSize );
+            zos.Write( buffer, fileStream.LastRead() );
+        }
+    }
+    fflush( m_outputFile );
+    model_stored_size = ftell( m_outputFile );
+    model_stored_size -= imgStreamStart; // Get the size of the compressed stream
+
+    fmt::print( m_outputFile, "\nendstream\n" );
+    closePdfObject();
+
+    startPdfObject( modelLenHandle );
+    fmt::println( m_outputFile, "{}", (unsigned) model_stored_size );
+    closePdfObject();
+
+    outputFFile.Detach(); // Don't close it
 }
