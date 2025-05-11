@@ -210,6 +210,7 @@ const std::string FILEEXT::BrepFileExtension( "brep" );
 const std::string FILEEXT::XaoFileExtension( "xao" );
 const std::string FILEEXT::PlyFileExtension( "ply" );
 const std::string FILEEXT::StlFileExtension( "stl" );
+const std::string FILEEXT::U3DFileExtension( "u3d" );
 
 const std::string FILEEXT::GencadFileExtension( "cad" );
 

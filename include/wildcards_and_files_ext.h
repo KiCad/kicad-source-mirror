@@ -199,6 +199,7 @@ public:
     static const std::string XaoFileExtension;
     static const std::string PlyFileExtension;
     static const std::string StlFileExtension;
+    static const std::string U3DFileExtension;
 
     static const std::string GencadFileExtension;
 
