@@ -24,7 +24,6 @@
 #include <kicommon.h>
 #include <layer_ids.h>
 #include <lseq.h>
-#include <wx/string.h>
 #include <jobs/job_export_pcb_plot.h>
 
 class KICOMMON_API JOB_EXPORT_PCB_GERBER : public JOB_EXPORT_PCB_PLOT

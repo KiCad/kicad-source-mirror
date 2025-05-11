@@ -22,7 +22,6 @@
 #define JOB_FP_UPGRADE_H
 
 #include <kicommon.h>
-#include <wx/string.h>
 #include "job.h"
 
 class KICOMMON_API JOB_FP_UPGRADE : public JOB

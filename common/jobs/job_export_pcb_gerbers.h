@@ -25,7 +25,6 @@
 #include "job_export_pcb_gerber.h"
 #include <layer_ids.h>
 #include <lset.h>
-#include <wx/string.h>
 #include "job.h"
 
 class KICOMMON_API JOB_EXPORT_PCB_GERBERS : public JOB_EXPORT_PCB_GERBER

@@ -23,7 +23,6 @@
 #define JOB_PCB_RENDER_H
 
 #include <kicommon.h>
-#include <wx/string.h>
 #include "job.h"
 #include <optional>
 #include <math/vector3.h>

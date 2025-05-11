@@ -20,9 +20,10 @@
 
 #pragma once
 
+#include <wx/string.h>
+
 #include <kicommon.h>
 #include <map>
-#include <wx/string.h>
 #include <settings/json_settings.h>
 #include <lseq.h>
 #include <lset.h>

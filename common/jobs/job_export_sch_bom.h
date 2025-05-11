@@ -23,7 +23,6 @@
 
 #include <kicommon.h>
 #include <vector>
-#include <wx/string.h>
 #include "job.h"
 
 class KICOMMON_API JOB_EXPORT_SCH_BOM : public JOB

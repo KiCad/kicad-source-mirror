@@ -23,7 +23,6 @@
 
 #include <vector>
 #include <kicommon.h>
-#include <wx/string.h>
 #include "job.h"
 
 

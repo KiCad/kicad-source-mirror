@@ -21,7 +21,6 @@
 #pragma once
 
 #include <kicommon.h>
-#include <wx/string.h>
 #include <jobs/job.h>
 
 class KICOMMON_API JOB_SPECIAL_COPYFILES : public JOB

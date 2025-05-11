@@ -24,7 +24,6 @@
 #include <plotprint_opts.h>
 #include <layer_ids.h>
 #include <lseq.h>
-#include <wx/string.h>
 #include "job.h"
 
 class KICOMMON_API JOB_EXPORT_PCB_PLOT : public JOB

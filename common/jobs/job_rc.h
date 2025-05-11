@@ -21,7 +21,6 @@
 #pragma once
 
 #include <kicommon.h>
-#include <wx/string.h>
 #include <widgets/report_severity.h>
 #include "job.h"
 

@@ -22,7 +22,6 @@
 #define JOB_EXPORT_SCH_PYTHONBOM_H
 
 #include <kicommon.h>
-#include <wx/string.h>
 #include "job.h"
 
 class KICOMMON_API JOB_EXPORT_SCH_PYTHONBOM : public JOB

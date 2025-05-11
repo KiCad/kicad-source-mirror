@@ -23,7 +23,6 @@
 
 #include <kicommon.h>
 #include <math/vector2d.h>
-#include <wx/string.h>
 #include "job.h"
 
 // Default value to chain 2 shapes when creating the board outlines

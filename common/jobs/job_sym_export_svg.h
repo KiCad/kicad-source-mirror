@@ -22,7 +22,6 @@
 #define JOB_SYM_EXPORT_SVG_H
 
 #include <kicommon.h>
-#include <wx/string.h>
 #include "job.h"
 
 class KICOMMON_API JOB_SYM_EXPORT_SVG : public JOB

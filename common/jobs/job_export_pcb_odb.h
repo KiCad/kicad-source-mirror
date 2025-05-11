@@ -21,7 +21,6 @@
 #define JOB_EXPORT_PCB_ODB_H
 
 #include <kicommon.h>
-#include <wx/string.h>
 #include "job.h"
 
 class KICOMMON_API JOB_EXPORT_PCB_ODB : public JOB

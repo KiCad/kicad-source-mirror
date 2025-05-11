@@ -22,7 +22,6 @@
 #define JOB_EXPORT_PCB_IPCD356_H
 
 #include <kicommon.h>
-#include <wx/string.h>
 #include "job.h"
 
 class KICOMMON_API JOB_EXPORT_PCB_IPCD356 : public JOB
