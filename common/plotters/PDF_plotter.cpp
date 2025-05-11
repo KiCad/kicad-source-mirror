@@ -1956,7 +1956,6 @@ void PDF_PLOTTER::Plot3DModel( const wxString&                 aSourcePath,
     {
         wxFFileOutputStream ffos( outputFFile );
         wxZlibOutputStream  zos( ffos, wxZ_BEST_COMPRESSION, wxZLIB_ZLIB );
-        wxDataOutputStream  dos( zos );
 
         wxFFileInputStream fileStream( aSourcePath );
         if( !fileStream.IsOk() )
@@ -1964,13 +1963,7 @@ void PDF_PLOTTER::Plot3DModel( const wxString&                 aSourcePath,
             wxLogError( _( "Failed to open 3D model file: %s" ), aSourcePath );
         }
 
-        const size_t bufferSize = 4096;
-        char         buffer[bufferSize];
-        while( !fileStream.Eof() )
-        {
-            fileStream.Read( buffer, bufferSize );
-            zos.Write( buffer, fileStream.LastRead() );
-        }
+        zos.Write( fileStream );
     }
     fflush( m_outputFile );
     model_stored_size = ftell( m_outputFile );
