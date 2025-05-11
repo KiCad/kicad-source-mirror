@@ -23,6 +23,7 @@
 
 #pragma once
 
+#include <functional>
 #include <memory>
 
 #include <allegro_pcb_structs.h>
@@ -53,6 +54,13 @@ public:
 private:
     VECTOR2I scale( const VECTOR2I& aVector ) const;
 
+
+    PCB_LAYER_ID getLayer( const LAYER_INFO& aLayerInfo ) const;
+
+    /**
+     * Build the shapes from an 0x14 shape list
+     */
+    std::vector<std::unique_ptr<PCB_SHAPE>> buildShapes( const BLK_0x14& aGraphicList, BOARD_ITEM_CONTAINER& aParent );
     std::unique_ptr<FOOTPRINT> buildFootprint( const BLK_0x2D& aFpInstance );
     std::unique_ptr<PCB_TEXT>  buildPcbText( const BLK_0x30_STR_WRAPPER& aStrWrapper );
 

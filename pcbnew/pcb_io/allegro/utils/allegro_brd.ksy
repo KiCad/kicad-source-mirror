@@ -348,21 +348,25 @@ types:
 
   type_01_arc:
     seq:
-      - id: t
+      - id: t1
         type: u1
-      - id: un0
+      - id: t2
         type: u1
       - id: subtype
         type: u1
+        doc: |
+          Can be 0x00, 0x40
       - id: key
         type: u4
       - id: next
         type: u4
       - id: parent
         type: u4
-      - id: un1
+      - id: unknown_1
         type: u4
-      - id: un6
+        doc: |
+          Can be 0x00, 0x20. Seems independent of subtype.
+      - id: unknown_2
         type: u4
         if: _root.ver >= 0x00140400
       - id: width

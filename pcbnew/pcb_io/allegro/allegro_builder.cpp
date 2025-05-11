@@ -207,6 +207,124 @@ static const std::unordered_map<LAYER_INFO, PCB_LAYER_ID> s_LayerKiMap = {
 // clang-format on
 
 
+PCB_LAYER_ID BOARD_BUILDER::getLayer( const LAYER_INFO& aLayerInfo ) const
+{
+    PCB_LAYER_ID layer = User_1;
+
+    // Look up the layer in the presets list
+    if( s_LayerKiMap.count( aLayerInfo ) )
+    {
+        layer = s_LayerKiMap.at( aLayerInfo );
+    }
+    else
+    {
+        // Etch?
+    }
+
+    return layer;
+}
+
+
+std::vector<std::unique_ptr<PCB_SHAPE>> BOARD_BUILDER::buildShapes( const BLK_0x14&       aGraphic,
+                                                                    BOARD_ITEM_CONTAINER& aParent )
+{
+    std::vector<std::unique_ptr<PCB_SHAPE>> shapes;
+
+    PCB_LAYER_ID layer = getLayer( aGraphic.m_Layer );
+
+    // Within the graphics list, we can get various lines and arcs on PLACE_BOUND_TOP, which
+    // aren't actually the courtyard, which is a polygon in the 0x28 list. So, if we see such items,
+    // remap them now to a specific other layer
+    if( layer == F_CrtYd )
+        layer = User_2;
+
+    const LL_WALKER segWalker{ aGraphic.m_SegmentPtr, aGraphic.m_Key, m_rawBoard };
+
+    for( const BLOCK_BASE* segBlock : segWalker )
+    {
+        std::unique_ptr<PCB_SHAPE>& shape = shapes.emplace_back( std::make_unique<PCB_SHAPE>( &aParent ) );
+        shape->SetLayer( layer );
+
+        switch( segBlock->GetBlockType() )
+        {
+        case 0x01:
+        {
+            const auto& arc = static_cast<const BLOCK<BLK_0x01_ARC>&>( *segBlock ).GetData();
+
+            VECTOR2I start{ arc.m_StartX, arc.m_StartY };
+            VECTOR2I end{ arc.m_EndX, arc.m_EndY };
+
+            start = scale( start );
+            end = scale( end );
+
+            VECTOR2I c = scale( KiROUND( VECTOR2D{ arc.m_CenterX, arc.m_CenterY } ) );
+
+            int radius = static_cast<int>( arc.m_Radius * m_scale );
+
+            bool clockwise = false; // TODO - flag?
+            // Probably follow fabmaster here for flipping, as I guess it's identical.
+
+            shape->SetWidth( m_scale * arc.m_Width );
+
+            if( start == end )
+            {
+                shape->SetShape( SHAPE_T::CIRCLE );
+                shape->SetCenter( c );
+                shape->SetRadius( radius );
+            }
+            else
+            {
+                shape->SetShape( SHAPE_T::ARC );
+                EDA_ANGLE startangle( start - c );
+                EDA_ANGLE endangle( end - c );
+
+                startangle.Normalize();
+                endangle.Normalize();
+
+                EDA_ANGLE angle = endangle - startangle;
+
+                if( clockwise && angle < ANGLE_0 )
+                    angle += ANGLE_360;
+                if( !clockwise && angle > ANGLE_0 )
+                    angle -= ANGLE_360;
+
+                if( start == end )
+                    angle = -ANGLE_360;
+
+                VECTOR2I mid = start;
+                RotatePoint( mid, c, -angle / 2.0 );
+
+                shape->SetArcGeometry( start, mid, end );
+            }
+            break;
+        }
+        case 0x15:
+        case 0x16:
+        case 0x17:
+        {
+            shape->SetShape( SHAPE_T::SEGMENT );
+
+            const auto& seg = static_cast<const BLOCK<BLK_0x15_16_17_SEGMENT>&>( *segBlock ).GetData();
+            VECTOR2I    start = scale( { seg.m_StartX, seg.m_StartY } );
+            VECTOR2I    end = scale( { seg.m_EndX, seg.m_EndY } );
+            const int   width = static_cast<int>( seg.m_Width );
+
+            shape->SetStart( start );
+            shape->SetEnd( end );
+            shape->SetWidth( width * m_scale );
+            break;
+        }
+        default:
+        {
+            break;
+        }
+        }
+    }
+
+    return shapes;
+}
+
+
 std::unique_ptr<FOOTPRINT> BOARD_BUILDER::buildFootprint( const BLK_0x2D& aFpInstance )
 {
     auto fp = std::make_unique<FOOTPRINT>( &m_board );
@@ -224,123 +342,23 @@ std::unique_ptr<FOOTPRINT> BOARD_BUILDER::buildFootprint( const BLK_0x2D& aFpIns
     const LL_WALKER graphicsWalker( aFpInstance.m_GraphicPtr, aFpInstance.m_Key, m_rawBoard );
     for( const BLOCK_BASE* graphicsBlock : graphicsWalker )
     {
-        if( graphicsBlock->GetBlockType() == 0x14 )
+        const uint8_t type = graphicsBlock->GetBlockType();
+        if( type == 0x14 )
         {
             const auto& graphics = static_cast<const BLOCK<BLK_0x14>&>( *graphicsBlock ).GetData();
 
-            const auto& layerInfo = graphics.m_Layer;
+            std::vector<std::unique_ptr<PCB_SHAPE>> shapes = buildShapes( graphics, *fp );
 
-            PCB_LAYER_ID layer = User_1;
-
-            // Look up the layer in the presets list
-            if( s_LayerKiMap.count( graphics.m_Layer ) )
+            for( std::unique_ptr<PCB_SHAPE>& shape : shapes )
             {
-                layer = s_LayerKiMap.at( graphics.m_Layer );
+                shape->Rotate( fpPos, rotation );
+                fp->Add( shape.release() );
             }
-            else
-            {
-                // Etch?
-            }
-
-            // Within the graphics list, we can get various lines and arcs on PLACE_BOUND_TOP, which
-            // aren't actually the courtyard, which is a polygon in the 0x28 list. So, if we see such items,
-            // remap them now to a specific other layer
-            if( layer == F_CrtYd )
-                layer = User_2;
-
-            const LL_WALKER segWalker{ graphics.m_SegmentPtr, graphics.m_Key, m_rawBoard };
-
-            for( const BLOCK_BASE* segBlock : segWalker )
-            {
-                std::unique_ptr<PCB_SHAPE> shape = std::make_unique<PCB_SHAPE>( &m_board );
-                shape->SetLayer( layer );
-
-                switch( segBlock->GetBlockType() )
-                {
-                case 0x01:
-                {
-                    const auto& arc = static_cast<const BLOCK<BLK_0x01_ARC>&>( *segBlock ).GetData();
-
-                    VECTOR2I start{ arc.m_StartX, arc.m_StartY };
-                    VECTOR2I end{ arc.m_EndX, arc.m_EndY };
-
-                    start = scale( start );
-                    end = scale( end );
-
-                    VECTOR2I c = scale( KiROUND( VECTOR2D{ arc.m_CenterX, arc.m_CenterY } ) );
-
-                    int radius = static_cast<int>( arc.m_Radius * m_scale );
-
-                    std::cout << "start " << start << " end " << end << ", c " << c << " r " << radius << std::endl;
-
-                    bool clockwise = false; // TODO - flag?
-                    // Probably follow fabmaster here for flipping, as I guess it's identical.
-
-                    shape->SetWidth( m_scale * arc.m_Width );
-
-                    if( start == end )
-                    {
-                        shape->SetShape( SHAPE_T::CIRCLE );
-                        shape->SetCenter( c );
-                        shape->SetRadius( radius );
-                    }
-                    else
-                    {
-                        shape->SetShape( SHAPE_T::ARC );
-                        EDA_ANGLE startangle( start - c );
-                        EDA_ANGLE endangle( end - c );
-
-                        startangle.Normalize();
-                        endangle.Normalize();
-
-                        EDA_ANGLE angle = endangle - startangle;
-
-                        if( clockwise && angle < ANGLE_0 )
-                            angle += ANGLE_360;
-                        if( !clockwise && angle > ANGLE_0 )
-                            angle -= ANGLE_360;
-
-                        if( start == end )
-                            angle = -ANGLE_360;
-
-                        VECTOR2I mid = start;
-                        RotatePoint( mid, c, -angle / 2.0 );
-
-                        shape->SetArcGeometry( start, mid, end );
-                    }
-                    fp->Add( shape.release() );
-
-                    break;
-                }
-                case 0x15:
-                case 0x16:
-                case 0x17:
-                {
-                    shape->SetShape( SHAPE_T::SEGMENT );
-
-                    const auto& seg = static_cast<const BLOCK<BLK_0x15_16_17_SEGMENT>&>( *segBlock ).GetData();
-                    VECTOR2I    start = scale( { seg.m_StartX, seg.m_StartY } );
-                    VECTOR2I    end = scale( { seg.m_EndX, seg.m_EndY } );
-                    const int   width = static_cast<int>( seg.m_Width );
-
-                    // The positions are pre-rotation, but in KiCad, they're post-rotation
-                    RotatePoint( start, fpPos, rotation );
-                    RotatePoint( end, fpPos, rotation );
-
-                    shape->SetStart( start );
-                    shape->SetEnd( end );
-                    shape->SetWidth( width * m_scale );
-
-                    fp->Add( shape.release() );
-                    break;
-                }
-                default:
-                {
-                    break;
-                }
-                }
-            }
-            // shape->SetStart( scale( VECTOR2I{ graphics.m_}) )
+        }
+        else
+        {
+            m_reporter.Report( wxString::Format( "Unexpected type in graphics list: %#04x", type ),
+                               RPT_SEVERITY_WARNING );
         }
     }
     return fp;

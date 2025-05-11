@@ -1822,7 +1822,7 @@ class AllegroBrd(KaitaiStruct):
 
 
     class Type01Arc(KaitaiStruct):
-        SEQ_FIELDS = ["t", "un0", "subtype", "key", "next", "parent", "un1", "un6", "width", "coords_0", "coords_1", "x", "y", "r", "bbox"]
+        SEQ_FIELDS = ["t1", "t2", "subtype", "key", "next", "parent", "unknown_1", "unknown_2", "width", "coords_0", "coords_1", "x", "y", "r", "bbox"]
         def __init__(self, _io, _parent=None, _root=None):
             self._io = _io
             self._parent = _parent
@@ -1831,12 +1831,12 @@ class AllegroBrd(KaitaiStruct):
             self._read()
 
         def _read(self):
-            self._debug['t']['start'] = self._io.pos()
-            self.t = self._io.read_u1()
-            self._debug['t']['end'] = self._io.pos()
-            self._debug['un0']['start'] = self._io.pos()
-            self.un0 = self._io.read_u1()
-            self._debug['un0']['end'] = self._io.pos()
+            self._debug['t1']['start'] = self._io.pos()
+            self.t1 = self._io.read_u1()
+            self._debug['t1']['end'] = self._io.pos()
+            self._debug['t2']['start'] = self._io.pos()
+            self.t2 = self._io.read_u1()
+            self._debug['t2']['end'] = self._io.pos()
             self._debug['subtype']['start'] = self._io.pos()
             self.subtype = self._io.read_u1()
             self._debug['subtype']['end'] = self._io.pos()
@@ -1849,13 +1849,13 @@ class AllegroBrd(KaitaiStruct):
             self._debug['parent']['start'] = self._io.pos()
             self.parent = self._io.read_u4le()
             self._debug['parent']['end'] = self._io.pos()
-            self._debug['un1']['start'] = self._io.pos()
-            self.un1 = self._io.read_u4le()
-            self._debug['un1']['end'] = self._io.pos()
+            self._debug['unknown_1']['start'] = self._io.pos()
+            self.unknown_1 = self._io.read_u4le()
+            self._debug['unknown_1']['end'] = self._io.pos()
             if self._root.ver >= 1311744:
-                self._debug['un6']['start'] = self._io.pos()
-                self.un6 = self._io.read_u4le()
-                self._debug['un6']['end'] = self._io.pos()
+                self._debug['unknown_2']['start'] = self._io.pos()
+                self.unknown_2 = self._io.read_u4le()
+                self._debug['unknown_2']['end'] = self._io.pos()
 
             self._debug['width']['start'] = self._io.pos()
             self.width = self._io.read_u4le()

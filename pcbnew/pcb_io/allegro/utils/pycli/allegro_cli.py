@@ -194,13 +194,14 @@ class AllegroBoard:
             prntr.print_v("Key", d, "key")
 
         if t == 0x01:
-            prntr.print_v("un0", d)
+            prntr.print_v("t1", d)
+            prntr.print_v("t2", d)
             prntr.print_v("subtype", d)
 
             prntr.print_ptr("next", d)
             prntr.print_ptr("parent", d)
-            prntr.print_v("un1", d)
-            prntr.print_v("un6", d)
+            prntr.print_v("unknown_1", d)
+            prntr.print_v("unknown_2", d)
             prntr.print_v("width", d, as_hex=False)
 
             prntr.print_coords("P0", d.coords_0)
