@@ -326,10 +326,23 @@ class AllegroBoard:
             prntr.print_v("unknown_4", d)
 
         elif t == 0x1c: # Padstack
+            prntr.print_ptr("next", d)
             prntr.print_s("Pad str", d.pad_str)
             prntr.print_v("Pad path", d.pad_path)
             prntr.print_v("Layer count", d.layer_count)
             prntr.print_v("Pad type", d.pad_info.pad_type)
+
+            prntr.print_v("unknown_1", d)
+            prntr.print_v("unknown_2", d)
+            prntr.print_v("unknown_3", d)
+            prntr.print_v("unknown_4", d)
+            prntr.print_v("unknown_5", d)
+            prntr.print_v("unknown_6", d)
+            prntr.print_v("unknown_7", d)
+            prntr.print_v("unknown_8", d)
+            prntr.print_v("unknown_9", d)
+            prntr.print_v("unknown_10", d)
+            prntr.print_v("unknown_11", d)
 
             for i, pc in  enumerate(d.components):
                 prntr.prnt(f"- Component {i}")

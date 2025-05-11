@@ -1087,35 +1087,54 @@ types:
           String ID for the padstack name.
 
           Examples: 'R110_95', 'S_SQU_0-95_P_V0', 'VIA26'
-      - type: u4
-      - type: u4
+      - id: unknown_1
+        type: u4
+      - id: unknown_2
+        type: u4
       - id: pad_path
         type: u4
-      - id: un4
+      - id: unknown_3
         type: u4
         if: _root.ver < 0x00140400
-        repeat: expr
-        repeat-expr: 4
+      - id: unknown_4
+        type: u4
+        if: _root.ver < 0x00140400
+      - id: unknown_5
+        type: u4
+        if: _root.ver < 0x00140400
+      - id: unknown_6
+        type: u4
+        if: _root.ver < 0x00140400
       - id: pad_info
         type: pad_info
-      - type: u4
-        repeat: expr
-        repeat-expr: 3
+      - id: unknown_7
+        type: u4
         if: _root.ver >= 0x00140400
-      - type: u2
+      - id: unknown_8
+        type: u4
+        if: _root.ver >= 0x00140400
+      - id: unknown_9
+        type: u4
+        if: _root.ver >= 0x00140400
+      - id: unknown_10
+        type: u2
         if: _root.ver < 0x00140400
       - id: layer_count
         type: u2
-      - type: u2
+      - id: unknown_11
+        type: u2
         if: _root.ver >= 0x00140400
-      - type: u4
+      - id: unknown_arr8
+        type: u4
         repeat: expr
         repeat-expr: 8
-      - type: u4
+      - id: unknown_arr28
+        type: u4
         repeat: expr
         repeat-expr: 28
         if: _root.ver >= 0x00140400
-      - type: u4
+      - id: unknown_arr8_2
+        type: u4
         repeat: expr
         repeat-expr: 8
         if: _root.ver & 0x00FFF000 == 0x00131000

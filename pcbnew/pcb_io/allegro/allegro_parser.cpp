@@ -24,6 +24,7 @@
 #include <allegro_parser.h>
 
 #include <cstring>
+#include <iostream>  // TOOD remove
 
 #include <wx/sstream.h>
 #include <wx/log.h>
@@ -202,11 +203,8 @@ static std::unique_ptr<ALLEGRO::FILE_HEADER> ReadHeader( FILE_STREAM& stream )
         switch( units )
         {
         case BOARD_UNITS::IMPERIAL:
-        case BOARD_UNITS::METRIC:
-            header->m_BoardUnits = static_cast<BOARD_UNITS>( units );
-            break;
-        default:
-            THROW_IO_ERROR( wxString::Format( "Unknown board units %d", units ) );
+        case BOARD_UNITS::METRIC: header->m_BoardUnits = static_cast<BOARD_UNITS>( units ); break;
+        default: THROW_IO_ERROR( wxString::Format( "Unknown board units %d", units ) );
         }
 
         stream.Skip( 3 );
@@ -951,6 +949,7 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x1C_PADSTACK( FILE_STREAM& aStrea
         PADSTACK_COMPONENT& comp = data.m_Components.emplace_back();
 
         comp.m_Type = aStream.ReadU8();
+
         comp.m_UnknownByte1 = aStream.ReadU8();
         comp.m_UnknownByte2 = aStream.ReadU8();
         comp.m_UnknownByte3 = aStream.ReadU8();
@@ -1039,6 +1038,7 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x1E( FILE_STREAM& aStream, FMT_VE
     auto& data = block->GetData();
 
     data.m_Type = aStream.ReadU8();
+    data.m_T2 = aStream.ReadU16();
     data.m_Key = aStream.ReadU32();
     data.m_Unknown1 = aStream.ReadU32();
 
@@ -2056,8 +2056,6 @@ static std::optional<uint32_t> GetBlockKey( const BLOCK_BASE& block )
     return std::nullopt;
 }
 
-#include <iostream>
-
 
 void ALLEGRO::PARSER::readObjects( RAW_BOARD& aBoard )
 {
@@ -2349,12 +2347,13 @@ void ALLEGRO::PARSER::readObjects( RAW_BOARD& aBoard )
         {
             if( !m_endAtUnknownBlock )
             {
-                THROW_IO_ERROR( wxString::Format( "Do not have parser for type %#02x available at offset %#010lx", type,
+                THROW_IO_ERROR( wxString::Format( "Do not have parser for block index %lu type %#02x available at offset %#010lx",
+                    aBoard.m_Objects.size(), type,
                                                   offset ) );
             }
 
             wxLogTrace( traceAllegroParser,
-                        wxString::Format( "Ending at unknown block type %#04x at offset %#010lx", type, offset ) );
+                        wxString::Format( "Ending at unknown block, index %lu type %#04x at offset %#010lx", aBoard.m_Objects.size(), type, offset ) );
             return;
         }
         }

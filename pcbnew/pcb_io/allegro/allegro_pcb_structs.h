@@ -179,7 +179,7 @@ struct COND_LT : public COND_FIELD_BASE<T>
 template <FMT_VER GEVersion, FMT_VER LTVersion, typename T>
 struct COND_GE_LT : public COND_FIELD_BASE<T>
 {
-    constexpr bool exists( FMT_VER ver ) const { return ver >= ver && ver < LTVersion; }
+    constexpr bool exists( FMT_VER ver ) const { return ver >= GEVersion && ver < LTVersion; }
 
     using COND_FIELD_BASE<T>::operator=;
 };
@@ -932,12 +932,14 @@ struct BLK_0x1D
 struct BLK_0x1E
 {
     uint8_t  m_Type;
+    uint16_t m_T2;
     uint32_t m_Key;
     uint32_t m_Unknown1;
 
     // Versioning seems unsure here
-    COND_GE<FMT_VER::V_172, uint16_t> m_Unknown2;
-    COND_GE<FMT_VER::V_172, uint16_t> m_Unknown3;
+    // At least it is in Kinoma (V_164)
+    COND_GE<FMT_VER::V_164, uint16_t> m_Unknown2;
+    COND_GE<FMT_VER::V_164, uint16_t> m_Unknown3;
 
     uint32_t m_StrPtr;
     uint32_t m_Size;
