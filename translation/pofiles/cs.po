@@ -22,16 +22,16 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-05-06 12:52+0300\n"
-"PO-Revision-Date: 2025-03-16 16:18+0000\n"
+"PO-Revision-Date: 2025-05-11 14:03+0000\n"
 "Last-Translator: Jan Straka <bach@email.cz>\n"
-"Language-Team: Czech <https://hosted.weblate.org/projects/kicad/master-"
-"source/cs/>\n"
+"Language-Team: Czech <https://hosted.weblate.org/projects/kicad/"
+"master-source/cs/>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=((n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2);\n"
-"X-Generator: Weblate 5.11-dev\n"
+"X-Generator: Weblate 5.12-dev\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-Basepath: .\n"
 
@@ -666,229 +666,184 @@ msgid "Show user ECO2 layer"
 msgstr "Zobrazit uživatelskou vrstvu ECO2"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:67
-#, fuzzy
 msgid "Show user defined layer 1"
-msgstr "Uživatelem definovaná vrstva 1"
+msgstr "Zobrazit uživatelem definovanou vrstvu 1"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:68
-#, fuzzy
 msgid "Show user defined layer 2"
-msgstr "Uživatelem definovaná vrstva 2"
+msgstr "Zobrazit uživatelem definovanou vrstvu 2"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:69
-#, fuzzy
 msgid "Show user defined layer 3"
-msgstr "Uživatelem definovaná vrstva 3"
+msgstr "Zobrazit uživatelem definovanou vrstvu 3"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:70
-#, fuzzy
 msgid "Show user defined layer 4"
-msgstr "Uživatelem definovaná vrstva 4"
+msgstr "Zobrazit uživatelem definovanou vrstvu 4"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:71
-#, fuzzy
 msgid "Show user defined layer 5"
-msgstr "Uživatelem definovaná vrstva 5"
+msgstr "Zobrazit uživatelem definovanou vrstvu 5"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:72
-#, fuzzy
 msgid "Show user defined layer 6"
-msgstr "Uživatelem definovaná vrstva 6"
+msgstr "Zobrazit uživatelem definovanou vrstvu 6"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:73
-#, fuzzy
 msgid "Show user defined layer 7"
-msgstr "Uživatelem definovaná vrstva 7"
+msgstr "Zobrazit uživatelem definovanou vrstvu 7"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:74
-#, fuzzy
 msgid "Show user defined layer 8"
-msgstr "Uživatelem definovaná vrstva 8"
+msgstr "Zobrazit uživatelem definovanou vrstvu 8"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:75
-#, fuzzy
 msgid "Show user defined layer 9"
-msgstr "Uživatelem definovaná vrstva 9"
+msgstr "Zobrazit uživatelem definovanou vrstvu 9"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:76
-#, fuzzy
 msgid "Show user defined layer 10"
-msgstr "Uživatelem definovaná vrstva 10"
+msgstr "Zobrazit uživatelem definovanou vrstvu 10"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:77
-#, fuzzy
 msgid "Show user defined layer 11"
-msgstr "Uživatelem definovaná vrstva 11"
+msgstr "Zobrazit uživatelem definovanou vrstvu 11"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:78
-#, fuzzy
 msgid "Show user defined layer 12"
-msgstr "Uživatelem definovaná vrstva 12"
+msgstr "Zobrazit uživatelem definovanou vrstvu 12"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:79
-#, fuzzy
 msgid "Show user defined layer 13"
-msgstr "Uživatelem definovaná vrstva 13"
+msgstr "Zobrazit uživatelem definovanou vrstvu 13"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:80
-#, fuzzy
 msgid "Show user defined layer 14"
-msgstr "Uživatelem definovaná vrstva 14"
+msgstr "Zobrazit uživatelem definovanou vrstvu 14"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:81
-#, fuzzy
 msgid "Show user defined layer 15"
-msgstr "Uživatelem definovaná vrstva 15"
+msgstr "Zobrazit uživatelem definovanou vrstvu 15"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:82
-#, fuzzy
 msgid "Show user defined layer 16"
-msgstr "Uživatelem definovaná vrstva 16"
+msgstr "Zobrazit uživatelem definovanou vrstvu 16"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:83
-#, fuzzy
 msgid "Show user defined layer 17"
-msgstr "Uživatelem definovaná vrstva 17"
+msgstr "Zobrazit uživatelem definovanou vrstvu 17"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:84
-#, fuzzy
 msgid "Show user defined layer 18"
-msgstr "Uživatelem definovaná vrstva 18"
+msgstr "Zobrazit uživatelem definovanou vrstvu 18"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:85
-#, fuzzy
 msgid "Show user defined layer 19"
-msgstr "Uživatelem definovaná vrstva 19"
+msgstr "Zobrazit uživatelem definovanou vrstvu 19"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:86
-#, fuzzy
 msgid "Show user defined layer 20"
-msgstr "Uživatelem definovaná vrstva 20"
+msgstr "Zobrazit uživatelem definovanou vrstvu 20"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:87
-#, fuzzy
 msgid "Show user defined layer 21"
-msgstr "Uživatelem definovaná vrstva 21"
+msgstr "Zobrazit uživatelem definovanou vrstvu 21"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:88
-#, fuzzy
 msgid "Show user defined layer 22"
-msgstr "Uživatelem definovaná vrstva 22"
+msgstr "Zobrazit uživatelem definovanou vrstvu 22"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:89
-#, fuzzy
 msgid "Show user defined layer 23"
-msgstr "Uživatelem definovaná vrstva 23"
+msgstr "Zobrazit uživatelem definovanou vrstvu 23"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:90
-#, fuzzy
 msgid "Show user defined layer 24"
-msgstr "Uživatelem definovaná vrstva 24"
+msgstr "Zobrazit uživatelem definovanou vrstvu 24"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:91
-#, fuzzy
 msgid "Show user defined layer 25"
-msgstr "Uživatelem definovaná vrstva 25"
+msgstr "Zobrazit uživatelem definovanou vrstvu 25"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:92
-#, fuzzy
 msgid "Show user defined layer 26"
-msgstr "Uživatelem definovaná vrstva 26"
+msgstr "Zobrazit uživatelem definovanou vrstvu 26"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:93
-#, fuzzy
 msgid "Show user defined layer 27"
-msgstr "Uživatelem definovaná vrstva 27"
+msgstr "Zobrazit uživatelem definovanou vrstvu 27"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:94
-#, fuzzy
 msgid "Show user defined layer 28"
-msgstr "Uživatelem definovaná vrstva 28"
+msgstr "Zobrazit uživatelem definovanou vrstvu 28"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:95
-#, fuzzy
 msgid "Show user defined layer 29"
-msgstr "Uživatelem definovaná vrstva 29"
+msgstr "Zobrazit uživatelem definovanou vrstvu 29"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:96
-#, fuzzy
 msgid "Show user defined layer 30"
-msgstr "Uživatelem definovaná vrstva 30"
+msgstr "Zobrazit uživatelem definovanou vrstvu 30"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:97
-#, fuzzy
 msgid "Show user defined layer 31"
-msgstr "Uživatelem definovaná vrstva 31"
+msgstr "Zobrazit uživatelem definovanou vrstvu 31"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:98
-#, fuzzy
 msgid "Show user defined layer 32"
-msgstr "Uživatelem definovaná vrstva 32"
+msgstr "Zobrazit uživatelem definovanou vrstvu 32"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:99
-#, fuzzy
 msgid "Show user defined layer 33"
-msgstr "Uživatelem definovaná vrstva 33"
+msgstr "Zobrazit uživatelem definovanou vrstvu 33"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:100
-#, fuzzy
 msgid "Show user defined layer 34"
-msgstr "Uživatelem definovaná vrstva 34"
+msgstr "Zobrazit uživatelem definovanou vrstvu 34"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:101
-#, fuzzy
 msgid "Show user defined layer 35"
-msgstr "Uživatelem definovaná vrstva 35"
+msgstr "Zobrazit uživatelem definovanou vrstvu 35"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:102
-#, fuzzy
 msgid "Show user defined layer 36"
-msgstr "Uživatelem definovaná vrstva 36"
+msgstr "Zobrazit uživatelem definovanou vrstvu 36"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:103
-#, fuzzy
 msgid "Show user defined layer 37"
-msgstr "Uživatelem definovaná vrstva 37"
+msgstr "Zobrazit uživatelem definovanou vrstvu 37"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:104
-#, fuzzy
 msgid "Show user defined layer 38"
-msgstr "Uživatelem definovaná vrstva 38"
+msgstr "Zobrazit uživatelem definovanou vrstvu 38"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:105
-#, fuzzy
 msgid "Show user defined layer 39"
-msgstr "Uživatelem definovaná vrstva 39"
+msgstr "Zobrazit uživatelem definovanou vrstvu 39"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:106
-#, fuzzy
 msgid "Show user defined layer 40"
-msgstr "Uživatelem definovaná vrstva 40"
+msgstr "Zobrazit uživatelem definovanou vrstvu 40"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:107
-#, fuzzy
 msgid "Show user defined layer 41"
-msgstr "Uživatelem definovaná vrstva 41"
+msgstr "Zobrazit uživatelem definovanou vrstvu 41"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:108
-#, fuzzy
 msgid "Show user defined layer 42"
-msgstr "Uživatelem definovaná vrstva 42"
+msgstr "Zobrazit uživatelem definovanou vrstvu 42"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:109
-#, fuzzy
 msgid "Show user defined layer 43"
-msgstr "Uživatelem definovaná vrstva 43"
+msgstr "Zobrazit uživatelem definovanou vrstvu 43"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:110
-#, fuzzy
 msgid "Show user defined layer 44"
-msgstr "Uživatelem definovaná vrstva 44"
+msgstr "Zobrazit uživatelem definovanou vrstvu 44"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:111
-#, fuzzy
 msgid "Show user defined layer 45"
-msgstr "Uživatelem definovaná vrstva 45"
+msgstr "Zobrazit uživatelem definovanou vrstvu 45"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:113
 msgid "Through-hole Models"
@@ -982,15 +937,15 @@ msgid "Use board stackup colors"
 msgstr "Použít barvy ze struktury vrstev"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:182
-#, fuzzy
 msgid "Use PCB editor copper colors"
-msgstr "Použít barvy mědi editoru desky"
+msgstr "Použít barvy mědi v editoru DPS"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:184
-#, fuzzy
 msgid ""
 "Use the board editor layer colors for copper layers (realtime renderer only)"
-msgstr "Použít barvy mědi editoru desky (pouze openGL)"
+msgstr ""
+"Použít barvy vrstev editoru desek pro vrstvy mědi (pouze vykreslování v "
+"reálném čase)"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:201
 #, c-format
@@ -2712,9 +2667,9 @@ msgid "Path"
 msgstr "Cesta"
 
 #: common/dialogs/dialog_design_block_properties.cpp:99
-#, fuzzy, c-format
+#, c-format
 msgid "Illegal character '%c' in name '%s'."
-msgstr "Nedovolený znak '%c' v logickém názvu '%s'."
+msgstr "Neplatný znak '%c' v názvu '%s'."
 
 #: common/dialogs/dialog_design_block_properties.cpp:125
 #: eeschema/dialogs/panel_template_fieldnames.cpp:102
@@ -2722,14 +2677,12 @@ msgid "Untitled Field"
 msgstr "Pole bez názvu"
 
 #: common/dialogs/dialog_design_block_properties.cpp:252
-#, fuzzy
 msgid "Duplicate fields are not allowed."
-msgstr "Opakující se názvy sítí nejsou dovoleny."
+msgstr "Duplicitní pole nejsou povolena."
 
 #: common/dialogs/dialog_design_block_properties_base.cpp:26
-#, fuzzy
 msgid "Default Fields"
-msgstr "Smazat pole"
+msgstr "Výchozí pole"
 
 #: common/dialogs/dialog_design_block_properties_base.cpp:43
 #: common/dialogs/dialog_plugin_options_base.cpp:44
@@ -3162,9 +3115,9 @@ msgid ""
 msgstr ""
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:30
-#, fuzzy, c-format
+#, c-format
 msgid "The selection contains %zu locked items."
-msgstr "Výběr obsahuje %lu uzamčených položek."
+msgstr "Výběr obsahuje %zu uzamčených položek."
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:34
 msgid "These items will be skipped unless you override the locks."
@@ -4158,14 +4111,12 @@ msgid "Enable Git tracking"
 msgstr "Zapnout automatické mazání spojů"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:28
-#, fuzzy
 msgid "Remote Tracking"
-msgstr "Propojit spoj"
+msgstr "Vzdálené sledování"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:41
-#, fuzzy
 msgid "Update interval:"
-msgstr "Aktualizovat pole"
+msgstr "Interval aktualizace:"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:46
 msgid ""
@@ -7439,9 +7390,9 @@ msgid "Failed to push reference to revision walker."
 msgstr "Selhalo push změn do vzdáleného repozitáře."
 
 #: common/git/git_pull_handler.cpp:381
-#, fuzzy, c-format
+#, c-format
 msgid "Could not lookup commit '%s'"
-msgstr "Nelze vyhledat komit '{}'"
+msgstr "Nelze vyhledat commit '%s'"
 
 #: common/git/git_pull_handler.cpp:414
 msgid "Could not merge commits"
@@ -7512,9 +7463,8 @@ msgid "[updated] %s"
 msgstr "[aktualizováno] %s"
 
 #: common/git/kicad_git_common.cpp:981
-#, fuzzy
 msgid "Unable to authenticate"
-msgstr "Nelze vytvořit "
+msgstr "Nelze ověřit"
 
 #: common/git/kicad_git_errors.cpp:40
 msgid "Invalid repository."
@@ -8008,9 +7958,8 @@ msgstr "Export HPGL"
 
 #: common/jobs/job_export_pcb_hpgl.cpp:57
 #: common/jobs/job_export_sch_plot.cpp:223
-#, fuzzy
 msgid "Export HPGL Job Settings"
-msgstr "Upravit možnosti..."
+msgstr "Exportovat nastavení úlohy HPGL"
 
 #: common/jobs/job_export_pcb_hpgl.cpp:61
 #, fuzzy
@@ -8086,9 +8035,8 @@ msgid "Export Postscript"
 msgstr "Exportovat Postscript"
 
 #: common/jobs/job_export_pcb_ps.cpp:62 common/jobs/job_export_sch_plot.cpp:204
-#, fuzzy
 msgid "Export Postscript Job Settings"
-msgstr "Upravit možnosti..."
+msgstr "Nastavení úlohy exportu Postscript"
 
 #: common/jobs/job_export_pcb_ps.cpp:66
 #, fuzzy
@@ -8155,18 +8103,16 @@ msgid "Schematic: Export PDF"
 msgstr "Schéma: Export PDF"
 
 #: common/jobs/job_export_sch_pythonbom.cpp:35
-#, fuzzy
 msgid "Schematic PythonBOM export"
-msgstr "Textu schématu"
+msgstr "Export PythonBOM schéma"
 
 #: common/jobs/job_pcb_drc.cpp:37
 msgid "Perform DRC"
 msgstr "Provést DRC"
 
 #: common/jobs/job_pcb_drc.cpp:43 pcbnew/dialogs/dialog_drc_job_config.cpp:24
-#, fuzzy
 msgid "DRC Job Settings"
-msgstr "3D nastavení"
+msgstr "Nastavení úloh DRC"
 
 #: common/jobs/job_pcb_drc.cpp:47
 msgid "PCB: Perform DRC"
@@ -8178,9 +8124,8 @@ msgid "Render %s"
 msgstr "Vykreslit %s"
 
 #: common/jobs/job_pcb_render.cpp:137
-#, fuzzy
 msgid "Render PCB Job Settings"
-msgstr "Upravit možnosti..."
+msgstr "Vykreslit nastavení úloh DPS"
 
 #: common/jobs/job_pcb_render.cpp:141
 msgid "PCB: Render"
@@ -8191,9 +8136,8 @@ msgid "Perform ERC"
 msgstr "Provést ERC"
 
 #: common/jobs/job_sch_erc.cpp:39
-#, fuzzy
 msgid "Schematic ERC Job Settings"
-msgstr "Exportovat Netlist"
+msgstr "Nastavení úloh ERC schématu"
 
 #: common/jobs/job_sch_erc.cpp:43
 msgid "Schematic: Perform ERC"
@@ -9382,14 +9326,12 @@ msgid "Decrement the primary field of the selected item(s)"
 msgstr "Duplikuje vybranou položku(y)"
 
 #: common/tool/actions.cpp:454
-#, fuzzy
 msgid "Increment Secondary"
-msgstr "Krok přírůstku:"
+msgstr "Přírůstek sekundární"
 
 #: common/tool/actions.cpp:455
-#, fuzzy
 msgid "Increment the secondary field of the selected item(s)"
-msgstr "Přesune vybranou položku(y)"
+msgstr "Přírůstek sekundárního pole vybrané položky(ek)"
 
 #: common/tool/actions.cpp:461
 #, fuzzy
@@ -10113,9 +10055,8 @@ msgstr "Znovu načíst všechny pluginy pythonu a aktualizovat nabídky pluginů
 #: pcbnew/dialogs/dialog_board_setup.cpp:241
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:81
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:152
-#, fuzzy
 msgid "Embedded Files"
-msgstr "Soubory obrázku"
+msgstr "Vložené soubory"
 
 #: common/tool/actions.cpp:1416
 msgid "Manage embedded files"
@@ -10443,9 +10384,8 @@ msgstr "Knihovny"
 
 #: common/widgets/footprint_diff_widget.cpp:50
 #: eeschema/widgets/symbol_diff_widget.cpp:53
-#, fuzzy
 msgid "Toggle between A and B display"
-msgstr "Přepnout zobrazení těla desky"
+msgstr "Přepnout mezi displejem A a B"
 
 #: common/widgets/footprint_preview_widget.cpp:127
 msgid "Footprint not found."
@@ -14519,9 +14459,8 @@ msgid "Open output file with associated application after successful plot"
 msgstr "Otevřít výstupní soubor přiřazenou aplikací po úspěšném vytištění"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.h:92
-#, fuzzy
 msgid "Plot Schematic"
-msgstr "Tisk schématu"
+msgstr "Kreslit schéma"
 
 #: eeschema/dialogs/dialog_rescue_each.cpp:102
 msgid ""
@@ -14725,9 +14664,8 @@ msgid "Search pin &names and numbers"
 msgstr "Hledat &jména a čísla vývodů"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:96
-#, fuzzy
 msgid "Search &hidden fields"
-msgstr "Hledat skrytá pole"
+msgstr "Hledat &skrytá pole"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:99
 msgid "Search the current &sheet only"
@@ -14811,9 +14749,8 @@ msgstr ""
 "Soubor projektu %s nelze načíst."
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:258
-#, fuzzy
 msgid "Loading Bus Aliases"
-msgstr "Aliasy sběrnic"
+msgstr "Načítám aliasy sběrnice"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:269 eeschema/files-io.cpp:279
 #: eeschema/picksymbol.cpp:124
@@ -15781,11 +15718,12 @@ msgid ""
 msgstr "Zobrazit / skrýt sloupce"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:206
-#, fuzzy
 msgid ""
 "Group\n"
 "By"
-msgstr "Skupiny"
+msgstr ""
+"Skupina\n"
+"Podle"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:701
 msgid "Qty"
@@ -15824,9 +15762,9 @@ msgid "Rename Field"
 msgstr "Přejmenovat pole"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:854
-#, fuzzy, c-format
+#, c-format
 msgid "Field name %s already exists."
-msgstr "Soubor %s již existuje."
+msgstr "Název pole %s již existuje."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:930
 msgid "The Quantity column cannot be grouped by."
@@ -15858,9 +15796,8 @@ msgid "Unsaved data"
 msgstr "Neuložená data"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1341
-#, fuzzy
 msgid "Changes have not yet been saved. Export unsaved data?"
-msgstr "Změny nejsou uloženy. Exportovat neuložená data?"
+msgstr "Změny ještě nebyly uloženy. Exportovat neuložená data?"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1365
 msgid "No output file specified in Export tab."
@@ -15913,9 +15850,8 @@ msgid "Exclude DNP"
 msgstr "Vyloučit DNP"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:103
-#, fuzzy
 msgid "Show 'Exclude from BOM'"
-msgstr "Vyloučit z BOM"
+msgstr "Zobrazit 'Vyloučení z kusovníku'"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:110
 msgid "Group symbols"
@@ -17472,9 +17408,8 @@ msgstr "Soubor schématu nelze načíst\n"
 #: pcbnew/pcbnew_jobs_handler.cpp:1583 pcbnew/pcbnew_jobs_handler.cpp:1717
 #: pcbnew/pcbnew_jobs_handler.cpp:2000 pcbnew/pcbnew_jobs_handler.cpp:2138
 #: pcbnew/pcbnew_jobs_handler.cpp:2334 pcbnew/pcbnew_jobs_handler.cpp:2428
-#, fuzzy
 msgid "Failed to create output directory\n"
-msgstr "Nepodařilo se odstranit adresář %s"
+msgstr "Nepodařilo se vytvořit výstupní adresář\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:413
 #: eeschema/eeschema_jobs_handler.cpp:535
@@ -17635,9 +17570,8 @@ msgstr "Nezapojeno"
 #: eeschema/erc/erc.cpp:210 eeschema/erc/erc.cpp:229
 #: pcbnew/drc/drc_test_provider_misc.cpp:319
 #: pcbnew/drc/drc_test_provider_misc.cpp:339
-#, fuzzy
 msgid " (in drawing sheet)"
-msgstr "Tisk listu výkresu"
+msgstr " (ve výkresovém listu)"
 
 #: eeschema/erc/erc.cpp:427
 msgid "Unresolved text variable in drawing sheet"
@@ -22759,11 +22693,12 @@ msgid ""
 msgstr "Symbol '%s' již existuje v knihovně '%s'"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1018
-#, fuzzy
 msgid ""
 "\n"
 "Do you want to overwrite all of them, or rename the new symbols?"
-msgstr "Opravdu chcete přepsat soubory v cílové složce?"
+msgstr ""
+"\n"
+"Chcete je všechny přepsat nebo přejmenovat nové symboly?"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1022
 msgid "Overwrite All"
@@ -24709,9 +24644,8 @@ msgid "Symbol Unit"
 msgstr "Jednotka symbolu"
 
 #: eeschema/tools/sch_edit_tool.cpp:113
-#, fuzzy
 msgid " (already placed)"
-msgstr "Již umístěno"
+msgstr " (již umístěno)"
 
 #: eeschema/tools/sch_edit_tool.cpp:181
 #, fuzzy
@@ -27502,9 +27436,8 @@ msgid "Invalid preset\n"
 msgstr "Neplatný formát\n"
 
 #: kicad/cli/command_pcb_render.cpp:350
-#, fuzzy
 msgid "Invalid background\n"
-msgstr "Vyplnit p&ozadí"
+msgstr "Neplatné pozadí\n"
 
 #: kicad/cli/command_pcb_render.cpp:356
 #, fuzzy
@@ -29046,9 +28979,9 @@ msgid "Failed to find branch head for '%s'"
 msgstr "Nelze najít prohlížeč PDF pro '%s'."
 
 #: kicad/project_tree_pane.cpp:1901
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to switch to branch '%s'"
-msgstr "Nepodařilo se načíst '%s'.\n"
+msgstr "Selhalo přepnutí na větev '%s'"
 
 #: kicad/project_tree_pane.cpp:1910
 #, fuzzy, c-format
@@ -30994,9 +30927,8 @@ msgid "Remove an item from the current list of available regulators"
 msgstr "Smazat položku z aktuálního seznamu dostupných regulátorů"
 
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:147
-#, fuzzy
 msgid "typ"
-msgstr "Ks"
+msgstr "typ"
 
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:161
 #: pcb_calculator/calculator_panels/panel_rf_attenuators_base.cpp:119
@@ -32284,9 +32216,8 @@ msgid "Best Width Ratio"
 msgstr "Nastavit šířku"
 
 #: pcbnew/board_connected_item.cpp:277
-#, fuzzy
 msgid "Max Width"
-msgstr "Max šířka:"
+msgstr "Max šířka"
 
 #: pcbnew/board_connected_item.cpp:283
 #, fuzzy
@@ -40204,9 +40135,8 @@ msgid "Default Properties for New Graphic Items"
 msgstr "Výchozí vlastnosti pro nové grafické položky:"
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:309
-#, fuzzy
 msgid "Hidden footprint libraries are not yet supported."
-msgstr "Knihovna pouzdra nebyla aktualizována\n"
+msgstr "Skryté knihovny pouzder ještě nejsou podporovány."
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:879
 #, fuzzy, c-format
@@ -42980,15 +42910,13 @@ msgstr ""
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:653
 #: pcbnew/exporters/step/step_pcb_model.cpp:2053
-#, fuzzy
 msgid "Errors:\n"
-msgstr "Chyby:"
+msgstr "Chyby:\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:663
 #: pcbnew/exporters/step/step_pcb_model.cpp:2063
-#, fuzzy
 msgid "Warnings:\n"
-msgstr "Upozornění:"
+msgstr "Upozornění:\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:684
 msgid "** ShapeUpgrade_UnifySameDomain produced a null shape **\n"
