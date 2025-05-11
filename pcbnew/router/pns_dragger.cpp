@@ -113,14 +113,6 @@ bool DRAGGER::startDragSegment( const VECTOR2D& aP, SEGMENT* aSeg )
     m_draggedLine      = m_world->AssembleLine( aSeg, &m_draggedSegmentIndex );
     m_lastDragSolution = m_draggedLine;
 
-    if ( m_world->CheckColliding( &m_draggedLine ) )
-    {
-        // If we're already in a state that violates DRC then there's not much we can do but
-        // switch to mark obstacles mode.
-        m_forceMarkObstaclesMode = true;
-    }
-
-
     auto distA = ( aP - aSeg->Seg().A ).EuclideanNorm();
     auto distB = ( aP - aSeg->Seg().B ).EuclideanNorm();
 
@@ -156,13 +148,6 @@ bool DRAGGER::startDragArc( const VECTOR2D& aP, ARC* aArc )
     m_draggedLine = m_world->AssembleLine( aArc, &m_draggedSegmentIndex );
     m_mode = DM_ARC;
 
-    if ( m_world->CheckColliding( &m_draggedLine ) )
-    {
-        // If we're already in a state that violates DRC then there's not much we can do but
-        // switch to mark obstacles mode.
-        m_forceMarkObstaclesMode = true;
-    }
-
     return true;
 }
 
@@ -173,13 +158,6 @@ bool DRAGGER::startDragVia( VIA* aVia )
     m_draggedVia = m_initialVia;
 
     m_mode = DM_VIA;
-
-    if ( m_world->CheckColliding( aVia ) )
-    {
-        // If we're already in a state that violates DRC then there's not much we can do but
-        // switch to mark obstacles mode.
-        m_forceMarkObstaclesMode = true;
-    }
 
     return true;
 }
@@ -641,7 +619,7 @@ bool DRAGGER::dragShove( const VECTOR2I& aP )
         }
 
         m_shove->ClearHeads();
-        m_shove->AddHeads( draggedPreShove, SHOVE::SHP_SHOVE );
+        m_shove->AddHeads( draggedPreShove, SHOVE::SHP_SHOVE | SHOVE::SHP_DONT_LOCK_ENDPOINTS );
         ok = m_shove->Run() == SHOVE::SH_OK;
 
         LINE draggedPostShove( draggedPreShove );

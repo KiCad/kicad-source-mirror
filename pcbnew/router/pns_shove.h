@@ -62,7 +62,8 @@ public:
         SHP_WALK_FORWARD = 0x2,
         SHP_WALK_BACK = 0x4,
         SHP_IGNORE = 0x8,
-        SHP_DONT_OPTIMIZE = 0x10
+        SHP_DONT_OPTIMIZE = 0x10,
+        SHP_DONT_LOCK_ENDPOINTS = 0x20
     };
 
 
