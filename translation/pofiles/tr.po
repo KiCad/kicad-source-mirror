@@ -24,15 +24,15 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-05-06 12:53+0300\n"
-"PO-Revision-Date: 2025-03-19 01:15+0000\n"
-"Last-Translator: Niyazi <tanyildizn@gmail.com>\n"
+"PO-Revision-Date: 2025-05-12 22:01+0000\n"
+"Last-Translator: Tevfik Bagcivan <tevfik.bagcivan@gmail.com>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/kicad/v9/tr/>\n"
 "Language: tr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.11-dev\n"
+"X-Generator: Weblate 5.12-dev\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
 #: common/dialogs/panel_embedded_files.cpp:321
@@ -766,39 +766,32 @@ msgid "Show user defined layer 24"
 msgstr "Kullanıcı tarafından tanımlanan katman 2"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:92
-#, fuzzy
 msgid "Show user defined layer 25"
-msgstr "Kullanıcı tarafından tanımlanan katman 2"
+msgstr "Kullanıcı tanımlı katman 25'i göster"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:93
-#, fuzzy
 msgid "Show user defined layer 26"
-msgstr "Kullanıcı tarafından tanımlanan katman 2"
+msgstr "Kullanıcı tanımlı katman 26'ı göster"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:94
-#, fuzzy
 msgid "Show user defined layer 27"
-msgstr "Kullanıcı tarafından tanımlanan katman 2"
+msgstr "Kullanıcı tanımlı katman 27'i göster"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:95
-#, fuzzy
 msgid "Show user defined layer 28"
-msgstr "Kullanıcı tarafından tanımlanan katman 2"
+msgstr "Kullanıcı tanımlı katman 28'i göster"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:96
-#, fuzzy
 msgid "Show user defined layer 29"
-msgstr "Kullanıcı tarafından tanımlanan katman 2"
+msgstr "Kullanıcı tanımlı katman 29'u göster"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:97
-#, fuzzy
 msgid "Show user defined layer 30"
-msgstr "Kullanıcı tarafından tanımlanan katman 3"
+msgstr "Kullanıcı tanımlı katman 30'u göster"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:98
-#, fuzzy
 msgid "Show user defined layer 31"
-msgstr "Kullanıcı tarafından tanımlanan katman 3"
+msgstr "Kullanıcı tanımlı katman 31'i göster0"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:99
 #, fuzzy
