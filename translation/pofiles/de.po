@@ -30,7 +30,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-05-06 12:53+0300\n"
-"PO-Revision-Date: 2025-05-06 09:51+0000\n"
+"PO-Revision-Date: 2025-05-11 14:03+0000\n"
 "Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v9/de/>\n"
 "Language: de\n"
@@ -4054,9 +4054,8 @@ msgid "Enable Git Tracking"
 msgstr "Git-Nachverfolgung aktivieren"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:28
-#, fuzzy
 msgid "Remote Tracking"
-msgstr "Leiterbahnen routen"
+msgstr "Entfernte Nachverfolgung"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:41
 msgid "Update interval:"
@@ -7207,9 +7206,8 @@ msgid "Could not look up target commit"
 msgstr "Konnte Ziel-Commit nicht auflösen"
 
 #: common/git/git_pull_handler.cpp:264
-#, fuzzy
 msgid "Could not get tree from target commit"
-msgstr "Konnte Commits nicht mergen"
+msgstr "Konnte Baum von Ziel-Commit nicht abrufen"
 
 #: common/git/git_pull_handler.cpp:306 common/git/kicad_git_errors.cpp:55
 msgid "Failed to perform checkout operation."
@@ -7226,15 +7224,12 @@ msgid "Failed to clean up repository state after fast-forward."
 msgstr "Repository konnte nach letztem fast-forward nicht gesäubert werden."
 
 #: common/git/git_pull_handler.cpp:334
-#, fuzzy
 msgid "Failed to initialize revision walker."
-msgstr "Initialisieren des Git-Projekts fehlgeschlagen."
+msgstr "Initialisierung des Revision Walkers ist fehlgeschlagen."
 
 #: common/git/git_pull_handler.cpp:343
-#, fuzzy
 msgid "Failed to push reference to revision walker."
-msgstr ""
-"Änderungen konnten nicht zum Remote-Repository übertragen werden (push)."
+msgstr "Verweis auf Revision Walker konnte nicht verschoben werden."
 
 #: common/git/git_pull_handler.cpp:358
 #, c-format
@@ -10190,9 +10185,8 @@ msgid "Toggle panning to selections in the search pane"
 msgstr "Auf Auswahl schwenken im Suchfeld umschalten"
 
 #: common/widgets/search_pane.cpp:51
-#, fuzzy
 msgid "Search Hidden Fields"
-msgstr "Verborgene Felder durc&hsuchen"
+msgstr "Verborgene Felder durchsuchen"
 
 #: common/widgets/unit_binder.cpp:351
 #, c-format
@@ -41955,7 +41949,7 @@ msgid "** Face skipped **\n"
 msgstr "** Fläche ausgelassen **\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1915
-#, fuzzy, c-format
+#, c-format
 msgid "Subtracting holes for %s\n"
 msgstr "Erstelle Löcher für %s\n"
 
