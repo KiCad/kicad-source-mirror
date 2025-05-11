@@ -30,7 +30,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-05-06 12:52+0300\n"
-"PO-Revision-Date: 2025-05-07 12:01+0000\n"
+"PO-Revision-Date: 2025-05-11 14:03+0000\n"
 "Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
@@ -1289,14 +1289,12 @@ msgid "Disable thickness"
 msgstr "Linienstärke ausschalten"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:91
-#, fuzzy
 msgid "Disable uVia holes"
-msgstr "Löcher ausschalten"
+msgstr "µVia-Löcher ausschalten"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:94
-#, fuzzy
 msgid "Disable all plated holes"
-msgstr "Löcher ausschalten"
+msgstr "Metallisierte Löcher ausschalten"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:27
 msgid "Procedural textures (slow)"
@@ -4165,14 +4163,12 @@ msgid "Add"
 msgstr "Hinzufügen"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:20
-#, fuzzy
 msgid "Enable Git tracking"
 msgstr "Git-Nachverfolgung aktivieren"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:28
-#, fuzzy
 msgid "Remote Tracking"
-msgstr "Leiterbahnen routen"
+msgstr "Entfernte Nachverfolgung"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:41
 msgid "Update interval:"
@@ -7084,9 +7080,8 @@ msgid "Font"
 msgstr "Schriftart"
 
 #: common/eda_text.cpp:1367
-#, fuzzy
 msgid "Auto Thickness"
-msgstr "Busbreite"
+msgstr "Automatische Dicke"
 
 #: common/eda_text.cpp:1370 eeschema/sch_field.cpp:1624
 #: eeschema/sch_label.cpp:2299 eeschema/sch_tablecell.cpp:196
@@ -7449,9 +7444,8 @@ msgid "Could not look up target commit"
 msgstr "Konnte Ziel-Commit nicht auflösen"
 
 #: common/git/git_pull_handler.cpp:287
-#, fuzzy
 msgid "Could not get tree from target commit"
-msgstr "Konnte Commits nicht mergen"
+msgstr "Konnte Baum von Ziel-Commit nicht abrufen"
 
 #: common/git/git_pull_handler.cpp:329 common/git/kicad_git_errors.cpp:55
 msgid "Failed to perform checkout operation."
@@ -7468,15 +7462,12 @@ msgid "Failed to clean up repository state after fast-forward."
 msgstr "Repository konnte nach letztem fast-forward nicht gesäubert werden."
 
 #: common/git/git_pull_handler.cpp:357
-#, fuzzy
 msgid "Failed to initialize revision walker."
-msgstr "Initialisieren des Git-Projekts fehlgeschlagen."
+msgstr "Initialisierung des Revision Walkers ist fehlgeschlagen."
 
 #: common/git/git_pull_handler.cpp:366
-#, fuzzy
 msgid "Failed to push reference to revision walker."
-msgstr ""
-"Änderungen konnten nicht zum Remote-Repository übertragen werden (push)."
+msgstr "Verweis auf Revision Walker konnte nicht verschoben werden."
 
 #: common/git/git_pull_handler.cpp:381
 #, c-format
@@ -8060,9 +8051,8 @@ msgid "Export HPGL Job Settings"
 msgstr "HPGL-Auftragseinstellungen exportieren"
 
 #: common/jobs/job_export_pcb_hpgl.cpp:61
-#, fuzzy
 msgid "PCB: Export HPGL"
-msgstr "PCB: PDF exportieren"
+msgstr "PCB: HPGL exportieren"
 
 #: common/jobs/job_export_pcb_ipc2581.cpp:72
 #: pcbnew/dialogs/dialog_export_2581_base.h:85
@@ -8137,9 +8127,8 @@ msgid "Export Postscript Job Settings"
 msgstr "Postscript-Auftragseinstellungen exportieren"
 
 #: common/jobs/job_export_pcb_ps.cpp:66
-#, fuzzy
 msgid "PCB: Export Postscript"
-msgstr "Postscript exportieren"
+msgstr "PCB: Postscript exportieren"
 
 #: common/jobs/job_export_pcb_svg.cpp:49
 #: common/jobs/job_export_sch_plot.cpp:179 kicad/kicad_cli.cpp:151
@@ -9547,16 +9536,14 @@ msgstr ""
 "anderen Punktes beizubehalten"
 
 #: common/tool/actions.cpp:571
-#, fuzzy
 msgid "Keep Arc Radius and Center, adjust angle"
-msgstr "Bogenmitte beibehalten, Radius anpassen"
+msgstr "Bogenradius und -mitte beibehalten, Winkel anpassen"
 
 #: common/tool/actions.cpp:572
-#, fuzzy
 msgid "Switch arc editing mode to maintainign radius when endpoint are moved"
 msgstr ""
-"Bogenbearbeitungsmodus wechseln, um den Mittelpunkt beizubehalten, Radius "
-"und Endpunkte anzupassen"
+"Bogenbearbeitungsmodus wechseln um Radius beizubehalten wenn Endpunkte "
+"bewegt werden"
 
 #: common/tool/actions.cpp:579
 msgid "Cycle Arc Editing Mode"
@@ -10724,14 +10711,12 @@ msgid "Toggle panning to selections in the search pane"
 msgstr "Auf Auswahl schwenken im Suchfeld umschalten"
 
 #: common/widgets/search_pane.cpp:52
-#, fuzzy
 msgid "Search Hidden Fields"
-msgstr "Verborgene Felder durc&hsuchen"
+msgstr "Verborgene Felder durchsuchen"
 
 #: common/widgets/search_pane.cpp:54
-#, fuzzy
 msgid "Search Metadata"
-msgstr "Metadaten"
+msgstr "Metadaten durchsuchen"
 
 #: common/widgets/search_pane.cpp:54
 msgid "Search library links, descriptions and keywords"
@@ -11019,9 +11004,8 @@ msgid "CSV Files"
 msgstr "CSV-Dateien"
 
 #: common/wildcards_and_files_ext.cpp:421
-#, fuzzy
 msgid "CSV/TSV Files"
-msgstr "CSV-Dateien"
+msgstr "CSV/TSV-Dateien"
 
 #: common/wildcards_and_files_ext.cpp:427
 msgid "Portable document format files"
@@ -33620,14 +33604,12 @@ msgid "Dimensions:"
 msgstr "Abmessungen:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:119
-#, fuzzy
 msgid "Front copper area:"
-msgstr "Vorderseitige Kupferlage"
+msgstr "Vorderseitige Kupferfläche:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:120
-#, fuzzy
 msgid "Back copper area:"
-msgstr "Rückseitige Kupferlage"
+msgstr "Rückseitige Kupferfläche:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:161
 msgid "THT:"
@@ -34580,9 +34562,8 @@ msgid "Anti-clockwise"
 msgstr "Im Uhrzeigersinn drehen"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:362
-#, fuzzy
 msgid "Direction"
-msgstr "Richtung:"
+msgstr "Richtung"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:366
 #: pcbnew/dialogs/dialog_create_array_base.cpp:419
@@ -42996,18 +42977,21 @@ msgid ""
 "Could not add 3D model for %s.\n"
 "File not found: %s\n"
 msgstr ""
+"Konnte 3D-Modell für %s nicht hinzufügen.\n"
+"Datei nicht gefunden: %s\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:406
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Could not add 3D model for %s.\n"
 "OpenCASCADE error: %s\n"
-msgstr "Kann nicht mit %s verbinden. Fehler: %s"
+msgstr ""
+"Konnte 3D-Modell für %s nicht hinzufügen.\n"
+"OpenCASCADE-Fehler: %s\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:810
-#, fuzzy
 msgid "Could not create PCB solid model.\n"
-msgstr "Konnte Stückliste-Ausgabe \"%s\" nicht erstellen."
+msgstr "Konnte Platinenkörpermodell nicht erstellen.\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:864
 msgid ""
@@ -43073,9 +43057,9 @@ msgid "Could not add shape (%d points) to copper layer %s.\n"
 msgstr ""
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1207
-#, fuzzy, c-format
+#, c-format
 msgid "No model defined for %s.\n"
-msgstr "Es wurde kein Footprint für das Symbol \"%s\" definiert."
+msgstr "Kein Modell für %s definiert.\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1222
 #, c-format
@@ -43088,9 +43072,9 @@ msgid "No location data for filename '%s'.\n"
 msgstr "Platzierungsdaten nach \"%s\" geschrieben.\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1243
-#, fuzzy, c-format
+#, c-format
 msgid "Could not add component with filename '%s'.\n"
-msgstr "Spice-Element mit Referenz \"%s\" konnte nicht gefunden werden"
+msgstr "Konnte Komponente mit Dateiname \"%s\" nicht hinzufügen.\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1413
 #, c-format
@@ -43159,7 +43143,7 @@ msgstr "Verwende nicht vereinfachtes Polygon.\n"
 #: pcbnew/exporters/step/step_pcb_model.cpp:1811
 #, c-format
 msgid "OCC exception creating contour %d: %s\n"
-msgstr ""
+msgstr "OCC-Ausnahme während der Erstellung der Kontur %d: %s\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1841
 msgid "** Face skipped **\n"
@@ -43167,16 +43151,15 @@ msgstr "** Fläche ausgelassen **\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1931
 #: pcbnew/exporters/step/step_pcb_model.cpp:1948
-#, fuzzy
 msgid "OCC error creating main outline.\n"
-msgstr "Fehler beim Lesen der Datei."
+msgstr "OCC-Fehler während der Erstellung der Hauptkontur.\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1957
 msgid "OCC error creating hole in main outline.\n"
-msgstr ""
+msgstr "OCC-Fehler während der Erstellung eines Lochs in der Hauptkontur.\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2000
-#, fuzzy, c-format
+#, c-format
 msgid "Subtracting holes for %s\n"
 msgstr "Erstelle Löcher für %s\n"
 
@@ -43203,9 +43186,10 @@ msgstr "Vias"
 #: pcbnew/exporters/step/step_pcb_model.cpp:3167
 #: pcbnew/exporters/step/step_pcb_model.cpp:3241
 #: pcbnew/exporters/step/step_pcb_model.cpp:3309
-#, fuzzy, c-format
+#, c-format
 msgid "No valid PCB assembly; cannot create output file '%s'.\n"
-msgstr "Kann das Ausgabeverzeichnis \"%s\" nicht erstellen."
+msgstr ""
+"Keine gültige Platinenbestückung; kann Ausgabedatei \"%s\" nicht erstellen.\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2389
 msgid "Failed to set STEP product name, but will attempt to continue."
@@ -43219,19 +43203,19 @@ msgstr ""
 #: pcbnew/exporters/step/step_pcb_model.cpp:3218
 #: pcbnew/exporters/step/step_pcb_model.cpp:3290
 #: pcbnew/exporters/step/step_pcb_model.cpp:3339
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot rename temporary file '%s' to '%s'.\n"
-msgstr "Kann temporäre Datei \"%s\" nicht in \"%s\" umbenennen"
+msgstr "Kann temporäre Datei \"%s\" nicht in \"%s\" umbenennen.\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2889
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot identify actual file type for '%s'.\n"
-msgstr "Kann Netzlistendatei \"%s\" nicht öffnen."
+msgstr "Kann tatsächlichen Typ der Datei \"%s\" nicht identifizieren.\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2899
-#, fuzzy, c-format
+#, c-format
 msgid "Could not transfer model data from file '%s'.\n"
-msgstr "Ordner \"%s\" konnte nicht erstellt werden."
+msgstr "Konnte Modelldaten von Datei \"%s\" nicht übertragen.\n"
 
 #: pcbnew/files.cpp:152
 msgid "All KiCad Board Files"
