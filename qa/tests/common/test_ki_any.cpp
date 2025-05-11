@@ -42,6 +42,7 @@
 
 #include <boost/test/unit_test.hpp>
 
+#include <cstdint>
 #include <memory>
 #include <set>
 #include <utility>
