@@ -223,18 +223,50 @@ types:
 
   layer_info:
     seq:
-      - id: family
+      - id: lclass
         type: u1
-        enum: layer_family
-      - id: ordinal
+        enum: layer_class
+      - id: subclass
         type: u1
+        enum: layer_subclass
 
     enums:
-      layer_family:
+      layer_class:
         0x01: board_geometry
-        0x06: copper
+        0x06: etch
         0x07: unknown
-        0x09: silk
+        0x09: package_geometry
+        0x0d: ref_des
+
+      layer_subclass:
+        0xef: dfa_bounds_top
+        0xf2: display_top
+        0xf9: dimension
+        0xfb: place_bounds_top
+        0xfd: assembly_top
+
+        # To identify:
+        # pin
+        #   soldermask_top/bottom
+        #   pastemask_top
+        #   filmmasktop
+        #   top/bottom (etch?)
+        # package_geom
+        #    pin_number
+        # board_geometry
+        #   design_outline
+        #   outline
+        #   dimension
+        # via_class
+        #   soldermask_top/bottom
+        #   top/bottom (etch layers?)
+        # manufacturing
+        #   xsection_chart
+        #   nclegend-1-2
+        # route_keepin
+        #   all
+        # package_keepin
+        #   all
 
   string_aligned:
     params:
@@ -934,18 +966,18 @@ types:
       - type: u2
       - id: key
         type: u4
-      - id: ptr1
+      - id: next
         type: u4
-      - id: ptr2
+      - id: ptr_0x11
         type: u4
-      - id: ptr3
+      - id: pad_ptr
         type: u4
-      - id: un0
+      - id: unknown_1
         type: u4
-      - id: un1
+      - id: unknown_2
         type: u4
         if: _root.ver >= 0x00131000
-      - id: un2
+      - id: unknown_3
         type: u4
         if: _root.ver >= 0x00140900
 
@@ -1814,10 +1846,10 @@ types:
         type: u4
       - id: next
         type: u4
-      - id: un4
+      - id: unknown_1
         type: u4
         if: _root.ver >= 0x00140400
-      - id: un5
+      - id: unknown_2
         type: u4
         if: _root.ver >= 0x00140400
       - id: font
@@ -1826,12 +1858,12 @@ types:
       - id: ptr3
         type: u4
         if: _root.ver >= 0x00140400
-      - id: un7
+      - id: unknown_3
         type: u4
         if: _root.ver >= 0x00140900
       - id: str_graphic_ptr
         type: u4
-      - id: un1
+      - id: unknown_4
         type: u4
       - id: font_16x
         type: text_properties
@@ -1840,16 +1872,16 @@ types:
         type: u4
         if: _root.ver >= 0x00140400
       - id: coords
-        type: s4
-        repeat: expr
-        repeat-expr: 2
-      - id: un3
+        type: coords
+      - id: unknown_5
         type: u4
       - id: rotation
         type: u4
       - id: ptr3_16x
         type: u4
         if: _root.ver < 0x00140400
+        doc: |
+          Can be null.
 
     enums:
       text_reversal:
@@ -1880,21 +1912,18 @@ types:
       - id: t
         type: u1
       - id: layer
-        type: u2
-        enum: string_layer
+        type: layer_info
       - id: key
         type: u4
       - id: str_graphic_wrapper_ptr
         type: u4
       - id: coords
-        type: s4
-        repeat: expr
-        repeat-expr: 2
-      - id: un
+        type: coords
+      - id: unknown_1
         type: u2
       - id: len
         type: u2
-      - id: un2
+      - id: unknown_2
         type: u4
         if: _root.ver >= 0x00140900
       - id: value
@@ -1918,7 +1947,7 @@ types:
         type: layer_info
       - id: key
         type: u4
-      - id: un1
+      - id: unknown_1
         type: u4
       - id: net_ptr
         type: u4
@@ -1950,10 +1979,10 @@ types:
         type: u4
       - id: ptr11
         type: u4
-      - id: coords
-        type: s4
-        repeat: expr
-        repeat-expr: 4
+      - id: coords_0
+        type: coords
+      - id: coords_1
+        type: coords
 
   type_33_via:
     seq:
@@ -2145,7 +2174,7 @@ types:
             type: u4
           - id: char_width
             type: u4
-          - id: un2
+          - id: unknown_1
             type: u4
             if: _root.ver >= 0x00140900
           - id: xs

@@ -23,6 +23,7 @@ or you may write to the Free Software Foundation, Inc.,
 """
 
 import argparse
+import enum
 import logging
 import struct
 
@@ -106,7 +107,7 @@ class AllegroBoard:
 
             return value
 
-        def print_ptr(self, name, struct_or_key: int, attr_name: str | None = None):
+        def print_ptr(self, name, struct_or_key: int | kaitaistruct.KaitaiStruct, attr_name: str | None = None):
 
             attr_name = attr_name or name
 
@@ -174,9 +175,20 @@ class AllegroBoard:
         def print_coords(self, name, coords):
             self.prnt(f"{name:12}: ({coords.x}, {coords.y})")
 
-        def print_layer(self, layer):
+        def print_layer(self, layer: allegro_brd.AllegroBrd.LayerInfo):
             name = "Layer"
-            v = f"{layer.family} {layer.ordinal:#04x}"
+
+            if isinstance(layer.lclass, enum.Enum):
+                lc = f"{layer.lclass} ({layer.lclass.value:#04x})"
+            else:
+                lc = f"Unknown ({layer.lclass:#04x})"
+
+            if isinstance(layer.subclass, enum.Enum):
+                sc = f"{layer.subclass} ({layer.subclass.value:#04x})"
+            else:
+                sc = f"Unknown ({layer.subclass:#04x})"
+
+            v = f"{lc} / {sc}"
             self.print_v(name, v)
 
     def print_obj(self, obj, indent=2):
@@ -283,6 +295,15 @@ class AllegroBoard:
 
             prntr.print_v("unknown_1", d)
             prntr.print_v("unknown_2", d)
+
+        elif t == 0x12:
+            prntr.print_ptr("next", d.next)
+            prntr.print_ptr("ptr_0x11", d.ptr_0x11)
+            prntr.print_ptr("pad_ptr", d.pad_ptr)
+
+            prntr.print_v("unknown_1", d)
+            prntr.print_v("unknown_2", d)
+            prntr.print_v("unknown_3", d)
 
         elif t == 0x14:
 
@@ -461,17 +482,73 @@ class AllegroBoard:
             prntr.print_ptr("inst_ref", d, "inst_ref")
 
         elif t == 0x30:
-
+            assert isinstance(d, allegro_brd.AllegroBrd.Type30StrWrapper)
             prntr.print_ptr("next", d.next)
             prntr.print_ptr("str_graphic_ptr", d.str_graphic_ptr)
+            prntr.print_coords("coords", d.coords)
+            prntr.print_v("rotation", d.rotation / 1000.)
+            prntr.print_layer(d.layer)
 
-            prntr.print_ptr("ptr_3", d)
-            prntr.print_ptr("un4", d)
+            prntr.print_ptr("ptr3", d)
+            prntr.print_ptr("ptr3_16x", d)
+            prntr.print_ptr("ptr4", d)
+            prntr.print_v("unknown_1", d)
+            prntr.print_v("unknown_2", d)
+            prntr.print_v("unknown_3", d)
+            prntr.print_v("unknown_4", d)
+            prntr.print_v("unknown_5", d)
 
+            if hasattr(d, "font"):
+                fprops = d.font
+            else:
+                fprops = d.font_16x
+
+            prntr.print_v("txt props key", fprops.key)
+            prntr.print_v("txt props flags", fprops.flags)
+            prntr.print_v("txt props align", fprops.alignment)
+            prntr.print_v("txt props rev", fprops.reversal)
         elif t == 0x31:
             prntr.print_ptr("str_graphic_wrapper_ptr", d.str_graphic_wrapper_ptr)
+            prntr.print_layer(d.layer)
+            prntr.print_coords("coords", d.coords)
 
             prntr.print_v("value", d.value)
+
+            prntr.print_v("unknown_1", d)
+            prntr.print_v("unknown_2", d)
+
+        elif t == 0x32:
+
+            prntr.print_ptr("net_ptr", d)
+            prntr.print_v("flags", d)
+
+            prntr.print_v("unknown_1", d)
+
+            prntr.print_coords("coords_0", d.coords_0)
+            prntr.print_coords("coords_1", d.coords_1)
+
+        elif t == 0x36:
+            assert isinstance(d, allegro_brd.AllegroBrd.Type36)
+            prntr.print_v("c", d)
+            prntr.print_v("num_items", d)
+            prntr.print_v("count", d)
+
+            subprntr = AllegroBoard.Printer(self, indent + 2)
+            for i, item in enumerate(d.items):
+                prntr.prnt(f"- Item {i}")
+
+                if d.c == 0x08:
+                    assert isinstance(item, allegro_brd.AllegroBrd.Type36.X08)
+                    subprntr.print_v("char_height", item, as_hex=False)
+                    subprntr.print_v("char_width", item, as_hex=False)
+                    subprntr.print_v("a", item, as_hex=False)
+                    subprntr.print_v("b", item, as_hex=False)
+                    subprntr.print_v("xs", item)
+                    subprntr.print_v("ys", item)
+                    subprntr.print_v("unknown_1", item)
+                else:
+                    subprntr.prnt(str(item))
+
 
         elif t == 0x37:
 

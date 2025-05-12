@@ -53,7 +53,30 @@ public:
 
 private:
     VECTOR2I scale( const VECTOR2I& aVector ) const;
+    int scale( int aVal ) const;
 
+    template <typename T>
+    const T* expectBlockByKey( uint32_t aKey, uint8_t aType ) const
+    {
+        const BLOCK_BASE* block = m_rawBoard.GetObjectByKey( aKey );
+
+        if( !block )
+        {
+            reportMissingBlock( aKey, aType );
+            return nullptr;
+        }
+
+        if( block->GetBlockType() != aType )
+        {
+            reportUnexpectedBlockType( block->GetBlockType(), aType, aKey );
+            return nullptr;
+        }
+
+        return &static_cast<const BLOCK<T>&>( *block ).GetData();
+    }
+
+    void reportMissingBlock( uint8_t aKey, uint8_t aType ) const;
+    void reportUnexpectedBlockType( uint8_t aGot, uint8_t aExpected, uint32_t aKey ) const;
 
     PCB_LAYER_ID getLayer( const LAYER_INFO& aLayerInfo ) const;
 
@@ -61,13 +84,31 @@ private:
      * Build the shapes from an 0x14 shape list
      */
     std::vector<std::unique_ptr<PCB_SHAPE>> buildShapes( const BLK_0x14& aGraphicList, BOARD_ITEM_CONTAINER& aParent );
+    std::unique_ptr<PCB_TEXT>  buildPcbText( const BLK_0x30_STR_WRAPPER& aStrWrapper, BOARD_ITEM_CONTAINER& aParent );
     std::unique_ptr<FOOTPRINT> buildFootprint( const BLK_0x2D& aFpInstance );
-    std::unique_ptr<PCB_TEXT>  buildPcbText( const BLK_0x30_STR_WRAPPER& aStrWrapper );
+
+    void cacheFontDefs();
+
+    /**
+     * Get the font definition for a given index in a 0x30, etc.
+     *
+     * @return the definition if it exists, else nullptr (which is probably an error in the
+     * importer logic)
+     */
+    const BLK_0x36::FontDef_X08* getFontDef( unsigned aIndex ) const;
+
+    /**
+     * Look up 0x07 FP instance data (0x07) for a given 0x2D FP instance
+     */
+    const BLK_0x07* getFpInstRef( const BLK_0x2D& aFpInstance ) const;
 
     const RAW_BOARD&   m_rawBoard;
     BOARD&             m_board;
     REPORTER&          m_reporter;
     PROGRESS_REPORTER* m_progressReporter;
+
+    // Cached list of font defs in the 0x36 node
+    std::vector<const BLK_0x36::FontDef_X08*> m_fontDefList;
 
     // The computed scale factor for the board
     // (based on units and divisor)

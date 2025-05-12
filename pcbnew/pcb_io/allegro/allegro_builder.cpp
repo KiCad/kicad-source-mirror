@@ -59,6 +59,8 @@ static uint32_t GetPrimaryNext( const BLOCK_BASE& aBlock )
     case 0x17: return BLK_FIELD( BLK_0x15_16_17_SEGMENT, m_Next );
     case 0x2B: return BLK_FIELD( BLK_0x2B, m_Next );
     case 0x2D: return BLK_FIELD( BLK_0x2D, m_Next );
+    case 0x30: return BLK_FIELD( BLK_0x30_STR_WRAPPER, m_Next );
+    case 0x36: return BLK_FIELD( BLK_0x36, m_Next );
     default: return 0;
     }
 }
@@ -118,7 +120,8 @@ public:
         const RAW_BOARD&  m_board;
     };
 
-    LL_WALKER( uint32_t aHead, uint32_t aTail, const RAW_BOARD& aBoard ) : m_head( aHead ), m_tail( aTail ), m_board( aBoard )
+    LL_WALKER( uint32_t aHead, uint32_t aTail, const RAW_BOARD& aBoard ) :
+            m_head( aHead ), m_tail( aTail ), m_board( aBoard )
     {
     }
 
@@ -152,9 +155,7 @@ BOARD_BUILDER::BOARD_BUILDER( const RAW_BOARD& aRawBoard, BOARD& aBoard, REPORTE
         // TODO: is the metric scale um?
         scale = 1000;
         break;
-    default:
-        THROW_IO_ERROR( "Unknown board units" );
-        break;
+    default: THROW_IO_ERROR( "Unknown board units" ); break;
     }
 
     if( m_rawBoard.m_Header->m_UnitsDivisor == 0 )
@@ -170,6 +171,27 @@ VECTOR2I BOARD_BUILDER::scale( const VECTOR2I& aVector ) const
     return vec;
 }
 
+int BOARD_BUILDER::scale( int aValue ) const
+{
+    return aValue * m_scale;
+}
+
+
+void BOARD_BUILDER::reportMissingBlock( uint8_t aKey, uint8_t aType ) const
+{
+    m_reporter.Report(
+            wxString::Format( "Could not find expected block with key %#010x and type %#04x", aKey, aType ),
+            RPT_SEVERITY_WARNING );
+}
+
+
+void BOARD_BUILDER::reportUnexpectedBlockType( uint8_t aGot, uint8_t aExpected, uint32_t aKey ) const
+{
+    m_reporter.Report( wxString::Format( "Object with key {#010x} has unexpected type %#04x (expected %#04x)", aKey,
+                                         aGot, aExpected ),
+                       RPT_SEVERITY_WARNING );
+}
+
 
 /**
  * Set up the layers on the board.
@@ -179,9 +201,55 @@ static void SetupBoardLayers( const RAW_BOARD& aRawBoard, BOARD& aBoard )
 }
 
 
-std::unique_ptr<PCB_TEXT> BOARD_BUILDER::buildPcbText( const BLK_0x30_STR_WRAPPER& aStrWrapper )
+void BOARD_BUILDER::cacheFontDefs()
 {
-    return nullptr;
+    LL_WALKER x36_walker{ m_rawBoard.m_Header->m_LL_0x36.m_Head, m_rawBoard.m_Header->m_LL_0x36.m_Tail, m_rawBoard };
+
+    bool encountered = false;
+
+    for( const BLOCK_BASE* block : x36_walker )
+    {
+        if( block->GetBlockType() != 0x36 )
+            continue;
+
+        const BLK_0x36& blk0x36 = static_cast<const BLOCK<BLK_0x36>&>( *block ).GetData();
+
+        if( blk0x36.m_Code != 0x08 )
+            continue;
+
+        if( encountered )
+        {
+            // This would be bad, because we won't get the indexes into the list right if there
+            // it's made up of entries from more than one list of entries.
+            m_reporter.Report( "Found more than one font definition lists in the 0x36 list.", RPT_SEVERITY_WARNING );
+            break;
+        }
+
+        for( const auto& item : blk0x36.m_Items )
+        {
+            const auto& fontDef = std::get<BLK_0x36::FontDef_X08>( item );
+            m_fontDefList.push_back( &fontDef );
+        }
+
+        encountered = true;
+    }
+}
+
+
+const BLK_0x36::FontDef_X08* BOARD_BUILDER::getFontDef( unsigned aIndex ) const
+{
+    if( aIndex == 0 || aIndex > m_fontDefList.size() )
+    {
+        m_reporter.Report(
+                wxString::Format( "Font def index %u requested, have %lu entries", aIndex, m_fontDefList.size() ),
+                RPT_SEVERITY_WARNING );
+        return nullptr;
+    }
+
+    // The index appears to be 1-indexed (maybe 0 means something special?)
+    aIndex -= 1;
+
+    return m_fontDefList[aIndex];
 }
 
 
@@ -195,6 +263,60 @@ struct std::hash<LAYER_INFO>
 };
 
 
+std::unique_ptr<PCB_TEXT> BOARD_BUILDER::buildPcbText( const BLK_0x30_STR_WRAPPER& aStrWrapper,
+                                                       BOARD_ITEM_CONTAINER&       aParent )
+{
+    std::cout << "  Text: " << aStrWrapper.m_Key << std::endl;
+
+    std::unique_ptr<PCB_TEXT> text = std::make_unique<PCB_TEXT>( &aParent );
+
+    VECTOR2I     textPos = scale( VECTOR2I{ aStrWrapper.m_CoordsX, aStrWrapper.m_CoordsY } );
+    PCB_LAYER_ID layer = getLayer( aStrWrapper.m_Layer );
+
+    text->SetPosition( textPos );
+    text->SetLayer( layer );
+
+    const BLK_0x31_SGRAPHIC* strGraphic = expectBlockByKey<BLK_0x31_SGRAPHIC>( aStrWrapper.m_StrGraphicPtr, 0x31 );
+
+    if( !strGraphic )
+    {
+        m_reporter.Report( wxString::Format( "Failed to find string graphic (0x31) with key %#010x "
+                                             "in string wrapper (0x30) with key %#010x",
+                                             aStrWrapper.m_StrGraphicPtr, aStrWrapper.m_Key ),
+                           RPT_SEVERITY_WARNING );
+        return nullptr;
+    }
+
+    const BLK_0x30_STR_WRAPPER::TEXT_PROPERTIES* props = nullptr;
+
+    if( aStrWrapper.m_Font.has_value() )
+        props = &aStrWrapper.m_Font.value();
+
+    if( !props && aStrWrapper.m_Font16x.has_value() )
+        props = &aStrWrapper.m_Font16x.value();
+
+    if( !props )
+    {
+        m_reporter.Report(
+                wxString::Format( "Expected one of the font properties fields in 0x30 object (key %#010x) to be set.",
+                                  aStrWrapper.m_Key ),
+                RPT_SEVERITY_WARNING );
+        return nullptr;
+    }
+
+    const BLK_0x36::FontDef_X08* fontDef = getFontDef( props->m_Key );
+
+    if( !fontDef )
+        return nullptr;
+
+    text->SetText( strGraphic->m_Value );
+    text->SetTextWidth( m_scale * fontDef->m_CharWidth );
+    text->SetTextHeight( m_scale * fontDef->m_CharHeight );
+
+    return text;
+}
+
+
 /**
  * Map of the pre-set class:subclass pairs to standard layers
  */
@@ -203,6 +325,8 @@ static const std::unordered_map<LAYER_INFO, PCB_LAYER_ID> s_LayerKiMap = {
     { { LAYER_INFO::CLASS::PACKAGE_GEOMETRY, LAYER_INFO::SUBCLASS::SILKSCREEN_TOP},     F_SilkS},
     { { LAYER_INFO::CLASS::PACKAGE_GEOMETRY, LAYER_INFO::SUBCLASS::ASSEMBLY_TOP},       F_Fab},
     { { LAYER_INFO::CLASS::PACKAGE_GEOMETRY, LAYER_INFO::SUBCLASS::PLACE_BOUND_TOP},    F_CrtYd},
+    { { LAYER_INFO::CLASS::REF_DES,          LAYER_INFO::SUBCLASS::REFDES_SS_TOP},      F_SilkS},
+    { { LAYER_INFO::CLASS::REF_DES,          LAYER_INFO::SUBCLASS::REFDES_ASS_TOP},     F_Fab},
 };
 // clang-format on
 
@@ -325,11 +449,48 @@ std::vector<std::unique_ptr<PCB_SHAPE>> BOARD_BUILDER::buildShapes( const BLK_0x
 }
 
 
+const BLK_0x07* BOARD_BUILDER::getFpInstRef( const BLK_0x2D& aFpInstance ) const
+{
+    uint32_t refKey = 0x00;
+
+    if( aFpInstance.m_InstRef.has_value() )
+        refKey = aFpInstance.m_InstRef.value();
+
+    if( !refKey && aFpInstance.m_InstRef16x.has_value() )
+        refKey = aFpInstance.m_InstRef16x.value();
+
+    // This can happen, for example for dimension "symbols".
+    if( refKey == 0 )
+        return nullptr;
+
+    const BLK_0x07* blk07 = expectBlockByKey<BLK_0x07>( refKey, 0x07 );
+    return blk07;
+}
+
+
 std::unique_ptr<FOOTPRINT> BOARD_BUILDER::buildFootprint( const BLK_0x2D& aFpInstance )
 {
     auto fp = std::make_unique<FOOTPRINT>( &m_board );
 
-    PCB_FIELD* refDes = fp->GetField( FIELD_T::REFERENCE );
+    const BLK_0x07* fpInstData = getFpInstRef( aFpInstance );
+
+    wxString refDesStr;
+    if( fpInstData )
+    {
+        refDesStr = m_rawBoard.GetString( fpInstData->m_RefDesRef );
+
+        if( refDesStr.IsEmpty() )
+        {
+            // Does this happen even when there's an 0x07 block?
+            m_reporter.Report( wxString::Format( "Empty ref des for 0x2D key %#010x", aFpInstance.m_Key ),
+                               RPT_SEVERITY_WARNING );
+        }
+    }
+
+    // We may update the PCB_FIELD layer if it's specified explicitly (e.g. with font size and so on),
+    // but if not, set the refdes at least, but make it invisible
+    fp->SetReference( refDesStr );
+    fp->GetField( FIELD_T::REFERENCE )->SetVisible( false );
 
     const VECTOR2I  fpPos = scale( VECTOR2I{ aFpInstance.m_CoordX, aFpInstance.m_CoordY } );
     const EDA_ANGLE rotation{ aFpInstance.m_Rotation / 1000. };
@@ -337,9 +498,9 @@ std::unique_ptr<FOOTPRINT> BOARD_BUILDER::buildFootprint( const BLK_0x2D& aFpIns
     fp->SetPosition( fpPos );
     fp->SetOrientation( rotation );
 
-    std::cout << "Footprint pos: " << fpPos.x << ", " << fpPos.y << " angle " << rotation.AsDegrees() << std::endl;
+    std::cout << "Footprint " << refDesStr << " pos: " << fpPos.x << ", " << fpPos.y << " angle " << rotation.AsDegrees() << std::endl;
 
-    const LL_WALKER graphicsWalker( aFpInstance.m_GraphicPtr, aFpInstance.m_Key, m_rawBoard );
+    const LL_WALKER graphicsWalker{ aFpInstance.m_GraphicPtr, aFpInstance.m_Key, m_rawBoard };
     for( const BLOCK_BASE* graphicsBlock : graphicsWalker )
     {
         const uint8_t type = graphicsBlock->GetBlockType();
@@ -351,16 +512,69 @@ std::unique_ptr<FOOTPRINT> BOARD_BUILDER::buildFootprint( const BLK_0x2D& aFpIns
 
             for( std::unique_ptr<PCB_SHAPE>& shape : shapes )
             {
-                shape->Rotate( fpPos, rotation );
+                // shape->Rotate( fpPos, rotation );
                 fp->Add( shape.release() );
             }
         }
         else
         {
+            // This probably means we're dropping something on the floor
+            // But as so far, only 0x14s occur in this list.
             m_reporter.Report( wxString::Format( "Unexpected type in graphics list: %#04x", type ),
                                RPT_SEVERITY_WARNING );
         }
     }
+
+    const LL_WALKER textWalker{ aFpInstance.m_TextPtr, aFpInstance.m_Key, m_rawBoard };
+    for( const BLOCK_BASE* textBlock : textWalker )
+    {
+        const uint8_t type = textBlock->GetBlockType();
+        if( type == 0x30 )
+        {
+            const auto& strWrapper = static_cast<const BLOCK<BLK_0x30_STR_WRAPPER>&>( *textBlock ).GetData();
+
+            std::unique_ptr<PCB_TEXT> text = buildPcbText( strWrapper, *fp );
+
+            if( text )
+            {
+                std::cout << "Text: "<< text->GetText() << std::endl;
+                std::cout << "CLass " << (int) strWrapper.m_Layer.m_Class << ": " << (int) strWrapper.m_Layer.m_Subclass
+                          << std::endl;
+                if( strWrapper.m_Layer.m_Class == LAYER_INFO::CLASS::REF_DES
+                    && ( strWrapper.m_Layer.m_Subclass == LAYER_INFO::SUBCLASS::REFDES_SS_TOP ) )
+                {
+                    // This is a visible silkscreen refdes - use it to update the PCB_FIELD refdes.
+                    PCB_FIELD* const refDes = fp->GetField( FIELD_T::REFERENCE );
+
+                    // KiCad netlisting requires parts to have non-digit + digit annotation.
+                    // If the reference begins with a number, we prepend 'UNK' (unknown) for the source
+                    // designator
+                    if( !std::isalpha( text->GetText()[0] ) )
+                        text->SetText( wxString( "UNK" ) + text->GetText() );
+
+                    // Update all ref-des parameters in-place
+                    *refDes = PCB_FIELD( *text, FIELD_T::REFERENCE );
+                }
+                else
+                {
+                    // Add it as a text item
+                    // In Allegro, the REF_DES::ASSEMBLY_x text is also in the REF_DES class, but
+                    // in KiCad, it's just an Fab layer text item with a special value.
+                    if( strWrapper.m_Layer.m_Class == LAYER_INFO::CLASS::REF_DES
+                        && ( strWrapper.m_Layer.m_Subclass == LAYER_INFO::SUBCLASS::REFDES_ASS_TOP ) )
+                    {
+                        text->SetText( "${REFERENCE}" );
+                    }
+
+                    // text->Rotate( fpPos, rotation );
+                    fp->Add( text.release() );
+                }
+            }
+        }
+    }
+
+    // Find the pads
+
     return fp;
 }
 
@@ -369,7 +583,14 @@ bool BOARD_BUILDER::BuildBoard()
 {
     if( m_progressReporter )
     {
-        m_progressReporter->AddPhases( 1 );
+        m_progressReporter->AddPhases( 2 );
+        m_progressReporter->AdvancePhase( _( "Constructing caches" ) );
+    }
+
+    cacheFontDefs();
+
+    if( m_progressReporter )
+    {
         m_progressReporter->AdvancePhase( _( "Converting footprints" ) );
     }
 
@@ -404,8 +625,16 @@ bool BOARD_BUILDER::BuildBoard()
 
                     std::unique_ptr<FOOTPRINT> fp = buildFootprint( inst );
 
-                    bulkAddedItems.push_back( fp.get() );
-                    m_board.Add( fp.release(), ADD_MODE::BULK_APPEND, true );
+                    if( fp )
+                    {
+                        bulkAddedItems.push_back( fp.get() );
+                        m_board.Add( fp.release(), ADD_MODE::BULK_APPEND, true );
+                    }
+                    else
+                    {
+                        m_reporter.Report( wxString::Format( "Failed to construct fooptrint for 0x2D key %#010x", inst.m_Key ),
+                                RPT_SEVERITY_ERROR );
+                    }
                 }
                 numInsts++;
             }

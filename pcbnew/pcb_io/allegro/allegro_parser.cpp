@@ -187,10 +187,10 @@ static std::unique_ptr<ALLEGRO::FILE_HEADER> ReadHeader( FILE_STREAM& stream )
     header->m_LL_Unknown3 = ReadLL( stream );
     header->m_0x35_Start = stream.ReadU32();
     header->m_0x35_End = stream.ReadU32();
-    header->m_LL_Unknown4 = ReadLL( stream );
+    header->m_LL_0x36 = ReadLL( stream );
     header->m_LL_Unknown5 = ReadLL( stream );
     header->m_LL_Unknown6 = ReadLL( stream );
-    header->m_LL_Unknown7 = ReadLL( stream );
+    header->m_LL_0x0A_2 = ReadLL( stream );
     header->m_Unknown3 = stream.ReadU32();
     stream.ReadBytes( header->m_AllegroVersion.data(), header->m_AllegroVersion.size() );
     header->m_Unknown4 = stream.ReadU32();
@@ -1437,7 +1437,7 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x2D( FILE_STREAM& stream, FMT_VER
 
     data.m_GraphicPtr = stream.ReadU32();
     data.m_FirstPadPtr = stream.ReadU32();
-    data.m_UnknownPtr2 = stream.ReadU32();
+    data.m_TextPtr = stream.ReadU32();
     ReadArrayU32( stream, data.m_UnknownPtrs1 );
 
     // ReadCond( stream, aVer, data.m_groupAssignmentPtr );
@@ -1545,10 +1545,8 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x30_STR_WRAPPER( FILE_STREAM& aSt
 
     ReadCond( aStream, aVer, data.m_Ptr2 );
 
-    for( size_t i = 0; i < data.m_Coords.size(); ++i )
-    {
-        data.m_Coords[i] = aStream.ReadS32();
-    }
+    data.m_CoordsX = aStream.ReadU32();
+    data.m_CoordsY = aStream.ReadU32();
 
     data.m_Unknown5 = aStream.ReadU32();
     data.m_Rotation = aStream.ReadU32();
@@ -1586,10 +1584,8 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x31_SGRAPHIC( FILE_STREAM& aStrea
     data.m_Key = aStream.ReadU32();
     data.m_StrGraphicWrapperPtr = aStream.ReadU32();
 
-    for( size_t i = 0; i < data.m_Coords.size(); ++i )
-    {
-        data.m_Coords[i] = aStream.ReadS32();
-    }
+    data.m_CoordsX = aStream.ReadU32();
+    data.m_CoordsY = aStream.ReadU32();
 
     data.m_Unknown = aStream.ReadU16();
     data.m_Len = aStream.ReadU16();
@@ -1795,7 +1791,7 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x36( FILE_STREAM& aStream, FMT_VE
         }
         case 0x08:
         {
-            BLK_0x36::X08 item;
+            BLK_0x36::FontDef_X08 item;
 
             item.m_A = aStream.ReadU32();
             item.m_B = aStream.ReadU32();

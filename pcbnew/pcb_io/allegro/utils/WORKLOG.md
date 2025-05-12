@@ -243,3 +243,48 @@ S!RES2012X50N_0805!PACKAGE!RESISTOR_RES2012X50N_0805_1K!R16!PACKAGE GEOMETRY!PLA
 * It looks like 0x15 is H line, 0x17 is V, and 0x16 is neither, so we can just merge the handling.
 
 * Arcs can now be imported, following some logic from the Fabmaster importer. For start = end, we can just use a circle anyway.
+
+## 2025-05-11
+
+* Broke out 0x14 builder function
+* Fixed Kinoma import (some wrong versions for V_164 boards)
+
+* Text looks like there's a reference to something for the font
+
+```
+S!LINEAR_DIMENSION!DRAFTING!!!BOARD GEOMETRY!DIMENSION!461 1!TEXT!260!-278!752!0.000!NO!LEFT!9 0 35 30 0.000 25 100 2!1.60!!!!!!!!!!!!!!!!
+
+looks like the entry in the 0x36 object with c = 0x08:
+
+  - Item 8
+    char_height : 35
+    char_width  : 30
+    a           : 0
+    b           : 0
+    xs          : [25, 100, 0, 2]
+    
+in the 0x30, we see
+
+  txt props key: 0x9
+  txt props flags: 0x0
+  txt props align: TextAligmnent.left (= LEFT above?)
+  txt props rev: TextReversal.straight (= NO above?)
+  
+S!RES2012X50N_0805!PACKAGE!RESISTOR_RES2012X50N_0805_1K!R16!REF DES!ASSEMBLY_TOP!490 1!TEXT!260!1260!520!0.000!NO!CENTER!17 0 24 18 0.000 4 8 3!R16!!!!!!!!!!!!!!!!
+
+looks like:
+
+  - Item 16
+    char_height : 24
+    char_width  : 18
+    a           : 0
+    b           : 0
+    xs          : [4, 8, 0, 3]
+```
+* So the first number (9, 17) is the 0x36 index + 1?
+
+## 2025-05-12
+
+* A bit more work on decoding texts
+
+* Looks like the SUBCLASS uint8 isn't the same for all CLASSes: PACKAGE_GEOMETRY:SILKSCREEN_TOP and REFDES:SILKSCREEN_TOP are 0x09:0xF7 and 0x0d:0xFB. Annoying.

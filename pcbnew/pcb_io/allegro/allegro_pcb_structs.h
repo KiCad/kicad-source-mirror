@@ -23,6 +23,9 @@
 
 #pragma once
 
+#include "string_any_map.h"
+
+
 #include <array>
 #include <optional>
 #include <memory>
@@ -122,6 +125,8 @@ struct COND_FIELD_BASE
     T&       value() { return *m_Value; }
     const T& value() const { return *m_Value; }
     bool     has_value() const { return m_Value.has_value(); }
+
+    const T& value_or( const T& aDefault ) const { return has_value() ? value() : aDefault; }
 
     T&       operator*() { return *m_Value; }
     const T& operator*() const { return *m_Value; }
@@ -249,10 +254,10 @@ struct FILE_HEADER
     uint32_t m_0x35_End;
 
     // And more linked lists
-    LINKED_LIST m_LL_Unknown4;
+    LINKED_LIST m_LL_0x36;
     LINKED_LIST m_LL_Unknown5;
     LINKED_LIST m_LL_Unknown6;
-    LINKED_LIST m_LL_Unknown7;
+    LINKED_LIST m_LL_0x0A_2;
 
     uint32_t m_Unknown3;
 
@@ -297,16 +302,32 @@ struct LAYER_INFO
 {
     enum CLASS
     {
+        // BOARD_GEOMETRY = 0x??
         PACKAGE_GEOMETRY = 0x09,
         ETCH = 0x06,
+        REF_DES = 0x0d,
+
+        // COMPONENT_VALUE = 0x??
+        // TOLERANCE = 0x??
+        // DEVICE_TYPE = 0x??
     };
 
+    /**
+     * The second byte in a CLASS:SUBCLASS pair.
+     *
+     * THe same meanings can have different subclass codes in different classes
+     */
     enum SUBCLASS
     {
+        // PACKAGE_GEOMETRY
         SILKSCREEN_TOP = 0xF7,
         PLACE_BOUND_TOP = 0xFB,
         ASSEMBLY_TOP = 0xFD,
         DFA_BOUND_TOP = 0xEF,
+
+        // REFDES class
+        REFDES_SS_TOP = 0xFB,
+        REFDES_ASS_TOP = 0xFD,
     };
 
     uint8_t m_Class;
@@ -1265,7 +1286,7 @@ struct BLK_0x2D
 
     uint32_t m_GraphicPtr;
     uint32_t m_FirstPadPtr;
-    uint32_t m_UnknownPtr2;
+    uint32_t m_TextPtr;  // Points to 0x30
 
     std::array<uint32_t, 4> m_UnknownPtrs1;
 
@@ -1348,7 +1369,8 @@ struct BLK_0x30_STR_WRAPPER
 
     COND_GE<FMT_VER::V_172, uint32_t> m_Ptr2;
 
-    std::array<int32_t, 2> m_Coords;
+    int32_t m_CoordsX;
+    int32_t m_CoordsY;
 
     uint32_t m_Unknown5;
     uint32_t m_Rotation;
@@ -1379,7 +1401,8 @@ struct BLK_0x31_SGRAPHIC
     uint32_t     m_Key;
     uint32_t     m_StrGraphicWrapperPtr;
 
-    std::array<int32_t, 2> m_Coords;
+    int32_t m_CoordsX;
+    int32_t m_CoordsY;
 
     uint16_t m_Unknown;
     uint16_t m_Len;
@@ -1534,7 +1557,7 @@ struct BLK_0x36
         COND_LT<FMT_VER::V_172, std::array<uint32_t, 50>> m_Unknown2;
     };
 
-    struct X08
+    struct FontDef_X08
     {
         uint32_t m_A;
         uint32_t m_B;
@@ -1575,7 +1598,7 @@ struct BLK_0x36
         std::array<uint8_t, 108> m_Unknown;
     };
 
-    using SubstructVariant = std::variant<X02, X03, X05, X06, X08, X0B, X0C, X0D, X0F, X10>;
+    using SubstructVariant = std::variant<X02, X03, X05, X06, FontDef_X08, X0B, X0C, X0D, X0F, X10>;
 
     std::vector<SubstructVariant> m_Items;
 };
@@ -1717,6 +1740,15 @@ public:
         if( it != m_ObjectKeyMap.end() )
             return it->second;
         return nullptr;
+    }
+
+    const std::string& GetString( uint32_t aId ) const
+    {
+        if( m_StringTable.count( aId ) )
+            return m_StringTable.at( aId );
+
+        static const std::string empty;
+        return empty;
     }
 };
 
