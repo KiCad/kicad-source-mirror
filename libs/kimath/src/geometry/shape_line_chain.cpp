@@ -78,12 +78,16 @@ SHAPE_LINE_CHAIN::SHAPE_LINE_CHAIN( const std::vector<VECTOR2I>& aV, bool aClose
 }
 
 
-SHAPE_LINE_CHAIN::SHAPE_LINE_CHAIN( const SHAPE_ARC& aArc, bool aClosed ) :
+SHAPE_LINE_CHAIN::SHAPE_LINE_CHAIN( const SHAPE_ARC& aArc, bool aClosed, std::optional<int> aMaxError ) :
         SHAPE_LINE_CHAIN_BASE( SH_LINE_CHAIN ),
         m_closed( false ),
         m_width( aArc.GetWidth() )
 {
-    Append( aArc );
+    if( aMaxError.has_value() )
+        Append( aArc, aMaxError.value() );
+    else
+        Append( aArc );
+
     SetClosed( aClosed );
 }
 
@@ -1636,6 +1640,12 @@ void SHAPE_LINE_CHAIN::Insert( size_t aVertex, const VECTOR2I& aP )
 
 void SHAPE_LINE_CHAIN::Insert( size_t aVertex, const SHAPE_ARC& aArc )
 {
+    Insert( aVertex, aArc, getArcPolygonizationMaxError() );
+}
+
+
+void SHAPE_LINE_CHAIN::Insert( size_t aVertex, const SHAPE_ARC& aArc, int aMaxError )
+{
     wxCHECK( aVertex < m_points.size(), /* void */ );
 
     if( aVertex > 0 && IsPtOnArc( aVertex ) )
@@ -1672,7 +1682,7 @@ void SHAPE_LINE_CHAIN::Insert( size_t aVertex, const SHAPE_ARC& aArc )
 
     /// Step 2: Add the arc polyline points to the chain
     //@todo need to check we aren't creating duplicate points at start or end
-    auto& chain = aArc.ConvertToPolyline( getArcPolygonizationMaxError() );
+    auto& chain = aArc.ConvertToPolyline( aMaxError );
     m_points.insert( m_points.begin() + aVertex, chain.CPoints().begin(), chain.CPoints().end() );
 
     /// Step 3: Add the vector of indices to the shape vector
