@@ -16,8 +16,8 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-05-06 12:52+0300\n"
-"PO-Revision-Date: 2025-05-10 13:03+0000\n"
-"Last-Translator: 2tama3 <2tama3@gmail.com>\n"
+"PO-Revision-Date: 2025-05-12 22:02+0000\n"
+"Last-Translator: co8 j <co8@nifty.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
 "Language: ja\n"
@@ -10555,9 +10555,8 @@ msgid "Updating Design Block Libraries"
 msgstr "デザインブロックライブラリの更新中"
 
 #: common/widgets/panel_design_block_chooser.cpp:427
-#, fuzzy
 msgid "Errors were encountered loading design blocks:"
-msgstr "シンボルのロード中にエラーが発生しました:"
+msgstr "デザインブロックのロード中にエラーが発生しました:"
 
 #: common/widgets/properties_panel.cpp:77
 #: common/widgets/properties_panel.cpp:207
@@ -10590,9 +10589,8 @@ msgid "Search Hidden Fields"
 msgstr "非表示フィールドを検索"
 
 #: common/widgets/search_pane.cpp:54
-#, fuzzy
 msgid "Search Metadata"
-msgstr "メタデータ"
+msgstr "メタデータの検索"
 
 #: common/widgets/search_pane.cpp:54
 msgid "Search library links, descriptions and keywords"
@@ -10879,9 +10877,8 @@ msgid "CSV Files"
 msgstr "CSV ファイル"
 
 #: common/wildcards_and_files_ext.cpp:421
-#, fuzzy
 msgid "CSV/TSV Files"
-msgstr "CSV ファイル"
+msgstr "CSV/TSV ファイル"
 
 #: common/wildcards_and_files_ext.cpp:427
 msgid "Portable document format files"
@@ -11307,9 +11304,8 @@ msgid "Footprint filters"
 msgstr "フットプリント フィルター"
 
 #: cvpcb/toolbars_cvpcb.cpp:123
-#, fuzzy
 msgid "Footprint filtering controls"
-msgstr "フットプリント フィルター:"
+msgstr "フットプリント フィルター"
 
 #: cvpcb/tools/cvpcb_actions.cpp:48
 msgid "View Selected Footprint"
@@ -12899,12 +12895,10 @@ msgid "By parent reference designator:"
 msgstr "リファレンス指定子の親:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:107
-#, fuzzy
 msgid "By parent symbol library id:"
 msgstr "親シンボル ライブラリ IDでフィルター:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:113
-#, fuzzy
 msgid "By parent symbol type:"
 msgstr "親のシンボル タイプでフィルター:"
 
@@ -13408,19 +13402,17 @@ msgstr "ド・モルガン"
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:283
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:299
 msgid "True"
-msgstr ""
+msgstr "True"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:283
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:303
-#, fuzzy
 msgid "False"
-msgstr "false"
+msgstr "False"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:982
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:1536
-#, fuzzy
 msgid "Select pin data file"
-msgstr "ファイルを選択"
+msgstr "ピンデータファイルを選択"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:1008
 #, c-format
