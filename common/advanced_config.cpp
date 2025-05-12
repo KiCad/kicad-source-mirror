@@ -525,11 +525,11 @@ void ADVANCED_CFG::loadSettings( wxConfigBase& aCfg )
 
     configParams.push_back( new PARAM_CFG_INT( true, AC_KEYS::TriangulateSimplificationLevel,
                                                     &m_TriangulateSimplificationLevel,
-                                                    m_TriangulateSimplificationLevel, 0, 1000 ) );
+                                                    m_TriangulateSimplificationLevel, 5, 1000 ) );
 
     configParams.push_back( new PARAM_CFG_INT( true, AC_KEYS::TriangulateMinimumArea,
                                                     &m_TriangulateMinimumArea,
-                                                    m_TriangulateMinimumArea, 0, 100000 ) );
+                                                    m_TriangulateMinimumArea, 25, 100000 ) );
 
     configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::EnableCacheFriendlyFracture,
                                                 &m_EnableCacheFriendlyFracture,

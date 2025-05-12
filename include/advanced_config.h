@@ -572,7 +572,7 @@ public:
      * segment when creating a new segment.
      *
      * Setting name: "TriangulateSimplificationLevel"
-     * Valid values: 0 to 1000
+     * Valid values: 5 to 1000
      * Default value: 50
     */
     int m_TriangulateSimplificationLevel;
@@ -583,7 +583,7 @@ public:
      * it is square nm in pcbnew.
      *
      * Setting name: "TriangulateMinimumArea"
-     * Valid values: 0 to 100000
+     * Valid values: 25 to 100000
      * Default value: 1000
      */
     int m_TriangulateMinimumArea;
