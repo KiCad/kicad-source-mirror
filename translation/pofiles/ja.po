@@ -16,8 +16,8 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-05-06 12:52+0300\n"
-"PO-Revision-Date: 2025-05-12 22:02+0000\n"
-"Last-Translator: co8 j <co8@nifty.com>\n"
+"PO-Revision-Date: 2025-05-13 12:48+0000\n"
+"Last-Translator: 2tama3 <2tama3@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
 "Language: ja\n"
@@ -33189,14 +33189,12 @@ msgid "Dimensions:"
 msgstr "寸法:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:119
-#, fuzzy
 msgid "Front copper area:"
-msgstr "表面の導体層"
+msgstr "表面の導体層:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:120
-#, fuzzy
 msgid "Back copper area:"
-msgstr "裏面の導体層"
+msgstr "裏面の導体層:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:161
 msgid "THT:"
@@ -42445,16 +42443,17 @@ msgid ""
 msgstr ""
 
 #: pcbnew/exporters/step/exporter_step.cpp:406
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Could not add 3D model for %s.\n"
 "OpenCASCADE error: %s\n"
-msgstr "%s に接続できませんでした。 エラー: %s"
+msgstr ""
+"%sの3Dモデルを追加できませんでした。\n"
+"OpenCASCADE エラー: %s\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:810
-#, fuzzy
 msgid "Could not create PCB solid model.\n"
-msgstr "BOM出力 '%s' を作成できませんでした。"
+msgstr "PCB ソリッド モデルを作成できませんでした。\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:864
 msgid ""
@@ -42522,14 +42521,14 @@ msgid "Could not add shape (%d points) to copper layer %s.\n"
 msgstr ""
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1207
-#, fuzzy, c-format
+#, c-format
 msgid "No model defined for %s.\n"
-msgstr "シンボル %s に対してフットプリントが定義されていません。"
+msgstr "%s にモデルが定義されていません。\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1222
-#, fuzzy, c-format
+#, c-format
 msgid "No model for filename '%s'.\n"
-msgstr "'%s' に '%s' という名前のモデルがありません。"
+msgstr "ファイル名 '%s'にはモデルがありません。\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1233
 #, fuzzy, c-format
@@ -42537,9 +42536,9 @@ msgid "No location data for filename '%s'.\n"
 msgstr "位置情報を '%s' に書き込みました。\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1243
-#, fuzzy, c-format
+#, c-format
 msgid "Could not add component with filename '%s'.\n"
-msgstr "IBISモデル '%s' が見つかりません"
+msgstr "ファイル名 '%s' のコンポーネントを追加できませんでした。\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1413
 #, c-format
@@ -42584,20 +42583,22 @@ msgid "OCC exception creating wire: %s\n"
 msgstr ""
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1728
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Wire not done (contour points %d): OCC error %d\n"
 "z: %g; bounding box: %s\n"
-msgstr "配線が完了していません (輪郭点 %d ): OCC エラー %d\n"
+msgstr ""
+"配線が完了していません (輪郭点 %d ): OCC エラー %d\n"
+"z: %g; バウンディングボックス: %s\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1742
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Wire self-interference check failed\n"
 "z: %g; bounding box: %s\n"
 msgstr ""
-"\n"
 "配線の自己干渉チェックに失敗しました\n"
+"z: %g; バウンディングボックス: %s\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1764
 msgid "Using non-simplified polygon.\n"
@@ -42614,9 +42615,8 @@ msgstr "** Face はスキップされました **\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1931
 #: pcbnew/exporters/step/step_pcb_model.cpp:1948
-#, fuzzy
 msgid "OCC error creating main outline.\n"
-msgstr "ファイル読み込み中のエラー。"
+msgstr "メインアウトライン作成中の OCC エラー。\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1957
 msgid "OCC error creating hole in main outline.\n"
@@ -42628,11 +42628,9 @@ msgid "Subtracting holes for %s\n"
 msgstr "%s の穴を削除しています\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2044
-#, fuzzy, c-format
+#, c-format
 msgid "** Got problems while cutting %s net '%s' **\n"
-msgstr ""
-"\n"
-"** %s ネット %s 切断中に問題が発生しました **\n"
+msgstr "** %s ネット '%s' を切断中に問題が発生しました **\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2096
 msgid "shapes"
@@ -42652,9 +42650,9 @@ msgstr "ビア"
 #: pcbnew/exporters/step/step_pcb_model.cpp:3167
 #: pcbnew/exporters/step/step_pcb_model.cpp:3241
 #: pcbnew/exporters/step/step_pcb_model.cpp:3309
-#, fuzzy, c-format
+#, c-format
 msgid "No valid PCB assembly; cannot create output file '%s'.\n"
-msgstr "出力ディレクトリ '%s' を作成できませんでした。"
+msgstr "有効な基板アセンブリがありません。出力ファイル '%s' を作成できません。\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2389
 msgid "Failed to set STEP product name, but will attempt to continue."
@@ -42668,19 +42666,19 @@ msgstr ""
 #: pcbnew/exporters/step/step_pcb_model.cpp:3218
 #: pcbnew/exporters/step/step_pcb_model.cpp:3290
 #: pcbnew/exporters/step/step_pcb_model.cpp:3339
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot rename temporary file '%s' to '%s'.\n"
-msgstr "一時ファイル '%s' を '%s' にリネームできません"
+msgstr "一時ファイル '%s' の名前を '%s' に変更できません。\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2889
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot identify actual file type for '%s'.\n"
-msgstr "ネットリスト ファイル '%s' を開くことができません。"
+msgstr "'%s' の実際のファイルタイプを識別できません。\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2899
-#, fuzzy, c-format
+#, c-format
 msgid "Could not transfer model data from file '%s'.\n"
-msgstr "値 '%s' からモデルを推論できませんでした"
+msgstr "ファイル '%s' からモデルを推論できませんでした。\n"
 
 #: pcbnew/files.cpp:152
 msgid "All KiCad Board Files"
