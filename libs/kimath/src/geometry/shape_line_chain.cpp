@@ -47,8 +47,18 @@ const ssize_t                     SHAPE_LINE_CHAIN::SHAPE_IS_PT = -1;
 const std::pair<ssize_t, ssize_t> SHAPE_LINE_CHAIN::SHAPES_ARE_PT = { SHAPE_IS_PT, SHAPE_IS_PT };
 
 
-SHAPE_LINE_CHAIN::SHAPE_LINE_CHAIN( const std::vector<int>& aV)
-    : SHAPE_LINE_CHAIN_BASE( SH_LINE_CHAIN ), m_closed( false ), m_width( 0 )
+int getArcPolygonizationMaxError()
+{
+    // This polyline will only be used for display.  The native arc is still used for output.
+    // We therefore want to use a higher definition than the typical maxError.
+    return SHAPE_ARC::DefaultAccuracyForPCB() / 5;
+}
+
+
+SHAPE_LINE_CHAIN::SHAPE_LINE_CHAIN( const std::vector<int>& aV) :
+        SHAPE_LINE_CHAIN_BASE( SH_LINE_CHAIN ),
+        m_closed( false ),
+        m_width( 0 )
 {
     for(size_t i = 0; i < aV.size(); i+= 2 )
     {
@@ -1580,7 +1590,7 @@ void SHAPE_LINE_CHAIN::Append( const SHAPE_LINE_CHAIN& aOtherLine )
 
 void SHAPE_LINE_CHAIN::Append( const SHAPE_ARC& aArc )
 {
-    Append( aArc, SHAPE_ARC::DefaultAccuracyForPCB() );
+    Append( aArc, getArcPolygonizationMaxError() );
 }
 
 
@@ -1662,7 +1672,7 @@ void SHAPE_LINE_CHAIN::Insert( size_t aVertex, const SHAPE_ARC& aArc )
 
     /// Step 2: Add the arc polyline points to the chain
     //@todo need to check we aren't creating duplicate points at start or end
-    auto& chain = aArc.ConvertToPolyline();
+    auto& chain = aArc.ConvertToPolyline( getArcPolygonizationMaxError() );
     m_points.insert( m_points.begin() + aVertex, chain.CPoints().begin(), chain.CPoints().end() );
 
     /// Step 3: Add the vector of indices to the shape vector
