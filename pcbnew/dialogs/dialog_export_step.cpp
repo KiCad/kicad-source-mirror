@@ -585,15 +585,15 @@ void DIALOG_EXPORT_STEP::onExportButton( wxCommandEvent& aEvent )
         // max dist from one endPt to next startPt to build a closed shape:
         int chainingEpsilon = pcbIUScale.mmToIU( tolerance );
 
-        // Arc to segment approx error (not critical here: we do not use the outline shape):
-        int maxError = pcbIUScale.mmToIU( 0.005 );
-        bool success = BuildBoardPolygonOutlines( m_editFrame->GetBoard(), outline, maxError,
-                                                  chainingEpsilon, nullptr );
-        if( !success )
+        // Arc to segment approximation error (not critical here: we do not use the outline shape):
+        int maxError = pcbIUScale.mmToIU( 0.05 );
+
+        if( !BuildBoardPolygonOutlines( m_editFrame->GetBoard(), outline, maxError, chainingEpsilon ) )
         {
-            DisplayErrorMessage( this, wxString::Format(
-                                 _( "Board outline is missing or not closed using %.3f mm tolerance.\n"
-                                    "Run DRC for a full analysis." ), tolerance ) );
+            DisplayErrorMessage( this, wxString::Format( _( "Board outline is missing or not closed using "
+                                                            "%.3f mm tolerance.\n"
+                                                            "Run DRC for a full analysis." ),
+                                                         tolerance ) );
             return;
         }
 

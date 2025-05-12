@@ -132,8 +132,10 @@ void DRC_TEST_PROVIDER_MISC::testOutline()
     // other tools (such as 3D viewer).
     int chainingEpsilon = m_board->GetOutlinesChainingEpsilon();
 
-    if( !BuildBoardPolygonOutlines( m_board, dummyOutline, m_board->GetDesignSettings().m_MaxError,
-                                    chainingEpsilon, &errorHandler ) )
+    // Arc to segment approximation error (not critical here: we do not use the outline shape):
+    int maxError = pcbIUScale.mmToIU( 0.05 );
+
+    if( !BuildBoardPolygonOutlines( m_board, dummyOutline, maxError, chainingEpsilon, &errorHandler ) )
     {
         if( errorHandled )
         {
