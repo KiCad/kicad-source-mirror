@@ -651,9 +651,7 @@ SHAPE_POLY_SET CONVERT_TOOL::makePolysFromChainedSegs( const std::deque<EDA_ITEM
         auto insert =
                 [&]( EDA_ITEM* aItem, const VECTOR2I& aAnchor, bool aDirection )
                 {
-                    if( aItem->Type() == PCB_ARC_T
-                        || ( aItem->Type() == PCB_SHAPE_T
-                             && static_cast<PCB_SHAPE*>( aItem )->GetShape() == SHAPE_T::ARC ) )
+                    if( aItem->IsType( { PCB_ARC_T, PCB_SHAPE_LOCATE_ARC_T } ) )
                     {
                         SHAPE_ARC arc;
 
@@ -876,15 +874,26 @@ SHAPE_POLY_SET CONVERT_TOOL::makePolysFromClosedGraphics( const std::deque<EDA_I
             if( !shape->IsClosed() )
                 continue;
 
-            if( aStrategy != BOUNDING_HULL )
-                shape->SetFilled( true );
+            if( shape->GetShape() == SHAPE_T::CIRCLE && aStrategy != BOUNDING_HULL )
+            {
+                VECTOR2I  c = shape->GetCenter();
+                int       R = shape->GetRadius();
+                SHAPE_ARC arc( c - VECTOR2I( R, 0 ), c + VECTOR2I( R, 0 ), c - VECTOR2I( R, 0 ), 0 );
 
-            shape->TransformShapeToPolygon( poly, UNDEFINED_LAYER, 0, bds.m_MaxError, ERROR_INSIDE,
-                                            aStrategy == COPY_LINEWIDTH
-                                                    || aStrategy == CENTERLINE );
+                poly.NewOutline();
+                poly.Append( arc );
+            }
+            else
+            {
+                if( aStrategy != BOUNDING_HULL )
+                    shape->SetFilled( true );
 
-            if( aStrategy != BOUNDING_HULL )
-                shape->SetFillMode( wasFilled );
+                shape->TransformShapeToPolygon( poly, UNDEFINED_LAYER, 0, bds.m_MaxError, ERROR_INSIDE,
+                                                aStrategy != BOUNDING_HULL );
+
+                if( aStrategy != BOUNDING_HULL )
+                    shape->SetFillMode( wasFilled );
+            }
 
             shape->SetFlags( SKIP_STRUCT );
             break;
@@ -907,8 +916,7 @@ SHAPE_POLY_SET CONVERT_TOOL::makePolysFromClosedGraphics( const std::deque<EDA_I
         case PCB_PAD_T:
         {
             PAD* pad = static_cast<PAD*>( item );
-            pad->TransformShapeToPolygon( poly, UNDEFINED_LAYER, 0, bds.m_MaxError, ERROR_INSIDE,
-                                          false );
+            pad->TransformShapeToPolygon( poly, UNDEFINED_LAYER, 0, bds.m_MaxError, ERROR_INSIDE, false );
             pad->SetFlags( SKIP_STRUCT );
             break;
         }
