@@ -86,7 +86,7 @@ public:
                                                        bool aInFill ) const;
 
     SHAPE_LINE_CHAIN ParseContour( nlohmann::json polyData, bool aInFill,
-                                   double aArcAccuracy = SHAPE_ARC::DefaultAccuracyForPCB() ) const;
+                                   int aMaxError = SHAPE_ARC::DefaultAccuracyForPCB() ) const;
 
 private:
     BOARD*   m_board;

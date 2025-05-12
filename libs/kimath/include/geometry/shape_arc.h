@@ -273,7 +273,7 @@ public:
      *
      * @return a default accuracy value for ConvertToPolyline() to build the polyline.
      */
-    static double DefaultAccuracyForPCB(){ return 0.005 * PCB_IU_PER_MM; }
+    static int DefaultAccuracyForPCB() { return ARC_HIGH_DEF; }
 
     /**
      * Construct a SHAPE_LINE_CHAIN of segments from a given arc.
@@ -284,14 +284,14 @@ public:
      *
      * @todo Unify KiCad internal units.
      *
-     * @param aAccuracy maximum divergence from true arc given in internal units.
-     * @param aEffectiveAccuracy is the actual divergence from true arc given.
-     * the approximation error is between -aEffectiveAccuracy/2 and +aEffectiveAccuracy/2
-     * in internal units
+     * @param aMaxError maximum divergence from true arc given in internal units.
+     * @param aActualError is the actual divergence from true arc given.
+     *                     the approximation error is between -aActualError/2 and
+     *                     +aActualError/2 in internal units
      * @return a #SHAPE_LINE_CHAIN.
      */
-    const SHAPE_LINE_CHAIN ConvertToPolyline( double aAccuracy = DefaultAccuracyForPCB(),
-                                              double* aEffectiveAccuracy = nullptr ) const;
+    const SHAPE_LINE_CHAIN ConvertToPolyline( int aMaxError = DefaultAccuracyForPCB(),
+                                              int* aActualError = nullptr ) const;
 
     bool operator==( SHAPE_ARC const& aArc ) const
     {
@@ -299,8 +299,7 @@ public:
                && ( aArc.m_width == m_width );
     }
 
-    void TransformToPolygon( SHAPE_POLY_SET& aBuffer, int aError,
-                             ERROR_LOC aErrorLoc ) const override;
+    void TransformToPolygon( SHAPE_POLY_SET& aBuffer, int aMaxError, ERROR_LOC aErrorLoc ) const override;
 
     /**
      * @return true if the arc is counter-clockwise.

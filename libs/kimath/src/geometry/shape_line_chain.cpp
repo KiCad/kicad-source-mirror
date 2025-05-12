@@ -1584,9 +1584,9 @@ void SHAPE_LINE_CHAIN::Append( const SHAPE_ARC& aArc )
 }
 
 
-void SHAPE_LINE_CHAIN::Append( const SHAPE_ARC& aArc, double aAccuracy )
+void SHAPE_LINE_CHAIN::Append( const SHAPE_ARC& aArc, int aMaxError )
 {
-    SHAPE_LINE_CHAIN chain = aArc.ConvertToPolyline( aAccuracy );
+    SHAPE_LINE_CHAIN chain = aArc.ConvertToPolyline( aMaxError );
 
     if( chain.PointCount() > 2 )
     {
@@ -2533,7 +2533,7 @@ void SHAPE_LINE_CHAIN::RemoveDuplicatePoints()
 
 
 
-void SHAPE_LINE_CHAIN::Simplify( int aMaxError )
+void SHAPE_LINE_CHAIN::Simplify( int aTolerance )
 {
     if( PointCount() < 3 )
         return;
@@ -2574,7 +2574,7 @@ void SHAPE_LINE_CHAIN::Simplify( int aMaxError )
                 }
 
                 // Test if the point is within the allowed error
-                if( !TestSegmentHit( m_points[test_idx], m_points[start_idx], m_points[end_idx], aMaxError ) )
+                if( !TestSegmentHit( m_points[test_idx], m_points[start_idx], m_points[end_idx], aTolerance ) )
                 {
                     can_simplify = false;
                     break;

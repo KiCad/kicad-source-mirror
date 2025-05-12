@@ -62,8 +62,7 @@ public:
 
     void TransformTextToBaseline( EDA_TEXT* textItem, const wxString& baselineAlign );
 
-    std::vector<SHAPE_LINE_CHAIN> ParseLineChains( const wxString& aData, int aArcMinSegLen,
-                                                   bool aForceClosed );
+    std::vector<SHAPE_LINE_CHAIN> ParseLineChains( const wxString& aData, int aMaxError, bool aForceClosed );
 
 protected:
     VECTOR2D m_relOrigin;

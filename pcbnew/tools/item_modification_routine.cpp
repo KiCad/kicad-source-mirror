@@ -869,7 +869,7 @@ void OUTSET_ROUTINE::ProcessItem( BOARD_ITEM& aItem )
             // No point doing a SHAPE_RECT as we may need to rotate it
             ROUNDRECT      rrect( box, radius );
             SHAPE_POLY_SET poly;
-            rrect.TransformToPolygon( poly, 0, ERROR_LOC::ERROR_OUTSIDE );
+            rrect.TransformToPolygon( poly );
 
             poly.Rotate( pad.GetOrientation(), pad.GetPosition() );
             addPoly( poly );
@@ -908,20 +908,20 @@ void OUTSET_ROUTINE::ProcessItem( BOARD_ITEM& aItem )
             box.Inflate( m_params.outsetDistance );
 
             SHAPE_RECT rect( box );
+
             if( m_params.roundCorners )
             {
                 try
                 {
                     ROUNDRECT      rrect( rect, m_params.outsetDistance );
                     SHAPE_POLY_SET poly;
-                    rrect.TransformToPolygon( poly, 0, ERROR_LOC::ERROR_OUTSIDE );
+                    rrect.TransformToPolygon( poly );
                     addPoly( poly );
                 }
                 catch( const KI_PARAM_ERROR& error )
                 {
                     DisplayErrorMessage( nullptr, error.What() );
                 }
-
             }
             else
             {

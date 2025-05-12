@@ -442,9 +442,10 @@ public:
      */
     struct VERTEX : PARSER
     {
-        VERTEX( VERTEX_TYPE aType = VERTEX_TYPE::POINT, POINT aEnd = POINT(),
-                POINT aCenter = POINT() ) :
-                Type( aType ), End( aEnd ), Center( aCenter )
+        VERTEX( VERTEX_TYPE aType = VERTEX_TYPE::POINT, POINT aEnd = POINT(), POINT aCenter = POINT() ) :
+                Type( aType ),
+                End( aEnd ),
+                Center( aCenter )
         {}
 
         VERTEX_TYPE Type;
@@ -455,12 +456,11 @@ public:
         void        Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) override;
 
         void AppendToChain( SHAPE_LINE_CHAIN* aChainToAppendTo,
-                const std::function<VECTOR2I( const VECTOR2I& )> aCadstarToKicadPointCallback,
-                double aAccuracy ) const;
+                            const std::function<VECTOR2I( const VECTOR2I& )> aCadstarToKicadPointCallback,
+                            int aAccuracy ) const;
 
         SHAPE_ARC BuildArc( const VECTOR2I& aPrevPoint,
-                            const std::function<VECTOR2I( const VECTOR2I& )>
-                                    aCadstarToKicadPointCallback ) const;
+                            const std::function<VECTOR2I( const VECTOR2I& )> aCadstarToKicadPointCallback ) const;
     };
 
     /**
@@ -493,13 +493,11 @@ public:
         static bool IsShape( XNODE* aNode );
         void        Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) override;
 
-        SHAPE_LINE_CHAIN OutlineAsChain( const std::function<VECTOR2I( const VECTOR2I& )>
-                                                 aCadstarToKicadPointCallback,
-                                         double aAccuracy ) const;
+        SHAPE_LINE_CHAIN OutlineAsChain( const std::function<VECTOR2I( const VECTOR2I& )> aCadstarToKicadPointCallback,
+                                         int aAccuracy ) const;
 
-        SHAPE_POLY_SET ConvertToPolySet( const std::function<VECTOR2I( const VECTOR2I& )>
-                                                 aCadstarToKicadPointCallback,
-                                         double aAccuracy  ) const;
+        SHAPE_POLY_SET ConvertToPolySet( const std::function<VECTOR2I( const VECTOR2I& )> aCadstarToKicadPointCallback,
+                                         int aAccuracy  ) const;
     };
 
 

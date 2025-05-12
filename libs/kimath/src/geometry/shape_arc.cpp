@@ -883,8 +883,7 @@ double SHAPE_ARC::GetRadius() const
 }
 
 
-const SHAPE_LINE_CHAIN SHAPE_ARC::ConvertToPolyline( double aAccuracy,
-                                                     double* aEffectiveAccuracy ) const
+const SHAPE_LINE_CHAIN SHAPE_ARC::ConvertToPolyline( int aMaxError, int* aActualError ) const
 {
     SHAPE_LINE_CHAIN rv;
     double    r    = GetRadius();
@@ -893,36 +892,36 @@ const SHAPE_LINE_CHAIN SHAPE_ARC::ConvertToPolyline( double aAccuracy,
     EDA_ANGLE ca   = GetCentralAngle();
 
     SEG    startToEnd( GetP0(), GetP1() );
-    double halfAccuracy = std::max( 1.0, aAccuracy / 2 );
+    double halfMaxError = std::max( 1.0, aMaxError / 2.0 );
 
     int n;
 
     // To calculate the arc to segment count, use the external radius instead of the radius.
     // for a arc with small radius and large width, the difference can be significant
-    double external_radius = r+(m_width/2);
-    double effectiveAccuracy;
+    double external_radius = r + ( m_width / 2.0 );
+    double effectiveError;
 
-    if( external_radius < halfAccuracy
-        || startToEnd.Distance( GetArcMid() ) < halfAccuracy ) // Should be a very rare case
+    if( external_radius < halfMaxError
+        || startToEnd.Distance( GetArcMid() ) < halfMaxError ) // Should be a very rare case
     {
         // In this case, the arc is approximated by one segment, with a effective error
-        // between -aAccuracy/2 and +aAccuracy/2, as expected.
+        // between -aMaxError/2 and +aMaxError/2, as expected.
         n = 0;
-        effectiveAccuracy = external_radius;
+        effectiveError = external_radius;
     }
     else
     {
-        n = GetArcToSegmentCount( external_radius, aAccuracy, ca );
+        n = GetArcToSegmentCount( external_radius, aMaxError, ca );
 
-        // Recalculate the effective error of approximation, that can be < aAccuracy
+        // Recalculate the effective error of approximation, that can be < aMaxError
         int seg360 = n * 360.0 / fabs( ca.AsDegrees() );
-        effectiveAccuracy = CircleToEndSegmentDeltaRadius( external_radius, seg360 );
+        effectiveError = CircleToEndSegmentDeltaRadius( external_radius, seg360 );
     }
 
     // Split the error on either side of the arc.  Since we want the start and end points
     // to be exactly on the arc, the first and last segments need to be shorter to stay within
     // the error band (since segments normally start 1/2 the error band outside the arc).
-    r += effectiveAccuracy / 2;
+    r += effectiveError / 2;
     n = n * 2;
 
     rv.Append( m_start );
@@ -942,8 +941,8 @@ const SHAPE_LINE_CHAIN SHAPE_ARC::ConvertToPolyline( double aAccuracy,
 
     rv.Append( m_end );
 
-    if( aEffectiveAccuracy )
-        *aEffectiveAccuracy = effectiveAccuracy;
+    if( aActualError )
+        *aActualError = KiROUND( effectiveError );
 
     return rv;
 }

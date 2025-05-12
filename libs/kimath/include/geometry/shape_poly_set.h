@@ -643,11 +643,11 @@ public:
      * @param aArc      The arc to be inserted
      * @param aOutline  Index of the polygon
      * @param aHole     Index of the hole (-1 for the main outline)
-     * @param aAccuracy Accuracy of the arc representation in IU
+     * @param aMaxError optional; accuracy of the arc representation in IU
      * @return the number of points in the arc (including the interpolated points from the arc)
      */
     int Append( const SHAPE_ARC& aArc, int aOutline = -1, int aHole = -1,
-                double aAccuracy = SHAPE_ARC::DefaultAccuracyForPCB() );
+                std::optional<int> aMaxError = {} );
 
     /**
      * Adds a vertex in the globally indexed position \a aGlobalIndex.

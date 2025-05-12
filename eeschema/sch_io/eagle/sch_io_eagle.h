@@ -78,7 +78,7 @@ struct EAGLE_LIBRARY
 class SCH_IO_EAGLE : public SCH_IO
 {
 public:
-    const double ARC_ACCURACY = SCH_IU_PER_MM * 0.01; // 0.01mm
+    const int ARC_ACCURACY = KiROUND( SCH_IU_PER_MM * 0.01 ); // 0.01mm
 
     SCH_IO_EAGLE();
     ~SCH_IO_EAGLE();
