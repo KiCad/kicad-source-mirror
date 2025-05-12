@@ -751,12 +751,8 @@ SHAPE_POLY_SET CONVERT_TOOL::makePolysFromChainedSegs( const std::deque<EDA_ITEM
         // Start with the first object and walk "right"
         // Note if the first object is an arc, we don't need to insert its first point here, the
         // whole arc will be inserted at anchor B inside process()
-        if( !( candidate->Type() == PCB_ARC_T
-               || ( candidate->Type() == PCB_SHAPE_T
-                    && static_cast<PCB_SHAPE*>( candidate )->GetShape() == SHAPE_T::ARC ) ) )
-        {
+        if( !candidate->IsType( { PCB_ARC_T, PCB_SHAPE_LOCATE_ARC_T } ) )
             insert( candidate, anchors->A, true );
-        }
 
         process( candidate, anchors->B, true );
 
@@ -792,8 +788,8 @@ SHAPE_POLY_SET CONVERT_TOOL::makePolysFromChainedSegs( const std::deque<EDA_ITEM
         {
             for( BOARD_ITEM* item : insertedItems )
             {
-                item->TransformShapeToPolygon( poly, UNDEFINED_LAYER, 0, bds.m_MaxError,
-                                               ERROR_INSIDE, false );
+                item->TransformShapeToPolygon( poly, UNDEFINED_LAYER, 0, bds.m_MaxError, ERROR_INSIDE,
+                                               false );
             }
         }
 
@@ -804,8 +800,7 @@ SHAPE_POLY_SET CONVERT_TOOL::makePolysFromChainedSegs( const std::deque<EDA_ITEM
 }
 
 
-SHAPE_POLY_SET CONVERT_TOOL::makePolysFromOpenGraphics( const std::deque<EDA_ITEM*>& aItems,
-                                                        int aGap )
+SHAPE_POLY_SET CONVERT_TOOL::makePolysFromOpenGraphics( const std::deque<EDA_ITEM*>& aItems, int aGap )
 {
     BOARD_DESIGN_SETTINGS& bds = m_frame->GetBoard()->GetDesignSettings();
     SHAPE_POLY_SET         poly;
@@ -824,8 +819,8 @@ SHAPE_POLY_SET CONVERT_TOOL::makePolysFromOpenGraphics( const std::deque<EDA_ITE
             if( shape->IsClosed() )
                 continue;
 
-            shape->TransformShapeToPolygon( poly, UNDEFINED_LAYER, aGap, bds.m_MaxError,
-                                            ERROR_INSIDE, false );
+            shape->TransformShapeToPolygon( poly, UNDEFINED_LAYER, aGap, bds.m_MaxError, ERROR_INSIDE,
+                                            false );
             shape->SetFlags( SKIP_STRUCT );
 
             break;
@@ -837,8 +832,8 @@ SHAPE_POLY_SET CONVERT_TOOL::makePolysFromOpenGraphics( const std::deque<EDA_ITE
         {
             PCB_TRACK* track = static_cast<PCB_TRACK*>( item );
 
-            track->TransformShapeToPolygon( poly, UNDEFINED_LAYER, aGap, bds.m_MaxError,
-                                            ERROR_INSIDE, false );
+            track->TransformShapeToPolygon( poly, UNDEFINED_LAYER, aGap, bds.m_MaxError, ERROR_INSIDE,
+                                            false );
             track->SetFlags( SKIP_STRUCT );
 
             break;
@@ -1361,31 +1356,36 @@ int CONVERT_TOOL::OutsetItems( const TOOL_EVENT& aEvent )
     // Handle modifications to existing items by the routine
     // How to deal with this depends on whether we're in the footprint editor or not
     // and whether the item was conjured up by decomposing a polygon or rectangle
-    auto item_modification_handler = [&]( BOARD_ITEM& aItem )
-    {
-    };
+    auto item_modification_handler =
+            [&]( BOARD_ITEM& aItem )
+            {
+            };
 
     bool any_items_created = false;
-    auto item_creation_handler = [&]( std::unique_ptr<BOARD_ITEM> aItem )
-    {
-        any_items_created = true;
-        items_to_select_on_success.push_back( aItem.get() );
-        commit.Add( aItem.release() );
-    };
 
-    auto item_removal_handler = [&]( BOARD_ITEM& aItem )
-    {
-        // If you do an outset on a FP pad, do you really want to delete
-        // the parent?
-        if( !aItem.GetParentFootprint() )
-        {
-            commit.Remove( &aItem );
-        }
-    };
+    auto item_creation_handler =
+            [&]( std::unique_ptr<BOARD_ITEM> aItem )
+            {
+                any_items_created = true;
+                items_to_select_on_success.push_back( aItem.get() );
+                commit.Add( aItem.release() );
+            };
+
+    auto item_removal_handler =
+            [&]( BOARD_ITEM& aItem )
+            {
+                // If you do an outset on a FP pad, do you really want to delete
+                // the parent?
+                if( !aItem.GetParentFootprint() )
+                {
+                    commit.Remove( &aItem );
+                }
+            };
 
     // Combine these callbacks into a CHANGE_HANDLER to inject in the ROUTINE
-    ITEM_MODIFICATION_ROUTINE::CALLABLE_BASED_HANDLER change_handler(
-            item_creation_handler, item_modification_handler, item_removal_handler );
+    ITEM_MODIFICATION_ROUTINE::CALLABLE_BASED_HANDLER change_handler( item_creation_handler,
+                                                                      item_modification_handler,
+                                                                      item_removal_handler );
 
     // Persistent settings between dialog invocations
     // Init with some sensible defaults
@@ -1411,8 +1411,8 @@ int CONVERT_TOOL::OutsetItems( const TOOL_EVENT& aEvent )
         false,
     };
 
-    OUTSET_ROUTINE::PARAMETERS& outset_params =
-            IsFootprintEditor() ? outset_params_fp_edit : outset_params_pcb_edit;
+    OUTSET_ROUTINE::PARAMETERS& outset_params = IsFootprintEditor() ? outset_params_fp_edit
+                                                                    : outset_params_pcb_edit;
 
     {
         DIALOG_OUTSET_ITEMS dlg( frame, outset_params );
