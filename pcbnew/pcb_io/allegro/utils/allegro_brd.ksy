@@ -541,11 +541,15 @@ types:
         type: u4
       - id: next
         type: u4
-      - id: ptr1
+      - id: net
         type: u4
-      - id: ptr2
+        doc: Points to 0x1B (NET)
+      - id: conn_item
         type: u4
-      - type: u4
+        doc: |
+          Connected item: points to 0x05 (TRACK), 0x32 (PAD)
+      - id: unknown_1
+        type: u4
         if: _root.ver >= 0x00140900
 
   type_05_track:
@@ -1110,7 +1114,7 @@ types:
         doc: |
           Could be a mask:
             PreAmp N13829: 0x202
-      - id: ptr1
+      - id: assignments
         type: u4
         doc: |
           PreAmp N13829 -> 0x04
@@ -1122,6 +1126,8 @@ types:
         type: u4
         doc: |
           Points to 0x03 (not to a string ID)
+
+          E.g. @preampl_schem.schematic1(sch_1):n15082
       - id: ptr4
         type: u4
       - id: model_ptr

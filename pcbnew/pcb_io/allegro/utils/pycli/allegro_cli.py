@@ -241,6 +241,12 @@ class AllegroBoard:
             if d.subtype in [0x68, 0x6B, 0x6D, 0x6E, 0x6F, 0x71, 0x73, 0x78]:
                 prntr.print_v("string data", d.data)
 
+        elif t == 0x04:
+            prntr.print_ptr("next", d)
+            prntr.print_ptr("net", d)
+            prntr.print_ptr("conn_item", d)
+            prntr.print_ptr("unknown_1", d)
+
         elif t == 0x06:
             prntr.print_s("String", d.str)
             prntr.print_s("Ptr 1", d.str_2),
@@ -338,11 +344,12 @@ class AllegroBoard:
             prntr.print_v("unknown_1", d)
 
         elif t == 0x1b: # Net
+            prntr.print_ptr("next", d)
             prntr.print_s("Net", d.net_name)
 
             prntr.print_ptr("Path str", d.path_str_ptr)
             prntr.print_ptr("Model str", d.model_ptr)
-            prntr.print_ptr("Ptr1", d.ptr1)
+            prntr.print_ptr("Assignments", d.assignments)
             prntr.print_ptr("Ptr2", d.ptr2)
             prntr.print_ptr("Ptr4", d.ptr4)
             prntr.print_ptr("Ptr6", d.ptr6)
