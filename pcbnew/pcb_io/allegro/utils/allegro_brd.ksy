@@ -227,23 +227,53 @@ types:
         type: u1
         enum: layer_class
       - id: subclass
-        type: u1
-        enum: layer_subclass
-
+        type:
+          switch-on: lclass
+          cases:
+            layer_class::board_geometry: subclass_board_geom
+            layer_class::manufacturing: subclass_manufacturing
+            layer_class::etch: u1
+            layer_class::package_geometry: subclass_package_geom
+            _: u1
     enums:
       layer_class:
         0x01: board_geometry
         0x06: etch
-        0x07: unknown
+        0x07: manufacturing
         0x09: package_geometry
         0x0d: ref_des
 
-      layer_subclass:
+      enum_package_geom:
         0xef: dfa_bounds_top
         0xf2: display_top
         0xf9: dimension
         0xfb: place_bounds_top
         0xfd: assembly_top
+
+      enum_board_geom:
+        0xf1: unknown
+
+      enum_manufacturing:
+        0xf0: unknown
+
+    types:
+      subclass_board_geom:
+        seq:
+          - id: sc
+            type: u1
+            enum: enum_board_geom
+
+      subclass_manufacturing:
+        seq:
+          - id: sc
+            type: u1
+            enum: enum_manufacturing
+
+      subclass_package_geom:
+        seq:
+          - id: sc
+            type: u1
+            enum: enum_package_geom
 
         # To identify:
         # pin
@@ -2274,14 +2304,14 @@ types:
       - id: layer_name_str
         type: u4
         if: _root.ver >= 0x00131500
-      - id: un2
+      - id: unknown_1
         type: u4
         if: _root.ver >= 0x00131500
-      - id: un1
+      - id: unknown_2
         type: u4
         repeat: expr
         repeat-expr: 7
-      - id: un3
+      - id: unknown_3
         type: u4
         if: _root.ver >= 0x00140900
 
@@ -2310,9 +2340,11 @@ types:
         type: u4
       - id: next
         type: u4
-      - id: un
+      - id: unknown_1
         type: u4
-      - id: un1
+        doc: |
+          Null?
+      - id: unknown_2
         type: u4
         if: _root.ver >= 0x00140900
 

@@ -175,21 +175,29 @@ class AllegroBoard:
         def print_coords(self, name, coords):
             self.prnt(f"{name:12}: ({coords.x}, {coords.y})")
 
-        def print_layer(self, layer: allegro_brd.AllegroBrd.LayerInfo):
-            name = "Layer"
 
+        @staticmethod
+        def format_layer(layer: allegro_brd.AllegroBrd.LayerInfo):
             if isinstance(layer.lclass, enum.Enum):
                 lc = f"{layer.lclass} ({layer.lclass.value:#04x})"
             else:
                 lc = f"Unknown ({layer.lclass:#04x})"
 
-            if isinstance(layer.subclass, enum.Enum):
-                sc = f"{layer.subclass} ({layer.subclass.value:#04x})"
-            else:
+            if isinstance(layer.subclass, int):
                 sc = f"Unknown ({layer.subclass:#04x})"
+            else:
+                # it's a known SC enum, but not a known value
+                if isinstance(layer.subclass.sc, int):
+                    sc = f"Unknown ({layer.subclass.sc:#04x})"
+                else:
+                    sc = f"{layer.subclass.sc} ({layer.subclass.sc.value:#04x})"
 
             v = f"{lc} / {sc}"
-            self.print_v(name, v)
+            return v
+
+        def print_layer(self, layer: allegro_brd.AllegroBrd.LayerInfo):
+            name = "Layer"
+            self.print_v(name, self.format_layer(layer))
 
     def print_obj(self, obj, indent=2):
         """
@@ -478,8 +486,13 @@ class AllegroBoard:
             prntr.print_v(f"rotation", d.rotation / 1000., as_hex=False)
             prntr.print_coords("coords", d.coords)
 
-            prntr.print_ptr("inst_ref", d, "inst_ref_16x")
-            prntr.print_ptr("inst_ref", d, "inst_ref")
+            ref = d.inst_ref if hasattr(d, "inst_ref") else d.inst_ref_16x
+            prntr.print_ptr("inst_ref", ref)
+
+            # Ref can be 0
+            if ref:
+                # Deref the reference for convenience to see which FP this is
+                prntr.print_s("ref>refdes", brd.object(ref).data.ref_des_ref)
 
         elif t == 0x30:
             assert isinstance(d, allegro_brd.AllegroBrd.Type30StrWrapper)
@@ -522,7 +535,7 @@ class AllegroBoard:
             prntr.print_ptr("net_ptr", d)
             prntr.print_v("flags", d)
 
-            prntr.print_v("unknown_1", d)
+            prntr.print_ptr("unknown_1", d)
 
             prntr.print_coords("coords_0", d.coords_0)
             prntr.print_coords("coords_1", d.coords_1)
@@ -564,6 +577,28 @@ class AllegroBoard:
             for i in range(d.count):
                 entry = d.ptrs[i]
                 prntr.print_ptr(f"entry {i}", entry)
+
+        elif t == 0x38:
+            prntr.print_ptr("next", d)
+            prntr.print_ptr("layer_list", d)
+            prntr.print_v("film_name", d)
+            prntr.print_s("layer_name_str", d)
+
+            prntr.print_v("unknown_1", d)
+            prntr.print_v("unknown_2", d)
+            prntr.print_v("unknown_3", d)
+
+        elif t == 0x39:
+            prntr.print_ptr("parent", d)
+            prntr.print_ptr("head", d)
+            prntr.print_v("x", d)
+
+        elif t == 0x3a:
+            assert isinstance(d, allegro_brd.AllegroBrd.Type3aFilmListNode)
+            prntr.print_ptr("next", d)
+            prntr.print_layer(d.layer)
+            prntr.print_v("unknown_1", d)
+            prntr.print_v("unknown_2", d)
 
         elif t == 0x3c:
 
@@ -647,6 +682,14 @@ def walk_list(brd: AllegroBoard, head: int, tail: int, next_attr="next"):
         index += 1
 
 
+def get_layer_for_obj(obj: allegro_brd.AllegroBrd.BoardObject) -> allegro_brd.AllegroBrd.LayerInfo | None:
+
+    if hasattr(obj.data, "layer"):
+        return obj.data.layer
+
+    return None
+
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Allegro file CLI explorer")
     parser.add_argument("brd", type=Path,
@@ -657,6 +700,9 @@ if __name__ == "__main__":
 
     parser.add_argument("-s", "--string", type=IntIsh,
                         help="Print a string from the string map")
+
+    parser.add_argument("--string-match", "--sm", type=str,
+                        help="Print strings in the string map that match a substring")
 
     parser.add_argument("-k", "--key", type=IntIsh,
                         help="Print the object with the given key")
@@ -676,6 +722,9 @@ if __name__ == "__main__":
 
     parser.add_argument( "--dump-layers", "--dl", action="store_true",
                         help="Dump all the layers in the layer map structure")
+
+    parser.add_argument( "--dump-object-layers", "--dol", action="store_true",
+                         help="Dump layers for objects with layer info")
 
     parser.add_argument("--footprints", "--fp", nargs="*", default=None,
                         help="Dump footprint info for the given ref designators, or all if none given")
@@ -713,6 +762,11 @@ if __name__ == "__main__":
             print(f"String {key:#010x}: {s}")
         except KeyError:
             print(f"String with key {key:#010x} not found")
+
+    if args.string_match is not None:
+        for k, s in brd.strs.items():
+            if args.string_match in s:
+                print(f"String key {k:#010x}: {s}")
 
     if args.key is not None:
         obj = brd.object(int(args.key))
@@ -756,6 +810,19 @@ if __name__ == "__main__":
             print(f"Layer {i}:")
             prntr.print_v("A", layer.a)
             prntr.print_ptr("B", layer.b)
+
+    if args.dump_object_layers:
+
+        for obj in kt_brd_struct.objects:
+            layer = get_layer_for_obj(obj)
+            if layer is not None:
+                s = f"  {obj.type:#04x} "
+                if getattr(obj.data, "key"):
+                    s += f"{obj.data.key:#010x} "
+
+                s += AllegroBoard.Printer.format_layer(layer)
+
+                print(s)
 
     if args.walk_list is not None:
         # Walk a list of objects in the Allegro board file

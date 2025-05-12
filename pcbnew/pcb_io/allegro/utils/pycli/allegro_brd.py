@@ -352,7 +352,7 @@ class AllegroBrd(KaitaiStruct):
 
 
     class Type32PlacedPad(KaitaiStruct):
-        SEQ_FIELDS = ["type", "layer", "key", "un1", "net_ptr", "flags", "prev", "next", "ptr3", "ptr4", "pad_ptr", "ptr6", "ptr7", "ptr8", "previous", "un2", "ptr10", "ptr11", "coords"]
+        SEQ_FIELDS = ["type", "layer", "key", "unknown_1", "net_ptr", "flags", "prev", "next", "ptr3", "ptr4", "pad_ptr", "ptr6", "ptr7", "ptr8", "previous", "un2", "ptr10", "ptr11", "coords_0", "coords_1"]
         def __init__(self, _io, _parent=None, _root=None):
             self._io = _io
             self._parent = _parent
@@ -370,9 +370,9 @@ class AllegroBrd(KaitaiStruct):
             self._debug['key']['start'] = self._io.pos()
             self.key = self._io.read_u4le()
             self._debug['key']['end'] = self._io.pos()
-            self._debug['un1']['start'] = self._io.pos()
-            self.un1 = self._io.read_u4le()
-            self._debug['un1']['end'] = self._io.pos()
+            self._debug['unknown_1']['start'] = self._io.pos()
+            self.unknown_1 = self._io.read_u4le()
+            self._debug['unknown_1']['end'] = self._io.pos()
             self._debug['net_ptr']['start'] = self._io.pos()
             self.net_ptr = self._io.read_u4le()
             self._debug['net_ptr']['end'] = self._io.pos()
@@ -420,16 +420,12 @@ class AllegroBrd(KaitaiStruct):
             self._debug['ptr11']['start'] = self._io.pos()
             self.ptr11 = self._io.read_u4le()
             self._debug['ptr11']['end'] = self._io.pos()
-            self._debug['coords']['start'] = self._io.pos()
-            self.coords = []
-            for i in range(4):
-                if not 'arr' in self._debug['coords']:
-                    self._debug['coords']['arr'] = []
-                self._debug['coords']['arr'].append({'start': self._io.pos()})
-                self.coords.append(self._io.read_s4le())
-                self._debug['coords']['arr'][i]['end'] = self._io.pos()
-
-            self._debug['coords']['end'] = self._io.pos()
+            self._debug['coords_0']['start'] = self._io.pos()
+            self.coords_0 = AllegroBrd.Coords(self._io, self, self._root)
+            self._debug['coords_0']['end'] = self._io.pos()
+            self._debug['coords_1']['start'] = self._io.pos()
+            self.coords_1 = AllegroBrd.Coords(self._io, self, self._root)
+            self._debug['coords_1']['end'] = self._io.pos()
 
 
     class Coords(KaitaiStruct):
@@ -1461,16 +1457,22 @@ class AllegroBrd(KaitaiStruct):
         class LayerClass(Enum):
             board_geometry = 1
             etch = 6
-            unknown = 7
+            manufacturing = 7
             package_geometry = 9
             ref_des = 13
 
-        class LayerSubclass(Enum):
+        class EnumPackageGeom(Enum):
             dfa_bounds_top = 239
             display_top = 242
             dimension = 249
             place_bounds_top = 251
             assembly_top = 253
+
+        class EnumBoardGeom(Enum):
+            unknown = 241
+
+        class EnumManufacturing(Enum):
+            unknown = 240
         SEQ_FIELDS = ["lclass", "subclass"]
         def __init__(self, _io, _parent=None, _root=None):
             self._io = _io
@@ -1484,8 +1486,63 @@ class AllegroBrd(KaitaiStruct):
             self.lclass = KaitaiStream.resolve_enum(AllegroBrd.LayerInfo.LayerClass, self._io.read_u1())
             self._debug['lclass']['end'] = self._io.pos()
             self._debug['subclass']['start'] = self._io.pos()
-            self.subclass = KaitaiStream.resolve_enum(AllegroBrd.LayerInfo.LayerSubclass, self._io.read_u1())
+            _on = self.lclass
+            if _on == AllegroBrd.LayerInfo.LayerClass.package_geometry:
+                self.subclass = AllegroBrd.LayerInfo.SubclassPackageGeom(self._io, self, self._root)
+            elif _on == AllegroBrd.LayerInfo.LayerClass.board_geometry:
+                self.subclass = AllegroBrd.LayerInfo.SubclassBoardGeom(self._io, self, self._root)
+            elif _on == AllegroBrd.LayerInfo.LayerClass.manufacturing:
+                self.subclass = AllegroBrd.LayerInfo.SubclassManufacturing(self._io, self, self._root)
+            elif _on == AllegroBrd.LayerInfo.LayerClass.etch:
+                self.subclass = self._io.read_u1()
+            else:
+                self.subclass = self._io.read_u1()
             self._debug['subclass']['end'] = self._io.pos()
+
+        class SubclassBoardGeom(KaitaiStruct):
+            SEQ_FIELDS = ["sc"]
+            def __init__(self, _io, _parent=None, _root=None):
+                self._io = _io
+                self._parent = _parent
+                self._root = _root if _root else self
+                self._debug = collections.defaultdict(dict)
+                self._read()
+
+            def _read(self):
+                self._debug['sc']['start'] = self._io.pos()
+                self.sc = KaitaiStream.resolve_enum(AllegroBrd.LayerInfo.EnumBoardGeom, self._io.read_u1())
+                self._debug['sc']['end'] = self._io.pos()
+
+
+        class SubclassManufacturing(KaitaiStruct):
+            SEQ_FIELDS = ["sc"]
+            def __init__(self, _io, _parent=None, _root=None):
+                self._io = _io
+                self._parent = _parent
+                self._root = _root if _root else self
+                self._debug = collections.defaultdict(dict)
+                self._read()
+
+            def _read(self):
+                self._debug['sc']['start'] = self._io.pos()
+                self.sc = KaitaiStream.resolve_enum(AllegroBrd.LayerInfo.EnumManufacturing, self._io.read_u1())
+                self._debug['sc']['end'] = self._io.pos()
+
+
+        class SubclassPackageGeom(KaitaiStruct):
+            SEQ_FIELDS = ["sc"]
+            def __init__(self, _io, _parent=None, _root=None):
+                self._io = _io
+                self._parent = _parent
+                self._root = _root if _root else self
+                self._debug = collections.defaultdict(dict)
+                self._read()
+
+            def _read(self):
+                self._debug['sc']['start'] = self._io.pos()
+                self.sc = KaitaiStream.resolve_enum(AllegroBrd.LayerInfo.EnumPackageGeom, self._io.read_u1())
+                self._debug['sc']['end'] = self._io.pos()
+
 
 
     class Type31Sgraphic(KaitaiStruct):
@@ -2729,7 +2786,7 @@ class AllegroBrd(KaitaiStruct):
 
 
     class Type3aFilmListNode(KaitaiStruct):
-        SEQ_FIELDS = ["t", "layer", "key", "next", "un", "un1"]
+        SEQ_FIELDS = ["t", "layer", "key", "next", "unknown_1", "unknown_2"]
         def __init__(self, _io, _parent=None, _root=None):
             self._io = _io
             self._parent = _parent
@@ -2750,13 +2807,13 @@ class AllegroBrd(KaitaiStruct):
             self._debug['next']['start'] = self._io.pos()
             self.next = self._io.read_u4le()
             self._debug['next']['end'] = self._io.pos()
-            self._debug['un']['start'] = self._io.pos()
-            self.un = self._io.read_u4le()
-            self._debug['un']['end'] = self._io.pos()
+            self._debug['unknown_1']['start'] = self._io.pos()
+            self.unknown_1 = self._io.read_u4le()
+            self._debug['unknown_1']['end'] = self._io.pos()
             if self._root.ver >= 1313024:
-                self._debug['un1']['start'] = self._io.pos()
-                self.un1 = self._io.read_u4le()
-                self._debug['un1']['end'] = self._io.pos()
+                self._debug['unknown_2']['start'] = self._io.pos()
+                self.unknown_2 = self._io.read_u4le()
+                self._debug['unknown_2']['end'] = self._io.pos()
 
 
 

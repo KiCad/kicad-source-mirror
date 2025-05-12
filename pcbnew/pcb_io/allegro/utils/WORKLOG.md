@@ -288,3 +288,27 @@ looks like:
 * A bit more work on decoding texts
 
 * Looks like the SUBCLASS uint8 isn't the same for all CLASSes: PACKAGE_GEOMETRY:SILKSCREEN_TOP and REFDES:SILKSCREEN_TOP are 0x09:0xF7 and 0x0d:0xFB. Annoying.
+
+* 0x2D:
+  * -inst_ref -> 0x07:
+    * Has refdes str
+    * 0x10 (ptr_2)
+      * 0x07 (same as 0x2D's)
+      * 0x12
+        * 0x12 (next)
+        * 0x11
+        * 0x32 (same as 0x2D's)
+      * 0x0F
+        * Str: 'G1;
+        * C_CAPC2008X126N_0805_2.2U
+        * 0x06
+        * 0x11 (not the same as the 0x12)
+      * 0x03
+        * subtype: 0x68 
+        * str:  @preampl_schem.schematic1(sch_1):page1_ins13791@discrete.\c.normal\(chips)
+      * Str: 'F31'
+  * 0x32 (pads)
+
+
+* Looking at 0x14s, we find some more layer mappings:
+  * 7:1 - MANUFACTURING:NCLEGEND-1-2

@@ -302,6 +302,7 @@ struct LAYER_INFO
 {
     enum CLASS
     {
+        MANUFACTURING = 0x07,
         // BOARD_GEOMETRY = 0x??
         PACKAGE_GEOMETRY = 0x09,
         ETCH = 0x06,
