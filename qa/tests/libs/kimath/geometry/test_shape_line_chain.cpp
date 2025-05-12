@@ -189,9 +189,11 @@ BOOST_AUTO_TEST_CASE( ArcToPolyline )
             VECTOR2I( 1500, 0 ),
     } );
 
-    SHAPE_LINE_CHAIN arc_insert1( SHAPE_ARC( VECTOR2I( 0, -100 ), VECTOR2I( 0, -200 ), ANGLE_180 ) );
+    SHAPE_LINE_CHAIN arc_insert1( SHAPE_ARC( VECTOR2I( 0, -100 ), VECTOR2I( 0, -200 ), ANGLE_180 ),
+                                  false, ARC_HIGH_DEF );
 
-    SHAPE_LINE_CHAIN arc_insert2( SHAPE_ARC( VECTOR2I( 0, 500 ), VECTOR2I( 0, 400 ), ANGLE_180 ) );
+    SHAPE_LINE_CHAIN arc_insert2( SHAPE_ARC( VECTOR2I( 0, 500 ), VECTOR2I( 0, 400 ), ANGLE_180 ),
+                                  false, ARC_HIGH_DEF );
 
     BOOST_CHECK_EQUAL( base_chain.CShapes().size(), base_chain.CPoints().size() );
     BOOST_CHECK_EQUAL( arc_insert1.CShapes().size(), arc_insert1.CPoints().size() );
@@ -201,7 +203,7 @@ BOOST_AUTO_TEST_CASE( ArcToPolyline )
     BOOST_CHECK( GEOM_TEST::IsOutlineValid( arc_insert1 ) );
     BOOST_CHECK( GEOM_TEST::IsOutlineValid( arc_insert2 ) );
 
-    base_chain.Insert( 0, SHAPE_ARC( VECTOR2I( 0, -100 ), VECTOR2I( 0, -200 ), ANGLE_180 ) );
+    base_chain.Insert( 0, SHAPE_ARC( VECTOR2I( 0, -100 ), VECTOR2I( 0, -200 ), ANGLE_180 ), ARC_HIGH_DEF );
     BOOST_CHECK( GEOM_TEST::IsOutlineValid( base_chain ) );
     BOOST_CHECK_EQUAL( base_chain.CShapes().size(), base_chain.CPoints().size() );
 
@@ -222,7 +224,7 @@ BOOST_AUTO_TEST_CASE( ArcToPolylineLargeCoords )
             VECTOR2I( 1500000, 0 ),
     } );
 
-    base_chain.Append( SHAPE_ARC( VECTOR2I( 200000, 0 ), VECTOR2I( 300000, 100000 ), ANGLE_180 ) );
+    base_chain.Append( SHAPE_ARC( VECTOR2I( 200000, 0 ), VECTOR2I( 300000, 100000 ), ANGLE_180 ), ARC_HIGH_DEF );
 
     BOOST_CHECK( GEOM_TEST::IsOutlineValid( base_chain ) );
     BOOST_CHECK_EQUAL( base_chain.PointCount(), 11 );
@@ -769,8 +771,8 @@ BOOST_AUTO_TEST_CASE( ArcWrappingToStartSharedPoints )
 
     // Start a chain with the two arcs
     SHAPE_LINE_CHAIN chain;
-    chain.Append( arc1 );
-    chain.Append( arc2 );
+    chain.Append( arc1, 5000 );
+    chain.Append( arc2, 5000 );
     BOOST_CHECK_EQUAL( chain.PointCount(), 13 );
     //BOOST_CHECK( GEOM_TEST::IsOutlineValid( chain ) );
 
@@ -829,7 +831,7 @@ BOOST_AUTO_TEST_CASE( Split )
     SHAPE_LINE_CHAIN chain( { seg1.A, seg1.B } );
     BOOST_CHECK_EQUAL( chain.PointCount(), 2 );
     // Add first arc
-    chain.Append( arc );
+    chain.Append( arc, 5000 );
     BOOST_CHECK_EQUAL( chain.PointCount(), 9 );
     // Add two points (seg2)
     chain.Append( seg2.A );
@@ -904,14 +906,14 @@ BOOST_AUTO_TEST_CASE( Slice )
     SHAPE_LINE_CHAIN chain( { VECTOR2I( 0, 0 ), VECTOR2I( 0, 100000 ), VECTOR2I( 100000, 0 ) } );
     BOOST_CHECK_EQUAL( chain.PointCount(), 3 );
     // Add first arc
-    chain.Append( firstArc );
+    chain.Append( firstArc, 5000 );
     BOOST_CHECK_EQUAL( chain.PointCount(), 10 );
     // Add two points (target segment)
     chain.Append( targetSegment.A );
     chain.Append( targetSegment.B );
     BOOST_CHECK_EQUAL( chain.PointCount(), 12 );
     // Add a second arc
-    chain.Append( secondArc );
+    chain.Append( secondArc, 5000 );
     BOOST_CHECK_EQUAL( chain.PointCount(), 20 );
     BOOST_CHECK( GEOM_TEST::IsOutlineValid( chain ) );
 
@@ -1193,7 +1195,7 @@ BOOST_AUTO_TEST_CASE( NearestPointPt )
     SHAPE_LINE_CHAIN chain( { seg1.A, seg1.B } );
     BOOST_CHECK_EQUAL( chain.PointCount(), 2 );
     // Add first arc
-    chain.Append( arc );
+    chain.Append( arc, 5000 );
     BOOST_CHECK_EQUAL( chain.PointCount(), 9 );
     // Add two points (seg2)
     chain.Append( seg2.A );

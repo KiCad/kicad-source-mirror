@@ -173,7 +173,7 @@ public:
 
     SHAPE_LINE_CHAIN( const std::vector<VECTOR2I>& aV, bool aClosed = false );
 
-    SHAPE_LINE_CHAIN( const SHAPE_ARC& aArc, bool aClosed = false );
+    SHAPE_LINE_CHAIN( const SHAPE_ARC& aArc, bool aClosed = false, std::optional<int> aMaxError = {} );
 
     SHAPE_LINE_CHAIN( const Clipper2Lib::Path64& aPath,
                       const std::vector<CLIPPER_Z_VALUE>& aZValueBuffer,
@@ -538,6 +538,7 @@ public:
     void Insert( size_t aVertex, const VECTOR2I& aP );
 
     void Insert( size_t aVertex, const SHAPE_ARC& aArc );
+    void Insert( size_t aVertex, const SHAPE_ARC& aArc, int aMaxError );
 
     /**
      * Replace points with indices in range [start_index, end_index] with a single point \a aP.
