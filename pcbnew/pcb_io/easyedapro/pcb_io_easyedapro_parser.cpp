@@ -458,7 +458,7 @@ PCB_IO_EASYEDAPRO_PARSER::ParsePoly( BOARD_ITEM_CONTAINER* aContainer, nlohmann:
 
 SHAPE_LINE_CHAIN
 PCB_IO_EASYEDAPRO_PARSER::ParseContour( nlohmann::json polyData, bool aInFill,
-                                     double aArcAccuracy ) const
+                                        int aMaxError ) const
 {
     SHAPE_LINE_CHAIN result;
     VECTOR2D         prevPt;
@@ -477,7 +477,7 @@ PCB_IO_EASYEDAPRO_PARSER::ParseContour( nlohmann::json polyData, bool aInFill,
                 center.y = ( polyData.at( ++i ) );
                 double r = ( polyData.at( ++i ) );
 
-                TransformCircleToPolygon( result, ScalePos( center ), ScaleSize( r ), ARC_HIGH_DEF,
+                TransformCircleToPolygon( result, ScalePos( center ), ScaleSize( r ), aMaxError,
                                           ERROR_INSIDE );
             }
             else if( str == wxS( "R" ) )
@@ -497,9 +497,8 @@ PCB_IO_EASYEDAPRO_PARSER::ParseContour( nlohmann::json polyData, bool aInFill,
                 VECTOR2D kcenter = kstart + ksize / 2;
                 RotatePoint( kcenter, kstart, EDA_ANGLE( angle, DEGREES_T ) );
 
-                TransformRoundChamferedRectToPolygon(
-                        poly, kcenter, ksize, EDA_ANGLE( angle, DEGREES_T ), ScaleSize( cr ), 0, 0,
-                        0, ARC_HIGH_DEF, ERROR_INSIDE );
+                TransformRoundChamferedRectToPolygon( poly, kcenter, ksize, EDA_ANGLE( angle, DEGREES_T ),
+                                                      ScaleSize( cr ), 0, 0, 0, aMaxError, ERROR_INSIDE );
 
                 result.Append( poly.Outline( 0 ) );
             }
@@ -530,7 +529,7 @@ PCB_IO_EASYEDAPRO_PARSER::ParseContour( nlohmann::json polyData, bool aInFill,
                 sarc.ConstructFromStartEndCenter( ScalePos( arcStart ), ScalePos( arcEnd ),
                                                   ScalePos( center ), angle >= 0, 0 );
 
-                result.Append( sarc, aArcAccuracy );
+                result.Append( sarc, aMaxError );
 
                 prevPt = end;
             }
@@ -553,7 +552,7 @@ PCB_IO_EASYEDAPRO_PARSER::ParseContour( nlohmann::json polyData, bool aInFill,
                 BEZIER_POLY           converter( ctrlPoints );
 
                 std::vector<VECTOR2I> bezierPoints;
-                converter.GetPoly( bezierPoints, aArcAccuracy );
+                converter.GetPoly( bezierPoints, aMaxError );
 
                 result.Append( bezierPoints );
 
@@ -587,7 +586,7 @@ PCB_IO_EASYEDAPRO_PARSER::ParseContour( nlohmann::json polyData, bool aInFill,
 
 
 std::unique_ptr<PAD> PCB_IO_EASYEDAPRO_PARSER::createPAD( FOOTPRINT*            aFootprint,
-                                                       const nlohmann::json& line )
+                                                          const nlohmann::json& line )
 {
     wxString uuid = line.at( 1 );
 
@@ -728,8 +727,8 @@ std::unique_ptr<PAD> PCB_IO_EASYEDAPRO_PARSER::createPAD( FOOTPRINT*            
 
 
 FOOTPRINT* PCB_IO_EASYEDAPRO_PARSER::ParseFootprint( const nlohmann::json&              aProject,
-                                                  const wxString&                    aFpUuid,
-                                                  const std::vector<nlohmann::json>& aLines )
+                                                     const wxString&                    aFpUuid,
+                                                     const std::vector<nlohmann::json>& aLines )
 {
     std::unique_ptr<FOOTPRINT> footprintPtr = std::make_unique<FOOTPRINT>( m_board );
     FOOTPRINT*                 footprint = footprintPtr.get();
@@ -1759,8 +1758,7 @@ void PCB_IO_EASYEDAPRO_PARSER::ParseBoard(
                     const nlohmann::json& fillData = poured.polyData[dataId];
                     const double          ptScale = 10;
 
-                    SHAPE_LINE_CHAIN contour =
-                            ParseContour( fillData, false, ARC_HIGH_DEF / ptScale );
+                    SHAPE_LINE_CHAIN contour = ParseContour( fillData, false, ARC_HIGH_DEF / ptScale );
 
                     // Scale the fill
                     for( int i = 0; i < contour.PointCount(); i++ )
@@ -1792,7 +1790,7 @@ void PCB_IO_EASYEDAPRO_PARSER::ParseBoard(
                             const SEG& seg = contour.CSegment( segId );
 
                             TransformOvalToPolygon( thermalSpokes, seg.A, seg.B, thermalWidth,
-                                                    ARC_LOW_DEF, ERROR_INSIDE );
+                                                    ARC_HIGH_DEF, ERROR_INSIDE );
                         }
                     }
                 }

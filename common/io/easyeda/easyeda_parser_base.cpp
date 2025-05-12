@@ -108,7 +108,7 @@ void EASYEDA_PARSER_BASE::TransformTextToBaseline( EDA_TEXT*       textItem,
 
 
 std::vector<SHAPE_LINE_CHAIN>
-EASYEDA_PARSER_BASE::ParseLineChains( const wxString& data, int aArcMinSegLen, bool aForceClosed )
+EASYEDA_PARSER_BASE::ParseLineChains( const wxString& data, int aMaxError, bool aForceClosed )
 {
     std::vector<SHAPE_LINE_CHAIN> result;
 
@@ -243,7 +243,7 @@ EASYEDA_PARSER_BASE::ParseLineChains( const wxString& data, int aArcMinSegLen, b
             arc.ConstructFromStartEndCenter( RelPos( start ), RelPos( end ), RelPos( arcCenter ),
                                              !cw );
 
-            chain.Append( arc, aArcMinSegLen );
+            chain.Append( arc, aMaxError );
 
             prevPt = end;
         }
@@ -266,7 +266,7 @@ EASYEDA_PARSER_BASE::ParseLineChains( const wxString& data, int aArcMinSegLen, b
             BEZIER_POLY           converter( ctrlPoints );
 
             std::vector<VECTOR2I> bezierPoints;
-            converter.GetPoly( bezierPoints, aArcMinSegLen );
+            converter.GetPoly( bezierPoints, aMaxError );
 
             chain.Append( bezierPoints );
 

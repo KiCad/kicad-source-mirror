@@ -289,7 +289,8 @@ int SHAPE_POLY_SET::Append( int x, int y, int aOutline, int aHole, bool aAllowDu
 }
 
 
-int SHAPE_POLY_SET::Append( const SHAPE_ARC& aArc, int aOutline, int aHole, double aAccuracy )
+int SHAPE_POLY_SET::Append( const SHAPE_ARC& aArc, int aOutline, int aHole,
+                            std::optional<int> aMaxError )
 {
     assert( m_polys.size() );
 
@@ -306,7 +307,10 @@ int SHAPE_POLY_SET::Append( const SHAPE_ARC& aArc, int aOutline, int aHole, doub
     assert( aOutline < (int) m_polys.size() );
     assert( idx < (int) m_polys[aOutline].size() );
 
-    m_polys[aOutline][idx].Append( aArc, aAccuracy );
+    if( aMaxError.has_value() )
+        m_polys[aOutline][idx].Append( aArc, aMaxError.value() );
+    else
+        m_polys[aOutline][idx].Append( aArc );
 
     return m_polys[aOutline][idx].PointCount();
 }
@@ -1865,13 +1869,13 @@ void SHAPE_POLY_SET::Simplify()
 }
 
 
-void SHAPE_POLY_SET::SimplifyOutlines( int aMaxError )
+void SHAPE_POLY_SET::SimplifyOutlines( int aTolerance )
 {
     for( POLYGON& paths : m_polys )
     {
         for( SHAPE_LINE_CHAIN& path : paths )
         {
-            path.Simplify( aMaxError );
+            path.Simplify( aTolerance );
         }
     }
 }

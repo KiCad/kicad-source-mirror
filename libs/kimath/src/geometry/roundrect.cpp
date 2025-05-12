@@ -52,7 +52,8 @@ SHAPE_ARC MakeSideArcCw180( const SHAPE_RECT& aRect, int aRadius, DIRECTION_45::
 
 
 ROUNDRECT::ROUNDRECT( SHAPE_RECT aRect, int aRadius ) :
-        m_rect( std::move( aRect ) ), m_radius( aRadius )
+        m_rect( std::move( aRect ) ),
+        m_radius( aRadius )
 {
     if( m_radius > m_rect.MajorDimension() )
     {
@@ -79,7 +80,7 @@ ROUNDRECT ROUNDRECT::GetInflated( int aOutset ) const
 }
 
 
-void ROUNDRECT::TransformToPolygon( SHAPE_POLY_SET& aBuffer, int aError, ERROR_LOC aErrorLoc ) const
+void ROUNDRECT::TransformToPolygon( SHAPE_POLY_SET& aBuffer ) const
 {
     const int         idx = aBuffer.NewOutline();
     SHAPE_LINE_CHAIN& outline = aBuffer.Outline( idx );

@@ -434,7 +434,7 @@ void PCB_IO_EASYEDA_PARSER::ParseToBoardItemContainer(
             //double       textHeight = !arr[4].IsEmpty() ? ConvertSize( arr[4] ) : 0;
 
             std::vector<SHAPE_LINE_CHAIN> lineChains =
-                    ParseLineChains( shapeData, pcbIUScale.mmToIU( 0.01 ), false );
+                    ParseLineChains( shapeData, SHAPE_ARC::DefaultAccuracyForPCB(), false );
 
             std::unique_ptr<PCB_GROUP> group = std::make_unique<PCB_GROUP>( aContainer );
             group->SetName( wxS( "Dimension" ) );
@@ -464,7 +464,7 @@ void PCB_IO_EASYEDA_PARSER::ParseToBoardItemContainer(
             wxString layer = arr[1];
 
             SHAPE_POLY_SET polySet =
-                    ParseLineChains( arr[3].Trim(), pcbIUScale.mmToIU( 0.01 ), true );
+                    ParseLineChains( arr[3].Trim(), SHAPE_ARC::DefaultAccuracyForPCB(), true );
 
             if( layer == wxS( "11" ) ) // Multi-layer (board cutout)
             {
@@ -539,7 +539,7 @@ void PCB_IO_EASYEDA_PARSER::ParseToBoardItemContainer(
             }
 
             SHAPE_POLY_SET polySet =
-                    ParseLineChains( arr[4].Trim(), pcbIUScale.mmToIU( 0.01 ), true );
+                    ParseLineChains( arr[4].Trim(), SHAPE_ARC::DefaultAccuracyForPCB(), true );
 
             for( const SHAPE_POLY_SET::POLYGON& poly : polySet.CPolygons() )
                 zone->Outline()->AddPolygon( poly );
@@ -561,7 +561,7 @@ void PCB_IO_EASYEDA_PARSER::ParseToBoardItemContainer(
                     for( const nlohmann::json& contourData : polyData )
                     {
                         SHAPE_POLY_SET contourPolySet = ParseLineChains(
-                                contourData.get<wxString>(), pcbIUScale.mmToIU( 0.01 ), true );
+                                contourData.get<wxString>(), SHAPE_ARC::DefaultAccuracyForPCB(), true );
 
                         SHAPE_POLY_SET currentOutline( contourPolySet.COutline( 0 ) );
 
@@ -739,11 +739,12 @@ void PCB_IO_EASYEDA_PARSER::ParseToBoardItemContainer(
                 {
                     if( auto dataStr = get_opt( attributes, "d" ) )
                     {
-                        int minSegLen = dataStr->size() < 8000 ? pcbIUScale.mmToIU( 0.005 )
-                                                               : pcbIUScale.mmToIU( 0.05 );
+                        int maxError = SHAPE_ARC::DefaultAccuracyForPCB();
 
-                        SHAPE_POLY_SET polySet =
-                                ParseLineChains( dataStr->Trim(), minSegLen, true );
+                        if( dataStr->size() >= 8000 )
+                            maxError *= 10;
+
+                        SHAPE_POLY_SET polySet = ParseLineChains( dataStr->Trim(), maxError, true );
 
                         polySet.RebuildHolesFromContours();
 

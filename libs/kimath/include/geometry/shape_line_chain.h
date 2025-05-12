@@ -334,10 +334,10 @@ public:
     /**
      * Simplify the line chain by removing colinear adjacent segments and duplicate vertices.
      *
-     * @param aMaxError is the maximum error in internal units.  Setting to 0 means that the
+     * @param aTolerance is the maximum tolerance in internal units.  Setting to 0 means that the
      * points must be exactly co-linear to be removed.
      */
-    void Simplify( int aMaxError = 0 );
+    void Simplify( int aTolerance = 0 );
 
     // legacy function, used by the router. Please do not remove until I'll figure out
     // the root cause of rounding errors - Tom
@@ -536,7 +536,7 @@ public:
     void Append( const SHAPE_LINE_CHAIN& aOtherLine );
 
     void Append( const SHAPE_ARC& aArc );
-    void Append( const SHAPE_ARC& aArc, double aAccuracy );
+    void Append( const SHAPE_ARC& aArc, int aMaxError );
 
     void Insert( size_t aVertex, const VECTOR2I& aP );
 
@@ -958,6 +958,9 @@ private:
     std::vector<std::pair<ssize_t, ssize_t>> m_shapes;
 
     std::vector<SHAPE_ARC> m_arcs;
+
+    // the maxError to use when converting arcs to points
+    int m_accuracy;
 
     /// is the line chain closed?
     bool m_closed;
