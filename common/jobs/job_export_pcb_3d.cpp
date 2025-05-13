@@ -82,8 +82,8 @@ JOB_EXPORT_PCB_3D::JOB_EXPORT_PCB_3D() :
         m_vrmlModelDir( wxEmptyString ),
         m_vrmlRelativePaths( false )
 {
-    m_params.emplace_back(
-            new JOB_PARAM<bool>( "overwrite", &m_3dparams.m_Overwrite, m_3dparams.m_Overwrite ) );
+    m_params.emplace_back( new JOB_PARAM<bool>( "overwrite", &m_3dparams.m_Overwrite,
+                                                m_3dparams.m_Overwrite ) );
     m_params.emplace_back( new JOB_PARAM<bool>( "use_grid_origin", &m_3dparams.m_UseGridOrigin,
                                                 m_3dparams.m_UseGridOrigin ) );
     m_params.emplace_back( new JOB_PARAM<bool>( "use_drill_origin", &m_3dparams.m_UseDrillOrigin,
@@ -92,10 +92,9 @@ JOB_EXPORT_PCB_3D::JOB_EXPORT_PCB_3D() :
                                                 m_3dparams.m_UseDefinedOrigin ) );
     m_params.emplace_back( new JOB_PARAM<bool>( "use_pcb_center_origin", &m_3dparams.m_UsePcbCenterOrigin,
                                                 m_3dparams.m_UsePcbCenterOrigin ) );
-    m_params.emplace_back(
-            new JOB_PARAM<bool>( "board_only", &m_3dparams.m_BoardOnly, m_3dparams.m_BoardOnly ) );
-    m_params.emplace_back( new JOB_PARAM<bool>( "include_unspecified",
-                                                &m_3dparams.m_IncludeUnspecified,
+    m_params.emplace_back( new JOB_PARAM<bool>( "board_only", &m_3dparams.m_BoardOnly,
+                                                m_3dparams.m_BoardOnly ) );
+    m_params.emplace_back( new JOB_PARAM<bool>( "include_unspecified", &m_3dparams.m_IncludeUnspecified,
                                                 m_3dparams.m_IncludeUnspecified ) );
     m_params.emplace_back( new JOB_PARAM<bool>( "include_dnp", &m_3dparams.m_IncludeDNP,
                                                 m_3dparams.m_IncludeDNP ) );
@@ -122,8 +121,7 @@ JOB_EXPORT_PCB_3D::JOB_EXPORT_PCB_3D() :
                                                 m_3dparams.m_ExportPads ) );
     m_params.emplace_back( new JOB_PARAM<bool>( "export_zones", &m_3dparams.m_ExportZones,
                                                 m_3dparams.m_ExportZones ) );
-    m_params.emplace_back( new JOB_PARAM<bool>( "export_inner_copper",
-                                                &m_3dparams.m_ExportInnerCopper,
+    m_params.emplace_back( new JOB_PARAM<bool>( "export_inner_copper", &m_3dparams.m_ExportInnerCopper,
                                                 m_3dparams.m_ExportInnerCopper ) );
     m_params.emplace_back( new JOB_PARAM<bool>( "export_silkscreen", &m_3dparams.m_ExportSilkscreen,
                                                 m_3dparams.m_ExportInnerCopper ) );
@@ -136,10 +134,9 @@ JOB_EXPORT_PCB_3D::JOB_EXPORT_PCB_3D() :
     m_params.emplace_back( new JOB_PARAM<wxString>( "vrml_model_dir", &m_vrmlModelDir, m_vrmlModelDir ) );
     m_params.emplace_back( new JOB_PARAM<bool>( "vrml_relative_paths", &m_vrmlRelativePaths,
                                                 m_vrmlRelativePaths ) );
-    m_params.emplace_back(
-            new JOB_PARAM<JOB_EXPORT_PCB_3D::FORMAT>( "format", &m_format, m_format ) );
-    m_params.emplace_back( new JOB_PARAM<EXPORTER_STEP_PARAMS::FORMAT>(
-            "occt_format", &m_3dparams.m_Format, m_3dparams.m_Format ) );
+    m_params.emplace_back( new JOB_PARAM<JOB_EXPORT_PCB_3D::FORMAT>( "format", &m_format, m_format ) );
+    m_params.emplace_back( new JOB_PARAM<EXPORTER_STEP_PARAMS::FORMAT>( "occt_format", &m_3dparams.m_Format,
+                                                                        m_3dparams.m_Format ) );
 }
 
 
