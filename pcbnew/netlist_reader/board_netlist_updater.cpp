@@ -900,9 +900,12 @@ bool BOARD_NETLIST_UPDATER::updateFootprintGroup( FOOTPRINT* aPcbFootprint,
                 m_board->Add( newGroup );
                 m_commit.Added( newGroup );
             }
+            else
+            {
+                m_commit.Modify( newGroup->AsEdaItem() );
+            }
 
-            m_commit.Stage( aPcbFootprint, CHT_GROUP );
-
+            newGroup->AddItem( aPcbFootprint );
             aPcbFootprint->SetParentGroup( newGroup );
         }
 
