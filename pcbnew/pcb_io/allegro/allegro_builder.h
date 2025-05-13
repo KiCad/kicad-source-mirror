@@ -35,6 +35,7 @@
 
 class BOARD;
 class FOOTPRINT;
+class NETINFO_ITEM;
 class PCB_TEXT;
 
 namespace ALLEGRO
@@ -88,6 +89,7 @@ private:
     std::unique_ptr<FOOTPRINT> buildFootprint( const BLK_0x2D& aFpInstance );
 
     void cacheFontDefs();
+    void cacheNets();
 
     /**
      * Get the font definition for a given index in a 0x30, etc.
@@ -109,6 +111,9 @@ private:
 
     // Cached list of font defs in the 0x36 node
     std::vector<const BLK_0x36::FontDef_X08*> m_fontDefList;
+
+    // Cached list of KiCad nets corresponding to Allegro 0x1B NET keys
+    std::unordered_map<uint32_t, NETINFO_ITEM*> m_netCache;
 
     // The computed scale factor for the board
     // (based on units and divisor)

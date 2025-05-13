@@ -23,6 +23,7 @@
 
 #include "allegro_pcb_structs.h"
 
+#include <wx/log.h>
 
 #include <allegro_builder.h>
 
@@ -32,6 +33,16 @@
 
 
 using namespace ALLEGRO;
+
+
+/**
+ * Flag to enable debug output of Allegro board construction.
+ *
+ * Use "KICAD_ALLEGRO_BUILDER" to enable debug output.
+ *
+ * @ingroup trace_env_vars
+ */
+static const wxChar* const traceAllegroBuilder = wxT( "KICAD_ALLEGRO_BUILDER" );
 
 
 #define BLK_FIELD( BLK_T, FIELD ) static_cast<const BLOCK<BLK_T>&>( aBlock ).GetData().FIELD
@@ -53,10 +64,12 @@ static uint32_t GetPrimaryNext( const BLOCK_BASE& aBlock )
 
     switch( type )
     {
+    case 0x04: return BLK_FIELD( BLK_0x04_NET_ASSIGNMENT, m_Next );
     case 0x14: return BLK_FIELD( BLK_0x14, m_Next );
     case 0x15:
     case 0x16:
     case 0x17: return BLK_FIELD( BLK_0x15_16_17_SEGMENT, m_Next );
+    case 0x1B: return BLK_FIELD( BLK_0x1B_NET, m_Next );
     case 0x2B: return BLK_FIELD( BLK_0x2B, m_Next );
     case 0x2D: return BLK_FIELD( BLK_0x2D, m_Next );
     case 0x30: return BLK_FIELD( BLK_0x30_STR_WRAPPER, m_Next );
@@ -179,9 +192,8 @@ int BOARD_BUILDER::scale( int aValue ) const
 
 void BOARD_BUILDER::reportMissingBlock( uint8_t aKey, uint8_t aType ) const
 {
-    m_reporter.Report(
-            wxString::Format( "Could not find expected block with key %#010x and type %#04x", aKey, aType ),
-            RPT_SEVERITY_WARNING );
+    m_reporter.Report( wxString::Format( "Could not find expected block with key %#010x and type %#04x", aKey, aType ),
+                       RPT_SEVERITY_WARNING );
 }
 
 
@@ -233,6 +245,45 @@ void BOARD_BUILDER::cacheFontDefs()
 
         encountered = true;
     }
+}
+
+
+void BOARD_BUILDER::cacheNets()
+{
+    // Incrementing netcode. We could also choose to, say, use the 0x1B key if we wanted
+    int netCode = 1;
+
+    std::vector<BOARD_ITEM*> bulkAdded;
+
+    LL_WALKER netWalker{ m_rawBoard.m_Header->m_LL_0x1B_Nets, m_rawBoard };
+    for( const BLOCK_BASE* block : netWalker )
+    {
+        const uint8_t type = block->GetBlockType();
+        if( type != BLOCK_TYPE::x1B_NET )
+        {
+            m_reporter.Report( wxString::Format( "Found unexpected net object of type %#04x at offset %lu", type,
+                                                 block->GetOffset() ),
+                               RPT_SEVERITY_WARNING );
+            continue;
+        }
+
+        const auto& netBlk = static_cast<const BLOCK<BLK_0x1B_NET>&>( *block ).GetData();
+
+        // All Allegro nets seem to have names even if just 'N1234', but even if they didn't,
+        // we can handle that in KiCad, as we're assigning new netcodes.
+        const wxString& netName = m_rawBoard.GetString( netBlk.m_NetName );
+
+        auto kiNetInfo = std::make_unique<NETINFO_ITEM>( &m_board, netName, netCode );
+        netCode++;
+
+        m_netCache[netBlk.m_Key] = kiNetInfo.get();
+        bulkAdded.push_back( kiNetInfo.get() );
+        m_board.Add( kiNetInfo.release(), ADD_MODE::BULK_APPEND );
+    }
+
+    m_board.FinalizeBulkAdd( bulkAdded );
+
+    wxLogTrace( traceAllegroBuilder, "Added %lu nets", m_netCache.size() );
 }
 
 
@@ -498,7 +549,8 @@ std::unique_ptr<FOOTPRINT> BOARD_BUILDER::buildFootprint( const BLK_0x2D& aFpIns
     fp->SetPosition( fpPos );
     fp->SetOrientation( rotation );
 
-    std::cout << "Footprint " << refDesStr << " pos: " << fpPos.x << ", " << fpPos.y << " angle " << rotation.AsDegrees() << std::endl;
+    std::cout << "Footprint " << refDesStr << " pos: " << fpPos.x << ", " << fpPos.y << " angle "
+              << rotation.AsDegrees() << std::endl;
 
     const LL_WALKER graphicsWalker{ aFpInstance.m_GraphicPtr, aFpInstance.m_Key, m_rawBoard };
     for( const BLOCK_BASE* graphicsBlock : graphicsWalker )
@@ -537,7 +589,7 @@ std::unique_ptr<FOOTPRINT> BOARD_BUILDER::buildFootprint( const BLK_0x2D& aFpIns
 
             if( text )
             {
-                std::cout << "Text: "<< text->GetText() << std::endl;
+                std::cout << "Text: " << text->GetText() << std::endl;
                 std::cout << "CLass " << (int) strWrapper.m_Layer.m_Class << ": " << (int) strWrapper.m_Layer.m_Subclass
                           << std::endl;
                 if( strWrapper.m_Layer.m_Class == LAYER_INFO::CLASS::REF_DES
@@ -583,11 +635,16 @@ bool BOARD_BUILDER::BuildBoard()
 {
     if( m_progressReporter )
     {
-        m_progressReporter->AddPhases( 2 );
+        m_progressReporter->AddPhases( 3 );
         m_progressReporter->AdvancePhase( _( "Constructing caches" ) );
     }
 
     cacheFontDefs();
+
+    if( m_progressReporter )
+        m_progressReporter->AdvancePhase( _( "Creating nets" ) );
+
+    cacheNets();
 
     if( m_progressReporter )
     {
@@ -632,7 +689,8 @@ bool BOARD_BUILDER::BuildBoard()
                     }
                     else
                     {
-                        m_reporter.Report( wxString::Format( "Failed to construct fooptrint for 0x2D key %#010x", inst.m_Key ),
+                        m_reporter.Report(
+                                wxString::Format( "Failed to construct fooptrint for 0x2D key %#010x", inst.m_Key ),
                                 RPT_SEVERITY_ERROR );
                     }
                 }

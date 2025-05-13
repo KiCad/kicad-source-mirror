@@ -172,7 +172,7 @@ static std::unique_ptr<ALLEGRO::FILE_HEADER> ReadHeader( FILE_STREAM& stream )
     header->m_LL_0x0C = ReadLL( stream );
     header->m_LL_Shapes = ReadLL( stream );
     header->m_LL_0x14 = ReadLL( stream );
-    header->m_LL_Nets = ReadLL( stream );
+    header->m_LL_0x1B_Nets = ReadLL( stream );
     header->m_LL_0x1C = ReadLL( stream );
     header->m_LL_0x24_0x28 = ReadLL( stream );
     header->m_LL_Unknown1 = ReadLL( stream );

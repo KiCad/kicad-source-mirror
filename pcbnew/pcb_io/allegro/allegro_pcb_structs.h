@@ -82,6 +82,12 @@ private:
 };
 
 
+enum BLOCK_TYPE
+{
+    x1B_NET = 0x1B,
+};
+
+
 /**
  * The format of an Allego file.
  *
@@ -235,7 +241,7 @@ struct FILE_HEADER
     LINKED_LIST m_LL_0x0C;
     LINKED_LIST m_LL_Shapes; // 0xE and 0x28
     LINKED_LIST m_LL_0x14;
-    LINKED_LIST m_LL_Nets; // 0x1B Nets
+    LINKED_LIST m_LL_0x1B_Nets;
     LINKED_LIST m_LL_0x1C;
     LINKED_LIST m_LL_0x24_0x28;
     LINKED_LIST m_LL_Unknown1;

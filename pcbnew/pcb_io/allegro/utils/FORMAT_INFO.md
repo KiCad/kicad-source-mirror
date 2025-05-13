@@ -51,8 +51,28 @@ The header contains the following fields:
 
 * File magic: this is a 32-bit int (e.g. `0x00140400`). The top 3 bytes seem to represent a distinct file type corresponding to an Allegro version. The lower byte does not seem to imply format changes. It is monotonically increasing with version.
 * A set of object linked lists - these are the primary entry points into the content of the file:
+  * `ll_x1b` - a list of nets in the design 
   * `ll_x2b` - a list of footprints (confusingly, Allegro calls these "symbols")
 
+## Nets
+
+### 0x1B NET
+
+* `next` - links the list that starts in the header
+* `net name` - a string ID for the net name
+* `path` - an `0x03` object that points to a string that seems to refer to the net in the schematic.
+  * E.g. `@preampl_schem.schematic1(sch_1):\0\` (for net `0`).
+* `assignment` - a pointer to an 0x04 object. While the `0x04` object has a `next` field, these always seem to be lists of length 1.
+
+### 0x04 NET_ASSIGNMENT
+
+A net assignment is a very small object that adds some other object to a net.
+
+* `next` - generally the `0x1B NET` object as these seem to be single-entry lists
+* `net` - points to the `0x1B NET` object
+* `conn_item` - points to some object to be assigned the net:
+  * `0x05 TRACK`
+  * `0x32 PLACED PAD`
 
 ## Footprints
 
