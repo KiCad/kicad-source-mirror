@@ -84,30 +84,30 @@ struct SLC_CASES
                                VECTOR2I( 24142136,  10000000 ),
                                VECTOR2I( 0,         20000000 ), 0 );
 
-        Circle1Arc.Append( ArcCircle );
+        Circle1Arc.Append( ArcCircle, 5000 );
         Circle1Arc.SetClosed( true );
 
-        Circle2Arcs.Append( Arc0a );
-        Circle2Arcs.Append( Arc0b );
+        Circle2Arcs.Append( Arc0a, 5000 );
+        Circle2Arcs.Append( Arc0b, 5000 );
         Circle2Arcs.SetClosed( true );
 
-        ArcsCoincident.Append( Arc0a );
-        ArcsCoincident.Append( Arc1 );
+        ArcsCoincident.Append( Arc0a, 5000 );
+        ArcsCoincident.Append( Arc1, 5000 );
 
-        ArcsCoincidentClosed=ArcsCoincident;
+        ArcsCoincidentClosed = ArcsCoincident;
         ArcsCoincidentClosed.SetClosed( true );
 
-        ArcsIndependent.Append( Arc0a );
-        ArcsIndependent.Append( Arc2 );
+        ArcsIndependent.Append( Arc0a, 5000 );
+        ArcsIndependent.Append( Arc2, 5000 );
 
-        DuplicateArcs=ArcsCoincident;
-        DuplicateArcs.Append( Arc1 ); //should add a segment between end of the chain and new copy of the arc
+        DuplicateArcs = ArcsCoincident;
+        DuplicateArcs.Append( Arc1, 5000 ); //should add a segment between end of the chain and new copy of the arc
 
-        ArcAndPoint.Append( Arc0a );
+        ArcAndPoint.Append( Arc0a, 5000 );
         ArcAndPoint.Append( VECTOR2I( 233450000, 228360000 ) );
 
         ArcsAndSegMixed = ArcAndPoint;
-        ArcsAndSegMixed.Append( Arc2 );
+        ArcsAndSegMixed.Append( Arc2, 5000 );
 
         OnePoint.Append( VECTOR2I( 233450000, 228360000 ) );
 
@@ -118,7 +118,7 @@ struct SLC_CASES
         ThreePoints.Append( VECTOR2I( 263450000, 308360000 ) );
 
         SegAndArcCoincident.Append( VECTOR2I( 0, 20000000 ) );
-        SegAndArcCoincident.Append( Arc3 );
+        SegAndArcCoincident.Append( Arc3, 5000 );
     }
 };
 
