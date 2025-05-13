@@ -441,7 +441,7 @@ void CLIPBOARD_IO::SaveSelection( const PCB_SELECTION& aSelected, bool isFootpri
                                 descendant->SetLocked( false );
                                 Format( descendant );
                             },
-                            RECURSE_MODE::NO_RECURSE );
+                            RECURSE_MODE::RECURSE );
                 }
 
                 delete copy;
