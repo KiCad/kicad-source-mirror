@@ -247,6 +247,27 @@ class AllegroBoard:
             prntr.print_ptr("conn_item", d)
             prntr.print_ptr("unknown_1", d)
 
+        elif t == 0x05:
+            prntr.print_ptr("next", d)
+            prntr.print_layer(d.layer)
+            prntr.print_ptr("first_segment", d)
+            prntr.print_ptr("net_assignment", d)
+
+            prntr.print_v("unknown_2", d)
+            prntr.print_v("unknown_3", d)
+            prntr.print_v("unknown_4", d)
+            prntr.print_v("unknown_5a", d)
+            prntr.print_v("unknown_5b", d)
+            prntr.print_v("unknown_6", d)
+
+            prntr.print_ptr("ptr1", d)
+            prntr.print_ptr("ptr2a", d)
+            prntr.print_ptr("ptr2b", d)
+            prntr.print_ptr("ptr3a", d)
+            prntr.print_ptr("ptr3b", d)
+            prntr.print_ptr("ptr5", d)
+
+
         elif t == 0x06:
             prntr.print_s("String", d.str)
             prntr.print_s("Ptr 1", d.str_2),
@@ -331,6 +352,14 @@ class AllegroBoard:
             prntr.print_v("unknown_2", d)
 
             prntr.print_layer(d.layer)
+
+            seg = self.object(d.segment_ptr)
+
+            if seg and seg.type in [0x15, 0x16, 0x17, 0x01]:
+                prntr.prnt("Seg info:")
+                subprntr = AllegroBoard.Printer(self, indent + 2)
+                subprntr.print_coords("coords_0", seg.data.coords_0)
+                subprntr.print_coords("coords_1", seg.data.coords_1)
 
         elif t in [0x15, 0x16, 0x17]:
             prntr.print_ptr("Next", d.next)
@@ -816,7 +845,7 @@ if __name__ == "__main__":
         for i, layer in enumerate(lm.entries):
             print(f"Layer {i}:")
             prntr.print_v("A", layer.a)
-            prntr.print_ptr("B", layer.b)
+            prntr.print_ptr("List:", layer.layer_list)
 
     if args.dump_object_layers:
 

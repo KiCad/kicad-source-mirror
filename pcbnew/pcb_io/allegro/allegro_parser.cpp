@@ -225,7 +225,7 @@ static std::unique_ptr<ALLEGRO::FILE_HEADER> ReadHeader( FILE_STREAM& stream )
     for( size_t i = 0; i < header->m_LayerMap.size(); ++i )
     {
         header->m_LayerMap[i].m_A = stream.ReadU32();
-        header->m_LayerMap[i].m_B = stream.ReadU32();
+        header->m_LayerMap[i].m_LayerList0x2A = stream.ReadU32();
     }
 
     wxLogTrace( traceAllegroParser, wxT( "Parsed header: %d objects, %d strings" ), header->m_ObjectCount,
@@ -444,29 +444,27 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x05_TRACK( FILE_STREAM& aStream, 
 
     auto& data = block->GetData();
 
-    aStream.Skip( 3 );
+    aStream.Skip( 1 );
 
+    data.m_Layer = ParseLayerInfo( aStream );
     data.m_Key = aStream.ReadU32();
-    data.m_Unknown1 = aStream.ReadU32();
+    data.m_Next = aStream.ReadU32();
+    data.m_NetAssignment = aStream.ReadU32();
     data.m_UnknownPtr1 = aStream.ReadU32();
-    data.m_UnknownPtr2 = aStream.ReadU32();
-    data.m_Unknown2a = aStream.ReadU32();
-    data.m_Unknown2b = aStream.ReadU32();
-    data.m_UnknownPtr3 = aStream.ReadU32();
-    data.m_UnknownPtr4 = aStream.ReadU32();
+    data.m_Unknown2 = aStream.ReadU32();
     data.m_Unknown3 = aStream.ReadU32();
+    data.m_UnknownPtr2a = aStream.ReadU32();
+    data.m_UnknownPtr2b = aStream.ReadU32();
+    data.m_Unknown4 = aStream.ReadU32();
+    data.m_UnknownPtr3a = aStream.ReadU32();
+    data.m_UnknownPtr3b = aStream.ReadU32();
 
-    data.m_Ptr0x3A = aStream.ReadU32();
-
-    ReadCond( aStream, aVer, data.m_Ptr0x3B );
-
-    ReadCond( aStream, aVer, data.m_PtrA );
-    ReadCond( aStream, aVer, data.m_PtrB );
-    ReadCond( aStream, aVer, data.m_PtrC );
+    ReadCond( aStream, aVer, data.m_Unknown5a );
+    ReadCond( aStream, aVer, data.m_Unknown5b );
 
     data.m_FirstSegPtr = aStream.ReadU32();
     data.m_UnknownPtr5 = aStream.ReadU32();
-    data.m_Unknown4 = aStream.ReadU32();
+    data.m_Unknown6 = aStream.ReadU32();
 
     return block;
 }
@@ -1308,7 +1306,7 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x29_PIN( FILE_STREAM& aStream, FM
 
 static std::unique_ptr<BLOCK_BASE> ParseBlock_0x2A( FILE_STREAM& aStream, FMT_VER aVer )
 {
-    auto block = std::make_unique<BLOCK<BLK_0x2A>>( 0x2A, aStream.Position() );
+    auto block = std::make_unique<BLOCK<BLK_0x2A_LAYER_LIST>>( 0x2A, aStream.Position() );
 
     auto& data = block->GetData();
 
@@ -1320,24 +1318,24 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x2A( FILE_STREAM& aStream, FMT_VE
 
     if( data.m_NonRefEntries.exists( aVer ) )
     {
-        data.m_NonRefEntries = std::vector<BLK_0x2A::NONREF_ENTRY>();
+        data.m_NonRefEntries = std::vector<BLK_0x2A_LAYER_LIST::NONREF_ENTRY>();
         data.m_NonRefEntries->reserve( data.m_NumEntries );
         for( size_t i = 0; i < data.m_NumEntries; ++i )
         {
-            BLK_0x2A::NONREF_ENTRY& entry = data.m_NonRefEntries->emplace_back();
+            BLK_0x2A_LAYER_LIST::NONREF_ENTRY& entry = data.m_NonRefEntries->emplace_back();
 
-            aStream.ReadBytes( entry.m_Unknown.data(), entry.m_Unknown.size() );
+            entry.m_Name = aStream.ReadStringFixed( 36, true );
         }
     }
     else
     {
-        data.m_RefEntries = std::vector<BLK_0x2A::REF_ENTRY>();
+        data.m_RefEntries = std::vector<BLK_0x2A_LAYER_LIST::REF_ENTRY>();
         data.m_RefEntries->reserve( data.m_NumEntries );
         for( size_t i = 0; i < data.m_NumEntries; ++i )
         {
-            BLK_0x2A::REF_ENTRY& entry = data.m_RefEntries->emplace_back();
+            BLK_0x2A_LAYER_LIST::REF_ENTRY& entry = data.m_RefEntries->emplace_back();
 
-            entry.mPtr = aStream.ReadU32();
+            entry.mLayerNameId = aStream.ReadU32();
             entry.m_Properties = aStream.ReadU32();
             entry.m_Unknown = aStream.ReadU32();
         }
@@ -2028,7 +2026,7 @@ static std::optional<uint32_t> GetBlockKey( const BLOCK_BASE& block )
     case 0x26: return static_cast<const BLOCK<BLK_0x26>&>( block ).GetData().m_Key;
     case 0x28: return static_cast<const BLOCK<BLK_0x28_SHAPE>&>( block ).GetData().m_Key;
     case 0x29: return static_cast<const BLOCK<BLK_0x29_PIN>&>( block ).GetData().m_Key;
-    case 0x2A: return static_cast<const BLOCK<BLK_0x2A>&>( block ).GetData().m_Key;
+    case 0x2A: return static_cast<const BLOCK<BLK_0x2A_LAYER_LIST>&>( block ).GetData().m_Key;
     case 0x2B: return static_cast<const BLOCK<BLK_0x2B>&>( block ).GetData().m_Key;
     case 0x2C: return static_cast<const BLOCK<BLK_0x2C_TABLE>&>( block ).GetData().m_Key;
     case 0x2D: return static_cast<const BLOCK<BLK_0x2D>&>( block ).GetData().m_Key;

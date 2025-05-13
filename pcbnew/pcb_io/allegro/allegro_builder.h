@@ -41,6 +41,8 @@ class PCB_TEXT;
 namespace ALLEGRO
 {
 
+class LAYER_MAPPER;
+
 /**
  * Class that builds a KiCad board from a RAW_BOARD
  * (= FILE_HEADER + STRINGS + OBJECTS + bookkeeping)
@@ -49,6 +51,7 @@ class BOARD_BUILDER
 {
 public:
     BOARD_BUILDER(const RAW_BOARD& aRawBoard, BOARD& aBoard, REPORTER& aReporter, PROGRESS_REPORTER* aProgressReporter );
+    ~BOARD_BUILDER();
 
     bool BuildBoard();
 
@@ -89,8 +92,8 @@ private:
     std::unique_ptr<FOOTPRINT> buildFootprint( const BLK_0x2D& aFpInstance );
 
     void cacheFontDefs();
-    void cacheNets();
-
+    void setupLayers();
+    void createNets();
     /**
      * Get the font definition for a given index in a 0x30, etc.
      *
@@ -114,6 +117,8 @@ private:
 
     // Cached list of KiCad nets corresponding to Allegro 0x1B NET keys
     std::unordered_map<uint32_t, NETINFO_ITEM*> m_netCache;
+
+    std::unique_ptr<LAYER_MAPPER> m_layerMapper;
 
     // The computed scale factor for the board
     // (based on units and divisor)

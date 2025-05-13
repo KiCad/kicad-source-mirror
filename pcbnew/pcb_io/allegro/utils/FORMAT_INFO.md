@@ -54,6 +54,36 @@ The header contains the following fields:
   * `ll_x1b` - a list of nets in the design 
   * `ll_x2b` - a list of footprints (confusingly, Allegro calls these "symbols")
 
+## Layers
+
+Layers in Allegro are a bit different to KiCad. Allegro items have a `CLASS` and a `SUBCLASS`.
+
+Examples of `CLASS`: `PACKAGE_GEOMETRY`, `REF_DES`, `BOARD_GEOMETRY`.
+
+Examples of `SUBCLASS`: `SILKSCREEN_TOP`, `DIMENSION`, `PLACE_BOUND_TOP`.
+
+Not all `CLASS`es contain all `SUBCLASS`es. A list of some of the classes and subclasses can be found here: https://www.artwork.com/all2dxf/alleggeo.htm
+
+Layers in objects are represent by two bytes, usually bytes 2 and 3 (where byte 0 is the `BType`). The first byte is the `CLASS`, which seems to be a fixed mapping:
+
+* `ETCH`: `0x06`
+* `MANUFACTURING`: `0x07`
+* ...
+
+The second byte is the subclass. The meaning of this byte depends on the class - the same subclass can have different values in different classes. For example `PACKAGE_GEOMETRY:SILKSCREEN_TOP` is `0xF7`, but the same subclass in the `REF_DES` class is `0xFB`.
+
+High values, like `0xFB` represent fixed, common values like `SILKSCREEN_TOP`. Low values, like `0x00`, represent custom layers. For example, `ETCH` layers start from 0 and represent the `n` copper layers in the design.
+
+The layer map in the head contains a list of custom layers for each `CLASS`. The layer map is arranged as a fixed length list of entries (appears to be 25 entries in all versions). This list is indexed by the `CLASS` value, so that the 7th entry (0-indexed) is for the `0x07` `CLASS` (which is `MANUFACTURING`).
+
+Each entry is two fields:
+* A 32-bit value of unknown use
+* A pointer to the `0x2A LAYER_LIST` object.
+
+Entries for multiple `CLASS`es can point to the same `0x2A LAYER_LIST` object.
+
+The indexes of the layers within these lists provides the mapping for small subclass values. So, if the first entry in the `MANUFACTURING` list is `NCLEGEND-1-2`, then the class/subclass pair `0x07,0x00` means that layer. 
+
 ## Nets
 
 ### 0x1B NET
@@ -73,6 +103,17 @@ A net assignment is a very small object that adds some other object to a net.
 * `conn_item` - points to some object to be assigned the net:
   * `0x05 TRACK`
   * `0x32 PLACED PAD`
+
+## Connected items
+
+### 0x05
+
+This appears to be a collection of connected items:
+
+* `layer`: the class/subclass of the items. Usually (always?) an `0x06 ETCH` class, and the subclass is then the layer number (0 = top side).
+* `next`: links a list of other `0x05` block, `0x32 PLACED_PAD` and finally returns to an `0x04 NET_ASSIGNMENT`.
+* `net_assignment`: back-links to the relevant `0x04 NET_ASSIGNMENT`
+* `first_segment`: links to the start of a list of segments (`0x15`, `0x16`, `0x17`) representing track segments
 
 ## Footprints
 

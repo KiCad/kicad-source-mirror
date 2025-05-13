@@ -185,10 +185,10 @@ types:
         seq:
           - id: a
             type: u4
-            doc: Seems small
-          - id: b
+            doc: Seems small, e.g. 0x00, 0x1, 0x6, 0x8, 0xe
+          - id: layer_list
             type: u4
-            doc: Pointer?
+            doc: Pointer to 0x2A LAYER_LIST, or null.
 
   string_map:
     params:
@@ -555,36 +555,52 @@ types:
   type_05_track:
     seq:
       - type: u1
-      - type: u2
+      - id: layer
+        type: layer_info
       - id: key
         type: u4
-      - type: u4
-      - id: ptr0
+      - id: next
+        type: u4
+        doc: |
+          Points to 0x05, 0x32, finally back to 0x04
+      - id: net_assignment
         type: u4
       - id: ptr1
         type: u4
-      - type: u4
-        repeat: expr
-        repeat-expr: 2
-      - id: ptr2
+        doc: Seems null
+      - id: unknown_2
         type: u4
-        repeat: expr
-        repeat-expr: 2
-      - type: u4
+        doc: Seems null
+      - id: unknown_3
+        type: u4
+        doc: Seems null
+      - id: ptr2a
+        type: u4
+        doc: |
+          Can be 0x28, 0x32, 0x33, or 0x2E
+      - id: ptr2b
+        type: u4
+        doc: |
+          Can be 0x05 or null
+      - id: unknown_4
+        type: u4
       - id: ptr3a
+        doc: Same as ptr2a
         type: u4
       - id: ptr3b
         type: u4
-        if: _root.ver < 0x00140400
-      - type: u4
+      - id: unknown_5a
+        type: u4
         if: _root.ver >= 0x00140400
-        repeat: expr
-        repeat-expr: 3
-      - id: first_segment_ptr
+      - id: unknown_5b
+        type: u4
+        if: _root.ver >= 0x00140400
+      - id: first_segment
         type: u4
       - id: ptr5
         type: u4
-      - type: u4
+      - id: unknown_6
+        type: u4
 
   type_06:
     seq:

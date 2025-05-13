@@ -215,7 +215,7 @@ struct FILE_HEADER
     struct LAYER_MAP_ENTRY
     {
         uint32_t m_A;
-        uint32_t m_B;
+        uint32_t m_LayerList0x2A;
     };
 
     /**
@@ -308,15 +308,26 @@ struct LAYER_INFO
 {
     enum CLASS
     {
-        MANUFACTURING = 0x07,
-        // BOARD_GEOMETRY = 0x??
-        PACKAGE_GEOMETRY = 0x09,
+        BOARD_GEOMETRY = 0x01,
+        COMPONENT_VALUE = 0x02,
+        DEVICE_TYPE = 0x03,
+        DRAWING_FORMAT = 0x04,
+        DRC_ERROR = 0x05,
         ETCH = 0x06,
+        MANUFACTURING = 0x07,
+        ANALYSIS = 0x08,
+        PACKAGE_GEOMETRY = 0x09,
+        PACKAGE_KEEPIN = 0x0A,
+        PACKAGE_KEEPOUT = 0x0B,
+        PIN = 0x0C,
         REF_DES = 0x0d,
-
-        // COMPONENT_VALUE = 0x??
-        // TOLERANCE = 0x??
-        // DEVICE_TYPE = 0x??
+        ROUTE_KEEPIN = 0x0e,
+        ROUTE_KEEPOUT = 0x0f,
+        TOLERANCE = 0x10,
+        USER_PART_NUMBER = 0x11,
+        VIA_CLASS = 0x12,
+        VIA_KEEPOUT = 0x13,
+        ANTI_ETCH = 0x14,
     };
 
     /**
@@ -326,15 +337,38 @@ struct LAYER_INFO
      */
     enum SUBCLASS
     {
-        // PACKAGE_GEOMETRY
-        SILKSCREEN_TOP = 0xF7,
-        PLACE_BOUND_TOP = 0xFB,
+        // BOARD_GEOMETRY
+        BGEOM_DIMENSION = 0xF9,
+
+        // COMPONENT_VALUE / DEVICE_TYPE / USER_PART_NUMBER
+        // REF_DES / TOLERANCE
+        DISPLAY_BOTTOM = 0xF8,
+        DISPLAY_TOP = 0xF9,
+        SILKSCREEN_BOTTOM = 0xFA,
+        SILKSCREEN_TOP = 0xFB,
+        ASSEMBLY_BOTTOM = 0xFC,
         ASSEMBLY_TOP = 0xFD,
+
+        // DRAWING_FORMAT
+        DFMT_OUTLINE = 0xFD,
+        // DFMT_TITLE_BLOCK = 0xF?,
+
+        // PACKAGE_GEOMETRY
+        PGEOM_DISPLAY_BOTTOM = 0xF1,
+        PGEOM_DISPLAY_TOP = 0xF2,
+        PGEOM_BODY_CENTER = 0xF5,
+        PGEOM_SILKSCREEN_BOTTOM = 0xF6,
+        PGEOM_SILKSCREEN_TOP = 0xF7,
+        PGEOM_PLACE_BOUND_BOTTOM = 0xFA,
+        PGEOM_PLACE_BOUND_TOP = 0xFB,
+        PGEOM_ASSEMBLY_BOTTOM = 0xFC,
+        PGEOM_ASSEMBLY_TOP = 0xFD,
+        DFA_BOUND_BOTTOM = 0xEE,
         DFA_BOUND_TOP = 0xEF,
 
-        // REFDES class
-        REFDES_SS_TOP = 0xFB,
-        REFDES_ASS_TOP = 0xFD,
+        // MANUFACTURING
+        MFR_AUTOSILK_BOTTOM = 0xF3,
+        MFR_AUTOSILK_TOP = 0xF4,
     };
 
     uint8_t m_Class;
@@ -434,27 +468,26 @@ struct BLK_0x04_NET_ASSIGNMENT
  */
 struct BLK_0x05_TRACK
 {
+    LAYER_INFO m_Layer;
+
     uint32_t m_Key;
-    uint32_t m_Unknown1;
+    uint32_t m_Next;
+    uint32_t m_NetAssignment;
     uint32_t m_UnknownPtr1;
-    uint32_t m_UnknownPtr2;
-    uint32_t m_Unknown2a;
-    uint32_t m_Unknown2b;
-    uint32_t m_UnknownPtr3;
-    uint32_t m_UnknownPtr4;
+    uint32_t m_Unknown2;
     uint32_t m_Unknown3;
+    uint32_t m_UnknownPtr2a;
+    uint32_t m_UnknownPtr2b;
+    uint32_t m_Unknown4;
+    uint32_t m_UnknownPtr3a;
+    uint32_t m_UnknownPtr3b;
 
-    uint32_t m_Ptr0x3A;
-
-    COND_LT<FMT_VER::V_172, uint32_t> m_Ptr0x3B;
-
-    COND_GE<FMT_VER::V_172, uint32_t> m_PtrA;
-    COND_GE<FMT_VER::V_172, uint32_t> m_PtrB;
-    COND_GE<FMT_VER::V_172, uint32_t> m_PtrC;
+    COND_GE<FMT_VER::V_172, uint32_t> m_Unknown5a;
+    COND_GE<FMT_VER::V_172, uint32_t> m_Unknown5b;
 
     uint32_t m_FirstSegPtr;
     uint32_t m_UnknownPtr5;
-    uint32_t m_Unknown4;
+    uint32_t m_Unknown6;
 };
 
 
@@ -1184,16 +1217,19 @@ struct BLK_0x29_PIN
 };
 
 
-struct BLK_0x2A
+/**
+ * Represents a list of layers.
+ */
+struct BLK_0x2A_LAYER_LIST
 {
     struct NONREF_ENTRY
     {
-        std::array<uint8_t, 36> m_Unknown;
+        std::string m_Name;
     };
 
     struct REF_ENTRY
     {
-        uint32_t mPtr;
+        uint32_t mLayerNameId; // string ID
         uint32_t m_Properties;
         uint32_t m_Unknown;
     };

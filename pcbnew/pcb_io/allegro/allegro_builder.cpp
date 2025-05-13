@@ -21,6 +21,10 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include "allegro_builder.h"
+
+
+#include "allegro_pcb_structs.h"
 #include "allegro_pcb_structs.h"
 
 #include <wx/log.h>
@@ -153,9 +157,322 @@ private:
 };
 
 
+template <>
+struct std::hash<LAYER_INFO>
+{
+    size_t operator()( const LAYER_INFO& aLayerInfo ) const noexcept
+    {
+        return ( aLayerInfo.m_Class << 8 ) + aLayerInfo.m_Subclass;
+    }
+};
+
+
+/**
+ * Map of the pre-set class:subclass pairs to standard layers.
+ *
+ * Allegro doesn't really have a neat mapping onto KiCad layers. In theory, we could use the Films to
+ * map things that actually end up on the silkscreen layer (films can pick things out by class:subclass),
+ * but that would be quite fiddly and would fail if the films weren't configured right.
+ */
+// clang-format off
+static const std::unordered_map<LAYER_INFO, PCB_LAYER_ID> s_LayerKiMap = {
+
+    { { LAYER_INFO::CLASS::COMPONENT_VALUE,  LAYER_INFO::SUBCLASS::ASSEMBLY_BOTTOM},            B_Fab},
+    { { LAYER_INFO::CLASS::COMPONENT_VALUE,  LAYER_INFO::SUBCLASS::ASSEMBLY_TOP},               F_Fab},
+
+    { { LAYER_INFO::CLASS::DEVICE_TYPE,      LAYER_INFO::SUBCLASS::ASSEMBLY_BOTTOM},            B_Fab},
+    { { LAYER_INFO::CLASS::DEVICE_TYPE,      LAYER_INFO::SUBCLASS::ASSEMBLY_TOP},               F_Fab},
+
+    { { LAYER_INFO::CLASS::PACKAGE_GEOMETRY, LAYER_INFO::SUBCLASS::PGEOM_SILKSCREEN_BOTTOM},    B_SilkS},
+    { { LAYER_INFO::CLASS::PACKAGE_GEOMETRY, LAYER_INFO::SUBCLASS::PGEOM_SILKSCREEN_TOP},       F_SilkS},
+    { { LAYER_INFO::CLASS::PACKAGE_GEOMETRY, LAYER_INFO::SUBCLASS::PGEOM_ASSEMBLY_BOTTOM},      B_Fab},
+    { { LAYER_INFO::CLASS::PACKAGE_GEOMETRY, LAYER_INFO::SUBCLASS::PGEOM_ASSEMBLY_TOP},         F_Fab},
+    { { LAYER_INFO::CLASS::PACKAGE_GEOMETRY, LAYER_INFO::SUBCLASS::PGEOM_PLACE_BOUND_BOTTOM},   B_CrtYd},
+    { { LAYER_INFO::CLASS::PACKAGE_GEOMETRY, LAYER_INFO::SUBCLASS::PGEOM_PLACE_BOUND_TOP},      F_CrtYd},
+
+    { { LAYER_INFO::CLASS::REF_DES,          LAYER_INFO::SUBCLASS::SILKSCREEN_BOTTOM},          B_SilkS},
+    { { LAYER_INFO::CLASS::REF_DES,          LAYER_INFO::SUBCLASS::SILKSCREEN_TOP},             F_SilkS},
+    { { LAYER_INFO::CLASS::REF_DES,          LAYER_INFO::SUBCLASS::ASSEMBLY_BOTTOM},            B_Fab},
+    { { LAYER_INFO::CLASS::REF_DES,          LAYER_INFO::SUBCLASS::ASSEMBLY_TOP},               F_Fab},
+};
+
+/**
+ * Names for custom KiCad layers that correspond to pre-defined Allegro layers.
+ *
+ * Multiple class:subclasses can share a layer name, in which case, they will share a layer.
+ *
+ * This is a balance between running out of layers and dumping too much unrelated stuff on the same layer.
+ */
+static const std::unordered_map<LAYER_INFO, wxString> s_OptionalFixedMappings = {
+    { { LAYER_INFO::CLASS::PACKAGE_GEOMETRY, LAYER_INFO::SUBCLASS::DFA_BOUND_TOP},              "DFA_BOUND_TOP" },
+    { { LAYER_INFO::CLASS::PACKAGE_GEOMETRY, LAYER_INFO::SUBCLASS::PGEOM_DISPLAY_TOP},          "DISPLAY_TOP" },
+    { { LAYER_INFO::CLASS::PACKAGE_GEOMETRY, LAYER_INFO::SUBCLASS::PGEOM_DISPLAY_BOTTOM},       "DISPLAY_BOTTOM" },
+    { { LAYER_INFO::CLASS::PACKAGE_GEOMETRY, LAYER_INFO::SUBCLASS::PGEOM_BODY_CENTER},          "BODY_CENTER" },
+    { { LAYER_INFO::CLASS::BOARD_GEOMETRY,   LAYER_INFO::SUBCLASS::BGEOM_DIMENSION},            "DIMENSION" },
+    { { LAYER_INFO::CLASS::DRAWING_FORMAT,   LAYER_INFO::SUBCLASS::DFMT_OUTLINE},               "PAGE_OUTLINE" },
+
+    { { LAYER_INFO::CLASS::COMPONENT_VALUE,  LAYER_INFO::SUBCLASS::DISPLAY_BOTTOM},             "DISPLAY_BOTTOM" },
+    { { LAYER_INFO::CLASS::COMPONENT_VALUE,  LAYER_INFO::SUBCLASS::DISPLAY_BOTTOM},             "DISPLAY_TOP" },
+    { { LAYER_INFO::CLASS::COMPONENT_VALUE,  LAYER_INFO::SUBCLASS::SILKSCREEN_BOTTOM},          "COMPVAL_TYPE_BOTTOM"},
+    { { LAYER_INFO::CLASS::COMPONENT_VALUE,  LAYER_INFO::SUBCLASS::SILKSCREEN_TOP},             "COMPVAL_TYPE_TOP"},
+
+    { { LAYER_INFO::CLASS::DEVICE_TYPE,      LAYER_INFO::SUBCLASS::DISPLAY_BOTTOM},             "DISPLAY_BOTTOM" },
+    { { LAYER_INFO::CLASS::DEVICE_TYPE,      LAYER_INFO::SUBCLASS::DISPLAY_BOTTOM},             "DISPLAY_TOP" },
+    { { LAYER_INFO::CLASS::DEVICE_TYPE,      LAYER_INFO::SUBCLASS::SILKSCREEN_BOTTOM},          "DEVICE_TYPE_BOTTOM"},
+    { { LAYER_INFO::CLASS::DEVICE_TYPE,      LAYER_INFO::SUBCLASS::SILKSCREEN_TOP},             "DEVICE_TYPE_TOP"},
+
+    { { LAYER_INFO::CLASS::TOLERANCE,        LAYER_INFO::SUBCLASS::DISPLAY_BOTTOM},             "DISPLAY_BOTTOM" },
+    { { LAYER_INFO::CLASS::TOLERANCE,        LAYER_INFO::SUBCLASS::DISPLAY_BOTTOM},             "DISPLAY_TOP" },
+    { { LAYER_INFO::CLASS::TOLERANCE,        LAYER_INFO::SUBCLASS::SILKSCREEN_BOTTOM},          "TOLERANCE_BOTTOM"},
+    { { LAYER_INFO::CLASS::TOLERANCE,        LAYER_INFO::SUBCLASS::SILKSCREEN_TOP},             "TOLERANCE_TOP"},
+
+    { { LAYER_INFO::CLASS::USER_PART_NUMBER, LAYER_INFO::SUBCLASS::DISPLAY_BOTTOM},             "DISPLAY_BOTTOM" },
+    { { LAYER_INFO::CLASS::USER_PART_NUMBER, LAYER_INFO::SUBCLASS::DISPLAY_BOTTOM},             "DISPLAY_TOP" },
+    { { LAYER_INFO::CLASS::USER_PART_NUMBER, LAYER_INFO::SUBCLASS::SILKSCREEN_BOTTOM},          "USER_PART_NUM_BOTTOM"},
+    { { LAYER_INFO::CLASS::USER_PART_NUMBER, LAYER_INFO::SUBCLASS::SILKSCREEN_TOP},             "USER_PART_NUM_TOP"},
+
+    { { LAYER_INFO::CLASS::MANUFACTURING,    LAYER_INFO::SUBCLASS::MFR_AUTOSILK_BOTTOM},        "AUTOSILK_BOTTOM"},
+    { { LAYER_INFO::CLASS::MANUFACTURING,    LAYER_INFO::SUBCLASS::MFR_AUTOSILK_TOP},           "AUTOSILK_TOP"},
+};
+
+// clang-format on
+
+
+/**
+ * Class to handle the mapping for Allero CLASS/SUBCLASS idiom to KiCad layers.
+ */
+class ALLEGRO::LAYER_MAPPER
+{
+    /**
+     * Represents the information found in a single entry of a layer list.
+     *
+     * Will eventually become a KiCad layer.
+     */
+    struct CUSTOM_LAYER
+    {
+        wxString m_Name;
+        // LAYER_ARTWORK: POSITIVE/NEGATIVE
+        // LAYER_USE: empty, EMBEDDED_PLANE, ...?
+        // bool m_IsConductor;
+    };
+
+public:
+    LAYER_MAPPER( const RAW_BOARD& aRawBoard, BOARD& aBoard ):
+        m_rawBoard( aRawBoard ), m_board( aBoard )
+    {}
+
+    void ProcessLayerList( uint8_t aClass, const BLK_0x2A_LAYER_LIST& aList )
+    {
+        // If we haven't seen this list yet, create and store the CUSTOM_LAYER list
+        if( m_Lists.count( &aList ) == 0 )
+        {
+            std::vector<CUSTOM_LAYER>& classLayers = m_Lists[&aList];
+
+            if( aList.m_RefEntries.has_value() )
+            {
+                for( const BLK_0x2A_LAYER_LIST::REF_ENTRY& entry : aList.m_RefEntries.value() )
+                {
+                    const wxString& layerName = m_rawBoard.GetString( entry.mLayerNameId );
+
+                    classLayers.emplace_back( CUSTOM_LAYER( layerName ) );
+                }
+            }
+            else if( aList.m_NonRefEntries.has_value() )
+            {
+                for( const BLK_0x2A_LAYER_LIST::NONREF_ENTRY& entry : aList.m_NonRefEntries.value() )
+                {
+                    classLayers.emplace_back( CUSTOM_LAYER( entry.m_Name ) );
+                }
+            }
+            else
+            {
+                // Presumably a parsing error.
+                THROW_IO_ERROR( "No ETCH layer list found." );
+            }
+
+            wxLogTrace( traceAllegroBuilder, "Added %lu layers for class %#04x, from 0x2A key %#010x",
+                        classLayers.size(), aClass, aList.m_Key );
+        }
+
+        // Store the class ID -> 0x2A mapping
+        m_ClassCustomLayerLists[aClass] = &m_Lists[&aList];
+    }
+
+    /**
+     * Called after all the custom layers are loaded.
+     *
+     * Finalises things like layer counts and stores into the board
+     */
+    void FinalizeLayers()
+    {
+        std::unordered_map<const CUSTOM_LAYER*, PCB_LAYER_ID> layerToId;
+
+        // Process all the Etch layers
+        const std::vector<CUSTOM_LAYER>& etchLayers = *m_ClassCustomLayerLists[LAYER_INFO::CLASS::ETCH];
+
+        const size_t numCuLayers = etchLayers.size();
+        m_board.GetDesignSettings().SetCopperLayerCount( numCuLayers );
+        for( size_t li = 0; li < numCuLayers; ++li )
+        {
+            const CUSTOM_LAYER& cLayer = etchLayers[li];
+            const PCB_LAYER_ID  lId = getNthCopperLayer( li, numCuLayers );
+            layerToId[&cLayer] = lId;
+
+            m_board.SetLayerName( lId, cLayer.m_Name );
+        }
+
+        // At this point, we don't actually create all the custom layers, because in many designs, there
+        // are loads of them, and if we do that, we run out of User layers (for now...).
+        //
+        // We'll assign dynamically as we discover usage of the layers.
+    }
+
+    PCB_LAYER_ID GetLayer( const LAYER_INFO& aLayerInfo )
+    {
+        // We already mapped and created the layer
+        if( m_customLayerToKiMap.count( aLayerInfo ) )
+            return m_customLayerToKiMap.at( aLayerInfo );
+
+        // It's a static mapping
+        if( s_LayerKiMap.count( aLayerInfo ) )
+            return s_LayerKiMap.at( aLayerInfo );
+
+        // Next, have a look and see if the class:subclass was recorded as a custom layer
+        if( m_ClassCustomLayerLists.count( aLayerInfo.m_Class ) )
+        {
+            const std::vector<CUSTOM_LAYER>* cLayerList = m_ClassCustomLayerLists.at( aLayerInfo.m_Class );
+
+            if( aLayerInfo.m_Subclass < cLayerList->size() )
+            {
+                // This subclass maps to a custom layer in this class
+                const CUSTOM_LAYER& cLayer = cLayerList->at( aLayerInfo.m_Subclass );
+                return mapCustomLayer( aLayerInfo, cLayer.m_Name );
+            }
+        }
+
+        // Now, there may be layers that map to custom layers in KiCad, but are fixed in Allegro
+        // (perhaps, DFA_BOUND_TOP), which means we won't find them in the layer lists.
+        // We add them if we encounter them, with the names defined.
+        if( s_OptionalFixedMappings.count( aLayerInfo ) )
+        {
+            const wxString& layerName = s_OptionalFixedMappings.at( aLayerInfo );
+            return mapCustomLayer( aLayerInfo, layerName );
+        }
+
+        // Keep a record of what we failed to map
+        static std::unordered_map<LAYER_INFO, int> s_UnknownLayers;
+
+        if( s_UnknownLayers.count( aLayerInfo ) == 0 )
+        {
+            wxLogTrace( traceAllegroBuilder, "Failed to map class:subclass to layer: %#04x:%#04x", aLayerInfo.m_Class,
+                        aLayerInfo.m_Subclass );
+            s_UnknownLayers[aLayerInfo] = 1;
+        }
+        s_UnknownLayers[aLayerInfo]++;
+
+        // Dump everything else here
+        return Cmts_User;
+    }
+
+    /**
+     * Allegro puts more graphics than just the polygon on PBT/B.
+     *
+     * Use this function to choose a user layer instead.
+     */
+    PCB_LAYER_ID GetPlaceBounds( bool aTop )
+    {
+        const wxString name = aTop ? "PLACE_BOUND_TOP" : "PLACE_BOUND_BOTTOM";
+
+        // If it's been added already, use it
+        if( m_MappedOptionalLayers.count( name ) )
+        {
+            return m_MappedOptionalLayers.at( name );
+        }
+
+        const PCB_LAYER_ID newLId = addUserLayer( name );
+        m_MappedOptionalLayers[name] = newLId;
+        return newLId;
+    }
+
+private:
+    static PCB_LAYER_ID getNthCopperLayer( int aNum, int aTotal )
+    {
+        if( aNum == 0 )
+            return F_Cu;
+        if( aNum == aTotal - 1 )
+            return B_Cu;
+        return ToLAYER_ID( 2 * ( aNum + 1 ) );
+    }
+
+    static PCB_LAYER_ID getNthUserLayer( int aNum )
+    {
+        aNum = std::min( aNum, MAX_USER_DEFINED_LAYERS - 1 );
+        return ToLAYER_ID( static_cast<int>( User_1 ) + 2 * aNum );
+    }
+
+    PCB_LAYER_ID mapCustomLayer( const LAYER_INFO& aLayerInfo, const wxString& aLayerName )
+    {
+        // See if we have mapped this layer name under a different class:subclass
+        if( m_MappedOptionalLayers.count( aLayerName ) )
+        {
+            const PCB_LAYER_ID existingLId = m_MappedOptionalLayers.at( aLayerName );
+            // Record the reuse
+            m_customLayerToKiMap[aLayerInfo] = existingLId;
+            return existingLId;
+        }
+
+        // First time we needed this name:
+        // Add as a user layer and store for next time
+        const PCB_LAYER_ID lId = addUserLayer( aLayerName );
+        m_customLayerToKiMap[aLayerInfo] = lId;
+
+        wxLogTrace( traceAllegroBuilder, "Adding mapping for %#04x:%#04x to %s", aLayerInfo.m_Class,
+                    aLayerInfo.m_Subclass, aLayerName );
+        return lId;
+    }
+
+    PCB_LAYER_ID addUserLayer( const wxString& aName )
+    {
+        const PCB_LAYER_ID lId = getNthUserLayer( m_numUserLayersUsed++ );
+        m_board.GetDesignSettings().SetUserDefinedLayerCount( m_numUserLayersUsed );
+        m_board.SetLayerName( lId, aName );
+        wxLogTrace( traceAllegroBuilder, "Adding user layer %s: %s", LayerName( lId ), aName );
+        return lId;
+    }
+
+    // Map of original layer list - we use this to store the CUSTOM_LAYERs, as well
+    // as check that we only handle each one once
+    std::unordered_map<const BLK_0x2A_LAYER_LIST*, std::vector<CUSTOM_LAYER>> m_Lists;
+
+    // Which classes point to which layer lists (more than one class can point to one list.
+    std::unordered_map<uint8_t, std::vector<CUSTOM_LAYER>*> m_ClassCustomLayerLists;
+
+    /**
+     * The main map from CLASS:SUBCLASS custom mappings to KiCadLayers
+     *
+     * This doesn't cover all the fixed layers, just created custom ones.
+     */
+    std::unordered_map<LAYER_INFO, PCB_LAYER_ID> m_customLayerToKiMap;
+
+    /**
+     * This is a map of named, but optional, Allegro layers that we have mapped to KiCad layers.
+     *
+     * This is done by name, because multiple class:subclass pairs may share the same name.
+     */
+    std::unordered_map<wxString, PCB_LAYER_ID> m_MappedOptionalLayers;
+
+    int m_numUserLayersUsed = 0;
+
+    // for looking up strings
+    const RAW_BOARD& m_rawBoard;
+    BOARD&           m_board;
+};
+
+
 BOARD_BUILDER::BOARD_BUILDER( const RAW_BOARD& aRawBoard, BOARD& aBoard, REPORTER& aReporter,
                               PROGRESS_REPORTER* aProgressReporter ) :
-        m_rawBoard( aRawBoard ), m_board( aBoard ), m_reporter( aReporter ), m_progressReporter( aProgressReporter )
+        m_rawBoard( aRawBoard ), m_board( aBoard ), m_reporter( aReporter ), m_progressReporter( aProgressReporter ),
+        m_layerMapper( std::make_unique<LAYER_MAPPER>( m_rawBoard, m_board ) )
 {
     double scale = 1;
     switch( m_rawBoard.m_Header->m_BoardUnits )
@@ -175,6 +492,11 @@ BOARD_BUILDER::BOARD_BUILDER( const RAW_BOARD& aRawBoard, BOARD& aBoard, REPORTE
         THROW_IO_ERROR( "Board units divisor is 0" );
 
     m_scale = scale / m_rawBoard.m_Header->m_UnitsDivisor;
+}
+
+
+BOARD_BUILDER::~BOARD_BUILDER()
+{
 }
 
 
@@ -202,14 +524,6 @@ void BOARD_BUILDER::reportUnexpectedBlockType( uint8_t aGot, uint8_t aExpected, 
     m_reporter.Report( wxString::Format( "Object with key {#010x} has unexpected type %#04x (expected %#04x)", aKey,
                                          aGot, aExpected ),
                        RPT_SEVERITY_WARNING );
-}
-
-
-/**
- * Set up the layers on the board.
- */
-static void SetupBoardLayers( const RAW_BOARD& aRawBoard, BOARD& aBoard )
-{
 }
 
 
@@ -248,7 +562,7 @@ void BOARD_BUILDER::cacheFontDefs()
 }
 
 
-void BOARD_BUILDER::cacheNets()
+void BOARD_BUILDER::createNets()
 {
     // Incrementing netcode. We could also choose to, say, use the 0x1B key if we wanted
     int netCode = 1;
@@ -287,6 +601,32 @@ void BOARD_BUILDER::cacheNets()
 }
 
 
+void BOARD_BUILDER::setupLayers()
+{
+    const auto& layerMap = m_rawBoard.m_Header->m_LayerMap;
+
+    for( size_t i = 0; i < layerMap.size(); ++i )
+    {
+        const uint8_t classNum = static_cast<uint8_t>( i );
+
+        const uint32_t x2aKey = layerMap[i].m_LayerList0x2A;
+
+        if( x2aKey == 0 )
+            continue;
+
+        const BLK_0x2A_LAYER_LIST* layerList = expectBlockByKey<BLK_0x2A_LAYER_LIST>( x2aKey, 0x2A );
+
+        // Probably an error
+        if( !layerList )
+            continue;
+
+        m_layerMapper->ProcessLayerList( classNum, *layerList );
+    }
+
+    m_layerMapper->FinalizeLayers();
+}
+
+
 const BLK_0x36::FontDef_X08* BOARD_BUILDER::getFontDef( unsigned aIndex ) const
 {
     if( aIndex == 0 || aIndex > m_fontDefList.size() )
@@ -304,21 +644,9 @@ const BLK_0x36::FontDef_X08* BOARD_BUILDER::getFontDef( unsigned aIndex ) const
 }
 
 
-template <>
-struct std::hash<LAYER_INFO>
-{
-    size_t operator()( const LAYER_INFO& aLayerInfo ) const noexcept
-    {
-        return ( aLayerInfo.m_Class << 8 ) + aLayerInfo.m_Subclass;
-    }
-};
-
-
 std::unique_ptr<PCB_TEXT> BOARD_BUILDER::buildPcbText( const BLK_0x30_STR_WRAPPER& aStrWrapper,
                                                        BOARD_ITEM_CONTAINER&       aParent )
 {
-    std::cout << "  Text: " << aStrWrapper.m_Key << std::endl;
-
     std::unique_ptr<PCB_TEXT> text = std::make_unique<PCB_TEXT>( &aParent );
 
     VECTOR2I     textPos = scale( VECTOR2I{ aStrWrapper.m_CoordsX, aStrWrapper.m_CoordsY } );
@@ -368,35 +696,9 @@ std::unique_ptr<PCB_TEXT> BOARD_BUILDER::buildPcbText( const BLK_0x30_STR_WRAPPE
 }
 
 
-/**
- * Map of the pre-set class:subclass pairs to standard layers
- */
-// clang-format off
-static const std::unordered_map<LAYER_INFO, PCB_LAYER_ID> s_LayerKiMap = {
-    { { LAYER_INFO::CLASS::PACKAGE_GEOMETRY, LAYER_INFO::SUBCLASS::SILKSCREEN_TOP},     F_SilkS},
-    { { LAYER_INFO::CLASS::PACKAGE_GEOMETRY, LAYER_INFO::SUBCLASS::ASSEMBLY_TOP},       F_Fab},
-    { { LAYER_INFO::CLASS::PACKAGE_GEOMETRY, LAYER_INFO::SUBCLASS::PLACE_BOUND_TOP},    F_CrtYd},
-    { { LAYER_INFO::CLASS::REF_DES,          LAYER_INFO::SUBCLASS::REFDES_SS_TOP},      F_SilkS},
-    { { LAYER_INFO::CLASS::REF_DES,          LAYER_INFO::SUBCLASS::REFDES_ASS_TOP},     F_Fab},
-};
-// clang-format on
-
-
 PCB_LAYER_ID BOARD_BUILDER::getLayer( const LAYER_INFO& aLayerInfo ) const
 {
-    PCB_LAYER_ID layer = User_1;
-
-    // Look up the layer in the presets list
-    if( s_LayerKiMap.count( aLayerInfo ) )
-    {
-        layer = s_LayerKiMap.at( aLayerInfo );
-    }
-    else
-    {
-        // Etch?
-    }
-
-    return layer;
+    return m_layerMapper->GetLayer( aLayerInfo );
 }
 
 
@@ -411,8 +713,9 @@ std::vector<std::unique_ptr<PCB_SHAPE>> BOARD_BUILDER::buildShapes( const BLK_0x
     // aren't actually the courtyard, which is a polygon in the 0x28 list. So, if we see such items,
     // remap them now to a specific other layer
     if( layer == F_CrtYd )
-        layer = User_2;
-
+        layer = m_layerMapper->GetPlaceBounds( true );
+    else if( layer == B_CrtYd )
+        layer = m_layerMapper->GetPlaceBounds( false );
     const LL_WALKER segWalker{ aGraphic.m_SegmentPtr, aGraphic.m_Key, m_rawBoard };
 
     for( const BLOCK_BASE* segBlock : segWalker )
@@ -428,6 +731,12 @@ std::vector<std::unique_ptr<PCB_SHAPE>> BOARD_BUILDER::buildShapes( const BLK_0x
 
             VECTOR2I start{ arc.m_StartX, arc.m_StartY };
             VECTOR2I end{ arc.m_EndX, arc.m_EndY };
+
+            if( layer == Cmts_User )
+            {
+                wxLogTrace( traceAllegroBuilder, "Unmapped Arc: %#04x %#04x %s, %s", aGraphic.m_Layer.m_Class,
+                            aGraphic.m_Layer.m_Subclass, start.Format(), end.Format() );
+            }
 
             start = scale( start );
             end = scale( end );
@@ -483,6 +792,12 @@ std::vector<std::unique_ptr<PCB_SHAPE>> BOARD_BUILDER::buildShapes( const BLK_0x
             VECTOR2I    start = scale( { seg.m_StartX, seg.m_StartY } );
             VECTOR2I    end = scale( { seg.m_EndX, seg.m_EndY } );
             const int   width = static_cast<int>( seg.m_Width );
+
+            if( layer == Cmts_User )
+            {
+                wxLogTrace( traceAllegroBuilder, "Unmapped Seg: %#04x %#04x %s, %s", aGraphic.m_Layer.m_Class,
+                            aGraphic.m_Layer.m_Subclass, start.Format(), end.Format() );
+            }
 
             shape->SetStart( start );
             shape->SetEnd( end );
@@ -549,9 +864,6 @@ std::unique_ptr<FOOTPRINT> BOARD_BUILDER::buildFootprint( const BLK_0x2D& aFpIns
     fp->SetPosition( fpPos );
     fp->SetOrientation( rotation );
 
-    std::cout << "Footprint " << refDesStr << " pos: " << fpPos.x << ", " << fpPos.y << " angle "
-              << rotation.AsDegrees() << std::endl;
-
     const LL_WALKER graphicsWalker{ aFpInstance.m_GraphicPtr, aFpInstance.m_Key, m_rawBoard };
     for( const BLOCK_BASE* graphicsBlock : graphicsWalker )
     {
@@ -589,11 +901,8 @@ std::unique_ptr<FOOTPRINT> BOARD_BUILDER::buildFootprint( const BLK_0x2D& aFpIns
 
             if( text )
             {
-                std::cout << "Text: " << text->GetText() << std::endl;
-                std::cout << "CLass " << (int) strWrapper.m_Layer.m_Class << ": " << (int) strWrapper.m_Layer.m_Subclass
-                          << std::endl;
                 if( strWrapper.m_Layer.m_Class == LAYER_INFO::CLASS::REF_DES
-                    && ( strWrapper.m_Layer.m_Subclass == LAYER_INFO::SUBCLASS::REFDES_SS_TOP ) )
+                    && ( strWrapper.m_Layer.m_Subclass == LAYER_INFO::SUBCLASS::SILKSCREEN_TOP ) )
                 {
                     // This is a visible silkscreen refdes - use it to update the PCB_FIELD refdes.
                     PCB_FIELD* const refDes = fp->GetField( FIELD_T::REFERENCE );
@@ -611,9 +920,9 @@ std::unique_ptr<FOOTPRINT> BOARD_BUILDER::buildFootprint( const BLK_0x2D& aFpIns
                 {
                     // Add it as a text item
                     // In Allegro, the REF_DES::ASSEMBLY_x text is also in the REF_DES class, but
-                    // in KiCad, it's just an Fab layer text item with a special value.
+                    // in KiCad, it's just a Fab layer text item with a special value.
                     if( strWrapper.m_Layer.m_Class == LAYER_INFO::CLASS::REF_DES
-                        && ( strWrapper.m_Layer.m_Subclass == LAYER_INFO::SUBCLASS::REFDES_ASS_TOP ) )
+                        && ( strWrapper.m_Layer.m_Subclass == LAYER_INFO::SUBCLASS::ASSEMBLY_TOP ) )
                     {
                         text->SetText( "${REFERENCE}" );
                     }
@@ -640,11 +949,12 @@ bool BOARD_BUILDER::BuildBoard()
     }
 
     cacheFontDefs();
+    setupLayers();
 
     if( m_progressReporter )
         m_progressReporter->AdvancePhase( _( "Creating nets" ) );
 
-    cacheNets();
+    createNets();
 
     if( m_progressReporter )
     {
@@ -659,9 +969,6 @@ bool BOARD_BUILDER::BuildBoard()
         if( fpContainer->GetBlockType() == 0x2B )
         {
             const BLK_0x2B& fpBlock = static_cast<const BLOCK<BLK_0x2B>&>( *fpContainer ).GetData();
-
-            std::cout << "Footprint: " << fpBlock.m_Key << std::endl;
-            // m_board.AddFootprint( fp_block.GetData().m_Footprint );
 
             const LL_WALKER instWalker( fpBlock.m_FirstInstPtr, fpBlock.m_Key, m_rawBoard );
 
@@ -678,8 +985,6 @@ bool BOARD_BUILDER::BuildBoard()
                 {
                     const auto& inst = static_cast<const BLOCK<BLK_0x2D>&>( *instBlock ).GetData();
 
-                    std::cout << "  Instance: " << numInsts << ", " << inst.m_Key << std::endl;
-
                     std::unique_ptr<FOOTPRINT> fp = buildFootprint( inst );
 
                     if( fp )
@@ -690,7 +995,7 @@ bool BOARD_BUILDER::BuildBoard()
                     else
                     {
                         m_reporter.Report(
-                                wxString::Format( "Failed to construct fooptrint for 0x2D key %#010x", inst.m_Key ),
+                                wxString::Format( "Failed to construct footprint for 0x2D key %#010x", inst.m_Key ),
                                 RPT_SEVERITY_ERROR );
                     }
                 }

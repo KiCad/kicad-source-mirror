@@ -312,3 +312,39 @@ looks like:
 
 * Looking at 0x14s, we find some more layer mappings:
   * 7:1 - MANUFACTURING:NCLEGEND-1-2
+
+## 2025-05-13
+
+* Net decoding and importing
+* Still not quite clear why 0x04s are in single-entry lists - don't nets have many member objects?
+
+* 0x05s seem like lists of objects. Maybe they're just tracks and we can get the pads/zones elsewhere?
+
+* Layer map seems to be indexed directly by CLASS, so then we know where to pull out layer names for the copper layers.
+
+* Stackup seems to be in one of the 0x21 objects:
+```
+Hex View  00 01 02 03 04 05 06 07  08 09 0A 0B 0C 0D 0E 0F
+ 
+00009EE0                           21 00 18 05 B4 00 00 00          !.......
+00009EF0  70 2E 79 0F FD 00 00 00  00 00 00 00 41 49 52 00  p.y.........AIR.
+00009F00  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  ................
+00009F10  30 20 4D 49 4C 00 30 30  30 30 30 30 30 30 65 2B  0 MIL.00000000e+
+00009F20  30 30 30 00 30 20 77 2F  63 6D 2D 64 65 67 43 00  000.0 w/cm-degC.
+00009F30  30 30 65 2D 30 30 32 00  30 20 6D 68 6F 2F 63 6D  00e-002.0 mho/cm
+00009F40  00 30 30 30 30 30 65 2B  30 30 30 00 31 00 30 30  .00000e+000.1.00
+00009F50  30 30 30 30 30 30 30 30  30 30 65 2B 30 30 30 00  0000000000e+000.
+00009F60  53 55 52 46 41 43 45 00  00 00 00 00 00 00 00 00  SURFACE.........
+
+A!LAYER_SORT!LAYER_SUBCLASS!LAYER_ARTWORK!LAYER_USE!LAYER_CONDUCTOR!LAYER_DIELECTRIC_CONSTANT!LAYER_ELECTRICAL_CONDUCTIVITY!LAYER_MATERIAL!LAYER_THERMAL_CONDUCTIVITY!LAYER_THICKNESS!
+J!C:/All_Preamp.brd!Fri May 02 14:59:47 2025!-560!-410!10440!8090!1!mils!PREAMPL_SCHEM!59.940157 mil!2!OUT OF DATE!
+S!000000!!!!NO!1.000000!0 mho/cm!AIR!!0 mil!
+S!000001!TOP!POSITIVE!!YES!4.500000!595900 mho/cm!COPPER!!0.72 mil!
+S!000002!!!!NO!4.500000!0 mho/cm!FR-4!!58.500000 mil!
+S!000003!BOTTOM!POSITIVE!!YES!4.500000!595900 mho/cm!COPPER!!0.72 mil!
+S!000004!!!!NO!1.000000!0 mho/cm!AIR!!0 mil!
+```
+
+* Figureed out several layer maps by comparing unmapped layers with cooridinates.
+  * DRAWING FORMAT is class 4, as it have the largest numbers and seems to work
+* https://www.artwork.com/all2dxf/alleggeo.htm seems to be in order. 0xFD looks like the highest in each class, and then count backwards. SO ASSEMBLY_TOP in DEVICE_TYPE is 0xFD, and ASSEMBLY_BOTTOM is 0xFC and so on. 
