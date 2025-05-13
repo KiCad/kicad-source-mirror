@@ -1399,6 +1399,12 @@ void SHAPE_LINE_CHAIN::RemoveShape( int aPointIndex )
 
 const SHAPE_LINE_CHAIN SHAPE_LINE_CHAIN::Slice( int aStartIndex, int aEndIndex ) const
 {
+    return Slice( aStartIndex, aEndIndex, getArcPolygonizationMaxError() );
+}
+
+
+const SHAPE_LINE_CHAIN SHAPE_LINE_CHAIN::Slice( int aStartIndex, int aEndIndex, int aMaxError ) const
+{
     SHAPE_LINE_CHAIN rv;
 
     if( aEndIndex < 0 )
@@ -1498,7 +1504,7 @@ const SHAPE_LINE_CHAIN SHAPE_LINE_CHAIN::Slice( int aStartIndex, int aEndIndex )
             {
                 // append the whole arc
                 const SHAPE_ARC& currentArc = Arc( ArcIndex( i ) );
-                rv.Append( currentArc );
+                rv.Append( currentArc, aMaxError );
             }
 
             if( isLastShape )
@@ -1506,8 +1512,7 @@ const SHAPE_LINE_CHAIN SHAPE_LINE_CHAIN::Slice( int aStartIndex, int aEndIndex )
         }
         else
         {
-            wxASSERT_MSG( !IsArcSegment( i ),
-                          wxT( "Still on an arc segment, we missed something..." ) );
+            wxASSERT_MSG( !IsArcSegment( i ), wxT( "Still on an arc segment, we missed something..." ) );
 
             if( i == aStartIndex )
                 rv.Append( m_points[i] );

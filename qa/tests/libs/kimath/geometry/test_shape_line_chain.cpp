@@ -924,7 +924,7 @@ BOOST_AUTO_TEST_CASE( Slice )
     //////////////////////////////////////////////////////////
     BOOST_TEST_CONTEXT( "Case 1: Start at arc endpoint, finish middle of arc" )
     {
-        SHAPE_LINE_CHAIN sliceResult = chain.Slice( 9, 18 );
+        SHAPE_LINE_CHAIN sliceResult = chain.Slice( 9, 18, ARC_HIGH_DEF );
         BOOST_CHECK( GEOM_TEST::IsOutlineValid( sliceResult ) );
 
         BOOST_CHECK_EQUAL( sliceResult.ArcCount(), 1 );
@@ -959,7 +959,7 @@ BOOST_AUTO_TEST_CASE( Slice )
     //////////////////////////////////////////////////////////////////
     BOOST_TEST_CONTEXT( "Case 2: Start at middle of an arc, finish at arc startpoint" )
     {
-        SHAPE_LINE_CHAIN sliceResult = chain.Slice( 5, 12 );
+        SHAPE_LINE_CHAIN sliceResult = chain.Slice( 5, 12, ARC_HIGH_DEF );
         BOOST_CHECK( GEOM_TEST::IsOutlineValid( sliceResult ) );
 
         BOOST_CHECK_EQUAL( sliceResult.ArcCount(), 1 );
@@ -998,7 +998,7 @@ BOOST_AUTO_TEST_CASE( Slice )
     //////////////////////////////////////////////////////////////////
     BOOST_TEST_CONTEXT( "Case 3: Full arc, nothing else" )
     {
-        SHAPE_LINE_CHAIN sliceResult = chain.Slice( 3, 9 );
+        SHAPE_LINE_CHAIN sliceResult = chain.Slice( 3, 9, ARC_HIGH_DEF );
         BOOST_CHECK( GEOM_TEST::IsOutlineValid( sliceResult ) );
 
         BOOST_CHECK_EQUAL( sliceResult.ArcCount(), 1 );
@@ -1028,7 +1028,7 @@ BOOST_AUTO_TEST_CASE( Slice )
     //////////////////////////////////////////////////////////////////
     BOOST_TEST_CONTEXT( "Case 4:  Full arc, and straight segments to next arc start" )
     {
-        SHAPE_LINE_CHAIN sliceResult = chain.Slice( 3, 12 );
+        SHAPE_LINE_CHAIN sliceResult = chain.Slice( 3, 12, ARC_HIGH_DEF );
         BOOST_CHECK( GEOM_TEST::IsOutlineValid( sliceResult ) );
 
         BOOST_CHECK_EQUAL( sliceResult.ArcCount(), 1 );
@@ -1062,7 +1062,7 @@ BOOST_AUTO_TEST_CASE( Slice )
         SHAPE_LINE_CHAIN chainCopy = chain;
         chainCopy.Append( VECTOR2I( 400000, 400000 ) );
 
-        SHAPE_LINE_CHAIN sliceResult = chainCopy.Slice( 11, -1 );
+        SHAPE_LINE_CHAIN sliceResult = chainCopy.Slice( 11, -1, ARC_HIGH_DEF );
         BOOST_CHECK( GEOM_TEST::IsOutlineValid( sliceResult ) );
         BOOST_CHECK_EQUAL( sliceResult.GetPoint( -1 ), VECTOR2I( 400000, 400000 ) );
     }
@@ -1071,7 +1071,7 @@ BOOST_AUTO_TEST_CASE( Slice )
     {
         SHAPE_LINE_CHAIN chainCopy = SLC_CASES().OnePoint;
 
-        SHAPE_LINE_CHAIN sliceResult = chainCopy.Slice( 0, -1 );
+        SHAPE_LINE_CHAIN sliceResult = chainCopy.Slice( 0, -1, ARC_HIGH_DEF );
         BOOST_CHECK_EQUAL( sliceResult.PointCount(), 1 );
         BOOST_CHECK_EQUAL( sliceResult.GetPoint( 0 ), VECTOR2I( 233450000, 228360000 ) );
         BOOST_CHECK_EQUAL( sliceResult.GetPoint( -1 ), VECTOR2I( 233450000, 228360000 ) ); // Same as index 0
@@ -1081,7 +1081,7 @@ BOOST_AUTO_TEST_CASE( Slice )
     {
         SHAPE_LINE_CHAIN chainCopy = SLC_CASES().TwoPoints;
 
-        SHAPE_LINE_CHAIN sliceResult = chainCopy.Slice( 0, -1 );
+        SHAPE_LINE_CHAIN sliceResult = chainCopy.Slice( 0, -1, ARC_HIGH_DEF );
         BOOST_CHECK_EQUAL( sliceResult.PointCount(), 2 );
         BOOST_CHECK_EQUAL( sliceResult.GetPoint( 0 ), VECTOR2I( 233450000, 228360000 ) );
         BOOST_CHECK_EQUAL( sliceResult.GetPoint( 1 ), VECTOR2I( 263450000, 258360000 ) );
@@ -1090,7 +1090,7 @@ BOOST_AUTO_TEST_CASE( Slice )
 
     BOOST_TEST_CONTEXT( "Case 8: Full 2nd arc, nothing else" )
     {
-        SHAPE_LINE_CHAIN sliceResult = chain.Slice( 12, 19 );
+        SHAPE_LINE_CHAIN sliceResult = chain.Slice( 12, 19, ARC_HIGH_DEF );
         BOOST_CHECK( GEOM_TEST::IsOutlineValid( sliceResult ) );
 
         BOOST_CHECK_EQUAL( sliceResult.ArcCount(), 1 );
@@ -1117,7 +1117,7 @@ BOOST_AUTO_TEST_CASE( Slice )
 
     BOOST_TEST_CONTEXT( "Case 9: Start at middle of a 2nd arc, finish at end" )
     {
-        SHAPE_LINE_CHAIN sliceResult = chain.Slice( 16, 19 );
+        SHAPE_LINE_CHAIN sliceResult = chain.Slice( 16, 19, ARC_HIGH_DEF );
         BOOST_CHECK( GEOM_TEST::IsOutlineValid( sliceResult ) );
 
         BOOST_CHECK_EQUAL( sliceResult.ArcCount(), 1 );
@@ -1153,7 +1153,7 @@ BOOST_AUTO_TEST_CASE( Slice )
         SHAPE_LINE_CHAIN chain10;
         chain10.Append( firstArc, ARC_HIGH_DEF );
 
-        SHAPE_LINE_CHAIN sliceResult = chain10.Slice( 3, 6 );
+        SHAPE_LINE_CHAIN sliceResult = chain10.Slice( 3, 6, ARC_HIGH_DEF );
         BOOST_CHECK( GEOM_TEST::IsOutlineValid( sliceResult ) );
 
         BOOST_CHECK_EQUAL( sliceResult.ArcCount(), 1 );
