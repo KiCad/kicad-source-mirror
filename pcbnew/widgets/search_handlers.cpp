@@ -22,6 +22,7 @@
 #include <pcb_edit_frame.h>
 #include <pcb_marker.h>
 #include <pcb_painter.h>
+#include <pcb_group.h>
 #include <pcb_textbox.h>
 #include <pcb_text.h>
 #include <pcb_dimension.h>
@@ -330,6 +331,61 @@ wxString TEXT_SEARCH_HANDLER::getResultCell( BOARD_ITEM* aItem, int aCol )
     else if( aCol == 3 )
         return m_frame->MessageTextFromCoord( aItem->GetX(), ORIGIN_TRANSFORMS::ABS_X_COORD );
     else if( aCol == 4 )
+        return m_frame->MessageTextFromCoord( aItem->GetY(), ORIGIN_TRANSFORMS::ABS_Y_COORD );
+
+    return wxEmptyString;
+}
+
+
+GROUP_SEARCH_HANDLER::GROUP_SEARCH_HANDLER( PCB_EDIT_FRAME* aFrame ) :
+        PCB_SEARCH_HANDLER( _HKI( "Groups" ), aFrame )
+{
+    m_columns.emplace_back( _HKI( "Type" ),  2,  wxLIST_FORMAT_LEFT );
+    m_columns.emplace_back( _HKI( "Name" ),  6,  wxLIST_FORMAT_LEFT );
+    m_columns.emplace_back( wxT( "X" ),      3,  wxLIST_FORMAT_CENTER );
+    m_columns.emplace_back( wxT( "Y" ),      3,  wxLIST_FORMAT_CENTER );
+}
+
+
+int GROUP_SEARCH_HANDLER::Search( const wxString& aQuery )
+{
+    m_hitlist.clear();
+    BOARD* board = m_frame->GetBoard();
+
+    APP_SETTINGS_BASE::SEARCH_PANE& settings = m_frame->config()->m_SearchPane;
+    EDA_SEARCH_DATA                 frp;
+
+    frp.searchAllFields = settings.search_hidden_fields;
+    frp.searchMetadata = settings.search_metadata;
+    frp.findString = aQuery;
+
+    // Try to handle whatever the user throws at us (substring, wildcards, regex, etc.)
+    frp.matchMode = EDA_SEARCH_MATCH_MODE::PERMISSIVE;
+
+    for( BOARD_ITEM* item : board->Groups() )
+    {
+        if( frp.findString.IsEmpty() || item->Matches( frp, nullptr ) )
+            m_hitlist.push_back( item );
+    }
+
+    return (int) m_hitlist.size();
+}
+
+
+wxString GROUP_SEARCH_HANDLER::getResultCell( BOARD_ITEM* aItem, int aCol )
+{
+    if( aCol == 0 )
+    {
+        if( aItem->Type() == PCB_GROUP_T )
+            return _( "Group" );
+        else if( aItem->Type() == PCB_GENERATOR_T )
+            return _( "Generator" );
+    }
+    else if( aCol == 1 )
+        return static_cast<PCB_GROUP*>( aItem )->GetName();
+    else if( aCol == 2 )
+        return m_frame->MessageTextFromCoord( aItem->GetX(), ORIGIN_TRANSFORMS::ABS_X_COORD );
+    else if( aCol == 3 )
         return m_frame->MessageTextFromCoord( aItem->GetY(), ORIGIN_TRANSFORMS::ABS_Y_COORD );
 
     return wxEmptyString;

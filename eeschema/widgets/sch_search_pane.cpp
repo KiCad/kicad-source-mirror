@@ -50,6 +50,7 @@ SCH_SEARCH_PANE::SCH_SEARCH_PANE( SCH_EDIT_FRAME* aFrame ) :
     AddSearcher( new POWER_SEARCH_HANDLER( aFrame ) );
     AddSearcher( new TEXT_SEARCH_HANDLER( aFrame ) );
     AddSearcher( new LABEL_SEARCH_HANDLER( aFrame ) );
+    AddSearcher( new GROUP_SEARCH_HANDLER( aFrame ) );
 }
 
 

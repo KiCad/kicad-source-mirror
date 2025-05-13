@@ -100,6 +100,18 @@ private:
 };
 
 
+class GROUP_SEARCH_HANDLER : public PCB_SEARCH_HANDLER
+{
+public:
+    GROUP_SEARCH_HANDLER( PCB_EDIT_FRAME* aFrame );
+
+    int Search( const wxString& aQuery ) override;
+
+private:
+    wxString getResultCell( BOARD_ITEM* aItem, int aCol ) override;
+};
+
+
 class NETS_SEARCH_HANDLER : public PCB_SEARCH_HANDLER
 {
 public:

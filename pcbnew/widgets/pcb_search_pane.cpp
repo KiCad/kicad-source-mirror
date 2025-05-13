@@ -46,6 +46,7 @@ PCB_SEARCH_PANE::PCB_SEARCH_PANE( PCB_EDIT_FRAME* aFrame ) :
     AddSearcher( new NETS_SEARCH_HANDLER( aFrame ) );
     AddSearcher( new RATSNEST_SEARCH_HANDLER( aFrame ) );
     AddSearcher( new TEXT_SEARCH_HANDLER( aFrame ) );
+    AddSearcher( new GROUP_SEARCH_HANDLER( aFrame ) );
 }
 
 

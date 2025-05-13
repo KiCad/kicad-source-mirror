@@ -21,6 +21,7 @@
 #include <sch_edit_frame.h>
 #include <sch_painter.h>
 #include <sch_symbol.h>
+#include <sch_group.h>
 #include <sch_label.h>
 #include <sch_text.h>
 #include <sch_textbox.h>
@@ -486,6 +487,71 @@ wxString LABEL_SEARCH_HANDLER::getResultCell( const SCH_SEARCH_HIT& aHit, int aC
         return m_frame->MessageTextFromValue( lbl->GetPosition().x );
     else if( aCol == 4 )
         return m_frame->MessageTextFromValue( lbl->GetPosition().y );
+
+    return wxEmptyString;
+}
+
+
+GROUP_SEARCH_HANDLER::GROUP_SEARCH_HANDLER( SCH_EDIT_FRAME* aFrame ) :
+        SCH_SEARCH_HANDLER( _HKI( "Groups" ), aFrame )
+{
+    m_columns.emplace_back( _HKI( "Name" ), 6, wxLIST_FORMAT_LEFT );
+    m_columns.emplace_back( _HKI( "Page" ), 2, wxLIST_FORMAT_CENTER );
+    m_columns.emplace_back( wxT( "X" ),     3, wxLIST_FORMAT_CENTER );
+    m_columns.emplace_back( wxT( "Y" ),     3, wxLIST_FORMAT_CENTER);
+}
+
+
+int GROUP_SEARCH_HANDLER::Search( const wxString& aQuery )
+{
+    m_hitlist.clear();
+
+    APP_SETTINGS_BASE::SEARCH_PANE& settings = m_frame->config()->m_SearchPane;
+    SCH_SEARCH_DATA                 frp;
+
+    frp.searchAllFields = settings.search_hidden_fields;
+    frp.searchMetadata = settings.search_metadata;
+    frp.findString = aQuery;
+
+    // Try to handle whatever the user throws at us (substring, wildcards, regex, etc.)
+    frp.matchMode = EDA_SEARCH_MATCH_MODE::PERMISSIVE;
+    frp.searchCurrentSheetOnly = false;
+
+    auto search =
+            [&frp]( SCH_ITEM* item, SCH_SHEET_PATH* sheet )
+            {
+                if( item->IsType( { SCH_GROUP_T } ) )
+                {
+                    SCH_GROUP* group = static_cast<SCH_GROUP*>( item );
+
+                    if( frp.findString.IsEmpty() || group->Matches( frp, sheet ) )
+                        return true;
+                }
+
+                return false;
+            };
+
+    FindAll( search );
+
+    return (int) m_hitlist.size();
+}
+
+
+wxString GROUP_SEARCH_HANDLER::getResultCell( const SCH_SEARCH_HIT& aHit, int aCol )
+{
+    SCH_GROUP* group = dynamic_cast<SCH_GROUP*>( aHit.item );
+
+    if( !group )
+        return wxEmptyString;
+
+    if( aCol == 0 )
+        return group->GetName();
+    else if( aCol == 1 )
+        return aHit.sheetPath->GetPageNumber();
+    else if( aCol == 2 )
+        return m_frame->MessageTextFromValue( group->GetPosition().x );
+    else if( aCol == 3 )
+        return m_frame->MessageTextFromValue( group->GetPosition().y );
 
     return wxEmptyString;
 }

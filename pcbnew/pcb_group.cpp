@@ -440,6 +440,12 @@ void PCB_GROUP::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_I
 }
 
 
+bool PCB_GROUP::Matches( const EDA_SEARCH_DATA& aSearchData, void* aAuxData ) const
+{
+    return EDA_ITEM::Matches( UnescapeString( GetName() ), aSearchData );
+}
+
+
 void PCB_GROUP::RunOnChildren( const std::function<void( BOARD_ITEM* )>& aFunction, RECURSE_MODE aMode ) const
 {
     try

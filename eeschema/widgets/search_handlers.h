@@ -115,4 +115,15 @@ protected:
     wxString getResultCell( const SCH_SEARCH_HIT& hit, int aCol ) override;
 };
 
+class GROUP_SEARCH_HANDLER : public SCH_SEARCH_HANDLER
+{
+public:
+    GROUP_SEARCH_HANDLER( SCH_EDIT_FRAME* aFrame );
+
+    int Search( const wxString& aQuery ) override;
+
+protected:
+    wxString getResultCell( const SCH_SEARCH_HIT& hit, int aCol ) override;
+};
+
 #endif

@@ -424,6 +424,12 @@ void SCH_GROUP::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_I
 }
 
 
+bool SCH_GROUP::Matches( const EDA_SEARCH_DATA& aSearchData, void* aAuxData ) const
+{
+    return EDA_ITEM::Matches( UnescapeString( GetName() ), aSearchData );
+}
+
+
 void SCH_GROUP::RunOnChildren( const std::function<void( SCH_ITEM* )>& aFunction, RECURSE_MODE aMode )
 {
     try
