@@ -620,7 +620,8 @@ public:
      * @param aEndIndex is the end of the point range to be returned (inclusive).
      * @return the cut line chain.
      */
-    const SHAPE_LINE_CHAIN Slice( int aStartIndex, int aEndIndex = -1 ) const;
+    const SHAPE_LINE_CHAIN Slice( int aStartIndex, int aEndIndex ) const;
+    const SHAPE_LINE_CHAIN Slice( int aStartIndex, int aEndIndex, int aMaxError ) const;
 
     struct compareOriginDistance
     {
