@@ -1732,12 +1732,12 @@ void PDF_PLOTTER::Text( const VECTOR2I&        aPos,
     VECTOR2I t_size( std::abs( aSize.x ), std::abs( aSize.y ) );
     bool     textMirrored = aSize.x < 0;
 
+    computeTextParameters( aPos, aText, aOrient, t_size, textMirrored, aH_justify, aV_justify,
+                           aWidth, aItalic, aBold, &wideningFactor, &ctm_a, &ctm_b, &ctm_c, &ctm_d,
+                           &ctm_e, &ctm_f, &heightFactor );
+
     SetColor( aColor );
     SetCurrentLineWidth( aWidth, aData );
-
-    computeTextParameters( aPos, aText, aOrient, t_size, textMirrored, aH_justify, aV_justify,
-                           GetCurrentLineWidth(), aItalic, aBold, &wideningFactor,
-                           &ctm_a, &ctm_b,  &ctm_c, &ctm_d, &ctm_e, &ctm_f, &heightFactor );
 
     wxStringTokenizer str_tok( aText, " ", wxTOKEN_RET_DELIMS );
 
@@ -1745,8 +1745,8 @@ void PDF_PLOTTER::Text( const VECTOR2I&        aPos,
     if( !aFont )
         aFont = KIFONT::FONT::GetFont();
 
-    VECTOR2I full_box( aFont->StringBoundaryLimits( aText, t_size, GetCurrentLineWidth(),
-                                                    aBold, aItalic, aFontMetrics ) );
+    VECTOR2I full_box( aFont->StringBoundaryLimits( aText, t_size, aWidth, aBold, aItalic,
+                                                    aFontMetrics ) );
 
     if( textMirrored )
         full_box.x *= -1;
@@ -1772,12 +1772,12 @@ void PDF_PLOTTER::Text( const VECTOR2I&        aPos,
         wxString word = str_tok.GetNextToken();
 
         computeTextParameters( pos, word, aOrient, t_size, textMirrored, GR_TEXT_H_ALIGN_LEFT,
-                               GR_TEXT_V_ALIGN_BOTTOM, GetCurrentLineWidth(), aItalic, aBold, &wideningFactor,
+                               GR_TEXT_V_ALIGN_BOTTOM, aWidth, aItalic, aBold, &wideningFactor,
                                &ctm_a, &ctm_b, &ctm_c, &ctm_d, &ctm_e, &ctm_f, &heightFactor );
 
         // Extract the changed width and rotate by the orientation to get the offset for the
         // next word
-        VECTOR2I bbox( aFont->StringBoundaryLimits( word, t_size, GetCurrentLineWidth(),
+        VECTOR2I bbox( aFont->StringBoundaryLimits( word, t_size, aWidth,
                                                     aBold, aItalic, aFontMetrics ).x, 0 );
 
         if( textMirrored )
@@ -1808,8 +1808,8 @@ void PDF_PLOTTER::Text( const VECTOR2I&        aPos,
     }
 
     // Plot the stroked text (if requested)
-    PLOTTER::Text( aPos, aColor, aText, aOrient, aSize, aH_justify, aV_justify, GetCurrentLineWidth(),
-                   aItalic, aBold, aMultilineAllowed, aFont, aFontMetrics );
+    PLOTTER::Text( aPos, aColor, aText, aOrient, aSize, aH_justify, aV_justify, aWidth, aItalic,
+                   aBold, aMultilineAllowed, aFont, aFontMetrics );
 }
 
 
