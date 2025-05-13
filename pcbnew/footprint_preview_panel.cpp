@@ -47,6 +47,7 @@
 #include <dialog_shim.h>
 #include <project_pcb.h>
 
+
 FOOTPRINT_PREVIEW_PANEL::FOOTPRINT_PREVIEW_PANEL( KIWAY* aKiway, wxWindow* aParent,
                                                   UNITS_PROVIDER* aUnitsProvider,
                                                   std::unique_ptr<KIGFX::GAL_DISPLAY_OPTIONS> aOpts,
@@ -76,6 +77,12 @@ FOOTPRINT_PREVIEW_PANEL::FOOTPRINT_PREVIEW_PANEL( KIWAY* aKiway, wxWindow* aPare
 
 FOOTPRINT_PREVIEW_PANEL::~FOOTPRINT_PREVIEW_PANEL( )
 {
+    ClearViewAndData();
+}
+
+
+void FOOTPRINT_PREVIEW_PANEL::ClearViewAndData()
+{
     m_dummyBoard->DetachAllFootprints();
 
     if( m_currentFootprint )
@@ -85,6 +92,9 @@ FOOTPRINT_PREVIEW_PANEL::~FOOTPRINT_PREVIEW_PANEL( )
         GetView()->Remove( m_otherFootprint.get() );
 
     GetView()->Clear();
+
+    m_currentFootprint = nullptr;
+    m_otherFootprint = nullptr;
 }
 
 
