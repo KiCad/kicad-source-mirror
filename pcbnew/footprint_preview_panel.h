@@ -76,6 +76,11 @@ public:
                                          UNITS_PROVIDER* aUnitsProvider );
     FOOTPRINT* GetCurrentFootprint() const { return m_currentFootprint.get(); }
 
+    /* Delete loaded footprints and clear view
+     * Must be called before deleting the panel
+     */
+    void ClearViewAndData();
+
 private:
     /**
      * Create a new panel

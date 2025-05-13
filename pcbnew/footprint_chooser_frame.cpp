@@ -236,6 +236,9 @@ FOOTPRINT_CHOOSER_FRAME::~FOOTPRINT_CHOOSER_FRAME()
     m_preview3DCanvas->Show();
     m_preview3DCanvas->OnCloseWindow( dummy );
 
+    // Ensure view and data used by the preview panel are cleared before deleting other items
+    static_cast<FOOTPRINT_PREVIEW_PANEL*>( m_chooserPanel->GetViewerPanel()->GetPreviewPanel() )->ClearViewAndData();
+
     // Disconnect board, which is owned by FOOTPRINT_PREVIEW_PANEL.
     m_pcb = nullptr;
 
