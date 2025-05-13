@@ -1179,11 +1179,13 @@ int PCBNEW_JOBS_HANDLER::JobExportGerbers( JOB* aJob )
     {
         if( !aGerberJob->m_argLayers.value().empty() )
         {
-            aGerberJob->m_plotLayerSequence = convertLayerArg( aGerberJob->m_argLayers.value(), nullptr );
+            aGerberJob->m_plotLayerSequence = convertLayerArg( aGerberJob->m_argLayers.value(), brd );
             hasLayerListSpecified = true;
         }
         else
+        {
             aGerberJob->m_plotLayerSequence = LSET::AllLayersMask().SeqStackupForPlotting();
+        }
     }
 
     if( aGerberJob->m_argCommonLayers )
