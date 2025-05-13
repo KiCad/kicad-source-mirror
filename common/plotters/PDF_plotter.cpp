@@ -231,10 +231,10 @@ void PDF_PLOTTER::Rect( const VECTOR2I& p1, const VECTOR2I& p2, FILL_T fill, int
 {
     wxASSERT( m_workFile );
 
-    SetCurrentLineWidth( width );
-
-    if( fill == FILL_T::NO_FILL && GetCurrentLineWidth() <= 0 )
+    if( fill == FILL_T::NO_FILL && width == 0 )
         return;
+
+    SetCurrentLineWidth( width );
 
     VECTOR2I size = p2 - p1;
 
@@ -286,10 +286,10 @@ void PDF_PLOTTER::Circle( const VECTOR2I& pos, int diametre, FILL_T aFill, int w
 {
     wxASSERT( m_workFile );
 
-    SetCurrentLineWidth( width );
-
-    if( aFill == FILL_T::NO_FILL && GetCurrentLineWidth() <= 0 )
+    if( aFill == FILL_T::NO_FILL && width == 0 )
         return;
+
+    SetCurrentLineWidth( width );
 
     VECTOR2D pos_dev = userToDeviceCoordinates( pos );
     double   radius = userToDeviceSize( diametre / 2.0 );
@@ -298,8 +298,6 @@ void PDF_PLOTTER::Circle( const VECTOR2I& pos, int diametre, FILL_T aFill, int w
     if( aFill == FILL_T::NO_FILL && diametre < GetCurrentLineWidth() )
     {
         aFill = FILL_T::FILLED_SHAPE;
-        SetCurrentLineWidth( 0 );
-
         radius = userToDeviceSize( ( diametre / 2.0 ) + ( width / 2.0 ) );
     }
 
@@ -407,10 +405,10 @@ void PDF_PLOTTER::PlotPoly( const std::vector<VECTOR2I>& aCornerList, FILL_T aFi
     if( aCornerList.size() <= 1 )
         return;
 
-    SetCurrentLineWidth( aWidth );
-
-    if( aFill == FILL_T::NO_FILL && GetCurrentLineWidth() <= 0 )
+    if( aFill == FILL_T::NO_FILL && aWidth == 0 )
         return;
+
+    SetCurrentLineWidth( aWidth );
 
     VECTOR2D pos = userToDeviceCoordinates( aCornerList[0] );
     fmt::println( m_workFile, "{:f} {:f} m", pos.x, pos.y );
@@ -424,7 +422,7 @@ void PDF_PLOTTER::PlotPoly( const std::vector<VECTOR2I>& aCornerList, FILL_T aFi
     // Close path and stroke and/or fill
     if( aFill == FILL_T::NO_FILL )
         fmt::println( m_workFile, "S" );
-    else if( GetCurrentLineWidth() == 0 )
+    else if( aWidth == 0 )
         fmt::println( m_workFile, "f" );
     else
         fmt::println( m_workFile, "b" );
