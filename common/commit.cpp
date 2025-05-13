@@ -28,6 +28,7 @@
 #include <core/kicad_algo.h>
 #include <commit.h>
 #include <eda_item.h>
+#include <eda_group.h>
 #include <macros.h>
 
 COMMIT::COMMIT()
@@ -40,7 +41,21 @@ COMMIT::~COMMIT()
     for( COMMIT_LINE& ent : m_changes )
     {
         if( ent.m_copy )
+        {
+            // If we're deleting changes, we have a commit that is being abandoned,
+            // and the copies of items with group memberships can have their group membership
+            // cleared as long as we make sure that group doesn't hold a reference to the copy.
+            if( ent.m_copy->GetParentGroup() )
+            {
+                // This is a copy, so it should not be in the group.
+                // (RemoveItem() returns false when it doesn't find the item),
+                // but if it is we need to remove it to prevent a crash.
+                wxASSERT( ent.m_copy->GetParentGroup()->RemoveItem( ent.m_copy ) == false );
+                ent.m_copy->SetParentGroup( nullptr );
+            }
+
             delete ent.m_copy;
+        }
     }
 }
 
