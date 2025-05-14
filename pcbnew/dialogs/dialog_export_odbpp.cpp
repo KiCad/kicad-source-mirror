@@ -307,42 +307,47 @@ void DIALOG_EXPORT_ODBPP::GenerateODBPPFiles( const JOB_EXPORT_PCB_ODB& aJob, BO
     if( outputFn.GetPath().IsEmpty() && outputFn.HasName() )
         outputFn.MakeAbsolute();
 
+    bool     outputIsSingleFile = aJob.m_compressionMode != JOB_EXPORT_PCB_ODB::ODB_COMPRESSION::NONE;
     wxString msg;
 
-    if( !PATHS::EnsurePathExists( outputFn.GetPath(),
-                                   aJob.m_compressionMode != JOB_EXPORT_PCB_ODB::ODB_COMPRESSION::NONE ) )
+    if( !PATHS::EnsurePathExists( outputFn.GetPath(), outputIsSingleFile ) )
     {
         msg.Printf( _( "Cannot create output directory '%s'." ), outputFn.GetFullPath() );
 
         if( aReporter )
             aReporter->Report( msg, RPT_SEVERITY_ERROR );
+
         return;
     }
 
     if( outputFn.IsDir() && !outputFn.IsDirWritable() )
     {
         msg.Printf( _( "Insufficient permissions to folder '%s'." ), outputFn.GetPath() );
-    }
-    else if( !outputFn.FileExists() && !outputFn.IsDirWritable() )
-    {
-        msg.Printf( _( "Insufficient permissions to save file '%s'." ), outputFn.GetFullPath() );
-    }
-    else if( outputFn.FileExists() && !outputFn.IsFileWritable() )
-    {
-        msg.Printf( _( "Insufficient permissions to save file '%s'." ), outputFn.GetFullPath() );
-    }
 
-    if( !msg.IsEmpty() )
-    {
         if( aReporter )
             aReporter->Report( msg, RPT_SEVERITY_ERROR );
 
         return;
     }
 
+    if( outputIsSingleFile )
+    {
+        bool writeable = outputFn.FileExists() ? outputFn.IsFileWritable() : outputFn.IsDirWritable();
+
+        if( !writeable )
+        {
+            msg.Printf( _( "Insufficient permissions to save file '%s'." ), outputFn.GetFullPath() );
+
+            if( aReporter )
+                aReporter->Report( msg, RPT_SEVERITY_ERROR );
+
+            return;
+        }
+    }
+
     wxFileName tempFile( outputFn.GetFullPath() );
 
-    if( aJob.m_compressionMode != JOB_EXPORT_PCB_ODB::ODB_COMPRESSION::NONE )
+    if( outputIsSingleFile )
     {
         if( outputFn.Exists() )
         {
