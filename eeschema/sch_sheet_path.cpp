@@ -826,23 +826,50 @@ void SCH_SHEET_LIST::SortByHierarchicalPageNumbers( bool aUpdateVirtualPageNums 
     std::sort( begin(), end(),
         []( const SCH_SHEET_PATH& a, const SCH_SHEET_PATH& b ) -> bool
         {
-            if( a.size() != b.size() )
-                return a.size() < b.size();
+            // Find the divergence point in the paths
+            size_t common_len = 0;
+            size_t min_len = std::min( a.size(), b.size() );
 
-            int retval = SCH_SHEET::ComparePageNum( a.GetCachedPageNumber(),
-                                                    b.GetCachedPageNumber() );
+            while( common_len < min_len && a.at( common_len )->m_Uuid == b.at( common_len )->m_Uuid )
+                common_len++;
 
-            if( retval < 0 )
-                return true;
-            else if( retval > 0 )
-                return false;
+            // If one path is a prefix of the other, the shorter one comes first
+            // This ensures parents come before children
+            if( common_len == a.size() )
+                return true;  // a is a prefix of b - a is the parent
+            if( common_len == b.size() )
+                return false; // b is a prefix of a - b is the parent
 
+            // Paths diverge at common_len
+            // If they share the same parent, sort by page number
+            // This ensures siblings are sorted by page number
+            SCH_SHEET* sheet_a = a.at( common_len );
+            SCH_SHEET* sheet_b = b.at( common_len );
+
+            // Create partial paths to get to these sheets for page number comparison
+            KIID_PATH path_a, path_b;
+            for( size_t i = 0; i <= common_len; i++ )
+            {
+                path_a.push_back( a.at( i )->m_Uuid );
+                path_b.push_back( b.at( i )->m_Uuid );
+            }
+
+            // Compare page numbers - use the last sheet's page number
+            wxString page_a = sheet_a->getPageNumber( path_a );
+            wxString page_b = sheet_b->getPageNumber( path_b );
+
+            int retval = SCH_SHEET::ComparePageNum( page_a, page_b );
+
+            if( retval != 0 )
+                return retval < 0;
+
+            // If page numbers are the same, use virtual page numbers as a tie-breaker
             if( a.GetVirtualPageNumber() < b.GetVirtualPageNumber() )
                 return true;
             else if( a.GetVirtualPageNumber() > b.GetVirtualPageNumber() )
                 return false;
 
-            // Enforce strict ordering.  If the page numbers are the same, use UUIDs
+            // Finally, use UUIDs for stable ordering when everything else is equal
             return a.GetCurrentHash() < b.GetCurrentHash();
         } );
 
