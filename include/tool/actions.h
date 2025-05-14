@@ -234,6 +234,7 @@ public:
     // Grouping
     static TOOL_ACTION group;
     static TOOL_ACTION ungroup;
+    static TOOL_ACTION addToGroup;
     static TOOL_ACTION removeFromGroup;
     static TOOL_ACTION groupEnter;
     static TOOL_ACTION groupLeave;

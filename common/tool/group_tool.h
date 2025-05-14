@@ -52,6 +52,9 @@ public:
     ///< Ungroup selected items.
     virtual int Ungroup( const TOOL_EVENT& aEvent );
 
+    ///< Add selection to group.
+    virtual int AddToGroup( const TOOL_EVENT& aEvent );
+
     ///< Remove selection from group.
     virtual int RemoveFromGroup( const TOOL_EVENT& aEvent );
 
@@ -64,6 +67,10 @@ public:
 protected:
     ///< Set up handlers for various events.
     void setTransitions() override;
+
+    ///< Get the correctly casted group type from the item.
+    /// Works around our lack of working dynamic_cast.
+    virtual EDA_GROUP* getGroupFromItem( EDA_ITEM* ) = 0;
 
     ///< Subclasses implement to provide correct *_COMMIT object type
     virtual std::shared_ptr<COMMIT> createCommit() = 0;

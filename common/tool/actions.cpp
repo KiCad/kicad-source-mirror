@@ -209,6 +209,13 @@ TOOL_ACTION ACTIONS::ungroup( TOOL_ACTION_ARGS()
         .Tooltip( _( "Ungroup any selected groups" ) )
         .Icon( BITMAPS::group_ungroup ) );
 
+TOOL_ACTION ACTIONS::addToGroup( TOOL_ACTION_ARGS()
+        .Name( "common.Interactive.addToGroup" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Add Items" ) )
+        .Tooltip( _( "Add items to group" ) )
+        .Icon( BITMAPS::group_remove ) );
+
 TOOL_ACTION ACTIONS::removeFromGroup( TOOL_ACTION_ARGS()
         .Name( "common.Interactive.removeFromGroup" )
         .Scope( AS_GLOBAL )

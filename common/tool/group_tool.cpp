@@ -44,6 +44,7 @@ public:
 
         Add( ACTIONS::group );
         Add( ACTIONS::ungroup );
+        Add( ACTIONS::addToGroup );
         Add( ACTIONS::removeFromGroup );
     }
 
@@ -62,6 +63,8 @@ private:
         bool canGroup = false;
         bool hasGroup = false;
         bool hasMember = false;
+        bool onlyOneGroup = false;
+        bool hasUngroupedItems = false;
 
         if( m_selectionTool != nullptr )
         {
@@ -70,7 +73,18 @@ private:
                 canGroup = true;
 
                 if( item->Type() == PCB_GROUP_T || item->Type() == SCH_GROUP_T )
-                    hasGroup = true;
+                {
+                    // Only allow one group to be selected for adding to existing group
+                    if( hasGroup )
+                        onlyOneGroup = false;
+                    else
+                    {
+                        onlyOneGroup = true;
+                        hasGroup = true;
+                    }
+                }
+                else if( !item->GetParentGroup() )
+                    hasUngroupedItems = true;
 
                 if( item->GetParentGroup() )
                     hasMember = true;
@@ -79,6 +93,7 @@ private:
 
         Enable( ACTIONS::group.GetUIId(),           canGroup );
         Enable( ACTIONS::ungroup.GetUIId(),         hasGroup );
+        Enable( ACTIONS::addToGroup.GetUIId(),      onlyOneGroup && hasUngroupedItems );
         Enable( ACTIONS::removeFromGroup.GetUIId(), hasMember );
     }
 
@@ -175,6 +190,47 @@ int GROUP_TOOL::Ungroup( const TOOL_EVENT& aEvent )
 }
 
 
+int GROUP_TOOL::AddToGroup( const TOOL_EVENT& aEvent )
+{
+    const SELECTION& selection = m_selectionTool->GetSelection();
+
+    EDA_ITEM* group = nullptr;
+    EDA_ITEMS toAdd;
+
+    for( EDA_ITEM* item : selection )
+    {
+        if( item->Type() == PCB_GROUP_T || item->Type() == SCH_GROUP_T )
+        {
+            // Only allow one group to be selected for adding to existing group
+            if( group != nullptr )
+                return 0;
+
+            group = item;
+        }
+        else if( !item->GetParentGroup() )
+            toAdd.push_back( item );
+    }
+
+    if( !group || toAdd.empty() )
+        return 0;
+
+    m_toolMgr->RunAction( ACTIONS::selectionClear );
+
+    m_commit->Modify( group, m_frame->GetScreen() );
+
+    for( EDA_ITEM* item : toAdd )
+        m_commit->Stage( item, CHT_GROUP, m_frame->GetScreen() );
+
+    m_commit->Push( _( "Add Items to Group" ) );
+
+    m_selectionTool->AddItemToSel( group );
+    m_toolMgr->PostEvent( EVENTS::SelectedItemsModified );
+    m_frame->OnModify();
+
+    return 0;
+}
+
+
 int GROUP_TOOL::RemoveFromGroup( const TOOL_EVENT& aEvent )
 {
     const SELECTION& selection = m_selectionTool->GetSelection();
@@ -225,6 +281,7 @@ void GROUP_TOOL::setTransitions()
 
     Go( &GROUP_TOOL::Group,                   ACTIONS::group.MakeEvent() );
     Go( &GROUP_TOOL::Ungroup,                 ACTIONS::ungroup.MakeEvent() );
+    Go( &GROUP_TOOL::AddToGroup,              ACTIONS::addToGroup.MakeEvent() );
     Go( &GROUP_TOOL::RemoveFromGroup,         ACTIONS::removeFromGroup.MakeEvent() );
     Go( &GROUP_TOOL::EnterGroup,              ACTIONS::groupEnter.MakeEvent() );
     Go( &GROUP_TOOL::LeaveGroup,              ACTIONS::groupLeave.MakeEvent() );
