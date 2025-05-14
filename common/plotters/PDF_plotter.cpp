@@ -829,7 +829,7 @@ void PDF_PLOTTER::ClosePage()
             };
 
     // Handle annotations (at the moment only "link" type objects)
-    std::vector<int> hyperlinkHandles;
+    std::vector<int> annotHandles;
 
     // Allocate all hyperlink objects for the page and calculate their position in user space
     // coordinates
@@ -845,9 +845,9 @@ void PDF_PLOTTER::ClosePage()
         userSpaceBox.SetOrigin( bottomLeft );
         userSpaceBox.SetEnd( topRight );
 
-        hyperlinkHandles.push_back( allocPdfObject() );
+        annotHandles.push_back( allocPdfObject() );
 
-        m_hyperlinkHandles.insert( { hyperlinkHandles.back(), { userSpaceBox, url } } );
+        m_hyperlinkHandles.insert( { annotHandles.back(), { userSpaceBox, url } } );
     }
 
     for( const std::pair<BOX2I, std::vector<wxString>>& menuPair : m_hyperlinkMenusInPage )
@@ -862,22 +862,31 @@ void PDF_PLOTTER::ClosePage()
         userSpaceBox.SetOrigin( bottomLeft );
         userSpaceBox.SetEnd( topRight );
 
-        hyperlinkHandles.push_back( allocPdfObject() );
+        annotHandles.push_back( allocPdfObject() );
 
-        m_hyperlinkMenuHandles.insert( { hyperlinkHandles.back(), { userSpaceBox, urls } } );
+        m_hyperlinkMenuHandles.insert( { annotHandles.back(), { userSpaceBox, urls } } );
     }
+
+    int annot3DHandle = -1;
+
+    if( m_3dExportMode )
+    {
+        annot3DHandle = allocPdfObject();
+        annotHandles.push_back( annot3DHandle );
+    }
+
 
     int hyperLinkArrayHandle = -1;
 
     // If we have added any annotation links, create an array containing all the objects
-    if( hyperlinkHandles.size() > 0 )
+    if( annotHandles.size() > 0 )
     {
         hyperLinkArrayHandle = startPdfObject();
         bool isFirst = true;
 
         fmt::print( m_outputFile, "[" );
 
-        for( int handle : hyperlinkHandles )
+        for( int handle : annotHandles )
         {
             if( isFirst )
                 isFirst = false;
@@ -891,14 +900,6 @@ void PDF_PLOTTER::ClosePage()
         closePdfObject();
     }
 
-    int annot3DHandle = -1;
-
-    if( m_3dExportMode )
-    {
-        annot3DHandle = allocPdfObject();
-    }
-
-
     // Emit the page object and put it in the page list for later
     int pageHandle = startPdfObject();
     m_pageHandles.push_back( pageHandle );
@@ -911,30 +912,13 @@ void PDF_PLOTTER::ClosePage()
                 "    /ProcSet [/PDF /Text /ImageC /ImageB]\n"
                 "    /Font {} 0 R\n"
                 "    /XObject {} 0 R >>\n"
-                "/MediaBox [0 0 {:g} {:g}]\n",
-                m_pageTreeHandle,
-                m_fontResDictHandle,
-                m_imgResDictHandle,
-                psPaperSize.x,
-                psPaperSize.y );
+                "/MediaBox [0 0 {:g} {:g}]\n"
+                "/Contents {} 0 R\n",
+                m_pageTreeHandle, m_fontResDictHandle, m_imgResDictHandle, psPaperSize.x, psPaperSize.y,
+                m_pageStreamHandle );
 
-    if( m_pageStreamHandle != -1 )
-    {
-        fmt::print( m_outputFile, "/Contents {} 0 R\n", m_pageStreamHandle );
-    }
-
-    std::vector<std::string> annots;
-    if( m_3dModelHandle != -1 )
-    {
-        annots.push_back( fmt::format( "{} 0 R", annot3DHandle ) );
-    }
-
-    if( hyperlinkHandles.size() > 0 )
-    {
-        annots.push_back( fmt::format( "{} 0 R", hyperLinkArrayHandle ) );
-    }
-
-    fmt::print( m_outputFile, "/Annots [{}]\n", fmt::join( annots, " " ) );
+    if( annotHandles.size() > 0 )
+        fmt::print( m_outputFile, "/Annots {} 0 R", hyperLinkArrayHandle );
 
     fmt::print( m_outputFile, ">>\n" );
 
