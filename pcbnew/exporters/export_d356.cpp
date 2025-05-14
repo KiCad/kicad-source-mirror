@@ -169,7 +169,7 @@ static int via_access_code( BOARD *aPcb, int top_layer, int bottom_layer )
 
     // It's a buried via, accessible from some inner layer
     // (maybe could be used for testing before laminating? no idea)
-    return bottom_layer + 1; // XXX is this correct?
+    return ( top_layer / 2 ) + 1;
 }
 
 /* Extract the D356 record from the vias */
@@ -310,8 +310,10 @@ void IPC356D_WRITER::write_D356_records( std::vector <D356_RECORD> &aRecords, FI
         {
             if( rk.mechanical )
                 rktype = 367;
-            else
+            else if( rk.access == 0 ) // This is a through-hole via
                 rktype = 317;
+            else                      // All others are either blind or buried
+                rktype = 307;
         }
 
         // Operation code, signal and component
