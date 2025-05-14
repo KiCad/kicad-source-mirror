@@ -320,7 +320,10 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
             }
 
             if( boardItem->Type() == PCB_GROUP_T || boardItem->Type() == PCB_GENERATOR_T )
+            {
+                wxASSERT_MSG( !addedGroup, "Multiple groups in a single commit. This is not supported." );
                 addedGroup = static_cast<PCB_GROUP*>( boardItem );
+            }
 
             if( boardItem->Type() != PCB_MARKER_T )
                 propagateDamage( boardItem, staleZones );
@@ -465,6 +468,12 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
                     connectivity->MarkItemNetAsDirty( boardItemCopy );
 
                 connectivity->Update( boardItem );
+            }
+
+            if( boardItem->Type() == PCB_GROUP_T || boardItem->Type() == PCB_GENERATOR_T )
+            {
+                wxASSERT_MSG( !addedGroup, "Multiple groups in a single commit. This is not supported." );
+                addedGroup = static_cast<PCB_GROUP*>( boardItem );
             }
 
             if( boardItem->Type() != PCB_MARKER_T )

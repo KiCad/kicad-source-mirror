@@ -283,7 +283,10 @@ void SCH_COMMIT::pushSchEdit( const wxString& aMessage, int aCommitFlags )
             }
 
             if( schItem->Type() == SCH_GROUP_T )
+            {
+                wxASSERT_MSG( !addedGroup, "Multiple groups in a single commit. This is not supported." );
                 addedGroup = static_cast<SCH_GROUP*>( schItem );
+            }
 
             if( frame )
                 frame->UpdateItem( schItem, true, true );
@@ -372,6 +375,12 @@ void SCH_COMMIT::pushSchEdit( const wxString& aMessage, int aCommitFlags )
 
                 undoList.PushItem( itemWrapper );
                 ent.m_copy = nullptr;   // We've transferred ownership to the undo list
+            }
+
+            if( schItem->Type() == SCH_GROUP_T )
+            {
+                wxASSERT_MSG( !addedGroup, "Multiple groups in a single commit. This is not supported." );
+                addedGroup = static_cast<SCH_GROUP*>( schItem );
             }
 
             if( frame )
