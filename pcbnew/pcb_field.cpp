@@ -40,10 +40,16 @@ PCB_FIELD::PCB_FIELD( FOOTPRINT* aParent, int aFieldId, const wxString& aName ) 
 
 
 PCB_FIELD::PCB_FIELD( const PCB_TEXT& aText, int aFieldId, const wxString& aName ) :
-        PCB_TEXT( aText ),
+        PCB_TEXT( aText.GetParent(), PCB_FIELD_T ),
         m_id( aFieldId ),
         m_name( aName )
 {
+    // Copy the text properties from the PCB_TEXT
+    SetText( aText.GetText() );
+    SetVisible( aText.IsVisible() );
+    SetLayer( aText.GetLayer() );
+    SetPosition( aText.GetPosition() );
+    SetAttributes( aText.GetAttributes() );
 }
 
 
