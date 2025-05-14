@@ -3380,6 +3380,10 @@ int SCH_DRAWING_TOOLS::AutoPlaceAllSheetPins( const TOOL_EVENT& aEvent )
     REENTRANCY_GUARD guard( &m_inDrawingTool );
 
     SCH_SHEET* sheet = dynamic_cast<SCH_SHEET*>( m_selectionTool->GetSelection().Front() );
+
+    if( !sheet )
+        return 0;
+
     std::vector<SCH_HIERLABEL*> labels = importHierLabels( sheet );
 
     if( labels.empty() )
