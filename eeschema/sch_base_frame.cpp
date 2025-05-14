@@ -513,6 +513,11 @@ void SCH_BASE_FRAME::RemoveFromScreen( EDA_ITEM* aItem, SCH_SCREEN* aScreen )
     if( screen == GetScreen() )
         GetCanvas()->GetView()->Remove( aItem );
 
+    EDA_GROUP* parentGroup = aItem->GetParentGroup();
+
+    if( parentGroup && !( parentGroup->AsEdaItem()->GetFlags() & STRUCT_DELETED ) )
+        parentGroup->RemoveItem( aItem );
+
     if( aItem->Type() != SCH_TABLECELL_T )
         screen->Remove( (SCH_ITEM*) aItem );
 
