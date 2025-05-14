@@ -348,3 +348,30 @@ S!000004!!!!NO!1.000000!0 mho/cm!AIR!!0 mil!
 * Figureed out several layer maps by comparing unmapped layers with cooridinates.
   * DRAWING FORMAT is class 4, as it have the largest numbers and seems to work
 * https://www.artwork.com/all2dxf/alleggeo.htm seems to be in order. 0xFD looks like the highest in each class, and then count backwards. SO ASSEMBLY_TOP in DEVICE_TYPE is 0xFD, and ASSEMBLY_BOTTOM is 0xFC and so on. 
+
+
+## 2025-05-14
+
+* More work on layers on KiCad side
+* Iterate 0x1B -> 0x04 -> 0x05/0x33/0x32/0x2E lists for connected things
+* 0x32 - next was wrong - there is a next for connection iteration, but another one for when iterating the footprint from 0x2B/0x2E
+* 0x2E - first unknown is next, found some more pointers, but unsure what it is:
+```
+  Object type : 0x2e
+  Key         : 0xf7cffb0
+  next        : 0x0f7cf270 (0x05)
+  net_ptr     : 0x0f7d0560 (0x04)
+  connection  : 0x0f7cfbb8 (0x05)
+  coords      : (959, 550)
+  unknown_1   : 0x20
+  unknown_4   : 0x0
+  
+but only these coords match:
+ 
+S!ETCH!TOP!305 1!LINE!257!959!540!959!550!20!!!!!CONNECT!!!!!!!!N13829!!!!!
+S!ETCH!TOP!306 1!LINE!257!959!550!959!609!20!!!!!CONNECT!!!!!!!!N13829!!!!!
+S!ETCH!TOP!307 4!LINE!257!928!581!959!550!20!!!!!CONNECT!!!!!!!!N13829!!!!!
+```
+
+* One 0x2E seems to be referred to by several 0x05s (one as next and ptr2a and 3a of two directly linked 0x2Es, so 2a, 3a might be forward/backlinks)
+* PreAmp only has 4 of them

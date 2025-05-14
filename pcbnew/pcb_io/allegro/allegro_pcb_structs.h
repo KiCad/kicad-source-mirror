@@ -60,6 +60,9 @@ public:
     uint8_t GetBlockType() const { return m_blockType; }
     size_t  GetOffset() const { return m_offset; }
 
+    // If this block data has a key, return it, else 0
+    uint32_t GetKey() const;
+
 private:
     uint8_t m_blockType;
     size_t  m_offset;
@@ -454,8 +457,8 @@ struct BLK_0x04_NET_ASSIGNMENT
     uint16_t m_R;
     uint32_t m_Key;
     uint32_t m_Next;
-    uint32_t m_Ptr1;
-    uint32_t m_Ptr2;
+    uint32_t m_Net;
+    uint32_t m_ConnItem;
 
     COND_GE<FMT_VER::V_174, uint32_t> m_Unknown;
 };
@@ -828,8 +831,8 @@ struct BLK_0x1B_NET
 
     uint32_t m_Type;
 
-    uint32_t m_UnknownPtr1;
-    uint32_t m_UnknownPtr2;
+    uint32_t m_Assignment;
+    uint32_t m_Ratline;
     uint32_t m_PathStrPtr;
     uint32_t m_UnknownPtr3;
     uint32_t m_ModelPtr;
@@ -1346,8 +1349,9 @@ struct BLK_0x2E
     uint8_t  m_Type;
     uint16_t m_T2;
     uint32_t m_Key;
+    uint32_t m_Next;
 
-    std::array<uint32_t, 7> m_UnknownArray;
+    std::array<uint32_t, 6> m_UnknownArray;
 
     COND_GE<FMT_VER::V_172, uint32_t> m_Unknown1;
 };
@@ -1464,13 +1468,13 @@ struct BLK_0x32_PLACED_PAD
     uint8_t    m_Type;
     LAYER_INFO m_Layer;
     uint32_t   m_Key;
-    uint32_t   m_Unknown1;
+    uint32_t   m_Next;
     uint32_t   m_NetPtr;
     uint32_t   m_Flags;
 
     COND_GE<FMT_VER::V_172, uint32_t> m_Prev;
 
-    uint32_t m_Next;
+    uint32_t m_NextInFp;
     uint32_t m_Ptr3;
     uint32_t m_Ptr4;
     uint32_t m_PadPtr;
@@ -1495,7 +1499,7 @@ struct BLK_0x33_VIA
 {
     LAYER_INFO m_LayerInfo;
     uint32_t   m_Key;
-    uint32_t   m_Unknown1;
+    uint32_t   m_Next;
     uint32_t   m_NetPtr;
     uint32_t   m_Unknown2;
 
@@ -1505,10 +1509,11 @@ struct BLK_0x33_VIA
 
     COND_GE<FMT_VER::V_172, uint32_t> m_UnknownPtr2;
 
-    std::array<int32_t, 2> m_Coords;
+    int32_t m_CoordsX;
+    int32_t m_CoordsY;
 
-    uint32_t m_UnknownPtr3;
-    uint32_t m_UnknownPtr4;
+    uint32_t m_Connection;
+    uint32_t m_Padstack;
     uint32_t m_UnknownPtr5;
     uint32_t m_UnknownPtr6;
 

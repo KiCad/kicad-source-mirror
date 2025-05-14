@@ -72,7 +72,7 @@ private:
 
         if( block->GetBlockType() != aType )
         {
-            reportUnexpectedBlockType( block->GetBlockType(), aType, aKey );
+            reportUnexpectedBlockType( block->GetBlockType(), aType, aKey, block->GetOffset() );
             return nullptr;
         }
 
@@ -80,7 +80,8 @@ private:
     }
 
     void reportMissingBlock( uint8_t aKey, uint8_t aType ) const;
-    void reportUnexpectedBlockType( uint8_t aGot, uint8_t aExpected, uint32_t aKey ) const;
+    void reportUnexpectedBlockType( uint8_t aGot, uint8_t aExpected, uint32_t aKey = 0, size_t aOffset = 0,
+                                    const wxString& aName = wxEmptyString ) const;
 
     PCB_LAYER_ID getLayer( const LAYER_INFO& aLayerInfo ) const;
 
@@ -90,10 +91,13 @@ private:
     std::vector<std::unique_ptr<PCB_SHAPE>> buildShapes( const BLK_0x14& aGraphicList, BOARD_ITEM_CONTAINER& aParent );
     std::unique_ptr<PCB_TEXT>  buildPcbText( const BLK_0x30_STR_WRAPPER& aStrWrapper, BOARD_ITEM_CONTAINER& aParent );
     std::unique_ptr<FOOTPRINT> buildFootprint( const BLK_0x2D& aFpInstance );
+    std::vector<std::unique_ptr<BOARD_ITEM>> buildTrack( const BLK_0x05_TRACK& aBlock, int aNetcode );
+    std::unique_ptr<BOARD_ITEM>              buildVia( const BLK_0x33_VIA& aBlock, int aNetcode );
 
     void cacheFontDefs();
     void setupLayers();
     void createNets();
+    void createTracks();
     /**
      * Get the font definition for a given index in a 0x30, etc.
      *

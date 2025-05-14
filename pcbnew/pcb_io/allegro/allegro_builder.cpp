@@ -68,7 +68,9 @@ static uint32_t GetPrimaryNext( const BLOCK_BASE& aBlock )
 
     switch( type )
     {
+    case 0x01: return BLK_FIELD( BLK_0x01_ARC, m_Next );
     case 0x04: return BLK_FIELD( BLK_0x04_NET_ASSIGNMENT, m_Next );
+    case 0x05: return BLK_FIELD( BLK_0x05_TRACK, m_Next );
     case 0x14: return BLK_FIELD( BLK_0x14, m_Next );
     case 0x15:
     case 0x16:
@@ -76,7 +78,11 @@ static uint32_t GetPrimaryNext( const BLOCK_BASE& aBlock )
     case 0x1B: return BLK_FIELD( BLK_0x1B_NET, m_Next );
     case 0x2B: return BLK_FIELD( BLK_0x2B, m_Next );
     case 0x2D: return BLK_FIELD( BLK_0x2D, m_Next );
+    case 0x2E: return BLK_FIELD( BLK_0x2E, m_Next );
     case 0x30: return BLK_FIELD( BLK_0x30_STR_WRAPPER, m_Next );
+    case 0x31: return 0; // Doesn't exist
+    case 0x32: return BLK_FIELD( BLK_0x32_PLACED_PAD, m_Next );
+    case 0x33: return BLK_FIELD( BLK_0x33_VIA, m_Next );
     case 0x36: return BLK_FIELD( BLK_0x36, m_Next );
     default: return 0;
     }
@@ -239,7 +245,7 @@ static const std::unordered_map<LAYER_INFO, wxString> s_OptionalFixedMappings = 
 
 
 /**
- * Class to handle the mapping for Allero CLASS/SUBCLASS idiom to KiCad layers.
+ * Class to handle the mapping for Allegro CLASS/SUBCLASS idiom to KiCad layers.
  */
 class ALLEGRO::LAYER_MAPPER
 {
@@ -305,24 +311,25 @@ public:
      */
     void FinalizeLayers()
     {
-        std::unordered_map<const CUSTOM_LAYER*, PCB_LAYER_ID> layerToId;
-
         // Process all the Etch layers
         const std::vector<CUSTOM_LAYER>& etchLayers = *m_ClassCustomLayerLists[LAYER_INFO::CLASS::ETCH];
 
-        const size_t numCuLayers = etchLayers.size();
+        const int numCuLayers = etchLayers.size();
         m_board.GetDesignSettings().SetCopperLayerCount( numCuLayers );
         for( size_t li = 0; li < numCuLayers; ++li )
         {
+            const LAYER_INFO    layerInfo{ LAYER_INFO::CLASS::ETCH, static_cast<uint8_t>( li ) };
             const CUSTOM_LAYER& cLayer = etchLayers[li];
             const PCB_LAYER_ID  lId = getNthCopperLayer( li, numCuLayers );
-            layerToId[&cLayer] = lId;
+
+            m_customLayerToKiMap[layerInfo] = lId;
 
             m_board.SetLayerName( lId, cLayer.m_Name );
         }
 
         // At this point, we don't actually create all the custom layers, because in many designs, there
-        // are loads of them, and if we do that, we run out of User layers (for now...).
+        // are loads of them, but many are empty. If we  make too many empty layers, we run out of
+        // User layers (for now...).
         //
         // We'll assign dynamically as we discover usage of the layers.
     }
@@ -333,7 +340,7 @@ public:
         if( m_customLayerToKiMap.count( aLayerInfo ) )
             return m_customLayerToKiMap.at( aLayerInfo );
 
-        // It's a static mapping
+        // It's a static mapping to a standard layer
         if( s_LayerKiMap.count( aLayerInfo ) )
             return s_LayerKiMap.at( aLayerInfo );
 
@@ -341,6 +348,15 @@ public:
         if( m_ClassCustomLayerLists.count( aLayerInfo.m_Class ) )
         {
             const std::vector<CUSTOM_LAYER>* cLayerList = m_ClassCustomLayerLists.at( aLayerInfo.m_Class );
+
+            // if it is using the copper layer list, return that
+            if( cLayerList == m_ClassCustomLayerLists.at( LAYER_INFO::CLASS::ETCH ) )
+            {
+                const PCB_LAYER_ID cuLayer = getNthCopperLayer( aLayerInfo.m_Subclass, cLayerList->size() );
+                // Remember this mapping
+                m_customLayerToKiMap[aLayerInfo] = cuLayer;
+                return cuLayer;
+            }
 
             if( aLayerInfo.m_Subclass < cLayerList->size() )
             {
@@ -450,7 +466,8 @@ private:
     /**
      * The main map from CLASS:SUBCLASS custom mappings to KiCadLayers
      *
-     * This doesn't cover all the fixed layers, just created custom ones.
+     * This doesn't cover all the fixed layers, just created custom ones,
+     * including the copper layers.
      */
     std::unordered_map<LAYER_INFO, PCB_LAYER_ID> m_customLayerToKiMap;
 
@@ -519,11 +536,17 @@ void BOARD_BUILDER::reportMissingBlock( uint8_t aKey, uint8_t aType ) const
 }
 
 
-void BOARD_BUILDER::reportUnexpectedBlockType( uint8_t aGot, uint8_t aExpected, uint32_t aKey ) const
+void BOARD_BUILDER::reportUnexpectedBlockType( uint8_t aGot, uint8_t aExpected, uint32_t aKey, size_t aOffset,
+                                               const wxString& aName ) const
 {
-    m_reporter.Report( wxString::Format( "Object with key {#010x} has unexpected type %#04x (expected %#04x)", aKey,
-                                         aGot, aExpected ),
-                       RPT_SEVERITY_WARNING );
+    wxString name = aName.IsEmpty() ? wxString( "Object" ) : aName;
+    wxString withKey = ( aKey == 0 ) ? wxString( "" ) : wxString::Format( ", with key %#04x ", aKey );
+    wxString withOffset = ( aOffset == 0 ) ? wxString( "" ) : wxString::Format( ", at offset %#04x ", aOffset );
+
+    wxString s = wxString::Format( "%s has unexpected type %#04x (expected %#04x)%s%s", name, aGot, aExpected, withKey,
+                                   withOffset );
+
+    m_reporter.Report( s, RPT_SEVERITY_WARNING );
 }
 
 
@@ -575,9 +598,7 @@ void BOARD_BUILDER::createNets()
         const uint8_t type = block->GetBlockType();
         if( type != BLOCK_TYPE::x1B_NET )
         {
-            m_reporter.Report( wxString::Format( "Found unexpected net object of type %#04x at offset %lu", type,
-                                                 block->GetOffset() ),
-                               RPT_SEVERITY_WARNING );
+            reportUnexpectedBlockType( type, BLOCK_TYPE::x1B_NET, 0, block->GetOffset(), "Net" );
             continue;
         }
 
@@ -939,12 +960,164 @@ std::unique_ptr<FOOTPRINT> BOARD_BUILDER::buildFootprint( const BLK_0x2D& aFpIns
     return fp;
 }
 
+std::vector<std::unique_ptr<BOARD_ITEM>> BOARD_BUILDER::buildTrack( const BLK_0x05_TRACK& aTrackBlock, int aNetCode )
+{
+    std::vector<std::unique_ptr<BOARD_ITEM>> items;
+
+    const PCB_LAYER_ID layer = getLayer( aTrackBlock.m_Layer );
+
+    LL_WALKER segWalker{ aTrackBlock.m_FirstSegPtr, aTrackBlock.m_Key, m_rawBoard };
+    for( const BLOCK_BASE* block : segWalker )
+    {
+        const uint8_t segType = block->GetBlockType();
+
+        switch( segType )
+        {
+        case 0x15:
+        case 0x16:
+        case 0x17:
+        {
+            const BLK_0x15_16_17_SEGMENT& segInfo =
+                    static_cast<const BLOCK<BLK_0x15_16_17_SEGMENT>&>( *block ).GetData();
+
+            VECTOR2I start{ segInfo.m_StartX, segInfo.m_StartY };
+            VECTOR2I end{ segInfo.m_EndX, segInfo.m_EndY };
+            int      width = static_cast<int>( segInfo.m_Width );
+
+            std::unique_ptr<PCB_TRACK> seg = std::make_unique<PCB_TRACK>( &m_board );
+
+            seg->SetNetCode( aNetCode );
+            seg->SetLayer( layer );
+
+            seg->SetStart( scale( start ) );
+            seg->SetEnd( scale( end ) );
+            seg->SetWidth( scale( width ) );
+
+            items.push_back( std::move( seg ) );
+        }
+            // Segment
+        case 0x01:
+            // Arc
+        default: break;
+        }
+    }
+    return items;
+}
+
+
+std::unique_ptr<BOARD_ITEM> BOARD_BUILDER::buildVia( const BLK_0x33_VIA& aViaData, int aNetCode )
+{
+    VECTOR2I viaPos{ aViaData.m_CoordsX, aViaData.m_CoordsY };
+
+    const BLK_0x1C_PADSTACK* viaPadstack = expectBlockByKey<BLK_0x1C_PADSTACK>( aViaData.m_Padstack, 0x1C );
+
+    if( !viaPadstack )
+        return nullptr;
+
+    std::unique_ptr<PCB_VIA> via = std::make_unique<PCB_VIA>( &m_board );
+    via->SetPosition( scale( viaPos ) );
+    via->SetNetCode( aNetCode );
+
+    via->SetTopLayer( F_Cu );
+    via->SetBottomLayer( B_Cu );
+    via->SetWidth( F_Cu, 1000000 );
+
+    return via;
+}
+
+
+void BOARD_BUILDER::createTracks()
+{
+    std::vector<BOARD_ITEM*> newItems;
+
+    // We need to walk this list again - we could do this all in createNets, but this seems tidier.
+    LL_WALKER netWalker{ m_rawBoard.m_Header->m_LL_0x1B_Nets, m_rawBoard };
+    for( const BLOCK_BASE* block : netWalker )
+    {
+        const uint8_t type = block->GetBlockType();
+        if( type != BLOCK_TYPE::x1B_NET )
+        {
+            reportUnexpectedBlockType( type, BLOCK_TYPE::x1B_NET, 0, block->GetOffset(), "Net" );
+            continue;
+        }
+
+        const auto& net = static_cast<const BLOCK<BLK_0x1B_NET>&>( *block ).GetData();
+
+        const int netCode = m_netCache.at( net.m_Key )->GetNetCode();
+
+        LL_WALKER assignmentWalker{ net.m_Assignment, net.m_Key, m_rawBoard };
+        for( const BLOCK_BASE* assignBlock : assignmentWalker )
+        {
+            if( assignBlock->GetBlockType() != 0x04 )
+            {
+                reportUnexpectedBlockType( assignBlock->GetBlockType(), 0x04, 0, block->GetOffset(), "Net assignment" );
+                continue;
+            }
+
+            // std::cout << wxString::Format("Net assignment" ) << std::endl;
+
+            const auto& assign = static_cast<const BLOCK<BLK_0x04_NET_ASSIGNMENT>&>( *assignBlock ).GetData();
+
+            // Walk the 0x05/0x32/... list
+            LL_WALKER connWalker{ assign.m_ConnItem, assign.m_Key, m_rawBoard };
+            for( const BLOCK_BASE* connItemBlock : connWalker )
+            {
+                const uint8_t connType = connItemBlock->GetBlockType();
+
+                // std::cout << wxString::Format(" Object %#04x key %#010x", connType, connItemBlock->GetKey() ) << std::endl;
+
+                // One connected item can be multiple KiCad objects, e.g.
+                // 0x05 track -> list of segments/arcs
+                std::vector<std::unique_ptr<BOARD_ITEM>> newItemList;
+
+                switch( connType )
+                {
+                // Track
+                case 0x05:
+                {
+                    const BLK_0x05_TRACK& trackData =
+                            static_cast<const BLOCK<BLK_0x05_TRACK>&>( *connItemBlock ).GetData();
+                    newItemList = buildTrack( trackData, netCode );
+                    break;
+                }
+                case 0x33:
+                {
+                    const BLK_0x33_VIA& viaData = static_cast<const BLOCK<BLK_0x33_VIA>&>( *connItemBlock ).GetData();
+                    newItemList.push_back( buildVia( viaData, netCode ) );
+                    break;
+                }
+                case 0x32:
+                {
+                    // This is a pad in a footprint - we don't need to handle this here, as we do all the footprint
+                    // pads, connected or not, in the footprint step.
+                    break;
+                }
+                case 0x28: // Polygon
+                case 0x2E: // This is something else
+                default:
+                {
+                    std::cout << "  Unhandled connected item code" << (int) connType << std::endl;
+                }
+                }
+
+                for( std::unique_ptr<BOARD_ITEM>& newItem : newItemList )
+                {
+                    newItems.push_back( newItem.get() );
+                    m_board.Add( newItem.release(), ADD_MODE::BULK_APPEND );
+                }
+            }
+        }
+    }
+
+    m_board.FinalizeBulkAdd( newItems );
+}
+
 
 bool BOARD_BUILDER::BuildBoard()
 {
     if( m_progressReporter )
     {
-        m_progressReporter->AddPhases( 3 );
+        m_progressReporter->AddPhases( 4 );
         m_progressReporter->AdvancePhase( _( "Constructing caches" ) );
     }
 
@@ -955,6 +1128,11 @@ bool BOARD_BUILDER::BuildBoard()
         m_progressReporter->AdvancePhase( _( "Creating nets" ) );
 
     createNets();
+
+    if( m_progressReporter )
+        m_progressReporter->AdvancePhase( _( "Creating tracks" ) );
+
+    createTracks();
 
     if( m_progressReporter )
     {

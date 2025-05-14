@@ -103,10 +103,12 @@ A net assignment is a very small object that adds some other object to a net.
 * `conn_item` - points to some object to be assigned the net:
   * `0x05 TRACK`
   * `0x32 PLACED PAD`
+  * `0x33 VIA`
+  * `0x2E`
 
 ## Connected items
 
-### 0x05
+### 0x05 TRACK
 
 This appears to be a collection of connected items:
 
@@ -114,6 +116,26 @@ This appears to be a collection of connected items:
 * `next`: links a list of other `0x05` block, `0x32 PLACED_PAD` and finally returns to an `0x04 NET_ASSIGNMENT`.
 * `net_assignment`: back-links to the relevant `0x04 NET_ASSIGNMENT`
 * `first_segment`: links to the start of a list of segments (`0x15`, `0x16`, `0x17`) representing track segments
+
+### 0x32 PLACED_PAD
+
+This is instance of a padstack at some specific point. These are linked to via `0x04 NET ASSIGNMENT` (if connected(?)), as well as from the parent `0x2B/0x2E` footprint or footprint instance.
+
+* `next` the next item in some list the pad is in
+* `next_in_fp` the next `0x32 PLACED PAD` in the footprint, or the `0x2B/0x2D` parent footprint at the end
+* `net` the `0x04 NET ASSIGNMENT` the pad has
+* `pad` the `0x0D PAD` which holds the pad geometry
+* `coords` the pad position
+
+### 0x33 VIA
+
+These are vias - instances of a padstack with some position and net assignment.
+
+* `next` the next item in some list the via is in
+* `net` the `0x04 NET ASSIGNMENT` the via has
+* `0x1C PADSTACK` pointer
+* `0x05` pointer to a track
+* `coords` the location
 
 ## Footprints
 
@@ -161,5 +183,5 @@ List of the layers in one film.
 ### 0x3a FILM_LIST_NODE
 
 * `next` for iteration
-* The layer included in the film by this node
+* The layer (class/subclass) included in the film by this node
 * `unknown_1`

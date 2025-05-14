@@ -427,6 +427,19 @@ class AllegroBoard:
             prntr.print_ptr("next", d)
             prntr.print_layer(d.layer)
 
+            prntr.print_ptr("ptr1", d)
+            prntr.print_ptr("ptr2", d)
+            prntr.print_ptr("ptr3", d)
+
+            prntr.print_coords("coords_0", d.coords_0)
+            prntr.print_coords("coords_1", d.coords_1)
+
+            prntr.print_v("unknown_1", d)
+            prntr.print_v("unknown_2", d)
+            prntr.print_v("unknown_3", d)
+            prntr.print_v("unknown_4", d)
+
+
         elif t == 0x24: # Rectangle
             prntr.print_layer(d.layer)
             prntr.print_coords("pt0", d.coords_0)
@@ -530,6 +543,15 @@ class AllegroBoard:
                 # Deref the reference for convenience to see which FP this is
                 prntr.print_s("ref>refdes", brd.object(ref).data.ref_des_ref)
 
+        elif t == 0x2E:
+            prntr.print_ptr("next", d.next)
+            prntr.print_ptr("net_ptr", d)
+            prntr.print_ptr("connection", d)
+            prntr.print_coords("coords", d.coords)
+
+            prntr.print_v("unknown_1", d)
+            prntr.print_v("unknown_4", d)
+            prntr.print_v("unknown_5", d)
         elif t == 0x30:
             assert isinstance(d, allegro_brd.AllegroBrd.Type30StrWrapper)
             prntr.print_ptr("next", d.next)
@@ -568,13 +590,48 @@ class AllegroBoard:
 
         elif t == 0x32:
 
+            prntr.print_ptr("next", d)
+            prntr.print_ptr("prev", d)
+            prntr.print_ptr("next_in_fp", d)
+            prntr.print_ptr("parent_fp", d)
             prntr.print_ptr("net_ptr", d)
+            prntr.print_ptr("pad_ptr", d)
+            prntr.print_ptr("fp_inst", d)
+            prntr.print_ptr("pad_name", d)
+            prntr.print_ptr("parent_fp", d)
+            prntr.print_ptr("track", d)
+            prntr.print_ptr("ratline", d)
             prntr.print_v("flags", d)
 
             prntr.print_ptr("unknown_1", d)
 
             prntr.print_coords("coords_0", d.coords_0)
             prntr.print_coords("coords_1", d.coords_1)
+
+            prntr.print_ptr("ptr4", d)
+            prntr.print_ptr("ptr5", d)
+
+            prntr.print_ptr("ptr7", d)
+
+        elif t == 0x33:
+            assert isinstance(d, allegro_brd.AllegroBrd.Type33Via)
+            prntr.print_ptr("next", d)
+            prntr.print_ptr("net_ptr", d)
+            prntr.print_ptr("padstack", d)
+            prntr.print_ptr("connection", d)
+            prntr.print_ptr("ptr1", d)
+            prntr.print_ptr("ptr2", d)
+            prntr.print_ptr("ptr3", d)
+            prntr.print_ptr("ptr4", d)
+
+            prntr.print_v("unknown_1", d)
+            prntr.print_v("unknown_2", d)
+            prntr.print_v("unknown_3", d)
+            prntr.print_v("unknown_4", d)
+
+            prntr.print_coords("pos", d.pos)
+
+
 
         elif t == 0x36:
             assert isinstance(d, allegro_brd.AllegroBrd.Type36)

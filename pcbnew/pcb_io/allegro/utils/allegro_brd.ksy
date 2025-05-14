@@ -1447,24 +1447,31 @@ types:
         repeat-expr: 2
       - id: ptr1
         type: u4
+        doc: 0x32
       - id: ptr2
         type: u4
+        doc: 0x23 or null
       - id: ptr3
         type: u4
-      - id: coords
-        type: s4
-        repeat: expr
-        repeat-expr: 5
-      - id: un
+        doc: 0x32
+      - id: unknown_1
+        type: u4
+        doc: Seems zero?
+      - id: coords_0
+        type: coords
+      - id: coords_1
+        type: coords
+      - id: unknown_2
         type: u4
         repeat: expr
         repeat-expr: 4
-      - id: un2
+        doc: All zero?
+      - id: unknown_3
         type: u4
         repeat: expr
         repeat-expr: 4
         if: _root.ver >= 0x00130C00
-      - id: un1
+      - id: unknown_4
         type: u4
         if: _root.ver >= 0x00140900
 
@@ -1869,11 +1876,21 @@ types:
       - type: u2
       - id: key
         type: u4
-      - id: un
+      - id: next
         type: u4
-        repeat: expr
-        repeat-expr: 7
-      - id: un1
+      - id: net_ptr
+        type: u4
+        doc: Points to 0x04
+      - id: unknown_1
+        type: u4
+      - id: coords
+        type: coords
+      - id: connection
+        type: u4
+        doc: Points to 0x05
+      - id: unknown_4
+        type: u4
+      - id: unknown_5
         type: u4
         if: _root.ver >= 0x00140400
 
@@ -1999,37 +2016,52 @@ types:
         type: layer_info
       - id: key
         type: u4
-      - id: unknown_1
-        type: u4
-      - id: net_ptr
-        type: u4
-      - id: flags
-        type: b32
-      - id: prev
-        type: u4
-        if: _root.ver >= 0x00140400
       - id: next
         type: u4
-      - id: ptr3
+        doc: |
+           0x04/0x05 when iterating a net.
+           Null if the 32 is part of an 0x2B
+      - id: net_ptr
         type: u4
-      - id: ptr4
-        type: u4
-      - id: pad_ptr
-        type: u4
-      - id: ptr6
-        type: u4
-      - id: ptr7
-        type: u4
-      - id: ptr8
-        type: u4
-      - id: previous
-        type: u4
-      - id: un2
+        doc: |
+          0x04 net assignment
+          Null if part of an 0x2B.
+      - id: flags
+        type: b32
+      - id: prev  # in FP?
         type: u4
         if: _root.ver >= 0x00140400
-      - id: ptr10
+      - id: next_in_fp
         type: u4
-      - id: ptr11
+        doc: another 0x32, or 0x2B/02D
+      - id: parent_fp
+        type: u4
+        doc: 0x2B/0x2D
+      - id: track
+        type: u4
+        doc: Points to 0x05
+      - id: pad_ptr
+        type: u4
+        doc: Points to 0x0D
+      - id: ptr3
+        type: u4
+        doc: Points to 0x12
+      - id: ratline
+        type: u4
+        doc: 0x23
+      - id: ptr5
+        type: u4
+        doc: Points to 0x08
+      - id: fp_inst
+        type: u4
+        doc: Points to 0x07 or null
+      - id: unknown_1
+        type: u4
+        if: _root.ver >= 0x00140400
+      - id: pad_name
+        type: u4
+        doc: Pointer to 0x30
+      - id: ptr6
         type: u4
       - id: coords_0
         type: coords
@@ -2044,36 +2076,37 @@ types:
         type: layer_info
       - id: key
         type: u4
-      - id: un1
+      - id: next
         type: u4
       - id: net_ptr
         type: u4
-      - id: un2
+        doc: Points to 0x04 or 0x2B (if not connected?)
+      - id: unknown_1
         type: u4
-      - id: un4
+      - id: unknown_2
         type: u4
         if: _root.ver >= 0x00140400
+      - id: ptr1
+        type: u4
       - id: ptr2
         type: u4
-      - id: ptr7
-        type: u4
         if: _root.ver >= 0x00140400
-      - id: coords
-        type: s4
-        repeat: expr
-        repeat-expr: 2
+      - id: pos
+        type: coords
+      - id: connection
+        type: u4
+        doc: Points to 0x05
+      - id: padstack
+        type: u4
+        doc: Points to 0x1C
       - id: ptr3
         type: u4
       - id: ptr4
         type: u4
-      - id: ptr5
+      - id: unknown_3
         type: u4
-      - id: ptr6
+      - id: unknown_4
         type: u4
-      - id: un3
-        type: u4
-        repeat: expr
-        repeat-expr: 2
       - id: bb_coords
         type: s4
         repeat: expr

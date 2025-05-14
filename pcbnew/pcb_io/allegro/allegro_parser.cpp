@@ -429,8 +429,8 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x04_NET_ASSIGNMENT( FILE_STREAM& 
     data.m_R = aStream.ReadU16();
     data.m_Key = aStream.ReadU32();
     data.m_Next = aStream.ReadU32();
-    data.m_Ptr1 = aStream.ReadU32();
-    data.m_Ptr2 = aStream.ReadU32();
+    data.m_Net = aStream.ReadU32();
+    data.m_ConnItem = aStream.ReadU32();
 
     ReadCond( aStream, aVer, data.m_Unknown );
 
@@ -856,8 +856,8 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x1B_NET( FILE_STREAM& stream, FMT
     ReadCond( stream, aVer, data.m_Unknown2 );
 
     data.m_Type = stream.ReadU32();
-    data.m_UnknownPtr1 = stream.ReadU32();
-    data.m_UnknownPtr2 = stream.ReadU32();
+    data.m_Assignment = stream.ReadU32();
+    data.m_Ratline = stream.ReadU32();
     data.m_PathStrPtr = stream.ReadU32();
     data.m_UnknownPtr3 = stream.ReadU32();
     data.m_ModelPtr = stream.ReadU32();
@@ -1453,6 +1453,7 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x2E( FILE_STREAM& aStream, FMT_VE
     data.m_Type = aStream.ReadU8();
     data.m_T2 = aStream.ReadU16();
     data.m_Key = aStream.ReadU32();
+    data.m_Next = aStream.ReadU32();
 
     ReadArrayU32( aStream, data.m_UnknownArray );
 
@@ -1605,13 +1606,13 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x32_PLACED_PAD( FILE_STREAM& aStr
     data.m_Type = aStream.ReadU8();
     data.m_Layer = ParseLayerInfo( aStream );
     data.m_Key = aStream.ReadU32();
-    data.m_Unknown1 = aStream.ReadU32();
+    data.m_Next = aStream.ReadU32();
     data.m_NetPtr = aStream.ReadU32();
     data.m_Flags = aStream.ReadU32();
 
     ReadCond( aStream, aVer, data.m_Prev );
 
-    data.m_Next = aStream.ReadU32();
+    data.m_NextInFp = aStream.ReadU32();
     data.m_Ptr3 = aStream.ReadU32();
     data.m_Ptr4 = aStream.ReadU32();
     data.m_PadPtr = aStream.ReadU32();
@@ -1644,7 +1645,7 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x33_VIA( FILE_STREAM& aStream, FM
 
     data.m_LayerInfo = ParseLayerInfo( aStream );
     data.m_Key = aStream.ReadU32();
-    data.m_Unknown1 = aStream.ReadU32();
+    data.m_Next = aStream.ReadU32();
     data.m_NetPtr = aStream.ReadU32();
     data.m_Unknown2 = aStream.ReadU32();
 
@@ -1654,13 +1655,11 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x33_VIA( FILE_STREAM& aStream, FM
 
     ReadCond( aStream, aVer, data.m_UnknownPtr2 );
 
-    for( size_t i = 0; i < data.m_Coords.size(); ++i )
-    {
-        data.m_Coords[i] = aStream.ReadS32();
-    }
+    data.m_CoordsX = aStream.ReadS32();
+    data.m_CoordsY = aStream.ReadS32();
 
-    data.m_UnknownPtr3 = aStream.ReadU32();
-    data.m_UnknownPtr4 = aStream.ReadU32();
+    data.m_Connection = aStream.ReadU32();
+    data.m_Padstack = aStream.ReadU32();
     data.m_UnknownPtr5 = aStream.ReadU32();
     data.m_UnknownPtr6 = aStream.ReadU32();
 
@@ -2048,6 +2047,12 @@ static std::optional<uint32_t> GetBlockKey( const BLOCK_BASE& block )
     // clang-format off
 
     return std::nullopt;
+}
+
+
+uint32_t BLOCK_BASE::GetKey() const
+{
+    return GetBlockKey( *this ).value_or( 0 );
 }
 
 
