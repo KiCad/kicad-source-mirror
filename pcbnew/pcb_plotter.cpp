@@ -437,12 +437,12 @@ void PCB_PLOTTER::PlotJobToPlotOpts( PCB_PLOT_PARAMS& aOpts, JOB_EXPORT_PCB_PLOT
 
     COLOR_SETTINGS* colors = mgr.GetColorSettings( aJob->m_colorTheme );
 
-    if( colors->GetFilename() != theme )
+    if( colors->GetFilename() != theme && !aOpts.GetBlackAndWhite() )
     {
-        aReporter.Report( wxString::Format(
-                _( "Color theme '%s' not found, will use theme from PCB Editor settings.\n" ),
-                theme ),
-            RPT_SEVERITY_WARNING );
+        aReporter.Report( wxString::Format( _( "Color theme '%s' not found, will use theme from "
+                                               "PCB Editor settings.\n" ),
+                                            theme ),
+                          RPT_SEVERITY_WARNING );
     }
 
     aOpts.SetColorSettings( colors );
