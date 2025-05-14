@@ -158,7 +158,7 @@ public:
     bool        GetSvgFitPagetoBoard() const { return m_svgFitPageToBoard; }
 
     void        SetBlackAndWhite( bool blackAndWhite ) { m_blackAndWhite = blackAndWhite; }
-    unsigned    GetBlackAndWhite() const { return m_blackAndWhite; }
+    bool        GetBlackAndWhite() const { return m_blackAndWhite; }
 
     void        SetSubtractMaskFromSilk( bool aSubtract ) { m_subtractMaskFromSilk = aSubtract; }
     bool        GetSubtractMaskFromSilk() const { return m_subtractMaskFromSilk; }
