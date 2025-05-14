@@ -1245,7 +1245,7 @@ void PCB_IO_KICAD_LEGACY::loadFOOTPRINT( FOOTPRINT* aFootprint )
             if( !text->IsVisible() && text->Type() == PCB_TEXT_T )
             {
                 aFootprint->Remove( text );
-                aFootprint->Add( new PCB_FIELD( text, FIELD_T::USER ) );
+                aFootprint->Add( new PCB_FIELD( *text, FIELD_T::USER ) );
                 delete text;
             }
         }

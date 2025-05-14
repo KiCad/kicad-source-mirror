@@ -2593,7 +2593,7 @@ bool FABMASTER::loadFootprints( BOARD* aBoard )
                         // should be hidden by default to prevent clutter.
                         if( txt->GetLayer() != F_SilkS && txt->GetLayer() != B_SilkS )
                         {
-                            PCB_FIELD* field = new PCB_FIELD( txt.get(), FIELD_T::USER );
+                            PCB_FIELD* field = new PCB_FIELD( *txt, FIELD_T::USER );
                             field->SetVisible( false );
                             fp->Add( field, ADD_MODE::APPEND );
                         }
