@@ -352,7 +352,7 @@ class AllegroBrd(KaitaiStruct):
 
 
     class Type32PlacedPad(KaitaiStruct):
-        SEQ_FIELDS = ["type", "layer", "key", "next", "net_ptr", "flags", "prev", "next_in_fp", "parent_fp", "track", "pad_ptr", "ptr3", "ratline", "ptr5", "fp_inst", "unknown_1", "pad_name", "ptr6", "coords_0", "coords_1"]
+        SEQ_FIELDS = ["type", "layer", "key", "next", "net_ptr", "flags", "prev", "next_in_fp", "parent_fp", "track", "pad_ptr", "ptr3", "ratline", "ptr5", "fp_inst", "unknown_1", "pad_name", "ptr6", "bbox_0", "bbox_1"]
         def __init__(self, _io, _parent=None, _root=None):
             self._io = _io
             self._parent = _parent
@@ -420,12 +420,12 @@ class AllegroBrd(KaitaiStruct):
             self._debug['ptr6']['start'] = self._io.pos()
             self.ptr6 = self._io.read_u4le()
             self._debug['ptr6']['end'] = self._io.pos()
-            self._debug['coords_0']['start'] = self._io.pos()
-            self.coords_0 = AllegroBrd.Coords(self._io, self, self._root)
-            self._debug['coords_0']['end'] = self._io.pos()
-            self._debug['coords_1']['start'] = self._io.pos()
-            self.coords_1 = AllegroBrd.Coords(self._io, self, self._root)
-            self._debug['coords_1']['end'] = self._io.pos()
+            self._debug['bbox_0']['start'] = self._io.pos()
+            self.bbox_0 = AllegroBrd.Coords(self._io, self, self._root)
+            self._debug['bbox_0']['end'] = self._io.pos()
+            self._debug['bbox_1']['start'] = self._io.pos()
+            self.bbox_1 = AllegroBrd.Coords(self._io, self, self._root)
+            self._debug['bbox_1']['end'] = self._io.pos()
 
 
     class Coords(KaitaiStruct):
@@ -3463,7 +3463,7 @@ class AllegroBrd(KaitaiStruct):
 
 
     class Type0dPad(KaitaiStruct):
-        SEQ_FIELDS = ["_unnamed0", "_unnamed1", "key", "str_ptr", "ptr2", "un3", "coords", "pad_ptr", "un1", "un2", "flags", "rotation"]
+        SEQ_FIELDS = ["_unnamed0", "_unnamed1", "key", "str_ptr", "next", "unknown_1", "coords", "padstack_ptr", "unknown_2", "unknown_3", "flags", "rotation"]
         def __init__(self, _io, _parent=None, _root=None):
             self._io = _io
             self._parent = _parent
@@ -3484,34 +3484,27 @@ class AllegroBrd(KaitaiStruct):
             self._debug['str_ptr']['start'] = self._io.pos()
             self.str_ptr = self._io.read_u4le()
             self._debug['str_ptr']['end'] = self._io.pos()
-            self._debug['ptr2']['start'] = self._io.pos()
-            self.ptr2 = self._io.read_u4le()
-            self._debug['ptr2']['end'] = self._io.pos()
+            self._debug['next']['start'] = self._io.pos()
+            self.next = self._io.read_u4le()
+            self._debug['next']['end'] = self._io.pos()
             if self._root.ver >= 1313024:
-                self._debug['un3']['start'] = self._io.pos()
-                self.un3 = self._io.read_u4le()
-                self._debug['un3']['end'] = self._io.pos()
+                self._debug['unknown_1']['start'] = self._io.pos()
+                self.unknown_1 = self._io.read_u4le()
+                self._debug['unknown_1']['end'] = self._io.pos()
 
             self._debug['coords']['start'] = self._io.pos()
-            self.coords = []
-            for i in range(2):
-                if not 'arr' in self._debug['coords']:
-                    self._debug['coords']['arr'] = []
-                self._debug['coords']['arr'].append({'start': self._io.pos()})
-                self.coords.append(self._io.read_s4le())
-                self._debug['coords']['arr'][i]['end'] = self._io.pos()
-
+            self.coords = AllegroBrd.Coords(self._io, self, self._root)
             self._debug['coords']['end'] = self._io.pos()
-            self._debug['pad_ptr']['start'] = self._io.pos()
-            self.pad_ptr = self._io.read_u4le()
-            self._debug['pad_ptr']['end'] = self._io.pos()
-            self._debug['un1']['start'] = self._io.pos()
-            self.un1 = self._io.read_u4le()
-            self._debug['un1']['end'] = self._io.pos()
+            self._debug['padstack_ptr']['start'] = self._io.pos()
+            self.padstack_ptr = self._io.read_u4le()
+            self._debug['padstack_ptr']['end'] = self._io.pos()
+            self._debug['unknown_2']['start'] = self._io.pos()
+            self.unknown_2 = self._io.read_u4le()
+            self._debug['unknown_2']['end'] = self._io.pos()
             if self._root.ver >= 1311744:
-                self._debug['un2']['start'] = self._io.pos()
-                self.un2 = self._io.read_u4le()
-                self._debug['un2']['end'] = self._io.pos()
+                self._debug['unknown_3']['start'] = self._io.pos()
+                self.unknown_3 = self._io.read_u4le()
+                self._debug['unknown_3']['end'] = self._io.pos()
 
             self._debug['flags']['start'] = self._io.pos()
             self.flags = self._io.read_bits_int_be(32)

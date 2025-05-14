@@ -845,20 +845,19 @@ types:
         type: u4
       - id: str_ptr
         type: u4
-      - id: ptr2
+      - id: next
         type: u4
-      - id: un3
+      - id: unknown_1
         type: u4
         if: _root.ver >= 0x00140900
       - id: coords
-        type: s4
-        repeat: expr
-        repeat-expr: 2
-      - id: pad_ptr
+        type: coords
+      - id: padstack_ptr
         type: u4
-      - id: un1
+        doc: Points to 0x1C
+      - id: unknown_2
         type: u4
-      - id: un2
+      - id: unknown_3
         type: u4
         if: _root.ver >= 0x00140400
       - id: flags
@@ -2063,9 +2062,9 @@ types:
         doc: Pointer to 0x30
       - id: ptr6
         type: u4
-      - id: coords_0
+      - id: bbox_0
         type: coords
-      - id: coords_1
+      - id: bbox_1
         type: coords
 
   type_33_via:

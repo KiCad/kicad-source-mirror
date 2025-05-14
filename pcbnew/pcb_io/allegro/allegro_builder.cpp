@@ -89,6 +89,25 @@ static uint32_t GetPrimaryNext( const BLOCK_BASE& aBlock )
 }
 
 
+/**
+ * "Get Next" function for the pad list in a footprint's 0x32 list.
+ */
+static uint32_t PadGetNextInFootprint( const BLOCK_BASE& aBlock )
+{
+    const uint8_t type = aBlock.GetBlockType();
+
+    if( type != 0x32 )
+    {
+        THROW_IO_ERROR(
+                wxString::Format( "Unexpected next item in 0x32 pad list: block type #04x, offset #lx, key %#010x",
+                                  type, aBlock.GetOffset(), aBlock.GetKey() ) );
+    }
+
+    // When iterating in a footprint use this field, not m_Next.
+    return BLK_FIELD( BLK_0x32_PLACED_PAD, m_NextInFp );
+}
+
+
 class LL_WALKER
 {
 public:
@@ -146,6 +165,8 @@ public:
     LL_WALKER( uint32_t aHead, uint32_t aTail, const RAW_BOARD& aBoard ) :
             m_head( aHead ), m_tail( aTail ), m_board( aBoard )
     {
+        // The default next function
+        m_nextFunction = GetPrimaryNext;
     }
 
     LL_WALKER( const FILE_HEADER::LINKED_LIST& aList, const RAW_BOARD& aBoard ) :
@@ -156,10 +177,17 @@ public:
     iterator begin() const { return iterator( m_head, m_tail, m_board ); }
     iterator end() const { return iterator( 0, m_tail, m_board ); }
 
+    using NEXT_FUNC_T = std::function<uint32_t( const BLOCK_BASE& )>;
+
+    void SetNextFunc( NEXT_FUNC_T aNextFunc ) { m_nextFunction = aNextFunc; }
+
 private:
     uint32_t         m_head;
     uint32_t         m_tail;
     const RAW_BOARD& m_board;
+
+    // This is the function that can get the next item in a list. By default
+    NEXT_FUNC_T m_nextFunction;
 };
 
 
@@ -550,6 +578,22 @@ void BOARD_BUILDER::reportUnexpectedBlockType( uint8_t aGot, uint8_t aExpected, 
 }
 
 
+wxString BOARD_BUILDER::get0x30StringValue( uint32_t a0x30Key ) const
+{
+    const BLK_0x30_STR_WRAPPER* blk0x30 = expectBlockByKey<BLK_0x30_STR_WRAPPER>( a0x30Key, 0x30 );
+
+    if( blk0x30 == nullptr )
+        THROW_IO_ERROR( "Failed to get 0x30 for string lookup" );
+
+    const BLK_0x31_SGRAPHIC* blk0x31 = expectBlockByKey<BLK_0x31_SGRAPHIC>( blk0x30->m_StrGraphicPtr, 0x31 );
+
+    if( blk0x31 == nullptr )
+        THROW_IO_ERROR( "Failed to get 0x31 for string lookup" );
+
+    return blk0x31->m_Value;
+}
+
+
 void BOARD_BUILDER::cacheFontDefs()
 {
     LL_WALKER x36_walker{ m_rawBoard.m_Header->m_LL_0x36.m_Head, m_rawBoard.m_Header->m_LL_0x36.m_Tail, m_rawBoard };
@@ -855,6 +899,18 @@ const BLK_0x07* BOARD_BUILDER::getFpInstRef( const BLK_0x2D& aFpInstance ) const
 }
 
 
+std::vector<std::unique_ptr<BOARD_ITEM>> buildPadItems( const BLK_0x1C_PADSTACK& aPadstack, FOOTPRINT& aFp,
+                                                        const wxString& aPadName, int aNetcode )
+{
+    // Not all Allegro PADSTACKS can be represented by a single KiCad padstack. For example, the
+    // paste and mask layers can have completely independent shapes in Allegro, but in KiCad that
+    // would require a separate aperture pad.
+    std::vector<std::unique_ptr<BOARD_ITEM>> padItems;
+
+    return padItems;
+}
+
+
 std::unique_ptr<FOOTPRINT> BOARD_BUILDER::buildFootprint( const BLK_0x2D& aFpInstance )
 {
     auto fp = std::make_unique<FOOTPRINT>( &m_board );
@@ -956,6 +1012,35 @@ std::unique_ptr<FOOTPRINT> BOARD_BUILDER::buildFootprint( const BLK_0x2D& aFpIns
     }
 
     // Find the pads
+    LL_WALKER padWalker{ aFpInstance.m_FirstPadPtr, aFpInstance.m_Key, m_rawBoard };
+    padWalker.SetNextFunc( PadGetNextInFootprint );
+    for( const BLOCK_BASE* padBlock : padWalker )
+    {
+        const auto& placedPadInfo = static_cast<const BLOCK<BLK_0x32_PLACED_PAD>&>( *padBlock ).GetData();
+
+        const BLK_0x04_NET_ASSIGNMENT* netAssignment =
+                expectBlockByKey<BLK_0x04_NET_ASSIGNMENT>( placedPadInfo.m_NetPtr, 0x04 );
+        const BLK_0x0D_PAD* padInfo = expectBlockByKey<BLK_0x0D_PAD>( placedPadInfo.m_PadPtr, 0x0D );
+
+        if( !netAssignment || !padInfo )
+            continue;
+
+        const BLK_0x1C_PADSTACK* padStack = expectBlockByKey<BLK_0x1C_PADSTACK>( padInfo->m_PadStack, 0x1C );
+
+        if( !padStack )
+            continue;
+
+        const int      netCode = m_netCache.at( netAssignment->m_Net )->GetNetCode();
+        const wxString padName = m_rawBoard.GetString( padInfo->m_NameStrId );
+
+        std::vector<std::unique_ptr<BOARD_ITEM>> padItems = buildPadItems( *padStack, *fp, padName, netCode );
+
+        for( std::unique_ptr<BOARD_ITEM>& item : padItems )
+        {
+            fp->Add( item.release() );
+        }
+    }
+
 
     return fp;
 }

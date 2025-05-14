@@ -306,6 +306,19 @@ class AllegroBoard:
         elif t == 0x0a:
             prntr.print_layer(d.layer)
 
+        elif t == 0x0d:
+            prntr.print_ptr("next", d)
+            prntr.print_s("str_ptr", d)
+            prntr.print_ptr("flags", d)
+            prntr.print_v("rotation", d.rotation / 1000.)
+            prntr.print_ptr("pad_ptr", d)
+
+            prntr.print_coords("coords", d.coords)
+
+            prntr.print_v("unknown_1", d)
+            prntr.print_v("unknown_2", d)
+            prntr.print_v("unknown_3", d)
+
         elif t == 0x0f:
             prntr.print_s("str_unk", d.str_unk)
             prntr.print_v("s", d.s)
@@ -589,7 +602,6 @@ class AllegroBoard:
             prntr.print_v("unknown_2", d)
 
         elif t == 0x32:
-
             prntr.print_ptr("next", d)
             prntr.print_ptr("prev", d)
             prntr.print_ptr("next_in_fp", d)
@@ -605,8 +617,8 @@ class AllegroBoard:
 
             prntr.print_ptr("unknown_1", d)
 
-            prntr.print_coords("coords_0", d.coords_0)
-            prntr.print_coords("coords_1", d.coords_1)
+            prntr.print_coords("bbox_0", d.bbox_0)
+            prntr.print_coords("bbox_1", d.bbox_1)
 
             prntr.print_ptr("ptr4", d)
             prntr.print_ptr("ptr5", d)
@@ -822,6 +834,10 @@ if __name__ == "__main__":
     parser.add_argument("--footprints", "--fp", nargs="*", default=None,
                         help="Dump footprint info for the given ref designators, or all if none given")
 
+    parser.add_argument("--padstacks", "--ps", nargs="*",
+                        help="Dump padstacks with the given name(s)")
+
+
     args = parser.parse_args()
 
     # Load the Allegro board file via Kaitai
@@ -833,6 +849,8 @@ if __name__ == "__main__":
     print("Parsed Allegro board file.")
 
     brd = AllegroBoard(kt_brd_struct)
+
+    prntr = AllegroBoard.Printer(brd, 4)
 
     # Print a summary of the Allegro board file
     if args.summary:
@@ -897,7 +915,6 @@ if __name__ == "__main__":
     if args.dump_layers:
 
         lm = kt_brd_struct.layer_map
-        prntr = AllegroBoard.Printer(brd, 4)
 
         for i, layer in enumerate(lm.entries):
             print(f"Layer {i}:")
@@ -1006,3 +1023,18 @@ if __name__ == "__main__":
 
                 next = inst_obj.data.next
                 inst_num += 1
+
+    if args.padstacks is not None:
+        def filter_padstack(psobj: allegro_brd.AllegroBrd.Type1cPadStack) -> bool:
+            if not args.padstacks:
+                return True
+
+            name = brd.string(psobj.pad_str)
+            return name in args.padstacks
+
+        for index, key, obj in walk_list(brd, kt_brd_struct.ll_x1c.head, kt_brd_struct.ll_x1c.tail):
+
+            if not filter_padstack(obj.data):
+                continue
+
+            brd.print_obj(obj)

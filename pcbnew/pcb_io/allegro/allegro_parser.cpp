@@ -650,17 +650,15 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x0D_PAD( FILE_STREAM& aStream, FM
     aStream.Skip( 3 );
 
     data.m_Key = aStream.ReadU32();
-    data.m_StrPtr = aStream.ReadU32();
-    data.m_UnknownPtr = aStream.ReadU32();
+    data.m_NameStrId = aStream.ReadU32();
+    data.m_Next = aStream.ReadU32();
 
     ReadCond( aStream, aVer, data.m_Unknown1 );
 
-    for( size_t i = 0; i < data.m_Coords.size(); ++i )
-    {
-        data.m_Coords[i] = aStream.ReadS32();
-    }
+    data.m_CoordsX = aStream.ReadS32();
+    data.m_CoordsY = aStream.ReadS32();
 
-    data.m_PadPtr = aStream.ReadU32();
+    data.m_PadStack = aStream.ReadU32();
     data.m_Unknown2 = aStream.ReadU32();
 
     ReadCond( aStream, aVer, data.m_Unknown3 );
@@ -1613,17 +1611,17 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x32_PLACED_PAD( FILE_STREAM& aStr
     ReadCond( aStream, aVer, data.m_Prev );
 
     data.m_NextInFp = aStream.ReadU32();
-    data.m_Ptr3 = aStream.ReadU32();
-    data.m_Ptr4 = aStream.ReadU32();
+    data.m_ParentFp = aStream.ReadU32();
+    data.m_Track = aStream.ReadU32();
     data.m_PadPtr = aStream.ReadU32();
     data.m_Ptr6 = aStream.ReadU32();
-    data.m_Ptr7 = aStream.ReadU32();
+    data.m_Ratline = aStream.ReadU32();
     data.m_Ptr8 = aStream.ReadU32();
     data.m_Previous = aStream.ReadU32();
 
     ReadCond( aStream, aVer, data.m_Unknown2 );
 
-    data.m_Ptr10 = aStream.ReadU32();
+    data.m_Name0x30 = aStream.ReadU32();
     data.m_Ptr11 = aStream.ReadU32();
 
     for( size_t i = 0; i < data.m_Coords.size(); ++i )

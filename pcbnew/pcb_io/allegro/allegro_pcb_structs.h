@@ -644,14 +644,15 @@ struct BLK_0x0C
 struct BLK_0x0D_PAD
 {
     uint32_t m_Key;
-    uint32_t m_StrPtr;
-    uint32_t m_UnknownPtr;
+    uint32_t m_NameStrId;
+    uint32_t m_Next;
 
     COND_GE<FMT_VER::V_174, uint32_t> m_Unknown1;
 
-    std::array<int32_t, 2> m_Coords;
+    uint32_t m_CoordsX;
+    uint32_t m_CoordsY;
 
-    uint32_t m_PadPtr;
+    uint32_t m_PadStack;
     uint32_t m_Unknown2;
 
     COND_GE<FMT_VER::V_172, uint32_t> m_Unknown3;
@@ -944,12 +945,46 @@ struct BLK_0x1C_PADSTACK
     COND_GE_LT<FMT_VER::V_165, FMT_VER::V_172, std::array<uint32_t, 8>> m_UnknownArr8_2;
 
     /**
+     * Indexes of fixed slots in the component table
+     */
+    enum FIXED_SLOTS
+    {
+        SOLDERMASK_TOP = 0,
+        PASTEMASK_TOP = 5,
+        FILMMASKTOP = 7,
+
+        LT_V172_FIXED_MAX = 10,
+        GE_V172_FIXED_MAX = 21,
+    };
+
+    /**
+     * Component table layer offsets
+     * In the component table's layer section, each layer has 3 or 4 slots, depending on version.
+     */
+    enum LAYER_COMP_SLOT
+    {
+        // First slot: Antipad
+        ANTIPAD = 0,
+        // Thermal relief shape
+        THERMAL_RELIEF = 1,
+        // Pad shape
+        PAD = 2,
+        // Unsure what this layer component slot is
+        // But I suspect it's keepout, as that was added in V172.
+        UNKNOWN_GE_V172 = 3,
+    };
+
+    /**
      * Collection of components that make up the padstack.
      *
      * The number of components appears to be fixed by version:
      *
      * *  < 17.2: 10 + layer_count * 3
      * * >= 17.2: 21 + layer_count * 4
+     *
+     * The first 10/21 components seem to be a fixed set of technical layers.
+     *
+     * Then, a set of groups of 3/4 components for each layer.
      */
     std::vector<PADSTACK_COMPONENT> m_Components;
 
@@ -1475,17 +1510,17 @@ struct BLK_0x32_PLACED_PAD
     COND_GE<FMT_VER::V_172, uint32_t> m_Prev;
 
     uint32_t m_NextInFp;
-    uint32_t m_Ptr3;
-    uint32_t m_Ptr4;
+    uint32_t m_ParentFp;
+    uint32_t m_Track;
     uint32_t m_PadPtr;
     uint32_t m_Ptr6;
-    uint32_t m_Ptr7;
+    uint32_t m_Ratline;
     uint32_t m_Ptr8;
     uint32_t m_Previous;
 
     COND_GE<FMT_VER::V_172, uint32_t> m_Unknown2;
 
-    uint32_t m_Ptr10;
+    uint32_t m_Name0x30;
     uint32_t m_Ptr11;
 
     std::array<int32_t, 4> m_Coords;

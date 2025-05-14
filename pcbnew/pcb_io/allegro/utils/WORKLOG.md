@@ -375,3 +375,21 @@ S!ETCH!TOP!307 4!LINE!257!928!581!959!550!20!!!!!CONNECT!!!!!!!!N13829!!!!!
 
 * One 0x2E seems to be referred to by several 0x05s (one as next and ptr2a and 3a of two directly linked 0x2Es, so 2a, 3a might be forward/backlinks)
 * PreAmp only has 4 of them
+
+* Padstacks 0x1C:
+  * Comp count: 10 + 3 * layer count (this is from a field)
+  * `R110_95` - count = 1 -> comps = 13:
+    * SOLDERMASK_TOP, PASTEMASK_TOP, FILMMASKTOP = (47, 45) => comps 0, 5, 7
+    * TOP => comp 12
+  * `R345_165` - count = 1 -> comps = 13:
+    * SOLDERMASK_TOP, PASTEMASK_TOP = (47, 45) => comps 0, 5
+    * TOP => comp 12
+  * So FILMMASKTOP = comp 7?
+  * `60X100` =  SOLDERMASK_TOP is 66x106, PASTEMASK_TOP is 60x100
+  * So SOLDERMASK_TOP = comp 0
+    * PASTEMASK_TOP = 5
+
+  * Looking at the ASCII headings, the three/layer is PAD, thermal relief, anti-pad (in <V172)
+    * The order in the comps seems to be AP/TR, TR/AP, PAD, X (x is unknown, seems always 0x0 >=V172) 
+  * S62D38 in BB-AI tells use it is in order: AP (72.000), TP (null), PAD (62.000), X (unknown function)
+ * TSM is index 14 in BB-AI

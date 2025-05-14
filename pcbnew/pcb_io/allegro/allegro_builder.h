@@ -86,11 +86,24 @@ private:
     PCB_LAYER_ID getLayer( const LAYER_INFO& aLayerInfo ) const;
 
     /**
+     * Get just the string value from a 0x31 STRING WRAPPER -> 0x30 STRING GRAPHIC pair
+     *
+     * Throws away all the other string data like pos/size/etc.
+     */
+    wxString get0x30StringValue( uint32_t a0x30Key ) const;
+
+    /**
      * Build the shapes from an 0x14 shape list
      */
     std::vector<std::unique_ptr<PCB_SHAPE>> buildShapes( const BLK_0x14& aGraphicList, BOARD_ITEM_CONTAINER& aParent );
     std::unique_ptr<PCB_TEXT>  buildPcbText( const BLK_0x30_STR_WRAPPER& aStrWrapper, BOARD_ITEM_CONTAINER& aParent );
-    std::unique_ptr<FOOTPRINT> buildFootprint( const BLK_0x2D& aFpInstance );
+
+    /**
+     * Construct "pad" items for a given 0x1C PADSTACK block.
+     */
+    std::vector<std::unique_ptr<BOARD_ITEM>> buildPadItems( const BLK_0x1C_PADSTACK& aPadstack, FOOTPRINT& aFp,
+                                                            const wxString& aPadName, int aNetcode );
+    std::unique_ptr<FOOTPRINT>               buildFootprint( const BLK_0x2D& aFpInstance );
     std::vector<std::unique_ptr<BOARD_ITEM>> buildTrack( const BLK_0x05_TRACK& aBlock, int aNetcode );
     std::unique_ptr<BOARD_ITEM>              buildVia( const BLK_0x33_VIA& aBlock, int aNetcode );
 
