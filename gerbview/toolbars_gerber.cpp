@@ -327,7 +327,7 @@ void GERBVIEW_FRAME::updateDCodeSelectBox()
         wxASSERT_MSG( false, wxT( "Invalid units" ) );
     }
 
-    for( const auto [_, dcode] : gerber->m_ApertureList )
+    for( const auto& [_, dcode] : gerber->m_ApertureList )
     {
         wxCHECK2( dcode,continue );
 
