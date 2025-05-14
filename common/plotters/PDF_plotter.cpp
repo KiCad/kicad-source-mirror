@@ -907,8 +907,14 @@ void PDF_PLOTTER::ClosePage()
                 "<<\n"
                 "/Type /Page\n"
                 "/Parent {} 0 R\n"
+                "/Resources <<\n"
+                "    /ProcSet [/PDF /Text /ImageC /ImageB]\n"
+                "    /Font {} 0 R\n"
+                "    /XObject {} 0 R >>\n"
                 "/MediaBox [0 0 {:g} {:g}]\n",
                 m_pageTreeHandle,
+                m_fontResDictHandle,
+                m_imgResDictHandle,
                 psPaperSize.x,
                 psPaperSize.y );
 
