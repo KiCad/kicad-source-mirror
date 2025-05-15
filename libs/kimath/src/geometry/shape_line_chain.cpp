@@ -57,6 +57,7 @@ int getArcPolygonizationMaxError()
 
 SHAPE_LINE_CHAIN::SHAPE_LINE_CHAIN( const std::vector<int>& aV) :
         SHAPE_LINE_CHAIN_BASE( SH_LINE_CHAIN ),
+        m_accuracy( 0 ),
         m_closed( false ),
         m_width( 0 )
 {
@@ -69,6 +70,7 @@ SHAPE_LINE_CHAIN::SHAPE_LINE_CHAIN( const std::vector<int>& aV) :
 
 SHAPE_LINE_CHAIN::SHAPE_LINE_CHAIN( const std::vector<VECTOR2I>& aV, bool aClosed ) :
         SHAPE_LINE_CHAIN_BASE( SH_LINE_CHAIN ),
+        m_accuracy( 0 ),
         m_closed( false ),
         m_width( 0 )
 {
@@ -80,6 +82,7 @@ SHAPE_LINE_CHAIN::SHAPE_LINE_CHAIN( const std::vector<VECTOR2I>& aV, bool aClose
 
 SHAPE_LINE_CHAIN::SHAPE_LINE_CHAIN( const SHAPE_ARC& aArc, bool aClosed, std::optional<int> aMaxError ) :
         SHAPE_LINE_CHAIN_BASE( SH_LINE_CHAIN ),
+        m_accuracy( 0 ),
         m_closed( false ),
         m_width( aArc.GetWidth() )
 {
@@ -96,7 +99,9 @@ SHAPE_LINE_CHAIN::SHAPE_LINE_CHAIN( const Clipper2Lib::Path64&          aPath,
                                     const std::vector<CLIPPER_Z_VALUE>& aZValueBuffer,
                                     const std::vector<SHAPE_ARC>&       aArcBuffer ) :
         SHAPE_LINE_CHAIN_BASE( SH_LINE_CHAIN ),
-        m_closed( true ), m_width( 0 )
+        m_accuracy( 0 ),
+        m_closed( true ),
+        m_width( 0 )
 {
     std::map<ssize_t, ssize_t> loadedArcs;
     m_points.reserve( aPath.size() );
