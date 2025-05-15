@@ -1111,7 +1111,7 @@ static void initializePlotter( PLOTTER* aPlotter, const BOARD* aBoard,
         paperscale  = 1;
 
         // Need autocentering only if scale is not 1:1
-        autocenter  = (aPlotOpts->GetScale() != 1.0);
+        autocenter  = (aPlotOpts->GetScale() != 1.0) || aPlotOpts->GetAutoScale();
     }
 
     BOX2I    bbox = aBoard->ComputeBoundingBox( false );
