@@ -27,6 +27,7 @@
 #include <clipboard.h>
 #include <confirm.h>
 #include <connection_graph.h>
+#include <design_block.h>
 #include <dialogs/dialog_symbol_fields_table.h>
 #include <dialogs/dialog_eeschema_page_settings.h>
 #include <dialogs/dialog_paste_special.h>
@@ -47,6 +48,7 @@
 #include <project/project_file.h>
 #include <project/net_settings.h>
 #include <project_sch.h>
+#include <sch_design_block_pane.h>
 #include <sch_edit_frame.h>
 #include <sch_io/kicad_sexpr/sch_io_kicad_sexpr.h>
 #include <sch_bitmap.h>
@@ -2967,6 +2969,89 @@ int SCH_EDITOR_CONTROL::GridFeedback( const TOOL_EVENT& aEvent )
 }
 
 
+int SCH_EDITOR_CONTROL::PlaceLinkedDesignBlock( const TOOL_EVENT& aEvent )
+{
+    SCH_EDIT_FRAME* editFrame = dynamic_cast<SCH_EDIT_FRAME*>( m_frame );
+
+    if( !editFrame )
+        return 1;
+
+    // Need to have a group selected and it needs to have a linked design block
+    SCH_SELECTION_TOOL* selTool = m_toolMgr->GetTool<SCH_SELECTION_TOOL>();
+    SCH_SELECTION       selection = selTool->GetSelection();
+
+    if( selection.Size() != 1 || selection[0]->Type() != SCH_GROUP_T )
+        return 1;
+
+    SCH_GROUP* group = static_cast<SCH_GROUP*>( selection[0] );
+
+    if( !group->HasDesignBlockLink() )
+        return 1;
+
+    // Get the associated design block
+    DESIGN_BLOCK* designBlock =
+            editFrame->GetDesignBlockPane()->GetDesignBlock( group->GetDesignBlockLibId(), true, true );
+
+    if( !designBlock )
+    {
+        wxString msg;
+        msg.Printf( _( "Could not find design block %s." ), group->GetDesignBlockLibId().GetUniStringLibId() );
+        m_frame->GetInfoBar()->ShowMessageFor( msg, 5000, wxICON_WARNING );
+        return 1;
+    }
+
+    if( designBlock->GetSchematicFile().IsEmpty() )
+    {
+        wxString msg;
+        msg.Printf( _( "Design block %s does not have a schematic file." ),
+                    group->GetDesignBlockLibId().GetUniStringLibId() );
+        m_frame->GetInfoBar()->ShowMessageFor( msg, 5000, wxICON_WARNING );
+        return 1;
+    }
+
+    editFrame->GetDesignBlockPane()->SelectLibId( group->GetDesignBlockLibId() );
+
+    return m_toolMgr->RunAction( SCH_ACTIONS::placeDesignBlock, designBlock );
+}
+
+
+int SCH_EDITOR_CONTROL::SaveToLinkedDesignBlock( const TOOL_EVENT& aEvent )
+{
+    SCH_EDIT_FRAME* editFrame = dynamic_cast<SCH_EDIT_FRAME*>( m_frame );
+
+    if( !editFrame )
+        return 1;
+
+    // Need to have a group selected and it needs to have a linked design block
+    SCH_SELECTION_TOOL* selTool = m_toolMgr->GetTool<SCH_SELECTION_TOOL>();
+    SCH_SELECTION       selection = selTool->GetSelection();
+
+    if( selection.Size() != 1 || selection[0]->Type() != SCH_GROUP_T )
+        return 1;
+
+    SCH_GROUP* group = static_cast<SCH_GROUP*>( selection[0] );
+
+    if( !group->HasDesignBlockLink() )
+        return 1;
+
+    // Get the associated design block
+    DESIGN_BLOCK* designBlock =
+            editFrame->GetDesignBlockPane()->GetDesignBlock( group->GetDesignBlockLibId(), true, true );
+
+    if( !designBlock )
+    {
+        wxString msg;
+        msg.Printf( _( "Could not find design block %s." ), group->GetDesignBlockLibId().GetUniStringLibId() );
+        m_frame->GetInfoBar()->ShowMessageFor( msg, 5000, wxICON_WARNING );
+        return 1;
+    }
+
+    editFrame->GetDesignBlockPane()->SelectLibId( group->GetDesignBlockLibId() );
+
+    return m_toolMgr->RunAction( SCH_ACTIONS::saveSelectionToDesignBlock ) ? 1 : 0;
+}
+
+
 void SCH_EDITOR_CONTROL::setTransitions()
 {
     Go( &SCH_EDITOR_CONTROL::New,                   ACTIONS::doNew.MakeEvent() );
@@ -3057,4 +3142,7 @@ void SCH_EDITOR_CONTROL::setTransitions()
 
     Go( &SCH_EDITOR_CONTROL::ExportSymbolsToLibrary, SCH_ACTIONS::exportSymbolsToLibrary.MakeEvent() );
     Go( &SCH_EDITOR_CONTROL::ExportSymbolsToLibrary, SCH_ACTIONS::exportSymbolsToNewLibrary.MakeEvent() );
+
+    Go( &SCH_EDITOR_CONTROL::PlaceLinkedDesignBlock, SCH_ACTIONS::placeLinkedDesignBlock.MakeEvent() );
+    Go( &SCH_EDITOR_CONTROL::SaveToLinkedDesignBlock, SCH_ACTIONS::saveToLinkedDesignBlock.MakeEvent() );
 }

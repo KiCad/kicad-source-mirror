@@ -84,7 +84,10 @@ int SCH_DESIGN_BLOCK_CONTROL::SaveSheetAsDesignBlock( const TOOL_EVENT& aEvent )
     if( !current )
         return -1;
 
-    if( !m_editFrame->SaveSheetAsDesignBlock( current->m_LibId.GetLibNickname(), m_editFrame->GetCurrentSheet() ) )
+    // This can be modified as a result of the save operation so copy it
+    LIB_ID libId = current->m_LibId;
+
+    if( !m_editFrame->SaveSheetAsDesignBlock( libId.GetLibNickname(), m_editFrame->GetCurrentSheet() ) )
         return -1;
 
     notifyOtherFrames();
@@ -100,7 +103,10 @@ int SCH_DESIGN_BLOCK_CONTROL::SaveSelectionAsDesignBlock( const TOOL_EVENT& aEve
     if( !current )
         return -1;
 
-    if( !m_editFrame->SaveSelectionAsDesignBlock( current->m_LibId.GetLibNickname() ) )
+    // This can be modified as a result of the save operation so copy it
+    LIB_ID libId = current->m_LibId;
+
+    if( !m_editFrame->SaveSelectionAsDesignBlock( libId.GetLibNickname() ) )
         return -1;
 
     notifyOtherFrames();
@@ -116,7 +122,10 @@ int SCH_DESIGN_BLOCK_CONTROL::SaveSheetToDesignBlock( const TOOL_EVENT& aEvent )
     if( !current )
         return -1;
 
-    if( !m_editFrame->SaveSheetToDesignBlock( current->m_LibId, m_editFrame->GetCurrentSheet() ) )
+    // This can be modified as a result of the save operation so copy it
+    LIB_ID libId = current->m_LibId;
+
+    if( !m_editFrame->SaveSheetToDesignBlock( libId, m_editFrame->GetCurrentSheet() ) )
         return -1;
 
     notifyOtherFrames();
@@ -132,7 +141,10 @@ int SCH_DESIGN_BLOCK_CONTROL::SaveSelectionToDesignBlock( const TOOL_EVENT& aEve
     if( !current )
         return -1;
 
-    if( !m_editFrame->SaveSelectionToDesignBlock( current->m_LibId ) )
+    // This can be modified as a result of the save operation so copy it
+    LIB_ID libId = current->m_LibId;
+
+    if( !m_editFrame->SaveSelectionToDesignBlock( libId ) )
         return -1;
 
     notifyOtherFrames();

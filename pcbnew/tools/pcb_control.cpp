@@ -1406,6 +1406,43 @@ int PCB_CONTROL::PlaceLinkedDesignBlock( const TOOL_EVENT& aEvent )
 }
 
 
+int PCB_CONTROL::SaveToLinkedDesignBlock( const TOOL_EVENT& aEvent )
+{
+    PCB_EDIT_FRAME* editFrame = dynamic_cast<PCB_EDIT_FRAME*>( m_frame );
+
+    if( !editFrame )
+        return 1;
+
+    // Need to have a group selected and it needs to have a linked design block
+    PCB_SELECTION_TOOL* selTool = m_toolMgr->GetTool<PCB_SELECTION_TOOL>();
+    PCB_SELECTION       selection = selTool->GetSelection();
+
+    if( selection.Size() != 1 || selection[0]->Type() != PCB_GROUP_T )
+        return 1;
+
+    PCB_GROUP* group = static_cast<PCB_GROUP*>( selection[0] );
+
+    if( !group->HasDesignBlockLink() )
+        return 1;
+
+    // Get the associated design block
+    DESIGN_BLOCK* designBlock =
+            editFrame->GetDesignBlockPane()->GetDesignBlock( group->GetDesignBlockLibId(), true, true );
+
+    if( !designBlock )
+    {
+        wxString msg;
+        msg.Printf( _( "Could not find design block %s." ), group->GetDesignBlockLibId().GetUniStringLibId() );
+        m_frame->GetInfoBar()->ShowMessageFor( msg, 5000, wxICON_WARNING );
+        return 1;
+    }
+
+    editFrame->GetDesignBlockPane()->SelectLibId( group->GetDesignBlockLibId() );
+
+    return m_toolMgr->RunAction( PCB_ACTIONS::saveSelectionToDesignBlock ) ? 1 : 0;
+}
+
+
 template<typename T>
 static void moveUnflaggedItems( const std::deque<T>& aList, std::vector<BOARD_ITEM*>& aTarget,
                                 bool aIsNew )
@@ -2576,6 +2613,7 @@ void PCB_CONTROL::setTransitions()
     // Append control
     Go( &PCB_CONTROL::AppendDesignBlock,    PCB_ACTIONS::placeDesignBlock.MakeEvent() );
     Go( &PCB_CONTROL::PlaceLinkedDesignBlock, PCB_ACTIONS::placeLinkedDesignBlock.MakeEvent() );
+    Go( &PCB_CONTROL::SaveToLinkedDesignBlock, PCB_ACTIONS::saveToLinkedDesignBlock.MakeEvent() );
     Go( &PCB_CONTROL::AppendBoardFromFile,  PCB_ACTIONS::appendBoard.MakeEvent() );
     Go( &PCB_CONTROL::DdAppendBoard,        PCB_ACTIONS::ddAppendBoard.MakeEvent() );
     Go( &PCB_CONTROL::PlaceCharacteristics, PCB_ACTIONS::placeCharacteristics.MakeEvent() );

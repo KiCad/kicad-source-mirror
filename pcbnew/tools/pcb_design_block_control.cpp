@@ -84,7 +84,10 @@ int PCB_DESIGN_BLOCK_CONTROL::SaveBoardAsDesignBlock( const TOOL_EVENT& aEvent )
     if( !current )
         return -1;
 
-    if( !m_editFrame->SaveBoardAsDesignBlock( current->m_LibId.GetLibNickname() ) )
+    // This can be modified as a result of the save operation so copy it
+    LIB_ID libId = current->m_LibId;
+
+    if( !m_editFrame->SaveBoardAsDesignBlock( libId.GetLibNickname() ) )
         return -1;
 
     notifyOtherFrames();
@@ -100,7 +103,10 @@ int PCB_DESIGN_BLOCK_CONTROL::SaveSelectionAsDesignBlock( const TOOL_EVENT& aEve
     if( !current )
         return -1;
 
-    if( !m_editFrame->SaveSelectionAsDesignBlock( current->m_LibId.GetLibNickname() ) )
+    // This can be modified as a result of the save operation so copy it
+    LIB_ID libId = current->m_LibId;
+
+    if( !m_editFrame->SaveSelectionAsDesignBlock( libId.GetLibNickname() ) )
         return -1;
 
     notifyOtherFrames();
@@ -116,7 +122,10 @@ int PCB_DESIGN_BLOCK_CONTROL::SaveBoardToDesignBlock( const TOOL_EVENT& aEvent )
     if( !current )
         return -1;
 
-    if( !m_editFrame->SaveBoardToDesignBlock( current->m_LibId ) )
+    // This can be modified as a result of the save operation so copy it
+    LIB_ID libId = current->m_LibId;
+
+    if( !m_editFrame->SaveBoardToDesignBlock( libId ) )
         return -1;
 
     notifyOtherFrames();
@@ -132,7 +141,10 @@ int PCB_DESIGN_BLOCK_CONTROL::SaveSelectionToDesignBlock( const TOOL_EVENT& aEve
     if( !current )
         return -1;
 
-    if( !m_editFrame->SaveSelectionToDesignBlock( current->m_LibId ) )
+    // This can be modified as a result of the save operation so copy it
+    LIB_ID libId = current->m_LibId;
+
+    if( !m_editFrame->SaveSelectionToDesignBlock( libId ) )
         return -1;
 
     notifyOtherFrames();

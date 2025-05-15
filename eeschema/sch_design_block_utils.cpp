@@ -27,6 +27,7 @@
 #include <design_block_lib_table.h>
 #include <sch_design_block_pane.h>
 #include <sch_edit_frame.h>
+#include <sch_group.h>
 #include <wx/choicdlg.h>
 #include <wx/msgdlg.h>
 #include <wx/textdlg.h>
@@ -380,6 +381,24 @@ bool SCH_EDIT_FRAME::SaveSelectionToDesignBlock( const LIB_ID& aLibId )
         return false;
     }
 
+    // If we have a single group, we want to strip the group and select the children
+    SCH_GROUP* group = nullptr;
+
+    if( selection.Size() == 1 )
+    {
+        EDA_ITEM* item = selection.Front();
+
+        if( item->Type() == SCH_GROUP_T )
+        {
+            group = static_cast<SCH_GROUP*>( item );
+
+            selection.Remove( item );
+
+            // Don't recurse; if we have a group of groups the user probably intends the inner groups to be saved
+            group->RunOnChildren( [&]( EDA_ITEM* aItem ) { selection.Add( aItem ); }, RECURSE_MODE::NO_RECURSE );
+        }
+    }
+
     DESIGN_BLOCK* blk = nullptr;
 
     try
@@ -400,11 +419,31 @@ bool SCH_EDIT_FRAME::SaveSelectionToDesignBlock( const LIB_ID& aLibId )
     // Create a temporary screen
     SCH_SCREEN* tempScreen = new SCH_SCREEN( m_schematic );
 
-    // Copy the selected items to the temporary screen
+    auto cloneAndAdd =
+        [&] ( EDA_ITEM* aItem )
+        {
+            if( !aItem->IsSCH_ITEM() )
+                return static_cast<SCH_ITEM*>( nullptr );
+
+            SCH_ITEM* copy = static_cast<SCH_ITEM*>( aItem->Clone() );
+            tempScreen->Append( static_cast<SCH_ITEM*>( copy ) );
+            return copy;
+        };
+
+    // Copy the selected items to the temporary board
     for( EDA_ITEM* item : selection )
     {
-        EDA_ITEM* copy = item->Clone();
-        tempScreen->Append( static_cast<SCH_ITEM*>( copy ) );
+        // Remove parent group membership since we strip the first group layer
+        if( SCH_ITEM* copy = cloneAndAdd( item ) )
+            copy->SetParentGroup( nullptr );
+
+        if( item->Type() == SCH_GROUP_T )
+        {
+            SCH_GROUP* innerGroup = static_cast<SCH_GROUP*>( item );
+
+            // Groups also need their children copied
+            innerGroup->RunOnChildren( cloneAndAdd, RECURSE_MODE::RECURSE );
+        }
     }
 
     // Create a sheet for the temporary screen
@@ -428,6 +467,24 @@ bool SCH_EDIT_FRAME::SaveSelectionToDesignBlock( const LIB_ID& aLibId )
     {
         success = Prj().DesignBlockLibs()->DesignBlockSave( aLibId.GetLibNickname(), blk )
                   == DESIGN_BLOCK_LIB_TABLE::SAVE_OK;
+
+        // If we had a group, we need to reselect it
+        if( group )
+        {
+            selection.Clear();
+            selection.Add( group );
+
+            // If we didn't have a design block link before, add one for convenience
+            if( !group->HasDesignBlockLink() )
+            {
+                SCH_COMMIT commit( m_toolManager );
+
+                commit.Modify( group );
+                group->SetDesignBlockLibId( aLibId );
+
+                commit.Push( "Set Group Design Block Link" );
+            }
+        }
     }
     catch( const IO_ERROR& ioe )
     {

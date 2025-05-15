@@ -858,14 +858,15 @@ void PCB_EDIT_FRAME::setupUIConditions()
     mgr->SetConditions( ACTIONS::doDelete,     ENABLE( cond.HasItems() ) );
     mgr->SetConditions( ACTIONS::duplicate,    ENABLE( cond.HasItems() ) );
 
-    mgr->SetConditions( PCB_ACTIONS::placeLinkedDesignBlock, ENABLE( groupWithDesignBlockLink) );
-
     static const std::vector<KICAD_T> groupTypes = { PCB_GROUP_T, PCB_GENERATOR_T };
 
     mgr->SetConditions( ACTIONS::group,        ENABLE( SELECTION_CONDITIONS::NotEmpty ) );
     mgr->SetConditions( ACTIONS::ungroup,      ENABLE( SELECTION_CONDITIONS::HasTypes( groupTypes ) ) );
     mgr->SetConditions( PCB_ACTIONS::lock,     ENABLE( PCB_SELECTION_CONDITIONS::HasUnlockedItems ) );
     mgr->SetConditions( PCB_ACTIONS::unlock,   ENABLE( PCB_SELECTION_CONDITIONS::HasLockedItems ) );
+
+    mgr->SetConditions( PCB_ACTIONS::placeLinkedDesignBlock, ENABLE( groupWithDesignBlockLink) );
+    mgr->SetConditions( PCB_ACTIONS::saveToLinkedDesignBlock, ENABLE( groupWithDesignBlockLink) );
 
     mgr->SetConditions( PCB_ACTIONS::padDisplayMode,   CHECK( !cond.PadFillDisplay() ) );
     mgr->SetConditions( PCB_ACTIONS::viaDisplayMode,   CHECK( !cond.ViaFillDisplay() ) );

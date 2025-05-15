@@ -178,6 +178,9 @@ public:
 
     bool GetHighlightBusMembers() const { return m_highlightBusMembers; }
 
+    int PlaceLinkedDesignBlock( const TOOL_EVENT& aEvent );
+    int SaveToLinkedDesignBlock( const TOOL_EVENT& aEvent );
+
 private:
     ///< copy selection to clipboard or to m_duplicateClipboard
     bool doCopy( bool aUseDuplicateClipboard = false );

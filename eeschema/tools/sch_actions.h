@@ -67,6 +67,8 @@ public:
     static TOOL_ACTION placeNextSymbolUnit;
     static TOOL_ACTION placePower;
     static TOOL_ACTION placeDesignBlock;
+    static TOOL_ACTION placeLinkedDesignBlock;
+    static TOOL_ACTION saveToLinkedDesignBlock;
     static TOOL_ACTION drawWire;
     static TOOL_ACTION drawBus;
     static TOOL_ACTION unfoldBus;

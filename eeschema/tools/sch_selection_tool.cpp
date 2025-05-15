@@ -304,6 +304,8 @@ bool SCH_SELECTION_TOOL::Init()
     // clang-format off
     menu.AddItem( ACTIONS::groupEnter,                groupEnterCondition, 1 );
     menu.AddItem( ACTIONS::groupLeave,                inGroupCondition,    1 );
+    menu.AddItem( SCH_ACTIONS::placeLinkedDesignBlock, groupEnterCondition, 1 );
+    menu.AddItem( SCH_ACTIONS::saveToLinkedDesignBlock, groupEnterCondition, 1 );
     menu.AddItem( SCH_ACTIONS::clearHighlight,        haveHighlight && SCH_CONDITIONS::Idle, 1 );
     menu.AddSeparator(                                haveHighlight && SCH_CONDITIONS::Idle, 1 );
 

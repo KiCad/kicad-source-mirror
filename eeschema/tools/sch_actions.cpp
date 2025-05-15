@@ -461,6 +461,22 @@ TOOL_ACTION SCH_ACTIONS::placeDesignBlock( TOOL_ACTION_ARGS()
         .Flags( AF_ACTIVATE )
         .Parameter<DESIGN_BLOCK*>( nullptr ) );
 
+TOOL_ACTION SCH_ACTIONS::placeLinkedDesignBlock( TOOL_ACTION_ARGS()
+        .Name( "eeschema.InteractiveDrawing.placeLinkedDesignBlock" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Place Linked Design Block" ) )
+        .Tooltip( _( "Place design block linked to selected group" ) )
+        .Icon( BITMAPS::add_component )
+        .Flags( AF_ACTIVATE ) );
+
+TOOL_ACTION SCH_ACTIONS::saveToLinkedDesignBlock( TOOL_ACTION_ARGS()
+        .Name( "eeschema.InteractiveDrawing.saveToLinkedDesignBlock" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Save to Linked Design Block" ) )
+        .Tooltip( _( "Save selected group to linked design block" ) )
+        .Icon( BITMAPS::add_component )
+        .Flags( AF_ACTIVATE ) );
+
 
 TOOL_ACTION SCH_ACTIONS::placeNoConnect( TOOL_ACTION_ARGS()
         .Name( "eeschema.InteractiveDrawing.placeNoConnect" )

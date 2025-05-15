@@ -28,6 +28,7 @@
 #include <design_block_lib_table.h>
 #include <footprint.h>
 #include <pad.h>
+#include <pcb_group.h>
 #include <widgets/pcb_design_block_pane.h>
 #include <pcb_edit_frame.h>
 #include <pcb_io/pcb_io.h>
@@ -262,16 +263,35 @@ bool PCB_EDIT_FRAME::saveSelectionToDesignBlock( const wxString& aNickname, PCB_
                 }
             };
 
+   auto cloneAndAdd =
+            [&] ( EDA_ITEM* aItem )
+            {
+                if( !aItem->IsBOARD_ITEM() )
+                    return static_cast<BOARD_ITEM*>( nullptr );
+
+                BOARD_ITEM* copy = static_cast<BOARD_ITEM*>( aItem->Clone() );
+                tempBoard->Add( copy, ADD_MODE::APPEND, false );
+                return copy;
+            };
+
     // Copy the selected items to the temporary board
     for( EDA_ITEM* item : aSelection )
     {
-        EDA_ITEM* copy = item->Clone();
-        tempBoard->Add( static_cast<BOARD_ITEM*>( copy ), ADD_MODE::APPEND, false );
+        if( BOARD_ITEM* copy = cloneAndAdd( item ) )
+            copy->SetParentGroup( nullptr );
 
-        if( FOOTPRINT* fp = dynamic_cast<FOOTPRINT*>( item ) )
-            fp->RunOnChildren( addNetIfNeeded, RECURSE_MODE::NO_RECURSE );
+        if( item->Type() == PCB_FOOTPRINT_T )
+            static_cast<FOOTPRINT*>( item )->RunOnChildren( addNetIfNeeded, RECURSE_MODE::NO_RECURSE );
+        else if( item->Type() == PCB_GROUP_T || item->Type() == PCB_GENERATOR_T )
+        {
+            PCB_GROUP* group = static_cast<PCB_GROUP*>( item );
+
+            // Groups also need their children copied
+            group->RunOnChildren( cloneAndAdd, RECURSE_MODE::RECURSE );
+            group->RunOnChildren( addNetIfNeeded, RECURSE_MODE::RECURSE );
+        }
         else
-            addNetIfNeeded( copy );
+            addNetIfNeeded( item );
     }
 
     // Rebuild connectivity, remove any unused nets
@@ -368,6 +388,24 @@ bool PCB_EDIT_FRAME::SaveSelectionToDesignBlock( const LIB_ID& aLibId )
         return false;
     }
 
+    // If we have a single group, we want to strip the group and select the children
+    PCB_GROUP* group = nullptr;
+
+    if( selection.Size() == 1 )
+    {
+        EDA_ITEM* item = selection.Front();
+
+        if( item->Type() == PCB_GROUP_T || item->Type() == PCB_GENERATOR_T )
+        {
+            group = static_cast<PCB_GROUP*>( item );
+
+            selection.Remove( item );
+
+            // Don't recurse; if we have a group of groups the user probably intends the inner groups to be saved
+            group->RunOnChildren( [&]( EDA_ITEM* aItem ) { selection.Add( aItem ); }, RECURSE_MODE::NO_RECURSE );
+        }
+    }
+
     DESIGN_BLOCK* blk = nullptr;
 
     try
@@ -381,9 +419,28 @@ bool PCB_EDIT_FRAME::SaveSelectionToDesignBlock( const LIB_ID& aLibId )
     }
 
     if( !blk->GetBoardFile().IsEmpty() && !checkOverwriteDbLayout( this, aLibId ) )
-    {
         return false;
+
+    if( !saveSelectionToDesignBlock( aLibId.GetLibNickname(), selection, *blk ) )
+        return false;
+
+    // If we had a group, we need to reselect it
+    if( group )
+    {
+        selection.Clear();
+        selection.Add( group );
+
+        // If we didn't have a design block link before, add one for convenience
+        if( !group->HasDesignBlockLink() )
+        {
+            BOARD_COMMIT commit( m_toolManager );
+
+            commit.Modify( group );
+            group->SetDesignBlockLibId( aLibId );
+
+            commit.Push( "Set Group Design Block Link" );
+        }
     }
 
-    return saveSelectionToDesignBlock( aLibId.GetLibNickname(), selection, *blk );
+    return true;
 }

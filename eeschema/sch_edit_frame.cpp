@@ -616,6 +616,20 @@ void SCH_EDIT_FRAME::setupUIConditions()
                 return GetUndoCommandCount() > 0;
             };
 
+    auto groupWithDesignBlockLink =
+            [] ( const SELECTION& aSel )
+            {
+                if( aSel.Size() != 1 )
+                    return false;
+
+                if( aSel[0]->Type() != SCH_GROUP_T )
+                    return false;
+
+                SCH_GROUP* group = static_cast<SCH_GROUP*>( aSel.GetItem( 0 ) );
+
+                return group->HasDesignBlockLink();
+            };
+
 #define ENABLE( x ) ACTION_CONDITIONS().Enable( x )
 #define CHECK( x )  ACTION_CONDITIONS().Check( x )
 
@@ -655,6 +669,9 @@ void SCH_EDIT_FRAME::setupUIConditions()
     mgr->SetConditions( SCH_ACTIONS::mirrorV,         ENABLE( hasElements ) );
     mgr->SetConditions( ACTIONS::group,               ENABLE( SELECTION_CONDITIONS::NotEmpty ) );
     mgr->SetConditions( ACTIONS::ungroup,             ENABLE( SELECTION_CONDITIONS::HasType( SCH_GROUP_T ) ) );
+
+    mgr->SetConditions( SCH_ACTIONS::placeLinkedDesignBlock, ENABLE( groupWithDesignBlockLink ) );
+    mgr->SetConditions( SCH_ACTIONS::saveToLinkedDesignBlock, ENABLE( groupWithDesignBlockLink ) );
 
     mgr->SetConditions( ACTIONS::zoomTool,            CHECK( cond.CurrentTool( ACTIONS::zoomTool ) ) );
     mgr->SetConditions( ACTIONS::selectionTool,       CHECK( cond.CurrentTool( ACTIONS::selectionTool ) ) );
