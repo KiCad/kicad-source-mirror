@@ -1127,9 +1127,7 @@ void EXPORTER_PCB_VRML::ExportVrmlFootprint( FOOTPRINT* aFootprint, std::ostream
 
             // copy the file if necessary
             wxDateTime srcModTime = srcFile.GetModificationTime();
-            wxDateTime destModTime = srcModTime;
-
-            destModTime.SetToCurrent();
+            wxDateTime destModTime = wxDateTime();
 
             if( dstFile.FileExists() )
                 destModTime = dstFile.GetModificationTime();
