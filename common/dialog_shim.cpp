@@ -658,6 +658,13 @@ void DIALOG_SHIM::OnCharHook( wxKeyEvent& aEvt )
 
         if( wxTextCtrl* textCtrl = dynamic_cast<wxTextCtrl*>( eventSource ) )
         {
+            // If the text control is not multi-line, we want to close the dialog
+            if( !textCtrl->IsMultiLine() )
+            {
+                wxPostEvent( this, wxCommandEvent( wxEVT_COMMAND_BUTTON_CLICKED, wxID_OK ) );
+                return;
+            }
+
 #if defined( __WXMAC__ ) || defined( __WXMSW__ )
             wxString eol = "\r\n";
 #else
