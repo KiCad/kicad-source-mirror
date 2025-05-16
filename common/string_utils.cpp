@@ -1155,10 +1155,8 @@ int ValueStringCompare( const wxString& strFWord, const wxString& strSWord )
         convertSeparators( &strFWordMid );
         convertSeparators( &strSWordMid );
 
-        LOCALE_IO toggle;    // toggles on, then off, the C locale.
-
-        strFWordMid.ToDouble( &lFirstNumber );
-        strSWordMid.ToDouble( &lSecondNumber );
+        strFWordMid.ToCDouble( &lFirstNumber );
+        strSWordMid.ToCDouble( &lSecondNumber );
 
         endingIsModifier |= ApplyModifier( lFirstNumber, strFWordEnd );
         endingIsModifier |= ApplyModifier( lSecondNumber, strSWordEnd );
