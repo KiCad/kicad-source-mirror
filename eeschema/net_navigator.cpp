@@ -445,6 +445,7 @@ const SCH_ITEM* SCH_EDIT_FRAME::SelectNextPrevNetNavigatorItem( bool aNext )
             m_netNavigator->EnsureVisible( nextId );
         }
 
+        m_netNavigator->UnselectAll();
         m_netNavigator->SelectItem( nextId );
 
         NET_NAVIGATOR_ITEM_DATA* data = static_cast<NET_NAVIGATOR_ITEM_DATA*>(

@@ -2845,6 +2845,7 @@ int SCH_SELECTION_TOOL::SelectNext( const TOOL_EVENT& aEvent )
 
     if( item )
     {
+        ClearSelection();
         select( const_cast<SCH_ITEM*>( item ) );
         m_toolMgr->ProcessEvent( EVENTS::SelectedEvent );
     }
@@ -2867,6 +2868,7 @@ int SCH_SELECTION_TOOL::SelectPrevious( const TOOL_EVENT& aEvent )
 
     if( item )
     {
+        ClearSelection();
         select( const_cast<SCH_ITEM*>( item ) );
         m_toolMgr->ProcessEvent( EVENTS::SelectedEvent );
     }
