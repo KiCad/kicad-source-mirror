@@ -254,8 +254,8 @@ void LINE_CHAMFER_ROUTINE::ProcessLinePair( PCB_SHAPE& aLineA, PCB_SHAPE& aLineB
 
     handler.AddNewItem( std::move( tSegment ) );
 
-    ModifyLineOrDeleteIfZeroLength( aLineA, *chamfer_result->m_updated_seg_a );
-    ModifyLineOrDeleteIfZeroLength( aLineB, *chamfer_result->m_updated_seg_b );
+    ModifyLineOrDeleteIfZeroLength( aLineA, chamfer_result->m_updated_seg_a );
+    ModifyLineOrDeleteIfZeroLength( aLineB, chamfer_result->m_updated_seg_b );
 
     AddSuccess();
 }
