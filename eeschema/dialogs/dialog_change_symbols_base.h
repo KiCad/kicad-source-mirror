@@ -73,6 +73,7 @@ class DIALOG_CHANGE_SYMBOLS_BASE : public DIALOG_SHIM
 		wxCheckBox* m_resetFieldEffects;
 		wxCheckBox* m_resetFieldPositions;
 		wxCheckBox* m_resetPinTextVisibility;
+		wxCheckBox* m_resetAlternatePin;
 		wxCheckBox* m_resetAttributes;
 		wxCheckBox* m_resetCustomPower;
 		WX_HTML_REPORT_PANEL* m_messagePanel;

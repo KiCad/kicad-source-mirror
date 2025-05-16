@@ -113,64 +113,79 @@ DIALOG_CHANGE_SYMBOLS_BASE::DIALOG_CHANGE_SYMBOLS_BASE( wxWindow* parent, wxWind
 	m_updateFieldsSizer->Add( m_selBtnSizer, 0, wxEXPAND, 5 );
 
 
-	bSizerUpdate->Add( m_updateFieldsSizer, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 10 );
+	bSizerUpdate->Add( m_updateFieldsSizer, 2, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 10 );
 
-	m_updateOptionsSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Update Options") ), wxVERTICAL );
+	m_updateOptionsSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Update Options") ), wxHORIZONTAL );
+
+	wxBoxSizer* bSizer8;
+	bSizer8 = new wxBoxSizer( wxVERTICAL );
+
+	m_removeExtraBox = new wxCheckBox( m_updateOptionsSizer->GetStaticBox(), wxID_ANY, _("Remove fields if not in library symbol"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_removeExtraBox->SetToolTip( _("Removes fields that do not occur in the original library symbols") );
+
+	bSizer8->Add( m_removeExtraBox, 0, wxBOTTOM|wxRIGHT, 4 );
+
+	m_resetEmptyFields = new wxCheckBox( m_updateOptionsSizer->GetStaticBox(), wxID_ANY, _("Reset fields if empty in library symbol"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer8->Add( m_resetEmptyFields, 0, wxBOTTOM|wxRIGHT, 4 );
+
+
+	bSizer8->Add( 0, 10, 1, wxEXPAND, 5 );
+
+	m_resetFieldText = new wxCheckBox( m_updateOptionsSizer->GetStaticBox(), wxID_ANY, _("Update/reset field text"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer8->Add( m_resetFieldText, 0, wxBOTTOM|wxRIGHT, 4 );
+
+	m_resetFieldVisibilities = new wxCheckBox( m_updateOptionsSizer->GetStaticBox(), wxID_ANY, _("Update/reset field visibilities"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer8->Add( m_resetFieldVisibilities, 0, wxBOTTOM|wxRIGHT, 4 );
+
+	m_resetFieldEffects = new wxCheckBox( m_updateOptionsSizer->GetStaticBox(), wxID_ANY, _("Update/reset field text sizes and styles"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer8->Add( m_resetFieldEffects, 0, wxBOTTOM|wxRIGHT, 4 );
+
+	m_resetFieldPositions = new wxCheckBox( m_updateOptionsSizer->GetStaticBox(), wxID_ANY, _("Update/reset field positions"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer8->Add( m_resetFieldPositions, 0, wxBOTTOM|wxRIGHT, 4 );
+
+
+	m_updateOptionsSizer->Add( bSizer8, 0, wxEXPAND, 5 );
+
+	wxBoxSizer* bSizer9;
+	bSizer9 = new wxBoxSizer( wxVERTICAL );
 
 	wxCheckBox* updateShapeAndPins;
 	updateShapeAndPins = new wxCheckBox( m_updateOptionsSizer->GetStaticBox(), wxID_ANY, _("Update symbol shape and pins"), wxDefaultPosition, wxDefaultSize, 0 );
 	updateShapeAndPins->SetValue(true);
 	updateShapeAndPins->Enable( false );
 
-	m_updateOptionsSizer->Add( updateShapeAndPins, 0, wxBOTTOM|wxRIGHT, 5 );
+	bSizer9->Add( updateShapeAndPins, 0, wxBOTTOM|wxRIGHT, 5 );
 
 	wxCheckBox* updateKeywordsAndFootprintFilters;
 	updateKeywordsAndFootprintFilters = new wxCheckBox( m_updateOptionsSizer->GetStaticBox(), wxID_ANY, _("Update keywords and footprint filters"), wxDefaultPosition, wxDefaultSize, 0 );
 	updateKeywordsAndFootprintFilters->SetValue(true);
 	updateKeywordsAndFootprintFilters->Enable( false );
 
-	m_updateOptionsSizer->Add( updateKeywordsAndFootprintFilters, 0, wxBOTTOM|wxRIGHT, 5 );
+	bSizer9->Add( updateKeywordsAndFootprintFilters, 0, wxBOTTOM|wxRIGHT, 5 );
 
 
-	m_updateOptionsSizer->Add( 0, 10, 1, wxEXPAND, 5 );
-
-	m_removeExtraBox = new wxCheckBox( m_updateOptionsSizer->GetStaticBox(), wxID_ANY, _("Remove fields if not in library symbol"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_removeExtraBox->SetToolTip( _("Removes fields that do not occur in the original library symbols") );
-
-	m_updateOptionsSizer->Add( m_removeExtraBox, 0, wxBOTTOM|wxRIGHT, 4 );
-
-	m_resetEmptyFields = new wxCheckBox( m_updateOptionsSizer->GetStaticBox(), wxID_ANY, _("Reset fields if empty in library symbol"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_updateOptionsSizer->Add( m_resetEmptyFields, 0, wxBOTTOM|wxRIGHT, 4 );
-
-
-	m_updateOptionsSizer->Add( 0, 10, 0, wxEXPAND, 5 );
-
-	m_resetFieldText = new wxCheckBox( m_updateOptionsSizer->GetStaticBox(), wxID_ANY, _("Update/reset field text"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_updateOptionsSizer->Add( m_resetFieldText, 0, wxBOTTOM|wxRIGHT, 4 );
-
-	m_resetFieldVisibilities = new wxCheckBox( m_updateOptionsSizer->GetStaticBox(), wxID_ANY, _("Update/reset field visibilities"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_updateOptionsSizer->Add( m_resetFieldVisibilities, 0, wxBOTTOM|wxRIGHT, 4 );
-
-	m_resetFieldEffects = new wxCheckBox( m_updateOptionsSizer->GetStaticBox(), wxID_ANY, _("Update/reset field text sizes and styles"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_updateOptionsSizer->Add( m_resetFieldEffects, 0, wxBOTTOM|wxRIGHT, 4 );
-
-	m_resetFieldPositions = new wxCheckBox( m_updateOptionsSizer->GetStaticBox(), wxID_ANY, _("Update/reset field positions"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_updateOptionsSizer->Add( m_resetFieldPositions, 0, wxBOTTOM|wxRIGHT, 4 );
-
-
-	m_updateOptionsSizer->Add( 0, 10, 1, wxEXPAND, 5 );
+	bSizer9->Add( 0, 10, 1, wxEXPAND, 5 );
 
 	m_resetPinTextVisibility = new wxCheckBox( m_updateOptionsSizer->GetStaticBox(), wxID_ANY, _("Update/reset visibility of pin names/numbers"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_updateOptionsSizer->Add( m_resetPinTextVisibility, 0, wxBOTTOM|wxRIGHT, 5 );
+	bSizer9->Add( m_resetPinTextVisibility, 0, wxBOTTOM|wxRIGHT, 5 );
+
+	m_resetAlternatePin = new wxCheckBox( m_updateOptionsSizer->GetStaticBox(), wxID_ANY, _("Reset alternate pin to default"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer9->Add( m_resetAlternatePin, 0, wxBOTTOM|wxRIGHT, 5 );
+
+
+	bSizer9->Add( 0, 10, 1, wxEXPAND, 5 );
 
 	m_resetAttributes = new wxCheckBox( m_updateOptionsSizer->GetStaticBox(), wxID_ANY, _("Update/reset symbol attributes"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_updateOptionsSizer->Add( m_resetAttributes, 0, wxBOTTOM|wxRIGHT, 5 );
+	bSizer9->Add( m_resetAttributes, 0, wxBOTTOM|wxRIGHT, 5 );
 
 	m_resetCustomPower = new wxCheckBox( m_updateOptionsSizer->GetStaticBox(), wxID_ANY, _("Reset custom power symbols"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_updateOptionsSizer->Add( m_resetCustomPower, 0, wxBOTTOM|wxRIGHT, 5 );
+	bSizer9->Add( m_resetCustomPower, 0, wxBOTTOM|wxRIGHT, 5 );
 
 
-	bSizerUpdate->Add( m_updateOptionsSizer, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 10 );
+	m_updateOptionsSizer->Add( bSizer9, 0, wxEXPAND, 5 );
+
+
+	bSizerUpdate->Add( m_updateOptionsSizer, 3, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 10 );
 
 
 	m_mainSizer->Add( bSizerUpdate, 0, wxEXPAND, 5 );
