@@ -168,7 +168,7 @@ class AllegroBoard:
 
             try:
                 string_val = self.board.string(string_id)
-                self.prnt(f"{name:12}: {string_val} (key: {string_id:#010x})")
+                self.prnt(f"{name:12}: '{string_val}' (key: {string_id:#010x})")
             except KeyError:
                 self.prnt(f"{name:12}: {string_id:#010x} (not found)")
 
@@ -410,8 +410,8 @@ class AllegroBoard:
             prntr.print_v("Layer count", d.layer_count)
             prntr.print_v("Pad type", d.pad_info.pad_type)
 
-            prntr.print_v("unknown_1", d)
-            prntr.print_v("unknown_2", d)
+            prntr.print_v("drill", d)  # ?
+            prntr.print_s("unknown_str", d)
             prntr.print_v("unknown_3", d)
             prntr.print_v("unknown_4", d)
             prntr.print_v("unknown_5", d)

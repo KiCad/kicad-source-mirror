@@ -26,7 +26,7 @@
 #include <functional>
 #include <memory>
 
-#include <allegro_pcb_structs.h>
+#include <convert/allegro_pcb_structs.h>
 
 #include <board.h>
 #include <reporter.h>

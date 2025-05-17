@@ -103,6 +103,7 @@ enum BLOCK_TYPE
  */
 enum class FMT_VER
 {
+    V_UNKNOWN,
     V_160, // Allegro 16.0, 0x00130000
     V_162, // Allegro 16.2  0x00130400
     V_164, // Allegro 16.4, 0x00130C00
@@ -649,8 +650,8 @@ struct BLK_0x0D_PAD
 
     COND_GE<FMT_VER::V_174, uint32_t> m_Unknown1;
 
-    uint32_t m_CoordsX;
-    uint32_t m_CoordsY;
+    int32_t m_CoordsX;
+    int32_t m_CoordsY;
 
     uint32_t m_PadStack;
     uint32_t m_Unknown2;
@@ -866,6 +867,22 @@ enum class PAD_TYPE
  */
 struct PADSTACK_COMPONENT
 {
+    enum TYPE
+    {
+        TYPE_NULL = 0x00,
+        TYPE_CIRCLE = 0x02,
+        TYPE_SQUARE= 0x05,
+        TYPE_RECTANGLE = 0x06,
+        TYPE_OBLONG_X = 0x0b,
+        TYPE_OBLONG_Y = 0x0c,
+        // Presumably:
+        // OCTAGON,
+        // POLYGON
+        // DONUT
+        // OBLONG
+        // etc
+    };
+
     uint8_t m_Type;
     uint8_t m_UnknownByte1;
     uint8_t m_UnknownByte2;
@@ -908,7 +925,7 @@ struct BLK_0x1C_PADSTACK
     uint32_t m_Key;
     uint32_t m_Next;
     uint32_t m_PadStr;
-    uint32_t m_Unknown1;
+    uint32_t m_Drill;
     uint32_t m_Unknown2;
     uint32_t m_PadPath;
 
@@ -947,14 +964,11 @@ struct BLK_0x1C_PADSTACK
     /**
      * Indexes of fixed slots in the component table
      */
-    enum FIXED_SLOTS
+    enum SLOTS
     {
         SOLDERMASK_TOP = 0,
         PASTEMASK_TOP = 5,
         FILMMASKTOP = 7,
-
-        LT_V172_FIXED_MAX = 10,
-        GE_V172_FIXED_MAX = 21,
     };
 
     /**
@@ -987,6 +1001,12 @@ struct BLK_0x1C_PADSTACK
      * Then, a set of groups of 3/4 components for each layer.
      */
     std::vector<PADSTACK_COMPONENT> m_Components;
+
+    /**
+     * How many of the entries are fixed roles (after this is n*layers)
+     */
+    size_t m_NumFixedCompEntries;
+    size_t m_NumCompsPerLayer;
 
     /**
      * Some structure of m_N * 8 or 10:
@@ -1798,7 +1818,14 @@ struct BLK_0x3C
 struct RAW_BOARD
 {
 public:
+    RAW_BOARD();
+
     std::unique_ptr<FILE_HEADER> m_Header;
+
+    /**
+     * What version is this file? We will need this to correctly interpret some structures.
+     */
+    FMT_VER m_FmtVer;
 
     /**
      * The string map is a map of U32 ID to strings.

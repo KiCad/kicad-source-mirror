@@ -23,13 +23,9 @@
 
 #include "allegro_builder.h"
 
-
-#include "allegro_pcb_structs.h"
-#include "allegro_pcb_structs.h"
+#include <convert/allegro_pcb_structs.h>
 
 #include <wx/log.h>
-
-#include <allegro_builder.h>
 
 #include <footprint.h>
 #include <pcb_text.h>
@@ -111,11 +107,14 @@ static uint32_t PadGetNextInFootprint( const BLOCK_BASE& aBlock )
 class LL_WALKER
 {
 public:
+
+    using NEXT_FUNC_T = std::function<uint32_t( const BLOCK_BASE& )>;
+
     class iterator
     {
     public:
-        iterator( uint32_t aCurrent, uint32_t aTail, const RAW_BOARD& aBoard ) :
-                m_current( aCurrent ), m_tail( aTail ), m_board( aBoard )
+        iterator( uint32_t aCurrent, uint32_t aTail, const RAW_BOARD& aBoard, NEXT_FUNC_T aNextFunc ) :
+                m_current( aCurrent ), m_tail( aTail ), m_board( aBoard ), m_NextFunc( aNextFunc )
         {
             m_currBlock = m_board.GetObjectByKey( m_current );
         }
@@ -130,7 +129,7 @@ public:
             }
             else
             {
-                m_current = ::GetPrimaryNext( *m_currBlock );
+                m_current = m_NextFunc( *m_currBlock );
 
                 // Reached the tail - this isn't actually a node we should return
                 if( m_current == m_tail )
@@ -160,6 +159,7 @@ public:
         const BLOCK_BASE* m_currBlock;
         uint32_t          m_tail;
         const RAW_BOARD&  m_board;
+        NEXT_FUNC_T       m_NextFunc;
     };
 
     LL_WALKER( uint32_t aHead, uint32_t aTail, const RAW_BOARD& aBoard ) :
@@ -174,10 +174,8 @@ public:
     {
     }
 
-    iterator begin() const { return iterator( m_head, m_tail, m_board ); }
-    iterator end() const { return iterator( 0, m_tail, m_board ); }
-
-    using NEXT_FUNC_T = std::function<uint32_t( const BLOCK_BASE& )>;
+    iterator begin() const { return iterator( m_head, m_tail, m_board, m_nextFunction ); }
+    iterator end() const { return iterator( 0, m_tail, m_board, m_nextFunction ); }
 
     void SetNextFunc( NEXT_FUNC_T aNextFunc ) { m_nextFunction = aNextFunc; }
 
@@ -404,38 +402,28 @@ public:
         }
 
         // Keep a record of what we failed to map
-        static std::unordered_map<LAYER_INFO, int> s_UnknownLayers;
-
-        if( s_UnknownLayers.count( aLayerInfo ) == 0 )
+        if( m_unknownLayers.count( aLayerInfo ) == 0 )
         {
             wxLogTrace( traceAllegroBuilder, "Failed to map class:subclass to layer: %#04x:%#04x", aLayerInfo.m_Class,
                         aLayerInfo.m_Subclass );
-            s_UnknownLayers[aLayerInfo] = 1;
+            m_unknownLayers[aLayerInfo] = 1;
         }
-        s_UnknownLayers[aLayerInfo]++;
+        m_unknownLayers[aLayerInfo]++;
 
         // Dump everything else here
-        return Cmts_User;
+        return m_unmappedLayer;
     }
 
     /**
-     * Allegro puts more graphics than just the polygon on PBT/B.
+     * Allegro puts more graphics than just the polygon on PBT/B, but we don't want to always make a static
+     * mapping, because some things on PBT/B _do_ belong to the courtyard layer in KiCad (polygons).
      *
-     * Use this function to choose a user layer instead.
+     * Use this function to create/choose a user layer instead.
      */
     PCB_LAYER_ID GetPlaceBounds( bool aTop )
     {
         const wxString name = aTop ? "PLACE_BOUND_TOP" : "PLACE_BOUND_BOTTOM";
-
-        // If it's been added already, use it
-        if( m_MappedOptionalLayers.count( name ) )
-        {
-            return m_MappedOptionalLayers.at( name );
-        }
-
-        const PCB_LAYER_ID newLId = addUserLayer( name );
-        m_MappedOptionalLayers[name] = newLId;
-        return newLId;
+        return mapCustomLayerByName( name );
     }
 
 private:
@@ -475,6 +463,25 @@ private:
         return lId;
     }
 
+    /**
+     * Create or find a mapped layer with a given name, but not specifically bound to a specific class:subclass.
+     *
+     * This is useful when some items on a class:sublcass need to be placed on a KiCad layer other than the usual
+     * mapping (non-polygon PLACE_BOUND_TOP items, for example)
+     */
+    PCB_LAYER_ID mapCustomLayerByName( const wxString& aLayerName )
+    {
+        // If it's been added already, use it
+        if( m_MappedOptionalLayers.count( aLayerName ) )
+        {
+            return m_MappedOptionalLayers.at( aLayerName );
+        }
+
+        const PCB_LAYER_ID newLId = addUserLayer( aLayerName );
+        m_MappedOptionalLayers[aLayerName] = newLId;
+        return newLId;
+    }
+
     PCB_LAYER_ID addUserLayer( const wxString& aName )
     {
         const PCB_LAYER_ID lId = getNthUserLayer( m_numUserLayersUsed++ );
@@ -500,16 +507,25 @@ private:
     std::unordered_map<LAYER_INFO, PCB_LAYER_ID> m_customLayerToKiMap;
 
     /**
-     * This is a map of named, but optional, Allegro layers that we have mapped to KiCad layers.
+     * This is a map of optional, Allegro layers that we have mapped to KiCad layers with given names.
      *
      * This is done by name, because multiple class:subclass pairs may share the same name.
      */
     std::unordered_map<wxString, PCB_LAYER_ID> m_MappedOptionalLayers;
 
+    /**
+     * A record of what we _failed_ to map.
+     */
+    std::unordered_map<LAYER_INFO, int> m_unknownLayers;
+
     int m_numUserLayersUsed = 0;
 
-    // for looking up strings
+    // The layer to use for mapping failures;
+    PCB_LAYER_ID m_unmappedLayer = Cmts_User;
+
+    // For looking up strings in the string map
     const RAW_BOARD& m_rawBoard;
+    // For adding layers to
     BOARD&           m_board;
 };
 
@@ -568,8 +584,8 @@ void BOARD_BUILDER::reportUnexpectedBlockType( uint8_t aGot, uint8_t aExpected, 
                                                const wxString& aName ) const
 {
     wxString name = aName.IsEmpty() ? wxString( "Object" ) : aName;
-    wxString withKey = ( aKey == 0 ) ? wxString( "" ) : wxString::Format( ", with key %#04x ", aKey );
-    wxString withOffset = ( aOffset == 0 ) ? wxString( "" ) : wxString::Format( ", at offset %#04x ", aOffset );
+    wxString withKey = ( aKey == 0 ) ? wxString( "" ) : wxString::Format( ", with key %#010x ", aKey );
+    wxString withOffset = ( aOffset == 0 ) ? wxString( "" ) : wxString::Format( ", at offset %#lx ", aOffset );
 
     wxString s = wxString::Format( "%s has unexpected type %#04x (expected %#04x)%s%s", name, aGot, aExpected, withKey,
                                    withOffset );
@@ -899,13 +915,243 @@ const BLK_0x07* BOARD_BUILDER::getFpInstRef( const BLK_0x2D& aFpInstance ) const
 }
 
 
-std::vector<std::unique_ptr<BOARD_ITEM>> buildPadItems( const BLK_0x1C_PADSTACK& aPadstack, FOOTPRINT& aFp,
-                                                        const wxString& aPadName, int aNetcode )
+/**
+ * Description of an Allegro pad component - one layer, with: shape, thermal relief, antipad.
+ *
+ * Drill is a separate part of the padstack.
+ */
+struct ALLEGRO_PADSTACK_COMP
 {
-    // Not all Allegro PADSTACKS can be represented by a single KiCad padstack. For example, the
+    enum class SHAPE
+    {
+        RECTANGLE,
+        CIRCLE,
+        OBLONG_X,
+        OBLONG_Y,
+    };
+
+    SHAPE m_Shape;
+    VECTOR2I m_Size;
+    VECTOR2I m_Offset;
+};
+
+
+std::vector<std::unique_ptr<BOARD_ITEM>> BOARD_BUILDER::buildPadItems( const BLK_0x1C_PADSTACK& aPadstack,
+                                                                       FOOTPRINT& aFp, const wxString& aPadName, int aNetcode )
+{
+    // Not all Allegro PADSTACKS can be represented by a single KiCad pad. For example, the
     // paste and mask layers can have completely independent shapes in Allegro, but in KiCad that
     // would require a separate aperture pad.
+    // Also if there are multiple drills, we will need to make a pad for each
     std::vector<std::unique_ptr<BOARD_ITEM>> padItems;
+
+    // This is the main padstack for the copper layers
+    PADSTACK mainPadStack( &aFp );
+
+    const auto getPcbLayerForCompIndex = [&]( size_t i ) -> PCB_LAYER_ID
+    {
+        const size_t indexInLayers = i - aPadstack.m_NumFixedCompEntries;
+        const size_t layerN = indexInLayers / aPadstack.m_NumCompsPerLayer;
+
+        if( layerN == 0 )
+            return F_Cu;
+        if( layerN == aPadstack.m_LayerCount - 1 )
+            return B_Cu;
+        return ToLAYER_ID( 2 * ( layerN + 1 ) );
+    };
+
+    std::vector<std::unique_ptr<PADSTACK::COPPER_LAYER_PROPS>> copperLayers( aPadstack.m_LayerCount );
+
+    const wxString& padStackName = m_rawBoard.GetString( aPadstack.m_PadStr );
+
+    std::cout << " Pad " << padStackName << " with " << aPadstack.m_LayerCount << " layers" << std::endl;
+
+    // First, gather all the copper layers into a set of shape props, which we can then use to decide on the padstack mode
+    for( size_t i = 0; i < aPadstack.m_LayerCount; ++i )
+    {
+        const size_t layerBaseIndex = aPadstack.m_NumFixedCompEntries + i * aPadstack.m_NumCompsPerLayer;
+        const ALLEGRO::PADSTACK_COMPONENT& padComp = aPadstack.m_Components[layerBaseIndex + BLK_0x1C_PADSTACK::LAYER_COMP_SLOT::PAD];
+        const ALLEGRO::PADSTACK_COMPONENT& antiPadComp = aPadstack.m_Components[layerBaseIndex + BLK_0x1C_PADSTACK::LAYER_COMP_SLOT::ANTIPAD];
+        const ALLEGRO::PADSTACK_COMPONENT& thermalComp = aPadstack.m_Components[layerBaseIndex + BLK_0x1C_PADSTACK::LAYER_COMP_SLOT::THERMAL_RELIEF];
+
+        // If this is zero just skip entirely - I don't think we can usefully make pads with just thermal relief
+        // Flag up if that happens.
+        if( padComp.m_Type == PADSTACK_COMPONENT::TYPE_NULL)
+        {
+            if( antiPadComp.m_Type != PADSTACK_COMPONENT::TYPE_NULL )
+            {
+                m_reporter.Report(
+                        wxString::Format( "Padstack %s: Copper layer %lu has no pad component, but has antipad",
+                                          padStackName, i ),
+                        RPT_SEVERITY_WARNING );
+            }
+            if( thermalComp.m_Type != PADSTACK_COMPONENT::TYPE_NULL )
+            {
+                m_reporter.Report(
+                        wxString::Format( "Copper layer %lu has no pad component, but has thermal relief", i ),
+                        RPT_SEVERITY_WARNING );
+            }
+            continue;
+        }
+
+        auto& layerCuProps = copperLayers[i];
+        std::cout << " Adding layer " << i << " with type " << (int) padComp.m_Type << std::endl;
+        layerCuProps = std::make_unique<PADSTACK::COPPER_LAYER_PROPS>();
+
+        switch( padComp.m_Type )
+        {
+        case PADSTACK_COMPONENT::TYPE_RECTANGLE:
+            layerCuProps->shape.shape = PAD_SHAPE::RECTANGLE;
+            layerCuProps->shape.size = scale( VECTOR2I{ padComp.m_W, padComp.m_H } );
+            layerCuProps->shape.offset = scale( VECTOR2I{ padComp.m_X3, padComp.m_X4 } );
+            break;
+        case PADSTACK_COMPONENT::TYPE_SQUARE:
+            layerCuProps->shape.shape = PAD_SHAPE::RECTANGLE;
+            layerCuProps->shape.size = scale( VECTOR2I{ padComp.m_W, padComp.m_W } ); // maybe just use the rect shape?
+            layerCuProps->shape.offset = scale( VECTOR2I{ padComp.m_X3, padComp.m_X4 } );
+            break;
+        case PADSTACK_COMPONENT::TYPE_CIRCLE:
+            layerCuProps->shape.shape = PAD_SHAPE::CIRCLE;
+            layerCuProps->shape.size = scale( VECTOR2I{ padComp.m_W, padComp.m_H } );
+            layerCuProps->shape.offset = scale( VECTOR2I{ padComp.m_X3, padComp.m_X4 } );
+            break;
+        default:
+            break;
+        }
+
+        if( antiPadComp.m_Type != PADSTACK_COMPONENT::TYPE_NULL)
+        {
+            if( antiPadComp.m_Type != padComp.m_Type )
+            {
+                m_reporter.Report( wxString::Format( "Copper layer %lu has an antipad of a different shape to the pad. The "
+                                                     "pad shape will be used.",
+                                                     i ),
+                                   RPT_SEVERITY_WARNING );
+            }
+
+            int clearanceX = scale( ( antiPadComp.m_W - padComp.m_W ) / 2 );
+            int clearanceY = scale( ( antiPadComp.m_H - padComp.m_H ) / 2 );
+
+            if( clearanceX && clearanceX != clearanceY )
+            {
+                m_reporter.Report( wxString::Format( "Padstack %s: copper layer %lu has a unequal X and Y antipad clearance (%d vs %d). "
+                                "The X clearance will be used.",
+                                padStackName, i, clearanceX, clearanceY ),
+                        RPT_SEVERITY_WARNING );
+            }
+
+            if( antiPadComp.m_X3 != 0 || antiPadComp.m_X4 != 0 )
+            {
+                m_reporter.Report(
+                        wxString::Format( "Copper layer %lu has an antipad offset %s, %s, which is not supported.", i,
+                                          antiPadComp.m_X3, antiPadComp.m_X4 ),
+                        RPT_SEVERITY_WARNING );
+            }
+
+            layerCuProps->clearance = clearanceX;
+        }
+
+        // TODO thermal
+
+        // TODO keepouts
+    }
+
+    // We have now constructed a list of copper props. We can determine the PADSTACK mode now and assign the shapes
+    PADSTACK padStack( &aFp );
+
+    if( copperLayers.size() == 0 )
+    {
+        // SMD aperture PAD or something?
+    }
+    else
+    {
+        const auto layersEqual = [&](size_t aFrom, size_t aTo) -> bool
+        {
+            bool eq = true;
+            for( size_t i = aFrom + 1; i < aTo; ++i )
+            {
+                if( !copperLayers[i - 1] || !copperLayers[i] || *copperLayers[i - 1] != *copperLayers[i] )
+                {
+                    eq = false;
+                    break;
+                }
+            }
+            return eq;
+        };
+
+        for(size_t i = 0; i < copperLayers.size(); ++i )
+        {
+            std::cout << " Layer " << i << ": " << !!copperLayers[i] << std::endl;
+        }
+
+        padStack.SetLayerSet( PAD::PTHMask() );
+
+        if( layersEqual(0, copperLayers.size() ) )
+        {
+            std::cout << " Normal mode" << std::endl;
+            padStack.SetMode( PADSTACK::MODE::NORMAL );
+            PADSTACK::COPPER_LAYER_PROPS& layerProps = padStack.CopperLayer( F_Cu );
+            layerProps = *copperLayers.front();
+        }
+        else if( layersEqual( 1, copperLayers.size() - 1) )
+        {
+            std::cout << " FIB mode" << std::endl;
+            padStack.SetMode( PADSTACK::MODE::FRONT_INNER_BACK );
+            padStack.CopperLayer( F_Cu ) = *copperLayers.front();
+            padStack.CopperLayer( B_Cu ) = *copperLayers.back();
+
+            // May be B_Cu if layers = 2, but that's OK
+            padStack.CopperLayer( In1_Cu ) = *copperLayers[1];
+        }
+        else
+        {
+            std::cout << " Custom mode" << std::endl;
+            // padStack.SetMode( PADSTACK::MODE::CUSTOM );
+            // for( size_t i = 0; i < copperLayers.size(); ++i )
+            // {
+            //     const PCB_LAYER_ID layer = getPcbLayerForCompIndex( i );
+            //     padStack.CopperLayer( layer ) = *copperLayers[i];
+            // }
+        }
+    }
+
+    if( aPadstack.m_Drill == 0 )
+    {
+        padStack.Drill().size = VECTOR2I( 0, 0 );
+    }
+    else
+    {
+        padStack.Drill().size = VECTOR2I( scale( aPadstack.m_Drill ), scale( aPadstack.m_Drill ) );
+    }
+
+    std::unique_ptr<PAD> pad = std::make_unique<PAD>( &aFp );
+    pad->SetPadstack( padStack );
+
+    padItems.push_back( std::move( pad ) );
+
+    // Now, for each technical layer, we see if we can include it into the existing padstack, or if we need to add
+    // it as a standalone pad
+    for( size_t i = 0; i < aPadstack.m_NumFixedCompEntries; ++i )
+    {
+        const ALLEGRO::PADSTACK_COMPONENT& psComp = aPadstack.m_Components[i];
+
+        /// If this is zero just skip entirely
+        if( psComp.m_Type == PADSTACK_COMPONENT::TYPE_NULL)
+            continue;
+
+        switch( i )
+        {
+        case BLK_0x1C_PADSTACK::SLOTS::SOLDERMASK_TOP:
+        case BLK_0x1C_PADSTACK::SLOTS::PASTEMASK_TOP:
+        case BLK_0x1C_PADSTACK::SLOTS::FILMMASKTOP:
+            break;
+        default:
+            // This layer index isn't handled (yet?)
+            // one of them is ~ALV, whatever that is, but it's been null up to now
+            m_reporter.Report( wxString::Format( "Unhandled fixed padstack slot: %lu", i ), RPT_SEVERITY_WARNING );
+            break;
+        };
+    }
 
     return padItems;
 }
@@ -1032,11 +1278,13 @@ std::unique_ptr<FOOTPRINT> BOARD_BUILDER::buildFootprint( const BLK_0x2D& aFpIns
 
         const int      netCode = m_netCache.at( netAssignment->m_Net )->GetNetCode();
         const wxString padName = m_rawBoard.GetString( padInfo->m_NameStrId );
+        const VECTOR2I padPos = scale( VECTOR2I{ padInfo->m_CoordsX, padInfo->m_CoordsY } );
 
         std::vector<std::unique_ptr<BOARD_ITEM>> padItems = buildPadItems( *padStack, *fp, padName, netCode );
 
         for( std::unique_ptr<BOARD_ITEM>& item : padItems )
         {
+            item->Move( padPos );
             fp->Add( item.release() );
         }
     }

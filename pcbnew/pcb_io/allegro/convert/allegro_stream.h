@@ -31,7 +31,7 @@
 #include <algorithm>
 
 #include <ki_exception.h>
-#include <allegro_pcb_structs.h>
+#include <convert/allegro_pcb_structs.h>
 
 namespace ALLEGRO
 {

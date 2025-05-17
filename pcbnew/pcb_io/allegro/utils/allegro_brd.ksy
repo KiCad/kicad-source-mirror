@@ -1170,10 +1170,12 @@ types:
           String ID for the padstack name.
 
           Examples: 'R110_95', 'S_SQU_0-95_P_V0', 'VIA26'
-      - id: unknown_1
+      - id: drill
         type: u4
-      - id: unknown_2
+      - id: unknown_str
         type: u4
+        doc: |
+          A string id, null, or the string is empty (so far)
       - id: pad_path
         type: u4
       - id: unknown_3

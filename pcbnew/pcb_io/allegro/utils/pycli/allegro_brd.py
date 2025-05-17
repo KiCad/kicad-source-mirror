@@ -2215,7 +2215,7 @@ class AllegroBrd(KaitaiStruct):
             slot = 3
             npth = 8
             smt_pin2 = 10
-        SEQ_FIELDS = ["_unnamed0", "n", "_unnamed2", "key", "next", "pad_str", "unknown_1", "unknown_2", "pad_path", "unknown_3", "unknown_4", "unknown_5", "unknown_6", "pad_info", "unknown_7", "unknown_8", "unknown_9", "unknown_10", "layer_count", "unknown_11", "unknown_arr8", "unknown_arr28", "unknown_arr8_2", "components", "unk2", "unk3"]
+        SEQ_FIELDS = ["_unnamed0", "n", "_unnamed2", "key", "next", "pad_str", "drill", "unknown_str", "pad_path", "unknown_3", "unknown_4", "unknown_5", "unknown_6", "pad_info", "unknown_7", "unknown_8", "unknown_9", "unknown_10", "layer_count", "unknown_11", "unknown_arr8", "unknown_arr28", "unknown_arr8_2", "components", "unk2", "unk3"]
         def __init__(self, _io, _parent=None, _root=None):
             self._io = _io
             self._parent = _parent
@@ -2242,12 +2242,12 @@ class AllegroBrd(KaitaiStruct):
             self._debug['pad_str']['start'] = self._io.pos()
             self.pad_str = self._io.read_u4le()
             self._debug['pad_str']['end'] = self._io.pos()
-            self._debug['unknown_1']['start'] = self._io.pos()
-            self.unknown_1 = self._io.read_u4le()
-            self._debug['unknown_1']['end'] = self._io.pos()
-            self._debug['unknown_2']['start'] = self._io.pos()
-            self.unknown_2 = self._io.read_u4le()
-            self._debug['unknown_2']['end'] = self._io.pos()
+            self._debug['drill']['start'] = self._io.pos()
+            self.drill = self._io.read_u4le()
+            self._debug['drill']['end'] = self._io.pos()
+            self._debug['unknown_str']['start'] = self._io.pos()
+            self.unknown_str = self._io.read_u4le()
+            self._debug['unknown_str']['end'] = self._io.pos()
             self._debug['pad_path']['start'] = self._io.pos()
             self.pad_path = self._io.read_u4le()
             self._debug['pad_path']['end'] = self._io.pos()

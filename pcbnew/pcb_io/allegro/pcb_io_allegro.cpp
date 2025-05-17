@@ -32,7 +32,7 @@
 #include <reporter.h>
 #include <io/io_utils.h>
 
-#include <allegro_parser.h>
+#include <convert/allegro_parser.h>
 #include <allegro_builder.h>
 
 #include <core/profile.h>

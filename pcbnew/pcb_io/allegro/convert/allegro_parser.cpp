@@ -21,7 +21,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <allegro_parser.h>
+#include "convert/allegro_parser.h"
 
 #include <cstring>
 #include <iostream>  // TOOD remove
@@ -29,8 +29,6 @@
 #include <wx/sstream.h>
 #include <wx/log.h>
 #include <wx/translation.h>
-
-#include <allegro_pcb_structs.h>
 
 #include <core/type_helpers.h>
 #include <ki_exception.h>
@@ -469,6 +467,21 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x05_TRACK( FILE_STREAM& aStream, 
     return block;
 }
 
+#include <convert/allegro_db.h>
+
+class OBJ_0x06: public DB_OBJ
+{
+public:
+    explicit OBJ_0x06(const BLOCK<BLK_0x06>& aBlock ):
+        DB_OBJ( aBlock )
+    {}
+
+    void ResolveRefs( const DB_OBJ_RESOLVER& aResolver ) override
+    {
+
+    }
+};
+
 
 static std::unique_ptr<BLOCK_BASE> ParseBlock_0x06( FILE_STREAM& stream, FMT_VER aVer )
 {
@@ -488,6 +501,8 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x06( FILE_STREAM& stream, FMT_VER
     data.m_PtrSymbol = stream.ReadU32();
 
     ReadCond( stream, aVer, data.m_UnknownPtr2 );
+
+    OBJ_0x06 obj(*block);
 
     return block;
 }
@@ -881,7 +896,7 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x1C_PADSTACK( FILE_STREAM& aStrea
     data.m_Next = aStream.ReadU32();
 
     data.m_PadStr = aStream.ReadU32();
-    data.m_Unknown1 = aStream.ReadU32();
+    data.m_Drill = aStream.ReadU32();
     data.m_Unknown2 = aStream.ReadU32();
     data.m_PadPath = aStream.ReadU32();
 
@@ -937,7 +952,11 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x1C_PADSTACK( FILE_STREAM& aStrea
     ReadCond( aStream, aVer, data.m_UnknownArr28 );
     ReadCond( aStream, aVer, data.m_UnknownArr8_2 );
 
-    const size_t nComps = aVer < FMT_VER::V_172 ? ( 10 + data.m_LayerCount * 3 ) : ( 21 + data.m_LayerCount * 4 );
+    // Work out how many fixed slots we have, and how many per-layer slots
+    data.m_NumFixedCompEntries = aVer < FMT_VER::V_172 ? 10 : 21;
+    data.m_NumCompsPerLayer = aVer < FMT_VER::V_172 ? 3 : 4;
+
+    const size_t nComps = data.m_NumFixedCompEntries + ( data.m_LayerCount * data.m_NumCompsPerLayer );
 
     data.m_Components.reserve( nComps );
     for( size_t i = 0; i < nComps; ++i )
@@ -2057,7 +2076,7 @@ uint32_t BLOCK_BASE::GetKey() const
 void ALLEGRO::PARSER::readObjects( RAW_BOARD& aBoard )
 {
     const uint32_t magic = aBoard.m_Header->m_Magic;
-    FMT_VER        ver = GetFormatVer( magic );
+    const FMT_VER  ver = aBoard.m_FmtVer;
 
     if( m_progressReporter )
     {
@@ -2391,6 +2410,7 @@ std::unique_ptr<RAW_BOARD> ALLEGRO::PARSER::Parse()
     try
     {
         board->m_Header = ReadHeader( m_stream );
+        board->m_FmtVer = GetFormatVer( board->m_Header->m_Magic );
 
         ReadStringMap( m_stream, *board, board->m_Header->m_StringsCount );
 
@@ -2412,3 +2432,8 @@ std::unique_ptr<RAW_BOARD> ALLEGRO::PARSER::Parse()
 
     return board;
 }
+
+
+ALLEGRO::RAW_BOARD::RAW_BOARD() :
+    m_FmtVer( FMT_VER::V_UNKNOWN )
+{}

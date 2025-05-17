@@ -35,15 +35,14 @@
 #include <core/profile.h>
 #include <ki_exception.h>
 
-#include <allegro_parser.h>
-#include <allegro_pcb_structs.h>
+#include <convert/allegro_parser.h>
 
 
 int main( int argc, char** argv )
 {
     wxInitialize( argc, argv );
 
-    argparse::ArgumentParser argParser( "Allegro .brd Parser utils" );
+    argparse::ArgumentParser argParser( "Allegro .brd database extraction" );
 
     // clang-format off
     argParser.add_argument( "-v", "--verbose" )
@@ -56,30 +55,9 @@ int main( int argc, char** argv )
         .required();
 
     argParser.add_argument( "-S", "--summary" )
-        .help( "Print a summary of the file structure" )
+        .help( "Print a summary of the file" )
         .flag();
 
-    argParser.add_argument( "--st", "--string-table" )
-        .help( "Print the string table" )
-        .flag();
-
-    argParser.add_argument( "--sk", "--string-by-key" )
-        .help( "Print the given string ID" )
-        .scan<'i', uint32_t>()
-        .metavar( "ID_32" );
-
-    argParser.add_argument( "--sm", "--string-match" )
-        .help( "Print strings that match a substring" )
-        .metavar( "SUBSTRING" );
-
-    argParser.add_argument( "--bc", "--block-counts" )
-        .help( "Print counts of each discovered block type" )
-        .flag();
-
-    argParser.add_argument( "-k", "--block-key" )
-        .help( "Find a block with a given key" )
-        .metavar( "KEY" )
-        .scan<'i', uint32_t>();
     // clang-format on
 
     try
@@ -100,7 +78,7 @@ int main( int argc, char** argv )
     // kaitai::kstream ks( &fin );
     ALLEGRO::FILE_STREAM allegroStream( fin );
 
-    ALLEGRO::PARSER parser( allegroStream );
+    ALLEGRO::PARSER parser( allegroStream, nullptr );
     parser.EndAtUnknownBlock( true );
 
     PROF_TIMER parseTimer;
@@ -131,73 +109,6 @@ int main( int argc, char** argv )
         // dumpObjectCounts( std::cout, boardContent );
 
         fmt::print( "  String map: {} entries", board->m_StringTable.size() );
-    }
-
-    if( argParser.get<bool>( "string-table" ) )
-    {
-        for( const auto& [id, str] : board->m_StringTable )
-        {
-            fmt::print( "{:#010x}: {}\n", id, str );
-        }
-    }
-    else if( argParser.is_used( "string-match" ) )
-    {
-        const std::string pat = argParser.get<std::string>( "string-match" );
-
-        const auto& stringTable = board->m_StringTable;
-
-        for( const auto& [id, str] : stringTable )
-        {
-            if( str.find( pat ) != std::string::npos )
-            {
-                fmt::print( "{:#010x}: {}\n", id, str );
-            }
-        }
-    }
-    else if( argParser.is_used( "string-by-key" ) )
-    {
-        uint32_t stringId = argParser.get<uint32_t>( "string-by-key" );
-
-        const auto& stringTable = board->m_StringTable;
-
-        if( stringTable.count( stringId ) )
-        {
-            fmt::print( "String ID {:#010x}: {}\n", stringId, stringTable.at( stringId ) );
-        }
-        else
-        {
-            fmt::print( "String ID {:#010x} not found\n", stringId );
-        }
-    }
-    else if( argParser.get<bool>( "block-counts" ) )
-    {
-        std::map<uint8_t, size_t> blockCounts;
-
-        for( const auto& obj : board->m_ObjectLists )
-        {
-            blockCounts[obj.first] = obj.second.size();
-        }
-
-        for( const auto& [blockType, count] : blockCounts )
-        {
-            fmt::print( "Block type {:#04x}: {:5d}\n", blockType, count );
-        }
-    }
-    else if( argParser.is_used( "block-key" ) )
-    {
-        uint32_t blockKey = argParser.get<uint32_t>( "block-key" );
-
-        if( board->m_ObjectKeyMap.count( blockKey ) )
-        {
-            auto* block = board->m_ObjectKeyMap.at( blockKey );
-
-            fmt::print( "Block key {:#010x}: {:#04x} at offset {:#010x}\n", blockKey, block->GetBlockType(),
-                        block->GetOffset() );
-        }
-        else
-        {
-            fmt::print( "Block key {:#010x} not found\n", blockKey );
-        }
     }
 
     wxUninitialize();
