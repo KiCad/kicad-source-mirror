@@ -26,6 +26,7 @@
 
 // Code under test
 #include <lib_symbol.h>
+#include <pin_type.h>
 #include <sch_pin.h>
 #include <sch_symbol.h>
 
@@ -114,6 +115,12 @@ BOOST_AUTO_TEST_CASE( Copy )
     BOOST_CHECK_EQUAL( copied.GetParentSymbol(), m_parent_symbol );
     BOOST_CHECK_EQUAL( copied.GetNumber(), m_lib_pin->GetNumber() );
     BOOST_CHECK_EQUAL( copied.GetAlt(), wxEmptyString );
+
+    SCH_PIN::ALT alt;
+    alt.m_Name = wxS( "alt" );
+    alt.m_Shape = GRAPHIC_PINSHAPE::INVERTED;
+    alt.m_Type = ELECTRICAL_PINTYPE::PT_OUTPUT;
+    copied.GetAlternates()[ wxS( "alt" ) ] = alt;
 
     // Set some non-default values
     copied.SetAlt( "alt" );
