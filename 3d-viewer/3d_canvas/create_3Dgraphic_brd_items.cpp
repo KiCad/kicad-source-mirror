@@ -685,27 +685,43 @@ void BOARD_ADAPTER::addShape( const PCB_SHAPE* aShape, CONTAINER_2D_BASE* aConta
         case SHAPE_T::BEZIER:
         case SHAPE_T::POLY:
         {
-            SHAPE_POLY_SET polyList;
-
-            aShape->TransformShapeToPolygon( polyList, UNDEFINED_LAYER, 0, ARC_HIGH_DEF, ERROR_INSIDE );
-
-            // Some polygons can be a bit complex (especially when coming from a
-            // picture of a text converted to a polygon
-            // So call Simplify before calling ConvertPolygonToTriangles, just in case.
-            polyList.Simplify();
-
-            if( polyList.IsEmpty() ) // Just for caution
-                break;
-
-            if( margin != 0 )
+            if( isSolidFill )
             {
-                CORNER_STRATEGY cornerStr = margin >= 0 ? CORNER_STRATEGY::ROUND_ALL_CORNERS
-                                                        : CORNER_STRATEGY::ALLOW_ACUTE_CORNERS;
+                SHAPE_POLY_SET polyList;
 
-                polyList.Inflate( margin, cornerStr, GetBoard()->GetDesignSettings().m_MaxError );
+                aShape->TransformShapeToPolygon( polyList, UNDEFINED_LAYER, 0, ARC_HIGH_DEF, ERROR_INSIDE );
+
+                // Some polygons can be a bit complex (especially when coming from a
+                // picture of a text converted to a polygon
+                // So call Simplify before calling ConvertPolygonToTriangles, just in case.
+                polyList.Simplify();
+
+                if( polyList.IsEmpty() ) // Just for caution
+                    break;
+
+                if( margin != 0 )
+                {
+                    CORNER_STRATEGY cornerStr =
+                            margin >= 0 ? CORNER_STRATEGY::ROUND_ALL_CORNERS : CORNER_STRATEGY::ALLOW_ACUTE_CORNERS;
+
+                    polyList.Inflate( margin, cornerStr, GetBoard()->GetDesignSettings().m_MaxError );
+                }
+
+                ConvertPolygonToTriangles( polyList, *aContainer, m_biuTo3Dunits, *aOwner );
             }
+            else
+            {
+                std::vector<VECTOR2I> pts = aShape->GetCorners();
 
-            ConvertPolygonToTriangles( polyList, *aContainer, m_biuTo3Dunits, *aOwner );
+                for( int i = 0; i < pts.size() - 1; i++ )
+                {
+                    addROUND_SEGMENT_2D( aContainer, TO_SFVEC2F( pts[i] ), TO_SFVEC2F( pts[i + 1] ), linewidth3DU,
+                                         *aOwner );
+                }
+
+                addROUND_SEGMENT_2D( aContainer, TO_SFVEC2F( pts[pts.size() - 1] ), TO_SFVEC2F( pts[0] ), linewidth3DU,
+                                     *aOwner );
+            }
             break;
         }
 
