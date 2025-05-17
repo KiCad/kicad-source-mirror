@@ -488,6 +488,12 @@ void SCH_IO_KICAD_SEXPR_LIB_CACHE::savePin( SCH_PIN* aPin, OUTPUTFORMATTER& aFor
 
     for( const std::pair<const wxString, SCH_PIN::ALT>& alt : aPin->GetAlternates() )
     {
+        // There was a bug somewhere in the alternate pin code that allowed pin alternates with no
+        // name to be saved in library symbols.  This strips any invalid alternates just in case
+        // that code resurfaces.
+        if( alt.second.m_Name.IsEmpty() )
+            continue;
+
         aFormatter.Print( "(alternate %s %s %s)",
                           aFormatter.Quotew( alt.second.m_Name ).c_str(),
                           getPinElectricalTypeToken( alt.second.m_Type ),

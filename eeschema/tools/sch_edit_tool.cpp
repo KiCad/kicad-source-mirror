@@ -202,13 +202,17 @@ private:
         wxMenuItem* item = Append( ID_POPUP_SCH_ALT_PIN_FUNCTION, libPin->GetName(), wxEmptyString,
                                    wxITEM_CHECK );
 
-        if( pin->GetAlt().IsEmpty() )
+        if( pin->GetAlt().IsEmpty() || ( pin->GetAlt() == libPin->GetName() ) )
             item->Check( true );
 
         int ii = 1;
 
         for( const auto& [ name, definition ] : libPin->GetAlternates() )
         {
+            // The default pin name is set above, avoid setting it again.
+            if( name == libPin->GetName() )
+                continue;
+
             item = Append( ID_POPUP_SCH_ALT_PIN_FUNCTION + ii, name, wxEmptyString, wxITEM_CHECK );
 
             if( name == pin->GetAlt() )

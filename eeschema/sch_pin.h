@@ -150,7 +150,17 @@ public:
     }
 
     wxString GetAlt() const { return m_alt; }
-    void SetAlt( const wxString& aAlt ) { m_alt = aAlt; }
+
+    /**
+     * Set the name of the alternate pin.
+     *
+     * @note If the alternate pin is the same as the default pin name or does not exist in the
+     *       list of pin alternates, it's set to an empty string which results in the alternate
+     *       being set to the default pin.
+     *
+     * @param is the name of the pin alternate in #m_alternates.
+     */
+    void SetAlt( const wxString& aAlt );
 
     /**
      * Return the pin real orientation (PIN_UP, PIN_DOWN, PIN_RIGHT, PIN_LEFT),

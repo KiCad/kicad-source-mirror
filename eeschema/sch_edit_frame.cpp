@@ -2427,6 +2427,18 @@ void SCH_EDIT_FRAME::SaveSymbolToSchematic( const LIB_SYMBOL& aSymbol,
         GetCanvas()->GetView()->Update( unit );
     }
 
+    // Clear any orphaned alternate pins.
+    for( SCH_PIN* pin : principalSymbol->GetPins() )
+    {
+        wxString altName = pin->GetAlt();
+
+        if( altName.IsEmpty() )
+            continue;
+
+        if( pin->GetAlternates().count( altName ) == 0 )
+            pin->SetAlt( wxEmptyString );
+    }
+
     if( !commit.Empty() )
         commit.Push( _( "Save Symbol to Schematic" ) );
 }
