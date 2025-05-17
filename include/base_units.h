@@ -112,14 +112,19 @@ constexpr EDA_IU_SCALE drawSheetIUScale = EDA_IU_SCALE( PL_IU_PER_MM );
 constexpr EDA_IU_SCALE schIUScale = EDA_IU_SCALE( SCH_IU_PER_MM );
 constexpr EDA_IU_SCALE unityScale = EDA_IU_SCALE( 1 );
 
+// Allowed error to approximate an arg by segments, in millimeters
+constexpr double ARC_LOW_DEF_MM = 0.02;
+constexpr double ARC_HIGH_DEF_MM = 0.005;
+
 #ifndef SWIG
 // The max error is the distance between the middle of a segment, and the circle
 // for circle/arc to segment approximation.
 // Warning: too small values can create very long calculation time in zone filling
 // 0.05 to 0.005 mm are reasonable values
 
-constexpr int ARC_LOW_DEF = pcbIUScale.mmToIU( 0.02 );
-constexpr int ARC_HIGH_DEF = pcbIUScale.mmToIU( 0.005 );
+// Allowed error to approximate an arg by segments, in Pcbnew IU
+constexpr int ARC_LOW_DEF = pcbIUScale.mmToIU( ARC_LOW_DEF_MM );
+constexpr int ARC_HIGH_DEF = pcbIUScale.mmToIU( ARC_HIGH_DEF_MM );
 #endif
 
 #endif   // _BASE_UNITS_H_

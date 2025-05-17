@@ -355,6 +355,15 @@ wxString EDA_SHAPE::SHAPE_T_asString() const
 }
 
 
+int EDA_SHAPE::GetArcToSegMaxErrorIU( bool aHighDefinition ) const
+{
+    // Returning ARC_HIGH_DEF or ARC_LOW_DEF is suitable only for
+    // Pcbnew calculations
+    // For other cases a GetArcToSegMaxErrorIU() must be probably override this one
+    return aHighDefinition ? ARC_HIGH_DEF : ARC_LOW_DEF;
+}
+
+
 void EDA_SHAPE::setPosition( const VECTOR2I& aPos )
 {
     move( aPos - getPosition() );
@@ -609,8 +618,8 @@ void EDA_SHAPE::UpdateHatching() const
         break;
 
     case SHAPE_T::CIRCLE:
-        TransformCircleToPolygon( shapeBuffer, getCenter(), GetRadius() + GetWidth(),
-                                  ARC_HIGH_DEF, ERROR_INSIDE );
+        TransformCircleToPolygon( shapeBuffer, getCenter(), GetRadius(),
+                                  GetArcToSegMaxErrorIU(), ERROR_INSIDE );
         break;
 
     case SHAPE_T::POLY:

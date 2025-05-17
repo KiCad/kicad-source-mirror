@@ -49,6 +49,14 @@ EDA_ITEM* SCH_SHAPE::Clone() const
 }
 
 
+int SCH_SHAPE::GetArcToSegMaxErrorIU( bool aHighDefinition ) const
+{
+    // Returns the equivalent of ARC_HIGH_DEF or ARC_LOW_DEF in eeschema IU
+    return aHighDefinition ?
+                schIUScale.mmToIU( ARC_HIGH_DEF_MM ) : schIUScale.mmToIU( ARC_LOW_DEF_MM );
+}
+
+
 void SCH_SHAPE::swapData( SCH_ITEM* aItem )
 {
     SCH_ITEM::SwapFlags( aItem );
