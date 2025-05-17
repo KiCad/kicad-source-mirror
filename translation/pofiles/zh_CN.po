@@ -42,7 +42,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-05-06 12:52+0300\n"
-"PO-Revision-Date: 2025-04-23 10:24+0000\n"
+"PO-Revision-Date: 2025-05-18 19:01+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/kicad/master-source/zh_Hans/>\n"
@@ -51,7 +51,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.11.1-dev\n"
+"X-Generator: Weblate 5.12-dev\n"
 "X-Poedit-KeywordsList: _HKI;_\n"
 "X-Poedit-Basepath: ../../kicad-source-mirror\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -2656,9 +2656,9 @@ msgid "Path"
 msgstr "路径"
 
 #: common/dialogs/dialog_design_block_properties.cpp:99
-#, fuzzy, c-format
+#, c-format
 msgid "Illegal character '%c' in name '%s'."
-msgstr "非法字符 '%c' 在名称 '%s'。"
+msgstr "名称 '%2$s' 中出现非法字符 '%1$c'。"
 
 #: common/dialogs/dialog_design_block_properties.cpp:125
 #: eeschema/dialogs/panel_template_fieldnames.cpp:102
@@ -13271,9 +13271,8 @@ msgid "Unknown columns in data: %s. These columns will be ignored."
 msgstr ""
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:1019
-#, fuzzy
 msgid "CSV import warning"
-msgstr "符号警告"
+msgstr "CSV 导入警告"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:1163
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:113
@@ -13351,14 +13350,12 @@ msgid "Export only shown pins"
 msgstr "导出封装"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:147
-#, fuzzy
 msgid "To File..."
-msgstr "提交文件..."
+msgstr "到文件..."
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:150
-#, fuzzy
 msgid "To Clipboard"
-msgstr "剪贴板"
+msgstr "到剪贴板"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:163
 #: eeschema/menubar.cpp:100 eeschema/symbol_editor/menubar_symbol_editor.cpp:67
@@ -13377,14 +13374,12 @@ msgid "Append to existing pins"
 msgstr "附加现有的图框"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:180
-#, fuzzy
 msgid "From File..."
-msgstr "提交文件..."
+msgstr "从文件..."
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:183
-#, fuzzy
 msgid "From Clipboard"
-msgstr "导出到剪贴板"
+msgstr "从剪贴板"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:200
 msgid "Filter by unit:"
@@ -19705,6 +19700,8 @@ msgid ""
 "Unable to find LTspice symbols.\n"
 "Install LTspice or put its library files into %s"
 msgstr ""
+"无法找到 LTspice 符号。\n"
+"安装 LTspice 或将其库文件放入 %s"
 
 #: eeschema/sch_io/ltspice/sch_io_ltspice.h:49
 msgid "LTspice schematic files"
@@ -25458,7 +25455,7 @@ msgstr "%s (D%d) 在层 %d: %s上"
 
 #: gerbview/gerber_file_image.cpp:125
 msgid "Too many messages, some are skipped"
-msgstr ""
+msgstr "信息过多, 部分被跳过"
 
 #: gerbview/gerber_file_image.cpp:358
 msgid "Image name"
@@ -46001,9 +45998,8 @@ msgid "Missing netclass name argument to hasNetclass()"
 msgstr "hasNetclass() 缺少网络类名参数"
 
 #: pcbnew/pcbexpr_functions.cpp:1316
-#, fuzzy
 msgid "Missing netclass name argument to hasExactNetclass()"
-msgstr "hasNetclass() 缺少网络类名参数"
+msgstr "hasExactNetclass() 缺少网络类名称参数"
 
 #: pcbnew/pcbexpr_functions.cpp:1356
 msgid "Missing component class name argument to hasComponentClass()"
