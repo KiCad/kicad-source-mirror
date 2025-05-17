@@ -155,6 +155,7 @@ public:
      */
     SHAPE_LINE_CHAIN() :
             SHAPE_LINE_CHAIN_BASE( SH_LINE_CHAIN ),
+            m_accuracy( 0 ),
             m_closed( false ),
             m_width( 0 )
     {}
@@ -164,6 +165,7 @@ public:
             m_points( aShape.m_points ),
             m_shapes( aShape.m_shapes ),
             m_arcs( aShape.m_arcs ),
+            m_accuracy( aShape.m_accuracy ),
             m_closed( aShape.m_closed ),
             m_width( aShape.m_width ),
             m_bbox( aShape.m_bbox )
