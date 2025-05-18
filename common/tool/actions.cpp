@@ -696,19 +696,23 @@ TOOL_ACTION ACTIONS::zoomFitScreen( TOOL_ACTION_ARGS()
 #endif
         .LegacyHotkeyName( "Zoom Auto" )
         .FriendlyName( _( "Zoom to Fit" ) )
+        .Tooltip( _( "Zoom to worksheet area if exists or edited object" ) )
         .Icon( BITMAPS::zoom_fit_in_page ) );
 
 TOOL_ACTION ACTIONS::zoomFitObjects( TOOL_ACTION_ARGS()
         .Name( "common.Control.zoomFitObjects" )
         .Scope( AS_GLOBAL )
         .DefaultHotkey( MD_CTRL + static_cast<int>( WXK_HOME ) )
-        .FriendlyName( _( "Zoom to Objects" ) )
+        .FriendlyName( _( "Zoom to All Objects" ) )
+        .Tooltip( _( "Zoom to all objects on screen" ) )
         .Icon( BITMAPS::zoom_fit_to_objects ) );
 
 TOOL_ACTION ACTIONS::zoomFitSelection( TOOL_ACTION_ARGS()
         .Name( "common.Control.zoomFitSelection" )
         .Scope( AS_GLOBAL )
-        .FriendlyName( _( "Zoom to Selected Objects" ) ) );
+        .Tooltip( _( "Zoom to items currently selected" ) )
+        .FriendlyName( _( "Zoom to Selected Objects" ) )
+        .Icon( BITMAPS::zoom_fit_to_objects ) );
 
 TOOL_ACTION ACTIONS::zoomIn( TOOL_ACTION_ARGS()
         .Name( "common.Control.zoomIn" )
@@ -787,7 +791,8 @@ TOOL_ACTION ACTIONS::zoomTool( TOOL_ACTION_ARGS()
         .Scope( AS_GLOBAL )
         .DefaultHotkey( MD_CTRL + static_cast<int>( WXK_F5 ) )
         .LegacyHotkeyName( "Zoom to Selection" )
-        .FriendlyName( _( "Zoom to Selection" ) )
+        .FriendlyName( _( "Zoom to Selection Area" ) )
+        .Tooltip( _( "Zoom to an area selection created by a mouse drag" ) )
         .Icon( BITMAPS::zoom_area )
         .ToolbarState( { TOOLBAR_STATE::TOGGLE, TOOLBAR_STATE::CANCEL } )
         .Flags( AF_ACTIVATE ) );
