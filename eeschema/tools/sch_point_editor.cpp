@@ -926,6 +926,7 @@ void SCH_POINT_EDITOR::makePointsAndBehavior( EDA_ITEM* aItem )
 SCH_POINT_EDITOR::SCH_POINT_EDITOR() :
         SCH_TOOL_BASE<SCH_BASE_FRAME>( "eeschema.PointEditor" ),
         m_editedPoint( nullptr ),
+        m_arcEditMode( ARC_EDIT_MODE::KEEP_CENTER_ADJUST_ANGLE_RADIUS ),
         m_inPointEditor( false )
 {
 }

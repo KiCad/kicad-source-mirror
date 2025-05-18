@@ -85,7 +85,8 @@ public:
 
     TOOLBAR_TREE_ITEM_DATA( TOOLBAR_ITEM_TYPE aType, TOOL_ACTION* aAction ) :
         m_type( aType ),
-        m_action( aAction )
+        m_action( aAction ),
+        m_size( 0 )
     {
         wxASSERT( aType == TOOLBAR_ITEM_TYPE::TOOL );
     }
@@ -123,7 +124,8 @@ PANEL_TOOLBAR_CUSTOMIZATION::PANEL_TOOLBAR_CUSTOMIZATION( wxWindow* aParent, APP
         PANEL_TOOLBAR_CUSTOMIZATION_BASE( aParent ),
         m_actionImageList( nullptr ),
         m_appSettings( aCfg ),
-        m_appTbSettings( aTbSettings )
+        m_appTbSettings( aTbSettings ),
+        m_currentToolbar( TOOLBAR_LOC::TOP_MAIN )
 {
     // Copy the tools and controls into the internal maps
     for( auto& tool : aTools )
