@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-05-06 12:53+0300\n"
-"PO-Revision-Date: 2025-05-18 23:32+0000\n"
+"PO-Revision-Date: 2025-05-19 04:05+0000\n"
 "Last-Translator: Sárkány Lőrinc <lsarkany@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/kicad/v9/hu/>\n"
 "Language: hu\n"
@@ -36292,7 +36292,6 @@ msgid "Centre on source items"
 msgstr "Alkatrészrajzolat nagyítása képernyőméretre"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:197
-#, fuzzy
 msgid "Horizontal, then vertical"
 msgstr "Vízszintesen, aztán függőlegesen"
 
@@ -36302,18 +36301,15 @@ msgid "Vertical, then horizontal"
 msgstr "Függőlegesen, aztán vízszintesen"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:199
-#, fuzzy
 msgid "Numbering Direction"
 msgstr "Számozás iránya"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:203
-#, fuzzy
 msgid "Reverse numbering on alternate rows/columns"
 msgstr "Minden második sor/oszlop fordított számozása"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:206
 #: pcbnew/dialogs/dialog_create_array_base.cpp:411
-#, fuzzy
 msgid "Use first free number"
 msgstr "Használja az első szabad számot"
 
@@ -36329,17 +36325,14 @@ msgid "Initial Pad Number"
 msgstr "Kezdő forrszem szám"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:212
-#, fuzzy
 msgid "Continuous (1, 2, 3...)"
-msgstr "Folyamatos (1, 2, 3...)"
+msgstr "Folytonos (1, 2, 3...)"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:212
-#, fuzzy
 msgid "Coordinate (A1, A2, ... B1, ...)"
 msgstr "Koordináta (A1, A2, ... B1, ...)"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:214
-#, fuzzy
 msgid "Pad Numbering Scheme"
 msgstr "Forrszem számozási séma"
 
@@ -36355,15 +36348,13 @@ msgstr "Másodlagos tengely irányú számozás:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:246
 #: pcbnew/dialogs/dialog_create_array_base.cpp:432
-#, fuzzy
 msgid "Pad numbering start:"
 msgstr "Forrszem számozás kezdőértéke:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:260
 #: pcbnew/dialogs/dialog_create_array_base.cpp:439
-#, fuzzy
 msgid "Pad numbering increment:"
-msgstr "Forrszem számozás kezdőértéke:"
+msgstr "Forrszem számozás növekmény:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:290
 #, fuzzy
@@ -36376,12 +36367,10 @@ msgid "Center position"
 msgstr "Aktuális pozíció"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:307
-#, fuzzy
 msgid "Center pos X:"
-msgstr "Középpont Y:"
+msgstr "Középpont X:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:318
-#, fuzzy
 msgid "Center pos Y:"
 msgstr "Középpont Y:"
 
@@ -36393,7 +36382,6 @@ msgstr "Alkatrészrajzolat kiválasztása..."
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:341
 #: pcbnew/dialogs/dialog_position_relative_base.cpp:40
-#, fuzzy
 msgid "Select Item..."
 msgstr "Elem kiválasztása..."
 
@@ -36403,9 +36391,8 @@ msgid "Duplication Settings"
 msgstr "Azonos lábak:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:353
-#, fuzzy
 msgid "Full circle"
-msgstr "kör"
+msgstr "Teljes kör"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:363
 #, fuzzy
@@ -36415,7 +36402,6 @@ msgstr "a szalag és a felső fém közötti távolság"
 #: pcbnew/dialogs/dialog_create_array_base.cpp:367
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:142
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:367
-#, fuzzy
 msgid "90"
 msgstr "90°"
 
@@ -36435,14 +36421,12 @@ msgid "Item count:"
 msgstr "Láb sorszám:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:381
-#, fuzzy
 msgid "How many items in the array."
 msgstr "A tömbben lévő elemek száma."
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:388
-#, fuzzy
 msgid "Rotate items"
-msgstr "Elem forgatása"
+msgstr "Elemek forgatása"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:390
 #, fuzzy
@@ -36454,9 +36438,8 @@ msgstr ""
 "pozíciót fognak felvenni"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:409
-#, fuzzy
 msgid "Numbering Options"
-msgstr "Forrszem számozás opciók"
+msgstr "Számozási beállítások"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:413
 #, fuzzy
@@ -36464,12 +36447,10 @@ msgid "Initial Pad Number:"
 msgstr "Kezdő forrszem szám:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:417
-#, fuzzy
 msgid "Pad Numbering:"
 msgstr "Forrszem számozás:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:462
-#, fuzzy
 msgid "Circular Array"
 msgstr "Kör alakú tömb"
 
@@ -36498,7 +36479,6 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_create_array_base.h:130
 #: pcbnew/tools/array_tool.cpp:313
-#, fuzzy
 msgid "Create Array"
 msgstr "Tömb létrehozása"
 
@@ -36523,7 +36503,6 @@ msgid "Leader Format"
 msgstr "Nullák formázása"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:39
-#, fuzzy
 msgid "Text frame:"
 msgstr "Szöveg keret:"
 
@@ -36564,7 +36543,6 @@ msgstr ""
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:65
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:140
 #: pcbnew/dialogs/panel_setup_dimensions_base.cpp:29
-#, fuzzy
 msgid "Units:"
 msgstr "Mértékegység:"
 
@@ -36617,7 +36595,6 @@ msgstr ""
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:166
 #: pcbnew/dialogs/dialog_plot_base.cpp:367
 #: pcbnew/dialogs/panel_setup_dimensions_base.cpp:71
-#, fuzzy
 msgid "Precision:"
 msgstr "Pontosság:"
 
@@ -36699,13 +36676,11 @@ msgstr "Méretvonal szöveg:"
 #: pcbnew/dialogs/dialog_tablecell_properties_base.cpp:144
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:176
 #: pcbnew/dialogs/dialog_textbox_properties_base.cpp:155
-#, fuzzy
 msgid "Text width"
 msgstr "Szöveg szélesség"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:288
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:215
-#, fuzzy
 msgid "Text pos X"
 msgstr "Szöveg X pozíció"
 
@@ -36713,13 +36688,11 @@ msgstr "Szöveg X pozíció"
 #: pcbnew/dialogs/dialog_tablecell_properties_base.cpp:157
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:189
 #: pcbnew/dialogs/dialog_textbox_properties_base.cpp:171
-#, fuzzy
 msgid "Text height"
 msgstr "Szöveg magasság"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:314
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:228
-#, fuzzy
 msgid "Text pos Y"
 msgstr "Szöveg Y pozíció"
 
@@ -36728,7 +36701,6 @@ msgstr "Szöveg Y pozíció"
 #: pcbnew/dialogs/dialog_target_properties_base.cpp:39
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:200
 #: pcbnew/dialogs/dialog_textbox_properties_base.cpp:182
-#, fuzzy
 msgid "Thickness:"
 msgstr "Vastagság:"
 
@@ -36736,35 +36708,30 @@ msgstr "Vastagság:"
 #: pcbnew/dialogs/dialog_tablecell_properties_base.cpp:170
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:202
 #: pcbnew/dialogs/dialog_textbox_properties_base.cpp:184
-#, fuzzy
 msgid "Text thickness"
 msgstr "Szövegvastagság"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:340
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:241
 #: pcbnew/dialogs/dialog_textbox_properties_base.cpp:197
-#, fuzzy
 msgid "Text orientation"
-msgstr "A szöveges tájolás"
+msgstr "Szöveg tájolása"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:346
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:247
 #: pcbnew/dialogs/dialog_textbox_properties_base.cpp:203
-#, fuzzy
 msgid "90.0"
 msgstr "+90.0°"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:347
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:248
 #: pcbnew/dialogs/dialog_textbox_properties_base.cpp:204
-#, fuzzy
 msgid "-90.0"
 msgstr "-90.0°"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:348
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:249
 #: pcbnew/dialogs/dialog_textbox_properties_base.cpp:205
-#, fuzzy
 msgid "180.0"
 msgstr "180.0°"
 
@@ -36785,7 +36752,6 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:355
 #: pcbnew/layer_pairs.cpp:138
-#, fuzzy
 msgid "Manual"
 msgstr "Kézi"
 
@@ -36816,9 +36782,8 @@ msgstr "Zónakitöltések ellenőrzése..."
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:401
 #: pcbnew/dialogs/panel_setup_dimensions_base.cpp:83
-#, fuzzy
 msgid "Arrow length:"
-msgstr "Láb hosszúsága:"
+msgstr "Nyíl hossza:"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:412
 #: pcbnew/dialogs/panel_setup_dimensions_base.cpp:99
@@ -36837,19 +36802,18 @@ msgid "Extension line overshoot:"
 msgstr "Pozíció eltolás:"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:438
-#, fuzzy
 msgid "Arrow direction:"
-msgstr "Keresés iránya:"
+msgstr "Nyíl iránya:"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:442
 #: pcbnew/pcb_dimension.cpp:1792
 msgid "Inward"
-msgstr ""
+msgstr "Befelé"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:442
 #: pcbnew/pcb_dimension.cpp:1793
 msgid "Outward"
-msgstr ""
+msgstr "Kifelé"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:446
 msgid ""
@@ -36862,12 +36826,10 @@ msgstr ""
 #: pcbnew/dialogs/dialog_dimension_properties_base.h:142
 #: pcbnew/pcb_dimension.cpp:1806 pcbnew/pcb_dimension.cpp:1909
 #: pcbnew/pcb_dimension.cpp:1984 pcbnew/pcb_dimension.cpp:2027
-#, fuzzy
 msgid "Dimension Properties"
-msgstr "Méretvonal szöveg tulajdonságok"
+msgstr "Mértékegység tulajdonságok"
 
 #: pcbnew/dialogs/dialog_drc.cpp:140
-#, fuzzy
 msgid "Run DRC"
 msgstr "Tervezési szabályellenőrző (DRC) futtatása"
 
@@ -36877,14 +36839,12 @@ msgid "DRC incomplete: could not compile custom design rules."
 msgstr "Nem sikerült megnyitni a konfigurációs fájlt"
 
 #: pcbnew/dialogs/dialog_drc.cpp:307 pcbnew/tools/board_inspection_tool.cpp:214
-#, fuzzy
 msgid "Show design rules."
 msgstr "Tervezési szabályok megjelenítése."
 
 #: pcbnew/dialogs/dialog_drc.cpp:360
-#, fuzzy
 msgid "-------- DRC cancelled by user.<br><br>"
-msgstr "-------- DRC cancelled by user.<br><br>"
+msgstr "-------- A felhasználó megszakította a DRC-t.<br><br>"
 
 #: pcbnew/dialogs/dialog_drc.cpp:703
 #, fuzzy, c-format
@@ -36921,7 +36881,6 @@ msgid "Report file '%s' created<br>"
 msgstr "A(z) \"%s\" naplófájl létrehozva\n"
 
 #: pcbnew/dialogs/dialog_drc.cpp:1411
-#, fuzzy
 msgid "not run"
 msgstr "nem fut"
 
@@ -36946,7 +36905,7 @@ msgstr ""
 "lesz jelentve."
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:123
-#, fuzzy, c-format
+#, c-format
 msgid "Unconnected Items (%s)"
 msgstr "Kapcsolat nélküli elemek (%s)"
 
@@ -36968,12 +36927,10 @@ msgstr ""
 "beleértve)."
 
 #: pcbnew/dialogs/dialog_enum_pads_base.cpp:32
-#, fuzzy
 msgid "Pad name prefix:"
 msgstr "Forrszem név előtag:"
 
 #: pcbnew/dialogs/dialog_enum_pads_base.cpp:47
-#, fuzzy
 msgid "First pad number:"
 msgstr "Első forrszem száma:"
 
@@ -36983,32 +36940,26 @@ msgid "Numbering step:"
 msgstr "Sorszámozás"
 
 #: pcbnew/dialogs/dialog_enum_pads_base.h:50
-#, fuzzy
 msgid "Pad Enumeration Settings"
 msgstr "Forrszem felsorolási beállítások"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:76
-#, fuzzy
 msgid "Change Footprints"
 msgstr "Alkatrészrajzolatok cseréje"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:77
-#, fuzzy
 msgid "Change all footprints on board"
 msgstr "Az összes alkatrészrajzolat a cseréje nyákterven"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:78
-#, fuzzy
 msgid "Change selected footprint(s)"
-msgstr "A kiválasztott alkatrészrajzolat cseréje"
+msgstr "A kiválasztott alkatrészrajzolat(ok) cseréje"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:79
-#, fuzzy
 msgid "Change footprints matching reference designator:"
 msgstr "A hivatkozási jelnek megfelelő alkatrészrajzolat cseréje:"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:80
-#, fuzzy
 msgid "Change footprints matching value:"
 msgstr "Az értéknek megfelelő alkatrészrajzolat cseréje:"
 
@@ -37018,19 +36969,16 @@ msgid "Change footprints with library id:"
 msgstr "Cserélni kívánt alkatrészrajzolatok könyvtári azonosítója:"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:82
-#, fuzzy
 msgid "Update text layers and visibilities"
 msgstr "Frissítse a szöveg és látható rétegeket"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:83
-#, fuzzy
 msgid "Update text sizes, styles and positions"
 msgstr "Szövegméretek, stílusok és pozíciók frissítése"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:84
-#, fuzzy
 msgid "Update text content"
-msgstr "Szövegmező  frissítése"
+msgstr "Szövegmező frissítése"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:85
 #, fuzzy
@@ -37038,9 +36986,8 @@ msgid "Update fabrication attributes"
 msgstr "Gyártáshoz szükséges attribútumok frissítése"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:86
-#, fuzzy
 msgid "Update 3D models"
-msgstr "3D modellek Frissítése"
+msgstr "3D modellek frissítése"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:90
 msgid ""
@@ -37051,14 +36998,13 @@ msgid ""
 msgstr ""
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:310
-#, fuzzy
 msgid "Change Footprint"
-msgstr "Alkatrészrajzolatok cseréje"
+msgstr "Alkatrészrajzolat cseréje"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:363
-#, fuzzy, c-format
+#, c-format
 msgid "Updated footprint %s (%s)"
-msgstr "Alkatrészrajzolatok frissítése"
+msgstr "Frissített alkatrészrajzolat %s (%s)"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:369
 #, fuzzy, c-format
@@ -37068,7 +37014,6 @@ msgstr ""
 "alkatrészrajzolatra: '%s'"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:379
-#, fuzzy
 msgid "*** library footprint not found ***"
 msgstr "*** alkatrészrajzolat nem található ***"
 
@@ -37078,7 +37023,6 @@ msgid ": (no changes)"
 msgstr "Módosítás visszavonása"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:408
-#, fuzzy
 msgid ": OK"
 msgstr ": OK"
 
