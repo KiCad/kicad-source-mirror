@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-05-06 12:53+0300\n"
-"PO-Revision-Date: 2025-05-18 19:02+0000\n"
+"PO-Revision-Date: 2025-05-18 23:32+0000\n"
 "Last-Translator: Sárkány Lőrinc <lsarkany@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/kicad/v9/hu/>\n"
 "Language: hu\n"
@@ -35445,7 +35445,6 @@ msgid "Slot"
 msgstr ""
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:493
-#, fuzzy
 msgid "???"
 msgstr "???"
 
@@ -35458,7 +35457,7 @@ msgstr "???"
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:152
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:176
 msgid "N/A"
-msgstr ""
+msgstr "N/A"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:513 pcbnew/pad.cpp:1565
 msgid "PTH"
@@ -35475,41 +35474,35 @@ msgid ""
 msgstr ""
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:676
-#, fuzzy
 msgid "Date"
 msgstr "Dátum"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:678
-#, fuzzy
 msgid "Board name"
 msgstr "NYÁK terv neve"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:689
 #: pcbnew/dialogs/dialog_board_statistics.cpp:697 pcbnew/pad.cpp:1347
-#, fuzzy
 msgid "Area"
 msgstr "Terület"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:744
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:39
-#, fuzzy
 msgid "Components"
 msgstr "Alkatrészek"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:750
-#, fuzzy
 msgid "Drill holes"
 msgstr "Furatok"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:757
-#, fuzzy, c-format
+#, c-format
 msgid "Error writing file '%s'."
-msgstr "Hiba a '%s' fájl írása közben"
+msgstr "Hiba a(z) '%s' fájl írása közben."
 
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:117
-#, fuzzy
 msgid "Board Size"
-msgstr "NYÁK Méret"
+msgstr "NYÁK méret"
 
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:196
 #, fuzzy
@@ -35517,19 +35510,16 @@ msgid "Subtract holes from board area"
 msgstr "Vonja le a lyukakat a panel területéből"
 
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:199
-#, fuzzy
 msgid "Exclude footprints with no pads"
 msgstr "Forrszem nélküli alkatrészrajzolatok kizárása"
 
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:229
-#, fuzzy
 msgid "X Size"
-msgstr "X Méret"
+msgstr "X méret"
 
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:230
-#, fuzzy
 msgid "Y Size"
-msgstr "Y Méret"
+msgstr "Y méret"
 
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:231
 #, fuzzy
@@ -35537,22 +35527,18 @@ msgid "Plated"
 msgstr "Furatfémezés nélküli"
 
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:232
-#, fuzzy
 msgid "Via/Pad"
 msgstr "Via/Forrszem"
 
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:233
-#, fuzzy
 msgid "Start Layer"
 msgstr "Kezdő réteg"
 
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:234
-#, fuzzy
 msgid "Stop Layer"
 msgstr "Utolsó Réteg"
 
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:253
-#, fuzzy
 msgid "Drill Holes"
 msgstr "Furatok"
 
@@ -35936,7 +35922,6 @@ msgstr "Körvonal vonalkázás:"
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:154
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:87
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:79
-#, fuzzy
 msgid "Corner smoothing:"
 msgstr "Sarok simítás:"
 
@@ -35947,7 +35932,6 @@ msgstr "Sarok simítás:"
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:242
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:371
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:83
-#, fuzzy
 msgid "Chamfer"
 msgstr "Letörés"
 
@@ -35958,13 +35942,11 @@ msgstr "Letörés"
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:242
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:371
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:83
-#, fuzzy
 msgid "Fillet"
 msgstr "Lekerekítés"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:190
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:115
-#, fuzzy
 msgid "Electrical Properties"
 msgstr "Elektromos tulajdonságok"
 
@@ -35976,19 +35958,16 @@ msgstr ""
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:210
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:76
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:135
-#, fuzzy
 msgid "Minimum width:"
 msgstr "Minimális szélesség:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:212
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:137
-#, fuzzy
 msgid "Minimum thickness of filled areas."
-msgstr "Kitöltött területek minimális vastagsága"
+msgstr "Kitöltött területek minimális vastagsága."
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:226
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:151
-#, fuzzy
 msgid "Pad connections:"
 msgstr "Forrszem csatlakozások:"
 
@@ -36050,35 +36029,30 @@ msgstr "A hőcsapda hézagon átvezető vezetősávok szélessége"
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:286
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:125
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:211
-#, fuzzy
 msgid "Fill type:"
 msgstr "Kitöltési mód:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:290
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:129
 #: pcbnew/zone.cpp:1853 pcbnew/zone_manager/panel_zone_properties_base.cpp:215
-#, fuzzy
 msgid "Solid fill"
 msgstr "Tömör"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:290
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:129
 #: pcbnew/zone.cpp:1854 pcbnew/zone_manager/panel_zone_properties_base.cpp:215
-#, fuzzy
 msgid "Hatch pattern"
 msgstr "Vonalkázott"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:307
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:149
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:232
-#, fuzzy
 msgid "Hatch width:"
 msgstr "Vonalkázás szélesség:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:318
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:160
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:243
-#, fuzzy
 msgid "Hatch gap:"
 msgstr "Vonalkázás hézag:"
 
@@ -36128,18 +36102,13 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:351
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:276
-#, fuzzy
 msgid "Remove islands:"
-msgstr "Mező eltávolítása"
+msgstr "Szigetek eltávolítása:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:353
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:278
-#, fuzzy
 msgid "Choose what to do with unconnected copper islands"
-msgstr ""
-"Egy vezeték sem fog\n"
-"nem-csatlakozó rézkitöltés\n"
-"szigetet létrehozni."
+msgstr "Mit csináljunk a különálló réz szigetekkel"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:357 pcbnew/zone.cpp:1864
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:282
@@ -36156,30 +36125,25 @@ msgstr "Minimális via átmérő:"
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:366
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:291
 msgid "Isolated islands smaller than this will be removed"
-msgstr ""
+msgstr "Az ennél kisebb, különálló szigetek el lesznek távolítva"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.h:136
-#, fuzzy
 msgid "Copper Zone Properties"
-msgstr "Rézkitöltés tulajdonságok\""
+msgstr "Rézkitöltés tulajdonságok"
 
 #: pcbnew/dialogs/dialog_create_array.cpp:104
-#, fuzzy
 msgid "Numerals (0,1,2,...,9,10)"
-msgstr "Számok (0-9, pl: 3, 15, 248)"
+msgstr "Számok (0,1,2,...,9,10)"
 
 #: pcbnew/dialogs/dialog_create_array.cpp:108
-#, fuzzy
 msgid "Hexadecimal (0,1,...,F,10,...)"
 msgstr "Hexadecimális (0-9, A-F, pl: 07, B5, DF)"
 
 #: pcbnew/dialogs/dialog_create_array.cpp:112
-#, fuzzy
 msgid "Alphabet, minus IOSQXZ"
 msgstr "Angol ABC, kivéve: IOSQXZ"
 
 #: pcbnew/dialogs/dialog_create_array.cpp:116
-#, fuzzy
 msgid "Alphabet, full 26 characters"
 msgstr "Angol ABC, mind a 26 karakter"
 
@@ -36194,7 +36158,7 @@ msgid "Select center point..."
 msgstr "Alkatrészrajzolat kiválasztása..."
 
 #: pcbnew/dialogs/dialog_create_array.cpp:346
-#, fuzzy, c-format
+#, c-format
 msgid "Bad numeric value for %s: %s"
 msgstr "Rossz számérték a(z) %s: %s számára"
 
@@ -36208,19 +36172,16 @@ msgstr ""
 "lenne"
 
 #: pcbnew/dialogs/dialog_create_array.cpp:390
-#, fuzzy
 msgid "step value"
-msgstr "Pulzáló érték:"
+msgstr "lépésköz"
 
 #: pcbnew/dialogs/dialog_create_array.cpp:412
-#, fuzzy
 msgid "horizontal count"
 msgstr "vízszintes darabszám"
 
 #: pcbnew/dialogs/dialog_create_array.cpp:413
-#, fuzzy
 msgid "vertical count"
-msgstr "függőleges darabszám:"
+msgstr "függőleges darabszám"
 
 #: pcbnew/dialogs/dialog_create_array.cpp:423
 #, fuzzy
@@ -36228,12 +36189,10 @@ msgid "stagger"
 msgstr "lépcsőzetes eltolás"
 
 #: pcbnew/dialogs/dialog_create_array.cpp:479
-#, fuzzy
 msgid "point count"
-msgstr "pontszámlálás"
+msgstr "pontszám"
 
 #: pcbnew/dialogs/dialog_create_array.cpp:526
-#, fuzzy
 msgid "Bad parameters"
 msgstr "Rossz paraméterek"
 
@@ -36243,25 +36202,21 @@ msgid "Grid Array Size"
 msgstr "Rács tömb"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:41
-#, fuzzy
 msgid "Horizontal count:"
 msgstr "Vízszintes darabszám:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:43
-#, fuzzy
 msgid "Number of columns"
-msgstr "Forrpontok száma"
+msgstr "Oszlopok száma"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:52
-#, fuzzy
 msgid "Vertical count:"
 msgstr "Függőleges darabszám:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:54
 #: pcbnew/dialogs/dialog_create_array_base.cpp:59
-#, fuzzy
 msgid "Number of rows"
-msgstr "Pontok száma"
+msgstr "Sorok száma"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:71
 #, fuzzy
@@ -36269,27 +36224,22 @@ msgid "Items Spacing"
 msgstr "Térköz növelése"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:79
-#, fuzzy
 msgid "Horizontal spacing:"
-msgstr "Vízszintes távolság:"
+msgstr "Vízszintes térköz:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:81
-#, fuzzy
 msgid "Distance between columns"
-msgstr "a szalag és a felső fém közötti távolság"
+msgstr "Oszlopok közti távolság"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:92
-#, fuzzy
 msgid "Vertical spacing:"
-msgstr "Függőleges távolság:"
+msgstr "Függőleges térköz:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:94
-#, fuzzy
 msgid "Distance between rows"
-msgstr "a szalag és a felső fém közötti távolság"
+msgstr "Sorok közti távolság"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:114
-#, fuzzy
 msgid "Horizontal offset:"
 msgstr "Vízszintes eltolás:"
 
@@ -36298,7 +36248,6 @@ msgid "Offset added to the next row position."
 msgstr ""
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:127
-#, fuzzy
 msgid "Vertical offset:"
 msgstr "Függőleges eltolás:"
 
@@ -36322,19 +36271,16 @@ msgid "Value -1,  0 or 1 disable this option."
 msgstr "0 = nem alkalmazza ezt a megkötést"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:164
-#, fuzzy
 msgid "Rows"
 msgstr "Sorok"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:167
-#, fuzzy
 msgid "Columns"
 msgstr "Oszlopok"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:175
-#, fuzzy
 msgid "Grid Position"
-msgstr "Végpont"
+msgstr "Rács helye"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:177
 msgid "Source items remain in place"
