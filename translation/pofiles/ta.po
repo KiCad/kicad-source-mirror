@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-05-06 12:53+0300\n"
-"PO-Revision-Date: 2025-05-18 19:02+0000\n"
+"PO-Revision-Date: 2025-05-18 23:32+0000\n"
 "Last-Translator: தமிழ்நேரம் <anishprabu.t@gmail.com>\n"
 "Language-Team: Tamil <https://hosted.weblate.org/projects/kicad/v9/ta/>\n"
 "Language: ta\n"
@@ -21672,11 +21672,11 @@ msgstr ""
 
 #: eeschema/symbol_chooser_frame.cpp:69
 msgid "Symbol Chooser"
-msgstr ""
+msgstr "அடையாளம் தேர்வாளர்"
 
 #: eeschema/symbol_diff_frame.cpp:62
 msgid "KiCad Symbol Difference Viewer"
-msgstr ""
+msgstr "கிகாட் அடையாளம் வேறுபாடு பார்வையாளர்"
 
 #: eeschema/symbol_diff_frame.cpp:103 eeschema/symbol_viewer_frame.cpp:171
 msgid ""
@@ -21684,55 +21684,61 @@ msgid ""
 "Search terms are separated by spaces.  All search terms must match.\n"
 "A term which is a number will also match against the pin count."
 msgstr ""
+"குறியீட்டு பெயர், முக்கிய வார்த்தைகள், விளக்கம் மற்றும் முள் எண்ணிக்கையில் வடிகட்டவும். \n"
+"தேடல் சொற்கள் இடைவெளிகளால் பிரிக்கப்படுகின்றன. அனைத்து தேடல் சொற்களும் பொருந்த வேண்டும். \n"
+"ஒரு எண்ணாக இருக்கும் ஒரு காலமும் முள் எண்ணிக்கையுடன் பொருந்தும்."
 
 #: eeschema/symbol_editor/lib_logger.cpp:64
 msgid ""
 "Not all symbol libraries could be loaded.  Use the Manage Symbol\n"
 "Libraries dialog to adjust paths and add or remove libraries."
 msgstr ""
+"எல்லா குறியீட்டு நூலகங்களையும் ஏற்ற முடியாது. நிர்வகிக்கும் சின்னத்தைப் பயன்படுத்தவும் \n"
+"பாதைகளை சரிசெய்ய மற்றும் நூலகங்களைச் சேர்க்க அல்லது அகற்ற நூலகங்கள் உரையாடல்."
 
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:70
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:79
 msgid "Symbol..."
-msgstr ""
+msgstr "அடையாளம் ..."
 
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:80
 msgid "View as PNG..."
-msgstr ""
+msgstr "Png எனக் காண்க ..."
 
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:81
 msgid "Symbol as SVG..."
-msgstr ""
+msgstr "எச்.வி.சி என அடையாளம் ..."
 
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:88
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:108
 msgid "Library Editor"
-msgstr ""
+msgstr "நூலக ஆசிரியர்"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:122
 msgid "KiCad Symbol Editor"
-msgstr ""
+msgstr "கிகாட் அடையாளம் ஆசிரியர்"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:149
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1209
 #: eeschema/symbol_library.cpp:523 eeschema/symbol_tree_model_adapter.cpp:74
 #: eeschema/symbol_viewer_frame.cpp:275
 msgid "Loading Symbol Libraries"
-msgstr ""
+msgstr "குறியீட்டு நூலகங்களை ஏற்றுகிறது"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:269
 msgid "Library changes are unsaved"
-msgstr ""
+msgstr "நூலக மாற்றங்கள் சேமிக்கப்படவில்லை"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:280
 msgid "Symbol library loading was cancelled by user."
-msgstr ""
+msgstr "குறியீட்டு நூலக ஏற்றுதல் பயனரால் ரத்து செய்யப்பட்டது."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:882
 #, c-format
 msgid ""
 "Editing symbol %s from schematic.  Saving will update the schematic only."
 msgstr ""
+"திட்டவட்டத்திலிருந்து குறியீட்டு %s திருத்துதல். சேமிப்பு திட்டத்தை மட்டுமே புதுப்பிக்கும்."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:886
 #, c-format
@@ -21744,10 +21750,12 @@ msgid ""
 "Symbols in legacy libraries are not editable.  Use Manage Symbol Libraries "
 "to migrate to current format."
 msgstr ""
+"மரபு நூலகங்களில் உள்ள சின்னங்கள் திருத்தக்கூடியவை அல்ல. தற்போதைய வடிவத்திற்கு இடம்பெயர "
+"குறியீட்டு நூலகங்களை நிர்வகிக்கவும்."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:902
 msgid "Manage symbol libraries"
-msgstr ""
+msgstr "குறியீட்டு நூலகங்களை நிர்வகிக்கவும்"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:915
 #, c-format
@@ -21785,7 +21793,7 @@ msgstr "நூலகத்தை நகலெடுக்கவும்"
 #: eeschema/tools/sch_editor_control.cpp:412
 #, c-format
 msgid "Library '%s' already exists."
-msgstr ""
+msgstr "நூலகம் '%s' ஏற்கனவே உள்ளது."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1079
 #, c-format
@@ -21793,21 +21801,23 @@ msgid ""
 "Could not create the library file '%s'.\n"
 "Make sure you have write permissions and try again."
 msgstr ""
+"'%s' நூலகக் கோப்பை உருவாக்க முடியவில்லை. \n"
+"உங்களிடம் எழுத்து அனுமதிகள் இருப்பதை உறுதிசெய்து மீண்டும் முயற்சிக்கவும்."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1090
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1128
 msgid "Could not open the library file."
-msgstr ""
+msgstr "நூலகக் கோப்பைத் திறக்க முடியவில்லை."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1215
 #, c-format
 msgid "Loading library '%s'..."
-msgstr ""
+msgstr "நூலகத்தை ஏற்றுகிறது '%s' ..."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1298
 #, c-format
 msgid "Failed to save backup to '%s'."
-msgstr ""
+msgstr "காப்புப்பிரதியை '%s' க்கு சேமிக்கத் தவறிவிட்டது."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1536
 #, c-format
@@ -21821,7 +21831,7 @@ msgstr "உள்ளமைவைத் திருத்த குறியீ�
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1539
 msgid "Library not found in symbol library table."
-msgstr ""
+msgstr "நூலகம் சின்ன நூலக அட்டவணையில் காணப்படவில்லை."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1547
 #, c-format
@@ -21830,34 +21840,34 @@ msgstr "குறியீட்டு நூலகம் '%s' தற்போ�
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1550
 msgid "Symbol library not enabled."
-msgstr ""
+msgstr "குறியீட்டு நூலகம் இயக்கப்படவில்லை."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1868
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1920
 msgid "Error saving global library table."
-msgstr ""
+msgstr "உலகளாவிய நூலக அட்டவணையைச் சேமிப்பது பிழை."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1869
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1921
 msgid "Error saving project library table."
-msgstr ""
+msgstr "திட்ட நூலக அட்டவணையைச் சேமிப்பது பிழை."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:67
 msgid "[from schematic]"
-msgstr ""
+msgstr "[திட்டவட்டத்திலிருந்து]"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:77
 msgid "[Read Only Library]"
-msgstr ""
+msgstr "[நூலகத்தை மட்டும் படியுங்கள்]"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:81
 msgid "[no symbol loaded]"
-msgstr ""
+msgstr "[எந்த சின்னமும் ஏற்றப்படவில்லை]"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:113
 #: eeschema/tools/symbol_editor_control.cpp:822
 msgid "No schematic currently open."
-msgstr ""
+msgstr "தற்போது எந்த திட்டமும் திறக்கப்படவில்லை."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:129
 #: eeschema/symbol_editor/symbol_editor.cpp:499
@@ -21867,39 +21877,39 @@ msgstr ""
 #: eeschema/tools/symbol_editor_control.cpp:448
 #, c-format
 msgid "Symbol library '%s' is not writable."
-msgstr ""
+msgstr "குறியீட்டு நூலகம் '%s' எழுத முடியாதவை அல்ல."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:131
 #: eeschema/symbol_editor/symbol_editor.cpp:501
 #: eeschema/symbol_editor/symbol_editor.cpp:1689
 msgid "You must save to a different location."
-msgstr ""
+msgstr "நீங்கள் வேறு இடத்திற்கு சேமிக்க வேண்டும்."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:188
 #: eeschema/symbol_editor/symbol_editor.cpp:1494
 msgid "The current symbol has been modified.  Save changes?"
-msgstr ""
+msgstr "தற்போதைய அடையாளம் மாற்றியமைக்கப்பட்டுள்ளது. மாற்றங்களைச் சேமிக்கவா?"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:369
 #: eeschema/symbol_editor/symbol_editor.cpp:1137
 #: eeschema/tools/symbol_editor_control.cpp:490
 #, c-format
 msgid "Symbol '%s' already exists in library '%s'."
-msgstr ""
+msgstr "'%s' அடையாளம் ஏற்கனவே நூலகத்தில் உள்ளது '%s'."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:817
 msgid "Save Symbol As"
-msgstr ""
+msgstr "சின்னத்தை சேமிக்கவும்"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:856
 #: pcbnew/footprint_libraries_utils.cpp:1044
 msgid "Save in library:"
-msgstr ""
+msgstr "நூலகத்தில் சேமிக்கவும்:"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:946
 #: pcbnew/footprint_libraries_utils.cpp:1127
 msgid "A library must be specified."
-msgstr ""
+msgstr "ஒரு நூலகம் குறிப்பிடப்பட வேண்டும்."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:958
 #, c-format
@@ -21921,11 +21931,11 @@ msgid ""
 msgstr "'%s' அடையாளம் அதன் சந்ததியினரான '%s' என்ற மற்றொரு குறியீட்டை மாற்ற முடியாது."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:996
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Symbol '%s' already exists in library '%s'. Do you want to overwrite it?"
 msgstr ""
-"'%s' அடையாளம் ஏற்கனவே நூலகத்தில் உள்ளது '%s'.do நீங்கள் அதை மேலெழுத விரும்புகிறீர்களா?"
+"'%s' அடையாளம் ஏற்கனவே நூலகத்தில் உள்ளது '%s'. அதை மேலெழுத விரும்புகிறீர்களா?"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1013
 #, c-format
@@ -21953,47 +21963,44 @@ msgid "Rename All"
 msgstr "அனைத்தையும் மறுபெயரிடுங்கள்"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1104
-#, fuzzy
 msgid "Export Symbol"
-msgstr "ஏற்றுமதி எச்.டி.எல்"
+msgstr "ஏற்றுமதி அடையாளம்"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1130
 #, c-format
 msgid "Library '%s' is read-only."
-msgstr ""
+msgstr "நூலகம் '%s' படிக்க மட்டுமே."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1170
-#, fuzzy, c-format
+#, c-format
 msgid "Error occurred attempting to load symbol library file '%s'."
-msgstr ""
-"வடிவமைப்பு தொகுதி நூலக அட்டவணை '%s' ஐ உருவாக்குவது.\n"
-" %s"
+msgstr "குறியீட்டு நூலகக் கோப்பை '%s' ஏற்ற முயற்சிப்பதில் பிழை ஏற்பட்டது."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1178
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:135
 #, c-format
 msgid "Symbol %s already exists in library '%s'."
-msgstr ""
+msgstr "அடையாளம் %s ஏற்கனவே நூலகத்தில் ' %s' உள்ளன."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1193
-#, fuzzy, c-format
+#, c-format
 msgid "Insufficient permissions to save library '%s'."
-msgstr "கோப்பை '%s' சேமிக்க போதுமான அனுமதிகள் இல்லை."
+msgstr "நூலகத்தை '%s' சேமிக்க போதுமான அனுமதிகள் இல்லை."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1212
-#, fuzzy, c-format
+#, c-format
 msgid "Error creating symbol library '%s'."
-msgstr "பிழையானது குறியீட்டு %s ஐ நூலகத்திற்கு ' %s' க்கு சேமிக்கிறது."
+msgstr "குறியீட்டு நூலகத்தை உருவாக்கும் பிழை '%s'."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1219
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol %s saved to library '%s'."
-msgstr "பிழையானது குறியீட்டு %s ஐ நூலகத்திற்கு ' %s' க்கு சேமிக்கிறது."
+msgstr "அடையாளம் %s நூலகத்தில் ' %s' க்கு சேமிக்கப்பட்டன."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1237
 #, c-format
 msgid "Symbol name '%s' already in use."
-msgstr ""
+msgstr "குறியீட்டு பெயர் '%s' ஏற்கனவே பயன்பாட்டில் உள்ளது."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1275
 #, c-format
@@ -22001,6 +22008,8 @@ msgid ""
 "The symbol '%s' has been modified.\n"
 "Do you want to remove it from the library?"
 msgstr ""
+"'%s' அடையாளம் மாற்றியமைக்கப்பட்டுள்ளது. \n"
+"அதை நூலகத்திலிருந்து அகற்ற விரும்புகிறீர்களா?"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1287
 #, c-format
@@ -22010,35 +22019,39 @@ msgid ""
 "\n"
 "Do you wish to delete this symbol and all of its derivatives?"
 msgstr ""
+"%s அடையாளம் மற்ற சின்னங்களைப் பெற பயன்படுத்தப்படுகிறது. \n"
+"இந்த சின்னத்தை நீக்குவது அதிலிருந்து பெறப்பட்ட அனைத்து சின்னங்களையும் நீக்கிவிடும். \n"
+"\n"
+"இந்த சின்னத்தையும் அதன் அனைத்து வழித்தோன்றல்களையும் நீக்க விரும்புகிறீர்களா?"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1292
 #: eeschema/tools/sch_actions.cpp:242
 msgid "Delete Symbol"
-msgstr ""
+msgstr "சின்னத்தை நீக்கு"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1293
 msgid "Keep Symbol"
-msgstr ""
+msgstr "சின்னத்தை வைத்திருங்கள்"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1430 pcbnew/files.cpp:342
 #: pcbnew/footprint_libraries_utils.cpp:1213
 #, c-format
 msgid "Revert '%s' to last version saved?"
-msgstr ""
+msgstr "கடைசி பதிப்பிற்கு '%s' ஐ மாற்றியமைக்கவா?"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1508
 #, c-format
 msgid "Symbol %s not found in library '%s'."
-msgstr ""
+msgstr "அடையாளம் %s நூலகத்தில் ' %s' இல் காணப்படவில்லை."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1537
 msgid "No library specified."
-msgstr ""
+msgstr "எந்த நூலகமும் குறிப்பிடப்படவில்லை."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1556
 #, c-format
 msgid "Save Library '%s' As..."
-msgstr ""
+msgstr "நூலகத்தை '%s' என சேமிக்கவும் ..."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1596
 #, c-format
@@ -22047,100 +22060,101 @@ msgstr "குறியீட்டு நூலகக் கோப்பில�
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1598
 msgid "Error Saving Library"
-msgstr ""
+msgstr "நூலகம் சேமிப்பதில் பிழை"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1644
 #, c-format
 msgid "Symbol library file '%s' saved."
-msgstr ""
+msgstr "குறியீட்டு நூலக கோப்பு '%s' சேமிக்கப்பட்டது."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1743
 msgid "Undefined!"
-msgstr ""
+msgstr "வரையறுக்கப்படவில்லை!"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1744
 #: eeschema/symbol_viewer_frame.cpp:458 pcbnew/board_item.cpp:407
 msgid "Parent"
-msgstr ""
+msgstr "பெற்றோர்"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1759
 msgid "Body"
-msgstr ""
+msgstr "உடல்"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1762
 msgid "Power Symbol"
-msgstr ""
+msgstr "ஆற்றல் அடையாளம்"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1769
 msgid "Datasheet"
-msgstr ""
+msgstr "தரவுத்தாள்"
 
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:81
 msgid "Import Symbol"
-msgstr ""
+msgstr "இறக்குமதி அடையாளம்"
 
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:96
 #: pcbnew/load_select_footprint.cpp:349
 #, c-format
 msgid "Unable to find a reader for '%s'."
-msgstr ""
+msgstr "'%s' க்கு ஒரு வாசகரைக் கண்டுபிடிக்க முடியவில்லை."
 
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:110
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:116
 #, c-format
 msgid "Cannot import symbol library '%s'."
-msgstr ""
+msgstr "குறியீட்டு நூலகத்தை '%s' இறக்குமதி செய்ய முடியாது."
 
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:123
 #, c-format
 msgid "Symbol library file '%s' is empty."
-msgstr ""
+msgstr "குறியீட்டு நூலகக் கோப்பு '%s' காலியாக உள்ளது."
 
 #: eeschema/symbol_lib_table.cpp:283
 #, c-format
 msgid ""
 "Duplicate library nickname '%s' found in symbol library table file line %d"
 msgstr ""
+"நகல் நூலக புனைப்பெயர் ' %s' குறியீட்டு நூலக அட்டவணை கோப்பு வரி %d இல் காணப்படுகிறது"
 
 #: eeschema/symbol_library.cpp:605 eeschema/symbol_tree_model_adapter.cpp:222
 #, c-format
 msgid "Error loading symbol library '%s'."
-msgstr ""
+msgstr "பிழையான ஏற்றுதல் குறியீட்டு நூலகம் '%s'."
 
 #: eeschema/symbol_library_manager.cpp:84
 #: eeschema/symbol_tree_model_adapter.cpp:109
 #: eeschema/symbol_viewer_frame.cpp:307
 msgid "Errors loading symbols:"
-msgstr ""
+msgstr "பிழைகள் ஏற்றுதல் சின்னங்கள்:"
 
 #: eeschema/symbol_library_manager.cpp:164
 #, c-format
 msgid "Library '%s' not found in the Symbol Library Table."
-msgstr ""
+msgstr "நூலகம் '%s' குறியீட்டு நூலக அட்டவணையில் காணப்படவில்லை."
 
 #: eeschema/symbol_library_manager.cpp:423
 msgid "Symbol not found."
-msgstr ""
+msgstr "அடையாளம் காணப்படவில்லை."
 
 #: eeschema/symbol_library_manager.cpp:642
 #, c-format
 msgid "Cannot load symbol '%s' from library '%s'."
-msgstr ""
+msgstr "'%s' என்ற குறியீட்டை '%s' இலிருந்து ஏற்ற முடியாது."
 
 #: eeschema/symbol_library_manager.cpp:801
 #, c-format
 msgid "Cannot enumerate library '%s'."
-msgstr ""
+msgstr "நூலகத்தை '%s' கணக்கிட முடியாது."
 
 #: eeschema/symbol_library_manager.cpp:863
 #: eeschema/symbol_library_manager.cpp:868
 #, c-format
 msgid "Error updating library buffer: %s"
-msgstr ""
+msgstr "நூலக இடையகத்தைப் புதுப்பிப்பதில் பிழை: %s"
 
 #: eeschema/symbol_library_manager.cpp:873
 msgid "Error updating library buffer."
-msgstr ""
+msgstr "நூலக இடையகத்தைப் புதுப்பிப்பதில் பிழை."
 
 #: eeschema/symbol_library_manager.cpp:1010
 #: eeschema/tools/sch_editor_control.cpp:460
@@ -22150,16 +22164,16 @@ msgstr "பிழையானது குறியீட்டு %s ஐ நூ
 
 #: eeschema/symbol_tree_synchronizing_adapter.cpp:273
 msgid "(failed to load)"
-msgstr ""
+msgstr "(ஏற்றுவதில் தோல்வி)"
 
 #: eeschema/symbol_viewer_frame.cpp:111
 msgid "KiCad Symbol Library Browser"
-msgstr ""
+msgstr "கிகாட் அடையாளம் நூலக உலாவி"
 
 #: eeschema/symbol_viewer_frame.cpp:1109 pcbnew/footprint_viewer_frame.cpp:1026
 #: pcbnew/footprint_viewer_frame.cpp:1031
 msgid "[no library selected]"
-msgstr ""
+msgstr "[எந்த நூலகமும் தேர்ந்தெடுக்கப்படவில்லை]"
 
 #: eeschema/sync_sheet_pin/dialog_sync_sheet_pins_base.cpp:28
 msgid ""
@@ -22199,15 +22213,15 @@ msgid "Delete Hierarchical Labels"
 msgstr "படிநிலை லேபிள்களை நீக்கு"
 
 #: eeschema/sync_sheet_pin/panel_sync_sheet_pins_base.cpp:99
-#, fuzzy
 msgid ""
 "Associate selected sheet pin and hierarchical label using the label name"
-msgstr "தாள் ஊசிகளையும் படிநிலை லேபிள்களையும் ஒத்திசைக்கவும்"
+msgstr ""
+"சிட்டை பெயரைப் பயன்படுத்தி தேர்ந்தெடுக்கப்பட்ட தாள் முள் மற்றும் படிநிலை லேபிளை இணைக்கவும்"
 
 #: eeschema/sync_sheet_pin/panel_sync_sheet_pins_base.cpp:104
-#, fuzzy
 msgid "Associate selected sheet pin and hierarchical label using the pin name"
-msgstr "முறிவு தாள் முள் மற்றும் படிநிலை சிட்டை அசோசியேசன் (கள்)"
+msgstr ""
+"முள் பெயரைப் பயன்படுத்தி தேர்ந்தெடுக்கப்பட்ட தாள் முள் மற்றும் படிநிலை லேபிளை இணைக்கவும்"
 
 #: eeschema/sync_sheet_pin/panel_sync_sheet_pins_base.cpp:109
 msgid "Break sheet pin and hierarchical label association(s)"
@@ -22223,40 +22237,41 @@ msgstr ""
 
 #: eeschema/toolbars_symbol_viewer.cpp:109
 msgid "Symbol Viewer"
-msgstr ""
+msgstr "குறியீட்டு பார்வையாளர்"
 
 #: eeschema/tools/assign_footprints.cpp:207
 msgid "Load Symbol Footprint Link File"
-msgstr ""
+msgstr "குறியீட்டு தடம் இணைப்பு கோப்பை ஏற்றவும்"
 
 #: eeschema/tools/assign_footprints.cpp:218
 msgid "Keep existing footprint field visibility"
-msgstr ""
+msgstr "இருக்கும் தடம் புலம் தெரிவுநிலையை வைத்திருங்கள்"
 
 #: eeschema/tools/assign_footprints.cpp:219
 msgid "Show all footprint fields"
-msgstr ""
+msgstr "அனைத்து தடம் புலங்களையும் காட்டு"
 
 #: eeschema/tools/assign_footprints.cpp:220
 msgid "Hide all footprint fields"
-msgstr ""
+msgstr "அனைத்து தடம் புலங்களையும் மறைக்கவும்"
 
 #: eeschema/tools/assign_footprints.cpp:222
 msgid "Select the footprint field visibility setting."
-msgstr ""
+msgstr "தடம் புலம் தெரிவுநிலை அமைப்பைத் தேர்ந்தெடுக்கவும்."
 
 #: eeschema/tools/assign_footprints.cpp:223
 msgid "Change Visibility"
-msgstr ""
+msgstr "தெரிவுநிலையை மாற்றவும்"
 
 #: eeschema/tools/assign_footprints.cpp:233
 #, c-format
 msgid "Failed to open symbol-footprint link file '%s'."
-msgstr ""
+msgstr "குறியீட்டு-கால் பிரிண்ட் இணைப்பு கோப்பை '%s' திறக்கத் தவறிவிட்டது."
 
 #: eeschema/tools/backannotate.cpp:76
 msgid "Select at least one property to back annotate."
 msgstr ""
+"சிறுகுறிப்புக்கு பின்வாங்க குறைந்தபட்சம் ஒரு சொத்தையாவது தேர்ந்தெடுக்கவும்."
 
 #: eeschema/tools/backannotate.cpp:100
 msgid ""
@@ -22264,21 +22279,24 @@ msgid ""
 "mode.\n"
 "You must launch the KiCad project manager and create a project."
 msgstr ""
+"பிசிபி நெட்லிச்ட்டைப் பெற முடியாது, ஏனெனில் திட்ட ஆசிரியர் தனித்த பயன்முறையில் "
+"திறக்கப்படுகிறார். \n"
+"நீங்கள் கிகாட் திட்ட மேலாளரைத் தொடங்கி ஒரு திட்டத்தை உருவாக்க வேண்டும்."
 
 #: eeschema/tools/backannotate.cpp:168
 #, c-format
 msgid "Footprint '%s' has no assigned symbol."
-msgstr ""
+msgstr "தடம் '%s' ஒதுக்கப்பட்ட அடையாளம் இல்லை."
 
 #: eeschema/tools/backannotate.cpp:245
 #, c-format
 msgid "Footprints '%s' and '%s' linked to same symbol."
-msgstr ""
+msgstr "கால்தடங்கள் '%s' மற்றும் '%s' ஒரே சின்னத்துடன் இணைக்கப்பட்டுள்ளன."
 
 #: eeschema/tools/backannotate.cpp:311
 #, c-format
 msgid "Cannot find symbol for footprint '%s'."
-msgstr ""
+msgstr "'%s' என்ற தடம் சின்னத்தைக் கண்டுபிடிக்க முடியவில்லை."
 
 #: eeschema/tools/backannotate.cpp:340
 #, c-format
@@ -22286,22 +22304,25 @@ msgid ""
 "Footprint '%s' is not present on PCB. Corresponding symbols in schematic "
 "must be manually deleted (if desired)."
 msgstr ""
+"PCB இல் '%s' தடம் இல்லை. திட்டவட்டத்தில் தொடர்புடைய சின்னங்கள் கைமுறையாக நீக்கப்பட வேண்டும் "
+"(விரும்பினால்)."
 
 #: eeschema/tools/backannotate.cpp:353
 msgid "Re-linking footprints requires a fully annotated schematic."
 msgstr ""
+"மீண்டும் இணைப்பது கால்தடங்களுக்கு முழுமையாக சிறுகுறிப்பு திட்டமிடல் தேவைப்படுகிறது."
 
 #: eeschema/tools/backannotate.cpp:356
 msgid "Footprint re-linking cancelled by user."
-msgstr ""
+msgstr "பயனரால் ரத்து செய்யப்படும் தடம் மீண்டும் இணைத்தல்."
 
 #: eeschema/tools/backannotate.cpp:382
 msgid "true"
-msgstr ""
+msgstr "உண்மை"
 
 #: eeschema/tools/backannotate.cpp:382
 msgid "false"
-msgstr ""
+msgstr "தவறு"
 
 #: eeschema/tools/backannotate.cpp:390
 #, c-format
@@ -22311,27 +22332,28 @@ msgstr "%s குறிப்பு வடிவமைப்பாளரை ' %s
 #: eeschema/tools/backannotate.cpp:403
 #, c-format
 msgid "Change %s footprint assignment from '%s' to '%s'."
-msgstr ""
+msgstr "%s தடம் ஒதுக்கீட்டை '%s' இலிருந்து '%s' வரை மாற்றவும்."
 
 #: eeschema/tools/backannotate.cpp:417
 #, c-format
 msgid "Change %s value from '%s' to '%s'."
-msgstr ""
+msgstr "%s மதிப்பை '%s' இலிருந்து '%s' ஆக மாற்றவும்."
 
 #: eeschema/tools/backannotate.cpp:431
 #, c-format
 msgid "Change %s 'Do not populate' from '%s' to '%s'."
-msgstr ""
+msgstr "%s '%s' முதல் '%s' வரை மாற்றவும்."
 
 #: eeschema/tools/backannotate.cpp:445
 #, c-format
 msgid "Change %s 'Exclude from bill of materials' from '%s' to '%s'."
 msgstr ""
+"%s 'பொருட்களின் மசோதாவிலிருந்து விலக்கு' '%s' இலிருந்து '%s' வரை மாற்றவும்."
 
 #: eeschema/tools/backannotate.cpp:466
 #, c-format
 msgid "Cannot find %s pin '%s'."
-msgstr ""
+msgstr "%s முள் ' %s' ஐக் கண்டுபிடிக்க முடியவில்லை."
 
 #: eeschema/tools/backannotate.cpp:508
 #, c-format
@@ -22351,17 +22373,18 @@ msgstr "%s புலம் ' %s ஐ நீக்கு.'"
 #: eeschema/tools/backannotate.cpp:699
 #, c-format
 msgid "Change %s pin %s net label from '%s' to '%s'."
-msgstr ""
+msgstr "%s முள் %s நிகர லேபிளை ' %s' இலிருந்து ' %s' ஆக மாற்றவும்."
 
 #: eeschema/tools/backannotate.cpp:721
 #, c-format
 msgid "Net %s cannot be changed to %s because it is driven by a power pin."
 msgstr ""
+"நிகர %களை %s ஆக மாற்ற முடியாது, ஏனெனில் இது ஒரு ஆற்றல் முள் மூலம் இயக்கப்படுகிறது."
 
 #: eeschema/tools/backannotate.cpp:730
 #, c-format
 msgid "Add label '%s' to %s pin %s net."
-msgstr ""
+msgstr "%s 'முள் %s வலையில்' %s 'லேபிளைச் சேர்க்கவும்."
 
 #: eeschema/tools/rule_area_create_helper.cpp:69
 msgid "Draw Rule Area"
@@ -22373,15 +22396,16 @@ msgstr "மின் விதிகள் செக்கர் சாளரத
 
 #: eeschema/tools/sch_actions.cpp:54
 msgid "Symbol Checker"
-msgstr ""
+msgstr "அடையாளம் செக்கர்"
 
 #: eeschema/tools/sch_actions.cpp:55
 msgid "Show the symbol checker window"
-msgstr ""
+msgstr "குறியீட்டு செக்கர் சாளரத்தைக் காட்டு"
 
 #: eeschema/tools/sch_actions.cpp:62
 msgid "Show differences between schematic symbol and its library equivalent"
 msgstr ""
+"திட்ட சின்னத்திற்கும் அதன் நூலகத்திற்கும் இடையிலான வேறுபாடுகளைக் காட்டுங்கள்"
 
 #: eeschema/tools/sch_actions.cpp:68
 msgid "Show Bus Syntax Help"
@@ -22390,31 +22414,33 @@ msgstr "பச் தொடரியல் உதவியைக் காட்
 #: eeschema/tools/sch_actions.cpp:75
 msgid "Show simulation window for running SPICE or IBIS simulations."
 msgstr ""
+"ச்பைச் அல்லது ஐபிஐஎச் உருவகப்படுத்துதல்களை இயக்குவதற்கான உருவகப்படுத்துதல் சாளரத்தைக் "
+"காட்டு."
 
 #: eeschema/tools/sch_actions.cpp:84 pcbnew/tools/pcb_actions.cpp:1978
 msgid "Create Corner"
-msgstr ""
+msgstr "மூலையை உருவாக்கு"
 
 #: eeschema/tools/sch_actions.cpp:90 eeschema/tools/sch_point_editor.cpp:1384
 #: pcbnew/tools/pcb_actions.cpp:1985
 msgid "Remove Corner"
-msgstr ""
+msgstr "மூலையை அகற்று"
 
 #: eeschema/tools/sch_actions.cpp:105
 msgid "Select Node"
-msgstr ""
+msgstr "முனை தேர்ந்தெடுக்கவும்"
 
 #: eeschema/tools/sch_actions.cpp:106
 msgid "Select a connection item under the cursor"
-msgstr ""
+msgstr "கர்சரின் கீழ் இணைப்பு உருப்படியைத் தேர்ந்தெடுக்கவும்"
 
 #: eeschema/tools/sch_actions.cpp:113
 msgid "Select Connection"
-msgstr ""
+msgstr "இணைப்பைத் தேர்ந்தெடுக்கவும்"
 
 #: eeschema/tools/sch_actions.cpp:114
 msgid "Select a complete connection"
-msgstr ""
+msgstr "தேர்ந்தெடு a complete connection"
 
 #: eeschema/tools/sch_actions.cpp:150
 msgid "Show/hide design blocks library"
@@ -22447,7 +22473,7 @@ msgstr "தேர்ந்தெடுக்கப்பட்ட வடிவ�
 #: eeschema/tools/sch_actions.cpp:177 eeschema/tools/sch_actions.cpp:736
 #: pcbnew/tools/pcb_actions.cpp:677
 msgid "Properties..."
-msgstr ""
+msgstr "பண்புகள் ..."
 
 #: eeschema/tools/sch_actions.cpp:178
 msgid "Edit properies of design block"
@@ -22455,7 +22481,7 @@ msgstr "வடிவமைப்பு தொகுதியின் பண்�
 
 #: eeschema/tools/sch_actions.cpp:188
 msgid "Save Library As..."
-msgstr ""
+msgstr "நூலகத்தை சேமிக்கவும் ..."
 
 #: eeschema/tools/sch_actions.cpp:189
 msgid "Save the current library to a new file"
@@ -22463,7 +22489,7 @@ msgstr "தற்போதைய நூலகத்தை புதிய கோ
 
 #: eeschema/tools/sch_actions.cpp:195
 msgid "New Symbol..."
-msgstr ""
+msgstr "புதிய அடையாளம் ..."
 
 #: eeschema/tools/sch_actions.cpp:196
 msgid "Create a new symbol in an existing library"
@@ -22471,27 +22497,28 @@ msgstr "ஏற்கனவே உள்ள நூலகத்தில் பு
 
 #: eeschema/tools/sch_actions.cpp:202
 msgid "Derive from Existing Symbol..."
-msgstr ""
+msgstr "இருக்கும் சின்னத்திலிருந்து பெறப்பட்டது ..."
 
 #: eeschema/tools/sch_actions.cpp:203
 msgid "Create a new symbol, derived from an existing symbol"
 msgstr ""
+"ஏற்கனவே இருக்கும் சின்னத்திலிருந்து பெறப்பட்ட புதிய சின்னத்தை உருவாக்கவும்"
 
 #: eeschema/tools/sch_actions.cpp:209
 msgid "Edit Symbol"
-msgstr ""
+msgstr "சின்னத்தைத் திருத்து"
 
 #: eeschema/tools/sch_actions.cpp:210
 msgid "Show selected symbol on editor canvas"
-msgstr ""
+msgstr "எடிட்டர் கேன்வாசில் தேர்ந்தெடுக்கப்பட்ட சின்னத்தைக் காட்டு"
 
 #: eeschema/tools/sch_actions.cpp:216
 msgid "Duplicate Symbol"
-msgstr ""
+msgstr "நகல் அடையாளம்"
 
 #: eeschema/tools/sch_actions.cpp:222
 msgid "Rename Symbol..."
-msgstr ""
+msgstr "அடையாளம் அடையாளம் ..."
 
 #: eeschema/tools/sch_actions.cpp:229
 msgid "Save the current symbol to a different library or name"
@@ -22499,7 +22526,7 @@ msgstr "தற்போதைய சின்னத்தை வேறு நூ
 
 #: eeschema/tools/sch_actions.cpp:235
 msgid "Save Copy As..."
-msgstr ""
+msgstr "நகலை சேமிக்கவும் ..."
 
 #: eeschema/tools/sch_actions.cpp:236
 msgid "Save a copy of the current symbol to a different library or name"
@@ -22507,41 +22534,39 @@ msgstr "தற்போதைய சின்னத்தின் நகலை 
 
 #: eeschema/tools/sch_actions.cpp:243
 msgid "Remove the selected symbol from its library"
-msgstr ""
+msgstr "தேர்ந்தெடுக்கப்பட்ட சின்னத்தை அதன் நூலகத்திலிருந்து அகற்றவும்"
 
 #: eeschema/tools/sch_actions.cpp:261
 msgid "Paste Symbol"
-msgstr ""
+msgstr "சின்னத்தை ஒட்டவும்"
 
 #: eeschema/tools/sch_actions.cpp:267
 msgid "Import Symbol..."
-msgstr ""
+msgstr "இறக்குமதி அடையாளம் ..."
 
 #: eeschema/tools/sch_actions.cpp:268
 msgid "Import a symbol to the current library"
-msgstr ""
+msgstr "தற்போதைய நூலகத்திற்கு ஒரு குறியீட்டை இறக்குமதி செய்யுங்கள்"
 
 #: eeschema/tools/sch_actions.cpp:274
-#, fuzzy
 msgid "Export..."
-msgstr "& ஏற்றுமதி"
+msgstr "ஏற்றுமதி ..."
 
 #: eeschema/tools/sch_actions.cpp:275
-#, fuzzy
 msgid "Export a symbol to a new library file"
-msgstr "பிழையானது குறியீட்டு %s ஐ நூலகத்திற்கு ' %s' க்கு சேமிக்கிறது."
+msgstr "புதிய நூலகக் கோப்பில் ஒரு குறியீட்டை ஏற்றுமதி செய்யுங்கள்"
 
 #: eeschema/tools/sch_actions.cpp:281
 msgid "Update Symbol Fields..."
-msgstr ""
+msgstr "குறியீட்டு புலங்களைப் புதுப்பிக்கவும் ..."
 
 #: eeschema/tools/sch_actions.cpp:282
 msgid "Update symbol to match changes made in parent symbol"
-msgstr ""
+msgstr "பெற்றோர் சின்னத்தில் செய்யப்பட்ட மாற்றங்களை பொருத்த அடையாளம்"
 
 #: eeschema/tools/sch_actions.cpp:288
 msgid "Set Unit Display Name..."
-msgstr ""
+msgstr "அலகு காட்சி பெயரை அமைக்கவும் ..."
 
 #: eeschema/tools/sch_actions.cpp:289
 msgid "Set the display name for a particular unit in a multi-unit symbol"
@@ -22549,47 +22574,47 @@ msgstr "ஒரு குறிப்பிட்ட அலகுக்கு க
 
 #: eeschema/tools/sch_actions.cpp:294
 msgid "Add Symbol to Schematic"
-msgstr ""
+msgstr "திட்டவட்டத்தில் குறியீட்டைச் சேர்க்கவும்"
 
 #: eeschema/tools/sch_actions.cpp:295
 msgid "Add the current symbol to the schematic"
-msgstr ""
+msgstr "தற்போதைய சின்னத்தை திட்டவட்டத்தில் சேர்க்கவும்"
 
 #: eeschema/tools/sch_actions.cpp:301
 msgid "Show Pin Electrical Types"
-msgstr ""
+msgstr "முள் மின் வகைகளைக் காட்டு"
 
 #: eeschema/tools/sch_actions.cpp:302
 msgid "Annotate pins with their electrical types"
-msgstr ""
+msgstr "ஊசிகளை அவற்றின் மின் வகைகளுடன் சிறுகுறிப்பு செய்யுங்கள்"
 
 #: eeschema/tools/sch_actions.cpp:308
 msgid "Show Pin Numbers"
-msgstr ""
+msgstr "முள் எண்களைக் காட்டு"
 
 #: eeschema/tools/sch_actions.cpp:309
 msgid "Annotate pins with their numbers"
-msgstr ""
+msgstr "ஊசிகளை அவற்றின் எண்களுடன் சிறுகுறிப்பு செய்யுங்கள்"
 
 #: eeschema/tools/sch_actions.cpp:315
 msgid "Export View as PNG..."
-msgstr ""
+msgstr "Png என ஏற்றுமதி பார்வை ..."
 
 #: eeschema/tools/sch_actions.cpp:316
 msgid "Create PNG file from the current view"
-msgstr ""
+msgstr "தற்போதைய பார்வையில் இருந்து PNG கோப்பை உருவாக்கவும்"
 
 #: eeschema/tools/sch_actions.cpp:322
 msgid "Export Symbol as SVG..."
-msgstr ""
+msgstr "எச்.வி.சி என ஏற்றுமதி அடையாளம் ..."
 
 #: eeschema/tools/sch_actions.cpp:323
 msgid "Create SVG file from the current symbol"
-msgstr ""
+msgstr "தற்போதைய சின்னத்திலிருந்து SVG கோப்பை உருவாக்கவும்"
 
 #: eeschema/tools/sch_actions.cpp:329
 msgid "Synchronized Pins Mode"
-msgstr ""
+msgstr "ஒத்திசைக்கப்பட்ட ஊசிகள் பயன்முறை"
 
 #: eeschema/tools/sch_actions.cpp:330
 msgid ""
@@ -22597,14 +22622,17 @@ msgid ""
 "When enabled propagates all changes (except pin numbers) to other units.\n"
 "Enabled by default for multiunit parts with interchangeable units."
 msgstr ""
+"ஒத்திசைக்கப்பட்ட ஊசிகள் பயன்முறை \n"
+"இயக்கப்பட்டால் மற்ற அலகுகளுக்கு அனைத்து மாற்றங்களையும் (முள் எண்களைத் தவிர) பரப்புகிறது. \n"
+"பரிமாற்றம் செய்யக்கூடிய அலகுகளுடன் மல்டியூனிட் பகுதிகளுக்கு இயல்பாக இயக்கப்பட்டது."
 
 #: eeschema/tools/sch_actions.cpp:338 eeschema/tools/sch_actions.cpp:1151
 msgid "Show Hidden Pins"
-msgstr ""
+msgstr "மறைக்கப்பட்ட ஊசிகளைக் காட்டு"
 
 #: eeschema/tools/sch_actions.cpp:344 eeschema/tools/sch_actions.cpp:1157
 msgid "Show Hidden Fields"
-msgstr ""
+msgstr "மறைக்கப்பட்ட புலங்களைக் காட்டு"
 
 #: eeschema/tools/sch_actions.cpp:355
 msgid "Draw Pins"
@@ -22637,31 +22665,31 @@ msgstr "பலகோணங்களை வரையவும்"
 
 #: eeschema/tools/sch_actions.cpp:395
 msgid "Move Symbol Anchor"
-msgstr ""
+msgstr "குறியீட்டு நங்கூரத்தை நகர்த்தவும்"
 
 #: eeschema/tools/sch_actions.cpp:404
 msgid "Push Pin Length"
-msgstr ""
+msgstr "முள் நீளத்தை தள்ளுங்கள்"
 
 #: eeschema/tools/sch_actions.cpp:405
 msgid "Copy pin length to other pins in symbol"
-msgstr ""
+msgstr "முள் நீளத்தை மற்ற ஊசிகளுக்கு சின்னத்தில் நகலெடுக்கவும்"
 
 #: eeschema/tools/sch_actions.cpp:411
 msgid "Push Pin Name Size"
-msgstr ""
+msgstr "முள் பெயர் அளவை தள்ளுங்கள்"
 
 #: eeschema/tools/sch_actions.cpp:412
 msgid "Copy pin name size to other pins in symbol"
-msgstr ""
+msgstr "முள் பெயர் அளவை மற்ற ஊசிகளுக்கு சின்னத்தில் நகலெடுக்கவும்"
 
 #: eeschema/tools/sch_actions.cpp:418
 msgid "Push Pin Number Size"
-msgstr ""
+msgstr "முள் எண் அளவை தள்ளுங்கள்"
 
 #: eeschema/tools/sch_actions.cpp:419
 msgid "Copy pin number size to other pins in symbol"
-msgstr ""
+msgstr "முள் எண் அளவை மற்ற ஊசிகளுக்கு சின்னத்தில் நகலெடுக்கவும்"
 
 #: eeschema/tools/sch_actions.cpp:430
 msgid "Place Symbols"
@@ -22737,14 +22765,12 @@ msgid "Place Sheet Pins"
 msgstr "தாள் ஊசிகளை வைக்கவும்"
 
 #: eeschema/tools/sch_actions.cpp:559 eeschema/tools/sch_actions.cpp:567
-#, fuzzy
 msgid "Sync Sheet Pins..."
-msgstr "தாள் ஊசிகளை ஒத்திசைக்கவும்"
+msgstr "தாள் ஊசிகளை ஒத்திசைக்கவும் ..."
 
 #: eeschema/tools/sch_actions.cpp:575
-#, fuzzy
 msgid "Import Sheet..."
-msgstr "இறக்குமதி தாள்"
+msgstr "இறக்குமதி தாள் ..."
 
 #: eeschema/tools/sch_actions.cpp:576
 msgid "Import sheet into project"
@@ -22785,15 +22811,15 @@ msgstr "விதி பகுதிகளை வரையவும்"
 
 #: eeschema/tools/sch_actions.cpp:665 pcbnew/tools/pcb_actions.cpp:404
 msgid "Delete Last Point"
-msgstr ""
+msgstr "கடைசி புள்ளியை நீக்கு"
 
 #: eeschema/tools/sch_actions.cpp:666 pcbnew/tools/pcb_actions.cpp:405
 msgid "Delete the last point added to the current item"
-msgstr ""
+msgstr "தற்போதைய உருப்படியில் சேர்க்கப்பட்ட கடைசி புள்ளியை நீக்கு"
 
 #: eeschema/tools/sch_actions.cpp:672 pcbnew/tools/pcb_actions.cpp:411
 msgid "Close Outline"
-msgstr ""
+msgstr "அவுட்லைன் மூடு"
 
 #: eeschema/tools/sch_actions.cpp:673
 msgid "Close the in-progress outline"
@@ -22801,40 +22827,40 @@ msgstr "முன்னேற்றம் அடைவை மூடு"
 
 #: eeschema/tools/sch_actions.cpp:688
 msgid "Repeat Last Item"
-msgstr ""
+msgstr "கடைசி உருப்படியை மீண்டும் செய்யவும்"
 
 #: eeschema/tools/sch_actions.cpp:689
 msgid "Duplicates the last drawn item"
-msgstr ""
+msgstr "கடைசியாக வரையப்பட்ட உருப்படியை நகலெடுக்கிறது"
 
 #: eeschema/tools/sch_actions.cpp:694 pcbnew/tools/pcb_actions.cpp:527
 msgid "Rotate Clockwise"
-msgstr ""
+msgstr "கடிகார திசையில் சுழற்றுங்கள்"
 
 #: eeschema/tools/sch_actions.cpp:702 pcbnew/tools/pcb_actions.cpp:537
 msgid "Rotate Counterclockwise"
-msgstr ""
+msgstr "எதிரெதிர் திசையில் சுழற்றுங்கள்"
 
 #: eeschema/tools/sch_actions.cpp:710 pcbnew/tools/pcb_actions.cpp:561
 msgid "Mirror Vertically"
-msgstr ""
+msgstr "செங்குத்தாக கண்ணாடி"
 
 #: eeschema/tools/sch_actions.cpp:711
 msgid "Flips selected item(s) from top to bottom"
-msgstr ""
+msgstr "தேர்ந்தெடுக்கப்பட்ட உருப்படி (களை) மேலிருந்து கீழாக புரட்டுகிறது"
 
 #: eeschema/tools/sch_actions.cpp:719 pcbnew/tools/pcb_actions.cpp:554
 msgid "Mirror Horizontally"
-msgstr ""
+msgstr "மிரர் கிடைமட்டமாக"
 
 #: eeschema/tools/sch_actions.cpp:720
 msgid "Flips selected item(s) from left to right"
-msgstr ""
+msgstr "தேர்ந்தெடுக்கப்பட்ட உருப்படி (களை) இடமிருந்து வலமாக புரட்டுகிறது"
 
 #: eeschema/tools/sch_actions.cpp:727 pcbnew/tools/edit_tool_move_fct.cpp:152
 #: pcbnew/tools/pcb_actions.cpp:569
 msgid "Swap"
-msgstr ""
+msgstr "இடமாற்றம்"
 
 #: eeschema/tools/sch_actions.cpp:728 pcbnew/tools/pcb_actions.cpp:570
 msgid "Swap positions of selected items"
@@ -22842,20 +22868,20 @@ msgstr "தேர்ந்தெடுக்கப்பட்ட பொரு�
 
 #: eeschema/tools/sch_actions.cpp:744
 msgid "Edit Reference Designator..."
-msgstr ""
+msgstr "குறிப்பு வடிவமைப்பாளரைத் திருத்து ..."
 
 #: eeschema/tools/sch_actions.cpp:752
 msgid "Edit Value..."
-msgstr ""
+msgstr "மதிப்பைத் திருத்து ..."
 
 #: eeschema/tools/sch_actions.cpp:760
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:235
 msgid "Edit Footprint..."
-msgstr ""
+msgstr "தடம் திருத்து ..."
 
 #: eeschema/tools/sch_actions.cpp:768 eeschema/tools/sch_edit_tool.cpp:1967
 msgid "Autoplace Fields"
-msgstr ""
+msgstr "ஆட்டோபிளேச் புலங்கள்"
 
 #: eeschema/tools/sch_actions.cpp:769
 msgid ""
@@ -22865,176 +22891,178 @@ msgstr ""
 
 #: eeschema/tools/sch_actions.cpp:775
 msgid "Change Symbols..."
-msgstr ""
+msgstr "சின்னங்களை மாற்றவும் ..."
 
 #: eeschema/tools/sch_actions.cpp:776
 msgid "Assign different symbols from the library"
-msgstr ""
+msgstr "நூலகத்திலிருந்து வெவ்வேறு சின்னங்களை ஒதுக்குங்கள்"
 
 #: eeschema/tools/sch_actions.cpp:782
 msgid "Update Symbols from Library..."
-msgstr ""
+msgstr "நூலகத்திலிருந்து சின்னங்களைப் புதுப்பிக்கவும் ..."
 
 #: eeschema/tools/sch_actions.cpp:783
 msgid "Update symbols to include any changes from the library"
 msgstr ""
+"நூலகத்திலிருந்து ஏதேனும் மாற்றங்களைச் சேர்க்க சின்னங்களை புதுப்பிக்கவும்"
 
 #: eeschema/tools/sch_actions.cpp:790
 msgid "Assign a different symbol from the library"
-msgstr ""
+msgstr "நூலகத்திலிருந்து வேறு அடையாளத்தை ஒதுக்குங்கள்"
 
 #: eeschema/tools/sch_actions.cpp:796
 msgid "Update Symbol..."
-msgstr ""
+msgstr "புதுப்பிப்பு அடையாளம் ..."
 
 #: eeschema/tools/sch_actions.cpp:797
 msgid "Update symbol to include any changes from the library"
-msgstr ""
+msgstr "நூலகத்திலிருந்து ஏதேனும் மாற்றங்களைச் சேர்க்க அடையாளம் புதுப்பிக்கவும்"
 
 #: eeschema/tools/sch_actions.cpp:803 pcbnew/tools/pcb_actions.cpp:1117
 msgid "Assign Netclass..."
-msgstr ""
+msgstr "நெட் கிளாசை ஒதுக்குங்கள் ..."
 
 #: eeschema/tools/sch_actions.cpp:804 pcbnew/tools/pcb_actions.cpp:1118
 msgid "Assign a netclass to nets matching a pattern"
-msgstr ""
+msgstr "ஒரு வடிவத்துடன் பொருந்தக்கூடிய வலைகளுக்கு நெட் கிளாசை ஒதுக்குங்கள்"
 
 #: eeschema/tools/sch_actions.cpp:810
 msgid "De Morgan Conversion"
-msgstr ""
+msgstr "டி மோர்கன் மாற்றம்"
 
 #: eeschema/tools/sch_actions.cpp:811
 msgid "Switch between De Morgan representations"
-msgstr ""
+msgstr "டி மோர்கன் பிரதிநிதித்துவங்களுக்கு இடையில் மாறவும்"
 
 #: eeschema/tools/sch_actions.cpp:817
 msgid "De Morgan Standard"
-msgstr ""
+msgstr "டி மோர்கன் தரநிலை"
 
 #: eeschema/tools/sch_actions.cpp:818
 msgid "Switch to standard De Morgan representation"
-msgstr ""
+msgstr "நிலையான டி மோர்கன் பிரதிநிதித்துவத்திற்கு மாறவும்"
 
 #: eeschema/tools/sch_actions.cpp:824
 msgid "De Morgan Alternate"
-msgstr ""
+msgstr "மாற்று மோர்கனின்"
 
 #: eeschema/tools/sch_actions.cpp:825
 msgid "Switch to alternate De Morgan representation"
-msgstr ""
+msgstr "மாற்று டி மோர்கன் பிரதிநிதித்துவத்திற்கு மாறவும்"
 
 #: eeschema/tools/sch_actions.cpp:831
 msgid "Change to Label"
-msgstr ""
+msgstr "லேபிளாக மாற்றவும்"
 
 #: eeschema/tools/sch_actions.cpp:832
 msgid "Change existing item to a label"
-msgstr ""
+msgstr "இருக்கும் உருப்படியை லேபிளாக மாற்றவும்"
 
 #: eeschema/tools/sch_actions.cpp:840
 msgid "Change to Directive Label"
-msgstr ""
+msgstr "டைரெக்டிவ் லேபிளாக மாற்றவும்"
 
 #: eeschema/tools/sch_actions.cpp:841
 msgid "Change existing item to a directive label"
-msgstr ""
+msgstr "ஏற்கனவே உள்ள உருப்படியை ஒரு கட்டளை லேபிளாக மாற்றவும்"
 
 #: eeschema/tools/sch_actions.cpp:849
 msgid "Change to Hierarchical Label"
-msgstr ""
+msgstr "படிநிலை லேபிளுக்கு மாற்றவும்"
 
 #: eeschema/tools/sch_actions.cpp:850
 msgid "Change existing item to a hierarchical label"
-msgstr ""
+msgstr "இருக்கும் உருப்படியை படிநிலை லேபிளாக மாற்றவும்"
 
 #: eeschema/tools/sch_actions.cpp:858
 msgid "Change to Global Label"
-msgstr ""
+msgstr "உலகளாவிய லேபிளுக்கு மாற்றம்"
 
 #: eeschema/tools/sch_actions.cpp:859
 msgid "Change existing item to a global label"
-msgstr ""
+msgstr "இருக்கும் உருப்படியை உலகளாவிய லேபிளாக மாற்றவும்"
 
 #: eeschema/tools/sch_actions.cpp:867
 msgid "Change to Text"
-msgstr ""
+msgstr "உரைக்கு மாற்றவும்"
 
 #: eeschema/tools/sch_actions.cpp:868
 msgid "Change existing item to a text comment"
-msgstr ""
+msgstr "ஏற்கனவே உள்ள உருப்படியை உரை கருத்துக்கு மாற்றவும்"
 
 #: eeschema/tools/sch_actions.cpp:876
 msgid "Change to Text Box"
-msgstr ""
+msgstr "உரை பெட்டியாக மாற்றவும்"
 
 #: eeschema/tools/sch_actions.cpp:877
 msgid "Change existing item to a text box"
-msgstr ""
+msgstr "இருக்கும் உருப்படியை உரை பெட்டியாக மாற்றவும்"
 
 #: eeschema/tools/sch_actions.cpp:885 eeschema/tools/sch_edit_tool.cpp:2972
 msgid "Cleanup Sheet Pins"
-msgstr ""
+msgstr "துப்புரவு தாள் ஊசிகள்"
 
 #: eeschema/tools/sch_actions.cpp:886
 msgid "Delete unreferenced sheet pins"
-msgstr ""
+msgstr "குறிப்பிடப்படாத தாள் ஊசிகளை நீக்கு"
 
 #: eeschema/tools/sch_actions.cpp:891 pcbnew/tools/pcb_actions.cpp:833
 msgid "Edit Text & Graphics Properties..."
-msgstr ""
+msgstr "உரை மற்றும் கிராபிக்ச் பண்புகளைத் திருத்தவும் ..."
 
 #: eeschema/tools/sch_actions.cpp:892
 msgid "Edit text and graphics properties globally across schematic"
 msgstr ""
+"திட்டமிடல் முழுவதும் உலகளவில் உரை மற்றும் கிராபிக்ச் பண்புகளைத் திருத்தவும்"
 
 #: eeschema/tools/sch_actions.cpp:898
 msgid "Symbol Properties..."
-msgstr ""
+msgstr "குறியீட்டு பண்புகள் ..."
 
 #: eeschema/tools/sch_actions.cpp:904
 msgid "Pin Table..."
-msgstr ""
+msgstr "முள் அட்டவணை ..."
 
 #: eeschema/tools/sch_actions.cpp:905
 msgid "Displays pin table for bulk editing of pins"
-msgstr ""
+msgstr "ஊசிகளின் மொத்த திருத்துதல் முள் அட்டவணையைக் காட்டுகிறது"
 
 #: eeschema/tools/sch_actions.cpp:911
 msgid "Break"
-msgstr ""
+msgstr "இடைவேளை"
 
 #: eeschema/tools/sch_actions.cpp:912
 msgid "Divide into connected segments"
-msgstr ""
+msgstr "இணைக்கப்பட்ட பிரிவுகளாக பிரிக்கவும்"
 
 #: eeschema/tools/sch_actions.cpp:918
 msgid "Slice"
-msgstr ""
+msgstr "துண்டு"
 
 #: eeschema/tools/sch_actions.cpp:919
 msgid "Divide into unconnected segments"
-msgstr ""
+msgstr "இணைக்கப்படாத பிரிவுகளாக பிரிக்கவும்"
 
 #: eeschema/tools/sch_actions.cpp:933 pcbnew/tools/pcb_actions.cpp:1241
 msgid "Highlight net under cursor"
-msgstr ""
+msgstr "கர்சரின் கீழ் நிகரத்தை முன்னிலைப்படுத்தவும்"
 
 #: eeschema/tools/sch_actions.cpp:940 pcbnew/tools/pcb_actions.cpp:1256
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1221
 msgid "Clear Net Highlighting"
-msgstr ""
+msgstr "நிகர சிறப்பம்சத்தை அழிக்கவும்"
 
 #: eeschema/tools/sch_actions.cpp:941
 msgid "Clear any existing net highlighting"
-msgstr ""
+msgstr "தற்போதுள்ள எந்த நிகர சிறப்பம்சத்தையும் அழிக்கவும்"
 
 #: eeschema/tools/sch_actions.cpp:950
 msgid "Highlight Nets"
-msgstr ""
+msgstr "வலைகளை முன்னிலைப்படுத்தவும்"
 
 #: eeschema/tools/sch_actions.cpp:951
 msgid "Highlight wires and pins of a net"
-msgstr ""
+msgstr "வலையின் கம்பிகள் மற்றும் ஊசிகளை முன்னிலைப்படுத்தவும்"
 
 #: eeschema/tools/sch_actions.cpp:959
 msgid "Show/hide the net navigator"
@@ -23042,84 +23070,87 @@ msgstr "நெட் நேவிகேட்டரைக் காட்டவ�
 
 #: eeschema/tools/sch_actions.cpp:966
 msgid "Edit with Symbol Editor"
-msgstr ""
+msgstr "குறியீட்டு எடிட்டருடன் திருத்து"
 
 #: eeschema/tools/sch_actions.cpp:967
 msgid "Open the selected symbol in the Symbol Editor"
-msgstr ""
+msgstr "தேர்ந்தெடுக்கப்பட்ட சின்னத்தை குறியீட்டு எடிட்டரில் திறக்கவும்"
 
 #: eeschema/tools/sch_actions.cpp:973
 msgid "Exclude from Bill of Materials"
-msgstr ""
+msgstr "பொருட்களின் மசோதாவிலிருந்து விலக்கு"
 
 #: eeschema/tools/sch_actions.cpp:974
 msgid "Set the exclude from bill of materials attribute"
-msgstr ""
+msgstr "பில் ஆஃப் மெட்டீரியல்ச் பண்புக்கூறில் இருந்து விலக்கை அமைக்கவும்"
 
 #: eeschema/tools/sch_actions.cpp:979
 msgid "Exclude from Simulation"
-msgstr ""
+msgstr "உருவகப்படுத்துதலில் இருந்து விலக்கு"
 
 #: eeschema/tools/sch_actions.cpp:980
 msgid "Set the exclude from simulation attribute"
-msgstr ""
+msgstr "உருவகப்படுத்துதல் பண்புகளிலிருந்து விலக்கை அமைக்கவும்"
 
 #: eeschema/tools/sch_actions.cpp:985
 msgid "Exclude from Board"
-msgstr ""
+msgstr "போர்டில் இருந்து விலக்கு"
 
 #: eeschema/tools/sch_actions.cpp:986
 msgid "Set the exclude from board attribute"
-msgstr ""
+msgstr "போர்டு பண்புகளிலிருந்து விலக்கை அமைக்கவும்"
 
 #: eeschema/tools/sch_actions.cpp:992
 msgid "Set the do not populate attribute"
-msgstr ""
+msgstr "பண்புக்கூறுகளை மக்கள்தொகை அமைக்கவும்"
 
 #: eeschema/tools/sch_actions.cpp:999
 msgid "Open the library symbol in the Symbol Editor"
-msgstr ""
+msgstr "குறியீட்டு எடிட்டரில் நூலக சின்னத்தைத் திறக்கவும்"
 
 #: eeschema/tools/sch_actions.cpp:1005
 msgid "Edit Symbol Fields..."
-msgstr ""
+msgstr "குறியீட்டு புலங்களைத் திருத்து ..."
 
 #: eeschema/tools/sch_actions.cpp:1006
 msgid "Bulk-edit fields of all symbols in schematic"
-msgstr ""
+msgstr "திட்டத்தில் உள்ள அனைத்து சின்னங்களின் மொத்த திருத்த புலங்கள்"
 
 #: eeschema/tools/sch_actions.cpp:1012
 msgid "Edit Symbol Library Links..."
-msgstr ""
+msgstr "குறியீட்டு நூலக இணைப்புகளைத் திருத்து ..."
 
 #: eeschema/tools/sch_actions.cpp:1013
 msgid "Edit links between schematic and library symbols"
 msgstr ""
+"திட்டவட்டமான மற்றும் நூலக சின்னங்களுக்கு இடையிலான இணைப்புகளைத் திருத்தவும்"
 
 #: eeschema/tools/sch_actions.cpp:1019
 msgid "Assign Footprints..."
-msgstr ""
+msgstr "கால்தடங்களை ஒதுக்குங்கள் ..."
 
 #: eeschema/tools/sch_actions.cpp:1020
 msgid "Run footprint assignment tool"
-msgstr ""
+msgstr "தடம் ஒதுக்கீட்டு கருவியை இயக்கவும்"
 
 #: eeschema/tools/sch_actions.cpp:1026
 msgid "Import Footprint Assignments..."
-msgstr ""
+msgstr "தடம் பணிகளை இறக்குமதி செய்யுங்கள் ..."
 
 #: eeschema/tools/sch_actions.cpp:1027
 msgid ""
 "Import symbol footprint assignments from .cmp file created by board editor"
 msgstr ""
+"போர்டு எடிட்டரால் உருவாக்கப்பட்ட .cmp கோப்பிலிருந்து குறியீட்டு தடம் பணிகளை இறக்குமதி "
+"செய்க"
 
 #: eeschema/tools/sch_actions.cpp:1033
 msgid "Annotate Schematic..."
-msgstr ""
+msgstr "சிறுகுறிப்பு திட்டவட்டமான ..."
 
 #: eeschema/tools/sch_actions.cpp:1034
 msgid "Fill in schematic symbol reference designators"
-msgstr ""
+msgstr "திட்ட அடையாளம் குறிப்பு வடிவமைப்பாளர்களை நிரப்பவும்"
 
 #: eeschema/tools/sch_actions.cpp:1040
 msgid "Increment Annotations From..."
@@ -23134,37 +23165,38 @@ msgstr ""
 
 #: eeschema/tools/sch_actions.cpp:1048
 msgid "Schematic Setup..."
-msgstr ""
+msgstr "திட்ட அமைப்பு ..."
 
 #: eeschema/tools/sch_actions.cpp:1049
 msgid "Edit schematic setup including annotation styles and electrical rules"
 msgstr ""
+"சிறுகுறிப்பு பாணிகள் மற்றும் மின் விதிகள் உள்ளிட்ட திட்ட அமைப்பைத் திருத்தவும்"
 
 #: eeschema/tools/sch_actions.cpp:1055
 msgid "Edit Sheet Page Number..."
-msgstr ""
+msgstr "தாள் பக்க எண்ணைத் திருத்து ..."
 
 #: eeschema/tools/sch_actions.cpp:1056
 msgid "Edit the page number of the current or selected sheet"
-msgstr ""
+msgstr "தற்போதைய அல்லது தேர்ந்தெடுக்கப்பட்ட தாளின் பக்க எண்ணைத் திருத்தவும்"
 
 #: eeschema/tools/sch_actions.cpp:1061
 msgid "Rescue Symbols..."
-msgstr ""
+msgstr "மீட்பு சின்னங்கள் ..."
 
 #: eeschema/tools/sch_actions.cpp:1062
 msgid "Find old symbols in project and rename/rescue them"
-msgstr ""
+msgstr "திட்டத்தில் பழைய சின்னங்களைக் கண்டுபிடித்து அவற்றை மறுபெயரிட/மீட்கவும்"
 
 #: eeschema/tools/sch_actions.cpp:1068
 msgid "Remap Legacy Library Symbols..."
-msgstr ""
+msgstr "ரீமேப் மரபு நூலக சின்னங்கள் ..."
 
 #: eeschema/tools/sch_actions.cpp:1069
 msgid ""
 "Remap library symbol references in legacy schematics to the symbol library "
 "table"
-msgstr ""
+msgstr "சின்ன நூலக அட்டவணைக்கு மரபு திட்டங்களில் நூலக அடையாளம் குறிப்புகள்"
 
 #: eeschema/tools/sch_actions.cpp:1075
 msgid "Export Drawing to Clipboard"
@@ -23172,114 +23204,122 @@ msgstr "இடைநிலைப்பலகைக்கு ஏற்றும�
 
 #: eeschema/tools/sch_actions.cpp:1076
 msgid "Export drawing of current sheet to clipboard"
-msgstr ""
+msgstr "இடைநிலைப்பலகைக்கு தற்போதைய தாளின் ஏற்றுமதி"
 
 #: eeschema/tools/sch_actions.cpp:1084 pcbnew/tools/pcb_actions.cpp:338
 msgid "Import Graphics..."
-msgstr ""
+msgstr "இறக்குமதி கிராபிக்ச் ..."
 
 #: eeschema/tools/sch_actions.cpp:1085 pcbnew/tools/pcb_actions.cpp:339
 msgid "Import 2D drawing file"
-msgstr ""
+msgstr "2 டி வரைதல் கோப்பை இறக்குமதி செய்யுங்கள்"
 
 #: eeschema/tools/sch_actions.cpp:1092
 msgid "Switch to PCB Editor"
-msgstr ""
+msgstr "பிசிபி எடிட்டருக்கு மாறவும்"
 
 #: eeschema/tools/sch_actions.cpp:1093
 msgid "Open PCB in board editor"
-msgstr ""
+msgstr "போர்டு எடிட்டரில் பிசிபி திறக்கவும்"
 
 #: eeschema/tools/sch_actions.cpp:1099
 msgid "Export Netlist..."
-msgstr ""
+msgstr "ஏற்றுமதி நெட்லிச்ட் ..."
 
 #: eeschema/tools/sch_actions.cpp:1100
 msgid "Export file containing netlist in one of several formats"
-msgstr ""
+msgstr "பல வடிவங்களில் ஒன்றில் நெட்லிச்ட்டைக் கொண்ட ஏற்றுமதி கோப்பு"
 
 #: eeschema/tools/sch_actions.cpp:1106
 msgid "Generate Bill of Materials..."
-msgstr ""
+msgstr "பொருட்களின் மசோதாவை உருவாக்குங்கள் ..."
 
 #: eeschema/tools/sch_actions.cpp:1107
 msgid "Generate a bill of materials for the current schematic"
-msgstr ""
+msgstr "தற்போதைய திட்டத்திற்கான பொருட்களின் மசோதாவை உருவாக்குங்கள்"
 
 #: eeschema/tools/sch_actions.cpp:1113
 msgid "Generate Legacy Bill of Materials..."
-msgstr ""
+msgstr "பொருட்களின் மரபு மசோதாவை உருவாக்குங்கள் ..."
 
 #: eeschema/tools/sch_actions.cpp:1114
 msgid ""
 "Generate a bill of materials for the current schematic (Legacy Generator)"
 msgstr ""
+"தற்போதைய திட்டத்திற்கான (மரபு செனரேட்டர்) பொருட்களின் மசோதாவை உருவாக்குங்கள்"
 
 #: eeschema/tools/sch_actions.cpp:1121
 msgid "Generate Bill of Materials (External)..."
-msgstr ""
+msgstr "பொருட்களின் மசோதாவை (வெளிப்புறம்) உருவாக்குங்கள் ..."
 
 #: eeschema/tools/sch_actions.cpp:1122
 msgid ""
 "Generate a bill of materials for the current schematic using external "
 "generator"
 msgstr ""
+"வெளிப்புற செனரேட்டரைப் பயன்படுத்தி தற்போதைய திட்டத்திற்கான பொருட்களின் மசோதாவை "
+"உருவாக்குங்கள்"
 
 #: eeschema/tools/sch_actions.cpp:1128
 msgid "Export Symbols to Library..."
-msgstr ""
+msgstr "நூலகத்திற்கு சின்னங்களை ஏற்றுமதி ..."
 
 #: eeschema/tools/sch_actions.cpp:1129
 msgid ""
 "Add symbols used in schematic to an existing symbol library\n"
 "(does not remove other symbols from this library)"
 msgstr ""
+"ஏற்கனவே உள்ள குறியீட்டு நூலகத்திற்கு திட்டத்தில் பயன்படுத்தப்படும் சின்னங்களைச் சேர்க்கவும் \n"
+"(இந்த நூலகத்திலிருந்து பிற சின்னங்களை அகற்றாது)"
 
 #: eeschema/tools/sch_actions.cpp:1136
 msgid "Export Symbols to New Library..."
-msgstr ""
+msgstr "புதிய நூலகத்திற்கு சின்னங்களை ஏற்றுமதி ..."
 
 #: eeschema/tools/sch_actions.cpp:1137
 msgid ""
 "Create a new symbol library using the symbols used in the schematic\n"
 "(if the library already exists it will be replaced)"
 msgstr ""
+"திட்டவட்டத்தில் பயன்படுத்தப்படும் சின்னங்களைப் பயன்படுத்தி புதிய குறியீட்டு நூலகத்தை "
+"உருவாக்கவும் \n"
+"(நூலகம் ஏற்கனவே இருந்தால் அது மாற்றப்படும்)"
 
 #: eeschema/tools/sch_actions.cpp:1144
 msgid "Select on PCB"
-msgstr ""
+msgstr "பிசிபியில் தேர்ந்தெடுக்கவும்"
 
 #: eeschema/tools/sch_actions.cpp:1145
 msgid "Select corresponding items in PCB editor"
-msgstr ""
+msgstr "பிசிபி எடிட்டரில் தொடர்புடைய உருப்படிகளைத் தேர்ந்தெடுக்கவும்"
 
 #: eeschema/tools/sch_actions.cpp:1162
 msgid "Show Directive Labels"
-msgstr ""
+msgstr "டைரெக்டிவ் லேபிள்களைக் காட்டு"
 
 #: eeschema/tools/sch_actions.cpp:1167
 msgid "Show ERC Warnings"
-msgstr ""
+msgstr "ERC எச்சரிக்கைகளைக் காட்டு"
 
 #: eeschema/tools/sch_actions.cpp:1168
 msgid "Show markers for electrical rules checker warnings"
-msgstr ""
+msgstr "மின் விதிகள் செக்கர் எச்சரிக்கைகளுக்கான குறிப்பான்களைக் காட்டு"
 
 #: eeschema/tools/sch_actions.cpp:1173
 msgid "Show ERC Errors"
-msgstr ""
+msgstr "ERC பிழைகளைக் காட்டு"
 
 #: eeschema/tools/sch_actions.cpp:1174
 msgid "Show markers for electrical rules checker errors"
-msgstr ""
+msgstr "மின் விதிகள் சரிபார்ப்பு பிழைகளுக்கான குறிப்பான்களைக் காட்டு"
 
 #: eeschema/tools/sch_actions.cpp:1179
 msgid "Show ERC Exclusions"
-msgstr ""
+msgstr "ERC விலக்குகளைக் காட்டு"
 
 #: eeschema/tools/sch_actions.cpp:1180
 msgid "Show markers for excluded electrical rules checker violations"
-msgstr ""
+msgstr "விலக்கப்பட்ட மின் விதி சோதனை மீறல்களுக்கான குறிப்பான்களைக் காட்டு"
 
 #: eeschema/tools/sch_actions.cpp:1185
 msgid "Mark items excluded from simulation"
@@ -23295,15 +23335,15 @@ msgstr "OP மின்னழுத்தங்களைக் காட்ட�
 
 #: eeschema/tools/sch_actions.cpp:1192
 msgid "Show operating point voltage data from simulation"
-msgstr ""
+msgstr "உருவகப்படுத்துதலில் இருந்து இயக்க புள்ளி மின்னழுத்த தரவைக் காட்டு"
 
 #: eeschema/tools/sch_actions.cpp:1197
 msgid "Show OP Currents"
-msgstr ""
+msgstr "OP நீரோட்டங்களைக் காட்டு"
 
 #: eeschema/tools/sch_actions.cpp:1198
 msgid "Show operating point current data from simulation"
-msgstr ""
+msgstr "உருவகப்படுத்துதலில் இருந்து இயக்க புள்ளி தற்போதைய தரவைக் காட்டு"
 
 #: eeschema/tools/sch_actions.cpp:1203
 msgid "Show Pin Alternate Icons"
@@ -23316,41 +23356,45 @@ msgstr "மாற்று முறைகளைக் கொண்ட ஊசி
 #: eeschema/tools/sch_actions.cpp:1209 eeschema/tools/sch_actions.cpp:1218
 #: eeschema/tools/sch_actions.cpp:1227 eeschema/tools/sch_actions.cpp:1237
 msgid "Line Mode for Wires and Buses"
-msgstr ""
+msgstr "கம்பிகள் மற்றும் பேருந்துகளுக்கான வரி முறை"
 
 #: eeschema/tools/sch_actions.cpp:1210
 msgid "Draw and drag at any angle"
-msgstr ""
+msgstr "எந்த கோணத்திலும் வரைந்து இழுக்கவும்"
 
 #: eeschema/tools/sch_actions.cpp:1219
 msgid "Constrain drawing and dragging to horizontal or vertical motions"
 msgstr ""
+"கிடைமட்ட அல்லது செங்குத்து இயக்கங்களுக்கு வரைதல் மற்றும் இழுத்தல் ஆகியவற்றைக் "
+"கட்டுப்படுத்துங்கள்"
 
 #: eeschema/tools/sch_actions.cpp:1228
 msgid ""
 "Constrain drawing and dragging to horizontal, vertical, or 45-degree angle "
 "motions"
 msgstr ""
+"கிடைமட்ட, செங்குத்து அல்லது 45 டிகிரி கோண இயக்கங்களுக்கு வரைதல் மற்றும் இழுத்தல் "
+"ஆகியவற்றைக் கட்டுப்படுத்துதல்"
 
 #: eeschema/tools/sch_actions.cpp:1238
 msgid "Switch to next line mode"
-msgstr ""
+msgstr "அடுத்த வரி பயன்முறைக்கு மாறவும்"
 
 #: eeschema/tools/sch_actions.cpp:1243
 msgid "Annotate Automatically"
-msgstr ""
+msgstr "தானாகவே சிறுகுறிப்பு"
 
 #: eeschema/tools/sch_actions.cpp:1244
 msgid "Toggle automatic annotation of new symbols"
-msgstr ""
+msgstr "புதிய சின்னங்களின் தானியங்கி சிறுகுறிப்பை மாற்றவும்"
 
 #: eeschema/tools/sch_actions.cpp:1250
 msgid "Repair Schematic"
-msgstr ""
+msgstr "பழுதுபார்க்கும் திட்டவட்டமான"
 
 #: eeschema/tools/sch_actions.cpp:1251
 msgid "Run various diagnostics and attempt to repair schematic"
-msgstr ""
+msgstr "பல்வேறு நோயறிதல்களை இயக்கி, திட்டவட்டத்தை சரிசெய்ய முயற்சிக்கவும்"
 
 #: eeschema/tools/sch_actions.cpp:1257
 msgid "Previous Symbol Unit"
@@ -23370,7 +23414,7 @@ msgstr "சின்னத்தின் அடுத்த அலகு தி
 
 #: eeschema/tools/sch_actions.cpp:1273
 msgid "Change Sheet"
-msgstr ""
+msgstr "தாளை மாற்றவும்"
 
 #: eeschema/tools/sch_actions.cpp:1274
 msgid "Change to provided sheet's contents in the schematic editor"
@@ -23378,63 +23422,63 @@ msgstr "திட்ட ஆசிரியத்தில் வழங்கப�
 
 #: eeschema/tools/sch_actions.cpp:1280
 msgid "Enter Sheet"
-msgstr ""
+msgstr "தாளை உள்ளிடவும்"
 
 #: eeschema/tools/sch_actions.cpp:1281
 msgid "Display the selected sheet's contents in the schematic editor"
-msgstr ""
+msgstr "தேர்ந்தெடுக்கப்பட்ட தாளின் உள்ளடக்கங்களை திட்ட எடிட்டரில் காண்பி"
 
 #: eeschema/tools/sch_actions.cpp:1289
 msgid "Leave Sheet"
-msgstr ""
+msgstr "தாள் விடுப்பு"
 
 #: eeschema/tools/sch_actions.cpp:1290
 msgid "Display the parent sheet in the schematic editor"
-msgstr ""
+msgstr "திட்ட எடிட்டரில் பெற்றோர் தாளைக் காண்பி"
 
 #: eeschema/tools/sch_actions.cpp:1297
 msgid "Navigate Up"
-msgstr ""
+msgstr "மேலே செல்லவும்"
 
 #: eeschema/tools/sch_actions.cpp:1298
 msgid "Navigate up one sheet in the hierarchy"
-msgstr ""
+msgstr "வரிசைக்கு ஒரு தாளில் செல்லவும்"
 
 #: eeschema/tools/sch_actions.cpp:1305
 msgid "Navigate Back"
-msgstr ""
+msgstr "மீண்டும் செல்லவும்"
 
 #: eeschema/tools/sch_actions.cpp:1306
 msgid "Move backward in sheet navigation history"
-msgstr ""
+msgstr "தாள் வழிசெலுத்தல் வரலாற்றில் பின்னோக்கி நகர்த்தவும்"
 
 #: eeschema/tools/sch_actions.cpp:1313
 msgid "Navigate Forward"
-msgstr ""
+msgstr "முன்னோக்கி செல்லவும்"
 
 #: eeschema/tools/sch_actions.cpp:1314
 msgid "Move forward in sheet navigation history"
-msgstr ""
+msgstr "தாள் வழிசெலுத்தல் வரலாற்றில் முன்னேறவும்"
 
 #: eeschema/tools/sch_actions.cpp:1321
 msgid "Previous Sheet"
-msgstr ""
+msgstr "முந்தைய தாள்"
 
 #: eeschema/tools/sch_actions.cpp:1322
 msgid "Move to previous sheet by number"
-msgstr ""
+msgstr "முந்தைய தாளுக்கு எண் மூலம் நகர்த்தவும்"
 
 #: eeschema/tools/sch_actions.cpp:1329
 msgid "Next Sheet"
-msgstr ""
+msgstr "அடுத்த தாள்"
 
 #: eeschema/tools/sch_actions.cpp:1330
 msgid "Move to next sheet by number"
-msgstr ""
+msgstr "எண் மூலம் அடுத்த தாளுக்கு நகர்த்தவும்"
 
 #: eeschema/tools/sch_actions.cpp:1337
 msgid "Hierarchy Navigator"
-msgstr ""
+msgstr "வரிசைமுறை நேவிகேட்டர்"
 
 #: eeschema/tools/sch_actions.cpp:1338
 msgid "Show/hide the schematic sheet hierarchy navigator"
@@ -23443,7 +23487,7 @@ msgstr "திட்ட தாள் வரிசைமுறை நேவிக
 #: eeschema/tools/sch_actions.cpp:1350
 #: eeschema/tools/sch_line_wire_bus_tool.cpp:1274
 msgid "Draw Wires"
-msgstr ""
+msgstr "கம்பிகளை வரையவும்"
 
 #: eeschema/tools/sch_actions.cpp:1361
 msgid "Draw Buses"
@@ -23453,27 +23497,27 @@ msgstr "பேருந்துகளை வரையவும்"
 #: eeschema/tools/sch_line_wire_bus_tool.cpp:80
 #: eeschema/tools/sch_line_wire_bus_tool.cpp:124
 msgid "Unfold from Bus"
-msgstr ""
+msgstr "பச்சிலிருந்து விரடுங்கள்"
 
 #: eeschema/tools/sch_actions.cpp:1372
 msgid "Break a wire out of a bus"
-msgstr ""
+msgstr "ஒரு பச்சில் இருந்து ஒரு கம்பியை உடைக்கவும்"
 
 #: eeschema/tools/sch_actions.cpp:1392 pcbnew/tools/pcb_actions.cpp:2367
 msgid "Undo Last Segment"
-msgstr ""
+msgstr "கடைசி பகுதியை செயல்தவிர்க்கவும்"
 
 #: eeschema/tools/sch_actions.cpp:1393
 msgid "Walks the current line back one segment."
-msgstr ""
+msgstr "தற்போதைய வரியை ஒரு பிரிவுக்கு பின்னால் நடத்துகிறது."
 
 #: eeschema/tools/sch_actions.cpp:1400
 msgid "Switch Segment Posture"
-msgstr ""
+msgstr "பிரிவு தோரணையை மாற்றவும்"
 
 #: eeschema/tools/sch_actions.cpp:1401
 msgid "Switches posture of the current segment."
-msgstr ""
+msgstr "தற்போதைய பிரிவின் தோரணையை மாற்றுகிறது."
 
 #: eeschema/tools/sch_actions.cpp:1412 eeschema/tools/sch_move_tool.cpp:396
 #: eeschema/tools/symbol_editor_move_tool.cpp:109
@@ -23481,11 +23525,11 @@ msgstr ""
 #: pcbnew/dialogs/panel_edit_options_base.cpp:81
 #: pcbnew/tools/edit_tool_move_fct.cpp:238 pcbnew/tools/pcb_actions.cpp:457
 msgid "Move"
-msgstr ""
+msgstr "நகர்த்தவும்"
 
 #: eeschema/tools/sch_actions.cpp:1421 eeschema/tools/sch_move_tool.cpp:396
 msgid "Drag"
-msgstr ""
+msgstr "பின்னிழுப்பு, பின்னிழுவிசை"
 
 #: eeschema/tools/sch_actions.cpp:1422
 msgid "Move items while keeping their connections"
@@ -23494,55 +23538,56 @@ msgstr "உருப்படிகளை அவற்றின் இணைப�
 #: eeschema/tools/sch_actions.cpp:1429 eeschema/tools/sch_move_tool.cpp:1823
 #: eeschema/tools/symbol_editor_move_tool.cpp:426
 msgid "Align Items to Grid"
-msgstr ""
+msgstr "உருப்படிகளை கட்டத்திற்கு சீரமைக்கவும்"
 
 #: eeschema/tools/sch_actions.cpp:1437
 msgid "Save Current Sheet Copy As..."
-msgstr ""
+msgstr "தற்போதைய தாள் நகலை சேமிக்கவும் ..."
 
 #: eeschema/tools/sch_actions.cpp:1438
 msgid "Save a copy of the current sheet to another location or name"
-msgstr ""
+msgstr "தற்போதைய தாளின் நகலை மற்றொரு இடம் அல்லது பெயரில் சேமிக்கவும்"
 
 #: eeschema/tools/sch_actions.cpp:1452
 msgid "New Analysis Tab..."
-msgstr ""
+msgstr "புதிய பகுப்பாய்வு தாவல் ..."
 
 #: eeschema/tools/sch_actions.cpp:1453
 msgid "Create a new tab containing a simulation analysis"
-msgstr ""
+msgstr "உருவகப்படுத்துதல் பகுப்பாய்வைக் கொண்ட புதிய தாவலை உருவாக்கவும்"
 
 #: eeschema/tools/sch_actions.cpp:1461
 msgid "Open Workbook..."
-msgstr ""
+msgstr "திறந்த பணிப்புத்தகம் ..."
 
 #: eeschema/tools/sch_actions.cpp:1462
 msgid "Open a saved set of analysis tabs and settings"
-msgstr ""
+msgstr "சேமித்த பகுப்பாய்வு தாவல்கள் மற்றும் அமைப்புகளைத் திறக்கவும்"
 
 #: eeschema/tools/sch_actions.cpp:1470
 msgid "Save Workbook"
-msgstr ""
+msgstr "பணிப்புத்தகத்தை சேமிக்கவும்"
 
 #: eeschema/tools/sch_actions.cpp:1471
 msgid "Save the current set of analysis tabs and settings"
-msgstr ""
+msgstr "பகுப்பாய்வு தாவல்கள் மற்றும் அமைப்புகளின் தற்போதைய தொகுப்பை சேமிக்கவும்"
 
 #: eeschema/tools/sch_actions.cpp:1479
 msgid "Save Workbook As..."
-msgstr ""
+msgstr "பணிப்புத்தகத்தை சேமிக்கவும் ..."
 
 #: eeschema/tools/sch_actions.cpp:1480
 msgid "Save the current set of analysis tabs and settings to another location"
 msgstr ""
+"தற்போதைய பகுப்பாய்வு தாவல்கள் மற்றும் அமைப்புகளின் தொகுப்பை வேறு இடத்திற்கு சேமிக்கவும்"
 
 #: eeschema/tools/sch_actions.cpp:1486
 msgid "Export Current Plot as PNG..."
-msgstr ""
+msgstr "தற்போதைய சூழ்ச்சி png என ஏற்றுமதி செய்யுங்கள் ..."
 
 #: eeschema/tools/sch_actions.cpp:1492
 msgid "Export Current Plot as CSV..."
-msgstr ""
+msgstr "தற்போதைய சூழ்ச்சி காபிம ஆக ஏற்றுமதி செய்யுங்கள் ..."
 
 #: eeschema/tools/sch_actions.cpp:1498
 msgid "Export Current Plot to Clipboard"
@@ -23554,71 +23599,74 @@ msgstr "தற்போதைய சதித்திட்டத்தை த�
 
 #: eeschema/tools/sch_actions.cpp:1510
 msgid "Show Legend"
-msgstr ""
+msgstr "புராணக்கதை காட்டு"
 
 #: eeschema/tools/sch_actions.cpp:1516
 msgid "Dotted Current/Phase"
-msgstr ""
+msgstr "புள்ளியிடப்பட்ட நடப்பு/கட்டம்"
 
 #: eeschema/tools/sch_actions.cpp:1517
 msgid "Draw secondary signal trace (current or phase) with a dotted line"
 msgstr ""
+"புள்ளியிடப்பட்ட வரியுடன் இரண்டாம் நிலை சமிக்ஞை சுவடு (தற்போதைய அல்லது கட்டம்) வரையவும்"
 
 #: eeschema/tools/sch_actions.cpp:1522
 msgid "Dark Mode Plots"
-msgstr ""
+msgstr "இருண்ட பயன்முறை அடுக்கு"
 
 #: eeschema/tools/sch_actions.cpp:1523
 msgid "Draw plots with a black background"
-msgstr ""
+msgstr "கருப்பு பின்னணியுடன் அடுக்குகளை வரையவும்"
 
 #: eeschema/tools/sch_actions.cpp:1528
 msgid "Edit Analysis Tab..."
-msgstr ""
+msgstr "பகுப்பாய்வு தாவலைத் திருத்து ..."
 
 #: eeschema/tools/sch_actions.cpp:1529
 msgid "Edit the current analysis tab's SPICE command and plot setup"
 msgstr ""
+"தற்போதைய பகுப்பாய்வு தாவலின் மசாலா கட்டளை மற்றும் சூழ்ச்சி அமைப்பைத் திருத்தவும்"
 
 #: eeschema/tools/sch_actions.cpp:1536
 msgid "Run Simulation"
-msgstr ""
+msgstr "உருவகப்படுத்துதலை இயக்கவும்"
 
 #: eeschema/tools/sch_actions.cpp:1542
 msgid "Stop Simulation"
-msgstr ""
+msgstr "உருவகப்படுத்துதலை நிறுத்துங்கள்"
 
 #: eeschema/tools/sch_actions.cpp:1549
 msgid "Probe Schematic..."
-msgstr ""
+msgstr "ஆய்வு திட்டவட்டமாக ..."
 
 #: eeschema/tools/sch_actions.cpp:1550
 msgid "Add a simulator probe"
-msgstr ""
+msgstr "சிமுலேட்டர் ஆய்வைச் சேர்க்கவும்"
 
 #: eeschema/tools/sch_actions.cpp:1557
 msgid "Add Tuned Value..."
-msgstr ""
+msgstr "டியூன் செய்யப்பட்ட மதிப்பைச் சேர்க்கவும் ..."
 
 #: eeschema/tools/sch_actions.cpp:1558
 msgid "Select a value to be tuned"
-msgstr ""
+msgstr "சரிசெய்ய வேண்டிய மதிப்பைத் தேர்ந்தெடுக்கவும்"
 
 #: eeschema/tools/sch_actions.cpp:1564
 msgid "User-defined Signals..."
-msgstr ""
+msgstr "பயனர் வரையறுக்கப்பட்ட சமிக்ஞைகள் ..."
 
 #: eeschema/tools/sch_actions.cpp:1565
 msgid "Add, edit or delete user-defined simulation signals"
 msgstr ""
+"பயனர் வரையறுக்கப்பட்ட உருவகப்படுத்துதல் சமிக்ஞைகளைச் சேர்க்கவும், திருத்தவும் அல்லது நீக்கவும்"
 
 #: eeschema/tools/sch_actions.cpp:1571
 msgid "Show SPICE Netlist"
-msgstr ""
+msgstr "ச்பைச் நெட்லிச்ட்டைக் காட்டு"
 
 #: eeschema/tools/sch_drawing_tools.cpp:320
 msgid "Press <ESC> to cancel symbol creation."
-msgstr ""
+msgstr "குறியீட்டு உருவாக்கத்தை ரத்து செய்ய <esc> ஐ அழுத்தவும்."
 
 #: eeschema/tools/sch_drawing_tools.cpp:431
 msgid "Place Symbol"
@@ -23642,7 +23690,7 @@ msgstr "வடிவமைப்பு தொகுதி சேர்க்க�
 
 #: eeschema/tools/sch_drawing_tools.cpp:756
 msgid "Import Schematic Sheet Content..."
-msgstr ""
+msgstr "திட்ட தாள் உள்ளடக்கத்தை இறக்குமதி செய்யுங்கள் ..."
 
 #: eeschema/tools/sch_drawing_tools.cpp:787
 msgid "Choose Schematic"
@@ -23650,95 +23698,95 @@ msgstr "திட்டவட்டத்தைத் தேர்வுசெ�
 
 #: eeschema/tools/sch_drawing_tools.cpp:1013 pcbnew/tools/drawing_tool.cpp:728
 msgid "Press <ESC> to cancel image creation."
-msgstr ""
+msgstr "பட உருவாக்கத்தை ரத்து செய்ய <esc> ஐ அழுத்தவும்."
 
 #: eeschema/tools/sch_drawing_tools.cpp:1064
 #: pagelayout_editor/pl_editor_frame.cpp:893
 #: pagelayout_editor/pl_editor_frame.cpp:901 pcbnew/tools/drawing_tool.cpp:780
 #, c-format
 msgid "Could not load image from '%s'."
-msgstr ""
+msgstr "'%s' இலிருந்து படத்தை ஏற்ற முடியவில்லை."
 
 #: eeschema/tools/sch_drawing_tools.cpp:1087 pcbnew/tools/drawing_tool.cpp:801
 msgid "Place Image"
-msgstr ""
+msgstr "படத்தை வைக்கவும்"
 
 #: eeschema/tools/sch_drawing_tools.cpp:1178
 #: eeschema/tools/symbol_editor_drawing_tools.cpp:691
 #: pcbnew/tools/drawing_tool.cpp:1830
 msgid "No graphic items found in file."
-msgstr ""
+msgstr "கோப்பில் கிராஃபிக் உருப்படிகள் இல்லை."
 
 #: eeschema/tools/sch_drawing_tools.cpp:1208
 #: eeschema/tools/sch_drawing_tools.cpp:1290
 #: eeschema/tools/symbol_editor_drawing_tools.cpp:726
 #: eeschema/tools/symbol_editor_drawing_tools.cpp:815
 msgid "Import Graphic"
-msgstr ""
+msgstr "கிராஃபிக் இறக்குமதி"
 
 #: eeschema/tools/sch_drawing_tools.cpp:1347
 msgid "Add No Connect Flag"
-msgstr ""
+msgstr "இணைப்புக் கொடியைச் சேர்க்கவும்"
 
 #: eeschema/tools/sch_drawing_tools.cpp:1354
 msgid "Add Junction"
-msgstr ""
+msgstr "சந்திப்பைச் சேர்க்கவும்"
 
 #: eeschema/tools/sch_drawing_tools.cpp:1360
 msgid "Add Wire to Bus Entry"
-msgstr ""
+msgstr "பச் நுழைவுக்கு கம்பி சேர்க்கவும்"
 
 #: eeschema/tools/sch_drawing_tools.cpp:1435
 msgid "Junction location contains no joinable wires and/or pins."
-msgstr ""
+msgstr "சந்தி இருப்பிடத்தில் சேரக்கூடிய கம்பிகள் மற்றும்/அல்லது ஊசிகளும் இல்லை."
 
 #: eeschema/tools/sch_drawing_tools.cpp:1905
 #: eeschema/tools/symbol_editor_drawing_tools.cpp:185
 msgid "Press <ESC> to cancel item creation."
-msgstr ""
+msgstr "உருப்படி உருவாக்கத்தை ரத்து செய்ய <esc> ஐ அழுத்தவும்."
 
 #: eeschema/tools/sch_drawing_tools.cpp:1936
 msgid "Add Text"
-msgstr ""
+msgstr "உரையைச் சேர்க்கவும்"
 
 #: eeschema/tools/sch_drawing_tools.cpp:1963
 msgid "Add Hierarchical Label"
-msgstr ""
+msgstr "படிநிலை லேபிளைச் சேர்க்கவும்"
 
 #: eeschema/tools/sch_drawing_tools.cpp:1968
 #: eeschema/tools/sch_drawing_tools.cpp:1973
 #: eeschema/tools/sch_drawing_tools.cpp:1978
 msgid "Add Label"
-msgstr ""
+msgstr "லேபிளைச் சேர்க்கவும்"
 
 #: eeschema/tools/sch_drawing_tools.cpp:1991
 msgid "Click over a sheet."
-msgstr ""
+msgstr "ஒரு தாளைக் சொடுக்கு செய்க."
 
 #: eeschema/tools/sch_drawing_tools.cpp:2015
 #: eeschema/tools/sch_drawing_tools.cpp:2117
 msgid "No new hierarchical labels found."
-msgstr ""
+msgstr "புதிய படிநிலை லேபிள்கள் எதுவும் கிடைக்கவில்லை."
 
 #: eeschema/tools/sch_drawing_tools.cpp:2029
 msgid "Add Sheet Pin"
-msgstr ""
+msgstr "தாள் முள் சேர்க்கவும்"
 
 #: eeschema/tools/sch_drawing_tools.cpp:2343
 #: eeschema/tools/symbol_editor_drawing_tools.cpp:490
 msgid "Add Text Box"
-msgstr ""
+msgstr "உரை பெட்டியைச் சேர்க்கவும்"
 
 #: eeschema/tools/sch_drawing_tools.cpp:2352
 #: eeschema/tools/symbol_editor_drawing_tools.cpp:496
 #, c-format
 msgid "Add %s"
-msgstr ""
+msgstr "%s ஐச் சேர்க்கவும்"
 
 #: eeschema/tools/sch_drawing_tools.cpp:2407
 #, c-format
 msgid "Draw %s"
-msgstr ""
+msgstr "%s வரையவும்"
 
 #: eeschema/tools/sch_drawing_tools.cpp:2783 pcbnew/tools/drawing_tool.cpp:1255
 msgid "Draw Table"
@@ -23751,7 +23799,7 @@ msgstr "'%s' கோப்பு இல்லை."
 
 #: eeschema/tools/sch_drawing_tools.cpp:2982
 msgid "Press <ESC> to cancel sheet creation."
-msgstr ""
+msgstr "தாள் உருவாக்கத்தை ரத்து செய்ய <esc> ஐ அழுத்தவும்."
 
 #: eeschema/tools/sch_drawing_tools.cpp:3221
 msgid "Modify sheet pin"
@@ -23767,7 +23815,7 @@ msgstr "தற்போதைய திட்டத்தில் எந்த 
 
 #: eeschema/tools/sch_edit_tool.cpp:78
 msgid "Symbol Unit"
-msgstr ""
+msgstr "அடையாளம் அலகு"
 
 #: eeschema/tools/sch_edit_tool.cpp:112
 msgid " (already placed)"
@@ -23775,124 +23823,125 @@ msgstr " (ஏற்கனவே வைக்கப்பட்டுள்ளத
 
 #: eeschema/tools/sch_edit_tool.cpp:180
 msgid "Pin Function"
-msgstr ""
+msgstr "முள் செயல்பாடு"
 
 #: eeschema/tools/sch_edit_tool.cpp:231
 msgid "Pin Helpers"
-msgstr ""
+msgstr "முள் உதவியாளர்கள்"
 
 #: eeschema/tools/sch_edit_tool.cpp:583
 msgid "Transform Selection"
-msgstr ""
+msgstr "தேர்வை மாற்றவும்"
 
 #: eeschema/tools/sch_edit_tool.cpp:611
 msgid "Edit Main Fields"
-msgstr ""
+msgstr "முதன்மையான புலங்களைத் திருத்தவும்"
 
 #: eeschema/tools/sch_edit_tool.cpp:624 eeschema/tools/sch_edit_tool.cpp:2782
 msgid "Change To"
-msgstr ""
+msgstr "மாற்றவும்"
 
 #: eeschema/tools/sch_edit_tool.cpp:1048
 #: eeschema/tools/symbol_editor_edit_tool.cpp:210
 #: pcbnew/tools/edit_tool.cpp:2066
 msgid "Rotate"
-msgstr ""
+msgstr "சுழற்றுங்கள்"
 
 #: eeschema/tools/sch_edit_tool.cpp:1246 gerbview/gerber_draw_item.cpp:731
 #: pcbnew/pcb_tablecell.cpp:109 pcbnew/pcb_text.cpp:290
 #: pcbnew/pcb_textbox.cpp:473 pcbnew/tools/edit_tool.cpp:2233
 msgid "Mirror"
-msgstr ""
+msgstr "கண்ணாடி"
 
 #: eeschema/tools/sch_edit_tool.cpp:1513
 msgid "Label value cannot go below zero"
-msgstr ""
+msgstr "சிட்டை மதிப்பு பூச்சியத்திற்கு கீழே செல்ல முடியாது"
 
 #: eeschema/tools/sch_edit_tool.cpp:1592
 msgid "Repeat Item"
-msgstr ""
+msgstr "உருப்படியை மீண்டும் செய்யவும்"
 
 #: eeschema/tools/sch_edit_tool.cpp:1813 eeschema/tools/sch_edit_tool.cpp:1817
 #: eeschema/tools/symbol_editor_edit_tool.cpp:692
 #, c-format
 msgid "Edit %s Field"
-msgstr ""
+msgstr "%s புலத்தைத் திருத்து"
 
 #: eeschema/tools/sch_edit_tool.cpp:1821
 #: eeschema/tools/symbol_editor_edit_tool.cpp:694
 #, c-format
 msgid "Edit '%s' Field"
-msgstr ""
+msgstr "'%s' புலத்தைத் திருத்து"
 
 #: eeschema/tools/sch_edit_tool.cpp:2191
 msgid "Edit Sheet Properties"
-msgstr ""
+msgstr "தாள் பண்புகளைத் திருத்தவும்"
 
 #: eeschema/tools/sch_edit_tool.cpp:2338
 #: pcbnew/dialogs/dialog_rule_area_properties_base.h:64
 msgid "Rule Area Properties"
-msgstr ""
+msgstr "விதி பகுதி பண்புகள்"
 
 #: eeschema/tools/sch_edit_tool.cpp:2460 eeschema/tools/sch_edit_tool.cpp:2551
 msgid "<empty>"
-msgstr ""
+msgstr "<வெற்று>"
 
 #: eeschema/tools/sch_edit_tool.cpp:2942
 msgid "Slice Wire"
-msgstr ""
+msgstr "துண்டு கம்பி"
 
 #: eeschema/tools/sch_edit_tool.cpp:2942
 msgid "Break Wire"
-msgstr ""
+msgstr "கம்பி உடைக்கவும்"
 
 #: eeschema/tools/sch_edit_tool.cpp:2963
 msgid "Do you wish to delete the unreferenced pins from this sheet?"
-msgstr ""
+msgstr "இந்த தாளில் இருந்து குறிப்பிடப்படாத ஊசிகளை நீக்க விரும்புகிறீர்களா?"
 
 #: eeschema/tools/sch_edit_tool.cpp:3024
 #, c-format
 msgid "Enter page number for sheet path%s"
-msgstr ""
+msgstr "தாள் பாதை%s க்கு பக்க எண்ணை உள்ளிடவும்"
 
 #: eeschema/tools/sch_edit_tool.cpp:3027
 #: eeschema/widgets/hierarchy_pane.cpp:417
 msgid "Edit Sheet Page Number"
-msgstr ""
+msgstr "தாள் பக்க எண்ணைத் திருத்தவும்"
 
 #: eeschema/tools/sch_edit_tool.cpp:3221
 msgid "Toggle Attribute"
-msgstr ""
+msgstr "பண்புக்கூறு மாற்றவும்"
 
 #: eeschema/tools/sch_editor_control.cpp:166
 #, c-format
 msgid "Revert '%s' (and all sub-sheets) to last version saved?"
 msgstr ""
+"கடைசி பதிப்பிற்கு '%s' (மற்றும் அனைத்து துணைத் தாள்களையும்) மாற்றியமைக்கவா?"
 
 #: eeschema/tools/sch_editor_control.cpp:358
 msgid "Include power symbols in schematic to the library?"
-msgstr ""
+msgstr "மின் சின்னங்களை நூலகத்திற்கு திட்டவட்டமாக சேர்க்கவா?"
 
 #: eeschema/tools/sch_editor_control.cpp:424
 #, c-format
 msgid "Could not add library '%s'."
-msgstr ""
+msgstr "'%s' நூலகத்தைச் சேர்க்க முடியவில்லை."
 
 #: eeschema/tools/sch_editor_control.cpp:437
 msgid "Update symbols in schematic to refer to new library?"
-msgstr ""
+msgstr "புதிய நூலகத்தைக் குறிக்க திட்டத்தில் சின்னங்களைப் புதுப்பிக்கவா?"
 
 #: eeschema/tools/sch_editor_control.cpp:831
 msgid "Error: duplicate sub-sheet names found in current sheet."
-msgstr ""
+msgstr "பிழை: தற்போதைய தாளில் காணப்படும் நகல் துணை தாள் பெயர்கள்."
 
 #: eeschema/tools/sch_editor_control.cpp:938
 msgid "No net selected."
-msgstr ""
+msgstr "நிகர தேர்ந்தெடுக்கப்படவில்லை."
 
 #: eeschema/tools/sch_editor_control.cpp:964
 msgid "Net must be labeled to assign a netclass."
-msgstr ""
+msgstr "நெட் கிளாசை ஒதுக்க நெட் பெயரிடப்பட வேண்டும்."
 
 #: eeschema/tools/sch_editor_control.cpp:1825
 #, c-format
@@ -23901,10 +23950,13 @@ msgid ""
 "was dropped because the destination already has the sheet or one of its "
 "subsheets as a parent."
 msgstr ""
+"ஒட்டப்பட்ட தாள் '%s' \n"
+"இலக்கு ஏற்கனவே தாள் அல்லது பெற்றோராக அதன் சப்சீட்களில் ஒன்றைக் கொண்டிருப்பதால் கைவிடப்பட்டது."
 
 #: eeschema/tools/sch_editor_control.cpp:2351
 msgid "Symbols with broken library symbol links cannot be edited."
 msgstr ""
+"உடைந்த நூலக குறியீட்டு இணைப்புகளைக் கொண்ட சின்னங்களைத் திருத்த முடியாது."
 
 #: eeschema/tools/sch_editor_control.cpp:2439
 msgid "Increment Annotations"
@@ -23915,31 +23967,31 @@ msgstr "அதிகரிப்பு சிறுகுறிப்புக�
 #: pcbnew/tools/footprint_editor_control.cpp:896
 #, c-format
 msgid "%d duplicate IDs replaced.\n"
-msgstr ""
+msgstr "%d நகல் ஐடிகள் மாற்றப்பட்டன.\n"
 
 #: eeschema/tools/sch_editor_control.cpp:2869
 #: pcbnew/tools/board_editor_control.cpp:629
 #: pcbnew/tools/footprint_editor_control.cpp:903
 #, c-format
 msgid "%d potential problems repaired."
-msgstr ""
+msgstr "%d சாத்தியமான சிக்கல்கள் சரிசெய்யப்படுகின்றன."
 
 #: eeschema/tools/sch_editor_control.cpp:2876
 #: pcbnew/drc/drc_rule_parser.cpp:179
 msgid "No errors found."
-msgstr ""
+msgstr "பிழைகள் எதுவும் கிடைக்கவில்லை."
 
 #: eeschema/tools/sch_find_replace_tool.cpp:330
 msgid "Reached end of schematic."
-msgstr ""
+msgstr "திட்டவட்டத்தின் முடிவை அடைந்தது."
 
 #: eeschema/tools/sch_find_replace_tool.cpp:331
 msgid "Reached end of sheet."
-msgstr ""
+msgstr "தாளின் முடிவை அடைந்தது."
 
 #: eeschema/tools/sch_find_replace_tool.cpp:335
 msgid "Find again to wrap around to the start."
-msgstr ""
+msgstr "தொடக்கத்திற்குச் சுற்ற மீண்டும் கண்டுபிடிக்கவும்."
 
 #: eeschema/tools/sch_inspection_tool.cpp:224
 #: pcbnew/tools/board_inspection_tool.cpp:292
@@ -23955,140 +24007,141 @@ msgstr "%s ரன்"
 
 #: eeschema/tools/sch_inspection_tool.cpp:318
 msgid "No symbol issues found."
-msgstr ""
+msgstr "குறியீட்டு சிக்கல்கள் எதுவும் காணப்படவில்லை."
 
 #: eeschema/tools/sch_inspection_tool.cpp:322
 msgid "Symbol Warnings"
-msgstr ""
+msgstr "குறியீட்டு எச்சரிக்கைகள்"
 
 #: eeschema/tools/sch_inspection_tool.cpp:358
 msgid "Select a symbol to diff against its library equivalent."
 msgstr ""
+"அதன் நூலகத்திற்கு எதிராக வேறுபடுவதற்கு ஒரு சின்னத்தைத் தேர்ந்தெடுக்கவும்."
 
 #: eeschema/tools/sch_inspection_tool.cpp:379
 #, c-format
 msgid "Symbol %s"
-msgstr ""
+msgstr "அடையாளம் %s"
 
 #: eeschema/tools/sch_inspection_tool.cpp:385
 #: pcbnew/tools/board_inspection_tool.cpp:1593
 msgid "Summary"
-msgstr ""
+msgstr "சுருக்கம்"
 
 #: eeschema/tools/sch_inspection_tool.cpp:387
 msgid "Schematic vs library diff for:"
-msgstr ""
+msgstr "திட்டவட்டமான Vs நூலகம் வேறுபடுகிறது:"
 
 #: eeschema/tools/sch_inspection_tool.cpp:389
 #: pcbnew/dialogs/dialog_footprint_associations.cpp:48
 #: pcbnew/tools/board_inspection_tool.cpp:1597
 msgid "Library: "
-msgstr ""
+msgstr "நூலகம்: "
 
 #: eeschema/tools/sch_inspection_tool.cpp:390
 #: pcbnew/tools/board_inspection_tool.cpp:1598
 msgid "Library item: "
-msgstr ""
+msgstr "நூலக உருப்படி: "
 
 #: eeschema/tools/sch_inspection_tool.cpp:400
 #: pcbnew/tools/board_inspection_tool.cpp:1616
 msgid "The library is not included in the current configuration."
-msgstr ""
+msgstr "தற்போதைய உள்ளமைவில் நூலகம் சேர்க்கப்படவில்லை."
 
 #: eeschema/tools/sch_inspection_tool.cpp:402
 #: eeschema/tools/sch_inspection_tool.cpp:408
 msgid "Manage Symbol Libraries"
-msgstr ""
+msgstr "குறியீட்டு நூலகங்களை நிர்வகிக்கவும்"
 
 #: eeschema/tools/sch_inspection_tool.cpp:406
 #: pcbnew/tools/board_inspection_tool.cpp:1624
 msgid "The library is not enabled in the current configuration."
-msgstr ""
+msgstr "தற்போதைய உள்ளமைவில் நூலகம் இயக்கப்படவில்லை."
 
 #: eeschema/tools/sch_inspection_tool.cpp:426
 #: pcbnew/tools/board_inspection_tool.cpp:1644
 #, c-format
 msgid "The library no longer contains the item %s."
-msgstr ""
+msgstr "நூலகத்தில் இனி %s உருப்படி இல்லை."
 
 #: eeschema/tools/sch_inspection_tool.cpp:447
 #: pcbnew/tools/board_inspection_tool.cpp:1650
 msgid "No relevant differences detected."
-msgstr ""
+msgstr "தொடர்புடைய வேறுபாடுகள் எதுவும் கண்டறியப்படவில்லை."
 
 #: eeschema/tools/sch_inspection_tool.cpp:450
 #: pcbnew/tools/board_inspection_tool.cpp:1652
 msgid "Visual"
-msgstr ""
+msgstr "காட்சி"
 
 #: eeschema/tools/sch_inspection_tool.cpp:548
 msgid "No datasheet defined."
-msgstr ""
+msgstr "தரவுத்தாள் வரையறுக்கப்படவில்லை."
 
 #: eeschema/tools/sch_inspection_tool.cpp:577
 #: pagelayout_editor/tools/pl_editor_control.cpp:160
 #: pcbnew/tools/pcb_control.cpp:1681
 msgid "UUID"
-msgstr ""
+msgstr "Uuid"
 
 #: eeschema/tools/sch_line_wire_bus_tool.cpp:106
 msgid "No bus selected"
-msgstr ""
+msgstr "பச் தேர்ந்தெடுக்கப்படவில்லை"
 
 #: eeschema/tools/sch_line_wire_bus_tool.cpp:115
 msgid "Bus has no members"
-msgstr ""
+msgstr "பச்சில் உறுப்பினர்கள் இல்லை"
 
 #: eeschema/tools/sch_line_wire_bus_tool.cpp:757
 msgid "Press <ESC> to cancel drawing."
-msgstr ""
+msgstr "வரைபடத்தை ரத்து செய்ய <esc> ஐ அழுத்தவும்."
 
 #: eeschema/tools/sch_move_tool.cpp:827
 msgid "Press <ESC> to cancel drag."
-msgstr ""
+msgstr "இழுவை ரத்து செய்ய <esc> ஐ அழுத்தவும்."
 
 #: eeschema/tools/sch_move_tool.cpp:829
 #: pagelayout_editor/tools/pl_edit_tool.cpp:235
 msgid "Press <ESC> to cancel move."
-msgstr ""
+msgstr "நகர்வை ரத்து செய்ய <esc> ஐ அழுத்தவும்."
 
 #: eeschema/tools/sch_navigate_tool.cpp:99
 #, c-format
 msgid "Page '%s' not found."
-msgstr ""
+msgstr "பக்கம் '%s' காணப்படவில்லை."
 
 #: eeschema/tools/sch_point_editor.cpp:1135
 #: pcbnew/tools/pcb_point_editor.cpp:2370
 msgid "Move Point"
-msgstr ""
+msgstr "நகர்த்தவும்"
 
 #: eeschema/tools/sch_point_editor.cpp:1342
 msgid "Add Corner"
-msgstr ""
+msgstr "மூலையில் சேர்க்கவும்"
 
 #: eeschema/tools/simulator_control.cpp:109
 msgid "Open Simulation Workbook"
-msgstr ""
+msgstr "திறந்த உருவகப்படுத்துதல் பணிப்புத்தகம்"
 
 #: eeschema/tools/simulator_control.cpp:128
 msgid "noname"
-msgstr ""
+msgstr "noname"
 
 #: eeschema/tools/simulator_control.cpp:161
 msgid "Save Simulation Workbook As"
-msgstr ""
+msgstr "உருவகப்படுத்துதல் பணிப்புத்தகத்தை சேமிக்கவும்"
 
 #: eeschema/tools/simulator_control.cpp:181
 msgid "Save Plot as Image"
-msgstr ""
+msgstr "சதித்திட்டத்தை படமாக சேமிக்கவும்"
 
 #: eeschema/tools/simulator_control.cpp:287
 msgid "Save Plot Data"
-msgstr ""
+msgstr "சூழ்ச்சி தரவைச் சேமிக்கவும்"
 
 #: eeschema/tools/simulator_control.cpp:520
 msgid "SPICE Netlist"
-msgstr ""
+msgstr "மசாலா நெட்லிச்ட்"
 
 #: eeschema/tools/symbol_editor_control.cpp:236
 #, c-format
@@ -24097,7 +24150,7 @@ msgstr "நூலக %s இலிருந்து குறியீட்ட�
 
 #: eeschema/tools/symbol_editor_control.cpp:256
 msgid "No symbol library selected."
-msgstr ""
+msgstr "குறியீட்டு நூலகம் எதுவும் தேர்ந்தெடுக்கப்படவில்லை."
 
 #: eeschema/tools/symbol_editor_control.cpp:342
 #: pcbnew/tools/footprint_editor_control.cpp:650
@@ -24113,30 +24166,30 @@ msgstr "கிகேடில் உரை எடிட்டர் தேர்
 #: eeschema/tools/symbol_editor_control.cpp:439
 #: eeschema/widgets/panel_symbol_chooser.cpp:684
 msgid "No symbol selected"
-msgstr ""
+msgstr "எந்த சின்னமும் தேர்ந்தெடுக்கப்படவில்லை"
 
 #: eeschema/tools/symbol_editor_control.cpp:476
 msgid "Change Symbol Name"
-msgstr ""
+msgstr "குறியீட்டு பெயரை மாற்றவும்"
 
 #: eeschema/tools/symbol_editor_control.cpp:700
 #: eeschema/tools/symbol_editor_control.cpp:747
 msgid "No symbol to export"
-msgstr ""
+msgstr "ஏற்றுமதி செய்ய அடையாளம் இல்லை"
 
 #: eeschema/tools/symbol_editor_control.cpp:709
 #: pcbnew/footprint_edit_frame.cpp:1510
 msgid "Export View as PNG"
-msgstr ""
+msgstr "Png ஆக ஏற்றுமதி பார்வை"
 
 #: eeschema/tools/symbol_editor_control.cpp:720
 #, c-format
 msgid "Can't save file '%s'."
-msgstr ""
+msgstr "கோப்பை '%s' சேமிக்க முடியாது."
 
 #: eeschema/tools/symbol_editor_control.cpp:756
 msgid "SVG File Name"
-msgstr ""
+msgstr "எச்.வி.சி கோப்பு பெயர்"
 
 #: eeschema/tools/symbol_editor_drawing_tools.cpp:295
 msgid "Place Pin"
@@ -24158,37 +24211,37 @@ msgstr "புலங்களை அகற்ற குறியீட்டு 
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:782
 msgid "Edit Pins"
-msgstr ""
+msgstr "ஊசிகளைத் திருத்து"
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:798
 msgid "Symbol is not derived from another symbol."
-msgstr ""
+msgstr "அடையாளம் மற்றொரு சின்னத்திலிருந்து பெறப்படவில்லை."
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:826
 #, c-format
 msgid "Enter display name for unit %s"
-msgstr ""
+msgstr "அலகு %s க்கு காட்சி பெயரை உள்ளிடவும்"
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:835
 msgid "Set Unit Display Name"
-msgstr ""
+msgstr "அலகு காட்சி பெயரை அமைக்கவும்"
 
 #: eeschema/tools/symbol_editor_pin_tool.cpp:199
 msgid "Edit Pin Properties"
-msgstr ""
+msgstr "முள் பண்புகளைத் திருத்தவும்"
 
 #: eeschema/tools/symbol_editor_pin_tool.cpp:239
 #, c-format
 msgid "This position is already occupied by another pin, in unit %d."
-msgstr ""
+msgstr "இந்த நிலை ஏற்கனவே மற்றொரு முள் ஆக்கிரமித்துள்ளது, அலகு %d இல்."
 
 #: eeschema/tools/symbol_editor_pin_tool.cpp:243
 msgid "Place Pin Anyway"
-msgstr ""
+msgstr "எப்படியும் முள் வைக்கவும்"
 
 #: eeschema/tools/symbol_editor_pin_tool.cpp:459
 msgid "Repeat Pin"
-msgstr ""
+msgstr "முள் மீண்டும் செய்யவும்"
 
 #: eeschema/widgets/design_block_pane.cpp:40
 msgid "Place as sheet"
@@ -24216,11 +24269,11 @@ msgstr ""
 
 #: eeschema/widgets/filedlg_hook_save_project.h:32
 msgid "Create a new project for this schematic"
-msgstr ""
+msgstr "இந்த திட்டத்திற்கு ஒரு புதிய திட்டத்தை உருவாக்கவும்"
 
 #: eeschema/widgets/hierarchy_pane.cpp:390
 msgid "Edit Page Number"
-msgstr ""
+msgstr "பக்க எண்ணைத் திருத்தவும்"
 
 #: eeschema/widgets/hierarchy_pane.cpp:394
 msgid "Rename"
@@ -24233,7 +24286,7 @@ msgstr "இந்த தாளின் பெயரை மாற்றவும
 #: eeschema/widgets/hierarchy_pane.cpp:413
 #, c-format
 msgid "Enter page number for sheet path %s"
-msgstr ""
+msgstr "தாள் பாதை %s க்கு பக்க எண்ணை உள்ளிடவும்"
 
 #: eeschema/widgets/hierarchy_pane.cpp:484
 msgid "Renaming sheet"
@@ -24242,7 +24295,7 @@ msgstr "மறுபெயரிடுதல் தாள்"
 #: eeschema/widgets/hierarchy_pane.cpp:547
 #, c-format
 msgid "(page %s)"
-msgstr ""
+msgstr "(பக்கம் %s)"
 
 #: eeschema/widgets/panel_design_block_chooser.cpp:69
 msgid "Loading Design Block Libraries"
@@ -24256,7 +24309,7 @@ msgstr "வடிவமைப்பு தொகுதி நூலகங்க�
 #: pcbnew/widgets/panel_selection_filter.cpp:156
 #, c-format
 msgid "Only %s"
-msgstr ""
+msgstr "%s மட்டுமே"
 
 #: eeschema/widgets/panel_sch_selection_filter.cpp:199
 #: eeschema/widgets/panel_sch_selection_filter_base.cpp:18
@@ -24264,21 +24317,21 @@ msgstr ""
 #: pcbnew/widgets/panel_selection_filter.cpp:193
 #: pcbnew/widgets/panel_selection_filter_base.cpp:19
 msgid "All items"
-msgstr ""
+msgstr "அனைத்து உருப்படிகளும்"
 
 #: eeschema/widgets/panel_sch_selection_filter.cpp:200
 #: eeschema/widgets/panel_sch_selection_filter_base.cpp:22
 #: pcbnew/widgets/panel_selection_filter.cpp:194
 #: pcbnew/widgets/panel_selection_filter_base.cpp:23
 msgid "Locked items"
-msgstr ""
+msgstr "பூட்டப்பட்ட உருப்படிகள்"
 
 #: eeschema/widgets/panel_sch_selection_filter.cpp:201
 #: eeschema/widgets/panel_sch_selection_filter_base.cpp:25
 #: pcbnew/widgets/panel_selection_filter.cpp:195
 #: pcbnew/widgets/panel_selection_filter_base.cpp:25
 msgid "Allow selection of locked items"
-msgstr ""
+msgstr "பூட்டப்பட்ட பொருட்களைத் தேர்வு செய்ய அனுமதிக்கவும்"
 
 #: eeschema/widgets/panel_sch_selection_filter.cpp:207
 #: eeschema/widgets/panel_sch_selection_filter_base.cpp:45
@@ -24286,20 +24339,20 @@ msgstr ""
 #: pcbnew/widgets/panel_selection_filter.cpp:201
 #: pcbnew/widgets/panel_selection_filter_base.cpp:49
 msgid "Graphics"
-msgstr ""
+msgstr "கிராபிக்ச்"
 
 #: eeschema/widgets/panel_sch_selection_filter.cpp:208
 #: eeschema/widgets/panel_sch_selection_filter_base.cpp:51
 #: pcbnew/widgets/appearance_controls.cpp:336
 msgid "Images"
-msgstr ""
+msgstr "படங்கள்"
 
 #: eeschema/widgets/panel_sch_selection_filter.cpp:209
 #: eeschema/widgets/panel_sch_selection_filter_base.cpp:59
 #: pcbnew/widgets/panel_selection_filter.cpp:205
 #: pcbnew/widgets/panel_selection_filter_base.cpp:65
 msgid "Other items"
-msgstr ""
+msgstr "பிற உருப்படிகள்"
 
 #: eeschema/widgets/panel_sch_selection_filter_base.cpp:47
 msgid "Graphical shapes"
@@ -24307,11 +24360,11 @@ msgstr "வரைகலை வடிவங்கள்"
 
 #: eeschema/widgets/panel_symbol_chooser.cpp:589
 msgid "No footprint specified"
-msgstr ""
+msgstr "எந்த தடம் குறிப்பிடப்படவில்லை"
 
 #: eeschema/widgets/panel_symbol_chooser.cpp:602
 msgid "Invalid footprint specified"
-msgstr ""
+msgstr "தவறான தடம் குறிப்பிடப்பட்டுள்ளது"
 
 #: eeschema/widgets/sch_properties_panel.cpp:209
 #: pcbnew/widgets/pcb_properties_panel.cpp:233
@@ -24324,7 +24377,7 @@ msgstr ""
 
 #: eeschema/widgets/search_handlers.cpp:167
 msgid "Excl. BOM"
-msgstr ""
+msgstr "EXCH. வெடிகுண்டு"
 
 #: eeschema/widgets/search_handlers.cpp:168
 msgid "Excl. board"
@@ -24332,32 +24385,32 @@ msgstr ""
 
 #: eeschema/widgets/search_handlers.cpp:468
 msgid "Hierarchical"
-msgstr ""
+msgstr "படிநிலை"
 
 #: eeschema/widgets/search_handlers.cpp:470
 msgid "Directive"
-msgstr ""
+msgstr "உத்தரவு"
 
 #: eeschema/widgets/symbol_filedlg_save_as.h:33
 msgid "Do not update library tables"
-msgstr ""
+msgstr "நூலக அட்டவணைகளை புதுப்பிக்க வேண்டாம்"
 
 #: eeschema/widgets/symbol_filedlg_save_as.h:35
 msgid "Update existing library table entry"
-msgstr ""
+msgstr "தற்போதுள்ள நூலக அட்டவணை உள்ளீட்டைப் புதுப்பிக்கவும்"
 
 #: eeschema/widgets/symbol_filedlg_save_as.h:37
 msgid "Add new global library table entry"
-msgstr ""
+msgstr "புதிய உலகளாவிய நூலக அட்டவணை நுழைவு சேர்க்கவும்"
 
 #: eeschema/widgets/symbol_filedlg_save_as.h:39
 msgid "Add new project library table entry"
-msgstr ""
+msgstr "புதிய திட்ட நூலக அட்டவணை நுழைவு சேர்க்கவும்"
 
 #: eeschema/widgets/tuner_slider.cpp:67 eeschema/widgets/tuner_slider.cpp:123
 #, c-format
 msgid "Tune %s"
-msgstr ""
+msgstr "டியூன் %s"
 
 #: eeschema/widgets/tuner_slider.cpp:84
 #, c-format
@@ -24366,32 +24419,32 @@ msgstr ""
 
 #: eeschema/widgets/tuner_slider_base.cpp:43
 msgid "Limit to E24 series values."
-msgstr ""
+msgstr "E24 தொடர் மதிப்புகளுக்கு வரம்பு."
 
 #: eeschema/widgets/tuner_slider_base.cpp:53
 msgid "Limit to E48 series values."
-msgstr ""
+msgstr "E48 தொடர் மதிப்புகளுக்கு வரம்பு."
 
 #: eeschema/widgets/tuner_slider_base.cpp:61
 msgid "Limit to E96 series values"
-msgstr ""
+msgstr "E96 தொடர் மதிப்புகளுக்கு வரம்பு"
 
 #: eeschema/widgets/tuner_slider_base.cpp:69
 msgid "Limit to E192 series values"
-msgstr ""
+msgstr "E192 தொடர் மதிப்புகளுக்கு வரம்பு"
 
 #: gerbview/clear_gbr_drawlayers.cpp:47
 msgid "Current data will be lost?"
-msgstr ""
+msgstr "தற்போதைய தரவு இழக்கப்படுமா?"
 
 #: gerbview/clear_gbr_drawlayers.cpp:78
 #, c-format
 msgid "Clear layer %d?"
-msgstr ""
+msgstr "தெளிவான அடுக்கு %d?"
 
 #: gerbview/dialogs/dialog_draw_layers_settings_base.cpp:21
 msgid "Active layer name:"
-msgstr ""
+msgstr "செயலில் அடுக்கு பெயர்:"
 
 #: gerbview/dialogs/dialog_draw_layers_settings_base.cpp:38
 #: pcbnew/dialogs/dialog_position_relative.cpp:168
@@ -24400,7 +24453,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_set_offset_base.cpp:29
 #: pcbnew/dialogs/dialog_text_properties.cpp:98
 msgid "Offset X:"
-msgstr ""
+msgstr "ஆஃப்செட் எக்ச்:"
 
 #: gerbview/dialogs/dialog_draw_layers_settings_base.cpp:49
 #: pcbnew/dialogs/dialog_position_relative.cpp:169
@@ -24409,34 +24462,34 @@ msgstr ""
 #: pcbnew/dialogs/dialog_set_offset_base.cpp:46
 #: pcbnew/dialogs/dialog_text_properties.cpp:99
 msgid "Offset Y:"
-msgstr ""
+msgstr "ஆஃப்செட் ஒய்:"
 
 #: gerbview/dialogs/dialog_draw_layers_settings_base.cpp:60
 msgid "Rotate counterclockwise:"
-msgstr ""
+msgstr "எதிரெதிர் திசையில் சுழற்றுங்கள்:"
 
 #: gerbview/dialogs/dialog_draw_layers_settings_base.cpp:77
 msgid "Active layer"
-msgstr ""
+msgstr "செயலில் அடுக்கு"
 
 #: gerbview/dialogs/dialog_draw_layers_settings_base.cpp:77
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:87
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:1037
 msgid "All layers"
-msgstr ""
+msgstr "அனைத்து அடுக்குகளும்"
 
 #: gerbview/dialogs/dialog_draw_layers_settings_base.cpp:77
 msgid "All visible layers"
-msgstr ""
+msgstr "அனைத்து புலப்படும் அடுக்குகளும்"
 
 #: gerbview/dialogs/dialog_draw_layers_settings_base.h:64
 msgid "Layers Settings"
-msgstr ""
+msgstr "அடுக்குகள் அமைப்புகள்"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb.cpp:143
 #, c-format
 msgid "Layer %d"
-msgstr ""
+msgstr "அடுக்கு %d"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb.cpp:169
 #: gerbview/dialogs/dialog_layers_select_to_pcb.cpp:233
@@ -24445,141 +24498,143 @@ msgstr ""
 #: gerbview/dialogs/dialog_layers_select_to_pcb.cpp:385
 #: gerbview/dialogs/dialog_select_one_pcb_layer.cpp:127
 msgid "Do not export"
-msgstr ""
+msgstr "ஏற்றுமதி செய்ய வேண்டாம்"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb.cpp:215
 #, c-format
 msgid "Gerbers with known layers: %d"
-msgstr ""
+msgstr "அறியப்பட்ட அடுக்குகளுடன் கூடிய செர்பர்ச்: %d"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb.cpp:216
 msgid "Assign to matching PCB layers?"
-msgstr ""
+msgstr "பொருந்தக்கூடிய பிசிபி அடுக்குகளுக்கு ஒதுக்கவா?"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb.cpp:217
 msgid "Automatic Layer Assignment"
-msgstr ""
+msgstr "தானியங்கி அடுக்கு ஒதுக்கீடு"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb.cpp:340
 #: gerbview/dialogs/dialog_layers_select_to_pcb.cpp:393
 #: gerbview/dialogs/dialog_select_one_pcb_layer.cpp:120
 msgid "Hole data"
-msgstr ""
+msgstr "துளை தரவு"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb.cpp:438
 msgid ""
 "Exported board does not have enough copper layers to handle selected inner "
 "layers"
 msgstr ""
+"ஏற்றுமதி செய்யப்பட்ட வாரியத்தில் தேர்ந்தெடுக்கப்பட்ட உள் அடுக்குகளைக் கையாள போதுமான செப்பு "
+"அடுக்குகள் இல்லை"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:32
 msgid "Layer selection:"
-msgstr ""
+msgstr "அடுக்கு தேர்வு:"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:78
 msgid "Copper layers count:"
-msgstr ""
+msgstr "செப்பு அடுக்குகள் எண்ணிக்கை:"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:82
 #: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:83
 msgid "2 Layers"
-msgstr ""
+msgstr "2 அடுக்குகள்"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:84
 msgid "4 Layers"
-msgstr ""
+msgstr "4 அடுக்குகள்"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:85
 msgid "6 Layers"
-msgstr ""
+msgstr "6 அடுக்குகள்"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:86
 msgid "8 Layers"
-msgstr ""
+msgstr "8 அடுக்குகள்"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:87
 msgid "10 Layers"
-msgstr ""
+msgstr "10 அடுக்குகள்"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:88
 msgid "12 Layers"
-msgstr ""
+msgstr "12 அடுக்குகள்"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:89
 msgid "14 Layers"
-msgstr ""
+msgstr "14 அடுக்குகள்"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:90
 msgid "16 Layers"
-msgstr ""
+msgstr "16 அடுக்குகள்"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:91
 msgid "18 Layers"
-msgstr ""
+msgstr "18 அடுக்குகள்"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:92
 msgid "20 Layers"
-msgstr ""
+msgstr "20 அடுக்குகள்"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:93
 msgid "22 Layers"
-msgstr ""
+msgstr "22 அடுக்குகள்"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:94
 msgid "24 Layers"
-msgstr ""
+msgstr "24 அடுக்குகள்"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:95
 msgid "26 Layers"
-msgstr ""
+msgstr "26 அடுக்குகள்"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:96
 msgid "28 Layers"
-msgstr ""
+msgstr "28 அடுக்குகள்"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:97
 msgid "30 Layers"
-msgstr ""
+msgstr "30 அடுக்குகள்"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:98
 msgid "32 Layers"
-msgstr ""
+msgstr "32 அடுக்குகள்"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:110
 msgid "Store Choice"
-msgstr ""
+msgstr "கடை தேர்வு"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:113
 msgid "Get Stored Choice"
-msgstr ""
+msgstr "சேமிக்கப்பட்ட தேர்வைப் பெறுங்கள்"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb_base.h:78
 msgid "Layer Selection"
-msgstr ""
+msgstr "அடுக்கு தேர்வு"
 
 #: gerbview/dialogs/dialog_print_gerbview.cpp:170
 #: pcbnew/dialogs/dialog_print_pcbnew.cpp:262
 msgid "Print mirrored"
-msgstr ""
+msgstr "அச்சு பிரதிபலித்தது"
 
 #: gerbview/dialogs/dialog_print_gerbview.cpp:178
 #: pcbnew/dialogs/dialog_plot_base.cpp:59
 #: pcbnew/dialogs/dialog_print_pcbnew.cpp:285
 msgid "Include Layers"
-msgstr ""
+msgstr "அடுக்குகளைச் சேர்க்கவும்"
 
 #: gerbview/dialogs/dialog_print_gerbview.cpp:192
 msgid "Select all"
-msgstr ""
+msgstr "அனைத்தையும் தெரிவுசெய்"
 
 #: gerbview/dialogs/dialog_print_gerbview.cpp:194
 msgid "Deselect all"
-msgstr ""
+msgstr "அனைத்தையும் தேர்வு செய்யுங்கள்"
 
 #: gerbview/dialogs/dialog_select_one_pcb_layer.cpp:87
 #, c-format
 msgid "Select Layer: %s"
-msgstr ""
+msgstr "அடுக்கைத் தேர்ந்தெடுக்கவும்: %s"
 
 #: gerbview/dialogs/dialog_select_one_pcb_layer.cpp:134
 #: pcbnew/board_connected_item.cpp:182 pcbnew/board_connected_item.cpp:185
@@ -24615,39 +24670,39 @@ msgstr ""
 #: pcbnew/widgets/search_handlers.cpp:255 pcbnew/zone.cpp:857
 #: pcbnew/zone.cpp:1936 pcbnew/zone.cpp:1937
 msgid "Layer"
-msgstr ""
+msgstr "அடுக்கு"
 
 #: gerbview/dialogs/panel_gerbview_color_settings.cpp:101
 #: gerbview/widgets/gerbview_layer_widget.cpp:130
 msgid "DCodes"
-msgstr ""
+msgstr "குறியீடுகள்"
 
 #: gerbview/dialogs/panel_gerbview_color_settings.cpp:102
 #: gerbview/widgets/gerbview_layer_widget.cpp:132
 msgid "Negative Objects"
-msgstr ""
+msgstr "எதிர்மறை பொருள்கள்"
 
 #: gerbview/dialogs/panel_gerbview_color_settings.cpp:110
 #, c-format
 msgid "Graphic Layer %d"
-msgstr ""
+msgstr "கிராஃபிக் லேயர் %d"
 
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:37
 msgid "Show D codes"
-msgstr ""
+msgstr "டி குறியீடுகளைக் காட்டு"
 
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:41
 #: pcbnew/dialogs/panel_edit_options_base.cpp:418
 msgid "Show page limits"
-msgstr ""
+msgstr "பக்க வரம்புகளைக் காட்டு"
 
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:50
 msgid "Drawing Mode"
-msgstr ""
+msgstr "வரைதல் முறை"
 
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:60
 msgid "Sketch flashed items"
-msgstr ""
+msgstr "ச்கெட்ச் ஒளிரும் உருப்படிகள்"
 
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:61
 msgid ""
@@ -24659,11 +24714,11 @@ msgstr ""
 
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:65
 msgid "Sketch lines"
-msgstr ""
+msgstr "ச்கெட்ச் கோடுகள்"
 
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:68
 msgid "Sketch polygons"
-msgstr ""
+msgstr "ச்கெட்ச் பலகோணங்கள்"
 
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:70
 msgid "Display polygon items in outline mode"
@@ -24683,60 +24738,61 @@ msgstr "கட்டாய ஒளிபுகா காட்சி பயன்
 
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:96
 msgid "Page Size"
-msgstr ""
+msgstr "பக்க அளவு"
 
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:109
 msgid "Full size"
-msgstr ""
+msgstr "முழு அளவு"
 
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:109
 msgid "Size A4"
-msgstr ""
+msgstr "அளவு A4"
 
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:109
 msgid "Size A3"
-msgstr ""
+msgstr "அளவு A3"
 
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:109
 msgid "Size A2"
-msgstr ""
+msgstr "அளவு A2"
 
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:109
 msgid "Size A"
-msgstr ""
+msgstr "அளவு a"
 
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:109
 msgid "Size B"
-msgstr ""
+msgstr "அளவு ஆ"
 
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:109
 msgid "Size C"
-msgstr ""
+msgstr "அளவு c"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:17
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:45
 msgid "File Format"
-msgstr ""
+msgstr "கோப்பு வடிவம்"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:27
 msgid "These parameters are usually specified in files, but not always."
 msgstr ""
+"இந்த அளவுருக்கள் பொதுவாக கோப்புகளில் குறிப்பிடப்படுகின்றன, ஆனால் எப்போதும் இல்லை."
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:33
 msgid "File Units"
-msgstr ""
+msgstr "கோப்பு அலகுகள்"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:37
 msgid "No leading zeros (TZ format)"
-msgstr ""
+msgstr "முன்னணி பூச்சியங்கள் இல்லை (TZ வடிவம்)"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:37
 msgid "No trailing zeros (LZ format)"
-msgstr ""
+msgstr "பின்தங்கிய பூச்சியங்கள் இல்லை (LZ வடிவம்)"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:39
 msgid "Zero Format"
-msgstr ""
+msgstr "சுழிய வடிவம்"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:41
 msgid ""
@@ -24744,22 +24800,25 @@ msgid ""
 "No leading zeros format means the leading zeros are stripped\n"
 "No trailing zeros  format means the trailing zeros are stripped"
 msgstr ""
+"கோப்புகளில் உள்ள எண்கள் அவற்றின் பூச்சியங்களை அகற்றலாம். \n"
+"முன்னணி சுழிய வடிவமும் முன்னணி பூச்சியங்களை அகற்றுவதாகும் \n"
+"பின்தங்கிய சுழிய வடிவம் இல்லை என்பதாகும் பூச்சியங்கள் அகற்றப்படுகின்றன"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:51
 msgid "Coordinates Format"
-msgstr ""
+msgstr "வடிவத்தை ஒருங்கிணைக்கிறது"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:61
 msgid "The coordinates format is not specified in Excellon format."
-msgstr ""
+msgstr "ஒருங்கிணைப்புகளின் வடிவம் எக்சலான் வடிவத்தில் குறிப்பிடப்படவில்லை."
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:65
 msgid "(The decimal format does not use these settings)"
-msgstr ""
+msgstr "(தசம வடிவம் இந்த அமைப்புகளைப் பயன்படுத்தாது)"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:74
 msgid "Format for mm"
-msgstr ""
+msgstr "மிமீ வடிவம்"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:81
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:91
@@ -24770,7 +24829,7 @@ msgstr ""
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:112
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:178
 msgid "2"
-msgstr ""
+msgstr "2"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:81
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:91
@@ -24780,7 +24839,7 @@ msgstr ""
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:113
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:179
 msgid "3"
-msgstr ""
+msgstr "3"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:81
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:91
@@ -24792,7 +24851,7 @@ msgstr ""
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:114
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:180
 msgid "4"
-msgstr ""
+msgstr "4"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:81
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:91
@@ -24806,7 +24865,7 @@ msgstr ""
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:115
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:181
 msgid "5"
-msgstr ""
+msgstr "5"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:81
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:91
@@ -24817,97 +24876,98 @@ msgstr ""
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:116
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:182
 msgid "6"
-msgstr ""
+msgstr "6"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:87
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:113
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:389
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:490
 msgid ":"
-msgstr ""
+msgstr ":"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:100
 msgid "Format for inches"
-msgstr ""
+msgstr "அங்குலங்களுக்கான வடிவம்"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:129
 msgid "Usually: 3:3 in mm and 2:4 in inches"
-msgstr ""
+msgstr "வழக்கமாக: 3: 3 மிமீ மற்றும் 2: 4 அங்குலங்களில்"
 
 #: gerbview/events_called_functions.cpp:162 gerbview/gerbview_frame.cpp:165
 msgid "Layers Manager"
-msgstr ""
+msgstr "அடுக்குகள் மேலாளர்"
 
 #: gerbview/excellon_read_drill_file.cpp:272
 #, c-format
 msgid "File %s not found."
-msgstr ""
+msgstr "கோப்பு %s கண்டுபிடிக்கப்படவில்லை."
 
 #: gerbview/excellon_read_drill_file.cpp:284
 msgid "No empty layers to load file into."
-msgstr ""
+msgstr "கோப்பை ஏற்ற வெற்று அடுக்குகள் இல்லை."
 
 #: gerbview/excellon_read_drill_file.cpp:291
 msgid "Error reading EXCELLON drill file"
-msgstr ""
+msgstr "பிழை வாசிப்பு எக்சலான் துரப்பணிக் கோப்பு"
 
 #: gerbview/excellon_read_drill_file.cpp:588
 #, c-format
 msgid "Unknown Excellon command &lt;%s&gt;"
-msgstr ""
+msgstr "அறியப்படாத எக்சலோன் கட்டளை & lt;%s & gt;"
 
 #: gerbview/excellon_read_drill_file.cpp:788
 msgid "Tool definition shape not found"
-msgstr ""
+msgstr "கருவி வரையறை வடிவம் காணப்படவில்லை"
 
 #: gerbview/excellon_read_drill_file.cpp:791
 #, c-format
 msgid "Tool definition '%c' not supported"
-msgstr ""
+msgstr "கருவி வரையறை '%சி' ஆதரிக்கப்படவில்லை"
 
 #: gerbview/excellon_read_drill_file.cpp:872
 #, c-format
 msgid "Tool %d not defined"
-msgstr ""
+msgstr "கருவி %d வரையறுக்கப்படவில்லை"
 
 #: gerbview/excellon_read_drill_file.cpp:1058
 #, c-format
 msgid "Unknown Excellon G Code: &lt;%s&gt;"
-msgstr ""
+msgstr "அறியப்படாத எக்சலோன் ஐயா குறியீடு: & lt;%s & gt;"
 
 #: gerbview/files.cpp:44
 msgid "<b>No more available layers</b> in GerbView to load files"
 msgstr ""
+"<b> கோப்புகளை ஏற்றுவதற்கு செர்ப்வியூவில் கிடைக்கக்கூடிய அடுக்குகள் இல்லை </b>"
 
 #: gerbview/files.cpp:45
 #, c-format
 msgid "<b>Not loaded:</b> <i>%s</i>"
-msgstr ""
+msgstr "<b> ஏற்றப்படவில்லை: </b> <i>%s </i>"
 
 #: gerbview/files.cpp:46
 #, c-format
 msgid "<b>Memory was exhausted reading:</b> <i>%s</i>"
-msgstr ""
+msgstr "<b> நினைவகம் வாசனை வாசிப்பு: </b> <i>%s </i>"
 
 #: gerbview/files.cpp:53 gerbview/files.cpp:208
 msgid "Gerber files"
-msgstr ""
+msgstr "கெர்பர் கோப்புகள்"
 
 #: gerbview/files.cpp:89
 msgid "Zip files"
-msgstr ""
+msgstr "சிப் கோப்புகள்"
 
 #: gerbview/files.cpp:106
 msgid "Job files"
-msgstr ""
+msgstr "வேலை கோப்புகள்"
 
 #: gerbview/files.cpp:188
 msgid "Open Autodetected File(s)"
-msgstr ""
+msgstr "தன்னியக்க கோப்பை (கள்) திறக்கவும்"
 
 #: gerbview/files.cpp:211
 msgid "Top layer"
-msgstr ""
+msgstr "மேல் அடுக்கு"
 
 #: gerbview/files.cpp:212
 msgid "Bottom layer"
@@ -45977,7 +46037,7 @@ msgstr ""
 
 #: pcbnew/tools/group_tool.cpp:144
 msgid "Click on new member..."
-msgstr ""
+msgstr "புதிய உறுப்பினரைக் சொடுக்கு செய்க ..."
 
 #: pcbnew/tools/group_tool.cpp:278 pcbnew/tools/pcb_actions.cpp:1195
 msgid "Group Items"
