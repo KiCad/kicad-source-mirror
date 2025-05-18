@@ -89,6 +89,9 @@ pcbnew/Info.plist
 *.orig
 *.patch
 
+# _clang-format is used, .clang-format is not
+.clang-format
+
 # These CMake files are wanted
 !cmake/**/*.cmake
 
