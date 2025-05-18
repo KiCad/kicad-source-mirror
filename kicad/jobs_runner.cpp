@@ -139,7 +139,8 @@ class JOBSET_OUTPUT_REPORTER : public WX_STRING_REPORTER
 {
 public:
     JOBSET_OUTPUT_REPORTER( const wxString& aTempDirPath ) :
-            m_tempDirPath( aTempDirPath )
+            m_tempDirPath( aTempDirPath ),
+            m_includeDebug( false )
     {
     }
 
