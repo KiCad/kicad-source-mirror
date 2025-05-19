@@ -236,6 +236,8 @@ public:
 
     std::vector<PNS::ITEM*> GetLastCommittedLeaderSegments();
 
+    bool GetNearestRatnestAnchor( VECTOR2I& aOtherEnd, PNS_LAYER_RANGE& aOtherEndLayers,
+                                  ITEM*& aOtherEndItem );
 private:
     bool movePlacing( const VECTOR2I& aP, ITEM* aItem );
     bool moveDragging( const VECTOR2I& aP, ITEM* aItem );
@@ -246,9 +248,6 @@ private:
 
     void markViolations( NODE* aNode, ITEM_SET& aCurrent, NODE::ITEM_VECTOR& aRemoved );
     bool isStartingPointRoutable( const VECTOR2I& aWhere, ITEM* aItem, int aLayer );
-
-    bool getNearestRatnestAnchor( VECTOR2I& aOtherEnd, PNS_LAYER_RANGE& aOtherEndLayers,
-                                  ITEM*& aOtherEndItem );
 
 
 private:

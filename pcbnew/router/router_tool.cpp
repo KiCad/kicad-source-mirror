@@ -1088,9 +1088,22 @@ int ROUTER_TOOL::handleLayerSwitch( const TOOL_EVENT& aEvent, bool aForceVia )
         // Implicit layer selection
         if( viaType == VIATYPE::THROUGH )
         {
-            // use the default layer pair
-            currentLayer = pairTop;
-            targetLayer = pairBottom;
+            // Try to switch to the nearest ratnest item's layer if we have one
+            VECTOR2I        otherEnd;
+            PNS_LAYER_RANGE otherEndLayers;
+            PNS::ITEM*      otherEndItem = nullptr;
+
+            if( !m_router->getNearestRatnestAnchor( otherEnd, otherEndLayers, otherEndItem ) )
+            {
+                // use the default layer pair
+                currentLayer = pairTop;
+                targetLayer = pairBottom;
+            }
+            else
+            {
+                // use the layer of the other end
+                targetLayer = m_iface->GetBoardLayerFromPNSLayer( otherEndLayers.Start() );
+            }
         }
         else
         {

@@ -489,7 +489,7 @@ bool ROUTER::Move( const VECTOR2I& aP, ITEM* endItem )
 }
 
 
-bool ROUTER::getNearestRatnestAnchor( VECTOR2I& aOtherEnd, PNS_LAYER_RANGE& aOtherEndLayers,
+bool ROUTER::GetNearestRatnestAnchor( VECTOR2I& aOtherEnd, PNS_LAYER_RANGE& aOtherEndLayers,
                                       ITEM*& aOtherEndItem )
 {
     // Can't finish something with no connections
@@ -561,7 +561,7 @@ bool ROUTER::Finish()
     ITEM*       otherEndItem = nullptr;
 
     // Get the anchor nearest to the end of the trace the user is routing
-    if( !getNearestRatnestAnchor( otherEnd, otherEndLayers, otherEndItem ) )
+    if( !GetNearestRatnestAnchor( otherEnd, otherEndLayers, otherEndItem ) )
         return false;
 
     // Keep moving until we don't change position or hit the limit
@@ -607,7 +607,7 @@ bool ROUTER::ContinueFromEnd( ITEM** aNewStartItem )
     ITEM*       otherEndItem = nullptr;
 
     // Get the anchor nearest to the end of the trace the user is routing
-    if( !getNearestRatnestAnchor( otherEnd, otherEndLayers, otherEndItem ) )
+    if( !GetNearestRatnestAnchor( otherEnd, otherEndLayers, otherEndItem ) )
         return false;
 
     CommitRouting();
