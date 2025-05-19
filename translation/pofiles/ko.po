@@ -32,15 +32,16 @@
 # dsa-t <dudesuchamazing@gmail.com>, 2025.
 # Seth Hillbrand <seth@kipro-pcb.com>, 2025.
 # DevAny KR <devany.kr@gmail.com>, 2025.
+# Jason Son <weblate.sash858@passmail.net>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-05-06 12:52+0300\n"
-"PO-Revision-Date: 2025-05-01 03:03+0000\n"
-"Last-Translator: DevAny <devany.kr@gmail.com>\n"
-"Language-Team: Korean <https://hosted.weblate.org/projects/kicad/master-"
-"source/ko/>\n"
+"PO-Revision-Date: 2025-05-19 17:22+0000\n"
+"Last-Translator: Jason Son <weblate.sash858@passmail.net>\n"
+"Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
+"master-source/ko/>\n"
 "Language: ko\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -4105,9 +4106,8 @@ msgid "Local"
 msgstr "로컬"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:91
-#, fuzzy
 msgid "SSH private key:     "
-msgstr "SSH 개인 키"
+msgstr "SSH 개인 키:     "
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:94
 msgid "Select SSH private key file"
@@ -4177,7 +4177,7 @@ msgstr "필드 업데이트"
 msgid ""
 "Number of minutes between remote update checks.  Zero disables automatic "
 "checks."
-msgstr ""
+msgstr "원격 업데이트 확인 간격(분)입니다. 0을 입력하면 자동확인이 비활성화됩니다."
 
 #: common/dialogs/git/panel_git_repos_base.cpp:50
 #: common/dialogs/panel_common_settings_base.cpp:347
@@ -28349,6 +28349,8 @@ msgid ""
 "This plugin requires the KiCad API, which is currently disabled in "
 "preferences. Would you like to enable it?"
 msgstr ""
+"이 플러그인을 사용하려면 KiCad API가 필요하지만, 현재 환경설정에서 "
+"비활성화되어 있습니다. KiCad API를 활성화하시겠습니까?"
 
 #: kicad/pcm/pcm.cpp:1121
 msgid "PCM Update"
