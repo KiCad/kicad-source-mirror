@@ -2188,7 +2188,6 @@ int PCB_CONTROL::UpdateMessagePanel( const TOOL_EVENT& aEvent )
 
                         if( aItem->Type() == PCB_GROUP_T || aItem->Type() == PCB_GENERATOR_T )
                         {
-                            // Use dynamic_cast to include PCB_GENERATORs.
                             static_cast<PCB_GROUP*>( aItem )->RunOnChildren( accumulateArea, RECURSE_MODE::RECURSE );
                             return;
                         }

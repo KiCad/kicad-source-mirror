@@ -364,6 +364,10 @@ int GROUP_SEARCH_HANDLER::Search( const wxString& aQuery )
 
     for( BOARD_ITEM* item : board->Groups() )
     {
+        // Skip generators, they are for internal use, not user-facing grouping
+        if( item->Type() == PCB_GENERATOR_T )
+            continue;
+
         if( frp.findString.IsEmpty() || item->Matches( frp, nullptr ) )
             m_hitlist.push_back( item );
     }
