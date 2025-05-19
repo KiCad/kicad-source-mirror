@@ -249,6 +249,7 @@ void PCB_EDIT_FRAME::doReCreateMenuBar()
     viewMenu->Add( ACTIONS::zoomOutCenter );
     viewMenu->Add( ACTIONS::zoomFitScreen );
     viewMenu->Add( ACTIONS::zoomFitObjects );
+    viewMenu->Add( ACTIONS::zoomFitSelection );
     viewMenu->Add( ACTIONS::zoomTool );
     viewMenu->Add( ACTIONS::zoomRedraw );
 
