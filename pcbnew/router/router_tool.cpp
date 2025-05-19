@@ -1093,7 +1093,7 @@ int ROUTER_TOOL::handleLayerSwitch( const TOOL_EVENT& aEvent, bool aForceVia )
             PNS_LAYER_RANGE otherEndLayers;
             PNS::ITEM*      otherEndItem = nullptr;
 
-            if( !m_router->getNearestRatnestAnchor( otherEnd, otherEndLayers, otherEndItem ) )
+            if( !m_router->GetNearestRatnestAnchor( otherEnd, otherEndLayers, otherEndItem ) )
             {
                 // use the default layer pair
                 currentLayer = pairTop;
