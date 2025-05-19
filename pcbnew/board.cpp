@@ -1109,7 +1109,9 @@ void BOARD::Add( BOARD_ITEM* aBoardItem, ADD_MODE aMode, bool aSkipConnectivity 
         // N.B. This inserts a small memory leak as we lose the
         if( !IsCopperLayer( aBoardItem->GetLayer() ) )
         {
-            wxFAIL_MSG( wxT( "BOARD::Add() Cannot place Track on non-copper layer" ) );
+            wxFAIL_MSG( wxString::Format( "BOARD::Add() Cannot place Track on non-copper layer: %d = %s",
+                                          static_cast<int>( aBoardItem->GetLayer() ),
+                                          GetLayerName( aBoardItem->GetLayer() ) ) );
             return;
         }
 
@@ -3117,5 +3119,3 @@ bool BOARD::operator==( const BOARD_ITEM& aItem ) const
 
     return true;
 }
-
-
