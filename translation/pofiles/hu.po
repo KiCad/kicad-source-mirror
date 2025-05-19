@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-05-06 12:52+0300\n"
-"PO-Revision-Date: 2025-05-19 04:05+0000\n"
+"PO-Revision-Date: 2025-05-19 17:22+0000\n"
 "Last-Translator: Sárkány Lőrinc <lsarkany@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/kicad/"
 "master-source/hu/>\n"
@@ -38583,9 +38583,8 @@ msgid ""
 msgstr ""
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:166
-#, fuzzy
 msgid "Coordinates"
-msgstr "Koordináta-rendszer:"
+msgstr "Koordináták"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:168
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:147
@@ -38596,26 +38595,22 @@ msgstr "Fúró kezdőpont"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:171
 #: pcbnew/dialogs/panel_pcbnew_display_origin_base.cpp:23
-#, fuzzy
 msgid "Grid origin"
-msgstr "Rács kezdőpont"
+msgstr "Rács origó"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:174
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:44
-#, fuzzy
 msgid "User defined origin"
-msgstr "Felhasználó által megadott kezdőpont"
+msgstr "Felhasználó által megadott origó"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:177
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:44
-#, fuzzy
 msgid "Board center origin"
 msgstr "Panel középpont"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:184
-#, fuzzy
 msgid "User Defined Origin"
-msgstr "Felhasználó által megadott kezdőpont"
+msgstr "Felhasználó által megadott origó"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:241
 msgid "Do not show components marked 'Do not populate'"
@@ -38634,9 +38629,8 @@ msgid "Replace VRML models with STEP models of the same name"
 msgstr ""
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:255
-#, fuzzy
 msgid "Overwrite old file"
-msgstr "Régi fájlok felülírása"
+msgstr "Régi fájl felülírása"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:258
 msgid "Don't write P-curves to STEP file"
@@ -38654,14 +38648,12 @@ msgid "Board outline chaining tolerance:"
 msgstr "Panel körvonalai"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:267
-#, fuzzy
 msgid "Tight (0.001 mm)"
-msgstr "Alapértelmezett"
+msgstr "Szoros (0,001 mm)"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:267
-#, fuzzy
 msgid "Standard (0.01 mm)"
-msgstr "Alapértelmezett"
+msgstr "Standard (0,01 mm)"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:267
 msgid "Loose (0.1 mm)"
@@ -38677,9 +38669,8 @@ msgstr ""
 "végtelen kicsi) pontnak lehet tekinteni. Alapértelmezetten 1μm."
 
 #: pcbnew/dialogs/dialog_export_step_base.h:107
-#, fuzzy
 msgid "Export 3D Model"
-msgstr "3D modell kiválasztása"
+msgstr "3D modell exportálása"
 
 #: pcbnew/dialogs/dialog_export_step_process.cpp:184
 #, c-format
@@ -38687,47 +38678,41 @@ msgid "Process failed with exit code %d"
 msgstr ""
 
 #: pcbnew/dialogs/dialog_export_step_process.cpp:192
-#, fuzzy
 msgid "Success"
-msgstr "Sikeres."
+msgstr "Siker"
 
 #: pcbnew/dialogs/dialog_export_step_process.cpp:213
 msgid "Do you want to cancel the export process?"
 msgstr "Megszakítsuk az exportálási folyamatot?"
 
 #: pcbnew/dialogs/dialog_export_step_process.cpp:214
-#, fuzzy
 msgid "Cancel Export"
-msgstr "Szigetelési távolság"
+msgstr "Exportálás megszakítása"
 
 #: pcbnew/dialogs/dialog_export_step_process.cpp:257
-#, fuzzy
 msgid "Command line:\n"
-msgstr "Parancssor:"
+msgstr "Parancssor:\n"
 
 #: pcbnew/dialogs/dialog_export_step_process_base.h:46
-#, fuzzy
 msgid "3D Export"
-msgstr "Exportolás"
+msgstr "3D Exportálás"
 
 #: pcbnew/dialogs/dialog_export_vrml.cpp:127
-#, fuzzy
 msgid "Are you sure you want to overwrite the existing file?"
 msgstr "Biztosan felülírja a meglévő fájlt?"
 
 #: pcbnew/dialogs/dialog_export_vrml.cpp:216
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to create folder '%s'."
-msgstr "Nem sikerült létrehozni a(z) \"%s\" fájlt"
+msgstr "Nem sikerült létrehozni a(z) \"%s\" mappát."
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:26
-#, fuzzy
 msgid "Save VRML Board File"
 msgstr "Mentés VRML nyákterv fájlba"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:26
 msgid "*.wrl"
-msgstr ""
+msgstr "*.wrl"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:31
 #, fuzzy
@@ -38740,22 +38725,18 @@ msgid "Coordinate Origin Options"
 msgstr "koordináta kezdőpont beállítások:"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:53
-#, fuzzy
 msgid "User defined origin:"
-msgstr "Felhasználó által megadott kezdőpont:"
+msgstr "Felhasználó által megadott origó:"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:109
-#, fuzzy
 msgid "meter"
 msgstr "méter"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:109
-#, fuzzy
 msgid "0.1 Inch"
 msgstr "0.1 hüvelyk"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:130
-#, fuzzy
 msgid "Copy 3D model files to 3D model path"
 msgstr "Másolja a 3D modell fájlokat a 3D modell mappába"
 
@@ -38778,7 +38759,6 @@ msgstr ""
 "fájlhoz képest relatív)"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.h:66
-#, fuzzy
 msgid "VRML Export Options"
 msgstr "VRML exportálási beállítások"
 
@@ -38828,23 +38808,21 @@ msgid "Filter Selected Items"
 msgstr "Elem kijelölése"
 
 #: pcbnew/dialogs/dialog_find.cpp:279
-#, fuzzy
 msgid "Searching..."
 msgstr "Keresés..."
 
 #: pcbnew/dialogs/dialog_find.cpp:423
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' not found"
 msgstr "'%s' nem található"
 
 #: pcbnew/dialogs/dialog_find.cpp:431
-#, fuzzy
 msgid "No more items to show"
-msgstr "Nincs beilleszthető elem."
+msgstr "Nincs több megjeleníthető elem"
 
 #: pcbnew/dialogs/dialog_find.cpp:433
 msgid "No hits"
-msgstr ""
+msgstr "Nincs találat"
 
 #: pcbnew/dialogs/dialog_find.cpp:439
 #, fuzzy, c-format
