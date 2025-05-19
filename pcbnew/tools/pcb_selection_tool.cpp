@@ -1411,6 +1411,46 @@ int PCB_SELECTION_TOOL::unrouteSelected( const TOOL_EVENT& aEvent )
 }
 
 
+int PCB_SELECTION_TOOL::unrouteSegment( const TOOL_EVENT& aEvent )
+{
+    std::deque<EDA_ITEM*> selectedItems = m_selection.GetItems();
+
+    // Get all footprints and pads
+    std::vector<BOARD_CONNECTED_ITEM*> toUnroute;
+
+    for( EDA_ITEM* item : selectedItems )
+    {
+        if( item->Type() == PCB_TRACE_T || item->Type() == PCB_ARC_T || item->Type() == PCB_VIA_T )
+        {
+            toUnroute.push_back( static_cast<BOARD_CONNECTED_ITEM*>( item ) );
+        }
+    }
+
+    // Get the tracks connecting to our starting objects
+    ClearSelection();
+    selectAllConnectedTracks( toUnroute, STOP_CONDITION::STOP_AT_SEGMENT );
+    std::deque<EDA_ITEM*> toSelectAfter;
+    // This will select the unroute items too, so filter them out
+    for( EDA_ITEM* item : m_selection.GetItemsSortedByTypeAndXY() )
+    {
+        if( std::find( toUnroute.begin(), toUnroute.end(), item ) == toUnroute.end() )
+            toSelectAfter.push_back( item );
+    }
+
+    ClearSelection( true );
+    for( EDA_ITEM* item : toUnroute )
+        select( item );
+    m_toolMgr->RunAction( ACTIONS::doDelete );
+
+    // Now our after tracks so the user can continue backing up as desired
+    ClearSelection( true );
+    for( EDA_ITEM* item : toSelectAfter )
+        select( item );
+
+    return 0;
+}
+
+
 int PCB_SELECTION_TOOL::expandConnection( const TOOL_EVENT& aEvent )
 {
     // expandConnection will get called no matter whether the user selected a connected item or a
@@ -1506,13 +1546,8 @@ void PCB_SELECTION_TOOL::selectAllConnectedTracks(
 
     auto connectivity = board()->GetConnectivity();
 
-    std::map<VECTOR2I, std::vector<PCB_TRACK*>> trackMap;
-    std::map<VECTOR2I, PCB_VIA*>                viaMap;
-    std::map<VECTOR2I, PAD*>                    padMap;
-    std::map<VECTOR2I, std::vector<PCB_SHAPE*>> shapeMap;
-    std::set<PAD*>                              startPadSet;
-    std::vector<BOARD_CONNECTED_ITEM*>          cleanupItems;
-    std::vector<std::pair<VECTOR2I, LSET>>      activePts;
+    std::set<PAD*>                     startPadSet;
+    std::vector<BOARD_CONNECTED_ITEM*> cleanupItems;
 
     for( BOARD_CONNECTED_ITEM* startItem : aStartItems )
     {
@@ -1527,6 +1562,12 @@ void PCB_SELECTION_TOOL::selectAllConnectedTracks(
 
     for( BOARD_CONNECTED_ITEM* startItem : aStartItems )
     {
+        std::map<VECTOR2I, std::vector<PCB_TRACK*>> trackMap;
+        std::map<VECTOR2I, PCB_VIA*>                viaMap;
+        std::map<VECTOR2I, PAD*>                    padMap;
+        std::map<VECTOR2I, std::vector<PCB_SHAPE*>> shapeMap;
+        std::vector<std::pair<VECTOR2I, LSET>>      activePts;
+
         if( startItem->HasFlag( SKIP_STRUCT ) ) // Skip already visited items
             continue;
 
@@ -1696,7 +1737,8 @@ void PCB_SELECTION_TOOL::selectAllConnectedTracks(
                         else
                             activePts.push_back( { track->GetStart(), track->GetLayerSet() } );
 
-                        expand = true;
+                        if( aStopCondition != STOP_AT_SEGMENT )
+                            expand = true;
                     }
                 }
 
@@ -1721,7 +1763,8 @@ void PCB_SELECTION_TOOL::selectAllConnectedTracks(
                             activePts.push_back( { newPoint, shape->GetLayerSet() } );
                         }
 
-                        expand = true;
+                        if( aStopCondition != STOP_AT_SEGMENT )
+                            expand = true;
                     }
                 }
 
@@ -1738,7 +1781,9 @@ void PCB_SELECTION_TOOL::selectAllConnectedTracks(
                         cleanupItems.push_back( via );
 
                         activePts.push_back( { via->GetPosition(), via->GetLayerSet() } );
-                        expand = true;
+
+                        if( aStopCondition != STOP_AT_SEGMENT )
+                            expand = true;
                     }
                 }
 
@@ -4126,6 +4171,7 @@ void PCB_SELECTION_TOOL::setTransitions()
     Go( &PCB_SELECTION_TOOL::filterSelection,     PCB_ACTIONS::filterSelection.MakeEvent() );
     Go( &PCB_SELECTION_TOOL::expandConnection,    PCB_ACTIONS::selectConnection.MakeEvent() );
     Go( &PCB_SELECTION_TOOL::unrouteSelected,     PCB_ACTIONS::unrouteSelected.MakeEvent() );
+    Go( &PCB_SELECTION_TOOL::unrouteSegment,      PCB_ACTIONS::unrouteSegment.MakeEvent() );
     Go( &PCB_SELECTION_TOOL::selectNet,           PCB_ACTIONS::selectNet.MakeEvent() );
     Go( &PCB_SELECTION_TOOL::selectNet,           PCB_ACTIONS::deselectNet.MakeEvent() );
     Go( &PCB_SELECTION_TOOL::selectUnconnected,   PCB_ACTIONS::selectUnconnected.MakeEvent() );

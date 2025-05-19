@@ -320,6 +320,11 @@ private:
     int unrouteSelected( const TOOL_EVENT& aEvent );
 
     /**
+     * Unroute the selected track connected item.
+     */
+    int unrouteSegment( const TOOL_EVENT& aEvent );
+
+    /**
      * Select all copper connections belonging to the same net(s) as the items in the selection.
      */
     int selectNet( const TOOL_EVENT& aEvent );
@@ -343,6 +348,8 @@ private:
          * on another layer as well, but a via with only one connection will be selected.
          */
         STOP_AT_JUNCTION,
+        /** Stop when reaching a segment (next track/arc/via). */
+        STOP_AT_SEGMENT,
         /** Stop when reaching a pad. */
         STOP_AT_PAD,
         /** Select the entire net. */

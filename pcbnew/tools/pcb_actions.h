@@ -75,6 +75,9 @@ public:
     /// Removes all tracks from the selected items to the first pad
     static TOOL_ACTION unrouteSelected;
 
+    /// Removes track segment from the selected item to the next segment
+    static TOOL_ACTION unrouteSegment;
+
     /// Select all connections belonging to a single net.
     static TOOL_ACTION selectNet;
 

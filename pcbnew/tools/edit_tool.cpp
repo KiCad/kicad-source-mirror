@@ -360,6 +360,7 @@ bool EDIT_TOOL::Init()
     menu.AddItem( PCB_ACTIONS::routerRouteSelected,     isRoutable );
     menu.AddItem( PCB_ACTIONS::routerRouteSelectedFromEnd, isRoutable );
     menu.AddItem( PCB_ACTIONS::unrouteSelected,         isRoutable );
+    menu.AddItem( PCB_ACTIONS::unrouteSegment,          isRoutable );
     menu.AddItem( PCB_ACTIONS::routerAutorouteSelected, isRoutable );
     menu.AddItem( PCB_ACTIONS::moveIndividually,  SELECTION_CONDITIONS::MoreThan( 1 )
                                                       && notMovingCondition );

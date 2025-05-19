@@ -2173,6 +2173,14 @@ TOOL_ACTION PCB_ACTIONS::unrouteSelected( TOOL_ACTION_ARGS()
         .Tooltip( _( "Unroutes selected items to the nearest pad." ) )
         .Icon( BITMAPS::general_deletions ) );
 
+TOOL_ACTION PCB_ACTIONS::unrouteSegment( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.InteractiveSelection.unrouteSegment" )
+        .Scope( AS_GLOBAL )
+        .DefaultHotkey( WXK_BACK )
+        .FriendlyName( _( "Unroute Segment" ) )
+        .Tooltip( _( "Unroutes segment to the nearest segment." ) )
+        .Icon( BITMAPS::general_deletions ) );
+
 TOOL_ACTION PCB_ACTIONS::syncSelection( TOOL_ACTION_ARGS()
         .Name( "pcbnew.InteractiveSelection.SyncSelection" )
         .Scope( AS_GLOBAL ) );
