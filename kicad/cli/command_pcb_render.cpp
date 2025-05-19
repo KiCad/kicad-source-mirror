@@ -329,7 +329,7 @@ int CLI::PCB_RENDER_COMMAND::doPerform( KIWAY& aKiway )
 
     renderJob->m_appearancePreset = m_argParser.get<std::string>( ARG_PRESET );
 
-    if( renderJob->m_appearancePreset == LEGACY_PRESET_FLAG )
+    if( renderJob->m_appearancePreset == std::string(wxString(LEGACY_PRESET_FLAG).ToUTF8().data()) )
     {
         wxFprintf( stderr, _( "Invalid preset\n" ) );
         return EXIT_CODES::ERR_ARGS;

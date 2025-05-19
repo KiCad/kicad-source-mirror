@@ -31,6 +31,8 @@
 #include <pcb_edit_frame.h>
 #include <kidialog.h>
 #include <wildcards_and_files_ext.h>
+#include <wx/anybutton.h>
+#include <wx/filedlg.h>
 #include <wx/checkbox.h>
 #include <wx/filepicker.h>
 #include <wx/sizer.h>

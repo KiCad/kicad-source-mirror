@@ -739,7 +739,7 @@ PGPROPERTY_TIME::PGPROPERTY_TIME( EDA_DRAW_FRAME* aParentFrame ) :
 
 
 #if wxCHECK_VERSION( 3, 3, 0 )
-bool PGPROPERTY_AREA::StringToValue( wxVariant& aVariant, const wxString& aText,
+bool PGPROPERTY_TIME::StringToValue( wxVariant& aVariant, const wxString& aText,
                                      wxPGPropValFormatFlags aArgFlags ) const
 #else
 bool PGPROPERTY_TIME::StringToValue( wxVariant& aVariant, const wxString& aText,
@@ -751,7 +751,7 @@ bool PGPROPERTY_TIME::StringToValue( wxVariant& aVariant, const wxString& aText,
 
 
 #if wxCHECK_VERSION( 3, 3, 0 )
-wxString PGPROPERTY_AREA::ValueToString( wxVariant& aVariant,
+wxString PGPROPERTY_TIME::ValueToString( wxVariant& aVariant,
                                          wxPGPropValFormatFlags aArgFlags ) const
 #else
 wxString PGPROPERTY_TIME::ValueToString( wxVariant& aVariant, int aArgFlags ) const
