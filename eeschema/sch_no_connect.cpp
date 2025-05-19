@@ -57,8 +57,6 @@ EDA_ITEM* SCH_NO_CONNECT::Clone() const
 
 void SCH_NO_CONNECT::swapData( SCH_ITEM* aItem )
 {
-    SCH_ITEM::SwapFlags( aItem );
-
     wxCHECK_RET( ( aItem != nullptr ) && ( aItem->Type() == SCH_NO_CONNECT_T ),
                  wxT( "Cannot swap no connect data with invalid item." ) );
 

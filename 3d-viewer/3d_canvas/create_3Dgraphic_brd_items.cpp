@@ -380,9 +380,6 @@ void BOARD_ADAPTER::createPadWithMargin( const PAD* aPad, CONTAINER_2D_BASE* aCo
         dummy.SetSize( aLayer, VECTOR2I( dummySize.x, dummySize.y ) );
         dummy.TransformShapeToPolygon( poly, aLayer, 0, maxError, ERROR_INSIDE );
         clearance = { 0, 0 };
-
-        // Remove group membership from dummy item before deleting
-        dummy.SetParentGroup( nullptr );
     }
     else if( aPad->GetShape( aLayer ) == PAD_SHAPE::CUSTOM )
     {

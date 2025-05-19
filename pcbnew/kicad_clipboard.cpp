@@ -273,9 +273,10 @@ void CLIPBOARD_IO::SaveSelection( const PCB_SELECTION& aSelected, bool isFootpri
             // some PCB_TEXT (reference and value) cannot be added to the footprint
             std::vector<BOARD_ITEM*> skipped_items;
 
-            if( copy->Type() == PCB_GROUP_T || copy->Type() == PCB_GENERATOR_T )
+            // Will catch at least PCB_GROUP_T and PCB_GENERATOR_T
+            if( PCB_GROUP* group = dynamic_cast<PCB_GROUP*>( copy ) )
             {
-                copy->RunOnChildren(
+                group->RunOnChildren(
                         [&]( BOARD_ITEM* descendant )
                         {
                             // One cannot add an additional mandatory field to a given footprint:

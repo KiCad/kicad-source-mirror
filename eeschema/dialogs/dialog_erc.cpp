@@ -530,7 +530,7 @@ void DIALOG_ERC::OnERCItemSelected( wxDataViewEvent& aEvent )
 {
     const KIID&     itemID = RC_TREE_MODEL::ToUUID( aEvent.GetItem() );
     SCH_SHEET_PATH  sheet;
-    SCH_ITEM*       item = m_parent->Schematic().GetItem( itemID, &sheet );
+    SCH_ITEM*       item = m_parent->Schematic().ResolveItem( itemID, &sheet, true );
 
     if( m_centerMarkerOnIdle )
     {
@@ -544,8 +544,8 @@ void DIALOG_ERC::OnERCItemSelected( wxDataViewEvent& aEvent )
         if( node )
         {
             // Determine the owning sheet for sheet-specific items
-            std::shared_ptr<ERC_ITEM> ercItem =
-                    std::static_pointer_cast<ERC_ITEM>( node->m_RcItem );
+            std::shared_ptr<ERC_ITEM> ercItem = std::static_pointer_cast<ERC_ITEM>( node->m_RcItem );
+
             switch( node->m_Type )
             {
             case RC_TREE_NODE::MARKER:
@@ -569,8 +569,7 @@ void DIALOG_ERC::OnERCItemSelected( wxDataViewEvent& aEvent )
 
         if( !sheet.empty() && sheet != m_parent->GetCurrentSheet() )
         {
-            m_parent->GetToolManager()->RunAction<SCH_SHEET_PATH*>( SCH_ACTIONS::changeSheet,
-                                                                    &sheet );
+            m_parent->GetToolManager()->RunAction<SCH_SHEET_PATH*>( SCH_ACTIONS::changeSheet, &sheet );
             m_parent->RedrawScreen( m_parent->GetScreen()->m_ScrollCenter, false );
         }
 

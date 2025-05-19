@@ -134,12 +134,7 @@ void DIALOG_GLOBAL_DELETION::DoGlobalDeletions()
             [&]( BOARD_ITEM* item, const LSET& layers_mask )
             {
                 if( ( item->GetLayerSet() & layers_mask ).any() )
-                {
-                    if( item->GetParentGroup() )
-                        commit.Stage( item, CHT_UNGROUP );
-
                     commit.Remove( item );
-                }
             };
 
     auto processConnectedItem =
@@ -147,9 +142,6 @@ void DIALOG_GLOBAL_DELETION::DoGlobalDeletions()
             {
                 if( ( item->GetLayerSet() & layers_mask ).any() )
                 {
-                    if( item->GetParentGroup() )
-                        commit.Stage( item, CHT_UNGROUP );
-
                     commit.Remove( item );
                     gen_rastnest = true;
                 }

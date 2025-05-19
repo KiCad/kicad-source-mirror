@@ -60,8 +60,6 @@ EDA_ITEM* SCH_JUNCTION::Clone() const
 
 void SCH_JUNCTION::swapData( SCH_ITEM* aItem )
 {
-    SCH_ITEM::SwapFlags( aItem );
-
     wxCHECK_RET( ( aItem != nullptr ) && ( aItem->Type() == SCH_JUNCTION_T ),
                  wxT( "Cannot swap junction data with invalid item." ) );
 

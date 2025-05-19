@@ -462,22 +462,21 @@ void DIALOG_DRC::OnDRCItemSelected( wxDataViewEvent& aEvent )
     }
 
     const KIID& itemID = RC_TREE_MODEL::ToUUID( aEvent.GetItem() );
-    BOARD_ITEM* item = board->GetItem( itemID );
+    BOARD_ITEM* item = board->ResolveItem( itemID, true );
 
-    if( !item || item == DELETED_BOARD_ITEM::GetInstance() )
+    if( item )
     {
         // nothing to highlight / focus on
-
         aEvent.Skip();
         return;
     }
 
     PCB_LAYER_ID principalLayer;
     LSET         violationLayers;
-    BOARD_ITEM*  a = board->GetItem( rc_item->GetMainItemID() );
-    BOARD_ITEM*  b = board->GetItem( rc_item->GetAuxItemID() );
-    BOARD_ITEM*  c = board->GetItem( rc_item->GetAuxItem2ID() );
-    BOARD_ITEM*  d = board->GetItem( rc_item->GetAuxItem3ID() );
+    BOARD_ITEM*  a = board->ResolveItem( rc_item->GetMainItemID(), true );
+    BOARD_ITEM*  b = board->ResolveItem( rc_item->GetAuxItemID(), true );
+    BOARD_ITEM*  c = board->ResolveItem( rc_item->GetAuxItem2ID(), true );
+    BOARD_ITEM*  d = board->ResolveItem( rc_item->GetAuxItem3ID(), true );
 
     if( rc_item->GetErrorCode() == DRCE_MALFORMED_COURTYARD )
     {
@@ -491,7 +490,7 @@ void DIALOG_DRC::OnDRCItemSelected( wxDataViewEvent& aEvent )
             principalLayer = F_CrtYd;
         }
     }
-    else if (rc_item->GetErrorCode() == DRCE_INVALID_OUTLINE )
+    else if( rc_item->GetErrorCode() == DRCE_INVALID_OUTLINE )
     {
         principalLayer = Edge_Cuts;
     }
@@ -596,7 +595,7 @@ void DIALOG_DRC::OnDRCItemSelected( wxDataViewEvent& aEvent )
 
             for( const KIID& id : rc_item->GetIDs() )
             {
-                auto* candidate = dynamic_cast<BOARD_CONNECTED_ITEM*>( board->GetItem( id ) );
+                auto* candidate = dynamic_cast<BOARD_CONNECTED_ITEM*>( board->ResolveItem( id, true ) );
 
                 if( candidate && candidate->GetNetCode() == net )
                     items.push_back( candidate );

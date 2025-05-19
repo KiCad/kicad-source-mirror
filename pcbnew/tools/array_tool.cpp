@@ -127,8 +127,8 @@ void ARRAY_TOOL::onDialogClosed( wxCloseEvent& aEvent )
 
     BOARD_COMMIT commit( editFrame );
 
-    FOOTPRINT* const fp =
-            m_isFootprintEditor ? editFrame->GetBoard()->GetFirstFootprint() : nullptr;
+    FOOTPRINT* const fp = m_isFootprintEditor ? editFrame->GetBoard()->GetFirstFootprint()
+                                              : nullptr;
 
     // Collect a list of pad numbers that will _not_ be counted as "used"
     // when finding the next pad numbers.
@@ -277,7 +277,7 @@ void ARRAY_TOOL::onDialogClosed( wxCloseEvent& aEvent )
 
                     // Don't bother incrementing pads: the footprint won't update until commit,
                     // so we can only do this once
-                    this_item = fp->DuplicateItem( item );
+                    this_item = fp->DuplicateItem( true, &commit, item );
                 }
                 else
                 {
@@ -299,10 +299,12 @@ void ARRAY_TOOL::onDialogClosed( wxCloseEvent& aEvent )
                     case PCB_DIM_ORTHOGONAL_T:
                     case PCB_DIM_LEADER_T:
                     case PCB_TARGET_T:
-                    case PCB_ZONE_T: this_item = item->Duplicate(); break;
+                    case PCB_ZONE_T:
+                        this_item = item->Duplicate( true, &commit );
+                        break;
 
                     case PCB_GROUP_T:
-                        this_item = static_cast<PCB_GROUP*>( item )->DeepDuplicate();
+                        this_item = static_cast<PCB_GROUP*>( item )->DeepDuplicate( true, &commit );
                         break;
 
                     default:

@@ -78,8 +78,6 @@ SCH_TABLE::~SCH_TABLE()
 
 void SCH_TABLE::swapData( SCH_ITEM* aItem )
 {
-    SCH_ITEM::SwapFlags( aItem );
-
     wxCHECK_RET( aItem != nullptr && aItem->Type() == SCH_TABLE_T,
                  wxT( "Cannot swap data with invalid table." ) );
 

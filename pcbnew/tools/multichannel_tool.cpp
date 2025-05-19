@@ -567,36 +567,32 @@ int MULTICHANNEL_TOOL::RepeatLayout( const TOOL_EVENT& aEvent, ZONE* aRefZone )
         totalCopied++;
     }
 
-
-    commit.Push( _( "Repeat layout" ) );
-
     if( m_areas.m_options.m_groupItems )
     {
-        BOARD_COMMIT grpCommit( GetManager(), true );
-
-        for( auto& targetArea : m_areas.m_compatMap )
+        for( const auto& [targetArea, compatData] : m_areas.m_compatMap )
         {
-            pruneExistingGroups( grpCommit, targetArea.second.m_affectedItems );
+            pruneExistingGroups( commit, compatData.m_affectedItems );
 
-            PCB_GROUP* grp = new PCB_GROUP( board() );
+            PCB_GROUP* group = new PCB_GROUP( board() );
 
-            grpCommit.Add( grp );
+            commit.Add( group );
 
-            for( BOARD_ITEM* item : targetArea.second.m_groupableItems )
+            for( BOARD_ITEM* item : compatData.m_groupableItems )
             {
-                grpCommit.Stage( item, CHT_GROUP );
+                commit.Modify( item );
+                group->AddItem( item );
             }
         }
-
-        grpCommit.Push( _( "Group repeated items" ) );
     }
 
+    commit.Push( _( "Repeat layout" ) );
 
     if( Pgm().IsGUI() )
     {
         frame()->ShowInfoBarMsg( wxString::Format( _( "Copied to %d Rule Areas." ), totalCopied ),
-                             true );
+                                 true );
     }
+
     return 0;
 }
 
@@ -1054,35 +1050,31 @@ bool MULTICHANNEL_TOOL::resolveConnectionTopology( RULE_AREA* aRefArea, RULE_ARE
 bool MULTICHANNEL_TOOL::pruneExistingGroups( COMMIT& aCommit,
                                              const std::unordered_set<BOARD_ITEM*>& aItemsToRemove )
 {
-    std::deque<PCB_GROUP*> pending ( board()->Groups() );
-    while( !pending.empty() )
+    // Note: groups are only collections, not "real" hierarchy.  A group's members are still parented
+    // by the board (and therefore nested groups are still in the board's list of groups).
+    for( PCB_GROUP* group : board()->Groups() )
     {
-        auto grp = pending.front();
-        pending.pop_front();
+        std::vector<EDA_ITEM*> pruneList;
 
-        std::unordered_set<EDA_ITEM*>& grpItems = grp->GetItems();
-        size_t n_erased = 0;
-
-        for( EDA_ITEM* refItem : grpItems )
+        for( EDA_ITEM* refItem : group->GetItems() )
         {
-            if( refItem->Type() == PCB_GROUP_T )
-                pending.push_back( static_cast<PCB_GROUP*>(refItem) );
-
             for( BOARD_ITEM* testItem : aItemsToRemove )
             {
                 if( refItem->m_Uuid == testItem->m_Uuid )
-                {
-                    aCommit.Stage( refItem, CHT_UNGROUP );
-                    n_erased++;
-                }
+                    pruneList.push_back( refItem );
             }
         }
 
-        if( n_erased == grpItems.size() )
+        if( !pruneList.empty() )
         {
-            aCommit.Stage( grp, CHT_REMOVE );
-        }
+            aCommit.Modify( group );
 
+            for( EDA_ITEM* item : pruneList )
+                group->RemoveItem( item );
+
+            if( group->GetItems().empty() )
+                aCommit.Remove( group );
+        }
     }
 
     return false;
@@ -1234,16 +1226,11 @@ int MULTICHANNEL_TOOL::AutogenerateRuleAreas( const TOOL_EVENT& aEvent )
         commit.Add( newZone.release() );
     }
 
-    commit.Push( _( "Auto-generate placement rule areas" ) );
-
     // fixme: handle corner cases where the items belonging to a Rule Area already
     // belong to other groups.
 
     if( m_areas.m_options.m_groupItems )
     {
-        // fixme: sth gets weird when creating new zones & grouping them within a single COMMIT
-        BOARD_COMMIT grpCommit( GetManager(), true );
-
         for( RULE_AREA& ra : m_areas.m_areas )
         {
             if( !ra.m_generateEnabled )
@@ -1260,20 +1247,24 @@ int MULTICHANNEL_TOOL::AutogenerateRuleAreas( const TOOL_EVENT& aEvent )
             if( ra.m_existsAlready )
                 toPrune.insert( ra.m_area );
 
-            pruneExistingGroups( grpCommit, toPrune );
+            pruneExistingGroups( commit, toPrune );
 
-            PCB_GROUP* grp = new PCB_GROUP( board() );
+            PCB_GROUP* group = new PCB_GROUP( board() );
 
-            grpCommit.Add( grp );
-            grpCommit.Stage( ra.m_area, CHT_GROUP );
+            commit.Add( group );
+
+            commit.Modify( ra.m_area );
+            group->AddItem( ra.m_area );
 
             for( FOOTPRINT* fp : ra.m_components )
             {
-                grpCommit.Stage( fp, CHT_GROUP );
+                commit.Modify( fp );
+                group->AddItem( fp );
             }
         }
-        grpCommit.Push( _( "Group components with their placement rule areas" ) );
     }
+
+    commit.Push( _( "Auto-generate placement rule areas" ) );
 
     return true;
 }

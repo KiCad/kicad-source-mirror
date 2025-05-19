@@ -213,7 +213,7 @@ public:
      */
     virtual BOARD_ITEM_CONTAINER* GetModel() const = 0;
 
-    EDA_ITEM* GetItem( const KIID& aId ) const override;
+    EDA_ITEM* ResolveItem( const KIID& aId, bool aAllowNullptrReturn = false ) const override;
 
     void FocusOnItem( EDA_ITEM* aItem ) override;
     void FocusOnItem( BOARD_ITEM* aItem, PCB_LAYER_ID aLayer = UNDEFINED_LAYER );

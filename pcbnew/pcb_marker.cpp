@@ -222,14 +222,8 @@ void PCB_MARKER::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_
     {
         wxString  mainText;
         wxString  auxText;
-        EDA_ITEM* mainItem = nullptr;
-        EDA_ITEM* auxItem = nullptr;
-
-        if( m_rcItem->GetMainItemID() != niluuid )
-            mainItem = aFrame->GetItem( m_rcItem->GetMainItemID() );
-
-        if( m_rcItem->GetAuxItemID() != niluuid )
-            auxItem = aFrame->GetItem( m_rcItem->GetAuxItemID() );
+        EDA_ITEM* mainItem = aFrame->ResolveItem( m_rcItem->GetMainItemID() );
+        EDA_ITEM* auxItem = aFrame->ResolveItem( m_rcItem->GetAuxItemID() );
 
         if( mainItem )
             mainText = mainItem->GetItemDescription( aFrame, true );

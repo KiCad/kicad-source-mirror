@@ -183,7 +183,7 @@ int SYMBOL_EDITOR_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
         commit = &localCommit;
 
     if( !item->IsMoving() )
-        commit->Modify( m_frame->GetCurSymbol(), m_frame->GetScreen() );
+        commit->Modify( m_frame->GetCurSymbol(), m_frame->GetScreen(), RECURSE_MODE::RECURSE );
 
     if( selection.GetSize() == 1 )
         rotPoint = item->GetPosition();
@@ -1015,7 +1015,7 @@ int SYMBOL_EDITOR_EDIT_TOOL::Paste( const TOOL_EVENT& aEvent )
         if( item.Type() == SCH_FIELD_T )
             continue;
 
-        SCH_ITEM* newItem = item.Duplicate();
+        SCH_ITEM* newItem = item.Duplicate( true, &commit );
         newItem->SetParent( symbol );
         newItem->SetFlags( IS_NEW | IS_PASTED | SELECTED );
 
@@ -1093,7 +1093,7 @@ int SYMBOL_EDITOR_EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
     for( EDA_ITEM* item : oldItems )
     {
         SCH_ITEM* oldItem = static_cast<SCH_ITEM*>( item );
-        SCH_ITEM* newItem = oldItem->Duplicate();
+        SCH_ITEM* newItem = oldItem->Duplicate( true, &commit );
 
         if( newItem->Type() == SCH_PIN_T )
         {

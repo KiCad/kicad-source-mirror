@@ -1225,17 +1225,6 @@ void PCB_TUNING_PATTERN::Remove( GENERATOR_TOOL* aTool, BOARD* aBoard, BOARD_COM
     PNS::ROUTER* router = aTool->Router();
     PNS_KICAD_IFACE* iface = aTool->GetInterface();
 
-    // Ungroup first so that undo works
-    if( !GetItems().empty() )
-    {
-        PCB_GENERATOR*  group = this;
-
-        for( EDA_ITEM* member : group->GetItems() )
-            aCommit->Stage( member, CHT_UNGROUP );
-
-        group->GetItems().clear();
-    }
-
     aCommit->Remove( this );
 
     aTool->ClearRouterChanges();
@@ -1637,7 +1626,6 @@ void PCB_TUNING_PATTERN::EditPush( GENERATOR_TOOL* aTool, BOARD* aBoard, BOARD_C
                     && bounds.PointInside( track->GetEnd(), epsilon ) )
                 {
                     AddItem( item );
-                    aCommit->Stage( item, CHT_GROUP );
                 }
             }
         }

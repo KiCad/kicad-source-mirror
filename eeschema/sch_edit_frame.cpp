@@ -856,7 +856,7 @@ void SCH_EDIT_FRAME::AddCopyForRepeatItem( const SCH_ITEM* aItem )
 
     if( aItem )
     {
-        std::unique_ptr<SCH_ITEM> repeatItem( static_cast<SCH_ITEM*>( aItem->Duplicate() ) );
+        std::unique_ptr<SCH_ITEM> repeatItem( static_cast<SCH_ITEM*>( aItem->Duplicate( IGNORE_PARENT_GROUP ) ) );
 
         // Clone() preserves the flags & parent, we want 'em cleared.
         repeatItem->ClearFlags();
@@ -867,9 +867,9 @@ void SCH_EDIT_FRAME::AddCopyForRepeatItem( const SCH_ITEM* aItem )
 }
 
 
-EDA_ITEM* SCH_EDIT_FRAME::GetItem( const KIID& aId ) const
+EDA_ITEM* SCH_EDIT_FRAME::ResolveItem( const KIID& aId, bool aAllowNullptrReturn ) const
 {
-    return Schematic().GetItem( aId );
+    return Schematic().ResolveItem( aId, nullptr, aAllowNullptrReturn );
 }
 
 
@@ -2319,8 +2319,7 @@ void SCH_EDIT_FRAME::FocusOnItem( EDA_ITEM* aItem )
 
     static KIID lastBrightenedItemID( niluuid );
 
-    SCH_SHEET_PATH dummy;
-    SCH_ITEM*      lastItem = Schematic().GetItem( lastBrightenedItemID, &dummy );
+    SCH_ITEM* lastItem = Schematic().ResolveItem( lastBrightenedItemID, nullptr, true );
 
     if( lastItem && lastItem != aItem )
     {
@@ -2377,7 +2376,7 @@ void SCH_EDIT_FRAME::SaveSymbolToSchematic( const LIB_SYMBOL& aSymbol,
 {
     SCH_SHEET_PATH principalPath;
     SCH_SHEET_LIST sheets = Schematic().Hierarchy();
-    SCH_ITEM*      item = sheets.GetItem( aSchematicSymbolUUID, &principalPath );
+    SCH_ITEM*      item = sheets.ResolveItem( aSchematicSymbolUUID, &principalPath, true );
     SCH_SYMBOL*    principalSymbol = dynamic_cast<SCH_SYMBOL*>( item );
     SCH_COMMIT     commit( m_toolManager );
 

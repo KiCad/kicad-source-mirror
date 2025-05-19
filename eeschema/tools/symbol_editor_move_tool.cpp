@@ -29,6 +29,7 @@
 #include <eda_item.h>
 #include <gal/graphics_abstraction_layer.h>
 #include <sch_shape.h>
+#include <sch_group.h>
 #include <sch_commit.h>
 #include <wx/debug.h>
 #include <view/view_controls.h>
@@ -232,8 +233,21 @@ bool SYMBOL_EDITOR_MOVE_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, SCH_COM
                     // Drag items to the current cursor position
                     for( EDA_ITEM* item : selection )
                     {
-                        moveItem( item, delta );
-                        updateItem( item, false );
+                        SCH_ITEM* schItem = static_cast<SCH_ITEM*>( item );
+
+                        moveItem( schItem, delta );
+                        updateItem( schItem, false );
+
+                        // While SCH_COMMIT::Push() will add any new items to the entered group,
+                        // we need to do it earlier so that the previews while moving are correct.
+                        if( SCH_GROUP* enteredGroup = m_selectionTool->GetEnteredGroup() )
+                        {
+                            if( schItem->IsGroupableType() && !item->GetParentGroup() )
+                            {
+                                aCommit->Modify( enteredGroup );
+                                enteredGroup->AddItem( schItem );
+                            }
+                        }
                     }
 
                     m_anchorPos = m_cursor;
@@ -329,7 +343,7 @@ bool SYMBOL_EDITOR_MOVE_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, SCH_COM
                 {
                     SCH_PIN* curr_pin = static_cast<SCH_PIN*>( selection.Front() );
 
-                    if( pinTool->PlacePin( curr_pin ) )
+                    if( pinTool->PlacePin( aCommit, curr_pin ) )
                     {
                         // PlacePin() clears the current selection, which we don't want.  Not only
                         // is it a poor user experience, but it also prevents us from doing the
@@ -383,21 +397,17 @@ int SYMBOL_EDITOR_MOVE_TOOL::AlignElements( const TOOL_EVENT& aEvent )
     SCH_SELECTION& selection = m_selectionTool->RequestSelection();
     SCH_COMMIT     commit( m_toolMgr );
 
-    auto doMoveItem =
-            [&]( EDA_ITEM* item, const VECTOR2I& delta )
-            {
-                commit.Modify( item, m_frame->GetScreen() );
-                static_cast<SCH_ITEM*>( item )->Move( delta );
-                updateItem( item, true );
-            };
-
     for( EDA_ITEM* item : selection )
     {
         VECTOR2I newPos = grid.AlignGrid( item->GetPosition(), grid.GetItemGrid( item ) );
         VECTOR2I delta = newPos - item->GetPosition();
 
         if( delta != VECTOR2I( 0, 0 ) )
-            doMoveItem( item, delta );
+        {
+            commit.Modify( item, m_frame->GetScreen(), RECURSE_MODE::RECURSE );
+            static_cast<SCH_ITEM*>( item )->Move( delta );
+            updateItem( item, true );
+        };
 
         if( SCH_PIN* pin = dynamic_cast<SCH_PIN*>( item ) )
         {

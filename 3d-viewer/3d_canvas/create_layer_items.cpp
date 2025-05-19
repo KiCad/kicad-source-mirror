@@ -1179,10 +1179,10 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
 
         // ADD PLATED COPPER
         ConvertPolygonToTriangles( *m_frontPlatedCopperPolys, *m_platedPadsFront, m_biuTo3Dunits,
-                                   *m_board->GetItem( niluuid ) );
+                                   *DELETED_BOARD_ITEM::GetInstance() );
 
         ConvertPolygonToTriangles( *m_backPlatedCopperPolys, *m_platedPadsBack, m_biuTo3Dunits,
-                                   *m_board->GetItem( niluuid ) );
+                                   *DELETED_BOARD_ITEM::GetInstance() );
 
         m_platedPadsFront->BuildBVH();
         m_platedPadsBack->BuildBVH();

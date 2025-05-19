@@ -44,8 +44,8 @@ public:
     SCH_PIN* CreatePin( const VECTOR2I& aPosition, LIB_SYMBOL* aSymbol );
     SCH_PIN* RepeatPin( const SCH_PIN* aSourcePin );
 
-    bool PlacePin( SCH_PIN* aPin );
-    void CreateImagePins( SCH_PIN* aPin );
+    bool PlacePin( SCH_COMMIT* aCommit, SCH_PIN* aPin );
+    void CreateImagePins( SCH_COMMIT* aCommit, SCH_PIN* aPin );
 
     bool EditPinProperties( SCH_PIN* aPin, bool aFocusPinNumber );
     int PushPinProperties( const TOOL_EVENT& aEvent );

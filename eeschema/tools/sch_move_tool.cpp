@@ -625,36 +625,48 @@ bool SCH_MOVE_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, SCH_COMMIT* aComm
 
                 for( EDA_ITEM* item : selection )
                 {
-                    if( item->IsNew() )
+                    SCH_ITEM* schItem = static_cast<SCH_ITEM*>( item );
+
+                    if( schItem->IsNew() )
                     {
                         // Item was added to commit in a previous command
+
+                        // While SCH_COMMIT::Push() will add any new items to the entered group,
+                        // we need to do it earlier so that the previews while moving are correct.
+                        if( SCH_GROUP* enteredGroup = m_selectionTool->GetEnteredGroup() )
+                        {
+                            if( schItem->IsGroupableType() && !schItem->GetParentGroup() )
+                            {
+                                aCommit->Modify( enteredGroup );
+                                enteredGroup->AddItem( schItem );
+                            }
+                        }
                     }
-                    else if( item->GetParent() && item->GetParent()->IsSelected() )
+                    else if( schItem->GetParent() && schItem->GetParent()->IsSelected() )
                     {
                         // Item will be (or has been) added to commit by parent
                     }
                     else
                     {
-                        aCommit->Modify( item, m_frame->GetScreen() );
+                        aCommit->Modify( schItem, m_frame->GetScreen() );
                     }
 
-                    item->SetFlags( IS_MOVING );
+                    schItem->SetFlags( IS_MOVING );
 
-                    if( SCH_SHAPE* shape = dynamic_cast<SCH_SHAPE*>( item ) )
+                    if( SCH_SHAPE* shape = dynamic_cast<SCH_SHAPE*>( schItem ) )
                     {
                         shape->SetHatchingDirty();
                         shape->UpdateHatching();
                     }
 
-                    static_cast<SCH_ITEM*>( item )->RunOnChildren(
+                    schItem->RunOnChildren(
                             [&]( SCH_ITEM* schItem )
                             {
                                 item->SetFlags( IS_MOVING );
                             },
                             RECURSE_MODE::RECURSE );
 
-                    if( SCH_ITEM* schItem = dynamic_cast<SCH_ITEM*>( item ) )
-                        schItem->SetStoredPos( schItem->GetPosition() );
+                    schItem->SetStoredPos( schItem->GetPosition() );
                 }
 
                 // Set up the starting position and move/drag offset
@@ -1670,7 +1682,7 @@ int SCH_MOVE_TOOL::AlignToGrid( const TOOL_EVENT& aEvent )
     auto doMoveItem =
             [&]( EDA_ITEM* item, const VECTOR2I& delta )
             {
-                commit.Modify( item, m_frame->GetScreen() );
+                commit.Modify( item, m_frame->GetScreen(), RECURSE_MODE::RECURSE );
 
                 // Ensure only one end is moved when calling moveItem
                 // i.e. we are in drag mode

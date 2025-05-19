@@ -66,22 +66,6 @@ public:
         return wxT( "PCB_GROUP" );
     }
 
-    /**
-     * Add item to group. Does not take ownership of item.
-     *
-     * @return true if item was added (false if item belongs to a different group).
-     */
-    bool AddItem( EDA_ITEM* aItem ) override;
-
-    /**
-     * Remove item from group.
-     *
-     * @return true if item was removed (false if item was not in the group).
-     */
-    bool RemoveItem( EDA_ITEM* aItem ) override;
-
-    void RemoveAll() override;
-
     std::unordered_set<BOARD_ITEM*> GetBoardItems() const;
 
     /*
@@ -134,14 +118,17 @@ public:
     EDA_ITEM* Clone() const override;
 
     /*
-     * Clone() this and all descendants
+     * Clone this and all descendants
      */
-    PCB_GROUP* DeepClone() const override;
+    PCB_GROUP* DeepClone() const;
 
     /*
-     * Duplicate() this and all descendants
+     * Duplicate this and all descendants
+     *
+     * @param addToParentGroup if the original is part of a group then the new member will also
+     *                         be added to said group
      */
-    PCB_GROUP* DeepDuplicate() const override;
+    PCB_GROUP* DeepDuplicate( bool addToParentGroup, BOARD_COMMIT* aCommit = nullptr ) const;
 
     /// @copydoc BOARD_ITEM::IsOnLayer
     bool IsOnLayer( PCB_LAYER_ID aLayer ) const override;
@@ -195,13 +182,6 @@ public:
 
     ///< @copydoc BOARD_ITEM::RunOnChildren
     void RunOnChildren( const std::function<void( BOARD_ITEM* )>& aFunction, RECURSE_MODE aMode ) const override;
-
-    /**
-     * Check if the proposed type can be added to a group
-     * @param aType KICAD_T type to check
-     * @return true if the type can belong to a group, false otherwise
-     */
-    static bool IsGroupableType( KICAD_T aType );
 
 protected:
     PCB_GROUP( BOARD_ITEM* aParent, KICAD_T idtype, PCB_LAYER_ID aLayer = F_Cu );

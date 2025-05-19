@@ -1538,11 +1538,16 @@ bool PCB_CONTROL::placeBoardItems( BOARD_COMMIT* aCommit, std::vector<BOARD_ITEM
                     },
                     RECURSE_MODE::RECURSE );
 
-            // Even though BOARD_COMMIT::Push() will add any new items to the group, we're
-            // going to run PCB_ACTIONS::move first, and the move tool will throw out any
-            // items that aren't in the entered group.
-            if( selectionTool->GetEnteredGroup() && !item->GetParentGroup() )
-                selectionTool->GetEnteredGroup()->AddItem( item );
+            // While BOARD_COMMIT::Push() will add any new items to the entered group,
+            // we need to do it earlier so that the previews while moving are correct.
+            if( PCB_GROUP* enteredGroup = selectionTool->GetEnteredGroup() )
+            {
+                if( item->IsGroupableType() && !item->GetParentGroup() )
+                {
+                    aCommit->Modify( enteredGroup );
+                    enteredGroup->AddItem( item );
+                }
+            }
 
             item->SetParent( board() );
         }
@@ -1729,12 +1734,9 @@ int PCB_CONTROL::AppendBoard( PCB_IO& pi, const wxString& fileName, DESIGN_BLOCK
 
     if( placeBoardItems( &commit, brd, false, false /* Don't reannotate dupes on Append Board */ ) )
     {
-        commit.Push( _( "Append Board" ) );
-
         if( placeAsGroup )
         {
-            BOARD_COMMIT grpCommit( m_toolMgr );
-            PCB_GROUP*   group = new PCB_GROUP( brd );
+            PCB_GROUP* group = new PCB_GROUP( brd );
 
             if( aDesignBlock )
             {
@@ -1759,15 +1761,16 @@ int PCB_CONTROL::AppendBoard( PCB_IO& pi, const wxString& fileName, DESIGN_BLOCK
                 }
             }
 
-            grpCommit.Add( group );
+            commit.Add( group );
 
             for( EDA_ITEM* eda_item : selection )
             {
                 if( eda_item->IsBOARD_ITEM() && !static_cast<BOARD_ITEM*>( eda_item )->GetParentFootprint() )
-                    grpCommit.Stage( static_cast<BOARD_ITEM*>( eda_item ), CHT_GROUP );
+                {
+                    commit.Modify( eda_item );
+                    group->AddItem( eda_item );
+                }
             }
-
-            grpCommit.Push( _( "Group Items" ), APPEND_UNDO );
 
             selTool->ClearSelection();
             selTool->select( group );
@@ -1776,6 +1779,8 @@ int PCB_CONTROL::AppendBoard( PCB_IO& pi, const wxString& fileName, DESIGN_BLOCK
             m_frame->OnModify();
             m_frame->Refresh();
         }
+
+        commit.Push( _( "Append Board" ) );
 
         editFrame->GetBoard()->BuildConnectivity();
         ret = 0;
@@ -2146,7 +2151,7 @@ int PCB_CONTROL::UpdateMessagePanel( const TOOL_EVENT& aEvent )
                         // Use dynamic_cast to include PCB_GENERATORs.
                         else if( PCB_GROUP* group = dynamic_cast<PCB_GROUP*>( aItem ) )
                         {
-                            group->RunOnChildren( accumulateTrackLength, RECURSE_MODE::NO_RECURSE );
+                            group->RunOnChildren( accumulateTrackLength, RECURSE_MODE::RECURSE );
                         }
                         else
                         {
@@ -2186,9 +2191,9 @@ int PCB_CONTROL::UpdateMessagePanel( const TOOL_EVENT& aEvent )
                             return;
                         }
 
-                        if( aItem->Type() == PCB_GROUP_T || aItem->Type() == PCB_GENERATOR_T )
+                        if( PCB_GROUP* group = dynamic_cast<PCB_GROUP*>( aItem ) )
                         {
-                            static_cast<PCB_GROUP*>( aItem )->RunOnChildren( accumulateArea, RECURSE_MODE::RECURSE );
+                            group->RunOnChildren( accumulateArea, RECURSE_MODE::RECURSE );
                             return;
                         }
 

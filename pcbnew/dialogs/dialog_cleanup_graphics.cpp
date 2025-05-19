@@ -139,15 +139,18 @@ void DIALOG_CLEANUP_GRAPHICS::doCleanup( bool aDryRun )
 
 void DIALOG_CLEANUP_GRAPHICS::OnSelectItem( wxDataViewEvent& aEvent )
 {
-    const KIID&   itemID = RC_TREE_MODEL::ToUUID( aEvent.GetItem() );
-    BOARD_ITEM*   item = m_parentFrame->GetBoard()->GetItem( itemID );
-    WINDOW_THAWER thawer( m_parentFrame );
+    const KIID& itemID = RC_TREE_MODEL::ToUUID( aEvent.GetItem() );
 
-    if( item && !item->GetLayerSet().test( m_parentFrame->GetActiveLayer() ) )
-        m_parentFrame->SetActiveLayer( item->GetLayerSet().UIOrder().front() );
+    if( BOARD_ITEM* item = m_parentFrame->GetBoard()->ResolveItem( itemID, true ) )
+    {
+        WINDOW_THAWER thawer( m_parentFrame );
 
-    m_parentFrame->FocusOnItem( item );
-    m_parentFrame->GetCanvas()->Refresh();
+        if( !item->GetLayerSet().test( m_parentFrame->GetActiveLayer() ) )
+            m_parentFrame->SetActiveLayer( item->GetLayerSet().UIOrder().front() );
+
+        m_parentFrame->FocusOnItem( item );
+        m_parentFrame->GetCanvas()->Refresh();
+    }
 
     aEvent.Skip();
 }

@@ -1838,7 +1838,6 @@ int DRAWING_TOOL::PlaceImportedGraphics( const TOOL_EVENT& aEvent )
     PCB_SELECTION            preview;
     BOARD_COMMIT             commit( m_frame );
     PCB_GROUP*               group = nullptr;
-    PICKED_ITEMS_LIST        groupUndoList;
     PCB_LAYER_ID             layer = F_Cu;
 
     if( dlg.ShouldGroupItems() )
@@ -1881,14 +1880,9 @@ int DRAWING_TOOL::PlaceImportedGraphics( const TOOL_EVENT& aEvent )
             newItems.push_back( item );
 
             if( group )
-            {
                 group->AddItem( item );
-                groupUndoList.PushItem( ITEM_PICKER( nullptr, item, UNDO_REDO::REGROUP ) );
-            }
             else
-            {
                 selectedItems.push_back( item );
-            }
 
             layer = item->GetLayer();
         }
@@ -1906,9 +1900,6 @@ int DRAWING_TOOL::PlaceImportedGraphics( const TOOL_EVENT& aEvent )
     {
         for( BOARD_ITEM* item : newItems )
             commit.Add( item );
-
-        if( groupUndoList.GetCount() > 0 )
-            commit.Stage( groupUndoList );
 
         commit.Push( _( "Import Graphics" ) );
 
@@ -1970,10 +1961,7 @@ int DRAWING_TOOL::PlaceImportedGraphics( const TOOL_EVENT& aEvent )
             m_toolMgr->RunAction( ACTIONS::selectionClear );
 
             if( group )
-            {
                 preview.Remove( group );
-                group->RemoveAll();
-            }
 
             for( BOARD_ITEM* item : newItems )
                 delete item;
@@ -1998,9 +1986,6 @@ int DRAWING_TOOL::PlaceImportedGraphics( const TOOL_EVENT& aEvent )
             // Place the imported drawings
             for( BOARD_ITEM* item : newItems )
                 commit.Add( item );
-
-            if( groupUndoList.GetCount() > 0 )
-                commit.Stage( groupUndoList );
 
             commit.Push( _( "Import Graphics" ) );
 

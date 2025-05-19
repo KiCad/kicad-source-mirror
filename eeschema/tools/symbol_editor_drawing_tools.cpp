@@ -290,7 +290,7 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
                 switch( item->Type() )
                 {
                 case SCH_PIN_T:
-                    pinTool->PlacePin( static_cast<SCH_PIN*>( item ) );
+                    pinTool->PlacePin( &commit, static_cast<SCH_PIN*>( item ) );
                     item->ClearEditFlags();
                     commit.Push( _( "Place Pin" ) );
                     break;

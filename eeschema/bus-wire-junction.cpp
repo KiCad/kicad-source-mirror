@@ -302,7 +302,7 @@ void SCH_EDIT_FRAME::BreakSegment( SCH_COMMIT* aCommit, SCH_LINE* aSegment, cons
     // Save the copy of aSegment before breaking it
     aCommit->Modify( aSegment, aScreen );
 
-    SCH_LINE* newSegment = aSegment->BreakAt( aPoint );
+    SCH_LINE* newSegment = aSegment->BreakAt( aCommit, aPoint );
 
     aSegment->SetFlags( IS_CHANGED | IS_BROKEN );
     newSegment->SetFlags( IS_NEW | IS_BROKEN );

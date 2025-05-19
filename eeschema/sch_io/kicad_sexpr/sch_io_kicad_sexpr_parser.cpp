@@ -3088,9 +3088,9 @@ SCH_SYMBOL* SCH_IO_KICAD_SEXPR_PARSER::parseSchematicSymbol()
             {
                 if( static_cast<int>( name.size() ) > bad_pos )
                 {
-                    wxString msg = wxString::Format(
-                            _( "Symbol %s contains invalid character '%c'" ), name,
-                            name[bad_pos] );
+                    wxString msg = wxString::Format( _( "Symbol %s contains invalid character '%c'" ),
+                                                     name,
+                                                     name[bad_pos] );
 
                     THROW_PARSE_ERROR( msg, CurSource(), CurLine(), CurLineNumber(), CurOffset() );
                 }
@@ -4865,6 +4865,7 @@ void SCH_IO_KICAD_SEXPR_PARSER::parseGroup()
             if( !IsSymbol( token ) && token != T_NUMBER )
                 Expecting( "symbol|number" );
 
+            LIB_ID   libId;
             wxString name = FromUTF8();
             // Some symbol LIB_IDs have the '/' character escaped which can break
             // symbol links.  The '/' character is no longer an illegal LIB_ID character so
@@ -4952,15 +4953,8 @@ void SCH_IO_KICAD_SEXPR_PARSER::resolveGroups( SCH_SCREEN* aParent )
         {
             for( const KIID& aUuid : groupInfo.memberUuids )
             {
-                SCH_ITEM* gItem = getItem( aUuid );
-
-                if( !gItem || gItem->Type() == NOT_USED )
-                {
-                    // This is the deleted item singleton, which means we didn't find the uuid.
-                    continue;
-                }
-
-                group->AddItem( gItem );
+                if( SCH_ITEM* gItem = getItem( aUuid ) )
+                    group->AddItem( gItem );
             }
         }
     }

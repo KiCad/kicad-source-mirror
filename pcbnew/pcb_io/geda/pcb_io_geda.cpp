@@ -928,7 +928,7 @@ FOOTPRINT* PCB_IO_GEDA::FootprintLoad( const wxString& aLibraryPath,
 
     if( footprint )
     {
-        FOOTPRINT* copy = (FOOTPRINT*) footprint->Duplicate();
+        FOOTPRINT* copy = (FOOTPRINT*) footprint->Duplicate( IGNORE_PARENT_GROUP );
         copy->SetParent( nullptr );
         return copy;
     }

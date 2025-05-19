@@ -129,15 +129,44 @@ SCH_ITEM::~SCH_ITEM()
 }
 
 
-SCH_ITEM* SCH_ITEM::Duplicate( bool doClone ) const
+bool SCH_ITEM::IsGroupableType() const
+{
+    switch( Type() )
+    {
+    case SCH_SYMBOL_T:
+    case SCH_PIN_T:
+    case SCH_SHAPE_T:
+    case SCH_BITMAP_T:
+    case SCH_FIELD_T:
+    case SCH_TEXT_T:
+    case SCH_TEXTBOX_T:
+    case SCH_TABLE_T:
+    case SCH_GROUP_T:
+    case SCH_LINE_T:
+    case SCH_JUNCTION_T:
+    case SCH_NO_CONNECT_T:
+    case SCH_BUS_WIRE_ENTRY_T:
+    case SCH_BUS_BUS_ENTRY_T:
+    case SCH_LABEL_T:
+    case SCH_GLOBAL_LABEL_T:
+    case SCH_HIER_LABEL_T:
+    case SCH_RULE_AREA_T:
+    case SCH_DIRECTIVE_LABEL_T:
+    case SCH_SHEET_PIN_T:
+    case SCH_SHEET_T:
+        return true;
+    default:
+        return false;
+    }
+}
+
+
+SCH_ITEM* SCH_ITEM::Duplicate( bool addToParentGroup, SCH_COMMIT* aCommit, bool doClone ) const
 {
     SCH_ITEM* newItem = (SCH_ITEM*) Clone();
 
     if( !doClone )
         const_cast<KIID&>( newItem->m_Uuid ) = KIID();
-
-    if( newItem->GetParentGroup() )
-        newItem->GetParentGroup()->AddItem( newItem );
 
     newItem->ClearFlags( SELECTED | BRIGHTENED );
 
@@ -147,6 +176,17 @@ SCH_ITEM* SCH_ITEM::Duplicate( bool doClone ) const
                 aChild->ClearFlags( SELECTED | BRIGHTENED );
             },
             RECURSE_MODE::NO_RECURSE );
+
+    if( addToParentGroup )
+    {
+        wxCHECK_MSG( aCommit, newItem, "Must supply a commit to update parent group" );
+
+        if( newItem->GetParentGroup() )
+        {
+            aCommit->Modify( newItem->GetParentGroup()->AsEdaItem() );
+            newItem->GetParentGroup()->AddItem( newItem );
+        }
+    }
 
     return newItem;
 }
@@ -176,33 +216,17 @@ void SCH_ITEM::SetBodyStyleProp( int aBodyStyle )
 
 SCHEMATIC* SCH_ITEM::Schematic() const
 {
-    EDA_ITEM* parent = GetParent();
-
-    while( parent )
-    {
-        if( parent->Type() == SCHEMATIC_T )
-            return static_cast<SCHEMATIC*>( parent );
-        else
-            parent = parent->GetParent();
-    }
-
-    return nullptr;
+    return static_cast<SCHEMATIC*>( findParent( SCHEMATIC_T ) );
 }
 
 
 const SYMBOL* SCH_ITEM::GetParentSymbol() const
 {
-    const EDA_ITEM* parent = GetParent();
+    if( SYMBOL* sch_symbol = static_cast<SCH_SYMBOL*>( findParent( SCH_SYMBOL_T ) ) )
+        return sch_symbol;
 
-    while( parent )
-    {
-        if( parent->Type() == SCH_SYMBOL_T )
-            return static_cast<const SCH_SYMBOL*>( parent );
-        else if( parent->Type() == LIB_SYMBOL_T )
-            return static_cast<const LIB_SYMBOL*>( parent );
-        else
-            parent = parent->GetParent();
-    }
+    if( SYMBOL* lib_symbol = static_cast<LIB_SYMBOL*>( findParent( LIB_SYMBOL_T ) ) )
+        return lib_symbol;
 
     return nullptr;
 }
@@ -210,17 +234,11 @@ const SYMBOL* SCH_ITEM::GetParentSymbol() const
 
 SYMBOL* SCH_ITEM::GetParentSymbol()
 {
-    EDA_ITEM* parent = GetParent();
+    if( SYMBOL* sch_symbol = static_cast<SCH_SYMBOL*>( findParent( SCH_SYMBOL_T ) ) )
+        return sch_symbol;
 
-    while( parent )
-    {
-        if( parent->Type() == SCH_SYMBOL_T )
-            return static_cast<SCH_SYMBOL*>( parent );
-        else if( parent->Type() == LIB_SYMBOL_T )
-            return static_cast<LIB_SYMBOL*>( parent );
-        else
-            parent = parent->GetParent();
-    }
+    if( SYMBOL* lib_symbol = static_cast<LIB_SYMBOL*>( findParent( LIB_SYMBOL_T ) ) )
+        return lib_symbol;
 
     return nullptr;
 }
@@ -381,16 +399,13 @@ void SCH_ITEM::SwapItemData( SCH_ITEM* aImage )
     if( aImage == nullptr )
         return;
 
-    EDA_ITEM*  parent = GetParent();
-    EDA_GROUP* group = GetParentGroup();
+    EDA_ITEM* parent = GetParent();
 
-    SetParentGroup( nullptr );
-    aImage->SetParentGroup( nullptr );
+    SwapFlags( aImage );
+    std::swap( m_group, aImage->m_group );
     swapData( aImage );
 
-    // Restore pointers to be sure they are not broken
     SetParent( parent );
-    SetParentGroup( group );
 }
 
 

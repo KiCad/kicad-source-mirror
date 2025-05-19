@@ -1653,7 +1653,7 @@ void SIMULATOR_FRAME_UI::AddTuner( const SCH_SHEET_PATH& aSheetPath, SCH_SYMBOL*
 void SIMULATOR_FRAME_UI::UpdateTunerValue( const SCH_SHEET_PATH& aSheetPath, const KIID& aSymbol,
                                            const wxString& aRef, const wxString& aValue )
 {
-    SCH_ITEM*   item = aSheetPath.GetItem( aSymbol );
+    SCH_ITEM*   item = aSheetPath.ResolveItem( aSymbol );
     SCH_SYMBOL* symbol = dynamic_cast<SCH_SYMBOL*>( item );
 
     if( !symbol )
@@ -2156,7 +2156,7 @@ void SIMULATOR_FRAME_UI::applyTuners()
         SCH_SHEET_PATH sheetPath;
         wxString       ref = tuner->GetSymbolRef();
         KIID           symbolId = tuner->GetSymbol( &sheetPath );
-        SCH_ITEM*      schItem = sheetPath.GetItem( symbolId );
+        SCH_ITEM*      schItem = sheetPath.ResolveItem( symbolId );
         SCH_SYMBOL*    symbol = dynamic_cast<SCH_SYMBOL*>( schItem );
 
         if( !symbol )

@@ -38,6 +38,37 @@
 #include <font/font.h>
 
 
+bool BOARD_ITEM::IsGroupableType() const
+{
+    switch ( Type() )
+    {
+    case PCB_FOOTPRINT_T:
+    case PCB_PAD_T:
+    case PCB_SHAPE_T:
+    case PCB_REFERENCE_IMAGE_T:
+    case PCB_FIELD_T:
+    case PCB_TEXT_T:
+    case PCB_TEXTBOX_T:
+    case PCB_TABLE_T:
+    case PCB_GROUP_T:
+    case PCB_GENERATOR_T:
+    case PCB_TRACE_T:
+    case PCB_VIA_T:
+    case PCB_ARC_T:
+    case PCB_DIMENSION_T:
+    case PCB_DIM_ALIGNED_T:
+    case PCB_DIM_LEADER_T:
+    case PCB_DIM_CENTER_T:
+    case PCB_DIM_RADIAL_T:
+    case PCB_DIM_ORTHOGONAL_T:
+    case PCB_ZONE_T:
+        return true;
+    default:
+        return false;
+    }
+}
+
+
 void BOARD_ITEM::CopyFrom( const BOARD_ITEM* aOther )
 {
     wxCHECK( aOther, /* void */ );
@@ -50,12 +81,7 @@ const BOARD* BOARD_ITEM::GetBoard() const
     if( Type() == PCB_T )
         return static_cast<const BOARD*>( this );
 
-    BOARD_ITEM* parent = GetParent();
-
-    if( parent )
-        return parent->GetBoard();
-
-    return nullptr;
+    return static_cast<const BOARD*>( findParent( PCB_T ) );
 }
 
 
@@ -64,23 +90,28 @@ BOARD* BOARD_ITEM::GetBoard()
     if( Type() == PCB_T )
         return static_cast<BOARD*>( this );
 
-    BOARD_ITEM* parent = GetParent();
+    return static_cast<BOARD*>( findParent( PCB_T ) );
+}
 
-    if( parent )
-        return parent->GetBoard();
 
-    return nullptr;
+FOOTPRINT* BOARD_ITEM::GetParentFootprint() const
+{
+    return static_cast<FOOTPRINT*>( findParent( PCB_FOOTPRINT_T ) );
 }
 
 
 bool BOARD_ITEM::IsLocked() const
 {
-    if( GetParentGroup() && static_cast<PCB_GROUP*>( GetParentGroup() )->IsLocked() )
-        return true;
+    if( EDA_GROUP* group = GetParentGroup() )
+    {
+        if( group->AsEdaItem()->IsLocked() )
+            return true;
+    }
 
-    const BOARD* board = GetBoard();
+    if( !GetBoard() || GetBoard()->GetBoardUse() == BOARD_USE::FPHOLDER )
+        return false;
 
-    return board && board->GetBoardUse() != BOARD_USE::FPHOLDER && m_isLocked;
+    return m_isLocked;
 }
 
 
@@ -220,6 +251,7 @@ void BOARD_ITEM::DeleteStructure()
 
 void BOARD_ITEM::swapData( BOARD_ITEM* aImage )
 {
+    UNIMPLEMENTED_FOR( GetClass() );
 }
 
 
@@ -228,26 +260,29 @@ void BOARD_ITEM::SwapItemData( BOARD_ITEM* aImage )
     if( aImage == nullptr )
         return;
 
-    EDA_ITEM*  parent = GetParent();
-    EDA_GROUP* group = GetParentGroup();
+    EDA_ITEM* parent = GetParent();
 
-    SetParentGroup( nullptr );
-    aImage->SetParentGroup( nullptr );
     swapData( aImage );
 
-    // Restore pointers to be sure they are not broken
     SetParent( parent );
-    SetParentGroup( group );
 }
 
 
-BOARD_ITEM* BOARD_ITEM::Duplicate() const
+BOARD_ITEM* BOARD_ITEM::Duplicate( bool addToParentGroup, BOARD_COMMIT* aCommit ) const
 {
     BOARD_ITEM* dupe = static_cast<BOARD_ITEM*>( Clone() );
     const_cast<KIID&>( dupe->m_Uuid ) = KIID();
 
-    if( dupe->GetParentGroup() )
-        dupe->GetParentGroup()->AddItem( dupe );
+    if( addToParentGroup )
+    {
+        wxCHECK_MSG( aCommit, dupe, "Must supply a commit to update parent group" );
+
+        if( dupe->GetParentGroup() )
+        {
+            aCommit->Modify( dupe->GetParentGroup()->AsEdaItem() );
+            dupe->GetParentGroup()->AddItem( dupe );
+        }
+    }
 
     return dupe;
 }
@@ -293,35 +328,6 @@ std::shared_ptr<SHAPE_SEGMENT> BOARD_ITEM::GetEffectiveHoleShape() const
     UNIMPLEMENTED_FOR( GetClass() );
 
     return slot;
-}
-
-
-FOOTPRINT* BOARD_ITEM::GetParentFootprint() const
-{
-    // EDA_ITEM::IsType is too slow here.
-    auto isContainer = []( BOARD_ITEM_CONTAINER* aTest )
-    {
-        switch( aTest->Type() )
-        {
-        case PCB_GROUP_T:
-        case PCB_GENERATOR_T:
-        case PCB_TABLE_T:
-            return true;
-
-        default:
-            return false;
-        }
-    };
-
-    BOARD_ITEM_CONTAINER* ancestor = GetParent();
-
-    while( ancestor && isContainer( ancestor ) )
-        ancestor = ancestor->GetParent();
-
-    if( ancestor && ancestor->Type() == PCB_FOOTPRINT_T )
-        return static_cast<FOOTPRINT*>( ancestor );
-
-    return nullptr;
 }
 
 

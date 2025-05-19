@@ -487,7 +487,7 @@ int SCH_DRAWING_TOOLS::PlaceSymbol( const TOOL_EVENT& aEvent )
                     // We are either stepping to the next unit or next symbol
                     if( m_frame->eeconfig()->m_SymChooserPanel.keep_symbol || new_unit > 1 )
                     {
-                        nextSymbol = static_cast<SCH_SYMBOL*>( symbol->Duplicate() );
+                        nextSymbol = static_cast<SCH_SYMBOL*>( symbol->Duplicate( IGNORE_PARENT_GROUP ) );
                         nextSymbol->SetUnit( new_unit );
                         nextSymbol->SetUnitSelection( new_unit );
 
@@ -757,7 +757,9 @@ int SCH_DRAWING_TOOLS::ImportSheet( const TOOL_EVENT& aEvent )
                         newItems.emplace_back( item );
                     }
                     else
+                    {
                         item->ClearFlags( SKIP_STRUCT );
+                    }
                 }
 
                 if( placeAsGroup )
@@ -766,7 +768,9 @@ int SCH_DRAWING_TOOLS::ImportSheet( const TOOL_EVENT& aEvent )
                     selectionTool->AddItemToSel( group );
                 }
                 else
+                {
                     selectionTool->AddItemsToSel( &newItems, true );
+                }
 
                 cursorPos = grid.Align( controls->GetMousePosition(),
                                         grid.GetSelectionGrid( selectionTool->GetSelection() ) );

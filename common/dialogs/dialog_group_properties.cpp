@@ -83,7 +83,7 @@ bool DIALOG_GROUP_PROPERTIES::TransferDataToWindow()
 
 bool DIALOG_GROUP_PROPERTIES::TransferDataFromWindow()
 {
-    m_commit->Modify( m_group->AsEdaItem(), m_frame->GetScreen() );
+    m_commit->Modify( m_group->AsEdaItem(), m_frame->GetScreen(), RECURSE_MODE::RECURSE );
 
     for( size_t ii = 0; ii < m_membersList->GetCount(); ++ii )
     {
@@ -117,7 +117,9 @@ bool DIALOG_GROUP_PROPERTIES::TransferDataFromWindow()
         m_group->SetDesignBlockLibId( libId );
     }
     else
+    {
         m_group->SetDesignBlockLibId( LIB_ID() );
+    }
 
     m_toolMgr->RunAction( ACTIONS::selectionClear );
     m_group->RemoveAll();

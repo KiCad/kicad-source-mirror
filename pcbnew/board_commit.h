@@ -61,7 +61,8 @@ public:
 
     virtual void Revert() override;
     COMMIT&      Stage( EDA_ITEM* aItem, CHANGE_TYPE aChangeType,
-                        BASE_SCREEN* aScreen = nullptr ) override;
+                        BASE_SCREEN* aScreen = nullptr,
+                        RECURSE_MODE aRecurse = RECURSE_MODE::NO_RECURSE ) override;
     COMMIT&      Stage( std::vector<EDA_ITEM*>& container, CHANGE_TYPE aChangeType,
                         BASE_SCREEN* aScreen = nullptr ) override;
     COMMIT&      Stage( const PICKED_ITEMS_LIST& aItems,

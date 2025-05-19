@@ -81,7 +81,7 @@ SCH_SYMBOL* TEST_SCH_REFERENCE_LIST_FIXTURE::getSymbolByKIID( wxString        aK
                                                               SCH_SHEET_PATH* aSymbolPath )
 {
     KIID        symKIID( aKIID );
-    SCH_ITEM*   foundItem = m_schematic.GetItem( symKIID, aSymbolPath );
+    SCH_ITEM*   foundItem = m_schematic.ResolveItem( symKIID, aSymbolPath );
     SCH_SYMBOL* symbol = dynamic_cast<SCH_SYMBOL*>( foundItem );
 
     return symbol;

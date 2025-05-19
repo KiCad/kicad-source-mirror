@@ -46,53 +46,36 @@ class EDA_GROUP
 {
 public:
     virtual EDA_ITEM* AsEdaItem() = 0;
-    virtual ~EDA_GROUP();
+    virtual ~EDA_GROUP() = default;
 
     wxString GetName() const { return m_name; }
     void     SetName( const wxString& aName ) { m_name = aName; }
 
     std::unordered_set<EDA_ITEM*>& GetItems() { return m_items; }
-
     const std::unordered_set<EDA_ITEM*>& GetItems() const { return m_items; }
 
     /**
      * Add item to group. Does not take ownership of item.
-     *
-     * @return true if item was added (false if item belongs to a different group).
      */
-    virtual bool AddItem( EDA_ITEM* aItem ) = 0;
+    void AddItem( EDA_ITEM* aItem );
 
     /**
      * Remove item from group.
-     *
-     * @return true if item was removed (false if item was not in the group).
      */
-    virtual bool RemoveItem( EDA_ITEM* aItem ) = 0;
+    void RemoveItem( EDA_ITEM* aItem );
+    void RemoveAll();
 
-    virtual void RemoveAll() = 0;
-
-    /*
-     * Clone() this and all descendants
-     */
-    virtual EDA_GROUP* DeepClone() const = 0;
-
-    /*
-     * Duplicate() this and all descendants
-     */
-    virtual EDA_GROUP* DeepDuplicate() const = 0;
+    KIID_VECT_LIST GetGroupMemberIds() const;
 
     bool HasDesignBlockLink() const { return m_designBlockLibId.IsValid(); }
 
     void SetDesignBlockLibId( const LIB_ID& aLibId ) { m_designBlockLibId = aLibId; }
-
     const LIB_ID& GetDesignBlockLibId() const { return m_designBlockLibId; }
 
 protected:
-    std::unordered_set<EDA_ITEM*> m_items; // Members of the group
-    wxString                      m_name;  // Optional group name
-
-    // Optional link to a design block
-    LIB_ID m_designBlockLibId;
+    std::unordered_set<EDA_ITEM*> m_items;             // Members of the group
+    wxString                      m_name;              // Optional group name
+    LIB_ID                        m_designBlockLibId;  // Optional link to a design block
 };
 
 #endif // CLASS_PCB_GROUP_H_

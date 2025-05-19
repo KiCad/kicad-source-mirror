@@ -1286,7 +1286,7 @@ void PCB_IO_EAGLE::loadElements( wxXmlNode* aElements )
             THROW_IO_ERROR( emsg );
         }
 
-        FOOTPRINT* footprint = static_cast<FOOTPRINT*>( it->second->Duplicate() );
+        FOOTPRINT* footprint = static_cast<FOOTPRINT*>( it->second->Duplicate( IGNORE_PARENT_GROUP ) );
 
         m_board->Add( footprint, ADD_MODE::APPEND );
 
@@ -2657,19 +2657,19 @@ void PCB_IO_EAGLE::loadClasses( wxXmlNode* aClasses )
 
     for( ECLASS& eClass : eClasses )
     {
-        for( std::pair<const wxString&, ECOORD> entry : eClass.clearanceMap )
+        for( const auto& [className, pt] : eClass.clearanceMap )
         {
-            if( m_classMap[ entry.first ] != nullptr )
+            if( m_classMap[className] != nullptr )
             {
                 wxString rule;
                 rule.Printf( wxT( "(rule \"class %s:%s\"\n"
                                   "  (condition \"A.NetClass == '%s' && B.NetClass == '%s'\")\n"
                                   "  (constraint clearance (min %smm)))\n" ),
                              eClass.number,
-                             entry.first,
+                             className,
                              eClass.name,
-                             m_classMap[ entry.first ]->GetName(),
-                             EDA_UNIT_UTILS::UI::StringFromValue( pcbIUScale, EDA_UNITS::MM, entry.second.ToPcbUnits() ) );
+                             m_classMap[className]->GetName(),
+                             EDA_UNIT_UTILS::UI::StringFromValue( pcbIUScale, EDA_UNITS::MM, pt.ToPcbUnits() ) );
 
                 m_customRules += wxT( "\n" ) + rule;
             }
@@ -2823,8 +2823,7 @@ void PCB_IO_EAGLE::loadSignals( wxXmlNode* aSignals )
                     else
                     {
                         double annulus = drillz * m_rules->rvViaOuter;  // eagle "restring"
-                        annulus = eagleClamp( m_rules->rlMinViaOuter, annulus,
-                                              m_rules->rlMaxViaOuter );
+                        annulus = eagleClamp( m_rules->rlMinViaOuter, annulus, m_rules->rlMaxViaOuter );
                         kidiam = KiROUND( drillz + 2 * annulus );
                         via->SetWidth( PADSTACK::ALL_LAYERS, kidiam );
                     }
@@ -3226,10 +3225,7 @@ void PCB_IO_EAGLE::cacheLib( const wxString& aLibPath )
             wxXmlDocument xmlDocument;
 
             if( !stream.IsOk() || !xmlDocument.Load( stream ) )
-            {
-                THROW_IO_ERROR( wxString::Format( _( "Unable to read file '%s'." ),
-                                                  fn.GetFullPath() ) );
-            }
+                THROW_IO_ERROR( wxString::Format( _( "Unable to read file '%s'." ), fn.GetFullPath() ) );
 
             doc = xmlDocument.GetRoot();
 
@@ -3304,9 +3300,8 @@ void PCB_IO_EAGLE::FootprintEnumerate( wxArrayString& aFootprintNames, const wxS
 }
 
 
-FOOTPRINT* PCB_IO_EAGLE::FootprintLoad( const wxString& aLibraryPath,
-                                        const wxString& aFootprintName, bool aKeepUUID,
-                                        const std::map<std::string, UTF8>* aProperties )
+FOOTPRINT* PCB_IO_EAGLE::FootprintLoad( const wxString& aLibraryPath, const wxString& aFootprintName,
+                                        bool aKeepUUID, const std::map<std::string, UTF8>* aProperties )
 {
     init( aProperties );
     cacheLib( aLibraryPath );
@@ -3316,7 +3311,7 @@ FOOTPRINT* PCB_IO_EAGLE::FootprintLoad( const wxString& aLibraryPath,
         return nullptr;
 
     // Return a copy of the template
-    FOOTPRINT* copy = (FOOTPRINT*) it->second->Duplicate();
+    FOOTPRINT* copy = (FOOTPRINT*) it->second->Duplicate( IGNORE_PARENT_GROUP );
     copy->SetParent( nullptr );
     return copy;
 }

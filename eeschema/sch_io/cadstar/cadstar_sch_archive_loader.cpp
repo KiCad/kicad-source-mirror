@@ -1728,7 +1728,7 @@ const LIB_SYMBOL* CADSTAR_SCH_ARCHIVE_LOADER::loadSymdef( const SYMDEF_ID& aSymd
 
                 RotatePoint( linePos, libtext->GetTextPos(), -libtext->GetTextAngle() );
 
-                SCH_TEXT* textLine = static_cast<SCH_TEXT*>( libtext->Duplicate() );
+                SCH_TEXT* textLine = static_cast<SCH_TEXT*>( libtext->Duplicate( IGNORE_PARENT_GROUP ) );
                 textLine->SetText( strings[ii] );
                 textLine->SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
                 textLine->SetVertJustify( GR_TEXT_V_ALIGN_BOTTOM );
@@ -2655,8 +2655,8 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadItemOntoKiCadSheet( const LAYER_ID& aCadsta
         for( std::pair<LAYER_ID, SHEET_NAME> sheetPair : Sheets.SheetNames )
         {
             LAYER_ID sheetID = sheetPair.first;
-            duplicateItem    = aItem->Duplicate();
-            m_sheetMap.at( sheetID )->GetScreen()->Append( aItem->Duplicate() );
+            duplicateItem    = aItem->Duplicate( IGNORE_PARENT_GROUP );
+            m_sheetMap.at( sheetID )->GetScreen()->Append( aItem->Duplicate( IGNORE_PARENT_GROUP ) );
         }
 
         //Get rid of the extra copy:

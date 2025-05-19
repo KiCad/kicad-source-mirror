@@ -824,7 +824,7 @@ int SCH_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
             rotPoint = m_frame->GetNearestHalfGridPosition( head->GetBoundingBox().GetCenter() );
 
         if( !moving )
-            commit->Modify( head, m_frame->GetScreen() );
+            commit->Modify( head, m_frame->GetScreen(), RECURSE_MODE::RECURSE );
 
         switch( head->Type() )
         {
@@ -989,7 +989,7 @@ int SCH_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
             continue;
 
         if( !moving )
-            commit->Modify( item, m_frame->GetScreen() );
+            commit->Modify( item, m_frame->GetScreen(), RECURSE_MODE::RECURSE );
 
         if( item->Type() == SCH_LINE_T )
         {
@@ -1092,7 +1092,7 @@ int SCH_EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
     if( selection.GetSize() == 1 )
     {
         if( !moving )
-            commit->Modify( item, m_frame->GetScreen() );
+            commit->Modify( item, m_frame->GetScreen(), RECURSE_MODE::RECURSE );
 
         switch( item->Type() )
         {
@@ -1193,7 +1193,7 @@ int SCH_EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
             item = static_cast<SCH_ITEM*>( edaItem );
 
             if( !moving )
-                commit->Modify( item, m_frame->GetScreen() );
+                commit->Modify( item, m_frame->GetScreen(), RECURSE_MODE::RECURSE );
 
             if( item->Type() == SCH_SHEET_PIN_T )
             {
@@ -1511,12 +1511,13 @@ int SCH_EDIT_TOOL::RepeatDrawItem( const TOOL_EVENT& aEvent )
 
     m_toolMgr->RunAction( ACTIONS::selectionClear );
 
-    SCH_COMMIT    commit( m_toolMgr );
-    SCH_SELECTION newItems;
+    SCH_SELECTION_TOOL* selectionTool = m_toolMgr->GetTool<SCH_SELECTION_TOOL>();
+    SCH_COMMIT          commit( m_toolMgr );
+    SCH_SELECTION       newItems;
 
     for( const std::unique_ptr<SCH_ITEM>& item : sourceItems )
     {
-        SCH_ITEM*          newItem = item->Duplicate();
+        SCH_ITEM*          newItem = item->Duplicate( IGNORE_PARENT_GROUP );
         SETTINGS_MANAGER&  mgr = Pgm().GetSettingsManager();
         EESCHEMA_SETTINGS* cfg = mgr.GetAppSettings<EESCHEMA_SETTINGS>( "eeschema" );
         bool               restore_state = false;
@@ -1524,6 +1525,15 @@ int SCH_EDIT_TOOL::RepeatDrawItem( const TOOL_EVENT& aEvent )
         // Ensure newItem has a suitable parent: the current screen, because an item from
         // a list of items to repeat must be attached to this current screen
         newItem->SetParent( m_frame->GetScreen() );
+
+        if( SCH_GROUP* enteredGroup = selectionTool->GetEnteredGroup() )
+        {
+            if( newItem->IsGroupableType() )
+            {
+                commit.Modify( enteredGroup );
+                enteredGroup->AddItem( newItem );
+            }
+        }
 
         if( SCH_LABEL_BASE* label = dynamic_cast<SCH_LABEL_BASE*>( newItem ) )
         {
@@ -1716,14 +1726,7 @@ int SCH_EDIT_TOOL::DoDelete( const TOOL_EVENT& aEvent )
         }
         else if( sch_item->Type() == SCH_GROUP_T )
         {
-            // Groups need to have all children ungrouped, then deleted
-            sch_item->RunOnChildren(
-                    [&]( SCH_ITEM* aChild )
-                    {
-                        commit.Stage( aChild, CHT_UNGROUP, m_frame->GetScreen() );
-                    },
-                    RECURSE_MODE::RECURSE );
-
+            // Groups need to delete their children
             sch_item->RunOnChildren(
                     [&]( SCH_ITEM* aChild )
                     {

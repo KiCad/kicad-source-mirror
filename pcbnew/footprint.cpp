@@ -233,13 +233,6 @@ FOOTPRINT::FOOTPRINT( FOOTPRINT&& aFootprint ) :
 
 FOOTPRINT::~FOOTPRINT()
 {
-    // Untangle group parents before doing any deleting
-    for( PCB_GROUP* group : m_groups )
-    {
-        for( EDA_ITEM* item : group->GetItems() )
-            item->SetParentGroup( nullptr );
-    }
-
     // Clean up the owned elements
     delete m_initial_comments;
 
@@ -1213,11 +1206,6 @@ void FOOTPRINT::Remove( BOARD_ITEM* aBoardItem, REMOVE_MODE aMode )
     }
 
     aBoardItem->SetFlags( STRUCT_DELETED );
-
-    EDA_GROUP* parentGroup = aBoardItem->GetParentGroup();
-
-    if( parentGroup && !( parentGroup->AsEdaItem()->GetFlags() & STRUCT_DELETED ) )
-        parentGroup->RemoveItem( aBoardItem );
 }
 
 
@@ -1312,10 +1300,6 @@ BOX2I FOOTPRINT::GetFpPadsLocalBbox() const
 
     for( PAD* pad : dummy.Pads() )
         bbox.Merge( pad->GetBoundingBox() );
-
-    // Remove the parent and the group from the dummy footprint before deletion
-    dummy.SetParent( nullptr );
-    dummy.SetParentGroup( nullptr );
 
     return bbox;
 }
@@ -2569,9 +2553,9 @@ void FOOTPRINT::SetOrientation( const EDA_ANGLE& aNewAngle )
 }
 
 
-BOARD_ITEM* FOOTPRINT::Duplicate() const
+BOARD_ITEM* FOOTPRINT::Duplicate( bool addToParentGroup, BOARD_COMMIT* aCommit ) const
 {
-    FOOTPRINT* dupe = static_cast<FOOTPRINT*>( BOARD_ITEM::Duplicate() );
+    FOOTPRINT* dupe = static_cast<FOOTPRINT*>( BOARD_ITEM::Duplicate( addToParentGroup, aCommit ) );
 
     dupe->RunOnChildren( [&]( BOARD_ITEM* child )
                             {
@@ -2583,7 +2567,8 @@ BOARD_ITEM* FOOTPRINT::Duplicate() const
 }
 
 
-BOARD_ITEM* FOOTPRINT::DuplicateItem( const BOARD_ITEM* aItem, bool aAddToFootprint )
+BOARD_ITEM* FOOTPRINT::DuplicateItem( bool addToParentGroup, BOARD_COMMIT* aCommit,
+                                      const BOARD_ITEM* aItem, bool addToFootprint )
 {
     BOARD_ITEM* new_item = nullptr;
 
@@ -2594,7 +2579,7 @@ BOARD_ITEM* FOOTPRINT::DuplicateItem( const BOARD_ITEM* aItem, bool aAddToFootpr
         PAD* new_pad = new PAD( *static_cast<const PAD*>( aItem ) );
         const_cast<KIID&>( new_pad->m_Uuid ) = KIID();
 
-        if( aAddToFootprint )
+        if( addToFootprint )
             m_pads.push_back( new_pad );
 
         new_item = new_pad;
@@ -2606,7 +2591,7 @@ BOARD_ITEM* FOOTPRINT::DuplicateItem( const BOARD_ITEM* aItem, bool aAddToFootpr
         ZONE* new_zone = new ZONE( *static_cast<const ZONE*>( aItem ) );
         const_cast<KIID&>( new_zone->m_Uuid ) = KIID();
 
-        if( aAddToFootprint )
+        if( addToFootprint )
             m_zones.push_back( new_zone );
 
         new_item = new_zone;
@@ -2626,11 +2611,11 @@ BOARD_ITEM* FOOTPRINT::DuplicateItem( const BOARD_ITEM* aItem, bool aAddToFootpr
             case FIELD_T::REFERENCE: new_text->SetText( wxT( "${REFERENCE}" ) ); break;
             case FIELD_T::VALUE:     new_text->SetText( wxT( "${VALUE}" ) );     break;
             case FIELD_T::DATASHEET: new_text->SetText( wxT( "${DATASHEET}" ) ); break;
-            default:                                                          break;
+            default:                                                             break;
             }
         }
 
-        if( aAddToFootprint )
+        if( addToFootprint )
             Add( new_text );
 
         new_item = new_text;
@@ -2642,7 +2627,7 @@ BOARD_ITEM* FOOTPRINT::DuplicateItem( const BOARD_ITEM* aItem, bool aAddToFootpr
         PCB_SHAPE* new_shape = new PCB_SHAPE( *static_cast<const PCB_SHAPE*>( aItem ) );
         const_cast<KIID&>( new_shape->m_Uuid ) = KIID();
 
-        if( aAddToFootprint )
+        if( addToFootprint )
             Add( new_shape );
 
         new_item = new_shape;
@@ -2654,7 +2639,7 @@ BOARD_ITEM* FOOTPRINT::DuplicateItem( const BOARD_ITEM* aItem, bool aAddToFootpr
         PCB_TEXTBOX* new_textbox = new PCB_TEXTBOX( *static_cast<const PCB_TEXTBOX*>( aItem ) );
         const_cast<KIID&>( new_textbox->m_Uuid ) = KIID();
 
-        if( aAddToFootprint )
+        if( addToFootprint )
             Add( new_textbox );
 
         new_item = new_textbox;
@@ -2667,9 +2652,10 @@ BOARD_ITEM* FOOTPRINT::DuplicateItem( const BOARD_ITEM* aItem, bool aAddToFootpr
     case PCB_DIM_RADIAL_T:
     case PCB_DIM_ORTHOGONAL_T:
     {
-        PCB_DIMENSION_BASE* dimension = static_cast<PCB_DIMENSION_BASE*>( aItem->Duplicate() );
+        PCB_DIMENSION_BASE* dimension = static_cast<PCB_DIMENSION_BASE*>( aItem->Duplicate( addToParentGroup,
+                                                                                            aCommit ) );
 
-        if( aAddToFootprint )
+        if( addToFootprint )
             Add( dimension );
 
         new_item = dimension;
@@ -2678,9 +2664,9 @@ BOARD_ITEM* FOOTPRINT::DuplicateItem( const BOARD_ITEM* aItem, bool aAddToFootpr
 
     case PCB_GROUP_T:
     {
-        PCB_GROUP* group = static_cast<const PCB_GROUP*>( aItem )->DeepDuplicate();
+        PCB_GROUP* group = static_cast<const PCB_GROUP*>( aItem )->DeepDuplicate( addToParentGroup, aCommit );
 
-        if( aAddToFootprint )
+        if( addToFootprint )
         {
             group->RunOnChildren(
                     [&]( BOARD_ITEM* aCurrItem )

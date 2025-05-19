@@ -108,11 +108,11 @@ BOOST_FIXTURE_TEST_CASE( BasicZoneFills, ZONE_FILL_TEST_FIXTURE )
             {
                 if( aItem->GetErrorCode() == DRCE_CLEARANCE )
                 {
-                    BOARD_ITEM* item_a = m_board->GetItem( aItem->GetMainItemID() );
+                    BOARD_ITEM* item_a = m_board->ResolveItem( aItem->GetMainItemID() );
                     PAD*        pad_a = dynamic_cast<PAD*>( item_a );
                     PCB_TRACK*  trk_a = dynamic_cast<PCB_TRACK*>( item_a );
 
-                    BOARD_ITEM* item_b = m_board->GetItem( aItem->GetAuxItemID() );
+                    BOARD_ITEM* item_b = m_board->ResolveItem( aItem->GetAuxItemID() );
                     PAD*        pad_b = dynamic_cast<PAD*>( item_b );
                     PCB_TRACK*  trk_b = dynamic_cast<PCB_TRACK*>( item_b );
 
@@ -210,7 +210,7 @@ BOOST_DATA_TEST_CASE_F( ZONE_FILL_TEST_FIXTURE, RegressionZoneFillTests,
     if( violations.empty() )
     {
         BOOST_CHECK_EQUAL( 1, 1 );  // quiet "did not check any assertions" warning
-        BOOST_TEST_MESSAGE( (const char*)(wxString::Format( "Zone fill regression: %s passed", relPath ).utf8_str()) );
+        BOOST_TEST_MESSAGE( wxString::Format( "Zone fill regression: %s passed", relPath ) );
     }
     else
     {
@@ -222,7 +222,7 @@ BOOST_DATA_TEST_CASE_F( ZONE_FILL_TEST_FIXTURE, RegressionZoneFillTests,
         for( const DRC_ITEM& item : violations )
             BOOST_TEST_MESSAGE( item.ShowReport( &unitsProvider, RPT_SEVERITY_ERROR, itemMap ) );
 
-        BOOST_ERROR( (const char*)(wxString::Format( "Zone fill regression: %s failed", relPath ).utf8_str()) );
+        BOOST_ERROR( wxString::Format( "Zone fill regression: %s failed", relPath ) );
     }
 }
 
@@ -257,7 +257,7 @@ BOOST_DATA_TEST_CASE_F( ZONE_FILL_TEST_FIXTURE, RegressionSliverZoneFillTests,
     if( violations.empty() )
     {
         BOOST_CHECK_EQUAL( 1, 1 );  // quiet "did not check any assertions" warning
-        BOOST_TEST_MESSAGE( (const char*)(wxString::Format( "Zone fill copper sliver regression: %s passed", relPath ).utf8_str()) );
+        BOOST_TEST_MESSAGE( wxString::Format( "Zone fill copper sliver regression: %s passed", relPath ) );
     }
     else
     {
@@ -269,7 +269,7 @@ BOOST_DATA_TEST_CASE_F( ZONE_FILL_TEST_FIXTURE, RegressionSliverZoneFillTests,
         for( const DRC_ITEM& item : violations )
             BOOST_TEST_MESSAGE( item.ShowReport( &unitsProvider, RPT_SEVERITY_ERROR, itemMap ) );
 
-        BOOST_ERROR( (const char*)(wxString::Format( "Zone fill copper sliver regression: %s failed", relPath ).utf8_str()) );
+        BOOST_ERROR( wxString::Format( "Zone fill copper sliver regression: %s failed", relPath ) );
     }
 }
 
@@ -328,14 +328,12 @@ BOOST_FIXTURE_TEST_CASE( RegressionNetTie, ZONE_FILL_TEST_FIXTURE )
                     std::shared_ptr<SHAPE> pad_shape( pad->GetEffectiveShape( layer ) );
                     int                    clearance = pad_shape->GetClearance( a_shape.get() );
                     BOOST_CHECK_MESSAGE( pad->GetNetCode() == zone->GetNetCode() || clearance != 0,
-                                         "Pad " << pad->GetNumber() << " from Footprint "
-                                                << pad->GetParentFootprint()
-                                                           ->GetReferenceAsString()
-                                                           .ToStdString()
-                                                << " has net code "
-                                                << pad->GetNetname().ToStdString()
-                                                << " and is connected to zone with net code "
-                                                << zone->GetNetname().ToStdString() );
+                                         wxString::Format( "Pad %s from Footprint %s has net code %s and "
+                                                           "is connected to zone with net code %s",
+                                                           pad->GetNumber(),
+                                                           pad->GetParentFootprint()->GetReferenceAsString(),
+                                                           pad->GetNetname(),
+                                                           zone->GetNetname() ) );
                 }
             }
         }

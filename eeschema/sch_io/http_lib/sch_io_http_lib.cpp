@@ -397,16 +397,14 @@ LIB_SYMBOL* SCH_IO_HTTP_LIB::loadSymbolFromPart( const wxString&          aSymbo
         }
         else if( !symbolId.IsValid() )
         {
-            wxLogTrace( traceHTTPLib,
-                        wxT( "loadSymbolFromPart: source symbol id '%s' is invalid, "
-                             "will create empty symbol" ),
+            wxLogTrace( traceHTTPLib, wxT( "loadSymbolFromPart: source symbol id '%s' is invalid, "
+                                           "will create empty symbol" ),
                         symbolIdStr );
         }
         else
         {
-            wxLogTrace( traceHTTPLib,
-                        wxT( "loadSymbolFromPart: source symbol '%s' not found, "
-                             "will create empty symbol" ),
+            wxLogTrace( traceHTTPLib, wxT( "loadSymbolFromPart: source symbol '%s' not found, "
+                                           "will create empty symbol" ),
                         symbolIdStr );
         }
     }

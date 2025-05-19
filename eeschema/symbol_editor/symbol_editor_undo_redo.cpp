@@ -37,8 +37,6 @@ void SYMBOL_EDIT_FRAME::PushSymbolToUndoList( const wxString& aDescription, LIB_
     if( !aSymbolCopy )
         return;
 
-    auto* drawingTool = GetToolManager()->GetTool<SYMBOL_EDITOR_DRAWING_TOOLS>();
-
     PICKED_ITEMS_LIST* lastcmd = new PICKED_ITEMS_LIST();
 
     // Clear current flags (which can be temporary set by a current edit command).
@@ -47,7 +45,6 @@ void SYMBOL_EDIT_FRAME::PushSymbolToUndoList( const wxString& aDescription, LIB_
     aSymbolCopy->SetFlags( UR_TRANSIENT );
 
     ITEM_PICKER wrapper( GetScreen(), aSymbolCopy, aUndoType );
-    wrapper.SetGroupId( drawingTool->GetLastPin() );
     lastcmd->PushItem( wrapper );
     lastcmd->SetDescription( aDescription );
     PushCommandToUndoList( lastcmd );
@@ -91,7 +88,6 @@ void SYMBOL_EDIT_FRAME::GetSymbolFromRedoList()
 
     oldSymbol->SetFlags( UR_TRANSIENT );
     ITEM_PICKER undoWrapper( GetScreen(), oldSymbol, undoRedoType );
-    undoWrapper.SetGroupId( drawingTool->GetLastPin() );
     undoCommand->SetDescription( description );
     undoCommand->PushItem( undoWrapper );
     PushCommandToUndoList( undoCommand );
@@ -147,7 +143,6 @@ void SYMBOL_EDIT_FRAME::GetSymbolFromUndoList()
 
     oldSymbol->SetFlags( UR_TRANSIENT );
     ITEM_PICKER redoWrapper( GetScreen(), oldSymbol, undoRedoType );
-    redoWrapper.SetGroupId( drawingTool->GetLastPin() );
     redoCommand->PushItem( redoWrapper );
     redoCommand->SetDescription( description );
     PushCommandToRedoList( redoCommand );

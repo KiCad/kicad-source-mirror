@@ -340,8 +340,8 @@ void BOARD_INSPECTION_TOOL::InspectDRCError( const std::shared_ptr<RC_ITEM>& aDR
 {
     wxCHECK( m_frame, /* void */ );
 
-    BOARD_ITEM*           a = m_frame->GetBoard()->GetItem( aDRCItem->GetMainItemID() );
-    BOARD_ITEM*           b = m_frame->GetBoard()->GetItem( aDRCItem->GetAuxItemID() );
+    BOARD_ITEM*           a = m_frame->GetBoard()->ResolveItem( aDRCItem->GetMainItemID() );
+    BOARD_ITEM*           b = m_frame->GetBoard()->ResolveItem( aDRCItem->GetAuxItemID() );
     BOARD_CONNECTED_ITEM* ac = dynamic_cast<BOARD_CONNECTED_ITEM*>( a );
     BOARD_CONNECTED_ITEM* bc = dynamic_cast<BOARD_CONNECTED_ITEM*>( b );
     PCB_LAYER_ID          layer = m_frame->GetActiveLayer();
@@ -380,7 +380,7 @@ void BOARD_INSPECTION_TOOL::InspectDRCError( const std::shared_ptr<RC_ITEM>& aDR
     {
         for( KIID id : aDRCItem->GetIDs() )
         {
-            bc = dynamic_cast<BOARD_CONNECTED_ITEM*>( m_frame->GetBoard()->GetItem( id ) );
+            bc = dynamic_cast<BOARD_CONNECTED_ITEM*>( m_frame->GetBoard()->ResolveItem( id, true ) );
 
             if( ac && bc && ac->GetNetCode() != bc->GetNetCode() )
                 break;

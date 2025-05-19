@@ -51,7 +51,7 @@ public:
     /*
      * Clone() this and all descendants
      */
-    PCB_GENERATOR* DeepClone() const override;
+    PCB_GENERATOR* DeepClone() const;
 
     virtual void EditStart( GENERATOR_TOOL* aTool, BOARD* aBoard, BOARD_COMMIT* aCommit );
 

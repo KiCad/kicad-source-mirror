@@ -1255,7 +1255,7 @@ void PCB_IO_KICAD_SEXPR_PARSER::resolveGroups( BOARD_ITEM* aParent )
 
                 if( BOARD* board = dynamic_cast<BOARD*>( aParent ) )
                 {
-                    aItem = board->GetItem( aId );
+                    aItem = board->ResolveItem( aId, true );
                 }
                 else if( FOOTPRINT* footprint = dynamic_cast<FOOTPRINT*>( aParent ) )
                 {
@@ -1297,8 +1297,8 @@ void PCB_IO_KICAD_SEXPR_PARSER::resolveGroups( BOARD_ITEM* aParent )
 
             if( !gen )
             {
-                THROW_IO_ERROR( wxString::Format(
-                        _( "Cannot create generated object of type '%s'" ), genInfo->genType ) );
+                THROW_IO_ERROR( wxString::Format( _( "Cannot create generated object of type '%s'" ),
+                                                  genInfo->genType ) );
             }
 
             gen->SetLayer( genInfo->layer );
@@ -1339,16 +1339,10 @@ void PCB_IO_KICAD_SEXPR_PARSER::resolveGroups( BOARD_ITEM* aParent )
                 else
                     item = getItem( aUuid );
 
-                if( !item || item->Type() == NOT_USED )
-                {
-                    // This is the deleted item singleton, which means we didn't find the uuid.
-                    continue;
-                }
-
                 // We used to allow fp items in non-footprint groups.  It was a mistake.  Check
                 // to make sure they the item and group are owned by the same parent (will both
                 // be nullptr in the board case).
-                if( item->GetParentFootprint() == group->GetParentFootprint() )
+                if( item && item->GetParentFootprint() == group->GetParentFootprint() )
                     group->AddItem( item );
             }
         }
@@ -1388,9 +1382,8 @@ void PCB_IO_KICAD_SEXPR_PARSER::parseHeader()
 
 void PCB_IO_KICAD_SEXPR_PARSER::parseGeneralSection()
 {
-     wxCHECK_RET( CurTok() == T_general,
-                 wxT( "Cannot parse " ) + GetTokenString( CurTok() ) +
-                 wxT( " as a general section." ) );
+    wxCHECK_RET( CurTok() == T_general,
+                 wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as a general section." ) );
 
     T token;
 
@@ -6171,7 +6164,8 @@ void PCB_IO_KICAD_SEXPR_PARSER::parseGROUP( BOARD_ITEM* aParent )
             {
                 if( static_cast<int>( name.size() ) > bad_pos )
                 {
-                    wxString msg = wxString::Format( _( "Group library link %s contains invalid character '%c'" ), name,
+                    wxString msg = wxString::Format( _( "Group library link %s contains invalid character '%c'" ),
+                                                     name,
                                                      name[bad_pos] );
 
                     THROW_PARSE_ERROR( msg, CurSource(), CurLine(), CurLineNumber(), CurOffset() );
@@ -6204,8 +6198,8 @@ void PCB_IO_KICAD_SEXPR_PARSER::parseGROUP( BOARD_ITEM* aParent )
 
 void PCB_IO_KICAD_SEXPR_PARSER::parseGENERATOR( BOARD_ITEM* aParent )
 {
-    wxCHECK_RET( CurTok() == T_generated, wxT( "Cannot parse " ) + GetTokenString( CurTok() )
-                                                  + wxT( " as PCB_GENERATOR." ) );
+    wxCHECK_RET( CurTok() == T_generated,
+                 wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as PCB_GENERATOR." ) );
 
     T token;
 
@@ -6259,7 +6253,9 @@ void PCB_IO_KICAD_SEXPR_PARSER::parseGENERATOR( BOARD_ITEM* aParent )
             NeedRIGHT();
             break;
 
-        case T_members: parseGROUP_members( genInfo ); break;
+        case T_members:
+            parseGROUP_members( genInfo );
+            break;
 
         default:
         {

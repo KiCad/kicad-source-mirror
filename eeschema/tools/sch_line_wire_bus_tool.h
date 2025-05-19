@@ -96,9 +96,11 @@ public:
     int TrimOverLappingWires( SCH_COMMIT* aCommit, SCH_SELECTION* aSelection );
 
 private:
-    int doDrawSegments( const TOOL_EVENT& aTool, int aType, bool aQuitOnDraw );
+    int doDrawSegments( const TOOL_EVENT& aTool, SCH_COMMIT& aCommit, int aType,
+                        bool aQuitOnDraw );
 
-    SCH_LINE* startSegments( int aType, const VECTOR2D& aPos, SCH_LINE* aSegment = nullptr );
+    SCH_LINE* startSegments( SCH_COMMIT& aCommit, int aType, const VECTOR2D& aPos,
+                             SCH_LINE* aSegment = nullptr );
 
     /**
      * Choose a bus to unfold based on the current tool selection.
@@ -112,10 +114,10 @@ private:
      * @param aPos The position to unfold the bus from, which will be the cursor if
      *            not provided, and will then be snapped to the selected bus segment.
     */
-    SCH_LINE* doUnfoldBus( const wxString&                aNet,
+    SCH_LINE* doUnfoldBus( SCH_COMMIT& aCommit, const wxString& aNet,
                            const std::optional<VECTOR2I>& aPos = std::nullopt );
 
-    void finishSegments();
+    void finishSegments( SCH_COMMIT& aCommit );
 
     /**
      * Iterate over the wire list and removes the null segments and

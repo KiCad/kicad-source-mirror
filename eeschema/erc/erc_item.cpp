@@ -425,7 +425,7 @@ void ERC_TREE_MODEL::GetValue( wxVariant& aVariant, wxDataViewItem const& aItem,
         }
         else
         {
-            msg = getItemDesc( schEditFrame->GetItem( ercItem->GetMainItemID() ),
+            msg = getItemDesc( schEditFrame->ResolveItem( ercItem->GetMainItemID() ),
                                ercItem->MainItemHasSheetPath() ? ercItem->GetMainItemSheetPath()
                                                                : schEditFrame->GetCurrentSheet() );
         }
@@ -433,18 +433,18 @@ void ERC_TREE_MODEL::GetValue( wxVariant& aVariant, wxDataViewItem const& aItem,
         break;
 
     case RC_TREE_NODE::AUX_ITEM:
-        msg = getItemDesc( schEditFrame->GetItem( ercItem->GetAuxItemID() ),
+        msg = getItemDesc( schEditFrame->ResolveItem( ercItem->GetAuxItemID() ),
                            ercItem->AuxItemHasSheetPath() ? ercItem->GetAuxItemSheetPath()
                                                           : schEditFrame->GetCurrentSheet() );
         break;
 
     case RC_TREE_NODE::AUX_ITEM2:
-        msg = getItemDesc( schEditFrame->GetItem( ercItem->GetAuxItem2ID() ),
+        msg = getItemDesc( schEditFrame->ResolveItem( ercItem->GetAuxItem2ID() ),
                            schEditFrame->GetCurrentSheet() );
         break;
 
     case RC_TREE_NODE::AUX_ITEM3:
-        msg = getItemDesc( schEditFrame->GetItem( ercItem->GetAuxItem3ID() ),
+        msg = getItemDesc( schEditFrame->ResolveItem( ercItem->GetAuxItem3ID() ),
                            schEditFrame->GetCurrentSheet() );
         break;
 

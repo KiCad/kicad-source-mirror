@@ -130,7 +130,7 @@ void LoadBoard( SETTINGS_MANAGER& aSettingsManager, const wxString& aRelPath,
 
 BOARD_ITEM& RequireBoardItemWithTypeAndId( const BOARD& aBoard, KICAD_T aItemType, const KIID& aID )
 {
-    BOARD_ITEM* item = aBoard.GetItem( aID );
+    BOARD_ITEM* item = aBoard.ResolveItem( aID, true );
 
     BOOST_REQUIRE( item );
     BOOST_REQUIRE_EQUAL( item->Type(), aItemType );

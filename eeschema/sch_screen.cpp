@@ -306,13 +306,6 @@ void SCH_SCREEN::FreeDrawList()
     std::copy_if( m_rtree.begin(), m_rtree.end(), std::back_inserter( delete_list ),
             []( SCH_ITEM* aItem )
             {
-                // Untangle group parents before doing any deleting
-                if( aItem->Type() == SCH_GROUP_T )
-                {
-                    for( EDA_ITEM* item : static_cast<SCH_GROUP*>(aItem)->GetItems() )
-                        item->SetParentGroup( nullptr );
-                }
-
                 return ( aItem->Type() != SCH_SHEET_PIN_T && aItem->Type() != SCH_FIELD_T );
             } );
 

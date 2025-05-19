@@ -227,15 +227,6 @@ private:
     ///< Rebuilds the ratsnest for operations that require it outside the commit rebuild
     void rebuildConnectivity();
 
-    ///< Removes all items from the set which are children of other PCB_GROUP or PCB_GENERATOR
-    ///< items in the set
-    void removeNonRootItems( std::unordered_set<EDA_ITEM*>& items );
-
-    ///< Recursively adds any child items of the given item to the set
-    void getChildItemsOfGroupsAndGenerators( EDA_ITEM*                        item,
-                                             std::unordered_set<EDA_ITEM*>& children );
-
-
 private:
     PCB_SELECTION_TOOL*   m_selectionTool;
     bool                  m_dragging;         // Indicates objects are currently being dragged

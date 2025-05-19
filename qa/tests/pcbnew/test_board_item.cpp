@@ -191,7 +191,7 @@ BOOST_AUTO_TEST_CASE( Move )
                         if( originalDimension != nullptr )
                             originalDimension->Update();
 
-                        auto     item = std::unique_ptr<BOARD_ITEM>( aOriginalItem->Duplicate() );
+                        auto     item = std::unique_ptr<BOARD_ITEM>( aOriginalItem->Duplicate( IGNORE_PARENT_GROUP ) );
                         VECTOR2I originalPos = item->GetPosition();
 
                         // Move to a point, then go back.
@@ -235,7 +235,7 @@ BOOST_AUTO_TEST_CASE( Rotate )
                         if( originalDimension != nullptr )
                             originalDimension->Update();
 
-                        auto item = std::unique_ptr<BOARD_ITEM>( aOriginalItem->Duplicate() );
+                        auto item = std::unique_ptr<BOARD_ITEM>( aOriginalItem->Duplicate( IGNORE_PARENT_GROUP ) );
 
                         // Four equivalent 90 degree rotations are an identity.
 
@@ -276,7 +276,7 @@ BOOST_AUTO_TEST_CASE( FlipLeftRight )
                         if( originalDimension != nullptr )
                             originalDimension->Update();
 
-                        auto item = std::unique_ptr<BOARD_ITEM>( aOriginalItem->Duplicate() );
+                        auto item = std::unique_ptr<BOARD_ITEM>( aOriginalItem->Duplicate( IGNORE_PARENT_GROUP ) );
 
                         // Two equivalent flips are an identity.
 
@@ -315,7 +315,7 @@ BOOST_AUTO_TEST_CASE( FlipUpDown )
                         if( originalDimension != nullptr )
                             originalDimension->Update();
 
-                        auto item = std::unique_ptr<BOARD_ITEM>( aOriginalItem->Duplicate() );
+                        auto item = std::unique_ptr<BOARD_ITEM>( aOriginalItem->Duplicate( IGNORE_PARENT_GROUP ) );
 
                         // Two equivalent flips are an identity.
 

@@ -221,7 +221,7 @@ FOOTPRINT* PCB_IO_CADSTAR_ARCHIVE::FootprintLoad( const wxString&        aLibrar
     if( !m_cache.at( aLibraryPath ).at( aFootprintName ) )
         return nullptr;
 
-    return static_cast<FOOTPRINT*>( m_cache.at( aLibraryPath ).at( aFootprintName )->Duplicate() );
+    return static_cast<FOOTPRINT*>( m_cache.at( aLibraryPath ).at( aFootprintName )->Duplicate( IGNORE_PARENT_GROUP ) );
 }
 
 

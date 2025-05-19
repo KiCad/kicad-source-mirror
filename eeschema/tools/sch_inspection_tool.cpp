@@ -250,7 +250,7 @@ void SCH_INSPECTION_TOOL::InspectERCError( const std::shared_ptr<RC_ITEM>& aERCI
 
     wxCHECK( frame, /* void */ );
 
-    EDA_ITEM* a = frame->GetItem( aERCItem->GetMainItemID() );
+    EDA_ITEM* a = frame->ResolveItem( aERCItem->GetMainItemID() );
 
     if( aERCItem->GetErrorCode() == ERCE_BUS_TO_NET_CONFLICT )
     {

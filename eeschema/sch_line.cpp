@@ -543,9 +543,9 @@ SCH_LINE* SCH_LINE::MergeOverlap( SCH_SCREEN* aScreen, SCH_LINE* aLine, bool aCh
 }
 
 
-SCH_LINE* SCH_LINE::BreakAt( const VECTOR2I& aPoint )
+SCH_LINE* SCH_LINE::BreakAt( SCH_COMMIT* aCommit, const VECTOR2I& aPoint )
 {
-    SCH_LINE* newSegment = static_cast<SCH_LINE*>( Duplicate() );
+    SCH_LINE* newSegment = static_cast<SCH_LINE*>( Duplicate( aCommit ) );
 
     newSegment->SetStartPoint( aPoint );
     newSegment->SetConnectivityDirty( true );
@@ -804,8 +804,6 @@ bool SCH_LINE::HitTest( const BOX2I& aRect, bool aContained, int aAccuracy ) con
 
 void SCH_LINE::swapData( SCH_ITEM* aItem )
 {
-    SCH_ITEM::SwapFlags( aItem );
-
     SCH_LINE* item = (SCH_LINE*) aItem;
 
     std::swap( m_layer, item->m_layer );

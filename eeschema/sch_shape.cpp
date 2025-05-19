@@ -59,8 +59,6 @@ int SCH_SHAPE::GetArcToSegMaxErrorIU( bool aHighDefinition ) const
 
 void SCH_SHAPE::swapData( SCH_ITEM* aItem )
 {
-    SCH_ITEM::SwapFlags( aItem );
-
     SCH_SHAPE* shape = static_cast<SCH_SHAPE*>( aItem );
 
     EDA_SHAPE::SwapShape( shape );

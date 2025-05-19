@@ -410,7 +410,7 @@ void DIALOG_GENERATORS::OnItemSelected( wxDataViewEvent& aEvent )
         wxVariant var;
         model->GetValue( var, viewItem, uuidCol );
 
-        BOARD_ITEM* brdItem = m_currentBoard->GetItem( var.GetString() );
+        BOARD_ITEM* brdItem = m_currentBoard->ResolveItem( var.GetString() );
 
         if( !brdItem || brdItem->Type() != KICAD_T::PCB_GENERATOR_T )
             continue;
@@ -447,7 +447,7 @@ void DIALOG_GENERATORS::OnRebuildTypeClick( wxCommandEvent& event )
         wxVariant var;
         model->GetValueByRow( var, row, uuidCol );
 
-        BOARD_ITEM* item = m_currentBoard->GetItem( var.GetString() );
+        BOARD_ITEM* item = m_currentBoard->ResolveItem( var.GetString() );
 
         if( !item || item->Type() != KICAD_T::PCB_GENERATOR_T )
             continue;

@@ -47,90 +47,14 @@ PCB_GROUP::PCB_GROUP( BOARD_ITEM* aParent, KICAD_T idtype, PCB_LAYER_ID aLayer )
 }
 
 
-bool PCB_GROUP::IsGroupableType( KICAD_T aType )
-{
-    switch ( aType )
-    {
-    case PCB_FOOTPRINT_T:
-    case PCB_PAD_T:
-    case PCB_SHAPE_T:
-    case PCB_REFERENCE_IMAGE_T:
-    case PCB_FIELD_T:
-    case PCB_TEXT_T:
-    case PCB_TEXTBOX_T:
-    case PCB_TABLE_T:
-    case PCB_GROUP_T:
-    case PCB_GENERATOR_T:
-    case PCB_TRACE_T:
-    case PCB_VIA_T:
-    case PCB_ARC_T:
-    case PCB_DIMENSION_T:
-    case PCB_DIM_ALIGNED_T:
-    case PCB_DIM_LEADER_T:
-    case PCB_DIM_CENTER_T:
-    case PCB_DIM_RADIAL_T:
-    case PCB_DIM_ORTHOGONAL_T:
-    case PCB_ZONE_T:
-        return true;
-    default:
-        return false;
-    }
-}
-
-
-bool PCB_GROUP::AddItem( EDA_ITEM* aItem )
-{
-    wxCHECK_MSG( aItem, false, wxT( "Nullptr added to group." ) );
-
-    wxCHECK_MSG( IsGroupableType( aItem->Type() ), false,
-            wxT( "Invalid item type added to group: " ) + aItem->GetTypeDesc() );
-
-    // Items can only be in one group at a time
-    if( aItem->GetParentGroup() )
-        aItem->GetParentGroup()->RemoveItem( aItem );
-
-    m_items.insert( aItem );
-    aItem->SetParentGroup( this );
-    return true;
-}
-
-
-bool PCB_GROUP::RemoveItem( EDA_ITEM* aItem )
-{
-    wxCHECK_MSG( aItem, false, wxT( "Nullptr removed from group." ) );
-
-    // Only clear the item's group field if it was inside this group
-    if( m_items.erase( aItem ) == 1 )
-    {
-        aItem->SetParentGroup( nullptr );
-        return true;
-    }
-
-    return false;
-}
-
-
-void PCB_GROUP::RemoveAll()
-{
-    for( EDA_ITEM* item : m_items )
-        item->SetParentGroup( nullptr );
-
-    m_items.clear();
-}
-
-
 std::unordered_set<BOARD_ITEM*> PCB_GROUP::GetBoardItems() const
 {
     std::unordered_set<BOARD_ITEM*> items;
 
     for( EDA_ITEM* item : m_items )
     {
-        BOARD_ITEM* board_item = dynamic_cast<BOARD_ITEM*>( item );
-
-        if( board_item )
-        {
-            items.insert( board_item );
-        }
+        if( item->IsBOARD_ITEM() )
+            items.insert( static_cast<BOARD_ITEM*>( item ) );
     }
 
     return items;
@@ -244,17 +168,17 @@ PCB_GROUP* PCB_GROUP::DeepClone() const
 }
 
 
-PCB_GROUP* PCB_GROUP::DeepDuplicate() const
+PCB_GROUP* PCB_GROUP::DeepDuplicate( bool addToParentGroup, BOARD_COMMIT* aCommit ) const
 {
-    PCB_GROUP* newGroup = static_cast<PCB_GROUP*>( Duplicate() );
+    PCB_GROUP* newGroup = static_cast<PCB_GROUP*>( Duplicate( addToParentGroup, aCommit ) );
     newGroup->m_items.clear();
 
     for( EDA_ITEM* member : m_items )
     {
         if( member->Type() == PCB_GROUP_T )
-            newGroup->AddItem( static_cast<PCB_GROUP*>( member )->DeepDuplicate() );
+            newGroup->AddItem( static_cast<PCB_GROUP*>( member )->DeepDuplicate( IGNORE_PARENT_GROUP ) );
         else
-            newGroup->AddItem( static_cast<BOARD_ITEM*>( static_cast<BOARD_ITEM*>( member )->Duplicate() ) );
+            newGroup->AddItem( static_cast<BOARD_ITEM*>( member )->Duplicate( IGNORE_PARENT_GROUP ) );
     }
 
     return newGroup;
@@ -267,25 +191,6 @@ void PCB_GROUP::swapData( BOARD_ITEM* aImage )
     PCB_GROUP* image = static_cast<PCB_GROUP*>( aImage );
 
     std::swap( *this, *image );
-
-    // A group doesn't own its children (they're owned by the board), so undo doesn't do a
-    // deep clone when making an image.  However, it's still safest to update the parentGroup
-    // pointers of the group's children -- we just have to be careful to do it in the right
-    // order in case any of the children are shared (ie: image first, "this" second so that
-    // any shared children end up with "this").
-    image->RunOnChildren(
-            [&]( BOARD_ITEM* child )
-            {
-                child->SetParentGroup( image );
-            },
-            RECURSE_MODE::NO_RECURSE );
-
-    RunOnChildren(
-            [&]( BOARD_ITEM* child )
-            {
-                child->SetParentGroup( this );
-            },
-            RECURSE_MODE::NO_RECURSE );
 }
 
 
@@ -325,8 +230,8 @@ std::shared_ptr<SHAPE> PCB_GROUP::GetEffectiveShape( PCB_LAYER_ID aLayer, FLASHI
 {
     std::shared_ptr<SHAPE_COMPOUND> shape = std::make_shared<SHAPE_COMPOUND>();
 
-    for( EDA_ITEM* item : m_items )
-        shape->AddShape( static_cast<BOARD_ITEM*>( item )->GetEffectiveShape( aLayer, aFlash )->Clone() );
+    for( BOARD_ITEM* item : GetBoardItems() )
+        shape->AddShape( item->GetEffectiveShape( aLayer, aFlash )->Clone() );
 
     return shape;
 }

@@ -70,8 +70,6 @@ EDA_ITEM* SCH_MARKER::Clone() const
 
 void SCH_MARKER::swapData( SCH_ITEM* aItem )
 {
-    SCH_ITEM::SwapFlags( aItem );
-
     SCH_MARKER* item = static_cast<SCH_MARKER*>( aItem );
 
     std::swap( m_isLegacyMarker, item->m_isLegacyMarker );
@@ -84,6 +82,7 @@ void SCH_MARKER::swapData( SCH_ITEM* aItem )
     std::swap( m_scalingFactor, item->m_scalingFactor );
     std::swap( m_shapeBoundingBox, item->m_shapeBoundingBox );
 
+    // TODO: isn't this going to swap all the stuff above a second time?
     std::swap( *((SCH_MARKER*) this), *((SCH_MARKER*) aItem ) );
 }
 
@@ -106,7 +105,7 @@ wxString SCH_MARKER::SerializeToString() const
             || m_rcItem->GetErrorCode() == ERCE_GENERIC_ERROR
             || m_rcItem->GetErrorCode() == ERCE_UNRESOLVED_VARIABLE )
     {
-        SCH_ITEM* sch_item = Schematic()->GetItem( erc->GetMainItemID() );
+        SCH_ITEM* sch_item = Schematic()->ResolveItem( erc->GetMainItemID() );
         SCH_ITEM* parent = static_cast<SCH_ITEM*>( sch_item->GetParent() );
         EDA_TEXT* text_item = dynamic_cast<EDA_TEXT*>( sch_item );
 
@@ -163,7 +162,7 @@ SCH_MARKER* SCH_MARKER::DeserializeFromString( const SCH_SHEET_LIST& aSheetList,
         if( !props[4].IsEmpty() )
         {
             KIID      uuid = niluuid;
-            SCH_ITEM* parent = aSheetList.GetItem( KIID( props[3] ) );
+            SCH_ITEM* parent = aSheetList.ResolveItem( KIID( props[3] ) );
 
             // Check fields and pins for a match
             parent->RunOnChildren(
@@ -386,10 +385,10 @@ void SCH_MARKER::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_
         EDA_ITEM* auxItem = nullptr;
 
         if( m_rcItem->GetMainItemID() != niluuid )
-            mainItem = aFrame->GetItem( m_rcItem->GetMainItemID() );
+            mainItem = aFrame->ResolveItem( m_rcItem->GetMainItemID() );
 
         if( m_rcItem->GetAuxItemID() != niluuid )
-            auxItem = aFrame->GetItem( m_rcItem->GetAuxItemID() );
+            auxItem = aFrame->ResolveItem( m_rcItem->GetAuxItemID() );
 
         if( mainItem )
             mainText = mainItem->GetItemDescription( aFrame, true );

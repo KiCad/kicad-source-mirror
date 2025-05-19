@@ -2115,7 +2115,7 @@ int EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
         for( EDA_ITEM* item : selection )
         {
             if( !item->IsNew() && !item->IsMoving() )
-                commit->Modify( item );
+                commit->Modify( item, nullptr, RECURSE_MODE::RECURSE );
 
             if( item->IsBOARD_ITEM() )
             {
@@ -2453,7 +2453,7 @@ int EDIT_TOOL::Flip( const TOOL_EVENT& aEvent )
         BOARD_ITEM* boardItem = static_cast<BOARD_ITEM*>( item );
 
         if( !boardItem->IsNew() && !boardItem->IsMoving() )
-            commit->Modify( boardItem );
+            commit->Modify( boardItem, nullptr, RECURSE_MODE::RECURSE );
 
         boardItem->Flip( refPt, flipDirection );
         boardItem->Normalize();
@@ -2487,53 +2487,6 @@ int EDIT_TOOL::Flip( const TOOL_EVENT& aEvent )
 }
 
 
-void EDIT_TOOL::getChildItemsOfGroupsAndGenerators( EDA_ITEM*                        item,
-                                                    std::unordered_set<EDA_ITEM*>& children )
-{
-    wxASSERT( item->Type() == PCB_GROUP_T || item->Type() == PCB_GENERATOR_T );
-
-    std::unordered_set<EDA_ITEM*>& childItems = static_cast<PCB_GROUP*>( item )->GetItems();
-
-    for( EDA_ITEM* childItem : childItems )
-    {
-        children.insert( childItem );
-
-        if( childItem->Type() == PCB_GROUP_T || childItem->Type() == PCB_GENERATOR_T )
-            getChildItemsOfGroupsAndGenerators( childItem, children );
-    }
-}
-
-
-void EDIT_TOOL::removeNonRootItems( std::unordered_set<EDA_ITEM*>& items )
-{
-    auto itr = items.begin();
-
-    while( itr != items.end() )
-    {
-        EDA_ITEM* item = *itr;
-
-        if( item->IsBOARD_ITEM() )
-        {
-            BOARD_ITEM* curItem = static_cast<BOARD_ITEM*>( item );
-
-            if( curItem->Type() == PCB_GROUP_T || curItem->Type() == PCB_GENERATOR_T )
-            {
-                std::unordered_set<EDA_ITEM*> childItems;
-                getChildItemsOfGroupsAndGenerators( curItem, childItems );
-
-                std::for_each( childItems.begin(), childItems.end(),
-                               [&]( auto eraseItem )
-                               {
-                                   items.erase( eraseItem );
-                               } );
-            }
-        }
-
-        ++itr;
-    }
-}
-
-
 void EDIT_TOOL::DeleteItems( const PCB_SELECTION& aItems, bool aIsCut )
 {
     PCB_BASE_EDIT_FRAME* editFrame = getEditFrame<PCB_BASE_EDIT_FRAME>();
@@ -2542,25 +2495,17 @@ void EDIT_TOOL::DeleteItems( const PCB_SELECTION& aItems, bool aIsCut )
     // As we are about to remove items, they have to be removed from the selection first
     m_toolMgr->RunAction( ACTIONS::selectionClear );
 
-    // Only delete items that are the root of a selected set (e.g. only delete grouped / generated
-    // items from the parent item, not individually) - issue #17527
-    std::unordered_set<EDA_ITEM*> rootItems( aItems.begin(), aItems.end() );
-    removeNonRootItems( rootItems );
-
     int itemsDeleted = 0;
     int fieldsHidden = 0;
     int fieldsAlreadyHidden = 0;
 
-    for( EDA_ITEM* item : rootItems )
+    for( EDA_ITEM* item : aItems )
     {
         if( !item->IsBOARD_ITEM() )
             continue;
 
         BOARD_ITEM* board_item = static_cast<BOARD_ITEM*>( item );
         FOOTPRINT*  parentFP = board_item->GetParentFootprint();
-
-        if( board_item->GetParentGroup() && !parentFP )
-            commit.Stage( board_item, CHT_UNGROUP );
 
         switch( item->Type() )
         {
@@ -2621,13 +2566,6 @@ void EDIT_TOOL::DeleteItems( const PCB_SELECTION& aItems, bool aIsCut )
             board_item->RunOnChildren(
                          [&commit]( BOARD_ITEM* aItem )
                          {
-                             commit.Stage( aItem, CHT_UNGROUP );
-                         },
-                         RECURSE_MODE::RECURSE );
-
-            board_item->RunOnChildren(
-                         [&commit]( BOARD_ITEM* aItem )
-                         {
                              commit.Remove( aItem );
                          },
                          RECURSE_MODE::RECURSE );
@@ -2682,7 +2620,7 @@ void EDIT_TOOL::DeleteItems( const PCB_SELECTION& aItems, bool aIsCut )
             break;
 
         case PCB_GENERATOR_T:
-            if( rootItems.size() == 1 )
+            if( aItems.Size() == 1 )
             {
                 PCB_GENERATOR* generator = static_cast<PCB_GENERATOR*>( board_item );
 
@@ -2692,9 +2630,6 @@ void EDIT_TOOL::DeleteItems( const PCB_SELECTION& aItems, bool aIsCut )
             else
             {
                 PCB_GENERATOR* generator = static_cast<PCB_GENERATOR*>( board_item );
-
-                for( EDA_ITEM* member : generator->GetItems() )
-                    commit.Stage( member, CHT_UNGROUP );
 
                 for( EDA_ITEM* member : generator->GetItems() )
                     commit.Remove( member );
@@ -2769,6 +2704,7 @@ int EDIT_TOOL::Remove( const TOOL_EVENT& aEvent )
         selectionCopy = m_selectionTool->RequestSelection(
                 []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, PCB_SELECTION_TOOL* sTool )
                 {
+                    sTool->FilterCollectorForHierarchy( aCollector, true );
                 } );
 
         size_t beforeFPCount = selectionCopy.CountType( PCB_FOOTPRINT_T );
@@ -2776,6 +2712,7 @@ int EDIT_TOOL::Remove( const TOOL_EVENT& aEvent )
         m_selectionTool->RequestSelection(
                 []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, PCB_SELECTION_TOOL* sTool )
                 {
+                    sTool->FilterCollectorForHierarchy( aCollector, true );
                     sTool->FilterCollectorForFreePads( aCollector );
                 } );
 
@@ -2799,6 +2736,7 @@ int EDIT_TOOL::Remove( const TOOL_EVENT& aEvent )
         selectionCopy = m_selectionTool->RequestSelection(
                 []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, PCB_SELECTION_TOOL* sTool )
                 {
+                    sTool->FilterCollectorForHierarchy( aCollector, true );
                     sTool->FilterCollectorForFreePads( aCollector );
                 },
                 true /* prompt user regarding locked items */ );
@@ -2864,7 +2802,7 @@ int EDIT_TOOL::MoveExact( const TOOL_EVENT& aEvent )
             BOARD_ITEM* boardItem = static_cast<BOARD_ITEM*>( item );
 
             if( !boardItem->IsNew() )
-                commit.Modify( boardItem );
+                commit.Modify( boardItem, nullptr, RECURSE_MODE::RECURSE );
 
             if( !boardItem->GetParent() || !boardItem->GetParent()->IsSelected() )
                 boardItem->Move( translation );
@@ -2958,11 +2896,9 @@ int EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
         BOARD_ITEM* dupe_item = nullptr;
         BOARD_ITEM* orig_item = static_cast<BOARD_ITEM*>( item );
 
-        if( !m_isFootprintEditor
-                && /*FOOTPRINT* parentFootprint =*/ orig_item->GetParentFootprint() )
+        if( !m_isFootprintEditor && orig_item->GetParentFootprint() )
         {
             // No sub-footprint modifications allowed outside of footprint editor
-            // and parentFootprint is not (yet?) used
         }
         else
         {
@@ -2984,9 +2920,9 @@ int EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
             case PCB_DIM_ORTHOGONAL_T:
             case PCB_DIM_LEADER_T:
                 if( m_isFootprintEditor )
-                    dupe_item = parentFootprint->DuplicateItem( orig_item );
+                    dupe_item = parentFootprint->DuplicateItem( true, &commit, orig_item );
                 else
-                    dupe_item = orig_item->Duplicate();
+                    dupe_item = orig_item->Duplicate( true, &commit );
 
                 // Clear the selection flag here, otherwise the PCB_SELECTION_TOOL
                 // will not properly select it later on
@@ -3003,7 +2939,7 @@ int EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
                 break;
 
             case PCB_PAD_T:
-                dupe_item = parentFootprint->DuplicateItem( orig_item );
+                dupe_item = parentFootprint->DuplicateItem( true, &commit, orig_item );
 
                 if( increment && static_cast<PAD*>( dupe_item )->CanHaveNumber() )
                 {
@@ -3028,7 +2964,7 @@ int EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
 
             case PCB_GENERATOR_T:
             case PCB_GROUP_T:
-                dupe_item = static_cast<PCB_GROUP*>( orig_item )->DeepDuplicate();
+                dupe_item = static_cast<PCB_GROUP*>( orig_item )->DeepDuplicate( true, &commit );
 
                 dupe_item->RunOnChildren(
                         [&]( BOARD_ITEM* aItem )
@@ -3045,8 +2981,7 @@ int EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
                 break;
 
             default:
-                wxASSERT_MSG( false, wxString::Format( wxT( "Unhandled item type %d" ),
-                                                       orig_item->Type() ) );
+                UNIMPLEMENTED_FOR( orig_item->Type() );
                 break;
             }
         }
@@ -3117,14 +3052,6 @@ int EDIT_TOOL::Increment( const TOOL_EVENT& aEvent )
     if( !commit )
         commit = &localCommit;
 
-    const auto modifyItem = [&]( EDA_ITEM& aItem )
-    {
-        if( aItem.IsNew() )
-            m_toolMgr->PostAction( ACTIONS::refreshPreview );
-        else
-            commit->Modify( &aItem );
-    };
-
     for( EDA_ITEM* item : selection )
     {
         switch( item->Type() )
@@ -3146,7 +3073,9 @@ int EDIT_TOOL::Increment( const TOOL_EVENT& aEvent )
 
             if( newNumber )
             {
-                modifyItem( pad );
+                if( !pad.IsNew() )
+                    commit->Modify( &pad );
+
                 pad.SetNumber( *newNumber );
             }
 
@@ -3161,7 +3090,9 @@ int EDIT_TOOL::Increment( const TOOL_EVENT& aEvent )
 
             if( newText )
             {
-                modifyItem( text );
+                if( !text.IsNew() )
+                    commit->Modify( &text );
+
                 text.SetText( *newText );
             }
 
@@ -3171,6 +3102,9 @@ int EDIT_TOOL::Increment( const TOOL_EVENT& aEvent )
             break;
         }
     }
+
+    if( selection.Front()->IsMoving() )
+        m_toolMgr->PostAction( ACTIONS::refreshPreview );
 
     commit->Push( _( "Increment" ) );
 
@@ -3367,23 +3301,8 @@ int EDIT_TOOL::copyToClipboard( const TOOL_EVENT& aEvent )
     PCB_SELECTION& selection = m_selectionTool->RequestSelection(
             []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, PCB_SELECTION_TOOL* sTool )
             {
-                for( int i = aCollector.GetCount() - 1; i >= 0; --i )
-                {
-                    BOARD_ITEM* item = aCollector[i];
-
-                    // We can't copy both a footprint and its text in the same operation, so if
-                    // both are selected, remove the text
-                    if( ( item->Type() == PCB_FIELD_T || item->Type() == PCB_TEXT_T )
-                        && aCollector.HasItem( item->GetParentFootprint() ) )
-                    {
-                        aCollector.Remove( item );
-                    }
-                    else if( item->Type() == PCB_MARKER_T )
-                    {
-                        // Don't allow copying marker objects
-                        aCollector.Remove( item );
-                    }
-                }
+                sTool->FilterCollectorForHierarchy( aCollector, true );
+                sTool->FilterCollectorForMarkers( aCollector );
             },
 
             // Prompt user regarding locked items.

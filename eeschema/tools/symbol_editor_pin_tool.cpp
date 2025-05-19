@@ -24,8 +24,6 @@
 
 #include "symbol_editor_pin_tool.h"
 
-#include <tools/sch_selection_tool.h>
-#include <symbol_edit_frame.h>
 #include <sch_commit.h>
 #include <kidialog.h>
 #include <sch_actions.h>
@@ -217,7 +215,7 @@ bool SYMBOL_EDITOR_PIN_TOOL::EditPinProperties( SCH_PIN* aPin, bool aFocusPinNum
 }
 
 
-bool SYMBOL_EDITOR_PIN_TOOL::PlacePin( SCH_PIN* aPin )
+bool SYMBOL_EDITOR_PIN_TOOL::PlacePin( SCH_COMMIT* aCommit, SCH_PIN* aPin )
 {
     LIB_SYMBOL* symbol = m_frame->GetCurSymbol();
     bool        ask_for_pin = true;   // Test for another pin in same position in other units
@@ -266,7 +264,7 @@ bool SYMBOL_EDITOR_PIN_TOOL::PlacePin( SCH_PIN* aPin )
         g_LastPinShape  = aPin->GetShape();
 
         if( m_frame->SynchronizePins() )
-            CreateImagePins( aPin );
+            CreateImagePins( aCommit, aPin );
 
         symbol->AddDrawItem( aPin );
         aPin->ClearFlags( IS_NEW );
@@ -325,7 +323,7 @@ SCH_PIN* SYMBOL_EDITOR_PIN_TOOL::CreatePin( const VECTOR2I& aPosition, LIB_SYMBO
 }
 
 
-void SYMBOL_EDITOR_PIN_TOOL::CreateImagePins( SCH_PIN* aPin )
+void SYMBOL_EDITOR_PIN_TOOL::CreateImagePins( SCH_COMMIT* aCommit, SCH_PIN* aPin )
 {
     int      ii;
     SCH_PIN* newPin;
@@ -348,7 +346,9 @@ void SYMBOL_EDITOR_PIN_TOOL::CreateImagePins( SCH_PIN* aPin )
         if( ii == aPin->GetUnit() )
             continue;
 
-        newPin = static_cast<SCH_PIN*>( aPin->Duplicate() );
+        // Already called Modify() on parent symbol; no need for Modify() calls on individual items
+        SCH_COMMIT dummy( m_toolMgr );
+        newPin = static_cast<SCH_PIN*>( aPin->Duplicate( true, &dummy ) );
 
         // To avoid mistakes, gives this pin a new pin number because
         // it does no have the save pin number as the master pin
@@ -366,8 +366,7 @@ void SYMBOL_EDITOR_PIN_TOOL::CreateImagePins( SCH_PIN* aPin )
         }
         catch( const boost::bad_pointer& e )
         {
-            wxFAIL_MSG( wxString::Format( wxT( "Boost pointer exception occurred: %s" ),
-                                          e.what() ));
+            wxFAIL_MSG( wxString::Format( wxT( "Boost pointer exception occurred: %s" ), e.what() ));
             delete newPin;
             return;
         }
@@ -423,7 +422,7 @@ SCH_PIN* SYMBOL_EDITOR_PIN_TOOL::RepeatPin( const SCH_PIN* aSourcePin )
 
     commit.Modify( symbol );
 
-    SCH_PIN* pin = static_cast<SCH_PIN*>( aSourcePin->Duplicate() );
+    SCH_PIN* pin = static_cast<SCH_PIN*>( aSourcePin->Duplicate( true, &commit ) );
     VECTOR2I step;
 
     pin->ClearFlags();
@@ -454,7 +453,7 @@ SCH_PIN* SYMBOL_EDITOR_PIN_TOOL::RepeatPin( const SCH_PIN* aSourcePin )
     if( m_frame->SynchronizePins() )
         pin->SetFlags( IS_LINKED );
 
-    if( PlacePin( pin ) )
+    if( PlacePin( &commit, pin ) )
     {
         commit.Push( _( "Repeat Pin" ) );
         return pin;

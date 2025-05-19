@@ -785,7 +785,7 @@ void SCH_IO_EAGLE::loadSchematic( const ESCHEMATIC& aSchematic )
             // Instantiate the missing symbol unit
             int            unit      = unitEntry.first;
             const wxString reference = origSymbol->GetField( FIELD_T::REFERENCE )->GetText();
-            std::unique_ptr<SCH_SYMBOL> symbol( (SCH_SYMBOL*) origSymbol->Duplicate() );
+            std::unique_ptr<SCH_SYMBOL> symbol( (SCH_SYMBOL*) origSymbol->Duplicate( IGNORE_PARENT_GROUP ) );
 
             symbol->SetUnitSelection( &sheetpath, unit );
             symbol->SetUnit( unit );

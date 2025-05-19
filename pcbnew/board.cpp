@@ -147,19 +147,6 @@ BOARD::BOARD() :
 
 BOARD::~BOARD()
 {
-    // Untangle group parents before doing any deleting
-    for( PCB_GROUP* group : m_groups )
-    {
-        for( EDA_ITEM* item : group->GetItems() )
-            item->SetParentGroup( nullptr );
-    }
-
-    for( PCB_GENERATOR* generator : m_generators )
-    {
-        for( EDA_ITEM* item : generator->GetItems() )
-            item->SetParentGroup( nullptr );
-    }
-
     m_itemByIdCache.clear();
 
     // Clean up the owned elements
@@ -390,7 +377,7 @@ std::vector<PCB_MARKER*> BOARD::ResolveDRCExclusions( bool aCreateMarkers )
             // Check to see if items still exist
             for( const KIID& guid : marker->GetRCItem()->GetIDs() )
             {
-                if( GetItem( guid ) == DELETED_BOARD_ITEM::GetInstance() )
+                if( !ResolveItem( guid, true ) )
                 {
                     delete marker;
                     marker = nullptr;
@@ -444,9 +431,9 @@ bool BOARD::ResolveTextVar( wxString* token, int aDepth ) const
 {
     if( token->Contains( ':' ) )
     {
-        wxString      remainder;
-        wxString      ref = token->BeforeFirst( ':', &remainder );
-        BOARD_ITEM*   refItem = GetItem( KIID( ref ) );
+        wxString    remainder;
+        wxString    ref = token->BeforeFirst( ':', &remainder );
+        BOARD_ITEM* refItem = ResolveItem( KIID( ref ), true );
 
         if( refItem && refItem->Type() == PCB_FOOTPRINT_T )
         {
@@ -1322,11 +1309,6 @@ void BOARD::Remove( BOARD_ITEM* aBoardItem, REMOVE_MODE aRemoveMode )
 
     aBoardItem->SetFlags( STRUCT_DELETED );
 
-    EDA_GROUP* parentGroup = aBoardItem->GetParentGroup();
-
-    if( parentGroup && !( parentGroup->AsEdaItem()->GetFlags() & STRUCT_DELETED ) )
-        parentGroup->RemoveItem( aBoardItem );
-
     m_connectivity->Remove( aBoardItem );
 
     if( aRemoveMode != REMOVE_MODE::BULK )
@@ -1509,13 +1491,29 @@ void BOARD::DetachAllFootprints()
 }
 
 
-BOARD_ITEM* BOARD::GetItem( const KIID& aID ) const
+BOARD_ITEM* BOARD::ResolveItem( const KIID& aID, bool aAllowNullptrReturn ) const
 {
     if( aID == niluuid )
         return nullptr;
 
     if( m_itemByIdCache.count( aID ) )
         return m_itemByIdCache.at( aID );
+
+    // Main clients include highlighting, group undo/redo and DRC items.  Since
+    // everything but group undo/redo will be spread over all object types, we
+    // might as well prioritize group undo/redo and search them first.
+
+    for( PCB_GROUP* group : m_groups )
+    {
+        if( group->m_Uuid == aID )
+            return group;
+    }
+
+    for( PCB_GENERATOR* generator : m_generators )
+    {
+        if( generator->m_Uuid == aID )
+            return generator;
+    }
 
     for( PCB_TRACK* track : Tracks() )
     {
@@ -1586,19 +1584,6 @@ BOARD_ITEM* BOARD::GetItem( const KIID& aID ) const
             return marker;
     }
 
-    for( PCB_GROUP* group : m_groups )
-    {
-        if( group->m_Uuid == aID )
-            return group;
-    }
-
-    for( PCB_GENERATOR* generator : m_generators )
-    {
-        if( generator->m_Uuid == aID )
-            return generator;
-    }
-
-
     for( NETINFO_ITEM* netInfo : m_NetInfo )
     {
         if( netInfo->m_Uuid == aID )
@@ -1609,7 +1594,10 @@ BOARD_ITEM* BOARD::GetItem( const KIID& aID ) const
         return const_cast<BOARD*>( this );
 
     // Not found; weak reference has been deleted.
-    return DELETED_BOARD_ITEM::GetInstance();
+    if( aAllowNullptrReturn )
+        return nullptr;
+    else
+        return DELETED_BOARD_ITEM::GetInstance();
 }
 
 
@@ -1733,7 +1721,7 @@ wxString BOARD::ConvertKIIDsToCrossReferences( const wxString& aSource ) const
             {
                 wxString      remainder;
                 wxString      ref = token.BeforeFirst( ':', &remainder );
-                BOARD_ITEM*   refItem = GetItem( KIID( ref ) );
+                BOARD_ITEM*   refItem = ResolveItem( KIID( ref ), true );
 
                 if( refItem && refItem->Type() == PCB_FOOTPRINT_T )
                 {

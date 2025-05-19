@@ -313,12 +313,15 @@ void DIALOG_CLEANUP_TRACKS_AND_VIAS::doCleanup( bool aDryRun )
 
 void DIALOG_CLEANUP_TRACKS_AND_VIAS::OnSelectItem( wxDataViewEvent& aEvent )
 {
-    const KIID&   itemID = RC_TREE_MODEL::ToUUID( aEvent.GetItem() );
-    BOARD_ITEM*   item = m_brd->GetItem( itemID );
-    WINDOW_THAWER thawer( m_parentFrame );
+    const KIID& itemID = RC_TREE_MODEL::ToUUID( aEvent.GetItem() );
 
-    m_parentFrame->FocusOnItem( item );
-    m_parentFrame->GetCanvas()->Refresh();
+    if( BOARD_ITEM* item = m_brd->ResolveItem( itemID, true ) )
+    {
+        WINDOW_THAWER thawer( m_parentFrame );
+
+        m_parentFrame->FocusOnItem( item );
+        m_parentFrame->GetCanvas()->Refresh();
+    }
 
     aEvent.Skip();
 }

@@ -1869,7 +1869,6 @@ int PCB_POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
                 // reference geometry (e.g. for intersections and extensions)
                 BOARD_ITEM* clone = static_cast<BOARD_ITEM*>( item->Clone() );
                 clone->SetParent( nullptr );
-                clone->SetParentGroup( nullptr );
 
                 if( PCB_SHAPE* shape= dynamic_cast<PCB_SHAPE*>( item ) )
                 {
@@ -2446,8 +2445,7 @@ int PCB_POINT_EDITOR::addCorner( const TOOL_EVENT& aEvent )
             graphicItem->SetEnd( nearestPoint );
 
             // and add another one starting from the break point
-            PCB_SHAPE* newSegment = static_cast<PCB_SHAPE*>( graphicItem->Duplicate() );
-
+            PCB_SHAPE* newSegment = static_cast<PCB_SHAPE*>( graphicItem->Duplicate( true, &commit ) );
             newSegment->ClearSelected();
             newSegment->SetStart( nearestPoint );
             newSegment->SetEnd( VECTOR2I( seg.B.x, seg.B.y ) );
@@ -2468,7 +2466,7 @@ int PCB_POINT_EDITOR::addCorner( const TOOL_EVENT& aEvent )
             graphicItem->SetEnd( nearestPoint );
 
             // and add another one starting from the break point
-            PCB_SHAPE* newArc = static_cast<PCB_SHAPE*>( graphicItem->Duplicate() );
+            PCB_SHAPE* newArc = static_cast<PCB_SHAPE*>( graphicItem->Duplicate( true, &commit ) );
 
             newArc->ClearSelected();
             newArc->SetEnd( arc.GetP1() );

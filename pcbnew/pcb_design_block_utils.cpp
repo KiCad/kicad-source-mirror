@@ -281,7 +281,11 @@ bool PCB_EDIT_FRAME::saveSelectionToDesignBlock( const wxString& aNickname, PCB_
             copy->SetParentGroup( nullptr );
 
         if( item->Type() == PCB_FOOTPRINT_T )
+        {
             static_cast<FOOTPRINT*>( item )->RunOnChildren( addNetIfNeeded, RECURSE_MODE::NO_RECURSE );
+        }
+        // Design Block TODO: does this want to catch design block groups?  If so, consider:
+        // if( PCB_GROUP* group = dynamic_cast<PCB_GROUP*>( copy ) )
         else if( item->Type() == PCB_GROUP_T || item->Type() == PCB_GENERATOR_T )
         {
             PCB_GROUP* group = static_cast<PCB_GROUP*>( item );
@@ -395,6 +399,8 @@ bool PCB_EDIT_FRAME::SaveSelectionToDesignBlock( const LIB_ID& aLibId )
     {
         EDA_ITEM* item = selection.Front();
 
+        // Design Block TODO: does this want to catch design block groups?  If so, consider:
+        // if( PCB_GROUP* group = dynamic_cast<PCB_GROUP*>( copy ) )
         if( item->Type() == PCB_GROUP_T || item->Type() == PCB_GENERATOR_T )
         {
             group = static_cast<PCB_GROUP*>( item );

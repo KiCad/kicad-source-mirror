@@ -757,7 +757,7 @@ void FOOTPRINT_VIEWER_FRAME::AddFootprintToPCB()
         BOARD_COMMIT commit( pcbframe );
 
         // Create the "new" footprint
-        FOOTPRINT* newFootprint = (FOOTPRINT*) GetBoard()->GetFirstFootprint()->Duplicate();
+        FOOTPRINT* newFootprint = (FOOTPRINT*) GetBoard()->GetFirstFootprint()->Duplicate( IGNORE_PARENT_GROUP );
         newFootprint->SetParent( pcbframe->GetBoard() );
         newFootprint->SetLink( niluuid );
         newFootprint->SetFlags(IS_NEW ); // whatever

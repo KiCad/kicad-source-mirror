@@ -3250,7 +3250,7 @@ FOOTPRINT* PCB_IO_KICAD_LEGACY::FootprintLoad( const wxString& aLibraryPath,
     }
 
     // Return copy of already loaded FOOTPRINT
-    FOOTPRINT* copy = (FOOTPRINT*) it->second->Duplicate();
+    FOOTPRINT* copy = (FOOTPRINT*) it->second->Duplicate( IGNORE_PARENT_GROUP );
     copy->SetParent( nullptr );
     return copy;
 }

@@ -1076,7 +1076,7 @@ int SCH_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
 
         if( lastRolloverItem != niluuid && lastRolloverItem != rolloverItem )
         {
-            EDA_ITEM* item = m_frame->GetItem( lastRolloverItem );
+            EDA_ITEM* item = m_frame->ResolveItem( lastRolloverItem );
 
             if( item->IsRollover() )
             {
@@ -1091,7 +1091,7 @@ int SCH_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
 
         if( rolloverItem != niluuid )
         {
-            EDA_ITEM* item = m_frame->GetItem( rolloverItem );
+            EDA_ITEM* item = m_frame->ResolveItem( rolloverItem );
 
             if( !item->IsRollover() )
             {
@@ -1164,6 +1164,7 @@ void SCH_SELECTION_TOOL::EnterGroup()
             {
                 if( aChild->Type() == SCH_LINE_T )
                     aChild->SetFlags( STARTPOINT | ENDPOINT );
+
                 select( aChild );
             },
             RECURSE_MODE::NO_RECURSE );
@@ -1897,13 +1898,12 @@ SCH_SELECTION& SCH_SELECTION_TOOL::RequestSelection( const std::vector<KICAD_T>&
 
             if( item->Type() == SCH_GROUP_T )
             {
-                static_cast<SCH_ITEM*>(item)
-                    ->RunOnChildren( [&]( SCH_ITEM* aChild )
-                                        {
-                                            if( aChild->IsType( aScanTypes ) )
-                                                selectedChildren.insert( aChild );
-                                        },
-                                        RECURSE_MODE::RECURSE );
+                static_cast<SCH_ITEM*>(item)->RunOnChildren( [&]( SCH_ITEM* aChild )
+                        {
+                            if( aChild->IsType( aScanTypes ) )
+                            selectedChildren.insert( aChild );
+                        },
+                        RECURSE_MODE::RECURSE );
                 unselect( item );
                 anyUnselected = true;
             }

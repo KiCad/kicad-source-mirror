@@ -407,8 +407,6 @@ void SCH_FIELD::swapData( SCH_ITEM* aItem )
 {
     wxCHECK_RET( aItem && aItem->Type() == SCH_FIELD_T, wxT( "Cannot swap with invalid item." ) );
 
-    SCH_ITEM::SwapFlags( aItem );
-
     SCH_FIELD* item = static_cast<SCH_FIELD*>( aItem );
 
     std::swap( m_layer, item->m_layer );

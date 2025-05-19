@@ -93,7 +93,7 @@ int EDIT_TOOL::Swap( const TOOL_EVENT& aEvent )
     for( EDA_ITEM* item : selection )
     {
         if( !item->IsNew() && !item->IsMoving() )
-            commit->Modify( item );
+            commit->Modify( item, nullptr, RECURSE_MODE::RECURSE );
     }
 
     for( size_t i = 0; i < sorted.size() - 1; i++ )
@@ -575,6 +575,10 @@ bool EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, BOARD_COMMIT* aCommit
 
                             m_toolMgr->RunSynchronousAction( PCB_ACTIONS::genStartEdit, aCommit,
                                                              static_cast<PCB_GENERATOR*>( item ) );
+                        }
+                        else if( item->Type() == PCB_GROUP_T || item->Type() == PCB_GENERATOR_T )
+                        {
+                            aCommit->Modify( item, nullptr, RECURSE_MODE::RECURSE );
                         }
                         else
                         {

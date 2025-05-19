@@ -65,7 +65,7 @@ void PAD_TOOL::Reset( RESET_REASON aReason )
     if( aReason == MODEL_RELOAD )
         m_lastPadNumber = wxT( "1" );
 
-    if( board() && board()->GetItem( m_editPad ) == DELETED_BOARD_ITEM::GetInstance() )
+    if( board() && board()->ResolveItem( m_editPad ) == DELETED_BOARD_ITEM::GetInstance() )
     {
         PCB_DISPLAY_OPTIONS opts = frame()->GetDisplayOptions();
 
@@ -730,9 +730,7 @@ int PAD_TOOL::EditPad( const TOOL_EVENT& aEvent )
 
     if( m_editPad != niluuid )
     {
-        PAD* pad = dynamic_cast<PAD*>( frame()->GetItem( m_editPad ) );
-
-        if( pad )
+        if( PAD* pad = dynamic_cast<PAD*>( frame()->ResolveItem( m_editPad ) ) )
         {
             BOARD_COMMIT commit( frame() );
             commit.Modify( pad );
@@ -887,7 +885,7 @@ void PAD_TOOL::explodePad( PAD* aPad, PCB_LAYER_ID* aLayer, BOARD_COMMIT& aCommi
     {
         for( const std::shared_ptr<PCB_SHAPE>& primitive : aPad->GetPrimitives( PADSTACK::ALL_LAYERS ) )
         {
-            PCB_SHAPE* shape = static_cast<PCB_SHAPE*>( primitive->Duplicate() );
+            PCB_SHAPE* shape = static_cast<PCB_SHAPE*>( primitive->Duplicate( true, &aCommit ) );
 
             shape->SetParent( board()->GetFirstFootprint() );
             shape->Rotate( VECTOR2I( 0, 0 ), aPad->GetOrientation() );

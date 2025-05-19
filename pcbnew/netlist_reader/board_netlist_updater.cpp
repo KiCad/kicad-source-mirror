@@ -864,9 +864,8 @@ bool BOARD_NETLIST_UPDATER::updateFootprintGroup( FOOTPRINT* aPcbFootprint,
                         EscapeHTML( existingGroup->GetName() ) );
 
             changed = true;
-            m_commit.Modify( aPcbFootprint->GetParentGroup()->AsEdaItem() );
-            aPcbFootprint->GetParentGroup()->RemoveItem( aPcbFootprint );
-            aPcbFootprint->SetParentGroup( nullptr );
+            m_commit.Modify( existingGroup );
+            existingGroup->RemoveItem( aPcbFootprint );
         }
 
         m_reporter->Report( msg, RPT_SEVERITY_ACTION );
@@ -906,7 +905,6 @@ bool BOARD_NETLIST_UPDATER::updateFootprintGroup( FOOTPRINT* aPcbFootprint,
             }
 
             newGroup->AddItem( aPcbFootprint );
-            aPcbFootprint->SetParentGroup( newGroup );
         }
 
         m_reporter->Report( msg, RPT_SEVERITY_ACTION );
@@ -1624,9 +1622,6 @@ bool BOARD_NETLIST_UPDATER::UpdateNetlist( NETLIST& aNetlist )
             }
             else
             {
-                if( footprint->GetParentGroup() )
-                    m_commit.Stage( footprint, CHT_UNGROUP );
-
                 m_commit.Remove( footprint );
                 msg.Printf( _( "Removed unused footprint %s." ),
                             footprint->GetReference() );

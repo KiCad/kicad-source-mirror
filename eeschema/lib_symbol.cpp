@@ -1357,7 +1357,7 @@ void LIB_SYMBOL::SetUnitCount( int aCount, bool aDuplicateDrawItems )
 
             for( int j = prevCount + 1; j <= aCount; j++ )
             {
-                SCH_ITEM* newItem = item.Duplicate();
+                SCH_ITEM* newItem = item.Duplicate( IGNORE_PARENT_GROUP );
                 newItem->m_unit = j;
                 tmp.push_back( newItem );
             }
@@ -1397,7 +1397,7 @@ void LIB_SYMBOL::SetHasAlternateBodyStyle( bool aHasAlternate, bool aDuplicatePi
             {
                 if( item.m_bodyStyle == 1 )
                 {
-                    SCH_ITEM* newItem = item.Duplicate();
+                    SCH_ITEM* newItem = item.Duplicate( IGNORE_PARENT_GROUP );
                     newItem->m_bodyStyle = 2;
                     tmp.push_back( newItem );
                 }

@@ -440,7 +440,7 @@ bool SCHEMATIC::ResolveCrossReference( wxString* token, int aDepth ) const
     KIID_PATH      path( ref );
     KIID           uuid = path.back();
     SCH_SHEET_PATH sheetPath;
-    SCH_ITEM*      refItem = GetItem( KIID( uuid ), &sheetPath );
+    SCH_ITEM*      refItem = ResolveItem( KIID( uuid ), &sheetPath, true );
 
     if( path.size() > 1 )
     {
@@ -602,7 +602,7 @@ wxString SCHEMATIC::ConvertKIIDsToRefs( const wxString& aSource ) const
                 KIID_PATH      path( ref );
                 KIID           uuid = path.back();
                 SCH_SHEET_PATH sheetPath;
-                SCH_ITEM*      refItem = GetItem( uuid, &sheetPath );
+                SCH_ITEM*      refItem = ResolveItem( uuid, &sheetPath, true );
 
                 if( path.size() > 1 )
                 {
@@ -768,7 +768,7 @@ void SCHEMATIC::FixupJunctions()
             // Breakup wires
             for( SCH_LINE* wire : screen->GetBusesAndWires( point, true ) )
             {
-                SCH_LINE* newSegment = wire->BreakAt( point );
+                SCH_LINE* newSegment = wire->BreakAt( nullptr, point );
                 screen->Append( newSegment );
             }
         }
@@ -858,7 +858,7 @@ void SCHEMATIC::ResolveERCExclusionsPostUpdate()
     for( SCH_MARKER* marker : ResolveERCExclusions() )
     {
         SCH_SHEET_PATH errorPath;
-        ignore_unused( sheetList.GetItem( marker->GetRCItem()->GetMainItemID(), &errorPath ) );
+        ignore_unused( sheetList.ResolveItem( marker->GetRCItem()->GetMainItemID(), &errorPath ) );
 
         if( errorPath.LastScreen() )
             errorPath.LastScreen()->Append( marker );

@@ -431,7 +431,10 @@ public:
     /**
      * Fetch an item by KIID.  Frame-type-specific implementation.
      */
-    virtual EDA_ITEM* GetItem( const KIID& aId ) const { return nullptr; }
+    virtual EDA_ITEM* ResolveItem( const KIID& aId, bool aAllowNullptrReturn = false ) const
+    {
+        return nullptr;
+    }
 
     /**
      * Use to start up the GAL drawing canvas.

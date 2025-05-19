@@ -270,7 +270,7 @@ public:
     /**
      * Fetch a SCH_ITEM by ID.
      */
-    SCH_ITEM* GetItem( const KIID& aID ) const;
+    SCH_ITEM* ResolveItem( const KIID& aID ) const;
 
     /**
      * Return the path of time stamps which do not changes even when editing sheet parameters.
@@ -487,7 +487,8 @@ public:
      *
      * Also returns the sheet the item was found on in \a aPathOut.
      */
-    SCH_ITEM* GetItem( const KIID& aID, SCH_SHEET_PATH* aPathOut = nullptr ) const;
+    SCH_ITEM* ResolveItem( const KIID& aID, SCH_SHEET_PATH* aPathOut = nullptr,
+                           bool aAllowNullptrReturn = false ) const;
 
     /**
      * Fill an item cache for temporary use when many items need to be fetched.

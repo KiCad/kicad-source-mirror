@@ -244,9 +244,9 @@ void PCB_BASE_FRAME::AddFootprintToBoard( FOOTPRINT* aFootprint )
 }
 
 
-EDA_ITEM* PCB_BASE_FRAME::GetItem( const KIID& aId ) const
+EDA_ITEM* PCB_BASE_FRAME::ResolveItem( const KIID& aId, bool aAllowNullptrReturn ) const
 {
-    return GetBoard()->GetItem( aId );
+    return GetBoard()->ResolveItem( aId, aAllowNullptrReturn );
 }
 
 void PCB_BASE_FRAME::FocusOnItem( EDA_ITEM* aItem )
@@ -273,27 +273,9 @@ void PCB_BASE_FRAME::FocusOnItems( std::vector<BOARD_ITEM*> aItems, PCB_LAYER_ID
 {
     static std::vector<KIID> lastBrightenedItemIDs;
 
-    BOARD_ITEM* lastItem = nullptr;
-
     for( KIID lastBrightenedItemID : lastBrightenedItemIDs )
     {
-        /// @todo The Boost entropy exception does not exist prior to 1.67. Once the minimum Boost
-        ///       version is raise to 1.67 or greater, this version check can be removed.
-    #if BOOST_VERSION >= 106700
-        try
-        {
-            lastItem = GetBoard()->GetItem( lastBrightenedItemID );
-        }
-        catch( const boost::uuids::entropy_error& )
-        {
-            wxLogError( wxT( "A Boost UUID entropy exception was thrown in %s:%s." ),
-                        __FILE__, __FUNCTION__ );
-        }
-    #else
-        lastItem = GetBoard()->GetItem( lastBrightenedItemID );
-    #endif
-
-        if( lastItem && lastItem != DELETED_BOARD_ITEM::GetInstance() )
+        if( BOARD_ITEM* lastItem = GetBoard()->ResolveItem( lastBrightenedItemID, true ) )
         {
             lastItem->ClearBrightened();
 
@@ -1265,9 +1247,7 @@ void PCB_BASE_FRAME::OnFpChangeDebounceTimer( wxTimerEvent& aEvent )
 
                 for( const KIID& uuid : selectedItems )
                 {
-                    BOARD_ITEM* item = GetBoard()->GetItem( uuid );
-
-                    if( item != DELETED_BOARD_ITEM::GetInstance() )
+                    if( BOARD_ITEM* item = GetBoard()->ResolveItem( uuid, true ) )
                         sel.push_back( item );
                 }
 

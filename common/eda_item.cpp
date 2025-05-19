@@ -26,6 +26,7 @@
 
 #include <bitmaps.h>
 #include <eda_item.h>
+#include <eda_group.h>
 #include <trace_helpers.h>
 #include <trigo.h>
 #include <i18n_utility.h>
@@ -68,6 +69,31 @@ EDA_ITEM::EDA_ITEM( const EDA_ITEM& base ) :
         m_isRollover( false )
 {
     SetForcedTransparency( base.GetForcedTransparency() );
+}
+
+
+EDA_ITEM* EDA_ITEM::findParent( KICAD_T aType ) const
+{
+    EDA_ITEM* parent = GetParent();
+
+    while( parent )
+    {
+        if( parent->Type() == aType )
+            return parent;
+        else
+            parent = parent->GetParent();
+    }
+
+    return nullptr;
+}
+
+
+KIID EDA_ITEM::GetParentGroupId() const
+{
+    if( EDA_GROUP* group = GetParentGroup() )
+        return group->AsEdaItem()->m_Uuid;
+    else
+        return niluuid;
 }
 
 

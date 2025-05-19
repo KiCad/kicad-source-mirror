@@ -2396,9 +2396,6 @@ void ZONE_FILLER::buildThermalSpokes( const ZONE* aZone, PCB_LAYER_ID aLayer,
                 spokesBox = dummy_pad.GetBoundingBox( aLayer );
                 position = pad->ShapePos( aLayer );
                 orientation = pad->GetOrientation();
-
-                // Remove group membership from dummy item before deleting
-                dummy_pad.SetParentGroup( nullptr );
             }
             else if( via )
             {

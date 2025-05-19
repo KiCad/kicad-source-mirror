@@ -476,9 +476,10 @@ public:
     void DetachAllFootprints();
 
     /**
-     * @return null if aID is null. Returns an object of Type() == NOT_USED if the aID is not found.
+     * @return null if aID is null. If \a aID cannot be resolved, returns either an object of
+     *         Type() == NOT_USED or null, depending on \a aAllowNullptrReturn.
      */
-    BOARD_ITEM* GetItem( const KIID& aID ) const;
+    BOARD_ITEM* ResolveItem( const KIID& aID, bool aAllowNullptrReturn = false ) const;
 
     void FillItemMap( std::map<KIID, EDA_ITEM*>& aMap );
 

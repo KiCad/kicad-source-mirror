@@ -47,91 +47,14 @@ SCH_GROUP::SCH_GROUP( SCH_SCREEN* aParent ) : SCH_ITEM( aParent, SCH_GROUP_T )
 {
 }
 
-bool SCH_GROUP::IsGroupableType( KICAD_T aType )
-{
-    switch( aType )
-    {
-    case SCH_SYMBOL_T:
-    case SCH_PIN_T:
-    case SCH_SHAPE_T:
-    case SCH_BITMAP_T:
-    case SCH_FIELD_T:
-    case SCH_TEXT_T:
-    case SCH_TEXTBOX_T:
-    case SCH_TABLE_T:
-    case SCH_GROUP_T:
-    case SCH_LINE_T:
-    case SCH_JUNCTION_T:
-    case SCH_NO_CONNECT_T:
-    case SCH_BUS_WIRE_ENTRY_T:
-    case SCH_BUS_BUS_ENTRY_T:
-    case SCH_LABEL_T:
-    case SCH_GLOBAL_LABEL_T:
-    case SCH_HIER_LABEL_T:
-    case SCH_RULE_AREA_T:
-    case SCH_DIRECTIVE_LABEL_T:
-    case SCH_SHEET_PIN_T:
-    case SCH_SHEET_T:
-        return true;
-    default:
-        return false;
-    }
-}
-
-
-bool SCH_GROUP::AddItem( EDA_ITEM* aItem )
-{
-    wxCHECK_MSG( aItem, false, wxT( "Nullptr added to group." ) );
-
-    wxCHECK_MSG( IsGroupableType( aItem->Type() ), false,
-                 wxT( "Invalid item type added to group: " ) + aItem->GetTypeDesc() );
-
-    // Items can only be in one group at a time
-    if( aItem->GetParentGroup() )
-        aItem->GetParentGroup()->RemoveItem( aItem );
-
-    m_items.insert( aItem );
-    aItem->SetParentGroup( this );
-    return true;
-}
-
-
-bool SCH_GROUP::RemoveItem( EDA_ITEM* aItem )
-{
-    wxCHECK_MSG( aItem, false, wxT( "Nullptr removed from group." ) );
-
-    // Only clear the item's group field if it was inside this group
-    if( m_items.erase( aItem ) == 1 )
-    {
-        aItem->SetParentGroup( nullptr );
-        return true;
-    }
-
-    return false;
-}
-
-
-void SCH_GROUP::RemoveAll()
-{
-    for( EDA_ITEM* item : m_items )
-        item->SetParentGroup( nullptr );
-
-    m_items.clear();
-}
-
-
 std::unordered_set<SCH_ITEM*> SCH_GROUP::GetSchItems() const
 {
     std::unordered_set<SCH_ITEM*> items;
 
     for( EDA_ITEM* item : m_items )
     {
-        SCH_ITEM* sch_item = dynamic_cast<SCH_ITEM*>( item );
-
-        if( sch_item )
-        {
-            items.insert( sch_item );
-        }
+        if( item->IsSCH_ITEM() )
+            items.insert( static_cast<SCH_ITEM*>( item ) );
     }
 
     return items;
@@ -230,17 +153,17 @@ SCH_GROUP* SCH_GROUP::DeepClone() const
 }
 
 
-SCH_GROUP* SCH_GROUP::DeepDuplicate() const
+SCH_GROUP* SCH_GROUP::DeepDuplicate( bool addToParentGroup, SCH_COMMIT* aCommit ) const
 {
-    SCH_GROUP* newGroup = static_cast<SCH_GROUP*>( Duplicate() );
+    SCH_GROUP* newGroup = static_cast<SCH_GROUP*>( Duplicate( addToParentGroup, aCommit ) );
     newGroup->m_items.clear();
 
     for( EDA_ITEM* member : m_items )
     {
         if( member->Type() == SCH_GROUP_T )
-            newGroup->AddItem( static_cast<SCH_GROUP*>( member )->DeepDuplicate() );
+            newGroup->AddItem( static_cast<SCH_GROUP*>( member )->DeepDuplicate( IGNORE_PARENT_GROUP ) );
         else
-            newGroup->AddItem( static_cast<SCH_ITEM*>( member )->Duplicate() );
+            newGroup->AddItem( static_cast<SCH_ITEM*>( member )->Duplicate( IGNORE_PARENT_GROUP ) );
     }
 
     return newGroup;
@@ -252,26 +175,9 @@ void SCH_GROUP::swapData( SCH_ITEM* aImage )
     assert( aImage->Type() == SCH_GROUP_T );
     SCH_GROUP* image = static_cast<SCH_GROUP*>( aImage );
 
-    std::swap( *this, *image );
-
-    // A group doesn't own its children (they're owned by the schematic), so undo doesn't do a
-    // deep clone when making an image.  However, it's still safest to update the parentGroup
-    // pointers of the group's children -- we just have to be careful to do it in the right
-    // order in case any of the children are shared (ie: image first, "this" second so that
-    // any shared children end up with "this").
-    image->RunOnChildren(
-            [&]( SCH_ITEM* child )
-            {
-                child->SetParentGroup( image );
-            },
-            RECURSE_MODE::NO_RECURSE );
-
-    RunOnChildren(
-            [&]( SCH_ITEM* child )
-            {
-                child->SetParentGroup( this );
-            },
-            RECURSE_MODE::NO_RECURSE );
+    std::swap( m_items, image->m_items );
+    std::swap( m_name, image->m_name );
+    std::swap( m_designBlockLibId, image->m_designBlockLibId );
 }
 
 

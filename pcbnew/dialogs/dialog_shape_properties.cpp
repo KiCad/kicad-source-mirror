@@ -845,9 +845,6 @@ DIALOG_SHAPE_PROPERTIES::DIALOG_SHAPE_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, 
     m_solderMaskMargin( aParent, m_solderMaskMarginLabel, m_solderMaskMarginCtrl, m_solderMaskMarginUnit ),
     m_workingCopy( *m_item )
 {
-    m_workingCopy.SetParentGroup( nullptr );
-    m_workingCopy.SetParent( nullptr );
-
     SetTitle( wxString::Format( GetTitle(), m_item->GetFriendlyName() ) );
     m_hash_key = TO_UTF8( GetTitle() );
 
@@ -1135,10 +1132,6 @@ bool DIALOG_SHAPE_PROPERTIES::TransferDataFromWindow()
     if( !pushCommit )
         m_item->SetFlags( IN_EDIT );
 
-    // Ensure parent and parent group item are restored. m_workingCopy had previously
-    // these parents cleared and not restored for some PCB_SHAPE types (i.e. POLY)
-    m_workingCopy.SetParentGroup( m_item->GetParentGroup() );
-    m_workingCopy.SetParent( m_item->GetParent() );
     *m_item = m_workingCopy;
 
     bool wasLocked = m_item->IsLocked();

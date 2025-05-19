@@ -402,9 +402,8 @@ unsigned int RC_TREE_MODEL::GetChildren( wxDataViewItem const& aItem,
 }
 
 
-void RC_TREE_MODEL::GetValue( wxVariant&              aVariant,
-                              wxDataViewItem const&   aItem,
-                              unsigned int            aCol ) const
+void RC_TREE_MODEL::GetValue( wxVariant& aVariant, wxDataViewItem const& aItem,
+                              unsigned int aCol ) const
 {
     const RC_TREE_NODE*            node = ToNode( aItem );
     const std::shared_ptr<RC_ITEM> rcItem = node->m_RcItem;
@@ -443,20 +442,20 @@ void RC_TREE_MODEL::GetValue( wxVariant&              aVariant,
         if( marker && marker->GetMarkerType() == MARKER_BASE::MARKER_DRAWING_SHEET )
             msg = _( "Drawing Sheet" );
         else
-            item = m_editFrame->GetItem( rcItem->GetMainItemID() );
+            item = m_editFrame->ResolveItem( rcItem->GetMainItemID() );
 
         break;
 
     case RC_TREE_NODE::AUX_ITEM:
-        item = m_editFrame->GetItem( rcItem->GetAuxItemID() );
+        item = m_editFrame->ResolveItem( rcItem->GetAuxItemID() );
         break;
 
     case RC_TREE_NODE::AUX_ITEM2:
-        item = m_editFrame->GetItem( rcItem->GetAuxItem2ID() );
+        item = m_editFrame->ResolveItem( rcItem->GetAuxItem2ID() );
         break;
 
     case RC_TREE_NODE::AUX_ITEM3:
-        item = m_editFrame->GetItem( rcItem->GetAuxItem3ID() );
+        item = m_editFrame->ResolveItem( rcItem->GetAuxItem3ID() );
         break;
 
     case RC_TREE_NODE::COMMENT:

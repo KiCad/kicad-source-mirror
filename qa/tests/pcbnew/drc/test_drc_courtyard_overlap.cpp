@@ -390,8 +390,8 @@ static bool CollisionMatchesExpected( BOARD& aBoard, const PCB_MARKER& aMarker,
 {
     auto reporter = std::static_pointer_cast<DRC_ITEM>( aMarker.GetRCItem() );
 
-    const FOOTPRINT* item_a = dynamic_cast<FOOTPRINT*>( aBoard.GetItem( reporter->GetMainItemID() ) );
-    const FOOTPRINT* item_b = dynamic_cast<FOOTPRINT*>( aBoard.GetItem( reporter->GetAuxItemID() ) );
+    const FOOTPRINT* item_a = dynamic_cast<FOOTPRINT*>( aBoard.ResolveItem( reporter->GetMainItemID(), true ) );
+    const FOOTPRINT* item_b = dynamic_cast<FOOTPRINT*>( aBoard.ResolveItem( reporter->GetAuxItemID(), true ) );
 
     // can't find the items!
     if( !item_a || !item_b )

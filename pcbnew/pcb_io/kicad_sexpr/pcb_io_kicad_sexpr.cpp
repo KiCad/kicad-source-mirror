@@ -3010,7 +3010,7 @@ FOOTPRINT* PCB_IO_KICAD_SEXPR::FootprintLoad( const wxString& aLibraryPath,
         if( aKeepUUID )
             copy = static_cast<FOOTPRINT*>( footprint->Clone() );
         else
-            copy = static_cast<FOOTPRINT*>( footprint->Duplicate() );
+            copy = static_cast<FOOTPRINT*>( footprint->Duplicate( IGNORE_PARENT_GROUP ) );
 
         copy->SetParent( nullptr );
         return copy;

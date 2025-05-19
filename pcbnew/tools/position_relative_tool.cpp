@@ -62,7 +62,7 @@ static void moveSelectionBy( const PCB_SELECTION& aSelection, const VECTOR2I& aM
             continue;
 
         BOARD_ITEM* boardItem = static_cast<BOARD_ITEM*>( item );
-        commit.Modify( boardItem );
+        commit.Modify( boardItem, nullptr, RECURSE_MODE::RECURSE );
         boardItem->Move( aMoveVec );
     }
 }

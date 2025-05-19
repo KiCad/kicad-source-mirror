@@ -24,6 +24,7 @@
  */
 
 #include <eda_item.h>
+#include <eda_group.h>
 #include <undo_redo_container.h>
 
 
@@ -47,13 +48,6 @@ ITEM_PICKER::ITEM_PICKER( BASE_SCREEN* aScreen, EDA_ITEM* aItem, UNDO_REDO aUndo
 }
 
 
-void ITEM_PICKER::SetItem( EDA_ITEM* aItem )
-{
-    m_pickedItem = aItem;
-    m_pickedItemType = aItem ? aItem->Type() : TYPE_NOT_INIT;
-}
-
-
 PICKED_ITEMS_LIST::PICKED_ITEMS_LIST()
 {
 }
@@ -61,6 +55,29 @@ PICKED_ITEMS_LIST::PICKED_ITEMS_LIST()
 
 PICKED_ITEMS_LIST::~PICKED_ITEMS_LIST()
 {
+}
+
+
+void ITEM_PICKER::SetItem( EDA_ITEM* aItem )
+{
+    m_pickedItem = aItem;
+    m_pickedItemType = aItem ? aItem->Type() : TYPE_NOT_INIT;
+
+    if( EDA_GROUP* group = dynamic_cast<EDA_GROUP*>( aItem ) )
+        m_groupMembers = group->GetGroupMemberIds();
+
+    m_groupId = aItem->GetParentGroupId();
+}
+
+
+void ITEM_PICKER::SetLink( EDA_ITEM* aItem )
+{
+    m_link = aItem;
+
+    if( EDA_GROUP* group = dynamic_cast<EDA_GROUP*>( aItem ) )
+        m_groupMembers = group->GetGroupMemberIds();
+
+    m_groupId = aItem->GetParentGroupId();
 }
 
 
@@ -89,22 +106,6 @@ bool PICKED_ITEMS_LIST::ContainsItem( const EDA_ITEM* aItem ) const
     for( const ITEM_PICKER& picker : m_ItemsList )
     {
         if( picker.GetItem() == aItem )
-            return true;
-    }
-
-    return false;
-}
-
-
-bool PICKED_ITEMS_LIST::ContainsItemType( KICAD_T aItemType ) const
-{
-    for( const ITEM_PICKER& picker : m_ItemsList )
-    {
-        const EDA_ITEM* item = picker.GetItem();
-
-        wxCHECK2( item, continue );
-
-        if( item->Type() == aItemType )
             return true;
     }
 
@@ -157,14 +158,15 @@ void PICKED_ITEMS_LIST::ClearListAndDeleteItems( std::function<void(EDA_ITEM*)> 
 }
 
 
-ITEM_PICKER PICKED_ITEMS_LIST::GetItemWrapper( unsigned int aIdx ) const
+const ITEM_PICKER& PICKED_ITEMS_LIST::GetItemWrapper( unsigned int aIdx ) const
 {
-    ITEM_PICKER picker;
+    return m_ItemsList.at( aIdx );
+}
 
-    if( aIdx < m_ItemsList.size() )
-        picker = m_ItemsList[aIdx];
 
-    return picker;
+ITEM_PICKER& PICKED_ITEMS_LIST::GetItemWrapper( unsigned int aIdx )
+{
+    return m_ItemsList.at( aIdx );
 }
 
 
@@ -213,27 +215,6 @@ EDA_ITEM_FLAGS PICKED_ITEMS_LIST::GetPickerFlags( unsigned aIdx ) const
 }
 
 
-KIID PICKED_ITEMS_LIST::GetPickedItemGroupId( unsigned aIdx ) const
-{
-    if( aIdx < m_ItemsList.size() )
-        return m_ItemsList[aIdx].GetGroupId();
-
-    return KIID();
-}
-
-
-bool PICKED_ITEMS_LIST::SetPickedItemGroupId( KIID aGroupId, unsigned aIdx )
-{
-    if( aIdx < m_ItemsList.size() )
-    {
-        m_ItemsList[aIdx].SetGroupId( aGroupId );
-        return true;
-    }
-
-    return false;
-}
-
-
 bool PICKED_ITEMS_LIST::SetPickedItem( EDA_ITEM* aItem, unsigned aIdx )
 {
     if( aIdx < m_ItemsList.size() )
@@ -251,19 +232,6 @@ bool PICKED_ITEMS_LIST::SetPickedItemLink( EDA_ITEM* aLink, unsigned aIdx )
     if( aIdx < m_ItemsList.size() )
     {
         m_ItemsList[aIdx].SetLink( aLink );
-        return true;
-    }
-
-    return false;
-}
-
-
-bool PICKED_ITEMS_LIST::SetPickedItem( EDA_ITEM* aItem, UNDO_REDO aStatus, unsigned aIdx )
-{
-    if( aIdx < m_ItemsList.size() )
-    {
-        m_ItemsList[aIdx].SetItem( aItem );
-        m_ItemsList[aIdx].SetStatus( aStatus );
         return true;
     }
 

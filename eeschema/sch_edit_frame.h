@@ -743,7 +743,7 @@ public:
         m_items_to_repeat.clear();
     }
 
-    EDA_ITEM* GetItem( const KIID& aId ) const override;
+    EDA_ITEM* ResolveItem( const KIID& aId, bool aAllowNullptrReturn = false ) const override;
 
     /**
      * Perform an undo of the last edit **without** logging a corresponding redo.

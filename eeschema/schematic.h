@@ -109,9 +109,10 @@ public:
 
     void RefreshHierarchy();
 
-    SCH_ITEM* GetItem( const KIID& aID, SCH_SHEET_PATH* aPathOut = nullptr ) const
+    SCH_ITEM* ResolveItem( const KIID& aID, SCH_SHEET_PATH* aPathOut = nullptr,
+                           bool aAllowNullptrReturn = false ) const
     {
-        return BuildUnorderedSheetList().GetItem( aID, aPathOut );
+        return BuildUnorderedSheetList().ResolveItem( aID, aPathOut, aAllowNullptrReturn );
     }
 
     SCH_SHEET& Root() const

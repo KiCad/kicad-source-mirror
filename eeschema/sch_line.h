@@ -256,7 +256,7 @@ public:
      * @param aPoint Point at which to break the segment
      * @return The newly created segment.
      */
-    SCH_LINE* BreakAt( const VECTOR2I& aPoint );
+    SCH_LINE* BreakAt( SCH_COMMIT* aCommit, const VECTOR2I& aPoint );
 
     bool IsParallel( const SCH_LINE* aLine ) const;
 

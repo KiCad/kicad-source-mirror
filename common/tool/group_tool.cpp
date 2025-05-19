@@ -164,18 +164,18 @@ int GROUP_TOOL::Ungroup( const TOOL_EVENT& aEvent )
 
     for( EDA_ITEM* item : selCopy )
     {
-        EDA_GROUP* group = dynamic_cast<EDA_GROUP*>( item );
-
-        if( group )
+        if( EDA_GROUP* group = dynamic_cast<EDA_GROUP*>( item ) )
         {
+            group->AsEdaItem()->SetSelected();
+            m_commit->Remove( group->AsEdaItem(), m_frame->GetScreen() );
+
             for( EDA_ITEM* member : group->GetItems() )
             {
-                m_commit->Stage( member, CHT_UNGROUP, m_frame->GetScreen() );
+                m_commit->Modify( member, m_frame->GetScreen() );
                 toSelect.push_back( member );
             }
 
-            group->AsEdaItem()->SetSelected();
-            m_commit->Remove( group->AsEdaItem(), m_frame->GetScreen() );
+            group->RemoveAll();
         }
     }
 
@@ -208,7 +208,9 @@ int GROUP_TOOL::AddToGroup( const TOOL_EVENT& aEvent )
             group = item;
         }
         else if( !item->GetParentGroup() )
+        {
             toAdd.push_back( item );
+        }
     }
 
     if( !group || toAdd.empty() )
@@ -219,7 +221,18 @@ int GROUP_TOOL::AddToGroup( const TOOL_EVENT& aEvent )
     m_commit->Modify( group, m_frame->GetScreen() );
 
     for( EDA_ITEM* item : toAdd )
-        m_commit->Stage( item, CHT_GROUP, m_frame->GetScreen() );
+    {
+        EDA_GROUP* existingGroup = item->GetParentGroup();
+        KIID       existingGroupId = existingGroup ? existingGroup->AsEdaItem()->m_Uuid : niluuid;
+
+        if( existingGroupId != group->m_Uuid )
+        {
+            m_commit->Modify( item, m_frame->GetScreen() );
+
+            if( existingGroup )
+                m_commit->Modify( existingGroup->AsEdaItem(), m_frame->GetScreen() );
+        }
+    }
 
     m_commit->Push( _( "Add Items to Group" ) );
 
@@ -240,8 +253,12 @@ int GROUP_TOOL::RemoveFromGroup( const TOOL_EVENT& aEvent )
 
     for( EDA_ITEM* item : selection )
     {
-        if( item->GetParentGroup() )
-            m_commit->Stage( item, CHT_UNGROUP, m_frame->GetScreen() );
+        if( EDA_GROUP* group = item->GetParentGroup() )
+        {
+            m_commit->Modify( group->AsEdaItem(), m_frame->GetScreen() );
+            m_commit->Modify( item, m_frame->GetScreen() );
+            group->RemoveItem( item );
+        }
     }
 
     m_commit->Push( _( "Remove Group Items" ) );

@@ -392,10 +392,14 @@ bool SCH_EDIT_FRAME::SaveSelectionToDesignBlock( const LIB_ID& aLibId )
         {
             group = static_cast<SCH_GROUP*>( item );
 
-            selection.Remove( item );
+            selection.Remove( group );
 
             // Don't recurse; if we have a group of groups the user probably intends the inner groups to be saved
-            group->RunOnChildren( [&]( EDA_ITEM* aItem ) { selection.Add( aItem ); }, RECURSE_MODE::NO_RECURSE );
+            group->RunOnChildren( [&]( EDA_ITEM* aItem )
+                                  {
+                                      selection.Add( aItem );
+                                  },
+                                  RECURSE_MODE::NO_RECURSE );
         }
     }
 
@@ -420,15 +424,15 @@ bool SCH_EDIT_FRAME::SaveSelectionToDesignBlock( const LIB_ID& aLibId )
     SCH_SCREEN* tempScreen = new SCH_SCREEN( m_schematic );
 
     auto cloneAndAdd =
-        [&] ( EDA_ITEM* aItem )
-        {
-            if( !aItem->IsSCH_ITEM() )
-                return static_cast<SCH_ITEM*>( nullptr );
+            [&] ( EDA_ITEM* aItem ) -> SCH_ITEM*
+            {
+                if( !aItem->IsSCH_ITEM() )
+                    return nullptr;
 
-            SCH_ITEM* copy = static_cast<SCH_ITEM*>( aItem->Clone() );
-            tempScreen->Append( static_cast<SCH_ITEM*>( copy ) );
-            return copy;
-        };
+                SCH_ITEM* copy = static_cast<SCH_ITEM*>( aItem->Clone() );
+                tempScreen->Append( static_cast<SCH_ITEM*>( copy ) );
+                return copy;
+            };
 
     // Copy the selected items to the temporary board
     for( EDA_ITEM* item : selection )

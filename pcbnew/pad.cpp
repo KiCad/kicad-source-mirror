@@ -2190,7 +2190,7 @@ std::vector<PCB_SHAPE*> PAD::Recombine( bool aIsDryRun, int maxError )
             if( EDA_GROUP* group = fpShape->GetParentGroup(); group )
                 group->RemoveItem( fpShape );
 
-            PCB_SHAPE* primitive = static_cast<PCB_SHAPE*>( fpShape->Duplicate() );
+            PCB_SHAPE* primitive = static_cast<PCB_SHAPE*>( fpShape->Duplicate( IGNORE_PARENT_GROUP ) );
 
             primitive->SetParent( nullptr );
 

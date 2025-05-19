@@ -846,14 +846,15 @@ public:
     KIID GetLink() const { return m_link; }
     void SetLink( const KIID& aLink ) { m_link = aLink; }
 
-    BOARD_ITEM* Duplicate() const override;
+    BOARD_ITEM* Duplicate( bool addToParentGroup, BOARD_COMMIT* aCommit = nullptr ) const override;
 
     /**
      * Duplicate a given item within the footprint, optionally adding it to the board.
      *
      * @return the new item, or NULL if the item could not be duplicated.
      */
-    BOARD_ITEM* DuplicateItem( const BOARD_ITEM* aItem, bool aAddToFootprint = false );
+    BOARD_ITEM* DuplicateItem( bool addToParentGroup, BOARD_COMMIT* aCommit, const BOARD_ITEM* aItem,
+                               bool addToFootprint = false );
 
     /**
      * Add \a a3DModel definition to the end of the 3D model list.

@@ -636,7 +636,7 @@ void PCB_EDIT_FRAME::ExportFootprintsToLibrary( bool aStoreInNewLib, const wxStr
 
                 if( !footprint->GetFPID().GetLibItemName().empty() )    // Handle old boards.
                 {
-                    FOOTPRINT* fpCopy = static_cast<FOOTPRINT*>( footprint->Duplicate() );
+                    FOOTPRINT* fpCopy = static_cast<FOOTPRINT*>( footprint->Duplicate( IGNORE_PARENT_GROUP ) );
 
                     // Reset reference designator and group membership before saving
                     resetReference( fpCopy );
@@ -694,7 +694,7 @@ void PCB_EDIT_FRAME::ExportFootprintsToLibrary( bool aStoreInNewLib, const wxStr
             {
                 if( !footprint->GetFPID().GetLibItemName().empty() )    // Handle old boards.
                 {
-                    FOOTPRINT* fpCopy = static_cast<FOOTPRINT*>( footprint->Duplicate() );
+                    FOOTPRINT* fpCopy = static_cast<FOOTPRINT*>( footprint->Duplicate( IGNORE_PARENT_GROUP ) );
 
                     // Reset reference designator and group membership before saving
                     resetReference( fpCopy );
@@ -743,10 +743,8 @@ bool FOOTPRINT_EDIT_FRAME::SaveFootprint( FOOTPRINT* aFootprint )
             m_footprintNameWhenLoaded = footprintName;
             return true;
         }
-        else
-        {
-            return false;
-        }
+
+        return false;
     }
     else if( libraryName.IsEmpty() || footprintName.IsEmpty() )
     {
@@ -756,10 +754,8 @@ bool FOOTPRINT_EDIT_FRAME::SaveFootprint( FOOTPRINT* aFootprint )
             SyncLibraryTree( true );
             return true;
         }
-        else
-        {
-            return false;
-        }
+
+        return false;
     }
 
     FP_LIB_TABLE* tbl = PROJECT_PCB::PcbFootprintLibs( &Prj() );

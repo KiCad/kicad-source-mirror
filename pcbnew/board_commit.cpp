@@ -94,20 +94,15 @@ BOARD* BOARD_COMMIT::GetBoard() const
 }
 
 
-COMMIT& BOARD_COMMIT::Stage( EDA_ITEM* aItem, CHANGE_TYPE aChangeType, BASE_SCREEN* aScreen )
+COMMIT& BOARD_COMMIT::Stage( EDA_ITEM* aItem, CHANGE_TYPE aChangeType, BASE_SCREEN* aScreen,
+                             RECURSE_MODE aRecurse )
 {
-    // Many operations (move, rotate, etc.) are applied directly to a group's children, so they
-    // must be staged as well.
-    if( aChangeType == CHT_MODIFY )
+    if( aRecurse == RECURSE_MODE::RECURSE )
     {
         if( PCB_GROUP* group = dynamic_cast<PCB_GROUP*>( aItem ) )
         {
-            group->RunOnChildren(
-                    [&]( BOARD_ITEM* child )
-                    {
-                        Stage( child, aChangeType );
-                    },
-                    RECURSE_MODE::NO_RECURSE );
+            for( EDA_ITEM* member : group->GetItems() )
+                Stage( member, aChangeType, aScreen, aRecurse );
         }
     }
 
@@ -175,6 +170,7 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
     BOARD*              board = static_cast<BOARD*>( m_toolMgr->GetModel() );
     PCB_BASE_FRAME*     frame = dynamic_cast<PCB_BASE_FRAME*>( m_toolMgr->GetToolHolder() );
     PCB_SELECTION_TOOL* selTool = m_toolMgr->GetTool<PCB_SELECTION_TOOL>();
+    PCB_GROUP*          enteredGroup = selTool ? selTool->GetEnteredGroup() : nullptr;
 
     // Notification info
     PICKED_ITEMS_LIST   undoList;
@@ -186,7 +182,6 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
     bool                     autofillZones = false;
     std::vector<BOARD_ITEM*> staleTeardropPadsAndVias;
     std::set<PCB_TRACK*>     staleTeardropTracks;
-    PCB_GROUP*               addedGroup = nullptr;
     std::vector<ZONE*>       staleZonesStorage;
     std::vector<ZONE*>*      staleZones = nullptr;
 
@@ -269,14 +264,21 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
     if( !staleTeardropPadsAndVias.empty() || !staleTeardropTracks.empty() )
         teardropMgr.RemoveTeardrops( *this, &staleTeardropPadsAndVias, &staleTeardropTracks );
 
-    auto updateComponentClasses = [this]( BOARD_ITEM* boardItem )
-    {
-        if( boardItem->Type() != PCB_FOOTPRINT_T )
-            return;
+    auto updateComponentClasses =
+            [this]( BOARD_ITEM* boardItem )
+            {
+                if( boardItem->Type() != PCB_FOOTPRINT_T )
+                    return;
 
-        FOOTPRINT* footprint = static_cast<FOOTPRINT*>( boardItem );
-        GetBoard()->GetComponentClassManager().RebuildRequiredCaches( footprint );
-    };
+                FOOTPRINT* footprint = static_cast<FOOTPRINT*>( boardItem );
+                GetBoard()->GetComponentClassManager().RebuildRequiredCaches( footprint );
+            };
+
+    // We don't know that anything will be added to the entered group, but it does no harm to
+    // add it to the commit anyway.
+    if( enteredGroup )
+        Modify( enteredGroup );
+
 
     for( COMMIT_LINE& ent : m_changes )
     {
@@ -290,11 +292,8 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
         switch( changeType )
         {
         case CHT_ADD:
-            if( selTool && selTool->GetEnteredGroup() && !boardItem->GetParentGroup()
-                    && PCB_GROUP::IsGroupableType( boardItem->Type() ) )
-            {
-                selTool->GetEnteredGroup()->AddItem( boardItem );
-            }
+            if( enteredGroup && boardItem->IsGroupableType() && !boardItem->GetParentGroup() )
+                enteredGroup->AddItem( boardItem );
 
             if( !( aCommitFlags & SKIP_UNDO ) )
                 undoList.PushItem( ITEM_PICKER( nullptr, boardItem, UNDO_REDO::NEWITEM ) );
@@ -319,12 +318,6 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
                 }
             }
 
-            if( boardItem->Type() == PCB_GROUP_T || boardItem->Type() == PCB_GENERATOR_T )
-            {
-                wxASSERT_MSG( !addedGroup, "Multiple groups in a single commit. This is not supported." );
-                addedGroup = static_cast<PCB_GROUP*>( boardItem );
-            }
-
             if( boardItem->Type() != PCB_MARKER_T )
                 propagateDamage( boardItem, staleZones );
 
@@ -341,7 +334,12 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
             EDA_GROUP* parentGroup = boardItem->GetParentGroup();
 
             if( !( aCommitFlags & SKIP_UNDO ) )
-                undoList.PushItem( ITEM_PICKER( nullptr, boardItem, UNDO_REDO::DELETED ) );
+            {
+                ITEM_PICKER itemWrapper( nullptr, boardItem, UNDO_REDO::DELETED );
+                itemWrapper.SetLink( ent.m_copy );
+                ent.m_copy = nullptr;   // We've transferred ownership to the undo list
+                undoList.PushItem( itemWrapper );
+            }
 
             if( boardItem->IsSelected() )
             {
@@ -417,63 +415,25 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
 
             // The item has been removed from the board; it is now owned by undo/redo.
             boardItem->SetFlags( UR_TRANSIENT );
-
             break;
         }
 
-        case CHT_UNGROUP:
-            if( EDA_GROUP* group = boardItem->GetParentGroup() )
-            {
-                if( !( aCommitFlags & SKIP_UNDO ) )
-                {
-                    ITEM_PICKER itemWrapper( nullptr, boardItem, UNDO_REDO::UNGROUP );
-                    itemWrapper.SetGroupId( group->AsEdaItem()->m_Uuid );
-                    undoList.PushItem( itemWrapper );
-                }
-
-                group->RemoveItem( boardItem );
-            }
-
-            break;
-
-        case CHT_GROUP:
-            if( addedGroup )
-            {
-                addedGroup->AddItem( boardItem );
-
-                if( !( aCommitFlags & SKIP_UNDO ) )
-                    undoList.PushItem( ITEM_PICKER( nullptr, boardItem, UNDO_REDO::REGROUP ) );
-            }
-
-            break;
-
         case CHT_MODIFY:
         {
-            BOARD_ITEM* boardItemCopy = nullptr;
-
-            if( ent.m_copy && ent.m_copy->IsBOARD_ITEM() )
-                boardItemCopy = static_cast<BOARD_ITEM*>( ent.m_copy );
+            BOARD_ITEM* boardItemCopy = dynamic_cast<BOARD_ITEM*>( ent.m_copy );
 
             if( !( aCommitFlags & SKIP_UNDO ) )
             {
                 ITEM_PICKER itemWrapper( nullptr, boardItem, UNDO_REDO::CHANGED );
-                wxASSERT( boardItemCopy );
-                itemWrapper.SetLink( boardItemCopy );
+                itemWrapper.SetLink( ent.m_copy );
+                ent.m_copy = nullptr;   // We've transferred ownership to the undo list
                 undoList.PushItem( itemWrapper );
             }
 
             if( !( aCommitFlags & SKIP_CONNECTIVITY ) )
             {
-                if( boardItemCopy )
-                    connectivity->MarkItemNetAsDirty( boardItemCopy );
-
+                connectivity->MarkItemNetAsDirty( boardItemCopy );
                 connectivity->Update( boardItem );
-            }
-
-            if( boardItem->Type() == PCB_GROUP_T || boardItem->Type() == PCB_GENERATOR_T )
-            {
-                wxASSERT_MSG( !addedGroup, "Multiple groups in a single commit. This is not supported." );
-                addedGroup = static_cast<PCB_GROUP*>( boardItem );
             }
 
             if( boardItem->Type() != PCB_MARKER_T )
@@ -488,11 +448,6 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
                 view->Update( boardItem );
 
             itemsChanged.push_back( boardItem );
-
-            // if no undo entry is needed, the copy would create a memory leak
-            if( aCommitFlags & SKIP_UNDO )
-                delete ent.m_copy;
-
             break;
         }
 
@@ -500,6 +455,10 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
             UNIMPLEMENTED_FOR( boardItem->GetClass() );
             break;
         }
+
+        // Delete any copies we still have ownership of
+        delete ent.m_copy;
+        ent.m_copy = nullptr;
 
         boardItem->ClearEditFlags();
         boardItem->RunOnChildren(
@@ -656,10 +615,6 @@ EDA_ITEM* BOARD_COMMIT::makeImage( EDA_ITEM* aItem ) const
 EDA_ITEM* BOARD_COMMIT::MakeImage( EDA_ITEM* aItem )
 {
     EDA_ITEM* clone = aItem->Clone();
-
-    if( clone->IsBOARD_ITEM() )
-        static_cast<BOARD_ITEM*>( clone )->SetParentGroup( nullptr );
-
     clone->SetFlags( UR_TRANSIENT );
 
     return clone;
@@ -700,14 +655,6 @@ void BOARD_COMMIT::Revert()
         switch( changeType )
         {
         case CHT_ADD:
-            // Items are auto-added to the parent group by BOARD_ITEM::Duplicate(), not when
-            // the commit is pushed.
-            if( EDA_GROUP* parentGroup = boardItem->GetParentGroup() )
-            {
-                if( GetStatus( parentGroup->AsEdaItem() ) == 0 )
-                    parentGroup->RemoveItem( boardItem );
-            }
-
             if( !( changeFlags & CHT_DONE ) )
                 break;
 
@@ -732,18 +679,17 @@ void BOARD_COMMIT::Revert()
 
             view->Add( boardItem );
 
-            // Note: parent can be nullptr, because entry.m_parent is only set for children
-            // of footprints.
-            BOARD_ITEM* parent = board->GetItem( entry.m_parent );
-
-            if( parent && parent->Type() == PCB_FOOTPRINT_T )
+            if( BOARD_ITEM* parent = board->ResolveItem( entry.m_parent, true ) )
             {
-                static_cast<FOOTPRINT*>( parent )->Add( boardItem, ADD_MODE::INSERT );
-            }
-            else
-            {
-                board->Add( boardItem, ADD_MODE::INSERT );
-                bulkAddedItems.push_back( boardItem );
+                if( parent->Type() == PCB_FOOTPRINT_T )
+                {
+                    static_cast<FOOTPRINT*>( parent )->Add( boardItem, ADD_MODE::INSERT );
+                }
+                else
+                {
+                    board->Add( boardItem, ADD_MODE::INSERT );
+                    bulkAddedItems.push_back( boardItem );
+                }
             }
 
             updateComponentClasses( boardItem );

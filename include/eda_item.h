@@ -51,6 +51,7 @@ enum RECURSE_MODE
     NO_RECURSE,
 };
 
+#define IGNORE_PARENT_GROUP false
 
 /**
  * Additional flag values wxFindReplaceData::m_Flags
@@ -95,7 +96,7 @@ typedef const INSPECTOR_FUNC& INSPECTOR;
 class EDA_ITEM : public KIGFX::VIEW_ITEM, public SERIALIZABLE
 {
 public:
-    virtual ~EDA_ITEM() { wxASSERT( m_group == nullptr ); };
+    virtual ~EDA_ITEM() = default;
 
     /**
      * Returns the type of object.
@@ -112,6 +113,8 @@ public:
 
     virtual void SetParentGroup( EDA_GROUP* aGroup ) { m_group = aGroup; }
     virtual EDA_GROUP* GetParentGroup() const { return m_group; }
+
+    KIID GetParentGroupId() const;
 
     virtual bool IsLocked() const { return false; }
     virtual void SetLocked( bool aLocked ) {}
@@ -498,6 +501,8 @@ protected:
      */
     bool Matches( const wxString& aText, const EDA_SEARCH_DATA& aSearchData ) const;
 
+    EDA_ITEM* findParent( KICAD_T aType ) const;
+
 public:
     const KIID  m_Uuid;
 
@@ -511,8 +516,8 @@ private:
 
 protected:
     EDA_ITEM_FLAGS m_flags;
-    EDA_ITEM*      m_parent; ///< Linked list: Link (parent struct).
-    EDA_GROUP*     m_group;  ///< The group this item belongs to
+    EDA_ITEM*      m_parent;        ///< Owner.
+    EDA_GROUP*     m_group;         ///< The group this item belongs to, if any.  No ownership implied.
     bool           m_forceVisible;
     bool           m_isRollover;
 };

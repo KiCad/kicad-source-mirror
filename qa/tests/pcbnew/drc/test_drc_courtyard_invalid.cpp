@@ -234,7 +234,7 @@ static bool InvalidMatchesExpected( BOARD& aBoard, const PCB_MARKER& aMarker,
                                     const COURTYARD_INVALID_INFO& aInvalid )
 {
     auto reporter = std::static_pointer_cast<DRC_ITEM>( aMarker.GetRCItem() );
-    const FOOTPRINT* item_a = dynamic_cast<FOOTPRINT*>( aBoard.GetItem( reporter->GetMainItemID() ) );
+    const FOOTPRINT* item_a = dynamic_cast<FOOTPRINT*>( aBoard.ResolveItem( reporter->GetMainItemID() ) );
 
     // This one is more than just a mismatch!
     if( reporter->GetAuxItemID() != niluuid )

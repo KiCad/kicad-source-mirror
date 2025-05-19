@@ -39,28 +39,12 @@ COMMIT::COMMIT()
 COMMIT::~COMMIT()
 {
     for( COMMIT_LINE& ent : m_changes )
-    {
-        if( ent.m_copy )
-        {
-            // If we're deleting changes, we have a commit that is being abandoned,
-            // and the copies of items with group memberships can have their group membership
-            // cleared as long as we make sure that group doesn't hold a reference to the copy.
-            if( ent.m_copy->GetParentGroup() )
-            {
-                // This is a copy, so it should not be in the group.
-                // (RemoveItem() returns false when it doesn't find the item),
-                // but if it is we need to remove it to prevent a crash.
-                wxASSERT( ent.m_copy->GetParentGroup()->RemoveItem( ent.m_copy ) == false );
-                ent.m_copy->SetParentGroup( nullptr );
-            }
-
-            delete ent.m_copy;
-        }
-    }
+        delete ent.m_copy;
 }
 
 
-COMMIT& COMMIT::Stage( EDA_ITEM* aItem, CHANGE_TYPE aChangeType, BASE_SCREEN* aScreen )
+COMMIT& COMMIT::Stage( EDA_ITEM* aItem, CHANGE_TYPE aChangeType, BASE_SCREEN* aScreen,
+                       RECURSE_MODE aRecurse )
 {
     // CHT_MODIFY and CHT_DONE are not compatible
     wxASSERT( ( aChangeType & ( CHT_MODIFY | CHT_DONE ) ) != ( CHT_MODIFY | CHT_DONE ) );
@@ -71,31 +55,24 @@ COMMIT& COMMIT::Stage( EDA_ITEM* aItem, CHANGE_TYPE aChangeType, BASE_SCREEN* aS
     {
     case CHT_ADD:
         makeEntry( aItem, CHT_ADD | flag, nullptr, aScreen );
-        return *this;
+        break;
 
     case CHT_REMOVE:
         wxASSERT( m_deletedItems.find( aItem ) == m_deletedItems.end() );
         m_deletedItems.insert( aItem );
-        makeEntry( aItem, CHT_REMOVE | flag, nullptr, aScreen );
-        return *this;
+        makeEntry( aItem, CHT_REMOVE | flag, makeImage( aItem ), aScreen );
+
+        if( EDA_GROUP* parentGroup = aItem->GetParentGroup() )
+            Modify( parentGroup->AsEdaItem(), aScreen );
+
+        break;
 
     case CHT_MODIFY:
     {
         EDA_ITEM* parent = parentObject( aItem );
-        EDA_ITEM* clone = makeImage( parent );
-
-        wxASSERT( clone );
-
-        if( clone )
-            return createModified( parent, clone, flag, aScreen );
-
+        createModified( parent, makeImage( parent ), flag, aScreen );
         break;
     }
-
-    case CHT_GROUP:
-    case CHT_UNGROUP:
-        makeEntry( aItem, aChangeType, nullptr, aScreen );
-        return *this;
 
     default:
         wxFAIL;
@@ -106,7 +83,7 @@ COMMIT& COMMIT::Stage( EDA_ITEM* aItem, CHANGE_TYPE aChangeType, BASE_SCREEN* aS
 
 
 COMMIT& COMMIT::Stage( std::vector<EDA_ITEM*> &container, CHANGE_TYPE aChangeType,
-        BASE_SCREEN *aScreen )
+                       BASE_SCREEN *aScreen )
 {
     for( EDA_ITEM* item : container )
         Stage( item, aChangeType, aScreen);
@@ -157,7 +134,6 @@ COMMIT& COMMIT::createModified( EDA_ITEM* aItem, EDA_ITEM* aCopy, int aExtraFlag
 
     if( m_changedItems.find( parent ) != m_changedItems.end() )
     {
-        aCopy->SetParentGroup( nullptr );
         delete aCopy;
         return *this; // item has been already modified once
     }
@@ -170,9 +146,6 @@ COMMIT& COMMIT::createModified( EDA_ITEM* aItem, EDA_ITEM* aCopy, int aExtraFlag
 
 void COMMIT::makeEntry( EDA_ITEM* aItem, CHANGE_TYPE aType, EDA_ITEM* aCopy, BASE_SCREEN *aScreen )
 {
-    // Expect an item copy if it is going to be modified
-    wxASSERT( !!aCopy == ( ( aType & CHT_TYPE ) == CHT_MODIFY ) );
-
     COMMIT_LINE ent;
 
     ent.m_item = aItem;
@@ -206,8 +179,6 @@ CHANGE_TYPE COMMIT::convert( UNDO_REDO aType ) const
     {
     case UNDO_REDO::NEWITEM:        return CHT_ADD;
     case UNDO_REDO::DELETED:        return CHT_REMOVE;
-    case UNDO_REDO::REGROUP:        return CHT_GROUP;
-    case UNDO_REDO::UNGROUP:        return CHT_UNGROUP;
     case UNDO_REDO::CHANGED:        return CHT_MODIFY;
     default:   wxASSERT( false );   return CHT_MODIFY;
     }
@@ -220,8 +191,6 @@ UNDO_REDO COMMIT::convert( CHANGE_TYPE aType ) const
     {
     case CHT_ADD:                   return UNDO_REDO::NEWITEM;
     case CHT_REMOVE:                return UNDO_REDO::DELETED;
-    case CHT_GROUP:                 return UNDO_REDO::REGROUP;
-    case CHT_UNGROUP:               return UNDO_REDO::UNGROUP;
     case CHT_MODIFY:                return UNDO_REDO::CHANGED;
     default:   wxASSERT( false );   return UNDO_REDO::CHANGED;
     }

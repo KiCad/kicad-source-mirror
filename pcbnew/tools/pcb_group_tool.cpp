@@ -172,14 +172,16 @@ int PCB_GROUP_TOOL::Group( const TOOL_EVENT& aEvent )
         }
     }
 
-    m_commit->Add( group );
-
     for( EDA_ITEM* eda_item : selection )
     {
         if( eda_item->IsBOARD_ITEM() )
-            m_commit->Stage( static_cast<BOARD_ITEM*>( eda_item ), CHT_GROUP );
+        {
+            m_commit->Modify( eda_item );
+            group->AddItem( eda_item );
+        }
     }
 
+    m_commit->Add( group );
     m_commit->Push( _( "Group Items" ) );
 
     m_toolMgr->RunAction( ACTIONS::selectionClear );

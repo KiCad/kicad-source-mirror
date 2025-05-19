@@ -143,7 +143,7 @@ void SCH_EDIT_FRAME::SaveCopyInUndoList( SCH_SCREEN* aScreen, SCH_ITEM* aItem,
     switch( aCommandType )
     {
     case UNDO_REDO::CHANGED: /* Create a copy of item */
-        itemWrapper.SetLink( aItem->Duplicate( true ) );
+        itemWrapper.SetLink( aItem->Duplicate( IGNORE_PARENT_GROUP, nullptr, true ) );
         commandToUndo->PushItem( itemWrapper );
         break;
 
@@ -246,7 +246,7 @@ void SCH_EDIT_FRAME::SaveCopyInUndoList( const PICKED_ITEMS_LIST& aItemsList,
              * If this link is not null, the copy is already done
              */
             if( commandToUndo->GetPickedItemLink( ii ) == nullptr )
-                commandToUndo->SetPickedItemLink( sch_item->Duplicate( true ), ii );
+                commandToUndo->SetPickedItemLink( sch_item->Duplicate( IGNORE_PARENT_GROUP, nullptr, true ), ii );
 
             wxASSERT( commandToUndo->GetPickedItemLink( ii ) );
             break;
@@ -255,8 +255,6 @@ void SCH_EDIT_FRAME::SaveCopyInUndoList( const PICKED_ITEMS_LIST& aItemsList,
         case UNDO_REDO::DELETED:
         case UNDO_REDO::PAGESETTINGS:
         case UNDO_REDO::REPEAT_ITEM:
-        case UNDO_REDO::REGROUP:
-        case UNDO_REDO::UNGROUP:
             break;
 
         default:
@@ -390,26 +388,6 @@ void SCH_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
 
             bulkAddedItems.emplace_back( schItem );
         }
-        else if( status == UNDO_REDO::REGROUP ) /* grouped items are ungrouped */
-        {
-            aList->SetPickedItemStatus( UNDO_REDO::UNGROUP, ii );
-
-            if( EDA_GROUP* group = eda_item->GetParentGroup() )
-            {
-                aList->SetPickedItemGroupId( group->AsEdaItem()->m_Uuid, ii );
-
-                group->RemoveItem( eda_item );
-            }
-        }
-        else if( status == UNDO_REDO::UNGROUP ) /* ungrouped items are re-added to their previuos groups */
-        {
-            aList->SetPickedItemStatus( UNDO_REDO::REGROUP, ii );
-
-            EDA_GROUP* group = dynamic_cast<EDA_GROUP*>( Schematic().GetItem( aList->GetPickedItemGroupId( ii ) ) );
-
-            if( group )
-                group->AddItem( eda_item );
-        }
         else if( status == UNDO_REDO::PAGESETTINGS )
         {
             if( GetCurrentSheet() != undoSheet )
@@ -450,8 +428,6 @@ void SCH_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
 
             wxCHECK2( itemCopy, continue );
 
-            EDA_GROUP* parentGroup = schItem->GetParentGroup();
-
             if( schItem->HasConnectivityChanges( itemCopy, &GetCurrentSheet() ) )
                 propagateConnectivityDamage( schItem );
 
@@ -485,23 +461,7 @@ void SCH_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
                     }
                 }
 
-                if( parentGroup )
-                    parentGroup->RemoveItem( schItem );
-
                 schItem->SwapItemData( itemCopy );
-
-                if( SCH_GROUP* group = dynamic_cast<SCH_GROUP*>( schItem ) )
-                {
-                    group->RunOnChildren( [&]( SCH_ITEM* child )
-                                          {
-                                              child->SetParentGroup( group );
-                                          },
-                                          RECURSE_MODE::NO_RECURSE );
-                }
-
-                if( parentGroup )
-                    parentGroup->AddItem( schItem );
-
 
                 bulkChangedItems.emplace_back( schItem );
 
@@ -542,6 +502,32 @@ void SCH_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
             if( schItem != &Schematic().Root() )
                 AddToScreen( schItem, screen );
         }
+    }
+
+    // We have now swapped all the group parent and group member pointers.  But it is a
+    // risky proposition to bet on the pointers being invariant, so validate them all.
+    for( int ii = 0; ii < (int) aList->GetCount(); ++ii )
+    {
+        ITEM_PICKER& wrapper = aList->GetItemWrapper( ii );
+
+        SCH_ITEM* parentGroup = Schematic().ResolveItem( wrapper.GetGroupId(), nullptr, true );
+        wrapper.GetItem()->SetParentGroup( dynamic_cast<SCH_GROUP*>( parentGroup ) );
+
+        if( EDA_GROUP* group = dynamic_cast<SCH_GROUP*>( wrapper.GetItem() ) )
+        {
+            // Items list may contain dodgy pointers, so don't use RemoveAll()
+            group->GetItems().clear();
+
+            for( const KIID& member : wrapper.GetGroupMembers() )
+            {
+                if( SCH_ITEM* memberItem = Schematic().ResolveItem( member, nullptr, true ) )
+                    group->AddItem( memberItem );
+            }
+        }
+
+        // And prepare for a redo by updating group info based on current image
+        if( EDA_ITEM* item = wrapper.GetLink() )
+            wrapper.SetLink( item );
     }
 
     GetCanvas()->GetView()->ClearHiddenFlags();

@@ -67,7 +67,8 @@ SCH_COMMIT::~SCH_COMMIT()
 }
 
 
-COMMIT& SCH_COMMIT::Stage( EDA_ITEM *aItem, CHANGE_TYPE aChangeType, BASE_SCREEN *aScreen )
+COMMIT& SCH_COMMIT::Stage( EDA_ITEM *aItem, CHANGE_TYPE aChangeType, BASE_SCREEN *aScreen,
+                           RECURSE_MODE aRecurse )
 {
     wxCHECK( aItem, *this );
 
@@ -82,18 +83,12 @@ COMMIT& SCH_COMMIT::Stage( EDA_ITEM *aItem, CHANGE_TYPE aChangeType, BASE_SCREEN
         aChangeType = CHT_MODIFY;
     }
 
-    // Many operations (move, rotate, etc.) are applied directly to a group's children, so they
-    // must be staged as well.
-    if( aChangeType == CHT_MODIFY )
+    if( aRecurse == RECURSE_MODE::RECURSE )
     {
         if( SCH_GROUP* group = dynamic_cast<SCH_GROUP*>( aItem ) )
         {
-            group->RunOnChildren(
-                    [&]( EDA_ITEM* child )
-                    {
-                        Stage( child, aChangeType, aScreen );
-                    },
-                    RECURSE_MODE::NO_RECURSE );
+            for( EDA_ITEM* member : group->GetItems() )
+                Stage( member, aChangeType, aScreen, aRecurse );
         }
     }
 
@@ -198,12 +193,12 @@ void SCH_COMMIT::pushSchEdit( const wxString& aMessage, int aCommitFlags )
 
     SCH_EDIT_FRAME*     frame = static_cast<SCH_EDIT_FRAME*>( m_toolMgr->GetToolHolder() );
     SCH_SELECTION_TOOL* selTool = m_toolMgr->GetTool<SCH_SELECTION_TOOL>();
+    SCH_GROUP*          enteredGroup = selTool ? selTool->GetEnteredGroup() : nullptr;
     bool                itemsDeselected = false;
     bool                selectedModified = false;
     bool                dirtyConnectivity = false;
     bool                refreshHierarchy = false;
     SCH_CLEANUP_FLAGS   connectivityCleanUp = NO_CLEANUP;
-    SCH_GROUP*          addedGroup = nullptr;
 
     if( Empty() )
         return;
@@ -214,6 +209,37 @@ void SCH_COMMIT::pushSchEdit( const wxString& aMessage, int aCommitFlags )
     std::vector<SCH_ITEM*> bulkAddedItems;
     std::vector<SCH_ITEM*> bulkRemovedItems;
     std::vector<SCH_ITEM*> itemsChanged;
+
+    auto updateConnectivityFlag =
+            [&]( SCH_ITEM* schItem )
+            {
+                if( schItem->IsConnectable() || ( schItem->Type() == SCH_RULE_AREA_T ) )
+                {
+                    dirtyConnectivity = true;
+
+                    // Do a local clean up if there are any connectable objects in the commit.
+                    if( connectivityCleanUp == NO_CLEANUP )
+                        connectivityCleanUp = LOCAL_CLEANUP;
+
+                    // Do a full rebuild of the connectivity if there is a sheet in the commit.
+                    if( schItem->Type() == SCH_SHEET_T )
+                        connectivityCleanUp = GLOBAL_CLEANUP;
+                }
+            };
+
+    // We don't know that anything will be added to the entered group, but it does no harm to
+    // add it to the commit anyway.
+    if( enteredGroup )
+        Modify( enteredGroup );
+
+    for( COMMIT_LINE& ent : m_changes )
+    {
+        SCH_ITEM* schItem = dynamic_cast<SCH_ITEM*>( ent.m_item );
+        int       changeType = ent.m_type & CHT_TYPE;
+
+        if( changeType == CHT_REMOVE && schItem->GetParentGroup() )
+            Modify( schItem->GetParentGroup()->AsEdaItem() );
+    }
 
     for( COMMIT_LINE& ent : m_changes )
     {
@@ -242,33 +268,14 @@ void SCH_COMMIT::pushSchEdit( const wxString& aMessage, int aCommitFlags )
                     RECURSE_MODE::NO_RECURSE );
         }
 
-        auto updateConnectivityFlag = [&]()
-        {
-            if( schItem->IsConnectable() || ( schItem->Type() == SCH_RULE_AREA_T ) )
-            {
-                dirtyConnectivity = true;
-
-                // Do a local clean up if there are any connectable objects in the commit.
-                if( connectivityCleanUp == NO_CLEANUP )
-                    connectivityCleanUp = LOCAL_CLEANUP;
-
-                // Do a full rebuild of the connectivity if there is a sheet in the commit.
-                if( schItem->Type() == SCH_SHEET_T )
-                    connectivityCleanUp = GLOBAL_CLEANUP;
-            }
-        };
-
         switch( changeType )
         {
         case CHT_ADD:
         {
-            if( selTool && selTool->GetEnteredGroup() && !schItem->GetParentGroup()
-                && SCH_GROUP::IsGroupableType( schItem->Type() ) )
-            {
+            if( enteredGroup && schItem->IsGroupableType() && !schItem->GetParentGroup() )
                 selTool->GetEnteredGroup()->AddItem( schItem );
-            }
 
-            updateConnectivityFlag();
+            updateConnectivityFlag( schItem );
 
             if( !( aCommitFlags & SKIP_UNDO ) )
                 undoList.PushItem( ITEM_PICKER( screen, schItem, UNDO_REDO::NEWITEM ) );
@@ -280,12 +287,6 @@ void SCH_COMMIT::pushSchEdit( const wxString& aMessage, int aCommitFlags )
 
                 if( view )
                     view->Add( schItem );
-            }
-
-            if( schItem->Type() == SCH_GROUP_T )
-            {
-                wxASSERT_MSG( !addedGroup, "Multiple groups in a single commit. This is not supported." );
-                addedGroup = static_cast<SCH_GROUP*>( schItem );
             }
 
             if( frame )
@@ -301,10 +302,15 @@ void SCH_COMMIT::pushSchEdit( const wxString& aMessage, int aCommitFlags )
 
         case CHT_REMOVE:
         {
-            updateConnectivityFlag();
+            updateConnectivityFlag( schItem );
 
             if( !( aCommitFlags & SKIP_UNDO ) )
-                undoList.PushItem( ITEM_PICKER( screen, schItem, UNDO_REDO::DELETED ) );
+            {
+                ITEM_PICKER itemWrapper( screen, schItem, UNDO_REDO::DELETED );
+                itemWrapper.SetLink( ent.m_copy );
+                ent.m_copy = nullptr;   // We've transferred ownership to the undo list
+                undoList.PushItem( itemWrapper );
+            }
 
             if( schItem->IsSelected() )
             {
@@ -320,6 +326,9 @@ void SCH_COMMIT::pushSchEdit( const wxString& aMessage, int aCommitFlags )
                 break;
             }
 
+            if( EDA_GROUP* group = schItem->GetParentGroup() )
+                group->RemoveItem( schItem );
+
             if( !( changeFlags & CHT_DONE ) )
             {
                 screen->Remove( schItem );
@@ -331,103 +340,60 @@ void SCH_COMMIT::pushSchEdit( const wxString& aMessage, int aCommitFlags )
             if( frame )
                 frame->UpdateItem( schItem, true, true );
 
-            bulkRemovedItems.push_back( schItem );
-
             if( schItem->Type() == SCH_SHEET_T )
                 refreshHierarchy = true;
 
+            bulkRemovedItems.push_back( schItem );
             break;
         }
 
         case CHT_MODIFY:
         {
+            const SCH_ITEM* itemCopy = static_cast<const SCH_ITEM*>( ent.m_copy );
+            SCH_SHEET_PATH  currentSheet;
+
+            if( frame )
+                currentSheet = frame->GetCurrentSheet();
+
+            if( itemCopy->HasConnectivityChanges( schItem, &currentSheet )
+                || ( itemCopy->Type() == SCH_RULE_AREA_T ) )
+            {
+                updateConnectivityFlag( schItem );
+            }
+
             if( !( aCommitFlags & SKIP_UNDO ) )
             {
                 ITEM_PICKER itemWrapper( screen, schItem, UNDO_REDO::CHANGED );
-                wxASSERT( ent.m_copy );
                 itemWrapper.SetLink( ent.m_copy );
-
-                const SCH_ITEM* itemCopy = static_cast<const SCH_ITEM*>( ent.m_copy );
-
-                wxCHECK2( itemCopy, continue );
-
-                SCH_SHEET_PATH currentSheet;
-
-                if( frame )
-                    currentSheet = frame->GetCurrentSheet();
-
-                if( itemCopy->HasConnectivityChanges( schItem, &currentSheet )
-                    || ( itemCopy->Type() == SCH_RULE_AREA_T ) )
-                {
-                    updateConnectivityFlag();
-                }
-
-
-                if( schItem->Type() == SCH_SHEET_T )
-                {
-                    const SCH_SHEET* modifiedSheet = static_cast<const SCH_SHEET*>( schItem );
-                    const SCH_SHEET* originalSheet = static_cast<const SCH_SHEET*>( itemCopy );
-                    wxCHECK2( modifiedSheet && originalSheet, continue );
-
-                    if( originalSheet->HasPageNumberChanges( *modifiedSheet ) )
-                        refreshHierarchy = true;
-                }
-
-                undoList.PushItem( itemWrapper );
                 ent.m_copy = nullptr;   // We've transferred ownership to the undo list
+                undoList.PushItem( itemWrapper );
             }
 
-            if( schItem->Type() == SCH_GROUP_T )
+            if( schItem->Type() == SCH_SHEET_T )
             {
-                wxASSERT_MSG( !addedGroup, "Multiple groups in a single commit. This is not supported." );
-                addedGroup = static_cast<SCH_GROUP*>( schItem );
+                const SCH_SHEET* modifiedSheet = static_cast<const SCH_SHEET*>( schItem );
+                const SCH_SHEET* originalSheet = static_cast<const SCH_SHEET*>( itemCopy );
+                wxCHECK2( modifiedSheet && originalSheet, continue );
+
+                if( originalSheet->HasPageNumberChanges( *modifiedSheet ) )
+                    refreshHierarchy = true;
             }
 
             if( frame )
                 frame->UpdateItem( schItem, false, true );
 
             itemsChanged.push_back( schItem );
-
-            if( ent.m_copy )
-            {
-                // if no undo entry is needed, the copy would create a memory leak
-                delete ent.m_copy;
-                ent.m_copy = nullptr;
-            }
-
             break;
         }
-
-        case CHT_UNGROUP:
-            if( EDA_GROUP* group = schItem->GetParentGroup() )
-            {
-                if( !( aCommitFlags & SKIP_UNDO ) )
-                {
-                    ITEM_PICKER itemWrapper( nullptr, schItem, UNDO_REDO::UNGROUP );
-                    itemWrapper.SetGroupId( group->AsEdaItem()->m_Uuid );
-                    undoList.PushItem( itemWrapper );
-                }
-
-                group->RemoveItem( schItem );
-            }
-
-            break;
-
-        case CHT_GROUP:
-            if( addedGroup )
-            {
-                addedGroup->AddItem( schItem );
-
-                if( !( aCommitFlags & SKIP_UNDO ) )
-                    undoList.PushItem( ITEM_PICKER( nullptr, schItem, UNDO_REDO::REGROUP ) );
-            }
-
-            break;
 
         default:
             wxASSERT( false );
             break;
         }
+
+        // Delete any copies we still have ownership of
+        delete ent.m_copy;
+        ent.m_copy = nullptr;
 
         // Clear all flags but SELECTED and others used to move and rotate commands,
         // after edition (selected items must keep their selection flag).

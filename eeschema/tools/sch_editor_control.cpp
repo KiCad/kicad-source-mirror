@@ -2338,14 +2338,15 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
             SCH_ITEM* item = nullptr;
 
             group->RunOnChildren(
-                [&]( SCH_ITEM* schItem )
-                {
-                    if( !found && schItem->Type() != SCH_GROUP_T )
+                    [&]( SCH_ITEM* schItem )
                     {
-                        item = schItem;
-                        found = true;
-                    }
-                }, RECURSE_MODE::RECURSE );
+                        if( !found && schItem->Type() != SCH_GROUP_T )
+                        {
+                            item = schItem;
+                            found = true;
+                        }
+                    },
+                    RECURSE_MODE::RECURSE );
 
             if( found )
                 selection.SetReferencePoint( item->GetPosition() );
@@ -2900,12 +2901,15 @@ int SCH_EDITOR_CONTROL::RepairSchematic( const TOOL_EVENT& aEvent )
         {
             processItem( item );
 
-            item->RunOnChildren(
-                    [&]( SCH_ITEM* aChild )
-                    {
-                        processItem( item );
-                    },
-                    RECURSE_MODE::NO_RECURSE );
+            if( item->Type() != SCH_GROUP_T )
+            {
+                item->RunOnChildren(
+                        [&]( SCH_ITEM* aChild )
+                        {
+                            processItem( item );
+                        },
+                        RECURSE_MODE::NO_RECURSE );
+            }
         }
     }
 

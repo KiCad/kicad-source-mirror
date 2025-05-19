@@ -270,9 +270,9 @@ std::unique_ptr<COMMIT> API_HANDLER_PCB::createCommit()
 
 std::optional<BOARD_ITEM*> API_HANDLER_PCB::getItemById( const KIID& aId ) const
 {
-    BOARD_ITEM* item = frame()->GetBoard()->GetItem( aId );
+    BOARD_ITEM* item = frame()->GetBoard()->ResolveItem( aId, true );
 
-    if( item == DELETED_BOARD_ITEM::GetInstance() )
+    if( !item )
         return std::nullopt;
 
     return item;
@@ -649,7 +649,7 @@ void API_HANDLER_PCB::deleteItemsInternal( std::map<KIID, ItemDeletionStatus>& a
 
     for( std::pair<const KIID, ItemDeletionStatus> pair : aItemsToDelete )
     {
-        if( BOARD_ITEM* item = board->GetItem( pair.first ) )
+        if( BOARD_ITEM* item = board->ResolveItem( pair.first, true ) )
         {
             validatedItems.push_back( item );
             aItemsToDelete[pair.first] = ItemDeletionStatus::IDS_OK;

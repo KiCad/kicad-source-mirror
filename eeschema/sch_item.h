@@ -42,6 +42,7 @@ class CONNECTION_GRAPH;
 class SCH_CONNECTION;
 class SCH_SHEET_PATH;
 class SCHEMATIC;
+class SCH_COMMIT;
 class SYMBOL;
 class LINE_READER;
 class SCH_EDIT_FRAME;
@@ -202,6 +203,8 @@ public:
         return false;
     }
 
+    bool IsGroupableType() const;
+
     /**
      * Swap data between \a aItem and \a aImage.
      *
@@ -224,10 +227,13 @@ public:
      *
      * The new object is not put in draw list (not linked).
      *
-     * @param doClone (default = false) indicates unique values (such as timestamp and
-     *                sheet name) should be duplicated.  Use only for undo/redo operations.
+     * @param addToParentGroup Indicates whether or not the new item is added to the group
+     *                         (if any) containing the old item.  If true, aCommit must be
+     *                         provided.
+     * @param aDoClone (default = false) indicates unique values (such as timestamp and
+     *                 sheet name) should be duplicated.  Use only for undo/redo operations.
      */
-    SCH_ITEM* Duplicate( bool doClone = false ) const;
+    SCH_ITEM* Duplicate( bool addToParentGroup, SCH_COMMIT* aCommit = nullptr, bool doClone = false ) const;
 
     static wxString GetUnitDescription( int aUnit );
     static wxString GetBodyStyleDescription( int aBodyStyle );

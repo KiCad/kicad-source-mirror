@@ -730,9 +730,6 @@ bool TRACKS_CLEANER::testMergeCollinearSegments( PCB_TRACK* aSeg1, PCB_TRACK* aS
     if( !aDummySeg )
         aDummySeg = &dummy_seg;
 
-    // Do not copy the parent group to the dummy segment
-    dummy_seg.SetParentGroup( nullptr );
-
     // Calculate the new ends of the segment to merge, and store them to dummy_seg:
     int min_x = std::min( aSeg1->GetStart().x,
             std::min( aSeg1->GetEnd().x, std::min( aSeg2->GetStart().x, aSeg2->GetEnd().x ) ) );
@@ -772,8 +769,6 @@ bool TRACKS_CLEANER::mergeCollinearSegments( PCB_TRACK* aSeg1, PCB_TRACK* aSeg2 
 {
     PCB_TRACK dummy_seg( *aSeg1 );
 
-    dummy_seg.SetParentGroup( nullptr );
-
     if( !testMergeCollinearSegments( aSeg1, aSeg2, &dummy_seg ) )
         return false;
 
@@ -787,10 +782,7 @@ bool TRACKS_CLEANER::mergeCollinearSegments( PCB_TRACK* aSeg1, PCB_TRACK* aSeg2 
     {
         m_commit.Modify( aSeg1 );
 
-        EDA_GROUP* group = aSeg1->GetParentGroup();
         *aSeg1 = dummy_seg;
-        aSeg1->SetParentGroup( group );
-
 
         m_brd->GetConnectivity()->Update( aSeg1 );
 

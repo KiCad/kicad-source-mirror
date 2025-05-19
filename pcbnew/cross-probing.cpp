@@ -321,7 +321,6 @@ void collectItemsForSyncParts( ItemContainer& aItems, std::set<wxString>& parts 
             PCB_GROUP* group = static_cast<PCB_GROUP*>( item );
 
             collectItemsForSyncParts( group->GetItems(), parts );
-
             break;
         }
         case PCB_FOOTPRINT_T:
@@ -330,7 +329,6 @@ void collectItemsForSyncParts( ItemContainer& aItems, std::set<wxString>& parts 
             wxString   ref = footprint->GetReference();
 
             parts.emplace( wxT( "F" ) + EscapeString( ref, CTX_IPC ) );
-
             break;
         }
 
@@ -341,7 +339,6 @@ void collectItemsForSyncParts( ItemContainer& aItems, std::set<wxString>& parts 
 
             parts.emplace( wxT( "P" ) + EscapeString( ref, CTX_IPC ) + wxT( "/" )
                            + EscapeString( pad->GetNumber(), CTX_IPC ) );
-
             break;
         }
 

@@ -63,22 +63,6 @@ public:
 
     wxString GetClass() const override { return wxT( "SCH_GROUP" ); }
 
-    /**
-     * Add item to group. Does not take ownership of item.
-     *
-     * @return true if item was added (false if item belongs to a different group).
-     */
-    bool AddItem( EDA_ITEM* aItem ) override;
-
-    /**
-     * Remove item from group.
-     *
-     * @return true if item was removed (false if item was not in the group).
-     */
-    bool RemoveItem( EDA_ITEM* aItem ) override;
-
-    void RemoveAll() override;
-
     std::unordered_set<SCH_ITEM*> GetSchItems() const;
 
     /*
@@ -111,14 +95,17 @@ public:
     EDA_ITEM* Clone() const override;
 
     /*
-     * Clone() this and all descendants
+     * Clone this and all descendants
      */
-    SCH_GROUP* DeepClone() const override;
+    SCH_GROUP* DeepClone() const;
 
     /*
-     * Duplicate() this and all descendants
+     * Duplicate this and all descendants
+     *
+     * @param addToParentGroup if the original is part of a group then the new member will also
+     *                         be added to said group
      */
-    SCH_GROUP* DeepDuplicate() const override;
+    SCH_GROUP* DeepDuplicate( bool addToParentGroup, SCH_COMMIT* aCommit = nullptr ) const;
 
     /// @copydoc EDA_ITEM::HitTest
     bool HitTest( const VECTOR2I& aPosition, int aAccuracy = 0 ) const override;
@@ -165,13 +152,6 @@ public:
 
     ///< @copydoc SCH_ITEM::RunOnChildren
     void RunOnChildren( const std::function<void( SCH_ITEM* )>& aFunction, RECURSE_MODE aMode ) override;
-
-    /**
-     * Check if the proposed type can be added to a group
-     * @param aType KICAD_T type to check
-     * @return true if the type can belong to a group, false otherwise
-     */
-    static bool IsGroupableType( KICAD_T aType );
 
     /// @copydoc SCH_ITEM::swapData
     void swapData( SCH_ITEM* aImage ) override;

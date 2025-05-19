@@ -52,14 +52,3 @@ std::vector<int> SYMBOL::ViewGetLayers() const
              LAYER_FIELDS,           LAYER_DEVICE_BACKGROUND, LAYER_SHAPES_BACKGROUND,
              LAYER_NOTES_BACKGROUND, LAYER_SELECTION_SHADOWS };
 }
-
-
-SYMBOL::~SYMBOL()
-{
-    // Untangle group parents before doing any deleting
-    RunOnChildren( []( EDA_ITEM* item )
-                        {
-                            if( item->Type() == SCH_GROUP_T)
-                                item->SetParentGroup( nullptr );
-                        }, RECURSE_MODE::RECURSE );
-}

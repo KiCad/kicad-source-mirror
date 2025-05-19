@@ -33,8 +33,9 @@
 #include <wx/string.h>
 #include <undo_redo_container.h>
 #include <kiid.h>
+#include <eda_item.h>
 
-class EDA_ITEM;
+class EDA_GROUP;
 class BASE_SCREEN;
 
 ///< Types of changes
@@ -42,9 +43,7 @@ enum CHANGE_TYPE {
     CHT_ADD     = 1,
     CHT_REMOVE  = 2,
     CHT_MODIFY  = 4,
-    CHT_GROUP   = 8,
-    CHT_UNGROUP = 16,
-    CHT_TYPE    = CHT_ADD | CHT_REMOVE | CHT_MODIFY | CHT_GROUP | CHT_UNGROUP,
+    CHT_TYPE    = CHT_ADD | CHT_REMOVE | CHT_MODIFY,
 
     CHT_DONE    = 32,             ///< Flag to indicate the change is already applied
     CHT_FLAGS   = CHT_DONE
@@ -105,9 +104,10 @@ public:
      *
      * @note Must be called before modification is performed.
      */
-    COMMIT& Modify( EDA_ITEM* aItem, BASE_SCREEN *aScreen = nullptr )
+    COMMIT& Modify( EDA_ITEM* aItem, BASE_SCREEN *aScreen = nullptr,
+                    RECURSE_MODE aRecurse = RECURSE_MODE::NO_RECURSE )
     {
-        return Stage( aItem, CHT_MODIFY, aScreen );
+        return Stage( aItem, CHT_MODIFY, aScreen, aRecurse );
     }
 
     /**
@@ -131,8 +131,8 @@ public:
     }
 
     /// Add a change of the item aItem of type aChangeType to the change list.
-    virtual COMMIT& Stage( EDA_ITEM* aItem, CHANGE_TYPE aChangeType,
-                           BASE_SCREEN *aScreen = nullptr );
+    virtual COMMIT& Stage( EDA_ITEM* aItem, CHANGE_TYPE aChangeType, BASE_SCREEN *aScreen = nullptr,
+                           RECURSE_MODE aRecurse = RECURSE_MODE::NO_RECURSE );
 
     virtual COMMIT& Stage( std::vector<EDA_ITEM*>& container, CHANGE_TYPE aChangeType,
                            BASE_SCREEN *aScreen = nullptr );

@@ -613,11 +613,9 @@ void PCB_SELECTION_TOOL::EnterGroup()
     ClearSelection();
     m_enteredGroup = aGroup;
     m_enteredGroup->SetFlags( ENTERED );
-    m_enteredGroup->RunOnChildren( [&]( BOARD_ITEM* titem )
-                                   {
-                                       select( titem );
-                                   },
-                                   RECURSE_MODE::NO_RECURSE );
+
+    for( EDA_ITEM* member : m_enteredGroup->GetItems() )
+        select( member );
 
     m_toolMgr->ProcessEvent( EVENTS::SelectedEvent );
 

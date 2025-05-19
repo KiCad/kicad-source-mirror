@@ -235,7 +235,7 @@ void DIALOG_FOOTPRINT_CHECKER::OnSelectItem( wxDataViewEvent& aEvent )
     BOARD*        board = m_frame->GetBoard();
     RC_TREE_NODE* node = RC_TREE_MODEL::ToNode( aEvent.GetItem() );
     const KIID&   itemID = node ? RC_TREE_MODEL::ToUUID( aEvent.GetItem() ) : niluuid;
-    BOARD_ITEM*   item = board->GetItem( itemID );
+    BOARD_ITEM*   item = board->ResolveItem( itemID, true );
 
     if( m_centerMarkerOnIdle )
     {
@@ -257,7 +257,7 @@ void DIALOG_FOOTPRINT_CHECKER::OnSelectItem( wxDataViewEvent& aEvent )
 
         if( rc_item->GetErrorCode() == DRCE_MALFORMED_COURTYARD )
         {
-            BOARD_ITEM* a = board->GetItem( rc_item->GetMainItemID() );
+            BOARD_ITEM* a = board->ResolveItem( rc_item->GetMainItemID(), true );
 
             if( a && ( a->GetFlags() & MALFORMED_B_COURTYARD ) > 0
                   && ( a->GetFlags() & MALFORMED_F_COURTYARD ) == 0 )
@@ -275,10 +275,10 @@ void DIALOG_FOOTPRINT_CHECKER::OnSelectItem( wxDataViewEvent& aEvent )
         }
         else
         {
-            BOARD_ITEM*  a = board->GetItem( rc_item->GetMainItemID() );
-            BOARD_ITEM*  b = board->GetItem( rc_item->GetAuxItemID() );
-            BOARD_ITEM*  c = board->GetItem( rc_item->GetAuxItem2ID() );
-            BOARD_ITEM*  d = board->GetItem( rc_item->GetAuxItem3ID() );
+            BOARD_ITEM*  a = board->ResolveItem( rc_item->GetMainItemID(), true );
+            BOARD_ITEM*  b = board->ResolveItem( rc_item->GetAuxItemID(), true );
+            BOARD_ITEM*  c = board->ResolveItem( rc_item->GetAuxItem2ID(), true );
+            BOARD_ITEM*  d = board->ResolveItem( rc_item->GetAuxItem3ID(), true );
 
             if( a || b || c || d )
                 violationLayers = LSET::AllLayersMask();

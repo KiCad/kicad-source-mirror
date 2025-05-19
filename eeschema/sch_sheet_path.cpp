@@ -978,11 +978,11 @@ void SCH_SHEET_LIST::ClearModifyStatus()
 }
 
 
-SCH_ITEM* SCH_SHEET_LIST::GetItem( const KIID& aID, SCH_SHEET_PATH* aPathOut ) const
+SCH_ITEM* SCH_SHEET_LIST::ResolveItem( const KIID& aID, SCH_SHEET_PATH* aPathOut, bool aAllowNullptrReturn ) const
 {
     for( const SCH_SHEET_PATH& sheet : *this )
     {
-        SCH_ITEM* item = sheet.GetItem( aID );
+        SCH_ITEM* item = sheet.ResolveItem( aID );
 
         if( item )
         {
@@ -994,11 +994,14 @@ SCH_ITEM* SCH_SHEET_LIST::GetItem( const KIID& aID, SCH_SHEET_PATH* aPathOut ) c
     }
 
     // Not found; weak reference has been deleted.
-    return DELETED_SHEET_ITEM::GetInstance();
+    if( aAllowNullptrReturn )
+        return nullptr;
+    else
+        return DELETED_SHEET_ITEM::GetInstance();
 }
 
 
-SCH_ITEM* SCH_SHEET_PATH::GetItem( const KIID& aID ) const
+SCH_ITEM* SCH_SHEET_PATH::ResolveItem( const KIID& aID ) const
 {
     for( SCH_ITEM* aItem : LastScreen()->Items() )
     {
