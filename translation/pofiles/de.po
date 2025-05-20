@@ -30,7 +30,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-05-06 12:52+0300\n"
-"PO-Revision-Date: 2025-05-11 14:03+0000\n"
+"PO-Revision-Date: 2025-05-20 20:01+0000\n"
 "Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
@@ -10720,7 +10720,7 @@ msgstr "Metadaten durchsuchen"
 
 #: common/widgets/search_pane.cpp:54
 msgid "Search library links, descriptions and keywords"
-msgstr ""
+msgstr "Durchsuche Bibliotheksverknüpfungen, Beschreibungen und Stichworte"
 
 #: common/widgets/unit_binder.cpp:351
 #, c-format
@@ -13065,7 +13065,7 @@ msgstr "Spannungssymbole"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:128
 msgid "By net:"
-msgstr ""
+msgstr "Nach Netz:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:140
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:123
@@ -13557,7 +13557,7 @@ msgstr "De Morgan"
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:283
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:299
 msgid "True"
-msgstr ""
+msgstr "Wahr"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:283
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:303
@@ -13574,7 +13574,7 @@ msgstr "Datei auswählen"
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:1008
 #, c-format
 msgid "Unknown columns in data: %s. These columns will be ignored."
-msgstr ""
+msgstr "Unbekannte Datenspalten: %s. Diese Spalten werden ignoriert."
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:1019
 #, fuzzy
@@ -20255,6 +20255,9 @@ msgid ""
 "Unable to find LTspice symbols.\n"
 "Install LTspice or put its library files into %s"
 msgstr ""
+"Konnte LTspice-Symbole nicht finden.\n"
+"Installieren Sie LTspice oder platzieren Sie seine Bibliothek in Verzeichnis "
+"%s"
 
 #: eeschema/sch_io/ltspice/sch_io_ltspice.h:49
 msgid "LTspice schematic files"
@@ -26187,7 +26190,7 @@ msgstr "%s (D%d) auf Lage %d: %s"
 
 #: gerbview/gerber_file_image.cpp:125
 msgid "Too many messages, some are skipped"
-msgstr ""
+msgstr "Zu viele Meldungen, einige werden übersprungen"
 
 #: gerbview/gerber_file_image.cpp:358
 msgid "Image name"
@@ -27390,7 +27393,7 @@ msgstr "Platine spiegeln (nützlich, um Unterseiten darzustellen)"
 
 #: kicad/cli/command_pcb_export_hpgl.cpp:102
 msgid "Size for the default pen [mm]"
-msgstr ""
+msgstr "Standardgröße für Stift [mm]"
 
 #: kicad/cli/command_pcb_export_hpgl.cpp:108
 #, fuzzy
@@ -27399,7 +27402,7 @@ msgstr "Bevorzuge Auswahl zum Ziehen"
 
 #: kicad/cli/command_pcb_export_hpgl.cpp:114
 msgid "Pen speed [cm/s] (1 to 99 cm/s)"
-msgstr ""
+msgstr "Stiftgeschwindigkeit [cm/s] (1 bis 11 cm/s)"
 
 #: kicad/cli/command_pcb_export_pdf.cpp:37
 msgid "Generate PDF from a list of layers"
