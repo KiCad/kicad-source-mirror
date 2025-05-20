@@ -206,7 +206,6 @@ static const TOOL_ACTION ACT_SwitchCornerMode( TOOL_ACTION_ARGS()
 
 ROUTER_TOOL::ROUTER_TOOL() :
         TOOL_BASE( "pcbnew.InteractiveRouter" ),
-        m_lastTargetLayer( UNDEFINED_LAYER ),
         m_originalActiveLayer( UNDEFINED_LAYER ),
         m_inRouterTool( false )
 {
@@ -466,7 +465,6 @@ ROUTER_TOOL::~ROUTER_TOOL()
 
 bool ROUTER_TOOL::Init()
 {
-    m_lastTargetLayer     = UNDEFINED_LAYER;
     m_originalActiveLayer = UNDEFINED_LAYER;
 
     PCB_EDIT_FRAME* frame = getEditFrame<PCB_EDIT_FRAME>();
@@ -566,8 +564,6 @@ bool ROUTER_TOOL::Init()
 
 void ROUTER_TOOL::Reset( RESET_REASON aReason )
 {
-    m_lastTargetLayer = UNDEFINED_LAYER;
-
     if( aReason == RUN )
         TOOL_BASE::Reset( aReason );
 }
@@ -904,16 +900,13 @@ int ROUTER_TOOL::handleLayerSwitch( const TOOL_EVENT& aEvent, bool aForceVia )
 
     if( aEvent.IsAction( &PCB_ACTIONS::layerNext ) )
     {
-        if( m_lastTargetLayer == UNDEFINED_LAYER )
-            m_lastTargetLayer = currentLayer;
-
         size_t idx = 0;
         size_t target_idx = 0;
         PCB_LAYER_ID lastTargetLayer = m_lastTargetLayer;
 
         for( size_t i = 0; i < layers.size(); i++ )
         {
-            if( layers[i] == lastTargetLayer )
+            if( layers[i] == currentLayer )
             {
                 idx = i;
                 break;
@@ -946,16 +939,12 @@ int ROUTER_TOOL::handleLayerSwitch( const TOOL_EVENT& aEvent, bool aForceVia )
     }
     else if( aEvent.IsAction( &PCB_ACTIONS::layerPrev ) )
     {
-        if( m_lastTargetLayer == UNDEFINED_LAYER )
-            m_lastTargetLayer = currentLayer;
-
         size_t idx = 0;
         size_t target_idx = 0;
-        PCB_LAYER_ID lastTargetLayer = m_lastTargetLayer;
 
         for( size_t i = 0; i < layers.size(); i++ )
         {
-            if( layers[i] == lastTargetLayer )
+            if( layers[i] == currentLayer )
             {
                 idx = i;
                 break;
@@ -1003,8 +992,6 @@ int ROUTER_TOOL::handleLayerSwitch( const TOOL_EVENT& aEvent, bool aForceVia )
 
     if( targetLayer != UNDEFINED_LAYER )
     {
-        m_lastTargetLayer = targetLayer;
-
         if( targetLayer == currentLayer )
             return 0;
 
@@ -1173,8 +1160,6 @@ int ROUTER_TOOL::handleLayerSwitch( const TOOL_EVENT& aEvent, bool aForceVia )
 
     if( !m_router->IsPlacingVia() )
         m_router->ToggleViaPlacement();
-
-    m_lastTargetLayer = targetLayer;
 
     if( m_router->RoutingInProgress() )
     {
