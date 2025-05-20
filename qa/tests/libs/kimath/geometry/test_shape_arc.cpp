@@ -670,22 +670,25 @@ struct ARC_SEG_COLLIDE_CASE : public KI_TEST::NAMED_CASE
     SEG                 m_seg;
     bool                m_exp_result;
     int                 m_exp_distance;
+    VECTOR2I            m_collide_point;
 };
 
 
 static const std::vector<ARC_SEG_COLLIDE_CASE> arc_seg_collide_cases = {
-    { "0   deg    ", { { 0, 0 }, { 100, 0 }, 270.0 }, 0, { { 100, 0 }, { 50, 0 } }, true, 0 },
-    { "90  deg    ", { { 0, 0 }, { 100, 0 }, 270.0 }, 0, { { 0, 100 }, { 0, 50 } }, true, 0 },
-    { "180 deg    ", { { 0, 0 }, { 100, 0 }, 270.0 }, 0, { { -100, 0 }, { -50, 0 } }, true, 0 },
-    { "270 deg    ", { { 0, 0 }, { 100, 0 }, 270.0 }, 0, { { 0, -100 }, { 0, -50 } }, true, 0 },
-    { "45  deg    ", { { 0, 0 }, { 100, 0 }, 270.0 }, 0, { { 71, 71 }, { 35, 35 } }, true, 0 },
-    { "-45 deg    ", { { 0, 0 }, { 100, 0 }, 270.0 }, 0, { { 71, -71 }, { 35, -35 } }, false, -1 },
+    { "0   deg    ", { { 0, 0 }, { 100, 0 }, 270.0 }, 0, { { 100, 0 }, { 50, 0 } }, true, 0, { 100, 0 } },
+    { "90  deg    ", { { 0, 0 }, { 100, 0 }, 270.0 }, 0, { { 0, 100 }, { 0, 50 } }, true, 0, { 0, 100 } },
+    { "180 deg    ", { { 0, 0 }, { 100, 0 }, 270.0 }, 0, { { -100, 0 }, { -50, 0 } }, true, 0, { -100, 0 } },
+    { "270 deg    ", { { 0, 0 }, { 100, 0 }, 270.0 }, 0, { { 0, -100 }, { 0, -50 } }, true, 0, { 0, -100 } },
+    { "45  deg    ", { { 0, 0 }, { 100, 0 }, 270.0 }, 0, { { 71, 71 }, { 35, 35 } }, true, 0, { 70, 70 } },
+    { "-45 deg    ", { { 0, 0 }, { 100, 0 }, 270.0 }, 0, { { 71, -71 }, { 35, -35 } }, false, -1, { 0, 0 } },
     { "seg inside arc start", { { 0, 0 }, { 71, -71 }, 90.0 },
-                        10, { { 90, 0 }, { -35, 0 } }, true, 10 },
+                        10, { { 90, 0 }, { -35, 0 } }, true, 10, { 100, 0 } },
     { "seg inside arc end", { { 0, 0 }, { 71, -71  }, 90.0 },
-                        10, { { -35, 0 }, { 90, 0 } }, true, 10 },
+                        10, { { -35, 0 }, { 90, 0 } }, true, 10, { 100, 0 } },
     { "large diameter arc", { { 172367922, 82282076 }, { 162530000, 92120000 }, -45.0 },
-                        433300, { { 162096732, 92331236 }, { 162096732, 78253268 } }, true, 433268 },
+                        433300, { { 162096732, 92331236 }, { 162096732, 78253268 } }, true, 433268, { 162530000, 92120000 } },
+    { "upside down collide", { { 26250000, 16520000 }, { 28360000, 16520000 }, 90.0 },
+                        0, { { 27545249, 18303444 }, { 27545249, 18114500 } }, true, 0, { 27545249, 18185662 } }
 };
 
 
@@ -714,6 +717,18 @@ BOOST_DATA_TEST_CASE( CollideSeg, boost::unit_test::data::make( arc_seg_collide_
             BOOST_CHECK_EQUAL( dist, 0 );
         else
             BOOST_CHECK_EQUAL( dist, -1 );
+    }
+
+    BOOST_TEST_CONTEXT( "Test Collide Point" )
+    {
+        VECTOR2I collide_point;
+        int dist = -1;
+
+        if( c.m_exp_result )
+        {
+            arc.Collide( c.m_seg, c.m_arc_clearance, &dist, &collide_point );
+            BOOST_CHECK_EQUAL( collide_point, c.m_collide_point );
+        }
     }
 }
 

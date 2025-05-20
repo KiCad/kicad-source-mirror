@@ -150,7 +150,7 @@ bool DRC_TEST_PROVIDER_EDGE_CLEARANCE::Run()
         if( !reportPhase( _( "Checking copper to board edge clearances..." ) ) )
             return false;    // DRC cancelled
     }
-    else if( m_drcEngine->IsErrorLimitExceeded( DRCE_SILK_EDGE_CLEARANCE ) )
+    else if( !m_drcEngine->IsErrorLimitExceeded( DRCE_SILK_EDGE_CLEARANCE ) )
     {
         if( !reportPhase( _( "Checking silk to board edge clearances..." ) ) )
             return false;    // DRC cancelled

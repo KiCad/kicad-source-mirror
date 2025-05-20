@@ -786,7 +786,7 @@ bool SHAPE_ARC::Collide( const VECTOR2I& aP, int aClearance, int* aActual,
         // because this trucates the distance to an integer before subtracting
         dist = KiROUND( radius - sqrt( ( aP - center ).SquaredEuclideanNorm() ) );
         nearestPt = center + VECTOR2I( radius, 0 );
-        RotatePoint( nearestPt, center, angleToPt );
+        RotatePoint( nearestPt, center, -angleToPt );
     }
 
     // If not a 360 degree arc, need to use arc angles to decide if point collides
