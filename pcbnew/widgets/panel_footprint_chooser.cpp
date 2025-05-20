@@ -121,19 +121,19 @@ PANEL_FOOTPRINT_CHOOSER::PANEL_FOOTPRINT_CHOOSER( PCB_BASE_FRAME* aFrame, wxTopL
     m_vsplitter->SetExtraStyle( wxWS_EX_TRANSIENT );
     m_hsplitter->SetExtraStyle( wxWS_EX_TRANSIENT );
 
-    auto detailsPanel = new wxPanel( m_vsplitter );
+    m_detailsPanel = new wxPanel( m_vsplitter );
     auto detailsSizer = new wxBoxSizer( wxVERTICAL );
-    detailsPanel->SetSizer( detailsSizer );
+    m_detailsPanel->SetSizer( detailsSizer );
 
-    m_details = new HTML_WINDOW( detailsPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize );
+    m_details = new HTML_WINDOW( m_detailsPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize );
     detailsSizer->Add( m_details, 1, wxEXPAND, 5 );
-    detailsPanel->Layout();
-    detailsSizer->Fit( detailsPanel );
+    m_detailsPanel->Layout();
+    detailsSizer->Fit( m_detailsPanel );
 
     m_vsplitter->SetSashGravity( 0.5 );
-    // Ensure the splitted areas are always shown (i.e. 0 size not allowed)
+    // Ensure splitted areas are always shown (i.e. 0 size not allowed) when m_detailsPanel is shown
     m_vsplitter->SetMinimumPaneSize( 80 );  // arbitrary value but reasonable min size
-    m_vsplitter->SplitHorizontally( m_hsplitter, detailsPanel );
+    m_vsplitter->SplitHorizontally( m_hsplitter, m_detailsPanel );
 
     sizer->Add( m_vsplitter, 1, wxEXPAND, 5 );
 
@@ -414,5 +414,3 @@ void PANEL_FOOTPRINT_CHOOSER::OnDetailsCharHook( wxKeyEvent& e )
         e.Skip();
     }
 }
-
-

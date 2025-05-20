@@ -29,6 +29,7 @@
 #include <board.h>
 #include <wx/button.h>
 #include <wx/checkbox.h>
+#include <wx/splitter.h>
 #include <kiplatform/ui.h>
 #include <lset.h>
 #include <widgets/panel_footprint_chooser.h>
@@ -99,11 +100,9 @@ FOOTPRINT_CHOOSER_FRAME::FOOTPRINT_CHOOSER_FRAME( KIWAY* aKiway, wxWindow* aPare
 {
     SetModal( true );
 
-    m_showFpMode = true;
-    m_show3DMode = false;
     m_messagePanel->Hide();
 
-    wxPanel*    bottomPanel = new wxPanel( this );
+    m_bottomPanel = new wxPanel( this );
     wxBoxSizer* bottomSizer = new wxBoxSizer( wxVERTICAL );
     wxBoxSizer* frameSizer = new wxBoxSizer( wxVERTICAL );
 
@@ -134,39 +133,46 @@ FOOTPRINT_CHOOSER_FRAME::FOOTPRINT_CHOOSER_FRAME( KIWAY* aKiway, wxWindow* aPare
     GetBoard()->SetBoardUse( BOARD_USE::FPHOLDER );
 
     build3DCanvas();    // must be called after creating m_chooserPanel
-    m_preview3DCanvas->Show( !m_showFpMode );
+    m_preview3DCanvas->Show( m_show3DMode );
 
     // buttonsSizer contains the BITMAP buttons
     wxBoxSizer* buttonsSizer = new wxBoxSizer( wxHORIZONTAL );
 
     buttonsSizer->Add( 0, 0, 1, 0, 5 );     // Add spacer to right-align buttons
 
-    BITMAP_BUTTON* separator = new BITMAP_BUTTON( bottomPanel, wxID_ANY, wxNullBitmap );
+
+    m_toggleDescription = new BITMAP_BUTTON( m_bottomPanel, wxID_ANY, wxNullBitmap );
+    m_toggleDescription->SetIsRadioButton();
+    m_toggleDescription->SetBitmap( KiBitmapBundle( BITMAPS::text_visibility_off ) );
+    m_toggleDescription->Check( m_showDescription );
+    buttonsSizer->Add( m_toggleDescription, 0, wxRIGHT | wxLEFT | wxALIGN_CENTER_VERTICAL, 1 );
+
+    BITMAP_BUTTON* separator = new BITMAP_BUTTON( m_bottomPanel, wxID_ANY, wxNullBitmap );
     separator->SetIsSeparator();
     buttonsSizer->Add( separator, 0, wxRIGHT | wxALIGN_CENTER_VERTICAL, 1 );
 
-    m_grButton3DView = new BITMAP_BUTTON( bottomPanel, wxID_ANY, wxNullBitmap );
+    m_grButton3DView = new BITMAP_BUTTON( m_bottomPanel, wxID_ANY, wxNullBitmap );
     m_grButton3DView->SetIsRadioButton();
     m_grButton3DView->SetBitmap( KiBitmapBundle( BITMAPS::shape_3d ) );
-    m_grButton3DView->Check( !m_showFpMode );
+    m_grButton3DView->Check( m_show3DMode );
     buttonsSizer->Add( m_grButton3DView, 0, wxRIGHT | wxALIGN_CENTER_VERTICAL, 1 );
 
-    m_grButtonFpView = new BITMAP_BUTTON( bottomPanel, wxID_ANY, wxNullBitmap );
+    m_grButtonFpView = new BITMAP_BUTTON( m_bottomPanel, wxID_ANY, wxNullBitmap );
     m_grButtonFpView->SetIsRadioButton();
     m_grButtonFpView->SetBitmap( KiBitmapBundle( BITMAPS::module ) );
     m_grButtonFpView->Check( m_showFpMode );
     buttonsSizer->Add( m_grButtonFpView, 0, wxRIGHT | wxALIGN_CENTER_VERTICAL, 1 );
 
-    separator = new BITMAP_BUTTON( bottomPanel, wxID_ANY, wxNullBitmap );
+    separator = new BITMAP_BUTTON( m_bottomPanel, wxID_ANY, wxNullBitmap );
     separator->SetIsSeparator();
     buttonsSizer->Add( separator, 0, wxRIGHT | wxALIGN_CENTER_VERTICAL, 1 );
 
-    m_show3DViewer = new wxCheckBox( bottomPanel, wxID_ANY, _( "Show 3D viewer in own window" ) );
+    m_show3DViewer = new wxCheckBox( m_bottomPanel, wxID_ANY, _( "Show 3D viewer in own window" ) );
     buttonsSizer->Add( m_show3DViewer, 0, wxALL | wxALIGN_CENTER_VERTICAL, 3 );
 
     wxStdDialogButtonSizer* sdbSizer = new wxStdDialogButtonSizer();
-    wxButton*               okButton = new wxButton( bottomPanel, wxID_OK );
-    wxButton*               cancelButton = new wxButton( bottomPanel, wxID_CANCEL );
+    wxButton*               okButton = new wxButton( m_bottomPanel, wxID_OK );
+    wxButton*               cancelButton = new wxButton( m_bottomPanel, wxID_CANCEL );
 
     sdbSizer->AddButton( okButton );
     sdbSizer->AddButton( cancelButton );
@@ -176,8 +182,8 @@ FOOTPRINT_CHOOSER_FRAME::FOOTPRINT_CHOOSER_FRAME( KIWAY* aKiway, wxWindow* aPare
     buttonsSizer->Add( sdbSizer, 0, wxALL | wxALIGN_CENTER_VERTICAL, 5 );
     bottomSizer->Add( buttonsSizer, 0, wxEXPAND, 5 );
 
-    bottomPanel->SetSizer( bottomSizer );
-    frameSizer->Add( bottomPanel, 0, wxEXPAND );
+    m_bottomPanel->SetSizer( bottomSizer );
+    frameSizer->Add( m_bottomPanel, 0, wxEXPAND );
 
     SetSizer( frameSizer );
 
@@ -186,6 +192,15 @@ FOOTPRINT_CHOOSER_FRAME::FOOTPRINT_CHOOSER_FRAME( KIWAY* aKiway, wxWindow* aPare
 
     Layout();
     m_chooserPanel->FinishSetup();
+
+    if( !m_showDescription )
+    {
+        m_chooserPanel->GetVerticalSpliter()->SetMinimumPaneSize( 0 );
+        m_chooserPanel->GetVerticalSpliter()->GetWindow2()->Hide();
+        m_chooserPanel->GetVerticalSpliter()->SetSashInvisible();
+
+        m_toggleDescription->SetBitmap( KiBitmapBundle( BITMAPS::text_visibility ) );
+    }
 
     // Create the manager and dispatcher & route draw panel events to the dispatcher
     m_toolManager = new TOOL_MANAGER;
@@ -207,8 +222,14 @@ FOOTPRINT_CHOOSER_FRAME::FOOTPRINT_CHOOSER_FRAME( KIWAY* aKiway, wxWindow* aPare
     m_toolManager->InitTools();
 
     setupUIConditions();
+    updatePanelsVisibility();
 
+    // clang-format off
     // Connect Events
+    m_toggleDescription->Connect( wxEVT_COMMAND_BUTTON_CLICKED ,
+                               wxCommandEventHandler( FOOTPRINT_CHOOSER_FRAME::toggleBottomSplit ),
+                               nullptr,this );
+
     m_grButton3DView->Connect( wxEVT_COMMAND_BUTTON_CLICKED ,
                                wxCommandEventHandler( FOOTPRINT_CHOOSER_FRAME::on3DviewReq ),
                                nullptr, this );
@@ -223,6 +244,7 @@ FOOTPRINT_CHOOSER_FRAME::FOOTPRINT_CHOOSER_FRAME( KIWAY* aKiway, wxWindow* aPare
 
     Connect( FP_SELECTION_EVENT,  // custom event fired by a PANEL_FOOTPRINT_CHOOSER
              wxCommandEventHandler( FOOTPRINT_CHOOSER_FRAME::onFpChanged ), nullptr, this );
+    // clang-format on
 
     // Needed on Linux to fix the position of widgets in bottomPanel
     PostSizeEvent();
@@ -242,7 +264,12 @@ FOOTPRINT_CHOOSER_FRAME::~FOOTPRINT_CHOOSER_FRAME()
     // Disconnect board, which is owned by FOOTPRINT_PREVIEW_PANEL.
     m_pcb = nullptr;
 
+    // clang-format off
     // Disconnect Events
+    m_toggleDescription->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED,
+                                  wxCommandEventHandler( FOOTPRINT_CHOOSER_FRAME::toggleBottomSplit ),
+                                  nullptr, this );
+
     m_grButton3DView->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED,
                                   wxCommandEventHandler( FOOTPRINT_CHOOSER_FRAME::on3DviewReq ),
                                   nullptr, this );
@@ -256,6 +283,7 @@ FOOTPRINT_CHOOSER_FRAME::~FOOTPRINT_CHOOSER_FRAME()
 
     Disconnect( FP_SELECTION_EVENT,
                 wxCommandEventHandler( FOOTPRINT_CHOOSER_FRAME::onFpChanged ), nullptr, this );
+    // clang-format on
 
     if( PCBNEW_SETTINGS* cfg = dynamic_cast<PCBNEW_SETTINGS*>( Kiface().KifaceSettings() ) )
     {
@@ -664,6 +692,40 @@ void FOOTPRINT_CHOOSER_FRAME::build3DCanvas()
     dummy_board_stackup.BuildDefaultStackupList( &dummy_bds, 2 );
 }
 
+
+void FOOTPRINT_CHOOSER_FRAME::toggleBottomSplit( wxCommandEvent& event )
+{
+    m_showDescription = !m_showDescription;
+
+    m_toggleDescription->Check( m_showDescription );
+
+    m_chooserPanel->GetDetailsPanel()->Show( m_showDescription );
+
+    if( !m_showDescription )
+    {
+        m_chooserPanel->GetVerticalSpliter()->SetMinimumPaneSize( GetSize().GetHeight() );
+        m_chooserPanel->GetVerticalSpliter()->SetSashPosition(
+                GetSize().GetHeight() + m_chooserPanel->GetDetailsPanel()->GetSize().GetHeight() );
+
+        m_chooserPanel->GetVerticalSpliter()->GetWindow2()->Hide();
+        m_chooserPanel->GetVerticalSpliter()->SetSashInvisible();
+
+        m_toggleDescription->SetBitmap( KiBitmapBundle( BITMAPS::text_visibility ) );
+    }
+    else
+    {
+        m_chooserPanel->GetVerticalSpliter()->SetMinimumPaneSize( 80 );
+        m_chooserPanel->GetVerticalSpliter()->GetWindow2()->Show();
+        m_chooserPanel->GetVerticalSpliter()->SetSashInvisible( false );
+
+        m_toggleDescription->SetBitmap( KiBitmapBundle( BITMAPS::text_visibility_off ) );
+    }
+
+    m_chooserPanel->GetVerticalSpliter()->UpdateSize();
+
+    m_chooserPanel->Layout();
+    m_chooserPanel->Refresh();
+}
 
 void FOOTPRINT_CHOOSER_FRAME::on3DviewReq( wxCommandEvent& event )
 {

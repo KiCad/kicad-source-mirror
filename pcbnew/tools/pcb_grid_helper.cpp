@@ -69,7 +69,7 @@ std::optional<INTERSECTABLE_GEOM> GetBoardIntersectable( const BOARD_ITEM& aItem
     {
     case PCB_SHAPE_T:
     {
-        const PCB_SHAPE& shape = static_cast<const PCB_SHAPE&>( aItem );
+        PCB_SHAPE shape = static_cast<const PCB_SHAPE&>( aItem );
 
         switch( shape.GetShape() )
         {
@@ -1770,6 +1770,7 @@ PCB_GRID_HELPER::ANCHOR* PCB_GRID_HELPER::nearestAnchor( const VECTOR2I& aPos, i
     for( ANCHOR* const anchor : anchorsAtMinDistance )
     {
         ecoord distToNearestItem = std::numeric_limits<ecoord>::max();
+
         for( EDA_ITEM* const item : anchor->items )
         {
             if( !item )

@@ -102,6 +102,8 @@ void BuildBitmapInfo( std::unordered_map<BITMAPS, std::vector<BITMAP_INFO>>& aBi
     aBitmapInfoCache[BITMAPS::text_valign_top].emplace_back( BITMAPS::text_valign_top, wxT( "text_valign_top_16.png" ), 16, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::text_valign_center].emplace_back( BITMAPS::text_valign_center, wxT( "text_valign_center_16.png" ), 16, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::text_valign_bottom].emplace_back( BITMAPS::text_valign_bottom, wxT( "text_valign_bottom_16.png" ), 16, wxT( "light" ) );
+    aBitmapInfoCache[BITMAPS::text_visibility].emplace_back( BITMAPS::text_visibility, wxT( "text_visibility_16.png" ), 16, wxT( "light" ) );
+    aBitmapInfoCache[BITMAPS::text_visibility_off].emplace_back( BITMAPS::text_visibility_off, wxT( "text_visibility_off_16.png" ), 16, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::text_bold].emplace_back( BITMAPS::text_bold, wxT( "text_bold_16.png" ), 16, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::text_italic].emplace_back( BITMAPS::text_italic, wxT( "text_italic_16.png" ), 16, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::text_mirrored].emplace_back( BITMAPS::text_mirrored, wxT( "text_mirrored_16.png" ), 16, wxT( "light" ) );
@@ -185,6 +187,8 @@ void BuildBitmapInfo( std::unordered_map<BITMAPS, std::vector<BITMAP_INFO>>& aBi
     aBitmapInfoCache[BITMAPS::text_valign_top].emplace_back( BITMAPS::text_valign_top, wxT( "text_valign_top_dark_16.png" ), 16, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::text_valign_center].emplace_back( BITMAPS::text_valign_center, wxT( "text_valign_center_dark_16.png" ), 16, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::text_valign_bottom].emplace_back( BITMAPS::text_valign_bottom, wxT( "text_valign_bottom_dark_16.png" ), 16, wxT( "dark" ) );
+    aBitmapInfoCache[BITMAPS::text_visibility].emplace_back( BITMAPS::text_visibility, wxT( "text_visibility_dark_16.png" ), 16, wxT( "dark" ) );
+    aBitmapInfoCache[BITMAPS::text_visibility_off].emplace_back( BITMAPS::text_visibility_off, wxT( "text_visibility_off_dark_16.png" ), 16, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::text_bold].emplace_back( BITMAPS::text_bold, wxT( "text_bold_dark_16.png" ), 16, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::text_italic].emplace_back( BITMAPS::text_italic, wxT( "text_italic_dark_16.png" ), 16, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::text_mirrored].emplace_back( BITMAPS::text_mirrored, wxT( "text_mirrored_dark_16.png" ), 16, wxT( "dark" ) );
@@ -268,6 +272,8 @@ void BuildBitmapInfo( std::unordered_map<BITMAPS, std::vector<BITMAP_INFO>>& aBi
     aBitmapInfoCache[BITMAPS::text_valign_top].emplace_back( BITMAPS::text_valign_top, wxT( "text_valign_top_32.png" ), 32, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::text_valign_center].emplace_back( BITMAPS::text_valign_center, wxT( "text_valign_center_32.png" ), 32, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::text_valign_bottom].emplace_back( BITMAPS::text_valign_bottom, wxT( "text_valign_bottom_32.png" ), 32, wxT( "light" ) );
+    aBitmapInfoCache[BITMAPS::text_visibility].emplace_back( BITMAPS::text_visibility, wxT( "text_visibility_32.png" ), 32, wxT( "light" ) );
+    aBitmapInfoCache[BITMAPS::text_visibility_off].emplace_back( BITMAPS::text_visibility_off, wxT( "text_visibility_off_32.png" ), 32, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::text_bold].emplace_back( BITMAPS::text_bold, wxT( "text_bold_32.png" ), 32, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::text_italic].emplace_back( BITMAPS::text_italic, wxT( "text_italic_32.png" ), 32, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::text_mirrored].emplace_back( BITMAPS::text_mirrored, wxT( "text_mirrored_32.png" ), 32, wxT( "light" ) );
@@ -351,6 +357,8 @@ void BuildBitmapInfo( std::unordered_map<BITMAPS, std::vector<BITMAP_INFO>>& aBi
     aBitmapInfoCache[BITMAPS::text_valign_top].emplace_back( BITMAPS::text_valign_top, wxT( "text_valign_top_dark_32.png" ), 32, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::text_valign_center].emplace_back( BITMAPS::text_valign_center, wxT( "text_valign_center_dark_32.png" ), 32, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::text_valign_bottom].emplace_back( BITMAPS::text_valign_bottom, wxT( "text_valign_bottom_dark_32.png" ), 32, wxT( "dark" ) );
+    aBitmapInfoCache[BITMAPS::text_visibility].emplace_back( BITMAPS::text_visibility, wxT( "text_visibility_dark_32.png" ), 32, wxT( "dark" ) );
+    aBitmapInfoCache[BITMAPS::text_visibility_off].emplace_back( BITMAPS::text_visibility_off, wxT( "text_visibility_off_dark_32.png" ), 32, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::text_bold].emplace_back( BITMAPS::text_bold, wxT( "text_bold_dark_32.png" ), 32, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::text_italic].emplace_back( BITMAPS::text_italic, wxT( "text_italic_dark_32.png" ), 32, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::text_mirrored].emplace_back( BITMAPS::text_mirrored, wxT( "text_mirrored_dark_32.png" ), 32, wxT( "dark" ) );

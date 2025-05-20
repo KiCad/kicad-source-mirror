@@ -616,6 +616,8 @@ enum class BITMAPS : unsigned int
     text_valign_top,
     text_valign_center,
     text_valign_bottom,
+    text_visibility,
+    text_visibility_off,
     text_horizontal,
     text_vertical,
     text_bold,

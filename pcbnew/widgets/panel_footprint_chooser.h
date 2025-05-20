@@ -79,6 +79,10 @@ public:
 
     FOOTPRINT_PREVIEW_WIDGET* GetViewerPanel() const { return m_preview_ctrl; }
 
+    wxSplitterWindow* GetVerticalSpliter() const { return m_vsplitter; }
+
+    wxPanel* GetDetailsPanel() const { return m_detailsPanel; }
+
 protected:
     static constexpr int DblClickDelay = 100; // milliseconds
 
@@ -109,6 +113,7 @@ public:
     const FOOTPRINT*          m_CurrFootprint;
 
 protected:
+    wxPanel*                  m_detailsPanel;
     wxTimer*                  m_dbl_click_timer;
     wxTimer*                  m_open_libs_timer;
     wxSplitterWindow*         m_hsplitter;

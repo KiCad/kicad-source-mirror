@@ -143,6 +143,8 @@ set( BMAPS_SMALL
     text_valign_top
     text_valign_center
     text_valign_bottom
+    text_visibility
+    text_visibility_off
     text_bold
     text_italic
     text_mirrored

@@ -460,6 +460,12 @@ int COMMON_TOOLS::doZoomToPreset( int idx, bool aCenterOnCursor )
 {
     std::vector<double>& zoomList = m_toolMgr->GetSettings()->m_Window.zoom_factors;
 
+    if( zoomList.empty() ) // When called from footprint chooser, zoomList is empty for some reason
+        zoomList = m_frame->config()->m_Window.zoom_factors;
+    // or: zoomList = Kiface().KifaceSettings()->m_Window.zoom_factors;
+
+    wxCHECK( !zoomList.empty(), 0 ); // To avoid a crash lower on scale from Fp Chooser panel
+
     if( idx == 0 )      // Zoom Auto
     {
         TOOL_EVENT dummy;
@@ -801,5 +807,3 @@ void COMMON_TOOLS::setTransitions()
     Go( &COMMON_TOOLS::ToggleCursorStyle,   ACTIONS::toggleCursorStyle.MakeEvent() );
     Go( &COMMON_TOOLS::ToggleBoundingBoxes, ACTIONS::toggleBoundingBoxes.MakeEvent() );
 }
-
-
