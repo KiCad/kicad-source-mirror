@@ -63,6 +63,9 @@ T isqrt(T x)
   T r = (T) std::sqrt((double) x);
   T sqrt_max = sqrt_max_typed<T>;
 
+  if( x < 0 )
+    return sqrt_max;
+
   while (r < sqrt_max && r * r < x)
     r++;
   while (r > sqrt_max || r * r > x)
@@ -474,7 +477,7 @@ SEG::ecoord SEG::SquaredDistance( const VECTOR2I& aP ) const
     // e is the projection of aP onto ab and therefore cannot be greater than
     // the length of ap and f is guaranteed to be greater than e, meaning
     // e * e / f cannot be greater than ap.SquaredEuclideanNorm()
-    if( g < 0 )
+    if( g < 0 || g > static_cast<double>( std::numeric_limits<ecoord>::max() ) )
         return 0;
 
     return KiROUND<double, ecoord>( g );
