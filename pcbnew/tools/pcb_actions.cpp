@@ -690,6 +690,20 @@ TOOL_ACTION PCB_ACTIONS::changeTrackWidth( TOOL_ACTION_ARGS()
         .FriendlyName( _( "Change Track Width" ) )
         .Tooltip( _( "Updates selected track & via sizes" ) ) );
 
+TOOL_ACTION PCB_ACTIONS::changeTrackLayerNext( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.Control.changeTrackLayerNext" )
+        .Scope( AS_GLOBAL )
+        .DefaultHotkey( MD_CTRL + '+' )
+        .FriendlyName( "Switch Track to Next Layer" )
+        .Tooltip( _( "Switch track to next enabled copper layer" ) ) );
+
+TOOL_ACTION PCB_ACTIONS::changeTrackLayerPrev( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.Control.changeTrackLayerPrev" )
+        .Scope( AS_GLOBAL )
+        .DefaultHotkey( MD_CTRL + '-' )
+        .FriendlyName( "Switch Track to Previous Layer" )
+        .Tooltip( _( "Switch track to previous enabled copper layer" ) ) );
+
 TOOL_ACTION PCB_ACTIONS::filletTracks( TOOL_ACTION_ARGS()
         .Name( "pcbnew.InteractiveEdit.filletTracks" )
         .Scope( AS_GLOBAL )

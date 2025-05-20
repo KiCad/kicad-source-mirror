@@ -136,6 +136,8 @@ public:
 
     /// Update selected tracks & vias to the current track & via dimensions
     static TOOL_ACTION changeTrackWidth;
+    static TOOL_ACTION changeTrackLayerNext;
+    static TOOL_ACTION changeTrackLayerPrev;
 
     /// Fillet (i.e. adds an arc tangent to) all selected straight tracks by a user defined radius
     static TOOL_ACTION filletTracks;

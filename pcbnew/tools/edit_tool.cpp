@@ -1063,6 +1063,69 @@ int EDIT_TOOL::ChangeTrackWidth( const TOOL_EVENT& aEvent )
 }
 
 
+int EDIT_TOOL::ChangeTrackLayer( const TOOL_EVENT& aEvent )
+{
+    if( m_toolMgr->GetTool<ROUTER_TOOL>()->IsToolActive() )
+        return 0;
+
+    bool isNext = aEvent.IsAction( &PCB_ACTIONS::changeTrackLayerNext );
+
+    const PCB_SELECTION& selection = m_selectionTool->RequestSelection(
+            []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, PCB_SELECTION_TOOL* sTool )
+            {
+                // Iterate from the back so we don't have to worry about removals.
+                for( int i = aCollector.GetCount() - 1; i >= 0; --i )
+                {
+                    BOARD_ITEM* item = aCollector[i];
+
+                    if( !dynamic_cast<PCB_TRACK*>( item ) )
+                        aCollector.Remove( item );
+                }
+            },
+            true /* prompt user regarding locked items */ );
+
+    PCB_LAYER_ID origLayer = frame()->GetActiveLayer();
+
+    if( isNext )
+        m_toolMgr->RunAction( PCB_ACTIONS::layerNext );
+    else
+        m_toolMgr->RunAction( PCB_ACTIONS::layerPrev );
+
+    PCB_LAYER_ID newLayer = frame()->GetActiveLayer();
+
+    if( newLayer == origLayer )
+        return 0;
+
+    BOARD_COMMIT commit( this );
+
+    for( EDA_ITEM* item : selection )
+    {
+        if( item->Type() == PCB_TRACE_T || item->Type() == PCB_ARC_T )
+        {
+            PCB_TRACK* track = dynamic_cast<PCB_TRACK*>( item );
+
+            wxCHECK( track, 0 );
+
+            commit.Modify( track );
+
+            track->SetLayer( newLayer );
+        }
+    }
+
+    commit.Push( _( "Edit Track Layer" ) );
+
+    if( selection.IsHover() )
+    {
+        m_toolMgr->RunAction( ACTIONS::selectionClear );
+
+        // Notify other tools of the changes -- This updates the visual ratsnest
+        m_toolMgr->ProcessEvent( EVENTS::SelectedItemsModified );
+    }
+
+    return 0;
+}
+
+
 int EDIT_TOOL::FilletTracks( const TOOL_EVENT& aEvent )
 {
     // Store last used fillet radius to allow pressing "enter" if repeat fillet is required
@@ -3513,6 +3576,8 @@ void EDIT_TOOL::setTransitions()
     Go( &EDIT_TOOL::Swap,                  PCB_ACTIONS::swap.MakeEvent() );
     Go( &EDIT_TOOL::PackAndMoveFootprints, PCB_ACTIONS::packAndMoveFootprints.MakeEvent() );
     Go( &EDIT_TOOL::ChangeTrackWidth,      PCB_ACTIONS::changeTrackWidth.MakeEvent() );
+    Go( &EDIT_TOOL::ChangeTrackLayer,      PCB_ACTIONS::changeTrackLayerNext.MakeEvent() );
+    Go( &EDIT_TOOL::ChangeTrackLayer,      PCB_ACTIONS::changeTrackLayerPrev.MakeEvent() );
     Go( &EDIT_TOOL::FilletTracks,          PCB_ACTIONS::filletTracks.MakeEvent() );
     Go( &EDIT_TOOL::ModifyLines,           PCB_ACTIONS::filletLines.MakeEvent() );
     Go( &EDIT_TOOL::ModifyLines,           PCB_ACTIONS::chamferLines.MakeEvent() );
