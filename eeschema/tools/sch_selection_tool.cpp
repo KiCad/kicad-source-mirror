@@ -2297,9 +2297,13 @@ bool SCH_SELECTION_TOOL::selectMultiple()
                         if( selectionRect.Contains( line->GetEndPoint() ) && line->IsEndDangling() )
                             flags |= ENDPOINT;
                     }
-                }
 
-                selectItem( item, flags );
+                    // Only select a line if it at least one point is selected
+                    if( flags & ( STARTPOINT | ENDPOINT ) )
+                        selectItem( item, flags );
+                }
+                else
+                    selectItem( item, flags );
 
                 item->ClearFlags( SHOW_ELEC_TYPE );
             }
