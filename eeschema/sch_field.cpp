@@ -1537,6 +1537,14 @@ void SCH_FIELD::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS& 
         SCH_GLOBALLABEL* label = static_cast<SCH_GLOBALLABEL*>( m_parent );
         textpos += label->GetSchematicTextOffset( renderSettings );
     }
+    else if( m_parent && m_parent->Type() == SCH_DIRECTIVE_LABEL_T )
+    {
+        SCH_DIRECTIVE_LABEL* label = static_cast<SCH_DIRECTIVE_LABEL*>( m_parent );
+        std::shared_ptr<NETCLASS> nc = label->GetEffectiveNetClass();
+
+        if( nc && ( nc->GetSchematicColor() != COLOR4D::UNSPECIFIED ) && aPlotter->GetColorMode() )
+            color = nc->GetSchematicColor();
+    }
 
     KIFONT::FONT* font = GetFont();
 
