@@ -14,10 +14,10 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-05-21 05:16+0300\n"
-"PO-Revision-Date: 2025-05-07 12:01+0000\n"
+"PO-Revision-Date: 2025-05-22 11:06+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
-"Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/master-"
-"source/sv/>\n"
+"Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/"
+"master-source/sv/>\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -3019,9 +3019,9 @@ msgid "Grid Settings"
 msgstr "Rutnätsinställningar"
 
 #: common/dialogs/dialog_group_properties.cpp:112
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid library link: '%s'"
-msgstr "Ogiltig biblioteksidentifierare"
+msgstr "Ogiltig bibliotekslänk: '%s'"
 
 #: common/dialogs/dialog_group_properties.cpp:133
 msgid "Edit Group Properties"
@@ -8785,9 +8785,9 @@ msgid "Open %s"
 msgstr "Öppna %s"
 
 #: common/plotters/PDF_plotter.cpp:1951
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to open 3D model file: %s"
-msgstr "Kunde inte öppna filen '%s'."
+msgstr "Kunde inte öppna 3D-modellfilen: %s"
 
 #: common/project.cpp:416 common/project.cpp:421 pcbnew/project_pcb.cpp:69
 msgid "Error loading project footprint library table."
@@ -9153,14 +9153,12 @@ msgid "Ungroup any selected groups"
 msgstr "Avgruppera valda grupper"
 
 #: common/tool/actions.cpp:215
-#, fuzzy
 msgid "Add Items"
-msgstr "Objekt"
+msgstr "Lägg till objekt"
 
 #: common/tool/actions.cpp:216
-#, fuzzy
 msgid "Add items to group"
-msgstr "Ta bort objekt från gruppen"
+msgstr "Lägg till objekt till gruppen"
 
 #: common/tool/actions.cpp:222
 msgid "Remove Items"
@@ -9544,22 +9542,19 @@ msgstr "Zooma för att passa"
 
 #: common/tool/actions.cpp:699
 msgid "Zoom to worksheet area if exists or edited object"
-msgstr ""
+msgstr "Zooma till arkets storlek om det finns, eller redigerat objekt"
 
 #: common/tool/actions.cpp:706
-#, fuzzy
 msgid "Zoom to All Objects"
-msgstr "Zooma till objekt"
+msgstr "Zooma till alla objekt"
 
 #: common/tool/actions.cpp:707
-#, fuzzy
 msgid "Zoom to all objects on screen"
-msgstr "Välj alla objekt på skärmen"
+msgstr "Zooma till alla objekt på skärmen"
 
 #: common/tool/actions.cpp:713
-#, fuzzy
 msgid "Zoom to items currently selected"
-msgstr "Redigera den aktuella valda regulatorn."
+msgstr "Zooma till för närvarande valda objekt"
 
 #: common/tool/actions.cpp:714
 msgid "Zoom to Selected Objects"
@@ -9622,11 +9617,12 @@ msgstr "Centrera på markören"
 #: common/tool/actions.cpp:794
 #, fuzzy
 msgid "Zoom to Selection Area"
-msgstr "Zooma till valda objekt"
+msgstr "Zooma till område för val"
 
 #: common/tool/actions.cpp:795
 msgid "Zoom to an area selection created by a mouse drag"
 msgstr ""
+"Zooma till ytan för att välja objekt som skapats genom att dra med musen"
 
 #: common/tool/actions.cpp:803 common/widgets/mathplot.cpp:1394
 msgid "Undo Last Zoom"
@@ -10160,9 +10156,8 @@ msgid "Grouping"
 msgstr "Gruppering"
 
 #: common/tool/group_tool.cpp:224
-#, fuzzy
 msgid "Add Items to Group"
-msgstr "Justera objekt till rutnät"
+msgstr "Lägg till objekt till grupp"
 
 #: common/tool/group_tool.cpp:247
 msgid "Remove Group Items"
@@ -12172,7 +12167,7 @@ msgstr "Uppdatera/återställ synlighet för stiftnamn/-nummer"
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:172
 #, fuzzy
 msgid "Reset alternate pin to default"
-msgstr "Återställ parametrarna i guiden till standardvärden"
+msgstr "Återställ stiftalternativ till standardvärden"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:178
 msgid "Update/reset symbol attributes"
@@ -13617,14 +13612,12 @@ msgid "Filter by unit:"
 msgstr "Filtrera efter enhet:"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:208
-#, fuzzy
 msgid "Filter by body style:"
 msgstr "Filtrera efter symbolform:"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:216
-#, fuzzy
 msgid "Filter by selection"
-msgstr "Filterval"
+msgstr "Filtrera efter urval"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:248
 msgid "Group by name"
@@ -14609,9 +14602,8 @@ msgstr "Sök efter stift&namn och -nummer"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:96
 #: pcbnew/dialogs/dialog_find_base.cpp:92
-#, fuzzy
 msgid "Include &hidden fields"
-msgstr "Inkludera dolda fält"
+msgstr "Inkludera &dolda fält"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:99
 msgid "Search the current &sheet only"
@@ -17326,7 +17318,7 @@ msgstr ""
 
 #: eeschema/eeschema_jobs_handler.cpp:132 pcbnew/pcbnew_jobs_handler.cpp:241
 msgid "Plotting to HPGL is no longer supported as of KiCad 10.0."
-msgstr ""
+msgstr "Plottning till HPGL stöds inte längre från och med KiCad 10.0."
 
 #: eeschema/eeschema_jobs_handler.cpp:199
 msgid "Failed to load schematic\n"
@@ -17336,7 +17328,7 @@ msgstr "Det gick inte att läsa in kretsschemat\n"
 #: kicad/cli/command_pcb_export_hpgl.cpp:36
 #: kicad/cli/command_sch_export_plot.cpp:126 pcbnew/pcbnew_jobs_handler.cpp:229
 msgid "Plotting to HPGL is no longer supported as of KiCad 10.0.\n"
-msgstr ""
+msgstr "Plottning till HPGL stöds inte längre från och med KiCad 10.0.\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:324
 #: eeschema/eeschema_jobs_handler.cpp:466
@@ -19965,15 +19957,14 @@ msgstr "Ogiltigt ID på symbolbibliotek"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:4880
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6174
-#, fuzzy, c-format
+#, c-format
 msgid "Group library link %s contains invalid character '%c'"
-msgstr "Symbol '%s' innehåller ogiltigt tecken '%c'"
+msgstr "Gruppbibliotekslänk %s innehåller ogiltigt tecken '%c'"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:4886
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6180
-#, fuzzy
 msgid "Invalid library ID"
-msgstr "Ogiltigt ID på symbolbibliotek"
+msgstr "Ogiltigt ID för bibliotek"
 
 #: eeschema/sch_io/ltspice/ltspice_schematic.cpp:223
 #, c-format
@@ -23457,24 +23448,20 @@ msgid "Add selected design block to current sheet"
 msgstr "Lägg till valt designblock till aktuellt ark"
 
 #: eeschema/tools/sch_actions.cpp:467 pcbnew/tools/pcb_actions.cpp:461
-#, fuzzy
 msgid "Place Linked Design Block"
-msgstr "Placera ut designblock"
+msgstr "Placera ut länkat designblock"
 
 #: eeschema/tools/sch_actions.cpp:468 pcbnew/tools/pcb_actions.cpp:462
-#, fuzzy
 msgid "Place design block linked to selected group"
-msgstr "Placera designblocket som en grupp."
+msgstr "Placera designblocket länkat till vald grupp"
 
 #: eeschema/tools/sch_actions.cpp:475 pcbnew/tools/pcb_actions.cpp:469
-#, fuzzy
 msgid "Save to Linked Design Block"
-msgstr "Spara val till designblock..."
+msgstr "Spara till länkat designblock"
 
 #: eeschema/tools/sch_actions.cpp:476 pcbnew/tools/pcb_actions.cpp:470
-#, fuzzy
 msgid "Save selected group to linked design block"
-msgstr "Spara val till designblock..."
+msgstr "Spara vald grupp till länkat designblock"
 
 #: eeschema/tools/sch_actions.cpp:486
 msgid "Place No Connect Flags"
@@ -24775,14 +24762,14 @@ msgstr "Inga fel hittades."
 #: eeschema/tools/sch_editor_control.cpp:2998
 #: eeschema/tools/sch_editor_control.cpp:3044 pcbnew/tools/pcb_control.cpp:1382
 #: pcbnew/tools/pcb_control.cpp:1435
-#, fuzzy, c-format
+#, c-format
 msgid "Could not find design block %s."
-msgstr "Kunde inte hitta kolumnetikett %s."
+msgstr "Kunde inte hitta designblock %s."
 
 #: eeschema/tools/sch_editor_control.cpp:3006
-#, fuzzy, c-format
+#, c-format
 msgid "Design block %s does not have a schematic file."
-msgstr "Designblocket har inte en kretsschema- eller mönsterkortsfil."
+msgstr "Designblocket %s har ingen kretsschemafil."
 
 #: eeschema/tools/sch_find_replace_tool.cpp:329
 msgid "Reached end of schematic."
@@ -25206,9 +25193,8 @@ msgstr "Direktiv"
 #: eeschema/widgets/search_handlers.cpp:496
 #: pcbnew/dialogs/dialog_multichannel_generate_rule_areas.cpp:115
 #: pcbnew/widgets/search_handlers.cpp:341
-#, fuzzy
 msgid "Groups"
-msgstr "Grupp"
+msgstr "Grupper"
 
 #: eeschema/widgets/symbol_filedlg_save_as.h:33
 msgid "Do not update library tables"
@@ -27136,7 +27122,7 @@ msgstr ""
 
 #: kicad/cli/command_pcb_export_hpgl.cpp:30
 msgid "No longer supported as of KiCad 10.0."
-msgstr ""
+msgstr "Stöds inte längre från och med KiCad 10.0."
 
 #: kicad/cli/command_pcb_export_pdf.cpp:37
 msgid "Generate PDF from a list of layers"
@@ -27531,9 +27517,8 @@ msgstr ""
 
 #: kicad/cli/command_sch_export_plot.cpp:108
 #: kicad/cli/command_sch_export_plot.cpp:114
-#, fuzzy
 msgid "Deprecated.  Has no effect."
-msgstr "Föråldrad version av %s."
+msgstr "Föråldrat.  Har ingen verkan."
 
 #: kicad/cli/command_sch_export_pythonbom.cpp:36
 msgid ""
@@ -28843,13 +28828,12 @@ msgid "Local path: monitoring folder changes"
 msgstr "Lokal sökväg: övervakning av mappändringar"
 
 #: kicad/project_tree_pane.cpp:1596
-#, fuzzy
 msgid "Please wait"
-msgstr "Pulsbredd:"
+msgstr "Vänligen vänta"
 
 #: kicad/project_tree_pane.cpp:1597
 msgid "Waiting for Git operations to finish..."
-msgstr ""
+msgstr "Väntar på att Git-åtgärder ska fullföljas..."
 
 #: kicad/project_tree_pane.cpp:1671
 msgid "The selected directory is already a Git project."
@@ -37129,9 +37113,8 @@ msgstr "Ersätt fotavtryck med dem som anges i nätlista"
 
 #: pcbnew/dialogs/dialog_import_netlist_base.cpp:59
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:43
-#, fuzzy
 msgid "Group footprints based on symbol group"
-msgstr "Inget fotavtryck definierat för symbol %s."
+msgstr "Gruppera fotavtryck efter symbolgrupp"
 
 #: pcbnew/dialogs/dialog_import_netlist_base.cpp:62
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:46
@@ -40102,9 +40085,8 @@ msgid "Place items matching component class:"
 msgstr "Placera objekt som matchar komponentklass:"
 
 #: pcbnew/dialogs/panel_rule_area_properties_placement_base.cpp:42
-#, fuzzy
 msgid "Place items in group:"
-msgstr "Placera som grupp"
+msgstr "Placera objekt i grupp:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:46
 msgid "Minimum clearance:"
@@ -44135,24 +44117,24 @@ msgid "Update %s jumper pad groups"
 msgstr "Uppdatera %s grupper av sammankopplade lödytor"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:856
-#, fuzzy, c-format
+#, c-format
 msgid "Remove %s from group \"%s\"."
-msgstr "Ta bort objekt från gruppen"
+msgstr "Ta bort %s från grupp \"%s\"."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:862
-#, fuzzy, c-format
+#, c-format
 msgid "Removed %s from group \"%s\"."
-msgstr "Ta bort objekt från gruppen"
+msgstr "Tog bort %s från grupp \"%s\"."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:880
-#, fuzzy, c-format
+#, c-format
 msgid "Add %s to group \"%s\"."
-msgstr "Lägg till användardefinierad grupp..."
+msgstr "Lägg till %s till grupp \"%s\"."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:886
-#, fuzzy, c-format
+#, c-format
 msgid "Added %s group \"%s\"."
-msgstr "Lade till %s (fotavtryck '%s')."
+msgstr "Lade till %s grupp \"%s\"."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:989
 #, c-format
@@ -44240,24 +44222,24 @@ msgid "Copper zone on layer %s at (%s, %s) has no pads connected."
 msgstr "Kopparzon på lager %s vid (%s, %s) har inga lödytor anslutna."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1365
-#, fuzzy, c-format
+#, c-format
 msgid "Change group name to '%s' to '%s'."
-msgstr "Ändra %s -värdet från '%s' till '%s'."
+msgstr "Ändra gruppnamn från '%s' till '%s'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1372
-#, fuzzy, c-format
+#, c-format
 msgid "Changed group name to '%s' to '%s'."
-msgstr "Ändra %s -värdet från '%s' till '%s'."
+msgstr "Ändra gruppnamn från '%s' till '%s'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1384
-#, fuzzy, c-format
+#, c-format
 msgid "Change group library link to '%s'."
-msgstr "&Spara inställningar"
+msgstr "Ändra gruppbibliotekslänk till '%s'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1391
-#, fuzzy, c-format
+#, c-format
 msgid "Changed group library link to '%s'."
-msgstr "&Spara inställningar"
+msgstr "Ändrade gruppbibliotekslänk till '%s'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1428
 #, c-format
@@ -44331,14 +44313,14 @@ msgstr ""
 "förskjutning: %d"
 
 #: pcbnew/netlist_reader/kicad_netlist_reader.cpp:675
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Invalid lib_id ID in\n"
 "file: '%s'\n"
 "line: %d\n"
 "offf: %d"
 msgstr ""
-"Ogiltigt fotavtrycks-ID i\n"
+"Ogiltigt lib_id-ID i\n"
 "fil: '%s'\n"
 "rad: %d\n"
 "förskjutning: %d"
@@ -46704,11 +46686,11 @@ msgid "No layers selected for plotting."
 msgstr "Inga lager valda för plottning."
 
 #: pcbnew/pcb_plotter.cpp:481
-#, fuzzy, c-format
+#, c-format
 msgid "Color theme '%s' not found, will use theme from PCB Editor.\n"
 msgstr ""
-"Färgschema '%s' hittades inte, inställningarna i mönsterkortsredigeraren "
-"kommer att användas.\n"
+"Färgschema '%s' hittades inte, färgshema från mönsterkortsredigeraren kommer "
+"att användas.\n"
 
 #: pcbnew/pcb_reference_image.cpp:350
 msgid "Associated Layer"
@@ -47163,7 +47145,7 @@ msgstr "Flera lager"
 
 #: pcbnew/plot_board_layers.cpp:1224
 msgid "HPGL plotting is no longer supported as of KiCad 10.0"
-msgstr ""
+msgstr "HPGL-plottning stöds inte längre från och med KiCad 10.0"
 
 #: pcbnew/project_pcb.cpp:64
 msgid "Error loading project footprint libraries."
@@ -48393,9 +48375,8 @@ msgid "Edit Track Width/Via Size"
 msgstr "Redigera ledarbredd / via-storlek"
 
 #: pcbnew/tools/edit_tool.cpp:1115
-#, fuzzy
 msgid "Edit Track Layer"
-msgstr "Ändra bana"
+msgstr "Ändra ledarens lager"
 
 #: pcbnew/tools/edit_tool.cpp:1150
 msgid "At least two straight track segments must be selected."
@@ -49126,14 +49107,12 @@ msgid "Updates selected track & via sizes"
 msgstr "Uppdaterar valda ledar- och viastorlekar"
 
 #: pcbnew/tools/pcb_actions.cpp:698
-#, fuzzy
 msgid "Switch track to next enabled copper layer"
-msgstr "Objekt på ett inaktiverat kopparlager"
+msgstr "Flytta ledare till nästa aktiva kopparlager"
 
 #: pcbnew/tools/pcb_actions.cpp:705
-#, fuzzy
 msgid "Switch track to previous enabled copper layer"
-msgstr "Byt till föregående lager"
+msgstr "Flytta ledare till föregående aktiva kopparlager"
 
 #: pcbnew/tools/pcb_actions.cpp:711
 msgid "Adds arcs tangent to the selected straight track segments"
@@ -50286,14 +50265,12 @@ msgid "Unroutes selected items to the nearest pad."
 msgstr "Tar bort valda objekt till närmaste lödyta."
 
 #: pcbnew/tools/pcb_actions.cpp:2194
-#, fuzzy
 msgid "Unroute Segment"
-msgstr "Ta bort vald ledardragning"
+msgstr "Ta bort valt ledarsegment"
 
 #: pcbnew/tools/pcb_actions.cpp:2195
-#, fuzzy
 msgid "Unroutes segment to the nearest segment."
-msgstr "Tar bort valda objekt till närmaste lödyta."
+msgstr "Tar bort segment till det närmaste segmentet."
 
 #: pcbnew/tools/pcb_actions.cpp:2209
 msgid "Select All Tracks in Net"
@@ -50713,9 +50690,9 @@ msgid "Invalid clipboard contents"
 msgstr "Ogiltigt urklippsinnehåll"
 
 #: pcbnew/tools/pcb_control.cpp:1390
-#, fuzzy, c-format
+#, c-format
 msgid "Design block %s does not have a board file."
-msgstr "Designblocket har inte en kretsschema- eller mönsterkortsfil."
+msgstr "Designblock %s har ingen mönsterkortsfil."
 
 #: pcbnew/tools/pcb_control.cpp:1693
 msgid "Error loading board."
