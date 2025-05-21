@@ -30,10 +30,10 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-05-21 05:16+0300\n"
-"PO-Revision-Date: 2025-05-20 20:01+0000\n"
+"PO-Revision-Date: 2025-05-22 11:05+0000\n"
 "Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
-"Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
-"source/de/>\n"
+"Language-Team: German <https://hosted.weblate.org/projects/kicad/"
+"master-source/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -8877,9 +8877,9 @@ msgid "Open %s"
 msgstr "Öffne %s"
 
 #: common/plotters/PDF_plotter.cpp:1951
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to open 3D model file: %s"
-msgstr "Konnte Datei \"%s\" nicht öffnen."
+msgstr "Konnte 3D-Modelldatei nicht öffnen: %s"
 
 #: common/project.cpp:416 common/project.cpp:421 pcbnew/project_pcb.cpp:69
 msgid "Error loading project footprint library table."
@@ -23717,9 +23717,8 @@ msgid "Place Linked Design Block"
 msgstr "Designblock hinzufügen"
 
 #: eeschema/tools/sch_actions.cpp:468 pcbnew/tools/pcb_actions.cpp:462
-#, fuzzy
 msgid "Place design block linked to selected group"
-msgstr "Designblock als neue Schaltplanseite einfügen."
+msgstr "Designblock mit gewählter Gruppe verknüpft einfügen"
 
 #: eeschema/tools/sch_actions.cpp:475 pcbnew/tools/pcb_actions.cpp:469
 #, fuzzy
