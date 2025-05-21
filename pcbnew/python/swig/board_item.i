@@ -179,7 +179,7 @@ static PCB_REFERENCE_IMAGE*  Cast_to_PCB_REFERENCE_IMAGE( BOARD_ITEM* );
         if ct=="BOARD":
             return None
         else:
-            return Cast_to_BOARD_ITEM( _pcbnew.BOARD_ITEM_Duplicate(self) ).Cast()
+            return Cast_to_BOARD_ITEM( _pcbnew.BOARD_ITEM_Duplicate(self, False) ).Cast()
 
     def SetPos(self,p):
         self.SetPosition(p)
