@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-06 12:52+0300\n"
+"POT-Creation-Date: 2025-05-21 05:16+0300\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -1742,11 +1742,18 @@ msgstr "Linked"
 msgid "Grid Settings"
 msgstr "Grid Settings"
 
+#, c-format
+msgid "Invalid library link: '%s'"
+msgstr "Invalid library link: '%s'"
+
 msgid "Edit Group Properties"
 msgstr "Edit Group Properties"
 
 msgid "Group name:"
 msgstr "Group name:"
+
+msgid "Library link:"
+msgstr "Library link:"
 
 msgid "Locked"
 msgstr "Locked"
@@ -4766,9 +4773,6 @@ msgstr "PCB: Export Gerbers"
 msgid "Export HPGL"
 msgstr "Export HPGL"
 
-msgid "Export HPGL Job Settings"
-msgstr "Export HPGL Job Settings"
-
 msgid "PCB: Export HPGL"
 msgstr "PCB: Export HPGL"
 
@@ -5340,6 +5344,10 @@ msgstr "Show Page %s"
 msgid "Open %s"
 msgstr "Open %s"
 
+#, c-format
+msgid "Failed to open 3D model file: %s"
+msgstr "Failed to open 3D model file: %s"
+
 msgid "Error loading project footprint library table."
 msgstr "Error loading project footprint library table."
 
@@ -5575,6 +5583,12 @@ msgstr "Ungroup Items"
 
 msgid "Ungroup any selected groups"
 msgstr "Ungroup any selected groups"
+
+msgid "Add Items"
+msgstr "Add Items"
+
+msgid "Add items to group"
+msgstr "Add items to group"
 
 msgid "Remove Items"
 msgstr "Remove Items"
@@ -5847,8 +5861,17 @@ msgstr "Refresh"
 msgid "Zoom to Fit"
 msgstr "Zoom to Fit"
 
-msgid "Zoom to Objects"
-msgstr "Zoom to Objects"
+msgid "Zoom to worksheet area if exists or edited object"
+msgstr "Zoom to worksheet area if exists or edited object"
+
+msgid "Zoom to All Objects"
+msgstr "Zoom to All Objects"
+
+msgid "Zoom to all objects on screen"
+msgstr "Zoom to all objects on screen"
+
+msgid "Zoom to items currently selected"
+msgstr "Zoom to items currently selected"
 
 msgid "Zoom to Selected Objects"
 msgstr "Zoom to Selected Objects"
@@ -5892,8 +5915,11 @@ msgstr "Zoom out vertically the plot area"
 msgid "Center on Cursor"
 msgstr "Center on Cursor"
 
-msgid "Zoom to Selection"
-msgstr "Zoom to Selection"
+msgid "Zoom to Selection Area"
+msgstr "Zoom to Selection Area"
+
+msgid "Zoom to an area selection created by a mouse drag"
+msgstr "Zoom to an area selection created by a mouse drag"
 
 msgid "Undo Last Zoom"
 msgstr "Undo Last Zoom"
@@ -6268,6 +6294,9 @@ msgstr ""
 msgid "Grouping"
 msgstr "Grouping"
 
+msgid "Add Items to Group"
+msgstr "Add Items to Group"
+
 msgid "Remove Group Items"
 msgstr "Remove Group Items"
 
@@ -6584,6 +6613,9 @@ msgstr "%d objects selected"
 
 msgid "Basic Properties"
 msgstr "Basic Properties"
+
+msgid "Zoom to Selection"
+msgstr "Zoom to Selection"
 
 msgid "Toggle zooming to selections in the search pane"
 msgstr "Toggle zooming to selections in the search pane"
@@ -7700,12 +7732,6 @@ msgstr "Select None"
 msgid "Update Options"
 msgstr "Update Options"
 
-msgid "Update symbol shape and pins"
-msgstr "Update symbol shape and pins"
-
-msgid "Update keywords and footprint filters"
-msgstr "Update keywords and footprint filters"
-
 msgid "Remove fields if not in library symbol"
 msgstr "Remove fields if not in library symbol"
 
@@ -7727,8 +7753,17 @@ msgstr "Update/reset field text sizes and styles"
 msgid "Update/reset field positions"
 msgstr "Update/reset field positions"
 
+msgid "Update symbol shape and pins"
+msgstr "Update symbol shape and pins"
+
+msgid "Update keywords and footprint filters"
+msgstr "Update keywords and footprint filters"
+
 msgid "Update/reset visibility of pin names/numbers"
 msgstr "Update/reset visibility of pin names/numbers"
+
+msgid "Reset alternate pin to default"
+msgstr "Reset alternate pin to default"
 
 msgid "Update/reset symbol attributes"
 msgstr "Update/reset symbol attributes"
@@ -9001,38 +9036,11 @@ msgstr "Plot Output Directory"
 msgid "Schematic size"
 msgstr "Schematic size"
 
-msgid "A5"
-msgstr "A5"
-
 msgid "A4"
 msgstr "A4"
 
-msgid "A3"
-msgstr "A3"
-
-msgid "A2"
-msgstr "A2"
-
-msgid "A1"
-msgstr "A1"
-
-msgid "A0"
-msgstr "A0"
-
 msgid "A"
 msgstr "A"
-
-msgid "B"
-msgstr "B"
-
-msgid "C"
-msgstr "C"
-
-msgid "D"
-msgstr "D"
-
-msgid "E"
-msgstr "E"
 
 #, c-format
 msgid "Falling back to user path '%s'."
@@ -9067,9 +9075,6 @@ msgstr "SVG"
 msgid "DXF"
 msgstr "DXF"
 
-msgid "HPGL"
-msgstr "HPGL"
-
 msgid "Page size:"
 msgstr "Page size:"
 
@@ -9103,27 +9108,6 @@ msgid ""
 msgstr ""
 "Selection of the default pen thickness used to draw items, when their "
 "thickness is set to 0."
-
-msgid "HPGL Options"
-msgstr "HPGL Options"
-
-msgid "Position and units:"
-msgstr "Position and units:"
-
-msgid "Bottom left, plotter units"
-msgstr "Bottom left, plotter units"
-
-msgid "Centered, plotter units"
-msgstr "Centered, plotter units"
-
-msgid "Page fit, user units"
-msgstr "Page fit, user units"
-
-msgid "Content fit, user units"
-msgstr "Content fit, user units"
-
-msgid "Pen width:"
-msgstr "Pen width:"
 
 msgid "PDF Options"
 msgstr "PDF Options"
@@ -9294,8 +9278,8 @@ msgstr "Regular Expression"
 msgid "Search pin &names and numbers"
 msgstr "Search pin &names and numbers"
 
-msgid "Search &hidden fields"
-msgstr "Search &hidden fields"
+msgid "Include &hidden fields"
+msgstr "Include &hidden fields"
 
 msgid "Search the current &sheet only"
 msgstr "Search the current &sheet only"
@@ -10220,9 +10204,6 @@ msgstr "Base Pin Name"
 
 msgid "Pin Functions"
 msgstr "Pin Functions"
-
-msgid "Library link:"
-msgstr "Library link:"
 
 msgid "Simulation Model..."
 msgstr "Simulation Model..."
@@ -11158,8 +11139,14 @@ msgid ""
 msgstr ""
 "Cannot copy file '%s' as it will be overwritten by the new root sheet file."
 
+msgid "Plotting to HPGL is no longer supported as of KiCad 10.0."
+msgstr "Plotting to HPGL is no longer supported as of KiCad 10.0."
+
 msgid "Failed to load schematic\n"
 msgstr "Failed to load schematic\n"
+
+msgid "Plotting to HPGL is no longer supported as of KiCad 10.0.\n"
+msgstr "Plotting to HPGL is no longer supported as of KiCad 10.0.\n"
 
 msgid "Failed to create output directory\n"
 msgstr "Failed to create output directory\n"
@@ -13054,6 +13041,13 @@ msgstr "Invalid symbol library name"
 
 msgid "Invalid symbol library ID"
 msgstr "Invalid symbol library ID"
+
+#, c-format
+msgid "Group library link %s contains invalid character '%c'"
+msgstr "Group library link %s contains invalid character '%c'"
+
+msgid "Invalid library ID"
+msgstr "Invalid library ID"
 
 #, c-format
 msgid "File at '%s' was ignored. Using previously found file at '%s' instead."
@@ -15738,6 +15732,18 @@ msgstr "Place Design Block"
 msgid "Add selected design block to current sheet"
 msgstr "Add selected design block to current sheet"
 
+msgid "Place Linked Design Block"
+msgstr "Place Linked Design Block"
+
+msgid "Place design block linked to selected group"
+msgstr "Place design block linked to selected group"
+
+msgid "Save to Linked Design Block"
+msgstr "Save to Linked Design Block"
+
+msgid "Save selected group to linked design block"
+msgstr "Save selected group to linked design block"
+
 msgid "Place No Connect Flags"
 msgstr "Place No Connect Flags"
 
@@ -16679,6 +16685,14 @@ msgstr "%d potential problems repaired."
 msgid "No errors found."
 msgstr "No errors found."
 
+#, c-format
+msgid "Could not find design block %s."
+msgstr "Could not find design block %s."
+
+#, c-format
+msgid "Design block %s does not have a schematic file."
+msgstr "Design block %s does not have a schematic file."
+
 msgid "Reached end of schematic."
 msgstr "Reached end of schematic."
 
@@ -16920,11 +16934,17 @@ msgstr "Invalid footprint specified"
 msgid "Place as sheet"
 msgstr "Place as sheet"
 
+msgid "Place as group"
+msgstr "Place as group"
+
 msgid "Keep annotations"
 msgstr "Keep annotations"
 
 msgid "Place copies of the design block on subsequent clicks."
 msgstr "Place copies of the design block on subsequent clicks."
+
+msgid "Place the design block as a group."
+msgstr "Place the design block as a group."
 
 msgid "Place the design block as a new sheet."
 msgstr "Place the design block as a new sheet."
@@ -16953,6 +16973,9 @@ msgstr "Hierarchical"
 
 msgid "Directive"
 msgstr "Directive"
+
+msgid "Groups"
+msgstr "Groups"
 
 msgid "Do not update library tables"
 msgstr "Do not update library tables"
@@ -18287,23 +18310,14 @@ msgstr ""
 msgid "Use the Gerber plot settings already configured in the board file"
 msgstr "Use the Gerber plot settings already configured in the board file"
 
-msgid "Generate HPGL from a list of layers"
-msgstr "Generate HPGL from a list of layers"
-
-msgid "Mirror the board (useful for trying to show bottom layers)"
-msgstr "Mirror the board (useful for trying to show bottom layers)"
-
-msgid "Size for the default pen [mm]"
-msgstr "Size for the default pen [mm]"
-
-msgid "Pen number selection (1 to 9)"
-msgstr "Pen number selection (1 to 9)"
-
-msgid "Pen speed [cm/s] (1 to 99 cm/s)"
-msgstr "Pen speed [cm/s] (1 to 99 cm/s)"
+msgid "No longer supported as of KiCad 10.0."
+msgstr "No longer supported as of KiCad 10.0."
 
 msgid "Generate PDF from a list of layers"
 msgstr "Generate PDF from a list of layers"
+
+msgid "Mirror the board (useful for trying to show bottom layers)"
+msgstr "Mirror the board (useful for trying to show bottom layers)"
 
 msgid "Color theme to use (will default to PCB Editor settings)"
 msgstr "Color theme to use (will default to PCB Editor settings)"
@@ -18583,14 +18597,8 @@ msgstr ""
 "List of page numbers separated by comma to print, blank or unspecified is "
 "equivalent to all pages"
 
-msgid "Pen size [mm]"
-msgstr "Pen size [mm]"
-
-msgid "Origin and scale: 0 bottom left, 1 centered, 2 page fit, 3 content fit"
-msgstr "Origin and scale: 0 bottom left, 1 centered, 2 page fit, 3 content fit"
-
-msgid "HPGL origin option must be 0, 1, 2 or 3\n"
-msgstr "HPGL origin option must be 0, 1, 2 or 3\n"
+msgid "Deprecated.  Has no effect."
+msgstr "Deprecated.  Has no effect."
 
 msgid ""
 "Export the legacy BOM XML format used in the schematic editor with Python "
@@ -19588,6 +19596,12 @@ msgstr "Network path: not monitoring folder changes"
 
 msgid "Local path: monitoring folder changes"
 msgstr "Local path: monitoring folder changes"
+
+msgid "Please wait"
+msgstr "Please wait"
+
+msgid "Waiting for Git operations to finish..."
+msgstr "Waiting for Git operations to finish..."
 
 msgid "The selected directory is already a Git project."
 msgstr "The selected directory is already a Git project."
@@ -20791,6 +20805,9 @@ msgstr "B3"
 
 msgid "B4"
 msgstr "B4"
+
+msgid "A5"
+msgstr "A5"
 
 msgid "A6"
 msgstr "A6"
@@ -23995,6 +24012,12 @@ msgstr "The number of values following the decimal separator"
 msgid "Version:"
 msgstr "Version:"
 
+msgid "B"
+msgstr "B"
+
+msgid "C"
+msgstr "C"
+
 msgid "Compress output"
 msgstr "Compress output"
 
@@ -24490,14 +24513,14 @@ msgstr "Wra&p"
 msgid "Search footprint reference &designators"
 msgstr "Search footprint reference &designators"
 
+msgid "Search DRC &markers"
+msgstr "Search DRC &markers"
+
 msgid "Search footprint &values"
 msgstr "Search footprint &values"
 
 msgid "Search &other text items"
 msgstr "Search &other text items"
-
-msgid "Search DRC &markers"
-msgstr "Search DRC &markers"
 
 msgid "Restart Search"
 msgstr "Restart Search"
@@ -25450,6 +25473,9 @@ msgstr "Delete footprints with no components in netlist"
 msgid "Replace footprints with those specified in netlist"
 msgstr "Replace footprints with those specified in netlist"
 
+msgid "Group footprints based on symbol group"
+msgstr "Group footprints based on symbol group"
+
 msgid "Delete/replace footprints even if locked"
 msgstr "Delete/replace footprints even if locked"
 
@@ -26115,9 +26141,6 @@ msgstr "Deselect All Layers"
 msgid "Order as Board Stackup"
 msgstr "Order as Board Stackup"
 
-msgid "HPGL pen size constrained."
-msgstr "HPGL pen size constrained."
-
 msgid "X scale constrained."
 msgstr "X scale constrained."
 
@@ -26201,12 +26224,6 @@ msgstr "2:1"
 
 msgid "3:1"
 msgstr "3:1"
-
-msgid "Plot mode:"
-msgstr "Plot mode:"
-
-msgid "Sketch"
-msgstr "Sketch"
 
 msgid ""
 "Use the drill/place file origin as the coordinate origin for plotted files"
@@ -26302,9 +26319,6 @@ msgid ""
 msgstr ""
 "Disable aperture macros in Gerber files\n"
 "Use *only* for broken Gerber viewers."
-
-msgid "Default pen size:"
-msgstr "Default pen size:"
 
 msgid "Postscript Options"
 msgstr "Postscript Options"
@@ -27627,6 +27641,9 @@ msgstr "Place items from sheet:"
 
 msgid "Place items matching component class:"
 msgstr "Place items matching component class:"
+
+msgid "Place items in group:"
+msgstr "Place items in group:"
 
 msgid "Minimum clearance:"
 msgstr "Minimum clearance:"
@@ -30657,6 +30674,22 @@ msgid "Update %s jumper pad groups"
 msgstr "Update %s jumper pad groups"
 
 #, c-format
+msgid "Remove %s from group \"%s\"."
+msgstr "Remove %s from group \"%s\"."
+
+#, c-format
+msgid "Removed %s from group \"%s\"."
+msgstr "Removed %s from group \"%s\"."
+
+#, c-format
+msgid "Add %s to group \"%s\"."
+msgstr "Add %s to group \"%s\"."
+
+#, c-format
+msgid "Added %s group \"%s\"."
+msgstr "Added %s group \"%s\"."
+
+#, c-format
 msgid "Disconnect %s pin %s."
 msgstr "Disconnect %s pin %s."
 
@@ -30725,6 +30758,22 @@ msgid "Copper zone on layer %s at (%s, %s) has no pads connected."
 msgstr "Copper zone on layer %s at (%s, %s) has no pads connected."
 
 #, c-format
+msgid "Change group name to '%s' to '%s'."
+msgstr "Change group name to '%s' to '%s'."
+
+#, c-format
+msgid "Changed group name to '%s' to '%s'."
+msgstr "Changed group name to '%s' to '%s'."
+
+#, c-format
+msgid "Change group library link to '%s'."
+msgstr "Change group library link to '%s'."
+
+#, c-format
+msgid "Changed group library link to '%s'."
+msgstr "Changed group library link to '%s'."
+
+#, c-format
 msgid ""
 "Symbol %s has pins with no number.  These pins can not be matched to pads in "
 "%s."
@@ -30779,6 +30828,18 @@ msgid ""
 "offf: %d"
 msgstr ""
 "Invalid footprint ID in\n"
+"file: '%s'\n"
+"line: %d\n"
+"offf: %d"
+
+#, c-format
+msgid ""
+"Invalid lib_id ID in\n"
+"file: '%s'\n"
+"line: %d\n"
+"offf: %d"
+msgstr ""
+"Invalid lib_id ID in\n"
 "file: '%s'\n"
 "line: %d\n"
 "offf: %d"
@@ -32658,8 +32719,8 @@ msgid "No layers selected for plotting."
 msgstr "No layers selected for plotting."
 
 #, c-format
-msgid "Color theme '%s' not found, will use theme from PCB Editor settings.\n"
-msgstr "Color theme '%s' not found, will use theme from PCB Editor settings.\n"
+msgid "Color theme '%s' not found, will use theme from PCB Editor.\n"
+msgstr "Color theme '%s' not found, will use theme from PCB Editor.\n"
 
 msgid "Associated Layer"
 msgstr "Associated Layer"
@@ -32998,6 +33059,9 @@ msgstr "Failed to create IPC-D-356 file\n"
 
 msgid "Multiple Layers"
 msgstr "Multiple Layers"
+
+msgid "HPGL plotting is no longer supported as of KiCad 10.0"
+msgstr "HPGL plotting is no longer supported as of KiCad 10.0"
 
 msgid "Error loading project footprint libraries."
 msgstr "Error loading project footprint libraries."
@@ -33900,6 +33964,9 @@ msgstr "Drag Arc Track"
 msgid "Edit Track Width/Via Size"
 msgstr "Edit Track Width/Via Size"
 
+msgid "Edit Track Layer"
+msgstr "Edit Track Layer"
+
 msgid "At least two straight track segments must be selected."
 msgstr "At least two straight track segments must be selected."
 
@@ -34448,6 +34515,12 @@ msgstr "Change Track Width"
 
 msgid "Updates selected track & via sizes"
 msgstr "Updates selected track & via sizes"
+
+msgid "Switch track to next enabled copper layer"
+msgstr "Switch track to next enabled copper layer"
+
+msgid "Switch track to previous enabled copper layer"
+msgstr "Switch track to previous enabled copper layer"
 
 msgid "Adds arcs tangent to the selected straight track segments"
 msgstr "Adds arcs tangent to the selected straight track segments"
@@ -35314,6 +35387,12 @@ msgstr "Unroute Selected"
 msgid "Unroutes selected items to the nearest pad."
 msgstr "Unroutes selected items to the nearest pad."
 
+msgid "Unroute Segment"
+msgstr "Unroute Segment"
+
+msgid "Unroutes segment to the nearest segment."
+msgstr "Unroutes segment to the nearest segment."
+
 msgid "Select All Tracks in Net"
 msgstr "Select All Tracks in Net"
 
@@ -35629,6 +35708,10 @@ msgstr "Paste Text"
 
 msgid "Invalid clipboard contents"
 msgstr "Invalid clipboard contents"
+
+#, c-format
+msgid "Design block %s does not have a board file."
+msgstr "Design block %s does not have a board file."
 
 msgid "Error loading board."
 msgstr "Error loading board."
@@ -36391,12 +36474,6 @@ msgstr "No footprint selected"
 msgid "Rule Areas"
 msgstr "Rule Areas"
 
-msgid "Place as group"
-msgstr "Place as group"
-
-msgid "Place the design block as a group."
-msgstr "Place the design block as a group."
-
 msgid ""
 "Preserve reference designators in the source layout. Otherwise, clear them."
 msgstr ""
@@ -36856,6 +36933,98 @@ msgstr "KiCad Schematic Symbol"
 
 msgid "KiCad Drawing Sheet"
 msgstr "KiCad Drawing Sheet"
+
+#~ msgid "Export HPGL Job Settings"
+#~ msgstr "Export HPGL Job Settings"
+
+#~ msgid "Zoom to Objects"
+#~ msgstr "Zoom to Objects"
+
+#~ msgid "A3"
+#~ msgstr "A3"
+
+#~ msgid "A2"
+#~ msgstr "A2"
+
+#~ msgid "A1"
+#~ msgstr "A1"
+
+#~ msgid "A0"
+#~ msgstr "A0"
+
+#~ msgid "D"
+#~ msgstr "D"
+
+#~ msgid "E"
+#~ msgstr "E"
+
+#~ msgid "HPGL"
+#~ msgstr "HPGL"
+
+#~ msgid "HPGL Options"
+#~ msgstr "HPGL Options"
+
+#~ msgid "Position and units:"
+#~ msgstr "Position and units:"
+
+#~ msgid "Bottom left, plotter units"
+#~ msgstr "Bottom left, plotter units"
+
+#~ msgid "Centered, plotter units"
+#~ msgstr "Centered, plotter units"
+
+#~ msgid "Page fit, user units"
+#~ msgstr "Page fit, user units"
+
+#~ msgid "Content fit, user units"
+#~ msgstr "Content fit, user units"
+
+#~ msgid "Pen width:"
+#~ msgstr "Pen width:"
+
+#~ msgid "Search &hidden fields"
+#~ msgstr "Search &hidden fields"
+
+#~ msgid "Generate HPGL from a list of layers"
+#~ msgstr "Generate HPGL from a list of layers"
+
+#~ msgid "Size for the default pen [mm]"
+#~ msgstr "Size for the default pen [mm]"
+
+#~ msgid "Pen number selection (1 to 9)"
+#~ msgstr "Pen number selection (1 to 9)"
+
+#~ msgid "Pen speed [cm/s] (1 to 99 cm/s)"
+#~ msgstr "Pen speed [cm/s] (1 to 99 cm/s)"
+
+#~ msgid "Pen size [mm]"
+#~ msgstr "Pen size [mm]"
+
+#~ msgid ""
+#~ "Origin and scale: 0 bottom left, 1 centered, 2 page fit, 3 content fit"
+#~ msgstr ""
+#~ "Origin and scale: 0 bottom left, 1 centered, 2 page fit, 3 content fit"
+
+#~ msgid "HPGL origin option must be 0, 1, 2 or 3\n"
+#~ msgstr "HPGL origin option must be 0, 1, 2 or 3\n"
+
+#~ msgid "HPGL pen size constrained."
+#~ msgstr "HPGL pen size constrained."
+
+#~ msgid "Plot mode:"
+#~ msgstr "Plot mode:"
+
+#~ msgid "Sketch"
+#~ msgstr "Sketch"
+
+#~ msgid "Default pen size:"
+#~ msgstr "Default pen size:"
+
+#, c-format
+#~ msgid ""
+#~ "Color theme '%s' not found, will use theme from PCB Editor settings.\n"
+#~ msgstr ""
+#~ "Color theme '%s' not found, will use theme from PCB Editor settings.\n"
 
 #~ msgid "Determining PCB data\n"
 #~ msgstr "Determining PCB data\n"
