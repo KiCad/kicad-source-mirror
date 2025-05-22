@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-05-21 05:22+0300\n"
-"PO-Revision-Date: 2025-05-04 22:08+0000\n"
+"PO-Revision-Date: 2025-05-23 00:01+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/v9/sv/>\n"
 "Language: sv\n"
@@ -10983,11 +10983,12 @@ msgid "Unconnected wire to bus entry"
 msgstr "Ej ansluten ledningsanslutning på buss"
 
 #: eeschema/connection_graph.cpp:4192
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Hierarchical label \"%s\" in cannot be connected to non-existent parent sheet"
 msgstr ""
-"Hierarkisk etikett %s har inget matchande arkstift i det överordnade arket"
+"Hierarkisk etikett \"%s\" kan inte anslutas till icke existerande överordnat "
+"ark"
 
 #: eeschema/connection_graph.cpp:4257
 #, c-format
@@ -11713,7 +11714,7 @@ msgstr "Uppdatera/återställ synlighet för stiftnamn/-nummer"
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:172
 #, fuzzy
 msgid "Reset alternate pin to default"
-msgstr "Återställ parametrarna i guiden till standardvärden"
+msgstr "Återställ alternativt stift till standardvärden"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:178
 msgid "Update/reset symbol attributes"
@@ -12832,9 +12833,8 @@ msgid "Enter the text to be used within the schematic"
 msgstr "Ange texten som ska användas i kretsschemat"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:62
-#, fuzzy
 msgid "Multiple label input"
-msgstr "Flera lager"
+msgstr "Inmatning av flera etiketter"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:68
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:42
@@ -14124,9 +14124,8 @@ msgid "Whole &words only"
 msgstr "Endast &hela ord"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:90
-#, fuzzy
 msgid "Regular Expression"
-msgstr "Felaktigt uttryckt"
+msgstr "Reguljärt uttryck"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:93
 msgid "Search pin &names and numbers"
@@ -23321,24 +23320,20 @@ msgstr ""
 "symbolbibliotekstabellen"
 
 #: eeschema/tools/sch_actions.cpp:1076
-#, fuzzy
 msgid "Next Net Item"
-msgstr "Textobjekt"
+msgstr "Nästa nätobjekt"
 
 #: eeschema/tools/sch_actions.cpp:1077
-#, fuzzy
 msgid "Select next item on the current net"
-msgstr "Välj ett anslutningsobjekt under markören"
+msgstr "Välj nästa objekt på det aktuella nätet"
 
 #: eeschema/tools/sch_actions.cpp:1083
-#, fuzzy
 msgid "Previous Net Item"
-msgstr "Föregående ark"
+msgstr "Föregående nätobjekt"
 
 #: eeschema/tools/sch_actions.cpp:1084
-#, fuzzy
 msgid "Select previous item on the current net"
-msgstr "Välj ett anslutningsobjekt under markören"
+msgstr "Välj föregående objekt på aktuellt nät"
 
 #: eeschema/tools/sch_actions.cpp:1089
 msgid "Export Drawing to Clipboard"
@@ -30972,9 +30967,8 @@ msgstr "Effektiv %s:"
 #: pcb_calculator/transline_ident.cpp:163
 #: pcb_calculator/transline_ident.cpp:198
 #: pcb_calculator/transline_ident.cpp:357
-#, fuzzy
 msgid "Unit propagation delay:"
-msgstr "Utbredningsfördröjning:"
+msgstr "Enhetsutbredningsfördröjning:"
 
 #: pcb_calculator/transline_ident.cpp:121
 #: pcb_calculator/transline_ident.cpp:164
@@ -31177,14 +31171,12 @@ msgid "Effective %s (odd):"
 msgstr "Effektiv %s (udda):"
 
 #: pcb_calculator/transline_ident.cpp:308
-#, fuzzy
 msgid "Unit propagation delay (even):"
-msgstr "Utbredningsfördröjning (jämn):"
+msgstr "Enhetsutbredningsfördröjning (jämn):"
 
 #: pcb_calculator/transline_ident.cpp:309
-#, fuzzy
 msgid "Unit propagation delay (odd):"
-msgstr "Utbredningsfördröjning (udda):"
+msgstr "Enhetsutbredningsfördröjning (udda):"
 
 #: pcb_calculator/transline_ident.cpp:310
 msgid "Conductor losses (even):"
@@ -39075,6 +39067,11 @@ msgid ""
 "\n"
 "<br>"
 msgstr ""
+"### Sats\n"
+"\n"
+"    (condition \"<uttryck>\")\n"
+"\n"
+"<br>"
 
 #: pcbnew/dialogs/panel_setup_condition_help_6notes.h:2
 msgid ""
@@ -39084,6 +39081,11 @@ msgid ""
 "<br><br><br>\n"
 "\n"
 msgstr ""
+"### Notera\n"
+"\n"
+"Använd Ctrl+/ för att göra rad(er) till kommentar eller icke kommentar.\n"
+"<br><br><br>\n"
+"\n"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:46
 msgid "Minimum clearance:"
@@ -40702,9 +40704,8 @@ msgid "(%s clearance %s; actual < 0)"
 msgstr "(%s frigång %s; faktisk <0)"
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:1423
-#, fuzzy
 msgid "(intersecting zones must have distinct priorities)"
-msgstr "Båge måste vara bestämd med tre distinkta punkter"
+msgstr "(zoner som överlappar måste ha definierade prioritetsnivåer)"
 
 #: pcbnew/drc/drc_test_provider_courtyard_clearance.cpp:85
 msgid "Checking footprint courtyard definitions..."
@@ -41482,18 +41483,21 @@ msgid ""
 "Could not add 3D model for %s.\n"
 "File not found: %s\n"
 msgstr ""
+"Kunde inte lägga till 3D-modell för %s.\n"
+"Fil hittades inte: %s\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:403
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Could not add 3D model for %s.\n"
 "OpenCASCADE error: %s\n"
-msgstr "Kunde inte ansluta till %s. Fel: %s"
+msgstr ""
+"Kunde inte lägga till 3D-modell för %s.\n"
+"OpenCASCADE-fel: %s\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:801
-#, fuzzy
 msgid "Could not create PCB solid model.\n"
-msgstr "Det gick inte att skapa komponentlistefil '%s'."
+msgstr "Det gick inte att skapa solid-modell av mönsterkortet.\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:855
 msgid ""
@@ -41551,42 +41555,42 @@ msgstr "** ShapeUpgrade_UnifySameDomain producerade en noll-form **\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:898
 msgid "OCC error adding pad/via polygon.\n"
-msgstr ""
+msgstr "OCC-fel vid tillägg av polygon för lödyta/via.\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1143
 #, c-format
 msgid "Could not add shape (%d points) to copper layer %s.\n"
-msgstr ""
+msgstr "Kunde inte lägga till form (%d punkter) till kopparlager %s.\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1161
-#, fuzzy, c-format
+#, c-format
 msgid "No model defined for %s.\n"
-msgstr "Inget fotavtryck definierat för symbol %s."
+msgstr "Ingen modell angiven för %s.\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1176
-#, fuzzy, c-format
+#, c-format
 msgid "No model for filename '%s'.\n"
-msgstr "Ingen modell med namn '%s' finns i '%s'."
+msgstr "Ingen modell för filnamn '%s'.\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1187
-#, fuzzy, c-format
+#, c-format
 msgid "No location data for filename '%s'.\n"
-msgstr "Skrev placeringsdata till '%s'.\n"
+msgstr "Inget placeringsdata för filnamn '%s'.\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1197
-#, fuzzy, c-format
+#, c-format
 msgid "Could not add component with filename '%s'.\n"
-msgstr "Kunde inte hitta SPICE-objekt med referens '%s'"
+msgstr "Kunde inte lägga till komponent med filnamn '%s'.\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1367
 #, c-format
 msgid "OCC exception building shape segment: %s\n"
-msgstr ""
+msgstr "OCC-undantag vid uppbyggnad av formsegment: %s\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1382
 #, c-format
 msgid "OCC exception building face: %s\n"
-msgstr ""
+msgstr "OCC-undantag vid uppbyggnad av yta: %s\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1394
 #: pcbnew/exporters/step/step_pcb_model.cpp:1763
@@ -41596,12 +41600,12 @@ msgstr "Det gick inte att skapa en prismatisk form\n"
 #: pcbnew/exporters/step/step_pcb_model.cpp:1446
 #, c-format
 msgid "Failed to make segment edge (%d %d) -> (%d %d), skipping\n"
-msgstr ""
+msgstr "Kunde inte skapa segmentkant (%d %d) -> (%d %d), hoppar över\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1458
 #, c-format
 msgid "Failed to add segment edge (%d %d) -> (%d %d)\n"
-msgstr ""
+msgstr "Kunde inte lägga till segmentkant (%d %d) -> (%d %d)\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1494
 #, c-format
@@ -41609,32 +41613,36 @@ msgid ""
 "Failed to add arc curve from (%d %d), arc p0 (%d %d), mid (%d %d), p1 (%d "
 "%d)\n"
 msgstr ""
+"Kunde inte lägga till bågkurva från (%d %d), båge p0 (%d %d), mitt (%d %d), "
+"p1 (%d %d)\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1570
 #, c-format
 msgid "Failed to close wire at %d, %d -> %d, %d **\n"
-msgstr ""
+msgstr "Kunde inte sluta ledning vid %d, %d -> %d, %d **\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1580
 #, c-format
 msgid "OCC exception creating wire: %s\n"
-msgstr ""
+msgstr "OCC-undantag vid skapande av ledning: %s\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1661
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Wire not done (contour points %d): OCC error %d\n"
 "z: %g; bounding box: %s\n"
-msgstr "Ledare utfördes inte (konturpunkter %d): OCC-fel %d\n"
+msgstr ""
+"Ledare utfördes inte (konturpunkter %d): OCC-fel %d\n"
+"z: %g; konturbox: %s\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1675
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Wire self-interference check failed\n"
 "z: %g; bounding box: %s\n"
 msgstr ""
-"\n"
-"Kontroll för ledares inkräktande på sig själv fallerade\n"
+"Kontroll för ledares överlappande med sig själv fallerade\n"
+"z: %g; konturbox: %s\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1697
 msgid "Using non-simplified polygon.\n"
@@ -41643,7 +41651,7 @@ msgstr "Använder icke förenklad polygon.\n"
 #: pcbnew/exporters/step/step_pcb_model.cpp:1744
 #, c-format
 msgid "OCC exception creating contour %d: %s\n"
-msgstr ""
+msgstr "OCC-undantag vid skapande av kontur %d: %s\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1774
 msgid "** Face skipped **\n"
@@ -41651,13 +41659,12 @@ msgstr "** Yta hoppades över **\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1864
 #: pcbnew/exporters/step/step_pcb_model.cpp:1881
-#, fuzzy
 msgid "OCC error creating main outline.\n"
-msgstr "Fel vid läsning av fil."
+msgstr "OCC-fel vid skapande av huvudkontur.\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1890
 msgid "OCC error creating hole in main outline.\n"
-msgstr ""
+msgstr "OCC-fel vid skapande av hål i huvudkontur.\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1932
 #, c-format
@@ -41665,11 +41672,9 @@ msgid "Subtracting holes for %s\n"
 msgstr "Subtraherar hål för %s\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1976
-#, fuzzy, c-format
+#, c-format
 msgid "** Got problems while cutting %s net '%s' **\n"
-msgstr ""
-"\n"
-"** Fick problem vid skärning av %s nät '%s' **\n"
+msgstr "** Fick problem vid skärning av %s nät '%s' **\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2029
 msgid "shapes"
@@ -41689,35 +41694,35 @@ msgstr "vior"
 #: pcbnew/exporters/step/step_pcb_model.cpp:3102
 #: pcbnew/exporters/step/step_pcb_model.cpp:3176
 #: pcbnew/exporters/step/step_pcb_model.cpp:3245
-#, fuzzy, c-format
+#, c-format
 msgid "No valid PCB assembly; cannot create output file '%s'.\n"
-msgstr "Det går inte att skapa utmatningskatalogen '%s'."
+msgstr "Inget giltigt kretskort; kan inte skapa utmatningsfil '%s'.\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2322
 msgid "Failed to set STEP product name, but will attempt to continue."
-msgstr ""
+msgstr "Kunde inte ställa in STEP-produktnamn, men försöker fortsätta."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2330
 msgid "Failed to set surface curve mode, but will attempt to continue."
-msgstr ""
+msgstr "Kunde inte ställa in ytkurvläge, men försöker fortsätta."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2371
 #: pcbnew/exporters/step/step_pcb_model.cpp:3153
 #: pcbnew/exporters/step/step_pcb_model.cpp:3226
 #: pcbnew/exporters/step/step_pcb_model.cpp:3275
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot rename temporary file '%s' to '%s'.\n"
-msgstr "Kunde inte döpa om temporär fil '%s' till '%s'"
+msgstr "Kan inte döpa om temporär fil '%s' till '%s'.\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2822
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot identify actual file type for '%s'.\n"
-msgstr "Kunde inte öppna nätlistefilen '%s'."
+msgstr "Kan inte identifiera faktisk filtyp för '%s'.\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2832
-#, fuzzy, c-format
+#, c-format
 msgid "Could not transfer model data from file '%s'.\n"
-msgstr "Det gick inte att sluta sig till en modell utifrån värde '%s'"
+msgstr "Det gick inte att överföra modelldata från fil '%s'.\n"
 
 #: pcbnew/files.cpp:152
 msgid "All KiCad Board Files"
@@ -50731,9 +50736,9 @@ msgid "Rule Area %s"
 msgstr "Regelområde %s"
 
 #: pcbnew/zone.cpp:1114
-#, fuzzy, c-format
+#, c-format
 msgid "Rule Area '%s' %s"
-msgstr "Regelområde %s"
+msgstr "Regelområde '%s' %s"
 
 #: pcbnew/zone.cpp:1121
 #, c-format
@@ -50741,14 +50746,14 @@ msgid "Teardrop %s %s"
 msgstr "Kragförstärkning %s %s"
 
 #: pcbnew/zone.cpp:1129
-#, fuzzy, c-format
+#, c-format
 msgid "Zone %s %s, priority %d"
-msgstr "Zonprioritetsnivå:"
+msgstr "Zon %s %s, prioritetsnivå %d"
 
 #: pcbnew/zone.cpp:1136
 #, c-format
 msgid "Zone '%s' %s %s, priority %d"
-msgstr ""
+msgstr "Zon '%s' %s %s, prioritet %d"
 
 #: pcbnew/zone.cpp:1982
 msgid "Keepout"
