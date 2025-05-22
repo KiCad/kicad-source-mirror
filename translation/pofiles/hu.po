@@ -14,10 +14,10 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-05-21 05:16+0300\n"
-"PO-Revision-Date: 2025-05-20 20:01+0000\n"
+"PO-Revision-Date: 2025-05-22 11:06+0000\n"
 "Last-Translator: Sárkány Lőrinc <lsarkany@gmail.com>\n"
-"Language-Team: Hungarian <https://hosted.weblate.org/projects/kicad/master-"
-"source/hu/>\n"
+"Language-Team: Hungarian <https://hosted.weblate.org/projects/kicad/"
+"master-source/hu/>\n"
 "Language: hu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -51769,12 +51769,11 @@ msgid "KiCad board netlist files"
 msgstr "KiCad netlista fájl (*.net)"
 
 #: pcbnew/tools/board_editor_control.cpp:457
-#, fuzzy, c-format
+#, c-format
 msgid "Path `%s` is read only."
 msgstr "A(z) `%s` könyvtár csak olvasható."
 
 #: pcbnew/tools/board_editor_control.cpp:458
-#, fuzzy
 msgid "I/O Error"
 msgstr "I/O Hiba"
 
@@ -51784,7 +51783,6 @@ msgid "Orphaned net %s re-parented.\n"
 msgstr ""
 
 #: pcbnew/tools/board_editor_control.cpp:636
-#, fuzzy
 msgid "No board problems found."
 msgstr "Nem található hiba a NYÁK panelen."
 
@@ -51827,12 +51825,10 @@ msgid "Place Footprint"
 msgstr "Alkatrészrajzolat elhelyezés"
 
 #: pcbnew/tools/board_editor_control.cpp:1331 pcbnew/tools/pcb_actions.cpp:1333
-#, fuzzy
 msgid "Lock"
 msgstr "Zárol"
 
 #: pcbnew/tools/board_editor_control.cpp:1331 pcbnew/tools/pcb_actions.cpp:1340
-#, fuzzy
 msgid "Unlock"
 msgstr "Felold"
 
@@ -51866,12 +51862,10 @@ msgid "Some zones did not intersect and were not merged."
 msgstr "Néhány elem megbukott a DRC teszten, ezért nem lettek módosítva."
 
 #: pcbnew/tools/board_editor_control.cpp:1453 pcbnew/tools/pcb_actions.cpp:1274
-#, fuzzy
 msgid "Merge Zones"
 msgstr "Zónák egyesítése"
 
 #: pcbnew/tools/board_editor_control.cpp:1507
-#, fuzzy
 msgid "Duplicate Zone"
 msgstr "Zóna duplikálása"
 
@@ -52383,9 +52377,8 @@ msgid "Could not convert selection"
 msgstr "A könyvtár fájlt nem lehet megnyitni."
 
 #: pcbnew/tools/convert_tool.cpp:573
-#, fuzzy
 msgid "Convert to Polygon"
-msgstr "Vonal vagy Sokszög"
+msgstr "Átalakítás sokszöggé"
 
 #: pcbnew/tools/convert_tool.cpp:575
 msgid "Create Polygon"
@@ -52413,34 +52406,28 @@ msgid "Select Via Size"
 msgstr "Fájl kiválasztása"
 
 #: pcbnew/tools/drawing_tool.cpp:381 pcbnew/tools/drawing_tool.cpp:2374
-#, fuzzy
 msgid "Draw Line"
 msgstr "Vonal rajzolása"
 
 #: pcbnew/tools/drawing_tool.cpp:445
-#, fuzzy
 msgid "Draw Text Box"
-msgstr "Vonal rajzolása"
+msgstr "Szövegdoboz rajzolása"
 
 #: pcbnew/tools/drawing_tool.cpp:445
-#, fuzzy
 msgid "Draw Rectangle"
-msgstr "Négyzet rajzolása"
+msgstr "Téglalap rajzolása"
 
 #: pcbnew/tools/drawing_tool.cpp:493
-#, fuzzy
 msgid "Draw Circle"
 msgstr "Kör rajzolása"
 
 #: pcbnew/tools/drawing_tool.cpp:540
-#, fuzzy
 msgid "Draw Arc"
 msgstr "Körív rajzolása"
 
 #: pcbnew/tools/drawing_tool.cpp:591
-#, fuzzy
 msgid "Draw Bezier"
-msgstr "Bezier"
+msgstr "Bezier görbe rajzolása"
 
 #: pcbnew/tools/drawing_tool.cpp:1602
 #, fuzzy
@@ -52463,7 +52450,6 @@ msgid "Via location violates DRC."
 msgstr "Szimulátor beállítások"
 
 #: pcbnew/tools/drawing_tool.cpp:4118
-#, fuzzy
 msgid "Place via"
 msgstr "Via hozzáadása"
 
@@ -52521,9 +52507,8 @@ msgid "Some of the track segments could not be filleted."
 msgstr "Némely projekt fájlról nem lehetett biztonsági mentést készíteni."
 
 #: pcbnew/tools/edit_tool.cpp:1360
-#, fuzzy
 msgid "Arc radius:"
-msgstr "sugár %s"
+msgstr "Körív sugara:"
 
 #: pcbnew/tools/edit_tool.cpp:1365
 #, fuzzy
@@ -53394,9 +53379,8 @@ msgid "Extend lines to meet each other"
 msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:755
-#, fuzzy
 msgid "Merge Polygons"
-msgstr "Sokszögek:"
+msgstr "Sokszögek egyesítése"
 
 #: pcbnew/tools/pcb_actions.cpp:756
 msgid "Merge selected polygons into a single polygon"
@@ -53848,24 +53832,20 @@ msgid "Export Specctra DSN routing info"
 msgstr "Specctra Design (*.dsn) fájl exportálása"
 
 #: pcbnew/tools/pcb_actions.cpp:1164
-#, fuzzy
 msgid "Gerbers (.gbr)..."
 msgstr "Gerber fájlok (.gbr)..."
 
 #: pcbnew/tools/pcb_actions.cpp:1165
-#, fuzzy
 msgid "Generate Gerbers for fabrication"
-msgstr "Sorozatgyártáshoz szükséges fájlok generálása"
+msgstr "Gerber fájlok generálása gyártáshoz"
 
 #: pcbnew/tools/pcb_actions.cpp:1171
-#, fuzzy
 msgid "Drill Files (.drl)..."
 msgstr "Fúró fájlok (.drl)..."
 
 #: pcbnew/tools/pcb_actions.cpp:1172
-#, fuzzy
 msgid "Generate Excellon drill file(s)"
-msgstr "Excellon fúró fájl(ok) létrehozása"
+msgstr "Excellon fúró fájl(ok) generálása"
 
 #: pcbnew/tools/pcb_actions.cpp:1178
 #, fuzzy
@@ -54265,9 +54245,8 @@ msgid "Cycle between showing zone fills and just their outlines"
 msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:1602
-#, fuzzy
 msgid "Automatic zoom"
-msgstr "Automatikus"
+msgstr "Automatikus nagyítás"
 
 #: pcbnew/tools/pcb_actions.cpp:1603
 #, fuzzy
@@ -54280,7 +54259,6 @@ msgid "Switch to Component (F.Cu) layer"
 msgstr "Váltás az alkatrész oldalra (felső oldal)"
 
 #: pcbnew/tools/pcb_actions.cpp:1673
-#, fuzzy
 msgid "Switch to Inner Layer 1"
 msgstr "Váltás az 1. belső rétegre"
 
@@ -54297,7 +54275,6 @@ msgid "Switch to Inner Layer 4"
 msgstr "Váltás a 4. belső rétegre"
 
 #: pcbnew/tools/pcb_actions.cpp:1709
-#, fuzzy
 msgid "Switch to Inner Layer 5"
 msgstr "Váltás az 5. belső rétegre"
 
@@ -54306,122 +54283,98 @@ msgid "Switch to Inner Layer 6"
 msgstr "Váltás a 6. belső rétegre"
 
 #: pcbnew/tools/pcb_actions.cpp:1726
-#, fuzzy
 msgid "Switch to Inner Layer 7"
-msgstr "Váltás az 7. belső rétegre"
+msgstr "Váltás a 7. belső rétegre"
 
 #: pcbnew/tools/pcb_actions.cpp:1734
-#, fuzzy
 msgid "Switch to Inner Layer 8"
-msgstr "Váltás az 8. belső rétegre"
+msgstr "Váltás a 8. belső rétegre"
 
 #: pcbnew/tools/pcb_actions.cpp:1742
-#, fuzzy
 msgid "Switch to Inner Layer 9"
-msgstr "Váltás az 9. belső rétegre"
+msgstr "Váltás a 9. belső rétegre"
 
 #: pcbnew/tools/pcb_actions.cpp:1750
-#, fuzzy
 msgid "Switch to Inner Layer 10"
-msgstr "Váltás az 10. belső rétegre"
+msgstr "Váltás a 10. belső rétegre"
 
 #: pcbnew/tools/pcb_actions.cpp:1758
-#, fuzzy
 msgid "Switch to Inner Layer 11"
-msgstr "Váltás az 11. belső rétegre"
+msgstr "Váltás a 11. belső rétegre"
 
 #: pcbnew/tools/pcb_actions.cpp:1766
-#, fuzzy
 msgid "Switch to Inner Layer 12"
-msgstr "Váltás az 12. belső rétegre"
+msgstr "Váltás a 12. belső rétegre"
 
 #: pcbnew/tools/pcb_actions.cpp:1774
-#, fuzzy
 msgid "Switch to Inner Layer 13"
-msgstr "Váltás az 13. belső rétegre"
+msgstr "Váltás a 13. belső rétegre"
 
 #: pcbnew/tools/pcb_actions.cpp:1782
-#, fuzzy
 msgid "Switch to Inner Layer 14"
-msgstr "Váltás az 14. belső rétegre"
+msgstr "Váltás a 14. belső rétegre"
 
 #: pcbnew/tools/pcb_actions.cpp:1790
-#, fuzzy
 msgid "Switch to Inner Layer 15"
-msgstr "Váltás az 15. belső rétegre"
+msgstr "Váltás a 15. belső rétegre"
 
 #: pcbnew/tools/pcb_actions.cpp:1798
-#, fuzzy
 msgid "Switch to Inner Layer 16"
-msgstr "Váltás az 16. belső rétegre"
+msgstr "Váltás a 16. belső rétegre"
 
 #: pcbnew/tools/pcb_actions.cpp:1806
-#, fuzzy
 msgid "Switch to Inner Layer 17"
-msgstr "Váltás az 17. belső rétegre"
+msgstr "Váltás a 17. belső rétegre"
 
 #: pcbnew/tools/pcb_actions.cpp:1814
-#, fuzzy
 msgid "Switch to Inner Layer 18"
-msgstr "Váltás az 18. belső rétegre"
+msgstr "Váltás a 18. belső rétegre"
 
 #: pcbnew/tools/pcb_actions.cpp:1822
-#, fuzzy
 msgid "Switch to Inner Layer 19"
-msgstr "Váltás az 19. belső rétegre"
+msgstr "Váltás a 19. belső rétegre"
 
 #: pcbnew/tools/pcb_actions.cpp:1830
-#, fuzzy
 msgid "Switch to Inner Layer 20"
 msgstr "Váltás a 20. belső rétegre"
 
 #: pcbnew/tools/pcb_actions.cpp:1838
-#, fuzzy
 msgid "Switch to Inner Layer 21"
 msgstr "Váltás a 21. belső rétegre"
 
 #: pcbnew/tools/pcb_actions.cpp:1846
-#, fuzzy
 msgid "Switch to Inner Layer 22"
 msgstr "Váltás a 22. belső rétegre"
 
 #: pcbnew/tools/pcb_actions.cpp:1854
-#, fuzzy
 msgid "Switch to Inner Layer 23"
 msgstr "Váltás a 23. belső rétegre"
 
 #: pcbnew/tools/pcb_actions.cpp:1862
-#, fuzzy
 msgid "Switch to Inner Layer 24"
 msgstr "Váltás a 24. belső rétegre"
 
 #: pcbnew/tools/pcb_actions.cpp:1870
-#, fuzzy
 msgid "Switch to Inner Layer 25"
 msgstr "Váltás a 25. belső rétegre"
 
 #: pcbnew/tools/pcb_actions.cpp:1878
-#, fuzzy
 msgid "Switch to Inner Layer 26"
 msgstr "Váltás a 26. belső rétegre"
 
 #: pcbnew/tools/pcb_actions.cpp:1886
-#, fuzzy
 msgid "Switch to Inner Layer 27"
 msgstr "Váltás a 27. belső rétegre"
 
 #: pcbnew/tools/pcb_actions.cpp:1894
-#, fuzzy
 msgid "Switch to Inner Layer 28"
 msgstr "Váltás a 28. belső rétegre"
 
 #: pcbnew/tools/pcb_actions.cpp:1902
-#, fuzzy
 msgid "Switch to Inner Layer 29"
 msgstr "Váltás a 29. belső rétegre"
 
 #: pcbnew/tools/pcb_actions.cpp:1910
-#, fuzzy
 msgid "Switch to Inner Layer 30"
 msgstr "Váltás a 30. belső rétegre"
 
@@ -54431,17 +54384,14 @@ msgid "Switch to Copper (B.Cu) Layer"
 msgstr "Váltás az forrasztási oldalra (alsó oldal)"
 
 #: pcbnew/tools/pcb_actions.cpp:1929
-#, fuzzy
 msgid "Switch to Next Layer"
 msgstr "Következő réteg"
 
 #: pcbnew/tools/pcb_actions.cpp:1937
-#, fuzzy
 msgid "Switch to Previous Layer"
 msgstr "Előző réteg"
 
 #: pcbnew/tools/pcb_actions.cpp:1945
-#, fuzzy
 msgid "Toggle Layer"
 msgstr "Réteg Kapcsoló"
 
@@ -55442,7 +55392,6 @@ msgid "Select/Expand Connection..."
 msgstr "Csatlakozás kijelölése"
 
 #: pcbnew/tools/placement_tool.cpp:64
-#, fuzzy
 msgid "Align/Distribute"
 msgstr "Igazítás/Szétszórás"
 
@@ -55495,17 +55444,14 @@ msgstr "Zónák ellenőrzése"
 
 #: pcbnew/tools/zone_filler_tool.cpp:95 pcbnew/tools/zone_filler_tool.cpp:174
 #: pcbnew/tools/zone_filler_tool.cpp:356
-#, fuzzy
 msgid "Fill Zone(s)"
 msgstr "Zónák kitöltése"
 
 #: pcbnew/tools/zone_filler_tool.cpp:143 pcbnew/tools/zone_filler_tool.cpp:230
-#, fuzzy
 msgid "Show DRC rules"
 msgstr "DRC szabályok megjelenítése"
 
 #: pcbnew/tools/zone_filler_tool.cpp:150 pcbnew/tools/zone_filler_tool.cpp:237
-#, fuzzy
 msgid "Rules"
 msgstr "Szabályok"
 
@@ -55537,7 +55483,6 @@ msgid ""
 msgstr ""
 
 #: pcbnew/tools/zone_filler_tool.cpp:350
-#, fuzzy
 msgid "Fill Zone"
 msgstr "Zóna kitöltése"
 
@@ -55617,17 +55562,14 @@ msgid "Incomplete undo/redo operation: some items not found"
 msgstr "A visszavonás/újra művelet nem sikerült: néhány elem nem található"
 
 #: pcbnew/widgets/appearance_controls.cpp:333
-#, fuzzy
 msgid "Show tracks"
 msgstr "Vezetősávok megjelenítése"
 
 #: pcbnew/widgets/appearance_controls.cpp:334
-#, fuzzy
 msgid "Show all vias"
 msgstr "Minden via megjelenítése"
 
 #: pcbnew/widgets/appearance_controls.cpp:335
-#, fuzzy
 msgid "Show all pads"
 msgstr "Minden forrszem megjelenítése"
 
@@ -55647,27 +55589,22 @@ msgid "Opacity of filled shapes"
 msgstr "Kijelölt elem(ek) átfordítása"
 
 #: pcbnew/widgets/appearance_controls.cpp:338
-#, fuzzy
 msgid "Show user images"
 msgstr "Felhasználói képek megjelenítése"
 
 #: pcbnew/widgets/appearance_controls.cpp:340
-#, fuzzy
 msgid "Footprints Front"
 msgstr "Felső alkatrészrajzolatok"
 
 #: pcbnew/widgets/appearance_controls.cpp:340
-#, fuzzy
 msgid "Show footprints that are on board's front"
 msgstr "Felső oldalon található alkatrészrajzolatok megjelenítése"
 
 #: pcbnew/widgets/appearance_controls.cpp:341
-#, fuzzy
 msgid "Footprints Back"
 msgstr "Alsó alkatrészrajzolatok"
 
 #: pcbnew/widgets/appearance_controls.cpp:341
-#, fuzzy
 msgid "Show footprints that are on board's back"
 msgstr "Alsó oldalon található alkatrészrajzolatok megjelenítése"
 
@@ -55677,9 +55614,8 @@ msgid "Show unconnected nets as a ratsnest"
 msgstr "Nem csatlakoztatott légvezetékek megjelenítése"
 
 #: pcbnew/widgets/appearance_controls.cpp:348
-#, fuzzy
 msgid "DRC Warnings"
-msgstr "DRC Figyelmeztések"
+msgstr "DRC Figyelmeztetések"
 
 #: pcbnew/widgets/appearance_controls.cpp:348
 #, fuzzy
@@ -55687,7 +55623,6 @@ msgid "DRC violations with a Warning severity"
 msgstr "DRC szabályok enyhe megsértése"
 
 #: pcbnew/widgets/appearance_controls.cpp:349
-#, fuzzy
 msgid "DRC Errors"
 msgstr "DRC Hibák"
 
@@ -55804,25 +55739,22 @@ msgstr "Vezetékek szűrése"
 
 #: pcbnew/widgets/appearance_controls.cpp:618
 #: pcbnew/widgets/appearance_controls.cpp:1850
-#, fuzzy
 msgid "Layer Display Options"
 msgstr "Réteg megjelenítési opciók"
 
 #: pcbnew/widgets/appearance_controls.cpp:630
 #: pcbnew/widgets/appearance_controls.cpp:1856
-#, fuzzy, c-format
+#, c-format
 msgid "Inactive layers (%s):"
 msgstr "Inaktív rétegek (%s):"
 
 #: pcbnew/widgets/appearance_controls.cpp:632
 #: pcbnew/widgets/appearance_controls.cpp:1858
-#, fuzzy
 msgid "Inactive layers:"
-msgstr "Inaktív Rétegek:"
+msgstr "Inaktív rétegek:"
 
 #: pcbnew/widgets/appearance_controls.cpp:646
 #: pcbnew/widgets/appearance_controls.cpp:1863
-#, fuzzy
 msgid "Inactive layers will be shown in full color"
 msgstr "Az inaktív rétegek teljes színben jelennek meg"
 
@@ -55958,7 +55890,6 @@ msgid "Unselect Tracks and Vias in %s"
 msgstr "Vezetősávok és viák (átvezetőfuratok) létrehozzása"
 
 #: pcbnew/widgets/appearance_controls.cpp:948
-#, fuzzy
 msgid "Show All Nets"
 msgstr "Összes vezeték megjelenítése"
 
@@ -55987,7 +55918,6 @@ msgstr ""
 
 #: pcbnew/widgets/appearance_controls.cpp:1031
 #: pcbnew/widgets/appearance_controls_base.cpp:45
-#, fuzzy
 msgid "Objects"
 msgstr "Objektumok"
 
@@ -55999,7 +55929,6 @@ msgstr ""
 "jobb gomb a menü"
 
 #: pcbnew/widgets/appearance_controls.cpp:1593
-#, fuzzy
 msgid "Show or hide this layer"
 msgstr "A réteg megjelenítése / elrejtése"
 
@@ -56421,7 +56350,6 @@ msgid "Total Length"
 msgstr "Teljes hossz"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:132
-#, fuzzy
 msgid "Via Count"
 msgstr "Viák száma"
 
@@ -56441,9 +56369,8 @@ msgid "Die Delay"
 msgstr "Késleltetés:"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:146
-#, fuzzy
 msgid "Via Length"
-msgstr "Via hossz:"
+msgstr "Via hossza"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:148
 msgid "Track Length"
@@ -56463,9 +56390,8 @@ msgid "Highlight Selected Net"
 msgstr "Kiválasztott vezeték kiemelése"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1082
-#, fuzzy
 msgid "Rename Selected Net..."
-msgstr "Kiválasztott vezeték átnevezése"
+msgstr "Kiválasztott vezeték átnevezése..."
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1086
 msgid "Delete Selected Net"
@@ -56514,14 +56440,12 @@ msgid "Group by Netclass"
 msgstr "Csoportosítás vezetékosztály szerint"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1244
-#, fuzzy
 msgid "Add Custom Group..."
-msgstr "Egyéni csoport hozzáadása"
+msgstr "Egyéni csoport hozzáadása..."
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1257
-#, fuzzy
 msgid "Remove All Custom Groups"
-msgstr "Elem eltávolítása a csoportból"
+msgstr "Összes egyéni csoport eltávolítása"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1265
 #, fuzzy
@@ -57056,32 +56980,26 @@ msgid "KiCad PCB Layout Editor"
 msgstr "KiCad PCB Réteg Szerkesztő"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:83
-#, fuzzy
 msgid "The KiCad Developers"
-msgstr "A KiCad fejlesztők"
+msgstr "A KiCad fejlesztői"
 
 #: resources/linux/mime/kicad-gerbers.xml.in:5
-#, fuzzy
 msgid "Gerber file"
-msgstr "Gerber fájlok"
+msgstr "Gerber fájl"
 
 #: resources/linux/mime/kicad-gerbers.xml.in:27
-#, fuzzy
 msgid "Excellon drill file"
-msgstr "Excellon fúró fájl(ok)"
+msgstr "Excellon fúró fájl"
 
 #: resources/linux/mime/kicad-kicad.xml.in:5
-#, fuzzy
 msgid "KiCad Project"
 msgstr "KiCad projekt"
 
 #: resources/linux/mime/kicad-kicad.xml.in:12
-#, fuzzy
 msgid "KiCad Schematic"
 msgstr "KiCad Kapcsolási rajz"
 
 #: resources/linux/mime/kicad-kicad.xml.in:27
-#, fuzzy
 msgid "KiCad Printed Circuit Board"
 msgstr "KiCad NYÁK"
 
