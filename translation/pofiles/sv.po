@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-05-21 05:16+0300\n"
-"PO-Revision-Date: 2025-05-22 11:06+0000\n"
+"PO-Revision-Date: 2025-05-23 12:01+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/"
 "master-source/sv/>\n"
@@ -12167,7 +12167,7 @@ msgstr "Uppdatera/återställ synlighet för stiftnamn/-nummer"
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:172
 #, fuzzy
 msgid "Reset alternate pin to default"
-msgstr "Återställ stiftalternativ till standardvärden"
+msgstr "Återställ alternativt stift till standardvärden"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:178
 msgid "Update/reset symbol attributes"
@@ -23966,7 +23966,7 @@ msgstr "Föregående nätobjekt"
 
 #: eeschema/tools/sch_actions.cpp:1127
 msgid "Select previous item on the current net"
-msgstr "Välj föregående objekt på det aktuella nätet"
+msgstr "Välj föregående objekt på aktuellt nät"
 
 #: eeschema/tools/sch_actions.cpp:1132
 msgid "Export Drawing to Clipboard"
@@ -31730,9 +31730,8 @@ msgstr "Effektiv %s:"
 #: pcb_calculator/transline_ident.cpp:164
 #: pcb_calculator/transline_ident.cpp:199
 #: pcb_calculator/transline_ident.cpp:389
-#, fuzzy
 msgid "Unit propagation delay:"
-msgstr "Utbredningsfördröjning:"
+msgstr "Enhetsutbredningsfördröjning:"
 
 #: pcb_calculator/transline_ident.cpp:122
 #: pcb_calculator/transline_ident.cpp:165
@@ -31947,15 +31946,13 @@ msgstr "Effektiv %s (udda):"
 
 #: pcb_calculator/transline_ident.cpp:309
 #: pcb_calculator/transline_ident.cpp:356
-#, fuzzy
 msgid "Unit propagation delay (even):"
-msgstr "Utbredningsfördröjning (jämn):"
+msgstr "Enhetsutbredningsfördröjning (jämn):"
 
 #: pcb_calculator/transline_ident.cpp:310
 #: pcb_calculator/transline_ident.cpp:357
-#, fuzzy
 msgid "Unit propagation delay (odd):"
-msgstr "Utbredningsfördröjning (udda):"
+msgstr "Enhetsutbredningsfördröjning (udda):"
 
 #: pcb_calculator/transline_ident.cpp:311
 msgid "Conductor losses (even):"
@@ -41777,7 +41774,7 @@ msgstr "(%s frigång %s; faktisk <0)"
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:1423
 msgid "(intersecting zones must have distinct priorities)"
-msgstr "(överlappande zoner måste ha distinkta prioritetsnivåer)"
+msgstr "(zoner som överlappar måste ha definierade prioritetsnivåer)"
 
 #: pcbnew/drc/drc_test_provider_courtyard_clearance.cpp:85
 msgid "Checking footprint courtyard definitions..."
@@ -42574,12 +42571,11 @@ msgid ""
 "OpenCASCADE error: %s\n"
 msgstr ""
 "Kunde inte lägga till 3D-modell för %s.\n"
-"OpenCASCADE fel: %s\n"
+"OpenCASCADE-fel: %s\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:810
-#, fuzzy
 msgid "Could not create PCB solid model.\n"
-msgstr "Det gick inte att skapa solidmodell för mönsterkort.\n"
+msgstr "Det gick inte att skapa solid-modell av mönsterkortet.\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:864
 msgid ""
@@ -42647,7 +42643,7 @@ msgstr "Kunde inte lägga till form (%d punkter) till kopparlager %s.\n"
 #: pcbnew/exporters/step/step_pcb_model.cpp:1207
 #, c-format
 msgid "No model defined for %s.\n"
-msgstr "Ingen modell definierad för %s.\n"
+msgstr "Ingen modell angiven för %s.\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1222
 #, c-format
@@ -42706,7 +42702,7 @@ msgstr "Kunde inte sluta ledning vid %d, %d -> %d, %d **\n"
 #: pcbnew/exporters/step/step_pcb_model.cpp:1646
 #, c-format
 msgid "OCC exception creating wire: %s\n"
-msgstr "OCC-undantag när ledning skapades: %s\n"
+msgstr "OCC-undantag vid skapande av ledning: %s\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1728
 #, c-format
@@ -42715,7 +42711,7 @@ msgid ""
 "z: %g; bounding box: %s\n"
 msgstr ""
 "Ledare utfördes inte (konturpunkter %d): OCC-fel %d\n"
-"z: %g; omslutande ram: %s\n"
+"z: %g; konturbox: %s\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1742
 #, c-format
@@ -42723,8 +42719,8 @@ msgid ""
 "Wire self-interference check failed\n"
 "z: %g; bounding box: %s\n"
 msgstr ""
-"Kontroll för ledares inkräktande på sig själv fallerade\n"
-"z: %g; omslutande ram: %s\n"
+"Kontroll för ledares överlappande med sig själv fallerade\n"
+"z: %g; konturbox: %s\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1764
 msgid "Using non-simplified polygon.\n"
@@ -42733,7 +42729,7 @@ msgstr "Använder icke förenklad polygon.\n"
 #: pcbnew/exporters/step/step_pcb_model.cpp:1811
 #, c-format
 msgid "OCC exception creating contour %d: %s\n"
-msgstr "OCC-undantag när kontur %d skapades: %s\n"
+msgstr "OCC-undantag vid skapande av kontur %d: %s\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1841
 msgid "** Face skipped **\n"
@@ -42742,11 +42738,11 @@ msgstr "** Yta hoppades över **\n"
 #: pcbnew/exporters/step/step_pcb_model.cpp:1931
 #: pcbnew/exporters/step/step_pcb_model.cpp:1948
 msgid "OCC error creating main outline.\n"
-msgstr "OCC-fel när huvudkontur skapades.\n"
+msgstr "OCC-fel vid skapande av huvudkontur.\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1957
 msgid "OCC error creating hole in main outline.\n"
-msgstr "OCC-fel när hål i huvudkontur skapades.\n"
+msgstr "OCC-fel vid skapande av hål i huvudkontur.\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2000
 #, c-format
@@ -42778,15 +42774,15 @@ msgstr "vior"
 #: pcbnew/exporters/step/step_pcb_model.cpp:3309
 #, c-format
 msgid "No valid PCB assembly; cannot create output file '%s'.\n"
-msgstr "Inget giltigt kretskort; det går inte att skapa utmatningsfil '%s'.\n"
+msgstr "Inget giltigt kretskort; kan inte skapa utmatningsfil '%s'.\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2389
 msgid "Failed to set STEP product name, but will attempt to continue."
-msgstr "Misslyckades att ställa in STEP-produktnamn, men försöker fortsätta."
+msgstr "Kunde inte ställa in STEP-produktnamn, men försöker fortsätta."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2397
 msgid "Failed to set surface curve mode, but will attempt to continue."
-msgstr "Misslyckades att ställa in ytkurveläge, men försöker fortsätta."
+msgstr "Kunde inte ställa in ytkurvläge, men försöker fortsätta."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2438
 #: pcbnew/exporters/step/step_pcb_model.cpp:3218
@@ -42794,12 +42790,12 @@ msgstr "Misslyckades att ställa in ytkurveläge, men försöker fortsätta."
 #: pcbnew/exporters/step/step_pcb_model.cpp:3339
 #, c-format
 msgid "Cannot rename temporary file '%s' to '%s'.\n"
-msgstr "Kunde inte döpa om temporär fil '%s' till '%s'.\n"
+msgstr "Kan inte döpa om temporär fil '%s' till '%s'.\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2889
 #, c-format
 msgid "Cannot identify actual file type for '%s'.\n"
-msgstr "Det går inte att identifiera faktisk filtyp för '%s'.\n"
+msgstr "Kan inte identifiera faktisk filtyp för '%s'.\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2899
 #, c-format
@@ -52029,7 +52025,7 @@ msgstr "Zon %s %s, prioritetsnivå %d"
 #: pcbnew/zone.cpp:1216
 #, c-format
 msgid "Zone '%s' %s %s, priority %d"
-msgstr "Zon '%s' %s %s, prioritetsnivå %d"
+msgstr "Zon '%s' %s %s, prioritet %d"
 
 #: pcbnew/zone.cpp:1939
 msgid "Keepout"
