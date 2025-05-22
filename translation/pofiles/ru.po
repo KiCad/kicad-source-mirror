@@ -22,10 +22,10 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-05-21 05:16+0300\n"
-"PO-Revision-Date: 2025-05-06 09:51+0000\n"
+"PO-Revision-Date: 2025-05-22 11:06+0000\n"
 "Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
-"Language-Team: Russian <https://hosted.weblate.org/projects/kicad/master-"
-"source/ru/>\n"
+"Language-Team: Russian <https://hosted.weblate.org/projects/kicad/"
+"master-source/ru/>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -42513,7 +42513,7 @@ msgstr "%s не соответствует посад. месту, заданн�
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:177
 #, c-format
 msgid "%s doesn't match symbol's footprint filters (%s)."
-msgstr "%s не соответствует фильтрам следов символа (%s)."
+msgstr "%s не соответствует фильтрам посад. мест символа (%s)."
 
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:228
 msgid "No corresponding pin found in schematic."
