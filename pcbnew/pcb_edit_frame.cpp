@@ -36,7 +36,6 @@
 #include <pcbnew_settings.h>
 #include <pcb_layer_box_selector.h>
 #include <footprint_edit_frame.h>
-#include <dialog_plot.h>
 #include <dialog_find.h>
 #include <dialog_footprint_properties.h>
 #include <dialogs/dialog_exchange_footprints.h>
@@ -1996,42 +1995,6 @@ void PCB_EDIT_FRAME::FindNext( bool reverse )
         ShowFindDialog();
 
     m_findDialog->FindNext( reverse );
-}
-
-
-void PCB_EDIT_FRAME::ToPlotter( int aID )
-{
-    PCB_PLOT_PARAMS plotSettings = GetPlotSettings();
-
-    switch( aID )
-    {
-    case ID_GEN_PLOT_GERBER:
-        plotSettings.SetFormat( PLOT_FORMAT::GERBER );
-        break;
-    case ID_GEN_PLOT_DXF:
-        plotSettings.SetFormat( PLOT_FORMAT::DXF );
-        break;
-    case ID_GEN_PLOT_PDF:
-        plotSettings.SetFormat( PLOT_FORMAT::PDF );
-        break;
-    case ID_GEN_PLOT_PS:
-        plotSettings.SetFormat( PLOT_FORMAT::POST );
-        break;
-    case ID_GEN_PLOT_SVG:
-        plotSettings.SetFormat( PLOT_FORMAT::SVG );
-        break;
-    case ID_GEN_PLOT:
-        /* keep the previous setup */
-        break;
-    default:
-        wxFAIL_MSG( wxT( "ToPlotter(): unexpected plot type" ) ); break;
-        break;
-    }
-
-    SetPlotSettings( plotSettings );
-
-    DIALOG_PLOT dlg( this );
-    dlg.ShowQuasiModal(  );
 }
 
 

@@ -24,30 +24,12 @@
  */
 
 /**
- * @file id.h
- *
  * @brief Common command IDs shared by more than one of the KiCad applications.
  *
  * Only place command IDs used in base window class event tables or shared
  * across multiple applications such as the zoom, grid, and language IDs.
- * Application specific IDs should be defined in the appropriate header
- * file to prevent the entire project from being rebuilt.
  *
- * However, we must avoid duplicate IDs in menus and toolbar items, when wxUpdateUIEvent
- * are associated to menuitems and/or toolbar items
- * The reason is the fact wxWidgets try to send a wxUpdateUIEvent event to a given window and,
- * if a wxUpdateUIEvent event function is not defined for a menuitem, wxWidgets
- * propagates this event ID to parents of the given window.
- * Therefore duplicate IDs could create strange behavior in menus and subtle bugs, depending
- * on the code inside the wxUpdateUIEvent event functions called in parent frames.
- * I did not seen this propagation to child frames, only to parent frames
- *
- * Issues exist only if 2 menus have the same ID, and only one menu is associated to
- * a wxUpdateUIEvent event, and this one is defined in a parent Window.
- * The probability it happens is low, but not null.
- *
- * Therefore we reserve room in ID list for each sub application.
- * Please, change these values if needed
+ * Most things should use the new ACTION framwork instead.
  */
 
 
@@ -80,13 +62,6 @@ enum main_id
     ID_FILE_LIST_CLEAR,
 
     ID_PREFERENCES_RESET_PANEL,
-
-    ID_GEN_PLOT,
-    ID_GEN_PLOT_PS,
-    ID_GEN_PLOT_GERBER,
-    ID_GEN_PLOT_SVG,
-    ID_GEN_PLOT_DXF,
-    ID_GEN_PLOT_PDF,
 
     ID_LANGUAGE_CHOICE,
     ID_LANGUAGE_DANISH,

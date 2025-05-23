@@ -48,6 +48,7 @@
 #include <dialogs/dialog_page_settings.h>
 #include <dialogs/dialog_update_pcb.h>
 #include <dialogs/dialog_assign_netclass.h>
+#include <dialog_plot.h>
 #include <kiface_base.h>
 #include <kiway.h>
 #include <netlist_reader/pcb_netlist.h>
@@ -368,7 +369,8 @@ int BOARD_EDITOR_CONTROL::PageSettings( const TOOL_EVENT& aEvent )
 
 int BOARD_EDITOR_CONTROL::Plot( const TOOL_EVENT& aEvent )
 {
-    m_frame->ToPlotter( ID_GEN_PLOT );
+    DIALOG_PLOT dlg( m_frame );
+    dlg.ShowQuasiModal();
     return 0;
 }
 
@@ -530,13 +532,26 @@ int BOARD_EDITOR_CONTROL::ExportNetlist( const TOOL_EVENT& aEvent )
 }
 
 
+int BOARD_EDITOR_CONTROL::GenerateGerbers( const TOOL_EVENT& aEvent )
+{
+    PCB_PLOT_PARAMS plotSettings = m_frame->GetPlotSettings();
+
+    plotSettings.SetFormat( PLOT_FORMAT::GERBER );
+
+    m_frame->SetPlotSettings( plotSettings );
+
+    DIALOG_PLOT dlg( m_frame );
+    dlg.ShowQuasiModal(  );
+
+    return 0;
+}
+
+
 int BOARD_EDITOR_CONTROL::GenerateFabFiles( const TOOL_EVENT& aEvent )
 {
     wxCommandEvent dummy;
 
-    if( aEvent.IsAction( &PCB_ACTIONS::generateGerbers ) )
-        m_frame->ToPlotter( ID_GEN_PLOT_GERBER );
-    else if( aEvent.IsAction( &PCB_ACTIONS::generateReportFile ) )
+    if( aEvent.IsAction( &PCB_ACTIONS::generateReportFile ) )
         m_frame->GenFootprintsReport( dummy );
     else if( aEvent.IsAction( &PCB_ACTIONS::generateD356File ) )
         m_frame->GenD356File( dummy );
@@ -1846,7 +1861,7 @@ void BOARD_EDITOR_CONTROL::setTransitions()
     }
 
     Go( &BOARD_EDITOR_CONTROL::GenerateDrillFiles,     PCB_ACTIONS::generateDrillFiles.MakeEvent() );
-    Go( &BOARD_EDITOR_CONTROL::GenerateFabFiles,       PCB_ACTIONS::generateGerbers.MakeEvent() );
+    Go( &BOARD_EDITOR_CONTROL::GenerateGerbers,        PCB_ACTIONS::generateGerbers.MakeEvent() );
     Go( &BOARD_EDITOR_CONTROL::GeneratePosFile,        PCB_ACTIONS::generatePosFile.MakeEvent() );
     Go( &BOARD_EDITOR_CONTROL::GenerateFabFiles,       PCB_ACTIONS::generateReportFile.MakeEvent() );
     Go( &BOARD_EDITOR_CONTROL::GenerateFabFiles,       PCB_ACTIONS::generateD356File.MakeEvent() );

@@ -156,11 +156,6 @@ public:
      */
     void FindNext( bool reverse = false );
 
-    /**
-     * Open a dialog frame to create plot and drill files relative to the current board.
-     */
-    void ToPlotter( int aID );
-
     bool LayerManagerShown();
     bool PropertiesShown();
     bool NetInspectorShown();

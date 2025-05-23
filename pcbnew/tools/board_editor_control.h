@@ -75,6 +75,7 @@ public:
     int ExportNetlist( const TOOL_EVENT& aEvent );
     int GenerateDrillFiles( const TOOL_EVENT& aEvent );
     int GeneratePosFile( const TOOL_EVENT& aEvent );
+    int GenerateGerbers( const TOOL_EVENT& aEvent );
     int GenerateFabFiles( const TOOL_EVENT& aEvent );
     int RepairBoard( const TOOL_EVENT& aEvent );
 
