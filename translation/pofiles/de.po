@@ -30,7 +30,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-05-21 05:22+0300\n"
-"PO-Revision-Date: 2025-05-20 20:02+0000\n"
+"PO-Revision-Date: 2025-05-24 01:33+0000\n"
 "Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v9/de/>\n"
 "Language: de\n"
@@ -8574,9 +8574,8 @@ msgid "Opt In"
 msgstr ""
 
 #: common/pgm_base.cpp:391
-#, fuzzy
 msgid "Decline"
-msgstr "Skizzieren der Linien"
+msgstr "Ablehnen"
 
 #: common/pgm_base.cpp:498
 msgid "Environment variable HOME is empty.  Unable to continue."
@@ -23132,9 +23131,8 @@ msgid "Sync Sheet Pins..."
 msgstr "Schaltplanpins synchronisieren"
 
 #: eeschema/tools/sch_actions.cpp:575
-#, fuzzy
 msgid "Import Sheet..."
-msgstr "Schaltplanseite importieren"
+msgstr "Schaltplanseite importieren..."
 
 #: eeschema/tools/sch_actions.cpp:576
 msgid "Import sheet into project"
@@ -28400,9 +28398,8 @@ msgid "Local path: monitoring folder changes"
 msgstr "Lokaler Pfad: Ordneränderungen überwachen"
 
 #: kicad/project_tree_pane.cpp:1644
-#, fuzzy
 msgid "The selected directory is already a Git project."
-msgstr "Der ausgewählte Ordner ist schon ein git-Projekt."
+msgstr "Das ausgewählte Vereichnis ist bereits ein Git-Projekt."
 
 #: kicad/project_tree_pane.cpp:1652
 msgid "Set default remote"
@@ -41896,9 +41893,8 @@ msgid ""
 msgstr "Kann nicht mit %s verbinden. Fehler: %s"
 
 #: pcbnew/exporters/step/exporter_step.cpp:801
-#, fuzzy
 msgid "Could not create PCB solid model.\n"
-msgstr "Konnte Stückliste-Ausgabe \"%s\" nicht erstellen."
+msgstr "Konnte Platinenkörpermodell nicht erstellen.\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:855
 msgid ""
@@ -42056,9 +42052,8 @@ msgstr "** Fläche ausgelassen **\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1864
 #: pcbnew/exporters/step/step_pcb_model.cpp:1881
-#, fuzzy
 msgid "OCC error creating main outline.\n"
-msgstr "Fehler beim Lesen der Datei."
+msgstr "OCC-Fehler während der Erstellung der Hauptkontur.\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1890
 msgid "OCC error creating hole in main outline.\n"
