@@ -61,12 +61,17 @@ PICKED_ITEMS_LIST::~PICKED_ITEMS_LIST()
 void ITEM_PICKER::SetItem( EDA_ITEM* aItem )
 {
     m_pickedItem = aItem;
-    m_pickedItemType = aItem ? aItem->Type() : TYPE_NOT_INIT;
+    m_pickedItemType = TYPE_NOT_INIT;
 
-    if( EDA_GROUP* group = dynamic_cast<EDA_GROUP*>( aItem ) )
-        m_groupMembers = group->GetGroupMemberIds();
+    if( aItem )
+    {
+        m_pickedItemType = aItem->Type();
 
-    m_groupId = aItem->GetParentGroupId();
+        if( EDA_GROUP* group = dynamic_cast<EDA_GROUP*>( aItem ) )
+            m_groupMembers = group->GetGroupMemberIds();
+
+        m_groupId = aItem->GetParentGroupId();
+    }
 }
 
 
@@ -74,10 +79,13 @@ void ITEM_PICKER::SetLink( EDA_ITEM* aItem )
 {
     m_link = aItem;
 
-    if( EDA_GROUP* group = dynamic_cast<EDA_GROUP*>( aItem ) )
-        m_groupMembers = group->GetGroupMemberIds();
+    if( aItem )
+    {
+        if( EDA_GROUP* group = dynamic_cast<EDA_GROUP*>( aItem ) )
+            m_groupMembers = group->GetGroupMemberIds();
 
-    m_groupId = aItem->GetParentGroupId();
+        m_groupId = aItem->GetParentGroupId();
+    }
 }
 
 
