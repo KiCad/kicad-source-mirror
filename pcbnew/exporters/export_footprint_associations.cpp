@@ -29,6 +29,7 @@
 #include <footprint.h>
 #include <project.h>
 #include <wildcards_and_files_ext.h>
+#include <tools/board_editor_control.h>
 #include <wx/filedlg.h>
 
 
@@ -62,24 +63,27 @@ bool RecreateCmpFile( BOARD * aBrd, const wxString& aFullCmpFileName )
 }
 
 
-void PCB_EDIT_FRAME::RecreateCmpFileFromBoard( wxCommandEvent& aEvent )
+int BOARD_EDITOR_CONTROL::ExportCmpFile( const TOOL_EVENT& aEvent )
 {
     // Build the .cmp file name from the board name
-    wxString   projectDir = wxPathOnly( Prj().GetProjectFullName() );
-    wxFileName fn = GetBoard()->GetFileName();
+    BOARD*     board = m_frame->GetBoard();
+    wxString   projectDir = wxPathOnly( m_frame->Prj().GetProjectFullName() );
+    wxFileName fn = board->GetFileName();
 
     fn.SetExt( FILEEXT::FootprintAssignmentFileExtension );
 
-    wxFileDialog dlg( this, _( "Save Footprint Association File" ), projectDir, fn.GetFullName(),
+    wxFileDialog dlg( m_frame, _( "Save Footprint Association File" ), projectDir, fn.GetFullName(),
                       FILEEXT::FootprintAssignmentFileWildcard(),
                       wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
     if( dlg.ShowModal() == wxID_CANCEL )
-        return;
+        return 0;
 
     wxString path = dlg.GetPath();
 
-    if( !RecreateCmpFile( GetBoard(), path ) )
-        DisplayError( this, wxString::Format( _( "Failed to create file '%s'." ), path ) );
+    if( !RecreateCmpFile( board, path ) )
+        DisplayError( m_frame, wxString::Format( _( "Failed to create file '%s'." ), path ) );
+
+    return 0;
 }
 

@@ -38,8 +38,10 @@
 #include <locale_io.h>
 #include <reporter.h>
 #include <richio.h>
+#include <tools/board_editor_control.h>
 #include <exporters/board_exporter_base.h>
 #include <wx/log.h>
+#include <wx/filedlg.h>
 
 static double iu2hyp( double iu )
 {
@@ -661,10 +663,30 @@ bool HYPERLYNX_EXPORTER::Run()
 }
 
 
-bool ExportBoardToHyperlynx( BOARD* aBoard, const wxFileName& aPath )
+int BOARD_EDITOR_CONTROL::ExportHyperlynx( const TOOL_EVENT& aEvent )
 {
+    wxString    wildcard =  wxT( "*.hyp" );
+    BOARD*      board = m_frame->GetBoard();
+    wxFileName  fn = board->GetFileName();
+
+    fn.SetExt( wxT("hyp") );
+
+    wxFileDialog dlg( m_frame, _( "Export Hyperlynx Layout" ), fn.GetPath(), fn.GetFullName(),
+                      wildcard, wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
+
+    if( dlg.ShowModal() != wxID_OK )
+        return 0;
+
+    fn = dlg.GetPath();
+
+    // always enforce filename extension, user may not have entered it.
+    fn.SetExt( wxT( "hyp" ) );
+
     HYPERLYNX_EXPORTER exporter;
-    exporter.SetBoard( aBoard );
-    exporter.SetOutputFilename( aPath );
-    return exporter.Run();
+    exporter.SetBoard( board );
+    exporter.SetOutputFilename( fn );
+    exporter.Run();
+
+    return 0;
 }
+

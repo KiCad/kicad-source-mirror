@@ -122,20 +122,12 @@ void PCB_EDIT_FRAME::doReCreateMenuBar()
     submenuExport->SetIcon( BITMAPS::export_file );
 
     submenuExport->Add( PCB_ACTIONS::exportSpecctraDSN, ACTION_MENU::NORMAL, _( "Specctra DSN..." ) );
-    submenuExport->Add( _( "GenCAD..." ), _( "Export GenCAD board representation" ),
-                        ID_GEN_EXPORT_FILE_GENCADFORMAT, BITMAPS::post_gencad );
-    submenuExport->Add( _( "VRML..." ), _( "Export VRML 3D board representation" ),
-                        ID_GEN_EXPORT_FILE_VRML, BITMAPS::export3d );
-    submenuExport->Add( _( "IDFv3..." ), _( "Export IDF 3D board representation" ),
-                        ID_GEN_EXPORT_FILE_IDF3, BITMAPS::export_idf );
-    submenuExport->Add( _( "STEP / GLB / BREP / XAO / PLY / STL..." ),
-                        _( "Export STEP / GLB / BREP / XAO / PLY / STL 3D board representation" ),
-                        ID_GEN_EXPORT_FILE_STEP, BITMAPS::export_step );
-    submenuExport->Add( _( "Footprint Association (.cmp) File..." ),
-                        _( "Export footprint association file (*.cmp) for schematic back annotation" ),
-                        ID_PCB_GEN_CMP_FILE, BITMAPS::export_cmp );
-    submenuExport->Add( _( "Hyperlynx..." ), wxEmptyString,
-                        ID_GEN_EXPORT_FILE_HYPERLYNX, BITMAPS::export_step );
+    submenuExport->Add( PCB_ACTIONS::exportGenCAD,      ACTION_MENU::NORMAL, _( "GenCAD..." ) );
+    submenuExport->Add( PCB_ACTIONS::exportVRML,        ACTION_MENU::NORMAL, _( "VRML..." ) );
+    submenuExport->Add( PCB_ACTIONS::exportIDF,         ACTION_MENU::NORMAL, _( "IDFv3..." ) );
+    submenuExport->Add( PCB_ACTIONS::exportSTEP,        ACTION_MENU::NORMAL, _( "STEP/GLB/BREP/XAO/PLY/STL..." ) );
+    submenuExport->Add( PCB_ACTIONS::exportCmpFile,     ACTION_MENU::NORMAL, _( "Footprint Association (.cmp) File..." ) );
+    submenuExport->Add( PCB_ACTIONS::exportHyperlynx,   ACTION_MENU::NORMAL, _( "Hyperlynx..." ) );
 
     if( ADVANCED_CFG::GetCfg().m_ShowPcbnewExportNetlist && m_exportNetlistAction )
         submenuExport->Add( *m_exportNetlistAction );

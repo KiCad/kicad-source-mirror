@@ -33,6 +33,7 @@
 #include <project.h>
 #include <wildcards_and_files_ext.h>
 #include <footprint.h>
+#include <tools/board_editor_control.h>
 #include <wx/listimpl.cpp>
 #include <wx/filedlg.h>
 
@@ -69,29 +70,29 @@ WX_DECLARE_LIST( BOM_ENTRY, BOM_ENTRY_LIST );
 WX_DEFINE_LIST( BOM_ENTRY_LIST )
 
 
-void PCB_EDIT_FRAME::RecreateBOMFileFromBoard( wxCommandEvent& aEvent )
+int BOARD_EDITOR_CONTROL::GenBOMFileFromBoard( const TOOL_EVENT& aEvent )
 {
+    BOARD*     board = m_frame->GetBoard();
     wxFileName fn;
     FILE*      fp_bom;
-    wxString   msg;
 
-    if( GetBoard()->Footprints().empty() )
+    if( board->Footprints().empty() )
     {
-        ShowInfoBarError( _( "Cannot export BOM: there are no footprints on the PCB." ) );
-        return;
+        m_frame->ShowInfoBarError( _( "Cannot export BOM: there are no footprints on the PCB." ) );
+        return 0;
     }
 
     /* Set the file extension: */
-    fn = GetBoard()->GetFileName();
+    fn = board->GetFileName();
     fn.SetExt( FILEEXT::CsvFileExtension );
 
-    wxString pro_dir = wxPathOnly( Prj().GetProjectFullName() );
+    wxString pro_dir = wxPathOnly( m_frame->Prj().GetProjectFullName() );
 
-    wxFileDialog dlg( this, _( "Save Bill of Materials" ), pro_dir, fn.GetFullName(),
+    wxFileDialog dlg( m_frame, _( "Save Bill of Materials" ), pro_dir, fn.GetFullName(),
                       FILEEXT::CsvFileWildcard(), wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
     if( dlg.ShowModal() == wxID_CANCEL )
-        return;
+        return 0;
 
     fn = dlg.GetPath();
 
@@ -99,13 +100,12 @@ void PCB_EDIT_FRAME::RecreateBOMFileFromBoard( wxCommandEvent& aEvent )
 
     if( fp_bom == nullptr )
     {
-        msg.Printf( _( "Failed to create file '%s'." ), fn.GetFullPath() );
-        DisplayError( this, msg );
-        return;
+        DisplayError( m_frame, wxString::Format( _( "Failed to create file '%s'." ), fn.GetFullPath() ) );
+        return 0;
     }
 
     // Write header:
-    msg = wxT( "\"" );
+    wxString msg = wxT( "\"" );
     msg << _( "Id" ) << wxT( "\";\"" );
     msg << _( "Designator" ) << wxT( "\";\"" );
     msg << _( "Footprint" ) << wxT( "\";\"" );
@@ -118,7 +118,7 @@ void PCB_EDIT_FRAME::RecreateBOMFileFromBoard( wxCommandEvent& aEvent )
     BOM_ENTRY_LIST list;
     int            i = 1;
 
-    for( FOOTPRINT* footprint : GetBoard()->Footprints() )
+    for( FOOTPRINT* footprint : board->Footprints() )
     {
         if( footprint->GetAttributes() & FP_EXCLUDE_FROM_BOM )
             continue;
@@ -130,8 +130,7 @@ void PCB_EDIT_FRAME::RecreateBOMFileFromBoard( wxCommandEvent& aEvent )
         {
             BOM_ENTRY* curEntry = *iter;
 
-            if( curEntry->m_Val == footprint->GetValue()
-                    && curEntry->m_FPID == footprint->GetFPID() )
+            if( curEntry->m_Val == footprint->GetValue() && curEntry->m_FPID == footprint->GetFPID() )
             {
                 curEntry->m_Ref.Append( wxT( ", " ), 1 );
                 curEntry->m_Ref.Append( footprint->Reference().GetShownText( false ) );
@@ -160,7 +159,6 @@ void PCB_EDIT_FRAME::RecreateBOMFileFromBoard( wxCommandEvent& aEvent )
     {
         BOM_ENTRY* curEntry = *list.begin();   // Because the first object will be removed
                                                // from list, all objects will be get here
-
         msg.Empty();
 
         msg << curEntry->m_Id << wxT( ";\"" );
@@ -176,4 +174,6 @@ void PCB_EDIT_FRAME::RecreateBOMFileFromBoard( wxCommandEvent& aEvent )
     }
 
     fclose( fp_bom );
+
+    return 0;
 }

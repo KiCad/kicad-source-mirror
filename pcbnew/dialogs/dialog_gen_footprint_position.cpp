@@ -585,56 +585,46 @@ int PCB_EDIT_FRAME::DoGenFootprintsPositionFile( const wxString& aFullFileName, 
 }
 
 
-void PCB_EDIT_FRAME::GenFootprintsReport( wxCommandEvent& event )
+int BOARD_EDITOR_CONTROL::GenFootprintsReport( const TOOL_EVENT& aEvent )
 {
+    BOARD*     board = m_frame->GetBoard();
     wxFileName fn;
 
-    wxString    boardFilePath = ( (wxFileName) GetBoard()->GetFileName() ).GetPath();
-    wxDirDialog dirDialog( this, _( "Select Output Directory" ), boardFilePath );
+    wxString    boardFilePath = ( (wxFileName) board->GetFileName() ).GetPath();
+    wxDirDialog dirDialog( m_frame, _( "Select Output Directory" ), boardFilePath );
 
     if( dirDialog.ShowModal() == wxID_CANCEL )
-        return;
+        return 0;
 
-    fn = GetBoard()->GetFileName();
+    fn = board->GetFileName();
     fn.SetPath( dirDialog.GetPath() );
     fn.SetExt( wxT( "rpt" ) );
 
-    bool unitMM = GetUserUnits() == EDA_UNITS::MM;
-    bool success = DoGenFootprintsReport( fn.GetFullPath(), unitMM );
-
-    wxString msg;
-
-    if( success )
-    {
-        msg.Printf( _( "Footprint report file created:\n'%s'." ), fn.GetFullPath() );
-        wxMessageBox( msg, _( "Footprint Report" ), wxICON_INFORMATION );
-    }
-    else
-    {
-        msg.Printf( _( "Failed to create file '%s'." ), fn.GetFullPath() );
-        DisplayError( this, msg );
-    }
-}
-
-
-bool PCB_EDIT_FRAME::DoGenFootprintsReport( const wxString& aFullFilename, bool aUnitsMM )
-{
-    FILE* rptfile = wxFopen( aFullFilename, wxT( "wt" ) );
+    FILE* rptfile = wxFopen( fn.GetFullPath(), wxT( "wt" ) );
 
     if( rptfile == nullptr )
-        return false;
+    {
+        wxMessageBox( wxString::Format( _( "Footprint report file created:\n'%s'." ), fn.GetFullPath() ),
+                      _( "Footprint Report" ), wxICON_INFORMATION );
+
+        return 0;
+    }
 
     std::string data;
-    PLACE_FILE_EXPORTER exporter( GetBoard(), aUnitsMM,
-                                  false, false,         // SMD aOnlySMD, aNoTHItems
-                                  false,                // aExcludeDNP
-                                  true, true,           // aTopSide, aBottomSide
-                                  false, true, false    // aFormatCSV, aUseAuxOrigin, aNegateBottomX
-                                );
+    PLACE_FILE_EXPORTER exporter( board, m_frame->GetUserUnits() == EDA_UNITS::MM,
+                                  false, false,            // SMD aOnlySMD, aNoTHItems
+                                  false,                   // aExcludeDNP
+                                  true, true,              // aTopSide, aBottomSide
+                                  false, true, false );    // aFormatCSV, aUseAuxOrigin, aNegateBottomX
     data = exporter.GenReportData();
 
     fputs( data.c_str(), rptfile );
     fclose( rptfile );
 
-    return true;
+    wxMessageBox( wxString::Format( _( "Footprint report file created:\n'%s'." ), fn.GetFullPath() ),
+                  _( "Footprint Report" ), wxICON_INFORMATION );
+
+    return 0;
 }
+
+

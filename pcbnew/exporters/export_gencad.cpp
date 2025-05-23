@@ -33,31 +33,32 @@
 #include <confirm.h>
 #include <dialogs/dialog_gencad_export_options.h>
 #include <pcb_edit_frame.h>
+#include <tools/board_editor_control.h>
 #include <project/project_file.h> // LAST_PATH_TYPE
 
 #include <export_gencad_writer.h>
 
 
 /* Driver function: processing starts here */
-void PCB_EDIT_FRAME::ExportToGenCAD( wxCommandEvent& aEvent )
+int BOARD_EDITOR_CONTROL::ExportGenCAD( const TOOL_EVENT& aEvent )
 {
     // Build default output file name
-    wxString path = GetLastPath( LAST_PATH_GENCAD );
+    wxString path = m_frame->GetLastPath( LAST_PATH_GENCAD );
 
     if( path.IsEmpty() )
     {
-        wxFileName brdFile = GetBoard()->GetFileName();
+        wxFileName brdFile = m_frame->GetBoard()->GetFileName();
         brdFile.SetExt( wxT( "cad" ) );
         path = brdFile.GetFullPath();
     }
 
-    DIALOG_GENCAD_EXPORT_OPTIONS optionsDialog( this, path );
+    DIALOG_GENCAD_EXPORT_OPTIONS optionsDialog( m_frame, path );
 
     if( optionsDialog.ShowModal() == wxID_CANCEL )
-        return;
+        return 0;
 
     path = optionsDialog.GetFileName();
-    SetLastPath( LAST_PATH_GENCAD, path );
+    m_frame->SetLastPath( LAST_PATH_GENCAD, path );
 
     // Get options
     bool flipBottomPads = optionsDialog.GetOption( FLIP_BOTTOM_PADS );
@@ -66,13 +67,13 @@ void PCB_EDIT_FRAME::ExportToGenCAD( wxCommandEvent& aEvent )
     bool storeOriginCoords = optionsDialog.GetOption( STORE_ORIGIN_COORDS );
 
     // No idea on *why* this should be needed... maybe to fix net names?
-    Compile_Ratsnest( true );
+    m_frame->Compile_Ratsnest( true );
 
-    GENCAD_EXPORTER exporter( GetBoard() );
+    GENCAD_EXPORTER exporter( m_frame->GetBoard() );
 
     // This is the export origin (the auxiliary axis)
     VECTOR2I GencadOffset;
-    VECTOR2I auxOrigin = m_pcb->GetDesignSettings().GetAuxOrigin();
+    VECTOR2I auxOrigin = m_frame->GetBoard()->GetDesignSettings().GetAuxOrigin();
     GencadOffset.x = optionsDialog.GetOption( USE_AUX_ORIGIN ) ? auxOrigin.x : 0;
     GencadOffset.y = optionsDialog.GetOption( USE_AUX_ORIGIN ) ? auxOrigin.y : 0;
 
@@ -85,9 +86,8 @@ void PCB_EDIT_FRAME::ExportToGenCAD( wxCommandEvent& aEvent )
     bool success = exporter.WriteFile( path );
 
     if( !success )
-    {
-        DisplayError( this, wxString::Format( _( "Failed to create file '%s'." ), path ) );
-        return;
-    }
+        DisplayError( m_frame, wxString::Format( _( "Failed to create file '%s'." ), path ) );
+
+    return 0;
 }
 

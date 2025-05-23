@@ -27,6 +27,7 @@
 #include <widgets/text_ctrl_eval.h>
 #include <dialog_export_idf.h>
 #include <pcbnew_settings.h>
+#include <tools/board_editor_control.h>
 #include <project/project_file.h> // LAST_PATH_TYPE
 #include <kidialog.h>
 
@@ -146,23 +147,25 @@ bool DIALOG_EXPORT_IDF3::TransferDataFromWindow()
 }
 
 
-void PCB_EDIT_FRAME::OnExportIDF3( wxCommandEvent& event )
+int BOARD_EDITOR_CONTROL::ExportIDF( const TOOL_EVENT& aEvent )
 {
+    BOARD* board = m_frame->GetBoard();
+
     // Build default output file name
-    wxString path = GetLastPath( LAST_PATH_IDF );
+    wxString path = m_frame->GetLastPath( LAST_PATH_IDF );
 
     if( path.IsEmpty() )
     {
-        wxFileName brdFile = GetBoard()->GetFileName();
+        wxFileName brdFile = board->GetFileName();
         brdFile.SetExt( wxT( "emn" ) );
         path = brdFile.GetFullPath();
     }
 
-    DIALOG_EXPORT_IDF3 dlg( this );
+    DIALOG_EXPORT_IDF3 dlg( m_frame );
     dlg.FilePicker()->SetPath( path );
 
     if ( dlg.ShowModal() != wxID_OK )
-        return;
+        return 0;
 
     bool thou = dlg.GetThouOption();
     double aXRef;
@@ -170,8 +173,7 @@ void PCB_EDIT_FRAME::OnExportIDF3( wxCommandEvent& event )
 
     if( dlg.GetAutoAdjustOffset() )
     {
-        BOX2I bbox = GetBoard()->GetBoardEdgesBoundingBox();
-
+        BOX2I bbox = board->GetBoardEdgesBoundingBox();
         aXRef = bbox.Centre().x * pcbIUScale.MM_PER_IU;
         aYRef = bbox.Centre().y * pcbIUScale.MM_PER_IU;
     }
@@ -186,20 +188,19 @@ void PCB_EDIT_FRAME::OnExportIDF3( wxCommandEvent& event )
             aXRef *= 25.4;
             aYRef *= 25.4;
         }
-
     }
 
     wxBusyCursor dummy;
 
     wxString fullFilename = dlg.FilePicker()->GetPath();
-    SetLastPath( LAST_PATH_IDF, fullFilename );
+    m_frame->SetLastPath( LAST_PATH_IDF, fullFilename );
 
-    if( !Export_IDF3( GetBoard(), fullFilename, thou, aXRef, aYRef, !dlg.GetNoUnspecifiedOption(),
-                      !dlg.GetNoDNPOption() ) )
+    if( !m_frame->Export_IDF3( board, fullFilename, thou, aXRef, aYRef, !dlg.GetNoUnspecifiedOption(),
+                               !dlg.GetNoDNPOption() ) )
     {
-        wxString msg = wxString::Format( _( "Failed to create file '%s'." ), fullFilename );
-        wxMessageBox( msg );
-        return;
+        wxMessageBox( wxString::Format( _( "Failed to create file '%s'." ), fullFilename ) );
     }
+
+    return 0;
 }
 

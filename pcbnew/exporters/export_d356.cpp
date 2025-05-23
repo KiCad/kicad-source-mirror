@@ -46,6 +46,7 @@
 #include <cctype>
 #include <math/util.h>      // for KiROUND
 #include <export_d356.h>
+#include <tools/board_editor_control.h>
 #include <wx/filedlg.h>
 #include <wx/msgdlg.h>
 
@@ -380,35 +381,36 @@ bool IPC356D_WRITER::Write( const wxString& aFilename )
 }
 
 
-void PCB_EDIT_FRAME::GenD356File( wxCommandEvent& aEvent )
+int BOARD_EDITOR_CONTROL::GenD356File( const TOOL_EVENT& aEvent )
 {
-    wxFileName  fn = GetBoard()->GetFileName();
+    wxFileName  fn = m_frame->GetBoard()->GetFileName();
     wxString    ext, wildcard, msg;
 
     ext = FILEEXT::IpcD356FileExtension;
     wildcard = FILEEXT::IpcD356FileWildcard();
     fn.SetExt( ext );
 
-    wxString pro_dir = wxPathOnly( Prj().GetProjectFullName() );
+    wxString pro_dir = wxPathOnly( m_frame->Prj().GetProjectFullName() );
 
-    wxFileDialog dlg( this, _( "Generate IPC-D-356 netlist file" ), pro_dir, fn.GetFullName(),
+    wxFileDialog dlg( m_frame, _( "Generate IPC-D-356 netlist file" ), pro_dir, fn.GetFullName(),
                       wildcard, wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
     if( dlg.ShowModal() == wxID_CANCEL )
-        return;
+        return 0;
 
-    IPC356D_WRITER writer( GetBoard() );
+    IPC356D_WRITER writer( m_frame->GetBoard() );
 
-    bool success = writer.Write( dlg.GetPath() );
-
-    if( success )
+    if( writer.Write( dlg.GetPath() ) )
     {
-        msg.Printf( _( "IPC-D-356 netlist file created:\n'%s'." ), dlg.GetPath() );
-        wxMessageBox( msg, _( "IPC-D-356 Netlist File" ), wxICON_INFORMATION );
+        wxMessageBox( wxString::Format( _( "IPC-D-356 netlist file created:\n'%s'." ),
+                                        dlg.GetPath() ),
+                      _( "IPC-D-356 Netlist File" ), wxICON_INFORMATION );
     }
     else
     {
-        msg.Printf( _( "Failed to create file '%s'." ), dlg.GetPath() );
-        DisplayError( this, msg );
+        DisplayError( m_frame, wxString::Format( _( "Failed to create file '%s'." ),
+                                                 dlg.GetPath() ) );
     }
+
+    return 0;
 }

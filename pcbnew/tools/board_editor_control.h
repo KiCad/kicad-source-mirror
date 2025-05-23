@@ -76,7 +76,17 @@ public:
     int GenerateDrillFiles( const TOOL_EVENT& aEvent );
     int GeneratePosFile( const TOOL_EVENT& aEvent );
     int GenerateGerbers( const TOOL_EVENT& aEvent );
-    int GenerateFabFiles( const TOOL_EVENT& aEvent );
+    int ExportGenCAD( const TOOL_EVENT& aEvent );
+    int ExportVRML( const TOOL_EVENT& aEvent );
+    int ExportIDF( const TOOL_EVENT& aEvent );
+    int ExportSTEP( const TOOL_EVENT& aEvent );
+    int ExportCmpFile( const TOOL_EVENT& aEvent );
+    int ExportHyperlynx( const TOOL_EVENT& aEvent );
+    int GenBOMFileFromBoard( const TOOL_EVENT& aEvent );
+    int GenFootprintsReport( const TOOL_EVENT& aEvent );
+    int GenD356File( const TOOL_EVENT& aEvent );
+    int GenIPC2581File( const TOOL_EVENT& aEvent );
+    int GenerateODBPPFiles( const TOOL_EVENT& aEvent );
     int RepairBoard( const TOOL_EVENT& aEvent );
 
     int UpdatePCBFromSchematic( const TOOL_EVENT& aEvent );

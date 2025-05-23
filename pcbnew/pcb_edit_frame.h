@@ -337,40 +337,9 @@ public:
                                      bool aNoTHItems, bool aExcludeDNP, bool aTopSide, bool aBottomSide,
                                      bool aFormatCSV, bool aUseAuxOrigin, bool aNegateBottomX );
 
-    /**
-     * Call #DoGenFootprintsReport to create a footprint report file
-     */
-    void GenFootprintsReport( wxCommandEvent& event );
-
-    /**
-     * Create and IPC2581 output file
-    */
-    void GenIPC2581File( wxCommandEvent& event );
-
-    /**
-     * Create and Generate ODB++ output files
-    */
-    void GenODBPPFiles( wxCommandEvent& event );
-
-    /**
-     * Create an ASCII footprint report file giving some infos on footprints and board outlines.
-     *
-     * @param aFullFilename the full file name of the file to create
-     * @param aUnitsMM false to use inches, true to use mm in coordinates
-     * @return true if OK, false if error
-     */
-    bool DoGenFootprintsReport( const wxString& aFullFilename, bool aUnitsMM );
-
-    void GenD356File( wxCommandEvent& event );
-
     void OnFileHistory( wxCommandEvent& event );
     void OnClearFileHistory( wxCommandEvent& aEvent );
 
-    bool LoadBoard();
-    bool ImportNonKicadBoard();
-    bool RecoverAutosave();
-    bool RevertBoard();
-    bool NewBoard();
     bool SaveBoard( bool aSaveAs = false, bool aSaveCopy = false );
 
     /**
@@ -441,13 +410,6 @@ public:
     ///< @copydoc PCB_BASE_FRAME::SetPageSettings()
     void SetPageSettings( const PAGE_INFO& aPageSettings ) override;
 
-    /**
-     * Recreates a .cmp file from the current loaded board.
-     *
-     * This is the same as created by CvPcb and can be used if this file is lost.
-     */
-    void RecreateCmpFileFromBoard( wxCommandEvent& aEvent );
-
     bool SaveBoardAsDesignBlock( const wxString& aLibraryName );
 
     bool SaveSelectionAsDesignBlock( const wxString& aLibraryName );
@@ -471,21 +433,6 @@ public:
      */
     void ExportFootprintsToLibrary( bool aStoreInNewLib, const wxString& aLibName = wxEmptyString,
                                     wxString* aLibPath = nullptr );
-
-    /**
-     * Create a BOM file from the current loaded board.
-     */
-    void RecreateBOMFileFromBoard( wxCommandEvent& aEvent );
-
-    /**
-     * Create a file in  GenCAD 1.4 format from the current board.
-     */
-    void ExportToGenCAD( wxCommandEvent& event );
-
-    /**
-     * Export the current BOARD to a VRML file.
-     */
-    void OnExportVRML( wxCommandEvent& event );
 
     /**
      * Create the file(s) exporting current BOARD to a VRML file.
@@ -517,14 +464,9 @@ public:
                           const wxString& a3D_Subdir, double aXRef, double aYRef );
 
     /**
-     * Export the current BOARD to a IDFv3 board and lib files.
-     */
-    void OnExportIDF3( wxCommandEvent& event );
-
-    /**
      * Export the current BOARD to a Hyperlynx HYP file.
      */
-    void OnExportHyperlynx( wxCommandEvent& event );
+    void OnExportHyperlynx();
 
     /**
      * Create an IDF3 compliant BOARD (*.emn) and LIBRARY (*.emp) file.
@@ -545,7 +487,7 @@ public:
     /**
      * Export the current BOARD to a STEP assembly.
      */
-    void OnExportSTEP( wxCommandEvent& event );
+    void OnExportSTEP();
 
     /**
      * Export the current BOARD to a specctra dsn file.
@@ -691,6 +633,11 @@ public:
     void ShowChangedLanguage() override;
 
     /**
+     * Update the state of the GUI after a new board is loaded or created.
+     */
+    void OnBoardLoaded();
+
+    /**
      * Set the main window title bar text.
      *
      * If file name defined by PCB_SCREEN::m_FileName is not set, the title is set to the
@@ -727,6 +674,14 @@ public:
     DIALOG_BOOK_REPORTER* GetInspectClearanceDialog();
 
     DIALOG_BOOK_REPORTER* GetFootprintDiffDialog();
+
+    /**
+     * Perform auto save when the board has been modified and not saved within the
+     * auto save interval.
+     *
+     * @return true if the auto save was successful.
+     */
+    bool DoAutoSave();
 
     DECLARE_EVENT_TABLE()
 
@@ -801,17 +756,12 @@ protected:
     PLUGIN_ACTION_SCOPE PluginActionScope() const override { return PLUGIN_ACTION_SCOPE::PCB; }
 
     /**
-     * Update the state of the GUI after a new board is loaded or created.
-     */
-    void onBoardLoaded();
-
-    /**
      * Perform auto save when the board has been modified and not saved within the
      * auto save interval.
      *
      * @return true if the auto save was successful.
      */
-    bool doAutoSave() override;
+    bool doAutoSave() override { return DoAutoSave(); }
 
     /**
      * Load the given filename but sets the path to the current project path.

@@ -139,7 +139,6 @@ BEGIN_EVENT_TABLE( PCB_EDIT_FRAME, PCB_BASE_FRAME )
     EVT_SOCKET( ID_EDA_SOCKET_EVENT_SERV, PCB_EDIT_FRAME::OnSockRequestServer )
     EVT_SOCKET( ID_EDA_SOCKET_EVENT, PCB_EDIT_FRAME::OnSockRequest )
 
-
     EVT_CHOICE( ID_ON_ZOOM_SELECT, PCB_EDIT_FRAME::OnSelectZoom )
     EVT_CHOICE( ID_ON_GRID_SELECT, PCB_EDIT_FRAME::OnSelectGrid )
 
@@ -149,17 +148,8 @@ BEGIN_EVENT_TABLE( PCB_EDIT_FRAME, PCB_BASE_FRAME )
     EVT_MENU_RANGE( ID_FILE1, ID_FILEMAX, PCB_EDIT_FRAME::OnFileHistory )
     EVT_MENU( ID_FILE_LIST_CLEAR, PCB_EDIT_FRAME::OnClearFileHistory )
 
-    EVT_MENU( ID_GEN_EXPORT_FILE_GENCADFORMAT, PCB_EDIT_FRAME::ExportToGenCAD )
-    EVT_MENU( ID_GEN_EXPORT_FILE_VRML, PCB_EDIT_FRAME::OnExportVRML )
-    EVT_MENU( ID_GEN_EXPORT_FILE_IDF3, PCB_EDIT_FRAME::OnExportIDF3 )
-    EVT_MENU( ID_GEN_EXPORT_FILE_STEP, PCB_EDIT_FRAME::OnExportSTEP )
-    EVT_MENU( ID_GEN_EXPORT_FILE_HYPERLYNX, PCB_EDIT_FRAME::OnExportHyperlynx )
-
     EVT_MENU( wxID_EXIT, PCB_EDIT_FRAME::OnQuit )
     EVT_MENU( wxID_CLOSE, PCB_EDIT_FRAME::OnQuit )
-
-    // menu Postprocess
-    EVT_MENU( ID_PCB_GEN_CMP_FILE, PCB_EDIT_FRAME::RecreateCmpFileFromBoard )
 
     // Horizontal toolbar
     EVT_CHOICE( ID_AUX_TOOLBAR_PCB_TRACK_WIDTH, PCB_EDIT_FRAME::Tracks_and_Vias_Size_Event )
@@ -1679,7 +1669,7 @@ void PCB_EDIT_FRAME::SetActiveLayer( PCB_LAYER_ID aLayer, bool aForceRedraw )
 }
 
 
-void PCB_EDIT_FRAME::onBoardLoaded()
+void PCB_EDIT_FRAME::OnBoardLoaded()
 {
     ENUM_MAP<PCB_LAYER_ID>& layerEnum = ENUM_MAP<PCB_LAYER_ID>::Instance();
 
@@ -2617,30 +2607,6 @@ bool PCB_EDIT_FRAME::CanAcceptApiCommands()
     return EDA_BASE_FRAME::CanAcceptApiCommands();
 }
 
-
-bool ExportBoardToHyperlynx( BOARD* aBoard, const wxFileName& aPath );
-
-
-void PCB_EDIT_FRAME::OnExportHyperlynx( wxCommandEvent& event )
-{
-    wxString    wildcard =  wxT( "*.hyp" );
-    wxFileName  fn = GetBoard()->GetFileName();
-
-    fn.SetExt( wxT("hyp") );
-
-    wxFileDialog dlg( this, _( "Export Hyperlynx Layout" ), fn.GetPath(), fn.GetFullName(),
-                      wildcard, wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
-
-    if( dlg.ShowModal() != wxID_OK )
-        return;
-
-    fn = dlg.GetPath();
-
-    // always enforce filename extension, user may not have entered it.
-    fn.SetExt( wxT( "hyp" ) );
-
-    ExportBoardToHyperlynx( GetBoard(), fn );
-}
 
 
 wxString PCB_EDIT_FRAME::GetCurrentFileName() const

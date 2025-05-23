@@ -423,6 +423,13 @@ public:
     static TOOL_ACTION generateD356File;
     static TOOL_ACTION generateBOM;
 
+    static TOOL_ACTION exportGenCAD;
+    static TOOL_ACTION exportVRML;
+    static TOOL_ACTION exportIDF;
+    static TOOL_ACTION exportSTEP;
+    static TOOL_ACTION exportCmpFile;
+    static TOOL_ACTION exportHyperlynx;
+
     // Global edit tool
     static TOOL_ACTION editTracksAndVias;
     static TOOL_ACTION editTextAndGraphics;

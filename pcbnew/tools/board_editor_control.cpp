@@ -254,20 +254,6 @@ bool BOARD_EDITOR_CONTROL::Init()
 }
 
 
-int BOARD_EDITOR_CONTROL::New( const TOOL_EVENT& aEvent )
-{
-    m_frame->NewBoard();
-    return 0;
-}
-
-
-int BOARD_EDITOR_CONTROL::Open( const TOOL_EVENT& aEvent )
-{
-    m_frame->LoadBoard();
-    return 0;
-}
-
-
 int BOARD_EDITOR_CONTROL::Save( const TOOL_EVENT& aEvent )
 {
     m_frame->SaveBoard();
@@ -285,27 +271,6 @@ int BOARD_EDITOR_CONTROL::SaveAs( const TOOL_EVENT& aEvent )
 int BOARD_EDITOR_CONTROL::SaveCopy( const TOOL_EVENT& aEvent )
 {
     m_frame->SaveBoard( true, true );
-    return 0;
-}
-
-
-int BOARD_EDITOR_CONTROL::Revert( const TOOL_EVENT& aEvent )
-{
-    m_frame->RevertBoard();
-    return 0;
-}
-
-
-int BOARD_EDITOR_CONTROL::RescueAutosave( const TOOL_EVENT& aEvent )
-{
-    m_frame->RecoverAutosave();
-    return 0;
-}
-
-
-int BOARD_EDITOR_CONTROL::OpenNonKicadBoard( const TOOL_EVENT& aEvent )
-{
-    m_frame->ImportNonKicadBoard();
     return 0;
 }
 
@@ -541,27 +506,6 @@ int BOARD_EDITOR_CONTROL::GenerateGerbers( const TOOL_EVENT& aEvent )
 
     DIALOG_PLOT dlg( m_frame );
     dlg.ShowQuasiModal(  );
-
-    return 0;
-}
-
-
-int BOARD_EDITOR_CONTROL::GenerateFabFiles( const TOOL_EVENT& aEvent )
-{
-    wxCommandEvent dummy;
-
-    if( aEvent.IsAction( &PCB_ACTIONS::generateReportFile ) )
-        m_frame->GenFootprintsReport( dummy );
-    else if( aEvent.IsAction( &PCB_ACTIONS::generateD356File ) )
-        m_frame->GenD356File( dummy );
-    else if( aEvent.IsAction( &PCB_ACTIONS::generateBOM ) )
-        m_frame->RecreateBOMFileFromBoard( dummy );
-    else if( aEvent.IsAction( &PCB_ACTIONS::generateIPC2581File ) )
-        m_frame->GenIPC2581File( dummy );
-    else if( aEvent.IsAction( &PCB_ACTIONS::generateODBPPFile ) )
-        m_frame->GenODBPPFiles( dummy );
-    else
-        wxFAIL_MSG( wxT( "GenerateFabFiles(): unexpected request" ) );
 
     return 0;
 }
@@ -1862,11 +1806,18 @@ void BOARD_EDITOR_CONTROL::setTransitions()
     Go( &BOARD_EDITOR_CONTROL::GenerateDrillFiles,     PCB_ACTIONS::generateDrillFiles.MakeEvent() );
     Go( &BOARD_EDITOR_CONTROL::GenerateGerbers,        PCB_ACTIONS::generateGerbers.MakeEvent() );
     Go( &BOARD_EDITOR_CONTROL::GeneratePosFile,        PCB_ACTIONS::generatePosFile.MakeEvent() );
-    Go( &BOARD_EDITOR_CONTROL::GenerateFabFiles,       PCB_ACTIONS::generateReportFile.MakeEvent() );
-    Go( &BOARD_EDITOR_CONTROL::GenerateFabFiles,       PCB_ACTIONS::generateD356File.MakeEvent() );
-    Go( &BOARD_EDITOR_CONTROL::GenerateFabFiles,       PCB_ACTIONS::generateBOM.MakeEvent() );
-    Go( &BOARD_EDITOR_CONTROL::GenerateFabFiles,       PCB_ACTIONS::generateIPC2581File.MakeEvent() );
-    Go( &BOARD_EDITOR_CONTROL::GenerateFabFiles,       PCB_ACTIONS::generateODBPPFile.MakeEvent() );
+    Go( &BOARD_EDITOR_CONTROL::GenFootprintsReport,    PCB_ACTIONS::generateReportFile.MakeEvent() );
+    Go( &BOARD_EDITOR_CONTROL::GenD356File,            PCB_ACTIONS::generateD356File.MakeEvent() );
+    Go( &BOARD_EDITOR_CONTROL::GenBOMFileFromBoard,    PCB_ACTIONS::generateBOM.MakeEvent() );
+    Go( &BOARD_EDITOR_CONTROL::GenIPC2581File,         PCB_ACTIONS::generateIPC2581File.MakeEvent() );
+    Go( &BOARD_EDITOR_CONTROL::GenerateODBPPFiles,     PCB_ACTIONS::generateODBPPFile.MakeEvent() );
+
+    Go( &BOARD_EDITOR_CONTROL::ExportGenCAD,           PCB_ACTIONS::exportGenCAD.MakeEvent() );
+    Go( &BOARD_EDITOR_CONTROL::ExportVRML,             PCB_ACTIONS::exportVRML.MakeEvent() );
+    Go( &BOARD_EDITOR_CONTROL::ExportIDF,              PCB_ACTIONS::exportIDF.MakeEvent() );
+    Go( &BOARD_EDITOR_CONTROL::ExportSTEP,             PCB_ACTIONS::exportSTEP.MakeEvent() );
+    Go( &BOARD_EDITOR_CONTROL::ExportCmpFile,          PCB_ACTIONS::exportCmpFile.MakeEvent() );
+    Go( &BOARD_EDITOR_CONTROL::ExportHyperlynx,        PCB_ACTIONS::exportHyperlynx.MakeEvent() );
 
     // Track & via size control
     Go( &BOARD_EDITOR_CONTROL::TrackWidthInc,          PCB_ACTIONS::trackWidthInc.MakeEvent() );
@@ -1914,5 +1865,3 @@ void BOARD_EDITOR_CONTROL::setTransitions()
     Go( &BOARD_EDITOR_CONTROL::RepairBoard,            PCB_ACTIONS::repairBoard.MakeEvent() );
 }
 
-
-const int BOARD_EDITOR_CONTROL::WIDTH_STEP = 100000;

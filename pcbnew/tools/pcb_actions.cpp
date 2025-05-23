@@ -1251,6 +1251,48 @@ TOOL_ACTION PCB_ACTIONS::generateBOM( TOOL_ACTION_ARGS()
         .Tooltip( _( "Create bill of materials from board" ) )
         .Icon( BITMAPS::post_bom ) );
 
+TOOL_ACTION PCB_ACTIONS::exportGenCAD( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.EditorControl.exportGenCAD" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Export GenCAD..." ) )
+        .Tooltip( _( "Export GenCAD board representation" ) )
+        .Icon( BITMAPS::post_gencad ) );
+
+TOOL_ACTION PCB_ACTIONS::exportVRML( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.EditorControl.exportVRML" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName(  _( "Export VRML..." ) )
+        .Tooltip( _( "Export VRML 3D board representation" ) )
+        .Icon( BITMAPS::export3d ) );
+
+TOOL_ACTION PCB_ACTIONS::exportIDF( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.EditorControl.exportIDF" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Export IDFv3..." ) )
+        .Tooltip( _( "Export IDF 3D board representation" ) )
+        .Icon( BITMAPS::export_idf ) );
+
+TOOL_ACTION PCB_ACTIONS::exportSTEP( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.EditorControl.exportSTEP" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Export STEP/GLB/BREP/XAO/PLY/STL..." ) )
+        .Tooltip( _( "Export STEP, GLB, BREP, XAO, PLY or STL 3D board representation" ) )
+        .Icon( BITMAPS::export_step ) );
+
+TOOL_ACTION PCB_ACTIONS::exportCmpFile( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.EditorControl.exportFootprintAssociations" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Export Footprint Association (.cmp) File..." ) )
+        .Tooltip( _( "Export footprint association file (*.cmp) for schematic back annotation" ) )
+        .Icon( BITMAPS::export_cmp ) );
+
+TOOL_ACTION PCB_ACTIONS::exportHyperlynx( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.EditorControl.exportHyperlynx" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Hyperlynx..." ) )
+        .Icon( BITMAPS::export_step ) );
+
+
 // Track & via size control
 TOOL_ACTION PCB_ACTIONS::trackWidthInc( TOOL_ACTION_ARGS()
         .Name( "pcbnew.EditorControl.trackWidthInc" )

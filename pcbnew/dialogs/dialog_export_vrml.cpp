@@ -34,6 +34,7 @@
 #include <kiface_base.h>
 #include <pcb_edit_frame.h>
 #include <pcbnew_settings.h>
+#include <tools/board_editor_control.h>
 #include <project/project_file.h>  // LAST_PATH_TYPE
 #include <wx/msgdlg.h>
 
@@ -145,17 +146,19 @@ double DIALOG_EXPORT_VRML::GetYRef()
 }
 
 
-void PCB_EDIT_FRAME::OnExportVRML( wxCommandEvent& event )
+int BOARD_EDITOR_CONTROL::ExportVRML( const TOOL_EVENT& aEvent )
 {
     // These variables are static to keep info during the session.
     static wxString subDirFor3Dshapes;
 
+    BOARD* board = m_frame->GetBoard();
+
     // Build default output file name
-    wxString path = GetLastPath( LAST_PATH_VRML );
+    wxString path = m_frame->GetLastPath( LAST_PATH_VRML );
 
     if( path.IsEmpty() )
     {
-        wxFileName brdFile = GetBoard()->GetFileName();
+        wxFileName brdFile = board->GetFileName();
         brdFile.SetExt( wxT( "wrl" ) );
         path = brdFile.GetFullPath();
     }
@@ -168,12 +171,12 @@ void PCB_EDIT_FRAME::OnExportVRML( wxCommandEvent& event )
     // this is the mm to VRML scaling factor for mm, 0.1 inch, and inch
     double scaleList[4] = { 1.0, 0.001, 10.0/25.4, 1.0/25.4 };
 
-    DIALOG_EXPORT_VRML dlg( this );
+    DIALOG_EXPORT_VRML dlg( m_frame );
     dlg.FilePicker()->SetPath( path );
     dlg.SetSubdir( subDirFor3Dshapes );
 
     if( dlg.ShowModal() != wxID_OK )
-        return;
+        return 0;
 
     double aXRef = dlg.GetXRef();
     double aYRef = dlg.GetYRef();
@@ -188,8 +191,7 @@ void PCB_EDIT_FRAME::OnExportVRML( wxCommandEvent& event )
     if( dlg.GetOriginChoice() == 1 )
     {
         // Origin = board center:
-        BOARD* pcb = GetBoard();
-        BOX2I  bbox = pcb->ComputeBoundingBox( true );
+        BOX2I  bbox = board->ComputeBoundingBox( true );
         aXRef = pcbIUScale.IUTomm( bbox.GetCenter().x );
         aYRef = pcbIUScale.IUTomm( bbox.GetCenter().y );
     }
@@ -201,7 +203,7 @@ void PCB_EDIT_FRAME::OnExportVRML( wxCommandEvent& event )
     bool useRelativePaths = dlg.GetUseRelativePathsOption();
 
     path = dlg.FilePicker()->GetPath();
-    SetLastPath( LAST_PATH_VRML, path );
+    m_frame->SetLastPath( LAST_PATH_VRML, path );
     wxFileName modelPath = path;
 
     wxBusyCursor dummy;
@@ -213,18 +215,18 @@ void PCB_EDIT_FRAME::OnExportVRML( wxCommandEvent& event )
     {
         if( !modelPath.Mkdir() )
         {
-            wxString msg = wxString::Format( _( "Failed to create folder '%s'." ),
-                                             modelPath.GetPath() );
-            DisplayErrorMessage( this, msg );
-            return;
+            DisplayErrorMessage( m_frame, wxString::Format( _( "Failed to create folder '%s'." ),
+                                                            modelPath.GetPath() ) );
+            return 0;
         }
     }
 
-    if( !ExportVRML_File( path, scale, includeUnspecified, includeDNP, export3DFiles,
-                          useRelativePaths, modelPath.GetPath(), aXRef, aYRef ) )
+    if( !m_frame->ExportVRML_File( path, scale, includeUnspecified, includeDNP, export3DFiles,
+                                   useRelativePaths, modelPath.GetPath(), aXRef, aYRef ) )
     {
-        wxString msg = wxString::Format( _( "Failed to create file '%s'." ), path );
-        DisplayErrorMessage( this, msg );
-        return;
+        DisplayErrorMessage( m_frame, wxString::Format( _( "Failed to create file '%s'." ),
+                                                        path ) );
     }
+
+    return 0;
 }
