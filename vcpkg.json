@@ -1,7 +1,7 @@
 {
   "$schema": "https://raw.githubusercontent.com/microsoft/vcpkg-tool/main/docs/vcpkg.schema.json",
   "name": "kicad",
-  "version": "8.99",
+  "version": "9.0",
   "license": "GPL-2.0+",
   "dependencies": [
     "boost-algorithm",
@@ -62,29 +62,19 @@
     },
     {
       "name": "wxwidgets",
-      "version": "3.2.6#2"
+      "version": "3.2.8"
     },
     {
       "name": "wxpython",
-      "version": "4.2.2#2"
+      "version": "4.2.2#3"
     },
     {
       "name": "ngspice",
       "version": "44#1"
     },
     {
-      "name": "liblzma",
-      "version": "5.4.4",
-      "$comment": "liblzma & xz were compromised upstream: CVE-2024-3094."
-    },
-    {
       "name": "protobuf",
       "version": "3.21.12#4"
-    },
-    {
-      "name": "vcpkg-get-python-packages",
-      "version": "2024-01-24",
-      "$comment": "forces python 3.11 compat"
     }
   ]
 }
