@@ -4162,6 +4162,9 @@ SCH_RULE_AREA* SCH_IO_KICAD_SEXPR_PARSER::parseSchRuleArea()
             ruleArea->SetStroke( poly->GetStroke() );
             ruleArea->SetFillMode( poly->GetFillMode() );
             ruleArea->SetFillColor( poly->GetFillColor() );
+
+            // the uuid is saved to the shape but stored and saved out of the rulearea
+            const_cast<KIID&>( ruleArea->m_Uuid ) = poly->m_Uuid;
             break;
         }
         default:
