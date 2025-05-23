@@ -60,11 +60,12 @@ PICKED_ITEMS_LIST::~PICKED_ITEMS_LIST()
 
 void ITEM_PICKER::SetItem( EDA_ITEM* aItem )
 {
-    m_pickedItem = aItem;
+    m_pickedItem = nullptr;
     m_pickedItemType = TYPE_NOT_INIT;
 
     if( aItem )
     {
+        m_pickedItem = aItem;
         m_pickedItemType = aItem->Type();
 
         if( EDA_GROUP* group = dynamic_cast<EDA_GROUP*>( aItem ) )
