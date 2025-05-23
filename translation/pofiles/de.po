@@ -30,7 +30,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-05-21 05:16+0300\n"
-"PO-Revision-Date: 2025-05-22 11:05+0000\n"
+"PO-Revision-Date: 2025-05-23 12:01+0000\n"
 "Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
@@ -29134,9 +29134,8 @@ msgid "Local path: monitoring folder changes"
 msgstr "Lokaler Pfad: Ordneränderungen überwachen"
 
 #: kicad/project_tree_pane.cpp:1596
-#, fuzzy
 msgid "Please wait"
-msgstr "Pulsbreite:"
+msgstr "Bitten warten"
 
 #: kicad/project_tree_pane.cpp:1597
 msgid "Waiting for Git operations to finish..."
@@ -40512,9 +40511,8 @@ msgid "Place items matching component class:"
 msgstr "Mit Bauteilklasse übereinstimmende Elemente einfügen:"
 
 #: pcbnew/dialogs/panel_rule_area_properties_placement_base.cpp:42
-#, fuzzy
 msgid "Place items in group:"
-msgstr "Place a module"
+msgstr "Elemente in Gruppe platzieren:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:46
 msgid "Minimum clearance:"
