@@ -218,13 +218,15 @@ TOOL_ACTION KICAD_MANAGER_ACTIONS::editOtherPCB( TOOL_ACTION_ARGS()
 TOOL_ACTION KICAD_MANAGER_ACTIONS::archiveProject( TOOL_ACTION_ARGS()
         .Name( "kicad.Control.archiveProject" )
         .Scope( AS_GLOBAL )
-        .FriendlyName( _( "Archive all project files" ) )
+        .FriendlyName( _( "Archive Project..." ) )
+        .Tooltip( _( "Archive all project files" ) )
         .Icon( BITMAPS::zip ) );
 
 TOOL_ACTION KICAD_MANAGER_ACTIONS::unarchiveProject( TOOL_ACTION_ARGS()
         .Name( "kicad.Control.unarchiveProject" )
         .Scope( AS_GLOBAL )
-        .FriendlyName( _( "Unarchive project files from zip archive" ) )
+        .FriendlyName( _( "Unarchive Project..." ) )
+        .Tooltip( _( "Unarchive project files from zip archive" ) )
         .Icon( BITMAPS::unzip ) );
 
 TOOL_ACTION KICAD_MANAGER_ACTIONS::openProjectDirectory( TOOL_ACTION_ARGS()
