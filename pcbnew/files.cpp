@@ -266,138 +266,135 @@ void PCB_EDIT_FRAME::OnClearFileHistory( wxCommandEvent& aEvent )
 }
 
 
-void PCB_EDIT_FRAME::Files_io( wxCommandEvent& event )
+bool PCB_EDIT_FRAME::LoadBoard()
 {
-    int        id = event.GetId();
-    Files_io_from_id( id );
+    // Only standalone mode can directly load a new document
+    if( !Kiface().IsSingle() )
+        return false;
+
+    int      open_ctl = KICTL_KICAD_ONLY;
+    wxString fileName = Prj().AbsolutePath( GetBoard()->GetFileName() );
+
+    return AskLoadBoardFileName( this, &fileName, open_ctl )
+           && OpenProjectFiles( std::vector<wxString>( 1, fileName ), open_ctl );
 }
 
 
-bool PCB_EDIT_FRAME::Files_io_from_id( int id )
+bool PCB_EDIT_FRAME::ImportNonKicadBoard()
+{
+    // Note: we explicitly allow this even if not in standalone mode for now, even though it is dangerous.
+    int      open_ctl = KICTL_NONKICAD_ONLY;
+    wxString fileName; // = Prj().AbsolutePath( GetBoard()->GetFileName() );
+
+    return AskLoadBoardFileName( this, &fileName, open_ctl )
+           && OpenProjectFiles( std::vector<wxString>( 1, fileName ), open_ctl );
+}
+
+
+bool PCB_EDIT_FRAME::RecoverAutosave()
 {
     wxString   msg;
 
-    switch( id )
+    wxFileName currfn = Prj().AbsolutePath( GetBoard()->GetFileName() );
+    wxFileName fn = currfn;
+
+    wxString rec_name = FILEEXT::AutoSaveFilePrefix + fn.GetName();
+    fn.SetName( rec_name );
+
+    if( !fn.FileExists() )
     {
-    case ID_LOAD_FILE:
-    {
-        // Only standalone mode can directly load a new document
-        if( !Kiface().IsSingle() )
-            return false;
-
-        int      open_ctl = KICTL_KICAD_ONLY;
-        wxString fileName = Prj().AbsolutePath( GetBoard()->GetFileName() );
-
-        return AskLoadBoardFileName( this, &fileName, open_ctl )
-               && OpenProjectFiles( std::vector<wxString>( 1, fileName ), open_ctl );
-    }
-
-    case ID_IMPORT_NON_KICAD_BOARD:
-    {
-        // Note: we explicitly allow this even if not in standalone mode for now, even though it is dangerous.
-        int      open_ctl = KICTL_NONKICAD_ONLY;
-        wxString fileName; // = Prj().AbsolutePath( GetBoard()->GetFileName() );
-
-        return AskLoadBoardFileName( this, &fileName, open_ctl )
-               && OpenProjectFiles( std::vector<wxString>( 1, fileName ), open_ctl );
-    }
-
-    case ID_MENU_RECOVER_BOARD_AUTOSAVE:
-    {
-        wxFileName currfn = Prj().AbsolutePath( GetBoard()->GetFileName() );
-        wxFileName fn = currfn;
-
-        wxString rec_name = FILEEXT::AutoSaveFilePrefix + fn.GetName();
-        fn.SetName( rec_name );
-
-        if( !fn.FileExists() )
-        {
-            msg.Printf( _( "Recovery file '%s' not found." ), fn.GetFullPath() );
-            DisplayInfoMessage( this, msg );
-            return false;
-        }
-
-        msg.Printf( _( "OK to load recovery file '%s'?" ), fn.GetFullPath() );
-
-        if( !IsOK( this, msg ) )
-            return false;
-
-        GetScreen()->SetContentModified( false );    // do not prompt the user for changes
-
-        if( OpenProjectFiles( std::vector<wxString>( 1, fn.GetFullPath() ) ) )
-        {
-            // Re-set the name since name or extension was changed
-            GetBoard()->SetFileName( currfn.GetFullPath() );
-            UpdateTitle();
-            return true;
-        }
-
+        msg.Printf( _( "Recovery file '%s' not found." ), fn.GetFullPath() );
+        DisplayInfoMessage( this, msg );
         return false;
     }
 
-    case ID_REVERT_BOARD:
+    msg.Printf( _( "OK to load recovery file '%s'?" ), fn.GetFullPath() );
+
+    if( !IsOK( this, msg ) )
+        return false;
+
+    GetScreen()->SetContentModified( false );    // do not prompt the user for changes
+
+    if( OpenProjectFiles( std::vector<wxString>( 1, fn.GetFullPath() ) ) )
     {
-        wxFileName fn = Prj().AbsolutePath( GetBoard()->GetFileName() );
-
-        msg.Printf( _( "Revert '%s' to last version saved?" ), fn.GetFullPath() );
-
-        if( !IsOK( this, msg ) )
-            return false;
-
-        GetScreen()->SetContentModified( false );    // do not prompt the user for changes
-
-        ReleaseFile();
-
-        return OpenProjectFiles( std::vector<wxString>( 1, fn.GetFullPath() ), KICTL_REVERT );
-    }
-
-    case ID_NEW_BOARD:
-    {
-        // Only standalone mode can directly load a new document
-        if( !Kiface().IsSingle() )
-            return false;
-
-        if( IsContentModified() )
-        {
-            wxFileName fileName = GetBoard()->GetFileName();
-            wxString   saveMsg = _( "Current board will be closed, save changes to '%s' before "
-                                    "continuing?" );
-
-            if( !HandleUnsavedChanges( this, wxString::Format( saveMsg, fileName.GetFullName() ),
-                                       [&]()->bool
-                                       {
-                                           return Files_io_from_id( ID_SAVE_BOARD );
-                                       } ) )
-            {
-                return false;
-            }
-        }
-        else if( !GetBoard()->IsEmpty() )
-        {
-            if( !IsOK( this, _( "Current Board will be closed. Continue?" ) ) )
-                return false;
-        }
-
-        SaveProjectLocalSettings();
-
-        GetBoard()->ClearProject();
-
-        SETTINGS_MANAGER* mgr = GetSettingsManager();
-        mgr->UnloadProject( &mgr->Prj() );
-
-        if( !Clear_Pcb( false ) )
-            return false;
-
-        LoadProjectSettings();
-        LoadDrawingSheet();
-
-        onBoardLoaded();
-
-        OnModify();
+        // Re-set the name since name or extension was changed
+        GetBoard()->SetFileName( currfn.GetFullPath() );
+        UpdateTitle();
         return true;
     }
 
-    case ID_SAVE_BOARD:
+    return false;
+}
+
+
+bool PCB_EDIT_FRAME::RevertBoard()
+{
+    wxFileName fn = Prj().AbsolutePath( GetBoard()->GetFileName() );
+
+    if( !IsOK( this, wxString::Format( _( "Revert '%s' to last version saved?" ), fn.GetFullPath() ) ) )
+        return false;
+
+    GetScreen()->SetContentModified( false );    // do not prompt the user for changes
+
+    ReleaseFile();
+
+    return OpenProjectFiles( std::vector<wxString>( 1, fn.GetFullPath() ), KICTL_REVERT );
+}
+
+
+bool PCB_EDIT_FRAME::NewBoard()
+{
+    // Only standalone mode can directly load a new document
+    if( !Kiface().IsSingle() )
+        return false;
+
+    if( IsContentModified() )
+    {
+        wxFileName fileName = GetBoard()->GetFileName();
+        wxString   saveMsg = _( "Current board will be closed, save changes to '%s' before "
+                                "continuing?" );
+
+        if( !HandleUnsavedChanges( this, wxString::Format( saveMsg, fileName.GetFullName() ),
+                                   [&]()->bool
+                                   {
+                                       return SaveBoard();
+                                   } ) )
+        {
+            return false;
+        }
+    }
+    else if( !GetBoard()->IsEmpty() )
+    {
+        if( !IsOK( this, _( "Current Board will be closed. Continue?" ) ) )
+            return false;
+    }
+
+    SaveProjectLocalSettings();
+
+    GetBoard()->ClearProject();
+
+    SETTINGS_MANAGER* mgr = GetSettingsManager();
+    mgr->UnloadProject( &mgr->Prj() );
+
+    if( !Clear_Pcb( false ) )
+        return false;
+
+    LoadProjectSettings();
+    LoadDrawingSheet();
+
+    onBoardLoaded();
+
+    OnModify();
+    return true;
+}
+
+
+bool PCB_EDIT_FRAME::SaveBoard( bool aSaveAs, bool aSaveCopy )
+{
+    wxString   msg;
+
+    if( !aSaveAs )
+    {
         if( !GetBoard()->GetFileName().IsEmpty() )
         {
             if( SavePcbFile( Prj().AbsolutePath( GetBoard()->GetFileName() ) ) )
@@ -408,56 +405,46 @@ bool PCB_EDIT_FRAME::Files_io_from_id( int id )
 
             return false;
         }
+    }
 
-        KI_FALLTHROUGH;
+    wxString orig_name;
 
-    case ID_COPY_BOARD_AS:
-    case ID_SAVE_BOARD_AS:
+    wxFileName::SplitPath( GetBoard()->GetFileName(), nullptr, nullptr, &orig_name, nullptr );
+
+    if( orig_name.IsEmpty() )
+        orig_name = NAMELESS_PROJECT;
+
+    wxFileName savePath( Prj().GetProjectFullName() );
+
+    if( !savePath.IsOk() || !savePath.IsDirWritable() )
     {
-        bool     addToHistory = ( id == ID_SAVE_BOARD_AS );
-        wxString orig_name;
-
-        wxFileName::SplitPath( GetBoard()->GetFileName(), nullptr, nullptr, &orig_name, nullptr );
-
-        if( orig_name.IsEmpty() )
-            orig_name = NAMELESS_PROJECT;
-
-        wxFileName savePath( Prj().GetProjectFullName() );
+        savePath = GetMruPath();
 
         if( !savePath.IsOk() || !savePath.IsDirWritable() )
-        {
-            savePath = GetMruPath();
-
-            if( !savePath.IsOk() || !savePath.IsDirWritable() )
-                savePath = PATHS::GetDefaultUserProjectsPath();
-        }
-
-        wxFileName  fn( savePath.GetPath(), orig_name, FILEEXT::KiCadPcbFileExtension );
-        wxString    filename = fn.GetFullPath();
-        bool        createProject = false;
-        bool        success = false;
-
-        if( AskSaveBoardFileName( this, &filename, &createProject ) )
-        {
-            if( id == ID_COPY_BOARD_AS )
-            {
-                success = SavePcbCopy( EnsureFileExtension( filename, FILEEXT::KiCadPcbFileExtension ), createProject );
-            }
-            else
-            {
-                success = SavePcbFile( filename, addToHistory, createProject );
-
-                if( success )
-                    m_autoSaveRequired = false;
-            }
-        }
-
-        return success;
+            savePath = PATHS::GetDefaultUserProjectsPath();
     }
 
-    default:
-        return false;
+    wxFileName  fn( savePath.GetPath(), orig_name, FILEEXT::KiCadPcbFileExtension );
+    wxString    filename = fn.GetFullPath();
+    bool        createProject = false;
+    bool        success = false;
+
+    if( AskSaveBoardFileName( this, &filename, &createProject ) )
+    {
+        if( aSaveCopy )
+        {
+            success = SavePcbCopy( EnsureFileExtension( filename, FILEEXT::KiCadPcbFileExtension ), createProject );
+        }
+        else
+        {
+            success = SavePcbFile( filename, aSaveAs, createProject );
+
+            if( success )
+                m_autoSaveRequired = false;
+        }
     }
+
+    return success;
 }
 
 

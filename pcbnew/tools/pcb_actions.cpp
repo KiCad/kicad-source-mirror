@@ -1130,6 +1130,43 @@ TOOL_ACTION PCB_ACTIONS::pluginsShowFolder( TOOL_ACTION_ARGS()
 
 // BOARD_EDITOR_CONTROL
 //
+TOOL_ACTION PCB_ACTIONS::appendBoard( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.EditorControl.appendBoard" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Append Board..." ) )
+        .Tooltip( _( "Open another board and append its contents to this board" ) )
+        .Icon( BITMAPS::add_board ) );
+
+TOOL_ACTION PCB_ACTIONS::rescueAutosave( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.EditorControl.rescueAutosave" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Rescue" ) )
+        .Tooltip( _( "Clear board and get last rescue file automatically saved by PCB editor" ) )
+        .Icon( BITMAPS::rescue ) );
+
+TOOL_ACTION PCB_ACTIONS::openNonKicadBoard( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.EditorControl.openNonKicadBoard" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Non-KiCad Board File..." ) )
+        .Tooltip( _( "Import board file from other applications" ) )
+        .Icon( BITMAPS::import_brd_file ) );
+
+TOOL_ACTION PCB_ACTIONS::exportFootprints( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.EditorControl.exportFootprints" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Footprints to Library..." ) )
+        .Tooltip( _( "Add footprints used on board to an existing footprint library\n"
+                     "(does not remove other footprints from this library)" ) )
+        .Icon( BITMAPS::library_archive ) );
+
+TOOL_ACTION PCB_ACTIONS::exportFootprintsAs( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.EditorControl.exportFootprintsAs" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Footprints to New Library..." ) )
+        .Tooltip( _( "Create a new footprint library containing the footprints used on board\n"
+                     "(if the library already exists it will be replaced)" ) )
+        .Icon( BITMAPS::library_archive_as ) );
+
 TOOL_ACTION PCB_ACTIONS::boardSetup( TOOL_ACTION_ARGS()
         .Name( "pcbnew.EditorControl.boardSetup" )
         .Scope( AS_GLOBAL )
@@ -1340,13 +1377,6 @@ TOOL_ACTION PCB_ACTIONS::unlock( TOOL_ACTION_ARGS()
         .FriendlyName( _( "Unlock" ) )
         .Tooltip( _( "Allow items to be moved and/or resized on the canvas" ) )
         .Icon( BITMAPS::unlocked ) );
-
-TOOL_ACTION PCB_ACTIONS::appendBoard( TOOL_ACTION_ARGS()
-        .Name( "pcbnew.EditorControl.appendBoard" )
-        .Scope( AS_GLOBAL )
-        .FriendlyName( _( "Append Board..." ) )
-        .Tooltip( _( "Open another board and append its contents to this board" ) )
-        .Icon( BITMAPS::add_board ) );
 
 TOOL_ACTION PCB_ACTIONS::highlightNet( TOOL_ACTION_ARGS()
         .Name( "pcbnew.EditorControl.highlightNet" )

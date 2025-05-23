@@ -401,20 +401,13 @@ public:
     /// Scripting Actions
     static TOOL_ACTION pluginsShowFolder;
 
-    // Global edit tool
+    // Board editor control
+    static TOOL_ACTION appendBoard;
+    static TOOL_ACTION rescueAutosave;
+    static TOOL_ACTION openNonKicadBoard;
+    static TOOL_ACTION exportFootprints;
+    static TOOL_ACTION exportFootprintsAs;
     static TOOL_ACTION boardSetup;
-    static TOOL_ACTION editTracksAndVias;
-    static TOOL_ACTION editTextAndGraphics;
-    static TOOL_ACTION editTeardrops;
-    static TOOL_ACTION globalDeletions;
-    static TOOL_ACTION cleanupTracksAndVias;
-    static TOOL_ACTION cleanupGraphics;
-    static TOOL_ACTION updateFootprint;
-    static TOOL_ACTION updateFootprints;
-    static TOOL_ACTION changeFootprint;
-    static TOOL_ACTION changeFootprints;
-    static TOOL_ACTION swapLayers;
-    static TOOL_ACTION removeUnusedPads;
 
     static TOOL_ACTION importNetlist;
 
@@ -429,6 +422,20 @@ public:
     static TOOL_ACTION generateODBPPFile;
     static TOOL_ACTION generateD356File;
     static TOOL_ACTION generateBOM;
+
+    // Global edit tool
+    static TOOL_ACTION editTracksAndVias;
+    static TOOL_ACTION editTextAndGraphics;
+    static TOOL_ACTION editTeardrops;
+    static TOOL_ACTION globalDeletions;
+    static TOOL_ACTION cleanupTracksAndVias;
+    static TOOL_ACTION cleanupGraphics;
+    static TOOL_ACTION updateFootprint;
+    static TOOL_ACTION updateFootprints;
+    static TOOL_ACTION changeFootprint;
+    static TOOL_ACTION changeFootprints;
+    static TOOL_ACTION swapLayers;
+    static TOOL_ACTION removeUnusedPads;
 
     static TOOL_ACTION runDRC;
 
@@ -537,7 +544,6 @@ public:
     static TOOL_ACTION drillOrigin;
     static TOOL_ACTION drillResetOrigin;
     static TOOL_ACTION drillSetOrigin;
-    static TOOL_ACTION appendBoard;
     static TOOL_ACTION showEeschema;
     static TOOL_ACTION boardStatistics;
     static TOOL_ACTION boardReannotate;

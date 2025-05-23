@@ -69,11 +69,7 @@
 
 enum main_id
 {
-    ID_LOAD_FILE = wxID_HIGHEST,
-    ID_NEW_BOARD,
-    ID_SAVE_BOARD,
-    ID_SAVE_BOARD_AS,
-    ID_AUTO_SAVE_TIMER,
+    ID_AUTO_SAVE_TIMER = wxID_HIGHEST,
 
     // ID for menuitems used in our file history management,
     // when we do not use wxFILE_ID (restricted to 9 items)

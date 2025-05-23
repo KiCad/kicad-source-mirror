@@ -101,10 +101,7 @@ void PCB_EDIT_FRAME::doReCreateMenuBar()
     fileMenu->Add( ACTIONS::revert );
 
     fileMenu->AppendSeparator();
-    fileMenu->Add( _( "Resc&ue" ),
-                   _( "Clear board and get last rescue file automatically saved by PCB editor" ),
-                   ID_MENU_RECOVER_BOARD_AUTOSAVE,
-                   BITMAPS::rescue );
+    fileMenu->Add( PCB_ACTIONS::rescueAutosave );
 
     // Import submenu
     ACTION_MENU* submenuImport = new ACTION_MENU( false, selTool );
@@ -114,9 +111,7 @@ void PCB_EDIT_FRAME::doReCreateMenuBar()
     submenuImport->Add( PCB_ACTIONS::importNetlist,          ACTION_MENU::NORMAL, _( "Netlist..." ) );
     submenuImport->Add( PCB_ACTIONS::importSpecctraSession,  ACTION_MENU::NORMAL, _( "Specctra Session..." ) );
     submenuImport->Add( PCB_ACTIONS::placeImportedGraphics,  ACTION_MENU::NORMAL, _( "Graphics..." ) );
-    submenuImport->Add( _( "Non-KiCad Board File..." ),
-                        _( "Import board file from other applications" ),
-                        ID_IMPORT_NON_KICAD_BOARD, BITMAPS::import_brd_file );
+    submenuImport->Add( PCB_ACTIONS::openNonKicadBoard );
 
     fileMenu->AppendSeparator();
     fileMenu->Add( submenuImport );
@@ -146,15 +141,8 @@ void PCB_EDIT_FRAME::doReCreateMenuBar()
         submenuExport->Add( *m_exportNetlistAction );
 
     submenuExport->AppendSeparator();
-    submenuExport->Add( _( "Footprints to Library..." ),
-                        _( "Add footprints used on board to an existing footprint library\n"
-                           "(does not remove other footprints from this library)" ),
-                        ID_MENU_EXPORT_FOOTPRINTS_TO_LIBRARY, BITMAPS::library_archive );
-
-    submenuExport->Add( _( "Footprints to New Library..." ),
-                        _( "Create a new footprint library containing the footprints used on board\n"
-                           "(if the library already exists it will be replaced)" ),
-                        ID_MENU_EXPORT_FOOTPRINTS_TO_NEW_LIBRARY, BITMAPS::library_archive_as );
+    submenuExport->Add( PCB_ACTIONS::exportFootprints );
+    submenuExport->Add( PCB_ACTIONS::exportFootprintsAs );
 
     fileMenu->Add( submenuExport );
 

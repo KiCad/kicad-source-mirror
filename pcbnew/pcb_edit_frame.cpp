@@ -41,16 +41,13 @@
 #include <dialog_footprint_properties.h>
 #include <dialogs/dialog_exchange_footprints.h>
 #include <dialog_board_setup.h>
-#include <invoke_pcb_dialog.h>
+#include <dialogs/dialog_dimension_properties.h>
+#include <dialogs/dialog_table_properties.h>
 #include <gal/graphics_abstraction_layer.h>
-#include <board.h>
-#include <board_design_settings.h>
-#include <footprint.h>
+#include <pcb_target.h>
 #include <layer_pairs.h>
 #include <drawing_sheet/ds_proxy_view_item.h>
-#include <connectivity/connectivity_data.h>
 #include <wildcards_and_files_ext.h>
-#include <pcb_draw_panel_gal.h>
 #include <functional>
 #include <pcb_painter.h>
 #include <project/project_file.h>
@@ -92,13 +89,10 @@
 #include <microwave/microwave_tool.h>
 #include <tools/position_relative_tool.h>
 #include <tools/zone_filler_tool.h>
-#include <tools/pcb_actions.h>
 #include <tools/multichannel_tool.h>
 #include <router/router_tool.h>
 #include <autorouter/autoplace_tool.h>
 #include <python/scripting/pcb_scripting_tool.h>
-#include <gestfich.h>
-#include <executable_names.h>
 #include <netlist_reader/netlist_reader.h>
 #include <wx/socket.h>
 #include <wx/wupdlock.h>
@@ -152,12 +146,7 @@ BEGIN_EVENT_TABLE( PCB_EDIT_FRAME, PCB_BASE_FRAME )
 
     EVT_SIZE( PCB_EDIT_FRAME::OnSize )
 
-    EVT_TOOL( ID_MENU_RECOVER_BOARD_AUTOSAVE, PCB_EDIT_FRAME::Files_io )
-
     // Menu Files:
-    EVT_MENU( ID_MAIN_MENUBAR, PCB_EDIT_FRAME::Process_Special_Functions )
-
-    EVT_MENU( ID_IMPORT_NON_KICAD_BOARD, PCB_EDIT_FRAME::Files_io )
     EVT_MENU_RANGE( ID_FILE1, ID_FILEMAX, PCB_EDIT_FRAME::OnFileHistory )
     EVT_MENU( ID_FILE_LIST_CLEAR, PCB_EDIT_FRAME::OnClearFileHistory )
 
@@ -166,9 +155,6 @@ BEGIN_EVENT_TABLE( PCB_EDIT_FRAME, PCB_BASE_FRAME )
     EVT_MENU( ID_GEN_EXPORT_FILE_IDF3, PCB_EDIT_FRAME::OnExportIDF3 )
     EVT_MENU( ID_GEN_EXPORT_FILE_STEP, PCB_EDIT_FRAME::OnExportSTEP )
     EVT_MENU( ID_GEN_EXPORT_FILE_HYPERLYNX, PCB_EDIT_FRAME::OnExportHyperlynx )
-
-    EVT_MENU( ID_MENU_EXPORT_FOOTPRINTS_TO_LIBRARY, PCB_EDIT_FRAME::Process_Special_Functions )
-    EVT_MENU( ID_MENU_EXPORT_FOOTPRINTS_TO_NEW_LIBRARY, PCB_EDIT_FRAME::Process_Special_Functions )
 
     EVT_MENU( wxID_EXIT, PCB_EDIT_FRAME::OnQuit )
     EVT_MENU( wxID_CLOSE, PCB_EDIT_FRAME::OnQuit )
@@ -1255,7 +1241,7 @@ bool PCB_EDIT_FRAME::canCloseWindow( wxCloseEvent& aEvent )
         if( !HandleUnsavedChanges( this, wxString::Format( msg, fileName.GetFullName() ),
                                    [&]() -> bool
                                    {
-                                       return Files_io_from_id( ID_SAVE_BOARD );
+                                       return SaveBoard();
                                    } ) )
         {
             return false;
@@ -2149,89 +2135,6 @@ bool PCB_EDIT_FRAME::FetchNetlistFromSchematic( NETLIST& aNetlist,
 }
 
 
-void PCB_EDIT_FRAME::RunEeschema()
-{
-    wxString   msg;
-    wxFileName schematic( Prj().GetProjectPath(), Prj().GetProjectName(),
-                          FILEEXT::KiCadSchematicFileExtension );
-
-    if( !schematic.FileExists() )
-    {
-        wxFileName legacySchematic( Prj().GetProjectPath(), Prj().GetProjectName(),
-                                    FILEEXT::LegacySchematicFileExtension );
-
-        if( legacySchematic.FileExists() )
-        {
-            schematic = legacySchematic;
-        }
-        else
-        {
-            msg.Printf( _( "Schematic file '%s' not found." ), schematic.GetFullPath() );
-            DisplayErrorMessage( this, msg );
-            return;
-        }
-    }
-
-    if( Kiface().IsSingle() )
-    {
-        ExecuteFile( EESCHEMA_EXE, schematic.GetFullPath() );
-    }
-    else
-    {
-        KIWAY_PLAYER* frame = Kiway().Player( FRAME_SCH, false );
-
-        // Please: note: DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::initBuffers() calls
-        // Kiway.Player( FRAME_SCH, true )
-        // therefore, the schematic editor is sometimes running, but the schematic project
-        // is not loaded, if the library editor was called, and the dialog field editor was used.
-        // On Linux, it happens the first time the schematic editor is launched, if
-        // library editor was running, and the dialog field editor was open
-        // On Windows, it happens always after the library editor was called,
-        // and the dialog field editor was used
-        if( !frame )
-        {
-            try
-            {
-                frame = Kiway().Player( FRAME_SCH, true );
-            }
-            catch( const IO_ERROR& err )
-            {
-
-                DisplayErrorMessage( this, _( "Eeschema failed to load." ) + wxS( "\n" ) + err.What() );
-                return;
-            }
-        }
-
-        wxEventBlocker blocker( this );
-
-        // If Kiway() cannot create the eeschema frame, it shows a error message, and
-        // frame is null
-        if( !frame )
-            return;
-
-        if( !frame->IsShownOnScreen() ) // the frame exists, (created by the dialog field editor)
-                                        // but no project loaded.
-        {
-            frame->OpenProjectFiles( std::vector<wxString>( 1, schematic.GetFullPath() ) );
-            frame->Show( true );
-        }
-
-        // On Windows, Raise() does not bring the window on screen, when iconized or not shown
-        // On Linux, Raise() brings the window on screen, but this code works fine
-        if( frame->IsIconized() )
-        {
-            frame->Iconize( false );
-
-            // If an iconized frame was created by Pcbnew, Iconize( false ) is not enough
-            // to show the frame at its normal size: Maximize should be called.
-            frame->Maximize( false );
-        }
-
-        frame->Raise();
-    }
-}
-
-
 void PCB_EDIT_FRAME::PythonSyncEnvironmentVariables()
 {
     const ENV_VAR_MAP& vars = Pgm().GetLocalEnvVariables();
@@ -2888,3 +2791,108 @@ void PCB_EDIT_FRAME::onPluginAvailabilityChanged( wxCommandEvent& aEvt )
     aEvt.Skip();
 }
 #endif
+
+
+void PCB_EDIT_FRAME::SwitchLayer( PCB_LAYER_ID layer )
+{
+    PCB_LAYER_ID curLayer = GetActiveLayer();
+    const PCB_DISPLAY_OPTIONS& displ_opts = GetDisplayOptions();
+
+    // Check if the specified layer matches the present layer
+    if( layer == curLayer )
+        return;
+
+    // Copper layers cannot be selected unconditionally; how many of those layers are currently
+    // enabled needs to be checked.
+    if( IsCopperLayer( layer ) )
+    {
+        if( layer > GetBoard()->GetCopperLayerStackMaxId() )
+            return;
+    }
+
+    // Is yet more checking required? E.g. when the layer to be selected is a non-copper layer,
+    // or when switching between a copper layer and a non-copper layer, or vice-versa?
+
+    SetActiveLayer( layer );
+
+    if( displ_opts.m_ContrastModeDisplay != HIGH_CONTRAST_MODE::NORMAL )
+        GetCanvas()->Refresh();
+}
+
+
+void PCB_EDIT_FRAME::OnEditItemRequest( BOARD_ITEM* aItem )
+{
+    switch( aItem->Type() )
+    {
+    case PCB_REFERENCE_IMAGE_T:
+        ShowReferenceImagePropertiesDialog( aItem );
+        break;
+
+    case PCB_FIELD_T:
+    case PCB_TEXT_T:
+        ShowTextPropertiesDialog( static_cast<PCB_TEXT*>( aItem ) );
+        break;
+
+    case PCB_TEXTBOX_T:
+        ShowTextBoxPropertiesDialog( static_cast<PCB_TEXTBOX*>( aItem ) );
+        break;
+
+    case PCB_TABLE_T:
+    {
+        DIALOG_TABLE_PROPERTIES dlg( this, static_cast<PCB_TABLE*>( aItem ) );
+
+        //QuasiModal required for Scintilla auto-complete
+        dlg.ShowQuasiModal();
+        break;
+    }
+
+    case PCB_PAD_T:
+        ShowPadPropertiesDialog( static_cast<PAD*>( aItem ) );
+        break;
+
+    case PCB_FOOTPRINT_T:
+        ShowFootprintPropertiesDialog( static_cast<FOOTPRINT*>( aItem ) );
+        break;
+
+    case PCB_TARGET_T:
+        ShowTargetOptionsDialog( static_cast<PCB_TARGET*>( aItem ) );
+        break;
+
+    case PCB_DIM_ALIGNED_T:
+    case PCB_DIM_CENTER_T:
+    case PCB_DIM_RADIAL_T:
+    case PCB_DIM_ORTHOGONAL_T:
+    case PCB_DIM_LEADER_T:
+    {
+        DIALOG_DIMENSION_PROPERTIES dlg( this, static_cast<PCB_DIMENSION_BASE*>( aItem ) );
+
+        // TODO: why is this QuasiModal?
+        dlg.ShowQuasiModal();
+        break;
+    }
+
+    case PCB_SHAPE_T:
+        ShowGraphicItemPropertiesDialog( static_cast<PCB_SHAPE*>( aItem ) );
+        break;
+
+    case PCB_ZONE_T:
+        Edit_Zone_Params( static_cast<ZONE*>( aItem ) );
+        break;
+
+    case PCB_GROUP_T:
+        m_toolManager->RunAction( ACTIONS::groupProperties, static_cast<PCB_GROUP*>( aItem ) );
+        break;
+
+    case PCB_GENERATOR_T:
+        static_cast<PCB_GENERATOR*>( aItem )->ShowPropertiesDialog( this );
+        break;
+
+    case PCB_MARKER_T:
+        m_toolManager->GetTool<DRC_TOOL>()->CrossProbe( static_cast<PCB_MARKER*>( aItem ) );
+        break;
+
+    default:
+        break;
+    }
+}
+

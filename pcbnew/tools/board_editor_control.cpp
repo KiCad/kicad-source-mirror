@@ -29,8 +29,10 @@
 #include <memory>
 
 #include <pgm_base.h>
+#include <executable_names.h>
 #include <advanced_config.h>
 #include <bitmaps.h>
+#include <gestfich.h>
 #include <pcb_painter.h>
 #include <board.h>
 #include <board_commit.h>
@@ -254,42 +256,70 @@ bool BOARD_EDITOR_CONTROL::Init()
 
 int BOARD_EDITOR_CONTROL::New( const TOOL_EVENT& aEvent )
 {
-    m_frame->Files_io_from_id( ID_NEW_BOARD );
+    m_frame->NewBoard();
     return 0;
 }
 
 
 int BOARD_EDITOR_CONTROL::Open( const TOOL_EVENT& aEvent )
 {
-    m_frame->Files_io_from_id( ID_LOAD_FILE );
+    m_frame->LoadBoard();
     return 0;
 }
 
 
 int BOARD_EDITOR_CONTROL::Save( const TOOL_EVENT& aEvent )
 {
-    m_frame->Files_io_from_id( ID_SAVE_BOARD );
+    m_frame->SaveBoard();
     return 0;
 }
 
 
 int BOARD_EDITOR_CONTROL::SaveAs( const TOOL_EVENT& aEvent )
 {
-    m_frame->Files_io_from_id( ID_SAVE_BOARD_AS );
+    m_frame->SaveBoard( true );
     return 0;
 }
 
 
 int BOARD_EDITOR_CONTROL::SaveCopy( const TOOL_EVENT& aEvent )
 {
-    m_frame->Files_io_from_id( ID_COPY_BOARD_AS );
+    m_frame->SaveBoard( true, true );
     return 0;
 }
 
 
 int BOARD_EDITOR_CONTROL::Revert( const TOOL_EVENT& aEvent )
 {
-    m_frame->Files_io_from_id( ID_REVERT_BOARD );
+    m_frame->RevertBoard();
+    return 0;
+}
+
+
+int BOARD_EDITOR_CONTROL::RescueAutosave( const TOOL_EVENT& aEvent )
+{
+    m_frame->RecoverAutosave();
+    return 0;
+}
+
+
+int BOARD_EDITOR_CONTROL::OpenNonKicadBoard( const TOOL_EVENT& aEvent )
+{
+    m_frame->ImportNonKicadBoard();
+    return 0;
+}
+
+
+int BOARD_EDITOR_CONTROL::ExportFootprints( const TOOL_EVENT& aEvent )
+{
+    m_frame->ExportFootprintsToLibrary( false );
+    return 0;
+}
+
+
+int BOARD_EDITOR_CONTROL::ExportFootprintsAs( const TOOL_EVENT& aEvent )
+{
+    m_frame->ExportFootprintsToLibrary( true );
     return 0;
 }
 
@@ -665,7 +695,9 @@ int BOARD_EDITOR_CONTROL::UpdateSchematicFromPCB( const TOOL_EVENT& aEvent )
         return 0;
     }
 
-    m_frame->RunEeschema();
+    TOOL_EVENT dummy;
+    ShowEeschema( dummy );
+
     KIWAY_PLAYER* frame = m_frame->Kiway().Player( FRAME_SCH, false );
 
     if( frame )
@@ -683,7 +715,87 @@ int BOARD_EDITOR_CONTROL::UpdateSchematicFromPCB( const TOOL_EVENT& aEvent )
 
 int BOARD_EDITOR_CONTROL::ShowEeschema( const TOOL_EVENT& aEvent )
 {
-    m_frame->RunEeschema();
+    wxString        msg;
+    PCB_EDIT_FRAME* boardFrame = m_frame;
+    PROJECT&        project = boardFrame->Prj();
+    wxFileName      schematic( project.GetProjectPath(), project.GetProjectName(),
+                               FILEEXT::KiCadSchematicFileExtension );
+
+    if( !schematic.FileExists() )
+    {
+        wxFileName legacySchematic( project.GetProjectPath(), project.GetProjectName(),
+                                    FILEEXT::LegacySchematicFileExtension );
+
+        if( legacySchematic.FileExists() )
+        {
+            schematic = legacySchematic;
+        }
+        else
+        {
+            msg.Printf( _( "Schematic file '%s' not found." ), schematic.GetFullPath() );
+            DisplayErrorMessage( m_frame, msg );
+            return 0;
+        }
+    }
+
+    if( Kiface().IsSingle() )
+    {
+        ExecuteFile( EESCHEMA_EXE, schematic.GetFullPath() );
+    }
+    else
+    {
+        KIWAY_PLAYER* frame = m_frame->Kiway().Player( FRAME_SCH, false );
+
+        // Please: note: DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::initBuffers() calls
+        // Kiway.Player( FRAME_SCH, true )
+        // therefore, the schematic editor is sometimes running, but the schematic project
+        // is not loaded, if the library editor was called, and the dialog field editor was used.
+        // On Linux, it happens the first time the schematic editor is launched, if
+        // library editor was running, and the dialog field editor was open
+        // On Windows, it happens always after the library editor was called,
+        // and the dialog field editor was used
+        if( !frame )
+        {
+            try
+            {
+                frame = boardFrame->Kiway().Player( FRAME_SCH, true );
+            }
+            catch( const IO_ERROR& err )
+            {
+
+                DisplayErrorMessage( boardFrame, _( "Eeschema failed to load." ) + wxS( "\n" ) + err.What() );
+                return 0;
+            }
+        }
+
+        wxEventBlocker blocker( boardFrame );
+
+        // If Kiway() cannot create the eeschema frame, it shows a error message, and
+        // frame is null
+        if( !frame )
+            return 0;
+
+        if( !frame->IsShownOnScreen() ) // the frame exists, (created by the dialog field editor)
+                                        // but no project loaded.
+        {
+            frame->OpenProjectFiles( std::vector<wxString>( 1, schematic.GetFullPath() ) );
+            frame->Show( true );
+        }
+
+        // On Windows, Raise() does not bring the window on screen, when iconized or not shown
+        // On Linux, Raise() brings the window on screen, but this code works fine
+        if( frame->IsIconized() )
+        {
+            frame->Iconize( false );
+
+            // If an iconized frame was created by Pcbnew, Iconize( false ) is not enough
+            // to show the frame at its normal size: Maximize should be called.
+            frame->Maximize( false );
+        }
+
+        frame->Raise();
+    }
+
     return 0;
 }
 
@@ -1718,6 +1830,10 @@ void BOARD_EDITOR_CONTROL::setTransitions()
     Go( &BOARD_EDITOR_CONTROL::FindNext,               ACTIONS::findNext.MakeEvent() );
     Go( &BOARD_EDITOR_CONTROL::FindNext,               ACTIONS::findPrevious.MakeEvent() );
 
+    Go( &BOARD_EDITOR_CONTROL::RescueAutosave,         PCB_ACTIONS::rescueAutosave.MakeEvent() );
+    Go( &BOARD_EDITOR_CONTROL::OpenNonKicadBoard,      PCB_ACTIONS::openNonKicadBoard.MakeEvent() );
+    Go( &BOARD_EDITOR_CONTROL::ExportFootprints,       PCB_ACTIONS::exportFootprints.MakeEvent() );
+    Go( &BOARD_EDITOR_CONTROL::ExportFootprintsAs,     PCB_ACTIONS::exportFootprintsAs.MakeEvent() );
     Go( &BOARD_EDITOR_CONTROL::BoardSetup,             PCB_ACTIONS::boardSetup.MakeEvent() );
     Go( &BOARD_EDITOR_CONTROL::ImportNetlist,          PCB_ACTIONS::importNetlist.MakeEvent() );
     Go( &BOARD_EDITOR_CONTROL::ImportSpecctraSession,  PCB_ACTIONS::importSpecctraSession.MakeEvent() );

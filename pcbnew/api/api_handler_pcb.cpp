@@ -169,7 +169,7 @@ HANDLER_RESULT<Empty> API_HANDLER_PCB::handleSaveDocument(
     if( !documentValidation )
         return tl::unexpected( documentValidation.error() );
 
-    frame()->Files_io_from_id( ID_SAVE_BOARD );
+    frame()->SaveBoard();
     return Empty();
 }
 
@@ -219,7 +219,7 @@ HANDLER_RESULT<Empty> API_HANDLER_PCB::handleSaveCopyOfDocument(
 
     if( board->GetFileName().Matches( boardPath.GetFullPath() ) )
     {
-        frame()->Files_io_from_id( ID_SAVE_BOARD );
+        frame()->SaveBoard();
         return Empty();
     }
 

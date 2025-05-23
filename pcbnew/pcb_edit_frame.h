@@ -168,8 +168,6 @@ public:
     void OnUpdateSelectViaSize( wxUpdateUIEvent& aEvent );
     void OnUpdateSelectTrackWidth( wxUpdateUIEvent& aEvent );
 
-    void RunEeschema();
-
     void UpdateTrackWidthSelectBox( wxChoice* aTrackWidthSelectBox, bool aShowNetclass,
                                     bool aShowEdit );
     void UpdateViaSizeSelectBox( wxChoice* aViaSizeSelectBox, bool aShowNetclass, bool aShowEdit );
@@ -373,27 +371,12 @@ public:
     void OnFileHistory( wxCommandEvent& event );
     void OnClearFileHistory( wxCommandEvent& aEvent );
 
-    /**
-     * Call #Files_io_from_id with the wxCommandEvent id.
-     *
-     * @param event is the command event handler.
-     */
-    void Files_io( wxCommandEvent& event );
-
-    /**
-     * Read and write board files according to \a aId.
-     *
-     * Valid event IDs are:
-     *  - ID_LOAD_FILE
-     *  - ID_MENU_RECOVER_BOARD_AUTOSAVE
-     *  - ID_NEW_BOARD
-     *  - ID_SAVE_BOARD
-     *  - ID_COPY_BOARD_AS
-     *  - ID_SAVE_BOARD_AS
-     *
-     * @param aId is an event ID coming from file command events:
-     */
-    bool Files_io_from_id( int aId );
+    bool LoadBoard();
+    bool ImportNonKicadBoard();
+    bool RecoverAutosave();
+    bool RevertBoard();
+    bool NewBoard();
+    bool SaveBoard( bool aSaveAs = false, bool aSaveCopy = false );
 
     /**
      * Load a KiCad board (.kicad_pcb) from \a aFileName.
