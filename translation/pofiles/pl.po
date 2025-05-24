@@ -18,10 +18,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-05-21 05:16+0300\n"
-"PO-Revision-Date: 2025-05-07 12:01+0000\n"
+"PO-Revision-Date: 2025-05-25 08:03+0000\n"
 "Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
-"Language-Team: Polish <https://hosted.weblate.org/projects/kicad/master-"
-"source/pl/>\n"
+"Language-Team: Polish <https://hosted.weblate.org/projects/kicad/"
+"master-source/pl/>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -3035,9 +3035,9 @@ msgid "Grid Settings"
 msgstr "Ustawienia siatki"
 
 #: common/dialogs/dialog_group_properties.cpp:112
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid library link: '%s'"
-msgstr "Niepoprawny identyfikator w bibliotece"
+msgstr "Niepoprawne łącze biblioteki: '%s'"
 
 #: common/dialogs/dialog_group_properties.cpp:133
 msgid "Edit Group Properties"
@@ -8819,9 +8819,9 @@ msgid "Open %s"
 msgstr "Otwórz %s"
 
 #: common/plotters/PDF_plotter.cpp:1951
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to open 3D model file: %s"
-msgstr "Nie udało się otworzyć pliku '%s'."
+msgstr "Nie udało się otworzyć pliku modelu 3D: %s"
 
 #: common/project.cpp:416 common/project.cpp:421 pcbnew/project_pcb.cpp:69
 msgid "Error loading project footprint library table."
@@ -9188,14 +9188,12 @@ msgid "Ungroup any selected groups"
 msgstr "Rozdziela dowolnie wybraną grupę elementów"
 
 #: common/tool/actions.cpp:215
-#, fuzzy
 msgid "Add Items"
-msgstr "Elementy"
+msgstr "Dodaj elementy"
 
 #: common/tool/actions.cpp:216
-#, fuzzy
 msgid "Add items to group"
-msgstr "Usuwa elementy z grupy"
+msgstr "Dodaje elementy do grupy"
 
 #: common/tool/actions.cpp:222
 msgid "Remove Items"
@@ -9576,22 +9574,19 @@ msgstr "Dopasuj powiększenie"
 
 #: common/tool/actions.cpp:699
 msgid "Zoom to worksheet area if exists or edited object"
-msgstr ""
+msgstr "Powiększ obszar arkusza roboczego, jeśli istnieje lub edytowano obiekt"
 
 #: common/tool/actions.cpp:706
-#, fuzzy
 msgid "Zoom to All Objects"
-msgstr "Powiększaj do obiektów"
+msgstr "Powiększ do wszystkich obiektów"
 
 #: common/tool/actions.cpp:707
-#, fuzzy
 msgid "Zoom to all objects on screen"
-msgstr "Zaznacz wszystkie elementy na ekranie"
+msgstr "Powiększ do wszystkich obiektów znajdujących się na ekranie"
 
 #: common/tool/actions.cpp:713
-#, fuzzy
 msgid "Zoom to items currently selected"
-msgstr "Edycja obecnie wybranego stabilizatora."
+msgstr "Powiększ do obecnie zaznaczonych elementów"
 
 #: common/tool/actions.cpp:714
 msgid "Zoom to Selected Objects"
@@ -9652,13 +9647,12 @@ msgid "Center on Cursor"
 msgstr "Wycentruj w miejscu kursora"
 
 #: common/tool/actions.cpp:794
-#, fuzzy
 msgid "Zoom to Selection Area"
-msgstr "Przybliż zaznaczenie"
+msgstr "Przybliż do zaznaczenia"
 
 #: common/tool/actions.cpp:795
 msgid "Zoom to an area selection created by a mouse drag"
-msgstr ""
+msgstr "Powiększ obszar zaznaczenia utworzony poprzez przeciągnięcie myszy"
 
 #: common/tool/actions.cpp:803 common/widgets/mathplot.cpp:1394
 msgid "Undo Last Zoom"
@@ -10196,9 +10190,8 @@ msgid "Grouping"
 msgstr "Grupowanie"
 
 #: common/tool/group_tool.cpp:224
-#, fuzzy
 msgid "Add Items to Group"
-msgstr "Wyrównaj elementy do siatki"
+msgstr "Dodaje elementy do grupy"
 
 #: common/tool/group_tool.cpp:247
 msgid "Remove Group Items"
@@ -12214,9 +12207,8 @@ msgid "Update/reset visibility of pin names/numbers"
 msgstr "Uaktualnij/zresetuj widoczność nazw/numerów wyprowadzeń"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:172
-#, fuzzy
 msgid "Reset alternate pin to default"
-msgstr "Zresetuj parametry kreatora do ich wartości domyślnych"
+msgstr "Zresetuj alternatywne piny do domyślnych"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:178
 msgid "Update/reset symbol attributes"
@@ -14666,7 +14658,6 @@ msgstr "Szukaj wszystkich nazw i numerów pinów"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:96
 #: pcbnew/dialogs/dialog_find_base.cpp:92
-#, fuzzy
 msgid "Include &hidden fields"
 msgstr "Uwzględnij ukryte pola"
 
@@ -17386,6 +17377,7 @@ msgstr ""
 #: eeschema/eeschema_jobs_handler.cpp:132 pcbnew/pcbnew_jobs_handler.cpp:241
 msgid "Plotting to HPGL is no longer supported as of KiCad 10.0."
 msgstr ""
+"Rysowanie do formatu HPGL nie jest już wspierane począwszy od KiCad 10.0."
 
 #: eeschema/eeschema_jobs_handler.cpp:199
 msgid "Failed to load schematic\n"
@@ -17396,6 +17388,7 @@ msgstr "Nie można załadować pliku schematu\n"
 #: kicad/cli/command_sch_export_plot.cpp:126 pcbnew/pcbnew_jobs_handler.cpp:229
 msgid "Plotting to HPGL is no longer supported as of KiCad 10.0.\n"
 msgstr ""
+"Rysowanie do formatu HPGL nie jest już wspierane począwszy od KiCad 10.0.\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:324
 #: eeschema/eeschema_jobs_handler.cpp:466
@@ -20052,15 +20045,14 @@ msgstr "Niepoprawny identyfikator symbolu w bibliotece"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:4880
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6174
-#, fuzzy, c-format
+#, c-format
 msgid "Group library link %s contains invalid character '%c'"
-msgstr "Symbol %s zawiera nieprawidłowy znak '%c'"
+msgstr "Łącze do grupy biblioteki %s zawiera nieprawidłowy znak '%c'"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:4886
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6180
-#, fuzzy
 msgid "Invalid library ID"
-msgstr "Niepoprawny identyfikator symbolu w bibliotece"
+msgstr "Niepoprawny identyfikator biblioteki"
 
 #: eeschema/sch_io/ltspice/ltspice_schematic.cpp:223
 #, c-format
@@ -23563,24 +23555,20 @@ msgid "Add selected design block to current sheet"
 msgstr "Dodaje wybrany blok projektowy do bieżącego arkusza"
 
 #: eeschema/tools/sch_actions.cpp:467 pcbnew/tools/pcb_actions.cpp:461
-#, fuzzy
 msgid "Place Linked Design Block"
-msgstr "Umieść blok projektowy"
+msgstr "Umieść połączony blok projektowy"
 
 #: eeschema/tools/sch_actions.cpp:468 pcbnew/tools/pcb_actions.cpp:462
-#, fuzzy
 msgid "Place design block linked to selected group"
-msgstr "Umieszcza blok projektowy jako grupę."
+msgstr "Umieszcza blok projektowy połączone z wybraną grupą"
 
 #: eeschema/tools/sch_actions.cpp:475 pcbnew/tools/pcb_actions.cpp:469
-#, fuzzy
 msgid "Save to Linked Design Block"
-msgstr "Zapisz zaznaczenie jako blok projektowy..."
+msgstr "Zapisz w połączonym bloku projektowym"
 
 #: eeschema/tools/sch_actions.cpp:476 pcbnew/tools/pcb_actions.cpp:470
-#, fuzzy
 msgid "Save selected group to linked design block"
-msgstr "Zapisz zaznaczenie jako blok projektowy..."
+msgstr "Zapisuje zaznaczoną grupę w połączonym z nim blokiem projektowym"
 
 #: eeschema/tools/sch_actions.cpp:486
 msgid "Place No Connect Flags"
@@ -24878,15 +24866,14 @@ msgstr "Nie znaleziono błędów."
 #: eeschema/tools/sch_editor_control.cpp:2998
 #: eeschema/tools/sch_editor_control.cpp:3044 pcbnew/tools/pcb_control.cpp:1382
 #: pcbnew/tools/pcb_control.cpp:1435
-#, fuzzy, c-format
+#, c-format
 msgid "Could not find design block %s."
-msgstr "Nie można odnaleźć etykiety kolumny %s."
+msgstr "Nie można odnaleźć bloku projektowego %s."
 
 #: eeschema/tools/sch_editor_control.cpp:3006
-#, fuzzy, c-format
+#, c-format
 msgid "Design block %s does not have a schematic file."
-msgstr ""
-"Blok projektowy nie posiada pliku schematu lub pliku obwodu drukowanego."
+msgstr "Blok projektowy %s nie posiada pliku schematu."
 
 #: eeschema/tools/sch_find_replace_tool.cpp:329
 msgid "Reached end of schematic."
@@ -25311,9 +25298,8 @@ msgstr "Dyrektywa"
 #: eeschema/widgets/search_handlers.cpp:496
 #: pcbnew/dialogs/dialog_multichannel_generate_rule_areas.cpp:115
 #: pcbnew/widgets/search_handlers.cpp:341
-#, fuzzy
 msgid "Groups"
-msgstr "Grupuj"
+msgstr "Grupy"
 
 #: eeschema/widgets/symbol_filedlg_save_as.h:33
 msgid "Do not update library tables"
@@ -27255,7 +27241,7 @@ msgstr "Użyj ustawień rysunku w formacie Gerber skonfigurowanych już na płyt
 
 #: kicad/cli/command_pcb_export_hpgl.cpp:30
 msgid "No longer supported as of KiCad 10.0."
-msgstr ""
+msgstr "Nie jest już wspierane od wersji KiCad 10.0."
 
 #: kicad/cli/command_pcb_export_pdf.cpp:37
 msgid "Generate PDF from a list of layers"
@@ -27643,9 +27629,8 @@ msgstr ""
 
 #: kicad/cli/command_sch_export_plot.cpp:108
 #: kicad/cli/command_sch_export_plot.cpp:114
-#, fuzzy
 msgid "Deprecated.  Has no effect."
-msgstr "Przestarzała wersja %s."
+msgstr "Przestarzałe.   Nie wywołuje działania."
 
 #: kicad/cli/command_sch_export_pythonbom.cpp:36
 msgid ""
@@ -28954,13 +28939,12 @@ msgid "Local path: monitoring folder changes"
 msgstr "Ścieżka lokalna: monitorowanie zmian w folderze jest aktywne"
 
 #: kicad/project_tree_pane.cpp:1596
-#, fuzzy
 msgid "Please wait"
-msgstr "Szerokość impulsu:"
+msgstr "Proszę czekać"
 
 #: kicad/project_tree_pane.cpp:1597
 msgid "Waiting for Git operations to finish..."
-msgstr ""
+msgstr "Oczekiwanie na zakończenie operacji przez Git..."
 
 #: kicad/project_tree_pane.cpp:1671
 msgid "The selected directory is already a Git project."
@@ -37251,9 +37235,8 @@ msgstr "Zamień footprinty z tymi określonymi na liście sieci"
 
 #: pcbnew/dialogs/dialog_import_netlist_base.cpp:59
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:43
-#, fuzzy
 msgid "Group footprints based on symbol group"
-msgstr "Nie ma zdefiniowanego footprintu dla symbolu %s."
+msgstr "Grupuj footprinty na podstawie grup symboli"
 
 #: pcbnew/dialogs/dialog_import_netlist_base.cpp:62
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:46
@@ -40251,9 +40234,8 @@ msgid "Place items matching component class:"
 msgstr "Umieść elementy pasujące do filtra klasy komponentu:"
 
 #: pcbnew/dialogs/panel_rule_area_properties_placement_base.cpp:42
-#, fuzzy
 msgid "Place items in group:"
-msgstr "Umieść jako grupę"
+msgstr "Umieść elementy w grupie:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:46
 msgid "Minimum clearance:"
@@ -44295,24 +44277,24 @@ msgid "Update %s jumper pad groups"
 msgstr "Uaktualnianie %s grup pól zworkowych"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:856
-#, fuzzy, c-format
+#, c-format
 msgid "Remove %s from group \"%s\"."
-msgstr "Usuwa elementy z grupy"
+msgstr "Usuwam %s z grupy \"%s\"."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:862
-#, fuzzy, c-format
+#, c-format
 msgid "Removed %s from group \"%s\"."
-msgstr "Usuwa elementy z grupy"
+msgstr "Usunięto %s z grupy \"%s\"."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:880
-#, fuzzy, c-format
+#, c-format
 msgid "Add %s to group \"%s\"."
-msgstr "Dodaj własną grupę..."
+msgstr "Dodaje %s do grupy \"%s\"."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:886
-#, fuzzy, c-format
+#, c-format
 msgid "Added %s group \"%s\"."
-msgstr "Dodano %s (footprint '%s')."
+msgstr "Dodano %s grupa \"%s\"."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:989
 #, c-format
@@ -44403,24 +44385,24 @@ msgstr ""
 "polem."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1365
-#, fuzzy, c-format
+#, c-format
 msgid "Change group name to '%s' to '%s'."
-msgstr "Zmieniam %s wartości z '%s' na '%s'."
+msgstr "Zmieniam nazwę grupy '%s' na '%s'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1372
-#, fuzzy, c-format
+#, c-format
 msgid "Changed group name to '%s' to '%s'."
-msgstr "Zmieniam %s wartości z '%s' na '%s'."
+msgstr "Zmieniono nazwę grupy '%s' na '%s'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1384
-#, fuzzy, c-format
+#, c-format
 msgid "Change group library link to '%s'."
-msgstr "Zmieniam '%s' etykiet globalnych na '%s'."
+msgstr "Zmieniam łącze grupy biblioteki na '%s'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1391
-#, fuzzy, c-format
+#, c-format
 msgid "Changed group library link to '%s'."
-msgstr "Zmieniam '%s' etykiet globalnych na '%s'."
+msgstr "Zmieniono łącze grupy biblioteki na '%s'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1428
 #, c-format
@@ -44497,14 +44479,14 @@ msgstr ""
 "przesunięcie: %d"
 
 #: pcbnew/netlist_reader/kicad_netlist_reader.cpp:675
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Invalid lib_id ID in\n"
 "file: '%s'\n"
 "line: %d\n"
 "offf: %d"
 msgstr ""
-"Niepoprawny ID footprintu w\n"
+"Niepoprawny lib_id identyfikatora\n"
 "plik: '%s'\n"
 "linia: %d\n"
 "przesunięcie: %d"
@@ -46915,7 +46897,7 @@ msgid "No layers selected for plotting."
 msgstr "Nie wybrano żadnych warstw do rysowania."
 
 #: pcbnew/pcb_plotter.cpp:481
-#, fuzzy, c-format
+#, c-format
 msgid "Color theme '%s' not found, will use theme from PCB Editor.\n"
 msgstr ""
 "Nie znaleziono zestawu kolorystyki '%s', zostanie użyty zestaw pochodzący z "
@@ -47372,7 +47354,7 @@ msgstr "Wiele warstw"
 
 #: pcbnew/plot_board_layers.cpp:1224
 msgid "HPGL plotting is no longer supported as of KiCad 10.0"
-msgstr ""
+msgstr "Rysowanie HPGL nie jest już wspierane od wersji KiCad 10.0"
 
 #: pcbnew/project_pcb.cpp:64
 msgid "Error loading project footprint libraries."
@@ -48613,9 +48595,8 @@ msgid "Edit Track Width/Via Size"
 msgstr "Edycja szerokości ścieżki/rozmiaru przelotki"
 
 #: pcbnew/tools/edit_tool.cpp:1115
-#, fuzzy
 msgid "Edit Track Layer"
-msgstr "Warstwy dolne"
+msgstr "Edytuj warstwę ścieżki"
 
 #: pcbnew/tools/edit_tool.cpp:1150
 msgid "At least two straight track segments must be selected."
@@ -49347,14 +49328,12 @@ msgid "Updates selected track & via sizes"
 msgstr "Uaktualnia rozmiary wybranych ścieżek i przelotek"
 
 #: pcbnew/tools/pcb_actions.cpp:698
-#, fuzzy
 msgid "Switch track to next enabled copper layer"
-msgstr "Element na wyłączonej warstwie sygnałowej"
+msgstr "Przełącz ścieżkę na następną aktywną warstwę sygnałową"
 
 #: pcbnew/tools/pcb_actions.cpp:705
-#, fuzzy
 msgid "Switch track to previous enabled copper layer"
-msgstr "Przełącz na poprzednią warstwę"
+msgstr "Przełącz ścieżkę na poprzednią aktywną warstwę sygnałową"
 
 #: pcbnew/tools/pcb_actions.cpp:711
 msgid "Adds arcs tangent to the selected straight track segments"
@@ -50528,14 +50507,12 @@ msgid "Unroutes selected items to the nearest pad."
 msgstr "Anuluje trasowanie wybranych elementów do najbliższego pola."
 
 #: pcbnew/tools/pcb_actions.cpp:2194
-#, fuzzy
 msgid "Unroute Segment"
-msgstr "Usuń trasowanie z wybranych"
+msgstr "Usuń trasowanie segmentu"
 
 #: pcbnew/tools/pcb_actions.cpp:2195
-#, fuzzy
 msgid "Unroutes segment to the nearest segment."
-msgstr "Anuluje trasowanie wybranych elementów do najbliższego pola."
+msgstr "Anuluje trasowanie segmentu do najbliższego mu innego segmentu."
 
 #: pcbnew/tools/pcb_actions.cpp:2209
 msgid "Select All Tracks in Net"
@@ -50968,10 +50945,9 @@ msgid "Invalid clipboard contents"
 msgstr "Niepoprawna zawartość schowka"
 
 #: pcbnew/tools/pcb_control.cpp:1390
-#, fuzzy, c-format
+#, c-format
 msgid "Design block %s does not have a board file."
-msgstr ""
-"Blok projektowy nie posiada pliku schematu lub pliku obwodu drukowanego."
+msgstr "Blok projektowy %s nie posiada pliku obwodu drukowanego."
 
 #: pcbnew/tools/pcb_control.cpp:1693
 msgid "Error loading board."
