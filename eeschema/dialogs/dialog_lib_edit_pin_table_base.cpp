@@ -157,7 +157,7 @@ DIALOG_LIB_EDIT_PIN_TABLE_BASE::DIALOG_LIB_EDIT_PIN_TABLE_BASE( wxWindow* parent
 	sbSizer3->Add( bExportSizer, 1, wxEXPAND, 5 );
 
 
-	bRightPaneSizer->Add( sbSizer3, 1, wxEXPAND|wxLEFT|wxRIGHT, 5 );
+	bRightPaneSizer->Add( sbSizer3, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
 
 	wxStaticBoxSizer* sbSizer2;
 	sbSizer2 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Import") ), wxVERTICAL );
@@ -187,7 +187,7 @@ DIALOG_LIB_EDIT_PIN_TABLE_BASE::DIALOG_LIB_EDIT_PIN_TABLE_BASE( wxWindow* parent
 	sbSizer2->Add( bImportBtnSizer, 1, wxEXPAND, 5 );
 
 
-	bRightPaneSizer->Add( sbSizer2, 1, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
+	bRightPaneSizer->Add( sbSizer2, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
 
 	wxStaticBoxSizer* sbSizer1;
 	sbSizer1 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Filter") ), wxVERTICAL );
