@@ -300,7 +300,7 @@ wxString SCH_FIELD::GetShownText( const SCH_SHEET_PATH* aPath, bool aAllowExtraT
                 text = ExpandTextVars( text, &Schematic()->Prj() );
                 text = ExpandTextVars( text, &schematicResolver );
             }
-        } while( text != last && iterration++ != ADVANCED_CFG::GetCfg().m_ResolveTextRecursionDepth );
+        } while( text != last && iterration++ <= ADVANCED_CFG::GetCfg().m_ResolveTextRecursionDepth );
     }
 
     // WARNING: the IDs of FIELDS and SHEETS overlap, so one must check *both* the
