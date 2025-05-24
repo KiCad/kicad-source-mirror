@@ -401,6 +401,15 @@ void SCH_IO_KICAD_SEXPR::Format( SCH_SHEET* aSheet )
                 if( a->Type() != b->Type() )
                     return a->Type() < b->Type();
 
+                // sorting fix specific for 9.0 to avoid format change
+                if( a->Type() == SCH_TABLE_T && b->Type() == SCH_TABLE_T )
+                {
+                    const SCH_TABLE* aTable = static_cast<const SCH_TABLE*>( a );
+                    const SCH_TABLE* bTable = static_cast<const SCH_TABLE*>( b );
+
+                    return aTable->GetHash() < bTable->GetHash();
+                }
+
                 return a->m_Uuid < b->m_Uuid;
             };
 

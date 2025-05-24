@@ -628,6 +628,25 @@ double SCH_TABLE::Similarity( const SCH_ITEM& aOther ) const
 }
 
 
+size_t SCH_TABLE::GetHash() const
+{
+    size_t hash = 0;
+
+    // The goal here is to generate an hash that would change the least for
+    // mundane things like just moving the table.
+
+    hash_combine( hash, m_colCount );
+    hash_combine( hash, m_rowHeights.size() );
+
+    for( SCH_TABLECELL* cell : m_cells )
+    {
+        hash_combine( hash, cell->GetText() );
+    }
+
+    return hash;
+}
+
+
 static struct SCH_TABLE_DESC
 {
     SCH_TABLE_DESC()
