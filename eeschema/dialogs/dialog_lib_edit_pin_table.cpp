@@ -53,32 +53,47 @@
 #include <tools/sch_selection_tool.h>
 #include <string_utils.h>
 
-#define UNITS_ALL _( "ALL" )
-#define DEMORGAN_ALL _( "ALL" )
-#define DEMORGAN_STD _( "Standard" )
-#define DEMORGAN_ALT _( "Alternate" )
+#define BOOL_TRUE _HKI( "True" )
+#define BOOL_FALSE _HKI( "False" )
+
+#define UNITS_ALL _HKI( "ALL" )
+#define DEMORGAN_ALL _HKI( "ALL" )
+#define DEMORGAN_STD _HKI( "Standard" )
+#define DEMORGAN_ALT _HKI( "Alternate" )
 
 
+/**
+ * Get the label for a given column in the pin table.
+ *
+ * This string is NOT translated.
+ */
 static wxString GetPinTableColLabel( int aCol )
 {
     switch( aCol )
     {
-    case COL_PIN_COUNT:    return _( "Count" );
-    case COL_NUMBER:       return _( "Number" );
-    case COL_NAME:         return _( "Name" );
-    case COL_TYPE:         return _( "Electrical Type" );
-    case COL_SHAPE:        return _( "Graphic Style" );
-    case COL_ORIENTATION:  return _( "Orientation" );
-    case COL_NUMBER_SIZE:  return _( "Number Text Size" );
-    case COL_NAME_SIZE:    return _( "Name Text Size" );
-    case COL_LENGTH:       return _( "Length" );
-    case COL_POSX:         return _( "X Position" );
-    case COL_POSY:         return _( "Y Position" );
-    case COL_VISIBLE:      return _( "Visible" );
-    case COL_UNIT:         return _( "Unit" );
-    case COL_DEMORGAN:     return _( "De Morgan" );
+    case COL_PIN_COUNT:    return _HKI( "Count" );
+    case COL_NUMBER:       return _HKI( "Number" );
+    case COL_NAME:         return _HKI( "Name" );
+    case COL_TYPE:         return _HKI( "Electrical Type" );
+    case COL_SHAPE:        return _HKI( "Graphic Style" );
+    case COL_ORIENTATION:  return _HKI( "Orientation" );
+    case COL_NUMBER_SIZE:  return _HKI( "Number Text Size" );
+    case COL_NAME_SIZE:    return _HKI( "Name Text Size" );
+    case COL_LENGTH:       return _HKI( "Length" );
+    case COL_POSX:         return _HKI( "X Position" );
+    case COL_POSY:         return _HKI( "Y Position" );
+    case COL_VISIBLE:      return _HKI( "Visible" );
+    case COL_UNIT:         return _HKI( "Unit" );
+    case COL_DEMORGAN:     return _HKI( "De Morgan" );
     default:               wxFAIL; return wxEmptyString;
     }
+}
+
+
+static bool MatchTranslationOrNative( const wxString& aStr, const wxString& aNativeLabel, bool aCaseSensitive )
+{
+    return wxGetTranslation( aNativeLabel ).IsSameAs( aStr, aCaseSensitive )
+           || aStr.IsSameAs( aNativeLabel, aCaseSensitive );
 }
 
 
@@ -86,7 +101,10 @@ static COL_ORDER GetColTypeForString( const wxString& aStr )
 {
     for( int i = 0; i < COL_COUNT; i++ )
     {
-        if( GetPinTableColLabel( i ).IsSameAs( aStr, false ) )
+        const wxString nativeLabel = GetPinTableColLabel( i );
+        const wxString translatedLabel = wxGetTranslation( nativeLabel );
+
+        if( MatchTranslationOrNative( aStr, GetPinTableColLabel( i ), false ) )
             return (COL_ORDER) i;
     }
     return COL_COUNT;
@@ -158,19 +176,19 @@ public:
             if( aPin.GetUnit() )
                 val << LIB_SYMBOL::LetterSubReference( aPin.GetUnit(), 'A' );
             else
-                val << UNITS_ALL;
+                val << wxGetTranslation( UNITS_ALL );
             break;
         case COL_DEMORGAN:
             switch( aPin.GetBodyStyle() )
             {
             case BODY_STYLE::BASE:
-                val << DEMORGAN_STD;
+                val << wxGetTranslation( DEMORGAN_STD );
                 break;
             case BODY_STYLE::DEMORGAN:
-                val << DEMORGAN_ALT;
+                val << wxGetTranslation( DEMORGAN_ALT );
                 break;
             default:
-                val << DEMORGAN_ALL;
+                val << wxGetTranslation( DEMORGAN_ALL );
                 break;
             }
             break;
@@ -240,7 +258,7 @@ public:
             break;
 
         case COL_UNIT:
-            if( aValue == UNITS_ALL )
+            if( MatchTranslationOrNative( aValue, UNITS_ALL, false ) )
             {
                 aPin.SetUnit( 0 );
             }
@@ -259,9 +277,9 @@ public:
             break;
 
         case COL_DEMORGAN:
-            if( aValue == DEMORGAN_STD )
+            if( MatchTranslationOrNative( aValue, DEMORGAN_STD, false ) )
                 aPin.SetBodyStyle( 1 );
-            else if( aValue == DEMORGAN_ALT )
+            else if( MatchTranslationOrNative( aValue, DEMORGAN_ALT, false ) )
                 aPin.SetBodyStyle( 2 );
             else
                 aPin.SetBodyStyle( 0 );
@@ -280,7 +298,7 @@ private:
         {
         case BOOL_FORMAT::ZERO_ONE: return aValue ? wxT( "1" ) : wxT( "0" );
         case BOOL_FORMAT::TRUE_FALSE:
-            return aValue ? _( "True" ) : _( "False" );
+            return wxGetTranslation( aValue ? BOOL_TRUE : BOOL_FALSE );
             // no default
         }
         wxCHECK_MSG( false, wxEmptyString, "Invalid BOOL_FORMAT" );
@@ -296,21 +314,19 @@ private:
         {
             return false;
         }
-        else if( aValue.IsSameAs( _( "True" ), false ) )
+        else if( MatchTranslationOrNative( aValue, BOOL_TRUE, false ) )
         {
             return true;
         }
-        else if( aValue.IsSameAs( _( "False" ), false ) )
+        else if( MatchTranslationOrNative( aValue, BOOL_FALSE, false ) )
         {
             return false;
         }
-        else
-        {
-            wxFAIL_MSG( wxString::Format( "string '%s' can't be converted to boolean correctly, "
-                                          "it will have been perceived as FALSE",
-                                          aValue ) );
-            return false;
-        }
+
+        wxFAIL_MSG( wxString::Format( _( "The value '%s' can't be converted to boolean correctly, "
+                                         "it has been interpreted as 'False'" ),
+                                      aValue ) );
+        return false;
     }
 
     UNITS_PROVIDER& m_unitsProvider;
@@ -393,7 +409,7 @@ public:
 
     wxString GetColLabelValue( int aCol ) override
     {
-        return GetPinTableColLabel( aCol );
+        return wxGetTranslation( GetPinTableColLabel( aCol ) );
     }
 
     bool IsEmptyCell( int row, int col ) override
@@ -876,7 +892,7 @@ public:
         std::vector<wxString> headers;
         for( int col : exportCols )
         {
-            headers.push_back( GetPinTableColLabel( col ) );
+            headers.push_back( wxGetTranslation( GetPinTableColLabel( col ) ) );
         }
         exportTable.emplace_back( std::move( headers ) );
 
@@ -1083,7 +1099,7 @@ DIALOG_LIB_EDIT_PIN_TABLE::DIALOG_LIB_EDIT_PIN_TABLE( SYMBOL_EDIT_FRAME* parent,
 
     attr = new wxGridCellAttr;
     wxArrayString unitNames;
-    unitNames.push_back( UNITS_ALL );
+    unitNames.push_back( wxGetTranslation( UNITS_ALL ) );
 
     for( int i = 1; i <= aSymbol->GetUnitCount(); i++ )
         unitNames.push_back( LIB_SYMBOL::LetterSubReference( i, 'A' ) );
@@ -1093,9 +1109,9 @@ DIALOG_LIB_EDIT_PIN_TABLE::DIALOG_LIB_EDIT_PIN_TABLE( SYMBOL_EDIT_FRAME* parent,
 
     attr = new wxGridCellAttr;
     wxArrayString demorganNames;
-    demorganNames.push_back( DEMORGAN_ALL );
-    demorganNames.push_back( DEMORGAN_STD );
-    demorganNames.push_back( DEMORGAN_ALT );
+    demorganNames.push_back( wxGetTranslation( DEMORGAN_ALL ) );
+    demorganNames.push_back( wxGetTranslation( DEMORGAN_STD ) );
+    demorganNames.push_back( wxGetTranslation( DEMORGAN_ALT ) );
     attr->SetEditor( new GRID_CELL_COMBOBOX( demorganNames ) );
     m_grid->SetColAttr( COL_DEMORGAN, attr );
 
@@ -1128,7 +1144,7 @@ DIALOG_LIB_EDIT_PIN_TABLE::DIALOG_LIB_EDIT_PIN_TABLE( SYMBOL_EDIT_FRAME* parent,
 
     if( aSymbol->IsMulti() )
     {
-        m_unitFilter->Append( UNITS_ALL );
+        m_unitFilter->Append( wxGetTranslation( UNITS_ALL ) );
 
         for( int ii = 0; ii < aSymbol->GetUnitCount(); ++ii )
             m_unitFilter->Append( aSymbol->GetUnitReference( ii + 1 ) );
@@ -1143,9 +1159,9 @@ DIALOG_LIB_EDIT_PIN_TABLE::DIALOG_LIB_EDIT_PIN_TABLE( SYMBOL_EDIT_FRAME* parent,
 
     if( aSymbol->HasAlternateBodyStyle() )
     {
-        m_bodyStyleFilter->Append( DEMORGAN_ALL );
-        m_bodyStyleFilter->Append( DEMORGAN_STD );
-        m_bodyStyleFilter->Append( DEMORGAN_ALT );
+        m_bodyStyleFilter->Append( wxGetTranslation( DEMORGAN_ALL ) );
+        m_bodyStyleFilter->Append( wxGetTranslation( DEMORGAN_STD ) );
+        m_bodyStyleFilter->Append( wxGetTranslation( DEMORGAN_ALT ) );
 
         m_bodyStyleFilter->SetSelection( -1 );
     }
