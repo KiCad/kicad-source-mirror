@@ -182,7 +182,7 @@ SIM_MODEL& SIM_LIB_MGR::CreateModel( const SIM_MODEL* aBaseModel,
 }
 
 SIM_LIBRARY::MODEL SIM_LIB_MGR::CreateModel( const SCH_SHEET_PATH* aSheetPath, SCH_SYMBOL& aSymbol,
-                                             REPORTER& aReporter )
+                                             REPORTER& aReporter, int aDepth )
 {
     // Note: currently this creates a resolved model (all Kicad variables references are resolved
     // before building the model).
@@ -204,7 +204,7 @@ SIM_LIBRARY::MODEL SIM_LIB_MGR::CreateModel( const SCH_SHEET_PATH* aSheetPath, S
                  || field.GetName().StartsWith( wxS( "Sim." ) ) )
         {
             fields.emplace_back( VECTOR2I(), -1, &aSymbol, field.GetName() );
-            fields.back().SetText( field.GetShownText( aSheetPath, false ) );
+            fields.back().SetText( field.GetShownText( aSheetPath, false, aDepth ) );
         }
     }
 

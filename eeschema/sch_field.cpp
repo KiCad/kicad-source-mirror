@@ -273,31 +273,34 @@ wxString SCH_FIELD::GetShownText( const SCH_SHEET_PATH* aPath, bool aAllowExtraT
     if( IsNameShown() && aAllowExtraText )
         text = GetShownName() << wxS( ": " ) << text;
 
-    if( text == wxS( "~" ) ) // Legacy placeholder for empty string
-        text = wxS( "" );
-
-    // The iteration here it to allow for nested variables in the
-    // text strings (e.g. ${${VAR}}).  Although the symbols and sheets
-    // and labels recurse, text that is none of those types such as text
-    // boxes and labels do not.  This only loops if there is still a
-    // variable to resolve.
-    for( int ii = aDepth;
-         ii < ADVANCED_CFG::GetCfg().m_ResolveTextRecursionDepth && text.Contains( wxT( "${" ) );
-         ++ii )
+    if( HasTextVars() )
     {
-        if( m_parent && m_parent->Type() == LIB_SYMBOL_T )
-            text = ExpandTextVars( text, &libSymbolResolver );
-        else if( m_parent && m_parent->Type() == SCH_SYMBOL_T )
-            text = ExpandTextVars( text, &symbolResolver );
-        else if( m_parent && m_parent->Type() == SCH_SHEET_T )
-            text = ExpandTextVars( text, &sheetResolver );
-        else if( m_parent && m_parent->IsType( labelTypes ) )
-            text = ExpandTextVars( text, &labelResolver );
-        else if( Schematic() )
+        wxString last;
+        int      iterration = aDepth;
+
+        // The iteration here it to allow for nested variables in the
+        // text strings (e.g. ${${VAR}}).  Although the symbols and sheets
+        // and labels recurse, text that is none of those types such as text
+        // boxes and labels do not.  This only loops if there is still a
+        // variable to resolve.
+        do
         {
-            text = ExpandTextVars( text, &Schematic()->Prj() );
-            text = ExpandTextVars( text, &schematicResolver );
-        }
+            last = text;
+
+            if( m_parent && m_parent->Type() == LIB_SYMBOL_T )
+                text = ExpandTextVars( text, &libSymbolResolver );
+            else if( m_parent && m_parent->Type() == SCH_SYMBOL_T )
+                text = ExpandTextVars( text, &symbolResolver );
+            else if( m_parent && m_parent->Type() == SCH_SHEET_T )
+                text = ExpandTextVars( text, &sheetResolver );
+            else if( m_parent && m_parent->IsType( labelTypes ) )
+                text = ExpandTextVars( text, &labelResolver );
+            else if( Schematic() )
+            {
+                text = ExpandTextVars( text, &Schematic()->Prj() );
+                text = ExpandTextVars( text, &schematicResolver );
+            }
+        } while( text != last && iterration++ != ADVANCED_CFG::GetCfg().m_ResolveTextRecursionDepth );
     }
 
     // WARNING: the IDs of FIELDS and SHEETS overlap, so one must check *both* the
