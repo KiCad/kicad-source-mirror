@@ -1183,6 +1183,15 @@ bool SIM_MODEL::InferSimModel( T& aSymbol, std::vector<SCH_FIELD>* aFields, bool
     wxString              value = GetFieldValue( aFields, SIM_VALUE_FIELD, aResolve );
     std::vector<SCH_PIN*> pins = aSymbol.GetPins();
 
+    // ensure the pins are sorted by number (not guaranteed in the symbol)
+    // because the inferred spice model pin assignment here and elsewhere depends on
+    // us maintaing the list of pins in order
+    std::sort( pins.begin(), pins.end(),
+               []( const SCH_PIN* a, const SCH_PIN* b )
+               {
+                   return a->GetNumber() < b->GetNumber();
+               } );
+
     *aDeviceType = GetFieldValue( aFields, SIM_DEVICE_FIELD, aResolve );
     *aModelType = GetFieldValue( aFields, SIM_DEVICE_SUBTYPE_FIELD, aResolve );
     *aModelParams = GetFieldValue( aFields, SIM_PARAMS_FIELD, aResolve );
