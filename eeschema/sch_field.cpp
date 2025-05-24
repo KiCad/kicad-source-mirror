@@ -960,6 +960,9 @@ void SCH_FIELD::OnScintillaCharAdded( SCINTILLA_TRICKS* aScintillaTricks,
                         else
                             autocompleteTokens.push_back( pin );
                     }
+
+                    // add the synthetic port for power measurements
+                    autocompleteTokens.push_back( wxT( "power" ) );
                 }
             }
             else
