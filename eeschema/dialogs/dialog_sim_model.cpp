@@ -182,7 +182,7 @@ bool DIALOG_SIM_MODEL<T>::TransferDataToWindow()
     WX_STRING_REPORTER reporter;
 
     // Infer RLC and VI models if they aren't specified
-    if( SIM_MODEL::InferSimModel( m_symbol, &m_fields, false, SIM_VALUE_GRAMMAR::NOTATION::SI,
+    if( SIM_MODEL::InferSimModel( m_symbol, &m_fields, false, 0, SIM_VALUE_GRAMMAR::NOTATION::SI,
                                   &deviceType, &modelType, &modelParams, &pinMap ) )
     {
         SetFieldValue( m_fields, SIM_DEVICE_FIELD, deviceType.ToStdString() );

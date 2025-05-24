@@ -227,7 +227,7 @@ SIM_LIBRARY::MODEL SIM_LIB_MGR::CreateModel( const SCH_SHEET_PATH* aSheetPath, S
     bool     storeInValue = false;
 
     // Infer RLC and VI models if they aren't specified
-    if( SIM_MODEL::InferSimModel( aSymbol, &fields, true, SIM_VALUE_GRAMMAR::NOTATION::SI,
+    if( SIM_MODEL::InferSimModel( aSymbol, &fields, true, aDepth, SIM_VALUE_GRAMMAR::NOTATION::SI,
                                   &deviceType, &modelType, &modelParams, &pinMap ) )
     {
         getOrCreateField( SIM_DEVICE_FIELD )->SetText( deviceType );

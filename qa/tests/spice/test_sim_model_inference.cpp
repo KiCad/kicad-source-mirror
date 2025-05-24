@@ -101,7 +101,7 @@ BOOST_AUTO_TEST_CASE( InferPassiveValues )
         fields.emplace_back( symbol->GetReferenceField() );
         fields.emplace_back( symbol->GetValueField() );
 
-        SIM_MODEL::InferSimModel( *symbol, &fields, false, SIM_VALUE_GRAMMAR::NOTATION::SPICE,
+        SIM_MODEL::InferSimModel( *symbol, &fields, false, 0, SIM_VALUE_GRAMMAR::NOTATION::SPICE,
                                   &deviceType, &modelType, &modelParams, &pinMap );
 
         msg.Printf( "Passive model inference %s %s failed [%s != %s]",

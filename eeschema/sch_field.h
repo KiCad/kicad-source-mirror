@@ -407,13 +407,13 @@ inline wxString GetFieldValue( const std::vector<SCH_FIELD>* aFields, FIELD_T aF
 
 
 inline std::string GetFieldValue( const std::vector<SCH_FIELD>* aFields,
-                                  const wxString& aFieldName, bool aResolve = false )
+                                  const wxString& aFieldName, bool aResolve = false, int aDepth = 0 )
 {
     if( !aFields )
         return "";
 
     if( const SCH_FIELD* field = FindField( *aFields, aFieldName ) )
-        return ( aResolve ? field->GetShownText( false ) : field->GetText() ).ToStdString();
+        return ( aResolve ? field->GetShownText( false, aDepth ) : field->GetText() ).ToStdString();
 
     return "";
 }

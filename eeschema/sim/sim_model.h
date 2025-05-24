@@ -504,7 +504,7 @@ public:
     virtual void SwitchSingleEndedDiff( bool aDiff ) { };
 
     template <class T>
-    static bool InferSimModel( T& aSymbol, std::vector<SCH_FIELD>* aFields, bool aResolve,
+    static bool InferSimModel( T& aSymbol, std::vector<SCH_FIELD>* aFields, bool aResolve, int aDepth,
                                SIM_VALUE_GRAMMAR::NOTATION aNotation, wxString* aDeviceType,
                                wxString* aModelType, wxString* aModelParams, wxString* aPinMap );
 

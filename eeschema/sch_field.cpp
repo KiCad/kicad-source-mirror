@@ -254,18 +254,8 @@ wxString SCH_FIELD::GetShownText( const SCH_SHEET_PATH* aPath, bool aAllowExtraT
 
     if( HasTextVars() )
     {
-        wxString last;
-        int      iterration = aDepth;
-
-        // The iteration here it to allow for nested variables in the
-        // text strings (e.g. ${${VAR}}).  Although the symbols and sheets
-        // and labels recurse, text that is none of those types such as text
-        // boxes and labels do not.  This only loops if there is still a
-        // variable to resolve.
-        do
+        while( text.Contains( wxT( "${" ) ) && aDepth++ <= ADVANCED_CFG::GetCfg().m_ResolveTextRecursionDepth )
         {
-            last = text;
-
             if( m_parent && m_parent->Type() == LIB_SYMBOL_T )
                 text = ExpandTextVars( text, &libSymbolResolver );
             else if( m_parent && m_parent->Type() == SCH_SYMBOL_T )
@@ -279,7 +269,7 @@ wxString SCH_FIELD::GetShownText( const SCH_SHEET_PATH* aPath, bool aAllowExtraT
                 text = ExpandTextVars( text, &Schematic()->Prj() );
                 text = ExpandTextVars( text, &schematicResolver );
             }
-        } while( text != last && iterration++ <= ADVANCED_CFG::GetCfg().m_ResolveTextRecursionDepth );
+        }
     }
 
     if( m_id == FIELD_T::REFERENCE && aPath )

@@ -1016,7 +1016,7 @@ bool SIM_MODEL::requiresSpiceModelLine( const SPICE_ITEM& aItem ) const
 
 
 template <class T>
-bool SIM_MODEL::InferSimModel( T& aSymbol, std::vector<SCH_FIELD>* aFields, bool aResolve,
+bool SIM_MODEL::InferSimModel( T& aSymbol, std::vector<SCH_FIELD>* aFields, bool aResolve, int aDepth,
                                SIM_VALUE_GRAMMAR::NOTATION aNotation, wxString* aDeviceType,
                                wxString* aModelType, wxString* aModelParams, wxString* aPinMap )
 {
@@ -1178,9 +1178,9 @@ bool SIM_MODEL::InferSimModel( T& aSymbol, std::vector<SCH_FIELD>* aFields, bool
             };
 
     wxString              prefix = aSymbol.GetPrefix();
-    wxString              library = GetFieldValue( aFields, SIM_LIBRARY_FIELD, aResolve );
-    wxString              modelName = GetFieldValue( aFields, SIM_NAME_FIELD, aResolve );
-    wxString              value = GetFieldValue( aFields, SIM_VALUE_FIELD, aResolve );
+    wxString              library = GetFieldValue( aFields, SIM_LIBRARY_FIELD, aResolve, aDepth );
+    wxString              modelName = GetFieldValue( aFields, SIM_NAME_FIELD, aResolve, aDepth );
+    wxString              value = GetFieldValue( aFields, SIM_VALUE_FIELD, aResolve, aDepth );
     std::vector<SCH_PIN*> pins = aSymbol.GetPins();
 
     // ensure the pins are sorted by number (not guaranteed in the symbol)
@@ -1192,10 +1192,10 @@ bool SIM_MODEL::InferSimModel( T& aSymbol, std::vector<SCH_FIELD>* aFields, bool
                    return a->GetNumber() < b->GetNumber();
                } );
 
-    *aDeviceType = GetFieldValue( aFields, SIM_DEVICE_FIELD, aResolve );
-    *aModelType = GetFieldValue( aFields, SIM_DEVICE_SUBTYPE_FIELD, aResolve );
-    *aModelParams = GetFieldValue( aFields, SIM_PARAMS_FIELD, aResolve );
-    *aPinMap = GetFieldValue( aFields, SIM_PINS_FIELD, aResolve );
+    *aDeviceType = GetFieldValue( aFields, SIM_DEVICE_FIELD, aResolve, aDepth );
+    *aModelType = GetFieldValue( aFields, SIM_DEVICE_SUBTYPE_FIELD, aResolve, aDepth );
+    *aModelParams = GetFieldValue( aFields, SIM_PARAMS_FIELD, aResolve, aDepth );
+    *aPinMap = GetFieldValue( aFields, SIM_PINS_FIELD, aResolve, aDepth );
 
     if( pins.size() != 2 )
         return false;
@@ -1342,13 +1342,13 @@ bool SIM_MODEL::InferSimModel( T& aSymbol, std::vector<SCH_FIELD>* aFields, bool
 }
 
 
-template bool SIM_MODEL::InferSimModel<SCH_SYMBOL>( SCH_SYMBOL& aSymbol,
-                                                    std::vector<SCH_FIELD>* aFields, bool aResolve,
+template bool SIM_MODEL::InferSimModel<SCH_SYMBOL>( SCH_SYMBOL& aSymbol, std::vector<SCH_FIELD>* aFields,
+                                                    bool aResolve, int aDepth,
                                                     SIM_VALUE_GRAMMAR::NOTATION aNotation,
                                                     wxString* aDeviceType, wxString* aModelType,
                                                     wxString* aModelParams, wxString* aPinMap );
-template bool SIM_MODEL::InferSimModel<LIB_SYMBOL>( LIB_SYMBOL& aSymbol,
-                                                    std::vector<SCH_FIELD>* aFields, bool aResolve,
+template bool SIM_MODEL::InferSimModel<LIB_SYMBOL>( LIB_SYMBOL& aSymbol, std::vector<SCH_FIELD>* aFields,
+                                                    bool aResolve, int aDepth,
                                                     SIM_VALUE_GRAMMAR::NOTATION aNotation,
                                                     wxString* aDeviceType, wxString* aModelType,
                                                     wxString* aModelParams, wxString* aPinMap );
