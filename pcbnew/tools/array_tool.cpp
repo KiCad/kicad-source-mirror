@@ -30,6 +30,7 @@
 #include <pcb_group.h>
 #include <tools/board_reannotate_tool.h>
 #include <tools/pcb_selection_tool.h>
+#include <pcb_generator.h>
 
 
 /**
@@ -215,7 +216,6 @@ void ARRAY_TOOL::onDialogClosed( wxCloseEvent& aEvent )
                     case PCB_FOOTPRINT_T:
                     case PCB_SHAPE_T:
                     case PCB_REFERENCE_IMAGE_T:
-                    case PCB_GENERATOR_T:
                     case PCB_TEXT_T:
                     case PCB_TEXTBOX_T:
                     case PCB_TABLE_T:
@@ -228,7 +228,13 @@ void ARRAY_TOOL::onDialogClosed( wxCloseEvent& aEvent )
                     case PCB_DIM_ORTHOGONAL_T:
                     case PCB_DIM_LEADER_T:
                     case PCB_TARGET_T:
-                    case PCB_ZONE_T: this_item = item->Duplicate(); break;
+                    case PCB_ZONE_T:
+                        this_item = item->Duplicate();
+                        break;
+
+                    case PCB_GENERATOR_T:
+                        this_item = static_cast<PCB_GENERATOR*>( item )->DeepClone();
+                        break;
 
                     case PCB_GROUP_T:
                         this_item = static_cast<PCB_GROUP*>( item )->DeepDuplicate();
@@ -259,7 +265,8 @@ void ARRAY_TOOL::onDialogClosed( wxCloseEvent& aEvent )
                     TransformItem( *m_array_opts, arraySize - ptN - 1, *this_item );
 
                     // If a group is duplicated, add also created members to the board
-                    if( this_item->Type() == PCB_GROUP_T )
+                    if( this_item->Type() == PCB_GROUP_T ||
+                         this_item->Type() == PCB_GENERATOR_T )
                     {
                         this_item->RunOnDescendants(
                                 [&]( BOARD_ITEM* aItem )
