@@ -1315,7 +1315,9 @@ bool SCH_SYMBOL::ResolveTextVar( const SCH_SHEET_PATH* aPath, wxString* token, i
 
         std::vector<EMBEDDED_FILES*> embeddedFilesStack;
         embeddedFilesStack.push_back( schematic->GetEmbeddedFiles() );
-        embeddedFilesStack.push_back( GetLibSymbolRef()->GetEmbeddedFiles() );
+
+        if( m_part )
+            embeddedFilesStack.push_back( m_part->GetEmbeddedFiles() );
 
         simLibMgr.SetFilesStack( embeddedFilesStack );
 
