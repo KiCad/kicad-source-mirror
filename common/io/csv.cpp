@@ -35,23 +35,22 @@ void CSV_WRITER::WriteLine( const std::vector<wxString>& cols )
         if( i > 0 )
             line += m_delimiter;
 
-        double test;
 
-        if( !colVal.ToDouble( &test ) )
+        const bool useEscape = m_escape.size();
+
+        if( useEscape )
         {
-            bool useEscape = m_escape.size();
-
-            if( useEscape )
-            {
-                colVal.Replace( m_quote, m_escape + m_quote, true );
-            }
-            else
-            {
-                colVal.Replace( m_quote, m_quote + m_quote, true );
-            }
-
-            colVal = m_quote + colVal + m_quote;
+            colVal.Replace( m_quote, m_escape + m_quote, true );
         }
+        else
+        {
+            colVal.Replace( m_quote, m_quote + m_quote, true );
+        }
+
+        // Always quote - if that's a problem, we can only quote if the
+        // delimiter (or newlines?) are present in the string.
+        colVal = m_quote + colVal + m_quote;
+
 
         line += colVal;
     }
