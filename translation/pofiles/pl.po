@@ -18,7 +18,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-05-21 05:22+0300\n"
-"PO-Revision-Date: 2025-05-04 22:08+0000\n"
+"PO-Revision-Date: 2025-05-25 08:03+0000\n"
 "Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/kicad/v9/pl/>\n"
 "Language: pl\n"
@@ -11756,9 +11756,8 @@ msgid "Update/reset visibility of pin names/numbers"
 msgstr "Uaktualnij/zresetuj widoczność nazw/numerów wyprowadzeń"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:172
-#, fuzzy
 msgid "Reset alternate pin to default"
-msgstr "Zresetuj parametry kreatora do ich wartości domyślnych"
+msgstr "Zresetuj alternatywne piny do domyślnych"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:178
 msgid "Update/reset symbol attributes"
@@ -41667,9 +41666,8 @@ msgid ""
 msgstr "Nie można połączyć się z %s. Błędy: %s"
 
 #: pcbnew/exporters/step/exporter_step.cpp:801
-#, fuzzy
 msgid "Could not create PCB solid model.\n"
-msgstr "Nie można utworzyć listy materiałowej '%s'."
+msgstr "Nie można utworzyć kompletnego modelu PCB.\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:855
 msgid ""
@@ -41790,6 +41788,7 @@ msgstr ""
 #, c-format
 msgid "Failed to close wire at %d, %d -> %d, %d **\n"
 msgstr ""
+"Niepowodzenie podczas kończenia połączenia na pozycji %d, %d -> %d, %d **\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1580
 #, c-format
@@ -41827,9 +41826,8 @@ msgstr "** Pominięto widok **\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1864
 #: pcbnew/exporters/step/step_pcb_model.cpp:1881
-#, fuzzy
 msgid "OCC error creating main outline.\n"
-msgstr "Błąd podczas odczytywania pliku."
+msgstr "Wystąpił błąd OCC podczas tworzenia głównego obrysu.\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1890
 msgid "OCC error creating hole in main outline.\n"
@@ -41872,6 +41870,8 @@ msgstr "Nie można utworzyć folderu wyjściowego '%s'."
 #: pcbnew/exporters/step/step_pcb_model.cpp:2322
 msgid "Failed to set STEP product name, but will attempt to continue."
 msgstr ""
+"Niepowodzenie podczas ustawienia nazwy produktu STEP, nastąpi próba "
+"kontynuacji mimo to."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2330
 msgid "Failed to set surface curve mode, but will attempt to continue."
