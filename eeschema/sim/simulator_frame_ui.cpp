@@ -1486,7 +1486,7 @@ void SIMULATOR_FRAME_UI::UpdateTunerValue( const SCH_SHEET_PATH& aSheetPath, con
 
     mgr.SetFilesStack( embeddedFilesStack );
 
-    SIM_MODEL& model = mgr.CreateModel( &aSheetPath, *symbol, devnull ).model;
+    SIM_MODEL& model = mgr.CreateModel( &aSheetPath, *symbol, true, 0, devnull ).model;
 
     const SIM_MODEL::PARAM* tunerParam = model.GetTunerParam();
 

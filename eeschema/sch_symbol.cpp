@@ -1434,7 +1434,7 @@ bool SCH_SYMBOL::ResolveTextVar( const SCH_SHEET_PATH* aPath, wxString* token, i
 
         NULL_REPORTER devnull;
         SIM_MODEL&    model = simLibMgr.CreateModel( aPath, const_cast<SCH_SYMBOL&>( *this ),
-                                                     devnull, aDepth + 1 ).model;
+                                                     true, aDepth + 1, devnull ).model;
         SPICE_ITEM spiceItem;
         spiceItem.refName = GetRef( aPath );
 

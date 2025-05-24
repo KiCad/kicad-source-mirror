@@ -594,7 +594,7 @@ int SCH_EDITOR_CONTROL::SimProbe( const TOOL_EVENT& aEvent )
 
                         mgr.SetFilesStack( embeddedFilesStack );
 
-                        SIM_MODEL& model = mgr.CreateModel( &sheet, *symbol, reporter ).model;
+                        SIM_MODEL& model = mgr.CreateModel( &sheet, *symbol, true, 0, reporter ).model;
 
                         if( reporter.HasMessage() )
                             THROW_IO_ERROR( reporter.GetMessages() );

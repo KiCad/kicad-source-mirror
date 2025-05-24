@@ -62,11 +62,10 @@ public:
 
     // TODO: The argument can be made const.
     SIM_LIBRARY::MODEL CreateModel( const SCH_SHEET_PATH* aSheetPath, SCH_SYMBOL& aSymbol,
-                                    REPORTER& aReporter, int aDepth = 0 );
+                                    bool aResolve, int aDepth, REPORTER& aReporter );
 
-    SIM_LIBRARY::MODEL CreateModel( const std::vector<SCH_FIELD>& aFields,
-                                    const std::vector<SCH_PIN*>& aPins, bool aResolved,
-                                    REPORTER& aReporter );
+    SIM_LIBRARY::MODEL CreateModel( const std::vector<SCH_FIELD>& aFields, bool aResolve, int aDepth,
+                                    const std::vector<SCH_PIN*>& aPins, REPORTER& aReporter );
 
     SIM_LIBRARY::MODEL CreateModel( const wxString& aLibraryPath,
                                     const std::string& aBaseModelName,

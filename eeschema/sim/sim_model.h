@@ -407,7 +407,8 @@ public:
     static SPICE_INFO SpiceInfo( TYPE aType );
 
 
-    static TYPE ReadTypeFromFields( const std::vector<SCH_FIELD>& aFields, REPORTER& aReporter );
+    static TYPE ReadTypeFromFields( const std::vector<SCH_FIELD>& aFields,
+                                    bool aResolve, int aDepth, REPORTER& aReporter );
 
     static std::unique_ptr<SIM_MODEL> Create( TYPE aType, const std::vector<SCH_PIN*>& aPins,
                                               REPORTER& aReporter );
@@ -423,11 +424,11 @@ public:
 
     static std::unique_ptr<SIM_MODEL> Create( const std::vector<SCH_FIELD>& aFields,
                                               const std::vector<SCH_PIN*>& aPins,
-                                              bool aResolved, REPORTER& aReporter );
+                                              bool aResolve, int aDepth, REPORTER& aReporter );
 
     static std::string GetFieldValue( const std::vector<SCH_FIELD>* aFields,
                                       const wxString& aFieldName,
-                                      bool aResolve = true );
+                                      bool aResolve = false, int aDepth = 0 );
 
     static void SetFieldValue( std::vector<SCH_FIELD>& aFields, const wxString& aFieldName,
                                const std::string& aValue, bool aIsVisible = true );
@@ -444,7 +445,7 @@ public:
     SIM_MODEL( SIM_MODEL&& aOther ) = default;
     SIM_MODEL& operator=(SIM_MODEL&& aOther ) = delete;
 
-    void ReadDataFields( const std::vector<SCH_FIELD>* aFields,
+    void ReadDataFields( const std::vector<SCH_FIELD>* aFields, bool aResolve, int aDepth,
                          const std::vector<SCH_PIN*>& aPins );
 
     void WriteFields( std::vector<SCH_FIELD>& aFields ) const;
@@ -511,7 +512,7 @@ public:
     virtual void SwitchSingleEndedDiff( bool aDiff ) { };
 
     template <class T>
-    static bool InferSimModel( T& aSymbol, std::vector<SCH_FIELD>* aFields, bool aResolve,
+    static bool InferSimModel( T& aSymbol, std::vector<SCH_FIELD>* aFields, bool aResolve, int aDepth,
                                SIM_VALUE_GRAMMAR::NOTATION aNotation, wxString* aDeviceType,
                                wxString* aModelType, wxString* aModelParams, wxString* aPinMap );
 

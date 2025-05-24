@@ -198,7 +198,7 @@ bool DIALOG_SIM_MODEL<T>::TransferDataToWindow()
             };
 
     // Infer RLC and VI models if they aren't specified
-    if( SIM_MODEL::InferSimModel( m_symbol, &m_fields, false, SIM_VALUE_GRAMMAR::NOTATION::SI,
+    if( SIM_MODEL::InferSimModel( m_symbol, &m_fields, false, 0, SIM_VALUE_GRAMMAR::NOTATION::SI,
                                   &deviceType, &modelType, &modelParams, &pinMap ) )
     {
         setFieldValue( SIM_DEVICE_FIELD, deviceType );
@@ -230,7 +230,7 @@ bool DIALOG_SIM_MODEL<T>::TransferDataToWindow()
                 m_infoBar->ShowMessage( reporter.GetMessages() );
 
             m_libraryPathText->ChangeValue( libraryFilename );
-            m_curModelType = SIM_MODEL::ReadTypeFromFields( m_fields, reporter );
+            m_curModelType = SIM_MODEL::ReadTypeFromFields( m_fields, false, 0, reporter );
 
             m_libraryModelsMgr.CreateModel( nullptr, m_sortedPartPins, m_fields, reporter );
 
@@ -318,7 +318,7 @@ bool DIALOG_SIM_MODEL<T>::TransferDataToWindow()
         m_rbBuiltinModel->SetValue( true );
 
         reporter.Clear();
-        m_curModelType = SIM_MODEL::ReadTypeFromFields( m_fields, reporter );
+        m_curModelType = SIM_MODEL::ReadTypeFromFields( m_fields, false, 0, reporter );
 
         if( reporter.HasMessage() )
             DisplayErrorMessage( this, reporter.GetMessages() );
@@ -329,7 +329,7 @@ bool DIALOG_SIM_MODEL<T>::TransferDataToWindow()
         if( m_rbBuiltinModel->GetValue() && type == m_curModelType )
         {
             reporter.Clear();
-            m_builtinModelsMgr.CreateModel( m_fields, m_sortedPartPins, false, reporter );
+            m_builtinModelsMgr.CreateModel( m_fields, false, 0, m_sortedPartPins, reporter );
 
             if( reporter.HasMessage() )
             {
@@ -385,7 +385,7 @@ bool DIALOG_SIM_MODEL<T>::TransferDataFromWindow()
         if( m_modelListBox->GetSelection() >= 0 )
             name = m_modelListBox->GetStringSelection().ToStdString();
         else if( dynamic_cast<SIM_MODEL_SPICE_FALLBACK*>( &model ) )
-            name = SIM_MODEL::GetFieldValue( &m_fields, SIM_LIBRARY::NAME_FIELD, false );
+            name = SIM_MODEL::GetFieldValue( &m_fields, SIM_LIBRARY::NAME_FIELD );
     }
 
     SIM_MODEL::SetFieldValue( m_fields, SIM_LIBRARY::LIBRARY_FIELD, path, false );
@@ -1526,7 +1526,7 @@ void DIALOG_SIM_MODEL<T>::onWaveformChoice( wxCommandEvent& aEvent )
 
             try
             {
-                m_libraryModelsMgr.GetModels()[idx].get().ReadDataFields( &m_fields,
+                m_libraryModelsMgr.GetModels()[idx].get().ReadDataFields( &m_fields, false, 0,
                                                                           m_sortedPartPins );
             }
             catch( IO_ERROR& err )

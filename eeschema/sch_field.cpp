@@ -275,18 +275,8 @@ wxString SCH_FIELD::GetShownText( const SCH_SHEET_PATH* aPath, bool aAllowExtraT
 
     if( HasTextVars() )
     {
-        wxString last;
-        int      iterration = aDepth;
-
-        // The iteration here it to allow for nested variables in the
-        // text strings (e.g. ${${VAR}}).  Although the symbols and sheets
-        // and labels recurse, text that is none of those types such as text
-        // boxes and labels do not.  This only loops if there is still a
-        // variable to resolve.
-        do
+        while( text.Contains( wxT( "${" ) ) && aDepth++ <= ADVANCED_CFG::GetCfg().m_ResolveTextRecursionDepth )
         {
-            last = text;
-
             if( m_parent && m_parent->Type() == LIB_SYMBOL_T )
                 text = ExpandTextVars( text, &libSymbolResolver );
             else if( m_parent && m_parent->Type() == SCH_SYMBOL_T )
@@ -300,7 +290,7 @@ wxString SCH_FIELD::GetShownText( const SCH_SHEET_PATH* aPath, bool aAllowExtraT
                 text = ExpandTextVars( text, &Schematic()->Prj() );
                 text = ExpandTextVars( text, &schematicResolver );
             }
-        } while( text != last && iterration++ <= ADVANCED_CFG::GetCfg().m_ResolveTextRecursionDepth );
+        }
     }
 
     // WARNING: the IDs of FIELDS and SHEETS overlap, so one must check *both* the
@@ -954,7 +944,7 @@ void SCH_FIELD::OnScintillaCharAdded( SCINTILLA_TRICKS* aScintillaTricks,
 
                     mgr.SetFilesStack( embeddedFilesStack );
 
-                    SIM_MODEL& model = mgr.CreateModel( &sheet, *symbol, devnull ).model;
+                    SIM_MODEL& model = mgr.CreateModel( &sheet, *symbol, true, 0, devnull ).model;
 
                     for( wxString pin : model.GetPinNames() )
                     {

@@ -1756,7 +1756,7 @@ int ERC_TESTER::TestSimModelIssues()
             // Reset for each symbol
             reporter.Clear();
 
-            SIM_LIBRARY::MODEL model = libMgr.CreateModel( &sheet, *symbol, reporter );
+            SIM_LIBRARY::MODEL model = libMgr.CreateModel( &sheet, *symbol, true, 0, reporter );
 
             if( reporter.HasMessage() )
             {
