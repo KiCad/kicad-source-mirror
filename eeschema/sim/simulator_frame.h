@@ -50,6 +50,18 @@ class SPICE_SIMULATOR;
 
 
 /**
+ * Simple error container for failure to init the simulation engine
+ * and ultimately abort the frame construction
+ */
+class SIMULATOR_INIT_ERR : public std::runtime_error
+{
+public:
+    explicit SIMULATOR_INIT_ERR(const std::string& what_arg)
+        : std::runtime_error(what_arg) {}
+};
+
+
+/**
  *
  * The SIMULATOR_FRAME holds the main user-interface for running simulations.
  *

@@ -145,7 +145,9 @@ SIMULATOR_FRAME::SIMULATOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     mainSizer->Add( m_ui, 1, wxEXPAND, 5 );
 
     m_simulator = SIMULATOR::CreateInstance( "ngspice" );
-    wxASSERT( m_simulator );
+
+    if( !m_simulator )
+        throw SIMULATOR_INIT_ERR( "Failed to create simulator instance" );
 
     LoadSettings( config() );
 

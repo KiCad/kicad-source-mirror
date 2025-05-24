@@ -498,7 +498,7 @@ void NGSPICE::init_dll()
 #endif
 
     if( !m_dll.IsLoaded() )
-        throw std::runtime_error( "Missing ngspice shared library" );
+        throw std::runtime_error( _( "Unable to load ngspice shared library. Please check your install." ).ToStdString() );
 
     m_error = false;
 
