@@ -452,8 +452,9 @@ KIWAY_PLAYER* KIWAY::Player( FRAME_T aFrameType, bool doCreate, wxTopLevelWindow
                                             m_ctl       // questionable need, these same flags
                                                         // were passed to KIFACE::OnKifaceStart()
                                             );
+            if( frame )
+                m_playerFrameId[aFrameType].store( frame->GetId() );
 
-            m_playerFrameId[aFrameType].store( frame->GetId() );
             return frame;
         }
         catch( ... )
