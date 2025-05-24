@@ -1052,7 +1052,7 @@ void KICAD_MANAGER_FRAME::ProjectChanged()
 
         title = fn.GetName();
 
-        if( !fn.IsDirWritable() )
+        if( Prj().IsReadOnly() )
             title += wxS( " " ) + _( "[Read Only]" );
     }
     else
