@@ -196,7 +196,7 @@ static struct IFACE : public KIFACE_BASE, public UNITS_PROVIDER
                 SIMULATOR_FRAME* frame = new SIMULATOR_FRAME( aKiway, aParent );
                 return frame;
             }
-            catch( SIMULATOR_INIT_ERR )
+            catch( const SIMULATOR_INIT_ERR& )
             {
                 // catch the init err exception as we don't want it to bubble up
                 // its going to be some ngspice install issue but we don't want to log that
