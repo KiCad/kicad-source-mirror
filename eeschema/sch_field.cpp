@@ -279,7 +279,7 @@ wxString SCH_FIELD::GetShownText( const SCH_SHEET_PATH* aPath, bool aAllowExtraT
                 text = ExpandTextVars( text, &Schematic()->Prj() );
                 text = ExpandTextVars( text, &schematicResolver );
             }
-        } while( text != last && iterration++ != ADVANCED_CFG::GetCfg().m_ResolveTextRecursionDepth );
+        } while( text != last && iterration++ <= ADVANCED_CFG::GetCfg().m_ResolveTextRecursionDepth );
     }
 
     if( m_id == FIELD_T::REFERENCE && aPath )
