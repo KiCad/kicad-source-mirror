@@ -904,6 +904,9 @@ bool SCH_REFERENCE::IsSplitNeeded()
 {
     std::string refText = GetRefStr();
 
+    if( refText.empty() )
+        return false;
+
     int ll = refText.length() - 1;
 
     return ( refText[ll] == '?' ) || isdigit( refText[ll] );

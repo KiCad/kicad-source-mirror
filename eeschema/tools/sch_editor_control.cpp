@@ -2389,6 +2389,7 @@ int SCH_EDITOR_CONTROL::Annotate( const TOOL_EVENT& aEvent )
 int SCH_EDITOR_CONTROL::IncrementAnnotations( const TOOL_EVENT& aEvent )
 {
     DIALOG_INCREMENT_ANNOTATIONS_BASE dlg( m_frame );
+    dlg.m_FirstRefDes->SetValidator( wxTextValidator( wxFILTER_EMPTY ) );
 
     dlg.SetInitialFocus( dlg.m_FirstRefDes );
 
