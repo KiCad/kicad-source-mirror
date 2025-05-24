@@ -123,10 +123,12 @@ public:
         TRUE_FALSE,
     };
 
-    PIN_INFO_FORMATTER( UNITS_PROVIDER& aUnitsProvider, bool aIncludeUnits, BOOL_FORMAT aBoolFormat ) :
-        m_unitsProvider( aUnitsProvider ),
-        m_includeUnits( aIncludeUnits ),
-        m_boolFormat( aBoolFormat )
+    PIN_INFO_FORMATTER( UNITS_PROVIDER& aUnitsProvider, bool aIncludeUnits, BOOL_FORMAT aBoolFormat,
+                        REPORTER& aReporter ) :
+            m_unitsProvider( aUnitsProvider ),
+            m_includeUnits( aIncludeUnits ),
+            m_boolFormat( aBoolFormat ),
+            m_reporter( aReporter )
     {
     }
 
@@ -254,7 +256,7 @@ public:
             break;
 
         case COL_VISIBLE:
-            aPin.SetVisible(boolFromString( aValue ));
+            aPin.SetVisible(boolFromString( aValue, m_reporter ));
             break;
 
         case COL_UNIT:
@@ -304,7 +306,7 @@ private:
         wxCHECK_MSG( false, wxEmptyString, "Invalid BOOL_FORMAT" );
     }
 
-    bool boolFromString( const wxString& aValue ) const
+    bool boolFromString( const wxString& aValue, REPORTER& aReporter ) const
     {
         if( aValue == wxS( "1" ) )
         {
@@ -323,15 +325,17 @@ private:
             return false;
         }
 
-        wxFAIL_MSG( wxString::Format( _( "The value '%s' can't be converted to boolean correctly, "
-                                         "it has been interpreted as 'False'" ),
-                                      aValue ) );
+        aReporter.Report( wxString::Format( _( "The value '%s' can't be converted to boolean correctly, "
+                                               "it has been interpreted as 'False'" ),
+                                            aValue ),
+                          RPT_SEVERITY_ERROR );
         return false;
     }
 
     UNITS_PROVIDER& m_unitsProvider;
     bool            m_includeUnits;
     BOOL_FORMAT     m_boolFormat;
+    REPORTER&       m_reporter;
 };
 
 
@@ -441,7 +445,8 @@ public:
         if( pins.empty() )
             return fieldValue;
 
-        PIN_INFO_FORMATTER formatter( *aParentFrame, true, PIN_INFO_FORMATTER::BOOL_FORMAT::ZERO_ONE );
+        NULL_REPORTER      reporter;
+        PIN_INFO_FORMATTER formatter( *aParentFrame, true, PIN_INFO_FORMATTER::BOOL_FORMAT::ZERO_ONE, reporter );
 
         for( const SCH_PIN* pin : pins )
         {
@@ -574,7 +579,8 @@ public:
             return;
         }
 
-        PIN_INFO_FORMATTER formatter( *m_frame, true, PIN_INFO_FORMATTER::BOOL_FORMAT::ZERO_ONE );
+        NULL_REPORTER      reporter;
+        PIN_INFO_FORMATTER formatter( *m_frame, true, PIN_INFO_FORMATTER::BOOL_FORMAT::ZERO_ONE, reporter );
 
         for( SCH_PIN* pin : pins )
         {
@@ -896,7 +902,8 @@ public:
         }
         exportTable.emplace_back( std::move( headers ) );
 
-        PIN_INFO_FORMATTER formatter( m_unitsProvider, false, PIN_INFO_FORMATTER::BOOL_FORMAT::TRUE_FALSE );
+        NULL_REPORTER      reporter;
+        PIN_INFO_FORMATTER formatter( m_unitsProvider, false, PIN_INFO_FORMATTER::BOOL_FORMAT::TRUE_FALSE, reporter );
 
         for( const SCH_PIN* pin : aPins )
         {
@@ -928,8 +935,9 @@ private:
 class PIN_TABLE_IMPORT
 {
 public:
-    PIN_TABLE_IMPORT( EDA_BASE_FRAME& aFrame ) :
-            m_frame( aFrame )
+    PIN_TABLE_IMPORT( EDA_BASE_FRAME& aFrame, REPORTER& aReporter ) :
+            m_frame( aFrame ),
+            m_reporter( aReporter )
     {
     }
 
@@ -960,7 +968,7 @@ public:
 
         std::vector<std::unique_ptr<SCH_PIN>> pins;
 
-        PIN_INFO_FORMATTER formatter( m_frame, false, PIN_INFO_FORMATTER::BOOL_FORMAT::TRUE_FALSE );
+        PIN_INFO_FORMATTER formatter( m_frame, false, PIN_INFO_FORMATTER::BOOL_FORMAT::TRUE_FALSE, m_reporter );
 
         if( ok )
         {
@@ -1023,19 +1031,14 @@ private:
         {
             wxString msg = wxString::Format( _( "Unknown columns in data: %s. These columns will be ignored." ),
                                              AccumulateDescriptions( unknownHeaders ) );
-
-            showWarning( msg );
+            m_reporter.Report( msg, RPT_SEVERITY_ERROR );
         }
 
         return colOrder;
     }
 
-    void showWarning( const wxString& aMsg ) const
-    {
-        wxMessageBox( aMsg, _( "CSV import warning" ), wxOK | wxICON_WARNING );
-    }
-
     EDA_BASE_FRAME& m_frame;
+    REPORTER&       m_reporter;
 };
 
 
@@ -1510,8 +1513,19 @@ void DIALOG_LIB_EDIT_PIN_TABLE::OnImportButtonClick( wxCommandEvent& event )
     bool fromFile = event.GetEventObject() == m_btnImportFromFile;
     bool replaceAll = m_rbReplaceAll->GetValue();
 
-    PIN_TABLE_IMPORT                      importer( *m_editFrame );
+    WX_STRING_REPORTER reporter;
+    PIN_TABLE_IMPORT   importer( *m_editFrame, reporter );
+
     std::vector<std::unique_ptr<SCH_PIN>> newPins = importer.ImportData( fromFile, *m_symbol );
+
+    if( reporter.HasMessage() )
+    {
+        int ret = wxMessageBox( reporter.GetMessages(), _( "Errors" ), wxOK | wxCANCEL | wxICON_ERROR, this );
+
+        // Give the user the option to cancel the import on errors.
+        if( ret == wxCANCEL )
+            return;
+    }
 
     if( !newPins.size() )
     {
