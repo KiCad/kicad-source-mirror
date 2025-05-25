@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-05-21 05:16+0300\n"
-"PO-Revision-Date: 2025-05-25 08:03+0000\n"
+"PO-Revision-Date: 2025-05-25 18:39+0000\n"
 "Last-Translator: Sárkány Lőrinc <lsarkany@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/kicad/"
 "master-source/hu/>\n"
@@ -33368,27 +33368,22 @@ msgid "Coupled Stripline"
 msgstr "Differenciális microstrip tápvonal"
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:27
-#, fuzzy
 msgid "Coplanar wave guide"
-msgstr "Koplanár hullámvezető"
+msgstr "Koplanáris hullámvezető"
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:28
-#, fuzzy
 msgid "Coplanar wave guide w/ ground plane"
-msgstr "Koplanár hullámvezető földelősíkkal"
+msgstr "Koplanáris hullámvezető földelősíkkal"
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:29
-#, fuzzy
 msgid "Rectangular Waveguide"
 msgstr "Négyszögletes csőtápvonal"
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:30
-#, fuzzy
 msgid "Coaxial Line"
 msgstr "Koaxiális tápvonal"
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:31
-#, fuzzy
 msgid "Twisted Pair"
 msgstr "Csavart érpár"
 
@@ -33413,7 +33408,6 @@ msgid "Tan delta:"
 msgstr "Trapéz delta:"
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:96
-#, fuzzy
 msgid "Rho:"
 msgstr "ρ [Ω⋅m]:"
 
@@ -33440,14 +33434,12 @@ msgid "Rough:"
 msgstr "Érdesség:"
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:166
-#, fuzzy
 msgid "Insulator mu:"
-msgstr "Szövegfordítók"
+msgstr "Szigetelő relatív permeabilitása:"
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:178
-#, fuzzy
 msgid "Conductor mu:"
-msgstr "Vezetősáv hossz:"
+msgstr "Vezető relatív permeabilitása:"
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:197
 #, fuzzy
@@ -33490,7 +33482,7 @@ msgstr "Relatív dielektromos állandók"
 
 #: pcb_calculator/calculator_panels/panel_via_size.cpp:105
 msgid "Electrical Resistivity in Ohm*m"
-msgstr ""
+msgstr "Fajlagos ellenállás [Ω⋅m]"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:31
 #, fuzzy
@@ -34208,15 +34200,15 @@ msgstr "Külső átmérő (szigetelő)"
 
 #: pcb_calculator/transline_ident.cpp:307
 #: pcb_calculator/transline_ident.cpp:354
-#, fuzzy, c-format
+#, c-format
 msgid "Effective %s (even):"
-msgstr "Elvárt \"%s\""
+msgstr "Effektív %s (páros):"
 
 #: pcb_calculator/transline_ident.cpp:308
 #: pcb_calculator/transline_ident.cpp:355
-#, fuzzy, c-format
+#, c-format
 msgid "Effective %s (odd):"
-msgstr "Elvárt \"%s\""
+msgstr "Effektív %s (páratlan):"
 
 #: pcb_calculator/transline_ident.cpp:309
 #: pcb_calculator/transline_ident.cpp:356
@@ -34256,9 +34248,8 @@ msgstr "Differenciális jelvezetékek"
 
 #: pcb_calculator/transline_ident.cpp:340
 #: pcb_calculator/transline_ident.cpp:372
-#, fuzzy
 msgid "Zeven"
-msgstr "Zeven:"
+msgstr "Zpáros"
 
 #: pcb_calculator/transline_ident.cpp:341
 #: pcb_calculator/transline_ident.cpp:373
@@ -34269,9 +34260,8 @@ msgstr ""
 
 #: pcb_calculator/transline_ident.cpp:342
 #: pcb_calculator/transline_ident.cpp:376
-#, fuzzy
 msgid "Zodd"
-msgstr "Zodd:"
+msgstr "Zpáratlan"
 
 #: pcb_calculator/transline_ident.cpp:343
 #: pcb_calculator/transline_ident.cpp:377
