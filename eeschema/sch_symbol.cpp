@@ -1306,7 +1306,7 @@ bool SCH_SYMBOL::ResolveTextVar( const SCH_SHEET_PATH* aPath, wxString* token, i
         wxString rangeStr( operatingPoint.GetMatch( *token, 4 ) );
 
         int      precision = precisionStr.IsEmpty() ? 3 : precisionStr[0] - '0';
-        wxString range = rangeStr.IsEmpty() ? wxS( "~A" ) : rangeStr;
+        wxString range = rangeStr.IsEmpty() ? wxString( wxS( "~A" ) ) : rangeStr;
 
         SIM_LIB_MGR simLibMgr( &schematic->Prj() );
 
