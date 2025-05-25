@@ -905,7 +905,8 @@ bool SYMBOL_LIBRARY_MANAGER::UpdateLibraryBuffer( const wxString& aLibrary )
 
 SYMBOL_BUFFER::SYMBOL_BUFFER( std::unique_ptr<LIB_SYMBOL> aSymbol,
                               std::unique_ptr<SCH_SCREEN> aScreen ) :
-        m_screen( std::move( aScreen ) ), m_symbol( std::move( aSymbol ) )
+        m_screen( std::move( aScreen ) ),
+        m_symbol( std::move( aSymbol ) )
 {
     wxASSERT( m_symbol );
     m_original = std::make_unique<LIB_SYMBOL>( *m_symbol );
@@ -979,7 +980,7 @@ bool LIB_BUFFER::CreateBuffer( std::unique_ptr<LIB_SYMBOL> aCopy,
     aCopy->SetLibId( libId );
 
     auto symbolBuf = std::make_shared<SYMBOL_BUFFER>( std::move( aCopy ), std::move( aScreen ) );
-    m_symbols.push_back( symbolBuf );
+    m_symbols.push_back( std::move( symbolBuf ) );
 
     ++m_hash;
 

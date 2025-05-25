@@ -423,7 +423,7 @@ VECTOR2I OUTLINE_FONT::getTextAsGlyphsUnlocked( BOX2I* aBBox,
                     outline.m_Points.push_back( { tofuBox.GetSize().x, tofuBox.GetPosition().y } );
                     outline.m_Points.push_back( tofuBox.GetSize() );
                     outline.m_Points.push_back( { tofuBox.GetPosition().x, tofuBox.GetSize().y } );
-                    glyphData.m_Contours.push_back( outline );
+                    glyphData.m_Contours.push_back( std::move( outline ) );
 
                     CONTOUR hole;
                     tofuBox.Move( { scaler * 0.06, scaler * 0.06 } );
@@ -435,7 +435,7 @@ VECTOR2I OUTLINE_FONT::getTextAsGlyphsUnlocked( BOX2I* aBBox,
                     hole.m_Points.push_back( { tofuBox.GetSize().x, tofuBox.GetPosition().y } );
                     hole.m_Points.push_back( tofuBox.GetSize() );
                     hole.m_Points.push_back( { tofuBox.GetPosition().x, tofuBox.GetSize().y } );
-                    glyphData.m_Contours.push_back( hole );
+                    glyphData.m_Contours.push_back( std::move( hole ) );
                 }
             }
 

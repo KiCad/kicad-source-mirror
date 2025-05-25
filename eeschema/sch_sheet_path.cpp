@@ -1367,7 +1367,7 @@ std::vector<SCH_SHEET_INSTANCE> SCH_SHEET_LIST::GetSheetInstances() const
         instance.m_Path = tmpPath.Path();
         instance.m_PageNumber = path.GetPageNumber();
 
-        retval.push_back( instance );
+        retval.push_back( std::move( instance ) );
     }
 
     return retval;

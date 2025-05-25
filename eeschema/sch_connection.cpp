@@ -159,7 +159,8 @@ void SCH_CONNECTION::ConfigureFromLabel( const wxString& aLabel )
 
         for( const wxString& vector_member : members )
         {
-            auto member            = std::make_shared<SCH_CONNECTION>( m_parent, m_sheet );
+            std::shared_ptr<SCH_CONNECTION> member = std::make_shared<SCH_CONNECTION>( m_parent, m_sheet );
+
             member->m_type         = CONNECTION_TYPE::NET;
             member->m_prefix       = m_prefix;
             member->m_local_name   = vector_member;
@@ -167,7 +168,7 @@ void SCH_CONNECTION::ConfigureFromLabel( const wxString& aLabel )
             member->m_vector_index = i++;
             member->SetName( vector_member );
             member->SetGraph( m_graph );
-            m_members.push_back( member );
+            m_members.push_back( std::move( member ) );
         }
     }
     else if( NET_SETTINGS::ParseBusGroup( unescaped, &prefix, &members ) )
@@ -186,20 +187,20 @@ void SCH_CONNECTION::ConfigureFromLabel( const wxString& aLabel )
             {
                 for( const wxString& alias_member : alias->Members() )
                 {
-                    auto member = std::make_shared< SCH_CONNECTION >( m_parent, m_sheet );
+                    std::shared_ptr<SCH_CONNECTION> member = std::make_shared<SCH_CONNECTION>( m_parent, m_sheet );
                     member->SetPrefix( prefix );
                     member->SetGraph( m_graph );
                     member->ConfigureFromLabel( EscapeString( alias_member, CTX_NETNAME ) );
-                    m_members.push_back( member );
+                    m_members.push_back( std::move( member ) );
                 }
             }
             else
             {
-                auto member = std::make_shared< SCH_CONNECTION >( m_parent, m_sheet );
+                std::shared_ptr<SCH_CONNECTION> member = std::make_shared<SCH_CONNECTION>( m_parent, m_sheet );
                 member->SetPrefix( prefix );
                 member->SetGraph( m_graph );
                 member->ConfigureFromLabel( group_member );
-                m_members.push_back( member );
+                m_members.push_back( std::move( member ) );
             }
         }
     }

@@ -238,11 +238,11 @@ bool SHAPE_POLY_SET::GetGlobalIndex( SHAPE_POLY_SET::VERTEX_INDEX aRelativeIndic
 int SHAPE_POLY_SET::NewOutline()
 {
     SHAPE_LINE_CHAIN empty_path;
-    POLYGON poly;
+    POLYGON          poly;
 
     empty_path.SetClosed( true );
     poly.push_back( empty_path );
-    m_polys.push_back( poly );
+    m_polys.push_back( std::move( poly ) );
     return m_polys.size() - 1;
 }
 
@@ -3118,13 +3118,12 @@ SHAPE_POLY_SET::BuildPolysetFromOrientedPaths( const std::vector<SHAPE_LINE_CHAI
         for( int i = 0; i < path.PointCount(); i++ )
             lc.emplace_back( path.CPoint( i ).x, path.CPoint( i ).y );
 
-        paths.push_back( lc );
+        paths.push_back( std::move( lc ) );
     }
 
     clipper.AddSubject( paths );
     clipper.Execute( Clipper2Lib::ClipType::Union, aEvenOdd ? Clipper2Lib::FillRule::EvenOdd
-                                                           : Clipper2Lib::FillRule::NonZero, tree );
-
+                                                            : Clipper2Lib::FillRule::NonZero, tree );
 
     std::vector<CLIPPER_Z_VALUE> zValues;
     std::vector<SHAPE_ARC> arcBuffer;
