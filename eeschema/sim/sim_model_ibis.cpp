@@ -55,11 +55,11 @@ std::vector<std::string> SPICE_GENERATOR_IBIS::CurrentNames( const SPICE_ITEM& a
 std::string SPICE_GENERATOR_IBIS::IbisDevice( const SPICE_ITEM& aItem, SCHEMATIC* aSchematic,
                                               const wxString& aCacheDir, REPORTER& aReporter ) const
 {
-    std::string ibisLibFilename = GetFieldValue( &aItem.fields, SIM_LIBRARY::LIBRARY_FIELD );
-    std::string ibisCompName    = GetFieldValue( &aItem.fields, SIM_LIBRARY::NAME_FIELD  );
-    std::string ibisPinName     = GetFieldValue( &aItem.fields, SIM_LIBRARY_IBIS::PIN_FIELD );
-    std::string ibisModelName   = GetFieldValue( &aItem.fields, SIM_LIBRARY_IBIS::MODEL_FIELD );
-    bool        diffMode        = GetFieldValue( &aItem.fields, SIM_LIBRARY_IBIS::DIFF_FIELD ) == "1";
+    std::string ibisLibFilename = GetFieldValue( &aItem.fields, SIM_LIBRARY::LIBRARY_FIELD, true, 0 );
+    std::string ibisCompName    = GetFieldValue( &aItem.fields, SIM_LIBRARY::NAME_FIELD, true, 0  );
+    std::string ibisPinName     = GetFieldValue( &aItem.fields, SIM_LIBRARY_IBIS::PIN_FIELD, true, 0 );
+    std::string ibisModelName   = GetFieldValue( &aItem.fields, SIM_LIBRARY_IBIS::MODEL_FIELD, true, 0 );
+    bool        diffMode        = GetFieldValue( &aItem.fields, SIM_LIBRARY_IBIS::DIFF_FIELD, true, 0 ) == "1";
 
     WX_STRING_REPORTER reporter;
     SIM_LIB_MGR        mgr( &aSchematic->Prj() );

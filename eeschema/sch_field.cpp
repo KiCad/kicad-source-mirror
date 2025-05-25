@@ -750,7 +750,7 @@ void SCH_FIELD::OnScintillaCharAdded( SCINTILLA_TRICKS* aScintillaTricks,
 
                     mgr.SetFilesStack( embeddedFilesStack );
 
-                    SIM_MODEL& model = mgr.CreateModel( &sheet, *symbol, devnull ).model;
+                    SIM_MODEL& model = mgr.CreateModel( &sheet, *symbol, true, 0, devnull ).model;
 
                     for( wxString pin : model.GetPinNames() )
                     {

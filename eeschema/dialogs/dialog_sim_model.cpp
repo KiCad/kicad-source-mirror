@@ -201,7 +201,7 @@ bool DIALOG_SIM_MODEL<T>::TransferDataToWindow()
         FindField( m_fields, FIELD_T::VALUE )->SetText( wxT( "${SIM.PARAMS}" ) );
     }
 
-    wxString libraryFilename = GetFieldValue( &m_fields, SIM_LIBRARY::LIBRARY_FIELD );
+    wxString libraryFilename = GetFieldValue( &m_fields, SIM_LIBRARY::LIBRARY_FIELD, true, 0 );
 
     if( libraryFilename != "" )
     {
@@ -214,16 +214,16 @@ bool DIALOG_SIM_MODEL<T>::TransferDataToWindow()
                 m_infoBar->ShowMessage( reporter.GetMessages() );
 
             m_libraryPathText->ChangeValue( libraryFilename );
-            m_curModelType = SIM_MODEL::ReadTypeFromFields( m_fields, reporter );
+            m_curModelType = SIM_MODEL::ReadTypeFromFields( m_fields, true, 0, reporter );
 
-            m_libraryModelsMgr.CreateModel( nullptr, m_sortedPartPins, m_fields, reporter );
+            m_libraryModelsMgr.CreateModel( nullptr, m_sortedPartPins, m_fields, true, 0, reporter );
 
             m_modelListBox->Append( _( "<unknown>" ) );
             m_modelListBox->SetSelection( 0 );
         }
         else
         {
-            std::string modelName = GetFieldValue( &m_fields, SIM_LIBRARY::NAME_FIELD );
+            std::string modelName = GetFieldValue( &m_fields, SIM_LIBRARY::NAME_FIELD, true, 0 );
             int         modelIdx = m_modelListBox->FindString( modelName );
 
             if( modelIdx == wxNOT_FOUND )
@@ -251,8 +251,7 @@ bool DIALOG_SIM_MODEL<T>::TransferDataToWindow()
             if( m_modelListBoxEntryToLibraryIdx.contains( sel ) )
                 idx = m_modelListBoxEntryToLibraryIdx.at( sel );
 
-            auto ibismodel =
-                    dynamic_cast<SIM_MODEL_IBIS*>( &m_libraryModelsMgr.GetModels()[idx].get() );
+            auto ibismodel = dynamic_cast<SIM_MODEL_IBIS*>( &m_libraryModelsMgr.GetModels()[idx].get() );
 
             if( ibismodel )
             {
@@ -262,7 +261,7 @@ bool DIALOG_SIM_MODEL<T>::TransferDataToWindow()
 
                 for( const std::pair<std::string, std::string>& strs : ibismodel->GetIbisPins() )
                 {
-                    if( strs.first == GetFieldValue( &m_fields, SIM_LIBRARY_IBIS::PIN_FIELD ) )
+                    if( strs.first == GetFieldValue( &m_fields, SIM_LIBRARY_IBIS::PIN_FIELD, true, 0 ) )
                     {
                         auto ibisLibrary = static_cast<const SIM_LIBRARY_IBIS*>( library() );
 
@@ -277,10 +276,11 @@ bool DIALOG_SIM_MODEL<T>::TransferDataToWindow()
                 {
                     onPinCombobox( dummyEvent ); // refresh list of models
 
-                    m_pinModelCombobox->SetStringSelection( GetFieldValue( &m_fields, SIM_LIBRARY_IBIS::MODEL_FIELD ) );
+                    wxString ibisModel = GetFieldValue( &m_fields, SIM_LIBRARY_IBIS::MODEL_FIELD, true, 0 );
+                    m_pinModelCombobox->SetStringSelection( ibisModel );
                 }
 
-                if( GetFieldValue( &m_fields, SIM_LIBRARY_IBIS::DIFF_FIELD ) == "1" )
+                if( GetFieldValue( &m_fields, SIM_LIBRARY_IBIS::DIFF_FIELD, true, 0 ) == "1" )
                 {
                     ibismodel->SwitchSingleEndedDiff( true );
                     m_differentialCheckbox->SetValue( true );
@@ -293,14 +293,14 @@ bool DIALOG_SIM_MODEL<T>::TransferDataToWindow()
             }
         }
     }
-    else if( !GetFieldValue( &m_fields, SIM_DEVICE_FIELD ).empty()
-                || !GetFieldValue( &m_fields, SIM_DEVICE_SUBTYPE_FIELD ).empty() )
+    else if( !GetFieldValue( &m_fields, SIM_DEVICE_FIELD, false, 0 ).empty()
+                || !GetFieldValue( &m_fields, SIM_DEVICE_SUBTYPE_FIELD, false, 0 ).empty() )
     {
         // The model is sourced from the instance.
         m_rbBuiltinModel->SetValue( true );
 
         reporter.Clear();
-        m_curModelType = SIM_MODEL::ReadTypeFromFields( m_fields, reporter );
+        m_curModelType = SIM_MODEL::ReadTypeFromFields( m_fields, true, 0, reporter );
 
         if( reporter.HasMessage() )
             DisplayErrorMessage( this, reporter.GetMessages() );
@@ -311,7 +311,7 @@ bool DIALOG_SIM_MODEL<T>::TransferDataToWindow()
         if( m_rbBuiltinModel->GetValue() && type == m_curModelType )
         {
             reporter.Clear();
-            m_builtinModelsMgr.CreateModel( m_fields, m_sortedPartPins, false, reporter );
+            m_builtinModelsMgr.CreateModel( m_fields, true, 0, m_sortedPartPins, reporter );
 
             if( reporter.HasMessage() )
             {
@@ -367,7 +367,7 @@ bool DIALOG_SIM_MODEL<T>::TransferDataFromWindow()
         if( m_modelListBox->GetSelection() >= 0 )
             name = m_modelListBox->GetStringSelection().ToStdString();
         else if( dynamic_cast<SIM_MODEL_SPICE_FALLBACK*>( &model ) )
-            name = GetFieldValue( &m_fields, SIM_LIBRARY::NAME_FIELD, false );
+            name = GetFieldValue( &m_fields, SIM_LIBRARY::NAME_FIELD, false, 0 );
     }
 
     SetFieldValue( m_fields, SIM_LIBRARY::LIBRARY_FIELD, path, false );
@@ -468,7 +468,7 @@ void DIALOG_SIM_MODEL<T>::updateWidgets()
     updateModelCodeTab( model );
     updatePinAssignments( model, model != m_prevModel );
 
-    std::string ref = GetFieldValue( &m_fields, SIM_REFERENCE_FIELD );
+    std::string ref = GetFieldValue( &m_fields, SIM_REFERENCE_FIELD, false, 0 );
 
     m_modelPanel->Layout();
     m_pinAssignmentsPanel->Layout();
@@ -826,12 +826,12 @@ bool DIALOG_SIM_MODEL<T>::loadLibrary( const wxString& aLibraryPath, REPORTER& a
     if( aReporter.HasMessageOfSeverity( RPT_SEVERITY_UNDEFINED | RPT_SEVERITY_ERROR ) )
         return false;
 
-    std::string modelName = GetFieldValue( &m_fields, SIM_LIBRARY::NAME_FIELD );
+    std::string modelName = GetFieldValue( &m_fields, SIM_LIBRARY::NAME_FIELD, true, 0 );
 
     for( const auto& [baseModelName, baseModel] : library()->GetModels() )
     {
         if( baseModelName == modelName )
-            m_libraryModelsMgr.CreateModel( &baseModel, m_sortedPartPins, m_fields, aReporter );
+            m_libraryModelsMgr.CreateModel( &baseModel, m_sortedPartPins, m_fields, true, 0, aReporter );
         else
             m_libraryModelsMgr.CreateModel( &baseModel, m_sortedPartPins, aReporter );
     }
@@ -1508,7 +1508,7 @@ void DIALOG_SIM_MODEL<T>::onWaveformChoice( wxCommandEvent& aEvent )
 
             try
             {
-                m_libraryModelsMgr.GetModels()[idx].get().ReadDataFields( &m_fields,
+                m_libraryModelsMgr.GetModels()[idx].get().ReadDataFields( &m_fields, true, 0,
                                                                           m_sortedPartPins );
             }
             catch( IO_ERROR& err )

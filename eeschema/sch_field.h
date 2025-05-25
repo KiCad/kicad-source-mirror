@@ -407,7 +407,7 @@ inline wxString GetFieldValue( const std::vector<SCH_FIELD>* aFields, FIELD_T aF
 
 
 inline std::string GetFieldValue( const std::vector<SCH_FIELD>* aFields,
-                                  const wxString& aFieldName, bool aResolve = false, int aDepth = 0 )
+                                  const wxString& aFieldName, bool aResolve, int aDepth )
 {
     if( !aFields )
         return "";

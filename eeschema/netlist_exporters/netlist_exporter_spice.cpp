@@ -422,7 +422,7 @@ void NETLIST_EXPORTER_SPICE::readRefName( SCH_SHEET_PATH& aSheet, SCH_SYMBOL& aS
 void NETLIST_EXPORTER_SPICE::readModel( SCH_SHEET_PATH& aSheet, SCH_SYMBOL& aSymbol,
                                         SPICE_ITEM& aItem, REPORTER& aReporter )
 {
-    const SIM_LIBRARY::MODEL& libModel = m_libMgr.CreateModel( &aSheet, aSymbol, aReporter );
+    const SIM_LIBRARY::MODEL& libModel = m_libMgr.CreateModel( &aSheet, aSymbol, true, 0, aReporter );
 
     aItem.baseModelName = libModel.name;
     aItem.model = &libModel.model;
@@ -491,7 +491,7 @@ void NETLIST_EXPORTER_SPICE::readPinNetNames( SCH_SYMBOL& aSymbol, SPICE_ITEM& a
 void NETLIST_EXPORTER_SPICE::getNodePattern( SPICE_ITEM&               aItem,
                                              std::vector<std::string>& aModifiers )
 {
-    std::string input = GetFieldValue( &aItem.fields, SIM_NODES_FORMAT_FIELD, true );
+    std::string input = GetFieldValue( &aItem.fields, SIM_NODES_FORMAT_FIELD, true, 0 );
 
     if( input == "" )
         return;

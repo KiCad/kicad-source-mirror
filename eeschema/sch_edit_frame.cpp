@@ -1631,7 +1631,7 @@ void SCH_EDIT_FRAME::RefreshOperatingPointDisplay()
 
                 simLibMgr.SetFilesStack( embeddedFilesStack );
 
-                SIM_MODEL& model = simLibMgr.CreateModel( &GetCurrentSheet(), *symbol, devnull ).model;
+                SIM_MODEL& model = simLibMgr.CreateModel( &GetCurrentSheet(), *symbol, true, 0, devnull ).model;
 
                 SPICE_ITEM spiceItem;
                 spiceItem.refName = ref;

@@ -387,10 +387,11 @@ SIM_MODEL::SPICE_INFO SIM_MODEL::SpiceInfo( TYPE aType )
 }
 
 
-TYPE SIM_MODEL::ReadTypeFromFields( const std::vector<SCH_FIELD>& aFields, REPORTER& aReporter )
+TYPE SIM_MODEL::ReadTypeFromFields( const std::vector<SCH_FIELD>& aFields, bool aResolve, int aDepth,
+                                    REPORTER& aReporter )
 {
-    std::string deviceTypeFieldValue = GetFieldValue( &aFields, SIM_DEVICE_FIELD );
-    std::string typeFieldValue = GetFieldValue( &aFields, SIM_DEVICE_SUBTYPE_FIELD );
+    std::string deviceTypeFieldValue = GetFieldValue( &aFields, SIM_DEVICE_FIELD, aResolve, aDepth );
+    std::string typeFieldValue = GetFieldValue( &aFields, SIM_DEVICE_SUBTYPE_FIELD, aResolve, aDepth );
 
     if( !deviceTypeFieldValue.empty() )
     {
@@ -426,21 +427,21 @@ TYPE SIM_MODEL::ReadTypeFromFields( const std::vector<SCH_FIELD>& aFields, REPOR
 }
 
 
-void SIM_MODEL::ReadDataFields( const std::vector<SCH_FIELD>* aFields,
+void SIM_MODEL::ReadDataFields( const std::vector<SCH_FIELD>* aFields, bool aResolve, int aDepth,
                                 const std::vector<SCH_PIN*>& aPins )
 {
-    bool diffMode = GetFieldValue( aFields, SIM_LIBRARY_IBIS::DIFF_FIELD ) == "1";
+    bool diffMode = GetFieldValue( aFields, SIM_LIBRARY_IBIS::DIFF_FIELD, aResolve, aDepth ) == "1";
     SwitchSingleEndedDiff( diffMode );
 
-    m_serializer->ParseEnable( GetFieldValue( aFields, SIM_LEGACY_ENABLE_FIELD_V7 ) );
+    m_serializer->ParseEnable( GetFieldValue( aFields, SIM_LEGACY_ENABLE_FIELD_V7, aResolve, aDepth ) );
 
     createPins( aPins );
-    m_serializer->ParsePins( GetFieldValue( aFields, SIM_PINS_FIELD ) );
+    m_serializer->ParsePins( GetFieldValue( aFields, SIM_PINS_FIELD, aResolve, aDepth ) );
 
-    std::string paramsField = GetFieldValue( aFields, SIM_PARAMS_FIELD );
+    std::string paramsField = GetFieldValue( aFields, SIM_PARAMS_FIELD, aResolve, aDepth );
 
     if( !m_serializer->ParseParams( paramsField ) )
-        m_serializer->ParseValue( GetFieldValue( aFields, SIM_VALUE_FIELD ) );
+        m_serializer->ParseValue( GetFieldValue( aFields, SIM_VALUE_FIELD, aResolve, aDepth ) );
 }
 
 
@@ -486,7 +487,8 @@ std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( TYPE aType, const std::vector<SCH_
     try
     {
         // Passing nullptr to ReadDataFields will make it act as if all fields were empty.
-        model->ReadDataFields( static_cast<const std::vector<SCH_FIELD>*>( nullptr ), aPins );
+        model->ReadDataFields( static_cast<const std::vector<SCH_FIELD>*>( nullptr ),
+                               false, 0, aPins );
     }
     catch( IO_ERROR& )
     {
@@ -523,7 +525,8 @@ std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( const SIM_MODEL* aBaseModel,
 
     try
     {
-        model->ReadDataFields( static_cast<const std::vector<SCH_FIELD>*>( nullptr ), aPins );
+        model->ReadDataFields( static_cast<const std::vector<SCH_FIELD>*>( nullptr ),
+                               false, 0, aPins );
     }
     catch( IO_ERROR& )
     {
@@ -537,7 +540,7 @@ std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( const SIM_MODEL* aBaseModel,
 std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( const SIM_MODEL* aBaseModel,
                                               const std::vector<SCH_PIN*>& aPins,
                                               const std::vector<SCH_FIELD>& aFields,
-                                              REPORTER& aReporter )
+                                              bool aResolve, int aDepth, REPORTER& aReporter )
 {
     std::unique_ptr<SIM_MODEL> model;
 
@@ -545,7 +548,7 @@ std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( const SIM_MODEL* aBaseModel,
     {
         NULL_REPORTER devnull;
         TYPE          type = aBaseModel->GetType();
-        TYPE          type_override = ReadTypeFromFields( aFields, devnull );
+        TYPE          type_override = ReadTypeFromFields( aFields, aResolve, aDepth, devnull );
 
         // Check for an override in the case of IBIS models.
         // The other models require type to be set from the base model.
@@ -566,18 +569,17 @@ std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( const SIM_MODEL* aBaseModel,
     }
     else  // No base model means the model wasn't found in the library, so create a fallback
     {
-        TYPE type = ReadTypeFromFields( aFields, aReporter );
+        TYPE type = ReadTypeFromFields( aFields, aResolve, aDepth, aReporter );
         model = std::make_unique<SIM_MODEL_SPICE_FALLBACK>( type );
     }
 
     try
     {
-        model->ReadDataFields( &aFields, aPins );
+        model->ReadDataFields( &aFields, aResolve, aDepth, aPins );
     }
     catch( IO_ERROR& err )
     {
-        aReporter.Report( wxString::Format( _( "Error reading simulation model from "
-                                               "symbol '%s':\n%s" ),
+        aReporter.Report( wxString::Format( _( "Error reading simulation model from symbol '%s':\n%s" ),
                                             GetFieldValue( &aFields, FIELD_T::REFERENCE ),
                                             err.Problem() ),
                           RPT_SEVERITY_ERROR );
@@ -588,19 +590,19 @@ std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( const SIM_MODEL* aBaseModel,
 
 
 std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( const std::vector<SCH_FIELD>& aFields,
-                                              const std::vector<SCH_PIN*>& aPins,
-                                              bool aResolved, REPORTER& aReporter )
+                                              bool aResolve, int aDepth,
+                                              const std::vector<SCH_PIN*>& aPins, REPORTER& aReporter )
 {
-    TYPE type = ReadTypeFromFields( aFields, aReporter );
+    TYPE type = ReadTypeFromFields( aFields, aResolve, aDepth, aReporter );
     std::unique_ptr<SIM_MODEL> model = SIM_MODEL::Create( type );
 
     try
     {
-        model->ReadDataFields( &aFields, aPins );
+        model->ReadDataFields( &aFields, aResolve, aDepth, aPins );
     }
     catch( const IO_ERROR& parse_err )
     {
-        if( !aResolved )
+        if( !aResolve )
         {
             aReporter.Report( parse_err.What(), RPT_SEVERITY_ERROR );
             return model;
@@ -609,23 +611,22 @@ std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( const std::vector<SCH_FIELD>& aFie
         // Just because we can't parse it doesn't mean that a SPICE interpreter can't.  Fall
         // back to a raw spice code model.
 
-        std::string modelData = GetFieldValue( &aFields, SIM_PARAMS_FIELD );
+        std::string modelData = GetFieldValue( &aFields, SIM_PARAMS_FIELD, aResolve, aDepth );
 
         if( modelData.empty() )
-            modelData = GetFieldValue( &aFields, SIM_VALUE_FIELD );
+            modelData = GetFieldValue( &aFields, SIM_VALUE_FIELD, aResolve, aDepth );
 
         model = std::make_unique<SIM_MODEL_RAW_SPICE>( modelData );
 
         try
         {
             model->createPins( aPins );
-            model->m_serializer->ParsePins( GetFieldValue( &aFields, SIM_PINS_FIELD ) );
+            model->m_serializer->ParsePins( GetFieldValue( &aFields, SIM_PINS_FIELD, aResolve, aDepth ) );
         }
         catch( const IO_ERROR& err )
         {
             // We own the pin syntax, so if we can't parse it then there's an error.
-            aReporter.Report( wxString::Format( _( "Error reading simulation model from "
-                                                   "symbol '%s':\n%s" ),
+            aReporter.Report( wxString::Format( _( "Error reading simulation model from symbol '%s':\n%s" ),
                                                 GetFieldValue( &aFields, FIELD_T::REFERENCE ),
                                                 err.Problem() ),
                               RPT_SEVERITY_ERROR );
@@ -1699,7 +1700,8 @@ void SIM_MODEL::MigrateSimModel( T& aSymbol, const PROJECT* aProject )
         lazySortSourcePins();
 
         SIM_LIBRARY::MODEL simModel = libMgr.CreateModel( lib, model.ToStdString(),
-                                                          emptyFields, sourcePins, reporter );
+                                                          emptyFields, false, 0,
+                                                          sourcePins, reporter );
 
         if( reporter.HasMessage() )
             libraryModel = false;    // Fall back to raw spice model
