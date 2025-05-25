@@ -30,7 +30,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-05-21 05:16+0300\n"
-"PO-Revision-Date: 2025-05-23 12:01+0000\n"
+"PO-Revision-Date: 2025-05-25 08:03+0000\n"
 "Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
@@ -3074,9 +3074,9 @@ msgid "Grid Settings"
 msgstr "Raster-Einstellungen"
 
 #: common/dialogs/dialog_group_properties.cpp:112
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid library link: '%s'"
-msgstr "Ungültiger Bibliotheksbezeichner"
+msgstr "Ungültig Bibliotheksverknüpfung: \"%s\""
 
 #: common/dialogs/dialog_group_properties.cpp:133
 msgid "Edit Group Properties"
@@ -23721,14 +23721,12 @@ msgid "Place design block linked to selected group"
 msgstr "Designblock mit gewählter Gruppe verknüpft einfügen"
 
 #: eeschema/tools/sch_actions.cpp:475 pcbnew/tools/pcb_actions.cpp:469
-#, fuzzy
 msgid "Save to Linked Design Block"
-msgstr "Auswahl als Designblock speichern..."
+msgstr "Als verknüpften Designblock speichern"
 
 #: eeschema/tools/sch_actions.cpp:476 pcbnew/tools/pcb_actions.cpp:470
-#, fuzzy
 msgid "Save selected group to linked design block"
-msgstr "Auswahl als Designblock speichern..."
+msgstr "Gewählte Gruppe als verknüpften Designblock speichern"
 
 #: eeschema/tools/sch_actions.cpp:486
 msgid "Place No Connect Flags"
@@ -25047,9 +25045,9 @@ msgid "Could not find design block %s."
 msgstr "Konnte Spaltenbeschriftung %s nicht finden."
 
 #: eeschema/tools/sch_editor_control.cpp:3006
-#, fuzzy, c-format
+#, c-format
 msgid "Design block %s does not have a schematic file."
-msgstr "Designblock hat keine Schaltplan- oder Platinendatei."
+msgstr "Designblock %s hat keine Schaltplandatei."
 
 #: eeschema/tools/sch_find_replace_tool.cpp:329
 msgid "Reached end of schematic."
@@ -37491,9 +37489,8 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_import_netlist_base.cpp:59
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:43
-#, fuzzy
 msgid "Group footprints based on symbol group"
-msgstr "Es wurde kein Footprint für das Symbol \"%s\" definiert."
+msgstr "Footprints anhand gewählter Symbole gruppieren"
 
 #: pcbnew/dialogs/dialog_import_netlist_base.cpp:62
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:46
@@ -44594,19 +44591,19 @@ msgid "Update %s jumper pad groups"
 msgstr "Jumperpadgruppen %s aktualisieren"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:856
-#, fuzzy, c-format
+#, c-format
 msgid "Remove %s from group \"%s\"."
-msgstr "Elemente aus der Gruppe heraus lösen"
+msgstr "%s aus Gruppe %s entfernen."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:862
-#, fuzzy, c-format
+#, c-format
 msgid "Removed %s from group \"%s\"."
-msgstr "Elemente aus der Gruppe heraus lösen"
+msgstr "%s aus Gruppe %s entfernt."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:880
-#, fuzzy, c-format
+#, c-format
 msgid "Add %s to group \"%s\"."
-msgstr "Benutzerdefinierte Gruppe hinzufügen..."
+msgstr "%s zur Gruppe \"%s\" hinzufügen."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:886
 #, fuzzy, c-format
@@ -44699,24 +44696,24 @@ msgid "Copper zone on layer %s at (%s, %s) has no pads connected."
 msgstr "Kupferzone auf Lage %s bei (%s, %s) hat keine verbundenen Pads."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1365
-#, fuzzy, c-format
+#, c-format
 msgid "Change group name to '%s' to '%s'."
-msgstr "Ändere Wert %s von \"%s\" in \"%s\"."
+msgstr "Gruppe von \"%s\" in \"%s\" umbenennen."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1372
-#, fuzzy, c-format
+#, c-format
 msgid "Changed group name to '%s' to '%s'."
-msgstr "Ändere Wert %s von \"%s\" in \"%s\"."
+msgstr "Gruppe von \"%s\" in \"%s\" umbenannt."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1384
-#, fuzzy, c-format
+#, c-format
 msgid "Change group library link to '%s'."
-msgstr "Globalen Beschriftungen \"%s\" in \"%s\" ändern."
+msgstr "Gruppenbibliotheksverknüpfung in \"%s\" ändern."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1391
-#, fuzzy, c-format
+#, c-format
 msgid "Changed group library link to '%s'."
-msgstr "Globalen Beschriftungen \"%s\" in \"%s\" ändern."
+msgstr "Gruppenbibliotheksverknüpfung in \"%s\" geändert."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1428
 #, c-format
@@ -51321,9 +51318,9 @@ msgid "Invalid clipboard contents"
 msgstr "Inhalt der Zwischenablage ungültig"
 
 #: pcbnew/tools/pcb_control.cpp:1390
-#, fuzzy, c-format
+#, c-format
 msgid "Design block %s does not have a board file."
-msgstr "Designblock hat keine Schaltplan- oder Platinendatei."
+msgstr "Designblock %s hat keine Platinendatei."
 
 #: pcbnew/tools/pcb_control.cpp:1693
 msgid "Error loading board."
