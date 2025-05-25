@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-05-21 05:22+0300\n"
-"PO-Revision-Date: 2025-05-25 22:01+0000\n"
+"PO-Revision-Date: 2025-05-26 23:01+0000\n"
 "Last-Translator: EdizonTN <EdizonTN@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Slovak <https://hosted.weblate.org/projects/kicad/v9/sk/>\n"
 "Language: sk\n"
@@ -24790,13 +24790,13 @@ msgid "Select a value to be tuned"
 msgstr "Vyberte hodnotu, ktorú chcete naladiť"
 
 #: eeschema/tools/sch_actions.cpp:1578
-#, fuzzy
 msgid "User-defined Signals..."
-msgstr "Užívateľom definovaný pôvod"
+msgstr "Používateľom definované signály..."
 
 #: eeschema/tools/sch_actions.cpp:1579
 msgid "Add, edit or delete user-defined simulation signals"
 msgstr ""
+"Pridať, upraviť alebo odstrániť používateľom definované signály simulácie"
 
 #: eeschema/tools/sch_actions.cpp:1585
 #, fuzzy
@@ -35957,7 +35957,7 @@ msgstr "Mriežkový pôvod"
 #: pcbnew/dialogs/dialog_export_step_base.cpp:174
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:44
 msgid "User defined origin"
-msgstr "Užívateľom definovaný pôvod"
+msgstr "Používateľom definovaný počiatok"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:177
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:44
@@ -35965,9 +35965,8 @@ msgid "Board center origin"
 msgstr "Pôvod doskového centra"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:184
-#, fuzzy
 msgid "User Defined Origin"
-msgstr "Užívateľom definovaný pôvod"
+msgstr "Používateľom definovaný počiatok"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:241
 msgid "Do not show components marked 'Do not populate'"
@@ -36092,7 +36091,7 @@ msgstr "Možnosti pôvodu súradníc:"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:53
 msgid "User defined origin:"
-msgstr "Užívateľom definovaný pôvod:"
+msgstr "Požívateľom definovaný počiatok:"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:109
 msgid "meter"
@@ -38993,17 +38992,14 @@ msgid "SVG Options"
 msgstr "Možnosti SVG"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:372
-#, fuzzy
 msgid ""
 "This number defines how many digits are exported that are below 1 mm.\n"
 "User unit is 10^-<N> mm\n"
 "Choose 4 if you are not sure."
 msgstr ""
-"Aká veľká je jednotka používateľa SVG.\n"
-"Číslo definuje, koľko číslic sa exportuje, ktoré sú menšie ako 1 mm alebo 1 "
-"palec.\n"
-"Jednotka používateľa je 10 ^ - <N> mm alebo 10 ^ - <N> palec.\n"
-"Ak si nie ste istí, vyberte 6."
+"Číslo definuje, koľko číslic sa exportuje pod 1 mm.\n"
+"Jednotka používateľa je 10 ^ - <N> mm\n"
+"Ak si nie ste istí, vyberte 4."
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:386
 #, fuzzy
@@ -39043,9 +39039,8 @@ msgstr "Medzera spojov musí byť väčšia než nula."
 #: pcbnew/dialogs/dialog_pns_diff_pair_dimensions.cpp:66
 #: pcbnew/router/pns_kicad_iface.cpp:742 pcbnew/router/pns_kicad_iface.cpp:837
 #: pcbnew/router/pns_kicad_iface.cpp:838
-#, fuzzy
 msgid "user choice"
-msgstr "Uložiť voľbu"
+msgstr "zvolené používateľom"
 
 #: pcbnew/dialogs/dialog_pns_diff_pair_dimensions_base.cpp:36
 #, fuzzy
@@ -41273,17 +41268,15 @@ msgstr "Vnútorné vrstvy, ktoré sa majú vymazať"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:1163
 msgid "All user-defined layers have already been added."
-msgstr ""
+msgstr "Všetky používateľom definované vrstvy už boli pridané."
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:1167
-#, fuzzy
 msgid "Add User-defined Layer"
-msgstr "Pridajte vrstvu definovanú používateľom"
+msgstr "Pridať používateľom definovanú vrstvu"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:26
-#, fuzzy
 msgid "Add User Defined Layer..."
-msgstr "Pridajte vrstvu definovanú používateľom"
+msgstr "Pridať používateľom definovanú vrstvu..."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:32
 #, fuzzy
@@ -45600,9 +45593,8 @@ msgid "Compare Footprint with Library"
 msgstr "Exportovať stopy do knižnice..."
 
 #: pcbnew/pcb_field.cpp:163
-#, fuzzy
 msgid "User Field"
-msgstr "Užívateľské polia"
+msgstr "Používateľské pole"
 
 #: pcbnew/pcb_field.cpp:184
 #, fuzzy, c-format
@@ -45688,13 +45680,13 @@ msgid "Pads6 stream has unexpected length for subrecord 6: %d."
 msgstr ""
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:287
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Altium layer %s has no KiCad equivalent. It has been moved to KiCad layer "
 "Eco1_User."
 msgstr ""
-"Oblúkový oblúk na vrstve Altium %d nemá ekvivalent KiCadu. Namiesto toho ho "
-"vložte na server Eco1_User"
+"Vrstva Altium %d nemá ekvivalent v KiCade. Bola presunutá do vrstvy "
+"Eco1_User."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:484
 #, fuzzy, c-format
@@ -45772,13 +45764,13 @@ msgstr "Načítanie 3D modelov"
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1745
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1847
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1878
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Dimension found on an Altium layer (%d) with no KiCad equivalent. It has "
 "been moved to KiCad layer Eco1_User."
 msgstr ""
-"Rozmer na altiovej vrstve %d nemá ekvivalent KiCad. Namiesto toho ho vložte "
-"na server Eco1_User"
+"Rozmer na Altium vrstve %d nemá ekvivalent v KiCade. Bol presunutý na vrstvu "
+"Eco1_User."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1904
 #, fuzzy
