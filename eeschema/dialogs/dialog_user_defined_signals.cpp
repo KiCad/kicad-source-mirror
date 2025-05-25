@@ -218,9 +218,12 @@ void DIALOG_USER_DEFINED_SIGNALS::onScintillaCharAdded( wxStyledTextEvent &aEven
         }
     }
 
-    wxString partial = textCtrl->GetRange( start, text_pos );
+    if( start >= 0 )    // i.e. at least one char entered
+    {
+        wxString partial = textCtrl->GetRange( start, text_pos );
+        aTricks->DoAutocomplete( partial, tokens );
+    }
 
-    aTricks->DoAutocomplete( partial, tokens );
     textCtrl->SetFocus();
 }
 
