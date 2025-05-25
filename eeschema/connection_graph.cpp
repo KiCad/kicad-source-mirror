@@ -3360,7 +3360,7 @@ bool CONNECTION_GRAPH::ercCheckMultipleDrivers( const CONNECTION_SUBGRAPH* aSubg
                 ercItem->SetItemsSheetPaths( aSubgraph->GetSheet(), aSubgraph->m_sheet );
                 ercItem->SetErrorMessage( msg );
 
-                SCH_MARKER* marker = new SCH_MARKER( ercItem, driver->GetPosition() );
+                SCH_MARKER* marker = new SCH_MARKER( std::move( ercItem ), driver->GetPosition() );
                 aSubgraph->m_sheet.LastScreen()->Append( marker );
 
                 return false;
@@ -3423,7 +3423,7 @@ bool CONNECTION_GRAPH::ercCheckBusToNetConflicts( const CONNECTION_SUBGRAPH* aSu
         ercItem->SetSheetSpecificPath( sheet );
         ercItem->SetItems( net_item, bus_item );
 
-        SCH_MARKER* marker = new SCH_MARKER( ercItem, net_item->GetPosition() );
+        SCH_MARKER* marker = new SCH_MARKER( std::move( ercItem ), net_item->GetPosition() );
         screen->Append( marker );
 
         return false;
@@ -3491,7 +3491,7 @@ bool CONNECTION_GRAPH::ercCheckBusToBusConflicts( const CONNECTION_SUBGRAPH* aSu
             ercItem->SetSheetSpecificPath( sheet );
             ercItem->SetItems( label, port );
 
-            SCH_MARKER* marker = new SCH_MARKER( ercItem, label->GetPosition() );
+            SCH_MARKER* marker = new SCH_MARKER( std::move( ercItem ), label->GetPosition() );
             screen->Append( marker );
 
             return false;
@@ -3597,7 +3597,7 @@ bool CONNECTION_GRAPH::ercCheckBusToBusEntryConflicts( const CONNECTION_SUBGRAPH
         ercItem->SetItems( bus_entry, bus_wire );
         ercItem->SetErrorMessage( msg );
 
-        SCH_MARKER* marker = new SCH_MARKER( ercItem, bus_entry->GetPosition() );
+        SCH_MARKER* marker = new SCH_MARKER( std::move( ercItem ), bus_entry->GetPosition() );
         screen->Append( marker );
 
         return false;
@@ -3722,7 +3722,7 @@ bool CONNECTION_GRAPH::ercCheckNoConnects( const CONNECTION_SUBGRAPH* aSubgraph 
                 pos = aSubgraph->m_no_connect->GetPosition();
             }
 
-            SCH_MARKER* marker = new SCH_MARKER( ercItem, pos );
+            SCH_MARKER* marker = new SCH_MARKER( std::move( ercItem ), pos );
             screen->Append( marker );
 
             ok = false;
@@ -3736,7 +3736,7 @@ bool CONNECTION_GRAPH::ercCheckNoConnects( const CONNECTION_SUBGRAPH* aSubgraph 
             ercItem->SetSheetSpecificPath( sheet );
             ercItem->SetItemsSheetPaths( sheet );
 
-            SCH_MARKER* marker = new SCH_MARKER( ercItem, aSubgraph->m_no_connect->GetPosition() );
+            SCH_MARKER* marker = new SCH_MARKER( std::move( ercItem ), aSubgraph->m_no_connect->GetPosition() );
             screen->Append( marker );
 
             ok = false;
@@ -3831,7 +3831,7 @@ bool CONNECTION_GRAPH::ercCheckNoConnects( const CONNECTION_SUBGRAPH* aSubgraph 
             ercItem->SetItemsSheetPaths( sheet );
             ercItem->SetItems( pin );
 
-            SCH_MARKER* marker = new SCH_MARKER( ercItem, pin->GetPosition() );
+            SCH_MARKER* marker = new SCH_MARKER( std::move( ercItem ), pin->GetPosition() );
             screen->Append( marker );
 
             ok = false;
@@ -3856,7 +3856,7 @@ bool CONNECTION_GRAPH::ercCheckNoConnects( const CONNECTION_SUBGRAPH* aSubgraph 
                     ercItem->SetItemsSheetPaths( sheet );
                     ercItem->SetItems( testPin );
 
-                    SCH_MARKER* marker = new SCH_MARKER( ercItem, testPin->GetPosition() );
+                    SCH_MARKER* marker = new SCH_MARKER( std::move( ercItem ), testPin->GetPosition() );
                     screen->Append( marker );
 
                     ok = false;
@@ -3895,7 +3895,7 @@ bool CONNECTION_GRAPH::ercCheckDanglingWireEndpoints( const CONNECTION_SUBGRAPH*
                 ercItem->SetSheetSpecificPath( sheet );
                 ercItem->SetErrorMessage( _( "Unconnected wire endpoint" ) );
 
-                SCH_MARKER* marker = new SCH_MARKER( ercItem, location );
+                SCH_MARKER* marker = new SCH_MARKER( std::move( ercItem ), location );
                 sheet.LastScreen()->Append( marker );
 
                 err_count++;
@@ -3920,7 +3920,7 @@ bool CONNECTION_GRAPH::ercCheckDanglingWireEndpoints( const CONNECTION_SUBGRAPH*
                 ercItem->SetSheetSpecificPath( sheet );
                 ercItem->SetErrorMessage( _( "Unconnected wire to bus entry" ) );
 
-                SCH_MARKER* marker = new SCH_MARKER( ercItem, location );
+                SCH_MARKER* marker = new SCH_MARKER( std::move( ercItem ), location );
                 sheet.LastScreen()->Append( marker );
 
                 err_count++;
@@ -3968,7 +3968,7 @@ bool CONNECTION_GRAPH::ercCheckFloatingWires( const CONNECTION_SUBGRAPH* aSubgra
                            wires.size() > 2 ? wires[2] : nullptr,
                            wires.size() > 3 ? wires[3] : nullptr );
 
-        SCH_MARKER* marker = new SCH_MARKER( ercItem, wires[0]->GetPosition() );
+        SCH_MARKER* marker = new SCH_MARKER( std::move( ercItem ), wires[0]->GetPosition() );
         screen->Append( marker );
 
         return false;
@@ -4022,7 +4022,7 @@ bool CONNECTION_GRAPH::ercCheckLabels( const CONNECTION_SUBGRAPH* aSubgraph )
                     ercItem->SetSheetSpecificPath( sheet );
                     ercItem->SetItems( aText );
 
-                    SCH_MARKER* marker = new SCH_MARKER( ercItem, aText->GetPosition() );
+                    SCH_MARKER* marker = new SCH_MARKER( std::move( ercItem ), aText->GetPosition() );
                     aSubgraph->m_sheet.LastScreen()->Append( marker );
                 }
             };
@@ -4194,7 +4194,7 @@ int CONNECTION_GRAPH::ercCheckSingleGlobalLabel()
             ercItem->SetSheetSpecificPath( sheet );
             ercItem->SetItemsSheetPaths( sheet );
 
-            SCH_MARKER* marker = new SCH_MARKER( ercItem, item->GetPosition() );
+            SCH_MARKER* marker = new SCH_MARKER( std::move( ercItem ), item->GetPosition() );
             sheet.LastScreen()->Append( marker );
 
             errors++;
@@ -4222,7 +4222,7 @@ int CONNECTION_GRAPH::ercCheckDirectiveLabels()
                 ercItem->SetSheetSpecificPath( sheet );
                 ercItem->SetItems( text );
 
-                SCH_MARKER* marker = new SCH_MARKER( ercItem, text->GetPosition() );
+                SCH_MARKER* marker = new SCH_MARKER( std::move( ercItem ), text->GetPosition() );
                 sheet.LastScreen()->Append( marker );
                 error_count++;
             }
@@ -4258,7 +4258,7 @@ int CONNECTION_GRAPH::ercCheckHierSheets()
                 ercItem->SetItems( item );
                 ercItem->SetErrorMessage( msg );
 
-                SCH_MARKER* marker = new SCH_MARKER( ercItem, item->GetPosition() );
+                SCH_MARKER* marker = new SCH_MARKER( std::move( ercItem ), item->GetPosition() );
                 sheet.LastScreen()->Append( marker );
 
                 errors++;
@@ -4287,7 +4287,7 @@ int CONNECTION_GRAPH::ercCheckHierSheets()
                     ercItem->SetSheetSpecificPath( sheet );
                     ercItem->SetItemsSheetPaths( sheet );
 
-                    SCH_MARKER* marker = new SCH_MARKER( ercItem, pin->GetPosition() );
+                    SCH_MARKER* marker = new SCH_MARKER( std::move( ercItem ), pin->GetPosition() );
                     sheet.LastScreen()->Append( marker );
 
                     errors++;
@@ -4326,7 +4326,8 @@ int CONNECTION_GRAPH::ercCheckHierSheets()
                     ercItem->SetSheetSpecificPath( sheet );
                     ercItem->SetItemsSheetPaths( sheet );
 
-                    SCH_MARKER* marker = new SCH_MARKER( ercItem, unmatched.second->GetPosition() );
+                    SCH_MARKER* marker = new SCH_MARKER( std::move( ercItem ),
+                                                         unmatched.second->GetPosition() );
                     sheet.LastScreen()->Append( marker );
 
                     errors++;
@@ -4343,7 +4344,8 @@ int CONNECTION_GRAPH::ercCheckHierSheets()
                     ercItem->SetSheetSpecificPath( parentSheetPath );
                     ercItem->SetItemsSheetPaths( parentSheetPath );
 
-                    SCH_MARKER* marker = new SCH_MARKER( ercItem, unmatched.second->GetPosition() );
+                    SCH_MARKER* marker = new SCH_MARKER( std::move( ercItem ),
+                                                         unmatched.second->GetPosition() );
                     parentSheet->GetScreen()->Append( marker );
 
                     errors++;

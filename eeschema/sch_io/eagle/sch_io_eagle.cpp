@@ -2846,9 +2846,8 @@ void SCH_IO_EAGLE::addBusEntries()
                         }
                         else
                         {
-                            auto        ercItem = ERC_ITEM::Create( ERCE_BUS_ENTRY_NEEDED );
-                            SCH_MARKER* marker = new SCH_MARKER( ercItem, wireStart );
-                            screen->Append( marker );
+                            std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_BUS_ENTRY_NEEDED );
+                            screen->Append( new SCH_MARKER( std::move( ercItem ), wireStart ) );
                         }
                     }
                     else
@@ -2888,9 +2887,8 @@ void SCH_IO_EAGLE::addBusEntries()
                         }
                         else
                         {
-                            auto        ercItem = ERC_ITEM::Create( ERCE_BUS_ENTRY_NEEDED );
-                            SCH_MARKER* marker = new SCH_MARKER( ercItem, wireStart );
-                            screen->Append( marker );
+                            std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_BUS_ENTRY_NEEDED );
+                            screen->Append( new SCH_MARKER( std::move( ercItem ), wireStart ) );
                         }
                     }
 
@@ -2937,9 +2935,8 @@ void SCH_IO_EAGLE::addBusEntries()
                         }
                         else
                         {
-                            auto        ercItem = ERC_ITEM::Create( ERCE_BUS_ENTRY_NEEDED );
-                            SCH_MARKER* marker = new SCH_MARKER( ercItem, wireEnd );
-                            screen->Append( marker );
+                            std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_BUS_ENTRY_NEEDED );
+                            screen->Append( new SCH_MARKER( std::move( ercItem ), wireEnd ) );
                         }
                     }
                     else
@@ -2979,9 +2976,8 @@ void SCH_IO_EAGLE::addBusEntries()
                         }
                         else
                         {
-                            auto        ercItem = ERC_ITEM::Create( ERCE_BUS_ENTRY_NEEDED );
-                            SCH_MARKER* marker = new SCH_MARKER( ercItem, wireEnd );
-                            screen->Append( marker );
+                            std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_BUS_ENTRY_NEEDED );
+                            screen->Append( new SCH_MARKER( std::move( ercItem ), wireEnd ) );
                         }
                     }
 
@@ -3036,9 +3032,8 @@ void SCH_IO_EAGLE::addBusEntries()
                         }
                         else
                         {
-                            auto        ercItem = ERC_ITEM::Create( ERCE_BUS_ENTRY_NEEDED );
-                            SCH_MARKER* marker = new SCH_MARKER( ercItem, wireStart );
-                            screen->Append( marker );
+                            std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_BUS_ENTRY_NEEDED );
+                            screen->Append( new SCH_MARKER( std::move( ercItem ), wireStart ) );
                         }
                     }
                     else
@@ -3081,9 +3076,8 @@ void SCH_IO_EAGLE::addBusEntries()
                         }
                         else
                         {
-                            auto        ercItem = ERC_ITEM::Create( ERCE_BUS_ENTRY_NEEDED );
-                            SCH_MARKER* marker = new SCH_MARKER( ercItem, wireStart );
-                            screen->Append( marker );
+                            std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_BUS_ENTRY_NEEDED );
+                            screen->Append( new SCH_MARKER( std::move( ercItem ), wireStart ) );
                         }
                     }
 
@@ -3133,9 +3127,8 @@ void SCH_IO_EAGLE::addBusEntries()
                         }
                         else
                         {
-                            auto        ercItem = ERC_ITEM::Create( ERCE_BUS_ENTRY_NEEDED );
-                            SCH_MARKER* marker = new SCH_MARKER( ercItem, wireEnd );
-                            screen->Append( marker );
+                            std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_BUS_ENTRY_NEEDED );
+                            screen->Append( new SCH_MARKER( std::move( ercItem ), wireEnd ) );
                         }
                     }
                     else
@@ -3178,9 +3171,8 @@ void SCH_IO_EAGLE::addBusEntries()
                         }
                         else
                         {
-                            auto        ercItem = ERC_ITEM::Create( ERCE_BUS_ENTRY_NEEDED );
-                            SCH_MARKER* marker = new SCH_MARKER( ercItem, wireEnd );
-                            screen->Append( marker );
+                            std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_BUS_ENTRY_NEEDED );
+                            screen->Append( new SCH_MARKER( std::move( ercItem ), wireEnd ) );
                         }
                     }
 

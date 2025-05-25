@@ -167,7 +167,7 @@ int ERC_TESTER::TestDuplicateSheetNames( bool aCreateMarker )
                         auto ercItem = ERC_ITEM::Create( ERCE_DUPLICATE_SHEET_NAME );
                         ercItem->SetItems( sheet, test_item );
 
-                        SCH_MARKER* marker = new SCH_MARKER( ercItem, sheet->GetPosition() );
+                        SCH_MARKER* marker = new SCH_MARKER( std::move( ercItem ), sheet->GetPosition() );
                         screen->Append( marker );
                     }
 
@@ -212,7 +212,7 @@ void ERC_TESTER::TestTextVars( DS_PROXY_VIEW_ITEM* aDrawingSheet )
                     ercItem->SetSheetSpecificPath( sheet );
                     ercItem->SetErrorMessage( ercText );
 
-                    SCH_MARKER* marker = new SCH_MARKER( ercItem, pos );
+                    SCH_MARKER* marker = new SCH_MARKER( std::move( ercItem ), pos );
                     screen->Append( marker );
 
                     return true;
@@ -231,7 +231,7 @@ void ERC_TESTER::TestTextVars( DS_PROXY_VIEW_ITEM* aDrawingSheet )
                     ercItem->SetSheetSpecificPath( sheet );
                     ercItem->SetErrorMessage( ercText );
 
-                    SCH_MARKER* marker = new SCH_MARKER( ercItem, pos );
+                    SCH_MARKER* marker = new SCH_MARKER( std::move( ercItem ), pos );
                     screen->Append( marker );
 
                     return true;
@@ -269,7 +269,7 @@ void ERC_TESTER::TestTextVars( DS_PROXY_VIEW_ITEM* aDrawingSheet )
                         ercItem->SetItems( symbol );
                         ercItem->SetSheetSpecificPath( sheet );
 
-                        SCH_MARKER* marker = new SCH_MARKER( ercItem, field.GetPosition() );
+                        SCH_MARKER* marker = new SCH_MARKER( std::move( ercItem ), field.GetPosition() );
                         screen->Append( marker );
                     }
 
@@ -299,7 +299,7 @@ void ERC_TESTER::TestTextVars( DS_PROXY_VIEW_ITEM* aDrawingSheet )
                                         bbox = symbol->GetTransform().TransformCoordinate( bbox );
                                         VECTOR2I pos = bbox.Centre() + symbol->GetPosition();
 
-                                        SCH_MARKER* marker = new SCH_MARKER( ercItem, pos );
+                                        SCH_MARKER* marker = new SCH_MARKER( std::move( ercItem ), pos );
                                         screen->Append( marker );
                                     }
 
@@ -320,7 +320,7 @@ void ERC_TESTER::TestTextVars( DS_PROXY_VIEW_ITEM* aDrawingSheet )
                                         bbox = symbol->GetTransform().TransformCoordinate( bbox );
                                         VECTOR2I pos = bbox.Centre() + symbol->GetPosition();
 
-                                        SCH_MARKER* marker = new SCH_MARKER( ercItem, pos );
+                                        SCH_MARKER* marker = new SCH_MARKER( std::move( ercItem ), pos );
                                         screen->Append( marker );
                                     }
 
@@ -341,7 +341,7 @@ void ERC_TESTER::TestTextVars( DS_PROXY_VIEW_ITEM* aDrawingSheet )
                         ercItem->SetItems( label );
                         ercItem->SetSheetSpecificPath( sheet );
 
-                        SCH_MARKER* marker = new SCH_MARKER( ercItem, field.GetPosition() );
+                        SCH_MARKER* marker = new SCH_MARKER( std::move( ercItem ), field.GetPosition() );
                         screen->Append( marker );
                     }
 
@@ -360,7 +360,7 @@ void ERC_TESTER::TestTextVars( DS_PROXY_VIEW_ITEM* aDrawingSheet )
                         ercItem->SetItems( subSheet );
                         ercItem->SetSheetSpecificPath( sheet );
 
-                        SCH_MARKER* marker = new SCH_MARKER( ercItem, field.GetPosition() );
+                        SCH_MARKER* marker = new SCH_MARKER( std::move( ercItem ), field.GetPosition() );
                         screen->Append( marker );
                     }
 
@@ -378,7 +378,7 @@ void ERC_TESTER::TestTextVars( DS_PROXY_VIEW_ITEM* aDrawingSheet )
                         ercItem->SetItems( pin );
                         ercItem->SetSheetSpecificPath( sheet );
 
-                        SCH_MARKER* marker = new SCH_MARKER( ercItem, pin->GetPosition() );
+                        SCH_MARKER* marker = new SCH_MARKER( std::move( ercItem ), pin->GetPosition() );
                         screen->Append( marker );
                     }
                 }
@@ -391,7 +391,7 @@ void ERC_TESTER::TestTextVars( DS_PROXY_VIEW_ITEM* aDrawingSheet )
                     ercItem->SetItems( text );
                     ercItem->SetSheetSpecificPath( sheet );
 
-                    SCH_MARKER* marker = new SCH_MARKER( ercItem, text->GetPosition() );
+                    SCH_MARKER* marker = new SCH_MARKER( std::move( ercItem ), text->GetPosition() );
                     screen->Append( marker );
                 }
 
@@ -405,7 +405,7 @@ void ERC_TESTER::TestTextVars( DS_PROXY_VIEW_ITEM* aDrawingSheet )
                     ercItem->SetItems( textBox );
                     ercItem->SetSheetSpecificPath( sheet );
 
-                    SCH_MARKER* marker = new SCH_MARKER( ercItem, textBox->GetPosition() );
+                    SCH_MARKER* marker = new SCH_MARKER( std::move( ercItem ), textBox->GetPosition() );
                     screen->Append( marker );
                 }
 
@@ -423,11 +423,11 @@ void ERC_TESTER::TestTextVars( DS_PROXY_VIEW_ITEM* aDrawingSheet )
                 }
                 else if( text->GetShownText( true ).Matches( wxS( "*${*}*" ) ) )
                 {
-                    std::shared_ptr<ERC_ITEM> erc = ERC_ITEM::Create( ERCE_UNRESOLVED_VARIABLE );
-                    erc->SetErrorMessage( _( "Unresolved text variable in drawing sheet" ) );
-                    erc->SetSheetSpecificPath( sheet );
+                    std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_UNRESOLVED_VARIABLE );
+                    ercItem->SetErrorMessage( _( "Unresolved text variable in drawing sheet" ) );
+                    ercItem->SetSheetSpecificPath( sheet );
 
-                    SCH_MARKER* marker = new SCH_MARKER( erc, text->GetPosition() );
+                    SCH_MARKER* marker = new SCH_MARKER( std::move( ercItem ), text->GetPosition() );
                     screen->Append( marker );
                 }
             }
@@ -466,7 +466,7 @@ int ERC_TESTER::TestConflictingBusAliases()
                     std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_BUS_ALIAS_CONFLICT );
                     ercItem->SetErrorMessage( msg );
 
-                    SCH_MARKER* marker = new SCH_MARKER( ercItem, VECTOR2I() );
+                    SCH_MARKER* marker = new SCH_MARKER( std::move( ercItem ), VECTOR2I() );
                     test->GetParent()->Append( marker );
 
                     ++err_count;
@@ -530,7 +530,7 @@ int ERC_TESTER::TestMultiunitFootprints()
                 ercItem->SetErrorMessage( msg );
                 ercItem->SetItems( unit, secondUnit );
 
-                SCH_MARKER* marker = new SCH_MARKER( ercItem, secondUnit->GetPosition() );
+                SCH_MARKER* marker = new SCH_MARKER( std::move( ercItem ), secondUnit->GetPosition() );
                 secondRef.GetSheetPath().LastScreen()->Append( marker );
 
                 ++errors;
@@ -593,7 +593,7 @@ int ERC_TESTER::TestMissingUnits()
                     ercItem->SetSheetSpecificPath( base_ref.GetSheetPath() );
                     ercItem->SetItemsSheetPaths( base_ref.GetSheetPath() );
 
-                    SCH_MARKER* marker = new SCH_MARKER( ercItem, unit->GetPosition() );
+                    SCH_MARKER* marker = new SCH_MARKER( std::move( ercItem ), unit->GetPosition() );
                     base_ref.GetSheetPath().LastScreen()->Append( marker );
 
                     ++errors;
@@ -696,7 +696,7 @@ int ERC_TESTER::TestMissingNetclasses()
                 ercItem->SetErrorMessage( wxString::Format( _( "Netclass %s is not defined" ),
                                                             netclass ) );
 
-                SCH_MARKER* marker = new SCH_MARKER( ercItem, item->GetPosition() );
+                SCH_MARKER* marker = new SCH_MARKER( std::move( ercItem ), item->GetPosition() );
                 sheet.LastScreen()->Append( marker );
             };
 
@@ -778,7 +778,7 @@ int ERC_TESTER::TestLabelMultipleWires()
                 ercItem->SetErrorMessage( msg );
                 ercItem->SetSheetSpecificPath( sheet );
 
-                SCH_MARKER* marker = new SCH_MARKER( ercItem, pair.first );
+                SCH_MARKER* marker = new SCH_MARKER( std::move( ercItem ), pair.first );
                 sheet.LastScreen()->Append( marker );
             }
         }
@@ -832,7 +832,7 @@ int ERC_TESTER::TestFourWayJunction()
 
                 ercItem->SetSheetSpecificPath( sheet );
 
-                SCH_MARKER* marker = new SCH_MARKER( ercItem, pair.first );
+                SCH_MARKER* marker = new SCH_MARKER( std::move( ercItem ), pair.first );
                 sheet.LastScreen()->Append( marker );
             }
         }
@@ -901,7 +901,7 @@ int ERC_TESTER::TestNoConnectPins()
                 ercItem->SetErrorMessage( _( "Pin with 'no connection' type is connected" ) );
                 ercItem->SetSheetSpecificPath( sheet );
 
-                SCH_MARKER* marker = new SCH_MARKER( ercItem, pair.first );
+                SCH_MARKER* marker = new SCH_MARKER( std::move( ercItem ), pair.first );
                 sheet.LastScreen()->Append( marker );
             }
         }
@@ -1121,7 +1121,7 @@ int ERC_TESTER::TestPinToPin()
                                           ElectricalPinTypeGetText( pin->GetType() ),
                                           ElectricalPinTypeGetText( other_pin->GetType() ) ) );
 
-                SCH_MARKER* marker = new SCH_MARKER( ercItem, pin->GetPosition() );
+                SCH_MARKER* marker = new SCH_MARKER( std::move( ercItem ), pin->GetPosition() );
                 pinToScreenMap[pin]->Append( marker );
                 errors++;
             }
@@ -1139,7 +1139,8 @@ int ERC_TESTER::TestPinToPin()
                 ercItem->SetSheetSpecificPath( needsDriver.Sheet() );
                 ercItem->SetItemsSheetPaths( needsDriver.Sheet() );
 
-                SCH_MARKER* marker = new SCH_MARKER( ercItem, needsDriver.Pin()->GetPosition() );
+                SCH_MARKER* marker = new SCH_MARKER( std::move( ercItem ),
+                                                     needsDriver.Pin()->GetPosition() );
                 pinToScreenMap[needsDriver.Pin()]->Append( marker );
                 errors++;
             }
@@ -1181,20 +1182,18 @@ int ERC_TESTER::TestMultUnitPinConflicts()
                     }
                     else if( pinToNetMap[name].first != netName )
                     {
-                        std::shared_ptr<ERC_ITEM> ercItem =
-                                ERC_ITEM::Create( ERCE_DIFFERENT_UNIT_NET );
+                        std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_DIFFERENT_UNIT_NET );
 
-                        ercItem->SetErrorMessage( wxString::Format(
-                                _( "Pin %s is connected to both %s and %s" ),
-                                pin->GetShownNumber(),
-                                netName,
-                                pinToNetMap[name].first ) );
+                        ercItem->SetErrorMessage( wxString::Format( _( "Pin %s is connected to both %s and %s" ),
+                                                                    pin->GetShownNumber(),
+                                                                    netName,
+                                                                    pinToNetMap[name].first ) );
 
                         ercItem->SetItems( pin, pinToNetMap[name].second );
                         ercItem->SetSheetSpecificPath( sheet );
                         ercItem->SetItemsSheetPaths( sheet, sheet );
 
-                        SCH_MARKER* marker = new SCH_MARKER( ercItem, pin->GetPosition() );
+                        SCH_MARKER* marker = new SCH_MARKER( std::move( ercItem ), pin->GetPosition() );
                         sheet.LastScreen()->Append( marker );
                         errors += 1;
                     }
@@ -1244,13 +1243,13 @@ int ERC_TESTER::TestSameLocalGlobalLabel()
         {
             if( globalText == localText )
             {
-                std::shared_ptr<ERC_ITEM> ercItem =
-                        ERC_ITEM::Create( ERCE_SAME_LOCAL_GLOBAL_LABEL );
+                std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_SAME_LOCAL_GLOBAL_LABEL );
                 ercItem->SetItems( globalItem.first, localItem.first );
                 ercItem->SetSheetSpecificPath( globalItem.second );
                 ercItem->SetItemsSheetPaths( globalItem.second, localItem.second );
 
-                SCH_MARKER* marker = new SCH_MARKER( ercItem, globalItem.first->GetPosition() );
+                SCH_MARKER* marker = new SCH_MARKER( std::move( ercItem ),
+                                                     globalItem.first->GetPosition() );
                 globalItem.second.LastScreen()->Append( marker );
 
                 errCount++;
@@ -1294,7 +1293,7 @@ int ERC_TESTER::TestSimilarLabels()
         ercItem->SetSheetSpecificPath( sheet );
         ercItem->SetItemsSheetPaths( sheet, otherSheet );
 
-        SCH_MARKER* marker = new SCH_MARKER( ercItem, item->GetPosition() );
+        SCH_MARKER* marker = new SCH_MARKER( std::move( ercItem ), item->GetPosition() );
         sheet.LastScreen()->Append( marker );
     };
 
@@ -1402,7 +1401,7 @@ int ERC_TESTER::TestLibSymbolIssues()
                                 UnescapeString( libName ) );
                     ercItem->SetErrorMessage( msg );
 
-                    markers.emplace_back( new SCH_MARKER( ercItem, symbol->GetPosition() ) );
+                    markers.emplace_back( new SCH_MARKER( std::move( ercItem ), symbol->GetPosition() ) );
                 }
 
                 continue;
@@ -1417,7 +1416,7 @@ int ERC_TESTER::TestLibSymbolIssues()
                                 UnescapeString( libName ) );
                     ercItem->SetErrorMessage( msg );
 
-                    markers.emplace_back( new SCH_MARKER( ercItem, symbol->GetPosition() ) );
+                    markers.emplace_back( new SCH_MARKER( std::move( ercItem ), symbol->GetPosition() ) );
                 }
 
                 continue;
@@ -1433,7 +1432,7 @@ int ERC_TESTER::TestLibSymbolIssues()
                                 libTableRow->GetFullURI( true ) );
                     ercItem->SetErrorMessage( msg );
 
-                    markers.emplace_back( new SCH_MARKER( ercItem, symbol->GetPosition() ) );
+                    markers.emplace_back( new SCH_MARKER( std::move( ercItem ), symbol->GetPosition() ) );
                 }
 
                 continue;
@@ -1453,7 +1452,7 @@ int ERC_TESTER::TestLibSymbolIssues()
                                 UnescapeString( libName ) );
                     ercItem->SetErrorMessage( msg );
 
-                    markers.emplace_back( new SCH_MARKER( ercItem, symbol->GetPosition() ) );
+                    markers.emplace_back( new SCH_MARKER( std::move( ercItem ), symbol->GetPosition() ) );
                 }
 
                 continue;
@@ -1477,7 +1476,7 @@ int ERC_TESTER::TestLibSymbolIssues()
                                 UnescapeString( symbolName ) );
                     ercItem->SetErrorMessage( msg );
 
-                    markers.emplace_back( new SCH_MARKER( ercItem, symbol->GetPosition() ) );
+                    markers.emplace_back( new SCH_MARKER( std::move( ercItem ), symbol->GetPosition() ) );
                 }
                 else if( flattenedSymbol->Compare( *libSymbolInSchematic, flags ) != 0 )
                 {
@@ -1488,7 +1487,7 @@ int ERC_TESTER::TestLibSymbolIssues()
                                 UnescapeString( libName ) );
                     ercItem->SetErrorMessage( msg );
 
-                    markers.emplace_back( new SCH_MARKER( ercItem, symbol->GetPosition() ) );
+                    markers.emplace_back( new SCH_MARKER( std::move( ercItem ), symbol->GetPosition() ) );
                 }
             }
         }
@@ -1535,7 +1534,7 @@ int ERC_TESTER::TestFootprintLinkIssues( KIFACE* aCvPcb, PROJECT* aProject )
                 msg.Printf( _( "'%s' is not a valid footprint identifier." ), footprint );
                 ercItem->SetErrorMessage( msg );
                 ercItem->SetItems( symbol );
-                markers.emplace_back( new SCH_MARKER( ercItem, symbol->GetPosition() ) );
+                markers.emplace_back( new SCH_MARKER( std::move( ercItem ), symbol->GetPosition() ) );
                 continue;
             }
 
@@ -1550,7 +1549,7 @@ int ERC_TESTER::TestFootprintLinkIssues( KIFACE* aCvPcb, PROJECT* aProject )
                             libName );
                 ercItem->SetErrorMessage( msg );
                 ercItem->SetItems( symbol );
-                markers.emplace_back( new SCH_MARKER( ercItem, symbol->GetPosition() ) );
+                markers.emplace_back( new SCH_MARKER( std::move( ercItem ), symbol->GetPosition() ) );
             }
             else if( ret == KIFACE_TEST_FOOTPRINT_LINK_LIBRARY_NOT_ENABLED )
             {
@@ -1559,7 +1558,7 @@ int ERC_TESTER::TestFootprintLinkIssues( KIFACE* aCvPcb, PROJECT* aProject )
                             libName );
                 ercItem->SetErrorMessage( msg );
                 ercItem->SetItems( symbol );
-                markers.emplace_back( new SCH_MARKER( ercItem, symbol->GetPosition() ) );
+                markers.emplace_back( new SCH_MARKER( std::move( ercItem ), symbol->GetPosition() ) );
             }
             else if( ret == KIFACE_TEST_FOOTPRINT_LINK_NO_FOOTPRINT )
             {
@@ -1569,7 +1568,7 @@ int ERC_TESTER::TestFootprintLinkIssues( KIFACE* aCvPcb, PROJECT* aProject )
                             libName );
                 ercItem->SetErrorMessage( msg );
                 ercItem->SetItems( symbol );
-                markers.emplace_back( new SCH_MARKER( ercItem, symbol->GetPosition() ) );
+                markers.emplace_back( new SCH_MARKER( std::move( ercItem ), symbol->GetPosition() ) );
             }
         }
 
@@ -1639,7 +1638,8 @@ int ERC_TESTER::TestFootprintFilters()
                             wxJoin( filters, ' ' ) );
                 ercItem->SetErrorMessage( msg );
                 ercItem->SetItems( sch_symbol );
-                markers.emplace_back( new SCH_MARKER( ercItem, sch_symbol->GetPosition() ) );
+                markers.emplace_back( new SCH_MARKER( std::move( ercItem ),
+                                                      sch_symbol->GetPosition() ) );
             }
         }
 
@@ -1675,7 +1675,7 @@ int ERC_TESTER::TestOffGridEndpoints()
                     std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_ENDPOINT_OFF_GRID );
                     ercItem->SetItems( line );
 
-                    markers.emplace_back( new SCH_MARKER( ercItem, line->GetStartPoint() ) );
+                    markers.emplace_back( new SCH_MARKER( std::move( ercItem ), line->GetStartPoint() ) );
                 }
                 else if( ( line->GetEndPoint().x % gridSize ) != 0
                             || ( line->GetEndPoint().y % gridSize ) != 0 )
@@ -1683,7 +1683,7 @@ int ERC_TESTER::TestOffGridEndpoints()
                     std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_ENDPOINT_OFF_GRID );
                     ercItem->SetItems( line );
 
-                    markers.emplace_back( new SCH_MARKER( ercItem, line->GetEndPoint() ) );
+                    markers.emplace_back( new SCH_MARKER( std::move( ercItem ), line->GetEndPoint() ) );
                 }
             }
             if( item->Type() == SCH_BUS_WIRE_ENTRY_T )
@@ -1698,7 +1698,7 @@ int ERC_TESTER::TestOffGridEndpoints()
                         std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_ENDPOINT_OFF_GRID );
                         ercItem->SetItems( entry );
 
-                        markers.emplace_back( new SCH_MARKER( ercItem, point ) );
+                        markers.emplace_back( new SCH_MARKER( std::move( ercItem ), point ) );
                     }
                 }
             }
@@ -1715,10 +1715,10 @@ int ERC_TESTER::TestOffGridEndpoints()
 
                     if( ( pinPos.x % gridSize ) != 0 || ( pinPos.y % gridSize ) != 0 )
                     {
-                        auto ercItem = ERC_ITEM::Create( ERCE_ENDPOINT_OFF_GRID );
+                        std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_ENDPOINT_OFF_GRID );
                         ercItem->SetItems( pin );
 
-                        markers.emplace_back( new SCH_MARKER( ercItem, pinPos ) );
+                        markers.emplace_back( new SCH_MARKER( std::move( ercItem ), pinPos ) );
                         break;
                     }
                 }
@@ -1774,7 +1774,7 @@ int ERC_TESTER::TestSimModelIssues()
                 ercItem->SetErrorMessage( msg );
                 ercItem->SetItems( symbol );
 
-                markers.emplace_back( new SCH_MARKER( ercItem, symbol->GetPosition() ) );
+                markers.emplace_back( new SCH_MARKER( std::move( ercItem ), symbol->GetPosition() ) );
             }
         }
 

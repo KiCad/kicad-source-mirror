@@ -255,7 +255,7 @@ SCH_MARKER* SCH_MARKER::DeserializeFromString( const SCH_SHEET_LIST& aSheetList,
         }
     }
 
-    SCH_MARKER* marker = new SCH_MARKER( ercItem, markerPos );
+    SCH_MARKER* marker = new SCH_MARKER( std::move( ercItem ), markerPos );
     marker->SetIsLegacyMarker( isLegacyMarker );
 
     return marker;
