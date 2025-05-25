@@ -329,20 +329,17 @@ void LIBRARY_MANAGER::LoadGlobalTables()
 
     wxCHECK( settings, /* void */ );
 
-    wxString packagesPath;
     const ENV_VAR_MAP& vars = Pgm().GetLocalEnvVariables();
+    std::optional<wxString> packagesPath = ENV_VAR::GetVersionedEnvVarValue( vars, wxT( "3RD_PARTY" ) );
 
-    if( std::optional<wxString> v = ENV_VAR::GetVersionedEnvVarValue( vars, wxT( "3RD_PARTY" ) ) )
-        packagesPath = *v;
-
-    if( settings->m_PcmLibAutoAdd )
+    if( packagesPath && settings->m_PcmLibAutoAdd )
     {
         // Scan for libraries in PCM packages directory
-        wxFileName d( packagesPath, "" );
+        wxFileName d( *packagesPath, "" );
 
         if( d.DirExists() )
         {
-            PCM_LIB_TRAVERSER traverser( packagesPath, *this, settings->m_PcmLibPrefix );
+            PCM_LIB_TRAVERSER traverser( *packagesPath, *this, settings->m_PcmLibPrefix );
             wxDir             dir( d.GetPath() );
 
             dir.Traverse( traverser );
@@ -369,7 +366,7 @@ void LIBRARY_MANAGER::LoadGlobalTables()
                 [&]( const LIBRARY_TABLE_ROW& aRow )
                 {
                     wxString path = GetFullURI( &aRow, true );
-                    return path.StartsWith( packagesPath ) && !wxFile::Exists( path );
+                    return path.StartsWith( *packagesPath ) && !wxFile::Exists( path );
                 } );
 
             table->Rows().erase( toErase.begin(), toErase.end() );
@@ -386,7 +383,7 @@ void LIBRARY_MANAGER::LoadGlobalTables()
             }
         };
 
-    if( settings->m_PcmLibAutoRemove )
+    if( packagesPath && settings->m_PcmLibAutoRemove )
     {
         cleanupRemovedPCMLibraries( LIBRARY_TABLE_TYPE::SYMBOL );
         cleanupRemovedPCMLibraries( LIBRARY_TABLE_TYPE::FOOTPRINT );

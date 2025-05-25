@@ -37,8 +37,8 @@ BOOST_AUTO_TEST_CASE( Rectifier )
 {
     LOCALE_IO dummy;
 
-    const MOCK_PGM_BASE& program = static_cast<MOCK_PGM_BASE&>( Pgm() );
-    MOCK_EXPECT( program.GetLocalEnvVariables ).returns( ENV_VAR_MAP() );
+    // const MOCK_PGM_BASE& program = static_cast<MOCK_PGM_BASE&>( Pgm() );
+    // MOCK_EXPECT( program.GetLocalEnvVariables ).returns( ENV_VAR_MAP() );
 
     TestNetlist( "rectifier" );
     TestTranPoint( 0, { { "V(/in)", 0 }, { "V(/out)", 0 } } );
@@ -61,8 +61,8 @@ BOOST_AUTO_TEST_CASE( Opamp )
     // Instead of Simulation_SPICE:OPAMP, we use Amplifier_Operational:MCP6001-OT because its pins
     // are not ordered by pin numbers, which is a possible failure condition.
 
-    const MOCK_PGM_BASE& program = static_cast<MOCK_PGM_BASE&>( Pgm() );
-    MOCK_EXPECT( program.GetLocalEnvVariables ).returns( ENV_VAR_MAP() );
+    // const MOCK_PGM_BASE& program = static_cast<MOCK_PGM_BASE&>( Pgm() );
+    // MOCK_EXPECT( program.GetLocalEnvVariables ).returns( ENV_VAR_MAP() );
 
     TestNetlist( "opamp" );
     TestTranPoint( 0, { { "V(/in)", 0 }, { "V(/out)", 0 } } );

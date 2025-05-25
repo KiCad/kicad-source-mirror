@@ -33,6 +33,7 @@ public:
             std::unique_ptr<NETLIST_READER> netlistReader( NETLIST_READER::GetNetlistReader(
                                                 &golden, GetNetlistPath(), wxEmptyString ) );
 
+            BOOST_ASSERT( netlistReader );
             BOOST_REQUIRE_NO_THROW( netlistReader->LoadNetlist() );
         }
 
@@ -40,6 +41,7 @@ public:
             std::unique_ptr<NETLIST_READER> netlistReader( NETLIST_READER::GetNetlistReader(
                                                 &test, GetNetlistPath( true ), wxEmptyString ) );
 
+            BOOST_ASSERT( netlistReader );
             BOOST_REQUIRE_NO_THROW( netlistReader->LoadNetlist() );
         }
 

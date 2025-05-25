@@ -54,11 +54,7 @@ public:
     XATTR()
     {}
 
-    XATTR( const wxString& aName, const VALUE_TYPE& aValue ) :
-        wxXmlAttribute( aName, wxEmptyString ),
-        m_originalValue( aValue )
-    {
-    }
+    XATTR( const wxString& aName, const VALUE_TYPE& aValue );
 
     void SetValue( const VALUE_TYPE& aValue ) { m_originalValue = aValue; }
 

@@ -26,6 +26,8 @@
  */
 #include <boost/test/unit_test.hpp>
 #include <mock_pgm_base.h>
+#include <settings/settings_manager.h>
+#include <settings/kicad_settings.h>
 
 #include <wx/image.h>
 #include <wx/init.h>
@@ -44,7 +46,12 @@ bool init_unit_test()
     bool ok = wxInitialize();
 
     if( ok )
+    {
         Pgm().InitPgm( true, true, true );
+        Pgm().GetSettingsManager().RegisterSettings( new KICAD_SETTINGS, false );
+        Pgm().GetSettingsManager().Load();
+        Pgm().GetSettingsManager().LoadProject( "" );
+    }
 
     return ok;
 }

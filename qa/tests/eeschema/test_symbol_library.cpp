@@ -68,6 +68,7 @@ BOOST_AUTO_TEST_CASE( ProjectLibraryTable )
     BOOST_REQUIRE( rows[0]->URI() == "${KIPRJMOD}/Device.kicad_sym" );
 
     SYMBOL_LIBRARY_MANAGER_ADAPTER adapter( manager );
+    adapter.LoadOne( "Device" );
 
     std::vector<LIB_SYMBOL*> symbols = adapter.GetSymbols( "Device" );
 

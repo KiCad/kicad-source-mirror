@@ -57,6 +57,7 @@ bool init_unit_test()
     Pgm().GetSettingsManager().RegisterSettings( new EESCHEMA_SETTINGS, false );
     Pgm().GetSettingsManager().RegisterSettings( new SYMBOL_EDITOR_SETTINGS, false );
     Pgm().GetSettingsManager().Load();
+    Pgm().GetSettingsManager().LoadProject( "" );
 
     return ok;
 }

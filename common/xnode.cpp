@@ -31,6 +31,58 @@
 #include <io/kicad/kicad_io_utils.h>
 
 
+XATTR::XATTR( const wxString& aName, const VALUE_TYPE& aValue ) :
+        wxXmlAttribute( aName, wxEmptyString ),
+        m_originalValue( aValue )
+{
+    std::visit( [&]<typename T0>( T0&& arg )
+                {
+                    using T = std::decay_t<T0>;
+
+                    if constexpr( std::is_same_v<T, int> )
+                    {
+                        wxXmlAttribute::SetValue( wxString::Format( "%d", arg ) );
+                    }
+                    else if constexpr( std::is_same_v<T, double> )
+                    {
+                        std::string buf;
+
+                        if( arg != 0.0 && std::fabs( arg ) <= 0.0001 )
+                        {
+                            buf = fmt::format( "{:.16f}", arg );
+
+                            // remove trailing zeros (and the decimal marker if needed)
+                            while( !buf.empty() && buf[buf.size() - 1] == '0' )
+                            {
+                                buf.pop_back();
+                            }
+
+                            // if the value was really small
+                            // we may have just stripped all the zeros after the decimal
+                            if( buf[buf.size() - 1] == '.' )
+                            {
+                                buf.pop_back();
+                            }
+                        }
+                        else
+                        {
+                            buf = fmt::format( "{:.10g}", arg );
+                        }
+
+                        wxXmlAttribute::SetValue( buf );
+                    }
+                    else if constexpr( std::is_same_v<T, wxString> )
+                    {
+                        wxXmlAttribute::SetValue( arg );
+                    }
+                    else
+                    {
+                        static_assert( false, "Missing type handling in XNODE::FormatContents" );
+                    }
+                    }, aValue );
+}
+
+
 void XNODE::AddBool( const wxString& aKey, bool aValue )
 {
     AddAttribute( aKey, aValue ? wxT( "yes" ) : wxT( "no" ) );
@@ -84,65 +136,26 @@ void XNODE::FormatContents( OUTPUTFORMATTER* out ) const
     // output attributes first if they exist
     for( wxXmlAttribute* attr = GetAttributes(); attr; attr = attr->GetNext() )
     {
+        bool quote = true;
+
         if( auto xa = dynamic_cast<XATTR*>( attr ) )
         {
             XATTR::VALUE_TYPE value = xa->GetValue();
 
-            std::visit(
-                [out, xa]<typename T0>(T0&& arg)
-                {
-                    using T = std::decay_t<T0>;
-
-                    if constexpr( std::is_same_v<T, int> )
+            std::visit( [&quote]<typename T0>( T0&& )
                     {
-                        out->Print( 0, " (%s %d)", TO_UTF8( xa->GetName() ), arg );
-                    }
-                    else if constexpr( std::is_same_v<T, double> )
-                    {
-                        std::string buf;
+                        using T = std::decay_t<T0>;
 
-                        if( arg != 0.0 && std::fabs( arg ) <= 0.0001 )
+                        if constexpr( std::is_same_v<T, int> || std::is_same_v<T, double> )
                         {
-                            buf = fmt::format( "{:.16f}", arg );
-
-                            // remove trailing zeros (and the decimal marker if needed)
-                            while( !buf.empty() && buf[buf.size() - 1] == '0' )
-                            {
-                                buf.pop_back();
-                            }
-
-                            // if the value was really small
-                            // we may have just stripped all the zeros after the decimal
-                            if( buf[buf.size() - 1] == '.' )
-                            {
-                                buf.pop_back();
-                            }
+                            quote = false;
                         }
-                        else
-                        {
-                            buf = fmt::format( "{:.10g}", arg );
-                        }
+                    }, value );
+        }
 
-                        out->Print( 0, " (%s %s)", TO_UTF8( xa->GetName() ), buf.c_str() );
-                    }
-                    else if constexpr( std::is_same_v<T, wxString> )
-                    {
-                        out->Print( 0, " (%s %s)",
-                                TO_UTF8( xa->GetName() ),
-                                out->Quotew( arg ).c_str() );
-                    }
-                    else
-                    {
-                        static_assert( false, "Missing type handling in XNODE::FormatContents" );
-                    }
-                }, value );
-        }
-        else
-        {
-            out->Print( 0, " (%s %s)",
-                        TO_UTF8( attr->GetName() ),
-                        out->Quotew( attr->GetValue() ).c_str() );
-        }
+        out->Print( 0, " (%s %s)",
+                    TO_UTF8( attr->GetName() ),
+                    quote ? out->Quotew( attr->GetValue() ).c_str() : TO_UTF8( attr->GetValue() ) );
     }
 
     // we only expect to have used one of two types here:

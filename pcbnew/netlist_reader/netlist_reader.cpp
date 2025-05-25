@@ -58,7 +58,7 @@ NETLIST_READER::NETLIST_FILE_T NETLIST_READER::GuessNetlistFileType( LINE_READER
     wxASSERT( reLegacy.IsValid() );
 
     // Our new netlist format starts by "(export (version "
-    wxRegEx reKicad( wxT( "[ ]*\\(export[ ]+" ), wxRE_ADVANCED );
+    wxRegEx reKicad( wxT( "[ ]*\\(export(\\s+\\(version)?" ), wxRE_ADVANCED );
     wxASSERT( reKicad.IsValid() );
 
     wxString line;

@@ -31,6 +31,7 @@
 
 #include <pgm_base.h>
 #include <settings/settings_manager.h>
+#include <settings/kicad_settings.h>
 #include <eeschema_settings.h>
 #include <symbol_editor/symbol_editor_settings.h>
 #include <wx/app.h>
@@ -55,9 +56,11 @@ bool init_unit_test()
     wxSetAssertHandler( &KI_TEST::wxAssertThrower );
 
     Pgm().InitPgm( true, true, true );
+    Pgm().GetSettingsManager().RegisterSettings( new KICAD_SETTINGS, false );
     Pgm().GetSettingsManager().RegisterSettings( new EESCHEMA_SETTINGS, false );
     Pgm().GetSettingsManager().RegisterSettings( new SYMBOL_EDITOR_SETTINGS, false );
     Pgm().GetSettingsManager().Load();
+    Pgm().GetSettingsManager().LoadProject( "" );
     return ok;
 }
 

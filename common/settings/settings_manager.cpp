@@ -1045,7 +1045,9 @@ bool SETTINGS_MANAGER::LoadProject( const wxString& aFullPath, bool aSetActive )
 
     m_projects[fullPath]->setLocalSettings( settings );
 
-    if( aSetActive )
+    // If not running from SWIG; notify the library manager of the new project
+    // TODO(JE) this maybe could be handled through kiway (below) in the future
+    if( aSetActive && PgmOrNull() )
         Pgm().GetLibraryManager().ProjectChanged();
 
     if( aSetActive && m_kiway )

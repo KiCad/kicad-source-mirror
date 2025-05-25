@@ -68,8 +68,10 @@ BOOST_AUTO_TEST_CASE( CadstarFootprintImport )
         wxArrayString cstarFootprintNames;
         wxArrayString kicadFootprintNames;
 
-        cstarPlugin.FootprintEnumerate( cstarFootprintNames, cstarLibraryPath, true, nullptr );
-        kicadPlugin.FootprintEnumerate( kicadFootprintNames, kicadLibraryPath, true, nullptr );
+        BOOST_REQUIRE_NO_THROW(
+            cstarPlugin.FootprintEnumerate( cstarFootprintNames, cstarLibraryPath, true, nullptr ) );
+        BOOST_REQUIRE_NO_THROW(
+            kicadPlugin.FootprintEnumerate( kicadFootprintNames, kicadLibraryPath, true, nullptr ) );
 
         BOOST_CHECK_EQUAL( cstarFootprintNames.GetCount(), kicadFootprintNames.GetCount() );
 

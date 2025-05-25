@@ -2,4 +2,5 @@
   (version 7)
   (lib (name "Device")(type "KiCad")(uri "${KICAD9_SYMBOL_DIR}/Device.kicad_sym")(options "")(descr "Generic symbols for common devices"))
   (lib (name "power")(type "KiCad")(uri "${KICAD9_SYMBOL_DIR}/power.kicad_sym")(options "")(descr "Power symbols, special power flags"))
+  (lib (name "future")(type "Unknown")(uri "${KICAD_CONFIG_HOME}/../libraries/unknown.kicad_sym")(options "")(descr "An unknown type of library"))
 )
