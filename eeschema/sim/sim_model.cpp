@@ -357,8 +357,8 @@ SIM_MODEL::SPICE_INFO SIM_MODEL::SpiceInfo( TYPE aType )
     case TYPE::I_PULSE:              return { "I",  "",            "PULSE"                                       };
     case TYPE::I_SIN:                return { "I",  "",            "SIN"                                         };
     case TYPE::I_EXP:                return { "I",  "",            "EXP"                                         };
-    case TYPE::I_AM:                 return { "V",  "",            "AM"                                          };
-    case TYPE::I_SFFM:               return { "V",  "",            "SFFM"                                        };
+    case TYPE::I_AM:                 return { "I",  "",            "AM"                                          };
+    case TYPE::I_SFFM:               return { "I",  "",            "SFFM"                                        };
     case TYPE::I_VCL:                return { "G",  "",            ""                                            };
     case TYPE::I_CCL:                return { "F",  "",            ""                                            };
     case TYPE::I_PWL:                return { "I",  "",            "PWL"                                         };
