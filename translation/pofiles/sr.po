@@ -6,17 +6,16 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-05-21 05:22+0300\n"
-"PO-Revision-Date: 2024-12-07 18:00+0000\n"
-"Last-Translator: Daniel Petrovich <danielthe@cyberdude.com>\n"
-"Language-Team: Serbian <https://hosted.weblate.org/projects/kicad/master-"
-"source/sr/>\n"
+"PO-Revision-Date: 2025-05-25 18:39+0000\n"
+"Last-Translator: ___davidpr <david.pribic95@gmail.com>\n"
+"Language-Team: Serbian <https://hosted.weblate.org/projects/kicad/v9/sr/>\n"
 "Language: sr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 5.9-dev\n"
+"X-Generator: Weblate 5.12-dev\n"
 "X-Poedit-Bookmarks: -1,-1,5234,-1,-1,-1,-1,-1,-1,-1\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
@@ -2611,9 +2610,8 @@ msgstr ""
 
 #: common/dialog_about/dialog_about_base.cpp:65
 #: common/tool/common_control.cpp:321
-#, fuzzy
 msgid "Donate to KiCad"
-msgstr "Добродошли у KiCad %s!"
+msgstr "Донирајте за KiCad"
 
 #: common/dialog_shim.cpp:791
 msgid "&Apply"
@@ -4121,9 +4119,8 @@ msgid "Invalid SSH Key"
 msgstr "Попуњавање зона"
 
 #: common/dialogs/git/dialog_git_repository.cpp:353
-#, fuzzy
 msgid "The selected file is not a valid SSH private key"
-msgstr "Изабрана путања не садржи ваљане KiCad поставке!"
+msgstr "Изабрана датотека није ваљан SSH приватни кључ"
 
 #: common/dialogs/git/dialog_git_repository.cpp:377
 #, fuzzy, c-format
@@ -9065,9 +9062,8 @@ msgstr "фајл не постоји"
 
 #: common/project/project_archiver.cpp:163 kicad/pcm/pcm_task_manager.cpp:251
 #: kicad/pcm/pcm_task_manager.cpp:294
-#, fuzzy
 msgid "Error extracting file!"
-msgstr "фајл не постоји"
+msgstr "Грешка у екстраховању датотеке!"
 
 #: common/project/project_archiver.cpp:250 eeschema/dialogs/dialog_erc.cpp:1066
 #: eeschema/netlist_exporters/netlist_exporter_allegro.cpp:65
@@ -12373,9 +12369,8 @@ msgid "Update symbols matching library identifier:"
 msgstr "Референца"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:73
-#, fuzzy
 msgid "New library identifier:"
-msgstr "Библиотека није дефинисана!"
+msgstr "Нови ID библиотеке:"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:95
 #, fuzzy
@@ -18184,9 +18179,9 @@ msgid "Different footprints assigned to %s and %s"
 msgstr "Додјела шеме"
 
 #: eeschema/erc/erc.cpp:613
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol %s has unplaced units %s"
-msgstr "Смибол није пронађен у %s!"
+msgstr "Смибол %s садржи јединице које нису стављене %s"
 
 #: eeschema/erc/erc.cpp:658
 #, fuzzy, c-format
@@ -18249,9 +18244,9 @@ msgid "The symbol library '%s' was not found at '%s'."
 msgstr "Маркер није пронађен"
 
 #: eeschema/erc/erc.cpp:1449
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol '%s' not found in symbol library '%s'"
-msgstr "Смибол није пронађен у %s!"
+msgstr "Смибол '%s' није пронађен у библиотеци симбола %s"
 
 #: eeschema/erc/erc.cpp:1474
 #, fuzzy, c-format
@@ -53869,9 +53864,8 @@ msgid "[INFO] load failed: %s"
 msgstr ""
 
 #: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:6
-#, fuzzy
 msgid "bitmap2component;Bitmap;Converter;"
-msgstr "компонента"
+msgstr "Bitmap-у-компоненту;Bitmap;Конвертер;"
 
 #: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:12
 #, fuzzy
@@ -53916,9 +53910,8 @@ msgid "gerbview;PCB;Gerber;"
 msgstr ""
 
 #: resources/linux/launchers/org.kicad.kicad.desktop.in:10
-#, fuzzy
 msgid "Projectmanager;"
-msgstr "Име:"
+msgstr "Пројектменаџер;"
 
 #: resources/linux/launchers/org.kicad.kicad.desktop.in:13
 msgid "EDA Suite"
@@ -53933,9 +53926,8 @@ msgid "KiCad PCB Calculator"
 msgstr "KiCad PCB дигитрон"
 
 #: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:11
-#, fuzzy
 msgid "PCB;Calculator;"
-msgstr "PCB дигитрон"
+msgstr "PCB;Дигитрон;"
 
 #: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:12
 msgid "PCB Calculator"
