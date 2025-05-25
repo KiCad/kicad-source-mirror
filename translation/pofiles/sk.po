@@ -7,21 +7,22 @@
 # Marcel Hecko <marcel.hecko@moirelabs.com>, 2024.
 # David Chorváth <dadulo33@gmail.com>, 2024.
 # John Beard <john.j.beard@gmail.com>, 2025.
+# EdizonTN <EdizonTN@users.noreply.hosted.weblate.org>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-05-21 05:16+0300\n"
-"PO-Revision-Date: 2025-02-19 03:14+0000\n"
-"Last-Translator: Seth Hillbrand <seth@kipro-pcb.com>\n"
-"Language-Team: Slovak <https://hosted.weblate.org/projects/kicad/master-"
-"source/sk/>\n"
+"PO-Revision-Date: 2025-05-25 22:01+0000\n"
+"Last-Translator: EdizonTN <EdizonTN@users.noreply.hosted.weblate.org>\n"
+"Language-Team: Slovak <https://hosted.weblate.org/projects/kicad/"
+"master-source/sk/>\n"
 "Language: sk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=((n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2);\n"
-"X-Generator: Weblate 5.10.1-dev\n"
+"X-Generator: Weblate 5.12-dev\n"
 "X-Poedit-Basepath: /home/slavko/projekty/svn/kicad-20100408\n"
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-SearchPath-0: pcbnew\n"
@@ -664,229 +665,184 @@ msgid "Show user ECO2 layer"
 msgstr "Zobraziť používateľskú vrstvu ECO2"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:67
-#, fuzzy
 msgid "Show user defined layer 1"
-msgstr "Užívateľom definovaná vrstva 1"
+msgstr "Zobraziť požívateľom definovanú vrstvu 1"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:68
-#, fuzzy
 msgid "Show user defined layer 2"
-msgstr "Užívateľom definovaná vrstva 2"
+msgstr "Zobraziť požívateľom definovanú vrstvu 2"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:69
-#, fuzzy
 msgid "Show user defined layer 3"
-msgstr "Užívateľom definovaná vrstva 3"
+msgstr "Zobraziť požívateľom definovanú vrstvu 3"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:70
-#, fuzzy
 msgid "Show user defined layer 4"
-msgstr "Užívateľom definovaná vrstva 4"
+msgstr "Zobraziť požívateľom definovanú vrstvu 4"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:71
-#, fuzzy
 msgid "Show user defined layer 5"
-msgstr "Užívateľom definovaná vrstva 5"
+msgstr "Zobraziť požívateľom definovanú vrstvu 5"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:72
-#, fuzzy
 msgid "Show user defined layer 6"
-msgstr "Užívateľom definovaná vrstva 6"
+msgstr "Zobraziť požívateľom definovanú vrstvu 6"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:73
-#, fuzzy
 msgid "Show user defined layer 7"
-msgstr "Užívateľom definovaná vrstva 7"
+msgstr "Zobraziť požívateľom definovanú vrstvu 7"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:74
-#, fuzzy
 msgid "Show user defined layer 8"
-msgstr "Užívateľom definovaná vrstva 8"
+msgstr "Zobraziť požívateľom definovanú vrstvu 8"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:75
-#, fuzzy
 msgid "Show user defined layer 9"
-msgstr "Užívateľom definovaná vrstva 9"
+msgstr "Zobraziť požívateľom definovanú vrstvu 9"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:76
-#, fuzzy
 msgid "Show user defined layer 10"
-msgstr "Užívateľom definovaná vrstva 1"
+msgstr "Zobraziť požívateľom definovanú vrstvu 10"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:77
-#, fuzzy
 msgid "Show user defined layer 11"
-msgstr "Užívateľom definovaná vrstva 1"
+msgstr "Zobraziť požívateľom definovanú vrstvu 11"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:78
-#, fuzzy
 msgid "Show user defined layer 12"
-msgstr "Užívateľom definovaná vrstva 1"
+msgstr "Zobraziť požívateľom definovanú vrstvu 12"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:79
-#, fuzzy
 msgid "Show user defined layer 13"
-msgstr "Užívateľom definovaná vrstva 1"
+msgstr "Zobraziť požívateľom definovanú vrstvu 13"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:80
-#, fuzzy
 msgid "Show user defined layer 14"
-msgstr "Užívateľom definovaná vrstva 1"
+msgstr "Zobraziť požívateľom definovanú vrstvu 14"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:81
-#, fuzzy
 msgid "Show user defined layer 15"
-msgstr "Užívateľom definovaná vrstva 1"
+msgstr "Zobraziť požívateľom definovanú vrstvu 15"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:82
-#, fuzzy
 msgid "Show user defined layer 16"
-msgstr "Užívateľom definovaná vrstva 1"
+msgstr "Zobraziť požívateľom definovanú vrstvu 16"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:83
-#, fuzzy
 msgid "Show user defined layer 17"
-msgstr "Užívateľom definovaná vrstva 1"
+msgstr "Zobraziť požívateľom definovanú vrstvu 17"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:84
-#, fuzzy
 msgid "Show user defined layer 18"
-msgstr "Užívateľom definovaná vrstva 1"
+msgstr "Zobraziť požívateľom definovanú vrstvu 18"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:85
-#, fuzzy
 msgid "Show user defined layer 19"
-msgstr "Užívateľom definovaná vrstva 1"
+msgstr "Zobraziť požívateľom definovanú vrstvu 19"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:86
-#, fuzzy
 msgid "Show user defined layer 20"
-msgstr "Užívateľom definovaná vrstva 2"
+msgstr "Zobraziť požívateľom definovanú vrstvu 20"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:87
-#, fuzzy
 msgid "Show user defined layer 21"
-msgstr "Užívateľom definovaná vrstva 2"
+msgstr "Zobraziť požívateľom definovanú vrstvu 21"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:88
-#, fuzzy
 msgid "Show user defined layer 22"
-msgstr "Užívateľom definovaná vrstva 2"
+msgstr "Zobraziť požívateľom definovanú vrstvu 22"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:89
-#, fuzzy
 msgid "Show user defined layer 23"
-msgstr "Užívateľom definovaná vrstva 2"
+msgstr "Zobraziť požívateľom definovanú vrstvu 23"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:90
-#, fuzzy
 msgid "Show user defined layer 24"
-msgstr "Užívateľom definovaná vrstva 2"
+msgstr "Zobraziť požívateľom definovanú vrstvu 24"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:91
-#, fuzzy
 msgid "Show user defined layer 25"
-msgstr "Užívateľom definovaná vrstva 2"
+msgstr "Zobraziť požívateľom definovanú vrstvu 25"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:92
-#, fuzzy
 msgid "Show user defined layer 26"
-msgstr "Užívateľom definovaná vrstva 2"
+msgstr "Zobraziť požívateľom definovanú vrstvu 26"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:93
-#, fuzzy
 msgid "Show user defined layer 27"
-msgstr "Užívateľom definovaná vrstva 2"
+msgstr "Zobraziť požívateľom definovanú vrstvu 27"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:94
-#, fuzzy
 msgid "Show user defined layer 28"
-msgstr "Užívateľom definovaná vrstva 2"
+msgstr "Zobraziť požívateľom definovanú vrstvu 28"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:95
-#, fuzzy
 msgid "Show user defined layer 29"
-msgstr "Užívateľom definovaná vrstva 2"
+msgstr "Zobraziť požívateľom definovanú vrstvu 29"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:96
-#, fuzzy
 msgid "Show user defined layer 30"
-msgstr "Užívateľom definovaná vrstva 3"
+msgstr "Zobraziť požívateľom definovanú vrstvu 30"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:97
-#, fuzzy
 msgid "Show user defined layer 31"
-msgstr "Užívateľom definovaná vrstva 3"
+msgstr "Zobraziť požívateľom definovanú vrstvu 31"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:98
-#, fuzzy
 msgid "Show user defined layer 32"
-msgstr "Užívateľom definovaná vrstva 3"
+msgstr "Zobraziť požívateľom definovanú vrstvu 32"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:99
-#, fuzzy
 msgid "Show user defined layer 33"
-msgstr "Užívateľom definovaná vrstva 3"
+msgstr "Zobraziť požívateľom definovanú vrstvu 33"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:100
-#, fuzzy
 msgid "Show user defined layer 34"
-msgstr "Užívateľom definovaná vrstva 3"
+msgstr "Zobraziť požívateľom definovanú vrstvu 34"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:101
-#, fuzzy
 msgid "Show user defined layer 35"
-msgstr "Užívateľom definovaná vrstva 3"
+msgstr "Zobraziť požívateľom definovanú vrstvu 35"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:102
-#, fuzzy
 msgid "Show user defined layer 36"
-msgstr "Užívateľom definovaná vrstva 3"
+msgstr "Zobraziť požívateľom definovanú vrstvu 36"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:103
-#, fuzzy
 msgid "Show user defined layer 37"
-msgstr "Užívateľom definovaná vrstva 3"
+msgstr "Zobraziť požívateľom definovanú vrstvu 37"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:104
-#, fuzzy
 msgid "Show user defined layer 38"
-msgstr "Užívateľom definovaná vrstva 3"
+msgstr "Zobraziť požívateľom definovanú vrstvu 38"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:105
-#, fuzzy
 msgid "Show user defined layer 39"
-msgstr "Užívateľom definovaná vrstva 3"
+msgstr "Zobraziť požívateľom definovanú vrstvu 39"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:106
-#, fuzzy
 msgid "Show user defined layer 40"
-msgstr "Užívateľom definovaná vrstva 4"
+msgstr "Zobraziť požívateľom definovanú vrstvu 40"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:107
-#, fuzzy
 msgid "Show user defined layer 41"
-msgstr "Užívateľom definovaná vrstva 4"
+msgstr "Zobraziť požívateľom definovanú vrstvu 41"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:108
-#, fuzzy
 msgid "Show user defined layer 42"
-msgstr "Užívateľom definovaná vrstva 4"
+msgstr "Zobraziť požívateľom definovanú vrstvu 42"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:109
-#, fuzzy
 msgid "Show user defined layer 43"
-msgstr "Užívateľom definovaná vrstva 4"
+msgstr "Zobraziť požívateľom definovanú vrstvu 43"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:110
-#, fuzzy
 msgid "Show user defined layer 44"
-msgstr "Užívateľom definovaná vrstva 4"
+msgstr "Zobraziť požívateľom definovanú vrstvu 44"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:111
-#, fuzzy
 msgid "Show user defined layer 45"
-msgstr "Užívateľom definovaná vrstva 4"
+msgstr "Zobraziť požívateľom definovanú vrstvu 45"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:113
 msgid "Through-hole Models"
@@ -4138,9 +4094,8 @@ msgid "*"
 msgstr "*"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:99
-#, fuzzy
 msgid "User name:"
-msgstr "Meno siete:"
+msgstr "Používateľské meno:"
 
 #: common/dialogs/git/dialog_git_repository_base.h:76
 msgid "Git Repository"
@@ -7994,9 +7949,8 @@ msgid "Cannot parse JSON line %d in '%s': %s"
 msgstr "Nepodarilo sa získať riadok JSON %d v '%s': %s"
 
 #: common/io/io_base.cpp:139
-#, fuzzy
 msgid "Loading file canceled by user."
-msgstr "Otváranie zrušené používateľom."
+msgstr "Otváranie súboru bolo zrušené používateľom."
 
 #: common/jobs/job.cpp:82
 #, fuzzy
@@ -12563,9 +12517,8 @@ msgid "DSN:"
 msgstr "DSN:"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:45
-#, fuzzy
 msgid "Username:"
-msgstr "Meno siete:"
+msgstr "Používateľské meno:"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:71
 #, fuzzy
@@ -14719,7 +14672,7 @@ msgstr "A"
 #: eeschema/dialogs/dialog_plot_schematic.cpp:450
 #, c-format
 msgid "Falling back to user path '%s'."
-msgstr "Návrat na uživatelskou cestu '%s'."
+msgstr "Návrat na použivateľskú cestu '%s'."
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:479
 #: eeschema/dialogs/dialog_plot_schematic.cpp:517
@@ -15753,9 +15706,8 @@ msgid "Compatibility mode:"
 msgstr "Režim kompatibility:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:666
-#, fuzzy
 msgid "User configuration"
-msgstr "Konfigurácia svetla"
+msgstr "Používateľská konfigurácia"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:666
 #, fuzzy
@@ -16935,9 +16887,8 @@ msgid "Syntax Help"
 msgstr "Pomoc so syntaxou"
 
 #: eeschema/dialogs/dialog_user_defined_signals_base.h:63
-#, fuzzy
 msgid "User-defined Signals"
-msgstr "Užívateľom definovaný pôvod"
+msgstr "Používateľom definované signály"
 
 #: eeschema/dialogs/dialog_wire_bus_properties.cpp:233
 #, fuzzy
@@ -23394,9 +23345,8 @@ msgid "Library changes are unsaved"
 msgstr "Zmeny knižnice sú neuložené"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:282
-#, fuzzy
 msgid "Symbol library loading was cancelled by user."
-msgstr "Knižnica %s už existuje."
+msgstr "Načítanie knižnice symbolov bolo zrušené používateľom"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:910
 #, c-format
