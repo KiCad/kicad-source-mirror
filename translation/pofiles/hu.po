@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-05-21 05:22+0300\n"
-"PO-Revision-Date: 2025-05-25 18:39+0000\n"
+"PO-Revision-Date: 2025-05-25 22:01+0000\n"
 "Last-Translator: Sárkány Lőrinc <lsarkany@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/kicad/v9/hu/>\n"
 "Language: hu\n"
@@ -33515,22 +33515,19 @@ msgid "mi/h"
 msgstr "mi/h"
 
 #: pcbnew/api/api_handler_pcb.cpp:505
-#, fuzzy
 msgid "Modified items via API"
-msgstr "Zónák létrehozása"
+msgstr "API-n keresztül módosított elemek"
 
 #: pcbnew/api/api_handler_pcb.cpp:668
-#, fuzzy
 msgid "Deleted items via API"
-msgstr "Elem törlése"
+msgstr "API-n keresztül törölt elemek"
 
 #: pcbnew/autorouter/ar_autoplacer.cpp:882
-#, fuzzy
 msgid "Autoplacing components..."
 msgstr "Alkatrészek automatikus elhelyezése..."
 
 #: pcbnew/autorouter/ar_autoplacer.cpp:898
-#, fuzzy, c-format
+#, c-format
 msgid "Autoplacing %s"
 msgstr "%s automatikus elhelyezése"
 
@@ -33541,7 +33538,6 @@ msgstr ""
 
 #: pcbnew/autorouter/autoplace_tool.cpp:124
 #: pcbnew/autorouter/autoplace_tool.cpp:130
-#, fuzzy
 msgid "Autoplace Components"
 msgstr "Alkatrészek automatikus elhelyezése"
 
@@ -33557,7 +33553,6 @@ msgstr "Rézkitöltések közötti szigetelési távolságok...\n"
 #: pcbnew/pcb_draw_panel_gal.cpp:715 pcbnew/widgets/appearance_controls.cpp:333
 #: pcbnew/widgets/panel_selection_filter.cpp:200
 #: pcbnew/widgets/panel_selection_filter_base.cpp:45
-#, fuzzy
 msgid "Pads"
 msgstr "Forrszemek"
 
@@ -33573,9 +33568,8 @@ msgstr "Forrszemek"
 #: pcbnew/widgets/appearance_controls.cpp:332
 #: pcbnew/widgets/panel_selection_filter.cpp:199
 #: pcbnew/widgets/panel_selection_filter_base.cpp:41
-#, fuzzy
 msgid "Vias"
-msgstr "Viák (átvezetőfuratok)"
+msgstr "Viák"
 
 #: pcbnew/board.cpp:1849 pcbnew/pcb_draw_panel_gal.cpp:717
 #, fuzzy
@@ -33617,9 +33611,8 @@ msgid "Best Length Ratio"
 msgstr "Legjobb hossz:"
 
 #: pcbnew/board_connected_item.cpp:264
-#, fuzzy
 msgid "Max Length"
-msgstr "Max hossz:"
+msgstr "Max hossz"
 
 #: pcbnew/board_connected_item.cpp:270
 #, fuzzy
@@ -33627,9 +33620,8 @@ msgid "Best Width Ratio"
 msgstr "Szöveg szélesség"
 
 #: pcbnew/board_connected_item.cpp:277
-#, fuzzy
 msgid "Max Width"
-msgstr "Maximális szélesség:"
+msgstr "Max szélesség"
 
 #: pcbnew/board_connected_item.cpp:283
 #, fuzzy
@@ -33672,7 +33664,6 @@ msgid "Dielectric %d"
 msgstr "Dielektrikum veszteségek:"
 
 #: pcbnew/board_stackup_manager/board_stackup.cpp:652
-#, fuzzy
 msgid "Top Silk Screen"
 msgstr "Felső Szitanyomat"
 
@@ -33697,7 +33688,6 @@ msgid "Bottom Solder Paste"
 msgstr "Felső forrasztópaszta"
 
 #: pcbnew/board_stackup_manager/board_stackup.cpp:725
-#, fuzzy
 msgid "Bottom Silk Screen"
 msgstr "Alsó Szitanyomat"
 
@@ -33788,9 +33778,9 @@ msgid "PrePreg"
 msgstr ""
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:218
-#, fuzzy, c-format
+#, c-format
 msgid "Enter board thickness in %s:"
-msgstr "vezetősáv szélesség és vezetősáv vastagság [mil]"
+msgstr "Adja meg a panel vastagságát %s-ban:"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:223
 #, fuzzy, c-format
@@ -33838,9 +33828,8 @@ msgid "Remove Dielectric Layer"
 msgstr "Relatív dielektromos állandók"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:388
-#, fuzzy
 msgid "Select layer to remove:"
-msgstr "Rajzjelkönyvtár / alkatrészkönyvtár kiválasztása"
+msgstr "Válassza ki az eltávolítani kívánt réteget:"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:1170
 msgid ""
@@ -33855,23 +33844,21 @@ msgstr ""
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:1237
 msgid "A layer thickness is < 0. Fix it"
-msgstr ""
+msgstr "Valamelyik réteg vastagsága <0. Javítsa!"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:1687
-#, fuzzy
 msgid "Custom..."
-msgstr "Egyedi"
+msgstr "Egyedi..."
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:22
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:529
-#, fuzzy
 msgid "Copper layers:"
 msgstr "Vezető rétegek:"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:24
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:32
 msgid "Select the number of copper layers in the stackup"
-msgstr ""
+msgstr "Vezető rétegek száma a rétegfelépítésben"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:28
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:53
@@ -33935,14 +33922,12 @@ msgid ""
 msgstr ""
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:47
-#, fuzzy
 msgid "Add Dielectric Layer..."
-msgstr "Réteg kiválasztása"
+msgstr "Dielektromos réteg hozzáadása..."
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:50
-#, fuzzy
 msgid "Remove Dielectric Layer..."
-msgstr "Relatív dielektromos állandók"
+msgstr "Dielektromos réteg eltávolítása..."
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:79
 #: pcbnew/build_BOM_from_board.cpp:109
@@ -34104,14 +34089,12 @@ msgid "Supplier and ref"
 msgstr "Szállító és referencia"
 
 #: pcbnew/cleanup_item.cpp:46
-#, fuzzy
 msgid "Remove track shorting two nets"
 msgstr "Rövidzárlatot okozó vezetősávok törlése"
 
 #: pcbnew/cleanup_item.cpp:47
-#, fuzzy
 msgid "Remove via shorting two nets"
-msgstr "Rövidzárlatot okozó viá-k törlése"
+msgstr "Rövidzárlatot okozó viák törlése"
 
 #: pcbnew/cleanup_item.cpp:48
 msgid "Remove redundant via"
@@ -34665,7 +34648,7 @@ msgstr "Beállítások importálása egy másik projektből..."
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:82
 msgid "Board Stackup"
-msgstr "NYÁK Panel beállítások"
+msgstr "NYÁK Panel rétegszerkezet"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:95
 #, fuzzy
@@ -34673,9 +34656,8 @@ msgid "Board Editor Layers"
 msgstr "NYÁK tervező rétegek"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:104
-#, fuzzy
 msgid "Physical Stackup"
-msgstr "Fizikai paraméterek:"
+msgstr "Fizikai rétegszerkezet"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:111
 #, fuzzy
@@ -34689,7 +34671,6 @@ msgid "Solder Mask/Paste"
 msgstr "Forrasztásgátló és paszta réteg"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:120
-#, fuzzy
 msgid "Text & Graphics"
 msgstr "Szöveg és Grafika"
 
