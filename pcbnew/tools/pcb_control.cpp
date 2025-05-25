@@ -1318,22 +1318,14 @@ int PCB_CONTROL::AppendDesignBlock( const TOOL_EVENT& aEvent )
     if( !editFrame )
         return 1;
 
-    DESIGN_BLOCK* designBlock = nullptr;
-
     if( !editFrame->GetDesignBlockPane()->GetSelectedLibId().IsValid() )
         return 1;
 
+    DESIGN_BLOCK_PANE* designBlockPane = editFrame->GetDesignBlockPane();
+    std::unique_ptr<DESIGN_BLOCK> designBlock( designBlockPane->GetDesignBlock( designBlockPane->GetSelectedLibId(),
+                                                                                true, true ) );
 
-    designBlock = editFrame->GetDesignBlockPane()->GetDesignBlock( editFrame->GetDesignBlockPane()->GetSelectedLibId(),
-                                                                   true, true );
-
-    if( !designBlock )
-        return 1;
-
-    wxString designBlockBoardFile = designBlock->GetBoardFile();
-    delete designBlock;
-
-    if( designBlock->GetBoardFile().IsEmpty() )
+    if( !designBlock || designBlock->GetBoardFile().IsEmpty() )
         return 1;
 
     PCB_IO_MGR::PCB_FILE_T pluginType = PCB_IO_MGR::KICAD_SEXP;
@@ -1351,7 +1343,7 @@ int PCB_CONTROL::AppendDesignBlock( const TOOL_EVENT& aEvent )
 
     do
     {
-        ret = AppendBoard( *pi, designBlockBoardFile );
+        ret = AppendBoard( *pi, designBlock->GetBoardFile() );
     } while( repeatPlacement && ret == 0 );
 
     return ret;
@@ -1378,8 +1370,9 @@ int PCB_CONTROL::PlaceLinkedDesignBlock( const TOOL_EVENT& aEvent )
         return 1;
 
     // Get the associated design block
-    DESIGN_BLOCK* designBlock = editFrame->GetDesignBlockPane()->GetDesignBlock( group->GetDesignBlockLibId(),
-                                                                                 true, true );
+    DESIGN_BLOCK_PANE* designBlockPane = editFrame->GetDesignBlockPane();
+    std::unique_ptr<DESIGN_BLOCK> designBlock( designBlockPane->GetDesignBlock( group->GetDesignBlockLibId(),
+                                                                                true, true ) );
 
     if( !designBlock )
     {
@@ -1389,10 +1382,7 @@ int PCB_CONTROL::PlaceLinkedDesignBlock( const TOOL_EVENT& aEvent )
         return 1;
     }
 
-    wxString designBlockBoardFile = designBlock->GetBoardFile();
-    delete designBlock;
-
-    if( designBlockBoardFile.IsEmpty() )
+    if( designBlock->GetBoardFile().IsEmpty() )
     {
         wxString msg;
         msg.Printf( _( "Design block %s does not have a board file." ),
@@ -1408,7 +1398,7 @@ int PCB_CONTROL::PlaceLinkedDesignBlock( const TOOL_EVENT& aEvent )
     if( !pi )
         return 1;
 
-    int ret = AppendBoard( *pi, designBlockBoardFile );
+    int ret = AppendBoard( *pi, designBlock->GetBoardFile() );
 
     return ret;
 }
@@ -1434,8 +1424,9 @@ int PCB_CONTROL::SaveToLinkedDesignBlock( const TOOL_EVENT& aEvent )
         return 1;
 
     // Get the associated design block
-    DESIGN_BLOCK* designBlock = editFrame->GetDesignBlockPane()->GetDesignBlock( group->GetDesignBlockLibId(),
-                                                                                 true, true );
+    DESIGN_BLOCK_PANE* designBlockPane = editFrame->GetDesignBlockPane();
+    std::unique_ptr<DESIGN_BLOCK> designBlock( designBlockPane->GetDesignBlock( group->GetDesignBlockLibId(),
+                                                                                true, true ) );
 
     if( !designBlock )
     {
@@ -1444,8 +1435,6 @@ int PCB_CONTROL::SaveToLinkedDesignBlock( const TOOL_EVENT& aEvent )
         m_frame->GetInfoBar()->ShowMessageFor( msg, 5000, wxICON_WARNING );
         return 1;
     }
-
-    delete designBlock;
 
     editFrame->GetDesignBlockPane()->SelectLibId( group->GetDesignBlockLibId() );
 

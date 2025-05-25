@@ -2994,8 +2994,9 @@ int SCH_EDITOR_CONTROL::PlaceLinkedDesignBlock( const TOOL_EVENT& aEvent )
         return 1;
 
     // Get the associated design block
-    DESIGN_BLOCK* designBlock = editFrame->GetDesignBlockPane()->GetDesignBlock( group->GetDesignBlockLibId(),
-                                                                                 true, true );
+    DESIGN_BLOCK_PANE* designBlockPane = editFrame->GetDesignBlockPane();
+    std::unique_ptr<DESIGN_BLOCK> designBlock( designBlockPane->GetDesignBlock( group->GetDesignBlockLibId(),
+                                                                                true, true ) );
 
     if( !designBlock )
     {
@@ -3011,13 +3012,12 @@ int SCH_EDITOR_CONTROL::PlaceLinkedDesignBlock( const TOOL_EVENT& aEvent )
         msg.Printf( _( "Design block %s does not have a schematic file." ),
                     group->GetDesignBlockLibId().GetUniStringLibId() );
         m_frame->GetInfoBar()->ShowMessageFor( msg, 5000, wxICON_WARNING );
-        delete designBlock;
         return 1;
     }
 
     editFrame->GetDesignBlockPane()->SelectLibId( group->GetDesignBlockLibId() );
 
-    return m_toolMgr->RunAction( SCH_ACTIONS::placeDesignBlock, designBlock );
+    return m_toolMgr->RunAction( SCH_ACTIONS::placeDesignBlock, designBlock.release() );
 }
 
 
@@ -3041,8 +3041,9 @@ int SCH_EDITOR_CONTROL::SaveToLinkedDesignBlock( const TOOL_EVENT& aEvent )
         return 1;
 
     // Get the associated design block
-    DESIGN_BLOCK* designBlock = editFrame->GetDesignBlockPane()->GetDesignBlock( group->GetDesignBlockLibId(),
-                                                                                 true, true );
+    DESIGN_BLOCK_PANE* designBlockPane = editFrame->GetDesignBlockPane();
+    std::unique_ptr<DESIGN_BLOCK> designBlock( designBlockPane->GetDesignBlock( group->GetDesignBlockLibId(),
+                                                                                true, true ) );
 
     if( !designBlock )
     {
@@ -3051,8 +3052,6 @@ int SCH_EDITOR_CONTROL::SaveToLinkedDesignBlock( const TOOL_EVENT& aEvent )
         m_frame->GetInfoBar()->ShowMessageFor( msg, 5000, wxICON_WARNING );
         return 1;
     }
-
-    delete designBlock;
 
     editFrame->GetDesignBlockPane()->SelectLibId( group->GetDesignBlockLibId() );
 

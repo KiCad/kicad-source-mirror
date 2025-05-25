@@ -646,32 +646,6 @@ int SCH_DRAWING_TOOLS::PlaceNextSymbolUnit( const TOOL_EVENT& aEvent )
 
 int SCH_DRAWING_TOOLS::ImportSheet( const TOOL_EVENT& aEvent )
 {
-    bool          placingDesignBlock = aEvent.IsAction( &SCH_ACTIONS::placeDesignBlock );
-
-    DESIGN_BLOCK* designBlock = nullptr;
-    wxString      sheetFileName = wxEmptyString;
-
-    if( placingDesignBlock )
-    {
-        if( m_frame->GetDesignBlockPane()->GetSelectedLibId().IsValid() )
-        {
-            designBlock = m_frame->GetDesignBlockPane()->GetDesignBlock(
-                    m_frame->GetDesignBlockPane()->GetSelectedLibId(), true, true );
-
-            if( !designBlock )
-                return 0;
-
-            sheetFileName = designBlock->GetSchematicFile();
-        }
-    }
-    else
-    {
-        wxString* importSourceFile = aEvent.Parameter<wxString*>();
-
-        if( importSourceFile != nullptr )
-            sheetFileName = *importSourceFile;
-    }
-
     COMMON_SETTINGS*            common_settings = Pgm().GetCommonSettings();
     EESCHEMA_SETTINGS*          cfg = m_frame->eeconfig();
     SCHEMATIC_SETTINGS&         schSettings = m_frame->Schematic().Settings();
@@ -688,11 +662,39 @@ int SCH_DRAWING_TOOLS::ImportSheet( const TOOL_EVENT& aEvent )
     if( m_inDrawingTool )
         return 0;
 
+    bool placingDesignBlock = aEvent.IsAction( &SCH_ACTIONS::placeDesignBlock );
+
+    std::unique_ptr<DESIGN_BLOCK> designBlock;
+    wxString                      sheetFileName = wxEmptyString;
+
+    if( placingDesignBlock )
+    {
+        SCH_DESIGN_BLOCK_PANE* designBlockPane = m_frame->GetDesignBlockPane();
+
+        if( designBlockPane->GetSelectedLibId().IsValid() )
+        {
+            designBlock.reset( designBlockPane->GetDesignBlock( designBlockPane->GetSelectedLibId(),
+                                                                true, true ) );
+
+            if( !designBlock )
+                return 0;
+
+            sheetFileName = designBlock->GetSchematicFile();
+        }
+    }
+    else
+    {
+        wxString* importSourceFile = aEvent.Parameter<wxString*>();
+
+        if( importSourceFile != nullptr )
+            sheetFileName = *importSourceFile;
+    }
+
     auto setCursor =
             [&]()
             {
                 m_frame->GetCanvas()->SetCurrentCursor( designBlock ? KICURSOR::MOVING
-                                                               : KICURSOR::COMPONENT );
+                                                                    : KICURSOR::COMPONENT );
             };
 
     auto placeSheetContents =
@@ -829,41 +831,41 @@ int SCH_DRAWING_TOOLS::ImportSheet( const TOOL_EVENT& aEvent )
     // if we weren't provided one
     if( sheetFileName.IsEmpty() )
     {
-            wxString path;
-            wxString file;
+        wxString path;
+        wxString file;
 
-            if (!placingDesignBlock) {
-
-                if( sheetFileName.IsEmpty() )
-                {
-                    path = wxPathOnly( m_frame->Prj().GetProjectFullName() );
-                    file = wxEmptyString;
-                }
-                else
-                {
-                    path = wxPathOnly( sheetFileName );
-                    file = wxFileName( sheetFileName ).GetFullName();
-                }
-
-                // Open file chooser dialog even if we have been provided a file so the user
-                // can select the options they want
-                wxFileDialog dlg( m_frame, _( "Choose Schematic" ), path, file,
-                                  FILEEXT::KiCadSchematicFileWildcard(),
-                                  wxFD_OPEN | wxFD_FILE_MUST_EXIST );
-
-                FILEDLG_IMPORT_SHEET_CONTENTS dlgHook( cfg );
-                dlg.SetCustomizeHook( dlgHook );
-
-                if( dlg.ShowModal() == wxID_CANCEL )
-                    return 0;
-
-                sheetFileName = dlg.GetPath();
-
-                m_frame->GetDesignBlockPane()->UpdateCheckboxes();
-            }
+        if (!placingDesignBlock) {
 
             if( sheetFileName.IsEmpty() )
+            {
+                path = wxPathOnly( m_frame->Prj().GetProjectFullName() );
+                file = wxEmptyString;
+            }
+            else
+            {
+                path = wxPathOnly( sheetFileName );
+                file = wxFileName( sheetFileName ).GetFullName();
+            }
+
+            // Open file chooser dialog even if we have been provided a file so the user
+            // can select the options they want
+            wxFileDialog dlg( m_frame, _( "Choose Schematic" ), path, file,
+                              FILEEXT::KiCadSchematicFileWildcard(),
+                              wxFD_OPEN | wxFD_FILE_MUST_EXIST );
+
+            FILEDLG_IMPORT_SHEET_CONTENTS dlgHook( cfg );
+            dlg.SetCustomizeHook( dlgHook );
+
+            if( dlg.ShowModal() == wxID_CANCEL )
                 return 0;
+
+            sheetFileName = dlg.GetPath();
+
+            m_frame->GetDesignBlockPane()->UpdateCheckboxes();
+        }
+
+        if( sheetFileName.IsEmpty() )
+            return 0;
     }
 
     // If we're placing sheet contents, we don't even want to run our tool loop, just add the items
@@ -875,9 +877,6 @@ int SCH_DRAWING_TOOLS::ImportSheet( const TOOL_EVENT& aEvent )
 
             m_toolMgr->RunAction( ACTIONS::selectionClear );
             m_view->ClearPreview();
-            delete designBlock;
-            designBlock = nullptr;
-
             return 0;
     }
 
@@ -921,11 +920,12 @@ int SCH_DRAWING_TOOLS::ImportSheet( const TOOL_EVENT& aEvent )
         {
             if( placingDesignBlock )
             {
-                m_toolMgr->PostAction( SCH_ACTIONS::drawSheetFromDesignBlock, designBlock );
+                // drawSheet must delete designBlock
+                m_toolMgr->PostAction( SCH_ACTIONS::drawSheetFromDesignBlock, designBlock.release() );
             }
             else
             {
-                // drawSheet must delete
+                // drawSheet must delete sheetFileName
                 m_toolMgr->PostAction( SCH_ACTIONS::drawSheetFromFile,
                                        new wxString( sheetFileName ) );
             }
@@ -2950,9 +2950,10 @@ int SCH_DRAWING_TOOLS::DrawSheet( const TOOL_EVENT& aEvent )
     bool isDrawSheetCopy = aEvent.IsAction( &SCH_ACTIONS::drawSheetFromFile );
     bool isDrawSheetFromDesignBlock = aEvent.IsAction( &SCH_ACTIONS::drawSheetFromDesignBlock );
 
-    DESIGN_BLOCK* designBlock = nullptr;
-    SCH_SHEET*    sheet = nullptr;
-    wxString      filename;
+    std::unique_ptr<DESIGN_BLOCK> designBlock;
+
+    SCH_SHEET* sheet = nullptr;
+    wxString   filename;
 
     if( isDrawSheetCopy )
     {
@@ -2965,7 +2966,7 @@ int SCH_DRAWING_TOOLS::DrawSheet( const TOOL_EVENT& aEvent )
     }
     else if( isDrawSheetFromDesignBlock )
     {
-        designBlock = aEvent.Parameter<DESIGN_BLOCK*>();
+        designBlock.reset( aEvent.Parameter<DESIGN_BLOCK*>() );
         wxCHECK( designBlock, 0 );
         filename = designBlock->GetSchematicFile();
     }

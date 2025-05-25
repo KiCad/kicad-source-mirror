@@ -403,11 +403,11 @@ bool SCH_EDIT_FRAME::SaveSelectionToDesignBlock( const LIB_ID& aLibId )
         }
     }
 
-    DESIGN_BLOCK* blk = nullptr;
+    std::unique_ptr<DESIGN_BLOCK> blk;
 
     try
     {
-        blk = Prj().DesignBlockLibs()->DesignBlockLoad( aLibId.GetLibNickname(), aLibId.GetLibItemName() );
+        blk.reset( Prj().DesignBlockLibs()->DesignBlockLoad( aLibId.GetLibNickname(), aLibId.GetLibItemName() ) );
     }
     catch( const IO_ERROR& ioe )
     {
@@ -416,10 +416,7 @@ bool SCH_EDIT_FRAME::SaveSelectionToDesignBlock( const LIB_ID& aLibId )
     }
 
     if( !blk->GetSchematicFile().IsEmpty() && !checkOverwriteDbSchematic( this, aLibId ) )
-    {
-        delete blk;
         return false;
-    }
 
     // Create a temporary screen
     SCH_SCREEN* tempScreen = new SCH_SCREEN( m_schematic );
@@ -462,7 +459,6 @@ bool SCH_EDIT_FRAME::SaveSelectionToDesignBlock( const LIB_ID& aLibId )
     {
         DisplayErrorMessage( this, _( "Error saving temporary schematic file to create design block." ) );
         wxRemoveFile( tempFile );
-        delete blk;
         return false;
     }
 
@@ -472,7 +468,7 @@ bool SCH_EDIT_FRAME::SaveSelectionToDesignBlock( const LIB_ID& aLibId )
 
     try
     {
-        success = Prj().DesignBlockLibs()->DesignBlockSave( aLibId.GetLibNickname(), blk )
+        success = Prj().DesignBlockLibs()->DesignBlockSave( aLibId.GetLibNickname(), blk.get() )
                   == DESIGN_BLOCK_LIB_TABLE::SAVE_OK;
 
         // If we had a group, we need to reselect it
@@ -506,6 +502,5 @@ bool SCH_EDIT_FRAME::SaveSelectionToDesignBlock( const LIB_ID& aLibId )
     m_designBlocksPane->RefreshLibs();
     m_designBlocksPane->SelectLibId( blk->GetLibId() );
 
-    delete blk;
     return success;
 }
