@@ -197,7 +197,7 @@ void TRACKS_CLEANER::removeShortingTrackSegments()
                     item = std::make_shared<CLEANUP_ITEM>( CLEANUP_SHORTING_TRACK );
 
                 item->SetItems( segment );
-                m_itemsList->push_back( item );
+                m_itemsList->push_back( std::move( item ) );
 
                 toRemove.insert( segment );
             }
@@ -215,7 +215,7 @@ void TRACKS_CLEANER::removeShortingTrackSegments()
                     item = std::make_shared<CLEANUP_ITEM>( CLEANUP_SHORTING_TRACK );
 
                 item->SetItems( segment );
-                m_itemsList->push_back( item );
+                m_itemsList->push_back( std::move( item ) );
 
                 toRemove.insert( segment );
             }
@@ -307,7 +307,7 @@ bool TRACKS_CLEANER::deleteDanglingTracks( bool aTrack, bool aVia )
                     item = std::make_shared<CLEANUP_ITEM>( CLEANUP_DANGLING_TRACK );
 
                 item->SetItems( track );
-                m_itemsList->push_back( item );
+                m_itemsList->push_back( std::move( item ) );
                 track->SetFlags( IS_DELETED );
 
                 // keep iterating, because a track connected to the deleted track
@@ -358,7 +358,7 @@ void TRACKS_CLEANER::deleteTracksInPads()
                 {
                     auto item = std::make_shared<CLEANUP_ITEM>( CLEANUP_TRACK_IN_PAD );
                     item->SetItems( track );
-                    m_itemsList->push_back( item );
+                    m_itemsList->push_back( std::move( item ) );
 
                     toRemove.insert( track );
                     track->SetFlags( IS_DELETED );
@@ -419,7 +419,7 @@ void TRACKS_CLEANER::cleanup( bool aDeleteDuplicateVias, bool aDeleteNullSegment
                         {
                             auto item = std::make_shared<CLEANUP_ITEM>( CLEANUP_REDUNDANT_VIA );
                             item->SetItems( via );
-                            m_itemsList->push_back( item );
+                            m_itemsList->push_back( std::move( item ) );
 
                             via->SetFlags( IS_DELETED );
                             toRemove.insert( via );
@@ -438,7 +438,7 @@ void TRACKS_CLEANER::cleanup( bool aDeleteDuplicateVias, bool aDeleteNullSegment
                 {
                     auto item = std::make_shared<CLEANUP_ITEM>( CLEANUP_REDUNDANT_VIA );
                     item->SetItems( via, pad );
-                    m_itemsList->push_back( item );
+                    m_itemsList->push_back( std::move( item ) );
 
                     via->SetFlags( IS_DELETED );
                     toRemove.insert( via );
@@ -455,7 +455,7 @@ void TRACKS_CLEANER::cleanup( bool aDeleteDuplicateVias, bool aDeleteNullSegment
             {
                 auto item = std::make_shared<CLEANUP_ITEM>( CLEANUP_ZERO_LENGTH_TRACK );
                 item->SetItems( track );
-                m_itemsList->push_back( item );
+                m_itemsList->push_back( std::move( item ) );
 
                 track->SetFlags( IS_DELETED );
                 toRemove.insert( track );
@@ -485,7 +485,7 @@ void TRACKS_CLEANER::cleanup( bool aDeleteDuplicateVias, bool aDeleteNullSegment
                         {
                             auto item = std::make_shared<CLEANUP_ITEM>( CLEANUP_DUPLICATE_TRACK );
                             item->SetItems( track );
-                            m_itemsList->push_back( item );
+                            m_itemsList->push_back( std::move( item ) );
 
                             track->SetFlags( IS_DELETED );
                             toRemove.insert( track );
@@ -774,7 +774,7 @@ bool TRACKS_CLEANER::mergeCollinearSegments( PCB_TRACK* aSeg1, PCB_TRACK* aSeg2 
 
     std::shared_ptr<CLEANUP_ITEM> item = std::make_shared<CLEANUP_ITEM>( CLEANUP_MERGE_TRACKS );
     item->SetItems( aSeg1, aSeg2 );
-    m_itemsList->push_back( item );
+    m_itemsList->push_back( std::move( item ) );
 
     aSeg2->SetFlags( IS_DELETED );
 
