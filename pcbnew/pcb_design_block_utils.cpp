@@ -410,11 +410,11 @@ bool PCB_EDIT_FRAME::SaveSelectionToDesignBlock( const LIB_ID& aLibId )
         }
     }
 
-    DESIGN_BLOCK* blk = nullptr;
+    std::unique_ptr<DESIGN_BLOCK> blk;
 
     try
     {
-        blk = Prj().DesignBlockLibs()->DesignBlockLoad( aLibId.GetLibNickname(), aLibId.GetLibItemName() );
+        blk.reset( Prj().DesignBlockLibs()->DesignBlockLoad( aLibId.GetLibNickname(), aLibId.GetLibItemName() ) );
     }
     catch( const IO_ERROR& ioe )
     {

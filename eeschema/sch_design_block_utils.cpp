@@ -44,7 +44,8 @@
 
 bool checkOverwriteDb( wxWindow* aFrame, wxString& libname, wxString& newName )
 {
-    wxString msg = wxString::Format( _( "Design block '%s' already exists in library '%s'." ), newName.GetData(),
+    wxString msg = wxString::Format( _( "Design block '%s' already exists in library '%s'." ),
+                                     newName.GetData(),
                                      libname.GetData() );
 
     if( OKOrCancelDialog( aFrame, _( "Confirmation" ), msg, _( "Overwrite existing design block?" ), _( "Overwrite" ) )
@@ -59,8 +60,8 @@ bool checkOverwriteDb( wxWindow* aFrame, wxString& libname, wxString& newName )
 
 bool checkOverwriteDbSchematic( wxWindow* aFrame, const LIB_ID& aLibId )
 {
-    wxString msg =
-            wxString::Format( _( "Design block '%s' already has a schematic." ), aLibId.GetUniStringLibItemName() );
+    wxString msg = wxString::Format( _( "Design block '%s' already has a schematic." ),
+                                     aLibId.GetUniStringLibItemName() );
 
     if( OKOrCancelDialog( aFrame, _( "Confirmation" ), msg, _( "Overwrite existing schematic?" ), _( "Overwrite" ) )
         != wxID_OK )
@@ -119,9 +120,7 @@ bool SCH_EDIT_FRAME::SaveSheetAsDesignBlock( const wxString& aLibraryName, SCH_S
     wxString newName = blk.GetLibId().GetLibItemName();
 
     if( Prj().DesignBlockLibs()->DesignBlockExists( libName, newName ) && !checkOverwriteDb( this, libName, newName ) )
-    {
         return false;
-    }
 
     // Save a temporary copy of the schematic file, as the plugin is just going to move it
     wxString tempFile = wxFileName::CreateTempFileName( "design_block" );
@@ -174,11 +173,11 @@ bool SCH_EDIT_FRAME::SaveSheetToDesignBlock( const LIB_ID& aLibId, SCH_SHEET_PAT
         return false;
     }
 
-    DESIGN_BLOCK* blk = nullptr;
+    std::unique_ptr<DESIGN_BLOCK> blk;
 
     try
     {
-        blk = Prj().DesignBlockLibs()->DesignBlockLoad( aLibId.GetLibNickname(), aLibId.GetLibItemName() );
+        blk.reset( Prj().DesignBlockLibs()->DesignBlockLoad( aLibId.GetLibNickname(), aLibId.GetLibItemName() ) );
     }
     catch( const IO_ERROR& ioe )
     {
@@ -187,9 +186,7 @@ bool SCH_EDIT_FRAME::SaveSheetToDesignBlock( const LIB_ID& aLibId, SCH_SHEET_PAT
     }
 
     if( !blk->GetSchematicFile().IsEmpty() && !checkOverwriteDbSchematic( this, aLibId ) )
-    {
         return false;
-    }
 
     // Copy all fields from the sheet to the design block.
     // Note: this will overwrite any existing fields in the design block, but
@@ -207,7 +204,7 @@ bool SCH_EDIT_FRAME::SaveSheetToDesignBlock( const LIB_ID& aLibId, SCH_SHEET_PAT
 
     blk->SetFields( dbFields );
 
-    DIALOG_DESIGN_BLOCK_PROPERTIES dlg( this, blk, true );
+    DIALOG_DESIGN_BLOCK_PROPERTIES dlg( this, blk.get(), true );
 
     if( dlg.ShowModal() != wxID_OK )
         return false;
@@ -227,7 +224,7 @@ bool SCH_EDIT_FRAME::SaveSheetToDesignBlock( const LIB_ID& aLibId, SCH_SHEET_PAT
 
     try
     {
-        success = Prj().DesignBlockLibs()->DesignBlockSave( aLibId.GetLibNickname(), blk )
+        success = Prj().DesignBlockLibs()->DesignBlockSave( aLibId.GetLibNickname(), blk.get() )
                   == DESIGN_BLOCK_LIB_TABLE::SAVE_OK;
     }
     catch( const IO_ERROR& ioe )
@@ -275,7 +272,9 @@ bool SCH_EDIT_FRAME::SaveSelectionAsDesignBlock( const wxString& aLibraryName )
             SaveSheetAsDesignBlock( aLibraryName, curPath );
         }
         else
+        {
             DisplayErrorMessage( this, _( "Design blocks with nested sheets are not supported." ) );
+        }
 
         return false;
     }
@@ -294,9 +293,7 @@ bool SCH_EDIT_FRAME::SaveSelectionAsDesignBlock( const wxString& aLibraryName )
     wxString newName = blk.GetLibId().GetLibItemName();
 
     if( Prj().DesignBlockLibs()->DesignBlockExists( libName, newName ) && !checkOverwriteDb( this, libName, newName ) )
-    {
         return false;
-    }
 
     // Create a temporary screen
     SCH_SCREEN* tempScreen = new SCH_SCREEN( m_schematic );
@@ -376,7 +373,9 @@ bool SCH_EDIT_FRAME::SaveSelectionToDesignBlock( const LIB_ID& aLibId )
             SaveSheetToDesignBlock( aLibId, curPath );
         }
         else
+        {
             DisplayErrorMessage( this, _( "Design blocks with nested sheets are not supported." ) );
+        }
 
         return false;
     }
