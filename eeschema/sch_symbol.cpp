@@ -1287,8 +1287,9 @@ bool SCH_SYMBOL::ResolveTextVar( const SCH_SHEET_PATH* aPath, wxString* token, i
 {
     static wxRegEx operatingPoint( wxT( "^"
                                         "OP"
-                                        "(:[^.]*)?"                // pin
-                                        "(.([0-9])?([a-zA-Z]*))?"  // format
+                                        "(:[^.]*)?"      // pin
+                                        "(.([0-9])?"     // precisionStr
+                                        "([a-zA-Z]*))?"  // rangeStr
                                         "$" ) );
 
     wxCHECK( aPath, false );
@@ -1302,14 +1303,10 @@ bool SCH_SYMBOL::ResolveTextVar( const SCH_SHEET_PATH* aPath, wxString* token, i
     {
         wxString pin( operatingPoint.GetMatch( *token, 1 ).Lower() );
         wxString precisionStr( operatingPoint.GetMatch( *token, 3 ) );
-        wxString range( operatingPoint.GetMatch( *token, 4 ) );
-        int      precision = 3;
+        wxString rangeStr( operatingPoint.GetMatch( *token, 4 ) );
 
-        if( !precisionStr.IsEmpty() )
-            precision = precisionStr[0] - '0';
-
-        if( range.IsEmpty() )
-            range = wxS( "~A" );
+        int      precision = precisionStr.IsEmpty() ? 3 : precisionStr[0] - '0';
+        wxString range = rangeStr.IsEmpty() ? wxS( "~A" ) : rangeStr;
 
         SIM_LIB_MGR simLibMgr( &schematic->Prj() );
 
@@ -1337,7 +1334,7 @@ bool SCH_SYMBOL::ResolveTextVar( const SCH_SHEET_PATH* aPath, wxString* token, i
         }
         else if( pin == wxS( ":power" ) )
         {
-            if( range.IsEmpty() )
+            if( rangeStr.IsEmpty() )
                 range = wxS( "~W" );
 
             *token = schematic->GetOperatingPoint( spiceRef + wxS( ":power" ), precision, range );
