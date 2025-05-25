@@ -164,12 +164,9 @@ wxString RC_ITEM::ShowReport( UNITS_PROVIDER* aUnitsProvider, SEVERITY aSeverity
 
 
 void RC_ITEM::GetJsonViolation( RC_JSON::VIOLATION& aViolation, UNITS_PROVIDER* aUnitsProvider,
-                                SEVERITY aSeverity,
-                                const std::map<KIID, EDA_ITEM*>& aItemMap ) const
+                                SEVERITY aSeverity, const std::map<KIID, EDA_ITEM*>& aItemMap ) const
 {
-    wxString severity = getSeverityString( aSeverity );
-
-    aViolation.severity = severity;
+    aViolation.severity = getSeverityString( aSeverity );
     aViolation.description = GetErrorMessage();
     aViolation.type = GetSettingsKey();
     aViolation.excluded = ( m_parent && m_parent->IsExcluded() );

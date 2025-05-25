@@ -441,7 +441,7 @@ bool BOARD::ResolveTextVar( wxString* token, int aDepth ) const
 
             if( refFP->ResolveTextVar( &remainder, aDepth + 1 ) )
             {
-                *token = remainder;
+                *token = std::move( remainder );
                 return true;
             }
         }

@@ -190,8 +190,7 @@ void SEARCH_PANE::ClearAllResults()
 
 void SEARCH_PANE::OnSearchTextEntry( wxCommandEvent& aEvent )
 {
-    wxString query = m_searchCtrl1->GetValue();
-    m_lastQuery = query;
+    m_lastQuery = m_searchCtrl1->GetValue();
 
     RefreshSearch();
 }

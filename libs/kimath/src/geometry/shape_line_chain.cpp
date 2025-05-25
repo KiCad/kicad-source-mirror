@@ -2653,8 +2653,8 @@ void SHAPE_LINE_CHAIN::Simplify( int aTolerance )
 
     m_points.clear();
     m_shapes.clear();
-    m_points = new_points;
-    m_shapes = new_shapes;
+    m_points = std::move( new_points );
+    m_shapes = std::move( new_shapes );
 }
 
 
