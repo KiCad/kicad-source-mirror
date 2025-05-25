@@ -202,6 +202,7 @@ bool PCB_EDIT_FRAME::SaveBoardToDesignBlock( const LIB_ID& aLibId )
 
     if( !blk->GetBoardFile().IsEmpty() && !checkOverwriteDbLayout( this, aLibId ) )
     {
+        delete blk;
         return false;
     }
 
@@ -212,6 +213,7 @@ bool PCB_EDIT_FRAME::SaveBoardToDesignBlock( const LIB_ID& aLibId )
     {
         DisplayErrorMessage( this, _( "Error saving temporary board file to create design block." ) );
         wxRemoveFile( tempFile );
+        delete blk;
         return false;
     }
 
@@ -235,6 +237,7 @@ bool PCB_EDIT_FRAME::SaveBoardToDesignBlock( const LIB_ID& aLibId )
     m_designBlocksPane->RefreshLibs();
     m_designBlocksPane->SelectLibId( blk->GetLibId() );
 
+    delete blk;
     return success;
 }
 

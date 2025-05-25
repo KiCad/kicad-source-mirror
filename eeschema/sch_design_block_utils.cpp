@@ -417,6 +417,7 @@ bool SCH_EDIT_FRAME::SaveSelectionToDesignBlock( const LIB_ID& aLibId )
 
     if( !blk->GetSchematicFile().IsEmpty() && !checkOverwriteDbSchematic( this, aLibId ) )
     {
+        delete blk;
         return false;
     }
 
@@ -456,10 +457,12 @@ bool SCH_EDIT_FRAME::SaveSelectionToDesignBlock( const LIB_ID& aLibId )
 
     // Save a temporary copy of the schematic file, as the plugin is just going to move it
     wxString tempFile = wxFileName::CreateTempFileName( "design_block" );
+
     if( !saveSchematicFile( tempSheet, tempFile ) )
     {
         DisplayErrorMessage( this, _( "Error saving temporary schematic file to create design block." ) );
         wxRemoveFile( tempFile );
+        delete blk;
         return false;
     }
 
@@ -503,5 +506,6 @@ bool SCH_EDIT_FRAME::SaveSelectionToDesignBlock( const LIB_ID& aLibId )
     m_designBlocksPane->RefreshLibs();
     m_designBlocksPane->SelectLibId( blk->GetLibId() );
 
+    delete blk;
     return success;
 }
