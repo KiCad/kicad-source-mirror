@@ -1296,7 +1296,7 @@ void RENDER_3D_RAYTRACE_BASE::load3DModels( CONTAINER_3D& aDstContainer,
                 embeddedFilesStack.push_back( m_boardAdapter.GetBoard()->GetEmbeddedFiles() );
 
                 const S3DMODEL* modelPtr = cacheMgr->GetModel( model.m_Filename, footprintBasePath,
-                                                               embeddedFilesStack );
+                                                               std::move( embeddedFilesStack ) );
 
                 // only add it if the return is not NULL.
                 if( modelPtr )

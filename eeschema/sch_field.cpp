@@ -748,7 +748,7 @@ void SCH_FIELD::OnScintillaCharAdded( SCINTILLA_TRICKS* aScintillaTricks,
                     embeddedFilesStack.push_back( schematic->GetEmbeddedFiles() );
                     embeddedFilesStack.push_back( symbol->GetEmbeddedFiles() );
 
-                    mgr.SetFilesStack( embeddedFilesStack );
+                    mgr.SetFilesStack( std::move( embeddedFilesStack ) );
 
                     SIM_MODEL& model = mgr.CreateModel( &sheet, *symbol, true, 0, devnull ).model;
 

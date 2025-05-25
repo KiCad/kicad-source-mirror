@@ -343,8 +343,11 @@ bool DIALOG_SIM_MODEL<T>::TransferDataToWindow()
 template <typename T>
 bool DIALOG_SIM_MODEL<T>::TransferDataFromWindow()
 {
-    m_pinAssignmentsGrid->CommitPendingChanges();
-    m_paramGrid->GetGrid()->CommitChangesFromEditor();
+    if( !m_pinAssignmentsGrid->CommitPendingChanges() )
+        return false;
+
+    if( !m_paramGrid->GetGrid()->CommitChangesFromEditor() )
+        return false;
 
     if( !DIALOG_SIM_MODEL_BASE::TransferDataFromWindow() )
         return false;

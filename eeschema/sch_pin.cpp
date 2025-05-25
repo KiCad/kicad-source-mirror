@@ -1206,11 +1206,10 @@ void SCH_PIN::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITE
         aList.emplace_back( _( "Pos X" ), aFrame->MessageTextFromValue( GetPosition().x, true ) );
         aList.emplace_back( _( "Pos Y" ), aFrame->MessageTextFromValue( GetPosition().y, true ) );
     }
-    else
+    else if( SCH_SYMBOL* schsymbol = dynamic_cast<SCH_SYMBOL*>( symbol ) )
     {
         SCH_EDIT_FRAME* schframe = dynamic_cast<SCH_EDIT_FRAME*>( aFrame );
         SCH_SHEET_PATH* currentSheet = schframe ? &schframe->GetCurrentSheet() : nullptr;
-        SCH_SYMBOL*     schsymbol = dynamic_cast<SCH_SYMBOL*>( symbol );
 
         // Don't use GetShownText(); we want to see the variable references here
         aList.emplace_back( symbol->GetRef( currentSheet ),

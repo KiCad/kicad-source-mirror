@@ -298,7 +298,7 @@ void DIALOG_FOOTPRINT_CHECKER::OnSelectItem( wxDataViewEvent& aEvent )
 
         if( violationLayers.count() )
             principalLayer = violationLayers.Seq().front();
-        else
+        else if( principalLayer >= 0 )
             violationLayers.set( principalLayer );
 
         WINDOW_THAWER thawer( m_frame );

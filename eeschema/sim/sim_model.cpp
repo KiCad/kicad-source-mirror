@@ -1233,15 +1233,15 @@ bool SIM_MODEL::InferSimModel( T& aSymbol, std::vector<SCH_FIELD>* aFields, bool
                 {
                     aModelParams->Printf( wxT( "%s=\"%s%s\"" ),
                                           prefix.Left(1).Lower(),
-                                          valueMantissa,
+                                          std::move( valueMantissa ),
                                           convertNotation( valueExponent ) );
                 }
                 else
                 {
                     aModelParams->Printf( wxT( "%s=\"%s.%s%s\"" ),
                                           prefix.Left(1).Lower(),
-                                          valueMantissa,
-                                          valueFraction,
+                                          std::move( valueMantissa ),
+                                          std::move( valueFraction ),
                                           convertNotation( valueExponent ) );
                 }
             }
@@ -1303,17 +1303,17 @@ bool SIM_MODEL::InferSimModel( T& aSymbol, std::vector<SCH_FIELD>* aFields, bool
                 if( valueMantissa.Contains( wxT( "." ) ) || valueFraction.IsEmpty() )
                 {
                     aModelParams->Printf( wxT( "%s=\"%s%s\" %s" ),
-                                          param,
-                                          valueMantissa,
+                                          std::move( param ),
+                                          std::move( valueMantissa ),
                                           convertNotation( valueExponent ),
                                           *aModelParams );
                 }
                 else
                 {
                     aModelParams->Printf( wxT( "%s=\"%s.%s%s\" %s" ),
-                                          param,
-                                          valueMantissa,
-                                          valueFraction,
+                                          std::move( param ),
+                                          std::move( valueMantissa ),
+                                          std::move( valueFraction ),
                                           convertNotation( valueExponent ),
                                           *aModelParams );
                 }
@@ -1321,8 +1321,8 @@ bool SIM_MODEL::InferSimModel( T& aSymbol, std::vector<SCH_FIELD>* aFields, bool
             else
             {
                 aModelParams->Printf( wxT( "%s=\"%s\" %s" ),
-                                      param,
-                                      value,
+                                      std::move( param ),
+                                      std::move( value ),
                                       *aModelParams );
             }
         }
@@ -1691,7 +1691,7 @@ void SIM_MODEL::MigrateSimModel( T& aSymbol, const PROJECT* aProject )
 
         embeddedFilesStack.push_back( aSymbol.GetEmbeddedFiles() );
 
-        libMgr.SetFilesStack( embeddedFilesStack );
+        libMgr.SetFilesStack( std::move( embeddedFilesStack ) );
 
         // Pull out any following parameters from model name
         model = model.BeforeFirst( ' ', &modelLineParams );

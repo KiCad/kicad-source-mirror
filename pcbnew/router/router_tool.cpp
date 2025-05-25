@@ -206,6 +206,7 @@ static const TOOL_ACTION ACT_SwitchCornerMode( TOOL_ACTION_ARGS()
 
 ROUTER_TOOL::ROUTER_TOOL() :
         TOOL_BASE( "pcbnew.InteractiveRouter" ),
+        m_lastTargetLayer( UNDEFINED_LAYER ),
         m_originalActiveLayer( UNDEFINED_LAYER ),
         m_inRouterTool( false )
 {

@@ -519,7 +519,7 @@ void DIALOG_DRC::OnDRCItemSelected( wxDataViewEvent& aEvent )
 
     if( violationLayers.count() )
         principalLayer = violationLayers.Seq().front();
-    else if( !(principalLayer <= UNDEFINED_LAYER ) )
+    else if( principalLayer >= 0 )
         violationLayers.set( principalLayer );
 
     WINDOW_THAWER thawer( m_frame );

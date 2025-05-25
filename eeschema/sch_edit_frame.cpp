@@ -1629,7 +1629,7 @@ void SCH_EDIT_FRAME::RefreshOperatingPointDisplay()
                 embeddedFilesStack.push_back( m_schematic->GetEmbeddedFiles() );
                 embeddedFilesStack.push_back( symbol->GetEmbeddedFiles() );
 
-                simLibMgr.SetFilesStack( embeddedFilesStack );
+                simLibMgr.SetFilesStack( std::move( embeddedFilesStack ) );
 
                 SIM_MODEL& model = simLibMgr.CreateModel( &GetCurrentSheet(), *symbol, true, 0, devnull ).model;
 

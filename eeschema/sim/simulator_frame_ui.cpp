@@ -1670,7 +1670,7 @@ void SIMULATOR_FRAME_UI::UpdateTunerValue( const SCH_SHEET_PATH& aSheetPath, con
     embeddedFilesStack.push_back( m_schematicFrame->Schematic().GetEmbeddedFiles() );
     embeddedFilesStack.push_back( symbol->GetEmbeddedFiles() );
 
-    mgr.SetFilesStack( embeddedFilesStack );
+    mgr.SetFilesStack( std::move( embeddedFilesStack ) );
 
     SIM_MODEL& model = mgr.CreateModel( &aSheetPath, *symbol, true, 0, devnull ).model;
 

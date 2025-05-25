@@ -589,7 +589,7 @@ int SCH_EDITOR_CONTROL::SimProbe( const TOOL_EVENT& aEvent )
                         embeddedFilesStack.push_back( m_frame->Schematic().GetEmbeddedFiles() );
                         embeddedFilesStack.push_back( symbol->GetEmbeddedFiles() );
 
-                        mgr.SetFilesStack( embeddedFilesStack );
+                        mgr.SetFilesStack( std::move( embeddedFilesStack ) );
 
                         SIM_MODEL& model = mgr.CreateModel( &sheet, *symbol, true, 0, reporter ).model;
 

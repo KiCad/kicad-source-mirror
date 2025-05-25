@@ -46,8 +46,10 @@ public:
 
     void Clear();
 
-    void SetFilesStack( std::vector<EMBEDDED_FILES*> aFilesStack ) { m_embeddedFilesStack = aFilesStack; }
-
+    void SetFilesStack( std::vector<EMBEDDED_FILES*> aFilesStack )
+    {
+        m_embeddedFilesStack = std::move( aFilesStack );
+    }
 
     void SetLibrary( const wxString& aLibraryPath, REPORTER& aReporter );
 

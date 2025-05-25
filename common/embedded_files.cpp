@@ -371,8 +371,10 @@ void EMBEDDED_FILES_PARSER::ParseEmbedded( EMBEDDED_FILES* aFiles )
 
             switch( token )
             {
-
             case T_checksum:
+                if( !file )
+                    Expecting( T_name );
+
                 NeedSYMBOLorNUMBER();
 
                 if( !IsSymbol( token ) )
@@ -383,6 +385,9 @@ void EMBEDDED_FILES_PARSER::ParseEmbedded( EMBEDDED_FILES* aFiles )
                 break;
 
             case T_data:
+                if( !file )
+                    Expecting( T_name);
+
                 try
                 {
                     NeedBAR();
@@ -419,7 +424,6 @@ void EMBEDDED_FILES_PARSER::ParseEmbedded( EMBEDDED_FILES* aFiles )
                 break;
 
             case T_name:
-
                 if( file )
                 {
                     wxLogTrace( wxT( "KICAD_EMBED" ),
@@ -435,30 +439,21 @@ void EMBEDDED_FILES_PARSER::ParseEmbedded( EMBEDDED_FILES* aFiles )
                 break;
 
             case T_type:
+                if( !file )
+                    Expecting( T_name );
 
                 token = NextTok();
 
                 switch( token )
                 {
-                case T_datasheet:
-                    file->type = EMBEDDED_FILES::EMBEDDED_FILE::FILE_TYPE::DATASHEET;
-                    break;
-                case T_font:
-                    file->type = EMBEDDED_FILES::EMBEDDED_FILE::FILE_TYPE::FONT;
-                    break;
-                case T_model:
-                    file->type = EMBEDDED_FILES::EMBEDDED_FILE::FILE_TYPE::MODEL;
-                    break;
-                case T_worksheet:
-                    file->type = EMBEDDED_FILES::EMBEDDED_FILE::FILE_TYPE::WORKSHEET;
-                    break;
-                case T_other:
-                    file->type = EMBEDDED_FILES::EMBEDDED_FILE::FILE_TYPE::OTHER;
-                    break;
-                default:
-                    Expecting( "datasheet, font, model, worksheet or other" );
-                    break;
+                case T_datasheet: file->type = EMBEDDED_FILES::EMBEDDED_FILE::FILE_TYPE::DATASHEET; break;
+                case T_font:      file->type = EMBEDDED_FILES::EMBEDDED_FILE::FILE_TYPE::FONT;      break;
+                case T_model:     file->type = EMBEDDED_FILES::EMBEDDED_FILE::FILE_TYPE::MODEL;     break;
+                case T_worksheet: file->type = EMBEDDED_FILES::EMBEDDED_FILE::FILE_TYPE::WORKSHEET; break;
+                case T_other:     file->type = EMBEDDED_FILES::EMBEDDED_FILE::FILE_TYPE::OTHER;     break;
+                default:          Expecting( "datasheet, font, model, worksheet or other" );        break;
                 }
+
                 NeedRIGHT();
                 break;
 

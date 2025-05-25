@@ -237,6 +237,8 @@ void SCH_COMMIT::pushSchEdit( const wxString& aMessage, int aCommitFlags )
         SCH_ITEM* schItem = dynamic_cast<SCH_ITEM*>( ent.m_item );
         int       changeType = ent.m_type & CHT_TYPE;
 
+        wxCHECK2( schItem, continue );
+
         if( changeType == CHT_REMOVE && schItem->GetParentGroup() )
             Modify( schItem->GetParentGroup()->AsEdaItem() );
     }

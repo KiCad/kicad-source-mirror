@@ -147,7 +147,7 @@ SCENEGRAPH* S3D_CACHE::load( const wxString& aModelFile, const wxString& aBasePa
     if( aCachePtr )
         *aCachePtr = nullptr;
 
-    wxString full3Dpath = m_FNResolver->ResolvePath( aModelFile, aBasePath, aEmbeddedFilesStack );
+    wxString full3Dpath = m_FNResolver->ResolvePath( aModelFile, aBasePath, std::move( aEmbeddedFilesStack ) );
 
     if( full3Dpath.empty() )
     {
@@ -215,7 +215,7 @@ SCENEGRAPH* S3D_CACHE::load( const wxString& aModelFile, const wxString& aBasePa
 SCENEGRAPH* S3D_CACHE::Load( const wxString& aModelFile, const wxString& aBasePath,
                              std::vector<const EMBEDDED_FILES*> aEmbeddedFilesStack )
 {
-    return load( aModelFile, aBasePath, nullptr, aEmbeddedFilesStack );
+    return load( aModelFile, aBasePath, nullptr, std::move( aEmbeddedFilesStack ) );
 }
 
 
@@ -552,7 +552,7 @@ S3DMODEL* S3D_CACHE::GetModel( const wxString& aModelFileName, const wxString& a
                                std::vector<const EMBEDDED_FILES*> aEmbeddedFilesStack )
 {
     S3D_CACHE_ENTRY* cp = nullptr;
-    SCENEGRAPH*      sp = load( aModelFileName, aBasePath, &cp, aEmbeddedFilesStack );
+    SCENEGRAPH*      sp = load( aModelFileName, aBasePath, &cp, std::move( aEmbeddedFilesStack ) );
 
     if( !sp )
         return nullptr;

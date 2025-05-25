@@ -67,7 +67,7 @@ NETLIST_EXPORTER_SPICE::NETLIST_EXPORTER_SPICE( SCHEMATIC* aSchematic ) :
 {
     std::vector<EMBEDDED_FILES*> embeddedFilesStack;
     embeddedFilesStack.push_back( aSchematic->GetEmbeddedFiles() );
-    m_libMgr.SetFilesStack( embeddedFilesStack );
+    m_libMgr.SetFilesStack( std::move( embeddedFilesStack ) );
 }
 
 

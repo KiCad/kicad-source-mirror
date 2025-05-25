@@ -973,7 +973,13 @@ int EESCHEMA_JOBS_HANDLER::JobSymExportSvg( JOB* aJob )
 
     if( !svgJob->m_outputDirectory.IsEmpty() && !wxDir::Exists( svgJob->m_outputDirectory ) )
     {
-        wxFileName::Mkdir( svgJob->m_outputDirectory );
+        if( !wxFileName::Mkdir( svgJob->m_outputDirectory ) )
+        {
+            m_reporter->Report( wxString::Format( _( "Unable to create output directory '%s'." ) + wxS( "\n" ),
+                                                  svgJob->m_outputDirectory ),
+                                RPT_SEVERITY_ERROR );
+            return CLI::EXIT_CODES::ERR_UNKNOWN;
+        }
     }
 
     SCH_RENDER_SETTINGS renderSettings;

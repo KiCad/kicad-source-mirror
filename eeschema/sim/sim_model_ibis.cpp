@@ -66,7 +66,7 @@ std::string SPICE_GENERATOR_IBIS::IbisDevice( const SPICE_ITEM& aItem, SCHEMATIC
 
     std::vector<EMBEDDED_FILES*> embeddedFilesStack;
     embeddedFilesStack.push_back( aSchematic->GetEmbeddedFiles() );
-    mgr.SetFilesStack( embeddedFilesStack );
+    mgr.SetFilesStack( std::move( embeddedFilesStack ) );
 
     wxString path = mgr.ResolveLibraryPath( ibisLibFilename, reporter );
 

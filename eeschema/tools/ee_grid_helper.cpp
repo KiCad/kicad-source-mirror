@@ -469,7 +469,7 @@ void EE_GRID_HELPER::computeAnchors( SCH_ITEM *aItem, const VECTOR2I &aRefPos, b
         if( aIncludeText )
         {
             addAnchor( aItem->GetPosition(), SNAPPABLE | CORNER, aItem );
-            addAnchor( dynamic_cast<SCH_SHAPE*>( aItem )->GetEnd(), SNAPPABLE | CORNER, aItem );
+            addAnchor( static_cast<SCH_SHAPE*>( aItem )->GetEnd(), SNAPPABLE | CORNER, aItem );
         }
 
         break;

@@ -388,7 +388,8 @@ private:
 
 JOBS_GRID_TRICKS::JOBS_GRID_TRICKS( PANEL_JOBSET* aParent, WX_GRID* aGrid ) :
         GRID_TRICKS( aGrid ),
-        m_parent( aParent )
+        m_parent( aParent ),
+        m_doubleClickRow( -1 )
 {
     m_enableSingleClickEdit = false;
     m_multiCellEditEnabled = false;
