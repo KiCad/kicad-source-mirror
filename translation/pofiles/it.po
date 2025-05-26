@@ -116,7 +116,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-05-21 05:22+0300\n"
-"PO-Revision-Date: 2025-04-28 11:59+0000\n"
+"PO-Revision-Date: 2025-05-26 23:01+0000\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/v9/it/>\n"
 "Language: it\n"
@@ -11852,9 +11852,8 @@ msgid "Update/reset visibility of pin names/numbers"
 msgstr "Aggiorna/reimposta visibilità numeri/nomi pin"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:172
-#, fuzzy
 msgid "Reset alternate pin to default"
-msgstr "Reimposta i parametri dell'assistente ai valori predefiniti"
+msgstr "Reimposta pin alternativo al predefinito"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:178
 msgid "Update/reset symbol attributes"
@@ -19625,6 +19624,8 @@ msgid ""
 "Unable to find LTspice symbols.\n"
 "Install LTspice or put its library files into %s"
 msgstr ""
+"Impossibile trovare i simboli LTspice.\n"
+"Installa LTspice o inserisci i file della libreria in %s"
 
 #: eeschema/sch_io/ltspice/sch_io_ltspice.h:49
 msgid "LTspice schematic files"
@@ -25460,7 +25461,7 @@ msgstr "%s (D%d) su strato %d: %s"
 
 #: gerbview/gerber_file_image.cpp:125
 msgid "Too many messages, some are skipped"
-msgstr ""
+msgstr "Troppi messaggi, alcuni vengono saltati"
 
 #: gerbview/gerber_file_image.cpp:359
 msgid "Image name"
@@ -41718,6 +41719,8 @@ msgid ""
 "Could not add 3D model for %s.\n"
 "File not found: %s\n"
 msgstr ""
+"Impossibile aggiungere il modello 3D per %s.\n"
+"File non trovato: %s\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:403
 #, fuzzy, c-format
@@ -41787,12 +41790,12 @@ msgstr "** ShapeUpgrade_UnifySameDomain ha prodotto una forma nulla **\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:898
 msgid "OCC error adding pad/via polygon.\n"
-msgstr ""
+msgstr "Errore OCC durante l'aggiunta del poligono piazzola/via.\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1143
 #, c-format
 msgid "Could not add shape (%d points) to copper layer %s.\n"
-msgstr ""
+msgstr "Impossibile aggiungere la forma (%d punti) allo strato di rame %s.\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1161
 #, fuzzy, c-format
@@ -41817,12 +41820,12 @@ msgstr "Impossibile trovare il componente IBIS '%s'"
 #: pcbnew/exporters/step/step_pcb_model.cpp:1367
 #, c-format
 msgid "OCC exception building shape segment: %s\n"
-msgstr ""
+msgstr "Eccezione OCC creando un segmento di una forma: %s\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1382
 #, c-format
 msgid "OCC exception building face: %s\n"
-msgstr ""
+msgstr "Eccezione OCC creando una faccia: %s\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1394
 #: pcbnew/exporters/step/step_pcb_model.cpp:1763
@@ -41832,12 +41835,12 @@ msgstr "Fallita creazione forma prismatica\n"
 #: pcbnew/exporters/step/step_pcb_model.cpp:1446
 #, c-format
 msgid "Failed to make segment edge (%d %d) -> (%d %d), skipping\n"
-msgstr ""
+msgstr "Impossibile creare il bordo del segmento (%d %d) -> (%d %d), saltato\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1458
 #, c-format
 msgid "Failed to add segment edge (%d %d) -> (%d %d)\n"
-msgstr ""
+msgstr "Impossibile aggiungere il bordo del segmento (%d %d) -> (%d %d)\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1494
 #, c-format
@@ -41845,16 +41848,18 @@ msgid ""
 "Failed to add arc curve from (%d %d), arc p0 (%d %d), mid (%d %d), p1 (%d "
 "%d)\n"
 msgstr ""
+"Impossibile aggiungere la curva dell'arco da (%d %d), arc p0 (%d %d), mid ("
+"%d %d), p1 (%d %d)\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1570
 #, c-format
 msgid "Failed to close wire at %d, %d -> %d, %d **\n"
-msgstr ""
+msgstr "Impossibile chiudere il collegamento in %d, %d -> %d, %d **\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1580
 #, c-format
 msgid "OCC exception creating wire: %s\n"
-msgstr ""
+msgstr "Eccezione OCC durante la creazione del collegamento: %s\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1661
 #, fuzzy, c-format
@@ -41879,7 +41884,7 @@ msgstr "Utilizzo di poligoni non semplificati.\n"
 #: pcbnew/exporters/step/step_pcb_model.cpp:1744
 #, c-format
 msgid "OCC exception creating contour %d: %s\n"
-msgstr ""
+msgstr "Eccezione OCC durante la creazione del bordo %d: %s\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1774
 msgid "** Face skipped **\n"
@@ -41893,7 +41898,7 @@ msgstr "Errore nel leggere il file."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1890
 msgid "OCC error creating hole in main outline.\n"
-msgstr ""
+msgstr "Errore OCC che creando un foro nel bordo principale.\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1932
 #, c-format
@@ -41932,10 +41937,13 @@ msgstr "Impossibile creare la cartella risultati '%s'."
 #: pcbnew/exporters/step/step_pcb_model.cpp:2322
 msgid "Failed to set STEP product name, but will attempt to continue."
 msgstr ""
+"Impossibile impostare il nome del prodotto STEP, ma si tenterà di continuare."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2330
 msgid "Failed to set surface curve mode, but will attempt to continue."
 msgstr ""
+"Impossibile impostare la modalità curva di superficie, ma si tenterà di "
+"continuare."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2371
 #: pcbnew/exporters/step/step_pcb_model.cpp:3153
