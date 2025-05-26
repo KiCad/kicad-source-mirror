@@ -130,7 +130,9 @@ protected:
 class POLYGON_POINT_EDIT_BEHAVIOR : public POINT_EDIT_BEHAVIOR
 {
 public:
-    POLYGON_POINT_EDIT_BEHAVIOR( SHAPE_POLY_SET& aPolygon ) : m_polygon( aPolygon ) {}
+    POLYGON_POINT_EDIT_BEHAVIOR( SHAPE_POLY_SET& aPolygon ) :
+            m_polygon( aPolygon )
+    {}
 
     /**
      * Build the edit points for the given polygon outline.
@@ -201,7 +203,8 @@ public:
 class EDA_SEGMENT_POINT_EDIT_BEHAVIOR : public POINT_EDIT_BEHAVIOR
 {
 public:
-    EDA_SEGMENT_POINT_EDIT_BEHAVIOR( EDA_SHAPE& aSegment ) : m_segment( aSegment )
+    EDA_SEGMENT_POINT_EDIT_BEHAVIOR( EDA_SHAPE& aSegment ) :
+            m_segment( aSegment )
     {
         wxASSERT( aSegment.GetShape() == SHAPE_T::SEGMENT );
     }
@@ -236,7 +239,8 @@ private:
 class EDA_CIRCLE_POINT_EDIT_BEHAVIOR : public POINT_EDIT_BEHAVIOR
 {
 public:
-    EDA_CIRCLE_POINT_EDIT_BEHAVIOR( EDA_SHAPE& aCircle ) : m_circle( aCircle )
+    EDA_CIRCLE_POINT_EDIT_BEHAVIOR( EDA_SHAPE& aCircle ) :
+            m_circle( aCircle )
     {
         wxASSERT( aCircle.GetShape() == SHAPE_T::CIRCLE );
     }
@@ -271,7 +275,9 @@ private:
 class EDA_BEZIER_POINT_EDIT_BEHAVIOR : public POINT_EDIT_BEHAVIOR
 {
 public:
-    EDA_BEZIER_POINT_EDIT_BEHAVIOR( EDA_SHAPE& aBezier ) : m_bezier( aBezier )
+    EDA_BEZIER_POINT_EDIT_BEHAVIOR( EDA_SHAPE& aBezier, int aMaxError ) :
+            m_bezier( aBezier ),
+            m_maxError( aMaxError )
     {
         wxASSERT( aBezier.GetShape() == SHAPE_T::BEZIER );
     }
@@ -296,6 +302,7 @@ protected:
 
 private:
     EDA_SHAPE& m_bezier;
+    int        m_maxError;
 };
 
 

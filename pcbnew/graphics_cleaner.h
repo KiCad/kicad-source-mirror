@@ -61,12 +61,13 @@ private:
 
 private:
     const DRAWINGS& m_drawings;
-    FOOTPRINT*    m_parentFootprint;  // nullptr if not in Footprint Editor
-    BOARD_COMMIT& m_commit;
-    TOOL_MANAGER* m_toolMgr;
-    bool          m_dryRun;
-    int           m_epsilon;
-    int           m_outlinesTolerance;
+    FOOTPRINT*      m_parentFootprint;  // nullptr if not in Footprint Editor
+    BOARD_COMMIT&   m_commit;
+    TOOL_MANAGER*   m_toolMgr;
+    bool            m_dryRun;
+    int             m_epsilon;
+    int             m_maxError;
+    int             m_outlinesTolerance;
 
     std::vector<std::shared_ptr<CLEANUP_ITEM>>* m_itemsList;
 };

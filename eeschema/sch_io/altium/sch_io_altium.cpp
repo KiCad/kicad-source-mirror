@@ -2276,7 +2276,7 @@ void SCH_IO_ALTIUM::ParseBezier( const std::map<wxString, wxString>& aProperties
                 }
 
                 bezier->SetStroke( STROKE_PARAMS( elem.LineWidth, LINE_STYLE::SOLID ) );
-                bezier->RebuildBezierToSegmentsPointsList( bezier->GetWidth() / 2 );
+                bezier->RebuildBezierToSegmentsPointsList( schIUScale.mmToIU( ARC_LOW_DEF_MM ) );
             }
         }
     }
@@ -2680,7 +2680,7 @@ void SCH_IO_ALTIUM::ParseEllipticalArc( const std::map<wxString, wxString>& aPro
             schbezier->SetBezierC2( bezier.C2 );
             schbezier->SetEnd( bezier.End );
             schbezier->SetStroke( STROKE_PARAMS( elem.LineWidth, LINE_STYLE::SOLID ) );
-            schbezier->RebuildBezierToSegmentsPointsList( elem.LineWidth / 2 );
+            schbezier->RebuildBezierToSegmentsPointsList( schIUScale.mmToIU( ARC_LOW_DEF_MM ) );
 
             currentScreen->Append( schbezier );
         }
@@ -2743,7 +2743,7 @@ void SCH_IO_ALTIUM::ParseEllipticalArc( const std::map<wxString, wxString>& aPro
             }
 
             SetLibShapeLine( elem, schbezier, ALTIUM_SCH_RECORD::ELLIPTICAL_ARC );
-            schbezier->RebuildBezierToSegmentsPointsList( elem.LineWidth / 2 );
+            schbezier->RebuildBezierToSegmentsPointsList( schIUScale.mmToIU( ARC_LOW_DEF_MM ) );
         }
     }
 }
@@ -2877,7 +2877,7 @@ void SCH_IO_ALTIUM::ParseEllipse( const std::map<wxString, wxString>& aPropertie
             schbezier->SetFillColor( fillColor );
             schbezier->SetFillMode( fillMode );
 
-            schbezier->RebuildBezierToSegmentsPointsList( schbezier->GetWidth() / 2 );
+            schbezier->RebuildBezierToSegmentsPointsList( schIUScale.mmToIU( ARC_LOW_DEF_MM ) );
             screen->Append( schbezier );
 
             polyPoints.push_back( bezier.Start );
@@ -2953,7 +2953,7 @@ void SCH_IO_ALTIUM::ParseEllipse( const std::map<wxString, wxString>& aPropertie
 
             SetLibShapeLine( elem, libbezier, ALTIUM_SCH_RECORD::ELLIPSE );
             SetLibShapeFillAndColor( elem, libbezier, ALTIUM_SCH_RECORD::ELLIPSE, elem.Color );
-            libbezier->RebuildBezierToSegmentsPointsList( libbezier->GetWidth() / 2 );
+            libbezier->RebuildBezierToSegmentsPointsList( schIUScale.mmToIU( ARC_LOW_DEF_MM ) );
 
             polyPoints.push_back( libbezier->GetStart() );
         }

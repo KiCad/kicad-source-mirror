@@ -43,7 +43,8 @@ GRAPHICS_CLEANER::GRAPHICS_CLEANER( const DRAWINGS& aDrawings, FOOTPRINT* aParen
         m_commit( aCommit ),
         m_toolMgr( aToolMgr ),
         m_dryRun( true ),
-        m_epsilon( 0 ),
+        m_epsilon( 1 ),
+        m_maxError( ARC_HIGH_DEF ),
         m_outlinesTolerance( 0 ),
         m_itemsList( nullptr )
 {
@@ -59,7 +60,8 @@ void GRAPHICS_CLEANER::CleanupBoard( bool                                       
     m_itemsList = aItemsList;
     m_outlinesTolerance = aTolerance;
 
-    m_epsilon = m_commit.GetBoard()->GetDesignSettings().m_MaxError;
+    m_epsilon = m_commit.GetBoard()->GetDesignSettings().GetDRCEpsilon();
+    m_maxError = m_commit.GetBoard()->GetDesignSettings().m_MaxError;
 
     // Clear the flag used to mark some shapes as deleted, in dry run:
     for( BOARD_ITEM* drawing : m_drawings )
@@ -105,7 +107,7 @@ bool GRAPHICS_CLEANER::isNullShape( PCB_SHAPE* aShape )
         return aShape->GetPointCount() == 0;
 
     case SHAPE_T::BEZIER:
-        aShape->RebuildBezierToSegmentsPointsList( ARC_HIGH_DEF );
+        aShape->RebuildBezierToSegmentsPointsList( m_maxError );
 
         // If the Bezier points list contains 2 points, it is equivalent to a segment
         if( aShape->GetBezierPoints().size() == 2 )

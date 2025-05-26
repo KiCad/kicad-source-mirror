@@ -229,7 +229,7 @@ void EDA_BEZIER_POINT_EDIT_BEHAVIOR::UpdateItem( const EDIT_POINT& aEditedPoint,
         m_bezier.SetEnd( aPoints.Point( BEZIER_END ).GetPosition() );
     }
 
-    m_bezier.RebuildBezierToSegmentsPointsList( ARC_HIGH_DEF );
+    m_bezier.RebuildBezierToSegmentsPointsList( m_maxError );
 }
 
 

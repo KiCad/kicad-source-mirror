@@ -305,7 +305,7 @@ bool EDA_SHAPE::Deserialize( const google::protobuf::Any &aContainer )
         SetBezierC1( UnpackVector2( shape.bezier().control1() ) );
         SetBezierC2( UnpackVector2( shape.bezier().control2() ) );
         SetEnd( UnpackVector2( shape.bezier().end() ) );
-        RebuildBezierToSegmentsPointsList( ARC_HIGH_DEF );
+        RebuildBezierToSegmentsPointsList( getMaxError() );
     }
 
     return true;
@@ -353,15 +353,6 @@ wxString EDA_SHAPE::SHAPE_T_asString() const
     }
 
     return wxEmptyString;  // Just to quiet GCC.
-}
-
-
-int EDA_SHAPE::GetArcToSegMaxErrorIU( bool aHighDefinition ) const
-{
-    // Returning ARC_HIGH_DEF or ARC_LOW_DEF is suitable only for
-    // Pcbnew calculations
-    // For other cases a GetArcToSegMaxErrorIU() must be probably override this one
-    return aHighDefinition ? ARC_HIGH_DEF : ARC_LOW_DEF;
 }
 
 
@@ -620,8 +611,7 @@ void EDA_SHAPE::UpdateHatching() const
         break;
 
     case SHAPE_T::CIRCLE:
-        TransformCircleToPolygon( shapeBuffer, getCenter(), GetRadius(),
-                                  GetArcToSegMaxErrorIU(), ERROR_INSIDE );
+        TransformCircleToPolygon( shapeBuffer, getCenter(), GetRadius(), getMaxError(), ERROR_INSIDE );
         break;
 
     case SHAPE_T::POLY:
@@ -789,7 +779,7 @@ void EDA_SHAPE::scale( double aScale )
         scalePt( m_end );
         scalePt( m_bezierC1 );
         scalePt( m_bezierC2 );
-        RebuildBezierToSegmentsPointsList( m_stroke.GetWidth() / 2 );
+        RebuildBezierToSegmentsPointsList( getMaxError() );
         break;
 
     default:
@@ -897,7 +887,7 @@ void EDA_SHAPE::flip( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection )
         MIRROR( m_bezierC1, aCentre, aFlipDirection );
         MIRROR( m_bezierC2, aCentre, aFlipDirection );
 
-        RebuildBezierToSegmentsPointsList( m_stroke.GetWidth() / 2 );
+        RebuildBezierToSegmentsPointsList( getMaxError() );
         break;
 
     default:
@@ -1934,7 +1924,7 @@ void EDA_SHAPE::beginEdit( const VECTOR2I& aPosition )
         SetBezierC2( aPosition );
         m_editState = 1;
 
-        RebuildBezierToSegmentsPointsList( GetWidth() / 2 );
+        RebuildBezierToSegmentsPointsList( getMaxError() );
         break;
 
     case SHAPE_T::POLY:
@@ -2016,7 +2006,7 @@ void EDA_SHAPE::calcEdit( const VECTOR2I& aPosition )
         case 3: SetBezierC2( aPosition ); break;
         }
 
-        RebuildBezierToSegmentsPointsList( GetWidth() / 2 );
+        RebuildBezierToSegmentsPointsList( getMaxError() );
     }
     break;
 

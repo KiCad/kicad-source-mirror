@@ -398,7 +398,7 @@ bool doConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aShapeList, SHAPE_POLY_
                     }
 
                     // Ensure the approximated Bezier shape is built
-                    graphic->RebuildBezierToSegmentsPointsList( ARC_HIGH_DEF );
+                    graphic->RebuildBezierToSegmentsPointsList( aErrorMax );
 
                     if( reverse )
                     {

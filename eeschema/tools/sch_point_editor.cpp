@@ -862,8 +862,15 @@ void SCH_POINT_EDITOR::makePointsAndBehavior( EDA_ITEM* aItem )
             m_editBehavior = std::make_unique<EDA_POLYGON_POINT_EDIT_BEHAVIOR>( *shape );
             break;
         case SHAPE_T::BEZIER:
-            m_editBehavior = std::make_unique<EDA_BEZIER_POINT_EDIT_BEHAVIOR>( *shape );
+        {
+            int maxError = schIUScale.mmToIU( ARC_LOW_DEF_MM );
+
+            if( SCHEMATIC* schematic = shape->Schematic() )
+                maxError = schematic->Settings().m_MaxError;
+
+            m_editBehavior = std::make_unique<EDA_BEZIER_POINT_EDIT_BEHAVIOR>( *shape, maxError );
             break;
+        }
         default:
             UNIMPLEMENTED_FOR( shape->SHAPE_T_asString() );
         }

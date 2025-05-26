@@ -312,7 +312,7 @@ bool DRC_TEST_PROVIDER_PHYSICAL_CLEARANCE::Run()
                             {
                                 SHAPE_LINE_CHAIN asPoly;
 
-                                shape->RebuildBezierToSegmentsPointsList( ARC_HIGH_DEF );
+                                shape->RebuildBezierToSegmentsPointsList( errorMax );
 
                                 for( const VECTOR2I& pt : shape->GetBezierPoints() )
                                     asPoly.Append( pt );

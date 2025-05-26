@@ -27,6 +27,7 @@
 
 #include <sch_item.h>
 #include <eda_shape.h>
+#include <schematic.h>
 
 
 class SCH_SHAPE : public SCH_ITEM, public EDA_SHAPE
@@ -75,14 +76,6 @@ public:
     {
         return GetHatchLineWidth() * 40;
     }
-
-    /**
-     * @return a suitable value for error approximation when converting arc/circle to segments
-     * this value is in internal units
-     * @param aHightDef = true for high definition
-     * high def = similar to ARC_HIGH_DEF but in Eeschema IU, low def = similar to ARC_LOW_DEF
-     */
-    int GetArcToSegMaxErrorIU( bool aHighDefinition = true ) const override;
 
     void SetFilled( bool aFilled ) override;
 
@@ -153,7 +146,10 @@ protected:
 
     int getMaxError() const override
     {
-        return schIUScale.mmToIU( ARC_HIGH_DEF_MM );
+        if( SCHEMATIC* schematic = Schematic() )
+            return schematic->Settings().m_MaxError;
+        else
+            return schIUScale.mmToIU( ARC_LOW_DEF_MM );
     }
 
     /**

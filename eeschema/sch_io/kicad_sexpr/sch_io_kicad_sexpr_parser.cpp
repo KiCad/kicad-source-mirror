@@ -86,7 +86,8 @@ SCH_IO_KICAD_SEXPR_PARSER::SCH_IO_KICAD_SEXPR_PARSER( LINE_READER* aLineReader,
         m_lineReader( aLineReader ),
         m_lastProgressLine( 0 ),
         m_lineCount( aLineCount ),
-        m_rootSheet( aRootSheet )
+        m_rootSheet( aRootSheet ),
+        m_maxError( ARC_LOW_DEF_MM * schIUScale.IU_PER_MM )
 {
 }
 
@@ -1458,7 +1459,7 @@ SCH_SHAPE* SCH_IO_KICAD_SEXPR_PARSER::parseSymbolBezier()
         }
     }
 
-    bezier->RebuildBezierToSegmentsPointsList( bezier->GetPenWidth() / 2 );
+    bezier->RebuildBezierToSegmentsPointsList( m_maxError );
 
     return bezier.release();
 }
@@ -2652,6 +2653,9 @@ void SCH_IO_KICAD_SEXPR_PARSER::ParseSchematic( SCH_SHEET* aSheet, bool aIsCopya
     SCH_SCREEN* screen = aSheet->GetScreen();
 
     wxCHECK( screen != nullptr, /* void */ );
+
+    if( SCHEMATIC* schematic = dynamic_cast<SCHEMATIC*>( screen->GetParent() ) )
+        m_maxError = schematic->Settings().m_MaxError;
 
     if( aIsCopyableOnly )
         m_requiredVersion = aFileVersion;
@@ -4293,7 +4297,7 @@ SCH_SHAPE* SCH_IO_KICAD_SEXPR_PARSER::parseSchBezier()
         }
     }
 
-    bezier->RebuildBezierToSegmentsPointsList( bezier->GetPenWidth() / 2 );
+    bezier->RebuildBezierToSegmentsPointsList( m_maxError );
 
     return bezier.release();
 }

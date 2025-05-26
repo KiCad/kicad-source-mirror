@@ -81,7 +81,9 @@ struct EDA_IU_SCALE
 
 
     constexpr EDA_IU_SCALE( double aIUPerMM ) :
-            IU_PER_MM( aIUPerMM ), IU_PER_MILS( aIUPerMM * 0.0254 ), MM_PER_IU( 1 / IU_PER_MM )
+            IU_PER_MM( aIUPerMM ),
+            IU_PER_MILS( aIUPerMM * 0.0254 ),
+            MM_PER_IU( 1 / IU_PER_MM )
     {
     }
 

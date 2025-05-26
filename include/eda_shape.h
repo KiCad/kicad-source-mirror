@@ -381,14 +381,6 @@ public:
         return makeEffectiveShapes( aEdgeOnly );
     }
 
-    /**
-     * @return a suitable value for error approximation when converting arc/circle to segments
-     * this value is in internal units
-     * @param aHightDef = true for high definition
-     * for boards, high def = ARC_HIGH_DEF, low def = ARC_LOW_DEF
-     */
-    virtual int GetArcToSegMaxErrorIU( bool aHighDefinition = true ) const;
-
     void ShapeGetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList );
 
     void SetLength( const double& aLength );
