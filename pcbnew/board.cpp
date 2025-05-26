@@ -891,7 +891,7 @@ void BOARD::SetVisibleAlls()
 
 GAL_SET BOARD::GetVisibleElements() const
 {
-    return m_project ? m_project->GetLocalSettings().m_VisibleItems : GAL_SET().set();
+    return m_project ? m_project->GetLocalSettings().m_VisibleItems : GAL_SET::DefaultVisible();
 }
 
 
