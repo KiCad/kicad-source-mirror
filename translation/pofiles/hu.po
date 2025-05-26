@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-05-21 05:16+0300\n"
-"PO-Revision-Date: 2025-05-25 22:01+0000\n"
+"PO-Revision-Date: 2025-05-26 23:01+0000\n"
 "Last-Translator: Sárkány Lőrinc <lsarkany@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/kicad/"
 "master-source/hu/>\n"
@@ -2321,7 +2321,7 @@ msgstr "Vezető fejlesztői csapat"
 
 #: common/dialog_about/AboutDialog_main.cpp:200
 msgid "Lead Development Alumni"
-msgstr ""
+msgstr "Korábbi vezető fejlesztők"
 
 #: common/dialog_about/AboutDialog_main.cpp:201
 msgid "Additional Contributions By"
@@ -3166,6 +3166,8 @@ msgid ""
 "Do not show this dialog again until KiCad restarts. You can re-enable this "
 "dialog in Pcbnew preferences."
 msgstr ""
+"Ne mutassa ezt az üzenetet a KiCad újraindításáig. Az üzenetet újra "
+"bekapcsolhatja a Pcbnew beállításainál."
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:30
 #, c-format
@@ -26080,14 +26082,12 @@ msgid "Edit the current analysis tab's SPICE command and plot setup"
 msgstr ""
 
 #: eeschema/tools/sch_actions.cpp:1611
-#, fuzzy
 msgid "Run Simulation"
-msgstr "Szimulátor futtatása"
+msgstr "Szimuláció futtatása"
 
 #: eeschema/tools/sch_actions.cpp:1617
-#, fuzzy
 msgid "Stop Simulation"
-msgstr "Szimulátor futtatása/leállítása"
+msgstr "Szimuláció leállítása"
 
 #: eeschema/tools/sch_actions.cpp:1624
 #, fuzzy
@@ -26119,13 +26119,12 @@ msgid "Add, edit or delete user-defined simulation signals"
 msgstr ""
 
 #: eeschema/tools/sch_actions.cpp:1646
-#, fuzzy
 msgid "Show SPICE Netlist"
 msgstr "SPICE netlista megjelenítése"
 
 #: eeschema/tools/sch_drawing_tools.cpp:321
 msgid "Press <ESC> to cancel symbol creation."
-msgstr ""
+msgstr "Nyomja meg az <ESC>-t a rajzjel létrehozásának megszakításához."
 
 #: eeschema/tools/sch_drawing_tools.cpp:462
 #, fuzzy
@@ -26163,7 +26162,7 @@ msgstr "Új kapcsolási rajz"
 
 #: eeschema/tools/sch_drawing_tools.cpp:1072 pcbnew/tools/drawing_tool.cpp:728
 msgid "Press <ESC> to cancel image creation."
-msgstr ""
+msgstr "Nyomja meg az <ESC>-t a kép létrehozásának megszakításához."
 
 #: eeschema/tools/sch_drawing_tools.cpp:1123
 #: pagelayout_editor/pl_editor_frame.cpp:872
@@ -26173,24 +26172,21 @@ msgid "Could not load image from '%s'."
 msgstr "Nem sikerült betölteni a(z) \"%s\" képet"
 
 #: eeschema/tools/sch_drawing_tools.cpp:1146 pcbnew/tools/drawing_tool.cpp:801
-#, fuzzy
 msgid "Place Image"
-msgstr "Modul hozzáadása"
+msgstr "Kép elhelyezése"
 
 #: eeschema/tools/sch_drawing_tools.cpp:1237
 #: eeschema/tools/symbol_editor_drawing_tools.cpp:691
 #: pcbnew/tools/drawing_tool.cpp:1830
-#, fuzzy
 msgid "No graphic items found in file."
-msgstr "Nem található grafikai elem az importált fájlban"
+msgstr "Nem található grafikai elem a fájlban."
 
 #: eeschema/tools/sch_drawing_tools.cpp:1267
 #: eeschema/tools/sch_drawing_tools.cpp:1349
 #: eeschema/tools/symbol_editor_drawing_tools.cpp:726
 #: eeschema/tools/symbol_editor_drawing_tools.cpp:815
-#, fuzzy
 msgid "Import Graphic"
-msgstr "Grafika Importálás..."
+msgstr "Grafika importálása"
 
 #: eeschema/tools/sch_drawing_tools.cpp:1406
 #, fuzzy
@@ -26198,7 +26194,6 @@ msgid "Add No Connect Flag"
 msgstr "\"Nem csatlakoztatott\" jelölés hozzáadása"
 
 #: eeschema/tools/sch_drawing_tools.cpp:1413
-#, fuzzy
 msgid "Add Junction"
 msgstr "Csomópont hozzáadása"
 
@@ -26215,22 +26210,19 @@ msgstr "A csomópont nem tartalmaz összeköthető vezetékeket és/vagy lábaka
 #: eeschema/tools/sch_drawing_tools.cpp:1979
 #: eeschema/tools/symbol_editor_drawing_tools.cpp:185
 msgid "Press <ESC> to cancel item creation."
-msgstr ""
+msgstr "Nyomja meg az <ESC>-et az elem létrehozásának megszakításához."
 
 #: eeschema/tools/sch_drawing_tools.cpp:2010
-#, fuzzy
 msgid "Add Text"
-msgstr "Szöveg hozzáadás"
+msgstr "Szöveg hozzáadása"
 
 #: eeschema/tools/sch_drawing_tools.cpp:2037
-#, fuzzy
 msgid "Add Hierarchical Label"
 msgstr "Hierarchikus címke hozzáadása"
 
 #: eeschema/tools/sch_drawing_tools.cpp:2042
 #: eeschema/tools/sch_drawing_tools.cpp:2047
 #: eeschema/tools/sch_drawing_tools.cpp:2052
-#, fuzzy
 msgid "Add Label"
 msgstr "Címke hozzáadása"
 
@@ -26253,25 +26245,23 @@ msgstr "Lap kivezető láb hozzáadása"
 
 #: eeschema/tools/sch_drawing_tools.cpp:2416
 #: eeschema/tools/symbol_editor_drawing_tools.cpp:490
-#, fuzzy
 msgid "Add Text Box"
-msgstr "Szöveg Doboz Hozzáadás"
+msgstr "Szöveg Doboz hozzáadása"
 
 #: eeschema/tools/sch_drawing_tools.cpp:2425
 #: eeschema/tools/symbol_editor_drawing_tools.cpp:496
-#, fuzzy, c-format
+#, c-format
 msgid "Add %s"
-msgstr "Busz hozzáadása"
+msgstr "%s hozzáadása"
 
 #: eeschema/tools/sch_drawing_tools.cpp:2480
-#, fuzzy, c-format
+#, c-format
 msgid "Draw %s"
-msgstr "Rajzok"
+msgstr "%s rajzolása"
 
 #: eeschema/tools/sch_drawing_tools.cpp:2856 pcbnew/tools/drawing_tool.cpp:1255
-#, fuzzy
 msgid "Draw Table"
-msgstr "Vonal rajzolása"
+msgstr "Táblázat rajzolása"
 
 #: eeschema/tools/sch_drawing_tools.cpp:3055
 msgid "Press <ESC> to cancel sheet creation."
@@ -26325,19 +26315,17 @@ msgstr "Főmező szerkesztése"
 #: eeschema/tools/sch_edit_tool.cpp:630 eeschema/tools/sch_edit_tool.cpp:2822
 #, fuzzy
 msgid "Change To"
-msgstr "Csere:"
+msgstr "Csere erre:"
 
 #: eeschema/tools/sch_edit_tool.cpp:1068
 #: eeschema/tools/symbol_editor_edit_tool.cpp:210
 #: pcbnew/tools/edit_tool.cpp:2133
-#, fuzzy
 msgid "Rotate"
 msgstr "Forgatás"
 
 #: eeschema/tools/sch_edit_tool.cpp:1266 gerbview/gerber_draw_item.cpp:731
 #: pcbnew/pcb_tablecell.cpp:112 pcbnew/pcb_text.cpp:288
 #: pcbnew/pcb_textbox.cpp:473 pcbnew/tools/edit_tool.cpp:2301
-#, fuzzy
 msgid "Mirror"
 msgstr "Tükrözés"
 
@@ -26353,15 +26341,15 @@ msgstr "Elemek törlése"
 
 #: eeschema/tools/sch_edit_tool.cpp:1855
 #: eeschema/tools/symbol_editor_edit_tool.cpp:692
-#, fuzzy, c-format
+#, c-format
 msgid "Edit %s Field"
 msgstr "%s mező szerkesztése"
 
 #: eeschema/tools/sch_edit_tool.cpp:1859
 #: eeschema/tools/symbol_editor_edit_tool.cpp:694
-#, fuzzy, c-format
+#, c-format
 msgid "Edit '%s' Field"
-msgstr "%s mező szerkesztése"
+msgstr "\"%s\" mező szerkesztése"
 
 #: eeschema/tools/sch_edit_tool.cpp:2229
 #, fuzzy
@@ -26375,7 +26363,6 @@ msgid "Rule Area Properties"
 msgstr "Kizárt terület tulajdonságok"
 
 #: eeschema/tools/sch_edit_tool.cpp:2504 eeschema/tools/sch_edit_tool.cpp:2595
-#, fuzzy
 msgid "<empty>"
 msgstr "<üres>"
 
@@ -26420,9 +26407,9 @@ msgid "Include power symbols in schematic to the library?"
 msgstr "Alkatrészrajzolatok frissítése a könyvtárból"
 
 #: eeschema/tools/sch_editor_control.cpp:421
-#, fuzzy, c-format
+#, c-format
 msgid "Could not add library '%s'."
-msgstr "A(z) \"%s\" könyvtár fájl nem található"
+msgstr "Nem sikerült hozzáadni a könyvtárat: %s."
 
 #: eeschema/tools/sch_editor_control.cpp:434
 #, fuzzy
@@ -26484,7 +26471,7 @@ msgstr "%d azonos időbélyeget talált majd cserélt le."
 #: pcbnew/tools/footprint_editor_control.cpp:903
 #, c-format
 msgid "%d potential problems repaired."
-msgstr ""
+msgstr "%d lehetséges probléma kijavítva."
 
 #: eeschema/tools/sch_editor_control.cpp:2940
 #: pcbnew/drc/drc_rule_parser.cpp:180 pcbnew/drc/drc_rule_parser.cpp:255
@@ -26553,14 +26540,14 @@ msgid "Select a symbol to diff against its library equivalent."
 msgstr "Alkatrészrajzolatok ellenőrzése"
 
 #: eeschema/tools/sch_inspection_tool.cpp:379
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol %s"
-msgstr "Rajzjelek"
+msgstr "Rajzjel %s"
 
 #: eeschema/tools/sch_inspection_tool.cpp:385
 #: pcbnew/tools/board_inspection_tool.cpp:1593
 msgid "Summary"
-msgstr ""
+msgstr "Összegzés"
 
 #: eeschema/tools/sch_inspection_tool.cpp:387
 #, fuzzy
@@ -26644,7 +26631,7 @@ msgstr "A busznak nincsenek tagjai"
 
 #: eeschema/tools/sch_line_wire_bus_tool.cpp:758
 msgid "Press <ESC> to cancel drawing."
-msgstr ""
+msgstr "Nyomja meg az <ESC>-et a rajzolás megszakításához."
 
 #: eeschema/tools/sch_move_tool.cpp:839
 msgid "Press <ESC> to cancel drag."
@@ -26743,17 +26730,15 @@ msgstr "Ne exportálja"
 
 #: eeschema/tools/symbol_editor_control.cpp:711
 #: pcbnew/footprint_edit_frame.cpp:1514
-#, fuzzy
 msgid "Export View as PNG"
-msgstr "Aktuális nézet exportálása PNG fájlba..."
+msgstr "Aktuális nézet exportálása PNG fájlba"
 
 #: eeschema/tools/symbol_editor_control.cpp:722
-#, fuzzy, c-format
+#, c-format
 msgid "Can't save file '%s'."
-msgstr "A(z) \"%s\" fájl nem menthető"
+msgstr "A(z) \"%s\" fájl nem menthető."
 
 #: eeschema/tools/symbol_editor_control.cpp:758
-#, fuzzy
 msgid "SVG File Name"
 msgstr "SVG Fájlnév"
 
