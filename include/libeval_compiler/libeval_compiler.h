@@ -285,6 +285,8 @@ public:
 
     EDA_UNITS GetUnits() const { return m_units; }
 
+    bool StringIsWildcard() const { return m_stringIsWildcard; }
+
 private:
     VAR_TYPE_T                m_type;
     mutable double            m_valueDbl;               // mutable to support deferred evaluation
