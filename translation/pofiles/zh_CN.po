@@ -41,7 +41,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-05-21 05:22+0300\n"
-"PO-Revision-Date: 2025-05-18 19:02+0000\n"
+"PO-Revision-Date: 2025-05-26 23:01+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/kicad/v9/zh_Hans/>\n"
@@ -13918,9 +13918,8 @@ msgid "Whole &words only"
 msgstr "全字匹配 (&W)"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:90
-#, fuzzy
 msgid "Regular Expression"
-msgstr "格式错误的表达式"
+msgstr "正则表达式"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:93
 msgid "Search pin &names and numbers"
@@ -22889,24 +22888,20 @@ msgid ""
 msgstr "将旧原理图中的库符号引用重新映射到符号库表"
 
 #: eeschema/tools/sch_actions.cpp:1076
-#, fuzzy
 msgid "Next Net Item"
-msgstr "文本项目"
+msgstr "下一网络项"
 
 #: eeschema/tools/sch_actions.cpp:1077
-#, fuzzy
 msgid "Select next item on the current net"
-msgstr "选择光标下的连接项"
+msgstr "选择下一网络项"
 
 #: eeschema/tools/sch_actions.cpp:1083
-#, fuzzy
 msgid "Previous Net Item"
-msgstr "上一图纸"
+msgstr "上一网络项"
 
 #: eeschema/tools/sch_actions.cpp:1084
-#, fuzzy
 msgid "Select previous item on the current net"
-msgstr "选择光标下的连接项"
+msgstr "选择上一网络项"
 
 #: eeschema/tools/sch_actions.cpp:1089
 msgid "Export Drawing to Clipboard"
@@ -40730,9 +40725,9 @@ msgid "No model defined for %s.\n"
 msgstr "没有为符号 %s 定义封装。"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1176
-#, fuzzy, c-format
+#, c-format
 msgid "No model for filename '%s'.\n"
-msgstr "库 '%2$s' 中没有名为 '%1$s' 的模型。"
+msgstr "没有文件名为 '%s' 的模型。\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1187
 #, fuzzy, c-format
@@ -49672,9 +49667,9 @@ msgid "Rule Area %s"
 msgstr "规则域 %s"
 
 #: pcbnew/zone.cpp:1114
-#, fuzzy, c-format
+#, c-format
 msgid "Rule Area '%s' %s"
-msgstr "规则域 %s"
+msgstr "规则域 '%s' %s"
 
 #: pcbnew/zone.cpp:1121
 #, c-format
