@@ -86,7 +86,7 @@ PROJECT_LOCAL_SETTINGS::PROJECT_LOCAL_SETTINGS( PROJECT* aProject, const wxStrin
             {
                 if( !aVal.is_array() || aVal.empty() )
                 {
-                    m_VisibleItems = GAL_SET::DefaultVisible();
+                    m_VisibleItems |= UserVisbilityLayers();
                     return;
                 }
 
@@ -447,7 +447,7 @@ PROJECT_LOCAL_SETTINGS::PROJECT_LOCAL_SETTINGS( PROJECT* aProject, const wxStrin
 
                 if( Contains( ptr ) )
                 {
-                    if( At( ptr ).is_array() )
+                    if( At( ptr ).is_array() && !At( ptr ).empty() )
                         At( ptr ).push_back( LAYER_FILLED_SHAPES - GAL_LAYER_ID_START );
                     else
                         At( "board" ).erase( "visible_items" );
