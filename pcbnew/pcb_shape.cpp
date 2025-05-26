@@ -731,6 +731,15 @@ std::shared_ptr<SHAPE> PCB_SHAPE::GetEffectiveShape( PCB_LAYER_ID aLayer, FLASHI
 }
 
 
+int PCB_SHAPE::getMaxError() const
+{
+    if( const BOARD* board = GetBoard() )
+        return board->GetDesignSettings().m_MaxError;
+
+    return ARC_HIGH_DEF;
+}
+
+
 void PCB_SHAPE::swapData( BOARD_ITEM* aImage )
 {
     PCB_SHAPE* image = dynamic_cast<PCB_SHAPE*>( aImage );

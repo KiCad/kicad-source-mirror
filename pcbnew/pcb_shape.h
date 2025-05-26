@@ -196,6 +196,8 @@ public:
 protected:
     void swapData( BOARD_ITEM* aImage ) override;
 
+    int getMaxError() const override;
+
     struct cmp_drawings
     {
         bool operator()( const BOARD_ITEM* aFirst, const BOARD_ITEM* aSecond ) const;

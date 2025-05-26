@@ -137,6 +137,11 @@ protected:
         m_fill = aFlag ? FILL_T::FILLED_WITH_COLOR : FILL_T::NO_FILL;
     }
 
+    int getMaxError() const override
+    {
+        return schIUScale.mmToIU( ARC_HIGH_DEF_MM );
+    }
+
     /**
      * @copydoc SCH_ITEM::compare()
      *

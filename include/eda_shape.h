@@ -431,6 +431,8 @@ protected:
     // fixme: move to shape_compound
     std::vector<SHAPE*> makeEffectiveShapes( bool aEdgeOnly, bool aLineChainOnly = false ) const;
 
+    virtual int getMaxError() const { return 100; }
+
 protected:
     bool                  m_endsSwapped;  // true if start/end were swapped e.g. SetArcAngleAndEnd
     SHAPE_T               m_shape;        // Shape: line, Circle, Arc
