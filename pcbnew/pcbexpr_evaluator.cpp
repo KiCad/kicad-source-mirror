@@ -169,8 +169,21 @@ public:
 
         if( b->GetType() == LIBEVAL::VT_STRING )
         {
-            if( m_item->GetEffectiveNetClass()->ContainsNetclassWithName( b->AsString() ) )
-                return true;
+            for( const auto nc : m_item->GetEffectiveNetClass()->GetConstituentNetclasses() )
+            {
+                const wxString& ncName = nc->GetName();
+
+                if( b->StringIsWildcard() )
+                {
+                    if( WildCompareString( b->AsString(), ncName, false ) )
+                        return true;
+                }
+                else
+                {
+                    if( ncName.IsSameAs( b->AsString(), false ) )
+                        return true;
+                }
+            }
 
             return m_item->GetEffectiveNetClass()->GetName() == b->AsString();
         }
@@ -188,8 +201,30 @@ public:
 
         if( b->GetType() == LIBEVAL::VT_STRING )
         {
-            const bool isInConstituents =
-                    m_item->GetEffectiveNetClass()->ContainsNetclassWithName( b->AsString() );
+            bool isInConstituents = false;
+
+            for( const auto nc : m_item->GetEffectiveNetClass()->GetConstituentNetclasses() )
+            {
+                const wxString& ncName = nc->GetName();
+
+                if( b->StringIsWildcard() )
+                {
+                    if( WildCompareString( b->AsString(), ncName, false ) )
+                    {
+                        isInConstituents = true;
+                        break;
+                    }
+                }
+                else
+                {
+                    if( ncName.IsSameAs( b->AsString(), false ) )
+                    {
+                        isInConstituents = true;
+                        break;
+                    }
+                }
+            }
+
             const bool isFullName = m_item->GetEffectiveNetClass()->GetName() == b->AsString();
 
             return !isInConstituents && !isFullName;
