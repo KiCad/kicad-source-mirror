@@ -446,7 +446,8 @@ void EDA_SHAPE::SetLength( const double& aLength )
     switch( m_shape )
     {
     case SHAPE_T::SEGMENT:
-        m_segmentLength = aLength; break;
+        m_segmentLength = aLength;
+        break;
 
     default:
         UNIMPLEMENTED_FOR( SHAPE_T_asString() );
@@ -1830,7 +1831,7 @@ std::vector<SHAPE*> EDA_SHAPE::makeEffectiveShapes( bool aEdgeOnly, bool aLineCh
 
     case SHAPE_T::BEZIER:
     {
-        std::vector<VECTOR2I> bezierPoints = buildBezierToSegmentsPointsList( width / 2 );
+        std::vector<VECTOR2I> bezierPoints = buildBezierToSegmentsPointsList( getMaxError() );
         VECTOR2I              start_pt = bezierPoints[0];
 
         for( unsigned int jj = 1; jj < bezierPoints.size(); jj++ )

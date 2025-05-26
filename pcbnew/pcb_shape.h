@@ -203,6 +203,8 @@ protected:
 
     bool isMoving() const override { return IsMoving(); }
 
+    int getMaxError() const override;
+
     struct cmp_drawings
     {
         bool operator()( const BOARD_ITEM* aFirst, const BOARD_ITEM* aSecond ) const;

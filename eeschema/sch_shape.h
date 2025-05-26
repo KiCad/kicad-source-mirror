@@ -151,6 +151,11 @@ protected:
 
     bool isMoving() const override { return IsMoving(); }
 
+    int getMaxError() const override
+    {
+        return schIUScale.mmToIU( ARC_HIGH_DEF_MM );
+    }
+
     /**
      * @copydoc SCH_ITEM::compare()
      *
