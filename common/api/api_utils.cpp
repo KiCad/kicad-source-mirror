@@ -21,6 +21,7 @@
 #include <magic_enum.hpp>
 #include <api/api_utils.h>
 #include <geometry/shape_poly_set.h>
+#include <kiid.h>
 #include <wx/log.h>
 
 const wxChar* const traceApi = wxT( "KICAD_API" );
@@ -230,6 +231,16 @@ KICOMMON_API KIGFX::COLOR4D UnpackColor( const types::Color& aInput )
     double a = std::clamp( aInput.a(), 0.0, 1.0 );
 
     return KIGFX::COLOR4D( r, g, b, a );
+}
+
+KICOMMON_API void PackSheetPath( types::SheetPath& aOutput, const KIID_PATH& aInput )
+{
+    aOutput.clear_path();
+
+    for( const KIID& entry : aInput )
+        aOutput.add_path()->set_value( entry.AsStdString() );
+
+    aOutput.set_path_human_readable( aInput.AsString().ToStdString() );
 }
 
 } // namespace kiapi::common

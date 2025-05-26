@@ -896,4 +896,7 @@ message FootprintInstance
 
   FootprintAttributes attributes = 11;
   FootprintDesignRuleOverrides overrides  = 12;
+
+  // The sheet path to the associated symbol for this footprint instance, if one exists
+  kiapi.common.types.SheetPath symbol_path = 13;
 }
