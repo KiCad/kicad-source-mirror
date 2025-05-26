@@ -37,7 +37,7 @@
 #include <pcb_shape.h>
 #include <macros.h>
 #include <widgets/unit_binder.h>
-
+#include <board_design_settings.h>
 #include <dialog_shape_properties_base.h>
 #include <tools/drawing_tool.h>
 
@@ -1166,7 +1166,7 @@ bool DIALOG_SHAPE_PROPERTIES::TransferDataFromWindow()
     else
         m_item->SetLocalSolderMaskMargin( m_solderMaskMargin.GetIntValue() );
 
-    m_item->RebuildBezierToSegmentsPointsList( ARC_HIGH_DEF );
+    m_item->RebuildBezierToSegmentsPointsList( m_parent->GetDesignSettings().m_MaxError );
 
     if( m_item->IsOnCopperLayer() )
         m_item->SetNetCode( m_netSelector->GetSelectedNetcode() );

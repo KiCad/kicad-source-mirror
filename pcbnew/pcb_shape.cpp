@@ -500,37 +500,7 @@ void PCB_SHAPE::Flip( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection )
 
 void PCB_SHAPE::Mirror( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection )
 {
-    // Mirror an edge of the footprint. the layer is not modified
-    // This is a footprint shape modification.
-
-    switch( GetShape() )
-    {
-    case SHAPE_T::ARC:
-    case SHAPE_T::SEGMENT:
-    case SHAPE_T::RECTANGLE:
-    case SHAPE_T::CIRCLE:
-    case SHAPE_T::BEZIER:
-        MIRROR( m_start, aCentre, aFlipDirection );
-        MIRROR( m_end, aCentre, aFlipDirection );
-        MIRROR( m_arcCenter, aCentre, aFlipDirection );
-        MIRROR( m_bezierC1, aCentre, aFlipDirection );
-        MIRROR( m_bezierC2, aCentre, aFlipDirection );
-
-        if( GetShape() == SHAPE_T::ARC )
-            std::swap( m_start, m_end );
-
-        if( GetShape() == SHAPE_T::BEZIER )
-            RebuildBezierToSegmentsPointsList( ARC_HIGH_DEF );
-
-        break;
-
-    case SHAPE_T::POLY:
-        m_poly.Mirror( aCentre, aFlipDirection );
-        break;
-
-    default:
-        UNIMPLEMENTED_FOR( SHAPE_T_asString() );
-    }
+    flip( aCentre, aFlipDirection );
 }
 
 

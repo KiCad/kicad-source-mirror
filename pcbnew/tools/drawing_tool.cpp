@@ -2827,29 +2827,13 @@ bool DRAWING_TOOL::drawArc( const TOOL_EVENT& aTool, PCB_SHAPE** aGraphic,
 }
 
 
-/**
- * Update a bezier PCB_SHAPE from the current state of a Bezier Geometry Manager.
- */
-static void updateBezierFromConstructionMgr( const KIGFX::PREVIEW::BEZIER_GEOM_MANAGER& aMgr,
-                                             PCB_SHAPE&                                 aBezier )
-{
-    VECTOR2I vec = aMgr.GetStart();
-
-    aBezier.SetStart( vec );
-    aBezier.SetBezierC1( aMgr.GetControlC1() );
-    aBezier.SetEnd( aMgr.GetEnd() );
-    aBezier.SetBezierC2( aMgr.GetControlC2() );
-
-    // Need this for the length preview to work
-    aBezier.RebuildBezierToSegmentsPointsList( ARC_HIGH_DEF );
-}
-
-
 std::unique_ptr<PCB_SHAPE> DRAWING_TOOL::drawOneBezier( const TOOL_EVENT&   aTool,
                                                         const OPT_VECTOR2I& aStartingPoint,
                                                         const OPT_VECTOR2I& aStartingControl1Point,
                                                         DRAW_ONE_RESULT&    aResult )
 {
+    int maxError = board()->GetDesignSettings().m_MaxError;
+
     std::unique_ptr<PCB_SHAPE> bezier = std::make_unique<PCB_SHAPE>( m_frame->GetModel() );
     bezier->SetShape( SHAPE_T::BEZIER );
     bezier->SetFlags( IS_NEW );
@@ -2875,26 +2859,29 @@ std::unique_ptr<PCB_SHAPE> DRAWING_TOOL::drawOneBezier( const TOOL_EVENT&   aToo
     m_view->Add( &bezierAsst );
     PCB_GRID_HELPER grid( m_toolMgr, m_frame->GetMagneticItemsSettings() );
 
-    const auto setCursor = [&]()
-    {
-        m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::PENCIL );
-    };
+    const auto setCursor =
+            [&]()
+            {
+                m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::PENCIL );
+            };
 
-    const auto resetProgress = [&]()
-    {
-        preview.Clear();
-        bezier.reset();
-    };
+    const auto resetProgress =
+            [&]()
+            {
+                preview.Clear();
+                bezier.reset();
+            };
 
     m_controls->ShowCursor( true );
     m_controls->ForceCursorPosition( false );
     // Set initial cursor
     setCursor();
 
-    const auto started = [&]()
-    {
-        return bezierManager.GetStep() > KIGFX::PREVIEW::BEZIER_GEOM_MANAGER::SET_START;
-    };
+    const auto started =
+            [&]()
+            {
+                return bezierManager.GetStep() > KIGFX::PREVIEW::BEZIER_GEOM_MANAGER::SET_START;
+            };
 
     aResult = DRAW_ONE_RESULT::ACCEPTED;
     bool priming = false;
@@ -3010,15 +2997,11 @@ std::unique_ptr<PCB_SHAPE> DRAWING_TOOL::drawOneBezier( const TOOL_EVENT&   aToo
             {
                 // Use the current point for all remaining points
                 while( bezierManager.GetStep() < KIGFX::PREVIEW::BEZIER_GEOM_MANAGER::SET_END )
-                {
                     bezierManager.AddPoint( cursorPos, true );
-                }
             }
 
             if( bezierManager.GetStep() == KIGFX::PREVIEW::BEZIER_GEOM_MANAGER::SET_END )
-            {
                 preview.Add( bezier.get() );
-            }
 
             // Return to the caller for a reset
             if( doubleClick )
@@ -3033,9 +3016,7 @@ std::unique_ptr<PCB_SHAPE> DRAWING_TOOL::drawOneBezier( const TOOL_EVENT&   aToo
             bezierManager.RemoveLastPoint();
 
             if( bezierManager.GetStep() < KIGFX::PREVIEW::BEZIER_GEOM_MANAGER::SET_END )
-            {
                 preview.Remove( bezier.get() );
-            }
         }
         else if( evt->IsMotion() )
         {
@@ -3126,9 +3107,8 @@ std::unique_ptr<PCB_SHAPE> DRAWING_TOOL::drawOneBezier( const TOOL_EVENT&   aToo
             m_view->Update( &bezierAsst );
             evt->SetPassEvent();
         }
-        else if( started()
-                 && ( ZONE_FILLER_TOOL::IsZoneFillAction( evt )
-                      || evt->IsAction( &ACTIONS::redo ) ) )
+        else if( started() && (   ZONE_FILLER_TOOL::IsZoneFillAction( evt )
+                               || evt->IsAction( &ACTIONS::redo ) ) )
         {
             wxBell();
         }
@@ -3143,7 +3123,12 @@ std::unique_ptr<PCB_SHAPE> DRAWING_TOOL::drawOneBezier( const TOOL_EVENT&   aToo
         }
         else if( bezierManager.HasGeometryChanged() )
         {
-            updateBezierFromConstructionMgr( bezierManager, *bezier );
+            bezier->SetStart( bezierManager.GetStart() );
+            bezier->SetBezierC1( bezierManager.GetControlC1() );
+            bezier->SetEnd( bezierManager.GetEnd() );
+            bezier->SetBezierC2( bezierManager.GetControlC2() );
+            bezier->RebuildBezierToSegmentsPointsList( maxError );
+
             m_view->Update( &preview );
             m_view->Update( &bezierAsst );
 

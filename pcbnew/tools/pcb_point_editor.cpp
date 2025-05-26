@@ -2008,9 +2008,11 @@ std::shared_ptr<EDIT_POINTS> PCB_POINT_EDITOR::makePoints( EDA_ITEM* aItem )
         case SHAPE_T::SEGMENT:
             m_editorBehavior = std::make_unique<EDA_SEGMENT_POINT_EDIT_BEHAVIOR>( *shape );
             break;
+
         case SHAPE_T::RECTANGLE:
             m_editorBehavior = std::make_unique<RECTANGLE_POINT_EDIT_BEHAVIOR>( *shape );
             break;
+
         case SHAPE_T::ARC:
             m_editorBehavior = std::make_unique<ARC_POINT_EDIT_BEHAVIOR>( *shape, m_arcEditMode,
                                                                           *getViewControls() );
@@ -2025,7 +2027,8 @@ std::shared_ptr<EDIT_POINTS> PCB_POINT_EDITOR::makePoints( EDA_ITEM* aItem )
             break;
 
         case SHAPE_T::BEZIER:
-            m_editorBehavior = std::make_unique<EDA_BEZIER_POINT_EDIT_BEHAVIOR>( *shape );
+            m_editorBehavior = std::make_unique<EDA_BEZIER_POINT_EDIT_BEHAVIOR>(
+                    *shape, board()->GetDesignSettings().m_MaxError );
             break;
 
         default:        // suppress warnings

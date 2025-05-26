@@ -27,6 +27,7 @@
 
 #include <sch_item.h>
 #include <eda_shape.h>
+#include <schematic.h>
 
 
 class SCH_SHAPE : public SCH_ITEM, public EDA_SHAPE
@@ -139,7 +140,10 @@ protected:
 
     int getMaxError() const override
     {
-        return schIUScale.mmToIU( ARC_HIGH_DEF_MM );
+        if( SCHEMATIC* schematic = Schematic() )
+            return schematic->Settings().m_MaxError;
+        else
+            return schIUScale.mmToIU( ARC_LOW_DEF_MM );
     }
 
     /**

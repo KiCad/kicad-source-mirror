@@ -254,6 +254,9 @@ private:
 
     /// The rootsheet for full project loads or null for importing a schematic.
     SCH_SHEET*         m_rootSheet;
+
+    /// Max deviation allowed when approximating bezier curves
+    int                m_maxError;
 };
 
 #endif    // SCH_IO_KICAD_SEXPR_PARSER_H_

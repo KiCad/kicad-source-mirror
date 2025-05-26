@@ -64,13 +64,13 @@ SCHEMATIC_SETTINGS::SCHEMATIC_SETTINGS( JSON_SETTINGS* aParent, const std::strin
         m_SpiceSaveAllDissipations( false ),
         m_SpiceSaveAllEvents( true ),
         m_SpiceModelCurSheetAsRoot( true ),
+        m_MaxError( ARC_LOW_DEF_MM * schIUScale.IU_PER_MM ),
         m_NgspiceSettings( nullptr )
 {
     SETTINGS_MANAGER&  mgr = Pgm().GetSettingsManager();
     EESCHEMA_SETTINGS* cfg = mgr.GetAppSettings<EESCHEMA_SETTINGS>( "eeschema" );
 
-    int defaultLineThickness =
-            cfg ? cfg->m_Drawing.default_line_thickness : DEFAULT_LINE_WIDTH_MILS;
+    int defaultLineThickness = cfg ? cfg->m_Drawing.default_line_thickness : DEFAULT_LINE_WIDTH_MILS;
     int defaultTextSize = cfg ? cfg->m_Drawing.default_text_size : DEFAULT_TEXT_SIZE;
     int defaultPinSymbolSize = cfg ? cfg->m_Drawing.pin_symbol_size : DEFAULT_TEXT_SIZE / 2;
     int defaultJunctionSizeChoice = cfg ? cfg->m_Drawing.junction_size_choice : 3;

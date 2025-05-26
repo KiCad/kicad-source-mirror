@@ -114,6 +114,9 @@ public:
 
     KIFONT::METRICS             m_FontMetrics;
 
+    /// Max deviation allowable when approximating circles and curves (in IU).
+    int                         m_MaxError;
+
     /**
      * Ngspice simulator settings.
      */
