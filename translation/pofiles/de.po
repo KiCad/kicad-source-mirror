@@ -31,7 +31,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-05-21 05:22+0300\n"
 "PO-Revision-Date: 2025-05-28 04:01+0000\n"
-"Last-Translator: weblateuser <useross@disroot.org>\n"
+"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v9/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -12962,9 +12962,8 @@ msgid "Enter the text to be used within the schematic"
 msgstr "Zu verwendender Text innerhalb des Schaltplans"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:62
-#, fuzzy
 msgid "Multiple label input"
-msgstr "Mehrere Lagen"
+msgstr "Mehrfache Bezeichnereingabe"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:68
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:42
