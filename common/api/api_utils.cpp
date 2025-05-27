@@ -239,8 +239,6 @@ KICOMMON_API void PackSheetPath( types::SheetPath& aOutput, const KIID_PATH& aIn
 
     for( const KIID& entry : aInput )
         aOutput.add_path()->set_value( entry.AsStdString() );
-
-    aOutput.set_path_human_readable( aInput.AsString().ToStdString() );
 }
 
 } // namespace kiapi::common
