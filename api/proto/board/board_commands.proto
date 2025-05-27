@@ -189,6 +189,42 @@ message PadShapeAsPolygonResponse
   repeated kiapi.common.types.PolygonWithHoles polygons = 2;
 }
 
+// Tests if the given set of items with padstacks (pads or vias) has content on the given set of layers.
+// This is a dynamic call rather than a property of the padstack because pads and vias can be set to only include
+// shapes on connected copper layers, and whether or not the pad is connected can't be determined in isolation.
+// To optimize API call performance, multiple items and multiple layers to test may be passed in with this
+// command message.  The return will include the results for each valid item on each valid layer.
+// Note that not all layers make sense for a given item (for example, testing against BL_UNDEFINED never makes
+// sense).  In general, the internal KiCad APIs will not return an error when testing non-sensical layers for a given
+// item, and instead will return a default of "true" for any such layers.
+message CheckPadstackPresenceOnLayers
+{
+  kiapi.common.types.DocumentSpecifier board = 1;
+
+  repeated kiapi.common.types.KIID items = 2;
+
+  repeated kiapi.board.types.BoardLayer layers = 3;
+}
+
+enum PadstackPresence
+{
+  PSP_UNKNOWN = 0;
+  PSP_PRESENT = 1;      // The padstack has a shape on a given layer (is flashed)
+  PSP_NOT_PRESENT = 2;  // The padstack has no shape on a given layer (is not flashed)
+}
+
+message PadstackPresenceEntry
+{
+  kiapi.common.types.KIID item = 1;
+  kiapi.board.types.BoardLayer layer = 2;
+  PadstackPresence presence = 3;
+}
+
+message PadstackPresenceResponse
+{
+  repeated PadstackPresenceEntry entries = 1;
+}
+
 // PCB editor commands
 
 // returns BoardLayers

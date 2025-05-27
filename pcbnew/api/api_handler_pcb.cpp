@@ -78,6 +78,8 @@ API_HANDLER_PCB::API_HANDLER_PCB( PCB_EDIT_FRAME* aFrame ) :
             &API_HANDLER_PCB::handleGetBoundingBox );
     registerHandler<GetPadShapeAsPolygon, PadShapeAsPolygonResponse>(
             &API_HANDLER_PCB::handleGetPadShapeAsPolygon );
+    registerHandler<CheckPadstackPresenceOnLayers, PadstackPresenceResponse>(
+            &API_HANDLER_PCB::handleCheckPadstackPresenceOnLayers );
     registerHandler<GetTitleBlockInfo, types::TitleBlockInfo>(
             &API_HANDLER_PCB::handleGetTitleBlockInfo );
     registerHandler<ExpandTextVariables, ExpandTextVariablesResponse>(
@@ -1050,6 +1052,73 @@ HANDLER_RESULT<PadShapeAsPolygonResponse> API_HANDLER_PCB::handleGetPadShapeAsPo
 
         types::PolygonWithHoles* polyMsg = response.mutable_polygons()->Add();
         PackPolyLine( *polyMsg->mutable_outline(), poly.COutline( 0 ) );
+    }
+
+    return response;
+}
+
+
+HANDLER_RESULT<PadstackPresenceResponse> API_HANDLER_PCB::handleCheckPadstackPresenceOnLayers(
+        const HANDLER_CONTEXT<CheckPadstackPresenceOnLayers>& aCtx )
+{
+    using board::types::BoardLayer;
+
+    if( HANDLER_RESULT<bool> documentValidation = validateDocument( aCtx.Request.board() );
+        !documentValidation )
+    {
+        return tl::unexpected( documentValidation.error() );
+    }
+
+    PadstackPresenceResponse response;
+
+    LSET layers;
+
+    for( const int layer : aCtx.Request.layers() )
+        layers.set( FromProtoEnum<PCB_LAYER_ID, BoardLayer>( static_cast<BoardLayer>( layer ) ) );
+
+    for( const types::KIID& padRequest : aCtx.Request.items() )
+    {
+        KIID id( padRequest.value() );
+        std::optional<BOARD_ITEM*> optItem = getItemById( id );
+
+        if( !optItem )
+            continue;
+
+        switch( ( *optItem )->Type() )
+        {
+        case PCB_PAD_T:
+        {
+            PAD* pad = static_cast<PAD*>( *optItem );
+
+            for( PCB_LAYER_ID layer : layers )
+            {
+                PadstackPresenceEntry* entry = response.add_entries();
+                entry->mutable_item()->set_value( pad->m_Uuid.AsStdString() );
+                entry->set_layer( ToProtoEnum<PCB_LAYER_ID, BoardLayer>( layer ) );
+                entry->set_presence( pad->FlashLayer( layer ) ? PSP_PRESENT : PSP_NOT_PRESENT );
+            }
+
+            break;
+        }
+
+        case PCB_VIA_T:
+        {
+            PCB_VIA* via = static_cast<PCB_VIA*>( *optItem );
+
+            for( PCB_LAYER_ID layer : layers )
+            {
+                PadstackPresenceEntry* entry = response.add_entries();
+                entry->mutable_item()->set_value( via->m_Uuid.AsStdString() );
+                entry->set_layer( ToProtoEnum<PCB_LAYER_ID, BoardLayer>( layer ) );
+                entry->set_presence( via->FlashLayer( layer ) ? PSP_PRESENT : PSP_NOT_PRESENT );
+            }
+
+            break;
+        }
+
+        default:
+            break;
+        }
     }
 
     return response;
