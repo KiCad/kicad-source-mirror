@@ -116,7 +116,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-05-21 05:16+0300\n"
-"PO-Revision-Date: 2025-05-26 23:01+0000\n"
+"PO-Revision-Date: 2025-05-28 04:01+0000\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/"
 "master-source/it/>\n"
@@ -25390,7 +25390,7 @@ msgid "Tune %s"
 msgstr "Regola %s"
 
 #: eeschema/widgets/tuner_slider.cpp:84
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s has simulation model of type '%s %s'.\n"
 "\n"
@@ -27690,9 +27690,8 @@ msgstr ""
 
 #: kicad/cli/command_sch_export_plot.cpp:108
 #: kicad/cli/command_sch_export_plot.cpp:114
-#, fuzzy
 msgid "Deprecated.  Has no effect."
-msgstr "Versione deprecata di %s."
+msgstr "Obsoleto.  Non ha alcun effetto."
 
 #: kicad/cli/command_sch_export_pythonbom.cpp:36
 msgid ""
@@ -29483,9 +29482,8 @@ msgid "(paper size)"
 msgstr "(dimensione carta)"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:29
-#, fuzzy
 msgid "Item Type"
-msgstr "Tipo linea"
+msgstr "Tipo elemento"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:38
 msgid "Show on all pages"
@@ -31247,9 +31245,8 @@ msgid "Stripline"
 msgstr "Linea inglobata"
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:26
-#, fuzzy
 msgid "Coupled Stripline"
-msgstr "Linea microstriscia accoppiata"
+msgstr "Stripline accoppiata"
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:27
 msgid "Coplanar wave guide"
@@ -33488,14 +33485,12 @@ msgid "Dimensions:"
 msgstr "Dimensioni:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:119
-#, fuzzy
 msgid "Front copper area:"
-msgstr "Strato in rame fronte"
+msgstr "Area rame fronte:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:120
-#, fuzzy
 msgid "Back copper area:"
-msgstr "Strato in rame retro"
+msgstr "Area rame retro:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:161
 msgid "THT:"
@@ -33600,14 +33595,12 @@ msgid "Dimensions"
 msgstr "Dimensioni"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:760
-#, fuzzy
 msgid "Front copper area"
-msgstr "Strato in rame fronte"
+msgstr "Area rame fronte"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:762
-#, fuzzy
 msgid "Back copper area"
-msgstr "Strato in rame retro"
+msgstr "Area rame retro"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:809
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:38
@@ -33632,9 +33625,8 @@ msgid "Subtract holes from board area"
 msgstr "Sottrai fori dall'area scheda"
 
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:208
-#, fuzzy
 msgid "Subtract holes from copper areas"
-msgstr "Sottrai fori dall'area scheda"
+msgstr "Sottrai fori dalle aree rame"
 
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:211
 msgid "Exclude footprints with no pads"
@@ -34436,19 +34428,16 @@ msgid "Full circle"
 msgstr "Cerchio completo"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:360
-#, fuzzy
 msgid "Clockwise"
-msgstr "Ruota in senso orario"
+msgstr "Oraria"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:360
-#, fuzzy
 msgid "Anti-clockwise"
-msgstr "Ruota in senso orario"
+msgstr "Antioraria"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:362
-#, fuzzy
 msgid "Direction"
-msgstr "Direzione:"
+msgstr "Direzione"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:366
 #: pcbnew/dialogs/dialog_create_array_base.cpp:419
@@ -34489,9 +34478,8 @@ msgid "How many items in the array."
 msgstr "Quanti elementi nell'array."
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:403
-#, fuzzy
 msgid "First item angle:"
-msgstr "Filtra elementi per connessione:"
+msgstr "Angolo primo elemento:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:408
 msgid "Angle offset of the first item in the array"
@@ -35043,9 +35031,8 @@ msgid "Update fabrication attributes"
 msgstr "Aggiorna attributi di fabbricazione"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:87
-#, fuzzy
 msgid "Update clearance overrides and settings"
-msgstr "Impostazioni e scavalcamenti clearance"
+msgstr "Aggiorna imposizioni clearance e impostazioni"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:88
 msgid "Update 3D models"
@@ -35134,9 +35121,8 @@ msgid "Update/reset fabrication attributes"
 msgstr "Aggiorna/reimposta attributi di fabbricazione"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:114
-#, fuzzy
 msgid "Update/reset clearance overrides and settings"
-msgstr "Impostazioni e scavalcamenti clearance"
+msgstr "Aggiorna/reimposta imposizioni clearance e impostazioni"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:117
 msgid "Update/reset 3D models"
@@ -37313,9 +37299,8 @@ msgstr "Rimpiazza le impronte con quelle specificate nella netlist"
 
 #: pcbnew/dialogs/dialog_import_netlist_base.cpp:59
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:43
-#, fuzzy
 msgid "Group footprints based on symbol group"
-msgstr "Nessuna impronta definita per il simbolo %s."
+msgstr "Impronte di gruppo basate sul gruppo di simboli"
 
 #: pcbnew/dialogs/dialog_import_netlist_base.cpp:62
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:46
@@ -40314,9 +40299,8 @@ msgid "Place items matching component class:"
 msgstr "Piazza elementi corrispondenti alla classe componenti:"
 
 #: pcbnew/dialogs/panel_rule_area_properties_placement_base.cpp:42
-#, fuzzy
 msgid "Place items in group:"
-msgstr "Piazza come gruppo"
+msgstr "Piazza elementi in gruppo:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:46
 msgid "Minimum clearance:"
@@ -42807,16 +42791,17 @@ msgstr ""
 "File non trovato: %s\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:406
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Could not add 3D model for %s.\n"
 "OpenCASCADE error: %s\n"
-msgstr "Impossibile connettersi a %s. Errori: %s"
+msgstr ""
+"Impossibile aggiungere il modello 3D per %s.\n"
+"Errore OpenCASCADE: %s\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:810
-#, fuzzy
 msgid "Could not create PCB solid model.\n"
-msgstr "Impossibile creare la DIBA d'uscita '%s'."
+msgstr "Impossibile creare il modello solido del C.S. .\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:864
 msgid ""
@@ -42882,24 +42867,24 @@ msgid "Could not add shape (%d points) to copper layer %s.\n"
 msgstr "Impossibile aggiungere la forma (%d punti) allo strato di rame %s.\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1207
-#, fuzzy, c-format
+#, c-format
 msgid "No model defined for %s.\n"
-msgstr "Nessuna impronta definita per il simbolo %s."
+msgstr "Nessun modello definito per %s.\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1222
-#, fuzzy, c-format
+#, c-format
 msgid "No model for filename '%s'.\n"
-msgstr "Nessun modello di nome '%s' in '%s'."
+msgstr "Nessun modello per il nomefile '%s'.\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1233
-#, fuzzy, c-format
+#, c-format
 msgid "No location data for filename '%s'.\n"
-msgstr "Scritti dati posizionali in '%s'.\n"
+msgstr "Nessun dato posizionale per il nomefile '%s'.\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1243
-#, fuzzy, c-format
+#, c-format
 msgid "Could not add component with filename '%s'.\n"
-msgstr "Impossibile trovare il componente IBIS '%s'"
+msgstr "Impossibile aggiungere componente con nomefile '%s'.\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1413
 #, c-format
@@ -42946,20 +42931,22 @@ msgid "OCC exception creating wire: %s\n"
 msgstr "Eccezione OCC durante la creazione del collegamento: %s\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1728
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Wire not done (contour points %d): OCC error %d\n"
 "z: %g; bounding box: %s\n"
-msgstr "Filo non eseguito (punti di contorno %d): errore OCC %d\n"
+msgstr ""
+"Collegamento non completato (punti di contorno %d): errore OCC %d\n"
+"z: %g; riquadro di delimitazione: %s\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1742
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Wire self-interference check failed\n"
 "z: %g; bounding box: %s\n"
 msgstr ""
-"\n"
 "Controllo autointerferenza filo fallito\n"
+"z: %g; riquadro di delimitazione: %s\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1764
 msgid "Using non-simplified polygon.\n"
@@ -42976,9 +42963,8 @@ msgstr "** Faccia saltata **\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1931
 #: pcbnew/exporters/step/step_pcb_model.cpp:1948
-#, fuzzy
 msgid "OCC error creating main outline.\n"
-msgstr "Errore nel leggere il file."
+msgstr "Errore OCC creando il riquadro principale.\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1957
 msgid "OCC error creating hole in main outline.\n"
@@ -42990,11 +42976,9 @@ msgid "Subtracting holes for %s\n"
 msgstr "Sottrazione fori per %s\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2044
-#, fuzzy, c-format
+#, c-format
 msgid "** Got problems while cutting %s net '%s' **\n"
-msgstr ""
-"\n"
-"** Problemi durante il taglio di %s net '%s' **\n"
+msgstr "** Problemi durante il taglio di %s net '%s' **\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2096
 msgid "shapes"
@@ -43014,9 +42998,10 @@ msgstr "via"
 #: pcbnew/exporters/step/step_pcb_model.cpp:3167
 #: pcbnew/exporters/step/step_pcb_model.cpp:3241
 #: pcbnew/exporters/step/step_pcb_model.cpp:3309
-#, fuzzy, c-format
+#, c-format
 msgid "No valid PCB assembly; cannot create output file '%s'.\n"
-msgstr "Impossibile creare la cartella risultati '%s'."
+msgstr ""
+"Assemblamento C.S. non valido; impossibile creare il file risultati '%s'.\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2389
 msgid "Failed to set STEP product name, but will attempt to continue."
@@ -43033,19 +43018,19 @@ msgstr ""
 #: pcbnew/exporters/step/step_pcb_model.cpp:3218
 #: pcbnew/exporters/step/step_pcb_model.cpp:3290
 #: pcbnew/exporters/step/step_pcb_model.cpp:3339
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot rename temporary file '%s' to '%s'.\n"
-msgstr "Impossibile rinominare il file temporaneo '%s' in '%s'"
+msgstr "Impossibile rinominare il file temporaneo '%s' in '%s'\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2889
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot identify actual file type for '%s'.\n"
-msgstr "Impossibile aprire il file netlist '%s'."
+msgstr "Impossibile identificare il tipo di file effettivo per '%s'.\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2899
-#, fuzzy, c-format
+#, c-format
 msgid "Could not transfer model data from file '%s'.\n"
-msgstr "Impossibile scaricare dati dal remoto '%s': %s"
+msgstr "Impossibile trasferire i dati del modello dal file '%s'.\n"
 
 #: pcbnew/files.cpp:152
 msgid "All KiCad Board Files"
@@ -44359,24 +44344,24 @@ msgid "Update %s jumper pad groups"
 msgstr "Aggiorna %s gruppi di piazzola ponticelli"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:856
-#, fuzzy, c-format
+#, c-format
 msgid "Remove %s from group \"%s\"."
-msgstr "Rimuovi elementi da un gruppo"
+msgstr "Rimuovi %s dal gruppo \"%s\"."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:862
-#, fuzzy, c-format
+#, c-format
 msgid "Removed %s from group \"%s\"."
-msgstr "Rimuovi elementi da un gruppo"
+msgstr "Rimosso %s dal gruppo \"%s\"."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:880
-#, fuzzy, c-format
+#, c-format
 msgid "Add %s to group \"%s\"."
-msgstr "Aggiungi gruppo personalizzato..."
+msgstr "Aggiungi %s al gruppo \"%s\"."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:886
-#, fuzzy, c-format
+#, c-format
 msgid "Added %s group \"%s\"."
-msgstr "Aggiunto %s (impronta '%s')."
+msgstr "Aggiunto %s al gruppo \"%s\"."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:989
 #, c-format
@@ -44466,24 +44451,24 @@ msgid "Copper zone on layer %s at (%s, %s) has no pads connected."
 msgstr "La zona rame su strato \"%s\" a (%s, %s) non ha piazzole connesse."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1365
-#, fuzzy, c-format
+#, c-format
 msgid "Change group name to '%s' to '%s'."
-msgstr "Cambia valore %s da \"%s\" a \"%s\"."
+msgstr "Cambia nome gruppo da '%s' a '%s'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1372
-#, fuzzy, c-format
+#, c-format
 msgid "Changed group name to '%s' to '%s'."
-msgstr "Cambia valore %s da \"%s\" a \"%s\"."
+msgstr "Cambiato nome gruppo da '%s' a '%s'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1384
-#, fuzzy, c-format
+#, c-format
 msgid "Change group library link to '%s'."
-msgstr "Impossibile creare il percorso tabella librerie '%s'."
+msgstr "Cambia il collegamento alla libreria gruppi in '%s'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1391
-#, fuzzy, c-format
+#, c-format
 msgid "Changed group library link to '%s'."
-msgstr "Impossibile creare il percorso tabella librerie '%s'."
+msgstr "Cambiato il collegamento alla libreria gruppi in '%s'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1428
 #, c-format
@@ -44558,14 +44543,14 @@ msgstr ""
 "scostamento: %d"
 
 #: pcbnew/netlist_reader/kicad_netlist_reader.cpp:675
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Invalid lib_id ID in\n"
 "file: '%s'\n"
 "line: %d\n"
 "offf: %d"
 msgstr ""
-"ID impronta non valido in\n"
+"ID lib_id non valido in\n"
 "file: '%s'\n"
 "riga: %d\n"
 "scostamento: %d"
@@ -46964,10 +46949,10 @@ msgid "No layers selected for plotting."
 msgstr "Nessuno strato selezionato per la tracciatura."
 
 #: pcbnew/pcb_plotter.cpp:481
-#, fuzzy, c-format
+#, c-format
 msgid "Color theme '%s' not found, will use theme from PCB Editor.\n"
 msgstr ""
-"Tema colore '%s' non trovato, verrà utilizzato il tema dalle impostazioni "
+"Tema colore '%s' non trovato, verrà usato il tema dalle impostazioni "
 "dell'editor dei C.S. .\n"
 
 #: pcbnew/pcb_reference_image.cpp:350
@@ -47264,9 +47249,8 @@ msgid "Missing netclass name argument to hasNetclass()"
 msgstr "Argomento del nome della netclass mancante per hasNetclass()"
 
 #: pcbnew/pcbexpr_functions.cpp:1318
-#, fuzzy
 msgid "Missing netclass name argument to hasExactNetclass()"
-msgstr "Argomento del nome della netclass mancante per hasNetclass()"
+msgstr "Argomento del nome netclass mancante per hasExactNetclass()"
 
 #: pcbnew/pcbexpr_functions.cpp:1358
 msgid "Missing component class name argument to hasComponentClass()"
@@ -48648,9 +48632,8 @@ msgid "Edit Track Width/Via Size"
 msgstr "Modifica larghezza piste/dimensioni via"
 
 #: pcbnew/tools/edit_tool.cpp:1115
-#, fuzzy
 msgid "Edit Track Layer"
-msgstr "Strati retro"
+msgstr "Modifica livello pista"
 
 #: pcbnew/tools/edit_tool.cpp:1150
 msgid "At least two straight track segments must be selected."
@@ -49382,14 +49365,12 @@ msgid "Updates selected track & via sizes"
 msgstr "Aggiorna le dimensioni di piste e via selezionati"
 
 #: pcbnew/tools/pcb_actions.cpp:698
-#, fuzzy
 msgid "Switch track to next enabled copper layer"
-msgstr "Elemento su strato rame disabilitato"
+msgstr "Passa pista al successivo strato di rame abilitato"
 
 #: pcbnew/tools/pcb_actions.cpp:705
-#, fuzzy
 msgid "Switch track to previous enabled copper layer"
-msgstr "Passa allo strato precedente"
+msgstr "Passa pista al precedente strato di rame abilitato"
 
 #: pcbnew/tools/pcb_actions.cpp:711
 msgid "Adds arcs tangent to the selected straight track segments"
@@ -50568,15 +50549,12 @@ msgstr ""
 "Annulla lo sbroglio degli elementi selezionati alla piazzola più vicina."
 
 #: pcbnew/tools/pcb_actions.cpp:2194
-#, fuzzy
 msgid "Unroute Segment"
-msgstr "De-sbroglia selezione"
+msgstr "De-sbroglia segmento"
 
 #: pcbnew/tools/pcb_actions.cpp:2195
-#, fuzzy
 msgid "Unroutes segment to the nearest segment."
-msgstr ""
-"Annulla lo sbroglio degli elementi selezionati alla piazzola più vicina."
+msgstr "Annulla lo sbroglio segmento al segmento più vicino."
 
 #: pcbnew/tools/pcb_actions.cpp:2209
 msgid "Select All Tracks in Net"
@@ -51011,9 +50989,9 @@ msgid "Invalid clipboard contents"
 msgstr "Contenuto appunti non valido"
 
 #: pcbnew/tools/pcb_control.cpp:1390
-#, fuzzy, c-format
+#, c-format
 msgid "Design block %s does not have a board file."
-msgstr "Il blocco progetto non ha uno schema o un file scheda."
+msgstr "Il blocco progetto %s non ha un file scheda."
 
 #: pcbnew/tools/pcb_control.cpp:1693
 msgid "Error loading board."
