@@ -116,7 +116,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-05-21 05:22+0300\n"
-"PO-Revision-Date: 2025-05-26 23:01+0000\n"
+"PO-Revision-Date: 2025-05-28 04:01+0000\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/v9/it/>\n"
 "Language: it\n"
@@ -41723,16 +41723,17 @@ msgstr ""
 "File non trovato: %s\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:403
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Could not add 3D model for %s.\n"
 "OpenCASCADE error: %s\n"
-msgstr "Impossibile connettersi a %s. Errori: %s"
+msgstr ""
+"Impossibile aggiungere il modello 3D per %s.\n"
+"Errore OpenCASCADE: %s\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:801
-#, fuzzy
 msgid "Could not create PCB solid model.\n"
-msgstr "Impossibile creare la DIBA d'uscita '%s'."
+msgstr "Impossibile creare il modello solido del C.S. .\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:855
 msgid ""
@@ -41798,24 +41799,24 @@ msgid "Could not add shape (%d points) to copper layer %s.\n"
 msgstr "Impossibile aggiungere la forma (%d punti) allo strato di rame %s.\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1161
-#, fuzzy, c-format
+#, c-format
 msgid "No model defined for %s.\n"
-msgstr "Nessuna impronta definita per il simbolo %s."
+msgstr "Nessun modello definito per %s.\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1176
-#, fuzzy, c-format
+#, c-format
 msgid "No model for filename '%s'.\n"
-msgstr "Nessun modello di nome '%s' in '%s'."
+msgstr "Nessun modello per il nomefile '%s'.\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1187
-#, fuzzy, c-format
+#, c-format
 msgid "No location data for filename '%s'.\n"
-msgstr "Scritti dati posizionali in '%s'.\n"
+msgstr "Nessun dato posizionale per il nomefile '%s'.\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1197
-#, fuzzy, c-format
+#, c-format
 msgid "Could not add component with filename '%s'.\n"
-msgstr "Impossibile trovare il componente IBIS '%s'"
+msgstr "Impossibile aggiungere componente con nomefile '%s'.\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1367
 #, c-format
@@ -41862,20 +41863,22 @@ msgid "OCC exception creating wire: %s\n"
 msgstr "Eccezione OCC durante la creazione del collegamento: %s\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1661
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Wire not done (contour points %d): OCC error %d\n"
 "z: %g; bounding box: %s\n"
-msgstr "Filo non eseguito (punti di contorno %d): errore OCC %d\n"
+msgstr ""
+"Collegamento non completato (punti di contorno %d): errore OCC %d\n"
+"z: %g; riquadro di delimitazione: %s\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1675
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Wire self-interference check failed\n"
 "z: %g; bounding box: %s\n"
 msgstr ""
-"\n"
 "Controllo autointerferenza filo fallito\n"
+"z: %g; riquadro di delimitazione: %s\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1697
 msgid "Using non-simplified polygon.\n"
@@ -41892,9 +41895,8 @@ msgstr "** Faccia saltata **\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1864
 #: pcbnew/exporters/step/step_pcb_model.cpp:1881
-#, fuzzy
 msgid "OCC error creating main outline.\n"
-msgstr "Errore nel leggere il file."
+msgstr "Errore OCC creando il riquadro principale.\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1890
 msgid "OCC error creating hole in main outline.\n"
@@ -41906,11 +41908,9 @@ msgid "Subtracting holes for %s\n"
 msgstr "Sottrazione fori per %s\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1976
-#, fuzzy, c-format
+#, c-format
 msgid "** Got problems while cutting %s net '%s' **\n"
-msgstr ""
-"\n"
-"** Problemi durante il taglio di %s net '%s' **\n"
+msgstr "** Problemi durante il taglio di %s net '%s' **\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2029
 msgid "shapes"
@@ -41930,9 +41930,10 @@ msgstr "via"
 #: pcbnew/exporters/step/step_pcb_model.cpp:3102
 #: pcbnew/exporters/step/step_pcb_model.cpp:3176
 #: pcbnew/exporters/step/step_pcb_model.cpp:3245
-#, fuzzy, c-format
+#, c-format
 msgid "No valid PCB assembly; cannot create output file '%s'.\n"
-msgstr "Impossibile creare la cartella risultati '%s'."
+msgstr ""
+"Assemblamento C.S. non valido; impossibile creare il file risultati '%s'.\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2322
 msgid "Failed to set STEP product name, but will attempt to continue."
@@ -41949,19 +41950,19 @@ msgstr ""
 #: pcbnew/exporters/step/step_pcb_model.cpp:3153
 #: pcbnew/exporters/step/step_pcb_model.cpp:3226
 #: pcbnew/exporters/step/step_pcb_model.cpp:3275
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot rename temporary file '%s' to '%s'.\n"
-msgstr "Impossibile rinominare il file temporaneo '%s' in '%s'"
+msgstr "Impossibile rinominare il file temporaneo '%s' in '%s'\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2822
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot identify actual file type for '%s'.\n"
-msgstr "Impossibile aprire il file netlist '%s'."
+msgstr "Impossibile identificare il tipo di file effettivo per '%s'.\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2832
-#, fuzzy, c-format
+#, c-format
 msgid "Could not transfer model data from file '%s'.\n"
-msgstr "Impossibile scaricare dati dal remoto '%s': %s"
+msgstr "Impossibile trasferire i dati del modello dal file '%s'.\n"
 
 #: pcbnew/files.cpp:152
 msgid "All KiCad Board Files"
@@ -46041,9 +46042,8 @@ msgid "Missing netclass name argument to hasNetclass()"
 msgstr "Argomento del nome della netclass mancante per hasNetclass()"
 
 #: pcbnew/pcbexpr_functions.cpp:1317
-#, fuzzy
 msgid "Missing netclass name argument to hasExactNetclass()"
-msgstr "Argomento del nome della netclass mancante per hasNetclass()"
+msgstr "Argomento del nome netclass mancante per hasExactNetclass()"
 
 #: pcbnew/pcbexpr_functions.cpp:1357
 msgid "Missing component class name argument to hasComponentClass()"
