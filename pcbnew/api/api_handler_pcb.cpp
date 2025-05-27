@@ -64,6 +64,7 @@ API_HANDLER_PCB::API_HANDLER_PCB( PCB_EDIT_FRAME* aFrame ) :
     registerHandler<RevertDocument, Empty>( &API_HANDLER_PCB::handleRevertDocument );
 
     registerHandler<GetItems, GetItemsResponse>( &API_HANDLER_PCB::handleGetItems );
+    registerHandler<GetItemsById, GetItemsResponse>( &API_HANDLER_PCB::handleGetItemsById );
 
     registerHandler<GetSelection, SelectionResponse>( &API_HANDLER_PCB::handleGetSelection );
     registerHandler<ClearSelection, Empty>( &API_HANDLER_PCB::handleClearSelection );
@@ -484,7 +485,9 @@ HANDLER_RESULT<ItemRequestStatus> API_HANDLER_PCB::handleCreateUpdateItemsIntern
             // doesn't currently know what to do with a footprint that has had its children
             // replaced with other children; which results in things like the view not having its
             // cached geometry for footprint children updated when you move a footprint around.
-            if( boardItem->Type() == PCB_FOOTPRINT_T )
+            // And also, groups are special because they can contain any item type, so we
+            // can't use CopyFrom on them either.
+            if( boardItem->Type() == PCB_FOOTPRINT_T  || boardItem->Type() == PCB_GROUP_T )
             {
                 commit->Remove( boardItem );
                 item->Serialize( newItem );
@@ -615,6 +618,16 @@ HANDLER_RESULT<GetItemsResponse> API_HANDLER_PCB::handleGetItems(
             break;
         }
 
+        case PCB_GROUP_T:
+        {
+            handledAnything = true;
+
+            std::copy( board->Groups().begin(), board->Groups().end(),
+                       std::back_inserter( items ) );
+
+            typesInserted.insert( PCB_GROUP_T );
+            break;
+        }
         default:
             break;
         }
@@ -642,6 +655,47 @@ HANDLER_RESULT<GetItemsResponse> API_HANDLER_PCB::handleGetItems(
     return response;
 }
 
+
+HANDLER_RESULT<GetItemsResponse> API_HANDLER_PCB::handleGetItemsById(
+        const HANDLER_CONTEXT<GetItemsById>& aCtx )
+{
+    if( std::optional<ApiResponseStatus> busy = checkForBusy() )
+        return tl::unexpected( *busy );
+
+    if( !validateItemHeaderDocument( aCtx.Request.header() ) )
+    {
+        ApiResponseStatus e;
+        e.set_status( ApiStatusCode::AS_UNHANDLED );
+        return tl::unexpected( e );
+    }
+
+    GetItemsResponse response;
+
+    std::vector<BOARD_ITEM*> items;
+    for( const kiapi::common::types::KIID& id : aCtx.Request.items() )
+    {
+        if( std::optional<BOARD_ITEM*> item = getItemById( KIID( id.value() ) ) )
+            items.emplace_back( *item );
+    }
+
+    if( items.empty() )
+    {
+        ApiResponseStatus e;
+        e.set_status( ApiStatusCode::AS_BAD_REQUEST );
+        e.set_error_message( "none of the requested IDs were found or valid" );
+        return tl::unexpected( e );
+    }
+
+    for( const BOARD_ITEM* item : items )
+    {
+        google::protobuf::Any itemBuf;
+        item->Serialize( itemBuf );
+        response.mutable_items()->Add( std::move( itemBuf ) );
+    }
+
+    response.set_status( ItemRequestStatus::IRS_OK );
+    return response;
+}
 
 void API_HANDLER_PCB::deleteItemsInternal( std::map<KIID, ItemDeletionStatus>& aItemsToDelete,
                                            const std::string& aClientName )

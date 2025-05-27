@@ -841,7 +841,9 @@ message ReferenceImage
 
 message Group
 {
-  // TODO
+  kiapi.common.types.KIID id = 1;
+  string name = 2;
+  repeated kiapi.common.types.KIID items = 3;
 }
 
 message FieldId

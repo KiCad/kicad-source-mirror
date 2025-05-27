@@ -32,6 +32,11 @@
 #include <confirm.h>
 #include <widgets/msgpanel.h>
 #include <view/view.h>
+#include <api/api_enums.h>
+#include <api/api_utils.h>
+#include <api/api_pcb_utils.h>
+#include <api/board/board_types.pb.h>
+#include <google/protobuf/any.pb.h>
 
 #include <wx/debug.h>
 
@@ -46,6 +51,53 @@ PCB_GROUP::PCB_GROUP( BOARD_ITEM* aParent, KICAD_T idtype, PCB_LAYER_ID aLayer )
 {
 }
 
+void PCB_GROUP::Serialize( google::protobuf::Any &aContainer ) const
+{
+    using namespace kiapi::board::types;
+    Group group;
+
+    group.mutable_id()->set_value( m_Uuid.AsStdString() );
+    group.set_name( GetName().ToUTF8() );
+
+    for( EDA_ITEM* item : GetItems() )
+    {
+        kiapi::common::types::KIID* itemId = group.add_items();
+        itemId->set_value( item->m_Uuid.AsStdString() );
+    }
+
+    aContainer.PackFrom( group );
+}
+
+
+bool PCB_GROUP::Deserialize( const google::protobuf::Any &aContainer )
+{
+    kiapi::board::types::Group group;
+
+    if( !aContainer.UnpackTo( &group ) )
+        return false;
+
+    const_cast<KIID&>( m_Uuid ) = KIID( group.id().value() );
+    SetName( wxString( group.name().c_str(), wxConvUTF8 ) );
+
+
+    BOARD* board = GetBoard();
+    if( !board )
+        return false;
+
+    for ( const kiapi::common::types::KIID& itemId : group.items() )
+    {
+
+        KIID        id( itemId.value() );
+        BOARD_ITEM* item = board->ResolveItem( id, true ); 
+        
+        if( item )
+        {
+            AddItem( item );
+        }
+    }
+
+    return true;
+}
 
 std::unordered_set<BOARD_ITEM*> PCB_GROUP::GetBoardItems() const
 {

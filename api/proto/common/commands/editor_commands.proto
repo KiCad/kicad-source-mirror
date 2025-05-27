@@ -222,6 +222,14 @@ message GetItems
   repeated kiapi.common.types.KiCadObjectType types = 2;
 }
 
+message GetItemsById
+{
+  // Specifies which document to query, which fields to return, etc.
+  kiapi.common.types.ItemHeader header = 1;
+
+  repeated kiapi.common.types.KIID items = 2;
+}
+
 message GetItemsResponse
 {
   // Specifies which document was modified, which fields are included in items, etc.
