@@ -103,6 +103,9 @@ private:
     HANDLER_RESULT<PadShapeAsPolygonResponse> handleGetPadShapeAsPolygon(
             const HANDLER_CONTEXT<GetPadShapeAsPolygon>& aCtx );
 
+    HANDLER_RESULT<PadstackPresenceResponse> handleCheckPadstackPresenceOnLayers(
+            const HANDLER_CONTEXT<CheckPadstackPresenceOnLayers>& aCtx );
+
     HANDLER_RESULT<types::TitleBlockInfo> handleGetTitleBlockInfo(
             const HANDLER_CONTEXT<commands::GetTitleBlockInfo>& aCtx );
 
