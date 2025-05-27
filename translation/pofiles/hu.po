@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-05-21 05:22+0300\n"
-"PO-Revision-Date: 2025-05-26 23:01+0000\n"
+"PO-Revision-Date: 2025-05-28 04:01+0000\n"
 "Last-Translator: Sárkány Lőrinc <lsarkany@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/kicad/v9/hu/>\n"
 "Language: hu\n"
@@ -25070,9 +25070,8 @@ msgid "Line Mode for Wires and Buses"
 msgstr "Vezetékek és buszok csak vízszintesen és függőlegesen"
 
 #: eeschema/tools/sch_actions.cpp:1224
-#, fuzzy
 msgid "Draw and drag at any angle"
-msgstr "Rajzolás és vonal húzás minden irányba"
+msgstr "Rajzolás és vonszolás tetszőleges irányban"
 
 #: eeschema/tools/sch_actions.cpp:1233
 #, fuzzy
@@ -25142,7 +25141,6 @@ msgid "Change to provided sheet's contents in the schematic editor"
 msgstr "Kiválasztott lap tartalmának megjelenítése"
 
 #: eeschema/tools/sch_actions.cpp:1294
-#, fuzzy
 msgid "Enter Sheet"
 msgstr "Lap megnyitása"
 
@@ -25192,7 +25190,6 @@ msgid "Move forward in sheet navigation history"
 msgstr "Előre a lap navigációs előzményeiben"
 
 #: eeschema/tools/sch_actions.cpp:1335
-#, fuzzy
 msgid "Previous Sheet"
 msgstr "Előző Lap"
 
@@ -25201,7 +25198,6 @@ msgid "Move to previous sheet by number"
 msgstr ""
 
 #: eeschema/tools/sch_actions.cpp:1343
-#, fuzzy
 msgid "Next Sheet"
 msgstr "Következő Lap"
 
@@ -25267,12 +25263,10 @@ msgstr "Aktuális vezetősáv irányváltás"
 #: pagelayout_editor/tools/pl_actions.cpp:82
 #: pcbnew/dialogs/panel_edit_options_base.cpp:81
 #: pcbnew/tools/edit_tool_move_fct.cpp:238 pcbnew/tools/pcb_actions.cpp:457
-#, fuzzy
 msgid "Move"
 msgstr "Mozgatás"
 
 #: eeschema/tools/sch_actions.cpp:1435 eeschema/tools/sch_move_tool.cpp:396
-#, fuzzy
 msgid "Drag"
 msgstr "Vonszolás"
 
@@ -25838,9 +25832,8 @@ msgstr "A(z) \"%s\" kapcsolási rajz fájl már meg van nyitva."
 #: eeschema/tools/sch_inspection_tool.cpp:389
 #: pcbnew/dialogs/dialog_footprint_associations.cpp:48
 #: pcbnew/tools/board_inspection_tool.cpp:1597
-#, fuzzy
 msgid "Library: "
-msgstr "Könyvtár:"
+msgstr "Könyvtár: "
 
 #: eeschema/tools/sch_inspection_tool.cpp:390
 #: pcbnew/tools/board_inspection_tool.cpp:1598
@@ -25859,9 +25852,8 @@ msgstr ""
 
 #: eeschema/tools/sch_inspection_tool.cpp:402
 #: eeschema/tools/sch_inspection_tool.cpp:408
-#, fuzzy
 msgid "Manage Symbol Libraries"
-msgstr "Rajzjel könyvtárak kezelése..."
+msgstr "Rajzjel könyvtárak kezelése"
 
 #: eeschema/tools/sch_inspection_tool.cpp:406
 #: pcbnew/tools/board_inspection_tool.cpp:1624
@@ -25874,9 +25866,9 @@ msgstr ""
 
 #: eeschema/tools/sch_inspection_tool.cpp:426
 #: pcbnew/tools/board_inspection_tool.cpp:1644
-#, fuzzy, c-format
+#, c-format
 msgid "The library no longer contains the item %s."
-msgstr "A kijelölt elem zárolva van."
+msgstr "A könyvtár már nem tartalmazza a(z) %s elemet."
 
 #: eeschema/tools/sch_inspection_tool.cpp:447
 #: pcbnew/tools/board_inspection_tool.cpp:1650
@@ -25924,9 +25916,9 @@ msgid "Press <ESC> to cancel move."
 msgstr ""
 
 #: eeschema/tools/sch_navigate_tool.cpp:99
-#, fuzzy, c-format
+#, c-format
 msgid "Page '%s' not found."
-msgstr "A(z) \"%s\" fájl nem található."
+msgstr "A(z) \"%s\" oldal nem található."
 
 #: eeschema/tools/sch_point_editor.cpp:1135
 #: pcbnew/tools/pcb_point_editor.cpp:2370
@@ -25955,7 +25947,6 @@ msgid "Save Simulation Workbook As"
 msgstr "Szimulátor munkafüzetet mentése"
 
 #: eeschema/tools/simulator_control.cpp:181
-#, fuzzy
 msgid "Save Plot as Image"
 msgstr "Ábra mentése képként"
 
@@ -25994,7 +25985,6 @@ msgstr "Nincs szövegszerkesztő kiválasztva. Válasszon egyet."
 
 #: eeschema/tools/symbol_editor_control.cpp:439
 #: eeschema/widgets/panel_symbol_chooser.cpp:684
-#, fuzzy
 msgid "No symbol selected"
 msgstr "Nincs rajzjel kiválasztva"
 
@@ -26030,15 +26020,13 @@ msgstr "Via hozzáadása"
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:470
 #: pcbnew/tools/edit_tool.cpp:2656
-#, fuzzy
 msgid "Hide Field"
-msgstr "Mező hozzáadása"
+msgstr "Mező elrejtése"
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:472
 #: pcbnew/tools/edit_tool.cpp:2658
-#, fuzzy
 msgid "Hide Fields"
-msgstr "Rejtett lábak megjelenítése"
+msgstr "Mezők elrejtése"
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:474
 msgid "Use the Symbol Properties dialog to remove fields."
@@ -34352,7 +34340,6 @@ msgstr ""
 "********** Rendezés %s szerint ***********"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:572
-#, fuzzy
 msgid "Footprint Coordinates"
 msgstr "Alkatrészrajzolat Koordináták"
 
@@ -34444,35 +34431,35 @@ msgstr "Alkatrész réteg"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:50
 msgid "Horizontally: top left to bottom right"
-msgstr ""
+msgstr "Vízszintesen: bal felső --> jobb alsó"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:61
 msgid "Horizontally: top right to bottom left"
-msgstr ""
+msgstr "Vízszintesen: jobb felső --> bal alsó"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:72
 msgid "Horizontally: bottom left to top right"
-msgstr ""
+msgstr "Vízszintesen: bal alsó --> jobb felső"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:83
 msgid "Horizontally:: bottom right to top left"
-msgstr ""
+msgstr "Vízszintesen: jobb alsó --> bal felső"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:91
 msgid "Vertically: top left to bottom right"
-msgstr ""
+msgstr "Függőlegesen: bal felső --> jobb alsó"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:102
 msgid "Vertically: bottom left to top right"
-msgstr ""
+msgstr "Függőlegesen: bal alsó --> jobb felső"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:113
 msgid "Vertically: top right to bottom left"
-msgstr ""
+msgstr "Függőlegesen: jobb felső --> bal alsó"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:124
 msgid "Vertically: bottom right to top left"
-msgstr ""
+msgstr "Függőlegesen: jobb alsó --> bal felső"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:137
 #, fuzzy
@@ -34621,14 +34608,12 @@ msgid "Geographical Reannotation"
 msgstr ""
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:54
-#, fuzzy
 msgid "Board Setup"
 msgstr "NYÁK Panel beállítások"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:55
-#, fuzzy
 msgid "Import Settings from Another Board..."
-msgstr "Beállítások importálása egy másik projektből..."
+msgstr "Beállítások importálása egy másik panelból..."
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:82
 msgid "Board Stackup"
@@ -34948,9 +34933,8 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_cleanup_graphics_base.cpp:46
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:178
-#, fuzzy
 msgid "Tolerance:"
-msgstr "Tűrés ±"
+msgstr "Tűrés:"
 
 #: pcbnew/dialogs/dialog_cleanup_graphics_base.cpp:67
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:144
@@ -38456,9 +38440,8 @@ msgid "Footprint fields that are not the reference designator or value field"
 msgstr "A(z) \"%s\" értékű rajzjel referencia azonosítója nincs megadva."
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:50
-#, fuzzy
 msgid "PCB dimensions"
-msgstr "Méretvonal"
+msgstr "NYÁK méretei"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:53
 #, fuzzy
@@ -38532,9 +38515,8 @@ msgid "Filter vias by size:"
 msgstr "Viák szűrése méret szerint:"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:150
-#, fuzzy
 msgid "-- leave unchanged --  "
-msgstr "-- változatlanul hagy --"
+msgstr "-- változatlanul hagy --  "
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:162
 msgid "Via size:"
