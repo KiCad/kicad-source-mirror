@@ -25,13 +25,14 @@
 # Frank Sonnenberg <frasoberg@web.de>, 2024.
 # John Beard <john.j.beard@gmail.com>, 2024, 2025.
 # dsa-t <dudesuchamazing@gmail.com>, 2025.
+# weblateuser <useross@disroot.org>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-05-21 05:16+0300\n"
-"PO-Revision-Date: 2025-05-25 08:03+0000\n"
-"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
+"PO-Revision-Date: 2025-05-28 04:01+0000\n"
+"Last-Translator: weblateuser <useross@disroot.org>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
 "Language: de\n"
@@ -30297,7 +30298,7 @@ msgstr "Strombelastbarkeit:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:149
 msgid "Current density"
-msgstr "Aktuelle Dichte"
+msgstr "Stromdichte"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:156
 msgid "A/mm^2"
@@ -41777,7 +41778,7 @@ msgstr "Loch-Freiraum-Verstoß"
 
 #: pcbnew/drc/drc_item.cpp:108
 msgid "Drilled hole too close to other hole"
-msgstr "Bohrloch zu dich an anderem Loch"
+msgstr "Bohrloch zu dicht an anderem Loch"
 
 #: pcbnew/drc/drc_item.cpp:112
 msgid "Drilled holes co-located"
@@ -41957,7 +41958,7 @@ msgstr "Nicht-gespiegelter Text auf Rückseite"
 
 #: pcbnew/drc/drc_item.cpp:304
 msgid "Drilled hole too close to other hole - deprecated"
-msgstr "Bohrloch zu dich an anderem Loch - veraltet"
+msgstr "Bohrloch zu dicht an anderem Loch - veraltet"
 
 #: pcbnew/drc/drc_item.cpp:506
 #, c-format
@@ -43013,7 +43014,7 @@ msgid ""
 "Could not add 3D model for %s.\n"
 "File not found: %s\n"
 msgstr ""
-"Konnte 3D-Modell für %s nicht hinzufügen.\n"
+"3D-Modell für %s konnte nicht hinzugefügt werden.\n"
 "Datei nicht gefunden: %s\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:406
@@ -43085,7 +43086,7 @@ msgstr "** ShapeUpgrade_UnifySameDomain erzeugte eine null shape **\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:944
 msgid "OCC error adding pad/via polygon.\n"
-msgstr ""
+msgstr "OCC-Fehler beim Hinzufügen von Pad/Via-Polygonen.\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1189
 #, c-format
