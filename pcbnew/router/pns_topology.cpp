@@ -233,7 +233,7 @@ bool TOPOLOGY::followTrivialPath( LINE* aLine2, bool aLeft, ITEM_SET& aSet,
         {
             if( link->OfKind( ITEM::VIA_T ) )
                 via = link;
-            else if( visited.insert( link ).second )
+            else if( !visited.contains( link ) )
                 next_seg = static_cast<SEGMENT*>( link );
         }
 
