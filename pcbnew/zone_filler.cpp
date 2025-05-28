@@ -1077,6 +1077,9 @@ void ZONE_FILLER::knockoutThermalReliefs( const ZONE* aZone, PCB_LAYER_ID aLayer
     {
         for( PAD* pad : footprint->Pads() )
         {
+            if( !pad->IsOnLayer( aLayer ) )
+                continue;
+
             BOX2I padBBox = pad->GetBoundingBox();
             padBBox.Inflate( m_worstClearance );
 
@@ -1187,6 +1190,9 @@ void ZONE_FILLER::knockoutThermalReliefs( const ZONE* aZone, PCB_LAYER_ID aLayer
             if( track->Type() == PCB_VIA_T )
             {
                 PCB_VIA* via = static_cast<PCB_VIA*>( track );
+
+                if( !via->IsOnLayer( aLayer ) )
+                    continue;
 
                 BOX2I viaBBox = via->GetBoundingBox();
                 viaBBox.Inflate( m_worstClearance );
