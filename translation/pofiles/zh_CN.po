@@ -41,7 +41,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-05-21 05:22+0300\n"
-"PO-Revision-Date: 2025-05-26 23:01+0000\n"
+"PO-Revision-Date: 2025-05-29 15:01+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/kicad/v9/zh_Hans/>\n"
@@ -621,7 +621,7 @@ msgstr "显示 底层 '铜/表面' 处理颜色"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:58
 msgid "Adhesive"
-msgstr "红胶"
+msgstr "Adhesive"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:58
 msgid "Show adhesive"
@@ -629,7 +629,7 @@ msgstr "显示点胶层"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:59
 msgid "Solder Paste"
-msgstr "锡膏"
+msgstr "Solder Paste"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:59
 msgid "Show solder paste"
@@ -8120,15 +8120,15 @@ msgstr "过孔孔壁"
 
 #: common/layer_id.cpp:134
 msgid "Plated holes"
-msgstr "镀孔"
+msgstr "电镀孔"
 
 #: common/layer_id.cpp:135
 msgid "Plated hole walls"
-msgstr "镀孔孔壁"
+msgstr "电镀孔壁"
 
 #: common/layer_id.cpp:136
 msgid "Non-plated holes"
-msgstr "无镀铜孔"
+msgstr "非电镀孔"
 
 #: common/layer_id.cpp:137 pcbnew/dialogs/panel_edit_options_base.cpp:371
 #: pcbnew/widgets/appearance_controls.cpp:345
@@ -45073,7 +45073,7 @@ msgstr "差分对间隙小于电路板最小间隙。"
 
 #: pcbnew/router/pns_router.cpp:261
 msgid "Cannot start routing from a non-plated hole."
-msgstr "无法从非镀通孔开始布线。"
+msgstr "无法从非电镀通孔开始布线。"
 
 #: pcbnew/router/pns_router.cpp:274
 #, c-format
