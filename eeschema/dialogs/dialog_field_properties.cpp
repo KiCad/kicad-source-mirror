@@ -78,7 +78,7 @@ DIALOG_FIELD_PROPERTIES::DIALOG_FIELD_PROPERTIES( SCH_BASE_FRAME* aParent, const
 
 #ifdef __WXGTK__
     m_StyledTextCtrl->SetExtraAscent( 6 );
-    m_StyledTextCtrl->SetExtraDescent( 2 );
+    m_StyledTextCtrl->SetExtraDescent( 6 );
 #elif defined ( __WXMSW__ )
     // Do nothing: SetExtraAscent() + SetExtraDescent(), when set to a value not 0
     // Generate a strange bug: the text is not always shown (Perhaps a wxMSW bug)
@@ -345,9 +345,9 @@ void DIALOG_FIELD_PROPERTIES::init()
     // (multiline text is not supported in fields and will be removed)
     if( m_StyledTextCtrl->IsShown() )
     {
-        wxSize maxSize = m_StyledTextCtrl->GetSize();
+        wxSize maxSize;
         maxSize.x = -1;     // Do not fix the max width
-        maxSize.y = m_xPosCtrl->GetSize().y;
+        maxSize.y = m_StyledTextCtrl->TextHeight( 0 );
         m_StyledTextCtrl->SetMaxSize( maxSize );
         m_StyledTextCtrl->SetUseVerticalScrollBar( false );
         m_StyledTextCtrl->SetUseHorizontalScrollBar( false );
