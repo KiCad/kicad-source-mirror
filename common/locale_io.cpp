@@ -24,6 +24,7 @@
 #include <locale_io.h>
 #include <wx/intl.h>
 #include <clocale>
+#include <atomic>
 
 // When reading/writing files, we need to switch to setlocale( LC_NUMERIC, "C" ).
 // Works fine to read/write files with floating point numbers.
@@ -50,8 +51,18 @@
 // On Windows, when using setlocale, a wx alert is generated
 // in some cases (reading a bitmap for instance)
 // So we disable alerts during the time a file is read or written
+
+
+// set USE_WXLOCALE to 0 to use setlocale, 1 to use wxLocale:
+#if defined( _WIN32 )
+#define USE_WXLOCALE 1
+#else
+#define USE_WXLOCALE 0
+#endif
+
 #if !USE_WXLOCALE
 #if defined( _WIN32 ) && defined( DEBUG )
+#include <wx/appl.h>    // for wxTheApp
 
 // a wxAssertHandler_t function to filter wxWidgets alert messages when reading/writing a file
 // when switching the locale to LC_NUMERIC, "C"

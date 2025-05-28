@@ -25,15 +25,7 @@
 #define LOCALE_IO_H
 
 #include <kicommon.h>
-#include <atomic>
 #include <string>
-
-// set USE_WXLOCALE 0 to use setlocale, 1 to use wxLocale:
-#if defined( _WIN32 )
-#define USE_WXLOCALE 1
-#else
-#define USE_WXLOCALE 0
-#endif
 
 class wxLocale;
 
@@ -52,13 +44,10 @@ public:
     ~LOCALE_IO();
 
 private:
-#if USE_WXLOCALE
-    wxLocale* m_wxLocale;
-#else
     // The locale in use before switching to the "C" locale
     // (the locale can be set by user, and is not always the system locale)
-    std::string m_user_locale;
-#endif
+    wxLocale* m_wxLocale;           // used when using wxLocale
+    std::string m_user_locale;      // used when using setlocale or wxSetlocale
 };
 
 #endif
