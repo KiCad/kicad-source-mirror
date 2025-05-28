@@ -838,29 +838,20 @@ wxArrayString* DSNLEXER::ReadCommentLines()
 
 double DSNLEXER::parseDouble()
 {
+// We try here to be locale independent to avoid the need to switch to a "C" locale
 #if ( defined( __GNUC__ ) && __GNUC__ < 11 ) || ( defined( __clang__ ) && __clang_major__ < 13 )
     // GCC older than 11 "supports" C++17 without supporting the C++17 std::from_chars for doubles
     // clang is similar
 
-    char* tmp;
+    // Use wxString::ToCDouble() which is designed to be locale independent
+    wxString tmp = CurStr();
+    double fval;
+    bool success = tmp.ToCDouble( &fval );
 
-    errno = 0;
-
-    double fval = strtod( CurText(), &tmp );
-
-    if( errno )
+    if( !success )
     {
         wxString error;
         error.Printf( _( "Invalid floating point number in\nfile: '%s'\nline: %d\noffset: %d" ),
-                      CurSource(), CurLineNumber(), CurOffset() );
-
-        THROW_IO_ERROR( error );
-    }
-
-    if( CurText() == tmp )
-    {
-        wxString error;
-        error.Printf( _( "Missing floating point number in\nfile: '%s'\nline: %d\noffset: %d" ),
                       CurSource(), CurLineNumber(), CurOffset() );
 
         THROW_IO_ERROR( error );
