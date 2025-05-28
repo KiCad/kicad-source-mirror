@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-05-21 05:22+0300\n"
-"PO-Revision-Date: 2025-05-28 04:01+0000\n"
+"PO-Revision-Date: 2025-05-29 15:01+0000\n"
 "Last-Translator: Sárkány Lőrinc <lsarkany@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/kicad/v9/hu/>\n"
 "Language: hu\n"
@@ -41145,12 +41145,10 @@ msgid "Blind/buried"
 msgstr "Zsák/eltemetett"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:364
-#, fuzzy
 msgid "Start layer:"
 msgstr "Kezdő réteg:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:371
-#, fuzzy
 msgid "End layer:"
 msgstr "Befejező réteg:"
 
@@ -41262,23 +41260,20 @@ msgstr ""
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:38
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:167
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:296
-#, fuzzy
 msgid "Minimum amplitude (A):"
-msgstr "Maximális amplitúdó (Amax):"
+msgstr "Minimális amplitúdó (A):"
 
 #: pcbnew/dialogs/dialog_tuning_pattern_properties_base.cpp:60
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:55
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:184
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:313
-#, fuzzy
 msgid "Maximum amplitude (A):"
-msgstr "Maximális amplitúdó (Amax):"
+msgstr "Maximális amplitúdó (A):"
 
 #: pcbnew/dialogs/dialog_tuning_pattern_properties_base.cpp:71
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:66
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:195
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:324
-#, fuzzy
 msgid "Spacing (s):"
 msgstr "Térköz (s):"
 
