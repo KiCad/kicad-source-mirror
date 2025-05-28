@@ -1595,7 +1595,9 @@ bool LINE_PLACER::FixRoute( const VECTOR2I& aP, ITEM* aEndItem, bool aForceFinis
         ///<       false but someone with more knowledge of the code will need to determine that..
         if( m_lastNode )
         {
-            m_lastNode->Add( Clone( pl.Via() ) );
+            auto newVia = Clone( pl.Via() );
+            newVia->ResetUid();
+            m_lastNode->Add( std::move( newVia ) );
             m_shove->AddLockedSpringbackNode( m_lastNode );
         }
 
@@ -1675,7 +1677,12 @@ bool LINE_PLACER::FixRoute( const VECTOR2I& aP, ITEM* aEndItem, bool aForceFinis
     }
 
     if( pl.EndsWithVia() )
-        m_lastNode->Add( Clone( pl.Via() ) );
+    {
+        auto newVia = Clone( pl.Via() );
+        newVia->ResetUid();
+        m_lastNode->Add( std::move( newVia ) );
+    }
+
 
     if( realEnd && lastItem )
         simplifyNewLine( m_lastNode, lastItem );

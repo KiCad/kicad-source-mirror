@@ -43,6 +43,11 @@ public:
         m_uid( aOther.m_uid )
     {}
 
+    void ResetUid()
+    {
+        m_uid = genNextUid();
+    }
+
     UNIQ_ID Uid() const { return m_uid; }
 
     virtual void SetWidth( int aWidth )
