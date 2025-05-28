@@ -69,7 +69,7 @@ public:
 class GRID_CELL_STC_EDITOR : public wxGridCellEditor
 {
 public:
-    GRID_CELL_STC_EDITOR( bool aIgnoreCase,
+    GRID_CELL_STC_EDITOR( bool aIgnoreCase, bool aSingleLine,
                           std::function<void( wxStyledTextEvent&, SCINTILLA_TRICKS* )> onCharFn );
 
     void SetSize( const wxRect& aRect ) override;
@@ -77,7 +77,7 @@ public:
 
     wxGridCellEditor* Clone() const override
     {
-        return new GRID_CELL_STC_EDITOR( m_ignoreCase, m_onCharFn );
+        return new GRID_CELL_STC_EDITOR( m_ignoreCase, m_singleLine, m_onCharFn );
     }
 
     wxString GetValue() const override;
@@ -97,6 +97,7 @@ protected:
 protected:
     SCINTILLA_TRICKS* m_scintillaTricks;
     bool              m_ignoreCase;
+    bool              m_singleLine;
     wxString          m_value;
 
     std::function<void( wxStyledTextEvent&, SCINTILLA_TRICKS* )> m_onCharFn;

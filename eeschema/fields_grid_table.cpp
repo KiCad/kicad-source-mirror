@@ -253,7 +253,7 @@ void FIELDS_GRID_TABLE::initGrid( WX_GRID* aGrid )
     }
     else
     {
-        GRID_CELL_STC_EDITOR* valueEditor = new GRID_CELL_STC_EDITOR( true,
+        GRID_CELL_STC_EDITOR* valueEditor = new GRID_CELL_STC_EDITOR( true, true,
                 [this]( wxStyledTextEvent& aEvent, SCINTILLA_TRICKS* aScintillaTricks )
                 {
                     SCH_FIELD* valueField = this->GetField( FIELD_T::VALUE );

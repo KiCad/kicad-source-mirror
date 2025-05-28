@@ -111,11 +111,11 @@ wxSize GRID_CELL_ESCAPED_TEXT_RENDERER::GetBestSize( wxGrid & aGrid, wxGridCellA
 //-------- GRID_CELL_STC_EDITOR -----------------------------------------------------------------
 //
 
-GRID_CELL_STC_EDITOR::GRID_CELL_STC_EDITOR(
-                        bool aIgnoreCase,
-                        std::function<void( wxStyledTextEvent&, SCINTILLA_TRICKS* )> onCharFn ) :
+GRID_CELL_STC_EDITOR::GRID_CELL_STC_EDITOR( bool aIgnoreCase, bool aSingleLine,
+                                            std::function<void( wxStyledTextEvent&, SCINTILLA_TRICKS* )> onCharFn ) :
         m_scintillaTricks( nullptr ),
         m_ignoreCase( aIgnoreCase ),
+        m_singleLine( aSingleLine ),
         m_onCharFn( std::move( onCharFn ) )
 { }
 
@@ -132,7 +132,7 @@ void GRID_CELL_STC_EDITOR::SetSize( const wxRect& aRect )
     rect.Offset( -1, 3 );
 #else
     rect.Offset( 1, 3 );
-    rect.SetHeight( rect.GetHeight() - 6 );
+    rect.SetHeight( rect.GetHeight() - 4 );
 #endif
     wxGridCellEditor::SetSize( rect );
 }
@@ -161,7 +161,7 @@ void GRID_CELL_STC_EDITOR::Create( wxWindow* aParent, wxWindowID aId, wxEvtHandl
     stc_ctrl()->SetScrollWidthTracking( true );
 
     m_scintillaTricks = new SCINTILLA_TRICKS(
-            stc_ctrl(), wxEmptyString, false,
+            stc_ctrl(), wxEmptyString, m_singleLine,
 
             // onAcceptFn
             [this]( wxKeyEvent& aEvent )
