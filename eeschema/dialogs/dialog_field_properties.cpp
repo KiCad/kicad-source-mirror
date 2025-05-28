@@ -76,14 +76,7 @@ DIALOG_FIELD_PROPERTIES::DIALOG_FIELD_PROPERTIES( SCH_BASE_FRAME* aParent, const
 
     m_StyledTextCtrl->SetEOLMode( wxSTC_EOL_LF );   // Normalize EOL across platforms
 
-#ifdef __WXGTK__
-    m_StyledTextCtrl->SetExtraAscent( 6 );
-    m_StyledTextCtrl->SetExtraDescent( 2 );
-#elif defined ( __WXMSW__ )
-    // Do nothing: SetExtraAscent() + SetExtraDescent(), when set to a value not 0
-    // Generate a strange bug: the text is not always shown (Perhaps a wxMSW bug)
-    // and this call is not needed on WXMSW
-#else
+#ifdef __WXMAC__
     m_StyledTextCtrl->SetExtraAscent( 1 );
     m_StyledTextCtrl->SetExtraDescent( 2 );
 #endif
