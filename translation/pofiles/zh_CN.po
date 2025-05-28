@@ -42,7 +42,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-05-21 05:16+0300\n"
-"PO-Revision-Date: 2025-05-26 23:01+0000\n"
+"PO-Revision-Date: 2025-05-29 15:01+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/kicad/master-source/zh_Hans/>\n"
@@ -635,7 +635,7 @@ msgstr "显示 底层 '铜/表面' 处理颜色"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:57
 msgid "Adhesive"
-msgstr "红胶"
+msgstr "Adhesive"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:57
 msgid "Show adhesive"
@@ -643,7 +643,7 @@ msgstr "显示点胶层"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:58
 msgid "Solder Paste"
-msgstr "锡膏"
+msgstr "Solder Paste"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:58
 msgid "Show solder paste"
@@ -1266,14 +1266,12 @@ msgid "Disable thickness"
 msgstr "禁用厚度绘制"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:91
-#, fuzzy
 msgid "Disable uVia holes"
-msgstr "禁用通孔绘制"
+msgstr "禁用微孔"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:94
-#, fuzzy
 msgid "Disable all plated holes"
-msgstr "禁用通孔绘制"
+msgstr "禁用所有电镀孔"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:27
 msgid "Procedural textures (slow)"
@@ -3003,9 +3001,9 @@ msgid "Grid Settings"
 msgstr "栅格设置"
 
 #: common/dialogs/dialog_group_properties.cpp:112
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid library link: '%s'"
-msgstr "无效的库标识"
+msgstr "无效的库链接: '%s'"
 
 #: common/dialogs/dialog_group_properties.cpp:133
 msgid "Edit Group Properties"
@@ -4090,7 +4088,6 @@ msgid "Add"
 msgstr "添加"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:20
-#, fuzzy
 msgid "Enable Git tracking"
 msgstr "启用 Git 跟踪"
 
@@ -7869,9 +7866,8 @@ msgid "Export HPGL"
 msgstr "导出 HPGL"
 
 #: common/jobs/job_export_pcb_hpgl.cpp:37
-#, fuzzy
 msgid "PCB: Export HPGL"
-msgstr "PCB: 导出 PDF"
+msgstr "PCB: 导出 HPGL"
 
 #: common/jobs/job_export_pcb_ipc2581.cpp:72
 #: pcbnew/dialogs/dialog_export_2581_base.h:85
@@ -7946,9 +7942,8 @@ msgid "Export Postscript Job Settings"
 msgstr "导出 Postscript 作业设置"
 
 #: common/jobs/job_export_pcb_ps.cpp:67
-#, fuzzy
 msgid "PCB: Export Postscript"
-msgstr "导出 Postscript"
+msgstr "PCB: 导出 Postscript"
 
 #: common/jobs/job_export_pcb_svg.cpp:50
 #: common/jobs/job_export_sch_plot.cpp:142 kicad/kicad_cli.cpp:151
@@ -8391,15 +8386,15 @@ msgstr "过孔孔壁"
 
 #: common/layer_id.cpp:134
 msgid "Plated holes"
-msgstr "镀孔"
+msgstr "电镀孔"
 
 #: common/layer_id.cpp:135
 msgid "Plated hole walls"
-msgstr "镀孔孔壁"
+msgstr "电镀孔壁"
 
 #: common/layer_id.cpp:136
 msgid "Non-plated holes"
-msgstr "无镀铜孔"
+msgstr "非电镀孔"
 
 #: common/layer_id.cpp:137 pcbnew/dialogs/panel_edit_options_base.cpp:371
 #: pcbnew/widgets/appearance_controls.cpp:347
@@ -9050,14 +9045,12 @@ msgid "Ungroup any selected groups"
 msgstr "取消选中的组合"
 
 #: common/tool/actions.cpp:215
-#, fuzzy
 msgid "Add Items"
-msgstr "辅助项目"
+msgstr "添加项目"
 
 #: common/tool/actions.cpp:216
-#, fuzzy
 msgid "Add items to group"
-msgstr "从组合中移除项目"
+msgstr "添加项目到组合中"
 
 #: common/tool/actions.cpp:222
 msgid "Remove Items"
@@ -9437,19 +9430,16 @@ msgid "Zoom to worksheet area if exists or edited object"
 msgstr ""
 
 #: common/tool/actions.cpp:706
-#, fuzzy
 msgid "Zoom to All Objects"
-msgstr "缩放至适应对象"
+msgstr "缩放至所有对象"
 
 #: common/tool/actions.cpp:707
-#, fuzzy
 msgid "Zoom to all objects on screen"
-msgstr "选择屏幕上的所有项目"
+msgstr "缩放直至所有对象都被显示在屏幕上"
 
 #: common/tool/actions.cpp:713
-#, fuzzy
 msgid "Zoom to items currently selected"
-msgstr "没有封装被选择"
+msgstr "缩放至选中对象"
 
 #: common/tool/actions.cpp:714
 msgid "Zoom to Selected Objects"
@@ -9510,13 +9500,12 @@ msgid "Center on Cursor"
 msgstr "以光标为中心"
 
 #: common/tool/actions.cpp:794
-#, fuzzy
 msgid "Zoom to Selection Area"
-msgstr "缩放至选区大小"
+msgstr "缩放至框选区域"
 
 #: common/tool/actions.cpp:795
 msgid "Zoom to an area selection created by a mouse drag"
-msgstr ""
+msgstr "缩放至鼠标框选区域"
 
 #: common/tool/actions.cpp:803 common/widgets/mathplot.cpp:1394
 msgid "Undo Last Zoom"
@@ -10829,9 +10818,8 @@ msgid "CSV Files"
 msgstr "CSV 文件"
 
 #: common/wildcards_and_files_ext.cpp:422
-#, fuzzy
 msgid "CSV/TSV Files"
-msgstr "CSV 文件"
+msgstr "CSV/TSV 文件"
 
 #: common/wildcards_and_files_ext.cpp:428
 msgid "Portable document format files"
@@ -12792,9 +12780,8 @@ msgid "Filter Items"
 msgstr "筛选项目"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:87
-#, fuzzy
 msgid "By field name:"
-msgstr "字段名称"
+msgstr "按字段名称:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:99
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:97
@@ -12802,14 +12789,12 @@ msgid "By parent reference designator:"
 msgstr "按父位号:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:107
-#, fuzzy
 msgid "By parent symbol library id:"
-msgstr "按父级符号库标识 筛选项目:"
+msgstr "按父级符号库标识:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:113
-#, fuzzy
 msgid "By parent symbol type:"
-msgstr "按父级符号类型筛选项目:"
+msgstr "按父级符号类型:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:116
 msgid "Non-power symbols"
@@ -12821,7 +12806,7 @@ msgstr "电源符号"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:128
 msgid "By net:"
-msgstr ""
+msgstr "按网络:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:140
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:123
@@ -13309,13 +13294,12 @@ msgstr "De Morgan 等效样式"
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:283
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:299
 msgid "True"
-msgstr ""
+msgstr "真"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:283
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:303
-#, fuzzy
 msgid "False"
-msgstr "false"
+msgstr "假"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:982
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:1536
@@ -46361,7 +46345,7 @@ msgstr "差分对间隙小于电路板最小间隙。"
 
 #: pcbnew/router/pns_router.cpp:261
 msgid "Cannot start routing from a non-plated hole."
-msgstr "无法从非镀通孔开始布线。"
+msgstr "无法从非电镀通孔开始布线。"
 
 #: pcbnew/router/pns_router.cpp:274
 #, c-format
