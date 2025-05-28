@@ -200,13 +200,6 @@ void SCINTILLA_TRICKS::onModified( wxStyledTextEvent& aEvent )
                            m_te->GotoPos( currpos-1 );
                        } );
         }
-
-        // If the font is larger than the height of a single-line text box we can get issues
-        // with the text disappearing every other character due to scrolling.
-        CallAfter( [this]()
-                   {
-                       m_te->ScrollToStart();
-                   } );
     }
 }
 
