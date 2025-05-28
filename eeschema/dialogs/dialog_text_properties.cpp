@@ -117,6 +117,11 @@ DIALOG_TEXT_PROPERTIES::DIALOG_TEXT_PROPERTIES( SCH_BASE_FRAME* aParent, SCH_ITE
                         } );
             } );
 
+    // A hack which causes Scintilla to auto-size the text editor canvas
+    // See: https://github.com/jacobslusser/ScintillaNET/issues/216
+    m_textCtrl->SetScrollWidth( 1 );
+    m_textCtrl->SetScrollWidthTracking( true );
+
     m_textEntrySizer->AddGrowableRow( 0 );
 
     m_textColorSwatch->SetDefaultColor( COLOR4D::UNSPECIFIED );
