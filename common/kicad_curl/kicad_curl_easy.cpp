@@ -163,7 +163,6 @@ KICAD_CURL_EASY::KICAD_CURL_EASY() :
         curl_easy_setopt( m_CURL, CURLOPT_VERBOSE, 1L );
     }
 
-    wxPlatformInfo platformInfo;
     wxString application( wxS( "KiCad" ) );
     wxString version( GetBuildVersion() );
     wxString platform = wxS( "(" ) + wxGetOsDescription() + wxS( ";" ) +

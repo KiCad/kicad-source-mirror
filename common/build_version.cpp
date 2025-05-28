@@ -31,6 +31,7 @@
 #include <build_version.h>
 
 #include <tuple>
+#include <mutex>
 
 // kicad_curl.h must be included before wx headers, to avoid
 // conflicts for some defines, at least on Windows
@@ -51,6 +52,9 @@ extern std::string GetCurlLibVersion();
 #include <kicad_build_version.h>
 #undef INCLUDE_KICAD_VERSION
 
+// Mutex for wxPlatformInfo
+static std::recursive_mutex s_platformInfoMutex;
+
 // Remember OpenGL info
 static wxString s_glVendor;
 static wxString s_glRenderer;
@@ -66,8 +70,10 @@ void SetOpenGLInfo( const char* aVendor, const char* aRenderer, const char* aVer
 
 wxString GetPlatformGetBitnessName()
 {
-    wxPlatformInfo platform;
-    return platform.GetBitnessName();
+    // wxPlatformInfo is not thread-safe, so protect it
+    std::unique_lock lock(s_platformInfoMutex);
+
+    return wxPlatformInfo().GetBitnessName();
 }
 
 
@@ -157,7 +163,6 @@ wxString GetVersionInfoData( const wxString& aTitle, bool aHtml, bool aBrief )
 #endif
             << " build";
 
-    wxPlatformInfo platform;
     aMsg << "Application: " << aTitle;
     aMsg << " " << wxGetCpuArchitectureName() << " on " << wxGetNativeCpuArchitectureName();
 
@@ -187,14 +192,19 @@ wxString GetVersionInfoData( const wxString& aTitle, bool aHtml, bool aBrief )
     // Linux uses the lsb-release program to get the description of the OS, if lsb-release
     // isn't installed, then the string will be empty and we fallback to the method used on
     // the other platforms (to at least get the kernel/uname info).
-     if( osDescription.empty() )
-         osDescription = wxGetOsDescription();
+    if( osDescription.empty() )
+        osDescription = wxGetOsDescription();
 
-    aMsg << "Platform: "
-         << osDescription << ", "
-         << GetPlatformGetBitnessName() << ", "
-         << platform.GetEndiannessName() << ", "
-         << platform.GetPortIdName();
+    {
+        // wxPlatformInfo is not thread-safe, so protect it
+        std::unique_lock lock( s_platformInfoMutex );
+
+        aMsg << "Platform: "
+            << osDescription << ", "
+            << GetPlatformGetBitnessName() << ", "
+            << wxPlatformInfo().GetEndiannessName() << ", "
+            << wxPlatformInfo().GetPortIdName();
+    }
 
 #ifdef __WXGTK__
     if( wxTheApp && wxTheApp->IsGUI() )
@@ -240,11 +250,15 @@ wxString GetVersionInfoData( const wxString& aTitle, bool aHtml, bool aBrief )
 
     // Get the GTK+ version where possible.
 #ifdef __WXGTK__
-    int major, minor;
+    {
+        // wxPlatformInfo is not thread-safe, so protect it
+        std::unique_lock lock( s_platformInfoMutex );
+        int              major, minor;
 
-    major = wxPlatformInfo().Get().GetToolkitMajorVersion();
-    minor = wxPlatformInfo().Get().GetToolkitMinorVersion();
-    aMsg << " GTK+ " <<  major << "." << minor;
+        major = wxPlatformInfo().GetToolkitMajorVersion();
+        minor = wxPlatformInfo().GetToolkitMinorVersion();
+        aMsg << " GTK+ " << major << "." << minor;
+    }
 #endif
 
     aMsg << eol;
