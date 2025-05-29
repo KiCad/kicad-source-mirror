@@ -60,8 +60,6 @@ public:
         ID_DUPLICATE,
     };
 
-    void SetMenuLabels( const std::map<MENU_ID, wxString>& aItems );
-
 private:
     // Custom event handlers
     void OnListBoxCopy( wxCommandEvent& aEvent );
@@ -92,8 +90,6 @@ private:
      * Duplicate the selected filters.
      */
     void listBoxDuplicateSelected();
-
-    std::map<MENU_ID, wxString> m_menuStrings;
 
     wxWindow&  m_parent;
     wxListBox& m_listBox;

@@ -43,18 +43,9 @@ wxDEFINE_EVENT( EDA_EVT_LISTBOX_CHANGED, wxCommandEvent );
 
 
 LISTBOX_TRICKS::LISTBOX_TRICKS( wxWindow& aParent, wxListBox& aListBox ) :
-        m_parent( aParent ), m_listBox( aListBox )
+        m_parent( aParent ),
+        m_listBox( aListBox )
 {
-    // Init default menu labels
-    m_menuStrings = { {
-            { ID_COPY, _( "Copy" ) },
-            { ID_PASTE, _( "Paste" ) },
-            { ID_CUT, _( "Cut" ) },
-            { ID_DUPLICATE, _( "Duplicate" ) },
-            { ID_DELETE, _( "Delete" ) },
-    } };
-
-
     m_listBox.Connect( wxEVT_RIGHT_DOWN, wxMouseEventHandler( LISTBOX_TRICKS::OnListBoxRDown ),
                        nullptr, this );
     m_listBox.Connect( wxEVT_KEY_DOWN, wxKeyEventHandler( LISTBOX_TRICKS::OnListBoxKeyDown ),
@@ -64,8 +55,7 @@ LISTBOX_TRICKS::LISTBOX_TRICKS( wxWindow& aParent, wxListBox& aListBox ) :
     Connect( EDA_EVT_LISTBOX_COPY, wxCommandEventHandler( LISTBOX_TRICKS::OnListBoxCopy ) );
     Connect( EDA_EVT_LISTBOX_CUT, wxCommandEventHandler( LISTBOX_TRICKS::OnListBoxCut ) );
     Connect( EDA_EVT_LISTBOX_PASTE, wxCommandEventHandler( LISTBOX_TRICKS::OnListBoxPaste ) );
-    Connect( EDA_EVT_LISTBOX_DUPLICATE,
-             wxCommandEventHandler( LISTBOX_TRICKS::OnListBoxDuplicate ) );
+    Connect( EDA_EVT_LISTBOX_DUPLICATE, wxCommandEventHandler( LISTBOX_TRICKS::OnListBoxDuplicate ) );
 }
 
 
@@ -80,17 +70,7 @@ LISTBOX_TRICKS::~LISTBOX_TRICKS()
     Disconnect( EDA_EVT_LISTBOX_COPY, wxCommandEventHandler( LISTBOX_TRICKS::OnListBoxCopy ) );
     Disconnect( EDA_EVT_LISTBOX_CUT, wxCommandEventHandler( LISTBOX_TRICKS::OnListBoxCut ) );
     Disconnect( EDA_EVT_LISTBOX_PASTE, wxCommandEventHandler( LISTBOX_TRICKS::OnListBoxPaste ) );
-    Disconnect( EDA_EVT_LISTBOX_DUPLICATE,
-                wxCommandEventHandler( LISTBOX_TRICKS::OnListBoxDuplicate ) );
-}
-
-
-void LISTBOX_TRICKS::SetMenuLabels( const std::map<MENU_ID, wxString>& aItems )
-{
-    for( const auto& [id, string] : aItems )
-    {
-        m_menuStrings[id] = string;
-    }
+    Disconnect( EDA_EVT_LISTBOX_DUPLICATE, wxCommandEventHandler( LISTBOX_TRICKS::OnListBoxDuplicate ) );
 }
 
 
@@ -155,13 +135,10 @@ void LISTBOX_TRICKS::listBoxDuplicateSelected()
 void LISTBOX_TRICKS::listBoxCopy()
 {
     wxArrayString filters = listBoxGetSelected();
-
-    wxString result;
+    wxString      result;
 
     for( const wxString& filter : filters )
-    {
         result += filter + wxT( "\n" );
-    }
 
     if( wxTheClipboard->Open() )
     {
@@ -225,40 +202,23 @@ void LISTBOX_TRICKS::OnListBoxRDown( wxMouseEvent& aEvent )
 {
     wxMenu menu;
 
-    const auto mstr = [&]( const MENU_ID& id ) -> const wxString&
-    {
-        return m_menuStrings[id];
-    };
-
-    // clang-format off
-    KIUI::AddMenuItem( &menu, ID_COPY,
-                       mstr( ID_COPY ) + "\tCtrl+C",
-                       KiBitmap( BITMAPS::copy ) );
-    KIUI::AddMenuItem( &menu, ID_CUT,
-                       mstr( ID_CUT ) + "\tCtrl+X",
-                       KiBitmap( BITMAPS::cut ) );
-    KIUI::AddMenuItem( &menu, ID_PASTE,
-                       mstr( ID_PASTE ) + "\tCtrl+V",
-                       KiBitmap( BITMAPS::paste ) );
-    KIUI::AddMenuItem( &menu, ID_DUPLICATE,
-                       mstr( ID_DUPLICATE ) + "\tCtrl+D",
-                       KiBitmap( BITMAPS::duplicate ) );
-    KIUI::AddMenuItem( &menu, ID_DELETE,
-                       mstr( ID_DELETE ) + "\tDel",
-                       KiBitmap( BITMAPS::trash ) );
-    // clang-format on
+    KIUI::AddMenuItem( &menu, ID_COPY,      _( "Copy" )      + "\tCtrl+C", KiBitmap( BITMAPS::copy ) );
+    KIUI::AddMenuItem( &menu, ID_CUT,       _( "Cut" )       + "\tCtrl+X", KiBitmap( BITMAPS::cut ) );
+    KIUI::AddMenuItem( &menu, ID_PASTE,     _( "Paste" )     + "\tCtrl+V", KiBitmap( BITMAPS::paste ) );
+    KIUI::AddMenuItem( &menu, ID_DUPLICATE, _( "Duplicate" ) + "\tCtrl+D", KiBitmap( BITMAPS::duplicate ) );
+    KIUI::AddMenuItem( &menu, ID_DELETE,    _( "Delete" )    + "\tDel",    KiBitmap( BITMAPS::trash ) );
 
     menu.Bind( wxEVT_COMMAND_MENU_SELECTED,
                [&]( wxCommandEvent& aCmd )
                {
                    switch( aEvent.GetId() )
                    {
-                   case ID_COPY: listBoxCopy(); break;
-                   case ID_PASTE: listBoxPaste(); break;
-                   case ID_CUT: listBoxCut(); break;
-                   case ID_DELETE: listBoxDeleteSelected(); break;
+                   case ID_COPY:      listBoxCopy();              break;
+                   case ID_PASTE:     listBoxPaste();             break;
+                   case ID_CUT:       listBoxCut();               break;
+                   case ID_DELETE:    listBoxDeleteSelected();    break;
                    case ID_DUPLICATE: listBoxDuplicateSelected(); break;
-                   default: aEvent.Skip();
+                   default:           aEvent.Skip();
                    }
                } );
 
@@ -278,11 +238,11 @@ void LISTBOX_TRICKS::OnListBoxKeyDown( wxKeyEvent& aEvent )
         {
             switch( aEvent.GetKeyCode() )
             {
-            case 'C': listBoxCopy(); break;
-            case 'V': listBoxPaste(); break;
-            case 'X': listBoxCut(); break;
+            case 'C': listBoxCopy();              break;
+            case 'V': listBoxPaste();             break;
+            case 'X': listBoxCut();               break;
             case 'D': listBoxDuplicateSelected(); break;
-            default: aEvent.Skip();
+            default:  aEvent.Skip();
             }
         }
         else
