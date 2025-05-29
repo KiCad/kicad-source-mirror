@@ -78,12 +78,6 @@ LIB_TREE::LIB_TREE( wxWindow* aParent, const wxString& aRecentSearchesKey, LIB_T
 
         m_query_ctrl->ShowCancelButton( true );
 
-#ifdef __WXGTK__
-        // wxSearchCtrl vertical height is not calculated correctly on some GTK setups
-        // See https://gitlab.com/kicad/code/kicad/-/issues/9019
-        m_query_ctrl->SetMinSize( wxSize( -1, GetTextExtent( wxT( "qb" ) ).y + 10 ) );
-#endif
-
         m_debounceTimer = new wxTimer( this );
 
         search_sizer->Add( m_query_ctrl, 1, wxEXPAND | wxRIGHT, 5 );
