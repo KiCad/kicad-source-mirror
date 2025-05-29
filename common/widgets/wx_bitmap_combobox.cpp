@@ -38,12 +38,13 @@ wxSize WX_BITMAP_COMBOBOX::DoGetBestSize() const
     wxSize size = wxBitmapComboBox::DoGetBestSize();
 
 #ifdef __WXGTK__
-    // wxWidgets has a bug on GTK where the wxBitmapComboBox doesn't scale correctly with scaled
-    // fonts.  This is a bit of a hack to get around it.
+    // wxWidgets has a bug on GTK where the wxBitmapComboBox doesn't scale correctly with fontsize.
+    // The following hack is incomplete, but gets around the worst of it.  The hack can be removed
+    // once https://github.com/wxWidgets/wxWidgets/issues/25468 is fixed.
     wxTextCtrl dummyCtrl( m_parent, wxID_ANY );
     int        dummyWidth = 100;
 
-    size.y = std::max( size.y, dummyCtrl.GetBestHeight( dummyWidth ) );
+    size.y = std::max( size.y, dummyCtrl.GetBestHeight( dummyWidth ) + 4 );
 #endif
 
     return size;
