@@ -161,8 +161,8 @@ void PCB_PLOT_PARAMS::Format( OUTPUTFORMATTER* aFormatter ) const
     if( m_gerberPrecision != gbrDefaultPrecision )
         aFormatter->Print( "(gerberprecision %d)", m_gerberPrecision );
 
-    aFormatter->Print( "(dashed_line_dash_ratio %f)", GetDashedLineDashRatio() );
-    aFormatter->Print( "(dashed_line_gap_ratio %f)", GetDashedLineGapRatio() );
+    aFormatter->Print( "(dashed_line_dash_ratio %s)", FormatDouble2Str( GetDashedLineDashRatio() ).c_str() );
+    aFormatter->Print( "(dashed_line_gap_ratio %s)", FormatDouble2Str( GetDashedLineGapRatio() ).c_str() );
 
     // SVG options
     aFormatter->Print( "(svgprecision %d)", m_svgPrecision );
