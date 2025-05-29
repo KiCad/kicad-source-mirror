@@ -729,13 +729,13 @@ void DIALOG_FOOTPRINT_PROPERTIES::OnDeleteField( wxCommandEvent&  )
     }
 
     m_itemsGrid->CommitPendingChanges( true /* quiet mode */ );
-    m_itemsGrid->ClearSelection();
 
     // Reverse sort so deleting a row doesn't change the indexes of the other rows.
     selectedRows.Sort( []( int* first, int* second ) { return *second - *first; } );
 
     for( int row : selectedRows )
     {
+        m_itemsGrid->ClearSelection();
         m_fields->erase( m_fields->begin() + row );
 
         // notify the grid

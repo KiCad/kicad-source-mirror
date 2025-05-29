@@ -818,7 +818,7 @@ void DIALOG_LABEL_PROPERTIES::OnDeleteField( wxCommandEvent& event )
     for( int row : selectedRows )
     {
         //avoids an assert if we deselect early here
-        m_grid->DeselectRow( row );
+        m_grid->ClearSelection();
         m_fields->erase( m_fields->begin() + row );
 
         // notify the grid
