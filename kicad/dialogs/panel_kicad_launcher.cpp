@@ -43,6 +43,8 @@ PANEL_KICAD_LAUNCHER::PANEL_KICAD_LAUNCHER( wxWindow* aParent ) :
 
 PANEL_KICAD_LAUNCHER::~PANEL_KICAD_LAUNCHER()
 {
+    m_frame->SetPcmButton( nullptr );
+
     for( wxWindow* window : m_scrolledWindow->GetChildren() )
     {
         if( dynamic_cast<BITMAP_BUTTON*>( window ) != nullptr )
