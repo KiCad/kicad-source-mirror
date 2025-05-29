@@ -22,7 +22,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-05-29 21:51+0300\n"
-"PO-Revision-Date: 2025-05-23 00:01+0000\n"
+"PO-Revision-Date: 2025-05-30 20:02+0000\n"
 "Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/kicad/v9/ru/>\n"
 "Language: ru\n"
@@ -10322,9 +10322,8 @@ msgid "KiCad s-expression schematic files"
 msgstr "Файлы схемы KiCad (s-expression)"
 
 #: common/wildcards_and_files_ext.cpp:289
-#, fuzzy
 msgid "Altium Project files"
-msgstr "Файлы проекта KiCad (все версии)"
+msgstr "Файлы проекта Altium"
 
 #: common/wildcards_and_files_ext.cpp:295
 msgid "CADSTAR Archive files"
