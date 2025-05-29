@@ -436,6 +436,7 @@ endif()
 
 set( COMMON_WIDGET_SRCS
     widgets/app_progress_dialog.cpp
+    widgets/wx_bitmap_combobox.cpp
     widgets/bitmap_toggle.cpp
     widgets/button_row_panel.cpp
     widgets/color_swatch.cpp

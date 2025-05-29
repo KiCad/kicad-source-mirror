@@ -23,15 +23,14 @@
  */
 
 #include "pinshape_combobox.h"
-
 #include <bitmaps.h>
-#include <sch_pin.h>
+
 
 PINSHAPE_COMBOBOX::PINSHAPE_COMBOBOX( wxWindow* parent, wxWindowID id, const wxString& value,
                                      const wxPoint& pos, const wxSize& size, int n,
                                      const wxString choices[], long style,
                                      const wxValidator& validator, const wxString& name ) :
-        wxBitmapComboBox( parent, id, value, pos, size, n, choices, style, validator, name )
+        WX_BITMAP_COMBOBOX( parent, id, value, pos, size, n, choices, style, validator, name )
 {
     for( unsigned ii = 0; ii < GRAPHIC_PINSHAPES_TOTAL; ++ii )
     {
@@ -56,5 +55,5 @@ GRAPHIC_PINSHAPE PINSHAPE_COMBOBOX::GetPinShapeSelection()
 
 void PINSHAPE_COMBOBOX::SetSelection( GRAPHIC_PINSHAPE aShape )
 {
-    wxBitmapComboBox::SetSelection( static_cast<int>( aShape ) );
+    WX_BITMAP_COMBOBOX::SetSelection( static_cast<int>( aShape ) );
 }

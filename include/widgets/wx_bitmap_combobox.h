@@ -1,12 +1,11 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2015 Simon Richter <Simon.Richter@hogyros.de>
  * Copyright The KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
+ * as published by the Free Software Foundation; either version 3
  * of the License, or (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
@@ -22,22 +21,22 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <widgets/wx_bitmap_combobox.h>
-#include <pin_type.h>
+#ifndef WX_BITMAP_COMBOBOX_H
+#define WX_BITMAP_COMBOBOX_H
 
-class PINSHAPE_COMBOBOX : public WX_BITMAP_COMBOBOX
+#include <wx/bmpcbox.h>
+
+class WX_BITMAP_COMBOBOX : public wxBitmapComboBox
 {
 public:
-    PINSHAPE_COMBOBOX( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& value = wxEmptyString,
-                       const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
-                       int n = 0, const wxString choices[] = nullptr, long style = 0,
-                       const wxValidator& validator = wxDefaultValidator,
-                       const wxString& name = wxBitmapComboBoxNameStr );
+    WX_BITMAP_COMBOBOX( wxWindow *parent, wxWindowID id = wxID_ANY, const wxString& value = wxEmptyString,
+                        const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
+                        int n = 0, const wxString choices[] = NULL, long style = 0,
+                        const wxValidator& validator = wxDefaultValidator,
+                        const wxString& name = wxASCII_STR( wxBitmapComboBoxNameStr ) );
 
-    GRAPHIC_PINSHAPE GetPinShapeSelection();
-    void SetSelection( GRAPHIC_PINSHAPE aShape );
-
-private:
-    // fixes hidden overloaded virtual function warnings
-    using wxBitmapComboBox::SetSelection;
+    wxSize DoGetBestSize() const override;
 };
+
+
+#endif //WX_BITMAP_COMBOBOX_H

@@ -8,9 +8,9 @@
 #include "pinshape_combobox.h"
 #include "pintype_combobox.h"
 #include "widgets/std_bitmap_button.h"
+#include "widgets/wx_bitmap_combobox.h"
 #include "widgets/wx_grid.h"
 #include "widgets/wx_infobar.h"
-#include "wx/bmpcbox.h"
 
 #include "dialog_pin_properties_base.h"
 
@@ -114,7 +114,7 @@ DIALOG_PIN_PROPERTIES_BASE::DIALOG_PIN_PROPERTIES_BASE( wxWindow* parent, wxWind
 	m_staticTextOrient->Wrap( -1 );
 	gbSizer1->Add( m_staticTextOrient, wxGBPosition( 6, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
 
-	m_choiceOrientation = new wxBitmapComboBox( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_DROPDOWN|wxCB_READONLY );
+	m_choiceOrientation = new WX_BITMAP_COMBOBOX( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_DROPDOWN|wxCB_READONLY );
 	gbSizer1->Add( m_choiceOrientation, wxGBPosition( 6, 1 ), wxGBSpan( 1, 2 ), wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
 
 	m_posXUnits = new wxStaticText( this, wxID_ANY, _("units"), wxDefaultPosition, wxDefaultSize, 0 );

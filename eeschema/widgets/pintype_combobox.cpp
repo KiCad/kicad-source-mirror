@@ -23,15 +23,14 @@
  */
 
 #include "pintype_combobox.h"
-
 #include <bitmaps.h>
-#include <sch_pin.h>
+
 
 PINTYPE_COMBOBOX::PINTYPE_COMBOBOX( wxWindow* parent, wxWindowID id, const wxString& value,
                                     const wxPoint& pos, const wxSize& size, int n,
                                     const wxString choices[], long style,
                                     const wxValidator& validator, const wxString& name ) :
-        wxBitmapComboBox( parent, id, value, pos, size, n, choices, style, validator, name )
+        WX_BITMAP_COMBOBOX( parent, id, value, pos, size, n, choices, style, validator, name )
 {
     for( unsigned ii = 0; ii < ELECTRICAL_PINTYPES_TOTAL; ++ii )
     {
@@ -56,5 +55,5 @@ ELECTRICAL_PINTYPE PINTYPE_COMBOBOX::GetPinTypeSelection()
 
 void PINTYPE_COMBOBOX::SetSelection( ELECTRICAL_PINTYPE aType )
 {
-    wxBitmapComboBox::SetSelection( static_cast<int>( aType ) );
+    WX_BITMAP_COMBOBOX::SetSelection( static_cast<int>( aType ) );
 }

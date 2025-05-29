@@ -13,9 +13,9 @@
 class PINSHAPE_COMBOBOX;
 class PINTYPE_COMBOBOX;
 class STD_BITMAP_BUTTON;
+class WX_BITMAP_COMBOBOX;
 class WX_GRID;
 class WX_INFOBAR;
-class wxBitmapComboBox;
 
 #include "dialog_shim.h"
 #include <wx/infobar.h>
@@ -70,7 +70,7 @@ class DIALOG_PIN_PROPERTIES_BASE : public DIALOG_SHIM
 		wxStaticText* m_staticTextGstyle;
 		PINSHAPE_COMBOBOX* m_choiceStyle;
 		wxStaticText* m_staticTextOrient;
-		wxBitmapComboBox* m_choiceOrientation;
+		WX_BITMAP_COMBOBOX* m_choiceOrientation;
 		wxStaticText* m_posXUnits;
 		wxStaticText* m_posYUnits;
 		wxStaticText* m_pinLengthUnits;
