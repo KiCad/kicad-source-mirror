@@ -22,33 +22,22 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file pin_type_combobox.h
- * @brief ComboBox widget for pin type
- */
-
 #include <wx/bmpcbox.h>
 
 #include <pin_type.h>
 
-class PinTypeComboBox : public wxBitmapComboBox
+class PINTYPE_COMBOBOX : public wxBitmapComboBox
 {
 public:
-    /// @todo C++11: replace with forwarder
+    PINTYPE_COMBOBOX( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& value = wxEmptyString,
+                      const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
+                      int n = 0, const wxString choices[] = nullptr, long style = 0,
+                      const wxValidator& validator = wxDefaultValidator,
+                      const wxString& name = wxBitmapComboBoxNameStr );
 
-    PinTypeComboBox( wxWindow* parent,
-                     wxWindowID id = wxID_ANY,
-                     const wxString& value = wxEmptyString,
-                     const wxPoint& pos = wxDefaultPosition,
-                     const wxSize& size = wxDefaultSize,
-                     int n = 0,
-                     const wxString choices[] = nullptr,
-                     long style = 0,
-                     const wxValidator& validator = wxDefaultValidator,
-                     const wxString& name = wxBitmapComboBoxNameStr );
+    ELECTRICAL_PINTYPE GetPinTypeSelection();
 
-    ELECTRICAL_PINTYPE  GetPinTypeSelection();
-    void                SetSelection( ELECTRICAL_PINTYPE aType );
+    void SetSelection( ELECTRICAL_PINTYPE aType );
 
 private:
     // fixes hidden overloaded virtual function warnings

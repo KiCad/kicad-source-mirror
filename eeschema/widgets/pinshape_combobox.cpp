@@ -22,27 +22,16 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file pin_shape_combobox.cpp
- * @brief ComboBox widget for pin shape
- */
-
-#include "pin_shape_combobox.h"
+#include "pinshape_combobox.h"
 
 #include <bitmaps.h>
 #include <sch_pin.h>
 
-PinShapeComboBox::PinShapeComboBox( wxWindow* parent,
-        wxWindowID id,
-        const wxString& value,
-        const wxPoint& pos,
-        const wxSize& size,
-        int n,
-        const wxString choices[],
-        long style,
-        const wxValidator& validator,
-        const wxString& name ) :
-    wxBitmapComboBox( parent, id, value, pos, size, n, choices, style, validator, name )
+PINSHAPE_COMBOBOX::PINSHAPE_COMBOBOX( wxWindow* parent, wxWindowID id, const wxString& value,
+                                     const wxPoint& pos, const wxSize& size, int n,
+                                     const wxString choices[], long style,
+                                     const wxValidator& validator, const wxString& name ) :
+        wxBitmapComboBox( parent, id, value, pos, size, n, choices, style, validator, name )
 {
     for( unsigned ii = 0; ii < GRAPHIC_PINSHAPES_TOTAL; ++ii )
     {
@@ -59,13 +48,13 @@ PinShapeComboBox::PinShapeComboBox( wxWindow* parent,
 }
 
 
-GRAPHIC_PINSHAPE PinShapeComboBox::GetPinShapeSelection()
+GRAPHIC_PINSHAPE PINSHAPE_COMBOBOX::GetPinShapeSelection()
 {
     return static_cast<GRAPHIC_PINSHAPE>( GetSelection() );
 }
 
 
-void PinShapeComboBox::SetSelection( GRAPHIC_PINSHAPE aShape )
+void PINSHAPE_COMBOBOX::SetSelection( GRAPHIC_PINSHAPE aShape )
 {
     wxBitmapComboBox::SetSelection( static_cast<int>( aShape ) );
 }

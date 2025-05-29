@@ -5,8 +5,8 @@
 // PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#include "pin_shape_combobox.h"
-#include "pin_type_combobox.h"
+#include "pinshape_combobox.h"
+#include "pintype_combobox.h"
 #include "widgets/std_bitmap_button.h"
 #include "widgets/wx_grid.h"
 #include "widgets/wx_infobar.h"
@@ -100,14 +100,14 @@ DIALOG_PIN_PROPERTIES_BASE::DIALOG_PIN_PROPERTIES_BASE( wxWindow* parent, wxWind
 
 	gbSizer1->Add( m_staticTextEType, wxGBPosition( 2, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
 
-	m_choiceElectricalType = new PinTypeComboBox( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_DROPDOWN|wxCB_READONLY );
+	m_choiceElectricalType = new PINTYPE_COMBOBOX( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_DROPDOWN|wxCB_READONLY );
 	gbSizer1->Add( m_choiceElectricalType, wxGBPosition( 2, 1 ), wxGBSpan( 1, 2 ), wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
 
 	m_staticTextGstyle = new wxStaticText( this, wxID_ANY, _("Graphic style:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextGstyle->Wrap( -1 );
 	gbSizer1->Add( m_staticTextGstyle, wxGBPosition( 3, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
 
-	m_choiceStyle = new PinShapeComboBox( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_DROPDOWN|wxCB_READONLY );
+	m_choiceStyle = new PINSHAPE_COMBOBOX( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_DROPDOWN|wxCB_READONLY );
 	gbSizer1->Add( m_choiceStyle, wxGBPosition( 3, 1 ), wxGBSpan( 1, 2 ), wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
 
 	m_staticTextOrient = new wxStaticText( this, wxID_ANY, _("Orientation:"), wxDefaultPosition, wxDefaultSize, 0 );

@@ -22,27 +22,16 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file pin_type_combobox.cpp
- * @brief ComboBox widget for pin type
- */
-
-#include "pin_type_combobox.h"
+#include "pintype_combobox.h"
 
 #include <bitmaps.h>
 #include <sch_pin.h>
 
-PinTypeComboBox::PinTypeComboBox( wxWindow* parent,
-        wxWindowID id,
-        const wxString& value,
-        const wxPoint& pos,
-        const wxSize& size,
-        int n,
-        const wxString choices[],
-        long style,
-        const wxValidator& validator,
-        const wxString& name ) :
-    wxBitmapComboBox( parent, id, value, pos, size, n, choices, style, validator, name )
+PINTYPE_COMBOBOX::PINTYPE_COMBOBOX( wxWindow* parent, wxWindowID id, const wxString& value,
+                                    const wxPoint& pos, const wxSize& size, int n,
+                                    const wxString choices[], long style,
+                                    const wxValidator& validator, const wxString& name ) :
+        wxBitmapComboBox( parent, id, value, pos, size, n, choices, style, validator, name )
 {
     for( unsigned ii = 0; ii < ELECTRICAL_PINTYPES_TOTAL; ++ii )
     {
@@ -59,13 +48,13 @@ PinTypeComboBox::PinTypeComboBox( wxWindow* parent,
 }
 
 
-ELECTRICAL_PINTYPE PinTypeComboBox::GetPinTypeSelection()
+ELECTRICAL_PINTYPE PINTYPE_COMBOBOX::GetPinTypeSelection()
 {
     return static_cast<ELECTRICAL_PINTYPE>( GetSelection() );
 }
 
 
-void PinTypeComboBox::SetSelection( ELECTRICAL_PINTYPE aType )
+void PINTYPE_COMBOBOX::SetSelection( ELECTRICAL_PINTYPE aType )
 {
     wxBitmapComboBox::SetSelection( static_cast<int>( aType ) );
 }

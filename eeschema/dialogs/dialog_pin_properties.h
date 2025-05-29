@@ -28,8 +28,8 @@
 #include <wx/bmpcbox.h>
 #include <wx/dcclient.h>
 
-#include <pin_shape_combobox.h>
-#include <pin_type_combobox.h>
+#include <pinshape_combobox.h>
+#include <pintype_combobox.h>
 
 #include <dialog_pin_properties_base.h>
 #include <widgets/unit_binder.h>

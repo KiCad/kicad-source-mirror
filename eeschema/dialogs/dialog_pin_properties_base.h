@@ -10,8 +10,8 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
-class PinShapeComboBox;
-class PinTypeComboBox;
+class PINSHAPE_COMBOBOX;
+class PINTYPE_COMBOBOX;
 class STD_BITMAP_BUTTON;
 class WX_GRID;
 class WX_INFOBAR;
@@ -66,9 +66,9 @@ class DIALOG_PIN_PROPERTIES_BASE : public DIALOG_SHIM
 		wxStaticText* m_numberSizeLabel;
 		wxTextCtrl* m_numberSizeCtrl;
 		wxStaticText* m_staticTextEType;
-		PinTypeComboBox* m_choiceElectricalType;
+		PINTYPE_COMBOBOX* m_choiceElectricalType;
 		wxStaticText* m_staticTextGstyle;
-		PinShapeComboBox* m_choiceStyle;
+		PINSHAPE_COMBOBOX* m_choiceStyle;
 		wxStaticText* m_staticTextOrient;
 		wxBitmapComboBox* m_choiceOrientation;
 		wxStaticText* m_posXUnits;

@@ -22,32 +22,20 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file pin_shape_combobox.h
- * @brief ComboBox widget for pin shape
- */
-
 #include <wx/bmpcbox.h>
 #include <pin_type.h>
 
-class PinShapeComboBox : public wxBitmapComboBox
+class PINSHAPE_COMBOBOX : public wxBitmapComboBox
 {
 public:
-    /// @todo C++11: replace with forwarder
-
-    PinShapeComboBox( wxWindow* parent,
-                      wxWindowID id = wxID_ANY,
-                      const wxString& value = wxEmptyString,
-                      const wxPoint& pos = wxDefaultPosition,
-                      const wxSize& size = wxDefaultSize,
-                      int n = 0,
-                      const wxString choices[] = nullptr,
-                      long style = 0,
-                      const wxValidator& validator = wxDefaultValidator,
-                      const wxString& name = wxBitmapComboBoxNameStr );
+    PINSHAPE_COMBOBOX( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& value = wxEmptyString,
+                       const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
+                       int n = 0, const wxString choices[] = nullptr, long style = 0,
+                       const wxValidator& validator = wxDefaultValidator,
+                       const wxString& name = wxBitmapComboBoxNameStr );
 
     GRAPHIC_PINSHAPE GetPinShapeSelection();
-    void             SetSelection( GRAPHIC_PINSHAPE aShape );
+    void SetSelection( GRAPHIC_PINSHAPE aShape );
 
 private:
     // fixes hidden overloaded virtual function warnings
