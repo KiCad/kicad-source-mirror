@@ -169,6 +169,8 @@ public:
 
         if( b->GetType() == LIBEVAL::VT_STRING )
         {
+            // Test constituent net class names. The effective net class name (e.g. CLASS1,CLASS2,OTHER_CLASS) is
+            // tested in the fallthrough condition.
             for( const auto nc : m_item->GetEffectiveNetClass()->GetConstituentNetclasses() )
             {
                 const wxString& ncName = nc->GetName();
@@ -184,8 +186,6 @@ public:
                         return true;
                 }
             }
-
-            return m_item->GetEffectiveNetClass()->GetName() == b->AsString();
         }
 
         return LIBEVAL::VALUE::EqualTo( aCtx, b );
@@ -201,6 +201,7 @@ public:
 
         if( b->GetType() == LIBEVAL::VT_STRING )
         {
+            // Test constituent net class names
             bool isInConstituents = false;
 
             for( const auto nc : m_item->GetEffectiveNetClass()->GetConstituentNetclasses() )
@@ -225,7 +226,8 @@ public:
                 }
             }
 
-            const bool isFullName = m_item->GetEffectiveNetClass()->GetName() == b->AsString();
+            // Test effective net class name
+            const bool isFullName = LIBEVAL::VALUE::EqualTo( aCtx, b );
 
             return !isInConstituents && !isFullName;
         }
@@ -274,10 +276,23 @@ public:
 
         if( b->GetType() == LIBEVAL::VT_STRING )
         {
-            if( m_item->GetComponentClass()->ContainsClassName( b->AsString() ) )
-                return true;
+            // Test constituent component class names. The effective component class name
+            // (e.g. CLASS1,CLASS2,OTHER_CLASS) is tested in the fallthrough condition.
+            for( const auto cc : m_item->GetComponentClass()->GetConstituentClasses() )
+            {
+                const wxString& ccName = cc->GetFullName();
 
-            return m_item->GetComponentClass()->GetFullName() == b->AsString();
+                if( b->StringIsWildcard() )
+                {
+                    if( WildCompareString( b->AsString(), ccName, false ) )
+                        return true;
+                }
+                else
+                {
+                    if( ccName.IsSameAs( b->AsString(), false ) )
+                        return true;
+                }
+            }
         }
 
         return LIBEVAL::VALUE::EqualTo( aCtx, b );
@@ -301,9 +316,33 @@ public:
 
         if( b->GetType() == LIBEVAL::VT_STRING )
         {
-            const bool isInConstituents =
-                    m_item->GetComponentClass()->ContainsClassName( b->AsString() );
-            const bool isFullName = m_item->GetComponentClass()->GetFullName() == b->AsString();
+            // Test constituent component class names
+            bool isInConstituents = false;
+
+            for( const auto cc : m_item->GetComponentClass()->GetConstituentClasses() )
+            {
+                const wxString& ccName = cc->GetFullName();
+
+                if( b->StringIsWildcard() )
+                {
+                    if( WildCompareString( b->AsString(), ccName, false ) )
+                    {
+                        isInConstituents = true;
+                        break;
+                    }
+                }
+                else
+                {
+                    if( ccName.IsSameAs( b->AsString(), false ) )
+                    {
+                        isInConstituents = true;
+                        break;
+                    }
+                }
+            }
+
+            // Test effective component class name
+            const bool isFullName = LIBEVAL::VALUE::EqualTo( aCtx, b );
 
             return !isInConstituents && !isFullName;
         }
