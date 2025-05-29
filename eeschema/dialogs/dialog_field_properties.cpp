@@ -316,6 +316,7 @@ void DIALOG_FIELD_PROPERTIES::init()
         SetInitialFocus( m_TextCtrl );
 
         m_StyledTextCtrl->Show( false );
+        m_StyledTextCtrlBorder->Show( false );
     }
     else
     {
