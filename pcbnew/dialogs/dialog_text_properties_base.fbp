@@ -578,7 +578,7 @@
                 <property name="permission">none</property>
                 <object class="sizeritem" expanded="false">
                   <property name="border">15</property>
-                  <property name="flag">wxTOP|wxBOTTOM|wxRIGHT</property>
+                  <property name="flag">wxALL</property>
                   <property name="proportion">1</property>
                   <object class="wxCheckBox" expanded="false">
                     <property name="BottomDockable">1</property>
@@ -727,7 +727,7 @@
                   </object>
                 </object>
                 <object class="sizeritem" expanded="true">
-                  <property name="border">10</property>
+                  <property name="border">20</property>
                   <property name="flag">wxALIGN_CENTER_VERTICAL|wxRIGHT</property>
                   <property name="proportion">0</property>
                   <object class="wxCheckBox" expanded="false">
@@ -2388,10 +2388,10 @@
               </object>
             </object>
             <object class="gbsizeritem" expanded="true">
-              <property name="border">5</property>
+              <property name="border">15</property>
               <property name="colspan">1</property>
               <property name="column">4</property>
-              <property name="flag">wxALIGN_CENTER_VERTICAL</property>
+              <property name="flag">wxALIGN_CENTER_VERTICAL|wxLEFT</property>
               <property name="row">3</property>
               <property name="rowspan">1</property>
               <object class="wxStaticText" expanded="false">
@@ -2587,10 +2587,10 @@
               </object>
             </object>
             <object class="gbsizeritem" expanded="true">
-              <property name="border">5</property>
+              <property name="border">15</property>
               <property name="colspan">1</property>
               <property name="column">4</property>
-              <property name="flag">wxALIGN_CENTER_VERTICAL</property>
+              <property name="flag">wxALIGN_CENTER_VERTICAL|wxLEFT</property>
               <property name="row">4</property>
               <property name="rowspan">1</property>
               <object class="wxStaticText" expanded="false">
@@ -2786,10 +2786,10 @@
               </object>
             </object>
             <object class="gbsizeritem" expanded="true">
-              <property name="border">5</property>
+              <property name="border">15</property>
               <property name="colspan">1</property>
               <property name="column">4</property>
-              <property name="flag">wxALIGN_CENTER_VERTICAL</property>
+              <property name="flag">wxALIGN_CENTER_VERTICAL|wxLEFT</property>
               <property name="row">5</property>
               <property name="rowspan">1</property>
               <object class="wxStaticText" expanded="false">
