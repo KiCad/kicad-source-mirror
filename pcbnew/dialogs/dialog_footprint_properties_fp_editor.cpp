@@ -752,7 +752,6 @@ void DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::OnDeleteField( wxCommandEvent& event
     }
 
     m_itemsGrid->CommitPendingChanges( true /* quiet mode */ );
-    m_itemsGrid->ClearSelection();
 
     // Reverse sort so deleting a row doesn't change the indexes of the other rows.
     selectedRows.Sort( []( int* first, int* second )
@@ -762,6 +761,7 @@ void DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::OnDeleteField( wxCommandEvent& event
 
     for( int row : selectedRows )
     {
+        m_itemsGrid->ClearSelection();
         m_fields->erase( m_fields->begin() + row );
 
         // notify the grid
@@ -813,6 +813,7 @@ void DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::OnDeleteLayer( wxCommandEvent& event
     if( curRow < 0 )
         return;
 
+    m_privateLayersGrid->ClearSelection();
     m_privateLayers->erase( m_privateLayers->begin() + curRow );
 
     // notify the grid

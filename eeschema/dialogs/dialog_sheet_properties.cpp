@@ -798,6 +798,7 @@ void DIALOG_SHEET_PROPERTIES::OnDeleteField( wxCommandEvent& event )
 
     for( int row : selectedRows )
     {
+        m_grid->ClearSelection();
         m_fields->erase( m_fields->begin() + row );
 
         // notify the grid

@@ -633,13 +633,13 @@ void DIALOG_LIB_SYMBOL_PROPERTIES::OnDeleteField( wxCommandEvent& event )
     }
 
     m_grid->CommitPendingChanges( true /* quiet mode */ );
-    m_grid->ClearSelection();
 
     // Reverse sort so deleting a row doesn't change the indexes of the other rows.
     selectedRows.Sort( []( int* first, int* second ) { return *second - *first; } );
 
     for( int row : selectedRows )
     {
+        m_grid->ClearSelection();
         m_fields->erase( m_fields->begin() + row );
 
         // notify the grid
@@ -713,6 +713,8 @@ void DIALOG_LIB_SYMBOL_PROPERTIES::OnEditSpiceModel( wxCommandEvent& event )
 {
     if( !m_grid->CommitPendingChanges() )
         return;
+
+    m_grid->ClearSelection();
 
     std::vector<SCH_FIELD> fields;
 

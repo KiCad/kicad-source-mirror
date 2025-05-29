@@ -190,11 +190,13 @@ public:
         {
             LIB_TABLE_ROWS_ITER start = begin() + aPos;
             erase( start, start + aNumRows );
+
             if( GetView() )
             {
                 wxGridTableMessage msg( this, wxGRIDTABLE_NOTIFY_ROWS_DELETED, aPos, aNumRows );
                 GetView()->ProcessTableMessage( msg );
             }
+
             return true;
         }
 
