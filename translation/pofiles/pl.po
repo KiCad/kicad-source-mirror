@@ -18,10 +18,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-05-29 21:50+0300\n"
-"PO-Revision-Date: 2025-05-25 08:03+0000\n"
+"PO-Revision-Date: 2025-05-30 20:01+0000\n"
 "Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
-"Language-Team: Polish <https://hosted.weblate.org/projects/kicad/master-"
-"source/pl/>\n"
+"Language-Team: Polish <https://hosted.weblate.org/projects/kicad/"
+"master-source/pl/>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -13528,6 +13528,8 @@ msgid ""
 "The value '%s' can't be converted to boolean correctly, it has been "
 "interpreted as 'False'"
 msgstr ""
+"Wartość '%s' nie może być prawidłowo zamieniona na wartość logiczną, "
+"zostanie zinterpretowana jako 'Fałsz'"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:1006
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:1566
@@ -17453,7 +17455,7 @@ msgid "There is no symbol selected to save."
 msgstr "Nie ma zaznaczonych symboli do zapisu."
 
 #: eeschema/eeschema_jobs_handler.cpp:978
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to create output directory '%s'."
 msgstr "Nie można utworzyć folderu wyjściowego '%s'."
 
@@ -21730,6 +21732,8 @@ msgstr "spodziewano się definicji formatu pomiarów"
 #: eeschema/sim/ngspice.cpp:501
 msgid "Unable to load ngspice shared library. Please check your install."
 msgstr ""
+"Nie można załadować współdzielonej biblioteki ngspice. Proszę sprawdzić "
+"poprawność instalacji."
 
 #: eeschema/sim/sim_lib_mgr.cpp:91 eeschema/sim/sim_lib_mgr.cpp:144
 #, c-format
@@ -29142,7 +29146,6 @@ msgid "Launch preferred text editor"
 msgstr "Uruchom preferowany edytor tekstu"
 
 #: kicad/tools/kicad_manager_actions.cpp:221
-#, fuzzy
 msgid "Archive Project..."
 msgstr "Archiwizuj projekt..."
 
@@ -29151,7 +29154,6 @@ msgid "Archive all project files"
 msgstr "Zarchiwizuj wszystkie pliki projektu"
 
 #: kicad/tools/kicad_manager_actions.cpp:228
-#, fuzzy
 msgid "Unarchive Project..."
 msgstr "Rozpakuj projekt..."
 
@@ -44993,9 +44995,8 @@ msgid "IDFv3..."
 msgstr "IDFv3..."
 
 #: pcbnew/menubar_pcb_editor.cpp:128
-#, fuzzy
 msgid "STEP/GLB/BREP/XAO/PLY/STL..."
-msgstr "STEP / GLB / BREP / XAO / PLY / STL..."
+msgstr "STEP/GLB/BREP/XAO/PLY/STL..."
 
 #: pcbnew/menubar_pcb_editor.cpp:129
 msgid "Footprint Association (.cmp) File..."
@@ -50938,47 +50939,40 @@ msgid "Create bill of materials from board"
 msgstr "Tworzy listę materiałową z płytki"
 
 #: pcbnew/tools/pcb_actions.cpp:1257
-#, fuzzy
 msgid "Export GenCAD..."
-msgstr "Eksportuj plik GenCAD"
+msgstr "Eksportuj jako GenCAD..."
 
 #: pcbnew/tools/pcb_actions.cpp:1258
 msgid "Export GenCAD board representation"
 msgstr "Eksportuje obraz płytki w formacie GenCAD"
 
 #: pcbnew/tools/pcb_actions.cpp:1264
-#, fuzzy
 msgid "Export VRML..."
-msgstr "Eksportuj VRML"
+msgstr "Eksportuj jako VRML..."
 
 #: pcbnew/tools/pcb_actions.cpp:1265
 msgid "Export VRML 3D board representation"
 msgstr "Eksportuje obraz płytki w formacie VRML 3D"
 
 #: pcbnew/tools/pcb_actions.cpp:1271
-#, fuzzy
 msgid "Export IDFv3..."
-msgstr "Eksport IDFv3"
+msgstr "Eksportuj jako IDFv3..."
 
 #: pcbnew/tools/pcb_actions.cpp:1272
 msgid "Export IDF 3D board representation"
 msgstr "Eksportuje obraz płytki w formacie IDF 3D"
 
 #: pcbnew/tools/pcb_actions.cpp:1278
-#, fuzzy
 msgid "Export STEP/GLB/BREP/XAO/PLY/STL..."
-msgstr "STEP / GLB / BREP / XAO / PLY / STL..."
+msgstr "Eksportuj jako STEP/GLB/BREP/XAO/PLY/STL..."
 
 #: pcbnew/tools/pcb_actions.cpp:1279
-#, fuzzy
 msgid "Export STEP, GLB, BREP, XAO, PLY or STL 3D board representation"
-msgstr ""
-"Eksportuje obraz 3D płytki w formacie STEP / GLB / BREP / XAO / PLY / STL 3D"
+msgstr "Eksportuje obraz 3D płytki w formacie STEP, GLB, BREP, XAO, PLY lub STL"
 
 #: pcbnew/tools/pcb_actions.cpp:1285
-#, fuzzy
 msgid "Export Footprint Association (.cmp) File..."
-msgstr "Plik przydzieleń footprintów (.cmp)..."
+msgstr "Eksportuj plik przydzieleń footprintów (.cmp)..."
 
 #: pcbnew/tools/pcb_actions.cpp:1286
 msgid "Export footprint association file (*.cmp) for schematic back annotation"
