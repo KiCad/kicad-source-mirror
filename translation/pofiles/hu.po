@@ -13,8 +13,8 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-05-29 21:51+0300\n"
-"PO-Revision-Date: 2025-05-30 20:01+0000\n"
-"Last-Translator: Anonymous <noreply@weblate.org>\n"
+"PO-Revision-Date: 2025-05-31 22:01+0000\n"
+"Last-Translator: Sárkány Lőrinc <lsarkany@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/kicad/v9/hu/>\n"
 "Language: hu\n"
 "MIME-Version: 1.0\n"
@@ -49448,7 +49448,6 @@ msgstr ""
 "függvényeket."
 
 #: pcbnew/pcb_layer_box_selector.cpp:73
-#, fuzzy
 msgid "(not activated)"
 msgstr "(nem aktivált)"
 
