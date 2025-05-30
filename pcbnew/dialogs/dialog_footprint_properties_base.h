@@ -70,7 +70,6 @@ class DIALOG_FOOTPRINT_PROPERTIES_BASE : public DIALOG_SHIM
 		wxCheckBox* m_boardOnly;
 		wxCheckBox* m_excludeFromPosFiles;
 		wxCheckBox* m_excludeFromBOM;
-		wxCheckBox* m_noCourtyards;
 		wxCheckBox* m_cbDNP;
 		wxButton* m_buttonUpdate;
 		wxButton* m_buttonExchange;
@@ -95,6 +94,8 @@ class DIALOG_FOOTPRINT_PROPERTIES_BASE : public DIALOG_SHIM
 		wxStaticText* m_staticTextInfoPaste;
 		wxStaticText* m_staticText16;
 		wxChoice* m_ZoneConnectionChoice;
+		wxStaticText* m_jumperGroupsLabel;
+		wxStaticText* m_jumperGroupsText;
 		wxStaticText* m_libraryIDLabel;
 		wxTextCtrl* m_tcLibraryID;
 		wxStdDialogButtonSizer* m_sdbSizerStdButtons;

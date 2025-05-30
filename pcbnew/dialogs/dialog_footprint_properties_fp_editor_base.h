@@ -34,7 +34,6 @@ class WX_GRID;
 #include <wx/checkbox.h>
 #include <wx/panel.h>
 #include <wx/gbsizer.h>
-#include <wx/listbox.h>
 #include <wx/notebook.h>
 #include <wx/dialog.h>
 
@@ -68,7 +67,6 @@ class DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE : public DIALOG_SHIM
 		wxCheckBox* m_boardOnly;
 		wxCheckBox* m_excludeFromPosFiles;
 		wxCheckBox* m_excludeFromBOM;
-		wxCheckBox* m_noCourtyards;
 		wxCheckBox* m_cbDNP;
 		wxPanel* m_PanelClearances;
 		wxStaticText* m_staticTextInfo;
@@ -87,20 +85,19 @@ class DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE : public DIALOG_SHIM
 		wxStaticText* m_PasteMarginRatioUnits;
 		wxStaticText* m_staticTextInfoCopper;
 		wxStaticText* m_staticTextInfoPaste;
+		wxCheckBox* m_noCourtyards;
+		wxPanel* m_PanelPadConnections;
 		wxStaticText* m_staticText16;
 		wxChoice* m_ZoneConnectionChoice;
-		wxStaticText* m_padGroupsLabel;
-		WX_GRID* m_padGroupsGrid;
-		STD_BITMAP_BUTTON* m_bpAddPadGroup;
-		STD_BITMAP_BUTTON* m_bpRemovePadGroup;
-		wxPanel* m_PanelPinConnections;
+		wxStaticText* m_nettieGroupsLabel;
+		WX_GRID* m_nettieGroupsGrid;
+		STD_BITMAP_BUTTON* m_bpAddNettieGroup;
+		STD_BITMAP_BUTTON* m_bpRemoveNettieGroup;
 		wxCheckBox* m_cbDuplicatePadsAreJumpers;
-		wxStaticText* stLabelAvailablePads;
-		wxListBox* m_listAvailablePads;
-		wxBitmapButton* m_btnCreateJumperPadGroup;
-		wxBitmapButton* m_btnRemoveJumperPadGroup;
-		wxStaticText* stLabelGroups;
-		wxListBox* m_listJumperPadGroups;
+		wxStaticText* m_jumperGroupsLabel;
+		WX_GRID* m_jumperGroupsGrid;
+		STD_BITMAP_BUTTON* m_bpAddJumperGroup;
+		STD_BITMAP_BUTTON* m_bpRemoveJumperGroup;
 		wxStdDialogButtonSizer* m_sdbSizerStdButtons;
 		wxButton* m_sdbSizerStdButtonsOK;
 		wxButton* m_sdbSizerStdButtonsCancel;
@@ -117,12 +114,10 @@ class DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE : public DIALOG_SHIM
 		virtual void OnDeleteLayer( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnChoice( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnCheckBox( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnAddPadGroup( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnRemovePadGroup( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnAvailablePadsClick( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnBtnCreateJumperPadGroup( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnBtnRemoveJumperPadGroup( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnGroupedPadListClick( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnAddNettieGroup( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnRemoveNettieGroup( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnAddJumperGroup( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnRemoveJumperGroup( wxCommandEvent& event ) { event.Skip(); }
 
 
 	public:

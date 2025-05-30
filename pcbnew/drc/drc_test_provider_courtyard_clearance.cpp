@@ -127,7 +127,7 @@ bool DRC_TEST_PROVIDER_COURTYARD_CLEARANCE::testFootprintCourtyardDefinitions()
             if( m_drcEngine->IsErrorLimitExceeded( DRCE_MISSING_COURTYARD ) )
                 continue;
 
-            if( footprint->GetAttributes() & FP_ALLOW_MISSING_COURTYARD )
+            if( footprint->AllowMissingCourtyard() )
                 continue;
 
             std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_MISSING_COURTYARD );

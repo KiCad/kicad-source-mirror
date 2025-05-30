@@ -181,7 +181,7 @@ DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE::DIALOG_FOOTPRINT_PROPERTIES_FP_EDITO
 	bSizerProperties->Add( bSizerPrivateLayers, 1, wxEXPAND|wxRIGHT, 15 );
 
 	wxStaticBoxSizer* sbAttributesSizer;
-	sbAttributesSizer = new wxStaticBoxSizer( new wxStaticBox( m_PanelGeneral, wxID_ANY, _("Attributes") ), wxVERTICAL );
+	sbAttributesSizer = new wxStaticBoxSizer( new wxStaticBox( m_PanelGeneral, wxID_ANY, _("Fabrication Attributes") ), wxVERTICAL );
 
 	wxBoxSizer* bPartTypeSizer;
 	bPartTypeSizer = new wxBoxSizer( wxHORIZONTAL );
@@ -208,11 +208,6 @@ DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE::DIALOG_FOOTPRINT_PROPERTIES_FP_EDITO
 	m_excludeFromBOM = new wxCheckBox( sbAttributesSizer->GetStaticBox(), wxID_ANY, _("Exclude from bill of materials"), wxDefaultPosition, wxDefaultSize, 0 );
 	sbAttributesSizer->Add( m_excludeFromBOM, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
-	m_noCourtyards = new wxCheckBox( sbAttributesSizer->GetStaticBox(), wxID_ANY, _("Exempt from courtyard requirement"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_noCourtyards->SetToolTip( _("Will not generate \"missing courtyard\" DRC violations") );
-
-	sbAttributesSizer->Add( m_noCourtyards, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
-
 	m_cbDNP = new wxCheckBox( sbAttributesSizer->GetStaticBox(), wxID_ANY, _("Do not populate"), wxDefaultPosition, wxDefaultSize, 0 );
 	sbAttributesSizer->Add( m_cbDNP, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
 
@@ -226,7 +221,7 @@ DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE::DIALOG_FOOTPRINT_PROPERTIES_FP_EDITO
 	m_PanelGeneral->SetSizer( m_PanelPropertiesBoxSizer );
 	m_PanelGeneral->Layout();
 	m_PanelPropertiesBoxSizer->Fit( m_PanelGeneral );
-	m_NoteBook->AddPage( m_PanelGeneral, _("General"), false );
+	m_NoteBook->AddPage( m_PanelGeneral, _("General"), true );
 	m_PanelClearances = new wxPanel( m_NoteBook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bSizerPanelClearances;
 	bSizerPanelClearances = new wxBoxSizer( wxVERTICAL );
@@ -322,8 +317,31 @@ DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE::DIALOG_FOOTPRINT_PROPERTIES_FP_EDITO
 
 	bSizerPanelClearances->Add( sbSizerLocalProperties, 0, wxEXPAND|wxALL, 5 );
 
+
+	bSizerPanelClearances->Add( 0, 5, 0, wxEXPAND, 5 );
+
+	wxStaticBoxSizer* sbSizerCourtyards;
+	sbSizerCourtyards = new wxStaticBoxSizer( new wxStaticBox( m_PanelClearances, wxID_ANY, _("Courtyards") ), wxVERTICAL );
+
+	m_noCourtyards = new wxCheckBox( sbSizerCourtyards->GetStaticBox(), wxID_ANY, _("Exempt from courtyard requirement"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_noCourtyards->SetToolTip( _("Will not generate \"missing courtyard\" DRC violations") );
+
+	sbSizerCourtyards->Add( m_noCourtyards, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+
+
+	bSizerPanelClearances->Add( sbSizerCourtyards, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
+
+
+	m_PanelClearances->SetSizer( bSizerPanelClearances );
+	m_PanelClearances->Layout();
+	bSizerPanelClearances->Fit( m_PanelClearances );
+	m_NoteBook->AddPage( m_PanelClearances, _("Clearance Overrides"), false );
+	m_PanelPadConnections = new wxPanel( m_NoteBook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	wxBoxSizer* bSizer19;
+	bSizer19 = new wxBoxSizer( wxVERTICAL );
+
 	wxStaticBoxSizer* sbSizerCopperZones;
-	sbSizerCopperZones = new wxStaticBoxSizer( new wxStaticBox( m_PanelClearances, wxID_ANY, _("Connection to Copper Zones") ), wxHORIZONTAL );
+	sbSizerCopperZones = new wxStaticBoxSizer( new wxStaticBox( m_PanelPadConnections, wxID_ANY, _("Connection to Copper Zones") ), wxHORIZONTAL );
 
 	m_staticText16 = new wxStaticText( sbSizerCopperZones->GetStaticBox(), wxID_ANY, _("Pad connection to zones:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText16->Wrap( -1 );
@@ -336,139 +354,135 @@ DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE::DIALOG_FOOTPRINT_PROPERTIES_FP_EDITO
 	sbSizerCopperZones->Add( m_ZoneConnectionChoice, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxALIGN_CENTER_VERTICAL, 5 );
 
 
-	bSizerPanelClearances->Add( sbSizerCopperZones, 0, wxALL|wxEXPAND, 5 );
+	bSizer19->Add( sbSizerCopperZones, 0, wxALL|wxEXPAND, 5 );
+
+
+	bSizer19->Add( 0, 5, 0, wxEXPAND, 5 );
 
 	wxStaticBoxSizer* sbSizerNetTies;
-	sbSizerNetTies = new wxStaticBoxSizer( new wxStaticBox( m_PanelClearances, wxID_ANY, _("Net Ties") ), wxVERTICAL );
+	sbSizerNetTies = new wxStaticBoxSizer( new wxStaticBox( m_PanelPadConnections, wxID_ANY, _("Net Ties") ), wxVERTICAL );
 
-	m_padGroupsLabel = new wxStaticText( sbSizerNetTies->GetStaticBox(), wxID_ANY, _("Pad groups allowed to short different nets:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_padGroupsLabel->Wrap( -1 );
-	sbSizerNetTies->Add( m_padGroupsLabel, 0, wxRIGHT|wxLEFT, 5 );
+	m_nettieGroupsLabel = new wxStaticText( sbSizerNetTies->GetStaticBox(), wxID_ANY, _("Pad groups allowed to short different nets:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_nettieGroupsLabel->Wrap( -1 );
+	sbSizerNetTies->Add( m_nettieGroupsLabel, 0, wxRIGHT|wxLEFT, 5 );
 
-	m_padGroupsGrid = new WX_GRID( sbSizerNetTies->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
+	m_nettieGroupsGrid = new WX_GRID( sbSizerNetTies->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
 
 	// Grid
-	m_padGroupsGrid->CreateGrid( 0, 1 );
-	m_padGroupsGrid->EnableEditing( true );
-	m_padGroupsGrid->EnableGridLines( true );
-	m_padGroupsGrid->EnableDragGridSize( false );
-	m_padGroupsGrid->SetMargins( 0, 0 );
+	m_nettieGroupsGrid->CreateGrid( 0, 1 );
+	m_nettieGroupsGrid->EnableEditing( true );
+	m_nettieGroupsGrid->EnableGridLines( true );
+	m_nettieGroupsGrid->EnableDragGridSize( false );
+	m_nettieGroupsGrid->SetMargins( 0, 0 );
 
 	// Columns
-	m_padGroupsGrid->SetColSize( 0, 320 );
-	m_padGroupsGrid->EnableDragColMove( false );
-	m_padGroupsGrid->EnableDragColSize( true );
-	m_padGroupsGrid->SetColLabelSize( 0 );
-	m_padGroupsGrid->SetColLabelAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
+	m_nettieGroupsGrid->SetColSize( 0, 320 );
+	m_nettieGroupsGrid->EnableDragColMove( false );
+	m_nettieGroupsGrid->EnableDragColSize( true );
+	m_nettieGroupsGrid->SetColLabelSize( 0 );
+	m_nettieGroupsGrid->SetColLabelAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
 
 	// Rows
-	m_padGroupsGrid->EnableDragRowSize( true );
-	m_padGroupsGrid->SetRowLabelSize( 0 );
-	m_padGroupsGrid->SetRowLabelAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
+	m_nettieGroupsGrid->EnableDragRowSize( true );
+	m_nettieGroupsGrid->SetRowLabelSize( 0 );
+	m_nettieGroupsGrid->SetRowLabelAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
 
 	// Label Appearance
 
 	// Cell Defaults
-	m_padGroupsGrid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_CENTER );
-	m_padGroupsGrid->SetMinSize( wxSize( -1,30 ) );
+	m_nettieGroupsGrid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_CENTER );
+	m_nettieGroupsGrid->SetMinSize( wxSize( -1,30 ) );
 
-	sbSizerNetTies->Add( m_padGroupsGrid, 1, wxALL|wxEXPAND, 5 );
+	sbSizerNetTies->Add( m_nettieGroupsGrid, 1, wxALL|wxEXPAND, 5 );
 
 	wxBoxSizer* bButtonSize2;
 	bButtonSize2 = new wxBoxSizer( wxHORIZONTAL );
 
-	m_bpAddPadGroup = new STD_BITMAP_BUTTON( sbSizerNetTies->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
-	bButtonSize2->Add( m_bpAddPadGroup, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
+	m_bpAddNettieGroup = new STD_BITMAP_BUTTON( sbSizerNetTies->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
+	bButtonSize2->Add( m_bpAddNettieGroup, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
 
 
 	bButtonSize2->Add( 20, 0, 0, wxEXPAND, 5 );
 
-	m_bpRemovePadGroup = new STD_BITMAP_BUTTON( sbSizerNetTies->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
-	bButtonSize2->Add( m_bpRemovePadGroup, 0, wxBOTTOM|wxRIGHT, 5 );
+	m_bpRemoveNettieGroup = new STD_BITMAP_BUTTON( sbSizerNetTies->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
+	bButtonSize2->Add( m_bpRemoveNettieGroup, 0, wxBOTTOM|wxRIGHT, 5 );
 
 
 	sbSizerNetTies->Add( bButtonSize2, 0, wxEXPAND, 2 );
 
 
-	bSizerPanelClearances->Add( sbSizerNetTies, 1, wxALL|wxEXPAND, 5 );
+	bSizer19->Add( sbSizerNetTies, 1, wxALL|wxEXPAND, 5 );
 
 
-	m_PanelClearances->SetSizer( bSizerPanelClearances );
-	m_PanelClearances->Layout();
-	bSizerPanelClearances->Fit( m_PanelClearances );
-	m_NoteBook->AddPage( m_PanelClearances, _("Clearance Overrides and Settings"), false );
-	m_PanelPinConnections = new wxPanel( m_NoteBook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
-	wxBoxSizer* bSizer19;
-	bSizer19 = new wxBoxSizer( wxVERTICAL );
+	bSizer19->Add( 0, 5, 0, wxEXPAND, 5 );
 
-	m_cbDuplicatePadsAreJumpers = new wxCheckBox( m_PanelPinConnections, wxID_ANY, _("Pads with duplicate numbers are jumpers"), wxDefaultPosition, wxDefaultSize, 0 );
+	wxStaticBoxSizer* sbJumpers;
+	sbJumpers = new wxStaticBoxSizer( new wxStaticBox( m_PanelPadConnections, wxID_ANY, _("Jumpers") ), wxVERTICAL );
+
+	m_cbDuplicatePadsAreJumpers = new wxCheckBox( sbJumpers->GetStaticBox(), wxID_ANY, _("All pads with duplicate numbers are jumpers"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_cbDuplicatePadsAreJumpers->SetToolTip( _("When enabled, this footprint can have more than one pad with the same number, and pads with the same number will be considered to be jumpered together internally.") );
 
-	bSizer19->Add( m_cbDuplicatePadsAreJumpers, 0, wxALL, 5 );
-
-	wxStaticBoxSizer* sbJumperPinGroups;
-	sbJumperPinGroups = new wxStaticBoxSizer( new wxStaticBox( m_PanelPinConnections, wxID_ANY, _("Jumper Pad Groups") ), wxVERTICAL );
-
-	wxBoxSizer* bSizer20;
-	bSizer20 = new wxBoxSizer( wxHORIZONTAL );
-
-	wxBoxSizer* bSizer22;
-	bSizer22 = new wxBoxSizer( wxVERTICAL );
-
-	stLabelAvailablePads = new wxStaticText( sbJumperPinGroups->GetStaticBox(), wxID_ANY, _("Available pads"), wxDefaultPosition, wxDefaultSize, 0 );
-	stLabelAvailablePads->Wrap( -1 );
-	bSizer22->Add( stLabelAvailablePads, 0, wxALL, 5 );
-
-	m_listAvailablePads = new wxListBox( sbJumperPinGroups->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, 0, NULL, wxLB_EXTENDED|wxLB_SORT );
-	m_listAvailablePads->SetMinSize( wxSize( 200,-1 ) );
-
-	bSizer22->Add( m_listAvailablePads, 1, wxALL|wxEXPAND, 5 );
+	sbJumpers->Add( m_cbDuplicatePadsAreJumpers, 0, wxALL, 5 );
 
 
-	bSizer20->Add( bSizer22, 1, wxEXPAND, 5 );
+	sbJumpers->Add( 0, 5, 0, wxEXPAND, 5 );
 
-	wxBoxSizer* bSizer21;
-	bSizer21 = new wxBoxSizer( wxVERTICAL );
+	m_jumperGroupsLabel = new wxStaticText( sbJumpers->GetStaticBox(), wxID_ANY, _("Explicit jumper pad groups:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_jumperGroupsLabel->Wrap( -1 );
+	sbJumpers->Add( m_jumperGroupsLabel, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 
-	m_btnCreateJumperPadGroup = new wxBitmapButton( sbJumperPinGroups->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
-	m_btnCreateJumperPadGroup->SetToolTip( _("Create jumper group from the selected pads") );
+	m_jumperGroupsGrid = new WX_GRID( sbJumpers->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
 
-	bSizer21->Add( m_btnCreateJumperPadGroup, 0, wxALL, 5 );
+	// Grid
+	m_jumperGroupsGrid->CreateGrid( 0, 1 );
+	m_jumperGroupsGrid->EnableEditing( true );
+	m_jumperGroupsGrid->EnableGridLines( true );
+	m_jumperGroupsGrid->EnableDragGridSize( false );
+	m_jumperGroupsGrid->SetMargins( 0, 0 );
 
-	m_btnRemoveJumperPadGroup = new wxBitmapButton( sbJumperPinGroups->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
-	m_btnRemoveJumperPadGroup->SetToolTip( _("Remove the selected jumper pad group") );
+	// Columns
+	m_jumperGroupsGrid->SetColSize( 0, 320 );
+	m_jumperGroupsGrid->EnableDragColMove( false );
+	m_jumperGroupsGrid->EnableDragColSize( true );
+	m_jumperGroupsGrid->SetColLabelSize( 0 );
+	m_jumperGroupsGrid->SetColLabelAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
 
-	bSizer21->Add( m_btnRemoveJumperPadGroup, 0, wxALL, 5 );
+	// Rows
+	m_jumperGroupsGrid->EnableDragRowSize( true );
+	m_jumperGroupsGrid->SetRowLabelSize( 0 );
+	m_jumperGroupsGrid->SetRowLabelAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
 
+	// Label Appearance
 
-	bSizer20->Add( bSizer21, 0, wxALIGN_CENTER_VERTICAL, 5 );
+	// Cell Defaults
+	m_jumperGroupsGrid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_CENTER );
+	m_jumperGroupsGrid->SetMinSize( wxSize( -1,30 ) );
 
-	wxBoxSizer* bSizer23;
-	bSizer23 = new wxBoxSizer( wxVERTICAL );
+	sbJumpers->Add( m_jumperGroupsGrid, 1, wxALL|wxEXPAND, 5 );
 
-	stLabelGroups = new wxStaticText( sbJumperPinGroups->GetStaticBox(), wxID_ANY, _("Grouped pads"), wxDefaultPosition, wxDefaultSize, 0 );
-	stLabelGroups->Wrap( -1 );
-	bSizer23->Add( stLabelGroups, 0, wxALL, 5 );
+	wxBoxSizer* bButtonSize21;
+	bButtonSize21 = new wxBoxSizer( wxHORIZONTAL );
 
-	m_listJumperPadGroups = new wxListBox( sbJumperPinGroups->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, 0, NULL, wxLB_EXTENDED|wxLB_SORT );
-	m_listJumperPadGroups->SetMinSize( wxSize( 200,-1 ) );
-
-	bSizer23->Add( m_listJumperPadGroups, 1, wxALL|wxEXPAND, 5 );
-
-
-	bSizer20->Add( bSizer23, 1, wxEXPAND, 5 );
-
-
-	sbJumperPinGroups->Add( bSizer20, 1, wxEXPAND, 5 );
-
-
-	bSizer19->Add( sbJumperPinGroups, 1, wxALL|wxTOP, 5 );
+	m_bpAddJumperGroup = new STD_BITMAP_BUTTON( sbJumpers->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
+	bButtonSize21->Add( m_bpAddJumperGroup, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
 
 
-	m_PanelPinConnections->SetSizer( bSizer19 );
-	m_PanelPinConnections->Layout();
-	bSizer19->Fit( m_PanelPinConnections );
-	m_NoteBook->AddPage( m_PanelPinConnections, _("Pad Connections"), true );
+	bButtonSize21->Add( 20, 0, 0, wxEXPAND, 5 );
+
+	m_bpRemoveJumperGroup = new STD_BITMAP_BUTTON( sbJumpers->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
+	bButtonSize21->Add( m_bpRemoveJumperGroup, 0, wxBOTTOM|wxRIGHT, 5 );
+
+
+	sbJumpers->Add( bButtonSize21, 0, wxEXPAND, 5 );
+
+
+	bSizer19->Add( sbJumpers, 1, wxALL|wxTOP|wxEXPAND, 5 );
+
+
+	m_PanelPadConnections->SetSizer( bSizer19 );
+	m_PanelPadConnections->Layout();
+	bSizer19->Fit( m_PanelPadConnections );
+	m_NoteBook->AddPage( m_PanelPadConnections, _("Pad Connections"), false );
 
 	m_GeneralBoxSizer->Add( m_NoteBook, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 10 );
 
@@ -509,15 +523,14 @@ DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE::DIALOG_FOOTPRINT_PROPERTIES_FP_EDITO
 	m_boardOnly->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE::OnCheckBox ), NULL, this );
 	m_excludeFromPosFiles->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE::OnCheckBox ), NULL, this );
 	m_excludeFromBOM->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE::OnCheckBox ), NULL, this );
-	m_noCourtyards->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE::OnCheckBox ), NULL, this );
 	m_cbDNP->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE::OnCheckBox ), NULL, this );
-	m_padGroupsGrid->Connect( wxEVT_SIZE, wxSizeEventHandler( DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE::OnGridSize ), NULL, this );
-	m_bpAddPadGroup->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE::OnAddPadGroup ), NULL, this );
-	m_bpRemovePadGroup->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE::OnRemovePadGroup ), NULL, this );
-	m_listAvailablePads->Connect( wxEVT_COMMAND_LISTBOX_SELECTED, wxCommandEventHandler( DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE::OnAvailablePadsClick ), NULL, this );
-	m_btnCreateJumperPadGroup->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE::OnBtnCreateJumperPadGroup ), NULL, this );
-	m_btnRemoveJumperPadGroup->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE::OnBtnRemoveJumperPadGroup ), NULL, this );
-	m_listJumperPadGroups->Connect( wxEVT_COMMAND_LISTBOX_SELECTED, wxCommandEventHandler( DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE::OnGroupedPadListClick ), NULL, this );
+	m_noCourtyards->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE::OnCheckBox ), NULL, this );
+	m_nettieGroupsGrid->Connect( wxEVT_SIZE, wxSizeEventHandler( DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE::OnGridSize ), NULL, this );
+	m_bpAddNettieGroup->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE::OnAddNettieGroup ), NULL, this );
+	m_bpRemoveNettieGroup->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE::OnRemoveNettieGroup ), NULL, this );
+	m_jumperGroupsGrid->Connect( wxEVT_SIZE, wxSizeEventHandler( DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE::OnGridSize ), NULL, this );
+	m_bpAddJumperGroup->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE::OnAddJumperGroup ), NULL, this );
+	m_bpRemoveJumperGroup->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE::OnRemoveJumperGroup ), NULL, this );
 }
 
 DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE::~DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE()
@@ -539,14 +552,13 @@ DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE::~DIALOG_FOOTPRINT_PROPERTIES_FP_EDIT
 	m_boardOnly->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE::OnCheckBox ), NULL, this );
 	m_excludeFromPosFiles->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE::OnCheckBox ), NULL, this );
 	m_excludeFromBOM->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE::OnCheckBox ), NULL, this );
-	m_noCourtyards->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE::OnCheckBox ), NULL, this );
 	m_cbDNP->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE::OnCheckBox ), NULL, this );
-	m_padGroupsGrid->Disconnect( wxEVT_SIZE, wxSizeEventHandler( DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE::OnGridSize ), NULL, this );
-	m_bpAddPadGroup->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE::OnAddPadGroup ), NULL, this );
-	m_bpRemovePadGroup->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE::OnRemovePadGroup ), NULL, this );
-	m_listAvailablePads->Disconnect( wxEVT_COMMAND_LISTBOX_SELECTED, wxCommandEventHandler( DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE::OnAvailablePadsClick ), NULL, this );
-	m_btnCreateJumperPadGroup->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE::OnBtnCreateJumperPadGroup ), NULL, this );
-	m_btnRemoveJumperPadGroup->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE::OnBtnRemoveJumperPadGroup ), NULL, this );
-	m_listJumperPadGroups->Disconnect( wxEVT_COMMAND_LISTBOX_SELECTED, wxCommandEventHandler( DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE::OnGroupedPadListClick ), NULL, this );
+	m_noCourtyards->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE::OnCheckBox ), NULL, this );
+	m_nettieGroupsGrid->Disconnect( wxEVT_SIZE, wxSizeEventHandler( DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE::OnGridSize ), NULL, this );
+	m_bpAddNettieGroup->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE::OnAddNettieGroup ), NULL, this );
+	m_bpRemoveNettieGroup->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE::OnRemoveNettieGroup ), NULL, this );
+	m_jumperGroupsGrid->Disconnect( wxEVT_SIZE, wxSizeEventHandler( DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE::OnGridSize ), NULL, this );
+	m_bpAddJumperGroup->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE::OnAddJumperGroup ), NULL, this );
+	m_bpRemoveJumperGroup->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE::OnRemoveJumperGroup ), NULL, this );
 
 }

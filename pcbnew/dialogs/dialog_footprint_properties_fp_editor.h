@@ -88,19 +88,20 @@ private:
     void OnDeleteField( wxCommandEvent& event ) override;
     void OnAddLayer( wxCommandEvent& event ) override;
     void OnDeleteLayer( wxCommandEvent& event ) override;
-    void OnAddPadGroup( wxCommandEvent& event ) override;
-    void OnRemovePadGroup( wxCommandEvent& event ) override;
+    void OnAddNettieGroup( wxCommandEvent& event ) override;
+    void OnRemoveNettieGroup( wxCommandEvent& event ) override;
+    void OnAddJumperGroup( wxCommandEvent& event ) override;
+    void OnRemoveJumperGroup( wxCommandEvent& event ) override;
     void OnUpdateUI( wxUpdateUIEvent& event ) override;
     void OnPageChanging( wxNotebookEvent& event ) override;
     void OnText( wxCommandEvent& event ) override;
     void OnChoice( wxCommandEvent& event ) override;
     void OnCheckBox( wxCommandEvent& event ) override;
-    void OnBtnCreateJumperPadGroup( wxCommandEvent& event ) override;
-    void OnBtnRemoveJumperPadGroup( wxCommandEvent& event ) override;
-    void OnGroupedPadListClick( wxCommandEvent& event ) override;
-    void OnAvailablePadsClick( wxCommandEvent& event ) override;
 
     bool checkFootprintName( const wxString& aFootprintName, LIB_ID* doOverwrite );
+
+    void onAddGroup( WX_GRID* aGrid );
+    void onRemoveGroup( WX_GRID* aGrid );
 
     void adjustGridColumns();
 

@@ -179,15 +179,21 @@ DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR(
                                                             {
                                                                 OnAddLayer( aEvent );
                                                             } ) );
-    m_padGroupsGrid->PushEventHandler( new GRID_TRICKS( m_padGroupsGrid,
-                                                        [this]( wxCommandEvent& aEvent )
-                                                        {
-                                                            OnAddPadGroup( aEvent );
-                                                        } ) );
+    m_nettieGroupsGrid->PushEventHandler( new GRID_TRICKS( m_nettieGroupsGrid,
+                                                           [this]( wxCommandEvent& aEvent )
+                                                           {
+                                                               OnAddNettieGroup( aEvent );
+                                                           } ) );
+    m_jumperGroupsGrid->PushEventHandler( new GRID_TRICKS( m_jumperGroupsGrid,
+                                                           [this]( wxCommandEvent& aEvent )
+                                                           {
+                                                               OnAddJumperGroup( aEvent );
+                                                           } ) );
 
     m_itemsGrid->SetSelectionMode( wxGrid::wxGridSelectRows );
     m_privateLayersGrid->SetSelectionMode( wxGrid::wxGridSelectRows );
-    m_padGroupsGrid->SetSelectionMode( wxGrid::wxGridSelectRows );
+    m_nettieGroupsGrid->SetSelectionMode( wxGrid::wxGridSelectRows );
+    m_jumperGroupsGrid->SetSelectionMode( wxGrid::wxGridSelectRows );
 
     // Show/hide columns according to the user's preference
     m_itemsGrid->ShowHideColumns( m_frame->GetSettings()->m_FootprintTextShownColumns );
@@ -224,11 +230,10 @@ DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR(
     m_bpDelete->SetBitmap( KiBitmapBundle( BITMAPS::small_trash ) );
     m_bpAddLayer->SetBitmap( KiBitmapBundle( BITMAPS::small_plus ) );
     m_bpDeleteLayer->SetBitmap( KiBitmapBundle( BITMAPS::small_trash ) );
-    m_bpAddPadGroup->SetBitmap( KiBitmapBundle( BITMAPS::small_plus ) );
-    m_bpRemovePadGroup->SetBitmap( KiBitmapBundle( BITMAPS::small_trash ) );
-
-    m_btnCreateJumperPadGroup->SetBitmap( KiBitmapBundle( BITMAPS::right ) );
-    m_btnRemoveJumperPadGroup->SetBitmap( KiBitmapBundle( BITMAPS::left ) );
+    m_bpAddNettieGroup->SetBitmap( KiBitmapBundle( BITMAPS::small_plus ) );
+    m_bpRemoveNettieGroup->SetBitmap( KiBitmapBundle( BITMAPS::small_trash ) );
+    m_bpAddJumperGroup->SetBitmap( KiBitmapBundle( BITMAPS::small_plus ) );
+    m_bpRemoveJumperGroup->SetBitmap( KiBitmapBundle( BITMAPS::small_trash ) );
 
     SetupStandardButtons();
 
@@ -248,7 +253,8 @@ DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::~DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR()
     // Delete the GRID_TRICKS.
     m_itemsGrid->PopEventHandler( true );
     m_privateLayersGrid->PopEventHandler( true );
-    m_padGroupsGrid->PopEventHandler( true );
+    m_nettieGroupsGrid->PopEventHandler( true );
+    m_jumperGroupsGrid->PopEventHandler( true );
 
     m_page = static_cast<NOTEBOOK_PAGES>( m_NoteBook->GetSelection() );
 
@@ -308,7 +314,6 @@ bool DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::TransferDataToWindow()
     m_boardOnly->SetValue( m_footprint->GetAttributes() & FP_BOARD_ONLY );
     m_excludeFromPosFiles->SetValue( m_footprint->GetAttributes() & FP_EXCLUDE_FROM_POS_FILES );
     m_excludeFromBOM->SetValue( m_footprint->GetAttributes() & FP_EXCLUDE_FROM_BOM );
-    m_noCourtyards->SetValue( m_footprint->GetAttributes() & FP_ALLOW_MISSING_COURTYARD );
     m_cbDNP->SetValue( m_footprint->GetAttributes() & FP_DNP );
 
     // Local Clearances
@@ -333,7 +338,8 @@ bool DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::TransferDataToWindow()
     else
         m_solderPasteRatio.SetValue( wxEmptyString );
 
-    m_allowBridges->SetValue( m_footprint->GetAttributes() & FP_ALLOW_SOLDERMASK_BRIDGES );
+    m_noCourtyards->SetValue( m_footprint->AllowMissingCourtyard() );
+    m_allowBridges->SetValue( m_footprint->AllowSolderMaskBridges() );
 
     switch( m_footprint->GetLocalZoneConnection() )
     {
@@ -348,40 +354,28 @@ bool DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::TransferDataToWindow()
     {
         if( !group.IsEmpty() )
         {
-            m_padGroupsGrid->AppendRows( 1 );
-            m_padGroupsGrid->SetCellValue( m_padGroupsGrid->GetNumberRows() - 1, 0, group );
+            m_nettieGroupsGrid->AppendRows( 1 );
+            m_nettieGroupsGrid->SetCellValue( m_nettieGroupsGrid->GetNumberRows() - 1, 0, group );
         }
     }
 
     m_cbDuplicatePadsAreJumpers->SetValue( m_footprint->GetDuplicatePadNumbersAreJumpers() );
-    m_btnCreateJumperPadGroup->Disable();
-    m_btnRemoveJumperPadGroup->Disable();
-
-    // Pad connections tab
-    std::set<wxString> availablePads;
-
-    for( const PAD* pad : m_footprint->Pads() )
-        availablePads.insert( pad->GetNumber() );
 
     for( const std::set<wxString>& group : m_footprint->JumperPadGroups() )
     {
         wxString groupTxt;
-        size_t i = 0;
 
         for( const wxString& pinNumber : group )
         {
-            availablePads.erase( pinNumber );
-            groupTxt << pinNumber;
-
-            if( ++i < group.size() )
+            if( !groupTxt.IsEmpty() )
                 groupTxt << ", ";
+
+            groupTxt << pinNumber;
         }
 
-        m_listJumperPadGroups->Append( groupTxt );
+        m_jumperGroupsGrid->AppendRows( 1 );
+        m_jumperGroupsGrid->SetCellValue( m_jumperGroupsGrid->GetNumberRows() - 1, 0, groupTxt );
     }
-
-    for( const wxString& pin : availablePads )
-        m_listAvailablePads->AppendString( pin );
 
     // Items grid
     for( int col = 0; col < m_itemsGrid->GetNumberCols(); col++ )
@@ -557,7 +551,8 @@ bool DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::TransferDataFromWindow()
 {
     if( !m_itemsGrid->CommitPendingChanges()
             || !m_privateLayersGrid->CommitPendingChanges()
-            || !m_padGroupsGrid->CommitPendingChanges() )
+            || !m_nettieGroupsGrid->CommitPendingChanges()
+            || !m_jumperGroupsGrid->CommitPendingChanges() )
     {
         return false;
     }
@@ -658,16 +653,13 @@ bool DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::TransferDataFromWindow()
     if( m_excludeFromBOM->GetValue() )
         attributes |= FP_EXCLUDE_FROM_BOM;
 
-    if( m_noCourtyards->GetValue() )
-        attributes |= FP_ALLOW_MISSING_COURTYARD;
-
     if( m_cbDNP->GetValue() )
         attributes |= FP_DNP;
 
-    if( m_allowBridges->GetValue() )
-        attributes |= FP_ALLOW_SOLDERMASK_BRIDGES;
-
     m_footprint->SetAttributes( attributes );
+
+    m_footprint->SetAllowMissingCourtyard( m_noCourtyards->GetValue() );
+    m_footprint->SetAllowSolderMaskBridges( m_allowBridges->GetValue() );
 
     // Initialize mask clearances
     if( m_netClearance.IsNull() )
@@ -701,9 +693,9 @@ bool DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::TransferDataFromWindow()
 
     m_footprint->ClearNetTiePadGroups();
 
-    for( int ii = 0; ii < m_padGroupsGrid->GetNumberRows(); ++ii )
+    for( int ii = 0; ii < m_nettieGroupsGrid->GetNumberRows(); ++ii )
     {
-        wxString group = m_padGroupsGrid->GetCellValue( ii, 0 );
+        wxString group = m_nettieGroupsGrid->GetCellValue( ii, 0 );
 
         if( !group.IsEmpty() )
             m_footprint->AddNetTiePadGroup( group );
@@ -714,9 +706,9 @@ bool DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::TransferDataFromWindow()
     std::vector<std::set<wxString>>& jumpers = m_footprint->JumperPadGroups();
     jumpers.clear();
 
-    for( unsigned i = 0; i < m_listJumperPadGroups->GetCount(); ++i )
+    for( int ii = 0; ii < m_jumperGroupsGrid->GetNumberRows(); ++ii )
     {
-        wxStringTokenizer tokenizer( m_listJumperPadGroups->GetString( i ), ", " );
+        wxStringTokenizer tokenizer( m_jumperGroupsGrid->GetCellValue( ii, 0 ), ", " );
         std::set<wxString>& group = jumpers.emplace_back();
 
         while( tokenizer.HasMoreTokens() )
@@ -879,45 +871,69 @@ void DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::OnDeleteLayer( wxCommandEvent& event
 }
 
 
-void DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::OnAddPadGroup( wxCommandEvent& event )
+void DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::OnAddNettieGroup( wxCommandEvent& event )
 {
-    if( !m_padGroupsGrid->CommitPendingChanges() )
+    onAddGroup( m_nettieGroupsGrid );
+}
+
+
+void DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::OnRemoveNettieGroup( wxCommandEvent& event )
+{
+    onRemoveGroup( m_nettieGroupsGrid );
+}
+
+
+void DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::OnAddJumperGroup( wxCommandEvent& event )
+{
+    onAddGroup( m_jumperGroupsGrid );
+}
+
+
+void DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::OnRemoveJumperGroup( wxCommandEvent& event )
+{
+    onRemoveGroup( m_jumperGroupsGrid );
+}
+
+
+void DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::onAddGroup( WX_GRID* aGrid )
+{
+    if( !aGrid->CommitPendingChanges() )
         return;
 
-    m_padGroupsGrid->AppendRows( 1 );
+    aGrid->AppendRows( 1 );
 
-    m_padGroupsGrid->SetFocus();
-    m_padGroupsGrid->MakeCellVisible( m_padGroupsGrid->GetNumberRows() - 1, 0 );
-    m_padGroupsGrid->SetGridCursor( m_padGroupsGrid->GetNumberRows() - 1, 0 );
+    aGrid->SetFocus();
+    aGrid->MakeCellVisible( aGrid->GetNumberRows() - 1, 0 );
+    aGrid->SetGridCursor( aGrid->GetNumberRows() - 1, 0 );
 
-    m_padGroupsGrid->EnableCellEditControl( true );
-    m_padGroupsGrid->ShowCellEditControl();
+    aGrid->EnableCellEditControl( true );
+    aGrid->ShowCellEditControl();
 
     OnModify();
 }
 
 
-void DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::OnRemovePadGroup( wxCommandEvent& event )
+void DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::onRemoveGroup( WX_GRID* aGrid )
 {
-    if( !m_padGroupsGrid->CommitPendingChanges() )
+    if( !aGrid->CommitPendingChanges() )
         return;
 
-    wxArrayInt selectedRows = m_padGroupsGrid->GetSelectedRows();
-    int        curRow = m_padGroupsGrid->GetGridCursorRow();
+    wxArrayInt selectedRows = aGrid->GetSelectedRows();
+    int        curRow = aGrid->GetGridCursorRow();
 
-    if( selectedRows.empty() && curRow >= 0 && curRow < m_padGroupsGrid->GetNumberRows() )
+    if( selectedRows.empty() && curRow >= 0 && curRow < aGrid->GetNumberRows() )
         selectedRows.Add( curRow );
 
     for( int ii = (int) selectedRows.Count() - 1; ii >= 0; --ii )
     {
         int row = selectedRows.Item( ii );
-        m_padGroupsGrid->DeleteRows( row, 1 );
+        aGrid->DeleteRows( row, 1 );
         curRow = std::min( curRow, row );
     }
 
     curRow = std::max( 0, curRow - 1 );
-    m_padGroupsGrid->MakeCellVisible( curRow, m_padGroupsGrid->GetGridCursorCol() );
-    m_padGroupsGrid->SetGridCursor( curRow, m_padGroupsGrid->GetGridCursorCol() );
+    aGrid->MakeCellVisible( curRow, aGrid->GetGridCursorCol() );
+    aGrid->SetGridCursor( curRow, aGrid->GetGridCursorCol() );
 
     OnModify();
 }
@@ -938,16 +954,17 @@ void DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::adjustGridColumns()
         itemsWidth -= m_itemsGrid->GetColSize( i );
     }
 
-    m_itemsGrid->SetColSize(
-            1, std::max( itemsWidth, m_itemsGrid->GetVisibleWidth( 0, true, false ) ) );
+    m_itemsGrid->SetColSize( 1, std::max( itemsWidth, m_itemsGrid->GetVisibleWidth( 0, true, false ) ) );
 
-    // Update the width private layers grid
-    m_privateLayersGrid->SetColSize( 0, std::max( m_privateLayersGrid->GetClientSize().x,
-                                                  m_privateLayersGrid->GetVisibleWidth( 0 ) ) );
+    auto updateSingleColumnGrid =
+            []( WX_GRID* aGrid )
+            {
+                aGrid->SetColSize( 0, std::max( aGrid->GetClientSize().x, aGrid->GetVisibleWidth( 0 ) ) );
+            };
 
-    // Update the width net tie pad groups grid
-    m_padGroupsGrid->SetColSize( 0, std::max( m_padGroupsGrid->GetClientSize().x,
-                                              m_padGroupsGrid->GetVisibleWidth( 0 ) ) );
+    updateSingleColumnGrid( m_privateLayersGrid );
+    updateSingleColumnGrid( m_nettieGroupsGrid );
+    updateSingleColumnGrid( m_jumperGroupsGrid );
 
     // Update the width of the 3D panel
     m_3dPanel->AdjustGridColumnWidths();
@@ -1071,75 +1088,3 @@ void DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::OnChoice( wxCommandEvent& event )
 }
 
 
-void DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::OnBtnCreateJumperPadGroup( wxCommandEvent& aEvent )
-{
-    wxArrayInt selections;
-    int n = m_listAvailablePads->GetSelections( selections );
-    wxCHECK( n > 0, /* void */ );
-
-    m_listJumperPadGroups->Freeze();
-    m_listAvailablePads->Freeze();
-
-    wxString group;
-    int i = 0;
-
-    for( int idx : selections )
-    {
-        group << m_listAvailablePads->GetString( idx );
-
-        if( ++i < n )
-            group << ", ";
-    }
-
-    for( int idx = selections.size() - 1; idx >= 0; --idx )
-        m_listAvailablePads->Delete( selections[idx] );
-
-    m_listJumperPadGroups->AppendString( group );
-
-    m_listJumperPadGroups->Thaw();
-    m_listAvailablePads->Thaw();
-}
-
-
-void DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::OnBtnRemoveJumperPadGroup( wxCommandEvent& aEvent )
-{
-    wxArrayInt selections;
-    int n = m_listJumperPadGroups->GetSelections( selections );
-    wxCHECK( n > 0, /* void */ );
-
-    m_listJumperPadGroups->Freeze();
-    m_listAvailablePads->Freeze();
-
-    for( int idx : selections )
-    {
-        wxStringTokenizer tokenizer( m_listJumperPadGroups->GetString( idx ), ", " );
-
-        while( tokenizer.HasMoreTokens() )
-        {
-            if( wxString token = tokenizer.GetNextToken(); !token.IsEmpty() )
-                m_listAvailablePads->AppendString( token );
-        }
-    }
-
-    for( int idx = selections.size() - 1; idx >= 0; --idx )
-        m_listJumperPadGroups->Delete( selections[idx] );
-
-    m_listJumperPadGroups->Thaw();
-    m_listAvailablePads->Thaw();
-}
-
-
-void DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::OnGroupedPadListClick( wxCommandEvent& aEvent )
-{
-    wxArrayInt selections;
-    int n = m_listJumperPadGroups->GetSelections( selections );
-    m_btnRemoveJumperPadGroup->Enable( n > 0 );
-}
-
-
-void DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::OnAvailablePadsClick( wxCommandEvent& aEvent )
-{
-    wxArrayInt selections;
-    int n = m_listJumperPadGroups->GetSelections( selections );
-    m_btnCreateJumperPadGroup->Enable( n > 0 );
-}

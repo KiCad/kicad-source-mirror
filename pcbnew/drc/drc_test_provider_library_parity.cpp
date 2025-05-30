@@ -624,13 +624,9 @@ bool FOOTPRINT::FootprintNeedsUpdate( const FOOTPRINT* aLibFP, int aCompareFlags
     TEST_ATTR( GetAttributes(), aLibFP->GetAttributes(), (FP_THROUGH_HOLE | FP_SMD),
                _( "Footprint types differ." ) );
 
-    TEST_ATTR( GetAttributes(), aLibFP->GetAttributes(), FP_ALLOW_SOLDERMASK_BRIDGES,
-               wxString::Format( _( "'%s' settings differ." ),
-                                 _( "Allow bridged solder mask apertures between pads" ) ) );
-
-    TEST_ATTR( GetAttributes(), aLibFP->GetAttributes(), FP_ALLOW_MISSING_COURTYARD,
-               wxString::Format( _( "'%s' settings differ." ),
-                                 _( "Exempt From Courtyard Requirement" ) ) );
+    TEST( AllowSolderMaskBridges(), aLibFP->AllowSolderMaskBridges(),
+          wxString::Format( _( "'%s' settings differ." ),
+                            _( "Allow bridged solder mask apertures between pads" ) ) );
 
     if( !( aCompareFlags & COMPARE_FLAGS::DRC ) )
     {

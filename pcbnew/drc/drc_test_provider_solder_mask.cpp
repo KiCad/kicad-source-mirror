@@ -375,11 +375,9 @@ bool DRC_TEST_PROVIDER_SOLDER_MASK::checkMaskAperture( BOARD_ITEM* aMaskItem, BO
 
     FOOTPRINT* fp = aMaskItem->GetParentFootprint();
 
-    if( fp && ( fp->GetAttributes() & FP_ALLOW_SOLDERMASK_BRIDGES ) > 0 )
-    {
-        // Mask apertures in footprints which allow soldermask bridges are ignored entirely.
+    // Mask apertures in footprints which allow soldermask bridges are ignored entirely.
+    if( fp && fp->AllowSolderMaskBridges() )
         return false;
-    }
 
     PTR_LAYER_CACHE_KEY key = { aMaskItem, maskLayer };
 
@@ -439,11 +437,9 @@ bool DRC_TEST_PROVIDER_SOLDER_MASK::checkItemMask( BOARD_ITEM* aMaskItem, int aT
 {
     if( FOOTPRINT* fp = aMaskItem->GetParentFootprint() )
     {
-        if( ( fp->GetAttributes() & FP_ALLOW_SOLDERMASK_BRIDGES ) > 0 )
-        {
-            // If we're allowing bridges then we're allowing bridges.  Nothing to check.
+        // If we're allowing bridges then we're allowing bridges.  Nothing to check.
+        if( fp->AllowSolderMaskBridges() )
             return false;
-        }
 
         // Graphic items are used to implement net-ties between pads of a group within a net-tie
         // footprint.  They must be allowed to intrude into their pad's mask aperture.
@@ -501,7 +497,7 @@ void DRC_TEST_PROVIDER_SOLDER_MASK::testItemAgainstItems( BOARD_ITEM* aItem, con
                         return false;
 
                     // Footprint-specific exclusion
-                    if( ( itemFP->GetAttributes() & FP_ALLOW_SOLDERMASK_BRIDGES ) > 0 )
+                    if( itemFP->AllowSolderMaskBridges() )
                         return false;
                 }
 

@@ -2436,32 +2436,22 @@ void PCB_EDIT_FRAME::ExchangeFootprint( FOOTPRINT* aExisting, FOOTPRINT* aNew,
         }
     }
 
-    // Careful; allow-soldermask-bridges is in the m_attributes field but is not presented
-    // as a fabrication attribute in the GUI....
-    int existingFabAttrs = aExisting->GetAttributes() & ~FP_ALLOW_SOLDERMASK_BRIDGES;
-    int libraryFabAttrs = aNew->GetAttributes() & ~FP_ALLOW_SOLDERMASK_BRIDGES;
-    int existingSolderMaskBridgesFlag = aExisting->GetAttributes() & FP_ALLOW_SOLDERMASK_BRIDGES;
-    int librarySolderMaskBridgesFlag = aNew->GetAttributes() & FP_ALLOW_SOLDERMASK_BRIDGES;
-
     if( resetFabricationAttrs )
     {
         // We've replaced the existing footprint with the library one, so the fabrication attrs
         // are already reset.  Just set the aUpdated flag if appropriate.
-        if( libraryFabAttrs != existingFabAttrs )
+        if( aNew->GetAttributes() != aExisting->GetAttributes() )
             *aUpdated = true;
     }
     else
     {
-        aNew->SetAttributes( existingFabAttrs | librarySolderMaskBridgesFlag );
+        aNew->SetAttributes( aExisting->GetAttributes() );
     }
 
     if( resetClearanceOverrides )
     {
-        if( ( aExisting->GetAttributes() & FP_ALLOW_SOLDERMASK_BRIDGES )
-            != ( aNew->GetAttributes() & FP_ALLOW_SOLDERMASK_BRIDGES ) )
-        {
+        if( aExisting->AllowSolderMaskBridges() != aNew->AllowSolderMaskBridges() )
             *aUpdated = true;
-        }
 
         if( ( aExisting->GetLocalClearance() != aNew->GetLocalClearance() )
                 || ( aExisting->GetLocalSolderMaskMargin() != aNew->GetLocalSolderMaskMargin() )
@@ -2479,9 +2469,7 @@ void PCB_EDIT_FRAME::ExchangeFootprint( FOOTPRINT* aExisting, FOOTPRINT* aNew,
         aNew->SetLocalSolderPasteMargin( aExisting->GetLocalSolderPasteMargin() );
         aNew->SetLocalSolderPasteMarginRatio( aExisting->GetLocalSolderPasteMarginRatio() );
         aNew->SetLocalZoneConnection( aExisting->GetLocalZoneConnection() );
-
-        int otherFabAttrs = aNew->GetAttributes() & ~FP_ALLOW_SOLDERMASK_BRIDGES;
-        aNew->SetAttributes( otherFabAttrs | existingSolderMaskBridgesFlag );
+        aNew->SetAllowSolderMaskBridges( aExisting->AllowSolderMaskBridges() );
     }
 
     if( reset3DModels )

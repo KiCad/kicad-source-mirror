@@ -1293,13 +1293,13 @@ void PCB_IO_KICAD_SEXPR::format( const FOOTPRINT* aFootprint ) const
         if( aFootprint->GetAttributes() & FP_EXCLUDE_FROM_BOM )
             m_out->Print( " exclude_from_bom" );
 
-        if( aFootprint->GetAttributes() & FP_ALLOW_MISSING_COURTYARD )
+        if( aFootprint->AllowMissingCourtyard() )
             m_out->Print( " allow_missing_courtyard" );
 
         if( aFootprint->GetAttributes() & FP_DNP )
             m_out->Print( " dnp" );
 
-        if( aFootprint->GetAttributes() & FP_ALLOW_SOLDERMASK_BRIDGES )
+        if( aFootprint->AllowSolderMaskBridges() )
             m_out->Print( " allow_soldermask_bridges" );
 
         m_out->Print( ")" );

@@ -83,9 +83,7 @@ enum FOOTPRINT_ATTR_T
     FP_EXCLUDE_FROM_BOM         = 0x0008,
     FP_BOARD_ONLY               = 0x0010,   // Footprint has no corresponding symbol
     FP_JUST_ADDED               = 0x0020,   // Footprint just added by netlist update
-    FP_ALLOW_SOLDERMASK_BRIDGES = 0x0040,
-    FP_ALLOW_MISSING_COURTYARD  = 0x0080,
-    FP_DNP                      = 0x0100
+    FP_DNP                      = 0x0040
 };
 
 class FP_3DMODEL
@@ -294,6 +292,12 @@ public:
 
     int GetAttributes() const { return m_attributes; }
     void SetAttributes( int aAttributes ) { m_attributes = aAttributes; }
+
+    bool AllowMissingCourtyard() const { return m_allowMissingCourtyard; }
+    void SetAllowMissingCourtyard( bool aAllow ) { m_allowMissingCourtyard = aAllow; }
+
+    bool AllowSolderMaskBridges() const { return m_allowSolderMaskBridges; }
+    void SetAllowSolderMaskBridges( bool aAllow ) { m_allowSolderMaskBridges = aAllow; }
 
     void SetFlag( int aFlag ) { m_arflag = aFlag; }
     void IncrementFlag() { m_arflag += 1; }
@@ -737,15 +741,6 @@ public:
             m_attributes &= ~FP_EXCLUDE_FROM_BOM;
     }
 
-    bool AllowMissingCourtyard() const { return m_attributes & FP_ALLOW_MISSING_COURTYARD; }
-    void SetAllowMissingCourtyard( bool aAllow = true )
-    {
-        if( aAllow )
-            m_attributes |= FP_ALLOW_MISSING_COURTYARD;
-        else
-            m_attributes &= ~FP_ALLOW_MISSING_COURTYARD;
-    }
-
     bool IsDNP() const { return m_attributes & FP_DNP; }
     void SetDNP( bool aDNP = true )
     {
@@ -1098,7 +1093,7 @@ private:
 
     // A list of pad groups, each of which is allowed to short nets within their group.
     // A pad group is a comma-separated list of pad numbers.
-    std::vector<wxString> m_netTiePadGroups;
+    std::vector<wxString>  m_netTiePadGroups;
 
     // A list of 1:N footprint item to allowed net numbers
     std::map<const BOARD_ITEM*, std::set<int>> m_netTieCache;
@@ -1134,8 +1129,11 @@ private:
     /// number as jumpered pin groups
     bool m_duplicatePadNumbersAreJumpers;
 
-    SHAPE_POLY_SET   m_courtyard_cache_front; // Note that a footprint can have both front and back
-    SHAPE_POLY_SET   m_courtyard_cache_back;  // courtyards populated.
+    bool               m_allowMissingCourtyard;
+    bool               m_allowSolderMaskBridges;
+
+    SHAPE_POLY_SET     m_courtyard_cache_front; // Note that a footprint can have both front and back
+    SHAPE_POLY_SET     m_courtyard_cache_back;  // courtyards populated.
     mutable HASH_128   m_courtyard_cache_front_hash;
     mutable HASH_128   m_courtyard_cache_back_hash;
     mutable std::mutex m_courtyard_cache_mutex;

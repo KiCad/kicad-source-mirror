@@ -167,7 +167,6 @@ DIALOG_FOOTPRINT_PROPERTIES::DIALOG_FOOTPRINT_PROPERTIES( PCB_EDIT_FRAME* aParen
         m_boardOnly,
         m_excludeFromPosFiles,
         m_excludeFromBOM,
-        m_noCourtyards,
         m_cbDNP,
       	m_NetClearanceCtrl,
         m_SolderMaskMarginCtrl,
@@ -317,7 +316,6 @@ bool DIALOG_FOOTPRINT_PROPERTIES::TransferDataToWindow()
     m_boardOnly->SetValue( m_footprint->GetAttributes() & FP_BOARD_ONLY );
     m_excludeFromPosFiles->SetValue( m_footprint->GetAttributes() & FP_EXCLUDE_FROM_POS_FILES );
     m_excludeFromBOM->SetValue( m_footprint->GetAttributes() & FP_EXCLUDE_FROM_BOM );
-    m_noCourtyards->SetValue( m_footprint->GetAttributes() & FP_ALLOW_MISSING_COURTYARD );
     m_cbDNP->SetValue( m_footprint->GetAttributes() & FP_DNP );
 
     // Local Clearances
@@ -342,7 +340,7 @@ bool DIALOG_FOOTPRINT_PROPERTIES::TransferDataToWindow()
     else
         m_solderPasteRatio.SetValue( wxEmptyString );
 
-    m_allowSolderMaskBridges->SetValue( m_footprint->GetAttributes() & FP_ALLOW_SOLDERMASK_BRIDGES );
+    m_allowSolderMaskBridges->SetValue( m_footprint->AllowSolderMaskBridges() );
 
     switch( m_footprint->GetLocalZoneConnection() )
     {
@@ -351,6 +349,39 @@ bool DIALOG_FOOTPRINT_PROPERTIES::TransferDataToWindow()
     case ZONE_CONNECTION::FULL:      m_ZoneConnectionChoice->SetSelection( 1 ); break;
     case ZONE_CONNECTION::THERMAL:   m_ZoneConnectionChoice->SetSelection( 2 ); break;
     case ZONE_CONNECTION::NONE:      m_ZoneConnectionChoice->SetSelection( 3 ); break;
+    }
+
+    wxString jumperGroups;
+
+    if( m_footprint->GetDuplicatePadNumbersAreJumpers() )
+        jumperGroups = _( "all pads with duplicate numbers" );
+
+    for( const std::set<wxString>& group : m_footprint->JumperPadGroups() )
+    {
+        wxString groupTxt;
+
+        for( const wxString& pinNumber : group )
+        {
+            if( !groupTxt.IsEmpty() )
+                groupTxt << ", ";
+
+            groupTxt << pinNumber;
+        }
+
+        if( !jumperGroups.IsEmpty() )
+            jumperGroups << ";  ";
+
+        jumperGroups << "(" << groupTxt << ")";
+    }
+
+    if( jumperGroups.IsEmpty() )
+    {
+        m_jumperGroupsText->SetLabel( _( "none" ) );
+        m_jumperGroupsText->SetFont( KIUI::GetControlFont( m_jumperGroupsText ).Italic() );
+    }
+    else
+    {
+        m_jumperGroupsText->SetLabel( jumperGroups );
     }
 
     // Show the footprint's FPID.
@@ -630,13 +661,9 @@ bool DIALOG_FOOTPRINT_PROPERTIES::TransferDataFromWindow()
     if( m_cbDNP->GetValue() )
         attributes |= FP_DNP;
 
-    if( m_noCourtyards->GetValue() )
-        attributes |= FP_ALLOW_MISSING_COURTYARD;
-
-    if( m_allowSolderMaskBridges->GetValue() )
-        attributes |= FP_ALLOW_SOLDERMASK_BRIDGES;
-
     m_footprint->SetAttributes( attributes );
+
+    m_footprint->SetAllowSolderMaskBridges( m_allowSolderMaskBridges->GetValue() );
 
     EDA_ANGLE orient = m_orientation.GetAngleValue().Normalize();
 

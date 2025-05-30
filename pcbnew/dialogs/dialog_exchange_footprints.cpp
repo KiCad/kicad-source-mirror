@@ -84,7 +84,7 @@ DIALOG_EXCHANGE_FOOTPRINTS::DIALOG_EXCHANGE_FOOTPRINTS( PCB_EDIT_FRAME* aParent,
         m_resetTextItemEffects->SetLabel( _( "Update text sizes, styles and positions" ) );
         m_resetTextItemContent->SetLabel( _( "Update text content" ) );
         m_resetFabricationAttrs->SetLabel( _( "Update fabrication attributes" ) );
-        m_resetClearanceOverrides->SetLabel( _( "Update clearance overrides and settings" ) );
+        m_resetClearanceOverrides->SetLabel( _( "Update clearance overrides" ) );
         m_reset3DModels->SetLabel( _( "Update 3D models" ) );
     }
 

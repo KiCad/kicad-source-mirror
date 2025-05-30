@@ -4881,7 +4881,7 @@ FOOTPRINT* PCB_IO_KICAD_SEXPR_PARSER::parseFOOTPRINT_unchecked( wxArrayString* a
                     break;
 
                 case T_allow_missing_courtyard:
-                    attributes |= FP_ALLOW_MISSING_COURTYARD;
+                    footprint->SetAllowMissingCourtyard( true );
                     break;
 
                 case T_dnp:
@@ -4889,7 +4889,7 @@ FOOTPRINT* PCB_IO_KICAD_SEXPR_PARSER::parseFOOTPRINT_unchecked( wxArrayString* a
                     break;
 
                 case T_allow_soldermask_bridges:
-                    attributes |= FP_ALLOW_SOLDERMASK_BRIDGES;
+                    footprint->SetAllowSolderMaskBridges( true );
                     break;
 
                 default:
