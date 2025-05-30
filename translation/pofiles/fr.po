@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-29 21:50+0300\n"
-"PO-Revision-Date: 2025-05-14 18:12+0200\n"
+"POT-Creation-Date: 2025-05-30 09:21+0200\n"
+"PO-Revision-Date: 2025-05-26 08:46+0200\n"
 "Last-Translator: \n"
 "Language-Team: jp-charras\n"
 "Language: fr_FR\n"
@@ -8720,12 +8720,10 @@ msgid "Missing units for '%s'| (%s)"
 msgstr "Unités manquantes pour '%s'| (%s)"
 
 #: common/libeval_compiler/libeval_compiler.cpp:1164
-#, c-format
 msgid "Type mismatch between '%s' and %lf"
 msgstr "Non correspondance de type entre '%s' et %lf"
 
 #: common/libeval_compiler/libeval_compiler.cpp:1170
-#, c-format
 msgid "Type mismatch between %lf and '%s'"
 msgstr "Non correspondance de type entre %lf et '%s'"
 
@@ -9213,14 +9211,12 @@ msgid "Ungroup any selected groups"
 msgstr "Dégrouper tous les groupes sélectionnés"
 
 #: common/tool/actions.cpp:215
-#, fuzzy
 msgid "Add Items"
-msgstr "Eléments Divers"
+msgstr "Ajouter Eléments"
 
 #: common/tool/actions.cpp:216
-#, fuzzy
 msgid "Add items to group"
-msgstr "Ajout %s au groupe \"%s\"."
+msgstr "Ajouter des éléments à un groupe"
 
 #: common/tool/actions.cpp:222
 msgid "Remove Items"
@@ -9617,22 +9613,19 @@ msgstr "Zoom Optimal"
 
 #: common/tool/actions.cpp:699
 msgid "Zoom to worksheet area if exists or edited object"
-msgstr ""
+msgstr "Zoom sur la feuille de travail si elle existe ou l'objet en édition"
 
 #: common/tool/actions.cpp:706
-#, fuzzy
 msgid "Zoom to All Objects"
-msgstr "Zoom sur Objets"
+msgstr "Zoom sur Tous les Objets"
 
 #: common/tool/actions.cpp:707
-#, fuzzy
 msgid "Zoom to all objects on screen"
-msgstr "Sélectionner tous les éléments sur l'écran"
+msgstr "Zoom sur tous les objets à l'écran"
 
 #: common/tool/actions.cpp:713
-#, fuzzy
 msgid "Zoom to items currently selected"
-msgstr "Empreinte non sélectionnée"
+msgstr "Zoom sur les éléments actuellement sélectionnés"
 
 #: common/tool/actions.cpp:714
 msgid "Zoom to Selected Objects"
@@ -9693,13 +9686,12 @@ msgid "Center on Cursor"
 msgstr "Centrer sur le Curseur"
 
 #: common/tool/actions.cpp:794
-#, fuzzy
 msgid "Zoom to Selection Area"
-msgstr "Zoom sur la Sélection"
+msgstr "Zoom sur Zone de Sélection"
 
 #: common/tool/actions.cpp:795
 msgid "Zoom to an area selection created by a mouse drag"
-msgstr ""
+msgstr "Zoom sur une sélection de zone créée par un drag de souris"
 
 #: common/tool/actions.cpp:803 common/widgets/mathplot.cpp:1394
 msgid "Undo Last Zoom"
@@ -10236,9 +10228,8 @@ msgid "Grouping"
 msgstr "Groupage"
 
 #: common/tool/group_tool.cpp:237
-#, fuzzy
 msgid "Add Items to Group"
-msgstr "Aligner Eléments sur Grille"
+msgstr "Ajouter Eléments à Groupe"
 
 #: common/tool/group_tool.cpp:264
 msgid "Remove Group Items"
@@ -12268,9 +12259,8 @@ msgid "Update/reset visibility of pin names/numbers"
 msgstr "Mise à jour/réinitialisation des noms/numéros de pin"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:172
-#, fuzzy
 msgid "Reset alternate pin to default"
-msgstr "&Réinitialiser couleurs à défaut"
+msgstr "Réinit de pin alternative à défaut"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:178
 msgid "Update/reset symbol attributes"
@@ -13607,6 +13597,8 @@ msgid ""
 "The value '%s' can't be converted to boolean correctly, it has been "
 "interpreted as 'False'"
 msgstr ""
+"La valeur '%s' ne peut pas être convertie en valeur booléenne correctement, "
+"elle a été interprétée comme 'False'"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:1006
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:1566
@@ -15702,6 +15694,7 @@ msgid "Code"
 msgstr "Code"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:226
+#, c++-format
 msgid "Save {} in Value field as \"{}\""
 msgstr "Enregistrer {} dans le champ Valeur comme \"{}\""
 
@@ -17562,7 +17555,7 @@ msgid "There is no symbol selected to save."
 msgstr "Pas de composant sélectionné à sauver."
 
 #: eeschema/eeschema_jobs_handler.cpp:978
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to create output directory '%s'."
 msgstr "Impossible de créer le répertoire de sortie '%s'."
 
@@ -21869,6 +21862,8 @@ msgstr "attendu définition du format de mesure"
 #: eeschema/sim/ngspice.cpp:501
 msgid "Unable to load ngspice shared library. Please check your install."
 msgstr ""
+"Impossible de charger la librairie partagée ngspice. Veuillez vérifier votre "
+"installation."
 
 #: eeschema/sim/sim_lib_mgr.cpp:91 eeschema/sim/sim_lib_mgr.cpp:144
 #, c-format
@@ -23720,14 +23715,12 @@ msgid "Place design block linked to selected group"
 msgstr "Placer le bloc de conception lié au groupe sélectionné."
 
 #: eeschema/tools/sch_actions.cpp:475 pcbnew/tools/pcb_actions.cpp:469
-#, fuzzy
 msgid "Save to Linked Design Block"
-msgstr "Placer Bloc de Conception Lié"
+msgstr "Sauver dans Bloc de Conception Lié"
 
 #: eeschema/tools/sch_actions.cpp:476 pcbnew/tools/pcb_actions.cpp:470
-#, fuzzy
 msgid "Save selected group to linked design block"
-msgstr "Sauver Sélection dans Bloc de Conception..."
+msgstr "Sauver le groupe sélectionné dans un bloc de dessin lié"
 
 #: eeschema/tools/sch_actions.cpp:486
 msgid "Place No Connect Flags"
@@ -25063,9 +25056,9 @@ msgid "Could not find design block %s."
 msgstr "Impossible de trouver le bloc de conception %s."
 
 #: eeschema/tools/sch_editor_control.cpp:3012
-#, fuzzy, c-format
+#, c-format
 msgid "Design block %s does not have a schematic file."
-msgstr "Le bloc de conception n'a pas de schéma ou de fichier de PCB."
+msgstr "Le bloc de conception %s n'a pas de fichier de schéma."
 
 #: eeschema/tools/sch_find_replace_tool.cpp:320
 msgid "Reached end of schematic."
@@ -29362,18 +29355,16 @@ msgid "Launch preferred text editor"
 msgstr "Lancer l'éditeur de texte préféré"
 
 #: kicad/tools/kicad_manager_actions.cpp:221
-#, fuzzy
 msgid "Archive Project..."
-msgstr "&Archiver Projet..."
+msgstr "Archiver Projet..."
 
 #: kicad/tools/kicad_manager_actions.cpp:222
 msgid "Archive all project files"
 msgstr "Archiver les fichiers du projet"
 
 #: kicad/tools/kicad_manager_actions.cpp:228
-#, fuzzy
 msgid "Unarchive Project..."
-msgstr "&Désarchiver Projet..."
+msgstr "Désarchiver Projet..."
 
 #: kicad/tools/kicad_manager_actions.cpp:229
 msgid "Unarchive project files from zip archive"
@@ -45279,9 +45270,8 @@ msgid "IDFv3..."
 msgstr "IDFv3..."
 
 #: pcbnew/menubar_pcb_editor.cpp:128
-#, fuzzy
 msgid "STEP/GLB/BREP/XAO/PLY/STL..."
-msgstr "STEP / GLB / BREP / XAO / PLY / STL..."
+msgstr "STEP/GLB/BREP/XAO/PLY/STL..."
 
 #: pcbnew/menubar_pcb_editor.cpp:129
 msgid "Footprint Association (.cmp) File..."
@@ -48504,7 +48494,7 @@ msgstr "Cuivrage"
 msgid "Filling"
 msgstr "Rempli"
 
-#: pcbnew/pcbexpr_evaluator.cpp:650
+#: pcbnew/pcbexpr_evaluator.cpp:689
 msgid "must be mm, in, mil, deg, fs, or ps"
 msgstr "doit être mm, in, mil, deg, fs, ou ps"
 
@@ -49972,9 +49962,8 @@ msgid "Edit Track Width/Via Size"
 msgstr "Editer Taille des Pistes ou/et Vias"
 
 #: pcbnew/tools/edit_tool.cpp:1115
-#, fuzzy
 msgid "Edit Track Layer"
-msgstr "Couches de Dessous"
+msgstr "Editer Couche Piste"
 
 #: pcbnew/tools/edit_tool.cpp:1150
 msgid "At least two straight track segments must be selected."
@@ -50704,14 +50693,12 @@ msgid "Updates selected track & via sizes"
 msgstr "Mises à jour taille des pistes et via sélectionnées"
 
 #: pcbnew/tools/pcb_actions.cpp:698
-#, fuzzy
 msgid "Switch track to next enabled copper layer"
-msgstr "Elément sur une couche cuivre inactive"
+msgstr "Commuter piste à couche cuivre suivante"
 
 #: pcbnew/tools/pcb_actions.cpp:705
-#, fuzzy
 msgid "Switch track to previous enabled copper layer"
-msgstr "Commuter à Couche Précédente"
+msgstr "Commuter piste à couche cuivre précédente"
 
 #: pcbnew/tools/pcb_actions.cpp:711
 msgid "Adds arcs tangent to the selected straight track segments"
@@ -51249,47 +51236,40 @@ msgid "Create bill of materials from board"
 msgstr "Créer la liste de matériel à partir du PCB"
 
 #: pcbnew/tools/pcb_actions.cpp:1257
-#, fuzzy
 msgid "Export GenCAD..."
-msgstr "Export Fichier GENCAD"
+msgstr "Exporter GenCAD..."
 
 #: pcbnew/tools/pcb_actions.cpp:1258
 msgid "Export GenCAD board representation"
 msgstr "Exporter une représentation GenCAD du circuit"
 
 #: pcbnew/tools/pcb_actions.cpp:1264
-#, fuzzy
 msgid "Export VRML..."
-msgstr "Export VRML"
+msgstr "Exporter VRML..."
 
 #: pcbnew/tools/pcb_actions.cpp:1265
 msgid "Export VRML 3D board representation"
 msgstr "Exporter une représentation VRML du circuit en 3D"
 
 #: pcbnew/tools/pcb_actions.cpp:1271
-#, fuzzy
 msgid "Export IDFv3..."
-msgstr "Exportation IDFv3"
+msgstr "Exporter IDFv3..."
 
 #: pcbnew/tools/pcb_actions.cpp:1272
 msgid "Export IDF 3D board representation"
 msgstr "Exporter une représentation IDF du circuit en 3D"
 
 #: pcbnew/tools/pcb_actions.cpp:1278
-#, fuzzy
 msgid "Export STEP/GLB/BREP/XAO/PLY/STL..."
-msgstr "STEP / GLB / BREP / XAO / PLY / STL..."
+msgstr "Exporter STEP/GLB/BREP/XAO/PLY/STL..."
 
 #: pcbnew/tools/pcb_actions.cpp:1279
-#, fuzzy
 msgid "Export STEP, GLB, BREP, XAO, PLY or STL 3D board representation"
-msgstr ""
-"Exportation STEP / GLB / BREP / XAO / PLY / STL représentation 3D de la carte"
+msgstr "Exportation 3D du PCB STEP, GLB, BREP, XAO, PLY ou STL"
 
 #: pcbnew/tools/pcb_actions.cpp:1285
-#, fuzzy
 msgid "Export Footprint Association (.cmp) File..."
-msgstr "Fichier (.cmp) Association d'Empreintes..."
+msgstr "Exporter Fichier Association Empreintes (.cmp)..."
 
 #: pcbnew/tools/pcb_actions.cpp:1286
 msgid "Export footprint association file (*.cmp) for schematic back annotation"
@@ -51985,14 +51965,12 @@ msgid "Unroutes selected items to the nearest pad."
 msgstr "Déconnecter les éléments sélectionnés jusqu'au pad le plus proche."
 
 #: pcbnew/tools/pcb_actions.cpp:2266
-#, fuzzy
 msgid "Unroute Segment"
-msgstr "Déconnecter Sélectionné"
+msgstr "Annuler Routage Segment"
 
 #: pcbnew/tools/pcb_actions.cpp:2267
-#, fuzzy
 msgid "Unroutes segment to the nearest segment."
-msgstr "Déconnecter les éléments sélectionnés jusqu'au pad le plus proche."
+msgstr "Annuler routage segment vers le segment le plus proche."
 
 #: pcbnew/tools/pcb_actions.cpp:2281
 msgid "Select All Tracks in Net"
