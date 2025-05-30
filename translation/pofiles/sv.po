@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-05-29 21:51+0300\n"
-"PO-Revision-Date: 2025-05-23 00:01+0000\n"
+"PO-Revision-Date: 2025-05-30 20:02+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/v9/sv/>\n"
 "Language: sv\n"
@@ -10286,9 +10286,8 @@ msgid "KiCad s-expression schematic files"
 msgstr "KiCad s-expression kretsschemafiler"
 
 #: common/wildcards_and_files_ext.cpp:289
-#, fuzzy
 msgid "Altium Project files"
-msgstr "Alla KiCad projektfiler"
+msgstr "Altium projektfiler"
 
 #: common/wildcards_and_files_ext.cpp:295
 msgid "CADSTAR Archive files"
@@ -17883,7 +17882,7 @@ msgstr "Enhet %s"
 #: eeschema/lib_symbol.cpp:580 eeschema/sch_sheet.cpp:310
 #: eeschema/sch_symbol.cpp:1601
 msgid "Excluded from BOM"
-msgstr "Uteslut från komponentlistan"
+msgstr "Utesluten från komponentlistan"
 
 #: eeschema/lib_symbol.cpp:585 eeschema/sch_sheet.cpp:319
 #: eeschema/sch_symbol.cpp:1610
@@ -21067,6 +21066,8 @@ msgstr "förväntar formatdefinition för mätvärde"
 #: eeschema/sim/ngspice.cpp:501
 msgid "Unable to load ngspice shared library. Please check your install."
 msgstr ""
+"Kan inte läsa in delat ngspice-bibliotek. Vänligen kontrollera din "
+"installation."
 
 #: eeschema/sim/sim_lib_mgr.cpp:91 eeschema/sim/sim_lib_mgr.cpp:144
 #, c-format
@@ -27204,9 +27205,8 @@ msgstr ""
 "Projektet kan inte importeras."
 
 #: kicad/import_project.cpp:146
-#, fuzzy
 msgid "Import Altium Project Files"
-msgstr "Importera Eagle Project-filer"
+msgstr "Importera Altium projektfiler"
 
 #: kicad/import_project.cpp:154
 msgid "Import CADSTAR Archive Project Files"
@@ -27329,14 +27329,12 @@ msgid "Import Non-KiCad Project..."
 msgstr "Importera icke-KiCad-projekt ..."
 
 #: kicad/menubar.cpp:115
-#, fuzzy
 msgid "Altium Project..."
-msgstr "EAGLE-projekt..."
+msgstr "Altium-projekt..."
 
 #: kicad/menubar.cpp:116
-#, fuzzy
 msgid "Import Altium Schematic and PCB (*.PrjPcb)"
-msgstr "Importera CADSTAR-arkivschemat och PCB (*.csa, *.cpa)"
+msgstr "Importera Altium kretsschema och mönsterkort (*.PrjPcb)"
 
 #: kicad/menubar.cpp:119
 msgid "CADSTAR Project..."
@@ -29991,7 +29989,7 @@ msgstr "Enkel lösning:"
 #: pcb_calculator/calculator_panels/panel_r_calculator_base.cpp:131
 #: pcb_calculator/calculator_panels/panel_r_calculator_base.cpp:151
 msgid "Approximation:"
-msgstr "Approximation:"
+msgstr "Närmevärde:"
 
 #: pcb_calculator/calculator_panels/panel_r_calculator_base.cpp:122
 msgid "3R solution:"
