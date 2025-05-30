@@ -15,16 +15,16 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-05-29 21:51+0300\n"
-"PO-Revision-Date: 2025-02-19 03:14+0000\n"
-"Last-Translator: Seth Hillbrand <seth@kipro-pcb.com>\n"
-"Language-Team: Portuguese <https://hosted.weblate.org/projects/kicad/master-"
-"source/pt/>\n"
+"PO-Revision-Date: 2025-05-30 20:01+0000\n"
+"Last-Translator: Hildo Guillardi Júnior <hildogjr@gmail.com>\n"
+"Language-Team: Portuguese <https://hosted.weblate.org/projects/kicad/v9/pt/>"
+"\n"
 "Language: pt\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.10.1-dev\n"
+"X-Generator: Weblate 5.12-dev\n"
 "X-Poedit-Basepath: ../../kicad-source-mirror\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
@@ -27892,7 +27892,7 @@ msgstr "Confirme a atualização"
 #: kicad/pcm/dialogs/panel_packages_view.cpp:723
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:121
 msgid "Install"
-msgstr "Instale"
+msgstr "Instalar"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:121 kicad/pcm/dialogs/panel_package.cpp:78
 #: kicad/pcm/dialogs/panel_package.cpp:124
@@ -27900,7 +27900,7 @@ msgstr "Instale"
 #: kicad/pcm/dialogs/panel_package.cpp:163
 #: kicad/pcm/dialogs/panel_packages_view.cpp:724
 msgid "Uninstall"
-msgstr "Desinstale"
+msgstr "Desinstalar"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:160 kicad/pcm/dialogs/dialog_pcm.cpp:394
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:53
