@@ -14,10 +14,10 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-05-29 21:50+0300\n"
-"PO-Revision-Date: 2025-05-23 12:01+0000\n"
+"PO-Revision-Date: 2025-05-30 20:01+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
-"Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/master-"
-"source/sv/>\n"
+"Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/"
+"master-source/sv/>\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -13481,6 +13481,8 @@ msgid ""
 "The value '%s' can't be converted to boolean correctly, it has been "
 "interpreted as 'False'"
 msgstr ""
+"Värdet '%s' kan inte konverteras korrekt till boolesk; det har tolkats som "
+"'Falskt'"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:1006
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:1566
@@ -17393,7 +17395,7 @@ msgid "There is no symbol selected to save."
 msgstr "Det finns ingen vald symbol att spara."
 
 #: eeschema/eeschema_jobs_handler.cpp:978
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to create output directory '%s'."
 msgstr "Det går inte att skapa utmatningskatalogen '%s'."
 
@@ -18369,7 +18371,7 @@ msgstr "Enhet %s"
 #: eeschema/lib_symbol.cpp:615 eeschema/sch_sheet.cpp:276
 #: eeschema/sch_symbol.cpp:1490
 msgid "Excluded from BOM"
-msgstr "Uteslut från komponentlistan"
+msgstr "Utesluten från komponentlistan"
 
 #: eeschema/lib_symbol.cpp:620 eeschema/sch_sheet.cpp:285
 #: eeschema/sch_symbol.cpp:1499
@@ -21630,6 +21632,8 @@ msgstr "förväntar formatdefinition för mätvärde"
 #: eeschema/sim/ngspice.cpp:501
 msgid "Unable to load ngspice shared library. Please check your install."
 msgstr ""
+"Kan inte läsa in delat ngspice-bibliotek. Vänligen kontrollera din "
+"installation."
 
 #: eeschema/sim/sim_lib_mgr.cpp:91 eeschema/sim/sim_lib_mgr.cpp:144
 #, c-format
@@ -29033,18 +29037,16 @@ msgid "Launch preferred text editor"
 msgstr "Öppna textredigerare"
 
 #: kicad/tools/kicad_manager_actions.cpp:221
-#, fuzzy
 msgid "Archive Project..."
-msgstr "&Arkivera projektfiler..."
+msgstr "Arkivera projekt..."
 
 #: kicad/tools/kicad_manager_actions.cpp:222
 msgid "Archive all project files"
 msgstr "Arkivera alla projektfiler"
 
 #: kicad/tools/kicad_manager_actions.cpp:228
-#, fuzzy
 msgid "Unarchive Project..."
-msgstr "&Packa upp arkiverat projekt..."
+msgstr "Packa upp arkiverat projekt..."
 
 #: kicad/tools/kicad_manager_actions.cpp:229
 msgid "Unarchive project files from zip archive"
@@ -30734,7 +30736,7 @@ msgstr "Enkel lösning:"
 #: pcb_calculator/calculator_panels/panel_r_calculator_base.cpp:131
 #: pcb_calculator/calculator_panels/panel_r_calculator_base.cpp:151
 msgid "Approximation:"
-msgstr "Approximation:"
+msgstr "Närmevärde:"
 
 #: pcb_calculator/calculator_panels/panel_r_calculator_base.cpp:122
 msgid "3R solution:"
@@ -45082,9 +45084,8 @@ msgid "IDFv3..."
 msgstr "IDFv3 ..."
 
 #: pcbnew/menubar_pcb_editor.cpp:128
-#, fuzzy
 msgid "STEP/GLB/BREP/XAO/PLY/STL..."
-msgstr "STEP / GLB/ BREP / XAO / PLY / STL..."
+msgstr "STEP/GLB/BREP/XAO/PLY/STL..."
 
 #: pcbnew/menubar_pcb_editor.cpp:129
 msgid "Footprint Association (.cmp) File..."
@@ -50973,48 +50974,42 @@ msgid "Create bill of materials from board"
 msgstr "Skapa materialförteckning från mönsterkortet"
 
 #: pcbnew/tools/pcb_actions.cpp:1257
-#, fuzzy
 msgid "Export GenCAD..."
-msgstr "Exportera GenCAD-fil"
+msgstr "Exportera GenCAD..."
 
 #: pcbnew/tools/pcb_actions.cpp:1258
 msgid "Export GenCAD board representation"
 msgstr "Exportera GenCAD-mönsterkort"
 
 #: pcbnew/tools/pcb_actions.cpp:1264
-#, fuzzy
 msgid "Export VRML..."
-msgstr "Exportera VRML"
+msgstr "Exportera VRML..."
 
 #: pcbnew/tools/pcb_actions.cpp:1265
 msgid "Export VRML 3D board representation"
 msgstr "Exportera VRML 3D-kortrepresentation"
 
 #: pcbnew/tools/pcb_actions.cpp:1271
-#, fuzzy
 msgid "Export IDFv3..."
-msgstr "Exportera IDFv3"
+msgstr "Exportera IDFv3..."
 
 #: pcbnew/tools/pcb_actions.cpp:1272
 msgid "Export IDF 3D board representation"
 msgstr "Exportera IDF 3D-kortrepresentation"
 
 #: pcbnew/tools/pcb_actions.cpp:1278
-#, fuzzy
 msgid "Export STEP/GLB/BREP/XAO/PLY/STL..."
-msgstr "STEP / GLB/ BREP / XAO / PLY / STL..."
+msgstr "Exportera STEP/GLB/BREP/XAO/PLY/STL..."
 
 #: pcbnew/tools/pcb_actions.cpp:1279
-#, fuzzy
 msgid "Export STEP, GLB, BREP, XAO, PLY or STL 3D board representation"
 msgstr ""
-"Exportera STEP / GLB / BREP / XAO / PLY / STL 3D-representation av "
+"Exportera STEP, GLB, BREP, XAO, PLY eller STL 3D-representation av "
 "mönsterkort"
 
 #: pcbnew/tools/pcb_actions.cpp:1285
-#, fuzzy
 msgid "Export Footprint Association (.cmp) File..."
-msgstr "Footprint Association (.cmp) -fil ..."
+msgstr "Exportera fotavtryckstilldelningsfil (.cmp)..."
 
 #: pcbnew/tools/pcb_actions.cpp:1286
 msgid "Export footprint association file (*.cmp) for schematic back annotation"
