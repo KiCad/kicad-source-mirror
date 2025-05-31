@@ -83,8 +83,7 @@ void PCB_SHAPE::Serialize( google::protobuf::Any &aContainer ) const
     BoardGraphicShape msg;
 
     msg.set_layer( ToProtoEnum<PCB_LAYER_ID, BoardLayer>( GetLayer() ) );
-    msg.mutable_net()->mutable_code()->set_value( GetNetCode() );
-    msg.mutable_net()->set_name( GetNetname() );
+    PackNet( msg.mutable_net() );
     msg.mutable_id()->set_value( m_Uuid.AsStdString() );
     msg.set_locked( IsLocked() ? types::LockedState::LS_LOCKED : types::LockedState::LS_UNLOCKED );
 
@@ -123,7 +122,7 @@ bool PCB_SHAPE::Deserialize( const google::protobuf::Any &aContainer )
     const_cast<KIID&>( m_Uuid ) = KIID( msg.id().value() );
     SetLocked( msg.locked() == types::LS_LOCKED );
     SetLayer( FromProtoEnum<PCB_LAYER_ID, BoardLayer>( msg.layer() ) );
-    SetNetCode( msg.net().code().value() );
+    UnpackNet( msg.net() );
 
     google::protobuf::Any any;
     any.PackFrom( msg.shape() );

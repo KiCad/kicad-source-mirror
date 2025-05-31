@@ -157,8 +157,7 @@ void PAD::Serialize( google::protobuf::Any &aContainer ) const
     kiapi::common::PackVector2( *pad.mutable_position(), GetPosition() );
     pad.set_locked( IsLocked() ? kiapi::common::types::LockedState::LS_LOCKED
                                : kiapi::common::types::LockedState::LS_UNLOCKED );
-    pad.mutable_net()->mutable_code()->set_value( GetNetCode() );
-    pad.mutable_net()->set_name( GetNetname() );
+    PackNet( pad.mutable_net() );
     pad.set_number( GetNumber().ToUTF8() );
     pad.set_type( ToProtoEnum<PAD_ATTRIB, PadType>( GetAttribute() ) );
 
@@ -182,7 +181,7 @@ bool PAD::Deserialize( const google::protobuf::Any &aContainer )
 
     const_cast<KIID&>( m_Uuid ) = KIID( pad.id().value() );
     SetPosition( kiapi::common::UnpackVector2( pad.position() ) );
-    SetNetCode( pad.net().code().value() );
+    UnpackNet( pad.net() );
     SetLocked( pad.locked() == kiapi::common::types::LockedState::LS_LOCKED );
     SetAttribute( FromProtoEnum<PAD_ATTRIB>( pad.type() ) );
     SetNumber( wxString::FromUTF8( pad.number() ) );
