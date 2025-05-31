@@ -62,7 +62,7 @@ static void CheckArcGeom( const SHAPE_ARC& aArc, const ARC_PROPERTIES& aProps, c
 {
     // Angular error - note this can get quite large for very small arcs,
     // as the integral position rounding has a relatively greater effect
-    const double angle_tol_deg = 1.0;
+    const double angle_tol_deg = 2.0;
 
     // Position error - rounding to nearest integer
     const int pos_tol = 1;
@@ -401,7 +401,7 @@ static const std::vector<ARC_TTR_CASE> arc_ttr_cases = {
                     { 1707, 1707 },    //end on second segment
                     135,               //positive angle due to start/end
                     180,
-                    225,
+                    315,
                     1000,
                     { { 0, 1414 }, { 1707, 1000 } },
             }

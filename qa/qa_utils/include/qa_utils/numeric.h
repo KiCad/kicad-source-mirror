@@ -39,14 +39,18 @@ namespace KI_TEST
  *
  * @return value is in [( aNominal - aError ) % aWrap, ( aNominal + aError ) % aWrap]
  */
-template <typename T> bool IsWithinWrapped( T aValue, T aNominal, T aWrap, T aError )
+template <typename T>
+bool IsWithinWrapped( T aValue, T aNominal, T aWrap, T aError )
 {
-    double diff = std::fmod( aNominal - aValue + aWrap / 2.0, aWrap );
+    // Compute shortest signed distance on a ring
+    double diff = std::fmod( static_cast<double>( aValue - aNominal ), static_cast<double>( aWrap ) );
 
-    if( diff < 0 )
+    if( diff > aWrap / 2.0 )
+        diff -= aWrap;
+    else if( diff < -aWrap / 2.0 )
         diff += aWrap;
 
-    return diff - aWrap / 2.0 <= aError;
+    return std::abs( diff ) <= aError;
 }
 
 /**
