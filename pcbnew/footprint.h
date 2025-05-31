@@ -1098,6 +1098,17 @@ private:
     // A list of 1:N footprint item to allowed net numbers
     std::map<const BOARD_ITEM*, std::set<int>> m_netTieCache;
 
+    /// A list of jumper pad groups, each of which is a set of pad numbers that should be jumpered
+    /// together (treated as internally connected for the purposes of connectivity)
+    std::vector<std::set<wxString>> m_jumperPadGroups;
+
+    /// Flag that this footprint should automatically treat sets of two or more pads with the same
+    /// number as jumpered pin groups
+    bool                  m_duplicatePadNumbersAreJumpers;
+
+    bool                  m_allowMissingCourtyard;
+    bool                  m_allowSolderMaskBridges;
+
     // Optional overrides
     ZONE_CONNECTION       m_zoneConnection;
     std::optional<int>    m_clearance;
@@ -1117,23 +1128,12 @@ private:
     KIID            m_link;              // Temporary logical link used during editing
     LSET            m_privateLayers;     // Layers visible only in the footprint editor
 
-    std::vector<FP_3DMODEL>       m_3D_Drawings;       // 3D models.
-    wxArrayString*                m_initial_comments;  // s-expression comments in the footprint,
-                                                       // lazily allocated only if needed for speed
+    std::vector<FP_3DMODEL> m_3D_Drawings;       // 3D models.
+    wxArrayString*          m_initial_comments;  // s-expression comments in the footprint,
+                                                 //   lazily allocated only if needed for speed
 
-    /// A list of jumper pad groups, each of which is a set of pad numbers that should be jumpered
-    /// together (treated as internally connected for the purposes of connectivity)
-    std::vector<std::set<wxString>> m_jumperPadGroups;
-
-    /// Flag that this footprint should automatically treat sets of two or more pads with the same
-    /// number as jumpered pin groups
-    bool m_duplicatePadNumbersAreJumpers;
-
-    bool               m_allowMissingCourtyard;
-    bool               m_allowSolderMaskBridges;
-
-    SHAPE_POLY_SET     m_courtyard_cache_front; // Note that a footprint can have both front and back
-    SHAPE_POLY_SET     m_courtyard_cache_back;  // courtyards populated.
+    SHAPE_POLY_SET     m_courtyard_cache_front;  // Note that a footprint can have both front and back
+    SHAPE_POLY_SET     m_courtyard_cache_back;   //   courtyards populated.
     mutable HASH_128   m_courtyard_cache_front_hash;
     mutable HASH_128   m_courtyard_cache_back_hash;
     mutable std::mutex m_courtyard_cache_mutex;

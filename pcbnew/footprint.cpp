@@ -70,19 +70,24 @@
 
 FOOTPRINT::FOOTPRINT( BOARD* parent ) :
         BOARD_ITEM_CONTAINER( (BOARD_ITEM*) parent, PCB_FOOTPRINT_T ),
-        m_boundingBoxCacheTimeStamp( 0 ), m_textExcludedBBoxCacheTimeStamp( 0 ),
-        m_hullCacheTimeStamp( 0 ), m_initial_comments( nullptr ),
+        m_orient( ANGLE_0 ),
+        m_attributes( 0 ),
+        m_fpStatus( FP_PADS_are_LOCKED ),
+        m_fileFormatVersionAtLoad( 0 ),
+        m_boundingBoxCacheTimeStamp( 0 ),
+        m_textExcludedBBoxCacheTimeStamp( 0 ),
+        m_hullCacheTimeStamp( 0 ),
+        m_duplicatePadNumbersAreJumpers( false ),
+        m_allowMissingCourtyard( false ),
+        m_allowSolderMaskBridges( false ),
+        m_zoneConnection( ZONE_CONNECTION::INHERITED ),
+        m_lastEditTime( 0 ),
+        m_arflag( 0 ),
+        m_link( 0 ),
+        m_initial_comments( nullptr ),
         m_componentClassCacheProxy( std::make_unique<COMPONENT_CLASS_CACHE_PROXY>( this ) )
 {
-    m_attributes   = 0;
-    m_layer        = F_Cu;
-    m_orient       = ANGLE_0;
-    m_fpStatus     = FP_PADS_are_LOCKED;
-    m_arflag       = 0;
-    m_link         = 0;
-    m_lastEditTime = 0;
-    m_zoneConnection          = ZONE_CONNECTION::INHERITED;
-    m_fileFormatVersionAtLoad = 0;
+    m_layer      = F_Cu;
     m_embedFonts = false;
 
     auto addField =
@@ -107,15 +112,12 @@ FOOTPRINT::FOOTPRINT( const FOOTPRINT& aFootprint ) :
         BOARD_ITEM_CONTAINER( aFootprint ), EMBEDDED_FILES( aFootprint ),
         m_componentClassCacheProxy( std::make_unique<COMPONENT_CLASS_CACHE_PROXY>( this ) )
 {
-    m_pos          = aFootprint.m_pos;
-    m_fpid         = aFootprint.m_fpid;
-    m_attributes   = aFootprint.m_attributes;
-    m_fpStatus     = aFootprint.m_fpStatus;
-    m_orient       = aFootprint.m_orient;
-    m_lastEditTime = aFootprint.m_lastEditTime;
-    m_link         = aFootprint.m_link;
-    m_path         = aFootprint.m_path;
-    m_embedFonts   = aFootprint.m_embedFonts;
+    m_orient                  = aFootprint.m_orient;
+    m_pos                     = aFootprint.m_pos;
+    m_fpid                    = aFootprint.m_fpid;
+    m_attributes              = aFootprint.m_attributes;
+    m_fpStatus                = aFootprint.m_fpStatus;
+    m_fileFormatVersionAtLoad = aFootprint.m_fileFormatVersionAtLoad;
 
     m_cachedBoundingBox              = aFootprint.m_cachedBoundingBox;
     m_boundingBoxCacheTimeStamp      = aFootprint.m_boundingBoxCacheTimeStamp;
@@ -124,17 +126,37 @@ FOOTPRINT::FOOTPRINT( const FOOTPRINT& aFootprint ) :
     m_cachedHull                     = aFootprint.m_cachedHull;
     m_hullCacheTimeStamp             = aFootprint.m_hullCacheTimeStamp;
 
-    m_clearance                      = aFootprint.m_clearance;
-    m_solderMaskMargin               = aFootprint.m_solderMaskMargin;
-    m_solderPasteMargin              = aFootprint.m_solderPasteMargin;
-    m_solderPasteMarginRatio         = aFootprint.m_solderPasteMarginRatio;
-    m_zoneConnection                 = aFootprint.m_zoneConnection;
     m_netTiePadGroups                = aFootprint.m_netTiePadGroups;
-    m_fileFormatVersionAtLoad        = aFootprint.m_fileFormatVersionAtLoad;
-    m_duplicatePadNumbersAreJumpers  = aFootprint.m_duplicatePadNumbersAreJumpers;
 
     std::ranges::copy( aFootprint.m_jumperPadGroups,
                        std::inserter( m_jumperPadGroups, m_jumperPadGroups.end() ) );
+
+    m_duplicatePadNumbersAreJumpers  = aFootprint.m_duplicatePadNumbersAreJumpers;
+    m_allowMissingCourtyard          = aFootprint.m_allowMissingCourtyard;
+    m_allowSolderMaskBridges         = aFootprint.m_allowSolderMaskBridges;
+
+    m_zoneConnection         = aFootprint.m_zoneConnection;
+    m_clearance              = aFootprint.m_clearance;
+    m_solderMaskMargin       = aFootprint.m_solderMaskMargin;
+    m_solderPasteMargin      = aFootprint.m_solderPasteMargin;
+    m_solderPasteMarginRatio = aFootprint.m_solderPasteMarginRatio;
+
+    m_libDescription   = aFootprint.m_libDescription;
+    m_keywords         = aFootprint.m_keywords;
+    m_path             = aFootprint.m_path;
+    m_sheetname        = aFootprint.m_sheetname;
+    m_sheetfile        = aFootprint.m_sheetfile;
+    m_filters          = aFootprint.m_filters;
+    m_lastEditTime     = aFootprint.m_lastEditTime;
+    m_arflag           = 0;
+    m_link             = aFootprint.m_link;
+    m_privateLayers    = aFootprint.m_privateLayers;
+
+    m_3D_Drawings      = aFootprint.m_3D_Drawings;
+    m_initial_comments = aFootprint.m_initial_comments ? new wxArrayString( *aFootprint.m_initial_comments )
+                                                       : nullptr;
+
+    m_embedFonts       = aFootprint.m_embedFonts;
 
     std::map<EDA_ITEM*, EDA_ITEM*> ptrMap;
 
@@ -210,17 +232,6 @@ FOOTPRINT::FOOTPRINT( const FOOTPRINT& aFootprint ) :
 
     for( auto& [ name, file ] : aFootprint.EmbeddedFileMap() )
         AddFile( new EMBEDDED_FILES::EMBEDDED_FILE( *file ) );
-
-    // Copy auxiliary data
-    m_3D_Drawings   = aFootprint.m_3D_Drawings;
-    m_libDescription = aFootprint.m_libDescription;
-    m_keywords      = aFootprint.m_keywords;
-    m_privateLayers = aFootprint.m_privateLayers;
-
-    m_arflag        = 0;
-
-    m_initial_comments = aFootprint.m_initial_comments ?
-                         new wxArrayString( *aFootprint.m_initial_comments ) : nullptr;
 }
 
 

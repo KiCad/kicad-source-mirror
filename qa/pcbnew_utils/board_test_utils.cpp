@@ -426,9 +426,12 @@ void CheckFootprint( const FOOTPRINT* expected, const FOOTPRINT* fp )
 
     // TODO: Groups
 
-    // Use FootprintNeedsUpdate as sanity check (which should do the same thing as our manually coded checks)
-    // If we get the reporter working, and COMPARE_FLAGS::DRC is enough for us, we can remove the old code
-    BOOST_CHECK( !const_cast<FOOTPRINT*>(expected)->FootprintNeedsUpdate(fp, BOARD_ITEM::COMPARE_FLAGS::DRC, nullptr) );
+    // Use FootprintNeedsUpdate as sanity check (which should do many of the same checks as above,
+    // but neither is guaranteed to be complete).
+    WX_STRING_REPORTER reporter;
+
+    if( const_cast<FOOTPRINT*>(expected)->FootprintNeedsUpdate(fp, BOARD_ITEM::COMPARE_FLAGS::DRC, &reporter) )
+        BOOST_REQUIRE_MESSAGE( false,  reporter.GetMessages() );
 }
 
 
@@ -466,11 +469,11 @@ void CheckFpPad( const PAD* expected, const PAD* pad )
         BOOST_CHECK_EQUAL( expected->GetPadToDieLength(), pad->GetPadToDieLength() );
         BOOST_CHECK_EQUAL( expected->GetPadToDieDelay(), pad->GetPadToDieDelay() );
         BOOST_CHECK_EQUAL( expected->GetLocalSolderMaskMargin().value_or( 0 ),
-                                  pad->GetLocalSolderMaskMargin().value_or( 0 ) );
+                           pad->GetLocalSolderMaskMargin().value_or( 0 ) );
         BOOST_CHECK_EQUAL( expected->GetLocalSolderPasteMargin().value_or( 0 ),
-                                  pad->GetLocalSolderPasteMargin().value_or( 0 ) );
+                           pad->GetLocalSolderPasteMargin().value_or( 0 ) );
         BOOST_CHECK_EQUAL( expected->GetLocalSolderPasteMarginRatio().value_or( 0 ),
-                                  pad->GetLocalSolderPasteMarginRatio().value_or( 0 ) );
+                           pad->GetLocalSolderPasteMarginRatio().value_or( 0 ) );
         BOOST_CHECK_EQUAL( expected->GetLocalClearance().value_or( 0 ),
                            pad->GetLocalClearance().value_or( 0 ) );
         CHECK_ENUM_CLASS_EQUAL( expected->GetLocalZoneConnection(), pad->GetLocalZoneConnection() );
@@ -505,7 +508,6 @@ void CheckFpPad( const PAD* expected, const PAD* pad )
                               pad->GetPrimitives( PADSTACK::ALL_LAYERS ).at( i ).get() );
             }
         }
-
     }
 }
 
@@ -534,8 +536,7 @@ void CheckFpText( const PCB_TEXT* expected, const PCB_TEXT* text )
         BOOST_CHECK_EQUAL( expected->GetHorizJustify(), text->GetHorizJustify() );
         BOOST_CHECK_EQUAL( expected->GetVertJustify(), text->GetVertJustify() );
         BOOST_CHECK_EQUAL( expected->IsMirrored(), text->IsMirrored() );
-        BOOST_CHECK_EQUAL( expected->GetFontName(),
-                           text->GetFontName() ); // TODO: bold/italic setting?
+        BOOST_CHECK_EQUAL( expected->GetFontName(), text->GetFontName() );
 
         // TODO: render cache?
     }
