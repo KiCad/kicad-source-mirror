@@ -522,10 +522,14 @@ public:
      * @param aCommit commit that should store the changes.
      */
     void ExchangeFootprint( FOOTPRINT* aExisting, FOOTPRINT* aNew, BOARD_COMMIT& aCommit,
-                            bool deleteExtraTexts = true, bool resetTextLayers = true,
-                            bool resetTextEffects = true, bool resetFabricationAttrs = true,
-                            bool resetTextContent = true, bool resetClearanceOverrides = true,
-                            bool reset3DModels = true, bool* aUpdated = nullptr );
+                            bool deleteExtraTexts = true,
+                            bool resetTextLayers = true,
+                            bool resetTextEffects = true,
+                            bool resetFabricationAttrs = true,
+                            bool resetTextContent = true,
+                            bool resetClearanceOverrides = true,
+                            bool reset3DModels = true,
+                            bool* aUpdated = nullptr );
 
     /**
      * Install the corresponding dialog editor for the given item.

@@ -2293,10 +2293,14 @@ static PCB_TEXT* getMatchingTextItem( PCB_TEXT* aRefItem, FOOTPRINT* aFootprint 
 
 
 void PCB_EDIT_FRAME::ExchangeFootprint( FOOTPRINT* aExisting, FOOTPRINT* aNew,
-                                        BOARD_COMMIT& aCommit, bool deleteExtraTexts,
-                                        bool resetTextLayers, bool resetTextEffects,
-                                        bool resetTextContent, bool resetFabricationAttrs,
-                                        bool resetClearanceOverrides, bool reset3DModels,
+                                        BOARD_COMMIT& aCommit,
+                                        bool deleteExtraTexts,
+                                        bool resetTextLayers,
+                                        bool resetTextEffects,
+                                        bool resetTextContent,
+                                        bool resetFabricationAttrs,
+                                        bool resetClearanceOverrides,
+                                        bool reset3DModels,
                                         bool* aUpdated )
 {
     EDA_GROUP* parentGroup = aExisting->GetParentGroup();
@@ -2687,8 +2691,10 @@ void PCB_EDIT_FRAME::onSize( wxSizeEvent& aEvent )
 DIALOG_BOOK_REPORTER* PCB_EDIT_FRAME::GetInspectDrcErrorDialog()
 {
     if( !m_inspectDrcErrorDlg )
+    {
         m_inspectDrcErrorDlg = new DIALOG_BOOK_REPORTER( this, INSPECT_DRC_ERROR_DIALOG_NAME,
                                                          _( "Violation Report" ) );
+    }
 
     return m_inspectDrcErrorDlg;
 }
@@ -2697,8 +2703,10 @@ DIALOG_BOOK_REPORTER* PCB_EDIT_FRAME::GetInspectDrcErrorDialog()
 DIALOG_BOOK_REPORTER* PCB_EDIT_FRAME::GetInspectClearanceDialog()
 {
     if( !m_inspectClearanceDlg )
+    {
         m_inspectClearanceDlg = new DIALOG_BOOK_REPORTER( this, INSPECT_CLEARANCE_DIALOG_NAME,
                                                           _( "Clearance Report" ) );
+    }
 
     return m_inspectClearanceDlg;
 }
@@ -2707,8 +2715,10 @@ DIALOG_BOOK_REPORTER* PCB_EDIT_FRAME::GetInspectClearanceDialog()
 DIALOG_BOOK_REPORTER* PCB_EDIT_FRAME::GetInspectConstraintsDialog()
 {
     if( !m_inspectConstraintsDlg )
+    {
         m_inspectConstraintsDlg = new DIALOG_BOOK_REPORTER( this, INSPECT_CONSTRAINTS_DIALOG_NAME,
                                                             _( "Constraints Report" ) );
+    }
 
     return m_inspectConstraintsDlg;
 }
@@ -2717,8 +2727,10 @@ DIALOG_BOOK_REPORTER* PCB_EDIT_FRAME::GetInspectConstraintsDialog()
 DIALOG_BOOK_REPORTER* PCB_EDIT_FRAME::GetFootprintDiffDialog()
 {
     if( !m_footprintDiffDlg )
+    {
         m_footprintDiffDlg = new DIALOG_BOOK_REPORTER( this, FOOTPRINT_DIFF_DIALOG_NAME,
                                                        _( "Compare Footprint with Library" ) );
+    }
 
     return m_footprintDiffDlg;
 }
