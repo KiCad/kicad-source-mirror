@@ -4389,6 +4389,7 @@ void SCH_IO_ALTIUM::ParseParameter( const std::map<wxString, wxString>& aPropert
         field->SetText( kicadText );
         field->SetPosition( elem.location + m_sheetOffset );
         field->SetVisible( !elem.isHidden );
+        field->SetNameShown( elem.isShowName );
         SetTextPositioning( field, elem.justification, elem.orientation );
     }
 }

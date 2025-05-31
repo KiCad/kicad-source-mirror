@@ -545,7 +545,7 @@ SCH_LINE* SCH_LINE::MergeOverlap( SCH_SCREEN* aScreen, SCH_LINE* aLine, bool aCh
 
 SCH_LINE* SCH_LINE::BreakAt( SCH_COMMIT* aCommit, const VECTOR2I& aPoint )
 {
-    SCH_LINE* newSegment = static_cast<SCH_LINE*>( Duplicate( aCommit ) );
+    SCH_LINE* newSegment = static_cast<SCH_LINE*>( Duplicate( true, aCommit ) );
 
     newSegment->SetStartPoint( aPoint );
     newSegment->SetConnectivityDirty( true );
