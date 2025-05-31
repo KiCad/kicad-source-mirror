@@ -410,8 +410,7 @@ void PCB_TRACK::Serialize( google::protobuf::Any &aContainer ) const
     track.set_layer( ToProtoEnum<PCB_LAYER_ID, kiapi::board::types::BoardLayer>( GetLayer() ) );
     track.set_locked( IsLocked() ? kiapi::common::types::LockedState::LS_LOCKED
                                  : kiapi::common::types::LockedState::LS_UNLOCKED );
-    track.mutable_net()->mutable_code()->set_value( GetNetCode() );
-    track.mutable_net()->set_name( GetNetname() );
+    PackNet( track.mutable_net() );
     // TODO m_hasSolderMask and m_solderMaskMargin
 
     aContainer.PackFrom( track );
@@ -430,7 +429,7 @@ bool PCB_TRACK::Deserialize( const google::protobuf::Any &aContainer )
     SetEnd( VECTOR2I( track.end().x_nm(), track.end().y_nm() ) );
     SetWidth( track.width().value_nm() );
     SetLayer( FromProtoEnum<PCB_LAYER_ID, kiapi::board::types::BoardLayer>( track.layer() ) );
-    SetNetCode( track.net().code().value() );
+    UnpackNet( track.net() );
     SetLocked( track.locked() == kiapi::common::types::LockedState::LS_LOCKED );
     // TODO m_hasSolderMask and m_solderMaskMargin
 
@@ -453,8 +452,7 @@ void PCB_ARC::Serialize( google::protobuf::Any &aContainer ) const
     arc.set_layer( ToProtoEnum<PCB_LAYER_ID, kiapi::board::types::BoardLayer>( GetLayer() ) );
     arc.set_locked( IsLocked() ? kiapi::common::types::LockedState::LS_LOCKED
                                : kiapi::common::types::LockedState::LS_UNLOCKED );
-    arc.mutable_net()->mutable_code()->set_value( GetNetCode() );
-    arc.mutable_net()->set_name( GetNetname() );
+    PackNet( arc.mutable_net() );
     // TODO m_hasSolderMask and m_solderMaskMargin
 
     aContainer.PackFrom( arc );
@@ -474,7 +472,7 @@ bool PCB_ARC::Deserialize( const google::protobuf::Any &aContainer )
     SetEnd( VECTOR2I( arc.end().x_nm(), arc.end().y_nm() ) );
     SetWidth( arc.width().value_nm() );
     SetLayer( FromProtoEnum<PCB_LAYER_ID, kiapi::board::types::BoardLayer>( arc.layer() ) );
-    SetNetCode( arc.net().code().value() );
+    UnpackNet( arc.net() );
     SetLocked( arc.locked() == kiapi::common::types::LockedState::LS_LOCKED );
     // TODO m_hasSolderMask and m_solderMaskMargin
 
@@ -503,8 +501,7 @@ void PCB_VIA::Serialize( google::protobuf::Any &aContainer ) const
     via.set_type( ToProtoEnum<VIATYPE, kiapi::board::types::ViaType>( GetViaType() ) );
     via.set_locked( IsLocked() ? kiapi::common::types::LockedState::LS_LOCKED
                                : kiapi::common::types::LockedState::LS_UNLOCKED );
-    via.mutable_net()->mutable_code()->set_value( GetNetCode() );
-    via.mutable_net()->set_name( GetNetname() );
+    PackNet( via.mutable_net() );
 
     aContainer.PackFrom( via );
 }
@@ -531,7 +528,7 @@ bool PCB_VIA::Deserialize( const google::protobuf::Any &aContainer )
     m_padStack.LayerSet().reset();
 
     SetViaType( FromProtoEnum<VIATYPE>( via.type() ) );
-    SetNetCode( via.net().code().value() );
+    UnpackNet( via.net() );
     SetLocked( via.locked() == kiapi::common::types::LockedState::LS_LOCKED );
 
     return true;

@@ -294,8 +294,7 @@ void ZONE::Serialize( google::protobuf::Any& aContainer ) const
         case 1: hatch->set_border_mode( types::ZHFBM_USE_HATCH_THICKNESS );    break;
         }
 
-        cu->mutable_net()->mutable_code()->set_value( GetNetCode() );
-        cu->mutable_net()->set_name( GetNetname() );
+        PackNet( cu->mutable_net() );
         cu->mutable_teardrop()->set_type(
                 ToProtoEnum<TEARDROP_TYPE, types::TeardropType>( m_teardropType ) );
     }
@@ -391,7 +390,7 @@ bool ZONE::Deserialize( const google::protobuf::Any& aContainer )
         case types::ZHFBM_USE_HATCH_THICKNESS:    m_hatchBorderAlgorithm = 1; break;
         }
 
-        SetNetCode( cu.net().code().value() );
+        UnpackNet( cu.net() );
         m_teardropType = FromProtoEnum<TEARDROP_TYPE>( cu.teardrop().type() );
 
         for( const auto& properties : zone.layer_properties() )

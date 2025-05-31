@@ -32,6 +32,7 @@
 #include <string_utils.h>
 #include <i18n_utility.h>
 #include <netinfo.h>
+#include <api/board/board_types.pb.h>
 
 using namespace std::placeholders;
 
@@ -40,6 +41,32 @@ BOARD_CONNECTED_ITEM::BOARD_CONNECTED_ITEM( BOARD_ITEM* aParent, KICAD_T idtype 
     m_netinfo( NETINFO_LIST::OrphanedItem() )
 {
     m_localRatsnestVisible = true;
+}
+
+
+void BOARD_CONNECTED_ITEM::UnpackNet( const kiapi::board::types::Net& aProto )
+{
+    if( BOARD* board = GetBoard() )
+    {
+        wxString name = wxString::FromUTF8( aProto.name() );
+
+        if( NETINFO_ITEM* net = board->FindNet( name ) )
+        {
+            m_netinfo = net;
+        }
+        else
+        {
+            NETINFO_ITEM* newnet = new NETINFO_ITEM( board, name, 0 );
+            board->Add( newnet );
+            m_netinfo = newnet;
+        }
+    }
+}
+
+
+void BOARD_CONNECTED_ITEM::PackNet( kiapi::board::types::Net* aProto ) const
+{
+    aProto->set_name( GetNetname().ToUTF8() );
 }
 
 

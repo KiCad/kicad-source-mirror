@@ -33,6 +33,11 @@ class NETCLASS;
 class NETINFO_ITEM;
 class PAD;
 
+namespace kiapi::board::types
+{
+class Net;
+}
+
 /**
  * A base class derived from #BOARD_ITEM for items that can be connected and have a net, a
  * netname, a clearance ...
@@ -86,6 +91,13 @@ public:
     {
         m_netinfo = aNetInfo;
     }
+
+    /**
+     * Assigns a net to this item from an API message.  If the net does not yet exist, it will be created.
+     * @param aProto is the protobuf message to unpack a net from
+     */
+    void UnpackNet( const kiapi::board::types::Net& aProto );
+    void PackNet( kiapi::board::types::Net* aProto ) const;
 
     /**
      * @return the net code.
