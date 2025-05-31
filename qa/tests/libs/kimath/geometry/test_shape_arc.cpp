@@ -155,21 +155,96 @@ BOOST_AUTO_TEST_CASE( NullCtor )
 
 
 /**
+ * Info to set up an arc by start, mid and end points
+ */
+struct ARC_START_MID_END
+{
+    VECTOR2I m_start_point;
+    VECTOR2I m_mid_point;
+    VECTOR2I m_end_point;
+};
+
+struct ARC_SME_CASE : public KI_TEST::NAMED_CASE
+{
+    /// Geom of the arc
+    ARC_START_MID_END m_geom;
+
+    /// Arc line width
+    int m_width;
+
+    /// Expected properties
+    ARC_PROPERTIES m_properties;
+};
+
+
+static const std::vector<ARC_SME_CASE> arc_sme_cases = {
+    {
+            "S(-100,0), M(0,100), E(100,0)",
+            {
+                    { -100, 0 },
+                    { 0, 100 },
+                    { 100, 0 },
+            },
+            0,
+            {
+                    { 0, 0 },
+                    { -100, 0 },
+                    { 100, 0 },
+                    180,
+                    180,
+                    0,
+                    100,
+                    { { -100, 0 }, { 200, 100 } },
+            },
+    },
+    {
+            // This data has a midpoint not exactly at the midway point of the arc.
+            // This should be corrected by the constructor.
+            // The mid point should be at about (-71, -71) for a 270 degree arc, with the
+            // bottom right quadrant open.
+            "S(100,0), M(0,100), E(0,100) (bad midpoint)",
+            {
+                    { 100, 0 },
+                    { -100, 0 },
+                    { 0, 100 },
+            },
+            0,
+            {
+                    { 0, 0 },
+                    { 100, 0 },
+                    { 0, 100 },
+                    270,
+                    0,
+                    270,
+                    100,
+                    { { -100, -100 }, { 200, 200 } },
+            },
+    }
+};
+
+
+// The "bad midpoint" case is currently failing
+// Remove this expected failure when this issue is resolved:
+// https://gitlab.com/kicad/code/kicad/-/issues/21035
+BOOST_AUTO_TEST_CASE_EXPECTED_FAILURES( BasicSMEGeom, 6 )
+
+
+BOOST_DATA_TEST_CASE( BasicSMEGeom, boost::unit_test::data::make( arc_sme_cases ), c )
+{
+    const auto this_arc = SHAPE_ARC{ c.m_geom.m_start_point, c.m_geom.m_mid_point, c.m_geom.m_end_point, c.m_width };
+
+    CheckArc( this_arc, c.m_properties );
+}
+
+
+/**
  * Info to set up an arc by centre, start point and angle
- *
- * In future there may be more ways to set this up, so keep it separate
  */
 struct ARC_CENTRE_PT_ANGLE
 {
     VECTOR2I m_center_point;
     VECTOR2I m_start_point;
     double   m_center_angle;
-};
-struct ARC_START_MID_END
-{
-    VECTOR2I m_start_point;
-    VECTOR2I m_mid_point;
-    VECTOR2I m_end_point;
 };
 
 
