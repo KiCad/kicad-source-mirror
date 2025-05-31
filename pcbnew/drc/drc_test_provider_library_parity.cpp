@@ -597,18 +597,20 @@ bool FOOTPRINT::FootprintNeedsUpdate( const FOOTPRINT* aLibFP, int aCompareFlags
     // due to rounding and shape modifications
 
     std::unique_ptr<FOOTPRINT> temp( static_cast<FOOTPRINT*>( aLibFP->Clone() ) );
-    temp->SetParentGroup( nullptr );
 
     temp->SetParent( GetBoard() );  // Needed to know the copper layer count;
 
-    if( IsFlipped() != temp->IsFlipped() )
-        temp->Flip( { 0, 0 }, FLIP_DIRECTION::TOP_BOTTOM );
+    if( !( aCompareFlags & COMPARE_FLAGS::INSTANCE_TO_INSTANCE ) )
+    {
+        if( IsFlipped() != temp->IsFlipped() )
+            temp->Flip( { 0, 0 }, FLIP_DIRECTION::TOP_BOTTOM );
 
-    if( GetOrientation() != temp->GetOrientation() )
-        temp->SetOrientation( GetOrientation() );
+        if( GetOrientation() != temp->GetOrientation() )
+            temp->SetOrientation( GetOrientation() );
 
-    if( GetPosition() != temp->GetPosition() )
-        temp->SetPosition( GetPosition() );
+        if( GetPosition() != temp->GetPosition() )
+            temp->SetPosition( GetPosition() );
+    }
 
     for( BOARD_ITEM* item : temp->GraphicalItems() )
         item->NormalizeForCompare();
@@ -648,6 +650,9 @@ bool FOOTPRINT::FootprintNeedsUpdate( const FOOTPRINT* aLibFP, int aCompareFlags
                                      _( "Do not populate" ) ) );
     }
 
+#define REPORT( msg ) { if( aReporter ) aReporter->Report( msg ); }
+#define CHECKPOINT { if( diff && !aReporter ) return diff; }
+
     // Clearance and zone connection overrides are as likely to be set at the board level as in
     // the library.
     //
@@ -657,20 +662,20 @@ bool FOOTPRINT::FootprintNeedsUpdate( const FOOTPRINT* aLibFP, int aCompareFlags
     // On the other hand, if we report them then boards that override at the board level are
     // going to be VERY noisy.
     //
-    // For now we report them if there's a reporter, but we DON'T generate DRC errors on them.
-    if( aReporter )
+    // For report them as different, but we DON'T generate DRC errors on them.
+    if( !( aCompareFlags & COMPARE_FLAGS::DRC ) )
     {
         if( GetLocalClearance().has_value() && GetLocalClearance() != aLibFP->GetLocalClearance() )
         {
             diff = true;
-            aReporter->Report( _( "Pad clearance overridden." ) );
+            REPORT( _( "Pad clearance overridden." ) );
         }
 
         if( GetLocalSolderMaskMargin().has_value()
                 && GetLocalSolderMaskMargin() != aLibFP->GetLocalSolderMaskMargin() )
         {
             diff = true;
-            aReporter->Report( _( "Solder mask expansion overridden." ) );
+            REPORT( _( "Solder mask expansion overridden." ) );
         }
 
 
@@ -678,21 +683,21 @@ bool FOOTPRINT::FootprintNeedsUpdate( const FOOTPRINT* aLibFP, int aCompareFlags
                 && GetLocalSolderPasteMargin() != aLibFP->GetLocalSolderPasteMargin() )
         {
             diff = true;
-            aReporter->Report( _( "Solder paste absolute clearance overridden." ) );
+            REPORT( _( "Solder paste absolute clearance overridden." ) );
         }
 
         if( GetLocalSolderPasteMarginRatio()
                 && GetLocalSolderPasteMarginRatio() != aLibFP->GetLocalSolderPasteMarginRatio() )
         {
             diff = true;
-            aReporter->Report( _( "Solder paste relative clearance overridden." ) );
+            REPORT( _( "Solder paste relative clearance overridden." ) );
         }
 
         if( GetLocalZoneConnection() != ZONE_CONNECTION::INHERITED
                 && GetLocalZoneConnection() != aLibFP->GetLocalZoneConnection() )
         {
             diff = true;
-            aReporter->Report( _( "Zone connection overridden." ) );
+            REPORT( _( "Zone connection overridden." ) );
         }
     }
 
@@ -704,9 +709,6 @@ bool FOOTPRINT::FootprintNeedsUpdate( const FOOTPRINT* aLibFP, int aCompareFlags
         TEST( GetNetTiePadGroups()[ii], aLibFP->GetNetTiePadGroups()[ii],
               _( "Net tie pad groups differ." ) );
     }
-
-#define REPORT( msg ) { if( aReporter ) aReporter->Report( msg ); }
-#define CHECKPOINT { if( diff && !aReporter ) return diff; }
 
     // Text items are really problematic.  We don't want to test the reference, but after that
     // it gets messy.

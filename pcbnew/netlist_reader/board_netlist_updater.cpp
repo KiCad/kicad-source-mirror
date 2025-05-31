@@ -62,6 +62,8 @@ BOARD_NETLIST_UPDATER::BOARD_NETLIST_UPDATER( PCB_EDIT_FRAME* aFrame, BOARD* aBo
     m_lookupByTimestamp = false;
     m_transferGroups = false;
     m_overrideLocks = false;
+    m_updateFields = false;
+    m_removeExtraFields = false;
 
     m_warningCount = 0;
     m_errorCount = 0;
@@ -505,8 +507,11 @@ bool BOARD_NETLIST_UPDATER::updateFootprintParameters( FOOTPRINT* aPcbFootprint,
     {
         if( m_isDryRun )
         {
-            msg.Printf( _( "Update %s fields." ), aPcbFootprint->GetReference() );
-            m_reporter->Report( msg, RPT_SEVERITY_ACTION );
+            if( m_updateFields )
+            {
+                msg.Printf( _( "Update %s fields." ), aPcbFootprint->GetReference() );
+                m_reporter->Report( msg, RPT_SEVERITY_ACTION );
+            }
 
             // Remove fields that aren't present in the symbol
             for( PCB_FIELD* field : aPcbFootprint->GetFields() )
@@ -516,74 +521,83 @@ bool BOARD_NETLIST_UPDATER::updateFootprintParameters( FOOTPRINT* aPcbFootprint,
 
                 if( compFields.count( field->GetName() ) == 0 )
                 {
-                    msg.Printf( _( "Remove %s footprint fields not in symbol." ),
-                                aPcbFootprint->GetReference() );
-                    m_reporter->Report( msg, RPT_SEVERITY_ACTION );
+                    if( m_removeExtraFields )
+                    {
+                        msg.Printf( _( "Remove %s footprint fields not in symbol." ),
+                                    aPcbFootprint->GetReference() );
+                        m_reporter->Report( msg, RPT_SEVERITY_ACTION );
+                    }
+
                     break;
                 }
             }
         }
         else
         {
-            msg.Printf( _( "Updated %s fields." ), aPcbFootprint->GetReference() );
-            m_reporter->Report( msg, RPT_SEVERITY_ACTION );
-
-            changed = true;
-
-            // Add or change field value
-            for( auto& [name, value] : compFields )
+            if( m_updateFields )
             {
-                if( aPcbFootprint->HasField( name ) )
+                msg.Printf( _( "Updated %s fields." ), aPcbFootprint->GetReference() );
+                m_reporter->Report( msg, RPT_SEVERITY_ACTION );
+
+                changed = true;
+
+                // Add or change field value
+                for( auto& [name, value] : compFields )
                 {
-                    aPcbFootprint->GetField( name )->SetText( value );
-                }
-                else
-                {
-                    PCB_FIELD* newField = new PCB_FIELD( aPcbFootprint, FIELD_T::USER );
-                    aPcbFootprint->Add( newField );
+                    if( aPcbFootprint->HasField( name ) )
+                    {
+                        aPcbFootprint->GetField( name )->SetText( value );
+                    }
+                    else
+                    {
+                        PCB_FIELD* newField = new PCB_FIELD( aPcbFootprint, FIELD_T::USER );
+                        aPcbFootprint->Add( newField );
 
-                    newField->SetName( name );
-                    newField->SetText( value );
-                    newField->SetVisible( false );
-                    newField->SetLayer( aPcbFootprint->GetLayer() == F_Cu ? F_Fab : B_Fab );
+                        newField->SetName( name );
+                        newField->SetText( value );
+                        newField->SetVisible( false );
+                        newField->SetLayer( aPcbFootprint->GetLayer() == F_Cu ? F_Fab : B_Fab );
 
-                    // Give the relative position (0,0) in footprint
-                    newField->SetPosition( aPcbFootprint->GetPosition() );
-                    // Give the footprint orientation
-                    newField->Rotate( aPcbFootprint->GetPosition(), aPcbFootprint->GetOrientation() );
+                        // Give the relative position (0,0) in footprint
+                        newField->SetPosition( aPcbFootprint->GetPosition() );
+                        // Give the footprint orientation
+                        newField->Rotate( aPcbFootprint->GetPosition(), aPcbFootprint->GetOrientation() );
 
-                    if( m_frame )
-                        newField->StyleFromSettings( m_frame->GetDesignSettings() );
+                        if( m_frame )
+                            newField->StyleFromSettings( m_frame->GetDesignSettings() );
+                    }
                 }
             }
 
-            // Remove and delete fields that aren't present in the symbol
-            bool warned = false;
-
-            std::vector<PCB_FIELD*> fieldList;
-            aPcbFootprint->GetFields( fieldList, false );
-
-            for( PCB_FIELD* field : fieldList )
+            if( m_removeExtraFields )
             {
-                if( field->IsMandatory() )
-                    continue;
+                bool warned = false;
 
-                if( compFields.count( field->GetName() ) == 0 )
+                std::vector<PCB_FIELD*> fieldList;
+                aPcbFootprint->GetFields( fieldList, false );
+
+                for( PCB_FIELD* field : fieldList )
                 {
-                    if( !warned )
+                    if( field->IsMandatory() )
+                        continue;
+
+                    if( compFields.count( field->GetName() ) == 0 )
                     {
-                        warned = true;
-                        msg.Printf( _( "Removed %s footprint fields not in symbol." ),
-                                    aPcbFootprint->GetReference() );
-                        m_reporter->Report( msg, RPT_SEVERITY_ACTION );
+                        if( !warned )
+                        {
+                            warned = true;
+                            msg.Printf( _( "Removed %s footprint fields not in symbol." ),
+                                        aPcbFootprint->GetReference() );
+                            m_reporter->Report( msg, RPT_SEVERITY_ACTION );
+                        }
+
+                        aPcbFootprint->Remove( field );
+
+                        if( m_frame )
+                            m_frame->GetCanvas()->GetView()->Remove( field );
+
+                        delete field;
                     }
-
-                    aPcbFootprint->Remove( field );
-
-                    if( m_frame )
-                        m_frame->GetCanvas()->GetView()->Remove( field );
-
-                    delete field;
                 }
             }
         }
@@ -799,7 +813,7 @@ bool BOARD_NETLIST_UPDATER::updateFootprintParameters( FOOTPRINT* aPcbFootprint,
 
     if( changed && copy )
         m_commit.Modified( aPcbFootprint, copy );
-    else if( copy )
+    else
         delete copy;
 
     return true;
