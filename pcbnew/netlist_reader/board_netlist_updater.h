@@ -91,6 +91,10 @@ public:
 
     void SetLookupByTimestamp( bool aEnabled ) { m_lookupByTimestamp = aEnabled; }
 
+    void SetUpdateFields( bool aEnabled ) { m_updateFields = aEnabled; }
+
+    void SetRemoveExtraFields( bool aEnabled ) { m_removeExtraFields = aEnabled; }
+
     std::vector<FOOTPRINT*> GetAddedFootprints() const { return m_addedFootprints; }
 
 private:
@@ -136,6 +140,8 @@ private:
     bool m_replaceFootprints;
     bool m_lookupByTimestamp;
     bool m_overrideLocks;
+    bool m_updateFields;
+    bool m_removeExtraFields;
 
     int m_warningCount;
     int m_errorCount;

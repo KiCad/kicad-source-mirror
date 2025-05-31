@@ -420,7 +420,8 @@ public:
 
     enum COMPARE_FLAGS : int
     {
-        DRC = 0x01
+        DRC                  = 0x01,
+        INSTANCE_TO_INSTANCE = 0x02
     };
 
     struct ptr_cmp

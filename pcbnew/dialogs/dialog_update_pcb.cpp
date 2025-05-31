@@ -121,6 +121,8 @@ void DIALOG_UPDATE_PCB::PerformUpdate( bool aDryRun )
     updater.SetDeleteUnusedFootprints( m_cbDeleteExtraFootprints->GetValue());
     updater.SetReplaceFootprints( m_cbUpdateFootprints->GetValue() );
     updater.SetOverrideLocks( m_cbOverrideLocks->GetValue() );
+    updater.SetUpdateFields( m_cbUpdateFields->GetValue() );
+    updater.SetRemoveExtraFields( m_cbRemoveExtraFields->GetValue() );
     updater.UpdateNetlist( *m_netlist );
 
     m_messagePanel->Flush( true );
