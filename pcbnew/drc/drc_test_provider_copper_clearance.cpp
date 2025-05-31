@@ -111,11 +111,15 @@ private:
 
     typedef struct checked
     {
-        checked()
-            : layers(), has_error( false ) {}
+        checked() :
+                layers(),
+                has_error( false )
+        {}
 
-        checked( PCB_LAYER_ID aLayer )
-            : layers( { aLayer } ), has_error( false ) {}
+        checked( PCB_LAYER_ID aLayer ) :
+                layers( { aLayer } ),
+                has_error( false )
+        {}
 
         LSET layers;
         bool has_error;
@@ -330,9 +334,7 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testSingleLayerItemAgainstItem( BOARD_I
             // We only test a track item here against an item with a hole.
             // If either case is not valid, simply move on
             if( !( dynamic_cast<PCB_TRACK*>( a[ii] ) ) || !b[ii]->HasHole() )
-            {
                 continue;
-            }
 
             if( b[ii]->Type() == PCB_VIA_T )
             {
@@ -636,7 +638,7 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testTrackClearances()
                         // Filter:
                         [&]( BOARD_ITEM* other ) -> bool
                         {
-                            auto otherCItem = dynamic_cast<BOARD_CONNECTED_ITEM*>( other );
+                            BOARD_CONNECTED_ITEM* otherCItem = dynamic_cast<BOARD_CONNECTED_ITEM*>( other );
 
                             if( otherCItem && otherCItem->GetNetCode() == track->GetNetCode() )
                                 return false;
@@ -775,8 +777,9 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testPadAgainstItem( PAD* pad, SHAPE* pa
             testClearance = testShorting = false;
     }
 
-    PAD*     otherPad = nullptr;
-    PCB_VIA* otherVia = nullptr;
+    BOARD_CONNECTED_ITEM* otherCItem = dynamic_cast<BOARD_CONNECTED_ITEM*>( other );
+    PAD*                  otherPad = nullptr;
+    PCB_VIA*              otherVia = nullptr;
 
     if( other->Type() == PCB_PAD_T )
         otherPad = static_cast<PAD*>( other );
@@ -799,10 +802,7 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testPadAgainstItem( PAD* pad, SHAPE* pa
         testClearance = testShorting = false;
 
     int padNet = pad->GetNetCode();
-    int otherNet = 0;
-
-    if( BOARD_CONNECTED_ITEM* connectedItem = dynamic_cast<BOARD_CONNECTED_ITEM*>( other ) )
-        otherNet = connectedItem->GetNetCode();
+    int otherNet = otherCItem ? otherCItem->GetNetCode() : 0;
 
     // Other objects of the same (defined) net get a waiver on clearance and hole tests
     if( otherNet && otherNet == padNet )
@@ -877,11 +877,9 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testPadAgainstItem( PAD* pad, SHAPE* pa
                 else if( actual == 0 && padNet && otherNet && testShorting )
                 {
                     std::shared_ptr<DRC_ITEM> drce = DRC_ITEM::Create( DRCE_SHORTING_ITEMS );
-                    wxString msg;
-
-                    msg.Printf( _( "(nets %s and %s)" ),
-                                pad->GetNetname(),
-                                static_cast<BOARD_CONNECTED_ITEM*>( other )->GetNetname() );
+                    wxString msg = wxString::Format( _( "(nets %s and %s)" ),
+                                                     pad->GetNetname(),
+                                                     otherCItem->GetNetname() );
 
                     drce->SetErrorMessage( drce->GetErrorText() + wxS( " " ) + msg );
                     drce->SetItems( pad, other );
