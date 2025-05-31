@@ -82,7 +82,7 @@
             <property name="vgap">5</property>
             <object class="sizeritem" expanded="false">
               <property name="border">5</property>
-              <property name="flag">wxALL</property>
+              <property name="flag">wxTOP|wxBOTTOM|wxLEFT</property>
               <property name="proportion">0</property>
               <object class="wxStaticText" expanded="false">
                 <property name="BottomDockable">1</property>
@@ -212,7 +212,7 @@
             </object>
             <object class="sizeritem" expanded="false">
               <property name="border">5</property>
-              <property name="flag">wxALL|wxALIGN_CENTER_VERTICAL</property>
+              <property name="flag">wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxLEFT</property>
               <property name="proportion">0</property>
               <object class="wxStaticText" expanded="false">
                 <property name="BottomDockable">1</property>

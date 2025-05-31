@@ -25,7 +25,7 @@ DIALOG_EXECUTECOMMAND_JOB_SETTINGS_BASE::DIALOG_EXECUTECOMMAND_JOB_SETTINGS_BASE
 
 	m_textCommand = new wxStaticText( this, wxID_ANY, _("Command:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_textCommand->Wrap( -1 );
-	fgSizer1->Add( m_textCommand, 0, wxALL, 5 );
+	fgSizer1->Add( m_textCommand, 0, wxTOP|wxBOTTOM|wxLEFT, 5 );
 
 	m_textCtrlCommand = new wxStyledTextCtrl( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0, wxEmptyString );
 	m_textCtrlCommand->SetUseTabs( false );
@@ -61,7 +61,7 @@ DIALOG_EXECUTECOMMAND_JOB_SETTINGS_BASE::DIALOG_EXECUTECOMMAND_JOB_SETTINGS_BASE
 
 	m_textOutputPath = new wxStaticText( this, wxID_ANY, _("Output path:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_textOutputPath->Wrap( -1 );
-	fgSizer1->Add( m_textOutputPath, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+	fgSizer1->Add( m_textOutputPath, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxLEFT, 5 );
 
 	m_textCtrlOutputPath = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_textCtrlOutputPath->SetMinSize( wxSize( 350,-1 ) );
