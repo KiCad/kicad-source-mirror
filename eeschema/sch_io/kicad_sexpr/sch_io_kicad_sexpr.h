@@ -31,6 +31,7 @@
 #include <stack>
 #include <wildcards_and_files_ext.h>
 #include <wx/string.h>
+#include <richio.h>
 
 
 class KIWAY;

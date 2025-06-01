@@ -30,6 +30,7 @@
 #include <io/altium/altium_ascii_parser.h>
 #include <io/altium/altium_parser_utils.h>
 #include <sch_io/altium/sch_io_altium.h>
+#include <sch_io/kicad_sexpr/sch_io_kicad_sexpr.h>
 
 #include <schematic.h>
 #include <project_sch.h>
@@ -1078,8 +1079,12 @@ void SCH_IO_ALTIUM::ParseFileHeader( const ALTIUM_COMPOUND_FILE& aAltiumSchFile 
         fixupSymbolPinNameNumbers( symbol.second );
         fixupSymbolPinNameNumbers( libSymbolIt->second );
 
-        m_pi->SaveSymbol( getLibFileName().GetFullPath(),
-                          new LIB_SYMBOL( *( libSymbolIt->second ) ), m_properties.get() );
+        // set properties to prevent save file on every symbol save
+        std::map<std::string, UTF8> properties;
+        properties.emplace( SCH_IO_KICAD_SEXPR::PropBuffering, wxEmptyString );
+
+        m_pi->SaveSymbol( getLibFileName().GetFullPath(), new LIB_SYMBOL( *( libSymbolIt->second ) ),
+                          &properties );
 
         symbol.second->SetLibSymbol( libSymbolIt->second );
     }
@@ -1188,8 +1193,12 @@ void SCH_IO_ALTIUM::ParseASCIISchematic( const wxString& aFileName )
         fixupSymbolPinNameNumbers( symbol.second );
         fixupSymbolPinNameNumbers( libSymbolIt->second );
 
-        m_pi->SaveSymbol( getLibFileName().GetFullPath(),
-                          new LIB_SYMBOL( *( libSymbolIt->second ) ), m_properties.get() );
+        // set properties to prevent save file on every symbol save
+        std::map<std::string, UTF8> properties;
+        properties.emplace( SCH_IO_KICAD_SEXPR::PropBuffering, wxEmptyString );
+
+        m_pi->SaveSymbol( getLibFileName().GetFullPath(), new LIB_SYMBOL( *( libSymbolIt->second ) ),
+                          &properties );
 
         symbol.second->SetLibSymbol( libSymbolIt->second );
     }
@@ -3672,8 +3681,7 @@ void SCH_IO_ALTIUM::ParsePowerPort( const std::map<wxString, wxString>& aPropert
     {
         libSymbol = powerSymbolIt->second; // cache hit
     }
-    else if( LIB_SYMBOL* alreadyLoaded = m_pi->LoadSymbol( getLibFileName().GetFullPath(), symName,
-                                                           m_properties.get() ) )
+    else if( LIB_SYMBOL* alreadyLoaded = m_pi->LoadSymbol( getLibFileName().GetFullPath(), symName ) )
     {
         libSymbol = alreadyLoaded;
     }
@@ -3706,8 +3714,12 @@ void SCH_IO_ALTIUM::ParsePowerPort( const std::map<wxString, wxString>& aPropert
 
         libSymbol->GetValueField().SetPosition( valueFieldPos );
 
+        // set properties to prevent save file on every symbol save
+        std::map<std::string, UTF8> properties;
+        properties.emplace( SCH_IO_KICAD_SEXPR::PropBuffering, wxEmptyString );
+
         // this has to be done after parsing the LIB_SYMBOL!
-        m_pi->SaveSymbol( getLibFileName().GetFullPath(), libSymbol, m_properties.get() );
+        m_pi->SaveSymbol( getLibFileName().GetFullPath(), libSymbol, &properties );
         m_powerSymbols.insert( { symName, libSymbol } );
     }
 
