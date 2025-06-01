@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-05-29 21:51+0300\n"
-"PO-Revision-Date: 2025-06-01 16:39+0000\n"
+"PO-Revision-Date: 2025-06-01 16:41+0000\n"
 "Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
 "Language-Team: Tamil <https://hosted.weblate.org/projects/kicad/v9/ta/>\n"
 "Language: ta\n"
@@ -30050,9 +30050,8 @@ msgid "Zout:"
 msgstr "உப்பு:"
 
 #: pcb_calculator/calculator_panels/panel_rf_attenuators_base.cpp:141
-#, fuzzy
 msgid "R3:"
-msgstr "பி 3"
+msgstr "R3:"
 
 #: pcb_calculator/calculator_panels/panel_track_width.cpp:61
 msgid "Temperature rise"
