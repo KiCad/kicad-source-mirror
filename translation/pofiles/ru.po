@@ -22,10 +22,10 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-06-01 19:41+0300\n"
-"PO-Revision-Date: 2025-05-30 20:01+0000\n"
+"PO-Revision-Date: 2025-06-01 17:41+0000\n"
 "Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
-"Language-Team: Russian <https://hosted.weblate.org/projects/kicad/master-"
-"source/ru/>\n"
+"Language-Team: Russian <https://hosted.weblate.org/projects/kicad/"
+"master-source/ru/>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -12230,9 +12230,8 @@ msgid "Update/reset visibility of pin names/numbers"
 msgstr "Обновить/сбросить видимость имён/номеров выводов"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:172
-#, fuzzy
 msgid "Reset alternate pin to default"
-msgstr "Вернуть параметры мастера к значениям по умолчанию"
+msgstr "Сбросить альтернативный вывод к значениям по умолчанию"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:178
 msgid "Update/reset symbol attributes"
@@ -13313,9 +13312,8 @@ msgid "Enter the text to be used within the schematic"
 msgstr "Введите текст для использования на схеме"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:62
-#, fuzzy
 msgid "Multiple label input"
-msgstr "Несколько слоёв"
+msgstr "Ввод нескольких меток"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:68
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:42
@@ -14675,9 +14673,8 @@ msgid "Whole &words only"
 msgstr "Только целые слова"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:90
-#, fuzzy
 msgid "Regular Expression"
-msgstr "Неудачное выражение"
+msgstr "Регулярное выражение"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:93
 msgid "Search pin &names and numbers"
@@ -21708,6 +21705,8 @@ msgstr "ожидалось measurement format definition"
 #: eeschema/sim/ngspice.cpp:501
 msgid "Unable to load ngspice shared library. Please check your install."
 msgstr ""
+"Не удалось загрузить разделяемую библиотеку ngspice. Пожалуйста, проверьте "
+"вашу установку."
 
 #: eeschema/sim/sim_lib_mgr.cpp:91 eeschema/sim/sim_lib_mgr.cpp:144
 #, c-format
@@ -24035,24 +24034,20 @@ msgstr ""
 "библиотеки"
 
 #: eeschema/tools/sch_actions.cpp:1119
-#, fuzzy
 msgid "Next Net Item"
-msgstr "Текстовые поля"
+msgstr "Следующий элемент цепи"
 
 #: eeschema/tools/sch_actions.cpp:1120
-#, fuzzy
 msgid "Select next item on the current net"
-msgstr "Выделить элемент соединения под курсором"
+msgstr "Выделить следующий элемент на текущей цепи"
 
 #: eeschema/tools/sch_actions.cpp:1126
-#, fuzzy
 msgid "Previous Net Item"
-msgstr "Предыдущий лист"
+msgstr "Предыдущий элемент цепи"
 
 #: eeschema/tools/sch_actions.cpp:1127
-#, fuzzy
 msgid "Select previous item on the current net"
-msgstr "Выделить элемент соединения под курсором"
+msgstr "Выделить предыдущий элемент на текущей цепи"
 
 #: eeschema/tools/sch_actions.cpp:1132
 msgid "Export Drawing to Clipboard"
@@ -28017,9 +28012,8 @@ msgstr ""
 "быть импортирован."
 
 #: kicad/import_project.cpp:146
-#, fuzzy
 msgid "Import Altium Project Files"
-msgstr "Импортировать файлы проекта Eagle"
+msgstr "Импорт файлов проекта Altium"
 
 #: kicad/import_project.cpp:154
 msgid "Import CADSTAR Archive Project Files"
@@ -28142,14 +28136,12 @@ msgid "Import Non-KiCad Project..."
 msgstr "Импорт проекта из другой САПР..."
 
 #: kicad/menubar.cpp:115
-#, fuzzy
 msgid "Altium Project..."
-msgstr "Проект EAGLE..."
+msgstr "Проект Altium..."
 
 #: kicad/menubar.cpp:116
-#, fuzzy
 msgid "Import Altium Schematic and PCB (*.PrjPcb)"
-msgstr "Импорт архива схемы и платы CADSTAR (*.csa, *.cpa)"
+msgstr "Импорт схемы и платы Altium (*.PrjPcb)"
 
 #: kicad/menubar.cpp:119
 msgid "CADSTAR Project..."
@@ -39669,14 +39661,12 @@ msgid "Unused Pads"
 msgstr "Неиспользуемые конт. пл."
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:42
-#, fuzzy
 msgid "Update Footprints"
 msgstr "Обновить посад. места"
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:44
-#, fuzzy
 msgid "Replace footprints with those specified by symbols"
-msgstr "Заменить посад. места на указанные в списке цепей"
+msgstr "Заменить посад. места на указанные в символах"
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:46
 msgid ""
@@ -39701,19 +39691,16 @@ msgstr ""
 "символом схемы."
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:55
-#, fuzzy
 msgid "Override locks"
-msgstr "Разблокировать"
+msgstr "Перезаписывать заблокированные"
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:67
-#, fuzzy
 msgid "Update footprint fields from symbols"
-msgstr "Обновить посад.место %s с '%s' на '%s'"
+msgstr "Обновить поля посад. мест из символов"
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:71
-#, fuzzy
 msgid "Remove footprint fields not found in symbols"
-msgstr "Удалить %s полей посад. мест, отсутствующие в символе."
+msgstr "Удалить поля посад. мест, отсутствующие в символах"
 
 #: pcbnew/dialogs/dialog_update_pcb_base.h:57
 msgid "Update PCB from Schematic"
@@ -41560,7 +41547,6 @@ msgstr ""
 "\n"
 
 #: pcbnew/dialogs/panel_setup_rules_help_8expression_functions.h:2
-#, fuzzy
 msgid ""
 "### Expression functions\n"
 "\n"
@@ -41709,8 +41695,8 @@ msgstr ""
 "<br><br>\n"
 "\n"
 "    A.fromTo('x', 'y')\n"
-"Истина, если объект находится на медном соединении между указанными конт. "
-"пл.\n"
+"Истина, если объект находится на медном соединении между указанными конт. пл."
+"\n"
 "`x` и `y` — полные имена конт. пл. (например, `R1-Pad1`).\n"
 "<br><br>\n"
 "\n"
@@ -41729,8 +41715,8 @@ msgstr ""
 "<br><br>\n"
 "\n"
 "    A.inDiffPair('<имя_цепи>')\n"
-"Истина, если `A` относится к цепи, которая является частью указанной диф."
-"пары.\n"
+"Истина, если `A` относится к цепи, которая является частью указанной "
+"диф.пары.\n"
 "Например, `inDiffPair('/CLK')` соответствует цепям `/CLK_P` и `/CLK_N`.\n"
 "<br><br>\n"
 "\n"
@@ -41791,6 +41777,11 @@ msgstr ""
 "    A.memberOfSheet('<путь_листа>')\n"
 "Истина, если `A` принадлежит указанному листу схемы.\n"
 "Путь может содержать шаблоны.\n"
+"\n"
+"    A.memberOfSheetOrChildren('<sheet_path>')\n"
+"Истина, если `A` является членом указанного листа схемы или любого из его "
+"дочерних иерархических листов. Путь может \n"
+"содержать шаблоны.\n"
 "<br><br>\n"
 "\n"
 
@@ -43116,9 +43107,8 @@ msgid "(%s clearance %s; actual < 0)"
 msgstr "(%s зазор %s; текущий < 0)"
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:1421
-#, fuzzy
 msgid "(intersecting zones must have distinct priorities)"
-msgstr "Дуга должна иметь 3 четкие точки"
+msgstr "(пересекающиеся зоны должны иметь разные приоритеты)"
 
 #: pcbnew/drc/drc_test_provider_courtyard_clearance.cpp:85
 msgid "Checking footprint courtyard definitions..."
@@ -43901,18 +43891,21 @@ msgid ""
 "Could not add 3D model for %s.\n"
 "File not found: %s\n"
 msgstr ""
+"Не удалось добавить 3D-модель для %s.\n"
+"Файл не найден: %s\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:406
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Could not add 3D model for %s.\n"
 "OpenCASCADE error: %s\n"
-msgstr "Не удалось подключиться к %s. Ошибки: %s"
+msgstr ""
+"Не удалось добавить 3D-модель для %s.\n"
+"Ошибка OpenCASCADE: %s\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:810
-#, fuzzy
 msgid "Could not create PCB solid model.\n"
-msgstr "Не удалось создать BOM '%s'."
+msgstr "Не удалось создать твердотельную модель печатной платы.\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:864
 msgid ""
@@ -43970,42 +43963,42 @@ msgstr "** ShapeUpgrade_UnifySameDomain создал пустую фигуру *
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:944
 msgid "OCC error adding pad/via polygon.\n"
-msgstr ""
+msgstr "Ошибка OCC при добавлении полигона pad/via.\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1189
 #, c-format
 msgid "Could not add shape (%d points) to copper layer %s.\n"
-msgstr ""
+msgstr "Не удалось добавить фигуру (%d точек) к медному слою %s.\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1207
-#, fuzzy, c-format
+#, c-format
 msgid "No model defined for %s.\n"
-msgstr "Не задано посад. место для символа %s."
+msgstr "Не задана модель для %s.\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1222
-#, fuzzy, c-format
+#, c-format
 msgid "No model for filename '%s'.\n"
-msgstr "Нет модели с именем '%s' в '%s'."
+msgstr "Нет модели для имени файла '%s'.\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1233
-#, fuzzy, c-format
+#, c-format
 msgid "No location data for filename '%s'.\n"
-msgstr "Данные о размещении записаны в %s.\n"
+msgstr "Нет данных о расположении для имени файла '%s'.\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1243
-#, fuzzy, c-format
+#, c-format
 msgid "Could not add component with filename '%s'.\n"
-msgstr "Не удалось найти конт.пл. сложной формы с именем '%s'."
+msgstr "Не удалось добавить компонент из файла '%s'.\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1413
 #, c-format
 msgid "OCC exception building shape segment: %s\n"
-msgstr ""
+msgstr "Исключение OCC при построении сегмента фигуры: %s\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1428
 #, c-format
 msgid "OCC exception building face: %s\n"
-msgstr ""
+msgstr "Исключение OCC при построении грани: %s\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1440
 #: pcbnew/exporters/step/step_pcb_model.cpp:1830
@@ -44015,12 +44008,12 @@ msgstr "Не удалось создать призматическую форм
 #: pcbnew/exporters/step/step_pcb_model.cpp:1512
 #, c-format
 msgid "Failed to make segment edge (%d %d) -> (%d %d), skipping\n"
-msgstr ""
+msgstr "Не удалось создать край сегмента (%d %d) -> (%d %d), пропущено\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1524
 #, c-format
 msgid "Failed to add segment edge (%d %d) -> (%d %d)\n"
-msgstr ""
+msgstr "Не удалось добавить ребро сегмента (%d %d) -> (%d %d)\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1560
 #, c-format
@@ -44028,32 +44021,36 @@ msgid ""
 "Failed to add arc curve from (%d %d), arc p0 (%d %d), mid (%d %d), p1 (%d "
 "%d)\n"
 msgstr ""
+"Не удалось добавить кривую дуги из (%d %d), arc p0 (%d %d), mid (%d %d), p1 ("
+"%d %d)\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1636
 #, c-format
 msgid "Failed to close wire at %d, %d -> %d, %d **\n"
-msgstr ""
+msgstr "Не удалось сомкнуть wire в %d, %d -> %d, %d **\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1646
 #, c-format
 msgid "OCC exception creating wire: %s\n"
-msgstr ""
+msgstr "Исключение OCC при создании wire: %s\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1728
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Wire not done (contour points %d): OCC error %d\n"
 "z: %g; bounding box: %s\n"
-msgstr "Wire не выполнен (точек контура: %d): ошибка OCC %d\n"
+msgstr ""
+"Wire не выполнена (точек контура %d): Ошибка OCC %d\n"
+"z: %g; bounding box: %s\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1742
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Wire self-interference check failed\n"
 "z: %g; bounding box: %s\n"
 msgstr ""
-"\n"
-"Сбой проверки на наличие самопересечений Wire\n"
+"Тест на самопересечение wire не прошел\n"
+"z: %g; bounding box: %s\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1764
 msgid "Using non-simplified polygon.\n"
@@ -44062,7 +44059,7 @@ msgstr "Использование неупрощённого полигона.\
 #: pcbnew/exporters/step/step_pcb_model.cpp:1811
 #, c-format
 msgid "OCC exception creating contour %d: %s\n"
-msgstr ""
+msgstr "Исключение OCC при создании контура %d: %s\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1841
 msgid "** Face skipped **\n"
@@ -44070,13 +44067,12 @@ msgstr "** Грань пропущена **\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1931
 #: pcbnew/exporters/step/step_pcb_model.cpp:1948
-#, fuzzy
 msgid "OCC error creating main outline.\n"
-msgstr "Ошибка чтения файла."
+msgstr "Ошибка OCC при создании главного контура.\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1957
 msgid "OCC error creating hole in main outline.\n"
-msgstr ""
+msgstr "Ошибка OCC при создании отверстия в главном контуре.\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2000
 #, c-format
@@ -44084,11 +44080,9 @@ msgid "Subtracting holes for %s\n"
 msgstr "Вычитание отверстий для %s\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2044
-#, fuzzy, c-format
+#, c-format
 msgid "** Got problems while cutting %s net '%s' **\n"
-msgstr ""
-"\n"
-"** Возникли проблемы при вырезании %s цепи %s **\n"
+msgstr "** Возникли проблемы при вырезании %s цепь '%s' **\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2096
 msgid "shapes"
@@ -44108,35 +44102,38 @@ msgstr "перех.отв."
 #: pcbnew/exporters/step/step_pcb_model.cpp:3167
 #: pcbnew/exporters/step/step_pcb_model.cpp:3241
 #: pcbnew/exporters/step/step_pcb_model.cpp:3309
-#, fuzzy, c-format
+#, c-format
 msgid "No valid PCB assembly; cannot create output file '%s'.\n"
-msgstr "Не удалось создать выходной каталог '%s'."
+msgstr ""
+"Нет корректной сборки печатной платы; невозможно создать выходной файл '%s'."
+"\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2389
 msgid "Failed to set STEP product name, but will attempt to continue."
-msgstr ""
+msgstr "Не удалось установить название продукта STEP, но попытаемся продолжить."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2397
 msgid "Failed to set surface curve mode, but will attempt to continue."
 msgstr ""
+"Не удалось установить режим кривых поверхностей, но попытаемся продолжить."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2438
 #: pcbnew/exporters/step/step_pcb_model.cpp:3218
 #: pcbnew/exporters/step/step_pcb_model.cpp:3290
 #: pcbnew/exporters/step/step_pcb_model.cpp:3339
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot rename temporary file '%s' to '%s'.\n"
-msgstr "Не удалось переименовать временный файл '%s' в '%s'"
+msgstr "Не удалось переименовать временный файл '%s' в '%s'.\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2889
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot identify actual file type for '%s'.\n"
-msgstr "Не удалось открыть файл списка цепей '%s'."
+msgstr "Не удалось определить фактический тип файла для '%s'.\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2899
-#, fuzzy, c-format
+#, c-format
 msgid "Could not transfer model data from file '%s'.\n"
-msgstr "Не удалось создать каталог '%s'."
+msgstr "Не удалось перенести данные модели из файла '%s'.\n"
 
 #: pcbnew/files.cpp:153
 msgid "All KiCad Board Files"
@@ -53453,9 +53450,9 @@ msgid "Rule Area %s"
 msgstr "Область запрета %s"
 
 #: pcbnew/zone.cpp:1193
-#, fuzzy, c-format
+#, c-format
 msgid "Rule Area '%s' %s"
-msgstr "Область запрета %s"
+msgstr "Область запрета '%s' %s"
 
 #: pcbnew/zone.cpp:1200
 #, c-format
@@ -53463,14 +53460,14 @@ msgid "Teardrop %s %s"
 msgstr "Каплевидный переход %s %s"
 
 #: pcbnew/zone.cpp:1208
-#, fuzzy, c-format
+#, c-format
 msgid "Zone %s %s, priority %d"
-msgstr "Уровень приоритета зоны:"
+msgstr "Зона %s %s, приоритет %d"
 
 #: pcbnew/zone.cpp:1215
-#, fuzzy, c-format
+#, c-format
 msgid "Zone '%s' %s %s, priority %d"
-msgstr "%s, %s, %s, или %s"
+msgstr "Зона '%s' %s %s, приоритет %d"
 
 #: pcbnew/zone.cpp:1938
 msgid "Keepout"
