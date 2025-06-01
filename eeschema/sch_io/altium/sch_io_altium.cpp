@@ -1513,7 +1513,6 @@ void SCH_IO_ALTIUM::ParseComponent( int aIndex, const std::map<wxString, wxStrin
     // each component has its own symbol for now
     SCH_SYMBOL* symbol = new SCH_SYMBOL();
 
-    const_cast<KIID&>( symbol->m_Uuid ) = KIID( elem.uniqueid );
     symbol->SetPosition( elem.location + m_sheetOffset );
 
     for( SCH_FIELD& field : symbol->GetFields() )
