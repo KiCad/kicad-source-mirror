@@ -541,9 +541,7 @@ SCH_SHEET* SCH_IO_ALTIUM::LoadSchematicFile( const wxString& aFileName, SCHEMATI
     if( m_reporter )
     {
         for( auto& [msg, severity] : m_errorMessages )
-        {
             m_reporter->Report( msg, severity );
-        }
     }
 
     m_errorMessages.clear();
@@ -642,8 +640,8 @@ void SCH_IO_ALTIUM::CreateAliases()
                     return label;
             }
 
-            SCH_LABEL* result = walkBusLine( KIGEOM::GetOtherEnd( line->GetSeg(), aStart ),
-                                           aVisited );
+            SCH_LABEL* result = walkBusLine( KIGEOM::GetOtherEnd( line->GetSeg(), aStart ), aVisited );
+
             if( result )
                 return result;
         }
@@ -690,8 +688,7 @@ void SCH_IO_ALTIUM::CreateAliases()
 
         if( !busLine )
         {
-            for( auto elem : getCurrentScreen()->Items().Overlapping(
-                         SCH_HIER_LABEL_T, box ) )
+            for( SCH_ITEM* elem : getCurrentScreen()->Items().Overlapping( SCH_HIER_LABEL_T, box ) )
             {
                 SCH_HIERLABEL* label = static_cast<SCH_HIERLABEL*>( elem );
 
@@ -713,7 +710,6 @@ void SCH_IO_ALTIUM::CreateAliases()
                     busLine->SetEndPoint( VECTOR2I( pos.x, center.y ) );
                     busLine->SetFlags( IS_NEW );
                     screen->Append( busLine );
-
                 }
 
                 break;
@@ -892,12 +888,11 @@ void SCH_IO_ALTIUM::ParseAltiumSch( const wxString& aFileName )
 
         if( loadAltiumFileName.GetFullName().IsEmpty() || !loadAltiumFileName.IsFileReadable() )
         {
-            wxString msg;
-
-            msg.Printf( _( "The file name for sheet %s is undefined, this is probably an"
-                           " Altium signal harness that got converted to a sheet." ),
-                        sheet->GetName() );
-            m_errorMessages.emplace( msg, SEVERITY::RPT_SEVERITY_INFO );
+            m_errorMessages.emplace( wxString::Format( _( "The file name for sheet %s is undefined, "
+                                                          "this is probably an Altium signal harness "
+                                                          "that got converted to a sheet." ),
+                                                       sheet->GetName() ),
+                                     SEVERITY::RPT_SEVERITY_INFO );
             sheet->SetScreen( new SCH_SCREEN( m_schematic ) );
             continue;
         }
@@ -962,10 +957,9 @@ void SCH_IO_ALTIUM::ParseStorage( const ALTIUM_COMPOUND_FILE& aAltiumSchFile )
     // throw IO Error.
     if( reader.GetRemainingBytes() != 0 )
     {
-        m_errorMessages.emplace( wxString::Format( _( "Storage file not fully parsed "
-                                                 "(%d bytes remaining)." ),
-                                              reader.GetRemainingBytes() ),
-                            RPT_SEVERITY_ERROR );
+        m_errorMessages.emplace( wxString::Format( _( "Storage file not fully parsed (%d bytes remaining)." ),
+                                                   reader.GetRemainingBytes() ),
+                                 RPT_SEVERITY_ERROR );
     }
 }
 
@@ -1025,8 +1019,7 @@ void SCH_IO_ALTIUM::ParseFileHeader( const ALTIUM_COMPOUND_FILE& aAltiumSchFile 
 {
     wxString streamName = wxS( "FileHeader" );
 
-    const CFB::COMPOUND_FILE_ENTRY* file =
-            aAltiumSchFile.FindStream( { streamName.ToStdString() } );
+    const CFB::COMPOUND_FILE_ENTRY* file = aAltiumSchFile.FindStream( { streamName.ToStdString() } );
 
     if( file == nullptr )
         THROW_IO_ERROR( "FileHeader not found" );
@@ -1486,12 +1479,12 @@ void SCH_IO_ALTIUM::ParseComponent( int aIndex, const std::map<wxString, wxStrin
         const ASCH_SYMBOL& currentSymbol = m_altiumComponents.at( aIndex );
 
         m_errorMessages.emplace( wxString::Format( _( "Symbol \"%s\" in sheet \"%s\" at index %d "
-                                                 "replaced with symbol \"%s\"." ),
-                                              currentSymbol.libreference,
-                                              sheetName,
-                                              aIndex,
-                                              altiumSymbol.libreference ),
-                            RPT_SEVERITY_ERROR );
+                                                      "replaced with symbol \"%s\"." ),
+                                                   currentSymbol.libreference,
+                                                   sheetName,
+                                                   aIndex,
+                                                   altiumSymbol.libreference ),
+                                 RPT_SEVERITY_ERROR );
     }
 
     auto pair = m_altiumComponents.insert( { aIndex, altiumSymbol } );
@@ -1583,9 +1576,8 @@ void SCH_IO_ALTIUM::ParsePin( const std::map<wxString, wxString>& aProperties,
 {
     ASCH_PIN elem( aProperties );
 
-    LIB_SYMBOL* symbol = (int) aSymbol.size() <= elem.ownerpartdisplaymode
-                                                         ? nullptr
-                                                         : aSymbol[elem.ownerpartdisplaymode];
+    LIB_SYMBOL* symbol = (int) aSymbol.size() <= elem.ownerpartdisplaymode ? nullptr
+                                                                           : aSymbol[elem.ownerpartdisplaymode];
     SCH_SYMBOL* schSymbol = nullptr;
 
     if( !symbol )
@@ -1596,8 +1588,8 @@ void SCH_IO_ALTIUM::ParsePin( const std::map<wxString, wxString>& aProperties,
         {
             // TODO: e.g. can depend on Template (RECORD=39
             m_errorMessages.emplace( wxString::Format( wxT( "Pin's owner (%d) not found." ),
-                                                  elem.ownerindex ),
-                                RPT_SEVERITY_DEBUG );
+                                                       elem.ownerindex ),
+                                     RPT_SEVERITY_DEBUG );
             return;
         }
 
@@ -2054,9 +2046,9 @@ void SCH_IO_ALTIUM::AddLibTextBox( const ASCH_TEXT_FRAME *aElem, std::vector<LIB
         if( libSymbolIt == m_libSymbols.end() )
         {
             // TODO: e.g. can depend on Template (RECORD=39
-            m_errorMessages.emplace(
-                    wxString::Format( wxT( "Label's owner (%d) not found." ), aElem->ownerindex ),
-                    RPT_SEVERITY_DEBUG );
+            m_errorMessages.emplace( wxString::Format( wxT( "Label's owner (%d) not found." ),
+                                                       aElem->ownerindex ),
+                                     RPT_SEVERITY_DEBUG );
             return;
         }
 
@@ -2193,8 +2185,8 @@ void SCH_IO_ALTIUM::ParseBezier( const std::map<wxString, wxString>& aProperties
             {
                 // TODO: e.g. can depend on Template (RECORD=39
                 m_errorMessages.emplace( wxString::Format( wxT( "Bezier's owner (%d) not found." ),
-                                                      elem.ownerindex ),
-                                    RPT_SEVERITY_DEBUG );
+                                                           elem.ownerindex ),
+                                         RPT_SEVERITY_DEBUG );
                 return;
             }
 
@@ -2313,9 +2305,8 @@ void SCH_IO_ALTIUM::ParsePolyline( const std::map<wxString, wxString>& aProperti
     }
     else
     {
-        LIB_SYMBOL* symbol = (int) aSymbol.size() <= elem.ownerpartdisplaymode
-                                                             ? nullptr
-                                                             : aSymbol[elem.ownerpartdisplaymode];
+        LIB_SYMBOL* symbol = (int) aSymbol.size() <= elem.ownerpartdisplaymode ? nullptr
+                                                                               : aSymbol[elem.ownerpartdisplaymode];
         SCH_SYMBOL* schsym = nullptr;
 
         if( !symbol )
@@ -2326,8 +2317,8 @@ void SCH_IO_ALTIUM::ParsePolyline( const std::map<wxString, wxString>& aProperti
             {
                 // TODO: e.g. can depend on Template (RECORD=39
                 m_errorMessages.emplace( wxString::Format( wxT( "Polyline's owner (%d) not found." ),
-                                                      elem.ownerindex ),
-                                    RPT_SEVERITY_DEBUG );
+                                                           elem.ownerindex ),
+                                         RPT_SEVERITY_DEBUG );
                 return;
             }
 
@@ -2384,9 +2375,8 @@ void SCH_IO_ALTIUM::ParsePolygon( const std::map<wxString, wxString>& aPropertie
     }
     else
     {
-        LIB_SYMBOL* symbol = (int) aSymbol.size() <= elem.ownerpartdisplaymode
-                                                            ? nullptr
-                                                            : aSymbol[elem.ownerpartdisplaymode];
+        LIB_SYMBOL* symbol = (int) aSymbol.size() <= elem.ownerpartdisplaymode ? nullptr
+                                                                               : aSymbol[elem.ownerpartdisplaymode];
         SCH_SYMBOL* schsym = nullptr;
 
         if( !symbol )
@@ -2397,8 +2387,8 @@ void SCH_IO_ALTIUM::ParsePolygon( const std::map<wxString, wxString>& aPropertie
             {
                 // TODO: e.g. can depend on Template (RECORD=39
                 m_errorMessages.emplace( wxString::Format( wxT( "Polygon's owner (%d) not found." ),
-                                                      elem.ownerindex ),
-                                    RPT_SEVERITY_DEBUG );
+                                                           elem.ownerindex ),
+                                         RPT_SEVERITY_DEBUG );
                 return;
             }
 
@@ -2466,9 +2456,8 @@ void SCH_IO_ALTIUM::ParseRoundRectangle( const std::map<wxString, wxString>& aPr
     }
     else
     {
-        LIB_SYMBOL* symbol = (int) aSymbol.size() <= elem.ownerpartdisplaymode
-                                                            ? nullptr
-                                                            : aSymbol[elem.ownerpartdisplaymode];
+        LIB_SYMBOL* symbol = (int) aSymbol.size() <= elem.ownerpartdisplaymode ? nullptr
+                                                                               : aSymbol[elem.ownerpartdisplaymode];
         SCH_SYMBOL* schsym = nullptr;
 
         if( !symbol )
@@ -2478,10 +2467,9 @@ void SCH_IO_ALTIUM::ParseRoundRectangle( const std::map<wxString, wxString>& aPr
             if( libSymbolIt == m_libSymbols.end() )
             {
                 // TODO: e.g. can depend on Template (RECORD=39
-                m_errorMessages.emplace( wxString::Format( wxT( "Rounded rectangle's owner (%d) not "
-                                                           "found." ),
-                                                      elem.ownerindex ),
-                                    RPT_SEVERITY_DEBUG );
+                m_errorMessages.emplace( wxString::Format( wxT( "Rounded rectangle's owner (%d) not found." ),
+                                                           elem.ownerindex ),
+                                         RPT_SEVERITY_DEBUG );
                 return;
             }
 
@@ -2586,9 +2574,8 @@ void SCH_IO_ALTIUM::ParseArc( const std::map<wxString, wxString>& aProperties,
     }
     else
     {
-        LIB_SYMBOL* symbol = (int) aSymbol.size() <= elem.ownerpartdisplaymode
-                                                             ? nullptr
-                                                             : aSymbol[elem.ownerpartdisplaymode];
+        LIB_SYMBOL* symbol = (int) aSymbol.size() <= elem.ownerpartdisplaymode ? nullptr
+                                                                               : aSymbol[elem.ownerpartdisplaymode];
         SCH_SYMBOL* schsym = nullptr;
 
         if( !symbol )
@@ -2599,8 +2586,8 @@ void SCH_IO_ALTIUM::ParseArc( const std::map<wxString, wxString>& aProperties,
             {
                 // TODO: e.g. can depend on Template (RECORD=39
                 m_errorMessages.emplace( wxString::Format( wxT( "Arc's owner (%d) not found." ),
-                                                      elem.ownerindex ),
-                                    RPT_SEVERITY_DEBUG );
+                                                           elem.ownerindex ),
+                                         RPT_SEVERITY_DEBUG );
                 return;
             }
 
@@ -2687,9 +2674,8 @@ void SCH_IO_ALTIUM::ParseEllipticalArc( const std::map<wxString, wxString>& aPro
     }
     else
     {
-        LIB_SYMBOL* symbol = (int) aSymbol.size() <= elem.ownerpartdisplaymode
-                                                             ? nullptr
-                                                             : aSymbol[elem.ownerpartdisplaymode];
+        LIB_SYMBOL* symbol = (int) aSymbol.size() <= elem.ownerpartdisplaymode ? nullptr
+                                                                               : aSymbol[elem.ownerpartdisplaymode];
         SCH_SYMBOL* schsym = nullptr;
 
         if( !symbol )
@@ -2700,8 +2686,8 @@ void SCH_IO_ALTIUM::ParseEllipticalArc( const std::map<wxString, wxString>& aPro
             {
                 // TODO: e.g. can depend on Template (RECORD=39
                 m_errorMessages.emplace( wxString::Format( wxT( "Elliptical Arc's owner (%d) not found." ),
-                                                      elem.ownerindex ),
-                                    RPT_SEVERITY_DEBUG );
+                                                           elem.ownerindex ),
+                                         RPT_SEVERITY_DEBUG );
                 return;
             }
 
@@ -2787,9 +2773,8 @@ void SCH_IO_ALTIUM::ParsePieChart( const std::map<wxString, wxString>& aProperti
     }
     else
     {
-        LIB_SYMBOL* symbol = (int) aSymbol.size() <= elem.ownerpartdisplaymode
-                                                             ? nullptr
-                                                             : aSymbol[elem.ownerpartdisplaymode];
+        LIB_SYMBOL* symbol = (int) aSymbol.size() <= elem.ownerpartdisplaymode ? nullptr
+                                                                               : aSymbol[elem.ownerpartdisplaymode];
         SCH_SYMBOL* schsym = nullptr;
 
         if( !symbol )
@@ -2800,8 +2785,8 @@ void SCH_IO_ALTIUM::ParsePieChart( const std::map<wxString, wxString>& aProperti
             {
                 // TODO: e.g. can depend on Template (RECORD=39
                 m_errorMessages.emplace( wxString::Format( wxT( "Piechart's owner (%d) not found." ),
-                                                      elem.ownerindex ),
-                                    RPT_SEVERITY_DEBUG );
+                                                           elem.ownerindex ),
+                                         RPT_SEVERITY_DEBUG );
                 return;
             }
 
@@ -2900,9 +2885,8 @@ void SCH_IO_ALTIUM::ParseEllipse( const std::map<wxString, wxString>& aPropertie
     }
     else
     {
-        LIB_SYMBOL* symbol = (int) aSymbol.size() <= elem.ownerpartdisplaymode
-                                                             ? nullptr
-                                                             : aSymbol[elem.ownerpartdisplaymode];
+        LIB_SYMBOL* symbol = (int) aSymbol.size() <= elem.ownerpartdisplaymode ? nullptr
+                                                                               : aSymbol[elem.ownerpartdisplaymode];
         SCH_SYMBOL* schsym = nullptr;
 
         if( !symbol )
@@ -2913,8 +2897,8 @@ void SCH_IO_ALTIUM::ParseEllipse( const std::map<wxString, wxString>& aPropertie
             {
                 // TODO: e.g. can depend on Template (RECORD=39
                 m_errorMessages.emplace( wxString::Format( wxT( "Ellipse's owner (%d) not found." ),
-                                                      elem.ownerindex ),
-                                    RPT_SEVERITY_DEBUG );
+                                                           elem.ownerindex ),
+                                         RPT_SEVERITY_DEBUG );
                 return;
             }
 
@@ -3005,9 +2989,8 @@ void SCH_IO_ALTIUM::ParseCircle( const std::map<wxString, wxString>& aProperties
     }
     else
     {
-        LIB_SYMBOL* symbol = (int) aSymbol.size() <= elem.ownerpartdisplaymode
-                                                             ? nullptr
-                                                             : aSymbol[elem.ownerpartdisplaymode];
+        LIB_SYMBOL* symbol = (int) aSymbol.size() <= elem.ownerpartdisplaymode ? nullptr
+                                                                               : aSymbol[elem.ownerpartdisplaymode];
         SCH_SYMBOL* schsym = nullptr;
 
         if( !symbol )
@@ -3018,8 +3001,8 @@ void SCH_IO_ALTIUM::ParseCircle( const std::map<wxString, wxString>& aProperties
             {
                 // TODO: e.g. can depend on Template (RECORD=39
                 m_errorMessages.emplace( wxString::Format( wxT( "Ellipse's owner (%d) not found." ),
-                                                      elem.ownerindex ),
-                                    RPT_SEVERITY_DEBUG );
+                                                           elem.ownerindex ),
+                                         RPT_SEVERITY_DEBUG );
                 return;
             }
 
@@ -3067,9 +3050,8 @@ void SCH_IO_ALTIUM::ParseLine( const std::map<wxString, wxString>& aProperties,
     }
     else
     {
-        LIB_SYMBOL* symbol = (int) aSymbol.size() <= elem.ownerpartdisplaymode
-                                                             ? nullptr
-                                                             : aSymbol[elem.ownerpartdisplaymode];
+        LIB_SYMBOL* symbol = (int) aSymbol.size() <= elem.ownerpartdisplaymode ? nullptr
+                                                                               : aSymbol[elem.ownerpartdisplaymode];
         SCH_SYMBOL* schsym = nullptr;
 
         if( !symbol )
@@ -3080,8 +3062,8 @@ void SCH_IO_ALTIUM::ParseLine( const std::map<wxString, wxString>& aProperties,
             {
                 // TODO: e.g. can depend on Template (RECORD=39
                 m_errorMessages.emplace( wxString::Format( wxT( "Line's owner (%d) not found." ),
-                                                      elem.ownerindex ),
-                                    RPT_SEVERITY_DEBUG );
+                                                           elem.ownerindex ),
+                                         RPT_SEVERITY_DEBUG );
                 return;
             }
 
@@ -3138,8 +3120,8 @@ void SCH_IO_ALTIUM::ParseSignalHarness( const std::map<wxString, wxString>& aPro
     else
     {
         // No clue if this situation can ever exist
-        m_errorMessages.emplace( wxT( "Signal harness, belonging to the part is not currently "
-                                 "supported." ), RPT_SEVERITY_DEBUG );
+        m_errorMessages.emplace( wxT( "Signal harness, belonging to the part is not currently supported." ),
+                                 RPT_SEVERITY_DEBUG );
     }
 }
 
@@ -3182,9 +3164,8 @@ void SCH_IO_ALTIUM::ParseHarnessConnector( int aIndex, const std::map<wxString,
     else
     {
         // I have no clue if this situation can ever exist
-        m_errorMessages.emplace( wxT( "Harness connector, belonging to the part is not currently "
-                                 "supported." ),
-                            RPT_SEVERITY_DEBUG );
+        m_errorMessages.emplace( wxT( "Harness connector, belonging to the part is not currently supported." ),
+                                 RPT_SEVERITY_DEBUG );
     }
 }
 
@@ -3198,8 +3179,8 @@ void SCH_IO_ALTIUM::ParseHarnessEntry( const std::map<wxString, wxString>& aProp
     if( harnessIt == m_altiumHarnesses.end() )
     {
         m_errorMessages.emplace( wxString::Format( wxT( "Harness entry's parent (%d) not found." ),
-                                              SCH_IO_ALTIUM::m_harnessEntryParent ),
-                            RPT_SEVERITY_DEBUG );
+                                                   SCH_IO_ALTIUM::m_harnessEntryParent ),
+                                 RPT_SEVERITY_DEBUG );
         return;
     }
 
@@ -3253,14 +3234,13 @@ void SCH_IO_ALTIUM::ParseHarnessType( const std::map<wxString, wxString>& aPrope
     if( harnessIt == m_altiumHarnesses.end() )
     {
         m_errorMessages.emplace( wxString::Format( wxT( "Harness type's parent (%d) not found." ),
-                                              SCH_IO_ALTIUM::m_harnessEntryParent ),
-                            RPT_SEVERITY_DEBUG );
+                                                   SCH_IO_ALTIUM::m_harnessEntryParent ),
+                                 RPT_SEVERITY_DEBUG );
         return;
     }
 
     HARNESS& harness = harnessIt->second;
     harness.m_name = elem.Text;
-
 }
 
 
@@ -3289,9 +3269,8 @@ void SCH_IO_ALTIUM::ParseRectangle( const std::map<wxString, wxString>& aPropert
     }
     else
     {
-        LIB_SYMBOL* symbol = (int) aSymbol.size() <= elem.ownerpartdisplaymode
-                                                             ? nullptr
-                                                             : aSymbol[elem.ownerpartdisplaymode];
+        LIB_SYMBOL* symbol = (int) aSymbol.size() <= elem.ownerpartdisplaymode ? nullptr
+                                                                               : aSymbol[elem.ownerpartdisplaymode];
         SCH_SYMBOL* schsym = nullptr;
 
         if( !symbol )
@@ -3302,8 +3281,8 @@ void SCH_IO_ALTIUM::ParseRectangle( const std::map<wxString, wxString>& aPropert
             {
                 // TODO: e.g. can depend on Template (RECORD=39
                 m_errorMessages.emplace( wxString::Format( wxT( "Rectangle's owner (%d) not found." ),
-                                                    elem.ownerindex ),
-                                    RPT_SEVERITY_DEBUG );
+                                                         elem.ownerindex ),
+                                         RPT_SEVERITY_DEBUG );
                 return;
             }
 
@@ -3381,8 +3360,8 @@ void SCH_IO_ALTIUM::ParseSheetEntry( const std::map<wxString, wxString>& aProper
     if( sheetIt == m_sheets.end() )
     {
         m_errorMessages.emplace( wxString::Format( wxT( "Sheet entry's owner (%d) not found." ),
-                                              elem.ownerindex ),
-                            RPT_SEVERITY_DEBUG );
+                                                   elem.ownerindex ),
+                                 RPT_SEVERITY_DEBUG );
         return;
     }
 

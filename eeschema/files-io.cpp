@@ -290,7 +290,7 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
         }
         catch( const FUTURE_FORMAT_ERROR& ffe )
         {
-            msg.Printf( _( "Error loading schematic '%s'." ), fullFileName);
+            msg.Printf( _( "Error loading schematic '%s'." ), fullFileName );
             progressReporter.Hide();
             DisplayErrorMessage( this, msg, ffe.Problem() );
 
@@ -298,7 +298,7 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
         }
         catch( const IO_ERROR& ioe )
         {
-            msg.Printf( _( "Error loading schematic '%s'." ), fullFileName);
+            msg.Printf( _( "Error loading schematic '%s'." ), fullFileName );
             progressReporter.Hide();
             DisplayErrorMessage( this, msg, ioe.What() );
 
