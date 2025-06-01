@@ -5,8 +5,8 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-05-29 21:51+0300\n"
-"PO-Revision-Date: 2025-05-21 01:54+0000\n"
-"Last-Translator: Anonymous <noreply@weblate.org>\n"
+"PO-Revision-Date: 2025-06-01 16:38+0000\n"
+"Last-Translator: தமிழ்நேரம் <anishprabu.t@gmail.com>\n"
 "Language-Team: Tamil <https://hosted.weblate.org/projects/kicad/v9/ta/>\n"
 "Language: ta\n"
 "MIME-Version: 1.0\n"
@@ -3959,7 +3959,7 @@ msgstr "கூட்டு"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:20
 msgid "Enable Git Tracking"
-msgstr ""
+msgstr "அறிவிலி கண்காணிப்பை இயக்கவும்"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:28
 msgid "Remote Tracking"
@@ -6828,11 +6828,12 @@ msgstr ""
 
 #: common/env_vars.cpp:129
 msgid "A directory containing system-wide scripts installed with KiCad"
-msgstr ""
+msgstr "கிகாட் உடன் நிறுவப்பட்ட கணினி அளவிலான ச்கிரிப்ட்களைக் கொண்ட ஒரு அடைவு"
 
 #: common/env_vars.cpp:131
 msgid "A directory containing user-specific scripts installed with KiCad"
 msgstr ""
+"கிகாட் உடன் நிறுவப்பட்ட பயனர் குறிப்பிட்ட ச்கிரிப்ட்களைக் கொண்ட ஒரு அடைவு"
 
 #: common/env_vars.cpp:134
 #, c-format
@@ -9680,7 +9681,7 @@ msgstr "சூம்: %.2 எஃப்"
 #: common/validators.cpp:224
 #, c-format
 msgid "Incorrect value: %s"
-msgstr ""
+msgstr "தவறான மதிப்பு: %s"
 
 #: common/validators.cpp:282
 msgid "Invalid signal name"
@@ -10225,9 +10226,8 @@ msgid "KiCad s-expression schematic files"
 msgstr "கிகாட் எச்-எக்ச்பிரசன் திட்ட கோப்புகள்"
 
 #: common/wildcards_and_files_ext.cpp:289
-#, fuzzy
 msgid "Altium Project files"
-msgstr "அனைத்து கிகாட் திட்ட கோப்புகளும்"
+msgstr "ஆல்டியம் திட்ட கோப்புகள்"
 
 #: common/wildcards_and_files_ext.cpp:295
 msgid "CADSTAR Archive files"
@@ -10914,10 +10914,10 @@ msgid "Unconnected wire to bus entry"
 msgstr "பச் நுழைவுக்கு இணைக்கப்படாத கம்பி"
 
 #: eeschema/connection_graph.cpp:4192
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Hierarchical label \"%s\" in cannot be connected to non-existent parent sheet"
-msgstr "படிநிலை சிட்டை %s பெற்றோர் தாளில் பொருந்தக்கூடிய தாள் முள் இல்லை"
+msgstr "இன் படிநிலை சிட்டை \"%s\" இல்லாத பெற்றோர் தாளுடன் இணைக்க முடியாது"
 
 #: eeschema/connection_graph.cpp:4257
 #, c-format
@@ -11631,9 +11631,8 @@ msgid "Update/reset visibility of pin names/numbers"
 msgstr "முள் பெயர்கள்/எண்களின் பார்வை/மீட்டமை"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:172
-#, fuzzy
 msgid "Reset alternate pin to default"
-msgstr "வழிகாட்டி அளவுருக்களை இயல்புநிலைக்கு மீட்டமைக்கவும்"
+msgstr "மாற்று முள் இயல்புநிலைக்கு மீட்டமைக்கவும்"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:178
 msgid "Update/reset symbol attributes"
@@ -12267,7 +12266,7 @@ msgstr "அலகு:"
 #: eeschema/dialogs/dialog_field_properties_base.cpp:97
 #, c-format
 msgid "(%s)"
-msgstr ""
+msgstr "(%s)"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:113
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:320
@@ -12462,23 +12461,23 @@ msgstr "தாள் எல்லை & பின்னணி"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:79
 msgid "Filters"
-msgstr ""
+msgstr "வடிப்பான்கள்"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:87
 msgid "Filter fields by name:"
-msgstr ""
+msgstr "பெயரால் புலங்களை வடிகட்டவும்:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:99
 msgid "Filter items by parent reference designator:"
-msgstr ""
+msgstr "பெற்றோர் குறிப்பு வடிவமைப்பாளரால் உருப்படிகளை வடிகட்டவும்:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:107
 msgid "Filter items by parent symbol library id:"
-msgstr ""
+msgstr "பெற்றோர் குறியீட்டு நூலக அடையாளம் மூலம் உருப்படிகளை வடிகட்டவும்:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:113
 msgid "Filter items by parent symbol type:"
-msgstr ""
+msgstr "பெற்றோர் குறியீட்டு வகை மூலம் உருப்படிகளை வடிகட்டவும்:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:116
 msgid "Non-power symbols"
@@ -12747,9 +12746,8 @@ msgid "Enter the text to be used within the schematic"
 msgstr "திட்டத்திற்குள் பயன்படுத்த வேண்டிய உரையை உள்ளிடவும்"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:62
-#, fuzzy
 msgid "Multiple label input"
-msgstr "பல அடுக்குகள்"
+msgstr "பல சிட்டை உள்ளீடு"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:68
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:42
@@ -13268,6 +13266,10 @@ msgid ""
 "from editing in the schematic.  The symbol will not be included in\n"
 "the BOM and cannot be assigned a footprint."
 msgstr ""
+"இந்த விருப்பத்தை அமைப்பது கேள்விக்குரிய குறியீட்டைத் தோன்றும் \n"
+"\"பவர் சிம்பல் சேர்\" உரையாடல். அதைப் பாதுகாக்க மதிப்பு உரையை பூட்டும் \n"
+"திட்டத்தில் திருத்துவதிலிருந்து. அடையாளம் சேர்க்கப்படாது \n"
+"போம் மற்றும் ஒரு தடம் ஒதுக்க முடியாது."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:213
 msgid "Pin Text Options"
@@ -14036,9 +14038,8 @@ msgid "Whole &words only"
 msgstr "முழு வார்த்தைகளும் மட்டுமே"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:90
-#, fuzzy
 msgid "Regular Expression"
-msgstr "தவறாக வெளிப்பாடு"
+msgstr "வழக்கமான வெளிப்பாடு"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:93
 msgid "Search pin &names and numbers"
@@ -14165,7 +14166,7 @@ msgstr "திட்டத்தின் இயல்புநிலை வர�
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:115
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:212
 msgid "Filled shape"
-msgstr ""
+msgstr "நிரப்பப்பட்ட வடிவம்"
 
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:141
 msgid "Clear colors to use Schematic Editor colors."
@@ -16672,6 +16673,7 @@ msgstr "உலகளாவிய புலம் பெயர் வார்ப
 #, c-format
 msgid "The field name \"%s\" contains trailing and/or leading whitespace."
 msgstr ""
+"புலம் பெயரில் \"%s\" பின்தங்கிய மற்றும்/அல்லது முன்னணி இடைவெளியைக் கொண்டுள்ளது."
 
 #: eeschema/dialogs/panel_template_fieldnames.cpp:215
 msgid ""
@@ -20914,6 +20916,7 @@ msgstr "அளவீட்டு வடிவமைப்பு வரையற�
 #: eeschema/sim/ngspice.cpp:501
 msgid "Unable to load ngspice shared library. Please check your install."
 msgstr ""
+"NGSPICE பகிரப்பட்ட நூலகத்தை ஏற்ற முடியவில்லை. உங்கள் நிறுவலை சரிபார்க்கவும்."
 
 #: eeschema/sim/sim_lib_mgr.cpp:91 eeschema/sim/sim_lib_mgr.cpp:144
 #, c-format
@@ -22194,11 +22197,11 @@ msgstr "முறிவு தாள் முள் மற்றும் ப�
 
 #: eeschema/toolbars_symbol_viewer.cpp:52
 msgid "Display previous symbol"
-msgstr ""
+msgstr "முந்தைய சின்னத்தைக் காண்பி"
 
 #: eeschema/toolbars_symbol_viewer.cpp:56
 msgid "Display next symbol"
-msgstr ""
+msgstr "அடுத்த சின்னத்தைக் காண்பி"
 
 #: eeschema/toolbars_symbol_viewer.cpp:109
 msgid "Symbol Viewer"
@@ -23156,24 +23159,20 @@ msgid ""
 msgstr "சின்ன நூலக அட்டவணைக்கு மரபு திட்டங்களில் நூலக அடையாளம் குறிப்புகள்"
 
 #: eeschema/tools/sch_actions.cpp:1076
-#, fuzzy
 msgid "Next Net Item"
-msgstr "உரை உருப்படிகள்"
+msgstr "அடுத்த நிகர உருப்படி"
 
 #: eeschema/tools/sch_actions.cpp:1077
-#, fuzzy
 msgid "Select next item on the current net"
-msgstr "கர்சரின் கீழ் இணைப்பு உருப்படியைத் தேர்ந்தெடுக்கவும்"
+msgstr "தற்போதைய வலையில் அடுத்த உருப்படியைத் தேர்ந்தெடுக்கவும்"
 
 #: eeschema/tools/sch_actions.cpp:1083
-#, fuzzy
 msgid "Previous Net Item"
-msgstr "முந்தைய தாள்"
+msgstr "முந்தைய நிகர உருப்படி"
 
 #: eeschema/tools/sch_actions.cpp:1084
-#, fuzzy
 msgid "Select previous item on the current net"
-msgstr "கர்சரின் கீழ் இணைப்பு உருப்படியைத் தேர்ந்தெடுக்கவும்"
+msgstr "தற்போதைய வலையில் முந்தைய உருப்படியைத் தேர்ந்தெடுக்கவும்"
 
 #: eeschema/tools/sch_actions.cpp:1089
 msgid "Export Drawing to Clipboard"
@@ -24340,7 +24339,7 @@ msgstr "பண்புகளைத் திருத்து"
 
 #: eeschema/widgets/search_handlers.cpp:166
 msgid "Excl. sim"
-msgstr ""
+msgstr "EXCH. சிம்"
 
 #: eeschema/widgets/search_handlers.cpp:167
 msgid "Excl. BOM"
@@ -24348,7 +24347,7 @@ msgstr "EXCH. வெடிகுண்டு"
 
 #: eeschema/widgets/search_handlers.cpp:168
 msgid "Excl. board"
-msgstr ""
+msgstr "EXCH. பலகை"
 
 #: eeschema/widgets/search_handlers.cpp:468
 msgid "Hierarchical"
@@ -24383,6 +24382,8 @@ msgstr "டியூன் %s"
 #, c-format
 msgid "%s has simulation model of type '%s %s'; only RLC passives be tuned"
 msgstr ""
+"%s ' %s %s' வகையின் உருவகப்படுத்துதல் மாதிரியைக் கொண்டுள்ளன; ஆர்.எல்.சி செயலற்றவை "
+"மட்டுமே சரிசெய்யப்படும்"
 
 #: eeschema/widgets/tuner_slider_base.cpp:43
 msgid "Limit to E24 series values."
@@ -27019,9 +27020,8 @@ msgstr ""
 "இறக்குமதி செய்ய முடியாது."
 
 #: kicad/import_project.cpp:146
-#, fuzzy
 msgid "Import Altium Project Files"
-msgstr "ஈகிள் திட்ட கோப்புகளை இறக்குமதி செய்க"
+msgstr "அல்தியம் திட்ட கோப்புகளை இறக்குமதி செய்க"
 
 #: kicad/import_project.cpp:154
 msgid "Import CADSTAR Archive Project Files"
@@ -27144,14 +27144,12 @@ msgid "Import Non-KiCad Project..."
 msgstr "கிகேட் அல்லாத திட்டத்தை இறக்குமதி செய்யுங்கள் ..."
 
 #: kicad/menubar.cpp:115
-#, fuzzy
 msgid "Altium Project..."
-msgstr "கழுகு திட்டம் ..."
+msgstr "ஆல்டியம் திட்டம் ..."
 
 #: kicad/menubar.cpp:116
-#, fuzzy
 msgid "Import Altium Schematic and PCB (*.PrjPcb)"
-msgstr "காட்ச்டார் காப்பக திட்ட மற்றும் பிசிபி ( *.csa, *.cpa) இறக்குமதி செய்யுங்கள்"
+msgstr "அல்தியம் திட்டவட்டமான மற்றும் பிசிபி (*.prjpcb) இறக்குமதி செய்யுங்கள்"
 
 #: kicad/menubar.cpp:119
 msgid "CADSTAR Project..."
@@ -27187,15 +27185,16 @@ msgstr "எளிதான ஈசி ஈடா (சே.எல்.இ.டி.ஏ)
 
 #: kicad/menubar.cpp:141
 msgid "&Archive Project..."
-msgstr ""
+msgstr "& காப்பக திட்டம் ..."
 
 #: kicad/menubar.cpp:142
 msgid "Archive all needed project files into zip archive"
 msgstr ""
+"தேவையான அனைத்து திட்டக் கோப்புகளையும் சிப் காப்பகத்தில் காப்பகப்படுத்தவும்"
 
 #: kicad/menubar.cpp:146
 msgid "&Unarchive Project..."
-msgstr ""
+msgstr "& Uncharchibe திட்டம் ..."
 
 #: kicad/menubar.cpp:147 kicad/menubar.cpp:275
 msgid "Unarchive project files from zip archive"
@@ -27207,7 +27206,7 @@ msgstr "திட்ட கோப்புகளை உலாவுக"
 
 #: kicad/menubar.cpp:176
 msgid "Open project directory in file browser"
-msgstr ""
+msgstr "கோப்பு உலாவியில் திட்ட கோப்பகத்தைத் திறக்கவும்"
 
 #: kicad/menubar.cpp:209
 msgid "Edit Local File..."
@@ -32981,7 +32980,7 @@ msgstr "பகுதி வரம்புக்கு கீழே"
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:363
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:288
 msgid "Minimum island size:"
-msgstr ""
+msgstr "குறைந்தபட்ச தீவு அளவு:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:366
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:291
@@ -35206,7 +35205,7 @@ msgstr "சென்காட் அமைப்புகளுக்கு ஏ�
 
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:47
 msgid "Select a GenCAD export filename"
-msgstr ""
+msgstr "சென்காட் ஏற்றுமதி கோப்பு பெயரைத் தேர்ந்தெடுக்கவும்"
 
 #: pcbnew/dialogs/dialog_gendrill.cpp:435
 #, c-format
@@ -36604,7 +36603,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:538
 msgid "Technical layers:"
-msgstr ""
+msgstr "தொழில்நுட்ப அடுக்குகள்:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:542
 msgid "Front adhesive"
@@ -37645,9 +37644,8 @@ msgid "x"
 msgstr "ஃச்"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:70
-#, fuzzy
 msgid "Quality preset:"
-msgstr "முன்னமைவைத் தேர்ந்தெடுக்கவும்:"
+msgstr "தரமான முன்னமைவு:"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:79
 msgid "Background style:"
@@ -37707,16 +37705,15 @@ msgstr "°"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:233
 msgid "Lights intensity"
-msgstr ""
+msgstr "விளக்குகள் தீவிரம்"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:264
 msgid "Camera:"
 msgstr "கேமரா:"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:282
-#, fuzzy
 msgid "Lights position"
-msgstr "விளக்குகள் உள்ளமைவு"
+msgstr "விளக்குகள் நிலை"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:290
 msgid "Side lights elevation:"
@@ -38003,7 +38000,6 @@ msgid "Parent footprint description"
 msgstr "பெற்றோர் தடம் விளக்கம்"
 
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:274
-#, fuzzy
 msgid "Update Thickness According to Text Size"
 msgstr "உரை அளவிற்கு ஏற்ப தடிமன் புதுப்பிக்கவும்"
 
@@ -38222,7 +38218,7 @@ msgstr "கண்காணிப்பு மற்றும் பரிமா�
 
 #: pcbnew/dialogs/dialog_tuning_pattern_properties.cpp:55
 msgid "Target skew: "
-msgstr ""
+msgstr "இலக்கு வளைவு: "
 
 #: pcbnew/dialogs/dialog_tuning_pattern_properties.cpp:95
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2197
@@ -38240,7 +38236,7 @@ msgstr "( %s இலிருந்து)"
 
 #: pcbnew/dialogs/dialog_tuning_pattern_properties_base.cpp:31
 msgid "Target length:"
-msgstr ""
+msgstr "இலக்கு நீளம்:"
 
 #: pcbnew/dialogs/dialog_tuning_pattern_properties_base.cpp:42
 msgid "Override custom rules"
@@ -38852,6 +38848,11 @@ msgid ""
 "\n"
 "<br>"
 msgstr ""
+"### பிரிவு \n"
+"\n"
+"(நிபந்தனை \"<வெளிப்பாடு>\") \n"
+"\n"
+"<br>"
 
 #: pcbnew/dialogs/panel_setup_condition_help_6notes.h:2
 msgid ""
@@ -38861,6 +38862,11 @@ msgid ""
 "<br><br><br>\n"
 "\n"
 msgstr ""
+"### குறிப்புகள் \n"
+"\n"
+"CTRL+/ ஐப் பயன்படுத்தவும் அல்லது கருத்து அல்லது அன்சிமென்ட் லைன் (கள்) பயன்படுத்தவும். \n"
+"<br> <br> <br>\n"
+"\n"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:46
 msgid "Minimum clearance:"
@@ -39515,16 +39521,15 @@ msgid "Check rule syntax"
 msgstr "விதி தொடரியல் சரிபார்க்கவும்"
 
 #: pcbnew/dialogs/panel_setup_rules_help_10documentation.h:2
-#, fuzzy
 msgid ""
 "### Documentation\n"
 "\n"
 "For the full documentation see [https://docs.kicad.org](https://go.kicad.org/"
 "docs/GetMajorMinorVersion/en/pcbnew/pcbnew.html#custom_design_rules)."
 msgstr ""
-"### ஆவணம்\n"
+"### ஆவணம் \n"
 "\n"
-" முழு ஆவணங்களுக்கு [https://docs.kicad.org] (https://docs.kicad.org/"
+"முழு ஆவணங்களுக்கு [https://docs.kicad.org] (https://go.kicad.org/docs/"
 "getmajorminorversion/en/pcbnew/pcbnew.html#custom_design_rules) ஐப் பார்க்கவும்."
 
 #: pcbnew/dialogs/panel_setup_rules_help_1clauses.h:2
