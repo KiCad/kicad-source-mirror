@@ -1071,9 +1071,6 @@ void SCH_IO_ALTIUM::ParseFileHeader( const ALTIUM_COMPOUND_FILE& aAltiumSchFile 
         fixupSymbolPinNameNumbers( symbol.second );
         fixupSymbolPinNameNumbers( libSymbolIt->second );
 
-        m_pi->SaveSymbol( getLibFileName().GetFullPath(),
-                          new LIB_SYMBOL( *( libSymbolIt->second ) ), m_properties.get() );
-
         symbol.second->SetLibSymbol( libSymbolIt->second );
     }
 
@@ -1180,9 +1177,6 @@ void SCH_IO_ALTIUM::ParseASCIISchematic( const wxString& aFileName )
 
         fixupSymbolPinNameNumbers( symbol.second );
         fixupSymbolPinNameNumbers( libSymbolIt->second );
-
-        m_pi->SaveSymbol( getLibFileName().GetFullPath(),
-                          new LIB_SYMBOL( *( libSymbolIt->second ) ), m_properties.get() );
 
         symbol.second->SetLibSymbol( libSymbolIt->second );
     }
@@ -3685,7 +3679,6 @@ void SCH_IO_ALTIUM::ParsePowerPort( const std::map<wxString, wxString>& aPropert
         libSymbol->GetValueField().SetPosition( valueFieldPos );
 
         // this has to be done after parsing the LIB_SYMBOL!
-        m_pi->SaveSymbol( getLibFileName().GetFullPath(), libSymbol, m_properties.get() );
         m_powerSymbols.insert( { symName, libSymbol } );
     }
 
