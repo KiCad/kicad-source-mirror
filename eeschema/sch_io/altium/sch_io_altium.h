@@ -228,8 +228,7 @@ private:
     wxString       m_libName;           // Library name to save symbols
     bool           m_isIntLib;          // Flag to indicate Integrated Library
 
-    IO_RELEASER<SCH_IO>                           m_pi;            // Plugin to create KiCad symbol library.
-    std::unique_ptr<std::map<std::string, UTF8>>  m_properties;    // Library plugin properties.
+    IO_RELEASER<SCH_IO>                m_pi;                  // Plugin to create KiCad symbol library.
 
     std::unique_ptr<TITLE_BLOCK>       m_currentTitleBlock;   // Will be assigned at the end of parsing
                                                               //   a sheet
