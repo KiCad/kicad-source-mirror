@@ -16,8 +16,8 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-05-29 21:51+0300\n"
-"PO-Revision-Date: 2025-05-10 13:03+0000\n"
-"Last-Translator: 2tama3 <2tama3@gmail.com>\n"
+"PO-Revision-Date: 2025-06-01 16:38+0000\n"
+"Last-Translator: co8 j <co8@nifty.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/v9/ja/>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
@@ -10261,9 +10261,8 @@ msgid "KiCad s-expression schematic files"
 msgstr "KiCad S式回路図ファイル"
 
 #: common/wildcards_and_files_ext.cpp:289
-#, fuzzy
 msgid "Altium Project files"
-msgstr "すべての KiCad プロジェクト ファイル"
+msgstr "Altium プロジェクトファイル"
 
 #: common/wildcards_and_files_ext.cpp:295
 msgid "CADSTAR Archive files"
@@ -10972,10 +10971,10 @@ msgid "Unconnected wire to bus entry"
 msgstr "バス エントリーまでの未接続の配線"
 
 #: eeschema/connection_graph.cpp:4192
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Hierarchical label \"%s\" in cannot be connected to non-existent parent sheet"
-msgstr "階層ラベル %s と対応するシートピンが親シートにありません"
+msgstr "階層ラベル \"%s\" を存在しない親シートに接続できません"
 
 #: eeschema/connection_graph.cpp:4257
 #, c-format
@@ -11692,9 +11691,8 @@ msgid "Update/reset visibility of pin names/numbers"
 msgstr "ピン名/番号の表示を更新/リセット"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:172
-#, fuzzy
 msgid "Reset alternate pin to default"
-msgstr "ウィザード の パラメーター を既定値へ リセット"
+msgstr "代替ピンを既定値へ リセット"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:178
 msgid "Update/reset symbol attributes"
@@ -12809,9 +12807,8 @@ msgid "Enter the text to be used within the schematic"
 msgstr "回路図内で使用されるテキストの入力"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:62
-#, fuzzy
 msgid "Multiple label input"
-msgstr "複数のレイヤー"
+msgstr "複数のラベル入力"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:68
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:42
@@ -14099,9 +14096,8 @@ msgid "Whole &words only"
 msgstr "単語全体のみ(&W)"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:90
-#, fuzzy
 msgid "Regular Expression"
-msgstr "不正な式"
+msgstr "正規表現"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:93
 msgid "Search pin &names and numbers"
@@ -21030,7 +21026,8 @@ msgstr "計測のフォーマット定義を予期しています"
 
 #: eeschema/sim/ngspice.cpp:501
 msgid "Unable to load ngspice shared library. Please check your install."
-msgstr ""
+msgstr "ngspice "
+"共有ライブラリのロードに失敗しました。インストールを確認してください。"
 
 #: eeschema/sim/sim_lib_mgr.cpp:91 eeschema/sim/sim_lib_mgr.cpp:144
 #, c-format
@@ -23273,24 +23270,20 @@ msgstr ""
 "プする"
 
 #: eeschema/tools/sch_actions.cpp:1076
-#, fuzzy
 msgid "Next Net Item"
-msgstr "テキスト アイテム"
+msgstr "次のネットアイテム"
 
 #: eeschema/tools/sch_actions.cpp:1077
-#, fuzzy
 msgid "Select next item on the current net"
-msgstr "カーソル位置にある接続アイテムを選択"
+msgstr "現在のネット上で次のアイテムを選択"
 
 #: eeschema/tools/sch_actions.cpp:1083
-#, fuzzy
 msgid "Previous Net Item"
-msgstr "前のシート"
+msgstr "前のネットアイテム"
 
 #: eeschema/tools/sch_actions.cpp:1084
-#, fuzzy
 msgid "Select previous item on the current net"
-msgstr "カーソル位置にある接続アイテムを選択"
+msgstr "現在のネット上で前のアイテムを選択"
 
 #: eeschema/tools/sch_actions.cpp:1089
 msgid "Export Drawing to Clipboard"
@@ -27111,9 +27104,8 @@ msgstr ""
 "プロジェクトはインポートできませんでした。"
 
 #: kicad/import_project.cpp:146
-#, fuzzy
 msgid "Import Altium Project Files"
-msgstr "Eagle プロジェクト ファイルをインポート"
+msgstr "Altium プロジェクトファイルをインポート"
 
 #: kicad/import_project.cpp:154
 msgid "Import CADSTAR Archive Project Files"
@@ -27236,15 +27228,12 @@ msgid "Import Non-KiCad Project..."
 msgstr "KiCad以外のプロジェクトをインポート..."
 
 #: kicad/menubar.cpp:115
-#, fuzzy
 msgid "Altium Project..."
-msgstr "Eagle プロジェクト..."
+msgstr "Altium プロジェクト..."
 
 #: kicad/menubar.cpp:116
-#, fuzzy
 msgid "Import Altium Schematic and PCB (*.PrjPcb)"
-msgstr ""
-"CADSTAR 回路図アーカイブと基板アーカイブ(*.csa, *.cpa)をインポートします"
+msgstr "Altium の回路図と基板(*.PrjPcb)をインポートします"
 
 #: kicad/menubar.cpp:119
 msgid "CADSTAR Project..."
@@ -40186,7 +40175,6 @@ msgstr ""
 "\n"
 
 #: pcbnew/dialogs/panel_setup_rules_help_8expression_functions.h:2
-#, fuzzy
 msgid ""
 "### Expression functions\n"
 "\n"
@@ -40314,8 +40302,8 @@ msgid ""
 msgstr ""
 "### 式関数\n"
 "\n"
-"全ての関数のパラメーターは単純なワイルドカードをサポートします。 (`*` and `?"
-"`).\n"
+"全ての関数のパラメーターは単純なワイルドカードをサポートします。 (`*` and "
+"`?`).\n"
 "<br><br>\n"
 "\n"
 "    A.enclosedByArea('<zone_name>')\n"
@@ -40427,6 +40415,12 @@ msgstr ""
 "\n"
 "    A.memberOfSheet('<sheet_path>')\n"
 "True if `A` is a member of the given schematic sheet. The sheet path can "
+"contain wildcards.\n"
+"<br><br>\n"
+"\n"
+"    A.memberOfSheetOrChildren('<sheet_path>')\n"
+"True if `A` is a member of the given schematic sheet, or any of its child "
+"hierarchical sheets. The sheet path can \n"
 "contain wildcards.\n"
 "<br><br>\n"
 "\n"
@@ -41672,9 +41666,8 @@ msgid "(%s clearance %s; actual < 0)"
 msgstr "(%s クリアランス %s; 現状 < 0)"
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:1423
-#, fuzzy
 msgid "(intersecting zones must have distinct priorities)"
-msgstr "円弧は３個のポイントが必要です"
+msgstr "(交差するゾーンには明確な優先順位が必要）"
 
 #: pcbnew/drc/drc_test_provider_courtyard_clearance.cpp:85
 msgid "Checking footprint courtyard definitions..."
@@ -42447,18 +42440,21 @@ msgid ""
 "Could not add 3D model for %s.\n"
 "File not found: %s\n"
 msgstr ""
+"%s 用の3Dモデルが追加できませんでした。\n"
+"ファイルが見つかりません:%s\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:403
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Could not add 3D model for %s.\n"
 "OpenCASCADE error: %s\n"
-msgstr "%s に接続できませんでした。 エラー: %s"
+msgstr ""
+"%s 用の3Dモデルが追加できませんでした。\n"
+"CASCADE のオープンエラー: %s\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:801
-#, fuzzy
 msgid "Could not create PCB solid model.\n"
-msgstr "BOM出力 '%s' を作成できませんでした。"
+msgstr "PCB ソリッド モデルを作成できませんでした。\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:855
 msgid ""
@@ -42518,37 +42514,37 @@ msgstr "** ShapeUpgrade_UnifySameDomain は空の形状を生成しました **\
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:898
 msgid "OCC error adding pad/via polygon.\n"
-msgstr ""
+msgstr "パッド/ビア ポリゴン追加中にOCC エラー\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1143
 #, c-format
 msgid "Could not add shape (%d points) to copper layer %s.\n"
-msgstr ""
+msgstr "形状(%d ポイント)を導体レイヤー %s に追加することができませんでした。\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1161
-#, fuzzy, c-format
+#, c-format
 msgid "No model defined for %s.\n"
-msgstr "シンボル %s に対してフットプリントが定義されていません。"
+msgstr "%s に対してモデルが定義されていません。\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1176
-#, fuzzy, c-format
+#, c-format
 msgid "No model for filename '%s'.\n"
-msgstr "'%s' に '%s' という名前のモデルがありません。"
+msgstr "ファイル名 '%s' に対応するモデルがありません。\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1187
-#, fuzzy, c-format
+#, c-format
 msgid "No location data for filename '%s'.\n"
-msgstr "位置情報を '%s' に書き込みました。\n"
+msgstr "ファイル名 '%s' に位置情報がありません。\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1197
-#, fuzzy, c-format
+#, c-format
 msgid "Could not add component with filename '%s'.\n"
-msgstr "IBISモデル '%s' が見つかりません"
+msgstr "ファイル名 '%s' にコンポーネントの追加ができませんでした。\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1367
 #, c-format
 msgid "OCC exception building shape segment: %s\n"
-msgstr ""
+msgstr "形状セグメント構築中にOCC例外: %s\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1382
 #, c-format
