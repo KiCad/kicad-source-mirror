@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-29 21:51+0300\n"
+"POT-Creation-Date: 2025-06-01 19:42+0300\n"
 "PO-Revision-Date: 2025-04-28 11:59+0000\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Romanian <https://hosted.weblate.org/projects/kicad/v9/ro/>\n"
@@ -1541,7 +1541,7 @@ msgstr "Z:"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:68
 #: gerbview/gerber_draw_item.cpp:722 pcbnew/footprint.cpp:1770
-#: pcbnew/pad.cpp:1395
+#: pcbnew/pad.cpp:1394
 msgid "Rotation"
 msgstr "Rotație"
 
@@ -1924,7 +1924,7 @@ msgstr "Blocați raportul înălțime / lățime"
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:25
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:49
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:99
-#: include/lib_table_grid.h:213
+#: include/lib_table_grid.h:215
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:197
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:117
 #: pcbnew/dialogs/dialog_import_netlist_base.cpp:51
@@ -2341,7 +2341,7 @@ msgstr "Nu se poate crea calea globală a tabelului de bibliotecă '%s'."
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:100
 #: eeschema/sch_symbol.cpp:2114 eeschema/symbol_editor/symbol_editor.cpp:828
 #: eeschema/symbol_editor/symbol_editor.cpp:1767
-#: eeschema/symbol_viewer_frame.cpp:459 include/lib_table_grid.h:214
+#: eeschema/symbol_viewer_frame.cpp:459 include/lib_table_grid.h:216
 #: kicad/pcm/dialogs/panel_package_base.cpp:59
 #: pcbnew/dialogs/dialog_footprint_wizard_list_base.cpp:43
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:50
@@ -2756,8 +2756,8 @@ msgstr "Variabile de mediu"
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:120
 #: pcbnew/widgets/search_handlers.cpp:187
 #: pcbnew/widgets/search_handlers.cpp:325
-#: pcbnew/widgets/search_handlers.cpp:407 pcbnew/zone.cpp:859
-#: pcbnew/zone.cpp:1979 pcbnew/zone_manager/dialog_zone_manager_base.cpp:38
+#: pcbnew/widgets/search_handlers.cpp:407 pcbnew/zone.cpp:858
+#: pcbnew/zone.cpp:1978 pcbnew/zone_manager/dialog_zone_manager_base.cpp:38
 #: pcbnew/zone_manager/model_zones_overview_table.h:75
 msgid "Name"
 msgstr "Nume"
@@ -3991,11 +3991,11 @@ msgstr "Denumiri Net"
 #: common/dialogs/git/dialog_git_commit.cpp:53
 #: eeschema/dialogs/dialog_migrate_buses.cpp:117
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:94
-#: pcbnew/dialogs/dialog_find_base.cpp:118 pcbnew/pad.cpp:1333
+#: pcbnew/dialogs/dialog_find_base.cpp:118 pcbnew/pad.cpp:1332
 #: pcbnew/pcb_dimension.cpp:673 pcbnew/pcb_group.cpp:396
-#: pcbnew/pcb_shape.cpp:619 pcbnew/pcb_tablecell.cpp:106
-#: pcbnew/pcb_text.cpp:286 pcbnew/pcb_textbox.cpp:470 pcbnew/pcb_track.cpp:1734
-#: pcbnew/zone.cpp:825
+#: pcbnew/pcb_shape.cpp:618 pcbnew/pcb_tablecell.cpp:106
+#: pcbnew/pcb_text.cpp:286 pcbnew/pcb_textbox.cpp:470 pcbnew/pcb_track.cpp:1731
+#: pcbnew/zone.cpp:824
 msgid "Status"
 msgstr "Stare"
 
@@ -4928,7 +4928,7 @@ msgstr ""
 #: common/dialogs/panel_design_block_lib_table_base.cpp:93
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:44
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:94
-#: include/lib_table_grid.h:215 pcbnew/dialogs/panel_fp_lib_table_base.cpp:44
+#: include/lib_table_grid.h:217 pcbnew/dialogs/panel_fp_lib_table_base.cpp:44
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:93
 msgid "Active"
 msgstr "Activ"
@@ -4945,7 +4945,7 @@ msgstr "Activ"
 #: eeschema/dialogs/panel_template_fieldnames_base.cpp:43
 #: eeschema/sch_field.cpp:1221 eeschema/sch_pin.cpp:1616
 #: eeschema/sch_pin.cpp:2215 eeschema/sch_tablecell.cpp:207
-#: include/lib_table_grid.h:216 pcbnew/dialogs/panel_fp_lib_table_base.cpp:45
+#: include/lib_table_grid.h:218 pcbnew/dialogs/panel_fp_lib_table_base.cpp:45
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:94
 msgid "Visible"
 msgstr "Vizibil"
@@ -4954,7 +4954,7 @@ msgstr "Vizibil"
 #: common/dialogs/panel_design_block_lib_table_base.cpp:95
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:46
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:96
-#: eeschema/symbol_editor/symbol_editor.cpp:827 include/lib_table_grid.h:208
+#: eeschema/symbol_editor/symbol_editor.cpp:827 include/lib_table_grid.h:210
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:46
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:95
 #: pcbnew/footprint_libraries_utils.cpp:1014
@@ -4966,7 +4966,7 @@ msgstr "Poreclă"
 #: common/dialogs/panel_design_block_lib_table_base.cpp:96
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:47
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:97
-#: include/lib_table_grid.h:209 pcbnew/dialogs/panel_fp_lib_table_base.cpp:47
+#: include/lib_table_grid.h:211 pcbnew/dialogs/panel_fp_lib_table_base.cpp:47
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:96
 #, fuzzy
 msgid "Library Path"
@@ -4975,7 +4975,7 @@ msgstr "Bibliotecă"
 #: common/dialogs/panel_design_block_lib_table_base.cpp:48
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:48
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:98
-#: include/lib_table_grid.h:212 pcbnew/dialogs/panel_fp_lib_table_base.cpp:48
+#: include/lib_table_grid.h:214 pcbnew/dialogs/panel_fp_lib_table_base.cpp:48
 #, fuzzy
 msgid "Library Format"
 msgstr "Bibliotecă"
@@ -5419,11 +5419,11 @@ msgstr "Zoom"
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:587
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:858
 #: pcbnew/dialogs/dialog_plot_base.cpp:118 pcbnew/footprint.cpp:4125
-#: pcbnew/pad.cpp:2692 pcbnew/pad.cpp:2711 pcbnew/pcb_dimension.cpp:2012
+#: pcbnew/pad.cpp:2691 pcbnew/pad.cpp:2710 pcbnew/pcb_dimension.cpp:2012
 #: pcbnew/widgets/appearance_controls.cpp:732
 #: pcbnew/widgets/appearance_controls.cpp:774
 #: pcbnew/widgets/appearance_controls.cpp:2579
-#: pcbnew/widgets/appearance_controls.cpp:2598 pcbnew/zone.cpp:1871
+#: pcbnew/widgets/appearance_controls.cpp:2598 pcbnew/zone.cpp:1870
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:83
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:157
 msgid "None"
@@ -5654,8 +5654,8 @@ msgstr "Fără conexiuni"
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:363
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:332
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:858 pcbnew/footprint.cpp:4127
-#: pcbnew/pad.cpp:2713 pcbnew/pcb_table.cpp:601 pcbnew/pcb_textbox.cpp:785
-#: pcbnew/zone.cpp:863 pcbnew/zone.cpp:1873
+#: pcbnew/pad.cpp:2712 pcbnew/pcb_table.cpp:601 pcbnew/pcb_textbox.cpp:785
+#: pcbnew/zone.cpp:862 pcbnew/zone.cpp:1872
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:157
 msgid "Solid"
 msgstr "Masiv"
@@ -5785,7 +5785,7 @@ msgstr "Clasele de rețea"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:52
 #: pcbnew/tools/board_inspection_tool.cpp:642
-#: pcbnew/tools/board_inspection_tool.cpp:1202 pcbnew/zone.cpp:2114
+#: pcbnew/tools/board_inspection_tool.cpp:1202 pcbnew/zone.cpp:2113
 msgid "Clearance"
 msgstr "Distanţă"
 
@@ -5884,7 +5884,7 @@ msgstr ""
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:153
 #: eeschema/sch_field.cpp:1376 eeschema/sch_label.cpp:207
-#: pcbnew/board_connected_item.cpp:200 pcbnew/pad.cpp:2767 pcbnew/zone.cpp:1973
+#: pcbnew/board_connected_item.cpp:227 pcbnew/pad.cpp:2766 pcbnew/zone.cpp:1972
 msgid "Net Class"
 msgstr "Netclass"
 
@@ -6013,7 +6013,7 @@ msgstr "Linie"
 #: common/eda_shape.cpp:2320
 #: eeschema/dialogs/dialog_label_properties_base.cpp:199
 #: eeschema/sch_label.cpp:2298
-#: pcbnew/dialogs/dialog_dimension_properties_base.cpp:45 pcbnew/pad.cpp:2684
+#: pcbnew/dialogs/dialog_dimension_properties_base.cpp:45 pcbnew/pad.cpp:2683
 #: pcbnew/pcb_dimension.cpp:2013
 msgid "Rectangle"
 msgstr "Dreptunghi"
@@ -6473,14 +6473,14 @@ msgstr "Ecran"
 #: common/eda_item.cpp:386 eeschema/sch_symbol.cpp:2111
 #: eeschema/widgets/search_handlers.cpp:162 pcbnew/build_BOM_from_board.cpp:111
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:141
-#: pcbnew/load_select_footprint.cpp:293 pcbnew/pad.cpp:1314
-#: pcbnew/pcb_shape.cpp:613 pcbnew/pcb_text.cpp:274
+#: pcbnew/load_select_footprint.cpp:293 pcbnew/pad.cpp:1313
+#: pcbnew/pcb_shape.cpp:612 pcbnew/pcb_text.cpp:274
 #: pcbnew/plot_board_layers.cpp:171
 msgid "Footprint"
 msgstr "Amprentă"
 
 #: common/eda_item.cpp:387 pcbnew/dialogs/dialog_board_statistics.cpp:515
-#: pcbnew/pad.cpp:1317
+#: pcbnew/pad.cpp:1316
 msgid "Pad"
 msgstr "Pad"
 
@@ -6519,12 +6519,12 @@ msgstr "Numele pinilor"
 msgid "Table Cell"
 msgstr "Mărimea paginii"
 
-#: common/eda_item.cpp:396 common/eda_item.cpp:397 pcbnew/pcb_track.cpp:1609
+#: common/eda_item.cpp:396 common/eda_item.cpp:397 pcbnew/pcb_track.cpp:1606
 msgid "Track"
 msgstr "Traseu"
 
 #: common/eda_item.cpp:398 pcbnew/dialogs/dialog_board_statistics.cpp:515
-#: pcbnew/pcb_track.cpp:1607 pcbnew/pcb_track.cpp:1683
+#: pcbnew/pcb_track.cpp:1604 pcbnew/pcb_track.cpp:1680
 msgid "Via"
 msgstr "Via"
 
@@ -6588,7 +6588,7 @@ msgid "Bitmap"
 msgstr "Bitmap"
 
 #: common/eda_item.cpp:419 eeschema/sch_rule_area.cpp:51
-#: eeschema/sch_rule_area.cpp:380 pcbnew/zone.cpp:926
+#: eeschema/sch_rule_area.cpp:380 pcbnew/zone.cpp:925
 #, fuzzy
 msgid "Rule Area"
 msgstr "Adăugați o zonă de reguli"
@@ -6653,12 +6653,12 @@ msgstr "Desenați elementul"
 msgid "Thermal Spoke"
 msgstr "Lățimea reliefului termic"
 
-#: common/eda_shape.cpp:320 pcbnew/pcb_shape.cpp:953
+#: common/eda_shape.cpp:320 pcbnew/pcb_shape.cpp:952
 #, fuzzy
 msgid "Number Box"
 msgstr "Numar"
 
-#: common/eda_shape.cpp:329 pcbnew/pad.cpp:1551
+#: common/eda_shape.cpp:329 pcbnew/pad.cpp:1550
 msgid "Rect"
 msgstr "Dreptunghi"
 
@@ -6670,8 +6670,8 @@ msgstr "Arc"
 #: common/eda_shape.cpp:331 common/eda_shape.cpp:971 common/eda_shape.cpp:2322
 #: eeschema/dialogs/dialog_label_properties_base.cpp:193
 #: eeschema/sch_label.cpp:2296 gerbview/gerber_draw_item.cpp:231
-#: pcbnew/dialogs/dialog_dimension_properties_base.cpp:45 pcbnew/pad.cpp:1549
-#: pcbnew/pad.cpp:2683 pcbnew/pcb_dimension.cpp:2014
+#: pcbnew/dialogs/dialog_dimension_properties_base.cpp:45 pcbnew/pad.cpp:1548
+#: pcbnew/pad.cpp:2682 pcbnew/pcb_dimension.cpp:2014
 msgid "Circle"
 msgstr "Cerc"
 
@@ -6688,7 +6688,7 @@ msgstr "Poligon"
 msgid "Pad Number Box"
 msgstr "Numar"
 
-#: common/eda_shape.cpp:963 pcbnew/pcb_shape.cpp:960
+#: common/eda_shape.cpp:963 pcbnew/pcb_shape.cpp:959
 #, fuzzy
 msgid "Thermal Spoke Template"
 msgstr "Lățimea reliefului termic"
@@ -6722,7 +6722,7 @@ msgid "Shape"
 msgstr "Formă"
 
 #: common/eda_shape.cpp:993 common/eda_shape.cpp:1002 common/eda_shape.cpp:2399
-#: pcbnew/dialogs/dialog_shape_properties.cpp:932 pcbnew/pcb_track.cpp:1630
+#: pcbnew/dialogs/dialog_shape_properties.cpp:932 pcbnew/pcb_track.cpp:1627
 msgid "Radius"
 msgstr "Rază"
 
@@ -6754,12 +6754,12 @@ msgstr "Puncte"
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:55
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:40
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:169
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2140 pcbnew/pad.cpp:1382
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2140 pcbnew/pad.cpp:1381
 #: pcbnew/pcb_fields_grid_table.cpp:150 pcbnew/pcb_reference_image.cpp:222
 #: pcbnew/pcb_reference_image.cpp:375 pcbnew/pcb_tablecell.cpp:197
 #: pcbnew/pcb_tablecell.cpp:203 pcbnew/pcb_target.cpp:156
 #: pcbnew/pcb_target.cpp:249 pcbnew/pcb_text.cpp:296 pcbnew/pcb_textbox.cpp:804
-#: pcbnew/pcb_track.cpp:1625 pcbnew/pcb_track.cpp:2115
+#: pcbnew/pcb_track.cpp:1622 pcbnew/pcb_track.cpp:2112
 msgid "Width"
 msgstr "Lățime"
 
@@ -6771,7 +6771,7 @@ msgstr "Lățime"
 #: pcbnew/dialogs/dialog_board_statistics.cpp:696
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:55
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:56
-#: pcbnew/pad.cpp:1383 pcbnew/pcb_dimension.cpp:1033
+#: pcbnew/pad.cpp:1382 pcbnew/pcb_dimension.cpp:1033
 #: pcbnew/pcb_fields_grid_table.cpp:151 pcbnew/pcb_reference_image.cpp:224
 #: pcbnew/pcb_reference_image.cpp:382 pcbnew/pcb_tablecell.cpp:198
 #: pcbnew/pcb_tablecell.cpp:204 pcbnew/pcb_text.cpp:297
@@ -6791,14 +6791,14 @@ msgstr "Proprietăți text"
 #: common/eda_shape.cpp:2376 eeschema/sch_table.cpp:660
 #: eeschema/sch_tablecell.cpp:192 pcbnew/pcb_table.cpp:616
 #: pcbnew/pcb_tablecell.cpp:192 pcbnew/pcb_textbox.cpp:800
-#: pcbnew/pcb_track.cpp:2118
+#: pcbnew/pcb_track.cpp:2115
 msgid "Start X"
 msgstr "Începe X"
 
 #: common/eda_shape.cpp:2381 eeschema/sch_table.cpp:663
 #: eeschema/sch_tablecell.cpp:193 pcbnew/pcb_table.cpp:619
 #: pcbnew/pcb_tablecell.cpp:193 pcbnew/pcb_textbox.cpp:801
-#: pcbnew/pcb_track.cpp:2122
+#: pcbnew/pcb_track.cpp:2119
 msgid "Start Y"
 msgstr "Începe Y"
 
@@ -6814,13 +6814,13 @@ msgstr "Centru"
 
 #: common/eda_shape.cpp:2405 eeschema/sch_tablecell.cpp:194
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2617 pcbnew/pcb_tablecell.cpp:194
-#: pcbnew/pcb_textbox.cpp:802 pcbnew/pcb_track.cpp:2125
+#: pcbnew/pcb_textbox.cpp:802 pcbnew/pcb_track.cpp:2122
 msgid "End X"
 msgstr "Termină X"
 
 #: common/eda_shape.cpp:2411 eeschema/sch_tablecell.cpp:195
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2623 pcbnew/pcb_tablecell.cpp:195
-#: pcbnew/pcb_textbox.cpp:803 pcbnew/pcb_track.cpp:2128
+#: pcbnew/pcb_textbox.cpp:803 pcbnew/pcb_track.cpp:2125
 msgid "End Y"
 msgstr "Termină Y"
 
@@ -6832,7 +6832,7 @@ msgid "Line Width"
 msgstr "Grosimea liniei"
 
 #: common/eda_shape.cpp:2437 eeschema/sch_tablecell.cpp:200
-#: pcbnew/pcb_shape.cpp:894 pcbnew/pcb_tablecell.cpp:201
+#: pcbnew/pcb_shape.cpp:893 pcbnew/pcb_tablecell.cpp:201
 #, fuzzy
 msgid "Line Color"
 msgstr "Folosiți culori:"
@@ -6843,7 +6843,7 @@ msgid "Filled"
 msgstr "Umplut"
 
 #: common/eda_shape.cpp:2489 eeschema/sch_shape.cpp:765
-#: pcbnew/pcb_shape.cpp:895
+#: pcbnew/pcb_shape.cpp:894
 #, fuzzy
 msgid "Fill Color"
 msgstr "Lipiți culoarea"
@@ -6969,7 +6969,7 @@ msgstr "Partea de jos"
 #: eeschema/sch_text.cpp:794 eeschema/sch_textbox.cpp:709
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:59
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:60
-#: pcbnew/footprint.cpp:4157 pcbnew/pad.cpp:2730 pcbnew/pcb_dimension.cpp:1804
+#: pcbnew/footprint.cpp:4157 pcbnew/pad.cpp:2729 pcbnew/pcb_dimension.cpp:1804
 #: pcbnew/pcb_dimension.cpp:1879 pcbnew/pcb_fields_grid_table.cpp:155
 #: pcbnew/pcb_tablecell.cpp:206
 msgid "Orientation"
@@ -8775,19 +8775,19 @@ msgid "Type mismatch between %lf and '%s'"
 msgstr "Nepotrivire de tip între %lf și \"%s\""
 
 #: common/netclass.cpp:297 pcbnew/component_class_manager.cpp:61
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1084 pcbnew/zone.cpp:837
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1084 pcbnew/zone.cpp:836
 #, fuzzy, c-format
 msgid "%s and %s"
 msgstr "Solid"
 
 #: common/netclass.cpp:301 pcbnew/component_class_manager.cpp:66
-#: pcbnew/zone.cpp:843
+#: pcbnew/zone.cpp:842
 #, fuzzy, c-format
 msgid "%s, %s and %s"
 msgstr "Solid"
 
 #: common/netclass.cpp:306 pcbnew/component_class_manager.cpp:71
-#: pcbnew/zone.cpp:850
+#: pcbnew/zone.cpp:849
 #, fuzzy, c-format
 msgid "%s, %s and %d more"
 msgstr "Numele amprentei nu poate conține \"%s\"."
@@ -10293,8 +10293,8 @@ msgid "Mirroring for Y axis is not supported yet"
 msgstr "Oglindirea pentru axa Y nu este încă acceptată"
 
 #: common/widgets/filter_combobox.cpp:72
-#: eeschema/dialogs/dialog_lib_symbol_properties.cpp:801
-#: eeschema/dialogs/dialog_lib_symbol_properties.cpp:828
+#: eeschema/dialogs/dialog_lib_symbol_properties.cpp:803
+#: eeschema/dialogs/dialog_lib_symbol_properties.cpp:830
 msgid "Filter:"
 msgstr "Filtru:"
 
@@ -10409,7 +10409,7 @@ msgstr "Fixare la grilă:"
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:357
 #: pcbnew/dialogs/panel_edit_options_base.cpp:329
 #: pcbnew/dialogs/panel_edit_options_base.cpp:343
-#: pcbnew/dialogs/panel_edit_options_base.cpp:357 pcbnew/zone.cpp:1891
+#: pcbnew/dialogs/panel_edit_options_base.cpp:357 pcbnew/zone.cpp:1890
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:282
 msgid "Always"
 msgstr "Întotdeauna"
@@ -10422,7 +10422,7 @@ msgstr "Când este afișată grila"
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:357
 #: pcbnew/dialogs/panel_edit_options_base.cpp:329
 #: pcbnew/dialogs/panel_edit_options_base.cpp:343
-#: pcbnew/dialogs/panel_edit_options_base.cpp:357 pcbnew/zone.cpp:1892
+#: pcbnew/dialogs/panel_edit_options_base.cpp:357 pcbnew/zone.cpp:1891
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:282
 msgid "Never"
 msgstr "Niciodată"
@@ -12000,6 +12000,7 @@ msgid "Change symbols matching library identifier:"
 msgstr "Schimbați simbolurile care corespund identificatorului bibliotecii:"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:136
+#: pcbnew/dialogs/dialog_update_pcb_base.cpp:62
 msgid "Update Fields"
 msgstr "Actualizați câmpurile"
 
@@ -13369,7 +13370,7 @@ msgstr "Valoarea nu poate fi goală."
 #: eeschema/dialogs/dialog_label_properties.cpp:565
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:443
 #: eeschema/dialogs/dialog_sheet_properties.cpp:397
-#: eeschema/dialogs/dialog_symbol_properties.cpp:741 include/project.h:43
+#: eeschema/dialogs/dialog_symbol_properties.cpp:743 include/project.h:43
 #, fuzzy
 msgid "untitled"
 msgstr "Cantitate"
@@ -13765,7 +13766,7 @@ msgstr "Creați o bibliotecă de simboluri"
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:207
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:206
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:208
-#: pcbnew/drc/drc_test_provider_library_parity.cpp:648
+#: pcbnew/drc/drc_test_provider_library_parity.cpp:650
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:206
 #, fuzzy
 msgid "Exclude from bill of materials"
@@ -13805,7 +13806,7 @@ msgstr "Simbol"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:334
 #: eeschema/dialogs/dialog_sheet_properties.cpp:217
-#: eeschema/dialogs/dialog_symbol_properties.cpp:650
+#: eeschema/dialogs/dialog_symbol_properties.cpp:652
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:406
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:458
 #, fuzzy
@@ -13841,7 +13842,7 @@ msgstr "Simbolul \"%s\" există deja în biblioteca \"%s\"."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:409
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:414
-#: eeschema/dialogs/dialog_symbol_properties.cpp:782
+#: eeschema/dialogs/dialog_symbol_properties.cpp:784
 #, fuzzy
 msgid "Edit Symbol Properties"
 msgstr "Proprietățile etichetei"
@@ -13853,18 +13854,18 @@ msgstr "Numele câmpului \"%s\" este deja utilizat."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:629
 #: eeschema/dialogs/dialog_sheet_properties.cpp:788
-#: eeschema/dialogs/dialog_symbol_properties.cpp:883
+#: eeschema/dialogs/dialog_symbol_properties.cpp:885
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:720
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:748
 #, c-format
 msgid "The first %d fields are mandatory."
 msgstr ""
 
-#: eeschema/dialogs/dialog_lib_symbol_properties.cpp:801
+#: eeschema/dialogs/dialog_lib_symbol_properties.cpp:803
 msgid "Add Footprint Filter"
 msgstr "Adăugați un filtru de amprente"
 
-#: eeschema/dialogs/dialog_lib_symbol_properties.cpp:828
+#: eeschema/dialogs/dialog_lib_symbol_properties.cpp:830
 #, fuzzy
 msgid "Edit Footprint Filter"
 msgstr "Adăugați un filtru de amprente"
@@ -14896,7 +14897,7 @@ msgstr ""
 "Setați culoarea la transparent pentru a utiliza culorile Editorului de "
 "scheme."
 
-#: eeschema/dialogs/dialog_shape_properties_base.cpp:158 pcbnew/zone.cpp:2036
+#: eeschema/dialogs/dialog_shape_properties_base.cpp:158 pcbnew/zone.cpp:2035
 msgid "Fill Style"
 msgstr "Stil de umplere"
 
@@ -15073,7 +15074,7 @@ msgstr ""
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:217
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:214
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:216
-#: pcbnew/drc/drc_test_provider_library_parity.cpp:652
+#: pcbnew/drc/drc_test_provider_library_parity.cpp:654
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:193
 #, fuzzy
 msgid "Do not populate"
@@ -15162,7 +15163,7 @@ msgstr "OSP"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:25
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:96
-#: pcbnew/dialogs/dialog_track_via_properties_base.cpp:283 pcbnew/pad.cpp:2689
+#: pcbnew/dialogs/dialog_track_via_properties_base.cpp:283 pcbnew/pad.cpp:2688
 #: pcbnew/widgets/pcb_net_inspector_panel_data_model.h:711
 msgid "Custom"
 msgstr "Personalizat"
@@ -15701,9 +15702,9 @@ msgstr "Parametru"
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:29
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:83
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2095 pcbnew/pcb_marker.cpp:199
-#: pcbnew/pcb_shape.cpp:616 pcbnew/pcb_text.cpp:283 pcbnew/pcb_track.cpp:1619
-#: pcbnew/pcb_track.cpp:1686 pcbnew/tools/drawing_stackup_table_tool.cpp:251
-#: pcbnew/widgets/search_handlers.cpp:253 pcbnew/zone.cpp:777
+#: pcbnew/pcb_shape.cpp:615 pcbnew/pcb_text.cpp:283 pcbnew/pcb_track.cpp:1616
+#: pcbnew/pcb_track.cpp:1683 pcbnew/tools/drawing_stackup_table_tool.cpp:251
+#: pcbnew/widgets/search_handlers.cpp:253 pcbnew/zone.cpp:776
 msgid "Type"
 msgstr "Tip"
 
@@ -15921,7 +15922,7 @@ msgid "Field must have a name."
 msgstr "Netclass trebuie să aibă un nume."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:762
-#: eeschema/dialogs/dialog_symbol_properties.cpp:811
+#: eeschema/dialogs/dialog_symbol_properties.cpp:813
 #, c-format
 msgid "Field name '%s' already in use."
 msgstr "Numele câmpului \"%s\" este deja utilizat."
@@ -16650,7 +16651,7 @@ msgstr "Resetați câmpurile dacă sunt goale în noul simbol"
 msgid "Update/reset field sizes and styles"
 msgstr "Actualizați/resetați dimensiunile și stilurile câmpului"
 
-#: eeschema/dialogs/dialog_user_defined_signals.cpp:267
+#: eeschema/dialogs/dialog_user_defined_signals.cpp:259
 #: eeschema/sch_label.cpp:2217 pcbnew/dialogs/panel_setup_rules.cpp:877
 #, fuzzy
 msgid "Syntax Help"
@@ -17991,21 +17992,21 @@ msgid "'%s' is not a valid footprint identifier."
 msgstr "\"%s\" nu este o amprentă validă."
 
 #: eeschema/erc/erc.cpp:1547
-#: pcbnew/drc/drc_test_provider_library_parity.cpp:878
+#: pcbnew/drc/drc_test_provider_library_parity.cpp:880
 #: pcbnew/footprint_editor_utils.cpp:363
 #, fuzzy, c-format
 msgid "The current configuration does not include the footprint library '%s'."
 msgstr "Nu se poate crea biblioteca de amprente '%s'."
 
 #: eeschema/erc/erc.cpp:1556
-#: pcbnew/drc/drc_test_provider_library_parity.cpp:892
+#: pcbnew/drc/drc_test_provider_library_parity.cpp:894
 #: pcbnew/footprint_editor_utils.cpp:375
 #, fuzzy, c-format
 msgid "The footprint library '%s' is not enabled in the current configuration."
 msgstr "Biblioteca \"%s\" nu se află în tabelul de biblioteci de amprentă."
 
 #: eeschema/erc/erc.cpp:1565
-#: pcbnew/drc/drc_test_provider_library_parity.cpp:943
+#: pcbnew/drc/drc_test_provider_library_parity.cpp:945
 #, fuzzy, c-format
 msgid "Footprint '%s' not found in library '%s'."
 msgstr "Amprenta nu a fost găsită."
@@ -18672,7 +18673,7 @@ msgid "Error loading symbol %s from library '%s'."
 msgstr "Eroare la încărcarea simbolului %s din biblioteca „%s”."
 
 #: eeschema/generate_alias_info.cpp:122 eeschema/sim/spice_simulator.cpp:69
-#: kicad/pcm/pcm.cpp:766 pcbnew/zone.cpp:865
+#: kicad/pcm/pcm.cpp:766 pcbnew/zone.cpp:864
 msgid "Unknown"
 msgstr "Necunoscut"
 
@@ -18716,7 +18717,7 @@ msgid "Only vectors will be imported.  Bitmaps and fonts will be ignored."
 msgstr ""
 
 #: eeschema/import_gfx/dialog_import_gfx_sch_base.cpp:43
-#: pcbnew/dialogs/dialog_rule_area_properties.cpp:129 pcbnew/zone.cpp:2015
+#: pcbnew/dialogs/dialog_rule_area_properties.cpp:129 pcbnew/zone.cpp:2014
 msgid "Placement"
 msgstr "Plasament"
 
@@ -18808,13 +18809,13 @@ msgid "Unit count differs."
 msgstr "Nu s-au găsit elemente grafice în fișier."
 
 #: eeschema/lib_symbol.cpp:1655
-#: pcbnew/drc/drc_test_provider_library_parity.cpp:759
+#: pcbnew/drc/drc_test_provider_library_parity.cpp:761
 #, fuzzy
 msgid "Graphic item count differs."
 msgstr "Nu s-au găsit elemente grafice în fișier."
 
 #: eeschema/lib_symbol.cpp:1667
-#: pcbnew/drc/drc_test_provider_library_parity.cpp:773
+#: pcbnew/drc/drc_test_provider_library_parity.cpp:775
 #, c-format
 msgid "%s differs."
 msgstr ""
@@ -19309,7 +19310,7 @@ msgid "Error occurred saving project specific symbol library table."
 msgstr ""
 "Eroare la salvarea tabelului bibliotecii de amprente specifice proiectului."
 
-#: eeschema/project_sch.cpp:113 pcbnew/board_connected_item.cpp:130
+#: eeschema/project_sch.cpp:113 pcbnew/board_connected_item.cpp:157
 #, fuzzy
 msgid "Not Found"
 msgstr "Nu s-a gasit fisierul"
@@ -19361,18 +19362,18 @@ msgstr "Simbolul %s nu se găsește în biblioteca '%s'."
 
 #: eeschema/sch_bitmap.cpp:309 eeschema/sch_pin.cpp:2188
 #: eeschema/sch_shape.cpp:757 eeschema/sch_symbol.cpp:2980
-#: pcbnew/board_item.cpp:412 pcbnew/pcb_group.cpp:501 pcbnew/pcb_shape.cpp:890
-#: pcbnew/pcb_tablecell.cpp:182 pcbnew/pcb_track.cpp:2117 pcbnew/zone.cpp:1911
-#: pcbnew/zone.cpp:1923
+#: pcbnew/board_item.cpp:412 pcbnew/pcb_group.cpp:501 pcbnew/pcb_shape.cpp:889
+#: pcbnew/pcb_tablecell.cpp:182 pcbnew/pcb_track.cpp:2114 pcbnew/zone.cpp:1910
+#: pcbnew/zone.cpp:1922
 #, fuzzy
 msgid "Position X"
 msgstr "Poziția X:"
 
 #: eeschema/sch_bitmap.cpp:314 eeschema/sch_pin.cpp:2192
 #: eeschema/sch_shape.cpp:759 eeschema/sch_symbol.cpp:2983
-#: pcbnew/board_item.cpp:415 pcbnew/pcb_group.cpp:502 pcbnew/pcb_shape.cpp:892
-#: pcbnew/pcb_tablecell.cpp:183 pcbnew/pcb_track.cpp:2121 pcbnew/zone.cpp:1917
-#: pcbnew/zone.cpp:1924
+#: pcbnew/board_item.cpp:415 pcbnew/pcb_group.cpp:502 pcbnew/pcb_shape.cpp:891
+#: pcbnew/pcb_tablecell.cpp:183 pcbnew/pcb_track.cpp:2118 pcbnew/zone.cpp:1916
+#: pcbnew/zone.cpp:1923
 #, fuzzy
 msgid "Position Y"
 msgstr "Poziția Y:"
@@ -19411,9 +19412,9 @@ msgstr "Tipul de intrare în magistrală"
 
 #: eeschema/sch_bus_entry.cpp:543 eeschema/sch_junction.cpp:319
 #: eeschema/sch_label.cpp:1263 eeschema/sch_line.cpp:951
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2134 pcbnew/pad.cpp:1329
-#: pcbnew/pcb_track.cpp:1716 pcbnew/tools/pcb_control.cpp:1890
-#: pcbnew/zone.cpp:813
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2134 pcbnew/pad.cpp:1328
+#: pcbnew/pcb_track.cpp:1713 pcbnew/tools/pcb_control.cpp:1890
+#: pcbnew/zone.cpp:812
 #, fuzzy
 msgid "Resolved Netclass"
 msgstr "Netclass alocat"
@@ -19619,7 +19620,7 @@ msgid "Blanket not currently supported."
 msgstr "Masca de compilare nu este acceptată în prezent."
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:1430
-#: eeschema/sch_io/altium/sch_io_altium.cpp:4776
+#: eeschema/sch_io/altium/sch_io_altium.cpp:4777
 #, fuzzy, c-format
 msgid "Unknown or unexpected record id %d found in %s."
 msgstr "Fișier neașteptat \"%s\" găsit în biblioteca \"%s\"."
@@ -19684,7 +19685,7 @@ msgstr "Eroare la citirea imaginii %s."
 msgid "File not found %s."
 msgstr "Fișierul nu a fost găsit %s."
 
-#: eeschema/sch_io/altium/sch_io_altium.cpp:4912
+#: eeschema/sch_io/altium/sch_io_altium.cpp:4913
 msgid "Expected Altium Schematic Library file version 5.0"
 msgstr ""
 
@@ -20400,12 +20401,12 @@ msgstr "Stil linie"
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:83
 #: pcbnew/dialogs/dialog_textbox_properties_base.cpp:73
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:58
-#: pcbnew/footprint.cpp:1751 pcbnew/pad.cpp:1333 pcbnew/pad.cpp:2728
+#: pcbnew/footprint.cpp:1751 pcbnew/pad.cpp:1332 pcbnew/pad.cpp:2727
 #: pcbnew/pcb_dimension.cpp:673 pcbnew/pcb_group.cpp:396
-#: pcbnew/pcb_marker.cpp:381 pcbnew/pcb_shape.cpp:619
+#: pcbnew/pcb_marker.cpp:381 pcbnew/pcb_shape.cpp:618
 #: pcbnew/pcb_tablecell.cpp:106 pcbnew/pcb_text.cpp:286
-#: pcbnew/pcb_textbox.cpp:470 pcbnew/pcb_track.cpp:1734
-#: pcbnew/tools/generator_tool.cpp:47 pcbnew/zone.cpp:825
+#: pcbnew/pcb_textbox.cpp:470 pcbnew/pcb_track.cpp:1731
+#: pcbnew/tools/generator_tool.cpp:47 pcbnew/zone.cpp:824
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:52
 msgid "Locked"
 msgstr "încuiat"
@@ -20418,8 +20419,8 @@ msgid "Size"
 msgstr "Dimensiune"
 
 #: eeschema/sch_junction.cpp:379
-#: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:104 pcbnew/pad.cpp:1378
-#: pcbnew/pcb_track.cpp:1692 pcbnew/pcb_track.cpp:2164
+#: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:104 pcbnew/pad.cpp:1377
+#: pcbnew/pcb_track.cpp:1689 pcbnew/pcb_track.cpp:2161
 msgid "Diameter"
 msgstr "Diametru"
 
@@ -20447,15 +20448,15 @@ msgid "Justification"
 msgstr "Justificare"
 
 #: eeschema/sch_label.cpp:1378 eeschema/sch_line.cpp:890
-#: pcbnew/board_connected_item.cpp:187
+#: pcbnew/board_connected_item.cpp:214
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:39
 #: pcbnew/generators/pcb_tuning_pattern.cpp:478
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2130 pcbnew/pad.cpp:1327
-#: pcbnew/pad.cpp:2765 pcbnew/pcb_shape.cpp:907 pcbnew/pcb_tablecell.cpp:186
-#: pcbnew/pcb_track.cpp:1714 pcbnew/tools/pcb_control.cpp:1887
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2130 pcbnew/pad.cpp:1326
+#: pcbnew/pad.cpp:2764 pcbnew/pcb_shape.cpp:906 pcbnew/pcb_tablecell.cpp:186
+#: pcbnew/pcb_track.cpp:1711 pcbnew/tools/pcb_control.cpp:1887
 #: pcbnew/widgets/pcb_properties_panel.cpp:282
-#: pcbnew/widgets/search_handlers.cpp:188 pcbnew/zone.cpp:811
-#: pcbnew/zone.cpp:1971 pcbnew/zone_manager/dialog_zone_manager_base.cpp:42
+#: pcbnew/widgets/search_handlers.cpp:188 pcbnew/zone.cpp:810
+#: pcbnew/zone.cpp:1970 pcbnew/zone_manager/dialog_zone_manager_base.cpp:42
 #: pcbnew/zone_manager/model_zones_overview_table.h:76
 msgid "Net"
 msgstr "Rețea"
@@ -20613,7 +20614,7 @@ msgstr ""
 msgid "Hidden pin %s [%s, %s]"
 msgstr ""
 
-#: eeschema/sch_pin.cpp:2170 pcbnew/pad.cpp:1320 pcbnew/pad.cpp:2785
+#: eeschema/sch_pin.cpp:2170 pcbnew/pad.cpp:1319 pcbnew/pad.cpp:2784
 #, fuzzy
 msgid "Pin Name"
 msgstr "Numele pinilor"
@@ -20748,7 +20749,7 @@ msgstr "Lipiți culoarea"
 
 #: eeschema/sch_sheet.cpp:870 eeschema/sch_sheet.cpp:1731
 #: pcbnew/dialogs/dialog_multichannel_generate_rule_areas.cpp:62
-#: pcbnew/zone.cpp:1902
+#: pcbnew/zone.cpp:1901
 #, fuzzy
 msgid "Sheet Name"
 msgstr "Numele foilor"
@@ -20826,7 +20827,7 @@ msgstr "Excludeți lista de materiale din schematică"
 msgid "Do not Populate"
 msgstr "Nu umpleți"
 
-#: eeschema/sch_sheet_path.cpp:59 include/board_item.h:467
+#: eeschema/sch_sheet_path.cpp:59 include/board_item.h:468
 #, fuzzy
 msgid "(Deleted Item)"
 msgstr "Ștergerea elementelor pe care s-a făcut clic"
@@ -26071,7 +26072,7 @@ msgid "Select Layer: %s"
 msgstr "Selectați Biblioteca"
 
 #: gerbview/dialogs/dialog_select_one_pcb_layer.cpp:134
-#: pcbnew/board_connected_item.cpp:182 pcbnew/board_connected_item.cpp:185
+#: pcbnew/board_connected_item.cpp:209 pcbnew/board_connected_item.cpp:212
 #: pcbnew/board_item.cpp:418
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:75
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:27
@@ -26084,16 +26085,16 @@ msgstr "Selectați Biblioteca"
 #: pcbnew/dialogs/panel_fp_editor_field_defaults_base.cpp:98
 #: pcbnew/dialogs/panel_fp_editor_field_defaults_base.cpp:167
 #: pcbnew/footprint.cpp:4152 pcbnew/footprint.cpp:4155
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2137 pcbnew/pad.cpp:1337
-#: pcbnew/pad.cpp:2727 pcbnew/pcb_dimension.cpp:675
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2137 pcbnew/pad.cpp:1336
+#: pcbnew/pad.cpp:2726 pcbnew/pcb_dimension.cpp:675
 #: pcbnew/pcb_dimension.cpp:1491 pcbnew/pcb_fields_grid_table.cpp:154
 #: pcbnew/pcb_group.cpp:503 pcbnew/pcb_marker.cpp:378
 #: pcbnew/pcb_reference_image.cpp:226 pcbnew/pcb_reference_image.cpp:349
-#: pcbnew/pcb_shape.cpp:623 pcbnew/pcb_shape.cpp:874 pcbnew/pcb_shape.cpp:876
+#: pcbnew/pcb_shape.cpp:622 pcbnew/pcb_shape.cpp:873 pcbnew/pcb_shape.cpp:875
 #: pcbnew/pcb_tablecell.cpp:108 pcbnew/pcb_tablecell.cpp:184
 #: pcbnew/pcb_target.cpp:153 pcbnew/pcb_text.cpp:288 pcbnew/pcb_textbox.cpp:472
-#: pcbnew/pcb_track.cpp:1623 pcbnew/pcb_track.cpp:1690
-#: pcbnew/pcb_track.cpp:2162 pcbnew/tools/board_inspection_tool.cpp:237
+#: pcbnew/pcb_track.cpp:1620 pcbnew/pcb_track.cpp:1687
+#: pcbnew/pcb_track.cpp:2159 pcbnew/tools/board_inspection_tool.cpp:237
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:215
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:226
 #: pcbnew/widgets/pcb_properties_panel.cpp:258
@@ -26101,8 +26102,8 @@ msgstr "Selectați Biblioteca"
 #: pcbnew/widgets/pcb_properties_panel.cpp:262
 #: pcbnew/widgets/search_handlers.cpp:120
 #: pcbnew/widgets/search_handlers.cpp:189
-#: pcbnew/widgets/search_handlers.cpp:255 pcbnew/zone.cpp:856
-#: pcbnew/zone.cpp:1964 pcbnew/zone.cpp:1965
+#: pcbnew/widgets/search_handlers.cpp:255 pcbnew/zone.cpp:855
+#: pcbnew/zone.cpp:1963 pcbnew/zone.cpp:1964
 msgid "Layer"
 msgstr "Strat"
 
@@ -32917,17 +32918,17 @@ msgstr "Segment"
 msgid "Unrouted"
 msgstr "Nicio magistrală selectată"
 
-#: pcbnew/board_connected_item.cpp:208
+#: pcbnew/board_connected_item.cpp:235
 #, fuzzy
 msgid "NetClass"
 msgstr "Netclass"
 
-#: pcbnew/board_connected_item.cpp:215
+#: pcbnew/board_connected_item.cpp:242
 #, fuzzy
 msgid "NetName"
 msgstr "Denumiri Net"
 
-#: pcbnew/board_connected_item.cpp:249
+#: pcbnew/board_connected_item.cpp:276
 #: pcbnew/dialogs/dialog_board_setup.cpp:163
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:43
 #: pcbnew/dialogs/dialog_global_edit_teardrops.cpp:132
@@ -32936,46 +32937,46 @@ msgstr "Denumiri Net"
 msgid "Teardrops"
 msgstr "Picături"
 
-#: pcbnew/board_connected_item.cpp:251
+#: pcbnew/board_connected_item.cpp:278
 #, fuzzy
 msgid "Enable Teardrops"
 msgstr "Adăugați Bitmap"
 
-#: pcbnew/board_connected_item.cpp:257
+#: pcbnew/board_connected_item.cpp:284
 #, fuzzy
 msgid "Best Length Ratio"
 msgstr "Magistrală, lungime %s"
 
-#: pcbnew/board_connected_item.cpp:264
+#: pcbnew/board_connected_item.cpp:291
 #, fuzzy
 msgid "Max Length"
 msgstr "Magistrală, lungime %s"
 
-#: pcbnew/board_connected_item.cpp:270
+#: pcbnew/board_connected_item.cpp:297
 #, fuzzy
 msgid "Best Width Ratio"
 msgstr "Lățime:"
 
-#: pcbnew/board_connected_item.cpp:277
+#: pcbnew/board_connected_item.cpp:304
 #, fuzzy
 msgid "Max Width"
 msgstr "Grosime traseu"
 
-#: pcbnew/board_connected_item.cpp:283
+#: pcbnew/board_connected_item.cpp:310
 #, fuzzy
 msgid "Curved Teardrops"
 msgstr "Adăugați Bitmap"
 
-#: pcbnew/board_connected_item.cpp:289
+#: pcbnew/board_connected_item.cpp:316
 #, fuzzy
 msgid "Prefer Zone Connections"
 msgstr "Numele amprentei nu poate conține \"%s\"."
 
-#: pcbnew/board_connected_item.cpp:295
+#: pcbnew/board_connected_item.cpp:322
 msgid "Allow Teardrops To Span Two Tracks"
 msgstr ""
 
-#: pcbnew/board_connected_item.cpp:301
+#: pcbnew/board_connected_item.cpp:328
 #, fuzzy
 msgid "Max Width Ratio"
 msgstr "Grosime traseu"
@@ -33527,7 +33528,7 @@ msgid "(arc has null or very small size: %d nm)"
 msgstr ""
 
 #: pcbnew/cross-probing.cpp:105 pcbnew/dialogs/dialog_board_setup.cpp:193
-#: pcbnew/dialogs/dialog_drc.cpp:272 pcbnew/pcb_edit_frame.cpp:2572
+#: pcbnew/dialogs/dialog_drc.cpp:272 pcbnew/pcb_edit_frame.cpp:2620
 #, fuzzy
 msgid "Custom Rules"
 msgstr "Personalizat (%s)"
@@ -34120,7 +34121,7 @@ msgid "Total:"
 msgstr "Total:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:491
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:441 pcbnew/pad.cpp:2702
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:441 pcbnew/pad.cpp:2701
 msgid "Round"
 msgstr "Rotund"
 
@@ -34143,11 +34144,11 @@ msgstr "???"
 msgid "N/A"
 msgstr "N/A"
 
-#: pcbnew/dialogs/dialog_board_statistics.cpp:513 pcbnew/pad.cpp:1565
+#: pcbnew/dialogs/dialog_board_statistics.cpp:513 pcbnew/pad.cpp:1564
 msgid "PTH"
 msgstr ""
 
-#: pcbnew/dialogs/dialog_board_statistics.cpp:513 pcbnew/pad.cpp:1568
+#: pcbnew/dialogs/dialog_board_statistics.cpp:513 pcbnew/pad.cpp:1567
 msgid "NPTH"
 msgstr ""
 
@@ -34167,7 +34168,7 @@ msgid "Board name"
 msgstr "Straturi ale plăci"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:689
-#: pcbnew/dialogs/dialog_board_statistics.cpp:697 pcbnew/pad.cpp:1347
+#: pcbnew/dialogs/dialog_board_statistics.cpp:697 pcbnew/pad.cpp:1346
 msgid "Area"
 msgstr "Zonă"
 
@@ -34550,7 +34551,7 @@ msgstr "Comutați afișarea zonei"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:134
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:59
-#: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:75 pcbnew/zone.cpp:864
+#: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:75 pcbnew/zone.cpp:863
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:59
 msgid "Hatched"
 msgstr "Eclozat"
@@ -34634,7 +34635,7 @@ msgid ""
 msgstr ""
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:232 pcbnew/footprint.cpp:4126
-#: pcbnew/pad.cpp:2712 pcbnew/zone.cpp:1872
+#: pcbnew/pad.cpp:2711 pcbnew/zone.cpp:1871
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:157
 #, fuzzy
 msgid "Thermal reliefs"
@@ -34685,14 +34686,14 @@ msgstr "Stil de umplere"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:290
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:129
-#: pcbnew/zone.cpp:1882 pcbnew/zone_manager/panel_zone_properties_base.cpp:215
+#: pcbnew/zone.cpp:1881 pcbnew/zone_manager/panel_zone_properties_base.cpp:215
 #, fuzzy
 msgid "Solid fill"
 msgstr "Masiv"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:290
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:129
-#: pcbnew/zone.cpp:1883 pcbnew/zone_manager/panel_zone_properties_base.cpp:215
+#: pcbnew/zone.cpp:1882 pcbnew/zone_manager/panel_zone_properties_base.cpp:215
 #, fuzzy
 msgid "Hatch pattern"
 msgstr "Eclozat"
@@ -34755,7 +34756,7 @@ msgstr "Adăugați câmp..."
 msgid "Choose what to do with unconnected copper islands"
 msgstr ""
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:357 pcbnew/zone.cpp:1893
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:357 pcbnew/zone.cpp:1892
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:282
 #, fuzzy
 msgid "Below area limit"
@@ -36689,19 +36690,19 @@ msgstr "Paduri componentă Through-Hole"
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:188
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:193
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:39 pcbnew/footprint.cpp:1375
-#: pcbnew/pad.cpp:1566 pcbnew/pad.cpp:2678
+#: pcbnew/pad.cpp:1565 pcbnew/pad.cpp:2677
 msgid "SMD"
 msgstr "SMD"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:200
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:202
-#: pcbnew/drc/drc_test_provider_library_parity.cpp:640
+#: pcbnew/drc/drc_test_provider_library_parity.cpp:642
 msgid "Not in schematic"
 msgstr "Nu în schematică"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:203
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:205
-#: pcbnew/drc/drc_test_provider_library_parity.cpp:644
+#: pcbnew/drc/drc_test_provider_library_parity.cpp:646
 msgid "Exclude from position files"
 msgstr "Excludeți din fișierele de poziție"
 
@@ -36775,7 +36776,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:304
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:273
-#: pcbnew/drc/drc_test_provider_library_parity.cpp:629
+#: pcbnew/drc/drc_test_provider_library_parity.cpp:631
 msgid "Allow bridged solder mask apertures between pads"
 msgstr ""
 
@@ -37653,7 +37654,7 @@ msgstr "2 Straturi"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:275
 #: pcbnew/dialogs/panel_fp_editor_graphics_defaults_base.cpp:64
-#: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:60 pcbnew/pad.cpp:2869
+#: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:60 pcbnew/pad.cpp:2868
 #, fuzzy
 msgid "Copper Layers"
 msgstr "Straturi ale plăci"
@@ -37845,7 +37846,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:175
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1075
-#: pcbnew/dialogs/dialog_track_via_properties_base.cpp:388 pcbnew/pad.cpp:2718
+#: pcbnew/dialogs/dialog_track_via_properties_base.cpp:388 pcbnew/pad.cpp:2717
 #, fuzzy
 msgid "All copper layers"
 msgstr "Simplificarea %d straturi de cupru"
@@ -37857,7 +37858,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:175
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1079
-#: pcbnew/dialogs/dialog_track_via_properties_base.cpp:388 pcbnew/pad.cpp:2719
+#: pcbnew/dialogs/dialog_track_via_properties_base.cpp:388 pcbnew/pad.cpp:2718
 #, fuzzy
 msgid "Connected layers only"
 msgstr "Creați straturi"
@@ -37958,7 +37959,7 @@ msgid "The netlist file does not exist."
 msgstr "Calea dată nu există"
 
 #: pcbnew/dialogs/dialog_import_netlist.cpp:172
-#: pcbnew/dialogs/dialog_update_pcb.cpp:148
+#: pcbnew/dialogs/dialog_update_pcb.cpp:150
 msgid "Changes Applied to PCB"
 msgstr ""
 
@@ -38011,7 +38012,6 @@ msgid "Replace footprints with those specified in netlist"
 msgstr ""
 
 #: pcbnew/dialogs/dialog_import_netlist_base.cpp:59
-#: pcbnew/dialogs/dialog_update_pcb_base.cpp:43
 #, fuzzy
 msgid "Delete/replace footprints even if locked"
 msgstr "Adăugați un filtru de amprente"
@@ -38245,7 +38245,7 @@ msgid "Sheets"
 msgstr "Foaie"
 
 #: pcbnew/dialogs/dialog_multichannel_generate_rule_areas.cpp:88
-#: pcbnew/footprint.cpp:1775 pcbnew/footprint.cpp:4182 pcbnew/zone.cpp:1903
+#: pcbnew/footprint.cpp:1775 pcbnew/footprint.cpp:4182 pcbnew/zone.cpp:1902
 #, fuzzy
 msgid "Component Class"
 msgstr "Componente"
@@ -38400,7 +38400,7 @@ msgid "Outset Items"
 msgstr "Fișiere text"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:179
-#: pcbnew/dialogs/dialog_pad_properties_base.h:287 pcbnew/pad.cpp:2769
+#: pcbnew/dialogs/dialog_pad_properties_base.h:287 pcbnew/pad.cpp:2768
 #, fuzzy
 msgid "Pad Properties"
 msgstr "Proprietăți"
@@ -38485,7 +38485,7 @@ msgstr ""
 msgid "Pad type:"
 msgstr "Solid"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:39 pcbnew/pad.cpp:2677
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:39 pcbnew/pad.cpp:2676
 #, fuzzy
 msgid "Through-hole"
 msgstr "Paduri componentă Through-Hole"
@@ -38541,8 +38541,8 @@ msgstr "Solid"
 msgid "Circular"
 msgstr "Rotund"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:127 pcbnew/pad.cpp:1550
-#: pcbnew/pad.cpp:2685
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:127 pcbnew/pad.cpp:1549
+#: pcbnew/pad.cpp:2684
 msgid "Oval"
 msgstr "Oval"
 
@@ -38554,12 +38554,12 @@ msgstr "Dreptunghiular"
 msgid "Trapezoidal"
 msgstr "Trapezoidal"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:127 pcbnew/pad.cpp:2687
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:127 pcbnew/pad.cpp:2686
 #, fuzzy
 msgid "Rounded rectangle"
 msgstr "Adăugați un dreptunghi"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:127 pcbnew/pad.cpp:2688
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:127 pcbnew/pad.cpp:2687
 #, fuzzy
 msgid "Chamfered rectangle"
 msgstr "Adăugați un dreptunghi"
@@ -38673,7 +38673,7 @@ msgstr ""
 msgid "Hole shape:"
 msgstr "Solid"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:441 pcbnew/pad.cpp:2703
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:441 pcbnew/pad.cpp:2702
 msgid "Oblong"
 msgstr ""
 
@@ -38761,24 +38761,24 @@ msgid ""
 "Mechanical specifies a through-hole pad that is used for mechanical support"
 msgstr ""
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:587 pcbnew/pad.cpp:2693
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:587 pcbnew/pad.cpp:2692
 msgid "BGA pad"
 msgstr ""
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:587 pcbnew/pad.cpp:2695
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:587 pcbnew/pad.cpp:2694
 #, fuzzy
 msgid "Fiducial, local to footprint"
 msgstr "Adăugați o amprentă"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:587 pcbnew/pad.cpp:2694
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:587 pcbnew/pad.cpp:2693
 msgid "Fiducial, global to board"
 msgstr ""
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:587 pcbnew/pad.cpp:2696
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:587 pcbnew/pad.cpp:2695
 msgid "Test point pad"
 msgstr ""
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:587 pcbnew/pad.cpp:2697
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:587 pcbnew/pad.cpp:2696
 msgid "Heatsink pad"
 msgstr ""
 
@@ -38786,7 +38786,7 @@ msgstr ""
 msgid "Castellated pad (through hole only)"
 msgstr ""
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:587 pcbnew/pad.cpp:1366
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:587 pcbnew/pad.cpp:1365
 #, fuzzy
 msgid "Mechanical"
 msgstr "Etichete ierarhice"
@@ -40293,17 +40293,17 @@ msgid "Via type:"
 msgstr "Spice"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:350
-#: pcbnew/pcb_track.cpp:2089
+#: pcbnew/pcb_track.cpp:2086
 msgid "Through"
 msgstr "Prin"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:350
-#: pcbnew/pcb_track.cpp:2091
+#: pcbnew/pcb_track.cpp:2088
 msgid "Micro"
 msgstr "Micro"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:350
-#: pcbnew/pcb_track.cpp:2090
+#: pcbnew/pcb_track.cpp:2087
 msgid "Blind/buried"
 msgstr "Orb/îngropat"
 
@@ -40324,20 +40324,20 @@ msgstr "Prefix:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:398
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:419
-#: pcbnew/pcb_track.cpp:2095
+#: pcbnew/pcb_track.cpp:2092
 #, fuzzy
 msgid "From design rules"
 msgstr "Verificator de reguli de proiectare"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:398
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:419
-#: pcbnew/pcb_track.cpp:2096
+#: pcbnew/pcb_track.cpp:2093
 msgid "Tented"
 msgstr "Acoperite"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:398
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:419
-#: pcbnew/pcb_track.cpp:2097
+#: pcbnew/pcb_track.cpp:2094
 #, fuzzy
 msgid "Not tented"
 msgstr "Fără conexiuni"
@@ -40394,14 +40394,14 @@ msgstr "Țintă"
 
 #: pcbnew/dialogs/dialog_tuning_pattern_properties.cpp:95
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2197
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2219 pcbnew/pad.cpp:1429
-#: pcbnew/pcb_track.cpp:1661 pcbnew/pcb_track.cpp:1669
-#: pcbnew/pcb_track.cpp:1701 pcbnew/pcb_track.cpp:1707
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2219 pcbnew/pad.cpp:1428
+#: pcbnew/pcb_track.cpp:1658 pcbnew/pcb_track.cpp:1666
+#: pcbnew/pcb_track.cpp:1698 pcbnew/pcb_track.cpp:1704
 #: pcbnew/router/router_tool.cpp:2771 pcbnew/router/router_tool.cpp:2776
 #: pcbnew/router/router_tool.cpp:2781 pcbnew/router/router_tool.cpp:2792
 #: pcbnew/router/router_tool.cpp:2800 pcbnew/router/router_tool.cpp:2805
 #: pcbnew/tools/pcb_control.cpp:1718 pcbnew/tools/pcb_control.cpp:1728
-#: pcbnew/zone.cpp:880
+#: pcbnew/zone.cpp:879
 #, fuzzy, c-format
 msgid "(from %s)"
 msgstr "[din %s]"
@@ -40512,29 +40512,50 @@ msgstr "Creați straturi"
 msgid "Unused Pads"
 msgstr "Adăugați câmp..."
 
-#: pcbnew/dialogs/dialog_update_pcb_base.cpp:32
+#: pcbnew/dialogs/dialog_update_pcb_base.cpp:39
 #, fuzzy
-msgid "Delete footprints with no symbols"
+msgid "Update Footprints"
+msgstr "Lipiți amprenta"
+
+#: pcbnew/dialogs/dialog_update_pcb_base.cpp:41
+#, fuzzy
+msgid "Replace footprints with those specified by symbols"
 msgstr "ID-ul amprentei \"%s\" nu este valid."
 
-#: pcbnew/dialogs/dialog_update_pcb_base.cpp:33
-msgid ""
-"Remove from the board unlocked footprints which are not linked to a "
-"schematic symbol."
-msgstr ""
-
-#: pcbnew/dialogs/dialog_update_pcb_base.cpp:37
-msgid "Replace footprints with those specified in the schematic"
-msgstr ""
-
-#: pcbnew/dialogs/dialog_update_pcb_base.cpp:39
+#: pcbnew/dialogs/dialog_update_pcb_base.cpp:43
 msgid ""
 "Normally footprints on the board should be changed to match footprint "
 "assignment changes made in the schematic. Uncheck this only if you don't "
 "want to change existing footprints on the board."
 msgstr ""
 
-#: pcbnew/dialogs/dialog_update_pcb_base.h:54
+#: pcbnew/dialogs/dialog_update_pcb_base.cpp:47
+#, fuzzy
+msgid "Delete footprints with no symbols"
+msgstr "ID-ul amprentei \"%s\" nu este valid."
+
+#: pcbnew/dialogs/dialog_update_pcb_base.cpp:48
+msgid ""
+"Remove from the board unlocked footprints which are not linked to a "
+"schematic symbol."
+msgstr ""
+
+#: pcbnew/dialogs/dialog_update_pcb_base.cpp:52
+#, fuzzy
+msgid "Override locks"
+msgstr "Înlocuiți blocările"
+
+#: pcbnew/dialogs/dialog_update_pcb_base.cpp:64
+#, fuzzy
+msgid "Update footprint fields from symbols"
+msgstr "Nicio amprentă definită pentru simbol %s."
+
+#: pcbnew/dialogs/dialog_update_pcb_base.cpp:68
+#, fuzzy
+msgid "Remove footprint fields not found in symbols"
+msgstr "Eliminați câmpurile dacă nu se află în noul simbol"
+
+#: pcbnew/dialogs/dialog_update_pcb_base.h:56
 #, fuzzy
 msgid "Update PCB from Schematic"
 msgstr "Actualizarea PCB din schemă..."
@@ -42325,8 +42346,8 @@ msgstr "Decalajul perechii diferențiale"
 msgid "7"
 msgstr "7"
 
-#: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:105 pcbnew/pad.cpp:1409
-#: pcbnew/pcb_track.cpp:1694 pcbnew/pcb_track.cpp:2166
+#: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:105 pcbnew/pad.cpp:1408
+#: pcbnew/pcb_track.cpp:1691 pcbnew/pcb_track.cpp:2163
 #: pcbnew/tools/board_inspection_tool.cpp:1125
 #: pcbnew/tools/board_inspection_tool.cpp:1154
 msgid "Hole"
@@ -42728,7 +42749,7 @@ msgid "%s pad connection: %s."
 msgstr "Numele amprentei nu poate conține \"%s\"."
 
 #: pcbnew/drc/drc_engine.cpp:1508 pcbnew/drc/drc_engine.cpp:1525
-#: pcbnew/drc/drc_engine.cpp:1542 pcbnew/zone.cpp:618 pcbnew/zone.h:181
+#: pcbnew/drc/drc_engine.cpp:1542 pcbnew/zone.cpp:617 pcbnew/zone.h:181
 msgid "zone"
 msgstr "zonă"
 
@@ -42747,7 +42768,7 @@ msgstr "Lățimea reliefului termic"
 msgid "Checking rule assertion \"%s\"."
 msgstr "Verificarea condiției regulii \"%s\"."
 
-#: pcbnew/drc/drc_item.cpp:42 pcbnew/zone.cpp:2112
+#: pcbnew/drc/drc_item.cpp:42 pcbnew/zone.cpp:2111
 msgid "Electrical"
 msgstr "Electric"
 
@@ -43667,87 +43688,87 @@ msgstr "Reguli"
 msgid "%s corners differ."
 msgstr "Editor de amprente"
 
-#: pcbnew/drc/drc_test_provider_library_parity.cpp:625
+#: pcbnew/drc/drc_test_provider_library_parity.cpp:627
 #, fuzzy
 msgid "Footprint types differ."
 msgstr "Filtre de amprentă:"
 
-#: pcbnew/drc/drc_test_provider_library_parity.cpp:628
-#: pcbnew/drc/drc_test_provider_library_parity.cpp:632
-#: pcbnew/drc/drc_test_provider_library_parity.cpp:639
-#: pcbnew/drc/drc_test_provider_library_parity.cpp:643
-#: pcbnew/drc/drc_test_provider_library_parity.cpp:647
-#: pcbnew/drc/drc_test_provider_library_parity.cpp:651
+#: pcbnew/drc/drc_test_provider_library_parity.cpp:630
+#: pcbnew/drc/drc_test_provider_library_parity.cpp:634
+#: pcbnew/drc/drc_test_provider_library_parity.cpp:641
+#: pcbnew/drc/drc_test_provider_library_parity.cpp:645
+#: pcbnew/drc/drc_test_provider_library_parity.cpp:649
+#: pcbnew/drc/drc_test_provider_library_parity.cpp:653
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:193
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:206
 #, fuzzy, c-format
 msgid "'%s' settings differ."
 msgstr "Filtre de amprentă:"
 
-#: pcbnew/drc/drc_test_provider_library_parity.cpp:633
+#: pcbnew/drc/drc_test_provider_library_parity.cpp:635
 #: pcbnew/footprint.cpp:4203
 msgid "Exempt From Courtyard Requirement"
 msgstr ""
 
-#: pcbnew/drc/drc_test_provider_library_parity.cpp:670
+#: pcbnew/drc/drc_test_provider_library_parity.cpp:675
 #, fuzzy
 msgid "Pad clearance overridden."
 msgstr "Distanţă"
 
-#: pcbnew/drc/drc_test_provider_library_parity.cpp:677
+#: pcbnew/drc/drc_test_provider_library_parity.cpp:682
 #, fuzzy
 msgid "Solder mask expansion overridden."
 msgstr "Culoarea măștii de sudură"
 
-#: pcbnew/drc/drc_test_provider_library_parity.cpp:685
+#: pcbnew/drc/drc_test_provider_library_parity.cpp:690
 #, fuzzy
 msgid "Solder paste absolute clearance overridden."
 msgstr "Distanța minimă a cuprului"
 
-#: pcbnew/drc/drc_test_provider_library_parity.cpp:692
+#: pcbnew/drc/drc_test_provider_library_parity.cpp:697
 #, fuzzy
 msgid "Solder paste relative clearance overridden."
 msgstr "Distanța minimă a cuprului"
 
-#: pcbnew/drc/drc_test_provider_library_parity.cpp:699
+#: pcbnew/drc/drc_test_provider_library_parity.cpp:704
 #, fuzzy
 msgid "Zone connection overridden."
 msgstr "Conexiuni"
 
-#: pcbnew/drc/drc_test_provider_library_parity.cpp:704
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:709
+#: pcbnew/drc/drc_test_provider_library_parity.cpp:714
 msgid "Net tie pad groups differ."
 msgstr ""
 
-#: pcbnew/drc/drc_test_provider_library_parity.cpp:786
+#: pcbnew/drc/drc_test_provider_library_parity.cpp:788
 msgid "Pad count differs."
 msgstr ""
 
-#: pcbnew/drc/drc_test_provider_library_parity.cpp:807
+#: pcbnew/drc/drc_test_provider_library_parity.cpp:809
 #, fuzzy
 msgid "Rule area count differs."
 msgstr "Reguli"
 
-#: pcbnew/drc/drc_test_provider_library_parity.cpp:826
+#: pcbnew/drc/drc_test_provider_library_parity.cpp:828
 msgid "No project loaded, skipping library parity tests."
 msgstr ""
 
-#: pcbnew/drc/drc_test_provider_library_parity.cpp:830
+#: pcbnew/drc/drc_test_provider_library_parity.cpp:832
 #, fuzzy
 msgid "Loading footprint library table..."
 msgstr "Eroare la încărcarea tabelului bibliotecii de amprentă."
 
-#: pcbnew/drc/drc_test_provider_library_parity.cpp:840
+#: pcbnew/drc/drc_test_provider_library_parity.cpp:842
 #, fuzzy
 msgid "Checking board footprints against library..."
 msgstr "Se verifică amprentele ..."
 
-#: pcbnew/drc/drc_test_provider_library_parity.cpp:906
+#: pcbnew/drc/drc_test_provider_library_parity.cpp:908
 #, fuzzy, c-format
 msgid "The footprint library '%s' was not found at '%s'."
 msgstr "Amprenta \"%s\" nu a fost găsită."
 
-#: pcbnew/drc/drc_test_provider_library_parity.cpp:956
+#: pcbnew/drc/drc_test_provider_library_parity.cpp:958
 #, fuzzy, c-format
 msgid "Footprint '%s' does not match copy in library '%s'."
 msgstr "Amprente în bibliotecă..."
@@ -44628,11 +44649,11 @@ msgstr ""
 msgid "(pad %s appears in more than one net-tie pad group)"
 msgstr ""
 
-#: pcbnew/footprint.cpp:4124 pcbnew/pad.cpp:2710 pcbnew/zone.cpp:1870
+#: pcbnew/footprint.cpp:4124 pcbnew/pad.cpp:2709 pcbnew/zone.cpp:1869
 msgid "Inherited"
 msgstr "Mostenit"
 
-#: pcbnew/footprint.cpp:4128 pcbnew/pad.cpp:2714 pcbnew/zone.cpp:1874
+#: pcbnew/footprint.cpp:4128 pcbnew/pad.cpp:2713 pcbnew/zone.cpp:1873
 #, fuzzy
 msgid "Thermal reliefs for PTH"
 msgstr "Lățimea reliefului termic"
@@ -44647,26 +44668,26 @@ msgstr "Nu în schematică"
 msgid "Exclude From Position Files"
 msgstr "Excludeți din fișierele de poziție"
 
-#: pcbnew/footprint.cpp:4200 pcbnew/pad.cpp:2879
+#: pcbnew/footprint.cpp:4200 pcbnew/pad.cpp:2878
 #, fuzzy
 msgid "Overrides"
 msgstr "Suprascrieți"
 
-#: pcbnew/footprint.cpp:4207 pcbnew/pad.cpp:2882
+#: pcbnew/footprint.cpp:4207 pcbnew/pad.cpp:2881
 #, fuzzy
 msgid "Clearance Override"
 msgstr "Distanţă"
 
-#: pcbnew/footprint.cpp:4212 pcbnew/pad.cpp:2892
+#: pcbnew/footprint.cpp:4212 pcbnew/pad.cpp:2891
 #, fuzzy
 msgid "Solderpaste Margin Override"
 msgstr "Distanţă"
 
-#: pcbnew/footprint.cpp:4217 pcbnew/pad.cpp:2897
+#: pcbnew/footprint.cpp:4217 pcbnew/pad.cpp:2896
 msgid "Solderpaste Margin Ratio Override"
 msgstr ""
 
-#: pcbnew/footprint.cpp:4223 pcbnew/pad.cpp:2903
+#: pcbnew/footprint.cpp:4223 pcbnew/pad.cpp:2902
 #, fuzzy
 msgid "Zone Connection Style"
 msgstr "Conexiuni"
@@ -45015,18 +45036,18 @@ msgstr "Magistrală, lungime %s"
 msgid "Routed Lengths"
 msgstr "Lungime"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2166 pcbnew/pcb_track.cpp:1644
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2166 pcbnew/pcb_track.cpp:1641
 #, fuzzy
 msgid "Routed Length"
 msgstr "Lungime"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2172 pcbnew/pad.cpp:2873
-#: pcbnew/pcb_track.cpp:1649
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2172 pcbnew/pad.cpp:2872
+#: pcbnew/pcb_track.cpp:1646
 #, fuzzy
 msgid "Pad To Die Length"
 msgstr "Lungime"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2175 pcbnew/pcb_track.cpp:1652
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2175 pcbnew/pcb_track.cpp:1649
 #, fuzzy
 msgid "Full Length"
 msgstr "Lungime"
@@ -45538,346 +45559,346 @@ msgstr "Placă"
 msgid "In Package"
 msgstr "Pachet"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:141
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:143
 #, fuzzy, c-format
 msgid "Cannot add %s (no footprint assigned)."
 msgstr "Nu se poate adăuga %s (amprenta '%s' nu a fost găsită)."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:152
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:154
 #, c-format
 msgid "Cannot add %s (footprint '%s' not found)."
 msgstr "Nu se poate adăuga %s (amprenta '%s' nu a fost găsită)."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:164
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:166
 #, fuzzy, c-format
 msgid "Add %s (footprint '%s')."
 msgstr "Adăugați %s (amprenta „%s”)."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:194
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:196
 #, fuzzy, c-format
 msgid "Added %s (footprint '%s')."
 msgstr "Adăugat %s (amprenta \"%s\")."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:235
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:237
 #, fuzzy, c-format
 msgid "Change %s component class to '%s'."
 msgstr "Actualizat '%s' de la '%s' la '%s'."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:241
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:243
 #, fuzzy, c-format
 msgid "Remove %s component class (currently '%s')."
 msgstr "Actualizat '%s' de la '%s' la '%s'."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:247
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:249
 #, fuzzy, c-format
 msgid "Change %s component class from '%s' to '%s'."
 msgstr "Schimbați simbolul %s din „%s” în „%s”"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:261
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:263
 #, fuzzy, c-format
 msgid "Changed %s component class to '%s'."
 msgstr "Actualizat '%s' de la '%s' la '%s'."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:267
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:269
 #, fuzzy, c-format
 msgid "Removed %s component class (was '%s')."
 msgstr "Actualizat '%s' de la '%s' la '%s'."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:273
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:275
 #, fuzzy, c-format
 msgid "Changed %s component class from '%s' to '%s'."
 msgstr "Actualizat '%s' de la '%s' la '%s'."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:291
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:293
 #, fuzzy, c-format
 msgid "Cannot update %s (no footprint assigned)."
 msgstr "Nu se poate actualiza %s (amprenta '%s' nu a fost găsită)."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:302
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:304
 #, c-format
 msgid "Cannot update %s (footprint '%s' not found)."
 msgstr "Nu se poate actualiza %s (amprenta '%s' nu a fost găsită)."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:314
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:316
 #, fuzzy, c-format
 msgid "Cannot change %s footprint from '%s' to '%s' (footprint is locked)."
 msgstr "Schimbați simbolul %s din „%s” în „%s”"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:325
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:327
 #, fuzzy, c-format
 msgid "Change %s footprint from '%s' to '%s'."
 msgstr "Schimbați simbolul %s din „%s” în „%s”"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:339
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:341
 #, fuzzy, c-format
 msgid "Could not change %s footprint from '%s' to '%s' (footprint is locked)."
 msgstr "Schimbați simbolul %s din „%s” în „%s”"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:352
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:354
 #, fuzzy, c-format
 msgid "Changed %s footprint from '%s' to '%s'."
 msgstr "Schimbați simbolul %s din „%s” în „%s”"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:385
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:387
 #, fuzzy, c-format
 msgid "Change %s reference designator to %s."
 msgstr "Înlocuiește desemnatori de referință cu \"%s\"."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:391
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:393
 #, fuzzy, c-format
 msgid "Changed %s reference designator to %s."
 msgstr "Înlocuiește desemnatori de referință cu \"%s\"."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:407
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:409
 #, fuzzy, c-format
 msgid "Change %s value from %s to %s."
 msgstr "Actualizat '%s' de la '%s' la '%s'."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:414
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:416
 #, fuzzy, c-format
 msgid "Changed %s value from %s to %s."
 msgstr "Actualizat '%s' de la '%s' la '%s'."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:436
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:438
 #, fuzzy, c-format
 msgid "Update %s symbol association from %s to %s."
 msgstr "Actualizarea simbolului %s de la \"%s\" în \"%s\""
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:443
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:445
 #, fuzzy, c-format
 msgid "Updated %s symbol association from %s to %s."
 msgstr "Actualizarea simbolului %s de la \"%s\" în \"%s\""
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:504
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:508
 #, fuzzy, c-format
 msgid "Update %s fields."
 msgstr "Actualizați câmpurile"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:515
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:522
 #, fuzzy, c-format
 msgid "Remove %s footprint fields not in symbol."
 msgstr "Eliminați câmpurile dacă nu se află în noul simbol"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:524
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:535
 #, fuzzy, c-format
 msgid "Updated %s fields."
 msgstr "Actualizați câmpurile"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:569
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:582
 #, fuzzy, c-format
 msgid "Removed %s footprint fields not in symbol."
 msgstr "Eliminați câmpurile dacă nu se află în noul simbol"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:604
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:618
 #, fuzzy, c-format
 msgid "Update %s sheetname to '%s'."
 msgstr "Actualizat '%s' de la '%s' la '%s'."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:611
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:625
 #, fuzzy, c-format
 msgid "Updated %s sheetname to '%s'."
 msgstr "Actualizat '%s' de la '%s' la '%s'."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:623
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:637
 #, fuzzy, c-format
 msgid "Update %s sheetfile to '%s'."
 msgstr "Actualizat '%s' de la '%s' la '%s'."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:630
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:644
 #, fuzzy, c-format
 msgid "Updated %s sheetfile to '%s'."
 msgstr "Actualizat '%s' de la '%s' la '%s'."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:642
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:656
 #, fuzzy, c-format
 msgid "Update %s footprint filters to '%s'."
 msgstr "Schimbați simbolul %s din „%s” în „%s”"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:649
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:663
 #, fuzzy, c-format
 msgid "Updated %s footprint filters to '%s'."
 msgstr "Schimbați simbolul %s din „%s” în „%s”"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:664
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:678
 #, fuzzy, c-format
 msgid "Add %s 'exclude from BOM' fabrication attribute."
 msgstr "S-a adăugat %s atributul de fabricație „exclude din BOM”."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:669
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:683
 #, fuzzy, c-format
 msgid "Remove %s 'exclude from BOM' fabrication attribute."
 msgstr "S-a adăugat %s atributul de fabricație „exclude din BOM”."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:680
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:694
 #, c-format
 msgid "Added %s 'exclude from BOM' fabrication attribute."
 msgstr "S-a adăugat %s atributul de fabricație „exclude din BOM”."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:686
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:700
 #, fuzzy, c-format
 msgid "Removed %s 'exclude from BOM' fabrication attribute."
 msgstr "S-a adăugat %s atributul de fabricație „exclude din BOM”."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:704
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:718
 #, fuzzy, c-format
 msgid "Add %s 'Do not place' fabrication attribute."
 msgstr "S-a adăugat %s atributul de fabricație „exclude din BOM”."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:709
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:723
 #, fuzzy, c-format
 msgid "Remove %s 'Do not place' fabrication attribute."
 msgstr "S-a adăugat %s atributul de fabricație „exclude din BOM”."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:720
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:734
 #, fuzzy, c-format
 msgid "Added %s 'Do not place' fabrication attribute."
 msgstr "S-a adăugat %s atributul de fabricație „exclude din BOM”."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:726
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:740
 #, fuzzy, c-format
 msgid "Removed %s 'Do not place' fabrication attribute."
 msgstr "S-a adăugat %s atributul de fabricație „exclude din BOM”."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:811
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:825
 #, fuzzy, c-format
 msgid "Disconnect %s pin %s."
 msgstr "Numele amprentei nu poate conține \"%s\"."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:817
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:831
 #, fuzzy, c-format
 msgid "Disconnected %s pin %s."
 msgstr "Elemente neconectate (%s)"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:827
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:841
 #, fuzzy, c-format
 msgid "No net found for component %s pad %s (no pin %s in symbol)."
 msgstr "Nicio amprentă definită pentru simbol %s."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:894
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:908
 #, fuzzy, c-format
 msgid "Add net %s."
 msgstr "Adăugați linii"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:905
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:919
 #, fuzzy, c-format
 msgid "Reconnect %s pin %s from %s to %s."
 msgstr "Actualizat %s (unitatea %s) de la %s la %s."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:913
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:927
 #, fuzzy, c-format
 msgid "Reconnected %s pin %s from %s to %s."
 msgstr "Actualizat %s (unitatea %s) de la %s la %s."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:924
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:938
 #, fuzzy, c-format
 msgid "Connect %s pin %s to %s."
 msgstr "Actualizat '%s' de la '%s' la '%s'."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:931
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:945
 #, fuzzy, c-format
 msgid "Connected %s pin %s to %s."
 msgstr "Actualizat '%s' de la '%s' la '%s'."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1012
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1026
 #, fuzzy, c-format
 msgid "Reconnect via from %s to %s."
 msgstr "Actualizat '%s' de la '%s' la '%s'."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1032
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1046
 #, fuzzy, c-format
 msgid "Reconnected via from %s to %s."
 msgstr "Actualizat '%s' de la '%s' la '%s'."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1042
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1056
 #, fuzzy, c-format
 msgid "Via connected to unknown net (%s)."
 msgstr "Elemente neconectate (%s)"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1087
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1101
 #, fuzzy, c-format
 msgid "Reconnect copper zone '%s' from %s to %s."
 msgstr "Schimbați simbolul %s din „%s” în „%s”"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1094
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1108
 #, c-format
 msgid "Reconnect copper zone from %s to %s."
 msgstr ""
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1117
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1131
 #, fuzzy, c-format
 msgid "Reconnected copper zone '%s' from %s to %s."
 msgstr "Actualizat '%s' de la '%s' la '%s'."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1124
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1138
 #, fuzzy, c-format
 msgid "Reconnected copper zone from %s to %s."
 msgstr "Actualizat '%s' de la '%s' la '%s'."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1137
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1151
 #, fuzzy, c-format
 msgid "Copper zone '%s' has no pads connected."
 msgstr "Numele amprentei nu poate conține \"%s\"."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1154
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1168
 #, c-format
 msgid "Copper zone on layer %s at (%s, %s) has no pads connected."
 msgstr ""
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1195
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1209
 #, c-format
 msgid ""
 "Symbol %s has pins with no number.  These pins can not be matched to pads in "
 "%s."
 msgstr ""
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1205
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1219
 #, fuzzy, c-format
 msgid "%s pad %s not found in %s."
 msgstr "%s nu a fost găsit"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1257
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1271
 #, fuzzy, c-format
 msgid "Processing symbol '%s:%s'."
 msgstr "Schimbați simbolul %s din „%s” în „%s”"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1331
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1345
 #, fuzzy, c-format
 msgid "Multiple footprints found for %s."
 msgstr ""
 "Forțarea trasării valorilor amprentei invizibile și a indicativelor de "
 "referință"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1363
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1377
 #, fuzzy, c-format
 msgid "Cannot remove unused footprint %s (footprint is locked)."
 msgstr "Nu se poate actualiza %s (amprenta '%s' nu a fost găsită)."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1368
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1382
 #, fuzzy, c-format
 msgid "Could not remove unused footprint %s (footprint is locked)."
 msgstr "Nu se poate actualiza %s (amprenta '%s' nu a fost găsită)."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1381
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1395
 #, fuzzy, c-format
 msgid "Remove unused footprint %s."
 msgstr "Vizualizați amprenta selectată"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1390
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1404
 #, fuzzy, c-format
 msgid "Removed unused footprint %s."
 msgstr "Adăugat %s (amprenta \"%s\")."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1421
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1435
 #, fuzzy, c-format
 msgid "Removed unused net %s."
 msgstr "Lățimea reliefului termic"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1433
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1447
 #, fuzzy
 msgid "Update Netlist"
 msgstr "Actualizați câmpurile"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1456
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1470
 #, c-format
 msgid "Total warnings: %d, errors: %d."
 msgstr ""
@@ -45973,359 +45994,359 @@ msgstr ""
 "fișier: \"%s\"\n"
 "linie: %d"
 
-#: pcbnew/pad.cpp:1115 pcbnew/pad.cpp:1275 pcbnew/pad.cpp:1291
-#: pcbnew/pad.cpp:1300
+#: pcbnew/pad.cpp:1114 pcbnew/pad.cpp:1274 pcbnew/pad.cpp:1290
+#: pcbnew/pad.cpp:1299
 #, fuzzy
 msgid "pad"
 msgstr "Pad"
 
-#: pcbnew/pad.cpp:1323 pcbnew/pad.cpp:2788
+#: pcbnew/pad.cpp:1322 pcbnew/pad.cpp:2787
 #, fuzzy
 msgid "Pin Type"
 msgstr "Tip de cale"
 
-#: pcbnew/pad.cpp:1360
+#: pcbnew/pad.cpp:1359
 msgid "BGA"
 msgstr "BGA"
 
-#: pcbnew/pad.cpp:1361
+#: pcbnew/pad.cpp:1360
 msgid "Fiducial global"
 msgstr ""
 
-#: pcbnew/pad.cpp:1362
+#: pcbnew/pad.cpp:1361
 msgid "Fiducial local"
 msgstr ""
 
-#: pcbnew/pad.cpp:1363
+#: pcbnew/pad.cpp:1362
 #, fuzzy
 msgid "Test point"
 msgstr "Nimic de imprimat"
 
-#: pcbnew/pad.cpp:1364
+#: pcbnew/pad.cpp:1363
 msgid "Heat sink"
 msgstr ""
 
-#: pcbnew/pad.cpp:1365
+#: pcbnew/pad.cpp:1364
 #, fuzzy
 msgid "Castellated"
 msgstr "Calculează"
 
-#: pcbnew/pad.cpp:1399
+#: pcbnew/pad.cpp:1398
 #, fuzzy
 msgid "Length in Package"
 msgstr "Lungime"
 
-#: pcbnew/pad.cpp:1415
+#: pcbnew/pad.cpp:1414
 msgid "Hole X / Y"
 msgstr ""
 
-#: pcbnew/pad.cpp:1427 pcbnew/pcb_track.cpp:1659 pcbnew/pcb_track.cpp:1699
+#: pcbnew/pad.cpp:1426 pcbnew/pcb_track.cpp:1656 pcbnew/pcb_track.cpp:1696
 #: pcbnew/router/router_tool.cpp:2774 pcbnew/router/router_tool.cpp:2803
-#: pcbnew/zone.cpp:878
+#: pcbnew/zone.cpp:877
 #, fuzzy, c-format
 msgid "Min Clearance: %s"
 msgstr "Spațiu liber:"
 
-#: pcbnew/pad.cpp:1552
+#: pcbnew/pad.cpp:1551
 msgid "Trap"
 msgstr ""
 
-#: pcbnew/pad.cpp:1553
+#: pcbnew/pad.cpp:1552
 #, fuzzy
 msgid "Roundrect"
 msgstr "Rotund"
 
-#: pcbnew/pad.cpp:1554
+#: pcbnew/pad.cpp:1553
 #, fuzzy
 msgid "Chamferedrect"
 msgstr "Șanfreren"
 
-#: pcbnew/pad.cpp:1555
+#: pcbnew/pad.cpp:1554
 #, fuzzy
 msgid "CustomShape"
 msgstr "Forma cursorului"
 
-#: pcbnew/pad.cpp:1567
+#: pcbnew/pad.cpp:1566
 msgid "Conn"
 msgstr ""
 
-#: pcbnew/pad.cpp:1586
+#: pcbnew/pad.cpp:1585
 #, fuzzy, c-format
 msgid "NPTH pad of %s"
 msgstr "Pad %s %s din %s pe %s."
 
-#: pcbnew/pad.cpp:1591
+#: pcbnew/pad.cpp:1590
 #, fuzzy
 msgid "NPTH pad"
 msgstr "Pad %s %s din %s pe %s."
 
-#: pcbnew/pad.cpp:1600
+#: pcbnew/pad.cpp:1599
 #, fuzzy, c-format
 msgid "Pad %s of %s on %s"
 msgstr "Pad %s %s din %s pe %s."
 
-#: pcbnew/pad.cpp:1607
+#: pcbnew/pad.cpp:1606
 #, fuzzy, c-format
 msgid "Pad on %s"
 msgstr "Solid"
 
-#: pcbnew/pad.cpp:1615
+#: pcbnew/pad.cpp:1614
 #, fuzzy, c-format
 msgid "PTH pad %s of %s"
 msgstr "Pad %s %s din %s pe %s."
 
-#: pcbnew/pad.cpp:1621
+#: pcbnew/pad.cpp:1620
 #, fuzzy
 msgid "PTH pad"
 msgstr "Pad %s %s din %s pe %s."
 
-#: pcbnew/pad.cpp:1631
+#: pcbnew/pad.cpp:1630
 #, c-format
 msgid "Pad %s %s of %s on %s"
 msgstr "Pad %s %s din %s pe %s."
 
-#: pcbnew/pad.cpp:1639
+#: pcbnew/pad.cpp:1638
 #, fuzzy, c-format
 msgid "Pad %s on %s"
 msgstr "Via %s, foraj %s"
 
-#: pcbnew/pad.cpp:1648
+#: pcbnew/pad.cpp:1647
 #, fuzzy, c-format
 msgid "PTH pad %s %s of %s"
 msgstr "Pad %s %s din %s pe %s."
 
-#: pcbnew/pad.cpp:1655
+#: pcbnew/pad.cpp:1654
 #, fuzzy, c-format
 msgid "PTH pad %s"
 msgstr "Pad %s %s din %s pe %s."
 
-#: pcbnew/pad.cpp:2231
+#: pcbnew/pad.cpp:2230
 msgid ""
 "(plated through holes normally have a copper pad on at least one outer layer)"
 msgstr ""
 
-#: pcbnew/pad.cpp:2239
+#: pcbnew/pad.cpp:2238
 msgid "('fiducial' property makes no sense on NPTH pads)"
 msgstr ""
 
-#: pcbnew/pad.cpp:2243
+#: pcbnew/pad.cpp:2242
 msgid "('testpoint' property makes no sense on NPTH pads)"
 msgstr ""
 
-#: pcbnew/pad.cpp:2246
+#: pcbnew/pad.cpp:2245
 msgid "('heatsink' property makes no sense of NPTH pads)"
 msgstr ""
 
-#: pcbnew/pad.cpp:2249
+#: pcbnew/pad.cpp:2248
 msgid "('castellated' property is for PTH pads)"
 msgstr ""
 
-#: pcbnew/pad.cpp:2252
+#: pcbnew/pad.cpp:2251
 msgid "('BGA' property is for SMD pads)"
 msgstr ""
 
-#: pcbnew/pad.cpp:2255
+#: pcbnew/pad.cpp:2254
 msgid "('mechanical' property is for PTH pads)"
 msgstr ""
 
-#: pcbnew/pad.cpp:2271
+#: pcbnew/pad.cpp:2270
 msgid "(connector pads normally have no solder paste; use a SMD pad instead)"
 msgstr ""
 
-#: pcbnew/pad.cpp:2279
+#: pcbnew/pad.cpp:2278
 #, fuzzy
 msgid "(SMD pad has a hole)"
 msgstr "Pad-uri prin gaură"
 
-#: pcbnew/pad.cpp:2285
+#: pcbnew/pad.cpp:2284
 msgid "(SMD pad has copper on both sides of the board)"
 msgstr ""
 
-#: pcbnew/pad.cpp:2291 pcbnew/pad.cpp:2304
+#: pcbnew/pad.cpp:2290 pcbnew/pad.cpp:2303
 msgid "(SMD pad has copper and mask layers on different sides of the board)"
 msgstr ""
 
-#: pcbnew/pad.cpp:2296 pcbnew/pad.cpp:2309
+#: pcbnew/pad.cpp:2295 pcbnew/pad.cpp:2308
 msgid "(SMD pad has copper and paste layers on different sides of the board)"
 msgstr ""
 
-#: pcbnew/pad.cpp:2315
+#: pcbnew/pad.cpp:2314
 #, fuzzy
 msgid "(SMD pad has no outer layers)"
 msgstr "Pad-uri prin gaură"
 
-#: pcbnew/pad.cpp:2335
+#: pcbnew/pad.cpp:2334
 msgid "(Pad must have a positive size)"
 msgstr ""
 
-#: pcbnew/pad.cpp:2346
+#: pcbnew/pad.cpp:2345
 #, fuzzy, c-format
 msgid "(PTH pad hole size must be larger than %s)"
 msgstr "Dimensiunea de foraj trebuie să fie mai mică decât diametrul via"
 
-#: pcbnew/pad.cpp:2370
+#: pcbnew/pad.cpp:2369
 #, fuzzy
 msgid "(PTH pad hole leaves no copper)"
 msgstr "Pad-uri prin gaură"
 
-#: pcbnew/pad.cpp:2380
+#: pcbnew/pad.cpp:2379
 #, fuzzy
 msgid "(PTH pad hole not fully inside copper)"
 msgstr "Pad-uri prin gaură"
 
-#: pcbnew/pad.cpp:2387
+#: pcbnew/pad.cpp:2386
 msgid "(pad hole not inside pad shape)"
 msgstr ""
 
-#: pcbnew/pad.cpp:2392
+#: pcbnew/pad.cpp:2391
 msgid "(negative local clearance values have no effect)"
 msgstr ""
 
-#: pcbnew/pad.cpp:2411
+#: pcbnew/pad.cpp:2410
 msgid ""
 "(negative solder mask clearance is larger than some shape primitives; "
 "results may be surprising)"
 msgstr ""
 
-#: pcbnew/pad.cpp:2421
+#: pcbnew/pad.cpp:2420
 msgid ""
 "(negative solder mask clearance is larger than pad; no solder mask will be "
 "generated)"
 msgstr ""
 
-#: pcbnew/pad.cpp:2440
+#: pcbnew/pad.cpp:2439
 msgid ""
 "(negative solder paste margin is larger than pad; no solder paste mask will "
 "be generated)"
 msgstr ""
 
-#: pcbnew/pad.cpp:2447
+#: pcbnew/pad.cpp:2446
 msgid "(negative corner radius is not allowed)"
 msgstr ""
 
-#: pcbnew/pad.cpp:2449
+#: pcbnew/pad.cpp:2448
 msgid "(corner size will make pad circular)"
 msgstr ""
 
-#: pcbnew/pad.cpp:2454
+#: pcbnew/pad.cpp:2453
 #, fuzzy
 msgid "(negative corner chamfer is not allowed)"
 msgstr "Descărcarea este prea mare."
 
-#: pcbnew/pad.cpp:2456
+#: pcbnew/pad.cpp:2455
 #, fuzzy
 msgid "(corner chamfer is too large)"
 msgstr "Descărcarea este prea mare."
 
-#: pcbnew/pad.cpp:2465
+#: pcbnew/pad.cpp:2464
 #, fuzzy
 msgid "(trapezoid delta is too large)"
 msgstr "Descărcarea este prea mare."
 
-#: pcbnew/pad.cpp:2475
+#: pcbnew/pad.cpp:2474
 msgid "(custom pad shape must resolve to a single polygon)"
 msgstr ""
 
-#: pcbnew/pad.cpp:2679
+#: pcbnew/pad.cpp:2678
 #, fuzzy
 msgid "Edge connector"
 msgstr "Conector:"
 
-#: pcbnew/pad.cpp:2680
+#: pcbnew/pad.cpp:2679
 #, fuzzy
 msgid "NPTH, mechanical"
 msgstr "Etichete ierarhice"
 
-#: pcbnew/pad.cpp:2686
+#: pcbnew/pad.cpp:2685
 #, fuzzy
 msgid "Trapezoid"
 msgstr "Trapezoidal"
 
-#: pcbnew/pad.cpp:2698
+#: pcbnew/pad.cpp:2697
 msgid "Castellated pad"
 msgstr ""
 
-#: pcbnew/pad.cpp:2699
+#: pcbnew/pad.cpp:2698
 #, fuzzy
 msgid "Mechanical pad"
 msgstr "Etichete ierarhice"
 
-#: pcbnew/pad.cpp:2721
+#: pcbnew/pad.cpp:2720
 #, fuzzy
 msgid "Front, back and connected layers"
 msgstr "Numele amprentei nu poate conține \"%s\"."
 
-#: pcbnew/pad.cpp:2771
+#: pcbnew/pad.cpp:2770
 #, fuzzy
 msgid "Pad Type"
 msgstr "Tip de cale"
 
-#: pcbnew/pad.cpp:2775
+#: pcbnew/pad.cpp:2774
 #, fuzzy
 msgid "Pad Shape"
 msgstr "Solid"
 
-#: pcbnew/pad.cpp:2780
+#: pcbnew/pad.cpp:2779
 #, fuzzy
 msgid "Pad Number"
 msgstr "Numar"
 
-#: pcbnew/pad.cpp:2792
+#: pcbnew/pad.cpp:2791
 #, fuzzy
 msgid "Size X"
 msgstr "Dimensiunea X:"
 
-#: pcbnew/pad.cpp:2796
+#: pcbnew/pad.cpp:2795
 #, fuzzy
 msgid "Size Y"
 msgstr "Dimensiunea Y:"
 
-#: pcbnew/pad.cpp:2829
+#: pcbnew/pad.cpp:2828
 #, fuzzy
 msgid "Corner Radius Ratio"
 msgstr "Colț %d"
 
-#: pcbnew/pad.cpp:2834
+#: pcbnew/pad.cpp:2833
 #, fuzzy
 msgid "Corner Radius Size"
 msgstr "Colț %d"
 
-#: pcbnew/pad.cpp:2840
+#: pcbnew/pad.cpp:2839
 #, fuzzy
 msgid "Hole Shape"
 msgstr "Solid"
 
-#: pcbnew/pad.cpp:2844
+#: pcbnew/pad.cpp:2843
 #, fuzzy
 msgid "Hole Size X"
 msgstr "Mărimea paginii"
 
-#: pcbnew/pad.cpp:2850
+#: pcbnew/pad.cpp:2849
 #, fuzzy
 msgid "Hole Size Y"
 msgstr "Mărimea paginii"
 
-#: pcbnew/pad.cpp:2865
+#: pcbnew/pad.cpp:2864
 #, fuzzy
 msgid "Fabrication Property"
 msgstr "Proprietățile materialului:"
 
-#: pcbnew/pad.cpp:2887 pcbnew/pcb_shape.cpp:985 pcbnew/pcb_track.cpp:2146
+#: pcbnew/pad.cpp:2886 pcbnew/pcb_shape.cpp:984 pcbnew/pcb_track.cpp:2143
 #, fuzzy
 msgid "Soldermask Margin Override"
 msgstr "Distanţă"
 
-#: pcbnew/pad.cpp:2909 pcbnew/zone.cpp:2138
+#: pcbnew/pad.cpp:2908 pcbnew/zone.cpp:2137
 #, fuzzy
 msgid "Thermal Relief Spoke Width"
 msgstr "Lățimea reliefului termic"
 
-#: pcbnew/pad.cpp:2915
+#: pcbnew/pad.cpp:2914
 #, fuzzy
 msgid "Thermal Relief Spoke Angle"
 msgstr "Lățimea reliefului termic"
 
-#: pcbnew/pad.cpp:2920 pcbnew/zone.cpp:2132
+#: pcbnew/pad.cpp:2919 pcbnew/zone.cpp:2131
 #, fuzzy
 msgid "Thermal Relief Gap"
 msgstr "Lățimea reliefului termic"
@@ -46469,36 +46490,36 @@ msgstr "Fișierul %s nu a fost găsit."
 msgid "Eeschema failed to load."
 msgstr "Nu s-a putut încărca biblioteca kiface \"%s\"."
 
-#: pcbnew/pcb_edit_frame.cpp:2566
+#: pcbnew/pcb_edit_frame.cpp:2614
 #, fuzzy
 msgid "Edit design rules"
 msgstr "Editați severitatea încălcărilor..."
 
-#: pcbnew/pcb_edit_frame.cpp:2578
+#: pcbnew/pcb_edit_frame.cpp:2626
 #, fuzzy
 msgid "Could not compile custom design rules."
 msgstr "Nu s-a putut găsi fișierul de bibliotecă %s."
 
-#: pcbnew/pcb_edit_frame.cpp:2636
+#: pcbnew/pcb_edit_frame.cpp:2684
 msgid "Export Hyperlynx Layout"
 msgstr ""
 
-#: pcbnew/pcb_edit_frame.cpp:2694
+#: pcbnew/pcb_edit_frame.cpp:2742
 #, fuzzy
 msgid "Violation Report"
 msgstr "Gravitatea încălcării"
 
-#: pcbnew/pcb_edit_frame.cpp:2704
+#: pcbnew/pcb_edit_frame.cpp:2752
 #, fuzzy
 msgid "Clearance Report"
 msgstr "Distanţă"
 
-#: pcbnew/pcb_edit_frame.cpp:2714
+#: pcbnew/pcb_edit_frame.cpp:2762
 #, fuzzy
 msgid "Constraints Report"
 msgstr "Constrângeri"
 
-#: pcbnew/pcb_edit_frame.cpp:2724 pcbnew/tools/pcb_actions.cpp:1858
+#: pcbnew/pcb_edit_frame.cpp:2772 pcbnew/tools/pcb_actions.cpp:1858
 #, fuzzy
 msgid "Compare Footprint with Library"
 msgstr "Amprente în bibliotecă..."
@@ -48214,42 +48235,42 @@ msgstr "Straturi inactive:"
 msgid "Greyscale"
 msgstr "Imagine în tonuri de gri"
 
-#: pcbnew/pcb_shape.cpp:616
+#: pcbnew/pcb_shape.cpp:615
 #, fuzzy
 msgid "Drawing"
 msgstr "Desene"
 
-#: pcbnew/pcb_shape.cpp:639
+#: pcbnew/pcb_shape.cpp:638
 #, fuzzy, c-format
 msgid "%s %s of %s on %s"
 msgstr "Pad %s %s din %s pe %s."
 
-#: pcbnew/pcb_shape.cpp:647
+#: pcbnew/pcb_shape.cpp:646
 #, fuzzy, c-format
 msgid "%s %s on %s"
 msgstr "%s pin %s găsit"
 
-#: pcbnew/pcb_shape.cpp:657
+#: pcbnew/pcb_shape.cpp:656
 #, fuzzy, c-format
 msgid "%s of %s on %s"
 msgstr "%s pin %s găsit"
 
-#: pcbnew/pcb_shape.cpp:664
+#: pcbnew/pcb_shape.cpp:663
 #, fuzzy, c-format
 msgid "%s on %s"
 msgstr "%s pin %s găsit"
 
-#: pcbnew/pcb_shape.cpp:951
+#: pcbnew/pcb_shape.cpp:950
 #, fuzzy
 msgid "Pad Primitives"
 msgstr "Adăugați formă"
 
-#: pcbnew/pcb_shape.cpp:967 pcbnew/pcb_track.cpp:2132
+#: pcbnew/pcb_shape.cpp:966 pcbnew/pcb_track.cpp:2129
 #, fuzzy
 msgid "Technical Layers"
 msgstr "Etichete ierarhice"
 
-#: pcbnew/pcb_shape.cpp:978 pcbnew/pcb_track.cpp:2143
+#: pcbnew/pcb_shape.cpp:977 pcbnew/pcb_track.cpp:2140
 #, fuzzy
 msgid "Soldermask"
 msgstr "Pastă de lipit"
@@ -48299,91 +48320,91 @@ msgstr "Via %s, foraj %s"
 msgid "Via %s on %s"
 msgstr "Via %s, foraj %s"
 
-#: pcbnew/pcb_track.cpp:608
+#: pcbnew/pcb_track.cpp:605
 msgid "removed annular ring"
 msgstr ""
 
-#: pcbnew/pcb_track.cpp:1606
+#: pcbnew/pcb_track.cpp:1603
 #, fuzzy
 msgid "Track (arc)"
 msgstr "Traseu"
 
-#: pcbnew/pcb_track.cpp:1633
+#: pcbnew/pcb_track.cpp:1630
 #, fuzzy
 msgid "Segment Length"
 msgstr "Segment"
 
-#: pcbnew/pcb_track.cpp:1668
+#: pcbnew/pcb_track.cpp:1665
 #, fuzzy, c-format
 msgid "Width Constraints: %s"
 msgstr "Constrângeri"
 
-#: pcbnew/pcb_track.cpp:1680
+#: pcbnew/pcb_track.cpp:1677
 #, fuzzy
 msgid "Micro Via"
 msgstr "Microvia-uri"
 
-#: pcbnew/pcb_track.cpp:1681
+#: pcbnew/pcb_track.cpp:1678
 #, fuzzy
 msgid "Blind/Buried Via"
 msgstr "Bl/Via-uri îngropate"
 
-#: pcbnew/pcb_track.cpp:1682
+#: pcbnew/pcb_track.cpp:1679
 #, fuzzy
 msgid "Through Via"
 msgstr "Prin via-uri"
 
-#: pcbnew/pcb_track.cpp:1705
+#: pcbnew/pcb_track.cpp:1702
 #, fuzzy, c-format
 msgid "Min Annular Width: %s"
 msgstr "Se verifică etichetele..."
 
-#: pcbnew/pcb_track.cpp:1721
+#: pcbnew/pcb_track.cpp:1718
 #, fuzzy
 msgid "NetCode"
 msgstr "DCod:"
 
-#: pcbnew/pcb_track.cpp:1873
+#: pcbnew/pcb_track.cpp:1870
 #, c-format
 msgid "Track (arc) %s on %s, length %s"
 msgstr ""
 
-#: pcbnew/pcb_track.cpp:1874
+#: pcbnew/pcb_track.cpp:1871
 #, fuzzy, c-format
 msgid "Track %s on %s, length %s"
 msgstr "Magistrală orizontală, lungime %s"
 
-#: pcbnew/pcb_track.cpp:2160
+#: pcbnew/pcb_track.cpp:2157
 #, fuzzy
 msgid "Via Properties"
 msgstr "Proprietăți"
 
-#: pcbnew/pcb_track.cpp:2168 pcbnew/widgets/pcb_properties_panel.cpp:263
+#: pcbnew/pcb_track.cpp:2165 pcbnew/widgets/pcb_properties_panel.cpp:263
 #, fuzzy
 msgid "Layer Top"
 msgstr "Strat"
 
-#: pcbnew/pcb_track.cpp:2170 pcbnew/widgets/pcb_properties_panel.cpp:264
+#: pcbnew/pcb_track.cpp:2167 pcbnew/widgets/pcb_properties_panel.cpp:264
 #, fuzzy
 msgid "Layer Bottom"
 msgstr "Vizualizați partea de jos"
 
-#: pcbnew/pcb_track.cpp:2172
+#: pcbnew/pcb_track.cpp:2169
 #, fuzzy
 msgid "Via Type"
 msgstr "Tip de cale"
 
-#: pcbnew/pcb_track.cpp:2174
+#: pcbnew/pcb_track.cpp:2171
 #, fuzzy
 msgid "Front tenting"
 msgstr "Formatare"
 
-#: pcbnew/pcb_track.cpp:2176
+#: pcbnew/pcb_track.cpp:2173
 #, fuzzy
 msgid "Back tenting"
 msgstr "Linie grafică"
 
-#: pcbnew/pcbexpr_evaluator.cpp:652
+#: pcbnew/pcbexpr_evaluator.cpp:691
 msgid "must be mm, in, or mil"
 msgstr ""
 
@@ -53913,8 +53934,8 @@ msgstr ""
 msgid "Delete all nets in group '%s'?"
 msgstr ""
 
-#: pcbnew/widgets/search_handlers.cpp:190 pcbnew/zone.cpp:818
-#: pcbnew/zone.cpp:1975
+#: pcbnew/widgets/search_handlers.cpp:190 pcbnew/zone.cpp:817
+#: pcbnew/zone.cpp:1974
 msgid "Priority"
 msgstr "Prioritate"
 
@@ -53934,228 +53955,228 @@ msgstr "NetClass"
 msgid "No Net"
 msgstr ""
 
-#: pcbnew/zone.cpp:775
+#: pcbnew/zone.cpp:774
 msgid "Cutout"
 msgstr ""
 
-#: pcbnew/zone.cpp:784
+#: pcbnew/zone.cpp:783
 #, fuzzy
 msgid "No vias"
 msgstr "Prin via-uri"
 
-#: pcbnew/zone.cpp:787
+#: pcbnew/zone.cpp:786
 #, fuzzy
 msgid "No tracks"
 msgstr "Trasee"
 
-#: pcbnew/zone.cpp:790
+#: pcbnew/zone.cpp:789
 #, fuzzy
 msgid "No pads"
 msgstr "Spatele padului SMD"
 
-#: pcbnew/zone.cpp:793
+#: pcbnew/zone.cpp:792
 #, fuzzy
 msgid "No copper zones"
 msgstr "Vizualizator de amprente"
 
-#: pcbnew/zone.cpp:796
+#: pcbnew/zone.cpp:795
 #, fuzzy
 msgid "No footprints"
 msgstr "amprentă"
 
-#: pcbnew/zone.cpp:799
+#: pcbnew/zone.cpp:798
 msgid "Restrictions"
 msgstr "Restricții"
 
-#: pcbnew/zone.cpp:803
+#: pcbnew/zone.cpp:802
 #, fuzzy
 msgid "Placement source"
 msgstr "Plasament"
 
-#: pcbnew/zone.cpp:833
+#: pcbnew/zone.cpp:832
 #, fuzzy, c-format
 msgid "%s"
 msgstr "%"
 
-#: pcbnew/zone.cpp:868 pcbnew/zone.cpp:2038
+#: pcbnew/zone.cpp:867 pcbnew/zone.cpp:2037
 #, fuzzy
 msgid "Fill Mode"
 msgstr "Umplut"
 
-#: pcbnew/zone.cpp:870
+#: pcbnew/zone.cpp:869
 #, fuzzy
 msgid "Filled Area"
 msgstr "Umplut"
 
-#: pcbnew/zone.cpp:891
+#: pcbnew/zone.cpp:890
 #, fuzzy
 msgid "Corner Count"
 msgstr "Stil linie"
 
-#: pcbnew/zone.cpp:928
+#: pcbnew/zone.cpp:927
 #, fuzzy
 msgid "Teardrop Area"
 msgstr "Setări grilă"
 
-#: pcbnew/zone.cpp:930
+#: pcbnew/zone.cpp:929
 #, fuzzy
 msgid "Copper Zone"
 msgstr "Cupru"
 
-#: pcbnew/zone.cpp:932
+#: pcbnew/zone.cpp:931
 #, fuzzy
 msgid "Non-copper Zone"
 msgstr "Convertit"
 
-#: pcbnew/zone.cpp:1072
+#: pcbnew/zone.cpp:1071
 #, fuzzy, c-format
 msgid "on %s"
 msgstr "%s pin %s găsit"
 
-#: pcbnew/zone.cpp:1076
+#: pcbnew/zone.cpp:1075
 #, fuzzy, c-format
 msgid "on %s and %s"
 msgstr "Solid"
 
-#: pcbnew/zone.cpp:1082
+#: pcbnew/zone.cpp:1081
 #, fuzzy, c-format
 msgid "on %s, %s and %s"
 msgstr "Solid"
 
-#: pcbnew/zone.cpp:1089
+#: pcbnew/zone.cpp:1088
 #, fuzzy, c-format
 msgid "on %s, %s and %zu more"
 msgstr "Numele amprentei nu poate conține \"%s\"."
 
-#: pcbnew/zone.cpp:1099
+#: pcbnew/zone.cpp:1098
 #, fuzzy, c-format
 msgid "Rule Area Cutout %s"
 msgstr "Reguli"
 
-#: pcbnew/zone.cpp:1101
+#: pcbnew/zone.cpp:1100
 #, fuzzy, c-format
 msgid "Zone Cutout %s"
 msgstr "Adăugați o zonă"
 
-#: pcbnew/zone.cpp:1109
+#: pcbnew/zone.cpp:1108
 #, fuzzy, c-format
 msgid "Rule Area %s"
 msgstr "Adăugați o zonă de reguli"
 
-#: pcbnew/zone.cpp:1114
+#: pcbnew/zone.cpp:1113
 #, fuzzy, c-format
 msgid "Rule Area '%s' %s"
 msgstr "Adăugați o zonă de reguli"
 
-#: pcbnew/zone.cpp:1121
+#: pcbnew/zone.cpp:1120
 #, fuzzy, c-format
 msgid "Teardrop %s %s"
 msgstr "Picături"
 
-#: pcbnew/zone.cpp:1129
+#: pcbnew/zone.cpp:1128
 #, fuzzy, c-format
 msgid "Zone %s %s, priority %d"
 msgstr "Zonele"
 
-#: pcbnew/zone.cpp:1136
+#: pcbnew/zone.cpp:1135
 #, c-format
 msgid "Zone '%s' %s %s, priority %d"
 msgstr ""
 
-#: pcbnew/zone.cpp:1982
+#: pcbnew/zone.cpp:1981
 #, fuzzy
 msgid "Keepout"
 msgstr "Partea de jos"
 
-#: pcbnew/zone.cpp:1984
+#: pcbnew/zone.cpp:1983
 #, fuzzy
 msgid "Keep Out Tracks"
 msgstr "Simbol"
 
-#: pcbnew/zone.cpp:1990
+#: pcbnew/zone.cpp:1989
 #, fuzzy
 msgid "Keep Out Vias"
 msgstr "Simbol"
 
-#: pcbnew/zone.cpp:1996
+#: pcbnew/zone.cpp:1995
 #, fuzzy
 msgid "Keep Out Pads"
 msgstr "Simbol"
 
-#: pcbnew/zone.cpp:2002
+#: pcbnew/zone.cpp:2001
 #, fuzzy
 msgid "Keep Out Copper Pours"
 msgstr "Se încarcă fișierele Gerber..."
 
-#: pcbnew/zone.cpp:2008
+#: pcbnew/zone.cpp:2007
 #, fuzzy
 msgid "Keep Out Footprints"
 msgstr "Nu există amprentă predefinită"
 
-#: pcbnew/zone.cpp:2017
+#: pcbnew/zone.cpp:2016
 #, fuzzy
 msgid "Enable"
 msgstr "Dezactivat"
 
-#: pcbnew/zone.cpp:2024
+#: pcbnew/zone.cpp:2023
 #, fuzzy
 msgid "Source Type"
 msgstr "Sursă"
 
-#: pcbnew/zone.cpp:2029
+#: pcbnew/zone.cpp:2028
 #, fuzzy
 msgid "Source Name"
 msgstr "Sursă"
 
-#: pcbnew/zone.cpp:2043
+#: pcbnew/zone.cpp:2042
 #, fuzzy
 msgid "Hatch Orientation"
 msgstr "Orientare"
 
-#: pcbnew/zone.cpp:2061
+#: pcbnew/zone.cpp:2060
 msgid "Cannot be less than zone minimum width"
 msgstr ""
 
-#: pcbnew/zone.cpp:2067
+#: pcbnew/zone.cpp:2066
 #, fuzzy
 msgid "Hatch Width"
 msgstr "Grosime traseu"
 
-#: pcbnew/zone.cpp:2074
+#: pcbnew/zone.cpp:2073
 #, fuzzy
 msgid "Hatch Gap"
 msgstr "Eclozat"
 
-#: pcbnew/zone.cpp:2081
+#: pcbnew/zone.cpp:2080
 msgid "Hatch Minimum Hole Ratio"
 msgstr ""
 
-#: pcbnew/zone.cpp:2089
+#: pcbnew/zone.cpp:2088
 #, fuzzy
 msgid "Smoothing Effort"
 msgstr "Nimic de imprimat"
 
-#: pcbnew/zone.cpp:2095
+#: pcbnew/zone.cpp:2094
 #, fuzzy
 msgid "Smoothing Amount"
 msgstr "Nimic de imprimat"
 
-#: pcbnew/zone.cpp:2101
+#: pcbnew/zone.cpp:2100
 #, fuzzy
 msgid "Remove Islands"
 msgstr "Adăugați câmp..."
 
-#: pcbnew/zone.cpp:2106
+#: pcbnew/zone.cpp:2105
 #, fuzzy
 msgid "Minimum Island Area"
 msgstr "Gaura minimă µVia:"
 
-#: pcbnew/zone.cpp:2121
+#: pcbnew/zone.cpp:2120
 #, fuzzy
 msgid "Minimum Width"
 msgstr "Lățimea minimă a traseului"
 
-#: pcbnew/zone.cpp:2128
+#: pcbnew/zone.cpp:2127
 #, fuzzy
 msgid "Pad Connections"
 msgstr "Conexiuni"
