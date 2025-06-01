@@ -836,7 +836,7 @@ void SCH_IO_ALTIUM::ParseAltiumSch( const wxString& aFileName )
         m_progressReporter->Report( wxString::Format( _( "Importing %s" ), relative.GetFullPath() ) );
 
         if( !m_progressReporter->KeepRefreshing() )
-            THROW_IO_ERROR( _( "Open cancelled by user." ) );
+            THROW_IO_ERROR( _( "File import canceled by user." ) );
     }
 
     if( isBinaryFile( aFileName ) )

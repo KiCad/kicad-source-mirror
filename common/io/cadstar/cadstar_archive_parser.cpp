@@ -2492,8 +2492,7 @@ XNODE* CADSTAR_ARCHIVE_PARSER::LoadArchiveFile( const wxString& aFileName,
             {
                 delete rootNode;
 
-                // @spellingerror
-                THROW_IO_ERROR( _( "File import cancelled by user." ) );
+                THROW_IO_ERROR( _( "File import canceled by user." ) );
             }
 
             aProgressReporter->SetCurrentProgress( currentProgress() );
@@ -2817,7 +2816,7 @@ void CADSTAR_ARCHIVE_PARSER::checkPoint()
         m_progressReporter->AdvanceProgress();
 
         if( !m_progressReporter->KeepRefreshing() )
-            THROW_IO_ERROR( _( "File import cancelled by user." ) );
+            THROW_IO_ERROR( _( "File import canceled by user." ) );
     }
 }
 

@@ -330,7 +330,7 @@ void ALTIUM_PCB::checkpoint()
                                                     / std::max( 1U, m_totalCount ) );
 
             if( !m_progressReporter->KeepRefreshing() )
-                THROW_IO_ERROR( _( "Open cancelled by user." ) );
+                THROW_IO_ERROR( _( "File import canceled by user." ) );
 
             m_lastProgressCount = m_doneCount;
         }

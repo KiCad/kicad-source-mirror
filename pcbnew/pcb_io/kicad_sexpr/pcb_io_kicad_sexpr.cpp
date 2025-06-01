@@ -2814,7 +2814,7 @@ BOARD* PCB_IO_KICAD_SEXPR::LoadBoard( const wxString& aFileName, BOARD* aAppendT
         m_progressReporter->Report( wxString::Format( _( "Loading %s..." ), aFileName ) );
 
         if( !m_progressReporter->KeepRefreshing() )
-            THROW_IO_ERROR( _( "Open cancelled by user." ) );
+            THROW_IO_ERROR( _( "Open canceled by user." ) );
 
         while( reader.ReadLine() )
             lineCount++;

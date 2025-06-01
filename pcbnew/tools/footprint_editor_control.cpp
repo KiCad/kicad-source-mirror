@@ -478,7 +478,7 @@ int FOOTPRINT_EDITOR_CONTROL::RenameFootprint( const TOOL_EVENT& aEvent )
                 return true;
             } ) )
     {
-        return 0;   // cancelled by user
+        return 0;   // canceled by user
     }
 
     if( newName == oldName )

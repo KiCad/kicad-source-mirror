@@ -357,7 +357,7 @@ void DIALOG_DRC::OnRunDRCClick( wxCommandEvent& aEvent )
     }
 
     if( m_cancelled )
-        m_messages->Report( _( "-------- DRC cancelled by user.<br><br>" ) );
+        m_messages->Report( _( "-------- DRC canceled by user.<br><br>" ) );
     else
         m_messages->Report( _( "Done.<br><br>" ) );
 

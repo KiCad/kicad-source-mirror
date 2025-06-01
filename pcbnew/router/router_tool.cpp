@@ -1048,7 +1048,7 @@ int ROUTER_TOOL::handleLayerSwitch( const TOOL_EVENT& aEvent, bool aForceVia )
             // Reset the cursor to the end of the track
             controls()->SetCursorPosition( m_endSnapPoint );
 
-            if( targetLayer == UNDEFINED_LAYER )    // cancelled by user
+            if( targetLayer == UNDEFINED_LAYER )    // canceled by user
                 return 0;
 
             // One cannot place a blind/buried via on only one layer:

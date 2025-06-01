@@ -453,7 +453,7 @@ void DIALOG_ERC::OnRunERCClick( wxCommandEvent& event )
 
     if( m_cancelled )
         // @spellingerror
-        m_messages->Report( _( "-------- ERC cancelled by user.<br><br>" ), RPT_SEVERITY_INFO );
+        m_messages->Report( _( "-------- ERC canceled by user.<br><br>" ), RPT_SEVERITY_INFO );
     else
         m_messages->Report( _( "Done.<br><br>" ), RPT_SEVERITY_INFO );
 

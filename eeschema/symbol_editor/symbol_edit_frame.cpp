@@ -279,7 +279,7 @@ SYMBOL_EDIT_FRAME::SYMBOL_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     Raise();
 
     if( loadingCancelled )
-        ShowInfoBarWarning( _( "Symbol library loading was cancelled by user." ) );
+        ShowInfoBarWarning( _( "Symbol library loading canceled by user." ) );
 }
 
 

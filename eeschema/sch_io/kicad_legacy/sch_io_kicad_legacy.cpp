@@ -115,7 +115,7 @@ void SCH_IO_KICAD_LEGACY::checkpoint()
                                                             / std::max( 1U, m_lineCount ) );
 
             if( !m_progressReporter->KeepRefreshing() )
-                THROW_IO_ERROR( _( "Open cancelled by user." ) );
+                THROW_IO_ERROR( _( "Open canceled by user." ) );
 
             m_lastProgressLine = curLine;
         }
@@ -287,7 +287,7 @@ void SCH_IO_KICAD_LEGACY::loadFile( const wxString& aFileName, SCH_SCREEN* aScre
         m_progressReporter->Report( wxString::Format( _( "Loading %s..." ), aFileName ) );
 
         if( !m_progressReporter->KeepRefreshing() )
-            THROW_IO_ERROR( _( "Open cancelled by user." ) );
+            THROW_IO_ERROR( _( "Open canceled by user." ) );
 
         m_lineReader = &reader;
         m_lineCount = 0;

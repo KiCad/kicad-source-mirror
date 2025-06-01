@@ -1382,6 +1382,11 @@ bool SCH_EDIT_FRAME::importFile( const wxString& aFileName, int aFileType,
                 GetScreen()->SetFileName( newfilename.GetFullPath() );
                 GetScreen()->SetContentModified();
 
+                progressReporter.Report( _( "Cleaning up schematic..." ) );
+
+                if( !progressReporter.KeepRefreshing() )
+                    THROW_IO_ERROR( _( "File import canceled by user." ) );
+
                 RecalculateConnections( nullptr, GLOBAL_CLEANUP );
 
                 // Only perform the dangling end test on root sheet.

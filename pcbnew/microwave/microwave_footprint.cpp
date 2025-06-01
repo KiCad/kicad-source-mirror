@@ -82,7 +82,7 @@ FOOTPRINT* MICROWAVE_TOOL::createFootprint( MICROWAVE_FOOTPRINT_SHAPE aFootprint
 
     // TODO: why is this QuasiModal?
     if( dlg.ShowQuasiModal() != wxID_OK )
-        return nullptr; // cancelled by user
+        return nullptr; // canceled by user
 
     value    = dlg.GetValue();
     gap_size = editFrame->ValueFromString( value );
@@ -97,7 +97,7 @@ FOOTPRINT* MICROWAVE_TOOL::createFootprint( MICROWAVE_FOOTPRINT_SHAPE aFootprint
 
         // TODO: why is this QuasiModal?
         if( angledlg.ShowQuasiModal() != wxID_OK )
-            return nullptr; // cancelled by user
+            return nullptr; // canceled by user
 
         msg = angledlg.GetValue();
 

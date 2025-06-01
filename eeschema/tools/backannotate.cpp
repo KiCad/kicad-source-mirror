@@ -353,7 +353,7 @@ void BACK_ANNOTATE::checkForUnusedSymbols()
     if( m_matchByReference && !m_frame->ReadyToNetlist( _( "Re-linking footprints requires a fully "
                                                            "annotated schematic." ) ) )
     {
-        m_reporter.ReportTail( _( "Footprint re-linking cancelled by user." ), RPT_SEVERITY_ERROR );
+        m_reporter.ReportTail( _( "Footprint re-linking canceled by user." ), RPT_SEVERITY_ERROR );
     }
 }
 
