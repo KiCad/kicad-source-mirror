@@ -16,10 +16,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-05-29 21:50+0300\n"
-"PO-Revision-Date: 2025-05-13 12:48+0000\n"
-"Last-Translator: 2tama3 <2tama3@gmail.com>\n"
-"Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/master-"
-"source/ja/>\n"
+"PO-Revision-Date: 2025-06-01 16:38+0000\n"
+"Last-Translator: co8 j <co8@nifty.com>\n"
+"Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
+"master-source/ja/>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -3020,9 +3020,9 @@ msgid "Grid Settings"
 msgstr "グリッド設定"
 
 #: common/dialogs/dialog_group_properties.cpp:112
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid library link: '%s'"
-msgstr "不正なライブラリ識別子"
+msgstr "不正なライブラリリンク: '%s'"
 
 #: common/dialogs/dialog_group_properties.cpp:135
 msgid "Edit Group Properties"
@@ -8758,9 +8758,9 @@ msgid "Open %s"
 msgstr "%s を開く"
 
 #: common/plotters/PDF_plotter.cpp:1951
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to open 3D model file: %s"
-msgstr "ファイル \"%s\" を開くことができませんでした"
+msgstr "3Dモデルファイル %s を開くことができませんでした"
 
 #: common/project.cpp:416 common/project.cpp:421 pcbnew/project_pcb.cpp:69
 msgid "Error loading project footprint library table."
@@ -9128,14 +9128,12 @@ msgid "Ungroup any selected groups"
 msgstr "選択したグループのグループ化を解除する"
 
 #: common/tool/actions.cpp:215
-#, fuzzy
 msgid "Add Items"
-msgstr "補助アイテム"
+msgstr "アイテムを追加"
 
 #: common/tool/actions.cpp:216
-#, fuzzy
 msgid "Add items to group"
-msgstr "グループからアイテムを削除"
+msgstr "アイテムをグループに追加"
 
 #: common/tool/actions.cpp:222
 msgid "Remove Items"
@@ -9517,19 +9515,16 @@ msgid "Zoom to worksheet area if exists or edited object"
 msgstr ""
 
 #: common/tool/actions.cpp:706
-#, fuzzy
 msgid "Zoom to All Objects"
-msgstr "オブジェクトに合わせてズーム"
+msgstr "すべてのオブジェクトにズーム"
 
 #: common/tool/actions.cpp:707
-#, fuzzy
 msgid "Zoom to all objects on screen"
-msgstr "スクリーン上の基板に合わせてズーム"
+msgstr "スクリーン上の全てのオブジェクトにズーム"
 
 #: common/tool/actions.cpp:713
-#, fuzzy
 msgid "Zoom to items currently selected"
-msgstr "現在選択中のグラフィック レイヤーを消去する"
+msgstr "現在選択中のアイテムにズーム"
 
 #: common/tool/actions.cpp:714
 msgid "Zoom to Selected Objects"
@@ -9590,13 +9585,12 @@ msgid "Center on Cursor"
 msgstr "カーソルを中心に"
 
 #: common/tool/actions.cpp:794
-#, fuzzy
 msgid "Zoom to Selection Area"
-msgstr "選択範囲をズーム"
+msgstr "選択範囲にズーム"
 
 #: common/tool/actions.cpp:795
 msgid "Zoom to an area selection created by a mouse drag"
-msgstr ""
+msgstr "マウスのドラッグで作成した選択範囲にズーム"
 
 #: common/tool/actions.cpp:803 common/widgets/mathplot.cpp:1394
 msgid "Undo Last Zoom"
@@ -10126,9 +10120,8 @@ msgid "Grouping"
 msgstr "グループ化"
 
 #: common/tool/group_tool.cpp:237
-#, fuzzy
 msgid "Add Items to Group"
-msgstr "グリッドに揃える"
+msgstr "アイテムをグループに追加"
 
 #: common/tool/group_tool.cpp:264
 msgid "Remove Group Items"
@@ -10831,9 +10824,8 @@ msgid "KiCad s-expression schematic files"
 msgstr "KiCad S式回路図ファイル"
 
 #: common/wildcards_and_files_ext.cpp:291
-#, fuzzy
 msgid "Altium Project files"
-msgstr "すべての KiCad プロジェクト ファイル"
+msgstr "Altium プロジェクトファイル"
 
 #: common/wildcards_and_files_ext.cpp:297
 msgid "CADSTAR Archive files"
@@ -12134,9 +12126,8 @@ msgid "Update/reset visibility of pin names/numbers"
 msgstr "ピン名/番号の表示を更新/リセット"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:172
-#, fuzzy
 msgid "Reset alternate pin to default"
-msgstr "ウィザード の パラメーター を既定値へ リセット"
+msgstr "代替ピンを既定値へ リセット"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:178
 msgid "Update/reset symbol attributes"
@@ -13213,9 +13204,8 @@ msgid "Enter the text to be used within the schematic"
 msgstr "回路図内で使用されるテキストの入力"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:62
-#, fuzzy
 msgid "Multiple label input"
-msgstr "複数のレイヤー"
+msgstr "複数のラベル入力"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:68
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:42
@@ -13458,7 +13448,7 @@ msgstr "ド・モルガン"
 msgid ""
 "The value '%s' can't be converted to boolean correctly, it has been "
 "interpreted as 'False'"
-msgstr ""
+msgstr "値 '%s' をブーリアンに正しく変換できません。'False'として扱います"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:1006
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:1566
@@ -13468,7 +13458,7 @@ msgstr "ピンデータファイルを選択"
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:1032
 #, c-format
 msgid "Unknown columns in data: %s. These columns will be ignored."
-msgstr ""
+msgstr "データ %s に不明な列があります。不明な列は無視されます。"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:1182
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:113
@@ -13536,24 +13526,20 @@ msgid "Export"
 msgstr "エクスポート"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:138
-#, fuzzy
 msgid "Export all pins"
-msgstr "ネットリストをエクスポート"
+msgstr "全てのピンをエクスポート"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:141
-#, fuzzy
 msgid "Export only shown pins"
-msgstr "フットプリントをエクスポート"
+msgstr "表示中のピンだけをエクスポート"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:147
-#, fuzzy
 msgid "To File..."
-msgstr "ファイルをコミット..."
+msgstr "ファイルへ..."
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:150
-#, fuzzy
 msgid "To Clipboard"
-msgstr "クリップボード"
+msgstr "クリップボードへ"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:163
 #: eeschema/menubar.cpp:100 eeschema/symbol_editor/menubar_symbol_editor.cpp:67
@@ -13562,14 +13548,12 @@ msgid "Import"
 msgstr "インポート"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:168
-#, fuzzy
 msgid "Replace all existing pins"
-msgstr "既存の配置ルール領域を置き換える"
+msgstr "既存のピンを全て置き換える"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:171
-#, fuzzy
 msgid "Append to existing pins"
-msgstr "既存の図面シートを追加"
+msgstr "既存のピンに追加"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:180
 #, fuzzy
@@ -14569,9 +14553,8 @@ msgid "Whole &words only"
 msgstr "単語全体のみ(&W)"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:90
-#, fuzzy
 msgid "Regular Expression"
-msgstr "不正な式"
+msgstr "正規表現"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:93
 msgid "Search pin &names and numbers"
@@ -21615,7 +21598,8 @@ msgstr "計測のフォーマット定義を予期しています"
 
 #: eeschema/sim/ngspice.cpp:501
 msgid "Unable to load ngspice shared library. Please check your install."
-msgstr ""
+msgstr "ngspice "
+"共有ライブラリのロードに失敗しました。インストールを確認してください。"
 
 #: eeschema/sim/sim_lib_mgr.cpp:91 eeschema/sim/sim_lib_mgr.cpp:144
 #, c-format
@@ -23927,24 +23911,20 @@ msgstr ""
 "プする"
 
 #: eeschema/tools/sch_actions.cpp:1119
-#, fuzzy
 msgid "Next Net Item"
-msgstr "テキスト アイテム"
+msgstr "次のネットアイテム"
 
 #: eeschema/tools/sch_actions.cpp:1120
-#, fuzzy
 msgid "Select next item on the current net"
-msgstr "カーソル位置にある接続アイテムを選択"
+msgstr "現在のネット上で次のアイテムを選択"
 
 #: eeschema/tools/sch_actions.cpp:1126
-#, fuzzy
 msgid "Previous Net Item"
-msgstr "前のシート"
+msgstr "前のネットアイテム"
 
 #: eeschema/tools/sch_actions.cpp:1127
-#, fuzzy
 msgid "Select previous item on the current net"
-msgstr "カーソル位置にある接続アイテムを選択"
+msgstr "現在のネット上で前のアイテムを選択"
 
 #: eeschema/tools/sch_actions.cpp:1132
 msgid "Export Drawing to Clipboard"
@@ -27878,9 +27858,8 @@ msgstr ""
 "プロジェクトはインポートできませんでした。"
 
 #: kicad/import_project.cpp:146
-#, fuzzy
 msgid "Import Altium Project Files"
-msgstr "Eagle プロジェクト ファイルをインポート"
+msgstr "Altium プロジェクトファイルをインポート"
 
 #: kicad/import_project.cpp:154
 msgid "Import CADSTAR Archive Project Files"
@@ -28003,15 +27982,12 @@ msgid "Import Non-KiCad Project..."
 msgstr "KiCad以外のプロジェクトをインポート..."
 
 #: kicad/menubar.cpp:115
-#, fuzzy
 msgid "Altium Project..."
-msgstr "Eagle プロジェクト..."
+msgstr "Altium プロジェクト..."
 
 #: kicad/menubar.cpp:116
-#, fuzzy
 msgid "Import Altium Schematic and PCB (*.PrjPcb)"
-msgstr ""
-"CADSTAR 回路図アーカイブと基板アーカイブ(*.csa, *.cpa)をインポートします"
+msgstr "Altium の回路図と基板(*.PrjPcb)をインポートします"
 
 #: kicad/menubar.cpp:119
 msgid "CADSTAR Project..."
@@ -41265,7 +41241,6 @@ msgstr ""
 "\n"
 
 #: pcbnew/dialogs/panel_setup_rules_help_8expression_functions.h:2
-#, fuzzy
 msgid ""
 "### Expression functions\n"
 "\n"
@@ -41393,8 +41368,8 @@ msgid ""
 msgstr ""
 "### 式関数\n"
 "\n"
-"全ての関数のパラメーターは単純なワイルドカードをサポートします。 (`*` and `?"
-"`).\n"
+"全ての関数のパラメーターは単純なワイルドカードをサポートします。 (`*` and "
+"`?`).\n"
 "<br><br>\n"
 "\n"
 "    A.enclosedByArea('<zone_name>')\n"
@@ -41506,6 +41481,12 @@ msgstr ""
 "\n"
 "    A.memberOfSheet('<sheet_path>')\n"
 "True if `A` is a member of the given schematic sheet. The sheet path can "
+"contain wildcards.\n"
+"<br><br>\n"
+"\n"
+"    A.memberOfSheetOrChildren('<sheet_path>')\n"
+"True if `A` is a member of the given schematic sheet, or any of its child "
+"hierarchical sheets. The sheet path can \n"
 "contain wildcards.\n"
 "<br><br>\n"
 "\n"
@@ -42828,9 +42809,8 @@ msgid "(%s clearance %s; actual < 0)"
 msgstr "(%s クリアランス %s; 現状 < 0)"
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:1423
-#, fuzzy
 msgid "(intersecting zones must have distinct priorities)"
-msgstr "円弧は３個のポイントが必要です"
+msgstr "(交差するゾーンには明確な優先順位が必要）"
 
 #: pcbnew/drc/drc_test_provider_courtyard_clearance.cpp:85
 msgid "Checking footprint courtyard definitions..."
@@ -43616,6 +43596,8 @@ msgid ""
 "Could not add 3D model for %s.\n"
 "File not found: %s\n"
 msgstr ""
+"%s 用の3Dモデルが追加できませんでした。\n"
+"ファイルが見つかりません:%s\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:406
 #, c-format
@@ -43623,8 +43605,8 @@ msgid ""
 "Could not add 3D model for %s.\n"
 "OpenCASCADE error: %s\n"
 msgstr ""
-"%sの3Dモデルを追加できませんでした。\n"
-"OpenCASCADE エラー: %s\n"
+"%s 用の3Dモデルが追加できませんでした。\n"
+"CASCADE のオープンエラー: %s\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:810
 msgid "Could not create PCB solid model.\n"
@@ -43688,37 +43670,37 @@ msgstr "** ShapeUpgrade_UnifySameDomain は空の形状を生成しました **\
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:944
 msgid "OCC error adding pad/via polygon.\n"
-msgstr ""
+msgstr "パッド/ビア ポリゴン追加中にOCC エラー\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1189
 #, c-format
 msgid "Could not add shape (%d points) to copper layer %s.\n"
-msgstr ""
+msgstr "形状(%d ポイント)を導体レイヤー %s に追加することができませんでした。\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1207
 #, c-format
 msgid "No model defined for %s.\n"
-msgstr "%s にモデルが定義されていません。\n"
+msgstr "%s に対してモデルが定義されていません。\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1222
 #, c-format
 msgid "No model for filename '%s'.\n"
-msgstr "ファイル名 '%s'にはモデルがありません。\n"
+msgstr "ファイル名 '%s' に対応するモデルがありません。\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1233
-#, fuzzy, c-format
+#, c-format
 msgid "No location data for filename '%s'.\n"
-msgstr "位置情報を '%s' に書き込みました。\n"
+msgstr "ファイル名 '%s' に位置情報がありません。\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1243
 #, c-format
 msgid "Could not add component with filename '%s'.\n"
-msgstr "ファイル名 '%s' のコンポーネントを追加できませんでした。\n"
+msgstr "ファイル名 '%s' にコンポーネントの追加ができませんでした。\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1413
 #, c-format
 msgid "OCC exception building shape segment: %s\n"
-msgstr ""
+msgstr "形状セグメント構築中にOCC例外: %s\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1428
 #, c-format
