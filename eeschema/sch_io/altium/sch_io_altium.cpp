@@ -31,6 +31,7 @@
 #include <io/altium/altium_parser_utils.h>
 #include <sch_io/altium/sch_io_altium.h>
 
+#include <progress_reporter.h>
 #include <schematic.h>
 #include <project_sch.h>
 #include <project/project_file.h>
@@ -821,8 +822,22 @@ void SCH_IO_ALTIUM::CreateAliases()
 
 void SCH_IO_ALTIUM::ParseAltiumSch( const wxString& aFileName )
 {
+    if( m_rootFilepath.IsEmpty() )
+        m_rootFilepath = aFileName;
+
     // Load path may be different from the project path.
-    wxFileName parentFileName = aFileName;
+    wxFileName parentFileName( aFileName );
+
+    if( m_progressReporter )
+    {
+        wxFileName relative = parentFileName;
+        relative.MakeRelativeTo( m_rootFilepath );
+
+        m_progressReporter->Report( wxString::Format( _( "Importing %s" ), relative.GetFullPath() ) );
+
+        if( !m_progressReporter->KeepRefreshing() )
+            THROW_IO_ERROR( _( "Open cancelled by user." ) );
+    }
 
     if( isBinaryFile( aFileName ) )
     {
@@ -842,8 +857,8 @@ void SCH_IO_ALTIUM::ParseAltiumSch( const wxString& aFileName )
         }
         catch( const std::exception& exc )
         {
-            wxLogTrace( traceAltiumSch, wxS( "Unhandled exception in Altium schematic "
-                                             "parsers: %s." ), exc.what() );
+            wxLogTrace( traceAltiumSch, wxS( "Unhandled exception in Altium schematic parser: %s." ),
+                        exc.what() );
             throw;
         }
     }

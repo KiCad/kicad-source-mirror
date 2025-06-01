@@ -274,9 +274,8 @@ void SYMBOL_VIEWER_FRAME::loadAllLibraries()
 
     if( m_show_progress )
     {
-        progressReporter = std::make_unique<WX_PROGRESS_REPORTER>( this,
-                                                                   _( "Loading Symbol Libraries" ),
-                                                                   libraryNames.size(), true );
+        progressReporter = std::make_unique<WX_PROGRESS_REPORTER>( this, _( "Load Symbol Libraries" ),
+                                                                   libraryNames.size(), PR_CAN_ABORT );
     }
 
     // Disable KIID generation: not needed for library parts; sometimes very slow

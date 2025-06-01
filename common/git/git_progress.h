@@ -31,11 +31,11 @@
 class GIT_PROGRESS
 {
 public:
-    GIT_PROGRESS() : m_previousProgress( 0 )
+    GIT_PROGRESS() :
+            m_previousProgress( 0 )
     {
         m_progressReporter.reset();
     }
-
 
     void SetProgressReporter( std::unique_ptr<WX_PROGRESS_REPORTER> aProgressReporter )
     {

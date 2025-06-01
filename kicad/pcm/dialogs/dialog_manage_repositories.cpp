@@ -127,7 +127,7 @@ void DIALOG_MANAGE_REPOSITORIES::addRepository( const wxString& aUrl )
     }
 
     PCM_REPOSITORY       repository;
-    WX_PROGRESS_REPORTER reporter( GetParent(), wxT( "" ), 1 );
+    WX_PROGRESS_REPORTER reporter( GetParent(), wxT( "" ), 1, PR_CAN_ABORT );
 
     if( m_pcm->FetchRepository( aUrl, repository, &reporter ) )
     {

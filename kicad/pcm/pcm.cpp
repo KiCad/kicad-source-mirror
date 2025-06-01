@@ -388,7 +388,7 @@ bool PLUGIN_CONTENT_MANAGER::CacheRepository( const wxString& aRepositoryId )
     std::shared_ptr<PROGRESS_REPORTER> reporter;
 
     if( m_dialog )
-        reporter = std::make_shared<WX_PROGRESS_REPORTER>( m_dialog, wxEmptyString, 1 );
+        reporter = std::make_shared<WX_PROGRESS_REPORTER>( m_dialog, wxT( "" ), 1, PR_CAN_ABORT );
     else
         reporter = m_updateBackgroundJob->m_reporter;
 

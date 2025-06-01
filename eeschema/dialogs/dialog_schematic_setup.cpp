@@ -252,10 +252,10 @@ void DIALOG_SCHEMATIC_SETUP::onAuxiliaryAction( wxCommandEvent& event )
         wxFileName schematicFn( projectFn );
         schematicFn.SetExt( FILEEXT::KiCadSchematicFileExtension );
 
-        wxString               fullFileName = schematicFn.GetFullPath();
-        wxString               msg;
-        IO_RELEASER<SCH_IO>    pi( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_KICAD ) );
-        WX_PROGRESS_REPORTER   progressReporter( this, _( "Loading Bus Aliases" ), 1 );
+        wxString             fullFileName = schematicFn.GetFullPath();
+        wxString             msg;
+        IO_RELEASER<SCH_IO>  pi( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_KICAD ) );
+        WX_PROGRESS_REPORTER progressReporter( this, _( "Load Bus Aliases" ), 1, PR_CAN_ABORT );
 
         pi->SetProgressReporter( &progressReporter );
 

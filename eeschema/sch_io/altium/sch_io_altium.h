@@ -212,42 +212,6 @@ private:
 
     void fixupSymbolPinNameNumbers( SYMBOL* aSymbol );
 
-private:
-    SCH_SHEET* m_rootSheet;      // The root sheet of the schematic being loaded..
-    SCH_SHEET_PATH m_sheetPath;
-    SCHEMATIC* m_schematic;      // Passed to Load(), the schematic object being loaded
-    wxString   m_libName;        // Library name to save symbols
-    bool       m_isIntLib;       // Flag to indicate Integrated Library
-
-    IO_RELEASER<SCH_IO>               m_pi;                // Plugin to create KiCad symbol library.
-    std::unique_ptr<std::map<std::string, UTF8>>  m_properties;        // Library plugin properties.
-
-    std::unique_ptr<TITLE_BLOCK>    m_currentTitleBlock; // Will be assigned at the end of parsing
-                                                         // a sheet
-
-    VECTOR2I                        m_sheetOffset;
-    std::unique_ptr<ASCH_SHEET>     m_altiumSheet;
-    std::map<int, SCH_SYMBOL*>      m_symbols;
-    std::map<int, SCH_SHEET*>       m_sheets;
-    std::map<int, LIB_SYMBOL*>      m_libSymbols;        // every symbol has its unique lib_symbol
-
-    std::map<wxString, LIB_SYMBOL*> m_powerSymbols;
-    std::vector<ASCH_STORAGE_FILE>  m_altiumStorage;
-    std::vector<ASCH_ADDITIONAL_FILE>  m_altiumAdditional;
-
-    std::map<int, ASCH_SYMBOL>      m_altiumComponents;
-    std::map<int, ASCH_TEMPLATE>    m_altiumTemplates;
-    std::map<int, int>              m_altiumImplementationList;
-    std::vector<ASCH_PORT>          m_altiumPortsCurrentSheet; // we require all connections first
-
-    // parse harness ports after "FileHeader" was parsed, in 2nd run.
-    std::vector<ASCH_PORT>          m_altiumHarnessPortsCurrentSheet;
-    std::map<int, HARNESS>          m_altiumHarnesses;
-
-    // Add offset to all harness ownerIndex'es after parsing FileHeader.
-    int m_harnessOwnerIndexOffset;
-    int m_harnessEntryParent; // used to identify harness connector for harness entry element
-
     // Symbol caching
     void ensureLoadedLibrary( const wxString& aLibraryPath, const std::map<std::string, UTF8>* aProperties );
     long long getLibraryTimestamp( const wxString& aLibraryPath ) const;
@@ -255,6 +219,43 @@ private:
     static bool isBinaryFile( const wxString& aFileName );
     static bool isASCIIFile( const wxString& aFileName );
     static bool checkFileHeader( const wxString& aFileName );
+
+private:
+    wxString       m_rootFilepath;      // The file path of the root sheet being imported
+    SCH_SHEET*     m_rootSheet;         // The root sheet of the schematic being loaded..
+    SCH_SHEET_PATH m_sheetPath;
+    SCHEMATIC*     m_schematic;         // Passed to Load(), the schematic object being loaded
+    wxString       m_libName;           // Library name to save symbols
+    bool           m_isIntLib;          // Flag to indicate Integrated Library
+
+    IO_RELEASER<SCH_IO>                           m_pi;            // Plugin to create KiCad symbol library.
+    std::unique_ptr<std::map<std::string, UTF8>>  m_properties;    // Library plugin properties.
+
+    std::unique_ptr<TITLE_BLOCK>       m_currentTitleBlock;   // Will be assigned at the end of parsing
+                                                              //   a sheet
+
+    VECTOR2I                           m_sheetOffset;
+    std::unique_ptr<ASCH_SHEET>        m_altiumSheet;
+    std::map<int, SCH_SYMBOL*>         m_symbols;
+    std::map<int, SCH_SHEET*>          m_sheets;
+    std::map<int, LIB_SYMBOL*>         m_libSymbols;        // every symbol has its unique lib_symbol
+
+    std::map<wxString, LIB_SYMBOL*>    m_powerSymbols;
+    std::vector<ASCH_STORAGE_FILE>     m_altiumStorage;
+    std::vector<ASCH_ADDITIONAL_FILE>  m_altiumAdditional;
+
+    std::map<int, ASCH_SYMBOL>         m_altiumComponents;
+    std::map<int, ASCH_TEMPLATE>       m_altiumTemplates;
+    std::map<int, int>                 m_altiumImplementationList;
+    std::vector<ASCH_PORT>             m_altiumPortsCurrentSheet; // we require all connections first
+
+    // parse harness ports after "FileHeader" was parsed, in 2nd run.
+    std::vector<ASCH_PORT>             m_altiumHarnessPortsCurrentSheet;
+    std::map<int, HARNESS>             m_altiumHarnesses;
+
+    // Add offset to all harness ownerIndex'es after parsing FileHeader.
+    int m_harnessOwnerIndexOffset;
+    int m_harnessEntryParent; // used to identify harness connector for harness entry element
 
     std::map<wxString, long long> m_timestamps;
     std::map<wxString, CASE_INSENSITIVE_MAP<LIB_SYMBOL*>> m_libCache;

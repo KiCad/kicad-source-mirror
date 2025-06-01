@@ -387,7 +387,7 @@ void DIALOG_ZONE_MANAGER::OnUpdateDisplayedZonesClick( wxCommandEvent& aEvent )
 
     auto commit = std::make_unique<BOARD_COMMIT>( m_pcbFrame );
     m_filler = std::make_unique<ZONE_FILLER>( board, commit.get() );
-    auto reporter = std::make_unique<WX_PROGRESS_REPORTER>( this, _( "Fill All Zones" ), 5 );
+    auto reporter = std::make_unique<WX_PROGRESS_REPORTER>( this, _( "Fill All Zones" ), 5, PR_CAN_ABORT );
     m_filler->SetProgressReporter( reporter.get() );
 
     // TODO: replace these const_cast calls with a different solution that avoids mutating the

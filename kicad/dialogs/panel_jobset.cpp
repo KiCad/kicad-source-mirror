@@ -274,8 +274,8 @@ public:
 
                     JOBS_RUNNER jobRunner( &( m_frame->Kiway() ), m_jobsFile, &project );
 
-                    auto* progressReporter = new WX_PROGRESS_REPORTER( m_frame, _( "Running jobs" ),
-                                                                       1 );
+                    auto* progressReporter = new WX_PROGRESS_REPORTER( m_frame, _( "Run Jobs" ), 1,
+                                                                       PR_NO_ABORT );
 
                     if( JOBSET_DESTINATION* destination = GetDestination() )
                         jobRunner.RunJobsForDestination( destination );
@@ -992,8 +992,8 @@ void PANEL_JOBSET::OnGenerateAllDestinationsClick( wxCommandEvent& event )
 
                 JOBS_RUNNER jobRunner( &( m_frame->Kiway() ), m_jobsFile.get(), &project );
 
-				WX_PROGRESS_REPORTER* progressReporter =
-						new WX_PROGRESS_REPORTER( m_frame, _( "Running jobs" ), 1 );
+				auto* progressReporter = new WX_PROGRESS_REPORTER( m_frame, _( "Run Jobs" ), 1,
+                                                                   PR_NO_ABORT );
 
                 jobRunner.RunJobsAllDestinations();
 

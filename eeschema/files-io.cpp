@@ -155,8 +155,9 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
     SetStatusText( wxEmptyString );
     m_infoBar->Dismiss();
 
-    WX_PROGRESS_REPORTER progressReporter( this, is_new ? _( "Creating Schematic" )
-                                                        : _( "Loading Schematic" ), 1 );
+    WX_PROGRESS_REPORTER progressReporter( this, is_new ? _( "Create Schematic" )
+                                                        : _( "Load Schematic" ), 1,
+                                           PR_CAN_ABORT );
 
     bool differentProject = pro.GetFullPath() != Prj().GetProjectFullName();
 
@@ -271,7 +272,9 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
         try
         {
             {
-                wxBusyCursor busy;
+                wxBusyCursor    busy;
+                WINDOW_DISABLER raii( this );
+
                 Schematic().SetRoot( pi->LoadSchematicFile( fullFileName, &Schematic() ) );
 
                 // Make ${SHEETNAME} work on the root sheet until we properly support
@@ -1335,7 +1338,7 @@ bool SCH_EDIT_FRAME::importFile( const wxString& aFileName, int aFileType,
         {
             IO_RELEASER<SCH_IO>  pi( SCH_IO_MGR::FindPlugin( fileType ) );
             DIALOG_HTML_REPORTER errorReporter( this );
-            WX_PROGRESS_REPORTER progressReporter( this, _( "Importing Schematic" ), 1 );
+            WX_PROGRESS_REPORTER progressReporter( this, _( "Import Schematic" ), 1, PR_CAN_ABORT );
 
             if( PROJECT_CHOOSER_PLUGIN* c_pi = dynamic_cast<PROJECT_CHOOSER_PLUGIN*>( pi.get() ) )
             {

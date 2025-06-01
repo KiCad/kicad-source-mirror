@@ -147,8 +147,8 @@ SYMBOL_EDIT_FRAME::SYMBOL_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     {
         // Preload libraries before using SyncLibraries the first time, as the preload is
         // multi-threaded
-        WX_PROGRESS_REPORTER reporter( this, _( "Loading Symbol Libraries" ),
-                                       m_libMgr->GetLibraryCount(), true );
+        WX_PROGRESS_REPORTER reporter( this, _( "Load Symbol Libraries" ), m_libMgr->GetLibraryCount(),
+                                       PR_CAN_ABORT );
         m_libMgr->Preload( reporter );
 
         loadingCancelled = reporter.IsCancelled();

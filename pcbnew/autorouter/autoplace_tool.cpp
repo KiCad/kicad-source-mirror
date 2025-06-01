@@ -77,8 +77,10 @@ int AUTOPLACE_TOOL::autoplace( std::vector<FOOTPRINT*>& aFootprints )
     }
 
     int locked_count = std::count_if( aFootprints.begin(), aFootprints.end(),
-                   [](FOOTPRINT* fp) { return fp->IsLocked(); } );
-
+                                      [](FOOTPRINT* fp)
+                                      {
+                                          return fp->IsLocked();
+                                      } );
 
     PCBNEW_SETTINGS* settings = frame()->GetPcbNewSettings();
 
@@ -120,14 +122,13 @@ int AUTOPLACE_TOOL::autoplace( std::vector<FOOTPRINT*>& aFootprints )
     std::function<int( FOOTPRINT* aFootprint )> callback = refreshCallback;
     autoplacer.SetRefreshCallback( callback );
 
-    std::unique_ptr<WX_PROGRESS_REPORTER> progressReporter =
-            std::make_unique<WX_PROGRESS_REPORTER>( frame(), _( "Autoplace Components" ), 1 );
+    WX_PROGRESS_REPORTER progressReporter( frame(), _( "Autoplace Footprints" ), 1, PR_CAN_ABORT );
+    autoplacer.SetProgressReporter( &progressReporter );
 
-    autoplacer.SetProgressReporter( progressReporter.get() );
     auto result = autoplacer.AutoplaceFootprints( aFootprints, &commit, false );
 
     if( result == AR_COMPLETED )
-        commit.Push( _( "Autoplace Components" ) );
+        commit.Push( _( "Autoplace Footprints" ) );
     else
         commit.Revert();
 

@@ -351,7 +351,7 @@ void DIALOG_BOARD_SETUP::onAuxiliaryAction( wxCommandEvent& aEvent )
 
     try
     {
-        WX_PROGRESS_REPORTER progressReporter( this, _( "Loading PCB" ), 1 );
+        WX_PROGRESS_REPORTER progressReporter( this, _( "Load PCB" ), 1, PR_CAN_ABORT );
 
         pi->SetProgressReporter( &progressReporter );
 

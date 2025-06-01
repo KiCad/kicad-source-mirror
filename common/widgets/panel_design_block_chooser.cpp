@@ -68,8 +68,9 @@ PANEL_DESIGN_BLOCK_CHOOSER::PANEL_DESIGN_BLOCK_CHOOSER( EDA_DRAW_FRAME* aFrame, 
     DESIGN_BLOCK_LIB_TABLE* libs = m_frame->Prj().DesignBlockLibs();
 
     // Load design block files:
-    WX_PROGRESS_REPORTER* progressReporter =
-            new WX_PROGRESS_REPORTER( aParent, _( "Loading Design Block Libraries" ), 1 );
+    auto* progressReporter = new WX_PROGRESS_REPORTER( aParent, _( "Load Design Block Libraries" ), 1,
+                                                       PR_CAN_ABORT );
+
     DESIGN_BLOCK_LIB_TABLE::GetGlobalList().ReadDesignBlockFiles( libs, nullptr, progressReporter );
 
     // Force immediate deletion of the WX_PROGRESS_REPORTER.  Do not use Destroy(), or use
@@ -270,7 +271,9 @@ void PANEL_DESIGN_BLOCK_CHOOSER::RefreshLibs( bool aProgress )
     // Sync FOOTPRINT_INFO list to the libraries on disk
     if( aProgress )
     {
-        WX_PROGRESS_REPORTER progressReporter( this, _( "Updating Design Block Libraries" ), 2 );
+        WX_PROGRESS_REPORTER progressReporter( this, _( "Update Design Block Libraries" ), 2,
+                                               PR_CAN_ABORT );
+
         DESIGN_BLOCK_LIB_TABLE::GetGlobalList().ReadDesignBlockFiles( fpTable, nullptr, &progressReporter );
         progressReporter.Show( false );
     }

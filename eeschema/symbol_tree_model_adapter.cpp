@@ -70,9 +70,8 @@ bool SYMBOL_TREE_MODEL_ADAPTER::AddLibraries( const std::vector<wxString>& aNick
 
     if( m_show_progress )
     {
-        progressReporter = std::make_unique<WX_PROGRESS_REPORTER>( aFrame,
-                                                                   _( "Loading Symbol Libraries" ),
-                                                                   aNicknames.size(), true );
+        progressReporter = std::make_unique<WX_PROGRESS_REPORTER>( aFrame, _( "Load Symbol Libraries" ),
+                                                                   aNicknames.size(), PR_CAN_ABORT );
     }
 
     // Disable KIID generation: not needed for library parts; sometimes very slow

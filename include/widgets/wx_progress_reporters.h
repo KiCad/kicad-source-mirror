@@ -33,6 +33,9 @@
 
 #include <widgets/progress_reporter_base.h>
 
+#define PR_NO_ABORT 0
+#define PR_CAN_ABORT wxPD_CAN_ABORT
+
 /**
  * Multi-thread safe progress reporter dialog, intended for use of tasks that parallel reporting
  * back of work status.
@@ -53,12 +56,12 @@ public:
      *   aNumPhases = 1 is the usual progress bar
      *   aNumPhases = n creates n virtual progress bar zones: a 0 to 100 percent width
      *   of a virtual zone fills 0 to 1/n progress bar full size of the nth virtual zone index
-     * @param aCanAbort is true if the abort button should be shown
+     * @param aCanAbort indicates if the Cancel button should be shown
      * @param aReserveSpaceForMessage will ensure that the dialog is laid out for status messages,
      *        preventing layout issues on Windows when reporting a message after the initial layout
      */
-    WX_PROGRESS_REPORTER( wxWindow* aParent, const wxString& aTitle, int aNumPhases,
-                          bool aCanAbort = true, bool aReserveSpaceForMessage = true );
+    WX_PROGRESS_REPORTER( wxWindow* aParent, const wxString& aTitle, int aNumPhases, int aCanAbort,
+                          bool aReserveSpaceForMessage = true );
     ~WX_PROGRESS_REPORTER();
 
     /**

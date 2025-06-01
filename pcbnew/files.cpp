@@ -565,8 +565,8 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
     // Get rid of any existing warnings about the old board
     GetInfoBar()->Dismiss();
 
-    WX_PROGRESS_REPORTER progressReporter( this, is_new ? _( "Creating PCB" )
-                                                        : _( "Loading PCB" ), 1 );
+    WX_PROGRESS_REPORTER progressReporter( this, is_new ? _( "Create PCB" ) : _( "Load PCB" ), 1,
+                                           PR_CAN_ABORT );
 
     // No save prompt (we already prompted above), and only reset to a new blank board if new
     Clear_Pcb( false, !is_new );
@@ -1316,7 +1316,7 @@ int BOARD_EDITOR_CONTROL::GenIPC2581File( const TOOL_EVENT& aEvent )
     wxString   tempFile = wxFileName::CreateTempFileName( wxS( "pcbnew_ipc" ) );
     wxString   upperTxt;
     wxString   lowerTxt;
-    WX_PROGRESS_REPORTER reporter( m_frame, _( "Generating IPC-2581 file" ), 5 );
+    WX_PROGRESS_REPORTER reporter( m_frame, _( "Generate IPC-2581 File" ), 5, PR_CAN_ABORT );
     std::map<std::string, UTF8> props;
 
     props["units"] = dlg.GetUnitsString();
@@ -1439,7 +1439,7 @@ int BOARD_EDITOR_CONTROL::GenerateODBPPFiles( const TOOL_EVENT& aEvent )
     job.m_units = dlg.GetUnitsString() == "mm" ? JOB_EXPORT_PCB_ODB::ODB_UNITS::MM
                                                : JOB_EXPORT_PCB_ODB::ODB_UNITS::INCH;
 
-    WX_PROGRESS_REPORTER progressReporter( m_frame, _( "Generating ODB++ output files" ), 3, false );
+    WX_PROGRESS_REPORTER progressReporter( m_frame, _( "Generate ODB++ Files" ), 3, PR_CAN_ABORT );
     WX_STRING_REPORTER reporter;
 
     DIALOG_EXPORT_ODBPP::GenerateODBPPFiles( job, m_frame->GetBoard(), m_frame, &progressReporter, &reporter );

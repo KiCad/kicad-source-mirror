@@ -184,7 +184,7 @@ void PCB_DESIGN_BLOCK_PREVIEW_WIDGET::DisplayDesignBlock( DESIGN_BLOCK* aDesignB
         try
         {
             IO_RELEASER<PCB_IO>  pi( PCB_IO_MGR::PluginFind( PCB_IO_MGR::KICAD_SEXP ) );
-            WX_PROGRESS_REPORTER progressReporter( this, _( "Loading PCB" ), 1 );
+            WX_PROGRESS_REPORTER progressReporter( this, _( "Load PCB" ), 1, PR_CAN_ABORT );
 
             pi->SetProgressReporter( &progressReporter );
 

@@ -1789,9 +1789,7 @@ void PROJECT_TREE_PANE::onGitInitializeProject( wxCommandEvent& aEvent )
 
     GIT_PULL_HANDLER handler( m_TreeProject->GitCommon() );
 
-    handler.SetProgressReporter( std::make_unique<WX_PROGRESS_REPORTER>( this,
-                                                                         _( "Fetching Remote" ),
-                                                                         1 ) );
+    handler.SetProgressReporter( std::make_unique<WX_PROGRESS_REPORTER>( this, _( "Fetch Remote" ), 1, PR_NO_ABORT ) );
 
     handler.PerformFetch();
 
@@ -1823,9 +1821,8 @@ void PROJECT_TREE_PANE::onGitPullProject( wxCommandEvent& aEvent )
 
     GIT_PULL_HANDLER handler( m_TreeProject->GitCommon() );
 
-    handler.SetProgressReporter( std::make_unique<WX_PROGRESS_REPORTER>( this,
-                                                                         _( "Fetching Remote" ),
-                                                                         1 ) );
+    handler.SetProgressReporter( std::make_unique<WX_PROGRESS_REPORTER>( this, _( "Fetch Remote" ), 1,
+                                                                         PR_NO_ABORT ) );
 
     if( handler.PerformPull() < PullResult::Success )
     {
@@ -1847,9 +1844,8 @@ void PROJECT_TREE_PANE::onGitPushProject( wxCommandEvent& aEvent )
 
     GIT_PUSH_HANDLER handler( m_TreeProject->GitCommon() );
 
-    handler.SetProgressReporter( std::make_unique<WX_PROGRESS_REPORTER>( this,
-                                                                         _( "Fetching Remote" ),
-                                                                         1 ) );
+    handler.SetProgressReporter( std::make_unique<WX_PROGRESS_REPORTER>( this, _( "Fetch Remote" ), 1,
+                                                                         PR_NO_ABORT ) );
 
     if( handler.PerformPush() != PushResult::Success )
     {

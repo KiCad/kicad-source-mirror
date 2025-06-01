@@ -1086,7 +1086,7 @@ void FOOTPRINT_EDIT_FRAME::initLibraryTree()
 {
     FP_LIB_TABLE*   fpTable = PROJECT_PCB::PcbFootprintLibs( &Prj() );
 
-    WX_PROGRESS_REPORTER progressReporter( this, _( "Loading Footprint Libraries" ), 1 );
+    WX_PROGRESS_REPORTER progressReporter( this, _( "Load Footprint Libraries" ), 1, PR_CAN_ABORT );
 
     if( GFootprintList.GetCount() == 0 )
         GFootprintList.ReadCacheFromFile( Prj().GetProjectPath() + wxT( "fp-info-cache" ) );
@@ -1114,7 +1114,7 @@ void FOOTPRINT_EDIT_FRAME::SyncLibraryTree( bool aProgress )
     // Sync FOOTPRINT_INFO list to the libraries on disk
     if( aProgress )
     {
-        WX_PROGRESS_REPORTER progressReporter( this, _( "Updating Footprint Libraries" ), 1 );
+        WX_PROGRESS_REPORTER progressReporter( this, _( "Update Footprint Libraries" ), 1, PR_CAN_ABORT );
         GFootprintList.ReadFootprintFiles( fpTable, nullptr, &progressReporter );
         progressReporter.Show( false );
     }

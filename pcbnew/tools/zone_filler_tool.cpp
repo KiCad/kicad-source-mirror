@@ -86,7 +86,8 @@ void ZONE_FILLER_TOOL::CheckAllZones( wxWindow* aCaller, PROGRESS_REPORTER* aRep
     }
     else
     {
-        reporter = std::make_unique<WX_PROGRESS_REPORTER>( aCaller, _( "Checking Zones" ), 4 );
+        reporter = std::make_unique<WX_PROGRESS_REPORTER>( aCaller, _( "Check Zones" ), 4,
+                                                           PR_CAN_ABORT );
         m_filler->SetProgressReporter( reporter.get() );
     }
 
@@ -163,7 +164,8 @@ void ZONE_FILLER_TOOL::FillAllZones( wxWindow* aCaller, PROGRESS_REPORTER* aRepo
     }
     else
     {
-        reporter = std::make_unique<WX_PROGRESS_REPORTER>( aCaller, _( "Fill All Zones" ), 5 );
+        reporter = std::make_unique<WX_PROGRESS_REPORTER>( aCaller, _( "Fill All Zones" ), 5,
+                                                           PR_CAN_ABORT );
         m_filler->SetProgressReporter( reporter.get() );
     }
 
@@ -256,7 +258,7 @@ int ZONE_FILLER_TOOL::ZoneFillDirty( const TOOL_EVENT& aEvent )
         {
             wxString title = wxString::Format( _( "Refill %d Zones" ), (int) toFill.size() );
 
-            reporter = std::make_unique<WX_PROGRESS_REPORTER>( frame, title, 5 );
+            reporter = std::make_unique<WX_PROGRESS_REPORTER>( frame, title, 5, PR_CAN_ABORT );
             m_filler->SetProgressReporter( reporter.get() );
             break;
         }
@@ -347,7 +349,7 @@ int ZONE_FILLER_TOOL::ZoneFill( const TOOL_EVENT& aEvent )
 
     m_filler = std::make_unique<ZONE_FILLER>( board(), &commit );
 
-    reporter = std::make_unique<WX_PROGRESS_REPORTER>( frame(), _( "Fill Zone" ), 5 );
+    reporter = std::make_unique<WX_PROGRESS_REPORTER>( frame(), _( "Fill Zone" ), 5, PR_CAN_ABORT );
     m_filler->SetProgressReporter( reporter.get() );
 
     if( m_filler->Fill( toFill ) )

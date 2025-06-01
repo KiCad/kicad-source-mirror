@@ -1686,7 +1686,7 @@ int PCB_CONTROL::AppendBoard( PCB_IO& pi, const wxString& fileName, DESIGN_BLOCK
                     return dlg.ShowModal() == wxID_OK;
                 } );
 
-        WX_PROGRESS_REPORTER progressReporter( editFrame, _( "Loading PCB" ), 1 );
+        WX_PROGRESS_REPORTER progressReporter( editFrame, _( "Load PCB" ), 1, PR_CAN_ABORT );
 
         editFrame->GetDesignSettings().m_NetSettings->ClearNetclasses();
         pi.SetProgressReporter( &progressReporter );

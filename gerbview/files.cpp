@@ -300,8 +300,7 @@ bool GERBVIEW_FRAME::LoadListOfGerberAndDrillFiles( const wxString&      aPath,
 
         if( !progress && ( aFilenameList.GetCount() > 1 ) )
         {
-            progress = std::make_unique<WX_PROGRESS_REPORTER>( this, _( "Loading files..." ), 1,
-                                                               false );
+            progress = std::make_unique<WX_PROGRESS_REPORTER>( this, _( "Load Files" ), 1, PR_CAN_ABORT );
             progress->SetMaxProgress( aFilenameList.GetCount() - 1 );
             progress->Report( wxString::Format( _("Loading %u/%zu %s..." ),
                                                 ii+1,

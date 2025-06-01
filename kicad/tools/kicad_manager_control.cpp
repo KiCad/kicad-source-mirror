@@ -178,7 +178,8 @@ int KICAD_MANAGER_CONTROL::NewFromRepository( const TOOL_EVENT& aEvent )
     cloneHandler.SetPassword( dlg.GetPassword() );
     cloneHandler.SetSSHKey( dlg.GetRepoSSHPath() );
 
-    cloneHandler.SetProgressReporter( std::make_unique<WX_PROGRESS_REPORTER>( m_frame, _( "Cloning Repository" ), 1 ) );
+    cloneHandler.SetProgressReporter( std::make_unique<WX_PROGRESS_REPORTER>( m_frame, _( "Clone Repository" ), 1,
+                                                                              PR_NO_ABORT ) );
 
     if( !cloneHandler.PerformClone() )
     {
