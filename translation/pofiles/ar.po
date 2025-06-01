@@ -7,17 +7,16 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-05-29 21:51+0300\n"
-"PO-Revision-Date: 2025-02-10 23:20+0000\n"
-"Last-Translator: Seth Hillbrand <seth@kipro-pcb.com>\n"
-"Language-Team: Arabic <https://hosted.weblate.org/projects/kicad/master-"
-"source/ar/>\n"
+"PO-Revision-Date: 2025-06-01 16:38+0000\n"
+"Last-Translator: Morad Tamer <Morad.TFarouk@gmail.com>\n"
+"Language-Team: Arabic <https://hosted.weblate.org/projects/kicad/v9/ar/>\n"
 "Language: ar\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
 "&& n%100<=10 ? 3 : n%100>=11 ? 4 : 5;\n"
-"X-Generator: Weblate 5.10-dev\n"
+"X-Generator: Weblate 5.12-dev\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
 #: common/dialogs/panel_embedded_files.cpp:321
@@ -60,7 +59,7 @@ msgstr "إنشاء مناطق"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:864
 msgid "Build Tech layers"
-msgstr "بناء طبقات تكنولوجيه"
+msgstr "بناء طبقات تكنولوجية"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:941
 #, c-format
@@ -98,9 +97,9 @@ msgid "Your OpenGL version is not supported. Minimum required is 1.5."
 msgstr "إصدار OpenGL الخاص بك غير مدعوم. الحد الأدنى المطلوب هو 1.5."
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:568
-#, c-format
+#, c-format, fuzzy
 msgid "Last render time %.0f ms"
-msgstr ""
+msgstr "مدة آخر رسم معروض %.0f ملي ثانية"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:743
 #, c-format
@@ -120,11 +119,11 @@ msgstr ""
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:799
 #, c-format
 msgid "Zone %s\t"
-msgstr ""
+msgstr "منطقة %s\t"
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:466
 msgid "Load OpenGL: board"
-msgstr ""
+msgstr "تحميل OpenGL: اللوحة"
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:493
 msgid "Load OpenGL: holes and vias"
