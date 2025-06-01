@@ -822,11 +822,11 @@ void SCH_IO_ALTIUM::CreateAliases()
 
 void SCH_IO_ALTIUM::ParseAltiumSch( const wxString& aFileName )
 {
-    if( m_rootFilepath.IsEmpty() )
-        m_rootFilepath = aFileName;
-
     // Load path may be different from the project path.
     wxFileName parentFileName( aFileName );
+
+    if( m_rootFilepath.IsEmpty() )
+        m_rootFilepath = parentFileName.GetPath();
 
     if( m_progressReporter )
     {

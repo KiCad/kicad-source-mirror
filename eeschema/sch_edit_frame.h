@@ -65,6 +65,7 @@ class RESCUER;
 class HIERARCHY_PANE;
 class API_HANDLER_SCH;
 class DIALOG_SCHEMATIC_SETUP;
+class PROGRESS_REPORTER;
 
 
 /// Schematic search type used by the socket link with Pcbnew
@@ -797,7 +798,8 @@ public:
     /**
      * Generate the connection data for the entire schematic hierarchy.
      */
-    void RecalculateConnections( SCH_COMMIT* aCommit, SCH_CLEANUP_FLAGS aCleanupFlags );
+    void RecalculateConnections( SCH_COMMIT* aCommit, SCH_CLEANUP_FLAGS aCleanupFlags,
+                                 PROGRESS_REPORTER* aProgressReporter = nullptr );
 
     /**
      * Called after the preferences dialog is run.

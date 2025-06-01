@@ -736,7 +736,8 @@ void CONNECTION_GRAPH::Reset()
 
 
 void CONNECTION_GRAPH::Recalculate( const SCH_SHEET_LIST& aSheetList, bool aUnconditional,
-                                    std::function<void( SCH_ITEM* )>* aChangedItemHandler )
+                                    std::function<void( SCH_ITEM* )>* aChangedItemHandler,
+                                    PROGRESS_REPORTER* aProgressReporter )
 {
     PROF_TIMER recalc_time( "CONNECTION_GRAPH::Recalculate" );
 
@@ -748,8 +749,17 @@ void CONNECTION_GRAPH::Recalculate( const SCH_SHEET_LIST& aSheetList, bool aUnco
     m_sheetList = aSheetList;
     std::set<SCH_ITEM*> dirty_items;
 
+    int count = aSheetList.size() * 2;
+    int done = 0;
+
     for( const SCH_SHEET_PATH& sheet : aSheetList )
     {
+        if( aProgressReporter )
+        {
+            aProgressReporter->SetCurrentProgress( done++ / (double) count );
+            aProgressReporter->KeepRefreshing();
+        }
+
         std::vector<SCH_ITEM*> items;
 
         // Store current unit value, to replace it after calculations
@@ -825,6 +835,12 @@ void CONNECTION_GRAPH::Recalculate( const SCH_SHEET_LIST& aSheetList, bool aUnco
         m_items.reserve( m_items.size() + items.size() );
 
         updateItemConnectivity( sheet, items );
+
+        if( aProgressReporter )
+        {
+            aProgressReporter->SetCurrentProgress( done++ / count );
+            aProgressReporter->KeepRefreshing();
+        }
 
         // UpdateDanglingState() also adds connected items for SCH_TEXT
         sheet.LastScreen()->TestDanglingEnds( &sheet, aChangedItemHandler );

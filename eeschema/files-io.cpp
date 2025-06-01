@@ -539,7 +539,10 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
 
         SCH_COMMIT dummy( this );
 
-        RecalculateConnections( &dummy, GLOBAL_CLEANUP );
+        progressReporter.Report( _( "Updating connections..." ) );
+        progressReporter.KeepRefreshing();
+
+        RecalculateConnections( &dummy, GLOBAL_CLEANUP, &progressReporter );
 
         if( schematic.HasSymbolFieldNamesWithWhiteSpace() )
         {
@@ -1382,12 +1385,12 @@ bool SCH_EDIT_FRAME::importFile( const wxString& aFileName, int aFileType,
                 GetScreen()->SetFileName( newfilename.GetFullPath() );
                 GetScreen()->SetContentModified();
 
-                progressReporter.Report( _( "Cleaning up schematic..." ) );
+                progressReporter.Report( _( "Updating connections..." ) );
 
                 if( !progressReporter.KeepRefreshing() )
                     THROW_IO_ERROR( _( "File import canceled by user." ) );
 
-                RecalculateConnections( nullptr, GLOBAL_CLEANUP );
+                RecalculateConnections( nullptr, GLOBAL_CLEANUP, &progressReporter );
 
                 // Only perform the dangling end test on root sheet.
                 GetScreen()->TestDanglingEnds();

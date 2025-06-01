@@ -1777,7 +1777,8 @@ void SCH_EDIT_FRAME::initScreenZoom()
 }
 
 
-void SCH_EDIT_FRAME::RecalculateConnections( SCH_COMMIT* aCommit, SCH_CLEANUP_FLAGS aCleanupFlags )
+void SCH_EDIT_FRAME::RecalculateConnections( SCH_COMMIT* aCommit, SCH_CLEANUP_FLAGS aCleanupFlags,
+                                             PROGRESS_REPORTER* aProgressReporter )
 {
     wxString            highlightedConn = GetHighlightedConnection();
     bool                hasHighlightedConn = !highlightedConn.IsEmpty();
@@ -1846,7 +1847,7 @@ void SCH_EDIT_FRAME::RecalculateConnections( SCH_COMMIT* aCommit, SCH_CLEANUP_FL
         SCH_RULE_AREA::UpdateRuleAreasInScreens( all_screens, GetCanvas()->GetView() );
 
         // Recalculate all connectivity
-        Schematic().ConnectionGraph()->Recalculate( list, true, &changeHandler );
+        Schematic().ConnectionGraph()->Recalculate( list, true, &changeHandler, aProgressReporter );
     }
     else
     {
@@ -2052,7 +2053,7 @@ void SCH_EDIT_FRAME::RecalculateConnections( SCH_COMMIT* aCommit, SCH_CLEANUP_FL
         for( const wxString& netName : affectedNets )
             netSettings->ClearCacheForNet( netName );
 
-        new_graph.Recalculate( list, false, &changeHandler );
+        new_graph.Recalculate( list, false, &changeHandler, aProgressReporter );
         Schematic().ConnectionGraph()->Merge( new_graph );
     }
 

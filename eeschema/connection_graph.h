@@ -31,6 +31,7 @@
 #include <sch_item.h>
 #include <wx/treectrl.h>
 #include <advanced_config.h>
+#include <progress_reporter.h>
 
 
 #ifdef DEBUG
@@ -391,7 +392,8 @@ public:
      * @param aChangedItemHandler an optional handler to receive any changed items
      */
     void Recalculate( const SCH_SHEET_LIST& aSheetList, bool aUnconditional = false,
-                      std::function<void( SCH_ITEM* )>* aChangedItemHandler = nullptr );
+                      std::function<void( SCH_ITEM* )>* aChangedItemHandler = nullptr,
+                      PROGRESS_REPORTER* aProgressReporter = nullptr );
 
     /**
      * Return a bus alias pointer for the given name if it exists (from cache)
