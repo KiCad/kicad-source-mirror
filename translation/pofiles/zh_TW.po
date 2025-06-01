@@ -19,7 +19,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-29 21:50+0300\n"
+"POT-Creation-Date: 2025-06-01 19:41+0300\n"
 "PO-Revision-Date: 2025-04-22 07:50+0000\n"
 "Last-Translator: Oliver0804 <icetzsr@gmail.com>\n"
 "Language-Team: Chinese (Traditional Han script) <https://hosted.weblate.org/"
@@ -1448,8 +1448,8 @@ msgid "Z:"
 msgstr "Z:"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:68
-#: gerbview/gerber_draw_item.cpp:722 pcbnew/footprint.cpp:1727
-#: pcbnew/pad.cpp:1397
+#: gerbview/gerber_draw_item.cpp:722 pcbnew/footprint.cpp:1738
+#: pcbnew/pad.cpp:1396
 msgid "Rotation"
 msgstr "旋轉"
 
@@ -2044,7 +2044,7 @@ msgstr "資訊"
 #: pcbnew/dialogs/dialog_export_idf.cpp:139
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:360
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:414
-#: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:444
+#: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:438
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:204
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:638
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:676
@@ -2204,7 +2204,7 @@ msgstr "無法建立全域庫表路徑 '%s'。"
 #: eeschema/generate_alias_info.cpp:40 eeschema/sch_symbol.cpp:2004
 #: eeschema/sch_symbol.cpp:2601 eeschema/sch_symbol.cpp:2963
 #: eeschema/symbol_editor/symbol_editor.cpp:1768
-#: eeschema/symbol_viewer_frame.cpp:463 pcbnew/footprint.cpp:4142
+#: eeschema/symbol_viewer_frame.cpp:463 pcbnew/footprint.cpp:4153
 #: pcbnew/generate_footprint_info.cpp:37 pcbnew/plot_board_layers.cpp:192
 msgid "Keywords"
 msgstr "關鍵字"
@@ -2630,8 +2630,8 @@ msgstr "環境變數"
 #: pcbnew/widgets/search_handlers.cpp:203
 #: pcbnew/widgets/search_handlers.cpp:344
 #: pcbnew/widgets/search_handlers.cpp:402
-#: pcbnew/widgets/search_handlers.cpp:485 pcbnew/zone.cpp:928
-#: pcbnew/zone.cpp:1936 pcbnew/zone_manager/dialog_zone_manager_base.cpp:38
+#: pcbnew/widgets/search_handlers.cpp:485 pcbnew/zone.cpp:927
+#: pcbnew/zone.cpp:1935 pcbnew/zone_manager/dialog_zone_manager_base.cpp:38
 #: pcbnew/zone_manager/model_zones_overview_table.h:75
 msgid "Name"
 msgstr "名稱"
@@ -2685,7 +2685,7 @@ msgstr "預設是 1"
 #: pcbnew/dialogs/panel_fp_editor_field_defaults.cpp:80
 #: pcbnew/dialogs/panel_fp_editor_field_defaults_base.cpp:48
 #: pcbnew/dialogs/panel_fp_editor_field_defaults_base.cpp:57
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:437 pcbnew/footprint.cpp:4132
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:437 pcbnew/footprint.cpp:4143
 #: pcbnew/footprint_wizard_frame.cpp:327 pcbnew/pcb_dimension.cpp:619
 #: pcbnew/pcb_fields_grid_table.cpp:148 pcbnew/plot_board_layers.cpp:167
 #: pcbnew/widgets/search_handlers.cpp:120
@@ -2930,12 +2930,12 @@ msgstr "(可選)"
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:434
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:121
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:132
-#: pcbnew/dialogs/dialog_footprint_properties_base.cpp:287
-#: pcbnew/dialogs/dialog_footprint_properties_base.cpp:300
-#: pcbnew/dialogs/dialog_footprint_properties_base.cpp:316
-#: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:256
-#: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:269
-#: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:285
+#: pcbnew/dialogs/dialog_footprint_properties_base.cpp:282
+#: pcbnew/dialogs/dialog_footprint_properties_base.cpp:295
+#: pcbnew/dialogs/dialog_footprint_properties_base.cpp:311
+#: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:251
+#: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:264
+#: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:280
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:163
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:216
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:233
@@ -3003,7 +3003,7 @@ msgstr "群組名稱:"
 
 #: common/dialogs/dialog_group_properties_base.cpp:37
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:312
-#: pcbnew/dialogs/dialog_footprint_properties_base.cpp:383
+#: pcbnew/dialogs/dialog_footprint_properties_base.cpp:394
 msgid "Library link:"
 msgstr "庫鏈接:"
 
@@ -3018,12 +3018,12 @@ msgstr "庫鏈接:"
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:83
 #: pcbnew/dialogs/dialog_textbox_properties_base.cpp:73
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:58
-#: pcbnew/footprint.cpp:1708 pcbnew/pad.cpp:1335 pcbnew/pad.cpp:2740
+#: pcbnew/footprint.cpp:1719 pcbnew/pad.cpp:1334 pcbnew/pad.cpp:2739
 #: pcbnew/pcb_dimension.cpp:673 pcbnew/pcb_group.cpp:344
-#: pcbnew/pcb_marker.cpp:375 pcbnew/pcb_shape.cpp:691
+#: pcbnew/pcb_marker.cpp:375 pcbnew/pcb_shape.cpp:690
 #: pcbnew/pcb_tablecell.cpp:109 pcbnew/pcb_text.cpp:284
-#: pcbnew/pcb_textbox.cpp:470 pcbnew/pcb_track.cpp:1941
-#: pcbnew/tools/generator_tool.cpp:47 pcbnew/zone.cpp:894
+#: pcbnew/pcb_textbox.cpp:470 pcbnew/pcb_track.cpp:1938
+#: pcbnew/tools/generator_tool.cpp:47 pcbnew/zone.cpp:893
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:52
 msgid "Locked"
 msgstr "鎖定"
@@ -3914,11 +3914,11 @@ msgstr "檔案名稱"
 #: common/dialogs/git/dialog_git_commit.cpp:53
 #: eeschema/dialogs/dialog_migrate_buses.cpp:117
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:94
-#: pcbnew/dialogs/dialog_find_base.cpp:138 pcbnew/pad.cpp:1335
+#: pcbnew/dialogs/dialog_find_base.cpp:138 pcbnew/pad.cpp:1334
 #: pcbnew/pcb_dimension.cpp:673 pcbnew/pcb_group.cpp:344
-#: pcbnew/pcb_shape.cpp:691 pcbnew/pcb_tablecell.cpp:109
-#: pcbnew/pcb_text.cpp:284 pcbnew/pcb_textbox.cpp:470 pcbnew/pcb_track.cpp:1941
-#: pcbnew/zone.cpp:894
+#: pcbnew/pcb_shape.cpp:690 pcbnew/pcb_tablecell.cpp:109
+#: pcbnew/pcb_text.cpp:284 pcbnew/pcb_textbox.cpp:470 pcbnew/pcb_track.cpp:1938
+#: pcbnew/zone.cpp:893
 msgid "Status"
 msgstr "狀態"
 
@@ -4424,8 +4424,8 @@ msgstr "高對比度模式的調光係數:"
 #: pcb_calculator/calculator_panels/panel_r_calculator_base.cpp:158
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:295
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:315
-#: pcbnew/dialogs/dialog_footprint_properties_base.cpp:329
-#: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:298
+#: pcbnew/dialogs/dialog_footprint_properties_base.cpp:324
+#: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:293
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:181
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:183
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:224
@@ -4960,7 +4960,7 @@ msgstr "檔案 \"%s\" 已存在。"
 #: pcbnew/dialogs/dialog_export_idf.cpp:140
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:362
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:416
-#: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:445
+#: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:439
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:205
 #: pcbnew/footprint_libraries_utils.cpp:376
 #: pcbnew/footprint_libraries_utils.cpp:1157
@@ -5277,7 +5277,7 @@ msgstr "縮放"
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:45
 #: pcbnew/dialogs/dialog_export_odbpp_base.cpp:75
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:363
-#: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:332
+#: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:350
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:94
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1074
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1083
@@ -5286,12 +5286,12 @@ msgstr "縮放"
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:887
 #: pcbnew/dialogs/dialog_plot_base.cpp:118
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:238
-#: pcbnew/dialogs/dialog_track_via_properties.h:179 pcbnew/footprint.cpp:4091
-#: pcbnew/pad.cpp:2704 pcbnew/pad.cpp:2723 pcbnew/pcb_dimension.cpp:2012
+#: pcbnew/dialogs/dialog_track_via_properties.h:179 pcbnew/footprint.cpp:4102
+#: pcbnew/pad.cpp:2703 pcbnew/pad.cpp:2722 pcbnew/pcb_dimension.cpp:2012
 #: pcbnew/widgets/appearance_controls.cpp:734
 #: pcbnew/widgets/appearance_controls.cpp:776
 #: pcbnew/widgets/appearance_controls.cpp:2598
-#: pcbnew/widgets/appearance_controls.cpp:2617 pcbnew/zone.cpp:1827
+#: pcbnew/widgets/appearance_controls.cpp:2617 pcbnew/zone.cpp:1826
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:83
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:157
 msgid "None"
@@ -5382,8 +5382,8 @@ msgstr "重置觸控板滾動手勢為預設值"
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:254
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:221
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:87
-#: pcbnew/dialogs/dialog_footprint_properties_base.cpp:260
-#: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:229
+#: pcbnew/dialogs/dialog_footprint_properties_base.cpp:255
+#: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:224
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:629
 #: pcbnew/dialogs/dialog_reference_image_properties_base.cpp:74
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:21
@@ -5525,11 +5525,11 @@ msgstr "<未定義>"
 #: eeschema/sch_line.cpp:1032 include/stroke_params.h:85
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:232
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:363
-#: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:332
+#: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:350
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:887
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:238
-#: pcbnew/footprint.cpp:4093 pcbnew/pad.cpp:2725 pcbnew/pcb_table.cpp:643
-#: pcbnew/pcb_textbox.cpp:803 pcbnew/zone.cpp:932 pcbnew/zone.cpp:1829
+#: pcbnew/footprint.cpp:4104 pcbnew/pad.cpp:2724 pcbnew/pcb_table.cpp:643
+#: pcbnew/pcb_textbox.cpp:803 pcbnew/zone.cpp:931 pcbnew/zone.cpp:1828
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:157
 msgid "Solid"
 msgstr "實心"
@@ -5662,7 +5662,7 @@ msgstr "網路類"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:52
 #: pcbnew/tools/board_inspection_tool.cpp:642
-#: pcbnew/tools/board_inspection_tool.cpp:1202 pcbnew/zone.cpp:2071
+#: pcbnew/tools/board_inspection_tool.cpp:1202 pcbnew/zone.cpp:2070
 msgid "Clearance"
 msgstr "銅皮間隙"
 
@@ -5763,7 +5763,7 @@ msgstr "樣版"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:148
 #: eeschema/sch_field.cpp:1125 eeschema/sch_label.cpp:207
-#: pcbnew/board_connected_item.cpp:200 pcbnew/pad.cpp:2779 pcbnew/zone.cpp:1930
+#: pcbnew/board_connected_item.cpp:227 pcbnew/pad.cpp:2778 pcbnew/zone.cpp:1929
 msgid "Net Class"
 msgstr "網路類"
 
@@ -5872,7 +5872,7 @@ msgstr "插入群組"
 
 #: common/dialogs/panel_toolbar_customization.cpp:553 common/eda_item.cpp:438
 #: common/eda_item.cpp:462 eeschema/sch_group.cpp:328 pcbnew/pcb_group.cpp:340
-#: pcbnew/widgets/search_handlers.cpp:384 pcbnew/zone.cpp:1860
+#: pcbnew/widgets/search_handlers.cpp:384 pcbnew/zone.cpp:1859
 msgid "Group"
 msgstr "群組"
 
@@ -5963,7 +5963,7 @@ msgstr "線"
 #: common/eda_shape.cpp:2519
 #: eeschema/dialogs/dialog_label_properties_base.cpp:199
 #: eeschema/sch_label.cpp:2279
-#: pcbnew/dialogs/dialog_dimension_properties_base.cpp:45 pcbnew/pad.cpp:2696
+#: pcbnew/dialogs/dialog_dimension_properties_base.cpp:45 pcbnew/pad.cpp:2695
 #: pcbnew/pcb_dimension.cpp:2013
 msgid "Rectangle"
 msgstr "矩形"
@@ -6400,14 +6400,14 @@ msgstr "屏幕"
 #: common/eda_item.cpp:415 eeschema/sch_symbol.cpp:1999
 #: eeschema/widgets/search_handlers.cpp:162 pcbnew/build_BOM_from_board.cpp:111
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:141
-#: pcbnew/load_select_footprint.cpp:294 pcbnew/pad.cpp:1316
-#: pcbnew/pcb_shape.cpp:685 pcbnew/pcb_text.cpp:272
+#: pcbnew/load_select_footprint.cpp:294 pcbnew/pad.cpp:1315
+#: pcbnew/pcb_shape.cpp:684 pcbnew/pcb_text.cpp:272
 #: pcbnew/plot_board_layers.cpp:171
 msgid "Footprint"
 msgstr "封裝"
 
 #: common/eda_item.cpp:416 pcbnew/dialogs/dialog_board_statistics.cpp:577
-#: pcbnew/pad.cpp:1319
+#: pcbnew/pad.cpp:1318
 msgid "Pad"
 msgstr "焊盤"
 
@@ -6442,12 +6442,12 @@ msgstr "表格"
 msgid "Table Cell"
 msgstr "單元格"
 
-#: common/eda_item.cpp:425 common/eda_item.cpp:426 pcbnew/pcb_track.cpp:1785
+#: common/eda_item.cpp:425 common/eda_item.cpp:426 pcbnew/pcb_track.cpp:1782
 msgid "Track"
 msgstr "走線"
 
 #: common/eda_item.cpp:427 pcbnew/dialogs/dialog_board_statistics.cpp:577
-#: pcbnew/pcb_track.cpp:1783 pcbnew/pcb_track.cpp:1894
+#: pcbnew/pcb_track.cpp:1780 pcbnew/pcb_track.cpp:1891
 msgid "Via"
 msgstr "貫孔"
 
@@ -6505,7 +6505,7 @@ msgid "Bitmap"
 msgstr "點陣圖"
 
 #: common/eda_item.cpp:448 eeschema/sch_rule_area.cpp:51
-#: eeschema/sch_rule_area.cpp:380 pcbnew/zone.cpp:995
+#: eeschema/sch_rule_area.cpp:380 pcbnew/zone.cpp:994
 msgid "Rule Area"
 msgstr "規則區域"
 
@@ -6567,11 +6567,11 @@ msgstr "繪製項目"
 msgid "Thermal Spoke"
 msgstr "散熱引線"
 
-#: common/eda_shape.cpp:322 pcbnew/pcb_shape.cpp:1033
+#: common/eda_shape.cpp:322 pcbnew/pcb_shape.cpp:1032
 msgid "Number Box"
 msgstr "編號框"
 
-#: common/eda_shape.cpp:331 pcbnew/pad.cpp:1553
+#: common/eda_shape.cpp:331 pcbnew/pad.cpp:1552
 msgid "Rect"
 msgstr "矩形"
 
@@ -6583,8 +6583,8 @@ msgstr "弧線"
 #: common/eda_shape.cpp:333 common/eda_shape.cpp:1134 common/eda_shape.cpp:2521
 #: eeschema/dialogs/dialog_label_properties_base.cpp:193
 #: eeschema/sch_label.cpp:2277 gerbview/gerber_draw_item.cpp:231
-#: pcbnew/dialogs/dialog_dimension_properties_base.cpp:45 pcbnew/pad.cpp:1551
-#: pcbnew/pad.cpp:2695 pcbnew/pcb_dimension.cpp:2014
+#: pcbnew/dialogs/dialog_dimension_properties_base.cpp:45 pcbnew/pad.cpp:1550
+#: pcbnew/pad.cpp:2694 pcbnew/pcb_dimension.cpp:2014
 msgid "Circle"
 msgstr "圓形"
 
@@ -6600,7 +6600,7 @@ msgstr "多邊形"
 msgid "Pad Number Box"
 msgstr "焊盤編號框"
 
-#: common/eda_shape.cpp:1126 pcbnew/pcb_shape.cpp:1040
+#: common/eda_shape.cpp:1126 pcbnew/pcb_shape.cpp:1039
 msgid "Thermal Spoke Template"
 msgstr "散熱引線模板"
 
@@ -6634,7 +6634,7 @@ msgstr "形狀"
 
 #: common/eda_shape.cpp:1156 common/eda_shape.cpp:1165
 #: common/eda_shape.cpp:2609 pcbnew/dialogs/dialog_shape_properties.cpp:929
-#: pcbnew/pcb_track.cpp:1806
+#: pcbnew/pcb_track.cpp:1803
 msgid "Radius"
 msgstr "半徑"
 
@@ -6665,12 +6665,12 @@ msgstr "點"
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:55
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:40
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:169
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2312 pcbnew/pad.cpp:1384
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2312 pcbnew/pad.cpp:1383
 #: pcbnew/pcb_fields_grid_table.cpp:150 pcbnew/pcb_reference_image.cpp:222
 #: pcbnew/pcb_reference_image.cpp:375 pcbnew/pcb_tablecell.cpp:205
 #: pcbnew/pcb_tablecell.cpp:211 pcbnew/pcb_target.cpp:156
 #: pcbnew/pcb_target.cpp:249 pcbnew/pcb_text.cpp:299 pcbnew/pcb_textbox.cpp:822
-#: pcbnew/pcb_track.cpp:1801 pcbnew/pcb_track.cpp:2348
+#: pcbnew/pcb_track.cpp:1798 pcbnew/pcb_track.cpp:2345
 msgid "Width"
 msgstr "寬度"
 
@@ -6681,7 +6681,7 @@ msgstr "寬度"
 #: pcbnew/dialogs/dialog_board_statistics.cpp:749
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:55
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:56
-#: pcbnew/pad.cpp:1385 pcbnew/pcb_dimension.cpp:1033
+#: pcbnew/pad.cpp:1384 pcbnew/pcb_dimension.cpp:1033
 #: pcbnew/pcb_fields_grid_table.cpp:151 pcbnew/pcb_reference_image.cpp:224
 #: pcbnew/pcb_reference_image.cpp:382 pcbnew/pcb_tablecell.cpp:206
 #: pcbnew/pcb_tablecell.cpp:212 pcbnew/pcb_text.cpp:300
@@ -6718,14 +6718,14 @@ msgstr "形狀屬性"
 #: common/eda_shape.cpp:2586 eeschema/sch_table.cpp:508
 #: eeschema/sch_tablecell.cpp:184 pcbnew/pcb_table.cpp:658
 #: pcbnew/pcb_tablecell.cpp:200 pcbnew/pcb_textbox.cpp:818
-#: pcbnew/pcb_track.cpp:2351
+#: pcbnew/pcb_track.cpp:2348
 msgid "Start X"
 msgstr "起點 X"
 
 #: common/eda_shape.cpp:2591 eeschema/sch_table.cpp:511
 #: eeschema/sch_tablecell.cpp:185 pcbnew/pcb_table.cpp:661
 #: pcbnew/pcb_tablecell.cpp:201 pcbnew/pcb_textbox.cpp:819
-#: pcbnew/pcb_track.cpp:2355
+#: pcbnew/pcb_track.cpp:2352
 msgid "Start Y"
 msgstr "起點 Y"
 
@@ -6739,13 +6739,13 @@ msgstr "中點 Y"
 
 #: common/eda_shape.cpp:2615 eeschema/sch_tablecell.cpp:186
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2835 pcbnew/pcb_tablecell.cpp:202
-#: pcbnew/pcb_textbox.cpp:820 pcbnew/pcb_track.cpp:2358
+#: pcbnew/pcb_textbox.cpp:820 pcbnew/pcb_track.cpp:2355
 msgid "End X"
 msgstr "終點 X"
 
 #: common/eda_shape.cpp:2621 eeschema/sch_tablecell.cpp:187
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2841 pcbnew/pcb_tablecell.cpp:203
-#: pcbnew/pcb_textbox.cpp:821 pcbnew/pcb_track.cpp:2361
+#: pcbnew/pcb_textbox.cpp:821 pcbnew/pcb_track.cpp:2358
 msgid "End Y"
 msgstr "終點 Y"
 
@@ -6757,7 +6757,7 @@ msgid "Line Width"
 msgstr "線寬"
 
 #: common/eda_shape.cpp:2647 eeschema/sch_tablecell.cpp:192
-#: pcbnew/pcb_shape.cpp:974 pcbnew/pcb_tablecell.cpp:209
+#: pcbnew/pcb_shape.cpp:973 pcbnew/pcb_tablecell.cpp:209
 msgid "Line Color"
 msgstr "線條顏色"
 
@@ -6770,7 +6770,7 @@ msgid "Fill"
 msgstr "填充"
 
 #: common/eda_shape.cpp:2699 eeschema/sch_shape.cpp:559
-#: pcbnew/pcb_shape.cpp:975
+#: pcbnew/pcb_shape.cpp:974
 msgid "Fill Color"
 msgstr "填充顏色"
 
@@ -6871,7 +6871,7 @@ msgstr "向下"
 #: eeschema/sch_text.cpp:702 eeschema/sch_textbox.cpp:633
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:59
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:60
-#: pcbnew/footprint.cpp:4123 pcbnew/pad.cpp:2742 pcbnew/pcb_dimension.cpp:1804
+#: pcbnew/footprint.cpp:4134 pcbnew/pad.cpp:2741 pcbnew/pcb_dimension.cpp:1804
 #: pcbnew/pcb_dimension.cpp:1879 pcbnew/pcb_fields_grid_table.cpp:155
 #: pcbnew/pcb_tablecell.cpp:214
 msgid "Orientation"
@@ -8545,19 +8545,19 @@ msgid "Type mismatch between %lf and '%s'"
 msgstr "%lf 和 '%s'之間類型不匹配"
 
 #: common/netclass.cpp:299 pcbnew/component_classes/component_class.cpp:66
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1078 pcbnew/zone.cpp:906
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1078 pcbnew/zone.cpp:905
 #, c-format
 msgid "%s and %s"
 msgstr "%s 和 %s"
 
 #: common/netclass.cpp:303 pcbnew/component_classes/component_class.cpp:71
-#: pcbnew/zone.cpp:912
+#: pcbnew/zone.cpp:911
 #, c-format
 msgid "%s, %s and %s"
 msgstr "%s, %s 和 %s"
 
 #: common/netclass.cpp:308 pcbnew/component_classes/component_class.cpp:76
-#: pcbnew/zone.cpp:919
+#: pcbnew/zone.cpp:918
 #, c-format
 msgid "%s, %s and %d more"
 msgstr "%s, %s 和 %d 更多"
@@ -8789,7 +8789,7 @@ msgstr "預設編輯"
 #: eeschema/dialogs/dialog_sim_model_base.cpp:274 eeschema/sch_symbol.cpp:1956
 #: eeschema/sch_symbol.cpp:2009 eeschema/sch_symbol.cpp:2951
 #: eeschema/widgets/search_handlers.cpp:160
-#: eeschema/widgets/search_handlers.cpp:256 pcbnew/footprint.cpp:4129
+#: eeschema/widgets/search_handlers.cpp:256 pcbnew/footprint.cpp:4140
 #: pcbnew/widgets/search_handlers.cpp:119
 msgid "Reference"
 msgstr "參考"
@@ -8808,10 +8808,7 @@ msgstr "按值和封裝建立群組"
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:199
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:72 eeschema/menubar.cpp:166
 #: eeschema/sch_sheet.cpp:1665 eeschema/sch_symbol.cpp:2993
-#: eeschema/tools/sch_edit_tool.cpp:603
-#: pcbnew/dialogs/dialog_footprint_properties_base.cpp:179
-#: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:184
-#: pcbnew/footprint.cpp:4152
+#: eeschema/tools/sch_edit_tool.cpp:603 pcbnew/footprint.cpp:4163
 msgid "Attributes"
 msgstr "特性"
 
@@ -10157,7 +10154,7 @@ msgid "Enter a description for the library:"
 msgstr "輸入庫的描述："
 
 #: common/widgets/design_block_pane.cpp:274 eeschema/sch_symbol.cpp:2960
-#: eeschema/widgets/search_handlers.cpp:171 pcbnew/footprint.cpp:4139
+#: eeschema/widgets/search_handlers.cpp:171 pcbnew/footprint.cpp:4150
 #: pcbnew/plot_board_layers.cpp:189 pcbnew/widgets/search_handlers.cpp:125
 msgid "Library Description"
 msgstr "庫描述"
@@ -10263,7 +10260,7 @@ msgstr "電路板"
 #: common/widgets/footprint_diff_widget.cpp:42 cvpcb/cvpcb_mainframe.cpp:818
 #: eeschema/sch_base_frame.cpp:623 eeschema/sch_symbol.cpp:1985
 #: eeschema/sch_symbol.cpp:1989 eeschema/sch_symbol.cpp:2025
-#: eeschema/widgets/symbol_diff_widget.cpp:45 pcbnew/footprint.cpp:1675
+#: eeschema/widgets/symbol_diff_widget.cpp:45 pcbnew/footprint.cpp:1686
 msgid "Library"
 msgstr "庫"
 
@@ -10353,7 +10350,7 @@ msgstr "貼齊到網格:"
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:357
 #: pcbnew/dialogs/panel_edit_options_base.cpp:329
 #: pcbnew/dialogs/panel_edit_options_base.cpp:343
-#: pcbnew/dialogs/panel_edit_options_base.cpp:357 pcbnew/zone.cpp:1847
+#: pcbnew/dialogs/panel_edit_options_base.cpp:357 pcbnew/zone.cpp:1846
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:282
 msgid "Always"
 msgstr "總是啟用"
@@ -10366,7 +10363,7 @@ msgstr "當網格顯示時啟用"
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:357
 #: pcbnew/dialogs/panel_edit_options_base.cpp:329
 #: pcbnew/dialogs/panel_edit_options_base.cpp:343
-#: pcbnew/dialogs/panel_edit_options_base.cpp:357 pcbnew/zone.cpp:1848
+#: pcbnew/dialogs/panel_edit_options_base.cpp:357 pcbnew/zone.cpp:1847
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:282
 msgid "Never"
 msgstr "從不啟用"
@@ -10434,8 +10431,8 @@ msgstr "將繪製視圖設定為顯示所有項目"
 #: common/widgets/net_selector.cpp:32 gerbview/gerber_draw_item.cpp:751
 #: pcbnew/dialogs/dialog_copper_zones.cpp:404
 #: pcbnew/dialogs/dialog_copper_zones.cpp:779
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:287
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:288
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:291
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:292
 msgid "<no net>"
 msgstr "<無網路>"
 
@@ -11137,7 +11134,7 @@ msgstr "找不到封裝 '%s'。"
 msgid "Error loading footprint"
 msgstr "載入封裝時出錯"
 
-#: cvpcb/display_footprints_frame.cpp:381 pcbnew/footprint.cpp:1737
+#: cvpcb/display_footprints_frame.cpp:381 pcbnew/footprint.cpp:1748
 #, c-format
 msgid "Footprint: %s"
 msgstr "封裝: %s"
@@ -11800,6 +11797,7 @@ msgid "Change symbols matching library identifier:"
 msgstr "替換使用此庫索引值的符號:"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:139
+#: pcbnew/dialogs/dialog_update_pcb_base.cpp:65
 msgid "Update Fields"
 msgstr "更新欄位"
 
@@ -13069,7 +13067,7 @@ msgstr "顯示語法幫助視窗"
 #: eeschema/sch_symbol.cpp:2949
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:27
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:28
-#: pcbnew/footprint.cpp:4127
+#: pcbnew/footprint.cpp:4138
 msgid "Fields"
 msgstr "欄位"
 
@@ -13491,7 +13489,7 @@ msgstr "建立一個電源符號"
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:207
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:206
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:208
-#: pcbnew/drc/drc_test_provider_library_parity.cpp:648
+#: pcbnew/drc/drc_test_provider_library_parity.cpp:646
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:206
 msgid "Exclude from bill of materials"
 msgstr "從物料清單中移除"
@@ -13526,8 +13524,8 @@ msgstr "新建符號"
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:378
 #: eeschema/dialogs/dialog_sheet_properties.cpp:217
 #: eeschema/dialogs/dialog_symbol_properties.cpp:655
-#: pcbnew/dialogs/dialog_footprint_properties.cpp:408
-#: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:491
+#: pcbnew/dialogs/dialog_footprint_properties.cpp:439
+#: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:485
 msgid "Fields must have a name."
 msgstr "欄位必須要有名稱。"
 
@@ -13569,8 +13567,8 @@ msgstr "名稱 '%s' 已被使用。"
 #: eeschema/dialogs/dialog_sheet_properties.cpp:772
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:778
 #: eeschema/dialogs/dialog_symbol_properties.cpp:899
-#: pcbnew/dialogs/dialog_footprint_properties.cpp:725
-#: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:795
+#: pcbnew/dialogs/dialog_footprint_properties.cpp:752
+#: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:787
 #, c-format
 msgid "The first %d fields are mandatory."
 msgstr "第一個欄位 %d 是必填的。"
@@ -14524,7 +14522,7 @@ msgstr "填充:"
 msgid "Clear colors to use Schematic Editor colors."
 msgstr "清除顏色以使用原理圖編輯器預設顏色。"
 
-#: eeschema/dialogs/dialog_shape_properties_base.cpp:159 pcbnew/zone.cpp:1993
+#: eeschema/dialogs/dialog_shape_properties_base.cpp:159 pcbnew/zone.cpp:1992
 msgid "Fill Style"
 msgstr "填充樣式"
 
@@ -14689,9 +14687,9 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:162
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:217
-#: pcbnew/dialogs/dialog_footprint_properties_base.cpp:214
-#: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:216
-#: pcbnew/drc/drc_test_provider_library_parity.cpp:652
+#: pcbnew/dialogs/dialog_footprint_properties_base.cpp:209
+#: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:211
+#: pcbnew/drc/drc_test_provider_library_parity.cpp:650
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:193
 msgid "Do not populate"
 msgstr "DNP (不作裝配)"
@@ -14767,7 +14765,7 @@ msgstr "SP"
 #: eeschema/dialogs/dialog_sim_command_base.cpp:25
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:96
 #: pcbnew/dialogs/dialog_track_via_properties.h:197
-#: pcbnew/dialogs/dialog_track_via_properties_base.cpp:292 pcbnew/pad.cpp:2701
+#: pcbnew/dialogs/dialog_track_via_properties_base.cpp:292 pcbnew/pad.cpp:2700
 #: pcbnew/widgets/pcb_net_inspector_panel_data_model.h:845
 msgid "Custom"
 msgstr "自定義"
@@ -15260,10 +15258,10 @@ msgstr "參數"
 #: pagelayout_editor/dialogs/dialog_design_inspector_base.cpp:36
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:83
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2267 pcbnew/pcb_marker.cpp:199
-#: pcbnew/pcb_shape.cpp:688 pcbnew/pcb_text.cpp:281 pcbnew/pcb_track.cpp:1795
-#: pcbnew/pcb_track.cpp:1897 pcbnew/tools/pcb_control.cpp:2432
+#: pcbnew/pcb_shape.cpp:687 pcbnew/pcb_text.cpp:281 pcbnew/pcb_track.cpp:1792
+#: pcbnew/pcb_track.cpp:1894 pcbnew/tools/pcb_control.cpp:2432
 #: pcbnew/widgets/search_handlers.cpp:270
-#: pcbnew/widgets/search_handlers.cpp:343 pcbnew/zone.cpp:846
+#: pcbnew/widgets/search_handlers.cpp:343 pcbnew/zone.cpp:845
 msgid "Type"
 msgstr "類型"
 
@@ -17347,21 +17345,21 @@ msgid "'%s' is not a valid footprint identifier."
 msgstr "'%s' 不是有效封裝索引。"
 
 #: eeschema/erc/erc.cpp:1548
-#: pcbnew/drc/drc_test_provider_library_parity.cpp:878
+#: pcbnew/drc/drc_test_provider_library_parity.cpp:876
 #: pcbnew/footprint_editor_utils.cpp:341
 #, c-format
 msgid "The current configuration does not include the footprint library '%s'."
 msgstr "目前配置不包含封裝庫 '%s'。"
 
 #: eeschema/erc/erc.cpp:1557
-#: pcbnew/drc/drc_test_provider_library_parity.cpp:892
+#: pcbnew/drc/drc_test_provider_library_parity.cpp:890
 #: pcbnew/footprint_editor_utils.cpp:353
 #, c-format
 msgid "The footprint library '%s' is not enabled in the current configuration."
 msgstr "目前配置中未啟用封裝庫 '%s'。"
 
 #: eeschema/erc/erc.cpp:1566
-#: pcbnew/drc/drc_test_provider_library_parity.cpp:943
+#: pcbnew/drc/drc_test_provider_library_parity.cpp:941
 #, c-format
 msgid "Footprint '%s' not found in library '%s'."
 msgstr "在庫‘%s’中未找到封裝‘%s’。"
@@ -17994,7 +17992,7 @@ msgid "Error loading symbol %s from library '%s'."
 msgstr "從庫“%s”載入符號 %s 時出錯。"
 
 #: eeschema/generate_alias_info.cpp:122 eeschema/sim/spice_simulator.cpp:69
-#: kicad/pcm/pcm.cpp:766 pcbnew/zone.cpp:934
+#: kicad/pcm/pcm.cpp:766 pcbnew/zone.cpp:933
 msgid "Unknown"
 msgstr "未知"
 
@@ -18036,7 +18034,7 @@ msgid "Only vectors will be imported.  Bitmaps and fonts will be ignored."
 msgstr "只匯入向量圖。點陣圖和字體將被忽略。"
 
 #: eeschema/import_gfx/dialog_import_gfx_sch_base.cpp:43
-#: pcbnew/dialogs/dialog_rule_area_properties.cpp:131 pcbnew/zone.cpp:1972
+#: pcbnew/dialogs/dialog_rule_area_properties.cpp:131 pcbnew/zone.cpp:1971
 msgid "Placement"
 msgstr "放置"
 
@@ -18104,7 +18102,7 @@ msgstr "模擬中排除"
 #: eeschema/lib_symbol.cpp:630 eeschema/sch_sheet.cpp:303
 #: eeschema/sch_sheet.cpp:871 eeschema/sch_symbol.cpp:1517
 #: eeschema/sch_symbol.cpp:1934 eeschema/widgets/search_handlers.cpp:169
-#: pcbnew/footprint.cpp:1723
+#: pcbnew/footprint.cpp:1734
 msgid "DNP"
 msgstr "DNP (不作裝配)"
 
@@ -18117,12 +18115,12 @@ msgid "Unit count differs."
 msgstr "'單元數量' 差異。"
 
 #: eeschema/lib_symbol.cpp:1567
-#: pcbnew/drc/drc_test_provider_library_parity.cpp:759
+#: pcbnew/drc/drc_test_provider_library_parity.cpp:757
 msgid "Graphic item count differs."
 msgstr "'圖形項目數量' 差異。"
 
 #: eeschema/lib_symbol.cpp:1579
-#: pcbnew/drc/drc_test_provider_library_parity.cpp:773
+#: pcbnew/drc/drc_test_provider_library_parity.cpp:771
 #, c-format
 msgid "%s differs."
 msgstr "%s 個差異。"
@@ -18442,7 +18440,9 @@ msgstr "更改主體樣式"
 msgid "Set Pin Function"
 msgstr "設定接腳功能"
 
-#: eeschema/pin_numbers.cpp:129 pcbnew/zones.h:62
+#: eeschema/pin_numbers.cpp:129
+#: pcbnew/dialogs/dialog_footprint_properties.cpp:379
+#: pcbnew/dialogs/dialog_footprint_properties_base.cpp:373 pcbnew/zones.h:62
 msgid "none"
 msgstr "無"
 
@@ -18579,7 +18579,7 @@ msgstr "無法儲存恢復庫 %s。"
 msgid "Error occurred saving project specific symbol library table."
 msgstr "儲存專案特定的符號庫表時出錯。"
 
-#: eeschema/project_sch.cpp:113 pcbnew/board_connected_item.cpp:130
+#: eeschema/project_sch.cpp:113 pcbnew/board_connected_item.cpp:157
 msgid "Not Found"
 msgstr "找不到"
 
@@ -18629,18 +18629,18 @@ msgstr ""
 #: eeschema/sch_bitmap.cpp:299 eeschema/sch_group.cpp:423
 #: eeschema/sch_pin.cpp:1765 eeschema/sch_shape.cpp:551
 #: eeschema/sch_symbol.cpp:2917 pcbnew/board_item.cpp:412
-#: pcbnew/pcb_group.cpp:440 pcbnew/pcb_shape.cpp:970
-#: pcbnew/pcb_tablecell.cpp:190 pcbnew/pcb_track.cpp:2350 pcbnew/zone.cpp:1868
-#: pcbnew/zone.cpp:1880
+#: pcbnew/pcb_group.cpp:440 pcbnew/pcb_shape.cpp:969
+#: pcbnew/pcb_tablecell.cpp:190 pcbnew/pcb_track.cpp:2347 pcbnew/zone.cpp:1867
+#: pcbnew/zone.cpp:1879
 msgid "Position X"
 msgstr "位置 X"
 
 #: eeschema/sch_bitmap.cpp:304 eeschema/sch_group.cpp:424
 #: eeschema/sch_pin.cpp:1769 eeschema/sch_shape.cpp:553
 #: eeschema/sch_symbol.cpp:2920 pcbnew/board_item.cpp:415
-#: pcbnew/pcb_group.cpp:441 pcbnew/pcb_shape.cpp:972
-#: pcbnew/pcb_tablecell.cpp:191 pcbnew/pcb_track.cpp:2354 pcbnew/zone.cpp:1874
-#: pcbnew/zone.cpp:1881
+#: pcbnew/pcb_group.cpp:441 pcbnew/pcb_shape.cpp:971
+#: pcbnew/pcb_tablecell.cpp:191 pcbnew/pcb_track.cpp:2351 pcbnew/zone.cpp:1873
+#: pcbnew/zone.cpp:1880
 msgid "Position Y"
 msgstr "位置 Y"
 
@@ -18676,9 +18676,9 @@ msgstr "匯流排輸入類型"
 
 #: eeschema/sch_bus_entry.cpp:513 eeschema/sch_junction.cpp:302
 #: eeschema/sch_label.cpp:1268 eeschema/sch_line.cpp:924
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2306 pcbnew/pad.cpp:1331
-#: pcbnew/pcb_track.cpp:1927 pcbnew/tools/pcb_control.cpp:2112
-#: pcbnew/zone.cpp:882
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2306 pcbnew/pad.cpp:1330
+#: pcbnew/pcb_track.cpp:1924 pcbnew/tools/pcb_control.cpp:2112
+#: pcbnew/zone.cpp:881
 msgid "Resolved Netclass"
 msgstr "已解析的網路類"
 
@@ -18918,7 +18918,7 @@ msgid "Blanket not currently supported."
 msgstr "尚未支援空白。"
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:1430
-#: eeschema/sch_io/altium/sch_io_altium.cpp:4770
+#: eeschema/sch_io/altium/sch_io_altium.cpp:4771
 #, c-format
 msgid "Unknown or unexpected record id %d found in %s."
 msgstr "'未知' 或 '意外'的記錄 ID %d在 %s 中被發現。"
@@ -18983,7 +18983,7 @@ msgstr "讀取圖片 %s 時出錯。"
 msgid "File not found %s."
 msgstr "找不到檔案 %s。"
 
-#: eeschema/sch_io/altium/sch_io_altium.cpp:4906
+#: eeschema/sch_io/altium/sch_io_altium.cpp:4907
 msgid "Expected Altium Schematic Library file version 5.0"
 msgstr "Altium 原理圖庫檔案應為 5.0 版本"
 
@@ -19733,8 +19733,8 @@ msgid "Size"
 msgstr "尺寸"
 
 #: eeschema/sch_junction.cpp:362
-#: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:104 pcbnew/pad.cpp:1380
-#: pcbnew/pcb_track.cpp:1903 pcbnew/pcb_track.cpp:2398
+#: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:104 pcbnew/pad.cpp:1379
+#: pcbnew/pcb_track.cpp:1900 pcbnew/pcb_track.cpp:2395
 msgid "Diameter"
 msgstr "直徑"
 
@@ -19765,15 +19765,15 @@ msgid "Justification"
 msgstr "齊行"
 
 #: eeschema/sch_label.cpp:1383 eeschema/sch_line.cpp:863
-#: pcbnew/board_connected_item.cpp:187
+#: pcbnew/board_connected_item.cpp:214
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:39
 #: pcbnew/generators/pcb_tuning_pattern.cpp:505
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2302 pcbnew/pad.cpp:1329
-#: pcbnew/pad.cpp:2777 pcbnew/pcb_shape.cpp:987 pcbnew/pcb_tablecell.cpp:194
-#: pcbnew/pcb_track.cpp:1925 pcbnew/tools/pcb_control.cpp:2109
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2302 pcbnew/pad.cpp:1328
+#: pcbnew/pad.cpp:2776 pcbnew/pcb_shape.cpp:986 pcbnew/pcb_tablecell.cpp:194
+#: pcbnew/pcb_track.cpp:1922 pcbnew/tools/pcb_control.cpp:2109
 #: pcbnew/widgets/pcb_properties_panel.cpp:282
-#: pcbnew/widgets/search_handlers.cpp:204 pcbnew/zone.cpp:880
-#: pcbnew/zone.cpp:1928 pcbnew/zone_manager/dialog_zone_manager_base.cpp:42
+#: pcbnew/widgets/search_handlers.cpp:204 pcbnew/zone.cpp:879
+#: pcbnew/zone.cpp:1927 pcbnew/zone_manager/dialog_zone_manager_base.cpp:42
 #: pcbnew/zone_manager/model_zones_overview_table.h:76
 msgid "Net"
 msgstr "網路"
@@ -19923,7 +19923,7 @@ msgstr "隱藏的接腳 %s [%s, %s, %s]"
 msgid "Hidden pin %s [%s, %s]"
 msgstr "隱藏的接腳 %s [%s, %s]"
 
-#: eeschema/sch_pin.cpp:1747 pcbnew/pad.cpp:1322 pcbnew/pad.cpp:2797
+#: eeschema/sch_pin.cpp:1747 pcbnew/pad.cpp:1321 pcbnew/pad.cpp:2796
 msgid "Pin Name"
 msgstr "接腳名稱"
 
@@ -20048,17 +20048,17 @@ msgid "Fill color"
 msgstr "填充顏色"
 
 #: eeschema/sch_shape.cpp:556 pcbnew/pcb_textbox.cpp:826
-#: pcbnew/pcb_track.cpp:2328
+#: pcbnew/pcb_track.cpp:2325
 msgid "Filled"
 msgstr "填充"
 
-#: eeschema/sch_shape.cpp:564 pcbnew/zone.cpp:937 pcbnew/zone.cpp:1995
+#: eeschema/sch_shape.cpp:564 pcbnew/zone.cpp:936 pcbnew/zone.cpp:1994
 msgid "Fill Mode"
 msgstr "填充模式"
 
 #: eeschema/sch_sheet.cpp:845 eeschema/sch_sheet.cpp:1652
 #: pcbnew/dialogs/dialog_multichannel_generate_rule_areas.cpp:62
-#: pcbnew/zone.cpp:1858
+#: pcbnew/zone.cpp:1857
 msgid "Sheet Name"
 msgstr "圖紙名稱"
 
@@ -20114,17 +20114,17 @@ msgid "Exclude From Simulation"
 msgstr "不參與電路模擬"
 
 #: eeschema/sch_sheet.cpp:1674 eeschema/sch_symbol.cpp:984
-#: eeschema/sch_symbol.cpp:3001 pcbnew/footprint.cpp:4159
+#: eeschema/sch_symbol.cpp:3001 pcbnew/footprint.cpp:4170
 msgid "Exclude From Bill of Materials"
 msgstr "不在物料清單中顯示"
 
 #: eeschema/sch_sheet.cpp:1678 eeschema/sch_symbol.cpp:985
 #: eeschema/sch_symbol.cpp:3004 eeschema/tools/sch_actions.cpp:1034
-#: pcbnew/footprint.cpp:4162
+#: pcbnew/footprint.cpp:4173
 msgid "Do not Populate"
 msgstr "不作裝配"
 
-#: eeschema/sch_sheet_path.cpp:58 include/board_item.h:476
+#: eeschema/sch_sheet_path.cpp:58 include/board_item.h:477
 msgid "(Deleted Item)"
 msgstr "(刪除項目)"
 
@@ -20176,7 +20176,7 @@ msgid "Mirror Y"
 msgstr "Y 軸鏡像"
 
 #: eeschema/sch_symbol.cpp:2957 eeschema/widgets/search_handlers.cpp:170
-#: pcbnew/footprint.cpp:4136 pcbnew/widgets/search_handlers.cpp:124
+#: pcbnew/footprint.cpp:4147 pcbnew/widgets/search_handlers.cpp:124
 msgid "Library Link"
 msgstr "庫鏈接"
 
@@ -23220,7 +23220,7 @@ msgid "Edit Value..."
 msgstr "編輯值..."
 
 #: eeschema/tools/sch_actions.cpp:800
-#: pcbnew/dialogs/dialog_footprint_properties_base.cpp:235
+#: pcbnew/dialogs/dialog_footprint_properties_base.cpp:230
 msgid "Edit Footprint..."
 msgstr "編輯封裝..."
 
@@ -25012,7 +25012,7 @@ msgid "Select Layer: %s"
 msgstr "選擇層: %s"
 
 #: gerbview/dialogs/dialog_select_one_pcb_layer.cpp:134
-#: pcbnew/board_connected_item.cpp:182 pcbnew/board_connected_item.cpp:185
+#: pcbnew/board_connected_item.cpp:209 pcbnew/board_connected_item.cpp:212
 #: pcbnew/board_item.cpp:418
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:75
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:58
@@ -25023,24 +25023,24 @@ msgstr "選擇層: %s"
 #: pcbnew/dialogs/panel_fp_editor_field_defaults.cpp:69
 #: pcbnew/dialogs/panel_fp_editor_field_defaults_base.cpp:50
 #: pcbnew/dialogs/panel_fp_editor_field_defaults_base.cpp:98
-#: pcbnew/footprint.cpp:4118 pcbnew/footprint.cpp:4121
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2309 pcbnew/pad.cpp:1339
-#: pcbnew/pad.cpp:2739 pcbnew/pcb_dimension.cpp:675
+#: pcbnew/footprint.cpp:4129 pcbnew/footprint.cpp:4132
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2309 pcbnew/pad.cpp:1338
+#: pcbnew/pad.cpp:2738 pcbnew/pcb_dimension.cpp:675
 #: pcbnew/pcb_dimension.cpp:1491 pcbnew/pcb_fields_grid_table.cpp:154
 #: pcbnew/pcb_group.cpp:442 pcbnew/pcb_marker.cpp:372
 #: pcbnew/pcb_reference_image.cpp:226 pcbnew/pcb_reference_image.cpp:349
-#: pcbnew/pcb_shape.cpp:695 pcbnew/pcb_shape.cpp:954 pcbnew/pcb_shape.cpp:956
+#: pcbnew/pcb_shape.cpp:694 pcbnew/pcb_shape.cpp:953 pcbnew/pcb_shape.cpp:955
 #: pcbnew/pcb_tablecell.cpp:111 pcbnew/pcb_tablecell.cpp:192
 #: pcbnew/pcb_target.cpp:153 pcbnew/pcb_text.cpp:286 pcbnew/pcb_textbox.cpp:472
-#: pcbnew/pcb_track.cpp:1799 pcbnew/pcb_track.cpp:1901
-#: pcbnew/pcb_track.cpp:2395 pcbnew/tools/board_inspection_tool.cpp:237
+#: pcbnew/pcb_track.cpp:1796 pcbnew/pcb_track.cpp:1898
+#: pcbnew/pcb_track.cpp:2392 pcbnew/tools/board_inspection_tool.cpp:237
 #: pcbnew/widgets/pcb_properties_panel.cpp:258
 #: pcbnew/widgets/pcb_properties_panel.cpp:259
 #: pcbnew/widgets/pcb_properties_panel.cpp:262
 #: pcbnew/widgets/search_handlers.cpp:121
 #: pcbnew/widgets/search_handlers.cpp:205
-#: pcbnew/widgets/search_handlers.cpp:272 pcbnew/zone.cpp:925
-#: pcbnew/zone.cpp:1921 pcbnew/zone.cpp:1922
+#: pcbnew/widgets/search_handlers.cpp:272 pcbnew/zone.cpp:924
+#: pcbnew/zone.cpp:1920 pcbnew/zone.cpp:1921
 msgid "Layer"
 msgstr "層"
 
@@ -31519,7 +31519,7 @@ msgstr "細分覆銅區..."
 #: pcbnew/board.cpp:1853 pcbnew/dialogs/dialog_board_statistics.cpp:766
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:79
 #: pcbnew/dialogs/dialog_unused_pad_layers_base.cpp:27
-#: pcbnew/footprint.cpp:1679 pcbnew/netinfo_item.cpp:109
+#: pcbnew/footprint.cpp:1690 pcbnew/netinfo_item.cpp:109
 #: pcbnew/pcb_draw_panel_gal.cpp:716 pcbnew/widgets/appearance_controls.cpp:335
 #: pcbnew/widgets/panel_selection_filter.cpp:200
 #: pcbnew/widgets/panel_selection_filter_base.cpp:45
@@ -31550,15 +31550,15 @@ msgstr "走線段"
 msgid "Unrouted"
 msgstr "未佈線"
 
-#: pcbnew/board_connected_item.cpp:208
+#: pcbnew/board_connected_item.cpp:235
 msgid "NetClass"
 msgstr "網路類"
 
-#: pcbnew/board_connected_item.cpp:215
+#: pcbnew/board_connected_item.cpp:242
 msgid "NetName"
 msgstr "網路名稱"
 
-#: pcbnew/board_connected_item.cpp:249
+#: pcbnew/board_connected_item.cpp:276
 #: pcbnew/dialogs/dialog_board_setup.cpp:170
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:43
 #: pcbnew/dialogs/dialog_global_edit_teardrops.cpp:132
@@ -31566,39 +31566,39 @@ msgstr "網路名稱"
 msgid "Teardrops"
 msgstr "淚滴"
 
-#: pcbnew/board_connected_item.cpp:251
+#: pcbnew/board_connected_item.cpp:278
 msgid "Enable Teardrops"
 msgstr "啟用淚滴"
 
-#: pcbnew/board_connected_item.cpp:257
+#: pcbnew/board_connected_item.cpp:284
 msgid "Best Length Ratio"
 msgstr "最優長度比"
 
-#: pcbnew/board_connected_item.cpp:264
+#: pcbnew/board_connected_item.cpp:291
 msgid "Max Length"
 msgstr "最大長度"
 
-#: pcbnew/board_connected_item.cpp:270
+#: pcbnew/board_connected_item.cpp:297
 msgid "Best Width Ratio"
 msgstr "最優寬度比"
 
-#: pcbnew/board_connected_item.cpp:277
+#: pcbnew/board_connected_item.cpp:304
 msgid "Max Width"
 msgstr "最大寬度"
 
-#: pcbnew/board_connected_item.cpp:283
+#: pcbnew/board_connected_item.cpp:310
 msgid "Curved Teardrops"
 msgstr "設定淚滴"
 
-#: pcbnew/board_connected_item.cpp:289
+#: pcbnew/board_connected_item.cpp:316
 msgid "Prefer Zone Connections"
 msgstr "優先區域連接"
 
-#: pcbnew/board_connected_item.cpp:295
+#: pcbnew/board_connected_item.cpp:322
 msgid "Allow Teardrops To Span Two Tracks"
 msgstr "允許淚滴跨越兩條走線"
 
-#: pcbnew/board_connected_item.cpp:301
+#: pcbnew/board_connected_item.cpp:328
 msgid "Max Width Ratio"
 msgstr "最大寬度比"
 
@@ -32113,7 +32113,7 @@ msgid "(arc has null or very small size: %d nm)"
 msgstr "(弧的大小過小或為空: %d nm)"
 
 #: pcbnew/cross-probing.cpp:106 pcbnew/dialogs/dialog_board_setup.cpp:222
-#: pcbnew/dialogs/dialog_drc.cpp:272 pcbnew/pcb_edit_frame.cpp:2557
+#: pcbnew/dialogs/dialog_drc.cpp:272 pcbnew/pcb_edit_frame.cpp:2597
 msgid "Custom Rules"
 msgstr "自定義規則"
 
@@ -32472,7 +32472,7 @@ msgstr "重新批註範圍"
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:154
 #: pcbnew/dialogs/dialog_render_job.cpp:39
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:117
-#: pcbnew/footprint.cpp:1691
+#: pcbnew/footprint.cpp:1702
 msgid "Front"
 msgstr "頂層"
 
@@ -32748,7 +32748,7 @@ msgid "Total:"
 msgstr "總計:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:557
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:441 pcbnew/pad.cpp:2714
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:441 pcbnew/pad.cpp:2713
 msgid "Round"
 msgstr "圓角"
 
@@ -32771,11 +32771,11 @@ msgstr "???"
 msgid "N/A"
 msgstr "N/A"
 
-#: pcbnew/dialogs/dialog_board_statistics.cpp:576 pcbnew/pad.cpp:1567
+#: pcbnew/dialogs/dialog_board_statistics.cpp:576 pcbnew/pad.cpp:1566
 msgid "PTH"
 msgstr "金屬化 (PTH)"
 
-#: pcbnew/dialogs/dialog_board_statistics.cpp:576 pcbnew/pad.cpp:1570
+#: pcbnew/dialogs/dialog_board_statistics.cpp:576 pcbnew/pad.cpp:1569
 msgid "NPTH"
 msgstr "非金屬化 (NPTH)"
 
@@ -32796,7 +32796,7 @@ msgid "Board name"
 msgstr "電路板名稱"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:751
-#: pcbnew/dialogs/dialog_board_statistics.cpp:757 pcbnew/pad.cpp:1349
+#: pcbnew/dialogs/dialog_board_statistics.cpp:757 pcbnew/pad.cpp:1348
 msgid "Area"
 msgstr "區域"
 
@@ -32939,7 +32939,7 @@ msgid "Build Changes"
 msgstr "建置更改"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias.cpp:267
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:189
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:193
 msgid "Checking zones..."
 msgstr "正在檢查覆銅..."
 
@@ -33163,7 +33163,7 @@ msgstr "邊框顯示:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:134
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:62
-#: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:75 pcbnew/zone.cpp:933
+#: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:75 pcbnew/zone.cpp:932
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:59
 msgid "Hatched"
 msgstr "陰影線"
@@ -33243,8 +33243,8 @@ msgstr ""
 "焊盤與覆銅預設連接類型。\n"
 "該設定可被局部焊盤設定覆蓋"
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:232 pcbnew/footprint.cpp:4092
-#: pcbnew/pad.cpp:2724 pcbnew/zone.cpp:1828
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:232 pcbnew/footprint.cpp:4103
+#: pcbnew/pad.cpp:2723 pcbnew/zone.cpp:1827
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:157
 msgid "Thermal reliefs"
 msgstr "緩釋熱焊盤 (花焊盤)"
@@ -33289,13 +33289,13 @@ msgstr "填充類型:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:290
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:132
-#: pcbnew/zone.cpp:1838 pcbnew/zone_manager/panel_zone_properties_base.cpp:215
+#: pcbnew/zone.cpp:1837 pcbnew/zone_manager/panel_zone_properties_base.cpp:215
 msgid "Solid fill"
 msgstr "實心填充"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:290
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:132
-#: pcbnew/zone.cpp:1839 pcbnew/zone_manager/panel_zone_properties_base.cpp:215
+#: pcbnew/zone.cpp:1838 pcbnew/zone_manager/panel_zone_properties_base.cpp:215
 msgid "Hatch pattern"
 msgstr "網格圖案"
 
@@ -33361,7 +33361,7 @@ msgstr "死銅移除:"
 msgid "Choose what to do with unconnected copper islands"
 msgstr "選擇如何處理未連接的孤銅"
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:357 pcbnew/zone.cpp:1849
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:357 pcbnew/zone.cpp:1848
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:282
 msgid "Below area limit"
 msgstr "僅低於區域限制時"
@@ -34219,7 +34219,7 @@ msgstr "更新制造特性"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:87
 #, fuzzy
-msgid "Update clearance overrides and settings"
+msgid "Update clearance overrides"
 msgstr "間隙覆蓋和設定"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:88
@@ -34308,7 +34308,7 @@ msgstr "更新/重置製造特性"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:114
 #, fuzzy
-msgid "Update/reset clearance overrides and settings"
+msgid "Update/reset clearance overrides"
 msgstr "間隙覆蓋和設定"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:117
@@ -35071,7 +35071,7 @@ msgstr "封裝檢查器"
 msgid "3D Models"
 msgstr "3D 模型"
 
-#: pcbnew/dialogs/dialog_footprint_properties.cpp:306
+#: pcbnew/dialogs/dialog_footprint_properties.cpp:305
 msgid ""
 "Locked footprints cannot be freely moved and oriented on the canvas and can "
 "only be selected when the 'Locked items' checkbox is checked in the "
@@ -35080,27 +35080,32 @@ msgstr ""
 "鎖定的封裝無法在畫布上自由移動和和調整方向, 只有在選擇篩選器中勾選 '已鎖定項"
 "目' 勾選框時才能選擇。"
 
-#: pcbnew/dialogs/dialog_footprint_properties.cpp:427
+#: pcbnew/dialogs/dialog_footprint_properties.cpp:357
+#, fuzzy
+msgid "all pads with duplicate numbers"
+msgstr "具有重複編號的焊盤為跳線"
+
+#: pcbnew/dialogs/dialog_footprint_properties.cpp:458
 #, c-format
 msgid "Text width must be at least %s."
 msgstr "文字寬度必須至少為 %s。"
 
-#: pcbnew/dialogs/dialog_footprint_properties.cpp:440
+#: pcbnew/dialogs/dialog_footprint_properties.cpp:471
 #, c-format
 msgid "Text width must be at most %s."
 msgstr "文字寬度不得超過 %s。"
 
-#: pcbnew/dialogs/dialog_footprint_properties.cpp:454
+#: pcbnew/dialogs/dialog_footprint_properties.cpp:485
 #, c-format
 msgid "Text height must be at least %s."
 msgstr "文字高度必須至少為 %s。"
 
-#: pcbnew/dialogs/dialog_footprint_properties.cpp:467
+#: pcbnew/dialogs/dialog_footprint_properties.cpp:498
 #, c-format
 msgid "Text height must be at most %s."
 msgstr "文字高度不得超過 %s。"
 
-#: pcbnew/dialogs/dialog_footprint_properties.cpp:484
+#: pcbnew/dialogs/dialog_footprint_properties.cpp:515
 #, c-format
 msgid ""
 "Text thickness is too large for the text size.\n"
@@ -35109,8 +35114,8 @@ msgstr ""
 "文字線寬與高度比例不對。\n"
 "線寬已被限制為 %s。"
 
-#: pcbnew/dialogs/dialog_footprint_properties.cpp:670
-#: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:735
+#: pcbnew/dialogs/dialog_footprint_properties.cpp:697
+#: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:727
 msgid "Edit Footprint Properties"
 msgstr "編輯封裝屬性"
 
@@ -35156,75 +35161,70 @@ msgstr "參考位置"
 msgid "Side:"
 msgstr "側面:"
 
+#: pcbnew/dialogs/dialog_footprint_properties_base.cpp:179
+#: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:184
+msgid "Fabrication Attributes"
+msgstr "製造屬性"
+
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:184
 msgid "Footprint type:"
 msgstr "封裝類型:"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:188
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:193
-#: pcbnew/footprint.cpp:1281
+#: pcbnew/footprint.cpp:1292
 msgid "Through hole"
 msgstr "通孔"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:188
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:193
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:39 pcbnew/footprint.cpp:1278
-#: pcbnew/pad.cpp:1568 pcbnew/pad.cpp:2690
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:39 pcbnew/footprint.cpp:1289
+#: pcbnew/pad.cpp:1567 pcbnew/pad.cpp:2689
 msgid "SMD"
 msgstr "表面黏著"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:200
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:202
-#: pcbnew/drc/drc_test_provider_library_parity.cpp:640
+#: pcbnew/drc/drc_test_provider_library_parity.cpp:638
 msgid "Not in schematic"
 msgstr "不在原理圖中"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:203
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:205
-#: pcbnew/drc/drc_test_provider_library_parity.cpp:644
+#: pcbnew/drc/drc_test_provider_library_parity.cpp:642
 msgid "Exclude from position files"
 msgstr "從 pos 檔案中移除"
 
-#: pcbnew/dialogs/dialog_footprint_properties_base.cpp:209
-#: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:211
-msgid "Exempt from courtyard requirement"
-msgstr "忽略封裝外框要求"
-
-#: pcbnew/dialogs/dialog_footprint_properties_base.cpp:210
-#: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:212
-msgid "Will not generate \"missing courtyard\" DRC violations"
-msgstr "不會產生\"遺失外框\"的 DRC 違規行為"
-
-#: pcbnew/dialogs/dialog_footprint_properties_base.cpp:229
+#: pcbnew/dialogs/dialog_footprint_properties_base.cpp:224
 msgid "Update Footprint from Library..."
 msgstr "從庫中更新封裝..."
 
-#: pcbnew/dialogs/dialog_footprint_properties_base.cpp:232
+#: pcbnew/dialogs/dialog_footprint_properties_base.cpp:227
 #: pcbnew/tools/pcb_actions.cpp:945
 msgid "Change Footprint..."
 msgstr "替換封裝..."
 
-#: pcbnew/dialogs/dialog_footprint_properties_base.cpp:241
+#: pcbnew/dialogs/dialog_footprint_properties_base.cpp:236
 #: pcbnew/tools/pcb_actions.cpp:537
 msgid "Edit Library Footprint..."
 msgstr "編輯庫封裝..."
 
-#: pcbnew/dialogs/dialog_footprint_properties_base.cpp:266
-#: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:235
+#: pcbnew/dialogs/dialog_footprint_properties_base.cpp:261
+#: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:230
 msgid "Clearances"
 msgstr "間隙"
 
-#: pcbnew/dialogs/dialog_footprint_properties_base.cpp:268
+#: pcbnew/dialogs/dialog_footprint_properties_base.cpp:263
 msgid "Leave values blank to use Board Setup values."
 msgstr "如果值為空, 則使用 電路板設定 的值。"
 
-#: pcbnew/dialogs/dialog_footprint_properties_base.cpp:278
-#: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:247
+#: pcbnew/dialogs/dialog_footprint_properties_base.cpp:273
+#: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:242
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:997
 msgid "Pad clearance:"
 msgstr "焊盤間隙:"
 
-#: pcbnew/dialogs/dialog_footprint_properties_base.cpp:280
+#: pcbnew/dialogs/dialog_footprint_properties_base.cpp:275
 msgid ""
 "This is the local net clearance for all pad of this footprint\n"
 "If 0, the Netclass values are used\n"
@@ -35234,14 +35234,14 @@ msgstr ""
 "如果為 0, 即使用網路類值\n"
 "這個值可以被局部值所取代。"
 
-#: pcbnew/dialogs/dialog_footprint_properties_base.cpp:291
-#: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:260
+#: pcbnew/dialogs/dialog_footprint_properties_base.cpp:286
+#: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:255
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1010
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:60
 msgid "Solder mask expansion:"
 msgstr "阻焊層擴展:"
 
-#: pcbnew/dialogs/dialog_footprint_properties_base.cpp:293
+#: pcbnew/dialogs/dialog_footprint_properties_base.cpp:288
 msgid ""
 "This is the local clearance between pads and the solder mask for this "
 "footprint.\n"
@@ -35252,20 +35252,20 @@ msgstr ""
 "這個值可以被焊盤局部值所取代。\n"
 "如果為0時, 使用全域設定值。"
 
-#: pcbnew/dialogs/dialog_footprint_properties_base.cpp:304
-#: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:273
-#: pcbnew/drc/drc_test_provider_library_parity.cpp:629
+#: pcbnew/dialogs/dialog_footprint_properties_base.cpp:299
+#: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:268
+#: pcbnew/drc/drc_test_provider_library_parity.cpp:631
 msgid "Allow bridged solder mask apertures between pads"
 msgstr "允許焊盤之間有橋接的阻焊開窗"
 
-#: pcbnew/dialogs/dialog_footprint_properties_base.cpp:307
-#: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:276
+#: pcbnew/dialogs/dialog_footprint_properties_base.cpp:302
+#: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:271
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1023
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:150
 msgid "Solder paste absolute clearance:"
 msgstr "錫膏絕對間隙:"
 
-#: pcbnew/dialogs/dialog_footprint_properties_base.cpp:309
+#: pcbnew/dialogs/dialog_footprint_properties_base.cpp:304
 msgid ""
 "This is the local clearance between pads and the solder paste for this "
 "footprint.\n"
@@ -35279,14 +35279,14 @@ msgstr ""
 "最終的間隙值是該值與間隙值比率之和。\n"
 "負值表示阻焊尺寸小於焊盤尺寸。"
 
-#: pcbnew/dialogs/dialog_footprint_properties_base.cpp:320
-#: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:289
+#: pcbnew/dialogs/dialog_footprint_properties_base.cpp:315
+#: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:284
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1036
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:165
 msgid "Solder paste relative clearance:"
 msgstr "錫膏相對間隙:"
 
-#: pcbnew/dialogs/dialog_footprint_properties_base.cpp:322
+#: pcbnew/dialogs/dialog_footprint_properties_base.cpp:317
 #, c-format
 msgid ""
 "This is the local clearance ratio applied as a percentage of the pad width "
@@ -35304,88 +35304,93 @@ msgstr ""
 "最終間隙值是該值與絕對間隙值之和。\n"
 "負值表示阻焊尺寸小於焊盤尺寸。"
 
-#: pcbnew/dialogs/dialog_footprint_properties_base.cpp:345
-#: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:314
+#: pcbnew/dialogs/dialog_footprint_properties_base.cpp:340
+#: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:309
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1058
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1082
 msgid ""
 "Note: solder mask and paste values are used only for pads on copper layers."
 msgstr "注意: 阻焊和錫膏值僅適用於銅層上的焊盤。"
 
-#: pcbnew/dialogs/dialog_footprint_properties_base.cpp:349
-#: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:318
+#: pcbnew/dialogs/dialog_footprint_properties_base.cpp:344
+#: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:313
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1062
 msgid ""
 "Note: solder paste clearances (absolute and relative) are added to determine "
 "the final clearance."
 msgstr "注意: 添加錫膏間隙 (絕對和相對) 以確定最終間隙。"
 
-#: pcbnew/dialogs/dialog_footprint_properties_base.cpp:357
-#: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:326
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:875
-msgid "Connection to Copper Zones"
-msgstr "連接到覆銅區域"
+#: pcbnew/dialogs/dialog_footprint_properties_base.cpp:352
+#: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:485
+#: pcbnew/zone.cpp:2084
+msgid "Pad Connections"
+msgstr "焊盤連接"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:359
-#: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:328
+#: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:346
 msgid "Pad connection to zones:"
 msgstr "連接到區域的焊盤:"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:363
-#: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:332
+#: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:350
 msgid "Use zone setting"
 msgstr "使用覆銅設定"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:363
-#: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:332
+#: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:350
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:887
 msgid "Thermal relief"
 msgstr "緩釋熱焊盤 (花焊盤)"
 
-#: pcbnew/dialogs/dialog_footprint_properties_base.cpp:376
-#: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:399
-msgid "Clearance Overrides and Settings"
+#: pcbnew/dialogs/dialog_footprint_properties_base.cpp:369
+#, fuzzy
+msgid "Jumper groups:"
+msgstr "跳線引腳群組"
+
+#: pcbnew/dialogs/dialog_footprint_properties_base.cpp:387
+#, fuzzy
+msgid "Clearance Overrides && Pad Connections"
 msgstr "間隙覆蓋和設定"
 
-#: pcbnew/dialogs/dialog_footprint_properties_base.cpp:389
+#: pcbnew/dialogs/dialog_footprint_properties_base.cpp:400
 msgid ""
 "The library ID and footprint ID currently assigned.  Use \"Change "
 "Footprint...\" to assign a different footprint."
 msgstr "目前已經分配了庫 ID 和封裝 ID。使用 \"替換封裝…\" 來分配不同的封裝。"
 
-#: pcbnew/dialogs/dialog_footprint_properties_base.h:124
-#: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.h:130
+#: pcbnew/dialogs/dialog_footprint_properties_base.h:125
+#: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.h:125
 msgid "Footprint Properties"
 msgstr "封裝屬性"
 
-#: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:424
+#: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:418
 #: pcbnew/footprint_libraries_utils.cpp:1131
 #: pcbnew/tools/footprint_editor_control.cpp:461
 msgid "Footprint must have a name."
 msgstr "封裝必須要有一個名稱。"
 
-#: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:429
+#: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:423
 #, c-format
 msgid "Footprint name may not contain '%s'."
 msgstr "封裝名稱可能不包含 '%s'。"
 
-#: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:441
+#: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:435
 #: pcbnew/tools/footprint_editor_control.cpp:468
 #, c-format
 msgid "Footprint '%s' already exists in library '%s'."
 msgstr "封裝 '%s' 已存在於庫 '%s' 中。"
 
-#: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:504
+#: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:498
 #, c-format
 msgid "The text width must be between %s and %s."
 msgstr "文字寬度範圍必須在 %s 和 %s。"
 
-#: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:516
+#: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:510
 #, c-format
 msgid "The text height must be between %s and %s."
 msgstr "文字高度範圍必須在 %s 和 %s。"
 
-#: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:534
+#: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:528
 #: pcbnew/dialogs/dialog_text_properties.cpp:562
 #: pcbnew/dialogs/dialog_textbox_properties.cpp:422
 msgid ""
@@ -35411,11 +35416,11 @@ msgstr "專有層"
 msgid "Component type:"
 msgstr "元件類型:"
 
-#: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:237
+#: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:232
 msgid "Leave values blank to use netclass values."
 msgstr "如果值為空, 則使用 網路類 的值。"
 
-#: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:249
+#: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:244
 msgid ""
 "This is the local net clearance for all pads of this footprint.\n"
 "If 0, the Netclass values are used.\n"
@@ -35427,7 +35432,7 @@ msgstr ""
 "在焊盤屬性的局部間隙和設定 選項卡中, \n"
 "可以覆蓋此值。"
 
-#: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:262
+#: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:257
 msgid ""
 "This is the local clearance between pads and the solder mask for \n"
 "this footprint.\n"
@@ -35441,7 +35446,7 @@ msgstr ""
 "該值可以在本地逐個焊盤的基礎上被覆蓋\n"
 "焊盤屬性的間隙和設定選項卡。"
 
-#: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:278
+#: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:273
 msgid ""
 "This is the local clearance between pads and the solder paste for\n"
 "this footprint.\n"
@@ -35456,7 +35461,7 @@ msgstr ""
 "負值表示錫膏鋼網孔徑小於焊盤尺寸。\n"
 "在焊盤屬性的局部間隙和設定選項卡中, 可以覆蓋此值。"
 
-#: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:291
+#: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:286
 #, c-format
 msgid ""
 "This is the local clearance ratio applied as a percentage of the pad width "
@@ -35475,19 +35480,51 @@ msgstr ""
 "負值表示錫膏鋼網孔徑小於焊盤尺寸。\n"
 "在焊盤屬性的局部間隙和設定選項卡中, 可以覆蓋此值。"
 
-#: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:342
+#: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:324
+#: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:277
+#: pcbnew/dialogs/panel_fp_editor_graphics_defaults_base.cpp:66
+#: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:68
+msgid "Courtyards"
+msgstr "元件外框"
+
+#: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:326
+msgid "Exempt from courtyard requirement"
+msgstr "忽略封裝外框要求"
+
+#: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:327
+msgid "Will not generate \"missing courtyard\" DRC violations"
+msgstr "不會產生\"遺失外框\"的 DRC 違規行為"
+
+#: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:338
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:976
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:1104
+msgid "Clearance Overrides"
+msgstr "間隙覆蓋"
+
+#: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:344
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:875
+msgid "Connection to Copper Zones"
+msgstr "連接到覆銅區域"
+
+#: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:363
 msgid "Net Ties"
 msgstr "網路結點(Net Ties)"
 
-#: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:344
+#: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:365
 msgid "Pad groups allowed to short different nets:"
 msgstr "被允許短路不同網路的焊盤組:"
 
-#: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:404
-msgid "Pads with duplicate numbers are jumpers"
+#: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:420
+#, fuzzy
+msgid "Jumpers"
+msgstr "跳線"
+
+#: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:422
+#, fuzzy
+msgid "All pads with duplicate numbers are jumpers"
 msgstr "具有重複編號的焊盤為跳線"
 
-#: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:405
+#: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:423
 msgid ""
 "When enabled, this footprint can have more than one pad with the same "
 "number, and pads with the same number will be considered to be jumpered "
@@ -35496,30 +35533,10 @@ msgstr ""
 "啟用時，該封裝可以有多個具有相同編號的焊盤，並且具有相同編號的焊盤將會被視為"
 "內部跳線。"
 
-#: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:410
-msgid "Jumper Pad Groups"
-msgstr "跳線焊盤群組"
-
-#: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:418
-msgid "Available pads"
-msgstr "可用焊盤"
-
-#: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:434
-msgid "Create jumper group from the selected pads"
-msgstr "從選定的焊盤建立跳線組"
-
-#: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:439
-msgid "Remove the selected jumper pad group"
-msgstr "刪除選定的跳線焊盤組"
-
-#: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:449
-msgid "Grouped pads"
-msgstr "已分組的焊盤"
-
-#: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:471
-#: pcbnew/zone.cpp:2085
-msgid "Pad Connections"
-msgstr "焊盤連接"
+#: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:430
+#, fuzzy
+msgid "Explicit jumper pad groups:"
+msgstr "更新 %s 跳線墊片群組"
 
 #: pcbnew/dialogs/dialog_footprint_wizard_list.cpp:146
 msgid "All footprint generator scripts were loaded"
@@ -36136,7 +36153,7 @@ msgstr "絲印層"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:275
 #: pcbnew/dialogs/panel_fp_editor_graphics_defaults_base.cpp:64
-#: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:66 pcbnew/pad.cpp:2881
+#: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:66 pcbnew/pad.cpp:2880
 msgid "Copper Layers"
 msgstr "銅層"
 
@@ -36145,12 +36162,6 @@ msgstr "銅層"
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:67
 msgid "Edge Cuts"
 msgstr "板框"
-
-#: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:277
-#: pcbnew/dialogs/panel_fp_editor_graphics_defaults_base.cpp:66
-#: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:68
-msgid "Courtyards"
-msgstr "元件外框"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:278
 #: pcbnew/dialogs/panel_fp_editor_graphics_defaults_base.cpp:67
@@ -36300,7 +36311,7 @@ msgstr "環形圈:"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:175
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1069
-#: pcbnew/dialogs/dialog_track_via_properties_base.cpp:381 pcbnew/pad.cpp:2730
+#: pcbnew/dialogs/dialog_track_via_properties_base.cpp:381 pcbnew/pad.cpp:2729
 msgid "All copper layers"
 msgstr "所有銅層"
 
@@ -36311,7 +36322,7 @@ msgstr "啟動、結束和連接層"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:175
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1073
-#: pcbnew/dialogs/dialog_track_via_properties_base.cpp:381 pcbnew/pad.cpp:2731
+#: pcbnew/dialogs/dialog_track_via_properties_base.cpp:381 pcbnew/pad.cpp:2730
 msgid "Connected layers only"
 msgstr "僅連接的層"
 
@@ -36383,7 +36394,7 @@ msgid "The netlist file does not exist."
 msgstr "網表檔案不存在。"
 
 #: pcbnew/dialogs/dialog_import_netlist.cpp:174
-#: pcbnew/dialogs/dialog_update_pcb.cpp:151
+#: pcbnew/dialogs/dialog_update_pcb.cpp:153
 msgid "Changes Applied to PCB"
 msgstr "變更已應用於 PCB"
 
@@ -36434,13 +36445,12 @@ msgid "Replace footprints with those specified in netlist"
 msgstr "將封裝取代為網表中指定的封裝"
 
 #: pcbnew/dialogs/dialog_import_netlist_base.cpp:59
-#: pcbnew/dialogs/dialog_update_pcb_base.cpp:43
+#: pcbnew/dialogs/dialog_update_pcb_base.cpp:32
 #, fuzzy
 msgid "Group footprints based on symbol group"
 msgstr "沒有為符號 %s 定義封裝。"
 
 #: pcbnew/dialogs/dialog_import_netlist_base.cpp:62
-#: pcbnew/dialogs/dialog_update_pcb_base.cpp:46
 msgid "Delete/replace footprints even if locked"
 msgstr "強制刪除/取代封裝 (無論是否已鎖定)"
 
@@ -36650,7 +36660,7 @@ msgid "Sheets"
 msgstr "圖紙"
 
 #: pcbnew/dialogs/dialog_multichannel_generate_rule_areas.cpp:88
-#: pcbnew/footprint.cpp:1733 pcbnew/footprint.cpp:4148 pcbnew/zone.cpp:1859
+#: pcbnew/footprint.cpp:1744 pcbnew/footprint.cpp:4159 pcbnew/zone.cpp:1858
 msgid "Component Class"
 msgstr "組件類別"
 
@@ -36779,7 +36789,7 @@ msgid "Outset Items"
 msgstr "文字項目"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:174
-#: pcbnew/dialogs/dialog_pad_properties_base.h:293 pcbnew/pad.cpp:2781
+#: pcbnew/dialogs/dialog_pad_properties_base.h:293 pcbnew/pad.cpp:2780
 msgid "Pad Properties"
 msgstr "焊盤屬性"
 
@@ -36855,7 +36865,7 @@ msgstr "w"
 msgid "Pad type:"
 msgstr "焊盤類型:"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:39 pcbnew/pad.cpp:2689
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:39 pcbnew/pad.cpp:2688
 msgid "Through-hole"
 msgstr "通孔"
 
@@ -36903,8 +36913,8 @@ msgstr "焊盤形狀:"
 msgid "Circular"
 msgstr "圓形"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:127 pcbnew/pad.cpp:1552
-#: pcbnew/pad.cpp:2697
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:127 pcbnew/pad.cpp:1551
+#: pcbnew/pad.cpp:2696
 msgid "Oval"
 msgstr "橢圓"
 
@@ -36916,11 +36926,11 @@ msgstr "矩形"
 msgid "Trapezoidal"
 msgstr "梯形"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:127 pcbnew/pad.cpp:2699
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:127 pcbnew/pad.cpp:2698
 msgid "Rounded rectangle"
 msgstr "圓角矩形"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:127 pcbnew/pad.cpp:2700
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:127 pcbnew/pad.cpp:2699
 msgid "Chamfered rectangle"
 msgstr "倒角矩形"
 
@@ -37031,7 +37041,7 @@ msgstr "形狀與孔的偏移"
 msgid "Hole shape:"
 msgstr "鑽孔形狀:"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:441 pcbnew/pad.cpp:2715
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:441 pcbnew/pad.cpp:2714
 msgid "Oblong"
 msgstr "橢圓形"
 
@@ -37055,7 +37065,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:561
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:266
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:187
-#: pcbnew/pcb_shape.cpp:1047 pcbnew/pcb_track.cpp:2365
+#: pcbnew/pcb_shape.cpp:1046 pcbnew/pcb_track.cpp:2362
 msgid "Technical Layers"
 msgstr "工藝層:"
 
@@ -37128,23 +37138,23 @@ msgstr ""
 "半孔焊盤 (Castellated) 指定板邊緣金屬化半孔焊盤\n"
 "機械(Mechanical) 指定用於機械支撐的通孔墊"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:616 pcbnew/pad.cpp:2705
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:616 pcbnew/pad.cpp:2704
 msgid "BGA pad"
 msgstr "BGA 焊盤"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:616 pcbnew/pad.cpp:2707
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:616 pcbnew/pad.cpp:2706
 msgid "Fiducial, local to footprint"
 msgstr "基準點 (局部, 僅針對封裝)"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:616 pcbnew/pad.cpp:2706
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:616 pcbnew/pad.cpp:2705
 msgid "Fiducial, global to board"
 msgstr "基準點 (全域, 整個電路板)"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:616 pcbnew/pad.cpp:2708
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:616 pcbnew/pad.cpp:2707
 msgid "Test point pad"
 msgstr "測試點焊盤"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:616 pcbnew/pad.cpp:2709
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:616 pcbnew/pad.cpp:2708
 msgid "Heatsink pad"
 msgstr "散熱焊盤"
 
@@ -37152,7 +37162,7 @@ msgstr "散熱焊盤"
 msgid "Castellated pad (through hole only)"
 msgstr "半孔焊盤 (僅通孔)"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:616 pcbnew/pad.cpp:1368
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:616 pcbnew/pad.cpp:1367
 msgid "Mechanical"
 msgstr "機械"
 
@@ -37224,11 +37234,6 @@ msgstr "引線寬度:"
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:940
 msgid "Spoke angle:"
 msgstr "引線角度:"
-
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:976
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:1104
-msgid "Clearance Overrides"
-msgstr "間隙覆蓋"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:979
 msgid "Leave values blank to use parent footprint or netclass values."
@@ -38596,17 +38601,17 @@ msgid "Via type:"
 msgstr "貫孔類型:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:355
-#: pcbnew/pcb_track.cpp:2297
+#: pcbnew/pcb_track.cpp:2294
 msgid "Through"
 msgstr "通孔"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:355
-#: pcbnew/pcb_track.cpp:2299
+#: pcbnew/pcb_track.cpp:2296
 msgid "Micro"
 msgstr "微孔"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:355
-#: pcbnew/pcb_track.cpp:2298
+#: pcbnew/pcb_track.cpp:2295
 msgid "Blind/buried"
 msgstr "盲孔/埋孔"
 
@@ -38663,14 +38668,14 @@ msgstr "目標偏移: %s"
 
 #: pcbnew/dialogs/dialog_tuning_pattern_properties.cpp:129
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2401
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2437 pcbnew/pad.cpp:1431
-#: pcbnew/pcb_track.cpp:1872 pcbnew/pcb_track.cpp:1880
-#: pcbnew/pcb_track.cpp:1912 pcbnew/pcb_track.cpp:1918
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2437 pcbnew/pad.cpp:1430
+#: pcbnew/pcb_track.cpp:1869 pcbnew/pcb_track.cpp:1877
+#: pcbnew/pcb_track.cpp:1909 pcbnew/pcb_track.cpp:1915
 #: pcbnew/router/router_tool.cpp:2770 pcbnew/router/router_tool.cpp:2775
 #: pcbnew/router/router_tool.cpp:2780 pcbnew/router/router_tool.cpp:2791
 #: pcbnew/router/router_tool.cpp:2799 pcbnew/router/router_tool.cpp:2804
 #: pcbnew/tools/pcb_control.cpp:1941 pcbnew/tools/pcb_control.cpp:1951
-#: pcbnew/zone.cpp:949
+#: pcbnew/zone.cpp:948
 #, c-format
 msgid "(from %s)"
 msgstr "(從 %s)"
@@ -38773,21 +38778,17 @@ msgstr "保留外部層 (&O)"
 msgid "Unused Pads"
 msgstr "未使用的焊盤"
 
-#: pcbnew/dialogs/dialog_update_pcb_base.cpp:32
-msgid "Delete footprints with no symbols"
-msgstr "刪除沒有對應符號的封裝"
+#: pcbnew/dialogs/dialog_update_pcb_base.cpp:42
+#, fuzzy
+msgid "Update Footprints"
+msgstr "更新封裝"
 
-#: pcbnew/dialogs/dialog_update_pcb_base.cpp:33
-msgid ""
-"Remove from the board unlocked footprints which are not linked to a "
-"schematic symbol."
-msgstr "從電路板移除未鏈接到原理圖符號的且未鎖定封裝。"
+#: pcbnew/dialogs/dialog_update_pcb_base.cpp:44
+#, fuzzy
+msgid "Replace footprints with those specified by symbols"
+msgstr "將封裝取代為網表中指定的封裝"
 
-#: pcbnew/dialogs/dialog_update_pcb_base.cpp:37
-msgid "Replace footprints with those specified in the schematic"
-msgstr "用原理圖中指定的封裝取代"
-
-#: pcbnew/dialogs/dialog_update_pcb_base.cpp:39
+#: pcbnew/dialogs/dialog_update_pcb_base.cpp:46
 msgid ""
 "Normally footprints on the board should be changed to match footprint "
 "assignment changes made in the schematic. Uncheck this only if you don't "
@@ -38796,7 +38797,32 @@ msgstr ""
 "通常應替換 PCB 上的封裝, 以匹配原理圖中所做的封裝分配變更。僅當您不想替換電路"
 "板上的現有封裝時, 才取消勾選此選項。"
 
-#: pcbnew/dialogs/dialog_update_pcb_base.h:55
+#: pcbnew/dialogs/dialog_update_pcb_base.cpp:50
+msgid "Delete footprints with no symbols"
+msgstr "刪除沒有對應符號的封裝"
+
+#: pcbnew/dialogs/dialog_update_pcb_base.cpp:51
+msgid ""
+"Remove from the board unlocked footprints which are not linked to a "
+"schematic symbol."
+msgstr "從電路板移除未鏈接到原理圖符號的且未鎖定封裝。"
+
+#: pcbnew/dialogs/dialog_update_pcb_base.cpp:55
+#, fuzzy
+msgid "Override locks"
+msgstr "忽略鎖定設定"
+
+#: pcbnew/dialogs/dialog_update_pcb_base.cpp:67
+#, fuzzy
+msgid "Update footprint fields from symbols"
+msgstr "沒有為符號 %s 定義封裝。"
+
+#: pcbnew/dialogs/dialog_update_pcb_base.cpp:71
+#, fuzzy
+msgid "Remove footprint fields not found in symbols"
+msgstr "移除了不在符號中的封裝欄位 %s 。"
+
+#: pcbnew/dialogs/dialog_update_pcb_base.h:57
 msgid "Update PCB from Schematic"
 msgstr "從原理圖更新 PCB"
 
@@ -41175,8 +41201,8 @@ msgstr "沒有定義差分對間隙。"
 msgid "7"
 msgstr "7"
 
-#: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:105 pcbnew/pad.cpp:1411
-#: pcbnew/pcb_track.cpp:1905 pcbnew/pcb_track.cpp:2400
+#: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:105 pcbnew/pad.cpp:1410
+#: pcbnew/pcb_track.cpp:1902 pcbnew/pcb_track.cpp:2397
 #: pcbnew/tools/board_inspection_tool.cpp:1125
 #: pcbnew/tools/board_inspection_tool.cpp:1154
 msgid "Hole"
@@ -41557,7 +41583,7 @@ msgid "%s pad connection: %s."
 msgstr "%s 焊盤連接: %s。"
 
 #: pcbnew/drc/drc_engine.cpp:1531 pcbnew/drc/drc_engine.cpp:1548
-#: pcbnew/drc/drc_engine.cpp:1565 pcbnew/zone.cpp:687 pcbnew/zone.h:200
+#: pcbnew/drc/drc_engine.cpp:1565 pcbnew/zone.cpp:686 pcbnew/zone.h:200
 msgid "zone"
 msgstr "覆銅"
 
@@ -41576,7 +41602,7 @@ msgstr "%s 散熱引線寬度: %s。"
 msgid "Checking rule assertion \"%s\"."
 msgstr "檢查規則斷言 \"%s\"。"
 
-#: pcbnew/drc/drc_item.cpp:42 pcbnew/zone.cpp:2069
+#: pcbnew/drc/drc_item.cpp:42 pcbnew/zone.cpp:2068
 msgid "Electrical"
 msgstr "電氣"
 
@@ -42036,48 +42062,48 @@ msgstr "正在檢查焊盤、貫孔和覆銅連接..."
 msgid "Checking net connections..."
 msgstr "正在檢查網路連接..."
 
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:143
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:147
 msgid "Checking track & via clearances..."
 msgstr "正在檢查走線和貫孔間隙..."
 
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:150
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:154
 msgid "Checking hole clearances..."
 msgstr "正在檢查孔間隙..."
 
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:158
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:162
 msgid "Checking pad clearances..."
 msgstr "正在檢查焊盤間隙..."
 
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:166
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:170
 msgid "Checking pads..."
 msgstr "正在檢查焊盤..."
 
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:174
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:178
 msgid "Checking copper graphic clearances..."
 msgstr "檢查銅層間隙..."
 
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:182
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:186
 msgid "Checking copper zone clearances..."
 msgstr "檢查覆銅區間隙..."
 
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:286
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:590
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:290
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:592
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:849
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:882
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:880
 #, c-format
 msgid "(nets %s and %s)"
 msgstr "(網路 %s 和 %s)"
 
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:302
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:358
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:476
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:514
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:597
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:895
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:926
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:946
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:967
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:1431
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:306
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:360
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:478
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:516
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:599
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:893
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:924
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:944
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:965
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:1429
 #: pcbnew/drc/drc_test_provider_courtyard_clearance.cpp:245
 #: pcbnew/drc/drc_test_provider_courtyard_clearance.cpp:277
 #: pcbnew/drc/drc_test_provider_edge_clearance.cpp:118
@@ -42093,12 +42119,12 @@ msgstr "(網路 %s 和 %s)"
 msgid "(%s clearance %s; actual %s)"
 msgstr "(%s 間隙 %s; 實際 %s)"
 
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:359
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:361
 #, c-format
 msgid "(%s clearance %s; actual < 0)"
 msgstr "(%s 間隙 %s; 實際 < 0)"
 
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:1423
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:1421
 #, fuzzy
 msgid "(intersecting zones must have distinct priorities)"
 msgstr "弧線必須有 3 個不同的點"
@@ -42446,78 +42472,72 @@ msgstr "%s 個 '輪廓邊角數量' 差異。"
 msgid "%s corners differ."
 msgstr "%s 個 '邊角' 差異。"
 
-#: pcbnew/drc/drc_test_provider_library_parity.cpp:625
+#: pcbnew/drc/drc_test_provider_library_parity.cpp:627
 msgid "Footprint types differ."
 msgstr "'封裝類型' 差異。"
 
-#: pcbnew/drc/drc_test_provider_library_parity.cpp:628
-#: pcbnew/drc/drc_test_provider_library_parity.cpp:632
-#: pcbnew/drc/drc_test_provider_library_parity.cpp:639
-#: pcbnew/drc/drc_test_provider_library_parity.cpp:643
-#: pcbnew/drc/drc_test_provider_library_parity.cpp:647
-#: pcbnew/drc/drc_test_provider_library_parity.cpp:651
+#: pcbnew/drc/drc_test_provider_library_parity.cpp:630
+#: pcbnew/drc/drc_test_provider_library_parity.cpp:637
+#: pcbnew/drc/drc_test_provider_library_parity.cpp:641
+#: pcbnew/drc/drc_test_provider_library_parity.cpp:645
+#: pcbnew/drc/drc_test_provider_library_parity.cpp:649
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:193
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:206
 #, c-format
 msgid "'%s' settings differ."
 msgstr "%s 設定不同。"
 
-#: pcbnew/drc/drc_test_provider_library_parity.cpp:633
-#: pcbnew/footprint.cpp:4169
-msgid "Exempt From Courtyard Requirement"
-msgstr "忽略封裝外框要求"
-
-#: pcbnew/drc/drc_test_provider_library_parity.cpp:670
+#: pcbnew/drc/drc_test_provider_library_parity.cpp:671
 msgid "Pad clearance overridden."
 msgstr "'焊盤間隙' 被覆蓋。"
 
-#: pcbnew/drc/drc_test_provider_library_parity.cpp:677
+#: pcbnew/drc/drc_test_provider_library_parity.cpp:678
 msgid "Solder mask expansion overridden."
 msgstr "'阻焊擴展' 被覆蓋。"
 
-#: pcbnew/drc/drc_test_provider_library_parity.cpp:685
+#: pcbnew/drc/drc_test_provider_library_parity.cpp:686
 msgid "Solder paste absolute clearance overridden."
 msgstr "'錫膏絕對間隙' 被覆蓋。"
 
-#: pcbnew/drc/drc_test_provider_library_parity.cpp:692
+#: pcbnew/drc/drc_test_provider_library_parity.cpp:693
 msgid "Solder paste relative clearance overridden."
 msgstr "'錫膏相對間隙' 被覆蓋。"
 
-#: pcbnew/drc/drc_test_provider_library_parity.cpp:699
+#: pcbnew/drc/drc_test_provider_library_parity.cpp:700
 msgid "Zone connection overridden."
 msgstr "'區域連接' 被覆蓋。"
 
-#: pcbnew/drc/drc_test_provider_library_parity.cpp:704
-#: pcbnew/drc/drc_test_provider_library_parity.cpp:709
+#: pcbnew/drc/drc_test_provider_library_parity.cpp:705
+#: pcbnew/drc/drc_test_provider_library_parity.cpp:710
 msgid "Net tie pad groups differ."
 msgstr "'網路連接點焊盤組不同。"
 
-#: pcbnew/drc/drc_test_provider_library_parity.cpp:786
+#: pcbnew/drc/drc_test_provider_library_parity.cpp:784
 msgid "Pad count differs."
 msgstr "'焊盤數量不同。"
 
-#: pcbnew/drc/drc_test_provider_library_parity.cpp:807
+#: pcbnew/drc/drc_test_provider_library_parity.cpp:805
 msgid "Rule area count differs."
 msgstr "'規則區域數量不同。"
 
-#: pcbnew/drc/drc_test_provider_library_parity.cpp:826
+#: pcbnew/drc/drc_test_provider_library_parity.cpp:824
 msgid "No project loaded, skipping library parity tests."
 msgstr "沒有載入專案, 跳過庫的一致性測試。"
 
-#: pcbnew/drc/drc_test_provider_library_parity.cpp:830
+#: pcbnew/drc/drc_test_provider_library_parity.cpp:828
 msgid "Loading footprint library table..."
 msgstr "正在載入封裝庫表..."
 
-#: pcbnew/drc/drc_test_provider_library_parity.cpp:840
+#: pcbnew/drc/drc_test_provider_library_parity.cpp:838
 msgid "Checking board footprints against library..."
 msgstr "正在根據庫檢查電路板封裝..."
 
-#: pcbnew/drc/drc_test_provider_library_parity.cpp:906
+#: pcbnew/drc/drc_test_provider_library_parity.cpp:904
 #, c-format
 msgid "The footprint library '%s' was not found at '%s'."
 msgstr "在“%s”處找不到封裝庫“%s”。"
 
-#: pcbnew/drc/drc_test_provider_library_parity.cpp:956
+#: pcbnew/drc/drc_test_provider_library_parity.cpp:954
 #, c-format
 msgid "Footprint '%s' does not match copy in library '%s'."
 msgstr "封裝 '%s' 與來源庫封裝 '%s' 存在差異。"
@@ -42673,25 +42693,25 @@ msgstr "在銅層上運行毛刺檢測..."
 msgid "board setup solder mask min width"
 msgstr "電路板設定阻焊層最小寬度"
 
-#: pcbnew/drc/drc_test_provider_solder_mask.cpp:577
-#: pcbnew/drc/drc_test_provider_solder_mask.cpp:671
+#: pcbnew/drc/drc_test_provider_solder_mask.cpp:573
+#: pcbnew/drc/drc_test_provider_solder_mask.cpp:667
 msgid "Front solder mask aperture bridges items with different nets"
 msgstr "頂層阻焊開窗區域與不同網路的項目相連"
 
-#: pcbnew/drc/drc_test_provider_solder_mask.cpp:579
-#: pcbnew/drc/drc_test_provider_solder_mask.cpp:673
+#: pcbnew/drc/drc_test_provider_solder_mask.cpp:575
+#: pcbnew/drc/drc_test_provider_solder_mask.cpp:669
 msgid "Rear solder mask aperture bridges items with different nets"
 msgstr "底層阻焊開窗區域與不同網路的項目相連"
 
-#: pcbnew/drc/drc_test_provider_solder_mask.cpp:796
+#: pcbnew/drc/drc_test_provider_solder_mask.cpp:792
 msgid "Building solder mask..."
 msgstr "正在建置阻焊層..."
 
-#: pcbnew/drc/drc_test_provider_solder_mask.cpp:804
+#: pcbnew/drc/drc_test_provider_solder_mask.cpp:800
 msgid "Checking solder mask to silk clearance..."
 msgstr "正在檢查阻焊層與絲印的間隙..."
 
-#: pcbnew/drc/drc_test_provider_solder_mask.cpp:809
+#: pcbnew/drc/drc_test_provider_solder_mask.cpp:805
 msgid "Checking solder mask web integrity..."
 msgstr "正在檢查阻焊層網路的完整性..."
 
@@ -43279,131 +43299,135 @@ msgstr ""
 msgid "Generating ODB++ output files"
 msgstr "生成 IPC2581 檔案"
 
-#: pcbnew/footprint.cpp:1283
+#: pcbnew/footprint.cpp:1294
 msgid "Other"
 msgstr "其它"
 
-#: pcbnew/footprint.cpp:1677
+#: pcbnew/footprint.cpp:1688
 msgid "Footprint Name"
 msgstr "封裝名稱"
 
-#: pcbnew/footprint.cpp:1681 pcbnew/footprint.cpp:1742
+#: pcbnew/footprint.cpp:1692 pcbnew/footprint.cpp:1753
 #, c-format
 msgid "Doc: %s"
 msgstr "文件: %s"
 
-#: pcbnew/footprint.cpp:1682 pcbnew/footprint.cpp:1743
+#: pcbnew/footprint.cpp:1693 pcbnew/footprint.cpp:1754
 #, c-format
 msgid "Keywords: %s"
 msgstr "關鍵字: %s"
 
-#: pcbnew/footprint.cpp:1691 pcbnew/footprint.cpp:1692
+#: pcbnew/footprint.cpp:1702 pcbnew/footprint.cpp:1703
 msgid "Board Side"
 msgstr "PCB 板面"
 
-#: pcbnew/footprint.cpp:1692
+#: pcbnew/footprint.cpp:1703
 msgid "Back (Flipped)"
 msgstr "背面(翻轉)"
 
-#: pcbnew/footprint.cpp:1711
+#: pcbnew/footprint.cpp:1722
 msgid "autoplaced"
 msgstr "自動放置"
 
-#: pcbnew/footprint.cpp:1714
+#: pcbnew/footprint.cpp:1725
 msgid "not in schematic"
 msgstr "不在原理圖中"
 
-#: pcbnew/footprint.cpp:1717
+#: pcbnew/footprint.cpp:1728
 msgid "exclude from pos files"
 msgstr "從 pos 檔案中移除"
 
-#: pcbnew/footprint.cpp:1720
+#: pcbnew/footprint.cpp:1731
 msgid "exclude from BOM"
 msgstr "從 BOM 中移除"
 
-#: pcbnew/footprint.cpp:1725
+#: pcbnew/footprint.cpp:1736
 msgid "Status: "
 msgstr "狀態: "
 
-#: pcbnew/footprint.cpp:1725
+#: pcbnew/footprint.cpp:1736
 msgid "Attributes:"
 msgstr "特性:"
 
-#: pcbnew/footprint.cpp:1738
+#: pcbnew/footprint.cpp:1749
 #, c-format
 msgid "3D-Shape: %s"
 msgstr "3D 形狀: %s"
 
-#: pcbnew/footprint.cpp:1738
+#: pcbnew/footprint.cpp:1749
 msgid "<none>"
 msgstr "<無>"
 
-#: pcbnew/footprint.cpp:2171
+#: pcbnew/footprint.cpp:2182
 msgid "<no reference designator>"
 msgstr "< 無參考位置 >"
 
-#: pcbnew/footprint.cpp:2173
+#: pcbnew/footprint.cpp:2184
 #, c-format
 msgid "Footprint %s"
 msgstr "封裝 %s"
 
-#: pcbnew/footprint.cpp:3260
+#: pcbnew/footprint.cpp:3271
 #, c-format
 msgid "(expected 'Through hole'; actual '%s')"
 msgstr "(應為 '通孔', 實際為 '%s')"
 
-#: pcbnew/footprint.cpp:3263
+#: pcbnew/footprint.cpp:3274
 #, c-format
 msgid "(expected 'SMD'; actual '%s')"
 msgstr "(應為 '表面黏著', 實際為 '%s')"
 
-#: pcbnew/footprint.cpp:3485
+#: pcbnew/footprint.cpp:3496
 #, c-format
 msgid "(net-tie pad group contains unknown pad number %s)"
 msgstr "(網路結點焊盤組包含未知的焊盤編號 %s)"
 
-#: pcbnew/footprint.cpp:3490
+#: pcbnew/footprint.cpp:3501
 #, c-format
 msgid "(pad %s appears in more than one net-tie pad group)"
 msgstr "(焊盤 %s 出現在超過一個網路結點焊盤組中)"
 
-#: pcbnew/footprint.cpp:4090 pcbnew/pad.cpp:2722 pcbnew/zone.cpp:1826
+#: pcbnew/footprint.cpp:4101 pcbnew/pad.cpp:2721 pcbnew/zone.cpp:1825
 msgid "Inherited"
 msgstr "繼承"
 
-#: pcbnew/footprint.cpp:4094 pcbnew/pad.cpp:2726 pcbnew/zone.cpp:1830
+#: pcbnew/footprint.cpp:4105 pcbnew/pad.cpp:2725 pcbnew/zone.cpp:1829
 msgid "Thermal reliefs for PTH"
 msgstr "對金屬化孔 (PTH) 使用緩釋熱焊盤 (花焊盤)"
 
-#: pcbnew/footprint.cpp:4154
+#: pcbnew/footprint.cpp:4165
 msgid "Not in Schematic"
 msgstr "不在原理圖中"
 
-#: pcbnew/footprint.cpp:4156
+#: pcbnew/footprint.cpp:4167
 msgid "Exclude From Position Files"
 msgstr "從定位檔案中排除"
 
-#: pcbnew/footprint.cpp:4166 pcbnew/pad.cpp:2896
+#: pcbnew/footprint.cpp:4177 pcbnew/pad.cpp:2895
 msgid "Overrides"
 msgstr "覆蓋"
 
-#: pcbnew/footprint.cpp:4173 pcbnew/pad.cpp:2899
+#: pcbnew/footprint.cpp:4180
+msgid "Exempt From Courtyard Requirement"
+msgstr "忽略封裝外框要求"
+
+#: pcbnew/footprint.cpp:4184 pcbnew/pad.cpp:2898
 msgid "Clearance Override"
 msgstr "間隙覆蓋"
 
-#: pcbnew/footprint.cpp:4178 pcbnew/pad.cpp:2909
+#: pcbnew/footprint.cpp:4189 pcbnew/pad.cpp:2908
 msgid "Solderpaste Margin Override"
 msgstr "錫膏邊距覆蓋"
 
-#: pcbnew/footprint.cpp:4183 pcbnew/pad.cpp:2914
+#: pcbnew/footprint.cpp:4194 pcbnew/pad.cpp:2913
 msgid "Solderpaste Margin Ratio Override"
 msgstr "錫膏邊距比例覆蓋"
 
-#: pcbnew/footprint.cpp:4189 pcbnew/pad.cpp:2920
+#: pcbnew/footprint.cpp:4200 pcbnew/pad.cpp:2919
 msgid "Zone Connection Style"
 msgstr "區域連接樣式"
 
-#: pcbnew/footprint.h:316 pcbnew/footprint.h:335
+#: pcbnew/footprint.h:320 pcbnew/footprint.h:339
 #, c-format
 msgid "footprint %s"
 msgstr "封裝 %s"
@@ -43704,31 +43728,31 @@ msgstr "已佈線長度"
 msgid "Routed Delays"
 msgstr "已佈線長度"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2356 pcbnew/pcb_track.cpp:1835
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2356 pcbnew/pcb_track.cpp:1832
 msgid "Routed Length"
 msgstr "已佈線長度"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2360 pcbnew/pcb_track.cpp:1848
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2360 pcbnew/pcb_track.cpp:1845
 #, fuzzy
 msgid "Routed Delay"
 msgstr "已佈線長度"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2368 pcbnew/pad.cpp:2885
-#: pcbnew/pcb_track.cpp:1840
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2368 pcbnew/pad.cpp:2884
+#: pcbnew/pcb_track.cpp:1837
 msgid "Pad To Die Length"
 msgstr "焊盤到 Die 長度"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2371 pcbnew/pcb_track.cpp:1843
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2371 pcbnew/pcb_track.cpp:1840
 msgid "Full Length"
 msgstr "完整長度"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2376 pcbnew/pad.cpp:2891
-#: pcbnew/pcb_track.cpp:1854
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2376 pcbnew/pad.cpp:2890
+#: pcbnew/pcb_track.cpp:1851
 #, fuzzy
 msgid "Pad To Die Delay"
 msgstr "焊盤到 Die 長度"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2379 pcbnew/pcb_track.cpp:1857
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2379 pcbnew/pcb_track.cpp:1854
 #, fuzzy
 msgid "Full Delay"
 msgstr "延時"
@@ -44128,413 +44152,413 @@ msgstr "在封裝中"
 msgid "Net Delay"
 msgstr "延時"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:144
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:146
 #, c-format
 msgid "Cannot add %s (no footprint assigned)."
 msgstr "無法添加 %s (沒有分配封裝)。"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:155
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:157
 #, c-format
 msgid "Cannot add %s (footprint '%s' not found)."
 msgstr "無法添加 %s (找不到封裝 '%s')。"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:168
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:170
 #, c-format
 msgid "Add %s (footprint '%s')."
 msgstr "添加 %s (封裝 '%s')。"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:198
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:200
 #, c-format
 msgid "Added %s (footprint '%s')."
 msgstr "添加了 %s (封裝 '%s')。"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:239
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:241
 #, c-format
 msgid "Change %s component class to '%s'."
 msgstr "將 %s 組件類別變更為“%s”。"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:245
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:247
 #, c-format
 msgid "Remove %s component class (currently '%s')."
 msgstr "刪除 %s 組件類別（目前為“%s”）。"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:251
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:253
 #, c-format
 msgid "Change %s component class from '%s' to '%s'."
 msgstr "將 %s 組件類別從“%s”更改為“%s”。"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:265
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:267
 #, c-format
 msgid "Changed %s component class to '%s'."
 msgstr "已將 %s 組件類別變更為“%s”。"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:271
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:273
 #, c-format
 msgid "Removed %s component class (was '%s')."
 msgstr "已刪除 %s 組件類別（原為“%s”）。"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:277
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:279
 #, c-format
 msgid "Changed %s component class from '%s' to '%s'."
 msgstr "已將 %s 組件類別從“%s”更改為“%s”。"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:295
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:297
 #, c-format
 msgid "Cannot update %s (no footprint assigned)."
 msgstr "無法更新 %s (沒有分配封裝)。"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:306
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:308
 #, c-format
 msgid "Cannot update %s (footprint '%s' not found)."
 msgstr "無法更新 %s (封裝 '%s' 找不到)。"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:318
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:320
 #, c-format
 msgid "Cannot change %s footprint from '%s' to '%s' (footprint is locked)."
 msgstr "無法將封裝 %s 從'%s' 更改為 '%s' (封裝已鎖定)。"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:329
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:331
 #, c-format
 msgid "Change %s footprint from '%s' to '%s'."
 msgstr "將 %s 的封裝從 '%s' 替換為 '%s'。"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:343
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:345
 #, c-format
 msgid "Could not change %s footprint from '%s' to '%s' (footprint is locked)."
 msgstr "不能將封裝 %s 從'%s' 更改為 '%s' (封裝已鎖定)。"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:356
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:358
 #, c-format
 msgid "Changed %s footprint from '%s' to '%s'."
 msgstr "已將 %s 的封裝從 '%s' 替換為 '%s'。"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:389
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:391
 #, c-format
 msgid "Change %s reference designator to %s."
 msgstr "更改 %s 的參考位置為 %s。"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:395
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:397
 #, c-format
 msgid "Changed %s reference designator to %s."
 msgstr "已將 %s 的參考位置更改為 %s。"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:411
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:413
 #, c-format
 msgid "Change %s value from %s to %s."
 msgstr "將 %s 的值從 '%s' 修改為 '%s'。"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:418
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:420
 #, c-format
 msgid "Changed %s value from %s to %s."
 msgstr "已將 %s 的值從 '%s' 修改為 '%s'。"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:440
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:442
 #, c-format
 msgid "Update %s symbol association from %s to %s."
 msgstr "更新 %s 符號分配從 %s 到 %s。"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:447
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:449
 #, c-format
 msgid "Updated %s symbol association from %s to %s."
 msgstr "將 %s 符號分配從 %s 更新到 %s。"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:508
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:512
 #, c-format
 msgid "Update %s fields."
 msgstr "更新 %s 個欄位。"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:519
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:526
 #, c-format
 msgid "Remove %s footprint fields not in symbol."
 msgstr "移除了不在符號中的封裝欄位 %s 。"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:528
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:539
 #, c-format
 msgid "Updated %s fields."
 msgstr "已更新 %s 個欄位。"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:576
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:589
 #, c-format
 msgid "Removed %s footprint fields not in symbol."
 msgstr "移除了不在符號中的封裝欄位 %s 。"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:613
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:627
 #, c-format
 msgid "Update %s sheetname to '%s'."
 msgstr "將 %s 圖紙名稱更新為 '%s'。"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:620
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:634
 #, c-format
 msgid "Updated %s sheetname to '%s'."
 msgstr "已將 %s 圖紙名稱更新為 '%s'。"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:632
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:646
 #, c-format
 msgid "Update %s sheetfile to '%s'."
 msgstr "將 %s 圖紙檔案更新為 '%s'。"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:639
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:653
 #, c-format
 msgid "Updated %s sheetfile to '%s'."
 msgstr "已將 %s 圖紙檔案更新為 '%s'。"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:651
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:665
 #, c-format
 msgid "Update %s footprint filters to '%s'."
 msgstr "將 %s 封裝篩選器更新為 '%s'。"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:658
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:672
 #, c-format
 msgid "Updated %s footprint filters to '%s'."
 msgstr "已將 %s 封裝篩選器更新為 '%s'。"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:673
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:687
 #, c-format
 msgid "Add %s 'exclude from BOM' fabrication attribute."
 msgstr "為 %s 添加 '從 BOM 中移除' 製造特性。"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:678
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:692
 #, c-format
 msgid "Remove %s 'exclude from BOM' fabrication attribute."
 msgstr "為 %s 移除 '從 BOM 中移除' 製造特性。"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:689
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:703
 #, c-format
 msgid "Added %s 'exclude from BOM' fabrication attribute."
 msgstr "已為 %s 添加 '從 BOM 中移除' 製造特性。"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:695
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:709
 #, c-format
 msgid "Removed %s 'exclude from BOM' fabrication attribute."
 msgstr "已為 %s 移除 '從 BOM 中移除' 製造特性。"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:713
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:727
 #, c-format
 msgid "Add %s 'Do not place' fabrication attribute."
 msgstr "為 %s 添加 'DNP (不作裝配)' 製造特性。"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:718
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:732
 #, c-format
 msgid "Remove %s 'Do not place' fabrication attribute."
 msgstr "為 %s 移除 'DNP (不作裝配)' 製造特性。"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:729
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:743
 #, c-format
 msgid "Added %s 'Do not place' fabrication attribute."
 msgstr "已為 %s 添加 'DNP (不作裝配)' 製造特性。"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:735
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:749
 #, c-format
 msgid "Removed %s 'Do not place' fabrication attribute."
 msgstr "已為 %s 移除 'DNP (不作裝配)' 製造特性。"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:758
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:772
 #, c-format
 msgid "Added %s 'duplicate pad numbers are jumpers' attribute."
 msgstr "已新增 %s「重複焊盤編號為跳線」屬性。"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:763
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:777
 #, c-format
 msgid "Removed %s 'duplicate pad numbers are jumpers' attribute."
 msgstr "已移除 %s 的「重複的墊片編號為跳線」屬性。"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:771
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:785
 #, c-format
 msgid "Add %s 'duplicate pad numbers are jumpers' attribute."
 msgstr "新增 %s「重複焊盤編號為跳線」屬性。"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:776
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:790
 #, c-format
 msgid "Remove %s 'duplicate pad numbers are jumpers' attribute."
 msgstr "移除 %s 的「重複的墊片編號為跳線」屬性。"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:790
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:804
 #, c-format
 msgid "Updated %s jumper pad groups"
 msgstr "更新了 %s 跳線墊組"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:794
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:808
 #, c-format
 msgid "Update %s jumper pad groups"
 msgstr "更新 %s 跳線墊片群組"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:856
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:870
 #, fuzzy, c-format
 msgid "Remove %s from group \"%s\"."
 msgstr "從組合中移除項目"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:862
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:876
 #, fuzzy, c-format
 msgid "Removed %s from group \"%s\"."
 msgstr "從組合中移除項目"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:879
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:893
 #, fuzzy, c-format
 msgid "Add %s to group \"%s\"."
 msgstr "添加自定義分組"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:885
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:899
 #, fuzzy, c-format
 msgid "Added %s group \"%s\"."
 msgstr "添加了 %s (封裝 '%s')。"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:987
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1001
 #, c-format
 msgid "Disconnect %s pin %s."
 msgstr "斷開 %s 接腳 %s。"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:993
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1007
 #, c-format
 msgid "Disconnected %s pin %s."
 msgstr "斷開連接的 %s 接腳 %s。"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1003
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1017
 #, c-format
 msgid "No net found for component %s pad %s (no pin %s in symbol)."
 msgstr "找不到元件 %s 的焊盤 %s 的網路 (接腳 %s 不存在於符號中)。"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1070
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1084
 #, c-format
 msgid "Add net %s."
 msgstr "添加網路 %s。"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1081
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1095
 #, c-format
 msgid "Reconnect %s pin %s from %s to %s."
 msgstr "重新連接 %s 的接腳 %s 從 %s 到 %s。"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1089
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1103
 #, c-format
 msgid "Reconnected %s pin %s from %s to %s."
 msgstr "將 %s 接腳 %s 從 %s 重新連接到 %s。"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1100
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1114
 #, c-format
 msgid "Connect %s pin %s to %s."
 msgstr "連接 %s 的接腳 %s 到 %s。"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1107
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1121
 #, c-format
 msgid "Connected %s pin %s to %s."
 msgstr "將 %s 接腳 %s 連接到了 %s。"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1188
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1202
 #, c-format
 msgid "Reconnect via from %s to %s."
 msgstr "重新連接貫孔從 %s 到 %s。"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1208
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1222
 #, c-format
 msgid "Reconnected via from %s to %s."
 msgstr "將貫孔從 %s 重新連接到了 %s。"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1218
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1232
 #, c-format
 msgid "Via connected to unknown net (%s)."
 msgstr "貫孔連接到未知網路 (%s)。"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1263
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1277
 #, c-format
 msgid "Reconnect copper zone '%s' from %s to %s."
 msgstr "將覆銅區 '%s' 從 %s 重新連接到 %s。"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1270
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1284
 #, c-format
 msgid "Reconnect copper zone from %s to %s."
 msgstr "將覆銅區 %s 重新連接到 %s。"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1293
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1307
 #, c-format
 msgid "Reconnected copper zone '%s' from %s to %s."
 msgstr "將覆銅區 '%s' 從 %s 重新連接到了 %s。"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1300
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1314
 #, c-format
 msgid "Reconnected copper zone from %s to %s."
 msgstr "將覆銅區從 %s 重新連接到了 %s。"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1313
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1327
 #, c-format
 msgid "Copper zone '%s' has no pads connected."
 msgstr "覆銅區 '%s' 沒有與之連接的焊盤。"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1330
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1344
 #, c-format
 msgid "Copper zone on layer %s at (%s, %s) has no pads connected."
 msgstr "座標 (%s, %s) 層 %s 上的覆銅區沒有與之相連的焊盤。"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1363
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1377
 #, fuzzy, c-format
 msgid "Change group name to '%s' to '%s'."
 msgstr "將 %s 的值由 '%s' 更改為 '%s'。"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1370
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1384
 #, fuzzy, c-format
 msgid "Changed group name to '%s' to '%s'."
 msgstr "將 %s 的值由 '%s' 更改為 '%s'。"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1382
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1396
 #, fuzzy, c-format
 msgid "Change group library link to '%s'."
 msgstr "將 %s 值從 %s 更改為%s."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1389
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1403
 #, fuzzy, c-format
 msgid "Changed group library link to '%s'."
 msgstr "將 %s 值從 %s 更改為%s."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1426
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1440
 #, c-format
 msgid ""
 "Symbol %s has pins with no number.  These pins can not be matched to pads in "
 "%s."
 msgstr "符號 %s 有沒有編號的接腳。這些接腳無法匹配到 %s 中的焊盤。"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1436
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1450
 #, c-format
 msgid "%s pad %s not found in %s."
 msgstr "%s 的焊盤 %s 在 %s 中未找到。"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1489
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1503
 #, c-format
 msgid "Processing symbol '%s:%s'."
 msgstr "正在處理符號 '%s:%s'。"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1569
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1583
 #, c-format
 msgid "Multiple footprints found for %s."
 msgstr "找到了 '%s' 的多個封裝。"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1602
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1616
 #, c-format
 msgid "Cannot remove unused footprint %s (footprint is locked)."
 msgstr "無法移除未使用的封裝 %s (封裝已鎖定)。"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1607
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1621
 #, c-format
 msgid "Could not remove unused footprint %s (footprint is locked)."
 msgstr "不能移除未使用的封裝 %s (封裝已鎖定)。"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1620
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1634
 #, c-format
 msgid "Remove unused footprint %s."
 msgstr "移除未使用封裝 %s。"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1626
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1640
 #, c-format
 msgid "Removed unused footprint %s."
 msgstr "移除了未使用的封裝 %s。"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1658
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1672
 #, c-format
 msgid "Removed unused net %s."
 msgstr "移除未使用的網路 %s。"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1670
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1684
 msgid "Update Netlist"
 msgstr "更新網表"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1693
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1707
 #, c-format
 msgid "Total warnings: %d, errors: %d."
 msgstr "總計警告: %d, 錯誤: %d。"
@@ -44640,323 +44664,323 @@ msgstr ""
 "檔案: '%s'\n"
 "行: %d"
 
-#: pcbnew/pad.cpp:1117 pcbnew/pad.cpp:1277 pcbnew/pad.cpp:1293
-#: pcbnew/pad.cpp:1302
+#: pcbnew/pad.cpp:1116 pcbnew/pad.cpp:1276 pcbnew/pad.cpp:1292
+#: pcbnew/pad.cpp:1301
 msgid "pad"
 msgstr "焊盤"
 
-#: pcbnew/pad.cpp:1325 pcbnew/pad.cpp:2800
+#: pcbnew/pad.cpp:1324 pcbnew/pad.cpp:2799
 msgid "Pin Type"
 msgstr "接腳類型"
 
-#: pcbnew/pad.cpp:1362
+#: pcbnew/pad.cpp:1361
 msgid "BGA"
 msgstr "BGA"
 
-#: pcbnew/pad.cpp:1363
+#: pcbnew/pad.cpp:1362
 msgid "Fiducial global"
 msgstr "全域 Fiducial"
 
-#: pcbnew/pad.cpp:1364
+#: pcbnew/pad.cpp:1363
 msgid "Fiducial local"
 msgstr "局部 Fiducial"
 
-#: pcbnew/pad.cpp:1365
+#: pcbnew/pad.cpp:1364
 msgid "Test point"
 msgstr "Test point"
 
-#: pcbnew/pad.cpp:1366
+#: pcbnew/pad.cpp:1365
 msgid "Heat sink"
 msgstr "散熱片"
 
-#: pcbnew/pad.cpp:1367
+#: pcbnew/pad.cpp:1366
 msgid "Castellated"
 msgstr "半孔焊盤"
 
-#: pcbnew/pad.cpp:1401
+#: pcbnew/pad.cpp:1400
 msgid "Length in Package"
 msgstr "封裝長度"
 
-#: pcbnew/pad.cpp:1417
+#: pcbnew/pad.cpp:1416
 msgid "Hole X / Y"
 msgstr "孔 X / Y"
 
-#: pcbnew/pad.cpp:1429 pcbnew/pcb_track.cpp:1870 pcbnew/pcb_track.cpp:1910
+#: pcbnew/pad.cpp:1428 pcbnew/pcb_track.cpp:1867 pcbnew/pcb_track.cpp:1907
 #: pcbnew/router/router_tool.cpp:2773 pcbnew/router/router_tool.cpp:2802
-#: pcbnew/zone.cpp:947
+#: pcbnew/zone.cpp:946
 #, c-format
 msgid "Min Clearance: %s"
 msgstr "最小間隙: %s"
 
-#: pcbnew/pad.cpp:1554
+#: pcbnew/pad.cpp:1553
 msgid "Trap"
 msgstr "凹槽"
 
-#: pcbnew/pad.cpp:1555
+#: pcbnew/pad.cpp:1554
 msgid "Roundrect"
 msgstr "圓角矩形"
 
-#: pcbnew/pad.cpp:1556
+#: pcbnew/pad.cpp:1555
 msgid "Chamferedrect"
 msgstr "倒角"
 
-#: pcbnew/pad.cpp:1557
+#: pcbnew/pad.cpp:1556
 msgid "CustomShape"
 msgstr "自定義形狀"
 
-#: pcbnew/pad.cpp:1569
+#: pcbnew/pad.cpp:1568
 msgid "Conn"
 msgstr "連接器"
 
-#: pcbnew/pad.cpp:1588
+#: pcbnew/pad.cpp:1587
 #, c-format
 msgid "NPTH pad of %s"
 msgstr "%s 的非金屬化焊盤"
 
-#: pcbnew/pad.cpp:1593
+#: pcbnew/pad.cpp:1592
 msgid "NPTH pad"
 msgstr "PTH 焊盤"
 
-#: pcbnew/pad.cpp:1602
+#: pcbnew/pad.cpp:1601
 #, c-format
 msgid "Pad %s of %s on %s"
 msgstr "焊盤　%s (%s) - %s"
 
-#: pcbnew/pad.cpp:1609
+#: pcbnew/pad.cpp:1608
 #, c-format
 msgid "Pad on %s"
 msgstr "焊盤 %s"
 
-#: pcbnew/pad.cpp:1617
+#: pcbnew/pad.cpp:1616
 #, c-format
 msgid "PTH pad %s of %s"
 msgstr "%s 的非金屬化焊盤 %s"
 
-#: pcbnew/pad.cpp:1623
+#: pcbnew/pad.cpp:1622
 msgid "PTH pad"
 msgstr "PTH 焊盤"
 
-#: pcbnew/pad.cpp:1633
+#: pcbnew/pad.cpp:1632
 #, c-format
 msgid "Pad %s %s of %s on %s"
 msgstr "%s 上 %s 的焊盤 %s %s"
 
-#: pcbnew/pad.cpp:1641
+#: pcbnew/pad.cpp:1640
 #, c-format
 msgid "Pad %s on %s"
 msgstr "貫孔 %s (%s)"
 
-#: pcbnew/pad.cpp:1650
+#: pcbnew/pad.cpp:1649
 #, c-format
 msgid "PTH pad %s %s of %s"
 msgstr "%s 的非金屬化焊盤 %s %s"
 
-#: pcbnew/pad.cpp:1657
+#: pcbnew/pad.cpp:1656
 #, c-format
 msgid "PTH pad %s"
 msgstr "PTH 焊盤 %s"
 
-#: pcbnew/pad.cpp:2243
+#: pcbnew/pad.cpp:2242
 msgid ""
 "(plated through holes normally have a copper pad on at least one outer layer)"
 msgstr "（電鍍通孔通常至少有一層外層有銅墊）"
 
-#: pcbnew/pad.cpp:2251
+#: pcbnew/pad.cpp:2250
 msgid "('fiducial' property makes no sense on NPTH pads)"
 msgstr "（「基準」屬性在 NPTH 焊盤上沒有意義）"
 
-#: pcbnew/pad.cpp:2255
+#: pcbnew/pad.cpp:2254
 msgid "('testpoint' property makes no sense on NPTH pads)"
 msgstr "（「測試點」屬性在 NPTH 焊盤上沒有意義）"
 
-#: pcbnew/pad.cpp:2258
+#: pcbnew/pad.cpp:2257
 msgid "('heatsink' property makes no sense of NPTH pads)"
 msgstr "（「散熱器」屬性對 NPTH 焊盤沒有意義）"
 
-#: pcbnew/pad.cpp:2261
+#: pcbnew/pad.cpp:2260
 msgid "('castellated' property is for PTH pads)"
 msgstr "（「城堡形」屬性適用於 PTH 焊盤）"
 
-#: pcbnew/pad.cpp:2264
+#: pcbnew/pad.cpp:2263
 msgid "('BGA' property is for SMD pads)"
 msgstr "（「BGA」屬性適用於 SMD 焊盤）"
 
-#: pcbnew/pad.cpp:2267
+#: pcbnew/pad.cpp:2266
 msgid "('mechanical' property is for PTH pads)"
 msgstr "（「機械」屬性適用於 PTH 焊盤）"
 
-#: pcbnew/pad.cpp:2283
+#: pcbnew/pad.cpp:2282
 msgid "(connector pads normally have no solder paste; use a SMD pad instead)"
 msgstr "（連接器焊盤通常沒有焊膏；請使用 SMD 焊盤代替）"
 
-#: pcbnew/pad.cpp:2291
+#: pcbnew/pad.cpp:2290
 msgid "(SMD pad has a hole)"
 msgstr "(SMD焊盤上存在一個孔)"
 
-#: pcbnew/pad.cpp:2297
+#: pcbnew/pad.cpp:2296
 msgid "(SMD pad has copper on both sides of the board)"
 msgstr "如果您希望在電路板正面使用焊膏層"
 
-#: pcbnew/pad.cpp:2303 pcbnew/pad.cpp:2316
+#: pcbnew/pad.cpp:2302 pcbnew/pad.cpp:2315
 msgid "(SMD pad has copper and mask layers on different sides of the board)"
 msgstr "(表面黏著焊盤銅層和 mask 層不匹配)"
 
-#: pcbnew/pad.cpp:2308 pcbnew/pad.cpp:2321
+#: pcbnew/pad.cpp:2307 pcbnew/pad.cpp:2320
 msgid "(SMD pad has copper and paste layers on different sides of the board)"
 msgstr "如果您希望在電路板正面使用焊膏層"
 
-#: pcbnew/pad.cpp:2327
+#: pcbnew/pad.cpp:2326
 msgid "(SMD pad has no outer layers)"
 msgstr "(SMD焊盤沒有外形層)"
 
-#: pcbnew/pad.cpp:2347
+#: pcbnew/pad.cpp:2346
 msgid "(Pad must have a positive size)"
 msgstr "（焊盤大小必須為正）"
 
-#: pcbnew/pad.cpp:2358
+#: pcbnew/pad.cpp:2357
 #, c-format
 msgid "(PTH pad hole size must be larger than %s)"
 msgstr "（PTH焊盤孔尺寸必須大於%s）"
 
-#: pcbnew/pad.cpp:2382
+#: pcbnew/pad.cpp:2381
 msgid "(PTH pad hole leaves no copper)"
 msgstr "(金屬化焊盤的孔沒留下銅)"
 
-#: pcbnew/pad.cpp:2392
+#: pcbnew/pad.cpp:2391
 msgid "(PTH pad hole not fully inside copper)"
 msgstr "(金屬化焊盤的孔沒留下銅)"
 
-#: pcbnew/pad.cpp:2399
+#: pcbnew/pad.cpp:2398
 msgid "(pad hole not inside pad shape)"
 msgstr "（焊盤孔不在焊盤形狀內部）"
 
-#: pcbnew/pad.cpp:2404
+#: pcbnew/pad.cpp:2403
 msgid "(negative local clearance values have no effect)"
 msgstr "（負局部間隙值無效）"
 
-#: pcbnew/pad.cpp:2423
+#: pcbnew/pad.cpp:2422
 msgid ""
 "(negative solder mask clearance is larger than some shape primitives; "
 "results may be surprising)"
 msgstr "（負阻焊層間隙大於某些形狀原型；結果可能令人驚訝）"
 
-#: pcbnew/pad.cpp:2433
+#: pcbnew/pad.cpp:2432
 msgid ""
 "(negative solder mask clearance is larger than pad; no solder mask will be "
 "generated)"
 msgstr "（負阻焊層間隙大於焊盤；不會產生阻焊層）"
 
-#: pcbnew/pad.cpp:2452
+#: pcbnew/pad.cpp:2451
 msgid ""
 "(negative solder paste margin is larger than pad; no solder paste mask will "
 "be generated)"
 msgstr "（負錫膏餘量大於焊盤；不會產生錫膏層）"
 
-#: pcbnew/pad.cpp:2459
+#: pcbnew/pad.cpp:2458
 msgid "(negative corner radius is not allowed)"
 msgstr "(圓角半徑不允許為負值)"
 
-#: pcbnew/pad.cpp:2461
+#: pcbnew/pad.cpp:2460
 msgid "(corner size will make pad circular)"
 msgstr "（角的大小將使焊盤呈圓形）"
 
-#: pcbnew/pad.cpp:2466
+#: pcbnew/pad.cpp:2465
 msgid "(negative corner chamfer is not allowed)"
 msgstr "(倒角尺寸不允許為負值)"
 
-#: pcbnew/pad.cpp:2468
+#: pcbnew/pad.cpp:2467
 msgid "(corner chamfer is too large)"
 msgstr "(倒角尺寸過大)"
 
-#: pcbnew/pad.cpp:2477
+#: pcbnew/pad.cpp:2476
 msgid "(trapezoid delta is too large)"
 msgstr "（梯形三角洲太大）"
 
-#: pcbnew/pad.cpp:2487
+#: pcbnew/pad.cpp:2486
 msgid "(custom pad shape must resolve to a single polygon)"
 msgstr "（自訂焊盤形狀必須解析為單一多邊形）"
 
-#: pcbnew/pad.cpp:2691
+#: pcbnew/pad.cpp:2690
 msgid "Edge connector"
 msgstr "板邊連接器"
 
-#: pcbnew/pad.cpp:2692
+#: pcbnew/pad.cpp:2691
 msgid "NPTH, mechanical"
 msgstr "非金屬化孔, 機械的"
 
-#: pcbnew/pad.cpp:2698
+#: pcbnew/pad.cpp:2697
 msgid "Trapezoid"
 msgstr "梯形"
 
-#: pcbnew/pad.cpp:2710
+#: pcbnew/pad.cpp:2709
 msgid "Castellated pad"
 msgstr "半孔焊盤"
 
-#: pcbnew/pad.cpp:2711
+#: pcbnew/pad.cpp:2710
 msgid "Mechanical pad"
 msgstr "機械"
 
-#: pcbnew/pad.cpp:2733
+#: pcbnew/pad.cpp:2732
 msgid "Front, back and connected layers"
 msgstr "啟動、結束和連接層"
 
-#: pcbnew/pad.cpp:2783
+#: pcbnew/pad.cpp:2782
 msgid "Pad Type"
 msgstr "焊盤類型"
 
-#: pcbnew/pad.cpp:2787
+#: pcbnew/pad.cpp:2786
 msgid "Pad Shape"
 msgstr "焊盤形狀"
 
-#: pcbnew/pad.cpp:2792
+#: pcbnew/pad.cpp:2791
 msgid "Pad Number"
 msgstr "焊盤編號"
 
-#: pcbnew/pad.cpp:2804
+#: pcbnew/pad.cpp:2803
 msgid "Size X"
 msgstr "X 尺寸"
 
-#: pcbnew/pad.cpp:2808
+#: pcbnew/pad.cpp:2807
 msgid "Size Y"
 msgstr "Y 尺寸"
 
-#: pcbnew/pad.cpp:2841
+#: pcbnew/pad.cpp:2840
 msgid "Corner Radius Ratio"
 msgstr "邊角半徑比"
 
-#: pcbnew/pad.cpp:2846
+#: pcbnew/pad.cpp:2845
 msgid "Corner Radius Size"
 msgstr "圓角半徑 %"
 
-#: pcbnew/pad.cpp:2852
+#: pcbnew/pad.cpp:2851
 msgid "Hole Shape"
 msgstr "鑽孔形狀:"
 
-#: pcbnew/pad.cpp:2856
+#: pcbnew/pad.cpp:2855
 msgid "Hole Size X"
 msgstr "鑽孔尺寸 X"
 
-#: pcbnew/pad.cpp:2862
+#: pcbnew/pad.cpp:2861
 msgid "Hole Size Y"
 msgstr "鑽孔尺寸 Y"
 
-#: pcbnew/pad.cpp:2877
+#: pcbnew/pad.cpp:2876
 msgid "Fabrication Property"
 msgstr "製造屬性"
 
-#: pcbnew/pad.cpp:2904 pcbnew/pcb_shape.cpp:1065 pcbnew/pcb_track.cpp:2379
+#: pcbnew/pad.cpp:2903 pcbnew/pcb_shape.cpp:1064 pcbnew/pcb_track.cpp:2376
 msgid "Soldermask Margin Override"
 msgstr "阻焊層邊界覆蓋"
 
-#: pcbnew/pad.cpp:2926 pcbnew/zone.cpp:2095
+#: pcbnew/pad.cpp:2925 pcbnew/zone.cpp:2094
 msgid "Thermal Relief Spoke Width"
 msgstr "緩釋熱焊盤 (花焊盤) 引線寬度"
 
-#: pcbnew/pad.cpp:2932
+#: pcbnew/pad.cpp:2931
 msgid "Thermal Relief Spoke Angle"
 msgstr "緩釋熱焊盤 (花焊盤) 引線角度"
 
-#: pcbnew/pad.cpp:2937 pcbnew/zone.cpp:2089
+#: pcbnew/pad.cpp:2936 pcbnew/zone.cpp:2088
 msgid "Thermal Relief Gap"
 msgstr "緩釋熱焊盤 (花焊盤) 間隙"
 
@@ -45092,27 +45116,27 @@ msgid ""
 msgstr ""
 "讀取網表時收到一個錯誤。請使用\"幫助->報告錯誤\"選單向 KiCad 團隊報告此問題。"
 
-#: pcbnew/pcb_edit_frame.cpp:2551
+#: pcbnew/pcb_edit_frame.cpp:2591
 msgid "Edit design rules"
 msgstr "編輯設計規則"
 
-#: pcbnew/pcb_edit_frame.cpp:2563
+#: pcbnew/pcb_edit_frame.cpp:2603
 msgid "Could not compile custom design rules."
 msgstr "無法編譯自定義設計規則。"
 
-#: pcbnew/pcb_edit_frame.cpp:2655
+#: pcbnew/pcb_edit_frame.cpp:2696
 msgid "Violation Report"
 msgstr "違規報告"
 
-#: pcbnew/pcb_edit_frame.cpp:2665
+#: pcbnew/pcb_edit_frame.cpp:2708
 msgid "Clearance Report"
 msgstr "間隙報告"
 
-#: pcbnew/pcb_edit_frame.cpp:2675
+#: pcbnew/pcb_edit_frame.cpp:2720
 msgid "Constraints Report"
 msgstr "約束報告"
 
-#: pcbnew/pcb_edit_frame.cpp:2685 pcbnew/tools/pcb_actions.cpp:2077
+#: pcbnew/pcb_edit_frame.cpp:2732 pcbnew/tools/pcb_actions.cpp:2077
 msgid "Compare Footprint with Library"
 msgstr "將封裝與庫比較"
 
@@ -46828,35 +46852,35 @@ msgstr "相關層"
 msgid "Greyscale"
 msgstr "灰度"
 
-#: pcbnew/pcb_shape.cpp:688
+#: pcbnew/pcb_shape.cpp:687
 msgid "Drawing"
 msgstr "圖形"
 
-#: pcbnew/pcb_shape.cpp:711
+#: pcbnew/pcb_shape.cpp:710
 #, c-format
 msgid "%s %s of %s on %s"
 msgstr "%s 上 %s 的焊盤 %s %s"
 
-#: pcbnew/pcb_shape.cpp:719
+#: pcbnew/pcb_shape.cpp:718
 #, c-format
 msgid "%s %s on %s"
 msgstr "%3$s 上的 %1$s %2$s"
 
-#: pcbnew/pcb_shape.cpp:729
+#: pcbnew/pcb_shape.cpp:728
 #, c-format
 msgid "%s of %s on %s"
 msgstr "%3$s 上的 %1$s %2$s"
 
-#: pcbnew/pcb_shape.cpp:736
+#: pcbnew/pcb_shape.cpp:735
 #, c-format
 msgid "%s on %s"
 msgstr "%2$s 上的 %1$s"
 
-#: pcbnew/pcb_shape.cpp:1031
+#: pcbnew/pcb_shape.cpp:1030
 msgid "Pad Primitives"
 msgstr "焊盤原型"
 
-#: pcbnew/pcb_shape.cpp:1058 pcbnew/pcb_track.cpp:2376
+#: pcbnew/pcb_shape.cpp:1057 pcbnew/pcb_track.cpp:2373
 msgid "Soldermask"
 msgstr "焊錫膏"
 
@@ -46902,154 +46926,154 @@ msgstr "微孔 %s (%s)"
 msgid "Via %s on %s"
 msgstr "貫孔 %s (%s)"
 
-#: pcbnew/pcb_track.cpp:608
+#: pcbnew/pcb_track.cpp:605
 msgid "removed annular ring"
 msgstr "移除通孔環"
 
-#: pcbnew/pcb_track.cpp:1782
+#: pcbnew/pcb_track.cpp:1779
 msgid "Track (arc)"
 msgstr "走線 (弧形)"
 
-#: pcbnew/pcb_track.cpp:1814
+#: pcbnew/pcb_track.cpp:1811
 msgid "Segment Length"
 msgstr "線段長度"
 
-#: pcbnew/pcb_track.cpp:1818
+#: pcbnew/pcb_track.cpp:1815
 #, fuzzy
 msgid "Segment Delay"
 msgstr "線段"
 
-#: pcbnew/pcb_track.cpp:1864
+#: pcbnew/pcb_track.cpp:1861
 msgid "Copper Area"
 msgstr "覆銅區"
 
-#: pcbnew/pcb_track.cpp:1879
+#: pcbnew/pcb_track.cpp:1876
 #, c-format
 msgid "Width Constraints: %s"
 msgstr "寬度約束: 最小 %s"
 
-#: pcbnew/pcb_track.cpp:1891
+#: pcbnew/pcb_track.cpp:1888
 msgid "Micro Via"
 msgstr "微孔"
 
-#: pcbnew/pcb_track.cpp:1892
+#: pcbnew/pcb_track.cpp:1889
 msgid "Blind/Buried Via"
 msgstr "盲孔/埋孔"
 
-#: pcbnew/pcb_track.cpp:1893
+#: pcbnew/pcb_track.cpp:1890
 msgid "Through Via"
 msgstr "通孔"
 
-#: pcbnew/pcb_track.cpp:1916
+#: pcbnew/pcb_track.cpp:1913
 #, c-format
 msgid "Min Annular Width: %s"
 msgstr "最小環形寬度: %s"
 
-#: pcbnew/pcb_track.cpp:1932
+#: pcbnew/pcb_track.cpp:1929
 msgid "NetCode"
 msgstr "網路代碼"
 
-#: pcbnew/pcb_track.cpp:2080
+#: pcbnew/pcb_track.cpp:2077
 #, c-format
 msgid "Track (arc) %s on %s, length %s"
 msgstr "走線 (弧形) %s 位於 %s, 長度 %s"
 
-#: pcbnew/pcb_track.cpp:2081
+#: pcbnew/pcb_track.cpp:2078
 #, c-format
 msgid "Track %s on %s, length %s"
 msgstr "走線 %s (%s), 長度: %s"
 
-#: pcbnew/pcb_track.cpp:2303 pcbnew/pcb_track.cpp:2309
-#: pcbnew/pcb_track.cpp:2315 pcbnew/pcb_track.cpp:2321
-#: pcbnew/pcb_track.cpp:2327
+#: pcbnew/pcb_track.cpp:2300 pcbnew/pcb_track.cpp:2306
+#: pcbnew/pcb_track.cpp:2312 pcbnew/pcb_track.cpp:2318
+#: pcbnew/pcb_track.cpp:2324
 msgid "From design rules"
 msgstr "來自設計規則"
 
-#: pcbnew/pcb_track.cpp:2304
+#: pcbnew/pcb_track.cpp:2301
 msgid "Tented"
 msgstr "居中"
 
-#: pcbnew/pcb_track.cpp:2305
+#: pcbnew/pcb_track.cpp:2302
 msgid "Not tented"
 msgstr "無電鍍"
 
-#: pcbnew/pcb_track.cpp:2310
+#: pcbnew/pcb_track.cpp:2307
 msgid "Covered"
 msgstr "懸停項目"
 
-#: pcbnew/pcb_track.cpp:2311
+#: pcbnew/pcb_track.cpp:2308
 msgid "Not covered"
 msgstr "不作鏡像"
 
-#: pcbnew/pcb_track.cpp:2316
+#: pcbnew/pcb_track.cpp:2313
 msgid "Plugged"
 msgstr "插件"
 
-#: pcbnew/pcb_track.cpp:2317
+#: pcbnew/pcb_track.cpp:2314
 msgid "Not plugged"
 msgstr "找不到"
 
-#: pcbnew/pcb_track.cpp:2322
+#: pcbnew/pcb_track.cpp:2319
 msgid "Capped"
 msgstr "封頂"
 
-#: pcbnew/pcb_track.cpp:2323
+#: pcbnew/pcb_track.cpp:2320
 msgid "Not capped"
 msgstr "沒有連接"
 
-#: pcbnew/pcb_track.cpp:2329
+#: pcbnew/pcb_track.cpp:2326
 msgid "Not filled"
 msgstr "無電鍍"
 
-#: pcbnew/pcb_track.cpp:2393
+#: pcbnew/pcb_track.cpp:2390
 msgid "Via Properties"
 msgstr "貫孔屬性"
 
-#: pcbnew/pcb_track.cpp:2402 pcbnew/widgets/pcb_properties_panel.cpp:263
+#: pcbnew/pcb_track.cpp:2399 pcbnew/widgets/pcb_properties_panel.cpp:263
 msgid "Layer Top"
 msgstr "層頂部"
 
-#: pcbnew/pcb_track.cpp:2404 pcbnew/widgets/pcb_properties_panel.cpp:264
+#: pcbnew/pcb_track.cpp:2401 pcbnew/widgets/pcb_properties_panel.cpp:264
 msgid "Layer Bottom"
 msgstr "層底部"
 
-#: pcbnew/pcb_track.cpp:2406
+#: pcbnew/pcb_track.cpp:2403
 msgid "Via Type"
 msgstr "貫孔類型"
 
-#: pcbnew/pcb_track.cpp:2408
+#: pcbnew/pcb_track.cpp:2405
 msgid "Front tenting"
 msgstr "格式化"
 
-#: pcbnew/pcb_track.cpp:2410
+#: pcbnew/pcb_track.cpp:2407
 msgid "Back tenting"
 msgstr "佈線編輯"
 
-#: pcbnew/pcb_track.cpp:2412
+#: pcbnew/pcb_track.cpp:2409
 msgid "Front covering"
 msgstr "格式化"
 
-#: pcbnew/pcb_track.cpp:2414
+#: pcbnew/pcb_track.cpp:2411
 msgid "Back covering"
 msgstr "佈線編輯"
 
-#: pcbnew/pcb_track.cpp:2416
+#: pcbnew/pcb_track.cpp:2413
 msgid "Front plugging"
 msgstr "格式化"
 
-#: pcbnew/pcb_track.cpp:2418
+#: pcbnew/pcb_track.cpp:2415
 msgid "Back plugging"
 msgstr "佈線編輯"
 
-#: pcbnew/pcb_track.cpp:2420
+#: pcbnew/pcb_track.cpp:2417
 msgid "Capping"
 msgstr "封蓋"
 
-#: pcbnew/pcb_track.cpp:2422
+#: pcbnew/pcb_track.cpp:2419
 msgid "Filling"
 msgstr "填充"
 
-#: pcbnew/pcbexpr_evaluator.cpp:650
+#: pcbnew/pcbexpr_evaluator.cpp:689
 #, fuzzy
 msgid "must be mm, in, mil, deg, fs, or ps"
 msgstr "單位必須為 mm, in 或 mil"
@@ -52028,8 +52052,8 @@ msgstr "網路 '%s' 正在使用中。仍要刪除嗎?"
 msgid "Delete all nets in group '%s'?"
 msgstr "刪除分組 '%s' 中的所有網路?"
 
-#: pcbnew/widgets/search_handlers.cpp:206 pcbnew/zone.cpp:887
-#: pcbnew/zone.cpp:1932
+#: pcbnew/widgets/search_handlers.cpp:206 pcbnew/zone.cpp:886
+#: pcbnew/zone.cpp:1931
 msgid "Priority"
 msgstr "優先"
 
@@ -52047,191 +52071,191 @@ msgstr "類別"
 msgid "No Net"
 msgstr "無網路"
 
-#: pcbnew/zone.cpp:844
+#: pcbnew/zone.cpp:843
 msgid "Cutout"
 msgstr "挖空"
 
-#: pcbnew/zone.cpp:853
+#: pcbnew/zone.cpp:852
 msgid "No vias"
 msgstr "無貫孔"
 
-#: pcbnew/zone.cpp:856
+#: pcbnew/zone.cpp:855
 msgid "No tracks"
 msgstr "無走線"
 
-#: pcbnew/zone.cpp:859
+#: pcbnew/zone.cpp:858
 msgid "No pads"
 msgstr "無焊盤"
 
-#: pcbnew/zone.cpp:862
+#: pcbnew/zone.cpp:861
 msgid "No zone fills"
 msgstr "沒有區域填充"
 
-#: pcbnew/zone.cpp:865
+#: pcbnew/zone.cpp:864
 msgid "No footprints"
 msgstr "沒有封裝"
 
-#: pcbnew/zone.cpp:868
+#: pcbnew/zone.cpp:867
 msgid "Restrictions"
 msgstr "限制"
 
-#: pcbnew/zone.cpp:872
+#: pcbnew/zone.cpp:871
 msgid "Placement source"
 msgstr "放置"
 
-#: pcbnew/zone.cpp:902
+#: pcbnew/zone.cpp:901
 #, c-format
 msgid "%s"
 msgstr "%s"
 
-#: pcbnew/zone.cpp:939
+#: pcbnew/zone.cpp:938
 msgid "Filled Area"
 msgstr "填充區域"
 
-#: pcbnew/zone.cpp:960
+#: pcbnew/zone.cpp:959
 msgid "Corner Count"
 msgstr "拐角數"
 
-#: pcbnew/zone.cpp:997
+#: pcbnew/zone.cpp:996
 msgid "Teardrop Area"
 msgstr "淚滴面積"
 
-#: pcbnew/zone.cpp:999
+#: pcbnew/zone.cpp:998
 msgid "Copper Zone"
 msgstr "覆銅區"
 
-#: pcbnew/zone.cpp:1001
+#: pcbnew/zone.cpp:1000
 msgid "Non-copper Zone"
 msgstr "非覆銅區"
 
-#: pcbnew/zone.cpp:1152
+#: pcbnew/zone.cpp:1151
 #, c-format
 msgid "on %s"
 msgstr "在 %s 上"
 
-#: pcbnew/zone.cpp:1156
+#: pcbnew/zone.cpp:1155
 #, c-format
 msgid "on %s and %s"
 msgstr "在 %s 和 %s 上"
 
-#: pcbnew/zone.cpp:1162
+#: pcbnew/zone.cpp:1161
 #, c-format
 msgid "on %s, %s and %s"
 msgstr "在 %s, %s 和 %s 上"
 
-#: pcbnew/zone.cpp:1169
+#: pcbnew/zone.cpp:1168
 #, c-format
 msgid "on %s, %s and %zu more"
 msgstr "在 %s, %s 和 %zu 個更多上"
 
-#: pcbnew/zone.cpp:1179
+#: pcbnew/zone.cpp:1178
 #, c-format
 msgid "Rule Area Cutout %s"
 msgstr "規則區域挖空 %s"
 
-#: pcbnew/zone.cpp:1181
+#: pcbnew/zone.cpp:1180
 #, c-format
 msgid "Zone Cutout %s"
 msgstr "區域挖空 %s"
 
-#: pcbnew/zone.cpp:1189
+#: pcbnew/zone.cpp:1188
 #, c-format
 msgid "Rule Area %s"
 msgstr "規則區域 %s"
 
-#: pcbnew/zone.cpp:1194
+#: pcbnew/zone.cpp:1193
 #, fuzzy, c-format
 msgid "Rule Area '%s' %s"
 msgstr "規則區域 %s"
 
-#: pcbnew/zone.cpp:1201
+#: pcbnew/zone.cpp:1200
 #, c-format
 msgid "Teardrop %s %s"
 msgstr "淚滴 %s %s"
 
-#: pcbnew/zone.cpp:1209
+#: pcbnew/zone.cpp:1208
 #, fuzzy, c-format
 msgid "Zone %s %s, priority %d"
 msgstr "覆銅優先級:"
 
-#: pcbnew/zone.cpp:1216
+#: pcbnew/zone.cpp:1215
 #, fuzzy, c-format
 msgid "Zone '%s' %s %s, priority %d"
 msgstr "%s, %s, %s, 或 %s"
 
-#: pcbnew/zone.cpp:1939
+#: pcbnew/zone.cpp:1938
 msgid "Keepout"
 msgstr "Keepouts"
 
-#: pcbnew/zone.cpp:1941
+#: pcbnew/zone.cpp:1940
 msgid "Keep Out Tracks"
 msgstr "禁止放置走線"
 
-#: pcbnew/zone.cpp:1947
+#: pcbnew/zone.cpp:1946
 msgid "Keep Out Vias"
 msgstr "禁止放置貫孔"
 
-#: pcbnew/zone.cpp:1953
+#: pcbnew/zone.cpp:1952
 msgid "Keep Out Pads"
 msgstr "禁止放置焊盤"
 
-#: pcbnew/zone.cpp:1959
+#: pcbnew/zone.cpp:1958
 msgid "Keep Out Zone Fills"
 msgstr "禁止區域填充"
 
-#: pcbnew/zone.cpp:1965
+#: pcbnew/zone.cpp:1964
 msgid "Keep Out Footprints"
 msgstr "禁止放置封裝"
 
-#: pcbnew/zone.cpp:1974
+#: pcbnew/zone.cpp:1973
 msgid "Enable"
 msgstr "已啟用:"
 
-#: pcbnew/zone.cpp:1981
+#: pcbnew/zone.cpp:1980
 msgid "Source Type"
 msgstr "源型別"
 
-#: pcbnew/zone.cpp:1986
+#: pcbnew/zone.cpp:1985
 msgid "Source Name"
 msgstr "信號源 2"
 
-#: pcbnew/zone.cpp:2000
+#: pcbnew/zone.cpp:1999
 msgid "Hatch Orientation"
 msgstr "方向"
 
-#: pcbnew/zone.cpp:2018
+#: pcbnew/zone.cpp:2017
 msgid "Cannot be less than zone minimum width"
 msgstr "不能低於區域最小寬度"
 
-#: pcbnew/zone.cpp:2024
+#: pcbnew/zone.cpp:2023
 msgid "Hatch Width"
 msgstr "網格寬度"
 
-#: pcbnew/zone.cpp:2031
+#: pcbnew/zone.cpp:2030
 msgid "Hatch Gap"
 msgstr "網格間隙"
 
-#: pcbnew/zone.cpp:2038
+#: pcbnew/zone.cpp:2037
 msgid "Hatch Minimum Hole Ratio"
 msgstr "網格最小孔徑比"
 
-#: pcbnew/zone.cpp:2046
+#: pcbnew/zone.cpp:2045
 msgid "Smoothing Effort"
 msgstr "平滑效果"
 
-#: pcbnew/zone.cpp:2052
+#: pcbnew/zone.cpp:2051
 msgid "Smoothing Amount"
 msgstr "平滑量"
 
-#: pcbnew/zone.cpp:2058
+#: pcbnew/zone.cpp:2057
 msgid "Remove Islands"
 msgstr "死銅移除"
 
-#: pcbnew/zone.cpp:2063
+#: pcbnew/zone.cpp:2062
 msgid "Minimum Island Area"
 msgstr "最小孤銅大小"
 
-#: pcbnew/zone.cpp:2078
+#: pcbnew/zone.cpp:2077
 msgid "Minimum Width"
 msgstr "最小寬度"
 
@@ -52459,6 +52483,24 @@ msgstr "KiCad 原理圖符號"
 #: resources/linux/mime/kicad-kicad.xml.in:69
 msgid "KiCad Drawing Sheet"
 msgstr "KiCad 專案圖編輯器"
+
+#~ msgid "Jumper Pad Groups"
+#~ msgstr "跳線焊盤群組"
+
+#~ msgid "Available pads"
+#~ msgstr "可用焊盤"
+
+#~ msgid "Create jumper group from the selected pads"
+#~ msgstr "從選定的焊盤建立跳線組"
+
+#~ msgid "Remove the selected jumper pad group"
+#~ msgstr "刪除選定的跳線焊盤組"
+
+#~ msgid "Grouped pads"
+#~ msgstr "已分組的焊盤"
+
+#~ msgid "Replace footprints with those specified in the schematic"
+#~ msgstr "用原理圖中指定的封裝取代"
 
 #, c-format
 #~ msgid ""
@@ -56878,9 +56920,6 @@ msgstr "KiCad 專案圖編輯器"
 
 #~ msgid "Text items must have some content."
 #~ msgstr "文字項必須包含一些內容。"
-
-#~ msgid "Fabrication Attributes"
-#~ msgstr "製造屬性"
 
 #, c-format
 #~ msgid "Duplicate netclass name '%s'."

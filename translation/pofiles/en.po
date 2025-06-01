@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-29 21:50+0300\n"
+"POT-Creation-Date: 2025-06-01 19:41+0300\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -23911,8 +23911,8 @@ msgstr "Update text content"
 msgid "Update fabrication attributes"
 msgstr "Update fabrication attributes"
 
-msgid "Update clearance overrides and settings"
-msgstr "Update clearance overrides and settings"
+msgid "Update clearance overrides"
+msgstr "Update clearance overrides"
 
 msgid "Update 3D models"
 msgstr "Update 3D models"
@@ -23981,8 +23981,8 @@ msgstr "Update/reset text content"
 msgid "Update/reset fabrication attributes"
 msgstr "Update/reset fabrication attributes"
 
-msgid "Update/reset clearance overrides and settings"
-msgstr "Update/reset clearance overrides and settings"
+msgid "Update/reset clearance overrides"
+msgstr "Update/reset clearance overrides"
 
 msgid "Update/reset 3D models"
 msgstr "Update/reset 3D models"
@@ -24567,6 +24567,9 @@ msgstr ""
 "only be selected when the 'Locked items' checkbox is checked in the "
 "selection filter."
 
+msgid "all pads with duplicate numbers"
+msgstr "all pads with duplicate numbers"
+
 #, c-format
 msgid "Text width must be at least %s."
 msgstr "Text width must be at least %s."
@@ -24612,6 +24615,9 @@ msgstr "Reference designator"
 msgid "Side:"
 msgstr "Side:"
 
+msgid "Fabrication Attributes"
+msgstr "Fabrication Attributes"
+
 msgid "Footprint type:"
 msgstr "Footprint type:"
 
@@ -24626,12 +24632,6 @@ msgstr "Not in schematic"
 
 msgid "Exclude from position files"
 msgstr "Exclude from position files"
-
-msgid "Exempt from courtyard requirement"
-msgstr "Exempt from courtyard requirement"
-
-msgid "Will not generate \"missing courtyard\" DRC violations"
-msgstr "Will not generate \"missing courtyard\" DRC violations"
 
 msgid "Update Footprint from Library..."
 msgstr "Update Footprint from Library…"
@@ -24730,8 +24730,8 @@ msgstr ""
 "Note: solder paste clearances (absolute and relative) are added to determine "
 "the final clearance."
 
-msgid "Connection to Copper Zones"
-msgstr "Connection to Copper Zones"
+msgid "Pad Connections"
+msgstr "Pad Connections"
 
 msgid "Pad connection to zones:"
 msgstr "Pad connection to zones:"
@@ -24742,8 +24742,11 @@ msgstr "Use zone setting"
 msgid "Thermal relief"
 msgstr "Thermal relief"
 
-msgid "Clearance Overrides and Settings"
-msgstr "Clearance Overrides and Settings"
+msgid "Jumper groups:"
+msgstr "Jumper groups:"
+
+msgid "Clearance Overrides && Pad Connections"
+msgstr "Clearance Overrides && Pad Connections"
 
 msgid ""
 "The library ID and footprint ID currently assigned.  Use \"Change "
@@ -24859,14 +24862,32 @@ msgstr ""
 "This value can be overridden on a pad-by-pad basis in the Local Clearance "
 "and Settings tab of Pad Properties."
 
+msgid "Courtyards"
+msgstr "Courtyards"
+
+msgid "Exempt from courtyard requirement"
+msgstr "Exempt from courtyard requirement"
+
+msgid "Will not generate \"missing courtyard\" DRC violations"
+msgstr "Will not generate \"missing courtyard\" DRC violations"
+
+msgid "Clearance Overrides"
+msgstr "Clearance Overrides"
+
+msgid "Connection to Copper Zones"
+msgstr "Connection to Copper Zones"
+
 msgid "Net Ties"
 msgstr "Net Ties"
 
 msgid "Pad groups allowed to short different nets:"
 msgstr "Pad groups allowed to short different nets:"
 
-msgid "Pads with duplicate numbers are jumpers"
-msgstr "Pads with duplicate numbers are jumpers"
+msgid "Jumpers"
+msgstr "Jumpers"
+
+msgid "All pads with duplicate numbers are jumpers"
+msgstr "All pads with duplicate numbers are jumpers"
 
 msgid ""
 "When enabled, this footprint can have more than one pad with the same "
@@ -24877,23 +24898,8 @@ msgstr ""
 "number, and pads with the same number will be considered to be jumpered "
 "together internally."
 
-msgid "Jumper Pad Groups"
-msgstr "Jumper Pad Groups"
-
-msgid "Available pads"
-msgstr "Available pads"
-
-msgid "Create jumper group from the selected pads"
-msgstr "Create jumper group from the selected pads"
-
-msgid "Remove the selected jumper pad group"
-msgstr "Remove the selected jumper pad group"
-
-msgid "Grouped pads"
-msgstr "Grouped pads"
-
-msgid "Pad Connections"
-msgstr "Pad Connections"
+msgid "Explicit jumper pad groups:"
+msgstr "Explicit jumper pad groups:"
 
 msgid "All footprint generator scripts were loaded"
 msgstr "All footprint generator scripts were loaded"
@@ -25288,9 +25294,6 @@ msgstr "Copper Layers"
 
 msgid "Edge Cuts"
 msgstr "Edge Cuts"
-
-msgid "Courtyards"
-msgstr "Courtyards"
 
 msgid "Fab Layers"
 msgstr "Fab Layers"
@@ -26053,9 +26056,6 @@ msgstr "Spoke width:"
 
 msgid "Spoke angle:"
 msgstr "Spoke angle:"
-
-msgid "Clearance Overrides"
-msgstr "Clearance Overrides"
 
 msgid "Leave values blank to use parent footprint or netclass values."
 msgstr "Leave values blank to use parent footprint or netclass values."
@@ -27216,6 +27216,21 @@ msgstr "Keep &outside layers"
 msgid "Unused Pads"
 msgstr "Unused Pads"
 
+msgid "Update Footprints"
+msgstr "Update Footprints"
+
+msgid "Replace footprints with those specified by symbols"
+msgstr "Replace footprints with those specified by symbols"
+
+msgid ""
+"Normally footprints on the board should be changed to match footprint "
+"assignment changes made in the schematic. Uncheck this only if you don't "
+"want to change existing footprints on the board."
+msgstr ""
+"Normally footprints on the board should be changed to match footprint "
+"assignment changes made in the schematic. Uncheck this only if you don't "
+"want to change existing footprints on the board."
+
 msgid "Delete footprints with no symbols"
 msgstr "Delete footprints with no symbols"
 
@@ -27226,17 +27241,14 @@ msgstr ""
 "Remove from the board unlocked footprints which are not linked to a "
 "schematic symbol."
 
-msgid "Replace footprints with those specified in the schematic"
-msgstr "Replace footprints with those specified in the schematic"
+msgid "Override locks"
+msgstr "Override locks"
 
-msgid ""
-"Normally footprints on the board should be changed to match footprint "
-"assignment changes made in the schematic. Uncheck this only if you don't "
-"want to change existing footprints on the board."
-msgstr ""
-"Normally footprints on the board should be changed to match footprint "
-"assignment changes made in the schematic. Uncheck this only if you don't "
-"want to change existing footprints on the board."
+msgid "Update footprint fields from symbols"
+msgstr "Update footprint fields from symbols"
+
+msgid "Remove footprint fields not found in symbols"
+msgstr "Remove footprint fields not found in symbols"
 
 msgid "Update PCB from Schematic"
 msgstr "Update PCB from Schematic"
@@ -30293,9 +30305,6 @@ msgstr "Footprint types differ."
 msgid "'%s' settings differ."
 msgstr "'%s' settings differ."
 
-msgid "Exempt From Courtyard Requirement"
-msgstr "Exempt From Courtyard Requirement"
-
 msgid "Pad clearance overridden."
 msgstr "Pad clearance overridden."
 
@@ -31003,6 +31012,9 @@ msgstr "Exclude From Position Files"
 
 msgid "Overrides"
 msgstr "Overrides"
+
+msgid "Exempt From Courtyard Requirement"
+msgstr "Exempt From Courtyard Requirement"
 
 msgid "Clearance Override"
 msgstr "Clearance Override"
@@ -38055,6 +38067,36 @@ msgstr "KiCad Schematic Symbol"
 
 msgid "KiCad Drawing Sheet"
 msgstr "KiCad Drawing Sheet"
+
+#~ msgid "Update clearance overrides and settings"
+#~ msgstr "Update clearance overrides and settings"
+
+#~ msgid "Update/reset clearance overrides and settings"
+#~ msgstr "Update/reset clearance overrides and settings"
+
+#~ msgid "Clearance Overrides and Settings"
+#~ msgstr "Clearance Overrides and Settings"
+
+#~ msgid "Pads with duplicate numbers are jumpers"
+#~ msgstr "Pads with duplicate numbers are jumpers"
+
+#~ msgid "Jumper Pad Groups"
+#~ msgstr "Jumper Pad Groups"
+
+#~ msgid "Available pads"
+#~ msgstr "Available pads"
+
+#~ msgid "Create jumper group from the selected pads"
+#~ msgstr "Create jumper group from the selected pads"
+
+#~ msgid "Remove the selected jumper pad group"
+#~ msgstr "Remove the selected jumper pad group"
+
+#~ msgid "Grouped pads"
+#~ msgstr "Grouped pads"
+
+#~ msgid "Replace footprints with those specified in the schematic"
+#~ msgstr "Replace footprints with those specified in the schematic"
 
 #, c-format
 #~ msgid ""
@@ -54970,9 +55012,6 @@ msgstr "KiCad Drawing Sheet"
 
 #~ msgid "Text items must have some content."
 #~ msgstr "Text items must have some content."
-
-#~ msgid "Fabrication Attributes"
-#~ msgstr "Fabrication Attributes"
 
 #, c-format
 #~ msgid "Update %s properties."
