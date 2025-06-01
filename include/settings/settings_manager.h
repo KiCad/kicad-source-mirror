@@ -531,9 +531,6 @@ private:
     /// Loaded project files, mapped according to project full name.
     std::map<wxString, PROJECT_FILE*> m_project_files;
 
-    /// Lock for loaded project (expand to multiple once we support MDI).
-    std::unique_ptr<LOCKFILE> m_project_lock;
-
     static wxString backupDateTimeFormat;
 };
 

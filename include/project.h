@@ -52,6 +52,7 @@ class SYMBOL_LIB_TABLE;
 class FILENAME_RESOLVER;
 class PROJECT_FILE;
 class PROJECT_LOCAL_SETTINGS;
+class LOCKFILE;
 
 
 /**
@@ -217,9 +218,9 @@ public:
     {
         DOC_PATH,
         SCH_LIB_PATH,
-        SCH_LIB_SELECT,               // eeschema/selpart.cpp
+        SCH_LIB_SELECT, // eeschema/selpart.cpp
         SCH_LIBEDIT_CUR_LIB,
-        SCH_LIBEDIT_CUR_SYMBOL,       // eeschema/libeditframe.cpp
+        SCH_LIBEDIT_CUR_SYMBOL, // eeschema/libeditframe.cpp
 
         VIEWER_3D_PATH,
         VIEWER_3D_FILTER_INDEX,
@@ -270,11 +271,11 @@ public:
     /**
      * Clear the _ELEMs and RSTRINGs.
      */
-    void Clear()        // inline not virtual
+    void Clear() // inline not virtual
     {
         elemsClear();
 
-        for( unsigned i = 0; i<RSTRING_COUNT;  ++i )
+        for( unsigned i = 0; i < RSTRING_COUNT; ++i )
             SetRString( RSTRING_T( i ), wxEmptyString );
     }
 
@@ -297,6 +298,10 @@ public:
      */
     virtual DESIGN_BLOCK_LIB_TABLE* DesignBlockLibs();
 
+    void SetProjectLock( LOCKFILE* aLockFile );
+
+    LOCKFILE* GetProjectLock() const;
+ 
 private:
     friend class SETTINGS_MANAGER; // so that SM can set project path
     friend class TEST_NETLISTS_FIXTURE; // TODO(JE) make this not required
@@ -366,6 +371,9 @@ private:
 
     /// @see this::Elem() and enum ELEM_T.
     std::array<_ELEM*,static_cast<unsigned int>( PROJECT::ELEM::COUNT )> m_elems;
+
+    /// Lock
+    std::unique_ptr<LOCKFILE> m_project_lock;
 };
 
 

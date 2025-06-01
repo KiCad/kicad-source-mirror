@@ -48,6 +48,7 @@
 #include <kiway.h>
 #include <kiway_express.h>
 #include <launch_ext.h>
+#include <lockfile.h>
 #include <notifications_manager.h>
 #include <reporter.h>
 #include <project/project_local_settings.h>
@@ -68,6 +69,7 @@
 #include <wx/filedlg.h>
 #include <wx/dnd.h>
 #include <wx/process.h>
+#include <wx/snglinst.h>
 #include <atomic>
 #include <update_manager.h>
 #include <jobs/jobset.h>
@@ -1035,7 +1037,42 @@ void KICAD_MANAGER_FRAME::CommonSettingsChanged( int aFlags )
 
 void KICAD_MANAGER_FRAME::ProjectChanged()
 {
-    wxString file  = GetProjectFileName();
+    wxString file = GetProjectFileName();
+
+    // empty file string means no project loaded
+    if( !Prj().IsNullProject() &&
+        Prj().GetProjectLock() == nullptr )
+    {
+        LOCKFILE lockFile( file );
+
+        if( !lockFile.Valid() && lockFile.IsLockedByMe() )
+        {
+            // If we cannot acquire the lock but we appear to be the one who
+            // locked it, check to see if there is another KiCad instance running.
+            // If there is not, then we can override the lock.  This could happen if
+            // KiCad crashed or was interrupted
+            if( !Pgm().SingleInstance()->IsAnotherRunning() )
+            {
+                lockFile.OverrideLock();
+            }
+        }
+
+        if( !lockFile.Valid() )
+        {
+            wxString msg;
+            msg.Printf( _( "Project '%s' is already open by '%s' at '%s'." ), file, lockFile.GetUsername(),
+                        lockFile.GetHostname() );
+
+            if( AskOverrideLock( this, msg ) )
+            {
+                lockFile.OverrideLock();
+            }
+        }
+
+        Prj().SetReadOnly( !lockFile.Valid() || Prj().GetProjectFile().IsReadOnly() );
+        Prj().SetProjectLock( new LOCKFILE( std::move( lockFile ) ) );
+    }
+
     wxString title;
 
     if( !file.IsEmpty() )

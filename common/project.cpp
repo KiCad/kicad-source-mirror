@@ -33,6 +33,7 @@
 #include <string_utils.h>
 #include <kiface_ids.h>
 #include <kiway.h>
+#include <lockfile.h>
 #include <macros.h>
 #include <project.h>
 #include <project/project_file.h>
@@ -41,6 +42,7 @@
 #include <settings/common_settings.h>
 #include <settings/settings_manager.h>
 #include <title_block.h>
+
 
 PROJECT::PROJECT() :
         m_readOnly( false ),
@@ -459,4 +461,16 @@ DESIGN_BLOCK_LIB_TABLE* PROJECT::DesignBlockLibs()
     }
 
     return tbl;
+}
+
+
+void PROJECT::SetProjectLock( LOCKFILE* aLockFile )
+{
+    m_project_lock.reset( aLockFile );
+}
+
+
+LOCKFILE* PROJECT::GetProjectLock() const
+{
+    return m_project_lock.get();
 }

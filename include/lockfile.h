@@ -127,6 +127,20 @@ public:
         }
     }
 
+    LOCKFILE( LOCKFILE&& other ) noexcept :
+            m_originalFile( std::move( other.m_originalFile ) ),
+            m_lockFilename( std::move( other.m_lockFilename ) ),
+            m_username( std::move( other.m_username ) ),
+            m_hostname( std::move( other.m_hostname ) ),
+            m_fileCreated( other.m_fileCreated ),
+            m_status( other.m_status ),
+            m_removeOnRelease( other.m_removeOnRelease ),
+            m_errorMsg( std::move( other.m_errorMsg ) )
+    {
+        // Disable unlock in the moved-from object
+        other.m_fileCreated = false;
+    }
+
     ~LOCKFILE()
     {
         UnlockFile();

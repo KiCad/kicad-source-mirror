@@ -939,13 +939,11 @@ bool SETTINGS_MANAGER::LoadProject( const wxString& aFullPath, bool aSetActive )
     if( m_projects.count( fullPath ) )
         return true;
 
-    bool readOnly = false;
     LOCKFILE lockFile( fullPath );
 
     if( !lockFile.Valid() )
     {
         wxLogTrace( traceSettings, wxT( "Project %s is locked; opening read-only" ), fullPath );
-        readOnly = true;
     }
 
     // No MDI yet
@@ -986,10 +984,10 @@ bool SETTINGS_MANAGER::LoadProject( const wxString& aFullPath, bool aSetActive )
 
     if( success )
     {
-        project->SetReadOnly( readOnly || project->GetProjectFile().IsReadOnly() );
+        project->SetReadOnly( !lockFile.Valid() || project->GetProjectFile().IsReadOnly() );
 
         if( lockFile && aSetActive )
-            m_project_lock.reset( new LOCKFILE( std::move( lockFile ) ) );
+            project->SetProjectLock( new LOCKFILE( std::move( lockFile ) ) );
     }
 
     m_projects_list.push_back( std::move( project ) );
@@ -1047,9 +1045,6 @@ bool SETTINGS_MANAGER::UnloadProject( PROJECT* aProject, bool aSave )
 
         // Remove the reference in the environment to the previous project
         wxSetEnv( PROJECT_VAR_NAME, wxS( "" ) );
-
-        // Release lock on the file, in case we had one
-        m_project_lock = nullptr;
 
         if( m_kiway )
             m_kiway->ProjectChanged();
