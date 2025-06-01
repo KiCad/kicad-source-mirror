@@ -5,10 +5,10 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-05-29 21:50+0300\n"
-"PO-Revision-Date: 2025-05-20 20:01+0000\n"
+"PO-Revision-Date: 2025-06-01 16:39+0000\n"
 "Last-Translator: தமிழ்நேரம் <anishprabu.t@gmail.com>\n"
-"Language-Team: Tamil <https://hosted.weblate.org/projects/kicad/master-"
-"source/ta/>\n"
+"Language-Team: Tamil <https://hosted.weblate.org/projects/kicad/"
+"master-source/ta/>\n"
 "Language: ta\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -12072,9 +12072,8 @@ msgid "Update/reset visibility of pin names/numbers"
 msgstr "முள் பெயர்கள்/எண்களின் பார்வை/மீட்டமை"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:172
-#, fuzzy
 msgid "Reset alternate pin to default"
-msgstr "வழிகாட்டி அளவுருக்களை இயல்புநிலைக்கு மீட்டமைக்கவும்"
+msgstr "மாற்று முள் இயல்புநிலைக்கு மீட்டமைக்கவும்"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:178
 msgid "Update/reset symbol attributes"
@@ -21482,6 +21481,7 @@ msgstr "அளவீட்டு வடிவமைப்பு வரையற�
 #: eeschema/sim/ngspice.cpp:501
 msgid "Unable to load ngspice shared library. Please check your install."
 msgstr ""
+"NGSPICE பகிரப்பட்ட நூலகத்தை ஏற்ற முடியவில்லை. உங்கள் நிறுவலை சரிபார்க்கவும்."
 
 #: eeschema/sim/sim_lib_mgr.cpp:91 eeschema/sim/sim_lib_mgr.cpp:144
 #, c-format
@@ -30797,7 +30797,6 @@ msgid "Zout:"
 msgstr "உப்பு:"
 
 #: pcb_calculator/calculator_panels/panel_rf_attenuators_base.cpp:141
-#, fuzzy
 msgid "R3:"
 msgstr "பி 3"
 
@@ -40516,16 +40515,15 @@ msgid "Check rule syntax"
 msgstr "விதி தொடரியல் சரிபார்க்கவும்"
 
 #: pcbnew/dialogs/panel_setup_rules_help_10documentation.h:2
-#, fuzzy
 msgid ""
 "### Documentation\n"
 "\n"
 "For the full documentation see [https://docs.kicad.org](https://go.kicad.org/"
 "docs/GetMajorMinorVersion/en/pcbnew/pcbnew.html#custom_design_rules)."
 msgstr ""
-"### ஆவணம்\n"
+"### ஆவணம் \n"
 "\n"
-" முழு ஆவணங்களுக்கு [https://docs.kicad.org] (https://docs.kicad.org/"
+"முழு ஆவணங்களுக்கு [https://docs.kicad.org] (https://go.kicad.org/docs/"
 "getmajorminorversion/en/pcbnew/pcbnew.html#custom_design_rules) ஐப் பார்க்கவும்."
 
 #: pcbnew/dialogs/panel_setup_rules_help_1clauses.h:2
