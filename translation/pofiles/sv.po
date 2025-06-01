@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-01 19:42+0300\n"
+"POT-Creation-Date: 2025-06-01 20:43+0300\n"
 "PO-Revision-Date: 2025-05-30 20:02+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/v9/sv/>\n"
@@ -10987,9 +10987,10 @@ msgid "Unconnected wire to bus entry"
 msgstr "Ej ansluten ledningsanslutning på buss"
 
 #: eeschema/connection_graph.cpp:4192
-#, c-format
+#, fuzzy, c-format
 msgid ""
-"Hierarchical label \"%s\" in cannot be connected to non-existent parent sheet"
+"Hierarchical label \"%s\" in root sheet cannot be connected to non-existent "
+"parent sheet"
 msgstr ""
 "Hierarkisk etikett \"%s\" kan inte anslutas till icke existerande överordnat "
 "ark"

@@ -18,7 +18,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-01 19:42+0300\n"
+"POT-Creation-Date: 2025-06-01 20:43+0300\n"
 "PO-Revision-Date: 2025-04-22 07:50+0000\n"
 "Last-Translator: Oliver0804 <icetzsr@gmail.com>\n"
 "Language-Team: Chinese (Traditional Han script) <https://hosted.weblate.org/"
@@ -10874,7 +10874,8 @@ msgstr "未連接匯流排入口的電線"
 #: eeschema/connection_graph.cpp:4192
 #, fuzzy, c-format
 msgid ""
-"Hierarchical label \"%s\" in cannot be connected to non-existent parent sheet"
+"Hierarchical label \"%s\" in root sheet cannot be connected to non-existent "
+"parent sheet"
 msgstr "層次標籤 %s 在父圖紙內沒有匹配的圖紙接腳"
 
 #: eeschema/connection_graph.cpp:4257

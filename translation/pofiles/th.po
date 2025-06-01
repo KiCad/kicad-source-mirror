@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-01 19:42+0300\n"
+"POT-Creation-Date: 2025-06-01 20:43+0300\n"
 "PO-Revision-Date: 2025-01-23 15:38+0000\n"
 "Last-Translator: John Beard <john.j.beard@gmail.com>\n"
 "Language-Team: Thai <https://hosted.weblate.org/projects/kicad/master-source/"
@@ -11275,7 +11275,8 @@ msgstr "ไม่เชื่อมต่อ"
 #: eeschema/connection_graph.cpp:4192
 #, fuzzy, c-format
 msgid ""
-"Hierarchical label \"%s\" in cannot be connected to non-existent parent sheet"
+"Hierarchical label \"%s\" in root sheet cannot be connected to non-existent "
+"parent sheet"
 msgstr "ป้ายชื่อตามลำดับขั้น %s ไม่มีชีตพินที่ตรงกันในแผ่นวงจรต้นกำเนิด"
 
 #: eeschema/connection_graph.cpp:4257

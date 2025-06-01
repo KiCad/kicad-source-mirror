@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-01 19:42+0300\n"
+"POT-Creation-Date: 2025-06-01 20:43+0300\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -6943,9 +6943,11 @@ msgstr "Unconnected wire to bus entry"
 
 #, c-format
 msgid ""
-"Hierarchical label \"%s\" in cannot be connected to non-existent parent sheet"
+"Hierarchical label \"%s\" in root sheet cannot be connected to non-existent "
+"parent sheet"
 msgstr ""
-"Hierarchical label \"%s\" in cannot be connected to non-existent parent sheet"
+"Hierarchical label \"%s\" in root sheet cannot be connected to non-existent "
+"parent sheet"
 
 #, c-format
 msgid "Sheet pin %s has no matching hierarchical label inside the sheet"
@@ -37230,6 +37232,14 @@ msgstr "KiCad Schematic Symbol"
 
 msgid "KiCad Drawing Sheet"
 msgstr "KiCad Drawing Sheet"
+
+#, c-format
+#~ msgid ""
+#~ "Hierarchical label \"%s\" in cannot be connected to non-existent parent "
+#~ "sheet"
+#~ msgstr ""
+#~ "Hierarchical label \"%s\" in cannot be connected to non-existent parent "
+#~ "sheet"
 
 #~ msgid "Replace footprints with those specified in the schematic"
 #~ msgstr "Replace footprints with those specified in the schematic"

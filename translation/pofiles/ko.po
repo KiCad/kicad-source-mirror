@@ -35,7 +35,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-01 19:42+0300\n"
+"POT-Creation-Date: 2025-06-01 20:43+0300\n"
 "PO-Revision-Date: 2025-05-19 17:22+0000\n"
 "Last-Translator: Jason Son <weblate.sash858@passmail.net>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/v9/ko/>\n"
@@ -10991,7 +10991,8 @@ msgstr "전선-버스 입력 미연결"
 #: eeschema/connection_graph.cpp:4192
 #, fuzzy, c-format
 msgid ""
-"Hierarchical label \"%s\" in cannot be connected to non-existent parent sheet"
+"Hierarchical label \"%s\" in root sheet cannot be connected to non-existent "
+"parent sheet"
 msgstr "계층 라벨 %s에는 상위 시트 내부에 일치하는 시트 핀이 없습니다"
 
 #: eeschema/connection_graph.cpp:4257

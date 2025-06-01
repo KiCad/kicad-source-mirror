@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 5.99\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-01 19:42+0300\n"
+"POT-Creation-Date: 2025-06-01 20:43+0300\n"
 "PO-Revision-Date: 2025-04-30 19:05+0000\n"
 "Last-Translator: Stian Kristensen <stiank@gmail.com>\n"
 "Language-Team: Norwegian Bokmål <https://hosted.weblate.org/projects/kicad/"
@@ -11497,7 +11497,8 @@ msgstr "Ikke-tilkoblede varer"
 #: eeschema/connection_graph.cpp:4192
 #, fuzzy, c-format
 msgid ""
-"Hierarchical label \"%s\" in cannot be connected to non-existent parent sheet"
+"Hierarchical label \"%s\" in root sheet cannot be connected to non-existent "
+"parent sheet"
 msgstr "Arkport %s har ingen samsvarende hierarkisk etikett inne i arket"
 
 #: eeschema/connection_graph.cpp:4257
