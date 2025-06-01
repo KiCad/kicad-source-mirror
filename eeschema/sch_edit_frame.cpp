@@ -1920,8 +1920,7 @@ void SCH_EDIT_FRAME::RecalculateConnections( SCH_COMMIT* aCommit, SCH_CLEANUP_FL
 
             if( item )
             {
-                SCH_SCREEN* screen =
-                        static_cast<SCH_SCREEN*>( changed_list->GetScreenForItem( ii ) );
+                SCH_SCREEN* screen = static_cast<SCH_SCREEN*>( changed_list->GetScreenForItem( ii ) );
                 changed_screens.insert( screen );
 
                 if( item->Type() == SCH_RULE_AREA_T )
@@ -1935,8 +1934,7 @@ void SCH_EDIT_FRAME::RecalculateConnections( SCH_COMMIT* aCommit, SCH_CLEANUP_FL
                 }
                 else if( item->IsConnectable() )
                 {
-                    SCH_ITEM* linked_item =
-                            dynamic_cast<SCH_ITEM*>( changed_list->GetPickedItemLink( ii ) );
+                    SCH_ITEM* linked_item = dynamic_cast<SCH_ITEM*>( changed_list->GetPickedItemLink( ii ) );
                     changed_connectable_items.push_back( { item, linked_item, screen } );
                 }
             }
@@ -1956,11 +1954,8 @@ void SCH_EDIT_FRAME::RecalculateConnections( SCH_COMMIT* aCommit, SCH_CLEANUP_FL
         // update their connectivity
         for( const std::pair<SCH_RULE_AREA*, SCH_SCREEN*>& changedRuleArea : changed_rule_areas )
         {
-            for( SCH_ITEM* containedItem :
-                 changedRuleArea.first->GetPastAndPresentContainedItems() )
-            {
+            for( SCH_ITEM* containedItem : changedRuleArea.first->GetPastAndPresentContainedItems() )
                 addItemToChangeSet( { containedItem, nullptr, changedRuleArea.second } );
-            }
         }
 
         // Add all changed items, and associated items, to the change set
@@ -1975,21 +1970,19 @@ void SCH_EDIT_FRAME::RecalculateConnections( SCH_COMMIT* aCommit, SCH_CLEANUP_FL
                 const std::vector<VECTOR2I> labelConnectionPoints =
                         changed_item_data.item->GetConnectionPoints();
 
-                EE_RTREE::EE_TYPE candidateRuleAreas =
-                        changed_item_data.screen->Items().Overlapping(
-                                SCH_RULE_AREA_T, changed_item_data.item->GetBoundingBox() );
+                auto candidateRuleAreas =
+                        changed_item_data.screen->Items().Overlapping( SCH_RULE_AREA_T,
+                                                                       changed_item_data.item->GetBoundingBox() );
 
                 for( SCH_ITEM* candidateRuleArea : candidateRuleAreas )
                 {
                     SCH_RULE_AREA*      ruleArea = static_cast<SCH_RULE_AREA*>( candidateRuleArea );
                     std::vector<SHAPE*> borderShapes = ruleArea->MakeEffectiveShapes( true );
 
-                    if( ruleArea->GetPolyShape().CollideEdge( labelConnectionPoints[0], nullptr,
-                                                              5 ) )
+                    if( ruleArea->GetPolyShape().CollideEdge( labelConnectionPoints[0], nullptr, 5 ) )
                     {
                         for( SCH_ITEM* containedItem : ruleArea->GetPastAndPresentContainedItems() )
-                            addItemToChangeSet(
-                                    { containedItem, nullptr, changed_item_data.screen } );
+                            addItemToChangeSet( { containedItem, nullptr, changed_item_data.screen } );
                     }
                 }
             }
@@ -2052,9 +2045,7 @@ void SCH_EDIT_FRAME::RecalculateConnections( SCH_COMMIT* aCommit, SCH_CLEANUP_FL
             SCH_CONNECTION* conn = item->Connection();
 
             if( conn )
-            {
                 affectedNets.insert( conn->Name() );
-            }
         }
 
         // Reset resolved netclass cache for this connection
