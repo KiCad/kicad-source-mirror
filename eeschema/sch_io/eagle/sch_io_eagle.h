@@ -262,15 +262,13 @@ private:
 
     std::unordered_map<wxString, bool> m_userValue; ///< deviceset/@uservalue for device.
 
-    IO_RELEASER<SCH_IO>               m_pi;                ///< PI to create KiCad symbol library.
-    std::unique_ptr<std::map<std::string, UTF8>>  m_properties;        ///< Library plugin properties.
+    IO_RELEASER<SCH_IO>                m_pi;                ///< PI to create KiCad symbol library.
 
-    int m_sheetIndex;
-
-    std::map<wxString, int>           m_netCounts;
-    std::map<int, SCH_LAYER_ID>       m_layerMap;
-    std::map<wxString, wxString>      m_powerPorts;        ///< map from symbol reference to global
-                                                           ///< label equivalent
+    int                                m_sheetIndex;
+    std::map<wxString, int>            m_netCounts;
+    std::map<int, SCH_LAYER_ID>        m_layerMap;
+    std::map<wxString, wxString>       m_powerPorts;        ///< map from symbol reference to global
+                                                            ///<   label equivalent
 
     ///< Wire intersection points, used for quick checks whether placing a net label in a particular
     ///< place would short two nets.

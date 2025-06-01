@@ -44,7 +44,7 @@
 #include <project_sch.h>
 #include <sch_bus_entry.h>
 #include <sch_edit_frame.h>
-#include <sch_io/kicad_legacy/sch_io_kicad_legacy.h>
+#include <sch_io/kicad_sexpr/sch_io_kicad_sexpr.h>
 #include <sch_junction.h>
 #include <sch_label.h>
 #include <sch_marker.h>
@@ -429,8 +429,6 @@ SCH_SHEET* SCH_IO_EAGLE::LoadSchematicFile( const wxString& aFileName, SCHEMATIC
     wxCHECK_MSG( libTable, nullptr, wxT( "Could not load symbol lib table." ) );
 
     m_pi.reset( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_KICAD ) );
-    m_properties = std::make_unique<std::map<std::string, UTF8>>();
-    ( *m_properties )[SCH_IO_KICAD_LEGACY::PropBuffering] = "";
 
     /// @note No check is being done here to see if the existing symbol library exists so this
     ///       will overwrite the existing one.
@@ -1789,13 +1787,15 @@ void SCH_IO_EAGLE::loadInstance( const std::unique_ptr<EINSTANCE>& aInstance,
     if( p != elib->package.end() )
         package = p->second;
 
-    LIB_SYMBOL* part = m_pi->LoadSymbol( getLibFileName().GetFullPath(), altSymbolName,
-                                         m_properties.get() );
+    // set properties to prevent save file on every symbol save
+    std::map<std::string, UTF8> properties;
+    properties.emplace( SCH_IO_KICAD_SEXPR::PropBuffering, wxEmptyString );
+
+    LIB_SYMBOL* part = m_pi->LoadSymbol( getLibFileName().GetFullPath(), altSymbolName, &properties );
 
     if( !part )
     {
-        part = m_pi->LoadSymbol( getLibFileName().GetFullPath(), kisymbolname,
-                                 m_properties.get() );
+        part = m_pi->LoadSymbol( getLibFileName().GetFullPath(), kisymbolname, &properties );
         libIdSymbolName = kisymbolname;
     }
 
@@ -2119,8 +2119,12 @@ EAGLE_LIBRARY* SCH_IO_EAGLE::loadLibrary( const ELIBRARY* aLibrary, EAGLE_LIBRAR
                         libSymbol->SetName( libName );
                     }
 
-                    m_pi->SaveSymbol( getLibFileName().GetFullPath(),
-                                      new LIB_SYMBOL( *libSymbol.get() ), m_properties.get() );
+                    // set properties to prevent save file on every symbol save
+                    std::map<std::string, UTF8> properties;
+                    properties.emplace( SCH_IO_KICAD_SEXPR::PropBuffering, wxEmptyString );
+
+                    m_pi->SaveSymbol( getLibFileName().GetFullPath(), new LIB_SYMBOL( *libSymbol.get() ),
+                                      &properties );
                 }
                 catch(...)
                 {
