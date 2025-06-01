@@ -1,12 +1,13 @@
 # தமிழ்நேரம் <anishprabu.t@gmail.com>, 2025.
 # Seth Hillbrand <seth@kipro-pcb.com>, 2025.
+# dsa-t <dudesuchamazing@gmail.com>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-05-29 21:50+0300\n"
-"PO-Revision-Date: 2025-06-01 16:40+0000\n"
-"Last-Translator: Anonymous <noreply@weblate.org>\n"
+"PO-Revision-Date: 2025-06-01 16:41+0000\n"
+"Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
 "Language-Team: Tamil <https://hosted.weblate.org/projects/kicad/"
 "master-source/ta/>\n"
 "Language: ta\n"
@@ -30797,9 +30798,8 @@ msgid "Zout:"
 msgstr "உப்பு:"
 
 #: pcb_calculator/calculator_panels/panel_rf_attenuators_base.cpp:141
-#, fuzzy
 msgid "R3:"
-msgstr "பி 3"
+msgstr "R3:"
 
 #: pcb_calculator/calculator_panels/panel_track_width.cpp:61
 msgid "Temperature rise"
