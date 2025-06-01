@@ -22,10 +22,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-05-29 21:50+0300\n"
-"PO-Revision-Date: 2025-05-11 14:03+0000\n"
+"PO-Revision-Date: 2025-06-01 16:38+0000\n"
 "Last-Translator: Jan Straka <bach@email.cz>\n"
-"Language-Team: Czech <https://hosted.weblate.org/projects/kicad/master-"
-"source/cs/>\n"
+"Language-Team: Czech <https://hosted.weblate.org/projects/kicad/"
+"master-source/cs/>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -10873,9 +10873,8 @@ msgid "KiCad s-expression schematic files"
 msgstr "Soubory schémat KiCadu s-expression"
 
 #: common/wildcards_and_files_ext.cpp:291
-#, fuzzy
 msgid "Altium Project files"
-msgstr "Všechny soubory projektů KiCadu"
+msgstr "Soubory projektu Altium"
 
 #: common/wildcards_and_files_ext.cpp:297
 msgid "CADSTAR Archive files"
@@ -13162,9 +13161,8 @@ msgstr ""
 "hodnota symbolu při načtení do schématu."
 
 #: eeschema/dialogs/dialog_increment_annotations_base.cpp:37
-#, fuzzy
 msgid "Increment by:"
-msgstr "Krok přírůstku:"
+msgstr "Zvýšit o:"
 
 #: eeschema/dialogs/dialog_increment_annotations_base.cpp:54
 msgid "All sheets"
@@ -14556,9 +14554,8 @@ msgid "Field name templates"
 msgstr "Šablony názvů polí"
 
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:54
-#, fuzzy
 msgid "BOM presets"
-msgstr "Přednastavení BOM"
+msgstr "Předvolby BOM"
 
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:57
 #, fuzzy
@@ -14585,7 +14582,6 @@ msgid "Bus alias definitions"
 msgstr "Definice aliasů sběrnice"
 
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:72
-#, fuzzy
 msgid "Text variables"
 msgstr "Textové proměnné"
 
@@ -15217,7 +15213,6 @@ msgid "SPICE directives:"
 msgstr "Směrnice SPICE:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:547
-#, fuzzy
 msgid "Load Directives from Schematic"
 msgstr "Načíst směrnice ze schématu"
 
@@ -30282,7 +30277,7 @@ msgstr ""
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:41
 msgid "Rated Voltage (RMS or DC):"
-msgstr ""
+msgstr "Jmenovité napětí (RMS nebo DC):"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:43
 msgid "Voltage of the mains supply"
@@ -30351,7 +30346,7 @@ msgstr "RMS napětí:"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:121
 msgid "Expected RMS voltage."
-msgstr ""
+msgstr "Očekávané napětí RMS."
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:134
 msgid "Transient overvoltage:"
@@ -37906,7 +37901,7 @@ msgstr "Tvar díry:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:441 pcbnew/pad.cpp:2715
 msgid "Oblong"
-msgstr ""
+msgstr "Podélný"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:487
 msgid "Specify pad to die length"
@@ -38926,7 +38921,7 @@ msgstr "Vlastnosti obrázku"
 
 #: pcbnew/dialogs/dialog_render_job.cpp:32
 msgid "Opaque"
-msgstr ""
+msgstr "Neprůhledný"
 
 #: pcbnew/dialogs/dialog_render_job.cpp:33
 #, fuzzy
@@ -38985,7 +38980,7 @@ msgstr "Označení směrnice"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:149
 msgid "Orthogonal"
-msgstr ""
+msgstr "Ortogonální"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:151
 #, fuzzy
@@ -39235,11 +39230,11 @@ msgstr "Počáteční bod"
 
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:133
 msgid "By Center/Start/Angle"
-msgstr ""
+msgstr "Podle středu/začátku/úhlu"
 
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:149
 msgid "By Start/Mid/End"
-msgstr ""
+msgstr "Podle začátku/poloviny/konce"
 
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:165
 #, fuzzy
@@ -39541,7 +39536,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:292
 msgid "Front/Inner/Back"
-msgstr ""
+msgstr "Přední/vnitřní/zadní"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:310
 #: pcbnew/dialogs/dialog_track_via_size_base.cpp:36
