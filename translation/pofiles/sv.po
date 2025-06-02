@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-06-01 20:43+0300\n"
-"PO-Revision-Date: 2025-05-30 20:02+0000\n"
+"PO-Revision-Date: 2025-06-03 08:05+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/v9/sv/>\n"
 "Language: sv\n"
@@ -10987,13 +10987,13 @@ msgid "Unconnected wire to bus entry"
 msgstr "Ej ansluten ledningsanslutning på buss"
 
 #: eeschema/connection_graph.cpp:4192
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Hierarchical label \"%s\" in root sheet cannot be connected to non-existent "
 "parent sheet"
 msgstr ""
-"Hierarkisk etikett \"%s\" kan inte anslutas till icke existerande överordnat "
-"ark"
+"Hierarkisk etikett \"%s\" i rotarket kan inte anslutas till icke existerande "
+"överordnat ark"
 
 #: eeschema/connection_graph.cpp:4257
 #, c-format
@@ -38572,14 +38572,12 @@ msgid "Unused Pads"
 msgstr "Oanvända hålkragar"
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:39
-#, fuzzy
 msgid "Update Footprints"
 msgstr "Uppdatera fotavtryck"
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:41
-#, fuzzy
 msgid "Replace footprints with those specified by symbols"
-msgstr "Ersätt fotavtryck med dem som anges i nätlista"
+msgstr "Ersätt fotavtryck med dem som anges i symboler"
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:43
 msgid ""
@@ -38604,19 +38602,16 @@ msgstr ""
 "kretsschemasymbol."
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:52
-#, fuzzy
 msgid "Override locks"
 msgstr "Åsidosätt låsningar"
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:64
-#, fuzzy
 msgid "Update footprint fields from symbols"
-msgstr "Uppdatera fotavtryck %s från '%s' till '%s'"
+msgstr "Uppdatera fotavtrycksfält från symboler"
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:68
-#, fuzzy
 msgid "Remove footprint fields not found in symbols"
-msgstr "Ta bort %s fotavtrycksfält som saknas i symbolen."
+msgstr "Ta bort fotavtrycksfält som saknas i symboler"
 
 #: pcbnew/dialogs/dialog_update_pcb_base.h:56
 msgid "Update PCB from Schematic"
