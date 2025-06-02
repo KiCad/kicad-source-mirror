@@ -464,7 +464,7 @@ void DIALOG_DRC::OnDRCItemSelected( wxDataViewEvent& aEvent )
     const KIID& itemID = RC_TREE_MODEL::ToUUID( aEvent.GetItem() );
     BOARD_ITEM* item = board->ResolveItem( itemID, true );
 
-    if( item )
+    if( !item )
     {
         // nothing to highlight / focus on
         aEvent.Skip();
