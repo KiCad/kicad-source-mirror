@@ -601,10 +601,13 @@ SCH_SHEET* SCH_IO_ALTIUM::getCurrentSheet()
 
 void SCH_IO_ALTIUM::CreateAliases()
 {
+    SCH_SCREEN* screen = getCurrentScreen();
+    wxCHECK( screen, /* void */ );
+
     std::vector<SCH_LINE*> busLines;
     std::map<VECTOR2I, std::vector<SCH_LINE*>> busLineMap;
 
-    for( auto elem : getCurrentScreen()->Items().OfType( SCH_LINE_T) )
+    for( SCH_ITEM* elem : screen->Items().OfType( SCH_LINE_T) )
     {
         SCH_LINE* line = static_cast<SCH_LINE*>( elem );
 
@@ -617,48 +620,44 @@ void SCH_IO_ALTIUM::CreateAliases()
     }
 
     std::function<SCH_LABEL*(VECTOR2I, std::set<SCH_LINE*>&)> walkBusLine =
-    [&]( VECTOR2I aStart, std::set<SCH_LINE*>& aVisited ) -> SCH_LABEL*
-    {
-        auto it = busLineMap.find( aStart );
-
-        if( it == busLineMap.end() )
-            return nullptr;
-
-        for( SCH_LINE* line : it->second )
-        {
-            // Skip lines we've already checked to avoid cycles
-            if( aVisited.count( line ) )
-                continue;
-
-            aVisited.insert( line );
-
-            for( auto elem : getCurrentScreen()->Items().
-                                Overlapping( SCH_LABEL_T, line->GetBoundingBox() ) )
+            [&]( const VECTOR2I& aStart, std::set<SCH_LINE*>& aVisited ) -> SCH_LABEL*
             {
-                SCH_LABEL* label = static_cast<SCH_LABEL*>( elem );
+                auto it = busLineMap.find( aStart );
 
-                if( line->HitTest( label->GetPosition() ) )
-                    return label;
-            }
+                if( it == busLineMap.end() )
+                    return nullptr;
 
-            SCH_LABEL* result = walkBusLine( KIGEOM::GetOtherEnd( line->GetSeg(), aStart ), aVisited );
+                for( SCH_LINE* line : it->second )
+                {
+                    // Skip lines we've already checked to avoid cycles
+                    if( aVisited.count( line ) )
+                        continue;
 
-            if( result )
-                return result;
-        }
+                    aVisited.insert( line );
 
-        return nullptr;
-    };
+                    for( SCH_ITEM* elem : screen->Items().Overlapping( SCH_LABEL_T, line->GetBoundingBox() ) )
+                    {
+                        SCH_LABEL* label = static_cast<SCH_LABEL*>( elem );
+
+                        if( line->HitTest( label->GetPosition() ) )
+                            return label;
+                    }
+
+                    SCH_LABEL* result = walkBusLine( KIGEOM::GetOtherEnd( line->GetSeg(), aStart ), aVisited );
+
+                    if( result )
+                        return result;
+                }
+
+                return nullptr;
+            };
 
     for( auto& [_, harness] : m_altiumHarnesses )
     {
-        SCH_SCREEN* screen = getCurrentScreen();
-
-        wxCHECK( screen, /* void */ );
-        std::shared_ptr<BUS_ALIAS> alias = std::make_shared<BUS_ALIAS>( screen);
+        std::shared_ptr<BUS_ALIAS> alias = std::make_shared<BUS_ALIAS>( screen );
         alias->SetName( harness.m_name );
 
-        for( auto& port : harness.m_ports )
+        for( HARNESS::HARNESS_PORT& port : harness.m_ports )
             alias->Members().push_back( port.m_name );
 
         screen->AddBusAlias( alias );
@@ -667,8 +666,7 @@ void SCH_IO_ALTIUM::CreateAliases()
         BOX2I     box( harness.m_location, harness.m_size );
         SCH_LINE* busLine = nullptr;
 
-        for( auto elem : getCurrentScreen()->Items().Overlapping(
-                     SCH_LINE_T, box ) )
+        for( SCH_ITEM* elem : screen->Items().Overlapping( SCH_LINE_T, box ) )
         {
             SCH_LINE* line = static_cast<SCH_LINE*>( elem );
 
@@ -677,7 +675,7 @@ void SCH_IO_ALTIUM::CreateAliases()
 
             busLine = line;
 
-            for( VECTOR2I pt : line->GetConnectionPoints() )
+            for( const VECTOR2I& pt : line->GetConnectionPoints() )
             {
                 if( box.Contains( pt ) )
                 {
@@ -689,7 +687,7 @@ void SCH_IO_ALTIUM::CreateAliases()
 
         if( !busLine )
         {
-            for( SCH_ITEM* elem : getCurrentScreen()->Items().Overlapping( SCH_HIER_LABEL_T, box ) )
+            for( SCH_ITEM* elem : screen->Items().Overlapping( SCH_HIER_LABEL_T, box ) )
             {
                 SCH_HIERLABEL* label = static_cast<SCH_HIERLABEL*>( elem );
 
@@ -778,7 +776,7 @@ void SCH_IO_ALTIUM::CreateAliases()
             line->SetEndPoint( top );
             line->SetLineWidth( busLine->GetLineWidth() );
             line->SetLineColor( busLine->GetLineColor() );
-            getCurrentScreen()->Append( line );
+            screen->Append( line );
 
             last_pt = ( busLine->GetStartPoint() - line->GetEndPoint() ).SquaredEuclideanNorm() <
                       ( busLine->GetStartPoint() - line->GetStartPoint() ).SquaredEuclideanNorm()
@@ -791,12 +789,15 @@ void SCH_IO_ALTIUM::CreateAliases()
             {
                 line = new SCH_LINE( last_pt, SCH_LAYER_ID::LAYER_BUS );
                 line->SetStartPoint( last_pt );
-                line->SetEndPoint( last_pt
-                                + VECTOR2I( alg::signbit( busLine->GetStartPoint().x - last_pt.x )
-                                                    ? -delta_space: delta_space, 0 ) );
+
+                if( alg::signbit( busLine->GetStartPoint().x - last_pt.x ) )
+                    line->SetEndPoint( last_pt + VECTOR2I( -delta_space, 0 ) );
+                else
+                    line->SetEndPoint( last_pt + VECTOR2I( delta_space, 0 ) );
+
                 line->SetLineWidth( busLine->GetLineWidth() );
                 line->SetLineColor( busLine->GetLineColor() );
-                getCurrentScreen()->Append( line );
+                screen->Append( line );
                 last_pt = line->GetEndPoint();
 
                 line = new SCH_LINE( last_pt, SCH_LAYER_ID::LAYER_BUS );
@@ -804,7 +805,7 @@ void SCH_IO_ALTIUM::CreateAliases()
                 line->SetEndPoint( last_pt + VECTOR2I( 0, busLine->GetStartPoint().y - last_pt.y ) );
                 line->SetLineWidth( busLine->GetLineWidth() );
                 line->SetLineColor( busLine->GetLineColor() );
-                getCurrentScreen()->Append( line );
+                screen->Append( line );
                 last_pt = line->GetEndPoint();
             }
 
@@ -813,8 +814,7 @@ void SCH_IO_ALTIUM::CreateAliases()
             line->SetEndPoint( busLine->GetStartPoint() );
             line->SetLineWidth( busLine->GetLineWidth() );
             line->SetLineColor( busLine->GetLineColor() );
-            getCurrentScreen()->Append( line );
-
+            screen->Append( line );
         }
     }
 }
