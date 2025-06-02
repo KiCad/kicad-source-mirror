@@ -576,8 +576,8 @@ void KICAD_NETLIST_PARSER::parseComponent()
     component->SetHumanReadablePath( humanSheetPath );
     component->SetComponentClassNames( componentClasses );
     component->SetDuplicatePadNumbersAreJumpers( duplicatePinsAreJumpers );
-    std::ranges::copy( jumperPinGroups,
-                       std::inserter( component->JumperPadGroups(), component->JumperPadGroups().end() ) );
+    std::ranges::copy( jumperPinGroups, std::inserter( component->JumperPadGroups(),
+                                                       component->JumperPadGroups().end() ) );
     m_netlist->AddComponent( component );
 }
 
@@ -678,7 +678,8 @@ void KICAD_NETLIST_PARSER::parseGroup()
         THROW_IO_ERROR( error );
     }
 
-    NETLIST_GROUP* group = new NETLIST_GROUP{ name, uuid, groupLibId, members };
+    NETLIST_GROUP* group = new NETLIST_GROUP{ std::move( name ), std::move( uuid ), std::move( groupLibId ),
+                                              std::move( members ) };
     m_netlist->AddGroup( group );
 }
 

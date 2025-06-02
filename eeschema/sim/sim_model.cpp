@@ -1248,7 +1248,7 @@ bool SIM_MODEL::InferSimModel( T& aSymbol, std::vector<SCH_FIELD>* aFields, bool
             else        // Behavioral
             {
                 *aModelType = wxT( "=" );
-                aModelParams->Printf( wxT( "%s=\"%s\"" ), prefix.Left(1).Lower(), value );
+                aModelParams->Printf( wxT( "%s=\"%s\"" ), prefix.Left(1).Lower(), std::move( value ) );
             }
         }
 
