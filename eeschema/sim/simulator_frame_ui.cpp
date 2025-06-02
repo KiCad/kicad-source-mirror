@@ -784,13 +784,10 @@ void SIMULATOR_FRAME_UI::ApplyPreferences( const SIM_PREFERENCES& aPrefs )
 {
     m_preferences = aPrefs;
 
-    const std::size_t pageCount = m_plotNotebook->GetPageCount();
-    for( std::size_t i = 0; i < pageCount; ++i )
+    for( std::size_t i = 0; i < m_plotNotebook->GetPageCount(); ++i )
     {
-        wxWindow* page = m_plotNotebook->GetPage( i );
-        auto      simTab = dynamic_cast<SIM_TAB*>( page );
-        wxASSERT( simTab != nullptr );
-        simTab->ApplyPreferences( aPrefs );
+        if( SIM_TAB* simTab = dynamic_cast<SIM_TAB*>( m_plotNotebook->GetPage( i ) ) )
+            simTab->ApplyPreferences( aPrefs );
     }
 }
 
