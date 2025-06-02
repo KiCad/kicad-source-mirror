@@ -209,6 +209,8 @@ void NL_PL_EDITOR_PLUGIN_IMPL::exportCommandsAndImages()
         try_add_category( strCategory, categoryStore );
         CATEGORY_STORE::iterator iter = categoryStore.find( strCategory );
 
+        wxCHECK2( iter != categoryStore.end(), continue );
+
         // Arbitrary 8-bit data stream
         wxMemoryOutputStream imageStream;
 
@@ -235,8 +237,8 @@ void NL_PL_EDITOR_PLUGIN_IMPL::exportCommandsAndImages()
         wxLogTrace( m_logTrace, wxT( "Inserting command: %s,  description: %s,  in category:  %s" ),
                     name, description, iter->first );
 
-        iter->second->push_back(
-                CCommand( std::move( name ), std::move( label ), std::move( description ) ) );
+        iter->second->push_back( CCommand( std::move( name ), std::move( label ),
+                                           std::move( description ) ) );
     }
 
     NAV_3D::AddCommandSet( commandSet );
