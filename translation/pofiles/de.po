@@ -31,8 +31,8 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-06-01 20:42+0300\n"
-"PO-Revision-Date: 2025-06-02 07:42+0000\n"
-"Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
+"PO-Revision-Date: 2025-06-03 08:04+0000\n"
+"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
 "Language: de\n"
@@ -9233,14 +9233,12 @@ msgid "Ungroup any selected groups"
 msgstr "Ausgewählte Gruppierungen aufheben"
 
 #: common/tool/actions.cpp:215
-#, fuzzy
 msgid "Add Items"
-msgstr "Hilfselemente"
+msgstr "Elemente hinzufügen"
 
 #: common/tool/actions.cpp:216
-#, fuzzy
 msgid "Add items to group"
-msgstr "Elemente aus der Gruppe heraus lösen"
+msgstr "Elemente zur Gruppe hinzufügen"
 
 #: common/tool/actions.cpp:222
 msgid "Remove Items"
@@ -9627,19 +9625,16 @@ msgid "Zoom to worksheet area if exists or edited object"
 msgstr ""
 
 #: common/tool/actions.cpp:706
-#, fuzzy
 msgid "Zoom to All Objects"
-msgstr "Auf Objekte zoomen"
+msgstr "Auf alle Objekte zoomen"
 
 #: common/tool/actions.cpp:707
-#, fuzzy
 msgid "Zoom to all objects on screen"
-msgstr "Wählt alle Elemente auf Bildschirm aus"
+msgstr "Auf alle Objekte in akt. Ansicht zoomen"
 
 #: common/tool/actions.cpp:713
-#, fuzzy
 msgid "Zoom to items currently selected"
-msgstr "Kein Footprint ausgewählt"
+msgstr "Auf gewählte Elemente zoomen"
 
 #: common/tool/actions.cpp:714
 msgid "Zoom to Selected Objects"
@@ -9700,13 +9695,12 @@ msgid "Center on Cursor"
 msgstr "Auf Zeiger zentrieren"
 
 #: common/tool/actions.cpp:794
-#, fuzzy
 msgid "Zoom to Selection Area"
-msgstr "Zoom auf Auswahl"
+msgstr "Auf Auswahlbereich zoomen"
 
 #: common/tool/actions.cpp:795
 msgid "Zoom to an area selection created by a mouse drag"
-msgstr ""
+msgstr "Auf durch gezogene Maus erstellten Auswahlbereich zoomen"
 
 #: common/tool/actions.cpp:803 common/widgets/mathplot.cpp:1394
 msgid "Undo Last Zoom"
@@ -10246,9 +10240,8 @@ msgid "Grouping"
 msgstr "Gruppierung"
 
 #: common/tool/group_tool.cpp:237
-#, fuzzy
 msgid "Add Items to Group"
-msgstr "Elemente am Raster ausrichten"
+msgstr "Elemente zur Gruppe hinzufügen"
 
 #: common/tool/group_tool.cpp:264
 msgid "Remove Group Items"
@@ -11661,13 +11654,13 @@ msgid "Unconnected wire to bus entry"
 msgstr "Unverbundener Buseingang"
 
 #: eeschema/connection_graph.cpp:4255
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Hierarchical label \"%s\" in root sheet cannot be connected to non-existent "
 "parent sheet"
 msgstr ""
-"Hierarchischer Bezeichner %s hat keinen entsprechenden Schaltplanpin im "
-"übergeordneten Schaltplanblatt"
+"Hierarchischer Bezeichner \"%s\" in Haupschaltplanblatt kann nicht zu nicht-"
+"existentem übergeordneten Schaltplanblatt verbunden werden"
 
 #: eeschema/connection_graph.cpp:4320
 #, c-format
