@@ -1065,7 +1065,7 @@ int EDIT_TOOL::ChangeTrackWidth( const TOOL_EVENT& aEvent )
 
 int EDIT_TOOL::ChangeTrackLayer( const TOOL_EVENT& aEvent )
 {
-    if( m_toolMgr->GetTool<ROUTER_TOOL>()->IsToolActive() )
+    if( m_toolMgr->GetTool<ROUTER_TOOL>() && m_toolMgr->GetTool<ROUTER_TOOL>()->IsToolActive() )
         return 0;
 
     bool isNext = aEvent.IsAction( &PCB_ACTIONS::changeTrackLayerNext );
