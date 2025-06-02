@@ -22,7 +22,7 @@
 # "Pferd O." <frank.0228@ich-war-hier.de>, 2024, 2025.
 # tct123 <tct1234@protonmail.com>, 2024.
 # Lauritz Tieste <lauritz6000000@gmail.com>, 2024.
-# Frank Sonnenberg <frasoberg@web.de>, 2024.
+# Frank Sonnenberg <frasoberg@web.de>, 2024, 2025.
 # John Beard <john.j.beard@gmail.com>, 2024, 2025.
 # dsa-t <dudesuchamazing@gmail.com>, 2025.
 # weblateuser <useross@disroot.org>, 2025.
@@ -32,7 +32,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-06-01 20:42+0300\n"
 "PO-Revision-Date: 2025-06-02 07:42+0000\n"
-"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
+"Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
 "Language: de\n"
@@ -8810,13 +8810,13 @@ msgid ""
 "reports when crashes or events occur. \n"
 "Your design files such as schematic and PCB are not shared in this process."
 msgstr ""
-"KiCad kann Entwicklern Abstürze und Daten zu besonderen Ereignissen anonym "
-"melden, um ein Auffinden kritischer Fehler zu vereinfachen und die genutzte "
-"Funktionalität zu untersuchen, um zukünftige Verbesserungen zu "
-"priorisieren. \n"
-"Wenn Sie sich entscheiden freiwillig teilzunehmen, dann wird KiCad "
-"automatisch obige Berichte senden, wenn das Programm abstürzt oder ein "
-"besonderes Ereignis eintritt. \n"
+"KiCad kann Abstürze und Daten von besonderen Ereignissen anonym an die "
+"Entwickler melden, um die Identifizierung kritischer Fehler zu unterstützen "
+"und hilft ein Profil der Funktionalität zu erstellen, um Verbesserungen "
+"vorzunehmen. \n"
+"Wenn Sie sich für eine freiwillige Teilnahme entscheiden, dann wird KiCad, "
+"im Falle eines Programmabsturzes oder eines besonderen Ereignisses, solche "
+"Berichte automatisch senden. \n"
 "Ihre Projektdateien wie Schaltpläne oder Platinendaten werden bei diesem "
 "Vorgang nicht übermittelt."
 
