@@ -2213,7 +2213,7 @@ std::vector<EDA_ITEM*> PCB_TUNING_PATTERN::GetPreviewItems( GENERATOR_TOOL* aToo
             }
             else
             {
-                if( m_settings.m_targetLengthDelay.Opt() == PNS::MEANDER_SETTINGS::LENGTH_UNCONSTRAINED )
+                if( m_settings.m_targetLength.Opt() == PNS::MEANDER_SETTINGS::LENGTH_UNCONSTRAINED )
                 {
                     statusItem->ClearMinMax();
                 }
