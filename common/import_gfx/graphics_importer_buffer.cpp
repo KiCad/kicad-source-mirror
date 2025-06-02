@@ -123,8 +123,7 @@ void GRAPHICS_IMPORTER_BUFFER::ImportTo( GRAPHICS_IMPORTER& aImporter )
                               ( aImporter.GetMillimeterToIuFactor() + 100 );
         double max_scale = std::max( scale_factor / boundingBox.GetSize().x,
                                      scale_factor / boundingBox.GetSize().y );
-        aImporter.ReportMsg( wxString::Format( _( "Imported graphic is too large. Maximum scale "
-                                                  "is %f" ),
+        aImporter.ReportMsg( wxString::Format( _( "Imported graphic is too large. Maximum scale is %f" ),
                                                max_scale ) );
         return;
     }
@@ -146,22 +145,17 @@ void GRAPHICS_IMPORTER_BUFFER::ImportTo( GRAPHICS_IMPORTER& aImporter )
         double   total_scale_x = aImporter.GetScale().x * aImporter.GetMillimeterToIuFactor();
         double   total_scale_y = aImporter.GetScale().y * aImporter.GetMillimeterToIuFactor();
 
-        double max_offset_x =
-                ( aImporter.GetImportOffsetMM().x + boundingBox.GetRight() ) * total_scale_x;
-        double max_offset_y =
-                ( aImporter.GetImportOffsetMM().y + boundingBox.GetBottom() ) * total_scale_y;
-        double min_offset_x =
-                ( aImporter.GetImportOffsetMM().x + boundingBox.GetLeft() ) * total_scale_x;
-        double min_offset_y =
-                ( aImporter.GetImportOffsetMM().y + boundingBox.GetTop() ) * total_scale_y;
+        double max_offset_x = ( aImporter.GetImportOffsetMM().x + boundingBox.GetRight() ) * total_scale_x;
+        double max_offset_y = ( aImporter.GetImportOffsetMM().y + boundingBox.GetBottom() ) * total_scale_y;
+        double min_offset_x = ( aImporter.GetImportOffsetMM().x + boundingBox.GetLeft() ) * total_scale_x;
+        double min_offset_y = ( aImporter.GetImportOffsetMM().y + boundingBox.GetTop() ) * total_scale_y;
 
         VECTOR2D newOffset = aImporter.GetImportOffsetMM();
         bool needsAdjustment = false;
 
         if( max_offset_x >= std::numeric_limits<int>::max() )
         {
-            newOffset.x -= ( max_offset_x - std::numeric_limits<int>::max() + 100.0 ) /
-                           total_scale_x;
+            newOffset.x -= ( max_offset_x - std::numeric_limits<int>::max() + 100.0 ) / total_scale_x;
             needsAdjustment = true;
         }
         else if( min_offset_x <= std::numeric_limits<int>::min() )
@@ -226,6 +220,8 @@ static void convertPolygon( std::list<std::unique_ptr<IMPORTED_SHAPE>>& aShapes,
     double origH = ( maxY - minY );
     double upscaledW, upscaledH;
 
+    wxCHECK( origH && origW, /* void */ );
+
     if( origW > origH )
     {
         upscaledW = convert_scale;
@@ -256,6 +252,7 @@ static void convertPolygon( std::list<std::unique_ptr<IMPORTED_SHAPE>>& aShapes,
             int yp = KiROUND( ( v.y - minY ) * ( upscaledH / origH ) );
             lc.Append( xp, yp );
         }
+
         lc.SetClosed( true );
         upscaledPaths.push_back( lc );
     }
@@ -277,8 +274,7 @@ static void convertPolygon( std::list<std::unique_ptr<IMPORTED_SHAPE>>& aShapes,
             pts.emplace_back( VECTOR2D( xp, yp ) );
         }
 
-        aShapes.push_back(
-                std::make_unique<IMPORTED_POLYGON>( pts, aStroke, aFilled, aFillColor ) );
+        aShapes.push_back( std::make_unique<IMPORTED_POLYGON>( pts, aStroke, aFilled, aFillColor ) );
     }
 
     for( IMPORTED_POLYGON* openPath : openPaths )
