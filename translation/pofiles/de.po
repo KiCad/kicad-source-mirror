@@ -30,8 +30,8 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-06-01 20:43+0300\n"
-"PO-Revision-Date: 2025-06-02 07:37+0000\n"
-"Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
+"PO-Revision-Date: 2025-06-03 08:04+0000\n"
+"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v9/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -11099,13 +11099,13 @@ msgid "Unconnected wire to bus entry"
 msgstr "Unverbundener Buseingang"
 
 #: eeschema/connection_graph.cpp:4192
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Hierarchical label \"%s\" in root sheet cannot be connected to non-existent "
 "parent sheet"
 msgstr ""
-"Hierarchischer Bezeichner %s hat keinen entsprechenden Schaltplanpin im "
-"übergeordneten Schaltplanblatt"
+"Hierarchischer Bezeichner \"%s\" in Haupschaltplanblatt kann nicht zu nicht-"
+"existentem übergeordneten Schaltplanblatt verbunden werden"
 
 #: eeschema/connection_graph.cpp:4257
 #, c-format
