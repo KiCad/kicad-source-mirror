@@ -150,6 +150,8 @@ DIALOG_TEXTBOX_PROPERTIES::DIALOG_TEXTBOX_PROPERTIES( PCB_BASE_EDIT_FRAME* aPare
              nullptr, this );
 
     finishDialogSettings();
+	Layout();
+	bMainSizer->Fit( this );
 }
 
 

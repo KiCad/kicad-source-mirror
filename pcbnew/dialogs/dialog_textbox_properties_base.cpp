@@ -17,7 +17,6 @@ DIALOG_TEXTBOX_PROPERTIES_BASE::DIALOG_TEXTBOX_PROPERTIES_BASE( wxWindow* parent
 {
 	this->SetSizeHints( wxSize( -1,-1 ), wxDefaultSize );
 
-	wxBoxSizer* bMainSizer;
 	bMainSizer = new wxBoxSizer( wxVERTICAL );
 
 	m_MultiLineSizer = new wxBoxSizer( wxVERTICAL );
@@ -68,7 +67,6 @@ DIALOG_TEXTBOX_PROPERTIES_BASE::DIALOG_TEXTBOX_PROPERTIES_BASE( wxWindow* parent
 	gbSizer1 = new wxGridBagSizer( 3, 3 );
 	gbSizer1->SetFlexibleDirection( wxBOTH );
 	gbSizer1->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
-	gbSizer1->SetEmptyCellSize( wxSize( -1,8 ) );
 
 	m_cbLocked = new wxCheckBox( this, wxID_ANY, _("Locked"), wxDefaultPosition, wxDefaultSize, 0 );
 	gbSizer1->Add( m_cbLocked, wxGBPosition( 0, 0 ), wxGBSpan( 1, 3 ), wxBOTTOM|wxRIGHT|wxLEFT, 5 );

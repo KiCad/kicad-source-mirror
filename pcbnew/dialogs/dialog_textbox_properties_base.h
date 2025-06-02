@@ -46,6 +46,7 @@ class DIALOG_TEXTBOX_PROPERTIES_BASE : public DIALOG_SHIM
 	private:
 
 	protected:
+		wxBoxSizer* bMainSizer;
 		wxBoxSizer* m_MultiLineSizer;
 		wxStyledTextCtrl* m_MultiLineText;
 		wxCheckBox* m_cbLocked;

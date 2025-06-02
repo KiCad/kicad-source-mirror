@@ -64,7 +64,7 @@
         <property name="minimum_size"></property>
         <property name="name">bMainSizer</property>
         <property name="orient">wxVERTICAL</property>
-        <property name="permission">none</property>
+        <property name="permission">protected</property>
         <object class="sizeritem" expanded="true">
           <property name="border">10</property>
           <property name="flag">wxEXPAND|wxALL</property>
@@ -212,7 +212,7 @@
           <property name="flag">wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT</property>
           <property name="proportion">0</property>
           <object class="wxGridBagSizer" expanded="true">
-            <property name="empty_cell_size">-1,8</property>
+            <property name="empty_cell_size">-1,-1</property>
             <property name="flexible_direction">wxBOTH</property>
             <property name="growablecols">3</property>
             <property name="growablerows"></property>
@@ -558,14 +558,14 @@
                 <event name="OnChoice">onFontSelected</event>
               </object>
             </object>
-            <object class="gbsizeritem" expanded="false">
+            <object class="gbsizeritem" expanded="true">
               <property name="border">8</property>
               <property name="colspan">3</property>
               <property name="column">4</property>
               <property name="flag">wxALIGN_CENTER_VERTICAL|wxEXPAND|wxRIGHT</property>
               <property name="row">3</property>
               <property name="rowspan">1</property>
-              <object class="wxBoxSizer" expanded="false">
+              <object class="wxBoxSizer" expanded="true">
                 <property name="minimum_size"></property>
                 <property name="name">bSizerButtonBar</property>
                 <property name="orient">wxHORIZONTAL</property>
