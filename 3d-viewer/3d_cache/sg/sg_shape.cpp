@@ -752,7 +752,9 @@ bool SGSHAPE::Prepare( const glm::dmat4* aTransform, S3D::MATLIST& materials,
     for( unsigned int i = 0; i < nvidx; ++i )
     {
         mit = indexmap.find( lv[i] );
-        lvidx[i] = mit->second;
+
+        if( mit != indexmap.end() )
+            lvidx[i] = mit->second;
     }
 
     m.m_FaceIdxSize = (unsigned int )nvidx;

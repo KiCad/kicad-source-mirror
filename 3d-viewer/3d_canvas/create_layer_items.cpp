@@ -797,8 +797,11 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
                     {
                         auto mut_it = layer_lock.find( layer );
 
-                        std::lock_guard< std::mutex > lock( *( mut_it->second ) );
-                        zone->TransformSolidAreasShapesToPolygon( layer, *m_layers_poly[layer] );
+                        if( mut_it != layer_lock.end() )
+                        {
+                            std::lock_guard< std::mutex > lock( *( mut_it->second ) );
+                            zone->TransformSolidAreasShapesToPolygon( layer, *m_layers_poly[layer] );
+                        }
                     }
                 }
 
