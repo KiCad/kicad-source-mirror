@@ -14,10 +14,10 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-06-01 20:42+0300\n"
-"PO-Revision-Date: 2025-05-30 20:01+0000\n"
+"PO-Revision-Date: 2025-06-03 08:04+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
-"Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/master-"
-"source/sv/>\n"
+"Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/"
+"master-source/sv/>\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -34865,9 +34865,8 @@ msgid "Update fabrication attributes"
 msgstr "Uppdatera tillverkningsattribut"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:87
-#, fuzzy
 msgid "Update clearance overrides"
-msgstr "Uppdatera undantag och inställningar för frigång"
+msgstr "Uppdatera undantag för frigång"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:88
 msgid "Update 3D models"
@@ -34956,9 +34955,8 @@ msgid "Update/reset fabrication attributes"
 msgstr "Uppdatera / återställ tillverkningsattribut"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:114
-#, fuzzy
 msgid "Update/reset clearance overrides"
-msgstr "Uppdatera/återställ undantag och inställningar för frigång"
+msgstr "Uppdatera/återställ undantag för frigång"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:117
 msgid "Update/reset 3D models"
@@ -35743,9 +35741,8 @@ msgstr ""
 "när kryssrutan 'Låsta objekt' är aktiverad i urvalsfiltret."
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:357
-#, fuzzy
 msgid "all pads with duplicate numbers"
-msgstr "Lödytor med samma nummer är sammankopplade"
+msgstr "alla lödytor med duplicerade nummer"
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:458
 #, c-format
@@ -36016,14 +36013,12 @@ msgid "Thermal relief"
 msgstr "Termisk avlastning"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:369
-#, fuzzy
 msgid "Jumper groups:"
-msgstr "Grupper av byglade stift"
+msgstr "Byglingsgrupper:"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:387
-#, fuzzy
 msgid "Clearance Overrides && Pad Connections"
-msgstr "Lokala undantag och inställningar för frigång"
+msgstr "Undantag för frigång && lödyteanslutningar"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:400
 msgid ""
@@ -36199,14 +36194,12 @@ msgid "Pad groups allowed to short different nets:"
 msgstr "Lödytegrupper som tillåts förbinda olika nät:"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:420
-#, fuzzy
 msgid "Jumpers"
-msgstr "hoppare"
+msgstr "Byglingar"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:422
-#, fuzzy
 msgid "All pads with duplicate numbers are jumpers"
-msgstr "Lödytor med samma nummer är sammankopplade"
+msgstr "Alla lödytor med samma nummer är sammankopplade"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:423
 msgid ""
@@ -36218,9 +36211,8 @@ msgstr ""
 "och lödytor med samma nummer kommer att anses vara internt sammankopplade."
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:430
-#, fuzzy
 msgid "Explicit jumper pad groups:"
-msgstr "Uppdatera %s grupper av sammankopplade lödytor"
+msgstr "Explicita grupper av byglade lödytor:"
 
 #: pcbnew/dialogs/dialog_footprint_wizard_list.cpp:146
 msgid "All footprint generator scripts were loaded"
@@ -39518,14 +39510,12 @@ msgid "Unused Pads"
 msgstr "Oanvända hålkragar"
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:42
-#, fuzzy
 msgid "Update Footprints"
 msgstr "Uppdatera fotavtryck"
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:44
-#, fuzzy
 msgid "Replace footprints with those specified by symbols"
-msgstr "Ersätt fotavtryck med dem som anges i nätlista"
+msgstr "Ersätt fotavtryck med dem som anges i symboler"
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:46
 msgid ""
@@ -39550,19 +39540,16 @@ msgstr ""
 "kretsschemasymbol."
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:55
-#, fuzzy
 msgid "Override locks"
 msgstr "Åsidosätt låsningar"
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:67
-#, fuzzy
 msgid "Update footprint fields from symbols"
-msgstr "Uppdatera fotavtryck %s från '%s' till '%s'"
+msgstr "Uppdatera fotavtrycksfält från symboler"
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:71
-#, fuzzy
 msgid "Remove footprint fields not found in symbols"
-msgstr "Ta bort %s fotavtrycksfält som saknas i symbolen."
+msgstr "Ta bort fotavtrycksfält som saknas i symboler"
 
 #: pcbnew/dialogs/dialog_update_pcb_base.h:57
 msgid "Update PCB from Schematic"
