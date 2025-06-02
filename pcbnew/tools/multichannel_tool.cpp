@@ -1222,8 +1222,8 @@ int MULTICHANNEL_TOOL::AutogenerateRuleAreas( const TOOL_EVENT& aEvent )
             commit.Remove( ra.m_oldArea );
         }
 
-        ra.m_area = newZone.get();
-        commit.Add( newZone.release() );
+        ra.m_area = newZone.release();
+        commit.Add( ra.m_area );
     }
 
     // fixme: handle corner cases where the items belonging to a Rule Area already
