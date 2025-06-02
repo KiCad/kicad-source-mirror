@@ -790,6 +790,23 @@ int ERC_TESTER::TestFourWayJunction()
 {
     int err_count = 0;
 
+    auto pinStackAlreadyRepresented =
+            []( SCH_PIN* pin, std::vector<SCH_ITEM*>& collection ) -> bool
+            {
+                for( SCH_ITEM*& item : collection )
+                {
+                    if( item->Type() == SCH_PIN_T && item->GetParentSymbol() == pin->GetParentSymbol() )
+                    {
+                        if( pin->IsVisible() && !static_cast<SCH_PIN*>( item )->IsVisible() )
+                            item = pin;
+
+                        return true;
+                    }
+                }
+
+                return false;
+            };
+
     for( const SCH_SHEET_PATH& sheet : m_sheetList )
     {
         std::map<VECTOR2I, std::vector<SCH_ITEM*>> connMap;
@@ -800,7 +817,15 @@ int ERC_TESTER::TestFourWayJunction()
             SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item );
 
             for( SCH_PIN* pin : symbol->GetPins( &sheet ) )
-                connMap[pin->GetPosition()].emplace_back( pin );
+            {
+                std::vector<SCH_ITEM*>& entry = connMap[pin->GetPosition()];
+
+                // Only one pin per pin-stack.
+                if( pinStackAlreadyRepresented( pin, entry ) )
+                    continue;
+
+                entry.emplace_back( pin );
+            }
         }
 
         for( SCH_ITEM* item : screen->Items().OfType( SCH_LINE_T ) )
