@@ -42,7 +42,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-06-01 20:42+0300\n"
-"PO-Revision-Date: 2025-06-02 07:42+0000\n"
+"PO-Revision-Date: 2025-06-03 08:04+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/kicad/master-source/zh_Hans/>\n"
@@ -8666,9 +8666,9 @@ msgid "Open %s"
 msgstr "打开 %s"
 
 #: common/plotters/PDF_plotter.cpp:1951
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to open 3D model file: %s"
-msgstr "打开文件 '%s' 失败。"
+msgstr "打开 3D 模型文件失败: %s"
 
 #: common/project.cpp:416 common/project.cpp:421 pcbnew/project_pcb.cpp:69
 msgid "Error loading project footprint library table."
@@ -14378,13 +14378,12 @@ msgstr "正则表达式"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:93
 msgid "Search pin &names and numbers"
-msgstr "包括搜索引脚名称和编号 (&N)"
+msgstr "搜索引脚名称和编号 (&N)"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:96
 #: pcbnew/dialogs/dialog_find_base.cpp:92
-#, fuzzy
 msgid "Include &hidden fields"
-msgstr "包括隐藏字段"
+msgstr "包含隐藏字段 (&H)"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:99
 msgid "Search the current &sheet only"
@@ -19601,7 +19600,7 @@ msgstr "符号的库名称无效"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:3102
 msgid "Invalid symbol library ID"
-msgstr "无效的符号的库标识"
+msgstr "无效的符号库标识"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:4888
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6167
@@ -19611,9 +19610,8 @@ msgstr "符号 %s 包含无效字符 '%c'"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:4894
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6174
-#, fuzzy
 msgid "Invalid library ID"
-msgstr "无效的符号的库标识"
+msgstr "无效的库标识"
 
 #: eeschema/sch_io/ltspice/ltspice_schematic.cpp:223
 #, c-format
@@ -21378,7 +21376,7 @@ msgstr "'OFF' 时间"
 #: eeschema/sim/sim_model_ibis.cpp:446 eeschema/sim/sim_model_ibis.cpp:479
 #: pcbnew/dialogs/panel_setup_time_domain_parameters_base.cpp:116
 msgid "Delay"
-msgstr "延迟"
+msgstr "时延"
 
 #: eeschema/sim/sim_model_ibis.cpp:454
 msgid "Number of cycles"
@@ -23020,9 +23018,8 @@ msgid "Place Linked Design Block"
 msgstr "放置设计图块"
 
 #: eeschema/tools/sch_actions.cpp:468 pcbnew/tools/pcb_actions.cpp:462
-#, fuzzy
 msgid "Place design block linked to selected group"
-msgstr "作为一个分组放置该设计图块。"
+msgstr "放置链接到所选组合的设计图块"
 
 #: eeschema/tools/sch_actions.cpp:475 pcbnew/tools/pcb_actions.cpp:469
 #, fuzzy
@@ -24315,9 +24312,9 @@ msgid "Could not find design block %s."
 msgstr "无法找到列标签 %s。"
 
 #: eeschema/tools/sch_editor_control.cpp:3012
-#, fuzzy, c-format
+#, c-format
 msgid "Design block %s does not have a schematic file."
-msgstr "设计图块缺少原理图或者电路板文件。"
+msgstr "设计图块 %s 缺少原理图文件。"
 
 #: eeschema/tools/sch_find_replace_tool.cpp:320
 msgid "Reached end of schematic."
@@ -24387,7 +24384,7 @@ msgstr "库项目: "
 #: eeschema/tools/sch_inspection_tool.cpp:400
 #: pcbnew/tools/board_inspection_tool.cpp:1616
 msgid "The library is not included in the current configuration."
-msgstr "当前配置中不包括该库。"
+msgstr "当前配置中不包含该库。"
 
 #: eeschema/tools/sch_inspection_tool.cpp:402
 #: eeschema/tools/sch_inspection_tool.cpp:408
@@ -26488,7 +26485,7 @@ msgstr "绘制时使用 钻孔/定位 文件的原点"
 #: kicad/cli/command_pcb_export_pdf.cpp:57
 #: kicad/cli/command_pcb_export_ps.cpp:61
 msgid "Include the border and title block"
-msgstr "包括边框和标题块"
+msgstr "包含边框和标题块"
 
 #: kicad/cli/command_pcb_export_dxf.cpp:89
 msgid "Output units, valid options: mm, in"
@@ -26619,7 +26616,7 @@ msgstr "使用电路板文件中已配置的 Gerber 绘制设置"
 
 #: kicad/cli/command_pcb_export_hpgl.cpp:30
 msgid "No longer supported as of KiCad 10.0."
-msgstr ""
+msgstr "自 KiCad 10.0 起不再支持。"
 
 #: kicad/cli/command_pcb_export_pdf.cpp:37
 msgid "Generate PDF from a list of layers"
@@ -26692,7 +26689,7 @@ msgstr "排除所有设置了 'DNP (不作装配)' 特性的封装"
 
 #: kicad/cli/command_pcb_export_pos.cpp:87
 msgid "Include board edge layer (Gerber only)"
-msgstr "包括电路板 edge 层 (仅 Gerber)"
+msgstr "包含电路板 edge 层 (仅 Gerber)"
 
 #: kicad/cli/command_pcb_export_pos.cpp:130
 #: kicad/cli/command_sch_export_netlist.cpp:95 kicad/cli/command_version.cpp:71
@@ -26976,9 +26973,8 @@ msgstr "用逗号分隔的要打印的页码列表, 留空或未指定则默认�
 
 #: kicad/cli/command_sch_export_plot.cpp:108
 #: kicad/cli/command_sch_export_plot.cpp:114
-#, fuzzy
 msgid "Deprecated.  Has no effect."
-msgstr "%s 的弃用版本。"
+msgstr "已弃用。 无影响。"
 
 #: kicad/cli/command_sch_export_pythonbom.cpp:36
 msgid ""
@@ -27004,11 +27000,11 @@ msgstr "要在库中导出的特定符号"
 
 #: kicad/cli/command_sym_export_svg.cpp:62
 msgid "Include hidden pins"
-msgstr "包括隐藏引脚"
+msgstr "包含隐藏引脚"
 
 #: kicad/cli/command_sym_export_svg.cpp:66
 msgid "Include hidden fields"
-msgstr "包括隐藏字段"
+msgstr "包含隐藏字段"
 
 #: kicad/cli/command_sym_export_svg.cpp:84
 msgid "Symbol file does not exist or is not accessible\n"
@@ -27976,7 +27972,7 @@ msgstr ""
 
 #: kicad/pcm/pcm_task_manager.cpp:369
 msgid "Archive does not contain a valid metadata.json file"
-msgstr "归档文件中不包含有效的 metadata.json 文件"
+msgstr "归档文件中缺少有效的 metadata.json 文件"
 
 #: kicad/pcm/pcm_task_manager.cpp:378
 msgid "Archive metadata must have a single version defined"
@@ -28248,9 +28244,8 @@ msgid "Local path: monitoring folder changes"
 msgstr "本地路径: 监视文件夹变更"
 
 #: kicad/project_tree_pane.cpp:1629
-#, fuzzy
 msgid "Please wait"
-msgstr "脉冲宽度："
+msgstr "请稍候"
 
 #: kicad/project_tree_pane.cpp:1630
 msgid "Waiting for Git operations to finish..."
@@ -28737,9 +28732,8 @@ msgid "(paper size)"
 msgstr "(纸张尺寸)"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:29
-#, fuzzy
 msgid "Item Type"
-msgstr "物料类型"
+msgstr "项目类型"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:38
 msgid "Show on all pages"
@@ -31110,7 +31104,7 @@ msgstr "有效 %s:"
 #: pcb_calculator/transline_ident.cpp:199
 #: pcb_calculator/transline_ident.cpp:389
 msgid "Unit propagation delay:"
-msgstr "单元传播延迟:"
+msgstr "单位传播时延:"
 
 #: pcb_calculator/transline_ident.cpp:122
 #: pcb_calculator/transline_ident.cpp:165
@@ -31326,12 +31320,12 @@ msgstr "有效 %s (奇模):"
 #: pcb_calculator/transline_ident.cpp:309
 #: pcb_calculator/transline_ident.cpp:356
 msgid "Unit propagation delay (even):"
-msgstr "单元传播延迟 (偶):"
+msgstr "单位传播时延(偶模):"
 
 #: pcb_calculator/transline_ident.cpp:310
 #: pcb_calculator/transline_ident.cpp:357
 msgid "Unit propagation delay (odd):"
-msgstr "单元传播延迟 (奇):"
+msgstr "单位传播时延(奇模):"
 
 #: pcb_calculator/transline_ident.cpp:311
 msgid "Conductor losses (even):"
@@ -32672,14 +32666,12 @@ msgid "Dimensions:"
 msgstr "尺寸:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:119
-#, fuzzy
 msgid "Front copper area:"
-msgstr "顶层铜层"
+msgstr "顶层铜箔面积:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:120
-#, fuzzy
 msgid "Back copper area:"
-msgstr "底层铜层"
+msgstr "底层铜箔面积:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:161
 msgid "THT:"
@@ -32784,14 +32776,12 @@ msgid "Dimensions"
 msgstr "测量标注"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:760
-#, fuzzy
 msgid "Front copper area"
-msgstr "顶层铜层"
+msgstr "顶层铜箔面积"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:762
-#, fuzzy
 msgid "Back copper area"
-msgstr "底层铜层"
+msgstr "底层铜箔面积"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:809
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:38
@@ -32816,9 +32806,8 @@ msgid "Subtract holes from board area"
 msgstr "不在电路板面积中包含孔"
 
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:208
-#, fuzzy
 msgid "Subtract holes from copper areas"
-msgstr "不在电路板面积中包含孔"
+msgstr "从铜箔面积中减去孔洞面积"
 
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:211
 msgid "Exclude footprints with no pads"
@@ -35630,7 +35619,7 @@ msgstr "排除具有通孔焊盘的所有封装"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:102
 msgid "Include board edge layer"
-msgstr "包括电路板边框层"
+msgstr "包含电路板边框层"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:108
 msgid "Use negative X coordinates for footprints on bottom layer"
@@ -37384,7 +37373,7 @@ msgstr "制造层上的草图焊盘"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:104
 msgid "Include pad outlines on F.Fab and B.Fab layers when plotting"
-msgstr "绘制时在 F.Fab 和 B.Fab 层上包括焊盘外框"
+msgstr "在绘制时包含 F.Fab 和 B.Fab 层上的焊盘外框"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:108
 msgid "Include pad numbers"
@@ -39348,9 +39337,8 @@ msgid "Place items matching component class:"
 msgstr "放置与元件类相匹配的项目:"
 
 #: pcbnew/dialogs/panel_rule_area_properties_placement_base.cpp:42
-#, fuzzy
 msgid "Place items in group:"
-msgstr "作为分组放置"
+msgstr "将项目作为组合放置:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:46
 msgid "Minimum clearance:"
@@ -42876,13 +42864,17 @@ msgid ""
 "Could not add 3D model for %s.\n"
 "File not found: %s\n"
 msgstr ""
+"无法为 %s 添加 3D 模型。\n"
+"找不到文件: %s\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:406
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Could not add 3D model for %s.\n"
 "OpenCASCADE error: %s\n"
-msgstr "无法连接到 %s。错误: %s"
+msgstr ""
+"无法为 %s 添加 3D 模型。\n"
+"OpenCASCADE 错误: %s\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:810
 msgid "Could not create PCB solid model.\n"
@@ -42967,9 +42959,9 @@ msgid "No location data for filename '%s'.\n"
 msgstr "写入定位数据到 '%s'。\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1243
-#, fuzzy, c-format
+#, c-format
 msgid "Could not add component with filename '%s'.\n"
-msgstr "找不到 IBIS 元件 '%s'"
+msgstr "无法添加文件名为'%s'的组件。\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1413
 #, c-format
@@ -43014,20 +43006,22 @@ msgid "OCC exception creating wire: %s\n"
 msgstr ""
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1728
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Wire not done (contour points %d): OCC error %d\n"
 "z: %g; bounding box: %s\n"
-msgstr "走线未完成 (轮廓点%d): OCC错误 %d\n"
+msgstr ""
+"走线未完成 (轮廓点%d): OCC错误 %d\n"
+"z: %g; 边界框: %s\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1742
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Wire self-interference check failed\n"
 "z: %g; bounding box: %s\n"
 msgstr ""
-"\n"
 "线路自干扰检查失败\n"
+"z: %g; 边界框: %s\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1764
 msgid "Using non-simplified polygon.\n"
@@ -43058,11 +43052,9 @@ msgid "Subtracting holes for %s\n"
 msgstr "在 %s 去除孔\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2044
-#, fuzzy, c-format
+#, c-format
 msgid "** Got problems while cutting %s net '%s' **\n"
-msgstr ""
-"\n"
-"** 切割 %s 网络 '%s' 时遇到问题 **\n"
+msgstr "** 切割 %s 网络 '%s' 时遇到问题 **\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2096
 msgid "shapes"
@@ -43088,7 +43080,7 @@ msgstr "无法创建输出目录 '%s'。"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2389
 msgid "Failed to set STEP product name, but will attempt to continue."
-msgstr ""
+msgstr "STEP 产物名称设置失败, 但将尝试继续。"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2397
 msgid "Failed to set surface curve mode, but will attempt to continue."
@@ -43098,14 +43090,14 @@ msgstr ""
 #: pcbnew/exporters/step/step_pcb_model.cpp:3218
 #: pcbnew/exporters/step/step_pcb_model.cpp:3290
 #: pcbnew/exporters/step/step_pcb_model.cpp:3339
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot rename temporary file '%s' to '%s'.\n"
-msgstr "无法重命名临时文件 '%s' 到 \"%s\""
+msgstr "无法将临时文件 '%s' 重命名为 '%s'。\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2889
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot identify actual file type for '%s'.\n"
-msgstr "无法打开网表文件 '%s'。"
+msgstr "无法识别 '%s' 的实际文件类型。\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2899
 #, fuzzy, c-format
@@ -44357,19 +44349,19 @@ msgid "Update %s jumper pad groups"
 msgstr "更新 %s 属性。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:870
-#, fuzzy, c-format
+#, c-format
 msgid "Remove %s from group \"%s\"."
-msgstr "从组合中移除项目"
+msgstr "从组合 \"%2$s\" 中移除 %1$s。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:876
-#, fuzzy, c-format
+#, c-format
 msgid "Removed %s from group \"%s\"."
-msgstr "从组合中移除项目"
+msgstr "从组合 \"%2$s\" 中移除 %1$s。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:893
-#, fuzzy, c-format
+#, c-format
 msgid "Add %s to group \"%s\"."
-msgstr "添加自定义分组..."
+msgstr "向组合 \"%2$s\" 中添加 %1$s。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:899
 #, fuzzy, c-format
@@ -44462,14 +44454,14 @@ msgid "Copper zone on layer %s at (%s, %s) has no pads connected."
 msgstr "坐标 (%s, %s) 层 %s 上的覆铜区没有与之相连的焊盘。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1377
-#, fuzzy, c-format
+#, c-format
 msgid "Change group name to '%s' to '%s'."
-msgstr "将 %s 的值由 '%s' 更改为 '%s'。"
+msgstr "将组合名称从 '%s' 更改为 '%s'。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1384
-#, fuzzy, c-format
+#, c-format
 msgid "Changed group name to '%s' to '%s'."
-msgstr "将 %s 的值由 '%s' 更改为 '%s'。"
+msgstr "已将组合名称从 '%s' 更改为 '%s'。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1396
 #, fuzzy, c-format
@@ -49706,27 +49698,24 @@ msgid "Create bill of materials from board"
 msgstr "从电路板创建 BOM"
 
 #: pcbnew/tools/pcb_actions.cpp:1257
-#, fuzzy
 msgid "Export GenCAD..."
-msgstr "导出 GenCAD 文件"
+msgstr "导出 GenCAD..."
 
 #: pcbnew/tools/pcb_actions.cpp:1258
 msgid "Export GenCAD board representation"
 msgstr "导出 GenCAD 电路板表示"
 
 #: pcbnew/tools/pcb_actions.cpp:1264
-#, fuzzy
 msgid "Export VRML..."
-msgstr "导出 VRML"
+msgstr "导出 VRML..."
 
 #: pcbnew/tools/pcb_actions.cpp:1265
 msgid "Export VRML 3D board representation"
 msgstr "导出 VRML 3D 电路板表示"
 
 #: pcbnew/tools/pcb_actions.cpp:1271
-#, fuzzy
 msgid "Export IDFv3..."
-msgstr "导出 IDFv3"
+msgstr "导出 IDFv3..."
 
 #: pcbnew/tools/pcb_actions.cpp:1272
 msgid "Export IDF 3D board representation"
@@ -50810,9 +50799,9 @@ msgid "Invalid clipboard contents"
 msgstr "无效的剪贴板内容"
 
 #: pcbnew/tools/pcb_control.cpp:1388
-#, fuzzy, c-format
+#, c-format
 msgid "Design block %s does not have a board file."
-msgstr "设计图块缺少原理图或者电路板文件。"
+msgstr "设计图块 %s 缺少电路板文件。"
 
 #: pcbnew/tools/pcb_control.cpp:1697
 msgid "Error loading board."
@@ -52144,14 +52133,14 @@ msgid "Teardrop %s %s"
 msgstr "泪滴 %s %s"
 
 #: pcbnew/zone.cpp:1208
-#, fuzzy, c-format
+#, c-format
 msgid "Zone %s %s, priority %d"
-msgstr "填充区优先级:"
+msgstr "填充区%s%s, 优先级 %d"
 
 #: pcbnew/zone.cpp:1215
-#, fuzzy, c-format
+#, c-format
 msgid "Zone '%s' %s %s, priority %d"
-msgstr "%s, %s, %s, 或 %s"
+msgstr "填充区 '%s' %s%s, 优先级 %d"
 
 #: pcbnew/zone.cpp:1938
 msgid "Keepout"
