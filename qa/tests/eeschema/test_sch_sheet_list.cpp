@@ -146,6 +146,10 @@ BOOST_AUTO_TEST_CASE( TestEditPageNumbersInSharedDesign )
         BOOST_CHECK( subSheetFn.Rmdir() );
         BOOST_CHECK( wxRemoveFile( newPrjFn.GetFullPath() ) );
         BOOST_CHECK( wxRemoveFile( rootFn.GetFullPath() ) );
+
+        // unload the active project before we can nuke the directory
+        m_manager.UnloadProject( &m_manager.Prj() );
+
         BOOST_CHECK( rootFn.Rmdir() );
     }
 

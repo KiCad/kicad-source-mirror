@@ -131,7 +131,7 @@ SCHEMATIC::~SCHEMATIC()
 
 void SCHEMATIC::Reset()
 {
-    if( m_project )
+    if( m_project && !m_project->IsNullProject() )
     {
         PROJECT_FILE& project = m_project->GetProjectFile();
 
