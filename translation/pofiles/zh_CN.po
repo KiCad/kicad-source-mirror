@@ -42,7 +42,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-06-01 20:42+0300\n"
-"PO-Revision-Date: 2025-05-29 15:01+0000\n"
+"PO-Revision-Date: 2025-06-02 07:42+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/kicad/master-source/zh_Hans/>\n"
@@ -8594,7 +8594,7 @@ msgstr "没有通知"
 
 #: common/pgm_base.cpp:216
 msgid "No default editor found, you must choose one."
-msgstr "找不到默认的文本编辑器, 必须选择一个。"
+msgstr "未找到默认文本编辑器, 请选择一个。"
 
 #: common/pgm_base.cpp:236 common/pgm_base.cpp:238
 msgid "Executable file"
@@ -42885,9 +42885,8 @@ msgid ""
 msgstr "无法连接到 %s。错误: %s"
 
 #: pcbnew/exporters/step/exporter_step.cpp:810
-#, fuzzy
 msgid "Could not create PCB solid model.\n"
-msgstr "无法创建 BOM 输出 '%s'。"
+msgstr "无法创建 PCB 实体模型。\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:864
 msgid ""
@@ -42953,9 +42952,9 @@ msgid "Could not add shape (%d points) to copper layer %s.\n"
 msgstr ""
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1207
-#, fuzzy, c-format
+#, c-format
 msgid "No model defined for %s.\n"
-msgstr "没有为符号 %s 定义封装。"
+msgstr "没有为 %s 定义模型。\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1222
 #, c-format
