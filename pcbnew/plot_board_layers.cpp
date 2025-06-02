@@ -923,11 +923,7 @@ void GenerateLayerPoly( SHAPE_POLY_SET* aResult, BOARD *aBoard, PCB_LAYER_ID aLa
 {
     int             maxError = aBoard->GetDesignSettings().m_MaxError;
     SHAPE_POLY_SET  buffer;
-    SHAPE_POLY_SET* boardOutline = nullptr;
     int             inflate = 0;
-
-    if( aBoard->GetBoardPolygonOutlines( buffer ) )
-        boardOutline = &buffer;
 
     if( aLayer == F_Mask || aLayer == B_Mask )
     {
@@ -1054,10 +1050,13 @@ void GenerateLayerPoly( SHAPE_POLY_SET* aResult, BOARD *aBoard, PCB_LAYER_ID aLa
             if( !zone->IsOnLayer( aLayer ) )
                 continue;
 
-            if( inflate != 0 )
-                zone->TransformSmoothedOutlineToPolygon( exactPolys, 0, maxError, ERROR_OUTSIDE, boardOutline );
+            SHAPE_POLY_SET area = *zone->GetFill( aLayer );
 
-            zone->TransformSmoothedOutlineToPolygon( *aResult, inflate, maxError, ERROR_OUTSIDE, boardOutline );
+            if( inflate != 0 )
+                exactPolys.Append( area );
+
+            area.Inflate( inflate, CORNER_STRATEGY::CHAMFER_ALL_CORNERS, maxError );
+            aResult->Append( area );
         }
     }
 
