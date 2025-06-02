@@ -41,7 +41,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-06-01 20:43+0300\n"
-"PO-Revision-Date: 2025-05-29 15:01+0000\n"
+"PO-Revision-Date: 2025-06-02 07:37+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/kicad/v9/zh_Hans/>\n"
@@ -8339,7 +8339,7 @@ msgstr "没有通知"
 
 #: common/pgm_base.cpp:216
 msgid "No default editor found, you must choose one."
-msgstr "找不到默认的文本编辑器, 必须选择一个。"
+msgstr "未找到默认文本编辑器, 请选择一个。"
 
 #: common/pgm_base.cpp:236 common/pgm_base.cpp:238
 msgid "Executable file"
@@ -10168,9 +10168,8 @@ msgid "KiCad s-expression schematic files"
 msgstr "KiCad s-expression 原理图文件"
 
 #: common/wildcards_and_files_ext.cpp:289
-#, fuzzy
 msgid "Altium Project files"
-msgstr "所有 KiCad 工程文件"
+msgstr "Altium 工程文件"
 
 #: common/wildcards_and_files_ext.cpp:295
 msgid "CADSTAR Archive files"
@@ -26650,9 +26649,8 @@ msgid ""
 msgstr "创建新目录时出错。请尝试不同路径。无法导入该工程。"
 
 #: kicad/import_project.cpp:146
-#, fuzzy
 msgid "Import Altium Project Files"
-msgstr "导入 Eagle 工程文件"
+msgstr "导入 Altium 工程文件"
 
 #: kicad/import_project.cpp:154
 msgid "Import CADSTAR Archive Project Files"
@@ -26775,14 +26773,12 @@ msgid "Import Non-KiCad Project..."
 msgstr "导入非 KiCad 工程..."
 
 #: kicad/menubar.cpp:115
-#, fuzzy
 msgid "Altium Project..."
-msgstr "Eagle 工程..."
+msgstr "Altium 工程..."
 
 #: kicad/menubar.cpp:116
-#, fuzzy
 msgid "Import Altium Schematic and PCB (*.PrjPcb)"
-msgstr "导入 CADSTAR 归档原理图和 PCB (*.csa, *.cpa)"
+msgstr "导入 Altium 原理图和 PCB (*.PrjPcb)"
 
 #: kicad/menubar.cpp:119
 msgid "CADSTAR Project..."
@@ -41774,9 +41770,8 @@ msgid ""
 msgstr "无法连接到 %s。错误: %s"
 
 #: pcbnew/exporters/step/exporter_step.cpp:801
-#, fuzzy
 msgid "Could not create PCB solid model.\n"
-msgstr "无法创建 BOM 输出 '%s'。"
+msgstr "无法创建 PCB 实体模型。\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:855
 msgid ""
@@ -41842,9 +41837,9 @@ msgid "Could not add shape (%d points) to copper layer %s.\n"
 msgstr ""
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1161
-#, fuzzy, c-format
+#, c-format
 msgid "No model defined for %s.\n"
-msgstr "没有为符号 %s 定义封装。"
+msgstr "没有为 %s 定义模型。\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1176
 #, c-format
