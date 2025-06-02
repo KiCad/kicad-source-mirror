@@ -1311,7 +1311,7 @@ bool ReplaceIllegalFileNameChars( std::string* aName, int aReplaceChar )
     }
 
     if( changed )
-        *aName = result;
+        *aName = std::move( result );
 
     return changed;
 }

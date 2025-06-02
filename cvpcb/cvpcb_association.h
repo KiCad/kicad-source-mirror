@@ -29,9 +29,7 @@
  */
 class CVPCB_ASSOCIATION
 {
-
 public:
-
     /**
      * Create an association event that contains all the information needed to modify the footprint
      * association of a component in cvpcb.
@@ -40,15 +38,15 @@ public:
      * @param aNewFootprint is the new footprint to give to the component
      * @param aOldFootprint is the old footprint from the component
      */
-    CVPCB_ASSOCIATION(
-            unsigned int aComponentIndex, LIB_ID aNewFootprint, LIB_ID aOldFootprint = LIB_ID() ) :
+    CVPCB_ASSOCIATION( unsigned int aComponentIndex, const LIB_ID& aNewFootprint,
+                       const LIB_ID& aOldFootprint = LIB_ID() ) :
             m_componentIndex( aComponentIndex ),
             m_newFootprint( aNewFootprint ),
             m_oldFootprint( aOldFootprint )
     {}
 
-    CVPCB_ASSOCIATION(
-            unsigned int aComponentIndex, wxString aNewFootprint, wxString aOldFootprint = "" ) :
+    CVPCB_ASSOCIATION( unsigned int aComponentIndex, const wxString& aNewFootprint,
+                       const wxString& aOldFootprint = "" ) :
             m_componentIndex( aComponentIndex )
     {
         m_newFootprint.Parse( aNewFootprint );
@@ -115,12 +113,10 @@ public:
         m_oldFootprint = aOldFootprint;
     }
 
-
 private:
     unsigned int m_componentIndex;
     LIB_ID       m_newFootprint;
     LIB_ID       m_oldFootprint;
-
 };
 
 

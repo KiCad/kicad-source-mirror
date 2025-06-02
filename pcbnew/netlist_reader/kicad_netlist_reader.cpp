@@ -415,7 +415,7 @@ void KICAD_NETLIST_PARSER::parseComponent()
             }
 
             if( !propName.IsEmpty() )
-                properties[ propName ] = propValue;
+                properties[propName] = std::move( propValue );
         }
             break;
 
@@ -448,7 +448,7 @@ void KICAD_NETLIST_PARSER::parseComponent()
                     }
 
                     if( !fieldName.IsEmpty() )
-                        fields[fieldName] = fieldValue;
+                        fields[fieldName] = std::move( fieldValue );
                 }
                 else
                 {

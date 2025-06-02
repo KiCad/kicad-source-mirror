@@ -92,24 +92,24 @@ template<typename ValueType>
 class PARAM : public PARAM_BASE
 {
 public:
-    PARAM( const std::string& aJsonPath, ValueType* aPtr, ValueType aDefault,
+    PARAM( const std::string& aJsonPath, ValueType* aPtr, const ValueType& aDefault,
            bool aReadOnly = false ) :
             PARAM_BASE( aJsonPath, aReadOnly ),
             m_min(),
             m_max(),
             m_use_minmax( false ),
             m_ptr( aPtr ),
-            m_default( std::move( aDefault ) )
+            m_default( aDefault )
     { }
 
-    PARAM( const std::string& aJsonPath, ValueType* aPtr, ValueType aDefault, ValueType aMin,
-           ValueType aMax, bool aReadOnly = false ) :
+    PARAM( const std::string& aJsonPath, ValueType* aPtr, const ValueType& aDefault,
+           const ValueType& aMin, const ValueType& aMax, bool aReadOnly = false ) :
             PARAM_BASE( aJsonPath, aReadOnly ),
-            m_min( std::move( aMin ) ),
-            m_max( std::move( aMax ) ),
+            m_min( aMin ),
+            m_max( aMax ),
             m_use_minmax( true ),
             m_ptr( aPtr ),
-            m_default( std::move( aDefault ) )
+            m_default( aDefault )
     { }
 
     void Load( const JSON_SETTINGS& aSettings, bool aResetIfMissing = true ) const override

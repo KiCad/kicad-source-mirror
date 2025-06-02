@@ -515,13 +515,13 @@ bool test::DRC_TEST_PROVIDER_DIFF_PAIR_COUPLING::Run()
                         case DIFF_PAIR_GAP_CONSTRAINT:
                             key.gapConstraint = constraint.GetValue();
                             key.gapRule = parentRule;
-                            key.gapRuleName = ruleName;
+                            key.gapRuleName = std::move( ruleName );
                             break;
 
                         case MAX_UNCOUPLED_CONSTRAINT:
                             key.uncoupledConstraint = constraint.GetValue();
                             key.uncoupledRule = parentRule;
-                            key.uncoupledRuleName = ruleName;
+                            key.uncoupledRuleName = std::move( ruleName );
                             break;
 
                         default:

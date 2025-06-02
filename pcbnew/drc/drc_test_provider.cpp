@@ -373,8 +373,8 @@ bool DRC_TEST_PROVIDER::isInvisibleText( const BOARD_ITEM* aItem ) const
 }
 
 
-wxString DRC_TEST_PROVIDER::formatMsg( const wxString& aFormatString, const wxString& aSource, double aConstraint,
-                                       double aActual, EDA_DATA_TYPE aType )
+wxString DRC_TEST_PROVIDER::formatMsg( const wxString& aFormatString, const wxString& aSource,
+                                       double aConstraint, double aActual, EDA_DATA_TYPE aType )
 {
     wxString constraint_str = MessageTextFromValue( aConstraint, true, aType );
     wxString actual_str = MessageTextFromValue( aActual, true, aType );
@@ -386,7 +386,7 @@ wxString DRC_TEST_PROVIDER::formatMsg( const wxString& aFormatString, const wxSt
         actual_str = StringFromValue( aActual, true, aType );
     }
 
-    return wxString::Format( aFormatString, aSource, constraint_str, actual_str );
+    return wxString::Format( aFormatString, aSource, std::move( constraint_str ), std::move( actual_str ) );
 }
 
 wxString DRC_TEST_PROVIDER::formatMsg( const wxString& aFormatString, const wxString& aSource,
@@ -402,5 +402,5 @@ wxString DRC_TEST_PROVIDER::formatMsg( const wxString& aFormatString, const wxSt
         actual_str = StringFromValue( aActual, true );
     }
 
-    return wxString::Format( aFormatString, aSource, constraint_str, actual_str );
+    return wxString::Format( aFormatString, aSource, std::move( constraint_str ), std::move( actual_str ) );
 }

@@ -159,7 +159,7 @@ void POLYGON_GEOM_MANAGER::Reset()
 }
 
 
-static SHAPE_LINE_CHAIN build45DegLeader( const VECTOR2I& aEndPoint, SHAPE_LINE_CHAIN aLastPoints )
+static SHAPE_LINE_CHAIN build45DegLeader( const VECTOR2I& aEndPoint, const SHAPE_LINE_CHAIN& aLastPoints )
 {
     if( aLastPoints.PointCount() < 1 )
         return SHAPE_LINE_CHAIN();

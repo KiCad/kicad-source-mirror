@@ -1301,7 +1301,7 @@ public:
     VECTOR_INSERT_TRAVERSER( std::vector<wxString>& aVec,
                              std::function<bool( const wxString& )> aCond ) :
             m_files( aVec ),
-            m_condition( aCond )
+            m_condition( std::move( aCond ) )
     {
     }
 

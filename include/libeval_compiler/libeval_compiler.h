@@ -255,14 +255,14 @@ public:
     void SetDeferredEval( std::function<double()> aLambda )
     {
         m_type = VT_NUMERIC;
-        m_lambdaDbl = aLambda;
+        m_lambdaDbl = std::move( aLambda );
         m_isDeferredDbl = true;
     }
 
     void SetDeferredEval( std::function<wxString()> aLambda )
     {
         m_type = VT_STRING;
-        m_lambdaStr = aLambda;
+        m_lambdaStr = std::move( aLambda );
         m_isDeferredStr = true;
     }
 

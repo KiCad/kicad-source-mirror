@@ -292,7 +292,7 @@ std::pair<std::set<wxString>,std::set<wxString>> KIGIT_COMMON::GetDifferentFiles
                     {
                         std::set<wxString>* modified_set_internal = static_cast<std::set<wxString>*>( payload );
                         wxString filePath = wxString::Format( "%s%s", root, git_tree_entry_name( entry ) );
-                        modified_set_internal->insert( filePath );
+                        modified_set_internal->insert( std::move( filePath ) );
                         return 0; // continue walking
                     },
                     &modified_set );

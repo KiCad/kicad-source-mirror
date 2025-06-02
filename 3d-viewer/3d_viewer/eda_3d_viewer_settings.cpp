@@ -320,7 +320,7 @@ EDA_3D_VIEWER_SETTINGS::EDA_3D_VIEWER_SETTINGS() :
 
     m_params.emplace_back( new PARAM_LIST<COLOR4D>( "render.raytrace_lightColor",
                                                     &m_Render.raytrace_lightColor,
-                                                    default_colors ) );
+                                                    std::move( default_colors ) ) );
 
     const std::vector<int> default_elevation =
     {
