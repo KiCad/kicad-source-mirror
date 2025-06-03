@@ -56,9 +56,10 @@ public:
     void OnClose( wxCloseEvent& aEvent );
 
     /**
-     * @brief Either selected HIERLABELs or SHEET_PINs will be used as templates for placing the new ones.
+     * Either the selected #HIERLABEL or #SHEET_PIN will be used as templates for placing the new ones.
      *
-     * @param aSheet The sheet where the new HIERLABELs or SHEET_PINs will be placed. For SHEET_PINs, it's the corresponding sheet symbol
+     * @param aSheet The sheet where the new #HIERLABEL or #SHEET_PIN will be placed. For #SHEET_PIN,
+     *               it's the corresponding sheet symbol.
      * @param aKind Either PlaceItemKind::HIERLABEL or PlaceItemKind::SHEET_PIN
      * @param aPlacementTemplateSet All the selected HIERLABELs or SHEET_PINs
      */
@@ -73,25 +74,25 @@ public:
     SCH_HIERLABEL* GetPlacementTemplate() const;
 
     /**
-     * @brief End place a new #HIERLABEL/#SHEET_PIN , and add the new item to the corresponding table.
+     * End place a new #HIERLABEL/#SHEET_PIN , and add the new item to the corresponding table.
      *
      * @param aNewItem The new #HIERLABEL/#SHEET_PIN to be placed.
      */
     void EndPlaceItem( EDA_ITEM* aNewItem );
 
     /**
-     * @brief Check if there are more items to be placed.
+     * Check if there are more items to be placed.
      */
     bool CanPlaceMore() const;
 
     void EndPlacement();
 
 private:
-    //It's the agent that performs modification and placement
+    /// It's the agent that performs modification and placement.
     std::shared_ptr<SHEET_SYNCHRONIZATION_AGENT>           m_agent;
     SCH_SHEET*                                             m_lastEditSheet;
 
-    //The same sheet may have mutiple instances
+    /// The same sheet may have multiple instances.
     std::unordered_map<SCH_SHEET*, PANEL_SYNC_SHEET_PINS*> m_panels;
     PlaceItemKind                                          m_placeItemKind;
     EDA_ITEM*                                              m_currentTemplate;
