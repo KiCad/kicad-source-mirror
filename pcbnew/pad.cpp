@@ -1179,10 +1179,13 @@ int PAD::GetSolderMaskExpansion( PCB_LAYER_ID aLayer ) const
         DRC_CONSTRAINT              constraint;
         std::shared_ptr<DRC_ENGINE> drcEngine = board->GetDesignSettings().m_DRCEngine;
 
-        constraint = drcEngine->EvalRules( SOLDER_MASK_EXPANSION_CONSTRAINT, this, nullptr, aLayer );
+        if( drcEngine )     // board used in previewer has no DRC engine
+        {
+            constraint = drcEngine->EvalRules( SOLDER_MASK_EXPANSION_CONSTRAINT, this, nullptr, aLayer );
 
-        if( constraint.m_Value.HasOpt() )
-            margin = constraint.m_Value.Opt();
+            if( constraint.m_Value.HasOpt() )
+                margin = constraint.m_Value.Opt();
+        }
     }
     else
     {
