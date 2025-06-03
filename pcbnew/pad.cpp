@@ -1172,18 +1172,27 @@ int PAD::GetSolderMaskExpansion( PCB_LAYER_ID aLayer ) const
     else
         return 0;
 
-    std::optional<int> margin = m_padStack.SolderMaskMargin( aLayer );
+    std::optional<int> margin;
 
-    if( !margin.has_value() )
+    if( const BOARD* board = GetBoard() )
     {
-        if( FOOTPRINT* parentFootprint = GetParentFootprint() )
-            margin = parentFootprint->GetLocalSolderMaskMargin();
+        DRC_CONSTRAINT              constraint;
+        std::shared_ptr<DRC_ENGINE> drcEngine = board->GetDesignSettings().m_DRCEngine;
+
+        constraint = drcEngine->EvalRules( SOLDER_MASK_EXPANSION_CONSTRAINT, this, nullptr, aLayer );
+
+        if( constraint.m_Value.HasOpt() )
+            margin = constraint.m_Value.Opt();
     }
-
-    if( !margin.has_value() )
+    else
     {
-        if( const BOARD* brd = GetBoard() )
-            margin = brd->GetDesignSettings().m_SolderMaskExpansion;
+        margin = m_padStack.SolderMaskMargin( aLayer );
+
+        if( !margin.has_value() )
+        {
+            if( FOOTPRINT* parentFootprint = GetParentFootprint() )
+                margin = parentFootprint->GetLocalSolderMaskMargin();
+        }
     }
 
     int marginValue = margin.value_or( 0 );
@@ -1218,31 +1227,40 @@ VECTOR2I PAD::GetSolderPasteMargin( PCB_LAYER_ID aLayer ) const
     else
         return VECTOR2I( 0, 0 );
 
-    std::optional<int>    margin = m_padStack.SolderPasteMargin( aLayer );
-    std::optional<double> mratio = m_padStack.SolderPasteMarginRatio( aLayer );
+    std::optional<int>    margin;
+    std::optional<double> mratio;
 
-    if( !margin.has_value() )
+    if( const BOARD* board = GetBoard() )
     {
-        if( FOOTPRINT* parentFootprint = GetParentFootprint() )
-            margin = parentFootprint->GetLocalSolderPasteMargin();
+        DRC_CONSTRAINT              constraint;
+        std::shared_ptr<DRC_ENGINE> drcEngine = board->GetDesignSettings().m_DRCEngine;
+
+        constraint = drcEngine->EvalRules( SOLDER_PASTE_ABS_MARGIN_CONSTRAINT, this, nullptr, aLayer );
+
+        if( constraint.m_Value.HasOpt() )
+            margin = constraint.m_Value.Opt();
+
+        constraint = drcEngine->EvalRules( SOLDER_PASTE_REL_MARGIN_CONSTRAINT, this, nullptr, aLayer );
+
+        if( constraint.m_Value.HasOpt() )
+            mratio = constraint.m_Value.Opt() / 1000.0;
     }
-
-    if( !margin.has_value() )
+    else
     {
-        if( const BOARD* board = GetBoard() )
-            margin = board->GetDesignSettings().m_SolderPasteMargin;
-    }
+        margin = m_padStack.SolderPasteMargin( aLayer );
+        mratio = m_padStack.SolderPasteMarginRatio( aLayer );
 
-    if( !mratio.has_value() )
-    {
-        if( FOOTPRINT* parentFootprint = GetParentFootprint() )
-            mratio = parentFootprint->GetLocalSolderPasteMarginRatio();
-    }
+        if( !margin.has_value() )
+        {
+            if( FOOTPRINT* parentFootprint = GetParentFootprint() )
+                margin = parentFootprint->GetLocalSolderPasteMargin();
+        }
 
-    if( !mratio.has_value() )
-    {
-        if( const BOARD* board = GetBoard() )
-            mratio = board->GetDesignSettings().m_SolderPasteMarginRatio;
+        if( !mratio.has_value() )
+        {
+            if( FOOTPRINT* parentFootprint = GetParentFootprint() )
+                mratio = parentFootprint->GetLocalSolderPasteMarginRatio();
+        }
     }
 
     PCB_LAYER_ID cuLayer = ( aLayer == B_Paste ) ? B_Cu : F_Cu;
@@ -1252,7 +1270,7 @@ VECTOR2I PAD::GetSolderPasteMargin( PCB_LAYER_ID aLayer ) const
     pad_margin.x = margin.value_or( 0 ) + KiROUND( padSize.x * mratio.value_or( 0 ) );
     pad_margin.y = margin.value_or( 0 ) + KiROUND( padSize.y * mratio.value_or( 0 ) );
 
-    // ensure mask have a size always >= 0
+    // ensure paste have a size always >= 0
     if( m_padStack.Shape( aLayer ) != PAD_SHAPE::CUSTOM )
     {
         if( pad_margin.x < -padSize.x / 2 )

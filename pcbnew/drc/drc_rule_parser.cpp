@@ -476,11 +476,12 @@ void DRC_RULES_PARSER::parseConstraint( DRC_RULE* aRule )
     else if( (int) token == DSN_RIGHT || token == T_EOF )
     {
         msg.Printf( _( "Missing constraint type.|  Expected %s." ),
-                    wxT( "assertion, clearance, hole_clearance, edge_clearance, "
-                         "physical_clearance, physical_hole_clearance, courtyard_clearance, "
-                         "silk_clearance, hole_size, hole_to_hole, track_width, annular_width, "
-                         "via_diameter, disallow, zone_connection, thermal_relief_gap, "
-                         "thermal_spoke_width, min_resolved_spokes, length, skew, via_count, "
+                    wxT( "assertion, clearance, hole_clearance, edge_clearance, physical_clearance, "
+                         "physical_hole_clearance, courtyard_clearance, silk_clearance, hole_size, "
+                         "hole_to_hole, track_width, track_angle, track_segment_length, annular_width, "
+                         "disallow, zone_connection, thermal_relief_gap, thermal_spoke_width, "
+                         "min_resolved_spokes, solder_mask_expansion, solder_paste_abs_margin, "
+                         "solder_paste_rel_margin, length, skew, via_count, via_diameter, "
                          "diff_pair_gap or diff_pair_uncoupled" ) );
         reportError( msg );
         return;
@@ -509,6 +510,9 @@ void DRC_RULES_PARSER::parseConstraint( DRC_RULE* aRule )
     case T_thermal_relief_gap:        c.m_Type = THERMAL_RELIEF_GAP_CONSTRAINT;        break;
     case T_thermal_spoke_width:       c.m_Type = THERMAL_SPOKE_WIDTH_CONSTRAINT;       break;
     case T_min_resolved_spokes:       c.m_Type = MIN_RESOLVED_SPOKES_CONSTRAINT;       break;
+    case T_solder_mask_expansion:     c.m_Type = SOLDER_MASK_EXPANSION_CONSTRAINT;     break;
+    case T_solder_paste_abs_margin:   c.m_Type = SOLDER_PASTE_ABS_MARGIN_CONSTRAINT;   break;
+    case T_solder_paste_rel_margin:   c.m_Type = SOLDER_PASTE_REL_MARGIN_CONSTRAINT;   break;
     case T_disallow:                  c.m_Type = DISALLOW_CONSTRAINT;                  break;
     case T_length:                    c.m_Type = LENGTH_CONSTRAINT;                    break;
     case T_skew:                      c.m_Type = SKEW_CONSTRAINT;                      break;
@@ -519,11 +523,12 @@ void DRC_RULES_PARSER::parseConstraint( DRC_RULE* aRule )
     case T_physical_hole_clearance:   c.m_Type = PHYSICAL_HOLE_CLEARANCE_CONSTRAINT;   break;
     default:
         msg.Printf( _( "Unrecognized item '%s'.| Expected %s." ), FromUTF8(),
-                    wxT( "assertion, clearance, hole_clearance, edge_clearance, "
-                         "physical_clearance, physical_hole_clearance, courtyard_clearance, "
-                         "silk_clearance, hole_size, hole_to_hole, track_width, track_angle, track_segment_length, annular_width, "
+                    wxT( "assertion, clearance, hole_clearance, edge_clearance, physical_clearance, "
+                         "physical_hole_clearance, courtyard_clearance, silk_clearance, hole_size, "
+                         "hole_to_hole, track_width, track_angle, track_segment_length, annular_width, "
                          "disallow, zone_connection, thermal_relief_gap, thermal_spoke_width, "
-                         "min_resolved_spokes, length, skew, via_count, via_diameter, "
+                         "min_resolved_spokes, solder_mask_expansion, solder_paste_abs_margin, "
+                         "solder_paste_rel_margin, length, skew, via_count, via_diameter, "
                          "diff_pair_gap or diff_pair_uncoupled" ) );
         reportError( msg );
     }

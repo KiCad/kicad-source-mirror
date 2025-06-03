@@ -1422,7 +1422,6 @@ int BOARD_INSPECTION_TOOL::InspectConstraints( const TOOL_EVENT& aEvent )
         r = dialog->AddHTMLPage( _( "Hole Size" ) );
         reportHeader( _( "Hole size resolution for:" ), item, r );
 
-        // PADSTACKS TODO: once we have padstacks we'll need to run this per-layer....
         constraint = EVAL_RULES( HOLE_SIZE_CONSTRAINT, item, nullptr, UNDEFINED_LAYER, r );
 
         if( compileError )
@@ -1433,6 +1432,53 @@ int BOARD_INSPECTION_TOOL::InspectConstraints( const TOOL_EVENT& aEvent )
                                      reportMin( m_frame, constraint ),
                                      reportOpt( m_frame, constraint ),
                                      reportMax( m_frame, constraint ) ) );
+
+        r->Flush();
+    }
+
+    if( item->Type() == PCB_PAD_T || item->Type() == PCB_SHAPE_T || dynamic_cast<PCB_TRACK*>( item ) )
+    {
+        r = dialog->AddHTMLPage( _( "Solder Mask" ) );
+        reportHeader( _( "Solder mask expansion resolution for:" ), item, r );
+
+        constraint = EVAL_RULES( SOLDER_MASK_EXPANSION_CONSTRAINT, item, nullptr, UNDEFINED_LAYER, r );
+
+        if( compileError )
+            reportCompileError( r );
+
+        r->Report( "" );
+        r->Report( wxString::Format( _( "Resolved solder mask expansion: %s." ),
+                                     reportOpt( m_frame, constraint ) ) );
+
+        r->Flush();
+    }
+
+    if( item->Type() == PCB_PAD_T )
+    {
+        r = dialog->AddHTMLPage( _( "Solder Paste" ) );
+        reportHeader( _( "Solder paste absolute clearance resolution for:" ), item, r );
+
+        constraint = EVAL_RULES( SOLDER_PASTE_ABS_MARGIN_CONSTRAINT, item, nullptr, UNDEFINED_LAYER, r );
+
+        if( compileError )
+            reportCompileError( r );
+
+        r->Report( "" );
+        r->Report( wxString::Format( _( "Resolved solder paste absolute clearance: %s." ),
+                                     reportOpt( m_frame, constraint ) ) );
+
+        reportHeader( _( "Solder paste relative clearance resolution for:" ), item, r );
+
+        constraint = EVAL_RULES( SOLDER_PASTE_REL_MARGIN_CONSTRAINT, item, nullptr, UNDEFINED_LAYER, r );
+
+        if( compileError )
+            reportCompileError( r );
+
+        r->Report( "" );
+        r->Report( "" );
+        r->Report( "" );
+        r->Report( wxString::Format( _( "Resolved solder paste relative clearance: %s." ),
+                                     reportOpt( m_frame, constraint ) ) );
 
         r->Flush();
     }

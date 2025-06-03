@@ -43,6 +43,9 @@ rule
 severity
 silk_clearance
 skew
+solder_mask_expansion
+solder_paste_abs_margin
+solder_paste_rel_margin
 solid
 text
 text_height

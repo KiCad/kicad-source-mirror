@@ -135,3 +135,15 @@
         (constraint hole_to_hole)
         (severity ignore))
 
+
+    # No solder mask expansion for vias.
+    (rule "no mask expansion on vias"
+        (constraint solder_mask_expansion (opt 0mm))
+        (condition "A.type == via"))
+
+
+    # Remove solder paste from DNP footprints.
+    (rule remove_solder_paste_from_DNP
+        (constraint solder_paste_abs_margin (opt -50mm))
+        (condition "A.Do_not_Populate"))
+

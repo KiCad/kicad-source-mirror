@@ -1130,15 +1130,21 @@ int PCB_VIA::GetSolderMaskExpansion() const
 
 int PCB_TRACK::GetSolderMaskExpansion() const
 {
-    int margin = m_solderMaskMargin.value_or( 0 );
+    int margin = 0;
 
-    // If no local margin is set, get the board's solder mask expansion value
-    if( !m_solderMaskMargin.has_value() )
+    if( const BOARD* board = GetBoard() )
     {
-        const BOARD* board = GetBoard();
+        DRC_CONSTRAINT              constraint;
+        std::shared_ptr<DRC_ENGINE> drcEngine = board->GetDesignSettings().m_DRCEngine;
 
-        if( board )
-            margin = board->GetDesignSettings().m_SolderMaskExpansion;
+        constraint = drcEngine->EvalRules( SOLDER_MASK_EXPANSION_CONSTRAINT, this, nullptr, m_layer );
+
+        if( constraint.m_Value.HasOpt() )
+            margin = constraint.m_Value.Opt();
+    }
+    else if( m_solderMaskMargin.has_value() )
+    {
+        margin = m_solderMaskMargin.value();
     }
 
     // Ensure the resulting mask opening has a non-negative size

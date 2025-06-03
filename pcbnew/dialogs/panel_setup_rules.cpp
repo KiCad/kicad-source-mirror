@@ -259,6 +259,9 @@ void PANEL_SETUP_RULES::onScintillaCharAdded( wxStyledTextEvent &aEvent )
                     || token == wxT( "physical_hole_clearance" )
                     || token == wxT( "silk_clearance" )
                     || token == wxT( "skew" )
+                    || token == wxT( "solder_mask_expansion" )
+                    || token == wxT( "solder_paste_abs_margin" )
+                    || token == wxT( "solder_paste_rel_margin" )
                     || token == wxT( "text_height" )
                     || token == wxT( "text_thickness" )
                     || token == wxT( "thermal_relief_gap" )
@@ -477,6 +480,9 @@ void PANEL_SETUP_RULES::onScintillaCharAdded( wxStyledTextEvent &aEvent )
                           "physical_hole_clearance|"
                           "silk_clearance|"
                           "skew|"
+                          "solder_mask_expansion|"
+                          "solder_paste_abs_margin|"
+                          "solder_paste_rel_margin|"
                           "text_height|"
                           "text_thickness|"
                           "thermal_relief_gap|"

@@ -40,6 +40,7 @@
 #include <footprint.h>
 #include <pad.h>
 #include <pcb_track.h>
+#include <pcb_shape.h>
 #include <core/profile.h>
 #include <thread_pool.h>
 #include <zone.h>
@@ -708,9 +709,12 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
     const ZONE*      zone = nullptr;
     const FOOTPRINT* parentFootprint = nullptr;
 
-    if( aConstraintType == ZONE_CONNECTION_CONSTRAINT
-     || aConstraintType == THERMAL_RELIEF_GAP_CONSTRAINT
-     || aConstraintType == THERMAL_SPOKE_WIDTH_CONSTRAINT )
+    if(    aConstraintType == ZONE_CONNECTION_CONSTRAINT
+        || aConstraintType == THERMAL_RELIEF_GAP_CONSTRAINT
+        || aConstraintType == THERMAL_SPOKE_WIDTH_CONSTRAINT
+        || aConstraintType == SOLDER_MASK_EXPANSION_CONSTRAINT
+        || aConstraintType == SOLDER_PASTE_ABS_MARGIN_CONSTRAINT
+        || aConstraintType == SOLDER_PASTE_REL_MARGIN_CONSTRAINT )
     {
         if( a && a->Type() == PCB_PAD_T )
             pad = static_cast<const PAD*>( a );
@@ -949,6 +953,64 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
             return constraint;
         }
     }
+    else if( aConstraintType == SOLDER_MASK_EXPANSION_CONSTRAINT )
+    {
+        std::optional<int> override;
+
+        if( pad )
+            override = pad->GetLocalSolderMaskMargin();
+        else if( a->Type() == PCB_SHAPE_T )
+            override = static_cast<const PCB_SHAPE*>( a )->GetLocalSolderMaskMargin();
+        else if( const PCB_TRACK* track = dynamic_cast<const PCB_TRACK*>( a ) )
+            override = track->GetLocalSolderMaskMargin();
+
+        if( override )
+        {
+            REPORT( "" )
+            REPORT( wxString::Format( _( "Local override on %s; solder mask expansion: %s." ),
+                                      EscapeHTML( pad->GetItemDescription( this, true ) ),
+                                      EscapeHTML( MessageTextFromValue( override.value() ) ) ) )
+
+            constraint.m_Value.SetOpt( override.value() );
+            return constraint;
+        }
+    }
+    else if( aConstraintType == SOLDER_PASTE_ABS_MARGIN_CONSTRAINT )
+    {
+        std::optional<int> override;
+
+        if( pad )
+            override = pad->GetLocalSolderPasteMargin();
+
+        if( override )
+        {
+            REPORT( "" )
+            REPORT( wxString::Format( _( "Local override on %s; solder paste absolute clearance: %s." ),
+                                      EscapeHTML( pad->GetItemDescription( this, true ) ),
+                                      EscapeHTML( MessageTextFromValue( override.value() ) ) ) )
+
+            constraint.m_Value.SetOpt( override.value_or( 0 ) );
+            return constraint;
+        }
+    }
+    else if( aConstraintType == SOLDER_PASTE_REL_MARGIN_CONSTRAINT )
+    {
+        std::optional<double> overrideRatio;
+
+        if( pad )
+            overrideRatio = pad->GetLocalSolderPasteMarginRatio();
+
+        if( overrideRatio )
+        {
+            REPORT( "" )
+            REPORT( wxString::Format( _( "Local override on %s; solder paste relative clearance: %s." ),
+                                      EscapeHTML( pad->GetItemDescription( this, true ) ),
+                                      EscapeHTML( MessageTextFromValue( overrideRatio.value() * 100.0 ) ) ) )
+
+            constraint.m_Value.SetOpt( KiROUND( overrideRatio.value_or( 0 ) * 1000 ) );
+            return constraint;
+        }
+    }
 
     auto testAssertion =
             [&]( const DRC_ENGINE_CONSTRAINT* c )
@@ -1012,6 +1074,24 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
 
                 case THERMAL_SPOKE_WIDTH_CONSTRAINT:
                     REPORT( wxString::Format( _( "Checking %s thermal spoke width: %s." ),
+                                              EscapeHTML( c->constraint.GetName() ),
+                                              MessageTextFromValue( c->constraint.m_Value.Opt() ) ) )
+                    break;
+
+                case SOLDER_MASK_EXPANSION_CONSTRAINT:
+                    REPORT( wxString::Format( _( "Checking %s solder mask expansion: %s." ),
+                                              EscapeHTML( c->constraint.GetName() ),
+                                              MessageTextFromValue( c->constraint.m_Value.Opt() ) ) )
+                    break;
+
+                case SOLDER_PASTE_ABS_MARGIN_CONSTRAINT:
+                    REPORT( wxString::Format( _( "Checking %s solder paste absolute cleraance: %s." ),
+                                              EscapeHTML( c->constraint.GetName() ),
+                                              MessageTextFromValue( c->constraint.m_Value.Opt() ) ) )
+                    break;
+
+                case SOLDER_PASTE_REL_MARGIN_CONSTRAINT:
+                    REPORT( wxString::Format( _( "Checking %s solder paste relative clearance: %s." ),
                                               EscapeHTML( c->constraint.GetName() ),
                                               MessageTextFromValue( c->constraint.m_Value.Opt() ) ) )
                     break;
@@ -1376,13 +1456,15 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
     if( constraint.GetParentRule() && !constraint.GetParentRule()->m_Implicit )
         return constraint;
 
-    // Special case for pad zone connections which can iherit from their parent footprints.
-    // We've already checked for local overrides, and there were no rules targetting the pad
-    // itself, so we know we're inheriting and need to see if there are any rules targetting
-    // the parent footprint.
+    // Special case for properties which can be inherited from parent footprints.  We've already
+    // checked for local overrides, and there were no rules targetting the item itself, so we know
+    // we're inheriting and need to see if there are any rules targetting the parent footprint.
     if( pad && parentFootprint && (   aConstraintType == ZONE_CONNECTION_CONSTRAINT
                                    || aConstraintType == THERMAL_RELIEF_GAP_CONSTRAINT
-                                   || aConstraintType == THERMAL_SPOKE_WIDTH_CONSTRAINT ) )
+                                   || aConstraintType == THERMAL_SPOKE_WIDTH_CONSTRAINT
+                                   || aConstraintType == SOLDER_MASK_EXPANSION_CONSTRAINT
+                                   || aConstraintType == SOLDER_PASTE_ABS_MARGIN_CONSTRAINT
+                                   || aConstraintType == SOLDER_PASTE_REL_MARGIN_CONSTRAINT ) )
     {
         REPORT( "" )
         REPORT( wxString::Format( _( "Inheriting from parent: %s." ),
@@ -1402,6 +1484,29 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
 
             if( constraint.GetParentRule() && !constraint.GetParentRule()->m_Implicit )
                 return constraint;
+        }
+
+        // Found nothing again?  Return the defaults.
+        if( aConstraintType == SOLDER_MASK_EXPANSION_CONSTRAINT )
+        {
+            constraint.SetParentRule( nullptr );
+            constraint.SetName( _( "board setup" ) );
+            constraint.m_Value.SetOpt( m_designSettings->m_SolderMaskExpansion );
+            return constraint;
+        }
+        else if( aConstraintType == SOLDER_PASTE_ABS_MARGIN_CONSTRAINT )
+        {
+            constraint.SetParentRule( nullptr );
+            constraint.SetName( _( "board setup" ) );
+            constraint.m_Value.SetOpt( m_designSettings->m_SolderPasteMargin );
+            return constraint;
+        }
+        else if( aConstraintType == SOLDER_PASTE_REL_MARGIN_CONSTRAINT )
+        {
+            constraint.SetParentRule( nullptr );
+            constraint.SetName( _( "board setup" ) );
+            constraint.m_Value.SetOpt( KiROUND( m_designSettings->m_SolderPasteMarginRatio * 1000 ) );
+            return constraint;
         }
     }
 
