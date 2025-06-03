@@ -875,8 +875,8 @@ EDA_ANGLE SHAPE_ARC::GetCentralAngle() const
     // Using only m_start and m_end arc points to calculate the central arc is not enough
     // there are 2 arcs having the same center and end points.
     // Using the middle point is mandatory to know what arc is the right one.
-    // IsClockwise() uses m_start, m_middle and m_end arc points to know the arc orientation
-    if( !IsClockwise() )
+    // IsCCW() uses m_start, m_middle and m_end arc points to know the arc orientation
+    if( IsCCW() )
     {
         if( angle < ANGLE_0 )
             angle += ANGLE_360;

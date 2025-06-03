@@ -245,7 +245,9 @@ public:
     }
 
     /**
-     * @return the central angle of the arc shape, normalized between 0..360 deg.
+     * Get the "central angle" of the arc - this is the angle at the point of the "pie slice".
+     *
+     * @return the central angle of the arc shape, normalized between -360..360 deg.
      */
     EDA_ANGLE GetCentralAngle() const;
 

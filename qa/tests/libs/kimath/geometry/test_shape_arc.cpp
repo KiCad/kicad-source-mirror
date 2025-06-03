@@ -88,8 +88,18 @@ static void CheckArcGeom( const SHAPE_ARC& aArc, const ARC_PROPERTIES& aProps, c
     BOOST_CHECK_PREDICATE( KI_TEST::IsWithin<double>,
             ( aArc.GetRadius() )( aProps.m_radius )( aSynErrIU ) );
 
+    // Angle normalization contracts
+    BOOST_TEST( aArc.GetStartAngle().AsDegrees() >= 0.0 );
+    BOOST_TEST( aArc.GetStartAngle().AsDegrees() <= 360.0 );
+
+    BOOST_TEST( aArc.GetEndAngle().AsDegrees() >= 0.0 );
+    BOOST_TEST( aArc.GetEndAngle().AsDegrees() <= 360.0 );
+
+    BOOST_TEST( aArc.GetCentralAngle().AsDegrees() >= -360.0 );
+    BOOST_TEST( aArc.GetCentralAngle().AsDegrees() <= 360.0 );
+
     /// Check the chord agrees
-    const auto chord = aArc.GetChord();
+    const SEG chord = aArc.GetChord();
 
     BOOST_CHECK_PREDICATE( KI_TEST::IsVecWithinTol<VECTOR2I>,
             ( chord.A )( aProps.m_start_point )( pos_tol ) );
@@ -198,6 +208,25 @@ static const std::vector<ARC_SME_CASE> arc_sme_cases = {
             },
     },
     {
+            "S(100,0), M(0,100), E(-100,0) (reversed)",
+            {
+                    { 100, 0 },
+                    { 0, 100 },
+                    { -100, 0 },
+            },
+            0,
+            {
+                    { 0, 0 },
+                    { 100, 0 },
+                    { -100, 0 },
+                    -180,
+                    0,
+                    180,
+                    100,
+                    { { -100, 0 }, { 200, 100 } },
+            },
+    },
+    {
             // This data has a midpoint not exactly at the midway point of the arc.
             // This should be corrected by the constructor.
             // The mid point should be at about (-71, -71) for a 270 degree arc, with the
@@ -225,7 +254,12 @@ static const std::vector<ARC_SME_CASE> arc_sme_cases = {
 
 BOOST_DATA_TEST_CASE( BasicSMEGeom, boost::unit_test::data::make( arc_sme_cases ), c )
 {
-    const auto this_arc = SHAPE_ARC{ c.m_geom.m_start_point, c.m_geom.m_mid_point, c.m_geom.m_end_point, c.m_width };
+    const SHAPE_ARC this_arc{
+        c.m_geom.m_start_point,
+        c.m_geom.m_mid_point,
+        c.m_geom.m_end_point,
+        c.m_width,
+    };
 
     CheckArc( this_arc, c.m_properties );
 }
@@ -402,10 +436,12 @@ static const std::vector<ARC_CPA_CASE> arc_cases = {
 
 BOOST_DATA_TEST_CASE( BasicCPAGeom, boost::unit_test::data::make( arc_cases ), c )
 {
-
-    const auto this_arc = SHAPE_ARC{ c.m_geom.m_center_point, c.m_geom.m_start_point,
-                                        EDA_ANGLE( c.m_geom.m_center_angle, DEGREES_T ),
-                                        c.m_width };
+    const SHAPE_ARC this_arc{
+        c.m_geom.m_center_point,
+        c.m_geom.m_start_point,
+        EDA_ANGLE( c.m_geom.m_center_angle, DEGREES_T ),
+        c.m_width,
+    };
 
     CheckArc( this_arc, c.m_properties );
 }
