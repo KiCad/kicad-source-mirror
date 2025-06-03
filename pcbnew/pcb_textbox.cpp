@@ -416,14 +416,14 @@ wxString PCB_TEXTBOX::GetShownText( bool aAllowExtraText, int aDepth ) const
 
     std::function<bool( wxString* )> resolver = [&]( wxString* token ) -> bool
     {
-        if( parentFootprint && parentFootprint->ResolveTextVar( token, aDepth + 1 ) )
-            return true;
-
         if( token->IsSameAs( wxT( "LAYER" ) ) )
         {
             *token = GetLayerName();
             return true;
         }
+
+        if( parentFootprint && parentFootprint->ResolveTextVar( token, aDepth + 1 ) )
+            return true;
 
         if( board->ResolveTextVar( token, aDepth + 1 ) )
             return true;

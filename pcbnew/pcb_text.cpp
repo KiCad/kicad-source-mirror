@@ -145,14 +145,14 @@ wxString PCB_TEXT::GetShownText( bool aAllowExtraText, int aDepth ) const
     std::function<bool( wxString* )> resolver =
             [&]( wxString* token ) -> bool
             {
-                if( parentFootprint && parentFootprint->ResolveTextVar( token, aDepth + 1 ) )
-                    return true;
-
                 if( token->IsSameAs( wxT( "LAYER" ) ) )
                 {
                     *token = GetLayerName();
                     return true;
                 }
+
+                if( parentFootprint && parentFootprint->ResolveTextVar( token, aDepth + 1 ) )
+                    return true;
 
                 // board can be null in some cases when saving a footprint in FP editor
                 if( board && board->ResolveTextVar( token, aDepth + 1 ) )
