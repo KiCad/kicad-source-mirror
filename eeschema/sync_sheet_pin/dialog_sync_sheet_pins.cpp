@@ -142,8 +142,7 @@ void DIALOG_SYNC_SHEET_PINS::EndPlaceItem( EDA_ITEM* aNewItem )
                                                  }
                                                  else
                                                  {
-                                                     m_currentTemplate =
-                                                             *m_placementTemplateSet.begin();
+                                                     m_currentTemplate = *m_placementTemplateSet.begin();
                                                  }
                                              } );
 
@@ -177,8 +176,10 @@ void DIALOG_SYNC_SHEET_PINS::EndPlaceItem( EDA_ITEM* aNewItem )
             panel->GetModel( SHEET_SYNCHRONIZATION_MODEL::HIRE_LABEL )->DoNotify();
     }
 }
-void DIALOG_SYNC_SHEET_PINS::PreparePlacementTemplate(
-        SCH_SHEET* aSheet, PlaceItemKind aKind, std::set<EDA_ITEM*> const& aPlacementTemplateSet )
+
+
+void DIALOG_SYNC_SHEET_PINS::PreparePlacementTemplate( SCH_SHEET* aSheet, PlaceItemKind aKind,
+                                                       std::set<EDA_ITEM*> const& aPlacementTemplateSet )
 {
     if( aPlacementTemplateSet.empty() )
         return;
@@ -189,6 +190,7 @@ void DIALOG_SYNC_SHEET_PINS::PreparePlacementTemplate(
     m_currentTemplate = *m_placementTemplateSet.begin();
 }
 
+
 SCH_HIERLABEL* DIALOG_SYNC_SHEET_PINS::GetPlacementTemplate() const
 {
     if( !m_currentTemplate )
@@ -197,10 +199,12 @@ SCH_HIERLABEL* DIALOG_SYNC_SHEET_PINS::GetPlacementTemplate() const
     return static_cast<SCH_HIERLABEL*>( m_currentTemplate );
 }
 
+
 bool DIALOG_SYNC_SHEET_PINS::CanPlaceMore() const
 {
     return !m_placementTemplateSet.empty();
 }
+
 
 void DIALOG_SYNC_SHEET_PINS::EndPlacement()
 {
