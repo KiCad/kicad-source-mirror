@@ -36,7 +36,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-06-01 20:43+0300\n"
-"PO-Revision-Date: 2025-06-03 08:04+0000\n"
+"PO-Revision-Date: 2025-06-04 09:01+0000\n"
 "Last-Translator: DevAny <devany.kr@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/v9/ko/>\n"
 "Language: ko\n"
@@ -12755,9 +12755,8 @@ msgid "Enter the text to be used within the schematic"
 msgstr "회로도 내에서 사용할 텍스트 입력"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:62
-#, fuzzy
 msgid "Multiple label input"
-msgstr "여러 레이어"
+msgstr "다중 레이블 입력"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:68
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:42
@@ -14040,9 +14039,8 @@ msgid "Whole &words only"
 msgstr "전체 단어만(&w)"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:90
-#, fuzzy
 msgid "Regular Expression"
-msgstr "잘못된 식"
+msgstr "정규 표현식"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:93
 msgid "Search pin &names and numbers"
@@ -15083,14 +15081,12 @@ msgid "Show datasheet in browser"
 msgstr "브라우저에서 데이터 시트 보기"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:200
-#, fuzzy
 msgid "Column Label"
-msgstr "%d 열 테이블"
+msgstr "열 레이블"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:205
-#, fuzzy
 msgid "Show Column"
-msgstr "열 표시/숨김"
+msgstr "열 표시"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:206
 msgid "Group By"
