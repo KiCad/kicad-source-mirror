@@ -698,8 +698,8 @@ void BOARD_ADAPTER::addShape( const PCB_SHAPE* aShape, CONTAINER_2D_BASE* aConta
 
                 if( margin != 0 )
                 {
-                    CORNER_STRATEGY cornerStr =
-                            margin >= 0 ? CORNER_STRATEGY::ROUND_ALL_CORNERS : CORNER_STRATEGY::ALLOW_ACUTE_CORNERS;
+                    CORNER_STRATEGY cornerStr = margin >= 0 ? CORNER_STRATEGY::ROUND_ALL_CORNERS
+                                                            : CORNER_STRATEGY::ALLOW_ACUTE_CORNERS;
 
                     polyList.Inflate( margin, cornerStr, GetBoard()->GetDesignSettings().m_MaxError );
                 }
