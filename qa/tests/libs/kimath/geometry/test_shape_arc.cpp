@@ -202,7 +202,7 @@ static const std::vector<ARC_SME_CASE> arc_sme_cases = {
             // This should be corrected by the constructor.
             // The mid point should be at about (-71, -71) for a 270 degree arc, with the
             // bottom right quadrant open.
-            "S(100,0), M(0,100), E(0,100) (bad midpoint)",
+            "S(100,0), M(-100,0), E(0,100) (bad midpoint)",
             {
                     { 100, 0 },
                     { -100, 0 },
@@ -213,20 +213,14 @@ static const std::vector<ARC_SME_CASE> arc_sme_cases = {
                     { 0, 0 },
                     { 100, 0 },
                     { 0, 100 },
-                    270,
+                    -270,
                     0,
-                    270,
+                    90,
                     100,
                     { { -100, -100 }, { 200, 200 } },
             },
     }
 };
-
-
-// The "bad midpoint" case is currently failing
-// Remove this expected failure when this issue is resolved:
-// https://gitlab.com/kicad/code/kicad/-/issues/21035
-BOOST_AUTO_TEST_CASE_EXPECTED_FAILURES( BasicSMEGeom, 6 )
 
 
 BOOST_DATA_TEST_CASE( BasicSMEGeom, boost::unit_test::data::make( arc_sme_cases ), c )
