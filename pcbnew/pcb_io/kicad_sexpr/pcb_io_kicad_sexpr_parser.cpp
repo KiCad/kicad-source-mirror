@@ -3020,7 +3020,12 @@ PCB_SHAPE* PCB_IO_KICAD_SEXPR_PARSER::parsePCB_SHAPE( BOARD_ITEM* aParent )
         shape->SetBezierC1( parseXY());
         shape->SetBezierC2( parseXY());
         shape->SetEnd( parseXY() );
-        shape->RebuildBezierToSegmentsPointsList( m_board->GetDesignSettings().m_MaxError );
+
+        if( m_board )
+            shape->RebuildBezierToSegmentsPointsList( m_board->GetDesignSettings().m_MaxError );
+        else
+            shape->RebuildBezierToSegmentsPointsList( ARC_HIGH_DEF );
+
         NeedRIGHT();
         break;
 
