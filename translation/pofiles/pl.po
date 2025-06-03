@@ -18,7 +18,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-06-01 20:43+0300\n"
-"PO-Revision-Date: 2025-05-30 20:01+0000\n"
+"PO-Revision-Date: 2025-06-03 08:04+0000\n"
 "Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/kicad/v9/pl/>\n"
 "Language: pl\n"
@@ -11027,13 +11027,13 @@ msgid "Unconnected wire to bus entry"
 msgstr "Niepodłączone wejście do magistrali"
 
 #: eeschema/connection_graph.cpp:4192
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Hierarchical label \"%s\" in root sheet cannot be connected to non-existent "
 "parent sheet"
 msgstr ""
-"Etykieta hierarchiczna %s nie ma odpowiednika w pinach arkusza na arkuszu "
-"nadrzędnym"
+"Etykieta hierarchiczna \"%s\" arkusza głównego nie może zostać połączona do "
+"nieistniejącego arkusza nadrzędnego"
 
 #: eeschema/connection_graph.cpp:4257
 #, c-format
@@ -38738,14 +38738,12 @@ msgid "Unused Pads"
 msgstr "Nieużywane pola lutownicze"
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:39
-#, fuzzy
 msgid "Update Footprints"
-msgstr "Uaktualnij footprint"
+msgstr "Uaktualnij footprinty"
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:41
-#, fuzzy
 msgid "Replace footprints with those specified by symbols"
-msgstr "Zamień footprinty z tymi określonymi na liście sieci"
+msgstr "Zamień footprinty na te określone poprzez symbole"
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:43
 msgid ""
@@ -38769,19 +38767,16 @@ msgstr ""
 "Usuń z płytki odblokowane footprinty, które nie są powiązane ze schematem."
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:52
-#, fuzzy
 msgid "Override locks"
-msgstr "Omiń blokadę"
+msgstr "Omiń blokady"
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:64
-#, fuzzy
 msgid "Update footprint fields from symbols"
-msgstr "Uaktualnij footprint %s z '%s' do '%s'"
+msgstr "Uaktualnij pola footprintów z symboli"
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:68
-#, fuzzy
 msgid "Remove footprint fields not found in symbols"
-msgstr "Usuń %s pól footprintu nie znajdujących się w symbolu."
+msgstr "Usuń pola footprintów nie znajdujące się w symbolu"
 
 #: pcbnew/dialogs/dialog_update_pcb_base.h:56
 msgid "Update PCB from Schematic"
