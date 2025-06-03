@@ -18,10 +18,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-06-01 20:42+0300\n"
-"PO-Revision-Date: 2025-05-30 20:01+0000\n"
+"PO-Revision-Date: 2025-06-03 08:04+0000\n"
 "Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
-"Language-Team: Polish <https://hosted.weblate.org/projects/kicad/master-"
-"source/pl/>\n"
+"Language-Team: Polish <https://hosted.weblate.org/projects/kicad/"
+"master-source/pl/>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -34980,9 +34980,8 @@ msgid "Update fabrication attributes"
 msgstr "Uaktualnij atrybuty fabrykacji"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:87
-#, fuzzy
 msgid "Update clearance overrides"
-msgstr "Uaktualnij podmiany prześwitu i ustawienia"
+msgstr "Uaktualnij zastępstwa prześwitu"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:88
 msgid "Update 3D models"
@@ -35071,9 +35070,8 @@ msgid "Update/reset fabrication attributes"
 msgstr "Uaktualnij/zresetuj atrybuty fabrykacji"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:114
-#, fuzzy
 msgid "Update/reset clearance overrides"
-msgstr "Uaktualnia/resetuje podmiany prześwitu i ustawienia"
+msgstr "Uaktualnia/resetuje zastępstwa prześwitu"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:117
 msgid "Update/reset 3D models"
@@ -35863,9 +35861,8 @@ msgstr ""
 "pole wyboru 'Zablokowane elementy'."
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:357
-#, fuzzy
 msgid "all pads with duplicate numbers"
-msgstr "Pola z powieloną numeracją traktuj jako połączone"
+msgstr "wszystkie pola z powieloną numeracją"
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:458
 #, c-format
@@ -36140,14 +36137,12 @@ msgid "Thermal relief"
 msgstr "Łącze termiczne"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:369
-#, fuzzy
 msgid "Jumper groups:"
-msgstr "Grupy pinów połączonych"
+msgstr "Grupy pinów połączonych:"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:387
-#, fuzzy
 msgid "Clearance Overrides && Pad Connections"
-msgstr "Lokalny prześwit i ustawienia"
+msgstr "Zastępstwa prześwitu oraz łącza pól lutowniczych"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:400
 msgid ""
@@ -36324,14 +36319,12 @@ msgid "Pad groups allowed to short different nets:"
 msgstr "Grupy pól z zezwoleniem na zwarcie różnych sieci:"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:420
-#, fuzzy
 msgid "Jumpers"
-msgstr "zworek"
+msgstr "Zwory"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:422
-#, fuzzy
 msgid "All pads with duplicate numbers are jumpers"
-msgstr "Pola z powieloną numeracją traktuj jako połączone"
+msgstr "Wszystkie pola z powieloną numeracją traktuj jako zwory"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:423
 msgid ""
@@ -36344,9 +36337,8 @@ msgstr ""
 "połączone."
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:430
-#, fuzzy
 msgid "Explicit jumper pad groups:"
-msgstr "Uaktualnianie %s grup pól zworkowych"
+msgstr "Jawne grupy zworek:"
 
 #: pcbnew/dialogs/dialog_footprint_wizard_list.cpp:146
 msgid "All footprint generator scripts were loaded"
@@ -39665,14 +39657,12 @@ msgid "Unused Pads"
 msgstr "Nieużywane pola lutownicze"
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:42
-#, fuzzy
 msgid "Update Footprints"
-msgstr "Uaktualnij footprint"
+msgstr "Uaktualnij footprinty"
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:44
-#, fuzzy
 msgid "Replace footprints with those specified by symbols"
-msgstr "Zamień footprinty z tymi określonymi na liście sieci"
+msgstr "Zamień footprinty na te określone poprzez symbole"
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:46
 msgid ""
@@ -39696,19 +39686,16 @@ msgstr ""
 "Usuń z płytki odblokowane footprinty, które nie są powiązane ze schematem."
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:55
-#, fuzzy
 msgid "Override locks"
-msgstr "Omiń blokadę"
+msgstr "Omiń blokady"
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:67
-#, fuzzy
 msgid "Update footprint fields from symbols"
-msgstr "Uaktualnij footprint %s z '%s' do '%s'"
+msgstr "Uaktualnij pola footprintów z symboli"
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:71
-#, fuzzy
 msgid "Remove footprint fields not found in symbols"
-msgstr "Usuń %s pól footprintu nie znajdujących się w symbolu."
+msgstr "Usuń pola footprintów nie znajdujące się w symbolu"
 
 #: pcbnew/dialogs/dialog_update_pcb_base.h:57
 msgid "Update PCB from Schematic"
