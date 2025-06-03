@@ -1230,23 +1230,20 @@ VECTOR2I PAD::GetSolderPasteMargin( PCB_LAYER_ID aLayer ) const
     std::optional<int>    margin;
     std::optional<double> mratio;
 
-    if( const BOARD* board = GetBoard() )
+    if( GetBoard() && GetBoard()->GetDesignSettings().m_DRCEngine )
     {
         DRC_CONSTRAINT              constraint;
-        std::shared_ptr<DRC_ENGINE> drcEngine = board->GetDesignSettings().m_DRCEngine;
+        std::shared_ptr<DRC_ENGINE> drcEngine = GetBoard()->GetDesignSettings().m_DRCEngine;
 
-        if( drcEngine )
-        {
-            constraint = drcEngine->EvalRules( SOLDER_PASTE_ABS_MARGIN_CONSTRAINT, this, nullptr, aLayer );
+        constraint = drcEngine->EvalRules( SOLDER_PASTE_ABS_MARGIN_CONSTRAINT, this, nullptr, aLayer );
 
-            if( constraint.m_Value.HasOpt() )
-                margin = constraint.m_Value.Opt();
+        if( constraint.m_Value.HasOpt() )
+            margin = constraint.m_Value.Opt();
 
-            constraint = drcEngine->EvalRules( SOLDER_PASTE_REL_MARGIN_CONSTRAINT, this, nullptr, aLayer );
+        constraint = drcEngine->EvalRules( SOLDER_PASTE_REL_MARGIN_CONSTRAINT, this, nullptr, aLayer );
 
-            if( constraint.m_Value.HasOpt() )
-                mratio = constraint.m_Value.Opt() / 1000.0;
-        }
+        if( constraint.m_Value.HasOpt() )
+            mratio = constraint.m_Value.Opt() / 1000.0;
     }
     else
     {
