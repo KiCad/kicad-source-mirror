@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -27,7 +27,6 @@
 
 ///////////////////////////////////////////////////////////////////////////
 
-
 ///////////////////////////////////////////////////////////////////////////////
 /// Class DIALOG_SYNC_SHEET_PINS_BASE
 ///////////////////////////////////////////////////////////////////////////////
@@ -40,10 +39,6 @@ class DIALOG_SYNC_SHEET_PINS_BASE : public DIALOG_SHIM
 		wxNotebook* m_notebook;
 		wxStaticText* m_labelTip;
 		wxButton* m_btnClose;
-
-		// Virtual event handlers, override them in your derived class
-		virtual void OnCloseBtnClick( wxCommandEvent& event ) { event.Skip(); }
-
 
 	public:
 

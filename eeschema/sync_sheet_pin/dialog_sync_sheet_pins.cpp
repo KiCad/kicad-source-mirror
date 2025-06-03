@@ -119,12 +119,6 @@ DIALOG_SYNC_SHEET_PINS::DIALOG_SYNC_SHEET_PINS(
 DIALOG_SYNC_SHEET_PINS::~DIALOG_SYNC_SHEET_PINS() = default;
 
 
-void DIALOG_SYNC_SHEET_PINS::OnCloseBtnClick( wxCommandEvent& event )
-{
-    Close();
-}
-
-
 void DIALOG_SYNC_SHEET_PINS::OnClose( wxCloseEvent& aEvent )
 {
     aEvent.Skip();
