@@ -53,8 +53,6 @@ public:
 
     ~DIALOG_SYNC_SHEET_PINS() override;
 
-    void OnCloseBtnClick( wxCommandEvent& event ) override;
-
     void OnClose( wxCloseEvent& aEvent );
 
     /**

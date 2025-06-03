@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -29,7 +29,9 @@ DIALOG_SYNC_SHEET_PINS_BASE::DIALOG_SYNC_SHEET_PINS_BASE( wxWindow* parent, wxWi
 	m_labelTip->Wrap( -1 );
 	bSizer8->Add( m_labelTip, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
-	m_btnClose = new wxButton( this, wxID_ANY, _("Close"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_btnClose = new wxButton( this, wxID_CANCEL, _("Close"), wxDefaultPosition, wxDefaultSize, 0 );
+
+	m_btnClose->SetDefault();
 	bSizer8->Add( m_btnClose, 0, wxALL, 5 );
 
 
@@ -41,14 +43,8 @@ DIALOG_SYNC_SHEET_PINS_BASE::DIALOG_SYNC_SHEET_PINS_BASE( wxWindow* parent, wxWi
 	m_sizerMain->Fit( this );
 
 	this->Centre( wxBOTH );
-
-	// Connect Events
-	m_btnClose->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SYNC_SHEET_PINS_BASE::OnCloseBtnClick ), NULL, this );
 }
 
 DIALOG_SYNC_SHEET_PINS_BASE::~DIALOG_SYNC_SHEET_PINS_BASE()
 {
-	// Disconnect Events
-	m_btnClose->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SYNC_SHEET_PINS_BASE::OnCloseBtnClick ), NULL, this );
-
 }
