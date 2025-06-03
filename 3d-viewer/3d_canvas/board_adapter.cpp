@@ -799,7 +799,7 @@ std::bitset<LAYER_3D_END> BOARD_ADAPTER::GetVisibleLayers() const
 {
     std::bitset<LAYER_3D_END> ret;
 
-    if( m_board && m_board->IsFootprintHolder() )
+    if( m_IsPreviewer )
     {
         if( m_Cfg->m_Render.preview_show_board_body )
         {
