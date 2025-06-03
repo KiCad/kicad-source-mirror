@@ -36,8 +36,8 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-06-01 20:43+0300\n"
-"PO-Revision-Date: 2025-05-19 17:22+0000\n"
-"Last-Translator: Jason Son <weblate.sash858@passmail.net>\n"
+"PO-Revision-Date: 2025-06-03 08:04+0000\n"
+"Last-Translator: DevAny <devany.kr@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/v9/ko/>\n"
 "Language: ko\n"
 "MIME-Version: 1.0\n"
@@ -669,164 +669,132 @@ msgid "Show user ECO2 layer"
 msgstr "사용자 ECO2 레이어 보기"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:68
-#, fuzzy
 msgid "Show user defined layer 1"
-msgstr "사용자 정의 레이어 1"
+msgstr "사용자 정의된 레이어 1 표시"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:69
-#, fuzzy
 msgid "Show user defined layer 2"
-msgstr "사용자 정의 레이어 2"
+msgstr "사용자 정의된 레이어 2 표시"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:70
-#, fuzzy
 msgid "Show user defined layer 3"
-msgstr "사용자 정의 레이어 3"
+msgstr "사용자 정의된 레이어 3 표시"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:71
-#, fuzzy
 msgid "Show user defined layer 4"
-msgstr "사용자 정의 레이어 4"
+msgstr "사용자 정의된 레이어 4 표시"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:72
-#, fuzzy
 msgid "Show user defined layer 5"
-msgstr "사용자 정의 레이어 5"
+msgstr "사용자 정의된 레이어 5 표시"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:73
-#, fuzzy
 msgid "Show user defined layer 6"
-msgstr "사용자 정의 레이어 6"
+msgstr "사용자 정의된 레이어 6 표시"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:74
-#, fuzzy
 msgid "Show user defined layer 7"
-msgstr "사용자 정의 레이어 7"
+msgstr "사용자 정의된 레이어 7 표시"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:75
-#, fuzzy
 msgid "Show user defined layer 8"
-msgstr "사용자 정의 레이어 8"
+msgstr "사용자 정의된 레이어 8 표시"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:76
-#, fuzzy
 msgid "Show user defined layer 9"
-msgstr "사용자 정의 레이어 9"
+msgstr "사용자 정의된 레이어 9 표시"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:77
-#, fuzzy
 msgid "Show user defined layer 10"
-msgstr "사용자 정의 레이어 10"
+msgstr "사용자 정의된 레이어 10 표시"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:78
-#, fuzzy
 msgid "Show user defined layer 11"
-msgstr "사용자 정의 레이어 11"
+msgstr "사용자 정의된 레이어 11 표시"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:79
-#, fuzzy
 msgid "Show user defined layer 12"
-msgstr "사용자 정의 레이어 12"
+msgstr "사용자 정의된 레이어 12 표시"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:80
-#, fuzzy
 msgid "Show user defined layer 13"
-msgstr "사용자 정의 레이어 13"
+msgstr "사용자 정의된 레이어 13 표시"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:81
-#, fuzzy
 msgid "Show user defined layer 14"
-msgstr "사용자 정의 레이어 14"
+msgstr "사용자 정의된 레이어 14 표시"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:82
-#, fuzzy
 msgid "Show user defined layer 15"
-msgstr "사용자 정의 레이어 15"
+msgstr "사용자 정의된 레이어 15 표시"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:83
-#, fuzzy
 msgid "Show user defined layer 16"
-msgstr "사용자 정의 레이어 16"
+msgstr "사용자 정의된 레이어 16 표시"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:84
-#, fuzzy
 msgid "Show user defined layer 17"
-msgstr "사용자 정의 레이어 17"
+msgstr "사용자 정의된 레이어 17 표시"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:85
-#, fuzzy
 msgid "Show user defined layer 18"
-msgstr "사용자 정의 레이어 18"
+msgstr "사용자 정의된 레이어 18 표시"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:86
-#, fuzzy
 msgid "Show user defined layer 19"
-msgstr "사용자 정의 레이어 19"
+msgstr "사용자 정의된 레이어 19 표시"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:87
-#, fuzzy
 msgid "Show user defined layer 20"
-msgstr "사용자 정의 레이어 20"
+msgstr "사용자 정의된 레이어 20 표시"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:88
-#, fuzzy
 msgid "Show user defined layer 21"
-msgstr "사용자 정의 레이어 21"
+msgstr "사용자 정의된 레이어 21 표시"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:89
-#, fuzzy
 msgid "Show user defined layer 22"
-msgstr "사용자 정의 레이어 22"
+msgstr "사용자 정의된 레이어 22 표시"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:90
-#, fuzzy
 msgid "Show user defined layer 23"
-msgstr "사용자 정의 레이어 23"
+msgstr "사용자 정의된 레이어 23 표시"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:91
-#, fuzzy
 msgid "Show user defined layer 24"
-msgstr "사용자 정의 레이어 24"
+msgstr "사용자 정의된 레이어 24 표시"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:92
-#, fuzzy
 msgid "Show user defined layer 25"
-msgstr "사용자 정의 레이어 25"
+msgstr "사용자 정의된 레이어 25 표시"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:93
-#, fuzzy
 msgid "Show user defined layer 26"
-msgstr "사용자 정의 레이어 26"
+msgstr "사용자 정의된 레이어 26 표시"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:94
-#, fuzzy
 msgid "Show user defined layer 27"
-msgstr "사용자 정의 레이어 27"
+msgstr "사용자 정의된 레이어 27 표시"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:95
-#, fuzzy
 msgid "Show user defined layer 28"
-msgstr "사용자 정의 레이어 28"
+msgstr "사용자 정의된 레이어 28 표시"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:96
-#, fuzzy
 msgid "Show user defined layer 29"
-msgstr "사용자 정의 레이어 29"
+msgstr "사용자 정의된 레이어 29 표시"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:97
-#, fuzzy
 msgid "Show user defined layer 30"
-msgstr "사용자 정의 레이어 30"
+msgstr "사용자 정의된 레이어 30 표시"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:98
-#, fuzzy
 msgid "Show user defined layer 31"
-msgstr "사용자 정의 레이어 31"
+msgstr "사용자 정의된 레이어 31 표시"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:99
-#, fuzzy
 msgid "Show user defined layer 32"
-msgstr "사용자 정의 레이어 32"
+msgstr "사용자 정의된 레이어 32 표시"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:100
 #, fuzzy
@@ -3010,9 +2978,9 @@ msgstr ""
 "자는 Pcbnew 환경설정에서 다시 활성화할 수 있습니다."
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:30
-#, fuzzy, c-format
+#, c-format
 msgid "The selection contains %zu locked items."
-msgstr "선택 항목에 %lu 잠긴 항목이 있음."
+msgstr "선택한 항목에 잠긴 항목 %zu개가 포함되어 있습니다."
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:34
 msgid "These items will be skipped unless you override the locks."
@@ -3908,7 +3876,6 @@ msgstr "커밋 메시지는 비워둘 수 없음"
 
 #: common/dialogs/git/dialog_git_repository.cpp:75
 #: common/dialogs/git/dialog_git_repository.cpp:310
-#, fuzzy
 msgid "Test Connection"
 msgstr "연결 테스트"
 
@@ -3954,9 +3921,8 @@ msgstr "저장소의 URL을 입력하세요"
 
 #: common/dialogs/git/dialog_git_repository.cpp:421
 #: common/dialogs/git/dialog_git_repository_base.cpp:106
-#, fuzzy
 msgid "SSH key password:"
-msgstr "SSH 키 비밀번호"
+msgstr "SSH 키 비밀번호:"
 
 #: common/dialogs/git/dialog_git_repository.cpp:429
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:54
@@ -3964,14 +3930,12 @@ msgid "Password:"
 msgstr "비밀번호:"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:42
-#, fuzzy
 msgid "Location:"
-msgstr "위치"
+msgstr "위치:"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:49
-#, fuzzy
 msgid "Connection type:"
-msgstr "연결 유형"
+msgstr "연결 유형:"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:58
 msgid "HTTPS"
@@ -3995,7 +3959,6 @@ msgid "*"
 msgstr "*"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:99
-#, fuzzy
 msgid "User name:"
 msgstr "사용자 이름:"
 
@@ -4041,14 +4004,12 @@ msgid "Enable Git Tracking"
 msgstr "트랙 자동 삭제 기능 사용"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:28
-#, fuzzy
 msgid "Remote Tracking"
-msgstr "트랙 삭제"
+msgstr "원격 추적"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:41
-#, fuzzy
 msgid "Update interval:"
-msgstr "필드 업데이트"
+msgstr "필드 업데이트:"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:46
 msgid ""
@@ -4967,9 +4928,8 @@ msgid "Failed to write file '%s'."
 msgstr "파일 ' %s '를 쓰지 못함."
 
 #: common/dialogs/panel_embedded_files_base.cpp:38
-#, fuzzy
 msgid "Embedded Reference"
-msgstr "내장된 참조번호 복사"
+msgstr "내장 참조"
 
 #: common/dialogs/panel_embedded_files_base.cpp:61
 msgid "Add embedded file"
@@ -7055,14 +7015,14 @@ msgid "Could not copy file: %s to %s"
 msgstr "파일을 복사할 수 없음: %s에서 %s로"
 
 #: common/gestfich.cpp:477
-#, fuzzy, c-format
+#, c-format
 msgid "Could not copy directory: %s to %s"
-msgstr "파일을 복사할 수 없음: %s에서 %s로"
+msgstr "'%s' 디렉터리를 '%s'(으)로 복사할 수 없음"
 
 #: common/gestfich.cpp:529
-#, fuzzy, c-format
+#, c-format
 msgid "Source directory does not exist: %s"
-msgstr "디렉토리 '%s'가 없음"
+msgstr "%s 원본 디렉터리가 존재하지 않음"
 
 #: common/gestfich.cpp:584
 #, c-format
@@ -7120,43 +7080,38 @@ msgid "Could not get reference OID for reference '%s'"
 msgstr "참조 '%s'에 대한 참조 OID를 가져올 수 없음"
 
 #: common/git/git_pull_handler.cpp:252
-#, fuzzy
 msgid "Could not look up target commit"
-msgstr "커밋을 조회할 수 없음"
+msgstr "대상 커밋을 조회할 수 없음"
 
 #: common/git/git_pull_handler.cpp:264
-#, fuzzy
 msgid "Could not get tree from target commit"
-msgstr "커밋을 병합할 수 없음"
+msgstr "대상 커밋에서 트리를 가져올 수 없음"
 
 #: common/git/git_pull_handler.cpp:306 common/git/kicad_git_errors.cpp:55
 msgid "Failed to perform checkout operation."
 msgstr "체크아웃 작업을 수행하지 못함."
 
 #: common/git/git_pull_handler.cpp:315
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to update reference '%s' to point to '%s'"
-msgstr "분기 '%s'에 대한 헤드 참조를 업데이트하지 못함"
+msgstr "참조 '%s'를 '%s'(으)로 업데이트하는 데 실패함"
 
 #: common/git/git_pull_handler.cpp:325
-#, fuzzy
 msgid "Failed to clean up repository state after fast-forward."
-msgstr "저장소 복제에 실패함."
+msgstr "패스트포워드 후 저장소 상태를 정리하지 못했습니다."
 
 #: common/git/git_pull_handler.cpp:334
-#, fuzzy
 msgid "Failed to initialize revision walker."
-msgstr "git 프로젝트 초기화에 실패했습니다."
+msgstr "리비전 워커를 초기화하지 못했습니다."
 
 #: common/git/git_pull_handler.cpp:343
-#, fuzzy
 msgid "Failed to push reference to revision walker."
-msgstr "원격 저장소에 변경 내용을 푸시하지 못함."
+msgstr "리비전 워커에 참조를 푸시하지 못함."
 
 #: common/git/git_pull_handler.cpp:358
-#, fuzzy, c-format
+#, c-format
 msgid "Could not lookup commit '%s'"
-msgstr "커밋 '{}'를 조회할 수 없음"
+msgstr "'%s' 커밋을 조회할 수 없음"
 
 #: common/git/git_pull_handler.cpp:391
 msgid "Could not merge commits"
@@ -7180,7 +7135,7 @@ msgstr "추가됨"
 
 #: common/git/git_pull_handler.cpp:527
 msgid "Conflicts detected during rebase"
-msgstr ""
+msgstr "리베이스 중 충돌 발생"
 
 #: common/git/git_push_handler.cpp:56
 msgid "Could not lookup remote"
@@ -7227,9 +7182,8 @@ msgid "[updated] %s"
 msgstr "[업데이트됨] %s"
 
 #: common/git/kicad_git_common.cpp:981
-#, fuzzy
 msgid "Unable to authenticate"
-msgstr "다음을 생성할 수 없습니다: "
+msgstr "인증할 수 없음"
 
 #: common/git/kicad_git_errors.cpp:40
 msgid "Invalid repository."
@@ -7667,7 +7621,6 @@ msgid "Export Drill Data Job Settings"
 msgstr "드릴 데이터 작업 설정 내보내기"
 
 #: common/jobs/job_export_pcb_drill.cpp:132
-#, fuzzy
 msgid "PCB: Export Drill Data"
 msgstr "PCB: 드릴 데이터 내보내기"
 
@@ -7715,29 +7668,24 @@ msgid "Export IPC-2581"
 msgstr "IPC-2581 내보내기"
 
 #: common/jobs/job_export_pcb_ipc2581.cpp:78
-#, fuzzy
 msgid "Export IPC-2581 Job Settings"
-msgstr "IPC2581 작업 설정 내보내기"
+msgstr "IPC-2581 작업 설정 내보내기"
 
 #: common/jobs/job_export_pcb_ipc2581.cpp:91
-#, fuzzy
 msgid "PCB: Export IPC-2581"
-msgstr "PCB: IPC2581 내보내기"
+msgstr "PCB: IPC-2581 내보내기"
 
 #: common/jobs/job_export_pcb_ipcd356.cpp:33
-#, fuzzy
 msgid "Export IPC-D-356"
-msgstr "IPC-2581 내보내기"
+msgstr "IPC-D-356 내보내기"
 
 #: common/jobs/job_export_pcb_ipcd356.cpp:39
-#, fuzzy
 msgid "Export IPC-D-356 Job Settings"
-msgstr "IPC2581 작업 설정 내보내기"
+msgstr "IPC-D-356 작업 설정 내보내기"
 
 #: common/jobs/job_export_pcb_ipcd356.cpp:52
-#, fuzzy
 msgid "PCB: Export IPC-D-356"
-msgstr "PCB: IPC2581 내보내기"
+msgstr "PCB: IPC-D-356 내보내기"
 
 #: common/jobs/job_export_pcb_odb.cpp:57
 #: pcbnew/dialogs/dialog_export_odbpp_base.h:65
@@ -8466,7 +8414,6 @@ msgid "Select Preferred Editor"
 msgstr "선호하는 편집기 선택"
 
 #: common/pgm_base.cpp:384
-#, fuzzy
 msgid ""
 "KiCad can anonymously report crashes and special event data to developers in "
 "order to aid identifying critical bugs and help profile functionality to "
@@ -8475,26 +8422,23 @@ msgid ""
 "reports when crashes or events occur. \n"
 "Your design files such as schematic and PCB are not shared in this process."
 msgstr ""
-"KiCad는 충돌 및 특별 이벤트 데이터를 개발자에게 익명으로 보고하여 사용자 기"
-"반 전반에서 중요한 버그를 보다 효과적으로 식별하고 개선 사항을 안내하는 기능"
-"을 프로파일링하는 데 도움을 줄 수 있습니다. \n"
-"자발적으로 참여하기로 선택한 경우, KiCad는 충돌이나 이벤트가 발생할 때 해당 "
-"보고서 전송을 자동으로 처리합니다. \n"
-"회로도 또는 PCB와 같은 설계 파일은 이 프로세스에서 공유되지 않습니다."
+"KiCad는 치명적인 버그를 찾아내고 기능 개선 방향을 안내하기 위해, 익명으로 "
+"충돌 및 특별 이벤트 데이터를 개발자에게 전송할 수 있습니다.\n"
+"사용자가 자발적으로 참여하기로 선택하면, 충돌이나 이벤트 발생 시 KiCad가 "
+"자동으로 해당 보고서를 전송합니다.\n"
+"이 과정에서 회로도나 PCB 같은 설계 파일은 공유되지 않습니다."
 
 #: common/pgm_base.cpp:389
-#, fuzzy
 msgid "Data Collection Opt In"
-msgstr "데이터 수집"
+msgstr "데이터 수집 동의"
 
 #: common/pgm_base.cpp:391
 msgid "Opt In"
-msgstr ""
+msgstr "수락"
 
 #: common/pgm_base.cpp:391
-#, fuzzy
 msgid "Decline"
-msgstr "선 스케치"
+msgstr "거부"
 
 #: common/pgm_base.cpp:498
 msgid "Environment variable HOME is empty.  Unable to continue."
@@ -10088,9 +10032,8 @@ msgid "Toggle panning to selections in the search pane"
 msgstr "검색창에서 선택 항목으로 전환하기"
 
 #: common/widgets/search_pane.cpp:51
-#, fuzzy
 msgid "Search Hidden Fields"
-msgstr "숨은 필드 찾기(&h)"
+msgstr "숨겨진 필드 검색"
 
 #: common/widgets/unit_binder.cpp:351
 #, c-format
@@ -10290,9 +10233,8 @@ msgid "KiCad s-expression schematic files"
 msgstr "KiCad s-expression 회로도 파일"
 
 #: common/wildcards_and_files_ext.cpp:289
-#, fuzzy
 msgid "Altium Project files"
-msgstr "모든 KiCad 프로젝트 파일"
+msgstr "Altium 프로젝트 파일"
 
 #: common/wildcards_and_files_ext.cpp:295
 msgid "CADSTAR Archive files"
@@ -10989,11 +10931,12 @@ msgid "Unconnected wire to bus entry"
 msgstr "전선-버스 입력 미연결"
 
 #: eeschema/connection_graph.cpp:4192
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Hierarchical label \"%s\" in root sheet cannot be connected to non-existent "
 "parent sheet"
-msgstr "계층 라벨 %s에는 상위 시트 내부에 일치하는 시트 핀이 없습니다"
+msgstr "최상위 시트의 \"%s\" 계층식 라벨은 존재하지 않는 상위 시트와 연결할 수 "
+"없습니다"
 
 #: eeschema/connection_graph.cpp:4257
 #, c-format
@@ -11701,9 +11644,8 @@ msgid "Update/reset visibility of pin names/numbers"
 msgstr "핀 이름/번호의 가시성 변경/재설정"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:172
-#, fuzzy
 msgid "Reset alternate pin to default"
-msgstr "마법사 매개변수를 기본값으로 초기화"
+msgstr "대체 핀을 기본값으로 재설정"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:178
 msgid "Update/reset symbol attributes"
@@ -11789,9 +11731,9 @@ msgid "Database Library Settings"
 msgstr "데이터베이스 라이브러리 설정"
 
 #: eeschema/dialogs/dialog_design_block_properties.cpp:98
-#, fuzzy, c-format
+#, c-format
 msgid "Illegal character '%c' in name '%s'."
-msgstr "허용되지 않는 문자 '%c'이(가) 별칭 '%s' 에서 발견되었습니다."
+msgstr "허용되지 않는 '%c' 문자가 '%s' 이름 안에 있습니다."
 
 #: eeschema/dialogs/dialog_design_block_properties.cpp:124
 #: eeschema/dialogs/panel_template_fieldnames.cpp:100
@@ -15155,18 +15097,20 @@ msgid "Group By"
 msgstr "그룹화"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:208
-#, fuzzy
 msgid ""
 "Show\n"
 "Column"
-msgstr "열 표시/숨김"
+msgstr ""
+"열\n"
+"표시"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:209
-#, fuzzy
 msgid ""
 "Group\n"
 "By"
-msgstr "그룹화"
+msgstr ""
+"그룹\n"
+"기준"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:710
 msgid "Qty"
@@ -17026,14 +16970,14 @@ msgid "The current configuration does not include the symbol library '%s'"
 msgstr "현재 설정에 심볼 라이브러리 '%s'가 포함되어 있지 않음"
 
 #: eeschema/erc/erc.cpp:1414
-#, fuzzy, c-format
+#, c-format
 msgid "The symbol library '%s' is not enabled in the current configuration"
-msgstr "현재 설정에서 심볼 라이브러리 '%s'를 사용할 수 없습니다."
+msgstr "현재 설정에서 '%s' 심볼 라이브러리가 활성화되어 있지 않습니다"
 
 #: eeschema/erc/erc.cpp:1429
-#, fuzzy, c-format
+#, c-format
 msgid "The symbol library '%s' was not found at '%s'."
-msgstr "풋프린트 라이브러리 '%s'을(를) 찾을 수 없음."
+msgstr "'%s' 심볼 라이브러리를 '%s'에서 찾을 수 없습니다."
 
 #: eeschema/erc/erc.cpp:1449
 #, c-format
@@ -19374,6 +19318,8 @@ msgid ""
 "Unable to find LTspice symbols.\n"
 "Install LTspice or put its library files into %s"
 msgstr ""
+"LTspice 심볼을 찾을 수 없습니다.\n"
+"LTspice를 설치하거나 해당 라이브러리 파일을 %s 경로에 넣으세요"
 
 #: eeschema/sch_io/ltspice/sch_io_ltspice.h:49
 msgid "LTspice schematic files"
@@ -20969,7 +20915,7 @@ msgstr "측정 형식 정의 요구"
 
 #: eeschema/sim/ngspice.cpp:501
 msgid "Unable to load ngspice shared library. Please check your install."
-msgstr ""
+msgstr "ngspice 공유 라이브러리를 불러올 수 없습니다. 설치 상태를 확인해 주세요."
 
 #: eeschema/sim/sim_lib_mgr.cpp:91 eeschema/sim/sim_lib_mgr.cpp:144
 #, c-format
@@ -22782,14 +22728,12 @@ msgid "Place Sheet Pins"
 msgstr "시트 핀 배치"
 
 #: eeschema/tools/sch_actions.cpp:559 eeschema/tools/sch_actions.cpp:567
-#, fuzzy
 msgid "Sync Sheet Pins..."
-msgstr "시트 핀 동기화"
+msgstr "시트 핀 동기화..."
 
 #: eeschema/tools/sch_actions.cpp:575
-#, fuzzy
 msgid "Import Sheet..."
-msgstr "시트 가져오기"
+msgstr "시트 가져오기..."
 
 #: eeschema/tools/sch_actions.cpp:576
 msgid "Import sheet into project"
@@ -25156,7 +25100,7 @@ msgstr "%s (D%d) - 레이어 %d: %s"
 
 #: gerbview/gerber_file_image.cpp:125
 msgid "Too many messages, some are skipped"
-msgstr ""
+msgstr "메시지가 너무 많아 일부는 건너뛰었습니다"
 
 #: gerbview/gerber_file_image.cpp:359
 msgid "Image name"
@@ -26675,9 +26619,9 @@ msgstr "작업 설정 파일 복사"
 
 #: kicad/dialogs/dialog_destination.cpp:55
 #: kicad/dialogs/dialog_destination_base.h:62
-#, fuzzy, c-format
+#, c-format
 msgid "%s Destination"
-msgstr "목적지:"
+msgstr "%s 목적지"
 
 #: kicad/dialogs/dialog_destination.cpp:86
 msgid "Select output directory"
@@ -26797,9 +26741,9 @@ msgid "Update Available"
 msgstr "사용 가능한 업데이트"
 
 #: kicad/dialogs/panel_jobset.cpp:64
-#, fuzzy, c-format
+#, c-format
 msgid "Destination: %s"
-msgstr "목적지:"
+msgstr "목적지: %s"
 
 #: kicad/dialogs/panel_jobset.cpp:68
 msgid "No."
@@ -26832,7 +26776,7 @@ msgstr "작업 실행"
 #: kicad/dialogs/panel_jobset.cpp:295
 #, fuzzy
 msgid "Edit Destination Options..."
-msgstr "사각형 설정"
+msgstr "출력 대상 옵션 편집..."
 
 #: kicad/dialogs/panel_jobset.cpp:296
 #, fuzzy
@@ -30768,9 +30712,8 @@ msgstr "유효 %s:"
 #: pcb_calculator/transline_ident.cpp:163
 #: pcb_calculator/transline_ident.cpp:198
 #: pcb_calculator/transline_ident.cpp:357
-#, fuzzy
 msgid "Unit propagation delay:"
-msgstr "전파 지연"
+msgstr "단위 전달 지연:"
 
 #: pcb_calculator/transline_ident.cpp:121
 #: pcb_calculator/transline_ident.cpp:164
@@ -30973,14 +30916,12 @@ msgid "Effective %s (odd):"
 msgstr "유효 %s (odd):"
 
 #: pcb_calculator/transline_ident.cpp:308
-#, fuzzy
 msgid "Unit propagation delay (even):"
-msgstr "전파 지연"
+msgstr "단위 전달 지연 (짝수):"
 
 #: pcb_calculator/transline_ident.cpp:309
-#, fuzzy
 msgid "Unit propagation delay (odd):"
-msgstr "전파 지연"
+msgstr "단위 전달 지연 (홀수):"
 
 #: pcb_calculator/transline_ident.cpp:310
 msgid "Conductor losses (even):"
@@ -35755,9 +35696,8 @@ msgid "By layer:"
 msgstr "이 레이어로:"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:97
-#, fuzzy
 msgid "By parent reference designator:"
-msgstr "참조 지정자 시작:"
+msgstr "상위 참조 지시자별:"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:103
 #, fuzzy
@@ -37712,7 +37652,7 @@ msgstr "이 규칙 영역에 대해서 DRC 규칙에서 사용될 고유 이름"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:86
 msgid "Distance between parallel lines used for hatching the area"
-msgstr ""
+msgstr "영역을 해칭할 때 사용하는 평행선 간 거리"
 
 #: pcbnew/dialogs/dialog_set_offset.cpp:66
 msgid "Reset this value to zero."
@@ -37985,22 +37925,20 @@ msgstr "테두리 스타일:"
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:546
 #, c-format
 msgid "Applying these changes will short net %s with %s."
-msgstr ""
+msgstr "이 변경 사항을 적용하면 네트 %s와 %s가 단락됩니다."
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:552
 #, c-format
 msgid "Applying these changes will short net %s with other nets."
-msgstr ""
+msgstr "이 변경 사항을 적용하면 %s 네트가 다른 네트들과 단락됩니다."
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:557
-#, fuzzy
 msgid "Apply Anyway"
-msgstr "강제로 추가"
+msgstr "그래도 적용"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:557
-#, fuzzy
 msgid "Cancel Changes"
-msgstr "변경을 취소 하겠습니까?"
+msgstr "변경 취소"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:571
 #, c-format
@@ -38040,7 +37978,7 @@ msgstr "트랙/비아 속성 편집"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:41
 msgid "Automatically update via nets"
-msgstr "네트워크를 통해 자동 업데이트"
+msgstr "비아 네트 자동 업데이트"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:42
 msgid ""
@@ -38327,9 +38265,8 @@ msgid "Update footprint fields from symbols"
 msgstr "풋프린트 %s을(를) '%s'에서 '%s'(으)로 업데이트"
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:68
-#, fuzzy
 msgid "Remove footprint fields not found in symbols"
-msgstr "심볼에 없는 %s 풋프린트 필드 제거."
+msgstr "심볼에서 찾을 수 없는 풋프린트 필드 제거"
 
 #: pcbnew/dialogs/dialog_update_pcb_base.h:56
 msgid "Update PCB from Schematic"
@@ -41943,9 +41880,9 @@ msgid "Checking board footprints against library..."
 msgstr "라이브러리에 대한 보드 풋프린트 확인 중..."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:908
-#, fuzzy, c-format
+#, c-format
 msgid "The footprint library '%s' was not found at '%s'."
-msgstr "풋프린트 라이브러리 '%s'을(를) 찾을 수 없음."
+msgstr "‘%s’ 풋프린트 라이브러리를 ‘%s’에서 찾을 수 없습니다."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:958
 #, c-format
@@ -42224,16 +42161,17 @@ msgid "Generate IPC-D-356 netlist file"
 msgstr "IPC-D-356 네트리스트 파일 생성"
 
 #: pcbnew/exporters/export_d356.cpp:406
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "IPC-D-356 netlist file created:\n"
 "'%s'."
-msgstr "IPC-D-356 네트리스트 파일..."
+msgstr ""
+"IPC-D-356 넷리스트 파일이 생성되었습니다.:\n"
+"'%s'"
 
 #: pcbnew/exporters/export_d356.cpp:407
-#, fuzzy
 msgid "IPC-D-356 Netlist File"
-msgstr "IPC-D-356 네트리스트 파일..."
+msgstr "IPC-D-356 네트리스트 파일"
 
 #: pcbnew/exporters/export_footprint_associations.cpp:73
 msgid "Save Footprint Association File"
@@ -42303,16 +42241,17 @@ msgid ""
 msgstr ""
 
 #: pcbnew/exporters/step/exporter_step.cpp:403
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Could not add 3D model for %s.\n"
 "OpenCASCADE error: %s\n"
-msgstr "%s에 연결할 수 없습니다. 오류: %s"
+msgstr ""
+"%s에 3D 모델을 추가할 수 없습니다.\n"
+"OpenCASCADE 오류: %s\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:801
-#, fuzzy
 msgid "Could not create PCB solid model.\n"
-msgstr "BOM 출력 '%s'를 만들 수 없음."
+msgstr "PCB 솔리드 모델을 생성할 수 없습니다.\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:855
 msgid ""
@@ -42379,14 +42318,14 @@ msgid "Could not add shape (%d points) to copper layer %s.\n"
 msgstr ""
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1161
-#, fuzzy, c-format
+#, c-format
 msgid "No model defined for %s.\n"
-msgstr "심볼 %s에 대해 지정된 풋프린트가 없음."
+msgstr "%s에 대한 모델이 정의되지 않았습니다.\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1176
-#, fuzzy, c-format
+#, c-format
 msgid "No model for filename '%s'.\n"
-msgstr "'%s'에 '%s'라는 모델 이름이 없음."
+msgstr "파일 이름 '%s'에 대한 모델이 없습니다.\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1187
 #, fuzzy, c-format
@@ -42394,9 +42333,9 @@ msgid "No location data for filename '%s'.\n"
 msgstr "위치 데이터를 '%s'에 저장함.\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1197
-#, fuzzy, c-format
+#, c-format
 msgid "Could not add component with filename '%s'.\n"
-msgstr "IBIS 모델을 찾을 수 없습니다’ %s‘"
+msgstr "파일명 '%s'인 컴포넌트를 추가할 수 없습니다.\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1367
 #, c-format
@@ -42441,20 +42380,22 @@ msgid "OCC exception creating wire: %s\n"
 msgstr ""
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1661
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Wire not done (contour points %d): OCC error %d\n"
 "z: %g; bounding box: %s\n"
-msgstr "배선이 완료되지 않음(도형 점 %d): OCC 오류 %d\n"
+msgstr ""
+"배선 미완료 (윤곽 점 %d): OCC 오류 %d\n"
+"z: %g; 경계 상자: %s\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1675
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Wire self-interference check failed\n"
 "z: %g; bounding box: %s\n"
 msgstr ""
-"\n"
-"와이어 자체 간섭 검사 실패\n"
+"와이어 자기 간섭 검사 실패\n"
+"z: %g; 경계 상자: %s\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1697
 msgid "Using non-simplified polygon.\n"
@@ -42471,9 +42412,8 @@ msgstr "** 얼굴 건너뛰기 **\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1864
 #: pcbnew/exporters/step/step_pcb_model.cpp:1881
-#, fuzzy
 msgid "OCC error creating main outline.\n"
-msgstr "파일을 읽는 중에 오류가 발생하였습니다."
+msgstr "주 윤곽선을 생성하는 중 OCC 오류가 발생하였습니다.\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1890
 msgid "OCC error creating hole in main outline.\n"
@@ -42487,9 +42427,7 @@ msgstr "%s에 구멍 만들기\n"
 #: pcbnew/exporters/step/step_pcb_model.cpp:1976
 #, fuzzy, c-format
 msgid "** Got problems while cutting %s net '%s' **\n"
-msgstr ""
-"\n"
-"** %s 번호 %d를 절단 중 문제 발생 **\n"
+msgstr "** '%s'('%s' 넷) 자르는 중 문제 발생 **\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2029
 msgid "shapes"
@@ -42509,9 +42447,9 @@ msgstr "비아"
 #: pcbnew/exporters/step/step_pcb_model.cpp:3102
 #: pcbnew/exporters/step/step_pcb_model.cpp:3176
 #: pcbnew/exporters/step/step_pcb_model.cpp:3245
-#, fuzzy, c-format
+#, c-format
 msgid "No valid PCB assembly; cannot create output file '%s'.\n"
-msgstr "출력 디렉토리 '%s'을(를) 생성할 수 없습니다."
+msgstr "유효한 PCB 어셈블리가 없습니다. '%s' 출력 파일을 만들 수 없습니다.\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2322
 msgid "Failed to set STEP product name, but will attempt to continue."
@@ -42525,19 +42463,19 @@ msgstr ""
 #: pcbnew/exporters/step/step_pcb_model.cpp:3153
 #: pcbnew/exporters/step/step_pcb_model.cpp:3226
 #: pcbnew/exporters/step/step_pcb_model.cpp:3275
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot rename temporary file '%s' to '%s'.\n"
-msgstr "임시 파일 '%s'의 이름을 '%s'(으)로 변경할 수 없음"
+msgstr "'%s' 임시 파일 이름을 '%s'(으)로 변경할 수 없음.\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2822
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot identify actual file type for '%s'.\n"
-msgstr "네트리스트 파일 '%s'을(를) 열 수 없습니다."
+msgstr "'%s'에 대한 실제 파일 유형을 식별할 수 없습니다.\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2832
-#, fuzzy, c-format
+#, c-format
 msgid "Could not transfer model data from file '%s'.\n"
-msgstr "값' %s'에서 모델 유추에 실패"
+msgstr "'%s' 파일에서 모델 데이터를 전송할 수 없습니다.\n"
 
 #: pcbnew/files.cpp:152
 msgid "All KiCad Board Files"
@@ -46703,9 +46641,8 @@ msgid "Successfully created IPC-D-356 file\n"
 msgstr "성공적으로 genCAD 파일을 생성함\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:2236
-#, fuzzy
 msgid "Failed to create IPC-D-356 file\n"
-msgstr "파일을 생성하지 못했습니다."
+msgstr "IPC-D-356 파일을 생성하지 못했음\n"
 
 #: pcbnew/pcbnew_printout.cpp:124
 msgid "Multiple Layers"
@@ -47717,9 +47654,9 @@ msgid "Physical Clearances"
 msgstr "물리적 공간거리"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1260
-#, fuzzy, c-format
+#, c-format
 msgid "No 'physical_clearance' constraints in effect on %s."
-msgstr "정의된 '물리적 공간거리' 제약 조건이 없음."
+msgstr "%s에 '물리적 간격' 제약 조건이 적용되어 있지 않음."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1279
 #, fuzzy
@@ -50573,9 +50510,8 @@ msgid "Colliding Courtyards"
 msgstr "부품자리"
 
 #: pcbnew/widgets/appearance_controls.cpp:351
-#, fuzzy
 msgid "Show colliding footprint courtyards"
-msgstr "풋프린트 부품자리 모으는 중..."
+msgstr "충돌하는 풋프린트 경계 표시"
 
 #: pcbnew/widgets/appearance_controls.cpp:352
 msgid "Show drawing sheet borders and title block"
@@ -51457,9 +51393,9 @@ msgid "Rule Area %s"
 msgstr "규칙 영역 %s"
 
 #: pcbnew/zone.cpp:1113
-#, fuzzy, c-format
+#, c-format
 msgid "Rule Area '%s' %s"
-msgstr "규칙 영역 %s"
+msgstr "규칙 영역 '%s' %s"
 
 #: pcbnew/zone.cpp:1120
 #, c-format
@@ -51467,9 +51403,9 @@ msgid "Teardrop %s %s"
 msgstr "티어드롭 %s %s"
 
 #: pcbnew/zone.cpp:1128
-#, fuzzy, c-format
+#, c-format
 msgid "Zone %s %s, priority %d"
-msgstr "정의된 영역 우선도:"
+msgstr "영역 %s %s, 우선순위 %d"
 
 #: pcbnew/zone.cpp:1135
 #, c-format
