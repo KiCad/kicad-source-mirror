@@ -215,7 +215,7 @@ bool PCB_PLOTTER::Plot( const wxString& aOutputPath,
             if( m_plotOpts.GetFormat() == PLOT_FORMAT::PDF && m_plotOpts.m_PDFSingle
                 && i != layersToPlot.size() - 1 )
             {
-                wxString     pageNumber = wxString::Format( "%zu", pageNum + 1 );
+                wxString     pageNumber = wxString::Format( "%d", pageNum + 1 );
                 size_t       nextI = i + 1;
                 PCB_LAYER_ID nextLayer = layersToPlot[nextI];
 
