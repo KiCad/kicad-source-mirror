@@ -38,7 +38,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-06-01 20:42+0300\n"
-"PO-Revision-Date: 2025-06-03 08:04+0000\n"
+"PO-Revision-Date: 2025-06-04 09:01+0000\n"
 "Last-Translator: DevAny <devany.kr@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
@@ -12873,14 +12873,12 @@ msgid "By parent reference designator:"
 msgstr "상위 참조 지시자별:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:107
-#, fuzzy
 msgid "By parent symbol library id:"
-msgstr "상위 심볼 라이브러리 ID로 항목 필터링:"
+msgstr "상위 심볼 라이브러리 ID별:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:113
-#, fuzzy
 msgid "By parent symbol type:"
-msgstr "상위 심볼 유형별로 항목 필터링:"
+msgstr "상위 심볼 유형별:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:116
 msgid "Non-power symbols"
@@ -13146,9 +13144,8 @@ msgid "Enter the text to be used within the schematic"
 msgstr "회로도 내에서 사용할 텍스트 입력"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:62
-#, fuzzy
 msgid "Multiple label input"
-msgstr "여러 레이어"
+msgstr "다중 레이블 입력"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:68
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:42
@@ -13322,7 +13319,6 @@ msgid "True"
 msgstr "참"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:57
-#, fuzzy
 msgid "False"
 msgstr "거짓"
 
@@ -13396,9 +13392,8 @@ msgstr "'%s' 값을 올바르게 불리언으로 변환할 수 없어 '거짓'�
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:1006
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:1566
-#, fuzzy
 msgid "Select pin data file"
-msgstr "파일 선택"
+msgstr "핀 데이터 파일 선택"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:1032
 #, c-format
@@ -13471,24 +13466,20 @@ msgid "Export"
 msgstr "내보내기"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:138
-#, fuzzy
 msgid "Export all pins"
-msgstr "네트리스트 내보내기"
+msgstr "모든 핀 내보내기"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:141
-#, fuzzy
 msgid "Export only shown pins"
-msgstr "풋프린트 내보내기"
+msgstr "보여지는 핀만 내보내기"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:147
-#, fuzzy
 msgid "To File..."
-msgstr "파일 커밋..."
+msgstr "파일로..."
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:150
-#, fuzzy
 msgid "To Clipboard"
-msgstr "클립보드"
+msgstr "클립보드로"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:163
 #: eeschema/menubar.cpp:100 eeschema/symbol_editor/menubar_symbol_editor.cpp:67
@@ -13497,24 +13488,20 @@ msgid "Import"
 msgstr "가져오기"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:168
-#, fuzzy
 msgid "Replace all existing pins"
-msgstr "기존 배치 규칙 영역 교체"
+msgstr "기존 핀 모두 교체"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:171
-#, fuzzy
 msgid "Append to existing pins"
-msgstr "이미 존재하는 도면 시트 추가하기"
+msgstr "기존 핀에 추가"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:180
-#, fuzzy
 msgid "From File..."
-msgstr "파일 커밋..."
+msgstr "파일에서..."
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:183
-#, fuzzy
 msgid "From Clipboard"
-msgstr "클립보드로 내보내기"
+msgstr "클립보드에서"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:200
 msgid "Filter by unit:"
@@ -13523,12 +13510,12 @@ msgstr "유닛 필터링:"
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:208
 #, fuzzy
 msgid "Filter by body style:"
-msgstr "크기별로 비아를 필터링함:"
+msgstr "본체 스타일로 필터:"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:216
 #, fuzzy
 msgid "Filter by selection"
-msgstr "삭제 선택"
+msgstr "선택별 필터"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:248
 msgid "Group by name"
@@ -13761,9 +13748,8 @@ msgstr ""
 "이들은 BOM에 포함되지 않으며, 풋프린트 할당이 불가능합니다."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:203
-#, fuzzy
 msgid "Define as local power symbol"
-msgstr "전원 심볼으로 정의"
+msgstr "로컬 전원 심볼로 정의"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:204
 msgid ""
@@ -13889,29 +13875,24 @@ msgid "Jumper Pin Groups"
 msgstr "점퍼 핀 그룹"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:370
-#, fuzzy
 msgid "Available pins"
-msgstr "사용 가능한 경로 :"
+msgstr "사용 가능한 핀"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:386
-#, fuzzy
 msgid "Create jumper group from the selected pins"
-msgstr "구리 영역 생성"
+msgstr "선택한 핀에서 점퍼 그룹 생성하기"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:391
-#, fuzzy
 msgid "Remove the selected jumper pin group"
-msgstr "선택한 사용자 지정 그룹 제거"
+msgstr "선택한 점퍼 핀 그룹 제거하기"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:401
-#, fuzzy
 msgid "Grouped pins"
-msgstr "그룹화"
+msgstr "그룹화된 핀"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:423
-#, fuzzy
 msgid "Pin Connections"
-msgstr "패드 연결"
+msgstr "핀 연결"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:436
 msgid "Edit Simulation Model..."
@@ -14500,9 +14481,8 @@ msgid "Whole &words only"
 msgstr "전체 단어만(&w)"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:90
-#, fuzzy
 msgid "Regular Expression"
-msgstr "잘못된 식"
+msgstr "정규 표현식"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:93
 msgid "Search pin &names and numbers"
@@ -14510,9 +14490,8 @@ msgstr "핀 이름 또는 번호 찾기 (&n)"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:96
 #: pcbnew/dialogs/dialog_find_base.cpp:92
-#, fuzzy
 msgid "Include &hidden fields"
-msgstr "숨은 필드 포함"
+msgstr "숨겨진 필드 포함(&H)"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:99
 msgid "Search the current &sheet only"
@@ -15540,14 +15519,12 @@ msgid "Show datasheet in browser"
 msgstr "브라우저에서 데이터 시트 보기"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:197
-#, fuzzy
 msgid "Column Label"
-msgstr "%d 열 테이블"
+msgstr "열 레이블"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:202
-#, fuzzy
 msgid "Show Column"
-msgstr "열 표시/숨김"
+msgstr "열 표시"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:203
 msgid "Group By"
@@ -16450,9 +16427,8 @@ msgstr "끝점 또는 시작점 방향 유지"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:50
 #: pcbnew/dialogs/panel_edit_options_base.cpp:63
-#, fuzzy
 msgid "Keep center and radius, adjust endpoints"
-msgstr "중심 유지, 반경 조정"
+msgstr "중심과 반지름은 유지하고, 끝점을 조정"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:56
 msgid "Mouse drag performs Drag (G) operation"
