@@ -1376,6 +1376,9 @@ void PCB_IO_KICAD_SEXPR_PARSER::parseHeader()
 
     m_tooRecent = ( m_requiredVersion > SEXPR_BOARD_FILE_VERSION );
 
+    // Prior to this, bar was a valid string char for unquoted strings.
+    SetKnowsBar( m_requiredVersion >= 20240706 );
+
     m_board->SetFileFormatVersionAtLoad( m_requiredVersion );
 }
 
