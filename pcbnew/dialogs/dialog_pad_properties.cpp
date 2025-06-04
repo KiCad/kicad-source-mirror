@@ -157,7 +157,6 @@ DIALOG_PAD_PROPERTIES::DIALOG_PAD_PROPERTIES( PCB_BASE_FRAME* aParent, PAD* aPad
     m_posX.SetCoordType( ORIGIN_TRANSFORMS::ABS_X_COORD );
     m_posY.SetCoordType( ORIGIN_TRANSFORMS::ABS_Y_COORD );
 
-    m_padNetSelector->SetBoard( m_board );
     m_padNetSelector->SetNetInfo( &m_board->GetNetInfo() );
 
     m_cbShowPadOutline->SetValue( m_sketchPreview );

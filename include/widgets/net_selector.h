@@ -36,16 +36,13 @@ class NET_SELECTOR : public FILTER_COMBOBOX
 public:
     // Note: this list of arguments is here because it keeps us from having to customize
     // the constructor calls in wxFormBuilder.
-    NET_SELECTOR( wxWindow *parent, wxWindowID id,
-                  const wxPoint &pos = wxDefaultPosition, const wxSize &size = wxDefaultSize,
-                  long style = 0 );
+    NET_SELECTOR( wxWindow *parent, wxWindowID id, const wxPoint &pos = wxDefaultPosition,
+                  const wxSize &size = wxDefaultSize, long style = 0 );
 
     void SetNetInfo( const NETINFO_LIST* aNetInfoList );
 
     // Set to wxEmptyString to disallow indeterminate settings
     void SetIndeterminateString( const wxString& aString );
-
-    void SetBoard( BOARD* aBoard );
 
     void SetSelectedNetcode( int aNetcode );
     void SetSelectedNet( const wxString& aNetname );
@@ -55,8 +52,12 @@ public:
     int GetSelectedNetcode();
     wxString GetSelectedNetname();
 
-protected:
+    void SetSelectedString( const wxString& aString ) override
+    {
+        wxFAIL_MSG( "Unsupported; use SetSelectedNet() or SetSelectedNetcode()" );
+    }
 
+protected:
     NET_SELECTOR_COMBOPOPUP* m_netSelectorPopup;
     wxString                 m_indeterminateString;
 };

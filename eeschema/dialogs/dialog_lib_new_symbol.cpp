@@ -53,12 +53,10 @@ DIALOG_LIB_NEW_SYMBOL::DIALOG_LIB_NEW_SYMBOL( EDA_DRAW_FRAME*      aParent,
         for( const wxString& name : aSymbolNames )
             escapedNames.Add( UnescapeString( name ) );
 
-        m_comboInheritanceSelect->SetSymbolList( escapedNames );
+        m_comboInheritanceSelect->SetStringList( escapedNames );
 
         if( !aInheritFromSymbolName.IsEmpty() )
-        {
-            m_comboInheritanceSelect->SetSelectedSymbol( aInheritFromSymbolName );
-        }
+            m_comboInheritanceSelect->SetSelectedString( aInheritFromSymbolName );
     }
 
     // Trigger the event handler to show/hide the info bar message.

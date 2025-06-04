@@ -156,7 +156,6 @@ void DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::onUnitsChanged( wxCommandEvent& aEvent 
 void DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::buildFilterLists()
 {
     // Populate the net filter list with net names
-    m_netFilter->SetBoard( m_brd );
     m_netFilter->SetNetInfo( &m_brd->GetNetInfo() );
 
     if( !m_brd->GetHighLightNetCodes().empty() )

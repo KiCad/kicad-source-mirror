@@ -23,8 +23,8 @@
 
 #include "widgets/symbol_filter_combobox.h"
 
-
 #include <iostream>
+
 
 static const wxString kNoParentSymbol( "<do not derive>" );
 
@@ -33,78 +33,26 @@ class SYMBOL_FILTER_COMBOPOPUP : public FILTER_COMBOPOPUP
 public:
     SYMBOL_FILTER_COMBOPOPUP() {}
 
-    wxString GetStringValue() const override { return m_selectedSymbol; }
-
-    void SetSelectedSymbol( const wxString& aSymbolName )
-    {
-        m_selectedSymbol = aSymbolName;
-        GetComboCtrl()->SetValue( m_selectedSymbol );
-    }
-
-    void Accept() override
-    {
-        wxString selectedSymbol = getSelectedValue().value_or( wxEmptyString );
-
-        Dismiss();
-
-        // No update on empty
-        if( !selectedSymbol.IsEmpty() && selectedSymbol != m_selectedSymbol )
-        {
-            m_selectedSymbol = selectedSymbol;
-            GetComboCtrl()->SetValue( m_selectedSymbol );
-
-            wxCommandEvent changeEvent( FILTERED_ITEM_SELECTED );
-            wxPostEvent( GetComboCtrl(), changeEvent );
-        }
-    }
-
-    void SetSymbolList( const wxArrayString& aSymbolList )
-    {
-        m_symbolList = aSymbolList;
-        m_symbolList.Sort();
-        rebuildList();
-    }
-
 private:
     void getListContent( wxArrayString& aListContent ) override
     {
+        FILTER_COMBOPOPUP::getListContent( aListContent );
+
         const wxString filterString = getFilterValue();
 
-        // Special handling for <no net>
+        // Special handling for <do not derive>
         if( filterString.IsEmpty() || kNoParentSymbol.Lower().Matches( filterString ) )
             aListContent.insert( aListContent.begin(), kNoParentSymbol );
-
-        // Simple substring, case-insensitive search
-        for( const wxString& symbol : m_symbolList )
-        {
-            if( filterString.IsEmpty() || symbol.Lower().Contains( filterString.Lower() ) )
-                aListContent.push_back( symbol );
-        }
     }
-
-    wxString      m_selectedSymbol;
-    wxArrayString m_symbolList;
 };
 
 
 SYMBOL_FILTER_COMBOBOX::SYMBOL_FILTER_COMBOBOX( wxWindow* parent, wxWindowID id, const wxPoint& pos,
                                                 const wxSize& size, long style ) :
-        FILTER_COMBOBOX( parent, id, pos, size, style )
+        FILTER_COMBOBOX( parent, id, pos, size, style|wxCB_READONLY )
 {
     m_selectorPopup = new SYMBOL_FILTER_COMBOPOPUP();
     setFilterPopup( m_selectorPopup );
-}
-
-
-void SYMBOL_FILTER_COMBOBOX::SetSymbolList( const wxArrayString& aSymbolList )
-{
-    m_selectorPopup->SetSymbolList( aSymbolList );
-}
-
-
-void SYMBOL_FILTER_COMBOBOX::SetSelectedSymbol( const wxString& aSymbolName )
-{
-    m_selectorPopup->SetSelectedSymbol( aSymbolName );
 }
 
 

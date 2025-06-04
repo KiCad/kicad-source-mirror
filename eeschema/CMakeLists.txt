@@ -280,8 +280,8 @@ set( EESCHEMA_WIDGETS
     widgets/panel_sch_selection_filter_base.cpp
     widgets/panel_sch_selection_filter.cpp
     widgets/panel_symbol_chooser.cpp
-        widgets/pinshape_combobox.cpp
-        widgets/pintype_combobox.cpp
+    widgets/pinshape_combobox.cpp
+    widgets/pintype_combobox.cpp
     widgets/symbol_diff_widget.cpp
     widgets/sch_design_block_pane.cpp
     widgets/sch_design_block_preview_widget.cpp
