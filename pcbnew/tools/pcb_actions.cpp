@@ -2055,7 +2055,8 @@ TOOL_ACTION PCB_ACTIONS::boardStatistics( TOOL_ACTION_ARGS()
         .Name( "pcbnew.InspectionTool.ShowBoardStatistics" )
         .Scope( AS_GLOBAL )
         .FriendlyName( _( "Show Board Statistics" ) )
-        .Tooltip( _( "Shows board statistics" ) ) );
+        .Tooltip( _( "Shows board statistics" ) )
+        .Icon( BITMAPS::editor ) );
 
 TOOL_ACTION PCB_ACTIONS::inspectClearance( TOOL_ACTION_ARGS()
         .Name( "pcbnew.InspectionTool.InspectClearance" )
@@ -2105,7 +2106,8 @@ TOOL_ACTION PCB_ACTIONS::repairFootprint( TOOL_ACTION_ARGS()
         .Name( "pcbnew.ModuleEditor.repairFootprint" )
         .Scope( AS_GLOBAL )
         .FriendlyName( _( "Repair Footprint" ) )
-        .Tooltip( _( "Run various diagnostics and attempt to repair footprint" ) ) );
+        .Tooltip( _( "Run various diagnostics and attempt to repair footprint" ) )
+        .Icon( BITMAPS::rescue ) );
 
 
 // PLACEMENT_TOOL
