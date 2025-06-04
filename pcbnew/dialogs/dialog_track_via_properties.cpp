@@ -365,7 +365,6 @@ DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_EDIT_FRAME* a
         m_ViaEndLayer->SetLayerSelection( selection_last_layer );
     }
 
-    m_netSelector->SetBoard( aParent->GetBoard() );
     m_netSelector->SetNetInfo( &aParent->GetBoard()->GetNetInfo() );
 
     if ( net >= 0 )

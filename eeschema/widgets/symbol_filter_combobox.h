@@ -37,13 +37,8 @@ public:
     SYMBOL_FILTER_COMBOBOX( wxWindow* parent, wxWindowID id, const wxPoint& pos = wxDefaultPosition,
                             const wxSize& size = wxDefaultSize, long style = 0 );
 
-    void SetSymbolList( const wxArrayString& aSymbolList );
-
-    void SetSelectedSymbol( const wxString& aSymbolName );
-
     wxString GetValue() const override;
 
 protected:
     SYMBOL_FILTER_COMBOPOPUP* m_selectorPopup;
-    // wxString                 m_indeterminateString;
 };

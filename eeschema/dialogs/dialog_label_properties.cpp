@@ -27,6 +27,7 @@
 #include <widgets/font_choice.h>
 #include <widgets/std_bitmap_button.h>
 #include <widgets/color_swatch.h>
+#include <widgets/filter_combobox.h>
 #include <settings/color_settings.h>
 #include <sch_edit_frame.h>
 #include <tool/tool_manager.h>
@@ -260,10 +261,6 @@ DIALOG_LABEL_PROPERTIES::DIALOG_LABEL_PROPERTIES( SCH_EDIT_FRAME* aParent,
         if( cfg->m_Appearance.edit_label_width > 0 && cfg->m_Appearance.edit_label_height > 0 )
             SetSize( cfg->m_Appearance.edit_label_width, cfg->m_Appearance.edit_label_height );
     }
-
-    // Bind the event to handle filtering
-    m_valueCombo->Bind( wxEVT_TEXT, &DIALOG_LABEL_PROPERTIES::OnLabelFilter, this );
-    m_valueCombo->Bind( wxEVT_COMBOBOX, &DIALOG_LABEL_PROPERTIES::OnLabelItemSelected, this );
 }
 
 
@@ -285,9 +282,6 @@ DIALOG_LABEL_PROPERTIES::~DIALOG_LABEL_PROPERTIES()
 
     if( m_helpWindow )
         m_helpWindow->Destroy();
-
-    m_valueCombo->Unbind( wxEVT_TEXT, &DIALOG_LABEL_PROPERTIES::OnLabelFilter, this );
-    m_valueCombo->Unbind( wxEVT_COMBOBOX, &DIALOG_LABEL_PROPERTIES::OnLabelItemSelected, this );
 }
 
 
@@ -296,15 +290,15 @@ bool DIALOG_LABEL_PROPERTIES::TransferDataToWindow()
     if( !wxDialog::TransferDataToWindow() )
         return false;
 
+    wxString text;
+
     if( m_activeTextEntry )
     {
         // show control characters in a human-readable format
-        wxString text = UnescapeString( m_currentLabel->GetText() );
+        text = UnescapeString( m_currentLabel->GetText() );
 
         // show text variable cross-references in a human-readable format
         text = m_currentLabel->Schematic()->ConvertKIIDsToRefs( text );
-
-        m_activeTextEntry->SetValue( text );
     }
 
     if( m_currentLabel->Type() == SCH_GLOBAL_LABEL_T || m_currentLabel->Type() == SCH_LABEL_T )
@@ -348,7 +342,12 @@ bool DIALOG_LABEL_PROPERTIES::TransferDataToWindow()
         for( const wxString& label : existingLabels )
             m_existingLabelArray.push_back( label );
 
-        m_valueCombo->Append( m_existingLabelArray );
+        m_valueCombo->SetStringList( m_existingLabelArray );
+        m_valueCombo->SetSelectedString( text );
+    }
+    else if( m_activeTextEntry )
+    {
+        m_activeTextEntry->SetValue( text );
     }
 
     // Push a copy of each field into m_updateFields
@@ -913,98 +912,6 @@ void DIALOG_LABEL_PROPERTIES::OnSizeGrid( wxSizeEvent& event )
 
     // Always propagate for a grid repaint (needed if the height changes, as well as width)
     event.Skip();
-}
-
-
-/**
- * Handles the filtering of items in the wxComboBox based on user input.
- *
- * This function is triggered by the wxEVT_TEXT event whenever the user types
- * or modifies the text in the combo box. It filters the dropdown list
- * to show only those items that match the user's input.
- *
- * Key Steps:
- * - Prevents re-entry using a static flag `isFiltering` to avoid recursion
- *   caused by wxComboBox events triggered during item updates.
- * - Compares the current input with the previously entered text to avoid
- *   unnecessary filtering if the text hasn't changed.
- * - Filters the items from `m_existingLabelArray` to match the user's input.
- * - Updates the combo box with the filtered items while preserving the user's
- *   input and cursor position.
- *
- * @param event The wxCommandEvent associated with the wxEVT_TEXT event.
- */
-void DIALOG_LABEL_PROPERTIES::OnLabelFilter( wxCommandEvent& event )
-{
-    static bool isFiltering = false;
-
-    if( isFiltering )
-        return;
-
-    isFiltering = true;
-
-    wxString currentLabelText = m_valueCombo->GetValue();
-
-    // Check if the text has changed compared to the previous value
-    if( currentLabelText.length() > m_previousLabelText.length() )
-    {
-        long insertionPoint = m_valueCombo->GetInsertionPoint();
-
-        wxArrayString filteredLabels;
-
-        if( currentLabelText.IsEmpty() )
-        {
-            filteredLabels = m_existingLabelArray;
-        }
-        else
-        {
-            wxString filterText = currentLabelText.Lower();
-
-            std::copy_if( m_existingLabelArray.begin(), m_existingLabelArray.end(),
-                          std::back_inserter( filteredLabels ),
-                          [&filterText]( const wxString& label )
-                          {
-                              return label.Lower().Contains( filterText );
-                          } );
-        }
-
-        m_valueCombo->Freeze();
-        m_valueCombo->Clear();
-        m_valueCombo->Append( filteredLabels );
-        m_valueCombo->Thaw();
-
-        m_valueCombo->ChangeValue( currentLabelText );
-        m_valueCombo->SetInsertionPoint( insertionPoint );
-
-        if( filteredLabels.size() > 0 && !currentLabelText.empty() )
-        {
-            wxString filterText = currentLabelText.Lower();
-
-            auto it = std::find_if( filteredLabels.begin(), filteredLabels.end(),
-                                    [&filterText]( const wxString& label )
-                                    {
-                                        return label.Lower().StartsWith( filterText );
-                                    } );
-
-            if( it != filteredLabels.end() )
-            {
-                wxString suggestion = *it;
-                m_valueCombo->ChangeValue( suggestion );
-                m_valueCombo->SetInsertionPoint( filterText.length() );
-                m_valueCombo->SetSelection( filterText.length(), suggestion.length() );
-            }
-        }
-    }
-
-    m_previousLabelText = currentLabelText;
-    isFiltering = false;
-}
-
-
-void DIALOG_LABEL_PROPERTIES::OnLabelItemSelected( wxCommandEvent& event )
-{
-    wxString selectedValue = m_valueCombo->GetValue();
-    m_previousLabelText = selectedValue;
 }
 
 

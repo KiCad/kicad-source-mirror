@@ -101,7 +101,6 @@ DIALOG_CLEANUP_TRACKS_AND_VIAS::~DIALOG_CLEANUP_TRACKS_AND_VIAS()
 void DIALOG_CLEANUP_TRACKS_AND_VIAS::buildFilterLists()
 {
     // Populate the net filter list with net names
-    m_netFilter->SetBoard( m_brd );
     m_netFilter->SetNetInfo( &m_brd->GetNetInfo() );
 
     if( !m_brd->GetHighLightNetCodes().empty() )

@@ -46,7 +46,12 @@ public:
 
     wxWindow* GetControl() override { return this; }
 
+    void SetStringList( const wxArrayString& aStringList );
+
+    wxString GetStringValue() const override;
     void SetStringValue( const wxString& aNetName ) override;
+
+    void SetSelectedString( const wxString& aString );
 
     void OnPopup() override;
 
@@ -54,7 +59,7 @@ public:
 
     wxSize GetAdjustedSize( int aMinWidth, int aPrefHeight, int aMaxHeight ) override;
 
-    virtual void Accept() = 0;
+    virtual void Accept();
 
 protected:
     /**
@@ -68,16 +73,16 @@ protected:
     wxString getFilterValue() const;
 
     /**
+     * Fill the combobox list
+     */
+    virtual void getListContent( wxArrayString& aStringList );
+
+    /**
      * Call this to rebuild the list from the getListContent() method.
      */
     void rebuildList();
 
 private:
-    /**
-     * Implement this to fill in the given list.
-     */
-    virtual void getListContent( wxArrayString& aListToFill ) = 0;
-
     wxSize updateSize();
 
     void onIdle( wxIdleEvent& aEvent );
@@ -98,7 +103,10 @@ protected:
     int              m_minPopupWidth;
     int              m_maxPopupHeight;
 
-    wxEvtHandler* m_focusHandler;
+    wxEvtHandler*    m_focusHandler;
+
+    wxString         m_selectedString;
+    wxArrayString    m_stringList;
 };
 
 
@@ -113,10 +121,20 @@ wxDECLARE_EVENT( FILTERED_ITEM_SELECTED, wxCommandEvent );
 class FILTER_COMBOBOX : public wxComboCtrl
 {
 public:
+    // C'tor matching wxFormBuilder's Custom Control
     FILTER_COMBOBOX( wxWindow* parent, wxWindowID id, const wxPoint& pos = wxDefaultPosition,
                      const wxSize& size = wxDefaultSize, long style = 0 );
 
+    // C'tor matching wxFormBuilder's ComboxBox.
+    FILTER_COMBOBOX( wxWindow* parent, wxWindowID id, const wxString& value,
+                     const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
+                     int count = 0, wxString strings[] = nullptr, long style = 0 );
+
     ~FILTER_COMBOBOX();
+
+    virtual void SetStringList( const wxArrayString& aStringList );
+
+    virtual void SetSelectedString( const wxString& aString );
 
 protected:
     void setFilterPopup( FILTER_COMBOPOPUP* aPopup );

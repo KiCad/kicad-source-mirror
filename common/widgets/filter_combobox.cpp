@@ -38,8 +38,8 @@ wxDEFINE_EVENT( FILTERED_ITEM_SELECTED, wxCommandEvent );
 
 #if defined( __WXOSX_MAC__ )
     #define POPUP_PADDING 2
-    #define LIST_ITEM_PADDING 5
-    #define LIST_PADDING 5
+    #define LIST_ITEM_PADDING 2
+    #define LIST_PADDING 7
 #elif defined( __WXMSW__ )
     #define POPUP_PADDING 0
     #define LIST_ITEM_PADDING 2
@@ -81,33 +81,53 @@ bool FILTER_COMBOPOPUP::Create( wxWindow* aParent )
 
     m_listBox = new wxListBox( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0, nullptr,
                                wxLB_SINGLE | wxLB_NEEDED_SB );
-    mainSizer->Add( m_listBox, 0, wxEXPAND | wxTOP, 2 );
+    mainSizer->Add( m_listBox, 1, wxEXPAND | wxTOP, 2 );
 
     SetSizer( mainSizer );
     Layout();
 
     Connect( wxEVT_IDLE, wxIdleEventHandler( FILTER_COMBOPOPUP::onIdle ), nullptr, this );
     Connect( wxEVT_CHAR_HOOK, wxKeyEventHandler( FILTER_COMBOPOPUP::onKeyDown ), nullptr, this );
-    Connect( wxEVT_LEFT_DOWN, wxMouseEventHandler( FILTER_COMBOPOPUP::onMouseClick ), nullptr,
-             this );
-    m_listBox->Connect( wxEVT_LEFT_DOWN, wxMouseEventHandler( FILTER_COMBOPOPUP::onMouseClick ),
-                        nullptr, this );
-    m_filterCtrl->Connect( wxEVT_TEXT, wxCommandEventHandler( FILTER_COMBOPOPUP::onFilterEdit ),
-                           nullptr, this );
-    m_filterCtrl->Connect( wxEVT_TEXT_ENTER, wxCommandEventHandler( FILTER_COMBOPOPUP::onEnter ),
-                           nullptr, this );
+    Connect( wxEVT_LEFT_DOWN, wxMouseEventHandler( FILTER_COMBOPOPUP::onMouseClick ), nullptr, this );
+    m_listBox->Connect( wxEVT_LEFT_DOWN, wxMouseEventHandler( FILTER_COMBOPOPUP::onMouseClick ), nullptr, this );
+    m_filterCtrl->Connect( wxEVT_TEXT, wxCommandEventHandler( FILTER_COMBOPOPUP::onFilterEdit ), nullptr, this );
+    m_filterCtrl->Connect( wxEVT_TEXT_ENTER, wxCommandEventHandler( FILTER_COMBOPOPUP::onEnter ), nullptr, this );
 
     // <enter> in a ListBox comes in as a double-click on GTK
-    m_listBox->Connect( wxEVT_COMMAND_LISTBOX_DOUBLECLICKED,
-                        wxCommandEventHandler( FILTER_COMBOPOPUP::onEnter ), nullptr, this );
+    m_listBox->Connect( wxEVT_COMMAND_LISTBOX_DOUBLECLICKED, wxCommandEventHandler( FILTER_COMBOPOPUP::onEnter ),
+                        nullptr, this );
 
     return true;
 }
 
 
+void FILTER_COMBOPOPUP::SetStringList( const wxArrayString& aStringList )
+{
+    m_stringList = aStringList;
+    m_stringList.Sort();
+    rebuildList();
+}
+
+
+wxString FILTER_COMBOPOPUP::GetStringValue() const
+{
+    return m_selectedString;
+}
+
+
 void FILTER_COMBOPOPUP::SetStringValue( const wxString& aNetName )
 {
-    // shouldn't be here (combo is read-only)
+    if( GetWindowStyleFlag() & wxCB_READONLY )
+        /* shouldn't be here (combo is read-only) */;
+    else
+        wxComboPopup::SetStringValue( aNetName );
+}
+
+
+void FILTER_COMBOPOPUP::SetSelectedString( const wxString& aString )
+{
+    m_selectedString = aString;
+    GetComboCtrl()->SetValue( m_selectedString );
 }
 
 
@@ -133,6 +153,24 @@ void FILTER_COMBOPOPUP::OnStartingKey( wxKeyEvent& aEvent )
 }
 
 
+void FILTER_COMBOPOPUP::Accept()
+{
+    wxString selectedString = getSelectedValue().value_or( wxEmptyString );
+
+    Dismiss();
+
+    // No update on empty
+    if( !selectedString.IsEmpty() && selectedString != m_selectedString )
+    {
+        m_selectedString = selectedString;
+        GetComboCtrl()->SetValue( m_selectedString );
+
+        wxCommandEvent changeEvent( FILTERED_ITEM_SELECTED );
+        wxPostEvent( GetComboCtrl(), changeEvent );
+    }
+}
+
+
 wxSize FILTER_COMBOPOPUP::GetAdjustedSize( int aMinWidth, int aPrefHeight, int aMaxHeight )
 {
     // Called when the popup is first shown.  Stash the minWidth and maxHeight so we
@@ -141,6 +179,19 @@ wxSize FILTER_COMBOPOPUP::GetAdjustedSize( int aMinWidth, int aPrefHeight, int a
     m_maxPopupHeight = aMaxHeight;
 
     return updateSize();
+}
+
+
+void FILTER_COMBOPOPUP::getListContent( wxArrayString& aListContent )
+{
+    const wxString filterString = getFilterValue();
+
+    // Simple substring, case-insensitive search
+    for( const wxString& str : m_stringList )
+    {
+        if( filterString.IsEmpty() || str.Lower().Contains( filterString.Lower() ) )
+            aListContent.push_back( str );
+    }
 }
 
 
@@ -174,17 +225,17 @@ wxSize FILTER_COMBOPOPUP::updateSize()
 {
     int listTop    = m_listBox->GetRect().y;
     int itemHeight = KIUI::GetTextSize( wxT( "Xy" ), this ).y + LIST_ITEM_PADDING;
-    int listHeight = m_listBox->GetCount() * itemHeight + LIST_PADDING;
+    int listHeight = ( (int) m_listBox->GetCount() * itemHeight ) + ( LIST_PADDING * 3 );
 
     if( listTop + listHeight >= m_maxPopupHeight )
         listHeight = m_maxPopupHeight - listTop - 1;
 
-    int    listWidth = m_minPopupWidth;
+    int listWidth = m_minPopupWidth;
 
     for( size_t i = 0; i < m_listBox->GetCount(); ++i )
     {
         int itemWidth = KIUI::GetTextSize( m_listBox->GetString( i ), m_listBox ).x;
-        listWidth = std::max( listWidth, itemWidth + LIST_PADDING * 3 );
+        listWidth = std::max( listWidth, itemWidth + LIST_PADDING * 2 );
     }
 
     wxSize listSize( listWidth, listHeight );
@@ -388,7 +439,7 @@ void FILTER_COMBOPOPUP::doSetFocus( wxWindow* aWindow )
 
 FILTER_COMBOBOX::FILTER_COMBOBOX( wxWindow *parent, wxWindowID id, const wxPoint &pos,
                                   const wxSize &size, long style ) :
-        wxComboCtrl( parent, id, wxEmptyString, pos, size, style|wxCB_READONLY|wxTE_PROCESS_ENTER ),
+        wxComboCtrl( parent, id, wxEmptyString, pos, size, style|wxTE_PROCESS_ENTER ),
         m_filterPopup( nullptr )
 {
     UseAltPopupWindow();
@@ -398,9 +449,34 @@ FILTER_COMBOBOX::FILTER_COMBOBOX( wxWindow *parent, wxWindowID id, const wxPoint
 }
 
 
+FILTER_COMBOBOX::FILTER_COMBOBOX( wxWindow* parent, wxWindowID id, const wxString& value,
+                                  const wxPoint& pos, const wxSize& size,
+                                  int count, wxString strings[], long style ) :
+        FILTER_COMBOBOX( parent, id, pos, size, style )
+{
+    // These arguments are just to match wxFormBuilder's expected API; they are not supported
+    wxASSERT( value.IsEmpty() && count == 0 && strings == nullptr );
+
+    m_filterPopup = new FILTER_COMBOPOPUP();
+    setFilterPopup( m_filterPopup );
+}
+
+
 FILTER_COMBOBOX::~FILTER_COMBOBOX()
 {
     Disconnect( wxEVT_CHAR_HOOK, wxKeyEventHandler( FILTER_COMBOBOX::onKeyDown ), nullptr, this );
+}
+
+
+void FILTER_COMBOBOX::SetStringList( const wxArrayString& aList )
+{
+    m_filterPopup->SetStringList( aList );
+}
+
+
+void FILTER_COMBOBOX::SetSelectedString( const wxString& aString )
+{
+    m_filterPopup->SetSelectedString( aString );
 }
 
 
@@ -432,8 +508,8 @@ void FILTER_COMBOBOX::onKeyDown( wxKeyEvent& aEvt )
     {
         Popup();
     }
-    // Non-control characters go to filterbox in popup
-    else if( key > WXK_SPACE && key < WXK_START )
+    // Non-control characters go to filterbox in popup for read-only controls
+    else if( key > WXK_SPACE && key < WXK_START && ( GetWindowStyleFlag() & wxCB_READONLY ) )
     {
         Popup();
         m_filterPopup->OnStartingKey( aEvt );

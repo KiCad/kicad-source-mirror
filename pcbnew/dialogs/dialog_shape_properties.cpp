@@ -1010,7 +1010,6 @@ DIALOG_SHAPE_PROPERTIES::DIALOG_SHAPE_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, 
     m_LayerSelectionCtrl->SetBoardFrame( m_parent );
     m_LayerSelectionCtrl->Resync();
 
-    m_netSelector->SetBoard( aParent->GetBoard() );
     m_netSelector->SetNetInfo( &aParent->GetBoard()->GetNetInfo() );
 
     if( m_parent->GetFrameType() == FRAME_FOOTPRINT_EDITOR )

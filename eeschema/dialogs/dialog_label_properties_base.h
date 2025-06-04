@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6a-dirty)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -12,6 +12,7 @@
 #include <wx/intl.h>
 class BITMAP_BUTTON;
 class COLOR_SWATCH;
+class FILTER_COMBOBOX;
 class FONT_CHOICE;
 class STD_BITMAP_BUTTON;
 class WX_GRID;
@@ -60,7 +61,7 @@ class DIALOG_LABEL_PROPERTIES_BASE : public DIALOG_SHIM
 		wxStaticText* m_labelSingleLine;
 		wxTextCtrl* m_valueSingleLine;
 		wxStaticText* m_labelCombo;
-		wxComboBox* m_valueCombo;
+		FILTER_COMBOBOX* m_valueCombo;
 		wxStaticText* m_labelMultiLine;
 		wxTextCtrl* m_valueMultiLine;
 		wxCheckBox* m_cbMultiLine;

@@ -212,7 +212,6 @@ DIALOG_GLOBAL_EDIT_TEARDROPS::~DIALOG_GLOBAL_EDIT_TEARDROPS()
 void DIALOG_GLOBAL_EDIT_TEARDROPS::buildFilterLists()
 {
     // Populate the net filter list with net names
-    m_netFilter->SetBoard( m_brd );
     m_netFilter->SetNetInfo( &m_brd->GetNetInfo() );
 
     if( !m_brd->GetHighLightNetCodes().empty() )
