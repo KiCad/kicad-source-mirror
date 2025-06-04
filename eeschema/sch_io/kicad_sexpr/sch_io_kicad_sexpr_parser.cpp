@@ -856,6 +856,9 @@ void SCH_IO_KICAD_SEXPR_PARSER::parseHeader( TSCHEMATIC_T::T aHeaderType, int aF
     {
         m_requiredVersion = aFileVersion;
     }
+
+    // Prior to this, bar was a valid string char for unquoted strings.
+    SetKnowsBar( m_requiredVersion >= 20240620 );
 }
 
 

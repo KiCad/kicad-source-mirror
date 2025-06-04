@@ -462,9 +462,9 @@ inline bool isDigit( char cc )
 
 
 /// @return true if @a cc is an s-expression separator character.
-inline bool isSep( char cc )
+inline bool DSNLEXER::isSep( char cc )
 {
-    return isSpace( cc ) || cc == '(' || cc == ')' || cc == '|';
+    return isSpace( cc ) || cc == '(' || cc == ')' || ( m_knowsBar && cc == '|' );
 }
 
 
@@ -609,7 +609,7 @@ L_read:
         goto exit;
     }
 
-    if( *cur == '|' )
+    if( m_knowsBar && *cur == '|' )
     {
         curText = *cur;
         curTok = DSN_BAR;
