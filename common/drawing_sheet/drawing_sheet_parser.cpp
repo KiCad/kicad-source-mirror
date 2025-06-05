@@ -51,9 +51,6 @@ public:
     void Parse( DS_DATA_MODEL* aLayout );
 
 private:
-    int m_requiredVersion;
-    wxString m_generatorVersion;
-
     /**
      * Parse the data specified at the very beginning of the file, like version and the
      * application used to create this file.
@@ -113,6 +110,10 @@ private:
     void parseCoordinate( POINT_COORD& aCoord);
     void readOption( DS_DATA_ITEM * aItem );
     void readPngdata( DS_DATA_ITEM_BITMAP * aItem );
+
+private:
+    int      m_requiredVersion;
+    wxString m_generatorVersion;
 };
 
 
