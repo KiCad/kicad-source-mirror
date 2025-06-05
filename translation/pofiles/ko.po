@@ -36,8 +36,8 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-06-01 20:43+0300\n"
-"PO-Revision-Date: 2025-06-04 09:01+0000\n"
-"Last-Translator: DevAny <devany.kr@gmail.com>\n"
+"PO-Revision-Date: 2025-06-05 14:56+0000\n"
+"Last-Translator: 김랑기 <korearf@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/v9/ko/>\n"
 "Language: ko\n"
 "MIME-Version: 1.0\n"
@@ -327,7 +327,7 @@ msgstr "KiCad 3D 뷰어"
 #: pcbnew/pcb_edit_frame.cpp:328 pcbnew/pcb_edit_frame.cpp:1713
 #: pcbnew/tools/pcb_actions.cpp:1332
 msgid "Appearance"
-msgstr "형상"
+msgstr "모양"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:328
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:699
@@ -597,12 +597,12 @@ msgstr "3D 축 표시"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:338
 msgid "Show Appearance Manager"
-msgstr "형상 관리자 표시"
+msgstr "모양 관리자 표시"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:339
 #: pcbnew/tools/pcb_actions.cpp:1333
 msgid "Show/hide the appearance manager"
-msgstr "형상 관리자 표시/숨기기"
+msgstr "모양 관리자 표시/숨기기"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:55
 msgid "Board Body"
@@ -37394,7 +37394,7 @@ msgstr "레이어 선택 명령을 마우스 오른쪽 단추로 클릭합니다
 
 #: pcbnew/dialogs/dialog_print_pcbnew.cpp:222
 msgid "Print according to objects tab of appearance manager"
-msgstr "형상 관리자의 객체 탭에 따라 출력"
+msgstr "모양 관리자의 객체 탭에 따라 출력"
 
 #: pcbnew/dialogs/dialog_print_pcbnew.cpp:249
 msgid "No drill mark"
