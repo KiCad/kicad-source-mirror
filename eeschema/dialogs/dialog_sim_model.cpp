@@ -217,10 +217,9 @@ bool DIALOG_SIM_MODEL<T>::TransferDataToWindow()
         m_fields[ VALUE_FIELD ].SetText( wxT( "${SIM.PARAMS}" ) );
     }
 
-    wxString libraryFilename = GetFieldValue( &m_fields, SIM_LIBRARY::LIBRARY_FIELD, true, 0 );
-    wxFileName tmp( libraryFilename );
+    std::string libraryFilename = SIM_MODEL::GetFieldValue( &m_fields, SIM_LIBRARY::LIBRARY_FIELD );
 
-    if( !tmp.GetFullName().IsEmpty() )
+    if( libraryFilename != "" )
     {
         // The model is sourced from a library, optionally with instance overrides.
         m_rbLibraryModel->SetValue( true );
@@ -235,7 +234,6 @@ bool DIALOG_SIM_MODEL<T>::TransferDataToWindow()
 
             m_libraryModelsMgr.CreateModel( nullptr, m_sortedPartPins, m_fields, reporter );
 
-            m_modelListBox->Clear();
             m_modelListBox->Append( _( "<unknown>" ) );
             m_modelListBox->SetSelection( 0 );
         }
@@ -842,22 +840,9 @@ bool DIALOG_SIM_MODEL<T>::loadLibrary( const wxString& aLibraryPath, REPORTER& a
 
     m_libraryModelsMgr.SetForceFullParse();
     m_libraryModelsMgr.SetLibrary( aLibraryPath, aReporter );
-    m_libraryPathText->ChangeValue( aLibraryPath );
-    m_modelListBoxEntryToLibraryIdx.clear();
 
     if( aReporter.HasMessageOfSeverity( RPT_SEVERITY_UNDEFINED | RPT_SEVERITY_ERROR ) )
-    {
-        if( m_libraryModelsMgr.GetModels().empty() )
-        {
-            if( m_modelListBox->GetSelection() != wxNOT_FOUND )
-                m_modelListBox->SetSelection( wxNOT_FOUND );
-
-            if( m_modelListBox->GetCount() )
-                m_modelListBox->Clear();
-        }
-
         return false;
-    }
 
     std::string modelName = SIM_MODEL::GetFieldValue( &m_fields, SIM_LIBRARY::NAME_FIELD );
 
@@ -870,7 +855,9 @@ bool DIALOG_SIM_MODEL<T>::loadLibrary( const wxString& aLibraryPath, REPORTER& a
     }
 
     m_rbLibraryModel->SetValue( true );
+    m_libraryPathText->ChangeValue( aLibraryPath );
 
+    m_modelListBoxEntryToLibraryIdx.clear();
     wxArrayString modelNames;
 
     bool modelNameExists = false;
