@@ -99,6 +99,9 @@ BOOST_DATA_TEST_CASE( AltiumPcbLibImport2,
                                                             true, nullptr );
             BOOST_CHECK( kicadFp );
 
+            if( !kicadFp )
+                continue;
+
             KI_TEST::CheckFootprint( kicadFp, altiumFp );
         }
     }
