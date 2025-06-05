@@ -2641,7 +2641,7 @@ bool PCB_EDIT_FRAME::CanAcceptApiCommands()
 
     ROUTER_TOOL* routerTool = m_toolManager->GetTool<ROUTER_TOOL>();
 
-    if( routerTool->RoutingInProgress() )
+    if( routerTool && routerTool->RoutingInProgress() )
         return false;
 
     return EDA_BASE_FRAME::CanAcceptApiCommands();
