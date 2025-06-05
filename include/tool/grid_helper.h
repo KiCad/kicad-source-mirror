@@ -64,21 +64,19 @@ public:
 
     virtual VECTOR2I Align( const VECTOR2I& aPoint, GRID_HELPER_GRIDS aGrid ) const
     {
-        return Align( aPoint, GetGridSize( aGrid ), GetOrigin() );
+        return Align( aPoint, GetGridSize( aGrid ) );
     }
 
     virtual VECTOR2I AlignGrid( const VECTOR2I& aPoint, GRID_HELPER_GRIDS aGrid ) const
     {
-        return AlignGrid( aPoint, GetGridSize( aGrid ), GetOrigin() );
+        return AlignGrid( aPoint, GetGridSize( aGrid ) );
     }
 
     virtual VECTOR2I Align( const VECTOR2I& aPoint ) const;
-    virtual VECTOR2I Align( const VECTOR2I& aPoint, const VECTOR2D& aGrid,
-                            const VECTOR2D& aOffset ) const;
+    virtual VECTOR2I Align( const VECTOR2I& aPoint, const VECTOR2D& aGrid ) const;
 
     VECTOR2I AlignGrid( const VECTOR2I& aPoint ) const;
-    VECTOR2I AlignGrid( const VECTOR2I& aPoint, const VECTOR2D& aGrid,
-                        const VECTOR2D& aOffset ) const;
+    VECTOR2I AlignGrid( const VECTOR2I& aPoint, const VECTOR2D& aGrid ) const;
 
     /**
      * Gets the coarsest grid that applies to a selecion of items.
@@ -199,8 +197,7 @@ protected:
      */
     bool canUseGrid() const;
 
-    VECTOR2I computeNearest( const VECTOR2I& aPoint, const VECTOR2I& aGrid,
-                             const VECTOR2I& aOffset ) const;
+    VECTOR2I computeNearest( const VECTOR2I& aPoint, const VECTOR2I& aGrid ) const;
 
 protected:
     void showConstructionGeometry( bool aShow );
