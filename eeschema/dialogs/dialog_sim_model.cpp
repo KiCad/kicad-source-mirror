@@ -202,8 +202,9 @@ bool DIALOG_SIM_MODEL<T>::TransferDataToWindow()
     }
 
     wxString libraryFilename = GetFieldValue( &m_fields, SIM_LIBRARY::LIBRARY_FIELD, true, 0 );
+    wxFileName tmp( libraryFilename );
 
-    if( libraryFilename != "" )
+    if( !tmp.GetFullName().IsEmpty() )
     {
         // The model is sourced from a library, optionally with instance overrides.
         m_rbLibraryModel->SetValue( true );
@@ -218,6 +219,7 @@ bool DIALOG_SIM_MODEL<T>::TransferDataToWindow()
 
             m_libraryModelsMgr.CreateModel( nullptr, m_sortedPartPins, m_fields, true, 0, reporter );
 
+            m_modelListBox->Clear();
             m_modelListBox->Append( _( "<unknown>" ) );
             m_modelListBox->SetSelection( 0 );
         }
@@ -825,9 +827,22 @@ bool DIALOG_SIM_MODEL<T>::loadLibrary( const wxString& aLibraryPath, REPORTER& a
 
     m_libraryModelsMgr.SetForceFullParse();
     m_libraryModelsMgr.SetLibrary( aLibraryPath, aReporter );
+    m_libraryPathText->ChangeValue( aLibraryPath );
+    m_modelListBoxEntryToLibraryIdx.clear();
 
     if( aReporter.HasMessageOfSeverity( RPT_SEVERITY_UNDEFINED | RPT_SEVERITY_ERROR ) )
+    {
+        if( m_libraryModelsMgr.GetModels().empty() )
+        {
+            if( m_modelListBox->GetSelection() != wxNOT_FOUND )
+                m_modelListBox->SetSelection( wxNOT_FOUND );
+
+            if( m_modelListBox->GetCount() )
+                m_modelListBox->Clear();
+        }
+
         return false;
+    }
 
     std::string modelName = GetFieldValue( &m_fields, SIM_LIBRARY::NAME_FIELD, true, 0 );
 
@@ -840,9 +855,7 @@ bool DIALOG_SIM_MODEL<T>::loadLibrary( const wxString& aLibraryPath, REPORTER& a
     }
 
     m_rbLibraryModel->SetValue( true );
-    m_libraryPathText->ChangeValue( aLibraryPath );
 
-    m_modelListBoxEntryToLibraryIdx.clear();
     wxArrayString modelNames;
 
     bool modelNameExists = false;
