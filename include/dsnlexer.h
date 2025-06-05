@@ -80,7 +80,6 @@ enum DSN_SYNTAX_T
 class KICOMMON_API DSNLEXER
 {
 public:
-
     /**
      * Initialize a DSN lexer and prepares to read from aFile which is already open and has
      * \a aFilename.
@@ -539,6 +538,7 @@ protected:
         return parseDouble( GetTokenText( aToken ) );
     }
 
+protected:
     bool                iOwnReaders;            ///< On readerStack, should I delete them?
     const char*         start;
     const char*         next;
