@@ -184,6 +184,9 @@ void SCH_IO_KICAD_SEXPR_PARSER::ParseLib( LIB_SYMBOL_MAP& aSymbolLibMap )
     NextTok();
     parseHeader( T_kicad_symbol_lib, SEXPR_SYMBOL_LIB_FILE_VERSION );
 
+    // Prior to this, bar was a valid string char for unquoted strings.
+    SetKnowsBar( m_requiredVersion >= 20240529 );
+
     bool versionChecked = false;
 
     auto checkVersion =
@@ -900,9 +903,6 @@ void SCH_IO_KICAD_SEXPR_PARSER::parseHeader( TSCHEMATIC_T::T aHeaderType, int aF
     {
         m_requiredVersion = aFileVersion;
     }
-
-    // Prior to this, bar was a valid string char for unquoted strings.
-    SetKnowsBar( m_requiredVersion >= 20240620 );
 }
 
 
@@ -2686,6 +2686,9 @@ void SCH_IO_KICAD_SEXPR_PARSER::ParseSchematic( SCH_SHEET* aSheet, bool aIsCopya
             Expecting( "kicad_sch" );
 
         parseHeader( T_kicad_sch, SEXPR_SCHEMATIC_FILE_VERSION );
+
+        // Prior to this, bar was a valid string char for unquoted strings.
+        SetKnowsBar( m_requiredVersion >= 20240620 );
 
         // Prior to schematic file version 20210406, schematics did not have UUIDs so we need
         // to generate one for the root schematic for instance paths.
