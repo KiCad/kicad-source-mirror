@@ -21,6 +21,7 @@
 
 class EDA_ITEM;
 class SCH_SCREEN;
+class SCH_SELECTION_TOOL;
 
 /**
  * This is a bridge class to help the schematic be able to affect SCH_EDIT_FRAME
@@ -37,4 +38,8 @@ public:
      * aScreen is the screen the item is located on, if not the current screen
      */
     virtual void AddToScreen( EDA_ITEM* aItem, SCH_SCREEN* aScreen = nullptr ) = 0;
+
+    virtual SCH_SELECTION_TOOL* GetSelectionTool() { return nullptr; }
+
+    virtual void RemoveFromScreen( EDA_ITEM* aItem, SCH_SCREEN* aScreen ) = 0;
 };

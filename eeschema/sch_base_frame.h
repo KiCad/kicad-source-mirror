@@ -216,7 +216,7 @@ public:
      * Remove an item from the screen (and view)
      * aScreen is the screen the item is located on, if not the current screen
      */
-    void RemoveFromScreen( EDA_ITEM* aItem, SCH_SCREEN* aScreen );
+    void RemoveFromScreen( EDA_ITEM* aItem, SCH_SCREEN* aScreen ) override;
 
     /**
      * Mark an item for refresh.
