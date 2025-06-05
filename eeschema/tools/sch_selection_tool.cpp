@@ -1127,7 +1127,8 @@ int SCH_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
             else if( !m_selection.Empty()
                         && drag_action == MOUSE_DRAG_ACTION::DRAG_SELECTED
                         && evt->HasPosition()
-                        && selectionContains( evt->Position() ) ) //move/drag option prediction
+                        && selectionContains( evt->Position() ) //move/drag option prediction
+            )
             {
                 m_nonModifiedCursor = KICURSOR::MOVING;
             }
@@ -2156,10 +2157,43 @@ bool SCH_SELECTION_TOOL::selectMultiple()
             BOX2I selectionBox = area.ViewBBox();
             view->Query( selectionBox, candidates );
 
+            // Ensure candidates only have unique items
+            std::set<SCH_ITEM*> uniqueCandidates;
+
+            for( const auto& candidate : candidates )
+            {
+                SCH_ITEM* schItem = dynamic_cast<SCH_ITEM*>( candidate.first );
+
+                if( schItem )
+                    uniqueCandidates.insert( schItem );
+            }
+
+            for( KIGFX::VIEW_ITEM* item : uniqueCandidates )
+            {
+                // If the item is a sheet or symbol, ensure we add its pins because they are not
+                // in the RTree and we need to check them against the selection box.
+                if( SCH_SHEET* sheet = dynamic_cast<SCH_SHEET*>( item ) )
+                {
+                    for( SCH_SHEET_PIN* pin : sheet->GetPins() )
+                    {
+                        // If the pin is within the selection box, add it as a candidate
+                        if( selectionBox.Intersects( pin->GetBoundingBox() ) )
+                            uniqueCandidates.insert( pin );
+                    }
+                }
+                else if( SCH_SYMBOL* symbol = dynamic_cast<SCH_SYMBOL*>( item ) )
+                {
+                    for( SCH_PIN* pin : symbol->GetPins() )
+                    {
+                        // If the pin is within the selection box, add it as a candidate
+                        if( selectionBox.Intersects( pin->GetBoundingBox() ) )
+                            uniqueCandidates.insert( pin );
+                    }
+                }
+            }
+
             // Construct a BOX2I to determine BOARD_ITEM selection
             BOX2I selectionRect( area.GetOrigin(), VECTOR2I( width, height ) );
-
-            selectionRect.Normalize();
 
             // Build lists of nearby items and their children
             SCH_COLLECTOR       collector;
@@ -2191,10 +2225,8 @@ bool SCH_SELECTION_TOOL::selectMultiple()
                     group_items.emplace( group_item );
             }
 
-            for( KIGFX::VIEW::LAYER_ITEM_PAIR& candidate : candidates )
+            for( SCH_ITEM* item : uniqueCandidates )
             {
-                SCH_ITEM* item = static_cast<SCH_ITEM*>( candidate.first );
-
                 // If the item is a line, add it even if it doesn't pass the hit test using the greedy
                 // flag as we handle partially selecting line ends later
                 if( item && Selectable( item )
