@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-06-01 20:43+0300\n"
-"PO-Revision-Date: 2025-05-31 22:01+0000\n"
+"PO-Revision-Date: 2025-06-06 21:01+0000\n"
 "Last-Translator: Sárkány Lőrinc <lsarkany@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/kicad/v9/hu/>\n"
 "Language: hu\n"
@@ -2263,7 +2263,6 @@ msgid "Report or examine bugs - "
 msgstr "Hibák bejelentése vagy megtekintése - "
 
 #: common/dialog_about/AboutDialog_main.cpp:158
-#, fuzzy
 msgid "KiCad users group and community"
 msgstr "KiCad felhasználói csoportok és közösség"
 
@@ -2296,14 +2295,12 @@ msgid "Additional Contributions By"
 msgstr "További hozzájárulók"
 
 #: common/dialog_about/AboutDialog_main.cpp:628
-#, fuzzy
 msgid "Documentation Team"
-msgstr "Dokumentáció"
+msgstr "Dokumentációs csapat"
 
 #: common/dialog_about/AboutDialog_main.cpp:854
-#, fuzzy
 msgid "Librarian Team"
-msgstr "KiCad Könyvtárak"
+msgstr "Könyvtárfejlesztő csoport"
 
 #: common/dialog_about/AboutDialog_main.cpp:907
 msgid "3D models"
@@ -2325,19 +2322,16 @@ msgstr "Rajzjelek"
 #: pcbnew/widgets/panel_selection_filter.cpp:196
 #: pcbnew/widgets/panel_selection_filter_base.cpp:29
 #: pcbnew/widgets/search_handlers.cpp:116
-#, fuzzy
 msgid "Footprints"
-msgstr "Alkatrészek"
+msgstr "Alkatrész rajzolatok"
 
 #: common/dialog_about/AboutDialog_main.cpp:929
-#, fuzzy
 msgid "Icons"
-msgstr "Ikon"
+msgstr "Ikonok"
 
 #: common/dialog_about/AboutDialog_main.cpp:936
-#, fuzzy
 msgid "Package Developers"
-msgstr "Fejlesztők"
+msgstr "Csomagfejlesztők"
 
 #: common/dialog_about/dialog_about.cpp:114
 #, c-format
@@ -2364,9 +2358,8 @@ msgid "Doc Writers"
 msgstr "Dokumentáció-készítők"
 
 #: common/dialog_about/dialog_about.cpp:146
-#, fuzzy
 msgid "Librarians"
-msgstr "Könyvtárak"
+msgstr "Könyvtár fejlesztők"
 
 #: common/dialog_about/dialog_about.cpp:149
 #, fuzzy
@@ -2414,12 +2407,10 @@ msgid "Lib Version Info"
 msgstr "Könyvtár verzió információ"
 
 #: common/dialog_about/dialog_about_base.cpp:54
-#, fuzzy
 msgid "&Copy Version Info"
-msgstr "KiCAD verzió információk másolása a vágólapra"
+msgstr "Verzió információk másolása"
 
 #: common/dialog_about/dialog_about_base.cpp:55
-#, fuzzy
 msgid "Copy KiCad version info to the clipboard"
 msgstr "KiCAD verzió információk másolása a vágólapra"
 
@@ -8034,14 +8025,12 @@ msgid "Export SVG Job Settings"
 msgstr "Beállítások szerkesztése"
 
 #: common/jobs/job_export_pcb_svg.cpp:59
-#, fuzzy
 msgid "PCB: Export SVG"
-msgstr "Exportálás SVG fájlba"
+msgstr "NYÁK: exportálás SVG-be"
 
 #: common/jobs/job_export_sch_bom.cpp:92
-#, fuzzy
 msgid "Generate bill of materials"
-msgstr "Bevásárlólista létrehozása..."
+msgstr "Bevásárlólista generálása"
 
 #: common/jobs/job_export_sch_bom.cpp:98
 #, fuzzy
