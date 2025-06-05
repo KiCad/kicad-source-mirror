@@ -42,7 +42,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-06-01 20:42+0300\n"
-"PO-Revision-Date: 2025-06-03 08:04+0000\n"
+"PO-Revision-Date: 2025-06-05 14:56+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/kicad/master-source/zh_Hans/>\n"
@@ -13294,9 +13294,8 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:1006
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:1566
-#, fuzzy
 msgid "Select pin data file"
-msgstr "选择文件"
+msgstr "选择引脚数据文件"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:1032
 #, c-format
@@ -13369,14 +13368,12 @@ msgid "Export"
 msgstr "导出"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:138
-#, fuzzy
 msgid "Export all pins"
-msgstr "导出网表"
+msgstr "导出所有引脚"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:141
-#, fuzzy
 msgid "Export only shown pins"
-msgstr "导出封装"
+msgstr "仅导出可见引脚"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:147
 msgid "To File..."
@@ -33496,7 +33493,6 @@ msgid "Centre on source items"
 msgstr "以源项目为中心"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:197
-#, fuzzy
 msgid "Renumber pads"
 msgstr "为焊盘重新编号"
 
@@ -33595,19 +33591,16 @@ msgid "Full circle"
 msgstr "完整圆形"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:360
-#, fuzzy
 msgid "Clockwise"
-msgstr "顺时针旋转"
+msgstr "顺时针方向"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:360
-#, fuzzy
 msgid "Anti-clockwise"
-msgstr "顺时针旋转"
+msgstr "逆时针方向"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:362
-#, fuzzy
 msgid "Direction"
-msgstr "方向:"
+msgstr "方向"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:366
 #: pcbnew/dialogs/dialog_create_array_base.cpp:419
@@ -43971,9 +43964,8 @@ msgid "IDFv3..."
 msgstr "IDFv3..."
 
 #: pcbnew/menubar_pcb_editor.cpp:128
-#, fuzzy
 msgid "STEP/GLB/BREP/XAO/PLY/STL..."
-msgstr "STEP / GLB / BREP / XAO / PLY / STL..."
+msgstr "STEP/GLB/BREP/XAO/PLY/STL..."
 
 #: pcbnew/menubar_pcb_editor.cpp:129
 msgid "Footprint Association (.cmp) File..."
@@ -44543,14 +44535,14 @@ msgstr ""
 "offset: %d"
 
 #: pcbnew/netlist_reader/kicad_netlist_reader.cpp:675
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Invalid lib_id ID in\n"
 "file: '%s'\n"
 "line: %d\n"
 "offf: %d"
 msgstr ""
-"无效的封装标识, 位于\n"
+"无效的 lib_id 标识, 位于\n"
 "file: '%s'\n"
 "line: %d\n"
 "offset: %d"
@@ -49722,19 +49714,16 @@ msgid "Export IDF 3D board representation"
 msgstr "导出 IDF 3D 电路板表示"
 
 #: pcbnew/tools/pcb_actions.cpp:1278
-#, fuzzy
 msgid "Export STEP/GLB/BREP/XAO/PLY/STL..."
-msgstr "STEP / GLB / BREP / XAO / PLY / STL..."
+msgstr "导出 STEP/GLB/BREP/XAO/PLY/STL..."
 
 #: pcbnew/tools/pcb_actions.cpp:1279
-#, fuzzy
 msgid "Export STEP, GLB, BREP, XAO, PLY or STL 3D board representation"
-msgstr "导出 STEP / GLB / BREP / XAO / PLY / STL 格式的电路板模型"
+msgstr "导出 STEP/GLB/BREP/XAO/PLY/STL 格式的电路板模型"
 
 #: pcbnew/tools/pcb_actions.cpp:1285
-#, fuzzy
 msgid "Export Footprint Association (.cmp) File..."
-msgstr "封装分配 (.cmp) 文件..."
+msgstr "导出封装分配 (.cmp) 文件..."
 
 #: pcbnew/tools/pcb_actions.cpp:1286
 msgid "Export footprint association file (*.cmp) for schematic back annotation"
