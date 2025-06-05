@@ -182,38 +182,35 @@ void GRID_HELPER::SetAuxAxes( bool aEnable, const VECTOR2I& aOrigin )
 
 VECTOR2I GRID_HELPER::AlignGrid( const VECTOR2I& aPoint ) const
 {
-    return computeNearest( aPoint, GetGrid(), GetOrigin() );
+    return computeNearest( aPoint, GetGrid() );
 }
 
 
-VECTOR2I GRID_HELPER::AlignGrid( const VECTOR2I& aPoint, const VECTOR2D& aGrid,
-                                 const VECTOR2D& aOffset ) const
+VECTOR2I GRID_HELPER::AlignGrid( const VECTOR2I& aPoint, const VECTOR2D& aGrid ) const
 {
-    return computeNearest( aPoint, aGrid, aOffset );
+    return computeNearest( aPoint, aGrid );
 }
 
 
-VECTOR2I GRID_HELPER::computeNearest( const VECTOR2I& aPoint, const VECTOR2I& aGrid,
-                                      const VECTOR2I& aOffset ) const
+VECTOR2I GRID_HELPER::computeNearest( const VECTOR2I& aPoint, const VECTOR2I& aGrid ) const
 {
-    return VECTOR2I( KiROUND( (double) ( aPoint.x - aOffset.x ) / aGrid.x ) * aGrid.x + aOffset.x,
-                     KiROUND( (double) ( aPoint.y - aOffset.y ) / aGrid.y ) * aGrid.y + aOffset.y );
+    return VECTOR2I( KiROUND( static_cast<double>( aPoint.x ) / aGrid.x ) * aGrid.x,
+                     KiROUND( static_cast<double>( aPoint.y ) / aGrid.y ) * aGrid.y );
 }
 
 
 VECTOR2I GRID_HELPER::Align( const VECTOR2I& aPoint ) const
 {
-    return Align( aPoint, GetGrid(), GetOrigin() );
+    return Align( aPoint, GetGrid() );
 }
 
 
-VECTOR2I GRID_HELPER::Align( const VECTOR2I& aPoint, const VECTOR2D& aGrid,
-                             const VECTOR2D& aOffset ) const
+VECTOR2I GRID_HELPER::Align( const VECTOR2I& aPoint, const VECTOR2D& aGrid ) const
 {
     if( !canUseGrid() )
         return aPoint;
 
-    VECTOR2I nearest = AlignGrid( aPoint, aGrid, aOffset );
+    VECTOR2I nearest = AlignGrid( aPoint, aGrid );
 
     if( !m_auxAxis )
         return nearest;
