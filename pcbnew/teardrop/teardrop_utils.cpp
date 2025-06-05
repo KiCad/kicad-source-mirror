@@ -745,7 +745,7 @@ bool TEARDROP_MANAGER::computeTeardropPolygon( const TEARDROP_PARAMETERS& aParam
 
     if( !aParams.m_CurvedEdges )
     {
-        aCorners = pts;
+        aCorners = std::move( pts );
         return true;
     }
 

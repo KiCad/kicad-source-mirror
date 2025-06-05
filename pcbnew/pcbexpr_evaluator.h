@@ -250,7 +250,7 @@ public:
 
     void SetErrorCallback( std::function<void( const wxString& aMessage, int aOffset )> aCallback )
     {
-        m_compiler.SetErrorCallback( aCallback );
+        m_compiler.SetErrorCallback( std::move( aCallback ) );
     }
 
     bool IsErrorPending() const { return m_errorStatus.pendingError; }

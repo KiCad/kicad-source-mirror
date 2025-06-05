@@ -564,7 +564,7 @@ bool FOOTPRINT::Deserialize( const google::protobuf::Any &aContainer )
                 model.m_Rotation = kiapi::common::UnpackVector3D( modelMsg.rotation() );
                 model.m_Offset = kiapi::common::UnpackVector3D( modelMsg.offset() );
 
-                Models().push_back( model );
+                Models().push_back( std::move( model ) );
             }
             else
             {

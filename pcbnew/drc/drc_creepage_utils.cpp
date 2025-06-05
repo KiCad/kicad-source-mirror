@@ -1716,14 +1716,12 @@ std::vector<PATH_CONNECTION> CU_SHAPE_ARC::Paths( const CU_SHAPE_ARC& aS2, doubl
         }
     }
 
-    for( std::vector<PATH_CONNECTION> pcs : { pcs3, pcs4, pcs5, pcs6 } )
+    for( const std::vector<PATH_CONNECTION>& pcs : { pcs3, pcs4, pcs5, pcs6 } )
     {
-        for( PATH_CONNECTION& pc : pcs )
+        for( const PATH_CONNECTION& pc : pcs )
         {
             if( bestPath.weight > pc.weight )
-            {
                 bestPath = pc;
-            }
         }
     }
 
@@ -1781,13 +1779,15 @@ bool SegmentIntersectsBoard( const VECTOR2I& aP1, const VECTOR2I& aP2,
         {
         case SHAPE_T::SEGMENT:
         {
-            bool intersects =
-                    segments_intersect( aP1, aP2, d->GetStart(), d->GetEnd(), &intersectionPoints );
+            bool intersects = segments_intersect( aP1, aP2, d->GetStart(), d->GetEnd(),
+                                                  &intersectionPoints );
 
             if( intersects && !TestGrooveWidth )
                 return false;
+
             break;
         }
+
         case SHAPE_T::RECTANGLE:
         {
             VECTOR2I c1 = d->GetStart();
@@ -1802,11 +1802,11 @@ bool SegmentIntersectsBoard( const VECTOR2I& aP1, const VECTOR2I& aP2,
             intersects |= segments_intersect( aP1, aP2, c4, c1, &intersectionPoints );
 
             if( intersects && !TestGrooveWidth )
-            {
                 return false;
-            }
+
             break;
         }
+
         case SHAPE_T::POLY:
         {
             std::vector<VECTOR2I> points;
@@ -1814,35 +1814,35 @@ bool SegmentIntersectsBoard( const VECTOR2I& aP1, const VECTOR2I& aP2,
 
             if( points.size() < 2 )
                 break;
+
             VECTOR2I prevPoint = points.back();
 
             bool intersects = false;
 
-            for( auto p : points )
+            for( const VECTOR2I& p : points )
             {
                 intersects |= segments_intersect( aP1, aP2, prevPoint, p, &intersectionPoints );
                 prevPoint = p;
             }
+
             if( intersects && !TestGrooveWidth )
-            {
                 return false;
-            }
+
             break;
         }
+
         case SHAPE_T::CIRCLE:
         {
             VECTOR2I center = d->GetCenter();
             double   radius = d->GetRadius();
 
-            bool intersects =
-                    segmentIntersectsCircle( aP1, aP2, center, radius, &intersectionPoints );
+            bool intersects = segmentIntersectsCircle( aP1, aP2, center, radius, &intersectionPoints );
 
             if( intersects && !TestGrooveWidth )
                 return false;
 
             break;
         }
-
 
         case SHAPE_T::ARC:
         {
@@ -1852,8 +1852,7 @@ bool SegmentIntersectsBoard( const VECTOR2I& aP1, const VECTOR2I& aP2,
             EDA_ANGLE A, B;
             d->CalcArcAngles( A, B );
 
-            bool intersects =
-                    segmentIntersectsArc( aP1, aP2, center, radius, A, B, &intersectionPoints );
+            bool intersects = segmentIntersectsArc( aP1, aP2, center, radius, A, B, &intersectionPoints );
 
             if( intersects && !TestGrooveWidth )
                 return false;
@@ -1906,18 +1905,19 @@ bool SegmentIntersectsBoard( const VECTOR2I& aP1, const VECTOR2I& aP2,
     for( size_t i = 0; i < intersectionPoints.size(); i += 2 )
     {
         if( intersectionPoints[i].SquaredDistance( intersectionPoints[i + 1] ) > GVSquared )
-        {
             return false;
-        }
     }
+
     return true;
 }
+
 
 bool CheckPathValidity( VECTOR2I aP1, VECTOR2I aP2, std::vector<BOARD_ITEM*> aBe,
                         std::vector<const BOARD_ITEM*> aDontTestAgainst )
 {
     return false;
 }
+
 
 std::vector<PATH_CONNECTION> GetPaths( CREEP_SHAPE* aS1, CREEP_SHAPE* aS2, double aMaxWeight )
 {

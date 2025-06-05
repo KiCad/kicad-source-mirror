@@ -44,7 +44,7 @@ void FROM_TO_CACHE::buildEndpointList( )
             m_ftEndpoints.push_back( ent );
             ent.name = footprint->GetReference();
             ent.parent = pad;
-            m_ftEndpoints.push_back( ent );
+            m_ftEndpoints.push_back( std::move( ent ) );
         }
     }
 }
@@ -77,7 +77,7 @@ static PATH_STATUS uniquePathBetweenNodes( CN_ITEM* u, CN_ITEM* v, std::vector<C
     Path pInit;
     bool pathFound = false;
     pInit.push_back( u );
-    Q.push_back( pInit );
+    Q.push_back( std::move( pInit ) );
 
     while( Q.size() )
     {
@@ -100,17 +100,19 @@ static PATH_STATUS uniquePathBetweenNodes( CN_ITEM* u, CN_ITEM* v, std::vector<C
             bool vertexVisited = isVertexVisited( ci, path );
 
             for( std::vector<CN_ITEM*>& p : Q )
+            {
                 if( isVertexVisited( ci, p ) )
                 {
                     vertexVisited = true;
                     break;
                 }
+            }
 
             if( !vertexVisited )
             {
                 Path newpath( path );
                 newpath.push_back( ci );
-                Q.push_back( newpath );
+                Q.push_back( std::move( newpath ) );
             }
         }
     }
@@ -133,7 +135,7 @@ int FROM_TO_CACHE::cacheFromToPaths( const wxString& aFrom, const wxString& aTo 
             p.net = endpoint.parent->GetNetCode();
             p.from = endpoint.parent;
             p.to = nullptr;
-            paths.push_back(p);
+            paths.push_back( std::move( p ) );
         }
     }
 
@@ -207,12 +209,10 @@ int FROM_TO_CACHE::cacheFromToPaths( const wxString& aFrom, const wxString& aTo 
         if( result == PS_NO_PATH )
             continue;
 
-        for( const auto item : upath )
-        {
+        for( const CN_ITEM* item : upath )
             path.pathItems.insert( item->Parent() );
-        }
 
-        m_ftPaths.push_back(path);
+        m_ftPaths.push_back( path );
         newPaths++;
     }
 

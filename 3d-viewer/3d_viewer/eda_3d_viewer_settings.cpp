@@ -329,7 +329,7 @@ EDA_3D_VIEWER_SETTINGS::EDA_3D_VIEWER_SETTINGS() :
 
     m_params.emplace_back( new PARAM_LIST<int>( "render.raytrace_lightElevation",
                                                 &m_Render.raytrace_lightElevation,
-                                                default_elevation ) );
+                                                std::move( default_elevation ) ) );
 
     const std::vector<int> default_azimuth =
     {
@@ -338,7 +338,7 @@ EDA_3D_VIEWER_SETTINGS::EDA_3D_VIEWER_SETTINGS() :
 
     m_params.emplace_back( new PARAM_LIST<int>( "render.raytrace_lightAzimuth",
                                                 &m_Render.raytrace_lightAzimuth,
-                                                default_azimuth ) );
+                                                std::move( default_azimuth ) ) );
 
     m_params.emplace_back( new PARAM<bool>( "render.show_adhesive",
                                             &m_Render.show_adhesive, true ) );

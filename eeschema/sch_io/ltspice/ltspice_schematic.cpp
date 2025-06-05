@@ -1178,7 +1178,7 @@ std::vector<LTSPICE_SCHEMATIC::LT_ASC> LTSPICE_SCHEMATIC::StructureBuilder()
             lineNumber++;
         }
 
-        ascFiles.push_back( ascFile );
+        ascFiles.push_back( std::move( ascFile ) );
     }
 
     return ascFiles;

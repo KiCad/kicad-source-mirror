@@ -74,7 +74,7 @@ PROJECT_TEMPLATE::PROJECT_TEMPLATE( const wxString& aPath )
 class FILE_TRAVERSER : public wxDirTraverser
 {
 public:
-    FILE_TRAVERSER( std::vector<wxFileName>& files, const wxString exclude ) :
+    FILE_TRAVERSER( std::vector<wxFileName>& files, const wxString& exclude ) :
         m_files( files ),
         m_exclude( exclude )
     { }

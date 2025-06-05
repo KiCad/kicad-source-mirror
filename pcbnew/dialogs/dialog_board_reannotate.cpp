@@ -722,7 +722,7 @@ bool DIALOG_BOARD_REANNOTATE::BuildFootprintList( std::vector<REFDES_INFO>& aBad
         // Get the type (R, C, etc)
         fpData.RefDesType = fpData.RefDesString.substr( 0, firstnum );
 
-        for( wxString excluded : m_excludeArray )
+        for( const wxString& excluded : m_excludeArray )
         {
             if( excluded == fpData.RefDesType ) // Am I supposed to exclude this type?
             {
@@ -742,7 +742,7 @@ bool DIALOG_BOARD_REANNOTATE::BuildFootprintList( std::vector<REFDES_INFO>& aBad
         {                                // If only annotating selected c
             fpData.Action = EXCLUDE_REFDES;     // Assume it isn't selected
 
-            for( KIID sel : selected )
+            for( const KIID& sel : selected )
             {
                 if( fpData.Uuid == sel )
                 {                                  // Found in selected footprints
@@ -827,19 +827,19 @@ void DIALOG_BOARD_REANNOTATE::BuildUnavailableRefsList()
 {
     std::vector<REFDES_INFO> excludedFootprints;
 
-    for( REFDES_INFO fpData : m_frontFootprints )
+    for( const REFDES_INFO& fpData : m_frontFootprints )
     {
         if( fpData.Action == EXCLUDE_REFDES )
             excludedFootprints.push_back( fpData );
     }
 
-    for( REFDES_INFO fpData : m_backFootprints )
+    for( const REFDES_INFO& fpData : m_backFootprints )
     {
         if( fpData.Action == EXCLUDE_REFDES )
             excludedFootprints.push_back( fpData );
     }
 
-    for( REFDES_INFO fpData : excludedFootprints )
+    for( const REFDES_INFO& fpData : excludedFootprints )
     {
         if( fpData.Action == EXCLUDE_REFDES )
         {

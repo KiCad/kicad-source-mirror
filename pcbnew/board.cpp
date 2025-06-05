@@ -1463,7 +1463,7 @@ void BOARD::DeleteMARKERs( bool aWarningsAndErrors, bool aExclusions )
         }
     }
 
-    m_markers = remaining;
+    m_markers = std::move( remaining );
 }
 
 

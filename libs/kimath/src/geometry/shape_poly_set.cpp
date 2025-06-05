@@ -556,9 +556,9 @@ int SHAPE_POLY_SET::AddOutline( const SHAPE_LINE_CHAIN& aOutline )
     wxCHECK2_MSG( aOutline.IsClosed(), poly.back().SetClosed( true ),
                   "Warning: non-closed outline added to SHAPE_POLY_SET" );
 
-    m_polys.push_back( poly );
+    m_polys.push_back( std::move( poly ) );
 
-    return m_polys.size() - 1;
+    return (int) m_polys.size() - 1;
 }
 
 
@@ -567,7 +567,7 @@ int SHAPE_POLY_SET::AddHole( const SHAPE_LINE_CHAIN& aHole, int aOutline )
     assert( m_polys.size() );
 
     if( aOutline < 0 )
-        aOutline += m_polys.size();
+        aOutline += (int) m_polys.size();
 
     assert( aOutline < (int)m_polys.size() );
 
@@ -577,7 +577,7 @@ int SHAPE_POLY_SET::AddHole( const SHAPE_LINE_CHAIN& aHole, int aOutline )
 
     poly.push_back( aHole );
 
-    return poly.size() - 2;
+    return (int) poly.size() - 2;
 }
 
 
@@ -741,7 +741,7 @@ void SHAPE_POLY_SET::RebuildHolesFromContours()
     for( int topParentId : topLevelParents )
     {
         std::vector<int> path;
-        process( topParentId, -1, path );
+        process( topParentId, -1, std::move( path ) );
     }
 
     *this = result;
@@ -1156,7 +1156,7 @@ void SHAPE_POLY_SET::importPolyPath( const std::unique_ptr<Clipper2Lib::PolyPath
                 importPolyPath( grandchild, aZValueBuffer, aArcBuffer );
         }
 
-        m_polys.push_back( paths );
+        m_polys.emplace_back( std::move( paths ) );
     }
 }
 
@@ -1197,7 +1197,7 @@ void SHAPE_POLY_SET::importPaths( Clipper2Lib::Paths64&              aPath,
     }
 
     if( !path.empty() )
-        m_polys.emplace_back( path );
+        m_polys.emplace_back( std::move( path ) );
 }
 
 
@@ -1208,7 +1208,9 @@ struct FractureEdge
     FractureEdge() = default;
 
     FractureEdge( const VECTOR2I& p1, const VECTOR2I& p2, Index next ) :
-            m_p1( p1 ), m_p2( p2 ), m_next( next )
+            m_p1( p1 ),
+            m_p2( p2 ),
+            m_next( next )
     {
     }
 
@@ -1831,7 +1833,7 @@ void SHAPE_POLY_SET::unfractureSingle( SHAPE_POLY_SET::POLYGON& aPoly )
     if( outline > 0 )
         std::swap( result[0], result[outline] );
 
-    aPoly = result;
+    aPoly = std::move( result );
 }
 
 
@@ -1994,7 +1996,7 @@ bool SHAPE_POLY_SET::Parse( std::stringstream& aStream )
                 outline.Append( p );
             }
 
-            paths.push_back( outline );
+            paths.push_back( std::move( outline ) );
         }
 
         m_polys.push_back( paths );

@@ -400,7 +400,7 @@ CN_CONNECTIVITY_ALGO::SearchClusters( CLUSTER_SEARCH_MODE aMode, bool aExcludeZo
             }
         }
 
-        clusters.push_back( cluster );
+        clusters.push_back( std::move( cluster ) );
     }
 
     if( m_progressReporter && m_progressReporter->IsCancelled() )
