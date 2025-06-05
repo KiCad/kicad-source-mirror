@@ -253,12 +253,12 @@ wxString LIB_TABLE::GetFullURI( const wxString& aNickname, bool aExpandEnvVars )
 
 LIB_TABLE_ROW* LIB_TABLE::findRow( const wxString& aNickName, bool aCheckIfEnabled ) const
 {
-    LIB_TABLE_ROW* row = nullptr;
     LIB_TABLE* cur = (LIB_TABLE*) this;
 
     do
     {
         std::shared_lock<std::shared_mutex> lock( cur->m_mutex );
+        LIB_TABLE_ROW*                      row = nullptr;
 
         if( cur->m_rowsMap.count( aNickName ) )
             row = &*cur->m_rowsMap.at( aNickName );
