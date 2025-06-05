@@ -90,14 +90,14 @@ bool SCH_EDIT_FRAME::TrimWire( SCH_COMMIT* aCommit, const VECTOR2I& aStart, cons
         // Step 1: break the segment on one end.
         // Ensure that *line points to the segment containing aEnd
         SCH_LINE* new_line;
-        BreakSegment( aCommit, line, aStart, &new_line, screen );
+        Schematic().BreakSegment( aCommit, line, aStart, &new_line, screen );
 
         if( IsPointOnSegment( new_line->GetStartPoint(), new_line->GetEndPoint(), aEnd ) )
             line = new_line;
 
         // Step 2: break the remaining segment.
         // Ensure that *line _also_ contains aStart.  This is our overlapping segment
-        BreakSegment( aCommit, line, aEnd, &new_line, screen );
+        Schematic().BreakSegment( aCommit, line, aEnd, &new_line, screen );
 
         if( IsPointOnSegment( new_line->GetStartPoint(), new_line->GetEndPoint(), aStart ) )
             line = new_line;
@@ -140,7 +140,7 @@ void SCH_EDIT_FRAME::SchematicCleanUp( SCH_COMMIT* aCommit, SCH_SCREEN* aScreen 
                            }
                        };
 
-    BreakSegmentsOnJunctions( aCommit, aScreen );
+    Schematic().BreakSegmentsOnJunctions( aCommit, aScreen );
 
     for( SCH_ITEM* item : aScreen->Items().OfType( SCH_JUNCTION_T ) )
     {
@@ -296,65 +296,6 @@ void SCH_EDIT_FRAME::SchematicCleanUp( SCH_COMMIT* aCommit, SCH_SCREEN* aScreen 
 }
 
 
-void SCH_EDIT_FRAME::BreakSegment( SCH_COMMIT* aCommit, SCH_LINE* aSegment, const VECTOR2I& aPoint,
-                                   SCH_LINE** aNewSegment, SCH_SCREEN* aScreen )
-{
-    // Save the copy of aSegment before breaking it
-    aCommit->Modify( aSegment, aScreen );
-
-    SCH_LINE* newSegment = aSegment->BreakAt( aPoint );
-
-    aSegment->SetFlags( IS_CHANGED | IS_BROKEN );
-    newSegment->SetFlags( IS_NEW | IS_BROKEN );
-
-    AddToScreen( newSegment, aScreen );
-    aCommit->Added( newSegment, aScreen );
-
-    *aNewSegment = newSegment;
-}
-
-
-bool SCH_EDIT_FRAME::BreakSegments( SCH_COMMIT* aCommit, const VECTOR2I& aPos, SCH_SCREEN* aScreen )
-{
-    bool      brokenSegments = false;
-    SCH_LINE* new_line;
-
-    for( SCH_LINE* wire : aScreen->GetBusesAndWires( aPos, true ) )
-    {
-        BreakSegment( aCommit, wire, aPos, &new_line, aScreen );
-        brokenSegments = true;
-    }
-
-    return brokenSegments;
-}
-
-
-bool SCH_EDIT_FRAME::BreakSegmentsOnJunctions( SCH_COMMIT* aCommit, SCH_SCREEN* aScreen )
-{
-    bool brokenSegments = false;
-
-    std::set<VECTOR2I> point_set;
-
-    for( SCH_ITEM* item : aScreen->Items().OfType( SCH_JUNCTION_T ) )
-        point_set.insert( item->GetPosition() );
-
-    for( SCH_ITEM* item : aScreen->Items().OfType( SCH_BUS_WIRE_ENTRY_T ) )
-    {
-        SCH_BUS_WIRE_ENTRY* entry = static_cast<SCH_BUS_WIRE_ENTRY*>( item );
-        point_set.insert( entry->GetPosition() );
-        point_set.insert( entry->GetEnd() );
-    }
-
-    for( const VECTOR2I& pt : point_set )
-    {
-        BreakSegments( aCommit, pt, aScreen );
-        brokenSegments = true;
-    }
-
-    return brokenSegments;
-}
-
-
 void SCH_EDIT_FRAME::DeleteJunction( SCH_COMMIT* aCommit, SCH_ITEM* aJunction )
 {
     SCH_SCREEN*         screen = GetScreen();
@@ -436,7 +377,7 @@ SCH_JUNCTION* SCH_EDIT_FRAME::AddJunction( SCH_COMMIT* aCommit, SCH_SCREEN* aScr
     AddToScreen( junction, aScreen );
     aCommit->Added( junction, aScreen );
 
-    BreakSegments( aCommit, aPos, aScreen );
+    Schematic().BreakSegments( aCommit, aPos, aScreen );
 
     return junction;
 }

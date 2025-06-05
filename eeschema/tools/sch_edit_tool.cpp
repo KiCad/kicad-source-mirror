@@ -2930,9 +2930,9 @@ int SCH_EDIT_TOOL::BreakWire( const TOOL_EVENT& aEvent )
 
         // We let the user select the break point if they're on a single line
         if( lines.size() == 1 && line->HitTest( cursorPos ) )
-            m_frame->BreakSegment( &commit, line, cursorPos, &newLine, screen );
+            m_frame->Schematic().BreakSegment( &commit, line, cursorPos, &newLine, screen );
         else
-            m_frame->BreakSegment( &commit, line, line->GetMidPoint(), &newLine, screen );
+            m_frame->Schematic().BreakSegment( &commit, line, line->GetMidPoint(), &newLine, screen );
 
         // Make sure both endpoints are deselected
         newLine->ClearFlags();

@@ -30,6 +30,8 @@
 #include <project/net_settings.h>
 #include <project/project_file.h>
 #include <schematic.h>
+#include <sch_bus_entry.h>
+#include <sch_commit.h>
 #include <sch_junction.h>
 #include <sch_label.h>
 #include <sch_line.h>
@@ -45,7 +47,8 @@ bool SCHEMATIC::m_IsSchematicExists = false;
 SCHEMATIC::SCHEMATIC( PROJECT* aPrj ) :
           EDA_ITEM( nullptr, SCHEMATIC_T ),
           m_project( nullptr ),
-          m_rootSheet( nullptr )
+          m_rootSheet( nullptr ),
+          m_schematicHolder( nullptr )
 {
     m_currentSheet    = new SCH_SHEET_PATH();
     m_connectionGraph = new CONNECTION_GRAPH( this );
@@ -998,4 +1001,65 @@ bool SCHEMATIC::IsComplexHierarchy() const
     }
 
     return false;
+}
+
+
+void SCHEMATIC::BreakSegment( SCH_COMMIT* aCommit, SCH_LINE* aSegment, const VECTOR2I& aPoint,
+                              SCH_LINE** aNewSegment, SCH_SCREEN* aScreen )
+{
+    // Save the copy of aSegment before breaking it
+    aCommit->Modify( aSegment, aScreen );
+
+    SCH_LINE* newSegment = aSegment->BreakAt( aPoint );
+
+    aSegment->SetFlags( IS_CHANGED | IS_BROKEN );
+    newSegment->SetFlags( IS_NEW | IS_BROKEN );
+
+    if( m_schematicHolder )
+        m_schematicHolder->AddToScreen( newSegment, aScreen );
+
+    aCommit->Added( newSegment, aScreen );
+
+    *aNewSegment = newSegment;
+}
+
+
+bool SCHEMATIC::BreakSegments( SCH_COMMIT* aCommit, const VECTOR2I& aPos, SCH_SCREEN* aScreen )
+{
+    bool      brokenSegments = false;
+    SCH_LINE* new_line;
+
+    for( SCH_LINE* wire : aScreen->GetBusesAndWires( aPos, true ) )
+    {
+        BreakSegment( aCommit, wire, aPos, &new_line, aScreen );
+        brokenSegments = true;
+    }
+
+    return brokenSegments;
+}
+
+
+bool SCHEMATIC::BreakSegmentsOnJunctions( SCH_COMMIT* aCommit, SCH_SCREEN* aScreen )
+{
+    bool brokenSegments = false;
+
+    std::set<VECTOR2I> point_set;
+
+    for( SCH_ITEM* item : aScreen->Items().OfType( SCH_JUNCTION_T ) )
+        point_set.insert( item->GetPosition() );
+
+    for( SCH_ITEM* item : aScreen->Items().OfType( SCH_BUS_WIRE_ENTRY_T ) )
+    {
+        SCH_BUS_WIRE_ENTRY* entry = static_cast<SCH_BUS_WIRE_ENTRY*>( item );
+        point_set.insert( entry->GetPosition() );
+        point_set.insert( entry->GetEnd() );
+    }
+
+    for( const VECTOR2I& pt : point_set )
+    {
+        BreakSegments( aCommit, pt, aScreen );
+        brokenSegments = true;
+    }
+
+    return brokenSegments;
 }

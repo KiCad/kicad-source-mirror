@@ -100,7 +100,7 @@ LIB_SYMBOL* SchGetLibSymbol( const LIB_ID& aLibId, SYMBOL_LIB_TABLE* aLibTable,
  *
  * @author Dick Hollenbeck
  */
-class SCH_BASE_FRAME : public EDA_DRAW_FRAME
+class SCH_BASE_FRAME : public EDA_DRAW_FRAME, public SCHEMATIC_HOLDER
 {
 public:
     SCH_BASE_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aWindowType, const wxString& aTitle,
@@ -210,7 +210,7 @@ public:
      * Add an item to the screen (and view)
      * aScreen is the screen the item is located on, if not the current screen
      */
-    void AddToScreen( EDA_ITEM* aItem, SCH_SCREEN* aScreen = nullptr );
+    void AddToScreen( EDA_ITEM* aItem, SCH_SCREEN* aScreen = nullptr ) override;
 
     /**
      * Remove an item from the screen (and view)

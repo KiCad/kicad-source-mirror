@@ -22,6 +22,7 @@
 
 #include <eda_item.h>
 #include <embedded_files.h>
+#include <schematic_holder.h>
 #include <sch_sheet_path.h>
 #include <schematic_settings.h>
 
@@ -31,6 +32,8 @@ class CONNECTION_GRAPH;
 class EDA_BASE_FRAME;
 class ERC_SETTINGS;
 class PROJECT;
+class SCH_COMMIT;
+class SCH_LINE;
 class SCH_SCREEN;
 class SCH_SHEET;
 class SCH_SHEET_LIST;
@@ -157,6 +160,8 @@ public:
         *m_currentSheet = aPath;
     }
 
+    SCH_SCREEN* GetCurrentScreen() const { return CurrentSheet().LastScreen(); }
+
     CONNECTION_GRAPH* ConnectionGraph() const
     {
         return m_connectionGraph;
@@ -265,6 +270,39 @@ public:
     void FixupJunctions();
 
     /**
+     * Break a single segment into two at the specified point.
+     *
+     * @param aCommit Transaction container used to record changes for undo/redo
+     * @param aSegment Line segment to break
+     * @param aPoint Point at which to break the segment
+     * @param aNewSegment Pointer to the newly created segment (if created)
+     * @param aScreen is the screen to examine
+     */
+    void BreakSegment( SCH_COMMIT* aCommit, SCH_LINE* aSegment, const VECTOR2I& aPoint, SCH_LINE** aNewSegment,
+                       SCH_SCREEN* aScreen );
+
+    /**
+     * Check every wire and bus for a intersection at \a aPoint and break into two segments
+     * at \a aPoint if an intersection is found.
+     *
+     * @param aCommit Transaction container used to record changes for undo/redo
+     * @param aPoint Test this point for an intersection.
+     * @param aScreen is the screen to examine.
+     * @return True if any wires or buses were broken.
+     */
+    bool BreakSegments( SCH_COMMIT* aCommit, const VECTOR2I& aPoint, SCH_SCREEN* aScreen );
+
+    /**
+     * Test all junctions and bus entries in the schematic for intersections with wires and
+     * buses and breaks any intersections into multiple segments.
+     *
+     * @param aCommit Transaction container used to record changes for undo/redo
+     * @param aScreen is the screen to examine.
+     * @return True if any wires or buses were broken.
+     */
+    bool BreakSegmentsOnJunctions( SCH_COMMIT* aCommit, SCH_SCREEN* aScreen );
+
+    /**
      * Scan existing markers and record data from any that are Excluded.
      */
     void RecordERCExclusions();
@@ -348,6 +386,8 @@ public:
      */
     bool IsComplexHierarchy() const;
 
+    void SetSchematicHolder( SCHEMATIC_HOLDER* aHolder ) { m_schematicHolder = aHolder; }
+
     /**
      * True if a SCHEMATIC exists, false if not
      */
@@ -410,6 +450,11 @@ private:
      * Currently installed listeners.
      */
     std::vector<SCHEMATIC_LISTENER*> m_listeners;
+
+    /**
+     * What currently "Holds" the schematic, i.e. a edit frame if available
+     */
+    SCHEMATIC_HOLDER* m_schematicHolder;
 };
 
 #endif
