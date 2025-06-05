@@ -51,57 +51,65 @@ void DSNLEXER::init()
 }
 
 
-DSNLEXER::DSNLEXER( const KEYWORD* aKeywordTable, unsigned aKeywordCount,
-                    const KEYWORD_MAP* aKeywordMap,
+DSNLEXER::DSNLEXER( const KEYWORD* aKeywordTable, unsigned aKeywordCount, const KEYWORD_MAP* aKeywordMap,
                     FILE* aFile, const wxString& aFilename ) :
     iOwnReaders( true ),
     start( nullptr ),
     next( nullptr ),
     limit( nullptr ),
     reader( nullptr ),
+    specctraMode( false ),
+    m_knowsBar( false ),
+    space_in_quoted_tokens( false ),
+    commentsAreTokens( false ),
     keywords( aKeywordTable ),
     keywordCount( aKeywordCount ),
     keywordsLookup( aKeywordMap )
 {
-    FILE_LINE_READER* fileReader = new FILE_LINE_READER( aFile, aFilename );
-    PushReader( fileReader );
+    PushReader( new FILE_LINE_READER( aFile, aFilename ) );
     init();
 }
 
 
-DSNLEXER::DSNLEXER( const KEYWORD* aKeywordTable, unsigned aKeywordCount,
-                    const KEYWORD_MAP* aKeywordMap,
+DSNLEXER::DSNLEXER( const KEYWORD* aKeywordTable, unsigned aKeywordCount, const KEYWORD_MAP* aKeywordMap,
                     const std::string& aClipboardTxt, const wxString& aSource ) :
-    iOwnReaders( true ),
-    start( nullptr ),
-    next( nullptr ),
-    limit( nullptr ),
-    reader( nullptr ),
-    keywords( aKeywordTable ),
-    keywordCount( aKeywordCount ),
-    keywordsLookup( aKeywordMap )
+        iOwnReaders( true ),
+        start( nullptr ),
+        next( nullptr ),
+        limit( nullptr ),
+        reader( nullptr ),
+        specctraMode( false ),
+        m_knowsBar( false ),
+        space_in_quoted_tokens( false ),
+        commentsAreTokens( false ),
+        keywords( aKeywordTable ),
+        keywordCount( aKeywordCount ),
+        keywordsLookup( aKeywordMap )
 {
-    STRING_LINE_READER* stringReader = new STRING_LINE_READER( aClipboardTxt, aSource.IsEmpty() ?
-                                        wxString( FMT_CLIPBOARD ) : aSource );
-    PushReader( stringReader );
+    PushReader( new STRING_LINE_READER( aClipboardTxt, aSource.IsEmpty() ? wxString( FMT_CLIPBOARD )
+                                                                         : aSource ) );
     init();
 }
 
 
-DSNLEXER::DSNLEXER( const KEYWORD* aKeywordTable, unsigned aKeywordCount,
-                    const KEYWORD_MAP* aKeywordMap,
+DSNLEXER::DSNLEXER( const KEYWORD* aKeywordTable, unsigned aKeywordCount, const KEYWORD_MAP* aKeywordMap,
                     LINE_READER* aLineReader ) :
-    iOwnReaders( false ),
-    start( nullptr ),
-    next( nullptr ),
-    limit( nullptr ),
-    reader( nullptr ),
-    keywords( aKeywordTable ),
-    keywordCount( aKeywordCount ),
-    keywordsLookup( aKeywordMap )
+        iOwnReaders( false ),
+        start( nullptr ),
+        next( nullptr ),
+        limit( nullptr ),
+        reader( nullptr ),
+        specctraMode( false ),
+        m_knowsBar( false ),
+        space_in_quoted_tokens( false ),
+        commentsAreTokens( false ),
+        keywords( aKeywordTable ),
+        keywordCount( aKeywordCount ),
+        keywordsLookup( aKeywordMap )
 {
     if( aLineReader )
         PushReader( aLineReader );
+
     init();
 }
 
@@ -109,18 +117,21 @@ DSNLEXER::DSNLEXER( const KEYWORD* aKeywordTable, unsigned aKeywordCount,
 static const KEYWORD empty_keywords[1] = {};
 
 DSNLEXER::DSNLEXER( const std::string& aSExpression, const wxString& aSource ) :
-    iOwnReaders( true ),
-    start( nullptr ),
-    next( nullptr ),
-    limit( nullptr ),
-    reader( nullptr ),
-    keywords( empty_keywords ),
-    keywordCount( 0 ),
-    keywordsLookup( nullptr )
+        iOwnReaders( true ),
+        start( nullptr ),
+        next( nullptr ),
+        limit( nullptr ),
+        reader( nullptr ),
+        specctraMode( false ),
+        m_knowsBar( false ),
+        space_in_quoted_tokens( false ),
+        commentsAreTokens( false ),
+        keywords( empty_keywords ),
+        keywordCount( 0 ),
+        keywordsLookup( nullptr )
 {
-    STRING_LINE_READER* stringReader = new STRING_LINE_READER( aSExpression, aSource.IsEmpty() ?
-                                        wxString( FMT_CLIPBOARD ) : aSource );
-    PushReader( stringReader );
+    PushReader( new STRING_LINE_READER( aSExpression, aSource.IsEmpty() ? wxString( FMT_CLIPBOARD )
+                                                                        : aSource ) );
     init();
 }
 
@@ -139,6 +150,7 @@ DSNLEXER::~DSNLEXER()
 void DSNLEXER::SetSpecctraMode( bool aMode )
 {
     specctraMode = aMode;
+
     if( aMode )
     {
         // specctra mode defaults, some of which can still be changed in this mode.
@@ -292,13 +304,9 @@ const char* DSNLEXER::GetTokenText( int aTok ) const
     const char* ret;
 
     if( aTok < 0 )
-    {
         return Syntax( aTok );
-    }
     else if( (unsigned) aTok < keywordCount )
-    {
         ret = keywords[aTok].name;
-    }
     else
         ret = "token too big";
 
@@ -374,6 +382,7 @@ void DSNLEXER::Unexpected( const char* text ) const
 void DSNLEXER::NeedLEFT()
 {
     int tok = NextTok();
+
     if( tok != DSN_LEFT )
         Expecting( DSN_LEFT );
 }
