@@ -435,7 +435,7 @@ void DIALOG_FIND::search( bool aDirection )
 
         m_status->SetLabel( msg );
     }
-    else if( endIsReached )
+    else if( endIsReached || m_it == m_hitList.end() )
     {
         m_frame->SetStatusText( wxEmptyString );
         m_frame->ShowInfoBarMsg( _( "No more items to show" ) );
