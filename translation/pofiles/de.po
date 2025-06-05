@@ -30,7 +30,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-06-01 20:43+0300\n"
-"PO-Revision-Date: 2025-06-03 08:04+0000\n"
+"PO-Revision-Date: 2025-06-05 14:56+0000\n"
 "Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v9/de/>\n"
 "Language: de\n"
@@ -11839,9 +11839,8 @@ msgid "Update/reset visibility of pin names/numbers"
 msgstr "Sichtbarkeit von Pinnamen/-nummern aktualisieren/zurücksetzen"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:172
-#, fuzzy
 msgid "Reset alternate pin to default"
-msgstr "Zurücksetzen der Wizard-Parameter auf Standardwerte"
+msgstr "Zurücksetzen der alternativen Pinfunktion auf Standardwert"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:178
 msgid "Update/reset symbol attributes"
@@ -15324,14 +15323,12 @@ msgid "Show datasheet in browser"
 msgstr "Datenblatt im Browser anzeigen"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:200
-#, fuzzy
 msgid "Column Label"
-msgstr "%d Tabellenspalte"
+msgstr "Spaltenbezeichner"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:205
-#, fuzzy
 msgid "Show Column"
-msgstr "Spalten anzeigen/ausblenden"
+msgstr "Spalte zeigen"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:206
 msgid "Group By"
@@ -19631,13 +19628,12 @@ msgid "Expecting R0, R90, R18, R270, M0, M90, M180 or M270"
 msgstr "R0, R90, R18, R270, M0, M90, M180 oder M270 erwartet"
 
 #: eeschema/sch_io/ltspice/ltspice_schematic.cpp:495
-#, fuzzy
 msgid ""
 "Expecting LEFT, CENTER, RIGHT, TOP, BOTTOM, VLEFT, VRIGHT, VCENTER, VTOP, "
 "VBOTTOM or INVISIBLE"
 msgstr ""
-"LEFT, CENTER, RIGHT, TOP, BOTTOM, VLEFT, VRIGHT, VCENTER, VTOP oder VBOTTOM "
-"erwartet"
+"LEFT, CENTER, RIGHT, TOP, BOTTOM, VLEFT, VRIGHT, VCENTER, VTOP, VBOTTOM oder "
+"INVISIBLE erwartet"
 
 #: eeschema/sch_io/ltspice/ltspice_schematic.cpp:518
 msgid ""
@@ -36360,9 +36356,8 @@ msgid "By layer:"
 msgstr "Auf Lage:"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:97
-#, fuzzy
 msgid "By parent reference designator:"
-msgstr "Start Referenzbezeichner:"
+msgstr "Nach übergeordnetem Referenzbezeichner filtern:"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:103
 #, fuzzy
