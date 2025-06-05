@@ -328,6 +328,9 @@ EMBEDDED_FILES::RETURN_CODE EMBEDDED_FILES::DecompressAndDecode( EMBEDDED_FILE& 
 // Parsing method
 void EMBEDDED_FILES_PARSER::ParseEmbedded( EMBEDDED_FILES* aFiles )
 {
+    // embedded files are version 20240706 and uses also Bars as separator
+    SetKnowsBar( true );
+
     if( !aFiles )
         THROW_PARSE_ERROR( "No embedded files object provided", CurSource(), CurLine(),
                            CurLineNumber(), CurOffset() );

@@ -46,7 +46,7 @@ void DSNLEXER::init()
     specctraMode = false;
     space_in_quoted_tokens = false;
     commentsAreTokens = false;
-
+    SetKnowsBar( true );    // default since version 20240706
     curOffset = 0;
 }
 
