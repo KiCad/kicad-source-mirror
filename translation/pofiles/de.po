@@ -31,7 +31,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-06-01 20:42+0300\n"
-"PO-Revision-Date: 2025-06-03 08:04+0000\n"
+"PO-Revision-Date: 2025-06-05 14:56+0000\n"
 "Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
@@ -12267,9 +12267,8 @@ msgid "Update/reset visibility of pin names/numbers"
 msgstr "Sichtbarkeit von Pinnamen/-nummern aktualisieren/zurücksetzen"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:172
-#, fuzzy
 msgid "Reset alternate pin to default"
-msgstr "Zurücksetzen der Wizard-Parameter auf Standardwerte"
+msgstr "Zurücksetzen der alternativen Pinfunktion auf Standardwert"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:178
 msgid "Update/reset symbol attributes"
@@ -13079,19 +13078,16 @@ msgstr "Nach Feldname:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:99
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:97
-#, fuzzy
 msgid "By parent reference designator:"
-msgstr "Start Referenzbezeichner:"
+msgstr "Nach übergeordnetem Referenzbezeichner filtern:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:107
-#, fuzzy
 msgid "By parent symbol library id:"
-msgstr "Elemente nach übergeordneter Symbolbibliotheks-ID filtern:"
+msgstr "Nach übergeordneter Symbolbibliotheks-ID filtern:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:113
-#, fuzzy
 msgid "By parent symbol type:"
-msgstr "Elemente nach übergeordnetem Symboltyp filtern:"
+msgstr "Nach übergeordnetem Symboltyp filtern:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:116
 msgid "Non-power symbols"
@@ -13536,9 +13532,8 @@ msgid "True"
 msgstr "Wahr"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:57
-#, fuzzy
 msgid "False"
-msgstr "falsch"
+msgstr "Falsch"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:59
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:60
@@ -13607,12 +13602,13 @@ msgid ""
 "The value '%s' can't be converted to boolean correctly, it has been "
 "interpreted as 'False'"
 msgstr ""
+"Der Wert \"%s\" konnte nicht korrekt in einen Wahrheitswert gewandelt werden;"
+" er wurde als \"falsch\" interpretert"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:1006
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:1566
-#, fuzzy
 msgid "Select pin data file"
-msgstr "Datei auswählen"
+msgstr "Pindaten-Datei auswählen"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:1032
 #, c-format
@@ -13685,24 +13681,20 @@ msgid "Export"
 msgstr "Exportieren"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:138
-#, fuzzy
 msgid "Export all pins"
-msgstr "Eine Netzliste exportieren"
+msgstr "Alle Pins exportieren"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:141
-#, fuzzy
 msgid "Export only shown pins"
-msgstr "Footprint exportieren"
+msgstr "Nur sichtbare Pins exportieren"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:147
-#, fuzzy
 msgid "To File..."
-msgstr "Datei committen..."
+msgstr "In Datei..."
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:150
-#, fuzzy
 msgid "To Clipboard"
-msgstr "Zwischenablage"
+msgstr "In Zwischenablage"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:163
 #: eeschema/menubar.cpp:100 eeschema/symbol_editor/menubar_symbol_editor.cpp:67
@@ -13711,24 +13703,20 @@ msgid "Import"
 msgstr "Importieren"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:168
-#, fuzzy
 msgid "Replace all existing pins"
-msgstr "Bestehender Platzierungs-Regelbereiche ersetzen"
+msgstr "Alle vorhandenen Pins ersetzen"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:171
-#, fuzzy
 msgid "Append to existing pins"
-msgstr "Bestehendes Zeichnungsblatt hinzufügen"
+msgstr "An vorhandene Pins anhängen"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:180
-#, fuzzy
 msgid "From File..."
-msgstr "Datei committen..."
+msgstr "Aus Datei..."
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:183
-#, fuzzy
 msgid "From Clipboard"
-msgstr "Export in Zwischenablage"
+msgstr "Aus Zwischenablage"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:200
 msgid "Filter by unit:"
@@ -13737,12 +13725,11 @@ msgstr "Nach Einheit filtern:"
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:208
 #, fuzzy
 msgid "Filter by body style:"
-msgstr "Vias nach Größe filtern:"
+msgstr "Nach Pinkörper filtern:"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:216
-#, fuzzy
 msgid "Filter by selection"
-msgstr "Filter Auswahl"
+msgstr "Nach Auswahl filtern"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:248
 msgid "Group by name"
@@ -14735,9 +14722,8 @@ msgstr "Pin&namen und -nummern durchsuchen"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:96
 #: pcbnew/dialogs/dialog_find_base.cpp:92
-#, fuzzy
 msgid "Include &hidden fields"
-msgstr "Verborgene Felder darstellen"
+msgstr "Verborgene Felder einbezie&hen"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:99
 msgid "Search the current &sheet only"
@@ -15777,14 +15763,12 @@ msgid "Show datasheet in browser"
 msgstr "Datenblatt im Browser anzeigen"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:197
-#, fuzzy
 msgid "Column Label"
-msgstr "%d Tabellenspalte"
+msgstr "Spaltenbezeichner"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:202
-#, fuzzy
 msgid "Show Column"
-msgstr "Spalten anzeigen/ausblenden"
+msgstr "Spalte zeigen"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:203
 msgid "Group By"
@@ -16705,9 +16689,8 @@ msgstr "Endpunkte oder Richtung des Startpunkts beibehalten"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:50
 #: pcbnew/dialogs/panel_edit_options_base.cpp:63
-#, fuzzy
 msgid "Keep center and radius, adjust endpoints"
-msgstr "Mittelpunkt beibehalten, Radius anpassen"
+msgstr "Mittelpunkt und Radius beibehalten, Endpunkte anpassen"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:56
 msgid "Mouse drag performs Drag (G) operation"
@@ -17469,7 +17452,7 @@ msgstr ""
 
 #: eeschema/eeschema_jobs_handler.cpp:132 pcbnew/pcbnew_jobs_handler.cpp:241
 msgid "Plotting to HPGL is no longer supported as of KiCad 10.0."
-msgstr ""
+msgstr "Das Plotten zu HPGL wird ab KiCad 10.0 nicht mehr unterstützt."
 
 #: eeschema/eeschema_jobs_handler.cpp:199
 msgid "Failed to load schematic\n"
@@ -17479,7 +17462,7 @@ msgstr "Konnte Schaltplan nicht laden\n"
 #: kicad/cli/command_pcb_export_hpgl.cpp:36
 #: kicad/cli/command_sch_export_plot.cpp:126 pcbnew/pcbnew_jobs_handler.cpp:229
 msgid "Plotting to HPGL is no longer supported as of KiCad 10.0.\n"
-msgstr ""
+msgstr "Das Plotten in HPGL wird ab KiCad 10.0 nicht mehr unterstützt.\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:324
 #: eeschema/eeschema_jobs_handler.cpp:466
@@ -17555,9 +17538,9 @@ msgid "There is no symbol selected to save."
 msgstr "Es wurde kein Symbol zum Speichern ausgewählt."
 
 #: eeschema/eeschema_jobs_handler.cpp:978
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to create output directory '%s'."
-msgstr "Kann das Ausgabeverzeichnis \"%s\" nicht erstellen."
+msgstr "Konnte Ausgabeverzeichnis \"%s\" nicht erstellen."
 
 #: eeschema/eeschema_jobs_handler.cpp:1031 pcbnew/pcbnew_jobs_handler.cpp:1780
 msgid "Output path must not conflict with existing path\n"
@@ -20165,15 +20148,14 @@ msgstr "Ungültige Symbolbibliotheks-ID"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:4888
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6167
-#, fuzzy, c-format
+#, c-format
 msgid "Group library link %s contains invalid character '%c'"
-msgstr "Symbol %s enthält ungültiges Zeichen \"%c\""
+msgstr "Gruppenbibliotheksverknüpfung %s enthält ungültiges Zeichen \"%c\""
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:4894
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6174
-#, fuzzy
 msgid "Invalid library ID"
-msgstr "Ungültige Symbolbibliotheks-ID"
+msgstr "Ungültige Bibliotheks-ID"
 
 #: eeschema/sch_io/ltspice/ltspice_schematic.cpp:223
 #, c-format
@@ -20214,13 +20196,12 @@ msgid "Expecting R0, R90, R18, R270, M0, M90, M180 or M270"
 msgstr "R0, R90, R18, R270, M0, M90, M180 oder M270 erwartet"
 
 #: eeschema/sch_io/ltspice/ltspice_schematic.cpp:495
-#, fuzzy
 msgid ""
 "Expecting LEFT, CENTER, RIGHT, TOP, BOTTOM, VLEFT, VRIGHT, VCENTER, VTOP, "
 "VBOTTOM or INVISIBLE"
 msgstr ""
-"LEFT, CENTER, RIGHT, TOP, BOTTOM, VLEFT, VRIGHT, VCENTER, VTOP oder VBOTTOM "
-"erwartet"
+"LEFT, CENTER, RIGHT, TOP, BOTTOM, VLEFT, VRIGHT, VCENTER, VTOP, VBOTTOM oder "
+"INVISIBLE erwartet"
 
 #: eeschema/sch_io/ltspice/ltspice_schematic.cpp:518
 msgid ""
@@ -21717,9 +21698,8 @@ msgid "Cannot remove temporary output file"
 msgstr "Kann temporäre Ausgabedatei nicht entfernen"
 
 #: eeschema/sim/kibis/kibis.cpp:682
-#, fuzzy
 msgid "Missing 'Values:' tag in temporary file"
-msgstr "Fehler beim Lesen der temporären Datei"
+msgstr "Fehlendes \"Values:\"-Tag in temporärer Datei"
 
 #: eeschema/sim/kibis/kibis.cpp:710 eeschema/sim/kibis/kibis.cpp:718
 msgid "Error while reading temporary file"
