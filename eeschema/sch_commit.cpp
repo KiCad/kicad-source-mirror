@@ -570,6 +570,8 @@ void SCH_COMMIT::Revert()
 
         case CHT_MODIFY:
         {
+            wxCHECK2( copy, break );
+
             if( view )
                 view->Remove( item );
 

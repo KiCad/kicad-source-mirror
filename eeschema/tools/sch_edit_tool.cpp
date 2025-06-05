@@ -2447,6 +2447,8 @@ int SCH_EDIT_TOOL::ChangeTextType( const TOOL_EVENT& aEvent )
             SPIN_STYLE       spinStyle   = SPIN_STYLE::SPIN::RIGHT;
             LABEL_FLAG_SHAPE shape       = LABEL_FLAG_SHAPE::L_UNSPECIFIED;
 
+            wxCHECK2( sourceText, continue );
+
             switch( item->Type() )
             {
             case SCH_LABEL_T:
@@ -2544,24 +2546,24 @@ int SCH_EDIT_TOOL::ChangeTextType( const TOOL_EVENT& aEvent )
 
             auto getValidNetname =
                     []( const wxString& aText )
-                {
-                    wxString local_txt = aText;
-                    local_txt.Replace( "\n", "_" );
-                    local_txt.Replace( "\r", "_" );
-                    local_txt.Replace( "\t", "_" );
+                    {
+                        wxString local_txt = aText;
+                        local_txt.Replace( "\n", "_" );
+                        local_txt.Replace( "\r", "_" );
+                        local_txt.Replace( "\t", "_" );
 
-                    // Bus groups can have spaces; bus vectors and signal names cannot
-                    if( !NET_SETTINGS::ParseBusGroup( aText, nullptr, nullptr ) )
-                        local_txt.Replace( " ", "_" );
+                        // Bus groups can have spaces; bus vectors and signal names cannot
+                        if( !NET_SETTINGS::ParseBusGroup( aText, nullptr, nullptr ) )
+                            local_txt.Replace( " ", "_" );
 
-                    // label strings are "escaped" i.e. a '/' is replaced by "{slash}"
-                    local_txt = EscapeString( local_txt, CTX_NETNAME );
+                        // label strings are "escaped" i.e. a '/' is replaced by "{slash}"
+                        local_txt = EscapeString( local_txt, CTX_NETNAME );
 
-                    if( local_txt.IsEmpty() )
-                        return _( "<empty>" );
-                    else
-                        return local_txt;
-                };
+                        if( local_txt.IsEmpty() )
+                            return _( "<empty>" );
+                        else
+                            return local_txt;
+                    };
 
             switch( convertTo )
             {
