@@ -302,11 +302,7 @@ void SCINTILLA_TRICKS::onCharHook( wxKeyEvent& aEvent )
                 else if( row > 0 )
                 {
                     col = (int) grid->GetNumberCols() - 1;
-
-                    if( row > 0 )
-                        row--;
-                    else
-                        row = (int) grid->GetNumberRows() - 1;
+                    row--;
                 }
             }
             else
@@ -318,11 +314,7 @@ void SCINTILLA_TRICKS::onCharHook( wxKeyEvent& aEvent )
                 else if( row < grid->GetNumberRows() - 1 )
                 {
                     col = 0;
-
-                    if( row < grid->GetNumberRows() - 1 )
-                        row++;
-                    else
-                        row = 0;
+                    row++;
                 }
             }
 
