@@ -333,7 +333,9 @@ EDA_ITEM& EDA_ITEM::operator=( const EDA_ITEM& aItem )
     m_structType   = aItem.m_structType;
     m_flags        = aItem.m_flags;
     m_parent       = aItem.m_parent;
+    m_group        = aItem.m_group;
     m_forceVisible = aItem.m_forceVisible;
+    m_isRollover   = aItem.m_isRollover;
 
     SetForcedTransparency( aItem.GetForcedTransparency() );
 

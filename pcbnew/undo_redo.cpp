@@ -533,6 +533,9 @@ void PCB_BASE_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
     {
         ITEM_PICKER& wrapper = aList->GetItemWrapper( ii );
 
+        if( wrapper.GetStatus() == UNDO_REDO::DELETED )
+            continue;
+
         BOARD_ITEM* parentGroup = GetBoard()->ResolveItem( wrapper.GetGroupId(), true );
         wrapper.GetItem()->SetParentGroup( dynamic_cast<PCB_GROUP*>( parentGroup ) );
 
