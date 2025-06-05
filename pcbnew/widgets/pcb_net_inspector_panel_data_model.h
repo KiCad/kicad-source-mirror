@@ -599,8 +599,8 @@ public:
     }
 
 
-    LIST_ITEM_ITER addGroup( LIST_ITEM_ITER groupsBegin, LIST_ITEM_ITER groupsEnd,
-                             wxString groupName, LIST_ITEM::GROUP_TYPE groupType )
+    LIST_ITEM* addGroup( LIST_ITEM_ITER groupsBegin, LIST_ITEM_ITER groupsEnd,
+                         wxString groupName, LIST_ITEM::GROUP_TYPE groupType )
     {
         LIST_ITEM_ITER group = std::find_if( groupsBegin, groupsEnd,
                                              [&]( const std::unique_ptr<LIST_ITEM>& x )
@@ -612,13 +612,13 @@ public:
         if( group == groupsEnd )
         {
             int                        dist = std::distance( groupsBegin, groupsEnd );
-            std::unique_ptr<LIST_ITEM> groupItem = std::make_unique<LIST_ITEM>( dist, groupName,
-                                                                                groupType );
+            std::unique_ptr<LIST_ITEM> groupItem = std::make_unique<LIST_ITEM>( dist, groupName, groupType );
+
             group = m_items.insert( groupsEnd, std::move( groupItem ) );
-            ItemAdded( wxDataViewItem( ( *group )->Parent() ), wxDataViewItem( &**group ) );
+            ItemAdded( wxDataViewItem( ( *group )->Parent() ), wxDataViewItem( ( *group ).get() ) );
         }
 
-        return group;
+        return ( *group ).get();
     }
 
 
@@ -656,9 +656,9 @@ public:
                                                           } );
 
             wxString match_str = aItem->GetNetclassName();
-            LIST_ITEM_ITER group = addGroup( groups_begin, groups_end, match_str,
-                                             LIST_ITEM::GROUP_TYPE::NETCLASS );
-            aItem->SetParent( &**group );
+            LIST_ITEM* group = addGroup( groups_begin, groups_end, match_str,
+                                         LIST_ITEM::GROUP_TYPE::NETCLASS );
+            aItem->SetParent( group );
         }
 
         // Now add the item itself. Usually when new nets are added,
