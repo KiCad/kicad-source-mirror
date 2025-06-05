@@ -4431,6 +4431,7 @@ FOOTPRINT* PCB_IO_KICAD_SEXPR_PARSER::parseFOOTPRINT_unchecked( wxArrayString* a
             NeedRIGHT();
             m_requiredVersion = std::max( m_requiredVersion, this_version );
             m_tooRecent       = ( m_requiredVersion > SEXPR_BOARD_FILE_VERSION );
+            SetKnowsBar( m_requiredVersion >= 20240706 ); // Bar token is known from this version
             footprint->SetFileFormatVersionAtLoad( this_version );
             break;
         }
