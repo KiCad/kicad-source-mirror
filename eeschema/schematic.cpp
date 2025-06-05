@@ -36,7 +36,9 @@
 #include <sch_label.h>
 #include <sch_line.h>
 #include <sch_marker.h>
+#include <sch_no_connect.h>
 #include <sch_screen.h>
+#include <sch_selection_tool.h>
 #include <sim/spice_settings.h>
 #include <sim/spice_value.h>
 
@@ -1062,4 +1064,195 @@ bool SCHEMATIC::BreakSegmentsOnJunctions( SCH_COMMIT* aCommit, SCH_SCREEN* aScre
     }
 
     return brokenSegments;
+}
+
+
+void SCHEMATIC::CleanUp( SCH_COMMIT* aCommit, SCH_SCREEN* aScreen )
+{
+    SCH_SELECTION_TOOL*          selectionTool = m_schematicHolder->GetSelectionTool();
+    std::vector<SCH_LINE*>       lines;
+    std::vector<SCH_JUNCTION*>   junctions;
+    std::vector<SCH_NO_CONNECT*> ncs;
+    std::vector<SCH_ITEM*>       items_to_remove;
+    bool                         changed = true;
+
+    if( aScreen == nullptr )
+        aScreen = GetCurrentScreen();
+
+    auto remove_item = [&]( SCH_ITEM* aItem ) -> void
+                       {
+                           changed = true;
+
+                           if( !( aItem->GetFlags() & STRUCT_DELETED ) )
+                           {
+                               aItem->SetFlags( STRUCT_DELETED );
+
+                               if( aItem->IsSelected() && selectionTool )
+                                   selectionTool->RemoveItemFromSel( aItem, true /*quiet mode*/ );
+
+                               if( m_schematicHolder )
+                               {
+                                   m_schematicHolder->RemoveFromScreen( aItem, aScreen );
+                               }
+                               aCommit->Removed( aItem, aScreen );
+                           }
+                       };
+
+    BreakSegmentsOnJunctions( aCommit, aScreen );
+
+    for( SCH_ITEM* item : aScreen->Items().OfType( SCH_JUNCTION_T ) )
+    {
+        if( !aScreen->IsExplicitJunction( item->GetPosition() ) )
+            items_to_remove.push_back( item );
+        else
+            junctions.push_back( static_cast<SCH_JUNCTION*>( item ) );
+    }
+
+    for( SCH_ITEM* item : items_to_remove )
+        remove_item( item );
+
+    for( SCH_ITEM* item : aScreen->Items().OfType( SCH_NO_CONNECT_T ) )
+        ncs.push_back( static_cast<SCH_NO_CONNECT*>( item ) );
+
+    alg::for_all_pairs( junctions.begin(), junctions.end(),
+            [&]( SCH_JUNCTION* aFirst, SCH_JUNCTION* aSecond )
+            {
+                if( ( aFirst->GetEditFlags() & STRUCT_DELETED )
+                        || ( aSecond->GetEditFlags() & STRUCT_DELETED ) )
+                {
+                    return;
+                }
+
+                if( aFirst->GetPosition() == aSecond->GetPosition() )
+                    remove_item( aSecond );
+            } );
+
+    alg::for_all_pairs( ncs.begin(), ncs.end(),
+            [&]( SCH_NO_CONNECT* aFirst, SCH_NO_CONNECT* aSecond )
+            {
+                if( ( aFirst->GetEditFlags() & STRUCT_DELETED )
+                        || ( aSecond->GetEditFlags() & STRUCT_DELETED ) )
+                {
+                    return;
+                }
+
+                if( aFirst->GetPosition() == aSecond->GetPosition() )
+                    remove_item( aSecond );
+            } );
+
+
+    auto minX = []( const SCH_LINE* l )
+                {
+                    return std::min( l->GetStartPoint().x, l->GetEndPoint().x );
+                };
+
+    auto maxX = []( const SCH_LINE* l )
+                {
+                    return std::max( l->GetStartPoint().x, l->GetEndPoint().x );
+                };
+
+    auto minY = []( const SCH_LINE* l )
+                {
+                    return std::min( l->GetStartPoint().y, l->GetEndPoint().y );
+                };
+
+    auto maxY = []( const SCH_LINE* l )
+                {
+                    return std::max( l->GetStartPoint().y, l->GetEndPoint().y );
+                };
+
+    // Would be nice to put lines in a canonical form here by swapping
+    //  start <-> end as needed but I don't know what swapping breaks.
+    while( changed )
+    {
+        changed = false;
+        lines.clear();
+
+        for( SCH_ITEM* item : aScreen->Items().OfType( SCH_LINE_T ) )
+        {
+            if( item->GetLayer() == LAYER_WIRE || item->GetLayer() == LAYER_BUS )
+                lines.push_back( static_cast<SCH_LINE*>( item ) );
+        }
+
+        // Sort by minimum X position
+        std::sort( lines.begin(), lines.end(),
+                   [&]( const SCH_LINE* a, const SCH_LINE* b )
+                   {
+                       return minX( a ) < minX( b );
+                   } );
+
+        for( auto it1 = lines.begin(); it1 != lines.end(); ++it1 )
+        {
+            SCH_LINE* firstLine = *it1;
+
+            if( firstLine->GetEditFlags() & STRUCT_DELETED )
+                continue;
+
+            if( firstLine->IsNull() )
+            {
+                remove_item( firstLine );
+                continue;
+            }
+
+            int  firstRightXEdge = maxX( firstLine );
+            auto it2 = it1;
+
+            for( ++it2; it2 != lines.end(); ++it2 )
+            {
+                SCH_LINE* secondLine = *it2;
+                int       secondLeftXEdge = minX( secondLine );
+
+                // impossible to overlap remaining lines
+                if( secondLeftXEdge > firstRightXEdge )
+                    break;
+
+                // No Y axis overlap
+                if( !( std::max( minY( firstLine ), minY( secondLine ) )
+                       <= std::min( maxY( firstLine ), maxY( secondLine ) ) ) )
+                {
+                    continue;
+                }
+
+                if( secondLine->GetFlags() & STRUCT_DELETED )
+                    continue;
+
+                if( !secondLine->IsParallel( firstLine )
+                        || !secondLine->IsStrokeEquivalent( firstLine )
+                        || secondLine->GetLayer() != firstLine->GetLayer() )
+                {
+                    continue;
+                }
+
+                // Remove identical lines
+                if( firstLine->IsEndPoint( secondLine->GetStartPoint() )
+                        && firstLine->IsEndPoint( secondLine->GetEndPoint() ) )
+                {
+                    remove_item( secondLine );
+                    continue;
+                }
+
+                // See if we can merge an overlap (or two colinear touching segments with
+                // no junction where they meet).
+                SCH_LINE* mergedLine = secondLine->MergeOverlap( aScreen, firstLine, true );
+
+                if( mergedLine != nullptr )
+                {
+                    remove_item( firstLine );
+                    remove_item( secondLine );
+
+                    if( m_schematicHolder )
+                    {
+                        m_schematicHolder->AddToScreen( mergedLine, aScreen );
+                    }
+
+                    aCommit->Added( mergedLine, aScreen );
+
+                    if( firstLine->IsSelected() || secondLine->IsSelected() )
+                        selectionTool->AddItemToSel( mergedLine, true /*quiet mode*/ );
+
+                    break;
+                }
+            }
+        }
+    }
 }

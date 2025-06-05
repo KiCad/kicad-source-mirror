@@ -1238,7 +1238,7 @@ void SCH_LINE_WIRE_BUS_TOOL::finishSegments()
     getViewControls()->SetAutoPan( false );
 
     // Correct and remove segments that need to be merged.
-    m_frame->SchematicCleanUp( &commit );
+    m_frame->Schematic().CleanUp( &commit );
 
     std::vector<SCH_ITEM*> symbols;
 

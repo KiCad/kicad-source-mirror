@@ -482,15 +482,6 @@ public:
     SCH_JUNCTION* AddJunction( SCH_COMMIT* aCommit, SCH_SCREEN* aScreen, const VECTOR2I& aPos );
 
     /**
-     * Perform routine schematic cleaning including breaking wire and buses and deleting
-     * identical objects superimposed on top of each other.
-     *
-     * @param aCommit Transaction container used to record changes for undo/redo
-     * @param aScreen is the screen to examine, or nullptr to examine the current screen
-     */
-    void SchematicCleanUp( SCH_COMMIT* aCommit, SCH_SCREEN* aScreen = nullptr );
-
-    /**
      * If any single wire passes through _both points_, remove the portion between the two points,
      * potentially splitting the wire into two.
      *

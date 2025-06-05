@@ -389,6 +389,15 @@ public:
     void SetSchematicHolder( SCHEMATIC_HOLDER* aHolder ) { m_schematicHolder = aHolder; }
 
     /**
+     * Perform routine schematic cleaning including breaking wire and buses and deleting
+     * identical objects superimposed on top of each other.
+     *
+     * @param aCommit Transaction container used to record changes for undo/redo
+     * @param aScreen is the screen to examine, or nullptr to examine the current screen
+     */
+    void CleanUp( SCH_COMMIT* aCommit, SCH_SCREEN* aScreen = nullptr );
+
+    /**
      * True if a SCHEMATIC exists, false if not
      */
     static bool m_IsSchematicExists;

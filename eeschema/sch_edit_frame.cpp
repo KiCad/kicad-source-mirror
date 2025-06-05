@@ -1780,12 +1780,12 @@ void SCH_EDIT_FRAME::RecalculateConnections( SCH_COMMIT* aCommit, SCH_CLEANUP_FL
     // Ensure schematic graph is accurate
     if( aCleanupFlags == LOCAL_CLEANUP )
     {
-        SchematicCleanUp( aCommit, GetScreen() );
+        Schematic().CleanUp( aCommit, GetScreen() );
     }
     else if( aCleanupFlags == GLOBAL_CLEANUP )
     {
         for( const SCH_SHEET_PATH& sheet : list )
-            SchematicCleanUp( aCommit, sheet.LastScreen() );
+            Schematic().CleanUp( aCommit, sheet.LastScreen() );
     }
 
     timer.Stop();

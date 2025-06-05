@@ -1024,7 +1024,7 @@ bool SCH_MOVE_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, SCH_COMMIT* aComm
         for( EDA_ITEM* item : selection )
             m_frame->AutoRotateItem( m_frame->GetScreen(), static_cast<SCH_ITEM*>( item ) );
 
-        m_frame->SchematicCleanUp( aCommit );
+        m_frame->Schematic().CleanUp( aCommit );
     }
 
     for( EDA_ITEM* item : m_frame->GetScreen()->Items() )
@@ -1052,7 +1052,7 @@ bool SCH_MOVE_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, SCH_COMMIT* aComm
 void SCH_MOVE_TOOL::trimDanglingLines( SCH_COMMIT* aCommit )
 {
     // Need a local cleanup first to ensure we remove unneeded junctions
-    m_frame->SchematicCleanUp( aCommit, m_frame->GetScreen() );
+    m_frame->Schematic().CleanUp( aCommit, m_frame->GetScreen() );
 
     std::set<SCH_ITEM*> danglers;
 
@@ -1840,7 +1840,7 @@ int SCH_MOVE_TOOL::AlignToGrid( const TOOL_EVENT& aEvent )
 
     m_toolMgr->PostEvent( EVENTS::SelectedItemsMoved );
 
-    m_frame->SchematicCleanUp( &commit );
+    m_frame->Schematic().CleanUp( &commit );
     commit.Push( _( "Align Items to Grid" ) );
     return 0;
 }

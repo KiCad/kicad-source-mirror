@@ -1466,7 +1466,7 @@ int SCH_DRAWING_TOOLS::SingleClickPlace( const TOOL_EVENT& aEvent )
                 SCH_COMMIT commit( m_toolMgr );
                 commit.Added( newItem, screen );
 
-                m_frame->SchematicCleanUp( &commit );
+                m_frame->Schematic().CleanUp( &commit );
 
                 commit.Push( description );
             }

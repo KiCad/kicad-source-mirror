@@ -1046,7 +1046,7 @@ int SCH_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
         lwbTool->TrimOverLappingWires( commit, &selectionCopy );
         lwbTool->AddJunctionsIfNeeded( commit, &selectionCopy );
 
-        m_frame->SchematicCleanUp( commit );
+        m_frame->Schematic().CleanUp( commit );
 
         if( !localCommit.Empty() )
             localCommit.Push( _( "Rotate" ) );
@@ -1243,7 +1243,7 @@ int SCH_EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
             lwbTool->TrimOverLappingWires( commit, &selectionCopy );
             lwbTool->AddJunctionsIfNeeded( commit, &selectionCopy );
 
-            m_frame->SchematicCleanUp( commit );
+            m_frame->Schematic().CleanUp( commit );
         }
 
         if( !localCommit.Empty() )
@@ -1592,7 +1592,7 @@ int SCH_EDIT_TOOL::RepeatDrawItem( const TOOL_EVENT& aEvent )
             lwbTool->TrimOverLappingWires( &commit, &newItems );
             lwbTool->AddJunctionsIfNeeded( &commit, &newItems );
 
-            m_frame->SchematicCleanUp( &commit );
+            m_frame->Schematic().CleanUp( &commit );
             commit.Push( _( "Repeat Item" ) );
         }
 
