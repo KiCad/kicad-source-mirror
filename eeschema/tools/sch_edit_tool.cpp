@@ -1905,7 +1905,13 @@ int SCH_EDIT_TOOL::EditField( const TOOL_EVENT& aEvent )
          || ( aEvent.IsAction( &SCH_ACTIONS::editFootprint ) && field->GetId() != FIELD_T::FOOTPRINT ) )
         {
             item = field->GetParentSymbol();
+
             m_selectionTool->ClearSelection( true );
+
+            // If the field to edit is not a symbol field, we cannot edit the ref, value or footprint
+            if( item == nullptr )
+                return 0;
+
             m_selectionTool->AddItemToSel( item );
         }
     }
