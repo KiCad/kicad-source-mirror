@@ -136,7 +136,7 @@ wxString PATHS::GetDefault3rdPartyPath()
 
     tmp.AppendDir( wxT( "3rdparty" ) );
 
-    return tmp.GetPath();
+    return tmp.GetAbsolutePath();
 }
 
 
