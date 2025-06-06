@@ -717,9 +717,9 @@ void KIBIS_PIN::getKuKdFromFile( const std::string& aSimul )
         Report( _( "Cannot remove temporary output file" ), RPT_SEVERITY_WARNING );
     }
 
-    m_Ku = ku;
-    m_Kd = kd;
-    m_t = t;
+    m_Ku = std::move( ku );
+    m_Kd = std::move( kd );
+    m_t = std::move( t );
 }
 
 
@@ -818,9 +818,9 @@ void KIBIS_PIN::getKuKdOneWaveform( KIBIS_MODEL&                                
         ku.push_back( 0 );
         kd.push_back( 0 );
         t.push_back( 0 );
-        m_Ku = ku;
-        m_Kd = kd;
-        m_t = t;
+        m_Ku = std::move( ku );
+        m_Kd = std::move( kd );
+        m_t = std::move( t );
     }
     else
     {
@@ -965,9 +965,9 @@ void KIBIS_PIN::getKuKdNoWaveform( KIBIS_MODEL& aModel, const KIBIS_PARAMETER& a
         t.push_back( 0 );
     }
 
-    m_Ku = ku;
-    m_Kd = kd;
-    m_t = t;
+    m_Ku = std::move( ku );
+    m_Kd = std::move( kd );
+    m_t = std::move( t );
 }
 
 
@@ -990,9 +990,9 @@ void KIBIS_PIN::getKuKdTwoWaveforms( KIBIS_MODEL&                               
         ku.push_back( 0 );
         kd.push_back( 0 );
         t.push_back( 0 );
-        m_Ku = ku;
-        m_Kd = kd;
-        m_t = t;
+        m_Ku = std::move( ku );
+        m_Kd = std::move( kd );
+        m_t = std::move( t );
     }
     else
     {

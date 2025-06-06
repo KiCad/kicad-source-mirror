@@ -1999,7 +1999,7 @@ bool SHAPE_POLY_SET::Parse( std::stringstream& aStream )
             paths.push_back( outline );
         }
 
-        m_polys.push_back( paths );
+        m_polys.push_back( std::move( paths ) );
     }
 
     return true;

@@ -569,8 +569,6 @@ wxString EscapeHTML( const wxString& aString )
 
 wxString UnescapeHTML( const wxString& aString )
 {
-    wxString converted = aString;
-
     // clang-format off
     static const std::map<wxString, wxString> c_replacements = {
         { wxS( "quot" ), wxS( "\"" ) },
@@ -596,7 +594,7 @@ wxString UnescapeHTML( const wxString& aString )
     size_t len = 0;
 
     wxString result;
-    wxString str = converted;
+    wxString str = aString;
 
     while( regex.Matches( str ) )
     {
