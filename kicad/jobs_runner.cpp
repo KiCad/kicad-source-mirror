@@ -241,7 +241,7 @@ bool JOBS_RUNNER::RunJobsForDestination( JOBSET_DESTINATION* aDestination, bool 
     int failCount = 0;
     int successCount = 0;
 
-    wxSetEnv( "JOBSET_OUTPUT_WORK_PATH", tempDirPath );
+    wxSetEnv( OUTPUT_WORK_PATH_VAR_NAME, tempDirPath );
 
     for( const JOBSET_JOB& job : jobsForDestination )
     {

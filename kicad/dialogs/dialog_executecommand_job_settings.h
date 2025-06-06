@@ -21,17 +21,29 @@
 #include <dialogs/dialog_executecommand_job_settings_base.h>
 
 class JOB_SPECIAL_EXECUTE;
+class SCINTILLA_TRICKS;
+
 
 class DIALOG_EXECUTECOMMAND_JOB_SETTINGS: public DIALOG_EXECUTECOMMAND_JOB_SETTINGS_BASE
 {
 public:
     DIALOG_EXECUTECOMMAND_JOB_SETTINGS( wxWindow* aParent, JOB_SPECIAL_EXECUTE* aJob );
+    ~DIALOG_EXECUTECOMMAND_JOB_SETTINGS();
 
     bool TransferDataFromWindow() override;
     bool TransferDataToWindow() override;
 
 private:
+    void onSizeGrid( wxSizeEvent& event ) override;
+    void adjustPathSubsGridColumns( int aWidth );
+    void OnRecordOutputClicked( wxCommandEvent& event ) override;
+
+    /// Populate the readonly environment variable table with names and values
+    /// by examining the script and path.
+    void populateEnvironReadOnlyTable();
+
+private:
     JOB_SPECIAL_EXECUTE* m_job;
 
-    void OnRecordOutputClicked( wxCommandEvent& event ) override;
+    SCINTILLA_TRICKS*    m_scintillaTricks;
 };

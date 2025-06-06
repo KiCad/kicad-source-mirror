@@ -632,13 +632,13 @@ bool PANEL_JOBSET::OpenJobOptionsForListItem( size_t aItemIndex )
 
             DIALOG_EXECUTECOMMAND_JOB_SETTINGS dialog( m_frame, specialJob );
 
-            if( dialog.ShowModal() == wxID_OK )
+            // QuasiModal for Scintilla autocomplete
+            if( dialog.ShowQuasiModal() == wxID_OK )
                 success = true;
         }
         else if( job.m_job->GetType() == "special_copyfiles" )
         {
-            JOB_SPECIAL_COPYFILES* specialJob =
-                    static_cast<JOB_SPECIAL_COPYFILES*>( job.m_job.get() );
+            JOB_SPECIAL_COPYFILES* specialJob = static_cast<JOB_SPECIAL_COPYFILES*>( job.m_job.get() );
             DIALOG_COPYFILES_JOB_SETTINGS dialog( m_frame, specialJob );
 
             if( dialog.ShowModal() == wxID_OK )
