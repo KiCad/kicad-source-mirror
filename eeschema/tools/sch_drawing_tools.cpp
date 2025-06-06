@@ -3305,8 +3305,7 @@ int SCH_DRAWING_TOOLS::doSyncSheetsPins( std::list<SCH_SHEET_PATH> sheetPaths )
                     },
                     [&]( EDA_ITEM* aItem, SCH_SHEET_PATH aPath )
                     {
-                        m_frame->GetToolManager()->RunAction<SCH_SHEET_PATH*>(
-                                SCH_ACTIONS::changeSheet, &aPath );
+                        m_frame->GetToolManager()->RunAction<SCH_SHEET_PATH*>( SCH_ACTIONS::changeSheet, &aPath );
                         SCH_SELECTION_TOOL* selectionTool = m_toolMgr->GetTool<SCH_SELECTION_TOOL>();
                         selectionTool->UnbrightenItem( aItem );
                         selectionTool->AddItemToSel( aItem, true );
@@ -3314,7 +3313,7 @@ int SCH_DRAWING_TOOLS::doSyncSheetsPins( std::list<SCH_SHEET_PATH> sheetPaths )
                     },
                     [&]( SCH_SHEET* aItem, SCH_SHEET_PATH aPath,
                          SHEET_SYNCHRONIZATION_AGENT::SHEET_SYNCHRONIZATION_PLACEMENT aOp,
-                         std::set<EDA_ITEM*>                                          aTemplates )
+                         std::set<EDA_ITEM*> aTemplates )
                     {
                         switch( aOp )
                         {
@@ -3323,10 +3322,8 @@ int SCH_DRAWING_TOOLS::doSyncSheetsPins( std::list<SCH_SHEET_PATH> sheetPaths )
                             SCH_SHEET* sheet = static_cast<SCH_SHEET*>( aItem );
                             m_dialogSyncSheetPin->Hide();
                             m_dialogSyncSheetPin->PreparePlacementTemplate(
-                                    sheet, DIALOG_SYNC_SHEET_PINS::PlaceItemKind::HIERLABEL,
-                                    aTemplates );
-                            m_frame->GetToolManager()->RunAction<SCH_SHEET_PATH*>(
-                                    SCH_ACTIONS::changeSheet, &aPath );
+                                    sheet, DIALOG_SYNC_SHEET_PINS::PlaceItemKind::HIERLABEL, aTemplates );
+                            m_frame->GetToolManager()->RunAction<SCH_SHEET_PATH*>( SCH_ACTIONS::changeSheet, &aPath );
                             m_toolMgr->RunAction( SCH_ACTIONS::placeHierLabel );
                             break;
                         }
@@ -3335,12 +3332,9 @@ int SCH_DRAWING_TOOLS::doSyncSheetsPins( std::list<SCH_SHEET_PATH> sheetPaths )
                             SCH_SHEET* sheet = static_cast<SCH_SHEET*>( aItem );
                             m_dialogSyncSheetPin->Hide();
                             m_dialogSyncSheetPin->PreparePlacementTemplate(
-                                    sheet, DIALOG_SYNC_SHEET_PINS::PlaceItemKind::SHEET_PIN,
-                                    aTemplates );
-                            m_frame->GetToolManager()->RunAction<SCH_SHEET_PATH*>(
-                                    SCH_ACTIONS::changeSheet, &aPath );
-                            m_toolMgr->GetTool<SCH_SELECTION_TOOL>()->SyncSelection( {}, nullptr,
-                                                                                     { sheet } );
+                                    sheet, DIALOG_SYNC_SHEET_PINS::PlaceItemKind::SHEET_PIN, aTemplates );
+                            m_frame->GetToolManager()->RunAction<SCH_SHEET_PATH*>( SCH_ACTIONS::changeSheet, &aPath );
+                            m_toolMgr->GetTool<SCH_SELECTION_TOOL>()->SyncSelection( {}, nullptr, { sheet } );
                             m_toolMgr->RunAction( SCH_ACTIONS::placeSheetPin );
                             break;
                         }

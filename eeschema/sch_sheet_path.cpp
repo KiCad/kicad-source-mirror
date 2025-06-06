@@ -945,11 +945,11 @@ bool SCH_SHEET_LIST::PageNumberExists( const wxString& aPageNumber ) const
 void SCH_SHEET_LIST::TrimToPageNumbers( const std::vector<wxString>& aPageInclusions )
 {
     auto it = std::remove_if( begin(), end(),
-                              [&]( SCH_SHEET_PATH sheet )
+                              [&]( const SCH_SHEET_PATH& sheet )
                               {
-                                  return std::find( aPageInclusions.begin(), aPageInclusions.end(),
-                                                    sheet.GetPageNumber() )
-                                         == aPageInclusions.end();
+                                  return std::find( aPageInclusions.begin(),
+                                                    aPageInclusions.end(),
+                                                    sheet.GetPageNumber() ) == aPageInclusions.end();
                               } );
 
     erase( it, end() );
@@ -1319,7 +1319,7 @@ void SCH_SHEET_LIST::UpdateSheetInstanceData( const std::vector<SCH_SHEET_INSTAN
         wxCHECK2( sheet && path.Last(), continue );
 
         auto it = std::find_if( aSheetInstances.begin(), aSheetInstances.end(),
-                                [ path ]( const SCH_SHEET_INSTANCE& r ) -> bool
+                                [&path]( const SCH_SHEET_INSTANCE& r ) -> bool
                                 {
                                     return path.Path() == r.m_Path;
                                 } );

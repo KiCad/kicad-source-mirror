@@ -284,7 +284,7 @@ void SCH_NAVIGATE_TOOL::setTransitions()
 }
 
 
-void SCH_NAVIGATE_TOOL::pushToHistory( SCH_SHEET_PATH aPath )
+void SCH_NAVIGATE_TOOL::pushToHistory( const SCH_SHEET_PATH& aPath )
 {
     if( CanGoForward() )
         m_navHistory.erase( std::next( m_navIndex ), m_navHistory.end() );
@@ -296,7 +296,7 @@ void SCH_NAVIGATE_TOOL::pushToHistory( SCH_SHEET_PATH aPath )
 }
 
 
-void SCH_NAVIGATE_TOOL::changeSheet( SCH_SHEET_PATH aPath )
+void SCH_NAVIGATE_TOOL::changeSheet( const SCH_SHEET_PATH& aPath )
 {
     m_frame->GetToolManager()->RunAction( ACTIONS::cancelInteractive );
     m_frame->GetToolManager()->RunAction( ACTIONS::selectionClear );

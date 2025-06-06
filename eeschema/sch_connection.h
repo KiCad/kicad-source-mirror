@@ -108,7 +108,7 @@ public:
     void SetDriver( SCH_ITEM* aItem );
 
     SCH_SHEET_PATH Sheet() const { return m_sheet; }
-    void SetSheet( SCH_SHEET_PATH aSheet );
+    void SetSheet( const SCH_SHEET_PATH& aSheet );
 
     SCH_SHEET_PATH LocalSheet() const { return m_local_sheet; }
 

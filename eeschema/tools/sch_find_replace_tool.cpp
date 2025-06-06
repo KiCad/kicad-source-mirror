@@ -281,10 +281,7 @@ int SCH_FIND_REPLACE_TOOL::FindNext( const TOOL_EVENT& aEvent )
             if( item )
             {
                 if( m_frame->Schematic().CurrentSheet() != sheet )
-                {
-                    m_frame->GetToolManager()->RunAction<SCH_SHEET_PATH*>( SCH_ACTIONS::changeSheet,
-                                                                           &sheet );
-                }
+                    m_frame->GetToolManager()->RunAction<SCH_SHEET_PATH*>( SCH_ACTIONS::changeSheet, &sheet );
 
                 break;
             }

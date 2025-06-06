@@ -141,7 +141,7 @@ void NETLIST_EXPORTER_ALLEGRO::extractComponentsInfo()
         m_schematic->SetCurrentSheet( sheet );
 
         auto cmp =
-                [sheet]( SCH_SYMBOL* a, SCH_SYMBOL* b )
+                [&sheet]( SCH_SYMBOL* a, SCH_SYMBOL* b )
                 {
                     return ( StrNumCmp( a->GetRef( &sheet, false ),
                                         b->GetRef( &sheet, false ), true ) < 0 );

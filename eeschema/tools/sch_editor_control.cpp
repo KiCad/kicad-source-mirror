@@ -154,8 +154,7 @@ int SCH_EDITOR_CONTROL::Revert( const TOOL_EVENT& aEvent )
         SCH_SHEET_PATH rootSheetPath;
         rootSheetPath.push_back( &root );
 
-        m_frame->GetToolManager()->RunAction<SCH_SHEET_PATH*>( SCH_ACTIONS::changeSheet,
-                                                               &rootSheetPath );
+        m_frame->GetToolManager()->RunAction<SCH_SHEET_PATH*>( SCH_ACTIONS::changeSheet, &rootSheetPath );
         wxSafeYield();
     }
 

@@ -80,9 +80,9 @@ private:
     ///< Set up handlers for various events.
     void setTransitions() override;
     ///< Clear history after this nav index and pushes aPath to history
-    void pushToHistory( SCH_SHEET_PATH aPath );
+    void pushToHistory( const SCH_SHEET_PATH& aPath );
     ///< Change current sheet to aPath and handle history, zooming, etc.
-    void changeSheet( SCH_SHEET_PATH aPath );
+    void changeSheet( const SCH_SHEET_PATH& aPath );
 
 private:
     std::list<SCH_SHEET_PATH>           m_navHistory;
