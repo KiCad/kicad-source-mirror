@@ -116,15 +116,18 @@ wxString SCH_MARKER::SerializeToString() const
 
         if( parent && parent->IsType( { SCH_SYMBOL_T, SCH_LABEL_T, SCH_SHEET_T } ) )
         {
-            return wxString::Format( wxT( "%s|%d|%d|%s|%s|%s|%s|%s" ),
-                                     m_rcItem->GetSettingsKey(),
-                                     m_Pos.x,
-                                     m_Pos.y,
-                                     parent->m_Uuid.AsString(),
-                                     text_item->GetText(),
-                                     sheetSpecificPath,
-                                     mainItemPath,
-                                     wxEmptyString );
+            if( text_item ) // should always be true, but Coverity doesn't know that
+            {
+                return wxString::Format( wxT( "%s|%d|%d|%s|%s|%s|%s|%s" ),
+                                         m_rcItem->GetSettingsKey(),
+                                         m_Pos.x,
+                                         m_Pos.y,
+                                         parent->m_Uuid.AsString(),
+                                         text_item->GetText(),
+                                         sheetSpecificPath,
+                                         mainItemPath,
+                                         wxEmptyString );
+            }
         }
     }
 

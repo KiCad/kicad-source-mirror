@@ -490,7 +490,7 @@ void FEATURES_MANAGER::InitFeatureList( PCB_LAYER_ID aLayer, std::vector<BOARD_I
         else if( PCB_TEXTBOX* tmp_text = dynamic_cast<PCB_TEXTBOX*>( item ) )
             text_item = static_cast<EDA_TEXT*>( tmp_text );
 
-        if( !text_item->IsVisible() || text_item->GetShownText( false ).empty() )
+        if( !text_item || !text_item->IsVisible() || text_item->GetShownText( false ).empty() )
             return;
 
         auto plot_text = [&]( const VECTOR2I& aPos, const wxString& aTextString,
@@ -542,9 +542,12 @@ void FEATURES_MANAGER::InitFeatureList( PCB_LAYER_ID aLayer, std::vector<BOARD_I
                         shape.SetEnd( *it2 );
                         shape.SetWidth( attributes.m_StrokeWidth );
                         AddShape( shape );
+
                         if( !m_featuresList.empty() )
+                        {
                             AddSystemAttribute( *m_featuresList.back(),
                                                  ODB_ATTR::STRING{ aTextString.ToStdString() } );
+                        }
                     }
                 }
 
@@ -593,9 +596,10 @@ void FEATURES_MANAGER::InitFeatureList( PCB_LAYER_ID aLayer, std::vector<BOARD_I
                             AddContour( poly_set, ii, FILL_T::FILLED_SHAPE );
 
                             if( !m_featuresList.empty() )
-                                AddSystemAttribute(
-                                        *m_featuresList.back(),
-                                        ODB_ATTR::STRING{ aTextString.ToStdString() } );
+                            {
+                                AddSystemAttribute( *m_featuresList.back(),
+                                                    ODB_ATTR::STRING{ aTextString.ToStdString() } );
+                            }
                         }
                     } );
 
@@ -650,8 +654,10 @@ void FEATURES_MANAGER::InitFeatureList( PCB_LAYER_ID aLayer, std::vector<BOARD_I
                 AddContour( finalpolyset, ii, FILL_T::FILLED_SHAPE );
 
                 if( !m_featuresList.empty() )
+                {
                     AddSystemAttribute( *m_featuresList.back(),
                                          ODB_ATTR::STRING{ shownText.ToStdString() } );
+                }
             }
         }
         else if( text_item->IsMultilineAllowed() )
