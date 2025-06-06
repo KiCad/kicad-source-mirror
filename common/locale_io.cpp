@@ -81,9 +81,7 @@ void KiAssertFilter( const wxString &file, int line,
 static std::atomic<unsigned int> locale_count( 0 );
 
 LOCALE_IO::LOCALE_IO()
-#if USE_WXLOCALE
     : m_wxLocale( nullptr )
-#endif
 {
     // use thread safe, atomic operation
     if( locale_count++ == 0 )
