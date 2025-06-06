@@ -22,10 +22,12 @@
 #include <connection_graph.h>
 #include <core/ignore.h>
 #include <core/kicad_algo.h>
+#include <core/profile.h>
 #include <sch_collectors.h>
 #include <erc/erc_settings.h>
 #include <font/outline_font.h>
 #include <netlist_exporter_spice.h>
+#include <progress_reporter.h>
 #include <project.h>
 #include <project/net_settings.h>
 #include <project/project_file.h>
@@ -37,10 +39,14 @@
 #include <sch_line.h>
 #include <sch_marker.h>
 #include <sch_no_connect.h>
+#include <sch_rule_area.h>
 #include <sch_screen.h>
+#include <sch_sheet_pin.h>
 #include <sch_selection_tool.h>
 #include <sim/spice_settings.h>
 #include <sim/spice_value.h>
+#include <tool/tool_manager.h>
+#include <undo_redo_container.h>
 
 #include <wx/log.h>
 
@@ -1069,7 +1075,7 @@ bool SCHEMATIC::BreakSegmentsOnJunctions( SCH_COMMIT* aCommit, SCH_SCREEN* aScre
 
 void SCHEMATIC::CleanUp( SCH_COMMIT* aCommit, SCH_SCREEN* aScreen )
 {
-    SCH_SELECTION_TOOL*          selectionTool = m_schematicHolder->GetSelectionTool();
+    SCH_SELECTION_TOOL*          selectionTool = m_schematicHolder ? m_schematicHolder->GetSelectionTool() : nullptr;
     std::vector<SCH_LINE*>       lines;
     std::vector<SCH_JUNCTION*>   junctions;
     std::vector<SCH_NO_CONNECT*> ncs;
@@ -1255,4 +1261,267 @@ void SCHEMATIC::CleanUp( SCH_COMMIT* aCommit, SCH_SCREEN* aScreen )
             }
         }
     }
+}
+
+
+void SCHEMATIC::RecalculateConnections( SCH_COMMIT* aCommit, SCH_CLEANUP_FLAGS aCleanupFlags,
+                                        TOOL_MANAGER* aToolManager,
+                                        const std::function<void( SCH_GLOBALLABEL* )>& aIntersheetRefItemCallback,
+                                        KIGFX::SCH_VIEW* aSchView,
+                                        std::function<void( SCH_ITEM* )>* aChangedItemHandler,
+                                        PICKED_ITEMS_LIST* aLastChangeList )
+{
+    SCHEMATIC_SETTINGS& settings = Settings();
+    SCH_SHEET_LIST      list = Hierarchy();
+    SCH_COMMIT          localCommit( aToolManager );
+
+    if( !aCommit )
+        aCommit = &localCommit;
+
+    PROF_TIMER timer;
+
+    // Ensure schematic graph is accurate
+    if( aCleanupFlags == LOCAL_CLEANUP )
+    {
+        CleanUp( aCommit, GetCurrentScreen() );
+    }
+    else if( aCleanupFlags == GLOBAL_CLEANUP )
+    {
+        for( const SCH_SHEET_PATH& sheet : list )
+            CleanUp( aCommit, sheet.LastScreen() );
+    }
+
+    timer.Stop();
+    wxLogTrace( "CONN_PROFILE", "SchematicCleanUp() %0.4f ms", timer.msecs() );
+
+    if( settings.m_IntersheetRefsShow )
+        RecomputeIntersheetRefs( aIntersheetRefItemCallback );
+
+    if( !ADVANCED_CFG::GetCfg().m_IncrementalConnectivity
+            || aCleanupFlags == GLOBAL_CLEANUP
+            || aLastChangeList == nullptr
+            || ConnectionGraph()->IsMinor() )
+    {
+        // Clear all resolved netclass caches in case labels have changed
+        Prj().GetProjectFile().NetSettings()->ClearAllCaches();
+
+        // Update all rule areas so we can cascade implied connectivity changes
+        std::unordered_set<SCH_SCREEN*> all_screens;
+
+        for( const SCH_SHEET_PATH& path : list )
+            all_screens.insert( path.LastScreen() );
+
+        SCH_RULE_AREA::UpdateRuleAreasInScreens( all_screens, aSchView );
+
+        // Recalculate all connectivity
+        ConnectionGraph()->Recalculate( list, true, aChangedItemHandler );
+    }
+    else
+    {
+        struct CHANGED_ITEM
+        {
+            SCH_ITEM*   item;
+            SCH_ITEM*   linked_item;
+            SCH_SCREEN* screen;
+        };
+
+        // Final change sets
+        std::set<SCH_ITEM*>                            changed_items;
+        std::set<VECTOR2I>                             pts;
+        std::set<std::pair<SCH_SHEET_PATH, SCH_ITEM*>> item_paths;
+
+        // Working change sets
+        std::unordered_set<SCH_SCREEN*>                  changed_screens;
+        std::set<std::pair<SCH_RULE_AREA*, SCH_SCREEN*>> changed_rule_areas;
+        std::vector<CHANGED_ITEM>                        changed_connectable_items;
+
+        // Lambda to add an item to the connectivity update sets
+        auto addItemToChangeSet = [&changed_items, &pts, &item_paths]( CHANGED_ITEM itemData )
+        {
+            std::vector<SCH_SHEET_PATH>& paths = itemData.screen->GetClientSheetPaths();
+
+            std::vector<VECTOR2I> tmp_pts = itemData.item->GetConnectionPoints();
+            pts.insert( tmp_pts.begin(), tmp_pts.end() );
+            changed_items.insert( itemData.item );
+
+            for( SCH_SHEET_PATH& path : paths )
+                item_paths.insert( std::make_pair( path, itemData.item ) );
+
+            if( !itemData.linked_item || !itemData.linked_item->IsConnectable() )
+                return;
+
+            tmp_pts = itemData.linked_item->GetConnectionPoints();
+            pts.insert( tmp_pts.begin(), tmp_pts.end() );
+            changed_items.insert( itemData.linked_item );
+
+            // We have to directly add the pins here because the link may not exist on the schematic
+            // anymore and so won't be picked up by GetScreen()->Items().Overlapping() below.
+            if( SCH_SYMBOL* symbol = dynamic_cast<SCH_SYMBOL*>( itemData.linked_item ) )
+            {
+                std::vector<SCH_PIN*> pins = symbol->GetPins();
+                changed_items.insert( pins.begin(), pins.end() );
+            }
+
+            for( SCH_SHEET_PATH& path : paths )
+                item_paths.insert( std::make_pair( path, itemData.linked_item ) );
+        };
+
+        // Get all changed connectable items and determine all changed screens
+        for( unsigned ii = 0; ii < aLastChangeList->GetCount(); ++ii )
+        {
+            switch( aLastChangeList->GetPickedItemStatus( ii ) )
+            {
+            // Only care about changed, new, and deleted items, the other
+            // cases are not connectivity-related
+            case UNDO_REDO::CHANGED:
+            case UNDO_REDO::NEWITEM:
+            case UNDO_REDO::DELETED:
+                break;
+
+            default:
+                continue;
+            }
+
+            SCH_ITEM* item = dynamic_cast<SCH_ITEM*>( aLastChangeList->GetPickedItem( ii ) );
+
+            if( item )
+            {
+                SCH_SCREEN* screen = static_cast<SCH_SCREEN*>( aLastChangeList->GetScreenForItem( ii ) );
+                changed_screens.insert( screen );
+
+                if( item->Type() == SCH_RULE_AREA_T )
+                {
+                    SCH_RULE_AREA* ruleArea = static_cast<SCH_RULE_AREA*>( item );
+
+                    // Clear item and directive associations for this rule area
+                    ruleArea->ResetDirectivesAndItems( aSchView );
+
+                    changed_rule_areas.insert( { ruleArea, screen } );
+                }
+                else if( item->IsConnectable() )
+                {
+                    SCH_ITEM* linked_item = dynamic_cast<SCH_ITEM*>( aLastChangeList->GetPickedItemLink( ii ) );
+                    changed_connectable_items.push_back( { item, linked_item, screen } );
+                }
+            }
+        }
+
+        // Update rule areas in changed screens to propagate any directive connectivity changes
+        std::vector<std::pair<SCH_RULE_AREA*, SCH_SCREEN*>> forceUpdateRuleAreas =
+                SCH_RULE_AREA::UpdateRuleAreasInScreens( changed_screens, aSchView );
+
+        std::for_each( forceUpdateRuleAreas.begin(), forceUpdateRuleAreas.end(),
+                       [&]( std::pair<SCH_RULE_AREA*, SCH_SCREEN*>& updatedRuleArea )
+                       {
+                           changed_rule_areas.insert( updatedRuleArea );
+                       } );
+
+        // If a SCH_RULE_AREA was changed, we need to add all past and present contained items to
+        // update their connectivity
+        for( const std::pair<SCH_RULE_AREA*, SCH_SCREEN*>& changedRuleArea : changed_rule_areas )
+        {
+            for( SCH_ITEM* containedItem : changedRuleArea.first->GetPastAndPresentContainedItems() )
+                addItemToChangeSet( { containedItem, nullptr, changedRuleArea.second } );
+        }
+
+        // Add all changed items, and associated items, to the change set
+        for( CHANGED_ITEM& changed_item_data : changed_connectable_items )
+        {
+            addItemToChangeSet( changed_item_data );
+
+            // If a SCH_DIRECTIVE_LABEL was changed which is attached to a SCH_RULE_AREA, we need
+            // to add the contained items to the change set to force update of their connectivity
+            if( changed_item_data.item->Type() == SCH_DIRECTIVE_LABEL_T )
+            {
+                const std::vector<VECTOR2I> labelConnectionPoints =
+                        changed_item_data.item->GetConnectionPoints();
+
+                auto candidateRuleAreas =
+                        changed_item_data.screen->Items().Overlapping( SCH_RULE_AREA_T,
+                                                                       changed_item_data.item->GetBoundingBox() );
+
+                for( SCH_ITEM* candidateRuleArea : candidateRuleAreas )
+                {
+                    SCH_RULE_AREA*      ruleArea = static_cast<SCH_RULE_AREA*>( candidateRuleArea );
+                    std::vector<SHAPE*> borderShapes = ruleArea->MakeEffectiveShapes( true );
+
+                    if( ruleArea->GetPolyShape().CollideEdge( labelConnectionPoints[0], nullptr, 5 ) )
+                    {
+                        for( SCH_ITEM* containedItem : ruleArea->GetPastAndPresentContainedItems() )
+                            addItemToChangeSet( { containedItem, nullptr, changed_item_data.screen } );
+                    }
+                }
+            }
+        }
+
+        for( const VECTOR2I& pt: pts )
+        {
+            for( SCH_ITEM* item : GetCurrentScreen()->Items().Overlapping( pt ) )
+            {
+                // Leave this check in place.  Overlapping items are not necessarily connectable.
+                if( !item->IsConnectable() )
+                    continue;
+
+                if( item->Type() == SCH_LINE_T )
+                {
+                    if( item->HitTest( pt ) )
+                        changed_items.insert( item );
+                }
+                else if( item->Type() == SCH_SYMBOL_T && item->IsConnected( pt ) )
+                {
+                    SCH_SYMBOL*           symbol = static_cast<SCH_SYMBOL*>( item );
+                    std::vector<SCH_PIN*> pins = symbol->GetPins();
+
+                    changed_items.insert( pins.begin(), pins.end() );
+                }
+                else if( item->Type() == SCH_SHEET_T )
+                {
+                    SCH_SHEET* sheet = static_cast<SCH_SHEET*>( item );
+
+                    wxCHECK2( sheet, continue );
+
+                    std::vector<SCH_SHEET_PIN*> sheetPins = sheet->GetPins();
+                    changed_items.insert( sheetPins.begin(), sheetPins.end() );
+                }
+                else
+                {
+                    if( item->IsConnected( pt ) )
+                        changed_items.insert( item );
+                }
+            }
+        }
+
+        std::set<std::pair<SCH_SHEET_PATH, SCH_ITEM*>> all_items =
+                ConnectionGraph()->ExtractAffectedItems( changed_items );
+
+        all_items.insert( item_paths.begin(), item_paths.end() );
+
+        CONNECTION_GRAPH new_graph( this );
+
+        new_graph.SetLastCodes( ConnectionGraph() );
+
+        std::shared_ptr<NET_SETTINGS> netSettings = Prj().GetProjectFile().NetSettings();
+
+        std::set<wxString> affectedNets;
+
+        for( auto&[ path, item ] : all_items )
+        {
+            wxCHECK2( item, continue );
+            item->SetConnectivityDirty();
+            SCH_CONNECTION* conn = item->Connection();
+
+            if( conn )
+                affectedNets.insert( conn->Name() );
+        }
+
+        // Reset resolved netclass cache for this connection
+        for( const wxString& netName : affectedNets )
+            netSettings->ClearCacheForNet( netName );
+
+        new_graph.Recalculate( list, false, aChangedItemHandler );
+        ConnectionGraph()->Merge( new_graph );
+    }
+
+    if( !localCommit.Empty() )
+        localCommit.Push( _( "Schematic Cleanup" ) );
 }

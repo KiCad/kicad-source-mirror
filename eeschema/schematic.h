@@ -38,10 +38,18 @@ class SCH_SCREEN;
 class SCH_SHEET;
 class SCH_SHEET_LIST;
 class SCH_GLOBALLABEL;
+class PROGRESS_REPORTER;
+class TOOL_MANAGER;
+class PICKED_ITEMS_LIST;
 
 namespace KIFONT
 {
 class OUTLINE_FONT;
+}
+
+namespace KIGFX
+{
+class SCH_VIEW;
 }
 
 
@@ -58,6 +66,13 @@ public:
     // This is called when the user changes to a new sheet, not when a sheet is altered.
     // Sheet alteration events will call OnSchItems*
     virtual void OnSchSheetChanged( SCHEMATIC& aSch ) {}
+};
+
+enum SCH_CLEANUP_FLAGS
+{
+    NO_CLEANUP,
+    LOCAL_CLEANUP,
+    GLOBAL_CLEANUP
 };
 
 /**
@@ -396,6 +411,16 @@ public:
      * @param aScreen is the screen to examine, or nullptr to examine the current screen
      */
     void CleanUp( SCH_COMMIT* aCommit, SCH_SCREEN* aScreen = nullptr );
+
+    /**
+     * Generate the connection data for the entire schematic hierarchy.
+     */
+    void RecalculateConnections( SCH_COMMIT* aCommit, SCH_CLEANUP_FLAGS aCleanupFlags,
+                                 TOOL_MANAGER* aToolManager,
+                                 const std::function<void( SCH_GLOBALLABEL* )>& aIntersheetRefItemCallback,
+                                 KIGFX::SCH_VIEW* aSchView = nullptr,
+                                 std::function<void( SCH_ITEM* )>* aChangedItemHandler = nullptr,
+                                 PICKED_ITEMS_LIST*                aLastChangeList = nullptr );
 
     /**
      * True if a SCHEMATIC exists, false if not

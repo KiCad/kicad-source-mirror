@@ -26,12 +26,15 @@
 #include <connection_graph.h>
 #include <locale_io.h>
 #include <schematic.h>
+#include <sch_commit.h>
 #include <sch_edit_frame.h>
 #include <sch_label.h>
 #include <sch_io/sch_io.h>
 #include <sch_io/sch_io_mgr.h>
 #include <settings/settings_manager.h>
 #include <wildcards_and_files_ext.h>
+#include <tool/tool_manager.h>
+#include <kiface_base.h>
 
 #include <wx/app.h>
 
@@ -188,6 +191,21 @@ SCHEMATIC* EESCHEMA_HELPERS::LoadSchematic( const wxString& aFileName,
     sheetList.AnnotatePowerSymbols();
 
     schematic->ConnectionGraph()->Reset();
+
+    TOOL_MANAGER* toolManager = new TOOL_MANAGER;
+    toolManager->SetEnvironment( schematic, nullptr, nullptr, Kiface().KifaceSettings(), nullptr );
+
+    SCH_COMMIT dummyCommit( toolManager );
+    schematic->RecalculateConnections( &dummyCommit, GLOBAL_CLEANUP, toolManager,
+                    [&]( SCH_GLOBALLABEL* label )
+                    {
+                        for( SCH_FIELD& field : label->GetFields() )
+                            field.ClearBoundingBoxCache();
+
+                        label->ClearBoundingBoxCache();
+                    } );
+
+    schematic->ResolveERCExclusionsPostUpdate();
 
     schematic->SetSheetNumberAndCount();
     schematic->RecomputeIntersheetRefs( []( SCH_GLOBALLABEL* aGlobal )
