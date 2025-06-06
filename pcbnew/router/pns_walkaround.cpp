@@ -257,7 +257,7 @@ bool WALKAROUND::singleStep()
 
         if ( anyColliding )
         {
-            shortest = shortest_alt;
+            shortest = std::move( shortest_alt );
         }
 
         if( !shortest )
