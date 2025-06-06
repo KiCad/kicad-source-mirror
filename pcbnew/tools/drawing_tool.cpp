@@ -1581,17 +1581,13 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
                     break;
                 }
 
-                if( t == PCB_DIM_CENTER_T || t == PCB_DIM_RADIAL_T || t == PCB_DIM_LEADER_T )
-                {
-                    // No separate height step
-                    ++step;
-                    KI_FALLTHROUGH;
-                }
-                else
+                if( t != PCB_DIM_CENTER_T && t != PCB_DIM_RADIAL_T && t != PCB_DIM_LEADER_T )
                 {
                     break;
                 }
 
+                ++step;
+                KI_FALLTHROUGH;
             case SET_HEIGHT:
                 assert( dimension->GetStart() != dimension->GetEnd() );
                 assert( dimension->GetLineThickness() > 0 );
