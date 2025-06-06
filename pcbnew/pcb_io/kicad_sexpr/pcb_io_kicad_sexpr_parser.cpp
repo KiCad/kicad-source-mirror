@@ -5163,6 +5163,15 @@ PAD* PCB_IO_KICAD_SEXPR_PARSER::parsePAD( FOOTPRINT* aParent )
         case T_layers:
         {
             LSET layerMask = parseBoardItemLayersAsMask();
+
+            // We force this mask to include all copper layers if the pad is a PTH pad.
+            // This is because PTH pads are always drawn on all copper layers, even if the
+            // padstack has inner layers that are smaller than the hole.  There was a corner
+            // case in the past where a PTH pad was defined with NPTH layer set (F&B.Cu) and
+            // could not be reset without effort
+            if( pad->GetAttribute() == PAD_ATTRIB::PTH && m_board )
+                layerMask |= LSET::AllCuMask( m_board->GetCopperLayerCount() );
+
             pad->SetLayerSet( layerMask );
             break;
         }
@@ -5922,7 +5931,7 @@ void PCB_IO_KICAD_SEXPR_PARSER::parsePadstack( PAD* aPad )
                         {
                             PCB_SHAPE* spokeTemplate = parsePCB_SHAPE( nullptr );
                             spokeTemplate->SetIsProxyItem();
-                           padstack.AddPrimitive( spokeTemplate, curLayer );
+                            padstack.AddPrimitive( spokeTemplate, curLayer );
                             break;
                         }
 
