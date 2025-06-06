@@ -1840,6 +1840,8 @@ void SCH_IO_EAGLE::loadInstance( const std::unique_ptr<EINSTANCE>& aInstance,
         else
             symbolField = symbol->GetField( partField->GetName() );
 
+        wxCHECK2( symbolField, continue );
+
         symbolField->ImportValues( *partField );
         symbolField->SetTextPos( symbol->GetPosition() + partField->GetTextPos() );
     }

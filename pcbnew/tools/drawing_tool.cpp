@@ -3017,23 +3017,16 @@ std::unique_ptr<PCB_SHAPE> DRAWING_TOOL::drawOneBezier( const TOOL_EVENT&   aToo
                 m_stroke.SetColor( COLOR4D::UNSPECIFIED );
             }
 
-            if( bezier )
+            if( !m_view->IsLayerVisible( m_layer ) )
             {
-                if( !m_view->IsLayerVisible( m_layer ) )
-                {
-                    m_frame->GetAppearancePanel()->SetLayerVisible( m_layer, true );
-                    m_frame->GetCanvas()->Refresh();
-                }
+                m_frame->GetAppearancePanel()->SetLayerVisible( m_layer, true );
+                m_frame->GetCanvas()->Refresh();
+            }
 
-                bezier->SetLayer( m_layer );
-                bezier->SetStroke( m_stroke );
-                m_view->Update( &preview );
-                frame()->SetMsgPanel( bezier.get() );
-            }
-            else
-            {
-                evt->SetPassEvent();
-            }
+            bezier->SetLayer( m_layer );
+            bezier->SetStroke( m_stroke );
+            m_view->Update( &preview );
+            frame()->SetMsgPanel( bezier.get() );
         }
         else if( evt->IsAction( &PCB_ACTIONS::properties ) )
         {
@@ -3052,21 +3045,15 @@ std::unique_ptr<PCB_SHAPE> DRAWING_TOOL::drawOneBezier( const TOOL_EVENT&   aToo
         }
         else if( evt->IsClick( BUT_RIGHT ) )
         {
-            if( !bezier )
-                m_toolMgr->VetoContextMenuMouseWarp();
-
             m_menu->ShowContextMenu( selection() );
         }
         else if( evt->IsAction( &PCB_ACTIONS::incWidth ) )
         {
             m_stroke.SetWidth( m_stroke.GetWidth() + WIDTH_STEP );
 
-            if( bezier )
-            {
-                bezier->SetStroke( m_stroke );
-                m_view->Update( &preview );
-                frame()->SetMsgPanel( bezier.get() );
-            }
+            bezier->SetStroke( m_stroke );
+            m_view->Update( &preview );
+            frame()->SetMsgPanel( bezier.get() );
         }
         else if( evt->IsAction( &PCB_ACTIONS::decWidth ) )
         {
@@ -3074,12 +3061,9 @@ std::unique_ptr<PCB_SHAPE> DRAWING_TOOL::drawOneBezier( const TOOL_EVENT&   aToo
             {
                 m_stroke.SetWidth( m_stroke.GetWidth() - WIDTH_STEP );
 
-                if( bezier )
-                {
-                    bezier->SetStroke( m_stroke );
-                    m_view->Update( &preview );
-                    frame()->SetMsgPanel( bezier.get() );
-                }
+                bezier->SetStroke( m_stroke );
+                m_view->Update( &preview );
+                frame()->SetMsgPanel( bezier.get() );
             }
         }
         else if( evt->IsAction( &ACTIONS::updateUnits ) )

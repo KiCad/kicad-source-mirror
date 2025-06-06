@@ -131,29 +131,26 @@ wxString GetSelectedItemsAsText( const SELECTION& aSel )
 std::set<int> GetUnplacedUnitsForSymbol( const SCH_SYMBOL& aSym )
 {
     SCHEMATIC const* schematic = aSym.Schematic();
-    const wxString   symRefDes = aSym.GetRef( &schematic->CurrentSheet(), false );
 
     if( !schematic )
         return {};
 
-    SCH_SHEET_LIST hierarchy = schematic->Hierarchy();
+    const wxString symRefDes = aSym.GetRef( &schematic->CurrentSheet(), false );
 
     // Get a list of all references in the schematic
+    SCH_SHEET_LIST     hierarchy = schematic->Hierarchy();
     SCH_REFERENCE_LIST existingRefs;
     hierarchy.GetSymbols( existingRefs );
 
     std::set<int> missingUnits;
+
     for( int unit = 1; unit <= aSym.GetUnitCount(); ++unit )
-    {
         missingUnits.insert( unit );
-    }
 
     for( const SCH_REFERENCE& ref : existingRefs )
     {
         if( symRefDes == ref.GetRef() )
-        {
             missingUnits.erase( ref.GetUnit() );
-        }
     }
 
     return missingUnits;

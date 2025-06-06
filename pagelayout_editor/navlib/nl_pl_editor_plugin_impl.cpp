@@ -428,48 +428,37 @@ long NL_PL_EDITOR_PLUGIN_IMPL::SetActiveCommand( std::string commandId )
     if( commandId.empty() )
         return 0;
 
-    if(m_viewport2D == nullptr)
-    {
+    if( m_viewport2D == nullptr )
         return navlib::make_result_code( navlib::navlib_errc::invalid_operation );
-    }
 
     wxWindow* parent = m_viewport2D->GetParent();
 
     // Only allow command execution if the window is enabled. i.e. there is not a modal dialog
     // currently active.
     if( parent == nullptr || !parent->IsEnabled() )
-    {
         return navlib::make_result_code( navlib::navlib_errc::invalid_operation );
-    }
 
-    TOOL_MANAGER* tool_manager = dynamic_cast<TOOLS_HOLDER*>( parent )->GetToolManager();
+    TOOLS_HOLDER* tools_holder = dynamic_cast<TOOLS_HOLDER*>( parent );
+    TOOL_MANAGER* tool_manager = tools_holder ? tools_holder->GetToolManager() : nullptr;
 
     // Only allow for command execution if the tool manager is accessible.
     if( tool_manager == nullptr )
-    {
         return navlib::make_result_code( navlib::navlib_errc::invalid_operation );
-    }
 
-    for( std::list<TOOL_ACTION*> actions = ACTION_MANAGER::GetActionList();
-         const auto action : actions )
+    for( std::list<TOOL_ACTION*> actions = ACTION_MANAGER::GetActionList(); const auto action : actions )
     {
         if( action == nullptr )
-        {
             continue;
-        }
 
         if( commandId == action->GetName() )
         {
             // Get the selection to use to test if the action is enabled
             const SELECTION& sel = tool_manager->GetToolHolder()->GetCurrentSelection();
 
-            const ACTION_CONDITIONS* aCond =
-                    tool_manager->GetActionManager()->GetCondition( *action );
+            const ACTION_CONDITIONS* aCond = tool_manager->GetActionManager()->GetCondition( *action );
 
             if( aCond == nullptr )
-            {
                 return navlib::make_result_code( navlib::navlib_errc::invalid_operation );
-            }
 
             aCond->enableCondition( sel );
             tool_manager->RunAction( *action );

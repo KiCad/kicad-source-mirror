@@ -570,8 +570,8 @@ bool GERBVIEW_FRAME::unarchiveFiles( const wxString& aFullFileName, REPORTER* aR
 
             if( read_ok )
             {
-                view->SetLayerHasNegatives( GERBER_DRAW_LAYER( layer ),
-                                            GetGbrImage( layer )->HasNegativeItems() );
+                if( GERBER_FILE_IMAGE* gbrImage = GetGbrImage( layer ) )
+                    view->SetLayerHasNegatives( GERBER_DRAW_LAYER( layer ), gbrImage->HasNegativeItems() );
             }
         }
 
