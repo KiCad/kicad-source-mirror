@@ -321,8 +321,7 @@ void HIERARCHY_PANE::onSelectSheetPath( wxTreeEvent& aEvent )
         return;
 
     SetCursor( wxCURSOR_ARROWWAIT );
-    m_frame->GetToolManager()->RunAction<SCH_SHEET_PATH*>( SCH_ACTIONS::changeSheet,
-                                                           &itemData->m_SheetPath );
+    m_frame->GetToolManager()->RunAction<SCH_SHEET_PATH*>( SCH_ACTIONS::changeSheet, &itemData->m_SheetPath );
     SetCursor( wxCURSOR_ARROW );
 }
 

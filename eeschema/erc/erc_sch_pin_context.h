@@ -45,7 +45,7 @@ public:
             m_hash( 0 )
     {}
 
-    ERC_SCH_PIN_CONTEXT( SCH_PIN* pin, SCH_SHEET_PATH sheet ) :
+    ERC_SCH_PIN_CONTEXT( SCH_PIN* pin, const SCH_SHEET_PATH& sheet ) :
             m_pin( pin ),
             m_sheet( sheet )
     {

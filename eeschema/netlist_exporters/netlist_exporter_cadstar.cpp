@@ -155,7 +155,7 @@ bool NETLIST_EXPORTER_CADSTAR::writeListOfNets( FILE* f )
 
         // Intra-net ordering: Ref des, then pin name
         std::sort( sorted_items.begin(), sorted_items.end(),
-                []( std::pair<SCH_PIN*, SCH_SHEET_PATH> a, std::pair<SCH_PIN*, SCH_SHEET_PATH> b )
+                []( const std::pair<SCH_PIN*, SCH_SHEET_PATH>& a, const std::pair<SCH_PIN*, SCH_SHEET_PATH>& b )
                 {
                     wxString ref_a = a.first->GetParentSymbol()->GetRef( &a.second );
                     wxString ref_b = b.first->GetParentSymbol()->GetRef( &b.second );
@@ -170,7 +170,7 @@ bool NETLIST_EXPORTER_CADSTAR::writeListOfNets( FILE* f )
         // pins across units.  If the user connects the pins on each unit, they will
         // appear on separate subgraphs.  Remove those here:
         sorted_items.erase( std::unique( sorted_items.begin(), sorted_items.end(),
-                []( std::pair<SCH_PIN*, SCH_SHEET_PATH> a, std::pair<SCH_PIN*, SCH_SHEET_PATH> b )
+                []( const std::pair<SCH_PIN*, SCH_SHEET_PATH>& a, const std::pair<SCH_PIN*, SCH_SHEET_PATH>& b )
                 {
                     wxString ref_a = a.first->GetParentSymbol()->GetRef( &a.second );
                     wxString ref_b = b.first->GetParentSymbol()->GetRef( &b.second );

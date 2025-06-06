@@ -119,7 +119,7 @@ void SCH_CONNECTION::SetDriver( SCH_ITEM* aItem )
 }
 
 
-void SCH_CONNECTION::SetSheet( SCH_SHEET_PATH aSheet )
+void SCH_CONNECTION::SetSheet( const SCH_SHEET_PATH& aSheet )
 {
     m_sheet       = aSheet;
     m_local_sheet = aSheet;

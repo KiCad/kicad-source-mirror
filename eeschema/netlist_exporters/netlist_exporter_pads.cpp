@@ -126,7 +126,7 @@ bool NETLIST_EXPORTER_PADS::writeListOfNets( FILE* f )
 
         // Netlist ordering: Net name, then ref des, then pin name
         std::sort( sorted_items.begin(), sorted_items.end(),
-                []( std::pair<SCH_PIN*, SCH_SHEET_PATH> a, std::pair<SCH_PIN*, SCH_SHEET_PATH> b )
+                []( const std::pair<SCH_PIN*, SCH_SHEET_PATH>& a, const std::pair<SCH_PIN*, SCH_SHEET_PATH>& b )
                 {
                     wxString ref_a = a.first->GetParentSymbol()->GetRef( &a.second );
                     wxString ref_b = b.first->GetParentSymbol()->GetRef( &b.second );
@@ -141,7 +141,7 @@ bool NETLIST_EXPORTER_PADS::writeListOfNets( FILE* f )
         // pins across units.  If the user connects the pins on each unit, they will
         // appear on separate subgraphs.  Remove those here:
         sorted_items.erase( std::unique( sorted_items.begin(), sorted_items.end(),
-                []( std::pair<SCH_PIN*, SCH_SHEET_PATH> a, std::pair<SCH_PIN*, SCH_SHEET_PATH> b )
+                []( const std::pair<SCH_PIN*, SCH_SHEET_PATH>& a, const std::pair<SCH_PIN*, SCH_SHEET_PATH>& b )
                 {
                     wxString ref_a = a.first->GetParentSymbol()->GetRef( &a.second );
                     wxString ref_b = b.first->GetParentSymbol()->GetRef( &b.second );
@@ -164,8 +164,7 @@ bool NETLIST_EXPORTER_PADS::writeListOfNets( FILE* f )
             if( refText[0] == wxChar( '#' ) )
                 continue;
 
-            netConns.push_back(
-                    wxString::Format( "%s.%.4s", refText, pinText ) );
+            netConns.push_back( wxString::Format( "%s.%.4s", refText, pinText ) );
         }
 
         // format it such that there are 6 net connections per line
@@ -174,17 +173,15 @@ bool NETLIST_EXPORTER_PADS::writeListOfNets( FILE* f )
         {
             ret |= fprintf( f, "*SIGNAL* %s\n", TO_UTF8(netName) );
             int cnt = 0;
+
             for( wxString& netConn : netConns )
             {
                 ret |= fputs( TO_UTF8( netConn ), f );
+
                 if( cnt != 0 && cnt % 6 == 0 )
-                {
                     ret |= fputc( '\n', f );
-                }
                 else
-                {
                     ret |= fputc( ' ', f );
-                }
 
                 cnt++;
             }
