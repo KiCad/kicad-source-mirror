@@ -786,6 +786,11 @@ public:
      */
     void RecomputeIntersheetRefs();
 
+    /**
+     * Callback from schematic ref update
+     */
+    void IntersheetRefUpdate( SCH_GLOBALLABEL* aItem ) override;
+
     void ShowAllIntersheetRefs( bool aShow );
 
     /**

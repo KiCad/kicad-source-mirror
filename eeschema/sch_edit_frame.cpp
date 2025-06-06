@@ -1810,14 +1810,6 @@ void SCH_EDIT_FRAME::RecalculateConnections( SCH_COMMIT* aCommit, SCH_CLEANUP_FL
 
     Schematic().RecalculateConnections( aCommit, aCleanupFlags,
                                         m_toolManager,
-                                        [&]( SCH_GLOBALLABEL* label )
-                                        {
-                                            for( SCH_FIELD& field : label->GetFields() )
-                                                field.ClearBoundingBoxCache();
-
-                                            label->ClearBoundingBoxCache();
-                                            GetCanvas()->GetView()->Update( label );
-                                        },
                                         aProgressReporter,
                                         GetCanvas()->GetView(),
                                         &changeHandler,
@@ -1880,14 +1872,13 @@ void SCH_EDIT_FRAME::RecalculateConnections( SCH_COMMIT* aCommit, SCH_CLEANUP_FL
 
 void SCH_EDIT_FRAME::RecomputeIntersheetRefs()
 {
-    Schematic().RecomputeIntersheetRefs( [&]( SCH_GLOBALLABEL* label )
-                                         {
-                                             for( SCH_FIELD& field : label->GetFields() )
-                                                 field.ClearBoundingBoxCache();
+    Schematic().RecomputeIntersheetRefs();
+}
 
-                                             label->ClearBoundingBoxCache();
-                                             GetCanvas()->GetView()->Update( label );
-                                         } );
+
+void SCH_EDIT_FRAME::IntersheetRefUpdate( SCH_GLOBALLABEL* aItem )
+{
+    GetCanvas()->GetView()->Update( aItem );
 }
 
 

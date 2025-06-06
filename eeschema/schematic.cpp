@@ -693,8 +693,7 @@ void SCHEMATIC::SetSheetNumberAndCount()
 }
 
 
-void SCHEMATIC::RecomputeIntersheetRefs(
-        const std::function<void( SCH_GLOBALLABEL* )>& aItemCallback )
+void SCHEMATIC::RecomputeIntersheetRefs()
 {
     std::map<wxString, std::set<int>>& pageRefsMap = GetPageRefsMap();
 
@@ -733,7 +732,14 @@ void SCHEMATIC::RecomputeIntersheetRefs(
                 globalLabel->AutoplaceFields( CurrentSheet().LastScreen(), AUTOPLACE_AUTO );
 
             CurrentSheet().LastScreen()->Update( globalLabel );
-            aItemCallback( globalLabel );
+
+            for( SCH_FIELD& field : globalLabel->GetFields() )
+                field.ClearBoundingBoxCache();
+
+            globalLabel->ClearBoundingBoxCache();
+
+            if( m_schematicHolder )
+                m_schematicHolder->IntersheetRefUpdate( globalLabel );
         }
     }
 }
@@ -1250,7 +1256,6 @@ void SCHEMATIC::CleanUp( SCH_COMMIT* aCommit, SCH_SCREEN* aScreen )
 
 void SCHEMATIC::RecalculateConnections( SCH_COMMIT* aCommit, SCH_CLEANUP_FLAGS aCleanupFlags,
                                         TOOL_MANAGER* aToolManager,
-                                        const std::function<void( SCH_GLOBALLABEL* )>& aIntersheetRefItemCallback,
                                         PROGRESS_REPORTER* aProgressReporter,
                                         KIGFX::SCH_VIEW* aSchView,
                                         std::function<void( SCH_ITEM* )>* aChangedItemHandler,
@@ -1280,7 +1285,7 @@ void SCHEMATIC::RecalculateConnections( SCH_COMMIT* aCommit, SCH_CLEANUP_FLAGS a
     wxLogTrace( "CONN_PROFILE", "SchematicCleanUp() %0.4f ms", timer.msecs() );
 
     if( settings.m_IntersheetRefsShow )
-        RecomputeIntersheetRefs( aIntersheetRefItemCallback );
+        RecomputeIntersheetRefs();
 
     if( !ADVANCED_CFG::GetCfg().m_IncrementalConnectivity
             || aCleanupFlags == GLOBAL_CLEANUP

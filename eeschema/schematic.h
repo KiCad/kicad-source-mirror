@@ -253,7 +253,7 @@ public:
      * Update the schematic's page reference map for all global labels, and refresh the labels
      * so that they are redrawn with up-to-date references.
      */
-    void RecomputeIntersheetRefs( const std::function<void( SCH_GLOBALLABEL* )>& aItemCallback );
+    void RecomputeIntersheetRefs();
 
     /**
      * Clear operating points from a .op simulation.
@@ -416,7 +416,6 @@ public:
      */
     void RecalculateConnections( SCH_COMMIT* aCommit, SCH_CLEANUP_FLAGS aCleanupFlags,
                                  TOOL_MANAGER* aToolManager,
-                                 const std::function<void( SCH_GLOBALLABEL* )>& aIntersheetRefItemCallback,
                                  PROGRESS_REPORTER* aProgressReporter = nullptr,
                                  KIGFX::SCH_VIEW* aSchView = nullptr,
                                  std::function<void( SCH_ITEM* )>* aChangedItemHandler = nullptr,
