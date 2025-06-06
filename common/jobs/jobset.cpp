@@ -36,7 +36,7 @@
 const int jobsFileSchemaVersion = 1;
 
 
-KICOMMON_API std::map<JOBSET_DESTINATION_T, JOBSET_DESTINATION_T_INFO> JobsetDestinationTypeInfos = 
+KICOMMON_API std::map<JOBSET_DESTINATION_T, JOBSET_DESTINATION_T_INFO> JobsetDestinationTypeInfos =
 {
     { JOBSET_DESTINATION_T::FOLDER,
         { _HKI( "Folder" ), BITMAPS::small_folder, true, "" } },
@@ -280,16 +280,24 @@ bool JOBSET::SaveToFile( const wxString& aDirectory, bool aForce )
 }
 
 
-JOBSET_DESTINATION* JOBSET::GetDestination( wxString& aDestination )
+JOBSET_DESTINATION* JOBSET::FindDestination( wxString& aDestinationStr )
 {
-    auto it = std::find_if( m_destinations.begin(), m_destinations.end(),
-                            [&]( const JOBSET_DESTINATION& destination )
-                            {
-                                if( destination.m_id == aDestination )
-                                    return true;
+    auto is_matching_dest = [&]( const JOBSET_DESTINATION& destination )
+    {
+        if( destination.m_id == aDestinationStr || destination.m_description == aDestinationStr )
+            return true;
 
-                                return false;
-                            } );
+        return false;
+    };
+
+    auto count = std::count_if( m_destinations.begin(), m_destinations.end(), is_matching_dest );
+
+    // we want to intentionally fail if more than one matching dest exists
+    // as theres no good way to handle it
+    if( count != 1 )
+        return nullptr;
+
+    auto it = std::find_if( m_destinations.begin(), m_destinations.end(), is_matching_dest );
 
     if( it != m_destinations.end() )
         return &(*it);
