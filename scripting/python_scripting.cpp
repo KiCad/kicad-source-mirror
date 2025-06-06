@@ -249,6 +249,19 @@ bool SCRIPTING::scriptingSetup()
         // Now initialize Python Home via capi
         Py_SetPythonHome( pyHome.GetFullPath().c_str() );
     }
+
+    // Allow executing the python pip installed scripts on windows easily
+    wxString envPath;
+    if( wxGetEnv( wxT( "PATH" ), &envPath ) )
+    {
+        wxFileName pythonThirdPartyBin( PATHS::GetDefault3rdPartyPath() );
+        pythonThirdPartyBin.AppendDir( wxString::Format( wxT( "Python%d%d" ), PY_MAJOR_VERSION, PY_MINOR_VERSION ) );
+        pythonThirdPartyBin.AppendDir( wxT( "Scripts" ) );
+
+        envPath = pythonThirdPartyBin.GetAbsolutePath() + ";" + envPath;
+
+        wxSetEnv( wxT( "PATH" ), envPath );
+    }
   #else
     // Intended for msys2 but we could probably use the msvc equivalent code too
     // If our python.exe (in kicad/bin) exists, force our kicad python environment
