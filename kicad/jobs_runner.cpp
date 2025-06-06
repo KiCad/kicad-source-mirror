@@ -242,6 +242,8 @@ bool JOBS_RUNNER::RunJobsForDestination( JOBSET_DESTINATION* aDestination, bool 
     int failCount = 0;
     int successCount = 0;
 
+    wxSetEnv( "JOBSET_OUTPUT_TMP_PATH", tempDirPath );
+
     for( const JOBSET_JOB& job : jobsForDestination )
     {
         if( m_reporter != nullptr )
@@ -270,6 +272,7 @@ bool JOBS_RUNNER::RunJobsForDestination( JOBSET_DESTINATION* aDestination, bool 
         }
 
         int result = CLI::EXIT_CODES::SUCCESS;
+
 
         if( iface < KIWAY::KIWAY_FACE_COUNT )
         {
@@ -327,6 +330,8 @@ bool JOBS_RUNNER::RunJobsForDestination( JOBSET_DESTINATION* aDestination, bool 
                 break;
         }
     }
+
+    wxUnsetEnv( "JOBSET_OUTPUT_TMP_PATH" );
 
     if( genOutputs )
         success &= aDestination->m_outputHandler->HandleOutputs( tempDirPath, m_project, outputs );
