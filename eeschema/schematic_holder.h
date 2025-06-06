@@ -22,6 +22,7 @@
 class EDA_ITEM;
 class SCH_SCREEN;
 class SCH_SELECTION_TOOL;
+class SCH_GLOBALLABEL;
 
 /**
  * This is a bridge class to help the schematic be able to affect SCH_EDIT_FRAME
@@ -42,4 +43,6 @@ public:
     virtual SCH_SELECTION_TOOL* GetSelectionTool() { return nullptr; }
 
     virtual void RemoveFromScreen( EDA_ITEM* aItem, SCH_SCREEN* aScreen ) = 0;
+
+    virtual void IntersheetRefUpdate( SCH_GLOBALLABEL* aItem ) {}
 };

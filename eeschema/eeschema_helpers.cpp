@@ -196,25 +196,12 @@ SCHEMATIC* EESCHEMA_HELPERS::LoadSchematic( const wxString& aFileName,
     toolManager->SetEnvironment( schematic, nullptr, nullptr, Kiface().KifaceSettings(), nullptr );
 
     SCH_COMMIT dummyCommit( toolManager );
-    schematic->RecalculateConnections( &dummyCommit, GLOBAL_CLEANUP, toolManager,
-                    [&]( SCH_GLOBALLABEL* label )
-                    {
-                        for( SCH_FIELD& field : label->GetFields() )
-                            field.ClearBoundingBoxCache();
-
-                        label->ClearBoundingBoxCache();
-                    } );
+    schematic->RecalculateConnections( &dummyCommit, GLOBAL_CLEANUP, toolManager );
 
     schematic->ResolveERCExclusionsPostUpdate();
 
     schematic->SetSheetNumberAndCount();
-    schematic->RecomputeIntersheetRefs( []( SCH_GLOBALLABEL* aGlobal )
-                                        {
-                                            for( SCH_FIELD& field : aGlobal->GetFields() )
-                                                field.ClearBoundingBoxCache();
-
-                                            aGlobal->ClearBoundingBoxCache();
-                                        } );
+    schematic->RecomputeIntersheetRefs();
 
     for( SCH_SHEET_PATH& sheet : sheetList )
     {
