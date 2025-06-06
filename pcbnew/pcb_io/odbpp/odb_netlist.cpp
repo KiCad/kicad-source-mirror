@@ -45,7 +45,8 @@
 std::string ODB_NET_LIST::ComputePadAccessSide( BOARD* aBoard, LSET aLayerMask )
 {
     // Non-copper is not interesting here
-    aLayerMask &= LSET::AllCuMask();
+    aLayerMask &= LSET::AllCuMask( aBoard->GetCopperLayerCount() );
+
     if( !aLayerMask.any() )
         return "";
 
@@ -61,16 +62,9 @@ std::string ODB_NET_LIST::ComputePadAccessSide( BOARD* aBoard, LSET aLayerMask )
     if( aLayerMask[B_Cu] )
         return "D";
 
-    // Inner
-    for( PCB_LAYER_ID layer : LSET::InternalCuMask().Seq() )
-    {
-        if( aLayerMask[layer] )
-            return "I";
-    }
-
-    // This shouldn't happen
-    wxLogDebug( "Unhandled layer mask input when compute pad access side of ODB++ netlist file." );
-    return "";
+    // Inner.  We've already checked that there is no copper on the front or back, so
+    // since we checked that there is at least one copper layer, this must be an inner layer
+    return "I";
 }
 
 
