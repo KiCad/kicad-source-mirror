@@ -164,7 +164,19 @@ public:
      * @return the zone's clearance in internal units.
      */
     std::optional<int> GetLocalClearance() const override;
-    void SetLocalClearance( std::optional<int> aClearance ) { m_ZoneClearance = aClearance.value(); }
+
+    /**
+     * Set the local clearance for this zone.
+     *
+     * @param aClearance is the clearance in internal units, or std::nullopt to clear it.
+     */
+    void SetLocalClearance( std::optional<int> aClearance )
+    {
+        if( aClearance )
+            m_ZoneClearance = aClearance.value();
+        else
+            m_ZoneClearance = 0;
+    }
 
     /**
      * Return any local clearances set in the "classic" (ie: pre-rule) system.
