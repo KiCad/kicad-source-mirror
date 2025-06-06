@@ -424,16 +424,16 @@ bool LAYERS_MAP_DIALOG::TransferDataFromWindow()
 
     for( int ii = 0; ii < GERBER_DRAWLAYERS_COUNT; ++ii )
     {
-        if( m_layersLookUpTable[ii] < F_Cu )
+        if( IsInnerCopperLayer( m_layersLookUpTable[ii] ) )
         {
             if( m_layersLookUpTable[ii ] > inner_layer_max )
                 inner_layer_max = m_layersLookUpTable[ii];
         }
     }
 
-    // inner_layer_max must be less than (or equal to the number of internal copper layers
+    // inner_layer_max must be less than or equal to the number of internal copper layers
     // internal copper layers = m_exportBoardCopperLayersCount-2
-    if( inner_layer_max > m_exportBoardCopperLayersCount-2 )
+    if( (int) CopperLayerToOrdinal( ToLAYER_ID( inner_layer_max ) ) > m_exportBoardCopperLayersCount-2 )
     {
         wxMessageBox( _( "Exported board does not have enough copper layers to handle selected "
                          "inner layers" ) );
