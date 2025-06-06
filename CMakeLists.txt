@@ -863,6 +863,14 @@ if( NOT _protobuf_found )
     endif()
 endif()
 
+if( NOT Protobuf_PROTOC_EXECUTABLE )
+    if( NOT KICAD_USE_CMAKE_FINDPROTOBUF)
+        set( Protobuf_PROTOC_EXECUTABLE "protobuf::protoc" )
+    else()
+        MESSAGE( FATAL_ERROR "Protobuf compiler not found. Please install protobuf-compiler." )
+    endif()
+endif()
+
 
 # Assist with header file searching optimization:
 # INC_BEFORE and INC_AFTER are two lists which go at the front and back of the
