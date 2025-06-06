@@ -62,7 +62,7 @@ std::string ODB_NET_LIST::ComputePadAccessSide( BOARD* aBoard, LSET aLayerMask )
         return "D";
 
     // Inner
-    for( int layer = In1_Cu; layer < B_Cu; ++layer )
+    for( PCB_LAYER_ID layer : LSET::InternalCuMask().Seq() )
     {
         if( aLayerMask[layer] )
             return "I";
