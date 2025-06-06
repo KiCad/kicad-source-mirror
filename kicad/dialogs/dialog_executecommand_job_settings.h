@@ -34,7 +34,13 @@ public:
     bool TransferDataToWindow() override;
 
 private:
+    void onSizeGrid( wxSizeEvent& event ) override;
+    void adjustPathSubsGridColumns( int aWidth );
     void OnRecordOutputClicked( wxCommandEvent& event ) override;
+
+    /// Populate the readonly environment variable table with names and values
+    /// by examining the script and path.
+    void populateEnvironReadOnlyTable();
 
 private:
     JOB_SPECIAL_EXECUTE* m_job;

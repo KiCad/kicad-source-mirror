@@ -10,6 +10,8 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
+class WX_GRID;
+
 #include "dialog_shim.h"
 #include <wx/string.h>
 #include <wx/stattext.h>
@@ -21,6 +23,7 @@
 #include <wx/textctrl.h>
 #include <wx/sizer.h>
 #include <wx/checkbox.h>
+#include <wx/grid.h>
 #include <wx/button.h>
 #include <wx/dialog.h>
 
@@ -40,12 +43,14 @@ class DIALOG_EXECUTECOMMAND_JOB_SETTINGS_BASE : public DIALOG_SHIM
 		wxTextCtrl* m_textCtrlOutputPath;
 		wxCheckBox* m_cbRecordOutput;
 		wxCheckBox* m_cbIgnoreExitCode;
+		WX_GRID* m_path_subs_grid;
 		wxStdDialogButtonSizer* m_sdbSizer1;
 		wxButton* m_sdbSizer1OK;
 		wxButton* m_sdbSizer1Cancel;
 
 		// Virtual event handlers, override them in your derived class
 		virtual void OnRecordOutputClicked( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onSizeGrid( wxSizeEvent& event ) { event.Skip(); }
 
 
 	public:

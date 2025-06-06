@@ -23,6 +23,8 @@
 #include <kicommon.h>
 #include <jobs/job.h>
 
+#define OUTPUT_TMP_PATH_VAR_NAME wxT( "JOBSET_OUTPUT_TMP_PATH" )
+
 class KICOMMON_API JOB_SPECIAL_EXECUTE : public JOB
 {
 public:
