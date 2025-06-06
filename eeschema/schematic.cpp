@@ -266,7 +266,7 @@ void SCHEMATIC::GetContextualTextVars( wxArrayString* aVars ) const
     if( !CurrentSheet().empty() )
         CurrentSheet().LastScreen()->GetTitleBlock().GetContextualTextVars( aVars );
 
-    for( std::pair<wxString, wxString> entry : Prj().GetTextVars() )
+    for( std::pair<wxString, wxString> entry : m_project->GetTextVars() )
         add( entry.first );
 }
 
@@ -310,14 +310,14 @@ bool SCHEMATIC::ResolveTextVar( const SCH_SHEET_PATH* aSheetPath, wxString* toke
     }
     else if( token->IsSameAs( wxT( "PROJECTNAME" ) ) )
     {
-        *token = Prj().GetProjectName();
+        *token = m_project->GetProjectName();
         return true;
     }
 
     if( aSheetPath->LastScreen()->GetTitleBlock().TextVarResolver( token, m_project ) )
         return true;
 
-    if( Prj().TextVarResolver( token ) )
+    if( m_project->TextVarResolver( token ) )
         return true;
 
     return false;
@@ -1308,7 +1308,7 @@ void SCHEMATIC::RecalculateConnections( SCH_COMMIT* aCommit, SCH_CLEANUP_FLAGS a
             || ConnectionGraph()->IsMinor() )
     {
         // Clear all resolved netclass caches in case labels have changed
-        Prj().GetProjectFile().NetSettings()->ClearAllCaches();
+        m_project->GetProjectFile().NetSettings()->ClearAllCaches();
 
         // Update all rule areas so we can cascade implied connectivity changes
         std::unordered_set<SCH_SCREEN*> all_screens;
@@ -1505,7 +1505,7 @@ void SCHEMATIC::RecalculateConnections( SCH_COMMIT* aCommit, SCH_CLEANUP_FLAGS a
 
         new_graph.SetLastCodes( ConnectionGraph() );
 
-        std::shared_ptr<NET_SETTINGS> netSettings = Prj().GetProjectFile().NetSettings();
+        std::shared_ptr<NET_SETTINGS> netSettings = m_project->GetProjectFile().NetSettings();
 
         std::set<wxString> affectedNets;
 
