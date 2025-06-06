@@ -32,7 +32,7 @@
 #include <layer_ids.h>
 #include <lset.h>
 
-#include <dialogs/dialog_layers_select_to_pcb.h>
+#include <dialogs/dialog_map_gerber_layers_to_pcb.h>
 
 #include <wx/msgdlg.h>
 #include <gestfich.h>
@@ -45,18 +45,18 @@ enum swap_layer_id {
 };
 
 
-int LAYERS_MAP_DIALOG::m_exportBoardCopperLayersCount = 2;
+int DIALOG_MAP_GERBER_LAYERS_TO_PCB::m_exportBoardCopperLayersCount = 2;
 
 
-BEGIN_EVENT_TABLE( LAYERS_MAP_DIALOG, LAYERS_MAP_DIALOG_BASE )
+BEGIN_EVENT_TABLE( DIALOG_MAP_GERBER_LAYERS_TO_PCB, DIALOG_MAP_GERBER_LAYERS_TO_PCB_BASE )
     EVT_COMMAND_RANGE( ID_BUTTON_0, ID_BUTTON_0 + GERBER_DRAWLAYERS_COUNT-1,
                        wxEVT_COMMAND_BUTTON_CLICKED,
-                       LAYERS_MAP_DIALOG::OnSelectLayer )
+                       DIALOG_MAP_GERBER_LAYERS_TO_PCB::OnSelectLayer )
 END_EVENT_TABLE()
 
 
-LAYERS_MAP_DIALOG::LAYERS_MAP_DIALOG( GERBVIEW_FRAME* parent ) :
-    LAYERS_MAP_DIALOG_BASE( parent )
+DIALOG_MAP_GERBER_LAYERS_TO_PCB::DIALOG_MAP_GERBER_LAYERS_TO_PCB( GERBVIEW_FRAME* parent ) :
+        DIALOG_MAP_GERBER_LAYERS_TO_PCB_BASE( parent )
 {
     m_Parent = parent;
     initDialog();
@@ -68,7 +68,7 @@ LAYERS_MAP_DIALOG::LAYERS_MAP_DIALOG( GERBVIEW_FRAME* parent ) :
 }
 
 
-void LAYERS_MAP_DIALOG::initDialog()
+void DIALOG_MAP_GERBER_LAYERS_TO_PCB::initDialog()
 {
     wxStaticText* label;
     wxStaticText* text;
@@ -211,10 +211,10 @@ void LAYERS_MAP_DIALOG::initDialog()
     if( numMappedGerbers > 0 )
     {
         // See if the user wants to map the Altium Gerbers to known KiCad PCB layers
-        int returnVal = wxMessageBox(
-                wxString::Format( _( "Gerbers with known layers: %d" ), numMappedGerbers ) + wxT( "\n\n" )
-                + _( "Assign to matching PCB layers?" ),
-                _( "Automatic Layer Assignment" ), wxOK | wxCANCEL | wxOK_DEFAULT );
+        int returnVal = wxMessageBox( wxString::Format( _( "Gerbers with known layers: %d" ), numMappedGerbers )
+                                              + wxT( "\n\n" ) + _( "Assign to matching PCB layers?" ),
+                                      _( "Automatic Layer Assignment" ),
+                                      wxOK | wxCANCEL | wxOK_DEFAULT );
 
         if( returnVal == wxOK )
         {
@@ -254,7 +254,7 @@ void LAYERS_MAP_DIALOG::initDialog()
 }
 
 
-void LAYERS_MAP_DIALOG::normalizeBrdLayersCount()
+void DIALOG_MAP_GERBER_LAYERS_TO_PCB::normalizeBrdLayersCount()
 {
     if( ( m_exportBoardCopperLayersCount & 1 ) )
         m_exportBoardCopperLayersCount++;
@@ -268,14 +268,14 @@ void LAYERS_MAP_DIALOG::normalizeBrdLayersCount()
 }
 
 
-void LAYERS_MAP_DIALOG::OnBrdLayersCountSelection( wxCommandEvent& event )
+void DIALOG_MAP_GERBER_LAYERS_TO_PCB::OnBrdLayersCountSelection( wxCommandEvent& event )
 {
     int id = event.GetSelection();
     m_exportBoardCopperLayersCount = ( id + 1 ) * 2;
 }
 
 
-void LAYERS_MAP_DIALOG::OnResetClick( wxCommandEvent& event )
+void DIALOG_MAP_GERBER_LAYERS_TO_PCB::OnResetClick( wxCommandEvent& event )
 {
     for( int ii = 0; ii < m_gerberActiveLayersCount; ++ii )
     {
@@ -291,7 +291,7 @@ void LAYERS_MAP_DIALOG::OnResetClick( wxCommandEvent& event )
 }
 
 
-void LAYERS_MAP_DIALOG::OnStoreSetup( wxCommandEvent& event )
+void DIALOG_MAP_GERBER_LAYERS_TO_PCB::OnStoreSetup( wxCommandEvent& event )
 {
     GERBVIEW_SETTINGS* config = static_cast<GERBVIEW_SETTINGS*>( Kiface().KifaceSettings() );
     config->m_BoardLayersCount = m_exportBoardCopperLayersCount;
@@ -307,7 +307,7 @@ void LAYERS_MAP_DIALOG::OnStoreSetup( wxCommandEvent& event )
 }
 
 
-void LAYERS_MAP_DIALOG::OnGetSetup( wxCommandEvent& event )
+void DIALOG_MAP_GERBER_LAYERS_TO_PCB::OnGetSetup( wxCommandEvent& event )
 {
     GERBVIEW_SETTINGS* config = static_cast<GERBVIEW_SETTINGS*>( Kiface().KifaceSettings() );
 
@@ -349,7 +349,7 @@ void LAYERS_MAP_DIALOG::OnGetSetup( wxCommandEvent& event )
 }
 
 
-void LAYERS_MAP_DIALOG::OnSelectLayer( wxCommandEvent& event )
+void DIALOG_MAP_GERBER_LAYERS_TO_PCB::OnSelectLayer( wxCommandEvent& event )
 {
     int ii = event.GetId() - ID_BUTTON_0;
 
@@ -412,7 +412,7 @@ void LAYERS_MAP_DIALOG::OnSelectLayer( wxCommandEvent& event )
 }
 
 
-bool LAYERS_MAP_DIALOG::TransferDataFromWindow()
+bool DIALOG_MAP_GERBER_LAYERS_TO_PCB::TransferDataFromWindow()
 {
     if( !wxDialog::TransferDataFromWindow() )
         return false;
@@ -444,7 +444,7 @@ bool LAYERS_MAP_DIALOG::TransferDataFromWindow()
 }
 
 
-int LAYERS_MAP_DIALOG::findKnownGerbersLoaded( std::vector<int>& aGerber2KicadMapping )
+int DIALOG_MAP_GERBER_LAYERS_TO_PCB::findKnownGerbersLoaded( std::vector<int>& aGerber2KicadMapping )
 {
     int numKnownGerbers = 0;
 
@@ -464,7 +464,7 @@ int LAYERS_MAP_DIALOG::findKnownGerbersLoaded( std::vector<int>& aGerber2KicadMa
 }
 
 
-int LAYERS_MAP_DIALOG::findNumAltiumGerbersLoaded( std::vector<int>& aGerber2KicadMapping )
+int DIALOG_MAP_GERBER_LAYERS_TO_PCB::findNumAltiumGerbersLoaded( std::vector<int>& aGerber2KicadMapping )
 {
     // The next comment preserves initializer formatting below it
     // clang-format off
@@ -571,7 +571,7 @@ int LAYERS_MAP_DIALOG::findNumAltiumGerbersLoaded( std::vector<int>& aGerber2Kic
 }
 
 
-int LAYERS_MAP_DIALOG::findNumKiCadGerbersLoaded( std::vector<int>& aGerber2KicadMapping )
+int DIALOG_MAP_GERBER_LAYERS_TO_PCB::findNumKiCadGerbersLoaded( std::vector<int>& aGerber2KicadMapping )
 {
     // The next comment preserves initializer formatting below it
     // clang-format off
@@ -702,7 +702,7 @@ int LAYERS_MAP_DIALOG::findNumKiCadGerbersLoaded( std::vector<int>& aGerber2Kica
 }
 
 
-int LAYERS_MAP_DIALOG::findNumX2GerbersLoaded( std::vector<int>& aGerber2KicadMapping )
+int DIALOG_MAP_GERBER_LAYERS_TO_PCB::findNumX2GerbersLoaded( std::vector<int>& aGerber2KicadMapping )
 {
     // The next comment preserves initializer formatting below it
     // clang-format off
@@ -771,7 +771,9 @@ int LAYERS_MAP_DIALOG::findNumX2GerbersLoaded( std::vector<int>& aGerber2KicadMa
 
     if( ( aGerber2KicadMapping.size() != 0 )
             && ( aGerber2KicadMapping.size() < (size_t) m_gerberActiveLayersCount ) )
+    {
         return numKicadMatches;
+    }
 
     // If the passed vector is empty, set it to the same number of elements as there
     // are loaded Gerbers, and set each to "UNSELECTED_LAYER"

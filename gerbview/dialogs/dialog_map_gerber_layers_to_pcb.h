@@ -22,14 +22,9 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file dialog_layers_select_to_pcb.h
- */
+#pragma once
 
-#ifndef DIALOG_LAYERS_SELECT_TO_PCB_H_
-#define DIALOG_LAYERS_SELECT_TO_PCB_H_
-
-#include <dialogs/dialog_layers_select_to_pcb_base.h>
+#include <dialogs/dialog_map_gerber_layers_to_pcb_base.h>
 #include <layer_ids.h>
 
 class GERBVIEW_FRAME;
@@ -37,10 +32,10 @@ class GERBVIEW_FRAME;
 /**
  * Show the Gerber files loaded and allow the user to choose between Gerber layers and pcb layers.
  */
-class LAYERS_MAP_DIALOG : public LAYERS_MAP_DIALOG_BASE
+class DIALOG_MAP_GERBER_LAYERS_TO_PCB : public DIALOG_MAP_GERBER_LAYERS_TO_PCB_BASE
 {
-public: LAYERS_MAP_DIALOG( GERBVIEW_FRAME* parent );
-    ~LAYERS_MAP_DIALOG() {};
+public: DIALOG_MAP_GERBER_LAYERS_TO_PCB( GERBVIEW_FRAME* parent );
+    ~DIALOG_MAP_GERBER_LAYERS_TO_PCB() {};
 
     int* GetLayersLookUpTable() { return m_layersLookUpTable; }
     static int GetCopperLayersCount() { return m_exportBoardCopperLayersCount; }
@@ -132,4 +127,3 @@ private:
     wxStaticText*   m_layersList[ int(GERBER_DRAWLAYERS_COUNT) + 1 ];
 };
 
-#endif      // DIALOG_LAYERS_SELECT_TO_PCB_H_

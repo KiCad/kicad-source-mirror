@@ -30,7 +30,7 @@
 #include <gerbview_frame.h>
 #include <layer_range.h>
 #include <lset.h>
-#include <dialogs/dialog_layers_select_to_pcb.h>
+#include <dialogs/dialog_map_gerber_layers_to_pcb.h>
 
 #include <wx/radiobox.h>
 

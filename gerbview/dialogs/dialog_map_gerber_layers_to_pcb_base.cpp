@@ -1,22 +1,22 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#include "dialog_layers_select_to_pcb_base.h"
+#include "dialog_map_gerber_layers_to_pcb_base.h"
 
 ///////////////////////////////////////////////////////////////////////////
 
-BEGIN_EVENT_TABLE( LAYERS_MAP_DIALOG_BASE, DIALOG_SHIM )
-	EVT_COMBOBOX( ID_M_COMBOCOPPERLAYERSCOUNT, LAYERS_MAP_DIALOG_BASE::_wxFB_OnBrdLayersCountSelection )
-	EVT_BUTTON( ID_STORE_CHOICE, LAYERS_MAP_DIALOG_BASE::_wxFB_OnStoreSetup )
-	EVT_BUTTON( ID_GET_PREVIOUS_CHOICE, LAYERS_MAP_DIALOG_BASE::_wxFB_OnGetSetup )
-	EVT_BUTTON( ID_RESET_CHOICE, LAYERS_MAP_DIALOG_BASE::_wxFB_OnResetClick )
+BEGIN_EVENT_TABLE( DIALOG_MAP_GERBER_LAYERS_TO_PCB_BASE, DIALOG_SHIM )
+	EVT_COMBOBOX( ID_M_COMBOCOPPERLAYERSCOUNT, DIALOG_MAP_GERBER_LAYERS_TO_PCB_BASE::_wxFB_OnBrdLayersCountSelection )
+	EVT_BUTTON( ID_STORE_CHOICE, DIALOG_MAP_GERBER_LAYERS_TO_PCB_BASE::_wxFB_OnStoreSetup )
+	EVT_BUTTON( ID_GET_PREVIOUS_CHOICE, DIALOG_MAP_GERBER_LAYERS_TO_PCB_BASE::_wxFB_OnGetSetup )
+	EVT_BUTTON( ID_RESET_CHOICE, DIALOG_MAP_GERBER_LAYERS_TO_PCB_BASE::_wxFB_OnResetClick )
 END_EVENT_TABLE()
 
-LAYERS_MAP_DIALOG_BASE::LAYERS_MAP_DIALOG_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : DIALOG_SHIM( parent, id, title, pos, size, style )
+DIALOG_MAP_GERBER_LAYERS_TO_PCB_BASE::DIALOG_MAP_GERBER_LAYERS_TO_PCB_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : DIALOG_SHIM( parent, id, title, pos, size, style )
 {
 	this->SetSizeHints( wxDefaultSize, wxDefaultSize );
 
@@ -142,6 +142,6 @@ LAYERS_MAP_DIALOG_BASE::LAYERS_MAP_DIALOG_BASE( wxWindow* parent, wxWindowID id,
 	this->Centre( wxBOTH );
 }
 
-LAYERS_MAP_DIALOG_BASE::~LAYERS_MAP_DIALOG_BASE()
+DIALOG_MAP_GERBER_LAYERS_TO_PCB_BASE::~DIALOG_MAP_GERBER_LAYERS_TO_PCB_BASE()
 {
 }

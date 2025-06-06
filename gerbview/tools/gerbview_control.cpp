@@ -20,7 +20,7 @@
 
 #include <confirm.h>
 #include <common.h>
-#include <dialogs/dialog_layers_select_to_pcb.h>
+#include <dialogs/dialog_map_gerber_layers_to_pcb.h>
 #include <export_to_pcbnew.h>
 #include <gerber_file_image.h>
 #include <gerber_file_image_list.h>
@@ -131,21 +131,16 @@ int GERBVIEW_CONTROL::ExportToPcbnew( const TOOL_EVENT& aEvent )
 
     wxFileName fileName = EnsureFileExtension( filedlg.GetPath(), FILEEXT::KiCadPcbFileExtension );
 
-    /* Install a dialog frame to choose the mapping
-     * between gerber layers and Pcbnew layers
-     */
-    LAYERS_MAP_DIALOG* layerdlg = new LAYERS_MAP_DIALOG( m_frame );
-    int ok = layerdlg->ShowModal();
-    layerdlg->Destroy();
+    DIALOG_MAP_GERBER_LAYERS_TO_PCB layerdlg( m_frame );
 
-    if( ok != wxID_OK )
+    if( layerdlg.ShowModal() != wxID_OK )
         return 0;
 
     m_frame->SetMruPath( fileName.GetPath() );
 
     GBR_TO_PCB_EXPORTER gbr_exporter( m_frame, fileName.GetFullPath() );
 
-    gbr_exporter.ExportPcb( layerdlg->GetLayersLookUpTable(), layerdlg->GetCopperLayersCount() );
+    gbr_exporter.ExportPcb( layerdlg.GetLayersLookUpTable(), layerdlg.GetCopperLayersCount() );
 
     return 0;
 }

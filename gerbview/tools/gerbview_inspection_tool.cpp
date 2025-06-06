@@ -22,7 +22,7 @@
 #include <eda_item.h>
 #include <bitmaps.h>
 #include <class_draw_panel_gal.h>
-#include <dialogs/dialog_layers_select_to_pcb.h>
+#include <dialogs/dialog_map_gerber_layers_to_pcb.h>
 #include <gestfich.h>
 #include <gerber_file_image.h>
 #include <gerbview_id.h>

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -37,9 +37,9 @@
 #define ID_RESET_CHOICE 1006
 
 ///////////////////////////////////////////////////////////////////////////////
-/// Class LAYERS_MAP_DIALOG_BASE
+/// Class DIALOG_MAP_GERBER_LAYERS_TO_PCB_BASE
 ///////////////////////////////////////////////////////////////////////////////
-class LAYERS_MAP_DIALOG_BASE : public DIALOG_SHIM
+class DIALOG_MAP_GERBER_LAYERS_TO_PCB_BASE : public DIALOG_SHIM
 {
 	DECLARE_EVENT_TABLE()
 	private:
@@ -75,9 +75,9 @@ class LAYERS_MAP_DIALOG_BASE : public DIALOG_SHIM
 
 	public:
 
-		LAYERS_MAP_DIALOG_BASE( wxWindow* parent, wxWindowID id = ID_LAYERS_MAP_DIALOG_BASE, const wxString& title = _("Layer Selection"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+		DIALOG_MAP_GERBER_LAYERS_TO_PCB_BASE( wxWindow* parent, wxWindowID id = ID_LAYERS_MAP_DIALOG_BASE, const wxString& title = _("Layer Selection"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
 
-		~LAYERS_MAP_DIALOG_BASE();
+		~DIALOG_MAP_GERBER_LAYERS_TO_PCB_BASE();
 
 };
 

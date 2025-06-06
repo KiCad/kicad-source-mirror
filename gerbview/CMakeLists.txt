@@ -24,8 +24,8 @@ set( DIALOGS_SRCS
     dialogs/panel_gerbview_excellon_settings_base.cpp
     dialogs/dialog_draw_layers_settings.cpp
     dialogs/dialog_draw_layers_settings_base.cpp
-    dialogs/dialog_layers_select_to_pcb.cpp
-    dialogs/dialog_layers_select_to_pcb_base.cpp
+    dialogs/dialog_map_gerber_layers_to_pcb.cpp
+    dialogs/dialog_map_gerber_layers_to_pcb_base.cpp
     dialogs/dialog_print_gerbview.cpp
     dialogs/dialog_select_one_pcb_layer.cpp
     )
