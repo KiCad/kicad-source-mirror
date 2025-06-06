@@ -848,15 +848,16 @@ void OPENGL_GAL::drawSegment( const VECTOR2D& aStartPoint, const VECTOR2D& aEndP
     VECTOR2D startEndVector = aEndPoint - aStartPoint;
     double   lineLength = startEndVector.EuclideanNorm();
 
-    float startx = aStartPoint.x;
-    float starty = aStartPoint.y;
-    float endx = aStartPoint.x + lineLength;
-    float endy = aStartPoint.y + lineLength;
-
     // Be careful about floating point rounding.  As we draw segments in larger and larger
     // coordinates, the shader (which uses floats) will lose precision and stop drawing small
     // segments.  In this case, we need to draw a circle for the minimal segment.
-    if( startx == endx || starty == endy )
+    // Check if the coordinate differences can be accurately represented as floats
+    float startX = static_cast<float>( aStartPoint.x );
+    float startY = static_cast<float>( aStartPoint.y );
+    float endX = static_cast<float>( aEndPoint.x );
+    float endY = static_cast<float>( aEndPoint.y );
+
+    if( startX == endX && startY == endY )
     {
         drawCircle( aStartPoint, aWidth / 2, aReserve );
         return;
@@ -2407,18 +2408,17 @@ void OPENGL_GAL::drawSegmentChain( const std::function<VECTOR2D( int )>& aPointG
         auto start = aPointGetter( i - 1 );
         auto end = aPointGetter( i );
 
-        VECTOR2D startEndVector = end - start;
-        double   lineLength = startEndVector.EuclideanNorm();
-
         float startx = start.x;
         float starty = start.y;
-        float endx = start.x + lineLength;
-        float endy = start.y + lineLength;
+        float endx = end.x;
+        float endy = end.y;
 
         // Be careful about floating point rounding.  As we draw segments in larger and larger
         // coordinates, the shader (which uses floats) will lose precision and stop drawing small
         // segments.  In this case, we need to draw a circle for the minimal segment.
-        if( startx == endx || starty == endy )
+        // Check if the coordinate differences can be accurately represented as floats
+
+        if( startx == endx && starty == endy )
         {
             vertices += 3; // One circle
             continue;
