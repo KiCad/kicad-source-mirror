@@ -77,7 +77,6 @@ void PCB_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
     char*       text;
     int         netcode = -1;
     bool        multiHighlight = false;
-    FOOTPRINT*  footprint = nullptr;
     PAD*        pad = nullptr;
     BOARD*      pcb = GetBoard();
 
@@ -188,16 +187,7 @@ void PCB_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
 
     BOX2I bbox;
 
-    if( footprint )
-    {
-        bbox = footprint->GetBoundingBox( true );
-
-        if( pad )
-            m_toolManager->RunAction<BOARD_ITEM*>( PCB_ACTIONS::highlightItem, pad );
-        else
-            m_toolManager->RunAction<BOARD_ITEM*>( PCB_ACTIONS::highlightItem, footprint );
-    }
-    else if( netcode > 0 || multiHighlight )
+    if( netcode > 0 || multiHighlight )
     {
         if( !multiHighlight )
         {
