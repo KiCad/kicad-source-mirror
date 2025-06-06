@@ -87,7 +87,7 @@ int CLI::JOBSET_RUN_COMMAND::doPerform( KIWAY& aKiway )
 
     if( !outputKey.IsEmpty() )
     {
-        JOBSET_DESTINATION* destination = jobFile.GetDestination( outputKey );
+        JOBSET_DESTINATION* destination = jobFile.FindDestination( outputKey );
 
         if( destination == nullptr || !jobsRunner.RunJobsForDestination( destination, bail ) )
             return_code = CLI::EXIT_CODES::ERR_JOBS_RUN_FAILED;

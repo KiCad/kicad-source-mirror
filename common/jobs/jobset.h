@@ -120,7 +120,11 @@ public:
 
     std::vector<JOBSET_DESTINATION>& GetDestinations() { return m_destinations; }
 
-    JOBSET_DESTINATION* GetDestination( wxString& aDestination );
+    /**
+     * Attempts to find a destination based on the given string
+     * Both the uuid of the destination and description name are used
+     */
+    JOBSET_DESTINATION* FindDestination( wxString& aDestinationStr );
 
     bool SaveToFile( const wxString& aDirectory = "", bool aForce = false ) override;
 
