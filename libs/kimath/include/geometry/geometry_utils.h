@@ -168,8 +168,10 @@ VECTOR2<ret_type> GetClampedCoords( const VECTOR2<in_type>& aCoords, pad_type aP
         return VECTOR2<ret_type>( KiROUND<in_type, ret_type>( x, true ),
                                   KiROUND<in_type, ret_type>( y, true ) );
     }
-
-    return VECTOR2<ret_type>( x, y );
+    else
+    {
+        return VECTOR2<ret_type>( x, y );
+    }
 }
 
 
