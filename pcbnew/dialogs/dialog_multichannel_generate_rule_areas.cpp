@@ -122,11 +122,11 @@ DIALOG_MULTICHANNEL_GENERATE_RULE_AREAS::DIALOG_MULTICHANNEL_GENERATE_RULE_AREAS
 
     for( RULE_AREA& ruleArea : raData->m_areas )
     {
-        if( ruleArea.m_sourceType == RULE_AREA_PLACEMENT_SOURCE_TYPE::SHEETNAME )
+        if( ruleArea.m_sourceType == PLACEMENT_SOURCE_T::SHEETNAME )
             sheetRowIdx++;
-        else if( ruleArea.m_sourceType == RULE_AREA_PLACEMENT_SOURCE_TYPE::COMPONENT_CLASS )
+        else if( ruleArea.m_sourceType == PLACEMENT_SOURCE_T::COMPONENT_CLASS )
             componentClassRowIdx++;
-        else if( ruleArea.m_sourceType == RULE_AREA_PLACEMENT_SOURCE_TYPE::GROUP_PLACEMENT )
+        else if( ruleArea.m_sourceType == PLACEMENT_SOURCE_T::GROUP_PLACEMENT )
             groupIdx++;
     }
 
@@ -145,7 +145,7 @@ DIALOG_MULTICHANNEL_GENERATE_RULE_AREAS::DIALOG_MULTICHANNEL_GENERATE_RULE_AREAS
 
     for( RULE_AREA& ruleArea : raData->m_areas )
     {
-        if( ruleArea.m_sourceType == RULE_AREA_PLACEMENT_SOURCE_TYPE::SHEETNAME )
+        if( ruleArea.m_sourceType == PLACEMENT_SOURCE_T::SHEETNAME )
         {
             m_sheetGrid->SetCellValue( sheetRowIdx, 1, ruleArea.m_sheetPath );
             m_sheetGrid->SetCellValue( sheetRowIdx, 2, ruleArea.m_sheetName );
@@ -155,7 +155,7 @@ DIALOG_MULTICHANNEL_GENERATE_RULE_AREAS::DIALOG_MULTICHANNEL_GENERATE_RULE_AREAS
                                        ruleArea.m_generateEnabled ? wxT( "1" ) : wxT( "" ) );
             sheetRowIdx++;
         }
-        else if( ruleArea.m_sourceType == RULE_AREA_PLACEMENT_SOURCE_TYPE::COMPONENT_CLASS )
+        else if( ruleArea.m_sourceType == PLACEMENT_SOURCE_T::COMPONENT_CLASS )
         {
             m_componentClassGrid->SetCellValue( componentClassRowIdx, 1,
                                                 ruleArea.m_componentClass );
@@ -219,12 +219,12 @@ bool DIALOG_MULTICHANNEL_GENERATE_RULE_AREAS::TransferDataFromWindow()
     {
         wxString enabled;
 
-        if( raData->m_areas[i].m_sourceType == RULE_AREA_PLACEMENT_SOURCE_TYPE::SHEETNAME )
+        if( raData->m_areas[i].m_sourceType == PLACEMENT_SOURCE_T::SHEETNAME )
         {
             enabled = m_sheetGrid->GetCellValue( sheetRowIdx, 0 );
             sheetRowIdx++;
         }
-        else if( raData->m_areas[i].m_sourceType == RULE_AREA_PLACEMENT_SOURCE_TYPE::COMPONENT_CLASS )
+        else if( raData->m_areas[i].m_sourceType == PLACEMENT_SOURCE_T::COMPONENT_CLASS )
         {
             enabled = m_componentClassGrid->GetCellValue( componentClassRowIdx, 0 );
             componentClassRowIdx++;

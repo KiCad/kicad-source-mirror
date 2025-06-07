@@ -209,7 +209,7 @@ BOOST_AUTO_TEST_CASE( ZoneBorderStyle )
 
 BOOST_AUTO_TEST_CASE( PlacementRuleSourceType )
 {
-    testEnums<RULE_AREA_PLACEMENT_SOURCE_TYPE, kiapi::board::types::PlacementRuleSourceType>();
+    testEnums<PLACEMENT_SOURCE_T, kiapi::board::types::PlacementRuleSourceType>();
 }
 
 BOOST_AUTO_TEST_CASE( TeardropType )

@@ -386,43 +386,43 @@ ZONE_BORDER_DISPLAY_STYLE FromProtoEnum( types::ZoneBorderStyle aValue )
 
 
 template<>
-types::PlacementRuleSourceType ToProtoEnum( RULE_AREA_PLACEMENT_SOURCE_TYPE aValue )
+types::PlacementRuleSourceType ToProtoEnum( PLACEMENT_SOURCE_T aValue )
 {
     switch( aValue )
     {
-    case RULE_AREA_PLACEMENT_SOURCE_TYPE::SHEETNAME:
+    case PLACEMENT_SOURCE_T::SHEETNAME:
         return types::PlacementRuleSourceType::PRST_SHEET_NAME;
 
-    case RULE_AREA_PLACEMENT_SOURCE_TYPE::COMPONENT_CLASS:
+    case PLACEMENT_SOURCE_T::COMPONENT_CLASS:
         return types::PlacementRuleSourceType::PRST_COMPONENT_CLASS;
 
-    case RULE_AREA_PLACEMENT_SOURCE_TYPE::GROUP_PLACEMENT:
+    case PLACEMENT_SOURCE_T::GROUP_PLACEMENT:
         return types::PlacementRuleSourceType::PRST_GROUP;
 
     default:
         wxCHECK_MSG( false, types::PlacementRuleSourceType::PRST_UNKNOWN,
-                     "Unhandled case in ToProtoEnum<RULE_AREA_PLACEMENT_SOURCE_TYPE>");
+                     "Unhandled case in ToProtoEnum<PLACEMENT_SOURCE_T>");
     }
 }
 
 
 template<>
-RULE_AREA_PLACEMENT_SOURCE_TYPE FromProtoEnum( types::PlacementRuleSourceType aValue )
+PLACEMENT_SOURCE_T FromProtoEnum( types::PlacementRuleSourceType aValue )
 {
     switch( aValue )
     {
     case types::PlacementRuleSourceType::PRST_UNKNOWN:
     case types::PlacementRuleSourceType::PRST_SHEET_NAME:
-        return RULE_AREA_PLACEMENT_SOURCE_TYPE::SHEETNAME;
+        return PLACEMENT_SOURCE_T::SHEETNAME;
 
     case types::PlacementRuleSourceType::PRST_COMPONENT_CLASS:
-        return RULE_AREA_PLACEMENT_SOURCE_TYPE::COMPONENT_CLASS;
+        return PLACEMENT_SOURCE_T::COMPONENT_CLASS;
 
     case types::PlacementRuleSourceType::PRST_GROUP:
-        return RULE_AREA_PLACEMENT_SOURCE_TYPE::GROUP_PLACEMENT;
+        return PLACEMENT_SOURCE_T::GROUP_PLACEMENT;
 
     default:
-        wxCHECK_MSG( false, RULE_AREA_PLACEMENT_SOURCE_TYPE::SHEETNAME,
+        wxCHECK_MSG( false, PLACEMENT_SOURCE_T::SHEETNAME,
                      "Unhandled case in FromProtoEnum<types::PlacementRuleSourceType>" );
     }
 }

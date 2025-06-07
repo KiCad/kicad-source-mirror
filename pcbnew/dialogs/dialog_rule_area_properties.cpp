@@ -63,28 +63,28 @@ private:
     void OnGroupClicked( wxCommandEvent& event );
 
 private:
-    BOARD*            m_board;
-    UNIT_BINDER       m_outlineHatchPitch;
-    PCB_BASE_FRAME*   m_parent;
-    ZONE_SETTINGS     m_zonesettings;    ///< the working copy of zone settings
-    ZONE_SETTINGS*    m_ptr;             ///< the pointer to the zone settings of the zone to edit
-    bool              m_isFpEditor;
+    BOARD*             m_board;
+    UNIT_BINDER        m_outlineHatchPitch;
+    PCB_BASE_FRAME*    m_parent;
+    ZONE_SETTINGS      m_zonesettings;    ///< the working copy of zone settings
+    ZONE_SETTINGS*     m_ptr;             ///< the pointer to the zone settings of the zone to edit
+    bool               m_isFpEditor;
 
-    CONVERT_SETTINGS* m_convertSettings;
-    wxRadioButton*    m_rbCenterline;
-    wxRadioButton*    m_rbBoundingHull;
-    wxStaticText*     m_gapLabel;
-    wxTextCtrl*       m_gapCtrl;
-    wxStaticText*     m_gapUnits;
-    UNIT_BINDER*      m_gap;
-    wxCheckBox*       m_cbDeleteOriginals;
+    CONVERT_SETTINGS*  m_convertSettings;
+    wxRadioButton*     m_rbCenterline;
+    wxRadioButton*     m_rbBoundingHull;
+    wxStaticText*      m_gapLabel;
+    wxTextCtrl*        m_gapCtrl;
+    wxStaticText*      m_gapUnits;
+    UNIT_BINDER*       m_gap;
+    wxCheckBox*        m_cbDeleteOriginals;
 
     // The name of a rule area source that is not now found on the board (e.g. after a netlist
     // update). This is used to re-populate the zone settings if the selection is not changed.
-    bool                            m_notFoundPlacementSource;
-    wxString                        m_notFoundPlacementSourceName;
-    RULE_AREA_PLACEMENT_SOURCE_TYPE m_originalPlacementSourceType;
-    RULE_AREA_PLACEMENT_SOURCE_TYPE m_lastPlacementSourceType;
+    bool               m_notFoundPlacementSource;
+    wxString           m_notFoundPlacementSourceName;
+    PLACEMENT_SOURCE_T m_originalPlacementSourceType;
+    PLACEMENT_SOURCE_T m_lastPlacementSourceType;
 
     PANEL_RULE_AREA_PROPERTIES_KEEPOUT_BASE*   m_keepoutProperties;
     PANEL_RULE_AREA_PROPERTIES_PLACEMENT_BASE* m_placementProperties;
@@ -116,8 +116,8 @@ DIALOG_RULE_AREA_PROPERTIES::DIALOG_RULE_AREA_PROPERTIES( PCB_BASE_FRAME*   aPar
         m_gap( nullptr ),
         m_cbDeleteOriginals( nullptr ),
         m_notFoundPlacementSource( false ),
-        m_originalPlacementSourceType( RULE_AREA_PLACEMENT_SOURCE_TYPE::SHEETNAME ),
-        m_lastPlacementSourceType( RULE_AREA_PLACEMENT_SOURCE_TYPE::SHEETNAME )
+        m_originalPlacementSourceType( PLACEMENT_SOURCE_T::SHEETNAME ),
+        m_lastPlacementSourceType( PLACEMENT_SOURCE_T::SHEETNAME )
 {
     m_parent = aParent;
 
@@ -215,19 +215,19 @@ DIALOG_RULE_AREA_PROPERTIES::~DIALOG_RULE_AREA_PROPERTIES()
 
 void DIALOG_RULE_AREA_PROPERTIES::OnSheetNameClicked( wxCommandEvent& event )
 {
-    m_lastPlacementSourceType = RULE_AREA_PLACEMENT_SOURCE_TYPE::SHEETNAME;
+    m_lastPlacementSourceType = PLACEMENT_SOURCE_T::SHEETNAME;
 }
 
 
 void DIALOG_RULE_AREA_PROPERTIES::OnComponentClassClicked( wxCommandEvent& event )
 {
-    m_lastPlacementSourceType = RULE_AREA_PLACEMENT_SOURCE_TYPE::COMPONENT_CLASS;
+    m_lastPlacementSourceType = PLACEMENT_SOURCE_T::COMPONENT_CLASS;
 }
 
 
 void DIALOG_RULE_AREA_PROPERTIES::OnGroupClicked( wxCommandEvent& event )
 {
-    m_lastPlacementSourceType = RULE_AREA_PLACEMENT_SOURCE_TYPE::GROUP_PLACEMENT;
+    m_lastPlacementSourceType = PLACEMENT_SOURCE_T::GROUP_PLACEMENT;
 }
 
 
@@ -261,7 +261,7 @@ bool DIALOG_RULE_AREA_PROPERTIES::TransferDataToWindow()
     m_placementProperties->m_GroupRb->SetValue( false );
     m_placementProperties->m_groupCombo->Clear();
 
-    wxString curSourceName = m_zonesettings.GetRuleAreaPlacementSource();
+    wxString curSourceName = m_zonesettings.GetPlacementAreaSource();
 
     // Load schematic sheet and component class lists
     if( m_board )
@@ -318,43 +318,39 @@ bool DIALOG_RULE_AREA_PROPERTIES::TransferDataToWindow()
         }
     };
 
-    if( m_zonesettings.GetRuleAreaPlacementSourceType()
-        == RULE_AREA_PLACEMENT_SOURCE_TYPE::SHEETNAME )
+    if( m_zonesettings.GetPlacementAreaSourceType() == PLACEMENT_SOURCE_T::SHEETNAME )
     {
-        if( m_zonesettings.GetRuleAreaPlacementEnabled() )
+        if( m_zonesettings.GetPlacementAreaEnabled() )
             m_placementProperties->m_SheetRb->SetValue( true );
 
         setupCurrentSourceSelection( m_placementProperties->m_sheetCombo );
-        m_originalPlacementSourceType = RULE_AREA_PLACEMENT_SOURCE_TYPE::SHEETNAME;
-        m_lastPlacementSourceType = RULE_AREA_PLACEMENT_SOURCE_TYPE::SHEETNAME;
+        m_originalPlacementSourceType = PLACEMENT_SOURCE_T::SHEETNAME;
+        m_lastPlacementSourceType = PLACEMENT_SOURCE_T::SHEETNAME;
     }
-    else if( m_zonesettings.GetRuleAreaPlacementSourceType()
-             == RULE_AREA_PLACEMENT_SOURCE_TYPE::COMPONENT_CLASS )
+    else if( m_zonesettings.GetPlacementAreaSourceType() == PLACEMENT_SOURCE_T::COMPONENT_CLASS )
     {
-        if( m_zonesettings.GetRuleAreaPlacementEnabled() )
+        if( m_zonesettings.GetPlacementAreaEnabled() )
             m_placementProperties->m_ComponentsRb->SetValue( true );
 
         setupCurrentSourceSelection( m_placementProperties->m_componentClassCombo );
-        m_originalPlacementSourceType = RULE_AREA_PLACEMENT_SOURCE_TYPE::COMPONENT_CLASS;
-        m_lastPlacementSourceType = RULE_AREA_PLACEMENT_SOURCE_TYPE::COMPONENT_CLASS;
+        m_originalPlacementSourceType = PLACEMENT_SOURCE_T::COMPONENT_CLASS;
+        m_lastPlacementSourceType = PLACEMENT_SOURCE_T::COMPONENT_CLASS;
     }
     else
     {
-        if( m_zonesettings.GetRuleAreaPlacementEnabled() )
+        if( m_zonesettings.GetPlacementAreaEnabled() )
             m_placementProperties->m_GroupRb->SetValue( true );
 
         setupCurrentSourceSelection( m_placementProperties->m_groupCombo );
-        m_originalPlacementSourceType = RULE_AREA_PLACEMENT_SOURCE_TYPE::GROUP_PLACEMENT;
-        m_lastPlacementSourceType = RULE_AREA_PLACEMENT_SOURCE_TYPE::GROUP_PLACEMENT;
+        m_originalPlacementSourceType = PLACEMENT_SOURCE_T::GROUP_PLACEMENT;
+        m_lastPlacementSourceType = PLACEMENT_SOURCE_T::GROUP_PLACEMENT;
     }
 
     // Handle most-useful notebook page selection
     m_areaPropertiesNb->SetSelection( 0 );
 
-    if( !m_zonesettings.HasKeepoutParametersSet() && m_zonesettings.GetRuleAreaPlacementEnabled() )
-    {
+    if( !m_zonesettings.HasKeepoutParametersSet() && m_zonesettings.GetPlacementAreaEnabled() )
         m_areaPropertiesNb->SetSelection( 1 );
-    }
 
 
     m_cbLocked->SetValue( m_zonesettings.m_Locked );
@@ -430,52 +426,53 @@ bool DIALOG_RULE_AREA_PROPERTIES::TransferDataFromWindow()
     m_zonesettings.SetDoNotAllowFootprints( m_keepoutProperties->m_cbFootprintsCtrl->GetValue() );
 
     // Set placement parameters
-    m_zonesettings.SetRuleAreaPlacementEnabled( false );
-    m_zonesettings.SetRuleAreaPlacementSource( wxEmptyString );
+    m_zonesettings.SetPlacementAreaEnabled( false );
+    m_zonesettings.SetPlacementAreaSource( wxEmptyString );
 
-    auto setPlacementSource = [this]( RULE_AREA_PLACEMENT_SOURCE_TYPE sourceType )
-    {
-        m_zonesettings.SetRuleAreaPlacementSourceType( sourceType );
-
-        wxComboBox* cb;
-
-        if( sourceType == RULE_AREA_PLACEMENT_SOURCE_TYPE::SHEETNAME )
-            cb = m_placementProperties->m_sheetCombo;
-        else if( sourceType == RULE_AREA_PLACEMENT_SOURCE_TYPE::COMPONENT_CLASS )
-            cb = m_placementProperties->m_componentClassCombo;
-        else
-            cb = m_placementProperties->m_groupCombo;
-
-        int selectedSourceIdx = cb->GetSelection();
-
-        if( selectedSourceIdx != wxNOT_FOUND )
-        {
-            if( selectedSourceIdx == 0 && m_notFoundPlacementSource
-                && m_originalPlacementSourceType == sourceType )
+    auto setPlacementSource =
+            [this]( PLACEMENT_SOURCE_T sourceType )
             {
-                m_zonesettings.SetRuleAreaPlacementSource( m_notFoundPlacementSourceName );
-            }
-            else
-            {
-                m_zonesettings.SetRuleAreaPlacementSource( cb->GetString( selectedSourceIdx ) );
-            }
-        }
-    };
+                m_zonesettings.SetPlacementAreaSourceType( sourceType );
+
+                wxComboBox* cb;
+
+                if( sourceType == PLACEMENT_SOURCE_T::SHEETNAME )
+                    cb = m_placementProperties->m_sheetCombo;
+                else if( sourceType == PLACEMENT_SOURCE_T::COMPONENT_CLASS )
+                    cb = m_placementProperties->m_componentClassCombo;
+                else
+                    cb = m_placementProperties->m_groupCombo;
+
+                int selectedSourceIdx = cb->GetSelection();
+
+                if( selectedSourceIdx != wxNOT_FOUND )
+                {
+                    if( selectedSourceIdx == 0 && m_notFoundPlacementSource
+                        && m_originalPlacementSourceType == sourceType )
+                    {
+                        m_zonesettings.SetPlacementAreaSource( m_notFoundPlacementSourceName );
+                    }
+                    else
+                    {
+                        m_zonesettings.SetPlacementAreaSource( cb->GetString( selectedSourceIdx ) );
+                    }
+                }
+            };
 
     if( m_placementProperties->m_SheetRb->GetValue() )
     {
-        m_zonesettings.SetRuleAreaPlacementEnabled( true );
-        setPlacementSource( RULE_AREA_PLACEMENT_SOURCE_TYPE::SHEETNAME );
+        m_zonesettings.SetPlacementAreaEnabled( true );
+        setPlacementSource( PLACEMENT_SOURCE_T::SHEETNAME );
     }
     else if( m_placementProperties->m_ComponentsRb->GetValue() )
     {
-        m_zonesettings.SetRuleAreaPlacementEnabled( true );
-        setPlacementSource( RULE_AREA_PLACEMENT_SOURCE_TYPE::COMPONENT_CLASS );
+        m_zonesettings.SetPlacementAreaEnabled( true );
+        setPlacementSource( PLACEMENT_SOURCE_T::COMPONENT_CLASS );
     }
     else if( m_placementProperties->m_GroupRb->GetValue() )
     {
-        m_zonesettings.SetRuleAreaPlacementEnabled( true );
-        setPlacementSource( RULE_AREA_PLACEMENT_SOURCE_TYPE::GROUP_PLACEMENT );
+        m_zonesettings.SetPlacementAreaEnabled( true );
+        setPlacementSource( PLACEMENT_SOURCE_T::GROUP_PLACEMENT );
     }
     else
     {

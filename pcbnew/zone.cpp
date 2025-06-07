@@ -57,8 +57,8 @@ ZONE::ZONE( BOARD_ITEM_CONTAINER* aParent ) :
         m_cornerRadius( 0 ),
         m_priority( 0 ),
         m_isRuleArea( false ),
-        m_ruleAreaPlacementEnabled( false ),
-        m_ruleAreaPlacementSourceType( RULE_AREA_PLACEMENT_SOURCE_TYPE::SHEETNAME ),
+        m_placementAreaEnabled( false ),
+        m_placementAreaSourceType( PLACEMENT_SOURCE_T::SHEETNAME ),
         m_teardropType( TEARDROP_TYPE::TD_NONE ),
         m_PadConnection( ZONE_CONNECTION::NONE ),
         m_ZoneClearance( 0 ),
@@ -73,7 +73,6 @@ ZONE::ZONE( BOARD_ITEM_CONTAINER* aParent ) :
         m_hatchOrientation( ANGLE_0 ),
         m_hatchSmoothingLevel( 0 ),
         m_hatchHoleMinArea( 0 ),
-        m_CornerSelection( nullptr ),
         m_area( 0.0 ),
         m_outlinearea( 0.0 )
 {
@@ -96,8 +95,7 @@ ZONE::ZONE( BOARD_ITEM_CONTAINER* aParent ) :
 
 ZONE::ZONE( const ZONE& aZone ) :
         BOARD_CONNECTED_ITEM( aZone ),
-        m_Poly( nullptr ),
-        m_CornerSelection( nullptr )
+        m_Poly( nullptr )
 {
     InitDataFromSrcInCopyCtor( aZone );
 }
@@ -123,7 +121,6 @@ void ZONE::CopyFrom( const BOARD_ITEM* aOther )
 ZONE::~ZONE()
 {
     delete m_Poly;
-    delete m_CornerSelection;
 
     if( BOARD* board = GetBoard() )
         board->IncrementTimeStamp();
@@ -148,9 +145,9 @@ void ZONE::InitDataFromSrcInCopyCtor( const ZONE& aZone )
     m_zoneName                = aZone.m_zoneName;
     m_priority                = aZone.m_priority;
     m_isRuleArea              = aZone.m_isRuleArea;
-    m_ruleAreaPlacementEnabled = aZone.m_ruleAreaPlacementEnabled;
-    m_ruleAreaPlacementSourceType = aZone.m_ruleAreaPlacementSourceType;
-    m_ruleAreaPlacementSource = aZone.m_ruleAreaPlacementSource;
+    m_placementAreaEnabled    = aZone.m_placementAreaEnabled;
+    m_placementAreaSourceType = aZone.m_placementAreaSourceType;
+    m_placementAreaSource     = aZone.m_placementAreaSource;
     SetLayerSet( aZone.GetLayerSet() );
 
     m_doNotAllowZoneFills     = aZone.m_doNotAllowZoneFills;
@@ -181,10 +178,6 @@ void ZONE::InitDataFromSrcInCopyCtor( const ZONE& aZone )
     m_hatchSmoothingValue     = aZone.m_hatchSmoothingValue;
     m_hatchBorderAlgorithm    = aZone.m_hatchBorderAlgorithm;
     m_hatchHoleMinArea        = aZone.m_hatchHoleMinArea;
-
-    // For corner moving, corner index to drag, or nullptr if no selection
-    delete m_CornerSelection;
-    m_CornerSelection         = nullptr;
 
     aZone.GetLayerSet().RunOnLayers(
             [&]( PCB_LAYER_ID layer )
@@ -256,11 +249,10 @@ void ZONE::Serialize( google::protobuf::Any& aContainer ) const
         ra->set_keepout_tracks( m_doNotAllowTracks );
         ra->set_keepout_vias( m_doNotAllowVias );
 
-        ra->set_placement_enabled( m_ruleAreaPlacementEnabled );
-        ra->set_placement_source( m_ruleAreaPlacementSource.ToUTF8() );
-        ra->set_placement_source_type(
-                ToProtoEnum<RULE_AREA_PLACEMENT_SOURCE_TYPE, types::PlacementRuleSourceType>(
-                        m_ruleAreaPlacementSourceType ) );
+        ra->set_placement_enabled( m_placementAreaEnabled );
+        ra->set_placement_source( m_placementAreaSource.ToUTF8() );
+        ra->set_placement_source_type( ToProtoEnum<PLACEMENT_SOURCE_T,
+                                                   types::PlacementRuleSourceType>( m_placementAreaSourceType ) );
     }
     else
     {
@@ -360,10 +352,9 @@ bool ZONE::Deserialize( const google::protobuf::Any& aContainer )
         m_doNotAllowTracks = ra.keepout_tracks();
         m_doNotAllowVias = ra.keepout_vias();
 
-        m_ruleAreaPlacementEnabled = ra.placement_enabled();
-        m_ruleAreaPlacementSource = wxString::FromUTF8( ra.placement_source() );
-        m_ruleAreaPlacementSourceType =
-                FromProtoEnum<RULE_AREA_PLACEMENT_SOURCE_TYPE>( ra.placement_source_type() );
+        m_placementAreaEnabled = ra.placement_enabled();
+        m_placementAreaSource = wxString::FromUTF8( ra.placement_source() );
+        m_placementAreaSourceType = FromProtoEnum<PLACEMENT_SOURCE_T>( ra.placement_source_type() );
     }
     else
     {
@@ -433,11 +424,8 @@ bool ZONE::HigherPriority( const ZONE* aOther ) const
 {
     // Teardrops are always higher priority than regular zones, so if one zone is a teardrop
     // and the other is not, then return higher priority as the teardrop
-    if( ( m_teardropType == TEARDROP_TYPE::TD_NONE )
-            ^ ( aOther->m_teardropType == TEARDROP_TYPE::TD_NONE ) )
-    {
+    if( ( m_teardropType == TEARDROP_TYPE::TD_NONE ) ^ ( aOther->m_teardropType == TEARDROP_TYPE::TD_NONE ) )
         return static_cast<int>( m_teardropType ) > static_cast<int>( aOther->m_teardropType );
-    }
 
     if( m_priority != aOther->m_priority )
         return m_priority > aOther->m_priority;
@@ -485,9 +473,8 @@ VECTOR2I ZONE::GetPosition() const
 PCB_LAYER_ID ZONE::GetLayer() const
 {
     if( m_layerSet.count() == 1 )
-    {
         return GetFirstLayer();
-    }
+
     return UNDEFINED_LAYER;
 }
 
@@ -495,18 +482,14 @@ PCB_LAYER_ID ZONE::GetLayer() const
 PCB_LAYER_ID ZONE::GetFirstLayer() const
 {
     if( m_layerSet.count() == 0 )
-    {
         return UNDEFINED_LAYER;
-    }
 
     const LSEQ uiLayers = m_layerSet.UIOrder();
 
     // This can't use m_layerSet.count() because it's possible to have a zone on
     // a rescue layer that is not in the UI order.
     if( uiLayers.size() )
-    {
         return uiLayers[0];
-    }
 
     // If it's not in the UI set at all, just return the first layer in the set.
     // (we know the count > 0)
@@ -563,10 +546,8 @@ void ZONE::SetLayerSet( const LSET& aLayerSet )
 const ZONE_LAYER_PROPERTIES& ZONE::LayerProperties( PCB_LAYER_ID aLayer ) const
 {
     wxCHECK_MSG( m_layerProperties.contains( aLayer ), m_layerProperties.at( GetFirstLayer() ),
-                 "Attempt to retrieve properties for layer "
-                         + std::string( magic_enum::enum_name( aLayer ) )
-                         + " from a "
-                           "zone that does not contain it" );
+                 "Zone has no layer " + std::string( magic_enum::enum_name( aLayer ) ) );
+
     return m_layerProperties.at( aLayer );
 }
 
@@ -581,12 +562,9 @@ void ZONE::SetLayerProperties( const std::map<PCB_LAYER_ID, ZONE_LAYER_PROPERTIE
 
 const std::optional<VECTOR2I>& ZONE::HatchingOffset( PCB_LAYER_ID aLayer ) const
 {
-    wxCHECK_MSG( m_layerProperties.contains( aLayer ),
-                 m_layerProperties.at( GetFirstLayer() ).hatching_offset,
-                 "Attempt to retrieve properties for layer "
-                         + std::string( magic_enum::enum_name( aLayer ) )
-                         + " from a "
-                           "zone that does not contain it" );
+    wxCHECK_MSG( m_layerProperties.contains( aLayer ), m_layerProperties.at( GetFirstLayer() ).hatching_offset,
+                 "Zone has no layer " + std::string( magic_enum::enum_name( aLayer ) ) );
+
     return m_layerProperties.at( aLayer ).hatching_offset;
 }
 
@@ -837,11 +815,6 @@ void ZONE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>&
 {
     wxString msg = GetFriendlyName();
 
-    // Display Cutout instead of Outline for holes inside a zone (i.e. when num contour !=0).
-    // Check whether the selected corner is in a hole; i.e., in any contour but the first one.
-    if( m_CornerSelection != nullptr && m_CornerSelection->m_contour > 0 )
-        msg << wxT( " " ) << _( "Cutout" );
-
     aList.emplace_back( _( "Type" ), msg );
 
     if( GetIsRuleArea() )
@@ -866,11 +839,8 @@ void ZONE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>&
         if( !msg.IsEmpty() )
             aList.emplace_back( _( "Restrictions" ), msg );
 
-        if( GetRuleAreaPlacementEnabled() )
-        {
-            aList.emplace_back( _( "Placement source" ),
-                                UnescapeString( GetRuleAreaPlacementSource() ) );
-        }
+        if( GetPlacementAreaEnabled() )
+            aList.emplace_back( _( "Placement source" ), UnescapeString( GetPlacementAreaSource() ) );
     }
     else if( IsOnCopperLayer() )
     {
@@ -883,8 +853,7 @@ void ZONE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>&
         }
 
         // Display priority level
-        aList.emplace_back( _( "Priority" ),
-                            wxString::Format( wxT( "%d" ), GetAssignedPriority() ) );
+        aList.emplace_back( _( "Priority" ), wxString::Format( wxT( "%d" ), GetAssignedPriority() ) );
     }
 
     if( aFrame->GetName() == PCB_EDIT_FRAME_NAME )
@@ -943,10 +912,8 @@ void ZONE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>&
 
     if( !source.IsEmpty() )
     {
-        aList.emplace_back( wxString::Format( _( "Min Clearance: %s" ),
-                                              aFrame->MessageTextFromValue( clearance ) ),
-                            wxString::Format( _( "(from %s)" ),
-                                              source ) );
+        aList.emplace_back( wxString::Format( _( "Min Clearance: %s" ), aFrame->MessageTextFromValue( clearance ) ),
+                            wxString::Format( _( "(from %s)" ), source ) );
     }
 
     if( !m_FilledPolysList.empty() )
@@ -1034,9 +1001,7 @@ void ZONE::Flip( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection )
     std::map<PCB_LAYER_ID, SHAPE_POLY_SET> fillsCopy;
 
     for( auto& [oldLayer, shapePtr] : m_FilledPolysList )
-    {
         fillsCopy[oldLayer] = *shapePtr;
-    }
 
     std::map<PCB_LAYER_ID, ZONE_LAYER_PROPERTIES> layerPropertiesCopy;
 
@@ -1171,61 +1136,44 @@ wxString ZONE::GetItemDescription( UNITS_PROVIDER* aUnitsProvider, bool aFull ) 
                           layers.size() - 2 );
     }
 
-    // Check whether the selected contour is a hole (contour index > 0)
-    if( m_CornerSelection != nullptr &&  m_CornerSelection->m_contour > 0 )
+    if( GetIsRuleArea() )
     {
-        if( GetIsRuleArea() )
-            return wxString::Format( _( "Rule Area Cutout %s" ), layerDesc  );
-        else
-            return wxString::Format( _( "Zone Cutout %s" ), layerDesc  );
-    }
-    else
-    {
-        if( GetIsRuleArea() )
+        if( GetZoneName().IsEmpty() )
         {
-            if( GetZoneName().IsEmpty() )
-            {
-                return wxString::Format( _( "Rule Area %s" ),
-                                         layerDesc );
-            }
-            else
-            {
-                return wxString::Format( _( "Rule Area '%s' %s" ),
-                                         GetZoneName(),
-                                         layerDesc );
-            }
-        }
-        else if( IsTeardropArea() )
-        {
-            return wxString::Format( _( "Teardrop %s %s" ),
-                                     GetNetnameMsg(),
+            return wxString::Format( _( "Rule Area %s" ),
                                      layerDesc );
         }
         else
         {
-            if( GetZoneName().IsEmpty() )
-            {
-                return wxString::Format( _( "Zone %s %s, priority %d" ),
-                                         GetNetnameMsg(),
-                                         layerDesc,
-                                         GetAssignedPriority() );
-            }
-            else
-            {
-                return wxString::Format( _( "Zone '%s' %s %s, priority %d" ),
-                                         GetZoneName(),
-                                         GetNetnameMsg(),
-                                         layerDesc,
-                                         GetAssignedPriority() );
-            }
+            return wxString::Format( _( "Rule Area '%s' %s" ),
+                                     GetZoneName(),
+                                     layerDesc );
         }
     }
-}
-
-
-int ZONE::GetBorderHatchPitch() const
-{
-    return m_borderHatchPitch;
+    else if( IsTeardropArea() )
+    {
+        return wxString::Format( _( "Teardrop %s %s" ),
+                                 GetNetnameMsg(),
+                                 layerDesc );
+    }
+    else
+    {
+        if( GetZoneName().IsEmpty() )
+        {
+            return wxString::Format( _( "Zone %s %s, priority %d" ),
+                                     GetNetnameMsg(),
+                                     layerDesc,
+                                     GetAssignedPriority() );
+        }
+        else
+        {
+            return wxString::Format( _( "Zone '%s' %s %s, priority %d" ),
+                                     GetZoneName(),
+                                     GetNetnameMsg(),
+                                     layerDesc,
+                                     GetAssignedPriority() );
+        }
+    }
 }
 
 
@@ -1239,12 +1187,6 @@ void ZONE::SetBorderDisplayStyle( ZONE_BORDER_DISPLAY_STYLE aBorderHatchStyle,
 
     if( aRebuildBorderHatch )
         HatchBorder();
-}
-
-
-void ZONE::SetBorderHatchPitch( int aPitch )
-{
-    m_borderHatchPitch = aPitch;
 }
 
 
@@ -1689,13 +1631,13 @@ bool ZONE::operator==( const ZONE& aOther ) const
          if( GetDoNotAllowPads() != other.GetDoNotAllowPads() )
              return false;
 
-         if( GetRuleAreaPlacementEnabled() != other.GetRuleAreaPlacementEnabled() )
+         if( GetPlacementAreaEnabled() != other.GetPlacementAreaEnabled() )
              return false;
 
-         if( GetRuleAreaPlacementSourceType() != other.GetRuleAreaPlacementSourceType() )
+         if( GetPlacementAreaSourceType() != other.GetPlacementAreaSourceType() )
              return false;
 
-         if( GetRuleAreaPlacementSource() != other.GetRuleAreaPlacementSource() )
+         if( GetPlacementAreaSource() != other.GetPlacementAreaSource() )
              return false;
     }
     else
@@ -1848,15 +1790,14 @@ static struct ZONE_DESC
                   .Map( ISLAND_REMOVAL_MODE::AREA,   _HKI( "Below area limit" ) );
         }
 
-        ENUM_MAP<RULE_AREA_PLACEMENT_SOURCE_TYPE>& rapstMap =
-                ENUM_MAP<RULE_AREA_PLACEMENT_SOURCE_TYPE>::Instance();
+        ENUM_MAP<PLACEMENT_SOURCE_T>& rapstMap = ENUM_MAP<PLACEMENT_SOURCE_T>::Instance();
 
         if( rapstMap.Choices().GetCount() == 0 )
         {
-            rapstMap.Undefined( RULE_AREA_PLACEMENT_SOURCE_TYPE::SHEETNAME );
-            rapstMap.Map( RULE_AREA_PLACEMENT_SOURCE_TYPE::SHEETNAME,       _HKI( "Sheet Name" ) )
-                    .Map( RULE_AREA_PLACEMENT_SOURCE_TYPE::COMPONENT_CLASS, _HKI( "Component Class" ) )
-                    .Map( RULE_AREA_PLACEMENT_SOURCE_TYPE::GROUP_PLACEMENT, _HKI( "Group" ) );
+            rapstMap.Undefined( PLACEMENT_SOURCE_T::SHEETNAME );
+            rapstMap.Map( PLACEMENT_SOURCE_T::SHEETNAME,       _HKI( "Sheet Name" ) )
+                    .Map( PLACEMENT_SOURCE_T::COMPONENT_CLASS, _HKI( "Component Class" ) )
+                    .Map( PLACEMENT_SOURCE_T::GROUP_PLACEMENT, _HKI( "Group" ) );
         }
 
         PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
@@ -1971,20 +1912,20 @@ static struct ZONE_DESC
         const wxString groupPlacement = _HKI( "Placement" );
 
         propMgr.AddProperty( new PROPERTY<ZONE, bool>( _HKI( "Enable" ),
-                                                       &ZONE::SetRuleAreaPlacementEnabled,
-                                                       &ZONE::GetRuleAreaPlacementEnabled ),
+                                                       &ZONE::SetPlacementAreaEnabled,
+                                                       &ZONE::GetPlacementAreaEnabled ),
                              groupPlacement )
                 .SetAvailableFunc( isRuleArea );
 
-        propMgr.AddProperty( new PROPERTY_ENUM<ZONE, RULE_AREA_PLACEMENT_SOURCE_TYPE>(
-                                     _HKI( "Source Type" ), &ZONE::SetRuleAreaPlacementSourceType,
-                                     &ZONE::GetRuleAreaPlacementSourceType ),
+        propMgr.AddProperty( new PROPERTY_ENUM<ZONE, PLACEMENT_SOURCE_T>( _HKI( "Source Type" ),
+                                                                          &ZONE::SetPlacementAreaSourceType,
+                                                                          &ZONE::GetPlacementAreaSourceType ),
                              groupPlacement )
                 .SetAvailableFunc( isRuleArea );
 
         propMgr.AddProperty( new PROPERTY<ZONE, wxString>( _HKI( "Source Name" ),
-                                                           &ZONE::SetRuleAreaPlacementSource,
-                                                           &ZONE::GetRuleAreaPlacementSource ),
+                                                           &ZONE::SetPlacementAreaSource,
+                                                           &ZONE::GetPlacementAreaSource ),
                              groupPlacement )
                 .SetAvailableFunc( isRuleArea );
 
@@ -2003,7 +1944,6 @@ static struct ZONE_DESC
                 .SetAvailableFunc( isCopperZone )
                 .SetWriteableFunc( isHatchedFill );
 
-        // TODO: Switch to translated
         auto atLeastMinWidthValidator =
                 []( const wxAny&& aValue, EDA_ITEM* aZone ) -> VALIDATOR_RESULT
                 {
@@ -2012,10 +1952,7 @@ static struct ZONE_DESC
                     wxCHECK( zone, std::nullopt );
 
                     if( val < zone->GetMinThickness() )
-                    {
-                        return std::make_unique<VALIDATION_ERROR_MSG>(
-                                _( "Cannot be less than zone minimum width" ) );
-                    }
+                        return std::make_unique<VALIDATION_ERROR_MSG>( _( "Cannot be less than zone minimum width" ) );
 
                     return std::nullopt;
                 };
@@ -2067,12 +2004,12 @@ static struct ZONE_DESC
 
         const wxString groupElectrical = _HKI( "Electrical" );
 
-        auto clearanceOverride = new PROPERTY<ZONE, std::optional<int>>( _HKI( "Clearance" ),
+        auto clearance = new PROPERTY<ZONE, std::optional<int>>( _HKI( "Clearance" ),
                     &ZONE::SetLocalClearance, &ZONE::GetLocalClearance,
                     PROPERTY_DISPLAY::PT_SIZE );
-        clearanceOverride->SetAvailableFunc( isCopperZone );
+        clearance->SetAvailableFunc( isCopperZone );
         constexpr int maxClearance = pcbIUScale.mmToIU( ZONE_CLEARANCE_MAX_VALUE_MM );
-        clearanceOverride->SetValidator( PROPERTY_VALIDATORS::RangeIntValidator<0, maxClearance> );
+        clearance->SetValidator( PROPERTY_VALIDATORS::RangeIntValidator<0, maxClearance> );
 
         auto minWidth = new PROPERTY<ZONE, int>( _HKI( "Minimum Width" ),
                     &ZONE::SetMinThickness, &ZONE::GetMinThickness,
@@ -2097,7 +2034,7 @@ static struct ZONE_DESC
         thermalSpokeWidth->SetAvailableFunc( isCopperZone );
         thermalSpokeWidth->SetValidator( atLeastMinWidthValidator );
 
-        propMgr.AddProperty( clearanceOverride, groupElectrical );
+        propMgr.AddProperty( clearance, groupElectrical );
         propMgr.AddProperty( minWidth, groupElectrical );
         propMgr.AddProperty( padConnections, groupElectrical );
         propMgr.AddProperty( thermalGap, groupElectrical );
@@ -2105,7 +2042,7 @@ static struct ZONE_DESC
     }
 } _ZONE_DESC;
 
-IMPLEMENT_ENUM_TO_WXANY( RULE_AREA_PLACEMENT_SOURCE_TYPE )
+IMPLEMENT_ENUM_TO_WXANY( PLACEMENT_SOURCE_T )
 IMPLEMENT_ENUM_TO_WXANY( ZONE_CONNECTION )
 IMPLEMENT_ENUM_TO_WXANY( ZONE_FILL_MODE )
 IMPLEMENT_ENUM_TO_WXANY( ISLAND_REMOVAL_MODE )

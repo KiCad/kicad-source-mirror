@@ -2632,21 +2632,18 @@ void PCB_IO_KICAD_SEXPR::format( const ZONE* aZone ) const
 
         // Multichannel settings
         m_out->Print( "(placement" );
-        KICAD_FORMAT::FormatBool( m_out, "enabled", aZone->GetRuleAreaPlacementEnabled() );
+        KICAD_FORMAT::FormatBool( m_out, "enabled", aZone->GetPlacementAreaEnabled() );
 
-        switch( aZone->GetRuleAreaPlacementSourceType() )
+        switch( aZone->GetPlacementAreaSourceType() )
         {
-        case RULE_AREA_PLACEMENT_SOURCE_TYPE::SHEETNAME:
-            m_out->Print( "(sheetname %s)",
-                          m_out->Quotew( aZone->GetRuleAreaPlacementSource() ).c_str() );
+        case PLACEMENT_SOURCE_T::SHEETNAME:
+            m_out->Print( "(sheetname %s)", m_out->Quotew( aZone->GetPlacementAreaSource() ).c_str() );
             break;
-        case RULE_AREA_PLACEMENT_SOURCE_TYPE::COMPONENT_CLASS:
-            m_out->Print( "(component_class %s)",
-                          m_out->Quotew( aZone->GetRuleAreaPlacementSource() ).c_str() );
+        case PLACEMENT_SOURCE_T::COMPONENT_CLASS:
+            m_out->Print( "(component_class %s)", m_out->Quotew( aZone->GetPlacementAreaSource() ).c_str() );
             break;
-        case RULE_AREA_PLACEMENT_SOURCE_TYPE::GROUP_PLACEMENT:
-            m_out->Print( "(group %s)",
-                          m_out->Quotew( aZone->GetRuleAreaPlacementSource() ).c_str() );
+        case PLACEMENT_SOURCE_T::GROUP_PLACEMENT:
+            m_out->Print( "(group %s)", m_out->Quotew( aZone->GetPlacementAreaSource() ).c_str() );
             break;
         }
 

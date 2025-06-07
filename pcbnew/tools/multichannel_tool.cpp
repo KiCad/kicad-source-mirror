@@ -95,20 +95,16 @@ bool MULTICHANNEL_TOOL::identifyComponentsInRuleArea( ZONE*                 aRul
 
     wxString ruleText;
 
-    switch( aRuleArea->GetRuleAreaPlacementSourceType() )
+    switch( aRuleArea->GetPlacementAreaSourceType() )
     {
-    case RULE_AREA_PLACEMENT_SOURCE_TYPE::SHEETNAME:
-    {
-        ruleText = wxT( "A.memberOfSheetOrChildren('" ) + aRuleArea->GetRuleAreaPlacementSource()
-                   + wxT( "')" );
+    case PLACEMENT_SOURCE_T::SHEETNAME:
+        ruleText = wxT( "A.memberOfSheetOrChildren('" ) + aRuleArea->GetPlacementAreaSource() + wxT( "')" );
         break;
-    }
-    case RULE_AREA_PLACEMENT_SOURCE_TYPE::COMPONENT_CLASS:
-        ruleText = wxT( "A.hasComponentClass('" ) + aRuleArea->GetRuleAreaPlacementSource()
-                   + wxT( "')" );
+    case PLACEMENT_SOURCE_T::COMPONENT_CLASS:
+        ruleText = wxT( "A.hasComponentClass('" ) + aRuleArea->GetPlacementAreaSource() + wxT( "')" );
         break;
-    case RULE_AREA_PLACEMENT_SOURCE_TYPE::GROUP_PLACEMENT:
-        ruleText = wxT( "A.memberOfGroup('" ) + aRuleArea->GetRuleAreaPlacementSource() + wxT( "')" );
+    case PLACEMENT_SOURCE_T::GROUP_PLACEMENT:
+        ruleText = wxT( "A.memberOfGroup('" ) + aRuleArea->GetPlacementAreaSource() + wxT( "')" );
         break;
     }
 
@@ -328,7 +324,7 @@ void MULTICHANNEL_TOOL::QuerySheetsAndComponentClasses()
     {
         RULE_AREA ent;
 
-        ent.m_sourceType = RULE_AREA_PLACEMENT_SOURCE_TYPE::SHEETNAME;
+        ent.m_sourceType = PLACEMENT_SOURCE_T::SHEETNAME;
         ent.m_generateEnabled = false;
         ent.m_sheetPath = sheet.first;
         ent.m_sheetName = sheet.second;
@@ -343,7 +339,7 @@ void MULTICHANNEL_TOOL::QuerySheetsAndComponentClasses()
     {
         RULE_AREA ent;
 
-        ent.m_sourceType = RULE_AREA_PLACEMENT_SOURCE_TYPE::COMPONENT_CLASS;
+        ent.m_sourceType = PLACEMENT_SOURCE_T::COMPONENT_CLASS;
         ent.m_generateEnabled = false;
         ent.m_componentClass = compClass;
         ent.m_components = queryComponentsInComponentClass( ent.m_componentClass );
@@ -357,7 +353,7 @@ void MULTICHANNEL_TOOL::QuerySheetsAndComponentClasses()
     {
         RULE_AREA ent;
 
-        ent.m_sourceType = RULE_AREA_PLACEMENT_SOURCE_TYPE::GROUP_PLACEMENT;
+        ent.m_sourceType = PLACEMENT_SOURCE_T::GROUP_PLACEMENT;
         ent.m_generateEnabled = false;
         ent.m_groupName = groupName;
         ent.m_components = queryComponentsInGroup( ent.m_groupName );
@@ -377,7 +373,7 @@ void MULTICHANNEL_TOOL::FindExistingRuleAreas()
     {
         if( !zone->GetIsRuleArea() )
             continue;
-        if( !zone->GetRuleAreaPlacementEnabled() )
+        if( !zone->GetPlacementAreaEnabled() )
             continue;
 
         RULE_AREA area;
@@ -430,7 +426,7 @@ int MULTICHANNEL_TOOL::repeatLayout( const TOOL_EVENT& aEvent )
             if( !zone->GetIsRuleArea() )
                 return nullptr;
 
-            if( !zone->GetRuleAreaPlacementEnabled() )
+            if( !zone->GetPlacementAreaEnabled() )
                 return nullptr;
 
             return zone;
@@ -1107,7 +1103,7 @@ int MULTICHANNEL_TOOL::AutogenerateRuleAreas( const TOOL_EVENT& aEvent )
     {
         if( !zone->GetIsRuleArea() )
             continue;
-        if( !zone->GetRuleAreaPlacementEnabled() )
+        if( !zone->GetPlacementAreaEnabled() )
             continue;
 
         std::set<FOOTPRINT*> components;
@@ -1120,27 +1116,22 @@ int MULTICHANNEL_TOOL::AutogenerateRuleAreas( const TOOL_EVENT& aEvent )
         {
             if( components == ra.m_components )
             {
-                if( zone->GetRuleAreaPlacementSourceType()
-                    == RULE_AREA_PLACEMENT_SOURCE_TYPE::SHEETNAME )
-                {
-                    wxLogTrace(
-                            traceMultichannelTool,
-                            wxT( "Placement rule area for sheet '%s' already exists as '%s'\n" ),
-                            ra.m_sheetPath, zone->GetZoneName() );
-                }
-                else if( zone->GetRuleAreaPlacementSourceType()
-                        == RULE_AREA_PLACEMENT_SOURCE_TYPE::COMPONENT_CLASS )
+                if( zone->GetPlacementAreaSourceType() == PLACEMENT_SOURCE_T::SHEETNAME )
                 {
                     wxLogTrace( traceMultichannelTool,
-                                wxT( "Placement rule area for component class '%s' already exists "
-                                     "as '%s'\n" ),
+                                wxT( "Placement rule area for sheet '%s' already exists as '%s'\n" ),
+                                ra.m_sheetPath, zone->GetZoneName() );
+                }
+                else if( zone->GetPlacementAreaSourceType() == PLACEMENT_SOURCE_T::COMPONENT_CLASS )
+                {
+                    wxLogTrace( traceMultichannelTool,
+                                wxT( "Placement rule area for component class '%s' already exists as '%s'\n" ),
                                 ra.m_componentClass, zone->GetZoneName() );
                 }
                 else
                 {
                     wxLogTrace( traceMultichannelTool,
-                                wxT( "Placement rule area for group '%s' already exists "
-                                     "as '%s'\n" ),
+                                wxT( "Placement rule area for group '%s' already exists as '%s'\n" ),
                                 ra.m_groupName, zone->GetZoneName() );
                 }
 
@@ -1150,8 +1141,7 @@ int MULTICHANNEL_TOOL::AutogenerateRuleAreas( const TOOL_EVENT& aEvent )
         }
     }
 
-    wxLogTrace( traceMultichannelTool,
-             wxT( "%d placement areas found\n" ), (int) m_areas.m_areas.size() );
+    wxLogTrace( traceMultichannelTool, wxT( "%d placement areas found\n" ), (int) m_areas.m_areas.size() );
 
     BOARD_COMMIT commit( GetManager(), true );
 
@@ -1170,48 +1160,39 @@ int MULTICHANNEL_TOOL::AutogenerateRuleAreas( const TOOL_EVENT& aEvent )
 
         std::unique_ptr<ZONE> newZone( new ZONE( board() ) );
 
-        if( ra.m_sourceType == RULE_AREA_PLACEMENT_SOURCE_TYPE::SHEETNAME )
-        {
-            newZone->SetZoneName(
-                    wxString::Format( wxT( "auto-placement-area-%s" ), ra.m_sheetPath ) );
-        }
-        else if( ra.m_sourceType == RULE_AREA_PLACEMENT_SOURCE_TYPE::COMPONENT_CLASS )
-        {
-            newZone->SetZoneName(
-                    wxString::Format( wxT( "auto-placement-area-%s" ), ra.m_componentClass ) );
-        }
+        if( ra.m_sourceType == PLACEMENT_SOURCE_T::SHEETNAME )
+            newZone->SetZoneName( wxString::Format( wxT( "auto-placement-area-%s" ), ra.m_sheetPath ) );
+        else if( ra.m_sourceType == PLACEMENT_SOURCE_T::COMPONENT_CLASS )
+            newZone->SetZoneName( wxString::Format( wxT( "auto-placement-area-%s" ), ra.m_componentClass ) );
         else
-        {
             newZone->SetZoneName( wxString::Format( wxT( "auto-placement-area-%s" ), ra.m_groupName ) );
-        }
 
         wxLogTrace( traceMultichannelTool, wxT( "Generated rule area '%s' (%d components)\n" ),
                     newZone->GetZoneName(), (int) ra.m_components.size() );
 
         newZone->SetIsRuleArea( true );
         newZone->SetLayerSet( LSET::AllCuMask() );
-        newZone->SetRuleAreaPlacementEnabled( true );
+        newZone->SetPlacementAreaEnabled( true );
         newZone->SetDoNotAllowZoneFills( false );
         newZone->SetDoNotAllowVias( false );
         newZone->SetDoNotAllowTracks( false );
         newZone->SetDoNotAllowPads( false );
         newZone->SetDoNotAllowFootprints( false );
 
-        if( ra.m_sourceType == RULE_AREA_PLACEMENT_SOURCE_TYPE::SHEETNAME )
+        if( ra.m_sourceType == PLACEMENT_SOURCE_T::SHEETNAME )
         {
-            newZone->SetRuleAreaPlacementSourceType( RULE_AREA_PLACEMENT_SOURCE_TYPE::SHEETNAME );
-            newZone->SetRuleAreaPlacementSource( ra.m_sheetPath );
+            newZone->SetPlacementAreaSourceType( PLACEMENT_SOURCE_T::SHEETNAME );
+            newZone->SetPlacementAreaSource( ra.m_sheetPath );
         }
-        else if( ra.m_sourceType == RULE_AREA_PLACEMENT_SOURCE_TYPE::COMPONENT_CLASS )
+        else if( ra.m_sourceType == PLACEMENT_SOURCE_T::COMPONENT_CLASS )
         {
-            newZone->SetRuleAreaPlacementSourceType(
-                    RULE_AREA_PLACEMENT_SOURCE_TYPE::COMPONENT_CLASS );
-            newZone->SetRuleAreaPlacementSource( ra.m_componentClass );
+            newZone->SetPlacementAreaSourceType( PLACEMENT_SOURCE_T::COMPONENT_CLASS );
+            newZone->SetPlacementAreaSource( ra.m_componentClass );
         }
         else
         {
-            newZone->SetRuleAreaPlacementSourceType( RULE_AREA_PLACEMENT_SOURCE_TYPE::GROUP_PLACEMENT );
-            newZone->SetRuleAreaPlacementSource( ra.m_groupName );
+            newZone->SetPlacementAreaSourceType( PLACEMENT_SOURCE_T::GROUP_PLACEMENT );
+            newZone->SetPlacementAreaSource( ra.m_groupName );
         }
 
         newZone->AddPolygon( raOutline );

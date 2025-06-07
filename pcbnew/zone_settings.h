@@ -71,7 +71,7 @@ enum class ISLAND_REMOVAL_MODE
     AREA
 };
 
-enum class RULE_AREA_PLACEMENT_SOURCE_TYPE
+enum class PLACEMENT_SOURCE_T
 {
     SHEETNAME = 0,
     COMPONENT_CLASS,
@@ -146,9 +146,9 @@ private:
     /**
      * Placement rule area data
      */
-    bool                            m_ruleAreaPlacementEnabled;
-    RULE_AREA_PLACEMENT_SOURCE_TYPE m_ruleAreaPlacementSourceType;
-    wxString                        m_ruleAreaPlacementSource;
+    bool                m_placementAreaEnabled;
+    PLACEMENT_SOURCE_T  m_placementAreaSourceType;
+    wxString            m_placementAreaSource;
 
     bool                m_keepoutDoNotAllowZoneFills;
     bool                m_keepoutDoNotAllowVias;
@@ -233,39 +233,30 @@ public:
     /**
      * Accessors to parameters used in Rule Area zones:
      */
-    bool GetIsRuleArea() const { return m_isRuleArea; }
-    bool GetRuleAreaPlacementEnabled() const { return m_ruleAreaPlacementEnabled; }
-    RULE_AREA_PLACEMENT_SOURCE_TYPE GetRuleAreaPlacementSourceType() const
-    {
-        return m_ruleAreaPlacementSourceType;
-    }
-    wxString GetRuleAreaPlacementSource() const { return m_ruleAreaPlacementSource; }
+    bool GetPlacementAreaEnabled() const                  { return m_placementAreaEnabled; }
+    PLACEMENT_SOURCE_T GetPlacementAreaSourceType() const { return m_placementAreaSourceType; }
+    wxString GetPlacementAreaSource() const               { return m_placementAreaSource; }
+    bool GetIsRuleArea() const           { return m_isRuleArea; }
     bool GetDoNotAllowZoneFills() const  { return m_keepoutDoNotAllowZoneFills; }
     bool GetDoNotAllowVias() const       { return m_keepoutDoNotAllowVias; }
     bool GetDoNotAllowTracks() const     { return m_keepoutDoNotAllowTracks; }
     bool GetDoNotAllowPads() const       { return m_keepoutDoNotAllowPads; }
     bool GetDoNotAllowFootprints() const { return m_keepoutDoNotAllowFootprints; }
 
-    void SetIsRuleArea( bool aEnable ) { m_isRuleArea = aEnable; }
-    void SetRuleAreaPlacementEnabled( bool aEnabled ) { m_ruleAreaPlacementEnabled = aEnabled; }
-    void SetRuleAreaPlacementSourceType( RULE_AREA_PLACEMENT_SOURCE_TYPE aType )
-    {
-        m_ruleAreaPlacementSourceType = aType;
-    }
-    void SetRuleAreaPlacementSource( const wxString& aSource )
-    {
-        m_ruleAreaPlacementSource = aSource;
-    }
+    void SetPlacementAreaEnabled( bool aEnabled )               { m_placementAreaEnabled = aEnabled; }
+    void SetPlacementAreaSourceType( PLACEMENT_SOURCE_T aType ) { m_placementAreaSourceType = aType; }
+    void SetPlacementAreaSource( const wxString& aSource )      { m_placementAreaSource = aSource; }
+    void SetIsRuleArea( bool aEnable )           { m_isRuleArea = aEnable; }
     void SetDoNotAllowZoneFills( bool aEnable )  { m_keepoutDoNotAllowZoneFills = aEnable; }
     void SetDoNotAllowVias( bool aEnable )       { m_keepoutDoNotAllowVias = aEnable; }
     void SetDoNotAllowTracks( bool aEnable )     { m_keepoutDoNotAllowTracks = aEnable; }
     void SetDoNotAllowPads( bool aEnable )       { m_keepoutDoNotAllowPads = aEnable; }
     void SetDoNotAllowFootprints( bool aEnable ) { m_keepoutDoNotAllowFootprints = aEnable; }
 
-    ISLAND_REMOVAL_MODE GetIslandRemovalMode() const { return m_removeIslands; }
+    ISLAND_REMOVAL_MODE GetIslandRemovalMode() const         { return m_removeIslands; }
     void SetIslandRemovalMode( ISLAND_REMOVAL_MODE aRemove ) { m_removeIslands = aRemove; }
 
-    long long int GetMinIslandArea() const { return m_minIslandArea; }
+    long long int GetMinIslandArea() const       { return m_minIslandArea; }
     void SetMinIslandArea( long long int aArea ) { m_minIslandArea = aArea; }
 };
 

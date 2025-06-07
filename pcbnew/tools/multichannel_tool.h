@@ -74,20 +74,20 @@ struct RULE_AREA_COMPAT_DATA
 
 struct RULE_AREA
 {
-    RULE_AREA_PLACEMENT_SOURCE_TYPE  m_sourceType = RULE_AREA_PLACEMENT_SOURCE_TYPE::SHEETNAME;
-    ZONE*                            m_oldArea = nullptr;
-    ZONE*                            m_area = nullptr;
-    std::set<FOOTPRINT*>             m_raFootprints;
-    std::set<FOOTPRINT*>             m_components;
-    bool                             m_existsAlready = false;
-    bool                             m_generateEnabled = false;
-    wxString                         m_sheetPath;
-    wxString                         m_sheetName;
-    wxString                         m_ruleName;
-    wxString                         m_componentClass;
-    KIID                             m_group;
-    wxString                         m_groupName;
-    VECTOR2I                         m_center;
+    PLACEMENT_SOURCE_T        m_sourceType = PLACEMENT_SOURCE_T::SHEETNAME;
+    ZONE*                     m_oldArea = nullptr;
+    ZONE*                     m_area = nullptr;
+    std::set<FOOTPRINT*>      m_raFootprints;
+    std::set<FOOTPRINT*>      m_components;
+    bool                      m_existsAlready = false;
+    bool                      m_generateEnabled = false;
+    wxString                  m_sheetPath;
+    wxString                  m_sheetName;
+    wxString                  m_ruleName;
+    wxString                  m_componentClass;
+    KIID                      m_group;
+    wxString                  m_groupName;
+    VECTOR2I                  m_center;
 };
 
 

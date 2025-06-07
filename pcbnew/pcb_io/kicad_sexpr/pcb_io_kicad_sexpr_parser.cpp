@@ -7230,25 +7230,23 @@ ZONE* PCB_IO_KICAD_SEXPR_PARSER::parseZONE( BOARD_ITEM_CONTAINER* aParent )
                 {
                 case T_sheetname:
                 {
-                    zone->SetRuleAreaPlacementSourceType(
-                            RULE_AREA_PLACEMENT_SOURCE_TYPE::SHEETNAME );
+                    zone->SetPlacementAreaSourceType( PLACEMENT_SOURCE_T::SHEETNAME );
                     NeedSYMBOL();
-                    zone->SetRuleAreaPlacementSource( FromUTF8() );
+                    zone->SetPlacementAreaSource( FromUTF8() );
                     break;
                 }
                 case T_component_class:
                 {
-                    zone->SetRuleAreaPlacementSourceType(
-                            RULE_AREA_PLACEMENT_SOURCE_TYPE::COMPONENT_CLASS );
+                    zone->SetPlacementAreaSourceType( PLACEMENT_SOURCE_T::COMPONENT_CLASS );
                     NeedSYMBOL();
-                    zone->SetRuleAreaPlacementSource( FromUTF8() );
+                    zone->SetPlacementAreaSource( FromUTF8() );
                     break;
                 }
                 case T_group:
                 {
-                    zone->SetRuleAreaPlacementSourceType( RULE_AREA_PLACEMENT_SOURCE_TYPE::GROUP_PLACEMENT );
+                    zone->SetPlacementAreaSourceType( PLACEMENT_SOURCE_T::GROUP_PLACEMENT );
                     NeedSYMBOL();
-                    zone->SetRuleAreaPlacementSource( FromUTF8() );
+                    zone->SetPlacementAreaSource( FromUTF8() );
                     break;
                 }
                 case T_enabled:
@@ -7256,9 +7254,9 @@ ZONE* PCB_IO_KICAD_SEXPR_PARSER::parseZONE( BOARD_ITEM_CONTAINER* aParent )
                     token = NextTok();
 
                     if( token == T_yes )
-                        zone->SetRuleAreaPlacementEnabled( true );
+                        zone->SetPlacementAreaEnabled( true );
                     else if( token == T_no )
-                        zone->SetRuleAreaPlacementEnabled( false );
+                        zone->SetPlacementAreaEnabled( false );
                     else
                         Expecting( "yes or no" );
 

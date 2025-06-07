@@ -81,7 +81,7 @@ ZONE_SETTINGS::ZONE_SETTINGS()
     m_minIslandArea = 10 * pcbIUScale.IU_PER_MM * pcbIUScale.IU_PER_MM;
 
     SetIsRuleArea( false );
-    SetRuleAreaPlacementSourceType( RULE_AREA_PLACEMENT_SOURCE_TYPE::SHEETNAME );
+    SetPlacementAreaSourceType( PLACEMENT_SOURCE_T::SHEETNAME );
     SetDoNotAllowZoneFills( false );
     SetDoNotAllowVias( true );
     SetDoNotAllowTracks( true );
@@ -89,7 +89,7 @@ ZONE_SETTINGS::ZONE_SETTINGS()
     SetDoNotAllowFootprints( false );
 
     m_TeardropType = TEARDROP_TYPE::TD_NONE;
-    m_ruleAreaPlacementEnabled = false;
+    m_placementAreaEnabled = false;
 }
 
 
@@ -116,9 +116,9 @@ bool ZONE_SETTINGS::operator==( const ZONE_SETTINGS& aOther ) const
     if( m_cornerSmoothingType         != aOther.m_cornerSmoothingType ) return false;
     if( m_cornerRadius                != aOther.m_cornerRadius ) return false;
     if( m_isRuleArea                  != aOther.m_isRuleArea ) return false;
-    if( m_ruleAreaPlacementEnabled    != aOther.m_ruleAreaPlacementEnabled ) return false;
-    if( m_ruleAreaPlacementSourceType != aOther.m_ruleAreaPlacementSourceType ) return false;
-    if( m_ruleAreaPlacementSource     != aOther.m_ruleAreaPlacementSource ) return false;
+    if( m_placementAreaEnabled        != aOther.m_placementAreaEnabled ) return false;
+    if( m_placementAreaSourceType     != aOther.m_placementAreaSourceType ) return false;
+    if( m_placementAreaSource         != aOther.m_placementAreaSource ) return false;
     if( m_keepoutDoNotAllowZoneFills  != aOther.m_keepoutDoNotAllowZoneFills ) return false;
     if( m_keepoutDoNotAllowVias       != aOther.m_keepoutDoNotAllowVias ) return false;
     if( m_keepoutDoNotAllowTracks     != aOther.m_keepoutDoNotAllowTracks ) return false;
@@ -166,9 +166,9 @@ ZONE_SETTINGS& ZONE_SETTINGS::operator << ( const ZONE& aSource )
     m_cornerSmoothingType         = aSource.GetCornerSmoothingType();
     m_cornerRadius                = aSource.GetCornerRadius();
     m_isRuleArea                  = aSource.GetIsRuleArea();
-    m_ruleAreaPlacementEnabled    = aSource.GetRuleAreaPlacementEnabled();
-    m_ruleAreaPlacementSourceType = aSource.GetRuleAreaPlacementSourceType();
-    m_ruleAreaPlacementSource     = aSource.GetRuleAreaPlacementSource();
+    m_placementAreaEnabled        = aSource.GetPlacementAreaEnabled();
+    m_placementAreaSourceType     = aSource.GetPlacementAreaSourceType();
+    m_placementAreaSource         = aSource.GetPlacementAreaSource();
     m_keepoutDoNotAllowZoneFills  = aSource.GetDoNotAllowZoneFills();
     m_keepoutDoNotAllowVias       = aSource.GetDoNotAllowVias();
     m_keepoutDoNotAllowTracks     = aSource.GetDoNotAllowTracks();
@@ -212,9 +212,9 @@ void ZONE_SETTINGS::ExportSetting( ZONE& aTarget, bool aFullExport ) const
     aTarget.SetCornerSmoothingType( m_cornerSmoothingType );
     aTarget.SetCornerRadius( m_cornerRadius );
     aTarget.SetIsRuleArea( GetIsRuleArea() );
-    aTarget.SetRuleAreaPlacementEnabled( GetRuleAreaPlacementEnabled() );
-    aTarget.SetRuleAreaPlacementSourceType( GetRuleAreaPlacementSourceType() );
-    aTarget.SetRuleAreaPlacementSource( GetRuleAreaPlacementSource() );
+    aTarget.SetPlacementAreaEnabled( GetPlacementAreaEnabled() );
+    aTarget.SetPlacementAreaSourceType( GetPlacementAreaSourceType() );
+    aTarget.SetPlacementAreaSource( GetPlacementAreaSource() );
     aTarget.SetDoNotAllowZoneFills( GetDoNotAllowZoneFills() );
     aTarget.SetDoNotAllowVias( GetDoNotAllowVias() );
     aTarget.SetDoNotAllowTracks( GetDoNotAllowTracks() );
@@ -273,9 +273,9 @@ void ZONE_SETTINGS::CopyFrom( const ZONE_SETTINGS& aOther, bool aCopyFull )
     m_cornerSmoothingType         = aOther.m_cornerSmoothingType;
     m_cornerRadius                = aOther.m_cornerRadius;
     m_isRuleArea                  = aOther.m_isRuleArea;
-    m_ruleAreaPlacementEnabled    = aOther.m_ruleAreaPlacementEnabled;
-    m_ruleAreaPlacementSourceType = aOther.m_ruleAreaPlacementSourceType;
-    m_ruleAreaPlacementSource     = aOther.m_ruleAreaPlacementSource;
+    m_placementAreaEnabled        = aOther.m_placementAreaEnabled;
+    m_placementAreaSourceType     = aOther.m_placementAreaSourceType;
+    m_placementAreaSource         = aOther.m_placementAreaSource;
     m_keepoutDoNotAllowZoneFills  = aOther.m_keepoutDoNotAllowZoneFills;
     m_keepoutDoNotAllowVias       = aOther.m_keepoutDoNotAllowVias;
     m_keepoutDoNotAllowTracks     = aOther.m_keepoutDoNotAllowTracks;
