@@ -44,6 +44,7 @@
 #include <wx/tooltip.h>
 
 #include <advanced_config.h>
+#include <app_monitor.h>
 #include <background_jobs_monitor.h>
 #include <bitmaps.h>
 #include <build_version.h>
@@ -67,13 +68,6 @@
 #include <trace_helpers.h>
 
 #include <widgets/wx_splash.h>
-
-#ifdef KICAD_USE_SENTRY
-#include <boost/uuid/uuid_io.hpp>
-#include <boost/uuid/uuid_generators.hpp>
-#include <sentry.h>
-#include <build_version.h>
-#endif
 
 #ifdef KICAD_IPC_API
 #include <api/api_plugin_manager.h>
@@ -171,9 +165,7 @@ void PGM_BASE::Destroy()
 {
     KICAD_CURL::Cleanup();
 
-#ifdef KICAD_USE_SENTRY
-    sentry_close();
-#endif
+    APP_MONITOR::SENTRY::Instance()->Cleanup();
 
     m_pgm_checker.reset();
 }
@@ -251,125 +243,6 @@ const wxString PGM_BASE::AskUserForPreferredEditor( const wxString& aDefaultEdit
 
 
 #ifdef KICAD_USE_SENTRY
-bool PGM_BASE::IsSentryOptedIn()
-{
-    KIPLATFORM::POLICY::PBOOL policyState =
-            KIPLATFORM::POLICY::GetPolicyBool( POLICY_KEY_DATACOLLECTION );
-    if( policyState != KIPLATFORM::POLICY::PBOOL::NOT_CONFIGURED )
-    {
-        return policyState == KIPLATFORM::POLICY::PBOOL::ENABLED;
-    }
-
-    return m_sentry_optin_fn.Exists();
-}
-
-
-void PGM_BASE::SetSentryOptIn( bool aOptIn )
-{
-    if( aOptIn )
-    {
-        if( !m_sentry_uid_fn.Exists() )
-        {
-            sentryCreateUid();
-        }
-
-        if( !m_sentry_optin_fn.Exists() )
-        {
-            wxFFile sentryInitFile( m_sentry_optin_fn.GetFullPath(), "w" );
-            sentryInitFile.Write( "" );
-            sentryInitFile.Close();
-        }
-    }
-    else
-    {
-        if( m_sentry_optin_fn.Exists() )
-        {
-            wxRemoveFile( m_sentry_optin_fn.GetFullPath() );
-            sentry_close();
-        }
-    }
-}
-
-
-wxString PGM_BASE::sentryCreateUid()
-{
-    boost::uuids::uuid uuid = boost::uuids::random_generator()();
-    wxString           userGuid = boost::uuids::to_string( uuid );
-
-    wxFFile sentryInitFile( m_sentry_uid_fn.GetFullPath(), "w" );
-    sentryInitFile.Write( userGuid );
-    sentryInitFile.Close();
-
-    return userGuid;
-}
-
-
-void PGM_BASE::ResetSentryId()
-{
-    m_sentryUid = sentryCreateUid();
-}
-
-
-const wxString& PGM_BASE::GetSentryId()
-{
-    return m_sentryUid;
-}
-
-
-void PGM_BASE::sentryInit()
-{
-    m_sentry_optin_fn = wxFileName( PATHS::GetUserCachePath(), "sentry-opt-in" );
-    m_sentry_uid_fn = wxFileName( PATHS::GetUserCachePath(), "sentry-uid" );
-
-    if( IsSentryOptedIn() )
-    {
-        wxFFile sentryInitFile( m_sentry_uid_fn.GetFullPath() );
-        sentryInitFile.ReadAll( &m_sentryUid );
-        sentryInitFile.Close();
-
-        if( m_sentryUid.IsEmpty() || m_sentryUid.length() != 36 )
-        {
-            m_sentryUid = sentryCreateUid();
-        }
-
-        sentry_options_t* options = sentry_options_new();
-
-#ifndef KICAD_SENTRY_DSN
-#   error "Project configuration error, missing KICAD_SENTRY_DSN"
-#endif
-        // only capture 5% of transactions
-        sentry_options_set_traces_sample_rate( options, 0.05 );
-        sentry_options_set_dsn( options, KICAD_SENTRY_DSN );
-
-        wxFileName tmp;
-        tmp.AssignDir( PATHS::GetUserCachePath() );
-        tmp.AppendDir( "sentry" );
-
-#ifdef __WINDOWS__
-        sentry_options_set_database_pathw( options, tmp.GetPathWithSep().wc_str() );
-#else
-        sentry_options_set_database_path( options, tmp.GetPathWithSep().c_str() );
-#endif
-        sentry_options_set_symbolize_stacktraces( options, true );
-        sentry_options_set_auto_session_tracking( options, false );
-
-        sentry_options_set_release( options, GetCommitHash().ToStdString().c_str() );
-
-        // This just gives us more filtering within sentry, issues still get grouped across
-        // environments.
-        sentry_options_set_environment( options, GetMajorMinorVersion().c_str() );
-
-        sentry_init( options );
-
-        sentry_value_t user = sentry_value_new_object();
-        sentry_value_set_by_key( user, "id", sentry_value_new_string( m_sentryUid.c_str() ) );
-        sentry_set_user( user );
-
-        sentry_set_tag( "kicad.version", GetBuildVersion().ToStdString().c_str() );
-    }
-}
-
-
 void PGM_BASE::sentryPrompt()
 {
     if( !IsGUI() )
@@ -394,12 +267,11 @@ void PGM_BASE::sentryPrompt()
 
         if( result == wxID_YES )
         {
-            SetSentryOptIn( true );
-            sentryInit();
+            APP_MONITOR::SENTRY::Instance()->SetSentryOptIn( true );
         }
         else
         {
-            SetSentryOptIn( false );
+            APP_MONITOR::SENTRY::Instance()->SetSentryOptIn( false );
         }
 
         m_settings_manager->GetCommonSettings()->m_DoNotShowAgain.data_collection_prompt = true;
@@ -468,9 +340,7 @@ bool PGM_BASE::InitPgm( bool aHeadless, bool aSkipPyInit, bool aIsUnitTest )
 
     KICAD_CURL::Init();
 
-#ifdef KICAD_USE_SENTRY
-    sentryInit();
-#endif
+    APP_MONITOR::SENTRY::Instance()->Init();
 
     // Initialize the singleton instance
     m_singleton.Init();
@@ -483,9 +353,7 @@ bool PGM_BASE::InitPgm( bool aHeadless, bool aSkipPyInit, bool aIsUnitTest )
     else
         pgm_name = wxFileName( App().argv[0] ).GetName().Lower();
 
-#ifdef KICAD_USE_SENTRY
-    sentry_set_tag( "kicad.app", pgm_name.c_str() );
-#endif
+    APP_MONITOR::SENTRY::Instance()->AddTag( "kicad.app", pgm_name );
 
     wxInitAllImageHandlers();
 
@@ -959,17 +827,7 @@ void PGM_BASE::HandleException( std::exception_ptr aPtr )
     }
     catch( const std::exception& e )
     {
-#ifdef KICAD_USE_SENTRY
-        if( IsSentryOptedIn() )
-        {
-            sentry_value_t exc = sentry_value_new_exception( "exception", e.what() );
-            sentry_value_set_stacktrace( exc, NULL, 0 );
-
-            sentry_value_t sentryEvent = sentry_value_new_event();
-            sentry_event_add_exception( sentryEvent, exc );
-            sentry_capture_event( sentryEvent );
-        }
-#endif
+        APP_MONITOR::SENTRY::Instance()->LogException( e.what() );
 
         wxLogError( wxT( "Unhandled exception class: %s  what: %s" ),
                     From_UTF8( typeid( e ).name() ), From_UTF8( e.what() ) );
@@ -979,28 +837,6 @@ void PGM_BASE::HandleException( std::exception_ptr aPtr )
         wxLogError( wxT( "Unhandled exception of unknown type" ) );
     }
 }
-
-
-#ifdef KICAD_USE_SENTRY
-struct SENTRY_ASSERT_CACHE_KEY
-{
-    wxString file;
-    int      line;
-    wxString func;
-    wxString cond;
-    wxString msg;
-};
-
-
-bool operator<( const SENTRY_ASSERT_CACHE_KEY& aKey1, const SENTRY_ASSERT_CACHE_KEY& aKey2 )
-{
-    return aKey1.file < aKey2.file ||
-        aKey1.line < aKey2.line ||
-        aKey1.func < aKey2.func ||
-        aKey1.cond < aKey2.cond ||
-        aKey1.msg < aKey2.msg;
-}
-#endif
 
 
 void PGM_BASE::HandleAssert( const wxString& aFile, int aLine, const wxString& aFunc,
@@ -1025,23 +861,8 @@ void PGM_BASE::HandleAssert( const wxString& aFile, int aLine, const wxString& a
 #endif
 
 #ifdef KICAD_USE_SENTRY
-    if( IsSentryOptedIn() )
-    {
-        static std::set<SENTRY_ASSERT_CACHE_KEY> assertCache;
-
-        SENTRY_ASSERT_CACHE_KEY key = { aFile, aLine, aFunc, aCond };
-
-        if( assertCache.find( key ) == assertCache.end() )
-        {
-            sentry_value_t exc = sentry_value_new_exception( "assert", assertStr );
-            sentry_value_set_stacktrace( exc, NULL, 0 );
-
-            sentry_value_t sentryEvent = sentry_value_new_event();
-            sentry_event_add_exception( sentryEvent, exc );
-            sentry_capture_event( sentryEvent );
-            assertCache.insert( key );
-        }
-    }
+    APP_MONITOR::ASSERT_CACHE_KEY key = { aFile, aLine, aFunc, aCond };
+    APP_MONITOR::SENTRY::Instance()->LogAssert( key, assertStr );
 #endif
 }
 

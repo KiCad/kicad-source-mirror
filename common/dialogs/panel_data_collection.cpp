@@ -24,12 +24,12 @@
 #include <dialogs/panel_data_collection.h>
 
 #include <advanced_config.h>
+#include <app_monitor.h>
 #include <bitmaps.h>
 #include <dialog_shim.h>
 #include <kiface_base.h>
 #include <kiplatform/policy.h>
 #include <kiplatform/ui.h>
-#include <pgm_base.h>
 #include <policy_keys.h>
 #include <id.h>
 #include <settings/common_settings.h>
@@ -54,7 +54,7 @@ bool PANEL_DATA_COLLECTION::TransferDataToWindow()
         Disable();
     }
 
-    m_sentryUid->SetValue( Pgm().GetSentryId() );
+    m_sentryUid->SetValue( APP_MONITOR::SENTRY::Instance()->GetSentryId() );
 
     return true;
 }
@@ -62,7 +62,7 @@ bool PANEL_DATA_COLLECTION::TransferDataToWindow()
 
 bool PANEL_DATA_COLLECTION::TransferDataFromWindow()
 {
-    Pgm().SetSentryOptIn( m_cbOptIn->GetValue() );
+    APP_MONITOR::SENTRY::Instance()->SetSentryOptIn( m_cbOptIn->GetValue() );
 
     return true;
 }
@@ -76,12 +76,12 @@ void PANEL_DATA_COLLECTION::ResetPanel()
 
 void PANEL_DATA_COLLECTION::applySettingsToPanel()
 {
-    m_cbOptIn->SetValue( Pgm().IsSentryOptedIn() );
+    m_cbOptIn->SetValue( APP_MONITOR::SENTRY::Instance()->IsOptedIn() );
 }
 
 
 void PANEL_DATA_COLLECTION::OnResetIdClick( wxCommandEvent& aEvent )
 {
-    Pgm().ResetSentryId();
-    m_sentryUid->SetValue( Pgm().GetSentryId() );
+    APP_MONITOR::SENTRY::Instance()->ResetSentryId();
+    m_sentryUid->SetValue( APP_MONITOR::SENTRY::Instance()->GetSentryId() );
 }

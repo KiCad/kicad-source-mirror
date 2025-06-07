@@ -305,31 +305,6 @@ public:
      */
     void SaveCommonSettings();
 
-#ifdef KICAD_USE_SENTRY
-    /**
-     * @return True if the user agreed to sentry data collection
-     */
-    bool IsSentryOptedIn();
-
-    /**
-     * Set the Sentry opt in state, this will also terminate sentry
-     * immediately if needed, however it will not init sentry if opted in.
-     *
-     * @param aOptIn True/false to agreeing to the use of sentry.
-     */
-    void SetSentryOptIn( bool aOptIn );
-
-    /**
-     * Generate and stores a new sentry id at random using the boost uuid generator.
-     */
-    void ResetSentryId();
-
-    /**
-     * Get the current id string being used as "user id" in sentry reports.
-     */
-    const wxString& GetSentryId();
-#endif
-
     /**
      * A exception handler to be used at the top level if exceptions bubble up that for.
      *

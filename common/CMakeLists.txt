@@ -267,7 +267,7 @@ if( KICAD_USE_SENTRY )
     target_link_libraries( kicommon
         sentry )
 
-    set_property(SOURCE pgm_base.cpp APPEND PROPERTY COMPILE_DEFINITIONS KICAD_SENTRY_DSN="${KICAD_SENTRY_DSN}")
+    set_property(SOURCE app_monitor.cpp APPEND PROPERTY COMPILE_DEFINITIONS KICAD_SENTRY_DSN="${KICAD_SENTRY_DSN}")
 endif()
 
 if( KICAD_IPC_API )
