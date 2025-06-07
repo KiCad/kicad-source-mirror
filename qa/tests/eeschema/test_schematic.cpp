@@ -54,13 +54,13 @@ BOOST_AUTO_TEST_CASE( TestSchematicSharedByMultipleProjects )
     LoadSchematic( "schematic_object_tests/not_shared_by_multiple_projects/"
                    "not_shared_by_multiple_projects" );
 
-    std::set<const SCH_SCREEN*> sharedScreens = m_schematic.GetSchematicsSharedByMultipleProjects();
+    std::set<const SCH_SCREEN*> sharedScreens = m_schematic->GetSchematicsSharedByMultipleProjects();
 
     BOOST_CHECK( sharedScreens.empty() );
 
     LoadSchematic( "schematic_object_tests/shared_by_multiple_projects/project_a/project_a" );
 
-    sharedScreens = m_schematic.GetSchematicsSharedByMultipleProjects();
+    sharedScreens = m_schematic->GetSchematicsSharedByMultipleProjects();
 
     BOOST_CHECK( !sharedScreens.empty() );
 }
@@ -70,11 +70,11 @@ BOOST_AUTO_TEST_CASE( TestSchematicIsComplexHierarchy )
 {
     LoadSchematic( "netlists/group_bus_matching/group_bus_matching" );
 
-    BOOST_CHECK( !m_schematic.IsComplexHierarchy() );
+    BOOST_CHECK( !m_schematic->IsComplexHierarchy() );
 
     LoadSchematic( "netlists/complex_hierarchy/complex_hierarchy" );
 
-    BOOST_CHECK( m_schematic.IsComplexHierarchy() );
+    BOOST_CHECK( m_schematic->IsComplexHierarchy() );
 }
 
 

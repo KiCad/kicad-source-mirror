@@ -50,7 +50,7 @@ BOOST_AUTO_TEST_CASE( TestSheetListPageProperties )
 {
     LoadSchematic( "complex_hierarchy/complex_hierarchy" );
 
-    SCH_SHEET_LIST sheets = m_schematic.BuildSheetListSortedByPageNumbers();
+    SCH_SHEET_LIST sheets = m_schematic->BuildSheetListSortedByPageNumbers();
 
     BOOST_CHECK( sheets.AllSheetPageNumbersEmpty() );
 
@@ -70,7 +70,7 @@ BOOST_AUTO_TEST_CASE( TestEditPageNumbersInSharedDesign )
         // Check the Sub Sheet has the expected page numbers
         LoadSchematic( "complex_hierarchy_shared/ampli_ht/ampli_ht" );
 
-        SCH_SHEET_LIST sheets = m_schematic.BuildSheetListSortedByPageNumbers();
+        SCH_SHEET_LIST sheets = m_schematic->BuildSheetListSortedByPageNumbers();
 
         BOOST_CHECK_EQUAL( sheets.size(), 2 );
         BOOST_CHECK_EQUAL( sheets.at( 0 ).GetPageNumber(), "i" );
@@ -82,7 +82,7 @@ BOOST_AUTO_TEST_CASE( TestEditPageNumbersInSharedDesign )
         // Check the parent sheet has the expected page numbers
         LoadSchematic( "complex_hierarchy_shared/complex_hierarchy" );
 
-        SCH_SHEET_LIST sheets = m_schematic.BuildSheetListSortedByPageNumbers();
+        SCH_SHEET_LIST sheets = m_schematic->BuildSheetListSortedByPageNumbers();
 
         BOOST_CHECK_EQUAL( sheets.size(), 5 );
         BOOST_CHECK_EQUAL( sheets.at( 0 ).GetPageNumber(), "1" );
@@ -94,7 +94,7 @@ BOOST_AUTO_TEST_CASE( TestEditPageNumbersInSharedDesign )
 
     BOOST_TEST_CONTEXT( "Modify page numbers in root sheet" )
     {
-        SCH_SHEET_LIST sheets = m_schematic.BuildSheetListSortedByPageNumbers();
+        SCH_SHEET_LIST sheets = m_schematic->BuildSheetListSortedByPageNumbers();
 
         // Amend Page numbers
         sheets.at( 0 ).SetPageNumber( "A" );
@@ -116,21 +116,21 @@ BOOST_AUTO_TEST_CASE( TestEditPageNumbersInSharedDesign )
         newPrjFn.SetExt( FILEEXT::ProjectFileExtension );
         BOOST_CHECK( wxCopyFile( prjFn.GetFullPath(), newPrjFn.GetFullPath() ) );
 
-        m_pi->SaveSchematicFile( rootFn.GetFullPath(), &m_schematic.Root(), &m_schematic );
+        m_pi->SaveSchematicFile( rootFn.GetFullPath(), &m_schematic->Root(), m_schematic.get() );
 
         wxFileName subSheetFn = rootFn;
         BOOST_CHECK( subSheetFn.AppendDir( "ampli_ht" ) );
         BOOST_CHECK( subSheetFn.Mkdir() );
 
         subSheetFn.SetName( "ampli_ht" );
-        m_pi->SaveSchematicFile( subSheetFn.GetFullPath(), sheets.at( 1 ).Last(), &m_schematic );
+        m_pi->SaveSchematicFile( subSheetFn.GetFullPath(), sheets.at( 1 ).Last(), m_schematic.get() );
 
         subSheetFn.SetName( "filter" );
-        m_pi->SaveSchematicFile( subSheetFn.GetFullPath(), sheets.at( 2 ).Last(), &m_schematic );
+        m_pi->SaveSchematicFile( subSheetFn.GetFullPath(), sheets.at( 2 ).Last(), m_schematic.get() );
 
         LoadSchematic( "complex_hierarchy_shared/temp/complex_hierarchy" );
 
-        sheets = m_schematic.BuildSheetListSortedByPageNumbers();
+        sheets = m_schematic->BuildSheetListSortedByPageNumbers();
 
         BOOST_CHECK_EQUAL( sheets.size(), 5 );
         BOOST_CHECK_EQUAL( sheets.at( 0 ).GetPageNumber(), "A" );
@@ -155,7 +155,7 @@ BOOST_AUTO_TEST_CASE( TestEditPageNumbersInSharedDesign )
         // (This should not have been modified after editing the root sheet)
         LoadSchematic( "complex_hierarchy_shared/ampli_ht/ampli_ht" );
 
-        SCH_SHEET_LIST sheets = m_schematic.BuildSheetListSortedByPageNumbers();
+        SCH_SHEET_LIST sheets = m_schematic->BuildSheetListSortedByPageNumbers();
 
         BOOST_CHECK_EQUAL( sheets.size(), 2 );
         BOOST_CHECK_EQUAL( sheets.at( 0 ).GetPageNumber(), "i" );
