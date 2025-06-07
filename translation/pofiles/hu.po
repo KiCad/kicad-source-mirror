@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-06-01 20:43+0300\n"
-"PO-Revision-Date: 2025-06-06 21:01+0000\n"
+"PO-Revision-Date: 2025-06-08 02:02+0000\n"
 "Last-Translator: Sárkány Lőrinc <lsarkany@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/kicad/v9/hu/>\n"
 "Language: hu\n"
@@ -5179,9 +5179,8 @@ msgid "PPI:"
 msgstr "PPI:"
 
 #: common/dialogs/panel_image_editor_base.cpp:48
-#, fuzzy
 msgid "Convert to Greyscale"
-msgstr "Négyszög mozgatása"
+msgstr "Átalakítás szürkeárnyalatossá"
 
 #: common/dialogs/panel_mouse_settings.cpp:46
 #: eeschema/dialogs/panel_simulator_preferences.cpp:32
@@ -5223,9 +5222,8 @@ msgstr ""
 "képernyő széléhez közeledve."
 
 #: common/dialogs/panel_mouse_settings_base.cpp:48
-#, fuzzy
 msgid "Use zoom acceleration"
-msgstr "Hardveres gyorsítás engedélyezése"
+msgstr "Nagyítás gyorsítása"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:49
 msgid "Zoom faster when scrolling quickly"
@@ -5753,7 +5751,6 @@ msgstr "Busz Vonalvastagság"
 #: eeschema/sch_line.cpp:936 eeschema/sch_line.cpp:1088
 #: eeschema/sch_line.cpp:1092 eeschema/sch_tablecell.cpp:199
 #: pcbnew/pcb_tablecell.cpp:200 pcbnew/pcb_textbox.cpp:807
-#, fuzzy
 msgid "Line Style"
 msgstr "Vonalstílus"
 
@@ -5774,7 +5771,6 @@ msgstr "Vonalstílus"
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2605 pcbnew/pcb_dimension.cpp:642
 #: pcbnew/pcb_tablecell.cpp:116 pcbnew/pcb_text.cpp:294
 #: pcbnew/pcb_textbox.cpp:476
-#, fuzzy
 msgid "Default"
 msgstr "Alapértelmezett"
 
@@ -5810,9 +5806,8 @@ msgstr "Vezetékosztály"
 #: common/dialogs/panel_setup_severities.cpp:118
 #: eeschema/dialogs/dialog_erc.cpp:880 eeschema/sch_marker.cpp:370
 #: pcbnew/dialogs/dialog_drc.cpp:986 pcbnew/pcb_marker.cpp:205
-#, fuzzy
 msgid "Ignore"
-msgstr "Kihagy"
+msgstr "Mellőz"
 
 #: common/dialogs/panel_setup_severities.cpp:118
 #, fuzzy
@@ -6433,9 +6428,8 @@ msgstr "Vezetősáv"
 
 #: common/eda_item.cpp:398 pcbnew/dialogs/dialog_board_statistics.cpp:515
 #: pcbnew/pcb_track.cpp:1604 pcbnew/pcb_track.cpp:1680
-#, fuzzy
 msgid "Via"
-msgstr "Viák (átvezetőfuratok)"
+msgstr "Via"
 
 #: common/eda_item.cpp:399 common/eda_item.cpp:411 eeschema/sch_marker.cpp:364
 #: pcbnew/pcb_marker.cpp:199
@@ -7528,9 +7522,8 @@ msgid "Copy"
 msgstr "Másolás"
 
 #: common/grid_tricks.cpp:364 kicad/dialogs/panel_jobset.cpp:393
-#, fuzzy
 msgid "Copy selected cells to clipboard"
-msgstr "A kijelölt cellák tartalmának vágólapra történő másolása"
+msgstr "Kijelölt cellák másolása a vágólapra"
 
 #: common/grid_tricks.cpp:368 common/tool/actions.cpp:245
 #: common/widgets/listbox_tricks.cpp:51
@@ -7749,9 +7742,8 @@ msgid "Cannot open file '%s'."
 msgstr "Nem sikerült megnyitni az alábbi fájlt: '%s'."
 
 #: common/io/altium/altium_binary_parser.cpp:71
-#, fuzzy
 msgid "Error reading file: cannot determine length."
-msgstr "Hiba a(z) \"%s\" fájl betöltése közben."
+msgstr "Hiba a fájl olvasásakor: nem sikerült meghatározni a hosszát."
 
 #: common/io/altium/altium_binary_parser.cpp:84
 msgid "Error reading file."
@@ -7791,14 +7783,14 @@ msgid "Unknown node '%s' in '%s'"
 msgstr "Ismeretlen token: \"%s\""
 
 #: common/io/cadstar/cadstar_archive_parser.h:49
-#, fuzzy, c-format
+#, c-format
 msgid "Missing Parameter '%s' in '%s'"
-msgstr "Hiányzó alkatrészrajzolatok"
+msgstr "Hiányzó paraméter \"%s\" ebben: \"%s\""
 
 #: common/io/cadstar/cadstar_archive_parser.h:52
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown Parameter '%s' in '%s'"
-msgstr "Ismeretlen token: \"%s\""
+msgstr "Ismeretlen paraméter \"%s\" ebben: \"%s\""
 
 #: common/io/cadstar/cadstar_archive_parser.h:55
 #, fuzzy, c-format
@@ -7872,9 +7864,8 @@ msgid "Export 3D Model Job Settings"
 msgstr "3D modell kiválasztása"
 
 #: common/jobs/job_export_pcb_3d.cpp:170
-#, fuzzy
 msgid "PCB: Export 3D Model"
-msgstr "3D modell kiválasztása"
+msgstr "NYÁK: 3D modell exportálása"
 
 #: common/jobs/job_export_pcb_drill.cpp:123
 #, fuzzy
@@ -7903,9 +7894,8 @@ msgid "Export DXF Job Settings"
 msgstr "Beállítások szerkesztése"
 
 #: common/jobs/job_export_pcb_dxf.cpp:67
-#, fuzzy
 msgid "PCB: Export DXF"
-msgstr "IDFv3 exportálás"
+msgstr "NYÁK: DXF exportálása"
 
 #: common/jobs/job_export_pcb_gencad.cpp:38
 #, fuzzy
@@ -7933,13 +7923,12 @@ msgstr "Exportálás a GenCAD beállításaihoz"
 
 #: common/jobs/job_export_pcb_gerbers.cpp:47
 msgid "PCB: Export Gerbers"
-msgstr ""
+msgstr "NYÁK: Gerber fájlok exportálása"
 
 #: common/jobs/job_export_pcb_ipc2581.cpp:72
 #: pcbnew/dialogs/dialog_export_2581_base.h:85
-#, fuzzy
 msgid "Export IPC-2581"
-msgstr "STEP exportálása"
+msgstr "IPC-2581 exportálása"
 
 #: common/jobs/job_export_pcb_ipc2581.cpp:78
 #, fuzzy
@@ -7947,14 +7936,12 @@ msgid "Export IPC-2581 Job Settings"
 msgstr "Exportálás fájlba"
 
 #: common/jobs/job_export_pcb_ipc2581.cpp:91
-#, fuzzy
 msgid "PCB: Export IPC-2581"
-msgstr "STEP exportálása"
+msgstr "NYÁK: IPC-2581 exportálása"
 
 #: common/jobs/job_export_pcb_ipcd356.cpp:33
-#, fuzzy
 msgid "Export IPC-D-356"
-msgstr "STEP exportálása"
+msgstr "IPC-D-356 exportálása"
 
 #: common/jobs/job_export_pcb_ipcd356.cpp:39
 #, fuzzy
@@ -7962,15 +7949,13 @@ msgid "Export IPC-D-356 Job Settings"
 msgstr "Exportálás fájlba"
 
 #: common/jobs/job_export_pcb_ipcd356.cpp:52
-#, fuzzy
 msgid "PCB: Export IPC-D-356"
-msgstr "STEP exportálása"
+msgstr "NYÁK: IPC-D-356 exportálása"
 
 #: common/jobs/job_export_pcb_odb.cpp:57
 #: pcbnew/dialogs/dialog_export_odbpp_base.h:65
-#, fuzzy
 msgid "Export ODB++"
-msgstr "IDFv3 exportálás"
+msgstr "ODB++ exportálása"
 
 #: common/jobs/job_export_pcb_odb.cpp:63
 #, fuzzy
@@ -7978,9 +7963,8 @@ msgid "Export ODB++ Job Settings"
 msgstr "Beállítások szerkesztése"
 
 #: common/jobs/job_export_pcb_odb.cpp:76
-#, fuzzy
 msgid "PCB: Export ODB++"
-msgstr "IDFv3 exportálás"
+msgstr "NYÁK: ODB++ exportálása"
 
 #: common/jobs/job_export_pcb_pdf.cpp:58
 #: common/jobs/job_export_sch_plot.cpp:141 kicad/kicad_cli.cpp:145
@@ -7994,9 +7978,8 @@ msgid "Export PDF Job Settings"
 msgstr "Beállítások szerkesztése"
 
 #: common/jobs/job_export_pcb_pdf.cpp:68
-#, fuzzy
 msgid "PCB: Export PDF"
-msgstr "IDFv3 exportálás"
+msgstr "NYÁK: PDF exportálása"
 
 #: common/jobs/job_export_pcb_pos.cpp:97
 #, fuzzy
@@ -8014,9 +7997,8 @@ msgstr ""
 
 #: common/jobs/job_export_pcb_svg.cpp:49
 #: common/jobs/job_export_sch_plot.cpp:179 kicad/kicad_cli.cpp:147
-#, fuzzy
 msgid "Export SVG"
-msgstr "Exportálás SVG fájlba"
+msgstr "SVG exportálása"
 
 #: common/jobs/job_export_pcb_svg.cpp:55
 #: common/jobs/job_export_sch_plot.cpp:185
@@ -8058,9 +8040,8 @@ msgid "Schematic: Export Netlist"
 msgstr "Netlista exportálása"
 
 #: common/jobs/job_export_sch_plot.cpp:198
-#, fuzzy
 msgid "Export Postscript"
-msgstr "Postscript"
+msgstr "Postscript exportálása"
 
 #: common/jobs/job_export_sch_plot.cpp:204
 #, fuzzy
@@ -8077,34 +8058,29 @@ msgid "Export HPGL Job Settings"
 msgstr "Beállítások szerkesztése"
 
 #: common/jobs/job_export_sch_plot.cpp:227
-#, fuzzy
 msgid "Schematic: Export SVG"
-msgstr "Kapcsolási rajz tervező"
+msgstr "Kapcsolási rajz: SVG exportálása"
 
 #: common/jobs/job_export_sch_plot.cpp:229
-#, fuzzy
 msgid "Schematic: Export HPGL"
-msgstr "Kapcsolási rajz tervező"
+msgstr "Kapcsolási rajz: HPGL exportálása"
 
 #: common/jobs/job_export_sch_plot.cpp:231
-#, fuzzy
 msgid "Schematic: Export Postscript"
-msgstr "Netlista exportálása"
+msgstr "Kapcsolási rajz: Postscript exportálása"
 
 #: common/jobs/job_export_sch_plot.cpp:233
-#, fuzzy
 msgid "Schematic: Export DXF"
-msgstr "Kapcsolási rajz tervező"
+msgstr "Kapcsolási rajz: DXF exportálása"
 
 #: common/jobs/job_export_sch_plot.cpp:235
-#, fuzzy
 msgid "Schematic: Export PDF"
-msgstr "Kapcsolási rajz tervező"
+msgstr "Kapcsolási rajz: PDF exportálása"
 
 #: common/jobs/job_export_sch_pythonbom.cpp:35
 #, fuzzy
 msgid "Schematic PythonBOM export"
-msgstr "Kapcsolási rajz mérete"
+msgstr "Kapcsolási rajz: PythonBOM exportálása"
 
 #: common/jobs/job_pcb_drc.cpp:37
 #, fuzzy
@@ -8230,66 +8206,54 @@ msgstr "Átmentés"
 
 #: common/layer_id.cpp:71 eeschema/widgets/panel_sch_selection_filter.cpp:204
 #: eeschema/widgets/panel_sch_selection_filter_base.cpp:37
-#, fuzzy
 msgid "Wires"
 msgstr "Vezetékek"
 
 #: common/layer_id.cpp:72
-#, fuzzy
 msgid "Buses"
 msgstr "Buszok"
 
 #: common/layer_id.cpp:73
-#, fuzzy
 msgid "Bus junctions"
 msgstr "Busz csomópontok"
 
 #: common/layer_id.cpp:74
-#, fuzzy
 msgid "Junctions"
 msgstr "Csomópontok"
 
 #: common/layer_id.cpp:75 eeschema/widgets/panel_sch_selection_filter.cpp:205
 #: eeschema/widgets/panel_sch_selection_filter_base.cpp:41
 #: eeschema/widgets/search_handlers.cpp:408
-#, fuzzy
 msgid "Labels"
 msgstr "Címkék"
 
 #: common/layer_id.cpp:76
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:45
-#, fuzzy
 msgid "Global labels"
 msgstr "Globális címkék"
 
 #: common/layer_id.cpp:77
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:48
-#, fuzzy
 msgid "Hierarchical labels"
 msgstr "Hierarchikus címkék"
 
 #: common/layer_id.cpp:78 eeschema/sch_symbol.cpp:3004
-#, fuzzy
 msgid "Pin numbers"
-msgstr "Kivezetések száma"
+msgstr "Lábak számozása"
 
 #: common/layer_id.cpp:79 eeschema/sch_symbol.cpp:3008
-#, fuzzy
 msgid "Pin names"
-msgstr "Kivezetések neve"
+msgstr "Lábak nevei"
 
 #: common/layer_id.cpp:80
-#, fuzzy
 msgid "Symbol references"
-msgstr "A rajzjel referenciájának szerkesztése"
+msgstr "Rajzjel referenciák"
 
 #: common/layer_id.cpp:81
-#, fuzzy
 msgid "Symbol values"
 msgstr "Rajzjel értékek"
 
 #: common/layer_id.cpp:82
-#, fuzzy
 msgid "Symbol fields"
 msgstr "Rajzjel mezők"
 
@@ -8341,7 +8305,6 @@ msgstr "Kapcsolási rajzlap tulajdonságok"
 
 #: common/layer_id.cpp:92 eeschema/widgets/panel_sch_selection_filter.cpp:206
 #: eeschema/widgets/panel_sch_selection_filter_base.cpp:33
-#, fuzzy
 msgid "Pins"
 msgstr "Lábak"
 
@@ -8420,14 +8383,13 @@ msgstr "Elemek törlése"
 #: gerbview/dialogs/panel_gerbview_color_settings.cpp:103
 #: gerbview/widgets/gerbview_layer_widget.cpp:135
 #: pcbnew/widgets/appearance_controls.cpp:353
-#, fuzzy
 msgid "Grid"
-msgstr "Rácsméretek"
+msgstr "Rács"
 
 #: common/layer_id.cpp:108
 #: gerbview/dialogs/panel_gerbview_color_settings.cpp:104
 msgid "Axes"
-msgstr ""
+msgstr "Tengelyek"
 
 #: common/layer_id.cpp:109 common/layer_id.cpp:151
 #: gerbview/dialogs/panel_gerbview_color_settings.cpp:107
@@ -8448,12 +8410,10 @@ msgid "Hovered items"
 msgstr "Elem mozgatása"
 
 #: common/layer_id.cpp:112
-#, fuzzy
 msgid "Highlighted items"
-msgstr "Kiemelt vezeték: %s"
+msgstr "Kiemelt elemek"
 
 #: common/layer_id.cpp:113
-#, fuzzy
 msgid "Hidden items"
 msgstr "Rejtett elemek"
 
@@ -8523,20 +8483,17 @@ msgstr "Vezetősávok"
 
 #: common/layer_id.cpp:129
 msgid "Through vias"
-msgstr "átvezető furat"
+msgstr "Átmenő viák"
 
 #: common/layer_id.cpp:130
-#, fuzzy
 msgid "Blind/Buried vias"
-msgstr "Zsák/eltemetett via"
+msgstr "Vak / eltemetett viák"
 
 #: common/layer_id.cpp:131
-#, fuzzy
 msgid "Micro-vias"
 msgstr "μViák"
 
 #: common/layer_id.cpp:132
-#, fuzzy
 msgid "Via holes"
 msgstr "Via furatok"
 
@@ -8772,7 +8729,7 @@ msgstr "Részletek"
 
 #: common/notifications_manager.cpp:97
 msgid "Dismiss"
-msgstr ""
+msgstr "Elvet"
 
 #: common/notifications_manager.cpp:155
 msgid "Notifications"
@@ -8791,7 +8748,6 @@ msgid "Executable file"
 msgstr "Végrehajtható fájl"
 
 #: common/pgm_base.cpp:248
-#, fuzzy
 msgid "Select Preferred Editor"
 msgstr "Alapértelmezett szövegszerkesztő kiválasztása"
 
@@ -12503,9 +12459,8 @@ msgid "%d symbol(s) require annotation.<br><br>"
 msgstr ""
 
 #: eeschema/dialogs/dialog_erc.cpp:455
-#, fuzzy
 msgid "-------- ERC cancelled by user.<br><br>"
-msgstr "-------- ERC felhasználó által törölve.<br><br>"
+msgstr "-------- ERC felhasználó által megszakítva.<br><br>"
 
 #: eeschema/dialogs/dialog_erc.cpp:457 pcbnew/dialogs/dialog_drc.cpp:362
 msgid "Done.<br><br>"
@@ -12520,9 +12475,8 @@ msgid "warnings"
 msgstr "figyelmeztések"
 
 #: eeschema/dialogs/dialog_erc.cpp:624 pcbnew/dialogs/dialog_drc.cpp:673
-#, fuzzy
 msgid "appropriate"
-msgstr "Forrszem tulajdonságok"
+msgstr "megfelelő"
 
 #: eeschema/dialogs/dialog_erc.cpp:647 pcbnew/dialogs/dialog_drc.cpp:694
 #, fuzzy
@@ -12943,18 +12897,16 @@ msgstr "(%s)"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:113
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:320
-#, fuzzy
 msgid "Show field name"
-msgstr "Mező név megjelenítés:"
+msgstr "Mutassa a mező nevét"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:115
 msgid "Show the field name in addtion to its value"
-msgstr ""
+msgstr "Mutassa a mező nevét is az értéke mellett"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:122
-#, fuzzy
 msgid "Allow automatic placement"
-msgstr "Automatikus elhelyezés szabályai"
+msgstr "Automatikus elhelyezés engedélyezése"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:125
 #, fuzzy
@@ -19649,17 +19601,15 @@ msgstr ""
 "keretrendszerből indítsa el a programokat."
 
 #: eeschema/sch_edit_frame.cpp:1355
-#, fuzzy
 msgid "New Schematic"
 msgstr "Új kapcsolási rajz"
 
 #: eeschema/sch_edit_frame.cpp:1367
-#, fuzzy, c-format
+#, c-format
 msgid "Schematic file '%s' already exists."
 msgstr "A(z) \"%s\" kapcsolási rajz fájl már létezik."
 
 #: eeschema/sch_edit_frame.cpp:1392
-#, fuzzy
 msgid "Open Schematic"
 msgstr "Kapcsolási rajz megnyitása"
 
@@ -19678,13 +19628,11 @@ msgstr "Nem sikerült megnyitni az alkatrésztársítót"
 #: eeschema/sch_edit_frame.cpp:1743 eeschema/sim/simulator_frame.cpp:343
 #: kicad/kicad_manager_frame.cpp:1056 pcbnew/footprint_edit_frame.cpp:1091
 #: pcbnew/pcb_edit_frame.cpp:1804
-#, fuzzy
 msgid "[Read Only]"
 msgstr "[Csak olvasható]"
 
 #: eeschema/sch_edit_frame.cpp:1746 eeschema/sim/simulator_frame.cpp:346
 #: pcbnew/footprint_edit_frame.cpp:1100 pcbnew/pcb_edit_frame.cpp:1807
-#, fuzzy
 msgid "[Unsaved]"
 msgstr "[Nincs mentve]"
 
@@ -19704,9 +19652,8 @@ msgid "Highlighted net: %s"
 msgstr "Kiemelt vezeték: %s"
 
 #: eeschema/sch_edit_frame.cpp:2424
-#, fuzzy
 msgid "Save Symbol to Schematic"
-msgstr "Rajzjel beillesztése a kapcsolási rajzba"
+msgstr "Rajzjel mentése a kapcsolási rajzba"
 
 #: eeschema/sch_edit_frame.cpp:2530 eeschema/tools/sch_actions.cpp:61
 #, fuzzy
@@ -19731,7 +19678,6 @@ msgstr "Rajzjel mező"
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:489
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:497
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:508
-#, fuzzy
 msgid "Yes"
 msgstr "Igen"
 
@@ -19742,7 +19688,6 @@ msgstr "Igen"
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:489
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:497
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:507
-#, fuzzy
 msgid "No"
 msgstr "Nem"
 
@@ -19874,14 +19819,14 @@ msgstr "A(z) \"%s\" biztonsági másolat fájl nem található."
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:4065
 #: eeschema/sch_io/altium/sch_io_altium.cpp:4085
-#, fuzzy, c-format
+#, c-format
 msgid "Error reading image %s."
-msgstr "Lap szerkesztés befejezése"
+msgstr "Hiba a kép beolvasásakor: %s."
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:4077
-#, fuzzy, c-format
+#, c-format
 msgid "File not found %s."
-msgstr "A fájl nem található"
+msgstr "A(z) %s fájl nem található."
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:4913
 msgid "Expected Altium Schematic Library file version 5.0"
@@ -47709,7 +47654,6 @@ msgid "Group '%s', %zu members"
 msgstr "Rajzjelek csoportosítása"
 
 #: pcbnew/pcb_group.cpp:392
-#, fuzzy
 msgid "<unnamed>"
 msgstr "<névtelen>"
 
