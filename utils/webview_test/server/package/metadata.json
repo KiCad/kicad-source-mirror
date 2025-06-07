@@ -1,0 +1,30 @@
+{
+  "name": "WebView Test Datasource",
+  "description": "Local development datasource for the schematic remote symbol panel.",
+  "description_full": "Installs a datasource that points to the local WebView test server shipped with the KiCad source tree. Start the server found in utils/webview_test/server/webview_test_server.py and install this package from file via the Plugin and Content Manager.",
+  "identifier": "org.kicad.dev.webview.test",
+  "type": "datasource",
+  "author": {
+    "name": "KiCad Developers",
+    "contact": {
+      "url": "https://www.kicad.org/"
+    }
+  },
+  "license": "GPL-3.0",
+  "resources": {
+    "server": "http://localhost:8080/",
+    "instructions": "Start the local test server with python3 webview_test_server.py before using this datasource."
+  },
+  "versions": [
+    {
+      "kicad_version": "7.0.0",
+      "version": "0.1.0",
+      "status": "stable",
+      "platforms": [
+        "windows",
+        "macos",
+        "linux"
+      ]
+    }
+  ]
+}

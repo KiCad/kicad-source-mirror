@@ -44,6 +44,7 @@ enum PCM_PACKAGE_TYPE
     PT_PLUGIN,
     PT_FAB,
     PT_LIBRARY,
+    PT_DATASOURCE,
     PT_COLORTHEME,
 };
 
@@ -172,6 +173,7 @@ NLOHMANN_JSON_SERIALIZE_ENUM( PCM_PACKAGE_TYPE, {
                                                         { PT_PLUGIN, "plugin" },
                                                         { PT_FAB, "fab" },
                                                         { PT_LIBRARY, "library" },
+                                                        { PT_DATASOURCE, "datasource" },
                                                         { PT_COLORTHEME, "colortheme" },
                                                 } )
 

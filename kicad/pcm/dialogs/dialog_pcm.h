@@ -83,6 +83,8 @@ public:
         return m_changed_package_types;
     };
 
+    void SetActivePackageType( PCM_PACKAGE_TYPE aType );
+
 private:
     /**
      * @brief Gets package data from PCM and displays it on repository tab

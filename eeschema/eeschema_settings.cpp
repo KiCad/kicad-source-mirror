@@ -149,6 +149,49 @@ const wxAuiPaneInfo& defaultDesignBlocksPaneInfo( wxWindow* aWindow )
 }
 
 
+const wxAuiPaneInfo& defaultRemoteSymbolPaneInfo( wxWindow* aWindow )
+{
+    static wxAuiPaneInfo paneInfo;
+
+    paneInfo.Name( EDA_DRAW_FRAME::RemoteSymbolPaneName() )
+            .Caption( _( "Remote Symbols" ) )
+            .CaptionVisible( true )
+            .PaneBorder( true )
+            .Right().Layer( 3 ).Position( 3 )
+            .TopDockable( false )
+            .BottomDockable( false )
+            .CloseButton( true )
+            .MinSize( aWindow->FromDIP( wxSize( 240, 60 ) ) )
+            .BestSize( aWindow->FromDIP( wxSize( 300, 200 ) ) )
+            .FloatingSize( aWindow->FromDIP( wxSize( 800, 600 ) ) )
+            .FloatingPosition( aWindow->FromDIP( wxPoint( 80, 220 ) ) )
+            .Show( false );
+
+    return paneInfo;
+}
+
+
+wxString EESCHEMA_SETTINGS::REMOTE_SYMBOL_CONFIG::DefaultDestinationDir()
+{
+        return wxS( "${KIPRJMOD}/RemoteLibrary" );
+}
+
+
+wxString EESCHEMA_SETTINGS::REMOTE_SYMBOL_CONFIG::DefaultLibraryPrefix()
+{
+        return wxS( "remote" );
+}
+
+
+void EESCHEMA_SETTINGS::REMOTE_SYMBOL_CONFIG::ResetToDefaults()
+{
+        destination_dir = DefaultDestinationDir();
+        library_prefix = DefaultLibraryPrefix();
+        add_to_global_table = false;
+        user_ids.clear();
+}
+
+
 EESCHEMA_SETTINGS::EESCHEMA_SETTINGS() :
         APP_SETTINGS_BASE( "eeschema", eeschemaSchemaVersion ),
         m_Appearance(),
@@ -246,6 +289,18 @@ EESCHEMA_SETTINGS::EESCHEMA_SETTINGS() :
     m_params.emplace_back( new PARAM<int>( "aui.design_blocks_panel_float_height",
             &m_AuiPanels.design_blocks_panel_float_height, -1 ) );
 
+    m_params.emplace_back( new PARAM<bool>( "aui.remote_symbol_show",
+            &m_AuiPanels.remote_symbol_show, false ) );
+
+    m_params.emplace_back( new PARAM<int>( "aui.remote_symbol_panel_docked_width",
+            &m_AuiPanels.remote_symbol_panel_docked_width, -1 ) );
+
+    m_params.emplace_back( new PARAM<int>( "aui.remote_symbol_panel_float_width",
+            &m_AuiPanels.remote_symbol_panel_float_width, -1 ) );
+
+    m_params.emplace_back( new PARAM<int>( "aui.remote_symbol_panel_float_height",
+            &m_AuiPanels.remote_symbol_panel_float_height, -1 ) );
+
     m_params.emplace_back( new PARAM<bool>( "aui.schematic_hierarchy_float",
             &m_AuiPanels.schematic_hierarchy_float, false ) );
 
@@ -296,6 +351,20 @@ EESCHEMA_SETTINGS::EESCHEMA_SETTINGS() :
 
     m_params.emplace_back( new PARAM<bool>( "autoplace_fields.align_to_grid",
             &m_AutoplaceFields.align_to_grid, true ) );
+
+    m_params.emplace_back( new PARAM<wxString>( "remote_symbols.destination_dir",
+            &m_RemoteSymbol.destination_dir,
+            REMOTE_SYMBOL_CONFIG::DefaultDestinationDir() ) );
+
+    m_params.emplace_back( new PARAM<wxString>( "remote_symbols.library_prefix",
+            &m_RemoteSymbol.library_prefix,
+            REMOTE_SYMBOL_CONFIG::DefaultLibraryPrefix() ) );
+
+    m_params.emplace_back( new PARAM<bool>( "remote_symbols.add_to_global_table",
+            &m_RemoteSymbol.add_to_global_table, false ) );
+
+    m_params.emplace_back( new PARAM_WXSTRING_MAP( "remote_symbols.user_ids",
+            &m_RemoteSymbol.user_ids, {} ) );
 
     m_params.emplace_back( new PARAM<int>( "drawing.default_bus_thickness",
             &m_Drawing.default_bus_thickness, DEFAULT_BUS_WIDTH_MILS ) );

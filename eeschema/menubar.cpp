@@ -36,6 +36,7 @@
 #include "eeschema_id.h"
 #include "sch_edit_frame.h"
 #include <widgets/wx_menubar.h>
+#include <widgets/panel_remote_symbol.h>
 #include <advanced_config.h>
 
 
@@ -187,6 +188,13 @@ void SCH_EDIT_FRAME::doReCreateMenuBar()
         showHidePanels->Add( SCH_ACTIONS::showNetNavigator, ACTION_MENU::CHECK );
 
     showHidePanels->Add( SCH_ACTIONS::showDesignBlockPanel, ACTION_MENU::CHECK, _( "Design Blocks" ) );
+    wxMenuItem* remoteSymbolItem = showHidePanels->Add( SCH_ACTIONS::showRemoteSymbolPanel, ACTION_MENU::CHECK, _( "Remote Symbols" ) );
+
+    if( m_remoteSymbolPane && !m_remoteSymbolPane->HasDataSources() )
+    {
+        remoteSymbolItem->Enable( false );
+        remoteSymbolItem->SetHelp( _( "Install a remote symbol server using the Plugin and Content Manger to enable" ) );
+    }
 
     viewMenu->Add( showHidePanels );
 
@@ -362,5 +370,4 @@ void SCH_EDIT_FRAME::doReCreateMenuBar()
     SetMenuBar( menuBar );
     delete oldMenuBar;
 }
-
 

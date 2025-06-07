@@ -124,6 +124,13 @@ TOOL_ACTION SCH_ACTIONS::showDesignBlockPanel( TOOL_ACTION_ARGS()
         .Tooltip( _( "Show/hide design blocks library" ) )
         .Icon( BITMAPS::search_tree ) );
 
+TOOL_ACTION SCH_ACTIONS::showRemoteSymbolPanel( TOOL_ACTION_ARGS()
+        .Name( "eeschema.RemoteSymbols.showPanel" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Remote Symbols" ) )
+        .Tooltip( _( "Show/hide the remote symbol panel" ) )
+        .Icon( BITMAPS::library_browser ) );
+
 TOOL_ACTION SCH_ACTIONS::saveSheetAsDesignBlock( TOOL_ACTION_ARGS()
         .Name( "eeschema.SchDesignBlockControl.saveSheetAsDesignBlock" )
         .Scope( AS_GLOBAL )

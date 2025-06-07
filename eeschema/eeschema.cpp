@@ -23,6 +23,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <core/json_serializers.h>
 #include <pgm_base.h>
 #include <kiface_base.h>
 #include <background_jobs_monitor.h>
@@ -60,6 +61,7 @@
 #include <connection_graph.h>
 #include <panel_template_fieldnames.h>
 #include <panel_eeschema_color_settings.h>
+#include <panel_sch_data_sources.h>
 #include <panel_sym_color_settings.h>
 #include <panel_eeschema_editing_options.h>
 #include <panel_eeschema_annotation_options.h>
@@ -359,6 +361,19 @@ static struct IFACE : public KIFACE_BASE, public UNITS_PROVIDER
 
         case PANEL_SCH_FIELD_NAME_TEMPLATES:
             return new PANEL_TEMPLATE_FIELDNAMES( aParent, nullptr );
+
+        case PANEL_SCH_DATA_SOURCES:
+        {
+            EDA_BASE_FRAME* frame = aKiway->Player( FRAME_SCH, false );
+
+            if( !frame )
+                frame = aKiway->Player( FRAME_SCH_SYMBOL_EDITOR, false );
+
+            if( !frame )
+                frame = aKiway->Player( FRAME_SCH_VIEWER, false );
+
+            return new class PANEL_SCH_DATA_SOURCES( aParent, frame );
+        }
 
         case PANEL_SCH_SIMULATOR:
             return new PANEL_SIMULATOR_PREFERENCES( aParent );

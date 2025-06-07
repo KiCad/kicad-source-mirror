@@ -25,6 +25,8 @@
 
 #include <wx/aui/framemanager.h>
 
+#include <map>
+
 #include <settings/app_settings.h>
 #include <sim/sim_preferences.h>
 
@@ -35,6 +37,7 @@ extern const wxAuiPaneInfo& defaultNetNavigatorPaneInfo();
 extern const wxAuiPaneInfo& defaultPropertiesPaneInfo( wxWindow* aWindow );
 extern const wxAuiPaneInfo& defaultSchSelectionFilterPaneInfo( wxWindow* aWindow );
 extern const wxAuiPaneInfo& defaultDesignBlocksPaneInfo( wxWindow* aWindow );
+extern const wxAuiPaneInfo& defaultRemoteSymbolPaneInfo( wxWindow* aWindow );
 
 
 
@@ -104,6 +107,27 @@ public:
         int  design_blocks_panel_docked_width;
         int  design_blocks_panel_float_width;
         int  design_blocks_panel_float_height;
+        bool remote_symbol_show;
+        int  remote_symbol_panel_docked_width;
+        int  remote_symbol_panel_float_width;
+        int  remote_symbol_panel_float_height;
+    };
+
+    struct REMOTE_SYMBOL_CONFIG
+    {
+        REMOTE_SYMBOL_CONFIG()
+        {
+            ResetToDefaults();
+        }
+
+        wxString destination_dir;
+        wxString library_prefix;
+        bool     add_to_global_table;
+        std::map<wxString, wxString> user_ids;
+
+        void ResetToDefaults();
+        static wxString DefaultDestinationDir();
+        static wxString DefaultLibraryPrefix();
     };
 
     struct AUTOPLACE_FIELDS
@@ -321,6 +345,7 @@ private:
 public:
     APPEARANCE                m_Appearance;
     AUI_PANELS                m_AuiPanels;
+    REMOTE_SYMBOL_CONFIG      m_RemoteSymbol;
 
     DRAWING                   m_Drawing;
     INPUT                     m_Input;
@@ -346,4 +371,3 @@ public:
 
     wxString                  m_lastSymbolLibDir;
 };
-

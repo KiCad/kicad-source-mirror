@@ -438,6 +438,8 @@ public:
 
     static const wxString DesignBlocksPaneName() { return wxS( "DesignBlocks" ); }
 
+    static const wxString RemoteSymbolPaneName() { return wxS( "RemoteSymbol" ); }
+
     static const wxString AppearancePanelName() { return wxS( "LayersManager" ); }
 
     /**

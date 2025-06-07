@@ -35,6 +35,7 @@ include_directories(
     ${CMAKE_SOURCE_DIR}/libs/sexpr/include
     ${INC_AFTER}
     ./dialogs
+    ${CMAKE_SOURCE_DIR}/kicad/pcm
     ./libview
     ./symbol_editor
     ./tools
@@ -135,6 +136,7 @@ set( EESCHEMA_DLGS
     dialogs/dialog_pin_properties_base.cpp
     dialogs/dialog_plot_schematic.cpp
     dialogs/dialog_plot_schematic_base.cpp
+    dialogs/dialog_remote_symbol_config.cpp
     dialogs/dialog_erc_job_config.cpp
     dialogs/dialog_rescue_each.cpp
     dialogs/dialog_rescue_each_base.cpp
@@ -185,6 +187,7 @@ set( EESCHEMA_DLGS
     dialogs/panel_setup_pinmap_base.cpp
     dialogs/panel_simulator_preferences.cpp
     dialogs/panel_simulator_preferences_base.cpp
+    dialogs/panel_sch_data_sources.cpp
     dialogs/panel_sym_color_settings.cpp
     dialogs/panel_sym_color_settings_base.cpp
     dialogs/panel_sym_display_options.cpp
@@ -281,6 +284,7 @@ set( EESCHEMA_WIDGETS
     widgets/panel_sch_selection_filter_base.cpp
     widgets/panel_sch_selection_filter.cpp
     widgets/panel_symbol_chooser.cpp
+    widgets/panel_remote_symbol.cpp
     widgets/pinshape_combobox.cpp
     widgets/pintype_combobox.cpp
     widgets/symbol_diff_widget.cpp
@@ -567,6 +571,7 @@ set_source_files_properties( ${CMAKE_SOURCE_DIR}/common/single_top.cpp PROPERTIE
 
 target_link_libraries( eeschema
     kicommon
+    pcm
     ${wxWidgets_LIBRARIES}
     )
 
@@ -584,6 +589,7 @@ if( KICAD_USE_PCH )
             <map>
             <memory>
             <unordered_map>
+            <core/json_serializers.h>
             <sch_edit_frame.h>
             <string_utils.h>
             <schematic.h>
@@ -599,7 +605,8 @@ target_include_directories( eeschema_kiface_objects
 
 target_link_libraries( eeschema_kiface_objects
     PUBLIC
-        common )
+        common
+        pcm )
 
 # Since we're not using target_link_libraries, we need to explicitly
 # declare the dependency
@@ -620,6 +627,7 @@ target_link_libraries( eeschema_kiface
     PRIVATE
         common
         eeschema_kiface_objects
+        pcm
         markdown_lib
         scripting
         sexpr

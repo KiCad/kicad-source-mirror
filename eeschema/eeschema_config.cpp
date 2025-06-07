@@ -36,6 +36,7 @@
 #include <widgets/hierarchy_pane.h>
 #include <widgets/sch_design_block_pane.h>
 #include <widgets/sch_search_pane.h>
+#include <widgets/panel_remote_symbol.h>
 #include <widgets/panel_sch_selection_filter.h>
 #include <widgets/properties_panel.h>
 #include <settings/app_settings.h>
@@ -368,6 +369,19 @@ void SCH_EDIT_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
         }
 
         m_designBlocksPane->SaveSettings();
+
+        wxAuiPaneInfo& remoteSymbolPane = m_auimgr.GetPane( RemoteSymbolPaneName() );
+        cfg->m_AuiPanels.remote_symbol_show = remoteSymbolPane.IsShown();
+
+        if( remoteSymbolPane.IsDocked() )
+        {
+            cfg->m_AuiPanels.remote_symbol_panel_docked_width = m_remoteSymbolPane->GetSize().x;
+        }
+        else
+        {
+            cfg->m_AuiPanels.remote_symbol_panel_float_height = remoteSymbolPane.floating_size.y;
+            cfg->m_AuiPanels.remote_symbol_panel_float_width = remoteSymbolPane.floating_size.x;
+        }
     }
 }
 

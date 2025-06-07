@@ -33,6 +33,7 @@
                     "enum": [
                         "plugin",
                         "library",
+                        "datasource",
                         "fab",
                         "colortheme"
                     ],

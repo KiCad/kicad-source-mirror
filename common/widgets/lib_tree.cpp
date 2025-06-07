@@ -222,7 +222,7 @@ LIB_TREE::LIB_TREE( wxWindow* aParent, const wxString& aRecentSearchesKey,
     {
         m_query_ctrl->SetDescriptiveText( _( "Filter" ) );
         m_query_ctrl->SetFocus();
-        m_query_ctrl->SetValue( wxEmptyString );
+        m_query_ctrl->ChangeValue( wxEmptyString );
         updateRecentSearchMenu();
 
         // Force an update of the adapter with the empty text to ensure preselect is done

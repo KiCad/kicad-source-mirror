@@ -18,6 +18,10 @@
  */
 
 #include <build_version.h>
+
+#include <tool/tool_manager.h>
+#include <tool/tool_base.h>
+
 #include <widgets/webview_panel.h>
 #include <wx/sizer.h>
 #include <wx/webviewarchivehandler.h>
@@ -25,11 +29,15 @@
 #include <wx/utils.h>
 #include <wx/log.h>
 
-WEBVIEW_PANEL::WEBVIEW_PANEL( wxWindow* aParent, wxWindowID aId, const wxPoint& aPos,
-                             const wxSize& aSize, const int aStyle )
-    : wxPanel( aParent, aId, aPos, aSize, aStyle ),
-      m_initialized( false ),
-      m_browser( wxWebView::New() )
+WEBVIEW_PANEL::WEBVIEW_PANEL( wxWindow* aParent, wxWindowID aId, const wxPoint& aPos, const wxSize& aSize,
+                              const int aStyle, TOOL_MANAGER* aToolManager, TOOL_BASE* aTool ) :
+        wxPanel( aParent, aId, aPos, aSize, aStyle ),
+        m_initialized( false ),
+        m_handleExternalLinks( false ),
+        m_loadError( false ),
+        m_browser( wxWebView::New() ),
+        m_toolManager( aToolManager ),
+        m_tool( aTool )
 {
     wxBoxSizer* sizer = new wxBoxSizer( wxVERTICAL );
 
@@ -66,6 +74,8 @@ WEBVIEW_PANEL::~WEBVIEW_PANEL()
 
 void WEBVIEW_PANEL::LoadURL( const wxString& aURL )
 {
+    wxLogTrace( "webview", "Loading URL: %s", aURL );
+
     if( aURL.starts_with( "file:/" ) && !aURL.starts_with( "file:///" ) )
     {
         wxString new_url = wxString( "file:///" ) + aURL.AfterFirst( '/' );
@@ -84,26 +94,52 @@ void WEBVIEW_PANEL::LoadURL( const wxString& aURL )
 
 void WEBVIEW_PANEL::SetPage( const wxString& aHtmlContent )
 {
+    wxLogTrace( "webview", "Setting page content" );
     m_browser->SetPage( aHtmlContent, "file://" );
 }
 
 bool WEBVIEW_PANEL::AddMessageHandler( const wxString& aName, MESSAGE_HANDLER aHandler )
 {
-    m_msgHandlers.emplace( aName, std::move(aHandler) );
+    wxLogTrace( "webview", "Adding message handler for: %s", aName );
+    auto it = m_msgHandlers.find( aName );
+
+    if( it != m_msgHandlers.end() )
+    {
+        it->second = std::move( aHandler );
+        return true;
+    }
+
+    m_msgHandlers.emplace( aName, std::move( aHandler ) );
+
+    if( m_initialized )
+    {
+        if( !m_browser->AddScriptMessageHandler( aName ) )
+            wxLogDebug( "Could not add script message handler %s", aName );
+    }
+
     return true;
 }
 
 void WEBVIEW_PANEL::ClearMessageHandlers()
 {
+    wxLogTrace( "webview", "Clearing all message handlers" );
+
+    for( const auto& handler : m_msgHandlers )
+        m_browser->RemoveScriptMessageHandler( handler.first );
+
     m_msgHandlers.clear();
 }
 
 void WEBVIEW_PANEL::OnNavigationRequest( wxWebViewEvent& aEvt )
 {
+    m_loadError = false;
+    wxLogTrace( "webview", "Navigation request to URL: %s", aEvt.GetURL() );
     // Default behavior: open external links in the system browser
     bool isExternal = aEvt.GetURL().StartsWith( "http://" ) || aEvt.GetURL().StartsWith( "https://" );
-    if( isExternal )
+
+    if( isExternal && !m_handleExternalLinks )
     {
+        wxLogTrace( "webview", "Opening external URL in system browser: %s", aEvt.GetURL() );
         wxLaunchDefaultBrowser( aEvt.GetURL() );
         aEvt.Veto();
     }
@@ -114,23 +150,17 @@ void WEBVIEW_PANEL::OnWebViewLoaded( wxWebViewEvent& aEvt )
     if( !m_initialized )
     {
         // Defer handler registration to avoid running during modal dialog/yield
-        CallAfter([this]() {
-            static bool handler_added_inner = false;
-            if (!handler_added_inner) {
-
-                for( const auto& handler : m_msgHandlers )
+        auto initFunc = [this]() {
+            for( const auto& handler : m_msgHandlers )
+            {
+                if( !m_browser->AddScriptMessageHandler( handler.first ) )
                 {
-                    if( !m_browser->AddScriptMessageHandler( handler.first ) )
-                    {
-                        wxLogDebug( "Could not add script message handler %s", handler.first );
-                    }
+                    wxLogDebug( "Could not add script message handler %s", handler.first );
                 }
-
-                handler_added_inner = true;
             }
 
-            // Inject navigation hook for SPA/JS navigation to prevent webkit crashing without new window
-            m_browser->AddUserScript(R"(
+             // Inject navigation hook for SPA/JS navigation to prevent webkit crashing without new window
+            m_browser->AddUserScript( R"(
                 (function() {
                     // Change window.open to navigate in the same window
                     window.open = function(url) { if (url) window.location.href = url; return null; };
@@ -153,11 +183,19 @@ void WEBVIEW_PANEL::OnWebViewLoaded( wxWebViewEvent& aEvt )
                         });
                     }
                 })();
-            )");
-        });
+            )" );
+
+        };
+
+        if( m_toolManager && m_tool )
+            m_toolManager->RunMainStack( m_tool, initFunc );
+        else
+            CallAfter( initFunc );
 
         m_initialized = true;
     }
+
+    aEvt.Skip();
 }
 
 void WEBVIEW_PANEL::OnNewWindow( wxWebViewEvent& aEvt )
@@ -173,22 +211,30 @@ void WEBVIEW_PANEL::OnNewWindow( wxWebViewEvent& aEvt )
 void WEBVIEW_PANEL::OnScriptMessage( wxWebViewEvent& aEvt )
 {
     wxLogTrace( "webview", "Script message received: %s for handler %s", aEvt.GetString(), aEvt.GetMessageHandler() );
+    wxString handler = aEvt.GetMessageHandler();
+    handler.Trim(true).Trim(false);
 
-    if( aEvt.GetMessageHandler().IsEmpty() )
+    if( handler.IsEmpty() )
     {
-        wxLogDebug( "No message handler specified for script message: %s", aEvt.GetString() );
+        for( auto handlerPair : m_msgHandlers )
+        {
+            wxLogTrace( "webview", "No handler specified, trying: %s", handlerPair.first );
+            handlerPair.second( aEvt.GetString() );
+        }
+
         return;
     }
 
-    auto it = m_msgHandlers.find( aEvt.GetMessageHandler() );
+    auto it = m_msgHandlers.find( handler );
+
     if( it == m_msgHandlers.end() )
     {
-        wxLogDebug( "No handler registered for message: %s", aEvt.GetMessageHandler() );
+        wxLogDebug( "No handler registered for message: %s", handler );
         return;
     }
 
     // Call the registered handler with the message
-    wxLogTrace( "webview", "Calling handler for message: %s", aEvt.GetMessageHandler() );
+    wxLogTrace( "webview", "Calling handler for message: %s", handler );
     it->second( aEvt.GetString() );
 }
 
@@ -200,5 +246,6 @@ void WEBVIEW_PANEL::OnScriptResult( wxWebViewEvent& aEvt )
 
 void WEBVIEW_PANEL::OnError( wxWebViewEvent& aEvt )
 {
+    m_loadError = true;
     wxLogDebug( "WebView error: %s", aEvt.GetString() );
 }

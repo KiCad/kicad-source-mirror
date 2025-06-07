@@ -133,6 +133,7 @@ public:
     int ShowNetNavigator( const TOOL_EVENT& aEvent );
     int ToggleProperties( const TOOL_EVENT& aEvent );
     int ToggleLibraryTree( const TOOL_EVENT& aEvent );
+    int ToggleRemoteSymbolPanel( const TOOL_EVENT& aEvent );
 
     int ToggleHiddenPins( const TOOL_EVENT& aEvent );
     int ToggleHiddenFields( const TOOL_EVENT& aEvent );

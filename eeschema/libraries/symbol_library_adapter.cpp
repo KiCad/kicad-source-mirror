@@ -19,6 +19,7 @@
  */
 
 #include <magic_enum.hpp>
+#include <memory>
 
 #include <common.h>
 #include <dialog_shim.h>
@@ -212,7 +213,62 @@ LIB_SYMBOL* SYMBOL_LIBRARY_ADAPTER::LoadSymbol( const wxString& aNickname, const
 SYMBOL_LIBRARY_ADAPTER::SAVE_T SYMBOL_LIBRARY_ADAPTER::SaveSymbol( const wxString& aNickname,
         const LIB_SYMBOL* aSymbol, bool aOverwrite )
 {
-    wxCHECK_MSG( false, SAVE_SKIPPED, "Unimplemented!" );
+    wxCHECK( aSymbol, SAVE_SKIPPED );
+
+    LIBRARY_RESULT<LIB_DATA*> libResult = loadIfNeeded( aNickname );
+
+    if( !libResult.has_value() )
+    {
+        wxLogTrace( traceLibraries, "SaveSymbol: unable to load library %s: %s",
+                    aNickname, libResult.error().message );
+        return SAVE_SKIPPED;
+    }
+
+    LIB_DATA* lib = *libResult;
+
+    if( !lib )
+    {
+        wxLogTrace( traceLibraries, "SaveSymbol: library %s not found", aNickname );
+        return SAVE_SKIPPED;
+    }
+
+    SCH_IO* plugin = schplugin( lib );
+    wxCHECK( plugin, SAVE_SKIPPED );
+
+    std::map<std::string, UTF8> options = lib->row->GetOptionsMap();
+
+    if( !aOverwrite )
+    {
+        try
+        {
+            std::unique_ptr<LIB_SYMBOL> existing( plugin->LoadSymbol( getUri( lib->row ),
+                                                                      aSymbol->GetName(),
+                                                                      &options ) );
+
+            if( existing )
+                return SAVE_SKIPPED;
+        }
+        catch( const IO_ERROR& e )
+        {
+            wxLogTrace( traceLibraries,
+                        "SaveSymbol: error checking for existing symbol %s:%s: %s",
+                        aNickname, aSymbol->GetName(), e.What() );
+            return SAVE_SKIPPED;
+        }
+    }
+
+    try
+    {
+        plugin->SaveSymbol( getUri( lib->row ), aSymbol, &options );
+    }
+    catch( const IO_ERROR& e )
+    {
+        wxLogTrace( traceLibraries, "SaveSymbol: error saving %s:%s: %s",
+                    aNickname, aSymbol->GetName(), e.What() );
+        return SAVE_SKIPPED;
+    }
+
+    return SAVE_OK;
 }
 
 

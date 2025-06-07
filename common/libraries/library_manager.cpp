@@ -656,6 +656,14 @@ std::optional<LIBRARY_TABLE_ROW*> LIBRARY_MANAGER::FindRowByURI( LIBRARY_TABLE_T
 }
 
 
+void LIBRARY_MANAGER::ReloadLibraryEntry( LIBRARY_TABLE_TYPE aType, const wxString& aNickname,
+                                          LIBRARY_TABLE_SCOPE aScope )
+{
+    if( std::optional<LIBRARY_MANAGER_ADAPTER*> adapter = Adapter( aType ); adapter )
+        ( *adapter )->ReloadLibraryEntry( aNickname, aScope );
+}
+
+
 void LIBRARY_MANAGER::LoadProjectTables( const wxString& aProjectPath )
 {
     if( wxFileName::IsDirReadable( aProjectPath ) )
@@ -810,7 +818,7 @@ void LIBRARY_MANAGER_ADAPTER::CheckTableRow( LIBRARY_TABLE_ROW& aRow )
         aRow.SetErrorDescription( plugin.error().message );
     }
 }
-    
+
 
 
 LIBRARY_TABLE* LIBRARY_MANAGER_ADAPTER::GlobalTable() const
@@ -1003,6 +1011,59 @@ std::vector<std::pair<wxString, LIB_STATUS>> LIBRARY_MANAGER_ADAPTER::GetLibrary
 }
 
 
+void LIBRARY_MANAGER_ADAPTER::ReloadLibraryEntry( const wxString& aNickname,
+                                                  LIBRARY_TABLE_SCOPE aScope )
+{
+    auto reloadScope =
+            [&]( LIBRARY_TABLE_SCOPE aScopeToReload, std::map<wxString, LIB_DATA>& aTarget,
+                 std::mutex& aMutex )
+            {
+                bool wasLoaded = false;
+
+                {
+                    std::lock_guard lock( aMutex );
+                    auto it = aTarget.find( aNickname );
+
+                    if( it != aTarget.end() && it->second.plugin )
+                    {
+                        wasLoaded = true;
+                        aTarget.erase( it );
+                    }
+                }
+
+                if( wasLoaded )
+                {
+                    if( LIBRARY_RESULT<LIB_DATA*> result =
+                                loadFromScope( aNickname, aScopeToReload, aTarget, aMutex );
+                            !result.has_value() )
+                    {
+                        wxLogTrace( traceLibraries,
+                                    "ReloadLibraryEntry: failed to reload %s (%s): %s",
+                                    aNickname, magic_enum::enum_name( aScopeToReload ),
+                                    result.error().message );
+                    }
+                }
+            };
+
+    switch( aScope )
+    {
+    case LIBRARY_TABLE_SCOPE::GLOBAL:
+        reloadScope( LIBRARY_TABLE_SCOPE::GLOBAL, globalLibs(), globalLibsMutex() );
+        break;
+
+    case LIBRARY_TABLE_SCOPE::PROJECT:
+        reloadScope( LIBRARY_TABLE_SCOPE::PROJECT, m_libraries, m_libraries_mutex );
+        break;
+
+    case LIBRARY_TABLE_SCOPE::BOTH:
+    case LIBRARY_TABLE_SCOPE::UNINITIALIZED:
+        reloadScope( LIBRARY_TABLE_SCOPE::PROJECT, m_libraries, m_libraries_mutex );
+        reloadScope( LIBRARY_TABLE_SCOPE::GLOBAL, globalLibs(), globalLibsMutex() );
+        break;
+    }
+}
+
+
 bool LIBRARY_MANAGER_ADAPTER::IsWritable( const wxString& aNickname ) const
 {
     if( std::optional<const LIB_DATA*> result = fetchIfLoaded( aNickname ) )
@@ -1078,56 +1139,56 @@ std::optional<LIB_DATA*> LIBRARY_MANAGER_ADAPTER::fetchIfLoaded(
 }
 
 
-LIBRARY_RESULT<LIB_DATA*> LIBRARY_MANAGER_ADAPTER::loadIfNeeded( const wxString& aNickname )
+LIBRARY_RESULT<LIB_DATA*> LIBRARY_MANAGER_ADAPTER::loadFromScope( const wxString& aNickname,
+        LIBRARY_TABLE_SCOPE aScope, std::map<wxString, LIB_DATA>& aTarget, std::mutex& aMutex )
 {
-    auto tryLoadFromScope =
-            [&]( LIBRARY_TABLE_SCOPE aScope, std::map<wxString, LIB_DATA>& aTarget,
-                 std::mutex& aMutex ) -> LIBRARY_RESULT<LIB_DATA*>
+    bool present = false;
+
+    {
+        std::lock_guard lock( aMutex );
+        present = aTarget.contains( aNickname ) && aTarget.at( aNickname ).plugin;
+    }
+
+    if( !present )
+    {
+        if( auto result = m_manager.GetRow( Type(), aNickname, aScope ) )
+        {
+            const LIBRARY_TABLE_ROW* row = *result;
+            wxLogTrace( traceLibraries, "Library %s (%s) not yet loaded, will attempt...",
+                        aNickname, magic_enum::enum_name( aScope ) );
+
+            if( LIBRARY_RESULT<IO_BASE*> plugin = createPlugin( row ); plugin.has_value() )
             {
-                bool present = false;
+                std::lock_guard lock( aMutex );
 
-                {
-                    std::lock_guard lock( aMutex );
-                    present = aTarget.contains( aNickname ) && aTarget.at( aNickname ).plugin;
-                }
-
-                if( !present )
-                {
-                    if( auto result = m_manager.GetRow( Type(), aNickname, aScope ) )
-                    {
-                        const LIBRARY_TABLE_ROW* row = *result;
-                        wxLogTrace( traceLibraries, "Library %s (%s) not yet loaded, will attempt...",
-                                    aNickname, magic_enum::enum_name( aScope ) );
-
-                        if( LIBRARY_RESULT<IO_BASE*> plugin = createPlugin( row ); plugin.has_value() )
-                        {
-                            std::lock_guard lock( aMutex );
-
-                            aTarget[ row->Nickname() ].status.load_status = LOAD_STATUS::LOADING;
-                            aTarget[ row->Nickname() ].row = row;
-                            aTarget[ row->Nickname() ].plugin.reset( *plugin );
-
-                            return &aTarget.at( aNickname );
-                        }
-                        else
-                        {
-                            return tl::unexpected( plugin.error() );
-                        }
-                    }
-
-                    return nullptr;
-                }
+                aTarget[ row->Nickname() ].status.load_status = LOAD_STATUS::LOADING;
+                aTarget[ row->Nickname() ].row = row;
+                aTarget[ row->Nickname() ].plugin.reset( *plugin );
 
                 return &aTarget.at( aNickname );
-            };
+            }
+            else
+            {
+                return tl::unexpected( plugin.error() );
+            }
+        }
 
-    LIBRARY_RESULT<LIB_DATA*> result = tryLoadFromScope( LIBRARY_TABLE_SCOPE::PROJECT, m_libraries,
-                                                         m_libraries_mutex );
+        return nullptr;
+    }
+
+    return &aTarget.at( aNickname );
+}
+
+
+LIBRARY_RESULT<LIB_DATA*> LIBRARY_MANAGER_ADAPTER::loadIfNeeded( const wxString& aNickname )
+{
+    LIBRARY_RESULT<LIB_DATA*> result =
+            loadFromScope( aNickname, LIBRARY_TABLE_SCOPE::PROJECT, m_libraries, m_libraries_mutex );
 
     if( !result.has_value() || *result )
         return result;
 
-    result = tryLoadFromScope( LIBRARY_TABLE_SCOPE::GLOBAL, globalLibs(), globalLibsMutex() );
+    result = loadFromScope( aNickname, LIBRARY_TABLE_SCOPE::GLOBAL, globalLibs(), globalLibsMutex() );
 
     if( !result.has_value() || *result )
         return result;

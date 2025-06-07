@@ -1,0 +1,4 @@
+* Simple capacitor SPICE model used by the WebView test harness
+.subckt C0603 1 2
+C1 1 2 100n
+.ends C0603

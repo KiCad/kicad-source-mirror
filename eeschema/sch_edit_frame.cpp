@@ -33,6 +33,7 @@
 #include <dialogs/dialog_book_reporter.h>
 #include <dialogs/dialog_symbol_fields_table.h>
 #include <widgets/sch_design_block_pane.h>
+#include <widgets/panel_remote_symbol.h>
 #include <wx/srchctrl.h>
 #include <mail_type.h>
 #include <wx/clntdata.h>
@@ -165,7 +166,8 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
         m_netNavigatorFilterValue(),
         m_netNavigatorMenuNetName(),
         m_highlightedConnChanged( false ),
-        m_designBlocksPane( nullptr )
+        m_designBlocksPane( nullptr ),
+        m_remoteSymbolPane( nullptr )
 {
     m_maximizeByDefault = true;
     m_schematic = new SCHEMATIC( &Prj() );
@@ -226,6 +228,7 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     m_searchPane = new SCH_SEARCH_PANE( this );
     m_propertiesPanel = new SCH_PROPERTIES_PANEL( this, this );
+    m_remoteSymbolPane = new PANEL_REMOTE_SYMBOL( this );
 
     m_propertiesPanel->SetSplitterProportion( eeconfig()->m_AuiPanels.properties_splitter );
 
@@ -265,6 +268,7 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_auimgr.AddPane( m_selectionFilterPanel, defaultSchSelectionFilterPaneInfo( this ) );
 
     m_auimgr.AddPane( m_designBlocksPane, defaultDesignBlocksPaneInfo( this ) );
+    m_auimgr.AddPane( m_remoteSymbolPane, defaultRemoteSymbolPaneInfo( this ) );
 
     m_auimgr.AddPane( createHighlightedNetNavigator(), defaultNetNavigatorPaneInfo() );
 
@@ -298,11 +302,18 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     wxAuiPaneInfo& propertiesPane = m_auimgr.GetPane( PropertiesPaneName() );
     wxAuiPaneInfo& selectionFilterPane = m_auimgr.GetPane( wxS( "SelectionFilter" ) );
     wxAuiPaneInfo& designBlocksPane = m_auimgr.GetPane( DesignBlocksPaneName() );
+    wxAuiPaneInfo& remoteSymbolPane = m_auimgr.GetPane( RemoteSymbolPaneName() );
 
     hierarchy_pane.Show( aui_cfg.show_schematic_hierarchy );
     netNavigatorPane.Show( aui_cfg.show_net_nav_panel );
     propertiesPane.Show( aui_cfg.show_properties );
     designBlocksPane.Show( aui_cfg.design_blocks_show );
+
+    if( m_remoteSymbolPane && !m_remoteSymbolPane->HasDataSources() )
+        remoteSymbolPane.Show( false );
+    else
+        remoteSymbolPane.Show( aui_cfg.remote_symbol_show );
+
     updateSelectionFilterVisbility();
 
     // The selection filter doesn't need to grow in the vertical direction when docked
@@ -351,6 +362,9 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     if( aui_cfg.design_blocks_show )
         SetAuiPaneSize( m_auimgr, designBlocksPane, aui_cfg.design_blocks_panel_docked_width, -1 );
+
+    if( aui_cfg.remote_symbol_show )
+        SetAuiPaneSize( m_auimgr, remoteSymbolPane, aui_cfg.remote_symbol_panel_docked_width, -1 );
 
     if( aui_cfg.hierarchy_panel_docked_width > 0 )
     {
@@ -728,6 +742,12 @@ void SCH_EDIT_FRAME::setupUIConditions()
                 return m_auimgr.GetPane( DesignBlocksPaneName() ).IsShown();
             };
 
+    auto remoteSymbolCond =
+            [ this ] (const SELECTION& aSel )
+            {
+                return m_auimgr.GetPane( RemoteSymbolPaneName() ).IsShown();
+            };
+
     auto undoCond =
             [ this ] (const SELECTION& aSel )
             {
@@ -763,6 +783,7 @@ void SCH_EDIT_FRAME::setupUIConditions()
     mgr->SetConditions( SCH_ACTIONS::showNetNavigator,     CHECK( netNavigatorCond ) );
     mgr->SetConditions( ACTIONS::showProperties,           CHECK( propertiesCond ) );
     mgr->SetConditions( SCH_ACTIONS::showDesignBlockPanel, CHECK( designBlockCond ) );
+    mgr->SetConditions( SCH_ACTIONS::showRemoteSymbolPanel, CHECK( remoteSymbolCond ) );
     mgr->SetConditions( ACTIONS::toggleGrid,               CHECK( cond.GridVisible() ) );
     mgr->SetConditions( ACTIONS::toggleGridOverrides,      CHECK( cond.GridOverrides() ) );
 
@@ -2001,6 +2022,7 @@ void SCH_EDIT_FRAME::ShowChangedLanguage()
     m_auimgr.GetPane( m_selectionFilterPanel ).Caption( _( "Selection Filter" ) );
     m_auimgr.GetPane( m_propertiesPanel ).Caption( _( "Properties" ) );
     m_auimgr.GetPane( m_designBlocksPane ).Caption( _( "Design Blocks" ) );
+    m_auimgr.GetPane( RemoteSymbolPaneName() ).Caption( _( "Remote Symbols" ) );
     m_auimgr.Update();
     m_hierarchy->UpdateHierarchyTree();
 
@@ -2894,6 +2916,47 @@ void SCH_EDIT_FRAME::ToggleLibraryTree()
         else
         {
             cfg->m_AuiPanels.design_blocks_panel_docked_width = m_designBlocksPane->GetSize().x;
+        }
+
+        m_auimgr.Update();
+    }
+}
+
+
+void SCH_EDIT_FRAME::ToggleRemoteSymbolPanel()
+{
+    EESCHEMA_SETTINGS* cfg = eeconfig();
+
+    wxCHECK( cfg, /* void */ );
+
+    wxAuiPaneInfo& remotePane = m_auimgr.GetPane( RemoteSymbolPaneName() );
+
+    remotePane.Show( !remotePane.IsShown() );
+
+    if( remotePane.IsShown() )
+    {
+        if( remotePane.IsFloating() )
+        {
+            remotePane.FloatingSize( cfg->m_AuiPanels.remote_symbol_panel_float_width,
+                                     cfg->m_AuiPanels.remote_symbol_panel_float_height );
+            m_auimgr.Update();
+        }
+        else if( cfg->m_AuiPanels.remote_symbol_panel_docked_width > 0 )
+        {
+            SetAuiPaneSize( m_auimgr, remotePane,
+                            cfg->m_AuiPanels.remote_symbol_panel_docked_width, -1 );
+        }
+    }
+    else
+    {
+        if( remotePane.IsFloating() )
+        {
+            cfg->m_AuiPanels.remote_symbol_panel_float_width  = remotePane.floating_size.x;
+            cfg->m_AuiPanels.remote_symbol_panel_float_height = remotePane.floating_size.y;
+        }
+        else if( m_remoteSymbolPane )
+        {
+            cfg->m_AuiPanels.remote_symbol_panel_docked_width = m_remoteSymbolPane->GetSize().x;
         }
 
         m_auimgr.Update();

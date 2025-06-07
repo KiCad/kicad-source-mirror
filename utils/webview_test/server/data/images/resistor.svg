@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="160" height="100" viewBox="0 0 160 100">
+  <rect width="160" height="100" fill="#f5f5f5" rx="12" />
+  <line x1="20" y1="50" x2="50" y2="50" stroke="#0d47a1" stroke-width="6" stroke-linecap="round" />
+  <polyline points="50,50 60,35 70,65 80,35 90,65 100,35 110,65 120,35 130,50" fill="none" stroke="#ff6f00" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" />
+  <line x1="130" y1="50" x2="140" y2="50" stroke="#0d47a1" stroke-width="6" stroke-linecap="round" />
+  <text x="80" y="88" font-family="Arial, sans-serif" font-size="20" text-anchor="middle" fill="#333">R0603</text>
+</svg>

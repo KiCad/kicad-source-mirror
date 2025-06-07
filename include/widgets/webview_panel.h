@@ -25,13 +25,17 @@
 #include <functional>
 #include <map>
 
+class TOOL_MANAGER;
+class TOOL_BASE;
+
 class WEBVIEW_PANEL : public wxPanel
 {
 public:
     using MESSAGE_HANDLER = std::function<void( const wxString& )>;
 
     explicit WEBVIEW_PANEL( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition,
-                            const wxSize& size = wxDefaultSize, const int style = 0 );
+                            const wxSize& size = wxDefaultSize, const int style = 0,
+                            TOOL_MANAGER* aToolManager = nullptr, TOOL_BASE* aTool = nullptr );
     ~WEBVIEW_PANEL() override;
 
     wxWebView* GetWebView() const { return m_browser; }
@@ -42,6 +46,16 @@ public:
     bool AddMessageHandler( const wxString& name, MESSAGE_HANDLER handler );
     void ClearMessageHandlers();
 
+    void SetHandleExternalLinks( bool aHandle ) { m_handleExternalLinks = aHandle; }
+    bool GetHandleExternalLinks() const { return m_handleExternalLinks; }
+
+    void RunScriptAsync( const wxString& aScript, void* aClientData = nullptr ) const
+    {
+        m_browser->RunScriptAsync( aScript, aClientData );
+    }
+
+    bool HasLoadError() const { return m_loadError; }
+
 protected:
     void OnNavigationRequest( wxWebViewEvent& evt );
     void OnWebViewLoaded( wxWebViewEvent& evt );
@@ -51,9 +65,14 @@ protected:
     void OnError( wxWebViewEvent& evt );
 
 private:
+
     bool                                m_initialized;
+    bool                                m_handleExternalLinks;
+    bool                                m_loadError;
     wxWebView*                          m_browser;
     std::map<wxString, MESSAGE_HANDLER> m_msgHandlers;
+    TOOL_MANAGER*                       m_toolManager;
+    TOOL_BASE*                          m_tool;
 };
 
 #endif // WEBVIEW_PANEL_H

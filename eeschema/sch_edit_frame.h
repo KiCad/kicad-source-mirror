@@ -35,6 +35,7 @@
 #include <wx/string.h>
 #include <wx/treectrl.h>
 #include <wx/utils.h>
+#include <wx/filename.h>
 
 #include <core/typeinfo.h>
 #include <eda_base_frame.h>
@@ -57,6 +58,7 @@ class SCH_JUNCTION;
 class SCHEMATIC;
 class SCH_COMMIT;
 class SCH_DESIGN_BLOCK_PANE;
+class PANEL_REMOTE_SYMBOL;
 class DIALOG_BOOK_REPORTER;
 class DIALOG_ERC;
 class DIALOG_SYMBOL_FIELDS_TABLE;
@@ -816,6 +818,9 @@ public:
 
     void ToggleLibraryTree() override;
 
+    void ToggleRemoteSymbolPanel();
+
+
     DIALOG_BOOK_REPORTER* GetSymbolDiffDialog();
 
     DIALOG_ERC* GetErcDialog();
@@ -1061,6 +1066,7 @@ private:
 
     std::vector<LIB_ID>         m_designBlockHistoryList;
     SCH_DESIGN_BLOCK_PANE*      m_designBlocksPane;
+    PANEL_REMOTE_SYMBOL*        m_remoteSymbolPane;
 
     wxChoice*                   m_currentVariantCtrl;
 

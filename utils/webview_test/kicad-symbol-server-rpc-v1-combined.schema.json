@@ -1,0 +1,377 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://go.kicad.org/schemas/kicad-rpc-v1-message-combined.json",
+  "title": "KiCad Remote Content Protocol Message (v1, combined)",
+  "type": "object",
+  "additionalProperties": false,
+
+  "required": [
+    "version",
+    "session_id",
+    "message_id",
+    "command"
+  ],
+
+  "properties": {
+    "version": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Protocol major version. For this schema: 1."
+    },
+
+    "session_id": {
+      "type": "string",
+      "description": "Session UUID (UUID-4).",
+      "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-4[0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$"
+    },
+
+    "message_id": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Monotonically increasing per-session message ID, starting at 1."
+    },
+
+    "response_to": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "If present, refers to the message_id of the message being responded to."
+    },
+
+    "command": {
+      "type": "string",
+      "description": "Command name for this message.",
+      "enum": [
+        "NEW_SESSION",
+        "GET_KICAD_VERSION",
+        "LIST_SUPPORTED_VERSIONS",
+        "CAPABILITIES",
+        "PING",
+        "PONG",
+        "LOGOUT",
+        "DL_FOOTPRINT",
+        "DL_SYMBOL",
+        "DL_SPICE",
+        "DL_3DMODEL"
+      ]
+    },
+
+    "status": {
+      "type": "string",
+      "description": "Status of the message, especially for responses.",
+      "enum": ["OK", "ERROR", "PENDING"]
+    },
+
+    "error_code": {
+      "type": "string",
+      "description": "Machine-readable error code when status == ERROR.",
+      "enum": [
+        "UNKNOWN_COMMAND",
+        "UNSUPPORTED_VERSION",
+        "INVALID_PARAMETERS",
+        "INVALID_PAYLOAD",
+        "INTERNAL_ERROR",
+        "TOO_LARGE",
+        "UNAUTHORIZED_ORIGIN",
+        "NOT_FOUND",
+        "CONFLICT"
+      ]
+    },
+
+    "error_message": {
+      "type": "string",
+      "description": "Human-readable error description when status == ERROR."
+    },
+
+    "parameters": {
+      "type": "object",
+      "description": "Command-specific parameters. Keys are strings; values are arbitrary JSON.",
+      "additionalProperties": true
+    },
+
+    "data": {
+      "type": "string",
+      "description": "Optional payload data. Typically base64-encoded, possibly compressed.",
+      "contentEncoding": "base64"
+    }
+  },
+
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "status": { "const": "ERROR" }
+        },
+        "required": ["status"]
+      },
+      "then": {
+        "required": ["error_code"]
+      }
+    },
+    {
+      "oneOf": [
+        {
+          "title": "NEW_SESSION message",
+          "properties": {
+            "command": { "const": "NEW_SESSION" },
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "client_name": { "type": "string" },
+                "client_version": { "type": "string" },
+                "supported_versions": {
+                  "type": "array",
+                  "items": { "type": "integer", "minimum": 1 }
+                },
+                "server_name": { "type": "string" },
+                "server_version": { "type": "string" },
+                "reason": { "type": "string" }
+              },
+              "additionalProperties": true
+            }
+          }
+        },
+
+        {
+          "title": "GET_KICAD_VERSION message",
+          "properties": {
+            "command": { "const": "GET_KICAD_VERSION" },
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "kicad_version": { "type": "string" }
+              },
+              "additionalProperties": true
+            }
+          }
+        },
+
+        {
+          "title": "LIST_SUPPORTED_VERSIONS message",
+          "properties": {
+            "command": { "const": "LIST_SUPPORTED_VERSIONS" },
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "supported_versions": {
+                  "type": "array",
+                  "items": { "type": "integer", "minimum": 1 }
+                }
+              },
+              "additionalProperties": true
+            }
+          }
+        },
+
+        {
+          "title": "CAPABILITIES message",
+          "properties": {
+            "command": { "const": "CAPABILITIES" },
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "commands": {
+                  "type": "array",
+                  "items": { "type": "string" }
+                },
+                "max_message_size": {
+                  "type": "number",
+                  "minimum": 0
+                },
+                "compression": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "enum": ["NONE", "ZSTD"]
+                  }
+                }
+              },
+              "additionalProperties": true
+            }
+          }
+        },
+
+        {
+          "title": "PING message",
+          "properties": {
+            "command": { "const": "PING" },
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "nonce": {
+                  "type": ["string", "number"]
+                }
+              },
+              "additionalProperties": true
+            }
+          }
+        },
+
+        {
+          "title": "PONG message",
+          "properties": {
+            "command": { "const": "PONG" },
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "nonce": {
+                  "type": ["string", "number"]
+                },
+                "latency_ms": {
+                  "type": "number",
+                  "minimum": 0
+                }
+              },
+              "additionalProperties": true
+            }
+          }
+        },
+
+        {
+          "title": "LOGOUT message",
+          "properties": {
+            "command": { "const": "LOGOUT" },
+            "parameters": {
+              "type": "object",
+              "additionalProperties": true
+            }
+          }
+        },
+
+        {
+          "title": "DL_FOOTPRINT message",
+          "properties": {
+            "command": { "const": "DL_FOOTPRINT" },
+            "parameters": {
+              "type": "object",
+              "required": ["mode", "compression", "content_type"],
+              "properties": {
+                "mode": {
+                  "type": "string",
+                  "enum": ["SAVE", "PLACE"]
+                },
+                "compression": {
+                  "type": "string",
+                  "enum": ["NONE", "ZSTD"]
+                },
+                "content_type": {
+                  "type": "string",
+                  "enum": ["KICAD_FOOTPRINT_V1"]
+                },
+                "library": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": true
+            },
+            "required": ["command", "parameters", "data"]
+          }
+        },
+
+        {
+          "title": "DL_SYMBOL message",
+          "properties": {
+            "command": { "const": "DL_SYMBOL" },
+            "parameters": {
+              "type": "object",
+              "required": ["mode", "compression", "content_type"],
+              "properties": {
+                "mode": {
+                  "type": "string",
+                  "enum": ["SAVE", "PLACE"]
+                },
+                "compression": {
+                  "type": "string",
+                  "enum": ["NONE", "ZSTD"]
+                },
+                "content_type": {
+                  "type": "string",
+                  "enum": ["KICAD_SYMBOL_V1"]
+                },
+                "library": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": true
+            },
+            "required": ["command", "parameters", "data"]
+          }
+        },
+
+        {
+          "title": "DL_SPICE message",
+          "properties": {
+            "command": { "const": "DL_SPICE" },
+            "parameters": {
+              "type": "object",
+              "required": ["mode", "compression", "content_type"],
+              "properties": {
+                "mode": {
+                  "type": "string",
+                  "enum": ["SAVE", "PLACE"]
+                },
+                "compression": {
+                  "type": "string",
+                  "enum": ["NONE", "ZSTD"]
+                },
+                "content_type": {
+                  "type": "string",
+                  "enum": ["KICAD_SPICE_MODEL_V1"]
+                },
+                "library": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": true
+            },
+            "required": ["command", "parameters", "data"]
+          }
+        },
+
+        {
+          "title": "DL_3DMODEL message",
+          "properties": {
+            "command": { "const": "DL_3DMODEL" },
+            "parameters": {
+              "type": "object",
+              "required": ["mode", "compression", "content_type"],
+              "properties": {
+                "mode": {
+                  "type": "string",
+                  "enum": ["SAVE", "PLACE"]
+                },
+                "compression": {
+                  "type": "string",
+                  "enum": ["NONE", "ZSTD"]
+                },
+                "content_type": {
+                  "type": "string",
+                  "enum": [
+                    "KICAD_3D_MODEL_STEP",
+                    "KICAD_3D_MODEL_WRL"
+                  ]
+                },
+                "library": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": true
+            },
+            "required": ["command", "parameters", "data"]
+          }
+        }
+      ]
+    }
+  ]
+}

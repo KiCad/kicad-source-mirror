@@ -148,6 +148,9 @@ public:
     /// Returns a list of all library nicknames and their status (even if they failed to load)
     std::vector<std::pair<wxString, LIB_STATUS>> GetLibraryStatuses() const;
 
+    void ReloadLibraryEntry( const wxString& aNickname,
+                             LIBRARY_TABLE_SCOPE aScope = LIBRARY_TABLE_SCOPE::BOTH );
+
     /// Return true if the given nickname exists and is not a read-only library
     virtual bool IsWritable( const wxString& aNickname ) const;
 
@@ -173,6 +176,11 @@ protected:
 
     /// Fetches a loaded library, triggering a load of that library if it isn't loaded yet
     LIBRARY_RESULT<LIB_DATA*> loadIfNeeded( const wxString& aNickname );
+
+    LIBRARY_RESULT<LIB_DATA*> loadFromScope( const wxString& aNickname,
+                                             LIBRARY_TABLE_SCOPE aScope,
+                                             std::map<wxString, LIB_DATA>& aTarget,
+                                             std::mutex& aMutex );
 
     /// Aborts any async load in progress; blocks until fully done aborting
     void abortLoad();
@@ -271,6 +279,9 @@ public:
                                                     const wxString &aUri,
                                                     LIBRARY_TABLE_SCOPE aScope =
                                                             LIBRARY_TABLE_SCOPE::BOTH ) const;
+
+    void ReloadLibraryEntry( LIBRARY_TABLE_TYPE aType, const wxString& aNickname,
+                             LIBRARY_TABLE_SCOPE aScope = LIBRARY_TABLE_SCOPE::BOTH );
 
     void LoadProjectTables( const wxString& aProjectPath );
 

@@ -1,0 +1,18 @@
+{
+  "Parts": [
+    {
+      "Name": "Resistor 0603 1k",
+      "Image": "images/resistor.svg",
+      "Symbol": "symbols/r.kicad_sym",
+      "Footprint": "footprints/R_0603_1608Metric.kicad_mod",
+      "SPICE Model": "spice/resistor.cir",
+      "3D Model": "3dmodels/R_0603_1608Metric.step"
+    },
+    {
+      "Name": "Capacitor 0603 100nF",
+      "Symbol": "symbols/c.kicad_sym",
+      "Footprint": "footprints/R_0603_1608Metric.kicad_mod",
+      "SPICE Model": "spice/capacitor.cir"
+    }
+  ]
+}

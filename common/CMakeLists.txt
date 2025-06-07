@@ -720,6 +720,7 @@ set( COMMON_SRCS
     refdes_utils.cpp
     reference_image.cpp
     render_settings.cpp
+    remote_login_server.cpp
     status_popup.cpp
     stroke_params.cpp
     template_fieldnames.cpp

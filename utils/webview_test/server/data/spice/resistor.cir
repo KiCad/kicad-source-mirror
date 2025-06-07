@@ -1,0 +1,4 @@
+* Simple resistor SPICE model used by the WebView test harness
+.subckt R0603 1 2
+R1 1 2 1k
+.ends R0603
