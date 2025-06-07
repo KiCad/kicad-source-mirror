@@ -23,15 +23,15 @@ class WX_GRID;
 #include <wx/settings.h>
 #include <wx/sizer.h>
 #include <wx/grid.h>
+#include <wx/checkbox.h>
+#include <wx/choice.h>
+#include <wx/gbsizer.h>
+#include <wx/statbox.h>
 #include <wx/radiobut.h>
 #include <wx/button.h>
 #include <wx/bitmap.h>
 #include <wx/image.h>
 #include <wx/icon.h>
-#include <wx/statbox.h>
-#include <wx/checkbox.h>
-#include <wx/choice.h>
-#include <wx/gbsizer.h>
 #include <wx/bmpbuttn.h>
 #include <wx/dialog.h>
 
@@ -52,6 +52,11 @@ class DIALOG_LIB_EDIT_PIN_TABLE_BASE : public DIALOG_SHIM
 		wxStaticText* m_staticTextDuplicatePins;
 		wxStaticText* m_duplicate_pins;
 		WX_GRID* m_grid;
+		wxCheckBox* m_cbFilterByUnit;
+		wxChoice* m_unitFilter;
+		wxCheckBox* m_cbFilterByBodyStyle;
+		wxChoice* m_bodyStyleFilter;
+		wxCheckBox* m_cbFilterSelected;
 		wxRadioButton* m_rbExportAllPins;
 		wxRadioButton* m_rbExportOnlyShownPins;
 		wxButton* m_btnExportToFile;
@@ -60,11 +65,6 @@ class DIALOG_LIB_EDIT_PIN_TABLE_BASE : public DIALOG_SHIM
 		wxRadioButton* m_radioBtn1;
 		wxButton* m_btnImportFromFile;
 		wxButton* m_btnImportFromClipboard;
-		wxCheckBox* m_cbFilterByUnit;
-		wxChoice* m_unitFilter;
-		wxCheckBox* m_cbFilterByBodyStyle;
-		wxChoice* m_bodyStyleFilter;
-		wxCheckBox* m_cbFilterSelected;
 		STD_BITMAP_BUTTON* m_addButton;
 		STD_BITMAP_BUTTON* m_deleteButton;
 		BITMAP_BUTTON* m_divider1;
@@ -81,10 +81,10 @@ class DIALOG_LIB_EDIT_PIN_TABLE_BASE : public DIALOG_SHIM
 		virtual void OnCellEdited( wxGridEvent& event ) = 0;
 		virtual void OnCellSelected( wxGridEvent& event ) = 0;
 		virtual void OnSize( wxSizeEvent& event ) = 0;
-		virtual void OnExportButtonClick( wxCommandEvent& event ) = 0;
-		virtual void OnImportButtonClick( wxCommandEvent& event ) = 0;
 		virtual void OnFilterCheckBox( wxCommandEvent& event ) = 0;
 		virtual void OnFilterChoice( wxCommandEvent& event ) = 0;
+		virtual void OnExportButtonClick( wxCommandEvent& event ) = 0;
+		virtual void OnImportButtonClick( wxCommandEvent& event ) = 0;
 		virtual void OnAddRow( wxCommandEvent& event ) = 0;
 		virtual void OnDeleteRow( wxCommandEvent& event ) = 0;
 		virtual void OnRebuildRows( wxCommandEvent& event ) = 0;
