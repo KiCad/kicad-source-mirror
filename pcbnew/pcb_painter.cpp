@@ -2294,9 +2294,7 @@ void PCB_PAINTER::draw( const PCB_TEXT* aText, int aLayer )
 
     if( aText->IsKnockout() )
     {
-        SHAPE_POLY_SET finalPoly;
-        aText->TransformTextToPolySet( finalPoly, 0, m_maxError, ERROR_INSIDE );
-        finalPoly.Fracture();
+        SHAPE_POLY_SET finalPoly = aText->GetKnockoutCache( font, resolvedText, m_maxError );
 
         m_gal->SetIsStroke( false );
         m_gal->SetIsFill( true );

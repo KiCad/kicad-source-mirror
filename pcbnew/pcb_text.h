@@ -142,6 +142,9 @@ public:
     GetEffectiveShape( PCB_LAYER_ID aLayer = UNDEFINED_LAYER,
                        FLASHING aFlash = FLASHING::DEFAULT ) const override;
 
+    SHAPE_POLY_SET GetKnockoutCache( const KIFONT::FONT* aFont, const wxString& forResolvedText,
+                                     int aMaxError ) const;
+
     virtual wxString GetTextTypeDescription() const;
 
     wxString GetItemDescription( UNITS_PROVIDER* aUnitsProvider, bool aFull ) const override;
@@ -188,6 +191,13 @@ protected:
     int getKnockoutMargin() const;
 
     const KIFONT::METRICS& getFontMetrics() const override { return GetFontMetrics(); }
+
+private:
+    mutable wxString            m_knockout_cache_text;
+    mutable TEXT_ATTRIBUTES     m_knockout_cache_text_attrs;
+    mutable EDA_ANGLE           m_knockout_cache_angle;
+    mutable VECTOR2I            m_knockout_cache_pos;
+    mutable SHAPE_POLY_SET      m_knockout_cache;
 };
 
 #endif  // #define PCB_TEXT_H
