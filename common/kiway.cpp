@@ -24,6 +24,7 @@
 
 #include <cstring>
 
+#include <app_monitor.h>
 #include <core/ignore.h>
 #include <macros.h>
 #include <kiway.h>
@@ -44,10 +45,6 @@
 #include <wx/debug.h>
 #include <wx/utils.h>
 #include <confirm.h>
-
-#ifdef KICAD_USE_SENTRY
-#include <sentry.h>
-#endif
 
 KIFACE* KIWAY::m_kiface[KIWAY_FACE_COUNT];
 int     KIWAY::m_kiface_version[KIWAY_FACE_COUNT];
@@ -261,14 +258,8 @@ KIFACE* KIWAY::KiFACE( FACE_T aFaceId, bool doLoad )
         setlocale( lc_new_type, user_locale.c_str() );
 
 #ifdef KICAD_USE_SENTRY
-        if( Pgm().IsSentryOptedIn() )
-        {
-            msg = wxString::Format( "Loading kiface %d", aFaceId );
-            sentry_value_t crumb = sentry_value_new_breadcrumb( "navigation", msg.utf8_str() );
-            sentry_value_set_by_key( crumb, "category", sentry_value_new_string( "kiway.kiface" ) );
-            sentry_value_set_by_key( crumb, "level", sentry_value_new_string( "info" ) );
-            sentry_add_breadcrumb( crumb );
-        }
+        msg = wxString::Format( "Loading kiface %d", aFaceId );
+        APP_MONITOR::AddNavigationBreadcrumb( msg, "kiway.kiface" );
 #endif
 
         if( !success )
@@ -427,15 +418,8 @@ KIWAY_PLAYER* KIWAY::Player( FRAME_T aFrameType, bool doCreate, wxTopLevelWindow
         try
         {
 #ifdef KICAD_USE_SENTRY
-            if( Pgm().IsSentryOptedIn() )
-            {
-                wxString       msg = wxString::Format( "Creating window type %d", aFrameType );
-                sentry_value_t crumb = sentry_value_new_breadcrumb( "navigation", msg.utf8_str() );
-                sentry_value_set_by_key( crumb, "category",
-                                         sentry_value_new_string( "kiway.player" ) );
-                sentry_value_set_by_key( crumb, "level", sentry_value_new_string( "info" ) );
-                sentry_add_breadcrumb( crumb );
-            }
+            wxString msg = wxString::Format( "Creating window type %d", aFrameType );
+            APP_MONITOR::AddNavigationBreadcrumb( msg, "kiway.player" );
 #endif
 
             FACE_T  face_type = KifaceType( aFrameType );
@@ -487,15 +471,8 @@ bool KIWAY::PlayerClose( FRAME_T aFrameType, bool doForce )
         return true;
 
 #ifdef KICAD_USE_SENTRY
-    if( Pgm().IsSentryOptedIn() )
-    {
-        wxString       msg = wxString::Format( "Closing window type %d", aFrameType );
-        sentry_value_t crumb = sentry_value_new_breadcrumb( "navigation", msg.utf8_str() );
-        sentry_value_set_by_key( crumb, "category",
-                                 sentry_value_new_string( "kiway.playerclose" ) );
-        sentry_value_set_by_key( crumb, "level", sentry_value_new_string( "info" ) );
-        sentry_add_breadcrumb( crumb );
-    }
+    wxString msg = wxString::Format( "Closing window type %d", aFrameType );
+    APP_MONITOR::AddNavigationBreadcrumb( msg, "kiway.playerclose" );
 #endif
 
     if( frame->NonUserClose( doForce ) )
@@ -641,10 +618,7 @@ void KIWAY::CommonSettingsChanged( int aFlags )
 void KIWAY::ProjectChanged()
 {
 #ifdef KICAD_USE_SENTRY
-    sentry_value_t crumb = sentry_value_new_breadcrumb( "navigation", "Changing project" );
-    sentry_value_set_by_key( crumb, "category", sentry_value_new_string( "kiway.projectchanged" ) );
-    sentry_value_set_by_key( crumb, "level", sentry_value_new_string( "info" ) );
-    sentry_add_breadcrumb( crumb );
+    APP_MONITOR::AddNavigationBreadcrumb( "Changing project", "kiway.projectchanged" );
 #endif
 
     if( m_ctl & KFCTL_CPP_PROJECT_SUITE )

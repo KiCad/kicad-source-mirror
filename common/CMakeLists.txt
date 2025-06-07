@@ -148,6 +148,7 @@ set( KICOMMON_SRCS
     design_block_info_impl.cpp
 
     advanced_config.cpp
+    app_monitor.cpp
     asset_archive.cpp
     array_axis.cpp
     array_options.cpp
