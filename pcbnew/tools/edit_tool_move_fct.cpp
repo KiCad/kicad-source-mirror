@@ -222,13 +222,19 @@ int EDIT_TOOL::Move( const TOOL_EVENT& aEvent )
 
     if( BOARD_COMMIT* commit = dynamic_cast<BOARD_COMMIT*>( aEvent.Commit() ) )
     {
-        wxCHECK( aEvent.SynchronousState(), 0 );
-        aEvent.SynchronousState()->store( STS_RUNNING );
+        // Most moves will be synchronous unless they are coming from the API
+        if( aEvent.SynchronousState() )
+            aEvent.SynchronousState()->store( STS_RUNNING );
 
         if( doMoveSelection( aEvent, commit, true ) )
-            aEvent.SynchronousState()->store( STS_FINISHED );
-        else
+        {
+            if( aEvent.SynchronousState() )
+                aEvent.SynchronousState()->store( STS_FINISHED );
+        }
+        else if( aEvent.SynchronousState() )
+        {
             aEvent.SynchronousState()->store( STS_CANCELLED );
+        }
     }
     else
     {
