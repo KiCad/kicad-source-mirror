@@ -24,7 +24,7 @@
 #ifndef QA_EESCHEMA_EESCHEMA_TEST_UTILS__H
 #define QA_EESCHEMA_EESCHEMA_TEST_UTILS__H
 
-
+#include <memory>
 #include <schematic.h>
 #include <settings/settings_manager.h>
 #include <sch_io/sch_io_mgr.h>
@@ -57,7 +57,7 @@ protected:
     virtual void LoadSchematic( const wxString& aRelativePath );
     virtual wxFileName GetSchematicPath( const wxString& aBaseName );
 
-    SCHEMATIC           m_schematic;
+    std::unique_ptr<SCHEMATIC>    m_schematic;
     IO_RELEASER<SCH_IO> m_pi;
     SETTINGS_MANAGER    m_manager;
 };

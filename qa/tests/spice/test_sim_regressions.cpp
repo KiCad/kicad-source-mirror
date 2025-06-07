@@ -53,7 +53,7 @@ public:
 
     wxString GetNetlistPath( bool aTest = false ) override
     {
-        wxFileName netFile = m_schematic.Prj().GetProjectFullName();
+        wxFileName netFile = m_schematic->Prj().GetProjectFullName();
 
         if( aTest )
             netFile.SetName( netFile.GetName() + "_test" );

@@ -55,16 +55,17 @@ public:
 
     void CreateTestSchematic()
     {
-        m_schematic.Reset();
+        m_schematic.release();
+
         m_manager.LoadProject( "" );
-        m_schematic.SetProject( &m_manager.Prj() );
+        m_schematic = std::make_unique<SCHEMATIC>( &m_manager.Prj() );
 
-        m_screen = new SCH_SCREEN( &m_schematic );
+        m_screen = new SCH_SCREEN( m_schematic.get() );
 
-        m_sheet = new SCH_SHEET( &m_schematic );
+        m_sheet = new SCH_SHEET( m_schematic.get() );
         m_sheet->SetScreen( m_screen );
 
-        m_schematic.SetRoot( m_sheet );
+        m_schematic->SetRoot( m_sheet );
 
         m_parent_part = new LIB_SYMBOL( "parent_part", nullptr );
 
@@ -158,7 +159,7 @@ BOOST_AUTO_TEST_CASE( LoadSchGroups )
 {
     LoadSchematic( "groups_load_save" );
 
-    EE_RTREE::EE_TYPE groups = m_schematic.RootScreen()->Items().OfType( SCH_GROUP_T );
+    EE_RTREE::EE_TYPE groups = m_schematic->RootScreen()->Items().OfType( SCH_GROUP_T );
 
     BOOST_CHECK_EQUAL( std::distance( groups.begin(), groups.end() ), 1 );
 

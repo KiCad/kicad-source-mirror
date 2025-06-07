@@ -66,8 +66,8 @@ BOOST_AUTO_TEST_CASE( TestInProjectPath )
     LoadSchematic( "schematic_object_tests/not_shared_by_multiple_projects/"
                    "not_shared_by_multiple_projects" );
 
-    SCH_SCREEN testScreen( &m_schematic );
-    wxFileName testFn( m_schematic.RootScreen()->GetFileName() );
+    SCH_SCREEN testScreen( m_schematic.get() );
+    wxFileName testFn( m_schematic->RootScreen()->GetFileName() );
 
     // File is in same folder as project.
     testFn.SetName( "test" );
@@ -88,7 +88,7 @@ BOOST_AUTO_TEST_CASE( TestInProjectPath )
     // File is in a completely different path with the same folder depth.
     testFn.SetPath( "/home/foo/kicad" );
 
-    wxFileName projectFn( m_schematic.Prj().GetProjectFullName() );
+    wxFileName projectFn( m_schematic->Prj().GetProjectFullName() );
 
     // Just in case someone has a build path with no subfolders.
     BOOST_CHECK( testFn.GetDirCount() < projectFn.GetDirCount() );
@@ -114,7 +114,7 @@ BOOST_AUTO_TEST_CASE( TestSharedByMultipleProjects )
     LoadSchematic( "schematic_object_tests/not_shared_by_multiple_projects/"
                    "not_shared_by_multiple_projects" );
 
-    const SCH_SCREEN* rootScreen = m_schematic.RootScreen();
+    const SCH_SCREEN* rootScreen = m_schematic->RootScreen();
     BOOST_CHECK( !rootScreen->HasInstanceDataFromOtherProjects() );
     BOOST_CHECK( rootScreen->InProjectPath() );
 }

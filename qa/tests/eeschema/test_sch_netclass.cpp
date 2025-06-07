@@ -36,7 +36,7 @@ BOOST_AUTO_TEST_CASE( TestSubsheetNetclass )
 {
     LoadSchematic( "issue14494" );
 
-    SCH_SHEET_PATH path = m_schematic.BuildSheetListSortedByPageNumbers().at( 1 );
+    SCH_SHEET_PATH path = m_schematic->BuildSheetListSortedByPageNumbers().at( 1 );
     SCH_SCREEN*    screen = path.GetSheet( 1 )->GetScreen();
 
     for( SCH_ITEM* item : screen->Items().OfType( SCH_HIER_LABEL_T ) )
@@ -56,7 +56,7 @@ BOOST_AUTO_TEST_CASE( TestMultiNetclasses )
 {
     LoadSchematic( "multinetclasses" );
 
-    std::shared_ptr<NET_SETTINGS>& netSettings = m_schematic.Prj().GetProjectFile().m_NetSettings;
+    std::shared_ptr<NET_SETTINGS>& netSettings = m_schematic->Prj().GetProjectFile().m_NetSettings;
 
     std::shared_ptr<NETCLASS> nc = netSettings->GetEffectiveNetClass( "/BUS.SIGNAL" );
     BOOST_CHECK_EQUAL( nc->GetName(), "CLASS2,CLASS1,Default" );
