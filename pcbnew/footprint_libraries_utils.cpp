@@ -50,6 +50,7 @@
 #include <project/project_file.h>
 #include <footprint_editor_settings.h>
 #include <footprint_viewer_frame.h>
+#include <io/kicad/kicad_io_utils.h>
 #include <view/view_controls.h>
 #include <wx/choicdlg.h>
 #include <wx/filedlg.h>
@@ -270,7 +271,10 @@ void FOOTPRINT_EDIT_FRAME::ExportFootprint( FOOTPRINT* aFootprint )
             return;
         }
 
-        fprintf( fp, "%s", pcb_io.GetStringOutput( false ).c_str() );
+        std::string prettyData = pcb_io.GetStringOutput( false );
+        KICAD_FORMAT::Prettify( prettyData, true );
+
+        fprintf( fp, "%s", prettyData.c_str() );
         fclose( fp );
     }
     catch( const IO_ERROR& ioe )
