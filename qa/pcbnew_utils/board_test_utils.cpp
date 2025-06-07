@@ -106,21 +106,31 @@ void LoadBoard( SETTINGS_MANAGER& aSettingsManager, const wxString& aRelPath,
 
     auto m_DRCEngine = std::make_shared<DRC_ENGINE>( aBoard.get(), &aBoard->GetDesignSettings() );
 
+    BOOST_TEST_CHECKPOINT( "Init drc engine" );
+
     if( rulesFile.Exists() )
         m_DRCEngine->InitEngine( rulesFile );
     else
         m_DRCEngine->InitEngine( wxFileName() );
 
     aBoard->GetDesignSettings().m_DRCEngine = m_DRCEngine;
+
+    BOOST_TEST_CHECKPOINT( "Build list of nets" );
     aBoard->BuildListOfNets();
+
+    BOOST_TEST_CHECKPOINT( "Build connectivity" );
     aBoard->BuildConnectivity();
+
+    BOOST_TEST_CHECKPOINT( "Synchronize Time Domain Properties" );
     aBoard->GetLengthCalculation()->SynchronizeTimeDomainProperties();
 
     if( aBoard->GetProject() )
     {
         std::unordered_set<wxString> dummy;
+        BOOST_TEST_CHECKPOINT( "Synchronize Component Classes" );
         aBoard->SynchronizeComponentClasses( dummy );
 
+        BOOST_TEST_CHECKPOINT( "Run DRC cache generator" );
         DRC_CACHE_GENERATOR cacheGenerator;
         cacheGenerator.SetDRCEngine( m_DRCEngine.get() );
         cacheGenerator.Run();
@@ -275,6 +285,8 @@ void LoadAndTestFootprintFile( const wxString& aLibRelativePath, const wxString&
 
 void FillZones( BOARD* m_board )
 {
+    BOOST_TEST_CHECKPOINT( "Filling zones" );
+
     TOOL_MANAGER toolMgr;
     toolMgr.SetEnvironment( m_board, nullptr, nullptr, nullptr, nullptr );
 
@@ -291,6 +303,7 @@ void FillZones( BOARD* m_board )
     if( filler.Fill( toFill, false, nullptr ) )
         commit.Push( _( "Fill Zone(s)" ), SKIP_UNDO | SKIP_SET_DIRTY | ZONE_FILL_OP | SKIP_CONNECTIVITY );
 
+    BOOST_TEST_CHECKPOINT( "Building connectivity (after zone fill)" );
     m_board->BuildConnectivity();
 }
 

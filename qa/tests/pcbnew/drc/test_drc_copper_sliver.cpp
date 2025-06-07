@@ -85,6 +85,7 @@ BOOST_DATA_TEST_CASE_F( DRC_REGRESSION_TEST_FIXTURE, DRCCopperSliver,
                     violations.push_back( *aItem );
             } );
 
+    BOOST_TEST_CHECKPOINT( "Running copper sliver drc" );
     bds.m_DRCEngine->RunTests( EDA_UNITS::MM, true, false );
 
     if( violations.size() == test.second )
