@@ -482,6 +482,38 @@ std::shared_ptr<SHAPE> PCB_TEXT::GetEffectiveShape( PCB_LAYER_ID aLayer, FLASHIN
 }
 
 
+SHAPE_POLY_SET PCB_TEXT::GetKnockoutCache( const KIFONT::FONT* aFont, const wxString& forResolvedText,
+                                           int aMaxError ) const
+{
+    TEXT_ATTRIBUTES attrs = GetAttributes();
+    EDA_ANGLE       drawAngle = GetDrawRotation();
+    VECTOR2I        drawPos = GetDrawPos();
+
+    if( m_knockout_cache.IsEmpty()
+            || m_knockout_cache_text_attrs != attrs
+            || m_knockout_cache_text != forResolvedText
+            || m_knockout_cache_angle != drawAngle )
+    {
+        m_knockout_cache.RemoveAllContours();
+
+        TransformTextToPolySet( m_knockout_cache, 0, aMaxError, ERROR_INSIDE );
+        m_knockout_cache.Fracture();
+
+        m_knockout_cache_text_attrs = attrs;
+        m_knockout_cache_angle = drawAngle;
+        m_knockout_cache_text = forResolvedText;
+        m_knockout_cache_pos = drawPos;
+    }
+    else if( m_knockout_cache_pos != drawPos )
+    {
+        m_knockout_cache.Move( drawPos - m_knockout_cache_pos );
+        m_knockout_cache_pos = drawPos;
+    }
+
+    return m_knockout_cache;
+}
+
+
 void PCB_TEXT::buildBoundingHull( SHAPE_POLY_SET* aBuffer, const SHAPE_POLY_SET& aRenderedText,
                                   int aClearance ) const
 {
