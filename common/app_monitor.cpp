@@ -72,9 +72,9 @@ static std::string GetSentryBreadCrumbLevel( BREADCRUMB_LEVEL aLevel )
     return ret;
 }
 
-
-void APP_MONITOR::AddBreadcrumb( BREADCRUMB_TYPE aType, const wxString& aMsg, const wxString& aCategory,
-                               BREADCRUMB_LEVEL aLevel )
+namespace APP_MONITOR
+{
+void AddBreadcrumb( BREADCRUMB_TYPE aType, const wxString& aMsg, const wxString& aCategory, BREADCRUMB_LEVEL aLevel )
 {
 #ifdef KICAD_USE_SENTRY
     if( !Pgm().IsSentryOptedIn() )
@@ -98,7 +98,7 @@ void APP_MONITOR::AddBreadcrumb( BREADCRUMB_TYPE aType, const wxString& aMsg, co
 }
 
 
-void APP_MONITOR::AddNavigationBreadcrumb( const wxString& aMsg, const wxString& aCategory )
+void AddNavigationBreadcrumb( const wxString& aMsg, const wxString& aCategory )
 {
 #ifdef KICAD_USE_SENTRY
     AddBreadcrumb( BREADCRUMB_TYPE::NAVIGATION, aMsg, aCategory, BREADCRUMB_LEVEL::INFO );
@@ -106,9 +106,102 @@ void APP_MONITOR::AddNavigationBreadcrumb( const wxString& aMsg, const wxString&
 }
 
 
-void APP_MONITOR::AddTransactionBreadcrumb( const wxString& aMsg, const wxString& aCategory )
+void AddTransactionBreadcrumb( const wxString& aMsg, const wxString& aCategory )
 {
 #ifdef KICAD_USE_SENTRY
     AddBreadcrumb( BREADCRUMB_TYPE::TRANSACTION, aMsg, aCategory, BREADCRUMB_LEVEL::INFO );
 #endif
+}
+
+class TRANSACTION_IMPL
+{
+public:
+    TRANSACTION_IMPL( const std::string& aName, const std::string& aOperation )
+    {
+        m_ctx = sentry_transaction_context_new( aName.c_str(), aOperation.c_str() );
+    }
+
+    ~TRANSACTION_IMPL() {
+        Finish();
+
+        // note m_ctx is handled by sentry
+    }
+
+    void Start()
+    {
+        m_tx = sentry_transaction_start( m_ctx, sentry_value_new_null() );
+    }
+
+    void Finish()
+    {
+        FinishSpan();
+
+        if( m_tx )
+        {
+            sentry_transaction_finish( m_tx );
+            m_tx = nullptr;
+        }
+    }
+
+    void StartSpan( const std::string& aOperation, const std::string& aDescription )
+    {
+        if( m_span )
+            return;
+
+        if( !m_tx )
+            return;
+
+        m_span = sentry_transaction_start_child( m_tx, aOperation.c_str(), aDescription.c_str() );
+    }
+
+    void FinishSpan()
+    {
+        if( m_span )
+        {
+            sentry_span_finish( m_span );
+            m_span = nullptr;
+        }
+    }
+
+private:
+    sentry_transaction_context_t* m_ctx;
+    sentry_transaction_t*         m_tx = nullptr;
+    sentry_span_t*                m_span = nullptr;
+};
+}
+
+
+TRANSACTION::TRANSACTION( const std::string& aName, const std::string& aOperation )
+{
+    m_impl = new TRANSACTION_IMPL( aName, aOperation );
+}
+
+
+TRANSACTION::~TRANSACTION()
+{
+    delete m_impl;
+}
+
+
+void TRANSACTION::Start()
+{
+    m_impl->Start();
+}
+
+
+void TRANSACTION::StartSpan( const std::string& aOperation, const std::string& aDescription )
+{
+    m_impl->StartSpan( aOperation, aDescription );
+}
+
+
+void TRANSACTION::Finish()
+{
+    m_impl->Finish();
+}
+
+
+void TRANSACTION::FinishSpan()
+{
+    m_impl->FinishSpan();
 }

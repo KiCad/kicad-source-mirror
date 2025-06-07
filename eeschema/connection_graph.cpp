@@ -24,6 +24,7 @@
 #include <future>
 #include <vector>
 #include <unordered_map>
+#include <app_monitor.h>
 #include <core/profile.h>
 #include <core/kicad_algo.h>
 #include <common.h>
@@ -739,11 +740,14 @@ void CONNECTION_GRAPH::Recalculate( const SCH_SHEET_LIST& aSheetList, bool aUnco
                                     std::function<void( SCH_ITEM* )>* aChangedItemHandler,
                                     PROGRESS_REPORTER* aProgressReporter )
 {
+    APP_MONITOR::TRANSACTION monitorTrans( "CONNECTION_GRAPH::Recalculate", "Recalculate" );
     PROF_TIMER recalc_time( "CONNECTION_GRAPH::Recalculate" );
+    monitorTrans.Start();
 
     if( aUnconditional )
         Reset();
 
+    monitorTrans.StartSpan( "updateItemConnectivity", "" );
     PROF_TIMER update_items( "updateItemConnectivity" );
 
     m_sheetList = aSheetList;
@@ -858,20 +862,27 @@ void CONNECTION_GRAPH::Recalculate( const SCH_SHEET_LIST& aSheetList, bool aUnco
     for( SCH_ITEM* item : dirty_items )
         item->SetConnectivityDirty( false );
 
+
+    monitorTrans.FinishSpan();
     if( wxLog::IsAllowedTraceMask( DanglingProfileMask ) )
         update_items.Show();
 
     PROF_TIMER build_graph( "buildConnectionGraph" );
+    monitorTrans.StartSpan( "BuildConnectionGraph", "" );
 
     buildConnectionGraph( aChangedItemHandler, aUnconditional );
 
     if( wxLog::IsAllowedTraceMask( DanglingProfileMask ) )
         build_graph.Show();
 
+    monitorTrans.FinishSpan();
+
     recalc_time.Stop();
 
     if( wxLog::IsAllowedTraceMask( DanglingProfileMask ) )
         recalc_time.Show();
+
+    monitorTrans.Finish();
 }
 
 

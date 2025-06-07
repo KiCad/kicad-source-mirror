@@ -337,7 +337,8 @@ void PGM_BASE::sentryInit()
 #ifndef KICAD_SENTRY_DSN
 #   error "Project configuration error, missing KICAD_SENTRY_DSN"
 #endif
-
+        // only capture 5% of transactions
+        sentry_options_set_traces_sample_rate( options, 0.05 );
         sentry_options_set_dsn( options, KICAD_SENTRY_DSN );
 
         wxFileName tmp;

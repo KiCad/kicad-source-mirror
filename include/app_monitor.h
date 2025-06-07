@@ -51,6 +51,24 @@ namespace APP_MONITOR
         DBG
 	};
 
+    class TRANSACTION_IMPL;
+
+    class KICOMMON_API TRANSACTION
+    {
+    public:
+        TRANSACTION( const std::string& aName, const std::string& aOperation );
+        ~TRANSACTION();
+
+        void Start();
+        void StartSpan( const std::string& aOperation, const std::string& aDescription );
+        void FinishSpan();
+        void Finish();
+
+    private:
+        // We use a IMPL to avoid seeding sentry everywhere
+        TRANSACTION_IMPL* m_impl;
+    };
+
 	KICOMMON_API void AddBreadcrumb( BREADCRUMB_TYPE aType, const wxString& aMsg, const wxString& aCategory,
                                      BREADCRUMB_LEVEL aLevel = BREADCRUMB_LEVEL::INFO );
 
