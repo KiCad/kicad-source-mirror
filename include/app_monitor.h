@@ -64,9 +64,11 @@ namespace APP_MONITOR
         void FinishSpan();
         void Finish();
 
+#ifdef KICAD_USE_SENTRY
     private:
         // We use a IMPL to avoid seeding sentry everywhere
-        TRANSACTION_IMPL* m_impl;
+        TRANSACTION_IMPL* m_impl = nullptr;
+#endif
     };
 
 	KICOMMON_API void AddBreadcrumb( BREADCRUMB_TYPE aType, const wxString& aMsg, const wxString& aCategory,

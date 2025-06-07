@@ -113,6 +113,7 @@ void AddTransactionBreadcrumb( const wxString& aMsg, const wxString& aCategory )
 #endif
 }
 
+#ifdef KICAD_USE_SENTRY
 class TRANSACTION_IMPL
 {
 public:
@@ -164,44 +165,72 @@ public:
     }
 
 private:
-    sentry_transaction_context_t* m_ctx;
+    sentry_transaction_context_t* m_ctx = nullptr;
     sentry_transaction_t*         m_tx = nullptr;
     sentry_span_t*                m_span = nullptr;
 };
+#endif
 }
 
 
 TRANSACTION::TRANSACTION( const std::string& aName, const std::string& aOperation )
 {
-    m_impl = new TRANSACTION_IMPL( aName, aOperation );
+#ifdef KICAD_USE_SENTRY
+    if( Pgm().IsSentryOptedIn() )
+    {
+        m_impl = new TRANSACTION_IMPL( aName, aOperation );
+    }
+#endif
 }
 
 
 TRANSACTION::~TRANSACTION()
 {
+#ifdef KICAD_USE_SENTRY
     delete m_impl;
+#endif
 }
 
 
 void TRANSACTION::Start()
 {
-    m_impl->Start();
+#ifdef KICAD_USE_SENTRY
+    if( m_impl )
+    {
+        m_impl->Start();
+    }
+#endif
 }
 
 
 void TRANSACTION::StartSpan( const std::string& aOperation, const std::string& aDescription )
 {
-    m_impl->StartSpan( aOperation, aDescription );
+#ifdef KICAD_USE_SENTRY
+    if( m_impl )
+    {
+        m_impl->StartSpan( aOperation, aDescription );
+    }
+#endif
 }
 
 
 void TRANSACTION::Finish()
 {
-    m_impl->Finish();
+#ifdef KICAD_USE_SENTRY
+    if( m_impl )
+    {
+        m_impl->Finish();
+    }
+#endif
 }
 
 
 void TRANSACTION::FinishSpan()
 {
-    m_impl->FinishSpan();
+#ifdef KICAD_USE_SENTRY
+    if( m_impl )
+    {
+        m_impl->FinishSpan();
+    }
+#endif
 }
