@@ -51,7 +51,11 @@ namespace APP_MONITOR
         DBG
 	};
 
-	KICOMMON_API void AddBreadcrumb( BREADCRUMB_TYPE aType, const wxString& aMsg, const wxString& aCategory, BREADCRUMB_LEVEL aLevel );
+	KICOMMON_API void AddBreadcrumb( BREADCRUMB_TYPE aType, const wxString& aMsg, const wxString& aCategory,
+                                     BREADCRUMB_LEVEL aLevel = BREADCRUMB_LEVEL::INFO );
+
 
     KICOMMON_API void AddNavigationBreadcrumb( const wxString& aMsg, const wxString& aCategory );
+
+    KICOMMON_API void AddTransactionBreadcrumb( const wxString& aMsg, const wxString& aCategory );
 }

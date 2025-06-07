@@ -23,6 +23,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <app_monitor.h>
 #include <dialog_shim.h>
 #include <core/ignore.h>
 #include <kiway_player.h>
@@ -111,6 +112,9 @@ DIALOG_SHIM::DIALOG_SHIM( wxWindow* aParent, wxWindowID id, const wxString& titl
 #endif
 
     Bind( wxEVT_PAINT, &DIALOG_SHIM::OnPaint, this );
+
+    wxString msg = wxString::Format( "Opening dialog %s", GetTitle() );
+    APP_MONITOR::AddNavigationBreadcrumb( msg, "dialog.open" );
 }
 
 
@@ -576,6 +580,9 @@ void DIALOG_SHIM::EndQuasiModal( int retCode )
 
 void DIALOG_SHIM::OnCloseWindow( wxCloseEvent& aEvent )
 {
+    wxString msg = wxString::Format( "Closing dialog %s", GetTitle() );
+    APP_MONITOR::AddNavigationBreadcrumb( msg, "dialog.close" );
+
     if( IsQuasiModal() )
     {
         EndQuasiModal( wxID_CANCEL );

@@ -104,3 +104,11 @@ void APP_MONITOR::AddNavigationBreadcrumb( const wxString& aMsg, const wxString&
     AddBreadcrumb( BREADCRUMB_TYPE::NAVIGATION, aMsg, aCategory, BREADCRUMB_LEVEL::INFO );
 #endif
 }
+
+
+void APP_MONITOR::AddTransactionBreadcrumb( const wxString& aMsg, const wxString& aCategory )
+{
+#ifdef KICAD_USE_SENTRY
+    AddBreadcrumb( BREADCRUMB_TYPE::TRANSACTION, aMsg, aCategory, BREADCRUMB_LEVEL::INFO );
+#endif
+}

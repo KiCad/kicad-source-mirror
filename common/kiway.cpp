@@ -257,10 +257,8 @@ KIFACE* KIWAY::KiFACE( FACE_T aFaceId, bool doLoad )
 
         setlocale( lc_new_type, user_locale.c_str() );
 
-#ifdef KICAD_USE_SENTRY
         msg = wxString::Format( "Loading kiface %d", aFaceId );
         APP_MONITOR::AddNavigationBreadcrumb( msg, "kiway.kiface" );
-#endif
 
         if( !success )
         {
@@ -417,10 +415,8 @@ KIWAY_PLAYER* KIWAY::Player( FRAME_T aFrameType, bool doCreate, wxTopLevelWindow
     {
         try
         {
-#ifdef KICAD_USE_SENTRY
             wxString msg = wxString::Format( "Creating window type %d", aFrameType );
             APP_MONITOR::AddNavigationBreadcrumb( msg, "kiway.player" );
-#endif
 
             FACE_T  face_type = KifaceType( aFrameType );
             KIFACE* kiface = KiFACE( face_type );
@@ -470,10 +466,8 @@ bool KIWAY::PlayerClose( FRAME_T aFrameType, bool doForce )
     if( frame == nullptr ) // Already closed
         return true;
 
-#ifdef KICAD_USE_SENTRY
     wxString msg = wxString::Format( "Closing window type %d", aFrameType );
     APP_MONITOR::AddNavigationBreadcrumb( msg, "kiway.playerclose" );
-#endif
 
     if( frame->NonUserClose( doForce ) )
     {
@@ -617,9 +611,7 @@ void KIWAY::CommonSettingsChanged( int aFlags )
 
 void KIWAY::ProjectChanged()
 {
-#ifdef KICAD_USE_SENTRY
     APP_MONITOR::AddNavigationBreadcrumb( "Changing project", "kiway.projectchanged" );
-#endif
 
     if( m_ctl & KFCTL_CPP_PROJECT_SUITE )
     {

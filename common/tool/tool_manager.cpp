@@ -30,6 +30,7 @@
 #include <stack>
 #include <trace_helpers.h>
 #include <kiplatform/ui.h>
+#include <app_monitor.h>
 
 #include <wx/event.h>
 #include <wx/clipbrd.h>
@@ -462,6 +463,9 @@ bool TOOL_MANAGER::runTool( TOOL_BASE* aTool )
 {
     wxASSERT( aTool != nullptr );
 
+    wxString msg = wxString::Format( wxS( "TOOL_MANAGER::runTool - running tool %s" ), aTool->GetName() );
+    APP_MONITOR::AddTransactionBreadcrumb( msg, "tool.run" );
+
     if( !isRegistered( aTool ) )
     {
         wxASSERT_MSG( false, wxT( "You cannot run unregistered tools" ) );
@@ -470,7 +474,7 @@ bool TOOL_MANAGER::runTool( TOOL_BASE* aTool )
 
     TOOL_ID id = aTool->GetId();
 
-    wxLogTrace( kicadTraceToolStack, wxS( "TOOL_MANAGER::runTool - running tool %s" ),
+    wxLogTrace( kicadTraceToolStack, msg,
                 aTool->GetName() );
 
     if( aTool->GetType() == INTERACTIVE )
