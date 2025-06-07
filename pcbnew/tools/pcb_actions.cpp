@@ -2070,7 +2070,7 @@ TOOL_ACTION PCB_ACTIONS::inspectConstraints( TOOL_ACTION_ARGS()
         .Scope( AS_GLOBAL )
         .FriendlyName( _( "Constraints Resolution" ) )
         .Tooltip( _( "Show constraints resolution for the selected object" ) )
-        .Icon( BITMAPS::mw_add_gap ) );
+        .Icon( BITMAPS::mw_add_stub ) );
 
 TOOL_ACTION PCB_ACTIONS::diffFootprint( TOOL_ACTION_ARGS()
         .Name( "pcbnew.InspectionTool.DiffFootprint" )
