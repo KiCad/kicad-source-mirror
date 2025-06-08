@@ -73,16 +73,11 @@ std::optional<INTERSECTABLE_GEOM> GetBoardIntersectable( const BOARD_ITEM& aItem
 
         switch( shape.GetShape() )
         {
-        case SHAPE_T::SEGMENT: return SEG{ shape.GetStart(), shape.GetEnd() };
-
-        case SHAPE_T::CIRCLE: return CIRCLE{ shape.GetCenter(), shape.GetRadius() };
-
-        case SHAPE_T::ARC:
-            return SHAPE_ARC{ shape.GetStart(), shape.GetArcMid(), shape.GetEnd(), 0 };
-
+        case SHAPE_T::SEGMENT:   return SEG{ shape.GetStart(), shape.GetEnd() };
+        case SHAPE_T::CIRCLE:    return CIRCLE{ shape.GetCenter(), shape.GetRadius() };
+        case SHAPE_T::ARC:       return SHAPE_ARC{ shape.GetStart(), shape.GetArcMid(), shape.GetEnd(), 0 };
         case SHAPE_T::RECTANGLE: return BOX2I::ByCorners( shape.GetStart(), shape.GetEnd() );
-
-        default: break;
+        default:                 break;
         }
 
         break;
@@ -91,14 +86,12 @@ std::optional<INTERSECTABLE_GEOM> GetBoardIntersectable( const BOARD_ITEM& aItem
     case PCB_TRACE_T:
     {
         const PCB_TRACK& track = static_cast<const PCB_TRACK&>( aItem );
-
         return SEG{ track.GetStart(), track.GetEnd() };
     }
 
     case PCB_ARC_T:
     {
         const PCB_ARC& arc = static_cast<const PCB_ARC&>( aItem );
-
         return SHAPE_ARC{ arc.GetStart(), arc.GetMid(), arc.GetEnd(), 0 };
     }
 
@@ -150,7 +143,8 @@ std::optional<int64_t> FindSquareDistanceToItem( const BOARD_ITEM& item, const V
 } // namespace
 
 PCB_GRID_HELPER::PCB_GRID_HELPER( TOOL_MANAGER* aToolMgr, MAGNETIC_SETTINGS* aMagneticSettings ) :
-        GRID_HELPER( aToolMgr, LAYER_ANCHOR ), m_magneticSettings( aMagneticSettings )
+        GRID_HELPER( aToolMgr, LAYER_ANCHOR ),
+        m_magneticSettings( aMagneticSettings )
 {
     KIGFX::VIEW*            view = m_toolMgr->GetView();
     KIGFX::RENDER_SETTINGS* settings = view->GetPainter()->GetSettings();
@@ -185,9 +179,7 @@ void PCB_GRID_HELPER::AddConstructionItems( std::vector<BOARD_ITEM*> aItems, boo
                                             bool aIsPersistent )
 {
     if( !ADVANCED_CFG::GetCfg().m_EnableExtensionSnaps )
-    {
         return;
-    }
 
     // For all the elements that get drawn construction geometry,
     // add something suitable to the construction helper.
@@ -218,10 +210,8 @@ void PCB_GRID_HELPER::AddConstructionItems( std::vector<BOARD_ITEM*> aItems, boo
                 {
                     // Two rays, extending from the segment ends
                     const VECTOR2I segVec = shape.GetEnd() - shape.GetStart();
-                    constructionDrawables.emplace_back(
-                            HALF_LINE{ shape.GetStart(), shape.GetStart() - segVec } );
-                    constructionDrawables.emplace_back(
-                            HALF_LINE{ shape.GetEnd(), shape.GetEnd() + segVec } );
+                    constructionDrawables.emplace_back( HALF_LINE{ shape.GetStart(), shape.GetStart() - segVec } );
+                    constructionDrawables.emplace_back( HALF_LINE{ shape.GetEnd(), shape.GetEnd() + segVec } );
                 }
 
                 if( aIsPersistent )
@@ -241,17 +231,15 @@ void PCB_GRID_HELPER::AddConstructionItems( std::vector<BOARD_ITEM*> aItems, boo
             {
                 if( !aExtensionOnly )
                 {
-                    constructionDrawables.push_back(
-                            CIRCLE{ shape.GetCenter(), shape.GetRadius() } );
+                    constructionDrawables.push_back( CIRCLE{ shape.GetCenter(), shape.GetRadius() } );
                 }
                 else
                 {
                     // The rest of the circle is the arc through the opposite point to the midpoint
-                    const VECTOR2I oppositeMid =
-                            shape.GetCenter() + ( shape.GetCenter() - shape.GetArcMid() );
-                    constructionDrawables.push_back(
-                            SHAPE_ARC{ shape.GetStart(), oppositeMid, shape.GetEnd(), 0 } );
+                    const VECTOR2I oppositeMid = shape.GetCenter() + ( shape.GetCenter() - shape.GetArcMid() );
+                    constructionDrawables.push_back( SHAPE_ARC{ shape.GetStart(), oppositeMid, shape.GetEnd(), 0 } );
                 }
+
                 constructionDrawables.push_back( shape.GetCenter() );
 
                 if( aIsPersistent )
@@ -288,15 +276,11 @@ void PCB_GRID_HELPER::AddConstructionItems( std::vector<BOARD_ITEM*> aItems, boo
             constructionDrawables.push_back( refImg.GetPosition() );
 
             if( refImg.GetTransformOriginOffset() != VECTOR2I( 0, 0 ) )
-            {
-                constructionDrawables.push_back( refImg.GetPosition()
-                                                 + refImg.GetTransformOriginOffset() );
-            }
+                constructionDrawables.push_back( refImg.GetPosition() + refImg.GetTransformOriginOffset() );
 
             for( const SEG& seg : KIGEOM::BoxToSegs( refImg.GetBoundingBox() ) )
-            {
                 constructionDrawables.push_back( seg );
-            }
+
             break;
         }
         default:
@@ -315,13 +299,11 @@ void PCB_GRID_HELPER::AddConstructionItems( std::vector<BOARD_ITEM*> aItems, boo
     }
 
     if( referenceOnlyPoints.size() )
-    {
         getSnapManager().SetReferenceOnlyPoints( std::move( referenceOnlyPoints ) );
-    }
 
     //  Let the manager handle it
-    getSnapManager().GetConstructionManager().ProposeConstructionItems(
-            std::move( constructionItemsBatch ), aIsPersistent );
+    getSnapManager().GetConstructionManager().ProposeConstructionItems( std::move( constructionItemsBatch ),
+                                                                        aIsPersistent );
 }
 
 
@@ -554,6 +536,7 @@ VECTOR2I PCB_GRID_HELPER::BestSnapAnchor( const VECTOR2I& aOrigin, const LSET& a
     if( KIGFX::ANCHOR_DEBUG* ad = enableAndGetAnchorDebug(); ad )
     {
         ad->ClearAnchors();
+
         for( const ANCHOR& anchor : m_anchors )
             ad->AddAnchor( anchor.pos );
 
@@ -563,6 +546,7 @@ VECTOR2I PCB_GRID_HELPER::BestSnapAnchor( const VECTOR2I& aOrigin, const LSET& a
 
     // The distance to the nearest snap point, if any
     std::optional<int> snapDist;
+
     if( nearest )
         snapDist = nearest->Distance( aOrigin );
 
@@ -571,41 +555,40 @@ VECTOR2I PCB_GRID_HELPER::BestSnapAnchor( const VECTOR2I& aOrigin, const LSET& a
     SNAP_MANAGER&      snapManager = getSnapManager();
     SNAP_LINE_MANAGER& snapLineManager = snapManager.GetSnapLineManager();
 
-    const auto ptIsReferenceOnly = [&]( const VECTOR2I& aPt )
-    {
-        const std::vector<VECTOR2I>& referenceOnlyPoints = snapManager.GetReferenceOnlyPoints();
-        return std::find( referenceOnlyPoints.begin(), referenceOnlyPoints.end(), aPt )
-               != referenceOnlyPoints.end();
-    };
-
-    const auto proposeConstructionForItems = [&]( const std::vector<EDA_ITEM*>& aItems )
-    {
-        // Add any involved item as a temporary construction item
-        // (de-duplication with existing construction items is handled later)
-        std::vector<BOARD_ITEM*> items;
-
-        for( EDA_ITEM* item : aItems )
-        {
-            BOARD_ITEM* boardItem = static_cast<BOARD_ITEM*>( item );
-
-            // Null items are allowed to arrive here as they represent geometry that isn't
-            // specifically tied to a board item. For example snap lines from some
-            // other anchor.
-            // But they don't produce new construction items.
-            if( boardItem )
+    const auto ptIsReferenceOnly =
+            [&]( const VECTOR2I& aPt )
             {
-                if( m_magneticSettings->allLayers
-                    || ( ( aLayers & boardItem->GetLayerSet() ).any() ) )
-                {
-                    items.push_back( boardItem );
-                }
-            }
-        }
+                const std::vector<VECTOR2I>& referenceOnlyPoints = snapManager.GetReferenceOnlyPoints();
+                return std::find( referenceOnlyPoints.begin(), referenceOnlyPoints.end(), aPt )
+                       != referenceOnlyPoints.end();
+            };
 
-        // Temporary construction items are not persistent and don't
-        // overlay the items themselves (as the items will not be moved)
-        AddConstructionItems( items, true, false );
-    };
+    const auto proposeConstructionForItems =
+            [&]( const std::vector<EDA_ITEM*>& aItems )
+            {
+                // Add any involved item as a temporary construction item
+                // (de-duplication with existing construction items is handled later)
+                std::vector<BOARD_ITEM*> items;
+
+                for( EDA_ITEM* item : aItems )
+                {
+                    BOARD_ITEM* boardItem = static_cast<BOARD_ITEM*>( item );
+
+                    // Null items are allowed to arrive here as they represent geometry that isn't
+                    // specifically tied to a board item. For example snap lines from some
+                    // other anchor.
+                    // But they don't produce new construction items.
+                    if( boardItem )
+                    {
+                        if( m_magneticSettings->allLayers || ( ( aLayers & boardItem->GetLayerSet() ).any() ) )
+                            items.push_back( boardItem );
+                    }
+                }
+
+                // Temporary construction items are not persistent and don't
+                // overlay the items themselves (as the items will not be moved)
+                AddConstructionItems( items, true, false );
+            };
 
     bool snapValid = false;
 
@@ -631,9 +614,7 @@ VECTOR2I PCB_GRID_HELPER::BestSnapAnchor( const VECTOR2I& aOrigin, const LSET& a
                 // (we don't snap to reference points, but we can use them to update the snap line,
                 // without actually snapping)
                 if( !ptIsReferenceOnly( *snapLineSnap ) )
-                {
                     return *snapLineSnap;
-                }
             }
         }
 
@@ -658,15 +639,13 @@ VECTOR2I PCB_GRID_HELPER::BestSnapAnchor( const VECTOR2I& aOrigin, const LSET& a
                 // This is to make construction items less intrusive and more
                 // a result of user intent.
                 if( !anchorIsConstructed )
-                {
                     proposeConstructionForItems( nearest->items );
-                }
 
                 const auto shouldAcceptAnchor = [&]( const ANCHOR& aAnchor )
                 {
                     // If no extension snaps are enabled, don't inhibit
-                    static const bool haveExtensions =
-                            ADVANCED_CFG::GetCfg().m_EnableExtensionSnaps;
+                    static const bool haveExtensions = ADVANCED_CFG::GetCfg().m_EnableExtensionSnaps;
+
                     if( !haveExtensions )
                         return true;
 
@@ -677,8 +656,7 @@ VECTOR2I PCB_GRID_HELPER::BestSnapAnchor( const VECTOR2I& aOrigin, const LSET& a
                     // This is an area most likely to be controversial/need tuning,
                     // as some users will think it's fiddly; without 'activation', others will
                     // think the snaps are intrusive.
-                    bool allRealAreInvolved =
-                            snapManager.GetConstructionManager().InvolvesAllGivenRealItems(
+                    bool allRealAreInvolved = snapManager.GetConstructionManager().InvolvesAllGivenRealItems(
                                     aAnchor.items );
                     return allRealAreInvolved;
                 };
@@ -700,14 +678,15 @@ VECTOR2I PCB_GRID_HELPER::BestSnapAnchor( const VECTOR2I& aOrigin, const LSET& a
         }
         else
         {
-            static const bool canActivateByHitTest =
-                    ADVANCED_CFG::GetCfg().m_ExtensionSnapActivateOnHover;
+            static const bool canActivateByHitTest = ADVANCED_CFG::GetCfg().m_ExtensionSnapActivateOnHover;
+
             if( canActivateByHitTest )
             {
                 // An exact hit on an item, even if not near a snap point
                 // If it's tool hard to hit by hover, this can be increased
                 // to make it non-exact.
                 const int hoverAccuracy = 0;
+
                 for( BOARD_ITEM* item : visibleItems )
                 {
                     if( item->HitTest( aOrigin, hoverAccuracy ) )
@@ -726,12 +705,10 @@ VECTOR2I PCB_GRID_HELPER::BestSnapAnchor( const VECTOR2I& aOrigin, const LSET& a
         // but they're useful when there isn't a grid to snap to
         if( !m_enableGrid )
         {
-            OPT_VECTOR2I nearestPointOnAnElement =
-                    GetNearestPoint( m_pointOnLineCandidates, aOrigin );
+            OPT_VECTOR2I nearestPointOnAnElement = GetNearestPoint( m_pointOnLineCandidates, aOrigin );
 
             // Got any nearest point - snap if in range
-            if( nearestPointOnAnElement
-                && nearestPointOnAnElement->Distance( aOrigin ) <= snapRange )
+            if( nearestPointOnAnElement && nearestPointOnAnElement->Distance( aOrigin ) <= snapRange )
             {
                 updateSnapPoint( { *nearestPointOnAnElement, POINT_TYPE::PT_ON_ELEMENT } );
 
@@ -953,49 +930,46 @@ void PCB_GRID_HELPER::computeAnchors( const std::vector<BOARD_ITEM*>& aItems,
     const bool excludeGraphics = aSelectionFilter && !aSelectionFilter->graphics;
     const bool excludeTracks = aSelectionFilter && !aSelectionFilter->tracks;
 
-    const auto itemIsSnappable = [&]( const BOARD_ITEM& aItem )
-    {
-        // If we are filtering by layers, check if the item matches
-        if( aMatchLayers )
-        {
-            return m_magneticSettings->allLayers
-                   || ( ( *aMatchLayers & aItem.GetLayerSet() ).any() );
-        }
-        return true;
-    };
-
-    const auto processItem = [&]( BOARD_ITEM& item )
-    {
-        // Don't even process the item if it doesn't match the layers
-        if( !itemIsSnappable( item ) )
-        {
-            return;
-        }
-
-        // First, add all the key points of the item itself
-        computeAnchors( &item, aRefPos, aFrom, aSelectionFilter );
-
-        // If we are computing intersections, construct the relevant intersectables
-        // Points on elements also use the intersectables.
-        if( computeIntersections || computePointsOnElements )
-        {
-            std::optional<INTERSECTABLE_GEOM> intersectableGeom;
-            if( !excludeGraphics
-                && ( item.Type() == PCB_SHAPE_T || item.Type() == PCB_REFERENCE_IMAGE_T ) )
+    const auto itemIsSnappable =
+            [&]( const BOARD_ITEM& aItem )
             {
-                intersectableGeom = GetBoardIntersectable( item );
-            }
-            else if( !excludeTracks && ( item.Type() == PCB_TRACE_T || item.Type() == PCB_ARC_T ) )
-            {
-                intersectableGeom = GetBoardIntersectable( item );
-            }
+                // If we are filtering by layers, check if the item matches
+                if( aMatchLayers )
+                    return m_magneticSettings->allLayers || ( ( *aMatchLayers & aItem.GetLayerSet() ).any() );
 
-            if( intersectableGeom )
+                return true;
+            };
+
+    const auto processItem =
+            [&]( BOARD_ITEM& item )
             {
-                intersectables.emplace_back( &item, *intersectableGeom );
-            }
-        }
-    };
+                // Don't even process the item if it doesn't match the layers
+                if( !itemIsSnappable( item ) )
+                    return;
+
+                // First, add all the key points of the item itself
+                computeAnchors( &item, aRefPos, aFrom, aSelectionFilter );
+
+                // If we are computing intersections, construct the relevant intersectables
+                // Points on elements also use the intersectables.
+                if( computeIntersections || computePointsOnElements )
+                {
+                    std::optional<INTERSECTABLE_GEOM> intersectableGeom;
+
+                    if( !excludeGraphics
+                        && ( item.Type() == PCB_SHAPE_T || item.Type() == PCB_REFERENCE_IMAGE_T ) )
+                    {
+                        intersectableGeom = GetBoardIntersectable( item );
+                    }
+                    else if( !excludeTracks && ( item.Type() == PCB_TRACE_T || item.Type() == PCB_ARC_T ) )
+                    {
+                        intersectableGeom = GetBoardIntersectable( item );
+                    }
+
+                    if( intersectableGeom )
+                        intersectables.emplace_back( &item, *intersectableGeom );
+                }
+            };
 
     for( BOARD_ITEM* item : aItems )
     {
@@ -1079,6 +1053,7 @@ void PCB_GRID_HELPER::computeAnchors( const std::vector<BOARD_ITEM*>& aItems,
     // The intersectables can also be used for fall-back snapping to "point on line"
     // snaps if no other snap is found
     m_pointOnLineCandidates.clear();
+
     if( computePointsOnElements )
     {
         // For the moment, it's trivial to make a NEARABLE from an INTERSECTABLE,
@@ -1175,144 +1150,143 @@ void PCB_GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos
             };
 
     // As defaults, these are probably reasonable to avoid spamming key points
-    const KIGEOM::OVAL_KEY_POINT_FLAGS ovalKeyPointFlags =
-            KIGEOM::OVAL_CENTER | KIGEOM::OVAL_CAP_TIPS | KIGEOM::OVAL_SIDE_MIDPOINTS
-            | KIGEOM::OVAL_CARDINAL_EXTREMES;
+    const KIGEOM::OVAL_KEY_POINT_FLAGS ovalKeyPointFlags = KIGEOM::OVAL_CENTER
+                                                           | KIGEOM::OVAL_CAP_TIPS
+                                                           | KIGEOM::OVAL_SIDE_MIDPOINTS
+                                                           | KIGEOM::OVAL_CARDINAL_EXTREMES;
 
-    auto handlePadShape = [&]( PAD* aPad, PCB_LAYER_ID aLayer )
-    {
-        addAnchor( aPad->GetPosition(), ORIGIN | SNAPPABLE, aPad, POINT_TYPE::PT_CENTER );
-
-        /// If we are getting a drag point, we don't want to center the edge of pads
-        if( aFrom )
-            return;
-
-        switch( aPad->GetShape( aLayer ) )
-        {
-        case PAD_SHAPE::CIRCLE:
-        {
-            const CIRCLE circle( aPad->ShapePos( aLayer ), aPad->GetSizeX() / 2 );
-
-            for( const TYPED_POINT2I& pt : KIGEOM::GetCircleKeyPoints( circle, false ) )
+    auto handlePadShape =
+            [&]( PAD* aPad, PCB_LAYER_ID aLayer )
             {
-                addAnchor( pt.m_point, OUTLINE | SNAPPABLE, aPad, pt.m_types );
-            }
+                addAnchor( aPad->GetPosition(), ORIGIN | SNAPPABLE, aPad, POINT_TYPE::PT_CENTER );
 
-            break;
-        }
-        case PAD_SHAPE::OVAL:
-        {
-            const OVAL oval( aPad->GetSize( aLayer ), aPad->GetPosition(), aPad->GetOrientation() );
+                /// If we are getting a drag point, we don't want to center the edge of pads
+                if( aFrom )
+                    return;
 
-            for( const TYPED_POINT2I& pt : KIGEOM::GetOvalKeyPoints( oval, ovalKeyPointFlags ) )
+                switch( aPad->GetShape( aLayer ) )
+                {
+                case PAD_SHAPE::CIRCLE:
+                {
+                    const CIRCLE circle( aPad->ShapePos( aLayer ), aPad->GetSizeX() / 2 );
+
+                    for( const TYPED_POINT2I& pt : KIGEOM::GetCircleKeyPoints( circle, false ) )
+                        addAnchor( pt.m_point, OUTLINE | SNAPPABLE, aPad, pt.m_types );
+
+                    break;
+                }
+                case PAD_SHAPE::OVAL:
+                {
+                    const OVAL oval( aPad->GetSize( aLayer ), aPad->GetPosition(), aPad->GetOrientation() );
+
+                    for( const TYPED_POINT2I& pt : KIGEOM::GetOvalKeyPoints( oval, ovalKeyPointFlags ) )
+                        addAnchor( pt.m_point, OUTLINE | SNAPPABLE, aPad, pt.m_types );
+
+                    break;
+                }
+                case PAD_SHAPE::RECTANGLE:
+                case PAD_SHAPE::TRAPEZOID:
+                case PAD_SHAPE::ROUNDRECT:
+                case PAD_SHAPE::CHAMFERED_RECT:
+                {
+                    VECTOR2I half_size( aPad->GetSize( aLayer ) / 2 );
+                    VECTOR2I trap_delta( 0, 0 );
+
+                    if( aPad->GetShape( aLayer ) == PAD_SHAPE::TRAPEZOID )
+                        trap_delta = aPad->GetDelta( aLayer ) / 2;
+
+                    SHAPE_LINE_CHAIN corners;
+
+                    corners.Append( -half_size.x - trap_delta.y, half_size.y + trap_delta.x );
+                    corners.Append( half_size.x + trap_delta.y, half_size.y - trap_delta.x );
+                    corners.Append( half_size.x - trap_delta.y, -half_size.y + trap_delta.x );
+                    corners.Append( -half_size.x + trap_delta.y, -half_size.y - trap_delta.x );
+                    corners.SetClosed( true );
+
+                    corners.Rotate( aPad->GetOrientation() );
+                    corners.Move( aPad->ShapePos( aLayer ) );
+
+                    for( std::size_t ii = 0; ii < corners.GetSegmentCount(); ++ii )
+                    {
+                        const SEG& seg = corners.GetSegment( ii );
+                        addAnchor( seg.A, OUTLINE | SNAPPABLE, aPad, POINT_TYPE::PT_CORNER );
+                        addAnchor( seg.Center(), OUTLINE | SNAPPABLE, aPad, POINT_TYPE::PT_MID );
+
+                        if( ii == corners.GetSegmentCount() - 1 )
+                            addAnchor( seg.B, OUTLINE | SNAPPABLE, aPad, POINT_TYPE::PT_CORNER );
+                    }
+
+                    break;
+                }
+
+                default:
+                {
+                    const auto& outline = aPad->GetEffectivePolygon( aLayer, ERROR_INSIDE );
+
+                    if( !outline->IsEmpty() )
+                    {
+                        for( const VECTOR2I& pt : outline->Outline( 0 ).CPoints() )
+                            addAnchor( pt, OUTLINE | SNAPPABLE, aPad );
+                    }
+
+                    break;
+                }
+                }
+
+                if( aPad->HasHole() )
+                {
+                    // Holes are at the pad centre (it's the shape that may be offset)
+                    const VECTOR2I hole_pos = aPad->GetPosition();
+                    const VECTOR2I hole_size = aPad->GetDrillSize();
+
+                    std::vector<TYPED_POINT2I> snap_pts;
+
+                    if( hole_size.x == hole_size.y )
+                    {
+                        // Circle
+                        const CIRCLE circle( hole_pos, hole_size.x / 2 );
+                        snap_pts = KIGEOM::GetCircleKeyPoints( circle, true );
+                    }
+                    else
+                    {
+                        // Oval
+
+                        // For now there's no way to have an off-angle hole, so this is the
+                        // same as the pad. In future, this may not be true:
+                        // https://gitlab.com/kicad/code/kicad/-/issues/4124
+                        const OVAL oval( hole_size, hole_pos, aPad->GetOrientation() );
+                        snap_pts = KIGEOM::GetOvalKeyPoints( oval, ovalKeyPointFlags );
+                    }
+
+                    for( const TYPED_POINT2I& snap_pt : snap_pts )
+                        addAnchor( snap_pt.m_point, OUTLINE | SNAPPABLE, aPad, snap_pt.m_types );
+                }
+            };
+
+    const auto addRectPoints =
+            [&]( const BOX2I& aBox, EDA_ITEM& aRelatedItem )
             {
-                addAnchor( pt.m_point, OUTLINE | SNAPPABLE, aPad, pt.m_types );
-            }
+                const VECTOR2I topRight( aBox.GetRight(), aBox.GetTop() );
+                const VECTOR2I bottomLeft( aBox.GetLeft(), aBox.GetBottom() );
 
-            break;
-        }
-        case PAD_SHAPE::RECTANGLE:
-        case PAD_SHAPE::TRAPEZOID:
-        case PAD_SHAPE::ROUNDRECT:
-        case PAD_SHAPE::CHAMFERED_RECT:
-        {
-            VECTOR2I half_size( aPad->GetSize( aLayer ) / 2 );
-            VECTOR2I trap_delta( 0, 0 );
+                const SEG first( aBox.GetOrigin(), topRight );
+                const SEG second( topRight, aBox.GetEnd() );
+                const SEG third( aBox.GetEnd(), bottomLeft );
+                const SEG fourth( bottomLeft, aBox.GetOrigin() );
 
-            if( aPad->GetShape( aLayer ) == PAD_SHAPE::TRAPEZOID )
-                trap_delta = aPad->GetDelta( aLayer ) / 2;
+                const int snapFlags = CORNER | SNAPPABLE;
 
-            SHAPE_LINE_CHAIN corners;
+                addAnchor( aBox.GetCenter(), snapFlags, &aRelatedItem, POINT_TYPE::PT_CENTER );
 
-            corners.Append( -half_size.x - trap_delta.y, half_size.y + trap_delta.x );
-            corners.Append( half_size.x + trap_delta.y, half_size.y - trap_delta.x );
-            corners.Append( half_size.x - trap_delta.y, -half_size.y + trap_delta.x );
-            corners.Append( -half_size.x + trap_delta.y, -half_size.y - trap_delta.x );
-            corners.SetClosed( true );
-
-            corners.Rotate( aPad->GetOrientation() );
-            corners.Move( aPad->ShapePos( aLayer ) );
-
-            for( std::size_t ii = 0; ii < corners.GetSegmentCount(); ++ii )
-            {
-                const SEG& seg = corners.GetSegment( ii );
-                addAnchor( seg.A, OUTLINE | SNAPPABLE, aPad, POINT_TYPE::PT_CORNER );
-                addAnchor( seg.Center(), OUTLINE | SNAPPABLE, aPad, POINT_TYPE::PT_MID );
-
-                if( ii == corners.GetSegmentCount() - 1 )
-                    addAnchor( seg.B, OUTLINE | SNAPPABLE, aPad, POINT_TYPE::PT_CORNER );
-            }
-
-            break;
-        }
-
-        default:
-        {
-            const auto& outline = aPad->GetEffectivePolygon( aLayer, ERROR_INSIDE );
-
-            if( !outline->IsEmpty() )
-            {
-                for( const VECTOR2I& pt : outline->Outline( 0 ).CPoints() )
-                    addAnchor( pt, OUTLINE | SNAPPABLE, aPad );
-            }
-
-            break;
-        }
-        }
-
-        if( aPad->HasHole() )
-        {
-            // Holes are at the pad centre (it's the shape that may be offset)
-            const VECTOR2I hole_pos = aPad->GetPosition();
-            const VECTOR2I hole_size = aPad->GetDrillSize();
-
-            std::vector<TYPED_POINT2I> snap_pts;
-
-            if( hole_size.x == hole_size.y )
-            {
-                // Circle
-                const CIRCLE circle( hole_pos, hole_size.x / 2 );
-                snap_pts = KIGEOM::GetCircleKeyPoints( circle, true );
-            }
-            else
-            {
-                // Oval
-
-                // For now there's no way to have an off-angle hole, so this is the
-                // same as the pad. In future, this may not be true:
-                // https://gitlab.com/kicad/code/kicad/-/issues/4124
-                const OVAL oval( hole_size, hole_pos, aPad->GetOrientation() );
-                snap_pts = KIGEOM::GetOvalKeyPoints( oval, ovalKeyPointFlags );
-            }
-
-            for( const TYPED_POINT2I& snap_pt : snap_pts )
-                addAnchor( snap_pt.m_point, OUTLINE | SNAPPABLE, aPad, snap_pt.m_types );
-        }
-    };
-
-    const auto addRectPoints = [&]( const BOX2I& aBox, EDA_ITEM& aRelatedItem )
-    {
-        const VECTOR2I topRight( aBox.GetRight(), aBox.GetTop() );
-        const VECTOR2I bottomLeft( aBox.GetLeft(), aBox.GetBottom() );
-
-        const SEG first( aBox.GetOrigin(), topRight );
-        const SEG second( topRight, aBox.GetEnd() );
-        const SEG third( aBox.GetEnd(), bottomLeft );
-        const SEG fourth( bottomLeft, aBox.GetOrigin() );
-
-        const int snapFlags = CORNER | SNAPPABLE;
-
-        addAnchor( aBox.GetCenter(), snapFlags, &aRelatedItem, POINT_TYPE::PT_CENTER );
-
-        addAnchor( first.A,         snapFlags, &aRelatedItem, POINT_TYPE::PT_CORNER );
-        addAnchor( first.Center(),  snapFlags, &aRelatedItem, POINT_TYPE::PT_MID );
-        addAnchor( second.A,        snapFlags, &aRelatedItem, POINT_TYPE::PT_CORNER );
-        addAnchor( second.Center(), snapFlags, &aRelatedItem, POINT_TYPE::PT_MID );
-        addAnchor( third.A,         snapFlags, &aRelatedItem, POINT_TYPE::PT_CORNER );
-        addAnchor( third.Center(),  snapFlags, &aRelatedItem, POINT_TYPE::PT_MID );
-        addAnchor( fourth.A,        snapFlags, &aRelatedItem, POINT_TYPE::PT_CORNER );
-        addAnchor( fourth.Center(), snapFlags, &aRelatedItem, POINT_TYPE::PT_MID );
-    };
+                addAnchor( first.A,         snapFlags, &aRelatedItem, POINT_TYPE::PT_CORNER );
+                addAnchor( first.Center(),  snapFlags, &aRelatedItem, POINT_TYPE::PT_MID );
+                addAnchor( second.A,        snapFlags, &aRelatedItem, POINT_TYPE::PT_CORNER );
+                addAnchor( second.Center(), snapFlags, &aRelatedItem, POINT_TYPE::PT_MID );
+                addAnchor( third.A,         snapFlags, &aRelatedItem, POINT_TYPE::PT_CORNER );
+                addAnchor( third.Center(),  snapFlags, &aRelatedItem, POINT_TYPE::PT_MID );
+                addAnchor( fourth.A,        snapFlags, &aRelatedItem, POINT_TYPE::PT_CORNER );
+                addAnchor( fourth.Center(), snapFlags, &aRelatedItem, POINT_TYPE::PT_MID );
+            };
 
     const auto handleShape =
             [&]( PCB_SHAPE* shape )
@@ -1328,26 +1302,18 @@ void PCB_GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos
 
                         addAnchor( start, ORIGIN | SNAPPABLE, shape, POINT_TYPE::PT_CENTER );
 
-                        addAnchor( start + VECTOR2I( -r, 0 ), OUTLINE | SNAPPABLE, shape,
-                                   POINT_TYPE::PT_QUADRANT );
-                        addAnchor( start + VECTOR2I( r, 0 ), OUTLINE | SNAPPABLE, shape,
-                                   POINT_TYPE::PT_QUADRANT );
-                        addAnchor( start + VECTOR2I( 0, -r ), OUTLINE | SNAPPABLE, shape,
-                                   POINT_TYPE::PT_QUADRANT );
-                        addAnchor( start + VECTOR2I( 0, r ), OUTLINE | SNAPPABLE, shape,
-                                   POINT_TYPE::PT_QUADRANT );
+                        addAnchor( start + VECTOR2I( -r, 0 ), OUTLINE | SNAPPABLE, shape, POINT_TYPE::PT_QUADRANT );
+                        addAnchor( start + VECTOR2I( r, 0 ), OUTLINE | SNAPPABLE, shape, POINT_TYPE::PT_QUADRANT );
+                        addAnchor( start + VECTOR2I( 0, -r ), OUTLINE | SNAPPABLE, shape, POINT_TYPE::PT_QUADRANT );
+                        addAnchor( start + VECTOR2I( 0, r ), OUTLINE | SNAPPABLE, shape, POINT_TYPE::PT_QUADRANT );
                         break;
                     }
 
                     case SHAPE_T::ARC:
-                        addAnchor( shape->GetStart(), CORNER | SNAPPABLE, shape,
-                                   POINT_TYPE::PT_END );
-                        addAnchor( shape->GetEnd(), CORNER | SNAPPABLE, shape,
-                                   POINT_TYPE::PT_END );
-                        addAnchor( shape->GetArcMid(), CORNER | SNAPPABLE, shape,
-                                   POINT_TYPE::PT_MID );
-                        addAnchor( shape->GetCenter(), ORIGIN | SNAPPABLE, shape,
-                                   POINT_TYPE::PT_CENTER );
+                        addAnchor( shape->GetStart(), CORNER | SNAPPABLE, shape, POINT_TYPE::PT_END );
+                        addAnchor( shape->GetEnd(), CORNER | SNAPPABLE, shape, POINT_TYPE::PT_END );
+                        addAnchor( shape->GetArcMid(), CORNER | SNAPPABLE, shape, POINT_TYPE::PT_MID );
+                        addAnchor( shape->GetCenter(), ORIGIN | SNAPPABLE, shape, POINT_TYPE::PT_CENTER );
                         break;
 
                     case SHAPE_T::RECTANGLE:
@@ -1359,8 +1325,7 @@ void PCB_GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos
                     case SHAPE_T::SEGMENT:
                         addAnchor( start, CORNER | SNAPPABLE, shape, POINT_TYPE::PT_END );
                         addAnchor( end, CORNER | SNAPPABLE, shape, POINT_TYPE::PT_END );
-                        addAnchor( shape->GetCenter(), CORNER | SNAPPABLE, shape,
-                                   POINT_TYPE::PT_MID );
+                        addAnchor( shape->GetCenter(), CORNER | SNAPPABLE, shape, POINT_TYPE::PT_MID );
                         break;
 
                     case SHAPE_T::POLY:
@@ -1422,7 +1387,9 @@ void PCB_GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos
                             if( !isHighContrast
                                 || PadstackUniqueLayerAppliesToLayer( pad->Padstack(), aLayer,
                                                                       activeHighContrastPrimaryLayer ) )
+                            {
                                 handlePadShape( pad, aLayer );
+                            }
                         } );
             }
 
@@ -1466,7 +1433,9 @@ void PCB_GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos
                             if( !isHighContrast
                                 || PadstackUniqueLayerAppliesToLayer( pad->Padstack(), aLayer,
                                                                       activeHighContrastPrimaryLayer ) )
+                            {
                                 handlePadShape( pad, aLayer );
+                            }
                         } );
             }
 
@@ -1568,8 +1537,7 @@ void PCB_GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos
 
         case PCB_MARKER_T:
         case PCB_TARGET_T:
-            addAnchor( aItem->GetPosition(), ORIGIN | CORNER | SNAPPABLE, aItem,
-                       POINT_TYPE::PT_CENTER );
+            addAnchor( aItem->GetPosition(), ORIGIN | CORNER | SNAPPABLE, aItem, POINT_TYPE::PT_CENTER );
             break;
 
         case PCB_VIA_T:
@@ -1585,8 +1553,7 @@ void PCB_GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos
             }
 
             if( checkVisibility( aItem ) )
-                addAnchor( aItem->GetPosition(), ORIGIN | CORNER | SNAPPABLE, aItem,
-                           POINT_TYPE::PT_CENTER );
+                addAnchor( aItem->GetPosition(), ORIGIN | CORNER | SNAPPABLE, aItem, POINT_TYPE::PT_CENTER );
 
             break;
 
@@ -1704,10 +1671,9 @@ void PCB_GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos
 
             if( checkVisibility( aItem ) )
             {
-                const PCB_REFERENCE_IMAGE& image =
-                        static_cast<const PCB_REFERENCE_IMAGE&>( *aItem );
-                const REFERENCE_IMAGE& refImg = image.GetReferenceImage();
-                const BOX2I            bbox = refImg.GetBoundingBox();
+                const PCB_REFERENCE_IMAGE& image = static_cast<const PCB_REFERENCE_IMAGE&>( *aItem );
+                const REFERENCE_IMAGE&     refImg = image.GetReferenceImage();
+                const BOX2I                bbox = refImg.GetBoundingBox();
 
                 addRectPoints( bbox, *aItem );
 
@@ -1749,6 +1715,7 @@ PCB_GRID_HELPER::ANCHOR* PCB_GRID_HELPER::nearestAnchor( const VECTOR2I& aPos, i
         else
         {
             const double dist = anchor.pos.SquaredDistance( aPos );
+
             if( dist < minDist )
             {
                 // New minimum distance

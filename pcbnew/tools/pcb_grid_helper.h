@@ -147,7 +147,8 @@ private:
     void computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos, bool aFrom,
                          const PCB_SELECTION_FILTER_OPTIONS* aSelectionFilter );
 
-    MAGNETIC_SETTINGS*     m_magneticSettings;
+private:
+    MAGNETIC_SETTINGS*         m_magneticSettings;
 
     std::vector<NEARABLE_GEOM> m_pointOnLineCandidates;
 };
