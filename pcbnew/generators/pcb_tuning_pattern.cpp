@@ -2611,6 +2611,8 @@ int DRAWING_TOOL::PlaceTuningPattern( const TOOL_EVENT& aEvent )
                 else
                     guide.SetIncludeSecondary( true );
 
+                guide.SetPreferredLayer( m_frame->GetActiveLayer() );
+
                 collector.Collect( board, { PCB_TRACE_T, PCB_ARC_T }, cursorPos, guide );
 
                 if( collector.GetCount() > 1 )
