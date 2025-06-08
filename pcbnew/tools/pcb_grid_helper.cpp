@@ -526,6 +526,7 @@ VECTOR2I PCB_GRID_HELPER::BestSnapAnchor( const VECTOR2I& aOrigin, const LSET& a
             BOX2ISafe( VECTOR2D( aOrigin ) - snapRange / 2.0, VECTOR2D( snapRange, snapRange ) );
 
     clearAnchors();
+    m_snapItem = std::nullopt;
 
     const std::vector<BOARD_ITEM*> visibleItems = queryVisible( visibilityHorizon, aSkip );
     computeAnchors( visibleItems, aOrigin, false, nullptr, &aLayers, false );
@@ -976,16 +977,13 @@ void PCB_GRID_HELPER::computeAnchors( const std::vector<BOARD_ITEM*>& aItems,
         processItem( *item );
     }
 
-    for( const CONSTRUCTION_MANAGER::CONSTRUCTION_ITEM_BATCH& batch :
-         getSnapManager().GetConstructionItems() )
+    for( const CONSTRUCTION_MANAGER::CONSTRUCTION_ITEM_BATCH& batch : getSnapManager().GetConstructionItems() )
     {
         for( const CONSTRUCTION_MANAGER::CONSTRUCTION_ITEM& constructionItem : batch )
         {
             BOARD_ITEM* involvedItem = static_cast<BOARD_ITEM*>( constructionItem.Item );
 
-
-            for( const KIGFX::CONSTRUCTION_GEOM::DRAWABLE& drawable :
-                 constructionItem.Constructions )
+            for( const KIGFX::CONSTRUCTION_GEOM::DRAWABLE& drawable : constructionItem.Constructions )
             {
                 std::visit(
                         [&]( const auto& visited )
@@ -1002,8 +1000,7 @@ void PCB_GRID_HELPER::computeAnchors( const std::vector<BOARD_ITEM*>& aItems,
                             else if constexpr( std::is_same_v<ItemType, VECTOR2I> )
                             {
                                 // Add any free-floating points as snap points.
-                                addAnchor( visited, SNAPPABLE | CONSTRUCTED, involvedItem,
-                                           POINT_TYPE::PT_NONE );
+                                addAnchor( visited, SNAPPABLE | CONSTRUCTED, involvedItem, POINT_TYPE::PT_NONE );
                             }
                         },
                         drawable );

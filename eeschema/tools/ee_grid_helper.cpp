@@ -153,6 +153,7 @@ VECTOR2I EE_GRID_HELPER::BestSnapAnchor( const VECTOR2I& aOrigin, GRID_HELPER_GR
                  VECTOR2I( snapRange, snapRange ) );
 
     clearAnchors();
+    m_snapItem = std::nullopt;
 
     for( SCH_ITEM* item : queryVisible( bb, aSkip ) )
         computeAnchors( item, aOrigin );
