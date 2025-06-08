@@ -92,7 +92,7 @@ public:
 class KICOMMON_API TOOLBAR_GROUP_CONFIG
 {
 public:
-    TOOLBAR_GROUP_CONFIG( wxString aName ) :
+    TOOLBAR_GROUP_CONFIG( const wxString& aName ) :
         m_groupName( aName )
     {
     }
@@ -134,7 +134,7 @@ public:
     TOOLBAR_CONFIGURATION() {}
     virtual ~TOOLBAR_CONFIGURATION() {}
 
-    TOOLBAR_CONFIGURATION& AppendAction( std::string aActionName )
+    TOOLBAR_CONFIGURATION& AppendAction( const std::string& aActionName )
     {
         m_toolbarItems.emplace_back( TOOLBAR_ITEM_TYPE::TOOL, aActionName );
         return *this;
@@ -168,7 +168,7 @@ public:
         return *this;
     }
 
-    TOOLBAR_CONFIGURATION& AppendControl( std::string aControlName )
+    TOOLBAR_CONFIGURATION& AppendControl( const std::string& aControlName )
     {
         m_toolbarItems.emplace_back( TOOLBAR_ITEM_TYPE::CONTROL, aControlName );
         return *this;
