@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-01 20:42+0300\n"
+"POT-Creation-Date: 2025-06-08 17:02+0300\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -4635,8 +4635,8 @@ msgstr "Error reading file."
 msgid "Cannot open file '%s'"
 msgstr "Cannot open file '%s'"
 
-msgid "File import cancelled by user."
-msgstr "File import cancelled by user."
+msgid "File import canceled by user."
+msgstr "File import canceled by user."
 
 msgid "The selected file is not valid or might be corrupt!"
 msgstr "The selected file is not valid or might be corrupt!"
@@ -6461,8 +6461,8 @@ msgstr "Toggle between A and B display"
 msgid "Footprint not found."
 msgstr "Footprint not found."
 
-msgid "Loading Footprint Libraries"
-msgstr "Loading Footprint Libraries"
+msgid "Load Footprint Libraries"
+msgstr "Load Footprint Libraries"
 
 msgid "No default footprint"
 msgstr "No default footprint"
@@ -6583,11 +6583,11 @@ msgstr "Open Preferences Directory"
 msgid "Reset %s to Defaults"
 msgstr "Reset %s to Defaults"
 
-msgid "Loading Design Block Libraries"
-msgstr "Loading Design Block Libraries"
+msgid "Load Design Block Libraries"
+msgstr "Load Design Block Libraries"
 
-msgid "Updating Design Block Libraries"
-msgstr "Updating Design Block Libraries"
+msgid "Update Design Block Libraries"
+msgstr "Update Design Block Libraries"
 
 msgid "Errors were encountered loading design blocks:"
 msgstr "Errors were encountered loading design blocks:"
@@ -7750,8 +7750,8 @@ msgstr "Update keywords and footprint filters"
 msgid "Update/reset visibility of pin names/numbers"
 msgstr "Update/reset visibility of pin names/numbers"
 
-msgid "Reset alternate pin to default"
-msgstr "Reset alternate pin to default"
+msgid "Reset alternate pin functions"
+msgstr "Reset alternate pin functions"
 
 msgid "Update/reset symbol attributes"
 msgstr "Update/reset symbol attributes"
@@ -7901,8 +7901,8 @@ msgstr "Errors, Warnings and Exclusions"
 msgid "%d symbol(s) require annotation.<br><br>"
 msgstr "%d symbol(s) require annotation.<br><br>"
 
-msgid "-------- ERC cancelled by user.<br><br>"
-msgstr "-------- ERC cancelled by user.<br><br>"
+msgid "-------- ERC canceled by user.<br><br>"
+msgstr "-------- ERC canceled by user.<br><br>"
 
 msgid "Done.<br><br>"
 msgstr "Done.<br><br>"
@@ -8554,6 +8554,18 @@ msgstr "Pin count:"
 msgid "Duplicate pins:"
 msgstr "Duplicate pins:"
 
+msgid "Filter Pin Table"
+msgstr "Filter Pin Table"
+
+msgid "Filter by unit:"
+msgstr "Filter by unit:"
+
+msgid "Filter by body style:"
+msgstr "Filter by body style:"
+
+msgid "Filter by selection"
+msgstr "Filter by selection"
+
 msgid "Export"
 msgstr "Export"
 
@@ -8583,15 +8595,6 @@ msgstr "From File..."
 
 msgid "From Clipboard"
 msgstr "From Clipboard"
-
-msgid "Filter by unit:"
-msgstr "Filter by unit:"
-
-msgid "Filter by body style:"
-msgstr "Filter by body style:"
-
-msgid "Filter by selection"
-msgstr "Filter by selection"
 
 msgid "Group by name"
 msgstr "Group by name"
@@ -9327,8 +9330,8 @@ msgstr ""
 "Error importing settings from project:\n"
 "Project file %s could not be loaded."
 
-msgid "Loading Bus Aliases"
-msgstr "Loading Bus Aliases"
+msgid "Load Bus Aliases"
+msgstr "Load Bus Aliases"
 
 msgid "Root"
 msgstr "Root"
@@ -11588,11 +11591,11 @@ msgstr "Schematic '%s' is already open by '%s' at '%s'."
 msgid "Schematic '%s' does not exist.  Do you wish to create it?"
 msgstr "Schematic '%s' does not exist.  Do you wish to create it?"
 
-msgid "Creating Schematic"
-msgstr "Creating Schematic"
+msgid "Create Schematic"
+msgstr "Create Schematic"
 
-msgid "Loading Schematic"
-msgstr "Loading Schematic"
+msgid "Load Schematic"
+msgstr "Load Schematic"
 
 msgid "Schematic file changes are unsaved"
 msgstr "Schematic file changes are unsaved"
@@ -11682,6 +11685,9 @@ msgid ""
 msgstr ""
 "This file was created by an older version of KiCad. It will be converted to "
 "the new format when saved."
+
+msgid "Updating connections..."
+msgstr "Updating connections..."
 
 msgid ""
 "This schematic contains symbols that have leading and/or trailing white "
@@ -11788,9 +11794,6 @@ msgstr "Overwrite Files"
 
 msgid "Abort Project Save"
 msgstr "Abort Project Save"
-
-msgid "Importing Schematic"
-msgstr "Importing Schematic"
 
 #, c-format
 msgid "Unhandled exception occurred loading schematic '%s'."
@@ -12401,9 +12404,6 @@ msgstr "[Unsaved]"
 msgid "[no schematic loaded]"
 msgstr "[no schematic loaded]"
 
-msgid "Schematic Cleanup"
-msgstr "Schematic Cleanup"
-
 #, c-format
 msgid "Highlighted net: %s"
 msgstr "Highlighted net: %s"
@@ -12456,6 +12456,10 @@ msgstr "<unnamed>"
 
 msgid "Members"
 msgstr "Members"
+
+#, c-format
+msgid "Importing %s"
+msgstr "Importing %s"
 
 #, c-format
 msgid ""
@@ -12872,8 +12876,8 @@ msgstr "Error retriving data from HTTP library %s: %s"
 msgid "KiCad HTTP library files"
 msgstr "KiCad HTTP library files"
 
-msgid "Open cancelled by user."
-msgstr "Open cancelled by user."
+msgid "Open canceled by user."
+msgstr "Open canceled by user."
 
 #, c-format
 msgid "'%s' does not appear to be an Eeschema file."
@@ -13807,6 +13811,9 @@ msgstr "Signal name contains '{' and '}' but is not a valid bus name"
 
 msgid "Signal name contains '[' or ']' but is not a valid bus name."
 msgstr "Signal name contains '[' or ']' but is not a valid bus name."
+
+msgid "Schematic Cleanup"
+msgstr "Schematic Cleanup"
 
 #, c-format
 msgid ""
@@ -14980,14 +14987,14 @@ msgstr "Library Editor"
 msgid "KiCad Symbol Editor"
 msgstr "KiCad Symbol Editor"
 
-msgid "Loading Symbol Libraries"
-msgstr "Loading Symbol Libraries"
+msgid "Load Symbol Libraries"
+msgstr "Load Symbol Libraries"
 
 msgid "Library changes are unsaved"
 msgstr "Library changes are unsaved"
 
-msgid "Symbol library loading was cancelled by user."
-msgstr "Symbol library loading was cancelled by user."
+msgid "Symbol library loading canceled by user."
+msgstr "Symbol library loading canceled by user."
 
 #, c-format
 msgid ""
@@ -15046,6 +15053,9 @@ msgstr ""
 
 msgid "Could not open the library file."
 msgstr "Could not open the library file."
+
+msgid "Loading Symbol Libraries"
+msgstr "Loading Symbol Libraries"
 
 #, c-format
 msgid "Loading library '%s'..."
@@ -15421,8 +15431,8 @@ msgstr ""
 msgid "Re-linking footprints requires a fully annotated schematic."
 msgstr "Re-linking footprints requires a fully annotated schematic."
 
-msgid "Footprint re-linking cancelled by user."
-msgstr "Footprint re-linking cancelled by user."
+msgid "Footprint re-linking canceled by user."
+msgstr "Footprint re-linking canceled by user."
 
 msgid "true"
 msgstr "true"
@@ -17393,8 +17403,8 @@ msgstr "File not found:"
 msgid "<b>A gerber job file cannot be loaded as a plot file</b> <i>%s</i>"
 msgstr "<b>A gerber job file cannot be loaded as a plot file</b> <i>%s</i>"
 
-msgid "Loading files..."
-msgstr "Loading files..."
+msgid "Load Files"
+msgstr "Load Files"
 
 #, c-format
 msgid "Loading %u/%zu %s..."
@@ -18677,11 +18687,17 @@ msgstr "Destination path:"
 msgid "Include jobs:"
 msgstr "Include jobs:"
 
+msgid "<value set at runtime>"
+msgstr "<value set at runtime>"
+
 msgid "Record output messages"
 msgstr "Record output messages"
 
 msgid "Ignore non-zero exit code"
 msgstr "Ignore non-zero exit code"
+
+msgid "Available text variables:"
+msgstr "Available text variables:"
 
 msgid "Execute Command Job Settings"
 msgstr "Execute Command Job Settings"
@@ -18770,8 +18786,8 @@ msgstr "Last run successful"
 msgid "Last run failed"
 msgstr "Last run failed"
 
-msgid "Running jobs"
-msgstr "Running jobs"
+msgid "Run Jobs"
+msgstr "Run Jobs"
 
 msgid "Edit Destination Options..."
 msgstr "Edit Destination Options..."
@@ -18987,6 +19003,10 @@ msgstr "Error opening jobs file"
 
 msgid "Edit File in Text Editor"
 msgstr "Edit File in Text Editor"
+
+#, c-format
+msgid "Project '%s' is already open by '%s' at '%s'."
+msgstr "Project '%s' is already open by '%s' at '%s'."
 
 msgid "[no project loaded]"
 msgstr "[no project loaded]"
@@ -19208,8 +19228,8 @@ msgstr "Error downloading package"
 msgid "Save Package"
 msgstr "Save Package"
 
-msgid "Downloading package"
-msgstr "Downloading package"
+msgid "Download Package"
+msgstr "Download Package"
 
 msgid ""
 "Integrity of the downloaded package could not be verified, hash does not "
@@ -19515,9 +19535,6 @@ msgstr "Open files in a Text Editor"
 msgid "Edit in a Text Editor"
 msgstr "Edit in a Text Editor"
 
-msgid "Run Jobs"
-msgstr "Run Jobs"
-
 msgid "Rename File..."
 msgstr "Rename File..."
 
@@ -19615,8 +19632,8 @@ msgstr "Failed to initialize Git project."
 msgid "Failed to set default remote."
 msgstr "Failed to set default remote."
 
-msgid "Fetching Remote"
-msgstr "Fetching Remote"
+msgid "Fetch Remote"
+msgstr "Fetch Remote"
 
 msgid "Failed to pull project"
 msgstr "Failed to pull project"
@@ -19790,8 +19807,8 @@ msgstr ""
 msgid "Clone Project from Git Repository"
 msgstr "Clone Project from Git Repository"
 
-msgid "Cloning Repository"
-msgstr "Cloning Repository"
+msgid "Clone Repository"
+msgstr "Clone Repository"
 
 msgid "No project files were found in the repository."
 msgstr "No project files were found in the repository."
@@ -20902,14 +20919,29 @@ msgstr "s"
 msgid "Calculate"
 msgstr "Calculate"
 
+msgid "Rhodium"
+msgstr "Rhodium"
+
 msgid "Platinum"
 msgstr "Platinum"
+
+msgid "Palladium"
+msgstr "Palladium"
 
 msgid "Gold"
 msgstr "Gold"
 
-msgid "Titanium"
-msgstr "Titanium"
+msgid "Stainless steel 316L"
+msgstr "Stainless steel 316L"
+
+msgid "Inconel"
+msgstr "Inconel"
+
+msgid "Indium"
+msgstr "Indium"
+
+msgid "Titanium, passive"
+msgstr "Titanium, passive"
 
 msgid "Stainless steel 18-9"
 msgstr "Stainless steel 18-9"
@@ -20920,8 +20952,17 @@ msgstr "Silver"
 msgid "Mercury"
 msgstr "Mercury"
 
+msgid "ENEPIG (Ni/Pd/Au)"
+msgstr "ENEPIG (Ni/Pd/Au)"
+
+msgid "ENIG (Ni/Au)"
+msgstr "ENIG (Ni/Au)"
+
 msgid "Nickel"
 msgstr "Nickel"
+
+msgid "Carbon (Graphitic)"
+msgstr "Carbon (Graphitic)"
 
 msgid "Copper"
 msgstr "Copper"
@@ -20932,8 +20973,26 @@ msgstr "Copper-Aluminium"
 msgid "Brass"
 msgstr "Brass"
 
+msgid "Beryllium copper"
+msgstr "Beryllium copper"
+
+msgid "Lead-free Solder"
+msgstr "Lead-free Solder"
+
+msgid "Phosphor bronze"
+msgstr "Phosphor bronze"
+
 msgid "Bronze"
 msgstr "Bronze"
+
+msgid "Tin-Nickel (Sn/Ni)"
+msgstr "Tin-Nickel (Sn/Ni)"
+
+msgid "Solder 63/37 (Eutectic)"
+msgstr "Solder 63/37 (Eutectic)"
+
+msgid "Solder 60/40 (Leaded)"
+msgstr "Solder 60/40 (Leaded)"
 
 msgid "Tin"
 msgstr "Tin"
@@ -20941,8 +21000,8 @@ msgstr "Tin"
 msgid "Lead"
 msgstr "Lead"
 
-msgid "Aluminium-Copper"
-msgstr "Aluminium-Copper"
+msgid "2xxx series Al alloy"
+msgstr "2xxx series Al alloy"
 
 msgid "Cast iron"
 msgstr "Cast iron"
@@ -20950,8 +21009,11 @@ msgstr "Cast iron"
 msgid "Carbon steel"
 msgstr "Carbon steel"
 
-msgid "Aluminium"
-msgstr "Aluminium"
+msgid "Aluminium, chromated"
+msgstr "Aluminium, chromated"
+
+msgid "Aluminium, pure, passive"
+msgstr "Aluminium, pure, passive"
 
 msgid "Cadmium"
 msgstr "Cadmium"
@@ -20959,11 +21021,14 @@ msgstr "Cadmium"
 msgid "Iron"
 msgstr "Iron"
 
-msgid "Chrome"
-msgstr "Chrome"
+msgid "Chrome, passive"
+msgstr "Chrome, passive"
 
 msgid "Zinc"
 msgstr "Zinc"
+
+msgid "Steel, zinc-plated"
+msgstr "Steel, zinc-plated"
 
 msgid "Manganese"
 msgstr "Manganese"
@@ -22003,8 +22068,8 @@ msgstr "Autoplacing %s"
 msgid "Board edges must be defined on the %s layer."
 msgstr "Board edges must be defined on the %s layer."
 
-msgid "Autoplace Components"
-msgstr "Autoplace Components"
+msgid "Autoplace Footprints"
+msgstr "Autoplace Footprints"
 
 msgid "Tessellating copper zones..."
 msgstr "Tessellating copper zones..."
@@ -22867,8 +22932,8 @@ msgstr ""
 "Error importing settings from board:\n"
 "Associated project file %s could not be loaded"
 
-msgid "Loading PCB"
-msgstr "Loading PCB"
+msgid "Load PCB"
+msgstr "Load PCB"
 
 #, c-format
 msgid ""
@@ -23807,8 +23872,8 @@ msgstr "DRC incomplete: could not compile custom design rules."
 msgid "Show design rules."
 msgstr "Show design rules."
 
-msgid "-------- DRC cancelled by user.<br><br>"
-msgstr "-------- DRC cancelled by user.<br><br>"
+msgid "-------- DRC canceled by user.<br><br>"
+msgstr "-------- DRC canceled by user.<br><br>"
 
 #, c-format
 msgid "Remove all exclusions for violations of rule '%s'"
@@ -29480,6 +29545,18 @@ msgid "%s min thickness: %s."
 msgstr "%s min thickness: %s."
 
 #, c-format
+msgid "Local override on %s; solder mask expansion: %s."
+msgstr "Local override on %s; solder mask expansion: %s."
+
+#, c-format
+msgid "Local override on %s; solder paste absolute clearance: %s."
+msgstr "Local override on %s; solder paste absolute clearance: %s."
+
+#, c-format
+msgid "Local override on %s; solder paste relative clearance: %s."
+msgstr "Local override on %s; solder paste relative clearance: %s."
+
+#, c-format
 msgid "Checking assertion \"%s\"."
 msgstr "Checking assertion \"%s\"."
 
@@ -29512,6 +29589,18 @@ msgstr "Checking %s gap: %s."
 #, c-format
 msgid "Checking %s thermal spoke width: %s."
 msgstr "Checking %s thermal spoke width: %s."
+
+#, c-format
+msgid "Checking %s solder mask expansion: %s."
+msgstr "Checking %s solder mask expansion: %s."
+
+#, c-format
+msgid "Checking %s solder paste absolute cleraance: %s."
+msgstr "Checking %s solder paste absolute cleraance: %s."
+
+#, c-format
+msgid "Checking %s solder paste relative clearance: %s."
+msgstr "Checking %s solder paste relative clearance: %s."
 
 #, c-format
 msgid "Checking %s min spoke count: %s."
@@ -29634,6 +29723,9 @@ msgstr "Condition not satisfied; rule ignored."
 #, c-format
 msgid "Inheriting from parent: %s."
 msgstr "Inheriting from parent: %s."
+
+msgid "board setup"
+msgstr "board setup"
 
 #, c-format
 msgid "Local clearance on %s: %s."
@@ -30857,8 +30949,8 @@ msgstr "The current PCB has been modified.  Save changes?"
 msgid "PCB '%s' does not exist. Do you wish to create it?"
 msgstr "PCB '%s' does not exist. Do you wish to create it?"
 
-msgid "Creating PCB"
-msgstr "Creating PCB"
+msgid "Create PCB"
+msgstr "Create PCB"
 
 msgid "File format is not supported"
 msgstr "File format is not supported"
@@ -30908,8 +31000,8 @@ msgstr ""
 msgid "The board must be saved before generating IPC-2581 file."
 msgstr "The board must be saved before generating IPC-2581 file."
 
-msgid "Generating IPC-2581 file"
-msgstr "Generating IPC-2581 file"
+msgid "Generate IPC-2581 File"
+msgstr "Generate IPC-2581 File"
 
 #, c-format
 msgid ""
@@ -30927,8 +31019,8 @@ msgstr ""
 "Error generating IPC-2581 file '%s'.\n"
 "Failed to rename temporary file '%s."
 
-msgid "Generating ODB++ output files"
-msgstr "Generating ODB++ output files"
+msgid "Generate ODB++ Files"
+msgstr "Generate ODB++ Files"
 
 msgid "Other"
 msgstr "Other"
@@ -31077,8 +31169,8 @@ msgstr "[from %s]"
 msgid "[no footprint loaded]"
 msgstr "[no footprint loaded]"
 
-msgid "Updating Footprint Libraries"
-msgstr "Updating Footprint Libraries"
+msgid "Update Footprint Libraries"
+msgstr "Update Footprint Libraries"
 
 msgid "No footprint selected."
 msgstr "No footprint selected."
@@ -34924,6 +35016,30 @@ msgstr "Resolved annular width constraints: min %s; opt %s; max %s."
 msgid "Resolved hole size constraints: min %s; opt %s; max %s."
 msgstr "Resolved hole size constraints: min %s; opt %s; max %s."
 
+msgid "Solder Mask"
+msgstr "Solder Mask"
+
+msgid "Solder mask expansion resolution for:"
+msgstr "Solder mask expansion resolution for:"
+
+#, c-format
+msgid "Resolved solder mask expansion: %s."
+msgstr "Resolved solder mask expansion: %s."
+
+msgid "Solder paste absolute clearance resolution for:"
+msgstr "Solder paste absolute clearance resolution for:"
+
+#, c-format
+msgid "Resolved solder paste absolute clearance: %s."
+msgstr "Resolved solder paste absolute clearance: %s."
+
+msgid "Solder paste relative clearance resolution for:"
+msgstr "Solder paste relative clearance resolution for:"
+
+#, c-format
+msgid "Resolved solder paste relative clearance: %s."
+msgstr "Resolved solder paste relative clearance: %s."
+
 #, c-format
 msgid "Resolved height constraints: min %s; opt %s; max %s."
 msgstr "Resolved height constraints: min %s; opt %s; max %s."
@@ -37010,8 +37126,8 @@ msgstr "Draw Zone"
 msgid "Draw Polygon"
 msgstr "Draw Polygon"
 
-msgid "Checking Zones"
-msgstr "Checking Zones"
+msgid "Check Zones"
+msgstr "Check Zones"
 
 msgid "Fill Zone(s)"
 msgstr "Fill Zone(s)"
@@ -37749,9 +37865,6 @@ msgstr "Class"
 msgid "No Net"
 msgstr "No Net"
 
-msgid "Cutout"
-msgstr "Cutout"
-
 msgid "No vias"
 msgstr "No vias"
 
@@ -37807,14 +37920,6 @@ msgstr "on %s, %s and %s"
 #, c-format
 msgid "on %s, %s and %zu more"
 msgstr "on %s, %s and %zu more"
-
-#, c-format
-msgid "Rule Area Cutout %s"
-msgstr "Rule Area Cutout %s"
-
-#, c-format
-msgid "Zone Cutout %s"
-msgstr "Zone Cutout %s"
 
 #, c-format
 msgid "Rule Area %s"
@@ -38067,6 +38172,107 @@ msgstr "KiCad Schematic Symbol"
 
 msgid "KiCad Drawing Sheet"
 msgstr "KiCad Drawing Sheet"
+
+#~ msgid "File import cancelled by user."
+#~ msgstr "File import cancelled by user."
+
+#~ msgid "Loading Footprint Libraries"
+#~ msgstr "Loading Footprint Libraries"
+
+#~ msgid "Loading Design Block Libraries"
+#~ msgstr "Loading Design Block Libraries"
+
+#~ msgid "Updating Design Block Libraries"
+#~ msgstr "Updating Design Block Libraries"
+
+#~ msgid "Reset alternate pin to default"
+#~ msgstr "Reset alternate pin to default"
+
+#~ msgid "-------- ERC cancelled by user.<br><br>"
+#~ msgstr "-------- ERC cancelled by user.<br><br>"
+
+#~ msgid "Loading Bus Aliases"
+#~ msgstr "Loading Bus Aliases"
+
+#~ msgid "Creating Schematic"
+#~ msgstr "Creating Schematic"
+
+#~ msgid "Loading Schematic"
+#~ msgstr "Loading Schematic"
+
+#~ msgid "Importing Schematic"
+#~ msgstr "Importing Schematic"
+
+#~ msgid "Open cancelled by user."
+#~ msgstr "Open cancelled by user."
+
+#~ msgid "Symbol library loading was cancelled by user."
+#~ msgstr "Symbol library loading was cancelled by user."
+
+#~ msgid "Footprint re-linking cancelled by user."
+#~ msgstr "Footprint re-linking cancelled by user."
+
+#~ msgid "Loading files..."
+#~ msgstr "Loading files..."
+
+#~ msgid "Running jobs"
+#~ msgstr "Running jobs"
+
+#~ msgid "Downloading package"
+#~ msgstr "Downloading package"
+
+#~ msgid "Fetching Remote"
+#~ msgstr "Fetching Remote"
+
+#~ msgid "Cloning Repository"
+#~ msgstr "Cloning Repository"
+
+#~ msgid "Titanium"
+#~ msgstr "Titanium"
+
+#~ msgid "Aluminium-Copper"
+#~ msgstr "Aluminium-Copper"
+
+#~ msgid "Aluminium"
+#~ msgstr "Aluminium"
+
+#~ msgid "Chrome"
+#~ msgstr "Chrome"
+
+#~ msgid "Autoplace Components"
+#~ msgstr "Autoplace Components"
+
+#~ msgid "Loading PCB"
+#~ msgstr "Loading PCB"
+
+#~ msgid "-------- DRC cancelled by user.<br><br>"
+#~ msgstr "-------- DRC cancelled by user.<br><br>"
+
+#~ msgid "Creating PCB"
+#~ msgstr "Creating PCB"
+
+#~ msgid "Generating IPC-2581 file"
+#~ msgstr "Generating IPC-2581 file"
+
+#~ msgid "Generating ODB++ output files"
+#~ msgstr "Generating ODB++ output files"
+
+#~ msgid "Updating Footprint Libraries"
+#~ msgstr "Updating Footprint Libraries"
+
+#~ msgid "Checking Zones"
+#~ msgstr "Checking Zones"
+
+#~ msgid "Cutout"
+#~ msgstr "Cutout"
+
+#, c-format
+#~ msgid "Rule Area Cutout %s"
+#~ msgstr "Rule Area Cutout %s"
+
+#, c-format
+#~ msgid "Zone Cutout %s"
+#~ msgstr "Zone Cutout %s"
 
 #~ msgid "Update clearance overrides and settings"
 #~ msgstr "Update clearance overrides and settings"
