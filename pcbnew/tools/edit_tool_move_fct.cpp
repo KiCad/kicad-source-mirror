@@ -538,7 +538,7 @@ bool EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, BOARD_COMMIT* aCommit
                 {
                     // Don't double move child items.
                     if( !item->GetParent() || !item->GetParent()->IsSelected() )
-                        static_cast<BOARD_ITEM*>( item )->Move( movement );
+                        item->Move( movement );
 
                     if( item->Type() == PCB_GENERATOR_T && sel_items.size() == 1 )
                     {
@@ -626,6 +626,9 @@ bool EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, BOARD_COMMIT* aCommit
                     // Drag items to the current cursor position
                     for( EDA_ITEM* item : selection )
                     {
+                        if( !item->IsBOARD_ITEM() )
+                            continue;
+
                         // Don't double move footprint pads, fields, etc.
                         if( item->GetParent() && item->GetParent()->IsSelected() )
                             continue;

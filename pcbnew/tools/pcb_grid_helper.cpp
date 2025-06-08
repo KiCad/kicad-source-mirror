@@ -69,7 +69,7 @@ std::optional<INTERSECTABLE_GEOM> GetBoardIntersectable( const BOARD_ITEM& aItem
     {
     case PCB_SHAPE_T:
     {
-        PCB_SHAPE shape = static_cast<const PCB_SHAPE&>( aItem );
+        const PCB_SHAPE& shape = static_cast<const PCB_SHAPE&>( aItem );
 
         switch( shape.GetShape() )
         {
@@ -573,6 +573,9 @@ VECTOR2I PCB_GRID_HELPER::BestSnapAnchor( const VECTOR2I& aOrigin, const LSET& a
 
                 for( EDA_ITEM* item : aItems )
                 {
+                    if( !item->IsBOARD_ITEM() )
+                        continue;
+
                     BOARD_ITEM* boardItem = static_cast<BOARD_ITEM*>( item );
 
                     // Null items are allowed to arrive here as they represent geometry that isn't
@@ -846,7 +849,7 @@ std::vector<BOARD_ITEM*>
 PCB_GRID_HELPER::queryVisible( const BOX2I& aArea, const std::vector<BOARD_ITEM*>& aSkip ) const
 {
     std::set<BOARD_ITEM*> items;
-    std::vector<KIGFX::VIEW::LAYER_ITEM_PAIR> selectedItems;
+    std::vector<KIGFX::VIEW::LAYER_ITEM_PAIR> visibleItems;
 
     PCB_TOOL_BASE*       currentTool = static_cast<PCB_TOOL_BASE*>( m_toolMgr->GetCurrentTool() );
     KIGFX::VIEW*         view = m_toolMgr->GetView();
@@ -854,10 +857,13 @@ PCB_GRID_HELPER::queryVisible( const BOX2I& aArea, const std::vector<BOARD_ITEM*
     const std::set<int>& activeLayers = settings->GetHighContrastLayers();
     bool                 isHighContrast = settings->GetHighContrast();
 
-    view->Query( aArea, selectedItems );
+    view->Query( aArea, visibleItems );
 
-    for( const auto& [ viewItem, layer ] : selectedItems )
+    for( const auto& [ viewItem, layer ] : visibleItems )
     {
+        if( !viewItem->IsBOARD_ITEM() )
+            continue;
+
         BOARD_ITEM* boardItem = static_cast<BOARD_ITEM*>( viewItem );
 
         if( currentTool->IsFootprintEditor() )
@@ -912,7 +918,8 @@ struct PCB_INTERSECTABLE
 
     // Clang wants this constructor
     PCB_INTERSECTABLE( BOARD_ITEM* aItem, INTERSECTABLE_GEOM aSeg ) :
-            Item( aItem ), Geometry( std::move( aSeg ) )
+            Item( aItem ),
+            Geometry( std::move( aSeg ) )
     {
     }
 };
@@ -1737,7 +1744,7 @@ PCB_GRID_HELPER::ANCHOR* PCB_GRID_HELPER::nearestAnchor( const VECTOR2I& aPos, i
 
         for( EDA_ITEM* const item : anchor->items )
         {
-            if( !item )
+            if( !item || !item->IsBOARD_ITEM() )
                 continue;
 
             std::optional<ecoord> distToThisItem =

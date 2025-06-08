@@ -2124,7 +2124,7 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
                                                        NeighboringSegmentFilter );
     }
 
-    if( selection.Empty() )
+    if( selection.Empty() || !selection.Front()->IsBOARD_ITEM() )
         return 0;
 
     // selection gets cleared in the next action, we need a copy of the selected items.
@@ -2150,6 +2150,9 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
     {
         for( int idx = 1; idx < selection.Size(); ++idx )
         {
+            if( !selection.GetItem( idx )->IsBOARD_ITEM() )
+                return 0;
+
             if( static_cast<BOARD_ITEM*>( selection.GetItem( idx ) )->Type() != PCB_FOOTPRINT_T )
                 return 0;
 

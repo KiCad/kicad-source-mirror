@@ -1774,7 +1774,7 @@ int PCB_POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
     PCB_BASE_EDIT_FRAME* editFrame = getEditFrame<PCB_BASE_EDIT_FRAME>();
     const PCB_SELECTION& selection = m_selectionTool->GetSelection();
 
-    if( selection.Size() != 1 || selection.Front()->GetEditFlags() )
+    if( selection.Size() != 1 || selection.Front()->GetEditFlags() || !selection.Front()->IsBOARD_ITEM() )
         return 0;
 
     BOARD_ITEM* item = static_cast<BOARD_ITEM*>( selection.Front() );

@@ -164,7 +164,11 @@ wxPGProperty* PCB_PROPERTIES_PANEL::createPGProperty( const PROPERTY_BASE* aProp
 PROPERTY_BASE* PCB_PROPERTIES_PANEL::getPropertyFromEvent( const wxPropertyGridEvent& aEvent ) const
 {
     PCB_SELECTION_TOOL* selectionTool = m_frame->GetToolManager()->GetTool<PCB_SELECTION_TOOL>();
-    const SELECTION& selection = selectionTool->GetSelection();
+    const SELECTION&    selection = selectionTool->GetSelection();
+
+    if( !selection.Front()->IsBOARD_ITEM() )
+        return nullptr;
+
     BOARD_ITEM* firstItem = static_cast<BOARD_ITEM*>( selection.Front() );
 
     wxCHECK_MSG( firstItem, nullptr,
@@ -225,6 +229,9 @@ void PCB_PROPERTIES_PANEL::valueChanged( wxPropertyGridEvent& aEvent )
 
     for( EDA_ITEM* edaItem : selection )
     {
+        if( !edaItem->IsBOARD_ITEM() )
+            continue;
+
         BOARD_ITEM* item = static_cast<BOARD_ITEM*>( edaItem );
         changes.Modify( item );
         item->Set( property, newValue );

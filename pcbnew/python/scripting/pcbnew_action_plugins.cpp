@@ -446,7 +446,7 @@ void PCB_EDIT_FRAME::RebuildAndRefresh()
 
     for( EDA_ITEM* item : selection.GetItems() )
     {
-        if( !item->IsSelected() )
+        if( !item->IsSelected() && item->IsBOARD_ITEM() )
             to_remove.push_back( static_cast<BOARD_ITEM*>( item ) );
     }
 

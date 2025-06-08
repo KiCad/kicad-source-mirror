@@ -725,6 +725,9 @@ PCB_SELECTION& PCB_SELECTION_TOOL::RequestSelection( CLIENT_SELECTION_FILTER aCl
 
         for( EDA_ITEM* item : m_selection )
         {
+            if( !item->IsBOARD_ITEM() )
+                continue;
+
             BOARD_ITEM* boardItem = static_cast<BOARD_ITEM*>( item );
             bool        lockedDescendant = false;
 
@@ -1166,6 +1169,9 @@ bool PCB_SELECTION_TOOL::selectMultiple()
 
             for( const KIGFX::VIEW::LAYER_ITEM_PAIR& candidate : candidates )
             {
+                if( !candidate.first->IsBOARD_ITEM() )
+                    continue;
+
                 BOARD_ITEM* item = static_cast<BOARD_ITEM*>( candidate.first );
 
                 if( item && Selectable( item ) && item->HitTest( selectionRect, !greedySelection )
@@ -1207,6 +1213,9 @@ bool PCB_SELECTION_TOOL::selectMultiple()
 
             for( EDA_ITEM* i : collector )
             {
+                if( !i->IsBOARD_ITEM() )
+                    continue;
+
                 BOARD_ITEM* item = static_cast<BOARD_ITEM*>( i );
 
                 if( m_subtractive || ( m_exclusive_or && item->IsSelected() ) )
@@ -1302,12 +1311,14 @@ int PCB_SELECTION_TOOL::SelectAll( const TOOL_EVENT& aEvent )
     getView()->Query( selectionBox,
             [&]( KIGFX::VIEW_ITEM* viewItem ) -> bool
             {
-                BOARD_ITEM* item = static_cast<BOARD_ITEM*>( viewItem );
+                if( viewItem->IsBOARD_ITEM() )
+                {
+                    BOARD_ITEM* item = static_cast<BOARD_ITEM*>( viewItem );
 
-                if( !item || !Selectable( item ) || !itemPassesFilter( item, true ) )
-                    return true;
+                    if( item && Selectable( item ) && itemPassesFilter( item, true ) )
+                        collection.Append( item );
+                }
 
-                collection.Append( item );
                 return true;
             } );
 
@@ -1333,12 +1344,14 @@ int PCB_SELECTION_TOOL::UnselectAll( const TOOL_EVENT& aEvent )
     getView()->Query( selectionBox,
             [&]( KIGFX::VIEW_ITEM* viewItem ) -> bool
             {
-                BOARD_ITEM* item = static_cast<BOARD_ITEM*>( viewItem );
+                if( viewItem->IsBOARD_ITEM() )
+                {
+                    BOARD_ITEM* item = static_cast<BOARD_ITEM*>( viewItem );
 
-                if( !item || !Selectable( item ) )
-                    return true;
+                    if( item && Selectable( item ) )
+                        unselect( item );
+                }
 
-                unselect( item );
                 return true;
             } );
 
@@ -2626,6 +2639,9 @@ int PCB_SELECTION_TOOL::filterSelection( const TOOL_EVENT& aEvent )
     // re-select items from the saved selection according to the dialog options
     for( EDA_ITEM* i : selection )
     {
+        if( !i->IsBOARD_ITEM() )
+            continue;
+
         BOARD_ITEM* item = static_cast<BOARD_ITEM*>( i );
         bool        include = itemIsIncludedByFilter( *item, board, opts );
 
@@ -2648,6 +2664,9 @@ void PCB_SELECTION_TOOL::FilterCollectedItems( GENERAL_COLLECTOR& aCollector, bo
 
     for( EDA_ITEM* i : aCollector )
     {
+        if( !i->IsBOARD_ITEM() )
+            continue;
+
         BOARD_ITEM* item = static_cast<BOARD_ITEM*>( i );
 
         if( !itemPassesFilter( item, aMultiSelect ) )
@@ -3149,7 +3168,7 @@ bool PCB_SELECTION_TOOL::Selectable( const BOARD_ITEM* aItem, bool checkVisibili
 
 void PCB_SELECTION_TOOL::select( EDA_ITEM* aItem )
 {
-    if( !aItem || aItem->IsSelected() )
+    if( !aItem || aItem->IsSelected() || !aItem->IsBOARD_ITEM() )
         return;
 
     if( aItem->Type() == PCB_PAD_T )
@@ -3921,10 +3940,10 @@ void PCB_SELECTION_TOOL::FilterCollectorForFootprints( GENERAL_COLLECTOR& aColle
         {
             FOOTPRINT* fp = nullptr;
 
-            if( item->Type() != PCB_FOOTPRINT_T )
-                fp = static_cast<BOARD_ITEM*>( item )->GetParentFootprint();
-            else
+            if( item->Type() == PCB_FOOTPRINT_T )
                 fp = static_cast<FOOTPRINT*>( item );
+            else if( item->IsBOARD_ITEM() )
+                fp = static_cast<BOARD_ITEM*>( item )->GetParentFootprint();
 
             // If the selection contains items that are not footprints, then don't restrict
             // whether we deselect the item or not.

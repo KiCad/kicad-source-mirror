@@ -522,7 +522,8 @@ std::deque<BOARD_ITEM*> GetCurrentSelection()
         std::for_each( selection.begin(), selection.end(),
                        [&items]( EDA_ITEM* item )
                        {
-                           items.push_back( static_cast<BOARD_ITEM*>( item ) );
+                           if( item->IsBOARD_ITEM() )
+                               items.push_back( static_cast<BOARD_ITEM*>( item ) );
                        } );
     }
 
