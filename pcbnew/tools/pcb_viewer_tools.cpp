@@ -297,7 +297,6 @@ int PCB_VIEWER_TOOLS::MeasureTool( const TOOL_EVENT& aEvent )
             else if( m_isDefaultTool )
             {
                 view.SetVisible( &ruler, false );
-                view.Remove( &ruler );
             }
             else
             {
