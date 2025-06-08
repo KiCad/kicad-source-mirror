@@ -1177,21 +1177,20 @@ void UOP::Exec( CONTEXT* ctx )
         // TODO: (and do this independently of unit specifics - e.g. MM + INCH needs to return one of the dimension
         // TODO: types, but our units framework doesn't currently allow this. Therefore, use some heuristics to
         // TODO: determine the resulting operation unit type for now
-        auto getOpResultUnits = []( const VALUE* aVal1, const VALUE* aVal2 )
-        {
-            // This condition can occur in, e.g., a unary negation operation
-            if( aVal1->GetUnits() == EDA_UNITS::UNSCALED && aVal2->GetUnits() != EDA_UNITS::UNSCALED )
-            {
-                return aVal2->GetUnits();
-            }
+        auto getOpResultUnits =
+                []( const VALUE* aVal1, const VALUE* aVal2 )
+                {
+                    wxCHECK( aVal1 && aVal2, EDA_UNITS::UNSCALED );
 
-            if( aVal1->GetUnits() != EDA_UNITS::UNSCALED && aVal2->GetUnits() == EDA_UNITS::UNSCALED )
-            {
-                return aVal1->GetUnits();
-            }
+                    // This condition can occur in, e.g., a unary negation operation
+                    if( aVal1->GetUnits() == EDA_UNITS::UNSCALED && aVal2->GetUnits() != EDA_UNITS::UNSCALED )
+                        return aVal2->GetUnits();
 
-            return aVal2->GetUnits();
-        };
+                    if( aVal1->GetUnits() != EDA_UNITS::UNSCALED && aVal2->GetUnits() == EDA_UNITS::UNSCALED )
+                        return aVal1->GetUnits();
+
+                    return aVal2->GetUnits();
+                };
 
         EDA_UNITS resultUnits = EDA_UNITS::UNSCALED;
 
