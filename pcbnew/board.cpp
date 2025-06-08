@@ -258,6 +258,8 @@ void BOARD::ClearProject()
 
 void BOARD::IncrementTimeStamp()
 {
+    std::unique_lock<std::shared_mutex> writeLock( m_CachesMutex );
+
     m_timeStamp++;
 
     if( !m_IntersectsAreaCache.empty()
@@ -271,8 +273,6 @@ void BOARD::IncrementTimeStamp()
         || m_maxClearanceValue.has_value()
         || !m_itemByIdCache.empty() )
     {
-        std::unique_lock<std::shared_mutex> writeLock( m_CachesMutex );
-
         m_IntersectsAreaCache.clear();
         m_EnclosedByAreaCache.clear();
         m_IntersectsCourtyardCache.clear();
