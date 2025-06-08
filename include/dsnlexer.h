@@ -332,6 +332,8 @@ public:
      */
     static bool IsSymbol( int aTok );
 
+    static bool IsNumber( int aTok );
+
     /**
      * Throw an #IO_ERROR exception with an input file specific error message.
      *
