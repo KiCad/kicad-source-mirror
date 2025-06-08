@@ -188,17 +188,27 @@ namespace SPICE_GRAMMAR
                                          opt<plusContinuation>,
                                          star<space>,
                                          paramValue> {};
+
     struct dotSubcktParamValuePairs : list<dotSubcktParamValuePair, sep> {};
-    struct dotSubcktParams : seq<opt<TAO_PEGTL_ISTRING( "params:" ),
-                                     opt<sep>>,
+
+    struct dotSubcktParamsStart : sor<TAO_PEGTL_ISTRING( "params:" ),
+                                      seq<newline,
+                                          TAO_PEGTL_ISTRING( ".param" )>> {};
+
+    struct dotSubcktParams : seq<opt<dotSubcktParamsStart>,
+                                 opt<sep>,
                                  dotSubcktParamValuePairs> {};
+
     struct dotSubcktPinName : seq<not_at<dotSubcktParams>,
                                   not_at<eolfComment>,
                                   plus<not_at<space>, any>> {};
+
     struct dotSubcktPinSequence : list<dotSubcktPinName, sep> {};
+
     struct dotSubcktEnd : seq<opt<sep>,
                               TAO_PEGTL_ISTRING( ".ends" ),
                               until<newline>> {};
+
     struct spiceUnit;
     struct dotSubckt : seq<opt<sep>,
                            if_must<TAO_PEGTL_ISTRING( ".subckt" ),
