@@ -60,15 +60,17 @@ static constexpr T sqrt_max_typed = ct_sqrt( std::numeric_limits<T>::max() );
 template <typename T>
 T isqrt(T x)
 {
-  T r = (T) std::sqrt((double) x);
   T sqrt_max = sqrt_max_typed<T>;
 
   if( x < 0 )
     return sqrt_max;
 
-  while (r < sqrt_max && r * r < x)
+  T r = (T) std::sqrt( (double) x );
+
+  while( r < sqrt_max && r * r < x )
     r++;
-  while (r > sqrt_max || r * r > x)
+
+  while( r > sqrt_max || r * r > x )
     r--;
 
   return r;
