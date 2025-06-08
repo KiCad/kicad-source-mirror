@@ -1167,13 +1167,16 @@ int PCB_CONTROL::Paste( const TOOL_EVENT& aEvent )
                 clipBoard->Visit(
                         [&]( EDA_ITEM* item, void* testData )
                         {
-                            // Anything still on the clipboard didn't get copied and needs to be
-                            // removed from the pasted groups.
-                            BOARD_ITEM* boardItem = static_cast<BOARD_ITEM*>( item );
-                            PCB_GROUP*  parentGroup = boardItem->GetParentGroup();
+                            if( item->IsBOARD_ITEM() )
+                            {
+                                // Anything still on the clipboard didn't get copied and needs to be
+                                // removed from the pasted groups.
+                                BOARD_ITEM* boardItem = static_cast<BOARD_ITEM*>( item );
+                                PCB_GROUP*  parentGroup = boardItem->GetParentGroup();
 
-                            if( parentGroup )
-                                parentGroup->RemoveItem( boardItem );
+                                if( parentGroup )
+                                    parentGroup->RemoveItem( boardItem );
+                            }
 
                             return INSPECT_RESULT::CONTINUE;
                         },
@@ -1430,9 +1433,8 @@ bool PCB_CONTROL::placeBoardItems( BOARD_COMMIT* aCommit, std::vector<BOARD_ITEM
         {
             selection.SetReferencePoint( VECTOR2I( 0, 0 ) );
         }
-        else
+        else if( BOARD_ITEM* item = dynamic_cast<BOARD_ITEM*>( selection.GetTopLeftItem() ) )
         {
-            BOARD_ITEM* item = static_cast<BOARD_ITEM*>( selection.GetTopLeftItem() );
             selection.SetReferencePoint( item->GetPosition() );
         }
 
@@ -1734,14 +1736,14 @@ int PCB_CONTROL::UpdateMessagePanel( const TOOL_EVENT& aEvent )
         // Pair selection broken into multiple, optional data, starting with the selected item
         // names
 
-        BOARD_ITEM* a = static_cast<BOARD_ITEM*>( selection[0] );
-        BOARD_ITEM* b = static_cast<BOARD_ITEM*>( selection[1] );
+        BOARD_ITEM* a = dynamic_cast<BOARD_ITEM*>( selection[0] );
+        BOARD_ITEM* b = dynamic_cast<BOARD_ITEM*>( selection[1] );
 
         msgItems.emplace_back( MSG_PANEL_ITEM( a->GetItemDescription( m_frame, false ),
                                                b->GetItemDescription( m_frame, false ) ) );
 
-        BOARD_CONNECTED_ITEM* a_conn = dyn_cast<BOARD_CONNECTED_ITEM*>( a );
-        BOARD_CONNECTED_ITEM* b_conn = dyn_cast<BOARD_CONNECTED_ITEM*>( b );
+        BOARD_CONNECTED_ITEM* a_conn = dynamic_cast<BOARD_CONNECTED_ITEM*>( a );
+        BOARD_CONNECTED_ITEM* b_conn = dynamic_cast<BOARD_CONNECTED_ITEM*>( b );
 
         if( a_conn && b_conn )
         {

@@ -1096,6 +1096,9 @@ int CONVERT_TOOL::CreateLines( const TOOL_EVENT& aEvent )
 
     for( EDA_ITEM* item : selection )
     {
+        if( !item->IsBOARD_ITEM() )
+            continue;
+
         if( handleGraphicSeg( item ) )
             continue;
 
@@ -1426,6 +1429,9 @@ int CONVERT_TOOL::OutsetItems( const TOOL_EVENT& aEvent )
 
     for( EDA_ITEM* item : selection )
     {
+        if( !item->IsBOARD_ITEM() )
+            continue;
+
         BOARD_ITEM* board_item = static_cast<BOARD_ITEM*>( item );
         outset_routine.ProcessItem( *board_item );
     }

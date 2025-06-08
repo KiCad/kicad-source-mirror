@@ -32,6 +32,7 @@
 #include <sch_tablecell.h>
 #include <sch_painter.h>
 #include <tool/tool_manager.h>
+#include <sch_tool_base.h>
 #include <settings/app_settings.h>
 #include <trigo.h>
 #include <view/view.h>
@@ -327,13 +328,30 @@ std::set<SCH_ITEM*> EE_GRID_HELPER::queryVisible( const BOX2I& aArea,
     std::set<SCH_ITEM*>                       items;
     std::vector<KIGFX::VIEW::LAYER_ITEM_PAIR> selectedItems;
 
-    KIGFX::VIEW* view = m_toolMgr->GetView();
+    EDA_DRAW_FRAME* frame = dynamic_cast<EDA_DRAW_FRAME*>( m_toolMgr->GetToolHolder() );
+    KIGFX::VIEW*    view = m_toolMgr->GetView();
 
     view->Query( aArea, selectedItems );
 
     for( const KIGFX::VIEW::LAYER_ITEM_PAIR& it : selectedItems )
     {
+        if( !it.first->IsSCH_ITEM() )
+            continue;
+
         SCH_ITEM* item = static_cast<SCH_ITEM*>( it.first );
+
+        if( frame && frame->IsType( FRAME_SCH_SYMBOL_EDITOR ) )
+        {
+            // If we are in the symbol editor, don't use the symbol itself
+            if( item->Type() == LIB_SYMBOL_T )
+                continue;
+        }
+        else
+        {
+            // If we are not in the symbol editor, don't use symbol-editor-private items
+            if( item->IsPrivate() )
+                continue;
+        }
 
         // The item must be visible and on an active layer
         if( view->IsVisible( item ) && item->ViewGetLOD( it.second, view ) < view->GetScale() )

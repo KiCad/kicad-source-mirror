@@ -3484,6 +3484,9 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
 
             for( const KIGFX::VIEW::LAYER_ITEM_PAIR& it : items )
             {
+                if( !it.first->IsBOARD_ITEM() )
+                    continue;
+
                 BOARD_ITEM* item = static_cast<BOARD_ITEM*>( it.first );
 
                 if( !( item->GetLayerSet() & lset ).any() )
@@ -3690,6 +3693,9 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
 
             for( const KIGFX::VIEW::LAYER_ITEM_PAIR& it : items )
             {
+                if( !it.first->IsBOARD_ITEM() )
+                    continue;
+
                 BOARD_ITEM* item = static_cast<BOARD_ITEM*>( it.first );
 
                 if( !( item->GetLayerSet() & lset ).any() )
