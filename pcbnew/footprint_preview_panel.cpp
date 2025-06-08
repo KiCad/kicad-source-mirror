@@ -54,8 +54,7 @@ FOOTPRINT_PREVIEW_PANEL::FOOTPRINT_PREVIEW_PANEL( KIWAY* aKiway, wxWindow* aPare
                                                   GAL_TYPE aGalType ) :
         PCB_DRAW_PANEL_GAL( aParent, -1, wxPoint( 0, 0 ), wxSize( 200, 200 ), *aOpts, aGalType ),
         KIWAY_HOLDER( aKiway, KIWAY_HOLDER::PANEL ),
-        m_displayOptions( std::move( aOpts ) ),
-        m_currentFootprint( nullptr )
+        m_displayOptions( std::move( aOpts ) )
 {
     SetStealsFocus( false );
     ShowScrollbars( wxSHOW_SB_NEVER, wxSHOW_SB_NEVER );
