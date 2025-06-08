@@ -1154,21 +1154,23 @@ bool BOARD_NETLIST_UPDATER::updateCopperZoneNets( NETLIST& aNetlist )
                 else
                 {
                     PCB_LAYER_ID layer = zone->GetLayer();
-                    VECTOR2I     pos = zone->GetPosition();
+                    VECTOR2I     pt = zone->GetPosition();
 
                     if( m_frame && m_frame->GetPcbNewSettings() )
                     {
                         if( m_frame->GetPcbNewSettings()->m_Display.m_DisplayInvertXAxis )
-                            pos.x *= -1;
+                            pt.x *= -1;
 
                         if( m_frame->GetPcbNewSettings()->m_Display.m_DisplayInvertYAxis )
-                            pos.y *= -1;
+                            pt.y *= -1;
                     }
 
                     msg.Printf( _( "Copper zone on layer %s at (%s, %s) has no pads connected." ),
                                 EscapeHTML( m_board->GetLayerName( layer ) ),
-                                m_frame->MessageTextFromValue( pos.x ),
-                                m_frame->MessageTextFromValue( pos.y ) );
+                                m_frame ? m_frame->MessageTextFromValue( pt.x )
+                                        : EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, EDA_UNITS::MM, pt.x ),
+                                m_frame ? m_frame->MessageTextFromValue( pt.y )
+                                        : EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, EDA_UNITS::MM, pt.y ) );
                 }
 
                 m_reporter->Report( msg, RPT_SEVERITY_WARNING );
@@ -1452,7 +1454,8 @@ bool BOARD_NETLIST_UPDATER::UpdateNetlist( NETLIST& aNetlist )
 
         // Although m_commit will probably also set this, it's not guaranteed, and we need to make
         // sure any modification to netclasses gets persisted to project settings through a save.
-        m_frame->OnModify();
+        if( m_frame )
+            m_frame->OnModify();
     }
 
     if( m_isDryRun )
