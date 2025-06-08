@@ -227,8 +227,8 @@ FOOTPRINT_CHOOSER_FRAME::FOOTPRINT_CHOOSER_FRAME( KIWAY* aKiway, wxWindow* aPare
     // clang-format off
     // Connect Events
     m_toggleDescription->Connect( wxEVT_COMMAND_BUTTON_CLICKED ,
-                               wxCommandEventHandler( FOOTPRINT_CHOOSER_FRAME::toggleBottomSplit ),
-                               nullptr,this );
+                                  wxCommandEventHandler( FOOTPRINT_CHOOSER_FRAME::toggleBottomSplit ),
+                                  nullptr, this );
 
     m_grButton3DView->Connect( wxEVT_COMMAND_BUTTON_CLICKED ,
                                wxCommandEventHandler( FOOTPRINT_CHOOSER_FRAME::on3DviewReq ),
@@ -267,8 +267,8 @@ FOOTPRINT_CHOOSER_FRAME::~FOOTPRINT_CHOOSER_FRAME()
     // clang-format off
     // Disconnect Events
     m_toggleDescription->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED,
-                                  wxCommandEventHandler( FOOTPRINT_CHOOSER_FRAME::toggleBottomSplit ),
-                                  nullptr, this );
+                                     wxCommandEventHandler( FOOTPRINT_CHOOSER_FRAME::toggleBottomSplit ),
+                                     nullptr, this );
 
     m_grButton3DView->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED,
                                   wxCommandEventHandler( FOOTPRINT_CHOOSER_FRAME::on3DviewReq ),
