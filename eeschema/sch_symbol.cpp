@@ -512,20 +512,20 @@ void SCH_SYMBOL::RemoveInstance( const KIID_PATH& aInstancePath )
 void SCH_SYMBOL::AddHierarchicalReference( const KIID_PATH& aPath, const wxString& aRef, int aUnit )
 {
     // Search for an existing path and remove it if found (should not occur)
-    for( unsigned ii = 0; ii < m_instanceReferences.size(); ii++ )
+    // (search from back to avoid invalidating iterator on remove)
+    for( unsigned ii = m_instanceReferences.size() - 1; ii >= 0; --ii )
     {
         if( m_instanceReferences[ii].m_Path == aPath )
         {
             wxLogTrace( traceSchSheetPaths, wxS( "Removing symbol instance:\n"
-                                                 "  sheet path %s\n"
-                                                 "  reference %s, unit %d from symbol %s." ),
+                                                 "    sheet path %s\n"
+                                                 "    reference %s, unit %d from symbol %s." ),
                         aPath.AsString(),
                         m_instanceReferences[ii].m_Reference,
                         m_instanceReferences[ii].m_Unit,
                         m_Uuid.AsString() );
 
             m_instanceReferences.erase( m_instanceReferences.begin() + ii );
-            ii--;
         }
     }
 
