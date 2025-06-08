@@ -684,6 +684,6 @@ void DIALOG_FIELD_PROPERTIES::UpdateField( SCH_COMMIT* aCommit, SCH_FIELD* aFiel
         parent->SetFieldsAutoplaced( AUTOPLACE_NONE );
 
     // Update the hierarchy navigator labels if needed.
-    if( needUpdateHierNav )
+    if( editFrame && needUpdateHierNav )
         editFrame->UpdateLabelsHierarchyNavigator();
 }

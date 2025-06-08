@@ -1081,7 +1081,9 @@ void VIEW::draw( VIEW_ITEM* aItem, bool aImmediate )
         if( it == m_layers.end() )
             continue;
 
-        m_gal->SetLayerDepth( it->second.renderingOrder );
+        if( m_gal )
+            m_gal->SetLayerDepth( it->second.renderingOrder );
+
         draw( aItem, layer, aImmediate );
     }
 }
