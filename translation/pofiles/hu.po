@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-06-01 20:43+0300\n"
-"PO-Revision-Date: 2025-06-08 02:02+0000\n"
+"PO-Revision-Date: 2025-06-08 14:01+0000\n"
 "Last-Translator: Sárkány Lőrinc <lsarkany@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/kicad/v9/hu/>\n"
 "Language: hu\n"
@@ -34646,6 +34646,8 @@ msgid ""
 "Error importing settings from board:\n"
 "Associated project file %s could not be loaded"
 msgstr ""
+"Hiba a panel beállításainak importálása közben\n"
+"Nem sikerült betölteni a hozzá tartozó projekt fájlt: %s"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:301 pcbnew/files.cpp:583
 #: pcbnew/tools/pcb_control.cpp:1517
@@ -34653,7 +34655,7 @@ msgid "Loading PCB"
 msgstr "NYÁK Betöltése"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:324
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error loading board file:\n"
 "%s"
@@ -34763,6 +34765,8 @@ msgid ""
 "PCB statistics report\n"
 "====================="
 msgstr ""
+"NYÁK statisztikai jelentés\n"
+"====================="
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:676
 msgid "Date"
@@ -34796,9 +34800,8 @@ msgid "Board Size"
 msgstr "NYÁK méret"
 
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:196
-#, fuzzy
 msgid "Subtract holes from board area"
-msgstr "Vonja le a lyukakat a panel területéből"
+msgstr "Vonja le a furatokat a panel területéből"
 
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:199
 msgid "Exclude footprints with no pads"
@@ -34835,9 +34838,8 @@ msgstr "Furatok"
 
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:260
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:195
-#, fuzzy
 msgid "Generate Report File..."
-msgstr "Naplófájl létrehozása"
+msgstr "Jelentésfájl létrehozása..."
 
 #: pcbnew/dialogs/dialog_board_statistics_base.h:68
 #, fuzzy
@@ -34847,7 +34849,6 @@ msgstr "NYÁK Terv Statisztika"
 #: pcbnew/dialogs/dialog_cleanup_graphics.cpp:48
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:310
 #: pcbnew/footprint_libraries_utils.cpp:970
-#, fuzzy
 msgid "Update Footprint"
 msgstr "Alkatrészrajzolat frissítése"
 
@@ -34889,7 +34890,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_cleanup_graphics_base.cpp:41
 msgid "Fix discontinuities in board outlines"
-msgstr ""
+msgstr "A panel körvonalában lévő szakadások javítása"
 
 #: pcbnew/dialogs/dialog_cleanup_graphics_base.cpp:46
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:178
@@ -34957,9 +34958,8 @@ msgid "remove vias on through hole pads and superimposed vias"
 msgstr "egymáson lévő vagy furatszerelt forrszemen lévő viák törlése"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:46
-#, fuzzy
 msgid "Delete vias connected on only one layer"
-msgstr "Töröli a csak egy rétegen csatlakoztatott via-kat"
+msgstr "A csak egy rétegen csatlakoztatott viák törlése"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:52
 msgid "&Merge co-linear tracks"
