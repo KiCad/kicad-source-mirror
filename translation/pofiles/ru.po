@@ -22,7 +22,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-06-01 20:43+0300\n"
-"PO-Revision-Date: 2025-06-01 17:42+0000\n"
+"PO-Revision-Date: 2025-06-08 14:01+0000\n"
 "Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/kicad/v9/ru/>\n"
 "Language: ru\n"
@@ -11020,11 +11020,13 @@ msgid "Unconnected wire to bus entry"
 msgstr "Неподключенный провод ко вводу шины"
 
 #: eeschema/connection_graph.cpp:4192
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Hierarchical label \"%s\" in root sheet cannot be connected to non-existent "
 "parent sheet"
-msgstr "Иерархическая метка %s не соответствует ни одному выводу листа"
+msgstr ""
+"Иерархическая метка \"%s\" в корневом листе не может быть соединена с "
+"несуществующим родительским листом"
 
 #: eeschema/connection_graph.cpp:4257
 #, c-format
