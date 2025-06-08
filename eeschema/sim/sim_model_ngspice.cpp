@@ -334,10 +334,11 @@ const SIM_MODEL_NGSPICE::MODEL_INFO& SIM_MODEL_NGSPICE::ModelInfo( MODEL_TYPE aT
     if( !s_ModelInfoMap )
     {
         std::lock_guard<std::mutex> lock( s_ModelInfoMapMutex );
+
+        // Someone else may have filled it in while we were waiting for the lock, so
+        // check it again.
         if( !s_ModelInfoMap )
-        {
             s_ModelInfoMap = std::make_unique<NGSPICE_MODEL_INFO_MAP>();
-        }
     }
 
     return s_ModelInfoMap->modelInfos.at( aType );
