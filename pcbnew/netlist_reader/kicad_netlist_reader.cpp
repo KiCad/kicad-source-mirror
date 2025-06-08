@@ -573,7 +573,15 @@ void KICAD_NETLIST_PARSER::parseLibPartList()
                 if( token != T_fp )
                     Expecting( T_fp );
 
-                NeedSYMBOLorNUMBER();
+                token = NextTok();
+
+                // Accept an empty (fp) sexpr.  We do write them out.
+                if( token == T_RIGHT )
+                    continue;
+
+                if( !IsSymbol( token ) && !IsNumber( token ) )
+                   Expecting( "footprint ID" );
+
                 footprintFilters.Add( From_UTF8( CurText() ) );
                 NeedRIGHT();
             }
