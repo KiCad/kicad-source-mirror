@@ -50,7 +50,7 @@ public:
     // Make the toolbar a friend so it can easily access everything inside here
     friend class ACTION_TOOLBAR;
 
-    ACTION_GROUP(const std::string_view& aName );
+    ACTION_GROUP( const std::string_view& aName );
 
     ACTION_GROUP( const std::string_view& aName, const std::vector<const TOOL_ACTION*>& aActions );
 
@@ -427,7 +427,8 @@ typedef std::function<void ( ACTION_TOOLBAR* )> ACTION_TOOLBAR_CONTROL_FACTORY;
 class ACTION_TOOLBAR_CONTROL
 {
 public:
-    ACTION_TOOLBAR_CONTROL( std::string aName, wxString aUiName, wxString aDescription ) :
+    ACTION_TOOLBAR_CONTROL( const std::string& aName, const wxString& aUiName,
+                            const wxString& aDescription ) :
         m_name( aName ),
         m_uiname( aUiName ),
         m_description( aDescription )

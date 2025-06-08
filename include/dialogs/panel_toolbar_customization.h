@@ -40,8 +40,8 @@ class PANEL_TOOLBAR_CUSTOMIZATION : public PANEL_TOOLBAR_CUSTOMIZATION_BASE
 {
 public:
     PANEL_TOOLBAR_CUSTOMIZATION( wxWindow* aParent, APP_SETTINGS_BASE* aCfg, TOOLBAR_SETTINGS* aTbSettings,
-                                 std::vector<TOOL_ACTION*> aTools,
-                                 std::vector<ACTION_TOOLBAR_CONTROL*> aControls );
+                                 const std::vector<TOOL_ACTION*>& aTools,
+                                 const std::vector<ACTION_TOOLBAR_CONTROL*>& aControls );
 
     ~PANEL_TOOLBAR_CUSTOMIZATION();
 

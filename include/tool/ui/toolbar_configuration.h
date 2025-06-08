@@ -235,7 +235,7 @@ public:
     /**
      * Set the stored configuration for the given toolbar.
      */
-    void SetStoredToolbarConfig( TOOLBAR_LOC aToolbar, TOOLBAR_CONFIGURATION& aConfig )
+    void SetStoredToolbarConfig( TOOLBAR_LOC aToolbar, const TOOLBAR_CONFIGURATION& aConfig )
     {
         m_toolbars[aToolbar] = aConfig;
     }
