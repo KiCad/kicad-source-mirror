@@ -66,13 +66,12 @@ static double selectionToScale( int selection )
 {
     switch( selection )
     {
-    default: return 1;
-    case 0: return 0;
-    case 2: return 1.5;
-    case 3: return 2;
-    case 4: return 3;
+    default: return 1.0;
+    case 0:  return 0.0;
+    case 2:  return 1.5;
+    case 3:  return 2.0;
+    case 4:  return 3.0;
     }
-    return 1;
 }
 
 

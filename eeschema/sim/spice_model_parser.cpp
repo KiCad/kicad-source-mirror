@@ -98,10 +98,9 @@ bool SPICE_MODEL_PARSER::ReadType( const SIM_LIBRARY_SPICE& aLibrary, const std:
 
             if( !sourceModel )
             {
-                THROW_IO_ERROR( wxString::Format(
-                        _( "Could not find model '%s' to copy for \"A Kind Of\" model '%s'" ),
-                        akoName,
-                        modelName ) );
+                THROW_IO_ERROR( wxString::Format( _( "Could not find parent model '%s' for \"A Kind Of\" model '%s'" ),
+                                                  akoName,
+                                                  modelName ) );
             }
 
             *aType = sourceModel->GetType();
@@ -213,10 +212,9 @@ void SPICE_MODEL_PARSER::ReadModel( const SIM_LIBRARY_SPICE& aLibrary,
 
             if( !sourceModel )
             {
-                THROW_IO_ERROR( wxString::Format(
-                        _( "Could not find model '%s' to copy for \"A Kind Of\" model '%s'" ),
-                        akoName,
-                        modelName ) );
+                THROW_IO_ERROR( wxString::Format( _( "Could not find parent model '%s' for \"A Kind Of\" model '%s'" ),
+                                                  akoName,
+                                                  modelName ) );
             }
 
             for( int i = 0; i < static_cast<int>( sourceModel->GetParamCount() ); ++i )
