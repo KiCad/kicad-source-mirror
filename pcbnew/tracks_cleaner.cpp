@@ -625,8 +625,9 @@ void TRACKS_CLEANER::cleanup( bool aDeleteDuplicateVias, bool aDeleteNullSegment
 const std::vector<BOARD_CONNECTED_ITEM*>& TRACKS_CLEANER::getConnectedItems( PCB_TRACK* aTrack )
 {
     const std::shared_ptr<CONNECTIVITY_DATA>& connectivity = m_brd->GetConnectivity();
+    std::lock_guard                           lock( m_mutex );
 
-    if( std::lock_guard lock( m_mutex ); !m_connectedItemsCache.contains( aTrack ) )
+    if( !m_connectedItemsCache.contains( aTrack ) )
         m_connectedItemsCache[aTrack] = connectivity->GetConnectedItems( aTrack );
 
     return m_connectedItemsCache.at( aTrack );
