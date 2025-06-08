@@ -264,16 +264,12 @@ BOARD* PCB_IO_EASYEDA::LoadBoard( const wxString& aFileName, BOARD* aAppendToMe,
     }
     catch( nlohmann::json::exception& e )
     {
-        THROW_IO_ERROR(
-                wxString::Format( _( "Error loading board '%s': %s" ), aFileName, e.what() ) );
+        THROW_IO_ERROR( wxString::Format( _( "Error loading board '%s': %s" ), aFileName, e.what() ) );
     }
     catch( std::exception& e )
     {
-        THROW_IO_ERROR(
-                wxString::Format( _( "Error loading board '%s': %s" ), aFileName, e.what() ) );
+        THROW_IO_ERROR( wxString::Format( _( "Error loading board '%s': %s" ), aFileName, e.what() ) );
     }
-
-    return m_board;
 }
 
 
