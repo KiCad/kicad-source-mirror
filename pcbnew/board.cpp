@@ -2393,7 +2393,7 @@ std::tuple<int, double, double, double, double> BOARD::GetTrackLength( const PCB
         LENGTH_DELAY_CALCULATION_ITEM item = GetLengthCalculation()->GetLengthCalculationItem( boardItem );
 
         if( item.Type() != LENGTH_DELAY_CALCULATION_ITEM::TYPE::UNKNOWN )
-            items.push_back( item );
+            items.push_back( std::move( item ) );
     }
 
     constexpr PATH_OPTIMISATIONS opts = {

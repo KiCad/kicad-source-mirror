@@ -778,13 +778,14 @@ double PCB_TRACK::GetDelay() const
         return 0.0;
 
     const LENGTH_DELAY_CALCULATION*            calc = board->GetLengthCalculation();
-    const LENGTH_DELAY_CALCULATION_ITEM        calcItem = calc->GetLengthCalculationItem( this );
-    std::vector<LENGTH_DELAY_CALCULATION_ITEM> items{ calcItem };
-    constexpr PATH_OPTIMISATIONS               opts = {
-                      .OptimiseViaLayers = false, .MergeTracks = false, .OptimiseTracesInPads = false, .InferViaInPad = false
-    };
+    std::vector<LENGTH_DELAY_CALCULATION_ITEM> items{ calc->GetLengthCalculationItem( this ) };
+    constexpr PATH_OPTIMISATIONS               opts = { .OptimiseViaLayers = false,
+                                                        .MergeTracks = false,
+                                                        .OptimiseTracesInPads = false,
+                                                        .InferViaInPad = false
+                                                      };
 
-    return calc->CalculateDelay( items, opts );
+    return (double) calc->CalculateDelay( items, opts );
 }
 
 

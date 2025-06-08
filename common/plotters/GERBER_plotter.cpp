@@ -452,7 +452,7 @@ int GERBER_PLOTTER::GetOrCreateAperture( const VECTOR2I& aSize, int aRadius,
     new_tool.m_ApertureAttribute = aApertureAttribute;
     new_tool.m_CustomAttribute = aCustomAttribute;
 
-    m_apertures.push_back( new_tool );
+    m_apertures.push_back( std::move( new_tool ) );
 
     return m_apertures.size() - 1;
 }
@@ -508,7 +508,7 @@ int GERBER_PLOTTER::GetOrCreateAperture( const std::vector<VECTOR2I>& aCorners,
     new_tool.m_ApertureAttribute = aApertureAttribute;
     new_tool.m_CustomAttribute = aCustomAttribute;
 
-    m_apertures.push_back( new_tool );
+    m_apertures.push_back( std::move( new_tool ) );
 
     return m_apertures.size() - 1;
 }
