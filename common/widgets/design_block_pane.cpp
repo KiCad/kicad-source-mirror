@@ -413,13 +413,13 @@ bool DESIGN_BLOCK_PANE::EditDesignBlockProperties( const LIB_ID& aLibId )
         return false;
     }
 
-    DESIGN_BLOCK* designBlock = GetDesignBlock( aLibId, true, true );
+    std::unique_ptr<DESIGN_BLOCK> designBlock( GetDesignBlock( aLibId, true, true ) );
 
     if( !designBlock )
         return false;
 
     wxString                       originalName = designBlock->GetLibId().GetLibItemName();
-    DIALOG_DESIGN_BLOCK_PROPERTIES dlg( m_frame, designBlock );
+    DIALOG_DESIGN_BLOCK_PROPERTIES dlg( m_frame, designBlock.get() );
 
     if( dlg.ShowModal() != wxID_OK )
         return false;
@@ -434,11 +434,13 @@ bool DESIGN_BLOCK_PANE::EditDesignBlockProperties( const LIB_ID& aLibId )
                 if( !checkOverwrite( m_frame, libname, newName ) )
                     return false;
 
-            m_frame->Prj().DesignBlockLibs()->DesignBlockSave( libname, designBlock );
+            m_frame->Prj().DesignBlockLibs()->DesignBlockSave( libname, designBlock.get() );
             m_frame->Prj().DesignBlockLibs()->DesignBlockDelete( libname, originalName );
         }
         else
-            m_frame->Prj().DesignBlockLibs()->DesignBlockSave( libname, designBlock );
+        {
+            m_frame->Prj().DesignBlockLibs()->DesignBlockSave( libname, designBlock.get() );
+        }
     }
     catch( const IO_ERROR& ioe )
     {

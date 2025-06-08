@@ -205,8 +205,8 @@ void SCH_DESIGN_BLOCK_PREVIEW_WIDGET::DisplayDesignBlock( DESIGN_BLOCK* aDesignB
 
     if( aDesignBlock && wxFileExists( aDesignBlock->GetSchematicFile() ) )
     {
-        m_previewItem =
-                EESCHEMA_HELPERS::LoadSchematic( aDesignBlock->GetSchematicFile(), SCH_IO_MGR::SCH_KICAD, false, true );
+        m_previewItem = EESCHEMA_HELPERS::LoadSchematic( aDesignBlock->GetSchematicFile(), SCH_IO_MGR::SCH_KICAD,
+                                                         false, true );
         BOX2I bBox;
 
         if( m_previewItem )

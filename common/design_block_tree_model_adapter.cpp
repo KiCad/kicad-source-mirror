@@ -190,6 +190,9 @@ wxString DESIGN_BLOCK_TREE_MODEL_ADAPTER::GenerateInfo( LIB_ID const& aLibId, in
         }
 
         html.Replace( "__FIELDS__", fieldTable );
+
+        // Design blocks (unlike symbols and footprints) are not cached.  We own the pointer.
+        delete db;
     }
     else
     {
