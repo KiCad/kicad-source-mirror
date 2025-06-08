@@ -1120,17 +1120,8 @@ int BOARD_INSPECTION_TOOL::InspectClearance( const TOOL_EVENT& aEvent )
 
         if( layer >= 0 )
         {
-            if( !pageAdded )
-            {
-                r = dialog->AddHTMLPage( _( "Hole" ) );
-                pageAdded = true;
-            }
-            else
-            {
-                r->Report( "" );
-                r->Report( "" );
-                r->Report( "" );
-            }
+            r = dialog->AddHTMLPage( _( "Hole" ) );
+            pageAdded = true;
 
             reportHeader( _( "Hole clearance resolution for:" ), a, b, layer, r );
 

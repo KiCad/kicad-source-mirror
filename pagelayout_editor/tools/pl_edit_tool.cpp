@@ -544,7 +544,6 @@ int PL_EDIT_TOOL::Paste( const TOOL_EVENT& aEvent )
 {
     PL_SELECTION&  selection = m_selectionTool->GetSelection();
     DS_DATA_MODEL& model = DS_DATA_MODEL::GetTheInstance();
-    bool           createdAnything = false;
 
     if( std::unique_ptr<wxImage> clipImg = GetImageFromClipboard() )
     {
@@ -552,8 +551,6 @@ int PL_EDIT_TOOL::Paste( const TOOL_EVENT& aEvent )
         image->SetImage( *clipImg );
         auto dataItem = std::make_unique<DS_DATA_ITEM_BITMAP>( image.release() );
         model.Append( dataItem.release() );
-
-        createdAnything = true;
     }
     else
     {
@@ -561,12 +558,7 @@ int PL_EDIT_TOOL::Paste( const TOOL_EVENT& aEvent )
 
         const std::string clipText = GetClipboardUTF8();
         model.SetPageLayout( clipText.c_str(), true, wxT( "clipboard" ) );
-        createdAnything = true;
     }
-
-    // Nothing pasteable
-    if( !createdAnything )
-        return 0;
 
     // Build out draw items and select the first of each data item
     for( DS_DATA_ITEM* dataItem : model.GetItems() )
