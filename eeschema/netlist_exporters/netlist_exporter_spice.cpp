@@ -283,7 +283,7 @@ const SPICE_ITEM* NETLIST_EXPORTER_SPICE::FindItem( const wxString& aRefName ) c
     const std::list<SPICE_ITEM>& spiceItems = GetItems();
 
     auto it = std::find_if( spiceItems.begin(), spiceItems.end(),
-                            [refName]( const SPICE_ITEM& item )
+                            [&refName]( const SPICE_ITEM& item )
                             {
                                 return item.refName == refName;
                             } );
