@@ -393,12 +393,6 @@ const VECTOR2D CalcArcCenter( const VECTOR2D& aStart, const VECTOR2D& aMid, cons
     if( xDelta_32 == 0.0 )
         xDelta_32 = -std::numeric_limits<double>::epsilon();
 
-    if( yDelta_21 == 0.0 )
-        yDelta_21 = std::numeric_limits<double>::epsilon();
-
-    if( yDelta_32 == 0.0 )
-        yDelta_32 = -std::numeric_limits<double>::epsilon();
-
     double aSlope = yDelta_21 / xDelta_21;
     double bSlope = yDelta_32 / xDelta_32;
 
