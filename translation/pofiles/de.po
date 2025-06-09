@@ -30,7 +30,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-06-08 17:03+0300\n"
-"PO-Revision-Date: 2025-06-05 14:56+0000\n"
+"PO-Revision-Date: 2025-06-10 06:01+0000\n"
 "Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v9/de/>\n"
 "Language: de\n"
@@ -22575,10 +22575,9 @@ msgid "Delete Hierarchical Labels"
 msgstr "Hierarchische Bezeichner löschen"
 
 #: eeschema/sync_sheet_pin/panel_sync_sheet_pins_base.cpp:99
-#, fuzzy
 msgid ""
 "Associate selected sheet pin and hierarchical label using the label name"
-msgstr "Schaltplanpins und hierarchische Bezeichner synchronisieren"
+msgstr "Gewählten Schaltplanpin und hierarchischen Bezeichner synchronisieren"
 
 #: eeschema/sync_sheet_pin/panel_sync_sheet_pins_base.cpp:104
 #, fuzzy
@@ -27481,9 +27480,8 @@ msgstr ""
 "anderen Pfad. Das Projekt kann nicht importiert werden."
 
 #: kicad/import_project.cpp:146
-#, fuzzy
 msgid "Import Altium Project Files"
-msgstr "Importiere Eagle-Projektdateien"
+msgstr "Altium-Projektdateien importieren"
 
 #: kicad/import_project.cpp:154
 msgid "Import CADSTAR Archive Project Files"
@@ -27491,7 +27489,7 @@ msgstr "CADSTAR-Archiv-Projektdateien importieren"
 
 #: kicad/import_project.cpp:162
 msgid "Import Eagle Project Files"
-msgstr "Importiere Eagle-Projektdateien"
+msgstr "Eagle-Projektdateien importieren"
 
 #: kicad/import_project.cpp:169
 msgid "Import EasyEDA Std Backup"
@@ -43140,9 +43138,9 @@ msgid "No location data for filename '%s'.\n"
 msgstr "Platzierungsdaten nach \"%s\" geschrieben.\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1197
-#, fuzzy, c-format
+#, c-format
 msgid "Could not add component with filename '%s'.\n"
-msgstr "Spice-Element mit Referenz \"%s\" konnte nicht gefunden werden"
+msgstr "Konnte Komponente mit Dateiname \"%s\" nicht hinzufügen.\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1367
 #, c-format
@@ -43187,11 +43185,13 @@ msgid "OCC exception creating wire: %s\n"
 msgstr ""
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1661
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Wire not done (contour points %d): OCC error %d\n"
 "z: %g; bounding box: %s\n"
-msgstr "Verbindung nicht fertiggestellt (Konturpunkte %d): OCC-Fehler %d\n"
+msgstr ""
+"Verbindung nicht fertiggestellt (Konturpunkte %d): OCC-Fehler %d\n"
+"z: %g; Begrenzungsrahmen: %s\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1675
 #, fuzzy, c-format
@@ -43209,7 +43209,7 @@ msgstr "Verwende nicht vereinfachtes Polygon.\n"
 #: pcbnew/exporters/step/step_pcb_model.cpp:1744
 #, c-format
 msgid "OCC exception creating contour %d: %s\n"
-msgstr ""
+msgstr "OCC-Ausnahme während der Erstellung der Kontur %d: %s\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1774
 msgid "** Face skipped **\n"
