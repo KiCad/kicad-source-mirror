@@ -455,6 +455,10 @@ void APP_SETTINGS_BASE::addParamsForWindow( WINDOW_SETTINGS* aWindow, const std:
     m_params.emplace_back( new PARAM_LIST<GRID>( aJsonPath + ".grid.sizes", &aWindow->grid.grids,
                                                  DefaultGridSizeList() ) );
 
+    // Force grids to have at least 1 entry.  If not, reset to default.
+    if( aWindow->grid.grids.empty() )
+        aWindow->grid.grids = DefaultGridSizeList();
+
     m_params.emplace_back( new PARAM<int>( aJsonPath + ".grid.last_size",
             &aWindow->grid.last_size_idx, defaultGridIdx ) );
 
