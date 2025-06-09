@@ -513,7 +513,8 @@ void SCH_SYMBOL::AddHierarchicalReference( const KIID_PATH& aPath, const wxStrin
 {
     // Search for an existing path and remove it if found (should not occur)
     // (search from back to avoid invalidating iterator on remove)
-    for( unsigned ii = m_instanceReferences.size() - 1; ii >= 0; --ii )
+    // Note: m_instanceReferences.size() can be 0 in QA tests
+    for( int ii = m_instanceReferences.size() - 1; ii >= 0; --ii )
     {
         if( m_instanceReferences[ii].m_Path == aPath )
         {
