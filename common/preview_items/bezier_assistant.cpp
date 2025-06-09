@@ -36,7 +36,7 @@ using namespace KIGFX::PREVIEW;
 
 BEZIER_ASSISTANT::BEZIER_ASSISTANT( const BEZIER_GEOM_MANAGER& aManager,
                                     const EDA_IU_SCALE& aIuScale, EDA_UNITS aUnits ) :
-        EDA_ITEM( NOT_USED ), m_constructMan( aManager ), m_iuScale( aIuScale ), m_units( aUnits )
+        EDA_ITEM( NOT_USED ), m_constructMan( aManager ), m_units( aUnits )
 {
 }
 

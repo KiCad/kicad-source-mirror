@@ -46,7 +46,6 @@ public:
 private:
     // The locale in use before switching to the "C" locale
     // (the locale can be set by user, and is not always the system locale)
-    wxLocale* m_wxLocale;           // used when using wxLocale
     std::string m_user_locale;      // used when using setlocale or wxSetlocale
 };
 

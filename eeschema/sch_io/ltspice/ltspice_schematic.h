@@ -283,8 +283,7 @@ public:
                                 REPORTER* aReporter, PROGRESS_REPORTER* aProgressReporter ) :
             m_reporter( aReporter ),
             m_schematic( nullptr ),
-            m_ltspiceDataDir( aLTspiceDataDir ),
-            m_progressReporter( aProgressReporter )
+            m_ltspiceDataDir( aLTspiceDataDir )
     {}
 
     ~LTSPICE_SCHEMATIC() {}
@@ -438,7 +437,6 @@ private:
     REPORTER*            m_reporter;
     SCHEMATIC*           m_schematic;
     wxFileName           m_ltspiceDataDir;
-    PROGRESS_REPORTER*   m_progressReporter;  // optional; may be nullptr
 
     std::map<wxString, std::map<wxString, wxString>> m_fileCache;
 };

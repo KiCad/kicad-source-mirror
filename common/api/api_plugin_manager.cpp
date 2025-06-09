@@ -44,9 +44,7 @@ wxDEFINE_EVENT( EDA_EVT_PLUGIN_AVAILABILITY_CHANGED, wxCommandEvent );
 
 API_PLUGIN_MANAGER::API_PLUGIN_MANAGER( wxEvtHandler* aEvtHandler ) :
         wxEvtHandler(),
-        m_parent( aEvtHandler ),
-        m_lastPid( 0 ),
-        m_raiseTimer( nullptr )
+        m_parent( aEvtHandler )
 {
     // Read and store pcm schema
     wxFileName schemaFile( PATHS::GetStockDataPath( true ), wxS( "api.v1.schema.json" ) );

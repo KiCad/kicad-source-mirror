@@ -63,7 +63,6 @@ namespace PREVIEW
 
     private:
         const BEZIER_GEOM_MANAGER& m_constructMan;
-        const EDA_IU_SCALE&        m_iuScale;
         EDA_UNITS                  m_units;
     };
 } // namespace PREVIEW

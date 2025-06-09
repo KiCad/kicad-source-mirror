@@ -81,7 +81,6 @@ public:
 
 private:
     SCH_HIERLABEL* m_label;
-    SCH_SHEET*     m_sheet;
 };
 
 
@@ -104,7 +103,6 @@ public:
 
 private:
     SCH_SHEET_PIN* m_pin;
-    SCH_SHEET*     m_sheet;
 };
 
 

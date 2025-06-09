@@ -103,7 +103,4 @@ private:
     std::deque<JOB> m_jobs;
 
     std::unique_ptr<JSON_SCHEMA_VALIDATOR> m_schema_validator;
-
-    long m_lastPid;
-    wxTimer* m_raiseTimer;
 };

@@ -34,7 +34,6 @@ class SPICE_LIBRARY_PARSER
 {
 public:
     SPICE_LIBRARY_PARSER( SIM_LIBRARY_SPICE &aLibrary, bool aForceFullParse ) :
-            m_forceFullParse( aForceFullParse ),
             m_library( aLibrary )
     {};
 
@@ -48,7 +47,6 @@ protected:
                     std::vector<std::pair<std::string, std::string>>* aModelQueue );
 
 private:
-    bool               m_forceFullParse;
     SIM_LIBRARY_SPICE& m_library;
 };
 

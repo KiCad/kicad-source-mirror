@@ -88,8 +88,6 @@ private:
     DO_MODIFY_ITEM  m_doModify;
     DO_DELETE_ITEM  m_doDelete;
     DO_PLACE_ITEM   m_doPlaceItem;
-    TOOL_MANAGER*   m_toolManager;
-    SCH_EDIT_FRAME* m_frame;
 };
 
 #endif
