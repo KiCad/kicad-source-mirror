@@ -2943,16 +2943,12 @@ int SCH_EDIT_TOOL::BreakWire( const TOOL_EVENT& aEvent )
     SCH_SCREEN*    screen = m_frame->GetScreen();
     SCH_COMMIT     commit( m_toolMgr );
     std::vector<SCH_LINE*> lines;
+    std::vector<SCH_LINE*> newLines;
 
     for( EDA_ITEM* item : selection )
     {
         if( item->Type() == SCH_LINE_T )
-        {
-            SCH_LINE* line = static_cast<SCH_LINE*>( item );
-
-            if( !line->IsEndPoint( cursorPos ) )
-                lines.push_back( line );
-        }
+            lines.push_back( static_cast<SCH_LINE*>( item ) );
     }
 
     m_selectionTool->ClearSelection();
@@ -2962,7 +2958,7 @@ int SCH_EDIT_TOOL::BreakWire( const TOOL_EVENT& aEvent )
         SCH_LINE* newLine;
 
         // We let the user select the break point if they're on a single line
-        if( lines.size() == 1 && line->HitTest( cursorPos ) )
+        if( lines.size() == 1 && line->HitTest( cursorPos ) && !line->IsEndPoint( cursorPos ) )
             m_frame->Schematic().BreakSegment( &commit, line, cursorPos, &newLine, screen );
         else
             m_frame->Schematic().BreakSegment( &commit, line, line->GetMidPoint(), &newLine, screen );
@@ -2981,6 +2977,8 @@ int SCH_EDIT_TOOL::BreakWire( const TOOL_EVENT& aEvent )
             m_selectionTool->AddItemToSel( newLine );
             newLine->SetFlags( STARTPOINT );
         }
+
+        newLines.push_back( newLine );
     }
 
     if( !lines.empty() )
@@ -2988,7 +2986,18 @@ int SCH_EDIT_TOOL::BreakWire( const TOOL_EVENT& aEvent )
         m_frame->TestDanglingEnds();
 
         if( m_toolMgr->RunSynchronousAction( SCH_ACTIONS::drag, &commit, isSlice ) )
+        {
             commit.Push( isSlice ? _( "Slice Wire" ) : _( "Break Wire" ) );
+
+            // Breaking wires is usually a repeated action, e.g. to add bends
+            if( !isSlice )
+            {
+                m_selectionTool->ClearSelection();
+                for( SCH_LINE* newLine : newLines )
+                    m_selectionTool->AddItemToSel( newLine );
+                m_toolMgr->PostAction( SCH_ACTIONS::breakWire );
+            }
+        }
         else
             commit.Revert();
     }
