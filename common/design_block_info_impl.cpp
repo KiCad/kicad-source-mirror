@@ -21,11 +21,9 @@
 #include <design_block_info_impl.h>
 
 #include <design_block.h>
-#include <design_block_info.h>
 #include <design_block_lib_table.h>
 #include <kiway.h>
 #include <locale_io.h>
-#include <lib_id.h>
 #include <progress_reporter.h>
 #include <string_utils.h>
 #include <thread_pool.h>
@@ -33,7 +31,6 @@
 
 #include <kiplatform/io.h>
 
-#include <wx/textfile.h>
 #include <wx/txtstrm.h>
 #include <wx/wfstream.h>
 
@@ -44,7 +41,8 @@ void DESIGN_BLOCK_INFO_IMPL::load()
 
     wxASSERT( dbtable );
 
-    const DESIGN_BLOCK* design_block = dbtable->GetEnumeratedDesignBlock( m_nickname, m_dbname );
+    std::unique_ptr<const DESIGN_BLOCK> design_block( dbtable->GetEnumeratedDesignBlock( m_nickname,
+                                                                                         m_dbname ) );
 
     if( design_block )
     {
@@ -127,7 +125,6 @@ bool DESIGN_BLOCK_LIST_IMPL::ReadDesignBlockFiles( DESIGN_BLOCK_LIB_TABLE* aTabl
         for( const wxString& nickname : aTable->GetLogicalLibs() )
             m_queue.push( nickname );
     }
-
 
     if( m_progress_reporter )
     {
