@@ -14,10 +14,10 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-06-08 17:02+0300\n"
-"PO-Revision-Date: 2025-06-03 08:04+0000\n"
+"PO-Revision-Date: 2025-06-10 06:03+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
-"Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/master-"
-"source/sv/>\n"
+"Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/"
+"master-source/sv/>\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -7795,7 +7795,6 @@ msgstr "Kan inte öppna filen '%s'"
 #: pcbnew/pcb_io/easyedapro/pcb_io_easyedapro.cpp:119
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:82
 #: pcbnew/pcb_io/fabmaster/pcb_io_fabmaster.cpp:62
-#, fuzzy
 msgid "File import canceled by user."
 msgstr "Filimport avbröts av användaren."
 
@@ -10418,9 +10417,8 @@ msgstr "Fotavtryck hittades inte."
 #: common/widgets/footprint_select_widget.cpp:65 cvpcb/cvpcb_mainframe.cpp:903
 #: pcbnew/footprint_edit_frame.cpp:1089
 #: pcbnew/widgets/panel_footprint_chooser.cpp:70
-#, fuzzy
 msgid "Load Footprint Libraries"
-msgstr "Läser in fotavtrycksbibliotek"
+msgstr "Läs in fotavtrycksbibliotek"
 
 #: common/widgets/footprint_select_widget.cpp:141
 msgid "No default footprint"
@@ -10608,14 +10606,12 @@ msgid "Reset %s to Defaults"
 msgstr "Återställ %s till standardinställningar"
 
 #: common/widgets/panel_design_block_chooser.cpp:71
-#, fuzzy
 msgid "Load Design Block Libraries"
-msgstr "Läser in designblocksbibliotek"
+msgstr "Läs in designblocksbibliotek"
 
 #: common/widgets/panel_design_block_chooser.cpp:274
-#, fuzzy
 msgid "Update Design Block Libraries"
-msgstr "Uppdaterar designblocksbibliotek"
+msgstr "Uppdatera designblocksbibliotek"
 
 #: common/widgets/panel_design_block_chooser.cpp:430
 msgid "Errors were encountered loading design blocks:"
@@ -12166,9 +12162,8 @@ msgid "Update/reset visibility of pin names/numbers"
 msgstr "Uppdatera/återställ synlighet för stiftnamn/-nummer"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:172
-#, fuzzy
 msgid "Reset alternate pin functions"
-msgstr "Återställ alternativt stift till standardvärden"
+msgstr "Återställ alternativa stiftfunktioner"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:178
 msgid "Update/reset symbol attributes"
@@ -12369,9 +12364,8 @@ msgid "%d symbol(s) require annotation.<br><br>"
 msgstr "%d symbol(er) kräver numrering.<br><br>"
 
 #: eeschema/dialogs/dialog_erc.cpp:456
-#, fuzzy
 msgid "-------- ERC canceled by user.<br><br>"
-msgstr "-------- ERC avbröts av användaren.<br><br>"
+msgstr "-------- Elektrisk regelkontroll avbröts av användaren.<br><br>"
 
 #: eeschema/dialogs/dialog_erc.cpp:458 pcbnew/dialogs/dialog_drc.cpp:362
 msgid "Done.<br><br>"
@@ -13564,9 +13558,8 @@ msgid "Duplicate pins:"
 msgstr "Duplicera stift:"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:133
-#, fuzzy
 msgid "Filter Pin Table"
-msgstr "Stifttabell"
+msgstr "Filtrera stifttabell"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:140
 msgid "Filter by unit:"
@@ -14696,9 +14689,8 @@ msgstr ""
 "Projektfilen %s kunde inte läsas in."
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:258
-#, fuzzy
 msgid "Load Bus Aliases"
-msgstr "Läser in bussalias"
+msgstr "Läs in bussalias"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:269 eeschema/files-io.cpp:282
 #: eeschema/picksymbol.cpp:124
@@ -17973,14 +17965,12 @@ msgid "Schematic '%s' does not exist.  Do you wish to create it?"
 msgstr "Krestsschema '%s' finns inte. Vill du skapa det?"
 
 #: eeschema/files-io.cpp:158
-#, fuzzy
 msgid "Create Schematic"
-msgstr "Skapar kretsschema"
+msgstr "Skapa kretsschema"
 
 #: eeschema/files-io.cpp:159
-#, fuzzy
 msgid "Load Schematic"
-msgstr "Läser in kretsschema"
+msgstr "Läs in kretsschema"
 
 #: eeschema/files-io.cpp:224
 msgid "Schematic file changes are unsaved"
@@ -18092,9 +18082,8 @@ msgstr ""
 "konverteras till det nya formatet när den sparas."
 
 #: eeschema/files-io.cpp:542 eeschema/files-io.cpp:1388
-#, fuzzy
 msgid "Updating connections..."
-msgstr "Uppdaterar nät..."
+msgstr "Uppdaterar anslutningar..."
 
 #: eeschema/files-io.cpp:549
 msgid ""
@@ -19195,9 +19184,9 @@ msgid "Members"
 msgstr "Medlemmar"
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:836
-#, fuzzy, c-format
+#, c-format
 msgid "Importing %s"
-msgstr "Importera inställningar"
+msgstr "Importerar %s"
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:906
 #, c-format
@@ -19731,7 +19720,6 @@ msgstr "KiCad HTTP-biblioteksfiler"
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:506
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2814
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:155
-#, fuzzy
 msgid "Open canceled by user."
 msgstr "Öppning avbruten av användare."
 
@@ -22455,16 +22443,14 @@ msgstr "KiCad Symbolredigerare"
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:150
 #: eeschema/symbol_tree_model_adapter.cpp:73
 #: eeschema/symbol_viewer_frame.cpp:277
-#, fuzzy
 msgid "Load Symbol Libraries"
-msgstr "Laddar symbolbibliotek"
+msgstr "Ladda symbolbibliotek"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:271
 msgid "Library changes are unsaved"
 msgstr "Biblioteksändringar sparas inte"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:282
-#, fuzzy
 msgid "Symbol library loading canceled by user."
 msgstr "Inläsning av symbolbibliotek avbröts av användaren."
 
@@ -23052,7 +23038,6 @@ msgid "Re-linking footprints requires a fully annotated schematic."
 msgstr "Återlänkning av fotavtryck kräver ett fullständigt numrerat schema."
 
 #: eeschema/tools/backannotate.cpp:356
-#, fuzzy
 msgid "Footprint re-linking canceled by user."
 msgstr "Återlänkning av fotavtryck avbröts av användaren."
 
@@ -25874,9 +25859,8 @@ msgid "<b>A gerber job file cannot be loaded as a plot file</b> <i>%s</i>"
 msgstr "<b> En Gerber-jobbfil kan inte laddas som en plotfil </b> <i> %s </i>"
 
 #: gerbview/files.cpp:303
-#, fuzzy
 msgid "Load Files"
-msgstr "Inga Filer"
+msgstr "Läs in filer"
 
 #: gerbview/files.cpp:305 gerbview/files.cpp:312
 #, c-format
@@ -27662,7 +27646,7 @@ msgstr "Inkludera åtgärder:"
 
 #: kicad/dialogs/dialog_executecommand_job_settings.cpp:151
 msgid "<value set at runtime>"
-msgstr ""
+msgstr "<värde sätts vid körning>"
 
 #: kicad/dialogs/dialog_executecommand_job_settings_base.cpp:79
 msgid "Record output messages"
@@ -27673,9 +27657,8 @@ msgid "Ignore non-zero exit code"
 msgstr "Ignorera utgångskod skild från noll"
 
 #: kicad/dialogs/dialog_executecommand_job_settings_base.cpp:92
-#, fuzzy
 msgid "Available text variables:"
-msgstr "Tillgängliga material:"
+msgstr "Tillgängliga textvariabler:"
 
 #: kicad/dialogs/dialog_executecommand_job_settings_base.h:58
 msgid "Execute Command Job Settings"
@@ -28076,9 +28059,9 @@ msgid "Edit File in Text Editor"
 msgstr "Redigera fil i textredigerare"
 
 #: kicad/kicad_manager_frame.cpp:1063
-#, fuzzy, c-format
+#, c-format
 msgid "Project '%s' is already open by '%s' at '%s'."
-msgstr "Mönsterkortet '%s' är redan öppnat av '%s' på '%s'."
+msgstr "Projektet '%s' är redan öppnat av '%s' på '%s'."
 
 #: kicad/kicad_manager_frame.cpp:1089
 msgid "[no project loaded]"
@@ -28381,9 +28364,8 @@ msgid "Save Package"
 msgstr "Spara paket"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:542
-#, fuzzy
 msgid "Download Package"
-msgstr "Laddar ned paket"
+msgstr "Ladda ned paket"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:560
 msgid ""
@@ -28901,9 +28883,8 @@ msgstr "Lyckades inte ställa in standardfjärrförvar."
 
 #: kicad/project_tree_pane.cpp:1792 kicad/project_tree_pane.cpp:1824
 #: kicad/project_tree_pane.cpp:1847
-#, fuzzy
 msgid "Fetch Remote"
-msgstr "Hämtar fjärrförvar"
+msgstr "Hämta fjärrförvar"
 
 #: kicad/project_tree_pane.cpp:1831
 msgid "Failed to pull project"
@@ -29130,9 +29111,8 @@ msgid "Clone Project from Git Repository"
 msgstr "Klona projekt från Git-förvar"
 
 #: kicad/tools/kicad_manager_control.cpp:181
-#, fuzzy
 msgid "Clone Repository"
-msgstr "Klonar förvar"
+msgstr "Klona förvar"
 
 #: kicad/tools/kicad_manager_control.cpp:194
 msgid "No project files were found in the repository."
@@ -30601,7 +30581,7 @@ msgstr "Beräkna"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:85
 msgid "Rhodium"
-msgstr ""
+msgstr "Rodium"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:89
 msgid "Platinum"
@@ -30609,29 +30589,27 @@ msgstr "Platina"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:93
 msgid "Palladium"
-msgstr ""
+msgstr "Palladium"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:97
 msgid "Gold"
 msgstr "Guld"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:101
-#, fuzzy
 msgid "Stainless steel 316L"
-msgstr "Rostfritt stål 18-9"
+msgstr "Syrafast rostfritt stål (18-10+Mo, A4, 316L)"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:105
 msgid "Inconel"
-msgstr ""
+msgstr "Inconel"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:109
 msgid "Indium"
-msgstr ""
+msgstr "Indium"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:113
-#, fuzzy
 msgid "Titanium, passive"
-msgstr "Titan"
+msgstr "Titan, passiverat"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:117
 msgid "Stainless steel 18-9"
@@ -30647,20 +30625,19 @@ msgstr "Kvicksilver"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:129
 msgid "ENEPIG (Ni/Pd/Au)"
-msgstr ""
+msgstr "ENEPIG (Ni/Pd/Au)"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:133
 msgid "ENIG (Ni/Au)"
-msgstr ""
+msgstr "ENIG (Ni/Au)"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:137
 msgid "Nickel"
 msgstr "Nickel"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:141
-#, fuzzy
 msgid "Carbon (Graphitic)"
-msgstr "Städa upp grafik"
+msgstr "Kol (Grafit)"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:145
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:854
@@ -30678,16 +30655,15 @@ msgstr "Mässing"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:157
 msgid "Beryllium copper"
-msgstr ""
+msgstr "Berylliumkoppar"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:161
-#, fuzzy
 msgid "Lead-free Solder"
-msgstr "HAL blyfritt"
+msgstr "Blyfritt lödtenn"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:165
 msgid "Phosphor bronze"
-msgstr ""
+msgstr "Fosforbrons"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:169
 msgid "Bronze"
@@ -30695,15 +30671,15 @@ msgstr "Brons"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:173
 msgid "Tin-Nickel (Sn/Ni)"
-msgstr ""
+msgstr "Tenn-nickel (Sn/Ni)"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:177
 msgid "Solder 63/37 (Eutectic)"
-msgstr ""
+msgstr "Lödtenn 63/37 (eutektiskt)"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:181
 msgid "Solder 60/40 (Leaded)"
-msgstr ""
+msgstr "Lödtenn 60/40 (bly)"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:185
 msgid "Tin"
@@ -30715,7 +30691,7 @@ msgstr "Bly"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:193
 msgid "2xxx series Al alloy"
-msgstr ""
+msgstr "Duraluminium (Al/Cu-legeringar)"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:197
 msgid "Cast iron"
@@ -30726,14 +30702,12 @@ msgid "Carbon steel"
 msgstr "Kolstål"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:205
-#, fuzzy
 msgid "Aluminium, chromated"
-msgstr "Aluminium"
+msgstr "Kromaterad aluminium"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:209
-#, fuzzy
 msgid "Aluminium, pure, passive"
-msgstr "Aluminium-Koppar"
+msgstr "Aluminium, ren, passiverad"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:213
 msgid "Cadmium"
@@ -30745,7 +30719,7 @@ msgstr "Järn"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:221
 msgid "Chrome, passive"
-msgstr ""
+msgstr "Krom, passiverad"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:225
 msgid "Zinc"
@@ -30753,7 +30727,7 @@ msgstr "Zink"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:229
 msgid "Steel, zinc-plated"
-msgstr ""
+msgstr "Förzinkat stål"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:233
 msgid "Manganese"
@@ -32239,7 +32213,6 @@ msgstr "Mönsterkortskanter måste definieras på %s -lagret."
 
 #: pcbnew/autorouter/autoplace_tool.cpp:125
 #: pcbnew/autorouter/autoplace_tool.cpp:131
-#, fuzzy
 msgid "Autoplace Footprints"
 msgstr "Placera fotavtryck automatiskt"
 
@@ -33409,9 +33382,8 @@ msgstr ""
 #: pcbnew/dialogs/dialog_board_setup.cpp:354 pcbnew/files.cpp:568
 #: pcbnew/tools/pcb_control.cpp:1689
 #: pcbnew/widgets/pcb_design_block_preview_widget.cpp:187
-#, fuzzy
 msgid "Load PCB"
-msgstr "Laddar mönsterkort"
+msgstr "Läs in mönsterkort"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:377
 #: pcbnew/widgets/pcb_design_block_preview_widget.cpp:203
@@ -34848,9 +34820,8 @@ msgid "Show design rules."
 msgstr "Visa designregler."
 
 #: pcbnew/dialogs/dialog_drc.cpp:360
-#, fuzzy
 msgid "-------- DRC canceled by user.<br><br>"
-msgstr "-------- DRC avbröts av användaren.<br><br>"
+msgstr "-------- Designregelkontroll avbröts av användaren.<br><br>"
 
 #: pcbnew/dialogs/dialog_drc.cpp:702
 #, c-format
@@ -41762,7 +41733,6 @@ msgstr ""
 "\n"
 
 #: pcbnew/dialogs/panel_setup_rules_help_8expression_functions.h:2
-#, fuzzy
 msgid ""
 "### Expression functions\n"
 "\n"
@@ -41914,7 +41884,7 @@ msgstr ""
 "\n"
 "    A.fromTo('x', 'y')\n"
 "Sant om objektet existerar på kopparledaren mellan de givna\n"
-"lödytorna. `x` och `y` är de fulla lödytenamnen, såsom  \n"
+"lödytorna. `x` och `y` är de fullständiga lödytenamnen, såsom  \n"
 "`R1-Pad1`.\n"
 "<br><br>\n"
 "\n"
@@ -41948,8 +41918,8 @@ msgstr ""
 "<br><br>\n"
 "\n"
 "    A.intersectsCourtyard('<fotavtrycksidentifierare>')\n"
-"Sant om någon del av `A` ligger inom det givna fotavtryckets "
-"huvudgårdsplan.\n"
+"Sant om någon del av `A` ligger inom det givna fotavtryckets huvudgårdsplan."
+"\n"
 "<br><br>\n"
 "\n"
 "    A.intersectsFrontCourtyard('<fotavtrycksidentifierare>')\n"
@@ -41970,8 +41940,8 @@ msgstr ""
 "   måste biblioteksidentifieraren innehålla `:` tecknet för att särskilja "
 "biblioteksnamnet\n"
 "   från fotavtrycksnamnet, och endera namnet kan innehålla jokertecken.\n"
-"3. En komponentklass enligt formen `${Class:ClassName}`.  Nyckelordet "
-"`Class` är inte\n"
+"3. En komponentklass enligt formen `${Class:ClassName}`.  Nyckelordet `Class`"
+" är inte\n"
 "   känsligt för versaler eller gemena, men komponentklassnamnen är det.\n"
 "\n"
 "<br>\n"
@@ -42007,6 +41977,12 @@ msgstr ""
 "    A.memberOfSheet('<arksökväg>')\n"
 "Sant om `A` tillhör det givna kretsschemaarket. Arksökvägen kan innehålla "
 "jokertecken.\n"
+"<br><br>\n"
+"\n"
+"    A.memberOfSheetOrChildren('<arksökväg>')\n"
+"Sant om `A` tillhör det givna kretsschemaarket, eller något av dess "
+"hierarkiska underark. Arksökvägen kan \n"
+"innehålla jokertecken.\n"
 "<br><br>\n"
 "\n"
 
@@ -42566,19 +42542,19 @@ msgid "%s min thickness: %s."
 msgstr "%s minimibredd: %s."
 
 #: pcbnew/drc/drc_engine.cpp:970
-#, fuzzy, c-format
+#, c-format
 msgid "Local override on %s; solder mask expansion: %s."
-msgstr "Lokalt undantag för %s; frigång: %s."
+msgstr "Lokalt undantag för %s; lödmaskens frigång: %s."
 
 #: pcbnew/drc/drc_engine.cpp:988
-#, fuzzy, c-format
+#, c-format
 msgid "Local override on %s; solder paste absolute clearance: %s."
-msgstr "Lokalt undantag för %s; frigång: %s."
+msgstr "Lokalt undantag för %s; lodpastans absoluta frigång: %s."
 
 #: pcbnew/drc/drc_engine.cpp:1006
-#, fuzzy, c-format
+#, c-format
 msgid "Local override on %s; solder paste relative clearance: %s."
-msgstr "Lokalt undantag för %s; frigång: %s."
+msgstr "Lokalt undantag för %s; lodpastans relativa frigång: %s."
 
 #: pcbnew/drc/drc_engine.cpp:1018
 #, c-format
@@ -42624,19 +42600,19 @@ msgid "Checking %s thermal spoke width: %s."
 msgstr "Kontrollerar %s ekerbredd för termisk avlastning: %s."
 
 #: pcbnew/drc/drc_engine.cpp:1082
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s solder mask expansion: %s."
-msgstr "Kontrollerar %s håldiameter: min %s."
+msgstr "Kontrollerar %s lödmaskmarginal: %s."
 
 #: pcbnew/drc/drc_engine.cpp:1088
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s solder paste absolute cleraance: %s."
-msgstr "Absolut marginal för lodpasta:"
+msgstr "Kontrollerar lodpastans absoluta frigång för %s: %s."
 
 #: pcbnew/drc/drc_engine.cpp:1094
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s solder paste relative clearance: %s."
-msgstr "Relativ marginal för lodpasta:"
+msgstr "Kontrollerar lodpastans relativa frigång för %s: %s."
 
 #: pcbnew/drc/drc_engine.cpp:1100
 #, c-format
@@ -42798,9 +42774,8 @@ msgstr "Härleder från symbol: %s."
 
 #: pcbnew/drc/drc_engine.cpp:1493 pcbnew/drc/drc_engine.cpp:1500
 #: pcbnew/drc/drc_engine.cpp:1507
-#, fuzzy
 msgid "board setup"
-msgstr "Mönsterkortsinställningar"
+msgstr "mönsterkortsinställningar"
 
 #: pcbnew/drc/drc_engine.cpp:1532 pcbnew/drc/drc_engine.cpp:1556
 #, c-format
@@ -44453,9 +44428,8 @@ msgid "PCB '%s' does not exist. Do you wish to create it?"
 msgstr "Mönsterkort '%s' finns inte. Vill du skapa det?"
 
 #: pcbnew/files.cpp:568
-#, fuzzy
 msgid "Create PCB"
-msgstr "Skapar mönsterkort"
+msgstr "Skapa mönsterkort"
 
 #: pcbnew/files.cpp:582 pcbnew/files.cpp:668
 msgid "File format is not supported"
@@ -44524,9 +44498,8 @@ msgid "The board must be saved before generating IPC-2581 file."
 msgstr "Mönsterkortet måste sparas innan IPC2581-fil skapas."
 
 #: pcbnew/files.cpp:1319
-#, fuzzy
 msgid "Generate IPC-2581 File"
-msgstr "Generera en IPC-2581-fil"
+msgstr "Generera IPC-2581-fil"
 
 #: pcbnew/files.cpp:1343 pcbnew/pcbnew_jobs_handler.cpp:2249
 #, c-format
@@ -44547,9 +44520,8 @@ msgstr ""
 "Kunde inte byta namn på temporär fil '%s."
 
 #: pcbnew/files.cpp:1442
-#, fuzzy
 msgid "Generate ODB++ Files"
-msgstr "Generera ODB++ utmatningsfiler"
+msgstr "Generera ODB++-filer"
 
 #: pcbnew/footprint.cpp:1294
 msgid "Other"
@@ -44744,9 +44716,8 @@ msgid "[no footprint loaded]"
 msgstr "[Inget fotavtryck laddat]"
 
 #: pcbnew/footprint_edit_frame.cpp:1117
-#, fuzzy
 msgid "Update Footprint Libraries"
-msgstr "Uppdaterar fotavtrycksbibliotek"
+msgstr "Uppdatera fotavtrycksbibliotek"
 
 #: pcbnew/footprint_edit_frame.cpp:1505
 msgid "No footprint selected."
@@ -49728,39 +49699,35 @@ msgid "Resolved hole size constraints: min %s; opt %s; max %s."
 msgstr "Tog reda på begränsningar för hålstorlek: min %s; opt %s max %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1441
-#, fuzzy
 msgid "Solder Mask"
 msgstr "Lödmask"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1442
-#, fuzzy
 msgid "Solder mask expansion resolution for:"
-msgstr "Lödmaskens frigång:"
+msgstr "Fastställer lödmaskens frigång för:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1450
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved solder mask expansion: %s."
-msgstr "Lödmaskens frigång:"
+msgstr "Fastställd frigång för lödmask: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1459
-#, fuzzy
 msgid "Solder paste absolute clearance resolution for:"
-msgstr "Tar reda på frigång hål till hål för:"
+msgstr "Fastställer lodpastans absoluta frigång för:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1467
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved solder paste absolute clearance: %s."
-msgstr "Absolut marginal för lodpasta:"
+msgstr "Fastställd absolut marginal för lodpasta: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1470
-#, fuzzy
 msgid "Solder paste relative clearance resolution for:"
-msgstr "Relativ marginal för lodpasta:"
+msgstr "Fastställer lodpastans relativa marginal för:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1480
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved solder paste relative clearance: %s."
-msgstr "Relativ marginal för lodpasta:"
+msgstr "Fastställd relativ marginal för lodpasta: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1497
 #, c-format
@@ -52539,9 +52506,8 @@ msgid "Draw Polygon"
 msgstr "Rita polygon"
 
 #: pcbnew/tools/zone_filler_tool.cpp:89
-#, fuzzy
 msgid "Check Zones"
-msgstr "Kontrollerar zoner"
+msgstr "Kontrollera zoner"
 
 #: pcbnew/tools/zone_filler_tool.cpp:96 pcbnew/tools/zone_filler_tool.cpp:176
 #: pcbnew/tools/zone_filler_tool.cpp:358
