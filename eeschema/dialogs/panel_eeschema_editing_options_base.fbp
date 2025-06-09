@@ -132,8 +132,8 @@
               </object>
             </object>
             <object class="sizeritem" expanded="true">
-              <property name="border">5</property>
-              <property name="flag">wxEXPAND|wxBOTTOM</property>
+              <property name="border">2</property>
+              <property name="flag">wxEXPAND|wxTOP|wxBOTTOM</property>
               <property name="proportion">0</property>
               <object class="wxStaticLine" expanded="true">
                 <property name="BottomDockable">1</property>
@@ -734,8 +734,8 @@
               </object>
             </object>
             <object class="sizeritem" expanded="true">
-              <property name="border">5</property>
-              <property name="flag">wxEXPAND|wxBOTTOM</property>
+              <property name="border">2</property>
+              <property name="flag">wxEXPAND|wxTOP|wxBOTTOM</property>
               <property name="proportion">0</property>
               <object class="wxStaticLine" expanded="true">
                 <property name="BottomDockable">1</property>
@@ -1422,8 +1422,8 @@
                         </object>
                       </object>
                       <object class="sizeritem" expanded="true">
-                        <property name="border">5</property>
-                        <property name="flag">wxEXPAND|wxBOTTOM</property>
+                        <property name="border">2</property>
+                        <property name="flag">wxEXPAND|wxTOP|wxBOTTOM</property>
                         <property name="proportion">0</property>
                         <object class="wxStaticLine" expanded="true">
                           <property name="BottomDockable">1</property>
@@ -1491,7 +1491,7 @@
                           <property name="permission">none</property>
                           <object class="sizeritem" expanded="true">
                             <property name="border">5</property>
-                            <property name="flag">wxRIGHT|wxLEFT</property>
+                            <property name="flag">wxTOP|wxRIGHT|wxLEFT</property>
                             <property name="proportion">0</property>
                             <object class="wxStaticText" expanded="true">
                               <property name="BottomDockable">1</property>
@@ -2793,8 +2793,8 @@
               </object>
             </object>
             <object class="sizeritem" expanded="true">
-              <property name="border">5</property>
-              <property name="flag">wxEXPAND|wxBOTTOM</property>
+              <property name="border">2</property>
+              <property name="flag">wxEXPAND|wxTOP|wxBOTTOM</property>
               <property name="proportion">0</property>
               <object class="wxStaticLine" expanded="true">
                 <property name="BottomDockable">1</property>
@@ -3130,8 +3130,8 @@
               </object>
             </object>
             <object class="sizeritem" expanded="true">
-              <property name="border">5</property>
-              <property name="flag">wxEXPAND|wxBOTTOM</property>
+              <property name="border">2</property>
+              <property name="flag">wxEXPAND|wxTOP|wxBOTTOM</property>
               <property name="proportion">0</property>
               <object class="wxStaticLine" expanded="true">
                 <property name="BottomDockable">1</property>
@@ -3803,8 +3803,8 @@
               </object>
             </object>
             <object class="sizeritem" expanded="true">
-              <property name="border">5</property>
-              <property name="flag">wxEXPAND|wxBOTTOM</property>
+              <property name="border">2</property>
+              <property name="flag">wxEXPAND|wxTOP|wxBOTTOM</property>
               <property name="proportion">0</property>
               <object class="wxStaticLine" expanded="true">
                 <property name="BottomDockable">1</property>

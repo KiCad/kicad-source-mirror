@@ -28,10 +28,10 @@ PANEL_FP_EDITOR_GRAPHICS_DEFAULTS_BASE::PANEL_FP_EDITOR_GRAPHICS_DEFAULTS_BASE( 
 	defaultPropertiesSizer->Add( defaultPropertiesLabel, 0, wxEXPAND|wxRIGHT|wxLEFT, 8 );
 
 	m_staticline1 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	defaultPropertiesSizer->Add( m_staticline1, 0, wxBOTTOM|wxEXPAND|wxTOP, 5 );
+	defaultPropertiesSizer->Add( m_staticline1, 0, wxBOTTOM|wxEXPAND|wxTOP, 2 );
 
 
-	defaultPropertiesSizer->Add( 0, 4, 0, wxEXPAND, 5 );
+	defaultPropertiesSizer->Add( 0, 7, 0, wxEXPAND, 5 );
 
 	m_graphicsGrid = new WX_GRID( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 

@@ -22,7 +22,10 @@ PANEL_SYM_EDITING_OPTIONS_BASE::PANEL_SYM_EDITING_OPTIONS_BASE( wxWindow* parent
 	leftColumn->Add( m_defaultsLabel, 0, wxTOP|wxRIGHT|wxLEFT, 13 );
 
 	m_staticline1 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	leftColumn->Add( m_staticline1, 0, wxEXPAND|wxBOTTOM, 5 );
+	leftColumn->Add( m_staticline1, 0, wxEXPAND|wxTOP|wxBOTTOM, 2 );
+
+
+	leftColumn->Add( 0, 5, 0, wxEXPAND, 5 );
 
 	wxGridBagSizer* gbSizer1;
 	gbSizer1 = new wxGridBagSizer( 2, 0 );
@@ -100,7 +103,10 @@ PANEL_SYM_EDITING_OPTIONS_BASE::PANEL_SYM_EDITING_OPTIONS_BASE( wxWindow* parent
 	leftColumn->Add( m_repeatLabel, 0, wxTOP|wxRIGHT|wxLEFT, 13 );
 
 	m_staticline2 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	leftColumn->Add( m_staticline2, 0, wxEXPAND|wxBOTTOM, 5 );
+	leftColumn->Add( m_staticline2, 0, wxEXPAND|wxTOP|wxBOTTOM, 2 );
+
+
+	leftColumn->Add( 0, 5, 0, wxEXPAND, 5 );
 
 	wxGridBagSizer* gbSizer2;
 	gbSizer2 = new wxGridBagSizer( 5, 0 );
@@ -142,7 +148,10 @@ PANEL_SYM_EDITING_OPTIONS_BASE::PANEL_SYM_EDITING_OPTIONS_BASE( wxWindow* parent
 	rightColumn->Add( m_generalOption1, 0, wxLEFT|wxRIGHT|wxTOP, 13 );
 
 	m_staticline4 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	rightColumn->Add( m_staticline4, 0, wxEXPAND|wxBOTTOM, 5 );
+	rightColumn->Add( m_staticline4, 0, wxEXPAND|wxTOP|wxBOTTOM, 2 );
+
+
+	rightColumn->Add( 0, 5, 0, wxEXPAND, 5 );
 
 	m_dragPinsWithEdges = new wxCheckBox( this, wxID_ANY, _("Keep pins attached when dragging edges"), wxDefaultPosition, wxDefaultSize, 0 );
 	rightColumn->Add( m_dragPinsWithEdges, 0, wxALL, 5 );

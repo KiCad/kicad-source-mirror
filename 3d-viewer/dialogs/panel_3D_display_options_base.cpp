@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -25,7 +25,7 @@ PANEL_3D_DISPLAY_OPTIONS_BASE::PANEL_3D_DISPLAY_OPTIONS_BASE( wxWindow* parent, 
 	bSizeLeft->Add( m_renderOptionsLabel, 0, wxTOP|wxRIGHT|wxLEFT|wxEXPAND, 13 );
 
 	m_staticline4 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	bSizeLeft->Add( m_staticline4, 0, wxEXPAND|wxBOTTOM, 5 );
+	bSizeLeft->Add( m_staticline4, 0, wxEXPAND|wxTOP|wxBOTTOM, 2 );
 
 	wxFlexGridSizer* fgSizer2;
 	fgSizer2 = new wxFlexGridSizer( 0, 1, 5, 0 );
@@ -33,7 +33,7 @@ PANEL_3D_DISPLAY_OPTIONS_BASE::PANEL_3D_DISPLAY_OPTIONS_BASE( wxWindow* parent, 
 	fgSizer2->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
 	m_checkBoxClipSilkOnViaAnnulus = new wxCheckBox( this, wxID_ANY, _("Clip silkscreen at via annuli"), wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer2->Add( m_checkBoxClipSilkOnViaAnnulus, 0, wxLEFT, 5 );
+	fgSizer2->Add( m_checkBoxClipSilkOnViaAnnulus, 0, wxTOP|wxLEFT, 5 );
 
 	m_checkBoxSubtractMaskFromSilk = new wxCheckBox( this, wxID_ANY, _("Clip silkscreen at solder mask edges"), wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizer2->Add( m_checkBoxSubtractMaskFromSilk, 0, wxLEFT, 5 );
@@ -76,22 +76,22 @@ PANEL_3D_DISPLAY_OPTIONS_BASE::PANEL_3D_DISPLAY_OPTIONS_BASE( wxWindow* parent, 
 	bSizerRight->Add( m_cameraOptionsLabel, 0, wxTOP|wxRIGHT|wxLEFT, 13 );
 
 	m_staticline5 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	bSizerRight->Add( m_staticline5, 0, wxEXPAND|wxBOTTOM, 5 );
+	bSizerRight->Add( m_staticline5, 0, wxEXPAND|wxTOP|wxBOTTOM, 2 );
 
 	wxBoxSizer* bSizerRotAngle;
 	bSizerRotAngle = new wxBoxSizer( wxHORIZONTAL );
 
 	m_staticTextRotAngle = new wxStaticText( this, wxID_ANY, _("Rotation increment:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextRotAngle->Wrap( -1 );
-	bSizerRotAngle->Add( m_staticTextRotAngle, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
+	bSizerRotAngle->Add( m_staticTextRotAngle, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT|wxLEFT, 5 );
 
 	m_spinCtrlRotationAngle = new wxSpinCtrlDouble( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 0, 359, 10, 1 );
 	m_spinCtrlRotationAngle->SetDigits( 0 );
-	bSizerRotAngle->Add( m_spinCtrlRotationAngle, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
+	bSizerRotAngle->Add( m_spinCtrlRotationAngle, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT|wxLEFT, 5 );
 
 	m_staticTextRotAngleUnits = new wxStaticText( this, wxID_ANY, _("deg"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextRotAngleUnits->Wrap( -1 );
-	bSizerRotAngle->Add( m_staticTextRotAngleUnits, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+	bSizerRotAngle->Add( m_staticTextRotAngleUnits, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT, 5 );
 
 
 	bSizerRight->Add( bSizerRotAngle, 0, wxTOP|wxLEFT, 5 );

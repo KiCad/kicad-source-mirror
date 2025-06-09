@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6-dirty)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -24,7 +24,7 @@ PANEL_COMMON_SETTINGS_BASE::PANEL_COMMON_SETTINGS_BASE( wxWindow* parent, wxWind
 	bLeftSizer->Add( m_staticText20, 0, wxTOP|wxRIGHT|wxLEFT|wxEXPAND, 13 );
 
 	m_staticline3 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	bLeftSizer->Add( m_staticline3, 0, wxEXPAND|wxBOTTOM, 5 );
+	bLeftSizer->Add( m_staticline3, 0, wxEXPAND|wxTOP|wxBOTTOM, 2 );
 
 	wxBoxSizer* bAntialiasingSizer;
 	bAntialiasingSizer = new wxBoxSizer( wxVERTICAL );
@@ -72,7 +72,7 @@ PANEL_COMMON_SETTINGS_BASE::PANEL_COMMON_SETTINGS_BASE( wxWindow* parent, wxWind
 	bLeftSizer->Add( m_staticText21, 0, wxTOP|wxRIGHT|wxLEFT, 13 );
 
 	m_staticline2 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	bLeftSizer->Add( m_staticline2, 0, wxEXPAND|wxBOTTOM, 5 );
+	bLeftSizer->Add( m_staticline2, 0, wxEXPAND|wxTOP|wxBOTTOM, 2 );
 
 	wxBoxSizer* bHelperAppsSizer;
 	bHelperAppsSizer = new wxBoxSizer( wxVERTICAL );
@@ -144,7 +144,7 @@ PANEL_COMMON_SETTINGS_BASE::PANEL_COMMON_SETTINGS_BASE( wxWindow* parent, wxWind
 	bLeftSizer->Add( m_staticText22, 0, wxTOP|wxRIGHT|wxLEFT, 13 );
 
 	m_staticline1 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	bLeftSizer->Add( m_staticline1, 0, wxEXPAND|wxBOTTOM, 5 );
+	bLeftSizer->Add( m_staticline1, 0, wxEXPAND|wxTOP|wxBOTTOM, 2 );
 
 	wxBoxSizer* bUserInterfaceSizer;
 	bUserInterfaceSizer = new wxBoxSizer( wxVERTICAL );
@@ -203,7 +203,7 @@ PANEL_COMMON_SETTINGS_BASE::PANEL_COMMON_SETTINGS_BASE( wxWindow* parent, wxWind
 	bSizerIconsTheme->Add( m_rbIconThemeAuto, 0, wxALL, 5 );
 
 
-	bUserInterfaceSizer->Add( bSizerIconsTheme, 0, wxEXPAND, 5 );
+	bUserInterfaceSizer->Add( bSizerIconsTheme, 0, wxEXPAND|wxTOP, 5 );
 
 	wxBoxSizer* bSizerToolbarSize;
 	bSizerToolbarSize = new wxBoxSizer( wxHORIZONTAL );
@@ -230,33 +230,30 @@ PANEL_COMMON_SETTINGS_BASE::PANEL_COMMON_SETTINGS_BASE( wxWindow* parent, wxWind
 
 	bUserInterfaceSizer->Add( bSizerToolbarSize, 0, wxEXPAND, 5 );
 
-	m_gbUserInterface = new wxGridBagSizer( 5, 0 );
-	m_gbUserInterface->SetFlexibleDirection( wxVERTICAL );
-	m_gbUserInterface->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_ALL );
-
-	m_staticTextCanvasScale = new wxStaticText( this, wxID_ANY, _("Canvas scale:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticTextCanvasScale->Wrap( -1 );
-	m_gbUserInterface->Add( m_staticTextCanvasScale, wxGBPosition( 1, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
-
-	m_canvasScaleCtrl = new wxSpinCtrlDouble( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 0, 100, 0, 1 );
-	m_canvasScaleCtrl->SetDigits( 0 );
-	m_gbUserInterface->Add( m_canvasScaleCtrl, wxGBPosition( 1, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
-
-	m_canvasScaleAuto = new wxCheckBox( this, wxID_ANY, _("Automatic"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_gbUserInterface->Add( m_canvasScaleAuto, wxGBPosition( 1, 2 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 15 );
-
-
-	bUserInterfaceSizer->Add( m_gbUserInterface, 0, wxTOP|wxBOTTOM|wxLEFT|wxEXPAND, 5 );
-
-
-	bUserInterfaceSizer->Add( 0, 10, 0, wxEXPAND, 5 );
-
 	m_scaleFonts = new wxCheckBox( this, wxID_ANY, _("Apply icon scaling to fonts"), wxDefaultPosition, wxDefaultSize, 0 );
 	bUserInterfaceSizer->Add( m_scaleFonts, 0, wxLEFT|wxRIGHT|wxTOP, 5 );
 
 	m_fontScalingHelp = new wxStaticText( this, wxID_ANY, _("(This workaround will improve some GTK HiDPI font scaling issues.)"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_fontScalingHelp->Wrap( -1 );
 	bUserInterfaceSizer->Add( m_fontScalingHelp, 0, wxBOTTOM|wxLEFT, 8 );
+
+	m_gbUserInterface = new wxGridBagSizer( 5, 0 );
+	m_gbUserInterface->SetFlexibleDirection( wxVERTICAL );
+	m_gbUserInterface->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_ALL );
+
+	m_staticTextCanvasScale = new wxStaticText( this, wxID_ANY, _("Canvas scale:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextCanvasScale->Wrap( -1 );
+	m_gbUserInterface->Add( m_staticTextCanvasScale, wxGBPosition( 0, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+
+	m_canvasScaleCtrl = new wxSpinCtrlDouble( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 0, 100, 0, 1 );
+	m_canvasScaleCtrl->SetDigits( 0 );
+	m_gbUserInterface->Add( m_canvasScaleCtrl, wxGBPosition( 0, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
+
+	m_canvasScaleAuto = new wxCheckBox( this, wxID_ANY, _("Automatic"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_gbUserInterface->Add( m_canvasScaleAuto, wxGBPosition( 0, 2 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 15 );
+
+
+	bUserInterfaceSizer->Add( m_gbUserInterface, 0, wxEXPAND|wxTOP|wxBOTTOM|wxLEFT, 5 );
 
 	wxBoxSizer* bSizerHighContrast;
 	bSizerHighContrast = new wxBoxSizer( wxHORIZONTAL );
@@ -273,7 +270,7 @@ PANEL_COMMON_SETTINGS_BASE::PANEL_COMMON_SETTINGS_BASE( wxWindow* parent, wxWind
 	bSizerHighContrast->Add( m_highContrastUnits, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
 
-	bUserInterfaceSizer->Add( bSizerHighContrast, 0, wxBOTTOM|wxEXPAND, 5 );
+	bUserInterfaceSizer->Add( bSizerHighContrast, 0, wxEXPAND|wxTOP|wxBOTTOM, 5 );
 
 
 	bLeftSizer->Add( bUserInterfaceSizer, 0, wxTOP|wxLEFT|wxEXPAND, 5 );
@@ -289,7 +286,7 @@ PANEL_COMMON_SETTINGS_BASE::PANEL_COMMON_SETTINGS_BASE( wxWindow* parent, wxWind
 	rightSizer->Add( m_staticText23, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 13 );
 
 	m_staticline6 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	rightSizer->Add( m_staticline6, 0, wxEXPAND|wxBOTTOM, 5 );
+	rightSizer->Add( m_staticline6, 0, wxEXPAND|wxTOP|wxBOTTOM, 2 );
 
 	wxBoxSizer* bEditingSizer;
 	bEditingSizer = new wxBoxSizer( wxVERTICAL );
@@ -314,7 +311,7 @@ PANEL_COMMON_SETTINGS_BASE::PANEL_COMMON_SETTINGS_BASE( wxWindow* parent, wxWind
 	rightSizer->Add( m_staticText24, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 13 );
 
 	m_staticline5 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	rightSizer->Add( m_staticline5, 0, wxEXPAND|wxBOTTOM, 5 );
+	rightSizer->Add( m_staticline5, 0, wxEXPAND|wxTOP|wxBOTTOM, 2 );
 
 	wxBoxSizer* bSessionSizer;
 	bSessionSizer = new wxBoxSizer( wxVERTICAL );
@@ -323,7 +320,7 @@ PANEL_COMMON_SETTINGS_BASE::PANEL_COMMON_SETTINGS_BASE( wxWindow* parent, wxWind
 	m_cbRememberOpenFiles->SetValue(true);
 	m_cbRememberOpenFiles->SetToolTip( _("If checked, launching a project will also launch tools such as the schematic and board editors with previously open files") );
 
-	bSessionSizer->Add( m_cbRememberOpenFiles, 0, wxALL, 5 );
+	bSessionSizer->Add( m_cbRememberOpenFiles, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 
 
 	bSessionSizer->Add( 0, 5, 0, 0, 5 );
@@ -384,7 +381,7 @@ PANEL_COMMON_SETTINGS_BASE::PANEL_COMMON_SETTINGS_BASE( wxWindow* parent, wxWind
 	rightSizer->Add( m_staticText25, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 13 );
 
 	m_staticline4 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	rightSizer->Add( m_staticline4, 0, wxEXPAND|wxBOTTOM, 5 );
+	rightSizer->Add( m_staticline4, 0, wxEXPAND|wxTOP|wxBOTTOM, 2 );
 
 	wxBoxSizer* bProjectBackupSizer;
 	bProjectBackupSizer = new wxBoxSizer( wxVERTICAL );

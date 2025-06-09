@@ -18,7 +18,8 @@
 #include <wx/colour.h>
 #include <wx/settings.h>
 #include <wx/statline.h>
-#include <wx/radiobox.h>
+#include <wx/radiobut.h>
+#include <wx/gbsizer.h>
 #include <wx/sizer.h>
 #include <wx/choice.h>
 #include <wx/panel.h>
@@ -36,8 +37,12 @@ class PANEL_GERBVIEW_EXCELLON_SETTINGS_BASE : public RESETTABLE_PANEL
 		wxStaticText* m_fileFormatLabel;
 		wxStaticLine* m_staticline1;
 		wxStaticText* m_fileFormatHelp;
-		wxRadioBox* m_rbUnits;
-		wxRadioBox* m_rbZeroFormat;
+		wxStaticText* unitsLabel;
+		wxRadioButton* m_rbInches;
+		wxRadioButton* m_rbMM;
+		wxStaticText* zeroFormatLabel;
+		wxRadioButton* m_rbTZ;
+		wxRadioButton* m_rbLZ;
 		wxStaticText* m_coordinatesLabel;
 		wxStaticLine* m_staticline2;
 		wxStaticText* m_coordsFormatHelp;

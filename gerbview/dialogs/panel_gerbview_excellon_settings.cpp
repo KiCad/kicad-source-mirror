@@ -56,8 +56,8 @@ bool PANEL_GERBVIEW_EXCELLON_SETTINGS::TransferDataFromWindow()
     SETTINGS_MANAGER&  mgr = Pgm().GetSettingsManager();
     GERBVIEW_SETTINGS* cfg = mgr.GetAppSettings<GERBVIEW_SETTINGS>( "gerbview" );
 
-    cfg->m_ExcellonDefaults.m_UnitsMM = m_rbUnits->GetSelection() != 0;
-    cfg->m_ExcellonDefaults.m_LeadingZero = m_rbZeroFormat->GetSelection();
+    cfg->m_ExcellonDefaults.m_UnitsMM = m_rbMM->GetValue();
+    cfg->m_ExcellonDefaults.m_LeadingZero = m_rbLZ->GetValue();
     // The first value of these param is 2, not 0
     #define FIRST_VALUE 2
     cfg->m_ExcellonDefaults.m_MmIntegerLen = m_choiceIntegerMM->GetSelection()+FIRST_VALUE;
@@ -78,8 +78,15 @@ void PANEL_GERBVIEW_EXCELLON_SETTINGS::ResetPanel()
 
 void PANEL_GERBVIEW_EXCELLON_SETTINGS::applySettingsToPanel( const EXCELLON_DEFAULTS& aSettings )
 {
-    m_rbUnits->SetSelection( aSettings.m_UnitsMM ? 1 : 0 );
-    m_rbZeroFormat->SetSelection( aSettings.m_LeadingZero );
+    if( aSettings.m_UnitsMM )
+        m_rbMM->SetValue( true );
+    else
+        m_rbInches->SetValue( true );
+
+    if( aSettings.m_LeadingZero )
+        m_rbLZ->SetValue( true );
+    else
+        m_rbTZ->SetValue( true );
 
     // The first value of these param is 2, not 0
     #define FIRST_VALUE 2

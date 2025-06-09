@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6a-dirty)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -18,7 +18,7 @@ PANEL_GIT_REPOS_BASE::PANEL_GIT_REPOS_BASE( wxWindow* parent, wxWindowID id, con
 	bLeftSizer = new wxBoxSizer( wxVERTICAL );
 
 	m_enableGit = new wxCheckBox( this, wxID_ANY, _("Enable Git tracking"), wxDefaultPosition, wxDefaultSize, 0 );
-	bLeftSizer->Add( m_enableGit, 0, wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 13 );
+	bLeftSizer->Add( m_enableGit, 0, wxEXPAND|wxALL, 10 );
 
 	m_gitSizer = new wxBoxSizer( wxVERTICAL );
 
@@ -30,7 +30,7 @@ PANEL_GIT_REPOS_BASE::PANEL_GIT_REPOS_BASE( wxWindow* parent, wxWindowID id, con
 	bSizerUpdate->Add( m_staticText6, 0, wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 13 );
 
 	m_staticline2 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	bSizerUpdate->Add( m_staticline2, 0, wxEXPAND | wxALL, 5 );
+	bSizerUpdate->Add( m_staticline2, 0, wxEXPAND|wxTOP|wxBOTTOM, 2 );
 
 	wxGridBagSizer* gbUpdate;
 	gbUpdate = new wxGridBagSizer( 4, 5 );
@@ -54,10 +54,10 @@ PANEL_GIT_REPOS_BASE::PANEL_GIT_REPOS_BASE( wxWindow* parent, wxWindowID id, con
 
 	gbUpdate->AddGrowableCol( 2 );
 
-	bSizerUpdate->Add( gbUpdate, 0, wxEXPAND|wxLEFT, 13 );
+	bSizerUpdate->Add( gbUpdate, 0, wxEXPAND|wxTOP|wxBOTTOM|wxLEFT, 5 );
 
 
-	m_gitSizer->Add( bSizerUpdate, 0, wxEXPAND, 5 );
+	m_gitSizer->Add( bSizerUpdate, 0, wxEXPAND|wxTOP, 5 );
 
 	wxBoxSizer* bSizerCommitData;
 	bSizerCommitData = new wxBoxSizer( wxVERTICAL );
@@ -67,7 +67,7 @@ PANEL_GIT_REPOS_BASE::PANEL_GIT_REPOS_BASE( wxWindow* parent, wxWindowID id, con
 	bSizerCommitData->Add( m_staticText12, 0, wxEXPAND|wxLEFT|wxTOP, 13 );
 
 	m_staticline31 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	bSizerCommitData->Add( m_staticline31, 0, wxEXPAND | wxALL, 5 );
+	bSizerCommitData->Add( m_staticline31, 0, wxEXPAND|wxTOP|wxBOTTOM, 2 );
 
 	wxFlexGridSizer* fgSizer1;
 	fgSizer1 = new wxFlexGridSizer( 0, 2, 0, 0 );
@@ -86,29 +86,29 @@ PANEL_GIT_REPOS_BASE::PANEL_GIT_REPOS_BASE( wxWindow* parent, wxWindowID id, con
 	m_authorLabel->Wrap( -1 );
 	m_authorLabel->Enable( false );
 
-	fgSizer1->Add( m_authorLabel, 0, wxALL, 5 );
+	fgSizer1->Add( m_authorLabel, 0, wxTOP|wxLEFT, 5 );
 
 	m_author = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_author->Enable( false );
 
-	fgSizer1->Add( m_author, 0, wxALL|wxEXPAND, 5 );
+	fgSizer1->Add( m_author, 1, wxTOP|wxRIGHT|wxLEFT, 5 );
 
 	m_authorEmailLabel = new wxStaticText( this, wxID_ANY, _("Author e-mail:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_authorEmailLabel->Wrap( -1 );
 	m_authorEmailLabel->Enable( false );
 
-	fgSizer1->Add( m_authorEmailLabel, 0, wxALL, 5 );
+	fgSizer1->Add( m_authorEmailLabel, 0, wxTOP|wxBOTTOM|wxLEFT, 5 );
 
 	m_authorEmail = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_authorEmail->Enable( false );
 
-	fgSizer1->Add( m_authorEmail, 0, wxALL|wxEXPAND, 5 );
+	fgSizer1->Add( m_authorEmail, 1, wxALL, 5 );
 
 
-	bSizerCommitData->Add( fgSizer1, 0, wxBOTTOM|wxEXPAND|wxLEFT, 8 );
+	bSizerCommitData->Add( fgSizer1, 0, wxEXPAND|wxALL, 5 );
 
 
-	m_gitSizer->Add( bSizerCommitData, 1, wxEXPAND, 5 );
+	m_gitSizer->Add( bSizerCommitData, 1, wxEXPAND|wxTOP, 10 );
 
 
 	bLeftSizer->Add( m_gitSizer, 0, wxEXPAND, 0 );

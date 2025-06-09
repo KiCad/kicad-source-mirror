@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -29,7 +29,10 @@ PANEL_EESCHEMA_ANNOTATION_OPTIONS_BASE::PANEL_EESCHEMA_ANNOTATION_OPTIONS_BASE( 
 	bLeftColumn->Add( m_orderLabel, 0, wxTOP|wxRIGHT|wxLEFT, 13 );
 
 	m_staticline2 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	bLeftColumn->Add( m_staticline2, 0, wxEXPAND|wxBOTTOM, 5 );
+	bLeftColumn->Add( m_staticline2, 0, wxEXPAND|wxTOP|wxBOTTOM, 2 );
+
+
+	bLeftColumn->Add( 0, 5, 0, wxEXPAND, 5 );
 
 	wxBoxSizer* bSizerXpos;
 	bSizerXpos = new wxBoxSizer( wxHORIZONTAL );
@@ -63,7 +66,10 @@ PANEL_EESCHEMA_ANNOTATION_OPTIONS_BASE::PANEL_EESCHEMA_ANNOTATION_OPTIONS_BASE( 
 	bLeftColumn->Add( m_numberingLabel, 0, wxTOP|wxRIGHT|wxLEFT, 13 );
 
 	m_staticline3 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	bLeftColumn->Add( m_staticline3, 0, wxEXPAND|wxBOTTOM, 5 );
+	bLeftColumn->Add( m_staticline3, 0, wxEXPAND|wxTOP|wxBOTTOM, 2 );
+
+
+	bLeftColumn->Add( 0, 5, 0, wxEXPAND, 5 );
 
 	wxGridBagSizer* gbSizerNumbering;
 	gbSizerNumbering = new wxGridBagSizer( 0, 0 );

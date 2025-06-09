@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -19,22 +19,25 @@ PANEL_3D_RAYTRACING_OPTIONS_BASE::PANEL_3D_RAYTRACING_OPTIONS_BASE( wxWindow* pa
 	bSizerMain->Add( m_renderingLabel, 0, wxTOP|wxRIGHT|wxLEFT|wxEXPAND, 13 );
 
 	m_staticline1 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	bSizerMain->Add( m_staticline1, 0, wxEXPAND|wxBOTTOM, 5 );
+	bSizerMain->Add( m_staticline1, 0, wxEXPAND|wxTOP|wxBOTTOM, 2 );
+
+
+	bSizerMain->Add( 0, 5, 0, wxEXPAND, 5 );
 
 	wxGridSizer* gSizer1;
 	gSizer1 = new wxGridSizer( 0, 1, 0, 20 );
 
 	m_cbRaytracing_proceduralTextures = new wxCheckBox( this, wxID_ANY, _("Procedural textures (slow)"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_cbRaytracing_proceduralTextures->SetValue(true);
-	gSizer1->Add( m_cbRaytracing_proceduralTextures, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	gSizer1->Add( m_cbRaytracing_proceduralTextures, 0, wxRIGHT|wxLEFT, 5 );
 
 	m_cbRaytracing_addFloor = new wxCheckBox( this, wxID_ANY, _("Add floor (slow)"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_cbRaytracing_addFloor->SetValue(true);
-	gSizer1->Add( m_cbRaytracing_addFloor, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	gSizer1->Add( m_cbRaytracing_addFloor, 0, wxRIGHT|wxLEFT, 5 );
 
 	m_cbRaytracing_antiAliasing = new wxCheckBox( this, wxID_ANY, _("Anti-aliasing (slow)"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_cbRaytracing_antiAliasing->SetValue(true);
-	gSizer1->Add( m_cbRaytracing_antiAliasing, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	gSizer1->Add( m_cbRaytracing_antiAliasing, 0, wxRIGHT|wxLEFT, 5 );
 
 	m_cbRaytracing_postProcessing = new wxCheckBox( this, wxID_ANY, _("Screen space ambient occlusions and global illumination reflections (slow)"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_cbRaytracing_postProcessing->SetValue(true);
@@ -123,7 +126,7 @@ PANEL_3D_RAYTRACING_OPTIONS_BASE::PANEL_3D_RAYTRACING_OPTIONS_BASE( wxWindow* pa
 	bSizerMain->Add( m_lightsLabel, 0, wxTOP|wxRIGHT|wxLEFT, 13 );
 
 	m_staticline2 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	bSizerMain->Add( m_staticline2, 0, wxEXPAND|wxBOTTOM, 5 );
+	bSizerMain->Add( m_staticline2, 0, wxEXPAND|wxTOP|wxBOTTOM, 2 );
 
 	wxBoxSizer* bLightsSizer;
 	bLightsSizer = new wxBoxSizer( wxVERTICAL );

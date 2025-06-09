@@ -29,14 +29,13 @@
 #include <panel_pcbnew_display_origin.h>
 
 
-PANEL_PCBNEW_DISPLAY_ORIGIN::PANEL_PCBNEW_DISPLAY_ORIGIN( wxWindow* aParent,
-                                                          APP_SETTINGS_BASE* aCfg,
+PANEL_PCBNEW_DISPLAY_ORIGIN::PANEL_PCBNEW_DISPLAY_ORIGIN( wxWindow* aParent, APP_SETTINGS_BASE* aCfg,
                                                           FRAME_T aFrameType ) :
         PANEL_PCBNEW_DISPLAY_ORIGIN_BASE( aParent ),
         m_cfg( aCfg ),
         m_frameType( aFrameType )
 {
-    m_DisplayOrigin->Show( m_frameType == FRAME_PCB_EDITOR );
+    m_displayOrigin->Show( m_frameType == FRAME_PCB_EDITOR );
 }
 
 
@@ -46,24 +45,36 @@ void PANEL_PCBNEW_DISPLAY_ORIGIN::loadSettings( APP_SETTINGS_BASE* aCfg )
     {
         FOOTPRINT_EDITOR_SETTINGS* cfg = static_cast<FOOTPRINT_EDITOR_SETTINGS*>( aCfg );
 
-        m_XAxisDirection->SetSelection( cfg->m_DisplayInvertXAxis ? 1 : 0 );
-        m_YAxisDirection->SetSelection( cfg->m_DisplayInvertYAxis ? 0 : 1 );
+        if( cfg->m_DisplayInvertXAxis )
+            m_xIncreasesLeft->SetValue( true );
+        else
+            m_xIncreasesRight->SetValue( true );
+
+        if( cfg->m_DisplayInvertYAxis )
+            m_yIncreasesUp->SetValue( true );
+        else
+            m_yIncreasesDown->SetValue( true );
     }
     else
     {
         PCBNEW_SETTINGS* cfg = static_cast<PCBNEW_SETTINGS*>( aCfg );
-        int              origin = 0;
 
-        switch( cfg->m_Display.m_DisplayOrigin )
-        {
-        case PCB_DISPLAY_ORIGIN::PCB_ORIGIN_PAGE: origin = 0; break;
-        case PCB_DISPLAY_ORIGIN::PCB_ORIGIN_AUX:  origin = 1; break;
-        case PCB_DISPLAY_ORIGIN::PCB_ORIGIN_GRID: origin = 2; break;
-        }
+        if( cfg->m_Display.m_DisplayOrigin == PCB_DISPLAY_ORIGIN::PCB_ORIGIN_PAGE )
+            m_pageOrigin->SetValue( true );
+        else if( cfg->m_Display.m_DisplayOrigin == PCB_DISPLAY_ORIGIN::PCB_ORIGIN_GRID )
+            m_gridOrigin->SetValue( true );
+        else
+            m_drillPlaceOrigin->SetValue( true );
 
-        m_DisplayOrigin->SetSelection( origin );
-        m_XAxisDirection->SetSelection( cfg->m_Display.m_DisplayInvertXAxis ? 1 : 0 );
-        m_YAxisDirection->SetSelection( cfg->m_Display.m_DisplayInvertYAxis ? 0 : 1 );
+        if( cfg->m_Display.m_DisplayInvertXAxis )
+            m_xIncreasesLeft->SetValue( true );
+        else
+            m_xIncreasesRight->SetValue( true );
+
+        if( cfg->m_Display.m_DisplayInvertYAxis )
+            m_yIncreasesUp->SetValue( true );
+        else
+            m_yIncreasesDown->SetValue( true );
     }
 }
 
@@ -82,22 +93,22 @@ bool PANEL_PCBNEW_DISPLAY_ORIGIN::TransferDataFromWindow()
     {
         FOOTPRINT_EDITOR_SETTINGS* cfg = static_cast<FOOTPRINT_EDITOR_SETTINGS*>( m_cfg );
 
-        cfg->m_DisplayInvertXAxis = m_XAxisDirection->GetSelection() != 0;
-        cfg->m_DisplayInvertYAxis = m_YAxisDirection->GetSelection() == 0;
+        cfg->m_DisplayInvertXAxis = m_xIncreasesLeft->GetValue();
+        cfg->m_DisplayInvertYAxis = m_yIncreasesUp->GetValue();
     }
     else
     {
         PCBNEW_SETTINGS* cfg = static_cast<PCBNEW_SETTINGS*>( m_cfg );
 
-        switch( m_DisplayOrigin->GetSelection() )
-        {
-        case 0: cfg->m_Display.m_DisplayOrigin = PCB_DISPLAY_ORIGIN::PCB_ORIGIN_PAGE; break;
-        case 1: cfg->m_Display.m_DisplayOrigin = PCB_DISPLAY_ORIGIN::PCB_ORIGIN_AUX;  break;
-        case 2: cfg->m_Display.m_DisplayOrigin = PCB_DISPLAY_ORIGIN::PCB_ORIGIN_GRID; break;
-        }
+        if( m_pageOrigin->GetValue() )
+            cfg->m_Display.m_DisplayOrigin = PCB_DISPLAY_ORIGIN::PCB_ORIGIN_PAGE;
+        else if( m_gridOrigin->GetValue() )
+            cfg->m_Display.m_DisplayOrigin = PCB_DISPLAY_ORIGIN::PCB_ORIGIN_GRID;
+        else
+            cfg->m_Display.m_DisplayOrigin = PCB_DISPLAY_ORIGIN::PCB_ORIGIN_AUX;
 
-        cfg->m_Display.m_DisplayInvertXAxis = m_XAxisDirection->GetSelection() != 0;
-        cfg->m_Display.m_DisplayInvertYAxis = m_YAxisDirection->GetSelection() == 0;
+        cfg->m_Display.m_DisplayInvertXAxis = m_xIncreasesLeft->GetValue();
+        cfg->m_Display.m_DisplayInvertYAxis = m_yIncreasesUp->GetValue();
     }
 
     return true;

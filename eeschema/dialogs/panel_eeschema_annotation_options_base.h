@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -31,11 +31,11 @@
 
 ///////////////////////////////////////////////////////////////////////////
 
-#define ID_SORT_BY_X_POSITION 1000
-#define ID_SORT_BY_Y_POSITION 1001
-#define wxID_FIRST_FREE 1002
-#define wxID_SHEET_X_100 1003
-#define wxID_SHEET_X_1000 1004
+#define ID_SORT_BY_X_POSITION 19200
+#define ID_SORT_BY_Y_POSITION 19201
+#define wxID_FIRST_FREE 19202
+#define wxID_SHEET_X_100 19203
+#define wxID_SHEET_X_1000 19204
 
 ///////////////////////////////////////////////////////////////////////////////
 /// Class PANEL_EESCHEMA_ANNOTATION_OPTIONS_BASE

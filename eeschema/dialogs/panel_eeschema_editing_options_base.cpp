@@ -22,7 +22,7 @@ PANEL_EESCHEMA_EDITING_OPTIONS_BASE::PANEL_EESCHEMA_EDITING_OPTIONS_BASE( wxWind
 	bLeftColumn->Add( m_editingLabel, 0, wxTOP|wxRIGHT|wxLEFT|wxEXPAND, 13 );
 
 	m_staticline3 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	bLeftColumn->Add( m_staticline3, 0, wxEXPAND|wxBOTTOM, 5 );
+	bLeftColumn->Add( m_staticline3, 0, wxEXPAND|wxTOP|wxBOTTOM, 2 );
 
 	wxBoxSizer* bSizer5;
 	bSizer5 = new wxBoxSizer( wxVERTICAL );
@@ -79,7 +79,7 @@ PANEL_EESCHEMA_EDITING_OPTIONS_BASE::PANEL_EESCHEMA_EDITING_OPTIONS_BASE( wxWind
 	bLeftColumn->Add( m_staticText26, 0, wxTOP|wxRIGHT|wxLEFT|wxEXPAND, 13 );
 
 	m_staticline4 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	bLeftColumn->Add( m_staticline4, 0, wxEXPAND|wxBOTTOM, 5 );
+	bLeftColumn->Add( m_staticline4, 0, wxEXPAND|wxTOP|wxBOTTOM, 2 );
 
 	wxGridBagSizer* gbSizer1;
 	gbSizer1 = new wxGridBagSizer( 0, 0 );
@@ -146,14 +146,14 @@ PANEL_EESCHEMA_EDITING_OPTIONS_BASE::PANEL_EESCHEMA_EDITING_OPTIONS_BASE( wxWind
 	bSizer8->Add( m_leftClickLabel, 0, wxTOP|wxRIGHT|wxLEFT|wxEXPAND, 13 );
 
 	m_staticline6 = new wxStaticLine( m_pageWinLin, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	bSizer8->Add( m_staticline6, 0, wxEXPAND|wxBOTTOM, 5 );
+	bSizer8->Add( m_staticline6, 0, wxEXPAND|wxTOP|wxBOTTOM, 2 );
 
 	wxBoxSizer* bSizer9;
 	bSizer9 = new wxBoxSizer( wxVERTICAL );
 
 	m_hint1 = new wxStaticText( m_pageWinLin, wxID_ANY, _("Left click (and drag) actions depend on 2 modifier keys:\nShift and Ctrl"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_hint1->Wrap( -1 );
-	bSizer9->Add( m_hint1, 0, wxRIGHT|wxLEFT, 5 );
+	bSizer9->Add( m_hint1, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 
 	wxFlexGridSizer* fgSizerCmdsWinLin;
 	fgSizerCmdsWinLin = new wxFlexGridSizer( 0, 2, 0, 5 );
@@ -275,7 +275,7 @@ PANEL_EESCHEMA_EDITING_OPTIONS_BASE::PANEL_EESCHEMA_EDITING_OPTIONS_BASE( wxWind
 	bRightColumn->Add( m_staticText32, 0, wxTOP|wxRIGHT|wxLEFT|wxEXPAND, 13 );
 
 	m_staticline10 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	bRightColumn->Add( m_staticline10, 0, wxEXPAND|wxBOTTOM, 5 );
+	bRightColumn->Add( m_staticline10, 0, wxEXPAND|wxTOP|wxBOTTOM, 2 );
 
 	wxBoxSizer* bSizer12;
 	bSizer12 = new wxBoxSizer( wxVERTICAL );
@@ -300,7 +300,7 @@ PANEL_EESCHEMA_EDITING_OPTIONS_BASE::PANEL_EESCHEMA_EDITING_OPTIONS_BASE( wxWind
 	bRightColumn->Add( m_staticText321, 0, wxTOP|wxRIGHT|wxLEFT|wxEXPAND, 13 );
 
 	m_staticline9 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	bRightColumn->Add( m_staticline9, 0, wxEXPAND|wxBOTTOM, 5 );
+	bRightColumn->Add( m_staticline9, 0, wxEXPAND|wxTOP|wxBOTTOM, 2 );
 
 	wxBoxSizer* bSizer13;
 	bSizer13 = new wxBoxSizer( wxVERTICAL );
@@ -356,7 +356,7 @@ PANEL_EESCHEMA_EDITING_OPTIONS_BASE::PANEL_EESCHEMA_EDITING_OPTIONS_BASE( wxWind
 	bRightColumn->Add( m_staticText322, 0, wxTOP|wxRIGHT|wxLEFT|wxEXPAND, 13 );
 
 	m_staticline8 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	bRightColumn->Add( m_staticline8, 0, wxEXPAND|wxBOTTOM, 5 );
+	bRightColumn->Add( m_staticline8, 0, wxEXPAND|wxTOP|wxBOTTOM, 2 );
 
 	wxBoxSizer* bSizer14;
 	bSizer14 = new wxBoxSizer( wxVERTICAL );

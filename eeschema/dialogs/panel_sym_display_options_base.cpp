@@ -27,7 +27,7 @@ PANEL_SYM_DISPLAY_OPTIONS_BASE::PANEL_SYM_DISPLAY_OPTIONS_BASE( wxWindow* parent
 	bRightColumn->Add( m_appearanceLabel, 0, wxTOP|wxRIGHT|wxLEFT, 13 );
 
 	m_staticline1 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	bRightColumn->Add( m_staticline1, 0, wxEXPAND|wxBOTTOM, 7 );
+	bRightColumn->Add( m_staticline1, 0, wxEXPAND|wxTOP|wxBOTTOM, 2 );
 
 	wxBoxSizer* bAppearanceSizer;
 	bAppearanceSizer = new wxBoxSizer( wxVERTICAL );

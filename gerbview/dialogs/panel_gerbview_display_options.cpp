@@ -19,25 +19,11 @@
  */
 
 #include <vector>
-#include <core/arraydim.h>
 #include <pgm_base.h>
 #include <settings/settings_manager.h>
 #include <gerbview_settings.h>
 #include <widgets/gal_options_panel.h>
 #include "panel_gerbview_display_options.h"
-
-
-/// List of page sizes
-static const wxChar* gerberPageSizeList[] =
-{
-    wxT( "GERBER" ),    // index 0: full size page selection
-    wxT( "A4" ),
-    wxT( "A3" ),
-    wxT( "A2" ),
-    wxT( "A" ),
-    wxT( "B" ),
-    wxT( "C" ),
-};
 
 
 PANEL_GERBVIEW_DISPLAY_OPTIONS::PANEL_GERBVIEW_DISPLAY_OPTIONS( wxWindow* aParent ) :
@@ -62,14 +48,20 @@ void PANEL_GERBVIEW_DISPLAY_OPTIONS::loadSettings( GERBVIEW_SETTINGS* aCfg )
     m_OptDisplayDCodes->SetValue( aCfg->m_Appearance.show_dcodes );
     m_spOpacityCtrl->SetValue( aCfg->m_Display.m_OpacityModeAlphaValue );
 
-    for( unsigned i = 0;  i < arrayDim( gerberPageSizeList );  ++i )
-    {
-        if( gerberPageSizeList[i] == aCfg->m_Appearance.page_type )
-        {
-            m_PageSize->SetSelection( i );
-            break;
-        }
-    }
+    if( aCfg->m_Appearance.page_type == wxT( "A4" ) )
+        m_pageSizeA4->SetValue( true );
+    else if( aCfg->m_Appearance.page_type == wxT( "A3" ) )
+        m_pageSizeA3->SetValue( true );
+    else if( aCfg->m_Appearance.page_type == wxT( "A2" ) )
+        m_pageSizeA2->SetValue( true );
+    else if( aCfg->m_Appearance.page_type == wxT( "A" ) )
+        m_pageSizeA->SetValue( true );
+    else if( aCfg->m_Appearance.page_type == wxT( "B" ) )
+        m_pageSizeB->SetValue( true );
+    else if( aCfg->m_Appearance.page_type == wxT( "C" ) )
+        m_pageSizeC->SetValue( true );
+    else
+        m_pageSizeFull->SetValue( true );
 
     m_ShowPageLimitsOpt->SetValue( aCfg->m_Display.m_DisplayPageLimits );
 }
@@ -100,7 +92,21 @@ bool PANEL_GERBVIEW_DISPLAY_OPTIONS::TransferDataFromWindow()
     cfg->m_Display.m_DisplayPolygonsFill = !m_OptDisplayPolygons->GetValue();
     cfg->m_Appearance.show_dcodes = m_OptDisplayDCodes->GetValue();
 
-    cfg->m_Appearance.page_type = gerberPageSizeList[ m_PageSize->GetSelection() ];
+    if( m_pageSizeA4->GetValue() )
+        cfg->m_Appearance.page_type = wxT( "A4" );
+    else if( m_pageSizeA3->GetValue() )
+        cfg->m_Appearance.page_type = wxT( "A3" );
+    else if( m_pageSizeA2->GetValue() )
+        cfg->m_Appearance.page_type = wxT( "A2" );
+    else if( m_pageSizeA->GetValue() )
+        cfg->m_Appearance.page_type = wxT( "A" );
+    else if( m_pageSizeB->GetValue() )
+        cfg->m_Appearance.page_type = wxT( "B" );
+    else if( m_pageSizeC->GetValue() )
+        cfg->m_Appearance.page_type = wxT( "C" );
+    else
+        cfg->m_Appearance.page_type = wxT( "GERBER" );
+
     cfg->m_Display.m_DisplayPageLimits = m_ShowPageLimitsOpt->GetValue();
     cfg->m_Display.m_OpacityModeAlphaValue = m_spOpacityCtrl->GetValue();
 

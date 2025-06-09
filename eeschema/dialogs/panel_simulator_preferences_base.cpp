@@ -22,7 +22,7 @@ PANEL_SIMULATOR_PREFERENCES_BASE::PANEL_SIMULATOR_PREFERENCES_BASE( wxWindow* pa
 	bScrollSizer->Add( m_lblScrollHeading, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 13 );
 
 	m_scrollLine = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	bScrollSizer->Add( m_scrollLine, 0, wxEXPAND|wxBOTTOM, 5 );
+	bScrollSizer->Add( m_scrollLine, 0, wxEXPAND|wxTOP|wxBOTTOM, 2 );
 
 	wxBoxSizer* bScrollMargins;
 	bScrollMargins = new wxBoxSizer( wxHORIZONTAL );

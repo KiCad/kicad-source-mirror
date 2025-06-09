@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf02)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -29,7 +29,7 @@ PANEL_GERBVIEW_DISPLAY_OPTIONS_BASE::PANEL_GERBVIEW_DISPLAY_OPTIONS_BASE( wxWind
 	bRightSizer->Add( m_staticText1, 0, wxTOP|wxRIGHT|wxLEFT|wxEXPAND, 13 );
 
 	m_staticline1 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	bRightSizer->Add( m_staticline1, 0, wxEXPAND|wxBOTTOM, 5 );
+	bRightSizer->Add( m_staticline1, 0, wxEXPAND|wxTOP|wxBOTTOM, 2 );
 
 	wxBoxSizer* bAnnotationsSizer;
 	bAnnotationsSizer = new wxBoxSizer( wxVERTICAL );
@@ -52,7 +52,7 @@ PANEL_GERBVIEW_DISPLAY_OPTIONS_BASE::PANEL_GERBVIEW_DISPLAY_OPTIONS_BASE( wxWind
 	bRightSizer->Add( m_staticText2, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 13 );
 
 	m_staticline2 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	bRightSizer->Add( m_staticline2, 0, wxEXPAND|wxBOTTOM, 5 );
+	bRightSizer->Add( m_staticline2, 0, wxEXPAND|wxTOP|wxBOTTOM, 2 );
 
 	wxBoxSizer* bDrawingModeSizer;
 	bDrawingModeSizer = new wxBoxSizer( wxVERTICAL );
@@ -71,24 +71,24 @@ PANEL_GERBVIEW_DISPLAY_OPTIONS_BASE::PANEL_GERBVIEW_DISPLAY_OPTIONS_BASE( wxWind
 
 	bDrawingModeSizer->Add( m_OptDisplayPolygons, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
-	wxStaticBoxSizer* sbSizerOpacity;
-	sbSizerOpacity = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Forced Opacity Display Mode") ), wxHORIZONTAL );
+	wxBoxSizer* bSizer9;
+	bSizer9 = new wxBoxSizer( wxHORIZONTAL );
 
-	m_staticTextOpacity = new wxStaticText( sbSizerOpacity->GetStaticBox(), wxID_ANY, _("Forced opacity:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextOpacity = new wxStaticText( this, wxID_ANY, _("Forced opacity:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextOpacity->Wrap( -1 );
 	m_staticTextOpacity->SetToolTip( _("Opacity in forced opacity display mode") );
 
-	sbSizerOpacity->Add( m_staticTextOpacity, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+	bSizer9->Add( m_staticTextOpacity, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
-	m_spOpacityCtrl = new wxSpinCtrlDouble( sbSizerOpacity->GetStaticBox(), wxID_ANY, wxT("0.6"), wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 0.2, 1, 0.600000, 0.1 );
+	m_spOpacityCtrl = new wxSpinCtrlDouble( this, wxID_ANY, wxT("0.6"), wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 0.2, 1, 0.600000, 0.1 );
 	m_spOpacityCtrl->SetDigits( 2 );
-	sbSizerOpacity->Add( m_spOpacityCtrl, 0, wxALL, 5 );
+	bSizer9->Add( m_spOpacityCtrl, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
 
-	bDrawingModeSizer->Add( sbSizerOpacity, 1, wxEXPAND|wxTOP, 5 );
+	bDrawingModeSizer->Add( bSizer9, 1, wxEXPAND|wxRIGHT, 5 );
 
 
-	bRightSizer->Add( bDrawingModeSizer, 0, wxEXPAND|wxTOP|wxLEFT, 5 );
+	bRightSizer->Add( bDrawingModeSizer, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 
 
 	bRightSizer->Add( 0, 15, 0, wxEXPAND, 5 );
@@ -98,7 +98,7 @@ PANEL_GERBVIEW_DISPLAY_OPTIONS_BASE::PANEL_GERBVIEW_DISPLAY_OPTIONS_BASE( wxWind
 	bRightSizer->Add( m_staticText3, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 13 );
 
 	m_staticline3 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	bRightSizer->Add( m_staticline3, 0, wxEXPAND|wxBOTTOM, 5 );
+	bRightSizer->Add( m_staticline3, 0, wxEXPAND|wxTOP|wxBOTTOM, 2 );
 
 	wxBoxSizer* bPageSizeSizer;
 	bPageSizeSizer = new wxBoxSizer( wxVERTICAL );
@@ -106,14 +106,29 @@ PANEL_GERBVIEW_DISPLAY_OPTIONS_BASE::PANEL_GERBVIEW_DISPLAY_OPTIONS_BASE( wxWind
 	wxBoxSizer* bMargins;
 	bMargins = new wxBoxSizer( wxVERTICAL );
 
-	wxString m_PageSizeChoices[] = { _("Full size"), _("Size A4"), _("Size A3"), _("Size A2"), _("Size A"), _("Size B"), _("Size C") };
-	int m_PageSizeNChoices = sizeof( m_PageSizeChoices ) / sizeof( wxString );
-	m_PageSize = new wxRadioBox( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, m_PageSizeNChoices, m_PageSizeChoices, 1, wxRA_SPECIFY_COLS );
-	m_PageSize->SetSelection( 0 );
-	bMargins->Add( m_PageSize, 0, wxEXPAND|wxALL, 5 );
+	m_pageSizeFull = new wxRadioButton( this, wxID_ANY, _("Full size"), wxDefaultPosition, wxDefaultSize, wxRB_GROUP );
+	bMargins->Add( m_pageSizeFull, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+
+	m_pageSizeA4 = new wxRadioButton( this, wxID_ANY, _("Size A4"), wxDefaultPosition, wxDefaultSize, 0 );
+	bMargins->Add( m_pageSizeA4, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+
+	m_pageSizeA3 = new wxRadioButton( this, wxID_ANY, _("Size A3"), wxDefaultPosition, wxDefaultSize, 0 );
+	bMargins->Add( m_pageSizeA3, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+
+	m_pageSizeA2 = new wxRadioButton( this, wxID_ANY, _("Size A2"), wxDefaultPosition, wxDefaultSize, 0 );
+	bMargins->Add( m_pageSizeA2, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+
+	m_pageSizeA = new wxRadioButton( this, wxID_ANY, _("Size A"), wxDefaultPosition, wxDefaultSize, 0 );
+	bMargins->Add( m_pageSizeA, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+
+	m_pageSizeB = new wxRadioButton( this, wxID_ANY, _("Size B"), wxDefaultPosition, wxDefaultSize, 0 );
+	bMargins->Add( m_pageSizeB, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+
+	m_pageSizeC = new wxRadioButton( this, wxID_ANY, _("Size C"), wxDefaultPosition, wxDefaultSize, 0 );
+	bMargins->Add( m_pageSizeC, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 
 
-	bPageSizeSizer->Add( bMargins, 0, wxEXPAND|wxRIGHT, 10 );
+	bPageSizeSizer->Add( bMargins, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 
 
 	bRightSizer->Add( bPageSizeSizer, 0, wxEXPAND|wxTOP|wxRIGHT, 5 );

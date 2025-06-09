@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6a-dirty)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -35,7 +35,7 @@ PANEL_EESCHEMA_DISPLAY_OPTIONS_BASE::PANEL_EESCHEMA_DISPLAY_OPTIONS_BASE( wxWind
 	bSizer8->Add( m_crossprobeLabel, 0, wxTOP|wxRIGHT|wxLEFT|wxEXPAND, 13 );
 
 	m_staticline3 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	bSizer8->Add( m_staticline3, 0, wxEXPAND|wxBOTTOM, 7 );
+	bSizer8->Add( m_staticline3, 0, wxEXPAND|wxTOP|wxBOTTOM, 2 );
 
 	wxBoxSizer* bCrossProbingSizer;
 	bCrossProbingSizer = new wxBoxSizer( wxVERTICAL );
@@ -44,7 +44,7 @@ PANEL_EESCHEMA_DISPLAY_OPTIONS_BASE::PANEL_EESCHEMA_DISPLAY_OPTIONS_BASE( wxWind
 	m_checkCrossProbeOnSelection->SetValue(true);
 	m_checkCrossProbeOnSelection->SetToolTip( _("Highlight symbols corresponding to selected footprints") );
 
-	bCrossProbingSizer->Add( m_checkCrossProbeOnSelection, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	bCrossProbingSizer->Add( m_checkCrossProbeOnSelection, 0, wxALL, 5 );
 
 	m_checkCrossProbeCenter = new wxCheckBox( this, wxID_ANY, _("Center view on cross-probed items"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_checkCrossProbeCenter->SetValue(true);
@@ -79,7 +79,7 @@ PANEL_EESCHEMA_DISPLAY_OPTIONS_BASE::PANEL_EESCHEMA_DISPLAY_OPTIONS_BASE( wxWind
 	bRightColumn->Add( m_appearanceLabel, 0, wxTOP|wxRIGHT|wxLEFT, 13 );
 
 	m_staticline1 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	bRightColumn->Add( m_staticline1, 0, wxEXPAND|wxBOTTOM, 7 );
+	bRightColumn->Add( m_staticline1, 0, wxEXPAND|wxTOP|wxBOTTOM, 2 );
 
 	wxBoxSizer* bAppearanceSizer;
 	bAppearanceSizer = new wxBoxSizer( wxVERTICAL );
@@ -95,10 +95,10 @@ PANEL_EESCHEMA_DISPLAY_OPTIONS_BASE::PANEL_EESCHEMA_DISPLAY_OPTIONS_BASE( wxWind
 	int m_defaultFontCtrlNChoices = sizeof( m_defaultFontCtrlChoices ) / sizeof( wxString );
 	m_defaultFontCtrl = new FONT_CHOICE( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_defaultFontCtrlNChoices, m_defaultFontCtrlChoices, 0 );
 	m_defaultFontCtrl->SetSelection( 0 );
-	bSizer4->Add( m_defaultFontCtrl, 0, wxALIGN_CENTER_VERTICAL, 5 );
+	bSizer4->Add( m_defaultFontCtrl, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 
-	bAppearanceSizer->Add( bSizer4, 1, wxEXPAND, 5 );
+	bAppearanceSizer->Add( bSizer4, 1, wxEXPAND|wxTOP, 5 );
 
 	m_checkShowHiddenPins = new wxCheckBox( this, wxID_ANY, _("S&how hidden pins"), wxDefaultPosition, wxDefaultSize, 0 );
 	bAppearanceSizer->Add( m_checkShowHiddenPins, 0, wxEXPAND|wxALL, 5 );
@@ -143,13 +143,13 @@ PANEL_EESCHEMA_DISPLAY_OPTIONS_BASE::PANEL_EESCHEMA_DISPLAY_OPTIONS_BASE( wxWind
 	bRightColumn->Add( m_selectionLabel, 0, wxTOP|wxRIGHT|wxLEFT|wxEXPAND, 13 );
 
 	m_staticline2 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	bRightColumn->Add( m_staticline2, 0, wxEXPAND|wxBOTTOM, 7 );
+	bRightColumn->Add( m_staticline2, 0, wxEXPAND|wxTOP|wxBOTTOM, 2 );
 
 	wxBoxSizer* bSelectionSizer;
 	bSelectionSizer = new wxBoxSizer( wxVERTICAL );
 
 	m_checkSelDrawChildItems = new wxCheckBox( this, wxID_ANY, _("Draw selected child items"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSelectionSizer->Add( m_checkSelDrawChildItems, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	bSelectionSizer->Add( m_checkSelDrawChildItems, 0, wxEXPAND|wxALL, 5 );
 
 	m_checkSelFillShapes = new wxCheckBox( this, wxID_ANY, _("Fill selected shapes"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSelectionSizer->Add( m_checkSelFillShapes, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
@@ -214,7 +214,7 @@ PANEL_EESCHEMA_DISPLAY_OPTIONS_BASE::PANEL_EESCHEMA_DISPLAY_OPTIONS_BASE( wxWind
 	bRightColumn->Add( bSelectionSizer, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 
 
-	bPanelSizer->Add( bRightColumn, 0, wxEXPAND|wxBOTTOM|wxLEFT, 10 );
+	bPanelSizer->Add( bRightColumn, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 10 );
 
 
 	this->SetSizer( bPanelSizer );

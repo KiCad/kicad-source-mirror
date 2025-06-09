@@ -132,8 +132,8 @@
               </object>
             </object>
             <object class="sizeritem" expanded="true">
-              <property name="border">5</property>
-              <property name="flag">wxEXPAND|wxBOTTOM</property>
+              <property name="border">2</property>
+              <property name="flag">wxEXPAND|wxTOP|wxBOTTOM</property>
               <property name="proportion">0</property>
               <object class="wxStaticLine" expanded="true">
                 <property name="BottomDockable">1</property>
@@ -188,6 +188,16 @@
                 <property name="window_extra_style"></property>
                 <property name="window_name"></property>
                 <property name="window_style"></property>
+              </object>
+            </object>
+            <object class="sizeritem" expanded="true">
+              <property name="border">5</property>
+              <property name="flag">wxEXPAND</property>
+              <property name="proportion">0</property>
+              <object class="spacer" expanded="true">
+                <property name="height">5</property>
+                <property name="permission">protected</property>
+                <property name="width">0</property>
               </object>
             </object>
             <object class="sizeritem" expanded="true">
@@ -1335,8 +1345,8 @@
               </object>
             </object>
             <object class="sizeritem" expanded="true">
-              <property name="border">5</property>
-              <property name="flag">wxEXPAND|wxBOTTOM</property>
+              <property name="border">2</property>
+              <property name="flag">wxEXPAND|wxTOP|wxBOTTOM</property>
               <property name="proportion">0</property>
               <object class="wxStaticLine" expanded="true">
                 <property name="BottomDockable">1</property>
@@ -1391,6 +1401,16 @@
                 <property name="window_extra_style"></property>
                 <property name="window_name"></property>
                 <property name="window_style"></property>
+              </object>
+            </object>
+            <object class="sizeritem" expanded="true">
+              <property name="border">5</property>
+              <property name="flag">wxEXPAND</property>
+              <property name="proportion">0</property>
+              <object class="spacer" expanded="true">
+                <property name="height">5</property>
+                <property name="permission">protected</property>
+                <property name="width">0</property>
               </object>
             </object>
             <object class="sizeritem" expanded="true">
@@ -1824,8 +1844,8 @@
               </object>
             </object>
             <object class="sizeritem" expanded="true">
-              <property name="border">5</property>
-              <property name="flag">wxEXPAND|wxBOTTOM</property>
+              <property name="border">2</property>
+              <property name="flag">wxEXPAND|wxTOP|wxBOTTOM</property>
               <property name="proportion">0</property>
               <object class="wxStaticLine" expanded="true">
                 <property name="BottomDockable">1</property>
@@ -1880,6 +1900,16 @@
                 <property name="window_extra_style"></property>
                 <property name="window_name"></property>
                 <property name="window_style"></property>
+              </object>
+            </object>
+            <object class="sizeritem" expanded="true">
+              <property name="border">5</property>
+              <property name="flag">wxEXPAND</property>
+              <property name="proportion">0</property>
+              <object class="spacer" expanded="true">
+                <property name="height">5</property>
+                <property name="permission">protected</property>
+                <property name="width">0</property>
               </object>
             </object>
             <object class="sizeritem" expanded="true">

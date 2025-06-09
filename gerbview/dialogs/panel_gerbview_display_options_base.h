@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf02)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -21,12 +21,10 @@
 #include <wx/statline.h>
 #include <wx/checkbox.h>
 #include <wx/spinctrl.h>
-#include <wx/statbox.h>
-#include <wx/radiobox.h>
+#include <wx/radiobut.h>
 #include <wx/panel.h>
 
 ///////////////////////////////////////////////////////////////////////////
-
 
 ///////////////////////////////////////////////////////////////////////////////
 /// Class PANEL_GERBVIEW_DISPLAY_OPTIONS_BASE
@@ -51,7 +49,13 @@ class PANEL_GERBVIEW_DISPLAY_OPTIONS_BASE : public RESETTABLE_PANEL
 		wxSpinCtrlDouble* m_spOpacityCtrl;
 		wxStaticText* m_staticText3;
 		wxStaticLine* m_staticline3;
-		wxRadioBox* m_PageSize;
+		wxRadioButton* m_pageSizeFull;
+		wxRadioButton* m_pageSizeA4;
+		wxRadioButton* m_pageSizeA3;
+		wxRadioButton* m_pageSizeA2;
+		wxRadioButton* m_pageSizeA;
+		wxRadioButton* m_pageSizeB;
+		wxRadioButton* m_pageSizeC;
 
 	public:
 

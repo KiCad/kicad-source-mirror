@@ -25,13 +25,13 @@ PANEL_EDIT_OPTIONS_BASE::PANEL_EDIT_OPTIONS_BASE( wxWindow* parent, wxWindowID i
 	bMiddleLeftSizer->Add( m_staticText31, 0, wxTOP|wxRIGHT|wxLEFT, 13 );
 
 	m_staticline3 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	bMiddleLeftSizer->Add( m_staticline3, 0, wxEXPAND|wxBOTTOM, 5 );
+	bMiddleLeftSizer->Add( m_staticline3, 0, wxEXPAND|wxTOP|wxBOTTOM, 2 );
 
 	wxBoxSizer* bSizerUniversal;
 	bSizerUniversal = new wxBoxSizer( wxVERTICAL );
 
 	m_cbConstrainHV45Mode = new wxCheckBox( this, wxID_ANY, _("Constrain actions to H, V, 45 degrees"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizerUniversal->Add( m_cbConstrainHV45Mode, 0, wxBOTTOM|wxLEFT, 5 );
+	bSizerUniversal->Add( m_cbConstrainHV45Mode, 0, wxTOP|wxBOTTOM|wxLEFT, 5 );
 
 	wxBoxSizer* bSizerRotationStep;
 	bSizerRotationStep = new wxBoxSizer( wxHORIZONTAL );
@@ -98,7 +98,7 @@ PANEL_EDIT_OPTIONS_BASE::PANEL_EDIT_OPTIONS_BASE( wxWindow* parent, wxWindowID i
 	bSizerFlip->Add( m_rbFlipTopBottom, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 10 );
 
 
-	m_sizerBoardEdit->Add( bSizerFlip, 1, wxEXPAND, 5 );
+	m_sizerBoardEdit->Add( bSizerFlip, 1, wxEXPAND|wxBOTTOM, 5 );
 
 	m_allowFreePads = new wxCheckBox( this, wxID_ANY, _("Allow free pads"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_allowFreePads->SetToolTip( _("If checked, pads can be moved with respect to the rest of the footprint.") );
@@ -118,7 +118,7 @@ PANEL_EDIT_OPTIONS_BASE::PANEL_EDIT_OPTIONS_BASE( wxWindow* parent, wxWindowID i
 	bMiddleLeftSizer->Add( m_staticText32, 0, wxTOP|wxRIGHT|wxLEFT, 13 );
 
 	m_staticline4 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	bMiddleLeftSizer->Add( m_staticline4, 0, wxEXPAND|wxBOTTOM, 5 );
+	bMiddleLeftSizer->Add( m_staticline4, 0, wxEXPAND|wxTOP|wxBOTTOM, 2 );
 
 	m_mouseCmdsWinLin = new wxBoxSizer( wxVERTICAL );
 
@@ -186,7 +186,7 @@ PANEL_EDIT_OPTIONS_BASE::PANEL_EDIT_OPTIONS_BASE( wxWindow* parent, wxWindowID i
 	m_mouseCmdsWinLin->Add( fgSizerCmdsWinLin, 1, wxEXPAND|wxTOP, 5 );
 
 
-	bMiddleLeftSizer->Add( m_mouseCmdsWinLin, 1, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	bMiddleLeftSizer->Add( m_mouseCmdsWinLin, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 
 	m_mouseCmdsOSX = new wxBoxSizer( wxVERTICAL );
 
@@ -264,7 +264,7 @@ PANEL_EDIT_OPTIONS_BASE::PANEL_EDIT_OPTIONS_BASE( wxWindow* parent, wxWindowID i
 	m_mouseCmdsOSX->Add( fgSizerCmdsOSX, 1, wxEXPAND|wxTOP, 5 );
 
 
-	bMiddleLeftSizer->Add( m_mouseCmdsOSX, 1, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	bMiddleLeftSizer->Add( m_mouseCmdsOSX, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 
 
 	bMargins->Add( bMiddleLeftSizer, 0, wxEXPAND|wxTOP|wxRIGHT, 5 );
@@ -283,7 +283,7 @@ PANEL_EDIT_OPTIONS_BASE::PANEL_EDIT_OPTIONS_BASE( wxWindow* parent, wxWindowID i
 	fpOptionsSizer->Add( m_staticText34, 0, wxTOP|wxRIGHT|wxLEFT, 13 );
 
 	m_staticline5 = new wxStaticLine( fpPage, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	fpOptionsSizer->Add( m_staticline5, 0, wxEXPAND|wxBOTTOM, 5 );
+	fpOptionsSizer->Add( m_staticline5, 0, wxEXPAND|wxTOP|wxBOTTOM, 2 );
 
 	wxBoxSizer* bSizer13;
 	bSizer13 = new wxBoxSizer( wxVERTICAL );
@@ -296,7 +296,7 @@ PANEL_EDIT_OPTIONS_BASE::PANEL_EDIT_OPTIONS_BASE( wxWindow* parent, wxWindowID i
 	bSizer13->Add( m_magneticGraphics, 0, wxBOTTOM|wxLEFT, 5 );
 
 
-	fpOptionsSizer->Add( bSizer13, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	fpOptionsSizer->Add( bSizer13, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 
 
 	fpPage->SetSizer( fpOptionsSizer );
@@ -313,7 +313,7 @@ PANEL_EDIT_OPTIONS_BASE::PANEL_EDIT_OPTIONS_BASE( wxWindow* parent, wxWindowID i
 	pcbOptionsSizer->Add( stMagneticPtsLabel1, 0, wxTOP|wxLEFT, 13 );
 
 	m_staticline6 = new wxStaticLine( pcbPage, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	pcbOptionsSizer->Add( m_staticline6, 0, wxEXPAND|wxBOTTOM, 5 );
+	pcbOptionsSizer->Add( m_staticline6, 0, wxEXPAND|wxTOP|wxBOTTOM, 2 );
 
 	wxFlexGridSizer* fgMagneticPoints;
 	fgMagneticPoints = new wxFlexGridSizer( 0, 2, 5, 0 );
@@ -324,7 +324,7 @@ PANEL_EDIT_OPTIONS_BASE::PANEL_EDIT_OPTIONS_BASE( wxWindow* parent, wxWindowID i
 	m_staticText2->Wrap( -1 );
 	m_staticText2->SetToolTip( _("Capture cursor when the mouse enters a pad area") );
 
-	fgMagneticPoints->Add( m_staticText2, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
+	fgMagneticPoints->Add( m_staticText2, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT|wxLEFT, 5 );
 
 	wxString m_magneticPadChoiceChoices[] = { _("Never"), _("When routing tracks"), _("Always") };
 	int m_magneticPadChoiceNChoices = sizeof( m_magneticPadChoiceChoices ) / sizeof( wxString );
@@ -332,7 +332,7 @@ PANEL_EDIT_OPTIONS_BASE::PANEL_EDIT_OPTIONS_BASE( wxWindow* parent, wxWindowID i
 	m_magneticPadChoice->SetSelection( 1 );
 	m_magneticPadChoice->SetToolTip( _("Capture cursor when the mouse enters a pad area") );
 
-	fgMagneticPoints->Add( m_magneticPadChoice, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxLEFT|wxRIGHT, 5 );
+	fgMagneticPoints->Add( m_magneticPadChoice, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 
 	m_staticText21 = new wxStaticText( pcbPage, wxID_ANY, _("Snap to tracks and vias:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText21->Wrap( -1 );
@@ -352,7 +352,7 @@ PANEL_EDIT_OPTIONS_BASE::PANEL_EDIT_OPTIONS_BASE( wxWindow* parent, wxWindowID i
 	m_staticText211->Wrap( -1 );
 	m_staticText211->SetToolTip( _("Capture cursor when the mouse approaches graphical control points") );
 
-	fgMagneticPoints->Add( m_staticText211, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
+	fgMagneticPoints->Add( m_staticText211, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 	wxString m_magneticGraphicsChoiceChoices[] = { _("Always"), _("Never") };
 	int m_magneticGraphicsChoiceNChoices = sizeof( m_magneticGraphicsChoiceChoices ) / sizeof( wxString );
@@ -360,7 +360,7 @@ PANEL_EDIT_OPTIONS_BASE::PANEL_EDIT_OPTIONS_BASE( wxWindow* parent, wxWindowID i
 	m_magneticGraphicsChoice->SetSelection( 0 );
 	m_magneticGraphicsChoice->SetToolTip( _("Capture cursor when the mouse approaches graphical control points") );
 
-	fgMagneticPoints->Add( m_magneticGraphicsChoice, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxLEFT|wxRIGHT, 5 );
+	fgMagneticPoints->Add( m_magneticGraphicsChoice, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 
 	pcbOptionsSizer->Add( fgMagneticPoints, 0, wxEXPAND|wxALL, 5 );
@@ -373,13 +373,13 @@ PANEL_EDIT_OPTIONS_BASE::PANEL_EDIT_OPTIONS_BASE( wxWindow* parent, wxWindowID i
 	pcbOptionsSizer->Add( stRatsnestLabel, 0, wxTOP|wxLEFT, 13 );
 
 	m_staticline7 = new wxStaticLine( pcbPage, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	pcbOptionsSizer->Add( m_staticline7, 0, wxEXPAND|wxBOTTOM, 5 );
+	pcbOptionsSizer->Add( m_staticline7, 0, wxEXPAND|wxTOP|wxBOTTOM, 2 );
 
 	wxBoxSizer* bRatsnest;
 	bRatsnest = new wxBoxSizer( wxVERTICAL );
 
 	m_showSelectedRatsnest = new wxCheckBox( pcbPage, wxID_ANY, _("Always show selected ratsnest"), wxDefaultPosition, wxDefaultSize, 0 );
-	bRatsnest->Add( m_showSelectedRatsnest, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	bRatsnest->Add( m_showSelectedRatsnest, 0, wxALL, 5 );
 
 	m_OptDisplayCurvedRatsnestLines = new wxCheckBox( pcbPage, wxID_ANY, _("Show ratsnest with curved lines"), wxDefaultPosition, wxDefaultSize, 0 );
 	bRatsnest->Add( m_OptDisplayCurvedRatsnestLines, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
@@ -396,7 +396,7 @@ PANEL_EDIT_OPTIONS_BASE::PANEL_EDIT_OPTIONS_BASE( wxWindow* parent, wxWindowID i
 	bRatsnestLineThickness->Add( m_ratsnestThickness, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 
-	bRatsnest->Add( bRatsnestLineThickness, 1, wxEXPAND, 5 );
+	bRatsnest->Add( bRatsnestLineThickness, 1, wxEXPAND|wxBOTTOM, 5 );
 
 
 	pcbOptionsSizer->Add( bRatsnest, 0, wxEXPAND|wxALL, 5 );
@@ -406,14 +406,14 @@ PANEL_EDIT_OPTIONS_BASE::PANEL_EDIT_OPTIONS_BASE( wxWindow* parent, wxWindowID i
 	pcbOptionsSizer->Add( stMiscellaneousLabel, 0, wxTOP|wxRIGHT|wxLEFT, 13 );
 
 	m_staticline8 = new wxStaticLine( pcbPage, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	pcbOptionsSizer->Add( m_staticline8, 0, wxEXPAND|wxBOTTOM, 5 );
+	pcbOptionsSizer->Add( m_staticline8, 0, wxEXPAND|wxTOP|wxBOTTOM, 2 );
 
 	wxBoxSizer* bMiscellaneous;
 	bMiscellaneous = new wxBoxSizer( wxVERTICAL );
 
 	m_escClearsNetHighlight = new wxCheckBox( pcbPage, wxID_ANY, _("<ESC> clears net highlighting"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_escClearsNetHighlight->SetValue(true);
-	bMiscellaneous->Add( m_escClearsNetHighlight, 0, wxBOTTOM|wxLEFT, 5 );
+	bMiscellaneous->Add( m_escClearsNetHighlight, 0, wxTOP|wxBOTTOM|wxLEFT, 5 );
 
 	m_showPageLimits = new wxCheckBox( pcbPage, wxID_ANY, _("Show page limits"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_showPageLimits->SetValue(true);

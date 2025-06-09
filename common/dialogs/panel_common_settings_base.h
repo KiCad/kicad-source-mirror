@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6-dirty)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -75,12 +75,12 @@ class PANEL_COMMON_SETTINGS_BASE : public RESETTABLE_PANEL
 		wxRadioButton* m_rbIconSizeSmall;
 		wxRadioButton* m_rbIconSizeNormal;
 		wxRadioButton* m_rbIconSizeLarge;
+		wxCheckBox* m_scaleFonts;
+		wxStaticText* m_fontScalingHelp;
 		wxGridBagSizer* m_gbUserInterface;
 		wxStaticText* m_staticTextCanvasScale;
 		wxSpinCtrlDouble* m_canvasScaleCtrl;
 		wxCheckBox* m_canvasScaleAuto;
-		wxCheckBox* m_scaleFonts;
-		wxStaticText* m_fontScalingHelp;
 		wxStaticText* m_highContrastLabel;
 		wxTextCtrl* m_highContrastCtrl;
 		wxStaticText* m_highContrastUnits;

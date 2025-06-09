@@ -19,7 +19,7 @@ PANEL_PACKAGES_AND_UPDATES_BASE::PANEL_PACKAGES_AND_UPDATES_BASE( wxWindow* pare
 	bSizer1->Add( m_generalLabel, 0, wxLEFT|wxRIGHT|wxTOP, 13 );
 
 	m_staticline3 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	bSizer1->Add( m_staticline3, 0, wxEXPAND | wxALL, 5 );
+	bSizer1->Add( m_staticline3, 0, wxEXPAND|wxTOP|wxBOTTOM, 2 );
 
 
 	bSizer1->Add( 0, 0, 0, wxEXPAND, 5 );
@@ -29,7 +29,7 @@ PANEL_PACKAGES_AND_UPDATES_BASE::PANEL_PACKAGES_AND_UPDATES_BASE( wxWindow* pare
 
 	m_cbKicadUpdate = new wxCheckBox( this, wxID_ANY, _("Check for KiCad updates on startup"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_cbKicadUpdate->SetValue(true);
-	bSizer41->Add( m_cbKicadUpdate, 0, wxLEFT, 5 );
+	bSizer41->Add( m_cbKicadUpdate, 0, wxTOP|wxBOTTOM|wxLEFT, 5 );
 
 
 	bSizer1->Add( bSizer41, 0, wxEXPAND|wxLEFT|wxTOP, 5 );
@@ -42,14 +42,14 @@ PANEL_PACKAGES_AND_UPDATES_BASE::PANEL_PACKAGES_AND_UPDATES_BASE( wxWindow* pare
 	bSizer1->Add( m_pcmLabel, 0, wxTOP|wxRIGHT|wxLEFT, 13 );
 
 	m_staticline1 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	bSizer1->Add( m_staticline1, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
+	bSizer1->Add( m_staticline1, 0, wxEXPAND|wxTOP|wxBOTTOM, 2 );
 
 	wxBoxSizer* bSizer4;
 	bSizer4 = new wxBoxSizer( wxVERTICAL );
 
 	m_cbPcmUpdate = new wxCheckBox( this, wxID_ANY, _("Check for package updates on startup"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_cbPcmUpdate->SetValue(true);
-	bSizer4->Add( m_cbPcmUpdate, 0, wxLEFT, 5 );
+	bSizer4->Add( m_cbPcmUpdate, 0, wxTOP|wxBOTTOM|wxLEFT, 5 );
 
 
 	bSizer1->Add( bSizer4, 0, wxEXPAND|wxTOP|wxLEFT, 5 );
@@ -62,7 +62,7 @@ PANEL_PACKAGES_AND_UPDATES_BASE::PANEL_PACKAGES_AND_UPDATES_BASE( wxWindow* pare
 	bSizer1->Add( m_staticText4, 0, wxLEFT|wxRIGHT|wxTOP, 13 );
 
 	m_staticline2 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	bSizer1->Add( m_staticline2, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
+	bSizer1->Add( m_staticline2, 0, wxEXPAND|wxTOP|wxBOTTOM, 2 );
 
 	wxBoxSizer* bSizer3;
 	bSizer3 = new wxBoxSizer( wxVERTICAL );
@@ -89,7 +89,7 @@ PANEL_PACKAGES_AND_UPDATES_BASE::PANEL_PACKAGES_AND_UPDATES_BASE( wxWindow* pare
 	bSizer3->Add( bSizer2, 0, wxEXPAND, 5 );
 
 
-	bSizer1->Add( bSizer3, 1, wxEXPAND|wxTOP|wxLEFT, 5 );
+	bSizer1->Add( bSizer3, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 
 
 	this->SetSizer( bSizer1 );
