@@ -2968,9 +2968,7 @@ int SCH_EDIT_TOOL::BreakWire( const TOOL_EVENT& aEvent )
             m_frame->Schematic().BreakSegment( &commit, line, line->GetMidPoint(), &newLine, screen );
 
         // Make sure both endpoints are deselected
-        newLine->ClearFlags();
-
-        m_selectionTool->AddItemToSel( line );
+        newLine->ClearFlags( ENDPOINT | STARTPOINT );
         line->SetFlags( ENDPOINT );
 
         // If we're a break, we want to drag both wires.
