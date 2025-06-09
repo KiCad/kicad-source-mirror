@@ -433,7 +433,7 @@ DESIGN_BLOCK_LIB_TABLE::DesignBlockSave( const wxString&     aNickname,
         std::unique_ptr<DESIGN_BLOCK> design_block( row->plugin->DesignBlockLoad(
                 row->GetFullURI( true ), DesignBlockname, row->GetProperties() ) );
 
-        if( design_block.get() )
+        if( design_block )
             return SAVE_SKIPPED;
     }
 
@@ -537,13 +537,11 @@ public:
         // consider a directory to be a lib if it's name ends with the design block lib dir
         // extension it is under $KICADn_3RD_PARTY/design_blocks/<pkgid>/ i.e. has nested
         // level of at least +3.
-        if( dirPath.EndsWith( wxString::Format( wxS( ".%s" ),
-                                                FILEEXT::KiCadDesignBlockLibPathExtension ) )
+        if( dirPath.EndsWith( wxString::Format( wxS( ".%s" ), FILEEXT::KiCadDesignBlockLibPathExtension ) )
             && dir.GetDirCount() >= m_prefix_dir_count + 3 )
         {
             wxString versionedPath;
-            versionedPath.Printf( wxS( "${%s}" ),
-                                  ENV_VAR::GetVersionedEnvVarName( wxS( "3RD_PARTY" ) ) );
+            versionedPath.Printf( wxS( "${%s}" ), ENV_VAR::GetVersionedEnvVarName( wxS( "3RD_PARTY" ) ) );
 
             wxArrayString parts = dir.GetDirs();
             parts.RemoveAt( 0, m_prefix_dir_count );
@@ -572,9 +570,9 @@ public:
                     } while( m_lib_table.HasLibrary( nickname ) );
                 }
 
-                m_lib_table.InsertRow( new DESIGN_BLOCK_LIB_TABLE_ROW(
-                        nickname, libPath, wxT( "KiCad" ), wxEmptyString,
-                        _( "Added by Plugin and Content Manager" ) ) );
+                m_lib_table.InsertRow( new DESIGN_BLOCK_LIB_TABLE_ROW( nickname, libPath, wxT( "KiCad" ),
+                                                                       wxEmptyString,
+                                                                       _( "Added by Plugin and Content Manager" ) ) );
             }
         }
 
@@ -611,8 +609,7 @@ bool DESIGN_BLOCK_LIB_TABLE::LoadGlobalTable( DESIGN_BLOCK_LIB_TABLE& aTable )
         SystemDirsAppend( &ss );
 
         const ENV_VAR_MAP&      envVars = Pgm().GetLocalEnvVariables();
-        std::optional<wxString> v = ENV_VAR::GetVersionedEnvVarValue( envVars,
-                                                                      wxT( "TEMPLATE_DIR" ) );
+        std::optional<wxString> v = ENV_VAR::GetVersionedEnvVarValue( envVars, wxT( "TEMPLATE_DIR" ) );
 
         if( v && !v->IsEmpty() )
             ss.AddPaths( *v, 0 );
@@ -649,8 +646,7 @@ bool DESIGN_BLOCK_LIB_TABLE::LoadGlobalTable( DESIGN_BLOCK_LIB_TABLE& aTable )
 
         if( d.DirExists() )
         {
-            PCM_DESIGN_BLOCK_LIB_TRAVERSER traverser( packagesPath, aTable,
-                                                      settings->m_PcmLibPrefix );
+            PCM_DESIGN_BLOCK_LIB_TRAVERSER traverser( packagesPath, aTable, settings->m_PcmLibPrefix );
             wxDir                          dir( d.GetPath() );
 
             dir.Traverse( traverser );
