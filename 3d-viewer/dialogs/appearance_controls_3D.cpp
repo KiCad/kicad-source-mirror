@@ -122,7 +122,7 @@ const APPEARANCE_CONTROLS_3D::APPEARANCE_SETTING_3D APPEARANCE_CONTROLS_3D::s_la
     RR( _HKI( "Footprint Text" ),       LAYER_FP_TEXT,             _HKI( "Show all footprint text" ) ),
     RR( _HKI( "Off-board Silkscreen" ), LAYER_3D_OFF_BOARD_SILK,   _HKI( "Do not clip silk layers to board outline" ) ),
     RR(),
-    RR( _HKI( "3D Axis" ),              LAYER_3D_AXES,              EDA_3D_ACTIONS::showAxis ),
+    RR( _HKI( "3D Navigator" ),         LAYER_3D_NAVIGATOR,         EDA_3D_ACTIONS::showNavigator ),
     RR( _HKI( "Background Start" ),     LAYER_3D_BACKGROUND_TOP,    _HKI( "Background gradient start color" ) ),
     RR( _HKI( "Background End" ),       LAYER_3D_BACKGROUND_BOTTOM, _HKI( "Background gradient end color" ) ),
 };

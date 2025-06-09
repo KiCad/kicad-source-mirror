@@ -27,6 +27,7 @@
 
 #include "../render_3d_base.h"
 #include "layer_triangles.h"
+#include "3d_spheres_gizmo.h"
 
 #include "../raytracing/shapes2D/polygon_2d.h"
 #include "../raytracing/shapes2D/triangle_2d.h"
@@ -70,6 +71,11 @@ public:
      * Load footprint models if they are not already loaded, i.e. if m_3dModelMap is empty
      */
     void Load3dModelsIfNeeded();
+    void                                handleGizmoMouseInput( int mouseX, int mouseY );
+    void                                setGizmoViewport( int x, int y, int width, int height );
+    std::tuple<int, int, int, int>      getGizmoViewport() const;
+    SPHERES_GIZMO::GizmoSphereSelection getSelectedGizmoSphere() const;
+    void                                resetSelectedGizmoSphere();
 
 private:
     OPENGL_RENDER_LIST* generateHoles( const LIST_OBJECT2D& aListHolesObject2d,
@@ -168,8 +174,6 @@ private:
     void setLightTop( bool enabled );
     void setLightBottom( bool enabled );
 
-    void render3dArrows();
-
     /**
      * Create a 3D grid to an OpenGL display list.
      *
@@ -239,8 +243,9 @@ private:
 
     BOARD_ITEM*         m_currentRollOverItem;
 
-    SHAPE_POLY_SET      m_antiBoardPolys;   ///< The negative polygon representation of the board
-                                            ///< outline.
+    SHAPE_POLY_SET m_antiBoardPolys; ///< The negative polygon representation of the board
+                                     ///< outline.
+    SPHERES_GIZMO* m_spheres_gizmo;
 };
 
 #endif // RENDER_3D_OPENGL_H

@@ -38,6 +38,7 @@ set(3D-VIEWER_SRCS
     3d_rendering/opengl/create_scene.cpp
     3d_rendering/opengl/render_3d_opengl.cpp
     3d_rendering/opengl/layer_triangles.cpp
+    3d_rendering/opengl/3d_spheres_gizmo.cpp
     ${DIR_RAY_ACC}/accelerator_3d.cpp
     ${DIR_RAY_ACC}/bvh_packet_traversal.cpp
     ${DIR_RAY_ACC}/bvh_pbrt.cpp

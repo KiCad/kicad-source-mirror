@@ -791,7 +791,7 @@ void BOARD_ADAPTER::SetVisibleLayers( const std::bitset<LAYER_3D_END>& aLayers )
 
     m_Cfg->m_Render.show_model_bbox                = aLayers.test( LAYER_3D_BOUNDING_BOXES );
     m_Cfg->m_Render.show_off_board_silk            = aLayers.test( LAYER_3D_OFF_BOARD_SILK );
-    m_Cfg->m_Render.show_axis                      = aLayers.test( LAYER_3D_AXES );
+    m_Cfg->m_Render.show_navigator                 = aLayers.test( LAYER_3D_NAVIGATOR );
 }
 
 
@@ -834,7 +834,7 @@ std::bitset<LAYER_3D_END> BOARD_ADAPTER::GetVisibleLayers() const
 
         ret.set( LAYER_3D_BOUNDING_BOXES,    m_Cfg->m_Render.show_model_bbox );
         ret.set( LAYER_3D_OFF_BOARD_SILK,    m_Cfg->m_Render.show_off_board_silk );
-        ret.set( LAYER_3D_AXES,              m_Cfg->m_Render.show_axis );
+        ret.set( LAYER_3D_NAVIGATOR,         m_Cfg->m_Render.show_navigator );
 
         return ret;
     }
@@ -868,7 +868,7 @@ std::bitset<LAYER_3D_END> BOARD_ADAPTER::GetVisibleLayers() const
 
     ret.set( LAYER_3D_BOUNDING_BOXES,    m_Cfg->m_Render.show_model_bbox );
     ret.set( LAYER_3D_OFF_BOARD_SILK,    m_Cfg->m_Render.show_off_board_silk );
-    ret.set( LAYER_3D_AXES,              m_Cfg->m_Render.show_axis );
+    ret.set( LAYER_3D_NAVIGATOR,         m_Cfg->m_Render.show_navigator );
 
     if( m_Cfg->m_CurrentPreset == FOLLOW_PCB )
     {
@@ -966,7 +966,7 @@ std::bitset<LAYER_3D_END> BOARD_ADAPTER::GetDefaultVisibleLayers() const
 
     ret.set( LAYER_3D_BOUNDING_BOXES,    false );
     ret.set( LAYER_3D_OFF_BOARD_SILK,    false );
-    ret.set( LAYER_3D_AXES,              true );
+    ret.set( LAYER_3D_NAVIGATOR,         true );
 
     return ret;
 }

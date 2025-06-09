@@ -87,7 +87,7 @@ public:
     static TOOL_ACTION showNotInPosFile;
     static TOOL_ACTION showDNP;
     static TOOL_ACTION showBBoxes;
-    static TOOL_ACTION showAxis;
+    static TOOL_ACTION showNavigator;
     static TOOL_ACTION showLayersManager;
 };
 

@@ -103,7 +103,7 @@ PARAM_LAYER_PRESET_3D::PARAM_LAYER_PRESET_3D( const std::string& aPath,
     LAYER( "user_drawings",       LAYER_3D_USER_DRAWINGS     );
     LAYER( "user_eco1",           LAYER_3D_USER_ECO1         );
     LAYER( "user_eco2",           LAYER_3D_USER_ECO2         );
-    LAYER( "3d_axes",             LAYER_3D_AXES              );
+    LAYER( "3d_navigator",        LAYER_3D_NAVIGATOR         );
     LAYER( "th_models",           LAYER_3D_TH_MODELS         );
     LAYER( "smd_models",          LAYER_3D_SMD_MODELS        );
     LAYER( "virtual_models",      LAYER_3D_VIRTUAL_MODELS    );
@@ -342,8 +342,8 @@ EDA_3D_VIEWER_SETTINGS::EDA_3D_VIEWER_SETTINGS() :
 
     m_params.emplace_back( new PARAM<bool>( "render.show_adhesive",
                                             &m_Render.show_adhesive, true ) );
-    m_params.emplace_back( new PARAM<bool>( "render.show_axis",
-                                            &m_Render.show_axis, true ) );
+    m_params.emplace_back( new PARAM<bool>( "render.show_navigator",
+                                            &m_Render.show_navigator, true ) );
     m_params.emplace_back( new PARAM<bool>( "render.show_board_body",
                                             &m_Render.show_board_body, true ) );
     m_params.emplace_back( new PARAM<bool>( "render.show_comments",
@@ -489,7 +489,7 @@ EDA_3D_VIEWER_SETTINGS::EDA_3D_VIEWER_SETTINGS() :
                 legacyColorMap[483] = "virtual_models";
                 legacyColorMap[484] = "non_pos_file_models";
                 legacyColorMap[485] = "dnp_models";
-                legacyColorMap[486] = "3d_axes";
+                legacyColorMap[486] = "3d_navigator";
                 legacyColorMap[487] = "bounding_boxes";
                 legacyColorMap[488] = "off_board_silk";
 
@@ -579,7 +579,7 @@ bool EDA_3D_VIEWER_SETTINGS::MigrateFromLegacy( wxConfigBase* aCfg )
     ret &= fromLegacy<bool>( aCfg, "Render_RAY_Shadows",        "render.raytrace_shadows" );
     ret &= fromLegacy<bool>( aCfg, "ShowRealisticMode",         "render.realistic" );
     ret &= fromLegacy<bool>( aCfg, "ShowAdhesiveLayers",        "render.show_adhesive" );
-    ret &= fromLegacy<bool>( aCfg, "ShowAxis",                  "render.show_axis" );
+    ret &= fromLegacy<bool>( aCfg, "ShowNavigator",             "render.show_navigator" );
     ret &= fromLegacy<bool>( aCfg, "ShowBoardBody",             "render.show_board_body" );
     ret &= fromLegacy<bool>( aCfg, "ShowCommentsLayers",        "render.show_comments" );
     ret &= fromLegacy<bool>( aCfg, "ShowEcoLayers",             "render.show_eco" );

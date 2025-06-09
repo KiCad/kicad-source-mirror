@@ -257,10 +257,9 @@ void EDA_3D_VIEWER_FRAME::setupUIConditions()
             {
                 return m_boardAdapter.m_Cfg->m_Render.show_model_bbox;
             };
-    auto showAxes =
-            [this]( const SELECTION& aSel )
+    auto showNavig = [this]( const SELECTION& aSel )
             {
-                return m_boardAdapter.m_Cfg->m_Render.show_axis;
+                return m_boardAdapter.m_Cfg->m_Render.show_navigator;
             };
     auto ortho =
             [this]( const SELECTION& )
@@ -284,7 +283,7 @@ void EDA_3D_VIEWER_FRAME::setupUIConditions()
     mgr->SetConditions( EDA_3D_ACTIONS::showDNP, ACTION_CONDITIONS().Check( show_DNP ) );
 
     mgr->SetConditions( EDA_3D_ACTIONS::showBBoxes, ACTION_CONDITIONS().Check( showBBoxes ) );
-    mgr->SetConditions( EDA_3D_ACTIONS::showAxis, ACTION_CONDITIONS().Check( showAxes ) );
+    mgr->SetConditions( EDA_3D_ACTIONS::showNavigator, ACTION_CONDITIONS().Check( showNavig ) );
 
     mgr->SetConditions( EDA_3D_ACTIONS::noGrid, GridSizeCheck( GRID3D_TYPE::NONE ) );
     mgr->SetConditions( EDA_3D_ACTIONS::show10mmGrid, GridSizeCheck( GRID3D_TYPE::GRID_10MM ) );

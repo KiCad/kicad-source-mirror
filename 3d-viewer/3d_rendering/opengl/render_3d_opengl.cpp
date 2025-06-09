@@ -81,6 +81,8 @@ RENDER_3D_OPENGL::RENDER_3D_OPENGL( EDA_3D_CANVAS* aCanvas, BOARD_ADAPTER& aAdap
     m_boardWithHoles = nullptr;
 
     m_3dModelMap.clear();
+
+    m_spheres_gizmo = new SPHERES_GIZMO( 4, 4 );
 }
 
 
@@ -104,9 +106,13 @@ void RENDER_3D_OPENGL::SetCurWindowSize( const wxSize& aSize )
 {
     if( m_windowSize != aSize )
     {
+        int viewport[4];
+        int fbWidth, fbHeight;
+        glGetIntegerv( GL_VIEWPORT, viewport );
+
         m_windowSize = aSize;
         glViewport( 0, 0, m_windowSize.x, m_windowSize.y );
-
+        setGizmoViewport( 0, 0, m_windowSize.x, m_windowSize.y );
         // Initialize here any screen dependent data here
     }
 }
@@ -139,42 +145,33 @@ void RENDER_3D_OPENGL::setLightBottom( bool enabled )
 }
 
 
-void RENDER_3D_OPENGL::render3dArrows()
+void RENDER_3D_OPENGL::resetSelectedGizmoSphere()
 {
-    const float arrow_size = RANGE_SCALE_3D * 0.30f;
+    m_spheres_gizmo->resetSelectedGizmoSphere();
+}
 
-    glDisable( GL_CULL_FACE );
 
-    // YxY squared view port, this is on propose
-    glViewport( 4, 4, m_windowSize.y / 8 , m_windowSize.y / 8 );
-    glClear( GL_DEPTH_BUFFER_BIT );
+SPHERES_GIZMO::GizmoSphereSelection RENDER_3D_OPENGL::getSelectedGizmoSphere() const
+{
+    return m_spheres_gizmo->getSelectedGizmoSphere();
+}
 
-    glMatrixMode( GL_PROJECTION );
-    glLoadIdentity();
-    gluPerspective( 45.0f, 1.0f, 0.001f, RANGE_SCALE_3D );
 
-    glMatrixMode( GL_MODELVIEW );
-    glLoadIdentity();
+void RENDER_3D_OPENGL::setGizmoViewport( int x, int y, int width, int height )
+{
+    m_spheres_gizmo->setViewport( x, y, width, height );
+}
 
-    const glm::mat4 TranslationMatrix =
-            glm::translate( glm::mat4( 1.0f ), SFVEC3F( 0.0f, 0.0f, -( arrow_size * 2.75f ) ) );
 
-    const glm::mat4 ViewMatrix = TranslationMatrix * m_camera.GetRotationMatrix();
+std::tuple<int, int, int, int> RENDER_3D_OPENGL::getGizmoViewport() const
+{
+    return m_spheres_gizmo->getViewport();
+}
 
-    glLoadMatrixf( glm::value_ptr( ViewMatrix ) );
 
-    setArrowMaterial();
-
-    glColor3f( 0.9f, 0.0f, 0.0f );
-    DrawRoundArrow( SFVEC3F( 0.0f, 0.0f, 0.0f ), SFVEC3F( arrow_size, 0.0f, 0.0f ), 0.275f );
-
-    glColor3f( 0.0f, 0.9f, 0.0f );
-    DrawRoundArrow( SFVEC3F( 0.0f, 0.0f, 0.0f ), SFVEC3F( 0.0f, arrow_size, 0.0f ), 0.275f );
-
-    glColor3f( 0.0f, 0.0f, 0.9f );
-    DrawRoundArrow( SFVEC3F( 0.0f, 0.0f, 0.0f ), SFVEC3F( 0.0f, 0.0f, arrow_size ), 0.275f );
-
-    glEnable( GL_CULL_FACE );
+void RENDER_3D_OPENGL::handleGizmoMouseInput( int mouseX, int mouseY )
+{
+    m_spheres_gizmo->handleMouseInput( mouseX, mouseY );
 }
 
 
@@ -826,8 +823,8 @@ bool RENDER_3D_OPENGL::Redraw( bool aIsMoving, REPORTER* aStatusReporter,
     }
 
     // Render 3D arrows
-    if( cfg.show_axis )
-        render3dArrows();
+    if( cfg.show_navigator )
+        m_spheres_gizmo->render3dSpheresGizmo( m_camera.GetRotationMatrix() );
 
     // Return back to the original viewport (this is important if we want
     // to take a screenshot after the render)

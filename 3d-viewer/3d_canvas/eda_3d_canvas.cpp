@@ -583,6 +583,19 @@ void EDA_3D_CANVAS::DoRePaint()
         Request_refresh( false );
     }
 
+    static constexpr std::array<VIEW3D_TYPE, static_cast<int>( SPHERES_GIZMO::GizmoSphereSelection::Count )>
+            viewTable = { VIEW3D_TYPE::VIEW3D_RIGHT, VIEW3D_TYPE::VIEW3D_LEFT, VIEW3D_TYPE::VIEW3D_BACK,
+                          VIEW3D_TYPE::VIEW3D_FRONT, VIEW3D_TYPE::VIEW3D_TOP,  VIEW3D_TYPE::VIEW3D_BOTTOM };
+
+    SPHERES_GIZMO::GizmoSphereSelection selectedGizmoSphere = m_3d_render_opengl->getSelectedGizmoSphere();
+    int                                 index = static_cast<int>( selectedGizmoSphere );
+    if( index >= 0 && index < static_cast<int>( viewTable.size() ) )
+    {
+        SetView3D( viewTable[index] );
+    }
+
+    m_3d_render_opengl->resetSelectedGizmoSphere();
+
     m_is_currently_painting.clear();
 }
 
@@ -859,6 +872,22 @@ void EDA_3D_CANVAS::OnLeftUp( wxMouseEvent& event )
         m_mouse_is_moving = false;
         restart_editingTimeOut_Timer();
     }
+
+    wxSize logicalSize = GetClientSize();
+    int    logicalW = logicalSize.GetWidth();
+    int    logicalH = logicalSize.GetHeight();
+
+    int gizmo_x, gizmo_y, gizmo_width, gizmo_height;
+    std::tie( gizmo_x, gizmo_y, gizmo_width, gizmo_height ) = m_3d_render_opengl->getGizmoViewport();
+
+    float scaleX = static_cast<float>( gizmo_width ) / logicalW;
+    float scaleY = static_cast<float>( gizmo_height ) / logicalH;
+
+    int scaledMouseX = static_cast<int>( event.GetX() * scaleX );
+    int scaledMouseY = static_cast<int>( ( logicalH - event.GetY() ) * scaleY );
+
+    m_3d_render_opengl->handleGizmoMouseInput( scaledMouseX, scaledMouseY );
+    Refresh();
 }
 
 

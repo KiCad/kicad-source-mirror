@@ -256,8 +256,8 @@ int EDA_3D_CONTROLLER::ToggleVisibility( const TOOL_EVENT& aEvent )
             flipLayer( LAYER_3D_MODELS_NOT_IN_POS );
         else if( aEvent.IsAction( &EDA_3D_ACTIONS::showDNP ) )
             flipLayer( LAYER_3D_MODELS_MARKED_DNP );
-        else if( aEvent.IsAction( &EDA_3D_ACTIONS::showAxis ) )
-            flipLayer( LAYER_3D_AXES );
+        else if( aEvent.IsAction( &EDA_3D_ACTIONS::showNavigator ) )
+            flipLayer( LAYER_3D_NAVIGATOR );
         else if( aEvent.IsAction( &EDA_3D_ACTIONS::showBBoxes ) )
             flipLayer( LAYER_3D_BOUNDING_BOXES );
     }

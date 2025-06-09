@@ -126,7 +126,7 @@ public:
         std::vector<int> raytrace_lightAzimuth;     // 0 .. 359
 
         bool show_adhesive;
-        bool show_axis;
+        bool show_navigator;
         bool show_board_body;
         bool show_comments;
         bool show_drawings;

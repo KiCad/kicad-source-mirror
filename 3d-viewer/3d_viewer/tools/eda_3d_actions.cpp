@@ -363,16 +363,16 @@ TOOL_ACTION EDA_3D_ACTIONS::showDNP( TOOL_ACTION_ARGS()
 
 TOOL_ACTION EDA_3D_ACTIONS::showBBoxes( TOOL_ACTION_ARGS()
         .Name( "3DViewer.Control.showBoundingBoxes" )
-         .Scope( AS_GLOBAL )
-         .FriendlyName( _( "Show Model Bounding Boxes" ) )
-         .Tooltip( _( "Show 3D model bounding boxes in realtime renderer" ) )
-         .Icon( BITMAPS::ortho )
-         .Flags( AF_NONE ) );
-
-TOOL_ACTION EDA_3D_ACTIONS::showAxis( TOOL_ACTION_ARGS()
-        .Name( "3DViewer.Control.showAxis" )
         .Scope( AS_GLOBAL )
-        .FriendlyName( _( "Show 3D Axis" ) )
+        .FriendlyName( _( "Show Model Bounding Boxes" ) )
+        .Tooltip( _( "Show 3D model bounding boxes in realtime renderer" ) )
+        .Icon( BITMAPS::ortho )
+        .Flags( AF_NONE ) );
+
+TOOL_ACTION EDA_3D_ACTIONS::showNavigator( TOOL_ACTION_ARGS()
+        .Name( "3DViewer.Control.showNavigator" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Show 3D Navigator" ) )
         .Icon( BITMAPS::axis3d_front )
         .Flags( AF_NONE ) );
 
