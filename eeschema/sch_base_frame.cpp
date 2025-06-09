@@ -789,3 +789,12 @@ void SCH_BASE_FRAME::OnSymChangeDebounceTimer( wxTimerEvent& aEvent )
         Kiway().ExpressMail( FRAME_SCH_SYMBOL_EDITOR, MAIL_REFRESH_SYMBOL, libName );
     }
 }
+
+
+SCH_SELECTION_TOOL* SCH_BASE_FRAME::GetSelectionTool()
+{
+    if( m_toolManager )
+        return m_toolManager->GetTool<SCH_SELECTION_TOOL>();
+
+    return nullptr;
+}
