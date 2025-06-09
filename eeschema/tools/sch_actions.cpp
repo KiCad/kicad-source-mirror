@@ -40,6 +40,7 @@ class DESIGN_BLOCK;
 #undef _
 #define _(s) s
 
+// clang-format off
 
 // SCH_INSPECTION_TOOL
 //
@@ -1579,6 +1580,16 @@ TOOL_ACTION SCH_ACTIONS::exportPlotToSchematic( TOOL_ACTION_ARGS()
         .FriendlyName( _( "Export Current Plot to Schematic" ) )
         .Icon( BITMAPS::export_png ) );
 
+TOOL_ACTION SCH_ACTIONS::toggleSimSidePanel( TOOL_ACTION_ARGS()
+        .Name( "eeschema.Simulator.toggleSimSidePanel" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Show Simulation Side Panel" ) ) );
+
+TOOL_ACTION SCH_ACTIONS::toggleSimConsole( TOOL_ACTION_ARGS()
+        .Name( "eeschema.Simulator.toggleSimConsole" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Show Simulation Console Panel" ) ) );
+
 TOOL_ACTION SCH_ACTIONS::toggleLegend( TOOL_ACTION_ARGS()
         .Name( "eeschema.Simulator.toggleLegend" )
         .Scope( AS_GLOBAL )
@@ -1645,3 +1656,5 @@ TOOL_ACTION SCH_ACTIONS::showNetlist( TOOL_ACTION_ARGS()
         .Scope( AS_GLOBAL )
         .FriendlyName( _( "Show SPICE Netlist" ) )
         .Icon( BITMAPS::netlist ) );
+
+// clang-format on

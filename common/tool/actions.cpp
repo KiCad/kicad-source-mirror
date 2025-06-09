@@ -951,16 +951,6 @@ TOOL_ACTION ACTIONS::hideLibraryTree( TOOL_ACTION_ARGS()
         .FriendlyName( _( "Hide Library Tree" ) )
         .Icon( BITMAPS::search_tree ) );
 
-TOOL_ACTION ACTIONS::toggleSimulationSidePanel( TOOL_ACTION_ARGS()
-        .Name( "common.Control.toggleSimulationSidePanel" )
-        .Scope( AS_GLOBAL )
-        .FriendlyName( _( "Show Side Panel" ) ) );
-
-TOOL_ACTION ACTIONS::toggleConsole( TOOL_ACTION_ARGS()
-        .Name( "common.Control.toggleConsole" )
-        .Scope( AS_GLOBAL )
-        .FriendlyName( _( "Show Console Panel" ) ) );
-
 TOOL_ACTION ACTIONS::libraryTreeSearch( TOOL_ACTION_ARGS()
         .Name( "common.Control.libraryTreeSearch" )
         .Scope( AS_GLOBAL )

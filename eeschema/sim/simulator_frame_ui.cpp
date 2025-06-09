@@ -2713,25 +2713,25 @@ void SIMULATOR_FRAME_UI::TogglePanel( wxPanel* aPanel, wxSplitterWindow* aSplitt
 }
 
 
-bool SIMULATOR_FRAME_UI::IsConsoleShown()
+bool SIMULATOR_FRAME_UI::IsSimConsoleShown()
 {
     return m_panelConsole->IsShown();
 }
 
 
-void SIMULATOR_FRAME_UI::ToggleConsole()
+void SIMULATOR_FRAME_UI::ToggleSimConsole()
 {
     TogglePanel( m_panelConsole, m_splitterPlotAndConsole, m_splitterPlotAndConsoleSashPosition );
 }
 
 
-bool SIMULATOR_FRAME_UI::IsSidePanelShown()
+bool SIMULATOR_FRAME_UI::IsSimSidePanelShown()
 {
     return m_sidePanel->IsShown();
 }
 
 
-void SIMULATOR_FRAME_UI::ToggleSimulationSidePanel()
+void SIMULATOR_FRAME_UI::ToggleSimSidePanel()
 {
     TogglePanel( m_sidePanel, m_splitterLeftRight, m_splitterLeftRightSashPosition );
 }

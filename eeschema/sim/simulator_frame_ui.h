@@ -176,10 +176,10 @@ public:
      */
     const SPICE_CIRCUIT_MODEL* GetExporter() const;
 
-    bool IsConsoleShown();
-    void ToggleConsole();
-    bool IsSidePanelShown();
-    void ToggleSimulationSidePanel();
+    bool IsSimConsoleShown();
+    void ToggleSimConsole();
+    bool IsSimSidePanelShown();
+    void ToggleSimSidePanel();
 
     bool DarkModePlots() const { return m_darkMode; }
     void ToggleDarkModePlots();

@@ -399,19 +399,19 @@ int SIMULATOR_CONTROL::RedoZoom( const TOOL_EVENT& aEvent )
 }
 
 
-int SIMULATOR_CONTROL::ToggleConsolePanel( const TOOL_EVENT& aEvent )
+int SIMULATOR_CONTROL::ToggleSimConsolePanel( const TOOL_EVENT& aEvent )
 {
     if( m_simulatorFrame )
-        m_simulatorFrame->ToggleConsole();
+        m_simulatorFrame->ToggleSimConsole();
 
     return 0;
 }
 
 
-int SIMULATOR_CONTROL::ToggleSimulationSidePanel( const TOOL_EVENT& aEvent )
+int SIMULATOR_CONTROL::ToggleSimSidePanel( const TOOL_EVENT& aEvent )
 {
     if( m_simulatorFrame )
-        m_simulatorFrame->ToggleSimulationSidePanel();
+        m_simulatorFrame->ToggleSimSidePanel();
 
     return 0;
 }
@@ -641,6 +641,7 @@ int SIMULATOR_CONTROL::ShowNetlist( const TOOL_EVENT& aEvent )
 
 void SIMULATOR_CONTROL::setTransitions()
 {
+    // clang-format off
     Go( &SIMULATOR_CONTROL::NewAnalysisTab,         SCH_ACTIONS::newAnalysisTab.MakeEvent() );
     Go( &SIMULATOR_CONTROL::OpenWorkbook,           SCH_ACTIONS::openWorkbook.MakeEvent() );
     Go( &SIMULATOR_CONTROL::SaveWorkbook,           SCH_ACTIONS::saveWorkbook.MakeEvent() );
@@ -652,9 +653,8 @@ void SIMULATOR_CONTROL::setTransitions()
 
     Go( &SIMULATOR_CONTROL::Close,                  ACTIONS::quit.MakeEvent() );
 
-    Go( &SIMULATOR_CONTROL::ToggleConsolePanel,             ACTIONS::toggleConsole.MakeEvent() );
-
-    Go( &SIMULATOR_CONTROL::ToggleSimulationSidePanel,             ACTIONS::toggleSimulationSidePanel.MakeEvent() );
+    Go( &SIMULATOR_CONTROL::ToggleSimConsolePanel,  SCH_ACTIONS::toggleSimConsole.MakeEvent() );
+    Go( &SIMULATOR_CONTROL::ToggleSimSidePanel,     SCH_ACTIONS::toggleSimSidePanel.MakeEvent() );
 
     Go( &SIMULATOR_CONTROL::Zoom,                   ACTIONS::zoomInCenter.MakeEvent() );
     Go( &SIMULATOR_CONTROL::Zoom,                   ACTIONS::zoomOutCenter.MakeEvent() );
@@ -678,4 +678,5 @@ void SIMULATOR_CONTROL::setTransitions()
 
     Go( &SIMULATOR_CONTROL::EditUserDefinedSignals, SCH_ACTIONS::editUserDefinedSignals.MakeEvent() );
     Go( &SIMULATOR_CONTROL::ShowNetlist,            SCH_ACTIONS::showNetlist.MakeEvent() );
+    // clang-format on
 }

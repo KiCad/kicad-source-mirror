@@ -151,9 +151,9 @@ public:
      */
     SIM_TAB* GetCurrentSimTab() const;
 
-    void ToggleConsole();
+    void ToggleSimConsole();
 
-    void ToggleSimulationSidePanel();
+    void ToggleSimSidePanel();
 
     /**
      * Toggle dark-mode of the plot tabs.

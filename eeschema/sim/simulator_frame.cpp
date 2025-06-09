@@ -590,15 +590,15 @@ bool SIMULATOR_FRAME::SaveWorkbook( const wxString& aPath )
 }
 
 
-void SIMULATOR_FRAME::ToggleConsole()
+void SIMULATOR_FRAME::ToggleSimConsole()
 {
-    m_ui->ToggleConsole();
+    m_ui->ToggleSimConsole();
 }
 
 
-void SIMULATOR_FRAME::ToggleSimulationSidePanel()
+void SIMULATOR_FRAME::ToggleSimSidePanel()
 {
-    m_ui->ToggleSimulationSidePanel();
+    m_ui->ToggleSimSidePanel();
 }
 
 
@@ -756,27 +756,29 @@ void SIMULATOR_FRAME::setupUIConditions()
                 return plotTab && plotTab->GetPlotWin()->RedoZoomStackSize() > 0;
             };
 
-    auto isConsoleShown =
+    // clang-format off
+    auto isSimConsoleShown =
             [this]( const SELECTION& aSel )
             {
                 bool aBool = false;
 
                 if( m_simulator )
-                    return m_ui->IsConsoleShown();
+                    return m_ui->IsSimConsoleShown();
 
                 return aBool;
             };
 
-    auto isSidePanelShown =
+    auto isSimSidePanelShown =
             [this]( const SELECTION& aSel )
             {
                 bool aBool = false;
 
                 if( m_simulator )
-                    return m_ui->IsSidePanelShown();
+                    return m_ui->IsSimSidePanelShown();
 
                 return aBool;
             };
+    // clang-format on
 
 #define ENABLE( x ) ACTION_CONDITIONS().Enable( x )
 #define CHECK( x )  ACTION_CONDITIONS().Check( x )
@@ -790,8 +792,8 @@ void SIMULATOR_FRAME::setupUIConditions()
     mgr->SetConditions( SCH_ACTIONS::exportPlotToClipboard, ENABLE( havePlot ) );
     mgr->SetConditions( SCH_ACTIONS::exportPlotToSchematic, ENABLE( havePlot ) );
 
-    mgr->SetConditions( ACTIONS::toggleSimulationSidePanel, CHECK( isSidePanelShown ) );
-    mgr->SetConditions( ACTIONS::toggleConsole,             CHECK( isConsoleShown ) );
+    mgr->SetConditions( SCH_ACTIONS::toggleSimSidePanel,    CHECK( isSimSidePanelShown ) );
+    mgr->SetConditions( SCH_ACTIONS::toggleSimConsole,      CHECK( isSimConsoleShown ) );
 
     mgr->SetConditions( ACTIONS::zoomUndo,                  ENABLE( haveZoomUndo ) );
     mgr->SetConditions( ACTIONS::zoomRedo,                  ENABLE( haveZoomRedo ) );

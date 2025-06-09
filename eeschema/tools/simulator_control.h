@@ -63,8 +63,8 @@ public:
     int ExportPlotToSchematic( const TOOL_EVENT& aEvent );
     int Close( const TOOL_EVENT& aEvent );
 
-    int ToggleConsolePanel( const TOOL_EVENT& aEvent );
-    int ToggleSimulationSidePanel( const TOOL_EVENT& aEvent );
+    int ToggleSimConsolePanel( const TOOL_EVENT& aEvent );
+    int ToggleSimSidePanel( const TOOL_EVENT& aEvent );
     int Zoom( const TOOL_EVENT& aEvent );
     int UndoZoom( const TOOL_EVENT& aEvent );
     int RedoZoom( const TOOL_EVENT& aEvent );

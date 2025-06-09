@@ -115,9 +115,10 @@ void SIMULATOR_FRAME::doReCreateMenuBar()
     //-- View menu -----------------------------------------------------------
     //
     ACTION_MENU* viewMenu = new ACTION_MENU( false, tool );
-
-    viewMenu->Add( ACTIONS::toggleSimulationSidePanel,               ACTION_MENU::CHECK );
-    viewMenu->Add( ACTIONS::toggleConsole,               ACTION_MENU::CHECK );
+    // clang-format off
+    viewMenu->Add( SCH_ACTIONS::toggleSimSidePanel, ACTION_MENU::CHECK );
+    viewMenu->Add( SCH_ACTIONS::toggleSimConsole,   ACTION_MENU::CHECK );
+    // clang-format on
 
     viewMenu->AppendSeparator();
     viewMenu->Add( ACTIONS::zoomUndo );

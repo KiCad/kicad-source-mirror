@@ -282,6 +282,8 @@ public:
     static TOOL_ACTION showSimulator;
     static TOOL_ACTION simProbe;
     static TOOL_ACTION simTune;
+    static TOOL_ACTION toggleSimConsole;
+    static TOOL_ACTION toggleSimSidePanel;
     static TOOL_ACTION toggleLegend;
     static TOOL_ACTION toggleDottedSecondary;
     static TOOL_ACTION toggleDarkModePlots;
