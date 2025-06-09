@@ -41,20 +41,11 @@ public:
     DRC_TEST_PROVIDER_TRACK_SEGMENT_LENGTH()
     {}
 
-    virtual ~DRC_TEST_PROVIDER_TRACK_SEGMENT_LENGTH()
-    {}
+    virtual ~DRC_TEST_PROVIDER_TRACK_SEGMENT_LENGTH() = default;
 
     virtual bool Run() override;
 
-    virtual const wxString GetName() const override
-    {
-        return wxT( "segment_length" );
-    };
-
-    virtual const wxString GetDescription() const override
-    {
-        return wxT( "Tests track segment lengths" );
-    }
+    virtual const wxString GetName() const override { return wxT( "segment_length" ); };
 };
 
 
@@ -62,13 +53,13 @@ bool DRC_TEST_PROVIDER_TRACK_SEGMENT_LENGTH::Run()
 {
     if( m_drcEngine->IsErrorLimitExceeded( DRCE_TRACK_SEGMENT_LENGTH ) )
     {
-        reportAux( wxT( "Track segment length violations ignored. Tests not run." ) );
+        REPORT_AUX( wxT( "Track segment length violations ignored. Tests not run." ) );
         return true;        // continue with other tests
     }
 
     if( !m_drcEngine->HasRulesForConstraintType( TRACK_SEGMENT_LENGTH_CONSTRAINT ) )
     {
-        reportAux( wxT( "No track segment length constraints found. Tests not run." ) );
+        REPORT_AUX( wxT( "No track segment length constraints found. Tests not run." ) );
         return true;        // continue with other tests
     }
 
@@ -181,8 +172,6 @@ bool DRC_TEST_PROVIDER_TRACK_SEGMENT_LENGTH::Run()
             status = ret.wait_for( std::chrono::milliseconds( 250 ) );
         }
     }
-
-    reportRuleStatistics();
 
     return !m_drcEngine->IsCancelled();
 }

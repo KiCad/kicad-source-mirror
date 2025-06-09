@@ -40,20 +40,11 @@ public:
     DRC_TEST_PROVIDER_VIA_DIAMETER()
     {}
 
-    virtual ~DRC_TEST_PROVIDER_VIA_DIAMETER()
-    {}
+    virtual ~DRC_TEST_PROVIDER_VIA_DIAMETER() = default;
 
     virtual bool Run() override;
 
-    virtual const wxString GetName() const override
-    {
-        return wxT( "diameter" );
-    };
-
-    virtual const wxString GetDescription() const override
-    {
-        return wxT( "Tests via diameters" );
-    }
+    virtual const wxString GetName() const override { return wxT( "diameter" ); };
 };
 
 
@@ -61,13 +52,13 @@ bool DRC_TEST_PROVIDER_VIA_DIAMETER::Run()
 {
     if( m_drcEngine->IsErrorLimitExceeded( DRCE_VIA_DIAMETER ) )
     {
-        reportAux( wxT( "Via diameter violations ignored. Tests not run." ) );
+        REPORT_AUX( wxT( "Via diameter violations ignored. Tests not run." ) );
         return true;        // continue with other tests
     }
 
     if( !m_drcEngine->HasRulesForConstraintType( VIA_DIAMETER_CONSTRAINT ) )
     {
-        reportAux( wxT( "No via diameter constraints found. Tests not run." ) );
+        REPORT_AUX( wxT( "No via diameter constraints found. Tests not run." ) );
         return true;        // continue with other tests
     }
 
@@ -154,8 +145,6 @@ bool DRC_TEST_PROVIDER_VIA_DIAMETER::Run()
         if( !checkViaDiameter( item ) )
             break;
     }
-
-    reportRuleStatistics();
 
     return !m_drcEngine->IsCancelled();
 }

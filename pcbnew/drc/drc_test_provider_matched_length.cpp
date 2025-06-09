@@ -20,11 +20,7 @@
 #include <common.h>
 #include <board.h>
 #include <board_design_settings.h>
-#include <pad.h>
-#include <pcb_track.h>
-
 #include <drc/drc_item.h>
-#include <drc/drc_rule.h>
 #include <drc/drc_test_provider.h>
 #include <drc/drc_length_report.h>
 
@@ -46,24 +42,13 @@ class DRC_TEST_PROVIDER_MATCHED_LENGTH : public DRC_TEST_PROVIDER
 public:
     DRC_TEST_PROVIDER_MATCHED_LENGTH () :
         m_board( nullptr )
-    {
-    }
+    {}
 
-    virtual ~DRC_TEST_PROVIDER_MATCHED_LENGTH()
-    {
-    }
+    virtual ~DRC_TEST_PROVIDER_MATCHED_LENGTH() = default;
 
     virtual bool Run() override;
 
-    virtual const wxString GetName() const override
-    {
-        return wxT( "length" );
-    };
-
-    virtual const wxString GetDescription() const override
-    {
-        return wxT( "Tests matched track lengths." );
-    }
+    virtual const wxString GetName() const override { return wxT( "length" ); };
 
 private:
 
@@ -132,12 +117,18 @@ void DRC_TEST_PROVIDER_MATCHED_LENGTH::checkLengths( const DRC_CONSTRAINT& aCons
             {
                 if( aConstraint.GetOption( DRC_CONSTRAINT::OPTIONS::TIME_DOMAIN ) )
                 {
-                    msg = formatMsg( _( "(%s min length %s; actual %s)" ), aConstraint.GetName(), minLen,
-                                     ent.totalDelay, dataType );
+                    msg = formatMsg( _( "(%s min length %s; actual %s)" ),
+                                     aConstraint.GetName(),
+                                     minLen,
+                                     ent.totalDelay,
+                                     dataType );
                 }
                 else
                 {
-                    msg = formatMsg( _( "(%s min length %s; actual %s)" ), aConstraint.GetName(), minLen, ent.total,
+                    msg = formatMsg( _( "(%s min length %s; actual %s)" ),
+                                     aConstraint.GetName(),
+                                     minLen,
+                                     ent.total,
                                      dataType );
                 }
             }
@@ -145,12 +136,18 @@ void DRC_TEST_PROVIDER_MATCHED_LENGTH::checkLengths( const DRC_CONSTRAINT& aCons
             {
                 if( aConstraint.GetOption( DRC_CONSTRAINT::OPTIONS::TIME_DOMAIN ) )
                 {
-                    msg = formatMsg( _( "(%s max length %s; actual %s)" ), aConstraint.GetName(), maxLen,
-                                     ent.totalDelay, dataType );
+                    msg = formatMsg( _( "(%s max length %s; actual %s)" ),
+                                     aConstraint.GetName(),
+                                     maxLen,
+                                     ent.totalDelay,
+                                     dataType );
                 }
                 else
                 {
-                    msg = formatMsg( _( "(%s max length %s; actual %s)" ), aConstraint.GetName(), maxLen, ent.total,
+                    msg = formatMsg( _( "(%s max length %s; actual %s)" ),
+                                     aConstraint.GetName(),
+                                     maxLen,
+                                     ent.total,
                                      dataType );
                 }
             }
@@ -162,8 +159,7 @@ void DRC_TEST_PROVIDER_MATCHED_LENGTH::checkLengths( const DRC_CONSTRAINT& aCons
 
             drcItem->SetViolatingRule( aConstraint.GetParentRule() );
 
-            reportViolation( drcItem, ( *ent.items.begin() )->GetPosition(),
-                             ( *ent.items.begin() )->GetLayer() );
+            reportViolation( drcItem, ( *ent.items.begin() )->GetPosition(), ( *ent.items.begin() )->GetLayer() );
         }
     }
 }
@@ -202,14 +198,10 @@ void DRC_TEST_PROVIDER_MATCHED_LENGTH::checkSkews( const DRC_CONSTRAINT& aConstr
             }
         }
 
-        for( const auto& ent : connections )
+        for( const DRC_LENGTH_REPORT::ENTRY& ent : connections )
         {
-            int skew = 0;
-
-            if( isTimeDomain )
-                skew = KiROUND( ent.totalDelay - maxLength );
-            else
-                skew = KiROUND( ent.total - maxLength );
+            int skew = isTimeDomain ? KiROUND( ent.totalDelay - maxLength )
+                                    : KiROUND( ent.total - maxLength );
 
             bool fail_min = false;
             bool fail_max = false;
@@ -233,7 +225,8 @@ void DRC_TEST_PROVIDER_MATCHED_LENGTH::checkSkews( const DRC_CONSTRAINT& aConstr
                                 aConstraint.GetName(),
                                 MessageTextFromValue( aConstraint.GetValue().Min(), true, dataType ),
                                 MessageTextFromValue( skew, true, dataType ),
-                                MessageTextFromValue( maxLength, true, dataType ), maxNetname,
+                                MessageTextFromValue( maxLength, true, dataType ),
+                                maxNetname,
                                 MessageTextFromValue( reportTotal, true, dataType ) );
                 }
                 else
@@ -243,7 +236,8 @@ void DRC_TEST_PROVIDER_MATCHED_LENGTH::checkSkews( const DRC_CONSTRAINT& aConstr
                                 aConstraint.GetName(),
                                 MessageTextFromValue( aConstraint.GetValue().Max(), true, dataType ),
                                 MessageTextFromValue( skew, true, dataType ),
-                                MessageTextFromValue( maxLength, true, dataType ), maxNetname,
+                                MessageTextFromValue( maxLength, true, dataType ),
+                                maxNetname,
                                 MessageTextFromValue( reportTotal, true, dataType ) );
                 }
 
@@ -254,8 +248,7 @@ void DRC_TEST_PROVIDER_MATCHED_LENGTH::checkSkews( const DRC_CONSTRAINT& aConstr
 
                 drcItem->SetViolatingRule( aConstraint.GetParentRule() );
 
-                reportViolation( drcItem, ( *ent.items.begin() )->GetPosition(),
-                                 ( *ent.items.begin() )->GetLayer() );
+                reportViolation( drcItem, ( *ent.items.begin() )->GetPosition(), ( *ent.items.begin() )->GetLayer() );
             }
         }
     };
@@ -329,13 +322,12 @@ void DRC_TEST_PROVIDER_MATCHED_LENGTH::checkViaCounts( const DRC_CONSTRAINT& aCo
 
         if( drcItem )
         {
-            for( auto offendingTrack : ent.items )
+            for( const BOARD_CONNECTED_ITEM* offendingTrack : ent.items )
                 drcItem->SetItems( offendingTrack );
 
             drcItem->SetViolatingRule( aConstraint.GetParentRule() );
 
-            reportViolation( drcItem, ( *ent.items.begin() )->GetPosition(),
-                             ( *ent.items.begin() )->GetLayer() );
+            reportViolation( drcItem, ( *ent.items.begin() )->GetPosition(), ( *ent.items.begin() )->GetLayer() );
         }
     }
 }
@@ -395,7 +387,7 @@ bool DRC_TEST_PROVIDER_MATCHED_LENGTH::runInternal( bool aDelayReportMode )
                     if( constraint.IsNull() )
                         continue;
 
-                    auto citem = static_cast<BOARD_CONNECTED_ITEM*>( item );
+                    BOARD_CONNECTED_ITEM* citem = static_cast<BOARD_CONNECTED_ITEM*>( item );
 
                     itemSets[ constraint.GetParentRule() ].insert( citem );
                 }
@@ -458,10 +450,7 @@ bool DRC_TEST_PROVIDER_MATCHED_LENGTH::runInternal( bool aDelayReportMode )
                              + static_cast<double>( ent.totalPadToDieDelay );
             ent.matchingRule = rule;
 
-            // fixme: doesn't seem to work ;-)
-            auto ftPath = ftCache->QueryFromToPath( ent.items );
-
-            if( ftPath )
+            if( FROM_TO_CACHE::FT_PATH* ftPath = ftCache->QueryFromToPath( ent.items ) )
             {
                 ent.from = ftPath->fromName;
                 ent.to = ftPath->toName;
@@ -498,21 +487,26 @@ bool DRC_TEST_PROVIDER_MATCHED_LENGTH::runInternal( bool aDelayReportMode )
                            return a.netname < b.netname;
                        } );
 
-            reportAux( wxString::Format( wxT( "Length-constrained traces for rule '%s':" ),
-                                         it.first->m_Name ) );
-
-            for( const DRC_LENGTH_REPORT::ENTRY& ent : matchedConnections )
+            if( getLogReporter() )
             {
-                reportAux( wxString::Format( wxT( " - net: %s, from: %s, to: %s, "
-                                                  "%d matching items, "
-                                                  "total: %s (tracks: %s, vias: %s, pad-to-die: %s), "
-                                                  "vias: %d" ),
-                                             ent.netname, ent.from, ent.to, static_cast<int>( ent.items.size() ),
-                                             MessageTextFromValue( ent.total ), MessageTextFromValue( ent.totalRoute ),
-                                             MessageTextFromValue( ent.totalVia ),
-                                             MessageTextFromValue( ent.totalPadToDie ), ent.viaCount ) );
-            }
+                REPORT_AUX( wxString::Format( wxT( "Length-constrained traces for rule '%s':" ),
+                                              it.first->m_Name ) );
 
+                for( const DRC_LENGTH_REPORT::ENTRY& ent : matchedConnections )
+                {
+                    REPORT_AUX( wxString::Format( wxT( " - net: %s, from: %s, to: %s, %d matching items, "
+                                                       "total: %s (tracks: %s, vias: %s, pad-to-die: %s), "
+                                                       "vias: %d" ),
+                                                  ent.netname,
+                                                  ent.from, ent.to,
+                                                  static_cast<int>( ent.items.size() ),
+                                                  MessageTextFromValue( ent.total ),
+                                                  MessageTextFromValue( ent.totalRoute ),
+                                                  MessageTextFromValue( ent.totalVia ),
+                                                  MessageTextFromValue( ent.totalPadToDie ),
+                                                  ent.viaCount ) );
+                }
+            }
 
             std::optional<DRC_CONSTRAINT> lengthConstraint = rule->FindConstraint( LENGTH_CONSTRAINT );
 
@@ -529,8 +523,6 @@ bool DRC_TEST_PROVIDER_MATCHED_LENGTH::runInternal( bool aDelayReportMode )
             if( viaCountConstraint && viaCountConstraint->GetSeverity() != RPT_SEVERITY_IGNORE )
                 checkViaCounts( *viaCountConstraint, matchedConnections );
         }
-
-        reportRuleStatistics();
     }
 
     return !m_drcEngine->IsCancelled();

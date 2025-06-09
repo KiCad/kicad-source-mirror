@@ -33,10 +33,8 @@
 #include <geometry/geometry_utils.h>
 #include <geometry/seg.h>
 #include <geometry/shape_segment.h>
-#include <drc/drc_engine.h>
 #include <drc/drc_rtree.h>
 #include <drc/drc_item.h>
-#include <drc/drc_rule.h>
 #include <drc/drc_test_provider_clearance_base.h>
 
 /*
@@ -52,24 +50,13 @@ class DRC_TEST_PROVIDER_PHYSICAL_CLEARANCE : public DRC_TEST_PROVIDER_CLEARANCE_
 public:
     DRC_TEST_PROVIDER_PHYSICAL_CLEARANCE () :
             DRC_TEST_PROVIDER_CLEARANCE_BASE()
-    {
-    }
+    {}
 
-    virtual ~DRC_TEST_PROVIDER_PHYSICAL_CLEARANCE()
-    {
-    }
+    virtual ~DRC_TEST_PROVIDER_PHYSICAL_CLEARANCE() = default;
 
     virtual bool Run() override;
 
-    virtual const wxString GetName() const override
-    {
-        return wxT( "physical_clearance" );
-    };
-
-    virtual const wxString GetDescription() const override
-    {
-        return wxT( "Tests item clearances irrespective of nets" );
-    }
+    virtual const wxString GetName() const override { return wxT( "physical_clearance" ); };
 
 private:
     int testItemAgainstItem( BOARD_ITEM* aItem, SHAPE* aItemShape, PCB_LAYER_ID aLayer,
@@ -96,11 +83,9 @@ bool DRC_TEST_PROVIDER_PHYSICAL_CLEARANCE::Run()
 
     if( m_board->m_DRCMaxPhysicalClearance <= 0 )
     {
-        reportAux( wxT( "No physical clearance constraints found. Tests not run." ) );
+        REPORT_AUX( wxT( "No physical clearance constraints found. Tests not run." ) );
         return true;   // continue with other tests
     }
-
-    reportAux( wxT( "Largest physical clearance : %d nm" ), m_board->m_DRCMaxPhysicalClearance );
 
     size_t progressDelta = 250;
     size_t count = 0;
@@ -385,8 +370,6 @@ bool DRC_TEST_PROVIDER_PHYSICAL_CLEARANCE::Run()
                 return !m_drcEngine->IsCancelled();
             } );
 
-    reportRuleStatistics();
-
     return !m_drcEngine->IsCancelled();
 }
 
@@ -502,8 +485,7 @@ void DRC_TEST_PROVIDER_PHYSICAL_CLEARANCE::testShapeLineChain( const SHAPE_LINE_
                 VECTOR2I secondPoint = candidate.NearestPoint( seg );
                 VECTOR2I pos = ( firstPoint + secondPoint ) / 2;
 
-                if( !collisions.empty() &&
-                        ( pos - collisions.back().first ).EuclideanNorm() < clearance * 2 )
+                if( !collisions.empty() && ( pos - collisions.back().first ).EuclideanNorm() < clearance * 2 )
                 {
                     if( actual < collisions.back().second )
                     {
@@ -519,7 +501,7 @@ void DRC_TEST_PROVIDER_PHYSICAL_CLEARANCE::testShapeLineChain( const SHAPE_LINE_
         }
     }
 
-    for( std::pair<VECTOR2I, int> collision : collisions )
+    for( const std::pair<VECTOR2I, int>& collision : collisions )
     {
         std::shared_ptr<DRC_ITEM> drce = DRC_ITEM::Create( DRCE_CLEARANCE );
         VECTOR2I pt = collision.first;
@@ -680,7 +662,7 @@ int DRC_TEST_PROVIDER_PHYSICAL_CLEARANCE::testItemAgainstItem( BOARD_ITEM* aItem
                 layers |= LSET::AllCuMask();
 
             wxCHECK_MSG( layers.Contains( aLayer ), violations,
-                    wxT( "Bug!  Vias should only be checked for layers on which they exist" ) );
+                         wxT( "Bug!  Vias should only be checked for layers on which they exist" ) );
 
             itemHoleShape = aItem->GetEffectiveHoleShape();
         }
@@ -703,7 +685,7 @@ int DRC_TEST_PROVIDER_PHYSICAL_CLEARANCE::testItemAgainstItem( BOARD_ITEM* aItem
                 layers |= LSET::AllCuMask();
 
             wxCHECK_MSG( layers.Contains( aLayer ), violations,
-                    wxT( "Bug!  Vias should only be checked for layers on which they exist" ) );
+                         wxT( "Bug!  Vias should only be checked for layers on which they exist" ) );
 
             otherHoleShape = aOther->GetEffectiveHoleShape();
         }

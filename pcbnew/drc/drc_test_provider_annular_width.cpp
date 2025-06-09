@@ -27,7 +27,6 @@
 #include <footprint.h>
 #include <drc/drc_engine.h>
 #include <drc/drc_item.h>
-#include <drc/drc_rule.h>
 #include <drc/drc_test_provider.h>
 #include <macros.h>
 #include <convert_basic_shapes_to_polygon.h>
@@ -48,24 +47,13 @@ class DRC_TEST_PROVIDER_ANNULAR_WIDTH : public DRC_TEST_PROVIDER
 {
 public:
     DRC_TEST_PROVIDER_ANNULAR_WIDTH()
-    {
-    }
+    {}
 
-    virtual ~DRC_TEST_PROVIDER_ANNULAR_WIDTH()
-    {
-    }
+    virtual ~DRC_TEST_PROVIDER_ANNULAR_WIDTH() = default;
 
     virtual bool Run() override;
 
-    virtual const wxString GetName() const override
-    {
-        return wxT( "annular_width" );
-    };
-
-    virtual const wxString GetDescription() const override
-    {
-        return wxT( "Tests pad/via annular rings" );
-    }
+    virtual const wxString GetName() const override { return wxT( "annular_width" ); };
 };
 
 
@@ -73,7 +61,7 @@ bool DRC_TEST_PROVIDER_ANNULAR_WIDTH::Run()
 {
     if( m_drcEngine->IsErrorLimitExceeded( DRCE_ANNULAR_WIDTH ) )
     {
-        reportAux( wxT( "Annular width violations ignored. Skipping check." ) );
+        REPORT_AUX( wxT( "Annular width violations ignored. Skipping check." ) );
         return true;    // continue with other tests
     }
 
@@ -81,7 +69,7 @@ bool DRC_TEST_PROVIDER_ANNULAR_WIDTH::Run()
 
     if( !m_drcEngine->HasRulesForConstraintType( ANNULAR_WIDTH_CONSTRAINT ) )
     {
-        reportAux( wxT( "No annular width constraints found. Tests not run." ) );
+        REPORT_AUX( wxT( "No annular width constraints found. Tests not run." ) );
         return true;    // continue with other tests
     }
 
@@ -398,8 +386,6 @@ bool DRC_TEST_PROVIDER_ANNULAR_WIDTH::Run()
                 break;
         }
     }
-
-    reportRuleStatistics();
 
     return !m_drcEngine->IsCancelled();
 }

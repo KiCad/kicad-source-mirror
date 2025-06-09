@@ -46,24 +46,13 @@ class DRC_TEST_PROVIDER_SLIVER_CHECKER : public DRC_TEST_PROVIDER
 {
 public:
     DRC_TEST_PROVIDER_SLIVER_CHECKER()
-    {
-    }
+    {}
 
-    virtual ~DRC_TEST_PROVIDER_SLIVER_CHECKER()
-    {
-    }
+    virtual ~DRC_TEST_PROVIDER_SLIVER_CHECKER() = default;
 
     virtual bool Run() override;
 
-    virtual const wxString GetName() const override
-    {
-        return wxT( "sliver checker" );
-    };
-
-    virtual const wxString GetDescription() const override
-    {
-        return wxT( "Checks copper layers for slivers" );
-    }
+    virtual const wxString GetName() const override { return wxT( "sliver checker" ); };
 
 private:
     wxString layerDesc( PCB_LAYER_ID aLayer );

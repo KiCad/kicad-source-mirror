@@ -43,24 +43,13 @@ class DRC_TEST_PROVIDER_HOLE_SIZE : public DRC_TEST_PROVIDER
 {
 public:
     DRC_TEST_PROVIDER_HOLE_SIZE()
-    {
-    }
+    {}
 
-    virtual ~DRC_TEST_PROVIDER_HOLE_SIZE()
-    {
-    }
+    virtual ~DRC_TEST_PROVIDER_HOLE_SIZE() = default;
 
     virtual bool Run() override;
 
-    virtual const wxString GetName() const override
-    {
-        return wxT( "hole_size" );
-    };
-
-    virtual const wxString GetDescription() const override
-    {
-        return wxT( "Tests sizes of drilled holes (via/pad drills)" );
-    }
+    virtual const wxString GetName() const override { return wxT( "hole_size" ); };
 
 private:
     void checkViaHole( PCB_VIA* via, bool aExceedMicro, bool aExceedStd );
@@ -114,10 +103,9 @@ bool DRC_TEST_PROVIDER_HOLE_SIZE::Run()
         }
     }
 
-    reportRuleStatistics();
-
     return !m_drcEngine->IsCancelled();
 }
+
 
 void DRC_TEST_PROVIDER_HOLE_SIZE::checkPadHole( PAD* aPad )
 {

@@ -24,8 +24,7 @@
  */
 
 
-#ifndef DRC_TEST_PROVIDER_CLEARANCE_BASE__H
-#define DRC_TEST_PROVIDER_CLEARANCE_BASE__H
+#pragma once
 
 #include <drc/drc_test_provider.h>
 #include <settings/color_settings.h>
@@ -43,12 +42,9 @@ public:
             DRC_TEST_PROVIDER(),
             m_board( nullptr ),
             m_boardOutlineValid( false )
-    {
-    }
+    {}
 
-    virtual ~DRC_TEST_PROVIDER_CLEARANCE_BASE()
-    {
-    }
+    virtual ~DRC_TEST_PROVIDER_CLEARANCE_BASE() = default;
 
 protected:
     BOARD* m_board;
@@ -62,6 +58,3 @@ protected:
                                                   const VECTOR2I& aStart, const VECTOR2I& aEnd,
                                                   int aLength );
 };
-
-
-#endif // DRC_TEST_PROVIDER_CLEARANCE_BASE__H

@@ -53,21 +53,11 @@ public:
         m_isRuleDriven = false;
     }
 
-    virtual ~DRC_TEST_PROVIDER_MISC()
-    {
-    }
+    virtual ~DRC_TEST_PROVIDER_MISC() = default;
 
     virtual bool Run() override;
 
-    virtual const wxString GetName() const override
-    {
-        return wxT( "miscellaneous" );
-    };
-
-    virtual const wxString GetDescription() const override
-    {
-        return wxT( "Misc checks (board outline, missing textvars)" );
-    }
+    virtual const wxString GetName() const override { return wxT( "miscellaneous" ); };
 
 private:
     void testOutline();

@@ -27,9 +27,7 @@
 #include <connectivity/connectivity_data.h>
 #include <connectivity/connectivity_algo.h>
 #include <zone.h>
-#include <drc/drc_engine.h>
 #include <drc/drc_item.h>
-#include <drc/drc_rule.h>
 #include <drc/drc_test_provider.h>
 
 
@@ -45,24 +43,13 @@ class DRC_TEST_PROVIDER_CONNECTIVITY : public DRC_TEST_PROVIDER
 {
 public:
     DRC_TEST_PROVIDER_CONNECTIVITY()
-    {
-    }
+    {}
 
-    virtual ~DRC_TEST_PROVIDER_CONNECTIVITY()
-    {
-    }
+    virtual ~DRC_TEST_PROVIDER_CONNECTIVITY() = default;
 
     virtual bool Run() override;
 
-    virtual const wxString GetName() const override
-    {
-        return wxT( "connectivity" );
-    };
-
-    virtual const wxString GetDescription() const override
-    {
-        return wxT( "Tests board connectivity" );
-    }
+    virtual const wxString GetName() const override { return wxT( "connectivity" ); };
 };
 
 
@@ -160,8 +147,6 @@ bool DRC_TEST_PROVIDER_CONNECTIVITY::Run()
 
                 return true;
             } );
-
-    reportRuleStatistics();
 
     return !m_drcEngine->IsCancelled();
 }

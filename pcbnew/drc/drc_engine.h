@@ -21,8 +21,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef DRC_ENGINE_H
-#define DRC_ENGINE_H
+#pragma once
 
 #include <memory>
 #include <vector>
@@ -59,7 +58,7 @@ namespace KIGFX
 void drcPrintDebugMessage( int level, const wxString& msg, const char *function, int line );
 
 #define drc_dbg(level, fmt, ...) \
-    drcPrintDebugMessage(level, wxString::Format( fmt, __VA_ARGS__ ), __FUNCTION__, __LINE__ );
+    drcPrintDebugMessage( level, wxString::Format( fmt, __VA_ARGS__ ), __FUNCTION__, __LINE__ );
 
 class DRC_RULE_CONDITION;
 class DRC_ITEM;
@@ -137,7 +136,7 @@ public:
      * Note: if no log reporter is installed rule parse/compile/run-time errors are returned
      * via a thrown PARSE_ERROR exception.
      */
-    void SetLogReporter( REPORTER* aReporter ) { m_reporter = aReporter; }
+    void SetLogReporter( REPORTER* aReporter ) { m_logReporter = aReporter; }
 
     /**
      * Initialize the DRC engine.
@@ -180,8 +179,9 @@ public:
     void SetMaxProgress( int aSize );
     bool ReportProgress( double aProgress );
     bool ReportPhase( const wxString& aMessage );
-    void ReportAux( const wxString& aStr );
     bool IsCancelled() const;
+
+    REPORTER* GetLogReporter() const { return m_logReporter; }
 
     bool QueryWorstConstraint( DRC_CONSTRAINT_T aRuleId, DRC_CONSTRAINT& aConstraint );
     std::set<int> QueryDistinctConstraints( DRC_CONSTRAINT_T aConstraintId );
@@ -253,10 +253,8 @@ protected:
     std::map<DRC_CONSTRAINT_T, std::vector<DRC_ENGINE_CONSTRAINT*>*> m_constraintMap;
 
     DRC_VIOLATION_HANDLER      m_violationHandler;
-    REPORTER*                  m_reporter;
+    REPORTER*                  m_logReporter;
     PROGRESS_REPORTER*         m_progressReporter;
 
     std::shared_ptr<KIGFX::VIEW_OVERLAY> m_debugOverlay;
 };
-
-#endif // DRC_H

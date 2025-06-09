@@ -216,8 +216,6 @@ int FROM_TO_CACHE::cacheFromToPaths( const wxString& aFrom, const wxString& aTo 
         newPaths++;
     }
 
-    // reportAux( _("Cached %d paths\n"), newPaths );
-
     return newPaths;
 }
 

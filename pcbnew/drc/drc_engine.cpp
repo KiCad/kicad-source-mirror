@@ -85,7 +85,7 @@ DRC_ENGINE::DRC_ENGINE( BOARD* aBoard, BOARD_DESIGN_SETTINGS *aSettings ) :
         m_rulesValid( false ),
         m_reportAllTrackErrors( false ),
         m_testFootprints( false ),
-        m_reporter( nullptr ),
+        m_logReporter( nullptr ),
         m_progressReporter( nullptr )
 {
     m_errorLimits.resize( DRCE_LAST + 1 );
@@ -153,8 +153,6 @@ std::shared_ptr<DRC_RULE> DRC_ENGINE::createImplicitRule( const wxString& name )
 
 void DRC_ENGINE::loadImplicitRules()
 {
-    ReportAux( wxString::Format( wxT( "Building implicit rules (per-item/class overrides, etc...)" ) ) );
-
     BOARD_DESIGN_SETTINGS& bds = m_board->GetDesignSettings();
 
     // 1) global defaults
@@ -487,9 +485,6 @@ void DRC_ENGINE::loadImplicitRules()
         disallowConstraint.m_DisallowFlags = disallowFlags;
         rule->AddConstraint( disallowConstraint );
     }
-
-    ReportAux( wxString::Format( wxT( "Building %d implicit netclass rules" ),
-                                 (int) netclassClearanceRules.size() ) );
 }
 
 
@@ -504,7 +499,7 @@ void DRC_ENGINE::loadRules( const wxFileName& aPath )
         if( fp )
         {
             DRC_RULES_PARSER parser( fp, aPath.GetFullPath() );
-            parser.Parse( rules, m_reporter );
+            parser.Parse( rules, m_logReporter );
         }
 
         // Copy the rules into the member variable afterwards so that if Parse() throws then
@@ -518,7 +513,11 @@ void DRC_ENGINE::loadRules( const wxFileName& aPath )
 
 void DRC_ENGINE::compileRules()
 {
-    ReportAux( wxString::Format( wxT( "Compiling Rules (%d rules): " ), (int) m_rules.size() ) );
+    if( m_logReporter )
+    {
+        m_logReporter->Report( ( wxString::Format( wxT( "Compiling Rules (%d rules): " ),
+                                                   (int) m_rules.size() ) ) );
+    }
 
     for( std::shared_ptr<DRC_RULE>& rule : m_rules )
     {
@@ -553,7 +552,9 @@ void DRC_ENGINE::InitEngine( const wxFileName& aRulePath )
 
     for( DRC_TEST_PROVIDER* provider : m_testProviders )
     {
-        ReportAux( wxString::Format( wxT( "Create DRC provider: '%s'" ), provider->GetName() ) );
+        if( m_logReporter )
+            m_logReporter->Report( wxString::Format( wxT( "Create DRC provider: '%s'" ), provider->GetName() ) );
+
         provider->SetDRCEngine( this );
     }
 
@@ -637,7 +638,8 @@ void DRC_ENGINE::RunTests( EDA_UNITS aUnits, bool aReportAllTrackErrors, bool aT
 
     for( DRC_TEST_PROVIDER* provider : m_testProviders )
     {
-        ReportAux( wxString::Format( wxT( "Run DRC provider: '%s'" ), provider->GetName() ) );
+        if( m_logReporter )
+            m_logReporter->Report( wxString::Format( wxT( "Run DRC provider: '%s'" ), provider->GetName() ) );
 
         if( !provider->RunTests( aUnits ) )
             break;
@@ -1778,7 +1780,7 @@ void DRC_ENGINE::ReportViolation( const std::shared_ptr<DRC_ITEM>& aItem, const 
         m_violationHandler( aItem, aPos, aMarkerLayer, aCustomHandler );
     }
 
-    if( m_reporter )
+    if( m_logReporter )
     {
         wxString msg = wxString::Format( wxT( "Test '%s': %s (code %d)" ),
                                          aItem->GetViolatingTest()->GetName(),
@@ -1790,23 +1792,14 @@ void DRC_ENGINE::ReportViolation( const std::shared_ptr<DRC_ITEM>& aItem, const 
         if( rule )
             msg += wxString::Format( wxT( ", violating rule: '%s'" ), rule->m_Name );
 
-        m_reporter->Report( msg );
+        m_logReporter->Report( msg );
 
         wxString violatingItemsStr = wxT( "Violating items: " );
 
-        m_reporter->Report( wxString::Format( wxT( "  |- violating position (%d, %d)" ),
+        m_logReporter->Report( wxString::Format( wxT( "  |- violating position (%d, %d)" ),
                                               aPos.x,
                                               aPos.y ) );
     }
-}
-
-
-void DRC_ENGINE::ReportAux ( const wxString& aStr )
-{
-    if( !m_reporter )
-        return;
-
-    m_reporter->Report( aStr, RPT_SEVERITY_INFO );
 }
 
 
@@ -1863,7 +1856,8 @@ bool DRC_ENGINE::IsCancelled() const
 
 bool DRC_ENGINE::HasRulesForConstraintType( DRC_CONSTRAINT_T constraintID )
 {
-    //drc_dbg(10,"hascorrect id %d size %d\n", ruleID,  m_ruleMap[ruleID]->sortedRules.size( ) );
+    //drc_dbg( 10, "hascorrect id %d size %d\n", ruleID, m_ruleMap[ruleID]->sortedRules.size() );
+
     if( m_constraintMap.count( constraintID ) )
         return m_constraintMap[ constraintID ]->size() > 0;
 

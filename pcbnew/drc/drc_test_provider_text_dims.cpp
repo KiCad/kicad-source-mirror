@@ -44,24 +44,13 @@ class DRC_TEST_PROVIDER_TEXT_DIMS : public DRC_TEST_PROVIDER
 {
 public:
     DRC_TEST_PROVIDER_TEXT_DIMS()
-    {
-    }
+    {}
 
-    virtual ~DRC_TEST_PROVIDER_TEXT_DIMS()
-    {
-    }
+    virtual ~DRC_TEST_PROVIDER_TEXT_DIMS() = default;
 
     virtual bool Run() override;
 
-    virtual const wxString GetName() const override
-    {
-        return wxT( "text_dimensions" );
-    };
-
-    virtual const wxString GetDescription() const override
-    {
-        return wxT( "Tests text height and thickness" );
-    }
+    virtual const wxString GetName() const override { return wxT( "text_dimensions" ); };
 };
 
 
@@ -74,14 +63,14 @@ bool DRC_TEST_PROVIDER_TEXT_DIMS::Run()
     if( m_drcEngine->IsErrorLimitExceeded( DRCE_TEXT_HEIGHT )
             && m_drcEngine->IsErrorLimitExceeded( DRCE_TEXT_THICKNESS ) )
     {
-        reportAux( wxT( "Text dimension violations ignored. Tests not run." ) );
+        REPORT_AUX( wxT( "Text dimension violations ignored. Tests not run." ) );
         return true;        // continue with other tests
     }
 
     if( !m_drcEngine->HasRulesForConstraintType( TEXT_HEIGHT_CONSTRAINT )
             && !m_drcEngine->HasRulesForConstraintType( TEXT_THICKNESS_CONSTRAINT ) )
     {
-        reportAux( wxT( "No text height or text thickness constraints found. Tests not run." ) );
+        REPORT_AUX( wxT( "No text height or text thickness constraints found. Tests not run." ) );
         return true;        // continue with other tests
     }
 
@@ -304,8 +293,6 @@ bool DRC_TEST_PROVIDER_TEXT_DIMS::Run()
 
                 return true;
             } );
-
-    reportRuleStatistics();
 
     return !m_drcEngine->IsCancelled();
 }

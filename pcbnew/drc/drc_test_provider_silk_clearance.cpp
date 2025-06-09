@@ -45,24 +45,13 @@ public:
     DRC_TEST_PROVIDER_SILK_CLEARANCE ():
         m_board( nullptr ),
         m_largestClearance( 0 )
-    {
-    }
+    {}
 
-    virtual ~DRC_TEST_PROVIDER_SILK_CLEARANCE()
-    {
-    }
+    virtual ~DRC_TEST_PROVIDER_SILK_CLEARANCE() = default;
 
     virtual bool Run() override;
 
-    virtual const wxString GetName() const override
-    {
-        return wxT( "silk_clearance" );
-    };
-
-    virtual const wxString GetDescription() const override
-    {
-        return wxT( "Tests for overlapping silkscreen features." );
-    }
+    virtual const wxString GetName() const override { return wxT( "silk_clearance" ); };
 
 private:
 
@@ -94,8 +83,6 @@ bool DRC_TEST_PROVIDER_SILK_CLEARANCE::Run()
 
     if( m_drcEngine->QueryWorstConstraint( SILK_CLEARANCE_CONSTRAINT, worstClearanceConstraint ) )
         m_largestClearance = worstClearanceConstraint.m_Value.Min();
-
-    reportAux( wxT( "Worst clearance : %d nm" ), m_largestClearance );
 
     if( !reportPhase( _( "Checking silkscreen for overlapping items..." ) ) )
         return false;   // DRC cancelled
@@ -151,9 +138,9 @@ bool DRC_TEST_PROVIDER_SILK_CLEARANCE::Run()
                          LSET::FrontMask() | LSET::BackMask() | LSET( { Edge_Cuts, Margin } ),
                          addToTargetTree );
 
-    reportAux( wxT( "Testing %d silkscreen features against %d board items." ),
-               silkTree.size(),
-               targetTree.size() );
+    REPORT_AUX( wxString::Format( wxT( "Testing %d silkscreen features against %d board items." ),
+                                  silkTree.size(),
+                                  targetTree.size() ) );
 
     const std::vector<DRC_RTREE::LAYER_PAIR> layerPairs =
     {
@@ -280,8 +267,6 @@ bool DRC_TEST_PROVIDER_SILK_CLEARANCE::Run()
             {
                 return reportProgress( aCount, aSize, progressDelta );
             } );
-
-    reportRuleStatistics();
 
     return !m_drcEngine->IsCancelled();
 }

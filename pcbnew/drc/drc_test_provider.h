@@ -22,8 +22,7 @@
  */
 
 
-#ifndef DRC_TEST_PROVIDER__H
-#define DRC_TEST_PROVIDER__H
+#pragma once
 
 #include <board.h>
 #include <board_commit.h>
@@ -84,7 +83,6 @@ public:
     void SetDRCEngine( DRC_ENGINE *engine )
     {
         m_drcEngine = engine;
-        m_stats.clear();
     }
 
     bool RunTests( EDA_UNITS aUnits )
@@ -99,26 +97,20 @@ public:
     virtual bool Run() = 0;
 
     virtual const wxString GetName() const;
-    virtual const wxString GetDescription() const;
 
 protected:
     int forEachGeometryItem( const std::vector<KICAD_T>& aTypes, const LSET& aLayers,
                              const std::function<bool(BOARD_ITEM*)>& aFunc );
 
-    // Do not use a wxString with a vararg list: it is a complex thing and can create issues.
-    // So prefer using a wxChar* item in this case:
-    void reportAux( const wxString& aMsg ) { reportAux( (const wxChar*) aMsg.wchar_str() ); }
-    virtual void reportAux( const wxChar* fmt, ... );
+    REPORTER* getLogReporter() const { return m_drcEngine->GetLogReporter(); }
+
+#define REPORT_AUX( s ) if( getLogReporter() ) getLogReporter()->Report( s, RPT_SEVERITY_INFO )
 
     virtual void reportViolation( std::shared_ptr<DRC_ITEM>& item, const VECTOR2I& aMarkerPos,
                                   int                        aMarkerLayer,
                                   DRC_CUSTOM_MARKER_HANDLER* aCustomHandler = nullptr );
     virtual bool reportProgress( size_t aCount, size_t aSize, size_t aDelta = 1 );
     virtual bool reportPhase( const wxString& aStageName );
-
-    virtual void reportRuleStatistics();
-    virtual void accountCheck( const DRC_RULE* ruleToTest );
-    virtual void accountCheck( const DRC_CONSTRAINT& constraintToTest );
 
     bool isInvisibleText( const BOARD_ITEM* aItem ) const;
 
@@ -131,13 +123,7 @@ protected:
     static std::vector<KICAD_T> s_allBasicItems;
     static std::vector<KICAD_T> s_allBasicItemsButZones;
 
-    EDA_UNITS   userUnits() const;
-
 protected:
     DRC_ENGINE* m_drcEngine;
-    std::unordered_map<const DRC_RULE*, int> m_stats;
     bool        m_isRuleDriven = true;
-    std::mutex                               m_statsMutex;
 };
-
-#endif // DRC_TEST_PROVIDER__H

@@ -45,24 +45,13 @@ class DRC_TEST_PROVIDER_TEXT_MIRRORING : public DRC_TEST_PROVIDER
 {
 public:
     DRC_TEST_PROVIDER_TEXT_MIRRORING()
-    {
-    }
+    {}
 
-    virtual ~DRC_TEST_PROVIDER_TEXT_MIRRORING()
-    {
-    }
+    virtual ~DRC_TEST_PROVIDER_TEXT_MIRRORING() = default;
 
     virtual bool Run() override;
 
-    virtual const wxString GetName() const override
-    {
-        return wxT( "text_mirroring" );
-    };
-
-    virtual const wxString GetDescription() const override
-    {
-        return wxT( "Tests mirrored text on top layer and non-mirrored text on bottom layer" );
-    }
+    virtual const wxString GetName() const override { return wxT( "text_mirroring" ); };
 };
 
 
@@ -71,7 +60,7 @@ bool DRC_TEST_PROVIDER_TEXT_MIRRORING::Run()
     if( m_drcEngine->IsErrorLimitExceeded( DRCE_MIRRORED_TEXT_ON_FRONT_LAYER )
             && m_drcEngine->IsErrorLimitExceeded( DRCE_NONMIRRORED_TEXT_ON_BACK_LAYER ) )
     {
-        reportAux( wxT( "Text mirroring violations ignored. Tests not run." ) );
+        REPORT_AUX( wxT( "Text mirroring violations ignored. Tests not run." ) );
         return true;        // continue with other tests
     }
 
@@ -139,8 +128,6 @@ bool DRC_TEST_PROVIDER_TEXT_MIRRORING::Run()
 
                 return true;
             } );
-
-    reportRuleStatistics();
 
     return !m_drcEngine->IsCancelled();
 }

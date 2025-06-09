@@ -52,21 +52,11 @@ public:
         m_isRuleDriven = false;
     }
 
-    virtual ~DRC_TEST_PROVIDER_LIBRARY_PARITY()
-    {
-    }
+    virtual ~DRC_TEST_PROVIDER_LIBRARY_PARITY() = default;
 
     virtual bool Run() override;
 
-    virtual const wxString GetName() const override
-    {
-        return wxT( "library_parity" );
-    };
-
-    virtual const wxString GetDescription() const override
-    {
-        return wxT( "Performs board footprint vs library integity checks" );
-    }
+    virtual const wxString GetName() const override { return wxT( "library_parity" ); };
 };
 
 
@@ -387,29 +377,28 @@ bool padNeedsUpdate( const PAD* a, const PAD* b, REPORTER* aReporter )
     PCB_LAYER_ID firstDifferingLayer = UNDEFINED_LAYER;
 
     a->Padstack().ForEachUniqueLayer(
-        [&]( PCB_LAYER_ID aLayer )
-        {
-            if( a->GetPrimitives( aLayer ).size() !=
-                b->GetPrimitives( aLayer ).size() )
+            [&]( PCB_LAYER_ID aLayer )
             {
-                primitivesDiffer = true;
-            }
-            else
-            {
-                for( size_t ii = 0; ii < a->GetPrimitives( aLayer ).size(); ++ii )
+                if( a->GetPrimitives( aLayer ).size() != b->GetPrimitives( aLayer ).size() )
                 {
-                    if( primitiveNeedsUpdate( a->GetPrimitives( aLayer )[ii],
-                                              b->GetPrimitives( aLayer )[ii] ) )
+                    primitivesDiffer = true;
+                }
+                else
+                {
+                    for( size_t ii = 0; ii < a->GetPrimitives( aLayer ).size(); ++ii )
                     {
-                        primitivesDiffer = true;
-                        break;
+                        if( primitiveNeedsUpdate( a->GetPrimitives( aLayer )[ii],
+                                                  b->GetPrimitives( aLayer )[ii] ) )
+                        {
+                            primitivesDiffer = true;
+                            break;
+                        }
                     }
                 }
-            }
 
-            if( primitivesDiffer && firstDifferingLayer == UNDEFINED_LAYER )
-                firstDifferingLayer = aLayer;
-        } );
+                if( primitivesDiffer && firstDifferingLayer == UNDEFINED_LAYER )
+                    firstDifferingLayer = aLayer;
+            } );
 
 
     if( primitivesDiffer )
@@ -419,10 +408,15 @@ bool padNeedsUpdate( const PAD* a, const PAD* b, REPORTER* aReporter )
                           : LayerName( firstDifferingLayer );
 
         if( aReporter )
+        {
             aReporter->Report( wxString::Format( _( "%s shape primitives differ on layer %s." ),
-                                                 PAD_DESC( a ), layerName ) );
+                                                 PAD_DESC( a ),
+                                                 layerName ) );
+        }
         else
+        {
             return true;
+        }
     }
 
     return diff;
@@ -821,7 +815,7 @@ bool DRC_TEST_PROVIDER_LIBRARY_PARITY::Run()
 
     if( !project )
     {
-        reportAux( _( "No project loaded, skipping library parity tests." ) );
+        REPORT_AUX( _( "No project loaded, skipping library parity tests." ) );
         return true;    // Continue with other tests
     }
 

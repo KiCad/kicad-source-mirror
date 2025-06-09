@@ -46,24 +46,13 @@ public:
     DRC_TEST_PROVIDER_EDGE_CLEARANCE () :
             DRC_TEST_PROVIDER_CLEARANCE_BASE(),
             m_largestEdgeClearance( 0 )
-    {
-    }
+    {}
 
-    virtual ~DRC_TEST_PROVIDER_EDGE_CLEARANCE()
-    {
-    }
+    virtual ~DRC_TEST_PROVIDER_EDGE_CLEARANCE() = default;
 
     virtual bool Run() override;
 
-    virtual const wxString GetName() const override
-    {
-        return wxT( "edge_clearance" );
-    }
-
-    virtual const wxString GetDescription() const override
-    {
-        return wxT( "Tests items vs board edge clearance" );
-    }
+    virtual const wxString GetName() const override { return wxT( "edge_clearance" ); }
 
 private:
     bool testAgainstEdge( BOARD_ITEM* item, SHAPE* itemShape, BOARD_ITEM* other,
@@ -129,13 +118,9 @@ bool DRC_TEST_PROVIDER_EDGE_CLEARANCE::testAgainstEdge( BOARD_ITEM* item, SHAPE*
             reportViolation( drce, pos, Edge_Cuts );
 
             if( item->Type() == PCB_TRACE_T || item->Type() == PCB_ARC_T )
-            {
                 return m_drcEngine->GetReportAllTrackErrors();
-            }
             else
-            {
                 return false;   // don't report violations with multiple edges; one is enough
-            }
         }
     }
 
@@ -157,7 +142,7 @@ bool DRC_TEST_PROVIDER_EDGE_CLEARANCE::Run()
     }
     else
     {
-        reportAux( wxT( "Edge clearance violations ignored. Tests not run." ) );
+        REPORT_AUX( wxT( "Edge clearance violations ignored. Tests not run." ) );
         return true;         // continue with other tests
     }
 
@@ -168,8 +153,6 @@ bool DRC_TEST_PROVIDER_EDGE_CLEARANCE::Run()
 
     if( m_drcEngine->QueryWorstConstraint( EDGE_CLEARANCE_CONSTRAINT, worstClearanceConstraint ) )
         m_largestEdgeClearance = worstClearanceConstraint.GetValue().Min();
-
-    reportAux( wxT( "Worst clearance : %d nm" ), m_largestEdgeClearance );
 
     /*
      * Build an RTree of the various edges (including NPTH holes) and margins found on the board.
@@ -291,11 +274,8 @@ bool DRC_TEST_PROVIDER_EDGE_CLEARANCE::Run()
                 {
                     PAD* pad = static_cast<PAD*>( item );
 
-                    if( pad->GetProperty() == PAD_PROP::CASTELLATED
-                        || pad->GetAttribute() == PAD_ATTRIB::CONN )
-                    {
+                    if( pad->GetProperty() == PAD_PROP::CASTELLATED || pad->GetAttribute() == PAD_ATTRIB::CONN )
                         return true;    // Continue with other items
-                    }
                 }
 
                 std::vector<PCB_LAYER_ID> layersToTest;
@@ -355,8 +335,6 @@ bool DRC_TEST_PROVIDER_EDGE_CLEARANCE::Run()
 
                 return true;
             } );
-
-    reportRuleStatistics();
 
     return !m_drcEngine->IsCancelled();
 }

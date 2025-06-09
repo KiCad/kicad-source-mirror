@@ -54,21 +54,11 @@ public:
         m_isRuleDriven = false;
     }
 
-    virtual ~DRC_TEST_PROVIDER_SCHEMATIC_PARITY()
-    {
-    }
+    virtual ~DRC_TEST_PROVIDER_SCHEMATIC_PARITY() = default;
 
     virtual bool Run() override;
 
-    virtual const wxString GetName() const override
-    {
-        return wxT( "schematic_parity" );
-    };
-
-    virtual const wxString GetDescription() const override
-    {
-        return wxT( "Performs layout-vs-schematics integity check" );
-    }
+    virtual const wxString GetName() const override { return wxT( "schematic_parity" ); };
 
 private:
     void testNetlist( NETLIST& aNetlist );
@@ -324,13 +314,11 @@ bool DRC_TEST_PROVIDER_SCHEMATIC_PARITY::Run()
 
         if( !netlist )
         {
-            reportAux( wxT( "No netlist provided, skipping schematic parity tests." ) );
+            REPORT_AUX( wxT( "No netlist provided, skipping schematic parity tests." ) );
             return true;
         }
 
         testNetlist( *netlist );
-
-        reportRuleStatistics();
     }
 
     return !m_drcEngine->IsCancelled();

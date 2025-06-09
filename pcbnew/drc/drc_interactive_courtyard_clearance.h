@@ -23,8 +23,7 @@
  */
 
 
-#ifndef DRC_INTERACTIVE_COURTYARD_CLEARANCE_H
-#define DRC_INTERACTIVE_COURTYARD_CLEARANCE_H
+#pragma once
 
 #include <drc/drc_test_provider_clearance_base.h>
 
@@ -40,9 +39,7 @@ public:
         SetDRCEngine( aDRCEngine.get() );
     }
 
-    virtual ~DRC_INTERACTIVE_COURTYARD_CLEARANCE ()
-    {
-    }
+    virtual ~DRC_INTERACTIVE_COURTYARD_CLEARANCE () = default;
 
     void Init( BOARD* aBoard );
 
@@ -51,11 +48,6 @@ public:
     virtual const wxString GetName() const override
     {
         return wxT( "interactive_courtyard_clearance" );
-    }
-
-    virtual const wxString GetDescription() const override
-    {
-        return wxT( "Tests footprints' courtyard collisions" );
     }
 
     void UpdateConflicts( KIGFX::VIEW* aView, bool aHighlightMoved );
@@ -73,5 +65,3 @@ private:
     std::set<BOARD_ITEM*>     m_itemsInConflict;      // The list of items in conflict
     std::vector<BOARD_ITEM*>  m_lastItemsInConflict;  // The list of items last highlighted
 };
-
-#endif // DRC_INTERACTIVE_COURTYARD_CLEARANCE_H

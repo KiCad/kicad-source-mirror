@@ -32,7 +32,6 @@
 #include <board.h>
 #include <board_connected_item.h>
 #include <board_design_settings.h>
-#include <drc/drc_rule.h>
 #include <drc/drc_item.h>
 #include <drc/drc_test_provider.h>
 #include <drc/drc_rtree.h>
@@ -89,24 +88,13 @@ class DRC_TEST_PROVIDER_CONNECTION_WIDTH : public DRC_TEST_PROVIDER
 {
 public:
     DRC_TEST_PROVIDER_CONNECTION_WIDTH()
-    {
-    }
+    {}
 
-    virtual ~DRC_TEST_PROVIDER_CONNECTION_WIDTH()
-    {
-    }
+    virtual ~DRC_TEST_PROVIDER_CONNECTION_WIDTH() = default;
 
     virtual bool Run() override;
 
-    virtual const wxString GetName() const override
-    {
-        return wxT( "copper width" );
-    };
-
-    virtual const wxString GetDescription() const override
-    {
-        return wxT( "Checks copper nets for connections less than a specified minimum" );
-    }
+    virtual const wxString GetName() const override { return wxT( "copper width" ); };
 
 private:
     wxString layerDesc( PCB_LAYER_ID aLayer );
@@ -119,8 +107,7 @@ public:
     POLYGON_TEST( int aLimit ) :
         VERTEX_SET( 0 ),
         m_limit( aLimit )
-    {
-    };
+    {};
 
     bool FindPairs( const SHAPE_LINE_CHAIN& aPoly )
     {
@@ -163,7 +150,6 @@ public:
     {
         return m_hits;
     }
-
 
     /**
      * Checks to see if there is a "substantial" protrusion in each polygon produced by the cut from
@@ -245,7 +231,6 @@ public:
         return ( same_point( p, aA ) || ( x_change && y_change ) );
     }
 
-
     VERTEX* getKink( VERTEX* aPt ) const
     {
         // The point needs to be at a concave surface
@@ -313,7 +298,10 @@ wxString DRC_TEST_PROVIDER_CONNECTION_WIDTH::layerDesc( PCB_LAYER_ID aLayer )
 bool DRC_TEST_PROVIDER_CONNECTION_WIDTH::Run()
 {
     if( m_drcEngine->IsErrorLimitExceeded( DRCE_CONNECTION_WIDTH ) )
+    {
+        REPORT_AUX( wxT( "Connection width violations ignored. Tests not run." ) );
         return true;    // Continue with other tests
+    }
 
     if( !reportPhase( _( "Checking nets for minimum connection width..." ) ) )
         return false;   // DRC cancelled
@@ -383,10 +371,7 @@ bool DRC_TEST_PROVIDER_CONNECTION_WIDTH::Run()
                 ITEMS_POLY& itemsPoly = dataset[ { aNetcode, aLayer } ];
 
                 for( BOARD_ITEM* item : itemsPoly.Items )
-                {
-                    item->TransformShapeToPolygon( itemsPoly.Poly, aLayer, 0, ARC_HIGH_DEF,
-                                                   ERROR_OUTSIDE );
-                }
+                    item->TransformShapeToPolygon( itemsPoly.Poly, aLayer, 0, ARC_HIGH_DEF, ERROR_OUTSIDE );
 
                 itemsPoly.Poly.Fracture();
 
@@ -449,9 +434,7 @@ bool DRC_TEST_PROVIDER_CONNECTION_WIDTH::Run()
                             auto obj_list = rtree->GetObjectsAt( location, aLayer, aMinWidth );
 
                             if( !obj_list.empty() && zone->HitTestFilledArea( aLayer, location, aMinWidth ) )
-                            {
                                 contributingItems.push_back( zone );
-                            }
                         }
 
                         if( !contributingItems.empty() )

@@ -56,22 +56,11 @@ public:
         m_bridgeRule.m_Name = _( "board setup solder mask min width" );
     }
 
-    virtual ~DRC_TEST_PROVIDER_SOLDER_MASK()
-    {
-    }
+    virtual ~DRC_TEST_PROVIDER_SOLDER_MASK() = default;
 
     virtual bool Run() override;
 
-    virtual const wxString GetName() const override
-    {
-        return wxT( "solder_mask_issues" );
-    };
-
-    virtual const wxString GetDescription() const override
-    {
-        return wxT( "Tests for silkscreen being clipped by solder mask and copper being exposed "
-                    "by mask apertures of other nets" );
-    }
+    virtual const wxString GetName() const override { return wxT( "solder_mask_issues" ); };
 
 private:
     void addItemToRTrees( BOARD_ITEM* aItem );
@@ -763,7 +752,7 @@ bool DRC_TEST_PROVIDER_SOLDER_MASK::Run()
     if( m_drcEngine->IsErrorLimitExceeded( DRCE_SILK_MASK_CLEARANCE )
             && m_drcEngine->IsErrorLimitExceeded( DRCE_SOLDERMASK_BRIDGE ) )
     {
-        reportAux( wxT( "Solder mask violations ignored. Tests not run." ) );
+        REPORT_AUX( wxT( "Solder mask violations ignored. Tests not run." ) );
         return true;    // continue with other tests
     }
 
@@ -787,8 +776,6 @@ bool DRC_TEST_PROVIDER_SOLDER_MASK::Run()
     if( m_drcEngine->QueryWorstConstraint( SILK_CLEARANCE_CONSTRAINT, worstClearanceConstraint ) )
         m_largestClearance = std::max( m_largestClearance, worstClearanceConstraint.m_Value.Min() );
 
-    reportAux( wxT( "Worst clearance : %d nm" ), m_largestClearance );
-
     if( !reportPhase( _( "Building solder mask..." ) ) )
         return false;   // DRC cancelled
 
@@ -806,8 +793,6 @@ bool DRC_TEST_PROVIDER_SOLDER_MASK::Run()
         return false;   // DRC cancelled
 
     testMaskBridges();
-
-    reportRuleStatistics();
 
     return !m_drcEngine->IsCancelled();
 }

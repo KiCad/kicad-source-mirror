@@ -48,24 +48,13 @@ class DRC_TEST_PROVIDER_DISALLOW : public DRC_TEST_PROVIDER
 {
 public:
     DRC_TEST_PROVIDER_DISALLOW()
-    {
-    }
+    {}
 
-    virtual ~DRC_TEST_PROVIDER_DISALLOW()
-    {
-    }
+    virtual ~DRC_TEST_PROVIDER_DISALLOW() = default;
 
     virtual bool Run() override;
 
-    virtual const wxString GetName() const override
-    {
-        return wxT( "disallow" );
-    };
-
-    virtual const wxString GetDescription() const override
-    {
-        return wxT( "Tests for disallowed items (e.g. keepouts)" );
-    }
+    virtual const wxString GetName() const override { return wxT( "disallow" ); };
 };
 
 
@@ -318,8 +307,6 @@ bool DRC_TEST_PROVIDER_DISALLOW::Run()
 
                 return true;
             } );
-
-    reportRuleStatistics();
 
     return !m_drcEngine->IsCancelled();
 }

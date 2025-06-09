@@ -44,20 +44,11 @@ public:
     DRC_TEST_PROVIDER_TRACK_ANGLE()
     {}
 
-    virtual ~DRC_TEST_PROVIDER_TRACK_ANGLE()
-    {}
+    virtual ~DRC_TEST_PROVIDER_TRACK_ANGLE() = default;
 
     virtual bool Run() override;
 
-    virtual const wxString GetName() const override
-    {
-        return wxT( "angle" );
-    };
-
-    virtual const wxString GetDescription() const override
-    {
-        return wxT( "Tests track angles" );
-    }
+    virtual const wxString GetName() const override { return wxT( "angle" ); };
 };
 
 
@@ -65,13 +56,13 @@ bool DRC_TEST_PROVIDER_TRACK_ANGLE::Run()
 {
     if( m_drcEngine->IsErrorLimitExceeded( DRCE_TRACK_ANGLE ) )
     {
-        reportAux( wxT( "Track angle violations ignored. Tests not run." ) );
+        REPORT_AUX( wxT( "Track angle violations ignored. Tests not run." ) );
         return true;        // continue with other tests
     }
 
     if( !m_drcEngine->HasRulesForConstraintType( TRACK_ANGLE_CONSTRAINT ) )
     {
-        reportAux( wxT( "No track angle constraints found. Tests not run." ) );
+        REPORT_AUX( wxT( "No track angle constraints found. Tests not run." ) );
         return true;        // continue with other tests
     }
 
@@ -224,8 +215,6 @@ bool DRC_TEST_PROVIDER_TRACK_ANGLE::Run()
             status = ret.wait_for( std::chrono::milliseconds( 250 ) );
         }
     }
-
-    reportRuleStatistics();
 
     return !m_drcEngine->IsCancelled();
 }

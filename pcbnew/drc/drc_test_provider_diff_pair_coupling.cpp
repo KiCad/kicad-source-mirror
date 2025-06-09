@@ -23,15 +23,10 @@
 #include <board_design_settings.h>
 #include <pcb_track.h>
 #include <pcb_generator.h>
-
-#include <drc/drc_engine.h>
 #include <drc/drc_item.h>
-#include <drc/drc_rule.h>
 #include <drc/drc_test_provider.h>
 #include <drc/drc_rtree.h>
-
 #include <geometry/shape_segment.h>
-
 #include <connectivity/connectivity_data.h>
 #include <connectivity/from_to_cache.h>
 
@@ -43,10 +38,6 @@
     - DRCE_DIFF_PAIR_GAP_OUT_OF_RANGE
     - DRCE_DIFF_PAIR_UNCOUPLED_LENGTH_TOO_LONG
     - DRCE_TOO_MANY_VIAS
-    Todo:
-    - arc support.
-    - improve recognition of coupled segments (now anything that's parallel is considered
-      coupled, causing DRC errors on meanders)
 */
 
 namespace test {
@@ -56,24 +47,13 @@ class DRC_TEST_PROVIDER_DIFF_PAIR_COUPLING : public DRC_TEST_PROVIDER
 public:
     DRC_TEST_PROVIDER_DIFF_PAIR_COUPLING () :
         m_board( nullptr )
-    {
-    }
+    {}
 
-    virtual ~DRC_TEST_PROVIDER_DIFF_PAIR_COUPLING()
-    {
-    }
+    virtual ~DRC_TEST_PROVIDER_DIFF_PAIR_COUPLING() = default;
 
     virtual bool Run() override;
 
-    virtual const wxString GetName() const override
-    {
-        return wxT( "diff_pair_coupling" );
-    };
-
-    virtual const wxString GetDescription() const override
-    {
-        return wxT( "Tests differential pair coupling" );
-    }
+    virtual const wxString GetName() const override { return wxT( "diff_pair_coupling" ); };
 
 private:
     BOARD* m_board;
@@ -493,7 +473,7 @@ bool test::DRC_TEST_PROVIDER_DIFF_PAIR_COUPLING::Run()
 
                 if( refNet && DRC_ENGINE::IsNetADiffPair( m_board, refNet, key.netP, key.netN ) )
                 {
-                    drc_dbg( 10, wxT( "eval dp %p\n" ), item );
+                    // drc_dbg( 10, wxT( "eval dp %p\n" ), item );
 
                     for( DRC_CONSTRAINT_T constraintType : { DIFF_PAIR_GAP_CONSTRAINT,
                                                              MAX_UNCOUPLED_CONSTRAINT } )
@@ -505,7 +485,7 @@ bool test::DRC_TEST_PROVIDER_DIFF_PAIR_COUPLING::Run()
                         if( constraint.IsNull() || constraint.GetSeverity() == RPT_SEVERITY_IGNORE )
                             continue;
 
-                        drc_dbg( 10, wxT( "cns %d item %p\n" ), (int) constraintType, item );
+                        // drc_dbg( 10, wxT( "cns %d item %p\n" ), (int) constraintType, item );
 
                         DRC_RULE* parentRule = constraint.GetParentRule();
                         wxString ruleName = parentRule ? parentRule->m_Name : constraint.GetName();
@@ -543,9 +523,9 @@ bool test::DRC_TEST_PROVIDER_DIFF_PAIR_COUPLING::Run()
     forEachGeometryItem( { PCB_TRACE_T, PCB_VIA_T, PCB_ARC_T }, LSET::AllCuMask(),
                          evaluateDpConstraints );
 
-    drc_dbg( 10, wxT( "dp rule matches %d\n" ), (int) dpRuleMatches.size() );
+    // drc_dbg( 10, wxT( "dp rule matches %d\n" ), (int) dpRuleMatches.size() );
 
-    reportAux( wxT( "DPs evaluated:" ) );
+    REPORT_AUX( wxT( "DPs evaluated:" ) );
 
     for( auto& [ key, itemSet ] : dpRuleMatches )
     {
@@ -558,8 +538,8 @@ bool test::DRC_TEST_PROVIDER_DIFF_PAIR_COUPLING::Run()
         wxString nameP = niP->GetNetname();
         wxString nameN = niN->GetNetname();
 
-        reportAux( wxString::Format( wxT( "Rule '%s', DP: (+) %s - (-) %s" ),
-                                     key.gapRuleName, nameP, nameN ) );
+        REPORT_AUX( wxString::Format( wxT( "Rule '%s', DP: (+) %s - (-) %s" ),
+                                      key.gapRuleName, nameP, nameN ) );
 
         extractDiffPairCoupledItems( itemSet );
 
@@ -567,7 +547,7 @@ bool test::DRC_TEST_PROVIDER_DIFF_PAIR_COUPLING::Run()
         itemSet.totalLengthN = 0;
         itemSet.totalLengthP = 0;
 
-        drc_dbg(10, wxT( "       coupled prims : %d\n" ), (int) itemSet.coupled.size() );
+        // drc_dbg( 10, wxT( "       coupled prims : %d\n" ), (int) itemSet.coupled.size() );
 
         std::set<BOARD_CONNECTED_ITEM*> allItems;
 
@@ -607,10 +587,10 @@ bool test::DRC_TEST_PROVIDER_DIFF_PAIR_COUPLING::Run()
                 overlay->Line( dp.coupledN );
             }
 
-            drc_dbg( 10, wxT( "               len %d gap %ld l %d\n" ),
-                     length,
-                     (long int) dp.computedGap,
-                     (int) dp.parentP->GetLayer() );
+            // drc_dbg( 10, wxT( "               len %d gap %ld l %d\n" ),
+            //          length,
+            //          (long int) dp.computedGap,
+            //          (int) dp.parentP->GetLayer() );
 
             if( key.gapConstraint )
             {
@@ -634,9 +614,10 @@ bool test::DRC_TEST_PROVIDER_DIFF_PAIR_COUPLING::Run()
         }
 
         int totalLen = std::max( itemSet.totalLengthN, itemSet.totalLengthP );
-        reportAux( wxString::Format( wxT( "   - coupled length: %s, total length: %s" ),
-                                     MessageTextFromValue( itemSet.totalCoupled ),
-                                     MessageTextFromValue( totalLen ) ) );
+
+        REPORT_AUX( wxString::Format( wxT( "   - coupled length: %s, total length: %s" ),
+                                      MessageTextFromValue( itemSet.totalCoupled ),
+                                      MessageTextFromValue( totalLen ) ) );
 
         int  totalUncoupled = totalLen - itemSet.totalCoupled;
         bool uncoupledViolation = false;
@@ -711,25 +692,26 @@ bool test::DRC_TEST_PROVIDER_DIFF_PAIR_COUPLING::Run()
                     if( !dp.couplingFailMin && !dp.couplingFailMax )
                         continue;
 
-                    auto     drcItem = DRC_ITEM::Create( DRCE_DIFF_PAIR_GAP_OUT_OF_RANGE );
-                    wxString msg;
+                    std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_DIFF_PAIR_GAP_OUT_OF_RANGE );
+                    wxString                  msg;
 
                     if( dp.couplingFailMin )
                     {
                         msg = formatMsg( _( "(%s minimum gap %s; actual %s)" ),
                                          key.gapRuleName,
                                          val.Min(),
-                                         dp.computedGap );
+                                         (double) dp.computedGap );
                     }
                     else if( dp.couplingFailMax )
                     {
                         msg = formatMsg( _( "(%s maximum gap %s; actual %s)" ),
                                          key.gapRuleName,
                                          val.Max(),
-                                         dp.computedGap );
+                                         (double) dp.computedGap );
                     }
 
                     drcItem->SetErrorMessage( drcItem->GetErrorText() + wxS( " " ) + msg );
+                    drcItem->SetViolatingRule( key.gapRule );
 
                     BOARD_CONNECTED_ITEM* item = nullptr;
 
@@ -745,15 +727,12 @@ bool test::DRC_TEST_PROVIDER_DIFF_PAIR_COUPLING::Run()
                         drcItem->AddItem( dp.parentN );
                     }
 
-                    drcItem->SetViolatingRule( key.gapRule );
-
-                    reportViolation( drcItem, item->GetFocusPosition(), item->GetLayer() );
+                    if( item )
+                        reportViolation( drcItem, item->GetFocusPosition(), item->GetLayer() );
                 }
             }
         }
     }
-
-    reportRuleStatistics();
 
     return true;
 }

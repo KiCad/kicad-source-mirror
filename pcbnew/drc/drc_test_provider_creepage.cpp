@@ -50,15 +50,15 @@
 class DRC_TEST_PROVIDER_CREEPAGE : public DRC_TEST_PROVIDER_CLEARANCE_BASE
 {
 public:
-    DRC_TEST_PROVIDER_CREEPAGE() : DRC_TEST_PROVIDER_CLEARANCE_BASE() {}
+    DRC_TEST_PROVIDER_CREEPAGE() :
+            DRC_TEST_PROVIDER_CLEARANCE_BASE()
+    {}
 
-    virtual ~DRC_TEST_PROVIDER_CREEPAGE() {}
+    virtual ~DRC_TEST_PROVIDER_CREEPAGE() = default;
 
     virtual bool Run() override;
 
     virtual const wxString GetName() const override { return wxT( "creepage" ); };
-
-    virtual const wxString GetDescription() const override { return wxT( "Tests creepage" ); }
 
     double GetMaxConstraint( const std::vector<int>& aNetCodes );
 
@@ -98,9 +98,7 @@ std::shared_ptr<GRAPH_NODE> FindInGraphNodes( std::shared_ptr<GRAPH_NODE>       
     for( std::shared_ptr<GRAPH_NODE> gn : aGraph )
     {
         if( aNode->m_pos == gn->m_pos )
-        {
             return gn;
-        }
     }
     return nullptr;
 }
@@ -215,22 +213,19 @@ int DRC_TEST_PROVIDER_CREEPAGE::testCreepage( CREEPAGE_GRAPH& aGraph, int aNetCo
         VECTOR2I               endPoint = gc2->m_path.a2;
         std::vector<PCB_SHAPE> path;
 
-        for( std::shared_ptr<GRAPH_CONNECTION> gc : shortestPath )
+        for( const std::shared_ptr<GRAPH_CONNECTION>& gc : shortestPath )
         {
             if( !gc )
                 continue;
 
             std::vector<PCB_SHAPE> shapes = gc->GetShapes();
 
-            for( PCB_SHAPE sh : shapes )
-            {
+            for( const PCB_SHAPE& sh : shapes )
                 path.push_back( sh );
-            }
         }
 
         DRC_CUSTOM_MARKER_HANDLER handler = GetGraphicsHandler( path, startPoint, endPoint, distance );
         reportViolation( drce, gc1->m_path.a2, aLayer, &handler );
-
     }
 
     return 1;
@@ -243,7 +238,6 @@ double DRC_TEST_PROVIDER_CREEPAGE::GetMaxConstraint( const std::vector<int>& aNe
 
     PCB_TRACK bci1( m_board );
     PCB_TRACK bci2( m_board );
-
 
     alg::for_all_pairs( aNetCodes.begin(), aNetCodes.end(),
                         [&]( int aNet1, int aNet2 )
@@ -273,9 +267,7 @@ void DRC_TEST_PROVIDER_CREEPAGE::CollectNetCodes( std::vector<int>& aVector )
     NETCODES_MAP nets = m_board->GetNetInfo().NetsByNetcode();
 
     for( auto it = nets.begin(); it != nets.end(); it++ )
-    {
         aVector.push_back( it->first );
-    }
 }
 
 void DRC_TEST_PROVIDER_CREEPAGE::CollectBoardEdges( std::vector<BOARD_ITEM*>& aVector )
@@ -289,9 +281,7 @@ void DRC_TEST_PROVIDER_CREEPAGE::CollectBoardEdges( std::vector<BOARD_ITEM*>& aV
             continue;
 
         if( drawing->IsOnLayer( Edge_Cuts ) )
-        {
             aVector.push_back( drawing );
-        }
     }
 
     for( FOOTPRINT* fp : m_board->Footprints() )
@@ -305,9 +295,7 @@ void DRC_TEST_PROVIDER_CREEPAGE::CollectBoardEdges( std::vector<BOARD_ITEM*>& aV
                 continue;
 
             if( drawing->IsOnLayer( Edge_Cuts ) )
-            {
                 aVector.push_back( drawing );
-            }
         }
     }
 
@@ -315,7 +303,6 @@ void DRC_TEST_PROVIDER_CREEPAGE::CollectBoardEdges( std::vector<BOARD_ITEM*>& aV
     {
         if( !p )
             continue;
-
 
         if( p->GetAttribute() != PAD_ATTRIB::NPTH )
             continue;
@@ -346,17 +333,12 @@ int DRC_TEST_PROVIDER_CREEPAGE::testCreepage()
         return -1;
 
     const DRAWINGS drawings = m_board->Drawings();
-    CREEPAGE_GRAPH  graph( *m_board );
-
+    CREEPAGE_GRAPH graph( *m_board );
 
     if( ADVANCED_CFG::GetCfg().m_EnableCreepageSlot )
-    {
         graph.m_minGrooveWidth = m_board->GetDesignSettings().m_MinGrooveWidth;
-    }
     else
-    {
         graph.m_minGrooveWidth = 0;
-    }
 
     graph.m_boardOutline = &outline;
 
@@ -367,14 +349,12 @@ int DRC_TEST_PROVIDER_CREEPAGE::testCreepage()
 
     graph.GeneratePaths( maxConstraint, Edge_Cuts, false );
 
-
     int  beNodeSize = graph.m_nodes.size();
     int  beConnectionsSize = graph.m_connections.size();
     bool prevTestChangedGraph = false;
 
     size_t current = 0;
-    size_t total =
-            ( netcodes.size() * ( netcodes.size() - 1 ) ) / 2 * m_board->GetCopperLayerCount();
+    size_t total = ( netcodes.size() * ( netcodes.size() - 1 ) ) / 2 * m_board->GetCopperLayerCount();
     LSET layers = m_board->GetLayerSet();
 
     alg::for_all_pairs( netcodes.begin(), netcodes.end(),
@@ -383,11 +363,7 @@ int DRC_TEST_PROVIDER_CREEPAGE::testCreepage()
                             if( aNet1 == aNet2 )
                                 return;
 
-
-
-                            for( auto it = layers.copper_layers_begin();
-                                      it != layers.copper_layers_end();
-                                      ++it )
+                            for( auto it = layers.copper_layers_begin(); it != layers.copper_layers_end(); ++it )
                             {
                                 PCB_LAYER_ID layer = *it;
 

@@ -47,21 +47,11 @@ public:
         m_isRuleDriven = false;
     }
 
-    virtual ~DRC_TEST_PROVIDER_FOOTPRINT_CHECKS()
-    {
-    }
+    virtual ~DRC_TEST_PROVIDER_FOOTPRINT_CHECKS() = default;
 
     virtual bool Run() override;
 
-    virtual const wxString GetName() const override
-    {
-        return wxT( "footprint checks" );
-    };
-
-    virtual const wxString GetDescription() const override
-    {
-        return wxT( "Check for common footprint pad and component type errors" );
-    }
+    virtual const wxString GetName() const override { return wxT( "footprint checks" ); };
 };
 
 

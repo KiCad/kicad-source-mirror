@@ -69,17 +69,12 @@ void DRC_TEST_PROVIDER::Init()
 
 
 const wxString DRC_TEST_PROVIDER::GetName() const { return wxT( "<no name test>" ); }
-const wxString DRC_TEST_PROVIDER::GetDescription() const { return wxEmptyString; }
 
 
 void DRC_TEST_PROVIDER::reportViolation( std::shared_ptr<DRC_ITEM>& item,
                                          const VECTOR2I& aMarkerPos, int aMarkerLayer,
                                          DRC_CUSTOM_MARKER_HANDLER* aCustomHandler )
 {
-    std::lock_guard<std::mutex> lock( m_statsMutex );
-    if( item->GetViolatingRule() )
-        accountCheck( item->GetViolatingRule() );
-
     item->SetViolatingTest( this );
     m_drcEngine->ReportViolation( item, aMarkerPos, aMarkerLayer, aCustomHandler );
 }
@@ -99,55 +94,8 @@ bool DRC_TEST_PROVIDER::reportProgress( size_t aCount, size_t aSize, size_t aDel
 
 bool DRC_TEST_PROVIDER::reportPhase( const wxString& aMessage )
 {
-    reportAux( aMessage );
+    REPORT_AUX( aMessage );
     return m_drcEngine->ReportPhase( aMessage );
-}
-
-
-void DRC_TEST_PROVIDER::reportAux( const wxChar* fmt, ... )
-{
-    va_list vargs;
-    va_start( vargs, fmt );
-    wxString str;
-    str.PrintfV( fmt, vargs );
-    va_end( vargs );
-    m_drcEngine->ReportAux( str );
-}
-
-
-void DRC_TEST_PROVIDER::accountCheck( const DRC_RULE* ruleToTest )
-{
-    auto it = m_stats.find( ruleToTest );
-
-    if( it == m_stats.end() )
-        m_stats[ ruleToTest ] = 1;
-    else
-        m_stats[ ruleToTest ] += 1;
-}
-
-
-void DRC_TEST_PROVIDER::accountCheck( const DRC_CONSTRAINT& constraintToTest )
-{
-    accountCheck( constraintToTest.GetParentRule() );
-}
-
-
-void DRC_TEST_PROVIDER::reportRuleStatistics()
-{
-    if( !m_isRuleDriven )
-        return;
-
-    m_drcEngine->ReportAux( wxT( "Rule hit statistics: " ) );
-
-    for( const std::pair<const DRC_RULE* const, int>& stat : m_stats )
-    {
-        if( stat.first )
-        {
-            m_drcEngine->ReportAux( wxString::Format( wxT( " - rule '%s': %d hits " ),
-                                                      stat.first->m_Name,
-                                                      stat.second ) );
-        }
-    }
 }
 
 

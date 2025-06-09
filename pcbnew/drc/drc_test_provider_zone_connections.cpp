@@ -32,7 +32,6 @@
 
 #include <geometry/shape_line_chain.h>
 #include <geometry/shape_poly_set.h>
-#include <drc/drc_rule.h>
 #include <drc/drc_item.h>
 #include <drc/drc_test_provider.h>
 
@@ -49,24 +48,13 @@ class DRC_TEST_PROVIDER_ZONE_CONNECTIONS : public DRC_TEST_PROVIDER
 {
 public:
     DRC_TEST_PROVIDER_ZONE_CONNECTIONS()
-    {
-    }
+    {}
 
-    virtual ~DRC_TEST_PROVIDER_ZONE_CONNECTIONS()
-    {
-    }
+    virtual ~DRC_TEST_PROVIDER_ZONE_CONNECTIONS() = default;
 
     virtual bool Run() override;
 
-    virtual const wxString GetName() const override
-    {
-        return wxT( "zone connections" );
-    };
-
-    virtual const wxString GetDescription() const override
-    {
-        return wxT( "Checks thermal reliefs for a sufficient number of connecting spokes" );
-    }
+    virtual const wxString GetName() const override { return wxT( "zone connections" ); };
 
 private:
     void testZoneLayer( ZONE* aZone, PCB_LAYER_ID aLayer );
@@ -129,15 +117,13 @@ void DRC_TEST_PROVIDER_ZONE_CONNECTIONS::testZoneLayer( ZONE* aZone, PCB_LAYER_I
             if( conn != ZONE_CONNECTION::THERMAL )
                 continue;
 
-            constraint = bds.m_DRCEngine->EvalRules( MIN_RESOLVED_SPOKES_CONSTRAINT, pad, aZone,
-                                                     aLayer );
+            constraint = bds.m_DRCEngine->EvalRules( MIN_RESOLVED_SPOKES_CONSTRAINT, pad, aZone, aLayer );
             int minCount = constraint.m_Value.Min();
 
             if( constraint.GetSeverity() == RPT_SEVERITY_IGNORE || minCount <= 0 )
                 continue;
 
-            constraint = bds.m_DRCEngine->EvalRules( THERMAL_RELIEF_GAP_CONSTRAINT, pad, aZone,
-                                                     aLayer );
+            constraint = bds.m_DRCEngine->EvalRules( THERMAL_RELIEF_GAP_CONSTRAINT, pad, aZone, aLayer );
             int mid_gap = constraint.m_Value.Min() / 2;
 
             SHAPE_POLY_SET padPoly;
@@ -157,7 +143,7 @@ void DRC_TEST_PROVIDER_ZONE_CONNECTIONS::testZoneLayer( ZONE* aZone, PCB_LAYER_I
 
                 std::vector<SHAPE_LINE_CHAIN::INTERSECTION> unique_intersections;
 
-                for( const auto& i : intersections )
+                for( const SHAPE_LINE_CHAIN::INTERSECTION& i : intersections )
                 {
                     const auto found = std::find_if(
                             std::begin( unique_intersections ), std::end( unique_intersections ),
@@ -178,8 +164,7 @@ void DRC_TEST_PROVIDER_ZONE_CONNECTIONS::testZoneLayer( ZONE* aZone, PCB_LAYER_I
                     if( alg::contains( isolatedIslands.m_SingleConnectionOutlines, jj ) )
                     {
                         ignoredSpokes += (int) unique_intersections.size() / 2;
-                        ignoredSpokePos =
-                                ( unique_intersections[0].p + unique_intersections[1].p ) / 2;
+                        ignoredSpokePos = ( unique_intersections[0].p + unique_intersections[1].p ) / 2;
                     }
                     else
                     {
@@ -198,9 +183,7 @@ void DRC_TEST_PROVIDER_ZONE_CONNECTIONS::testZoneLayer( ZONE* aZone, PCB_LAYER_I
                 for( const std::shared_ptr<PCB_SHAPE>& primitive : pad->GetPrimitives( aLayer ) )
                 {
                     if( primitive->IsProxyItem() && primitive->GetShape() == SHAPE_T::SEGMENT )
-                    {
                         customSpokes++;
-                    }
                 }
             }
 
@@ -213,17 +196,18 @@ void DRC_TEST_PROVIDER_ZONE_CONNECTIONS::testZoneLayer( ZONE* aZone, PCB_LAYER_I
 
                     if( ignoredSpokes )
                     {
-                        msg = wxString::Format(
-                                _( "(layer %s; %d spokes connected to isolated island)" ),
-                                board->GetLayerName( aLayer ), ignoredSpokes );
+                        msg = wxString::Format( _( "(layer %s; %d spokes connected to isolated island)" ),
+                                                board->GetLayerName( aLayer ),
+                                                ignoredSpokes );
                         pos = ignoredSpokePos;
                     }
                     else
                     {
-                        msg = wxString::Format(
-                                _( "(layer %s; %s custom spoke count %d; actual %d)" ),
-                                board->GetLayerName( aLayer ), constraint.GetName(), customSpokes,
-                                spokes );
+                        msg = wxString::Format( _( "(layer %s; %s custom spoke count %d; actual %d)" ),
+                                                board->GetLayerName( aLayer ),
+                                                constraint.GetName(),
+                                                customSpokes,
+                                                spokes );
                         pos = pad->GetPosition();
                     }
 
@@ -233,6 +217,7 @@ void DRC_TEST_PROVIDER_ZONE_CONNECTIONS::testZoneLayer( ZONE* aZone, PCB_LAYER_I
 
                     reportViolation( drce, pos, aLayer );
                 }
+
                 continue;
             }
 

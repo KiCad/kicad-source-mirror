@@ -24,7 +24,6 @@
 #include <geometry/shape_poly_set.h>
 #include <drc/drc_engine.h>
 #include <drc/drc_item.h>
-#include <drc/drc_rule.h>
 #include <pad.h>
 #include <geometry/shape_segment.h>
 #include <drc/drc_test_provider_clearance_base.h>
@@ -44,27 +43,17 @@ class DRC_TEST_PROVIDER_COURTYARD_CLEARANCE : public DRC_TEST_PROVIDER_CLEARANCE
 {
 public:
     DRC_TEST_PROVIDER_COURTYARD_CLEARANCE () :
-        DRC_TEST_PROVIDER_CLEARANCE_BASE(),
-        m_largestCourtyardClearance( 0 )
+            DRC_TEST_PROVIDER_CLEARANCE_BASE(),
+            m_largestCourtyardClearance( 0 )
     {
         m_isRuleDriven = false;
     }
 
-    virtual ~DRC_TEST_PROVIDER_COURTYARD_CLEARANCE ()
-    {
-    }
+    virtual ~DRC_TEST_PROVIDER_COURTYARD_CLEARANCE () = default;
 
     virtual bool Run() override;
 
-    virtual const wxString GetName() const override
-    {
-        return wxT( "courtyard_clearance" );
-    }
-
-    virtual const wxString GetDescription() const override
-    {
-        return wxT( "Tests footprints' courtyard clearance" );
-    }
+    virtual const wxString GetName() const override { return wxT( "courtyard_clearance" ); }
 
 private:
     bool testFootprintCourtyardDefinitions();
@@ -92,7 +81,7 @@ bool DRC_TEST_PROVIDER_COURTYARD_CLEARANCE::testFootprintCourtyardDefinitions()
     }
     else
     {
-        reportAux( wxT( "All courtyard violations ignored. Tests not run." ) );
+        REPORT_AUX( wxT( "All courtyard violations ignored. Tests not run." ) );
         return true;        // continue with other tests
     }
 
@@ -390,8 +379,6 @@ bool DRC_TEST_PROVIDER_COURTYARD_CLEARANCE::Run()
 
     if( m_drcEngine->QueryWorstConstraint( COURTYARD_CLEARANCE_CONSTRAINT, constraint ) )
         m_largestCourtyardClearance = constraint.GetValue().Min();
-
-    reportAux( wxT( "Worst courtyard clearance : %d nm" ), m_largestCourtyardClearance );
 
     if( !testFootprintCourtyardDefinitions() )
         return false;

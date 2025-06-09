@@ -64,24 +64,13 @@ public:
     DRC_TEST_PROVIDER_COPPER_CLEARANCE () :
             DRC_TEST_PROVIDER_CLEARANCE_BASE(),
             m_drcEpsilon( 0 )
-    {
-    }
+    {}
 
-    virtual ~DRC_TEST_PROVIDER_COPPER_CLEARANCE()
-    {
-    }
+    virtual ~DRC_TEST_PROVIDER_COPPER_CLEARANCE() = default;
 
     virtual bool Run() override;
 
-    virtual const wxString GetName() const override
-    {
-        return wxT( "clearance" );
-    };
-
-    virtual const wxString GetDescription() const override
-    {
-        return wxT( "Tests copper item clearance" );
-    }
+    virtual const wxString GetName() const override { return wxT( "clearance" ); };
 
 private:
     /**
@@ -136,7 +125,7 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::Run()
 
     if( m_board->m_DRCMaxClearance <= 0 )
     {
-        reportAux( wxT( "No Clearance constraints found. Tests not run." ) );
+        REPORT_AUX( wxT( "No Clearance constraints found. Tests not run." ) );
         return true;   // continue with other tests
     }
 
@@ -195,8 +184,6 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::Run()
 
         testZonesToZones();
     }
-
-    reportRuleStatistics();
 
     return !m_drcEngine->IsCancelled();
 }
@@ -620,7 +607,7 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testTrackClearances()
     std::atomic<size_t>                                   done( 0 );
     size_t                                                count = m_board->Tracks().size();
 
-    reportAux( wxT( "Testing %d tracks & vias..." ), count );
+    REPORT_AUX( wxString::Format( wxT( "Testing %d tracks & vias..." ), count ) );
 
     LSET boardCopperLayers = LSET::AllCuMask( m_board->GetCopperLayerCount() );
 
@@ -985,7 +972,7 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testPadClearances( )
     for( FOOTPRINT* footprint : m_board->Footprints() )
         count += footprint->Pads().size();
 
-    reportAux( wxT( "Testing %d pads..." ), count );
+    REPORT_AUX( wxString::Format( wxT( "Testing %d pads..." ), count ) );
 
     std::unordered_map<PTR_PTR_CACHE_KEY, int> checkedPairs;
 
@@ -1069,7 +1056,7 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testGraphicClearances( )
     for( FOOTPRINT* footprint : m_board->Footprints() )
         count += footprint->GraphicalItems().size();
 
-    reportAux( wxT( "Testing %d graphics..." ), count );
+    REPORT_AUX( wxString::Format( wxT( "Testing %d graphics..." ), count ) );
 
     auto isKnockoutText =
             []( BOARD_ITEM* item )

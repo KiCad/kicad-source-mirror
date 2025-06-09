@@ -24,8 +24,7 @@
  */
 
 
-#ifndef DRC_CACHE_GENERATOR__H
-#define DRC_CACHE_GENERATOR__H
+#pragma once
 
 #include <drc/drc_test_provider_clearance_base.h>
 
@@ -35,16 +34,9 @@ class DRC_CACHE_GENERATOR : public DRC_TEST_PROVIDER_CLEARANCE_BASE
 public:
     DRC_CACHE_GENERATOR() :
             DRC_TEST_PROVIDER_CLEARANCE_BASE()
-    {
-    }
+    {}
 
-    virtual ~DRC_CACHE_GENERATOR()
-    {
-    }
+    virtual ~DRC_CACHE_GENERATOR() = default;
 
     virtual bool Run() override;
 };
-
-
-
-#endif // DRC_CACHE_GENERATOR__H

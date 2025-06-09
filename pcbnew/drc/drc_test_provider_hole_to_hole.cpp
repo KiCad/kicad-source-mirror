@@ -48,24 +48,13 @@ public:
             DRC_TEST_PROVIDER_CLEARANCE_BASE(),
             m_board( nullptr ),
             m_largestHoleToHoleClearance( 0 )
-    {
-    }
+    {}
 
-    virtual ~DRC_TEST_PROVIDER_HOLE_TO_HOLE()
-    {
-    }
+    virtual ~DRC_TEST_PROVIDER_HOLE_TO_HOLE() = default;
 
     virtual bool Run() override;
 
-    virtual const wxString GetName() const override
-    {
-        return wxT( "hole_to_hole_clearance" );
-    };
-
-    virtual const wxString GetDescription() const override
-    {
-        return wxT( "Tests hole to hole spacing" );
-    }
+    virtual const wxString GetName() const override { return wxT( "hole_to_hole_clearance" ); };
 
 private:
     bool testHoleAgainstHole( BOARD_ITEM* aItem, SHAPE_CIRCLE* aHole, BOARD_ITEM* aOther );
@@ -98,7 +87,7 @@ bool DRC_TEST_PROVIDER_HOLE_TO_HOLE::Run()
     if( m_drcEngine->IsErrorLimitExceeded( DRCE_DRILLED_HOLES_TOO_CLOSE )
             && m_drcEngine->IsErrorLimitExceeded( DRCE_DRILLED_HOLES_COLOCATED ) )
     {
-        reportAux( wxT( "Hole to hole violations ignored. Tests not run." ) );
+        REPORT_AUX( wxT( "Hole to hole violations ignored. Tests not run." ) );
         return true;        // continue with other tests
     }
 
@@ -109,11 +98,10 @@ bool DRC_TEST_PROVIDER_HOLE_TO_HOLE::Run()
     if( m_drcEngine->QueryWorstConstraint( HOLE_TO_HOLE_CONSTRAINT, worstClearanceConstraint ) )
     {
         m_largestHoleToHoleClearance = worstClearanceConstraint.GetValue().Min();
-        reportAux( wxT( "Worst hole to hole : %d nm" ), m_largestHoleToHoleClearance );
     }
     else
     {
-        reportAux( wxT( "No hole to hole constraints found. Skipping check." ) );
+        REPORT_AUX( wxT( "No hole to hole constraints found. Skipping check." ) );
         return true;        // continue with other tests
     }
 
@@ -257,8 +245,6 @@ bool DRC_TEST_PROVIDER_HOLE_TO_HOLE::Run()
         if( m_drcEngine->IsCancelled() )
             return false;
     }
-
-    reportRuleStatistics();
 
     return !m_drcEngine->IsCancelled();
 }
