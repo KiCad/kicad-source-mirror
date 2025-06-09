@@ -582,21 +582,21 @@ void SCH_SYMBOL::RemoveInstance( const SCH_SHEET_PATH& aInstancePath )
 
 void SCH_SYMBOL::RemoveInstance( const KIID_PATH& aInstancePath )
 {
-    // Search for an existing path and remove it if found (should not occur)
-    for( unsigned ii = 0; ii < m_instanceReferences.size(); ii++ )
+    // Search for an existing path and remove it if found
+    // (search from back to avoid invalidating iterator on remove)
+    for( int ii = m_instanceReferences.size() - 1; ii >= 0; --ii )
     {
         if( m_instanceReferences[ii].m_Path == aInstancePath )
         {
             wxLogTrace( traceSchSheetPaths, wxS( "Removing symbol instance:\n"
-                                                 "  sheet path %s\n"
-                                                 "  reference %s, unit %d from symbol %s." ),
+                                                 "    sheet path %s\n"
+                                                 "    reference %s, unit %d from symbol %s." ),
                         aInstancePath.AsString(),
                         m_instanceReferences[ii].m_Reference,
                         m_instanceReferences[ii].m_Unit,
                         m_Uuid.AsString() );
 
             m_instanceReferences.erase( m_instanceReferences.begin() + ii );
-            ii--;
         }
     }
 }
@@ -604,80 +604,18 @@ void SCH_SYMBOL::RemoveInstance( const KIID_PATH& aInstancePath )
 
 void SCH_SYMBOL::AddHierarchicalReference( const KIID_PATH& aPath, const wxString& aRef, int aUnit )
 {
-    // Search for an existing path and remove it if found (should not occur)
-    // (search from back to avoid invalidating iterator on remove)
-    for( unsigned ii = m_instanceReferences.size() - 1; ii >= 0; --ii )
-    {
-        if( m_instanceReferences[ii].m_Path == aPath )
-        {
-            wxLogTrace( traceSchSheetPaths, wxS( "Removing symbol instance:\n"
-                                                 "    sheet path %s\n"
-                                                 "    reference %s, unit %d from symbol %s." ),
-                        aPath.AsString(),
-                        m_instanceReferences[ii].m_Reference,
-                        m_instanceReferences[ii].m_Unit,
-                        m_Uuid.AsString() );
-
-            m_instanceReferences.erase( m_instanceReferences.begin() + ii );
-        }
-    }
-
     SCH_SYMBOL_INSTANCE instance;
     instance.m_Path = aPath;
     instance.m_Reference = aRef;
     instance.m_Unit = aUnit;
 
-    wxLogTrace( traceSchSheetPaths, wxS( "Adding symbol '%s' instance:\n"
-                                         "    sheet path '%s'\n"
-                                         "    reference '%s'\n"
-                                         "    unit %d\n" ),
-                m_Uuid.AsString(),
-                aPath.AsString(),
-                aRef,
-                aUnit );
-
-    m_instanceReferences.push_back( instance );
-
-    // This should set the default instance to the first saved instance data for each symbol
-    // when importing sheets.
-    if( m_instanceReferences.size() == 1 )
-    {
-        m_fields[ REFERENCE_FIELD ].SetText( aRef );
-        m_unit = aUnit;
-    }
+    AddHierarchicalReference( instance );
 }
 
 
 void SCH_SYMBOL::AddHierarchicalReference( const SCH_SYMBOL_INSTANCE& aInstance )
 {
-    KIID_PATH searchPath( aInstance.m_Path );
-
-    std::vector<SCH_SYMBOL_INSTANCE>::iterator resultIt;
-
-    do
-    {
-        resultIt = std::find_if( m_instanceReferences.begin(), m_instanceReferences.end(),
-                                 [searchPath]( const auto& it )
-                                 {
-                                     return it.m_Path == searchPath;
-                                 } );
-
-        if( resultIt != m_instanceReferences.end() )
-        {
-            wxLogTrace( traceSchSheetPaths, wxS( "Removing symbol instance:\n"
-                                                 "  sheet path %s\n"
-                                                 "  reference %s, unit %d from symbol %s." ),
-                        aInstance.m_Path.AsString(),
-                        resultIt->m_Reference,
-                        resultIt->m_Unit,
-                        m_Uuid.AsString() );
-
-            // Instance data should be unique by path.  Double check just in case there was
-            // some buggy code in the past.
-            resultIt = m_instanceReferences.erase( resultIt );
-        }
-    }
-    while( resultIt != m_instanceReferences.end() );
+    RemoveInstance( aInstance.m_Path );
 
     SCH_SYMBOL_INSTANCE instance = aInstance;
 
