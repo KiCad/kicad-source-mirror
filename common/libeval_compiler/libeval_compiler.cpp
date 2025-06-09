@@ -980,7 +980,7 @@ bool COMPILER::generateUCode( UCODE* aCode, CONTEXT* aPreflightContext )
                     for( TREE_NODE* pnode : params )
                         stack.push_back( pnode );
 
-                    node->leaf[1]->SetUop( TR_OP_METHOD_CALL, func, std::move( vref ) );
+                    node->leaf[1]->SetUop( TR_OP_METHOD_CALL, std::move( func ), std::move( vref ) );
                     node->isTerminal = false;
                     break;
                 }

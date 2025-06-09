@@ -310,31 +310,31 @@ void PROPERTY_MANAGER::CLASS_DESC::rebuild()
 
     auto collectGroups =
             [&]( std::set<wxString>& aSet, std::vector<wxString>& aResult )
-    {
-        auto collectGroupsRecursive =
-                []( auto& aSelf, std::set<wxString>& aSetR, std::vector<wxString>& aResultR,
-                    const CLASS_DESC& aClassR ) -> void
-        {
-            for( const wxString& group : aClassR.m_groupDisplayOrder )
             {
-                if( !aSetR.count( group ) )
-                {
-                    aSetR.insert( group );
-                    aResultR.emplace_back( group );
-                }
-            }
+                auto collectGroupsRecursive =
+                        []( auto& aSelf, std::set<wxString>& aSetR, std::vector<wxString>& aResultR,
+                            const CLASS_DESC& aClassR ) -> void
+                        {
+                            for( const wxString& group : aClassR.m_groupDisplayOrder )
+                            {
+                                if( !aSetR.count( group ) )
+                                {
+                                    aSetR.insert( group );
+                                    aResultR.emplace_back( group );
+                                }
+                            }
 
-            for( const CLASS_DESC& base : aClassR.m_bases )
-                aSelf( aSelf, aSetR, aResultR, base );
-        };
+                            for( const CLASS_DESC& base : aClassR.m_bases )
+                                aSelf( aSelf, aSetR, aResultR, base );
+                        };
 
-        collectGroupsRecursive( collectGroupsRecursive, aSet, aResult, *this );
-    };
+                collectGroupsRecursive( collectGroupsRecursive, aSet, aResult, *this );
+            };
 
     // TODO(JE): This currently relies on rebuild() happening after all properties are added
     // separate out own groups vs. all groups to fix
     collectGroups( groups, displayOrder );
-    m_groupDisplayOrder = displayOrder;
+    m_groupDisplayOrder = std::move( displayOrder );
 }
 
 

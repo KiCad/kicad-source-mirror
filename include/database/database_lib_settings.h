@@ -53,8 +53,8 @@ struct KICOMMON_API DATABASE_FIELD_MAPPING
     bool        show_name;   ///< Whether or not to show the field name as well as its value
     bool        inherit_properties; ///< Whether or not to inherit properties from symbol field
 
-    explicit DATABASE_FIELD_MAPPING( std::string aColumn, std::string aName, bool aVisibleOnAdd,
-                                     bool aVisibleInChooser, bool aShowName,
+    explicit DATABASE_FIELD_MAPPING( const std::string& aColumn, const std::string& aName,
+                                     bool aVisibleOnAdd, bool aVisibleInChooser, bool aShowName,
                                      bool aInheritProperties );
 };
 

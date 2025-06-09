@@ -33,7 +33,7 @@
 const int dblibSchemaVersion = 1;
 
 
-DATABASE_FIELD_MAPPING::DATABASE_FIELD_MAPPING( std::string aColumn, std::string aName,
+DATABASE_FIELD_MAPPING::DATABASE_FIELD_MAPPING( const std::string& aColumn, const std::string& aName,
                                                 bool aVisibleOnAdd, bool aVisibleInChooser,
                                                 bool aShowName, bool aInheritProperties ) :
         column( aColumn ),
