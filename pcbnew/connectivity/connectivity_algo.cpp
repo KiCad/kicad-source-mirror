@@ -551,7 +551,7 @@ void CN_CONNECTIVITY_ALGO::Build( BOARD* aBoard, PROGRESS_REPORTER* aReporter )
 }
 
 
-void CN_CONNECTIVITY_ALGO::LocalBuild( std::shared_ptr<CONNECTIVITY_DATA> aGlobalConnectivity,
+void CN_CONNECTIVITY_ALGO::LocalBuild( const std::shared_ptr<CONNECTIVITY_DATA>& aGlobalConnectivity,
                                        const std::vector<BOARD_ITEM*>& aLocalItems )
 {
     m_isLocal = true;

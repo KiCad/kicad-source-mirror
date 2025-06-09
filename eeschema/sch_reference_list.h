@@ -405,12 +405,12 @@ public:
      * @param aStartAtCurrent Use m_numRef for each reference as the start number (overrides
      *        aStartNumber)
      */
-    void AnnotateByOptions( enum ANNOTATE_ORDER_T        aSortOption,
-                            enum ANNOTATE_ALGO_T         aAlgoOption,
-                            int                          aStartNumber,
-                            SCH_MULTI_UNIT_REFERENCE_MAP aLockedUnitMap,
-                            const SCH_REFERENCE_LIST&    aAdditionalRefs,
-                            bool                         aStartAtCurrent );
+    void AnnotateByOptions( enum ANNOTATE_ORDER_T               aSortOption,
+                            enum ANNOTATE_ALGO_T                aAlgoOption,
+                            int                                 aStartNumber,
+                            const SCH_MULTI_UNIT_REFERENCE_MAP& aLockedUnitMap,
+                            const SCH_REFERENCE_LIST&           aAdditionalRefs,
+                            bool                                aStartAtCurrent );
 
     /**
      * Set the reference designators in the list that have not been annotated.
@@ -434,7 +434,7 @@ public:
             aStartNumber)
      */
     void Annotate( bool aUseSheetNum, int aSheetIntervalId, int aStartNumber,
-                   SCH_MULTI_UNIT_REFERENCE_MAP aLockedUnitMap,
+                   const SCH_MULTI_UNIT_REFERENCE_MAP& aLockedUnitMap,
                    const SCH_REFERENCE_LIST& aAdditionalRefs, bool aStartAtCurrent = false );
 
     /**

@@ -45,8 +45,8 @@ class wxCloseEvent;
 class KICOMMON_API BACKGROUND_JOB_REPORTER : public PROGRESS_REPORTER_BASE
 {
 public:
-    BACKGROUND_JOB_REPORTER( BACKGROUND_JOBS_MONITOR*        aMonitor,
-                             std::shared_ptr<BACKGROUND_JOB> aJob );
+    BACKGROUND_JOB_REPORTER( BACKGROUND_JOBS_MONITOR*               aMonitor,
+                             const std::shared_ptr<BACKGROUND_JOB>& aJob );
 
     void SetTitle( const wxString& aTitle ) override
     {

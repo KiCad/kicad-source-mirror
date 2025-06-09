@@ -173,9 +173,10 @@ private:
 
 
 BACKGROUND_JOB_REPORTER::BACKGROUND_JOB_REPORTER( BACKGROUND_JOBS_MONITOR* aMonitor,
-                                                  std::shared_ptr<BACKGROUND_JOB> aJob ) :
+                                                  const std::shared_ptr<BACKGROUND_JOB>& aJob ) :
         PROGRESS_REPORTER_BASE( 1 ),
-        m_monitor( aMonitor ), m_job( aJob )
+        m_monitor( aMonitor ),
+        m_job( aJob )
 {
 
 }
@@ -305,10 +306,8 @@ void BACKGROUND_JOBS_MONITOR::ShowList( wxWindow* aParent, wxPoint aPos )
 
     std::shared_lock<std::shared_mutex> lock( m_mutex, std::try_to_lock );
 
-    for( std::shared_ptr<BACKGROUND_JOB> job : m_jobs )
-    {
+    for( const std::shared_ptr<BACKGROUND_JOB>& job : m_jobs )
         list->Add( job );
-    }
 
     lock.unlock();
 

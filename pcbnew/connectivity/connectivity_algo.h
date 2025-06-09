@@ -218,7 +218,7 @@ public:
     }
 
     void Build( BOARD* aBoard, PROGRESS_REPORTER* aReporter = nullptr );
-    void LocalBuild( std::shared_ptr<CONNECTIVITY_DATA> aGlobalConnectivity,
+    void LocalBuild( const std::shared_ptr<CONNECTIVITY_DATA>& aGlobalConnectivity,
                      const std::vector<BOARD_ITEM*>& aLocalItems );
 
     void Clear();

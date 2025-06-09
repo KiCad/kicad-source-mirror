@@ -404,12 +404,12 @@ void SCH_REFERENCE_LIST::ReannotateDuplicates( const SCH_REFERENCE_LIST& aAdditi
 }
 
 
-void SCH_REFERENCE_LIST::AnnotateByOptions( ANNOTATE_ORDER_T             aSortOption,
-                                            ANNOTATE_ALGO_T              aAlgoOption,
-                                            int                          aStartNumber,
-                                            SCH_MULTI_UNIT_REFERENCE_MAP aLockedUnitMap,
-                                            const SCH_REFERENCE_LIST&    aAdditionalRefs,
-                                            bool                         aStartAtCurrent )
+void SCH_REFERENCE_LIST::AnnotateByOptions( ANNOTATE_ORDER_T                    aSortOption,
+                                            ANNOTATE_ALGO_T                     aAlgoOption,
+                                            int                                 aStartNumber,
+                                            const SCH_MULTI_UNIT_REFERENCE_MAP& aLockedUnitMap,
+                                            const SCH_REFERENCE_LIST&           aAdditionalRefs,
+                                            bool                                aStartAtCurrent )
 {
     switch( aSortOption )
     {
@@ -447,7 +447,7 @@ void SCH_REFERENCE_LIST::AnnotateByOptions( ANNOTATE_ORDER_T             aSortOp
 
 
 void SCH_REFERENCE_LIST::Annotate( bool aUseSheetNum, int aSheetIntervalId, int aStartNumber,
-                                   SCH_MULTI_UNIT_REFERENCE_MAP aLockedUnitMap,
+                                   const SCH_MULTI_UNIT_REFERENCE_MAP& aLockedUnitMap,
                                    const SCH_REFERENCE_LIST& aAdditionalRefs, bool aStartAtCurrent )
 {
     if ( m_flatList.size() == 0 )
@@ -508,15 +508,15 @@ void SCH_REFERENCE_LIST::Annotate( bool aUseSheetNum, int aSheetIntervalId, int 
             continue;
 
         // Check whether this symbol is in aLockedUnitMap.
-        SCH_REFERENCE_LIST* lockedList = nullptr;
+        const SCH_REFERENCE_LIST* lockedList = nullptr;
 
-        for( SCH_MULTI_UNIT_REFERENCE_MAP::value_type& pair : aLockedUnitMap )
+        for( const SCH_MULTI_UNIT_REFERENCE_MAP::value_type& pair : aLockedUnitMap )
         {
             unsigned n_refs = pair.second.GetCount();
 
             for( unsigned thisRefI = 0; thisRefI < n_refs; ++thisRefI )
             {
-                SCH_REFERENCE &thisRef = pair.second[thisRefI];
+                const SCH_REFERENCE &thisRef = pair.second[thisRefI];
 
                 if( thisRef.IsSameInstance( ref_unit ) )
                 {
@@ -583,7 +583,7 @@ void SCH_REFERENCE_LIST::Annotate( bool aUseSheetNum, int aSheetIntervalId, int 
 
             for( unsigned lockedRefI = 0; lockedRefI < n_refs; ++lockedRefI )
             {
-                SCH_REFERENCE& lockedRef = ( *lockedList )[lockedRefI];
+                const SCH_REFERENCE& lockedRef = ( *lockedList )[lockedRefI];
 
                 if( lockedRef.IsSameInstance( ref_unit ) )
                 {
