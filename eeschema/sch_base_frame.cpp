@@ -776,3 +776,12 @@ void SCH_BASE_FRAME::OnSymChangeDebounceTimer( wxTimerEvent& aEvent )
 
     m_inSymChangeTimerEvent = false;
 }
+
+
+SCH_SELECTION_TOOL* SCH_BASE_FRAME::GetSelectionTool()
+{
+    if( m_toolManager )
+        return m_toolManager->GetTool<SCH_SELECTION_TOOL>();
+
+    return nullptr;
+}
