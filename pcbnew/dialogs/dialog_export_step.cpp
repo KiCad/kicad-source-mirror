@@ -59,7 +59,8 @@ static const std::vector<wxString> c_formatCommand = { FILEEXT::StepFileExtensio
                                                        FILEEXT::XaoFileExtension,
                                                        FILEEXT::BrepFileExtension,
                                                        FILEEXT::PlyFileExtension,
-                                                       FILEEXT::StlFileExtension};
+                                                       FILEEXT::StlFileExtension,
+                                                       FILEEXT::StepZFileAbrvExtension };
 
 // Maps file extensions to m_choiceFormat selection
 static const std::map<wxString, int> c_formatExtToChoice = { { FILEEXT::StepFileExtension, 0 },
@@ -68,8 +69,8 @@ static const std::map<wxString, int> c_formatExtToChoice = { { FILEEXT::StepFile
                                                              { FILEEXT::XaoFileExtension, 2 },
                                                              { FILEEXT::BrepFileExtension, 3 },
                                                              { FILEEXT::PlyFileExtension, 4 },
-                                                             { FILEEXT::StlFileExtension, 5 }};
-
+                                                             { FILEEXT::StlFileExtension, 5 },
+                                                             { FILEEXT::StepZFileAbrvExtension, 6 }};
 
 
 int  DIALOG_EXPORT_STEP::m_toleranceLastChoice = -1;    // Use default
@@ -820,6 +821,7 @@ void DIALOG_EXPORT_STEP::onExportButton( wxCommandEvent& aEvent )
         switch( m_job->m_3dparams.m_Format )
         {
         case EXPORTER_STEP_PARAMS::FORMAT::STEP: m_job->m_format = JOB_EXPORT_PCB_3D::FORMAT::STEP; break;
+        case EXPORTER_STEP_PARAMS::FORMAT::STEPZ: m_job->m_format = JOB_EXPORT_PCB_3D::FORMAT::STEPZ; break;
         case EXPORTER_STEP_PARAMS::FORMAT::GLB:  m_job->m_format = JOB_EXPORT_PCB_3D::FORMAT::GLB;  break;
         case EXPORTER_STEP_PARAMS::FORMAT::XAO:  m_job->m_format = JOB_EXPORT_PCB_3D::FORMAT::XAO;  break;
         case EXPORTER_STEP_PARAMS::FORMAT::BREP: m_job->m_format = JOB_EXPORT_PCB_3D::FORMAT::BREP; break;

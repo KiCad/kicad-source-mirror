@@ -78,6 +78,7 @@ enum class OUTPUT_FORMAT
 {
     FMT_OUT_UNKNOWN = 0,
     FMT_OUT_STEP,
+    FMT_OUT_STEPZ,
     FMT_OUT_IGES,
     FMT_OUT_BREP,
     FMT_OUT_XAO,
@@ -187,7 +188,7 @@ public:
 #endif
 
     // write the assembly model in STEP format
-    bool WriteSTEP( const wxString& aFileName, bool aOptimize );
+    bool WriteSTEP( const wxString& aFileName, bool aOptimize, bool compress );
 
     // write the assembly in BREP format
     bool WriteBREP( const wxString& aFileName );
@@ -255,6 +256,8 @@ private:
 
     TDF_Label transferModel( Handle( TDocStd_Document )& source, Handle( TDocStd_Document ) & dest,
                              VECTOR3D aScale );
+
+    bool CompressSTEP( wxString& inputFile, wxString& outputFile );
 
     Handle( XCAFApp_Application )   m_app;
     Handle( TDocStd_Document )      m_doc;

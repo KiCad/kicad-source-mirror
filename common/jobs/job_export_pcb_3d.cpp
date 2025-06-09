@@ -25,6 +25,7 @@
 NLOHMANN_JSON_SERIALIZE_ENUM( JOB_EXPORT_PCB_3D::FORMAT,
                               {
                                       { JOB_EXPORT_PCB_3D::FORMAT::UNKNOWN, nullptr },
+                                      { JOB_EXPORT_PCB_3D::FORMAT::STEPZ,   "stpz" },
                                       { JOB_EXPORT_PCB_3D::FORMAT::STEP,    "step" },
                                       { JOB_EXPORT_PCB_3D::FORMAT::BREP,    "brep" },
                                       { JOB_EXPORT_PCB_3D::FORMAT::GLB,     "step" },
@@ -47,6 +48,7 @@ wxString EXPORTER_STEP_PARAMS::GetDefaultExportExtension() const
     switch( m_Format )
     {
     case EXPORTER_STEP_PARAMS::FORMAT::STEP: return wxS( "step" );
+    case EXPORTER_STEP_PARAMS::FORMAT::STEPZ: return wxS( "stpz" );
     case EXPORTER_STEP_PARAMS::FORMAT::BREP: return wxS( "brep" );
     case EXPORTER_STEP_PARAMS::FORMAT::XAO:  return wxS( "xao" );
     case EXPORTER_STEP_PARAMS::FORMAT::GLB:  return wxS( "glb" );
@@ -63,6 +65,7 @@ wxString EXPORTER_STEP_PARAMS::GetFormatName() const
     {
         // honestly these names shouldn't be translated since they are mostly industry standard acronyms
     case EXPORTER_STEP_PARAMS::FORMAT::STEP: return wxS( "STEP" );
+    case EXPORTER_STEP_PARAMS::FORMAT::STEPZ: return wxS( "STPZ" );
     case EXPORTER_STEP_PARAMS::FORMAT::BREP: return wxS( "BREP" );
     case EXPORTER_STEP_PARAMS::FORMAT::XAO:  return wxS( "XAO" );
     case EXPORTER_STEP_PARAMS::FORMAT::GLB:  return wxS( "Binary GLTF" );
@@ -159,6 +162,7 @@ void JOB_EXPORT_PCB_3D::SetStepFormat( EXPORTER_STEP_PARAMS::FORMAT aFormat )
     switch( m_3dparams.m_Format )
     {
     case EXPORTER_STEP_PARAMS::FORMAT::STEP: m_format = JOB_EXPORT_PCB_3D::FORMAT::STEP; break;
+    case EXPORTER_STEP_PARAMS::FORMAT::STEPZ: m_format = JOB_EXPORT_PCB_3D::FORMAT::STEPZ; break;
     case EXPORTER_STEP_PARAMS::FORMAT::GLB:  m_format = JOB_EXPORT_PCB_3D::FORMAT::GLB;  break;
     case EXPORTER_STEP_PARAMS::FORMAT::XAO:  m_format = JOB_EXPORT_PCB_3D::FORMAT::XAO;  break;
     case EXPORTER_STEP_PARAMS::FORMAT::BREP: m_format = JOB_EXPORT_PCB_3D::FORMAT::BREP; break;

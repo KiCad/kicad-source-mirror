@@ -63,6 +63,7 @@ public:
     enum class FORMAT
     {
         STEP,
+        STEPZ,
         BREP,
         XAO,
         GLB,
@@ -118,6 +119,7 @@ public:
     {
         UNKNOWN, // defefer to arg
         STEP,
+        STEPZ,
         BREP,
         XAO,
         GLB,

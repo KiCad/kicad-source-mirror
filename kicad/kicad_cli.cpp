@@ -126,6 +126,7 @@ static CLI::PCB_EXPORT_3D_COMMAND        exportPcbXaoCmd{ "xao", UTF8STDSTR( _( 
 static CLI::PCB_EXPORT_3D_COMMAND        exportPcbVrmlCmd{ "vrml", UTF8STDSTR( _( "Export VRML" ) ), JOB_EXPORT_PCB_3D::FORMAT::VRML };
 static CLI::PCB_EXPORT_3D_COMMAND        exportPcbPlyCmd{ "ply", UTF8STDSTR( _( "Export PLY" ) ), JOB_EXPORT_PCB_3D::FORMAT::PLY };
 static CLI::PCB_EXPORT_3D_COMMAND        exportPcbStlCmd{ "stl", UTF8STDSTR( _( "Export STL" ) ), JOB_EXPORT_PCB_3D::FORMAT::STL };
+static CLI::PCB_EXPORT_3D_COMMAND        exportPcbStepzCmd{ "stpz", UTF8STDSTR( _( "Export STEPZ" ) ), JOB_EXPORT_PCB_3D::FORMAT::STEPZ };
 static CLI::PCB_EXPORT_SVG_COMMAND       exportPcbSvgCmd{};
 static CLI::PCB_EXPORT_PDF_COMMAND       exportPcbPdfCmd{};
 static CLI::PCB_EXPORT_POS_COMMAND       exportPcbPosCmd{};
@@ -215,7 +216,8 @@ static std::vector<COMMAND_ENTRY> commandStack = {
                     &exportPcbVrmlCmd,
                     &exportPcbXaoCmd,
                     &exportPcbPlyCmd,
-                    &exportPcbStlCmd
+                    &exportPcbStlCmd,
+                    &exportPcbStepzCmd
                 }
             }
         }

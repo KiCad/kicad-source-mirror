@@ -193,6 +193,7 @@ public:
     static const std::string PythonFileExtension;
 
     static const std::string StepFileExtension;
+    static const std::string StepZFileAbrvExtension;
     static const std::string StepFileAbrvExtension;
     static const std::string GltfBinaryFileExtension;
     static const std::string BrepFileExtension;

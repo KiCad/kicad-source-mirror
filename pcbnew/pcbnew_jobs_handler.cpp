@@ -542,6 +542,7 @@ int PCBNEW_JOBS_HANDLER::JobExportStep( JOB* aJob )
         switch( aStepJob->m_format )
         {
         case JOB_EXPORT_PCB_3D::FORMAT::STEP: params.m_Format = EXPORTER_STEP_PARAMS::FORMAT::STEP; break;
+        case JOB_EXPORT_PCB_3D::FORMAT::STEPZ: params.m_Format = EXPORTER_STEP_PARAMS::FORMAT::STEPZ; break;
         case JOB_EXPORT_PCB_3D::FORMAT::BREP: params.m_Format = EXPORTER_STEP_PARAMS::FORMAT::BREP; break;
         case JOB_EXPORT_PCB_3D::FORMAT::XAO:  params.m_Format = EXPORTER_STEP_PARAMS::FORMAT::XAO;  break;
         case JOB_EXPORT_PCB_3D::FORMAT::GLB:  params.m_Format = EXPORTER_STEP_PARAMS::FORMAT::GLB;  break;

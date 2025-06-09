@@ -75,7 +75,7 @@ CLI::PCB_EXPORT_3D_COMMAND::PCB_EXPORT_3D_COMMAND( const std::string&        aNa
     {
         m_argParser.add_argument( ARG_FORMAT )
                 .default_value( std::string( "step" ) )
-                .help( UTF8STDSTR( _( "Output file format, options: step, brep, xao, glb "
+                .help( UTF8STDSTR( _( "Output file format, options: step, stepz, brep, xao, glb "
                                       "(binary glTF), ply, stl" ) ) );
     }
 
@@ -258,6 +258,8 @@ int CLI::PCB_EXPORT_3D_COMMAND::doPerform( KIWAY& aKiway )
 
         if( format == wxS( "step" ) )
             step->m_format = JOB_EXPORT_PCB_3D::FORMAT::STEP;
+        else if( format == wxS( "stpz" ) )
+            step->m_format = JOB_EXPORT_PCB_3D::FORMAT::STEPZ;
         else if( format == wxS( "brep" ) )
             step->m_format = JOB_EXPORT_PCB_3D::FORMAT::BREP;
         else if( format == wxS( "xao" ) )

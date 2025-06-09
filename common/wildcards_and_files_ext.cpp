@@ -204,6 +204,7 @@ const std::string FILEEXT::JsonFileExtension( "json" );
 const std::string FILEEXT::PythonFileExtension( "py" );
 
 const std::string FILEEXT::StepFileExtension( "step" );
+const std::string FILEEXT::StepZFileAbrvExtension( "stpz" );
 const std::string FILEEXT::StepFileAbrvExtension( "stp" );
 const std::string FILEEXT::GltfBinaryFileExtension( "glb" );
 const std::string FILEEXT::BrepFileExtension( "brep" );

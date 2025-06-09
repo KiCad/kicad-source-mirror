@@ -28,10 +28,14 @@
 #include <sstream>
 #include <string>
 #include <utility>
+#include <wx/file.h>
 #include <wx/filename.h>
 #include <wx/filefn.h>
 #include <wx/sstream.h>
 #include <wx/stdpaths.h>
+#include <wx/stream.h>
+#include <wx/string.h>
+#include <wx/zstream.h>
 #include <wx/wfstream.h>
 #include <wx/zipstrm.h>
 #include <wx/stdstream.h>
@@ -2360,8 +2364,46 @@ bool STEP_PCB_MODEL::WriteIGES( const wxString& aFileName )
 }
 #endif
 
+bool STEP_PCB_MODEL::CompressSTEP( wxString& inputFile, wxString& outputFile )
+{
+    wxFileInputStream  input( inputFile );
+    wxFileOutputStream output( outputFile );
 
-bool STEP_PCB_MODEL::WriteSTEP( const wxString& aFileName, bool aOptimize )
+    if( !input.IsOk() )
+    {
+        m_reporter->Report( wxString::Format( _( "Cannot create input stream '%s'.\n" ), inputFile ) );
+        return false;
+    }
+
+    if( !output.IsOk() )
+    {
+        m_reporter->Report( wxString::Format( _( "Cannot create output stream '%s'.\n" ), outputFile ) );
+        return false;
+    }
+
+    wxZlibOutputStream zlibStream( output, -1, wxZLIB_GZIP );
+
+    if( !zlibStream.IsOk() )
+    {
+        m_reporter->Report( _( "Impossible create compress stream" ) );
+        return false;
+    }
+
+    input.Read( zlibStream );
+
+    if( input.LastRead() == 0 || zlibStream.LastWrite() == 0 )
+    {
+        m_reporter->Report( _( "Compress read or write error" ) );
+        return false;
+    }
+
+    zlibStream.Close();
+    output.Close();
+
+    return true;
+}
+
+bool STEP_PCB_MODEL::WriteSTEP( const wxString& aFileName, bool aOptimize, bool compress )
 {
     if( !isBoardOutlineValid() )
     {
@@ -2422,16 +2464,27 @@ bool STEP_PCB_MODEL::WriteSTEP( const wxString& aFileName, bool aOptimize )
     if( !workCWD.IsEmpty() )
         wxSetWorkingDirectory( workCWD );
 
-    char tmpfname[] = "$tempfile$.step";
+    wxString tmpfname( "$tempfile$.step" );
 
-    if( Standard_False == writer.Write( tmpfname ) )
+    if( Standard_False == writer.Write( tmpfname.c_str() ) )
         success = false;
+
+    if( compress && success )
+    {
+        wxString srcTmp( tmpfname );
+        wxString dstTmp( "$tempfile$.stpz" );
+
+        success = STEP_PCB_MODEL::CompressSTEP( srcTmp, dstTmp );
+        wxRemoveFile( srcTmp );
+
+        tmpfname = dstTmp;
+    }
 
     if( success )
     {
 
         // Preserve the permissions of the current file
-        KIPLATFORM::IO::DuplicatePermissions( fn.GetFullPath(), tmpfname );
+        KIPLATFORM::IO::DuplicatePermissions( fn.GetFullPath(), tmpfname.c_str() );
 
         if( !wxRenameFile( tmpfname, fn.GetFullName(), true ) )
         {

@@ -661,6 +661,10 @@ void EXPORTER_STEP::initOutputVariant()
             m_pcbModel->SpecializeVariant( OUTPUT_FORMAT::FMT_OUT_STEP );
             break;
 
+        case EXPORTER_STEP_PARAMS::FORMAT::STEPZ:
+            m_pcbModel->SpecializeVariant( OUTPUT_FORMAT::FMT_OUT_STEPZ );
+            break;
+
         case EXPORTER_STEP_PARAMS::FORMAT::BREP:
             m_pcbModel->SpecializeVariant( OUTPUT_FORMAT::FMT_OUT_BREP );
             break;
@@ -872,7 +876,9 @@ bool EXPORTER_STEP::Export()
 
         bool success = true;
         if( m_params.m_Format == EXPORTER_STEP_PARAMS::FORMAT::STEP )
-            success = m_pcbModel->WriteSTEP( m_outputFile, m_params.m_OptimizeStep );
+            success = m_pcbModel->WriteSTEP( m_outputFile, m_params.m_OptimizeStep, false );
+        else if( m_params.m_Format == EXPORTER_STEP_PARAMS::FORMAT::STEPZ )
+            success = m_pcbModel->WriteSTEP( m_outputFile, m_params.m_OptimizeStep, true );
         else if( m_params.m_Format == EXPORTER_STEP_PARAMS::FORMAT::BREP )
             success = m_pcbModel->WriteBREP( m_outputFile );
         else if( m_params.m_Format == EXPORTER_STEP_PARAMS::FORMAT::XAO )
