@@ -31,10 +31,10 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-06-08 17:02+0300\n"
-"PO-Revision-Date: 2025-06-05 14:56+0000\n"
+"PO-Revision-Date: 2025-06-10 06:03+0000\n"
 "Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
-"Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
-"source/de/>\n"
+"Language-Team: German <https://hosted.weblate.org/projects/kicad/"
+"master-source/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -19372,9 +19372,9 @@ msgid "Members"
 msgstr "Mitglieder"
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:836
-#, fuzzy, c-format
+#, c-format
 msgid "Importing %s"
-msgstr "Einstellungen importieren"
+msgstr "Importiere %s"
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:906
 #, c-format
@@ -23198,9 +23198,7 @@ msgstr "Hierarchische Bezeichner löschen"
 #: eeschema/sync_sheet_pin/panel_sync_sheet_pins_base.cpp:99
 msgid ""
 "Associate selected sheet pin and hierarchical label using the label name"
-msgstr ""
-"Gewählten Schaltplanpin und hierarchischen Bezeichner mittels "
-"Bezeichnernamen synchronisieren"
+msgstr "Gewählten Schaltplanpin und hierarchischen Bezeichner synchronisieren"
 
 #: eeschema/sync_sheet_pin/panel_sync_sheet_pins_base.cpp:104
 msgid "Associate selected sheet pin and hierarchical label using the pin name"
@@ -28251,7 +28249,7 @@ msgstr ""
 
 #: kicad/import_project.cpp:146
 msgid "Import Altium Project Files"
-msgstr "Importiere Altium-Projektdateien"
+msgstr "Altium-Projektdateien importieren"
 
 #: kicad/import_project.cpp:154
 msgid "Import CADSTAR Archive Project Files"
@@ -28259,7 +28257,7 @@ msgstr "CADSTAR-Archiv-Projektdateien importieren"
 
 #: kicad/import_project.cpp:162
 msgid "Import Eagle Project Files"
-msgstr "Importiere Eagle-Projektdateien"
+msgstr "Eagle-Projektdateien importieren"
 
 #: kicad/import_project.cpp:169
 msgid "Import EasyEDA Std Backup"
@@ -42784,14 +42782,14 @@ msgid "Checking %s solder mask expansion: %s."
 msgstr "Lochgröße %s wird geprüft: min %s."
 
 #: pcbnew/drc/drc_engine.cpp:1088
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s solder paste absolute cleraance: %s."
-msgstr "Freiraum (absolut) für Lötpaste:"
+msgstr "Prüfe %s absoluten Lötpastenfreiraum: %s."
 
 #: pcbnew/drc/drc_engine.cpp:1094
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s solder paste relative clearance: %s."
-msgstr "Freiraumverhältnis (relativ) für Lötpaste:"
+msgstr "Prüfe %s relativen Lötpastenfreiraum: %s."
 
 #: pcbnew/drc/drc_engine.cpp:1100
 #, c-format
@@ -50011,9 +50009,9 @@ msgid "Solder mask expansion resolution for:"
 msgstr "Lötstoppmaskenerweiterung:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1450
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved solder mask expansion: %s."
-msgstr "Lötstoppmaskenerweiterung:"
+msgstr "Ermittelte Lötstoppmaskenerweiterung: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1459
 #, fuzzy
@@ -50021,9 +50019,9 @@ msgid "Solder paste absolute clearance resolution for:"
 msgstr "Ermittlung des Loch-zu-Loch-Freiraums für:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1467
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved solder paste absolute clearance: %s."
-msgstr "Freiraum (absolut) für Lötpaste:"
+msgstr "Ermittelter absoluter Lötpastenfreiraum: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1470
 #, fuzzy
@@ -50031,9 +50029,9 @@ msgid "Solder paste relative clearance resolution for:"
 msgstr "Freiraumverhältnis (relativ) für Lötpaste:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1480
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved solder paste relative clearance: %s."
-msgstr "Freiraumverhältnis (relativ) für Lötpaste:"
+msgstr "Ermittelter relativer Lötpastenfreiraum: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1497
 #, c-format
