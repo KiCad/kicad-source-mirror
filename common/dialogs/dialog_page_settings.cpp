@@ -474,23 +474,16 @@ bool DIALOG_PAGES_SETTINGS::SavePageSettings()
     wxString msg;
     wxString fileName = GetWksFileName();
 
-    if( fileName != BASE_SCREEN::m_DrawingSheetFileName )
+    wxString fullFileName = m_filenameResolver->ResolvePath( fileName, m_projectPath, { m_embeddedFiles } );
+
+    BASE_SCREEN::m_DrawingSheetFileName = fileName;
+
+    if( !DS_DATA_MODEL::GetTheInstance().LoadDrawingSheet( fullFileName, &msg ) )
     {
-        wxString fullFileName = m_filenameResolver->ResolvePath( fileName, m_projectPath,
-                                                                 { m_embeddedFiles } );
-
-        BASE_SCREEN::m_DrawingSheetFileName = fileName;
-
-        if( !DS_DATA_MODEL::GetTheInstance().LoadDrawingSheet( fullFileName, &msg ) )
-        {
-            DisplayErrorMessage( this,
-                                 wxString::Format( _( "Error loading drawing sheet '%s'." ),
-                                                   fullFileName ),
-                                 msg );
-        }
-
-        m_localPrjConfigChanged = true;
+        DisplayErrorMessage( this, wxString::Format( _( "Error loading drawing sheet '%s'." ), fullFileName ), msg );
     }
+
+    m_localPrjConfigChanged = true;
 
     int idx = std::max( m_paperSizeComboBox->GetSelection(), 0 );
     const wxString paperType = m_pageFmt[idx];
@@ -823,7 +816,7 @@ void DIALOG_PAGES_SETTINGS::OnWksFileSelection( wxCommandEvent& event )
     if( m_embeddedFiles && customize.GetEmbed() )
     {
         fn.Assign( fileName );
-        EMBEDDED_FILES::EMBEDDED_FILE* result = m_embeddedFiles->AddFile( fn, false );
+        EMBEDDED_FILES::EMBEDDED_FILE* result = m_embeddedFiles->AddFile( fn, true );
         shortFileName = result->GetLink();
         fileName = m_embeddedFiles->GetTemporaryFileName( result->name ).GetFullPath();
     }
