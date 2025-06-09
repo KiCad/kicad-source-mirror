@@ -2943,7 +2943,6 @@ int SCH_EDIT_TOOL::BreakWire( const TOOL_EVENT& aEvent )
     SCH_SCREEN*    screen = m_frame->GetScreen();
     SCH_COMMIT     commit( m_toolMgr );
     std::vector<SCH_LINE*> lines;
-    std::vector<SCH_LINE*> newLines;
 
     for( EDA_ITEM* item : selection )
     {
@@ -2977,8 +2976,6 @@ int SCH_EDIT_TOOL::BreakWire( const TOOL_EVENT& aEvent )
             m_selectionTool->AddItemToSel( newLine );
             newLine->SetFlags( STARTPOINT );
         }
-
-        newLines.push_back( newLine );
     }
 
     if( !lines.empty() )
@@ -2991,12 +2988,7 @@ int SCH_EDIT_TOOL::BreakWire( const TOOL_EVENT& aEvent )
 
             // Breaking wires is usually a repeated action, e.g. to add bends
             if( !isSlice )
-            {
-                m_selectionTool->ClearSelection();
-                for( SCH_LINE* newLine : newLines )
-                    m_selectionTool->AddItemToSel( newLine );
                 m_toolMgr->PostAction( SCH_ACTIONS::breakWire );
-            }
         }
         else
             commit.Revert();
