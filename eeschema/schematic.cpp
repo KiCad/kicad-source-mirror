@@ -464,7 +464,7 @@ bool SCHEMATIC::ResolveCrossReference( wxString* token, int aDepth ) const
         SCH_SYMBOL* refSymbol = static_cast<SCH_SYMBOL*>( refItem );
 
         if( refSymbol->ResolveTextVar( &sheetPath, &remainder, aDepth + 1 ) )
-            *token = remainder;
+            *token = std::move( remainder );
         else
             *token = refSymbol->GetRef( &sheetPath, true ) + wxS( ":" ) + remainder;
 
@@ -477,7 +477,7 @@ bool SCHEMATIC::ResolveCrossReference( wxString* token, int aDepth ) const
         sheetPath.push_back( refSheet );
 
         if( refSheet->ResolveTextVar( &sheetPath, &remainder, aDepth + 1 ) )
-            *token = remainder;
+            *token = std::move( remainder );
 
         return true;    // Cross-reference is resolved whether or not the actual textvar was
     }
