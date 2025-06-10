@@ -30,7 +30,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-06-08 17:03+0300\n"
-"PO-Revision-Date: 2025-06-10 06:01+0000\n"
+"PO-Revision-Date: 2025-06-11 07:01+0000\n"
 "Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v9/de/>\n"
 "Language: de\n"
@@ -21280,6 +21280,8 @@ msgstr "erwarte Messungs-Formatdefinition"
 #: eeschema/sim/ngspice.cpp:501
 msgid "Unable to load ngspice shared library. Please check your install."
 msgstr ""
+"Die gemeinsame ngspice-Bibliothek kann nicht geladen werden. Bitte "
+"Installation überprüfen."
 
 #: eeschema/sim/sim_lib_mgr.cpp:91 eeschema/sim/sim_lib_mgr.cpp:144
 #, c-format
@@ -26798,9 +26800,8 @@ msgstr ""
 "derzeitige Größe, 2 = nur Platinenbereich)"
 
 #: kicad/cli/command_pcb_export_svg.cpp:92
-#, fuzzy
 msgid "Fit the page to the board"
-msgstr "Konnte Grafik nicht in die Zwischenablage kopieren"
+msgstr "Seite an Platine anpassen"
 
 #: kicad/cli/command_pcb_export_svg.cpp:96
 #: kicad/cli/command_sch_export_plot.cpp:77
@@ -40774,7 +40775,6 @@ msgstr ""
 "\n"
 
 #: pcbnew/dialogs/panel_setup_rules_help_8expression_functions.h:2
-#, fuzzy
 msgid ""
 "### Expression functions\n"
 "\n"
@@ -40939,8 +40939,8 @@ msgstr ""
 "<br><br>\n"
 "\n"
 "    A.inDiffPair('<Netzname>')\n"
-"Wahr, wenn `A` ein Netz hat, das Teil des angegebenen Differentialpaares "
-"ist.\n"
+"Wahr, wenn `A` ein Netz hat, das Teil des angegebenen Differentialpaares ist."
+"\n"
 "`<Netzname>` ist der Basisname des Differentialpaares.  Zum Beispiel passt\n"
 "`inDiffPair('/CLK')` zu Elementen in den Netzen `/CLK_P` und `/CLK_N`.\n"
 "<br><br>\n"
@@ -41012,6 +41012,12 @@ msgstr ""
 "    A.memberOfSheet('<Schaltplanblatt-Pfad>')\n"
 "Wahr, wenn `A` ein Teil des angegebenen Schaltplanblatts ist. Der Pfad kann "
 "Wildcards enthalten.\n"
+"<br><br>\n"
+"\n"
+"    A.memberOfSheetOrChildren('<Schaltplanblatt-Pfad>')\n"
+"Wahr, wenn `A` ein Teil des angegebenen Schaltplanblatts oder eines "
+"hierarchischen Unterschaltplanblatts ist. Der Pfad kann Wildcards enthalten."
+"\n"
 "<br><br>\n"
 "\n"
 
