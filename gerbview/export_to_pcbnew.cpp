@@ -325,6 +325,9 @@ void GBR_TO_PCB_EXPORTER::export_via( const EXPORT_VIA& aVia )
 
 void GBR_TO_PCB_EXPORTER::export_copper_item( const GERBER_DRAW_ITEM* aGbrItem, int aLayer )
 {
+    if( aGbrItem->GetLayerPolarity() )
+        return;
+
     switch( aGbrItem->m_ShapeType )
     {
     case GBR_SPOT_CIRCLE:
