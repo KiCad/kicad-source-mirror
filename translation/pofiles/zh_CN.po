@@ -42,7 +42,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-06-08 17:02+0300\n"
-"PO-Revision-Date: 2025-06-10 06:11+0000\n"
+"PO-Revision-Date: 2025-06-11 07:02+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/kicad/master-source/zh_Hans/>\n"
@@ -3692,7 +3692,7 @@ msgstr "自定义:"
 
 #: common/dialogs/dialog_print_generic_base.cpp:88
 msgid "Set X scale adjust for exact scale plotting"
-msgstr "调整 X 比例使输出的绘图比例更加精确"
+msgstr "调整 X 缩放使输出的绘图比例更加精确"
 
 #: common/dialogs/dialog_print_generic_base.cpp:107
 msgid "Info text"
@@ -14482,7 +14482,6 @@ msgstr ""
 "无法加载工程文件 %s。"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:258
-#, fuzzy
 msgid "Load Bus Aliases"
 msgstr "加载总线别名"
 
@@ -16323,9 +16322,8 @@ msgstr "保持端点或起点的方向"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:50
 #: pcbnew/dialogs/panel_edit_options_base.cpp:63
-#, fuzzy
 msgid "Keep center and radius, adjust endpoints"
-msgstr "保持中心, 调整半径"
+msgstr "保留中心和半径, 调整端点"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:56
 msgid "Mouse drag performs Drag (G) operation"
@@ -17005,9 +17003,9 @@ msgid "Global Field Name Templates"
 msgstr "全局字段名称模板"
 
 #: eeschema/dialogs/panel_template_fieldnames.cpp:271
-#, fuzzy, c-format
+#, c-format
 msgid "The field name '%s' contains trailing and/or leading white space."
-msgstr "字段名称 \"%s \" 包含尾随空格/前导空格。"
+msgstr "字段名称 '%s' 包含尾随空格/前导空格。"
 
 #: eeschema/dialogs/panel_template_fieldnames.cpp:276
 msgid ""
@@ -17055,7 +17053,7 @@ msgstr "文件 '%s' 会被新的工作表根目录图纸文件所覆盖, 无法�
 
 #: eeschema/eeschema_jobs_handler.cpp:132 pcbnew/pcbnew_jobs_handler.cpp:241
 msgid "Plotting to HPGL is no longer supported as of KiCad 10.0."
-msgstr ""
+msgstr "自 KiCad 10.0 起, 不再支持绘制 HPGL 图。"
 
 #: eeschema/eeschema_jobs_handler.cpp:199
 msgid "Failed to load schematic\n"
@@ -17065,7 +17063,7 @@ msgstr "加载原理图失败\n"
 #: kicad/cli/command_pcb_export_hpgl.cpp:36
 #: kicad/cli/command_sch_export_plot.cpp:126 pcbnew/pcbnew_jobs_handler.cpp:229
 msgid "Plotting to HPGL is no longer supported as of KiCad 10.0.\n"
-msgstr ""
+msgstr "自 KiCad 10.0 起, 不再支持绘制 HPGL 图。\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:324
 #: eeschema/eeschema_jobs_handler.cpp:466
@@ -17371,7 +17369,7 @@ msgstr "分配的封装 (%s) 与封装筛选规则 (%s) 不匹配。"
 
 #: eeschema/erc/erc.cpp:1827
 msgid "Checking sheet names..."
-msgstr "检查页面名称..."
+msgstr "正在检查图纸名称..."
 
 #: eeschema/erc/erc.cpp:1835
 msgid "Checking bus conflicts..."
@@ -17388,7 +17386,7 @@ msgstr "正在检查单元..."
 #: eeschema/erc/erc.cpp:1862
 #: pcbnew/drc/drc_test_provider_footprint_checks.cpp:70
 msgid "Checking footprints..."
-msgstr "检查封装..."
+msgstr "正在检查封装..."
 
 #: eeschema/erc/erc.cpp:1876
 msgid "Checking pins..."
@@ -17400,7 +17398,7 @@ msgstr "正在检查相似标签..."
 
 #: eeschema/erc/erc.cpp:1904
 msgid "Checking local and global labels..."
-msgstr "正在检查本地标签和全局标签..."
+msgstr "正在检查局部标签和全局标签..."
 
 #: eeschema/erc/erc.cpp:1912
 msgid "Checking for unresolved variables..."
@@ -17412,7 +17410,7 @@ msgstr "正在检查 SPICE 模型..."
 
 #: eeschema/erc/erc.cpp:1928
 msgid "Checking no connect pins for connections..."
-msgstr "正在检查没有连接的连接引脚..."
+msgstr "正在检查无连接引脚的连接..."
 
 #: eeschema/erc/erc.cpp:1937
 msgid "Checking for library symbol issues..."
@@ -17420,7 +17418,7 @@ msgstr "正在检查库符号问题..."
 
 #: eeschema/erc/erc.cpp:1945
 msgid "Checking for footprint link issues..."
-msgstr "检查封装链接问题..."
+msgstr "正在检查封装链接问题..."
 
 #: eeschema/erc/erc.cpp:1953
 msgid "Checking footprint assignments against footprint filters..."
@@ -17428,7 +17426,7 @@ msgstr "正在根据封装筛选规则检查封装分配..."
 
 #: eeschema/erc/erc.cpp:1961
 msgid "Checking for off grid pins and wires..."
-msgstr "检查偏离栅格的引脚与走线..."
+msgstr "正在检查偏离栅格的引脚和走线..."
 
 #: eeschema/erc/erc.cpp:1969
 msgid "Checking for four way junctions..."
@@ -17436,7 +17434,7 @@ msgstr "正在检查四通路结点..."
 
 #: eeschema/erc/erc.cpp:1977
 msgid "Checking for labels on more than one wire..."
-msgstr "检查标签是否连接了不止一条连线..."
+msgstr "正在检查标签是否连接了不止一条的连线..."
 
 #: eeschema/erc/erc.cpp:1985
 msgid "Checking for undefined netclasses..."
@@ -18683,7 +18681,7 @@ msgstr "总线输入类型"
 #: pcbnew/pcb_track.cpp:1930 pcbnew/tools/pcb_control.cpp:2112
 #: pcbnew/zone.cpp:851
 msgid "Resolved Netclass"
-msgstr "已解析的网络类"
+msgstr "已解析网络类"
 
 #: eeschema/sch_connection.cpp:451
 msgid "Connection Name"
@@ -18884,9 +18882,9 @@ msgid "Members"
 msgstr "成员"
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:836
-#, fuzzy, c-format
+#, c-format
 msgid "Importing %s"
-msgstr "导入设置"
+msgstr "导入 %s"
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:906
 #, c-format
@@ -19780,7 +19778,7 @@ msgstr "网络"
 #: eeschema/sch_label.cpp:1387 eeschema/sch_line.cpp:867
 #: eeschema/sch_rule_area.cpp:395
 msgid "Resolved netclass"
-msgstr "已解析的网络类"
+msgstr "已解析网络类"
 
 #: eeschema/sch_label.cpp:1405
 msgid "Hierarchical Labels"
@@ -20766,7 +20764,7 @@ msgstr "Cpin 无效。"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:260
 msgid "Checking component "
-msgstr "检查元件 "
+msgstr "正在检查元件 "
 
 #: eeschema/sim/kibis/ibis_parser.cpp:267
 msgid "Component: name cannot be empty."
@@ -20814,7 +20812,7 @@ msgstr "型号名称不能为空"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:491
 msgid "Checking model "
-msgstr "检查型号 "
+msgstr "正在检查模型 "
 
 #: eeschema/sim/kibis/ibis_parser.cpp:498
 msgid "Undefined model type."
@@ -20878,7 +20876,7 @@ msgstr "无效 Ramp"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:635
 msgid "Checking Header..."
-msgstr "正在检查 Header..."
+msgstr "正在检查头..."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:642
 msgid "Missing [IBIS Ver]"
@@ -20902,7 +20900,7 @@ msgstr "包型号名称不能为空。"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:699
 msgid "Checking package model "
-msgstr "检查包型号 "
+msgstr "正在检查封装模型 "
 
 #: eeschema/sim/kibis/ibis_parser.cpp:706
 msgid "Manufacturer cannot be empty."
@@ -21275,7 +21273,7 @@ msgstr "预期测量格式定义"
 
 #: eeschema/sim/ngspice.cpp:501
 msgid "Unable to load ngspice shared library. Please check your install."
-msgstr ""
+msgstr "无法加载 ngspice 共享库。请检查是否正确安装和配置。"
 
 #: eeschema/sim/sim_lib_mgr.cpp:91 eeschema/sim/sim_lib_mgr.cpp:144
 #, c-format
@@ -22048,7 +22046,6 @@ msgstr "KiCad 符号编辑器"
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:150
 #: eeschema/symbol_tree_model_adapter.cpp:73
 #: eeschema/symbol_viewer_frame.cpp:277
-#, fuzzy
 msgid "Load Symbol Libraries"
 msgstr "加载符号库"
 
@@ -22057,7 +22054,6 @@ msgid "Library changes are unsaved"
 msgstr "库变更未保存"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:282
-#, fuzzy
 msgid "Symbol library loading canceled by user."
 msgstr "用户取消了符号库加载。"
 
@@ -22625,7 +22621,6 @@ msgid "Re-linking footprints requires a fully annotated schematic."
 msgstr "请先将原理图批注完整, 然后才能重链接封装。"
 
 #: eeschema/tools/backannotate.cpp:356
-#, fuzzy
 msgid "Footprint re-linking canceled by user."
 msgstr "用户取消了封装重链接。"
 
@@ -23041,23 +23036,20 @@ msgid "Add selected design block to current sheet"
 msgstr "添加选中设计图块到当前图纸"
 
 #: eeschema/tools/sch_actions.cpp:467 pcbnew/tools/pcb_actions.cpp:461
-#, fuzzy
 msgid "Place Linked Design Block"
-msgstr "放置设计图块"
+msgstr "放置链接的设计图块"
 
 #: eeschema/tools/sch_actions.cpp:468 pcbnew/tools/pcb_actions.cpp:462
 msgid "Place design block linked to selected group"
 msgstr "放置链接到所选组合的设计图块"
 
 #: eeschema/tools/sch_actions.cpp:475 pcbnew/tools/pcb_actions.cpp:469
-#, fuzzy
 msgid "Save to Linked Design Block"
-msgstr "保存选区为设计图块..."
+msgstr "保存为链接的设计图块"
 
 #: eeschema/tools/sch_actions.cpp:476 pcbnew/tools/pcb_actions.cpp:470
-#, fuzzy
 msgid "Save selected group to linked design block"
-msgstr "保存选区为设计图块..."
+msgstr "保存选中分组为链接的设计图块"
 
 #: eeschema/tools/sch_actions.cpp:486
 msgid "Place No Connect Flags"
@@ -24288,12 +24280,9 @@ msgid "Net must be labeled to assign a netclass."
 msgstr "网络必须标记才能分配网络类。"
 
 #: eeschema/tools/sch_editor_control.cpp:1721 pcbnew/tools/pcb_control.cpp:1094
-#, fuzzy
 msgid ""
 "Pasting a long text text string may be very slow.  Do you want to continue?"
-msgstr ""
-"修改文件扩展名将更改文件类型。\n"
-"是否继续?"
+msgstr "粘贴长文本字符串可能会非常慢。是否继续?"
 
 #: eeschema/tools/sch_editor_control.cpp:1843
 #, c-format
@@ -24335,9 +24324,9 @@ msgstr "未发现错误。"
 #: eeschema/tools/sch_editor_control.cpp:3003
 #: eeschema/tools/sch_editor_control.cpp:3050 pcbnew/tools/pcb_control.cpp:1380
 #: pcbnew/tools/pcb_control.cpp:1434
-#, fuzzy, c-format
+#, c-format
 msgid "Could not find design block %s."
-msgstr "无法找到列标签 %s。"
+msgstr "找不到设计图块 %s。"
 
 #: eeschema/tools/sch_editor_control.cpp:3011
 #, c-format
@@ -25404,9 +25393,8 @@ msgid "<b>A gerber job file cannot be loaded as a plot file</b> <i>%s</i>"
 msgstr "<b>Gerber 作业文件无法作为绘制文件加载</b><i>%s</i>"
 
 #: gerbview/files.cpp:303
-#, fuzzy
 msgid "Load Files"
-msgstr "无文件"
+msgstr "加载文件"
 
 #: gerbview/files.cpp:305 gerbview/files.cpp:312
 #, c-format
@@ -26734,9 +26722,8 @@ msgid "Invalid side specified\n"
 msgstr "指定的侧无效\n"
 
 #: kicad/cli/command_pcb_export_ps.cpp:41
-#, fuzzy
 msgid "Generate Postscript from a list of layers"
-msgstr "从层列表生成 PDF"
+msgstr "从层列表生成 Postscript"
 
 #: kicad/cli/command_pcb_export_ps.cpp:116
 msgid ""
@@ -26745,19 +26732,16 @@ msgid ""
 msgstr ""
 
 #: kicad/cli/command_pcb_export_ps.cpp:123
-#, fuzzy
 msgid "X scale adjust for exact scale."
-msgstr "调整 X 比例使输出的绘图比例更加精确"
+msgstr "调整 X 缩放以使比例更加精确。"
 
 #: kicad/cli/command_pcb_export_ps.cpp:129
-#, fuzzy
 msgid "Y scale adjust for exact scale."
-msgstr "调整 X 比例使输出的绘图比例更加精确"
+msgstr "调整 Y 缩放以使比例更加精确。"
 
 #: kicad/cli/command_pcb_export_ps.cpp:135
-#, fuzzy
 msgid "Force A4 paper size."
-msgstr "自定义页面尺寸:"
+msgstr "强制使用 A4 纸尺寸。"
 
 #: kicad/cli/command_pcb_export_svg.cpp:41
 msgid "Generate SVG outputs of a given layer list"
@@ -27118,9 +27102,8 @@ msgid "Ignore non-zero exit code"
 msgstr "忽略非零退出代码"
 
 #: kicad/dialogs/dialog_executecommand_job_settings_base.cpp:92
-#, fuzzy
 msgid "Available text variables:"
-msgstr "可用材料："
+msgstr "可用文本变量："
 
 #: kicad/dialogs/dialog_executecommand_job_settings_base.h:58
 msgid "Execute Command Job Settings"
@@ -27506,9 +27489,9 @@ msgid "Edit File in Text Editor"
 msgstr "在文本编辑器中编辑"
 
 #: kicad/kicad_manager_frame.cpp:1063
-#, fuzzy, c-format
+#, c-format
 msgid "Project '%s' is already open by '%s' at '%s'."
-msgstr "PCB '%s' 已由 '%s' 在 '%s' 中打开。"
+msgstr "工程 '%s' 已由 '%s' 在 '%s' 中打开。"
 
 #: kicad/kicad_manager_frame.cpp:1089
 msgid "[no project loaded]"
@@ -27806,9 +27789,8 @@ msgid "Save Package"
 msgstr "保存扩展内容包"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:542
-#, fuzzy
 msgid "Download Package"
-msgstr "正在下载扩展内容包"
+msgstr "下载扩展内容包"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:560
 msgid ""
@@ -28290,7 +28272,7 @@ msgstr "请稍候"
 
 #: kicad/project_tree_pane.cpp:1630
 msgid "Waiting for Git operations to finish..."
-msgstr ""
+msgstr "等待 Git 操作完成..."
 
 #: kicad/project_tree_pane.cpp:1704
 msgid "The selected directory is already a Git project."
@@ -28489,18 +28471,16 @@ msgid "Launch preferred text editor"
 msgstr "启动首选文本编辑器"
 
 #: kicad/tools/kicad_manager_actions.cpp:221
-#, fuzzy
 msgid "Archive Project..."
-msgstr "打包工程 (&A)..."
+msgstr "打包工程..."
 
 #: kicad/tools/kicad_manager_actions.cpp:222
 msgid "Archive all project files"
 msgstr "打包全部工程文件"
 
 #: kicad/tools/kicad_manager_actions.cpp:228
-#, fuzzy
 msgid "Unarchive Project..."
-msgstr "解包工程 (&U)..."
+msgstr "解包工程..."
 
 #: kicad/tools/kicad_manager_actions.cpp:229
 msgid "Unarchive project files from zip archive"
@@ -28538,9 +28518,8 @@ msgid "Clone Project from Git Repository"
 msgstr "从 Git 仓库克隆工程"
 
 #: kicad/tools/kicad_manager_control.cpp:181
-#, fuzzy
 msgid "Clone Repository"
-msgstr "正在克隆仓库"
+msgstr "克隆仓库"
 
 #: kicad/tools/kicad_manager_control.cpp:194
 msgid "No project files were found in the repository."
@@ -29993,7 +29972,7 @@ msgstr "计算"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:85
 msgid "Rhodium"
-msgstr ""
+msgstr "铑"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:89
 msgid "Platinum"
@@ -30001,24 +29980,23 @@ msgstr "铂"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:93
 msgid "Palladium"
-msgstr ""
+msgstr "钯"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:97
 msgid "Gold"
 msgstr "金"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:101
-#, fuzzy
 msgid "Stainless steel 316L"
-msgstr "18-9 不锈钢"
+msgstr "316L 不锈钢"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:105
 msgid "Inconel"
-msgstr ""
+msgstr "因科耐尔合金"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:109
 msgid "Indium"
-msgstr ""
+msgstr "铟"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:113
 #, fuzzy
@@ -30039,20 +30017,19 @@ msgstr "汞"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:129
 msgid "ENEPIG (Ni/Pd/Au)"
-msgstr ""
+msgstr "镍钯金 (ENEPIG) (Ni/Pd/Au)"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:133
 msgid "ENIG (Ni/Au)"
-msgstr ""
+msgstr "镍金 (ENIG) (Ni/Au)"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:137
 msgid "Nickel"
 msgstr "镍"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:141
-#, fuzzy
 msgid "Carbon (Graphitic)"
-msgstr "清理图形"
+msgstr "碳 (石墨)"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:145
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:854
@@ -30070,16 +30047,15 @@ msgstr "黄铜"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:157
 msgid "Beryllium copper"
-msgstr ""
+msgstr "铍铜"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:161
-#, fuzzy
 msgid "Lead-free Solder"
-msgstr "无铅喷锡"
+msgstr "无铅焊料"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:165
 msgid "Phosphor bronze"
-msgstr ""
+msgstr "磷青铜"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:169
 msgid "Bronze"
@@ -30087,15 +30063,15 @@ msgstr "青铜"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:173
 msgid "Tin-Nickel (Sn/Ni)"
-msgstr ""
+msgstr "锡镍 (Sn/Ni)"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:177
 msgid "Solder 63/37 (Eutectic)"
-msgstr ""
+msgstr "63/37 锡铅焊料 (共晶焊料)"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:181
 msgid "Solder 60/40 (Leaded)"
-msgstr ""
+msgstr "60/40 锡铅焊料 (含铅焊料)"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:185
 msgid "Tin"
@@ -30107,7 +30083,7 @@ msgstr "铅"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:193
 msgid "2xxx series Al alloy"
-msgstr ""
+msgstr "2xxx 系铝合金"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:197
 msgid "Cast iron"
@@ -31594,7 +31570,6 @@ msgstr "必须在 %s 层上定义板边。"
 
 #: pcbnew/autorouter/autoplace_tool.cpp:125
 #: pcbnew/autorouter/autoplace_tool.cpp:131
-#, fuzzy
 msgid "Autoplace Footprints"
 msgstr "自动放置封装"
 
@@ -32746,9 +32721,8 @@ msgstr ""
 #: pcbnew/dialogs/dialog_board_setup.cpp:354 pcbnew/files.cpp:568
 #: pcbnew/tools/pcb_control.cpp:1689
 #: pcbnew/widgets/pcb_design_block_preview_widget.cpp:187
-#, fuzzy
 msgid "Load PCB"
-msgstr "加载 PCB 中"
+msgstr "加载 PCB"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:377
 #: pcbnew/widgets/pcb_design_block_preview_widget.cpp:203
@@ -35319,7 +35293,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1010
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:60
 msgid "Solder mask expansion:"
-msgstr "阻焊层扩展:"
+msgstr "阻焊扩展:"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:288
 msgid ""
@@ -38848,7 +38822,6 @@ msgid "Unused Pads"
 msgstr "未使用的焊盘"
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:42
-#, fuzzy
 msgid "Update Footprints"
 msgstr "更新封装"
 
@@ -38877,7 +38850,6 @@ msgid ""
 msgstr "从电路板移除未链接到原理图符号的且未锁定封装。"
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:55
-#, fuzzy
 msgid "Override locks"
 msgstr "忽略锁定设置"
 
@@ -39943,7 +39915,7 @@ msgstr "添加用户定义层..."
 msgid ""
 "Use your board manufacturer's recommendations for solder mask expansion and "
 "minimum web width."
-msgstr "请使用板厂推荐的阻焊层扩展和最小阻焊桥宽(绿油桥宽)。"
+msgstr "请使用板厂推荐的阻焊扩展和最小阻焊桥宽(绿油桥宽)。"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:33
 msgid "If none are provided, setting the values to zero is suggested."
@@ -41235,12 +41207,12 @@ msgstr "栅格重写"
 #: pcbnew/dialogs/panel_setup_time_domain_parameters_base.cpp:112
 #, fuzzy
 msgid "Signal Layer From"
-msgstr "丝印层"
+msgstr "信号层来自"
 
 #: pcbnew/dialogs/panel_setup_time_domain_parameters_base.cpp:113
 #, fuzzy
 msgid "Signal Layer To"
-msgstr "丝印层"
+msgstr "信号层到"
 
 #: pcbnew/dialogs/panel_setup_time_domain_parameters_base.cpp:114
 #, fuzzy
@@ -41370,7 +41342,7 @@ msgstr "keepout 域 '%s'"
 #: pcbnew/drc/drc_engine.cpp:663
 #, c-format
 msgid "Resolved zone connection type: %s."
-msgstr "已解析的填充区连接类型: %s。"
+msgstr "已解析填充区连接类型: %s。"
 
 #: pcbnew/drc/drc_engine.cpp:681
 #, c-format
@@ -41432,9 +41404,9 @@ msgid "%s min thickness: %s."
 msgstr "%s 最小线宽: %s。"
 
 #: pcbnew/drc/drc_engine.cpp:970
-#, fuzzy, c-format
+#, c-format
 msgid "Local override on %s; solder mask expansion: %s."
-msgstr "%s 上的局部覆盖; 间距: %s。"
+msgstr "%s 上的局部覆盖; 阻焊扩展: %s。"
 
 #: pcbnew/drc/drc_engine.cpp:988
 #, fuzzy, c-format
@@ -41449,7 +41421,7 @@ msgstr "%s 上的局部覆盖; 间距: %s。"
 #: pcbnew/drc/drc_engine.cpp:1018
 #, c-format
 msgid "Checking assertion \"%s\"."
-msgstr "检查断言 \"%s\"。"
+msgstr "正在检查断言 \"%s\"。"
 
 #: pcbnew/drc/drc_engine.cpp:1024 pcbnew/drc/drc_engine.cpp:1704
 msgid "Assertion passed."
@@ -41462,123 +41434,123 @@ msgstr "---> 断言失败。<--"
 #: pcbnew/drc/drc_engine.cpp:1048
 #, c-format
 msgid "Checking %s clearance: %s."
-msgstr "检查 %s 间距: %s。"
+msgstr "正在检查 %s 间距: %s。"
 
 #: pcbnew/drc/drc_engine.cpp:1053
 #, c-format
 msgid "Checking %s creepage: %s."
-msgstr "检查 %s 爬电距离: %s。"
+msgstr "正在检查 %s 爬电距离: %s。"
 
 #: pcbnew/drc/drc_engine.cpp:1058
 #, c-format
 msgid "Checking %s max uncoupled length: %s."
-msgstr "检查 %s 最大未耦合长度: %s。"
+msgstr "正在检查 %s 最大未耦合长度: %s。"
 
 #: pcbnew/drc/drc_engine.cpp:1064
 #, c-format
 msgid "Checking %s max skew: %s."
-msgstr "检查 %s 最大 skew: %s。"
+msgstr "正在检查 %s 最大 skew: %s。"
 
 #: pcbnew/drc/drc_engine.cpp:1070
 #, c-format
 msgid "Checking %s gap: %s."
-msgstr "检查 %s 间隙: %s。"
+msgstr "正在检查 %s 间隙: %s。"
 
 #: pcbnew/drc/drc_engine.cpp:1076
 #, c-format
 msgid "Checking %s thermal spoke width: %s."
-msgstr "检查 %s 散热引线宽度: %s。"
+msgstr "正在检查 %s 散热引线宽度: %s。"
 
 #: pcbnew/drc/drc_engine.cpp:1082
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s solder mask expansion: %s."
-msgstr "正检查 %s 孔尺寸: 最小 %s。"
+msgstr "正在检查 %s 阻焊扩展: %s。"
 
 #: pcbnew/drc/drc_engine.cpp:1088
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s solder paste absolute cleraance: %s."
-msgstr "锡膏绝对间距:"
+msgstr "正在检查 %s 锡膏绝对间距: %s。"
 
 #: pcbnew/drc/drc_engine.cpp:1094
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s solder paste relative clearance: %s."
-msgstr "锡膏相对间距:"
+msgstr "正在检查 %s 锡膏相对间距: %s。"
 
 #: pcbnew/drc/drc_engine.cpp:1100
 #, c-format
 msgid "Checking %s min spoke count: %s."
-msgstr "检查 %s 最小引线数: %s。"
+msgstr "正在检查 %s 最小引线数量: %s。"
 
 #: pcbnew/drc/drc_engine.cpp:1107
 #, c-format
 msgid "Checking %s zone connection: %s."
-msgstr "检查 %s 填充区连接: %s。"
+msgstr "正在检查 %s 填充区连接: %s。"
 
 #: pcbnew/drc/drc_engine.cpp:1139
 #, c-format
 msgid "Checking %s track width: opt %s."
-msgstr "正检查 %s 走线宽度: 最优 %s。"
+msgstr "正在检查 %s 走线宽度: 最优 %s。"
 
 #: pcbnew/drc/drc_engine.cpp:1145
 #, c-format
 msgid "Checking %s track width: min %s."
-msgstr "正检查 %s 走线宽度: 最小%s。"
+msgstr "正在检查 %s 走线宽度: 最小%s。"
 
 #: pcbnew/drc/drc_engine.cpp:1153
 #, c-format
 msgid "Checking %s annular width: min %s."
-msgstr "正检查 %s 孔环宽度: 最小 %s。"
+msgstr "正在检查 %s 孔环宽度: 最小 %s。"
 
 #: pcbnew/drc/drc_engine.cpp:1161
 #, c-format
 msgid "Checking %s via diameter: opt %s."
-msgstr "正检查 %s 过孔直径: 最优 %s。"
+msgstr "正在检查 %s 过孔直径: 最优 %s。"
 
 #: pcbnew/drc/drc_engine.cpp:1167
 #, c-format
 msgid "Checking %s via diameter: min %s."
-msgstr "正检查 %s 过孔直径: 最小 %s。"
+msgstr "正在检查 %s 过孔直径: 最小 %s。"
 
 #: pcbnew/drc/drc_engine.cpp:1176
 #, c-format
 msgid "Checking %s hole size: opt %s."
-msgstr "正检查 %s 孔尺寸: 最优 %s。"
+msgstr "正在检查 %s 通孔孔径: 最优 %s。"
 
 #: pcbnew/drc/drc_engine.cpp:1182
 #, c-format
 msgid "Checking %s hole size: min %s."
-msgstr "正检查 %s 孔尺寸: 最小 %s。"
+msgstr "正在检查 %s 通孔孔径: 最小 %s。"
 
 #: pcbnew/drc/drc_engine.cpp:1192
 #, c-format
 msgid "Checking %s: min %s."
-msgstr "正检查 %s: 最小 %s。"
+msgstr "正在检查 %s: 最小 %s。"
 
 #: pcbnew/drc/drc_engine.cpp:1200
 #, c-format
 msgid "Checking %s diff pair gap: opt %s."
-msgstr "正检查 %s 差分对间隙: 最优 %s。"
+msgstr "正在检查 %s 差分对间隙: 最优 %s。"
 
 #: pcbnew/drc/drc_engine.cpp:1206
 #, c-format
 msgid "Checking %s clearance: min %s."
-msgstr "正检查 %s 间隙: 最小 %s。"
+msgstr "正在检查 %s 间隙: 最小 %s。"
 
 #: pcbnew/drc/drc_engine.cpp:1214
 #, c-format
 msgid "Checking %s hole to hole: min %s."
-msgstr "正检查 %s 孔到孔: 最小 %s。"
+msgstr "正在检查 %s 通孔到通孔间距: 最小 %s。"
 
 #: pcbnew/drc/drc_engine.cpp:1220 pcbnew/drc/drc_engine.cpp:1246
 #: pcbnew/drc/drc_engine.cpp:1717
 #, c-format
 msgid "Checking %s."
-msgstr "检查 %s。"
+msgstr "正在检查 %s。"
 
 #: pcbnew/drc/drc_engine.cpp:1235
 #, c-format
 msgid "Checking %s: min %s; opt %s; max %s."
-msgstr "正检查 %s: 最小 %s; 最优 %s; 最大 %s。"
+msgstr "正在检查 %s: 最小 %s; 最优 %s; 最大 %s。"
 
 #: pcbnew/drc/drc_engine.cpp:1256
 msgid "Netclass clearances apply only between copper items."
@@ -41635,7 +41607,7 @@ msgstr "已应用无条件规则; 覆盖之前的约束。"
 #: pcbnew/drc/drc_engine.cpp:1415 pcbnew/drc/drc_engine.cpp:1732
 #, c-format
 msgid "Checking rule condition \"%s\"."
-msgstr "检查规则条件 \"%s\"。"
+msgstr "正在检查规则条件 \"%s\"。"
 
 #: pcbnew/drc/drc_engine.cpp:1425
 msgid "Constraint applied."
@@ -41664,7 +41636,6 @@ msgstr "继承自父对象 '%s'。"
 
 #: pcbnew/drc/drc_engine.cpp:1493 pcbnew/drc/drc_engine.cpp:1500
 #: pcbnew/drc/drc_engine.cpp:1507
-#, fuzzy
 msgid "board setup"
 msgstr "电路板配置"
 
@@ -41701,7 +41672,7 @@ msgstr "%s 散热引线宽度: %s。"
 #: pcbnew/drc/drc_engine.cpp:1698
 #, c-format
 msgid "Checking rule assertion \"%s\"."
-msgstr "检查规则断言 \"%s\"。"
+msgstr "正在检查规则断言 \"%s\"。"
 
 #: pcbnew/drc/drc_item.cpp:42 pcbnew/zone.cpp:2005
 msgid "Electrical"
@@ -42136,7 +42107,7 @@ msgstr "缺少严重级别名称。"
 
 #: pcbnew/drc/drc_test_provider_annular_width.cpp:88
 msgid "Checking pad & via annular rings..."
-msgstr "检查焊盘和过孔孔环..."
+msgstr "正在检查焊盘和过孔孔环..."
 
 #: pcbnew/drc/drc_test_provider_annular_width.cpp:340
 #, c-format
@@ -42150,7 +42121,7 @@ msgstr "(%s 最大孔环宽度 %s; 实际 %s)"
 
 #: pcbnew/drc/drc_test_provider_connection_width.cpp:318
 msgid "Checking nets for minimum connection width..."
-msgstr "正检查网络的最小连接宽度..."
+msgstr "正在检查网络的最小连接宽度..."
 
 #: pcbnew/drc/drc_test_provider_connection_width.cpp:470
 #, c-format
@@ -42159,7 +42130,7 @@ msgstr "(%s 最小连接宽度 %s; 实际 %s)"
 
 #: pcbnew/drc/drc_test_provider_connectivity.cpp:71
 msgid "Checking pad, via and zone connections..."
-msgstr "正在检查焊盘、过孔和填充区连接..."
+msgstr "正在检查焊盘, 过孔和填充区连接..."
 
 #: pcbnew/drc/drc_test_provider_connectivity.cpp:139
 msgid "Checking net connections..."
@@ -42171,7 +42142,7 @@ msgstr "正在检查走线和过孔间距..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:154
 msgid "Checking hole clearances..."
-msgstr "正在检查孔间距..."
+msgstr "正在检查通孔间距..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:162
 msgid "Checking pad clearances..."
@@ -42183,11 +42154,11 @@ msgstr "正在检查焊盘..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:178
 msgid "Checking copper graphic clearances..."
-msgstr "检查铜层间距..."
+msgstr "正在检查覆铜图形间距..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:186
 msgid "Checking copper zone clearances..."
-msgstr "检查覆铜区间距..."
+msgstr "正在检查覆铜填充区间距..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:290
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:592
@@ -42278,7 +42249,7 @@ msgstr "正在检查铜层到板边缘间距..."
 
 #: pcbnew/drc/drc_test_provider_edge_clearance.cpp:155
 msgid "Checking silk to board edge clearances..."
-msgstr "正在检查 silk 到板边缘间距..."
+msgstr "正在检查丝印到板边间距..."
 
 #: pcbnew/drc/drc_test_provider_hole_size.cpp:75
 msgid "Checking pad holes..."
@@ -42738,7 +42709,7 @@ msgstr "正在收集物理项目..."
 
 #: pcbnew/drc/drc_test_provider_physical_clearance.cpp:185
 msgid "Checking physical clearances..."
-msgstr "检查物理间距..."
+msgstr "正在检查物理间距..."
 
 #: pcbnew/drc/drc_test_provider_physical_clearance.cpp:533
 #, c-format
@@ -42820,7 +42791,7 @@ msgstr "正在检查阻焊层与丝印的间距..."
 
 #: pcbnew/drc/drc_test_provider_solder_mask.cpp:805
 msgid "Checking solder mask web integrity..."
-msgstr "正在检查阻焊层网络的完整性..."
+msgstr "正在检查阻焊网的完整性..."
 
 #: pcbnew/drc/drc_test_provider_text_dims.cpp:88
 msgid "Checking text dimensions..."
@@ -42856,7 +42827,7 @@ msgstr "正在检查文本镜像..."
 
 #: pcbnew/drc/drc_test_provider_track_angle.cpp:78
 msgid "Checking track angles..."
-msgstr "检查走线角度..."
+msgstr "正在检查走线角度..."
 
 #: pcbnew/drc/drc_test_provider_track_angle.cpp:180
 #, c-format
@@ -42870,7 +42841,7 @@ msgstr "(%s 最大角度 %s; 实际 %s)"
 
 #: pcbnew/drc/drc_test_provider_track_segment_length.cpp:75
 msgid "Checking track segment lengths..."
-msgstr "检查走线段长度度..."
+msgstr "正在检查走线段长度..."
 
 #: pcbnew/drc/drc_test_provider_track_width.cpp:74
 msgid "Checking track widths..."
@@ -43222,9 +43193,9 @@ msgstr "过孔"
 #: pcbnew/exporters/step/step_pcb_model.cpp:3167
 #: pcbnew/exporters/step/step_pcb_model.cpp:3241
 #: pcbnew/exporters/step/step_pcb_model.cpp:3309
-#, fuzzy, c-format
+#, c-format
 msgid "No valid PCB assembly; cannot create output file '%s'.\n"
-msgstr "无法创建输出目录 '%s'。"
+msgstr "没有有效的 PCB 组件; 无法创建输出文件 '%s'。\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2389
 msgid "Failed to set STEP product name, but will attempt to continue."
@@ -43248,9 +43219,9 @@ msgid "Cannot identify actual file type for '%s'.\n"
 msgstr "无法识别 '%s' 的实际文件类型。\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2899
-#, fuzzy, c-format
+#, c-format
 msgid "Could not transfer model data from file '%s'.\n"
-msgstr "无法从值“%s”推断模型"
+msgstr "无法从文件 '%s' 中获取模型数据。\n"
 
 #: pcbnew/files.cpp:153
 msgid "All KiCad Board Files"
@@ -45617,8 +45588,8 @@ msgid ""
 "equivalent. It has been moved to KiCad layer Eco1_User."
 msgstr ""
 "正在加载 '%1$s' 库:\n"
-"在封装 %2$s 中发现在其 Altium 层 (%4$d) 上存在非铜焊盘 %3$s, 但在 KiCad 中没"
-"有对应的等效项。已将其移至 KiCad 的 Eco1_User 层。"
+"在 Altium 层 (%4$d) 上发现封装 %2$s 中存在非铜焊盘 %3$s, 但在 KiCad "
+"中没有对应的等效项。已将其移至 KiCad 的 Eco1_User 层。"
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3655
 #, c-format
@@ -45626,8 +45597,8 @@ msgid ""
 "Footprint %s non-copper pad %s found on an Altium layer (%d) with no KiCad "
 "equivalent. It has been moved to KiCad layer Eco1_User."
 msgstr ""
-"在封装 %1$s 中发现在其 Altium 层 (%3$d) 上存在非铜焊盘 %2$s, 但在 KiCad 中没"
-"有对应的等效项。已将其移至 KiCad 的 Eco1_User 层。"
+"在 Altium 层 (%3$d) 上发现封装 %1$s 中存在非铜焊盘 %2$s, 但在 KiCad "
+"中没有对应的等效项。已将其移至 KiCad 的 Eco1_User 层。"
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3683
 #, c-format
@@ -46956,9 +46927,9 @@ msgid "No layers selected for plotting."
 msgstr "未选择要绘制的层。"
 
 #: pcbnew/pcb_plotter.cpp:481
-#, fuzzy, c-format
+#, c-format
 msgid "Color theme '%s' not found, will use theme from PCB Editor.\n"
-msgstr "未找到配色主题 '%s', 将使用 PCB 编辑器设置中的主题。\n"
+msgstr "未找到配色主题 '%s', 将使用 PCB 编辑器主题。\n"
 
 #: pcbnew/pcb_reference_image.cpp:350
 msgid "Associated Layer"
@@ -47057,7 +47028,7 @@ msgstr "线段长度"
 #: pcbnew/pcb_track.cpp:1821
 #, fuzzy
 msgid "Segment Delay"
-msgstr "线段"
+msgstr "线段延迟"
 
 #: pcbnew/pcb_track.cpp:1867
 #, fuzzy
@@ -47407,7 +47378,7 @@ msgstr "多层"
 
 #: pcbnew/plot_board_layers.cpp:1223
 msgid "HPGL plotting is no longer supported as of KiCad 10.0"
-msgstr ""
+msgstr "自 KiCad 10.0 起, 不再支持绘制 HPGL 图"
 
 #: pcbnew/project_pcb.cpp:64
 msgid "Error loading project footprint libraries."
@@ -47756,7 +47727,7 @@ msgstr "布线(差分对): %s"
 #: pcbnew/router/router_tool.cpp:2712 pcbnew/router/router_tool.cpp:2723
 #, c-format
 msgid "Resolved Netclass: %s"
-msgstr "已解析的网络类: %s"
+msgstr "已解析网络类: %s"
 
 #: pcbnew/router/router_tool.cpp:2719
 #, c-format
@@ -48102,7 +48073,7 @@ msgstr "差分对未耦合长度解析:"
 #: pcbnew/tools/board_inspection_tool.cpp:1022
 #, c-format
 msgid "Resolved max uncoupled length: %s."
-msgstr "已解析的最大未耦合长度: %s。"
+msgstr "已解析最大未耦合长度: %s。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:405
 #: pcbnew/tools/board_inspection_tool.cpp:1489
@@ -48112,7 +48083,7 @@ msgstr "文本高度解析:"
 #: pcbnew/tools/board_inspection_tool.cpp:413
 #, c-format
 msgid "Resolved height constraints: min %s; max %s."
-msgstr "已解析的高度约束: 最小 %s; 最大 %s。"
+msgstr "已解析高度约束: 最小 %s; 最大 %s。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:420
 #: pcbnew/tools/board_inspection_tool.cpp:1505
@@ -48122,7 +48093,7 @@ msgstr "文本线宽解析:"
 #: pcbnew/tools/board_inspection_tool.cpp:428
 #, c-format
 msgid "Resolved thickness constraints: min %s; max %s."
-msgstr "已解析的线宽约束: 最小 %s; 最大 %s。"
+msgstr "已解析线宽约束: 最小 %s; 最大 %s。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:435
 #: pcbnew/tools/board_inspection_tool.cpp:1366
@@ -48132,7 +48103,7 @@ msgstr "走线宽度解析:"
 #: pcbnew/tools/board_inspection_tool.cpp:443
 #, c-format
 msgid "Resolved width constraints: min %s; max %s."
-msgstr "已解析的宽度约束: 最小 %s; 最大 %s。"
+msgstr "已解析宽度约束: 最小 %s; 最大 %s。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:449
 msgid "Track Angle"
@@ -48145,7 +48116,7 @@ msgstr "走线角度解析:"
 #: pcbnew/tools/board_inspection_tool.cpp:458
 #, c-format
 msgid "Resolved angle constraints: min %s; max %s."
-msgstr "已解析的角度约束: 最小 %s; 最大 %s。"
+msgstr "已解析角度约束: 最小 %s; 最大 %s。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:464
 msgid "Track Segment Length"
@@ -48158,7 +48129,7 @@ msgstr "走线段长度解析:"
 #: pcbnew/tools/board_inspection_tool.cpp:473
 #, c-format
 msgid "Resolved segment length constraints: min %s; max %s."
-msgstr "已解析的直径约束: 最小 %s; 最大 %s。"
+msgstr "已解析段长度约束: 最小 %s; 最大 %s。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:479
 msgid "Connection Width"
@@ -48171,7 +48142,7 @@ msgstr "连接宽度解析:"
 #: pcbnew/tools/board_inspection_tool.cpp:488
 #, c-format
 msgid "Resolved min connection width: %s."
-msgstr "已解析的最小连接宽度约束: %s。"
+msgstr "已解析最小连接宽度约束: %s。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:493
 #: pcbnew/tools/board_inspection_tool.cpp:1384
@@ -48186,7 +48157,7 @@ msgstr "过孔直径解析:"
 #: pcbnew/tools/board_inspection_tool.cpp:502
 #, c-format
 msgid "Resolved diameter constraints: min %s; max %s."
-msgstr "已解析的直径约束: 最小 %s; 最大 %s。"
+msgstr "已解析直径约束: 最小 %s; 最大 %s。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:508
 msgid "Via Annulus"
@@ -48200,7 +48171,7 @@ msgstr "过孔孔环宽度解析:"
 #: pcbnew/tools/board_inspection_tool.cpp:517
 #, c-format
 msgid "Resolved annular width constraints: min %s; max %s."
-msgstr "已解析的孔环宽度约束: 最小 %s; 最大 %s。"
+msgstr "已解析孔环宽度约束: 最小 %s; 最大 %s。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:524
 #: pcbnew/tools/board_inspection_tool.cpp:1422
@@ -48215,7 +48186,7 @@ msgstr "孔直径解析:"
 #: pcbnew/tools/board_inspection_tool.cpp:533
 #, c-format
 msgid "Resolved hole size constraints: min %s; max %s."
-msgstr "已解析的高度约束: 最小 %s; 最大 %s。"
+msgstr "已解析孔径约束: 最小 %s; 最大 %s。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:539
 msgid "Hole Clearance"
@@ -48249,7 +48220,7 @@ msgstr "项目属于同一网络。间距为 0。"
 #: pcbnew/tools/board_inspection_tool.cpp:1314
 #, c-format
 msgid "Resolved min clearance: %s."
-msgstr "已解析的间距: %s。"
+msgstr "已解析最小间距: %s。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:563
 #: pcbnew/tools/board_inspection_tool.cpp:1297
@@ -48325,7 +48296,7 @@ msgstr "缓释热焊盘 (花焊盘) 间隙解析:"
 #: pcbnew/tools/board_inspection_tool.cpp:842
 #, c-format
 msgid "Resolved thermal relief gap: %s."
-msgstr "已解析的缓释热焊盘 (花焊盘) 间隙: %s。"
+msgstr "已解析缓释热焊盘 (花焊盘) 间隙: %s。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:847
 msgid "Thermal-relief spoke width resolution for:"
@@ -48334,7 +48305,7 @@ msgstr "缓释热焊盘 (花焊盘) 间距宽度:"
 #: pcbnew/tools/board_inspection_tool.cpp:856
 #, c-format
 msgid "Resolved spoke width: %s."
-msgstr "已解析的缓释热焊盘 (花焊盘) 引线宽度: %s。"
+msgstr "已解析缓释热焊盘 (花焊盘) 引线宽度: %s。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:861
 msgid "Thermal-relief min spoke count resolution for:"
@@ -48343,7 +48314,7 @@ msgstr "缓释热焊盘 (花焊盘) 最小引线宽度间距:"
 #: pcbnew/tools/board_inspection_tool.cpp:870
 #, c-format
 msgid "Resolved min spoke count: %d."
-msgstr "已解析的最小缓释热焊盘 (花焊盘) 引线数量: %d。"
+msgstr "已解析最小缓释热焊盘 (花焊盘) 引线数量: %d。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:879
 #: pcbnew/tools/board_inspection_tool.cpp:927
@@ -48376,7 +48347,7 @@ msgstr "最小间距为 0。"
 #: pcbnew/tools/board_inspection_tool.cpp:972
 #, c-format
 msgid "Resolved clearance: %s; clearance will not be tested."
-msgstr "已解决的间距问题: %s; 不被测试的间距。"
+msgstr "已解析间距: %s; 不被测试的间距。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:995
 msgid "Diff Pair"
@@ -48389,7 +48360,7 @@ msgstr "差分对间隙解析:"
 #: pcbnew/tools/board_inspection_tool.cpp:1001
 #, c-format
 msgid "Resolved gap constraints: min %s; opt %s; max %s."
-msgstr "已解析的间隙约束: 最小 %s; 最优 %s; 最大 %s。"
+msgstr "已解析间隙约束: 最小 %s; 最优 %s; 最大 %s。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1009
 msgid "Diff-pair max uncoupled length resolution for:"
@@ -48434,12 +48405,12 @@ msgstr "为约束解析报告选一个对象。"
 #: pcbnew/tools/board_inspection_tool.cpp:1374
 #, c-format
 msgid "Resolved width constraints: min %s; opt %s; max %s."
-msgstr "已解析的间距约束: 最小 %s; 最优 %s; 最大 %s。"
+msgstr "已解析间距约束: 最小 %s; 最优 %s; 最大 %s。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1394
 #, c-format
 msgid "Resolved diameter constraints: min %s; opt %s; max %s."
-msgstr "已解析的直径约束: 最小 %s; 最优 %s; 最大 %s。"
+msgstr "已解析直径约束: 最小 %s; 最优 %s; 最大 %s。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1401
 msgid "Via Annular Width"
@@ -48448,12 +48419,12 @@ msgstr "过孔孔环宽度"
 #: pcbnew/tools/board_inspection_tool.cpp:1411
 #, c-format
 msgid "Resolved annular width constraints: min %s; opt %s; max %s."
-msgstr "已解析的孔环宽度约束: 最小 %s; 最优 %s; 最大 %s。"
+msgstr "已解析孔环宽度约束: 最小 %s; 最优 %s; 最大 %s。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1431
 #, c-format
 msgid "Resolved hole size constraints: min %s; opt %s; max %s."
-msgstr "已解析的间距约束: 最小 %s; 最优 %s; 最大 %s。"
+msgstr "已解析间距约束: 最小 %s; 最优 %s; 最大 %s。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1441
 #, fuzzy
@@ -48461,14 +48432,13 @@ msgid "Solder Mask"
 msgstr "阻焊"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1442
-#, fuzzy
 msgid "Solder mask expansion resolution for:"
-msgstr "阻焊层扩展:"
+msgstr "阻焊扩展解析:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1450
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved solder mask expansion: %s."
-msgstr "阻焊层扩展:"
+msgstr "已解析阻焊扩展: %s。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1459
 #, fuzzy
@@ -48476,9 +48446,9 @@ msgid "Solder paste absolute clearance resolution for:"
 msgstr "锡膏绝对间距:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1467
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved solder paste absolute clearance: %s."
-msgstr "锡膏绝对间距:"
+msgstr "已解析锡膏绝对间距: %s。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1470
 #, fuzzy
@@ -48486,19 +48456,19 @@ msgid "Solder paste relative clearance resolution for:"
 msgstr "锡膏相对间距:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1480
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved solder paste relative clearance: %s."
-msgstr "锡膏相对间距:"
+msgstr "已解析锡膏相对间距: %s。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1497
 #, c-format
 msgid "Resolved height constraints: min %s; opt %s; max %s."
-msgstr "已解析的间距约束: 最小 %s; 最优 %s; 最大 %s。"
+msgstr "已解析间距约束: 最小 %s; 最优 %s; 最大 %s。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1513
 #, c-format
 msgid "Resolved thickness constraints: min %s; opt %s; max %s."
-msgstr "已解析的线宽约束: 最小 %s; 最优 %s; 最大 %s。"
+msgstr "已解析线宽约束: 最小 %s; 最优 %s; 最大 %s。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1522
 msgid "Keepout resolution for:"
@@ -50561,9 +50531,8 @@ msgid "Unroutes selected items to the nearest pad."
 msgstr "取消所选对象到距离最近的焊盘的布线。"
 
 #: pcbnew/tools/pcb_actions.cpp:2268
-#, fuzzy
 msgid "Unroute Segment"
-msgstr "取消选中对象的布线"
+msgstr "取消选中段的布线"
 
 #: pcbnew/tools/pcb_actions.cpp:2269
 #, fuzzy
@@ -51009,7 +50978,7 @@ msgstr "DP 间隙约束: %s"
 
 #: pcbnew/tools/pcb_control.cpp:1981
 msgid "Resolved Clearance"
-msgstr "已解析的间距"
+msgstr "已解析间距"
 
 #: pcbnew/tools/pcb_control.cpp:1991
 msgid "Actual Clearance"
@@ -51017,7 +50986,7 @@ msgstr "实际间距"
 
 #: pcbnew/tools/pcb_control.cpp:2034
 msgid "Resolved Hole Clearance"
-msgstr "已解析的孔间距"
+msgstr "已解析孔间距"
 
 #: pcbnew/tools/pcb_control.cpp:2039
 msgid "Actual Hole Clearance"
@@ -51025,11 +50994,11 @@ msgstr "实际孔间距"
 
 #: pcbnew/tools/pcb_control.cpp:2072
 msgid "Resolved Edge Clearance"
-msgstr "已解析的边缘间距"
+msgstr "已解析边缘间距"
 
 #: pcbnew/tools/pcb_control.cpp:2077
 msgid "Resolved Margin Clearance"
-msgstr "已解析的边界层间距"
+msgstr "已解析边界层间距"
 
 #: pcbnew/tools/pcb_control.cpp:2088
 msgid "Selected Items"
@@ -51093,9 +51062,8 @@ msgid "Edge card connectors: "
 msgstr "板边倒角处理: "
 
 #: pcbnew/tools/pcb_control.cpp:2384
-#, fuzzy
 msgid "Place Board Characteristics"
-msgstr "电路板特性"
+msgstr "放置电路板特性表"
 
 #: pcbnew/tools/pcb_control.cpp:2437
 msgid "Loss Tangent"
@@ -51106,9 +51074,8 @@ msgid "Dielectric"
 msgstr "介质"
 
 #: pcbnew/tools/pcb_control.cpp:2483
-#, fuzzy
 msgid "Place Board Stackup Table"
-msgstr "插入电路板叠层表"
+msgstr "放置电路板叠层表"
 
 #: pcbnew/tools/pcb_point_editor.cpp:1980
 msgid "Resize Table Cells"
@@ -51203,7 +51170,6 @@ msgid "Draw Polygon"
 msgstr "绘制多边形"
 
 #: pcbnew/tools/zone_filler_tool.cpp:89
-#, fuzzy
 msgid "Check Zones"
 msgstr "检查填充区"
 
@@ -51254,7 +51220,7 @@ msgstr "取消填充填充区"
 
 #: pcbnew/tracks_cleaner.cpp:74
 msgid "Checking null tracks and vias..."
-msgstr "正检查无效走线和过孔..."
+msgstr "正在检查无效走线和过孔..."
 
 #: pcbnew/tracks_cleaner.cpp:76
 msgid "Removing null tracks and vias..."
@@ -51262,7 +51228,7 @@ msgstr "正移除无效走线和过孔..."
 
 #: pcbnew/tracks_cleaner.cpp:87
 msgid "Checking redundant tracks..."
-msgstr "正检查多余走线..."
+msgstr "正在检查冗余走线..."
 
 #: pcbnew/tracks_cleaner.cpp:89
 msgid "Removing redundant tracks..."
@@ -51270,7 +51236,7 @@ msgstr "正移除多余走线..."
 
 #: pcbnew/tracks_cleaner.cpp:103
 msgid "Checking shorting tracks..."
-msgstr "检查短路走线..."
+msgstr "正在检查短路走线..."
 
 #: pcbnew/tracks_cleaner.cpp:105
 msgid "Removing shorting tracks..."
@@ -51278,7 +51244,7 @@ msgstr "正移除短路的走线..."
 
 #: pcbnew/tracks_cleaner.cpp:118
 msgid "Checking tracks in pads..."
-msgstr "检查焊盘内走线..."
+msgstr "正在检查焊盘内走线..."
 
 #: pcbnew/tracks_cleaner.cpp:120
 msgid "Removing tracks in pads..."
@@ -51286,7 +51252,7 @@ msgstr "正移除焊盘内走线..."
 
 #: pcbnew/tracks_cleaner.cpp:134
 msgid "Checking dangling tracks and vias..."
-msgstr "正检查悬空的走线和过孔..."
+msgstr "正在检查悬空的走线和过孔..."
 
 #: pcbnew/tracks_cleaner.cpp:139
 msgid "Removing dangling tracks..."
@@ -51298,7 +51264,7 @@ msgstr "正移除悬空的过孔..."
 
 #: pcbnew/tracks_cleaner.cpp:156
 msgid "Checking collinear tracks..."
-msgstr "检查同一直线上走线..."
+msgstr "正在检查重叠走线..."
 
 #: pcbnew/tracks_cleaner.cpp:158
 msgid "Merging collinear tracks..."
@@ -52042,7 +52008,7 @@ msgstr "过孔延迟"
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:139
 #, fuzzy
 msgid "Track Delay"
-msgstr "走线间隙:"
+msgstr "走线延迟"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:141
 #, fuzzy
@@ -52138,7 +52104,7 @@ msgstr "显示未连接网络"
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1279
 #, fuzzy
 msgid "Show Time Domain Details"
-msgstr "显示侧边栏面板"
+msgstr "显示时域详细信息"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1287
 msgid "Save Net Inspector Report..."
@@ -52221,9 +52187,8 @@ msgid "No pads"
 msgstr "无焊盘"
 
 #: pcbnew/zone.cpp:834
-#, fuzzy
 msgid "No zone fills"
-msgstr "禁止填充填充区"
+msgstr "无填充区填充内容"
 
 #: pcbnew/zone.cpp:837
 msgid "No footprints"
@@ -52324,9 +52289,8 @@ msgid "Keep Out Pads"
 msgstr "禁止放置焊盘"
 
 #: pcbnew/zone.cpp:1899
-#, fuzzy
 msgid "Keep Out Zone Fills"
-msgstr "禁止填充填充区"
+msgstr "禁止填充区填充内容"
 
 #: pcbnew/zone.cpp:1905
 msgid "Keep Out Footprints"
@@ -52386,7 +52350,7 @@ msgstr "最小宽度"
 
 #: pcbnew/zone_filler.cpp:253
 msgid "Checking zone fills..."
-msgstr "检查填充区填充内容..."
+msgstr "正在检查填充区填充内容..."
 
 #: pcbnew/zone_filler.cpp:254
 msgid "Building zone fills..."
