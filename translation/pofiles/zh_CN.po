@@ -41,7 +41,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-06-08 17:03+0300\n"
-"PO-Revision-Date: 2025-06-08 02:02+0000\n"
+"PO-Revision-Date: 2025-06-11 07:01+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/kicad/v9/zh_Hans/>\n"
@@ -3567,7 +3567,7 @@ msgstr "自定义:"
 
 #: common/dialogs/dialog_print_generic_base.cpp:77
 msgid "Set X scale adjust for exact scale plotting"
-msgstr "调整 X 比例使输出的绘图比例更加精确"
+msgstr "调整 X 缩放使输出的绘图比例更加精确"
 
 #: common/dialogs/dialog_print_generic_base.cpp:96
 msgid "Info text"
@@ -16876,7 +16876,7 @@ msgstr "分配的封装 (%s) 与封装筛选规则 (%s) 不匹配。"
 
 #: eeschema/erc/erc.cpp:1822
 msgid "Checking sheet names..."
-msgstr "检查页面名称..."
+msgstr "正在检查图纸名称..."
 
 #: eeschema/erc/erc.cpp:1830
 msgid "Checking bus conflicts..."
@@ -16893,7 +16893,7 @@ msgstr "正在检查单元..."
 #: eeschema/erc/erc.cpp:1857
 #: pcbnew/drc/drc_test_provider_footprint_checks.cpp:70
 msgid "Checking footprints..."
-msgstr "检查封装..."
+msgstr "正在检查封装..."
 
 #: eeschema/erc/erc.cpp:1871
 msgid "Checking pins..."
@@ -16905,7 +16905,7 @@ msgstr "正在检查相似标签..."
 
 #: eeschema/erc/erc.cpp:1899
 msgid "Checking local and global labels..."
-msgstr "正在检查本地标签和全局标签..."
+msgstr "正在检查局部标签和全局标签..."
 
 #: eeschema/erc/erc.cpp:1907
 msgid "Checking for unresolved variables..."
@@ -16917,7 +16917,7 @@ msgstr "正在检查 SPICE 模型..."
 
 #: eeschema/erc/erc.cpp:1923
 msgid "Checking no connect pins for connections..."
-msgstr "正在检查没有连接的连接引脚..."
+msgstr "正在检查无连接引脚的连接..."
 
 #: eeschema/erc/erc.cpp:1932
 msgid "Checking for library symbol issues..."
@@ -16925,7 +16925,7 @@ msgstr "正在检查库符号问题..."
 
 #: eeschema/erc/erc.cpp:1940
 msgid "Checking for footprint link issues..."
-msgstr "检查封装链接问题..."
+msgstr "正在检查封装链接问题..."
 
 #: eeschema/erc/erc.cpp:1948
 msgid "Checking footprint assignments against footprint filters..."
@@ -16933,7 +16933,7 @@ msgstr "正在根据封装筛选规则检查封装分配..."
 
 #: eeschema/erc/erc.cpp:1956
 msgid "Checking for off grid pins and wires..."
-msgstr "检查偏离栅格的引脚与走线..."
+msgstr "正在检查偏离栅格的引脚和走线..."
 
 #: eeschema/erc/erc.cpp:1964
 msgid "Checking for four way junctions..."
@@ -16941,7 +16941,7 @@ msgstr "正在检查四通路结点..."
 
 #: eeschema/erc/erc.cpp:1972
 msgid "Checking for labels on more than one wire..."
-msgstr "检查标签是否连接了不止一条连线..."
+msgstr "正在检查标签是否连接了不止一条的连线..."
 
 #: eeschema/erc/erc.cpp:1980
 msgid "Checking for undefined netclasses..."
@@ -18187,7 +18187,7 @@ msgstr "总线输入类型"
 #: pcbnew/pcb_track.cpp:1713 pcbnew/tools/pcb_control.cpp:1890
 #: pcbnew/zone.cpp:812
 msgid "Resolved Netclass"
-msgstr "已解析的网络类"
+msgstr "已解析网络类"
 
 #: eeschema/sch_connection.cpp:445
 msgid "Connection Name"
@@ -19221,7 +19221,7 @@ msgstr "网络"
 #: eeschema/sch_label.cpp:1382 eeschema/sch_line.cpp:894
 #: eeschema/sch_rule_area.cpp:395
 msgid "Resolved netclass"
-msgstr "已解析的网络类"
+msgstr "已解析网络类"
 
 #: eeschema/sch_label.cpp:1400
 msgid "Hierarchical Labels"
@@ -20194,7 +20194,7 @@ msgstr "Cpin 无效。"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:260
 msgid "Checking component "
-msgstr "检查元件 "
+msgstr "正在检查元件 "
 
 #: eeschema/sim/kibis/ibis_parser.cpp:267
 msgid "Component: name cannot be empty."
@@ -20242,7 +20242,7 @@ msgstr "型号名称不能为空"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:491
 msgid "Checking model "
-msgstr "检查型号 "
+msgstr "正在检查模型 "
 
 #: eeschema/sim/kibis/ibis_parser.cpp:498
 msgid "Undefined model type."
@@ -20306,7 +20306,7 @@ msgstr "无效 Ramp"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:635
 msgid "Checking Header..."
-msgstr "正在检查 Header..."
+msgstr "正在检查头..."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:642
 msgid "Missing [IBIS Ver]"
@@ -20330,7 +20330,7 @@ msgstr "包型号名称不能为空。"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:699
 msgid "Checking package model "
-msgstr "检查包型号 "
+msgstr "正在检查封装模型 "
 
 #: eeschema/sim/kibis/ibis_parser.cpp:706
 msgid "Manufacturer cannot be empty."
@@ -20699,7 +20699,7 @@ msgstr "预期测量格式定义"
 
 #: eeschema/sim/ngspice.cpp:501
 msgid "Unable to load ngspice shared library. Please check your install."
-msgstr ""
+msgstr "无法加载 ngspice 共享库。请检查是否正确安装和配置。"
 
 #: eeschema/sim/sim_lib_mgr.cpp:91 eeschema/sim/sim_lib_mgr.cpp:144
 #, c-format
@@ -34336,7 +34336,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:981
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:60
 msgid "Solder mask expansion:"
-msgstr "阻焊层扩展:"
+msgstr "阻焊扩展:"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:293
 msgid ""
@@ -37786,7 +37786,6 @@ msgid "Unused Pads"
 msgstr "未使用的焊盘"
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:39
-#, fuzzy
 msgid "Update Footprints"
 msgstr "更新封装"
 
@@ -37815,7 +37814,6 @@ msgid ""
 msgstr "从电路板移除未链接到原理图符号的且未锁定封装。"
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:52
-#, fuzzy
 msgid "Override locks"
 msgstr "忽略锁定设置"
 
@@ -38815,7 +38813,7 @@ msgstr "添加用户定义层..."
 msgid ""
 "Use your board manufacturer's recommendations for solder mask expansion and "
 "minimum web width."
-msgstr "请使用板厂推荐的阻焊层扩展和最小阻焊桥宽(绿油桥宽)。"
+msgstr "请使用板厂推荐的阻焊扩展和最小阻焊桥宽(绿油桥宽)。"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:36
 msgid "If none are provided, setting the values to zero is suggested."
@@ -40184,7 +40182,7 @@ msgstr "keepout 域 '%s'"
 #: pcbnew/drc/drc_engine.cpp:659
 #, c-format
 msgid "Resolved zone connection type: %s."
-msgstr "已解析的填充区连接类型: %s。"
+msgstr "已解析填充区连接类型: %s。"
 
 #: pcbnew/drc/drc_engine.cpp:677
 #, c-format
@@ -40248,7 +40246,7 @@ msgstr "%s 最小线宽: %s。"
 #: pcbnew/drc/drc_engine.cpp:933
 #, c-format
 msgid "Checking assertion \"%s\"."
-msgstr "检查断言 \"%s\"。"
+msgstr "正在检查断言 \"%s\"。"
 
 #: pcbnew/drc/drc_engine.cpp:939 pcbnew/drc/drc_engine.cpp:1576
 msgid "Assertion passed."
@@ -40261,108 +40259,108 @@ msgstr "---> 断言失败。<--"
 #: pcbnew/drc/drc_engine.cpp:963
 #, c-format
 msgid "Checking %s clearance: %s."
-msgstr "检查 %s 间距: %s。"
+msgstr "正在检查 %s 间距: %s。"
 
 #: pcbnew/drc/drc_engine.cpp:968
 #, c-format
 msgid "Checking %s creepage: %s."
-msgstr "检查 %s 爬电距离: %s。"
+msgstr "正在检查 %s 爬电距离: %s。"
 
 #: pcbnew/drc/drc_engine.cpp:973
 #, c-format
 msgid "Checking %s max uncoupled length: %s."
-msgstr "检查 %s 最大未耦合长度: %s。"
+msgstr "正在检查 %s 最大未耦合长度: %s。"
 
 #: pcbnew/drc/drc_engine.cpp:979
 #, c-format
 msgid "Checking %s max skew: %s."
-msgstr "检查 %s 最大 skew: %s。"
+msgstr "正在检查 %s 最大 skew: %s。"
 
 #: pcbnew/drc/drc_engine.cpp:985
 #, c-format
 msgid "Checking %s gap: %s."
-msgstr "检查 %s 间隙: %s。"
+msgstr "正在检查 %s 间隙: %s。"
 
 #: pcbnew/drc/drc_engine.cpp:991
 #, c-format
 msgid "Checking %s thermal spoke width: %s."
-msgstr "检查 %s 散热引线宽度: %s。"
+msgstr "正在检查 %s 散热引线宽度: %s。"
 
 #: pcbnew/drc/drc_engine.cpp:997
 #, c-format
 msgid "Checking %s min spoke count: %s."
-msgstr "检查 %s 最小引线数: %s。"
+msgstr "正在检查 %s 最小引线数量: %s。"
 
 #: pcbnew/drc/drc_engine.cpp:1004
 #, c-format
 msgid "Checking %s zone connection: %s."
-msgstr "检查 %s 填充区连接: %s。"
+msgstr "正在检查 %s 填充区连接: %s。"
 
 #: pcbnew/drc/drc_engine.cpp:1036
 #, c-format
 msgid "Checking %s track width: opt %s."
-msgstr "正检查 %s 走线宽度: 最优 %s。"
+msgstr "正在检查 %s 走线宽度: 最优 %s。"
 
 #: pcbnew/drc/drc_engine.cpp:1042
 #, c-format
 msgid "Checking %s track width: min %s."
-msgstr "正检查 %s 走线宽度: 最小%s。"
+msgstr "正在检查 %s 走线宽度: 最小%s。"
 
 #: pcbnew/drc/drc_engine.cpp:1050
 #, c-format
 msgid "Checking %s annular width: min %s."
-msgstr "正检查 %s 孔环宽度: 最小 %s。"
+msgstr "正在检查 %s 孔环宽度: 最小 %s。"
 
 #: pcbnew/drc/drc_engine.cpp:1058
 #, c-format
 msgid "Checking %s via diameter: opt %s."
-msgstr "正检查 %s 过孔直径: 最优 %s。"
+msgstr "正在检查 %s 过孔直径: 最优 %s。"
 
 #: pcbnew/drc/drc_engine.cpp:1064
 #, c-format
 msgid "Checking %s via diameter: min %s."
-msgstr "正检查 %s 过孔直径: 最小 %s。"
+msgstr "正在检查 %s 过孔直径: 最小 %s。"
 
 #: pcbnew/drc/drc_engine.cpp:1073
 #, c-format
 msgid "Checking %s hole size: opt %s."
-msgstr "正检查 %s 孔尺寸: 最优 %s。"
+msgstr "正在检查 %s 通孔孔径: 最优 %s。"
 
 #: pcbnew/drc/drc_engine.cpp:1079
 #, c-format
 msgid "Checking %s hole size: min %s."
-msgstr "正检查 %s 孔尺寸: 最小 %s。"
+msgstr "正在检查 %s 通孔孔径: 最小 %s。"
 
 #: pcbnew/drc/drc_engine.cpp:1089
 #, c-format
 msgid "Checking %s: min %s."
-msgstr "正检查 %s: 最小 %s。"
+msgstr "正在检查 %s: 最小 %s。"
 
 #: pcbnew/drc/drc_engine.cpp:1097
 #, c-format
 msgid "Checking %s diff pair gap: opt %s."
-msgstr "正检查 %s 差分对间隙: 最优 %s。"
+msgstr "正在检查 %s 差分对间隙: 最优 %s。"
 
 #: pcbnew/drc/drc_engine.cpp:1103
 #, c-format
 msgid "Checking %s clearance: min %s."
-msgstr "正检查 %s 间隙: 最小 %s。"
+msgstr "正在检查 %s 间隙: 最小 %s。"
 
 #: pcbnew/drc/drc_engine.cpp:1111
 #, c-format
 msgid "Checking %s hole to hole: min %s."
-msgstr "正检查 %s 孔到孔: 最小 %s。"
+msgstr "正在检查 %s 通孔到通孔间距: 最小 %s。"
 
 #: pcbnew/drc/drc_engine.cpp:1117 pcbnew/drc/drc_engine.cpp:1143
 #: pcbnew/drc/drc_engine.cpp:1589
 #, c-format
 msgid "Checking %s."
-msgstr "检查 %s。"
+msgstr "正在检查 %s。"
 
 #: pcbnew/drc/drc_engine.cpp:1132
 #, c-format
 msgid "Checking %s: min %s; opt %s; max %s."
-msgstr "正检查 %s: 最小 %s; 最优 %s; 最大 %s。"
+msgstr "正在检查 %s: 最小 %s; 最优 %s; 最大 %s。"
 
 #: pcbnew/drc/drc_engine.cpp:1153
 msgid "Netclass clearances apply only between copper items."
@@ -40419,7 +40417,7 @@ msgstr "已应用无条件规则; 覆盖之前的约束。"
 #: pcbnew/drc/drc_engine.cpp:1312 pcbnew/drc/drc_engine.cpp:1604
 #, c-format
 msgid "Checking rule condition \"%s\"."
-msgstr "检查规则条件 \"%s\"。"
+msgstr "正在检查规则条件 \"%s\"。"
 
 #: pcbnew/drc/drc_engine.cpp:1322
 msgid "Constraint applied."
@@ -40479,7 +40477,7 @@ msgstr "%s 散热引线宽度: %s。"
 #: pcbnew/drc/drc_engine.cpp:1570
 #, c-format
 msgid "Checking rule assertion \"%s\"."
-msgstr "检查规则断言 \"%s\"。"
+msgstr "正在检查规则断言 \"%s\"。"
 
 #: pcbnew/drc/drc_item.cpp:42 pcbnew/zone.cpp:2111
 msgid "Electrical"
@@ -40889,7 +40887,7 @@ msgstr "缺少严重级别名称。"
 
 #: pcbnew/drc/drc_test_provider_annular_width.cpp:88
 msgid "Checking pad & via annular rings..."
-msgstr "检查焊盘和过孔孔环..."
+msgstr "正在检查焊盘和过孔孔环..."
 
 #: pcbnew/drc/drc_test_provider_annular_width.cpp:340
 #, c-format
@@ -40903,7 +40901,7 @@ msgstr "(%s 最大孔环宽度 %s; 实际 %s)"
 
 #: pcbnew/drc/drc_test_provider_connection_width.cpp:318
 msgid "Checking nets for minimum connection width..."
-msgstr "正检查网络的最小连接宽度..."
+msgstr "正在检查网络的最小连接宽度..."
 
 #: pcbnew/drc/drc_test_provider_connection_width.cpp:470
 #, c-format
@@ -40912,7 +40910,7 @@ msgstr "(%s 最小连接宽度 %s; 实际 %s)"
 
 #: pcbnew/drc/drc_test_provider_connectivity.cpp:71
 msgid "Checking pad, via and zone connections..."
-msgstr "正在检查焊盘、过孔和填充区连接..."
+msgstr "正在检查焊盘, 过孔和填充区连接..."
 
 #: pcbnew/drc/drc_test_provider_connectivity.cpp:139
 msgid "Checking net connections..."
@@ -40924,7 +40922,7 @@ msgstr "正在检查走线和过孔间距..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:150
 msgid "Checking hole clearances..."
-msgstr "正在检查孔间距..."
+msgstr "正在检查通孔间距..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:158
 msgid "Checking pad clearances..."
@@ -40936,11 +40934,11 @@ msgstr "正在检查焊盘..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:174
 msgid "Checking copper graphic clearances..."
-msgstr "检查铜层间距..."
+msgstr "正在检查覆铜图形间距..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:182
 msgid "Checking copper zone clearances..."
-msgstr "检查覆铜区间距..."
+msgstr "正在检查覆铜填充区间距..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:286
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:590
@@ -41031,7 +41029,7 @@ msgstr "正在检查铜层到板边缘间距..."
 
 #: pcbnew/drc/drc_test_provider_edge_clearance.cpp:155
 msgid "Checking silk to board edge clearances..."
-msgstr "正在检查 silk 到板边缘间距..."
+msgstr "正在检查丝印到板边间距..."
 
 #: pcbnew/drc/drc_test_provider_hole_size.cpp:75
 msgid "Checking pad holes..."
@@ -41495,7 +41493,7 @@ msgstr "正在收集物理项目..."
 
 #: pcbnew/drc/drc_test_provider_physical_clearance.cpp:185
 msgid "Checking physical clearances..."
-msgstr "检查物理间距..."
+msgstr "正在检查物理间距..."
 
 #: pcbnew/drc/drc_test_provider_physical_clearance.cpp:533
 #, c-format
@@ -41577,7 +41575,7 @@ msgstr "正在检查阻焊层与丝印的间距..."
 
 #: pcbnew/drc/drc_test_provider_solder_mask.cpp:803
 msgid "Checking solder mask web integrity..."
-msgstr "正在检查阻焊层网络的完整性..."
+msgstr "正在检查阻焊网的完整性..."
 
 #: pcbnew/drc/drc_test_provider_text_dims.cpp:88
 msgid "Checking text dimensions..."
@@ -41613,7 +41611,7 @@ msgstr "正在检查文本镜像..."
 
 #: pcbnew/drc/drc_test_provider_track_angle.cpp:78
 msgid "Checking track angles..."
-msgstr "检查走线角度..."
+msgstr "正在检查走线角度..."
 
 #: pcbnew/drc/drc_test_provider_track_angle.cpp:180
 #, c-format
@@ -41627,7 +41625,7 @@ msgstr "(%s 最大角度 %s; 实际 %s)"
 
 #: pcbnew/drc/drc_test_provider_track_segment_length.cpp:75
 msgid "Checking track segment lengths..."
-msgstr "检查走线段长度度..."
+msgstr "正在检查走线段长度..."
 
 #: pcbnew/drc/drc_test_provider_track_width.cpp:74
 msgid "Checking track widths..."
@@ -41848,9 +41846,9 @@ msgid "No model for filename '%s'.\n"
 msgstr "没有文件名为 '%s' 的模型。\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1187
-#, fuzzy, c-format
+#, c-format
 msgid "No location data for filename '%s'.\n"
-msgstr "写入定位数据到 '%s'。\n"
+msgstr "文件 '%s' 中没有定位数据。\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1197
 #, c-format
@@ -41968,9 +41966,9 @@ msgstr "过孔"
 #: pcbnew/exporters/step/step_pcb_model.cpp:3102
 #: pcbnew/exporters/step/step_pcb_model.cpp:3176
 #: pcbnew/exporters/step/step_pcb_model.cpp:3245
-#, fuzzy, c-format
+#, c-format
 msgid "No valid PCB assembly; cannot create output file '%s'.\n"
-msgstr "无法创建输出目录 '%s'。"
+msgstr "没有有效的 PCB 组件; 无法创建输出文件 '%s'。\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2322
 msgid "Failed to set STEP product name, but will attempt to continue."
@@ -41994,9 +41992,9 @@ msgid "Cannot identify actual file type for '%s'.\n"
 msgstr "无法识别 '%s' 的实际文件类型。\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2832
-#, fuzzy, c-format
+#, c-format
 msgid "Could not transfer model data from file '%s'.\n"
-msgstr "无法从值“%s”推断模型"
+msgstr "无法从文件 '%s' 中获取模型数据。\n"
 
 #: pcbnew/files.cpp:152
 msgid "All KiCad Board Files"
@@ -44339,8 +44337,8 @@ msgid ""
 "equivalent. It has been moved to KiCad layer Eco1_User."
 msgstr ""
 "正在加载 '%1$s' 库:\n"
-"在封装 %2$s 中发现在其 Altium 层 (%4$d) 上存在非铜焊盘 %3$s, 但在 KiCad 中没"
-"有对应的等效项。已将其移至 KiCad 的 Eco1_User 层。"
+"在 Altium 层 (%4$d) 上发现封装 %2$s 中存在非铜焊盘 %3$s, 但在 KiCad "
+"中没有对应的等效项。已将其移至 KiCad 的 Eco1_User 层。"
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3654
 #, c-format
@@ -44348,8 +44346,8 @@ msgid ""
 "Footprint %s non-copper pad %s found on an Altium layer (%d) with no KiCad "
 "equivalent. It has been moved to KiCad layer Eco1_User."
 msgstr ""
-"在封装 %1$s 中发现在其 Altium 层 (%3$d) 上存在非铜焊盘 %2$s, 但在 KiCad 中没"
-"有对应的等效项。已将其移至 KiCad 的 Eco1_User 层。"
+"在 Altium 层 (%3$d) 上发现封装 %1$s 中存在非铜焊盘 %2$s, 但在 KiCad "
+"中没有对应的等效项。已将其移至 KiCad 的 Eco1_User 层。"
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3682
 #, c-format
@@ -46420,7 +46418,7 @@ msgstr "布线(差分对): %s"
 #: pcbnew/router/router_tool.cpp:2713 pcbnew/router/router_tool.cpp:2724
 #, c-format
 msgid "Resolved Netclass: %s"
-msgstr "已解析的网络类: %s"
+msgstr "已解析网络类: %s"
 
 #: pcbnew/router/router_tool.cpp:2720
 #, c-format
@@ -46755,7 +46753,7 @@ msgstr "差分对未耦合长度解析:"
 #: pcbnew/tools/board_inspection_tool.cpp:1022
 #, c-format
 msgid "Resolved max uncoupled length: %s."
-msgstr "已解析的最大未耦合长度: %s。"
+msgstr "已解析最大未耦合长度: %s。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:405
 #: pcbnew/tools/board_inspection_tool.cpp:1443
@@ -46765,7 +46763,7 @@ msgstr "文本高度解析:"
 #: pcbnew/tools/board_inspection_tool.cpp:413
 #, c-format
 msgid "Resolved height constraints: min %s; max %s."
-msgstr "已解析的高度约束: 最小 %s; 最大 %s。"
+msgstr "已解析高度约束: 最小 %s; 最大 %s。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:420
 #: pcbnew/tools/board_inspection_tool.cpp:1459
@@ -46775,7 +46773,7 @@ msgstr "文本线宽解析:"
 #: pcbnew/tools/board_inspection_tool.cpp:428
 #, c-format
 msgid "Resolved thickness constraints: min %s; max %s."
-msgstr "已解析的线宽约束: 最小 %s; 最大 %s。"
+msgstr "已解析线宽约束: 最小 %s; 最大 %s。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:435
 #: pcbnew/tools/board_inspection_tool.cpp:1366
@@ -46785,7 +46783,7 @@ msgstr "走线宽度解析:"
 #: pcbnew/tools/board_inspection_tool.cpp:443
 #, c-format
 msgid "Resolved width constraints: min %s; max %s."
-msgstr "已解析的宽度约束: 最小 %s; 最大 %s。"
+msgstr "已解析宽度约束: 最小 %s; 最大 %s。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:449
 msgid "Track Angle"
@@ -46798,7 +46796,7 @@ msgstr "走线角度解析:"
 #: pcbnew/tools/board_inspection_tool.cpp:458
 #, c-format
 msgid "Resolved angle constraints: min %s; max %s."
-msgstr "已解析的角度约束: 最小 %s; 最大 %s。"
+msgstr "已解析角度约束: 最小 %s; 最大 %s。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:464
 msgid "Track Segment Length"
@@ -46811,7 +46809,7 @@ msgstr "走线段长度解析:"
 #: pcbnew/tools/board_inspection_tool.cpp:473
 #, c-format
 msgid "Resolved segment length constraints: min %s; max %s."
-msgstr "已解析的直径约束: 最小 %s; 最大 %s。"
+msgstr "已解析段长度约束: 最小 %s; 最大 %s。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:479
 msgid "Connection Width"
@@ -46824,7 +46822,7 @@ msgstr "连接宽度解析:"
 #: pcbnew/tools/board_inspection_tool.cpp:488
 #, c-format
 msgid "Resolved min connection width: %s."
-msgstr "已解析的最小连接宽度约束: %s。"
+msgstr "已解析最小连接宽度约束: %s。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:493
 #: pcbnew/tools/board_inspection_tool.cpp:1384
@@ -46839,7 +46837,7 @@ msgstr "过孔直径解析:"
 #: pcbnew/tools/board_inspection_tool.cpp:502
 #, c-format
 msgid "Resolved diameter constraints: min %s; max %s."
-msgstr "已解析的直径约束: 最小 %s; 最大 %s。"
+msgstr "已解析直径约束: 最小 %s; 最大 %s。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:508
 msgid "Via Annulus"
@@ -46853,7 +46851,7 @@ msgstr "过孔孔环宽度解析:"
 #: pcbnew/tools/board_inspection_tool.cpp:517
 #, c-format
 msgid "Resolved annular width constraints: min %s; max %s."
-msgstr "已解析的孔环宽度约束: 最小 %s; 最大 %s。"
+msgstr "已解析孔环宽度约束: 最小 %s; 最大 %s。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:524
 #: pcbnew/tools/board_inspection_tool.cpp:1422
@@ -46868,7 +46866,7 @@ msgstr "孔直径解析:"
 #: pcbnew/tools/board_inspection_tool.cpp:533
 #, c-format
 msgid "Resolved hole size constraints: min %s; max %s."
-msgstr "已解析的高度约束: 最小 %s; 最大 %s。"
+msgstr "已解析孔径约束: 最小 %s; 最大 %s。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:539
 msgid "Hole Clearance"
@@ -46902,7 +46900,7 @@ msgstr "项目属于同一网络。间距为 0。"
 #: pcbnew/tools/board_inspection_tool.cpp:1314
 #, c-format
 msgid "Resolved min clearance: %s."
-msgstr "已解析的间距: %s。"
+msgstr "已解析最小间距: %s。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:563
 #: pcbnew/tools/board_inspection_tool.cpp:1297
@@ -46978,7 +46976,7 @@ msgstr "缓释热焊盘 (花焊盘) 间隙解析:"
 #: pcbnew/tools/board_inspection_tool.cpp:842
 #, c-format
 msgid "Resolved thermal relief gap: %s."
-msgstr "已解析的缓释热焊盘 (花焊盘) 间隙: %s。"
+msgstr "已解析缓释热焊盘 (花焊盘) 间隙: %s。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:847
 msgid "Thermal-relief spoke width resolution for:"
@@ -46987,7 +46985,7 @@ msgstr "缓释热焊盘 (花焊盘) 间距宽度:"
 #: pcbnew/tools/board_inspection_tool.cpp:856
 #, c-format
 msgid "Resolved spoke width: %s."
-msgstr "已解析的缓释热焊盘 (花焊盘) 引线宽度: %s。"
+msgstr "已解析缓释热焊盘 (花焊盘) 引线宽度: %s。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:861
 msgid "Thermal-relief min spoke count resolution for:"
@@ -46996,7 +46994,7 @@ msgstr "缓释热焊盘 (花焊盘) 最小引线宽度间距:"
 #: pcbnew/tools/board_inspection_tool.cpp:870
 #, c-format
 msgid "Resolved min spoke count: %d."
-msgstr "已解析的最小缓释热焊盘 (花焊盘) 引线数量: %d。"
+msgstr "已解析最小缓释热焊盘 (花焊盘) 引线数量: %d。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:879
 #: pcbnew/tools/board_inspection_tool.cpp:927
@@ -47029,7 +47027,7 @@ msgstr "最小间距为 0。"
 #: pcbnew/tools/board_inspection_tool.cpp:972
 #, c-format
 msgid "Resolved clearance: %s; clearance will not be tested."
-msgstr "已解决的间距问题: %s; 不被测试的间距。"
+msgstr "已解析间距: %s; 不被测试的间距。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:995
 msgid "Diff Pair"
@@ -47042,7 +47040,7 @@ msgstr "差分对间隙解析:"
 #: pcbnew/tools/board_inspection_tool.cpp:1001
 #, c-format
 msgid "Resolved gap constraints: min %s; opt %s; max %s."
-msgstr "已解析的间隙约束: 最小 %s; 最优 %s; 最大 %s。"
+msgstr "已解析间隙约束: 最小 %s; 最优 %s; 最大 %s。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1009
 msgid "Diff-pair max uncoupled length resolution for:"
@@ -47087,12 +47085,12 @@ msgstr "为约束解析报告选一个对象。"
 #: pcbnew/tools/board_inspection_tool.cpp:1374
 #, c-format
 msgid "Resolved width constraints: min %s; opt %s; max %s."
-msgstr "已解析的间距约束: 最小 %s; 最优 %s; 最大 %s。"
+msgstr "已解析间距约束: 最小 %s; 最优 %s; 最大 %s。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1394
 #, c-format
 msgid "Resolved diameter constraints: min %s; opt %s; max %s."
-msgstr "已解析的直径约束: 最小 %s; 最优 %s; 最大 %s。"
+msgstr "已解析直径约束: 最小 %s; 最优 %s; 最大 %s。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1401
 msgid "Via Annular Width"
@@ -47101,22 +47099,22 @@ msgstr "过孔孔环宽度"
 #: pcbnew/tools/board_inspection_tool.cpp:1411
 #, c-format
 msgid "Resolved annular width constraints: min %s; opt %s; max %s."
-msgstr "已解析的孔环宽度约束: 最小 %s; 最优 %s; 最大 %s。"
+msgstr "已解析孔环宽度约束: 最小 %s; 最优 %s; 最大 %s。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1432
 #, c-format
 msgid "Resolved hole size constraints: min %s; opt %s; max %s."
-msgstr "已解析的间距约束: 最小 %s; 最优 %s; 最大 %s。"
+msgstr "已解析间距约束: 最小 %s; 最优 %s; 最大 %s。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1451
 #, c-format
 msgid "Resolved height constraints: min %s; opt %s; max %s."
-msgstr "已解析的间距约束: 最小 %s; 最优 %s; 最大 %s。"
+msgstr "已解析间距约束: 最小 %s; 最优 %s; 最大 %s。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1467
 #, c-format
 msgid "Resolved thickness constraints: min %s; opt %s; max %s."
-msgstr "已解析的线宽约束: 最小 %s; 最优 %s; 最大 %s。"
+msgstr "已解析线宽约束: 最小 %s; 最优 %s; 最大 %s。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1476
 msgid "Keepout resolution for:"
@@ -49759,7 +49757,7 @@ msgstr "取消填充填充区"
 
 #: pcbnew/tracks_cleaner.cpp:74
 msgid "Checking null tracks and vias..."
-msgstr "正检查无效走线和过孔..."
+msgstr "正在检查无效走线和过孔..."
 
 #: pcbnew/tracks_cleaner.cpp:76
 msgid "Removing null tracks and vias..."
@@ -49767,7 +49765,7 @@ msgstr "正移除无效走线和过孔..."
 
 #: pcbnew/tracks_cleaner.cpp:87
 msgid "Checking redundant tracks..."
-msgstr "正检查多余走线..."
+msgstr "正在检查冗余走线..."
 
 #: pcbnew/tracks_cleaner.cpp:89
 msgid "Removing redundant tracks..."
@@ -49775,7 +49773,7 @@ msgstr "正移除多余走线..."
 
 #: pcbnew/tracks_cleaner.cpp:103
 msgid "Checking shorting tracks..."
-msgstr "检查短路走线..."
+msgstr "正在检查短路走线..."
 
 #: pcbnew/tracks_cleaner.cpp:105
 msgid "Removing shorting tracks..."
@@ -49783,7 +49781,7 @@ msgstr "正移除短路的走线..."
 
 #: pcbnew/tracks_cleaner.cpp:118
 msgid "Checking tracks in pads..."
-msgstr "检查焊盘内走线..."
+msgstr "正在检查焊盘内走线..."
 
 #: pcbnew/tracks_cleaner.cpp:120
 msgid "Removing tracks in pads..."
@@ -49791,7 +49789,7 @@ msgstr "正移除焊盘内走线..."
 
 #: pcbnew/tracks_cleaner.cpp:134
 msgid "Checking dangling tracks and vias..."
-msgstr "正检查悬空的走线和过孔..."
+msgstr "正在检查悬空的走线和过孔..."
 
 #: pcbnew/tracks_cleaner.cpp:139
 msgid "Removing dangling tracks..."
@@ -49803,7 +49801,7 @@ msgstr "正移除悬空的过孔..."
 
 #: pcbnew/tracks_cleaner.cpp:156
 msgid "Checking collinear tracks..."
-msgstr "检查同一直线上走线..."
+msgstr "正在检查重叠走线..."
 
 #: pcbnew/tracks_cleaner.cpp:158
 msgid "Merging collinear tracks..."
@@ -50886,7 +50884,7 @@ msgstr "焊盘连接"
 
 #: pcbnew/zone_filler.cpp:251
 msgid "Checking zone fills..."
-msgstr "检查填充区填充内容..."
+msgstr "正在检查填充区填充内容..."
 
 #: pcbnew/zone_filler.cpp:252
 msgid "Building zone fills..."
