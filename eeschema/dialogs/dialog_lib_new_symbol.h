@@ -84,6 +84,18 @@ public:
     void SetPinTextPosition( int position ) { m_pinTextPosition.SetValue( position ); }
     int GetPinTextPosition() { return m_pinTextPosition.GetValue(); }
 
+    void SetKeepDatasheet( bool keep ) { m_checkKeepDatasheet->SetValue( keep ); }
+    bool GetKeepDatasheet() { return m_checkKeepDatasheet->GetValue(); }
+
+    void SetKeepFootprint( bool keep ) { m_checkKeepFootprint->SetValue( keep ); }
+    bool GetKeepFootprint() { return m_checkKeepFootprint->GetValue(); }
+
+    void SetTransferUserFields( bool keep ) { m_checkTransferUserFields->SetValue( keep ); }
+    bool GetTransferUserFields() { return m_checkTransferUserFields->GetValue(); }
+
+    void SetKeepContentUserFields( bool keep ) { m_checkKeepContentUserFields->SetValue( keep ); }
+    bool GetKeepContentUserFields() { return m_checkKeepContentUserFields->GetValue(); }
+
     void SetShowPinNumber( bool show ) { m_checkShowPinNumber->SetValue( show ); }
     bool GetShowPinNumber() { return m_checkShowPinNumber->GetValue(); }
 
@@ -97,6 +109,7 @@ protected:
     bool TransferDataFromWindow() override;
 
     virtual void onPowerCheckBox( wxCommandEvent& aEvent ) override;
+    virtual void onCheckTransferUserFields( wxCommandEvent& aEvent ) override;
 
 private:
     void onParentSymbolSelect( wxCommandEvent& aEvent );

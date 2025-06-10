@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6-dirty)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -13,6 +13,7 @@
 
 BEGIN_EVENT_TABLE( DIALOG_LIB_NEW_SYMBOL_BASE, DIALOG_SHIM )
 	EVT_CHECKBOX( wxID_ANY, DIALOG_LIB_NEW_SYMBOL_BASE::_wxFB_onPowerCheckBox )
+	EVT_CHECKBOX( wxID_ANY, DIALOG_LIB_NEW_SYMBOL_BASE::_wxFB_onCheckTransferUserFields )
 END_EVENT_TABLE()
 
 DIALOG_LIB_NEW_SYMBOL_BASE::DIALOG_LIB_NEW_SYMBOL_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : DIALOG_SHIM( parent, id, title, pos, size, style )
@@ -91,6 +92,18 @@ DIALOG_LIB_NEW_SYMBOL_BASE::DIALOG_LIB_NEW_SYMBOL_BASE( wxWindow* parent, wxWind
 	m_excludeFromBoardCheckBox = new wxCheckBox( this, wxID_ANY, _("Exclude from board"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer17->Add( m_excludeFromBoardCheckBox, 0, wxLEFT|wxRIGHT|wxTOP, 5 );
 
+	m_checkKeepDatasheet = new wxCheckBox( this, wxID_ANY, _("Keep linked datasheet"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer17->Add( m_checkKeepDatasheet, 0, wxLEFT|wxRIGHT|wxTOP, 5 );
+
+	m_checkKeepFootprint = new wxCheckBox( this, wxID_ANY, _("Keep linked footprint"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer17->Add( m_checkKeepFootprint, 0, wxLEFT|wxRIGHT|wxTOP, 5 );
+
+	m_checkTransferUserFields = new wxCheckBox( this, wxID_ANY, _("Transfer user-definded fields"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer17->Add( m_checkTransferUserFields, 0, wxLEFT|wxRIGHT|wxTOP, 5 );
+
+	m_checkKeepContentUserFields = new wxCheckBox( this, wxID_ANY, _("Keep content of user-defined fields"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer17->Add( m_checkKeepContentUserFields, 0, wxLEFT|wxRIGHT|wxTOP, 5 );
+
 
 	bSizerTop->Add( bSizer17, 0, wxBOTTOM|wxEXPAND, 5 );
 
@@ -133,7 +146,7 @@ DIALOG_LIB_NEW_SYMBOL_BASE::DIALOG_LIB_NEW_SYMBOL_BASE( wxWindow* parent, wxWind
 
 	m_checkShowPinNameInside = new wxCheckBox( this, wxID_ANY, _("Pin name inside"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_checkShowPinNameInside->SetValue(true);
-	bSizer19->Add( m_checkShowPinNameInside, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+	bSizer19->Add( m_checkShowPinNameInside, 0, wxLEFT|wxRIGHT|wxTOP, 5 );
 
 
 	bSizerBottom->Add( bSizer19, 0, wxEXPAND, 5 );

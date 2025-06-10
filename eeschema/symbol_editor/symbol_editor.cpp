@@ -457,11 +457,16 @@ void SYMBOL_EDIT_FRAME::CreateNewSymbol( const wxString& aInheritFrom )
                 break;
 
             case FIELD_T::FOOTPRINT:
+                if( !dlg.GetKeepFootprint() )
+                    field->SetText( wxEmptyString );
+                break;
+
             case FIELD_T::DATASHEET:
                 // - footprint might be the same as parent, but might not
                 // - datasheet is most likely different
                 // - probably best to play it safe and copy neither
-                field->SetText( wxEmptyString );
+                if( !dlg.GetKeepDatasheet() )
+                    field->SetText( wxEmptyString );
                 break;
 
             default:
@@ -469,6 +474,26 @@ void SYMBOL_EDIT_FRAME::CreateNewSymbol( const wxString& aInheritFrom )
             }
 
             field->SetParent( &new_symbol );
+        }
+
+        if( dlg.GetTransferUserFields() )
+        {
+            std::vector<SCH_FIELD*> listFields;
+            parent->GetFields( listFields );
+
+            for( SCH_FIELD* field : listFields )
+            {
+                if( field->GetId() == FIELD_T::USER )
+                {
+                    SCH_FIELD* new_field = new SCH_FIELD( *field );
+
+                    if( !dlg.GetKeepContentUserFields() )
+                        new_field->SetText( wxEmptyString );
+
+                    new_field->SetParent( &new_symbol );
+                    new_symbol.AddField( new_field );
+                }
+            }
         }
     }
 

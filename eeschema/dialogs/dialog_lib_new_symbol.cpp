@@ -59,10 +59,6 @@ DIALOG_LIB_NEW_SYMBOL::DIALOG_LIB_NEW_SYMBOL( EDA_DRAW_FRAME*      aParent,
             m_comboInheritanceSelect->SetSelectedString( aInheritFromSymbolName );
     }
 
-    // Trigger the event handler to show/hide the info bar message.
-    wxCommandEvent dummyEvent;
-    onParentSymbolSelect( dummyEvent );
-
     m_textName->SetValidator( FIELD_VALIDATOR( FIELD_T::VALUE ) );
     m_textReference->SetValidator( FIELD_VALIDATOR( FIELD_T::REFERENCE ) );
 
@@ -84,6 +80,17 @@ DIALOG_LIB_NEW_SYMBOL::DIALOG_LIB_NEW_SYMBOL( EDA_DRAW_FRAME*      aParent,
                           m_nameIsDefaulted = false;
                       } );
 
+    m_checkTransferUserFields->Connect(
+            wxEVT_CHECKBOX, wxCommandEventHandler( DIALOG_LIB_NEW_SYMBOL::onCheckTransferUserFields ), nullptr, this );
+
+    // Trigger the event handler to show/hide the info bar message.
+    wxCommandEvent dummyEvent;
+    onParentSymbolSelect( dummyEvent );
+
+    // Trigger the event handler to handle other check boxes
+    onPowerCheckBox( dummyEvent );
+    onCheckTransferUserFields( dummyEvent );
+
     // initial focus should be on first editable field.
     m_textName->SetFocus();
 
@@ -99,8 +106,9 @@ DIALOG_LIB_NEW_SYMBOL::~DIALOG_LIB_NEW_SYMBOL()
     m_comboInheritanceSelect->Disconnect(
             FILTERED_ITEM_SELECTED,
             wxCommandEventHandler( DIALOG_LIB_NEW_SYMBOL::onParentSymbolSelect ), nullptr, this );
+    m_checkTransferUserFields->Disconnect(
+            wxEVT_CHECKBOX, wxCommandEventHandler( DIALOG_LIB_NEW_SYMBOL::onCheckTransferUserFields ), nullptr, this );
 }
-
 
 bool DIALOG_LIB_NEW_SYMBOL::TransferDataFromWindow()
 {
@@ -148,9 +156,15 @@ void DIALOG_LIB_NEW_SYMBOL::syncControls( bool aIsDerivedPart )
     m_staticPinTextPositionLabel->Enable( !aIsDerivedPart );
     m_textPinTextPosition->Enable( !aIsDerivedPart );
     m_staticPinTextPositionUnits->Enable( !aIsDerivedPart );
+
     m_checkShowPinNumber->Enable( !aIsDerivedPart );
     m_checkShowPinName->Enable( !aIsDerivedPart );
     m_checkShowPinNameInside->Enable( !aIsDerivedPart );
+
+    m_checkKeepDatasheet->Enable( aIsDerivedPart );
+    m_checkKeepFootprint->Enable( aIsDerivedPart );
+    m_checkTransferUserFields->Enable( aIsDerivedPart );
+    m_checkKeepContentUserFields->Enable( aIsDerivedPart );
 }
 
 
@@ -170,3 +184,9 @@ void DIALOG_LIB_NEW_SYMBOL::onPowerCheckBox( wxCommandEvent& aEvent )
     }
 }
 
+
+void DIALOG_LIB_NEW_SYMBOL::onCheckTransferUserFields( wxCommandEvent& aEvent )
+{
+    bool checked = m_checkTransferUserFields->IsChecked();
+    m_checkKeepContentUserFields->Enable( checked );
+}
