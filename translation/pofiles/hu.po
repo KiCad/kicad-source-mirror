@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-06-08 17:03+0300\n"
-"PO-Revision-Date: 2025-06-08 14:01+0000\n"
+"PO-Revision-Date: 2025-06-11 07:01+0000\n"
 "Last-Translator: Sárkány Lőrinc <lsarkany@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/kicad/v9/hu/>\n"
 "Language: hu\n"
@@ -4027,9 +4027,8 @@ msgid "Last Commit"
 msgstr ""
 
 #: common/dialogs/git/dialog_git_switch.cpp:60
-#, fuzzy
 msgid "Last Updated"
-msgstr "Frissített"
+msgstr "Utoljára frissítve"
 
 #: common/dialogs/git/dialog_git_switch.cpp:70
 #: common/dialogs/git/dialog_git_switch.cpp:151
@@ -4147,7 +4146,7 @@ msgstr "Nyitott emitteres"
 
 #: common/dialogs/panel_color_settings_base.cpp:44
 msgid "Open the folder containing color themes"
-msgstr ""
+msgstr "A színsémákat tartalmazó mappa megnyitása"
 
 #: common/dialogs/panel_common_settings.cpp:88
 #, fuzzy
@@ -7162,11 +7161,9 @@ msgid "Unable to find a PDF viewer for '%s'."
 msgstr "A PDF olvasó nem található a megadott útvonalon: \"%s\""
 
 #: common/gestfich.cpp:280
-#, fuzzy, c-format
+#, c-format
 msgid "Problem while running the PDF viewer '%s'."
-msgstr ""
-"Probléma lépett fel a PDF megjelenítő indítása közben.\n"
-"A parancs \"%s\""
+msgstr "Probléma lépett fel a PDF megjelenítő: %s futtatása közben."
 
 #: common/gestfich.cpp:299 eeschema/eeschema.cpp:659 eeschema/eeschema.cpp:694
 #: gerbview/gerbview.cpp:243 kicad/project_template.cpp:309
@@ -7190,9 +7187,9 @@ msgid "'%s' is not a directory"
 msgstr "'%s' nem egy mappa"
 
 #: common/gestfich.cpp:350
-#, fuzzy, c-format
+#, c-format
 msgid "Error removing directory '%s': %s"
-msgstr "konfigurációs könyvtár"
+msgstr "Hiba a(z) %s mappa törlésekor: %s"
 
 #: common/gestfich.cpp:366 common/gestfich.cpp:440 common/gestfich.cpp:554
 #, c-format
@@ -7200,24 +7197,24 @@ msgid "Could not open source directory: %s"
 msgstr "Nem sikerült megnyitni a forrás mappát: %s"
 
 #: common/gestfich.cpp:373 common/gestfich.cpp:511
-#, fuzzy, c-format
+#, c-format
 msgid "Could not create destination directory: %s"
-msgstr "Kimeneti mappa \"%s\" nem hozható létre"
+msgstr "Nem sikerült létrehozni a(z) %s célmappát"
 
 #: common/gestfich.cpp:397 common/gestfich.cpp:428
-#, fuzzy, c-format
+#, c-format
 msgid "Could not copy file: %s to %s"
-msgstr "Nem lehet kapcsolódni a(z) '%s'-hez "
+msgstr "Nem sikerült másolni a(z) %s fájlt ide: %s"
 
 #: common/gestfich.cpp:477
-#, fuzzy, c-format
+#, c-format
 msgid "Could not copy directory: %s to %s"
-msgstr "Nem lehet kapcsolódni a(z) '%s'-hez "
+msgstr "Nem sikerült másolni a(z) %s mappát ide: %s"
 
 #: common/gestfich.cpp:529
-#, fuzzy, c-format
+#, c-format
 msgid "Source directory does not exist: %s"
-msgstr "Az adott elérési útvonal nem létezik"
+msgstr "A(z) %s forrásmappa nem létezik"
 
 #: common/gestfich.cpp:584
 #, c-format
