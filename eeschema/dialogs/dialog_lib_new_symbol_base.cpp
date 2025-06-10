@@ -98,7 +98,7 @@ DIALOG_LIB_NEW_SYMBOL_BASE::DIALOG_LIB_NEW_SYMBOL_BASE( wxWindow* parent, wxWind
 	m_checkKeepFootprint = new wxCheckBox( this, wxID_ANY, _("Keep linked footprint"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer17->Add( m_checkKeepFootprint, 0, wxLEFT|wxRIGHT|wxTOP, 5 );
 
-	m_checkTransferUserFields = new wxCheckBox( this, wxID_ANY, _("Transfer user-definded fields"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_checkTransferUserFields = new wxCheckBox( this, wxID_ANY, _("Transfer user-defined fields"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer17->Add( m_checkTransferUserFields, 0, wxLEFT|wxRIGHT|wxTOP, 5 );
 
 	m_checkKeepContentUserFields = new wxCheckBox( this, wxID_ANY, _("Keep content of user-defined fields"), wxDefaultPosition, wxDefaultSize, 0 );
