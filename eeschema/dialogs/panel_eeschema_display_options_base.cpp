@@ -69,7 +69,10 @@ PANEL_EESCHEMA_DISPLAY_OPTIONS_BASE::PANEL_EESCHEMA_DISPLAY_OPTIONS_BASE( wxWind
 	bSizer9->Add( bSizer8, 0, wxEXPAND, 5 );
 
 
-	bPanelSizer->Add( bSizer9, 0, wxEXPAND|wxRIGHT, 15 );
+	bPanelSizer->Add( bSizer9, 0, wxEXPAND|wxRIGHT, 5 );
+
+
+	bPanelSizer->Add( 20, 0, 0, 0, 5 );
 
 	wxBoxSizer* bRightColumn;
 	bRightColumn = new wxBoxSizer( wxVERTICAL );

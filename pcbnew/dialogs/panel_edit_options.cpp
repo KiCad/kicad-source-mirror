@@ -49,13 +49,23 @@ PANEL_EDIT_OPTIONS::PANEL_EDIT_OPTIONS( wxWindow* aParent, UNITS_PROVIDER* aUnit
 #ifdef __WXOSX_MAC__
     m_mouseCmdsOSX->Show( true );
     m_mouseCmdsWinLin->Show( false );
+
     // Disable highlight net option for footprint editor
-    m_rbHighlightNetMac->Show( !m_isFootprintEditor );
+    if( m_isFootprintEditor )
+    {
+        m_rbToggleSelMac->SetValue( true );
+        m_rbHighlightNetMac->Show( false );
+    }
 #else
     m_mouseCmdsWinLin->Show( true );
     m_mouseCmdsOSX->Show( false );
+
     // Disable highlight net option for footprint editor
-    m_rbHighlightNet->Show( !m_isFootprintEditor );
+    if( m_isFootprintEditor )
+    {
+        m_rbToggleSel->SetValue( true );
+        m_rbHighlightNet->Show( false );
+    }
 #endif
 
     m_optionsBook->SetSelection( isFootprintEditor ? 0 : 1 );
@@ -66,16 +76,14 @@ static int arcEditModeToComboIndex( ARC_EDIT_MODE aMode )
 {
     switch( aMode )
     {
-        case ARC_EDIT_MODE::KEEP_CENTER_ADJUST_ANGLE_RADIUS:
+        case ARC_EDIT_MODE::KEEP_CENTER_ADJUST_ANGLE_RADIUS:   return 0;
+        case ARC_EDIT_MODE::KEEP_ENDPOINTS_OR_START_DIRECTION: return 1;
+        case ARC_EDIT_MODE::KEEP_CENTER_ENDS_ADJUST_ANGLE:     return 2;
+
+        default:
+            wxFAIL_MSG( "Invalid ARC_EDIT_MODE" );
             return 0;
-        case ARC_EDIT_MODE::KEEP_ENDPOINTS_OR_START_DIRECTION:
-            return 1;
-        case ARC_EDIT_MODE::KEEP_CENTER_ENDS_ADJUST_ANGLE:
-            return 2;
-        // No default
     }
-    wxFAIL_MSG( "Invalid ARC_EDIT_MODE" );
-    return 0;
 };
 
 
@@ -83,18 +91,14 @@ static ARC_EDIT_MODE arcEditModeToEnum( int aIndex )
 {
     switch( aIndex )
     {
-        case 0:
-            return ARC_EDIT_MODE::KEEP_CENTER_ADJUST_ANGLE_RADIUS;
-        case 1:
-            return ARC_EDIT_MODE::KEEP_ENDPOINTS_OR_START_DIRECTION;
-        case 2:
-            return ARC_EDIT_MODE::KEEP_CENTER_ENDS_ADJUST_ANGLE;
+        case 0:  return ARC_EDIT_MODE::KEEP_CENTER_ADJUST_ANGLE_RADIUS;
+        case 1:  return ARC_EDIT_MODE::KEEP_ENDPOINTS_OR_START_DIRECTION;
+        case 2:  return ARC_EDIT_MODE::KEEP_CENTER_ENDS_ADJUST_ANGLE;
+
         default:
             wxFAIL_MSG( wxString::Format( "Invalid index for ARC_EDIT_MODE: %d", aIndex ) );
-            break;
+            return ARC_EDIT_MODE::KEEP_CENTER_ADJUST_ANGLE_RADIUS;
     }
-
-    return ARC_EDIT_MODE::KEEP_CENTER_ADJUST_ANGLE_RADIUS;
 };
 
 

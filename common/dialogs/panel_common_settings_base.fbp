@@ -61,7 +61,7 @@
         <property name="orient">wxHORIZONTAL</property>
         <property name="permission">none</property>
         <object class="sizeritem" expanded="true">
-          <property name="border">20</property>
+          <property name="border">35</property>
           <property name="flag">wxRIGHT</property>
           <property name="proportion">0</property>
           <object class="wxBoxSizer" expanded="true">
@@ -2845,7 +2845,7 @@
         </object>
         <object class="sizeritem" expanded="true">
           <property name="border">5</property>
-          <property name="flag">wxLEFT</property>
+          <property name="flag">wxRIGHT|wxLEFT</property>
           <property name="proportion">0</property>
           <object class="wxBoxSizer" expanded="true">
             <property name="minimum_size"></property>

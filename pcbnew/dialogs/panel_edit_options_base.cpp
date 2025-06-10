@@ -282,13 +282,13 @@ PANEL_EDIT_OPTIONS_BASE::PANEL_EDIT_OPTIONS_BASE( wxWindow* parent, wxWindowID i
 	m_mouseCmdsOSX->Add( fgSizerCmdsOSX, 1, wxEXPAND|wxTOP, 5 );
 
 
-	bMiddleLeftSizer->Add( m_mouseCmdsOSX, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
+	bMiddleLeftSizer->Add( m_mouseCmdsOSX, 1, wxEXPAND|wxALL, 5 );
 
 
-	bMargins->Add( bMiddleLeftSizer, 0, wxEXPAND|wxTOP|wxRIGHT, 5 );
+	bMargins->Add( bMiddleLeftSizer, 0, wxEXPAND|wxRIGHT, 10 );
 
 
-	bMargins->Add( 10, 0, 1, wxEXPAND, 5 );
+	bMargins->Add( 20, 0, 0, wxEXPAND, 5 );
 
 	m_optionsBook = new wxSimplebook( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
 	wxPanel* fpPage;
@@ -458,7 +458,7 @@ PANEL_EDIT_OPTIONS_BASE::PANEL_EDIT_OPTIONS_BASE( wxWindow* parent, wxWindowID i
 	pcbOptionsSizer->Fit( pcbPage );
 	m_optionsBook->AddPage( pcbPage, _("a page"), false );
 
-	bMargins->Add( m_optionsBook, 0, wxEXPAND | wxALL, 5 );
+	bMargins->Add( m_optionsBook, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 
 	bPanelSizer->Add( bMargins, 1, wxRIGHT, 5 );

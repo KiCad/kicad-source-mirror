@@ -265,7 +265,7 @@ PANEL_EESCHEMA_EDITING_OPTIONS_BASE::PANEL_EESCHEMA_EDITING_OPTIONS_BASE( wxWind
 	bLeftColumn->Add( m_leftClickCmdsBook, 1, wxEXPAND|wxTOP|wxBOTTOM, 5 );
 
 
-	bPanelSizer->Add( bLeftColumn, 0, wxEXPAND|wxRIGHT, 20 );
+	bPanelSizer->Add( bLeftColumn, 0, wxEXPAND|wxRIGHT, 35 );
 
 	wxBoxSizer* bRightColumn;
 	bRightColumn = new wxBoxSizer( wxVERTICAL );

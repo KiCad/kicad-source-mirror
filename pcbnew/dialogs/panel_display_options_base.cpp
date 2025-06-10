@@ -25,6 +25,9 @@ PANEL_DISPLAY_OPTIONS_BASE::PANEL_DISPLAY_OPTIONS_BASE( wxWindow* parent, wxWind
 
 	bupperSizer->Add( m_galOptionsSizer, 0, wxEXPAND|wxRIGHT, 10 );
 
+
+	bupperSizer->Add( 15, 0, 0, 0, 5 );
+
 	m_optionsBook = new wxSimplebook( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
 	wxPanel* fpEditorPage;
 	fpEditorPage = new wxPanel( m_optionsBook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );

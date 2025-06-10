@@ -276,7 +276,7 @@ PANEL_COMMON_SETTINGS_BASE::PANEL_COMMON_SETTINGS_BASE( wxWindow* parent, wxWind
 	bLeftSizer->Add( bUserInterfaceSizer, 0, wxTOP|wxLEFT|wxEXPAND, 5 );
 
 
-	bPanelSizer->Add( bLeftSizer, 0, wxRIGHT, 20 );
+	bPanelSizer->Add( bLeftSizer, 0, wxRIGHT, 35 );
 
 	wxBoxSizer* rightSizer;
 	rightSizer = new wxBoxSizer( wxVERTICAL );
@@ -454,7 +454,7 @@ PANEL_COMMON_SETTINGS_BASE::PANEL_COMMON_SETTINGS_BASE( wxWindow* parent, wxWind
 	rightSizer->Add( bProjectBackupSizer, 0, wxEXPAND|wxTOP|wxLEFT, 5 );
 
 
-	bPanelSizer->Add( rightSizer, 0, wxLEFT, 5 );
+	bPanelSizer->Add( rightSizer, 0, wxRIGHT|wxLEFT, 5 );
 
 
 	this->SetSizer( bPanelSizer );

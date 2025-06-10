@@ -151,7 +151,7 @@ PANEL_DISPLAY_OPTIONS::PANEL_DISPLAY_OPTIONS( wxWindow* aParent, APP_SETTINGS_BA
         m_isPCBEdit( dynamic_cast<PCBNEW_SETTINGS*>( aAppSettings ) != nullptr )
 {
     m_galOptsPanel = new GAL_OPTIONS_PANEL( this, aAppSettings );
-    m_galOptionsSizer->Add( m_galOptsPanel, 1, wxEXPAND|wxRIGHT, 15 );
+    m_galOptionsSizer->Add( m_galOptsPanel, 1, wxEXPAND|wxRIGHT, 5 );
 
     m_optionsBook->SetSelection( m_isPCBEdit ? 1 : 0 );
 
