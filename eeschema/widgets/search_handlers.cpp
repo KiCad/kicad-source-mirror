@@ -234,13 +234,13 @@ wxString SYMBOL_SEARCH_HANDLER::getResultCell( const SCH_SEARCH_HIT& aHit, int a
     else if( aCol == 5 )
         return m_frame->MessageTextFromValue( sym->GetPosition().y );
     else if( aCol == 6 )
-        return sym->GetExcludedFromSim() ? wxS( "X" ) : wxS( " " );
+        return sym->ResolveExcludedFromSim() ? wxS( "X" ) : wxS( " " );
     else if( aCol == 7 )
-        return sym->GetExcludedFromBOM() ? wxS( "X" ) : wxS( " " );
+        return sym->ResolveExcludedFromBOM() ? wxS( "X" ) : wxS( " " );
     else if( aCol == 8 )
-        return sym->GetExcludedFromBoard() ? wxS( "X" ) : wxS( " " );
+        return sym->ResolveExcludedFromBoard() ? wxS( "X" ) : wxS( " " );
     else if( aCol == 9 )
-        return sym->GetDNP() ? wxS( "X" ) : wxS( " " );
+        return sym->ResolveDNP() ? wxS( "X" ) : wxS( " " );
     else if( aCol == 10 )
         return sym->GetLibId().Format();
     else if( aCol == 11 )

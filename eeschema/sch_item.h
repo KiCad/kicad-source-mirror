@@ -251,6 +251,19 @@ public:
 
     virtual void SetExcludedFromSim( bool aExclude ) { }
     virtual bool GetExcludedFromSim() const { return false; }
+    bool ResolveExcludedFromSim() const;
+
+    virtual void SetExcludedFromBOM( bool aExcludeFromBOM ) { }
+    virtual bool GetExcludedFromBOM() const { return false; }
+    bool ResolveExcludedFromBOM() const;
+
+    virtual void SetExcludedFromBoard( bool aExcludeFromBoard ) { }
+    virtual bool GetExcludedFromBoard() const { return false; }
+    bool ResolveExcludedFromBoard() const;
+
+    virtual void SetDNP( bool aDNP ) { }
+    virtual bool GetDNP() const { return false; }
+    bool ResolveDNP() const;
 
     /**
      * Check if object is movable from the anchor point.
@@ -739,7 +752,7 @@ protected:
     bool                                                   m_connectivity_dirty;
 
     /// Store pointers to rule areas which this item is contained within
-    std::unordered_set<SCH_RULE_AREA*> m_rule_areas_cache;
+    std::unordered_set<SCH_RULE_AREA*>                     m_rule_areas_cache;
 
 private:
     friend class LIB_SYMBOL;

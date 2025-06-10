@@ -21,9 +21,9 @@ class WX_INFOBAR;
 #include <wx/settings.h>
 #include <wx/string.h>
 #include <wx/checkbox.h>
+#include <wx/sizer.h>
 #include <wx/stattext.h>
 #include <wx/textctrl.h>
-#include <wx/sizer.h>
 #include <wx/panel.h>
 #include <wx/bmpcbox.h>
 #include <wx/gbsizer.h>
@@ -45,6 +45,7 @@ class DIALOG_SHAPE_PROPERTIES_BASE : public DIALOG_SHIM
 	private:
 
 		// Private event handlers
+		void _wxFB_OnCheckBox( wxCommandEvent& event ){ OnCheckBox( event ); }
 		void _wxFB_onBorderChecked( wxCommandEvent& event ){ onBorderChecked( event ); }
 		void _wxFB_onFillChoice( wxCommandEvent& event ){ onFillChoice( event ); }
 		void _wxFB_onFillRadioButton( wxCommandEvent& event ){ onFillRadioButton( event ); }
@@ -53,13 +54,18 @@ class DIALOG_SHAPE_PROPERTIES_BASE : public DIALOG_SHIM
 	protected:
 		enum
 		{
-			NO_FILL = 1000,
+			NO_FILL = 11300,
 			FILLED_SHAPE,
 			FILLED_WITH_BG_BODYCOLOR,
 			FILLED_WITH_COLOR,
 		};
 
 		WX_INFOBAR* m_infoBar;
+		wxBoxSizer* m_ruleAreaSizer;
+		wxCheckBox* m_cbExcludeFromSim;
+		wxCheckBox* m_cbExcludeFromBom;
+		wxCheckBox* m_cbExcludeFromBoard;
+		wxCheckBox* m_cbDNP;
 		wxGridBagSizer* m_borderSizer;
 		wxCheckBox* m_borderCheckbox;
 		wxStaticText* m_borderWidthLabel;
@@ -95,6 +101,7 @@ class DIALOG_SHAPE_PROPERTIES_BASE : public DIALOG_SHIM
 		wxButton* m_sdbSizerCancel;
 
 		// Virtual event handlers, override them in your derived class
+		virtual void OnCheckBox( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onBorderChecked( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onFillChoice( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onFillRadioButton( wxCommandEvent& event ) { event.Skip(); }

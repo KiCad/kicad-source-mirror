@@ -3413,7 +3413,7 @@ SCH_SYMBOL* SCH_IO_KICAD_SEXPR_PARSER::parseSchematicSymbol()
         }
 
         default:
-            Expecting( "lib_id, lib_name, at, mirror, uuid, on_board, in_bom, dnp, "
+            Expecting( "lib_id, lib_name, at, mirror, uuid, exclude_from_sim, on_board, in_bom, dnp, "
                        "default_instance, property, pin, or instances" );
         }
     }
@@ -4224,8 +4224,29 @@ SCH_RULE_AREA* SCH_IO_KICAD_SEXPR_PARSER::parseSchRuleArea()
             const_cast<KIID&>( ruleArea->m_Uuid ) = poly->m_Uuid;
             break;
         }
+
+        case T_exclude_from_sim:
+            ruleArea->SetExcludedFromSim( parseBool() );
+            NeedRIGHT();
+            break;
+
+        case T_in_bom:
+            ruleArea->SetExcludedFromBOM( !parseBool() );
+            NeedRIGHT();
+            break;
+
+        case T_on_board:
+            ruleArea->SetExcludedFromBoard( !parseBool() );
+            NeedRIGHT();
+            break;
+
+        case T_dnp:
+            ruleArea->SetDNP( parseBool() );
+            NeedRIGHT();
+            break;
+
         default:
-            Expecting( "polyline" );
+            Expecting( "exclude_from_sim, on_board, in_bom, dnp, or polyline" );
         }
     }
 

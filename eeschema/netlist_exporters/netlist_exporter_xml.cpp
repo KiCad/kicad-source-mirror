@@ -305,10 +305,10 @@ XNODE* NETLIST_EXPORTER_XML::makeSymbols( unsigned aCtl )
             if( !symbol )
                 continue;
 
-            if( forBOM && ( sheet.GetExcludedFromBOM() || symbol->GetExcludedFromBOM() ) )
+            if( forBOM && ( sheet.GetExcludedFromBOM() || symbol->ResolveExcludedFromBOM() ) )
                 continue;
 
-            if( forBoard && ( sheet.GetExcludedFromBoard() || symbol->GetExcludedFromBoard() ) )
+            if( forBoard && ( sheet.GetExcludedFromBoard() || symbol->ResolveExcludedFromBoard() ) )
                 continue;
 
             // Output the symbol's elements in order of expected access frequency. This may
@@ -379,19 +379,19 @@ XNODE* NETLIST_EXPORTER_XML::makeSymbols( unsigned aCtl )
                     xproperty->AddAttribute( wxT( "value" ), sheetField.GetText() );
             }
 
-            if( symbol->GetExcludedFromBOM() || sheet.GetExcludedFromBOM() )
+            if( symbol->ResolveExcludedFromBOM() || sheet.GetExcludedFromBOM() )
             {
                 xcomp->AddChild( xproperty = node( wxT( "property" ) ) );
                 xproperty->AddAttribute( wxT( "name" ), wxT( "exclude_from_bom" ) );
             }
 
-            if( symbol->GetExcludedFromBoard() || sheet.GetExcludedFromBoard() )
+            if( symbol->ResolveExcludedFromBoard() || sheet.GetExcludedFromBoard() )
             {
                 xcomp->AddChild( xproperty = node( wxT( "property" ) ) );
                 xproperty->AddAttribute( wxT( "name" ), wxT( "exclude_from_board" ) );
             }
 
-            if( symbol->GetDNP() || sheet.GetDNP() )
+            if( symbol->ResolveDNP() || sheet.GetDNP() )
             {
                 xcomp->AddChild( xproperty = node( wxT( "property" ) ) );
                 xproperty->AddAttribute( wxT( "name" ), wxT( "dnp" ) );
@@ -889,10 +889,10 @@ XNODE* NETLIST_EXPORTER_XML::makeListOfNets( unsigned aCtl )
                     if( !symbol )
                         continue;
 
-                    if( forBOM && ( sheet.GetExcludedFromBOM() || symbol->GetExcludedFromBOM() ) )
+                    if( forBOM && ( sheet.GetExcludedFromBOM() || symbol->ResolveExcludedFromBOM() ) )
                         continue;
 
-                    if( forBoard && ( sheet.GetExcludedFromBoard() || symbol->GetExcludedFromBoard() ) )
+                    if( forBoard && ( sheet.GetExcludedFromBoard() || symbol->ResolveExcludedFromBoard() ) )
                         continue;
 
                     net_record->m_Nodes.emplace_back( pin, sheet );

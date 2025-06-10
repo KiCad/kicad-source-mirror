@@ -28,6 +28,7 @@
 #include <eda_item.h>
 #include <sch_connection.h>
 #include <sch_group.h>
+#include <sch_rule_area.h>
 #include <sch_item.h>
 #include <sch_screen.h>
 #include <sch_sheet_path.h>
@@ -241,6 +242,66 @@ SYMBOL* SCH_ITEM::GetParentSymbol()
         return lib_symbol;
 
     return nullptr;
+}
+
+
+bool SCH_ITEM::ResolveExcludedFromSim() const
+{
+    if( GetExcludedFromSim() )
+        return true;
+
+    for( SCH_RULE_AREA* area : m_rule_areas_cache )
+    {
+        if( area->GetExcludedFromSim() )
+            return true;
+    }
+
+    return false;
+}
+
+
+bool SCH_ITEM::ResolveExcludedFromBOM() const
+{
+    if( GetExcludedFromBOM() )
+        return true;
+
+    for( SCH_RULE_AREA* area : m_rule_areas_cache )
+    {
+        if( area->GetExcludedFromBOM() )
+            return true;
+    }
+
+    return false;
+}
+
+
+bool SCH_ITEM::ResolveExcludedFromBoard() const
+{
+    if( GetExcludedFromBoard() )
+        return true;
+
+    for( SCH_RULE_AREA* area : m_rule_areas_cache )
+    {
+        if( area->GetExcludedFromBoard() )
+            return true;
+    }
+
+    return false;
+}
+
+
+bool SCH_ITEM::ResolveDNP() const
+{
+    if( GetDNP() )
+        return true;
+
+    for( SCH_RULE_AREA* area : m_rule_areas_cache )
+    {
+        if( area->GetDNP() )
+            return true;
+    }
+
+    return false;
 }
 
 

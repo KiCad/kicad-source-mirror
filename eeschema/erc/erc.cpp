@@ -1780,7 +1780,7 @@ int ERC_TESTER::TestSimModelIssues()
 
             // Power symbols and other symbols which have the reference starting with "#" are
             // not included in simulation
-            if( symbol->GetRef( &sheet ).StartsWith( '#' ) || symbol->GetExcludedFromSim() )
+            if( symbol->GetRef( &sheet ).StartsWith( '#' ) || symbol->ResolveExcludedFromSim() )
                 continue;
 
             // Reset for each symbol

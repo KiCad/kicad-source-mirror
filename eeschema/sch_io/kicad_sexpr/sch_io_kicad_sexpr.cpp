@@ -1215,7 +1215,14 @@ void SCH_IO_KICAD_SEXPR::saveRuleArea( SCH_RULE_AREA* aRuleArea )
     wxCHECK_RET( aRuleArea != nullptr && m_out != nullptr, "" );
 
     m_out->Print( "(rule_area " );
+
+    KICAD_FORMAT::FormatBool( m_out, "exclude_from_sim", aRuleArea->GetExcludedFromSim() );
+    KICAD_FORMAT::FormatBool( m_out, "in_bom", !aRuleArea->GetExcludedFromBOM() );
+    KICAD_FORMAT::FormatBool( m_out, "on_board", !aRuleArea->GetExcludedFromBoard() );
+    KICAD_FORMAT::FormatBool( m_out, "dnp", aRuleArea->GetDNP() );
+
     saveShape( aRuleArea );
+
     m_out->Print( ")" );
 }
 

@@ -55,6 +55,30 @@ public:
 
     EDA_ITEM* Clone() const override;
 
+    /**
+     * Set or clear the exclude from simulation flag.
+     */
+    void SetExcludedFromSim( bool aExcludeFromSim ) override { m_excludedFromSim = aExcludeFromSim; }
+    bool GetExcludedFromSim() const override { return m_excludedFromSim; }
+
+    /**
+     * Set or clear the exclude from schematic bill of materials flag.
+     */
+    void SetExcludedFromBOM( bool aExcludeFromBOM ) override { m_excludedFromBOM = aExcludeFromBOM; }
+    bool GetExcludedFromBOM() const override { return m_excludedFromBOM; }
+
+    /**
+     * Set or clear exclude from board netlist flag.
+     */
+    void SetExcludedFromBoard( bool aExcludeFromBoard ) override { m_excludedFromBoard = aExcludeFromBoard; }
+    bool GetExcludedFromBoard() const override { return m_excludedFromBoard; }
+
+    /**
+     * Set or clear the 'Do Not Populate' flag.
+     */
+    bool GetDNP() const override { return m_DNP; }
+    void SetDNP( bool aDNP ) override { m_DNP = aDNP; }
+
     std::vector<int> ViewGetLayers() const override;
 
     bool IsFilledForHitTesting() const override
@@ -116,6 +140,12 @@ protected:
     /// Clear the list of items which this rule area affects.
     void clearContainedItems();
 
+protected:
+    bool          m_excludedFromSim;
+    bool          m_excludedFromBOM;
+    bool          m_excludedFromBoard;
+    bool          m_DNP;                   ///< True if symbol is set to 'Do Not Populate'.
+
     /// All #SCH_ITEM objects currently contained or intersecting the rule area.
     std::unordered_set<SCH_ITEM*>            m_items;
 
@@ -123,7 +153,7 @@ protected:
     std::unordered_set<SCH_DIRECTIVE_LABEL*> m_directives;
 
     /// All #SCH_ITEM objectss contained or intersecting the rule area in the previous update.
-    std::unordered_set<SCH_ITEM*> m_prev_items;
+    std::unordered_set<SCH_ITEM*>            m_prev_items;
 
     /// All SCH_DIRECTIVE_LABEL objects attached to the rule area border in the previous update.
     std::unordered_set<SCH_DIRECTIVE_LABEL*> m_prev_directives;

@@ -45,6 +45,7 @@
 #include <core/mirror.h>
 #include <trigo.h>
 #include <sch_label.h>
+#include <sch_rule_area.h>
 #include <magic_enum.hpp>
 #include <api/api_utils.h>
 #include <api/schematic/schematic_types.pb.h>
@@ -766,6 +767,58 @@ bool SCH_LABEL_BASE::ResolveTextVar( const SCH_SHEET_PATH* aPath, wxString* toke
 
         if( connection )
             *token = GetEffectiveNetClass()->GetName();
+
+        return true;
+    }
+    else if( Type() == SCH_DIRECTIVE_LABEL_T && token->IsSameAs( wxT( "EXCLUDE_FROM_BOM" ) ) )
+    {
+        const SCH_DIRECTIVE_LABEL* directive = static_cast<const SCH_DIRECTIVE_LABEL*>( this );
+        *token = wxEmptyString;
+
+        for( SCH_RULE_AREA* ruleArea : directive->GetConnectedRuleAreas() )
+        {
+            if( ruleArea->GetExcludedFromBOM() )
+                *token = _( "Excluded from BOM" );
+        }
+
+        return true;
+    }
+    else if( Type() == SCH_DIRECTIVE_LABEL_T && token->IsSameAs( wxT( "EXCLUDE_FROM_BOARD" ) ) )
+    {
+        const SCH_DIRECTIVE_LABEL* directive = static_cast<const SCH_DIRECTIVE_LABEL*>( this );
+        *token = wxEmptyString;
+
+        for( SCH_RULE_AREA* ruleArea : directive->GetConnectedRuleAreas() )
+        {
+            if( ruleArea->GetExcludedFromBoard() )
+                *token = _( "Excluded from board" );
+        }
+
+        return true;
+    }
+    else if( Type() == SCH_DIRECTIVE_LABEL_T && token->IsSameAs( wxT( "EXCLUDE_FROM_SIM" ) ) )
+    {
+        const SCH_DIRECTIVE_LABEL* directive = static_cast<const SCH_DIRECTIVE_LABEL*>( this );
+        *token = wxEmptyString;
+
+        for( SCH_RULE_AREA* ruleArea : directive->GetConnectedRuleAreas() )
+        {
+            if( ruleArea->GetExcludedFromSim() )
+                *token = _( "Excluded from simulation" );
+        }
+
+        return true;
+    }
+    else if( Type() == SCH_DIRECTIVE_LABEL_T && token->IsSameAs( wxT( "DNP" ) ) )
+    {
+        const SCH_DIRECTIVE_LABEL* directive = static_cast<const SCH_DIRECTIVE_LABEL*>( this );
+        *token = wxEmptyString;
+
+        for( SCH_RULE_AREA* ruleArea : directive->GetConnectedRuleAreas() )
+        {
+            if( ruleArea->GetDNP() )
+                *token = _( "DNP" );
+        }
 
         return true;
     }
@@ -1789,6 +1842,12 @@ void SCH_DIRECTIVE_LABEL::ClearConnectedRuleAreas()
 void SCH_DIRECTIVE_LABEL::RemoveConnectedRuleArea( SCH_RULE_AREA* aRuleArea )
 {
     m_connected_rule_areas.erase( aRuleArea );
+}
+
+
+const std::unordered_set<SCH_RULE_AREA*> SCH_DIRECTIVE_LABEL::GetConnectedRuleAreas() const
+{
+    return m_connected_rule_areas;
 }
 
 

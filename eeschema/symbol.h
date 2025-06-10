@@ -177,20 +177,20 @@ public:
     /**
      * Set or clear the exclude from schematic bill of materials flag.
      */
-    void SetExcludedFromBOM( bool aExcludeFromBOM ) { m_excludedFromBOM = aExcludeFromBOM; }
-    bool GetExcludedFromBOM() const { return m_excludedFromBOM; }
+    void SetExcludedFromBOM( bool aExcludeFromBOM ) override { m_excludedFromBOM = aExcludeFromBOM; }
+    bool GetExcludedFromBOM() const override { return m_excludedFromBOM; }
 
     /**
      * Set or clear exclude from board netlist flag.
      */
-    void SetExcludedFromBoard( bool aExcludeFromBoard ) { m_excludedFromBoard = aExcludeFromBoard; }
-    bool GetExcludedFromBoard() const { return m_excludedFromBoard; }
+    void SetExcludedFromBoard( bool aExcludeFromBoard ) override { m_excludedFromBoard = aExcludeFromBoard; }
+    bool GetExcludedFromBoard() const override { return m_excludedFromBoard; }
 
     /**
      * Set or clear the 'Do Not Populate' flag.
      */
-    bool GetDNP() const { return m_DNP; }
-    void SetDNP( bool aDNP ) { m_DNP = aDNP; }
+    bool GetDNP() const override { return m_DNP; }
+    void SetDNP( bool aDNP ) override { m_DNP = aDNP; }
 
     virtual int GetOrientation() const { return SYM_NORMAL; }
 

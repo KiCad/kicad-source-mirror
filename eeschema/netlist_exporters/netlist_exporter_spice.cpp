@@ -177,7 +177,7 @@ bool NETLIST_EXPORTER_SPICE::ReadSchematicAndLibraries( unsigned aNetlistOptions
         {
             SCH_SYMBOL* symbol = findNextSymbol( item, sheet );
 
-            if( !symbol || symbol->GetExcludedFromSim() )
+            if( !symbol || symbol->ResolveExcludedFromSim() )
                 continue;
 
             try
@@ -306,7 +306,7 @@ void NETLIST_EXPORTER_SPICE::ReadDirectives( unsigned aNetlistOptions )
     {
         for( SCH_ITEM* item : sheet.LastScreen()->Items() )
         {
-            if( item->GetExcludedFromSim() )
+            if( item->ResolveExcludedFromSim() )
                 continue;
 
             if( item->Type() == SCH_TEXT_T )

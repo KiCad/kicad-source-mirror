@@ -493,6 +493,8 @@ public:
     /// @brief Removes a specific rule area from the cache
     void RemoveConnectedRuleArea( SCH_RULE_AREA* aRuleArea );
 
+    const std::unordered_set<SCH_RULE_AREA*> GetConnectedRuleAreas() const;
+
     /// @brief Determines dangling state from connectivity and cached connected rule areas
     virtual bool IsDangling() const override;
 

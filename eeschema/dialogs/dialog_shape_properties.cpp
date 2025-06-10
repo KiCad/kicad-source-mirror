@@ -26,6 +26,7 @@
 #include <sch_edit_frame.h>
 #include <symbol_edit_frame.h>
 #include <sch_shape.h>
+#include <sch_rule_area.h>
 #include <dialog_shape_properties.h>
 #include <settings/color_settings.h>
 #include <symbol_editor_settings.h>
@@ -34,10 +35,10 @@
 
 
 DIALOG_SHAPE_PROPERTIES::DIALOG_SHAPE_PROPERTIES( SCH_BASE_FRAME* aParent, SCH_SHAPE* aShape ) :
-    DIALOG_SHAPE_PROPERTIES_BASE( aParent ),
-    m_frame( aParent ),
-    m_shape( aShape ),
-    m_borderWidth( aParent, m_borderWidthLabel, m_borderWidthCtrl, m_borderWidthUnits, true )
+        DIALOG_SHAPE_PROPERTIES_BASE( aParent ),
+        m_frame( aParent ),
+        m_shape( aShape ),
+        m_borderWidth( aParent, m_borderWidthLabel, m_borderWidthCtrl, m_borderWidthUnits, true )
 {
     SetTitle( wxString::Format( GetTitle(), aShape->GetFriendlyName() ) );
 
@@ -68,6 +69,8 @@ DIALOG_SHAPE_PROPERTIES::DIALOG_SHAPE_PROPERTIES( SCH_BASE_FRAME* aParent, SCH_S
     if( m_frame->GetColorSettings()->GetOverrideSchItemColors() )
         m_infoBar->ShowMessage( _( "Note: individual item colors overridden in Preferences." ) );
 
+    m_ruleAreaSizer->Show( dynamic_cast<SCH_RULE_AREA*>( aShape ) != nullptr );
+
     SetInitialFocus( m_borderWidthCtrl );
 
     // Required under wxGTK if we want to dismiss the dialog with the ESC key
@@ -92,10 +95,8 @@ DIALOG_SHAPE_PROPERTIES::DIALOG_SHAPE_PROPERTIES( SCH_BASE_FRAME* aParent, SCH_S
         m_symbolEditorSizer->Show( false );
     }
 
-    m_borderColorSwatch->Bind( COLOR_SWATCH_CHANGED, &DIALOG_SHAPE_PROPERTIES::onBorderSwatch,
-                               this );
-    m_customColorSwatch->Bind( COLOR_SWATCH_CHANGED, &DIALOG_SHAPE_PROPERTIES::onCustomColorSwatch,
-                               this );
+    m_borderColorSwatch->Bind( COLOR_SWATCH_CHANGED, &DIALOG_SHAPE_PROPERTIES::onBorderSwatch, this );
+    m_customColorSwatch->Bind( COLOR_SWATCH_CHANGED, &DIALOG_SHAPE_PROPERTIES::onCustomColorSwatch, this );
 
     // Now all widgets have the size fixed, call FinishDialogSettings
     finishDialogSettings();
@@ -104,11 +105,8 @@ DIALOG_SHAPE_PROPERTIES::DIALOG_SHAPE_PROPERTIES( SCH_BASE_FRAME* aParent, SCH_S
 
 DIALOG_SHAPE_PROPERTIES::~DIALOG_SHAPE_PROPERTIES()
 {
-    m_borderColorSwatch->Unbind( COLOR_SWATCH_CHANGED, &DIALOG_SHAPE_PROPERTIES::onBorderSwatch,
-                                 this );
-    m_customColorSwatch->Unbind( COLOR_SWATCH_CHANGED,
-                                 &DIALOG_SHAPE_PROPERTIES::onCustomColorSwatch,
-                                 this );
+    m_borderColorSwatch->Unbind( COLOR_SWATCH_CHANGED, &DIALOG_SHAPE_PROPERTIES::onBorderSwatch, this );
+    m_customColorSwatch->Unbind( COLOR_SWATCH_CHANGED, &DIALOG_SHAPE_PROPERTIES::onCustomColorSwatch, this );
 }
 
 
@@ -116,6 +114,14 @@ bool DIALOG_SHAPE_PROPERTIES::TransferDataToWindow()
 {
     if( !wxDialog::TransferDataToWindow() )
         return false;
+
+    if( SCH_RULE_AREA* ruleArea = dynamic_cast<SCH_RULE_AREA*>( m_shape ) )
+    {
+        m_cbExcludeFromSim->SetValue( ruleArea->GetExcludedFromSim() );
+        m_cbExcludeFromBom->SetValue( ruleArea->GetExcludedFromBOM() );
+        m_cbExcludeFromBoard->SetValue( ruleArea->GetExcludedFromBoard() );
+        m_cbDNP->SetValue( ruleArea->GetDNP() );
+    }
 
     if( m_shape->GetWidth() >= 0 )
     {
@@ -308,6 +314,14 @@ bool DIALOG_SHAPE_PROPERTIES::TransferDataFromWindow()
 
     if( !m_shape->IsNew() )
         commit.Modify( m_shape, m_frame->GetScreen() );
+
+    if( SCH_RULE_AREA* ruleArea = dynamic_cast<SCH_RULE_AREA*>( m_shape ) )
+    {
+        ruleArea->SetExcludedFromSim( m_cbExcludeFromSim->GetValue() );
+        ruleArea->SetExcludedFromBOM( m_cbExcludeFromBom->GetValue() );
+        ruleArea->SetExcludedFromBoard( m_cbExcludeFromBoard->GetValue() );
+        ruleArea->SetDNP( m_cbDNP->GetValue() );
+    }
 
     STROKE_PARAMS stroke = m_shape->GetStroke();
 
