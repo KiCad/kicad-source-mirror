@@ -42,7 +42,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-06-08 17:02+0300\n"
-"PO-Revision-Date: 2025-06-08 02:02+0000\n"
+"PO-Revision-Date: 2025-06-10 06:11+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/kicad/master-source/zh_Hans/>\n"
@@ -43102,9 +43102,9 @@ msgid "No model for filename '%s'.\n"
 msgstr "没有文件名为 '%s' 的模型。\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1233
-#, fuzzy, c-format
+#, c-format
 msgid "No location data for filename '%s'.\n"
-msgstr "写入定位数据到 '%s'。\n"
+msgstr "文件 '%s' 中没有定位数据。\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1243
 #, c-format
@@ -43318,9 +43318,8 @@ msgid "PCB '%s' does not exist. Do you wish to create it?"
 msgstr "PCB '%s' 不存在, 是否创建?"
 
 #: pcbnew/files.cpp:568
-#, fuzzy
 msgid "Create PCB"
-msgstr "PCB 创建中"
+msgstr "创建 PCB"
 
 #: pcbnew/files.cpp:582 pcbnew/files.cpp:668
 msgid "File format is not supported"
@@ -43337,9 +43336,8 @@ msgid "Memory exhausted loading PCB '%s'"
 msgstr "加载电路板 '%s' 时内存耗尽"
 
 #: pcbnew/files.cpp:800 pcbnew/pcb_edit_frame.cpp:1403
-#, fuzzy
 msgid "Could not load component class assignment rules"
-msgstr "无法编译自定义设计规则。"
+msgstr "无法加载元件类分配规则"
 
 #: pcbnew/files.cpp:862
 #, c-format
@@ -43386,7 +43384,6 @@ msgid "The board must be saved before generating IPC-2581 file."
 msgstr "生成 IPC-2581 文件前必须保存电路板。"
 
 #: pcbnew/files.cpp:1319
-#, fuzzy
 msgid "Generate IPC-2581 File"
 msgstr "生成 IPC-2581 文件"
 
@@ -43409,7 +43406,6 @@ msgstr ""
 "重命名临时文件 '%s' 失败。"
 
 #: pcbnew/files.cpp:1442
-#, fuzzy
 msgid "Generate ODB++ Files"
 msgstr "生成 ODB++ 文件"
 
@@ -43606,7 +43602,6 @@ msgid "[no footprint loaded]"
 msgstr "[未加载任何封装]"
 
 #: pcbnew/footprint_edit_frame.cpp:1117
-#, fuzzy
 msgid "Update Footprint Libraries"
 msgstr "更新封装库"
 
