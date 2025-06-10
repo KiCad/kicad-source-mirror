@@ -31,7 +31,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-06-08 17:02+0300\n"
-"PO-Revision-Date: 2025-06-10 06:03+0000\n"
+"PO-Revision-Date: 2025-06-11 07:01+0000\n"
 "Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
@@ -7886,7 +7886,6 @@ msgstr "Kann Datei \"%s\" nicht öffnen"
 #: pcbnew/pcb_io/easyedapro/pcb_io_easyedapro.cpp:119
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:82
 #: pcbnew/pcb_io/fabmaster/pcb_io_fabmaster.cpp:62
-#, fuzzy
 msgid "File import canceled by user."
 msgstr "Dateiimport durch Benutzer abgebrochen."
 
@@ -9634,7 +9633,7 @@ msgstr "In Fenster einpassen"
 
 #: common/tool/actions.cpp:699
 msgid "Zoom to worksheet area if exists or edited object"
-msgstr ""
+msgstr "Auf Zeichnungsblatt, wenn es existiert, oder bearbeitete Objekte zoomen"
 
 #: common/tool/actions.cpp:706
 msgid "Zoom to All Objects"
@@ -10518,7 +10517,6 @@ msgstr "Footprint nicht gefunden."
 #: common/widgets/footprint_select_widget.cpp:65 cvpcb/cvpcb_mainframe.cpp:903
 #: pcbnew/footprint_edit_frame.cpp:1089
 #: pcbnew/widgets/panel_footprint_chooser.cpp:70
-#, fuzzy
 msgid "Load Footprint Libraries"
 msgstr "Footprint-Bibliotheken laden"
 
@@ -10713,14 +10711,12 @@ msgid "Reset %s to Defaults"
 msgstr "%s auf Standardwerte zurücksetzen"
 
 #: common/widgets/panel_design_block_chooser.cpp:71
-#, fuzzy
 msgid "Load Design Block Libraries"
-msgstr "Lade Designblock-Bibliotheken"
+msgstr "Designblock-Bibliotheken laden"
 
 #: common/widgets/panel_design_block_chooser.cpp:274
-#, fuzzy
 msgid "Update Design Block Libraries"
-msgstr "Aktualisiere Designblock-Bibliotheken"
+msgstr "Designblock-Bibliotheken aktualisieren"
 
 #: common/widgets/panel_design_block_chooser.cpp:430
 msgid "Errors were encountered loading design blocks:"
@@ -12282,9 +12278,8 @@ msgid "Update/reset visibility of pin names/numbers"
 msgstr "Sichtbarkeit von Pinnamen/-nummern aktualisieren/zurücksetzen"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:172
-#, fuzzy
 msgid "Reset alternate pin functions"
-msgstr "Zurücksetzen der alternativen Pinfunktion auf Standardwert"
+msgstr "Zurücksetzen der alternativen Pinfunktion"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:178
 msgid "Update/reset symbol attributes"
@@ -12486,9 +12481,8 @@ msgid "%d symbol(s) require annotation.<br><br>"
 msgstr "%d Symbol(e) benötigen Annotation.<br><br>"
 
 #: eeschema/dialogs/dialog_erc.cpp:456
-#, fuzzy
 msgid "-------- ERC canceled by user.<br><br>"
-msgstr "-------- ERC durch Benutzer abgebrochen. <br><br>"
+msgstr "-------- ERC durch Benutzer abgebrochen.<br><br>"
 
 #: eeschema/dialogs/dialog_erc.cpp:458 pcbnew/dialogs/dialog_drc.cpp:362
 msgid "Done.<br><br>"
@@ -13688,16 +13682,14 @@ msgid "Duplicate pins:"
 msgstr "Doppelte Pins:"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:133
-#, fuzzy
 msgid "Filter Pin Table"
-msgstr "Pin-Tabelle"
+msgstr "Pintabelle filtern"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:140
 msgid "Filter by unit:"
 msgstr "Nach Einheit filtern:"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:148
-#, fuzzy
 msgid "Filter by body style:"
 msgstr "Nach Pinkörper filtern:"
 
@@ -14828,9 +14820,8 @@ msgstr ""
 "Projektdatei %s konnte nicht geladen werden."
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:258
-#, fuzzy
 msgid "Load Bus Aliases"
-msgstr "Lade Bus-Aliase"
+msgstr "Busaliase laden"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:269 eeschema/files-io.cpp:282
 #: eeschema/picksymbol.cpp:124
@@ -18123,14 +18114,12 @@ msgid "Schematic '%s' does not exist.  Do you wish to create it?"
 msgstr "Schaltplan \"%s\" existiert nicht.  Soll er angelegt werden?"
 
 #: eeschema/files-io.cpp:158
-#, fuzzy
 msgid "Create Schematic"
-msgstr "Schaltplan wird erzeugt"
+msgstr "Schaltplan erzeugen"
 
 #: eeschema/files-io.cpp:159
-#, fuzzy
 msgid "Load Schematic"
-msgstr "Schaltplan wird geladen"
+msgstr "Schaltplan laden"
 
 #: eeschema/files-io.cpp:224
 msgid "Schematic file changes are unsaved"
@@ -18246,9 +18235,8 @@ msgstr ""
 "wird sie automatisch in das neue Format gewandelt."
 
 #: eeschema/files-io.cpp:542 eeschema/files-io.cpp:1388
-#, fuzzy
 msgid "Updating connections..."
-msgstr "Aktualisiere Netze ..."
+msgstr "Aktualisiere Verbindungen ..."
 
 #: eeschema/files-io.cpp:549
 msgid ""
@@ -19926,7 +19914,6 @@ msgstr "KiCad HTTP-Bibliotheksdateien"
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:506
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2814
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:155
-#, fuzzy
 msgid "Open canceled by user."
 msgstr "Öffnen durch Benutzer abgebrochen."
 
@@ -21868,6 +21855,8 @@ msgstr "erwarte Messungs-Formatdefinition"
 #: eeschema/sim/ngspice.cpp:501
 msgid "Unable to load ngspice shared library. Please check your install."
 msgstr ""
+"Die gemeinsame ngspice-Bibliothek kann nicht geladen werden. Bitte "
+"Installation überprüfen."
 
 #: eeschema/sim/sim_lib_mgr.cpp:91 eeschema/sim/sim_lib_mgr.cpp:144
 #, c-format
@@ -22675,7 +22664,6 @@ msgstr "KiCad Symboleditor"
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:150
 #: eeschema/symbol_tree_model_adapter.cpp:73
 #: eeschema/symbol_viewer_frame.cpp:277
-#, fuzzy
 msgid "Load Symbol Libraries"
 msgstr "Symbolbibliotheken laden"
 
@@ -22684,9 +22672,8 @@ msgid "Library changes are unsaved"
 msgstr "Änderungen an der Bibliothek sind nicht gespeichert"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:282
-#, fuzzy
 msgid "Symbol library loading canceled by user."
-msgstr "Laden der Symbolbibliothek wurde durch den Benutzer abgebrochen."
+msgstr "Laden der Symbolbibliothek durch den Benutzer abgebrochen."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:910
 #, c-format
@@ -23286,7 +23273,6 @@ msgid "Re-linking footprints requires a fully annotated schematic."
 msgstr "Footprint-Neuverknüpfung benötigt vollständig annotierten Schaltplan."
 
 #: eeschema/tools/backannotate.cpp:356
-#, fuzzy
 msgid "Footprint re-linking canceled by user."
 msgstr "Footprint-Neuverknüpfung durch Benutzer abgebrochen."
 
@@ -23713,9 +23699,8 @@ msgid "Add selected design block to current sheet"
 msgstr "Gewählten Designblock auf aktueller Schaltplanseite einfügen"
 
 #: eeschema/tools/sch_actions.cpp:467 pcbnew/tools/pcb_actions.cpp:461
-#, fuzzy
 msgid "Place Linked Design Block"
-msgstr "Designblock hinzufügen"
+msgstr "Verknüpften Designblock hinzufügen"
 
 #: eeschema/tools/sch_actions.cpp:468 pcbnew/tools/pcb_actions.cpp:462
 msgid "Place design block linked to selected group"
@@ -25043,9 +25028,9 @@ msgstr "Keine Fehler gefunden."
 #: eeschema/tools/sch_editor_control.cpp:3003
 #: eeschema/tools/sch_editor_control.cpp:3050 pcbnew/tools/pcb_control.cpp:1380
 #: pcbnew/tools/pcb_control.cpp:1434
-#, fuzzy, c-format
+#, c-format
 msgid "Could not find design block %s."
-msgstr "Konnte Spaltenbeschriftung %s nicht finden."
+msgstr "Konnte Designblock %s nicht finden."
 
 #: eeschema/tools/sch_editor_control.cpp:3011
 #, c-format
@@ -25420,9 +25405,8 @@ msgstr "Als Zeichenblatt einfügen"
 
 #: eeschema/widgets/sch_design_block_pane.cpp:43
 #: pcbnew/widgets/pcb_design_block_pane.cpp:44
-#, fuzzy
 msgid "Place as group"
-msgstr "Place a module"
+msgstr "Als Gruppe einfügen"
 
 #: eeschema/widgets/sch_design_block_pane.cpp:44
 #: pcbnew/widgets/pcb_design_block_pane.cpp:45
@@ -25436,9 +25420,8 @@ msgstr "Kopien des Designblocks mit Folgeklicks platzieren."
 
 #: eeschema/widgets/sch_design_block_pane.cpp:113
 #: pcbnew/widgets/pcb_design_block_pane.cpp:107
-#, fuzzy
 msgid "Place the design block as a group."
-msgstr "Designblock als neue Schaltplanseite einfügen."
+msgstr "Designblock als Gruppe einfügen."
 
 #: eeschema/widgets/sch_design_block_pane.cpp:119
 msgid "Place the design block as a new sheet."
@@ -25458,7 +25441,6 @@ msgid "Edit Properties"
 msgstr "Eigenschaften bearbeiten"
 
 #: eeschema/widgets/search_handlers.cpp:166
-#, fuzzy
 msgid "Excl. Sim"
 msgstr "Von Sim. ausschl."
 
@@ -25467,7 +25449,6 @@ msgid "Excl. BOM"
 msgstr "Von Stückl. ausschl."
 
 #: eeschema/widgets/search_handlers.cpp:168
-#, fuzzy
 msgid "Excl. Board"
 msgstr "Von Platine ausschl."
 
@@ -25482,9 +25463,8 @@ msgstr "Anweisung"
 #: eeschema/widgets/search_handlers.cpp:496
 #: pcbnew/dialogs/dialog_multichannel_generate_rule_areas.cpp:115
 #: pcbnew/widgets/search_handlers.cpp:341
-#, fuzzy
 msgid "Groups"
-msgstr "Gruppe"
+msgstr "Gruppen"
 
 #: eeschema/widgets/symbol_filedlg_save_as.h:33
 msgid "Do not update library tables"
@@ -25508,7 +25488,7 @@ msgid "Tune %s"
 msgstr "%s abstimmen"
 
 #: eeschema/widgets/tuner_slider.cpp:84
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s has simulation model of type '%s %s'.\n"
 "\n"
@@ -26132,9 +26112,8 @@ msgstr ""
 "%s </i>"
 
 #: gerbview/files.cpp:303
-#, fuzzy
 msgid "Load Files"
-msgstr "Keine Dateien"
+msgstr "Dateien laden"
 
 #: gerbview/files.cpp:305 gerbview/files.cpp:312
 #, c-format
@@ -27428,7 +27407,7 @@ msgstr "Gerber-Ploteinstellungen aus der Platinendatei verwenden"
 
 #: kicad/cli/command_pcb_export_hpgl.cpp:30
 msgid "No longer supported as of KiCad 10.0."
-msgstr ""
+msgstr "Seit KiCad 10.0 nicht mehr unterstützt."
 
 #: kicad/cli/command_pcb_export_pdf.cpp:37
 msgid "Generate PDF from a list of layers"
@@ -27523,15 +27502,16 @@ msgid "Invalid side specified\n"
 msgstr "Ungültige Seite angegeben\n"
 
 #: kicad/cli/command_pcb_export_ps.cpp:41
-#, fuzzy
 msgid "Generate Postscript from a list of layers"
-msgstr "PDF von einer Liste von Lagen erstellen"
+msgstr "Postscript von einer Liste von Lagen erstellen"
 
 #: kicad/cli/command_pcb_export_ps.cpp:116
 msgid ""
 "Track width correction [mm]. Used to compensate errors in track widths, pad "
 "and via sizes."
 msgstr ""
+"Leiterbahnbreitenkorrektur [mm]. Dient zum Ausgleich von Fehlern in "
+"Leiterbahnbreiten, Pad- und Via-Größen."
 
 #: kicad/cli/command_pcb_export_ps.cpp:123
 msgid "X scale adjust for exact scale."
@@ -27563,9 +27543,8 @@ msgstr ""
 "derzeitige Größe, 2 = nur Platinenbereich)"
 
 #: kicad/cli/command_pcb_export_svg.cpp:93
-#, fuzzy
 msgid "Fit the page to the board"
-msgstr "Kopiere aktuelle 3D-Ansicht in Zwischenablage"
+msgstr "Seite an Platine anpassen"
 
 #: kicad/cli/command_pcb_export_svg.cpp:97
 #: kicad/cli/command_sch_export_plot.cpp:67
@@ -42073,8 +42052,8 @@ msgstr ""
 "<br><br>\n"
 "\n"
 "    A.inDiffPair('<Netzname>')\n"
-"Wahr, wenn `A` ein Netz hat, das Teil des angegebenen Differentialpaares "
-"ist.\n"
+"Wahr, wenn `A` ein Netz hat, das Teil des angegebenen Differentialpaares ist."
+"\n"
 "`<Netzname>` ist der Basisname des Differentialpaares.  Zum Beispiel passt\n"
 "`inDiffPair('/CLK')` zu Elementen in den Netzen `/CLK_P` und `/CLK_N`.\n"
 "<br><br>\n"
@@ -42150,8 +42129,8 @@ msgstr ""
 "\n"
 "    A.memberOfSheetOrChildren('<Schaltplanblatt-Pfad>')\n"
 "Wahr, wenn `A` ein Teil des angegebenen Schaltplanblatts oder eines "
-"hierarchischen Unterschaltplanblatts ist. Der Pfad kann Wildcards "
-"enthalten.\n"
+"hierarchischen Unterschaltplanblatts ist. Der Pfad kann Wildcards enthalten."
+"\n"
 "<br><br>\n"
 "\n"
 
