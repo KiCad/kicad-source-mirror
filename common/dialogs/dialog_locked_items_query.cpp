@@ -60,11 +60,17 @@ void DIALOG_LOCKED_ITEMS_QUERY::onOverrideLocks( wxCommandEvent& event )
 
 int DIALOG_LOCKED_ITEMS_QUERY::ShowModal()
 {
+    static int doNotShowValue = wxID_ANY;
+
+    if( doNotShowValue != wxID_ANY && m_lockingOptions.m_sessionSkipPrompts )
+        return doNotShowValue;
+
     int ret = DIALOG_SHIM::ShowModal();
 
     // Has the user asked not to show the dialog again this session?
     if( m_doNotShowBtn->IsChecked() && ret != wxID_CANCEL )
     {
+        doNotShowValue = ret;
         m_lockingOptions.m_sessionSkipPrompts = true;
     }
 
