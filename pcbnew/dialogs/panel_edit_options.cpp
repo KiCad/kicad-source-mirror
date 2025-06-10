@@ -50,12 +50,12 @@ PANEL_EDIT_OPTIONS::PANEL_EDIT_OPTIONS( wxWindow* aParent, UNITS_PROVIDER* aUnit
     m_mouseCmdsOSX->Show( true );
     m_mouseCmdsWinLin->Show( false );
     // Disable highlight net option for footprint editor
-    m_rbCtrlClickActionMac->Enable( 1, !m_isFootprintEditor );
+    m_rbHighlightNetMac->Show( !m_isFootprintEditor );
 #else
     m_mouseCmdsWinLin->Show( true );
     m_mouseCmdsOSX->Show( false );
     // Disable highlight net option for footprint editor
-    m_rbCtrlClickAction->Enable( 1, !m_isFootprintEditor );
+    m_rbHighlightNet->Show( !m_isFootprintEditor );
 #endif
 
     m_optionsBook->SetSelection( isFootprintEditor ? 0 : 1 );
@@ -124,9 +124,15 @@ void PANEL_EDIT_OPTIONS::loadPCBSettings( PCBNEW_SETTINGS* aCfg )
     m_ratsnestThickness->SetValue( aCfg->m_Display.m_RatsnestThickness );
 
 #ifdef __WXOSX_MAC__
-    m_rbCtrlClickActionMac->SetSelection( aCfg->m_CtrlClickHighlight );
+    if( aCfg->m_CtrlClickHighlight )
+        m_rbHighlightNetMac->SetValue( true );
+    else
+        m_rbToggleSelMac->SetValue( true );
 #else
-    m_rbCtrlClickAction->SetSelection( aCfg->m_CtrlClickHighlight );
+    if( aCfg->m_CtrlClickHighlight )
+        m_rbHighlightNet->SetValue( true );
+    else
+        m_rbToggleSel->SetValue( true );
 #endif
 
     m_escClearsNetHighlight->SetValue( aCfg->m_ESCClearsNetHighlight );
@@ -211,11 +217,10 @@ bool PANEL_EDIT_OPTIONS::TransferDataFromWindow()
         cfg->m_ShowPageLimits = m_showPageLimits->GetValue();
         cfg->m_ShowCourtyardCollisions = m_cbCourtyardCollisions->GetValue();
 
-
 #ifdef __WXOSX_MAC__
-        cfg->m_CtrlClickHighlight = m_rbCtrlClickActionMac->GetSelection();
+        cfg->m_CtrlClickHighlight = m_rbHighlightNetMac->GetValue();
 #else
-        cfg->m_CtrlClickHighlight = m_rbCtrlClickAction->GetSelection();
+        cfg->m_CtrlClickHighlight = m_rbHighlightNet->GetValue();
 #endif
     }
 

@@ -53,6 +53,9 @@ PANEL_EDIT_OPTIONS_BASE::PANEL_EDIT_OPTIONS_BASE( wxWindow* parent, wxWindowID i
 
 	bSizerUniversal->Add( bSizerRotationStep, 0, wxEXPAND, 5 );
 
+
+	bSizerUniversal->Add( 0, 3, 0, 0, 5 );
+
 	m_arcEditModeLabel = new wxStaticText( this, wxID_ANY, _("Arc editing mode:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_arcEditModeLabel->Wrap( -1 );
 	bSizerUniversal->Add( m_arcEditModeLabel, 0, wxLEFT, 5 );
@@ -70,6 +73,9 @@ PANEL_EDIT_OPTIONS_BASE::PANEL_EDIT_OPTIONS_BASE( wxWindow* parent, wxWindowID i
 	bMiddleLeftSizer->Add( bSizerUniversal, 0, wxEXPAND|wxALL, 5 );
 
 	m_sizerBoardEdit = new wxBoxSizer( wxVERTICAL );
+
+
+	m_sizerBoardEdit->Add( 0, 3, 0, wxEXPAND, 5 );
 
 	m_trackMouseDragLabel = new wxStaticText( this, wxID_ANY, _("Track mouse-drag mode:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_trackMouseDragLabel->Wrap( -1 );
@@ -98,7 +104,7 @@ PANEL_EDIT_OPTIONS_BASE::PANEL_EDIT_OPTIONS_BASE( wxWindow* parent, wxWindowID i
 	bSizerFlip->Add( m_rbFlipTopBottom, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 10 );
 
 
-	m_sizerBoardEdit->Add( bSizerFlip, 1, wxEXPAND|wxBOTTOM, 5 );
+	m_sizerBoardEdit->Add( bSizerFlip, 1, wxEXPAND|wxTOP|wxBOTTOM, 5 );
 
 	m_allowFreePads = new wxCheckBox( this, wxID_ANY, _("Allow free pads"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_allowFreePads->SetToolTip( _("If checked, pads can be moved with respect to the rest of the footprint.") );
@@ -132,7 +138,7 @@ PANEL_EDIT_OPTIONS_BASE::PANEL_EDIT_OPTIONS_BASE( wxWindow* parent, wxWindowID i
 	fgSizerCmdsWinLin->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
 	wxStaticText* staticText61;
-	staticText61 = new wxStaticText( this, wxID_ANY, _("Click"), wxDefaultPosition, wxDefaultSize, 0 );
+	staticText61 = new wxStaticText( this, wxID_ANY, _("Click:"), wxDefaultPosition, wxDefaultSize, 0 );
 	staticText61->Wrap( -1 );
 	fgSizerCmdsWinLin->Add( staticText61, 0, wxRIGHT|wxLEFT, 5 );
 
@@ -142,7 +148,7 @@ PANEL_EDIT_OPTIONS_BASE::PANEL_EDIT_OPTIONS_BASE( wxWindow* parent, wxWindowID i
 	fgSizerCmdsWinLin->Add( staticText71, 0, wxRIGHT|wxLEFT, 5 );
 
 	wxStaticText* staticText611;
-	staticText611 = new wxStaticText( this, wxID_ANY, _("Long Click"), wxDefaultPosition, wxDefaultSize, 0 );
+	staticText611 = new wxStaticText( this, wxID_ANY, _("Long Click:"), wxDefaultPosition, wxDefaultSize, 0 );
 	staticText611->Wrap( -1 );
 	fgSizerCmdsWinLin->Add( staticText611, 0, wxRIGHT|wxLEFT, 5 );
 
@@ -152,7 +158,7 @@ PANEL_EDIT_OPTIONS_BASE::PANEL_EDIT_OPTIONS_BASE( wxWindow* parent, wxWindowID i
 	fgSizerCmdsWinLin->Add( staticText711, 0, wxRIGHT|wxLEFT, 5 );
 
 	wxStaticText* staticText81;
-	staticText81 = new wxStaticText( this, wxID_ANY, _("Shift"), wxDefaultPosition, wxDefaultSize, 0 );
+	staticText81 = new wxStaticText( this, wxID_ANY, _("Shift:"), wxDefaultPosition, wxDefaultSize, 0 );
 	staticText81->Wrap( -1 );
 	fgSizerCmdsWinLin->Add( staticText81, 0, wxRIGHT|wxLEFT, 5 );
 
@@ -162,7 +168,7 @@ PANEL_EDIT_OPTIONS_BASE::PANEL_EDIT_OPTIONS_BASE( wxWindow* parent, wxWindowID i
 	fgSizerCmdsWinLin->Add( staticText91, 0, wxRIGHT|wxLEFT, 5 );
 
 	wxStaticText* staticText121;
-	staticText121 = new wxStaticText( this, wxID_ANY, _("Ctrl+Shift"), wxDefaultPosition, wxDefaultSize, 0 );
+	staticText121 = new wxStaticText( this, wxID_ANY, _("Ctrl+Shift:"), wxDefaultPosition, wxDefaultSize, 0 );
 	staticText121->Wrap( -1 );
 	fgSizerCmdsWinLin->Add( staticText121, 0, wxRIGHT|wxLEFT, 5 );
 
@@ -172,15 +178,21 @@ PANEL_EDIT_OPTIONS_BASE::PANEL_EDIT_OPTIONS_BASE( wxWindow* parent, wxWindowID i
 	fgSizerCmdsWinLin->Add( staticText131, 0, wxRIGHT|wxLEFT, 5 );
 
 	wxStaticText* staticText161;
-	staticText161 = new wxStaticText( this, wxID_ANY, _("Ctrl"), wxDefaultPosition, wxDefaultSize, 0 );
+	staticText161 = new wxStaticText( this, wxID_ANY, _("Ctrl:"), wxDefaultPosition, wxDefaultSize, 0 );
 	staticText161->Wrap( -1 );
-	fgSizerCmdsWinLin->Add( staticText161, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+	fgSizerCmdsWinLin->Add( staticText161, 0, wxRIGHT|wxLEFT, 5 );
 
-	wxString m_rbCtrlClickActionChoices[] = { _("Toggle selection"), _("Highlight net (for pads or tracks)") };
-	int m_rbCtrlClickActionNChoices = sizeof( m_rbCtrlClickActionChoices ) / sizeof( wxString );
-	m_rbCtrlClickAction = new wxRadioBox( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, m_rbCtrlClickActionNChoices, m_rbCtrlClickActionChoices, 1, wxRA_SPECIFY_COLS );
-	m_rbCtrlClickAction->SetSelection( 1 );
-	fgSizerCmdsWinLin->Add( m_rbCtrlClickAction, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
+	wxBoxSizer* bSizer16;
+	bSizer16 = new wxBoxSizer( wxVERTICAL );
+
+	m_rbToggleSel = new wxRadioButton( this, wxID_ANY, _("Toggle selection"), wxDefaultPosition, wxDefaultSize, wxRB_GROUP );
+	bSizer16->Add( m_rbToggleSel, 0, 0, 5 );
+
+	m_rbHighlightNet = new wxRadioButton( this, wxID_ANY, _("Highlight net (for pads/tracks)"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer16->Add( m_rbHighlightNet, 0, wxTOP, 2 );
+
+
+	fgSizerCmdsWinLin->Add( bSizer16, 1, wxEXPAND|wxLEFT, 5 );
 
 
 	m_mouseCmdsWinLin->Add( fgSizerCmdsWinLin, 1, wxEXPAND|wxTOP, 5 );
@@ -200,7 +212,7 @@ PANEL_EDIT_OPTIONS_BASE::PANEL_EDIT_OPTIONS_BASE( wxWindow* parent, wxWindowID i
 	fgSizerCmdsOSX->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
 	wxStaticText* staticText62;
-	staticText62 = new wxStaticText( this, wxID_ANY, _("Click"), wxDefaultPosition, wxDefaultSize, 0 );
+	staticText62 = new wxStaticText( this, wxID_ANY, _("Click:"), wxDefaultPosition, wxDefaultSize, 0 );
 	staticText62->Wrap( -1 );
 	fgSizerCmdsOSX->Add( staticText62, 0, wxRIGHT|wxLEFT, 5 );
 
@@ -210,7 +222,7 @@ PANEL_EDIT_OPTIONS_BASE::PANEL_EDIT_OPTIONS_BASE( wxWindow* parent, wxWindowID i
 	fgSizerCmdsOSX->Add( staticText72, 0, wxRIGHT|wxLEFT, 5 );
 
 	wxStaticText* staticText162;
-	staticText162 = new wxStaticText( this, wxID_ANY, _("Long Click"), wxDefaultPosition, wxDefaultSize, 0 );
+	staticText162 = new wxStaticText( this, wxID_ANY, _("Long Click:"), wxDefaultPosition, wxDefaultSize, 0 );
 	staticText162->Wrap( -1 );
 	fgSizerCmdsOSX->Add( staticText162, 0, wxRIGHT|wxLEFT, 5 );
 
@@ -220,7 +232,7 @@ PANEL_EDIT_OPTIONS_BASE::PANEL_EDIT_OPTIONS_BASE( wxWindow* parent, wxWindowID i
 	fgSizerCmdsOSX->Add( staticText172, 0, wxRIGHT|wxLEFT, 5 );
 
 	wxStaticText* staticText82;
-	staticText82 = new wxStaticText( this, wxID_ANY, _("Shift"), wxDefaultPosition, wxDefaultSize, 0 );
+	staticText82 = new wxStaticText( this, wxID_ANY, _("Shift:"), wxDefaultPosition, wxDefaultSize, 0 );
 	staticText82->Wrap( -1 );
 	fgSizerCmdsOSX->Add( staticText82, 0, wxRIGHT|wxLEFT, 5 );
 
@@ -230,7 +242,7 @@ PANEL_EDIT_OPTIONS_BASE::PANEL_EDIT_OPTIONS_BASE( wxWindow* parent, wxWindowID i
 	fgSizerCmdsOSX->Add( staticText92, 0, wxRIGHT|wxLEFT, 5 );
 
 	wxStaticText* staticText122;
-	staticText122 = new wxStaticText( this, wxID_ANY, _("Shift+Cmd"), wxDefaultPosition, wxDefaultSize, 0 );
+	staticText122 = new wxStaticText( this, wxID_ANY, _("Shift+Cmd:"), wxDefaultPosition, wxDefaultSize, 0 );
 	staticText122->Wrap( -1 );
 	fgSizerCmdsOSX->Add( staticText122, 0, wxRIGHT|wxLEFT, 5 );
 
@@ -240,18 +252,24 @@ PANEL_EDIT_OPTIONS_BASE::PANEL_EDIT_OPTIONS_BASE( wxWindow* parent, wxWindowID i
 	fgSizerCmdsOSX->Add( staticText132, 0, wxRIGHT|wxLEFT, 5 );
 
 	wxStaticText* staticText142;
-	staticText142 = new wxStaticText( this, wxID_ANY, _("Cmd"), wxDefaultPosition, wxDefaultSize, 0 );
+	staticText142 = new wxStaticText( this, wxID_ANY, _("Cmd:"), wxDefaultPosition, wxDefaultSize, 0 );
 	staticText142->Wrap( -1 );
-	fgSizerCmdsOSX->Add( staticText142, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+	fgSizerCmdsOSX->Add( staticText142, 0, wxRIGHT|wxLEFT, 5 );
 
-	wxString m_rbCtrlClickActionMacChoices[] = { _("Toggle selection"), _("Highlight net (for pads or tracks)") };
-	int m_rbCtrlClickActionMacNChoices = sizeof( m_rbCtrlClickActionMacChoices ) / sizeof( wxString );
-	m_rbCtrlClickActionMac = new wxRadioBox( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, m_rbCtrlClickActionMacNChoices, m_rbCtrlClickActionMacChoices, 1, wxRA_SPECIFY_COLS );
-	m_rbCtrlClickActionMac->SetSelection( 0 );
-	fgSizerCmdsOSX->Add( m_rbCtrlClickActionMac, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
+	wxBoxSizer* bSizer161;
+	bSizer161 = new wxBoxSizer( wxVERTICAL );
+
+	m_rbToggleSelMac = new wxRadioButton( this, wxID_ANY, _("Toggle selection"), wxDefaultPosition, wxDefaultSize, wxRB_GROUP );
+	bSizer161->Add( m_rbToggleSelMac, 0, 0, 5 );
+
+	m_rbHighlightNetMac = new wxRadioButton( this, wxID_ANY, _("Highlight net (for pads/tracks)"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer161->Add( m_rbHighlightNetMac, 0, wxTOP, 2 );
+
+
+	fgSizerCmdsOSX->Add( bSizer161, 1, wxEXPAND|wxLEFT, 5 );
 
 	wxStaticText* staticText102;
-	staticText102 = new wxStaticText( this, wxID_ANY, _("Option"), wxDefaultPosition, wxDefaultSize, 0 );
+	staticText102 = new wxStaticText( this, wxID_ANY, _("Option:"), wxDefaultPosition, wxDefaultSize, 0 );
 	staticText102->Wrap( -1 );
 	fgSizerCmdsOSX->Add( staticText102, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
 

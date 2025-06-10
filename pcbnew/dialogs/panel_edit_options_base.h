@@ -23,7 +23,6 @@
 #include <wx/sizer.h>
 #include <wx/choice.h>
 #include <wx/radiobut.h>
-#include <wx/radiobox.h>
 #include <wx/panel.h>
 #include <wx/spinctrl.h>
 #include <wx/simplebook.h>
@@ -61,10 +60,12 @@ class PANEL_EDIT_OPTIONS_BASE : public RESETTABLE_PANEL
 		wxStaticLine* m_staticline4;
 		wxBoxSizer* m_mouseCmdsWinLin;
 		wxStaticText* m_stHint1;
-		wxRadioBox* m_rbCtrlClickAction;
+		wxRadioButton* m_rbToggleSel;
+		wxRadioButton* m_rbHighlightNet;
 		wxBoxSizer* m_mouseCmdsOSX;
 		wxStaticText* m_stHint2;
-		wxRadioBox* m_rbCtrlClickActionMac;
+		wxRadioButton* m_rbToggleSelMac;
+		wxRadioButton* m_rbHighlightNetMac;
 		wxSimplebook* m_optionsBook;
 		wxStaticText* m_staticText34;
 		wxStaticLine* m_staticline5;
