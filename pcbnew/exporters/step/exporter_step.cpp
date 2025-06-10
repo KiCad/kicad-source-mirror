@@ -1088,6 +1088,7 @@ bool EXPORTER_STEP::buildBoard3DShapes()
     m_pcbModel->SetEnabledLayers( m_layersToExport );
     m_pcbModel->SetFuseShapes( m_params.m_FuseShapes );
     m_pcbModel->SetNetFilter( m_params.m_NetFilter );
+    m_pcbModel->SetExtraPadThickness( m_params.m_ExtraPadThickness );
 
     // Note: m_params.m_BoardOutlinesChainingEpsilon is used only to build the board outlines,
     // not to set OCC chaining epsilon (much smaller)

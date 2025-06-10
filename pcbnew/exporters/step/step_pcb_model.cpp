@@ -795,6 +795,7 @@ STEP_PCB_MODEL::STEP_PCB_MODEL( const wxString& aPcbName, REPORTER* aReporter ) 
     m_minx = 1.0e10;    // absurdly large number; any valid PCB X value will be smaller
     m_pcbName = aPcbName;
     m_fuseShapes = false;
+    m_extraPadThickness = true;
     m_outFmt = OUTPUT_FORMAT::FMT_OUT_UNKNOWN;
 }
 
@@ -828,7 +829,7 @@ bool STEP_PCB_MODEL::AddPadShape( const PAD* aPad, const VECTOR2D& aOrigin, bool
         double Zpos, thickness;
         getLayerZPlacement( pcb_layer, Zpos, thickness );
 
-        if( !aVia )
+        if( !aVia && m_extraPadThickness )
         {
             // Pad surface as a separate face for FEM simulations.
             if( pcb_layer == F_Cu )
@@ -892,7 +893,7 @@ bool STEP_PCB_MODEL::AddPadShape( const PAD* aPad, const VECTOR2D& aOrigin, bool
         getLayerZPlacement( F_Cu, f_pos, f_thickness );
         getLayerZPlacement( B_Cu, b_pos, b_thickness );
 
-        if( !aVia )
+        if( !aVia && m_extraPadThickness )
         {
             // Pad surface is slightly thicker
             f_thickness += c_padExtraThickness;
@@ -988,7 +989,7 @@ bool STEP_PCB_MODEL::AddHole( const SHAPE_SEGMENT& aShape, int aPlatingThickness
                            // must be > OCC_MAX_DISTANCE_TO_MERGE_POINTS
 
     // Pads are taller by 0.01 mm
-    if( !aVia )
+    if( !aVia && m_extraPadThickness)
         margin += 0.01;
 
     double f_pos, f_thickness;
@@ -1755,6 +1756,12 @@ void STEP_PCB_MODEL::SetStackup( const BOARD_STACKUP& aStackup )
 void STEP_PCB_MODEL::SetNetFilter( const wxString& aFilter )
 {
     m_netFilter = aFilter;
+}
+
+
+void STEP_PCB_MODEL::SetExtraPadThickness( bool aValue )
+{
+    m_extraPadThickness = aValue;
 }
 
 

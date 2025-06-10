@@ -56,6 +56,7 @@ public:
             m_FuseShapes( false ),
             m_FillAllVias( false ),
             m_OptimizeStep( true ),
+            m_ExtraPadThickness( true ),
             m_Format( FORMAT::STEP ),
             m_OutputFile()
     {};
@@ -100,6 +101,7 @@ public:
     bool     m_FuseShapes;
     bool     m_FillAllVias;
     bool     m_OptimizeStep;
+    bool     m_ExtraPadThickness;
     FORMAT   m_Format;
     wxString m_OutputFile;
 

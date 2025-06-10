@@ -196,6 +196,7 @@ public:
     void SetSimplifyShapes( bool aValue );
     void SetStackup( const BOARD_STACKUP& aStackup );
     void SetNetFilter( const wxString& aFilter );
+    void SetExtraPadThickness( bool aValue );
 
     // Set the max distance (in mm) to consider 2 points have the same coordinates
     // and can be merged
@@ -333,6 +334,7 @@ private:
     bool                            m_hasPCB;           // set true if CreatePCB() has been invoked
     bool                            m_simplifyShapes;   // convert parts of outlines to arcs where possible
     bool                            m_fuseShapes;       // fuse geometry together
+    bool                            m_extraPadThickness; // add extra thickness to pads
     std::vector<TDF_Label>          m_pcb_labels;       // labels for the PCB model (one by main outline)
     MODEL_MAP                       m_models;           // map of file names to model labels
     int                             m_components;       // number of successfully loaded components;

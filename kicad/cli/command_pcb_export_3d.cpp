@@ -50,6 +50,7 @@
 #define ARG_FUSE_SHAPES "--fuse-shapes"
 #define ARG_FILL_ALL_VIAS "--fill-all-vias"
 #define ARG_NO_OPTIMIZE_STEP "--no-optimize-step"
+#define ARG_NO_EXTRA_PAD_THICKNESS "--no-extra-pad-thickness"
 #define ARG_NET_FILTER "--net-filter"
 #define ARG_FORMAT "--format"
 #define ARG_VRML_UNITS "--units"
@@ -164,6 +165,10 @@ CLI::PCB_EXPORT_3D_COMMAND::PCB_EXPORT_3D_COMMAND( const std::string&        aNa
                 .help( UTF8STDSTR( _( "Don't cut via holes in conductor layers." ) ) )
                 .flag();
 
+        m_argParser.add_argument( ARG_NO_EXTRA_PAD_THICKNESS )
+                .help( UTF8STDSTR( _( "Disable extra pad thickness (pads will have normal thickness)" ) ) )
+                .flag();
+
         m_argParser.add_argument( ARG_MIN_DISTANCE )
                 .default_value( std::string( "0.01mm" ) )
                 .help( UTF8STDSTR( _( "Minimum distance between points to treat them as separate "
@@ -230,6 +235,7 @@ int CLI::PCB_EXPORT_3D_COMMAND::doPerform( KIWAY& aKiway )
         params.m_ExportSoldermask = m_argParser.get<bool>( ARG_INCLUDE_SOLDERMASK );
         params.m_FuseShapes = m_argParser.get<bool>( ARG_FUSE_SHAPES );
         params.m_FillAllVias = m_argParser.get<bool>( ARG_FILL_ALL_VIAS );
+        params.m_ExtraPadThickness = !m_argParser.get<bool>( ARG_NO_EXTRA_PAD_THICKNESS );
         params.m_BoardOnly = m_argParser.get<bool>( ARG_BOARD_ONLY );
         params.m_NetFilter = From_UTF8( m_argParser.get<std::string>( ARG_NET_FILTER ).c_str() );
         params.m_ComponentFilter =
