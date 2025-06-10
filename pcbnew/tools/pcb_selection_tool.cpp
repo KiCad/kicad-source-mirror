@@ -742,10 +742,10 @@ PCB_SELECTION& PCB_SELECTION_TOOL::RequestSelection( CLIENT_SELECTION_FILTER aCl
         }
 
         PCBNEW_SETTINGS* settings = m_frame->GetPcbNewSettings();
-        if( !lockedItems.empty() && !settings->m_LockingOptions.m_sessionSkipPrompts )
+
+        if( !lockedItems.empty() )
         {
-            DIALOG_LOCKED_ITEMS_QUERY dlg( frame(), lockedItems.size(),
-                                           settings->m_LockingOptions );
+            DIALOG_LOCKED_ITEMS_QUERY dlg( frame(), lockedItems.size(), settings->m_LockingOptions );
 
             switch( dlg.ShowModal() )
             {
