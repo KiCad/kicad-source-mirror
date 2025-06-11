@@ -76,20 +76,12 @@ int BackDirectionsArray[] = {
     SORTXFIRST + ASCENDINGFIRST + DESCENDINGSECOND   // "Right to left, bottom to top",  //  001
 };
 
-#define SetSortCodes( DirArray, Code )                                     \
-    {                                                                                                                  \
-        g_SortYFirst = ( ( DirArray[Code] & SORTYFIRST ) != 0 );       \
+#define SetSortCodes( DirArray, Code )                                       \
+    {                                                                        \
+        g_SortYFirst = ( ( DirArray[Code] & SORTYFIRST ) != 0 );             \
         g_DescendingFirst  = ( ( DirArray[Code] & DESCENDINGFIRST ) != 0 );  \
         g_DescendingSecond = ( ( DirArray[Code] & DESCENDINGSECOND ) != 0 ); \
     }
-
-
-wxString AnnotateString[] = {
-    _( "All" ),          // ANNOTATE_ALL
-    _( "Only front" ),   // AnnotateFront
-    _( "Only back" ),    // AnnotateBack
-    _( "Only selected" ) // ANNOTATE_SELECTED
-};
 
 
 wxString ActionMessage[] = {

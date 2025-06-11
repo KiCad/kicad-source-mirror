@@ -27,12 +27,11 @@ class WX_HTML_REPORT_PANEL;
 #include <wx/statbmp.h>
 #include <wx/sizer.h>
 #include <wx/choice.h>
-#include <wx/panel.h>
+#include <wx/checkbox.h>
 #include <wx/textctrl.h>
 #include <wx/valgen.h>
-#include <wx/checkbox.h>
 #include <wx/gbsizer.h>
-#include <wx/notebook.h>
+#include <wx/panel.h>
 #include <wx/button.h>
 #include <wx/dialog.h>
 
@@ -46,8 +45,6 @@ class DIALOG_BOARD_REANNOTATE_BASE : public DIALOG_SHIM
 	private:
 
 	protected:
-		wxNotebook* m_notebook;
-		wxPanel* m_StandardOptions;
 		wxStaticLine* m_staticline1;
 		wxRadioButton* m_Down_Right;
 		wxStaticBitmap* reannotate_down_right_bitmap;
@@ -74,7 +71,11 @@ class DIALOG_BOARD_REANNOTATE_BASE : public DIALOG_SHIM
 		wxRadioButton* m_AnnotateFront;
 		wxRadioButton* m_AnnotateBack;
 		wxRadioButton* m_AnnotateSelection;
-		wxPanel* m_Advanced;
+		wxCheckBox* m_ExcludeLocked;
+		wxStaticText* m_ExcludeListText;
+		wxTextCtrl* m_ExcludeList;
+		wxStaticText* m_staticText10;
+		wxStaticLine* m_staticline3;
 		wxStaticText* m_FrontRefDesStartText;
 		wxTextCtrl* m_FrontRefDesStart;
 		wxStaticText* m_BottomRefDesStartText;
@@ -85,9 +86,6 @@ class DIALOG_BOARD_REANNOTATE_BASE : public DIALOG_SHIM
 		wxTextCtrl* m_BackPrefix;
 		wxCheckBox* m_RemoveFrontPrefix;
 		wxCheckBox* m_RemoveBackPrefix;
-		wxCheckBox* m_ExcludeLocked;
-		wxStaticText* m_ExcludeListText;
-		wxTextCtrl* m_ExcludeList;
 		WX_HTML_REPORT_PANEL* m_MessageWindow;
 		wxStdDialogButtonSizer* m_sdbSizer;
 		wxButton* m_sdbSizerOK;
