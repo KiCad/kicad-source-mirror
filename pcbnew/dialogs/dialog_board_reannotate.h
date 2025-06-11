@@ -80,17 +80,17 @@ struct REFDES_INFO
     KIID        Uuid;
     bool        Front;              // True if on the front of the board
     wxString    RefDesString;       // What its refdes is R1, C2
-    wxString    RefDesType;         // ie R, C, etc
+    wxString    RefDesPrefix;       // ie R, C, etc
     int         x, y;               // The coordinates
     int         roundedx, roundedy; // The coordinates after rounding.
-    ACTION_CODE  Action;             // Used to skip (if #, etc)
+    ACTION_CODE Action;             // Used to skip (if #, etc)
     LIB_ID      FPID;
 };
 
-struct REFDES_TYPE_STR
+struct REFDES_PREFIX_INFO
 {
-    wxString     RefDesType;
-    unsigned int LastUsedRefDes;
+    wxString               RefDesPrefix;
+    unsigned int           LastUsedRefDes;
     std::set<unsigned int> UnavailableRefs;
 };
 
@@ -184,25 +184,25 @@ private:
 
     /// Get the structure representing the information currently held for aRefDesPrefix or create one
     /// if it doesn't exist
-    REFDES_TYPE_STR* GetOrBuildRefDesInfo( const wxString& aRefDesPrefix, unsigned int aStartRefDes = 0 );
+    REFDES_PREFIX_INFO* GetOrBuildRefDesInfo( const wxString& aRefDesPrefix, int aStartRefDes = 1 );
 
     PCB_EDIT_FRAME*  m_frame;
     FOOTPRINTS       m_footprints;
     PCB_SELECTION    m_selection;
 
-    std::vector<REFDES_CHANGE>  m_changeArray;
-    std::vector<REFDES_INFO>    m_frontFootprints;
-    std::vector<REFDES_INFO>    m_backFootprints;
-    std::vector<REFDES_TYPE_STR> m_refDesTypes;
-    std::vector<wxString>      m_excludeArray;
+    std::vector<REFDES_CHANGE>      m_changeArray;
+    std::vector<REFDES_INFO>        m_frontFootprints;
+    std::vector<REFDES_INFO>        m_backFootprints;
+    std::vector<REFDES_PREFIX_INFO> m_refDesPrefixInfos;
+    std::vector<wxString>           m_excludeArray;
 
-    int m_sortCode;
-    int m_gridIndex;
-    int m_annotationScope;
-    int m_severity;
+    int      m_sortCode;
+    int      m_gridIndex;
+    int      m_annotationScope;
+    int      m_severity;
 
-    double m_sortGridx;
-    double m_sortGridy;
+    double   m_sortGridx;
+    double   m_sortGridy;
 
     wxString m_frontPrefixString;
     wxString m_backPrefixString;

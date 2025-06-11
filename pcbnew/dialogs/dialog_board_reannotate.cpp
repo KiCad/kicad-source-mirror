@@ -42,9 +42,9 @@
 #include <wx/valtext.h>
 
 
-bool SortYFirst;
-bool DescendingFirst;
-bool DescendingSecond;
+bool g_SortYFirst;
+bool g_DescendingFirst;
+bool g_DescendingSecond;
 
 //
 // This converts the index into a sort code. Note that Back sort code will have left and
@@ -77,10 +77,10 @@ int BackDirectionsArray[] = {
 };
 
 #define SetSortCodes( DirArray, Code )                                     \
-    {                                                                      \
-        SortYFirst       = ( ( DirArray[Code] & SORTYFIRST ) != 0 );       \
-        DescendingFirst  = ( ( DirArray[Code] & DESCENDINGFIRST ) != 0 );  \
-        DescendingSecond = ( ( DirArray[Code] & DESCENDINGSECOND ) != 0 ); \
+    {                                                                                                                  \
+        g_SortYFirst = ( ( DirArray[Code] & SORTYFIRST ) != 0 );       \
+        g_DescendingFirst  = ( ( DirArray[Code] & DESCENDINGFIRST ) != 0 );  \
+        g_DescendingSecond = ( ( DirArray[Code] & DESCENDINGSECOND ) != 0 ); \
     }
 
 
@@ -187,21 +187,21 @@ DIALOG_BOARD_REANNOTATE::~DIALOG_BOARD_REANNOTATE()
     if( cfg )
     {
         cfg->m_Reannotate.sort_on_fp_location = m_locationChoice->GetSelection() == 0;
-        cfg->m_Reannotate.remove_front_prefix     = m_RemoveFrontPrefix->GetValue();
-        cfg->m_Reannotate.remove_back_prefix      = m_RemoveBackPrefix->GetValue();
-        cfg->m_Reannotate.exclude_locked          = m_ExcludeLocked->GetValue();
+        cfg->m_Reannotate.remove_front_prefix = m_RemoveFrontPrefix->GetValue();
+        cfg->m_Reannotate.remove_back_prefix  = m_RemoveBackPrefix->GetValue();
+        cfg->m_Reannotate.exclude_locked      = m_ExcludeLocked->GetValue();
 
-        cfg->m_Reannotate.grid_index              = m_gridIndex;
-        cfg->m_Reannotate.sort_code               = m_sortCode;
-        cfg->m_Reannotate.annotation_choice       = m_annotationScope;
-        cfg->m_Reannotate.report_severity         = m_severity;
+        cfg->m_Reannotate.grid_index          = m_gridIndex;
+        cfg->m_Reannotate.sort_code           = m_sortCode;
+        cfg->m_Reannotate.annotation_choice   = m_annotationScope;
+        cfg->m_Reannotate.report_severity     = m_severity;
 
-        cfg->m_Reannotate.front_refdes_start      = m_FrontRefDesStart->GetValue();
-        cfg->m_Reannotate.back_refdes_start       = m_BackRefDesStart->GetValue();
-        cfg->m_Reannotate.front_prefix            = m_FrontPrefix->GetValue();
-        cfg->m_Reannotate.back_prefix             = m_BackPrefix->GetValue();
-        cfg->m_Reannotate.exclude_list            = m_ExcludeList->GetValue();
-        cfg->m_Reannotate.report_file_name        = m_MessageWindow->GetFileName();
+        cfg->m_Reannotate.front_refdes_start  = m_FrontRefDesStart->GetValue();
+        cfg->m_Reannotate.back_refdes_start   = m_BackRefDesStart->GetValue();
+        cfg->m_Reannotate.front_prefix        = m_FrontPrefix->GetValue();
+        cfg->m_Reannotate.back_prefix         = m_BackPrefix->GetValue();
+        cfg->m_Reannotate.exclude_list        = m_ExcludeList->GetValue();
+        cfg->m_Reannotate.report_file_name    = m_MessageWindow->GetFileName();
     }
 }
 
@@ -256,29 +256,22 @@ void DIALOG_BOARD_REANNOTATE::FilterPrefix( wxTextCtrl* aPrefix )
 }
 
 
-REFDES_TYPE_STR* DIALOG_BOARD_REANNOTATE::GetOrBuildRefDesInfo( const wxString& aRefDesPrefix,
-                                                              unsigned int    aStartRefDes )
+REFDES_PREFIX_INFO* DIALOG_BOARD_REANNOTATE::GetOrBuildRefDesInfo( const wxString& aRefDesPrefix,
+                                                                   int aStartRefDes )
 {
-    unsigned int requiredLastRef = ( aStartRefDes == 0 ? 1 : aStartRefDes ) - 1;
-
-    for( size_t i = 0; i < m_refDesTypes.size(); i++ ) // See if it is in the types array
+    for( size_t i = 0; i < m_refDesPrefixInfos.size(); i++ ) // See if it is in the info array
     {
-        if( m_refDesTypes[i].RefDesType == aRefDesPrefix ) // Found it!
-        {
-            m_refDesTypes[i].LastUsedRefDes = std::max( m_refDesTypes[i].LastUsedRefDes,
-                                                        requiredLastRef );
-
-            return &m_refDesTypes[i];
-        }
+        if( m_refDesPrefixInfos[i].RefDesPrefix == aRefDesPrefix ) // Found it!
+            return &m_refDesPrefixInfos[i];
     }
 
-    // Wasn't in the types array so add it
-    REFDES_TYPE_STR newtype;
-    newtype.RefDesType = aRefDesPrefix;
-    newtype.LastUsedRefDes = requiredLastRef;
-    m_refDesTypes.push_back( newtype );
+    // Wasn't in the info array so add it
+    REFDES_PREFIX_INFO newtype;
+    newtype.RefDesPrefix = aRefDesPrefix;
+    newtype.LastUsedRefDes = aStartRefDes - 1;
+    m_refDesPrefixInfos.push_back( newtype );
 
-    return &m_refDesTypes.back();
+    return &m_refDesPrefixInfos.back();
 }
 
 
@@ -296,8 +289,6 @@ void DIALOG_BOARD_REANNOTATE::FilterBackPrefix( wxCommandEvent& event )
 
 void DIALOG_BOARD_REANNOTATE::OnApplyClick( wxCommandEvent& event )
 {
-    wxString warning;
-
     if( m_frame->GetBoard()->IsEmpty() )
     {
         ShowReport( _( "No PCB to reannotate!" ), RPT_SEVERITY_ERROR );
@@ -305,10 +296,6 @@ void DIALOG_BOARD_REANNOTATE::OnApplyClick( wxCommandEvent& event )
     }
 
     GetParameters(); // Figure out how this is to be done
-    MakeSampleText( warning );
-
-    if( !IsOK( m_frame, warning ) )
-        return;
 
     if( ReannotateBoard() )
     {
@@ -321,81 +308,6 @@ void DIALOG_BOARD_REANNOTATE::OnApplyClick( wxCommandEvent& event )
     m_MessageWindow->Flush( false );
     m_frame->GetCanvas()->Refresh(); // Redraw
     m_frame->OnModify();             // Need to save file on exit.
-}
-
-
-void DIALOG_BOARD_REANNOTATE::MakeSampleText( wxString& aMessage )
-{
-    aMessage.Printf( _( "\n%s footprints will be reannotated." ),
-                     wxGetTranslation( AnnotateString[m_annotationScope] ) );
-
-    if( !m_ExcludeList->GetValue().empty() )
-    {
-        aMessage += wxString::Format( _( "\nAny reference types %s will not be annotated." ),
-                                      m_ExcludeList->GetValue() );
-    }
-
-    if( m_ExcludeLocked->GetValue() )
-        aMessage += wxString::Format( _( "\nLocked footprints will not be annotated" ) );
-
-    if( !m_AnnotateBack->GetValue() )
-    {
-        aMessage += wxString::Format( _( "\nFront footprints will start at %s" ),
-                                      m_FrontRefDesStart->GetValue() );
-    }
-
-    if( !m_AnnotateFront->GetValue() )
-    {
-        bool frontPlusOne = ( 0 == wxAtoi( m_BackRefDesStart->GetValue() ) )
-                            && !m_AnnotateBack->GetValue();
-
-        aMessage += wxString::Format( _( "\nBack footprints will start at %s." ),
-                                      frontPlusOne ? _( "the last front footprint + 1" ) :
-                                      m_BackRefDesStart->GetValue() );
-    }
-
-    if( !m_FrontPrefix->GetValue().empty() )
-    {
-        if( m_RemoveFrontPrefix->GetValue() )
-        {
-            aMessage += wxString::Format( _( "\nFront footprints starting with '%s' will have "
-                                             "the prefix removed." ),
-                                          m_FrontPrefix->GetValue() );
-        }
-        else
-        {
-            aMessage += wxString::Format( _( "\nFront footprints will have '%s' inserted as a "
-                                             "prefix." ),
-                                          m_FrontPrefix->GetValue() );
-        }
-    }
-
-    if( !m_BackPrefix->GetValue().empty() )
-    {
-        if( m_RemoveBackPrefix->GetValue() )
-        {
-            aMessage += wxString::Format( _( "\nBack footprints starting with '%s' will have the "
-                                             "prefix removed." ),
-                                          m_BackPrefix->GetValue() );
-        }
-        else
-        {
-            aMessage += wxString::Format( _( "\nBack footprints will have '%s' inserted as a "
-                                             "prefix." ),
-                                          m_BackPrefix->GetValue() );
-        }
-    }
-
-    bool fpLocation = m_locationChoice->GetSelection() == 0;
-
-    aMessage += wxString::Format( _( "\nPrior to sorting by %s, the coordinates of which will be "
-                                     "rounded to a %s, %s grid." ),
-                                  fpLocation ? _( "footprint location" )
-                                             : _( "reference designator location" ),
-                                  m_frame->MessageTextFromValue( m_sortGridx ),
-                                  m_frame->MessageTextFromValue( m_sortGridy ) );
-
-    ShowReport( aMessage, RPT_SEVERITY_INFO );
 }
 
 
@@ -420,10 +332,10 @@ void DIALOG_BOARD_REANNOTATE::GetParameters()
     // Get the chosen sort grid for rounding
     m_gridIndex = m_GridChoice->GetSelection();
 
-    m_sortGridx = EDA_UNIT_UTILS::UI::DoubleValueFromString(
-            pcbIUScale, EDA_UNITS::MILS, m_settings->m_Window.grid.grids[m_gridIndex].x );
-    m_sortGridy = EDA_UNIT_UTILS::UI::DoubleValueFromString(
-            pcbIUScale, EDA_UNITS::MILS, m_settings->m_Window.grid.grids[m_gridIndex].y );
+    m_sortGridx = EDA_UNIT_UTILS::UI::DoubleValueFromString( pcbIUScale, EDA_UNITS::MILS,
+                                                             m_settings->m_Window.grid.grids[m_gridIndex].x );
+    m_sortGridy = EDA_UNIT_UTILS::UI::DoubleValueFromString( pcbIUScale, EDA_UNITS::MILS,
+                                                             m_settings->m_Window.grid.grids[m_gridIndex].y );
 
     m_annotationScope = ANNOTATE_ALL;
 
@@ -469,21 +381,21 @@ static bool ChangeArrayCompare( const REFDES_CHANGE& aA, const REFDES_CHANGE& aB
 
 /// Compare function to sort footprints.
 /// @return true if the first coordinate should be before the second coordinate
-static bool ModuleCompare( const REFDES_INFO& aA, const REFDES_INFO& aB )
+static bool FootprintCompare( const REFDES_INFO& aA, const REFDES_INFO& aB )
 {
     int X0 = aA.roundedx, X1 = aB.roundedx, Y0 = aA.roundedy, Y1 = aB.roundedy;
 
-    if( SortYFirst ) //If sorting by Y then X, swap X and Y
+    if( g_SortYFirst ) //If sorting by Y then X, swap X and Y
     {
         std::swap( X0, Y0 );
         std::swap( X1, Y1 );
     }
 
     // If descending, same compare just swap directions
-    if( DescendingFirst )
+    if( g_DescendingFirst )
         std::swap( X0, X1 );
 
-    if( DescendingSecond )
+    if( g_DescendingSecond )
         std::swap( Y0, Y1 );
 
     if( X0 < X1 )
@@ -512,9 +424,7 @@ void DIALOG_BOARD_REANNOTATE::ShowReport( const wxString& aMessage, SEVERITY aSe
     wxStringTokenizer msgs( aMessage, wxT( "\n" ) );
 
     while( msgs.HasMoreTokens() )
-    {
         m_MessageWindow->Report( msgs.GetNextToken(), aSeverity );
-    }
 }
 
 
@@ -523,12 +433,14 @@ void DIALOG_BOARD_REANNOTATE::LogChangePlan()
     int      i = 1;
     wxString message;
 
-    message.Printf( _( "\n\nThere are %i types of reference designations\n"
-                       "**********************************************************\n" ),
-                    (int) m_refDesTypes.size() );
+    message.Printf( _( "<br/>There are %i reference designator prefixes in use<br/>"
+                       "**********************************************************<br/>" ),
+                    (int) m_refDesPrefixInfos.size() );
 
-    for( REFDES_TYPE_STR Type : m_refDesTypes ) // Show all the types of refdes
-        message += Type.RefDesType + ( 0 == ( i++ % 16 ) ? wxT( "\n" ) : wxS( " " ) );
+    for( const REFDES_PREFIX_INFO& info : m_refDesPrefixInfos ) // Show all the types of refdes
+        message += info.RefDesPrefix + ( ( i++ % 16 ) == 0 ? wxT( "<br/>" ) : wxS( " " ) );
+
+    message += wxT( "<br/>" );
 
     if( !m_excludeArray.empty() )
     {
@@ -537,10 +449,10 @@ void DIALOG_BOARD_REANNOTATE::LogChangePlan()
         for( wxString& exclude : m_excludeArray ) // Show the refdes we are excluding
             excludes += exclude + wxS( " " );
 
-        message += wxString::Format( _( "\nExcluding: %s from reannotation\n\n" ), excludes );
+        message += wxString::Format( _( "Excluding: %s from reannotation<br/>" ), excludes );
     }
 
-    message += _( "\n    Change Array\n***********************\n" );
+    message += _( "<br/>Change Array\n***********************<br/>" );
 
     for( const REFDES_CHANGE& change : m_changeArray )
     {
@@ -548,8 +460,7 @@ void DIALOG_BOARD_REANNOTATE::LogChangePlan()
                                      change.OldRefDesString,
                                      change.NewRefDes,
                                      ActionMessage[change.Action],
-                                     UPDATE_REFDES != change.Action ? _( " will be ignored" )
-                                                                   : wxString( wxT( "" ) ) );
+                                     change.Action != UPDATE_REFDES ? _( "(will be ignored)" ) : wxString( "" ) );
     }
 
     ShowReport( message, RPT_SEVERITY_INFO );
@@ -562,26 +473,23 @@ void DIALOG_BOARD_REANNOTATE::LogFootprints( const wxString& aMessage,
     wxString message = aMessage;
 
     if( aFootprints.empty() )
-        message += _( "\nNo footprints" );
+        message += _( "<br/>No footprints" );
     else
     {
         int i = 1;
-        bool fpLocations = m_locationChoice->GetSelection() == 0;
 
-        message += wxString::Format( _( "\n*********** Sort on %s ***********" ),
-                                     fpLocations ? _( "Footprint Coordinates" )
-                                                 : _( "Reference Designator Coordinates" ) );
+        if( m_locationChoice->GetSelection() == 0 )
+            message += _( "<br/>*********** Sort on Footprint Coordinates ***********" );
+        else
+            message += _( "<br/>*********** Sort on Reference Coordinates ***********" );
 
-        message += wxString::Format( _( "\nSort Code %d" ), m_sortCode );
-
-        for( const REFDES_INFO& mod : aFootprints )
+        for( const REFDES_INFO& fp : aFootprints )
         {
-            message += wxString::Format( _( "\n%d %s UUID: [%s], X, Y: %s, Rounded X, Y, %s" ),
+            message += wxString::Format( _( "<br/>%d %s X, Y: %s; rounded X, Y: %s" ),
                                          i++,
-                                         mod.RefDesString,
-                                         mod.Uuid.AsString(),
-                                         CoordTowxString( mod.x, mod.y ),
-                                         CoordTowxString( mod.roundedx, mod.roundedy ) );
+                                         fp.RefDesString,
+                                         CoordTowxString( fp.x, fp.y ),
+                                         CoordTowxString( fp.roundedx, fp.roundedy ) );
         }
     }
 
@@ -592,10 +500,10 @@ void DIALOG_BOARD_REANNOTATE::LogFootprints( const wxString& aMessage,
 bool DIALOG_BOARD_REANNOTATE::ReannotateBoard()
 {
     std::vector<REFDES_INFO> BadRefDes;
-    wxString                message, badrefdes;
-    STRING_FORMATTER        stringformatter;
+    wxString                 message, badrefdes;
+    STRING_FORMATTER         stringformatter;
     REFDES_CHANGE*           newref;
-    NETLIST                 netlist;
+    NETLIST                  netlist;
 
     if( !BuildFootprintList( BadRefDes ) )
     {
@@ -606,14 +514,13 @@ bool DIALOG_BOARD_REANNOTATE::ReannotateBoard()
 
     if( !BadRefDes.empty() )
     {
-        message.Printf( _( "\nPCB has %d empty or invalid reference designations."
-                           "\nRecommend running DRC with 'Test for parity between PCB and "
-                           "schematic' checked.\n" ),
+        message.Printf( _( "<br/>PCB has %d empty or invalid reference designations."
+                           "<br/>Recommend running DRC with 'Test for parity between PCB and schematic' checked.\n" ),
                         (int) BadRefDes.size() );
 
         for( const REFDES_INFO& mod : BadRefDes )
         {
-            badrefdes += wxString::Format( _( "\nRefDes: %s Footprint: %s:%s at %s on PCB." ),
+            badrefdes += wxString::Format( _( "<br/>RefDes: %s Footprint: %s:%s at %s on PCB." ),
                                            mod.RefDesString,
                                            mod.FPID.GetLibNickname().wx_str(),
                                            mod.FPID.GetLibItemName().wx_str(),
@@ -649,9 +556,9 @@ bool DIALOG_BOARD_REANNOTATE::ReannotateBoard()
 bool DIALOG_BOARD_REANNOTATE::BuildFootprintList( std::vector<REFDES_INFO>& aBadRefDes )
 {
     bool annotateSelected = m_AnnotateSelection->GetValue();
-    bool annotateFront = m_AnnotateFront->GetValue(); // Unless only doing back
-    bool annotateBack  = m_AnnotateBack->GetValue();  // Unless only doing front
-    bool skipLocked    = m_ExcludeLocked->GetValue();
+    bool annotateFront    = m_AnnotateFront->GetValue();
+    bool annotateBack     = m_AnnotateBack->GetValue();
+    bool skipLocked       = m_ExcludeLocked->GetValue();
 
     int    errorcount = 0;
     size_t firstnum   = 0;
@@ -661,47 +568,37 @@ bool DIALOG_BOARD_REANNOTATE::BuildFootprintList( std::vector<REFDES_INFO>& aBad
     m_excludeArray.clear();
     m_footprints = m_frame->GetBoard()->Footprints();
 
-    std::vector<KIID> selected;
-
-    if( annotateSelected )
-    {
-        for( EDA_ITEM* item : m_selection )
-        {
-            // Get the timestamps of selected footprints
-            if( item->Type() == PCB_FOOTPRINT_T )
-                selected.push_back( item->m_Uuid );
-        }
-    }
-
     wxString exclude;
 
     // Break exclude list into words.
     for( auto thischar : m_ExcludeList->GetValue() )
     {
-    	if( ( ' ' == thischar ) || ( ',' == thischar ) )
+    	if( thischar == ' ' || thischar == ',' )
         {
             m_excludeArray.push_back( exclude );
             exclude.clear();
         }
         else
+        {
             exclude += thischar;
+        }
     }
 
     if( !exclude.empty() )      // last item to exclude
         m_excludeArray.push_back( exclude );
 
     REFDES_INFO fpData;
-    bool       useModuleLocation = m_locationChoice->GetSelection() == 0;
+    bool        useFPLocation = m_locationChoice->GetSelection() == 0;
 
     for( FOOTPRINT* footprint : m_footprints )
     {
         fpData.Uuid         = footprint->m_Uuid;
         fpData.RefDesString = footprint->GetReference();
         fpData.FPID         = footprint->GetFPID();
-        fpData.x            = useModuleLocation ? footprint->GetPosition().x
-                                                : footprint->Reference().GetPosition().x;
-        fpData.y            = useModuleLocation ? footprint->GetPosition().y
-                                                : footprint->Reference().GetPosition().y;
+        fpData.x            = useFPLocation ? footprint->GetPosition().x
+                                            : footprint->Reference().GetPosition().x;
+        fpData.y            = useFPLocation ? footprint->GetPosition().y
+                                            : footprint->Reference().GetPosition().y;
         fpData.roundedx     = RoundToGrid( fpData.x, m_sortGridx ); // Round to sort
         fpData.roundedy     = RoundToGrid( fpData.y, m_sortGridy );
         fpData.Front        = footprint->GetLayer() == F_Cu;
@@ -720,37 +617,25 @@ bool DIALOG_BOARD_REANNOTATE::BuildFootprintList( std::vector<REFDES_INFO>& aBad
         }
 
         // Get the type (R, C, etc)
-        fpData.RefDesType = fpData.RefDesString.substr( 0, firstnum );
+        fpData.RefDesPrefix = fpData.RefDesString.substr( 0, firstnum );
 
         for( const wxString& excluded : m_excludeArray )
         {
-            if( excluded == fpData.RefDesType ) // Am I supposed to exclude this type?
+            if( excluded == fpData.RefDesPrefix ) // Am I supposed to exclude this type?
             {
                 fpData.Action = EXCLUDE_REFDES; // Yes
                 break;
             }
         }
 
-        if(( fpData.Front && annotateBack ) ||            // If a front fp and doing backs only
-                ( !fpData.Front && annotateFront ) ||     // If a back fp and doing front only
-                ( footprint->IsLocked() && skipLocked ) ) // If excluding locked and it is locked
-        {
+        if( footprint->IsLocked() && skipLocked )
             fpData.Action = EXCLUDE_REFDES;
-        }
-
-        if( annotateSelected )
-        {                                // If only annotating selected c
-            fpData.Action = EXCLUDE_REFDES;     // Assume it isn't selected
-
-            for( const KIID& sel : selected )
-            {
-                if( fpData.Uuid == sel )
-                {                                  // Found in selected footprints
-                    fpData.Action = UPDATE_REFDES;  // Update it
-                    break;
-                }
-            }
-        }
+        else if( annotateSelected )
+            fpData.Action = footprint->IsSelected() ? UPDATE_REFDES : EXCLUDE_REFDES;
+        else if( annotateFront )
+            fpData.Action = fpData.Front ? UPDATE_REFDES : EXCLUDE_REFDES;
+        else if( annotateBack )
+            fpData.Action = fpData.Front ? EXCLUDE_REFDES : UPDATE_REFDES;
 
         if( fpData.Front )
             m_frontFootprints.push_back( fpData );
@@ -762,15 +647,15 @@ bool DIALOG_BOARD_REANNOTATE::BuildFootprintList( std::vector<REFDES_INFO>& aBad
     SetSortCodes( FrontDirectionsArray, m_sortCode );
 
     // Sort the front footprints.
-    sort( m_frontFootprints.begin(), m_frontFootprints.end(), ModuleCompare );
+    sort( m_frontFootprints.begin(), m_frontFootprints.end(), FootprintCompare );
 
     // Determine the sort order for the back.
     SetSortCodes( BackDirectionsArray, m_sortCode );
 
     // Sort the back footprints.
-    sort( m_backFootprints.begin(), m_backFootprints.end(), ModuleCompare );
+    sort( m_backFootprints.begin(), m_backFootprints.end(), FootprintCompare );
 
-    m_refDesTypes.clear();
+    m_refDesPrefixInfos.clear();
     m_changeArray.clear();
 
     BuildUnavailableRefsList();
@@ -796,15 +681,13 @@ bool DIALOG_BOARD_REANNOTATE::BuildFootprintList( std::vector<REFDES_INFO>& aBad
 
     for( size_t i = 0; i < changearraysize; i++ ) // Scan through for duplicates if update or skip
     {
-        if( ( m_changeArray[i].Action != EMPTY_REFDES )
-                && ( m_changeArray[i].Action != INVALID_REFDES ) )
+        if( m_changeArray[i].Action != EMPTY_REFDES && m_changeArray[i].Action != INVALID_REFDES )
         {
             for( size_t j = i + 1; j < changearraysize; j++ )
             {
                 if( m_changeArray[i].NewRefDes == m_changeArray[j].NewRefDes )
                 {
-                    ShowReport( wxString::Format( _( "Duplicate instances of %s" ),
-                                                  m_changeArray[j].NewRefDes ),
+                    ShowReport( wxString::Format( _( "Duplicate instances of %s" ), m_changeArray[j].NewRefDes ),
                                 RPT_SEVERITY_ERROR );
 
                     if( errorcount++ > MAXERROR )
@@ -820,7 +703,7 @@ bool DIALOG_BOARD_REANNOTATE::BuildFootprintList( std::vector<REFDES_INFO>& aBad
             break;
     }
 
-    return ( 0 == errorcount );
+    return ( errorcount == 0 );
 }
 
 void DIALOG_BOARD_REANNOTATE::BuildUnavailableRefsList()
@@ -843,7 +726,7 @@ void DIALOG_BOARD_REANNOTATE::BuildUnavailableRefsList()
     {
         if( fpData.Action == EXCLUDE_REFDES )
         {
-            REFDES_TYPE_STR* refDesInfo = GetOrBuildRefDesInfo( fpData.RefDesType );
+            REFDES_PREFIX_INFO* refDesInfo = GetOrBuildRefDesInfo( fpData.RefDesPrefix );
             refDesInfo->UnavailableRefs.insert( UTIL::GetRefDesNumber( fpData.RefDesString ) );
         }
     }
@@ -863,16 +746,15 @@ void DIALOG_BOARD_REANNOTATE::BuildChangeArray( std::vector<REFDES_INFO>& aFootp
 
     bool prefixpresent; // Prefix found
 
-    wxString logstring = ( aFootprints.front().Front ) ? _( "\n\nFront Footprints" )
-                                                       : _( "\n\nBack Footprints" );
+    wxString logstring = ( aFootprints.front().Front ) ? _( "<br/><br/>Front Footprints" )
+                                                       : _( "<br/><br/>Back Footprints" );
     LogFootprints( logstring, aFootprints );
 
-    if( 0 != aStartRefDes ) // Initialize the change array if present
+    if( aStartRefDes != 0 ) // Initialize the change array if present
     {
-    	for( size_t i = 0; i < m_refDesTypes.size(); i++ )
-            m_refDesTypes[i].LastUsedRefDes = aStartRefDes;
+    	for( size_t i = 0; i < m_refDesPrefixInfos.size(); i++ )
+            m_refDesPrefixInfos[i].LastUsedRefDes = aStartRefDes - 1;
     }
-
 
     for( REFDES_INFO fpData : aFootprints )
     {
@@ -896,21 +778,21 @@ void DIALOG_BOARD_REANNOTATE::BuildChangeArray( std::vector<REFDES_INFO>& aFootp
 
         if( change.Action == UPDATE_REFDES )
         {
-            prefixpresent = ( fpData.RefDesType.find( aPrefix ) == 0 );
+            prefixpresent = ( fpData.RefDesPrefix.find( aPrefix ) == 0 );
 
             if( addprefix && !prefixpresent )
-                fpData.RefDesType.insert( 0, aPrefix ); // Add prefix once only
+                fpData.RefDesPrefix.insert( 0, aPrefix ); // Add prefix once only
 
             if( aRemovePrefix && prefixpresent ) // If there is a prefix remove it
-                fpData.RefDesType.erase( 0, prefixsize );
+                fpData.RefDesPrefix.erase( 0, prefixsize );
 
-            REFDES_TYPE_STR* refDesInfo = GetOrBuildRefDesInfo( fpData.RefDesType, aStartRefDes );
+            REFDES_PREFIX_INFO* refDesInfo = GetOrBuildRefDesInfo( fpData.RefDesPrefix, aStartRefDes );
             unsigned int  newRefDesNumber = refDesInfo->LastUsedRefDes + 1;
 
             while( refDesInfo->UnavailableRefs.count( newRefDesNumber ) )
                 newRefDesNumber++;
 
-            change.NewRefDes = refDesInfo->RefDesType + std::to_string( newRefDesNumber );
+            change.NewRefDes = refDesInfo->RefDesPrefix + std::to_string( newRefDesNumber );
             refDesInfo->LastUsedRefDes = newRefDesNumber;
         }
 
