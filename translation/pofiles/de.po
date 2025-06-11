@@ -31,7 +31,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-06-08 17:02+0300\n"
-"PO-Revision-Date: 2025-06-11 07:01+0000\n"
+"PO-Revision-Date: 2025-06-12 10:05+0000\n"
 "Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
@@ -27585,6 +27585,8 @@ msgstr "Renderqualität. Optionen: %s"
 #, c-format
 msgid "Appearance preset. Options: %s, %s, or user-defined preset name"
 msgstr ""
+"Darstellungsvoreinstellung. Optionen: %s, %s, oder benutzerdefinierter "
+"Voreinstellungsname"
 
 #: kicad/cli/command_pcb_render.cpp:264
 msgid ""
@@ -27647,9 +27649,8 @@ msgid "Side lights elevation angle in degrees, range: 0-90"
 msgstr "Seitenlichthöhen-Winkel in Grad, Bereich: 0-90"
 
 #: kicad/cli/command_pcb_render.cpp:334
-#, fuzzy
 msgid "Invalid preset\n"
-msgstr "Ungültiges Format\n"
+msgstr "Ungültige Voreinstellung\n"
 
 #: kicad/cli/command_pcb_render.cpp:350
 msgid "Invalid background\n"
@@ -27798,9 +27799,8 @@ msgstr ""
 
 #: kicad/cli/command_sch_export_plot.cpp:108
 #: kicad/cli/command_sch_export_plot.cpp:114
-#, fuzzy
 msgid "Deprecated.  Has no effect."
-msgstr "Veraltete Version von %s."
+msgstr "Veraltet.  Ohne Effekt."
 
 #: kicad/cli/command_sch_export_pythonbom.cpp:36
 msgid ""
@@ -27908,7 +27908,7 @@ msgstr "Enthaltene Aufträge:"
 
 #: kicad/dialogs/dialog_executecommand_job_settings.cpp:151
 msgid "<value set at runtime>"
-msgstr ""
+msgstr "<Wert zur Laufzeit gesetzt>"
 
 #: kicad/dialogs/dialog_executecommand_job_settings_base.cpp:79
 msgid "Record output messages"
@@ -27919,9 +27919,8 @@ msgid "Ignore non-zero exit code"
 msgstr "Ergebniscode ungleich Null ignorieren"
 
 #: kicad/dialogs/dialog_executecommand_job_settings_base.cpp:92
-#, fuzzy
 msgid "Available text variables:"
-msgstr "Verfügbare Materialien:"
+msgstr "Verfügbare Textvariablen:"
 
 #: kicad/dialogs/dialog_executecommand_job_settings_base.h:58
 msgid "Execute Command Job Settings"
@@ -29132,7 +29131,7 @@ msgstr "Bitten warten"
 
 #: kicad/project_tree_pane.cpp:1630
 msgid "Waiting for Git operations to finish..."
-msgstr ""
+msgstr "Warte auf Ende der Git-Operationen ..."
 
 #: kicad/project_tree_pane.cpp:1704
 msgid "The selected directory is already a Git project."
@@ -30870,7 +30869,7 @@ msgstr "Berechnen"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:85
 msgid "Rhodium"
-msgstr ""
+msgstr "Rhodium"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:89
 msgid "Platinum"
@@ -30878,7 +30877,7 @@ msgstr "Platin"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:93
 msgid "Palladium"
-msgstr ""
+msgstr "Palladium"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:97
 msgid "Gold"
@@ -30891,11 +30890,11 @@ msgstr "Rostfreier Stahl 18-9"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:105
 msgid "Inconel"
-msgstr ""
+msgstr "Inconel"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:109
 msgid "Indium"
-msgstr ""
+msgstr "Indium"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:113
 #, fuzzy
@@ -30916,11 +30915,11 @@ msgstr "Quecksilber"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:129
 msgid "ENEPIG (Ni/Pd/Au)"
-msgstr ""
+msgstr "ENEPIG (Ni/Pd/Au)"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:133
 msgid "ENIG (Ni/Au)"
-msgstr ""
+msgstr "ENIG (Ni/Au)"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:137
 msgid "Nickel"
@@ -30947,7 +30946,7 @@ msgstr "Messing"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:157
 msgid "Beryllium copper"
-msgstr ""
+msgstr "Berylliumkupfer"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:161
 #, fuzzy
@@ -30956,7 +30955,7 @@ msgstr "HAL Bleifrei"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:165
 msgid "Phosphor bronze"
-msgstr ""
+msgstr "Phosphorbronze"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:169
 msgid "Bronze"
@@ -30964,15 +30963,15 @@ msgstr "Bronze"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:173
 msgid "Tin-Nickel (Sn/Ni)"
-msgstr ""
+msgstr "Zinn-Nickel (Sn/Ni)"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:177
 msgid "Solder 63/37 (Eutectic)"
-msgstr ""
+msgstr "Lötzinn 63/37 (eutektisch)"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:181
 msgid "Solder 60/40 (Leaded)"
-msgstr ""
+msgstr "Lötzinn 60/40 (bleihaltig)"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:185
 msgid "Tin"
@@ -30984,7 +30983,7 @@ msgstr "Blei"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:193
 msgid "2xxx series Al alloy"
-msgstr ""
+msgstr "2xxx-er Serie Al-Legierung"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:197
 msgid "Cast iron"
@@ -31014,7 +31013,7 @@ msgstr "Eisen"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:221
 msgid "Chrome, passive"
-msgstr ""
+msgstr "Chrom, passiv"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:225
 msgid "Zinc"
@@ -31022,7 +31021,7 @@ msgstr "Zink"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:229
 msgid "Steel, zinc-plated"
-msgstr ""
+msgstr "Stahl, verzinkt"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:233
 msgid "Manganese"
@@ -34726,7 +34725,7 @@ msgstr "Elemente nach Netz filtern:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:408
 msgid "Angle offset of the first item in the array"
-msgstr ""
+msgstr "Winkeloffset des ersten Elements im Array"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:440
 msgid "Numbering Options"
@@ -39366,6 +39365,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:86
 msgid "Distance between parallel lines used for hatching the area"
 msgstr ""
+"Abstand paralleler Linien, die zur Flächenschraffierung verwendet werden"
 
 #: pcbnew/dialogs/dialog_set_offset.cpp:66
 msgid "Reset this value to zero."
@@ -42469,7 +42469,7 @@ msgstr "Standardeigenschaften neuer Grafik- und Textelemente"
 
 #: pcbnew/dialogs/panel_setup_time_domain_parameters.cpp:464
 msgid "No delay profiles to override"
-msgstr ""
+msgstr "Keine Verzögerungsprofile zum Überschreiben"
 
 #: pcbnew/dialogs/panel_setup_time_domain_parameters.cpp:570
 msgid "Tuning profile must have a name"
@@ -42481,7 +42481,7 @@ msgstr "Abstimmungsprofilname wird bereits verwendet"
 
 #: pcbnew/dialogs/panel_setup_time_domain_parameters.cpp:624
 msgid "Via override configuration is duplicated"
-msgstr ""
+msgstr "Via-Überschreibungskonfiguration ist dupliziert"
 
 #: pcbnew/dialogs/panel_setup_time_domain_parameters_base.cpp:31
 msgid "Delay Profiles"
@@ -44359,7 +44359,7 @@ msgstr "OCC-Fehler beim Hinzufügen von Pad/Via-Polygonen.\n"
 #: pcbnew/exporters/step/step_pcb_model.cpp:1189
 #, c-format
 msgid "Could not add shape (%d points) to copper layer %s.\n"
-msgstr ""
+msgstr "Konnte Form (%d Punkte) nicht zu Kupferlage %s hinzufügen\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1207
 #, c-format
@@ -44384,12 +44384,12 @@ msgstr "Konnte Komponente mit Dateiname \"%s\" nicht hinzufügen.\n"
 #: pcbnew/exporters/step/step_pcb_model.cpp:1413
 #, c-format
 msgid "OCC exception building shape segment: %s\n"
-msgstr ""
+msgstr "OCC-Exception beim Erzeugen von Formsegement: %s\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1428
 #, c-format
 msgid "OCC exception building face: %s\n"
-msgstr ""
+msgstr "OCC-Exception beim Erzeugen von Fläche: %s\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1440
 #: pcbnew/exporters/step/step_pcb_model.cpp:1830
@@ -44400,11 +44400,12 @@ msgstr "Konnte prismatische Form nicht erstellen\n"
 #, c-format
 msgid "Failed to make segment edge (%d %d) -> (%d %d), skipping\n"
 msgstr ""
+"Konnte Segmentkante (%d %d) -> (%d %d) nicht erzeugen, wird übersprungen\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1524
 #, c-format
 msgid "Failed to add segment edge (%d %d) -> (%d %d)\n"
-msgstr ""
+msgstr "Konnte Segmentkante (%d %d) -> (%d %d) nicht hinzhufügen\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1560
 #, c-format
@@ -44412,16 +44413,18 @@ msgid ""
 "Failed to add arc curve from (%d %d), arc p0 (%d %d), mid (%d %d), p1 (%d "
 "%d)\n"
 msgstr ""
+"Konnte Bogenkurve von (%d %d), Bogen p0 (%d %d), Mitte (%d %d), p1 (%d %d) "
+"nicht hinzufügen\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1636
 #, c-format
 msgid "Failed to close wire at %d, %d -> %d, %d **\n"
-msgstr ""
+msgstr "Konnte Verbindung %d, %d -> %d, %d nicht schließen **\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1646
 #, c-format
 msgid "OCC exception creating wire: %s\n"
-msgstr ""
+msgstr "OCC-Exception beim Erzeugen von Verbindung: %s\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1728
 #, c-format
@@ -44499,10 +44502,12 @@ msgstr ""
 #: pcbnew/exporters/step/step_pcb_model.cpp:2389
 msgid "Failed to set STEP product name, but will attempt to continue."
 msgstr ""
+"Konnte STEP-Produktname nicht setzen, aber werde versuchen fort zu fahren."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2397
 msgid "Failed to set surface curve mode, but will attempt to continue."
 msgstr ""
+"Konnte Oberflächenkurvenmodus nicht setzen, aber versuchen fort zu fahren."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2438
 #: pcbnew/exporters/step/step_pcb_model.cpp:3218
@@ -48883,7 +48888,7 @@ msgstr "Mehrere Lagen"
 
 #: pcbnew/plot_board_layers.cpp:1223
 msgid "HPGL plotting is no longer supported as of KiCad 10.0"
-msgstr ""
+msgstr "HPGL Plotten wird ab KiCad 10.0 nicht mehr unterstützt"
 
 #: pcbnew/project_pcb.cpp:64
 msgid "Error loading project footprint libraries."
@@ -49417,7 +49422,7 @@ msgstr "Steuerelement zum Wählen des Viadurchmessers"
 
 #: pcbnew/toolbars_pcb_editor.cpp:195
 msgid "Track routing tools"
-msgstr ""
+msgstr "Leiterbahn-Verlegewerkzeuge"
 
 #: pcbnew/toolbars_pcb_editor.cpp:198
 #, fuzzy
