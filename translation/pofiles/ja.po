@@ -16,10 +16,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-06-08 17:02+0300\n"
-"PO-Revision-Date: 2025-06-01 16:38+0000\n"
+"PO-Revision-Date: 2025-06-12 10:05+0000\n"
 "Last-Translator: co8 j <co8@nifty.com>\n"
-"Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/master-"
-"source/ja/>\n"
+"Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
+"master-source/ja/>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -7779,7 +7779,6 @@ msgstr "ファイル '%s' を開くことができません"
 #: pcbnew/pcb_io/easyedapro/pcb_io_easyedapro.cpp:119
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:82
 #: pcbnew/pcb_io/fabmaster/pcb_io_fabmaster.cpp:62
-#, fuzzy
 msgid "File import canceled by user."
 msgstr "ファイルのインポートはユーザーによってキャンセルされました。"
 
@@ -9442,9 +9441,8 @@ msgstr ""
 "えます"
 
 #: common/tool/actions.cpp:578
-#, fuzzy
 msgid "Keep Arc Radius and Center, adjust angle"
-msgstr "孤の中心を維持、半径を調整"
+msgstr "孤の半径と中心を維持、角度を調整"
 
 #: common/tool/actions.cpp:579
 #, fuzzy
@@ -10396,9 +10394,8 @@ msgstr "フットプリントが見つかりません。"
 #: common/widgets/footprint_select_widget.cpp:65 cvpcb/cvpcb_mainframe.cpp:903
 #: pcbnew/footprint_edit_frame.cpp:1089
 #: pcbnew/widgets/panel_footprint_chooser.cpp:70
-#, fuzzy
 msgid "Load Footprint Libraries"
-msgstr "フットプリント ライブラリをロード中"
+msgstr "フットプリント ライブラリをロード"
 
 #: common/widgets/footprint_select_widget.cpp:141
 msgid "No default footprint"
@@ -10586,14 +10583,12 @@ msgid "Reset %s to Defaults"
 msgstr "%s をデフォルトに戻す"
 
 #: common/widgets/panel_design_block_chooser.cpp:71
-#, fuzzy
 msgid "Load Design Block Libraries"
-msgstr "デザインブロックライブラリのロード中"
+msgstr "デザインブロックライブラリのロード"
 
 #: common/widgets/panel_design_block_chooser.cpp:274
-#, fuzzy
 msgid "Update Design Block Libraries"
-msgstr "デザインブロックライブラリの更新中"
+msgstr "デザインブロックライブラリの更新"
 
 #: common/widgets/panel_design_block_chooser.cpp:430
 msgid "Errors were encountered loading design blocks:"
@@ -12342,7 +12337,6 @@ msgid "%d symbol(s) require annotation.<br><br>"
 msgstr "%d個のシンボルにアノテーションが必要です。<br><br>"
 
 #: eeschema/dialogs/dialog_erc.cpp:456
-#, fuzzy
 msgid "-------- ERC canceled by user.<br><br>"
 msgstr "-------- ERC はユーザーによってキャンセルされました。<br><br>"
 
@@ -13590,14 +13584,12 @@ msgid "Append to existing pins"
 msgstr "既存のピンに追加"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:219
-#, fuzzy
 msgid "From File..."
-msgstr "ファイルをコミット..."
+msgstr "ファイルから..."
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:225
-#, fuzzy
 msgid "From Clipboard"
-msgstr "クリップボードにエクスポート"
+msgstr "クリップボードから"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:257
 msgid "Group by name"
@@ -13831,9 +13823,8 @@ msgstr ""
 "シンボルは BOM に含まれず、フットプリントを割り当てることはできません。"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:203
-#, fuzzy
 msgid "Define as local power symbol"
-msgstr "電源シンボルとして定義"
+msgstr "ローカル電源シンボルとして定義"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:204
 msgid ""
@@ -13959,9 +13950,8 @@ msgid "Jumper Pin Groups"
 msgstr "ジャンパーピングループ"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:370
-#, fuzzy
 msgid "Available pins"
-msgstr "有効なパス:"
+msgstr "有効なピン"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:386
 #, fuzzy
@@ -13969,19 +13959,16 @@ msgid "Create jumper group from the selected pins"
 msgstr "選択対象から導体ゾーン作成"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:391
-#, fuzzy
 msgid "Remove the selected jumper pin group"
-msgstr "選択したカスタムグループを削除"
+msgstr "選択したジャンパーピングループを削除"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:401
-#, fuzzy
 msgid "Grouped pins"
-msgstr "グループ化"
+msgstr "グループ化したピン"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:423
-#, fuzzy
 msgid "Pin Connections"
-msgstr "パッド接続"
+msgstr "ピン接続"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:436
 msgid "Edit Simulation Model..."
@@ -14582,9 +14569,8 @@ msgstr "ピン名と番号を検索 (&n)"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:96
 #: pcbnew/dialogs/dialog_find_base.cpp:92
-#, fuzzy
 msgid "Include &hidden fields"
-msgstr "非表示フィールドを含める"
+msgstr "非表示フィールドを含める(&H)"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:99
 msgid "Search the current &sheet only"
@@ -14665,7 +14651,6 @@ msgstr ""
 "プロジェクト ファイル %s をロードできませんでした。"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:258
-#, fuzzy
 msgid "Load Bus Aliases"
 msgstr "バスエイリアスの読み込み"
 
@@ -16529,9 +16514,8 @@ msgstr "終点もしくは始点の方向を固定"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:50
 #: pcbnew/dialogs/panel_edit_options_base.cpp:63
-#, fuzzy
 msgid "Keep center and radius, adjust endpoints"
-msgstr "中心を固定、半径を調整"
+msgstr "中心と半径を固定、終点を調整"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:56
 msgid "Mouse drag performs Drag (G) operation"
@@ -17230,10 +17214,9 @@ msgid "Global Field Name Templates"
 msgstr "グローバル フィールド名テンプレート"
 
 #: eeschema/dialogs/panel_template_fieldnames.cpp:271
-#, fuzzy, c-format
+#, c-format
 msgid "The field name '%s' contains trailing and/or leading white space."
-msgstr ""
-"フィールド名 \"%s\" は末尾と先頭(またはどちらか)に空白文字を含んでいます。"
+msgstr "フィールド名 \"%s\" は末尾と先頭(またはどちらか)に空白文字を含んでいます。"
 
 #: eeschema/dialogs/panel_template_fieldnames.cpp:276
 msgid ""
@@ -17287,7 +17270,7 @@ msgstr ""
 
 #: eeschema/eeschema_jobs_handler.cpp:132 pcbnew/pcbnew_jobs_handler.cpp:241
 msgid "Plotting to HPGL is no longer supported as of KiCad 10.0."
-msgstr ""
+msgstr "HPGLへのプロットは KiCad 10.0ではサポート外です。"
 
 #: eeschema/eeschema_jobs_handler.cpp:199
 msgid "Failed to load schematic\n"
@@ -17297,7 +17280,7 @@ msgstr "回路図のロードに失敗しました\n"
 #: kicad/cli/command_pcb_export_hpgl.cpp:36
 #: kicad/cli/command_sch_export_plot.cpp:126 pcbnew/pcbnew_jobs_handler.cpp:229
 msgid "Plotting to HPGL is no longer supported as of KiCad 10.0.\n"
-msgstr ""
+msgstr "HPGLへのプロットは KiCad 10.0ではサポート外です。\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:324
 #: eeschema/eeschema_jobs_handler.cpp:466
@@ -17373,7 +17356,7 @@ msgid "There is no symbol selected to save."
 msgstr "保存するシンボルが選択されていません。"
 
 #: eeschema/eeschema_jobs_handler.cpp:978
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to create output directory '%s'."
 msgstr "出力ディレクトリ '%s' を作成できませんでした。"
 
@@ -17925,14 +17908,12 @@ msgid "Schematic '%s' does not exist.  Do you wish to create it?"
 msgstr "回路図 '%s' は存在しません。新規作成しますか?"
 
 #: eeschema/files-io.cpp:158
-#, fuzzy
 msgid "Create Schematic"
 msgstr "回路図を作成"
 
 #: eeschema/files-io.cpp:159
-#, fuzzy
 msgid "Load Schematic"
-msgstr "回路図をロード中"
+msgstr "回路図をロード"
 
 #: eeschema/files-io.cpp:224
 msgid "Schematic file changes are unsaved"
@@ -18046,9 +18027,8 @@ msgstr ""
 "フォーマットに変換されます。"
 
 #: eeschema/files-io.cpp:542 eeschema/files-io.cpp:1388
-#, fuzzy
 msgid "Updating connections..."
-msgstr "ネットを更新…"
+msgstr "接続を更新中…"
 
 #: eeschema/files-io.cpp:549
 msgid ""
@@ -18961,9 +18941,8 @@ msgid "Design block '%s' already has a schematic."
 msgstr "デザインブロック '%s' はすでに存在します。"
 
 #: eeschema/sch_design_block_utils.cpp:66
-#, fuzzy
 msgid "Overwrite existing schematic?"
-msgstr "既存のプリセットを上書きしますか?"
+msgstr "既存の回路図を上書きしますか?"
 
 #: eeschema/sch_design_block_utils.cpp:81
 #: eeschema/sch_design_block_utils.cpp:259
@@ -18990,9 +18969,8 @@ msgstr ""
 
 #: eeschema/sch_design_block_utils.cpp:162
 #: eeschema/sch_design_block_utils.cpp:360
-#, fuzzy
 msgid "Please select a design block to save the schematic to."
-msgstr "デザイン ブロックを保存するライブラリを選択してください。"
+msgstr "回路図を保存する先のデザイン ブロックを選択してください。"
 
 #: eeschema/sch_design_block_utils.cpp:252
 #: eeschema/sch_design_block_utils.cpp:353
@@ -19150,9 +19128,9 @@ msgid "Members"
 msgstr "メンバー"
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:836
-#, fuzzy, c-format
+#, c-format
 msgid "Importing %s"
-msgstr "設定をインポート"
+msgstr "%sをインポート中"
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:906
 #, c-format
@@ -19688,7 +19666,6 @@ msgstr "KiCad HTTP ライブラリ ファイル"
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:506
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2814
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:155
-#, fuzzy
 msgid "Open canceled by user."
 msgstr "オープンの操作はユーザーによってキャンセルされました。"
 
@@ -39524,7 +39501,6 @@ msgid "Unused Pads"
 msgstr "未使用のパッド"
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:42
-#, fuzzy
 msgid "Update Footprints"
 msgstr "フットプリントを更新"
 
@@ -39566,9 +39542,8 @@ msgid "Update footprint fields from symbols"
 msgstr "%s のフットプリントを '%s' から '%s' に更新"
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:71
-#, fuzzy
 msgid "Remove footprint fields not found in symbols"
-msgstr "%s のシンボルにないフットプリント フィールドを削除します。"
+msgstr "シンボルにないフットプリント フィールドを削除します"
 
 #: pcbnew/dialogs/dialog_update_pcb_base.h:57
 msgid "Update PCB from Schematic"
