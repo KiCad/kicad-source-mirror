@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-06-08 17:03+0300\n"
-"PO-Revision-Date: 2025-06-01 16:38+0000\n"
+"PO-Revision-Date: 2025-06-12 11:01+0000\n"
 "Last-Translator: co8 j <co8@nifty.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/v9/ja/>\n"
 "Language: ja\n"
@@ -38400,7 +38400,6 @@ msgid "Unused Pads"
 msgstr "未使用のパッド"
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:39
-#, fuzzy
 msgid "Update Footprints"
 msgstr "フットプリントを更新"
 
@@ -38442,9 +38441,8 @@ msgid "Update footprint fields from symbols"
 msgstr "%s のフットプリントを '%s' から '%s' に更新"
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:68
-#, fuzzy
 msgid "Remove footprint fields not found in symbols"
-msgstr "%s のシンボルにないフットプリント フィールドを削除します。"
+msgstr "シンボルにないフットプリント フィールドを削除します"
 
 #: pcbnew/dialogs/dialog_update_pcb_base.h:56
 msgid "Update PCB from Schematic"
