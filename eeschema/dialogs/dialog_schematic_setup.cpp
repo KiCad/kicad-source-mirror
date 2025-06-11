@@ -22,6 +22,7 @@
 #include <schematic.h>
 #include <kiface_base.h>
 #include <dialog_sch_import_settings.h>
+#include <dialogs/panel_setup_annotation.h>
 #include <dialogs/panel_setup_netclasses.h>
 #include <dialogs/panel_setup_severities.h>
 #include <dialogs/panel_setup_buses.h>
@@ -61,6 +62,13 @@ DIALOG_SCHEMATIC_SETUP::DIALOG_SCHEMATIC_SETUP( SCH_EDIT_FRAME* aFrame ) :
             {
                 return new PANEL_SETUP_FORMATTING( aParent, m_frame );
             }, _( "Formatting" ) );
+
+    m_annotationPage = m_treebook->GetPageCount();
+    m_treebook->AddLazySubPage(
+            [this]( wxWindow* aParent ) -> wxWindow*
+            {
+                return new PANEL_SETUP_ANNOTATION( aParent, m_frame );
+            }, _( "Annotation" ) );
 
     m_fieldNameTemplatesPage = m_treebook->GetPageCount();
     m_treebook->AddLazySubPage(

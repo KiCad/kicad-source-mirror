@@ -27,6 +27,7 @@
 #include <font/font.h>
 
 class NGSPICE_SETTINGS;
+class REFDES_TRACKER;
 
 
 // The minimal grid size allowed to place a pin is 25 mils.  Tthe best grid size is 50 mils,
@@ -124,6 +125,18 @@ public:
      * Ngspice simulator settings.
      */
     std::shared_ptr<NGSPICE_SETTINGS> m_NgspiceSettings;
+
+    /**
+     * True if we want allow deleted schematic reference designators to be reused
+     * in the same project.
+     */
+    bool m_reuseRefDes;
+
+    /**
+     * A list of previously used schematic reference designators.
+     * This is used to avoid reusing designators in the same project.
+     */
+    std::shared_ptr<REFDES_TRACKER> m_refDesTracker;
 };
 
 #endif

@@ -31,6 +31,7 @@
 #include <project.h>
 #include <project/net_settings.h>
 #include <project/project_file.h>
+#include <refdes_tracker.h>
 #include <schematic.h>
 #include <sch_bus_entry.h>
 #include <sch_commit.h>
@@ -192,6 +193,25 @@ void SCHEMATIC::SetProject( PROJECT* aPrj )
         project.m_SchematicSettings->LoadFromFile();
         project.m_SchematicSettings->m_NgspiceSettings->LoadFromFile();
         project.m_ErcSettings->LoadFromFile();
+    }
+}
+
+
+void SCHEMATIC::CacheExistingAnnotation()
+{
+    wxASSERT( m_project );
+
+    // Cache all existing annotations in the REFDES_TRACKER
+    std::shared_ptr<REFDES_TRACKER> refdesTracker = m_project->GetProjectFile().m_SchematicSettings->m_refDesTracker;
+
+    SCH_SHEET_LIST sheets = Hierarchy();
+    SCH_REFERENCE_LIST references;
+
+    sheets.GetSymbols( references );
+
+    for( const SCH_REFERENCE& ref : references )
+    {
+        refdesTracker->Insert( ref.GetFullRef( false ).ToStdString() );
     }
 }
 

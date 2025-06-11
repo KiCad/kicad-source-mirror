@@ -38,6 +38,7 @@
 
 #include <string_utils.h>
 #include <erc/erc_settings.h>
+#include <refdes_tracker.h>
 #include <sch_symbol.h>
 #include <sch_edit_frame.h>
 
@@ -256,33 +257,7 @@ int SCH_REFERENCE_LIST::FindFirstUnusedReference( const SCH_REFERENCE& aRef, int
         refNumberMap[ref.m_numRef].push_back( ref );
     }
 
-    // Start at the given minimum value
-    int minFreeNumber = aMinValue;
-
-    for( ; refNumberMap[minFreeNumber].size() > 0; ++minFreeNumber )
-    {
-        auto isNumberInUse = [&]() -> bool
-                             {
-                                for( const int& unit : aRequiredUnits )
-                                {
-                                    for( const SCH_REFERENCE& ref : refNumberMap[minFreeNumber] )
-                                    {
-                                        if( ref.CompareLibName( aRef ) || ref.CompareValue( aRef )
-                                            || ref.GetUnit() == unit )
-                                        {
-                                            return true;
-                                        }
-                                    }
-                                }
-
-                                return false;
-                             };
-
-        if( !isNumberInUse() )
-            return minFreeNumber;
-    }
-
-    return minFreeNumber;
+    return m_refDesTracker->GetNextRefDesForUnits( aRef, refNumberMap, aRequiredUnits, aMinValue );
 }
 
 
@@ -301,41 +276,6 @@ std::vector<SCH_SYMBOL_INSTANCE> SCH_REFERENCE_LIST::GetSymbolInstances() const
     }
 
     return retval;
-}
-
-
-int SCH_REFERENCE_LIST::createFirstFreeRefId( std::vector<int>& aIdList, int aFirstValue )
-{
-    int expectedId = aFirstValue;
-
-    // We search for expected Id a value >= aFirstValue.
-    // Skip existing Id < aFirstValue
-    unsigned ii = 0;
-
-    for( ; ii < aIdList.size(); ii++ )
-    {
-        if( expectedId <= aIdList[ii] )
-            break;
-    }
-
-    // Ids are sorted by increasing value, from aFirstValue
-    // So we search from aFirstValue the first not used value, i.e. the first hole in list.
-    for( ; ii < aIdList.size(); ii++ )
-    {
-        if( expectedId != aIdList[ii] )    // This id is not yet used.
-        {
-            // Insert this free Id, in order to keep list sorted
-            aIdList.insert( aIdList.begin() + ii, expectedId );
-            return expectedId;
-        }
-
-        expectedId++;
-    }
-
-    // All existing Id are tested, and all values are found in use.
-    // So Create a new one.
-    aIdList.push_back( expectedId );
-    return expectedId;
 }
 
 
@@ -448,8 +388,15 @@ void SCH_REFERENCE_LIST::AnnotateByOptions( ANNOTATE_ORDER_T                    
 
 void SCH_REFERENCE_LIST::Annotate( bool aUseSheetNum, int aSheetIntervalId, int aStartNumber,
                                    const SCH_MULTI_UNIT_REFERENCE_MAP& aLockedUnitMap,
-                                   const SCH_REFERENCE_LIST& aAdditionalRefs, bool aStartAtCurrent )
+                                   const SCH_REFERENCE_LIST& aAdditionalRefs,
+                                   bool aStartAtCurrent )
 {
+    if( !m_refDesTracker )
+    {
+        wxLogError( wxS( "No reference tracker set for SCH_REFERENCE_LIST::Annotate()" ) );
+        return;
+    }
+
     if ( m_flatList.size() == 0 )
         return;
 
@@ -553,9 +500,7 @@ void SCH_REFERENCE_LIST::Annotate( bool aUseSheetNum, int aSheetIntervalId, int 
         {
             if( ref_unit.m_isNew )
             {
-                std::vector<int> idList;
-                GetRefsInUse( first, idList, minRefId );
-                LastReferenceNumber = createFirstFreeRefId( idList, minRefId );
+                LastReferenceNumber = FindFirstUnusedReference( ref_unit, minRefId, {} );
                 ref_unit.m_numRef = LastReferenceNumber;
                 ref_unit.m_numRefStr = ref_unit.formatRefStr( LastReferenceNumber );
             }

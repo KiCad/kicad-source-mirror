@@ -1692,7 +1692,8 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
     tempScreen->MigrateSimModels();
 
     EESCHEMA_SETTINGS::PANEL_ANNOTATE& annotate = m_frame->eeconfig()->m_AnnotatePanel;
-    int annotateStartNum = m_frame->Schematic().Settings().m_AnnotateStartNum;
+    SCHEMATIC_SETTINGS& schematicSettings = m_frame->Schematic().Settings();
+    int annotateStartNum = schematicSettings.m_AnnotateStartNum;
 
     PASTE_MODE pasteMode = annotate.automatic ? PASTE_MODE::RESPECT_OPTIONS : PASTE_MODE::REMOVE_ANNOTATIONS;
     bool       forceRemoveAnnotations = false;
@@ -2106,6 +2107,8 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
         for( SCH_SHEET_PATH& path : sheetPathsForScreen )
         {
             annotatedSymbols[path].SortByReferenceOnly();
+            annotatedSymbols[path].SetRefDesTracker( schematicSettings.m_refDesTracker );
+            annotatedSymbols[path].SetReuseRefDes( schematicSettings.m_reuseRefDes );
 
             if( pasteMode == PASTE_MODE::UNIQUE_ANNOTATIONS )
             {
@@ -2128,6 +2131,8 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
             for( const SCH_SHEET_PATH& pastedSheetPath : pastedSheets[path] )
             {
                 annotatedSymbols[pastedSheetPath].SortByReferenceOnly();
+                annotatedSymbols[path].SetRefDesTracker( schematicSettings.m_refDesTracker );
+                annotatedSymbols[path].SetReuseRefDes( schematicSettings.m_reuseRefDes );
 
                 if( pasteMode == PASTE_MODE::UNIQUE_ANNOTATIONS )
                 {

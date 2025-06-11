@@ -24,6 +24,7 @@
 #include <algorithm>
 
 #include <confirm.h>
+#include <project/project_file.h>
 #include <reporter.h>
 #include <sch_edit_frame.h>
 #include <schematic.h>
@@ -358,6 +359,12 @@ void SCH_EDIT_FRAME::AnnotateSymbols( SCH_COMMIT* aCommit, ANNOTATE_SCOPE_T  aAn
                 additionalRefs.AddItem( allRefs[i] );
         }
     }
+
+    std::shared_ptr<REFDES_TRACKER> refdes = Schematic().Settings().m_refDesTracker;
+    bool reuseRefDes = Schematic().Settings().m_reuseRefDes;
+
+    references.SetReuseRefDes( reuseRefDes );
+    references.SetRefDesTracker( refdes );
 
     // Break full symbol reference into name (prefix) and number:
     // example: IC1 become IC, and 1

@@ -65,26 +65,9 @@ void PANEL_SETUP_FORMATTING::onCheckBoxIref( wxCommandEvent& event )
 }
 
 
-int getRefStyleMenuIndex( int aSubpartIdSeparator, int aFirstSubpartId )
-{
-    // Reference style one of: "A" ".A" "-A" "_A" ".1" "-1" "_1"
-    switch( aSubpartIdSeparator )
-    {
-    default:
-    case 0:   return 0;
-    case '.': return aFirstSubpartId == '1' ? 4 : 1;
-    case '-': return aFirstSubpartId == '1' ? 5 : 2;
-    case '_': return aFirstSubpartId == '1' ? 6 : 3;
-    }
-}
-
-
 bool PANEL_SETUP_FORMATTING::TransferDataToWindow()
 {
     SCHEMATIC_SETTINGS& settings = m_frame->Schematic().Settings();
-
-    m_choiceSeparatorRefId->SetSelection( getRefStyleMenuIndex( settings.m_SubpartIdSeparator,
-                                                                settings.m_SubpartFirstId ) );
 
     m_textSize.SetUnits( EDA_UNITS::MILS );
     m_lineWidth.SetUnits( EDA_UNITS::MILS );
@@ -142,19 +125,6 @@ bool PANEL_SETUP_FORMATTING::TransferDataFromWindow()
 
     SCHEMATIC_SETTINGS& settings = m_frame->Schematic().Settings();
 
-    // Reference style one of: "A" ".A" "-A" "_A" ".1" "-1" "_1"
-    switch( m_choiceSeparatorRefId->GetSelection() )
-    {
-    default:
-    case 0: settings.m_SubpartFirstId = 'A'; settings.m_SubpartIdSeparator = 0;   break;
-    case 1: settings.m_SubpartFirstId = 'A'; settings.m_SubpartIdSeparator = '.'; break;
-    case 2: settings.m_SubpartFirstId = 'A'; settings.m_SubpartIdSeparator = '-'; break;
-    case 3: settings.m_SubpartFirstId = 'A'; settings.m_SubpartIdSeparator = '_'; break;
-    case 4: settings.m_SubpartFirstId = '1'; settings.m_SubpartIdSeparator = '.'; break;
-    case 5: settings.m_SubpartFirstId = '1'; settings.m_SubpartIdSeparator = '-'; break;
-    case 6: settings.m_SubpartFirstId = '1'; settings.m_SubpartIdSeparator = '_'; break;
-    }
-
     settings.m_DefaultTextSize = m_textSize.GetIntValue();
     settings.m_DefaultLineWidth = m_lineWidth.GetIntValue();
     settings.m_PinSymbolSize = m_pinSymbolSize.GetIntValue();
@@ -205,9 +175,6 @@ bool PANEL_SETUP_FORMATTING::TransferDataFromWindow()
 
 void PANEL_SETUP_FORMATTING::ImportSettingsFrom( SCHEMATIC_SETTINGS& aSettings )
 {
-    m_choiceSeparatorRefId->SetSelection( getRefStyleMenuIndex( aSettings.m_SubpartIdSeparator,
-                                                                aSettings.m_SubpartFirstId ) );
-
     m_textSize.SetValue( aSettings.m_DefaultTextSize );
     m_lineWidth.SetValue( aSettings.m_DefaultLineWidth );
     m_pinSymbolSize.SetValue( aSettings.m_PinSymbolSize );

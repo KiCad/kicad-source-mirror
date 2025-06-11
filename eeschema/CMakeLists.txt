@@ -176,6 +176,8 @@ set( EESCHEMA_DLGS
     dialogs/panel_eeschema_annotation_options_base.cpp
     dialogs/panel_eeschema_editing_options.cpp
     dialogs/panel_eeschema_editing_options_base.cpp
+    dialogs/panel_setup_annotation.cpp
+    dialogs/panel_setup_annotation_base.cpp
     dialogs/panel_setup_buses.cpp
     dialogs/panel_setup_buses_base.cpp
     dialogs/panel_setup_formatting.cpp
@@ -375,6 +377,7 @@ set( EESCHEMA_SRCS
     pin_type.cpp
     project_sch.cpp
     project_rescue.cpp
+    refdes_tracker.cpp
     sch_base_frame.cpp
     sch_bitmap.cpp
     sch_bus_entry.cpp

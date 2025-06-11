@@ -425,6 +425,14 @@ public:
                                  PICKED_ITEMS_LIST*                aLastChangeList = nullptr );
 
     /**
+     * Store all existing annotations in the REFDES_TRACKER.
+     * This is useful when adding existing sheets or enabling tracking for the first time.
+     * It will not change the existing annotations, but will allow the REFDES_TRACKER
+     * to track the existing annotations and prevent duplicates.
+     */
+    void CacheExistingAnnotation();
+
+    /**
      * True if a SCHEMATIC exists, false if not
      */
     static bool m_IsSchematicExists;

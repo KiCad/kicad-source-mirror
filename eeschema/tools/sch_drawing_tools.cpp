@@ -144,6 +144,7 @@ int SCH_DRAWING_TOOLS::PlaceSymbol( const TOOL_EVENT& aEvent )
     std::vector<PICKED_SYMBOL>* historyList = nullptr;
     bool                        ignorePrimePosition = false;
     COMMON_SETTINGS*            common_settings = Pgm().GetCommonSettings();
+    SCHEMATIC_SETTINGS&         schSettings = m_frame->Schematic().Settings();
     SCH_SCREEN*                 screen = m_frame->GetScreen();
 
     if( m_inDrawingTool )
@@ -231,12 +232,14 @@ int SCH_DRAWING_TOOLS::PlaceSymbol( const TOOL_EVENT& aEvent )
                     SCH_REFERENCE newReference( symbol, instance );
                     SCH_REFERENCE_LIST refs;
                     refs.AddItem( newReference );
+                    refs.SetRefDesTracker( schSettings.m_refDesTracker );
+                    refs.SetReuseRefDes( schSettings.m_reuseRefDes );
 
                     if( cfg->m_AnnotatePanel.automatic || newReference.AlwaysAnnotate() )
                     {
                         refs.ReannotateByOptions( (ANNOTATE_ORDER_T) cfg->m_AnnotatePanel.sort_order,
                                                   (ANNOTATE_ALGO_T) cfg->m_AnnotatePanel.method,
-                                                  m_frame->Schematic().Settings().m_AnnotateStartNum,
+                                                  schSettings.m_AnnotateStartNum,
                                                   existingRefs, false, &hierarchy );
 
                         refs.UpdateAnnotation();

@@ -50,6 +50,7 @@ protected:
     std::shared_ptr<ERC_ITEM> m_pinToPinError;
 
     size_t                    m_formattingPage;
+    size_t                    m_annotationPage;
     size_t                    m_fieldNameTemplatesPage;
     size_t                    m_bomPresetsPage;
     size_t                    m_pinMapPage;

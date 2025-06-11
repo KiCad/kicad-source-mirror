@@ -35,6 +35,7 @@
 #include <sch_text.h>
 #include <erc/erc_settings.h>
 
+class REFDES_TRACKER;
 
 /** Schematic annotation scope options. */
 enum ANNOTATE_SCOPE_T
@@ -166,14 +167,14 @@ public:
     const char* GetRefStr() const { return m_ref.c_str(); }
 
     /// Return reference name with unit altogether.
-    wxString GetFullRef() const
+    wxString GetFullRef( bool aIncludeUnit = true ) const
     {
         wxString refNum = m_numRefStr;
 
         if( refNum.IsEmpty() )
             refNum << m_numRef;
 
-        if( GetSymbol()->GetUnitCount() > 1 )
+        if( aIncludeUnit && GetSymbol()->GetUnitCount() > 1 )
             return GetRef() + refNum + GetSymbol()->SubReference( GetUnit() );
         else
             return GetRef() + refNum;
@@ -224,6 +225,12 @@ public:
             return true; // Assume units locked when we don't have a library
     }
 
+    void SetRefNum( int aNum )
+    {
+        m_numRef = aNum;
+        m_numRefStr = formatRefStr( aNum );
+    }
+
 private:
     wxString formatRefStr( int aNumber ) const;
 
@@ -269,6 +276,7 @@ class SCH_REFERENCE_LIST
 public:
     SCH_REFERENCE_LIST()
     {
+        m_reuseRefDes = true;  // Default to reusing reference designators after deletion
     }
 
     SCH_REFERENCE& operator[]( int aIndex )
@@ -405,12 +413,12 @@ public:
      * @param aStartAtCurrent Use m_numRef for each reference as the start number (overrides
      *        aStartNumber)
      */
-    void AnnotateByOptions( enum ANNOTATE_ORDER_T               aSortOption,
-                            enum ANNOTATE_ALGO_T                aAlgoOption,
-                            int                                 aStartNumber,
-                            const SCH_MULTI_UNIT_REFERENCE_MAP& aLockedUnitMap,
-                            const SCH_REFERENCE_LIST&           aAdditionalRefs,
-                            bool                                aStartAtCurrent );
+    void AnnotateByOptions( enum ANNOTATE_ORDER_T                   aSortOption,
+                            enum ANNOTATE_ALGO_T                    aAlgoOption,
+                            int                                     aStartNumber,
+                            const SCH_MULTI_UNIT_REFERENCE_MAP&     aLockedUnitMap,
+                            const SCH_REFERENCE_LIST&               aAdditionalRefs,
+                            bool                                    aStartAtCurrent );
 
     /**
      * Set the reference designators in the list that have not been annotated.
@@ -435,7 +443,8 @@ public:
      */
     void Annotate( bool aUseSheetNum, int aSheetIntervalId, int aStartNumber,
                    const SCH_MULTI_UNIT_REFERENCE_MAP& aLockedUnitMap,
-                   const SCH_REFERENCE_LIST& aAdditionalRefs, bool aStartAtCurrent = false );
+                   const SCH_REFERENCE_LIST& aAdditionalRefs,
+                   bool aStartAtCurrent = false );
 
     /**
      * Check for annotations errors.
@@ -575,6 +584,26 @@ public:
     static wxString Shorthand( std::vector<SCH_REFERENCE> aList, const wxString& refDelimiter,
                                const wxString& refRangeDelimiter );
 
+    std::shared_ptr<REFDES_TRACKER> GetRefDesTracker() const
+    {
+        return m_refDesTracker;
+    }
+
+    void SetRefDesTracker( std::shared_ptr<REFDES_TRACKER> aTracker )
+    {
+        m_refDesTracker = aTracker;
+    }
+
+    bool ReuseRefDes() const
+    {
+        return m_reuseRefDes;
+    }
+
+    void SetReuseRefDes( bool aReuse )
+    {
+        m_reuseRefDes = aReuse;
+    }
+
     friend class BACK_ANNOTATION;
 
     typedef std::vector<SCH_REFERENCE>::iterator       iterator;
@@ -603,24 +632,13 @@ private:
 
     static bool sortByReferenceOnly( const SCH_REFERENCE& item1, const SCH_REFERENCE& item2 );
 
-    /**
-     * Search for the first free reference number in \a aListId of reference numbers in use.
-     *
-     * This function just searches for a hole in a list of incremented numbers, this list must
-     * be sorted by increasing values and each value can be stored only once.  The new value
-     * is added to the list.
-     *
-     * @see BuildRefIdInUseList to prepare this list
-     * @param aIdList The buffer that contains the reference numbers in use.
-     * @param aFirstValue The first expected free value
-     * @return The first free (not yet used) value.
-     */
-    static int createFirstFreeRefId( std::vector<int>& aIdList, int aFirstValue );
-
     // Used for sorting static sortByTimeStamp function
     friend class BACK_ANNOTATE;
 
     std::vector<SCH_REFERENCE> m_flatList;
+
+    bool  m_reuseRefDes;  // True if the reference designators should be reused after being deleted
+    std::shared_ptr<REFDES_TRACKER> m_refDesTracker; ///< A list of previously used reference designators.
 };
 
 #endif    // _SCH_REFERENCE_LIST_H_

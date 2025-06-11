@@ -63,6 +63,9 @@ set( QA_EESCHEMA_SRCS
     erc/test_erc_unconnected_wire_endpoints.cpp
     erc/test_erc_wire_bus_entry.cpp
 
+    test_annotation_refdes_tracker_units.cpp
+    test_annotation_units_conflicts.cpp
+    test_annotation_units_integration.cpp
     test_connectivity_algo.cpp
     test_eagle_plugin.cpp
     test_junction_helpers.cpp

@@ -194,6 +194,8 @@ public:
      */
     std::shared_ptr<NET_SETTINGS> m_NetSettings;
 
+
+
     /**
      * Component class settings for the project (owned here)
      */

@@ -164,17 +164,18 @@ void LoadSchematic( SETTINGS_MANAGER& aSettingsManager, const wxString& aRelPath
             screen->MigrateSimModels();
     }
 
-   sheets.AnnotatePowerSymbols();
 
-   // NOTE: This is required for multi-unit symbols to be correct
-   // Normally called from SCH_EDIT_FRAME::FixupJunctions() but could be refactored
-   for( SCH_SHEET_PATH& sheet : sheets )
-       sheet.UpdateAllScreenReferences();
+    sheets.AnnotatePowerSymbols();
 
-   // NOTE: SchematicCleanUp is not called; QA schematics must already be clean or else
-   // SchematicCleanUp must be freed from its UI dependencies.
+    // NOTE: This is required for multi-unit symbols to be correct
+    // Normally called from SCH_EDIT_FRAME::FixupJunctions() but could be refactored
+    for( SCH_SHEET_PATH& sheet : sheets )
+        sheet.UpdateAllScreenReferences();
 
-   aSchematic->ConnectionGraph()->Recalculate( sheets, true );
+    // NOTE: SchematicCleanUp is not called; QA schematics must already be clean or else
+    // SchematicCleanUp must be freed from its UI dependencies.
+
+    aSchematic->ConnectionGraph()->Recalculate( sheets, true );
 }
 
 } // namespace KI_TEST

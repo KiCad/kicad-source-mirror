@@ -1101,16 +1101,15 @@ void SCH_SHEET_LIST::AnnotatePowerSymbols()
     // (Not sure this is really useful)
     for( unsigned ii = 0; ii< references.GetCount(); ++ii )
     {
-        if( references[ii].GetRef()[0] != '#' )
+        SCH_REFERENCE& ref_unit = references[ii];
+
+        if( ref_unit.GetRef()[0] != '#' )
         {
-            wxString new_ref = "#" + references[ii].GetRef();
-            references[ii].SetRef( new_ref );
+            wxString new_ref = "#" + ref_unit.GetRef();
+            ref_unit.SetRef( new_ref );
+            ref_unit.SetRefNum( ii );
         }
     }
-
-    // Recalculate and update reference numbers in schematic
-    references.Annotate( false, 0, 100, lockedSymbols, additionalreferences );
-    references.UpdateAnnotation();
 }
 
 
