@@ -586,8 +586,6 @@ PCBNEW_SETTINGS::PCBNEW_SETTINGS()
             &m_Reannotate.sort_code, 0 ) );
     m_params.emplace_back( new PARAM<int>( "reannotate_dialog.annotate_choice",
             &m_Reannotate.annotation_choice, 0 ) );
-    m_params.emplace_back( new PARAM<int>( "reannotate_dialog.annotate_report_severity",
-            &m_Reannotate.report_severity, 0 ) );
 
     m_params.emplace_back( new PARAM<wxString>( "reannotate_dialog.annotate_front_refdes_start",
             &m_Reannotate.front_refdes_start, "1" ) );

@@ -92,12 +92,11 @@ wxString ActionMessage[] = {
 };
 
 
-DIALOG_BOARD_REANNOTATE::DIALOG_BOARD_REANNOTATE( PCB_EDIT_FRAME* aParentFrame )
-        : DIALOG_BOARD_REANNOTATE_BASE( aParentFrame ),
-          m_footprints( aParentFrame->GetBoard()->Footprints() )
+DIALOG_BOARD_REANNOTATE::DIALOG_BOARD_REANNOTATE( PCB_EDIT_FRAME* aParentFrame ) :
+        DIALOG_BOARD_REANNOTATE_BASE( aParentFrame ),
+        m_frame( aParentFrame ),
+        m_footprints( aParentFrame->GetBoard()->Footprints() )
 {
-    m_frame  = aParentFrame;
-    m_Config = Kiface().KifaceSettings();
     InitValues();
 
     // Init bitmaps associated to some wxRadioButton
@@ -113,16 +112,14 @@ DIALOG_BOARD_REANNOTATE::DIALOG_BOARD_REANNOTATE( PCB_EDIT_FRAME* aParentFrame )
     m_FrontRefDesStart->SetValidator( wxTextValidator( wxFILTER_DIGITS ) );
     m_BackRefDesStart->SetValidator( wxTextValidator( wxFILTER_DIGITS ) );
 
-    m_sdbSizerOK->SetLabel( _( "Reannotate PCB" ) );
-    m_sdbSizerCancel->SetLabel( _( "Close" ) );
-    m_sdbSizer->Layout();
+    SetupStandardButtons( { { wxID_OK,     _( "Reannotate PCB" ) },
+                            { wxID_CANCEL, _( "Close" )          } } );
 
-    m_settings = aParentFrame->config();
     wxArrayString gridslist;
-    GRID_MENU::BuildChoiceList( &gridslist, m_settings, aParentFrame );
+    GRID_MENU::BuildChoiceList( &gridslist, m_frame->config(), aParentFrame );
 
     if( -1 == m_gridIndex ) // If no default loaded
-        m_gridIndex = m_settings->m_Window.grid.last_size_idx;        // Get the current grid size
+        m_gridIndex = m_frame->config()->m_Window.grid.last_size_idx;     // Get the current grid size
 
     m_sortGridx = m_frame->GetCanvas()->GetGAL()->GetGridSize().x;
     m_sortGridy = m_frame->GetCanvas()->GetGAL()->GetGridSize().y;
@@ -165,18 +162,7 @@ DIALOG_BOARD_REANNOTATE::~DIALOG_BOARD_REANNOTATE()
 {
     GetParameters(); // Get the current menu settings
 
-    PCBNEW_SETTINGS* cfg = nullptr;
-
-    try
-    {
-        cfg = m_frame->GetPcbNewSettings();
-    }
-    catch( const std::runtime_error& e )
-    {
-        wxFAIL_MSG( e.what() );
-    }
-
-    if( cfg )
+    if( PCBNEW_SETTINGS* cfg = m_frame->GetPcbNewSettings() )
     {
         cfg->m_Reannotate.sort_on_fp_location = m_locationChoice->GetSelection() == 0;
         cfg->m_Reannotate.remove_front_prefix = m_RemoveFrontPrefix->GetValue();
@@ -186,7 +172,6 @@ DIALOG_BOARD_REANNOTATE::~DIALOG_BOARD_REANNOTATE()
         cfg->m_Reannotate.grid_index          = m_gridIndex;
         cfg->m_Reannotate.sort_code           = m_sortCode;
         cfg->m_Reannotate.annotation_choice   = m_annotationScope;
-        cfg->m_Reannotate.report_severity     = m_severity;
 
         cfg->m_Reannotate.front_refdes_start  = m_FrontRefDesStart->GetValue();
         cfg->m_Reannotate.back_refdes_start   = m_BackRefDesStart->GetValue();
@@ -200,23 +185,24 @@ DIALOG_BOARD_REANNOTATE::~DIALOG_BOARD_REANNOTATE()
 
 void DIALOG_BOARD_REANNOTATE::InitValues( void )
 {
-    PCBNEW_SETTINGS* cfg = m_frame->GetPcbNewSettings();
-    m_locationChoice->SetSelection( cfg->m_Reannotate.sort_on_fp_location ? 0 : 1 );
-    m_RemoveFrontPrefix->SetValue( cfg->m_Reannotate.remove_front_prefix );
-    m_RemoveBackPrefix->SetValue( cfg->m_Reannotate.remove_back_prefix );
-    m_ExcludeLocked->SetValue( cfg->m_Reannotate.exclude_locked );
+    if( PCBNEW_SETTINGS* cfg = m_frame->GetPcbNewSettings() )
+    {
+        m_locationChoice->SetSelection( cfg->m_Reannotate.sort_on_fp_location ? 0 : 1 );
+        m_RemoveFrontPrefix->SetValue( cfg->m_Reannotate.remove_front_prefix );
+        m_RemoveBackPrefix->SetValue( cfg->m_Reannotate.remove_back_prefix );
+        m_ExcludeLocked->SetValue( cfg->m_Reannotate.exclude_locked );
 
-    m_gridIndex         = cfg->m_Reannotate.grid_index ;
-    m_sortCode          = cfg->m_Reannotate.sort_code ;
-    m_annotationScope   = cfg->m_Reannotate.annotation_choice ;
-    m_severity          = cfg->m_Reannotate.report_severity;
+        m_gridIndex         = cfg->m_Reannotate.grid_index ;
+        m_sortCode          = cfg->m_Reannotate.sort_code ;
+        m_annotationScope   = cfg->m_Reannotate.annotation_choice ;
 
-    m_FrontRefDesStart->SetValue( cfg->m_Reannotate.front_refdes_start );
-    m_BackRefDesStart->SetValue( cfg->m_Reannotate.back_refdes_start );
-    m_FrontPrefix->SetValue( cfg->m_Reannotate.front_prefix );
-    m_BackPrefix->SetValue( cfg->m_Reannotate.back_prefix );
-    m_ExcludeList->SetValue( cfg->m_Reannotate.exclude_list );
-    m_MessageWindow->SetFileName( cfg->m_Reannotate.report_file_name );
+        m_FrontRefDesStart->SetValue( cfg->m_Reannotate.front_refdes_start );
+        m_BackRefDesStart->SetValue( cfg->m_Reannotate.back_refdes_start );
+        m_FrontPrefix->SetValue( cfg->m_Reannotate.front_prefix );
+        m_BackPrefix->SetValue( cfg->m_Reannotate.back_prefix );
+        m_ExcludeList->SetValue( cfg->m_Reannotate.exclude_list );
+        m_MessageWindow->SetFileName( cfg->m_Reannotate.report_file_name );
+    }
 }
 
 
@@ -281,12 +267,6 @@ void DIALOG_BOARD_REANNOTATE::FilterBackPrefix( wxCommandEvent& event )
 
 void DIALOG_BOARD_REANNOTATE::OnApplyClick( wxCommandEvent& event )
 {
-    if( m_frame->GetBoard()->IsEmpty() )
-    {
-        ShowReport( _( "No PCB to reannotate!" ), RPT_SEVERITY_ERROR );
-        return;
-    }
-
     GetParameters(); // Figure out how this is to be done
 
     if( ReannotateBoard() )
@@ -325,9 +305,9 @@ void DIALOG_BOARD_REANNOTATE::GetParameters()
     m_gridIndex = m_GridChoice->GetSelection();
 
     m_sortGridx = EDA_UNIT_UTILS::UI::DoubleValueFromString( pcbIUScale, EDA_UNITS::MILS,
-                                                             m_settings->m_Window.grid.grids[m_gridIndex].x );
+                                                             m_frame->config()->m_Window.grid.grids[m_gridIndex].x );
     m_sortGridy = EDA_UNIT_UTILS::UI::DoubleValueFromString( pcbIUScale, EDA_UNITS::MILS,
-                                                             m_settings->m_Window.grid.grids[m_gridIndex].y );
+                                                             m_frame->config()->m_Window.grid.grids[m_gridIndex].y );
 
     m_annotationScope = ANNOTATE_ALL;
 
@@ -560,24 +540,10 @@ bool DIALOG_BOARD_REANNOTATE::BuildFootprintList( std::vector<REFDES_INFO>& aBad
     m_excludeArray.clear();
     m_footprints = m_frame->GetBoard()->Footprints();
 
-    wxString exclude;
+    wxStringTokenizer tokenizer( m_ExcludeList->GetValue(), wxS( " ," ), wxTOKEN_STRTOK );
 
-    // Break exclude list into words.
-    for( auto thischar : m_ExcludeList->GetValue() )
-    {
-    	if( thischar == ' ' || thischar == ',' )
-        {
-            m_excludeArray.push_back( exclude );
-            exclude.clear();
-        }
-        else
-        {
-            exclude += thischar;
-        }
-    }
-
-    if( !exclude.empty() )      // last item to exclude
-        m_excludeArray.push_back( exclude );
+    while( tokenizer.HasMoreTokens() )
+        m_excludeArray.push_back( tokenizer.GetNextToken() );
 
     REFDES_INFO fpData;
     bool        useFPLocation = m_locationChoice->GetSelection() == 0;

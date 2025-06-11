@@ -315,7 +315,6 @@ public:
         int      grid_index;
         int      sort_code;
         int      annotation_choice;
-        int      report_severity;
         wxString front_refdes_start;
         wxString back_refdes_start;
         wxString front_prefix;

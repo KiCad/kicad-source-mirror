@@ -68,11 +68,11 @@ enum ANNOTATION_SCOPE
 
 struct REFDES_CHANGE
 {
-    KIID        Uuid;
-    wxString    NewRefDes;          // The new reference designation (F_U21)
-    wxString    OldRefDesString;    // What the old refdes preamble + number was
-    bool        Front;              // True if on the front of the board
-    ACTION_CODE  Action;             // Used to skip (if #, etc)
+    KIID         Uuid;
+    wxString     NewRefDes;         // The new reference designation (F_U21)
+    wxString     OldRefDesString;   // What the old refdes preamble + number was
+    bool         Front;             // True if on the front of the board
+    ACTION_CODE  Action;            // Used to skip (if #, etc)
 };
 
 struct REFDES_INFO
@@ -176,9 +176,6 @@ private:
     /// @return the string
     wxString CoordTowxString( int aX, int aY );
 
-    /// Make the text to summarize what is about to happen.
-    void MakeSampleText( wxString& aMessage );
-
     /// Check to make sure the prefix (if there is one) is properly constructed.
     void FilterPrefix( wxTextCtrl* aPrefix );
 
@@ -199,7 +196,6 @@ private:
     int      m_sortCode;
     int      m_gridIndex;
     int      m_annotationScope;
-    int      m_severity;
 
     double   m_sortGridx;
     double   m_sortGridy;
@@ -207,10 +203,6 @@ private:
     wxString m_frontPrefixString;
     wxString m_backPrefixString;
     wxString m_validPrefixes;
-
-    APP_SETTINGS_BASE* m_settings;
-
-    APP_SETTINGS_BASE* m_Config;
 };
 
 #endif /* DIALOG_BOARD_REANNOTATE_H */
