@@ -30,7 +30,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-06-08 17:03+0300\n"
-"PO-Revision-Date: 2025-06-11 07:01+0000\n"
+"PO-Revision-Date: 2025-06-12 11:01+0000\n"
 "Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v9/de/>\n"
 "Language: de\n"
@@ -38363,6 +38363,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:86
 msgid "Distance between parallel lines used for hatching the area"
 msgstr ""
+"Abstand paralleler Linien, die zur Flächenschraffierung verwendet werden"
 
 #: pcbnew/dialogs/dialog_set_offset.cpp:66
 msgid "Reset this value to zero."
@@ -43126,7 +43127,7 @@ msgstr "OCC-Fehler beim Hinzufügen von Pad/Via-Polygonen.\n"
 #: pcbnew/exporters/step/step_pcb_model.cpp:1143
 #, c-format
 msgid "Could not add shape (%d points) to copper layer %s.\n"
-msgstr ""
+msgstr "Konnte Form (%d Punkte) nicht zu Kupferlage %s hinzufügen\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1161
 #, fuzzy, c-format
@@ -43151,12 +43152,12 @@ msgstr "Konnte Komponente mit Dateiname \"%s\" nicht hinzufügen.\n"
 #: pcbnew/exporters/step/step_pcb_model.cpp:1367
 #, c-format
 msgid "OCC exception building shape segment: %s\n"
-msgstr ""
+msgstr "OCC-Exception beim Erzeugen von Formsegement: %s\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1382
 #, c-format
 msgid "OCC exception building face: %s\n"
-msgstr ""
+msgstr "OCC-Exception beim Erzeugen von Fläche: %s\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1394
 #: pcbnew/exporters/step/step_pcb_model.cpp:1763
@@ -43167,11 +43168,12 @@ msgstr "Konnte prismatische Form nicht erstellen\n"
 #, c-format
 msgid "Failed to make segment edge (%d %d) -> (%d %d), skipping\n"
 msgstr ""
+"Konnte Segmentkante (%d %d) -> (%d %d) nicht erzeugen, wird übersprungen\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1458
 #, c-format
 msgid "Failed to add segment edge (%d %d) -> (%d %d)\n"
-msgstr ""
+msgstr "Konnte Segmentkante (%d %d) -> (%d %d) nicht hinzhufügen\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1494
 #, c-format
@@ -43179,16 +43181,18 @@ msgid ""
 "Failed to add arc curve from (%d %d), arc p0 (%d %d), mid (%d %d), p1 (%d "
 "%d)\n"
 msgstr ""
+"Konnte Bogenkurve von (%d %d), Bogen p0 (%d %d), Mitte (%d %d), p1 (%d %d) "
+"nicht hinzufügen\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1570
 #, c-format
 msgid "Failed to close wire at %d, %d -> %d, %d **\n"
-msgstr ""
+msgstr "Konnte Verbindung %d, %d -> %d, %d nicht schließen **\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1580
 #, c-format
 msgid "OCC exception creating wire: %s\n"
-msgstr ""
+msgstr "OCC-Exception beim Erzeugen von Verbindung: %s\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1661
 #, c-format
@@ -43267,10 +43271,12 @@ msgstr "Kann das Ausgabeverzeichnis \"%s\" nicht erstellen."
 #: pcbnew/exporters/step/step_pcb_model.cpp:2322
 msgid "Failed to set STEP product name, but will attempt to continue."
 msgstr ""
+"Konnte STEP-Produktname nicht setzen, aber werde versuchen fort zu fahren."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2330
 msgid "Failed to set surface curve mode, but will attempt to continue."
 msgstr ""
+"Konnte Oberflächenkurvenmodus nicht setzen, aber versuchen fort zu fahren."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2371
 #: pcbnew/exporters/step/step_pcb_model.cpp:3153
