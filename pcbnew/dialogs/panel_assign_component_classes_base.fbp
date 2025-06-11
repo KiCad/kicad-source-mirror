@@ -61,7 +61,7 @@
         <property name="orient">wxVERTICAL</property>
         <property name="permission">none</property>
         <object class="sizeritem" expanded="false">
-          <property name="border">5</property>
+          <property name="border">10</property>
           <property name="flag">wxALL</property>
           <property name="proportion">0</property>
           <object class="wxCheckBox" expanded="false">
@@ -186,7 +186,7 @@
         </object>
         <object class="sizeritem" expanded="true">
           <property name="border">5</property>
-          <property name="flag">wxEXPAND</property>
+          <property name="flag">wxEXPAND|wxRIGHT|wxLEFT</property>
           <property name="proportion">0</property>
           <object class="wxFlexGridSizer" expanded="false">
             <property name="cols">3</property>
@@ -666,7 +666,7 @@
                 <property name="style"></property>
                 <property name="subclass">STD_BITMAP_BUTTON; widgets/std_bitmap_button.h; forward_declare</property>
                 <property name="toolbar_pane">0</property>
-                <property name="tooltip"></property>
+                <property name="tooltip">Highlight matching footprints</property>
                 <property name="validator_data_type"></property>
                 <property name="validator_style">wxFILTER_NONE</property>
                 <property name="validator_type">wxDefaultValidator</property>
@@ -716,7 +716,7 @@
                 <property name="gripper">0</property>
                 <property name="hidden">0</property>
                 <property name="id">wxID_ANY</property>
-                <property name="label">Delete Assignment</property>
+                <property name="label">Delete Row</property>
                 <property name="margins"></property>
                 <property name="markup">0</property>
                 <property name="max_size"></property>
@@ -741,7 +741,7 @@
                 <property name="style"></property>
                 <property name="subclass">STD_BITMAP_BUTTON; widgets/std_bitmap_button.h; forward_declare</property>
                 <property name="toolbar_pane">0</property>
-                <property name="tooltip"></property>
+                <property name="tooltip">Delete row</property>
                 <property name="validator_data_type"></property>
                 <property name="validator_style">wxFILTER_NONE</property>
                 <property name="validator_type">wxDefaultValidator</property>
@@ -1216,7 +1216,7 @@
             <property name="gripper">0</property>
             <property name="hidden">0</property>
             <property name="id">wxID_ANY</property>
-            <property name="label">Delete match</property>
+            <property name="label">Import References</property>
             <property name="margins"></property>
             <property name="markup">0</property>
             <property name="max_size"></property>
@@ -1241,7 +1241,7 @@
             <property name="style"></property>
             <property name="subclass">STD_BITMAP_BUTTON; widgets/std_bitmap_button.h; forward_declare</property>
             <property name="toolbar_pane">0</property>
-            <property name="tooltip"></property>
+            <property name="tooltip">Import references</property>
             <property name="validator_data_type"></property>
             <property name="validator_style">wxFILTER_NONE</property>
             <property name="validator_type">wxDefaultValidator</property>
@@ -1291,7 +1291,7 @@
             <property name="gripper">0</property>
             <property name="hidden">0</property>
             <property name="id">wxID_ANY</property>
-            <property name="label">Delete match</property>
+            <property name="label">Delete Row</property>
             <property name="margins"></property>
             <property name="markup">0</property>
             <property name="max_size"></property>
@@ -1316,7 +1316,7 @@
             <property name="style"></property>
             <property name="subclass">STD_BITMAP_BUTTON; widgets/std_bitmap_button.h; forward_declare</property>
             <property name="toolbar_pane">0</property>
-            <property name="tooltip"></property>
+            <property name="tooltip">Delete row</property>
             <property name="validator_data_type"></property>
             <property name="validator_style">wxFILTER_NONE</property>
             <property name="validator_type">wxDefaultValidator</property>
@@ -1542,7 +1542,7 @@
             <property name="gripper">0</property>
             <property name="hidden">0</property>
             <property name="id">wxID_ANY</property>
-            <property name="label">Delete match</property>
+            <property name="label">Delete Row</property>
             <property name="margins"></property>
             <property name="markup">0</property>
             <property name="max_size"></property>
@@ -1567,7 +1567,7 @@
             <property name="style"></property>
             <property name="subclass">STD_BITMAP_BUTTON; widgets/std_bitmap_button.h; forward_declare</property>
             <property name="toolbar_pane">0</property>
-            <property name="tooltip"></property>
+            <property name="tooltip">Delete row</property>
             <property name="validator_data_type"></property>
             <property name="validator_style">wxFILTER_NONE</property>
             <property name="validator_type">wxDefaultValidator</property>
@@ -1855,7 +1855,7 @@
             <property name="gripper">0</property>
             <property name="hidden">0</property>
             <property name="id">wxID_ANY</property>
-            <property name="label">Delete match</property>
+            <property name="label">Delete Row</property>
             <property name="margins"></property>
             <property name="markup">0</property>
             <property name="max_size"></property>
@@ -1880,7 +1880,7 @@
             <property name="style"></property>
             <property name="subclass">STD_BITMAP_BUTTON; widgets/std_bitmap_button.h; forward_declare</property>
             <property name="toolbar_pane">0</property>
-            <property name="tooltip"></property>
+            <property name="tooltip">Delete row</property>
             <property name="validator_data_type"></property>
             <property name="validator_style">wxFILTER_NONE</property>
             <property name="validator_type">wxDefaultValidator</property>
@@ -2105,7 +2105,7 @@
             <property name="gripper">0</property>
             <property name="hidden">0</property>
             <property name="id">wxID_ANY</property>
-            <property name="label">Delete match</property>
+            <property name="label">Show Library</property>
             <property name="margins"></property>
             <property name="markup">0</property>
             <property name="max_size"></property>
@@ -2130,7 +2130,7 @@
             <property name="style"></property>
             <property name="subclass">STD_BITMAP_BUTTON; widgets/std_bitmap_button.h; forward_declare</property>
             <property name="toolbar_pane">0</property>
-            <property name="tooltip"></property>
+            <property name="tooltip">Show library</property>
             <property name="validator_data_type"></property>
             <property name="validator_style">wxFILTER_NONE</property>
             <property name="validator_type">wxDefaultValidator</property>
@@ -2190,7 +2190,7 @@
             <property name="gripper">0</property>
             <property name="hidden">0</property>
             <property name="id">wxID_ANY</property>
-            <property name="label">Delete match</property>
+            <property name="label">Delete Row</property>
             <property name="margins"></property>
             <property name="markup">0</property>
             <property name="max_size"></property>
@@ -2215,7 +2215,7 @@
             <property name="style"></property>
             <property name="subclass">STD_BITMAP_BUTTON; widgets/std_bitmap_button.h; forward_declare</property>
             <property name="toolbar_pane">0</property>
-            <property name="tooltip"></property>
+            <property name="tooltip">Delete row</property>
             <property name="validator_data_type"></property>
             <property name="validator_style">wxFILTER_NONE</property>
             <property name="validator_type">wxDefaultValidator</property>
@@ -2578,7 +2578,7 @@
             <property name="gripper">0</property>
             <property name="hidden">0</property>
             <property name="id">wxID_ANY</property>
-            <property name="label">Delete match</property>
+            <property name="label">Delete Row</property>
             <property name="margins"></property>
             <property name="markup">0</property>
             <property name="max_size"></property>
@@ -2603,7 +2603,7 @@
             <property name="style"></property>
             <property name="subclass">STD_BITMAP_BUTTON; widgets/std_bitmap_button.h; forward_declare</property>
             <property name="toolbar_pane">0</property>
-            <property name="tooltip"></property>
+            <property name="tooltip">Delete row</property>
             <property name="validator_data_type"></property>
             <property name="validator_style">wxFILTER_NONE</property>
             <property name="validator_type">wxDefaultValidator</property>
@@ -2828,7 +2828,7 @@
             <property name="gripper">0</property>
             <property name="hidden">0</property>
             <property name="id">wxID_ANY</property>
-            <property name="label">Delete match</property>
+            <property name="label">Delete Row</property>
             <property name="margins"></property>
             <property name="markup">0</property>
             <property name="max_size"></property>
@@ -2853,7 +2853,7 @@
             <property name="style"></property>
             <property name="subclass">STD_BITMAP_BUTTON; widgets/std_bitmap_button.h; forward_declare</property>
             <property name="toolbar_pane">0</property>
-            <property name="tooltip"></property>
+            <property name="tooltip">Delete row</property>
             <property name="validator_data_type"></property>
             <property name="validator_style">wxFILTER_NONE</property>
             <property name="validator_type">wxDefaultValidator</property>
@@ -2881,7 +2881,7 @@
       <property name="id">wxID_ANY</property>
       <property name="maximum_size"></property>
       <property name="minimum_size"></property>
-      <property name="name">PANEL_COMPONENT_CLASS_SHEET_BASE</property>
+      <property name="name">PANEL_COMPONENT_CLASS_CONDITION_SHEET_BASE</property>
       <property name="pos"></property>
       <property name="size">-1,-1</property>
       <property name="subclass">; ; forward_declare</property>
@@ -3079,7 +3079,7 @@
             <property name="gripper">0</property>
             <property name="hidden">0</property>
             <property name="id">wxID_ANY</property>
-            <property name="label">Delete match</property>
+            <property name="label">Delete Row</property>
             <property name="margins"></property>
             <property name="markup">0</property>
             <property name="max_size"></property>
@@ -3104,7 +3104,7 @@
             <property name="style"></property>
             <property name="subclass">STD_BITMAP_BUTTON; widgets/std_bitmap_button.h; forward_declare</property>
             <property name="toolbar_pane">0</property>
-            <property name="tooltip"></property>
+            <property name="tooltip">Delete row</property>
             <property name="validator_data_type"></property>
             <property name="validator_style">wxFILTER_NONE</property>
             <property name="validator_type">wxDefaultValidator</property>

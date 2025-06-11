@@ -18,10 +18,10 @@ PANEL_SETUP_TEARDROPS_BASE::PANEL_SETUP_TEARDROPS_BASE( wxWindow* parent, wxWind
 
 	m_roundShapesLabel = new wxStaticText( this, wxID_ANY, _("Default Properties for Round Shapes"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_roundShapesLabel->Wrap( -1 );
-	m_gridSizer->Add( m_roundShapesLabel, 0, wxTOP|wxRIGHT|wxLEFT, 8 );
+	m_gridSizer->Add( m_roundShapesLabel, 0, wxTOP|wxRIGHT|wxLEFT, 13 );
 
 	m_staticline1 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	m_gridSizer->Add( m_staticline1, 0, wxEXPAND|wxBOTTOM, 10 );
+	m_gridSizer->Add( m_staticline1, 0, wxEXPAND|wxTOP|wxBOTTOM, 2 );
 
 	wxBoxSizer* bSizerShapeColumns;
 	bSizerShapeColumns = new wxBoxSizer( wxHORIZONTAL );
@@ -181,17 +181,17 @@ PANEL_SETUP_TEARDROPS_BASE::PANEL_SETUP_TEARDROPS_BASE( wxWindow* parent, wxWind
 	bSizerShapeColumns->Add( gbSizer, 0, wxEXPAND|wxLEFT, 20 );
 
 
-	m_gridSizer->Add( bSizerShapeColumns, 1, wxEXPAND, 5 );
+	m_gridSizer->Add( bSizerShapeColumns, 1, wxEXPAND|wxTOP, 5 );
 
 
 	m_gridSizer->Add( 0, 10, 0, wxEXPAND, 5 );
 
 	m_rectShapesLabel = new wxStaticText( this, wxID_ANY, _("Default Properties for Rectangular Shapes"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_rectShapesLabel->Wrap( -1 );
-	m_gridSizer->Add( m_rectShapesLabel, 0, wxTOP|wxRIGHT|wxLEFT, 8 );
+	m_gridSizer->Add( m_rectShapesLabel, 0, wxTOP|wxRIGHT|wxLEFT, 13 );
 
 	m_staticline2 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	m_gridSizer->Add( m_staticline2, 0, wxEXPAND|wxBOTTOM, 10 );
+	m_gridSizer->Add( m_staticline2, 0, wxEXPAND|wxTOP|wxBOTTOM, 2 );
 
 	wxBoxSizer* bSizerShapeColumns1;
 	bSizerShapeColumns1 = new wxBoxSizer( wxHORIZONTAL );
@@ -351,17 +351,17 @@ PANEL_SETUP_TEARDROPS_BASE::PANEL_SETUP_TEARDROPS_BASE( wxWindow* parent, wxWind
 	bSizerShapeColumns1->Add( gbSizer1, 0, wxEXPAND|wxLEFT, 20 );
 
 
-	m_gridSizer->Add( bSizerShapeColumns1, 1, wxEXPAND, 5 );
+	m_gridSizer->Add( bSizerShapeColumns1, 1, wxEXPAND|wxTOP, 5 );
 
 
 	m_gridSizer->Add( 0, 10, 0, wxEXPAND, 5 );
 
 	m_tracksLabel = new wxStaticText( this, wxID_ANY, _("Properties for Track-to-Track Teardrops"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_tracksLabel->Wrap( -1 );
-	m_gridSizer->Add( m_tracksLabel, 0, wxTOP|wxRIGHT|wxLEFT, 8 );
+	m_gridSizer->Add( m_tracksLabel, 0, wxTOP|wxRIGHT|wxLEFT, 13 );
 
 	m_staticline3 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	m_gridSizer->Add( m_staticline3, 0, wxEXPAND|wxBOTTOM, 10 );
+	m_gridSizer->Add( m_staticline3, 0, wxEXPAND|wxTOP|wxBOTTOM, 2 );
 
 	wxBoxSizer* bSizerShapeColumns2;
 	bSizerShapeColumns2 = new wxBoxSizer( wxHORIZONTAL );
@@ -516,7 +516,7 @@ PANEL_SETUP_TEARDROPS_BASE::PANEL_SETUP_TEARDROPS_BASE( wxWindow* parent, wxWind
 	bSizerShapeColumns2->Add( gbSizer2, 0, wxEXPAND|wxLEFT, 20 );
 
 
-	m_gridSizer->Add( bSizerShapeColumns2, 1, wxEXPAND, 5 );
+	m_gridSizer->Add( bSizerShapeColumns2, 1, wxEXPAND|wxTOP, 5 );
 
 
 	m_gridSizer->Add( 0, 5, 0, wxEXPAND, 5 );

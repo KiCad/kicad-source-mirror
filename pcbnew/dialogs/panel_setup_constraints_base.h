@@ -16,13 +16,13 @@
 #include <wx/font.h>
 #include <wx/colour.h>
 #include <wx/settings.h>
+#include <wx/statline.h>
 #include <wx/bitmap.h>
 #include <wx/image.h>
 #include <wx/icon.h>
 #include <wx/statbmp.h>
 #include <wx/textctrl.h>
 #include <wx/valtext.h>
-#include <wx/statline.h>
 #include <wx/sizer.h>
 #include <wx/checkbox.h>
 #include <wx/spinctrl.h>
@@ -40,6 +40,10 @@ class PANEL_SETUP_CONSTRAINTS_BASE : public wxPanel
 
 	protected:
 		wxStaticText* m_staticText23;
+		wxStaticLine* m_staticline151;
+		wxStaticLine* m_staticline16;
+		wxStaticLine* m_staticline17;
+		wxStaticLine* m_staticline18;
 		wxStaticBitmap* m_bitmapClearance;
 		wxStaticText* m_clearanceTitle;
 		wxTextCtrl* m_clearanceCtrl;
@@ -72,11 +76,11 @@ class PANEL_SETUP_CONSTRAINTS_BASE : public wxPanel
 		wxStaticText* m_minGrooveWidthLabel;
 		wxTextCtrl* m_minGrooveWidthCtrl;
 		wxStaticText* m_minGrooveWidthUnits;
+		wxStaticText* m_staticText24;
 		wxStaticLine* m_staticline3;
 		wxStaticLine* m_staticline4;
 		wxStaticLine* m_staticline5;
 		wxStaticLine* m_staticline6;
-		wxStaticText* m_staticText24;
 		wxStaticBitmap* m_bitmapMinViaDrill;
 		wxStaticText* m_MinDrillTitle;
 		wxTextCtrl* m_MinDrillCtrl;
@@ -85,11 +89,11 @@ class PANEL_SETUP_CONSTRAINTS_BASE : public wxPanel
 		wxStaticText* m_HoleToHoleTitle;
 		wxTextCtrl* m_SetHoleToHoleCtrl;
 		wxStaticText* m_HoleToHoleUnits;
+		wxStaticText* m_staticText25;
 		wxStaticLine* m_staticline8;
 		wxStaticLine* m_staticline9;
 		wxStaticLine* m_staticline10;
 		wxStaticLine* m_staticline11;
-		wxStaticText* m_staticText25;
 		wxStaticBitmap* m_bitmapMinuViaDiameter;
 		wxStaticText* m_uviaMinSizeLabel;
 		wxTextCtrl* m_uviaMinSizeCtrl;
@@ -98,11 +102,11 @@ class PANEL_SETUP_CONSTRAINTS_BASE : public wxPanel
 		wxStaticText* m_uviaMinDrillLabel;
 		wxTextCtrl* m_uviaMinDrillCtrl;
 		wxStaticText* m_uviaMinDrillUnits;
+		wxStaticText* m_staticText28;
 		wxStaticLine* m_staticline111;
 		wxStaticLine* m_staticline12;
 		wxStaticLine* m_staticline13;
 		wxStaticLine* m_staticline14;
-		wxStaticText* m_staticText28;
 		wxStaticText* m_silkClearanceLabel;
 		wxTextCtrl* m_silkClearanceCtrl;
 		wxStaticText* m_silkClearanceUnits;
@@ -113,20 +117,21 @@ class PANEL_SETUP_CONSTRAINTS_BASE : public wxPanel
 		wxTextCtrl* m_textThicknessCtrl;
 		wxStaticText* m_textThicknessUnits;
 		wxStaticText* m_stCircleToPolyOpt;
+		wxStaticLine* m_staticline19;
 		wxStaticText* m_maxErrorTitle;
 		wxTextCtrl* m_maxErrorCtrl;
 		wxStaticText* m_maxErrorUnits;
 		wxStaticText* m_stCircleToPolyWarning;
 		wxBoxSizer* m_bSizerPolygonFillOption;
-		wxStaticLine* m_staticline1;
 		wxStaticText* m_stZoneFilledPolysOpt;
+		wxStaticLine* m_staticline1;
 		wxStaticBitmap* m_filletBitmap;
 		wxCheckBox* m_allowExternalFilletsOpt;
 		wxStaticBitmap* m_spokeBitmap;
 		wxStaticText* m_minResolvedSpokesLabel;
 		wxSpinCtrl* m_minResolvedSpokeCountCtrl;
-		wxStaticLine* m_staticline15;
 		wxStaticText* m_staticText33;
+		wxStaticLine* m_staticline15;
 		wxCheckBox* m_useHeightForLengthCalcs;
 
 	public:

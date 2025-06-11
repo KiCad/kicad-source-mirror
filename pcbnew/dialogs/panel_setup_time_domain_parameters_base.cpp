@@ -61,7 +61,7 @@ PANEL_SETUP_TIME_DOMAIN_PARAMETERS_BASE::PANEL_SETUP_TIME_DOMAIN_PARAMETERS_BASE
 
 	// Cell Defaults
 	m_tracePropagationGrid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_CENTER );
-	bUpperSizer->Add( m_tracePropagationGrid, 1, wxEXPAND|wxFIXED_MINSIZE|wxLEFT|wxRIGHT|wxTOP, 5 );
+	bUpperSizer->Add( m_tracePropagationGrid, 1, wxEXPAND|wxFIXED_MINSIZE|wxRIGHT|wxLEFT, 5 );
 
 	wxBoxSizer* buttonBoxSizer;
 	buttonBoxSizer = new wxBoxSizer( wxHORIZONTAL );
@@ -126,7 +126,7 @@ PANEL_SETUP_TIME_DOMAIN_PARAMETERS_BASE::PANEL_SETUP_TIME_DOMAIN_PARAMETERS_BASE
 
 	// Cell Defaults
 	m_viaPropagationGrid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_CENTER );
-	bUpperSizer1->Add( m_viaPropagationGrid, 1, wxEXPAND|wxFIXED_MINSIZE|wxLEFT|wxRIGHT|wxTOP, 5 );
+	bUpperSizer1->Add( m_viaPropagationGrid, 1, wxEXPAND|wxFIXED_MINSIZE|wxRIGHT|wxLEFT, 5 );
 
 	wxBoxSizer* buttonBoxSizer1;
 	buttonBoxSizer1 = new wxBoxSizer( wxHORIZONTAL );

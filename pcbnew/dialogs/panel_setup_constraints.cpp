@@ -79,9 +79,10 @@ PANEL_SETUP_CONSTRAINTS::PANEL_SETUP_CONSTRAINTS( wxWindow* aParentWindow, PCB_E
 
     if( !ADVANCED_CFG::GetCfg().m_EnableCreepageSlot )
     {
+        m_bitmapMinGrooveWidth->Show( false );
+        m_minGrooveWidthLabel->Show( false );
         m_minGrooveWidthCtrl->Show( false );
         m_minGrooveWidthUnits->Show( false );
-        m_minGrooveWidthLabel->Show( false );
     }
 }
 

@@ -85,7 +85,7 @@ PANEL_EMBEDDED_FILES_BASE::PANEL_EMBEDDED_FILES_BASE( wxWindow* parent, wxWindow
 	bButtonsSizer->Add( m_export, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 
-	bMainSizer->Add( bButtonsSizer, 0, wxBOTTOM|wxEXPAND|wxTOP, 3 );
+	bMainSizer->Add( bButtonsSizer, 0, wxEXPAND|wxBOTTOM, 3 );
 
 	wxBoxSizer* bSizer4;
 	bSizer4 = new wxBoxSizer( wxVERTICAL );

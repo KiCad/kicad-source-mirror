@@ -17,7 +17,7 @@ PANEL_ASSIGN_COMPONENT_CLASSES_BASE::PANEL_ASSIGN_COMPONENT_CLASSES_BASE( wxWind
 	bSizerMain = new wxBoxSizer( wxVERTICAL );
 
 	m_assignSheetClasses = new wxCheckBox( this, wxID_ANY, _("Assign component class per sheet"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizerMain->Add( m_assignSheetClasses, 0, wxALL, 5 );
+	bSizerMain->Add( m_assignSheetClasses, 0, wxALL, 10 );
 
 	m_staticline1 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
 	bSizerMain->Add( m_staticline1, 0, wxEXPAND | wxALL, 5 );
@@ -39,7 +39,7 @@ PANEL_ASSIGN_COMPONENT_CLASSES_BASE::PANEL_ASSIGN_COMPONENT_CLASSES_BASE( wxWind
 	fgSizer8->Add( m_btnAddAssignment, 0, wxALL, 5 );
 
 
-	bSizerMain->Add( fgSizer8, 0, wxEXPAND, 5 );
+	bSizerMain->Add( fgSizer8, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 
 	m_assignmentsScrollWindow = new wxScrolledWindow( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxHSCROLL|wxVSCROLL );
 	m_assignmentsScrollWindow->SetScrollRate( 5, 5 );
@@ -92,9 +92,13 @@ PANEL_COMPONENT_CLASS_ASSIGNMENT_BASE::PANEL_COMPONENT_CLASS_ASSIGNMENT_BASE( wx
 	m_header->Add( 10, 0, 1, wxEXPAND, 5 );
 
 	m_buttonHighlightItems = new STD_BITMAP_BUTTON( m_assignmentGroup->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
+	m_buttonHighlightItems->SetToolTip( _("Highlight matching footprints") );
+
 	m_header->Add( m_buttonHighlightItems, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
 	m_buttonDeleteAssignment = new STD_BITMAP_BUTTON( m_assignmentGroup->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
+	m_buttonDeleteAssignment->SetToolTip( _("Delete row") );
+
 	m_header->Add( m_buttonDeleteAssignment, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
 
@@ -171,9 +175,13 @@ PANEL_COMPONENT_CLASS_CONDITION_REFERENCE_BASE::PANEL_COMPONENT_CLASS_CONDITION_
 	m_conditionSizer->Add( 10, 0, 1, wxEXPAND, 5 );
 
 	m_buttonImportRefs = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
+	m_buttonImportRefs->SetToolTip( _("Import references") );
+
 	m_conditionSizer->Add( m_buttonImportRefs, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
 	m_buttonDeleteMatch = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
+	m_buttonDeleteMatch->SetToolTip( _("Delete row") );
+
 	m_conditionSizer->Add( m_buttonDeleteMatch, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
 
@@ -219,6 +227,8 @@ PANEL_COMPONENT_CLASS_CONDITION_SIDE_BASE::PANEL_COMPONENT_CLASS_CONDITION_SIDE_
 	m_conditionSizer->Add( 10, 0, 1, wxEXPAND, 5 );
 
 	m_buttonDeleteMatch = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
+	m_buttonDeleteMatch->SetToolTip( _("Delete row") );
+
 	m_conditionSizer->Add( m_buttonDeleteMatch, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
 
@@ -264,6 +274,8 @@ PANEL_COMPONENT_CLASS_CONDITION_ROTATION_BASE::PANEL_COMPONENT_CLASS_CONDITION_R
 	m_conditionSizer->Add( 10, 0, 1, wxEXPAND, 5 );
 
 	m_buttonDeleteMatch = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
+	m_buttonDeleteMatch->SetToolTip( _("Delete row") );
+
 	m_conditionSizer->Add( m_buttonDeleteMatch, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
 
@@ -304,12 +316,16 @@ PANEL_COMPONENT_CLASS_CONDITION_FOOTPRINT_BASE::PANEL_COMPONENT_CLASS_CONDITION_
 	m_conditionSizer->Add( 10, 0, 1, wxEXPAND, 5 );
 
 	m_buttonShowLibrary = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
+	m_buttonShowLibrary->SetToolTip( _("Show library") );
+
 	m_conditionSizer->Add( m_buttonShowLibrary, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
 
 	m_conditionSizer->Add( 10, 0, 1, wxEXPAND, 5 );
 
 	m_buttonDeleteMatch = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
+	m_buttonDeleteMatch->SetToolTip( _("Delete row") );
+
 	m_conditionSizer->Add( m_buttonDeleteMatch, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
 
@@ -370,6 +386,8 @@ PANEL_COMPONENT_CLASS_CONDITION_FIELD_BASE::PANEL_COMPONENT_CLASS_CONDITION_FIEL
 	m_conditionSizer->Add( 10, 0, 1, wxEXPAND, 5 );
 
 	m_buttonDeleteMatch = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
+	m_buttonDeleteMatch->SetToolTip( _("Delete row") );
+
 	m_conditionSizer->Add( m_buttonDeleteMatch, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
 
@@ -411,6 +429,8 @@ PANEL_COMPONENT_CLASS_CONDITION_CUSTOM_BASE::PANEL_COMPONENT_CLASS_CONDITION_CUS
 	m_conditionSizer->Add( 10, 0, 1, wxEXPAND, 5 );
 
 	m_buttonDeleteMatch = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
+	m_buttonDeleteMatch->SetToolTip( _("Delete row") );
+
 	m_conditionSizer->Add( m_buttonDeleteMatch, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
 
@@ -452,6 +472,8 @@ PANEL_COMPONENT_CLASS_CONDITION_SHEET_BASE::PANEL_COMPONENT_CLASS_CONDITION_SHEE
 	m_conditionSizer->Add( 10, 0, 1, wxEXPAND, 5 );
 
 	m_buttonDeleteMatch = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
+	m_buttonDeleteMatch->SetToolTip( _("Delete row") );
+
 	m_conditionSizer->Add( m_buttonDeleteMatch, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
 

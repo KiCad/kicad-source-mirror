@@ -264,7 +264,7 @@
                       </object>
                       <object class="sizeritem" expanded="false">
                         <property name="border">5</property>
-                        <property name="flag">wxEXPAND|wxFIXED_MINSIZE|wxLEFT|wxRIGHT|wxTOP</property>
+                        <property name="flag">wxEXPAND|wxFIXED_MINSIZE|wxRIGHT|wxLEFT</property>
                         <property name="proportion">1</property>
                         <object class="wxGrid" expanded="false">
                           <property name="BottomDockable">1</property>
@@ -668,7 +668,7 @@
                       </object>
                       <object class="sizeritem" expanded="true">
                         <property name="border">5</property>
-                        <property name="flag">wxEXPAND|wxFIXED_MINSIZE|wxLEFT|wxRIGHT|wxTOP</property>
+                        <property name="flag">wxEXPAND|wxFIXED_MINSIZE|wxRIGHT|wxLEFT</property>
                         <property name="proportion">1</property>
                         <object class="wxGrid" expanded="true">
                           <property name="BottomDockable">1</property>

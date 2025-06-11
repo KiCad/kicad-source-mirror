@@ -18,10 +18,10 @@ PANEL_SETUP_TUNING_PATTERNS_BASE::PANEL_SETUP_TUNING_PATTERNS_BASE( wxWindow* pa
 
 	m_singleTrackLabel = new wxStaticText( this, wxID_ANY, _("Default Properties for Single Track Tuning"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_singleTrackLabel->Wrap( -1 );
-	bMainSizer->Add( m_singleTrackLabel, 0, wxTOP|wxRIGHT|wxLEFT, 8 );
+	bMainSizer->Add( m_singleTrackLabel, 0, wxTOP|wxRIGHT|wxLEFT, 13 );
 
 	m_staticline1 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	bMainSizer->Add( m_staticline1, 0, wxEXPAND|wxBOTTOM, 10 );
+	bMainSizer->Add( m_staticline1, 0, wxEXPAND|wxTOP|wxBOTTOM, 2 );
 
 	wxBoxSizer* singleTrackSizer;
 	singleTrackSizer = new wxBoxSizer( wxHORIZONTAL );
@@ -140,17 +140,17 @@ PANEL_SETUP_TUNING_PATTERNS_BASE::PANEL_SETUP_TUNING_PATTERNS_BASE( wxWindow* pa
 	singleTrackSizer->Add( fgSizer3, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 
 
-	bMainSizer->Add( singleTrackSizer, 0, wxEXPAND|wxRIGHT, 5 );
+	bMainSizer->Add( singleTrackSizer, 0, wxEXPAND|wxTOP|wxRIGHT, 5 );
 
 
 	bMainSizer->Add( 0, 10, 0, wxEXPAND, 5 );
 
 	m_diffPairsLabel = new wxStaticText( this, wxID_ANY, _("Default Properties for Differential Pairs"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_diffPairsLabel->Wrap( -1 );
-	bMainSizer->Add( m_diffPairsLabel, 0, wxTOP|wxRIGHT|wxLEFT, 8 );
+	bMainSizer->Add( m_diffPairsLabel, 0, wxTOP|wxRIGHT|wxLEFT, 13 );
 
 	m_staticline11 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	bMainSizer->Add( m_staticline11, 0, wxEXPAND|wxBOTTOM, 10 );
+	bMainSizer->Add( m_staticline11, 0, wxEXPAND|wxTOP|wxBOTTOM, 2 );
 
 	wxBoxSizer* diffPairSizer;
 	diffPairSizer = new wxBoxSizer( wxHORIZONTAL );
@@ -269,17 +269,17 @@ PANEL_SETUP_TUNING_PATTERNS_BASE::PANEL_SETUP_TUNING_PATTERNS_BASE( wxWindow* pa
 	diffPairSizer->Add( fgSizer32, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 
 
-	bMainSizer->Add( diffPairSizer, 0, wxEXPAND|wxRIGHT, 5 );
+	bMainSizer->Add( diffPairSizer, 0, wxEXPAND|wxTOP|wxRIGHT, 5 );
 
 
 	bMainSizer->Add( 0, 10, 0, wxEXPAND, 5 );
 
 	m_diffPairsLabel1 = new wxStaticText( this, wxID_ANY, _("Default Properties for Differential Pair Skews"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_diffPairsLabel1->Wrap( -1 );
-	bMainSizer->Add( m_diffPairsLabel1, 0, wxTOP|wxRIGHT|wxLEFT, 8 );
+	bMainSizer->Add( m_diffPairsLabel1, 0, wxTOP|wxRIGHT|wxLEFT, 13 );
 
 	m_staticline111 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	bMainSizer->Add( m_staticline111, 0, wxEXPAND|wxBOTTOM, 10 );
+	bMainSizer->Add( m_staticline111, 0, wxEXPAND|wxTOP|wxBOTTOM, 2 );
 
 	wxBoxSizer* skewSizer;
 	skewSizer = new wxBoxSizer( wxHORIZONTAL );
@@ -398,7 +398,7 @@ PANEL_SETUP_TUNING_PATTERNS_BASE::PANEL_SETUP_TUNING_PATTERNS_BASE( wxWindow* pa
 	skewSizer->Add( fgSizer31, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 
 
-	bMainSizer->Add( skewSizer, 0, wxEXPAND|wxBOTTOM|wxRIGHT, 5 );
+	bMainSizer->Add( skewSizer, 0, wxEXPAND|wxTOP|wxBOTTOM|wxRIGHT, 5 );
 
 
 	this->SetSizer( bMainSizer );
