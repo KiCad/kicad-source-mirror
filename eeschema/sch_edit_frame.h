@@ -609,6 +609,8 @@ public:
      * @param aItem The junction to delete
      */
     void DeleteJunction( SCH_COMMIT* aCommit, SCH_ITEM* aItem );
+    
+    void UpdateHopOveredWires( SCH_ITEM* aItem );
 
     void FlipBodyStyle( SCH_SYMBOL* aSymbol );
 

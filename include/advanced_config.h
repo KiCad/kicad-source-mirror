@@ -714,6 +714,15 @@ public:
     double m_MinimumMarkerSeparationDistance;
 
     /**
+     * Default value for the Hop-Over Arc Radius, used to calculate the arc radius by multiplying
+     * the line width when drawing a hop-over in scenarios where a wire crosses another.
+     *
+     * Setting name: "HopOverArcRadius"
+     * Default value: 2.5
+     */
+    double m_hopOverArcRadius;
+
+    /**
      * When updating the net inspector, it either recalculates all nets or iterates through items
      * one-by-one. This value controls the threshold at which all nets are recalculated rather than
      * iterating over the items.

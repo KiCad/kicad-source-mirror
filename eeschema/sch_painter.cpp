@@ -1480,23 +1480,140 @@ void SCH_PAINTER::draw( const SCH_LINE* aLine, int aLayer )
     m_gal->SetStrokeColor( color );
     m_gal->SetLineWidth( width );
 
-    if( lineStyle <= LINE_STYLE::FIRST_TYPE || drawingShadows )
+    VECTOR2I currentLineStartPoint = aLine->GetStartPoint();
+    VECTOR2I currentLineEndPoint = aLine->GetEndPoint();
+
+    std::vector<SCH_LINE*> existingLines;
+    existingLines.clear();
+
+    if( aLine->IsWire() )
     {
-        m_gal->DrawLine( aLine->GetStartPoint(), aLine->GetEndPoint() );
+        SCH_SCREEN* curr_screen = m_schematic->GetCurrentScreen();
+
+        for( SCH_ITEM* item : curr_screen->Items().Overlapping( SCH_LINE_T, aLine->GetBoundingBox() ) )
+        {
+            SCH_LINE* line = static_cast<SCH_LINE*>( item );
+
+            if( line->IsWire() )
+                existingLines.push_back( line );
+        }
+    }
+
+    std::vector<VECTOR2I> intersections;
+
+    for( SCH_LINE* existingLine : existingLines )
+    {
+        VECTOR2I extLineStartPoint = existingLine->GetStartPoint();
+        VECTOR2I extLineEndPoint = existingLine->GetEndPoint();
+
+        if( extLineStartPoint == currentLineStartPoint && extLineEndPoint == currentLineEndPoint )
+            continue;
+
+        if( !aLine->ShouldHopOver( existingLine ) )
+            continue;
+
+        SEG currentSegment = SEG( currentLineStartPoint, currentLineEndPoint );
+        SEG existingSegment = SEG( extLineStartPoint, extLineEndPoint );
+
+        if( OPT_VECTOR2I intersect = currentSegment.Intersect( existingSegment, true, false ) )
+        {
+            if( aLine->IsEndPoint( *intersect ) || existingLine->IsEndPoint( *intersect ) )
+                continue;
+
+            intersections.push_back( *intersect );
+        }
+    }
+
+
+    if( intersections.empty() )
+    {
+        drawLine( currentLineStartPoint, currentLineEndPoint, lineStyle,
+                  ( lineStyle <= LINE_STYLE::FIRST_TYPE || drawingShadows ), width );
     }
     else
     {
-        SHAPE_SEGMENT line( aLine->GetStartPoint(), aLine->GetEndPoint() );
+        auto getDistance = []( const VECTOR2I& a, const VECTOR2I& b ) -> double
+        {
+            return std::sqrt( std::pow( a.x - b.x, 2 ) + std::pow( a.y - b.y, 2 ) );
+        };
 
-        STROKE_PARAMS::Stroke( &line, lineStyle, KiROUND( width ), &m_schSettings,
-                [&]( const VECTOR2I& a, const VECTOR2I& b )
-                {
-                    // DrawLine has problem with 0 length lines so enforce minimum
-                    if( a == b )
-                        m_gal->DrawLine( a+1, b );
-                    else
-                        m_gal->DrawLine( a, b );
-                } );
+        std::sort( intersections.begin(), intersections.end(),
+                   [&]( const VECTOR2I& a, const VECTOR2I& b )
+                   {
+                       return getDistance( aLine->GetStartPoint(), a )
+                              < getDistance( aLine->GetStartPoint(), b );
+                   } );
+
+        VECTOR2I currentStart = aLine->GetStartPoint();
+        float    lineWidth = getLineWidth( aLine, drawingShadows, drawingNetColorHighlights );
+        float    arcRadius = lineWidth * ADVANCED_CFG::GetCfg().m_hopOverArcRadius;
+
+        for( const VECTOR2I& hopMid : intersections )
+        {
+            // Calculate the angle of the line from start point to end point in radians
+            double lineAngle = std::atan2( aLine->GetEndPoint().y - aLine->GetStartPoint().y,
+                                          aLine->GetEndPoint().x - aLine->GetStartPoint().x );
+
+            // Convert the angle from radians to degrees
+            double lineAngleDeg = lineAngle * ( 180.0f / M_PI );
+
+            // Normalize the angle to be between 0 and 360 degrees
+            if( lineAngleDeg < 0 )
+                lineAngleDeg += 360;
+
+            double startAngle = lineAngleDeg;
+            double endAngle = startAngle + 180.0f;
+
+            // Adjust the end angle if it exceeds 360 degrees
+            if( endAngle >= 360.0 )
+                endAngle -= 360.0;
+
+            // Convert start and end angles from degrees to radians
+            double startAngleRad = startAngle * ( M_PI / 180.0f );
+            double endAngleRad = endAngle * ( M_PI / 180.0f );
+
+            VECTOR2I arcStartPoint = {
+                hopMid.x + static_cast<int>( arcRadius * cos( startAngleRad ) ),
+                hopMid.y + static_cast<int>( arcRadius * sin( startAngleRad ) )
+            };
+
+            VECTOR2I arcEndPoint = { hopMid.x + static_cast<int>( arcRadius * cos( endAngleRad ) ),
+                                     hopMid.y
+                                             + static_cast<int>( arcRadius * sin( endAngleRad ) ) };
+
+            VECTOR2I arcMidPoint = {
+                hopMid.x + static_cast<int>( arcRadius
+                                            * cos( ( startAngleRad + endAngleRad ) / 2.0f ) ),
+                hopMid.y + static_cast<int>( arcRadius
+                                            * sin( ( startAngleRad + endAngleRad ) / 2.0f ) )
+            };
+
+            VECTOR2I beforeHop = hopMid - VECTOR2I( arcRadius * std::cos( lineAngle ),
+                                             arcRadius * std::sin( lineAngle ) );
+            VECTOR2I afterHop = hopMid + VECTOR2I( arcRadius * std::cos( lineAngle ),
+                                            arcRadius * std::sin( lineAngle ) );
+
+            // Draw the line from the current start point to the before-hop point
+            drawLine( currentStart, beforeHop, lineStyle,
+                      ( lineStyle <= LINE_STYLE::FIRST_TYPE || drawingShadows ), width );
+
+            // Create an arc object and draw it using the stroke function
+            SHAPE_ARC arc( arcStartPoint, arcMidPoint, arcEndPoint, lineWidth );
+            STROKE_PARAMS::Stroke( &arc, LINE_STYLE::DASH, KiROUND( width ), &m_schSettings,
+                                   [&]( const VECTOR2I& start, const VECTOR2I& end )
+                                   {
+                                       if( start == end )
+                                           m_gal->DrawLine( start + 1, end );
+                                       else
+                                           m_gal->DrawLine( start, end );
+                                   } );
+
+            currentStart = afterHop;
+        }
+
+        // Draw the final line from the current start point to the end point of the original line
+        drawLine( currentStart, aLine->GetEndPoint(), lineStyle,
+                  ( lineStyle <= LINE_STYLE::FIRST_TYPE || drawingShadows ), width );
     }
 }
 
@@ -3109,6 +3226,28 @@ void SCH_PAINTER::draw( const SCH_GROUP* aGroup, int aLayer )
             KIFONT::FONT::GetFont()->Draw( m_gal, aGroup->GetName(), topLeft + textOffset, attrs,
                                            aGroup->GetFontMetrics() );
         }
+    }
+}
+
+void SCH_PAINTER::drawLine( const VECTOR2I& aStartPoint, const VECTOR2I& aEndPoint,
+                            LINE_STYLE aLineStyle, bool aDrawDirectLine, int aWidth )
+{
+    if( aDrawDirectLine )
+    {
+        m_gal->DrawLine( aStartPoint, aEndPoint );
+    }
+    else
+    {
+        SHAPE_SEGMENT segment( aStartPoint, aEndPoint );
+
+        STROKE_PARAMS::Stroke( &segment, aLineStyle, KiROUND( aWidth ), &m_schSettings,
+                               [&]( const VECTOR2I& start, const VECTOR2I& end )
+                               {
+                                   if( start == end )
+                                       m_gal->DrawLine( start + 1, end );
+                                   else
+                                       m_gal->DrawLine( start, end );
+                               } );
     }
 }
 

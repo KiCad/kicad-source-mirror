@@ -813,7 +813,7 @@ int SCH_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
 
     if( head && head->IsMoving() )
         moving = true;
-
+        
     if( principalItemCount == 1 )
     {
         if( moving && selection.HasReferencePoint() )
@@ -993,7 +993,7 @@ int SCH_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
 
         if( item->Type() == SCH_LINE_T )
         {
-            SCH_LINE* line = (SCH_LINE*) item;
+            SCH_LINE* line = (SCH_LINE*) item;          
 
             line->Rotate( rotPoint, !clockwise );
         }

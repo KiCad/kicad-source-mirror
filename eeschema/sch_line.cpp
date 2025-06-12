@@ -1009,6 +1009,29 @@ double SCH_LINE::Similarity( const SCH_ITEM& aOther ) const
 }
 
 
+bool SCH_LINE::ShouldHopOver( const SCH_LINE* aLine ) const
+{  
+    bool isLine1Vertical = ( m_end.x == m_start.x );
+    bool isLine2Vertical = ( aLine->GetEndPoint().x == aLine->GetStartPoint().x );
+
+    // Vertical vs. Horizontal: Horizontal should hop
+    if( isLine1Vertical && !isLine2Vertical )
+        return false;
+
+    if( isLine2Vertical && !isLine1Vertical )
+        return true;
+
+    double slope1 = 0;
+    double slope2 = 0;   
+
+    slope1 = ( m_end.y - m_start.y ) / (double) ( m_end.x - m_start.x );
+    slope2 = ( aLine->GetEndPoint().y - aLine->GetStartPoint().y )
+                    / (double) ( aLine->GetEndPoint().x - aLine->GetStartPoint().x );
+
+    return fabs( slope1 ) < fabs( slope2 ); // The shallower line should hop
+}
+
+
 static struct SCH_LINE_DESC
 {
     SCH_LINE_DESC()

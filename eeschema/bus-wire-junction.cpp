@@ -198,4 +198,25 @@ SCH_JUNCTION* SCH_EDIT_FRAME::AddJunction( SCH_COMMIT* aCommit, SCH_SCREEN* aScr
     return junction;
 }
 
+void SCH_EDIT_FRAME::UpdateHopOveredWires( SCH_ITEM* aItem )
+{
+    std::vector<KIGFX::VIEW::LAYER_ITEM_PAIR> items;
 
+    GetCanvas()->GetView()->Query( aItem->GetBoundingBox(), items );
+
+    for( const auto& it : items )
+    {
+        if( !it.first->IsSCH_ITEM() )
+            continue;
+
+        SCH_ITEM* item = static_cast<SCH_ITEM*>( it.first );
+
+        if( item == aItem )
+            continue;
+
+        if( item->IsType( { SCH_ITEM_LOCATE_WIRE_T } ) )
+        {
+            GetCanvas()->GetView()->Update( item );
+        }
+    }
+}

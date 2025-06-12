@@ -260,6 +260,8 @@ public:
 
     bool IsParallel( const SCH_LINE* aLine ) const;
 
+    bool ShouldHopOver( const SCH_LINE* aLine ) const;
+
     void GetEndPoints( std::vector<DANGLING_END_ITEM>& aItemList ) override;
 
     bool UpdateDanglingState( std::vector<DANGLING_END_ITEM>& aItemListByType,

@@ -140,6 +140,9 @@ private:
 
     wxString expandLibItemTextVars( const wxString& aSourceText, const SCH_SYMBOL* aSymbolContext );
 
+    void drawLine( const VECTOR2I& aStartPoint, const VECTOR2I& aEndPoint, LINE_STYLE aLineStyle, 
+                   bool aDrawDirectLine = false, int aWidth = 0 );
+
 public:
     static std::vector<KICAD_T> g_ScaledSelectionTypes;
 

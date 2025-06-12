@@ -312,6 +312,8 @@ ADVANCED_CFG::ADVANCED_CFG()
 
     m_MaxPastedTextLength = 100;
 
+    m_hopOverArcRadius = 2.5;
+
     loadFromConfigFile();
 }
 
