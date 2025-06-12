@@ -1006,6 +1006,9 @@ void mpScaleXLog::recalculateTicks( wxDC& dc, mpWindow& w )
     {
         step *= 10.0;
         visibleDecades = log( maxVvis / minVvis ) / log( step );
+
+        if( !std::isfinite( visibleDecades ) )
+            break;
     }
 
     for( d = minDecade; d<=maxDecade; d *= step )
