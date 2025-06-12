@@ -1275,6 +1275,7 @@ void DIALOG_DRC::OnDeleteAllClick( wxCommandEvent& aEvent )
     }
 
     deleteAllMarkers( s_includeExclusions );
+    m_drcRun = false;
 
     refreshEditor();
     updateDisplayedCounts();
