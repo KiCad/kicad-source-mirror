@@ -627,7 +627,14 @@ void PlotStandardLayer( BOARD* aBoard, PLOTTER* aPlotter, const LSET& aLayerMask
                 && (   ( onFrontFab && footprint->GetLayer() == F_Cu )
                     || ( onBackFab && footprint->GetLayer() == B_Cu ) ) )
         {
-            BOX2I rect = footprint->GetBoundingHull().BBox();
+            BOX2I                 rect;
+            const SHAPE_POLY_SET& courtyard = footprint->GetCourtyard( footprint->GetLayer() );
+
+            if( courtyard.IsEmpty() )
+                rect = footprint->GetEffectiveShape()->BBox();
+            else
+                rect = courtyard.BBox();
+
             int   width = aBoard->GetDesignSettings().m_LineThickness[ LAYER_CLASS_FAB ];
 
             aPlotter->ThickSegment( rect.GetOrigin(), rect.GetEnd(), width, nullptr );
