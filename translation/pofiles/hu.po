@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-06-08 17:02+0300\n"
-"PO-Revision-Date: 2025-06-11 07:02+0000\n"
+"PO-Revision-Date: 2025-06-14 00:02+0000\n"
 "Last-Translator: Sárkány Lőrinc <lsarkany@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/kicad/"
 "master-source/hu/>\n"
@@ -17793,56 +17793,46 @@ msgid "Range (voltages):"
 msgstr "Összes változás mentése"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:300
-#, fuzzy
 msgid "fV"
-msgstr "U"
+msgstr "fV"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:300
-#, fuzzy
 msgid "pV"
-msgstr "U"
+msgstr "pV"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:300
-#, fuzzy
 msgid "nV"
-msgstr "U"
+msgstr "nV"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:300
-#, fuzzy
 msgid "uV"
-msgstr "U"
+msgstr "μV"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:300
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion_base.cpp:73
 #: pcb_calculator/widgets/unit_selector.cpp:255
-#, fuzzy
 msgid "mV"
-msgstr "U"
+msgstr "mV"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:300
-#, fuzzy
 msgid "KV"
-msgstr "U"
+msgstr "kV"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:300
-#, fuzzy
 msgid "MV"
-msgstr "U"
+msgstr "MV"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:300
-#, fuzzy
 msgid "GV"
-msgstr "U"
+msgstr "GV"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:300
-#, fuzzy
 msgid "TV"
-msgstr "U"
+msgstr "TV"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:300
-#, fuzzy
 msgid "PV"
-msgstr "U"
+msgstr "PV"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:307
 msgid "Significant digits (currents):"
@@ -17854,69 +17844,56 @@ msgid "Range (currents):"
 msgstr "Az összes könyvtár mentése"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:319
-#, fuzzy
 msgid "fA"
-msgstr "A"
+msgstr "fA"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:319
-#, fuzzy
 msgid "pA"
-msgstr "A"
+msgstr "pA"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:319
-#, fuzzy
 msgid "nA"
-msgstr "A"
+msgstr "nA"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:319
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:271
 #: pcb_calculator/dialogs/dialog_regulator_form_base.cpp:92
-#, fuzzy
 msgid "uA"
 msgstr "μA"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:319
-#, fuzzy
 msgid "mA"
-msgstr "A"
+msgstr "mA"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:319
-#, fuzzy
 msgid "KA"
-msgstr "A"
+msgstr "kA"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:319
-#, fuzzy
 msgid "MA"
-msgstr "A"
+msgstr "MA"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:319
-#, fuzzy
 msgid "GA"
-msgstr "Forrszem hozzáadása"
+msgstr "GA"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:319
-#, fuzzy
 msgid "TA"
-msgstr "A"
+msgstr "TA"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:319
-#, fuzzy
 msgid "PA"
-msgstr "A"
+msgstr "PA"
 
 #: eeschema/dialogs/panel_setup_pinmap.cpp:228
-#, fuzzy
 msgid "No error or warning"
 msgstr "Nincs hiba vagy figyelmeztetés"
 
 #: eeschema/dialogs/panel_setup_pinmap.cpp:233
-#, fuzzy
 msgid "Generate warning"
 msgstr "Figyelmeztetés generálása"
 
 #: eeschema/dialogs/panel_setup_pinmap.cpp:238
-#, fuzzy
 msgid "Generate error"
 msgstr "Hiba generálása"
 
@@ -17980,14 +17957,12 @@ msgid "None:"
 msgstr "Nincs"
 
 #: eeschema/dialogs/panel_simulator_preferences_base.cpp:63
-#, fuzzy
 msgid "Ctrl:"
-msgstr "Ctrl"
+msgstr "Ctrl:"
 
 #: eeschema/dialogs/panel_simulator_preferences_base.cpp:72
-#, fuzzy
 msgid "Shift:"
-msgstr "Shift"
+msgstr "Shift:"
 
 #: eeschema/dialogs/panel_simulator_preferences_base.cpp:81
 msgid "Alt:"
@@ -18033,7 +18008,6 @@ msgid ""
 msgstr ""
 
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:59
-#, fuzzy
 msgid "D&efault pin length:"
 msgstr "Alapértelmezett lábhosszúság:"
 
@@ -18062,33 +18036,28 @@ msgid "Keep pins attached when dragging edges"
 msgstr ""
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:476
-#, fuzzy, c-format
+#, c-format
 msgid "Illegal character '%c' in nickname '%s'"
-msgstr "A(z) \"%c\" karakter nem megengedett a(z) \"%s\" megnevezésben."
+msgstr "A(z) \"%c\" karakter nem megengedett a(z) \"%s\" megnevezésben"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:582 eeschema/symbol_library.cpp:583
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol library '%s' failed to load."
-msgstr ""
-"Nem sikerült betölteni a(z) \"%s\" rajzjel könyvtárat.\n"
-"Hiba: %s"
+msgstr "Nem sikerült betölteni a(z) \"%s\" rajzjel könyvtárat."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:630 eeschema/files-io.cpp:666
 #: eeschema/import_gfx/dialog_import_gfx_sch.cpp:200
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:78
 #: pcbnew/files.cpp:157 pcbnew/footprint_libraries_utils.cpp:120
 #: pcbnew/import_gfx/dialog_import_graphics.cpp:213
-#, fuzzy
 msgid "All supported formats"
 msgstr "Minden támogatott formátum"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:643
-#, fuzzy
 msgid "Add Library"
-msgstr "Könyvtár hozzáadása..."
+msgstr "Könyvtár hozzáadása"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:657
-#, fuzzy
 msgid "Warning: Duplicate Nickname"
 msgstr "Figyelmeztetés: Ismétlődő megnevezés"
 
@@ -18125,17 +18094,15 @@ msgstr ""
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:976
 #: pcbnew/dialogs/dialog_export_step.cpp:615
-#, fuzzy, c-format
+#, c-format
 msgid "File '%s' already exists. Do you want overwrite this file?"
-msgstr ""
-"A(z) \"%s\" fájl már létezik.\n"
-"Biztosan felülírja?"
+msgstr "A(z) \"%s\" fájl már létezik. Biztosan felülírja?"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:1009 eeschema/libarch.cpp:129
 #: eeschema/libarch.cpp:135
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to save symbol library file '%s'."
-msgstr "Nem sikerült menteni a(z) \"%s\" könyvtár fájlt"
+msgstr "Nem sikerült menteni a(z) \"%s\" rajzjel könyvtár fájlt."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:1172
 msgid ""
@@ -18148,12 +18115,10 @@ msgstr ""
 "táblázatot módosítani lehet."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:1186
-#, fuzzy
 msgid "Symbol Libraries"
 msgstr "Rajzjelkönyvtárak"
 
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:134
-#, fuzzy
 msgid "Add existing library to table"
 msgstr "Meglévő könyvtár hozzáadása a táblázathoz"
 
@@ -18197,7 +18162,6 @@ msgstr "Forrszemek kizárása"
 
 #: eeschema/dialogs/panel_template_fieldnames_base.cpp:44
 #: kicad/pcm/dialogs/dialog_manage_repositories_base.cpp:40
-#, fuzzy
 msgid "URL"
 msgstr "URL"
 
@@ -18230,9 +18194,8 @@ msgid "Plotting to HPGL is no longer supported as of KiCad 10.0."
 msgstr ""
 
 #: eeschema/eeschema_jobs_handler.cpp:199
-#, fuzzy
 msgid "Failed to load schematic\n"
-msgstr "Nem sikerült betölteni a(z) \"%s\" kapcsolási rajzot"
+msgstr "Nem sikerült betölteni a kapcsolási rajzot\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:265
 #: kicad/cli/command_pcb_export_hpgl.cpp:36
@@ -18252,9 +18215,8 @@ msgstr ""
 #: pcbnew/pcbnew_jobs_handler.cpp:1609 pcbnew/pcbnew_jobs_handler.cpp:1892
 #: pcbnew/pcbnew_jobs_handler.cpp:2030 pcbnew/pcbnew_jobs_handler.cpp:2226
 #: pcbnew/pcbnew_jobs_handler.cpp:2320
-#, fuzzy
 msgid "Failed to create output directory\n"
-msgstr "Nem lehet létrehozni a(z) \"%s\" fájlt."
+msgstr "Nem sikerült létrehozni kimeneti mappát\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:388
 #: eeschema/eeschema_jobs_handler.cpp:510
@@ -18270,7 +18232,6 @@ msgstr ""
 #: eeschema/eeschema_jobs_handler.cpp:398
 #: eeschema/eeschema_jobs_handler.cpp:520
 #: eeschema/eeschema_jobs_handler.cpp:795
-#, fuzzy
 msgid "Warning: duplicate sheet names.\n"
 msgstr "Figyelmeztetés: ismétlődő lapnevek.\n"
 
@@ -18311,18 +18272,16 @@ msgstr "%s érték módosítása (\"%s\" -> \"%s\")"
 #: eeschema/eeschema_jobs_handler.cpp:955
 #: eeschema/eeschema_jobs_handler.cpp:1055 pcbnew/pcbnew_jobs_handler.cpp:1811
 #: pcbnew/pcbnew_jobs_handler.cpp:1884
-#, fuzzy
 msgid "Unable to load library\n"
-msgstr "A(z) \"%s\" fájlt nem lehet betölteni"
+msgstr "Nem sikerült betölteni a könyvtárat\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:968
 #: eeschema/symbol_editor/symbol_editor.cpp:1093
-#, fuzzy
 msgid "There is no symbol selected to save."
 msgstr "Nincs kijelölve rajzjel a mentéshez."
 
 #: eeschema/eeschema_jobs_handler.cpp:978
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to create output directory '%s'."
 msgstr "Kimeneti mappa \"%s\" nem hozható létre."
 
@@ -18358,9 +18317,9 @@ msgstr ""
 "\"%s\""
 
 #: eeschema/eeschema_jobs_handler.cpp:1178
-#, fuzzy, c-format
+#, c-format
 msgid "Saved ERC Report to %s\n"
-msgstr "DRC hibajelentés mentése"
+msgstr "ERC jelentés elmentve ide: %s\n"
 
 #: eeschema/eeschema_settings.cpp:71 eeschema/tools/sch_actions.cpp:1001
 #, fuzzy
@@ -18383,59 +18342,48 @@ msgid "Design Blocks"
 msgstr "Tervezési Szabályok"
 
 #: eeschema/erc/erc.cpp:79 eeschema/erc/erc.cpp:96
-#, fuzzy
 msgid "Input Pin"
 msgstr "Bemeneti láb"
 
 #: eeschema/erc/erc.cpp:80 eeschema/erc/erc.cpp:97
-#, fuzzy
 msgid "Output Pin"
 msgstr "Kimeneti láb"
 
 #: eeschema/erc/erc.cpp:81 eeschema/erc/erc.cpp:98
-#, fuzzy
 msgid "Bidirectional Pin"
 msgstr "Kétirányú láb"
 
 #: eeschema/erc/erc.cpp:82 eeschema/erc/erc.cpp:99
-#, fuzzy
 msgid "Tri-State Pin"
 msgstr "Háromállapotú láb"
 
 #: eeschema/erc/erc.cpp:83 eeschema/erc/erc.cpp:100
-#, fuzzy
 msgid "Passive Pin"
 msgstr "Passzív láb"
 
 #: eeschema/erc/erc.cpp:84 eeschema/erc/erc.cpp:101
-#, fuzzy
 msgid "Free Pin"
-msgstr "Üres Láb"
+msgstr "Szabad láb"
 
 #: eeschema/erc/erc.cpp:85 eeschema/erc/erc.cpp:102
-#, fuzzy
 msgid "Unspecified Pin"
 msgstr "Meghatározatlan láb"
 
 #: eeschema/erc/erc.cpp:86 eeschema/erc/erc.cpp:103
-#, fuzzy
 msgid "Power Input Pin"
-msgstr "Tápfeszültség bemeneti láb"
+msgstr "Tápellátás bemeneti láb"
 
 #: eeschema/erc/erc.cpp:87 eeschema/erc/erc.cpp:104
-#, fuzzy
 msgid "Power Output Pin"
-msgstr "Tápfeszültség kimeneti láb"
+msgstr "Tápellátás kimeneti láb"
 
 #: eeschema/erc/erc.cpp:88 eeschema/erc/erc.cpp:105
-#, fuzzy
 msgid "Open Collector"
-msgstr "Nyitott kollektoros láb"
+msgstr "Nyitott kollektor"
 
 #: eeschema/erc/erc.cpp:89 eeschema/erc/erc.cpp:106
-#, fuzzy
 msgid "Open Emitter"
-msgstr "Nyitott emitteres láb"
+msgstr "Nyitott emitter"
 
 #: eeschema/erc/erc.cpp:90 eeschema/erc/erc.cpp:107
 #, fuzzy
@@ -18518,65 +18466,65 @@ msgid "Pin %s is connected to both %s and %s"
 msgstr "A(z) %s láb (%s) %s-el és %s-el is össze van kötve"
 
 #: eeschema/erc/erc.cpp:1425
-#, fuzzy, c-format
+#, c-format
 msgid "The current configuration does not include the symbol library '%s'"
-msgstr "A jelenlegi konfiguráció nem tartalmazza a könyvtárat '%s'"
+msgstr "A jelenlegi konfiguráció nem tartalmazza a(z) '%s' rajzjel könyvtárat"
 
 #: eeschema/erc/erc.cpp:1440
-#, fuzzy, c-format
+#, c-format
 msgid "The symbol library '%s' is not enabled in the current configuration"
 msgstr ""
-"A(z) \"%s\" megnevezésű könyvtár nincs engedélyezve a jelenlegi "
-"konfiguráció.\n"
-"Nyissa meg a \"Könyvtárak kezelése\" menüpontot a szerkesztéshez."
+"A(z) \"%s\" rajzjel könyvtár nincs engedélyezve a jelenlegi konfigurációban"
 
 #: eeschema/erc/erc.cpp:1455
-#, fuzzy, c-format
+#, c-format
 msgid "The symbol library '%s' was not found at '%s'."
-msgstr "Az alkatrészrajzolat könyvtár nem található!"
+msgstr "A(z) '%s' rajzjel könyvtár nem található a megadott helyen: %s."
 
 #: eeschema/erc/erc.cpp:1475
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol '%s' not found in symbol library '%s'"
-msgstr "A(z) \"%s\" rajzjel nem található a(z) \"%s\" könyvtárban."
+msgstr "A(z) \"%s\" rajzjel nem található a(z) \"%s\" könyvtárban"
 
 #: eeschema/erc/erc.cpp:1500
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol '%s' has multiple pins with the same pin number"
-msgstr "Rajzjel alkatrészrajzolat összerendelés fájl (.equ)"
+msgstr "A(z) '%s' rajzjelben több lábnak is ugyanaz a sorszáma"
 
 #: eeschema/erc/erc.cpp:1510
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol '%s' doesn't match copy in library '%s'"
-msgstr "Alkatrészrajzolat szerkesztő - létrehozás/szerkesztés"
+msgstr ""
+"A(z) '%s' rajzjel nem egyezik a(z) '%s' könyvtárban található példánnyal"
 
 #: eeschema/erc/erc.cpp:1559
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' is not a valid footprint identifier."
-msgstr "A(z) \"%s\" nem érvényes LIB_ID."
+msgstr "'%s' nem egy érvényes alkatrészrajzolat-azonosító."
 
 #: eeschema/erc/erc.cpp:1573
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:876
 #: pcbnew/footprint_editor_utils.cpp:342
-#, fuzzy, c-format
+#, c-format
 msgid "The current configuration does not include the footprint library '%s'."
-msgstr "A jelenlegi konfiguráció nem tartalmazza a könyvtárat '%s'"
+msgstr ""
+"A jelenlegi konfiguráció nem tartalmazza a(z) '%s' alkatrészrajzolat "
+"könyvtárat."
 
 #: eeschema/erc/erc.cpp:1582
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:890
 #: pcbnew/footprint_editor_utils.cpp:354
-#, fuzzy, c-format
+#, c-format
 msgid "The footprint library '%s' is not enabled in the current configuration."
 msgstr ""
-"A(z) \"%s\" megnevezésű könyvtár nincs engedélyezve a jelenlegi "
-"konfiguráció.\n"
-"Nyissa meg a \"Könyvtárak kezelése\" menüpontot a szerkesztéshez."
+"A(z) \"%s\" alkatrészrajzolat könyvtár nincs engedélyezve a jelenlegi "
+"konfigurációban."
 
 #: eeschema/erc/erc.cpp:1591
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:941
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint '%s' not found in library '%s'."
-msgstr "A rajzjel nem található a(z) \"%s\"-ben!"
+msgstr "A(z) '%s' alkatrészrajzolat nem található a(z) '%s' könyvtárban."
 
 #: eeschema/erc/erc.cpp:1661
 #, fuzzy, c-format
@@ -18584,9 +18532,8 @@ msgid "Assigned footprint (%s) doesn't match footprint filters (%s)."
 msgstr "Irányelvek betöltése a kapcsolási rajzból"
 
 #: eeschema/erc/erc.cpp:1827
-#, fuzzy
 msgid "Checking sheet names..."
-msgstr "Zóna kitöltések ellenőrzése...\n"
+msgstr "Lapnevek ellenőrzése..."
 
 #: eeschema/erc/erc.cpp:1835
 #, fuzzy
@@ -18599,30 +18546,25 @@ msgid "Checking conflicts..."
 msgstr "Zóna kitöltések ellenőrzése...\n"
 
 #: eeschema/erc/erc.cpp:1856
-#, fuzzy
 msgid "Checking units..."
-msgstr "Zóna kitöltések ellenőrzése...\n"
+msgstr "Egységek ellenőrzése..."
 
 #: eeschema/erc/erc.cpp:1862
 #: pcbnew/drc/drc_test_provider_footprint_checks.cpp:70
-#, fuzzy
 msgid "Checking footprints..."
-msgstr "Alkatrészrajzolatok ellenőrzése"
+msgstr "Alkatrészrajzolatok ellenőrzése..."
 
 #: eeschema/erc/erc.cpp:1876
-#, fuzzy
 msgid "Checking pins..."
-msgstr "Zóna kitöltések ellenőrzése...\n"
+msgstr "Lábak ellenőrzése..."
 
 #: eeschema/erc/erc.cpp:1896
-#, fuzzy
 msgid "Checking similar labels..."
-msgstr "Zóna kitöltések ellenőrzése...\n"
+msgstr "Hasonló címkék ellenőrzése..."
 
 #: eeschema/erc/erc.cpp:1904
-#, fuzzy
 msgid "Checking local and global labels..."
-msgstr "Zóna kitöltések ellenőrzése...\n"
+msgstr "Lokális és globális címkék ellenőrzése..."
 
 #: eeschema/erc/erc.cpp:1912
 #, fuzzy
@@ -18630,9 +18572,8 @@ msgid "Checking for unresolved variables..."
 msgstr "Zóna kitöltések ellenőrzése...\n"
 
 #: eeschema/erc/erc.cpp:1920
-#, fuzzy
 msgid "Checking SPICE models..."
-msgstr "Zónakitöltések ellenőrzése..."
+msgstr "SPICE modellek ellenőrzése..."
 
 #: eeschema/erc/erc.cpp:1928
 #, fuzzy
@@ -18655,9 +18596,8 @@ msgid "Checking footprint assignments against footprint filters..."
 msgstr "Alkatrészrajzolatok ellenőrzése"
 
 #: eeschema/erc/erc.cpp:1961
-#, fuzzy
 msgid "Checking for off grid pins and wires..."
-msgstr "Alkatrészrajzolatok ellenőrzése"
+msgstr "Rácsra nem illeszkedő lábak és vezetékek ellenőrzése..."
 
 #: eeschema/erc/erc.cpp:1969
 #, fuzzy
@@ -18681,7 +18621,6 @@ msgstr "Ellentmondások"
 
 #: eeschema/erc/erc_item.cpp:41 pcbnew/dialogs/panel_edit_options_base.cpp:404
 #: pcbnew/drc/drc_item.cpp:47
-#, fuzzy
 msgid "Miscellaneous"
 msgstr "Egyebek"
 
@@ -18721,7 +18660,6 @@ msgid "Conflict problem between pins"
 msgstr "Ütközés a lábak között"
 
 #: eeschema/erc/erc_item.cpp:85
-#, fuzzy
 msgid "Mismatch between hierarchical labels and sheet pins"
 msgstr "Eltérés a hierarchikus címkék és lábak között"
 
@@ -18731,7 +18669,7 @@ msgstr ""
 
 #: eeschema/erc/erc_item.cpp:93
 msgid "Label connects more than one wire"
-msgstr ""
+msgstr "A címke több, mint egy vezetéket köt össze"
 
 #: eeschema/erc/erc_item.cpp:97
 #, fuzzy
@@ -18744,9 +18682,8 @@ msgid "Unconnected \"no connection\" flag"
 msgstr "\"Nem csatlakoztatott\" jelölés nem kapcsolódik"
 
 #: eeschema/erc/erc_item.cpp:105
-#, fuzzy
 msgid "Label not connected to anything"
-msgstr "A címke semmihez nem kapcsolódik"
+msgstr "A címke semmihez sem kapcsolódik"
 
 #: eeschema/erc/erc_item.cpp:109
 #, fuzzy
@@ -18754,28 +18691,24 @@ msgid "Global label not connected anywhere else in the schematic"
 msgstr "A globális címke semmihez sem kapcsolódik"
 
 #: eeschema/erc/erc_item.cpp:113
-#, fuzzy
 msgid "Labels are similar (lower/upper case difference only)"
 msgstr "Hasonló címkék (csak kis-nagybetű eltérés van)"
 
 #: eeschema/erc/erc_item.cpp:117
-#, fuzzy
 msgid "Power pins are similar (lower/upper case difference only)"
-msgstr "Hasonló címkék (csak kis-nagybetű eltérés van)"
+msgstr "Hasonló tápellátó lábak (csak kis-nagybetű eltérés van)"
 
 #: eeschema/erc/erc_item.cpp:121
-#, fuzzy
 msgid "Power pin and label are similar (lower/upper case difference only)"
-msgstr "Hasonló globális címkék (csak kis-nagybetű eltérés van)"
+msgstr "Tápellátó láb és címke hasonlóak (csak kis-nagybetű eltérés van)"
 
 #: eeschema/erc/erc_item.cpp:125
-#, fuzzy
 msgid "Global label only appears once in the schematic"
-msgstr "A globális címke semmihez sem kapcsolódik"
+msgstr "A globális címke csak egyszer fordul elő a kapcsolási rajzban"
 
 #: eeschema/erc/erc_item.cpp:129
 msgid "Local and global labels have same name"
-msgstr ""
+msgstr "A lokális és globális címkének azonos a neve"
 
 #: eeschema/erc/erc_item.cpp:133
 #, fuzzy
@@ -18797,15 +18730,13 @@ msgid "Conflict between bus alias definitions across schematic sheets"
 msgstr "Busz megnevezés több lapon is ellentmondóan van definiálva"
 
 #: eeschema/erc/erc_item.cpp:145
-#, fuzzy
 msgid "More than one name given to this bus or net"
 msgstr "A busznak/vezetéknek egynél több név lett megadva"
 
 #: eeschema/erc/erc_item.cpp:149
-#, fuzzy
 msgid "Net is graphically connected to a bus but not a bus member"
 msgstr ""
-"Egy vezeték a rajz szerint egy buszhoz van csatlakoztatva miközben nem a "
+"Egy vezeték a rajz szerint egy buszhoz van csatlakoztatva, miközben nem a "
 "busz tagja"
 
 #: eeschema/erc/erc_item.cpp:153
@@ -18814,12 +18745,10 @@ msgid "Buses are graphically connected but share no bus members"
 msgstr "A buszok grafikusan kapcsolódnak, de nem osztaznak a busztagokon"
 
 #: eeschema/erc/erc_item.cpp:157
-#, fuzzy
 msgid "Invalid connection between bus and net items"
-msgstr "Érvénytelen csatalkozás busz és vezeték között"
+msgstr "Érvénytelen csatlakozás busz és vezeték között"
 
 #: eeschema/erc/erc_item.cpp:161 pcbnew/drc/drc_item.cpp:216
-#, fuzzy
 msgid "Unresolved text variable"
 msgstr "Feloldatlan szövegváltozó"
 
@@ -18829,24 +18758,20 @@ msgid "Undefined netclass"
 msgstr "Vezetékosztály hozzárendelés"
 
 #: eeschema/erc/erc_item.cpp:169
-#, fuzzy
 msgid "SPICE model issue"
-msgstr "SPICE netlista fájl (*.cir)"
+msgstr "SPICE modell probléma"
 
 #: eeschema/erc/erc_item.cpp:173
-#, fuzzy
 msgid "Wires not connected to anything"
 msgstr "A vezetékek nem csatlakoznak semmihez"
 
 #: eeschema/erc/erc_item.cpp:177
-#, fuzzy
 msgid "Library symbol issue"
 msgstr "Könyvtári rajzjel probléma"
 
 #: eeschema/erc/erc_item.cpp:181
-#, fuzzy
 msgid "Symbol doesn't match copy in library"
-msgstr "Alkatrészrajzolat szerkesztő - létrehozás/szerkesztés"
+msgstr "A rajzjel nem egyezik a könyvtárban található példánnyal"
 
 #: eeschema/erc/erc_item.cpp:185
 #, fuzzy
@@ -18864,9 +18789,8 @@ msgid "Symbol is not annotated"
 msgstr "A rajzjel nincs azonosítókkal ellátva"
 
 #: eeschema/erc/erc_item.cpp:197
-#, fuzzy
 msgid "Symbol has more units than are defined"
-msgstr "A rajzjelnek több egysége van, mint amennyit meghatároztak"
+msgstr "A rajzjelnek több egysége van, mint amennyi definiálva van"
 
 #: eeschema/erc/erc_item.cpp:201
 #, fuzzy
@@ -18909,7 +18833,7 @@ msgid "ERC report (%s, Encoding UTF8)\n"
 msgstr "ERC jelentés (%s, UTF8 kódolás)\n"
 
 #: eeschema/erc/erc_report.cpp:80
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "\n"
 "***** Sheet %s\n"
@@ -18918,7 +18842,7 @@ msgstr ""
 "***** Lap %s\n"
 
 #: eeschema/erc/erc_report.cpp:99
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "\n"
 " ** ERC messages: %d  Errors %d  Warnings %d\n"
@@ -18928,28 +18852,24 @@ msgstr ""
 
 #: eeschema/fields_grid_table.cpp:286 eeschema/files-io.cpp:918
 #: eeschema/tools/sch_editor_control.cpp:132
-#, fuzzy
 msgid "Schematic Files"
 msgstr "Kapcsolási rajz fájlok"
 
 #: eeschema/fields_grid_table.cpp:317 eeschema/fields_grid_table.cpp:742
 #: eeschema/fields_grid_table.cpp:914
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:157
-#, fuzzy
 msgid "Horizontal"
 msgstr "Vízszintes"
 
 #: eeschema/fields_grid_table.cpp:318 eeschema/fields_grid_table.cpp:744
 #: eeschema/fields_grid_table.cpp:916
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:157
-#, fuzzy
 msgid "Vertical"
 msgstr "Függőleges"
 
 #: eeschema/fields_grid_table.cpp:491 eeschema/sch_field.cpp:1625
-#, fuzzy
 msgid "Allow Autoplacement"
-msgstr "Automatikus elhelyezés szabályai"
+msgstr "Automatikus elhelyezés engedélyezése"
 
 #: eeschema/fields_grid_table.cpp:492 eeschema/sch_field.cpp:1664
 #: eeschema/sch_item.cpp:586 eeschema/sch_item.cpp:638
@@ -18963,19 +18883,17 @@ msgid "Schematic '%s' is already open by '%s' at '%s'."
 msgstr "A(z) '%s' kapcsolási rajz fájl már meg van nyitva."
 
 #: eeschema/files-io.cpp:136
-#, fuzzy, c-format
+#, c-format
 msgid "Schematic '%s' does not exist.  Do you wish to create it?"
 msgstr "A(z) '%s' kapcsolási rajz nem létezik. Szeretné létrehozni?"
 
 #: eeschema/files-io.cpp:158
-#, fuzzy
 msgid "Create Schematic"
-msgstr "Kapcsolásirajz Létrehozás"
+msgstr "Kapcsolási rajz Létrehozás"
 
 #: eeschema/files-io.cpp:159
-#, fuzzy
 msgid "Load Schematic"
-msgstr "Kapcsolásirajz Betöltés"
+msgstr "Kapcsolási rajz Betöltés"
 
 #: eeschema/files-io.cpp:224
 #, fuzzy
@@ -18988,21 +18906,22 @@ msgid ""
 "'%s' is not a KiCad schematic file.\n"
 "Use File -> Import for non-KiCad schematic files."
 msgstr ""
+"'%s' nem egy KiCad kapcsolási rajz fájl.\n"
+"Használja a Fájl -> Importálás menüpontot nem-KiCad kapcsolási rajzokhoz."
 
 #: eeschema/files-io.cpp:289
-#, fuzzy
 msgid ""
 "The entire schematic could not be loaded.  Errors occurred attempting to "
 "load hierarchical sheets."
 msgstr ""
-"Nem sikerült betölteni a kapcsolási rajzot. A hibát egy hierarchikus lap "
-"betöltési kísérlete okozta."
+"Nem sikerült betölteni a teljes kapcsolási rajzot. Hibák merültek fel egy "
+"hierarchikus lap betöltése közben."
 
 #: eeschema/files-io.cpp:296 eeschema/files-io.cpp:304
 #: eeschema/files-io.cpp:1410 eeschema/sheet.cpp:231
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading schematic '%s'."
-msgstr "Hiba a '%s' kapcsolási rajz betöltésekor."
+msgstr "Hiba a(z) '%s' kapcsolási rajz betöltésekor."
 
 #: eeschema/files-io.cpp:312
 #, fuzzy, c-format
@@ -19011,9 +18930,9 @@ msgstr "Hiba történt a(z) \"%s\" kapcsolási rajz fájl betöltése során."
 
 #: eeschema/files-io.cpp:331 eeschema/files-io.cpp:1413
 #: eeschema/files-io.cpp:1425 eeschema/sheet.cpp:234
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to load '%s'."
-msgstr "\"%s\" betöltése sikertelen"
+msgstr "\"%s\" betöltése sikertelen."
 
 #: eeschema/files-io.cpp:344
 #, fuzzy
@@ -19044,7 +18963,6 @@ msgid ""
 msgstr ""
 
 #: eeschema/files-io.cpp:416
-#, fuzzy
 msgid "Do not show this dialog again."
 msgstr "Ne mutassa újra ezt az üzenetet."
 
@@ -19068,9 +18986,8 @@ msgid "Load Without Cache File"
 msgstr "Betöltés mentés nélkül"
 
 #: eeschema/files-io.cpp:459
-#, fuzzy
 msgid "Abort"
-msgstr "Megszakítás\n"
+msgstr "Megszakítás"
 
 #: eeschema/files-io.cpp:474 eeschema/files-io.cpp:494
 #: pagelayout_editor/files.cpp:260 pcbnew/files.cpp:822
@@ -19094,24 +19011,22 @@ msgid ""
 msgstr ""
 
 #: eeschema/files-io.cpp:608
-#, fuzzy
 msgid "Schematic is read only."
-msgstr "A(z) \"%s\" kapcsolási rajz fájl már meg van nyitva."
+msgstr "A kapcsolási rajz csak olvasható."
 
 #: eeschema/files-io.cpp:627
-#, fuzzy
 msgid ""
 "This operation replaces the contents of the current schematic, which will be "
 "permanently lost.\n"
 "\n"
 "Do you want to proceed?"
 msgstr ""
-"Ez a művelet nem vonnható vissza.\n"
+"Ez a művelet felülírja a kapcsolási rajz jelenlegi tartalmát, amely "
+"visszavonhatatlanul el fog veszni.\n"
 "\n"
-"El szeretné menteni az aktuális dokumentumot, mielőtt folytatná?"
+"Szeretné folytatni?"
 
 #: eeschema/files-io.cpp:669 eeschema/files-io.cpp:1344
-#, fuzzy
 msgid "Import Schematic"
 msgstr "Kapcsolási rajz importálása"
 
@@ -19126,7 +19041,7 @@ msgid "No loader can read the specified file: '%s'."
 msgstr ""
 
 #: eeschema/files-io.cpp:766 eeschema/files-io.cpp:812
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error saving schematic file '%s'.\n"
 "%s"
@@ -19135,39 +19050,38 @@ msgstr ""
 "%s"
 
 #: eeschema/files-io.cpp:817 pcbnew/files.cpp:1055 pcbnew/files.cpp:1347
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to create temporary file '%s'."
-msgstr "A(z) \"%s\" könyvtár fájlt nem lehet létrehozni"
+msgstr "Nem sikerült létrehozni a(z) \"%s\" ideiglenes fájlt."
 
 #: eeschema/files-io.cpp:837
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error saving schematic file '%s'.\n"
 "Failed to rename temporary file '%s'."
 msgstr ""
 "Hiba történt a(z) \"%s\" kapcsolási rajz fájl mentése során.\n"
-"%s"
+"Nem sikerült átnevezni a(z) '%s' ideiglenes fájlt."
 
 #: eeschema/files-io.cpp:843 pcbnew/files.cpp:1076 pcbnew/files.cpp:1413
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to rename temporary file '%s'."
-msgstr "A(z) \"%s\" könyvtár fájlt nem lehet létrehozni"
+msgstr "Nem sikerült átnevezni a(z) '%s' ideiglenes fájlt."
 
 #: eeschema/files-io.cpp:866 pagelayout_editor/files.cpp:187
 #: pagelayout_editor/files.cpp:219 pcbnew/files.cpp:1109
-#, fuzzy, c-format
+#, c-format
 msgid "File '%s' saved."
-msgstr "A(z) %s fájl mentése megtörtént"
+msgstr "A(z)'%s' fájl mentése megtörtént."
 
 #: eeschema/files-io.cpp:871
-#, fuzzy
 msgid "File write operation failed."
 msgstr "Sikertelen fájl írási művelet."
 
 #: eeschema/files-io.cpp:938 eeschema/files-io.cpp:1006
 #: kicad/import_project.cpp:93 kicad/tools/kicad_manager_control.cpp:117
 #: kicad/tools/kicad_manager_control.cpp:322
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Folder '%s' could not be created.\n"
 "\n"
@@ -19178,47 +19092,45 @@ msgstr ""
 "Kérjük, ellenőrizze, van-e írási jogosultsága, majd próbálja meg újra."
 
 #: eeschema/files-io.cpp:1088
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to save %s."
-msgstr "A(z) \"%s\" mentése sikertelen"
+msgstr "\"%s\" mentése sikertelen."
 
 #: eeschema/files-io.cpp:1090
-#, fuzzy
 msgid "Locked File Warning"
-msgstr "Legacy zóna figyelmeztetés"
+msgstr "Zárolt Fájl Figyelmeztetés"
 
 #: eeschema/files-io.cpp:1092
-#, fuzzy
 msgid ""
 "You do not have write permissions to:\n"
 "\n"
-msgstr "Nincs írási jogosultsága a(z) \"%s\" könyvtárban."
+msgstr ""
+"Nincs írási jogosultsága:\n"
+"\n"
 
 #: eeschema/files-io.cpp:1108
 msgid "Saving will overwrite existing files."
 msgstr "A mentés felül fogja írni a meglévő fájlokat."
 
 #: eeschema/files-io.cpp:1109
-#, fuzzy
 msgid "Save Warning"
-msgstr "Legacy zóna figyelmeztetés"
+msgstr "Figyelmeztetés mentése"
 
 #: eeschema/files-io.cpp:1112
-#, fuzzy
 msgid ""
 "The following files will be overwritten:\n"
 "\n"
-msgstr "Az alábbi könyvtárak nem találhatóak:"
+msgstr ""
+"Az alábbi fájlokat felül fogjuk írni:\n"
+"\n"
 
 #: eeschema/files-io.cpp:1113
-#, fuzzy
 msgid "Overwrite Files"
-msgstr "Fájlok felülírása:"
+msgstr "Fájlok felülírása"
 
 #: eeschema/files-io.cpp:1114
-#, fuzzy
 msgid "Abort Project Save"
-msgstr "Projekt importálása"
+msgstr "Projekt mentésének megszakítása"
 
 #: eeschema/files-io.cpp:1421
 #, fuzzy, c-format
@@ -19226,9 +19138,8 @@ msgid "Unhandled exception occurred loading schematic '%s'."
 msgstr "Hiba történt a(z) \"%s\" kapcsolási rajz fájl betöltése során."
 
 #: eeschema/files-io.cpp:1483
-#, fuzzy
 msgid "The current schematic has been modified.  Save changes?"
-msgstr "A kapcsolási rajz módosult.  Menti a módosításokat?"
+msgstr "A kapcsolási rajz módosult. Menti a változtatásokat?"
 
 #: eeschema/files-io.cpp:1581
 #, fuzzy
@@ -19251,27 +19162,29 @@ msgid ""
 "The file '%s' could not be opened.\n"
 "Manual recovery of automatically saved files is required."
 msgstr ""
+"Nem sikerült megnyitni a(z) \"%s\" fájlt.\n"
+"Az automatikusan mentett fájlok kézi helyreállítása szükséges."
 
 #: eeschema/files-io.cpp:1643
-#, fuzzy
 msgid "The following automatically saved file(s) could not be restored\n"
-msgstr "Az automatikus mentés \"%s\" fájl nem távolítható el!"
+msgstr "Nem sikerült visszaállítani az alábbi automatikus mentést\n"
 
 #: eeschema/files-io.cpp:1648
 msgid "Manual recovery will be required to restore the file(s) above."
-msgstr ""
+msgstr "A fentebbi fájlokat manuálisan kell visszaállítani."
 
 #: eeschema/files-io.cpp:1658
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The autosave file '%s' could not be removed.\n"
 "Manual removal will be required."
-msgstr "Az automatikus mentés \"%s\" fájl nem távolítható el!"
+msgstr ""
+"Az automatikus mentés fájl \"%s\" nem távolítható el.\n"
+"Manuálisan kell majd törölni."
 
 #: eeschema/files-io.cpp:1692
-#, fuzzy
 msgid "The following automatically saved file(s) could not be removed\n"
-msgstr "Az automatikus mentés \"%s\" fájl nem távolítható el!"
+msgstr "Nem sikerült eltávolítani az alábbi automatikus mentéseket\n"
 
 #: eeschema/files-io.cpp:1697
 msgid "Manual removal will be required for the file(s) above."
@@ -19280,7 +19193,7 @@ msgstr "A fentebbi fájl(oka)t manuálisan kell eltávolítani."
 #: eeschema/generate_alias_info.cpp:37 eeschema/sch_symbol.cpp:1981
 #, fuzzy
 msgid "Derived from"
-msgstr "Törli az extra egységeket a rajzjelből?"
+msgstr "Származtatva ebből:"
 
 #: eeschema/generate_alias_info.cpp:82 eeschema/sch_base_frame.cpp:86
 #: eeschema/symbol_editor/symbol_editor.cpp:170
@@ -19289,22 +19202,20 @@ msgstr "Törli az extra egységeket a rajzjelből?"
 #: eeschema/widgets/panel_symbol_chooser.cpp:566
 #: eeschema/widgets/panel_symbol_chooser.cpp:625
 #: eeschema/widgets/symbol_preview_widget.cpp:207
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading symbol %s from library '%s'."
 msgstr ""
 "Hiba történt a(z) '%s' rajzjel '%s' könyvtárból történő betöltése során."
 
 #: eeschema/generate_alias_info.cpp:122 eeschema/sim/spice_simulator.cpp:69
 #: kicad/pcm/pcm.cpp:766 pcbnew/zone.cpp:902
-#, fuzzy
 msgid "Unknown"
 msgstr "Ismeretlen"
 
 #: eeschema/import_gfx/dialog_import_gfx_sch.cpp:61
 #: pcbnew/import_gfx/dialog_import_graphics.cpp:56
-#, fuzzy
 msgid "Centimeter"
-msgstr "Középre"
+msgstr "Centiméter"
 
 #: eeschema/import_gfx/dialog_import_gfx_sch.cpp:62
 #: pcbnew/import_gfx/dialog_import_graphics.cpp:57
@@ -19314,9 +19225,8 @@ msgstr "Láb"
 #: eeschema/import_gfx/dialog_import_gfx_sch.cpp:202
 #: pcbnew/import_gfx/dialog_import_graphics.cpp:215
 #: pcbnew/tools/drawing_tool.cpp:1900 pcbnew/tools/drawing_tool.cpp:1986
-#, fuzzy
 msgid "Import Graphics"
-msgstr "Grafika Importálás..."
+msgstr "Grafika Importálása"
 
 #: eeschema/import_gfx/dialog_import_gfx_sch.cpp:217
 #, fuzzy
@@ -19360,20 +19270,17 @@ msgstr "A"
 
 #: eeschema/import_gfx/dialog_import_gfx_sch_base.cpp:74
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:115
-#, fuzzy
 msgid "DXF origin on PCB Grid, X Coordinate"
 msgstr "DXF origó a nyákterv rácson, X koordináta"
 
 #: eeschema/import_gfx/dialog_import_gfx_sch_base.cpp:95
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:132
-#, fuzzy
 msgid "DXF origin on PCB Grid, Y Coordinate"
 msgstr "DXF origó a nyákterv rácson, Y koordináta"
 
 #: eeschema/import_gfx/dialog_import_gfx_sch_base.cpp:116
-#, fuzzy
 msgid "Import Parameters"
-msgstr "Paraméterek importálása:"
+msgstr "Paraméterek importálása"
 
 #: eeschema/import_gfx/dialog_import_gfx_sch_base.cpp:127
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:49
@@ -19382,9 +19289,8 @@ msgid "Import scale:"
 msgstr "Importálási méretarány:"
 
 #: eeschema/import_gfx/dialog_import_gfx_sch_base.cpp:147
-#, fuzzy
 msgid "DXF Parameters"
-msgstr "Paraméterek"
+msgstr "DXF paraméterek"
 
 #: eeschema/import_gfx/dialog_import_gfx_sch_base.cpp:169
 #, fuzzy
@@ -19393,7 +19299,6 @@ msgstr "Alapértékek"
 
 #: eeschema/import_gfx/dialog_import_gfx_sch_base.h:77
 #: pcbnew/import_gfx/dialog_import_graphics_base.h:85
-#, fuzzy
 msgid "Import Vector Graphics File"
 msgstr "Vektorgrafikus fájl importálása"
 
