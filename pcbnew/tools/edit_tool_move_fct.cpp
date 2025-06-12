@@ -194,11 +194,11 @@ int EDIT_TOOL::PackAndMoveFootprints( const TOOL_EVENT& aEvent )
 
     BOX2I footprintsBbox;
 
-    for( FOOTPRINT* item : footprintsToPack )
+    for( FOOTPRINT* fp : footprintsToPack )
     {
-        commit.Modify( item );
-        item->SetFlags( IS_MOVING );
-        footprintsBbox.Merge( item->GetBoundingBox( false ) );
+        commit.Modify( fp );
+        fp->SetFlags( IS_MOVING );
+        footprintsBbox.Merge( fp->GetBoundingBox( false ) );
     }
 
     SpreadFootprints( &footprintsToPack, footprintsBbox.Normalize().GetOrigin(), false );
@@ -582,13 +582,9 @@ bool EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, BOARD_COMMIT* aCommit
                             m_toolMgr->RunSynchronousAction( PCB_ACTIONS::genStartEdit, aCommit,
                                                              static_cast<PCB_GENERATOR*>( item ) );
                         }
-                        else if( item->Type() == PCB_GROUP_T || item->Type() == PCB_GENERATOR_T )
-                        {
-                            aCommit->Modify( item, nullptr, RECURSE_MODE::RECURSE );
-                        }
                         else
                         {
-                            aCommit->Modify( item );
+                            aCommit->Modify( item, nullptr, RECURSE_MODE::RECURSE );
                         }
 
                         item->SetFlags( IS_MOVING );
@@ -762,7 +758,7 @@ bool EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, BOARD_COMMIT* aCommit
                     updateStatusPopup( nextItem, itemIdx + 1, orig_items.size() );
 
                     // Pick up new item
-                    aCommit->Modify( nextItem );
+                    aCommit->Modify( nextItem, nullptr, RECURSE_MODE::RECURSE );
                     nextItem->Move( controls->GetCursorPosition( true ) - nextItem->GetPosition() );
 
                     continue;

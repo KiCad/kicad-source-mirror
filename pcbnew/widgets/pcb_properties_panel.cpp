@@ -233,7 +233,7 @@ void PCB_PROPERTIES_PANEL::valueChanged( wxPropertyGridEvent& aEvent )
             continue;
 
         BOARD_ITEM* item = static_cast<BOARD_ITEM*>( edaItem );
-        changes.Modify( item );
+        changes.Modify( item, nullptr, RECURSE_MODE::NO_RECURSE );
         item->Set( property, newValue );
     }
 

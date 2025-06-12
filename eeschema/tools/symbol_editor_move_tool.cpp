@@ -244,7 +244,7 @@ bool SYMBOL_EDITOR_MOVE_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, SCH_COM
                         {
                             if( schItem->IsGroupableType() && !item->GetParentGroup() )
                             {
-                                aCommit->Modify( enteredGroup );
+                                aCommit->Modify( enteredGroup, m_frame->GetScreen(), RECURSE_MODE::NO_RECURSE );
                                 enteredGroup->AddItem( schItem );
                             }
                         }

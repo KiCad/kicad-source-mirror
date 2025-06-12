@@ -1530,7 +1530,7 @@ int SCH_EDIT_TOOL::RepeatDrawItem( const TOOL_EVENT& aEvent )
         {
             if( newItem->IsGroupableType() )
             {
-                commit.Modify( enteredGroup );
+                commit.Modify( enteredGroup, m_frame->GetScreen(), RECURSE_MODE::NO_RECURSE );
                 enteredGroup->AddItem( newItem );
             }
         }

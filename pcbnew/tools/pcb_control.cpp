@@ -1546,7 +1546,7 @@ bool PCB_CONTROL::placeBoardItems( BOARD_COMMIT* aCommit, std::vector<BOARD_ITEM
             {
                 if( item->IsGroupableType() && !item->GetParentGroup() )
                 {
-                    aCommit->Modify( enteredGroup );
+                    aCommit->Modify( enteredGroup, nullptr, RECURSE_MODE::NO_RECURSE );
                     enteredGroup->AddItem( item );
                 }
             }

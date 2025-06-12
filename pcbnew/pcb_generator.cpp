@@ -58,7 +58,7 @@ PCB_GENERATOR* PCB_GENERATOR::DeepClone() const
 
 void PCB_GENERATOR::EditStart( GENERATOR_TOOL* aTool, BOARD* aBoard, BOARD_COMMIT* aCommit )
 {
-    aCommit->Modify( this );
+    aCommit->Modify( this, nullptr, RECURSE_MODE::NO_RECURSE );
 }
 
 

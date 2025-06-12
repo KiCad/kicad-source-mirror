@@ -202,7 +202,7 @@ void ARRAY_TOOL::onDialogClosed( wxCloseEvent& aEvent )
             if( item == nullptr )
                 break;
 
-            commit.Modify( item );
+            commit.Modify( item, nullptr, RECURSE_MODE::RECURSE );
 
             // Transform is a relative move, so when arranging the transform needs to start from
             // the same point for each item, e.g. the first item's position
@@ -263,7 +263,7 @@ void ARRAY_TOOL::onDialogClosed( wxCloseEvent& aEvent )
                 // we might still modify it (position or label)
                 this_item = item;
 
-                commit.Modify( this_item );
+                commit.Modify( this_item, nullptr, RECURSE_MODE::RECURSE );
 
                 TransformItem( *m_array_opts, arraySize - 1, *this_item );
             }

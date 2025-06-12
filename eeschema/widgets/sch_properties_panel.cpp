@@ -198,8 +198,11 @@ void SCH_PROPERTIES_PANEL::valueChanged( wxPropertyGridEvent& aEvent )
 
     for( EDA_ITEM* edaItem : selection )
     {
+        if( !edaItem->IsSCH_ITEM() )
+            continue;
+
         SCH_ITEM* item = static_cast<SCH_ITEM*>( edaItem );
-        changes.Modify( item, screen );
+        changes.Modify( item, screen, RECURSE_MODE::NO_RECURSE );
         item->Set( property, newValue );
 
         if( SCH_SYMBOL* symbol = dynamic_cast<SCH_SYMBOL*>( item ) )

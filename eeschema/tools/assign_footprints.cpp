@@ -99,7 +99,7 @@ void SCH_EDITOR_CONTROL::AssignFootprints( const std::string& aChangedSetOfRefer
                         isChanged = true;
                         SCH_SCREEN* screen = refs[ii].GetSheetPath().LastScreen();
 
-                        commit.Modify( symbol, screen );
+                        commit.Modify( symbol, screen, RECURSE_MODE::NO_RECURSE );
                         footprintField->SetText( footprint );
                     }
                 }

@@ -277,10 +277,10 @@ BOARD_ITEM* BOARD_ITEM::Duplicate( bool addToParentGroup, BOARD_COMMIT* aCommit 
     {
         wxCHECK_MSG( aCommit, dupe, "Must supply a commit to update parent group" );
 
-        if( dupe->GetParentGroup() )
+        if( EDA_GROUP* group = dupe->GetParentGroup() )
         {
-            aCommit->Modify( dupe->GetParentGroup()->AsEdaItem() );
-            dupe->GetParentGroup()->AddItem( dupe );
+            aCommit->Modify( group->AsEdaItem(), nullptr, RECURSE_MODE::NO_RECURSE );
+            group->AddItem( dupe );
         }
     }
 

@@ -2311,7 +2311,7 @@ void PCB_EDIT_FRAME::ExchangeFootprint( FOOTPRINT* aExisting, FOOTPRINT* aNew,
 
     if( parentGroup )
     {
-        aCommit.Modify( parentGroup->AsEdaItem() );
+        aCommit.Modify( parentGroup->AsEdaItem(), nullptr, RECURSE_MODE::NO_RECURSE );
         parentGroup->RemoveItem( aExisting );
         parentGroup->AddItem( aNew );
     }

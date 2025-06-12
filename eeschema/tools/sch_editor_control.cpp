@@ -471,7 +471,7 @@ int SCH_EDITOR_CONTROL::ExportSymbolsToLibrary( const TOOL_EVENT& aEvent )
 
                 wxCHECK2( parentScreen, continue );
 
-                commit.Modify( symbol, parentScreen );
+                commit.Modify( symbol, parentScreen, RECURSE_MODE::NO_RECURSE );
                 symbol->SetLibId( id );
                 append = true;
             }
@@ -2492,7 +2492,7 @@ int SCH_EDITOR_CONTROL::IncrementAnnotations( const TOOL_EVENT& aEvent )
                     num += dlg.m_Increment->GetValue();
                     fullRef << num;
 
-                    commit.Modify( ref.GetSymbol(), sheet.LastScreen() );
+                    commit.Modify( ref.GetSymbol(), sheet.LastScreen(), RECURSE_MODE::NO_RECURSE );
                     ref.GetSymbol()->SetRef( &sheet, From_UTF8( fullRef.c_str() ) );
                 }
             }

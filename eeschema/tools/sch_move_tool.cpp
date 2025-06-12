@@ -637,7 +637,7 @@ bool SCH_MOVE_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, SCH_COMMIT* aComm
                         {
                             if( schItem->IsGroupableType() && !schItem->GetParentGroup() )
                             {
-                                aCommit->Modify( enteredGroup );
+                                aCommit->Modify( enteredGroup, m_frame->GetScreen(), RECURSE_MODE::NO_RECURSE );
                                 enteredGroup->AddItem( schItem );
                             }
                         }
@@ -648,7 +648,7 @@ bool SCH_MOVE_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, SCH_COMMIT* aComm
                     }
                     else
                     {
-                        aCommit->Modify( schItem, m_frame->GetScreen() );
+                        aCommit->Modify( schItem, m_frame->GetScreen(), RECURSE_MODE::RECURSE );
                     }
 
                     schItem->SetFlags( IS_MOVING );

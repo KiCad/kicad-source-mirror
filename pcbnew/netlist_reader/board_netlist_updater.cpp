@@ -878,7 +878,7 @@ bool BOARD_NETLIST_UPDATER::updateFootprintGroup( FOOTPRINT* aPcbFootprint,
                         EscapeHTML( existingGroup->GetName() ) );
 
             changed = true;
-            m_commit.Modify( existingGroup );
+            m_commit.Modify( existingGroup, nullptr, RECURSE_MODE::NO_RECURSE );
             existingGroup->RemoveItem( aPcbFootprint );
         }
 
@@ -915,7 +915,7 @@ bool BOARD_NETLIST_UPDATER::updateFootprintGroup( FOOTPRINT* aPcbFootprint,
             }
             else
             {
-                m_commit.Modify( newGroup->AsEdaItem() );
+                m_commit.Modify( newGroup->AsEdaItem(), nullptr, RECURSE_MODE::NO_RECURSE );
             }
 
             newGroup->AddItem( aPcbFootprint );
@@ -1385,7 +1385,7 @@ bool BOARD_NETLIST_UPDATER::updateGroups( NETLIST& aNetlist )
                 wxString msg;
                 msg.Printf( _( "Changed group name to '%s' to '%s'." ), EscapeHTML( pcbGroup->GetName() ),
                             EscapeHTML( netlistGroup->name ) );
-                m_commit.Modify( pcbGroup->AsEdaItem() );
+                m_commit.Modify( pcbGroup->AsEdaItem(), nullptr, RECURSE_MODE::NO_RECURSE );
                 pcbGroup->SetName( netlistGroup->name );
             }
         }
@@ -1404,7 +1404,7 @@ bool BOARD_NETLIST_UPDATER::updateGroups( NETLIST& aNetlist )
                 wxString msg;
                 msg.Printf( _( "Changed group library link to '%s'." ),
                             EscapeHTML( netlistGroup->libId.GetUniStringLibId() ) );
-                m_commit.Modify( pcbGroup->AsEdaItem() );
+                m_commit.Modify( pcbGroup->AsEdaItem(), nullptr, RECURSE_MODE::NO_RECURSE );
                 pcbGroup->SetDesignBlockLibId( netlistGroup->libId );
             }
         }

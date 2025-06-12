@@ -176,6 +176,9 @@ int PCB_GROUP_TOOL::Group( const TOOL_EVENT& aEvent )
     {
         if( eda_item->IsBOARD_ITEM() )
         {
+            if( EDA_GROUP* existingGroup = eda_item->GetParentGroup() )
+                m_commit->Modify( existingGroup->AsEdaItem(), nullptr, RECURSE_MODE::NO_RECURSE );
+
             m_commit->Modify( eda_item );
             group->AddItem( eda_item );
         }

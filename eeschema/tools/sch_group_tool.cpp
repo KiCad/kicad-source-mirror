@@ -131,15 +131,19 @@ int SCH_GROUP_TOOL::Group( const TOOL_EVENT& aEvent )
     SCH_SELECTION_TOOL* selTool = m_toolMgr->GetTool<SCH_SELECTION_TOOL>();
     SCH_SELECTION       selection = selTool->RequestSelection();
 
-    for( EDA_ITEM* item : selection.GetItems() )
+    // Iterate from the back so we don't have to worry about removals.
+    for( int ii = selection.GetSize() - 1; ii >= 0; --ii )
     {
-        SCH_ITEM* schItem = static_cast<SCH_ITEM*>( item );
+        if( !selection[ii]->IsSCH_ITEM() )
+        {
+            selection.Remove( selection[ii] );
+            continue;
+        }
+
+        SCH_ITEM* schItem = static_cast<SCH_ITEM*>( selection[ii] );
 
         if( !schItem->IsGroupableType() )
-            selection.Remove( item );
-
-        if( isSymbolEditor && schItem->GetParentSymbol() )
-            selection.Remove( item );
+            selection.Remove( schItem );
     }
 
     if( selection.Empty() )
@@ -155,7 +159,10 @@ int SCH_GROUP_TOOL::Group( const TOOL_EVENT& aEvent )
 
     for( EDA_ITEM* eda_item : selection )
     {
-        m_commit->Modify( eda_item, screen );
+        if( EDA_GROUP* existingGroup = eda_item->GetParentGroup() )
+            m_commit->Modify( existingGroup->AsEdaItem(), screen, RECURSE_MODE::NO_RECURSE );
+
+        m_commit->Modify( eda_item, screen, RECURSE_MODE::NO_RECURSE );
         group->AddItem( eda_item );
     }
 

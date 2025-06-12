@@ -182,10 +182,10 @@ SCH_ITEM* SCH_ITEM::Duplicate( bool addToParentGroup, SCH_COMMIT* aCommit, bool 
     {
         wxCHECK_MSG( aCommit, newItem, "Must supply a commit to update parent group" );
 
-        if( newItem->GetParentGroup() )
+        if( EDA_GROUP* group = newItem->GetParentGroup() )
         {
-            aCommit->Modify( newItem->GetParentGroup()->AsEdaItem() );
-            newItem->GetParentGroup()->AddItem( newItem );
+            aCommit->Modify( group->AsEdaItem(), nullptr, RECURSE_MODE::NO_RECURSE );
+            group->AddItem( newItem );
         }
     }
 

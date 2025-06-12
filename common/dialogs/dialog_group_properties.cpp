@@ -95,7 +95,7 @@ bool DIALOG_GROUP_PROPERTIES::TransferDataFromWindow()
             m_commit->Modify( item, m_frame->GetScreen() );
 
             if( existingGroup )
-                m_commit->Modify( existingGroup->AsEdaItem(), m_frame->GetScreen() );
+                m_commit->Modify( existingGroup->AsEdaItem(), m_frame->GetScreen(), RECURSE_MODE::NO_RECURSE );
         }
     }
 

@@ -435,7 +435,7 @@ bool PCB_EDIT_FRAME::SaveSelectionToDesignBlock( const LIB_ID& aLibId )
         {
             BOARD_COMMIT commit( m_toolManager );
 
-            commit.Modify( group );
+            commit.Modify( group, nullptr, RECURSE_MODE::NO_RECURSE );
             group->SetDesignBlockLibId( aLibId );
 
             commit.Push( "Set Group Design Block Link" );

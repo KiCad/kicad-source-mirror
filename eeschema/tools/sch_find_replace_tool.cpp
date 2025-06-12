@@ -358,7 +358,7 @@ int SCH_FIND_REPLACE_TOOL::ReplaceAndFindNext( const TOOL_EVENT& aEvent )
         SCH_COMMIT commit( m_frame );
         SCH_ITEM* sch_item = static_cast<SCH_ITEM*>( item );
 
-        commit.Modify( sch_item, sheet->LastScreen() );
+        commit.Modify( sch_item, sheet->LastScreen(), RECURSE_MODE::NO_RECURSE );
 
         if( item->Replace( data, sheet ) )
         {
@@ -398,7 +398,7 @@ int SCH_FIND_REPLACE_TOOL::ReplaceAll( const TOOL_EVENT& aEvent )
     auto doReplace =
             [&]( SCH_ITEM* aItem, SCH_SHEET_PATH* aSheet, EDA_SEARCH_DATA& aData )
             {
-                commit.Modify( aItem, aSheet->LastScreen() );
+                commit.Modify( aItem, aSheet->LastScreen(), RECURSE_MODE::NO_RECURSE );
 
                 if( aItem->Replace( aData, aSheet ) )
                 {

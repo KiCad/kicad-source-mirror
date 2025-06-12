@@ -382,7 +382,7 @@ void BACK_ANNOTATE::applyChangelist()
                     return b ? _( "true" ) : _( "false" );
                 };
         if( !m_dryRun )
-            commit.Modify( symbol, screen );
+            commit.Modify( symbol, screen, RECURSE_MODE::NO_RECURSE );
 
         if( m_processReferences && ref.GetRef() != fpData.m_ref && !skip )
         {
