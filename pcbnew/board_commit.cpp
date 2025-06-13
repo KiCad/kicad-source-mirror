@@ -514,7 +514,8 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
         if( !staleRuleAreas.empty() && (   settings->m_Display.m_TrackClearance == SHOW_WITH_VIA_ALWAYS
                                         || settings->m_Display.m_PadClearance ) )
         {
-            view->UpdateCollidingItems( staleRuleAreas, { PCB_TRACE_T, PCB_ARC_T, PCB_VIA_T, PCB_PAD_T } );
+            if( view )
+                view->UpdateCollidingItems( staleRuleAreas, { PCB_TRACE_T, PCB_ARC_T, PCB_VIA_T, PCB_PAD_T } );
         }
 
         if( !staleTeardropPadsAndVias.empty() || !staleTeardropTracks.empty() )
