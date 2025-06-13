@@ -261,9 +261,10 @@ void PCB_BASE_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
     bool reBuild_ratsnest = false;
     bool deep_reBuild_ratsnest = false;  // true later if pointers must be rebuilt
     bool solder_mask_dirty = false;
+    std::vector<BOX2I> dirty_rule_areas;
 
-    auto view = GetCanvas()->GetView();
-    auto connectivity = GetBoard()->GetConnectivity();
+    KIGFX::PCB_VIEW* view = GetCanvas()->GetView();
+    std::shared_ptr<CONNECTIVITY_DATA> connectivity = GetBoard()->GetConnectivity();
 
     GetBoard()->IncrementTimeStamp();   // clear caches
 
@@ -454,6 +455,12 @@ void PCB_BASE_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
             view->Hide( item, false );
             parent->Add( item );
 
+            if( item->Type() == PCB_ZONE_T && static_cast<ZONE*>( item )->GetIsRuleArea() )
+            {
+                dirty_rule_areas.push_back( item->GetBoundingBox() );
+                dirty_rule_areas.push_back( image->GetBoundingBox() );
+            }
+
             update_item_change_state( item, ITEM_CHANGE_TYPE::CHANGED );
             break;
         }
@@ -468,6 +475,9 @@ void PCB_BASE_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
 
             eda_item->SetFlags( UR_TRANSIENT );
 
+            if( eda_item->Type() == PCB_ZONE_T && static_cast<ZONE*>( eda_item )->GetIsRuleArea() )
+                dirty_rule_areas.push_back( eda_item->GetBoundingBox() );
+
             break;
 
         case UNDO_REDO::DELETED:    /* deleted items are put in List, as new items */
@@ -480,6 +490,9 @@ void PCB_BASE_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
 
             if( eda_item->Type() != PCB_NETINFO_T )
                 view->Add( eda_item );
+
+            if( eda_item->Type() == PCB_ZONE_T && static_cast<ZONE*>( eda_item )->GetIsRuleArea() )
+                dirty_rule_areas.push_back( eda_item->GetBoundingBox() );
 
             break;
 
@@ -558,6 +571,12 @@ void PCB_BASE_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
 
     if( IsType( FRAME_PCB_EDITOR ) )
     {
+        if( !dirty_rule_areas.empty() && (   GetPcbNewSettings()->m_Display.m_TrackClearance == SHOW_WITH_VIA_ALWAYS
+                                          || GetPcbNewSettings()->m_Display.m_PadClearance ) )
+        {
+            view->UpdateCollidingItems( dirty_rule_areas, { PCB_TRACE_T, PCB_ARC_T, PCB_VIA_T, PCB_PAD_T } );
+        }
+
         if( reBuild_ratsnest || deep_reBuild_ratsnest )
         {
             // Connectivity may have changed; rebuild internal caches to remove stale items

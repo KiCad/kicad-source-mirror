@@ -24,6 +24,8 @@
  */
 
 #include <macros.h>
+#include <pgm_base.h>
+#include <settings/settings_manager.h>
 #include <board.h>
 #include <footprint.h>
 #include <lset.h>
@@ -124,20 +126,27 @@ COMMIT& BOARD_COMMIT::Stage( const PICKED_ITEMS_LIST& aItems, UNDO_REDO aModFlag
 }
 
 
-void BOARD_COMMIT::propagateDamage( BOARD_ITEM* aChangedItem, std::vector<ZONE*>* aStaleZones )
+void BOARD_COMMIT::propagateDamage( BOARD_ITEM* aChangedItem, std::vector<ZONE*>* aStaleZones,
+                                    std::vector<BOX2I>& aStaleRuleAreas )
 {
     wxCHECK( aChangedItem, /* void */ );
 
     if( aStaleZones && aChangedItem->Type() == PCB_ZONE_T )
         aStaleZones->push_back( static_cast<ZONE*>( aChangedItem ) );
 
-    aChangedItem->RunOnChildren(
-            std::bind( &BOARD_COMMIT::propagateDamage, this, _1, aStaleZones ),
-            RECURSE_MODE::NO_RECURSE );
+    aChangedItem->RunOnChildren( std::bind( &BOARD_COMMIT::propagateDamage, this, _1, aStaleZones, aStaleRuleAreas ),
+                                 RECURSE_MODE::NO_RECURSE );
 
     BOARD* board = static_cast<BOARD*>( m_toolMgr->GetModel() );
     BOX2I  damageBBox = aChangedItem->GetBoundingBox();
     LSET   damageLayers = aChangedItem->GetLayerSet();
+
+    if( m_isBoardEditor && aChangedItem->Type() == PCB_ZONE_T )
+    {
+        // A named zone can have custom DRC rules targetting it.
+        if( !static_cast<ZONE*>( aChangedItem )->GetZoneName().IsEmpty() )
+            aStaleRuleAreas.push_back( damageBBox );
+    }
 
     if( aStaleZones )
     {
@@ -166,7 +175,7 @@ void BOARD_COMMIT::propagateDamage( BOARD_ITEM* aChangedItem, std::vector<ZONE*>
 
 void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
 {
-    KIGFX::VIEW*        view = m_toolMgr->GetView();
+    KIGFX::PCB_VIEW*    view = static_cast<KIGFX::PCB_VIEW*>( m_toolMgr->GetView() );
     BOARD*              board = static_cast<BOARD*>( m_toolMgr->GetModel() );
     PCB_BASE_FRAME*     frame = dynamic_cast<PCB_BASE_FRAME*>( m_toolMgr->GetToolHolder() );
     PCB_SELECTION_TOOL* selTool = m_toolMgr->GetTool<PCB_SELECTION_TOOL>();
@@ -184,6 +193,7 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
     std::set<PCB_TRACK*>     staleTeardropTracks;
     std::vector<ZONE*>       staleZonesStorage;
     std::vector<ZONE*>*      staleZones = nullptr;
+    std::vector<BOX2I>       staleRuleAreas;
 
     if( Empty() )
         return;
@@ -319,7 +329,7 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
             }
 
             if( boardItem->Type() != PCB_MARKER_T )
-                propagateDamage( boardItem, staleZones );
+                propagateDamage( boardItem, staleZones, staleRuleAreas );
 
             if( view && boardItem->Type() != PCB_NETINFO_T )
                 view->Add( boardItem );
@@ -356,7 +366,7 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
                 ent.m_parent = parentFP->m_Uuid;
 
             if( boardItem->Type() != PCB_MARKER_T )
-                propagateDamage( boardItem, staleZones );
+                propagateDamage( boardItem, staleZones, staleRuleAreas );
 
             switch( boardItem->Type() )
             {
@@ -438,8 +448,8 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
 
             if( boardItem->Type() != PCB_MARKER_T )
             {
-                propagateDamage( boardItemCopy, staleZones );   // before
-                propagateDamage( boardItem, staleZones );       // after
+                propagateDamage( boardItemCopy, staleZones, staleRuleAreas );   // before
+                propagateDamage( boardItem, staleZones, staleRuleAreas );       // after
             }
 
             updateComponentClasses( boardItem );
@@ -497,6 +507,14 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
         {
             if( frame )
                 frame->HideSolderMask();
+        }
+
+        PCBNEW_SETTINGS* settings = Pgm().GetSettingsManager().GetAppSettings<PCBNEW_SETTINGS>( "pcbnew" );
+
+        if( !staleRuleAreas.empty() && (   settings->m_Display.m_TrackClearance == SHOW_WITH_VIA_ALWAYS
+                                        || settings->m_Display.m_PadClearance ) )
+        {
+            view->UpdateCollidingItems( staleRuleAreas, { PCB_TRACE_T, PCB_ARC_T, PCB_VIA_T, PCB_PAD_T } );
         }
 
         if( !staleTeardropPadsAndVias.empty() || !staleTeardropTracks.empty() )

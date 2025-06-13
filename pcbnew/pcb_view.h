@@ -22,8 +22,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef __PCB_VIEW_H
-#define __PCB_VIEW_H
+#pragma once
 
 #include <layer_ids.h>
 #include <view/view.h>
@@ -51,9 +50,13 @@ public:
     /// @copydoc VIEW::Update()
     virtual void Update( const VIEW_ITEM* aItem ) const override;
 
+    /**
+     * Sets the KIGFX::REPAINT on all items matching \a aTypes which intersect \a aStaleAreas.
+     */
+    void UpdateCollidingItems( const std::vector<BOX2I>& aStaleAreas,
+                               std::initializer_list<KICAD_T> aTypes );
+
     void UpdateDisplayOptions( const PCB_DISPLAY_OPTIONS& aOptions );
 };
 
 }
-
-#endif

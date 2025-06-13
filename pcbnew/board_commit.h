@@ -76,7 +76,8 @@ private:
 
     EDA_ITEM* makeImage( EDA_ITEM* aItem ) const override;
 
-    void propagateDamage( BOARD_ITEM* aItem, std::vector<ZONE*>* aStaleZones );
+    void propagateDamage( BOARD_ITEM* aItem, std::vector<ZONE*>* aStaleZones,
+                          std::vector<BOX2I>& aStaleRuleAreas );
 
 private:
     TOOL_MANAGER*  m_toolMgr;
