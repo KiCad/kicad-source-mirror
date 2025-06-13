@@ -30,7 +30,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-06-08 17:03+0300\n"
-"PO-Revision-Date: 2025-06-12 11:01+0000\n"
+"PO-Revision-Date: 2025-06-14 00:01+0000\n"
 "Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v9/de/>\n"
 "Language: de\n"
@@ -30634,7 +30634,7 @@ msgstr "Koaxialleiter"
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:23
 msgid "Coupled Microstrip Line"
-msgstr "Gekoppelte Microstrip-Leiter"
+msgstr "Gekoppelter Microstrip-Leiter"
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:23
 msgid "Stripline"
@@ -31630,9 +31630,8 @@ msgid "mi/h"
 msgstr "mi/h"
 
 #: pcbnew/api/api_handler_pcb.cpp:507
-#, fuzzy
 msgid "Modified items via API"
-msgstr "Mittels API hinzugfügte Elemente"
+msgstr "Mittels API veränderte Elemente"
 
 #: pcbnew/api/api_handler_pcb.cpp:670
 msgid "Deleted items via API"
@@ -43354,7 +43353,7 @@ msgstr ""
 #: pcbnew/files.cpp:541
 #, c-format
 msgid "PCB '%s' is already open by '%s' at '%s'."
-msgstr "Platine \"%s\" ist bereits geöffnet durch \"%s\" auf \"%s\"."
+msgstr "Platine \"%s\" ist bereits durch \"%s\" auf \"%s\" geöffnet."
 
 #: pcbnew/files.cpp:554
 msgid "The current PCB has been modified.  Save changes?"
