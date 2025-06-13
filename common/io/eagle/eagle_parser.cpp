@@ -1917,11 +1917,13 @@ ESHEET::ESHEET( wxXmlNode* aSheet, IO_BASE* aIo ) :
     /*
      * <!ELEMENT sheet (description?, plain?, moduleinsts?, instances?, busses?, nets?)>
      */
-    description = parseOptionalAttribute<wxString>( aSheet, "description" );
-
     for( wxXmlNode* child = aSheet->GetChildren(); child; child = child->GetNext() )
     {
-        if( child->GetName() == "plain" )
+        if( child->GetName() == "description" )
+        {
+            description = std::make_optional<EDESCRIPTION>( child, aIo );
+        }
+        else if( child->GetName() == "plain" )
         {
             plain = std::make_unique<EPLAIN>( child, aIo );
         }
@@ -1932,8 +1934,7 @@ ESHEET::ESHEET( wxXmlNode* aSheet, IO_BASE* aIo ) :
             {
                 if( moduleinst->GetName() == "moduleinst" )
                 {
-                    std::unique_ptr<EMODULEINST> inst = std::make_unique<EMODULEINST>( moduleinst,
-                                                                                       aIo );
+                    std::unique_ptr<EMODULEINST> inst = std::make_unique<EMODULEINST>( moduleinst, aIo );
                     moduleinsts[ inst->name ] = std::move( inst );
                 }
             }
@@ -1942,8 +1943,7 @@ ESHEET::ESHEET( wxXmlNode* aSheet, IO_BASE* aIo ) :
         }
         else if( child->GetName() == "instances" )
         {
-            for( wxXmlNode* instance = child->GetChildren(); instance;
-                 instance = instance->GetNext() )
+            for( wxXmlNode* instance = child->GetChildren(); instance; instance = instance->GetNext() )
             {
                 if( instance->GetName() == "instance" )
                     instances.emplace_back( std::make_unique<EINSTANCE>( instance, aIo ) );

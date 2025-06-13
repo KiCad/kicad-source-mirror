@@ -825,7 +825,11 @@ void SCH_IO_EAGLE::loadSheet( const std::unique_ptr<ESHEET>& aSheet )
         fn.SetExt( FILEEXT::KiCadSchematicFileExtension );
 
         filename = wxString::Format( wxT( "%s_%d" ), m_filename.GetName(), m_sheetIndex );
-        sheet->SetName( filename );
+
+        if( aSheet->description )
+            sheet->SetName( aSheet->description.value().text );
+        else
+            sheet->SetName( filename );
 
         ReplaceIllegalFileNameChars( &filename );
         replace( filename.begin(), filename.end(), ' ', '_' );
