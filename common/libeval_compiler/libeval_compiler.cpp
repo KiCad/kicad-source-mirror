@@ -1262,6 +1262,7 @@ void UOP::Exec( CONTEXT* ctx )
         LIBEVAL::VALUE* arg1 = ctx->Pop();
         double          ARG1VALUE = arg1 ? arg1->AsDouble() : 0.0;
         double          result;
+        EDA_UNITS       resultUnits = arg1 ? arg1->GetUnits() : EDA_UNITS::UNSCALED;
 
         switch( m_op )
         {
@@ -1275,7 +1276,7 @@ void UOP::Exec( CONTEXT* ctx )
 
         auto rp = ctx->AllocValue();
         rp->Set( result );
-        rp->SetUnits( arg1->GetUnits() );
+        rp->SetUnits( resultUnits );
         ctx->Push( rp );
         return;
     }
