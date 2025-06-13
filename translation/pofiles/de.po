@@ -31,7 +31,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-06-08 17:02+0300\n"
-"PO-Revision-Date: 2025-06-12 10:05+0000\n"
+"PO-Revision-Date: 2025-06-14 00:01+0000\n"
 "Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
@@ -28324,9 +28324,9 @@ msgid "Edit File in Text Editor"
 msgstr "Datei in Texteditor bearbeiten"
 
 #: kicad/kicad_manager_frame.cpp:1063
-#, fuzzy, c-format
+#, c-format
 msgid "Project '%s' is already open by '%s' at '%s'."
-msgstr "Platine \"%s\" ist bereits geöffnet durch \"%s\" auf \"%s\"."
+msgstr "Projekt \"%s\" ist bereits durch \"%s\" auf \"%s\" geöffnet ."
 
 #: kicad/kicad_manager_frame.cpp:1089
 msgid "[no project loaded]"
@@ -28630,9 +28630,8 @@ msgid "Save Package"
 msgstr "Paket speichern"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:542
-#, fuzzy
 msgid "Download Package"
-msgstr "Lade Paket herunter"
+msgstr "Paket herunterladen"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:560
 msgid ""
@@ -29151,7 +29150,6 @@ msgstr "Konnte Standard-Remote nicht setzen."
 
 #: kicad/project_tree_pane.cpp:1792 kicad/project_tree_pane.cpp:1824
 #: kicad/project_tree_pane.cpp:1847
-#, fuzzy
 msgid "Fetch Remote"
 msgstr "Remote abrufen"
 
@@ -29332,18 +29330,16 @@ msgid "Launch preferred text editor"
 msgstr "Bevorzugten Texteditor starten"
 
 #: kicad/tools/kicad_manager_actions.cpp:221
-#, fuzzy
 msgid "Archive Project..."
-msgstr "Projektdateien &archivieren..."
+msgstr "Projekt archivieren ..."
 
 #: kicad/tools/kicad_manager_actions.cpp:222
 msgid "Archive all project files"
 msgstr "Alle Projektdateien archivieren"
 
 #: kicad/tools/kicad_manager_actions.cpp:228
-#, fuzzy
 msgid "Unarchive Project..."
-msgstr "Projektdateien aus Archiv &entpacken..."
+msgstr "Projekt aus Archiv entpacken ..."
 
 #: kicad/tools/kicad_manager_actions.cpp:229
 msgid "Unarchive project files from zip archive"
@@ -29382,7 +29378,6 @@ msgid "Clone Project from Git Repository"
 msgstr "Projekt von Git-Repository klonen"
 
 #: kicad/tools/kicad_manager_control.cpp:181
-#, fuzzy
 msgid "Clone Repository"
 msgstr "Repository klonen"
 
@@ -29626,9 +29621,8 @@ msgid "(paper size)"
 msgstr "(Papierformat)"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:29
-#, fuzzy
 msgid "Item Type"
-msgstr "Zu Text ändern"
+msgstr "Elemettyp"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:38
 msgid "Show on all pages"
@@ -30884,9 +30878,8 @@ msgid "Gold"
 msgstr "Gold"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:101
-#, fuzzy
 msgid "Stainless steel 316L"
-msgstr "Rostfreier Stahl 18-9"
+msgstr "Rostfreier Stahl 316L"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:105
 msgid "Inconel"
@@ -30897,9 +30890,8 @@ msgid "Indium"
 msgstr "Indium"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:113
-#, fuzzy
 msgid "Titanium, passive"
-msgstr "Titan"
+msgstr "Titan, passiv"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:117
 msgid "Stainless steel 18-9"
@@ -30926,9 +30918,8 @@ msgid "Nickel"
 msgstr "Nickel"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:141
-#, fuzzy
 msgid "Carbon (Graphitic)"
-msgstr "Grafiken bereinigen"
+msgstr "Kohlenstoff (Graphit)"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:145
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:854
@@ -30949,9 +30940,8 @@ msgid "Beryllium copper"
 msgstr "Berylliumkupfer"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:161
-#, fuzzy
 msgid "Lead-free Solder"
-msgstr "HAL Bleifrei"
+msgstr "Bleifreies Lötzinn"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:165
 msgid "Phosphor bronze"
@@ -30994,14 +30984,12 @@ msgid "Carbon steel"
 msgstr "Kohlenstoffstahl"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:205
-#, fuzzy
 msgid "Aluminium, chromated"
-msgstr "Aluminium"
+msgstr "Aluminium, chromatiert"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:209
-#, fuzzy
 msgid "Aluminium, pure, passive"
-msgstr "Aluminium-Kupfer"
+msgstr "Aluminium, rein, passiv"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:213
 msgid "Cadmium"
@@ -31450,14 +31438,13 @@ msgstr "Microstrip Leiter"
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:24
 msgid "Coupled Microstrip Line"
-msgstr "Gekoppelte Microstrip-Leiter"
+msgstr "Gekoppelter Microstrip-Leiter"
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:25
 msgid "Stripline"
 msgstr "Streifenleitung"
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:26
-#, fuzzy
 msgid "Coupled Stripline"
 msgstr "Gekoppelte Microstrip-Leiter"
 
@@ -32485,9 +32472,8 @@ msgid "mi/h"
 msgstr "mi/h"
 
 #: pcbnew/api/api_handler_pcb.cpp:507
-#, fuzzy
 msgid "Modified items via API"
-msgstr "Mittels API hinzugfügte Elemente"
+msgstr "Mittels API veränderte Elemente"
 
 #: pcbnew/api/api_handler_pcb.cpp:670
 msgid "Deleted items via API"
@@ -32509,7 +32495,6 @@ msgstr "Platinenränder müssen auf der %s-Lage definiert werden."
 
 #: pcbnew/autorouter/autoplace_tool.cpp:125
 #: pcbnew/autorouter/autoplace_tool.cpp:131
-#, fuzzy
 msgid "Autoplace Footprints"
 msgstr "Footprints automatisch platzieren"
 
@@ -33657,9 +33642,8 @@ msgid "Component Classes"
 msgstr "Bauteilklassen"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:214
-#, fuzzy
 msgid "Time Domain Parameters"
-msgstr "Schriftfeld-Parameter"
+msgstr "Zeitbereich-Parameter"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:234
 msgid "Board Data"
@@ -33682,9 +33666,8 @@ msgstr ""
 #: pcbnew/dialogs/dialog_board_setup.cpp:354 pcbnew/files.cpp:568
 #: pcbnew/tools/pcb_control.cpp:1689
 #: pcbnew/widgets/pcb_design_block_preview_widget.cpp:187
-#, fuzzy
 msgid "Load PCB"
-msgstr "Leiterplatte wird geladen"
+msgstr "Leiterplatte laden"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:377
 #: pcbnew/widgets/pcb_design_block_preview_widget.cpp:203
@@ -33827,14 +33810,12 @@ msgid "Dimensions"
 msgstr "Bemaßungen"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:760
-#, fuzzy
 msgid "Front copper area"
-msgstr "Vorderseitige Kupferlage"
+msgstr "Vorderseitige Kupferfläche"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:762
-#, fuzzy
 msgid "Back copper area"
-msgstr "Rückseitige Kupferlage"
+msgstr "Rückseitige Kupferfläche"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:809
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:38
@@ -33859,9 +33840,8 @@ msgid "Subtract holes from board area"
 msgstr "Löcher von Platinenfläche abziehen"
 
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:208
-#, fuzzy
 msgid "Subtract holes from copper areas"
-msgstr "Löcher von Platinenfläche abziehen"
+msgstr "Löcher von Kupferflächen abziehen"
 
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:211
 msgid "Exclude footprints with no pads"
@@ -34566,7 +34546,6 @@ msgid "Centre on source items"
 msgstr "Ansicht auf Quellelemente zentrieren"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:197
-#, fuzzy
 msgid "Renumber pads"
 msgstr "Pads neu nummerieren"
 
@@ -34665,14 +34644,12 @@ msgid "Full circle"
 msgstr "Vollkreis"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:360
-#, fuzzy
 msgid "Clockwise"
-msgstr "Im Uhrzeigersinn drehen"
+msgstr "Im Uhrzeigersinn"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:360
-#, fuzzy
 msgid "Anti-clockwise"
-msgstr "Im Uhrzeigersinn drehen"
+msgstr "Gegen Uhrzeigersinn"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:362
 msgid "Direction"
@@ -34719,9 +34696,8 @@ msgid "How many items in the array."
 msgstr "Wie viele Elemente sind im Array."
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:403
-#, fuzzy
 msgid "First item angle:"
-msgstr "Elemente nach Netz filtern:"
+msgstr "Winkel des ersten Elements:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:408
 msgid "Angle offset of the first item in the array"
@@ -35140,7 +35116,6 @@ msgid "Show design rules."
 msgstr "Designregeln anzeigen."
 
 #: pcbnew/dialogs/dialog_drc.cpp:360
-#, fuzzy
 msgid "-------- DRC canceled by user.<br><br>"
 msgstr "-------- DRC durch Benutzer abgebrochen. <br><br>"
 
@@ -35276,9 +35251,8 @@ msgid "Update fabrication attributes"
 msgstr "Fertigungsattribute aktualisieren"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:87
-#, fuzzy
 msgid "Update clearance overrides"
-msgstr "Freiraum"
+msgstr "Freiraumüberschreibungen aktualisieren"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:88
 msgid "Update 3D models"
@@ -44585,7 +44559,7 @@ msgstr ""
 #: pcbnew/files.cpp:527
 #, c-format
 msgid "PCB '%s' is already open by '%s' at '%s'."
-msgstr "Platine \"%s\" ist bereits geöffnet durch \"%s\" auf \"%s\"."
+msgstr "Platine \"%s\" ist bereits durch \"%s\" auf \"%s\" geöffnet."
 
 #: pcbnew/files.cpp:540
 msgid "The current PCB has been modified.  Save changes?"
