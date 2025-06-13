@@ -1898,7 +1898,7 @@ struct ESHEET : public EAGLE_BASE
      * <!ELEMENT sheet (description?, plain?, moduleinsts?, instances?, busses?, nets?)>
      */
 
-    opt_wxString                                     description;
+    std::optional<EDESCRIPTION>                      description;
     std::unique_ptr<EPLAIN>                          plain;
     std::map<wxString, std::unique_ptr<EMODULEINST>> moduleinsts;
     std::vector<std::unique_ptr<EINSTANCE>>          instances;
@@ -1925,8 +1925,7 @@ struct EMODULE : public EAGLE_BASE
     ECOORD       dx;
     ECOORD       dy;
 
-    std::optional<EDESCRIPTION> description;
-
+    std::optional<EDESCRIPTION>                           description;
     std::map<wxString, std::unique_ptr<EPORT>>            ports;
     std::map<wxString, std::unique_ptr<EVARIANTDEF>>      variantdefs;
     std::map<wxString, std::unique_ptr<ESCHEMATIC_GROUP>> groups;
