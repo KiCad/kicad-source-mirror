@@ -29,6 +29,7 @@
 #include <wx/pen.h>     // for wxPenStyle
 #include <list>         // for std::list
 #include <geometry/seg.h>
+#include <math/vector3.h>
 
 class NETLIST_OBJECT_LIST;
 
@@ -260,7 +261,22 @@ public:
 
     bool IsParallel( const SCH_LINE* aLine ) const;
 
+    /**
+     * For wires only: @return true if a wire can accept a hop over arc shape
+     * (when 2 wires are crossing, only one must accept the hpo over)
+     */
     bool ShouldHopOver( const SCH_LINE* aLine ) const;
+
+    /**
+     * For wires only: build the list of points to draw the shape using segments and 180 deg arcs
+     * Points are VECTOR3D, with Z coord used as flag:
+     * for segments: start point and end point have the Z coord = 0
+     * for arcs (hop over): start point middle point and end point have the Z coord = 1
+     * @return the list of points
+     * @param aScreen is the current screen to draw/plot
+     * @param aArcRadius is the radius of the hop over arc
+     */
+    std::vector<VECTOR3I> BuildWireWithHopShape( const SCH_SCREEN* aScreen, double aArcRadius ) const;
 
     void GetEndPoints( std::vector<DANGLING_END_ITEM>& aItemList ) override;
 

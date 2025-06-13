@@ -1480,140 +1480,46 @@ void SCH_PAINTER::draw( const SCH_LINE* aLine, int aLayer )
     m_gal->SetStrokeColor( color );
     m_gal->SetLineWidth( width );
 
-    VECTOR2I currentLineStartPoint = aLine->GetStartPoint();
-    VECTOR2I currentLineEndPoint = aLine->GetEndPoint();
+    double   lineWidth = getLineWidth( aLine, drawingShadows, drawingNetColorHighlights );
+    double   arcRadius = lineWidth * ADVANCED_CFG::GetCfg().m_hopOverArcRadius;
+    std::vector<VECTOR3I> curr_wire_shape = aLine->BuildWireWithHopShape( m_schematic->GetCurrentScreen(),
+                                                                          arcRadius );
 
-    std::vector<SCH_LINE*> existingLines;
-    existingLines.clear();
-
-    if( aLine->IsWire() )
+    for( size_t ii = 1; ii < curr_wire_shape.size(); ii++ )
     {
-        SCH_SCREEN* curr_screen = m_schematic->GetCurrentScreen();
+        VECTOR2I start( curr_wire_shape[ii-1].x, curr_wire_shape[ii-1].y );
 
-        for( SCH_ITEM* item : curr_screen->Items().Overlapping( SCH_LINE_T, aLine->GetBoundingBox() ) )
+        if( curr_wire_shape[ii-1].z == 0 )  // This is the start point of a segment
+                                            // there are always 2 points in list for a segment
         {
-            SCH_LINE* line = static_cast<SCH_LINE*>( item );
-
-            if( line->IsWire() )
-                existingLines.push_back( line );
-        }
-    }
-
-    std::vector<VECTOR2I> intersections;
-
-    for( SCH_LINE* existingLine : existingLines )
-    {
-        VECTOR2I extLineStartPoint = existingLine->GetStartPoint();
-        VECTOR2I extLineEndPoint = existingLine->GetEndPoint();
-
-        if( extLineStartPoint == currentLineStartPoint && extLineEndPoint == currentLineEndPoint )
-            continue;
-
-        if( !aLine->ShouldHopOver( existingLine ) )
-            continue;
-
-        SEG currentSegment = SEG( currentLineStartPoint, currentLineEndPoint );
-        SEG existingSegment = SEG( extLineStartPoint, extLineEndPoint );
-
-        if( OPT_VECTOR2I intersect = currentSegment.Intersect( existingSegment, true, false ) )
-        {
-            if( aLine->IsEndPoint( *intersect ) || existingLine->IsEndPoint( *intersect ) )
-                continue;
-
-            intersections.push_back( *intersect );
-        }
-    }
-
-
-    if( intersections.empty() )
-    {
-        drawLine( currentLineStartPoint, currentLineEndPoint, lineStyle,
-                  ( lineStyle <= LINE_STYLE::FIRST_TYPE || drawingShadows ), width );
-    }
-    else
-    {
-        auto getDistance = []( const VECTOR2I& a, const VECTOR2I& b ) -> double
-        {
-            return std::sqrt( std::pow( a.x - b.x, 2 ) + std::pow( a.y - b.y, 2 ) );
-        };
-
-        std::sort( intersections.begin(), intersections.end(),
-                   [&]( const VECTOR2I& a, const VECTOR2I& b )
-                   {
-                       return getDistance( aLine->GetStartPoint(), a )
-                              < getDistance( aLine->GetStartPoint(), b );
-                   } );
-
-        VECTOR2I currentStart = aLine->GetStartPoint();
-        float    lineWidth = getLineWidth( aLine, drawingShadows, drawingNetColorHighlights );
-        float    arcRadius = lineWidth * ADVANCED_CFG::GetCfg().m_hopOverArcRadius;
-
-        for( const VECTOR2I& hopMid : intersections )
-        {
-            // Calculate the angle of the line from start point to end point in radians
-            double lineAngle = std::atan2( aLine->GetEndPoint().y - aLine->GetStartPoint().y,
-                                          aLine->GetEndPoint().x - aLine->GetStartPoint().x );
-
-            // Convert the angle from radians to degrees
-            double lineAngleDeg = lineAngle * ( 180.0f / M_PI );
-
-            // Normalize the angle to be between 0 and 360 degrees
-            if( lineAngleDeg < 0 )
-                lineAngleDeg += 360;
-
-            double startAngle = lineAngleDeg;
-            double endAngle = startAngle + 180.0f;
-
-            // Adjust the end angle if it exceeds 360 degrees
-            if( endAngle >= 360.0 )
-                endAngle -= 360.0;
-
-            // Convert start and end angles from degrees to radians
-            double startAngleRad = startAngle * ( M_PI / 180.0f );
-            double endAngleRad = endAngle * ( M_PI / 180.0f );
-
-            VECTOR2I arcStartPoint = {
-                hopMid.x + static_cast<int>( arcRadius * cos( startAngleRad ) ),
-                hopMid.y + static_cast<int>( arcRadius * sin( startAngleRad ) )
-            };
-
-            VECTOR2I arcEndPoint = { hopMid.x + static_cast<int>( arcRadius * cos( endAngleRad ) ),
-                                     hopMid.y
-                                             + static_cast<int>( arcRadius * sin( endAngleRad ) ) };
-
-            VECTOR2I arcMidPoint = {
-                hopMid.x + static_cast<int>( arcRadius
-                                            * cos( ( startAngleRad + endAngleRad ) / 2.0f ) ),
-                hopMid.y + static_cast<int>( arcRadius
-                                            * sin( ( startAngleRad + endAngleRad ) / 2.0f ) )
-            };
-
-            VECTOR2I beforeHop = hopMid - VECTOR2I( arcRadius * std::cos( lineAngle ),
-                                             arcRadius * std::sin( lineAngle ) );
-            VECTOR2I afterHop = hopMid + VECTOR2I( arcRadius * std::cos( lineAngle ),
-                                            arcRadius * std::sin( lineAngle ) );
-
-            // Draw the line from the current start point to the before-hop point
-            drawLine( currentStart, beforeHop, lineStyle,
+            VECTOR2I end( curr_wire_shape[ii].x, curr_wire_shape[ii].y );
+            drawLine( start, end, lineStyle,
                       ( lineStyle <= LINE_STYLE::FIRST_TYPE || drawingShadows ), width );
-
-            // Create an arc object and draw it using the stroke function
-            SHAPE_ARC arc( arcStartPoint, arcMidPoint, arcEndPoint, lineWidth );
-            STROKE_PARAMS::Stroke( &arc, LINE_STYLE::DASH, KiROUND( width ), &m_schSettings,
-                                   [&]( const VECTOR2I& start, const VECTOR2I& end )
-                                   {
-                                       if( start == end )
-                                           m_gal->DrawLine( start + 1, end );
-                                       else
-                                           m_gal->DrawLine( start, end );
-                                   } );
-
-            currentStart = afterHop;
         }
+        else   // This is the start point of a arc. there are always 3 points in list for an arc
+        {
+            // Hop are a small arc, so use a solid line style gives best results
+            VECTOR2I arc_middle( curr_wire_shape[ii].x, curr_wire_shape[ii].y );
+            ii++;
+            VECTOR2I arc_end( curr_wire_shape[ii].x, curr_wire_shape[ii].y );
+            ii++;
 
-        // Draw the final line from the current start point to the end point of the original line
-        drawLine( currentStart, aLine->GetEndPoint(), lineStyle,
-                  ( lineStyle <= LINE_STYLE::FIRST_TYPE || drawingShadows ), width );
+            VECTOR2D dstart = start;
+            VECTOR2D dmid = arc_middle;
+            VECTOR2D dend = arc_end;
+            VECTOR2D center = CalcArcCenter( dstart, dmid, dend );
+
+            EDA_ANGLE startAngle( dstart - center );
+            EDA_ANGLE midAngle( dmid - center );
+            EDA_ANGLE endAngle( dend - center );
+
+            EDA_ANGLE angle1 = midAngle - startAngle;
+            EDA_ANGLE angle2 = endAngle - midAngle;
+
+            EDA_ANGLE angle = angle1.Normalize180() + angle2.Normalize180();
+
+            m_gal->DrawArc( center, ( dstart - center ).EuclideanNorm(), startAngle, angle );
+        }
     }
 }
 

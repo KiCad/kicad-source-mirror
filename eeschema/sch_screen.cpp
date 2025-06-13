@@ -61,10 +61,12 @@
 #include <locale_io.h>
 
 #include <algorithm>
+#include <math/vector3.h>
 
 // TODO(JE) Debugging only
 #include <core/profile.h>
 #include "sch_bus_entry.h"
+#include "sch_shape.h"
 
 /**
  * Flag to enable profiling of the TestDanglingEnds() function.
@@ -913,8 +915,53 @@ void SCH_SCREEN::Plot( PLOTTER* aPlotter, const SCH_PLOT_OPTS& aPlotOpts ) const
     // Plot the foreground items
     for( SCH_ITEM* item : other )
     {
-        aPlotter->SetCurrentLineWidth( item->GetEffectivePenWidth( renderSettings ) );
-        item->Plot( aPlotter, !background, aPlotOpts, 0, 0, { 0, 0 }, false );
+        double   lineWidth = item->GetEffectivePenWidth( renderSettings );
+        aPlotter->SetCurrentLineWidth( lineWidth );
+
+        if( item->Type() != SCH_LINE_T )
+            item->Plot( aPlotter, !background, aPlotOpts, 0, 0, { 0, 0 }, false );
+        else
+        {
+            SCH_LINE* aLine = static_cast<SCH_LINE*>( item );
+
+            if( !aLine->IsWire() )
+                item->Plot( aPlotter, !background, aPlotOpts, 0, 0, { 0, 0 }, false );
+            else
+            {
+                double arcRadius = lineWidth * ADVANCED_CFG::GetCfg().m_hopOverArcRadius;
+                std::vector<VECTOR3I> curr_wire_shape = aLine->BuildWireWithHopShape( this, arcRadius );
+
+                for( size_t ii = 1; ii < curr_wire_shape.size(); ii++ )
+                {
+                    VECTOR2I start( curr_wire_shape[ii-1].x, curr_wire_shape[ii-1].y );
+
+                    if( curr_wire_shape[ii-1].z == 0 )  // This is the start point of a segment
+                                                        // there are always 2 points in list for a segment
+                    {
+                        VECTOR2I end( curr_wire_shape[ii].x, curr_wire_shape[ii].y );
+
+                        SCH_LINE curr_line( *aLine );
+                        curr_line.SetStartPoint( start );
+                        curr_line.SetEndPoint( end );
+                        curr_line.Plot( aPlotter, !background, aPlotOpts, 0, 0, { 0, 0 }, false );
+                    }
+                    else   // This is the start point of a arc. there are always 3 points in list for an arc
+                    {
+                        VECTOR2I arc_middle( curr_wire_shape[ii].x, curr_wire_shape[ii].y );
+                        ii++;
+                        VECTOR2I arc_end( curr_wire_shape[ii].x, curr_wire_shape[ii].y );
+                        ii++;
+
+                        SCH_SHAPE arc( SHAPE_T::ARC, aLine->GetLayer(), lineWidth );
+
+                        arc.SetArcGeometry( start, arc_middle, arc_end );
+                        // Hop are a small arc, so use a solid line style gives best results
+                        arc.SetLineStyle( LINE_STYLE::SOLID );
+                        arc.Plot( aPlotter, !background, aPlotOpts, 0, 0, { 0, 0 }, false );
+                    }
+                }
+            }
+        }
     }
 
     // After plotting the symbols as a group above (in `other`), we need to overplot the pins

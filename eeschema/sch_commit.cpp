@@ -232,6 +232,20 @@ void SCH_COMMIT::pushSchEdit( const wxString& aMessage, int aCommitFlags )
     if( enteredGroup )
         Modify( enteredGroup );
 
+    // Handle wires with Hop Over shapes:
+    for( COMMIT_LINE& ent : m_changes )
+    {
+        SCH_ITEM* schCopyItem = dynamic_cast<SCH_ITEM*>( ent.m_copy );
+        SCH_ITEM* schItem = dynamic_cast<SCH_ITEM*>( ent.m_item );
+
+        if( schCopyItem && schCopyItem->Type() == SCH_LINE_T )
+            frame->UpdateHopOveredWires( schCopyItem );
+
+        if( schItem && schItem->Type() == SCH_LINE_T )
+            frame->UpdateHopOveredWires( schItem );
+    }
+
+
     for( COMMIT_LINE& ent : m_changes )
     {
         SCH_ITEM* schItem = dynamic_cast<SCH_ITEM*>( ent.m_item );
@@ -463,20 +477,6 @@ void SCH_COMMIT::pushSchEdit( const wxString& aMessage, int aCommitFlags )
 
 void SCH_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
 {
-    SCH_EDIT_FRAME* frame = static_cast<SCH_EDIT_FRAME*>( m_toolMgr->GetToolHolder() );
-
-    for( COMMIT_LINE& ent : m_changes )
-    {
-        SCH_ITEM* schCopyItem = dynamic_cast<SCH_ITEM*>( ent.m_copy );
-        SCH_ITEM* schItem = dynamic_cast<SCH_ITEM*>( ent.m_item );
-
-        if( schCopyItem && schCopyItem->Type() == SCH_LINE_T )
-            frame->UpdateHopOveredWires( schCopyItem );
-
-        if( schItem && schItem->Type() == SCH_LINE_T )
-            frame->UpdateHopOveredWires( schItem );
-    }
-
     if( m_isLibEditor )
         pushLibEdit( aMessage, aCommitFlags );
     else

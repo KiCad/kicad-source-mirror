@@ -1010,7 +1010,7 @@ double SCH_LINE::Similarity( const SCH_ITEM& aOther ) const
 
 
 bool SCH_LINE::ShouldHopOver( const SCH_LINE* aLine ) const
-{  
+{
     bool isLine1Vertical = ( m_end.x == m_start.x );
     bool isLine2Vertical = ( aLine->GetEndPoint().x == aLine->GetStartPoint().x );
 
@@ -1022,13 +1022,147 @@ bool SCH_LINE::ShouldHopOver( const SCH_LINE* aLine ) const
         return true;
 
     double slope1 = 0;
-    double slope2 = 0;   
+    double slope2 = 0;
 
     slope1 = ( m_end.y - m_start.y ) / (double) ( m_end.x - m_start.x );
     slope2 = ( aLine->GetEndPoint().y - aLine->GetStartPoint().y )
                     / (double) ( aLine->GetEndPoint().x - aLine->GetStartPoint().x );
 
     return fabs( slope1 ) < fabs( slope2 ); // The shallower line should hop
+}
+
+
+std::vector<VECTOR3I> SCH_LINE::BuildWireWithHopShape( const SCH_SCREEN* aScreen,
+                                                       double aArcRadius ) const
+{
+    // Note: Points are VECTOR3D, with Z coord used as flag
+    // for segments: start point and end point have the Z coord = 0
+    // for arcs: start point middle point and end point have the Z coord = 1
+
+    std::vector<VECTOR3I> wire_shape;       // List of coordinates:
+                                            // 2 points for a segment, 3 points for an arc
+
+    if( !IsWire() )
+    {
+        wire_shape.emplace_back( GetStartPoint().x,GetStartPoint().y, 0 );
+        wire_shape.emplace_back( GetEndPoint().x, GetEndPoint().y, 0 );
+        return wire_shape;
+    }
+
+    std::vector<SCH_LINE*> existingWires;   // wires to test (candidates)
+    std::vector<VECTOR2I> intersections;
+
+    for( SCH_ITEM* item : aScreen->Items().Overlapping( SCH_LINE_T, GetBoundingBox() ) )
+    {
+        SCH_LINE* line = static_cast<SCH_LINE*>( item );
+
+        if( line->IsWire() )
+            existingWires.push_back( line );
+    }
+
+    VECTOR2I currentLineStartPoint = GetStartPoint();
+    VECTOR2I currentLineEndPoint = GetEndPoint();
+
+    for( SCH_LINE* existingLine : existingWires )
+    {
+        VECTOR2I extLineStartPoint = existingLine->GetStartPoint();
+        VECTOR2I extLineEndPoint = existingLine->GetEndPoint();
+
+        if( extLineStartPoint == currentLineStartPoint && extLineEndPoint == currentLineEndPoint )
+            continue;
+
+        if( !ShouldHopOver( existingLine ) )
+            continue;
+
+        SEG currentSegment = SEG( currentLineStartPoint, currentLineEndPoint );
+        SEG existingSegment = SEG( extLineStartPoint, extLineEndPoint );
+
+        if( OPT_VECTOR2I intersect = currentSegment.Intersect( existingSegment, true, false ) )
+        {
+            if( IsEndPoint( *intersect ) || existingLine->IsEndPoint( *intersect ) )
+                continue;
+
+            intersections.push_back( *intersect );
+        }
+    }
+
+
+    if( intersections.empty() )
+    {
+        wire_shape.emplace_back( currentLineStartPoint.x, currentLineStartPoint.y, 0 );
+        wire_shape.emplace_back( currentLineEndPoint.x, currentLineEndPoint.y, 0 );
+    }
+    else
+    {
+        auto getDistance = []( const VECTOR2I& a, const VECTOR2I& b ) -> double
+        {
+            return std::sqrt( std::pow( a.x - b.x, 2 ) + std::pow( a.y - b.y, 2 ) );
+        };
+
+        std::sort( intersections.begin(), intersections.end(),
+                   [&]( const VECTOR2I& a, const VECTOR2I& b )
+                   {
+                       return getDistance( GetStartPoint(), a ) < getDistance( GetStartPoint(), b );
+                   } );
+
+        VECTOR2I currentStart = GetStartPoint();
+        double   arcRadius = aArcRadius;
+
+        for( const VECTOR2I& hopMid : intersections )
+        {
+            // Calculate the angle of the line from start point to end point in radians
+            double lineAngle = std::atan2( GetEndPoint().y - GetStartPoint().y,
+                                           GetEndPoint().x - GetStartPoint().x );
+
+            // Convert the angle from radians to degrees
+            double lineAngleDeg = lineAngle * ( 180.0f / M_PI );
+
+            // Normalize the angle to be between 0 and 360 degrees
+            if( lineAngleDeg < 0 )
+                lineAngleDeg += 360;
+
+            double startAngle = lineAngleDeg;
+            double endAngle = startAngle + 180.0f;
+
+            // Adjust the end angle if it exceeds 360 degrees
+            if( endAngle >= 360.0 )
+                endAngle -= 360.0;
+
+            // Convert start and end angles from degrees to radians
+            double startAngleRad = startAngle * ( M_PI / 180.0f );
+            double endAngleRad = endAngle * ( M_PI / 180.0f );
+
+            VECTOR2I arcMidPoint = {
+                hopMid.x + static_cast<int>( arcRadius
+                                            * cos( ( startAngleRad + endAngleRad ) / 2.0f ) ),
+                hopMid.y + static_cast<int>( arcRadius
+                                            * sin( ( startAngleRad + endAngleRad ) / 2.0f ) )
+            };
+
+            VECTOR2I beforeHop = hopMid - VECTOR2I( arcRadius * std::cos( lineAngle ),
+                                             arcRadius * std::sin( lineAngle ) );
+            VECTOR2I afterHop = hopMid + VECTOR2I( arcRadius * std::cos( lineAngle ),
+                                            arcRadius * std::sin( lineAngle ) );
+
+            // Draw the line from the current start point to the before-hop point
+            wire_shape.emplace_back( currentStart.x, currentStart.y, 0 );
+            wire_shape.emplace_back( beforeHop.x, beforeHop.y, 0 );
+
+            // Create an arc object
+            SHAPE_ARC arc( beforeHop, arcMidPoint, afterHop, 0 );
+            wire_shape.emplace_back( beforeHop.x, beforeHop.y, 1 );
+            wire_shape.emplace_back( arcMidPoint.x, arcMidPoint.y, 1 );
+            wire_shape.emplace_back( afterHop.x, afterHop.y, 1 );
+
+            currentStart = afterHop;
+        }
+
+        // Draw the final line from the current start point to the end point of the original line
+        wire_shape.emplace_back( currentStart. x,currentStart.y, 0 );
+        wire_shape.emplace_back( GetEndPoint().x, GetEndPoint().y, 0 );
+    }
+
+    return wire_shape;
 }
 
 
