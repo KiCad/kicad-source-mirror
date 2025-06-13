@@ -118,6 +118,33 @@ void PCB_VIEW::Update( const KIGFX::VIEW_ITEM* aItem ) const
 }
 
 
+void PCB_VIEW::UpdateCollidingItems( const std::vector<BOX2I>& aStaleAreas,
+                                     std::initializer_list<KICAD_T> aTypes )
+{
+    UpdateAllItemsConditionally(
+            [&]( KIGFX::VIEW_ITEM* aItem ) -> int
+            {
+                if( aItem->IsBOARD_ITEM() )
+                {
+                    BOARD_ITEM* item = static_cast<BOARD_ITEM*>( aItem );
+
+                    if( item->IsType( aTypes ) )
+                    {
+                        BOX2I itemBBox = item->GetBoundingBox();
+
+                        for( const BOX2I& bbox : aStaleAreas )
+                        {
+                            if( itemBBox.Intersects( bbox ) )
+                                return KIGFX::REPAINT;
+                        }
+                    }
+                }
+
+                return 0;
+            } );
+}
+
+
 void PCB_VIEW::UpdateDisplayOptions( const PCB_DISPLAY_OPTIONS& aOptions )
 {
     KIGFX::PCB_PAINTER*         painter  = static_cast<KIGFX::PCB_PAINTER*>( GetPainter() );

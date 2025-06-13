@@ -24,6 +24,8 @@
  */
 
 #include <macros.h>
+#include <pgm_base.h>
+#include <settings/settings_manager.h>
 #include <board.h>
 #include <footprint.h>
 #include <lset.h>
@@ -125,37 +127,46 @@ COMMIT& BOARD_COMMIT::Stage( const PICKED_ITEMS_LIST& aItems, UNDO_REDO aModFlag
 }
 
 
-void BOARD_COMMIT::dirtyIntersectingZones( BOARD_ITEM* item, int aChangeType )
+void BOARD_COMMIT::propagateDamage( BOARD_ITEM* aChangedItem, std::vector<ZONE*>* aStaleZones,
+                                    std::vector<BOX2I>& aStaleRuleAreas )
 {
-    wxCHECK( item, /* void */ );
+    wxCHECK( aChangedItem, /* void */ );
 
-    ZONE_FILLER_TOOL* zoneFillerTool = m_toolMgr->GetTool<ZONE_FILLER_TOOL>();
+    if( aStaleZones && aChangedItem->Type() == PCB_ZONE_T )
+        aStaleZones->push_back( static_cast<ZONE*>( aChangedItem ) );
 
-    if( item->Type() == PCB_ZONE_T )
-        zoneFillerTool->DirtyZone( static_cast<ZONE*>( item ) );
-
-    item->RunOnChildren( std::bind( &BOARD_COMMIT::dirtyIntersectingZones, this, _1, aChangeType ) );
+    aChangedItem->RunOnChildren( std::bind( &BOARD_COMMIT::propagateDamage, this, _1, aStaleZones, aStaleRuleAreas ) );
 
     BOARD* board = static_cast<BOARD*>( m_toolMgr->GetModel() );
-    BOX2I  bbox = item->GetBoundingBox();
-    LSET   layers = item->GetLayerSet();
+    BOX2I  damageBBox = aChangedItem->GetBoundingBox();
+    LSET   damageLayers = aChangedItem->GetLayerSet();
 
-    if( layers.test( Edge_Cuts ) || layers.test( Margin ) )
-        layers = LSET::PhysicalLayersMask();
-    else
-        layers &= LSET::AllCuMask();
-
-    if( layers.any() )
+    if( m_isBoardEditor && aChangedItem->Type() == PCB_ZONE_T )
     {
-        for( ZONE* zone : board->Zones() )
-        {
-            if( zone->GetIsRuleArea() )
-                continue;
+        // A named zone can have custom DRC rules targetting it.
+        if( !static_cast<ZONE*>( aChangedItem )->GetZoneName().IsEmpty() )
+            aStaleRuleAreas.push_back( damageBBox );
+    }
 
-            if( ( zone->GetLayerSet() & layers ).any()
-                    && zone->GetBoundingBox().Intersects( bbox ) )
+    if( aStaleZones )
+    {
+        if( damageLayers.test( Edge_Cuts ) || damageLayers.test( Margin ) )
+            damageLayers = LSET::PhysicalLayersMask();
+        else
+            damageLayers &= LSET::AllCuMask();
+
+        if( damageLayers.any() )
+        {
+            for( ZONE* zone : board->Zones() )
             {
-                zoneFillerTool->DirtyZone( zone );
+                if( zone->GetIsRuleArea() )
+                    continue;
+
+                if( ( zone->GetLayerSet() & damageLayers ).any()
+                        && zone->GetBoundingBox().Intersects( damageBBox ) )
+                {
+                    aStaleZones->push_back( zone );
+                }
             }
         }
     }
@@ -164,7 +175,7 @@ void BOARD_COMMIT::dirtyIntersectingZones( BOARD_ITEM* item, int aChangeType )
 
 void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
 {
-    KIGFX::VIEW*        view = m_toolMgr->GetView();
+    KIGFX::PCB_VIEW*    view = static_cast<KIGFX::PCB_VIEW*>( m_toolMgr->GetView() );
     BOARD*              board = static_cast<BOARD*>( m_toolMgr->GetModel() );
     PCB_BASE_FRAME*     frame = dynamic_cast<PCB_BASE_FRAME*>( m_toolMgr->GetToolHolder() );
     PCB_SELECTION_TOOL* selTool = m_toolMgr->GetTool<PCB_SELECTION_TOOL>();
@@ -179,6 +190,9 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
     bool                     autofillZones = false;
     std::vector<BOARD_ITEM*> staleTeardropPadsAndVias;
     std::set<PCB_TRACK*>     staleTeardropTracks;
+    std::vector<ZONE*>       staleZonesStorage;
+    std::vector<ZONE*>*      staleZones = nullptr;
+    std::vector<BOX2I>       staleRuleAreas;
     PCB_GROUP*               addedGroup = nullptr;
 
     if( Empty() )
@@ -200,6 +214,7 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
             && ( frame && frame->GetPcbNewSettings()->m_AutoRefillZones ) )
     {
         autofillZones = true;
+        staleZones = &staleZonesStorage;
 
         for( ZONE* zone : board->Zones() )
             zone->CacheBoundingBox();
@@ -303,8 +318,8 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
             if( boardItem->Type() == PCB_GROUP_T || boardItem->Type() == PCB_GENERATOR_T )
                 addedGroup = static_cast<PCB_GROUP*>( boardItem );
 
-            if( m_isBoardEditor && autofillZones && boardItem->Type() != PCB_MARKER_T )
-                dirtyIntersectingZones( boardItem, changeType );
+            if( boardItem->Type() != PCB_MARKER_T )
+                propagateDamage( boardItem, staleZones, staleRuleAreas );
 
             if( view && boardItem->Type() != PCB_NETINFO_T )
                 view->Add( boardItem );
@@ -333,8 +348,8 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
             if( parentFP && !( parentFP->GetFlags() & STRUCT_DELETED ) )
                 ent.m_parent = parentFP->m_Uuid;
 
-            if( m_isBoardEditor && autofillZones && boardItem->Type() != PCB_MARKER_T )
-                dirtyIntersectingZones( boardItem, changeType );
+            if( boardItem->Type() != PCB_MARKER_T )
+                propagateDamage( boardItem, staleZones, staleRuleAreas );
 
             switch( boardItem->Type() )
             {
@@ -446,10 +461,10 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
                 connectivity->Update( boardItem );
             }
 
-            if( m_isBoardEditor && autofillZones && boardItem->Type() != PCB_MARKER_T )
+            if( boardItem->Type() != PCB_MARKER_T )
             {
-                dirtyIntersectingZones( boardItemCopy, changeType );   // before
-                dirtyIntersectingZones( boardItem, changeType );       // after
+                propagateDamage( boardItemCopy, staleZones, staleRuleAreas );   // before
+                propagateDamage( boardItem, staleZones, staleRuleAreas );       // after
             }
 
             if( view )
@@ -502,6 +517,14 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
         {
             if( frame )
                 frame->HideSolderMask();
+        }
+
+        PCBNEW_SETTINGS* settings = Pgm().GetSettingsManager().GetAppSettings<PCBNEW_SETTINGS>( "pcbnew" );
+
+        if( !staleRuleAreas.empty() && (   settings->m_Display.m_TrackClearance == SHOW_WITH_VIA_ALWAYS
+                                        || settings->m_Display.m_PadClearance ) )
+        {
+            view->UpdateCollidingItems( staleRuleAreas, { PCB_TRACE_T, PCB_ARC_T, PCB_VIA_T, PCB_PAD_T } );
         }
 
         if( !staleTeardropPadsAndVias.empty() || !staleTeardropTracks.empty() )
@@ -570,7 +593,14 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
         m_toolMgr->PostEvent( EVENTS::UnselectedEvent );
 
     if( autofillZones )
+    {
+        ZONE_FILLER_TOOL* zoneFillerTool = m_toolMgr->GetTool<ZONE_FILLER_TOOL>();
+
+        for( ZONE* zone : *staleZones )
+            zoneFillerTool->DirtyZone( zone );
+
         m_toolMgr->PostAction( PCB_ACTIONS::zoneFillDirty );
+    }
 
     if( selectedModified )
         m_toolMgr->ProcessEvent( EVENTS::SelectedItemsModified );

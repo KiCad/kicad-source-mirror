@@ -27,8 +27,10 @@
 #define BOARD_COMMIT_H
 
 #include <commit.h>
+#include <math/box2.h>
 
 class BOARD_ITEM;
+class ZONE;
 class BOARD;
 class PICKED_ITEMS_LIST;
 class PCB_TOOL_BASE;
@@ -73,7 +75,8 @@ private:
 
     EDA_ITEM* makeImage( EDA_ITEM* aItem ) const override;
 
-    void dirtyIntersectingZones( BOARD_ITEM* item, int aChangeType );
+    void propagateDamage( BOARD_ITEM* aItem, std::vector<ZONE*>* aStaleZones,
+                          std::vector<BOX2I>& aStaleRuleAreas );
 
 private:
     TOOL_MANAGER*  m_toolMgr;
