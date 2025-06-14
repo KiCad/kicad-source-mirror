@@ -625,6 +625,10 @@ if(wxWidgets_FIND_STYLE STREQUAL "win32")
           set(WX_USE_REL_AND_DBG FALSE)
         endif()
 
+        if( VCPKG_TOOLCHAIN )
+          set(WX_USE_REL_AND_DBG FALSE)
+        endif()
+
         # Get configuration parameters from the name.
         WX_GET_NAME_COMPONENTS(${wxWidgets_CONFIGURATION} PF UNV UCD DBG)
 
