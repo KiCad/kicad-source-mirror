@@ -350,7 +350,7 @@ enum class isoCodeType
     ID,
     IE,
     IL,
-    IN,
+    IND, // iso code IN conflicts header, just use the A-3 type
     IO,
     IQ,
     IR,
@@ -505,7 +505,7 @@ enum class fillPropertyType
     HATCH,
     MESH,
     FILL,
-    VOID
+    VOIDFILL
 };
 
 enum class linePropertyType
