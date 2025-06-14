@@ -234,7 +234,23 @@ void WX_INFOBAR::onSize( wxSizeEvent& aEvent )
     if( !sizer )
         return;
 
+    // wx3.3 moved the sizer we previously wanted deeper into sizers...
+    // do we actually still need this for wx3.3?
+    #if wxCHECK_VERSION( 3, 3, 0 )
+    wxSizerItem* outerSizer = sizer->GetItem( (size_t) 0 );
+    wxSizerItem* text = nullptr;
+    if (outerSizer->IsSizer())
+    {
+        wxBoxSizer* innerSizer1 = dynamic_cast<wxBoxSizer*>( outerSizer->GetSizer() );
+        wxBoxSizer* innerSizer2 =
+                dynamic_cast<wxBoxSizer*>( innerSizer1->GetItem((size_t)0)->GetSizer() );
+
+        if( innerSizer2 )
+            text = innerSizer2->GetItem( 1 );
+    }
+    #else
     wxSizerItem* text = sizer->GetItem( 1 );
+    #endif
 
     if( text )
     {
