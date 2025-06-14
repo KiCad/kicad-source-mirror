@@ -509,13 +509,14 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
                 frame->HideSolderMask();
         }
 
-        PCBNEW_SETTINGS* settings = Pgm().GetSettingsManager().GetAppSettings<PCBNEW_SETTINGS>( "pcbnew" );
-
-        if( !staleRuleAreas.empty() && (   settings->m_Display.m_TrackClearance == SHOW_WITH_VIA_ALWAYS
-                                        || settings->m_Display.m_PadClearance ) )
+        if( PCBNEW_SETTINGS* cfg = GetAppSettings<PCBNEW_SETTINGS>( "pcbnew" ) )
         {
-            if( view )
-                view->UpdateCollidingItems( staleRuleAreas, { PCB_TRACE_T, PCB_ARC_T, PCB_VIA_T, PCB_PAD_T } );
+            if( !staleRuleAreas.empty() && (   cfg->m_Display.m_TrackClearance == SHOW_WITH_VIA_ALWAYS
+                                            || cfg->m_Display.m_PadClearance ) )
+            {
+                if( view )
+                    view->UpdateCollidingItems( staleRuleAreas, { PCB_TRACE_T, PCB_ARC_T, PCB_VIA_T, PCB_PAD_T } );
+            }
         }
 
         if( !staleTeardropPadsAndVias.empty() || !staleTeardropTracks.empty() )

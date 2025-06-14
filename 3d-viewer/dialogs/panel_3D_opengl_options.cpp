@@ -56,32 +56,27 @@ void PANEL_3D_OPENGL_OPTIONS::loadSettings( EDA_3D_VIEWER_SETTINGS* aCfg )
 
 bool PANEL_3D_OPENGL_OPTIONS::TransferDataToWindow()
 {
-    SETTINGS_MANAGER&       mgr = Pgm().GetSettingsManager();
-    EDA_3D_VIEWER_SETTINGS* cfg = mgr.GetAppSettings<EDA_3D_VIEWER_SETTINGS>( "3d_viewer" );
-
-    loadSettings( cfg );
-
+    loadSettings( GetAppSettings<EDA_3D_VIEWER_SETTINGS>( "3d_viewer" ) );
     return true;
 }
 
 
 bool PANEL_3D_OPENGL_OPTIONS::TransferDataFromWindow()
 {
-    SETTINGS_MANAGER&       mgr = Pgm().GetSettingsManager();
-    EDA_3D_VIEWER_SETTINGS* cfg = mgr.GetAppSettings<EDA_3D_VIEWER_SETTINGS>( "3d_viewer" );
+    if( EDA_3D_VIEWER_SETTINGS* cfg = GetAppSettings<EDA_3D_VIEWER_SETTINGS>( "3d_viewer" ) )
+    {
+        cfg->m_Render.opengl_copper_thickness = m_checkBoxCuThickness->GetValue();
+        cfg->m_Render.show_model_bbox = m_checkBoxBoundingBoxes->GetValue();
+        cfg->m_Render.highlight_on_rollover = m_checkBoxHighlightOnRollOver->GetValue();
 
-    cfg->m_Render.opengl_copper_thickness = m_checkBoxCuThickness->GetValue();
-    cfg->m_Render.show_model_bbox = m_checkBoxBoundingBoxes->GetValue();
-    cfg->m_Render.highlight_on_rollover = m_checkBoxHighlightOnRollOver->GetValue();
+        cfg->m_Render.opengl_AA_mode = static_cast<ANTIALIASING_MODE>( m_choiceAntiAliasing->GetSelection() );
+        cfg->m_Render.opengl_selection_color = m_selectionColorSwatch->GetSwatchColor();
 
-    cfg->m_Render.opengl_AA_mode =
-            static_cast<ANTIALIASING_MODE>( m_choiceAntiAliasing->GetSelection() );
-    cfg->m_Render.opengl_selection_color = m_selectionColorSwatch->GetSwatchColor();
-
-    cfg->m_Render.opengl_AA_disableOnMove = m_checkBoxDisableAAMove->GetValue();
-    cfg->m_Render.opengl_thickness_disableOnMove = m_checkBoxDisableMoveThickness->GetValue();
-    cfg->m_Render.opengl_microvias_disableOnMove = m_checkBoxDisableMoveVias->GetValue();
-    cfg->m_Render.opengl_holes_disableOnMove = m_checkBoxDisableMoveHoles->GetValue();
+        cfg->m_Render.opengl_AA_disableOnMove = m_checkBoxDisableAAMove->GetValue();
+        cfg->m_Render.opengl_thickness_disableOnMove = m_checkBoxDisableMoveThickness->GetValue();
+        cfg->m_Render.opengl_microvias_disableOnMove = m_checkBoxDisableMoveVias->GetValue();
+        cfg->m_Render.opengl_holes_disableOnMove = m_checkBoxDisableMoveHoles->GetValue();
+    }
 
     return true;
 }

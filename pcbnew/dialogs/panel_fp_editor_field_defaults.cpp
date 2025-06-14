@@ -169,8 +169,7 @@ public:
 
 static FOOTPRINT_EDITOR_SETTINGS& GetPgmSettings()
 {
-    SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
-    return *mgr.GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>( "fpedit" );
+    return *GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>( "fpedit" );
 }
 
 

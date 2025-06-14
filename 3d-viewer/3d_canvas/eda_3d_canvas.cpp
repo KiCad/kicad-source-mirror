@@ -1124,14 +1124,14 @@ bool EDA_3D_CANVAS::SetView3D( VIEW3D_TYPE aRequestedView )
 
 void EDA_3D_CANVAS::RenderEngineChanged()
 {
-    SETTINGS_MANAGER&       mgr = Pgm().GetSettingsManager();
-    EDA_3D_VIEWER_SETTINGS* cfg = mgr.GetAppSettings<EDA_3D_VIEWER_SETTINGS>( "3d_viewer" );
-
-    switch( cfg->m_Render.engine )
+    if( EDA_3D_VIEWER_SETTINGS* cfg = GetAppSettings<EDA_3D_VIEWER_SETTINGS>( "3d_viewer" ) )
     {
-    case RENDER_ENGINE::OPENGL:     m_3d_render = m_3d_render_opengl;     break;
-    case RENDER_ENGINE::RAYTRACING: m_3d_render = m_3d_render_raytracing; break;
-    default:                        m_3d_render = nullptr;                break;
+        switch( cfg->m_Render.engine )
+        {
+        case RENDER_ENGINE::OPENGL:     m_3d_render = m_3d_render_opengl;     break;
+        case RENDER_ENGINE::RAYTRACING: m_3d_render = m_3d_render_raytracing; break;
+        default:                        m_3d_render = nullptr;                break;
+        }
     }
 
     if( m_3d_render )

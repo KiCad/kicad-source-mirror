@@ -317,79 +317,80 @@ PANEL_DESIGN_BLOCK_LIB_TABLE::PANEL_DESIGN_BLOCK_LIB_TABLE( DIALOG_EDIT_LIBRARY_
     for( auto& [fileType, desc] : m_supportedDesignBlockFiles )
         choices.Add( DESIGN_BLOCK_IO_MGR::ShowType( fileType ) );
 
-
-    SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
-    KICAD_SETTINGS*   cfg = mgr.GetAppSettings<KICAD_SETTINGS>( "kicad" );
+    KICAD_SETTINGS* cfg = GetAppSettings<KICAD_SETTINGS>( "kicad" );
 
     if( cfg->m_lastDesignBlockLibDir.IsEmpty() )
         cfg->m_lastDesignBlockLibDir = PATHS::GetDefaultUserDesignBlocksPath();
 
     m_lastProjectLibDir = m_projectBasePath;
 
-    auto autoSizeCol = [&]( WX_GRID* aGrid, int aCol )
-    {
-        int prevWidth = aGrid->GetColSize( aCol );
+    auto autoSizeCol =
+            [&]( WX_GRID* aGrid, int aCol )
+            {
+                int prevWidth = aGrid->GetColSize( aCol );
 
-        aGrid->AutoSizeColumn( aCol, false );
-        aGrid->SetColSize( aCol, std::max( prevWidth, aGrid->GetColSize( aCol ) ) );
-    };
+                aGrid->AutoSizeColumn( aCol, false );
+                aGrid->SetColSize( aCol, std::max( prevWidth, aGrid->GetColSize( aCol ) ) );
+            };
 
-    auto setupGrid = [&]( WX_GRID* aGrid )
-    {
-        // Give a bit more room for wxChoice editors
-        aGrid->SetDefaultRowSize( aGrid->GetDefaultRowSize() + 4 );
+    auto setupGrid =
+            [&]( WX_GRID* aGrid )
+            {
+                // Give a bit more room for wxChoice editors
+                aGrid->SetDefaultRowSize( aGrid->GetDefaultRowSize() + 4 );
 
-        // add Cut, Copy, and Paste to wxGrids
-        aGrid->PushEventHandler( new DESIGN_BLOCK_GRID_TRICKS( m_parent, aGrid ) );
+                // add Cut, Copy, and Paste to wxGrids
+                aGrid->PushEventHandler( new DESIGN_BLOCK_GRID_TRICKS( m_parent, aGrid ) );
 
-        aGrid->SetSelectionMode( wxGrid::wxGridSelectRows );
+                aGrid->SetSelectionMode( wxGrid::wxGridSelectRows );
 
-        wxGridCellAttr* attr;
+                wxGridCellAttr* attr = new wxGridCellAttr;
 
-        attr = new wxGridCellAttr;
-        attr->SetEditor( new GRID_CELL_PATH_EDITOR(
-                m_parent, aGrid, &cfg->m_lastDesignBlockLibDir, true, m_projectBasePath,
-                [this]( WX_GRID* grid, int row ) -> wxString
+                if( cfg )
                 {
-                    auto* libTable = static_cast<DESIGN_BLOCK_LIB_TABLE_GRID*>( grid->GetTable() );
-                    auto* tableRow =
-                            static_cast<DESIGN_BLOCK_LIB_TABLE_ROW*>( libTable->at( row ) );
-                    DESIGN_BLOCK_IO_MGR::DESIGN_BLOCK_FILE_T fileType = tableRow->GetFileType();
-                    const IO_BASE::IO_FILE_DESC&             pluginDesc =
-                            m_supportedDesignBlockFiles.at( fileType );
+                    attr->SetEditor( new GRID_CELL_PATH_EDITOR(
+                            m_parent, aGrid, &cfg->m_lastDesignBlockLibDir, true, m_projectBasePath,
+                            [this]( WX_GRID* grid, int row ) -> wxString
+                            {
+                                auto* libTable = static_cast<DESIGN_BLOCK_LIB_TABLE_GRID*>( grid->GetTable() );
+                                auto* tableRow = static_cast<DESIGN_BLOCK_LIB_TABLE_ROW*>( libTable->at( row ) );
+                                DESIGN_BLOCK_IO_MGR::DESIGN_BLOCK_FILE_T fileType = tableRow->GetFileType();
+                                const IO_BASE::IO_FILE_DESC& pluginDesc = m_supportedDesignBlockFiles.at( fileType );
 
-                    if( pluginDesc.m_IsFile )
-                        return pluginDesc.FileFilter();
-                    else
-                        return wxEmptyString;
-                } ) );
-        aGrid->SetColAttr( COL_URI, attr );
+                                if( pluginDesc.m_IsFile )
+                                    return pluginDesc.FileFilter();
+                                else
+                                    return wxEmptyString;
+                            } ) );
+                }
 
-        attr = new wxGridCellAttr;
-        attr->SetEditor( new wxGridCellChoiceEditor( choices ) );
-        aGrid->SetColAttr( COL_TYPE, attr );
+                aGrid->SetColAttr( COL_URI, attr );
 
-        attr = new wxGridCellAttr;
-        attr->SetRenderer( new wxGridCellBoolRenderer() );
-        attr->SetReadOnly(); // not really; we delegate interactivity to GRID_TRICKS
-        aGrid->SetColAttr( COL_ENABLED, attr );
+                attr = new wxGridCellAttr;
+                attr->SetEditor( new wxGridCellChoiceEditor( choices ) );
+                aGrid->SetColAttr( COL_TYPE, attr );
 
-        // No visibility control for design block libraries yet; this feature is primarily
-        // useful for database libraries and it's only implemented for schematic symbols
-        // at the moment.
-        aGrid->HideCol( COL_VISIBLE );
+                attr = new wxGridCellAttr;
+                attr->SetRenderer( new wxGridCellBoolRenderer() );
+                attr->SetReadOnly(); // not really; we delegate interactivity to GRID_TRICKS
+                aGrid->SetColAttr( COL_ENABLED, attr );
 
-        // all but COL_OPTIONS, which is edited with Option Editor anyways.
-        autoSizeCol( aGrid, COL_NICKNAME );
-        autoSizeCol( aGrid, COL_TYPE );
-        autoSizeCol( aGrid, COL_URI );
-        autoSizeCol( aGrid, COL_DESCR );
+                // No visibility control for design block libraries yet; this feature is primarily
+                // useful for database libraries and it's only implemented for schematic symbols
+                // at the moment.
+                aGrid->HideCol( COL_VISIBLE );
 
-        // Gives a selection to each grid, mainly for delete button. wxGrid's wake up with
-        // a currentCell which is sometimes not highlighted.
-        if( aGrid->GetNumberRows() > 0 )
-            aGrid->SelectRow( 0 );
-    };
+                // all but COL_OPTIONS, which is edited with Option Editor anyways.
+                autoSizeCol( aGrid, COL_NICKNAME );
+                autoSizeCol( aGrid, COL_TYPE );
+                autoSizeCol( aGrid, COL_URI );
+                autoSizeCol( aGrid, COL_DESCR );
+
+                // Gives a selection to each grid, mainly for delete button. wxGrid's wake up with
+                // a currentCell which is sometimes not highlighted.
+                if( aGrid->GetNumberRows() > 0 )
+                    aGrid->SelectRow( 0 );
+            };
 
     setupGrid( m_global_grid );
 
@@ -857,14 +858,12 @@ void PANEL_DESIGN_BLOCK_LIB_TABLE::onMigrateLibraries( wxCommandEvent& event )
     {
         if( rowsToMigrate.size() == 1 )
         {
-            msg.Printf( _( "Save '%s' as current KiCad format "
-                           "and replace entry in table?" ),
+            msg.Printf( _( "Save '%s' as current KiCad format and replace entry in table?" ),
                         m_cur_grid->GetCellValue( rowsToMigrate[0], COL_NICKNAME ) );
         }
         else
         {
-            msg.Printf( _( "Save %d libraries as current KiCad format "
-                           "and replace entries in table?" ),
+            msg.Printf( _( "Save %d libraries as current KiCad format and replace entries in table?" ),
                         (int) rowsToMigrate.size() );
         }
 
@@ -897,18 +896,16 @@ void PANEL_DESIGN_BLOCK_LIB_TABLE::onMigrateLibraries( wxCommandEvent& event )
                            "blocks?" ),
                         newLib.GetFullPath() );
 
-            switch( wxMessageBox( msg, _( "Migrate Library" ),
-                                  wxYES_NO | wxCANCEL | wxICON_QUESTION, m_parent ) )
+            switch( wxMessageBox( msg, _( "Migrate Library" ), wxYES_NO | wxCANCEL | wxICON_QUESTION, m_parent ) )
             {
-            case wxYES: break;
-            case wxNO: continue;
+            case wxYES:    break;
+            case wxNO:     continue;
             case wxCANCEL: return;
             }
         }
 
-        wxString                         options = m_cur_grid->GetCellValue( row, COL_OPTIONS );
-        std::unique_ptr<std::map<std::string, UTF8>> props(
-                LIB_TABLE::ParseOptions( options.ToStdString() ) );
+        wxString options = m_cur_grid->GetCellValue( row, COL_OPTIONS );
+        std::unique_ptr<std::map<std::string, UTF8>> props( LIB_TABLE::ParseOptions( options.ToStdString() ) );
 
         if( DESIGN_BLOCK_IO_MGR::ConvertLibrary( props.get(), legacyLib.GetFullPath(),
                                                  newLib.GetFullPath() ) )
@@ -926,8 +923,7 @@ void PANEL_DESIGN_BLOCK_LIB_TABLE::onMigrateLibraries( wxCommandEvent& event )
         }
         else
         {
-            msg.Printf( _( "Failed to save design block library file '%s'." ),
-                        newLib.GetFullPath() );
+            msg.Printf( _( "Failed to save design block library file '%s'." ), newLib.GetFullPath() );
             DisplayErrorMessage( wxGetTopLevelParent( this ), msg );
         }
     }
@@ -955,51 +951,42 @@ void PANEL_DESIGN_BLOCK_LIB_TABLE::browseLibrariesHandler( wxCommandEvent& event
 
     if( fileType == DESIGN_BLOCK_IO_MGR::FILE_TYPE_NONE )
     {
-        wxLogWarning( wxT( "File type selection event received but could not find the file type "
-                           "in the table" ) );
+        wxLogWarning( wxT( "File type selection event received but could not find the file type in the table" ) );
         return;
     }
 
     const IO_BASE::IO_FILE_DESC& fileDesc = m_supportedDesignBlockFiles.at( fileType );
-    SETTINGS_MANAGER&            mgr = Pgm().GetSettingsManager();
-    KICAD_SETTINGS*              cfg = mgr.GetAppSettings<KICAD_SETTINGS>( "kicad" );
+    KICAD_SETTINGS*              cfg = GetAppSettings<KICAD_SETTINGS>( "kicad" );
 
-    wxString title =
-            wxString::Format( _( "Select %s Library" ), DESIGN_BLOCK_IO_MGR::ShowType( fileType ) );
-    wxString openDir = cfg->m_lastDesignBlockLibDir;
+    wxString  title = wxString::Format( _( "Select %s Library" ), DESIGN_BLOCK_IO_MGR::ShowType( fileType ) );
+    wxString  dummy;
+    wxString* lastDir;
 
     if( m_cur_grid == m_project_grid )
-        openDir = m_lastProjectLibDir;
+        lastDir = &m_lastProjectLibDir;
+    else
+        lastDir = cfg ? &cfg->m_lastDesignBlockLibDir : &dummy;
 
     wxArrayString files;
-
-    wxWindow* topLevelParent = wxGetTopLevelParent( this );
+    wxWindow*     topLevelParent = wxGetTopLevelParent( this );
 
     if( fileDesc.m_IsFile )
     {
-        wxFileDialog dlg( topLevelParent, title, openDir, wxEmptyString, fileDesc.FileFilter(),
+        wxFileDialog dlg( topLevelParent, title, *lastDir, wxEmptyString, fileDesc.FileFilter(),
                           wxFD_OPEN | wxFD_FILE_MUST_EXIST | wxFD_MULTIPLE );
 
-        int result = dlg.ShowModal();
-
-        if( result == wxID_CANCEL )
+        if( dlg.ShowModal() == wxID_CANCEL )
             return;
 
         dlg.GetPaths( files );
-
-        if( m_cur_grid == m_global_grid )
-            cfg->m_lastDesignBlockLibDir = dlg.GetDirectory();
-        else
-            m_lastProjectLibDir = dlg.GetDirectory();
+        *lastDir = dlg.GetDirectory();
     }
     else
     {
-        wxDirDialog dlg( topLevelParent, title, openDir,
+        wxDirDialog dlg( topLevelParent, title, *lastDir,
                          wxDD_DEFAULT_STYLE | wxDD_DIR_MUST_EXIST | wxDD_MULTIPLE );
 
-        int result = dlg.ShowModal();
-
-        if( result == wxID_CANCEL )
+        if( dlg.ShowModal() == wxID_CANCEL )
             return;
 
         dlg.GetPaths( files );
@@ -1007,18 +994,13 @@ void PANEL_DESIGN_BLOCK_LIB_TABLE::browseLibrariesHandler( wxCommandEvent& event
         if( !files.IsEmpty() )
         {
             wxFileName first( files.front() );
-
-            if( m_cur_grid == m_global_grid )
-                cfg->m_lastDesignBlockLibDir = first.GetPath();
-            else
-                m_lastProjectLibDir = first.GetPath();
+            *lastDir = first.GetPath();
         }
     }
 
     // Drop the last directory if the path is a .pretty folder
-    if( cfg->m_lastDesignBlockLibDir.EndsWith( FILEEXT::KiCadDesignBlockLibPathExtension ) )
-        cfg->m_lastDesignBlockLibDir =
-                cfg->m_lastDesignBlockLibDir.BeforeLast( wxFileName::GetPathSeparator() );
+    if( cfg && cfg->m_lastDesignBlockLibDir.EndsWith( FILEEXT::KiCadDesignBlockLibPathExtension ) )
+        cfg->m_lastDesignBlockLibDir = cfg->m_lastDesignBlockLibDir.BeforeLast( wxFileName::GetPathSeparator() );
 
     const ENV_VAR_MAP& envVars = Pgm().GetLocalEnvVariables();
     bool               addDuplicates = false;
@@ -1034,8 +1016,7 @@ void PANEL_DESIGN_BLOCK_LIB_TABLE::browseLibrariesHandler( wxCommandEvent& event
         wxString   nickname = LIB_ID::FixIllegalChars( fn.GetName(), true );
         bool       doAdd = true;
 
-        if( fileType == DESIGN_BLOCK_IO_MGR::KICAD_SEXP
-            && fn.GetExt() != FILEEXT::KiCadDesignBlockLibPathExtension )
+        if( fileType == DESIGN_BLOCK_IO_MGR::KICAD_SEXP && fn.GetExt() != FILEEXT::KiCadDesignBlockLibPathExtension )
             nickname = LIB_ID::FixIllegalChars( fn.GetFullName(), true ).wx_str();
 
         if( cur_model()->ContainsNickname( nickname ) )

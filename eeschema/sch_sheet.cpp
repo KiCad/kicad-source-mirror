@@ -1263,7 +1263,7 @@ void SCH_SHEET::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS& 
 
     if( GetDNP() )
     {
-        COLOR_SETTINGS* colors = Pgm().GetSettingsManager().GetColorSettings();
+        COLOR_SETTINGS* colors = ::GetColorSettings( DEFAULT_THEME );
         BOX2I           bbox = GetBodyBoundingBox();
         BOX2I           pins = GetBoundingBox();
         VECTOR2D        margins( std::max( bbox.GetX() - pins.GetX(),

@@ -205,7 +205,7 @@ void EESCHEMA_JOBS_HANDLER::InitRenderSettings( SCH_RENDER_SETTINGS* aRenderSett
                                                 const wxString& aTheme, SCHEMATIC* aSch,
                                                 const wxString& aDrawingSheetOverride )
 {
-    COLOR_SETTINGS* cs = Pgm().GetSettingsManager().GetColorSettings( aTheme );
+    COLOR_SETTINGS* cs = ::GetColorSettings( aTheme );
     aRenderSettings->LoadColors( cs );
     aRenderSettings->m_ShowHiddenPins = false;
     aRenderSettings->m_ShowHiddenFields = false;
@@ -282,14 +282,8 @@ int EESCHEMA_JOBS_HANDLER::JobExportPlot( JOB* aJob )
 
     if( font.IsEmpty() )
     {
-        SETTINGS_MANAGER&  mgr = Pgm().GetSettingsManager();
-        EESCHEMA_SETTINGS* cfg =
-                dynamic_cast<EESCHEMA_SETTINGS*>( mgr.GetAppSettings<EESCHEMA_SETTINGS>( "eeschema" ) );
-
-        if( cfg )
-            font = cfg->m_Appearance.default_font;
-        else
-            font = KICAD_FONT_NAME;
+        EESCHEMA_SETTINGS* cfg = GetAppSettings<EESCHEMA_SETTINGS>( "eeschema" );
+        font = cfg ? cfg->m_Appearance.default_font : KICAD_FONT_NAME;
     }
 
     renderSettings->SetDefaultFont( font );
@@ -983,7 +977,7 @@ int EESCHEMA_JOBS_HANDLER::JobSymExportSvg( JOB* aJob )
     }
 
     SCH_RENDER_SETTINGS renderSettings;
-    COLOR_SETTINGS* cs = Pgm().GetSettingsManager().GetColorSettings( svgJob->m_colorTheme );
+    COLOR_SETTINGS* cs = ::GetColorSettings( svgJob->m_colorTheme );
     renderSettings.LoadColors( cs );
     renderSettings.SetDefaultPenWidth( DEFAULT_LINE_WIDTH_MILS * schIUScale.IU_PER_MILS );
     renderSettings.m_ShowHiddenPins = svgJob->m_includeHiddenPins;

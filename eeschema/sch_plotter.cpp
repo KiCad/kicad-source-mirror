@@ -881,9 +881,7 @@ wxFileName SCH_PLOTTER::createPlotFileName( const SCH_PLOT_OPTS& aPlotOpts,
 void SCH_PLOTTER::Plot( PLOT_FORMAT aPlotFormat, const SCH_PLOT_OPTS& aPlotOpts,
                         SCH_RENDER_SETTINGS* aRenderSettings, REPORTER* aReporter )
 {
-    SETTINGS_MANAGER& settingsMgr = Pgm().GetSettingsManager();
-
-    m_colorSettings = settingsMgr.GetColorSettings( aPlotOpts.m_theme );
+    m_colorSettings = ::GetColorSettings( aPlotOpts.m_theme );
 
     switch( aPlotFormat )
     {

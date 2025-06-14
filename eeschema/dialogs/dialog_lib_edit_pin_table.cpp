@@ -544,18 +544,17 @@ public:
 
                     VECTOR2I pos = last->GetPosition();
 
-                    SETTINGS_MANAGER&       mgr = Pgm().GetSettingsManager();
-                    SYMBOL_EDITOR_SETTINGS* cfg =
-                            mgr.GetAppSettings<SYMBOL_EDITOR_SETTINGS>( "symbol_editor" );
-
-                    if( last->GetOrientation() == PIN_ORIENTATION::PIN_LEFT
-                        || last->GetOrientation() == PIN_ORIENTATION::PIN_RIGHT )
+                    if( SYMBOL_EDITOR_SETTINGS* cfg = GetAppSettings<SYMBOL_EDITOR_SETTINGS>( "symbol_editor" ) )
                     {
-                        pos.y -= schIUScale.MilsToIU( cfg->m_Repeat.pin_step );
-                    }
-                    else
-                    {
-                        pos.x += schIUScale.MilsToIU( cfg->m_Repeat.pin_step );
+                        if( last->GetOrientation() == PIN_ORIENTATION::PIN_LEFT
+                            || last->GetOrientation() == PIN_ORIENTATION::PIN_RIGHT )
+                        {
+                            pos.y -= schIUScale.MilsToIU( cfg->m_Repeat.pin_step );
+                        }
+                        else
+                        {
+                            pos.x += schIUScale.MilsToIU( cfg->m_Repeat.pin_step );
+                        }
                     }
 
                     newPin->SetPosition( pos );

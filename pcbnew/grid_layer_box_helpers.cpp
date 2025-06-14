@@ -55,24 +55,18 @@ void GRID_CELL_LAYER_RENDERER::Draw( wxGrid& aGrid, wxGridCellAttr& aAttr, wxDC&
                                      const wxRect& aRect, int aRow, int aCol, bool isSelected )
 {
     int             value = aGrid.GetTable()->GetValueAsLong( aRow, aCol );
-    COLOR_SETTINGS* cs = nullptr;
+    COLOR_SETTINGS* cs = ::GetColorSettings( DEFAULT_THEME );
+
+    if( m_frame )
+        cs = m_frame->GetColorSettings();
+    else if( FOOTPRINT_EDITOR_SETTINGS* cfg = GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>( "fpedit" ) )
+        cs = ::GetColorSettings( cfg->m_ColorTheme );
 
     wxRect rect = aRect;
     rect.Inflate( -1 );
 
     // erase background
     wxGridCellRenderer::Draw( aGrid, aAttr, aDC, aRect, aRow, aCol, isSelected );
-
-    if( m_frame )
-    {
-        cs = m_frame->GetColorSettings();
-    }
-    else
-    {
-        SETTINGS_MANAGER&          mgr = Pgm().GetSettingsManager();
-        FOOTPRINT_EDITOR_SETTINGS* cfg = mgr.GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>( "fpedit" );
-        cs = mgr.GetColorSettings( cfg->m_ColorTheme );
-    }
 
     // draw the swatch
 #ifdef __WXMAC__

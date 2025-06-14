@@ -661,18 +661,14 @@ bool SYMBOL_LIB_TABLE::LoadGlobalTable( SYMBOL_LIB_TABLE& aTable )
 
     aTable.Load( fn.GetFullPath() );
 
-    SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
-    KICAD_SETTINGS*   settings = mgr.GetAppSettings<KICAD_SETTINGS>( "kicad" );
-
-    wxCHECK( settings, false );
-
-    wxString packagesPath;
+    KICAD_SETTINGS*    cfg = GetAppSettings<KICAD_SETTINGS>( "kicad" );
+    wxString           packagesPath;
     const ENV_VAR_MAP& vars = Pgm().GetLocalEnvVariables();
 
     if( std::optional<wxString> v = ENV_VAR::GetVersionedEnvVarValue( vars, wxT( "3RD_PARTY" ) ) )
         packagesPath = *v;
 
-    if( settings->m_PcmLibAutoAdd )
+    if( cfg && cfg->m_PcmLibAutoAdd )
     {
         // Scan for libraries in PCM packages directory
         wxFileName d( packagesPath, "" );
@@ -680,14 +676,14 @@ bool SYMBOL_LIB_TABLE::LoadGlobalTable( SYMBOL_LIB_TABLE& aTable )
 
         if( d.DirExists() )
         {
-            PCM_SYM_LIB_TRAVERSER traverser( packagesPath, aTable, settings->m_PcmLibPrefix );
+            PCM_SYM_LIB_TRAVERSER traverser( packagesPath, aTable, cfg->m_PcmLibPrefix );
             wxDir                 dir( d.GetPath() );
 
             dir.Traverse( traverser );
         }
     }
 
-    if( settings->m_PcmLibAutoRemove )
+    if( cfg && cfg->m_PcmLibAutoRemove )
     {
         // Remove PCM libraries that no longer exist
         std::vector<wxString> to_remove;

@@ -444,12 +444,8 @@ WINDOW_SETTINGS* FOOTPRINT_CHOOSER_FRAME::GetWindowSettings( APP_SETTINGS_BASE* 
 
 COLOR_SETTINGS* FOOTPRINT_CHOOSER_FRAME::GetColorSettings( bool aForceRefresh ) const
 {
-    auto* cfg = Pgm().GetSettingsManager().GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>( "fpedit" );
-
-    if( cfg )
-        return Pgm().GetSettingsManager().GetColorSettings( cfg->m_ColorTheme );
-    else
-        return Pgm().GetSettingsManager().GetColorSettings();
+    FOOTPRINT_EDITOR_SETTINGS* cfg = GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>( "fpedit" );
+    return ::GetColorSettings( cfg ? cfg->m_ColorTheme : DEFAULT_THEME );
 }
 
 
@@ -670,10 +666,7 @@ void FOOTPRINT_CHOOSER_FRAME::build3DCanvas()
     m_boardAdapter.m_IsBoardView = false;
     m_boardAdapter.m_IsPreviewer = true;   // Force display 3D models, regardless the 3D viewer options
 
-    SETTINGS_MANAGER&       mgr = Pgm().GetSettingsManager();
-    EDA_3D_VIEWER_SETTINGS* cfg = mgr.GetAppSettings<EDA_3D_VIEWER_SETTINGS>( "3d_viewer" );
-
-    m_boardAdapter.m_Cfg = cfg;
+    m_boardAdapter.m_Cfg = GetAppSettings<EDA_3D_VIEWER_SETTINGS>( "3d_viewer" );
 
     // Build the 3D canvas
     m_preview3DCanvas = new EDA_3D_CANVAS( m_chooserPanel->m_RightPanel,

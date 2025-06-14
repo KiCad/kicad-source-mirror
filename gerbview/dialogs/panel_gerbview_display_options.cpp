@@ -29,8 +29,7 @@
 PANEL_GERBVIEW_DISPLAY_OPTIONS::PANEL_GERBVIEW_DISPLAY_OPTIONS( wxWindow* aParent ) :
     PANEL_GERBVIEW_DISPLAY_OPTIONS_BASE( aParent, wxID_ANY )
 {
-    SETTINGS_MANAGER&  mgr = Pgm().GetSettingsManager();
-    GERBVIEW_SETTINGS* cfg = mgr.GetAppSettings<GERBVIEW_SETTINGS>( "gerbview" );
+    GERBVIEW_SETTINGS* cfg = GetAppSettings<GERBVIEW_SETTINGS>( "gerbview" );
 
     m_galOptsPanel = new GAL_OPTIONS_PANEL( this, cfg );
     m_galOptionsSizer->Add( m_galOptsPanel, 0, wxEXPAND|wxRIGHT, 15 );
@@ -71,10 +70,7 @@ bool PANEL_GERBVIEW_DISPLAY_OPTIONS::TransferDataToWindow()
 {
     m_galOptsPanel->TransferDataToWindow();
 
-    SETTINGS_MANAGER&  mgr = Pgm().GetSettingsManager();
-    GERBVIEW_SETTINGS* cfg = mgr.GetAppSettings<GERBVIEW_SETTINGS>( "gerbview" );
-
-    loadSettings( cfg );
+    loadSettings( GetAppSettings<GERBVIEW_SETTINGS>( "gerbview" ) );
 
     return true;
 }
@@ -82,33 +78,28 @@ bool PANEL_GERBVIEW_DISPLAY_OPTIONS::TransferDataToWindow()
 
 bool PANEL_GERBVIEW_DISPLAY_OPTIONS::TransferDataFromWindow()
 {
-    SETTINGS_MANAGER&  mgr = Pgm().GetSettingsManager();
-    GERBVIEW_SETTINGS* cfg = mgr.GetAppSettings<GERBVIEW_SETTINGS>( "gerbview" );
-
     m_galOptsPanel->TransferDataFromWindow();
 
-    cfg->m_Display.m_DisplayLinesFill = !m_OptDisplayLines->GetValue();
-    cfg->m_Display.m_DisplayFlashedItemsFill = !m_OptDisplayFlashedItems->GetValue();
-    cfg->m_Display.m_DisplayPolygonsFill = !m_OptDisplayPolygons->GetValue();
-    cfg->m_Appearance.show_dcodes = m_OptDisplayDCodes->GetValue();
+    if( GERBVIEW_SETTINGS* cfg = GetAppSettings<GERBVIEW_SETTINGS>( "gerbview" ) )
+    {
+        cfg->m_Display.m_DisplayLinesFill = !m_OptDisplayLines->GetValue();
+        cfg->m_Display.m_DisplayFlashedItemsFill = !m_OptDisplayFlashedItems->GetValue();
+        cfg->m_Display.m_DisplayPolygonsFill = !m_OptDisplayPolygons->GetValue();
+        cfg->m_Appearance.show_dcodes = m_OptDisplayDCodes->GetValue();
 
-    if( m_pageSizeA4->GetValue() )
-        cfg->m_Appearance.page_type = wxT( "A4" );
-    else if( m_pageSizeA3->GetValue() )
-        cfg->m_Appearance.page_type = wxT( "A3" );
-    else if( m_pageSizeA2->GetValue() )
-        cfg->m_Appearance.page_type = wxT( "A2" );
-    else if( m_pageSizeA->GetValue() )
-        cfg->m_Appearance.page_type = wxT( "A" );
-    else if( m_pageSizeB->GetValue() )
-        cfg->m_Appearance.page_type = wxT( "B" );
-    else if( m_pageSizeC->GetValue() )
-        cfg->m_Appearance.page_type = wxT( "C" );
-    else
-        cfg->m_Appearance.page_type = wxT( "GERBER" );
+        // clang-format off
+        if(      m_pageSizeA4->GetValue() ) cfg->m_Appearance.page_type = wxT( "A4" );
+        else if( m_pageSizeA3->GetValue() ) cfg->m_Appearance.page_type = wxT( "A3" );
+        else if( m_pageSizeA2->GetValue() ) cfg->m_Appearance.page_type = wxT( "A2" );
+        else if( m_pageSizeA->GetValue() )  cfg->m_Appearance.page_type = wxT( "A" );
+        else if( m_pageSizeB->GetValue() )  cfg->m_Appearance.page_type = wxT( "B" );
+        else if( m_pageSizeC->GetValue() )  cfg->m_Appearance.page_type = wxT( "C" );
+        else                                cfg->m_Appearance.page_type = wxT( "GERBER" );
+        // clang-format on
 
-    cfg->m_Display.m_DisplayPageLimits = m_ShowPageLimitsOpt->GetValue();
-    cfg->m_Display.m_OpacityModeAlphaValue = m_spOpacityCtrl->GetValue();
+        cfg->m_Display.m_DisplayPageLimits = m_ShowPageLimitsOpt->GetValue();
+        cfg->m_Display.m_OpacityModeAlphaValue = m_spOpacityCtrl->GetValue();
+    }
 
     return true;
 }

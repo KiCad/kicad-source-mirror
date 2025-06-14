@@ -1554,8 +1554,7 @@ void APPEARANCE_CONTROLS::rebuildLayers()
     COLOR4D         bgColor  = theme->GetColor( LAYER_PCB_BACKGROUND );
     bool            readOnly = theme->IsReadOnly();
 
-    SETTINGS_MANAGER&          mgr = Pgm().GetSettingsManager();
-    FOOTPRINT_EDITOR_SETTINGS* cfg = mgr.GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>( "fpedit" );
+    FOOTPRINT_EDITOR_SETTINGS* cfg = GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>( "fpedit" );
 
 #ifdef __WXMAC__
     wxSizerItem* m_windowLayersSizerItem = m_panelLayersSizer->GetItem( m_windowLayers );
@@ -1627,10 +1626,8 @@ void APPEARANCE_CONTROLS::rebuildLayers()
                             onLayerVisibilityToggled( static_cast<PCB_LAYER_ID>( layerId ) );
                         } );
 
-                swatch->Bind( COLOR_SWATCH_CHANGED, &APPEARANCE_CONTROLS::OnColorSwatchChanged,
-                              this );
-                swatch->SetReadOnlyCallback( std::bind( &APPEARANCE_CONTROLS::onReadOnlySwatch,
-                                                        this ) );
+                swatch->Bind( COLOR_SWATCH_CHANGED, &APPEARANCE_CONTROLS::OnColorSwatchChanged, this );
+                swatch->SetReadOnlyCallback( std::bind( &APPEARANCE_CONTROLS::onReadOnlySwatch, this ) );
                 swatch->SetReadOnly( readOnly );
 
                 panel->Bind( wxEVT_RIGHT_DOWN, &APPEARANCE_CONTROLS::rightClickHandler, this );

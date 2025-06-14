@@ -29,19 +29,13 @@
 #include <sch_connection.h>
 #include <sch_group.h>
 #include <sch_rule_area.h>
-#include <sch_item.h>
-#include <sch_screen.h>
-#include <sch_sheet_path.h>
 #include <sch_draw_panel.h>
 #include <sch_edit_frame.h>
-#include <schematic.h>
-#include <symbol.h>
 #include <connection_graph.h>
-#include <trace_helpers.h>
-#include <general.h>
 #include <netclass.h>
 #include <project/project_file.h>
 #include <project/net_settings.h>
+#include <font/kicad_font_name.h>
 
 
 // Rendering fonts is expensive (particularly when using outline fonts).  At small effective
@@ -576,10 +570,11 @@ int SCH_ITEM::compare( const SCH_ITEM& aOther, int aCompareFlags ) const
 
 const wxString& SCH_ITEM::GetDefaultFont() const
 {
-    SETTINGS_MANAGER&  mgr = Pgm().GetSettingsManager();
-    EESCHEMA_SETTINGS* cfg = mgr.GetAppSettings<EESCHEMA_SETTINGS>( "eeschema" );
+    static wxString defaultName = KICAD_FONT_NAME;
 
-    return cfg->m_Appearance.default_font;
+    EESCHEMA_SETTINGS* cfg = GetAppSettings<EESCHEMA_SETTINGS>( "eeschema" );
+
+    return cfg ? cfg->m_Appearance.default_font : defaultName;
 }
 
 

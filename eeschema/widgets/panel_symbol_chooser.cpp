@@ -79,8 +79,8 @@ PANEL_SYMBOL_CHOOSER::PANEL_SYMBOL_CHOOSER( SCH_BASE_FRAME* aFrame, wxWindow* aP
     PROJECT_FILE&             project = m_frame->Prj().GetProjectFile();
 
     // Make sure settings are loaded before we start running multi-threaded symbol loaders
-    Pgm().GetSettingsManager().GetAppSettings<EESCHEMA_SETTINGS>( "eeschema" );
-    Pgm().GetSettingsManager().GetAppSettings<SYMBOL_EDITOR_SETTINGS>( "symbol_editor" );
+    GetAppSettings<EESCHEMA_SETTINGS>( "eeschema" );
+    GetAppSettings<SYMBOL_EDITOR_SETTINGS>( "symbol_editor" );
 
     m_adapter = SYMBOL_TREE_MODEL_ADAPTER::Create( m_frame, libs );
     SYMBOL_TREE_MODEL_ADAPTER* adapter = static_cast<SYMBOL_TREE_MODEL_ADAPTER*>( m_adapter.get() );
@@ -388,19 +388,12 @@ void PANEL_SYMBOL_CHOOSER::OnChar( wxKeyEvent& aEvent )
 
 wxPanel* PANEL_SYMBOL_CHOOSER::constructRightPanel( wxWindow* aParent )
 {
-    EDA_DRAW_PANEL_GAL::GAL_TYPE backend;
+    EDA_DRAW_PANEL_GAL::GAL_TYPE backend = EDA_DRAW_PANEL_GAL::GAL_TYPE::GAL_TYPE_OPENGL;
 
     if( m_frame->GetCanvas() )
-    {
         backend = m_frame->GetCanvas()->GetBackend();
-    }
-    else
-    {
-        SETTINGS_MANAGER&  mgr = Pgm().GetSettingsManager();
-        EESCHEMA_SETTINGS* cfg = mgr.GetAppSettings<EESCHEMA_SETTINGS>( "eeschema" );
-
+    else if( EESCHEMA_SETTINGS* cfg = GetAppSettings<EESCHEMA_SETTINGS>( "eeschema" ) )
         backend = (EDA_DRAW_PANEL_GAL::GAL_TYPE) cfg->m_Graphics.canvas_type;
-    }
 
     wxPanel*    panel = new wxPanel( aParent );
     wxBoxSizer* sizer = new wxBoxSizer( wxVERTICAL );

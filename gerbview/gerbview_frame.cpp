@@ -150,22 +150,19 @@ GERBVIEW_FRAME::GERBVIEW_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     setupUIConditions();
     ReCreateMenuBar();
 
-    m_toolbarSettings = Pgm().GetSettingsManager().GetToolbarSettings<GERBVIEW_TOOLBAR_SETTINGS>( "gerbview-toolbars" );
+    m_toolbarSettings = GetToolbarSettings<GERBVIEW_TOOLBAR_SETTINGS>( "gerbview-toolbars" );
     configureToolbars();
     RecreateToolbars();
 
     m_auimgr.SetManagedWindow( this );
 
     m_auimgr.AddPane( m_tbTopMain, EDA_PANE().HToolbar().Name( "TopMainToolbar" ).Top().Layer( 6 ) );
-    m_auimgr.AddPane( m_tbTopAux, EDA_PANE().HToolbar().Name( "TopAuxToolbar" ).Top()
-                      .Layer(4) );
-    m_auimgr.AddPane( m_messagePanel, EDA_PANE().Messages().Name( "MsgPanel" ).Bottom()
-                      .Layer( 6 ) );
-    m_auimgr.AddPane( m_tbLeft, EDA_PANE().VToolbar().Name( "LeftToolbar" ).Left()
-                      .Layer( 3 ) );
-    m_auimgr.AddPane( m_LayersManager, EDA_PANE().Palette().Name( "LayersManager" ).Right()
-                      .Layer( 3 ).Caption( _( "Layers Manager" ) ).PaneBorder( false )
-                      .MinSize( 80, -1 ).BestSize( m_LayersManager->GetBestSize() ) );
+    m_auimgr.AddPane( m_tbTopAux, EDA_PANE().HToolbar().Name( "TopAuxToolbar" ).Top().Layer(4) );
+    m_auimgr.AddPane( m_messagePanel, EDA_PANE().Messages().Name( "MsgPanel" ).Bottom().Layer( 6 ) );
+    m_auimgr.AddPane( m_tbLeft, EDA_PANE().VToolbar().Name( "LeftToolbar" ).Left().Layer( 3 ) );
+    m_auimgr.AddPane( m_LayersManager, EDA_PANE().Palette().Name( "LayersManager" ).Right().Layer( 3 )
+                                                 .Caption( _( "Layers Manager" ) ).PaneBorder( false )
+                                                 .MinSize( 80, -1 ).BestSize( m_LayersManager->GetBestSize() ) );
 
     m_auimgr.AddPane( GetCanvas(), EDA_PANE().Canvas().Name( "DrawFrame" ).Center() );
 
@@ -376,26 +373,23 @@ void GERBVIEW_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
 {
     EDA_DRAW_FRAME::SaveSettings( aCfg );
 
-    GERBVIEW_SETTINGS* cfg = dynamic_cast<GERBVIEW_SETTINGS*>( aCfg );
-    wxCHECK( cfg, /*void*/ );
+    if( GERBVIEW_SETTINGS* cfg = dynamic_cast<GERBVIEW_SETTINGS*>( aCfg ) )
+    {
+        cfg->m_Appearance.page_type = GetPageSettings().GetType();
 
-    cfg->m_Appearance.page_type = GetPageSettings().GetType();
+        m_drillFileHistory.Save( &cfg->m_DrillFileHistory );
+        m_zipFileHistory.Save( &cfg->m_ZipFileHistory );
+        m_jobFileHistory.Save( &cfg->m_JobFileHistory );
+    }
 
-    m_drillFileHistory.Save( &cfg->m_DrillFileHistory );
-    m_zipFileHistory.Save( &cfg->m_ZipFileHistory );
-    m_jobFileHistory.Save( &cfg->m_JobFileHistory );
-
-    COLOR_SETTINGS* cs = Pgm().GetSettingsManager().GetColorSettings();
-    Pgm().GetSettingsManager().SaveColorSettings( cs, "gerbview" );
+    Pgm().GetSettingsManager().SaveColorSettings( ::GetColorSettings( DEFAULT_THEME ), "gerbview" );
 }
 
 
 COLOR_SETTINGS* GERBVIEW_FRAME::GetColorSettings( bool aForceRefresh ) const
 {
-    SETTINGS_MANAGER&  mgr = Pgm().GetSettingsManager();
-    GERBVIEW_SETTINGS* cfg = mgr.GetAppSettings<GERBVIEW_SETTINGS>( "gerbview" );
-    wxString currentTheme = cfg->m_ColorTheme;
-    return mgr.GetColorSettings( currentTheme );
+    GERBVIEW_SETTINGS* cfg = GetAppSettings<GERBVIEW_SETTINGS>( "gerbview" );
+    return ::GetColorSettings( cfg ? cfg->m_ColorTheme : DEFAULT_THEME );
 }
 
 
@@ -1219,16 +1213,15 @@ void GERBVIEW_FRAME::CommonSettingsChanged( int aFlags )
     EDA_DRAW_FRAME::CommonSettingsChanged( aFlags );
 
     // Update gal display options like cursor shape, grid options:
-    SETTINGS_MANAGER&  mgr = Pgm().GetSettingsManager();
-    GERBVIEW_SETTINGS* cfg = mgr.GetAppSettings<GERBVIEW_SETTINGS>( "gerbview" );
+    if( GERBVIEW_SETTINGS* cfg = GetAppSettings<GERBVIEW_SETTINGS>( "gerbview" ) )
+    {
+        GetGalDisplayOptions().ReadWindowSettings( cfg->m_Window );
 
-    GetGalDisplayOptions().ReadWindowSettings( cfg->m_Window );
-
-    SetPageSettings( PAGE_INFO( gvconfig()->m_Appearance.page_type ) );
+        SetPageSettings( PAGE_INFO( cfg->m_Appearance.page_type ) );
+        SetElementVisibility( LAYER_DCODES, cfg->m_Appearance.show_dcodes );
+    }
 
     UpdateXORLayers();
-
-    SetElementVisibility( LAYER_DCODES, gvconfig()->m_Appearance.show_dcodes );
 
     GetCanvas()->GetView()->MarkTargetDirty( KIGFX::TARGET_NONCACHED );
     GetCanvas()->GetView()->UpdateAllItems( KIGFX::REPAINT );

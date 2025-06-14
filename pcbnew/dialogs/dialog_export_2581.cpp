@@ -244,13 +244,9 @@ void DIALOG_EXPORT_2581::onDistPNChange( wxCommandEvent& event )
 
 bool DIALOG_EXPORT_2581::Init()
 {
-    SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
-    PCBNEW_SETTINGS*  cfg = mgr.GetAppSettings<PCBNEW_SETTINGS>( "pcbnew" );
-
     std::set<wxString> options;
-    BOARD* board = m_parent->GetBoard();
 
-    for( FOOTPRINT* fp : board->Footprints() )
+    for( FOOTPRINT* fp : m_parent->GetBoard()->Footprints() )
     {
         for( PCB_FIELD* field : fp->GetFields() )
             options.insert( field->GetName() );
@@ -258,10 +254,13 @@ bool DIALOG_EXPORT_2581::Init()
 
     if( !m_job )
     {
-        m_choiceUnits->SetSelection( cfg->m_Export2581.units );
-        m_precision->SetValue( cfg->m_Export2581.precision );
-        m_versionChoice->SetSelection( cfg->m_Export2581.version );
-        m_cbCompress->SetValue( cfg->m_Export2581.compress );
+        if( PCBNEW_SETTINGS* cfg = GetAppSettings<PCBNEW_SETTINGS>( "pcbnew" ) )
+        {
+            m_choiceUnits->SetSelection( cfg->m_Export2581.units );
+            m_precision->SetValue( cfg->m_Export2581.precision );
+            m_versionChoice->SetSelection( cfg->m_Export2581.version );
+            m_cbCompress->SetValue( cfg->m_Export2581.compress );
+        }
     }
     else
     {
@@ -359,13 +358,13 @@ bool DIALOG_EXPORT_2581::TransferDataFromWindow()
 {
     if( !m_job )
     {
-        SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
-        PCBNEW_SETTINGS*  cfg = mgr.GetAppSettings<PCBNEW_SETTINGS>( "pcbnew" );
-
-        cfg->m_Export2581.units = m_choiceUnits->GetSelection();
-        cfg->m_Export2581.precision = m_precision->GetValue();
-        cfg->m_Export2581.version = m_versionChoice->GetSelection();
-        cfg->m_Export2581.compress = m_cbCompress->GetValue();
+        if( PCBNEW_SETTINGS* cfg = GetAppSettings<PCBNEW_SETTINGS>( "pcbnew" ) )
+        {
+            cfg->m_Export2581.units = m_choiceUnits->GetSelection();
+            cfg->m_Export2581.precision = m_precision->GetValue();
+            cfg->m_Export2581.version = m_versionChoice->GetSelection();
+            cfg->m_Export2581.compress = m_cbCompress->GetValue();
+        }
 
         PROJECT_FILE& prj = Prj().GetProjectFile();
         wxString      empty;

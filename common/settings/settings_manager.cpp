@@ -237,7 +237,7 @@ COLOR_SETTINGS* SETTINGS_MANAGER::GetColorSettings( const wxString& aName )
         {
             ret = registerColorSettings( aName );
             *ret = *m_color_settings.at( COLOR_SETTINGS::COLOR_BUILTIN_DEFAULT );
-            ret->SetFilename( wxT( "user" ) );
+            ret->SetFilename( DEFAULT_THEME );
             ret->SetReadOnly( false );
         }
 

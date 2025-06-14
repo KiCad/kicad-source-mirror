@@ -1245,8 +1245,7 @@ COLOR_SETTINGS* EDA_DRAW_FRAME::GetColorSettings( bool aForceRefresh ) const
 {
     if( !m_colorSettings || aForceRefresh )
     {
-        COLOR_SETTINGS* colorSettings = Pgm().GetSettingsManager().GetColorSettings();
-
+        COLOR_SETTINGS* colorSettings = ::GetColorSettings( DEFAULT_THEME );
         const_cast<EDA_DRAW_FRAME*>( this )->m_colorSettings = colorSettings;
     }
 

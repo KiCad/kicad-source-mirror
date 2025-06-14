@@ -645,16 +645,14 @@ bool DESIGN_BLOCK_LIB_TABLE::LoadGlobalTable( DESIGN_BLOCK_LIB_TABLE& aTable )
     aTable.clear();
     aTable.Load( fn.GetFullPath() );
 
-    SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
-    KICAD_SETTINGS*   settings = mgr.GetAppSettings<KICAD_SETTINGS>( "kicad" );
-
+    KICAD_SETTINGS*    cfg = GetAppSettings<KICAD_SETTINGS>( "kicad" );
     const ENV_VAR_MAP& env = Pgm().GetLocalEnvVariables();
     wxString           packagesPath;
 
     if( std::optional<wxString> v = ENV_VAR::GetVersionedEnvVarValue( env, wxT( "3RD_PARTY" ) ) )
         packagesPath = *v;
 
-    if( settings->m_PcmLibAutoAdd )
+    if( cfg && cfg->m_PcmLibAutoAdd )
     {
         // Scan for libraries in PCM packages directory
 
@@ -663,14 +661,14 @@ bool DESIGN_BLOCK_LIB_TABLE::LoadGlobalTable( DESIGN_BLOCK_LIB_TABLE& aTable )
 
         if( d.DirExists() )
         {
-            PCM_DESIGN_BLOCK_LIB_TRAVERSER traverser( packagesPath, aTable, settings->m_PcmLibPrefix );
+            PCM_DESIGN_BLOCK_LIB_TRAVERSER traverser( packagesPath, aTable, cfg->m_PcmLibPrefix );
             wxDir                          dir( d.GetPath() );
 
             dir.Traverse( traverser );
         }
     }
 
-    if( settings->m_PcmLibAutoRemove )
+    if( cfg && cfg->m_PcmLibAutoRemove )
     {
         // Remove PCM libraries that no longer exist
         std::vector<wxString> to_remove;

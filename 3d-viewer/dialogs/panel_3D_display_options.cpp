@@ -64,32 +64,28 @@ void PANEL_3D_DISPLAY_OPTIONS::loadViewSettings( EDA_3D_VIEWER_SETTINGS* aCfg )
 
 bool PANEL_3D_DISPLAY_OPTIONS::TransferDataToWindow()
 {
-    SETTINGS_MANAGER&       mgr = Pgm().GetSettingsManager();
-    EDA_3D_VIEWER_SETTINGS* cfg = mgr.GetAppSettings<EDA_3D_VIEWER_SETTINGS>( "3d_viewer" );
-
-    loadViewSettings( cfg );
-
+    loadViewSettings( GetAppSettings<EDA_3D_VIEWER_SETTINGS>( "3d_viewer" ) );
     return true;
 }
 
 
 bool PANEL_3D_DISPLAY_OPTIONS::TransferDataFromWindow()
 {
-    SETTINGS_MANAGER&       mgr = Pgm().GetSettingsManager();
-    EDA_3D_VIEWER_SETTINGS* cfg = mgr.GetAppSettings<EDA_3D_VIEWER_SETTINGS>( "3d_viewer" );
+    if( EDA_3D_VIEWER_SETTINGS* cfg = GetAppSettings<EDA_3D_VIEWER_SETTINGS>( "3d_viewer" ) )
+    {
+        // Set visibility of items
+        cfg->m_Render.show_zones = m_checkBoxAreas->GetValue();
+        cfg->m_Render.subtract_mask_from_silk = m_checkBoxSubtractMaskFromSilk->GetValue();
+        cfg->m_Render.clip_silk_on_via_annuli = m_checkBoxClipSilkOnViaAnnulus->GetValue();
+        cfg->m_Render.differentiate_plated_copper = m_checkBoxRenderPlatedPadsAsPlated->GetValue();
 
-    // Set visibility of items
-    cfg->m_Render.show_zones = m_checkBoxAreas->GetValue();
-    cfg->m_Render.subtract_mask_from_silk = m_checkBoxSubtractMaskFromSilk->GetValue();
-    cfg->m_Render.clip_silk_on_via_annuli = m_checkBoxClipSilkOnViaAnnulus->GetValue();
-    cfg->m_Render.differentiate_plated_copper = m_checkBoxRenderPlatedPadsAsPlated->GetValue();
+        cfg->m_Render.material_mode = static_cast<MATERIAL_MODE>( m_materialProperties->GetSelection() );
 
-    cfg->m_Render.material_mode = static_cast<MATERIAL_MODE>( m_materialProperties->GetSelection() );
-
-    // Camera Options
-    cfg->m_Camera.animation_enabled = m_checkBoxEnableAnimation->GetValue();
-    cfg->m_Camera.moving_speed_multiplier = m_sliderAnimationSpeed->GetValue();
-    cfg->m_Camera.rotation_increment = m_spinCtrlRotationAngle->GetValue();
+        // Camera Options
+        cfg->m_Camera.animation_enabled = m_checkBoxEnableAnimation->GetValue();
+        cfg->m_Camera.moving_speed_multiplier = m_sliderAnimationSpeed->GetValue();
+        cfg->m_Camera.rotation_increment = m_spinCtrlRotationAngle->GetValue();
+    }
 
     return true;
 }

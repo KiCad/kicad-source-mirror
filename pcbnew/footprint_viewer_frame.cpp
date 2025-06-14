@@ -220,7 +220,7 @@ FOOTPRINT_VIEWER_FRAME::FOOTPRINT_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent
 
     setupUIConditions();
 
-    m_toolbarSettings = Pgm().GetSettingsManager().GetToolbarSettings<FOOTPRINT_VIEWER_TOOLBAR_SETTINGS>( "fpviewer-toolbars" );
+    m_toolbarSettings = GetToolbarSettings<FOOTPRINT_VIEWER_TOOLBAR_SETTINGS>( "fpviewer-toolbars" );
     configureToolbars();
     RecreateToolbars();
     ReCreateMenuBar();
@@ -797,31 +797,31 @@ void FOOTPRINT_VIEWER_FRAME::AddFootprintToPCB()
 
 void FOOTPRINT_VIEWER_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
 {
-    PCBNEW_SETTINGS* cfg = dynamic_cast<PCBNEW_SETTINGS*>( aCfg );
-    wxCHECK( cfg, /*void*/ );
-
-    // We don't allow people to change this right now, so make sure it's on
-    GetWindowSettings( cfg )->cursor.always_show_cursor = true;
-
-    PCB_BASE_FRAME::LoadSettings( aCfg );
-
-    // Fetch display and grid settings from Footprint Editor
-    SETTINGS_MANAGER&          mgr = Pgm().GetSettingsManager();
-    FOOTPRINT_EDITOR_SETTINGS* fpedit = mgr.GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>( "fpedit" );
-
-    m_displayOptions = fpedit->m_Display;
-    GetGalDisplayOptions().ReadWindowSettings( fpedit->m_Window );
-
-    m_libListWidth = cfg->m_FootprintViewerLibListWidth;
-    m_fpListWidth = cfg->m_FootprintViewerFPListWidth;
-
-    // Set parameters to a reasonable value.
-    int maxWidth = cfg->m_FootprintViewer.state.size_x - 80;
-
-    if( m_libListWidth + m_fpListWidth > maxWidth )
+    if( PCBNEW_SETTINGS* cfg = dynamic_cast<PCBNEW_SETTINGS*>( aCfg ) )
     {
-        m_libListWidth = maxWidth * ( m_libListWidth / ( m_libListWidth + m_fpListWidth ) );
-        m_fpListWidth = maxWidth - m_libListWidth;
+        // We don't allow people to change this right now, so make sure it's on
+        GetWindowSettings( cfg )->cursor.always_show_cursor = true;
+
+        PCB_BASE_FRAME::LoadSettings( aCfg );
+
+        // Fetch display and grid settings from Footprint Editor
+        if( FOOTPRINT_EDITOR_SETTINGS* fpedit = GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>( "fpedit" ) )
+        {
+            m_displayOptions = fpedit->m_Display;
+            GetGalDisplayOptions().ReadWindowSettings( fpedit->m_Window );
+        }
+
+        m_libListWidth = cfg->m_FootprintViewerLibListWidth;
+        m_fpListWidth = cfg->m_FootprintViewerFPListWidth;
+
+        // Set parameters to a reasonable value.
+        int maxWidth = cfg->m_FootprintViewer.state.size_x - 80;
+
+        if( m_libListWidth + m_fpListWidth > maxWidth )
+        {
+            m_libListWidth = maxWidth * ( m_libListWidth / ( m_libListWidth + m_fpListWidth ) );
+            m_fpListWidth = maxWidth - m_libListWidth;
+        }
     }
 }
 
@@ -856,13 +856,8 @@ WINDOW_SETTINGS* FOOTPRINT_VIEWER_FRAME::GetWindowSettings( APP_SETTINGS_BASE* a
 
 COLOR_SETTINGS* FOOTPRINT_VIEWER_FRAME::GetColorSettings( bool aForceRefresh ) const
 {
-    SETTINGS_MANAGER&          mgr = Pgm().GetSettingsManager();
-    FOOTPRINT_EDITOR_SETTINGS* cfg = mgr.GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>( "fpedit" );
-
-    if( cfg )
-        return mgr.GetColorSettings( cfg->m_ColorTheme );
-    else
-        return mgr.GetColorSettings();
+    FOOTPRINT_EDITOR_SETTINGS* cfg = GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>( "fpedit" );
+    return ::GetColorSettings( cfg ? cfg->m_ColorTheme : DEFAULT_THEME );
 }
 
 

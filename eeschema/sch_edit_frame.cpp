@@ -193,7 +193,7 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     setupUIConditions();
     ReCreateMenuBar();
 
-    m_toolbarSettings = Pgm().GetSettingsManager().GetToolbarSettings<SCH_EDIT_TOOLBAR_SETTINGS>( "eeschema-toolbars" );
+    m_toolbarSettings = GetToolbarSettings<SCH_EDIT_TOOLBAR_SETTINGS>( "eeschema-toolbars" );
     configureToolbars();
     RecreateToolbars();
 
@@ -1906,24 +1906,25 @@ void SCH_EDIT_FRAME::CommonSettingsChanged( int aFlags )
 
     ShowAllIntersheetRefs( settings.m_IntersheetRefsShow );
 
-    SETTINGS_MANAGER&  mgr = Pgm().GetSettingsManager();
-    EESCHEMA_SETTINGS* cfg = mgr.GetAppSettings<EESCHEMA_SETTINGS>( "eeschema" );
-    GetGalDisplayOptions().ReadWindowSettings( cfg->m_Window );
-    GetRenderSettings()->SetDefaultFont( cfg->m_Appearance.default_font );
+    if( EESCHEMA_SETTINGS* cfg = GetAppSettings<EESCHEMA_SETTINGS>( "eeschema" ) )
+    {
+        GetGalDisplayOptions().ReadWindowSettings( cfg->m_Window );
+        GetRenderSettings()->SetDefaultFont( cfg->m_Appearance.default_font );
 
-    KIGFX::VIEW* view = GetCanvas()->GetView();
-    view->SetLayerVisible( LAYER_ERC_ERR, cfg->m_Appearance.show_erc_errors );
-    view->SetLayerVisible( LAYER_ERC_WARN, cfg->m_Appearance.show_erc_warnings );
-    view->SetLayerVisible( LAYER_ERC_EXCLUSION, cfg->m_Appearance.show_erc_exclusions );
-    view->SetLayerVisible( LAYER_OP_VOLTAGES, cfg->m_Appearance.show_op_voltages );
-    view->SetLayerVisible( LAYER_OP_CURRENTS, cfg->m_Appearance.show_op_currents );
+        KIGFX::VIEW* view = GetCanvas()->GetView();
+        view->SetLayerVisible( LAYER_ERC_ERR, cfg->m_Appearance.show_erc_errors );
+        view->SetLayerVisible( LAYER_ERC_WARN, cfg->m_Appearance.show_erc_warnings );
+        view->SetLayerVisible( LAYER_ERC_EXCLUSION, cfg->m_Appearance.show_erc_exclusions );
+        view->SetLayerVisible( LAYER_OP_VOLTAGES, cfg->m_Appearance.show_op_voltages );
+        view->SetLayerVisible( LAYER_OP_CURRENTS, cfg->m_Appearance.show_op_currents );
 
-    RefreshOperatingPointDisplay();
+        RefreshOperatingPointDisplay();
 
-    settings.m_TemplateFieldNames.DeleteAllFieldNameTemplates( true /* global */ );
+        settings.m_TemplateFieldNames.DeleteAllFieldNameTemplates( true /* global */ );
 
-    if( !cfg->m_Drawing.field_names.IsEmpty() )
-        settings.m_TemplateFieldNames.AddTemplateFieldNames( cfg->m_Drawing.field_names );
+        if( !cfg->m_Drawing.field_names.IsEmpty() )
+            settings.m_TemplateFieldNames.AddTemplateFieldNames( cfg->m_Drawing.field_names );
+    }
 
     SCH_SCREEN* screen = GetCurrentSheet().LastScreen();
 

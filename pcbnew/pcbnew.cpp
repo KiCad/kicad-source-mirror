@@ -94,8 +94,7 @@ static struct IFACE : public KIFACE_BASE, public UNITS_PROVIDER
 
     void OnKifaceEnd() override;
 
-    wxWindow* CreateKiWindow( wxWindow* aParent, int aClassId, KIWAY* aKiway,
-                              int aCtlBits = 0 ) override
+    wxWindow* CreateKiWindow( wxWindow* aParent, int aClassId, KIWAY* aKiway, int aCtlBits = 0 ) override
     {
         switch( aClassId )
         {
@@ -153,17 +152,11 @@ static struct IFACE : public KIFACE_BASE, public UNITS_PROVIDER
             return nullptr;
 
         case PANEL_FP_DISPLAY_OPTIONS:
-        {
-            SETTINGS_MANAGER&          mgr = Pgm().GetSettingsManager();
-            FOOTPRINT_EDITOR_SETTINGS* cfg = mgr.GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>( "fpedit" );
-
-            return new PANEL_DISPLAY_OPTIONS( aParent, cfg );
-        }
+            return new PANEL_DISPLAY_OPTIONS( aParent, GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>( "fpedit" ) );
 
         case PANEL_FP_GRIDS:
         {
-            SETTINGS_MANAGER&          mgr = Pgm().GetSettingsManager();
-            FOOTPRINT_EDITOR_SETTINGS* cfg = mgr.GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>( "fpedit" );
+            FOOTPRINT_EDITOR_SETTINGS* cfg = GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>( "fpedit" );
             EDA_BASE_FRAME*            frame = aKiway->Player( FRAME_FOOTPRINT_EDITOR, false );
 
             if( !frame )
@@ -179,12 +172,8 @@ static struct IFACE : public KIFACE_BASE, public UNITS_PROVIDER
         }
 
         case PANEL_FP_ORIGINS_AXES:
-        {
-            SETTINGS_MANAGER&          mgr = Pgm().GetSettingsManager();
-            FOOTPRINT_EDITOR_SETTINGS* cfg = mgr.GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>( "fpedit" );
-
-            return new PANEL_PCBNEW_DISPLAY_ORIGIN( aParent, cfg, FRAME_FOOTPRINT_EDITOR );
-        }
+            return new PANEL_PCBNEW_DISPLAY_ORIGIN( aParent, GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>( "fpedit" ),
+                                                    FRAME_FOOTPRINT_EDITOR );
 
         case PANEL_FP_EDIT_OPTIONS:
         {
@@ -236,9 +225,8 @@ static struct IFACE : public KIFACE_BASE, public UNITS_PROVIDER
 
         case PANEL_FP_TOOLBARS:
         {
-            SETTINGS_MANAGER&  mgr = Pgm().GetSettingsManager();
-            APP_SETTINGS_BASE* cfg = mgr.GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>( "fpedit" );
-            TOOLBAR_SETTINGS*  tb  = mgr.GetToolbarSettings<FOOTPRINT_EDIT_TOOLBAR_SETTINGS>( "fpedit-toolbars" );
+            APP_SETTINGS_BASE* cfg = GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>( "fpedit" );
+            TOOLBAR_SETTINGS*  tb  = GetToolbarSettings<FOOTPRINT_EDIT_TOOLBAR_SETTINGS>( "fpedit-toolbars" );
 
             std::vector<TOOL_ACTION*>            actions;
             std::vector<ACTION_TOOLBAR_CONTROL*> controls;
@@ -256,17 +244,11 @@ static struct IFACE : public KIFACE_BASE, public UNITS_PROVIDER
             return new PANEL_FP_EDITOR_COLOR_SETTINGS( aParent );
 
         case PANEL_PCB_DISPLAY_OPTS:
-        {
-            SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
-            PCBNEW_SETTINGS*  cfg = mgr.GetAppSettings<PCBNEW_SETTINGS>( "pcbnew" );
-
-            return new PANEL_DISPLAY_OPTIONS( aParent, cfg );
-        }
+            return new PANEL_DISPLAY_OPTIONS( aParent, GetAppSettings<PCBNEW_SETTINGS>( "pcbnew" ) );
 
         case PANEL_PCB_GRIDS:
         {
-            SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
-            PCBNEW_SETTINGS*  cfg = mgr.GetAppSettings<PCBNEW_SETTINGS>( "pcbnew" );
+            PCBNEW_SETTINGS*  cfg = GetAppSettings<PCBNEW_SETTINGS>( "pcbnew" );
             EDA_BASE_FRAME*   frame = aKiway->Player( FRAME_PCB_EDITOR, false );
 
             if( !frame )
@@ -282,12 +264,8 @@ static struct IFACE : public KIFACE_BASE, public UNITS_PROVIDER
         }
 
         case PANEL_PCB_ORIGINS_AXES:
-        {
-            SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
-            PCBNEW_SETTINGS*  cfg = mgr.GetAppSettings<PCBNEW_SETTINGS>( "pcbnew" );
-
-            return new PANEL_PCBNEW_DISPLAY_ORIGIN( aParent, cfg, FRAME_PCB_EDITOR );
-        }
+            return new PANEL_PCBNEW_DISPLAY_ORIGIN( aParent, GetAppSettings<PCBNEW_SETTINGS>( "pcbnew" ),
+                                                    FRAME_PCB_EDITOR );
 
         case PANEL_PCB_EDIT_OPTIONS:
         {
@@ -318,9 +296,8 @@ static struct IFACE : public KIFACE_BASE, public UNITS_PROVIDER
 
         case PANEL_PCB_TOOLBARS:
         {
-            SETTINGS_MANAGER&  mgr = Pgm().GetSettingsManager();
-            APP_SETTINGS_BASE* cfg = mgr.GetAppSettings<PCBNEW_SETTINGS>( "pcbnew" );
-            TOOLBAR_SETTINGS*  tb  = mgr.GetToolbarSettings<PCB_EDIT_TOOLBAR_SETTINGS>( "pcbnew-toolbars" );
+            APP_SETTINGS_BASE* cfg = GetAppSettings<PCBNEW_SETTINGS>( "pcbnew" );
+            TOOLBAR_SETTINGS*  tb  = GetToolbarSettings<PCB_EDIT_TOOLBAR_SETTINGS>( "pcbnew-toolbars" );
 
             std::vector<TOOL_ACTION*>            actions;
             std::vector<ACTION_TOOLBAR_CONTROL*> controls;
@@ -347,22 +324,21 @@ static struct IFACE : public KIFACE_BASE, public UNITS_PROVIDER
             return new PANEL_3D_RAYTRACING_OPTIONS( aParent );
 
         case PANEL_3DV_TOOLBARS:
-            {
-                SETTINGS_MANAGER&  mgr = Pgm().GetSettingsManager();
-                APP_SETTINGS_BASE* cfg = mgr.GetAppSettings<EDA_3D_VIEWER_SETTINGS>( "3d_viewer" );
-                TOOLBAR_SETTINGS*  tb  = mgr.GetToolbarSettings<EDA_3D_VIEWER_TOOLBAR_SETTINGS>( "3d_viewer-toolbars" );
+        {
+            APP_SETTINGS_BASE* cfg = GetAppSettings<EDA_3D_VIEWER_SETTINGS>( "3d_viewer" );
+            TOOLBAR_SETTINGS*  tb  = GetToolbarSettings<EDA_3D_VIEWER_TOOLBAR_SETTINGS>( "3d_viewer-toolbars" );
 
-                std::vector<TOOL_ACTION*>            actions;
-                std::vector<ACTION_TOOLBAR_CONTROL*> controls;
+            std::vector<TOOL_ACTION*>            actions;
+            std::vector<ACTION_TOOLBAR_CONTROL*> controls;
 
-                for( TOOL_ACTION* action : ACTION_MANAGER::GetActionList() )
-                    actions.push_back( action );
+            for( TOOL_ACTION* action : ACTION_MANAGER::GetActionList() )
+                actions.push_back( action );
 
-                for( ACTION_TOOLBAR_CONTROL* control : ACTION_TOOLBAR::GetCustomControlList() )
-                    controls.push_back( control );
+            for( ACTION_TOOLBAR_CONTROL* control : ACTION_TOOLBAR::GetCustomControlList() )
+                controls.push_back( control );
 
-                return new PANEL_TOOLBAR_CUSTOMIZATION( aParent, cfg, tb, actions, controls );
-            }
+            return new PANEL_TOOLBAR_CUSTOMIZATION( aParent, cfg, tb, actions, controls );
+        }
 
         default:
             return nullptr;
@@ -477,10 +453,10 @@ bool IFACE::OnKifaceStart( PGM_BASE* aProgram, int aCtlBits, KIWAY* aKiway )
     if( !loadGlobalLibTable() )
     {
         // we didnt get anywhere deregister the settings
-        mgr.FlushAndRelease( mgr.GetAppSettings<CVPCB_SETTINGS>( "cvpcb" ), false );
+        mgr.FlushAndRelease( GetAppSettings<CVPCB_SETTINGS>( "cvpcb" ), false );
         mgr.FlushAndRelease( KifaceSettings(), false );
-        mgr.FlushAndRelease( mgr.GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>( "fpedit" ), false );
-        mgr.FlushAndRelease( mgr.GetAppSettings<EDA_3D_VIEWER_SETTINGS>( "3d_viewer" ), false );
+        mgr.FlushAndRelease( GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>( "fpedit" ), false );
+        mgr.FlushAndRelease( GetAppSettings<EDA_3D_VIEWER_SETTINGS>( "3d_viewer" ), false );
 
         return false;
     }

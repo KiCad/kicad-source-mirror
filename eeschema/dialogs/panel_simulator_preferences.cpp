@@ -86,16 +86,17 @@ bool PANEL_SIMULATOR_PREFERENCES::TransferDataFromWindow()
                 return static_cast<SIM_MOUSE_WHEEL_ACTION>( aChoice->GetSelection() );
             };
 
-    SETTINGS_MANAGER&           mgr = Pgm().GetSettingsManager();
-    EESCHEMA_SETTINGS*          cfg = mgr.GetAppSettings<EESCHEMA_SETTINGS>( "eeschema" );
-    SIM_MOUSE_WHEEL_ACTION_SET& actions = cfg->m_Simulator.preferences.mouse_wheel_actions;
+    if( EESCHEMA_SETTINGS* cfg = GetAppSettings<EESCHEMA_SETTINGS>( "eeschema" ) )
+    {
+        SIM_MOUSE_WHEEL_ACTION_SET& actions = cfg->m_Simulator.preferences.mouse_wheel_actions;
 
-    actions.vertical_unmodified = toAction( m_choiceVScrollUnmodified );
-    actions.vertical_with_ctrl  = toAction( m_choiceVScrollCtrl );
-    actions.vertical_with_shift = toAction( m_choiceVScrollShift );
-    actions.vertical_with_alt   = toAction( m_choiceVScrollAlt );
+        actions.vertical_unmodified = toAction( m_choiceVScrollUnmodified );
+        actions.vertical_with_ctrl  = toAction( m_choiceVScrollCtrl );
+        actions.vertical_with_shift = toAction( m_choiceVScrollShift );
+        actions.vertical_with_alt   = toAction( m_choiceVScrollAlt );
 
-    actions.horizontal = horizontalScrollSelectionToAction( m_choiceHScroll->GetSelection() );
+        actions.horizontal = horizontalScrollSelectionToAction( m_choiceHScroll->GetSelection() );
+    }
 
     return true;
 }
@@ -103,10 +104,9 @@ bool PANEL_SIMULATOR_PREFERENCES::TransferDataFromWindow()
 
 bool PANEL_SIMULATOR_PREFERENCES::TransferDataToWindow()
 {
-    SETTINGS_MANAGER&  mgr = Pgm().GetSettingsManager();
-    EESCHEMA_SETTINGS* cfg = mgr.GetAppSettings<EESCHEMA_SETTINGS>( "eeschema" );
+    if( EESCHEMA_SETTINGS* cfg = GetAppSettings<EESCHEMA_SETTINGS>( "eeschema" ) )
+        applyMouseScrollActionsToPanel( cfg->m_Simulator.preferences.mouse_wheel_actions );
 
-    applyMouseScrollActionsToPanel( cfg->m_Simulator.preferences.mouse_wheel_actions );
     return true;
 }
 

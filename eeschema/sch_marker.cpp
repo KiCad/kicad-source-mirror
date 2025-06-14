@@ -328,8 +328,7 @@ SCH_LAYER_ID SCH_MARKER::GetColorLayer() const
 
 KIGFX::COLOR4D SCH_MARKER::getColor() const
 {
-    COLOR_SETTINGS* colors = Pgm().GetSettingsManager().GetColorSettings();
-    return colors->GetColor( GetColorLayer() );
+    return ::GetColorSettings( DEFAULT_THEME )->GetColor( GetColorLayer() );
 }
 
 

@@ -544,7 +544,7 @@ EESCHEMA_SETTINGS::EESCHEMA_SETTINGS() :
             &m_PlotPanel.color, true ) );
 
     m_params.emplace_back( new PARAM<wxString>( "plot.color_theme",
-            &m_PlotPanel.color_theme, wxT( "user" ) ) );
+            &m_PlotPanel.color_theme, DEFAULT_THEME ) );
 
     m_params.emplace_back( new PARAM<int>( "plot.format",
             &m_PlotPanel.format, 0 ) );
@@ -951,12 +951,14 @@ bool EESCHEMA_SETTINGS::MigrateFromLegacy( wxConfigBase* aCfg )
     SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
     COLOR_SETTINGS*   cs = mgr.GetMigratedColorSettings();
 
-    auto migrateLegacyColor = [&] ( const std::string& aKey, int aLayerId ) {
-        wxString str;
+    auto migrateLegacyColor =
+            [&] ( const std::string& aKey, int aLayerId )
+            {
+                wxString str;
 
-        if( aCfg->Read( aKey, &str ) )
-            cs->SetColor( aLayerId, COLOR4D( str ) );
-    };
+                if( aCfg->Read( aKey, &str ) )
+                    cs->SetColor( aLayerId, COLOR4D( str ) );
+            };
 
     migrateLegacyColor( "Color4DBgCanvasEx",        LAYER_SCHEMATIC_BACKGROUND );
     migrateLegacyColor( "Color4DBodyBgEx",          LAYER_DEVICE_BACKGROUND );
@@ -995,9 +997,11 @@ bool EESCHEMA_SETTINGS::MigrateFromLegacy( wxConfigBase* aCfg )
     // LibEdit settings were stored with eeschema.  If eeschema is the first app to run,
     // we need to migrate the LibEdit settings here
 
-    SYMBOL_EDITOR_SETTINGS* libedit = mgr.GetAppSettings<SYMBOL_EDITOR_SETTINGS>( "symbol_editor" );
-    libedit->MigrateFromLegacy( aCfg );
-    libedit->Load();
+    if( SYMBOL_EDITOR_SETTINGS* sym_edit_cfg = GetAppSettings<SYMBOL_EDITOR_SETTINGS>( "symbol_editor" ) )
+    {
+        sym_edit_cfg->MigrateFromLegacy( aCfg );
+        sym_edit_cfg->Load();
+    }
 
     return ret;
 }

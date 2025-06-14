@@ -136,7 +136,7 @@ PL_EDITOR_FRAME::PL_EDITOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     setupUIConditions();
     ReCreateMenuBar();
 
-    m_toolbarSettings = Pgm().GetSettingsManager().GetToolbarSettings<PL_EDITOR_TOOLBAR_SETTINGS>( "pl_editor-toolbars" );
+    m_toolbarSettings = GetToolbarSettings<PL_EDITOR_TOOLBAR_SETTINGS>( "pl_editor-toolbars" );
     configureToolbars();
     RecreateToolbars();
 
@@ -643,9 +643,8 @@ void PL_EDITOR_FRAME::CommonSettingsChanged( int aFlags )
 {
     EDA_DRAW_FRAME::CommonSettingsChanged( aFlags );
 
-    SETTINGS_MANAGER&   mgr = Pgm().GetSettingsManager();
-    PL_EDITOR_SETTINGS* cfg = mgr.GetAppSettings<PL_EDITOR_SETTINGS>( "pl_editor" );
-    COLOR_SETTINGS*     colors = mgr.GetColorSettings( cfg->m_ColorTheme );
+    PL_EDITOR_SETTINGS* cfg = GetAppSettings<PL_EDITOR_SETTINGS>( "pl_editor" );
+    COLOR_SETTINGS*     colors = ::GetColorSettings( cfg ? cfg->m_ColorTheme : DEFAULT_THEME );
 
     // Update gal display options like cursor shape, grid options:
     GetGalDisplayOptions().ReadWindowSettings( cfg->m_Window );

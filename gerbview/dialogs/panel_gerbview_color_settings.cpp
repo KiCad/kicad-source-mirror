@@ -31,29 +31,22 @@ PANEL_GERBVIEW_COLOR_SETTINGS::PANEL_GERBVIEW_COLOR_SETTINGS( wxWindow* aParent 
 {
     m_colorNamespace = "gerbview";
 
-    SETTINGS_MANAGER&  mgr          = Pgm().GetSettingsManager();
-    GERBVIEW_SETTINGS* app_settings = mgr.GetAppSettings<GERBVIEW_SETTINGS>( "gerbview" );
-    COLOR_SETTINGS*    current      = mgr.GetColorSettings( app_settings->m_ColorTheme );
+    GERBVIEW_SETTINGS* cfg     = GetAppSettings<GERBVIEW_SETTINGS>( "gerbview" );
+    COLOR_SETTINGS*    current = ::GetColorSettings( cfg ? cfg->m_ColorTheme : DEFAULT_THEME );
 
     // Colors can also be modified from the LayersManager, so collect last settings if exist
     // (They can be no yet saved on disk)
-    GERBVIEW_FRAME* gbr_mainframe = dynamic_cast<GERBVIEW_FRAME*>(
-                                    wxWindow::FindWindowByName( GERBVIEW_FRAME_NAME ) );
-    if( gbr_mainframe )
-    {
-       gbr_mainframe->m_LayersManager->CollectCurrentColorSettings( current );
-    }
+    if( GERBVIEW_FRAME* frame = dynamic_cast<GERBVIEW_FRAME*>( wxWindow::FindWindowByName( GERBVIEW_FRAME_NAME ) ) )
+        frame->m_LayersManager->CollectCurrentColorSettings( current );
 
     // Saved theme doesn't exist?  Reset to default
-    if( current->GetFilename() != app_settings->m_ColorTheme )
-        app_settings->m_ColorTheme = current->GetFilename();
+    if( cfg && current->GetFilename() != cfg->m_ColorTheme )
+        cfg->m_ColorTheme = current->GetFilename();
 
-    createThemeList( app_settings->m_ColorTheme );
-
+    createThemeList( cfg ? cfg->m_ColorTheme : DEFAULT_THEME );
 
     // Currently this only applies to eeschema
     m_optOverrideColors->Hide();
-
 
     m_currentSettings = new COLOR_SETTINGS( *current );
 
@@ -75,10 +68,8 @@ PANEL_GERBVIEW_COLOR_SETTINGS::~PANEL_GERBVIEW_COLOR_SETTINGS()
 
 bool PANEL_GERBVIEW_COLOR_SETTINGS::TransferDataFromWindow()
 {
-    SETTINGS_MANAGER&  mgr = Pgm().GetSettingsManager();
-    GERBVIEW_SETTINGS* cfg = mgr.GetAppSettings<GERBVIEW_SETTINGS>( "gerbview" );
-
-    cfg->m_ColorTheme = m_currentSettings->GetFilename();
+    if( GERBVIEW_SETTINGS* cfg = GetAppSettings<GERBVIEW_SETTINGS>( "gerbview" ) )
+        cfg->m_ColorTheme = m_currentSettings->GetFilename();
 
     return true;
 }

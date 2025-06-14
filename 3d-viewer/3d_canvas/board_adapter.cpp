@@ -227,17 +227,11 @@ BOARD_ADAPTER::~BOARD_ADAPTER()
 
 void BOARD_ADAPTER::ReloadColorSettings() noexcept
 {
-    wxCHECK( PgmOrNull(), /* void */ );
+    PCBNEW_SETTINGS* cfg = GetAppSettings<PCBNEW_SETTINGS>( "pcbnew" );
+    COLOR_SETTINGS*  cs = ::GetColorSettings( cfg ? cfg->m_ColorTheme : DEFAULT_THEME );
 
-    SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
-    PCBNEW_SETTINGS*  cfg = mgr.GetAppSettings<PCBNEW_SETTINGS>( "pcbnew" );
-    COLOR_SETTINGS*   colors = mgr.GetColorSettings( cfg ? cfg->m_ColorTheme : wxString( "" ) );
-
-    if( colors )
-    {
-        for( int layer = F_Cu; layer < PCB_LAYER_ID_COUNT; ++layer )
-            m_BoardEditorColors[ layer ] = colors->GetColor( layer );
-    }
+    for( int layer = F_Cu; layer < PCB_LAYER_ID_COUNT; ++layer )
+        m_BoardEditorColors[ layer ] = cs->GetColor( layer );
 }
 
 
@@ -617,7 +611,7 @@ std::map<int, COLOR4D> BOARD_ADAPTER::GetDefaultColors() const
     colors[ LAYER_3D_USER_ECO1 ]         = BOARD_ADAPTER::g_DefaultECOs;
     colors[ LAYER_3D_USER_ECO2 ]         = BOARD_ADAPTER::g_DefaultECOs;
 
-    COLOR_SETTINGS* settings = Pgm().GetSettingsManager().GetColorSettings( wxEmptyString );
+    COLOR_SETTINGS* settings = ::GetColorSettings( DEFAULT_THEME );
 
     for( int layer = LAYER_3D_USER_1; layer <= LAYER_3D_USER_45; ++layer )
         colors[ layer ] = settings->GetColor( layer );
@@ -636,7 +630,7 @@ std::map<int, COLOR4D> BOARD_ADAPTER::GetLayerColors() const
     }
     else
     {
-        COLOR_SETTINGS* settings = Pgm().GetSettingsManager().GetColorSettings();
+        COLOR_SETTINGS* settings = ::GetColorSettings( DEFAULT_THEME );
 
         for( const auto& [ layer, defaultColor /* unused */ ] : GetDefaultColors() )
             colors[ layer ] = settings->GetColor( layer );
@@ -746,7 +740,7 @@ std::map<int, COLOR4D> BOARD_ADAPTER::GetLayerColors() const
 
 void BOARD_ADAPTER::SetLayerColors( const std::map<int, COLOR4D>& aColors )
 {
-    COLOR_SETTINGS* settings = Pgm().GetSettingsManager().GetColorSettings();
+    COLOR_SETTINGS* settings = ::GetColorSettings( DEFAULT_THEME );
 
     for( const auto& [ layer, color ] : aColors )
     {

@@ -206,7 +206,7 @@ KICAD_MANAGER_FRAME::KICAD_MANAGER_FRAME( wxWindow* parent, const wxString& titl
     setupTools();
     setupUIConditions();
 
-    m_toolbarSettings = Pgm().GetSettingsManager().GetToolbarSettings<KICAD_MANAGER_TOOLBAR_SETTINGS>( "kicad-toolbars" );
+    m_toolbarSettings = GetToolbarSettings<KICAD_MANAGER_TOOLBAR_SETTINGS>( "kicad-toolbars" );
     configureToolbars();
     RecreateToolbars();
     ReCreateMenuBar();
@@ -214,8 +214,7 @@ KICAD_MANAGER_FRAME::KICAD_MANAGER_FRAME( wxWindow* parent, const wxString& titl
     m_auimgr.SetManagedWindow( this );
     m_auimgr.SetFlags( wxAUI_MGR_LIVE_RESIZE );
 
-    m_auimgr.AddPane( m_tbLeft,
-                      EDA_PANE().VToolbar().Name( "TopMainToolbar" ).Left().Layer( 2 ) );
+    m_auimgr.AddPane( m_tbLeft, EDA_PANE().VToolbar().Name( "TopMainToolbar" ).Left().Layer( 2 ) );
 
     // BestSize() does not always set the actual pane size of m_leftWin to the required value.
     // It happens when m_leftWin is too large (roughly > 1/3 of the kicad manager frame width.
@@ -232,10 +231,8 @@ KICAD_MANAGER_FRAME::KICAD_MANAGER_FRAME( wxWindow* parent, const wxString& titl
                                     wxAUI_NB_TOP | wxAUI_NB_CLOSE_ON_ALL_TABS | wxAUI_NB_TAB_MOVE
                                             | wxAUI_NB_SCROLL_BUTTONS | wxNO_BORDER );
 
-    m_notebook->Bind( wxEVT_AUINOTEBOOK_PAGE_CLOSE,
-                      &KICAD_MANAGER_FRAME::onNotebookPageCloseRequest, this );
-    m_notebook->Bind( wxEVT_AUINOTEBOOK_PAGE_CLOSED,
-                      &KICAD_MANAGER_FRAME::onNotebookPageCountChanged, this );
+    m_notebook->Bind( wxEVT_AUINOTEBOOK_PAGE_CLOSE, &KICAD_MANAGER_FRAME::onNotebookPageCloseRequest, this );
+    m_notebook->Bind( wxEVT_AUINOTEBOOK_PAGE_CLOSED, &KICAD_MANAGER_FRAME::onNotebookPageCountChanged, this );
     m_launcher = new PANEL_KICAD_LAUNCHER( m_notebook );
 
     m_notebook->Freeze();
@@ -244,9 +241,8 @@ KICAD_MANAGER_FRAME::KICAD_MANAGER_FRAME( wxWindow* parent, const wxString& titl
     m_notebook->SetTabCtrlHeight( 0 );
     m_notebook->Thaw();
 
-    m_auimgr.AddPane( m_notebook,
-                      EDA_PANE().Canvas().Name( "Editors" ).Center().Caption( EDITORS_CAPTION )
-                                .PaneBorder( false ).MinSize( m_notebook->GetBestSize() ) );
+    m_auimgr.AddPane( m_notebook, EDA_PANE().Canvas().Name( "Editors" ).Center().Caption( EDITORS_CAPTION )
+                                            .PaneBorder( false ).MinSize( m_notebook->GetBestSize() ) );
 
     m_auimgr.Update();
 

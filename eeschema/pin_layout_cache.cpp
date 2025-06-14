@@ -131,16 +131,14 @@ void PIN_LAYOUT_CACHE::recomputeExtentsCache( bool aDefinitelyDirty, KIFONT::FON
     VECTOR2D fontSize( aSize, aSize );
     int      penWidth = GetPenSizeForNormal( aSize );
 
-    aCache.m_Extents =
-            aFont->StringBoundaryLimits( aText, fontSize, penWidth, false, false, aFontMetrics );
+    aCache.m_Extents = aFont->StringBoundaryLimits( aText, fontSize, penWidth, false, false, aFontMetrics );
 }
 
 
 void PIN_LAYOUT_CACHE::recomputeCaches()
 {
-    SETTINGS_MANAGER&      mgr = Pgm().GetSettingsManager();
-    EESCHEMA_SETTINGS*     cfg = mgr.GetAppSettings<EESCHEMA_SETTINGS>( "eeschema" );
-    KIFONT::FONT*          font = KIFONT::FONT::GetFont( cfg->m_Appearance.default_font );
+    EESCHEMA_SETTINGS*     cfg = GetAppSettings<EESCHEMA_SETTINGS>( "eeschema" );
+    KIFONT::FONT*          font = KIFONT::FONT::GetFont( cfg ? cfg->m_Appearance.default_font : wxString( "" ) );
     const KIFONT::METRICS& metrics = m_pin.GetFontMetrics();
 
     // Due to the fact a shadow text in position INSIDE or OUTSIDE is drawn left or right aligned,
@@ -156,15 +154,13 @@ void PIN_LAYOUT_CACHE::recomputeCaches()
     {
         const bool     dirty = isDirty( DIRTY_FLAGS::NUMBER );
         const wxString number = m_pin.GetShownNumber();
-        recomputeExtentsCache( dirty, font, m_pin.GetNumberTextSize(), number, metrics,
-                               m_numExtentsCache );
+        recomputeExtentsCache( dirty, font, m_pin.GetNumberTextSize(), number, metrics, m_numExtentsCache );
     }
 
     {
         const bool     dirty = isDirty( DIRTY_FLAGS::NAME );
         const wxString name = m_pin.GetShownName();
-        recomputeExtentsCache( dirty, font, m_pin.GetNameTextSize(), name, metrics,
-                               m_nameExtentsCache );
+        recomputeExtentsCache( dirty, font, m_pin.GetNameTextSize(), name, metrics, m_nameExtentsCache );
     }
 
     {

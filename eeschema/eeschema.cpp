@@ -163,8 +163,7 @@ static struct IFACE : public KIFACE_BASE, public UNITS_PROVIDER
 
     void OnKifaceEnd() override;
 
-    wxWindow* CreateKiWindow( wxWindow* aParent, int aClassId, KIWAY* aKiway,
-                              int aCtlBits = 0 ) override
+    wxWindow* CreateKiWindow( wxWindow* aParent, int aClassId, KIWAY* aKiway, int aCtlBits = 0 ) override
     {
         switch( aClassId )
         {
@@ -184,10 +183,7 @@ static struct IFACE : public KIFACE_BASE, public UNITS_PROVIDER
         }
 
         case FRAME_SCH_SYMBOL_EDITOR:
-        {
-            SYMBOL_EDIT_FRAME* frame = new SYMBOL_EDIT_FRAME( aKiway, aParent );
-            return frame;
-        }
+            return new SYMBOL_EDIT_FRAME( aKiway, aParent );
 
         case FRAME_SIMULATOR:
         {
@@ -205,16 +201,10 @@ static struct IFACE : public KIFACE_BASE, public UNITS_PROVIDER
         }
 
         case FRAME_SCH_VIEWER:
-        {
-            SYMBOL_VIEWER_FRAME* frame = new SYMBOL_VIEWER_FRAME( aKiway, aParent );
-            return frame;
-        }
+            return new SYMBOL_VIEWER_FRAME( aKiway, aParent );
 
         case FRAME_SYMBOL_CHOOSER:
-        {
-            SYMBOL_CHOOSER_FRAME* frame = new SYMBOL_CHOOSER_FRAME( aKiway, aParent );
-            return frame;
-        }
+            return new SYMBOL_CHOOSER_FRAME( aKiway, aParent );
 
         case DIALOG_SCH_LIBRARY_TABLE:
             InvokeSchEditSymbolLibTable( aKiway, aParent );
@@ -227,17 +217,11 @@ static struct IFACE : public KIFACE_BASE, public UNITS_PROVIDER
             return nullptr;
 
         case PANEL_SYM_DISP_OPTIONS:
-        {
-            SETTINGS_MANAGER&  mgr = Pgm().GetSettingsManager();
-            APP_SETTINGS_BASE* cfg = mgr.GetAppSettings<SYMBOL_EDITOR_SETTINGS>( "symbol_editor" );
-
-            return new PANEL_SYM_DISPLAY_OPTIONS( aParent, cfg );
-        }
+            return new PANEL_SYM_DISPLAY_OPTIONS( aParent, GetAppSettings<SYMBOL_EDITOR_SETTINGS>( "symbol_editor" ) );
 
         case PANEL_SYM_EDIT_GRIDS:
         {
-            SETTINGS_MANAGER&  mgr = Pgm().GetSettingsManager();
-            APP_SETTINGS_BASE* cfg = mgr.GetAppSettings<SYMBOL_EDITOR_SETTINGS>( "symbol_editor" );
+            APP_SETTINGS_BASE* cfg = GetAppSettings<SYMBOL_EDITOR_SETTINGS>( "symbol_editor" );
             EDA_BASE_FRAME*    frame = aKiway->Player( FRAME_SCH_SYMBOL_EDITOR, false );
 
             if( !frame )
@@ -270,9 +254,8 @@ static struct IFACE : public KIFACE_BASE, public UNITS_PROVIDER
 
         case PANEL_SYM_TOOLBARS:
         {
-            SETTINGS_MANAGER&  mgr = Pgm().GetSettingsManager();
-            APP_SETTINGS_BASE* cfg = mgr.GetAppSettings<SYMBOL_EDITOR_SETTINGS>( "symbol_editor" );
-            TOOLBAR_SETTINGS*  tb  = mgr.GetToolbarSettings<SYMBOL_EDIT_TOOLBAR_SETTINGS>( "symbol_editor-toolbars" );
+            APP_SETTINGS_BASE* cfg = GetAppSettings<SYMBOL_EDITOR_SETTINGS>( "symbol_editor" );
+            TOOLBAR_SETTINGS*  tb  = GetToolbarSettings<SYMBOL_EDIT_TOOLBAR_SETTINGS>( "symbol_editor-toolbars" );
 
             std::vector<TOOL_ACTION*>            actions;
             std::vector<ACTION_TOOLBAR_CONTROL*> controls;
@@ -290,17 +273,11 @@ static struct IFACE : public KIFACE_BASE, public UNITS_PROVIDER
             return new PANEL_SYM_COLOR_SETTINGS( aParent );
 
         case PANEL_SCH_DISP_OPTIONS:
-        {
-            SETTINGS_MANAGER&  mgr = Pgm().GetSettingsManager();
-            EESCHEMA_SETTINGS* cfg = mgr.GetAppSettings<EESCHEMA_SETTINGS>( "eeschema" );
-
-            return new PANEL_EESCHEMA_DISPLAY_OPTIONS( aParent, cfg );
-        }
+            return new PANEL_EESCHEMA_DISPLAY_OPTIONS( aParent, GetAppSettings<EESCHEMA_SETTINGS>( "eeschema" ) );
 
         case PANEL_SCH_GRIDS:
         {
-            SETTINGS_MANAGER&  mgr = Pgm().GetSettingsManager();
-            EESCHEMA_SETTINGS* cfg = mgr.GetAppSettings<EESCHEMA_SETTINGS>( "eeschema" );
+            EESCHEMA_SETTINGS* cfg = GetAppSettings<EESCHEMA_SETTINGS>( "eeschema" );
             EDA_BASE_FRAME*    frame = aKiway->Player( FRAME_SCH, false );
 
             if( !frame )
@@ -332,17 +309,12 @@ static struct IFACE : public KIFACE_BASE, public UNITS_PROVIDER
         }
 
         case PANEL_SCH_ANNO_OPTIONS:
-        {
-            EDA_BASE_FRAME* schSettingsProvider = aKiway->Player( FRAME_SCH, false );
-
-            return new PANEL_EESCHEMA_ANNOTATION_OPTIONS( aParent, schSettingsProvider );
-        }
+            return new PANEL_EESCHEMA_ANNOTATION_OPTIONS( aParent, aKiway->Player( FRAME_SCH, false ) );
 
         case PANEL_SCH_TOOLBARS:
         {
-            SETTINGS_MANAGER&  mgr = Pgm().GetSettingsManager();
-            APP_SETTINGS_BASE* cfg = mgr.GetAppSettings<EESCHEMA_SETTINGS>( "eeschema" );
-            TOOLBAR_SETTINGS*  tb  = mgr.GetToolbarSettings<SCH_EDIT_TOOLBAR_SETTINGS>( "eeschema-toolbars" );
+            APP_SETTINGS_BASE* cfg = GetAppSettings<EESCHEMA_SETTINGS>( "eeschema" );
+            TOOLBAR_SETTINGS*  tb  = GetToolbarSettings<SCH_EDIT_TOOLBAR_SETTINGS>( "eeschema-toolbars" );
 
             std::vector<TOOL_ACTION*>            actions;
             std::vector<ACTION_TOOLBAR_CONTROL*> controls;

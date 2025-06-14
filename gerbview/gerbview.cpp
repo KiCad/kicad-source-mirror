@@ -81,8 +81,7 @@ static struct IFACE : public KIFACE_BASE, public UNITS_PROVIDER
 
         case PANEL_GBR_GRIDS:
         {
-            SETTINGS_MANAGER&  mgr = Pgm().GetSettingsManager();
-            GERBVIEW_SETTINGS* cfg = mgr.GetAppSettings<GERBVIEW_SETTINGS>( "gerbview" );
+            GERBVIEW_SETTINGS* cfg = GetAppSettings<GERBVIEW_SETTINGS>( "gerbview" );
             EDA_BASE_FRAME*    frame = aKiway->Player( FRAME_GERBER, false );
 
             if( frame )
@@ -96,9 +95,8 @@ static struct IFACE : public KIFACE_BASE, public UNITS_PROVIDER
 
         case PANEL_GBR_TOOLBARS:
         {
-            SETTINGS_MANAGER&  mgr = Pgm().GetSettingsManager();
-            GERBVIEW_SETTINGS* cfg = mgr.GetAppSettings<GERBVIEW_SETTINGS>( "gerbview" );
-            TOOLBAR_SETTINGS*  tb  = mgr.GetToolbarSettings<GERBVIEW_TOOLBAR_SETTINGS>( "gerbview-toolbars" );
+            GERBVIEW_SETTINGS* cfg = GetAppSettings<GERBVIEW_SETTINGS>( "gerbview" );
+            TOOLBAR_SETTINGS*  tb  = GetToolbarSettings<GERBVIEW_TOOLBAR_SETTINGS>( "gerbview-toolbars" );
 
             std::vector<TOOL_ACTION*>            actions;
             std::vector<ACTION_TOOLBAR_CONTROL*> controls;

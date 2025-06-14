@@ -241,16 +241,13 @@ protected:
 void PANEL_SYM_LIB_TABLE::setupGrid( WX_GRID* aGrid )
 {
     auto autoSizeCol =
-        [&]( WX_GRID* aCurrGrid, int aCol )
-        {
-            int prevWidth = aCurrGrid->GetColSize( aCol );
+            [&]( WX_GRID* aCurrGrid, int aCol )
+            {
+                int prevWidth = aCurrGrid->GetColSize( aCol );
 
-            aCurrGrid->AutoSizeColumn( aCol, false );
-            aCurrGrid->SetColSize( aCol, std::max( prevWidth, aCurrGrid->GetColSize( aCol ) ) );
-        };
-
-    SETTINGS_MANAGER&  mgr = Pgm().GetSettingsManager();
-    EESCHEMA_SETTINGS* cfg = mgr.GetAppSettings<EESCHEMA_SETTINGS>( "eeschema" );
+                aCurrGrid->AutoSizeColumn( aCol, false );
+                aCurrGrid->SetColSize( aCol, std::max( prevWidth, aCurrGrid->GetColSize( aCol ) ) );
+            };
 
     // Give a bit more room for combobox editors
     for( int ii = 0; ii < aGrid->GetNumberRows(); ++ii )
@@ -262,33 +259,34 @@ void PANEL_SYM_LIB_TABLE::setupGrid( WX_GRID* aGrid )
     aGrid->SetSelectionMode( wxGrid::wxGridSelectRows );
 
     // Set special attributes
-    wxGridCellAttr* attr;
-
-    attr = new wxGridCellAttr;
+    wxGridCellAttr* attr = new wxGridCellAttr;
 
     wxString fileFiltersStr;
     wxString allWildcardsStr;
 
-    attr->SetEditor( new GRID_CELL_PATH_EDITOR( m_parent, aGrid,
-                                                &cfg->m_lastSymbolLibDir,
-                                                true, m_project->GetProjectPath(),
-            []( WX_GRID* grid, int row ) -> wxString
-            {
-                auto* libTable = static_cast<SYMBOL_LIB_TABLE_GRID*>( grid->GetTable() );
-                auto* tableRow = static_cast<SYMBOL_LIB_TABLE_ROW*>( libTable->at( row ) );
-
-                IO_RELEASER<SCH_IO> pi( SCH_IO_MGR::FindPlugin( tableRow->GetFileType() ) );
-
-                if( pi )
+    if( EESCHEMA_SETTINGS* cfg = GetAppSettings<EESCHEMA_SETTINGS>( "eeschema" ) )
+    {
+        attr->SetEditor( new GRID_CELL_PATH_EDITOR(
+                m_parent, aGrid, &cfg->m_lastSymbolLibDir, true, m_project->GetProjectPath(),
+                []( WX_GRID* grid, int row ) -> wxString
                 {
-                    const IO_BASE::IO_FILE_DESC& desc = pi->GetLibraryDesc();
+                    auto* libTable = static_cast<SYMBOL_LIB_TABLE_GRID*>( grid->GetTable() );
+                    auto* tableRow = static_cast<SYMBOL_LIB_TABLE_ROW*>( libTable->at( row ) );
 
-                    if( desc.m_IsFile )
-                        return desc.FileFilter();
-                }
+                    IO_RELEASER<SCH_IO> pi( SCH_IO_MGR::FindPlugin( tableRow->GetFileType() ) );
 
-                return wxEmptyString;
-            } ) );
+                    if( pi )
+                    {
+                        const IO_BASE::IO_FILE_DESC& desc = pi->GetLibraryDesc();
+
+                        if( desc.m_IsFile )
+                            return desc.FileFilter();
+                    }
+
+                    return wxEmptyString;
+                } ) );
+    }
+
     aGrid->SetColAttr( COL_URI, attr );
 
     attr = new wxGridCellAttr;
@@ -345,14 +343,13 @@ PANEL_SYM_LIB_TABLE::PANEL_SYM_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent, P
             m_pluginChoices.Add( SCH_IO_MGR::ShowType( type ) );
     }
 
-    SETTINGS_MANAGER&  mgr = Pgm().GetSettingsManager();
-    EESCHEMA_SETTINGS* cfg = mgr.GetAppSettings<EESCHEMA_SETTINGS>( "eeschema" );
-
-    if( cfg->m_lastSymbolLibDir.IsEmpty() )
-        cfg->m_lastSymbolLibDir = PATHS::GetDefaultUserSymbolsPath();
+    if( EESCHEMA_SETTINGS* cfg = GetAppSettings<EESCHEMA_SETTINGS>( "eeschema" ) )
+    {
+        if( cfg->m_lastSymbolLibDir.IsEmpty() )
+            cfg->m_lastSymbolLibDir = PATHS::GetDefaultUserSymbolsPath();
+    }
 
     m_lastProjectLibDir = m_project->GetProjectPath();
-
 
     setupGrid( m_global_grid );
 
@@ -630,34 +627,28 @@ void PANEL_SYM_LIB_TABLE::browseLibrariesHandler( wxCommandEvent& event )
     fileFiltersStr = _( "All supported formats" ) + wxT( "|" ) + allWildcardsStr + wxT( "|" )
                      + fileFiltersStr;
 
-    SETTINGS_MANAGER&  mgr = Pgm().GetSettingsManager();
-    EESCHEMA_SETTINGS* cfg = mgr.GetAppSettings<EESCHEMA_SETTINGS>( "eeschema" );
-
-    wxString openDir = cfg->m_lastSymbolLibDir;
+    EESCHEMA_SETTINGS* cfg = GetAppSettings<EESCHEMA_SETTINGS>( "eeschema" );
+    wxString           dummy;
+    wxString*          lastDir;
 
     if( m_cur_grid == m_project_grid )
-        openDir = m_lastProjectLibDir;
+        lastDir = &m_lastProjectLibDir;
+    else
+        lastDir = cfg ? &cfg->m_lastSymbolLibDir : &dummy;
 
     wxWindow* topLevelParent = wxGetTopLevelParent( this );
 
-    wxFileDialog dlg( topLevelParent, _( "Add Library" ), openDir, wxEmptyString, fileFiltersStr,
+    wxFileDialog dlg( topLevelParent, _( "Add Library" ), *lastDir, wxEmptyString, fileFiltersStr,
                       wxFD_OPEN | wxFD_FILE_MUST_EXIST | wxFD_MULTIPLE );
 
     if( dlg.ShowModal() == wxID_CANCEL )
         return;
 
-    if( m_cur_grid == m_global_grid )
-        cfg->m_lastSymbolLibDir = dlg.GetDirectory();
-    else
-        m_lastProjectLibDir = dlg.GetDirectory();
+    *lastDir = dlg.GetDirectory();
 
     const ENV_VAR_MAP& envVars       = Pgm().GetLocalEnvVariables();
     bool               addDuplicates = false;
     bool               applyToAll    = false;
-    wxString           warning       = _( "Warning: Duplicate Nickname" );
-    wxString           msg           = _( "A library nicknamed '%s' already exists." );
-    wxString           detailedMsg   = _( "One of the nicknames will need to be changed after "
-                                          "adding this library." );
 
     wxArrayString filePathsList;
     dlg.GetPaths( filePathsList );
@@ -673,9 +664,12 @@ void PANEL_SYM_LIB_TABLE::browseLibrariesHandler( wxCommandEvent& event )
             if( !applyToAll )
             {
                 // The cancel button adds the library to the table anyway
-                addDuplicates = OKOrCancelDialog( wxGetTopLevelParent( this ), warning,
-                                                  wxString::Format( msg, nickname ),
-                                                  detailedMsg, _( "Skip" ), _( "Add Anyway" ),
+                addDuplicates = OKOrCancelDialog( wxGetTopLevelParent( this ), _( "Warning: Duplicate Nickname" ),
+                                                  wxString::Format( _( "A library nicknamed '%s' already exists." ),
+                                                                    nickname ),
+                                                  _( "One of the nicknames will need to be changed after adding "
+                                                     "this library." ),
+                                                  _( "Skip" ), _( "Add Anyway" ),
                                                   &applyToAll ) == wxID_CANCEL;
             }
 

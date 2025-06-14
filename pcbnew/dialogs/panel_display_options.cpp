@@ -246,20 +246,10 @@ bool PANEL_DISPLAY_OPTIONS::Show( bool aShow )
 
 bool PANEL_DISPLAY_OPTIONS::TransferDataToWindow()
 {
-    SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
-
     if( m_isPCBEdit )
-    {
-        PCBNEW_SETTINGS* cfg = mgr.GetAppSettings<PCBNEW_SETTINGS>( "pcbnew" );
-
-        loadPCBSettings( cfg );
-    }
+        loadPCBSettings( GetAppSettings<PCBNEW_SETTINGS>( "pcbnew" ) );
     else
-    {
-        FOOTPRINT_EDITOR_SETTINGS* cfg = mgr.GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>( "fpedit" );
-
-        loadFPSettings( cfg );
-    }
+        loadFPSettings( GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>( "fpedit" ) );
 
     m_galOptsPanel->TransferDataToWindow();
 
@@ -377,40 +367,40 @@ bool PANEL_DISPLAY_OPTIONS::TransferDataFromWindow()
 
     m_galOptsPanel->TransferDataFromWindow();
 
-    SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
-
     if( m_isPCBEdit )
     {
-        PCBNEW_SETTINGS* cfg = mgr.GetAppSettings<PCBNEW_SETTINGS>( "pcbnew" );
+        if( PCBNEW_SETTINGS* cfg = GetAppSettings<PCBNEW_SETTINGS>( "pcbnew" ) )
+        {
+            int i = m_OptDisplayTracksClearance->GetSelection();
+            cfg->m_Display.m_TrackClearance = UTIL::GetValFromConfig( clearanceModeMap, i );
 
-        int i = m_OptDisplayTracksClearance->GetSelection();
-        cfg->m_Display.m_TrackClearance = UTIL::GetValFromConfig( clearanceModeMap, i );
-
-        cfg->m_Display.m_PadClearance = m_OptDisplayPadClearence->GetValue();
-        cfg->m_ViewersDisplay.m_DisplayPadNumbers = m_OptDisplayPadNumber->GetValue();
-        cfg->m_Display.m_NetNames = m_ShowNetNamesOption->GetSelection();
-        cfg->m_Display.m_ForceShowFieldsWhenFPSelected = m_checkForceShowFieldsWhenFPSelected->GetValue();
-        cfg->m_Display.m_Live3DRefresh = m_live3Drefresh->GetValue();
-        cfg->m_CrossProbing.on_selection = m_checkCrossProbeOnSelection->GetValue();
-        cfg->m_CrossProbing.center_on_items = m_checkCrossProbeCenter->GetValue();
-        cfg->m_CrossProbing.zoom_to_fit = m_checkCrossProbeZoom->GetValue();
-        cfg->m_CrossProbing.auto_highlight = m_checkCrossProbeAutoHighlight->GetValue();
+            cfg->m_Display.m_PadClearance = m_OptDisplayPadClearence->GetValue();
+            cfg->m_ViewersDisplay.m_DisplayPadNumbers = m_OptDisplayPadNumber->GetValue();
+            cfg->m_Display.m_NetNames = m_ShowNetNamesOption->GetSelection();
+            cfg->m_Display.m_ForceShowFieldsWhenFPSelected = m_checkForceShowFieldsWhenFPSelected->GetValue();
+            cfg->m_Display.m_Live3DRefresh = m_live3Drefresh->GetValue();
+            cfg->m_CrossProbing.on_selection = m_checkCrossProbeOnSelection->GetValue();
+            cfg->m_CrossProbing.center_on_items = m_checkCrossProbeCenter->GetValue();
+            cfg->m_CrossProbing.zoom_to_fit = m_checkCrossProbeZoom->GetValue();
+            cfg->m_CrossProbing.auto_highlight = m_checkCrossProbeAutoHighlight->GetValue();
+        }
     }
     else
     {
-        FOOTPRINT_EDITOR_SETTINGS* cfg = mgr.GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>( "fpedit" );
-
-        cfg->m_DesignSettings.m_UserLayerNames.clear();
-        wxGridTableBase* table = m_layerNameitemsGrid->GetTable();
-
-        for( int i = 0; i < m_layerNameitemsGrid->GetNumberRows(); ++i )
+        if( FOOTPRINT_EDITOR_SETTINGS* cfg = GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>( "fpedit" ) )
         {
-            PCB_LAYER_ID layer = static_cast<PCB_LAYER_ID>( table->GetValueAsLong( i, 0 ) );
-            wxString     orig_name = LSET::Name( static_cast<PCB_LAYER_ID>( layer ) );
-            wxString     name = table->GetValue( i, 1 );
+            cfg->m_DesignSettings.m_UserLayerNames.clear();
+            wxGridTableBase* table = m_layerNameitemsGrid->GetTable();
 
-            if( layer >= 0 && IsUserLayer( layer ) && !name.IsEmpty() )
-                cfg->m_DesignSettings.m_UserLayerNames.emplace( orig_name.ToStdString(), name );
+            for( int i = 0; i < m_layerNameitemsGrid->GetNumberRows(); ++i )
+            {
+                PCB_LAYER_ID layer = static_cast<PCB_LAYER_ID>( table->GetValueAsLong( i, 0 ) );
+                wxString     orig_name = LSET::Name( static_cast<PCB_LAYER_ID>( layer ) );
+                wxString     name = table->GetValue( i, 1 );
+
+                if( layer >= 0 && IsUserLayer( layer ) && !name.IsEmpty() )
+                    cfg->m_DesignSettings.m_UserLayerNames.emplace( orig_name.ToStdString(), name );
+            }
         }
     }
 

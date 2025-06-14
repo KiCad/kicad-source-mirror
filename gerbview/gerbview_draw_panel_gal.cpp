@@ -58,16 +58,13 @@ EDA_DRAW_PANEL_GAL( aParentWindow, aWindowId, aPosition, aSize, aOptions, aGalTy
 
     setDefaultLayerDeps();
 
-    COLOR_SETTINGS* color_settings;
+    COLOR_SETTINGS* cs = ::GetColorSettings( DEFAULT_THEME );
 
-    if( auto frame = dynamic_cast<GERBVIEW_FRAME*>( GetParentEDAFrame() ) )
-        color_settings = frame->GetColorSettings();
-    else
-        color_settings = Pgm().GetSettingsManager().GetColorSettings();
+    if( GERBVIEW_FRAME* frame = dynamic_cast<GERBVIEW_FRAME*>( GetParentEDAFrame() ) )
+        cs = frame->GetColorSettings();
 
-    wxASSERT( color_settings );
     auto renderSettings = static_cast<KIGFX::GERBVIEW_RENDER_SETTINGS*>( m_painter->GetSettings() );
-    renderSettings->LoadColors( color_settings );
+    renderSettings->LoadColors( cs );
 }
 
 

@@ -216,8 +216,7 @@ void UPDATE_MANAGER::CheckForUpdate( wxWindow* aNoticeParent )
         requestContent.current_version = verString;
         requestContent.lang = Pgm().GetLanguageTag();
 
-        SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
-        KICAD_SETTINGS*   settings = mgr.GetAppSettings<KICAD_SETTINGS>( "kicad" );
+        KICAD_SETTINGS* settings = GetAppSettings<KICAD_SETTINGS>( "kicad" );
 
         requestContent.last_check = settings->m_lastUpdateCheckTime;
 
@@ -255,17 +254,15 @@ void UPDATE_MANAGER::CheckForUpdate( wxWindow* aNoticeParent )
                                 {
                                     // basically saving the last received update prevents us from
                                     // prompting again
-                                    SETTINGS_MANAGER& set_mgr = Pgm().GetSettingsManager();
-                                    KICAD_SETTINGS*   cfg     = set_mgr.GetAppSettings<KICAD_SETTINGS>( "kicad" );
-                                    cfg->m_lastReceivedUpdate = response.version;
+                                    if( KICAD_SETTINGS* cfg = GetAppSettings<KICAD_SETTINGS>( "kicad" ) )
+                                        cfg->m_lastReceivedUpdate = response.version;
                                 }
                             } );
                 }
             }
             catch( const std::exception& e )
             {
-                wxLogError( wxString::Format( _( "Unable to parse update response: %s" ),
-                                              e.what() ) );
+                wxLogError( wxString::Format( _( "Unable to parse update response: %s" ), e.what() ) );
             }
         }
 

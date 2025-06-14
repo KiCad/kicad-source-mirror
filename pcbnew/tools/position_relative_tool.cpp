@@ -348,13 +348,12 @@ int POSITION_RELATIVE_TOOL::PositionRelativeInteractively( const TOOL_EVENT& aEv
         // move or drag when origin set updates rules
         else if( originSet && ( evt->IsMotion() || evt->IsDrag( BUT_LEFT ) ) )
         {
-            SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
-            bool              force45Deg;
+            bool force45Deg;
 
             if( frame()->IsType( FRAME_PCB_EDITOR ) )
-                force45Deg = mgr.GetAppSettings<PCBNEW_SETTINGS>( "pcbnew" )->m_Use45DegreeLimit;
+                force45Deg = GetAppSettings<PCBNEW_SETTINGS>( "pcbnew" )->m_Use45DegreeLimit;
             else
-                force45Deg = mgr.GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>( "fpedit" )->m_Use45Limit;
+                force45Deg = GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>( "fpedit" )->m_Use45Limit;
 
             twoPtMgr.SetAngleSnap( force45Deg );
             twoPtMgr.SetEnd( cursorPos );

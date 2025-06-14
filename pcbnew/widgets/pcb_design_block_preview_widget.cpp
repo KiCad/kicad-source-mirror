@@ -48,11 +48,10 @@ PCB_DESIGN_BLOCK_PREVIEW_WIDGET::PCB_DESIGN_BLOCK_PREVIEW_WIDGET( wxWindow* aPar
         DESIGN_BLOCK_PREVIEW_WIDGET( aParent ), m_preview( nullptr ), m_status( nullptr ), m_statusPanel( nullptr ),
         m_statusSizer( nullptr ), m_previewItem( nullptr )
 {
-    SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
-    COMMON_SETTINGS*  common_settings = Pgm().GetCommonSettings();
-    PCBNEW_SETTINGS*  app_settings = mgr.GetAppSettings<PCBNEW_SETTINGS>( "pcbnew" );
+    COMMON_SETTINGS* common_settings = Pgm().GetCommonSettings();
+    PCBNEW_SETTINGS* cfg = GetAppSettings<PCBNEW_SETTINGS>( "pcbnew" );
 
-    m_galDisplayOptions.ReadConfig( *common_settings, app_settings->m_Window, this );
+    m_galDisplayOptions.ReadConfig( *common_settings, cfg->m_Window, this );
     m_galDisplayOptions.m_forceDisplayCursor = false;
 
     m_preview = FOOTPRINT_PREVIEW_PANEL::New( &aFrame->Kiway(), this, aFrame );
@@ -71,8 +70,8 @@ PCB_DESIGN_BLOCK_PREVIEW_WIDGET::PCB_DESIGN_BLOCK_PREVIEW_WIDGET( wxWindow* aPar
     KIGFX::VIEW* view = m_preview->GetView();
     auto         settings = static_cast<KIGFX::PCB_RENDER_SETTINGS*>( view->GetPainter()->GetSettings() );
 
-    if( auto* theme = Pgm().GetSettingsManager().GetColorSettings( app_settings->m_ColorTheme ) )
-        settings->LoadColors( theme );
+    if( COLOR_SETTINGS* cs = ::GetColorSettings( cfg ? cfg->m_ColorTheme : DEFAULT_THEME ) )
+        settings->LoadColors( cs );
 
     const COLOR4D& backgroundColor = settings->GetBackgroundColor();
     const COLOR4D& foregroundColor = settings->GetCursorColor();

@@ -99,9 +99,8 @@ void PANEL_EESCHEMA_EDITING_OPTIONS::loadEEschemaSettings( EESCHEMA_SETTINGS* aC
     m_vPitch.SetValue( schIUScale.MilsToIU( aCfg->m_Drawing.default_repeat_offset_y ) );
     m_spinLabelRepeatStep->SetValue( aCfg->m_Drawing.repeat_label_increment );
 
-    SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
-    COLOR_SETTINGS*   settings = mgr.GetColorSettings();
-    COLOR4D           schematicBackground = settings->GetColor( LAYER_SCHEMATIC_BACKGROUND );
+    COLOR_SETTINGS* settings = ::GetColorSettings( DEFAULT_THEME );
+    COLOR4D         schematicBackground = settings->GetColor( LAYER_SCHEMATIC_BACKGROUND );
 
     m_borderColorSwatch->SetSwatchBackground( schematicBackground );
     m_borderColorSwatch->SetDefaultColor( settings->GetDefaultColor( LAYER_SHEET ) );
@@ -109,8 +108,7 @@ void PANEL_EESCHEMA_EDITING_OPTIONS::loadEEschemaSettings( EESCHEMA_SETTINGS* aC
 
     m_backgroundColorSwatch->SetSwatchBackground( schematicBackground );
     m_backgroundColorSwatch->SetDefaultColor( settings->GetDefaultColor( LAYER_SHEET_BACKGROUND ) );
-    m_backgroundColorSwatch->SetSwatchColor( aCfg->m_Drawing.default_sheet_background_color,
-                                             false );
+    m_backgroundColorSwatch->SetSwatchColor( aCfg->m_Drawing.default_sheet_background_color, false );
 
     m_choiceLineMode->SetSelection( aCfg->m_Drawing.line_mode );
     m_choiceArcMode->SetSelection( arcEditModeToComboIndex( aCfg->m_Drawing.arc_edit_mode ) );
@@ -132,42 +130,38 @@ void PANEL_EESCHEMA_EDITING_OPTIONS::loadEEschemaSettings( EESCHEMA_SETTINGS* aC
 
 bool PANEL_EESCHEMA_EDITING_OPTIONS::TransferDataToWindow()
 {
-    SETTINGS_MANAGER&  mgr = Pgm().GetSettingsManager();
-    EESCHEMA_SETTINGS* cfg = mgr.GetAppSettings<EESCHEMA_SETTINGS>( "eeschema" );
-
-    loadEEschemaSettings( cfg );
-
+    loadEEschemaSettings( GetAppSettings<EESCHEMA_SETTINGS>( "eeschema" ) );
     return true;
 }
 
 
 bool PANEL_EESCHEMA_EDITING_OPTIONS::TransferDataFromWindow()
 {
-    SETTINGS_MANAGER&  mgr = Pgm().GetSettingsManager();
-    EESCHEMA_SETTINGS* cfg = mgr.GetAppSettings<EESCHEMA_SETTINGS>( "eeschema" );
+    if( EESCHEMA_SETTINGS* cfg = GetAppSettings<EESCHEMA_SETTINGS>( "eeschema" ) )
+    {
+        cfg->m_Drawing.new_power_symbols = static_cast<POWER_SYMBOLS>( m_choicePower->GetSelection() );
 
-    cfg->m_Drawing.new_power_symbols = static_cast<POWER_SYMBOLS>( m_choicePower->GetSelection() );
+        cfg->m_Drawing.default_sheet_border_color = m_borderColorSwatch->GetSwatchColor();
+        cfg->m_Drawing.default_sheet_background_color = m_backgroundColorSwatch->GetSwatchColor();
 
-    cfg->m_Drawing.default_sheet_border_color = m_borderColorSwatch->GetSwatchColor();
-    cfg->m_Drawing.default_sheet_background_color = m_backgroundColorSwatch->GetSwatchColor();
+        cfg->m_Drawing.default_repeat_offset_x = schIUScale.IUToMils( m_hPitch.GetIntValue() );
+        cfg->m_Drawing.default_repeat_offset_y = schIUScale.IUToMils( m_vPitch.GetIntValue() );
+        cfg->m_Drawing.repeat_label_increment = m_spinLabelRepeatStep->GetValue();
 
-    cfg->m_Drawing.default_repeat_offset_x = schIUScale.IUToMils( m_hPitch.GetIntValue() );
-    cfg->m_Drawing.default_repeat_offset_y = schIUScale.IUToMils( m_vPitch.GetIntValue() );
-    cfg->m_Drawing.repeat_label_increment = m_spinLabelRepeatStep->GetValue();
+        cfg->m_Drawing.line_mode = m_choiceLineMode->GetSelection();
+        cfg->m_Drawing.arc_edit_mode = arcEditModeToEnum( m_choiceArcMode->GetSelection() );
+        cfg->m_Appearance.footprint_preview = m_footprintPreview->GetValue();
+        cfg->m_RescueNeverShow = m_neverShowRescue->GetValue();
 
-    cfg->m_Drawing.line_mode = m_choiceLineMode->GetSelection();
-    cfg->m_Drawing.arc_edit_mode = arcEditModeToEnum( m_choiceArcMode->GetSelection() );
-    cfg->m_Appearance.footprint_preview = m_footprintPreview->GetValue();
-    cfg->m_RescueNeverShow = m_neverShowRescue->GetValue();
+        cfg->m_AutoplaceFields.enable = m_checkAutoplaceFields->GetValue();
+        cfg->m_AutoplaceFields.allow_rejustify = m_checkAutoplaceJustify->GetValue();
+        cfg->m_AutoplaceFields.align_to_grid = m_checkAutoplaceAlign->GetValue();
 
-    cfg->m_AutoplaceFields.enable = m_checkAutoplaceFields->GetValue();
-    cfg->m_AutoplaceFields.allow_rejustify = m_checkAutoplaceJustify->GetValue();
-    cfg->m_AutoplaceFields.align_to_grid = m_checkAutoplaceAlign->GetValue();
+        cfg->m_Input.drag_is_move = !m_mouseDragIsDrag->GetValue();
 
-    cfg->m_Input.drag_is_move = !m_mouseDragIsDrag->GetValue();
-
-    cfg->m_Drawing.auto_start_wires = m_cbAutoStartWires->GetValue();
-    cfg->m_Input.esc_clears_net_highlight = m_escClearsNetHighlight->GetValue();
+        cfg->m_Drawing.auto_start_wires = m_cbAutoStartWires->GetValue();
+        cfg->m_Input.esc_clears_net_highlight = m_escClearsNetHighlight->GetValue();
+    }
 
     return true;
 }

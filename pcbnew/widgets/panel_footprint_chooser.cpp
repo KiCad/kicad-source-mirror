@@ -222,8 +222,7 @@ PANEL_FOOTPRINT_CHOOSER::~PANEL_FOOTPRINT_CHOOSER()
     Unbind( EVT_LIBITEM_SELECTED, &PANEL_FOOTPRINT_CHOOSER::onFootprintSelected, this );
     Unbind( EVT_LIBITEM_CHOSEN, &PANEL_FOOTPRINT_CHOOSER::onFootprintChosen, this );
 
-    m_details->Disconnect( wxEVT_CHAR_HOOK,
-                           wxKeyEventHandler( PANEL_FOOTPRINT_CHOOSER::OnDetailsCharHook ),
+    m_details->Disconnect( wxEVT_CHAR_HOOK, wxKeyEventHandler( PANEL_FOOTPRINT_CHOOSER::OnDetailsCharHook ),
                            nullptr, this );
 
     // I am not sure the following two lines are necessary, but they will not hurt anyone
@@ -232,17 +231,7 @@ PANEL_FOOTPRINT_CHOOSER::~PANEL_FOOTPRINT_CHOOSER()
     delete m_dbl_click_timer;
     delete m_open_libs_timer;
 
-    PCBNEW_SETTINGS* cfg = nullptr;
-    try
-    {
-        cfg = Pgm().GetSettingsManager().GetAppSettings<PCBNEW_SETTINGS>( "pcbnew" );
-    }
-    catch( const std::runtime_error& e )
-    {
-        wxFAIL_MSG( e.what() );
-    }
-
-    if( cfg )
+    if( PCBNEW_SETTINGS* cfg = GetAppSettings<PCBNEW_SETTINGS>( "pcbnew" ) )
     {
         // Save any changes to column widths, etc.
         m_adapter->SaveSettings();
@@ -275,7 +264,7 @@ void PANEL_FOOTPRINT_CHOOSER::onMenuClose( wxMenuEvent& aEvent )
 
 void PANEL_FOOTPRINT_CHOOSER::FinishSetup()
 {
-    if( auto* settings = Pgm().GetSettingsManager().GetAppSettings<PCBNEW_SETTINGS>( "pcbnew" ) )
+    if( PCBNEW_SETTINGS* settings = GetAppSettings<PCBNEW_SETTINGS>( "pcbnew" ) )
     {
         auto horizPixelsFromDU =
                 [&]( int x ) -> int

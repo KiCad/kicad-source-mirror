@@ -47,16 +47,14 @@ PANEL_PACKAGES_AND_UPDATES::PANEL_PACKAGES_AND_UPDATES( wxWindow* parent ) :
 
 bool PANEL_PACKAGES_AND_UPDATES::TransferDataToWindow()
 {
-    SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
-    KICAD_SETTINGS*   cfg = mgr.GetAppSettings<KICAD_SETTINGS>( "kicad" );
-
-    wxCHECK( cfg, false );
-
-    m_cbKicadUpdate->SetValue( cfg->m_KiCadUpdateCheck );
-    m_cbPcmUpdate->SetValue( cfg->m_PcmUpdateCheck );
-    m_libAutoAdd->SetValue( cfg->m_PcmLibAutoAdd );
-    m_libAutoRemove->SetValue( cfg->m_PcmLibAutoRemove );
-    m_libPrefix->SetValue( cfg->m_PcmLibPrefix );
+    if( KICAD_SETTINGS* cfg = GetAppSettings<KICAD_SETTINGS>( "kicad" ) )
+    {
+        m_cbKicadUpdate->SetValue( cfg->m_KiCadUpdateCheck );
+        m_cbPcmUpdate->SetValue( cfg->m_PcmUpdateCheck );
+        m_libAutoAdd->SetValue( cfg->m_PcmLibAutoAdd );
+        m_libAutoRemove->SetValue( cfg->m_PcmLibAutoRemove );
+        m_libPrefix->SetValue( cfg->m_PcmLibPrefix );
+    }
 
     return true;
 }
@@ -64,16 +62,14 @@ bool PANEL_PACKAGES_AND_UPDATES::TransferDataToWindow()
 
 bool PANEL_PACKAGES_AND_UPDATES::TransferDataFromWindow()
 {
-    SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
-    KICAD_SETTINGS*   cfg = mgr.GetAppSettings<KICAD_SETTINGS>( "kicad" );
-
-    wxCHECK( cfg, false );
-
-    cfg->m_KiCadUpdateCheck = m_cbKicadUpdate->GetValue();
-    cfg->m_PcmUpdateCheck = m_cbPcmUpdate->GetValue();
-    cfg->m_PcmLibAutoAdd = m_libAutoAdd->GetValue();
-    cfg->m_PcmLibAutoRemove = m_libAutoRemove->GetValue();
-    cfg->m_PcmLibPrefix = m_libPrefix->GetValue();
+    if( KICAD_SETTINGS* cfg = GetAppSettings<KICAD_SETTINGS>( "kicad" ) )
+    {
+        cfg->m_KiCadUpdateCheck = m_cbKicadUpdate->GetValue();
+        cfg->m_PcmUpdateCheck = m_cbPcmUpdate->GetValue();
+        cfg->m_PcmLibAutoAdd = m_libAutoAdd->GetValue();
+        cfg->m_PcmLibAutoRemove = m_libAutoRemove->GetValue();
+        cfg->m_PcmLibPrefix = m_libPrefix->GetValue();
+    }
 
     return true;
 }

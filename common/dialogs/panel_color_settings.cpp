@@ -369,15 +369,14 @@ bool PANEL_COLOR_SETTINGS::saveCurrentTheme( bool aValidate )
     if( aValidate && !validateSave() )
         return false;
 
-    SETTINGS_MANAGER& settingsMgr = Pgm().GetSettingsManager();
-    COLOR_SETTINGS* selected = settingsMgr.GetColorSettings( m_currentSettings->GetFilename() );
+    COLOR_SETTINGS* selected = ::GetColorSettings( m_currentSettings->GetFilename() );
 
     selected->SetOverrideSchItemColors( m_optOverrideColors->GetValue() );
 
     for( int layer : m_validLayers )
         selected->SetColor( layer, m_currentSettings->GetColor( layer ) );
 
-    settingsMgr.SaveColorSettings( selected, m_colorNamespace );
+    Pgm().GetSettingsManager().SaveColorSettings( selected, m_colorNamespace );
 
     return true;
 }

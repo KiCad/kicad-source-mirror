@@ -165,7 +165,7 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     initLibraryTree();
     m_treePane = new FOOTPRINT_TREE_PANE( this );
 
-    m_toolbarSettings = Pgm().GetSettingsManager().GetToolbarSettings<FOOTPRINT_EDIT_TOOLBAR_SETTINGS>( "fpedit-toolbars" );
+    m_toolbarSettings = GetToolbarSettings<FOOTPRINT_EDIT_TOOLBAR_SETTINGS>( "fpedit-toolbars" );
     configureToolbars();
     RecreateToolbars();
     ReCreateLayerBox( false );
@@ -553,13 +553,13 @@ void FOOTPRINT_EDIT_FRAME::updateEnabledLayers()
     }
 
     // Enable any layers that the user has gone to the trouble to name
-    SETTINGS_MANAGER&          mgr = Pgm().GetSettingsManager();
-    FOOTPRINT_EDITOR_SETTINGS* cfg = mgr.GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>( "fpedit" );
-
-    for( const PCB_LAYER_ID& user : LSET::UserDefinedLayersMask() )
+    if( FOOTPRINT_EDITOR_SETTINGS* cfg = GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>( "fpedit" ) )
     {
-        if( cfg->m_DesignSettings.m_UserLayerNames.contains( LSET::Name( user ).ToStdString() ) )
-            enabledLayers.set( user );
+        for( const PCB_LAYER_ID& user : LSET::UserDefinedLayersMask() )
+        {
+            if( cfg->m_DesignSettings.m_UserLayerNames.contains( LSET::Name( user ).ToStdString() ) )
+                enabledLayers.set( user );
+        }
     }
 
     GetBoard()->SetEnabledLayers( enabledLayers );
@@ -692,11 +692,7 @@ void FOOTPRINT_EDIT_FRAME::SetPlotSettings( const PCB_PLOT_PARAMS& aSettings )
 FOOTPRINT_EDITOR_SETTINGS* FOOTPRINT_EDIT_FRAME::GetSettings()
 {
     if( !m_editorSettings )
-    {
-        SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
-
-        m_editorSettings = mgr.GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>( "fpedit" );
-    }
+        m_editorSettings = GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>( "fpedit" );
 
     return m_editorSettings;
 }
@@ -808,8 +804,8 @@ EDA_ANGLE FOOTPRINT_EDIT_FRAME::GetRotationAngle() const
 
 COLOR_SETTINGS* FOOTPRINT_EDIT_FRAME::GetColorSettings( bool aForceRefresh ) const
 {
-    wxString currentTheme = GetFootprintEditorSettings()->m_ColorTheme;
-    return Pgm().GetSettingsManager().GetColorSettings( currentTheme );
+    FOOTPRINT_EDITOR_SETTINGS* cfg = GetFootprintEditorSettings();
+    return ::GetColorSettings( cfg ? cfg->m_ColorTheme : DEFAULT_THEME );
 }
 
 
@@ -1468,13 +1464,13 @@ void FOOTPRINT_EDIT_FRAME::CommonSettingsChanged( int aFlags )
 {
     PCB_BASE_EDIT_FRAME::CommonSettingsChanged( aFlags );
 
-    SETTINGS_MANAGER&          mgr = Pgm().GetSettingsManager();
-    FOOTPRINT_EDITOR_SETTINGS* cfg = mgr.GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>( "fpedit" );
+    if( FOOTPRINT_EDITOR_SETTINGS* cfg = GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>( "fpedit" ) )
+    {
+        GetGalDisplayOptions().ReadWindowSettings( cfg->m_Window );
 
-    GetGalDisplayOptions().ReadWindowSettings( cfg->m_Window );
-
-    GetBoard()->GetDesignSettings() = cfg->m_DesignSettings;
-    updateEnabledLayers();
+        GetBoard()->GetDesignSettings() = cfg->m_DesignSettings;
+        updateEnabledLayers();
+    }
 
     GetCanvas()->GetView()->UpdateAllLayersColor();
     GetCanvas()->GetView()->MarkTargetDirty( KIGFX::TARGET_NONCACHED );

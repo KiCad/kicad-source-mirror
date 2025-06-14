@@ -333,17 +333,7 @@ DRAWING_TOOL::MODE DRAWING_TOOL::GetDrawingMode() const
 void DRAWING_TOOL::UpdateStatusBar() const
 {
     if( m_frame )
-    {
-        SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
-        bool              constrained;
-
-        if( m_frame->IsType( FRAME_PCB_EDITOR ) )
-            constrained = mgr.GetAppSettings<PCBNEW_SETTINGS>( "pcbnew" )->m_Use45DegreeLimit;
-        else
-            constrained = mgr.GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>( "fpedit" )->m_Use45Limit;
-
-        m_frame->DisplayConstraintsMsg( constrained ? _( "Constrain to H, V, 45" ) : wxString( "" ) );
-    }
+        m_frame->DisplayConstraintsMsg( Is45Limited() ? _( "Constrain to H, V, 45" ) : wxString( "" ) );
 }
 
 

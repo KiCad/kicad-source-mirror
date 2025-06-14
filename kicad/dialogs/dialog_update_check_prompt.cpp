@@ -40,13 +40,13 @@ DIALOG_UPDATE_CHECK_PROMPT::DIALOG_UPDATE_CHECK_PROMPT( wxWindow* aWindow ) :
 
 bool DIALOG_UPDATE_CHECK_PROMPT::TransferDataFromWindow()
 {
-    SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
-    KICAD_SETTINGS*   settings = mgr.GetAppSettings<KICAD_SETTINGS>( "kicad" );
-
-    settings->m_PcmUpdateCheck = m_cbPCMUpdates->GetValue();
+    if( KICAD_SETTINGS* settings = GetAppSettings<KICAD_SETTINGS>( "kicad" ) )
+    {
+        settings->m_PcmUpdateCheck = m_cbPCMUpdates->GetValue();
 #ifndef KICAD_UPDATE_CHECK
-    settings->m_KiCadUpdateCheck = m_cbKiCadUpdates->GetValue();
+        settings->m_KiCadUpdateCheck = m_cbKiCadUpdates->GetValue();
 #endif
+    }
 
     return true;
 }

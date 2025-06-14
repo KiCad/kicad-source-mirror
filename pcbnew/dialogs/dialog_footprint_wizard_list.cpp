@@ -47,18 +47,13 @@ enum FPGeneratorRowNames
 };
 
 
-DIALOG_FOOTPRINT_WIZARD_LIST::DIALOG_FOOTPRINT_WIZARD_LIST( wxWindow* aParent )
-    : DIALOG_FOOTPRINT_WIZARD_LIST_BASE( aParent )
+DIALOG_FOOTPRINT_WIZARD_LIST::DIALOG_FOOTPRINT_WIZARD_LIST( wxWindow* aParent ) :
+        DIALOG_FOOTPRINT_WIZARD_LIST_BASE( aParent )
 {
     initLists();
 
-    SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
-    PCBNEW_SETTINGS*  cfg = mgr.GetAppSettings<PCBNEW_SETTINGS>( "pcbnew" );
-
-    wxSize size;
-    size.x = cfg->m_FootprintWizardList.width;
-    size.y = cfg->m_FootprintWizardList.height;
-    SetSize( size );
+    if( PCBNEW_SETTINGS* cfg = GetAppSettings<PCBNEW_SETTINGS>( "pcbnew" ) )
+        SetSize( wxSize( cfg->m_FootprintWizardList.width, cfg->m_FootprintWizardList.height ) );
 
     SetupStandardButtons();
     finishDialogSettings();
@@ -69,14 +64,13 @@ DIALOG_FOOTPRINT_WIZARD_LIST::DIALOG_FOOTPRINT_WIZARD_LIST( wxWindow* aParent )
 
 DIALOG_FOOTPRINT_WIZARD_LIST::~DIALOG_FOOTPRINT_WIZARD_LIST()
 {
-    SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
-    PCBNEW_SETTINGS*  cfg = mgr.GetAppSettings<PCBNEW_SETTINGS>( "pcbnew" );
-
-    if( cfg && !IsIconized() )
+    if( !IsIconized() )
     {
-
-        cfg->m_FootprintWizardList.width  = GetSize().x;
-        cfg->m_FootprintWizardList.height = GetSize().y;
+        if( PCBNEW_SETTINGS* cfg = GetAppSettings<PCBNEW_SETTINGS>( "pcbnew" ) )
+        {
+            cfg->m_FootprintWizardList.width  = GetSize().x;
+            cfg->m_FootprintWizardList.height = GetSize().y;
+        }
     }
 }
 

@@ -405,11 +405,13 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
 
 bool SCH_MOVE_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, SCH_COMMIT* aCommit, bool aIsSlice )
 {
-    SETTINGS_MANAGER&     mgr = Pgm().GetSettingsManager();
-    EESCHEMA_SETTINGS*    cfg = mgr.GetAppSettings<EESCHEMA_SETTINGS>( "eeschema" );
     KIGFX::VIEW_CONTROLS* controls = getViewControls();
     EE_GRID_HELPER        grid( m_toolMgr );
     bool                  wasDragging = m_moveInProgress && m_isDrag;
+    bool                  isLineModeConstrained = false;
+
+    if( EESCHEMA_SETTINGS* cfg = GetAppSettings<EESCHEMA_SETTINGS>( "eeschema" ) )
+        isLineModeConstrained = cfg->m_Drawing.line_mode != LINE_MODE::LINE_MODE_FREE;
 
     m_anchorPos.reset();
 
@@ -800,10 +802,8 @@ bool SCH_MOVE_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, SCH_COMMIT* aComm
 
                     // Only partially selected drag lines in orthogonal line mode need special
                     // handling
-                    if( m_isDrag
-                            && cfg->m_Drawing.line_mode != LINE_MODE::LINE_MODE_FREE
-                            && line
-                            && line->HasFlag( STARTPOINT ) != line->HasFlag( ENDPOINT ) )
+                    if( m_isDrag && isLineModeConstrained
+                            && line && line->HasFlag( STARTPOINT ) != line->HasFlag( ENDPOINT ) )
                     {
                         orthoLineDrag( aCommit, line, splitDelta, xBendCount, yBendCount, grid );
                     }

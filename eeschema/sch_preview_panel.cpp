@@ -55,7 +55,7 @@ SCH_PREVIEW_PANEL::SCH_PREVIEW_PANEL( wxWindow* aParentWindow, wxWindowID aWindo
     m_painter.reset( new KIGFX::SCH_PAINTER( m_gal ) );
 
     SCH_RENDER_SETTINGS* renderSettings = GetRenderSettings();
-    renderSettings->LoadColors( Pgm().GetSettingsManager().GetColorSettings() );
+    renderSettings->LoadColors( ::GetColorSettings( DEFAULT_THEME ) );
     renderSettings->m_ShowPinsElectricalType = false;
     renderSettings->m_ShowPinNumbers = false;
     renderSettings->m_TextOffsetRatio = 0.35;

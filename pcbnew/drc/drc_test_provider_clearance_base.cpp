@@ -33,12 +33,11 @@ DRC_TEST_PROVIDER_CLEARANCE_BASE::GetGraphicsHandler( const std::vector<PCB_SHAP
                                                       int aLength )
 {
     // todo: Move this to a board-level object instead of getting it from the DRC Engine
-    PGM_BASE* pgm = PgmOrNull();
     COLOR4D   errorColor = COLOR4D( RED );
 
-    if( pgm )
+    if( PgmOrNull() )
     {
-        COLOR_SETTINGS* colorSettings = pgm->GetSettingsManager().GetColorSettings();
+        COLOR_SETTINGS* colorSettings = ::GetColorSettings( DEFAULT_THEME );
         errorColor = colorSettings->GetColor( LAYER_DRC_ERROR );
     }
 

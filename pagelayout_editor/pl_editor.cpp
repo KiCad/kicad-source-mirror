@@ -66,17 +66,11 @@ static struct IFACE : public KIFACE_BASE, public UNITS_PROVIDER
             return new PL_EDITOR_FRAME( aKiway, aParent );
 
         case PANEL_DS_DISPLAY_OPTIONS:
-        {
-            SETTINGS_MANAGER&  mgr = Pgm().GetSettingsManager();
-            APP_SETTINGS_BASE* cfg = mgr.GetAppSettings<PL_EDITOR_SETTINGS>( "pl_editor" );
-
-            return new PANEL_PL_EDITOR_DISPLAY_OPTIONS( aParent, cfg );
-        }
+            return new PANEL_PL_EDITOR_DISPLAY_OPTIONS( aParent, GetAppSettings<PL_EDITOR_SETTINGS>( "pl_editor" ) );
 
         case PANEL_DS_GRIDS:
         {
-            SETTINGS_MANAGER&  mgr = Pgm().GetSettingsManager();
-            APP_SETTINGS_BASE* cfg = mgr.GetAppSettings<PL_EDITOR_SETTINGS>( "pl_editor" );
+            APP_SETTINGS_BASE* cfg = GetAppSettings<PL_EDITOR_SETTINGS>( "pl_editor" );
             EDA_BASE_FRAME*    frame = aKiway->Player( FRAME_PL_EDITOR, false );
 
             if( frame )
@@ -90,9 +84,8 @@ static struct IFACE : public KIFACE_BASE, public UNITS_PROVIDER
 
         case PANEL_DS_TOOLBARS:
         {
-            SETTINGS_MANAGER&  mgr = Pgm().GetSettingsManager();
-            APP_SETTINGS_BASE* cfg = mgr.GetAppSettings<PL_EDITOR_SETTINGS>( "pl_editor" );
-            TOOLBAR_SETTINGS*  tb  = mgr.GetToolbarSettings<PL_EDITOR_TOOLBAR_SETTINGS>( "pl_editor-toolbars" );
+            APP_SETTINGS_BASE* cfg = GetAppSettings<PL_EDITOR_SETTINGS>( "pl_editor" );
+            TOOLBAR_SETTINGS*  tb  = GetToolbarSettings<PL_EDITOR_TOOLBAR_SETTINGS>( "pl_editor-toolbars" );
 
             std::vector<TOOL_ACTION*>            actions;
             std::vector<ACTION_TOOLBAR_CONTROL*> controls;

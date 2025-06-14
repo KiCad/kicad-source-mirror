@@ -26,6 +26,7 @@
 #include <typeinfo>
 #include <core/wx_stl_compat.h> // for wxString hash
 #include <settings/color_settings.h>
+#include <pgm_base.h>
 
 class COLOR_SETTINGS;
 class COMMON_SETTINGS;
@@ -40,6 +41,8 @@ class LOCKFILE;
 
 /// Project settings path will be <projectname> + this
 #define PROJECT_BACKUPS_DIR_SUFFIX wxT( "-backups" )
+
+#define DEFAULT_THEME wxString( wxT( "user" ) )
 
 
 class KICOMMON_API SETTINGS_MANAGER
@@ -136,7 +139,7 @@ public:
         }
         else
         {
-            throw std::runtime_error( "Tried to GetAppSettings before registering" );
+            wxFAIL_MSG( "Tried to GetAppSettings before registering" );
         }
 
         m_app_settings_cache[typeHash] = ret;
@@ -197,7 +200,7 @@ public:
      * @param aName is the name of the color scheme to load.
      * @return a loaded COLOR_SETTINGS object.
      */
-    COLOR_SETTINGS* GetColorSettings( const wxString& aName = "user" );
+    COLOR_SETTINGS* GetColorSettings( const wxString& aName );
 
     std::vector<COLOR_SETTINGS*> GetColorSettingsList()
     {
@@ -533,5 +536,31 @@ private:
 
     static wxString backupDateTimeFormat;
 };
+
+
+template<typename T>
+T* GetAppSettings( const char* aFilename )
+{
+    if( PGM_BASE* pgm = PgmOrNull() )
+        return pgm->GetSettingsManager().GetAppSettings<T>( aFilename );
+
+    return nullptr;
+}
+
+
+template<typename T>
+T* GetToolbarSettings( const wxString& aFilename )
+{
+    if( PGM_BASE* pgm = PgmOrNull() )
+        return pgm->GetSettingsManager().GetToolbarSettings<T>( aFilename );
+
+    return nullptr;
+}
+
+
+inline COLOR_SETTINGS* GetColorSettings( const wxString& aName )
+{
+    return Pgm().GetSettingsManager().GetColorSettings( aName );
+}
 
 #endif

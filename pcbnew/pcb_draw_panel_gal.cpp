@@ -454,23 +454,13 @@ void PCB_DRAW_PANEL_GAL::SetDrawingSheet( DS_PROXY_VIEW_ITEM* aDrawingSheet )
 
 void PCB_DRAW_PANEL_GAL::UpdateColors()
 {
-    COLOR_SETTINGS* cs = nullptr;
-
+    COLOR_SETTINGS* cs = ::GetColorSettings( DEFAULT_THEME );
     PCB_BASE_FRAME* frame = dynamic_cast<PCB_BASE_FRAME*>( GetParentEDAFrame() );
 
     if( frame )
-    {
         cs = frame->GetColorSettings();
-    }
-    else
-    {
-        auto* app = Pgm().GetSettingsManager().GetAppSettings<PCBNEW_SETTINGS>( "pcbnew" );
-
-        if( app )
-            cs = Pgm().GetSettingsManager().GetColorSettings( app->m_ColorTheme );
-        else
-            cs = Pgm().GetSettingsManager().GetColorSettings();
-    }
+    else if( PCBNEW_SETTINGS* cfg = GetAppSettings<PCBNEW_SETTINGS>( "pcbnew" ) )
+        cs = ::GetColorSettings( cfg->m_ColorTheme );
 
     wxCHECK_RET( cs, wxT( "null COLOR_SETTINGS" ) );
 

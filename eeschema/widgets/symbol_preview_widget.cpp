@@ -45,9 +45,8 @@ SYMBOL_PREVIEW_WIDGET::SYMBOL_PREVIEW_WIDGET( wxWindow* aParent, KIWAY* aKiway, 
         m_statusSizer( nullptr ),
         m_previewItem( nullptr )
 {
-    SETTINGS_MANAGER&  mgr = Pgm().GetSettingsManager();
     COMMON_SETTINGS*   common_settings = Pgm().GetCommonSettings();
-    EESCHEMA_SETTINGS* app_settings = mgr.GetAppSettings<EESCHEMA_SETTINGS>( "eeschema" );
+    EESCHEMA_SETTINGS* app_settings = GetAppSettings<EESCHEMA_SETTINGS>( "eeschema" );
 
     m_galDisplayOptions.ReadConfig( *common_settings, app_settings->m_Window, this );
     m_galDisplayOptions.m_forceDisplayCursor = false;
@@ -55,11 +54,8 @@ SYMBOL_PREVIEW_WIDGET::SYMBOL_PREVIEW_WIDGET( wxWindow* aParent, KIWAY* aKiway, 
     EDA_DRAW_PANEL_GAL::GAL_TYPE canvasType = aCanvasType;
 
     // Allows only a CAIRO or OPENGL canvas:
-    if( canvasType != EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL
-            && canvasType != EDA_DRAW_PANEL_GAL::GAL_FALLBACK )
-    {
+    if( canvasType != EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL && canvasType != EDA_DRAW_PANEL_GAL::GAL_FALLBACK )
         canvasType = EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL;
-    }
 
     m_preview = new SCH_PREVIEW_PANEL( this, wxID_ANY, wxDefaultPosition, wxSize( -1, -1 ),
                                        m_galDisplayOptions, canvasType );
@@ -78,8 +74,8 @@ SYMBOL_PREVIEW_WIDGET::SYMBOL_PREVIEW_WIDGET( wxWindow* aParent, KIWAY* aKiway, 
     KIGFX::VIEW* view = m_preview->GetView();
     auto settings = static_cast<SCH_RENDER_SETTINGS*>( view->GetPainter()->GetSettings() );
 
-    if( auto* theme = Pgm().GetSettingsManager().GetColorSettings( app_settings->m_ColorTheme ) )
-        settings->LoadColors( theme );
+    if( COLOR_SETTINGS* cs = ::GetColorSettings( app_settings ? app_settings->m_ColorTheme : DEFAULT_THEME ) )
+        settings->LoadColors( cs );
 
     const COLOR4D& backgroundColor = settings->GetBackgroundColor();
     const COLOR4D& foregroundColor = settings->GetCursorColor();
@@ -233,11 +229,11 @@ void SYMBOL_PREVIEW_WIDGET::DisplaySymbol( const LIB_ID& aSymbolID, int aUnit, i
         m_previewItem->SetPreviewUnit( settings->m_ShowUnit );
         m_previewItem->SetPreviewBodyStyle( settings->m_ShowBodyStyle );
 
-        SETTINGS_MANAGER&  mgr = Pgm().GetSettingsManager();
-        EESCHEMA_SETTINGS* cfg = mgr.GetAppSettings<EESCHEMA_SETTINGS>( "eeschema" );
-
-        if( cfg->m_AutoplaceFields.enable )
-            m_previewItem->AutoplaceFields( nullptr, AUTOPLACE_AUTO );
+        if( EESCHEMA_SETTINGS* cfg = GetAppSettings<EESCHEMA_SETTINGS>( "eeschema" ) )
+        {
+            if( cfg->m_AutoplaceFields.enable )
+                m_previewItem->AutoplaceFields( nullptr, AUTOPLACE_AUTO );
+        }
 
         view->Add( m_previewItem );
 
@@ -291,11 +287,11 @@ void SYMBOL_PREVIEW_WIDGET::DisplayPart( LIB_SYMBOL* aSymbol, int aUnit, int aBo
         m_previewItem->SetPreviewUnit( settings->m_ShowUnit );
         m_previewItem->SetPreviewBodyStyle( settings->m_ShowBodyStyle );
 
-        SETTINGS_MANAGER&  mgr = Pgm().GetSettingsManager();
-        EESCHEMA_SETTINGS* cfg = mgr.GetAppSettings<EESCHEMA_SETTINGS>( "eeschema" );
-
-        if( cfg->m_AutoplaceFields.enable )
-            m_previewItem->AutoplaceFields( nullptr, AUTOPLACE_AUTO );
+        if( EESCHEMA_SETTINGS* cfg = GetAppSettings<EESCHEMA_SETTINGS>( "eeschema" ) )
+        {
+            if( cfg->m_AutoplaceFields.enable )
+                m_previewItem->AutoplaceFields( nullptr, AUTOPLACE_AUTO );
+        }
 
         view->Add( m_previewItem );
 

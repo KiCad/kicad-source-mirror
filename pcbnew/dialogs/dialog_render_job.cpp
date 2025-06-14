@@ -57,9 +57,7 @@ DIALOG_RENDER_JOB::DIALOG_RENDER_JOB( wxWindow* aParent, JOB_PCB_RENDER* aJob  )
     for( const auto& [k, name] : sideMap )
         m_choiceSide->Append( wxGetTranslation( name ) );
 
-    SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
-
-    if( EDA_3D_VIEWER_SETTINGS* cfg = mgr.GetAppSettings<EDA_3D_VIEWER_SETTINGS>( "3d_viewer" ) )
+    if( EDA_3D_VIEWER_SETTINGS* cfg = GetAppSettings<EDA_3D_VIEWER_SETTINGS>( "3d_viewer" ) )
     {
         for( const LAYER_PRESET_3D& preset : cfg->m_LayerPresets )
             m_presetCtrl->Append( preset.name );

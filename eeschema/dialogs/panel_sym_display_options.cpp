@@ -50,10 +50,7 @@ void PANEL_SYM_DISPLAY_OPTIONS::loadSymEditorSettings( SYMBOL_EDITOR_SETTINGS* c
 
 bool PANEL_SYM_DISPLAY_OPTIONS::TransferDataToWindow()
 {
-    SETTINGS_MANAGER&       mgr = Pgm().GetSettingsManager();
-    SYMBOL_EDITOR_SETTINGS* cfg = mgr.GetAppSettings<SYMBOL_EDITOR_SETTINGS>( "symbol_editor" );
-
-    loadSymEditorSettings( cfg );
+    loadSymEditorSettings( GetAppSettings<SYMBOL_EDITOR_SETTINGS>( "symbol_editor" ) );
 
     m_galOptsPanel->TransferDataToWindow();
 
@@ -63,14 +60,14 @@ bool PANEL_SYM_DISPLAY_OPTIONS::TransferDataToWindow()
 
 bool PANEL_SYM_DISPLAY_OPTIONS::TransferDataFromWindow()
 {
-    SETTINGS_MANAGER&       mgr = Pgm().GetSettingsManager();
-    SYMBOL_EDITOR_SETTINGS* cfg = mgr.GetAppSettings<SYMBOL_EDITOR_SETTINGS>( "symbol_editor" );
-
-    cfg->m_ShowHiddenPins = m_checkShowHiddenPins->GetValue();
-    cfg->m_ShowHiddenFields = m_checkShowHiddenFields->GetValue();
-    cfg->m_ShowPinElectricalType = m_showPinElectricalTypes->GetValue();
-    cfg->m_ShowPinAltIcons = m_checkShowPinAltModeIcons->GetValue();
-    m_galOptsPanel->TransferDataFromWindow();
+    if( SYMBOL_EDITOR_SETTINGS* cfg = GetAppSettings<SYMBOL_EDITOR_SETTINGS>( "symbol_editor" ) )
+    {
+        cfg->m_ShowHiddenPins = m_checkShowHiddenPins->GetValue();
+        cfg->m_ShowHiddenFields = m_checkShowHiddenFields->GetValue();
+        cfg->m_ShowPinElectricalType = m_showPinElectricalTypes->GetValue();
+        cfg->m_ShowPinAltIcons = m_checkShowPinAltModeIcons->GetValue();
+        m_galOptsPanel->TransferDataFromWindow();
+    }
 
     return true;
 }

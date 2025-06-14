@@ -151,7 +151,7 @@ FOOTPRINT_WIZARD_FRAME::FOOTPRINT_WIZARD_FRAME( KIWAY* aKiway, wxWindow* aParent
     m_toolManager->InvokeTool( "common.InteractiveSelection" );
 
     // Create the toolbars
-    m_toolbarSettings = Pgm().GetSettingsManager().GetToolbarSettings<FOOTPRINT_WIZARD_TOOLBAR_SETTINGS>( "fpwizard-toolbars" );
+    m_toolbarSettings = GetToolbarSettings<FOOTPRINT_WIZARD_TOOLBAR_SETTINGS>( "fpwizard-toolbars" );
     configureToolbars();
     RecreateToolbars();
 
@@ -281,9 +281,8 @@ void FOOTPRINT_WIZARD_FRAME::OnSize( wxSizeEvent& SizeEv )
 
 COLOR_SETTINGS* FOOTPRINT_WIZARD_FRAME::GetColorSettings( bool aForceRefresh ) const
 {
-    wxString currentTheme = GetFootprintEditorSettings()->m_ColorTheme;
-
-    return Pgm().GetSettingsManager().GetColorSettings( currentTheme );
+    FOOTPRINT_EDITOR_SETTINGS* cfg = GetFootprintEditorSettings();
+    return ::GetColorSettings( cfg ? cfg->m_ColorTheme : DEFAULT_THEME );
 }
 
 

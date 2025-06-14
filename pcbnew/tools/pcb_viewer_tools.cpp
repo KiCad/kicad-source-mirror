@@ -107,12 +107,10 @@ template<class T> void Flip( T& aValue )
 
 int PCB_VIEWER_TOOLS::ToggleHV45Mode( const TOOL_EVENT& toolEvent )
 {
-    SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
-
     if( frame()->IsType( FRAME_PCB_EDITOR ) )
-        Flip( mgr.GetAppSettings<PCBNEW_SETTINGS>( "pcbnew" )->m_Use45DegreeLimit );
+        Flip( GetAppSettings<PCBNEW_SETTINGS>( "pcbnew" )->m_Use45DegreeLimit );
     else if( frame()->IsType( FRAME_FOOTPRINT_EDITOR ) )
-        Flip( mgr.GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>( "fpedit" )->m_Use45Limit );
+        Flip( GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>( "fpedit" )->m_Use45Limit );
     else
         Flip( frame()->GetViewerSettingsBase()->m_ViewersDisplay.m_Use45Limit );
 
@@ -342,13 +340,12 @@ int PCB_VIEWER_TOOLS::MeasureTool( const TOOL_EVENT& aEvent )
         // move or drag when origin set updates rules
         else if( originSet && ( evt->IsMotion() || evt->IsDrag( BUT_LEFT ) ) )
         {
-            SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
-            bool              force45Deg;
+            bool force45Deg;
 
             if( frame()->IsType( FRAME_PCB_EDITOR ) )
-                force45Deg = mgr.GetAppSettings<PCBNEW_SETTINGS>( "pcbnew" )->m_Use45DegreeLimit;
+                force45Deg = GetAppSettings<PCBNEW_SETTINGS>( "pcbnew" )->m_Use45DegreeLimit;
             else if( frame()->IsType( FRAME_FOOTPRINT_EDITOR ) )
-                force45Deg = mgr.GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>( "fpedit" )->m_Use45Limit;
+                force45Deg = GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>( "fpedit" )->m_Use45Limit;
             else
                 force45Deg = frame()->GetViewerSettingsBase()->m_ViewersDisplay.m_Use45Limit;
 

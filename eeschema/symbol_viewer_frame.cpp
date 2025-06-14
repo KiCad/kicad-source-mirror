@@ -143,7 +143,7 @@ SYMBOL_VIEWER_FRAME::SYMBOL_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     setupTools();
     setupUIConditions();
 
-    m_toolbarSettings = Pgm().GetSettingsManager().GetToolbarSettings<SYMBOL_VIEWER_TOOLBAR_SETTINGS>( "symbol_viewer-toolbars" );
+    m_toolbarSettings = GetToolbarSettings<SYMBOL_VIEWER_TOOLBAR_SETTINGS>( "symbol_viewer-toolbars" );
     configureToolbars();
     RecreateToolbars();
 
@@ -850,50 +850,50 @@ void SYMBOL_VIEWER_FRAME::DClickOnSymbolList( wxCommandEvent& event )
 
 void SYMBOL_VIEWER_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
 {
-    SETTINGS_MANAGER&  mgr = Pgm().GetSettingsManager();
-    EESCHEMA_SETTINGS* cfg = mgr.GetAppSettings<EESCHEMA_SETTINGS>( "eeschema" );
+    SCH_BASE_FRAME::LoadSettings( GetAppSettings<EESCHEMA_SETTINGS>( "eeschema" ) );
 
-    SCH_BASE_FRAME::LoadSettings( cfg );
-
-    // Grid shape, etc.
-    GetGalDisplayOptions().ReadWindowSettings( cfg->m_LibViewPanel.window );
-
-    m_libListWidth = cfg->m_LibViewPanel.lib_list_width;
-    m_symbolListWidth = cfg->m_LibViewPanel.cmp_list_width;
-
-    GetRenderSettings()->m_ShowPinsElectricalType = cfg->m_LibViewPanel.show_pin_electrical_type;
-    GetRenderSettings()->m_ShowPinNumbers = cfg->m_LibViewPanel.show_pin_numbers;
-
-    // Set parameters to a reasonable value.
-    int maxWidth = cfg->m_LibViewPanel.window.state.size_x - 80;
-
-    if( m_libListWidth + m_symbolListWidth > maxWidth )
+    if( EESCHEMA_SETTINGS* cfg = GetAppSettings<EESCHEMA_SETTINGS>( "eeschema" ) )
     {
-        m_libListWidth = maxWidth * ( m_libListWidth / ( m_libListWidth + m_symbolListWidth ) );
-        m_symbolListWidth = maxWidth - m_libListWidth;
+        // Grid shape, etc.
+        GetGalDisplayOptions().ReadWindowSettings( cfg->m_LibViewPanel.window );
+
+        m_libListWidth = cfg->m_LibViewPanel.lib_list_width;
+        m_symbolListWidth = cfg->m_LibViewPanel.cmp_list_width;
+
+        GetRenderSettings()->m_ShowPinsElectricalType = cfg->m_LibViewPanel.show_pin_electrical_type;
+        GetRenderSettings()->m_ShowPinNumbers = cfg->m_LibViewPanel.show_pin_numbers;
+
+        // Set parameters to a reasonable value.
+        int maxWidth = cfg->m_LibViewPanel.window.state.size_x - 80;
+
+        if( m_libListWidth + m_symbolListWidth > maxWidth )
+        {
+            m_libListWidth = maxWidth * ( m_libListWidth / ( m_libListWidth + m_symbolListWidth ) );
+            m_symbolListWidth = maxWidth - m_libListWidth;
+        }
     }
 }
 
 
 void SYMBOL_VIEWER_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg)
 {
-    SETTINGS_MANAGER&  mgr = Pgm().GetSettingsManager();
-    EESCHEMA_SETTINGS* cfg = mgr.GetAppSettings<EESCHEMA_SETTINGS>( "eeschema" );
-
-    SCH_BASE_FRAME::SaveSettings( cfg );
+    SCH_BASE_FRAME::SaveSettings( GetAppSettings<EESCHEMA_SETTINGS>( "eeschema" ) );
 
     if( m_libListWidth && m_libList )
         m_libListWidth = m_libList->GetSize().x;
 
     m_symbolListWidth = m_symbolList->GetSize().x;
 
-    cfg->m_LibViewPanel.lib_list_width = m_libListWidth;
-    cfg->m_LibViewPanel.cmp_list_width = m_symbolListWidth;
-
-    if( SCH_RENDER_SETTINGS* renderSettings = GetRenderSettings() )
+    if( EESCHEMA_SETTINGS* cfg = GetAppSettings<EESCHEMA_SETTINGS>( "eeschema" ) )
     {
-        cfg->m_LibViewPanel.show_pin_electrical_type = renderSettings->m_ShowPinsElectricalType;
-        cfg->m_LibViewPanel.show_pin_numbers = renderSettings->m_ShowPinNumbers;
+        cfg->m_LibViewPanel.lib_list_width = m_libListWidth;
+        cfg->m_LibViewPanel.cmp_list_width = m_symbolListWidth;
+
+        if( SCH_RENDER_SETTINGS* renderSettings = GetRenderSettings() )
+        {
+            cfg->m_LibViewPanel.show_pin_electrical_type = renderSettings->m_ShowPinsElectricalType;
+            cfg->m_LibViewPanel.show_pin_numbers = renderSettings->m_ShowPinNumbers;
+        }
     }
 }
 
@@ -910,9 +910,8 @@ void SYMBOL_VIEWER_FRAME::CommonSettingsChanged( int aFlags )
 {
     SCH_BASE_FRAME::CommonSettingsChanged( aFlags );
 
-    SETTINGS_MANAGER&  mgr = Pgm().GetSettingsManager();
-    EESCHEMA_SETTINGS* cfg = mgr.GetAppSettings<EESCHEMA_SETTINGS>( "eeschema" );
-    GetGalDisplayOptions().ReadWindowSettings( cfg->m_LibViewPanel.window );
+    if( EESCHEMA_SETTINGS* cfg = GetAppSettings<EESCHEMA_SETTINGS>( "eeschema" ) )
+        GetGalDisplayOptions().ReadWindowSettings( cfg->m_LibViewPanel.window );
 
     GetCanvas()->GetGAL()->SetAxesColor( m_colorSettings->GetColor( LAYER_SCHEMATIC_GRID_AXES ) );
     GetCanvas()->GetGAL()->DrawGrid();

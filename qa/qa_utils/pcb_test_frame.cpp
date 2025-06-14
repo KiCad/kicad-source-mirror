@@ -203,7 +203,7 @@ void PCB_TEST_FRAME_BASE::LoadSettings()
 
     mgr.RegisterSettings( new PCBNEW_SETTINGS );
     mgr.RegisterSettings( new CVPCB_SETTINGS );
-    mgr.GetColorSettings()->Load();
+    mgr.GetColorSettings( DEFAULT_THEME )->Load();
 }
 
 void PCB_TEST_FRAME_BASE::SetSelectionHook( std::function<void(PCB_TEST_FRAME_BASE*, PCB_SELECTION*)> aHook )

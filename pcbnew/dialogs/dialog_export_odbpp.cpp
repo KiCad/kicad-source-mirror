@@ -234,15 +234,15 @@ void DIALOG_EXPORT_ODBPP::onOKClick( wxCommandEvent& event )
 
 bool DIALOG_EXPORT_ODBPP::Init()
 {
-    SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
-    PCBNEW_SETTINGS*  cfg = mgr.GetAppSettings<PCBNEW_SETTINGS>( "pcbnew" );
-
     if( !m_job )
     {
-        m_choiceUnits->SetSelection( cfg->m_ExportODBPP.units );
-        m_precision->SetValue( cfg->m_ExportODBPP.precision );
-        m_choiceCompress->SetSelection( cfg->m_ExportODBPP.compressFormat );
-        OnFmtChoiceOptionChanged();
+        if( PCBNEW_SETTINGS* cfg = GetAppSettings<PCBNEW_SETTINGS>( "pcbnew" ) )
+        {
+            m_choiceUnits->SetSelection( cfg->m_ExportODBPP.units );
+            m_precision->SetValue( cfg->m_ExportODBPP.precision );
+            m_choiceCompress->SetSelection( cfg->m_ExportODBPP.compressFormat );
+            OnFmtChoiceOptionChanged();
+        }
     }
     else
     {
@@ -266,22 +266,20 @@ bool DIALOG_EXPORT_ODBPP::TransferDataFromWindow()
 {
     if( !m_job )
     {
-        SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
-        PCBNEW_SETTINGS*  cfg = mgr.GetAppSettings<PCBNEW_SETTINGS>( "pcbnew" );
-
-        cfg->m_ExportODBPP.units = m_choiceUnits->GetSelection();
-        cfg->m_ExportODBPP.precision = m_precision->GetValue();
-        cfg->m_ExportODBPP.compressFormat = m_choiceCompress->GetSelection();
+        if( PCBNEW_SETTINGS* cfg = GetAppSettings<PCBNEW_SETTINGS>( "pcbnew" ) )
+        {
+            cfg->m_ExportODBPP.units = m_choiceUnits->GetSelection();
+            cfg->m_ExportODBPP.precision = m_precision->GetValue();
+            cfg->m_ExportODBPP.compressFormat = m_choiceCompress->GetSelection();
+        }
     }
     else
     {
         m_job->SetConfiguredOutputPath( m_outputFileName->GetValue() );
 
         m_job->m_precision = m_precision->GetValue();
-        m_job->m_units =
-                static_cast<JOB_EXPORT_PCB_ODB::ODB_UNITS>( m_choiceUnits->GetSelection() );
-        m_job->m_compressionMode = static_cast<JOB_EXPORT_PCB_ODB::ODB_COMPRESSION>(
-                m_choiceCompress->GetSelection() );
+        m_job->m_units = static_cast<JOB_EXPORT_PCB_ODB::ODB_UNITS>( m_choiceUnits->GetSelection() );
+        m_job->m_compressionMode = static_cast<JOB_EXPORT_PCB_ODB::ODB_COMPRESSION>( m_choiceCompress->GetSelection() );
     }
 
     return true;

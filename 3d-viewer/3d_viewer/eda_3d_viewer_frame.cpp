@@ -111,24 +111,26 @@ EDA_3D_VIEWER_FRAME::EDA_3D_VIEWER_FRAME( KIWAY* aKiway, PCB_BASE_FRAME* aParent
     wxStatusBar *status_bar = CreateStatusBar( arrayDim( status_dims ) );
     SetStatusWidths( arrayDim( status_dims ), status_dims );
 
-    SETTINGS_MANAGER&       mgr = Pgm().GetSettingsManager();
-    EDA_3D_VIEWER_SETTINGS* cfg = mgr.GetAppSettings<EDA_3D_VIEWER_SETTINGS>( "3d_viewer" );
-    ANTIALIASING_MODE       aaMode = static_cast<ANTIALIASING_MODE>( cfg->m_Render.opengl_AA_mode );
+    ANTIALIASING_MODE       aaMode = ANTIALIASING_MODE::AA_NONE;
+    EDA_3D_VIEWER_SETTINGS* cfg = GetAppSettings<EDA_3D_VIEWER_SETTINGS>( "3d_viewer" );
 
-    m_canvas = new EDA_3D_CANVAS( this, OGL_ATT_LIST::GetAttributesList( aaMode, true ),
-                                  m_boardAdapter, m_currentCamera,
-                                  PROJECT_PCB::Get3DCacheManager( &Prj() ) );
+    if( cfg )
+        aaMode = static_cast<ANTIALIASING_MODE>( cfg->m_Render.opengl_AA_mode );
+
+    m_canvas = new EDA_3D_CANVAS( this, OGL_ATT_LIST::GetAttributesList( aaMode, true ), m_boardAdapter,
+                                  m_currentCamera, PROJECT_PCB::Get3DCacheManager( &Prj() ) );
 
     m_appearancePanel = new APPEARANCE_CONTROLS_3D( this, GetCanvas() );
 
-    LoadSettings( cfg );
+    LoadSettings( GetAppSettings<EDA_3D_VIEWER_SETTINGS>( "3d_viewer" ) );
     loadCommonSettings();
 
     m_appearancePanel->SetUserViewports( Prj().GetProjectFile().m_Viewports3D );
 
     // Create the manager
     m_toolManager = new TOOL_MANAGER;
-    m_toolManager->SetEnvironment( GetBoard(), nullptr, nullptr, cfg, this );
+    m_toolManager->SetEnvironment( GetBoard(), nullptr, nullptr,
+                                   GetAppSettings<EDA_3D_VIEWER_SETTINGS>( "3d_viewer" ), this );
 
     m_actions = new EDA_3D_ACTIONS();
     m_toolDispatcher = new TOOL_DISPATCHER( m_toolManager );
@@ -142,7 +144,7 @@ EDA_3D_VIEWER_FRAME::EDA_3D_VIEWER_FRAME( KIWAY* aKiway, PCB_BASE_FRAME* aParent
     setupUIConditions();
 
     if( EDA_3D_CONTROLLER* ctrlTool = GetToolManager()->GetTool<EDA_3D_CONTROLLER>() )
-        ctrlTool->SetRotationIncrement( cfg->m_Camera.rotation_increment );
+        ctrlTool->SetRotationIncrement( cfg ? cfg->m_Camera.rotation_increment : 10.0 );
 
     // Run the viewer control tool, it is supposed to be always active
     m_toolManager->InvokeTool( "3DViewer.Control" );
@@ -170,10 +172,11 @@ EDA_3D_VIEWER_FRAME::EDA_3D_VIEWER_FRAME( KIWAY* aKiway, PCB_BASE_FRAME* aParent
 
     wxAuiPaneInfo& layersManager = m_auimgr.GetPane( "LayersManager" );
 
-    if( cfg->m_AuiPanels.right_panel_width > 0 )
+    if( cfg && cfg->m_AuiPanels.right_panel_width > 0 )
         SetAuiPaneSize( m_auimgr, layersManager, cfg->m_AuiPanels.right_panel_width, -1 );
 
-    layersManager.Show( cfg->m_AuiPanels.show_layer_manager );
+    if( cfg )
+        layersManager.Show( cfg->m_AuiPanels.show_layer_manager );
 
     // Call Update() to fix all pane default sizes, especially the "InfoBar" pane before
     // hiding it.
@@ -455,35 +458,25 @@ void EDA_3D_VIEWER_FRAME::OnCloseWindow( wxCloseEvent &event )
 
 void EDA_3D_VIEWER_FRAME::Process_Special_Functions( wxCommandEvent &event )
 {
-    int     id = event.GetId();
-    bool    isChecked = event.IsChecked();
-
-    wxLogTrace( m_logTrace, wxT( "EDA_3D_VIEWER_FRAME::Process_Special_Functions id %d "
-                                 "isChecked %d" ),
-                id,
-                isChecked );
-
     if( m_canvas == nullptr )
         return;
 
-    switch( id )
+    switch( event.GetId() )
     {
     case ID_MENU3D_RESET_DEFAULTS:
     {
-        SETTINGS_MANAGER&       mgr = Pgm().GetSettingsManager();
-        EDA_3D_VIEWER_SETTINGS* cfg = mgr.GetAppSettings<EDA_3D_VIEWER_SETTINGS>( "3d_viewer" );
-
         m_boardAdapter.SetLayerColors( m_boardAdapter.GetDefaultColors() );
 
-        cfg->ResetToDefaults();
-        LoadSettings( cfg );
+        if( EDA_3D_VIEWER_SETTINGS* cfg = GetAppSettings<EDA_3D_VIEWER_SETTINGS>( "3d_viewer" ) )
+            cfg->ResetToDefaults();
+
+        LoadSettings( GetAppSettings<EDA_3D_VIEWER_SETTINGS>( "3d_viewer" ) );
 
         // Tell canvas that we (may have) changed the render engine
         RenderEngineChanged();
-
         NewDisplay( true );
-    }
         return;
+    }
 
     default:
         wxFAIL_MSG( wxT( "Invalid event in EDA_3D_VIEWER_FRAME::Process_Special_Functions()" ) );
@@ -494,8 +487,7 @@ void EDA_3D_VIEWER_FRAME::Process_Special_Functions( wxCommandEvent &event )
 
 void EDA_3D_VIEWER_FRAME::onDisableRayTracing( wxCommandEvent& aEvent )
 {
-    wxLogTrace( m_logTrace, wxT( "EDA_3D_VIEWER_FRAME::%s disabling ray tracing." ),
-                __WXFUNCTION__ );
+    wxLogTrace( m_logTrace, wxT( "EDA_3D_VIEWER_FRAME::%s disabling ray tracing." ), __WXFUNCTION__ );
 
     m_disable_ray_tracing = true;
     m_boardAdapter.m_Cfg->m_Render.engine = RENDER_ENGINE::OPENGL;
@@ -580,19 +572,9 @@ void EDA_3D_VIEWER_FRAME::LoadSettings( APP_SETTINGS_BASE *aCfg )
 
 void EDA_3D_VIEWER_FRAME::SaveSettings( APP_SETTINGS_BASE *aCfg )
 {
-    SETTINGS_MANAGER&       mgr = Pgm().GetSettingsManager();
-    EDA_3D_VIEWER_SETTINGS* cfg = mgr.GetAppSettings<EDA_3D_VIEWER_SETTINGS>( "3d_viewer" );
+    EDA_BASE_FRAME::SaveSettings( GetAppSettings<EDA_3D_VIEWER_SETTINGS>( "3d_viewer" ) );
 
-    EDA_BASE_FRAME::SaveSettings( cfg );
-
-    wxLogTrace( m_logTrace, wxT( "EDA_3D_VIEWER_FRAME::SaveSettings" ) );
-
-    wxLogTrace( m_logTrace, m_boardAdapter.m_Cfg->m_Render.engine == RENDER_ENGINE::RAYTRACING ?
-                               wxT( "EDA_3D_VIEWER_FRAME::SaveSettings render setting Ray Trace" )
-                               :
-                               wxT( "EDA_3D_VIEWER_FRAME::SaveSettings render setting OpenGL" ) );
-
-    if( cfg )
+    if( EDA_3D_VIEWER_SETTINGS* cfg = GetAppSettings<EDA_3D_VIEWER_SETTINGS>( "3d_viewer" ) )
     {
         cfg->m_AuiPanels.right_panel_width    = m_appearancePanel->GetSize().x;
 
@@ -614,8 +596,7 @@ void EDA_3D_VIEWER_FRAME::CommonSettingsChanged( int aFlags )
     EDA_BASE_FRAME::CommonSettingsChanged( aFlags );
 
     loadCommonSettings();
-    applySettings(
-            Pgm().GetSettingsManager().GetAppSettings<EDA_3D_VIEWER_SETTINGS>( "3d_viewer" ) );
+    applySettings( GetAppSettings<EDA_3D_VIEWER_SETTINGS>( "3d_viewer" ) );
 
     m_appearancePanel->CommonSettingsChanged();
 
@@ -643,23 +624,24 @@ void EDA_3D_VIEWER_FRAME::ShowChangedLanguage()
 
 void EDA_3D_VIEWER_FRAME::ToggleAppearanceManager()
 {
-    SETTINGS_MANAGER&       mgr = Pgm().GetSettingsManager();
-    EDA_3D_VIEWER_SETTINGS* cfg = mgr.GetAppSettings<EDA_3D_VIEWER_SETTINGS>( "3d_viewer" );
-    wxAuiPaneInfo&          layersManager = m_auimgr.GetPane( "LayersManager" );
+    wxAuiPaneInfo& layersManager = m_auimgr.GetPane( "LayersManager" );
 
-    // show auxiliary Vertical layers and visibility manager toolbar
-    cfg->m_AuiPanels.show_layer_manager = !cfg->m_AuiPanels.show_layer_manager;
-
-    layersManager.Show( cfg->m_AuiPanels.show_layer_manager );
-
-    if( cfg->m_AuiPanels.show_layer_manager )
+    if( EDA_3D_VIEWER_SETTINGS* cfg = GetAppSettings<EDA_3D_VIEWER_SETTINGS>( "3d_viewer" ) )
     {
-        SetAuiPaneSize( m_auimgr, layersManager, cfg->m_AuiPanels.right_panel_width, -1 );
-    }
-    else
-    {
-        cfg->m_AuiPanels.right_panel_width = m_appearancePanel->GetSize().x;
-        m_auimgr.Update();
+        // show auxiliary Vertical layers and visibility manager toolbar
+        cfg->m_AuiPanels.show_layer_manager = !cfg->m_AuiPanels.show_layer_manager;
+
+        layersManager.Show( cfg->m_AuiPanels.show_layer_manager );
+
+        if( cfg->m_AuiPanels.show_layer_manager )
+        {
+            SetAuiPaneSize( m_auimgr, layersManager, cfg->m_AuiPanels.right_panel_width, -1 );
+        }
+        else
+        {
+            cfg->m_AuiPanels.right_panel_width = m_appearancePanel->GetSize().x;
+            m_auimgr.Update();
+        }
     }
 }
 

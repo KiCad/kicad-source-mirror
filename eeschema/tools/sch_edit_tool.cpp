@@ -1517,10 +1517,8 @@ int SCH_EDIT_TOOL::RepeatDrawItem( const TOOL_EVENT& aEvent )
 
     for( const std::unique_ptr<SCH_ITEM>& item : sourceItems )
     {
-        SCH_ITEM*          newItem = item->Duplicate( IGNORE_PARENT_GROUP );
-        SETTINGS_MANAGER&  mgr = Pgm().GetSettingsManager();
-        EESCHEMA_SETTINGS* cfg = mgr.GetAppSettings<EESCHEMA_SETTINGS>( "eeschema" );
-        bool               restore_state = false;
+        SCH_ITEM* newItem = item->Duplicate( IGNORE_PARENT_GROUP );
+        bool      restore_state = false;
 
         // Ensure newItem has a suitable parent: the current screen, because an item from
         // a list of items to repeat must be attached to this current screen
@@ -1538,9 +1536,11 @@ int SCH_EDIT_TOOL::RepeatDrawItem( const TOOL_EVENT& aEvent )
         if( SCH_LABEL_BASE* label = dynamic_cast<SCH_LABEL_BASE*>( newItem ) )
         {
             // If incrementing tries to go below zero, tell user why the value is repeated
-
-            if( !label->IncrementLabel( cfg->m_Drawing.repeat_label_increment ) )
-                m_frame->ShowInfoBarWarning( _( "Label value cannot go below zero" ), true );
+            if( EESCHEMA_SETTINGS* cfg = GetAppSettings<EESCHEMA_SETTINGS>( "eeschema" ) )
+            {
+                if( !label->IncrementLabel( cfg->m_Drawing.repeat_label_increment ) )
+                    m_frame->ShowInfoBarWarning( _( "Label value cannot go below zero" ), true );
+            }
         }
 
         // If cloning a symbol then put into 'move' mode.
@@ -1549,7 +1549,7 @@ int SCH_EDIT_TOOL::RepeatDrawItem( const TOOL_EVENT& aEvent )
             VECTOR2I cursorPos = getViewControls()->GetCursorPosition( true );
             newItem->Move( cursorPos - newItem->GetPosition() );
         }
-        else
+        else if( EESCHEMA_SETTINGS* cfg = GetAppSettings<EESCHEMA_SETTINGS>( "eeschema" ) )
         {
             newItem->Move( VECTOR2I( schIUScale.MilsToIU( cfg->m_Drawing.default_repeat_offset_x ),
                                      schIUScale.MilsToIU( cfg->m_Drawing.default_repeat_offset_y ) ) );
@@ -1621,7 +1621,6 @@ int SCH_EDIT_TOOL::RepeatDrawItem( const TOOL_EVENT& aEvent )
             m_frame->Schematic().CleanUp( &commit );
             commit.Push( _( "Repeat Item" ) );
         }
-
     }
 
     if( !newItems.Empty() )
@@ -2945,8 +2944,6 @@ int SCH_EDIT_TOOL::BreakWire( const TOOL_EVENT& aEvent )
     std::vector<SCH_LINE*> lines;
 
     // Save the current orthogonal mode so we can restore it later
-    SETTINGS_MANAGER&     mgr = Pgm().GetSettingsManager();
-    EESCHEMA_SETTINGS*    cfg = mgr.GetAppSettings<EESCHEMA_SETTINGS>( "eeschema" );
     static enum LINE_MODE lineMode = LINE_MODE::LINE_MODE_90;
     static bool           lineModeChanged = false;
 
@@ -2963,7 +2960,6 @@ int SCH_EDIT_TOOL::BreakWire( const TOOL_EVENT& aEvent )
                     lineModeChanged = false;
                 }
             };
-
 
     for( EDA_ITEM* item : selection )
     {
@@ -3001,11 +2997,14 @@ int SCH_EDIT_TOOL::BreakWire( const TOOL_EVENT& aEvent )
 
     if( !lines.empty() )
     {
-        if( cfg->m_Drawing.line_mode != LINE_MODE::LINE_MODE_FREE )
+        if( EESCHEMA_SETTINGS* cfg = GetAppSettings<EESCHEMA_SETTINGS>( "eeschema" ) )
         {
-            lineMode = (enum LINE_MODE) cfg->m_Drawing.line_mode;
-            lineModeChanged = true;
-            m_toolMgr->RunAction( SCH_ACTIONS::lineModeFree );
+            if( cfg->m_Drawing.line_mode != LINE_MODE::LINE_MODE_FREE )
+            {
+                lineMode = (enum LINE_MODE) cfg->m_Drawing.line_mode;
+                lineModeChanged = true;
+                m_toolMgr->RunAction( SCH_ACTIONS::lineModeFree );
+            }
         }
 
         m_frame->TestDanglingEnds();

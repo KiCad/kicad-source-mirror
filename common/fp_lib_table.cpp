@@ -601,8 +601,7 @@ bool FP_LIB_TABLE::LoadGlobalTable( FP_LIB_TABLE& aTable )
         SystemDirsAppend( &ss );
 
         const ENV_VAR_MAP& envVars = Pgm().GetLocalEnvVariables();
-        std::optional<wxString> v = ENV_VAR::GetVersionedEnvVarValue( envVars,
-                                                                      wxT( "TEMPLATE_DIR" ) );
+        std::optional<wxString> v = ENV_VAR::GetVersionedEnvVarValue( envVars, wxT( "TEMPLATE_DIR" ) );
 
         if( v && !v->IsEmpty() )
             ss.AddPaths( *v, 0 );
@@ -612,7 +611,7 @@ bool FP_LIB_TABLE::LoadGlobalTable( FP_LIB_TABLE& aTable )
         // The fallback is to create an empty global footprint table for the user to populate.
         if( fileName.IsEmpty() || !::wxCopyFile( fileName, fn.GetFullPath(), false ) )
         {
-            FP_LIB_TABLE    emptyTable;
+            FP_LIB_TABLE emptyTable;
 
             emptyTable.Save( fn.GetFullPath() );
         }
@@ -620,16 +619,14 @@ bool FP_LIB_TABLE::LoadGlobalTable( FP_LIB_TABLE& aTable )
 
     aTable.Load( fn.GetFullPath() );
 
-    SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
-    KICAD_SETTINGS*   settings = mgr.GetAppSettings<KICAD_SETTINGS>( "kicad" );
-
+    KICAD_SETTINGS*    cfg = GetAppSettings<KICAD_SETTINGS>( "kicad" );
     const ENV_VAR_MAP& env = Pgm().GetLocalEnvVariables();
-    wxString packagesPath;
+    wxString           packagesPath;
 
     if( std::optional<wxString> v = ENV_VAR::GetVersionedEnvVarValue( env, wxT( "3RD_PARTY" ) ) )
         packagesPath = *v;
 
-    if( settings->m_PcmLibAutoAdd )
+    if( cfg && cfg->m_PcmLibAutoAdd )
     {
         // Scan for libraries in PCM packages directory
 
@@ -638,14 +635,14 @@ bool FP_LIB_TABLE::LoadGlobalTable( FP_LIB_TABLE& aTable )
 
         if( d.DirExists() )
         {
-            PCM_FP_LIB_TRAVERSER traverser( packagesPath, aTable, settings->m_PcmLibPrefix );
+            PCM_FP_LIB_TRAVERSER traverser( packagesPath, aTable, cfg->m_PcmLibPrefix );
             wxDir                dir( d.GetPath() );
 
             dir.Traverse( traverser );
         }
     }
 
-    if( settings->m_PcmLibAutoRemove )
+    if( cfg && cfg->m_PcmLibAutoRemove )
     {
         // Remove PCM libraries that no longer exist
         std::vector<wxString> to_remove;

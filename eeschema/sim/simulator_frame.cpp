@@ -172,7 +172,7 @@ SIMULATOR_FRAME::SIMULATOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     // was created.
     m_tbTopMain->SetToolManager( m_toolManager );
 
-    m_toolbarSettings = Pgm().GetSettingsManager().GetToolbarSettings<SIMULATOR_TOOLBAR_SETTINGS>( "sim-toolbars" );
+    m_toolbarSettings = GetToolbarSettings<SIMULATOR_TOOLBAR_SETTINGS>( "sim-toolbars" );
     configureToolbars();
     RecreateToolbars();
     ReCreateMenuBar();
@@ -290,18 +290,17 @@ void SIMULATOR_FRAME::CommonSettingsChanged( int aFlags )
 {
     KIWAY_PLAYER::CommonSettingsChanged( aFlags );
 
-    auto* cfg = dynamic_cast<EESCHEMA_SETTINGS*>( m_toolManager->GetSettings() );
-    wxASSERT( cfg != nullptr );
-    m_ui->ApplyPreferences( cfg->m_Simulator.preferences );
+    if( EESCHEMA_SETTINGS* cfg = GetAppSettings<EESCHEMA_SETTINGS>( "eeschema" ) )
+        m_ui->ApplyPreferences( cfg->m_Simulator.preferences );
 }
 
 
 WINDOW_SETTINGS* SIMULATOR_FRAME::GetWindowSettings( APP_SETTINGS_BASE* aCfg )
 {
-    EESCHEMA_SETTINGS* cfg = dynamic_cast<EESCHEMA_SETTINGS*>( aCfg );
-    wxASSERT( cfg );
+    if( EESCHEMA_SETTINGS* cfg = GetAppSettings<EESCHEMA_SETTINGS>( "eeschema" ) )
+        return &cfg->m_Simulator.window;
 
-    return cfg ? &cfg->m_Simulator.window : nullptr;
+    return nullptr;
 }
 
 

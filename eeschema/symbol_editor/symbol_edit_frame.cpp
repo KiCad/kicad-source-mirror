@@ -138,7 +138,7 @@ SYMBOL_EDIT_FRAME::SYMBOL_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     SetIcons( icon_bundle );
 
-    m_settings = Pgm().GetSettingsManager().GetAppSettings<SYMBOL_EDITOR_SETTINGS>( "symbol_editor" );
+    m_settings = GetAppSettings<SYMBOL_EDITOR_SETTINGS>( "symbol_editor" );
     LoadSettings( m_settings );
 
     m_libMgr = new LIB_SYMBOL_LIBRARY_MANAGER( *this );
@@ -181,7 +181,7 @@ SYMBOL_EDIT_FRAME::SYMBOL_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     ReCreateMenuBar();
 
-    m_toolbarSettings = Pgm().GetSettingsManager().GetToolbarSettings<SYMBOL_EDIT_TOOLBAR_SETTINGS>( "symbol_editor-toolbars" );
+    m_toolbarSettings = GetToolbarSettings<SYMBOL_EDIT_TOOLBAR_SETTINGS>( "symbol_editor-toolbars" );
     configureToolbars();
     RecreateToolbars();
 
@@ -304,11 +304,8 @@ SYMBOL_EDIT_FRAME::~SYMBOL_EDIT_FRAME()
     // current screen is destroyed in EDA_DRAW_FRAME
     SetScreen( m_dummyScreen );
 
-    SETTINGS_MANAGER&       mgr = Pgm().GetSettingsManager();
-    SYMBOL_EDITOR_SETTINGS* cfg = mgr.GetAppSettings<SYMBOL_EDITOR_SETTINGS>( "symbol_editor" );
-
-    if( cfg )
-        mgr.Save( cfg );
+    if( SYMBOL_EDITOR_SETTINGS* cfg = GetAppSettings<SYMBOL_EDITOR_SETTINGS>( "symbol_editor" ) )
+        Pgm().GetSettingsManager().Save( cfg );
 
     delete m_libMgr;
 }
@@ -362,12 +359,12 @@ APP_SETTINGS_BASE* SYMBOL_EDIT_FRAME::config() const
 
 COLOR_SETTINGS* SYMBOL_EDIT_FRAME::GetColorSettings( bool aForceRefresh ) const
 {
-    SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
+    APP_SETTINGS_BASE* cfg = GetSettings();
 
-    if( GetSettings()->m_UseEeschemaColorSettings )
-        return mgr.GetColorSettings( mgr.GetAppSettings<EESCHEMA_SETTINGS>( "eeschema" )->m_ColorTheme );
-    else
-        return mgr.GetColorSettings( GetSettings()->m_ColorTheme );
+    if( cfg && static_cast<SYMBOL_EDITOR_SETTINGS*>( cfg )->m_UseEeschemaColorSettings )
+        cfg = GetAppSettings<EESCHEMA_SETTINGS>( "eeschema" );
+
+    return ::GetColorSettings( cfg ? cfg->m_ColorTheme : DEFAULT_THEME );
 }
 
 
@@ -1367,15 +1364,15 @@ void SYMBOL_EDIT_FRAME::CommonSettingsChanged( int aFlags )
 {
     SCH_BASE_FRAME::CommonSettingsChanged( aFlags );
 
-    SETTINGS_MANAGER*       mgr = GetSettingsManager();
-    SYMBOL_EDITOR_SETTINGS* cfg = mgr->GetAppSettings<SYMBOL_EDITOR_SETTINGS>( "symbol_editor" );
+    if( SYMBOL_EDITOR_SETTINGS* cfg = GetAppSettings<SYMBOL_EDITOR_SETTINGS>( "symbol_editor" ) )
+    {
+        GetRenderSettings()->m_ShowPinsElectricalType = cfg->m_ShowPinElectricalType;
+        GetRenderSettings()->m_ShowHiddenPins = cfg->m_ShowHiddenPins;
+        GetRenderSettings()->m_ShowHiddenFields = cfg->m_ShowHiddenFields;
+        GetRenderSettings()->m_ShowPinAltIcons = cfg->m_ShowPinAltIcons;
 
-    GetRenderSettings()->m_ShowPinsElectricalType = cfg->m_ShowPinElectricalType;
-    GetRenderSettings()->m_ShowHiddenPins = cfg->m_ShowHiddenPins;
-    GetRenderSettings()->m_ShowHiddenFields = cfg->m_ShowHiddenFields;
-    GetRenderSettings()->m_ShowPinAltIcons = cfg->m_ShowPinAltIcons;
-
-    GetGalDisplayOptions().ReadWindowSettings( cfg->m_Window );
+        GetGalDisplayOptions().ReadWindowSettings( cfg->m_Window );
+    }
 
     if( m_symbol )
         m_symbol->ClearCaches();

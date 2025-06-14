@@ -101,31 +101,21 @@ SCH_PIN::SCH_PIN( LIB_SYMBOL* aParentSymbol ) :
         SCH_ITEM( aParentSymbol, SCH_PIN_T, 0, 0 ),
         m_libPin( nullptr ),
         m_position( { 0, 0 } ),
+        m_length( schIUScale.MilsToIU( DEFAULT_PIN_LENGTH ) ),
         m_orientation( PIN_ORIENTATION::PIN_RIGHT ),
         m_shape( GRAPHIC_PINSHAPE::LINE ),
         m_type( ELECTRICAL_PINTYPE::PT_UNSPECIFIED ),
         m_hidden( false ),
+        m_numTextSize( schIUScale.MilsToIU( DEFAULT_PINNUM_SIZE ) ),
+        m_nameTextSize( schIUScale.MilsToIU( DEFAULT_PINNAME_SIZE ) ),
         m_isDangling( true ),
         m_layoutCache( std::make_unique<PIN_LAYOUT_CACHE>( *this ) )
 {
-    // Use the application settings for pin sizes if exists.
-    // pgm can be nullptr when running a shared lib from a script, not from a kicad appl
-    PGM_BASE* pgm = PgmOrNull();
-
-    if( pgm )
+    if( SYMBOL_EDITOR_SETTINGS* cfg = GetAppSettings<SYMBOL_EDITOR_SETTINGS>( "symbol_editor" ) )
     {
-        SETTINGS_MANAGER&       mgr = pgm->GetSettingsManager();
-        SYMBOL_EDITOR_SETTINGS* cfg = mgr.GetAppSettings<SYMBOL_EDITOR_SETTINGS>( "symbol_editor" );
-
         m_length       = schIUScale.MilsToIU( cfg->m_Defaults.pin_length );
         m_numTextSize  = schIUScale.MilsToIU( cfg->m_Defaults.pin_num_size );
         m_nameTextSize = schIUScale.MilsToIU( cfg->m_Defaults.pin_name_size );
-    }
-    else    // Use hardcoded eeschema defaults: symbol_editor settings are not existing.
-    {
-        m_length       = schIUScale.MilsToIU( DEFAULT_PIN_LENGTH );
-        m_numTextSize  = schIUScale.MilsToIU( DEFAULT_PINNUM_SIZE );
-        m_nameTextSize = schIUScale.MilsToIU( DEFAULT_PINNAME_SIZE );
     }
 
     m_layer = LAYER_DEVICE;

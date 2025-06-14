@@ -317,16 +317,14 @@ protected:
 
 void PANEL_FP_LIB_TABLE::setupGrid( WX_GRID* aGrid )
 {
-    SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
-    PCBNEW_SETTINGS*  cfg = mgr.GetAppSettings<PCBNEW_SETTINGS>( "pcbnew" );
+    auto autoSizeCol =
+            [&]( WX_GRID* aLocGrid, int aCol )
+            {
+                int prevWidth = aLocGrid->GetColSize( aCol );
 
-    auto autoSizeCol = [&]( WX_GRID* aLocGrid, int aCol )
-    {
-        int prevWidth = aLocGrid->GetColSize( aCol );
-
-        aLocGrid->AutoSizeColumn( aCol, false );
-        aLocGrid->SetColSize( aCol, std::max( prevWidth, aLocGrid->GetColSize( aCol ) ) );
-    };
+                aLocGrid->AutoSizeColumn( aCol, false );
+                aLocGrid->SetColSize( aCol, std::max( prevWidth, aLocGrid->GetColSize( aCol ) ) );
+            };
 
     // Give a bit more room for wxChoice editors
     for( int ii = 0; ii < aGrid->GetNumberRows(); ++ii )
@@ -340,20 +338,25 @@ void PANEL_FP_LIB_TABLE::setupGrid( WX_GRID* aGrid )
     wxGridCellAttr* attr;
 
     attr = new wxGridCellAttr;
-    attr->SetEditor( new GRID_CELL_PATH_EDITOR(
-            m_parent, aGrid, &cfg->m_lastFootprintLibDir, true, m_projectBasePath,
-            [this]( WX_GRID* grid, int row ) -> wxString
-            {
-                auto* libTable = static_cast<FP_LIB_TABLE_GRID*>( grid->GetTable() );
-                auto* tableRow = static_cast<FP_LIB_TABLE_ROW*>( libTable->at( row ) );
-                PCB_IO_MGR::PCB_FILE_T       fileType = tableRow->GetFileType();
-                const IO_BASE::IO_FILE_DESC& pluginDesc = m_supportedFpFiles.at( fileType );
 
-                if( pluginDesc.m_IsFile )
-                    return pluginDesc.FileFilter();
-                else
-                    return wxEmptyString;
-            } ) );
+    if( PCBNEW_SETTINGS* cfg = GetAppSettings<PCBNEW_SETTINGS>( "pcbnew" ) )
+    {
+        attr->SetEditor( new GRID_CELL_PATH_EDITOR(
+                m_parent, aGrid, &cfg->m_lastFootprintLibDir, true, m_projectBasePath,
+                [this]( WX_GRID* grid, int row ) -> wxString
+                {
+                    auto* libTable = static_cast<FP_LIB_TABLE_GRID*>( grid->GetTable() );
+                    auto* tableRow = static_cast<FP_LIB_TABLE_ROW*>( libTable->at( row ) );
+                    PCB_IO_MGR::PCB_FILE_T       fileType = tableRow->GetFileType();
+                    const IO_BASE::IO_FILE_DESC& pluginDesc = m_supportedFpFiles.at( fileType );
+
+                    if( pluginDesc.m_IsFile )
+                        return pluginDesc.FileFilter();
+                    else
+                        return wxEmptyString;
+                } ) );
+    }
+
     aGrid->SetColAttr( COL_URI, attr );
 
     attr = new wxGridCellAttr;
@@ -408,12 +411,11 @@ PANEL_FP_LIB_TABLE::PANEL_FP_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent, PRO
     for( auto& [fileType, desc] : m_supportedFpFiles )
         m_pluginChoices.Add( PCB_IO_MGR::ShowType( fileType ) );
 
-
-    SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
-    PCBNEW_SETTINGS*  cfg = mgr.GetAppSettings<PCBNEW_SETTINGS>( "pcbnew" );
-
-    if( cfg->m_lastFootprintLibDir.IsEmpty() )
-        cfg->m_lastFootprintLibDir = PATHS::GetDefaultUserFootprintsPath();
+    if( PCBNEW_SETTINGS* cfg = GetAppSettings<PCBNEW_SETTINGS>( "pcbnew" ) )
+    {
+        if( cfg->m_lastFootprintLibDir.IsEmpty() )
+            cfg->m_lastFootprintLibDir = PATHS::GetDefaultUserFootprintsPath();
+    }
 
     m_lastProjectLibDir = m_projectBasePath;
 
@@ -509,11 +511,10 @@ PANEL_FP_LIB_TABLE::PANEL_FP_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent, PRO
 PANEL_FP_LIB_TABLE::~PANEL_FP_LIB_TABLE()
 {
     wxMenu* browseMenu = m_browseButton->GetSplitButtonMenu();
+
     for( auto& [type, desc] : m_supportedFpFiles )
-    {
-        browseMenu->Unbind( wxEVT_COMMAND_MENU_SELECTED,
-                            &PANEL_FP_LIB_TABLE::browseLibrariesHandler, this, type );
-    }
+        browseMenu->Unbind( wxEVT_COMMAND_MENU_SELECTED, &PANEL_FP_LIB_TABLE::browseLibrariesHandler, this, type );
+
     m_browseButton->Unbind( wxEVT_BUTTON, &PANEL_FP_LIB_TABLE::browseLibrariesHandler, this );
 
     // Delete the GRID_TRICKS.
@@ -947,14 +948,16 @@ void PANEL_FP_LIB_TABLE::browseLibrariesHandler( wxCommandEvent& event )
     }
 
     const IO_BASE::IO_FILE_DESC& fileDesc = m_supportedFpFiles.at( fileType );
-    SETTINGS_MANAGER&            mgr = Pgm().GetSettingsManager();
-    PCBNEW_SETTINGS*             cfg = mgr.GetAppSettings<PCBNEW_SETTINGS>( "pcbnew" );
+    PCBNEW_SETTINGS*             cfg = GetAppSettings<PCBNEW_SETTINGS>( "pcbnew" );
 
-    wxString title = wxString::Format( _( "Select %s Library" ), PCB_IO_MGR::ShowType( fileType ) );
-    wxString openDir = cfg->m_lastFootprintLibDir;
+    wxString  title = wxString::Format( _( "Select %s Library" ), PCB_IO_MGR::ShowType( fileType ) );
+    wxString  dummy;
+    wxString* lastDir;
 
     if( m_cur_grid == m_project_grid )
-        openDir = m_lastProjectLibDir;
+        lastDir = &m_lastProjectLibDir;
+    else
+        lastDir = cfg ? &cfg->m_lastFootprintLibDir : &dummy;
 
     wxArrayString files;
 
@@ -962,29 +965,21 @@ void PANEL_FP_LIB_TABLE::browseLibrariesHandler( wxCommandEvent& event )
 
     if( fileDesc.m_IsFile )
     {
-        wxFileDialog dlg( topLevelParent, title, openDir, wxEmptyString, fileDesc.FileFilter(),
+        wxFileDialog dlg( topLevelParent, title, *lastDir, wxEmptyString, fileDesc.FileFilter(),
                           wxFD_OPEN | wxFD_FILE_MUST_EXIST | wxFD_MULTIPLE );
 
-        int result = dlg.ShowModal();
-
-        if( result == wxID_CANCEL )
+        if( dlg.ShowModal() == wxID_CANCEL )
             return;
 
         dlg.GetPaths( files );
-
-        if( m_cur_grid == m_global_grid )
-            cfg->m_lastFootprintLibDir = dlg.GetDirectory();
-        else
-            m_lastProjectLibDir = dlg.GetDirectory();
+        *lastDir = dlg.GetDirectory();
     }
     else
     {
-        wxDirDialog dlg( topLevelParent, title, openDir,
+        wxDirDialog dlg( topLevelParent, title, *lastDir,
                          wxDD_DEFAULT_STYLE | wxDD_DIR_MUST_EXIST | wxDD_MULTIPLE );
 
-        int result = dlg.ShowModal();
-
-        if( result == wxID_CANCEL )
+        if( dlg.ShowModal() == wxID_CANCEL )
             return;
 
         dlg.GetPaths( files );
@@ -992,16 +987,12 @@ void PANEL_FP_LIB_TABLE::browseLibrariesHandler( wxCommandEvent& event )
         if( !files.IsEmpty() )
         {
             wxFileName first( files.front() );
-
-            if( m_cur_grid == m_global_grid )
-                cfg->m_lastFootprintLibDir = first.GetPath();
-            else
-                m_lastProjectLibDir = first.GetPath();
+            *lastDir = first.GetPath();
         }
     }
 
     // Drop the last directory if the path is a .pretty folder
-    if( cfg->m_lastFootprintLibDir.EndsWith( FILEEXT::KiCadFootprintLibPathExtension ) )
+    if( cfg && cfg->m_lastFootprintLibDir.EndsWith( FILEEXT::KiCadFootprintLibPathExtension ) )
         cfg->m_lastFootprintLibDir = cfg->m_lastFootprintLibDir.BeforeLast( wxFileName::GetPathSeparator() );
 
     const ENV_VAR_MAP& envVars       = Pgm().GetLocalEnvVariables();
@@ -1020,7 +1011,9 @@ void PANEL_FP_LIB_TABLE::browseLibrariesHandler( wxCommandEvent& event )
 
         if( fileType == PCB_IO_MGR::KICAD_SEXP
             && fn.GetExt() != FILEEXT::KiCadFootprintLibPathExtension )
+        {
             nickname = LIB_ID::FixIllegalChars( fn.GetFullName(), true ).wx_str();
+        }
 
         if( cur_model()->ContainsNickname( nickname ) )
         {

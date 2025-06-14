@@ -116,7 +116,7 @@ DISPLAY_FOOTPRINTS_FRAME::DISPLAY_FOOTPRINTS_FRAME( KIWAY* aKiway, wxWindow* aPa
 
     setupUIConditions();
 
-    m_toolbarSettings = Pgm().GetSettingsManager().GetToolbarSettings<DISPLAY_FOOTPRINTS_TOOLBAR_SETTINGS>( "display_footprints-toolbars" );
+    m_toolbarSettings = GetToolbarSettings<DISPLAY_FOOTPRINTS_TOOLBAR_SETTINGS>( "display_footprints-toolbars" );
     configureToolbars();
     RecreateToolbars();
 
@@ -192,13 +192,9 @@ void DISPLAY_FOOTPRINTS_FRAME::setupUIConditions()
     wxASSERT( mgr );
 
 #define CHECK( x )  ACTION_CONDITIONS().Check( x )
-
-    mgr->SetConditions( ACTIONS::zoomTool,
-                        CHECK( cond.CurrentTool( ACTIONS::zoomTool ) ) );
-    mgr->SetConditions( ACTIONS::selectionTool,
-                        CHECK( cond.CurrentTool( ACTIONS::selectionTool ) ) );
-    mgr->SetConditions( ACTIONS::measureTool,
-                        CHECK( cond.CurrentTool( ACTIONS::measureTool ) ) );
+    mgr->SetConditions( ACTIONS::zoomTool,             CHECK( cond.CurrentTool( ACTIONS::zoomTool ) ) );
+    mgr->SetConditions( ACTIONS::selectionTool,        CHECK( cond.CurrentTool( ACTIONS::selectionTool ) ) );
+    mgr->SetConditions( ACTIONS::measureTool,          CHECK( cond.CurrentTool( ACTIONS::measureTool ) ) );
 
     mgr->SetConditions( ACTIONS::toggleGrid,           CHECK( cond.GridVisible() ) );
     mgr->SetConditions( ACTIONS::toggleCursorStyle,    CHECK( cond.FullscreenCursor() ) );
@@ -219,46 +215,50 @@ void DISPLAY_FOOTPRINTS_FRAME::setupUIConditions()
 void DISPLAY_FOOTPRINTS_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
 {
     CVPCB_SETTINGS* cfg = dynamic_cast<CVPCB_SETTINGS*>( aCfg );
-    wxCHECK( cfg, /* void */ );
 
     // We don't allow people to change this right now, so make sure it's on
     GetWindowSettings( cfg )->cursor.always_show_cursor = true;
 
     PCB_BASE_FRAME::LoadSettings( cfg );
 
-    SetDisplayOptions( cfg->m_FootprintViewerDisplayOptions );
+    if( cfg )
+        SetDisplayOptions( cfg->m_FootprintViewerDisplayOptions );
 }
 
 
 void DISPLAY_FOOTPRINTS_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
 {
-    CVPCB_SETTINGS* cfg = dynamic_cast<CVPCB_SETTINGS*>( aCfg );
-    wxCHECK( cfg, /* void */ );
+    PCB_BASE_FRAME::SaveSettings( aCfg );
 
-    PCB_BASE_FRAME::SaveSettings( cfg );
-
-    cfg->m_FootprintViewerDisplayOptions = GetDisplayOptions();
-    cfg->m_FootprintViewerZoom = GetCanvas()->GetView()->GetScale();
+    if( CVPCB_SETTINGS* cfg = dynamic_cast<CVPCB_SETTINGS*>( aCfg ) )
+    {
+        cfg->m_FootprintViewerDisplayOptions = GetDisplayOptions();
+        cfg->m_FootprintViewerZoom = GetCanvas()->GetView()->GetScale();
+    }
 }
 
 
 WINDOW_SETTINGS* DISPLAY_FOOTPRINTS_FRAME::GetWindowSettings( APP_SETTINGS_BASE* aCfg )
 {
-    CVPCB_SETTINGS* cfg = Pgm().GetSettingsManager().GetAppSettings<CVPCB_SETTINGS>( "cvpcb" );
-    return &cfg->m_FootprintViewer;
+    static WINDOW_SETTINGS defaultCfg;
+
+    CVPCB_SETTINGS* cfg = GetAppSettings<CVPCB_SETTINGS>( "cvpcb" );
+    return cfg ? &cfg->m_FootprintViewer : &defaultCfg;
 }
 
 
 PCB_VIEWERS_SETTINGS_BASE* DISPLAY_FOOTPRINTS_FRAME::GetViewerSettingsBase() const
 {
-    return Pgm().GetSettingsManager().GetAppSettings<CVPCB_SETTINGS>( "cvpcb" );
+    return GetAppSettings<CVPCB_SETTINGS>( "cvpcb" );
 }
 
 
 MAGNETIC_SETTINGS* DISPLAY_FOOTPRINTS_FRAME::GetMagneticItemsSettings()
 {
-    CVPCB_SETTINGS* cfg = Pgm().GetSettingsManager().GetAppSettings<CVPCB_SETTINGS>( "cvpcb" );
-    return &cfg->m_FootprintViewerMagneticSettings;
+    static MAGNETIC_SETTINGS defaultCfg;
+
+    CVPCB_SETTINGS* cfg = GetAppSettings<CVPCB_SETTINGS>( "cvpcb" );
+    return cfg ? &cfg->m_FootprintViewerMagneticSettings : &defaultCfg;
 }
 
 
@@ -268,16 +268,14 @@ COLOR4D DISPLAY_FOOTPRINTS_FRAME::GetGridColor()
 }
 
 
-FOOTPRINT* DISPLAY_FOOTPRINTS_FRAME::GetFootprint( const wxString& aFootprintName,
-                                                   REPORTER& aReporter )
+FOOTPRINT* DISPLAY_FOOTPRINTS_FRAME::GetFootprint( const wxString& aFootprintName, REPORTER& aReporter )
 {
     FOOTPRINT* footprint = nullptr;
     LIB_ID     fpid;
 
     if( fpid.Parse( aFootprintName ) >= 0 )
     {
-        aReporter.Report( wxString::Format( _( "Footprint ID '%s' is not valid." ),
-                                            aFootprintName ),
+        aReporter.Report( wxString::Format( _( "Footprint ID '%s' is not valid." ), aFootprintName ),
                           RPT_SEVERITY_ERROR );
         return nullptr;
     }
@@ -291,8 +289,7 @@ FOOTPRINT* DISPLAY_FOOTPRINTS_FRAME::GetFootprint( const wxString& aFootprintNam
     // See if the library requested is in the library table
     if( !fpTable->HasLibrary( libNickname ) )
     {
-        aReporter.Report( wxString::Format( _( "Library '%s' is not in the footprint library "
-                                               "table." ),
+        aReporter.Report( wxString::Format( _( "Library '%s' is not in the footprint library table." ),
                                             libNickname ),
                           RPT_SEVERITY_ERROR );
         return nullptr;
@@ -455,12 +452,8 @@ void DISPLAY_FOOTPRINTS_FRAME::UpdateMsgPanel()
 
 COLOR_SETTINGS* DISPLAY_FOOTPRINTS_FRAME::GetColorSettings( bool aForceRefresh ) const
 {
-    auto* cfg = Pgm().GetSettingsManager().GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>( "fpedit" );
-
-    if( cfg )
-        return Pgm().GetSettingsManager().GetColorSettings( cfg->m_ColorTheme );
-    else
-        return Pgm().GetSettingsManager().GetColorSettings();
+    FOOTPRINT_EDITOR_SETTINGS* cfg = GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>( "fpedit" );
+    return ::GetColorSettings( cfg ? cfg->m_ColorTheme : DEFAULT_THEME );
 }
 
 

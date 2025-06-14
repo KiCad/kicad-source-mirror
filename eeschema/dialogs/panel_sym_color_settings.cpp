@@ -35,15 +35,14 @@ PANEL_SYM_COLOR_SETTINGS::PANEL_SYM_COLOR_SETTINGS( wxWindow* aWindow ) :
 
 bool PANEL_SYM_COLOR_SETTINGS::TransferDataToWindow()
 {
-    SETTINGS_MANAGER&       mgr = Pgm().GetSettingsManager();
-    SYMBOL_EDITOR_SETTINGS* cfg = mgr.GetAppSettings<SYMBOL_EDITOR_SETTINGS>( "symbol_editor" );
+    SYMBOL_EDITOR_SETTINGS* cfg = GetAppSettings<SYMBOL_EDITOR_SETTINGS>( "symbol_editor" );
 
-    if( cfg->m_UseEeschemaColorSettings )
+    if( cfg && cfg->m_UseEeschemaColorSettings )
         m_eeschemaRB->SetValue( true );
     else
         m_themeRB->SetValue( true );
 
-    COLOR_SETTINGS* current = mgr.GetColorSettings( cfg->m_ColorTheme );
+    COLOR_SETTINGS* current = ::GetColorSettings( cfg ? cfg->m_ColorTheme : DEFAULT_THEME );
 
     int width    = 0;
     int height   = 0;
@@ -51,7 +50,7 @@ bool PANEL_SYM_COLOR_SETTINGS::TransferDataToWindow()
 
     m_themes->Clear();
 
-    for( COLOR_SETTINGS* settings : mgr.GetColorSettingsList() )
+    for( COLOR_SETTINGS* settings : Pgm().GetSettingsManager().GetColorSettingsList() )
     {
         int pos = m_themes->Append( settings->GetName(), static_cast<void*>( settings ) );
 
@@ -72,17 +71,17 @@ bool PANEL_SYM_COLOR_SETTINGS::TransferDataToWindow()
 
 bool PANEL_SYM_COLOR_SETTINGS::TransferDataFromWindow()
 {
-    SETTINGS_MANAGER&       mgr = Pgm().GetSettingsManager();
-    SYMBOL_EDITOR_SETTINGS* cfg = mgr.GetAppSettings<SYMBOL_EDITOR_SETTINGS>( "symbol_editor" );
-
-    cfg->m_UseEeschemaColorSettings = m_eeschemaRB->GetValue();
-
-    if( !cfg->m_UseEeschemaColorSettings )
+    if( SYMBOL_EDITOR_SETTINGS* cfg = GetAppSettings<SYMBOL_EDITOR_SETTINGS>( "symbol_editor" ) )
     {
-        int             sel = m_themes->GetSelection();
-        COLOR_SETTINGS* colors = static_cast<COLOR_SETTINGS*>( m_themes->GetClientData( sel ) );
+        cfg->m_UseEeschemaColorSettings = m_eeschemaRB->GetValue();
 
-        cfg->m_ColorTheme = colors->GetFilename();
+        if( !cfg->m_UseEeschemaColorSettings )
+        {
+            int             sel = m_themes->GetSelection();
+            COLOR_SETTINGS* colors = static_cast<COLOR_SETTINGS*>( m_themes->GetClientData( sel ) );
+
+            cfg->m_ColorTheme = colors->GetFilename();
+        }
     }
 
     return true;

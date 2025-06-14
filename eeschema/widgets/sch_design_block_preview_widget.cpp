@@ -50,11 +50,10 @@ SCH_DESIGN_BLOCK_PREVIEW_WIDGET::SCH_DESIGN_BLOCK_PREVIEW_WIDGET( wxWindow* aPar
         m_statusSizer( nullptr ),
         m_previewItem( nullptr )
 {
-    SETTINGS_MANAGER&  mgr = Pgm().GetSettingsManager();
     COMMON_SETTINGS*   common_settings = Pgm().GetCommonSettings();
-    EESCHEMA_SETTINGS* app_settings = mgr.GetAppSettings<EESCHEMA_SETTINGS>( "eeschema" );
+    EESCHEMA_SETTINGS* cfg = GetAppSettings<EESCHEMA_SETTINGS>( "eeschema" );
 
-    m_galDisplayOptions.ReadConfig( *common_settings, app_settings->m_Window, this );
+    m_galDisplayOptions.ReadConfig( *common_settings, cfg->m_Window, this );
     m_galDisplayOptions.m_forceDisplayCursor = false;
 
     EDA_DRAW_PANEL_GAL::GAL_TYPE canvasType = aCanvasType;
@@ -82,8 +81,8 @@ SCH_DESIGN_BLOCK_PREVIEW_WIDGET::SCH_DESIGN_BLOCK_PREVIEW_WIDGET( wxWindow* aPar
     KIGFX::VIEW* view = m_preview->GetView();
     auto         settings = static_cast<SCH_RENDER_SETTINGS*>( view->GetPainter()->GetSettings() );
 
-    if( auto* theme = Pgm().GetSettingsManager().GetColorSettings( app_settings->m_ColorTheme ) )
-        settings->LoadColors( theme );
+    if( COLOR_SETTINGS* cs = ::GetColorSettings( cfg ? cfg->m_ColorTheme : DEFAULT_THEME ) )
+        settings->LoadColors( cs );
 
     const COLOR4D& backgroundColor = settings->GetBackgroundColor();
     const COLOR4D& foregroundColor = settings->GetCursorColor();

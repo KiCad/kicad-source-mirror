@@ -157,20 +157,10 @@ void PANEL_EDIT_OPTIONS::loadFPSettings( FOOTPRINT_EDITOR_SETTINGS* aCfg )
 
 bool PANEL_EDIT_OPTIONS::TransferDataToWindow()
 {
-    SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
-
     if( m_isFootprintEditor )
-    {
-        FOOTPRINT_EDITOR_SETTINGS* cfg = mgr.GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>( "fpedit" );
-
-        loadFPSettings( cfg );
-    }
+        loadFPSettings( GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>( "fpedit" ) );
     else
-    {
-        PCBNEW_SETTINGS* cfg = mgr.GetAppSettings<PCBNEW_SETTINGS>( "pcbnew" );
-
-        loadPCBSettings( cfg );
-    }
+        loadPCBSettings( GetAppSettings<PCBNEW_SETTINGS>( "pcbnew" ) );
 
    return true;
 }
@@ -178,54 +168,54 @@ bool PANEL_EDIT_OPTIONS::TransferDataToWindow()
 
 bool PANEL_EDIT_OPTIONS::TransferDataFromWindow()
 {
-    SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
-
     if( m_isFootprintEditor )
     {
-        FOOTPRINT_EDITOR_SETTINGS* cfg = mgr.GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>( "fpedit" );
+        if( FOOTPRINT_EDITOR_SETTINGS* cfg = GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>( "fpedit" ) )
+        {
+            cfg->m_RotationAngle = m_rotationAngle.GetAngleValue();
 
-        cfg->m_RotationAngle = m_rotationAngle.GetAngleValue();
+            cfg->m_MagneticItems.pads = m_magneticPads->GetValue() ? MAGNETIC_OPTIONS::CAPTURE_ALWAYS
+                                                                   : MAGNETIC_OPTIONS::NO_EFFECT;
+            cfg->m_MagneticItems.graphics = m_magneticGraphics->GetValue();
 
-        cfg->m_MagneticItems.pads = m_magneticPads->GetValue() ? MAGNETIC_OPTIONS::CAPTURE_ALWAYS
-                                                               : MAGNETIC_OPTIONS::NO_EFFECT;
-        cfg->m_MagneticItems.graphics = m_magneticGraphics->GetValue();
-
-        cfg->m_Use45Limit = m_cbConstrainHV45Mode->GetValue();
-        cfg->m_ArcEditMode = arcEditModeToEnum( m_arcEditMode->GetSelection() );
+            cfg->m_Use45Limit = m_cbConstrainHV45Mode->GetValue();
+            cfg->m_ArcEditMode = arcEditModeToEnum( m_arcEditMode->GetSelection() );
+        }
     }
     else
     {
-        PCBNEW_SETTINGS* cfg = mgr.GetAppSettings<PCBNEW_SETTINGS>( "pcbnew" );
+        if( PCBNEW_SETTINGS* cfg = GetAppSettings<PCBNEW_SETTINGS>( "pcbnew" ) )
+        {
+            cfg->m_Display.m_DisplayRatsnestLinesCurved = m_OptDisplayCurvedRatsnestLines->GetValue();
+            cfg->m_Display.m_ShowModuleRatsnest = m_showSelectedRatsnest->GetValue();
+            cfg->m_Display.m_RatsnestThickness = m_ratsnestThickness->GetValue();
 
-        cfg->m_Display.m_DisplayRatsnestLinesCurved = m_OptDisplayCurvedRatsnestLines->GetValue();
-        cfg->m_Display.m_ShowModuleRatsnest = m_showSelectedRatsnest->GetValue();
-        cfg->m_Display.m_RatsnestThickness = m_ratsnestThickness->GetValue();
+            cfg->m_Use45DegreeLimit = m_cbConstrainHV45Mode->GetValue();
+            cfg->m_RotationAngle = m_rotationAngle.GetAngleValue();
+            cfg->m_ArcEditMode = arcEditModeToEnum( m_arcEditMode->GetSelection() );
+            cfg->m_TrackDragAction = (TRACK_DRAG_ACTION) m_trackMouseDragCtrl->GetSelection();
 
-        cfg->m_Use45DegreeLimit = m_cbConstrainHV45Mode->GetValue();
-        cfg->m_RotationAngle = m_rotationAngle.GetAngleValue();
-        cfg->m_ArcEditMode = arcEditModeToEnum( m_arcEditMode->GetSelection() );
-        cfg->m_TrackDragAction = (TRACK_DRAG_ACTION) m_trackMouseDragCtrl->GetSelection();
+            cfg->m_FlipDirection = m_rbFlipLeftRight->GetValue() ? FLIP_DIRECTION::LEFT_RIGHT
+                                                                 : FLIP_DIRECTION::TOP_BOTTOM;
 
-        cfg->m_FlipDirection = m_rbFlipLeftRight->GetValue() ? FLIP_DIRECTION::LEFT_RIGHT
-                                                             : FLIP_DIRECTION::TOP_BOTTOM;
+            cfg->m_AllowFreePads = m_allowFreePads->GetValue();
+            cfg->m_LockingOptions.m_sessionSkipPrompts = m_overrideLocks->GetValue();
+            cfg->m_AutoRefillZones = m_autoRefillZones->GetValue();
 
-        cfg->m_AllowFreePads = m_allowFreePads->GetValue();
-        cfg->m_LockingOptions.m_sessionSkipPrompts = m_overrideLocks->GetValue();
-        cfg->m_AutoRefillZones = m_autoRefillZones->GetValue();
+            cfg->m_MagneticItems.pads = static_cast<MAGNETIC_OPTIONS>( m_magneticPadChoice->GetSelection() );
+            cfg->m_MagneticItems.tracks = static_cast<MAGNETIC_OPTIONS>( m_magneticTrackChoice->GetSelection() );
+            cfg->m_MagneticItems.graphics = !m_magneticGraphicsChoice->GetSelection();
 
-        cfg->m_MagneticItems.pads = static_cast<MAGNETIC_OPTIONS>( m_magneticPadChoice->GetSelection() );
-        cfg->m_MagneticItems.tracks = static_cast<MAGNETIC_OPTIONS>( m_magneticTrackChoice->GetSelection() );
-        cfg->m_MagneticItems.graphics = !m_magneticGraphicsChoice->GetSelection();
-
-        cfg->m_ESCClearsNetHighlight = m_escClearsNetHighlight->GetValue();
-        cfg->m_ShowPageLimits = m_showPageLimits->GetValue();
-        cfg->m_ShowCourtyardCollisions = m_cbCourtyardCollisions->GetValue();
+            cfg->m_ESCClearsNetHighlight = m_escClearsNetHighlight->GetValue();
+            cfg->m_ShowPageLimits = m_showPageLimits->GetValue();
+            cfg->m_ShowCourtyardCollisions = m_cbCourtyardCollisions->GetValue();
 
 #ifdef __WXOSX_MAC__
-        cfg->m_CtrlClickHighlight = m_rbHighlightNetMac->GetValue();
+            cfg->m_CtrlClickHighlight = m_rbHighlightNetMac->GetValue();
 #else
-        cfg->m_CtrlClickHighlight = m_rbHighlightNet->GetValue();
+            cfg->m_CtrlClickHighlight = m_rbHighlightNet->GetValue();
 #endif
+        }
     }
 
     return true;

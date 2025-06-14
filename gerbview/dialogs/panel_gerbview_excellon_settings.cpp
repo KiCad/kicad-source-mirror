@@ -39,13 +39,13 @@ PANEL_GERBVIEW_EXCELLON_SETTINGS::PANEL_GERBVIEW_EXCELLON_SETTINGS( wxWindow* aP
 
 bool PANEL_GERBVIEW_EXCELLON_SETTINGS::TransferDataToWindow( )
 {
-    SETTINGS_MANAGER&  mgr = Pgm().GetSettingsManager();
-    GERBVIEW_SETTINGS* cfg = mgr.GetAppSettings<GERBVIEW_SETTINGS>( "gerbview" );
-    EXCELLON_DEFAULTS  curr_settings;
+    if( GERBVIEW_SETTINGS* cfg = GetAppSettings<GERBVIEW_SETTINGS>( "gerbview" ) )
+    {
+        EXCELLON_DEFAULTS  curr_settings;
 
-    cfg->GetExcellonDefaults( curr_settings );
-
-    applySettingsToPanel( curr_settings );
+        cfg->GetExcellonDefaults( curr_settings );
+        applySettingsToPanel( curr_settings );
+    }
 
     return true;
 }
@@ -53,17 +53,17 @@ bool PANEL_GERBVIEW_EXCELLON_SETTINGS::TransferDataToWindow( )
 
 bool PANEL_GERBVIEW_EXCELLON_SETTINGS::TransferDataFromWindow()
 {
-    SETTINGS_MANAGER&  mgr = Pgm().GetSettingsManager();
-    GERBVIEW_SETTINGS* cfg = mgr.GetAppSettings<GERBVIEW_SETTINGS>( "gerbview" );
-
-    cfg->m_ExcellonDefaults.m_UnitsMM = m_rbMM->GetValue();
-    cfg->m_ExcellonDefaults.m_LeadingZero = m_rbLZ->GetValue();
-    // The first value of these param is 2, not 0
-    #define FIRST_VALUE 2
-    cfg->m_ExcellonDefaults.m_MmIntegerLen = m_choiceIntegerMM->GetSelection()+FIRST_VALUE;
-    cfg->m_ExcellonDefaults.m_MmMantissaLen = m_choiceMantissaMM->GetSelection()+FIRST_VALUE;
-    cfg->m_ExcellonDefaults.m_InchIntegerLen = m_choiceIntegerInch->GetSelection()+FIRST_VALUE;
-    cfg->m_ExcellonDefaults.m_InchMantissaLen = m_choiceMantissaInch->GetSelection()+FIRST_VALUE;
+    if( GERBVIEW_SETTINGS* cfg = GetAppSettings<GERBVIEW_SETTINGS>( "gerbview" ) )
+    {
+        cfg->m_ExcellonDefaults.m_UnitsMM = m_rbMM->GetValue();
+        cfg->m_ExcellonDefaults.m_LeadingZero = m_rbLZ->GetValue();
+        // The first value of these param is 2, not 0
+        #define FIRST_VALUE 2
+        cfg->m_ExcellonDefaults.m_MmIntegerLen = m_choiceIntegerMM->GetSelection()+FIRST_VALUE;
+        cfg->m_ExcellonDefaults.m_MmMantissaLen = m_choiceMantissaMM->GetSelection()+FIRST_VALUE;
+        cfg->m_ExcellonDefaults.m_InchIntegerLen = m_choiceIntegerInch->GetSelection()+FIRST_VALUE;
+        cfg->m_ExcellonDefaults.m_InchMantissaLen = m_choiceMantissaInch->GetSelection()+FIRST_VALUE;
+    }
 
     return true;
 }

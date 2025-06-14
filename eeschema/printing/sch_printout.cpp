@@ -139,17 +139,18 @@ bool SCH_PRINTOUT::PrintPage( SCH_SCREEN* aScreen, wxDC* aDC, bool aForPrinting 
 
     painter->SetSchematic( &m_parent->Schematic() );
 
-        SETTINGS_MANAGER&   mgr   = Pgm().GetSettingsManager();
-        EESCHEMA_SETTINGS*  cfg   = m_parent->eeconfig();
-        COLOR_SETTINGS*     theme = mgr.GetColorSettings( cfg->m_Printing.color_theme );
-        SCH_SELECTION_TOOL* selTool = m_parent->GetToolManager()->GetTool<SCH_SELECTION_TOOL>();
+    EESCHEMA_SETTINGS*  cfg = m_parent->eeconfig();
+    COLOR_SETTINGS*     cs = ::GetColorSettings( cfg ? cfg->m_Printing.color_theme : DEFAULT_THEME );
+    SCH_SELECTION_TOOL* selTool = m_parent->GetToolManager()->GetTool<SCH_SELECTION_TOOL>();
 
     // Target paper size
     wxRect pageSizePix;
     wxSize dcPPI = dc->GetPPI();
 
     if( aForPrinting )
+    {
         pageSizePix = GetLogicalPageRect();
+    }
     else
     {
         dc->SetUserScale( 1, 1 );
@@ -188,17 +189,17 @@ bool SCH_PRINTOUT::PrintPage( SCH_SCREEN* aScreen, wxDC* aDC, bool aForPrinting 
     // Set the color scheme
     dstSettings->LoadColors( m_parent->GetColorSettings( false ) );
 
-    if( cfg->m_Printing.use_theme && theme )
-        dstSettings->LoadColors( theme );
+    if( cfg && cfg->m_Printing.use_theme )
+        dstSettings->LoadColors( cs );
 
-    bool printDrawingSheet = cfg->m_Printing.title_block;
+    bool printDrawingSheet = cfg ? cfg->m_Printing.title_block : true;
 
     COLOR4D bgColor = m_parent->GetColorSettings()->GetColor( LAYER_SCHEMATIC_BACKGROUND );
 
-    if( cfg->m_Printing.background )
+    if( cfg && cfg->m_Printing.background )
     {
-        if( cfg->m_Printing.use_theme && theme )
-            bgColor = theme->GetColor( LAYER_SCHEMATIC_BACKGROUND );
+        if( cfg->m_Printing.use_theme )
+            bgColor = cs->GetColor( LAYER_SCHEMATIC_BACKGROUND );
     }
     else
     {
@@ -212,9 +213,9 @@ bool SCH_PRINTOUT::PrintPage( SCH_SCREEN* aScreen, wxDC* aDC, bool aForPrinting 
     dstSettings->SetLayerColor( LAYER_DRAWINGSHEET,
                                dstSettings->GetLayerColor( LAYER_SCHEMATIC_DRAWINGSHEET ) );
 
-    dstSettings->SetDefaultFont( cfg->m_Appearance.default_font );
+    dstSettings->SetDefaultFont( cfg ? cfg->m_Appearance.default_font : wxString( "" ) );
 
-    if( cfg->m_Printing.monochrome )
+    if( cfg && cfg->m_Printing.monochrome )
     {
         for( int i = 0; i < LAYER_ID_COUNT; ++i )
             dstSettings->SetLayerColor( i, COLOR4D::BLACK );

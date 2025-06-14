@@ -51,10 +51,8 @@ static int GetLastPinLength()
 {
     if( g_LastPinLength == -1 )
     {
-        SETTINGS_MANAGER&       mgr = Pgm().GetSettingsManager();
-        SYMBOL_EDITOR_SETTINGS* cfg = mgr.GetAppSettings<SYMBOL_EDITOR_SETTINGS>( "symbol_editor" );
-
-        g_LastPinLength = schIUScale.MilsToIU( cfg->m_Defaults.pin_length );
+        if( SYMBOL_EDITOR_SETTINGS* cfg = GetAppSettings<SYMBOL_EDITOR_SETTINGS>( "symbol_editor" ) )
+            g_LastPinLength = schIUScale.MilsToIU( cfg->m_Defaults.pin_length );
     }
 
     return g_LastPinLength;
@@ -64,10 +62,8 @@ static int GetLastPinNameSize()
 {
     if( g_LastPinNameSize == -1 )
     {
-        SETTINGS_MANAGER&       mgr = Pgm().GetSettingsManager();
-        SYMBOL_EDITOR_SETTINGS* cfg = mgr.GetAppSettings<SYMBOL_EDITOR_SETTINGS>( "symbol_editor" );
-
-        g_LastPinNameSize = schIUScale.MilsToIU( cfg->m_Defaults.pin_name_size );
+        if( SYMBOL_EDITOR_SETTINGS* cfg = GetAppSettings<SYMBOL_EDITOR_SETTINGS>( "symbol_editor" ) )
+            g_LastPinNameSize = schIUScale.MilsToIU( cfg->m_Defaults.pin_name_size );
     }
 
     return g_LastPinNameSize;
@@ -77,10 +73,8 @@ static int GetLastPinNumSize()
 {
     if( g_LastPinNumSize == -1 )
     {
-        SETTINGS_MANAGER&       mgr = Pgm().GetSettingsManager();
-        SYMBOL_EDITOR_SETTINGS* cfg = mgr.GetAppSettings<SYMBOL_EDITOR_SETTINGS>( "symbol_editor" );
-
-        g_LastPinNumSize = schIUScale.MilsToIU( cfg->m_Defaults.pin_num_size );
+        if( SYMBOL_EDITOR_SETTINGS* cfg = GetAppSettings<SYMBOL_EDITOR_SETTINGS>( "symbol_editor" ) )
+            g_LastPinNumSize = schIUScale.MilsToIU( cfg->m_Defaults.pin_num_size );
     }
 
     return g_LastPinNumSize;
@@ -423,32 +417,33 @@ SCH_PIN* SYMBOL_EDITOR_PIN_TOOL::RepeatPin( const SCH_PIN* aSourcePin )
     commit.Modify( symbol );
 
     SCH_PIN* pin = static_cast<SCH_PIN*>( aSourcePin->Duplicate( true, &commit ) );
-    VECTOR2I step;
 
     pin->ClearFlags();
     pin->SetFlags( IS_NEW );
 
-    SETTINGS_MANAGER&       mgr = Pgm().GetSettingsManager();
-    SYMBOL_EDITOR_SETTINGS* cfg = mgr.GetAppSettings<SYMBOL_EDITOR_SETTINGS>( "symbol_editor" );
-
-    switch( pin->GetOrientation() )
+    if( SYMBOL_EDITOR_SETTINGS* cfg = GetAppSettings<SYMBOL_EDITOR_SETTINGS>( "symbol_editor" ) )
     {
-    default:
-    case PIN_ORIENTATION::PIN_RIGHT: step.y = schIUScale.MilsToIU( cfg->m_Repeat.pin_step ); break;
-    case PIN_ORIENTATION::PIN_UP:    step.x = schIUScale.MilsToIU( cfg->m_Repeat.pin_step ); break;
-    case PIN_ORIENTATION::PIN_DOWN:  step.x = schIUScale.MilsToIU( cfg->m_Repeat.pin_step) ; break;
-    case PIN_ORIENTATION::PIN_LEFT:  step.y = schIUScale.MilsToIU( cfg->m_Repeat.pin_step ); break;
+        VECTOR2I step;
+
+        switch( pin->GetOrientation() )
+        {
+        default:
+        case PIN_ORIENTATION::PIN_RIGHT: step.y = schIUScale.MilsToIU( cfg->m_Repeat.pin_step ); break;
+        case PIN_ORIENTATION::PIN_UP:    step.x = schIUScale.MilsToIU( cfg->m_Repeat.pin_step ); break;
+        case PIN_ORIENTATION::PIN_DOWN:  step.x = schIUScale.MilsToIU( cfg->m_Repeat.pin_step) ; break;
+        case PIN_ORIENTATION::PIN_LEFT:  step.y = schIUScale.MilsToIU( cfg->m_Repeat.pin_step ); break;
+        }
+
+        pin->Move( step );
+
+        wxString nextName = pin->GetName();
+        IncrementString( nextName, cfg->m_Repeat.label_delta );
+        pin->SetName( nextName );
+
+        wxString nextNumber = pin->GetNumber();
+        IncrementString( nextNumber, cfg->m_Repeat.label_delta );
+        pin->SetNumber( nextNumber );
     }
-
-    pin->Move( step );
-
-    wxString nextName = pin->GetName();
-    IncrementString( nextName, cfg->m_Repeat.label_delta );
-    pin->SetName( nextName );
-
-    wxString nextNumber = pin->GetNumber();
-    IncrementString( nextNumber, cfg->m_Repeat.label_delta );
-    pin->SetNumber( nextNumber );
 
     if( m_frame->SynchronizePins() )
         pin->SetFlags( IS_LINKED );

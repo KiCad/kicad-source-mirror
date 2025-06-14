@@ -82,11 +82,9 @@ bool SYMBOL_EDITOR_DRAWING_TOOLS::Init()
 int SYMBOL_EDITOR_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
 {
     KICAD_T                 type = aEvent.Parameter<KICAD_T>();
-    SETTINGS_MANAGER&       mgr = Pgm().GetSettingsManager();
-    SYMBOL_EDITOR_SETTINGS* cfg = mgr.GetAppSettings<SYMBOL_EDITOR_SETTINGS>( "symbol_editor" );
-    SYMBOL_EDITOR_PIN_TOOL* pinTool = type == SCH_PIN_T
-                                                ? m_toolMgr->GetTool<SYMBOL_EDITOR_PIN_TOOL>()
-                                                : nullptr;
+    SYMBOL_EDITOR_SETTINGS* cfg = GetAppSettings<SYMBOL_EDITOR_SETTINGS>( "symbol_editor" );
+    SYMBOL_EDITOR_PIN_TOOL* pinTool = type == SCH_PIN_T ? m_toolMgr->GetTool<SYMBOL_EDITOR_PIN_TOOL>()
+                                                        : nullptr;
 
     if( m_inTwoClickPlace )
         return 0;
@@ -236,8 +234,12 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
                     if( m_drawSpecificBodyStyle )
                         text->SetBodyStyle( m_frame->GetBodyStyle() );
 
-                    text->SetTextSize( VECTOR2I( schIUScale.MilsToIU( cfg->m_Defaults.text_size ),
-                                                 schIUScale.MilsToIU( cfg->m_Defaults.text_size ) ) );
+                    if( cfg )
+                    {
+                        text->SetTextSize( VECTOR2I( schIUScale.MilsToIU( cfg->m_Defaults.text_size ),
+                                                     schIUScale.MilsToIU( cfg->m_Defaults.text_size ) ) );
+                    }
+
                     text->SetTextAngle( m_lastTextAngle );
 
                     DIALOG_TEXT_PROPERTIES dlg( m_frame, text );
@@ -367,8 +369,7 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::doDrawShape( const TOOL_EVENT& aEvent, std::opt
     SHAPE_T toolType  = aDrawingShape.value_or( SHAPE_T::SEGMENT );
 
     KIGFX::VIEW_CONTROLS*   controls = getViewControls();
-    SETTINGS_MANAGER&       mgr = Pgm().GetSettingsManager();
-    SYMBOL_EDITOR_SETTINGS* cfg = mgr.GetAppSettings<SYMBOL_EDITOR_SETTINGS>( "symbol_editor" );
+    SYMBOL_EDITOR_SETTINGS* cfg = GetAppSettings<SYMBOL_EDITOR_SETTINGS>( "symbol_editor" );
     EE_GRID_HELPER          grid( m_toolMgr );
     VECTOR2I                cursorPos;
     SHAPE_T                 shapeType = toolType == SHAPE_T::SEGMENT ? SHAPE_T::POLY : toolType;
@@ -469,15 +470,19 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::doDrawShape( const TOOL_EVENT& aEvent, std::opt
 
             m_toolMgr->RunAction( ACTIONS::selectionClear );
 
-            int lineWidth = schIUScale.MilsToIU( cfg->m_Defaults.line_width );
+            int lineWidth = schIUScale.MilsToIU( cfg ? cfg->m_Defaults.line_width : DEFAULT_LINE_WIDTH_MILS );
 
             if( isTextBox )
             {
                 SCH_TEXTBOX* textbox = new SCH_TEXTBOX( LAYER_DEVICE, lineWidth, m_lastFillStyle );
 
                 textbox->SetParent( symbol );
-                textbox->SetTextSize( VECTOR2I( schIUScale.MilsToIU( cfg->m_Defaults.text_size ),
-                                                schIUScale.MilsToIU( cfg->m_Defaults.text_size ) ) );
+
+                if( cfg )
+                {
+                    textbox->SetTextSize( VECTOR2I( schIUScale.MilsToIU( cfg->m_Defaults.text_size ),
+                                                    schIUScale.MilsToIU( cfg->m_Defaults.text_size ) ) );
+                }
 
                 // Must be after SetTextSize()
                 textbox->SetBold( m_lastTextBold );

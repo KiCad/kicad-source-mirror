@@ -986,12 +986,12 @@ bool PCBNEW_SETTINGS::MigrateFromLegacy( wxConfigBase* aCfg )
     }
 
     // Footprint editor settings were stored in pcbnew config file.  Migrate them here.
-    FOOTPRINT_EDITOR_SETTINGS* fpedit = mgr.GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>( "fpedit" );
+    FOOTPRINT_EDITOR_SETTINGS* fpedit = GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>( "fpedit" );
     fpedit->MigrateFromLegacy( aCfg );
     fpedit->Load();
 
     // Same with 3D viewer
-    EDA_3D_VIEWER_SETTINGS* viewer3d = mgr.GetAppSettings<EDA_3D_VIEWER_SETTINGS>( "3d_viewer" );
+    EDA_3D_VIEWER_SETTINGS* viewer3d = GetAppSettings<EDA_3D_VIEWER_SETTINGS>( "3d_viewer" );
     viewer3d->MigrateFromLegacy( aCfg );
     viewer3d->Load();
 

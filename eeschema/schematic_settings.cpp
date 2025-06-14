@@ -67,8 +67,7 @@ SCHEMATIC_SETTINGS::SCHEMATIC_SETTINGS( JSON_SETTINGS* aParent, const std::strin
         m_MaxError( ARC_LOW_DEF_MM * schIUScale.IU_PER_MM ),
         m_NgspiceSettings( nullptr )
 {
-    SETTINGS_MANAGER&  mgr = Pgm().GetSettingsManager();
-    EESCHEMA_SETTINGS* cfg = mgr.GetAppSettings<EESCHEMA_SETTINGS>( "eeschema" );
+    EESCHEMA_SETTINGS* cfg = GetAppSettings<EESCHEMA_SETTINGS>( "eeschema" );
 
     int defaultLineThickness = cfg ? cfg->m_Drawing.default_line_thickness : DEFAULT_LINE_WIDTH_MILS;
     int defaultTextSize = cfg ? cfg->m_Drawing.default_text_size : DEFAULT_TEXT_SIZE;
@@ -186,12 +185,11 @@ SCHEMATIC_SETTINGS::SCHEMATIC_SETTINGS( JSON_SETTINGS* aParent, const std::strin
                 }
 
                 // Read global fieldname templates
-                SETTINGS_MANAGER&  curr_mgr = Pgm().GetSettingsManager();
-                EESCHEMA_SETTINGS* curr_cfg =
-                        curr_mgr.GetAppSettings<EESCHEMA_SETTINGS>( "eeschema" );
-
-                if( curr_cfg && !curr_cfg->m_Drawing.field_names.IsEmpty() )
-                    m_TemplateFieldNames.AddTemplateFieldNames( curr_cfg->m_Drawing.field_names );
+                if( EESCHEMA_SETTINGS* curr_cfg = GetAppSettings<EESCHEMA_SETTINGS>( "eeschema" ) )
+                {
+                    if( !curr_cfg->m_Drawing.field_names.IsEmpty() )
+                        m_TemplateFieldNames.AddTemplateFieldNames( curr_cfg->m_Drawing.field_names );
+                }
             }, {} ) );
 
     m_params.emplace_back( new PARAM<wxString>( "bom_export_filename",

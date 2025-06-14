@@ -67,10 +67,9 @@ PANEL_EESCHEMA_COLOR_SETTINGS::PANEL_EESCHEMA_COLOR_SETTINGS( wxWindow* aParent 
 {
     m_colorNamespace = "schematic";
 
-    SETTINGS_MANAGER&  mgr = Pgm().GetSettingsManager();
     COMMON_SETTINGS*   common_settings = Pgm().GetCommonSettings();
-    EESCHEMA_SETTINGS* app_settings = mgr.GetAppSettings<EESCHEMA_SETTINGS>( "eeschema" );
-    COLOR_SETTINGS*    current = mgr.GetColorSettings( app_settings->m_ColorTheme );
+    EESCHEMA_SETTINGS* app_settings = GetAppSettings<EESCHEMA_SETTINGS>( "eeschema" );
+    COLOR_SETTINGS*    current = ::GetColorSettings( app_settings ? app_settings->m_ColorTheme : DEFAULT_THEME );
 
     // Saved theme doesn't exist?  Reset to default
     if( current->GetFilename() != app_settings->m_ColorTheme )
@@ -122,10 +121,8 @@ bool PANEL_EESCHEMA_COLOR_SETTINGS::TransferDataFromWindow()
     if( !saveCurrentTheme( true ) )
         return false;
 
-    SETTINGS_MANAGER&  mgr = Pgm().GetSettingsManager();
-    EESCHEMA_SETTINGS* cfg = mgr.GetAppSettings<EESCHEMA_SETTINGS>( "eeschema" );
-
-    cfg->m_ColorTheme = m_currentSettings->GetFilename();
+    if( EESCHEMA_SETTINGS* cfg = GetAppSettings<EESCHEMA_SETTINGS>( "eeschema" ) )
+        cfg->m_ColorTheme = m_currentSettings->GetFilename();
 
     return true;
 }

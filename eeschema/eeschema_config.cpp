@@ -52,7 +52,7 @@
 /// Helper for all the old plotting/printing code while it still exists
 COLOR4D GetLayerColor( SCH_LAYER_ID aLayer )
 {
-    return Pgm().GetSettingsManager().GetColorSettings()->GetColor( aLayer );
+    return ::GetColorSettings( DEFAULT_THEME )->GetColor( aLayer );
 }
 
 

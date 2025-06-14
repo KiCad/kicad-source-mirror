@@ -545,33 +545,34 @@ void PCB_EDIT_FRAME::addActionPluginTools( ACTION_TOOLBAR* aToolbar )
 
 std::vector<LEGACY_OR_API_PLUGIN> PCB_EDIT_FRAME::GetOrderedActionPlugins()
 {
-    SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
-    PCBNEW_SETTINGS*  cfg = mgr.GetAppSettings<PCBNEW_SETTINGS>( "pcbnew" );
-
-    std::vector<ACTION_PLUGIN*> plugins;
+    PCBNEW_SETTINGS*                  cfg = GetAppSettings<PCBNEW_SETTINGS>( "pcbnew" );
+    std::vector<ACTION_PLUGIN*>       plugins;
     std::vector<LEGACY_OR_API_PLUGIN> orderedPlugins;
 
     for( int i = 0; i < ACTION_PLUGINS::GetActionsCount(); i++ )
         plugins.push_back( ACTION_PLUGINS::GetAction( i ) );
 
     // First add plugins that have entries in settings
-    for( const auto& pair : cfg->m_VisibleActionPlugins )
+    if( cfg )
     {
-        auto loc = std::find_if( plugins.begin(), plugins.end(),
-                [pair] ( ACTION_PLUGIN* plugin )
-                {
-                    return plugin->GetPluginPath() == pair.first;
-                } );
-
-        if( loc != plugins.end() )
+        for( const auto& [path, show] : cfg->m_VisibleActionPlugins )
         {
-            orderedPlugins.push_back( *loc );
-            plugins.erase( loc );
+            auto loc = std::find_if( plugins.begin(), plugins.end(),
+                    [&path] ( ACTION_PLUGIN* plugin )
+                    {
+                        return plugin->GetPluginPath() == path;
+                    } );
+
+            if( loc != plugins.end() )
+            {
+                orderedPlugins.push_back( *loc );
+                plugins.erase( loc );
+            }
         }
     }
 
     // Now append new plugins that have not been configured yet
-    for( auto remaining_plugin : plugins )
+    for( ACTION_PLUGIN* remaining_plugin : plugins )
         orderedPlugins.push_back( remaining_plugin );
 
     // Finally append API plugins
@@ -582,22 +583,21 @@ std::vector<LEGACY_OR_API_PLUGIN> PCB_EDIT_FRAME::GetOrderedActionPlugins()
 }
 
 
-bool PCB_EDIT_FRAME::GetActionPluginButtonVisible( const wxString& aPluginPath,
-                                                   bool aPluginDefault )
+bool PCB_EDIT_FRAME::GetActionPluginButtonVisible( const wxString& aPluginPath, bool aPluginDefault )
 {
-    SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
-    PCBNEW_SETTINGS*  cfg = mgr.GetAppSettings<PCBNEW_SETTINGS>( "pcbnew" );
-
-    for( const auto& [path, visible] : cfg->m_VisibleActionPlugins )
+    if( PCBNEW_SETTINGS* cfg = GetAppSettings<PCBNEW_SETTINGS>( "pcbnew" ) )
     {
-        if( path == aPluginPath )
-            return visible;
-    }
+        for( const auto& [path, visible] : cfg->m_VisibleActionPlugins )
+        {
+            if( path == aPluginPath )
+                return visible;
+        }
 
-    for( const auto& [identifier, visible] : cfg->m_Plugins.actions )
-    {
-        if( identifier == aPluginPath )
-            return visible;
+        for( const auto& [identifier, visible] : cfg->m_Plugins.actions )
+        {
+            if( identifier == aPluginPath )
+                return visible;
+        }
     }
 
     // Plugin is not in settings, return default.

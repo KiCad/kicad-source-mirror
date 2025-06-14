@@ -52,11 +52,11 @@ PANEL_TEMPLATE_FIELDNAMES::PANEL_TEMPLATE_FIELDNAMES( wxWindow* aWindow,
         m_global = true;
         m_templateMgr = &m_templateMgrInstance;
 
-        SETTINGS_MANAGER&  mgr = Pgm().GetSettingsManager();
-        EESCHEMA_SETTINGS* cfg = mgr.GetAppSettings<EESCHEMA_SETTINGS>( "eeschema" );
-
-        if( cfg && !cfg->m_Drawing.field_names.IsEmpty() )
-            m_templateMgr->AddTemplateFieldNames( cfg->m_Drawing.field_names );
+        if( EESCHEMA_SETTINGS* cfg = GetAppSettings<EESCHEMA_SETTINGS>( "eeschema" ) )
+        {
+            if( !cfg->m_Drawing.field_names.IsEmpty() )
+                m_templateMgr->AddTemplateFieldNames( cfg->m_Drawing.field_names );
+        }
     }
 
     m_addFieldButton->SetBitmap( KiBitmapBundle( BITMAPS::small_plus ) );
@@ -292,10 +292,7 @@ bool PANEL_TEMPLATE_FIELDNAMES::TransferDataFromWindow()
 
     if( m_global )
     {
-        SETTINGS_MANAGER&  mgr = Pgm().GetSettingsManager();
-        EESCHEMA_SETTINGS* cfg = mgr.GetAppSettings<EESCHEMA_SETTINGS>( "eeschema" );
-
-        if( cfg )
+        if( EESCHEMA_SETTINGS* cfg = GetAppSettings<EESCHEMA_SETTINGS>( "eeschema" ) )
         {
             // Save global fieldname templates
             STRING_FORMATTER sf;

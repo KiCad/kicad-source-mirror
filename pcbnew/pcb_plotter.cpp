@@ -464,17 +464,16 @@ void PCB_PLOTTER::PlotJobToPlotOpts( PCB_PLOT_PARAMS& aOpts, JOB_EXPORT_PCB_PLOT
     case JOB_EXPORT_PCB_PLOT::PLOT_FORMAT::PDF:    aOpts.SetFormat( PLOT_FORMAT::PDF );    break;
     }
 
-    SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
-    wxString          theme = aJob->m_colorTheme;
+    wxString theme = aJob->m_colorTheme;
 
     // Theme may be empty when running from a job in GUI context, so use the GUI settings.
     if( theme.IsEmpty() )
     {
-        PCBNEW_SETTINGS* pcbSettings = mgr.GetAppSettings<PCBNEW_SETTINGS>( "pcbnew" );
-        theme = pcbSettings->m_ColorTheme;
+        if( PCBNEW_SETTINGS* pcbSettings = GetAppSettings<PCBNEW_SETTINGS>( "pcbnew" ) )
+            theme = pcbSettings->m_ColorTheme;
     }
 
-    COLOR_SETTINGS* colors = mgr.GetColorSettings( aJob->m_colorTheme );
+    COLOR_SETTINGS* colors = ::GetColorSettings( aJob->m_colorTheme );
 
     if( colors->GetFilename() != theme && !aOpts.GetBlackAndWhite() )
     {

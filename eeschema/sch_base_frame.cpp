@@ -152,12 +152,12 @@ APP_SETTINGS_BASE* SCH_BASE_FRAME::GetViewerSettingsBase() const
     {
     case FRAME_SCH:
     default:
-        return Pgm().GetSettingsManager().GetAppSettings<EESCHEMA_SETTINGS>( "eeschema" );
+        return GetAppSettings<EESCHEMA_SETTINGS>( "eeschema" );
 
     case FRAME_SCH_SYMBOL_EDITOR:
     case FRAME_SCH_VIEWER:
     case FRAME_SYMBOL_CHOOSER:
-        return Pgm().GetSettingsManager().GetAppSettings<SYMBOL_EDITOR_SETTINGS>( "symbol_editor" );
+        return GetAppSettings<SYMBOL_EDITOR_SETTINGS>( "symbol_editor" );
     }
 }
 
@@ -561,22 +561,19 @@ COLOR_SETTINGS* SCH_BASE_FRAME::GetColorSettings( bool aForceRefresh ) const
 {
     if( !m_colorSettings || aForceRefresh )
     {
-        SETTINGS_MANAGER&  mgr = Pgm().GetSettingsManager();
-        EESCHEMA_SETTINGS* cfg = mgr.GetAppSettings<EESCHEMA_SETTINGS>( "eeschema" );
-        wxString           colorTheme = cfg->m_ColorTheme;
+        EESCHEMA_SETTINGS* cfg = GetAppSettings<EESCHEMA_SETTINGS>( "eeschema" );
+        wxString           colorTheme = cfg ? cfg->m_ColorTheme : wxString( "" );
 
         if( IsType( FRAME_SCH_SYMBOL_EDITOR ) )
         {
-            SYMBOL_EDITOR_SETTINGS* symCfg =
-                    mgr.GetAppSettings<SYMBOL_EDITOR_SETTINGS>( "symbol_editor" );
-
-            if( !symCfg->m_UseEeschemaColorSettings )
-                colorTheme = symCfg->m_ColorTheme;
+            if( SYMBOL_EDITOR_SETTINGS* sym_edit_cfg = GetAppSettings<SYMBOL_EDITOR_SETTINGS>( "symbol_editor" ) )
+            {
+                if( !sym_edit_cfg->m_UseEeschemaColorSettings )
+                    colorTheme = sym_edit_cfg->m_ColorTheme;
+            }
         }
 
-        COLOR_SETTINGS* colorSettings = mgr.GetColorSettings( colorTheme );
-
-        const_cast<SCH_BASE_FRAME*>( this )->m_colorSettings = colorSettings;
+        const_cast<SCH_BASE_FRAME*>( this )->m_colorSettings = ::GetColorSettings( colorTheme );
     }
 
     return m_colorSettings;
