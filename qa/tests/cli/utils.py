@@ -120,9 +120,11 @@ def images_are_equal( image1_path: str, image2_path: str ) -> bool:
     image2 = Image.open( image2_path )
 
     if image1.size != image2.size:
+        logger.error("Images sizes are different.")
         return False
 
     if image1.mode != image2.mode:
+        logger.error("Images modes are different.")
         return False
 
     diff = ImageChops.difference( image1, image2 )

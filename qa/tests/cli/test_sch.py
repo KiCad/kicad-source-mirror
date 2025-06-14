@@ -29,8 +29,8 @@ from typing import List
 
 
 @pytest.mark.parametrize("test_file,output_dir,compare_fn,cli_args",
-                            [("cli/basic_test/basic_test.kicad_sch", "basic_test", "cli/basic_test/basic_test.png", []),
-                             ("cli/basic_test/basic_test.kicad_sch", "basic_test_nobg_bnw_nods", "cli/basic_test/basic_test_nobg_bnw_nods.png", ["--no-background-color", "--exclude-drawing-sheet", "--black-and-white"])
+                            [("cli/basic_test/basic_test.kicad_sch", "basic_test", "cli/basic_test/basic_test.svg", []),
+                             ("cli/basic_test/basic_test.kicad_sch", "basic_test_nobg_bnw_nods", "cli/basic_test/basic_test_nobg_bnw_nods.svg", ["--no-background-color", "--exclude-drawing-sheet", "--black-and-white"])
                              ])
 def test_sch_export_svg( kitest,
                          test_file: str,
@@ -64,11 +64,14 @@ def test_sch_export_svg( kitest,
 
     png_converted_from_svg_path = output_svg_path.with_suffix( '.png' )
 
-    compare_file_path = kitest.get_data_file_path( compare_fn )
-
     cairosvg.svg2png( url=str( output_svg_path ), write_to=str( png_converted_from_svg_path ), dpi=1200 )
 
-    assert utils.images_are_equal( png_converted_from_svg_path, compare_file_path  )
+    compare_file_path = kitest.get_data_file_path( compare_fn )
+    compare_stem = f"orig_{output_dir}"
+    compare_png_converted_from_svg_path = output_svg_path.with_suffix( '.png' ).with_stem(compare_stem)
+    cairosvg.svg2png( url=str( compare_file_path ), write_to=str( compare_png_converted_from_svg_path ), dpi=1200 )
+
+    assert utils.images_are_equal( png_converted_from_svg_path, compare_png_converted_from_svg_path  )
 
 
 @pytest.mark.parametrize("test_file,output_fn,line_skip_count,skip_compare,cli_args",
