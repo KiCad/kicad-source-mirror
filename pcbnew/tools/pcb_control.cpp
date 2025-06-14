@@ -1962,8 +1962,11 @@ int PCB_CONTROL::UpdateMessagePanel( const TOOL_EVENT& aEvent )
         BOARD_ITEM* a = dynamic_cast<BOARD_ITEM*>( selection[0] );
         BOARD_ITEM* b = dynamic_cast<BOARD_ITEM*>( selection[1] );
 
-        msgItems.emplace_back( MSG_PANEL_ITEM( a->GetItemDescription( m_frame, false ),
-                                               b->GetItemDescription( m_frame, false ) ) );
+        if( a && b )
+        {
+            msgItems.emplace_back( MSG_PANEL_ITEM( a->GetItemDescription( m_frame, false ),
+                                                   b->GetItemDescription( m_frame, false ) ) );
+        }
 
         BOARD_CONNECTED_ITEM* a_conn = dynamic_cast<BOARD_CONNECTED_ITEM*>( a );
         BOARD_CONNECTED_ITEM* b_conn = dynamic_cast<BOARD_CONNECTED_ITEM*>( b );

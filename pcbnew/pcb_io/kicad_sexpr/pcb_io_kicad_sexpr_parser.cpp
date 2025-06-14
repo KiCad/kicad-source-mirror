@@ -4792,7 +4792,9 @@ FOOTPRINT* PCB_IO_KICAD_SEXPR_PARSER::parseFOOTPRINT_unchecked( wxArrayString* a
                     break;
 
                 case DSN_STRING:
-                    currentGroup->insert( FromUTF8() );
+                    if( currentGroup )
+                        currentGroup->insert( FromUTF8() );
+
                     break;
 
                 case T_RIGHT:
