@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-06-08 17:02+0300\n"
-"PO-Revision-Date: 2025-06-14 00:02+0000\n"
+"PO-Revision-Date: 2025-06-15 00:22+0000\n"
 "Last-Translator: Sárkány Lőrinc <lsarkany@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/kicad/"
 "master-source/hu/>\n"
@@ -17236,41 +17236,34 @@ msgid "Highlight nets when they are highlighted in the PCB editor"
 msgstr ""
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:90
-#, fuzzy
 msgid "Default font:"
-msgstr "Alapértelmezet tbetű"
+msgstr "Alapértelmezett betűtípus:"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:103
 #: eeschema/dialogs/panel_sym_display_options_base.cpp:35
-#, fuzzy
 msgid "S&how hidden pins"
 msgstr "Rejtett alkatrész lábak megjelenítése"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:106
 #: eeschema/dialogs/panel_sym_display_options_base.cpp:38
-#, fuzzy
 msgid "Show hidden fields"
 msgstr "Rejtett mezők megjelenítése"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:109
-#, fuzzy
 msgid "Show ERC errors"
-msgstr "ERC hiba mutatása"
+msgstr "ERC hibák mutatása"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:112
-#, fuzzy
 msgid "Show ERC warnings"
-msgstr "ERC figyelmeztetés mutatása"
+msgstr "ERC figyelmeztetések mutatása"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:115
-#, fuzzy
 msgid "Show ERC exclusions"
-msgstr "ERC-kizárások mutatása"
+msgstr "ERC kizárások mutatása"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:118
-#, fuzzy
 msgid "Mark items which are excluded from simulation"
-msgstr "Gyártáshoz szükséges attribútumok"
+msgstr "Szimulációból kizárt alkatrészek megjelölése"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:122
 #, fuzzy
@@ -17294,9 +17287,8 @@ msgstr "Papír széleinek megjelenítése"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:141
 #: pcbnew/dialogs/panel_display_options_base.cpp:164
-#, fuzzy
 msgid "Selection && Highlighting"
-msgstr "Kiemelés megszüntetése"
+msgstr "Kijelölés és kiemelés"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:151
 #, fuzzy
@@ -17304,9 +17296,8 @@ msgid "Draw selected child items"
 msgstr "Elem törlése rákattintással"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:154
-#, fuzzy
 msgid "Fill selected shapes"
-msgstr "Kijelölt elem(ek) átfordítása"
+msgstr "Kijelölt alakzatok kitöltése"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:163
 #, fuzzy
@@ -17338,36 +17329,30 @@ msgid "Color highlight opacity:"
 msgstr "DRC szabálysértés: akadályok kiemelése"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:33
-#, fuzzy
 msgid "Line drawing mode:"
-msgstr "Vonal Rajzolási Mód:"
+msgstr "Vonal rajzolási mód:"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:37
-#, fuzzy
 msgid "Free Angle"
-msgstr "Bármilyen"
+msgstr "Bármilyen irányba"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:37
-#, fuzzy
 msgid "90 deg Angle"
-msgstr "90 fokos"
+msgstr "90 fokos szögben"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:37
-#, fuzzy
 msgid "45 deg Angle"
-msgstr "45 fokos"
+msgstr "45 fokos szögben"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:46
 #: pcbnew/dialogs/panel_edit_options_base.cpp:56
-#, fuzzy
 msgid "Arc editing mode:"
-msgstr "Pozíció eltolás:"
+msgstr "Körív szerkesztési mód:"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:50
 #: pcbnew/dialogs/panel_edit_options_base.cpp:63
-#, fuzzy
 msgid "Keep center, adjust radius"
-msgstr "Kör középpont (%s, %s), sugár %s"
+msgstr "Középpont megtartása, sugár állítása"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:50
 #: pcbnew/dialogs/panel_edit_options_base.cpp:63
@@ -17376,9 +17361,8 @@ msgstr ""
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:50
 #: pcbnew/dialogs/panel_edit_options_base.cpp:63
-#, fuzzy
 msgid "Keep center and radius, adjust endpoints"
-msgstr "Kör középpont (%s, %s), sugár %s"
+msgstr "Középpont és sugár megtartása, végpontok állítása"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:56
 msgid "Mouse drag performs Drag (G) operation"
@@ -17401,9 +17385,8 @@ msgstr ""
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:66
 #: pcbnew/dialogs/panel_edit_options_base.cpp:414
-#, fuzzy
 msgid "<ESC> clears net highlighting"
-msgstr "Kiemelés megszüntetése"
+msgstr "<ESC> megszünteti a kiemelést"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:67
 msgid ""
@@ -17417,14 +17400,12 @@ msgid "Defaults for New Objects"
 msgstr "Alapértelmezett formátum"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:89
-#, fuzzy
 msgid "Sheet border:"
 msgstr "Lap keret:"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:98
-#, fuzzy
 msgid "Sheet background:"
-msgstr "Lap háttér"
+msgstr "Lap háttér:"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:107
 #, fuzzy
@@ -17479,7 +17460,6 @@ msgstr "Kijelölésre nagyítás"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:179
 #: pcbnew/dialogs/panel_edit_options_base.cpp:165
-#, fuzzy
 msgid "Ctrl+Shift"
 msgstr "Ctrl+Shift"
 
@@ -17500,7 +17480,6 @@ msgstr ""
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:237
 #: pcbnew/dialogs/panel_edit_options_base.cpp:233
-#, fuzzy
 msgid "Shift+Cmd"
 msgstr "Shift+Cmd"
 
@@ -17582,14 +17561,13 @@ msgid "Alias"
 msgstr "Megnevezés"
 
 #: eeschema/dialogs/panel_setup_buses_base.cpp:76
-#, fuzzy
 msgid "(source)"
 msgstr "(forrás)"
 
 #: eeschema/dialogs/panel_setup_buses_base.cpp:94
-#, fuzzy, c-format
+#, c-format
 msgid "Members of '%s':"
-msgstr "szükség van egy számra a(z) \"%s\" számára"
+msgstr "\"%s\" tagjai:"
 
 #: eeschema/dialogs/panel_setup_buses_base.cpp:114
 #, fuzzy
@@ -17609,38 +17587,31 @@ msgid "Symbol unit notation:"
 msgstr "Rajzjel részegység jelölés:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:34
-#, fuzzy
 msgid ".A"
 msgstr ".A (ponttal kezdődő nagybetű)"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:34
-#, fuzzy
 msgid "-A"
 msgstr "-A (kötőjellel kezdődő nagybetű)"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:34
-#, fuzzy
 msgid "_A"
 msgstr "_A (aláhúzással kezdődő nagybetű)"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:34
-#, fuzzy
 msgid ".1"
 msgstr ".1 (ponttal kezdődő szám)"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:34
-#, fuzzy
 msgid "-1"
 msgstr "-1 (kötőjellel kezdődő szám)"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:34
-#, fuzzy
 msgid "_1"
 msgstr "_1 (aláhúzással kezdődő szám)"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:55
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:48
-#, fuzzy
 msgid "Default text size:"
 msgstr "Alapértelmezett szövegméret:"
 
@@ -17673,36 +17644,30 @@ msgstr ""
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:122
 #: eeschema/import_gfx/dialog_import_gfx_sch_base.cpp:158
-#, fuzzy
 msgid "Default line width:"
 msgstr "Alapértelmezett vonalszélesség:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:133
-#, fuzzy
 msgid "Pin symbol size:"
 msgstr "Láb szimbólum méret:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:151
 #: eeschema/erc/erc_item.cpp:39
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:967
-#, fuzzy
 msgid "Connections"
 msgstr "Csatlakozások"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:158
-#, fuzzy
 msgid "Junction dot size:"
 msgstr "Csomópont mérete:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:162
-#, fuzzy
 msgid "Smallest"
 msgstr "Legkisebb"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:162
-#, fuzzy
 msgid "Largest"
-msgstr "Nagyobb"
+msgstr "Legnagyobb"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:168
 #, fuzzy
@@ -17725,18 +17690,15 @@ msgid "Show own page reference"
 msgstr "Fő oldal hivatkozás megjelenítése"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:206
-#, fuzzy
 msgid "Standard (1,2,3)"
-msgstr "Alapértelmezett (1,2,3)"
+msgstr "Standard (1,2,3)"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:210
-#, fuzzy
 msgid "Abbreviated (1..3)"
-msgstr "Rövidítve (1..3)"
+msgstr "Rövidített (1..3)"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:219
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:130
-#, fuzzy
 msgid "Prefix:"
 msgstr "Előtag:"
 
@@ -17746,7 +17708,6 @@ msgstr "["
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:228
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:155
-#, fuzzy
 msgid "Suffix:"
 msgstr "Utótag:"
 
@@ -17756,21 +17717,18 @@ msgstr "]"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:247
 #: pcbnew/dialogs/panel_setup_formatting_base.cpp:20
-#, fuzzy
 msgid "Dashed Lines"
 msgstr "Szaggatott Vonal"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:254
 #: pcbnew/dialogs/panel_setup_formatting_base.cpp:32
-#, fuzzy
 msgid "Dash length:"
 msgstr "Vonal hossza:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:261
 #: pcbnew/dialogs/panel_setup_formatting_base.cpp:39
-#, fuzzy
 msgid "Gap length:"
-msgstr "Hézaghossz:"
+msgstr "Hézag hossza:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:271
 #: pcbnew/dialogs/panel_setup_formatting_base.cpp:49
@@ -17788,9 +17746,8 @@ msgid "Significant digits (voltages):"
 msgstr "Értékes jegyek (feszültségek):"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:296
-#, fuzzy
 msgid "Range (voltages):"
-msgstr "Összes változás mentése"
+msgstr "Tartomány (feszültségek):"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:300
 msgid "fV"
@@ -17839,9 +17796,8 @@ msgid "Significant digits (currents):"
 msgstr "Értékes jegyek (áramok):"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:315
-#, fuzzy
 msgid "Range (currents):"
-msgstr "Az összes könyvtár mentése"
+msgstr "Tartomány (áramok):"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:319
 msgid "fA"
@@ -17899,9 +17855,8 @@ msgstr "Hiba generálása"
 
 #: eeschema/dialogs/panel_simulator_preferences.cpp:41
 #: eeschema/dialogs/panel_simulator_preferences.cpp:62
-#, fuzzy
 msgid "No action"
-msgstr "Nem csatlakoztatott láb"
+msgstr "Nincs művelet"
 
 #: eeschema/dialogs/panel_simulator_preferences.cpp:42
 #: eeschema/dialogs/panel_simulator_preferences.cpp:63
@@ -18012,24 +17967,20 @@ msgid "D&efault pin length:"
 msgstr "Alapértelmezett lábhosszúság:"
 
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:70
-#, fuzzy
 msgid "De&fault pin number size:"
 msgstr "Alapértelmezett lábszámozás méret:"
 
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:81
-#, fuzzy
 msgid "Def&ault pin name size:"
 msgstr "Alapértelmezett lábnév méret:"
 
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:110
-#, fuzzy
 msgid "&Pitch of repeated pins:"
 msgstr "Ismétlődő lábak közötti térköz:"
 
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:140
-#, fuzzy
 msgid "General Editing"
-msgstr "Általános beállítások..."
+msgstr "Általános beállítások"
 
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:147
 msgid "Keep pins attached when dragging edges"
@@ -18129,14 +18080,12 @@ msgid "Reset Libraries"
 msgstr "Könyvtár visszaállítása"
 
 #: eeschema/dialogs/panel_template_fieldnames.cpp:45
-#, fuzzy
 msgid "Project Field Name Templates"
-msgstr "Projektmezőnév sablonok:"
+msgstr "Projekt mezőnév sablonok"
 
 #: eeschema/dialogs/panel_template_fieldnames.cpp:51
-#, fuzzy
 msgid "Global Field Name Templates"
-msgstr "Mezőnév sablonok"
+msgstr "Globális mezőnév sablonok"
 
 #: eeschema/dialogs/panel_template_fieldnames.cpp:271
 #, fuzzy, c-format
@@ -18260,9 +18209,9 @@ msgstr "A(z) \"%s\" alkatrészrajzolat nem található"
 
 #: eeschema/eeschema_jobs_handler.cpp:751
 #: eeschema/eeschema_jobs_handler.cpp:822
-#, fuzzy, c-format
+#, c-format
 msgid "Wrote bill of materials to '%s'."
-msgstr "Bevásárlólista létrehozása..."
+msgstr "Bevásárlólista elmentve ide: \"%s\"."
 
 #: eeschema/eeschema_jobs_handler.cpp:874
 #, fuzzy, c-format
@@ -18300,9 +18249,8 @@ msgid "Saving symbol library in updated format\n"
 msgstr "Érvénytelen rajzjel könyvtár azonosító"
 
 #: eeschema/eeschema_jobs_handler.cpp:1085
-#, fuzzy
 msgid "Symbol library was not updated\n"
-msgstr "A könyvtár nincs engedélyezve"
+msgstr "A rajzjel könyvtár nem lett frissítve\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:1159 pcbnew/pcbnew_jobs_handler.cpp:2153
 #, fuzzy, c-format
@@ -18416,14 +18364,15 @@ msgstr ""
 "részegységeihez"
 
 #: eeschema/erc/erc.cpp:614
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol %s has unplaced units %s"
-msgstr "A(z) \"%s\" rajzjel már létezik a(z) \"%s\" könyvtárban."
+msgstr "A(z) \"%s\" rajzjel \"%s\" egysége még nincs lehelyezve"
 
 #: eeschema/erc/erc.cpp:659
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol %s has input power pins in units %s that are not placed."
-msgstr "Rajzjel alkatrészrajzolat összerendelés fájl (.equ)"
+msgstr ""
+"A(z) \"%s\" rajzjel %s egységében le nem helyezett tápellátó lábak vannak."
 
 #: eeschema/erc/erc.cpp:666
 #, fuzzy, c-format
@@ -18625,9 +18574,8 @@ msgid "Miscellaneous"
 msgstr "Egyebek"
 
 #: eeschema/erc/erc_item.cpp:45
-#, fuzzy
 msgid "Duplicate sheet names within a given sheet"
-msgstr "Ismétlődő lapnevek vannak egy adott lapon belül"
+msgstr "Ismétlődő lapnevek egy adott lapon belül"
 
 #: eeschema/erc/erc_item.cpp:49
 #, fuzzy
@@ -18686,7 +18634,6 @@ msgid "Label not connected to anything"
 msgstr "A címke semmihez sem kapcsolódik"
 
 #: eeschema/erc/erc_item.cpp:109
-#, fuzzy
 msgid "Global label not connected anywhere else in the schematic"
 msgstr "A globális címke semmihez sem kapcsolódik"
 
@@ -19229,7 +19176,6 @@ msgid "Import Graphics"
 msgstr "Grafika Importálása"
 
 #: eeschema/import_gfx/dialog_import_gfx_sch.cpp:217
-#, fuzzy
 msgid "No file selected!"
 msgstr "Nincs fájl kiválasztva!"
 
