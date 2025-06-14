@@ -577,7 +577,10 @@ void PANEL_JOBSET::UpdateTitle()
         tabName = wxS( "*" ) + tabName;
 
     int pageIdx = m_parentBook->FindPage( this );
-    m_parentBook->SetPageText( pageIdx, tabName );
+    if( pageIdx >= 0 )
+    {
+        m_parentBook->SetPageText( pageIdx, tabName );
+    }
 }
 
 
