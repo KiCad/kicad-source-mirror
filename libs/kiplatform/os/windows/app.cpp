@@ -20,6 +20,7 @@
 
 #include <kiplatform/app.h>
 
+#include <wx/app.h>
 #include <wx/log.h>
 #include <wx/string.h>
 #include <wx/window.h>
@@ -98,6 +99,10 @@ bool KIPLATFORM::APP::Init()
 #endif
         wxLog::SetActiveTarget( new wxLogStderr );
     }
+
+#if wxCHECK_VERSION( 3, 3, 0 )
+    wxTheApp->MSWEnableDarkMode();
+#endif
 
     return true;
 }
