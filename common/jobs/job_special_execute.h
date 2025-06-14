@@ -24,7 +24,7 @@
 #include <wx/string.h>
 #include <jobs/job.h>
 
-#define OUTPUT_TMP_PATH_VAR_NAME wxT( "JOBSET_OUTPUT_TMP_PATH" )
+#define OUTPUT_WORK_PATH_VAR_NAME wxT( "JOBSET_OUTPUT_WORK_PATH" )
 
 class KICOMMON_API JOB_SPECIAL_EXECUTE : public JOB
 {

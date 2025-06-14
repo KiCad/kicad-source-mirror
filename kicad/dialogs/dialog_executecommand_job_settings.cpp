@@ -48,7 +48,7 @@ DIALOG_EXECUTECOMMAND_JOB_SETTINGS::DIALOG_EXECUTECOMMAND_JOB_SETTINGS( wxWindow
                         // getTokensFn
                         []( const wxString& xRef, wxArrayString* tokens )
                         {
-                            tokens->Add( OUTPUT_TMP_PATH_VAR_NAME );
+                            tokens->Add( OUTPUT_WORK_PATH_VAR_NAME );
                         } );
             } );
 
@@ -132,7 +132,7 @@ void DIALOG_EXECUTECOMMAND_JOB_SETTINGS::populateEnvironReadOnlyTable()
     }
 
     // Make sure these variables shows up even if not used yet.
-    unique.insert( OUTPUT_TMP_PATH_VAR_NAME );
+    unique.insert( OUTPUT_WORK_PATH_VAR_NAME );
     unique.insert( PROJECT_VAR_NAME );
 
     for( const wxString& evName : unique )
@@ -145,7 +145,7 @@ void DIALOG_EXECUTECOMMAND_JOB_SETTINGS::populateEnvironReadOnlyTable()
 
         wxString evValue;
 
-        if( evName.IsSameAs( OUTPUT_TMP_PATH_VAR_NAME ) )
+        if( evName.IsSameAs( OUTPUT_WORK_PATH_VAR_NAME ) )
         {
             evValue = _( "<value set at runtime>" );
             m_path_subs_grid->SetCellFont( row, 1, m_path_subs_grid->GetCellFont( row, 1 ).Italic() );
