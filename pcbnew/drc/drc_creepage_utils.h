@@ -456,8 +456,10 @@ public:
         VIRTUAL
     };
 
-    GRAPH_NODE( GRAPH_NODE::TYPE aType, CREEP_SHAPE* aParent, VECTOR2I aPos = VECTOR2I() )
-    : m_parent( aParent ), m_pos( aPos ), m_type( aType )
+    GRAPH_NODE( GRAPH_NODE::TYPE aType, CREEP_SHAPE* aParent, VECTOR2I aPos = VECTOR2I() ) :
+            m_parent( aParent ),
+            m_pos( aPos ),
+            m_type( aType )
     {
         m_node_conns = {};
         m_virtual = false;
@@ -488,7 +490,9 @@ class GRAPH_CONNECTION
 {
 public:
     GRAPH_CONNECTION( std::shared_ptr<GRAPH_NODE>& aN1, std::shared_ptr<GRAPH_NODE>& aN2,
-                      const PATH_CONNECTION& aPc ) : n1( aN1 ), n2( aN2 )
+                      const PATH_CONNECTION& aPc ) :
+            n1( aN1 ),
+            n2( aN2 )
     {
         m_path = aPc;
         m_forceStraightLine = false;
@@ -510,7 +514,8 @@ public:
 class BE_SHAPE_POINT : public BE_SHAPE
 {
 public:
-    BE_SHAPE_POINT( VECTOR2I aPos ) : BE_SHAPE()
+    BE_SHAPE_POINT( VECTOR2I aPos ) :
+            BE_SHAPE()
     {
         m_pos = aPos;
         m_type = CREEP_SHAPE::TYPE::POINT;
@@ -555,7 +560,8 @@ public:
 class BE_SHAPE_CIRCLE : public BE_SHAPE
 {
 public:
-    BE_SHAPE_CIRCLE( VECTOR2I aPos = VECTOR2I( 0, 0 ), int aRadius = 0 ) : BE_SHAPE()
+    BE_SHAPE_CIRCLE( VECTOR2I aPos = VECTOR2I( 0, 0 ), int aRadius = 0 ) :
+            BE_SHAPE()
     {
         m_pos = aPos;
         m_radius = aRadius;
@@ -686,7 +692,8 @@ protected:
 class CREEPAGE_GRAPH
 {
 public:
-    CREEPAGE_GRAPH( BOARD& aBoard ) : m_board( aBoard )
+    CREEPAGE_GRAPH( BOARD& aBoard ) :
+            m_board( aBoard )
     {
         m_boardOutline = nullptr;
         m_minGrooveWidth = 0;
@@ -728,22 +735,22 @@ public:
     void RemoveDuplicatedShapes();
 
     // Add a node to the graph. If an equivalent node exists, returns the pointer of the existing node instead
-    std::shared_ptr<GRAPH_NODE>       AddNode( GRAPH_NODE::TYPE aType, CREEP_SHAPE* aParent = nullptr,
-                                              VECTOR2I aPos = VECTOR2I() );
+    std::shared_ptr<GRAPH_NODE> AddNode( GRAPH_NODE::TYPE aType, CREEP_SHAPE* aParent = nullptr,
+                                         const VECTOR2I& aPos = VECTOR2I() );
 
-    std::shared_ptr<GRAPH_NODE>       AddNodeVirtual();
-
-    std::shared_ptr<GRAPH_CONNECTION> AddConnection( std::shared_ptr<GRAPH_NODE>& aN1,
-                                                    std::shared_ptr<GRAPH_NODE>& aN2,
-                                                    const PATH_CONNECTION&      aPc );
+    std::shared_ptr<GRAPH_NODE> AddNodeVirtual();
 
     std::shared_ptr<GRAPH_CONNECTION> AddConnection( std::shared_ptr<GRAPH_NODE>& aN1,
-                                                    std::shared_ptr<GRAPH_NODE>& aN2 );
+                                                     std::shared_ptr<GRAPH_NODE>& aN2,
+                                                     const PATH_CONNECTION&      aPc );
 
-    std::shared_ptr<GRAPH_NODE>       FindNode( GRAPH_NODE::TYPE aType, CREEP_SHAPE* aParent,
-                                               VECTOR2I aPos );
+    std::shared_ptr<GRAPH_CONNECTION> AddConnection( std::shared_ptr<GRAPH_NODE>& aN1,
+                                                     std::shared_ptr<GRAPH_NODE>& aN2 );
 
-    void RemoveConnection( std::shared_ptr<GRAPH_CONNECTION>, bool aDelete = false );
+    std::shared_ptr<GRAPH_NODE> FindNode( GRAPH_NODE::TYPE aType, CREEP_SHAPE* aParent,
+                                          const VECTOR2I& aPos );
+
+    void RemoveConnection( const std::shared_ptr<GRAPH_CONNECTION>&, bool aDelete = false );
 
     void Trim( double aWeightLimit );
 
@@ -755,8 +762,7 @@ public:
 
     void GeneratePaths( double aMaxWeight, PCB_LAYER_ID aLayer, bool aClearance );
 
-    std::shared_ptr<GRAPH_NODE> AddNetElements( int aNetCode, PCB_LAYER_ID aLayer,
-                                               int aMaxCreepage );
+    std::shared_ptr<GRAPH_NODE> AddNetElements( int aNetCode, PCB_LAYER_ID aLayer, int aMaxCreepage );
 
     void   SetTarget( double aTarget );
     double GetTarget() { return m_creepageTarget; };

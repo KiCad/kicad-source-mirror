@@ -1174,7 +1174,7 @@ bool GERBER_FILE_IMAGE::ReadApertureMacro( char *aBuff, unsigned int aBuffSize, 
         am.AddPrimitiveToList( prim );
     }
 
-    m_aperture_macros.insert( am );
+    m_aperture_macros.insert( std::move( am ) );
 
     return true;
 }
