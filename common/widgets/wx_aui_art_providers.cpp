@@ -195,7 +195,7 @@ WX_AUI_DOCK_ART::WX_AUI_DOCK_ART() : wxAuiDefaultDockArt()
     m_captionFont = *wxNORMAL_FONT;
 
     // Increase the box the caption rests in size a bit
-    m_captionSize = ( wxNORMAL_FONT->GetPixelSize().y * 7 ) / 4;
+    m_captionSize = ( wxNORMAL_FONT->GetPointSize() * 7 ) / 4 + 6;
 #endif
 
     SetColour( wxAUI_DOCKART_ACTIVE_CAPTION_TEXT_COLOUR,
