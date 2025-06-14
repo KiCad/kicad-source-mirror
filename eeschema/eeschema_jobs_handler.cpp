@@ -283,7 +283,7 @@ int EESCHEMA_JOBS_HANDLER::JobExportPlot( JOB* aJob )
     if( font.IsEmpty() )
     {
         EESCHEMA_SETTINGS* cfg = GetAppSettings<EESCHEMA_SETTINGS>( "eeschema" );
-        font = cfg ? cfg->m_Appearance.default_font : KICAD_FONT_NAME;
+        font = cfg ? cfg->m_Appearance.default_font : wxString( KICAD_FONT_NAME );
     }
 
     renderSettings->SetDefaultFont( font );
