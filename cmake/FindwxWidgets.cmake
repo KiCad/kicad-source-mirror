@@ -174,12 +174,12 @@
 # Helper macro to control the debugging output globally. There are
 # two versions for controlling how verbose your output should be.
 macro(DBG_MSG _MSG)
-#  message(STATUS
-#    "${CMAKE_CURRENT_LIST_FILE}(${CMAKE_CURRENT_LIST_LINE}): ${_MSG}")
+  message(STATUS
+    "${CMAKE_CURRENT_LIST_FILE}(${CMAKE_CURRENT_LIST_LINE}): ${_MSG}")
 endmacro()
 macro(DBG_MSG_V _MSG)
-#  message(STATUS
-#    "${CMAKE_CURRENT_LIST_FILE}(${CMAKE_CURRENT_LIST_LINE}): ${_MSG}")
+  message(STATUS
+    "${CMAKE_CURRENT_LIST_FILE}(${CMAKE_CURRENT_LIST_LINE}): ${_MSG}")
 endmacro()
 
 # Clear return values in case the module is loaded more than once.
@@ -520,6 +520,15 @@ if(wxWidgets_FIND_STYLE STREQUAL "win32")
       set(WX_LIB_DIR_PREFIX vc)
     endif()
 
+    set( EXTRA_LIB_PATH "" )
+    if(VCPKG_TOOLCHAIN)
+        if( CMAKE_BUILD_TYPE STREQUAL "Debug" )
+            set( EXTRA_LIB_PATH "${WX_ROOT_DIR}/debug/lib" )
+        else()
+            set( EXTRA_LIB_PATH "${WX_ROOT_DIR}/lib" )
+        endif()
+    endif()
+
     if(BUILD_SHARED_LIBS)
       find_path(wxWidgets_LIB_DIR
       NAMES
@@ -536,6 +545,7 @@ if(wxWidgets_FIND_STYLE STREQUAL "win32")
       PATHS
       ${WX_ROOT_DIR}/lib/${WX_LIB_DIR_PREFIX}_dll   # prefer shared
       ${WX_ROOT_DIR}/lib/${WX_LIB_DIR_PREFIX}_lib
+      ${EXTRA_LIB_PATH}
       DOC "Path to wxWidgets libraries"
       NO_DEFAULT_PATH
       )
@@ -555,6 +565,7 @@ if(wxWidgets_FIND_STYLE STREQUAL "win32")
       PATHS
       ${WX_ROOT_DIR}/lib/${WX_LIB_DIR_PREFIX}_lib   # prefer static
       ${WX_ROOT_DIR}/lib/${WX_LIB_DIR_PREFIX}_dll
+      ${EXTRA_LIB_PATH}
       DOC "Path to wxWidgets libraries"
       NO_DEFAULT_PATH
       )
