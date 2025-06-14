@@ -9,13 +9,13 @@
     {
       "kind": "git",
       "repository": "https://gitlab.com/kicad/packaging/kicad-vcpkg-registry.git",
-      "baseline": "861713f25db7228fbdb40a1fb63bccfe007aa927",
+      "baseline": "5ac5553c7195b76a551ae8a5b8ca78958ac1ba6f",
       "packages": [
         "glew",
         "python3",
         "opencascade",
-        "wxpython",
-        "wxwidgets",
+        "wxpython-33",
+        "wxwidgets-33",
         "ngspice"
       ]
     }
