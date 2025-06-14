@@ -33,7 +33,6 @@
 #include <convert_shape_list_to_polygon.h> // for OUTLINE_ERROR_HANDLER
 #include <hash.h>
 #include <layer_ids.h>
-#include <length_delay_calculation/length_delay_calculation.h>
 #include <lset.h>
 #include <netinfo.h>
 #include <pcb_item_containers.h>
@@ -51,6 +50,7 @@ class DRC_RTREE;
 class PCB_BASE_FRAME;
 class PCB_EDIT_FRAME;
 class PICKED_ITEMS_LIST;
+class LENGTH_DELAY_CALCULATION;
 class BOARD;
 class FOOTPRINT;
 class ZONE;

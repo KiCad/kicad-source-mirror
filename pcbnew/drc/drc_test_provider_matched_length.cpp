@@ -23,6 +23,7 @@
 #include <drc/drc_item.h>
 #include <drc/drc_test_provider.h>
 #include <drc/drc_length_report.h>
+#include <length_delay_calculation/length_delay_calculation.h>
 
 #include <connectivity/connectivity_data.h>
 #include <connectivity/from_to_cache.h>

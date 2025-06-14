@@ -22,6 +22,7 @@
  */
 
 #include <board.h>
+#include <length_delay_calculation/length_delay_calculation.h>
 #include <length_delay_calculation/time_domain_parameters_user_defined.h>
 #include <project/project_file.h>
 

@@ -38,6 +38,7 @@
 #include <pcb_shape.h>
 #include <zone.h>
 #include <zone_filler.h>
+#include <length_delay_calculation/length_delay_calculation.h>
 #include <drc/drc_cache_generator.h>
 #include <pcbnew_utils/board_file_utils.h>
 #include <settings/settings_manager.h>

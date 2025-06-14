@@ -25,6 +25,7 @@
 #include <netinfo.h>
 #include <footprint.h>
 #include <layer_range.h>
+#include <length_delay_calculation/length_delay_calculation.h>
 #include <pad.h>
 #include <pcb_track.h>
 #include <zone.h>

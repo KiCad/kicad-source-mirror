@@ -30,8 +30,10 @@
 #include <pcb_edit_frame.h>
 #include <wx/valnum.h>
 #include <board_commit.h>
+#include <board_design_settings.h>
 #include <pcb_layer_box_selector.h>
 #include <dialogs/html_message_box.h>
+#include <length_delay_calculation/length_delay_calculation.h>
 #include <tool/tool_manager.h>
 #include <tool/actions.h>
 #include <pcb_shape.h>

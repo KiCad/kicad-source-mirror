@@ -21,6 +21,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <length_delay_calculation/length_delay_calculation.h>
 #include <length_delay_calculation/length_delay_calculation_item.h>
 
 #include <board.h>

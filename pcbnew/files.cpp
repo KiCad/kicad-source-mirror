@@ -39,6 +39,7 @@
 #include <kiface_base.h>
 #include <macros.h>
 #include <trace_helpers.h>
+#include <length_delay_calculation/length_delay_calculation.h>
 #include <lockfile.h>
 #include <wx/snglinst.h>
 #include <netlist_reader/pcb_netlist.h>

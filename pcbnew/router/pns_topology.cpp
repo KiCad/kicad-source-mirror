@@ -32,6 +32,7 @@
 #include "pns_topology.h"
 
 #include <board.h>
+#include <length_delay_calculation/length_delay_calculation.h>
 #include <pad.h>
 
 namespace PNS {

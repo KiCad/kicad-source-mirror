@@ -26,6 +26,8 @@
 #include <connectivity/connectivity_algo.h>
 #include <dialogs/dialog_text_entry.h>
 #include <footprint.h>
+#include <length_delay_calculation/length_delay_calculation.h>
+#include <length_delay_calculation/length_delay_calculation_item.h>
 #include <pad.h>
 #include <pcb_edit_frame.h>
 #include <pcb_painter.h>

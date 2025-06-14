@@ -39,6 +39,7 @@
 #include <convert_shape_list_to_polygon.h>
 #include <footprint.h>
 #include <font/outline_font.h>
+#include <length_delay_calculation/length_delay_calculation.h>
 #include <lset.h>
 #include <pcb_base_frame.h>
 #include <pcb_track.h>
