@@ -259,6 +259,8 @@ if( MSVC )
     string( APPEND WARN_FLAGS_CXX " /wd5204 /wd4265" )
     # disable "layout of class may have changed from a previous version of the compiler"
     string( APPEND WARN_FLAGS_CXX " /wd4371" )
+    # disable "'this': used in base member initializer list"
+    string( APPEND WARN_FLAGS_CXX " /wd4355" )
     # disable "relative include path contains '..'"
     string( APPEND WARN_FLAGS_CXX " /wd4464" )
     # disable "'const' variable is not used"
