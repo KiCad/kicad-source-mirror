@@ -18,7 +18,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-06-08 17:03+0300\n"
-"PO-Revision-Date: 2025-06-10 06:01+0000\n"
+"PO-Revision-Date: 2025-06-16 06:01+0000\n"
 "Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/kicad/v9/pl/>\n"
 "Language: pl\n"
@@ -42984,13 +42984,13 @@ msgstr ""
 "z: %g; obszar: %s\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1675
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Wire self-interference check failed\n"
 "z: %g; bounding box: %s\n"
 msgstr ""
-"\n"
 "Sprawdzenie zakłóceń własnych przewodu nie powiodło się\n"
+"z: %g; obszar: %s\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1697
 msgid "Using non-simplified polygon.\n"
@@ -52202,9 +52202,9 @@ msgid "Zone %s %s, priority %d"
 msgstr "Poziom priorytetu strefy:"
 
 #: pcbnew/zone.cpp:1135
-#, fuzzy, c-format
+#, c-format
 msgid "Zone '%s' %s %s, priority %d"
-msgstr "%s, %s, %s lub %s"
+msgstr "Strefa '%s' %s %s, priorytet %d"
 
 #: pcbnew/zone.cpp:1981
 msgid "Keepout"
