@@ -378,8 +378,8 @@ private:
     GLint                   ufm_pixelSizeMultiplier;
     GLint                   ufm_antialiasingOffset;
 
-    /// wxCursor showing the current native cursor.
-    wxCursor                m_currentwxCursor;
+    /// wx cursor showing the current native cursor.
+    WX_CURSOR_TYPE          m_currentwxCursor;
 
     std::unique_ptr<GL_BITMAP_CACHE>            m_bitmapCache;
 

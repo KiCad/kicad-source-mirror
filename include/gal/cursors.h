@@ -29,6 +29,16 @@
 #include <map>
 #include <vector>
 
+/**
+ * Represents either a wxCursorBundle for wx 3.3+ or a wxCursor for older versions.
+ * This allows consistent cursor handling across different wxWidgets versions.
+ */
+#if wxCHECK_VERSION( 3, 3, 0 )
+typedef wxCursorBundle WX_CURSOR_TYPE;
+#else
+typedef wxCursor WX_CURSOR_TYPE;
+#endif
+
 
 enum class KICURSOR
 {
@@ -101,50 +111,59 @@ public:
      */
     struct CURSOR_DEF
     {
-        ///< The ID key used to uniquely identify a cursor in a given store
-        KICURSOR m_id_key;
-
-        ///< The image data bitmap
-        const unsigned char* m_image_data;
-
-        ///< The mask data bitmap
-        const unsigned char* m_mask_data;
-
         const char** m_xpm;
-
-        ///< The image size in pixels
-        wxSize m_size;
 
         ///< The "hotspot" where the cursor "is" in the image
         wxPoint m_hotspot;
     };
 
     /**
-     * Construct a store with a pre-set list of cursors.
-     *
-     * In future, an "Add()" function could be added if stores need to
-     * dynamically add cursors.
-     *
-     * @param aDefs: the list of pre-set cursor definitions
+     * Get a cursor bundle (wx 3.3+) or appropriate cursor (older versions)
+     * @param  aCursorType the cursor type to get
+     * @param  aHiDPI whether to prefer HiDPI version for older wx versions
+     * @return             the cursor bundle or cursor
      */
-    CURSOR_STORE( const std::vector<CURSOR_DEF>& aDefs );
+    static const WX_CURSOR_TYPE GetCursor( KICURSOR aCursorType, bool aHiDPI = false );
 
     /**
-     * Get a given cursor by its ID
-     * @param  aIdKey the ID key to look up
-     * @return        the cursor, if found, else wxNullCursor
+     * Get stock cursor type for the given cursor
+     * @param  aCursorType the cursor type
+     * @return             stock cursor type, or wxCURSOR_MAX if not a stock cursor
      */
-    const wxCursor& Get( KICURSOR aIdKey ) const;
-
-    static const wxCursor GetCursor( KICURSOR aCursorType );
-
-    static const wxCursor GetHiDPICursor( KICURSOR aCursorType );
-
     static wxStockCursor GetStockCursor( KICURSOR aCursorType );
 
 private:
-    ///< Internal store of cursors by ID
-    std::map<KICURSOR, wxCursor> m_store;
+    /**
+     * Construct a store with cursors for all defined types.
+     * The store will automatically contain both standard and HiDPI cursors.
+     */
+    CURSOR_STORE();
+
+#if wxCHECK_VERSION( 3, 3, 0 )
+    /**
+     * Get a cursor bundle by its ID (wx 3.3+ only)
+     * @param  aIdKey the ID key to look up
+     * @return        the cursor bundle, if found, else an invalid bundle
+     */
+    const wxCursorBundle& storeGetBundle( KICURSOR aIdKey ) const;
+#else
+    /**
+     * Get a cursor by its ID, automatically selecting the appropriate resolution
+     * @param  aIdKey the ID key to look up
+     * @param  aHiDPI whether to prefer HiDPI version if available
+     * @return        the cursor, if found, else wxNullCursor
+     */
+    const wxCursor& storeGetCursor( KICURSOR aIdKey, bool aHiDPI = false ) const;
+#endif
+
+#if wxCHECK_VERSION( 3, 3, 0 )
+    ///< Internal store of cursor bundles for wx 3.3+
+    std::map<KICURSOR, wxCursorBundle> m_bundleMap;
+#else
+    std::map<KICURSOR, wxCursor> m_standardCursorMap;
+    std::map<KICURSOR, wxCursor> m_hidpiCursorMap;
+#endif
+
 };
 
 #endif // CURSOR_STORE__H

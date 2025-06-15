@@ -1686,17 +1686,17 @@ bool CAIRO_GAL::updatedGalDisplayOptions( const GAL_DISPLAY_OPTIONS& aOptions )
 
 bool CAIRO_GAL::SetNativeCursorStyle( KICURSOR aCursor, bool aHiDPI )
 {
-    // Store the current cursor type and get the wxCursor for it
+    // Store the current cursor type and get the wx cursor for it
     if( !GAL::SetNativeCursorStyle( aCursor, aHiDPI ) )
         return false;
 
-    if( aHiDPI )
-        m_currentwxCursor = CURSOR_STORE::GetHiDPICursor( m_currentNativeCursor );
-    else
-        m_currentwxCursor = CURSOR_STORE::GetCursor( m_currentNativeCursor );
+    m_currentwxCursor = CURSOR_STORE::GetCursor( m_currentNativeCursor, aHiDPI );
 
-    // Update the cursor in the wx control
+#if wxCHECK_VERSION( 3, 3, 0 )
+    wxWindow::SetCursorBundle( m_currentwxCursor );
+#else
     wxWindow::SetCursor( m_currentwxCursor );
+#endif
 
     return true;
 }
@@ -1704,7 +1704,11 @@ bool CAIRO_GAL::SetNativeCursorStyle( KICURSOR aCursor, bool aHiDPI )
 
 void CAIRO_GAL::onSetNativeCursor( wxSetCursorEvent& aEvent )
 {
+#if wxCHECK_VERSION( 3, 3, 0 )
+    aEvent.SetCursor( m_currentwxCursor.GetCursorFor( this ) );
+#else
     aEvent.SetCursor( m_currentwxCursor );
+#endif
 }
 
 

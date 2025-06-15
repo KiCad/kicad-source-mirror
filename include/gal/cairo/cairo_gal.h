@@ -522,7 +522,8 @@ protected:
     int                 m_wxBufferWidth;
     bool                m_isInitialized;       ///< Are Cairo image & surface ready to use
     COLOR4D             m_backgroundColor;     ///< Background color
-    wxCursor            m_currentwxCursor;     ///< wxCursor showing the current native cursor
+
+    WX_CURSOR_TYPE      m_currentwxCursor;     ///< wx cursor showing the current native cursor
 };
 
 } // namespace KIGFX
