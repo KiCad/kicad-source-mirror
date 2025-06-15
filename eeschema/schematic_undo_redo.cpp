@@ -557,6 +557,21 @@ void SCH_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
 
         if( connectivityCleanUp == GLOBAL_CLEANUP )
             SetSheetNumberAndCount();
+
+        // Restore hop over shapes of wires, if any
+        if( eeconfig()->m_Appearance.show_hop_over )
+        {
+            for( SCH_ITEM* item : GetScreen()->Items() )
+            {
+                if( item->Type() != SCH_LINE_T )
+                    continue;
+
+                SCH_LINE* line = static_cast<SCH_LINE*>( item );
+
+                if( line->IsWire() )
+                    UpdateHopOveredWires( line );
+            }
+        }
     }
 
     // Update the hierarchy navigator when there are sheet changes.
