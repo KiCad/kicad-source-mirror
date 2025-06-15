@@ -36,13 +36,21 @@
 #define PR_NO_ABORT 0
 #define PR_CAN_ABORT wxPD_CAN_ABORT
 
+
+#if defined( _WIN32 ) && wxCHECK_VERSION( 3, 3, 0 )
+// In order to get a dark mode compatible progress dialog on Windows with wx 3.3
+#define WX_PROGRESS_REPORTER_BASE wxGenericProgressDialog
+#else
+#define WX_PROGRESS_REPORTER_BASE wxProgressDialog
+#endif
+
 /**
  * Multi-thread safe progress reporter dialog, intended for use of tasks that parallel reporting
  * back of work status.
  *
  * @see PROGRESS_REPORTER.
  */
-class WX_PROGRESS_REPORTER : public PROGRESS_REPORTER_BASE, public wxProgressDialog
+class WX_PROGRESS_REPORTER : public PROGRESS_REPORTER_BASE, public WX_PROGRESS_REPORTER_BASE
 {
 public:
     /**
@@ -69,7 +77,7 @@ public:
      */
     void SetTitle( const wxString& aTitle ) override
     {
-        wxProgressDialog::SetTitle( aTitle );
+        WX_PROGRESS_REPORTER_BASE::SetTitle( aTitle );
     }
 
 private:

@@ -27,10 +27,17 @@
 #include <wx/progdlg.h>
 #include <wx/appprogress.h>
 
+#if defined( _WIN32 ) && wxCHECK_VERSION(3,3,0)
+// In order to get a dark mode compatible progress dialog on Windows with wx 3.3
+#define APP_PROGRESS_DIALOG_BASE wxGenericProgressDialog
+#else
+#define APP_PROGRESS_DIALOG_BASE wxProgressDialog
+#endif
+
 /**
  * wxProgressDialog with the option to also update the application progress on the taskbar
  */
-class APP_PROGRESS_DIALOG : public wxProgressDialog
+class APP_PROGRESS_DIALOG : public APP_PROGRESS_DIALOG_BASE
 {
 public:
     APP_PROGRESS_DIALOG( const wxString& aTitle, const wxString& aMessage, int aMaximum = 100,

@@ -33,7 +33,7 @@ WX_PROGRESS_REPORTER::WX_PROGRESS_REPORTER( wxWindow* aParent, const wxString& a
                                             int aNumPhases, int aCanAbort,
                                             bool aReserveSpaceForMessage ) :
         PROGRESS_REPORTER_BASE( aNumPhases ),
-        wxProgressDialog( aTitle,
+        WX_PROGRESS_REPORTER_BASE( aTitle,
                           ( aReserveSpaceForMessage ? wxT( " " ) : wxT( "" ) ),
                           1, aParent,
                           // wxPD_APP_MODAL |   // Don't use; messes up OSX when called from
@@ -93,7 +93,7 @@ bool WX_PROGRESS_REPORTER::updateUI()
     }
 
     // Returns false when cancelled (if it's a cancellable dialog)
-    bool diag = wxProgressDialog::Update( cur, message );
+    bool diag = WX_PROGRESS_REPORTER_BASE::Update( cur, message );
 
     return diag;
 }

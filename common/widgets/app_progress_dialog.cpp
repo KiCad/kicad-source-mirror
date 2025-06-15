@@ -28,7 +28,7 @@
 APP_PROGRESS_DIALOG::APP_PROGRESS_DIALOG( const wxString& aTitle, const wxString& aMessage,
                                           int aMaximum, wxWindow* aParent,
                                           bool aIndeterminateTaskBarStatus, int aStyle )
-        : wxProgressDialog( aTitle,
+        : APP_PROGRESS_DIALOG_BASE( aTitle,
                             aMessage == wxEmptyString ? wxString( wxT( " " ) ) : aMessage,
                             aMaximum, aParent, aStyle ),
           m_appProgressIndicator( aParent, aMaximum ),
@@ -49,5 +49,5 @@ bool APP_PROGRESS_DIALOG::Update( int aValue, const wxString& aNewMsg, bool* aSk
         m_appProgressIndicator.SetValue( aValue );
     }
 
-    return wxProgressDialog::Update( aValue, aNewMsg, aSkip );
+    return APP_PROGRESS_DIALOG_BASE::Update( aValue, aNewMsg, aSkip );
 }
