@@ -118,7 +118,7 @@ std::vector<std::string> NGSPICE::AllVectors() const
         for( int i = 0; i < noOfVectors; i++, allVectors++ )
         {
             std::string vec = *allVectors;
-            retVal.push_back( vec );
+            retVal.push_back( std::move( vec ) );
         }
     }
 

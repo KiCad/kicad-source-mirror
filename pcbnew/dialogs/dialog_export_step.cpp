@@ -144,50 +144,51 @@ DIALOG_EXPORT_STEP::DIALOG_EXPORT_STEP( PCB_EDIT_FRAME* aEditFrame, wxWindow* aP
 
     if( !m_job )
     {
-        PCBNEW_SETTINGS* cfg = m_editFrame->GetPcbNewSettings();
-
-        m_origin = static_cast<STEP_ORIGIN_OPTION>( cfg->m_ExportStep.origin_mode );
-
-        switch( m_origin )
+        if( PCBNEW_SETTINGS* cfg = m_editFrame->GetPcbNewSettings() )
         {
-        default:
-        case STEP_ORIGIN_PLOT_AXIS: m_rbDrillAndPlotOrigin->SetValue( true ); break;
-        case STEP_ORIGIN_GRID_AXIS: m_rbGridOrigin->SetValue( true ); break;
-        case STEP_ORIGIN_USER: m_rbUserDefinedOrigin->SetValue( true ); break;
-        case STEP_ORIGIN_BOARD_CENTER: m_rbBoardCenterOrigin->SetValue( true ); break;
+            m_origin = static_cast<STEP_ORIGIN_OPTION>( cfg->m_ExportStep.origin_mode );
+
+            switch( m_origin )
+            {
+            default:
+            case STEP_ORIGIN_PLOT_AXIS:    m_rbDrillAndPlotOrigin->SetValue( true ); break;
+            case STEP_ORIGIN_GRID_AXIS:    m_rbGridOrigin->SetValue( true );         break;
+            case STEP_ORIGIN_USER:         m_rbUserDefinedOrigin->SetValue( true );  break;
+            case STEP_ORIGIN_BOARD_CENTER: m_rbBoardCenterOrigin->SetValue( true );  break;
+            }
+
+            m_originUnits = cfg->m_ExportStep.origin_units;
+            m_userOriginX = cfg->m_ExportStep.origin_x;
+            m_userOriginY = cfg->m_ExportStep.origin_y;
+            m_noUnspecified = cfg->m_ExportStep.no_unspecified;
+            m_noDNP = cfg->m_ExportStep.no_dnp;
+
+            m_txtNetFilter->SetValue( m_netFilter );
+            m_cbOptimizeStep->SetValue( m_optimizeStep );
+            m_cbExportBody->SetValue( m_exportBoardBody );
+            m_cbExportComponents->SetValue( m_exportComponents );
+            m_cbExportTracks->SetValue( m_exportTracks );
+            m_cbExportPads->SetValue( m_exportPads );
+            m_cbExportZones->SetValue( m_exportZones );
+            m_cbExportInnerCopper->SetValue( m_exportInnerCopper );
+            m_cbExportSilkscreen->SetValue( m_exportSilkscreen );
+            m_cbExportSoldermask->SetValue( m_exportSoldermask );
+            m_cbFuseShapes->SetValue( m_fuseShapes );
+            m_cbCutViasInBody->SetValue( m_cutViasInBody );
+            m_cbFillAllVias->SetValue( m_fillAllVias );
+            m_cbRemoveUnspecified->SetValue( m_noUnspecified );
+            m_cbRemoveDNP->SetValue( m_noDNP );
+            m_cbSubstModels->SetValue( cfg->m_ExportStep.replace_models );
+            m_cbOverwriteFile->SetValue( cfg->m_ExportStep.overwrite_file );
         }
-
-        m_originUnits = cfg->m_ExportStep.origin_units;
-        m_userOriginX = cfg->m_ExportStep.origin_x;
-        m_userOriginY = cfg->m_ExportStep.origin_y;
-        m_noUnspecified = cfg->m_ExportStep.no_unspecified;
-        m_noDNP = cfg->m_ExportStep.no_dnp;
-
-        m_txtNetFilter->SetValue( m_netFilter );
-        m_cbOptimizeStep->SetValue( m_optimizeStep );
-        m_cbExportBody->SetValue( m_exportBoardBody );
-        m_cbExportComponents->SetValue( m_exportComponents );
-        m_cbExportTracks->SetValue( m_exportTracks );
-        m_cbExportPads->SetValue( m_exportPads );
-        m_cbExportZones->SetValue( m_exportZones );
-        m_cbExportInnerCopper->SetValue( m_exportInnerCopper );
-        m_cbExportSilkscreen->SetValue( m_exportSilkscreen );
-        m_cbExportSoldermask->SetValue( m_exportSoldermask );
-        m_cbFuseShapes->SetValue( m_fuseShapes );
-        m_cbCutViasInBody->SetValue( m_cutViasInBody );
-        m_cbFillAllVias->SetValue( m_fillAllVias );
-        m_cbRemoveUnspecified->SetValue( m_noUnspecified );
-        m_cbRemoveDNP->SetValue( m_noDNP );
-        m_cbSubstModels->SetValue( cfg->m_ExportStep.replace_models );
-        m_cbOverwriteFile->SetValue( cfg->m_ExportStep.overwrite_file );
 
         m_txtComponentFilter->SetValue( m_componentFilter );
 
         switch( m_componentMode )
         {
-        case COMPONENT_MODE::EXPORT_ALL: m_rbAllComponents->SetValue( true ); break;
-        case COMPONENT_MODE::EXPORT_SELECTED: m_rbOnlySelected->SetValue( true ); break;
-        case COMPONENT_MODE::CUSTOM_FILTER: m_rbFilteredComponents->SetValue( true ); break;
+        case COMPONENT_MODE::EXPORT_ALL:      m_rbAllComponents->SetValue( true );      break;
+        case COMPONENT_MODE::EXPORT_SELECTED: m_rbOnlySelected->SetValue( true );       break;
+        case COMPONENT_MODE::CUSTOM_FILTER:   m_rbFilteredComponents->SetValue( true ); break;
         }
 
         // Sync the enabled states
@@ -317,20 +318,9 @@ DIALOG_EXPORT_STEP::~DIALOG_EXPORT_STEP()
 {
     GetOriginOption(); // Update m_origin member.
 
-    PCBNEW_SETTINGS* cfg = nullptr;
-
-    try
-    {
-        cfg = m_editFrame->GetPcbNewSettings();
-    }
-    catch( const std::runtime_error& e )
-    {
-        wxFAIL_MSG( e.what() );
-    }
-
     if( !m_job ) // dont save mru if its a job dialog
     {
-        if( cfg )
+        if( PCBNEW_SETTINGS* cfg = m_editFrame->GetPcbNewSettings() )
         {
             cfg->m_ExportStep.origin_mode = static_cast<int>( m_origin );
             cfg->m_ExportStep.origin_units = m_STEP_OrgUnitChoice->GetSelection();

@@ -345,13 +345,13 @@ void DIALOG_PRINT_PCBNEW::onPagePerLayerClicked( wxCommandEvent& event )
 
 void DIALOG_PRINT_PCBNEW::onColorModeClicked( wxCommandEvent& event )
 {
-    PCBNEW_SETTINGS* cfg = m_parent->GetPcbNewSettings();
-
     m_settings->m_blackWhite = m_outputMode->GetSelection();
 
     m_checkBackground->Enable( !m_settings->m_blackWhite );
     m_checkUseTheme->Enable( !m_settings->m_blackWhite );
-    m_colorTheme->Enable( !m_settings->m_blackWhite && cfg->m_Printing.use_theme );
+
+    if( PCBNEW_SETTINGS* cfg = m_parent->GetPcbNewSettings() )
+        m_colorTheme->Enable( !m_settings->m_blackWhite && cfg->m_Printing.use_theme );
 }
 
 

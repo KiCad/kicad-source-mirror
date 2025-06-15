@@ -74,24 +74,25 @@ DIALOG_IMPORT_GRAPHICS::DIALOG_IMPORT_GRAPHICS( PCB_BASE_FRAME* aParent ) :
     m_importer = std::make_unique<GRAPHICS_IMPORTER_PCBNEW>( aParent->GetModel() );
     m_gfxImportMgr = std::make_unique<GRAPHICS_IMPORT_MGR>();
 
-    PCBNEW_SETTINGS* cfg = m_parent->GetPcbNewSettings();
+    if( PCBNEW_SETTINGS* cfg = m_parent->GetPcbNewSettings() )
+    {
+        s_shouldGroupItems = cfg->m_ImportGraphics.group_items;
+        s_fixDiscontinuities = cfg->m_ImportGraphics.fix_discontinuities;
+        s_toleranceValue = cfg->m_ImportGraphics.tolerance * pcbIUScale.IU_PER_MM;
+        s_useDlgLayerSelection = cfg->m_ImportGraphics.use_dlg_layer_selection;
+        s_placementInteractive = cfg->m_ImportGraphics.interactive_placement;
 
-    s_shouldGroupItems = cfg->m_ImportGraphics.group_items;
-    s_fixDiscontinuities = cfg->m_ImportGraphics.fix_discontinuities;
-    s_toleranceValue = cfg->m_ImportGraphics.tolerance * pcbIUScale.IU_PER_MM;
-    s_useDlgLayerSelection = cfg->m_ImportGraphics.use_dlg_layer_selection;
+        m_xOrigin.SetValue( cfg->m_ImportGraphics.origin_x * pcbIUScale.IU_PER_MM );
+        m_yOrigin.SetValue( cfg->m_ImportGraphics.origin_y * pcbIUScale.IU_PER_MM );
+        m_defaultLineWidth.SetValue( cfg->m_ImportGraphics.dxf_line_width * pcbIUScale.IU_PER_MM );
+        m_textCtrlFileName->SetValue( cfg->m_ImportGraphics.last_file );
+    }
 
-    s_placementInteractive = cfg->m_ImportGraphics.interactive_placement;
     m_cbGroupItems->SetValue( s_shouldGroupItems );
     m_setLayerCheckbox->SetValue( s_useDlgLayerSelection );
 
-    m_xOrigin.SetValue( cfg->m_ImportGraphics.origin_x * pcbIUScale.IU_PER_MM );
-    m_yOrigin.SetValue( cfg->m_ImportGraphics.origin_y * pcbIUScale.IU_PER_MM );
-    m_defaultLineWidth.SetValue( cfg->m_ImportGraphics.dxf_line_width * pcbIUScale.IU_PER_MM );
-
     m_importScaleCtrl->SetValue( wxString::Format( wxT( "%f" ), s_importScale ) );
 
-    m_textCtrlFileName->SetValue( cfg->m_ImportGraphics.last_file );
     m_placeAtCheckbox->SetValue( !s_placementInteractive );
 
     m_tolerance.SetValue( s_toleranceValue );
@@ -102,13 +103,16 @@ DIALOG_IMPORT_GRAPHICS::DIALOG_IMPORT_GRAPHICS( PCB_BASE_FRAME* aParent ) :
     m_SelLayerBox->SetBoardFrame( m_parent );
     m_SelLayerBox->Resync();
 
-    if( m_SelLayerBox->SetLayerSelection( cfg->m_ImportGraphics.layer ) < 0 )
-        m_SelLayerBox->SetLayerSelection( Dwgs_User );
-
     for( const std::pair<const DXF_IMPORT_UNITS, wxString>& unitEntry : dxfUnitsMap )
         m_dxfUnitsChoice->Append( unitEntry.second );
 
-    m_dxfUnitsChoice->SetSelection( cfg->m_ImportGraphics.dxf_units );
+    if( PCBNEW_SETTINGS* cfg = m_parent->GetPcbNewSettings() )
+    {
+        if( m_SelLayerBox->SetLayerSelection( cfg->m_ImportGraphics.layer ) < 0 )
+            m_SelLayerBox->SetLayerSelection( Dwgs_User );
+
+        m_dxfUnitsChoice->SetSelection( cfg->m_ImportGraphics.dxf_units );
+    }
 
     m_browseButton->SetBitmap( KiBitmapBundle( BITMAPS::small_folder ) );
 
@@ -136,18 +140,7 @@ DIALOG_IMPORT_GRAPHICS::~DIALOG_IMPORT_GRAPHICS()
     s_shouldGroupItems = m_cbGroupItems->IsChecked();
     s_useDlgLayerSelection = m_setLayerCheckbox->IsChecked();
 
-    PCBNEW_SETTINGS* cfg = nullptr;
-
-    try
-    {
-        cfg = m_parent->GetPcbNewSettings();
-    }
-    catch( const std::runtime_error& e )
-    {
-        wxFAIL_MSG( e.what() );
-    }
-
-	if( cfg )
+	if( PCBNEW_SETTINGS* cfg = m_parent->GetPcbNewSettings() )
     {
         cfg->m_ImportGraphics.layer = m_SelLayerBox->GetLayerSelection();
         cfg->m_ImportGraphics.use_dlg_layer_selection = s_useDlgLayerSelection;

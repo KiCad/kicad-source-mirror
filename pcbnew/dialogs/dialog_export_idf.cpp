@@ -38,17 +38,18 @@ DIALOG_EXPORT_IDF3::DIALOG_EXPORT_IDF3( PCB_EDIT_FRAME* aEditFrame ) :
 {
     SetFocus();
 
-    auto cfg = m_editFrame->GetPcbNewSettings();
+    if( PCBNEW_SETTINGS* cfg = m_editFrame->GetPcbNewSettings() )
+    {
+        m_idfThouOpt = cfg->m_ExportIdf.units_mils;
+        m_rbUnitSelection->SetSelection( m_idfThouOpt ? 1 : 0 );
+        m_AutoAdjust = cfg->m_ExportIdf.auto_adjust;
+        m_RefUnits = cfg->m_ExportIdf.ref_units;
+        m_XRef = cfg->m_ExportIdf.ref_x;
+        m_YRef = cfg->m_ExportIdf.ref_y;
 
-    m_idfThouOpt = cfg->m_ExportIdf.units_mils;
-    m_rbUnitSelection->SetSelection( m_idfThouOpt ? 1 : 0 );
-    m_AutoAdjust = cfg->m_ExportIdf.auto_adjust;
-    m_RefUnits = cfg->m_ExportIdf.ref_units;
-    m_XRef = cfg->m_ExportIdf.ref_x;
-    m_YRef = cfg->m_ExportIdf.ref_y;
-
-    m_cbRemoveUnspecified->SetValue( cfg->m_ExportIdf.no_unspecified );
-    m_cbRemoveDNP->SetValue( cfg->m_ExportIdf.no_dnp );
+        m_cbRemoveUnspecified->SetValue( cfg->m_ExportIdf.no_unspecified );
+        m_cbRemoveDNP->SetValue( cfg->m_ExportIdf.no_dnp );
+    }
 
     m_cbAutoAdjustOffset->SetValue( m_AutoAdjust );
     m_cbAutoAdjustOffset->Bind( wxEVT_CHECKBOX, &DIALOG_EXPORT_IDF3::OnAutoAdjustOffset, this );
@@ -85,18 +86,7 @@ DIALOG_EXPORT_IDF3::~DIALOG_EXPORT_IDF3()
 {
     m_idfThouOpt = m_rbUnitSelection->GetSelection() == 1;
 
-    PCBNEW_SETTINGS* cfg = nullptr;
-
-    try
-    {
-        cfg = m_editFrame->GetPcbNewSettings();
-    }
-    catch( const std::runtime_error& e )
-    {
-        wxFAIL_MSG( e.what() );
-    }
-
-    if( cfg )
+    if( PCBNEW_SETTINGS* cfg = m_editFrame->GetPcbNewSettings() )
     {
         cfg->m_ExportIdf.units_mils = m_idfThouOpt;
         cfg->m_ExportIdf.auto_adjust = m_AutoAdjust;

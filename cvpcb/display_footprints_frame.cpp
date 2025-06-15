@@ -214,15 +214,14 @@ void DISPLAY_FOOTPRINTS_FRAME::setupUIConditions()
 
 void DISPLAY_FOOTPRINTS_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
 {
-    CVPCB_SETTINGS* cfg = dynamic_cast<CVPCB_SETTINGS*>( aCfg );
-
     // We don't allow people to change this right now, so make sure it's on
-    GetWindowSettings( cfg )->cursor.always_show_cursor = true;
+    GetWindowSettings( aCfg )->cursor.always_show_cursor = true;
 
-    PCB_BASE_FRAME::LoadSettings( cfg );
-
-    if( cfg )
+    if( CVPCB_SETTINGS* cfg = dynamic_cast<CVPCB_SETTINGS*>( aCfg ) )
+    {
+        PCB_BASE_FRAME::LoadSettings( cfg );
         SetDisplayOptions( cfg->m_FootprintViewerDisplayOptions );
+    }
 }
 
 

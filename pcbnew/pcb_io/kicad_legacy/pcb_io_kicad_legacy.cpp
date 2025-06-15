@@ -1174,11 +1174,10 @@ void PCB_IO_KICAD_LEGACY::loadSETUP()
      * (the first value is not tested, because it is the netclass value)
      */
     BOARD_DESIGN_SETTINGS& designSettings = m_board->GetDesignSettings();
-    sort( designSettings.m_ViasDimensionsList.begin() + 1,
-          designSettings.m_ViasDimensionsList.end() );
+    sort( designSettings.m_ViasDimensionsList.begin() + 1, designSettings.m_ViasDimensionsList.end() );
     sort( designSettings.m_TrackWidthList.begin() + 1, designSettings.m_TrackWidthList.end() );
 
-    for( unsigned ii = 1; ii < designSettings.m_ViasDimensionsList.size() - 1; ii++ )
+    for( int ii = 1; ii < (int) designSettings.m_ViasDimensionsList.size() - 1; ii++ )
     {
         if( designSettings.m_ViasDimensionsList[ii] == designSettings.m_ViasDimensionsList[ii + 1] )
         {
@@ -1187,7 +1186,7 @@ void PCB_IO_KICAD_LEGACY::loadSETUP()
         }
     }
 
-    for( unsigned ii = 1; ii < designSettings.m_TrackWidthList.size() - 1; ii++ )
+    for( int ii = 1; ii < (int) designSettings.m_TrackWidthList.size() - 1; ii++ )
     {
         if( designSettings.m_TrackWidthList[ii] == designSettings.m_TrackWidthList[ii + 1] )
         {

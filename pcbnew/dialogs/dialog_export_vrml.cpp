@@ -47,18 +47,18 @@ DIALOG_EXPORT_VRML::DIALOG_EXPORT_VRML( PCB_EDIT_FRAME* aEditFrame ) :
 {
     m_filePicker->SetFocus();
 
-    PCBNEW_SETTINGS* cfg = m_editFrame->GetPcbNewSettings();
-
-    m_unitsOpt = cfg->m_ExportVrml.units;
-    m_noUnspecified = cfg->m_ExportVrml.no_unspecified;
-    m_noDNP = cfg->m_ExportVrml.no_dnp;
-    m_copy3DFilesOpt = cfg->m_ExportVrml.copy_3d_models;
-    m_useRelativePathsOpt = cfg->m_ExportVrml.use_relative_paths;
-    m_RefUnits = cfg->m_ExportVrml.ref_units;
-    m_XRef = cfg->m_ExportVrml.ref_x;
-    m_YRef = cfg->m_ExportVrml.ref_y;
-    m_originMode = cfg->m_ExportVrml.origin_mode;
-
+    if( PCBNEW_SETTINGS* cfg = m_editFrame->GetPcbNewSettings() )
+    {
+        m_unitsOpt = cfg->m_ExportVrml.units;
+        m_noUnspecified = cfg->m_ExportVrml.no_unspecified;
+        m_noDNP = cfg->m_ExportVrml.no_dnp;
+        m_copy3DFilesOpt = cfg->m_ExportVrml.copy_3d_models;
+        m_useRelativePathsOpt = cfg->m_ExportVrml.use_relative_paths;
+        m_RefUnits = cfg->m_ExportVrml.ref_units;
+        m_XRef = cfg->m_ExportVrml.ref_x;
+        m_YRef = cfg->m_ExportVrml.ref_y;
+        m_originMode = cfg->m_ExportVrml.origin_mode;
+    }
 
     m_rbCoordOrigin->SetSelection( m_originMode );
     m_rbSelectUnits->SetSelection( m_unitsOpt );
@@ -88,18 +88,7 @@ DIALOG_EXPORT_VRML::~DIALOG_EXPORT_VRML()
     m_noDNP = GetNoDNPOption();
     m_copy3DFilesOpt = GetCopyFilesOption();
 
-    PCBNEW_SETTINGS* cfg = nullptr;
-
-    try
-    {
-        cfg = m_editFrame->GetPcbNewSettings();
-    }
-    catch( const std::runtime_error& e )
-    {
-        wxFAIL_MSG( e.what() );
-    }
-
-    if( cfg )
+    if( PCBNEW_SETTINGS* cfg = m_editFrame->GetPcbNewSettings() )
     {
         cfg->m_ExportVrml.units = m_unitsOpt;
         cfg->m_ExportVrml.no_unspecified = m_noUnspecified;

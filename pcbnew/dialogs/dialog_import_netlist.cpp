@@ -68,17 +68,18 @@ DIALOG_IMPORT_NETLIST::DIALOG_IMPORT_NETLIST( PCB_EDIT_FRAME* aParent,
     m_NetlistFilenameCtrl->SetValue( m_netlistPath );
     m_browseButton->SetBitmap( KiBitmapBundle( BITMAPS::small_folder ) );
 
-    auto cfg = m_parent->GetPcbNewSettings();
-
-    m_cbUpdateFootprints->SetValue( cfg->m_NetlistDialog.update_footprints );
-    m_cbTransferGroups->SetValue( cfg->m_NetlistDialog.transfer_groups );
-    m_cbDeleteShortingTracks->SetValue( cfg->m_NetlistDialog.delete_shorting_tracks );
-    m_cbDeleteExtraFootprints->SetValue( cfg->m_NetlistDialog.delete_extra_footprints );
+    if( PCBNEW_SETTINGS* cfg = m_parent->GetPcbNewSettings() )
+    {
+        m_cbUpdateFootprints->SetValue( cfg->m_NetlistDialog.update_footprints );
+        m_cbTransferGroups->SetValue( cfg->m_NetlistDialog.transfer_groups );
+        m_cbDeleteShortingTracks->SetValue( cfg->m_NetlistDialog.delete_shorting_tracks );
+        m_cbDeleteExtraFootprints->SetValue( cfg->m_NetlistDialog.delete_extra_footprints );
+        m_MessageWindow->SetVisibleSeverities( cfg->m_NetlistDialog.report_filter );
+    }
 
     m_matchByTimestamp->SetSelection( m_matchByUUID ? 0 : 1 );
 
     m_MessageWindow->SetLabel( _("Changes to Be Applied") );
-    m_MessageWindow->SetVisibleSeverities( cfg->m_NetlistDialog.report_filter );
     m_MessageWindow->SetFileName( Prj().GetProjectPath() + wxT( "report.txt" ) );
 
     SetupStandardButtons( { { wxID_OK,     _( "Load and Test Netlist" ) },
@@ -94,18 +95,7 @@ DIALOG_IMPORT_NETLIST::~DIALOG_IMPORT_NETLIST()
 {
     m_matchByUUID = m_matchByTimestamp->GetSelection() == 0;
 
-    PCBNEW_SETTINGS* cfg = nullptr;
-
-    try
-    {
-        cfg = m_parent->GetPcbNewSettings();
-    }
-    catch( const std::runtime_error& e )
-    {
-        wxFAIL_MSG( e.what() );
-    }
-
-    if( cfg )
+    if( PCBNEW_SETTINGS* cfg = m_parent->GetPcbNewSettings() )
     {
         cfg->m_NetlistDialog.report_filter           = m_MessageWindow->GetVisibleSeverities();
         cfg->m_NetlistDialog.update_footprints       = m_cbUpdateFootprints->GetValue();

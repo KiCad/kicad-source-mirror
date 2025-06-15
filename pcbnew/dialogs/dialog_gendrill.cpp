@@ -216,18 +216,19 @@ void DIALOG_GENDRILL::initDialog()
     }
     else
     {
-        auto cfg = m_pcbEditFrame->GetPcbNewSettings();
-
-        g_merge_PTH_NPTH = cfg->m_GenDrill.merge_pth_npth;
-        g_minimalHeader = cfg->m_GenDrill.minimal_header;
-        g_mirror = cfg->m_GenDrill.mirror;
-        g_unitDrillIsInch = cfg->m_GenDrill.unit_drill_is_inch;
-        g_useRouteModeForOvalHoles = cfg->m_GenDrill.use_route_for_oval_holes;
-        g_drillFileType = cfg->m_GenDrill.drill_file_type;
-        g_mapFileType = cfg->m_GenDrill.map_file_type;
-        g_zerosFormat = cfg->m_GenDrill.zeros_format;
-        g_generateMap = cfg->m_GenDrill.generate_map;
-        g_generateTenting = cfg->m_GenDrill.generate_tenting;
+        if( PCBNEW_SETTINGS* cfg = m_pcbEditFrame->GetPcbNewSettings() )
+        {
+            g_merge_PTH_NPTH = cfg->m_GenDrill.merge_pth_npth;
+            g_minimalHeader = cfg->m_GenDrill.minimal_header;
+            g_mirror = cfg->m_GenDrill.mirror;
+            g_unitDrillIsInch = cfg->m_GenDrill.unit_drill_is_inch;
+            g_useRouteModeForOvalHoles = cfg->m_GenDrill.use_route_for_oval_holes;
+            g_drillFileType = cfg->m_GenDrill.drill_file_type;
+            g_mapFileType = cfg->m_GenDrill.map_file_type;
+            g_zerosFormat = cfg->m_GenDrill.zeros_format;
+            g_generateMap = cfg->m_GenDrill.generate_map;
+            g_generateTenting = cfg->m_GenDrill.generate_tenting;
+        }
 
         // Ensure validity of g_mapFileType
         if( g_mapFileType < 0 || g_mapFileType >= (int) m_choiceDrillMap->GetCount() )
@@ -276,18 +277,19 @@ void DIALOG_GENDRILL::updateConfig()
 {
     UpdateDrillParams();
 
-    PCBNEW_SETTINGS* cfg = m_pcbEditFrame->GetPcbNewSettings();
-
-    cfg->m_GenDrill.merge_pth_npth           = g_merge_PTH_NPTH;
-    cfg->m_GenDrill.minimal_header           = g_minimalHeader;
-    cfg->m_GenDrill.mirror                   = g_mirror;
-    cfg->m_GenDrill.unit_drill_is_inch       = g_unitDrillIsInch;
-    cfg->m_GenDrill.use_route_for_oval_holes = g_useRouteModeForOvalHoles;
-    cfg->m_GenDrill.drill_file_type          = g_drillFileType;
-    cfg->m_GenDrill.map_file_type            = g_mapFileType;
-    cfg->m_GenDrill.zeros_format             = g_zerosFormat;
-    cfg->m_GenDrill.generate_map             = g_generateMap;
-    cfg->m_GenDrill.generate_tenting         = g_generateTenting;
+    if( PCBNEW_SETTINGS* cfg = m_pcbEditFrame->GetPcbNewSettings() )
+    {
+        cfg->m_GenDrill.merge_pth_npth           = g_merge_PTH_NPTH;
+        cfg->m_GenDrill.minimal_header           = g_minimalHeader;
+        cfg->m_GenDrill.mirror                   = g_mirror;
+        cfg->m_GenDrill.unit_drill_is_inch       = g_unitDrillIsInch;
+        cfg->m_GenDrill.use_route_for_oval_holes = g_useRouteModeForOvalHoles;
+        cfg->m_GenDrill.drill_file_type          = g_drillFileType;
+        cfg->m_GenDrill.map_file_type            = g_mapFileType;
+        cfg->m_GenDrill.zeros_format             = g_zerosFormat;
+        cfg->m_GenDrill.generate_map             = g_generateMap;
+        cfg->m_GenDrill.generate_tenting         = g_generateTenting;
+    }
 }
 
 

@@ -87,23 +87,25 @@ void DIALOG_GEN_FOOTPRINT_POSITION::initDialog()
     {
         m_browseButton->SetBitmap( KiBitmapBundle( BITMAPS::small_folder ) );
 
-        PROJECT_FILE&    projectFile = m_editFrame->Prj().GetProjectFile();
-        PCBNEW_SETTINGS* cfg = m_editFrame->GetPcbNewSettings();
+        PROJECT_FILE& projectFile = m_editFrame->Prj().GetProjectFile();
 
-        m_units = cfg->m_PlaceFile.units == 0 ? EDA_UNITS::INCH : EDA_UNITS::MM;
+        if( PCBNEW_SETTINGS* cfg = m_editFrame->GetPcbNewSettings() )
+        {
+            m_units = cfg->m_PlaceFile.units == 0 ? EDA_UNITS::INCH : EDA_UNITS::MM;
 
-        // Output directory
-        m_outputDirectoryName->SetValue( projectFile.m_PcbLastPath[LAST_PATH_POS_FILES] );
+            // Output directory
+            m_outputDirectoryName->SetValue( projectFile.m_PcbLastPath[LAST_PATH_POS_FILES] );
 
-        // Update Options
-        m_unitsCtrl->SetSelection( cfg->m_PlaceFile.units );
-        m_singleFile->SetValue( cfg->m_PlaceFile.file_options == 1 );
-        m_formatCtrl->SetSelection( cfg->m_PlaceFile.file_format );
-        m_cbIncludeBoardEdge->SetValue( cfg->m_PlaceFile.include_board_edge );
-        m_useDrillPlaceOrigin->SetValue( cfg->m_PlaceFile.use_aux_origin );
-        m_onlySMD->SetValue( cfg->m_PlaceFile.only_SMD );
-        m_negateXcb->SetValue( cfg->m_PlaceFile.negate_xcoord );
-        m_excludeTH->SetValue( cfg->m_PlaceFile.exclude_TH );
+            // Update Options
+            m_unitsCtrl->SetSelection( cfg->m_PlaceFile.units );
+            m_singleFile->SetValue( cfg->m_PlaceFile.file_options == 1 );
+            m_formatCtrl->SetSelection( cfg->m_PlaceFile.file_format );
+            m_cbIncludeBoardEdge->SetValue( cfg->m_PlaceFile.include_board_edge );
+            m_useDrillPlaceOrigin->SetValue( cfg->m_PlaceFile.use_aux_origin );
+            m_onlySMD->SetValue( cfg->m_PlaceFile.only_SMD );
+            m_negateXcb->SetValue( cfg->m_PlaceFile.negate_xcoord );
+            m_excludeTH->SetValue( cfg->m_PlaceFile.exclude_TH );
+        }
 
         // Update sizes and sizers:
         m_messagesPanel->MsgPanelSetMinSize( wxSize( -1, 160 ) );
@@ -266,22 +268,24 @@ void DIALOG_GEN_FOOTPRINT_POSITION::onGenerate( wxCommandEvent& event )
     {
         m_units  = m_unitsCtrl->GetSelection() == 0 ? EDA_UNITS::INCH : EDA_UNITS::MM;
 
-        PCBNEW_SETTINGS* cfg = m_editFrame->GetPcbNewSettings();
-
         wxString dirStr = m_outputDirectoryName->GetValue();
         // Keep unix directory format convention in cfg files
         dirStr.Replace( wxT( "\\" ), wxT( "/" ) );
 
         m_editFrame->Prj().GetProjectFile().m_PcbLastPath[LAST_PATH_POS_FILES] = dirStr;
-        cfg->m_PlaceFile.output_directory   = dirStr;
-        cfg->m_PlaceFile.units              = m_units == EDA_UNITS::INCH ? 0 : 1;
-        cfg->m_PlaceFile.file_options       = m_singleFile->GetValue() ? 1 : 0;
-        cfg->m_PlaceFile.file_format        = m_formatCtrl->GetSelection();
-        cfg->m_PlaceFile.include_board_edge = m_cbIncludeBoardEdge->GetValue();
-        cfg->m_PlaceFile.exclude_TH         = m_excludeTH->GetValue();
-        cfg->m_PlaceFile.only_SMD           = m_onlySMD->GetValue();
-        cfg->m_PlaceFile.use_aux_origin     = m_useDrillPlaceOrigin->GetValue();
-        cfg->m_PlaceFile.negate_xcoord      = m_negateXcb->GetValue();
+
+        if( PCBNEW_SETTINGS* cfg = m_editFrame->GetPcbNewSettings() )
+        {
+            cfg->m_PlaceFile.output_directory   = dirStr;
+            cfg->m_PlaceFile.units              = m_units == EDA_UNITS::INCH ? 0 : 1;
+            cfg->m_PlaceFile.file_options       = m_singleFile->GetValue() ? 1 : 0;
+            cfg->m_PlaceFile.file_format        = m_formatCtrl->GetSelection();
+            cfg->m_PlaceFile.include_board_edge = m_cbIncludeBoardEdge->GetValue();
+            cfg->m_PlaceFile.exclude_TH         = m_excludeTH->GetValue();
+            cfg->m_PlaceFile.only_SMD           = m_onlySMD->GetValue();
+            cfg->m_PlaceFile.use_aux_origin     = m_useDrillPlaceOrigin->GetValue();
+            cfg->m_PlaceFile.negate_xcoord      = m_negateXcb->GetValue();
+        }
 
         if( m_formatCtrl->GetSelection() == 2 )
             CreateGerberFiles();

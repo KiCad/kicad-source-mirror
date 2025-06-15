@@ -89,8 +89,16 @@ DIALOG_DRC::DIALOG_DRC( PCB_EDIT_FRAME* aEditorFrame, wxWindow* aParent ) :
 
     m_messages->SetImmediateMode();
 
-    PCBNEW_SETTINGS* cfg = m_frame->GetPcbNewSettings();
-    m_severities = cfg->m_DrcDialog.severities;
+    if( PCBNEW_SETTINGS* cfg = m_frame->GetPcbNewSettings() )
+    {
+        m_severities = cfg->m_DrcDialog.severities;
+
+        m_cbRefillZones->SetValue( cfg->m_DrcDialog.refill_zones );
+        m_cbReportAllTrackErrors->SetValue( cfg->m_DrcDialog.test_all_track_errors );
+
+        if( !Kiface().IsSingle() )
+            m_cbTestFootprints->SetValue( cfg->m_DrcDialog.test_footprints );
+    }
 
     m_markersProvider = std::make_shared<DRC_ITEMS_PROVIDER>( m_currentBoard,
                                                               MARKER_BASE::MARKER_DRC,
@@ -145,12 +153,6 @@ DIALOG_DRC::DIALOG_DRC( PCB_EDIT_FRAME* aEditorFrame, wxWindow* aParent ) :
     m_footprintsTitleTemplate  = m_Notebook->GetPageText( 2 );
     m_ignoredTitleTemplate     = m_Notebook->GetPageText( 3 );
 
-    m_cbRefillZones->SetValue( cfg->m_DrcDialog.refill_zones );
-    m_cbReportAllTrackErrors->SetValue( cfg->m_DrcDialog.test_all_track_errors );
-
-    if( !Kiface().IsSingle() )
-        m_cbTestFootprints->SetValue( cfg->m_DrcDialog.test_footprints );
-
     Layout(); // adding the units above expanded Clearance text, now resize.
 
     SetFocus();
@@ -177,18 +179,7 @@ DIALOG_DRC::~DIALOG_DRC()
                                    m_ignoredList->GetItemData( ii ) } );
     }
 
-    PCBNEW_SETTINGS* cfg = nullptr;
-
-    try
-    {
-        cfg = m_frame->GetPcbNewSettings();
-    }
-    catch( const std::runtime_error& e )
-    {
-        wxFAIL_MSG( e.what() );
-    }
-
-    if( cfg )
+    if( PCBNEW_SETTINGS* cfg = m_frame->GetPcbNewSettings() )
     {
         cfg->m_DrcDialog.refill_zones          = m_cbRefillZones->GetValue();
         cfg->m_DrcDialog.test_all_track_errors = m_cbReportAllTrackErrors->GetValue();

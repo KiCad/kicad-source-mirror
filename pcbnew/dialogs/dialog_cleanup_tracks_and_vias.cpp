@@ -42,16 +42,18 @@ DIALOG_CLEANUP_TRACKS_AND_VIAS::DIALOG_CLEANUP_TRACKS_AND_VIAS( PCB_EDIT_FRAME* 
         m_brd( aParentFrame->GetBoard() ),
         m_firstRun( true )
 {
-    PCBNEW_SETTINGS* cfg = m_parentFrame->GetPcbNewSettings();
     m_reporter = new WX_TEXT_CTRL_REPORTER( m_tcReport );
 
-    m_cbRefillZones->SetValue( cfg->m_Cleanup.cleanup_refill_zones );
-    m_cleanViasOpt->SetValue( cfg->m_Cleanup.cleanup_vias );
-    m_mergeSegmOpt->SetValue( cfg->m_Cleanup.merge_segments );
-    m_deleteUnconnectedOpt->SetValue( cfg->m_Cleanup.cleanup_unconnected );
-    m_cleanShortCircuitOpt->SetValue( cfg->m_Cleanup.cleanup_short_circuits );
-    m_deleteTracksInPadsOpt->SetValue( cfg->m_Cleanup.cleanup_tracks_in_pad );
-    m_deleteDanglingViasOpt->SetValue( cfg->m_Cleanup.delete_dangling_vias );
+    if( PCBNEW_SETTINGS* cfg = m_parentFrame->GetPcbNewSettings() )
+    {
+        m_cbRefillZones->SetValue( cfg->m_Cleanup.cleanup_refill_zones );
+        m_cleanViasOpt->SetValue( cfg->m_Cleanup.cleanup_vias );
+        m_mergeSegmOpt->SetValue( cfg->m_Cleanup.merge_segments );
+        m_deleteUnconnectedOpt->SetValue( cfg->m_Cleanup.cleanup_unconnected );
+        m_cleanShortCircuitOpt->SetValue( cfg->m_Cleanup.cleanup_short_circuits );
+        m_deleteTracksInPadsOpt->SetValue( cfg->m_Cleanup.cleanup_tracks_in_pad );
+        m_deleteDanglingViasOpt->SetValue( cfg->m_Cleanup.delete_dangling_vias );
+    }
 
     buildFilterLists();
 
@@ -72,18 +74,7 @@ DIALOG_CLEANUP_TRACKS_AND_VIAS::DIALOG_CLEANUP_TRACKS_AND_VIAS( PCB_EDIT_FRAME* 
 
 DIALOG_CLEANUP_TRACKS_AND_VIAS::~DIALOG_CLEANUP_TRACKS_AND_VIAS()
 {
-    PCBNEW_SETTINGS* cfg = nullptr;
-
-    try
-    {
-        cfg = m_parentFrame->GetPcbNewSettings();
-    }
-    catch( const std::runtime_error& e )
-    {
-        wxFAIL_MSG( e.what() );
-    }
-
-    if( cfg )
+    if( PCBNEW_SETTINGS* cfg = m_parentFrame->GetPcbNewSettings() )
     {
         cfg->m_Cleanup.cleanup_refill_zones   = m_cbRefillZones->GetValue();
         cfg->m_Cleanup.cleanup_vias           = m_cleanViasOpt->GetValue();

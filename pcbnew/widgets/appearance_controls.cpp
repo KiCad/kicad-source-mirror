@@ -576,13 +576,14 @@ APPEARANCE_CONTROLS::APPEARANCE_CONTROLS( PCB_BASE_FRAME* aParent, wxWindow* aFo
     if( m_isFpEditor )
         m_notebook->RemovePage( 2 );
 
-    PCBNEW_SETTINGS* settings = m_frame->GetPcbNewSettings();
+    if( PCBNEW_SETTINGS* cfg = m_frame->GetPcbNewSettings() )
+    {
+        if( cfg->m_AuiPanels.appearance_expand_layer_display )
+            m_paneLayerDisplayOptions->Expand();
 
-    if( settings->m_AuiPanels.appearance_expand_layer_display )
-        m_paneLayerDisplayOptions->Expand();
-
-    if( settings->m_AuiPanels.appearance_expand_net_display )
-        m_paneNetDisplayOptions->Expand();
+        if( cfg->m_AuiPanels.appearance_expand_net_display )
+            m_paneNetDisplayOptions->Expand();
+    }
 
     loadDefaultLayerPresets();
     rebuildLayerPresetsWidget();
@@ -1411,18 +1412,19 @@ void APPEARANCE_CONTROLS::UpdateDisplayOptions()
 
     if( !m_isFpEditor )
     {
-        PCBNEW_SETTINGS* cfg = m_frame->GetPcbNewSettings();
+        if( PCBNEW_SETTINGS* cfg = m_frame->GetPcbNewSettings() )
+        {
+            if( !cfg->m_Display.m_ShowGlobalRatsnest )
+                m_rbRatsnestNone->SetValue( true );
+            else if( cfg->m_Display.m_RatsnestMode == RATSNEST_MODE::ALL )
+                m_rbRatsnestAllLayers->SetValue( true );
+            else
+                m_rbRatsnestVisLayers->SetValue( true );
 
-        if( !cfg->m_Display.m_ShowGlobalRatsnest )
-            m_rbRatsnestNone->SetValue( true );
-        else if( cfg->m_Display.m_RatsnestMode == RATSNEST_MODE::ALL )
-            m_rbRatsnestAllLayers->SetValue( true );
-        else
-            m_rbRatsnestVisLayers->SetValue( true );
-
-        wxASSERT( m_objectSettingsMap.count( LAYER_RATSNEST ) );
-        APPEARANCE_SETTING* ratsnest = m_objectSettingsMap.at( LAYER_RATSNEST );
-        ratsnest->ctl_visibility->SetValue( cfg->m_Display.m_ShowGlobalRatsnest );
+            wxASSERT( m_objectSettingsMap.count( LAYER_RATSNEST ) );
+            APPEARANCE_SETTING* ratsnest = m_objectSettingsMap.at( LAYER_RATSNEST );
+            ratsnest->ctl_visibility->SetValue( cfg->m_Display.m_ShowGlobalRatsnest );
+        }
     }
 }
 
@@ -3269,30 +3271,34 @@ void APPEARANCE_CONTROLS::onNetColorMode( wxCommandEvent& aEvent )
 
 void APPEARANCE_CONTROLS::onRatsnestMode( wxCommandEvent& aEvent )
 {
-    PCBNEW_SETTINGS* cfg = m_frame->GetPcbNewSettings();
-
-    if( m_rbRatsnestAllLayers->GetValue() )
+    if( PCBNEW_SETTINGS* cfg = m_frame->GetPcbNewSettings() )
     {
-        cfg->m_Display.m_ShowGlobalRatsnest = true;
-        cfg->m_Display.m_RatsnestMode = RATSNEST_MODE::ALL;
-    }
-    else if( m_rbRatsnestVisLayers->GetValue() )
-    {
-        cfg->m_Display.m_ShowGlobalRatsnest = true;
-        cfg->m_Display.m_RatsnestMode = RATSNEST_MODE::VISIBLE;
-    }
-    else
-    {
-        cfg->m_Display.m_ShowGlobalRatsnest = false;
+        if( m_rbRatsnestAllLayers->GetValue() )
+        {
+            cfg->m_Display.m_ShowGlobalRatsnest = true;
+            cfg->m_Display.m_RatsnestMode = RATSNEST_MODE::ALL;
+        }
+        else if( m_rbRatsnestVisLayers->GetValue() )
+        {
+            cfg->m_Display.m_ShowGlobalRatsnest = true;
+            cfg->m_Display.m_RatsnestMode = RATSNEST_MODE::VISIBLE;
+        }
+        else
+        {
+            cfg->m_Display.m_ShowGlobalRatsnest = false;
+        }
     }
 
     if( PCB_EDIT_FRAME* editframe = dynamic_cast<PCB_EDIT_FRAME*>( m_frame ) )
     {
-        editframe->SetElementVisibility( LAYER_RATSNEST, cfg->m_Display.m_ShowGlobalRatsnest );
+        if( PCBNEW_SETTINGS* cfg = m_frame->GetPcbNewSettings() )
+            editframe->SetElementVisibility( LAYER_RATSNEST, cfg->m_Display.m_ShowGlobalRatsnest );
+
         editframe->OnDisplayOptionsChanged();
         editframe->GetCanvas()->RedrawRatsnest();
         editframe->GetCanvas()->Refresh();
     }
+
     passOnFocus();
 }
 

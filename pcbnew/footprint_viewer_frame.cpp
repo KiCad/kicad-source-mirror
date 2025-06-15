@@ -282,9 +282,8 @@ FOOTPRINT_VIEWER_FRAME::FOOTPRINT_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent
     ActivateGalCanvas();
 
     // Restore last zoom and auto zoom option.  (If auto-zooming we'll adjust when we load the footprint.)
-    PCBNEW_SETTINGS* cfg = GetPcbNewSettings();
-    wxASSERT( cfg );
-    GetCanvas()->GetView()->SetScale( cfg->m_FootprintViewerZoom );
+    if( PCBNEW_SETTINGS* cfg = GetPcbNewSettings() )
+        GetCanvas()->GetView()->SetScale( cfg->m_FootprintViewerZoom );
 
     updateView();
     setupUnits( config() );
@@ -732,7 +731,6 @@ void FOOTPRINT_VIEWER_FRAME::AddFootprintToPCB()
     if( GetBoard()->GetFirstFootprint() )
     {
         PCB_EDIT_FRAME*  pcbframe = (PCB_EDIT_FRAME*) Kiway().Player( FRAME_PCB_EDITOR, false );
-        PCBNEW_SETTINGS* cfg = pcbframe->GetPcbNewSettings();
 
         if( pcbframe == nullptr )      // happens when the board editor is not active (or closed)
         {
@@ -740,7 +738,8 @@ void FOOTPRINT_VIEWER_FRAME::AddFootprintToPCB()
             return;
         }
 
-        TOOL_MANAGER*   toolMgr = pcbframe->GetToolManager();
+        PCBNEW_SETTINGS* cfg = pcbframe->GetPcbNewSettings();
+        TOOL_MANAGER*    toolMgr = pcbframe->GetToolManager();
 
         if( toolMgr->GetTool<BOARD_EDITOR_CONTROL>()->PlacingFootprint() )
         {
