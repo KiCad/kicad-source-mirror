@@ -45,6 +45,7 @@ JOB_EXPORT_SCH_PLOT::JOB_EXPORT_SCH_PLOT( bool aOutputIsDirectory ) :
         m_drawingSheet(),
         m_plotAll( true ),
         m_plotDrawingSheet( true ),
+        m_show_hop_over( false ),
         m_blackAndWhite( false ),
         m_pageSizeSelect( JOB_PAGE_SIZE::PAGE_SIZE_AUTO ),
         m_useBackgroundColor( true ),
@@ -68,6 +69,9 @@ JOB_EXPORT_SCH_PLOT::JOB_EXPORT_SCH_PLOT( bool aOutputIsDirectory ) :
 
     m_params.emplace_back( new JOB_PARAM<bool>( "black_and_white",
             &m_blackAndWhite, m_blackAndWhite ) );
+
+    m_params.emplace_back( new JOB_PARAM<bool>( "show_hop_over",
+            &m_blackAndWhite, m_show_hop_over ) );
 
     m_params.emplace_back( new JOB_PARAM<JOB_PAGE_SIZE>( "page_size",
             &m_pageSizeSelect, m_pageSizeSelect ) );

@@ -244,6 +244,9 @@ EESCHEMA_SETTINGS::EESCHEMA_SETTINGS() :
     m_params.emplace_back( new PARAM<bool>( "appearance.show_page_limits",
             &m_Appearance.show_page_limits, true ) );
 
+    m_params.emplace_back( new PARAM<bool>( "appearance.show_hop_over",
+            &m_Appearance.show_hop_over, false ) );
+
     m_params.emplace_back( new PARAM<bool>( "appearance.show_sexpr_file_convert_warning",
             &m_Appearance.show_sexpr_file_convert_warning, true ) );
 

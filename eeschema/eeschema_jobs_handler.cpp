@@ -342,6 +342,7 @@ int EESCHEMA_JOBS_HANDLER::JobExportPlot( JOB* aJob )
     plotOpts.m_plotPages = aPlotJob->m_plotPages;
     plotOpts.m_theme = aPlotJob->m_theme;
     plotOpts.m_useBackgroundColor = aPlotJob->m_useBackgroundColor;
+    plotOpts.m_plotHopOver = aPlotJob->m_show_hop_over;
 
     schPlotter->Plot( format, plotOpts, renderSettings.get(), m_reporter );
 

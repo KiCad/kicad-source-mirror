@@ -62,6 +62,7 @@ void PANEL_EESCHEMA_DISPLAY_OPTIONS::loadEEschemaSettings( EESCHEMA_SETTINGS* cf
     m_checkShowOPVoltages->SetValue( cfg->m_Appearance.show_op_voltages );
     m_checkShowPinAltModeIcons->SetValue( cfg->m_Appearance.show_op_currents );
     m_checkPageLimits->SetValue( cfg->m_Appearance.show_page_limits );
+    m_cbHopOver->SetValue( cfg->m_Appearance.show_hop_over );
 
     m_checkSelDrawChildItems->SetValue( cfg->m_Selection.draw_selected_children );
     m_checkSelFillShapes->SetValue( cfg->m_Selection.fill_shapes );
@@ -90,33 +91,34 @@ bool PANEL_EESCHEMA_DISPLAY_OPTIONS::TransferDataFromWindow()
 {
     if( EESCHEMA_SETTINGS* cfg = GetAppSettings<EESCHEMA_SETTINGS>( "eeschema" ) )
     {
-        cfg->m_Appearance.default_font = m_defaultFontCtrl->GetSelection() <= 0
-                                         // This is a keyword. Do not translate.
-                                         ? wxString( KICAD_FONT_NAME )
-                                         : m_defaultFontCtrl->GetStringSelection();
-        cfg->m_Appearance.show_hidden_pins = m_checkShowHiddenPins->GetValue();
-        cfg->m_Appearance.show_hidden_fields = m_checkShowHiddenFields->GetValue();
-        cfg->m_Appearance.show_erc_warnings = m_checkShowERCWarnings->GetValue();
-        cfg->m_Appearance.show_erc_errors = m_checkShowERCErrors->GetValue();
-        cfg->m_Appearance.show_erc_exclusions = m_checkShowERCExclusions->GetValue();
-        cfg->m_Appearance.mark_sim_exclusions = m_cbMarkSimExclusions->GetValue();
-        cfg->m_Appearance.show_op_voltages = m_checkShowOPVoltages->GetValue();
-        cfg->m_Appearance.show_op_currents = m_checkShowOPCurrents->GetValue();
-        cfg->m_Appearance.show_pin_alt_icons = m_checkShowPinAltModeIcons->GetValue();
-        cfg->m_Appearance.show_page_limits = m_checkPageLimits->GetValue();
+    cfg->m_Appearance.default_font = m_defaultFontCtrl->GetSelection() <= 0
+                                     // This is a keyword. Do not translate.
+                                     ? wxString( KICAD_FONT_NAME )
+                                     : m_defaultFontCtrl->GetStringSelection();
+    cfg->m_Appearance.show_hidden_pins = m_checkShowHiddenPins->GetValue();
+    cfg->m_Appearance.show_hidden_fields = m_checkShowHiddenFields->GetValue();
+    cfg->m_Appearance.show_erc_warnings = m_checkShowERCWarnings->GetValue();
+    cfg->m_Appearance.show_erc_errors = m_checkShowERCErrors->GetValue();
+    cfg->m_Appearance.show_erc_exclusions = m_checkShowERCExclusions->GetValue();
+    cfg->m_Appearance.mark_sim_exclusions = m_cbMarkSimExclusions->GetValue();
+    cfg->m_Appearance.show_op_voltages = m_checkShowOPVoltages->GetValue();
+    cfg->m_Appearance.show_op_currents = m_checkShowOPCurrents->GetValue();
+    cfg->m_Appearance.show_pin_alt_icons = m_checkShowPinAltModeIcons->GetValue();
+    cfg->m_Appearance.show_page_limits = m_checkPageLimits->GetValue();
+    cfg->m_Appearance.show_hop_over = m_cbHopOver->GetValue();
 
-        cfg->m_Selection.draw_selected_children = m_checkSelDrawChildItems->GetValue();
-        cfg->m_Selection.fill_shapes = m_checkSelFillShapes->GetValue();
-        cfg->m_Selection.selection_thickness = KiROUND( m_selWidthCtrl->GetValue() );
-        cfg->m_Selection.highlight_thickness = KiROUND( m_highlightWidthCtrl->GetValue() );
-        cfg->m_Selection.highlight_netclass_colors = m_highlightNetclassColors->GetValue();
-        cfg->m_Selection.highlight_netclass_colors_thickness = m_colHighlightThickness->GetValue();
+    cfg->m_Selection.draw_selected_children = m_checkSelDrawChildItems->GetValue();
+    cfg->m_Selection.fill_shapes = m_checkSelFillShapes->GetValue();
+    cfg->m_Selection.selection_thickness = KiROUND( m_selWidthCtrl->GetValue() );
+    cfg->m_Selection.highlight_thickness = KiROUND( m_highlightWidthCtrl->GetValue() );
+    cfg->m_Selection.highlight_netclass_colors = m_highlightNetclassColors->GetValue();
+    cfg->m_Selection.highlight_netclass_colors_thickness = m_colHighlightThickness->GetValue();
         cfg->m_Selection.highlight_netclass_colors_alpha = m_colHighlightTransparency->GetValue() / 100.0;
 
-        cfg->m_CrossProbing.on_selection = m_checkCrossProbeOnSelection->GetValue();
-        cfg->m_CrossProbing.center_on_items = m_checkCrossProbeCenter->GetValue();
-        cfg->m_CrossProbing.zoom_to_fit = m_checkCrossProbeZoom->GetValue();
-        cfg->m_CrossProbing.auto_highlight = m_checkCrossProbeAutoHighlight->GetValue();
+    cfg->m_CrossProbing.on_selection = m_checkCrossProbeOnSelection->GetValue();
+    cfg->m_CrossProbing.center_on_items = m_checkCrossProbeCenter->GetValue();
+    cfg->m_CrossProbing.zoom_to_fit = m_checkCrossProbeZoom->GetValue();
+    cfg->m_CrossProbing.auto_highlight = m_checkCrossProbeAutoHighlight->GetValue();
     }
 
     m_galOptsPanel->TransferDataFromWindow();

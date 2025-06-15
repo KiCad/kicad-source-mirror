@@ -58,6 +58,7 @@ public:
     bool                  m_plotDrawingSheet;
     std::vector<wxString> m_plotPages;
 
+    bool                  m_show_hop_over;
     bool                  m_blackAndWhite;
     JOB_PAGE_SIZE         m_pageSizeSelect;
     bool                  m_useBackgroundColor;

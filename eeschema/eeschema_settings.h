@@ -87,6 +87,7 @@ public:
         bool show_pin_alt_icons;
         bool show_illegal_symbol_lib_dialog;
         bool show_page_limits;
+        bool show_hop_over;
         bool show_sexpr_file_convert_warning;
         bool show_sheet_filename_case_sensitivity_dialog;
     };

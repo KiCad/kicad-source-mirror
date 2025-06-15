@@ -57,6 +57,7 @@ struct SCH_PLOT_OPTS
     bool                  m_plotDrawingSheet;
     std::vector<wxString> m_plotPages;
 
+    bool           m_plotHopOver;
     bool           m_blackAndWhite;
     int            m_pageSizeSelect;
     bool           m_useBackgroundColor;
@@ -71,6 +72,7 @@ struct SCH_PLOT_OPTS
     SCH_PLOT_OPTS() :
         m_plotAll( true ),
         m_plotDrawingSheet( true ),
+        m_plotHopOver( false ),
         m_blackAndWhite( false ),
         m_pageSizeSelect( 0 ),
         m_useBackgroundColor( true ),

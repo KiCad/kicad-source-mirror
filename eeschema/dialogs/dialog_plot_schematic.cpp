@@ -413,6 +413,8 @@ void DIALOG_PLOT_SCHEMATIC::plotSchematic( bool aPlotAll )
     renderSettings.m_ShowHiddenPins = false;
     renderSettings.m_ShowHiddenFields = false;
 
+    EESCHEMA_SETTINGS* cfg = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
+
     getPlotOptions( &renderSettings );
 
     std::unique_ptr<SCH_PLOTTER> schPlotter = std::make_unique<SCH_PLOTTER>( m_editFrame );
@@ -430,6 +432,7 @@ void DIALOG_PLOT_SCHEMATIC::plotSchematic( bool aPlotAll )
     plotOpts.m_PDFMetadata = m_plotPDFMetadata->GetValue();
     plotOpts.m_outputDirectory = getOutputPath();
     plotOpts.m_pageSizeSelect = m_pageSizeSelect;
+    plotOpts.m_plotHopOver = cfg ? cfg->m_Appearance.show_hop_over : false;
 
     schPlotter->Plot( GetPlotFileFormat(), plotOpts, &renderSettings, &m_MessagesBox->Reporter() );
 

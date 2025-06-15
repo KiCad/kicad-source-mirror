@@ -38,6 +38,7 @@
 #define ARG_EXCLUDE_PDF_HIERARCHICAL_LINKS "--exclude-pdf-hierarchical-links"
 #define ARG_EXCLUDE_PDF_METADATA "--exclude-pdf-metadata"
 #define ARG_FONT_NAME "--default-font"
+#define ARG_DRAW_HOP_OVER "--draw-hop-over"
 
 #define DEPRECATED_ARG_HPGL_PEN_SIZE "--pen-size"
 #define DEPRECATED_ARG_HPGL_ORIGIN "--origin"
@@ -71,6 +72,11 @@ CLI::SCH_EXPORT_PLOT_COMMAND::SCH_EXPORT_PLOT_COMMAND( const std::string& aName,
     m_argParser.add_argument( ARG_FONT_NAME )
             .help( UTF8STDSTR( _( "Default font name" ) ) )
             .default_value( wxString( "" ).ToStdString() );
+
+    m_argParser.add_argument( ARG_DRAW_HOP_OVER )
+            .help( UTF8STDSTR( _( "Draw hop over at wire crossings" ) ) )
+            .implicit_value( true )
+            .default_value( false );
 
     if( aPlotFormat == SCH_PLOT_FORMAT::PDF )
     {
@@ -159,6 +165,7 @@ int CLI::SCH_EXPORT_PLOT_COMMAND::doPerform( KIWAY& aKiway )
     plotJob->m_plotDrawingSheet = !m_argParser.get<bool>( ARG_EXCLUDE_DRAWING_SHEET );
     plotJob->m_pageSizeSelect = JOB_PAGE_SIZE::PAGE_SIZE_AUTO;
     plotJob->m_defaultFont = m_argParser.get( ARG_FONT_NAME );
+    plotJob->m_show_hop_over = m_argParser.get<bool>( ARG_DRAW_HOP_OVER );
 
     if( m_plotFormat == SCH_PLOT_FORMAT::PDF
             || m_plotFormat == SCH_PLOT_FORMAT::POST
