@@ -1773,7 +1773,7 @@ int PCB_CONTROL::UpdateMessagePanel( const TOOL_EVENT& aEvent )
             }
         }
 
-        if( ( a->HasHole() || b->HasHole() ) )
+        if( a && b && ( a->HasHole() || b->HasHole() ) )
         {
             PCB_LAYER_ID active = m_frame->GetActiveLayer();
             PCB_LAYER_ID layer = UNDEFINED_LAYER;
