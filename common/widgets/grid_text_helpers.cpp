@@ -126,8 +126,13 @@ void GRID_CELL_STC_EDITOR::SetSize( const wxRect& aRect )
     WX_GRID::CellEditorTransformSizeRect( rect );
 
 #if defined( __WXMSW__ )
+#if !wxCHECK_VERSION( 3, 3, 0 )
     rect.Offset( -1, 0 );
+    // hack no longer needed with wx 3.3
     rect.SetHeight( rect.GetHeight() + 6 );
+#else
+    rect.Offset( 0, 1 );
+#endif
 #elif defined( __WXGTK__ )
     rect.Offset( -1, 3 );
 #else
