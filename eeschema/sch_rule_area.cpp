@@ -198,21 +198,22 @@ wxString SCH_RULE_AREA::GetItemDescription( UNITS_PROVIDER* aUnitsProvider, bool
 }
 
 
-void SCH_RULE_AREA::ResetCaches( KIGFX::SCH_VIEW* view )
+void SCH_RULE_AREA::resetCaches()
 {
     // Save the current state
-    m_prev_items = m_items;
-    m_prev_directives = m_directives;
+    m_prev_items = m_itemIDs;
+    m_prev_directives = m_directiveIDs;
 
     // Reset the rule area
-    clearContainedItems();
-    clearDirectives( view );
+    // Do NOT assume these pointers are valid.
+    m_items.clear();
+    m_itemIDs.clear();
+    m_directives.clear();
+    m_directiveIDs.clear();
 }
 
 
-void SCH_RULE_AREA::RefreshContainedItemsAndDirectives(
-        SCH_SCREEN* screen, KIGFX::SCH_VIEW* view,
-        std::vector<std::pair<SCH_RULE_AREA*, SCH_SCREEN*>>& forceUpdateRuleAreas )
+void SCH_RULE_AREA::RefreshContainedItemsAndDirectives( SCH_SCREEN* screen )
 {
     EE_RTREE&   items = screen->Items();
     const BOX2I boundingBox = GetBoundingBox();
@@ -228,12 +229,8 @@ void SCH_RULE_AREA::RefreshContainedItemsAndDirectives(
         assert( labelConnectionPoints.size() == 1 );
 
         if( GetPolyShape().CollideEdge( labelConnectionPoints[0], nullptr, 5 ) )
-            addDirective( label, view );
+            addDirective( label );
     }
-
-    // If directives have changed, we need to force an update of the contained items connectivity
-    if( m_directives != m_prev_directives )
-        forceUpdateRuleAreas.push_back( { this, screen } );
 
     // Next find any connectable items which lie within the rule area
     EE_RTREE::EE_TYPE ruleAreaItems = items.Overlapping( boundingBox );
@@ -280,17 +277,6 @@ void SCH_RULE_AREA::RefreshContainedItemsAndDirectives(
 }
 
 
-std::unordered_set<SCH_ITEM*> SCH_RULE_AREA::GetPastAndPresentContainedItems() const
-{
-    std::unordered_set<SCH_ITEM*> items = m_items;
-
-    for( SCH_ITEM* item : m_prev_items )
-        items.insert( item );
-
-    return items;
-}
-
-
 std::vector<std::pair<SCH_RULE_AREA*, SCH_SCREEN*>>
 SCH_RULE_AREA::UpdateRuleAreasInScreens( std::unordered_set<SCH_SCREEN*>& screens,
                                          KIGFX::SCH_VIEW*                 view )
@@ -301,17 +287,26 @@ SCH_RULE_AREA::UpdateRuleAreasInScreens( std::unordered_set<SCH_SCREEN*>& screen
     {
         // First reset all item caches - must be done first to ensure two rule areas
         // on the same item don't overwrite each other's caches
-        for( SCH_ITEM* ruleAreaAsItem : screen->Items().OfType( SCH_RULE_AREA_T ) )
+        for( SCH_ITEM* item : screen->Items() )
         {
-            SCH_RULE_AREA* ruleArea = static_cast<SCH_RULE_AREA*>( ruleAreaAsItem );
-            ruleArea->ResetCaches( view );
+            if( item->Type() == SCH_RULE_AREA_T )
+                static_cast<SCH_RULE_AREA*>( item )->resetCaches();
+
+            if( item->Type() == SCH_DIRECTIVE_LABEL_T && view )
+                view->Update( item, KIGFX::REPAINT );
+
+            item->ClearRuleAreasCache();
         }
 
         // Secondly refresh the contained items
         for( SCH_ITEM* ruleAreaAsItem : screen->Items().OfType( SCH_RULE_AREA_T ) )
         {
             SCH_RULE_AREA* ruleArea = static_cast<SCH_RULE_AREA*>( ruleAreaAsItem );
-            ruleArea->RefreshContainedItemsAndDirectives( screen, view, forceUpdateRuleAreas );
+
+            ruleArea->RefreshContainedItemsAndDirectives( screen );
+
+            if( ruleArea->m_directiveIDs != ruleArea->m_prev_directives )
+                forceUpdateRuleAreas.push_back( { ruleArea, screen } );
         }
     }
 
@@ -328,6 +323,12 @@ const std::unordered_set<SCH_ITEM*>& SCH_RULE_AREA::GetContainedItems() const
 const std::unordered_set<SCH_DIRECTIVE_LABEL*>& SCH_RULE_AREA::GetDirectives() const
 {
     return m_directives;
+}
+
+
+const std::unordered_set<KIID>& SCH_RULE_AREA::GetPastContainedItems() const
+{
+    return m_prev_items;
 }
 
 
@@ -362,19 +363,6 @@ const std::vector<std::pair<wxString, SCH_ITEM*>> SCH_RULE_AREA::GetResolvedNetc
 }
 
 
-void SCH_RULE_AREA::ResetDirectivesAndItems( KIGFX::SCH_VIEW* view )
-{
-    for( SCH_DIRECTIVE_LABEL* label : m_directives )
-    {
-        label->ClearConnectedRuleAreas();
-        view->Update( label, KIGFX::REPAINT );
-    }
-
-    for( SCH_ITEM* item : m_items )
-        item->ClearRuleAreasCache();
-}
-
-
 void SCH_RULE_AREA::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList )
 {
     aList.emplace_back( _( "Rule Area" ), wxEmptyString );
@@ -396,27 +384,11 @@ void SCH_RULE_AREA::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PAN
 }
 
 
-void SCH_RULE_AREA::addDirective( SCH_DIRECTIVE_LABEL* label, KIGFX::SCH_VIEW* view )
+void SCH_RULE_AREA::addDirective( SCH_DIRECTIVE_LABEL* label )
 {
     label->AddConnectedRuleArea( this );
     m_directives.insert( label );
-
-    if( view )
-        view->Update( label, KIGFX::REPAINT );
-}
-
-
-void SCH_RULE_AREA::clearDirectives( KIGFX::SCH_VIEW* view )
-{
-    for( SCH_DIRECTIVE_LABEL* label : m_directives )
-    {
-        label->ClearConnectedRuleAreas();
-
-        if( view )
-            view->Update( label, KIGFX::REPAINT );
-    }
-
-    m_directives.clear();
+    m_directiveIDs.insert( label->m_Uuid );
 }
 
 
@@ -424,15 +396,7 @@ void SCH_RULE_AREA::addContainedItem( SCH_ITEM* item )
 {
     item->AddRuleAreaToCache( this );
     m_items.insert( item );
-}
-
-
-void SCH_RULE_AREA::clearContainedItems()
-{
-    for( SCH_ITEM* item : m_items )
-        item->ClearRuleAreasCache();
-
-    m_items.clear();
+    m_itemIDs.insert( item->m_Uuid );
 }
 
 

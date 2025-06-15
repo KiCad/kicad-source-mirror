@@ -1382,10 +1382,6 @@ void SCHEMATIC::RecalculateConnections( SCH_COMMIT* aCommit, SCH_CLEANUP_FLAGS a
                 if( item->Type() == SCH_RULE_AREA_T )
                 {
                     SCH_RULE_AREA* ruleArea = static_cast<SCH_RULE_AREA*>( item );
-
-                    // Clear item and directive associations for this rule area
-                    ruleArea->ResetDirectivesAndItems( aSchView );
-
                     changed_rule_areas.insert( { ruleArea, screen } );
                 }
                 else if( item->IsConnectable() )
@@ -1408,11 +1404,24 @@ void SCHEMATIC::RecalculateConnections( SCH_COMMIT* aCommit, SCH_CLEANUP_FLAGS a
 
         // If a SCH_RULE_AREA was changed, we need to add all past and present contained items to
         // update their connectivity
-        for( const std::pair<SCH_RULE_AREA*, SCH_SCREEN*>& changedRuleArea : changed_rule_areas )
-        {
-            for( SCH_ITEM* containedItem : changedRuleArea.first->GetPastAndPresentContainedItems() )
-                addItemToChangeSet( { containedItem, nullptr, changedRuleArea.second } );
-        }
+        std::map<KIID, EDA_ITEM*> itemMap;
+        list.FillItemMap( itemMap );
+
+        auto addPastAndPresentContainedItems =
+                [&]( SCH_RULE_AREA* changedRuleArea, SCH_SCREEN* screen )
+                {
+                    for( const KIID& pastItem : changedRuleArea->GetPastContainedItems() )
+                    {
+                        if( itemMap.contains( pastItem ) )
+                            addItemToChangeSet( { static_cast<SCH_ITEM*>( itemMap[pastItem] ), nullptr, screen } );
+                    }
+
+                    for( SCH_ITEM* containedItem : changedRuleArea->GetContainedItems() )
+                        addItemToChangeSet( { containedItem, nullptr, screen } );
+                };
+
+        for( const auto& [changedRuleArea, screen] : changed_rule_areas )
+            addPastAndPresentContainedItems( changedRuleArea, screen );
 
         // Add all changed items, and associated items, to the change set
         for( CHANGED_ITEM& changed_item_data : changed_connectable_items )
@@ -1436,10 +1445,7 @@ void SCHEMATIC::RecalculateConnections( SCH_COMMIT* aCommit, SCH_CLEANUP_FLAGS a
                     std::vector<SHAPE*> borderShapes = ruleArea->MakeEffectiveShapes( true );
 
                     if( ruleArea->GetPolyShape().CollideEdge( labelConnectionPoints[0], nullptr, 5 ) )
-                    {
-                        for( SCH_ITEM* containedItem : ruleArea->GetPastAndPresentContainedItems() )
-                            addItemToChangeSet( { containedItem, nullptr, changed_item_data.screen } );
-                    }
+                        addPastAndPresentContainedItems( ruleArea, changed_item_data.screen );
                 }
             }
         }

@@ -95,16 +95,8 @@ public:
 
     wxString GetItemDescription( UNITS_PROVIDER* aUnitsProvider, bool aFull ) const override;
 
-    /// Reset all item and directive caches, saving the current state first.
-    void ResetCaches( KIGFX::SCH_VIEW* view );
-
     /// Refresh the list of items which this rule area affects.
-    void RefreshContainedItemsAndDirectives(
-            SCH_SCREEN* screen, KIGFX::SCH_VIEW* view,
-            std::vector<std::pair<SCH_RULE_AREA*, SCH_SCREEN*>>& forceUpdateRuleAreas );
-
-    /// Fetch all items which were, or are, within the rule area.
-    std::unordered_set<SCH_ITEM*> GetPastAndPresentContainedItems() const;
+    void RefreshContainedItemsAndDirectives( SCH_SCREEN* screen );
 
     /// Update all rule area connectvity / caches in the given sheet paths.
     ///
@@ -115,6 +107,8 @@ public:
     /// Return a set of all items contained within the rule area.
     const std::unordered_set<SCH_ITEM*>& GetContainedItems() const;
 
+    const std::unordered_set<KIID>& GetPastContainedItems() const;
+
     /// Return the set of all directive labels attached to the rule area border.
     const std::unordered_set<SCH_DIRECTIVE_LABEL*>& GetDirectives() const;
 
@@ -123,24 +117,18 @@ public:
     /// @return The resolved netclass (if any), and the SCH_ITEM providing the declaration.
     const std::vector<std::pair<wxString, SCH_ITEM*>> GetResolvedNetclasses() const;
 
-    /// Clear and resets items and directives attached to this rule area.
-    void ResetDirectivesAndItems( KIGFX::SCH_VIEW* view );
-
     /// Get the message panel info for the rule area.
     void GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList ) override;
 
 protected:
     /// Add a directive label which applies to items within ths rule area.
-    void addDirective( SCH_DIRECTIVE_LABEL* label, KIGFX::SCH_VIEW* view );
-
-    /// Clear the list of directives.
-    void clearDirectives( KIGFX::SCH_VIEW* view );
+    void addDirective( SCH_DIRECTIVE_LABEL* label );
 
     /// Add an item to the list of items which this rule area affects.
     void addContainedItem( SCH_ITEM* item );
 
-    /// Clear the list of items which this rule area affects.
-    void clearContainedItems();
+    /// Reset all item and directive caches, saving the current state first.
+    void resetCaches();
 
 protected:
     bool          m_excludedFromSim;
@@ -150,15 +138,17 @@ protected:
 
     /// All #SCH_ITEM objects currently contained or intersecting the rule area.
     std::unordered_set<SCH_ITEM*>            m_items;
+    std::unordered_set<KIID>                 m_itemIDs;
 
     /// All #SCH_DIRECTIVE_LABEL objectss attached to the rule area border.
     std::unordered_set<SCH_DIRECTIVE_LABEL*> m_directives;
+    std::unordered_set<KIID>                 m_directiveIDs;
 
     /// All #SCH_ITEM objectss contained or intersecting the rule area in the previous update.
-    std::unordered_set<SCH_ITEM*>            m_prev_items;
+    std::unordered_set<KIID>                 m_prev_items;
 
     /// All SCH_DIRECTIVE_LABEL objects attached to the rule area border in the previous update.
-    std::unordered_set<SCH_DIRECTIVE_LABEL*> m_prev_directives;
+    std::unordered_set<KIID>                 m_prev_directives;
 };
 
 #endif
