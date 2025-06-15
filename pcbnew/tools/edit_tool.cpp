@@ -2074,9 +2074,26 @@ int EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
     if( selection.Empty() )
         return 0;
 
+    // Some PCB_SHAPE must be rotated around their center instead of their start point in
+    // order to stay to the same place (at least RECT and POLY)
+    // Note a RECT shape rotated by a not cardinal angle is a POLY shape
+    bool usePcbShapeCenter = false;
+
+    if( selection.Size() == 1 && dynamic_cast<PCB_SHAPE*>( selection.Front() ) )
+    {
+        PCB_SHAPE* shape = static_cast<PCB_SHAPE*>( selection.Front() );
+
+        if( shape->GetShape() == SHAPE_T::RECTANGLE || shape->GetShape() == SHAPE_T::POLY )
+            usePcbShapeCenter = true;
+    }
+
     if( selection.Size() == 1 && dynamic_cast<PCB_TEXTBOX*>( selection.Front() ) )
     {
         selection.SetReferencePoint( static_cast<PCB_TEXTBOX*>( selection.Front() )->GetCenter() );
+    }
+    else if( usePcbShapeCenter )
+    {
+        selection.SetReferencePoint( static_cast<PCB_SHAPE*>( selection.Front() )->GetCenter() );
     }
     else
     {
