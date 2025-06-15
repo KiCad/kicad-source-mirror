@@ -2552,7 +2552,7 @@ void PCB_EDIT_FRAME::ExchangeFootprint( FOOTPRINT* aExisting, FOOTPRINT* aNew,
     aNew->SetFilters( aExisting->GetFilters() );
     aNew->SetStaticComponentClass( aExisting->GetComponentClass() );
 
-    if( !aUpdated )
+    if( *aUpdated == false )
     {
         // Check pad shapes, graphics, zones, etc. for changes
         if( aNew->FootprintNeedsUpdate( aExisting, BOARD_ITEM::COMPARE_FLAGS::INSTANCE_TO_INSTANCE ) )
