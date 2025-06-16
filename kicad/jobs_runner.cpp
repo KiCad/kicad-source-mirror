@@ -241,7 +241,7 @@ bool JOBS_RUNNER::RunJobsForDestination( JOBSET_DESTINATION* aDestination, bool 
     int failCount = 0;
     int successCount = 0;
 
-    wxSetEnv( "JOBSET_OUTPUT_TMP_PATH", tempDirPath );
+    wxSetEnv( "JOBSET_OUTPUT_WORK_PATH", tempDirPath );
 
     for( const JOBSET_JOB& job : jobsForDestination )
     {
@@ -330,7 +330,7 @@ bool JOBS_RUNNER::RunJobsForDestination( JOBSET_DESTINATION* aDestination, bool 
         }
     }
 
-    wxUnsetEnv( "JOBSET_OUTPUT_TMP_PATH" );
+    wxUnsetEnv( "JOBSET_OUTPUT_WORK_PATH" );
 
     if( genOutputs )
         success &= aDestination->m_outputHandler->HandleOutputs( tempDirPath, m_project, outputs );
