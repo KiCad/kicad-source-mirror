@@ -48,6 +48,7 @@ bool g_resetFieldVisibilities[2] = { true,   false  };
 bool g_resetFieldEffects[2]      = { true,   false  };
 bool g_resetFieldPositions[2]    = { true,   false  };
 bool g_resetAttributes[2]        = { true,   false  };
+bool g_resetPinVisibilities[2]   = { true,   false  };
 bool g_resetCustomPower[2]       = { false,  false  };
 bool g_resetAlternatePins[2]     = { true,   false  };
 
@@ -153,6 +154,7 @@ DIALOG_CHANGE_SYMBOLS::DIALOG_CHANGE_SYMBOLS( SCH_EDIT_FRAME* aParent, SCH_SYMBO
     m_resetFieldEffects->SetValue( g_resetFieldEffects[ (int) m_mode ] );
     m_resetFieldPositions->SetValue( g_resetFieldPositions[ (int) m_mode ] );
     m_resetAttributes->SetValue( g_resetAttributes[ (int) m_mode ] );
+    m_resetPinTextVisibility->SetValue( g_resetPinVisibilities[ (int) m_mode ] );
     m_resetCustomPower->SetValue( g_resetCustomPower[ (int) m_mode ] );
     m_resetAlternatePin->SetValue( g_resetAlternatePins[ (int) m_mode ] );
 
@@ -236,6 +238,7 @@ DIALOG_CHANGE_SYMBOLS::~DIALOG_CHANGE_SYMBOLS()
     g_resetFieldEffects[ (int) m_mode ] = m_resetFieldEffects->GetValue();
     g_resetFieldPositions[ (int) m_mode ] = m_resetFieldPositions->GetValue();
     g_resetAttributes[ (int) m_mode ] = m_resetAttributes->GetValue();
+    g_resetPinVisibilities[ (int) m_mode ] = m_resetPinTextVisibility->GetValue();
     g_resetCustomPower[ (int) m_mode ] = m_resetCustomPower->GetValue();
     g_resetAlternatePins[ (int) m_mode ] = m_resetAlternatePin->GetValue();
 }
@@ -414,10 +417,25 @@ void DIALOG_CHANGE_SYMBOLS::updateFieldsList()
 }
 
 
-void DIALOG_CHANGE_SYMBOLS::checkAll( bool aCheck )
+void DIALOG_CHANGE_SYMBOLS::selectAll( bool aSelect )
 {
     for( unsigned i = 0; i < m_fieldsBox->GetCount(); ++i )
-        m_fieldsBox->Check( i, aCheck );
+        m_fieldsBox->Check( i, aSelect );
+}
+
+
+void DIALOG_CHANGE_SYMBOLS::checkAll( bool aCheck )
+{
+    m_removeExtraBox->SetValue( aCheck );
+    m_resetEmptyFields->SetValue( aCheck );
+    m_resetFieldText->SetValue( aCheck );
+    m_resetFieldVisibilities->SetValue( aCheck );
+    m_resetFieldEffects->SetValue( aCheck );
+    m_resetFieldPositions->SetValue( aCheck );
+    m_resetPinTextVisibility->SetValue( aCheck );
+    m_resetAlternatePin->SetValue( aCheck );
+    m_resetAttributes->SetValue( aCheck );
+    m_resetCustomPower->SetValue( aCheck );
 }
 
 

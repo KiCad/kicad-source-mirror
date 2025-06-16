@@ -70,15 +70,26 @@ protected:
 
     void onSelectAll( wxCommandEvent& event ) override
     {
-        checkAll( true );
+        selectAll( true );
     }
 
     void onSelectNone( wxCommandEvent& event ) override
+    {
+        selectAll( false );
+    }
+
+    void onCheckAll( wxCommandEvent& aEvent ) override
+    {
+        checkAll( true );
+    }
+
+    void onUncheckAll( wxCommandEvent& aEvent ) override
     {
         checkAll( false );
     }
 
     /// Select or deselect all fields in the listbox widget.
+    void selectAll( bool aSelect );
     void checkAll( bool aCheck );
 
 private:

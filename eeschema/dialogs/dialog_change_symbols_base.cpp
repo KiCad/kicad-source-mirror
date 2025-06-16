@@ -32,25 +32,31 @@ DIALOG_CHANGE_SYMBOLS_BASE::DIALOG_CHANGE_SYMBOLS_BASE( wxWindow* parent, wxWind
 	m_matchSizer->Add( m_matchBySelection, wxGBPosition( 1, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxBOTTOM, 5 );
 
 	m_matchByReference = new wxRadioButton( this, wxID_ANY, _("Update symbols matching reference designator:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_matchSizer->Add( m_matchByReference, wxGBPosition( 2, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxBOTTOM, 2 );
+	m_matchSizer->Add( m_matchByReference, wxGBPosition( 2, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 2 );
 
 	m_specifiedReference = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 200,-1 ), wxTE_PROCESS_ENTER );
-	m_matchSizer->Add( m_specifiedReference, wxGBPosition( 2, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxEXPAND|wxBOTTOM, 2 );
+	m_matchSizer->Add( m_specifiedReference, wxGBPosition( 2, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxRIGHT|wxEXPAND, 5 );
 
 	m_matchByValue = new wxRadioButton( this, wxID_ANY, _("Update symbols matching value:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_matchSizer->Add( m_matchByValue, wxGBPosition( 3, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_specifiedValue = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER );
-	m_matchSizer->Add( m_specifiedValue, wxGBPosition( 3, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
+	m_matchSizer->Add( m_specifiedValue, wxGBPosition( 3, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxEXPAND|wxRIGHT, 5 );
 
 	m_matchById = new wxRadioButton( this, wxID_ANY, _("Update symbols matching library identifier:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_matchSizer->Add( m_matchById, wxGBPosition( 4, 0 ), wxGBSpan( 1, 2 ), wxALIGN_CENTER_VERTICAL|wxTOP, 6 );
+	m_matchSizer->Add( m_matchById, wxGBPosition( 4, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 6 );
+
+	wxBoxSizer* bSizer10;
+	bSizer10 = new wxBoxSizer( wxHORIZONTAL );
 
 	m_specifiedId = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER );
-	m_matchSizer->Add( m_specifiedId, wxGBPosition( 5, 0 ), wxGBSpan( 1, 2 ), wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
+	bSizer10->Add( m_specifiedId, 1, wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_matchIdBrowserButton = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
-	m_matchSizer->Add( m_matchIdBrowserButton, wxGBPosition( 5, 2 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxRIGHT, 3 );
+	bSizer10->Add( m_matchIdBrowserButton, 0, wxALIGN_CENTER_VERTICAL, 5 );
+
+
+	m_matchSizer->Add( bSizer10, wxGBPosition( 4, 1 ), wxGBSpan( 1, 1 ), wxEXPAND|wxRIGHT, 5 );
 
 
 	m_matchSizer->AddGrowableCol( 1 );
@@ -67,24 +73,18 @@ DIALOG_CHANGE_SYMBOLS_BASE::DIALOG_CHANGE_SYMBOLS_BASE( wxWindow* parent, wxWind
 	m_staticline1 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
 	m_mainSizer->Add( m_staticline1, 0, wxEXPAND|wxALL, 4 );
 
-	m_newIdSizer = new wxBoxSizer( wxVERTICAL );
+	m_newIdSizer = new wxBoxSizer( wxHORIZONTAL );
 
 	wxStaticText* m_newIdLabel;
 	m_newIdLabel = new wxStaticText( this, wxID_ANY, _("New library identifier:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_newIdLabel->Wrap( -1 );
-	m_newIdSizer->Add( m_newIdLabel, 0, wxLEFT, 5 );
-
-	wxBoxSizer* bSizer1;
-	bSizer1 = new wxBoxSizer( wxHORIZONTAL );
+	m_newIdSizer->Add( m_newIdLabel, 0, wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_newId = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER );
-	bSizer1->Add( m_newId, 1, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT, 5 );
+	m_newIdSizer->Add( m_newId, 1, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 	m_newIdBrowserButton = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
-	bSizer1->Add( m_newIdBrowserButton, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT, 5 );
-
-
-	m_newIdSizer->Add( bSizer1, 0, wxEXPAND|wxTOP, 2 );
+	m_newIdSizer->Add( m_newIdBrowserButton, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 
 	m_mainSizer->Add( m_newIdSizer, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
@@ -115,6 +115,9 @@ DIALOG_CHANGE_SYMBOLS_BASE::DIALOG_CHANGE_SYMBOLS_BASE( wxWindow* parent, wxWind
 
 	bSizerUpdate->Add( m_updateFieldsSizer, 2, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 10 );
 
+
+	bSizerUpdate->Add( 5, 0, 0, wxEXPAND, 5 );
+
 	m_updateOptionsSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Update Options") ), wxHORIZONTAL );
 
 	wxBoxSizer* bSizer8;
@@ -123,28 +126,31 @@ DIALOG_CHANGE_SYMBOLS_BASE::DIALOG_CHANGE_SYMBOLS_BASE( wxWindow* parent, wxWind
 	m_removeExtraBox = new wxCheckBox( m_updateOptionsSizer->GetStaticBox(), wxID_ANY, _("Remove fields if not in library symbol"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_removeExtraBox->SetToolTip( _("Removes fields that do not occur in the original library symbols") );
 
-	bSizer8->Add( m_removeExtraBox, 0, wxBOTTOM|wxRIGHT, 4 );
+	bSizer8->Add( m_removeExtraBox, 0, wxBOTTOM|wxRIGHT, 5 );
 
 	m_resetEmptyFields = new wxCheckBox( m_updateOptionsSizer->GetStaticBox(), wxID_ANY, _("Reset fields if empty in library symbol"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer8->Add( m_resetEmptyFields, 0, wxBOTTOM|wxRIGHT, 4 );
+	bSizer8->Add( m_resetEmptyFields, 0, wxBOTTOM|wxRIGHT, 5 );
 
 
 	bSizer8->Add( 0, 10, 1, wxEXPAND, 5 );
 
 	m_resetFieldText = new wxCheckBox( m_updateOptionsSizer->GetStaticBox(), wxID_ANY, _("Update/reset field text"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer8->Add( m_resetFieldText, 0, wxBOTTOM|wxRIGHT, 4 );
+	bSizer8->Add( m_resetFieldText, 0, wxBOTTOM|wxRIGHT, 5 );
 
 	m_resetFieldVisibilities = new wxCheckBox( m_updateOptionsSizer->GetStaticBox(), wxID_ANY, _("Update/reset field visibilities"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer8->Add( m_resetFieldVisibilities, 0, wxBOTTOM|wxRIGHT, 4 );
+	bSizer8->Add( m_resetFieldVisibilities, 0, wxBOTTOM|wxRIGHT, 5 );
 
 	m_resetFieldEffects = new wxCheckBox( m_updateOptionsSizer->GetStaticBox(), wxID_ANY, _("Update/reset field text sizes and styles"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer8->Add( m_resetFieldEffects, 0, wxBOTTOM|wxRIGHT, 4 );
+	bSizer8->Add( m_resetFieldEffects, 0, wxBOTTOM|wxRIGHT, 5 );
 
 	m_resetFieldPositions = new wxCheckBox( m_updateOptionsSizer->GetStaticBox(), wxID_ANY, _("Update/reset field positions"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer8->Add( m_resetFieldPositions, 0, wxBOTTOM|wxRIGHT, 4 );
+	bSizer8->Add( m_resetFieldPositions, 0, wxBOTTOM|wxRIGHT, 10 );
+
+	m_checkAll = new wxButton( m_updateOptionsSizer->GetStaticBox(), wxID_ANY, _("Check All Update Options"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer8->Add( m_checkAll, 0, wxEXPAND|wxTOP|wxBOTTOM, 5 );
 
 
-	m_updateOptionsSizer->Add( bSizer8, 0, wxEXPAND, 5 );
+	m_updateOptionsSizer->Add( bSizer8, 0, wxEXPAND|wxRIGHT, 10 );
 
 	wxBoxSizer* bSizer9;
 	bSizer9 = new wxBoxSizer( wxVERTICAL );
@@ -166,10 +172,10 @@ DIALOG_CHANGE_SYMBOLS_BASE::DIALOG_CHANGE_SYMBOLS_BASE( wxWindow* parent, wxWind
 
 	bSizer9->Add( 0, 10, 1, wxEXPAND, 5 );
 
-	m_resetPinTextVisibility = new wxCheckBox( m_updateOptionsSizer->GetStaticBox(), wxID_ANY, _("Update/reset visibility of pin names/numbers"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_resetPinTextVisibility = new wxCheckBox( m_updateOptionsSizer->GetStaticBox(), wxID_ANY, _("Update/reset pin name/number visibility"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer9->Add( m_resetPinTextVisibility, 0, wxBOTTOM|wxRIGHT, 5 );
 
-	m_resetAlternatePin = new wxCheckBox( m_updateOptionsSizer->GetStaticBox(), wxID_ANY, _("Reset alternate pin functions"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_resetAlternatePin = new wxCheckBox( m_updateOptionsSizer->GetStaticBox(), wxID_ANY, _("Reset alternate pin to default"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer9->Add( m_resetAlternatePin, 0, wxBOTTOM|wxRIGHT, 5 );
 
 
@@ -179,13 +185,16 @@ DIALOG_CHANGE_SYMBOLS_BASE::DIALOG_CHANGE_SYMBOLS_BASE( wxWindow* parent, wxWind
 	bSizer9->Add( m_resetAttributes, 0, wxBOTTOM|wxRIGHT, 5 );
 
 	m_resetCustomPower = new wxCheckBox( m_updateOptionsSizer->GetStaticBox(), wxID_ANY, _("Reset custom power symbols"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer9->Add( m_resetCustomPower, 0, wxBOTTOM|wxRIGHT, 5 );
+	bSizer9->Add( m_resetCustomPower, 0, wxBOTTOM|wxRIGHT, 10 );
+
+	m_uncheckAll = new wxButton( m_updateOptionsSizer->GetStaticBox(), wxID_ANY, _("Uncheck All Update Options"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer9->Add( m_uncheckAll, 0, wxEXPAND|wxTOP|wxBOTTOM, 5 );
 
 
-	m_updateOptionsSizer->Add( bSizer9, 0, wxEXPAND, 5 );
+	m_updateOptionsSizer->Add( bSizer9, 0, wxEXPAND|wxLEFT, 5 );
 
 
-	bSizerUpdate->Add( m_updateOptionsSizer, 3, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 10 );
+	bSizerUpdate->Add( m_updateOptionsSizer, 4, wxEXPAND|wxTOP|wxRIGHT, 10 );
 
 
 	m_mainSizer->Add( bSizerUpdate, 0, wxEXPAND, 5 );
@@ -232,6 +241,8 @@ DIALOG_CHANGE_SYMBOLS_BASE::DIALOG_CHANGE_SYMBOLS_BASE( wxWindow* parent, wxWind
 	m_newIdBrowserButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_CHANGE_SYMBOLS_BASE::launchNewIdSymbolBrowser ), NULL, this );
 	m_selAllBtn->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_CHANGE_SYMBOLS_BASE::onSelectAll ), NULL, this );
 	m_selNoneBtn->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_CHANGE_SYMBOLS_BASE::onSelectNone ), NULL, this );
+	m_checkAll->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_CHANGE_SYMBOLS_BASE::onCheckAll ), NULL, this );
+	m_uncheckAll->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_CHANGE_SYMBOLS_BASE::onUncheckAll ), NULL, this );
 	m_sdbSizerOK->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_CHANGE_SYMBOLS_BASE::onOkButtonClicked ), NULL, this );
 }
 
@@ -252,6 +263,8 @@ DIALOG_CHANGE_SYMBOLS_BASE::~DIALOG_CHANGE_SYMBOLS_BASE()
 	m_newIdBrowserButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_CHANGE_SYMBOLS_BASE::launchNewIdSymbolBrowser ), NULL, this );
 	m_selAllBtn->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_CHANGE_SYMBOLS_BASE::onSelectAll ), NULL, this );
 	m_selNoneBtn->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_CHANGE_SYMBOLS_BASE::onSelectNone ), NULL, this );
+	m_checkAll->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_CHANGE_SYMBOLS_BASE::onCheckAll ), NULL, this );
+	m_uncheckAll->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_CHANGE_SYMBOLS_BASE::onUncheckAll ), NULL, this );
 	m_sdbSizerOK->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_CHANGE_SYMBOLS_BASE::onOkButtonClicked ), NULL, this );
 
 }
