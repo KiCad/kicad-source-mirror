@@ -306,7 +306,6 @@ void DIALOG_EXCHANGE_FOOTPRINTS::checkAll( bool aCheck )
   	m_resetTextItemEffects->SetValue( aCheck );
   	m_resetTextItemContent->SetValue( aCheck );
   	m_resetFabricationAttrs->SetValue( aCheck );
-  	m_resetClearanceOverrides->SetValue( aCheck );
   	m_reset3DModels->SetValue( aCheck );
 }
 

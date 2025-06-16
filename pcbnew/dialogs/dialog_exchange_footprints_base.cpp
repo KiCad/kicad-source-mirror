@@ -133,9 +133,6 @@ DIALOG_EXCHANGE_FOOTPRINTS_BASE::DIALOG_EXCHANGE_FOOTPRINTS_BASE( wxWindow* pare
 	m_resetFabricationAttrs = new wxCheckBox( m_updateOptionsSizer->GetStaticBox(), wxID_ANY, _("Update/reset fabrication attributes"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer6->Add( m_resetFabricationAttrs, 0, wxBOTTOM|wxRIGHT, 5 );
 
-	m_resetClearanceOverrides = new wxCheckBox( m_updateOptionsSizer->GetStaticBox(), wxID_ANY, _("Update/reset clearance overrides"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer6->Add( m_resetClearanceOverrides, 0, wxBOTTOM|wxRIGHT, 5 );
-
 	m_reset3DModels = new wxCheckBox( m_updateOptionsSizer->GetStaticBox(), wxID_ANY, _("Update/reset 3D models"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer6->Add( m_reset3DModels, 0, wxBOTTOM|wxRIGHT, 5 );
 
