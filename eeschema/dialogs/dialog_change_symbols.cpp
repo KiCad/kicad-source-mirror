@@ -145,6 +145,9 @@ DIALOG_CHANGE_SYMBOLS::DIALOG_CHANGE_SYMBOLS( SCH_EDIT_FRAME* aParent, SCH_SYMBO
         m_resetFieldEffects->SetLabel( _( "Update field sizes and styles" ) );
         m_resetFieldPositions->SetLabel( _( "Update field positions" ) );
         m_resetAttributes->SetLabel( _( "Update symbol attributes" ) );
+        m_resetPinTextVisibility->SetLabel( _( "Update pin name/number visibilities" ) );
+        m_resetAlternatePin->SetLabel( _( "Reset alternate pin functions" ) );
+        m_resetCustomPower->SetLabel( _( "Reset custom power symbols" ) );
     }
 
     m_removeExtraBox->SetValue( g_removeExtraFields[ (int) m_mode ] );
