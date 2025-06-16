@@ -57,12 +57,8 @@ PCAD_FOOTPRINT::PCAD_FOOTPRINT( PCAD_CALLBACKS* aCallbacks, BOARD* aBoard ) :
 
 PCAD_FOOTPRINT::~PCAD_FOOTPRINT()
 {
-    int i;
-
-    for( i = 0; i < (int) m_FootprintItems.GetCount(); i++ )
-    {
+    for( int i = 0; i < (int) m_FootprintItems.GetCount(); i++ )
         delete m_FootprintItems[i];
-    }
 }
 
 
@@ -79,8 +75,8 @@ XNODE* PCAD_FOOTPRINT::FindModulePatternDefName( XNODE* aNode, const wxString& a
         if( lNode->GetName() == wxT( "patternDef" ) )
         {
             lNode->GetAttribute( wxT( "Name" ), &propValue1 );
-            FindNode( lNode,
-                      wxT( "originalName" ) )->GetAttribute( wxT( "Name" ), &propValue2 );
+            if( XNODE* originalNameNode = FindNode( lNode, wxT( "originalName" ) ) )
+                originalNameNode->GetAttribute( wxT( "Name" ), &propValue2 );
 
             if( ValidateName( propValue1 ) == aName || ValidateName( propValue2 ) == aName )
             {
@@ -135,10 +131,11 @@ XNODE* PCAD_FOOTPRINT::FindPatternMultilayerSection( XNODE* aNode, wxString* aPa
         propValue.Trim( false );
         patName = ValidateName( propValue );
 
-        if( FindNode( lNode, wxT( "attachedPattern" ) ) )
+        if( XNODE* patternNode = FindNode( lNode, wxT( "attachedPattern" ) ) )
         {
-            FindNode( FindNode( lNode, wxT( "attachedPattern" ) ),
-                      wxT( "patternName" ) )->GetAttribute( wxT( "Name" ), &propValue );
+            if( XNODE* patternNameNode = FindNode( patternNode, wxT( "patternName" ) ) )
+                patternNameNode->GetAttribute( wxT( "Name" ), &propValue );
+
             propValue.Trim( false );
             propValue.Trim( true );
             patName = ValidateName( propValue );
@@ -164,12 +161,8 @@ XNODE* PCAD_FOOTPRINT::FindPatternMultilayerSection( XNODE* aNode, wxString* aPa
 
         if( *aPatGraphRefName == wxEmptyString ) // default
         {
-            if( FindNode( aNode, wxT( "patternGraphicsNameRef" ) ) )
-            {
-                FindNode( aNode,
-                          wxT( "patternGraphicsNameRef" ) )->GetAttribute( wxT( "Name" ),
-                                                                           aPatGraphRefName );
-            }
+            if( XNODE* nameRefNode = FindNode( aNode, wxT( "patternGraphicsNameRef" ) ) )
+                nameRefNode->GetAttribute( wxT( "Name" ), aPatGraphRefName );
         }
 
         if( FindNode( aNode, wxT( "patternGraphicsDef" ) ) )
@@ -190,9 +183,8 @@ XNODE* PCAD_FOOTPRINT::FindPatternMultilayerSection( XNODE* aNode, wxString* aPa
         {
             if( lNode->GetName() == wxT( "patternGraphicsDef" ) )
             {
-                FindNode( lNode,
-                          wxT( "patternGraphicsNameDef" ) )->GetAttribute( wxT( "Name" ),
-                                                                           &propValue );
+                if( XNODE* nameDefNode = FindNode( lNode, wxT( "patternGraphicsNameDef" ) ) )
+                    nameDefNode->GetAttribute( wxT( "Name" ), &propValue );
 
                 if( propValue == *aPatGraphRefName )
                 {
@@ -220,23 +212,21 @@ void PCAD_FOOTPRINT::DoLayerContentsObjects( XNODE* aNode, PCAD_FOOTPRINT* aFoot
                                              const wxString& aDefaultMeasurementUnit,
                                              const wxString& aActualConversion )
 {
-    PCAD_ARC*         arc;
-    PCAD_POLYGON*     polygon;
+    PCAD_ARC*         arc = nullptr;
+    PCAD_POLYGON*     polygon = nullptr;
     PCAD_POLYGON*     plane_layer = nullptr;
-    PCAD_COPPER_POUR* copperPour;
-    PCAD_CUTOUT*      cutout;
-    PCAD_PLANE*       plane;
-    VERTICES_ARRAY*   plane_layer_polygon;
-    PCAD_LINE*        line;
-    PCAD_TEXT*        text;
-    XNODE*            lNode;
-    XNODE*            tNode;
+    PCAD_COPPER_POUR* copperPour = nullptr;
+    PCAD_CUTOUT*      cutout = nullptr;
+    PCAD_PLANE*       plane = nullptr;
+    VERTICES_ARRAY*   plane_layer_polygon = nullptr;
+    PCAD_LINE*        line = nullptr;
+    PCAD_TEXT*        text = nullptr;
+    XNODE*            lNode = nullptr;
+    XNODE*            tNode = nullptr;
     wxString          propValue;
-    long long         i;
-    int               PCadLayer;
+    long long         i = 0;
+    int               PCadLayer = 0;
     long              num = 0;
-
-    i = 0;
 
     // aStatusBar->SetStatusText( wxT( "Processing LAYER CONTENT OBJECTS " ) );
     if( FindNode( aNode, wxT( "layerNumRef" ) ) )
@@ -260,8 +250,6 @@ void PCAD_FOOTPRINT::DoLayerContentsObjects( XNODE* aNode, PCAD_FOOTPRINT* aFoot
     while( lNode )
     {
         i++;
-        // aStatusBar->SetStatusText( wxString::Format( "Processing LAYER CONTENT OBJECTS :%lld",
-        // i ) );
 
         if( lNode->GetName() == wxT( "line" ) )
         {
@@ -316,10 +304,13 @@ void PCAD_FOOTPRINT::DoLayerContentsObjects( XNODE* aNode, PCAD_FOOTPRINT* aFoot
         {
             if( m_callbacks->GetLayerType( PCadLayer ) == LAYER_TYPE_PLANE )
             {
-                plane_layer_polygon = new VERTICES_ARRAY;
-                plane_layer->FormPolygon( lNode, plane_layer_polygon, aDefaultMeasurementUnit,
-                                          aActualConversion );
-                plane_layer->m_Cutouts.Add( plane_layer_polygon );
+                if( plane_layer )
+                {
+                    plane_layer_polygon = new VERTICES_ARRAY;
+                    plane_layer->FormPolygon( lNode, plane_layer_polygon, aDefaultMeasurementUnit,
+                                              aActualConversion );
+                    plane_layer->m_Cutouts.Add( plane_layer_polygon );
+                }
             }
             else
             {
@@ -369,12 +360,10 @@ void PCAD_FOOTPRINT::DoLayerContentsObjects( XNODE* aNode, PCAD_FOOTPRINT* aFoot
 
 void PCAD_FOOTPRINT::SetName( const wxString& aPin, const wxString& aName )
 {
-    int     i;
-    long    num;
-
+    long num;
     aPin.ToLong( &num );
 
-    for( i = 0; i < (int) m_FootprintItems.GetCount(); i++ )
+    for( int i = 0; i < (int) m_FootprintItems.GetCount(); i++ )
     {
         if( m_FootprintItems[i]->m_ObjType == wxT( 'P' ) )
         {
@@ -389,10 +378,12 @@ void PCAD_FOOTPRINT::Parse( XNODE* aNode, wxStatusBar* aStatusBar,
                            const wxString& aDefaultMeasurementUnit,
                            const wxString& aActualConversion )
 {
-    XNODE*      lNode, * tNode, * mNode;
-    PCAD_PAD*    pad;
-    PCAD_VIA*    via;
-    wxString    propValue, str;
+    XNODE*     lNode = nullptr;
+    XNODE*     tNode = nullptr;;
+    XNODE*     mNode = nullptr;
+    PCAD_PAD*  pad = nullptr;
+    PCAD_VIA*  via = nullptr;
+    wxString   propValue, str;
 
     FindNode( aNode, wxT( "originalName" ) )->GetAttribute( wxT( "Name" ), &propValue );
     propValue.Trim( false );
@@ -435,8 +426,10 @@ void PCAD_FOOTPRINT::Parse( XNODE* aNode, wxStatusBar* aStatusBar,
     while( lNode )
     {
         if( lNode->GetName() == wxT( "layerContents" ) )
+        {
             DoLayerContentsObjects( lNode, this, &m_FootprintItems, aStatusBar,
                                     aDefaultMeasurementUnit, aActualConversion );
+        }
 
         lNode = lNode->GetNext();
     }
@@ -481,7 +474,6 @@ void PCAD_FOOTPRINT::AddToBoard( FOOTPRINT* aFootprint )
     // No nested footprints....
     wxCHECK( aFootprint == nullptr, /* void */ );
 
-    int i;
     EDA_ANGLE r;
 
     // transform text positions
@@ -553,42 +545,42 @@ void PCAD_FOOTPRINT::AddToBoard( FOOTPRINT* aFootprint )
     val_text->SetLayer( m_Value.mirror ? m_board->FlipLayer( m_KiCadLayer ) : m_KiCadLayer );
 
     // TEXTS
-    for( i = 0; i < (int) m_FootprintItems.GetCount(); i++ )
+    for( int i = 0; i < (int) m_FootprintItems.GetCount(); i++ )
     {
         if( m_FootprintItems[i]->m_ObjType == wxT( 'T' ) )
             m_FootprintItems[ i ]->AddToBoard( footprint );
     }
 
     // FOOTPRINT LINES
-    for( i = 0; i < (int) m_FootprintItems.GetCount(); i++ )
+    for( int i = 0; i < (int) m_FootprintItems.GetCount(); i++ )
     {
         if( m_FootprintItems[i]->m_ObjType == wxT( 'L' ) )
             m_FootprintItems[ i ]->AddToBoard( footprint );
     }
 
     // FOOTPRINT ARCS
-    for( i = 0; i < (int) m_FootprintItems.GetCount(); i++ )
+    for( int i = 0; i < (int) m_FootprintItems.GetCount(); i++ )
     {
         if( m_FootprintItems[i]->m_ObjType == wxT( 'A' ) )
             m_FootprintItems[ i ]->AddToBoard( footprint );
     }
 
     // FOOTPRINT POLYGONS
-    for( i = 0; i < (int) m_FootprintItems.GetCount(); i++ )
+    for( int i = 0; i < (int) m_FootprintItems.GetCount(); i++ )
     {
         if( m_FootprintItems[i]->m_ObjType == wxT( 'Z' ) )
             m_FootprintItems[ i ]->AddToBoard( footprint );
     }
 
     // PADS
-    for( i = 0; i < (int) m_FootprintItems.GetCount(); i++ )
+    for( int i = 0; i < (int) m_FootprintItems.GetCount(); i++ )
     {
         if( m_FootprintItems[i]->m_ObjType == wxT( 'P' ) )
             ((PCAD_PAD*) m_FootprintItems[ i ] )->AddToFootprint( footprint, m_Rotation, false );
     }
 
     // VIAS
-    for( i = 0; i < (int) m_FootprintItems.GetCount(); i++ )
+    for( int i = 0; i < (int) m_FootprintItems.GetCount(); i++ )
     {
         if( m_FootprintItems[i]->m_ObjType == wxT( 'V' ) )
             ((PCAD_VIA*) m_FootprintItems[ i ] )->AddToFootprint( footprint, m_Rotation, false );
@@ -598,13 +590,11 @@ void PCAD_FOOTPRINT::AddToBoard( FOOTPRINT* aFootprint )
 
 void PCAD_FOOTPRINT::Flip()
 {
-    int i;
-
     if( m_Mirror == 1 )
     {
         m_Rotation = -m_Rotation;
 
-        for( i = 0; i < (int) m_FootprintItems.GetCount(); i++ )
+        for( int i = 0; i < (int) m_FootprintItems.GetCount(); i++ )
         {
             if( m_FootprintItems[i]->m_ObjType == wxT( 'L' ) || // lines
                 m_FootprintItems[i]->m_ObjType == wxT( 'A' ) || // arcs
