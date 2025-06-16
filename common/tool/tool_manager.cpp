@@ -1011,6 +1011,16 @@ void TOOL_MANAGER::DispatchContextMenu( const TOOL_EVENT& aEvent )
 }
 
 
+void TOOL_MANAGER::WarpAfterContextMenu()
+{
+    if( m_viewControls && m_warpMouseAfterContextMenu )
+        m_viewControls->WarpMouseCursor( m_menuCursor, true, false );
+
+    // Don't warp again when the menu is closed
+    m_warpMouseAfterContextMenu = false;
+}
+
+
 TOOL_MANAGER::ID_LIST::iterator TOOL_MANAGER::finishTool( TOOL_STATE* aState )
 {
     auto it = std::find( m_activeTools.begin(), m_activeTools.end(), aState->theTool->GetId() );
