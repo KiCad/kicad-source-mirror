@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-06-08 17:02+0300\n"
-"PO-Revision-Date: 2025-06-16 06:01+0000\n"
+"PO-Revision-Date: 2025-06-17 07:01+0000\n"
 "Last-Translator: Luka Borkovic <borkovic@gmail.com>\n"
 "Language-Team: Serbian <https://hosted.weblate.org/projects/kicad/"
 "master-source/sr/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 5.12-dev\n"
+"X-Generator: Weblate 5.12.1\n"
 "X-Poedit-Bookmarks: -1,-1,5234,-1,-1,-1,-1,-1,-1,-1\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
@@ -4515,83 +4515,91 @@ msgid ""
 "If checked, launching a project will also launch tools such as the schematic "
 "and board editors with previously open files"
 msgstr ""
+"Ако је штиклирано, отварање пројекта такође отвара алате као што су уређивач "
+"шеме и плоче са претходно отвореним фајловима"
 
 #: common/dialogs/panel_common_settings_base.cpp:337
 msgid "&Auto save:"
-msgstr "& Аутоматско чување:"
+msgstr "&Аутоматско чување:"
 
 #: common/dialogs/panel_common_settings_base.cpp:342
 msgid ""
 "Delay after the first change to create a backup file of the board on disk.\n"
 "If set to 0, auto backup is disabled"
 msgstr ""
+"Временски интервал након прве промене за стварање резервне копије фајла "
+"плоче на диску\n"
+"Ако се постави на 0, аутоматско прављење резервне копије је искључено"
 
 #: common/dialogs/panel_common_settings_base.cpp:351
-#, fuzzy
 msgid "File history size:"
-msgstr "фајл не постоји"
+msgstr "Величина историје фајлова:"
 
 #: common/dialogs/panel_common_settings_base.cpp:358
 msgid "3D cache file duration:"
-msgstr ""
+msgstr "Трајање 3D кеш фајлова:"
 
 #: common/dialogs/panel_common_settings_base.cpp:363
 msgid ""
 "3D cache files older than this are deleted.\n"
 "If set to 0, cache clearing is disabled"
 msgstr ""
+"3D кеш фајлови старији од овога биће избрисани.\n"
+"Ако се постави на 0, чишћење кеша је онемогућено"
 
 #: common/dialogs/panel_common_settings_base.cpp:367
 msgid "days"
-msgstr ""
+msgstr "дана"
 
 #: common/dialogs/panel_common_settings_base.cpp:382
-#, fuzzy
 msgid "Project Backup"
-msgstr "Пројект"
+msgstr "Прављење резервне копије пројекта"
 
 #: common/dialogs/panel_common_settings_base.cpp:397
-#, fuzzy
 msgid "Automatically backup projects"
-msgstr "Недостаје.\n"
+msgstr "Аутоматски направи резервну копију пројекта"
 
 #: common/dialogs/panel_common_settings_base.cpp:398
 msgid ""
 "Automatically create backup archives of the current project when saving files"
 msgstr ""
+"Аутоматски направи резервну копију архива тренутног пројекта када чуваш "
+"фајлове"
 
 #: common/dialogs/panel_common_settings_base.cpp:402
 msgid "Create backups when auto save occurs"
-msgstr ""
+msgstr "Направи резервну копију кад се деси ауто чување"
 
 #: common/dialogs/panel_common_settings_base.cpp:403
 msgid ""
 "Create backups when the auto save feature is enabled.  If not checked, "
 "backups will only be created when you manually save a file."
 msgstr ""
+"Направи резервну копију када се ауто чување омогући. Ако није штиклирано, "
+"резервне копије ће само бити направљене када ручно сачуваш фајл."
 
 #: common/dialogs/panel_common_settings_base.cpp:407
-#, fuzzy
 msgid "Maximum backups to keep:"
-msgstr "Величина текста:"
+msgstr "Максималан број резервних копија за чување:"
 
 #: common/dialogs/panel_common_settings_base.cpp:409
 msgid "How many backup files total to keep (set to 0 for no limit)"
 msgstr ""
+"Колико највише фајлова копије укупно чувати (постави на 0 за бесконачно)"
 
 #: common/dialogs/panel_common_settings_base.cpp:416
-#, fuzzy
 msgid "Maximum backups per day:"
-msgstr "Величина текста:"
+msgstr "Максималан број резервних копија по дану:"
 
 #: common/dialogs/panel_common_settings_base.cpp:418
 msgid "How many backup files to keep each day (set to 0 for no limit)"
 msgstr ""
+"Колико највише фајлова копије чувати свакога дана (постави на 0 за "
+"бесконачно)"
 
 #: common/dialogs/panel_common_settings_base.cpp:425
-#, fuzzy
 msgid "Minimum time between backups:"
-msgstr "Величина текста:"
+msgstr "Најмање време између прављења две резервне копије:"
 
 #: common/dialogs/panel_common_settings_base.cpp:427
 msgid ""
