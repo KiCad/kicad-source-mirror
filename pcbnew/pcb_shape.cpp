@@ -979,6 +979,21 @@ static struct PCB_SHAPE_DESC
         propMgr.Mask( TYPE_HASH( PCB_SHAPE ), TYPE_HASH( EDA_SHAPE ), _HKI( "Line Color" ) );
         propMgr.Mask( TYPE_HASH( PCB_SHAPE ), TYPE_HASH( EDA_SHAPE ), _HKI( "Fill Color" ) );
 
+        // BEZIER curves are not closed shapes, and fill is not supported in board editor,
+        // only in schematic editor.
+        // So disable Fill option for Bezier curves
+        auto isNotBezier =
+                []( INSPECTABLE* aItem ) -> bool
+                {
+                    if( PCB_SHAPE* shape = dynamic_cast<PCB_SHAPE*>( aItem ) )
+                        return shape->GetShape() != SHAPE_T::BEZIER;
+
+                    return true;
+                };
+
+        propMgr.OverrideAvailability( TYPE_HASH( PCB_SHAPE ), TYPE_HASH( EDA_SHAPE ),
+                                      _HKI( "Fill" ), isNotBezier );
+
         auto isCopper =
                 []( INSPECTABLE* aItem ) -> bool
                 {

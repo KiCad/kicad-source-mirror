@@ -1031,7 +1031,9 @@ DIALOG_SHAPE_PROPERTIES::DIALOG_SHAPE_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, 
         }
     }
 
-    if( m_item->GetShape() == SHAPE_T::ARC || m_item->GetShape() == SHAPE_T::SEGMENT )
+    if( m_item->GetShape() == SHAPE_T::ARC
+        || m_item->GetShape() == SHAPE_T::SEGMENT
+        || m_item->GetShape() == SHAPE_T::BEZIER )
     {
         m_fillLabel->Show( false );
         m_fillCtrl->Show( false );
