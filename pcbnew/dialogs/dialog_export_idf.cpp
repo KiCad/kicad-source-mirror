@@ -34,6 +34,11 @@
 
 DIALOG_EXPORT_IDF3::DIALOG_EXPORT_IDF3( PCB_EDIT_FRAME* aEditFrame ) :
         DIALOG_EXPORT_IDF3_BASE( aEditFrame ),
+        m_idfThouOpt( false ),
+        m_AutoAdjust( false ),
+        m_RefUnits( 0 ),
+        m_XRef( 0.0 ),
+        m_YRef( 0.0 ),
         m_editFrame( aEditFrame )
 {
     SetFocus();

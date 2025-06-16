@@ -43,7 +43,16 @@
 
 DIALOG_EXPORT_VRML::DIALOG_EXPORT_VRML( PCB_EDIT_FRAME* aEditFrame ) :
         DIALOG_EXPORT_VRML_BASE( aEditFrame ),
-        m_editFrame( aEditFrame )
+        m_editFrame( aEditFrame ),
+        m_unitsOpt( 1 ),
+        m_noUnspecified( false ),
+        m_noDNP( false ),
+        m_copy3DFilesOpt( false ),
+        m_useRelativePathsOpt( false ),
+        m_RefUnits( 0 ),
+        m_XRef( 0.0 ),
+        m_YRef( 0.0 ),
+        m_originMode( 0 )
 {
     m_filePicker->SetFocus();
 

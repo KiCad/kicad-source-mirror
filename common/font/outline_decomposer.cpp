@@ -48,7 +48,7 @@ void OUTLINE_DECOMPOSER::newContour()
 {
     CONTOUR contour;
     contour.m_Orientation = FT_Outline_Get_Orientation( &m_outline );
-    m_contours->push_back( contour );
+    m_contours->push_back( std::move( contour ) );
 }
 
 

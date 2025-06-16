@@ -44,7 +44,8 @@ public:
             SCH_SHAPE( SHAPE_T::POLY, LAYER_RULE_AREAS, 0 /* line width */, FILL_T::NO_FILL, SCH_RULE_AREA_T ),
             m_excludedFromSim( false ),
             m_excludedFromBOM( false ),
-            m_excludedFromBoard( false )
+            m_excludedFromBoard( false ),
+            m_DNP( false )
     {
         SetLayer( LAYER_RULE_AREAS );
     }
