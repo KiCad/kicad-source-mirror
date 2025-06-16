@@ -331,7 +331,7 @@ bool JOBS_RUNNER::RunJobsForDestination( JOBSET_DESTINATION* aDestination, bool 
         }
     }
 
-    wxUnsetEnv( "JOBSET_OUTPUT_TMP_PATH" );
+    wxUnsetEnv( OUTPUT_TMP_PATH_VAR_NAME );
 
     if( genOutputs )
         success &= aDestination->m_outputHandler->HandleOutputs( tempDirPath, m_project, outputs );
