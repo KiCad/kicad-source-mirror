@@ -1338,6 +1338,9 @@ void ROUTER_TOOL::performRouting( VECTOR2D aStartPosition )
         }
         else if( evt->IsAction( &PCB_ACTIONS::routerAttemptFinish ) )
         {
+            if( m_toolMgr->IsContextMenuActive() )
+                m_toolMgr->WarpAfterContextMenu();
+
             bool* autoRouted = evt->Parameter<bool*>();
 
             if( m_router->Finish() )
