@@ -262,8 +262,9 @@ public:
     bool IsParallel( const SCH_LINE* aLine ) const;
 
     /**
-     * For wires only: @return true if a wire can accept a hop over arc shape
-     * (when 2 wires are crossing, only one must accept the hpo over)
+     * For wires only:
+     * @return true if a wire can accept a hop over arc shape
+     * (when 2 wires are crossing, only one must accept the hop over arc)
      */
     bool ShouldHopOver( const SCH_LINE* aLine ) const;
 

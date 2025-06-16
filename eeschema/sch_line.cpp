@@ -1011,24 +1011,26 @@ double SCH_LINE::Similarity( const SCH_ITEM& aOther ) const
 
 bool SCH_LINE::ShouldHopOver( const SCH_LINE* aLine ) const
 {
-    bool isLine1Vertical = ( m_end.x == m_start.x );
-    bool isLine2Vertical = ( aLine->GetEndPoint().x == aLine->GetStartPoint().x );
+    // try to find if this should hop over aLine. Horizontal wires have preference for hop.
+    bool isMeVertical = ( m_end.x == m_start.x );
+    bool isCandidateVertical = ( aLine->GetEndPoint().x == aLine->GetStartPoint().x );
 
     // Vertical vs. Horizontal: Horizontal should hop
-    if( isLine1Vertical && !isLine2Vertical )
+    if( isMeVertical && !isCandidateVertical )
         return false;
 
-    if( isLine2Vertical && !isLine1Vertical )
+    if( isCandidateVertical && !isMeVertical )
         return true;
 
-    double slope1 = 0;
-    double slope2 = 0;
+    // Both this and aLine have a slope. Try to find the best candidate
+    double slopeMe = ( m_end.y - m_start.y ) / (double) ( m_end.x - m_start.x );
+    double slopeCandidate = ( aLine->GetEndPoint().y - aLine->GetStartPoint().y )
+                        / (double) ( aLine->GetEndPoint().x - aLine->GetStartPoint().x );
 
-    slope1 = ( m_end.y - m_start.y ) / (double) ( m_end.x - m_start.x );
-    slope2 = ( aLine->GetEndPoint().y - aLine->GetStartPoint().y )
-                    / (double) ( aLine->GetEndPoint().x - aLine->GetStartPoint().x );
+    if( fabs( slopeMe ) == fabs( slopeCandidate ) )     // Can easily happen with 45 deg wires
+        return slopeMe < slopeCandidate;                // signs are certainly different
 
-    return fabs( slope1 ) < fabs( slope2 ); // The shallower line should hop
+    return fabs( slopeMe ) < fabs( slopeCandidate ); // The shallower line should hop
 }
 
 
