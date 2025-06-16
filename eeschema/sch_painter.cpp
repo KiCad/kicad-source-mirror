@@ -1479,6 +1479,7 @@ void SCH_PAINTER::draw( const SCH_LINE* aLine, int aLayer )
         return;
 
     m_gal->SetIsStroke( true );
+    m_gal->SetIsFill( false );
     m_gal->SetStrokeColor( color );
     m_gal->SetLineWidth( width );
 
