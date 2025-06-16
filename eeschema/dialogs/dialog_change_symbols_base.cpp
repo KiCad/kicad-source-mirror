@@ -175,7 +175,7 @@ DIALOG_CHANGE_SYMBOLS_BASE::DIALOG_CHANGE_SYMBOLS_BASE( wxWindow* parent, wxWind
 	m_resetPinTextVisibility = new wxCheckBox( m_updateOptionsSizer->GetStaticBox(), wxID_ANY, _("Update/reset pin name/number visibility"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer9->Add( m_resetPinTextVisibility, 0, wxBOTTOM|wxRIGHT, 5 );
 
-	m_resetAlternatePin = new wxCheckBox( m_updateOptionsSizer->GetStaticBox(), wxID_ANY, _("Reset alternate pin to default"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_resetAlternatePin = new wxCheckBox( m_updateOptionsSizer->GetStaticBox(), wxID_ANY, _("Reset alternate pin functions"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer9->Add( m_resetAlternatePin, 0, wxBOTTOM|wxRIGHT, 5 );
 
 
