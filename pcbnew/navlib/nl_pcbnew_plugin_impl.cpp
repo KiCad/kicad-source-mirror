@@ -122,7 +122,8 @@ static void add_category( const std::string& aCategoryPath, CATEGORY_STORE& aCat
 
     aCategoryStore.insert( aCategoryStore.end(), { aCategoryPath, categoryNode.get() } );
 
-    parent_iter->second->push_back( std::move( categoryNode ) );
+    if( parent_iter != aCategoryStore.end() )
+        parent_iter->second->push_back( std::move( categoryNode ) );
 }
 
 
@@ -203,11 +204,13 @@ void NL_PCBNEW_PLUGIN_IMPL::exportCommandsAndImages()
             }
         }
 
-        wxLogTrace( m_logTrace, wxT( "Inserting command: %s,  description: %s,  in category:  %s" ),
-                    name, description, iter->first );
+        if( iter != categoryStore.end() )
+        {
+            wxLogTrace( m_logTrace, wxT( "Inserting command: %s,  description: %s,  in category:  %s" ),
+                        name, description, iter->first );
 
-        iter->second->push_back( CCommand( std::move( name ), std::move( label ),
-                                           std::move( description ) ) );
+            iter->second->push_back( CCommand( name, label, description ) );
+        }
     }
 
     NAV_3D::AddCommandSet( commandSet );
@@ -217,7 +220,7 @@ void NL_PCBNEW_PLUGIN_IMPL::exportCommandsAndImages()
 
 long NL_PCBNEW_PLUGIN_IMPL::GetCameraMatrix( navlib::matrix_t& matrix ) const
 {
-    if( m_view == nullptr )
+    if( !m_view )
         return navlib::make_result_code( navlib::navlib_errc::no_data_available );
 
     m_viewPosition = m_view->GetCenter();
@@ -237,7 +240,7 @@ long NL_PCBNEW_PLUGIN_IMPL::GetCameraMatrix( navlib::matrix_t& matrix ) const
 
 long NL_PCBNEW_PLUGIN_IMPL::GetPointerPosition( navlib::point_t& position ) const
 {
-    if( m_view == nullptr )
+    if( !m_view )
         return navlib::make_result_code( navlib::navlib_errc::no_data_available );
 
     VECTOR2D mouse_pointer = m_viewport2D->GetViewControls()->GetMousePosition();
@@ -252,7 +255,7 @@ long NL_PCBNEW_PLUGIN_IMPL::GetPointerPosition( navlib::point_t& position ) cons
 
 long NL_PCBNEW_PLUGIN_IMPL::GetViewExtents( navlib::box_t& extents ) const
 {
-    if( m_view == nullptr )
+    if( !m_view )
         return navlib::make_result_code( navlib::navlib_errc::no_data_available );
 
     double scale = m_viewport2D->GetGAL()->GetWorldScale();
@@ -281,14 +284,13 @@ long NL_PCBNEW_PLUGIN_IMPL::GetIsViewPerspective( navlib::bool_t& perspective ) 
 
 long NL_PCBNEW_PLUGIN_IMPL::SetCameraMatrix( const navlib::matrix_t& matrix )
 {
-    if( m_view == nullptr )
+    if( !m_view )
         return navlib::make_result_code( navlib::navlib_errc::invalid_operation );
 
     long     result = 0;
     VECTOR2D viewPos( matrix.m4x4[3][0], matrix.m4x4[3][1] );
 
-    if( !equals( m_view->GetCenter(), m_viewPosition,
-                 static_cast<VECTOR2D::coord_type>( FLT_EPSILON ) ) )
+    if( !equals( m_view->GetCenter(), m_viewPosition, static_cast<VECTOR2D::coord_type>( FLT_EPSILON ) ) )
     {
         m_view->SetCenter( viewPos + m_view->GetCenter() - m_viewPosition );
         result = navlib::make_result_code( navlib::navlib_errc::error );
@@ -306,7 +308,7 @@ long NL_PCBNEW_PLUGIN_IMPL::SetCameraMatrix( const navlib::matrix_t& matrix )
 
 long NL_PCBNEW_PLUGIN_IMPL::SetViewExtents( const navlib::box_t& extents )
 {
-    if( m_view == nullptr )
+    if( !m_view )
         return navlib::make_result_code( navlib::navlib_errc::invalid_operation );
 
     long result = 0;
@@ -341,7 +343,7 @@ long NL_PCBNEW_PLUGIN_IMPL::SetViewFrustum( const navlib::frustum_t& frustum )
 
 long NL_PCBNEW_PLUGIN_IMPL::GetModelExtents( navlib::box_t& extents ) const
 {
-    if( m_view == nullptr )
+    if( !m_view )
         return navlib::make_result_code( navlib::navlib_errc::no_data_available );
 
     BOX2I box = static_cast<PCB_BASE_FRAME*>( m_viewport2D->GetParent() )->GetDocumentExtents();
@@ -409,7 +411,7 @@ long NL_PCBNEW_PLUGIN_IMPL::SetActiveCommand( std::string commandId )
             context = action;
     }
 
-    if( context != nullptr )
+    if( context )
     {
         wxWindow* parent = m_viewport2D->GetParent();
 

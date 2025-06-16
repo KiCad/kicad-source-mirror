@@ -171,17 +171,15 @@ unsigned int OPENGL_COMPOSITOR::CreateBuffer( VECTOR2I aDimensions )
 
     if( (int) usedBuffers() >= maxBuffers )
     {
-        throw std::runtime_error( "Cannot create more framebuffers. OpenGL rendering backend "
-                                  "requires at least 3 framebuffers. You may try to update/change "
-                                  "your graphic drivers." );
+        throw std::runtime_error( "Cannot create more framebuffers. OpenGL rendering backend requires at "
+                                  "least 3 framebuffers. You may try to update/change your graphic drivers." );
     }
 
     glGetIntegerv( GL_MAX_TEXTURE_SIZE, (GLint*) &maxTextureSize );
 
     if( maxTextureSize < (int) aDimensions.x || maxTextureSize < (int) aDimensions.y )
     {
-        throw std::runtime_error( "Requested texture size is not supported. "
-                                  "Could not create a buffer." );
+        throw std::runtime_error( "Requested texture size is not supported. Could not create a buffer." );
     }
 
     // GL_COLOR_ATTACHMENTn are consecutive integers
@@ -197,16 +195,14 @@ unsigned int OPENGL_COMPOSITOR::CreateBuffer( VECTOR2I aDimensions )
 
     // Set texture parameters
     glTexEnvf( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE );
-    glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA8, aDimensions.x, aDimensions.y, 0, GL_RGBA,
-                  GL_UNSIGNED_BYTE, nullptr );
+    glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA8, aDimensions.x, aDimensions.y, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr );
     checkGlError( "creating framebuffer texture", __FILE__, __LINE__ );
     glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST );
     glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST );
 
     // Bind the texture to the specific attachment point, clear and rebind the screen
     bindFb( m_mainFbo );
-    glFramebufferTexture2DEXT( GL_FRAMEBUFFER_EXT, attachmentPoint, GL_TEXTURE_2D, textureTarget,
-                               0 );
+    glFramebufferTexture2DEXT( GL_FRAMEBUFFER_EXT, attachmentPoint, GL_TEXTURE_2D, textureTarget, 0 );
 
     // Check the status, exit if the framebuffer can't be created
     GLenum status = glCheckFramebufferStatusEXT( GL_FRAMEBUFFER_EXT );
@@ -222,20 +218,17 @@ unsigned int OPENGL_COMPOSITOR::CreateBuffer( VECTOR2I aDimensions )
             throw std::runtime_error( "No images attached to the framebuffer." );
 
         case GL_FRAMEBUFFER_INCOMPLETE_DRAW_BUFFER_EXT:
-            throw std::runtime_error( "The framebuffer does not have at least one "
-                                      "image attached to it." );
+            throw std::runtime_error( "The framebuffer does not have at least one image attached to it." );
 
         case GL_FRAMEBUFFER_INCOMPLETE_READ_BUFFER_EXT:
             throw std::runtime_error( "The framebuffer read buffer is incomplete." );
 
         case GL_FRAMEBUFFER_UNSUPPORTED_EXT:
-            throw std::runtime_error( "The combination of internal formats of the attached "
-                                      "images violates an implementation-dependent set of "
-                                      "restrictions." );
+            throw std::runtime_error( "The combination of internal formats of the attached images violates "
+                                      "an implementation-dependent set of restrictions." );
 
         case GL_FRAMEBUFFER_INCOMPLETE_MULTISAMPLE_EXT:
-            throw std::runtime_error( "GL_RENDERBUFFER_SAMPLES is not the same for "
-                                      "all attached renderbuffers" );
+            throw std::runtime_error( "GL_RENDERBUFFER_SAMPLES is not the same for all attached renderbuffers" );
 
         case GL_FRAMEBUFFER_INCOMPLETE_LAYER_TARGETS_EXT:
             throw std::runtime_error( "Framebuffer incomplete layer targets errors." );
@@ -263,15 +256,14 @@ unsigned int OPENGL_COMPOSITOR::CreateBuffer( VECTOR2I aDimensions )
 
 GLenum OPENGL_COMPOSITOR::GetBufferTexture( unsigned int aBufferHandle )
 {
-    wxASSERT( aBufferHandle > 0 && aBufferHandle <= usedBuffers() );
+    wxCHECK( aBufferHandle > 0 && aBufferHandle <= usedBuffers(), 0 );
     return m_buffers[aBufferHandle - 1].textureTarget;
 }
 
 
 void OPENGL_COMPOSITOR::SetBuffer( unsigned int aBufferHandle )
 {
-    wxASSERT( m_initialized );
-    wxASSERT( aBufferHandle <= usedBuffers() );
+    wxCHECK( m_initialized && aBufferHandle <= usedBuffers(), /* void */ );
 
     // Either unbind the FBO for direct rendering, or bind the one with target textures
     bindFb( aBufferHandle == DIRECT_RENDERING ? DIRECT_RENDERING : m_mainFbo );
@@ -283,8 +275,7 @@ void OPENGL_COMPOSITOR::SetBuffer( unsigned int aBufferHandle )
         glDrawBuffer( m_buffers[m_curBuffer].attachmentPoint );
         checkGlError( "setting draw buffer", __FILE__, __LINE__ );
 
-        glViewport( 0, 0, m_buffers[m_curBuffer].dimensions.x,
-                    m_buffers[m_curBuffer].dimensions.y );
+        glViewport( 0, 0, m_buffers[m_curBuffer].dimensions.x, m_buffers[m_curBuffer].dimensions.y );
     }
     else
     {
@@ -295,7 +286,7 @@ void OPENGL_COMPOSITOR::SetBuffer( unsigned int aBufferHandle )
 
 void OPENGL_COMPOSITOR::ClearBuffer( const COLOR4D& aColor )
 {
-    wxASSERT( m_initialized );
+    wxCHECK( m_initialized, /* void */ );
 
     glClearColor( aColor.r, aColor.g, aColor.b, m_curFbo == DIRECT_RENDERING ? 1.0f : 0.0f );
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT );
@@ -326,9 +317,8 @@ void OPENGL_COMPOSITOR::DrawBuffer( unsigned int aBufferHandle )
 
 void OPENGL_COMPOSITOR::DrawBuffer( unsigned int aSourceHandle, unsigned int aDestHandle )
 {
-    wxASSERT( m_initialized );
-    wxASSERT( aSourceHandle != 0 && aSourceHandle <= usedBuffers() );
-    wxASSERT( aDestHandle <= usedBuffers() );
+    wxCHECK( m_initialized && aSourceHandle != 0 && aSourceHandle <= usedBuffers(), /* void */ );
+    wxCHECK( aDestHandle <= usedBuffers(), /* void */ );
 
     // Switch to the destination buffer and blit the scene
     SetBuffer( aDestHandle );
@@ -393,7 +383,7 @@ void OPENGL_COMPOSITOR::bindFb( unsigned int aFb )
 
 void OPENGL_COMPOSITOR::clean()
 {
-    wxASSERT( m_initialized );
+    wxCHECK( m_initialized, /* void */ );
 
     bindFb( DIRECT_RENDERING );
 

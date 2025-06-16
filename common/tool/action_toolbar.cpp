@@ -799,9 +799,7 @@ void ACTION_TOOLBAR::popupPalette( wxAuiToolBarItem* aItem )
 
     wxWindow* toolParent = dynamic_cast<wxWindow*>( m_toolManager->GetToolHolder() );
 
-    wxASSERT( GetParent() );
-    wxASSERT( m_auiManager );
-    wxASSERT( toolParent );
+    wxCHECK( GetParent() && m_auiManager && toolParent, /* void */ );
 
     // Ensure the item we are using for the palette has a group associated with it.
     const auto it = m_actionGroups.find( aItem->GetId() );

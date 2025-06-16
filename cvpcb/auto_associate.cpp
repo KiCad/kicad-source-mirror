@@ -192,7 +192,8 @@ void CVPCB_MAINFRAME::AutomaticFootprintMatching()
     error_msg.Empty();
 
     bool firstAssoc = true;
-    for( unsigned kk = 0;  kk < m_netlist.GetCount();  kk++ )
+
+    for( int kk = 0;  kk < (int) m_netlist.GetCount();  kk++ )
     {
         COMPONENT* component = m_netlist.GetComponent( kk );
 
@@ -207,37 +208,29 @@ void CVPCB_MAINFRAME::AutomaticFootprintMatching()
         // for example)
         wxString fpid_candidate;
 
-        for( unsigned idx = 0; idx < equivList.size(); idx++ )
+        for( int idx = 0; idx < (int) equivList.size(); idx++ )
         {
             FOOTPRINT_EQUIVALENCE& equivItem = equivList[idx];
 
             if( equivItem.m_ComponentValue.CmpNoCase( component->GetValue() ) != 0 )
                 continue;
 
-            const FOOTPRINT_INFO* fp =
-                    m_FootprintsList->GetFootprintInfo( equivItem.m_FootprintFPID );
+            const FOOTPRINT_INFO* fp = m_FootprintsList->GetFootprintInfo( equivItem.m_FootprintFPID );
 
             bool equ_is_unique = true;
-            unsigned next = idx+1;
+            int  next = idx+1;
             int  previous = idx-1;
 
-            if( next < equivList.size()
-                    && equivItem.m_ComponentValue == equivList[next].m_ComponentValue )
-            {
+            if( next < (int) equivList.size() && equivItem.m_ComponentValue == equivList[next].m_ComponentValue )
                 equ_is_unique = false;
-            }
 
-            if( previous >= 0
-                    && equivItem.m_ComponentValue == equivList[previous].m_ComponentValue )
-            {
+            if( previous >= 0 && equivItem.m_ComponentValue == equivList[previous].m_ComponentValue )
                 equ_is_unique = false;
-            }
 
             // If the equivalence is unique, no ambiguity: use the association
             if( fp && equ_is_unique )
             {
-                AssociateFootprint( CVPCB_ASSOCIATION( kk, equivItem.m_FootprintFPID ),
-                                    firstAssoc );
+                AssociateFootprint( CVPCB_ASSOCIATION( kk, equivItem.m_FootprintFPID ), firstAssoc );
                 firstAssoc = false;
                 found = true;
                 break;
@@ -254,18 +247,18 @@ void CVPCB_MAINFRAME::AutomaticFootprintMatching()
             if( fp )
             {
                 size_t filtercount = component->GetFootprintFilters().GetCount();
-                found = ( 0 == filtercount ); // if no entries, do not filter
+                found = ( filtercount == 0 ); // if no entries, do not filter
 
                 for( size_t jj = 0; jj < filtercount && !found; jj++ )
                     found = fp->GetFootprintName().Matches( component->GetFootprintFilters()[jj] );
             }
             else
             {
-                msg.Printf( _( "Component %s: footprint %s not found in any of the project "
-                               "footprint libraries." ),
-                            component->GetReference(), equivItem.m_FootprintFPID );
+                msg.Printf( _( "Component %s: footprint %s not found in any of the project footprint libraries." ),
+                            component->GetReference(),
+                            equivItem.m_FootprintFPID );
 
-                if( ! error_msg.IsEmpty() )
+                if( !error_msg.IsEmpty() )
                     error_msg << wxT("\n\n");
 
                 error_msg += msg;
@@ -273,8 +266,7 @@ void CVPCB_MAINFRAME::AutomaticFootprintMatching()
 
             if( found )
             {
-                AssociateFootprint( CVPCB_ASSOCIATION( kk, equivItem.m_FootprintFPID ),
-                                    firstAssoc );
+                AssociateFootprint( CVPCB_ASSOCIATION( kk, equivItem.m_FootprintFPID ), firstAssoc );
                 firstAssoc = false;
                 break;
             }
@@ -292,14 +284,13 @@ void CVPCB_MAINFRAME::AutomaticFootprintMatching()
         }
 
         // obviously the last chance: there's only one filter matching one footprint
-        if( 1 == component->GetFootprintFilters().GetCount() )
+        if( component->GetFootprintFilters().GetCount() == 1 )
         {
             // we do not need to analyze wildcards: single footprint do not
             // contain them and if there are wildcards it just will not match any
             if( m_FootprintsList->GetFootprintInfo( component->GetFootprintFilters()[0] ) )
             {
-                AssociateFootprint( CVPCB_ASSOCIATION( kk, component->GetFootprintFilters()[0] ),
-                                    firstAssoc );
+                AssociateFootprint( CVPCB_ASSOCIATION( kk, component->GetFootprintFilters()[0] ), firstAssoc );
                 firstAssoc = false;
             }
         }

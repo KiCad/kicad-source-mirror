@@ -63,6 +63,7 @@ NL_GERBVIEW_PLUGIN_IMPL::~NL_GERBVIEW_PLUGIN_IMPL()
 {
     std::error_code m_errCode;
     EnableNavigation( false, m_errCode );
+
     if( m_errCode.value() != 0 )
     {
         wxLogTrace( wxT( "KI_TRACE_NAVLIB" ),
@@ -77,16 +78,12 @@ void NL_GERBVIEW_PLUGIN_IMPL::SetCanvas( EDA_DRAW_PANEL_GAL* aViewport )
     m_viewport2D = aViewport;
 
     if( m_viewport2D == nullptr )
-    {
         return;
-    }
 
     m_view = m_viewport2D->GetView();
 
     if( m_view == nullptr )
-    {
         return;
-    }
 
     m_viewportWidth = m_view->GetBoundary().GetWidth();
 
@@ -145,7 +142,8 @@ static void add_category( const std::string& aCategoryPath, CATEGORY_STORE& aCat
 
     aCategoryStore.try_emplace( aCategoryStore.end(), aCategoryPath, categoryNode.get() );
 
-    parent_iter->second->push_back( std::move( categoryNode ) );
+    if( parent_iter != aCategoryStore.end() )
+        parent_iter->second->push_back( std::move( categoryNode ) );
 }
 
 
@@ -160,9 +158,7 @@ static void add_category( const std::string& aCategoryPath, CATEGORY_STORE& aCat
 static void try_add_category( const std::string& aCategoryPath, CATEGORY_STORE& aCategoryStore )
 {
     if( !aCategoryStore.contains( aCategoryPath ) )
-    {
         add_category( aCategoryPath, aCategoryStore );
-    }
 }
 
 
@@ -232,11 +228,13 @@ void NL_GERBVIEW_PLUGIN_IMPL::exportCommandsAndImages()
             }
         }
 
-        wxLogTrace( m_logTrace, wxT( "Inserting command: %s,  description: %s,  in category:  %s" ),
-                    name, description, iter->first );
+        if( iter != categoryStore.end() )
+        {
+            wxLogTrace( m_logTrace, wxT( "Inserting command: %s,  description: %s,  in category:  %s" ),
+                        name, description, iter->first );
 
-        iter->second->push_back(
-                CCommand( std::move( name ), std::move( label ), std::move( description ) ) );
+            iter->second->push_back( CCommand( name, label, description ) );
+        }
     }
 
     NAV_3D::AddCommandSet( commandSet );
@@ -259,8 +257,7 @@ long NL_GERBVIEW_PLUGIN_IMPL::GetCameraMatrix( navlib::matrix_t& matrix ) const
 
     // Note: the connexion has been configured as row vectors, the coordinate system is defined in
     // NL_GERBVIEW_PLUGIN_IMPL::GetCoordinateSystem and the front view in NL_GERBVIEW_PLUGIN_IMPL::GetFrontView.
-    matrix = { { { x, 0, 0, 0, 0, y, 0, 0, 0, 0, z, 0, m_viewPosition.x, m_viewPosition.y, 0,
-                   1 } } };
+    matrix = { { { x, 0, 0, 0, 0, y, 0, 0, 0, 0, z, 0, m_viewPosition.x, m_viewPosition.y, 0, 1 } } };
     return 0;
 }
 
@@ -316,8 +313,7 @@ long NL_GERBVIEW_PLUGIN_IMPL::SetCameraMatrix( const navlib::matrix_t& matrix )
     long result = 0;
     VECTOR2D viewPos( matrix.m4x4[3][0], matrix.m4x4[3][1] );
 
-    if( !equals( m_view->GetCenter(), m_viewPosition,
-                 static_cast<VECTOR2D::coord_type>( FLT_EPSILON ) ) )
+    if( !equals( m_view->GetCenter(), m_viewPosition, static_cast<VECTOR2D::coord_type>( FLT_EPSILON ) ) )
     {
         m_view->SetCenter( viewPos + m_view->GetCenter() - m_viewPosition );
         result = navlib::make_result_code( navlib::navlib_errc::error );
@@ -426,35 +422,26 @@ long NL_GERBVIEW_PLUGIN_IMPL::SetActiveCommand( std::string commandId )
     if( commandId.empty() )
         return 0;
 
-    if(m_viewport2D == nullptr)
-    {
+    if( !m_viewport2D )
         return navlib::make_result_code( navlib::navlib_errc::invalid_operation );
-    }
 
     wxWindow* parent = m_viewport2D->GetParent();
 
     // Only allow command execution if the window is enabled. i.e. there is not a modal dialog
     // currently active.
-    if( parent == nullptr || !parent->IsEnabled() )
-    {
+    if( !parent || !parent->IsEnabled() )
         return navlib::make_result_code( navlib::navlib_errc::invalid_operation );
-    }
 
     TOOL_MANAGER* tool_manager = dynamic_cast<TOOLS_HOLDER*>( parent )->GetToolManager();
 
     // Only allow for command execution if the tool manager is accessible.
-    if( tool_manager == nullptr )
-    {
+    if( !tool_manager )
         return navlib::make_result_code( navlib::navlib_errc::invalid_operation );
-    }
 
-    for( std::list<TOOL_ACTION*> actions = ACTION_MANAGER::GetActionList();
-         const auto action : actions )
+    for( std::list<TOOL_ACTION*> actions = ACTION_MANAGER::GetActionList(); const auto action : actions )
     {
-        if( action == nullptr )
-        {
+        if( !action )
             continue;
-        }
 
         if( commandId == action->GetName() )
         {
@@ -464,10 +451,8 @@ long NL_GERBVIEW_PLUGIN_IMPL::SetActiveCommand( std::string commandId )
             const ACTION_CONDITIONS* aCond =
                     tool_manager->GetActionManager()->GetCondition( *action );
 
-            if( aCond == nullptr )
-            {
+            if( !aCond )
                 return navlib::make_result_code( navlib::navlib_errc::invalid_operation );
-            }
 
             aCond->enableCondition( sel );
             tool_manager->RunAction( *action );
