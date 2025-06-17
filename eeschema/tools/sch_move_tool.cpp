@@ -811,7 +811,9 @@ bool SCH_MOVE_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, SCH_COMMIT* aComm
         //------------------------------------------------------------------------
         // Handle cancel
         //
-        else if( evt->IsCancelInteractive() || evt->IsActivate() )
+        else if( evt->IsCancelInteractive()
+                 || evt->IsActivate()
+                 || evt->IsAction( &ACTIONS::undo ) )
         {
             if( evt->IsCancelInteractive() )
                 m_frame->GetInfoBar()->Dismiss();
@@ -843,18 +845,15 @@ bool SCH_MOVE_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, SCH_COMMIT* aComm
         //------------------------------------------------------------------------
         // Handle TOOL_ACTION special cases
         //
-        else if( evt->Action() == TA_UNDO_REDO_PRE )
-        {
-            unselect = true;
-            break;
-        }
         else if( evt->IsAction( &ACTIONS::doDelete ) )
         {
             evt->SetPassEvent();
             // Exit on a delete; there will no longer be anything to drag.
             break;
         }
-        else if( evt->IsAction( &ACTIONS::duplicate ) )
+        else if( evt->IsAction( &ACTIONS::duplicate )
+                 || evt->IsAction( &SCH_ACTIONS::repeatDrawItem )
+                 || evt->IsAction( &ACTIONS::redo ) )
         {
             wxBell();
         }
