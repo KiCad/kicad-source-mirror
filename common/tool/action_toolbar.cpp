@@ -263,6 +263,14 @@ void ACTION_TOOLBAR::ApplyConfiguration( const TOOLBAR_CONFIGURATION& aConfig )
 {
     wxASSERT( GetParent() );
 
+    std::map<std::string, std::string> currentGroupItems;
+
+    for( const auto& [id, group] : m_actionGroups )
+    {
+        if( m_toolActions[group->GetUIId()] )
+            currentGroupItems[group->GetName()] = m_toolActions[group->GetUIId()]->GetName();
+    }
+
     // Remove existing tools
     ClearToolbar();
 
@@ -284,9 +292,11 @@ void ACTION_TOOLBAR::ApplyConfiguration( const TOOLBAR_CONFIGURATION& aConfig )
         case TOOLBAR_ITEM_TYPE::TB_GROUP:
             {
             // Add a group of items to the toolbar
+            std::string                     groupName = item.m_GroupName.ToStdString();
             std::vector<const TOOL_ACTION*> tools;
+            const TOOL_ACTION*              defaultTool = nullptr;
 
-            for( auto& groupItem : item.m_GroupItems )
+            for( TOOLBAR_ITEM& groupItem : item.m_GroupItems )
             {
                 switch( groupItem.m_Type )
                 {
@@ -294,7 +304,7 @@ void ACTION_TOOLBAR::ApplyConfiguration( const TOOLBAR_CONFIGURATION& aConfig )
                 case TOOLBAR_ITEM_TYPE::SPACER:
                 case TOOLBAR_ITEM_TYPE::TB_GROUP:
                 case TOOLBAR_ITEM_TYPE::CONTROL:
-                    wxASSERT_MSG( false, "Unsupported group item type" );
+                    wxFAIL_MSG( wxT( "Unsupported group item type" ) );
                     continue;
 
                 case TOOLBAR_ITEM_TYPE::TOOL:
@@ -302,15 +312,23 @@ void ACTION_TOOLBAR::ApplyConfiguration( const TOOLBAR_CONFIGURATION& aConfig )
 
                     if( !grpAction )
                     {
-                        wxASSERT_MSG( false, wxString::Format( "Unable to find group tool %s", groupItem.m_ActionName ) );
+                        wxFAIL_MSG( wxString::Format( wxT( "Unable to find group tool %s" ), groupItem.m_ActionName ) );
                         continue;
                     }
 
                     tools.push_back( grpAction );
+
+                    if( currentGroupItems[groupName] == groupItem.m_ActionName )
+                        defaultTool = grpAction;
                 }
             }
 
-            AddGroup( std::make_unique<ACTION_GROUP>( item.m_GroupName.ToStdString(), tools ) );
+            std::unique_ptr<ACTION_GROUP> group = std::make_unique<ACTION_GROUP>( groupName, tools );
+
+            if( defaultTool )
+                group->SetDefaultAction( *defaultTool );
+
+            AddGroup( std::move( group ) );
             break;
             }
 
@@ -322,7 +340,7 @@ void ACTION_TOOLBAR::ApplyConfiguration( const TOOLBAR_CONFIGURATION& aConfig )
 
             if( !factory )
             {
-                wxASSERT_MSG( false, wxString::Format( "Unable to find control factory for %s", item.m_ControlName ) );
+                wxFAIL_MSG( wxString::Format( wxT( "Unable to find control factory for %s" ), item.m_ControlName ) );
                 continue;
             }
 
@@ -337,7 +355,7 @@ void ACTION_TOOLBAR::ApplyConfiguration( const TOOLBAR_CONFIGURATION& aConfig )
 
             if( !action )
             {
-                wxASSERT_MSG( false, wxString::Format( "Unable to find toolbar tool %s", item.m_ActionName ) );
+                wxFAIL_MSG( wxString::Format( wxT( "Unable to find toolbar tool %s" ), item.m_ActionName ) );
                 continue;
             }
 
