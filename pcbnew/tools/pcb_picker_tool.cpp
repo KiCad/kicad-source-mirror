@@ -45,16 +45,15 @@ PCB_PICKER_TOOL::PCB_PICKER_TOOL() :
 bool PCB_PICKER_TOOL::Init()
 {
     PCB_BASE_FRAME*    frame = getEditFrame<PCB_BASE_FRAME>();
-    MAGNETIC_SETTINGS  magneticSettings;
     CONDITIONAL_MENU&  menu = m_menu->GetMenu();
 
-    if( frame )
-        magneticSettings = *frame->GetMagneticItemsSettings();
-
     const auto snapIsSetToAllLayers =
-            [&]( const SELECTION& aSel )
+            [=]( const SELECTION& aSel )
             {
-                return magneticSettings.allLayers;
+                if( frame )
+                    return frame->GetMagneticItemsSettings()->allLayers;
+                else
+                    return false;
             };
 
     // "Cancel" goes at the top of the context menu when a tool is active
