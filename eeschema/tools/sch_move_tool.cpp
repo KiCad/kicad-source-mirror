@@ -1166,8 +1166,7 @@ void SCH_MOVE_TOOL::getConnectedItems( SCH_ITEM* aOriginalItem, const VECTOR2I& 
                     if( pin->IsConnected( aPoint ) )
                     {
                         if( pin->IsSelected() )
-                            m_specialCaseSheetPins[pin] = { line,
-                                                            line->GetStartPoint() == aPoint };
+                            m_specialCaseSheetPins[pin] = { line, line->GetStartPoint() == aPoint };
 
                         aList.push_back( pin );
                     }
@@ -1286,7 +1285,8 @@ void SCH_MOVE_TOOL::getConnectedDragItems( SCH_COMMIT* aCommit, SCH_ITEM* aSelec
 
             for( SCH_SHEET_PIN* pin : sheet->GetPins() )
             {
-                if( !pin->IsSelected() && pin->GetPosition() == aSelectedItem->GetPosition()
+                if( !pin->IsSelected()
+                    && pin->GetPosition() == aSelectedItem->GetPosition()
                     && pin->CanConnect( aSelectedItem ) )
                 {
                     itemsConnectable.push_back( pin );
@@ -1298,7 +1298,8 @@ void SCH_MOVE_TOOL::getConnectedDragItems( SCH_COMMIT* aCommit, SCH_ITEM* aSelec
 
         // Skip ourselves, skip already selected items (but not lines, they need both ends tested)
         // and skip unconnectable items
-        if( item == aSelectedItem || ( item->Type() != SCH_LINE_T && item->IsSelected() )
+        if( item == aSelectedItem
+            || ( item->Type() != SCH_LINE_T && item->IsSelected() )
             || !item->CanConnect( aSelectedItem ) )
         {
             continue;
@@ -1505,10 +1506,8 @@ void SCH_MOVE_TOOL::getConnectedDragItems( SCH_COMMIT* aCommit, SCH_ITEM* aSelec
 
                 if( line->HitTest( label->GetTextPos(), 1 ) )
                 {
-                    if( ( !line->HasFlag( STARTPOINT )
-                          && label->GetPosition() == line->GetStartPoint() )
-                        || ( !line->HasFlag( ENDPOINT )
-                             && label->GetPosition() == line->GetEndPoint() ) )
+                    if(    ( !line->HasFlag( STARTPOINT ) && label->GetPosition() == line->GetStartPoint() )
+                        || ( !line->HasFlag( ENDPOINT ) && label->GetPosition() == line->GetEndPoint() ) )
                     {
                         //If we have a line selected at only one end, don't grab labels
                         //connected directly to the unselected endpoint
@@ -1551,7 +1550,7 @@ void SCH_MOVE_TOOL::getConnectedDragItems( SCH_COMMIT* aCommit, SCH_ITEM* aSelec
             {
                 SCH_LINE* line = static_cast<SCH_LINE*>( aSelectedItem );
 
-                if( ( !line->HasFlag( STARTPOINT ) && test->IsConnected( line->GetStartPoint() ) )
+                if(    ( !line->HasFlag( STARTPOINT ) && test->IsConnected( line->GetStartPoint() ) )
                     || ( !line->HasFlag( ENDPOINT ) && test->IsConnected( line->GetEndPoint() ) ) )
                 {
                     // If we have a line selected at only one end, don't grab bus entries
