@@ -302,8 +302,7 @@ void PCB_IO_EAGLE::checkpoint()
     {
         if( ++m_doneCount > m_lastProgressCount + PROGRESS_DELTA )
         {
-            m_progressReporter->SetCurrentProgress( ( (double) m_doneCount )
-                                                    / std::max( 1U, m_totalCount ) );
+            m_progressReporter->SetCurrentProgress( ( (double) m_doneCount ) / std::max( 1U, m_totalCount ) );
 
             if( !m_progressReporter->KeepRefreshing() )
                 THROW_IO_ERROR( _( "File import canceled by user." ) );
@@ -392,7 +391,7 @@ BOARD* PCB_IO_EAGLE::LoadBoard( const wxString& aFileName, BOARD* aAppendToMe,
         NETCLASS defaults( wxT( "dummy" ) );
 
         auto finishNetclass =
-                [&]( std::shared_ptr<NETCLASS> netclass )
+                [&]( const std::shared_ptr<NETCLASS>& netclass )
                 {
                     // If Eagle has a clearance matrix then we'll build custom rules from that.
                     // Netclasses should just be the board minimum clearance.
@@ -438,6 +437,14 @@ BOARD* PCB_IO_EAGLE::LoadBoard( const wxString& aFileName, BOARD* aAppendToMe,
     // IO_ERROR exceptions are left uncaught, they pass upwards from here.
 
     m_board->SetCopperLayerCount( getMinimumCopperLayerCount() );
+
+    LSET enabledLayers = m_board->GetDesignSettings().GetEnabledLayers();
+
+    for( const auto& [eagleLayerName, layer] : m_layer_map )
+        enabledLayers.set( layer );
+
+    m_board->GetDesignSettings().SetEnabledLayers( enabledLayers );
+
     centerBoard();
 
     deleter.release();
