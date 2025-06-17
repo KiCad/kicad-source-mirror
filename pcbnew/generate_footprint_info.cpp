@@ -47,11 +47,18 @@ static const wxString DocFormat = wxT(
 
 std::optional<wxString> GetFootprintDocumentationURL( const FOOTPRINT& aFootprint )
 {
+    // Footprints have now a field (FIELD_T::DATASHEET) containing the url datasheet
+    // But old footprints did not have this field, so this fiels can be empty.
+    // So we use this field is not empty, and if empty see if the documentation has an URL
+    const PCB_FIELD* data_field = aFootprint.GetField( DATASHEET_FIELD );
+    wxString url = data_field->GetText();
+
+    if( !url.IsEmpty() )
+        return url;
+
     wxString desc = aFootprint.GetLibDescription();
 
-    wxString url;
-
-    // It is currently common practice to store a documentation link in the description.
+    // It is (or was) currently common practice to store a documentation link in the description.
     size_t idx = desc.find( wxT( "http:" ) );
 
     if( idx == wxString::npos )
@@ -87,6 +94,7 @@ std::optional<wxString> GetFootprintDocumentationURL( const FOOTPRINT& aFootprin
 
     if( url.IsEmpty() )
         return std::nullopt;
+
     return url;
 }
 
