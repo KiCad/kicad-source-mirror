@@ -1483,12 +1483,14 @@ void SCH_PAINTER::draw( const SCH_LINE* aLine, int aLayer )
     m_gal->SetStrokeColor( color );
     m_gal->SetLineWidth( width );
 
-    double   lineWidth = getLineWidth( aLine, drawingShadows, drawingNetColorHighlights );
-    double   arcRadius = lineWidth * ADVANCED_CFG::GetCfg().m_hopOverArcRadius;
     std::vector<VECTOR3I> curr_wire_shape;
 
     if( aLine->IsWire() && showHopOver )
+    {
+        double   lineWidth = getLineWidth( aLine, false, drawingNetColorHighlights );
+        double   arcRadius = lineWidth * ADVANCED_CFG::GetCfg().m_hopOverArcRadius;
         curr_wire_shape = aLine->BuildWireWithHopShape( m_schematic->GetCurrentScreen(), arcRadius );
+    }
     else
     {
         curr_wire_shape.emplace_back( aLine->GetStartPoint().x, aLine->GetStartPoint().y, 0 );
