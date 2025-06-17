@@ -303,9 +303,9 @@ bool HYPERLYNX_EXPORTER::writeBoardInfo()
             const SEG& s = outl.CSegment( i );
             m_out->Print( 1, "(PERIMETER_SEGMENT X1=%.9f Y1=%.9f X2=%.9f Y2=%.9f)\n",
                           iu2hyp( s.A.x ),
-                          iu2hyp( s.A.y ),
+                          iu2hyp( -s.A.y ),
                           iu2hyp( s.B.x ),
-                          iu2hyp( s.B.y ) );
+                          iu2hyp( -s.B.y ) );
         }
     }
 
@@ -447,7 +447,7 @@ bool HYPERLYNX_EXPORTER::writeNetObjects( const std::vector<BOARD_ITEM*>& aObjec
 
                 m_out->Print( 1, "(PIN X=%.10f Y=%.10f R=\"%s.%s\" P=%d)\n",
                               iu2hyp( pad->GetPosition().x ),
-                              iu2hyp( pad->GetPosition().y ),
+                              iu2hyp( -pad->GetPosition().y ),
                               (const char*) ref.c_str(),
                               (const char*) padName.c_str(),
                               pstackIter->second->GetId() );
@@ -461,7 +461,7 @@ bool HYPERLYNX_EXPORTER::writeNetObjects( const std::vector<BOARD_ITEM*>& aObjec
             {
                 m_out->Print( 1, "(VIA X=%.10f Y=%.10f P=%d)\n",
                               iu2hyp( via->GetPosition().x ),
-                              iu2hyp( via->GetPosition().y ),
+                              iu2hyp( -via->GetPosition().y ),
                               pstackIter->second->GetId() );
             }
         }
@@ -471,9 +471,9 @@ bool HYPERLYNX_EXPORTER::writeNetObjects( const std::vector<BOARD_ITEM*>& aObjec
 
             m_out->Print( 1, "(SEG X1=%.10f Y1=%.10f X2=%.10f Y2=%.10f W=%.10f L=\"%s\")\n",
                           iu2hyp( track->GetStart().x ),
-                          iu2hyp( track->GetStart().y ),
+                          iu2hyp( -track->GetStart().y ),
                           iu2hyp( track->GetEnd().x ),
-                          iu2hyp( track->GetEnd().y ),
+                          iu2hyp( -track->GetEnd().y ),
                           iu2hyp( track->GetWidth() ),
                           (const char*) layerName.c_str() );
         }
@@ -488,11 +488,11 @@ bool HYPERLYNX_EXPORTER::writeNetObjects( const std::vector<BOARD_ITEM*>& aObjec
 
             m_out->Print( 1, "(ARC X1=%.10f Y1=%.10f X2=%.10f Y2=%.10f XC=%.10f YC=%.10f R=%.10f W=%.10f L=\"%s\")\n",
                           iu2hyp( start.x ),
-                          iu2hyp( start.y ),
+                          iu2hyp( -start.y ),
                           iu2hyp( end.x ),
-                          iu2hyp( end.y ),
+                          iu2hyp( -end.y ),
                           iu2hyp( arc->GetCenter().x ),
-                          iu2hyp( arc->GetCenter().y ),
+                          iu2hyp( -arc->GetCenter().y ),
                           iu2hyp( arc->GetRadius() ),
                           iu2hyp( arc->GetWidth() ),
                           (const char*) layerName.c_str() );
@@ -515,16 +515,16 @@ bool HYPERLYNX_EXPORTER::writeNetObjects( const std::vector<BOARD_ITEM*>& aObjec
                                   (const char*) layerName.c_str(),
                                   m_polyId,
                                   iu2hyp( p0.x ),
-                                  iu2hyp( p0.y ) );
+                                  iu2hyp( -p0.y ) );
 
                     for( int v = 0; v < outl.PointCount(); v++ )
                     {
                         m_out->Print( 2, "(LINE X=%.10f Y=%.10f)\n",
                                       iu2hyp( outl.CPoint( v ).x ),
-                                      iu2hyp( outl.CPoint( v ).y ) );
+                                      iu2hyp( -outl.CPoint( v ).y ) );
                     }
 
-                    m_out->Print( 2, "(LINE X=%.10f Y=%.10f)\n", iu2hyp( p0.x ), iu2hyp( p0.y ) );
+                    m_out->Print( 2, "(LINE X=%.10f Y=%.10f)\n", iu2hyp( p0.x ), iu2hyp( -p0.y ) );
                     m_out->Print( 1, "}\n" );
 
                     for( int h = 0; h < fill.HoleCount( i ); h++ )
@@ -535,18 +535,18 @@ bool HYPERLYNX_EXPORTER::writeNetObjects( const std::vector<BOARD_ITEM*>& aObjec
                         m_out->Print( 1, "{POLYVOID ID=%d X=%.10f Y=%.10f\n",
                                       m_polyId,
                                       iu2hyp( ph0.x ),
-                                      iu2hyp( ph0.y ) );
+                                      iu2hyp( -ph0.y ) );
 
                         for( int v = 0; v < holeShape.PointCount(); v++ )
                         {
                             m_out->Print( 2, "(LINE X=%.10f Y=%.10f)\n",
                                           iu2hyp( holeShape.CPoint( v ).x ),
-                                          iu2hyp( holeShape.CPoint( v ).y ) );
+                                          iu2hyp( -holeShape.CPoint( v ).y ) );
                         }
 
                         m_out->Print( 2, "(LINE X=%.10f Y=%.10f)\n",
                                       iu2hyp( ph0.x ),
-                                      iu2hyp( ph0.y ) );
+                                      iu2hyp( -ph0.y ) );
                         m_out->Print( 1, "}\n" );
                     }
 
