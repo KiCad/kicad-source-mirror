@@ -486,13 +486,14 @@ void PCB_IO_EAGLE::clear_cu_map()
 
 void PCB_IO_EAGLE::loadAllSections( wxXmlNode* aDoc )
 {
-    wxXmlNode* drawing       = MapChildren( aDoc )["drawing"];
-    NODE_MAP drawingChildren = MapChildren( drawing );
+    wxXmlNode* drawing         = MapChildren( aDoc )["drawing"];
+    NODE_MAP   drawingChildren = MapChildren( drawing );
 
-    wxXmlNode* board         = drawingChildren["board"];
-    NODE_MAP boardChildren   = MapChildren( board );
+    wxXmlNode* board           = drawingChildren["board"];
+    NODE_MAP   boardChildren   = MapChildren( board );
 
-    auto count_children = [this]( wxXmlNode* aNode )
+    auto count_children =
+            [this]( wxXmlNode* aNode )
             {
                 if( aNode )
                 {
@@ -575,7 +576,11 @@ void PCB_IO_EAGLE::loadDesignRules( wxXmlNode* aDesignRules )
     if( aDesignRules )
     {
         m_xpath->push( "designrules" );
-        m_rules->parse( aDesignRules, [this](){ checkpoint(); } );
+        m_rules->parse( aDesignRules,
+                        [this]()
+                        {
+                            checkpoint();
+                        } );
         m_xpath->pop();     // "designrules"
     }
 }
@@ -1153,9 +1158,7 @@ void PCB_IO_EAGLE::loadLibrary( wxXmlNode* aLib, const wxString* aLibName )
     wxString urnOrdinal;
 
     if( !urn.IsEmpty() )
-    {
         urnOrdinal = urn.AfterLast( ':' );
-    }
 
     // library will have <xmlattr> node, skip that and get the single packages node
     wxXmlNode* packages = MapChildren( aLib )["packages"];
@@ -1514,9 +1517,9 @@ ZONE* PCB_IO_EAGLE::loadPolygon( wxXmlNode* aPolyNode )
 
     if( layer == UNDEFINED_LAYER )
     {
-        wxLogMessage( wxString::Format( _( "Ignoring a polygon since Eagle layer '%s' (%d) "
-                                           "was not mapped" ),
-                                        eagle_layer_name( p.layer ), p.layer ) );
+        wxLogMessage( wxString::Format( _( "Ignoring a polygon since Eagle layer '%s' (%d) was not mapped" ),
+                                        eagle_layer_name( p.layer ),
+                                        p.layer ) );
         return nullptr;
     }
 
@@ -1566,20 +1569,17 @@ ZONE* PCB_IO_EAGLE::loadPolygon( wxXmlNode* aPolyNode )
         if( v1.curve )
         {
             EVERTEX  v2 = vertices[i + 1];
-            VECTOR2I center =
-                    ConvertArcCenter( VECTOR2I( kicad_x( v1.x ), kicad_y( v1.y ) ),
-                                      VECTOR2I( kicad_x( v2.x ), kicad_y( v2.y ) ), *v1.curve );
+            VECTOR2I center = ConvertArcCenter( VECTOR2I( kicad_x( v1.x ), kicad_y( v1.y ) ),
+                                                VECTOR2I( kicad_x( v2.x ), kicad_y( v2.y ) ), *v1.curve );
             double angle = DEG2RAD( *v1.curve );
-            double  end_angle = atan2( kicad_y( v2.y ) - center.y, kicad_x( v2.x ) - center.x );
-            double  radius = sqrt( pow( center.x - kicad_x( v1.x ), 2 )
-                                  + pow( center.y - kicad_y( v1.y ), 2 ) );
+            double end_angle = atan2( kicad_y( v2.y ) - center.y, kicad_x( v2.x ) - center.x );
+            double radius = sqrt( pow( center.x - kicad_x( v1.x ), 2 ) + pow( center.y - kicad_y( v1.y ), 2 ) );
 
-            int segCount = GetArcToSegmentCount( KiROUND( radius ), ARC_HIGH_DEF,
-                                                 EDA_ANGLE( *v1.curve, DEGREES_T ) );
+            int    segCount = GetArcToSegmentCount( KiROUND( radius ), ARC_HIGH_DEF,
+                                                    EDA_ANGLE( *v1.curve, DEGREES_T ) );
             double delta_angle = angle / segCount;
 
-            for( double a = end_angle + angle; fabs( a - end_angle ) > fabs( delta_angle );
-                 a -= delta_angle )
+            for( double a = end_angle + angle; fabs( a - end_angle ) > fabs( delta_angle ); a -= delta_angle )
             {
                 polygon.Append( KiROUND( radius * cos( a ) ) + center.x,
                                 KiROUND( radius * sin( a ) ) + center.y );
@@ -1590,16 +1590,13 @@ ZONE* PCB_IO_EAGLE::loadPolygon( wxXmlNode* aPolyNode )
     // Eagle traces the zone such that half of the pen width is outside the polygon.
     // We trace the zone such that the copper is completely inside.
     if( p.width.ToPcbUnits() > 0 )
-    {
-        polygon.Inflate( p.width.ToPcbUnits() / 2, CORNER_STRATEGY::ALLOW_ACUTE_CORNERS,
-                         ARC_HIGH_DEF, true );
-    }
+        polygon.Inflate( p.width.ToPcbUnits() / 2, CORNER_STRATEGY::ALLOW_ACUTE_CORNERS, ARC_HIGH_DEF, true );
 
     if( polygon.OutlineCount() != 1 )
     {
-        wxLogMessage( wxString::Format(
-                _( "Skipping a polygon on layer '%s' (%d): outline count is not 1" ),
-                eagle_layer_name( p.layer ), p.layer ) );
+        wxLogMessage( wxString::Format( _( "Skipping a polygon on layer '%s' (%d): outline count is not 1" ),
+                                        eagle_layer_name( p.layer ),
+                                        p.layer ) );
 
         return nullptr;
     }
@@ -1692,9 +1689,7 @@ void PCB_IO_EAGLE::orientFPText( FOOTPRINT* aFootprint, const EELEMENT& e, PCB_T
         const EATTR& a = *aAttr;
 
         if( a.value )
-        {
             aFPText->SetText( *a.value );
-        }
 
         if( a.x && a.y )    // std::optional
         {
@@ -1713,12 +1708,12 @@ void PCB_IO_EAGLE::orientFPText( FOOTPRINT* aFootprint, const EELEMENT& e, PCB_T
         int      textThickness = KiROUND( fontz.y * ratio / 100 );
 
         aFPText->SetTextThickness( textThickness );
+
         if( a.size )
         {
             fontz = kicad_fontsize( *a.size, textThickness );
             aFPText->SetTextSize( fontz );
         }
-
 
         int align = ETEXT::BOTTOM_LEFT;     // bottom-left is eagle default
 
@@ -1730,7 +1725,6 @@ void PCB_IO_EAGLE::orientFPText( FOOTPRINT* aFootprint, const EELEMENT& e, PCB_T
         // package's text field.  If they did not want zero, they specify
         // what they want explicitly.
         double  degrees  = a.rot ? a.rot->degrees : 0.0;
-
         int     sign = 1;
         bool    spin = false;
 
@@ -1908,9 +1902,9 @@ void PCB_IO_EAGLE::packageWire( FOOTPRINT* aFootprint, wxXmlNode* aTree ) const
 
     if( layer == UNDEFINED_LAYER )
     {
-        wxLogMessage( wxString::Format( _( "Ignoring a wire since Eagle layer '%s' (%d) "
-                                           "was not mapped" ),
-                                        eagle_layer_name( w.layer ), w.layer ) );
+        wxLogMessage( wxString::Format( _( "Ignoring a wire since Eagle layer '%s' (%d) was not mapped" ),
+                                        eagle_layer_name( w.layer ),
+                                        w.layer ) );
         return;
     }
 
@@ -1975,7 +1969,7 @@ void PCB_IO_EAGLE::packagePad( FOOTPRINT* aFootprint, wxXmlNode* aTree )
 {
     // this is thru hole technology here, no SMDs
     EPAD e( aTree );
-    int shape = EPAD::UNDEF;
+    int  shape = EPAD::UNDEF;
     int  eagleDrillz = e.drill ? e.drill->ToPcbUnits() : 0;
 
     std::unique_ptr<PAD> pad = std::make_unique<PAD>( aFootprint );
@@ -2090,9 +2084,9 @@ void PCB_IO_EAGLE::packageText( FOOTPRINT* aFootprint, wxXmlNode* aTree ) const
 
     if( layer == UNDEFINED_LAYER )
     {
-        wxLogMessage( wxString::Format( _( "Ignoring a text since Eagle layer '%s' (%d) "
-                                           "was not mapped" ),
-                                        eagle_layer_name( t.layer ), t.layer ) );
+        wxLogMessage( wxString::Format( _( "Ignoring a text since Eagle layer '%s' (%d) was not mapped" ),
+                                        eagle_layer_name( t.layer ),
+                                        t.layer ) );
         return;
     }
 
@@ -2228,9 +2222,9 @@ void PCB_IO_EAGLE::packageRectangle( FOOTPRINT* aFootprint, wxXmlNode* aTree ) c
 
         if( layer == UNDEFINED_LAYER )
         {
-            wxLogMessage( wxString::Format( _( "Ignoring a rectangle since Eagle layer '%s' (%d) "
-                                               "was not mapped" ),
-                                            eagle_layer_name( r.layer ), r.layer ) );
+            wxLogMessage( wxString::Format( _( "Ignoring a rectangle since Eagle layer '%s' (%d) was not mapped" ),
+                                            eagle_layer_name( r.layer ),
+                                            r.layer ) );
             return;
         }
 
@@ -2302,8 +2296,7 @@ void PCB_IO_EAGLE::packagePolygon( FOOTPRINT* aFootprint, wxXmlNode* aTree ) con
                                                 *v1.curve );
             double angle = DEG2RAD( *v1.curve );
             double end_angle = atan2( kicad_y( v2.y ) - center.y, kicad_x( v2.x ) - center.x );
-            double radius = sqrt( pow( center.x - kicad_x( v1.x ), 2 )
-                                  + pow( center.y - kicad_y( v1.y ), 2 ) );
+            double radius = sqrt( pow( center.x - kicad_x( v1.x ), 2 ) + pow( center.y - kicad_y( v1.y ), 2 ) );
 
             // Don't allow a zero-radius curve
             if( KiROUND( radius ) == 0 )
@@ -2344,8 +2337,7 @@ void PCB_IO_EAGLE::packagePolygon( FOOTPRINT* aFootprint, wxXmlNode* aTree ) con
     {
         if( layer == UNDEFINED_LAYER )
         {
-            wxLogMessage( wxString::Format( _( "Ignoring a polygon since Eagle layer '%s' (%d) "
-                                               "was not mapped" ),
+            wxLogMessage( wxString::Format( _( "Ignoring a polygon since Eagle layer '%s' (%d) was not mapped" ),
                                             eagle_layer_name( p.layer ),
                                             p.layer ) );
             return;
@@ -2421,8 +2413,7 @@ void PCB_IO_EAGLE::packageCircle( FOOTPRINT* aFootprint, wxXmlNode* aTree ) cons
 
         if( layer == UNDEFINED_LAYER )
         {
-            wxLogMessage( wxString::Format( _( "Ignoring a circle since Eagle layer '%s' (%d) "
-                                               "was not mapped" ),
+            wxLogMessage( wxString::Format( _( "Ignoring a circle since Eagle layer '%s' (%d) was not mapped" ),
                                             eagle_layer_name( e.layer ),
                                             e.layer ) );
             return;
@@ -2584,10 +2575,9 @@ void PCB_IO_EAGLE::transferPad( const EPAD_COMMON& aEaglePad, PAD* aPad ) const
     // Solder mask
     const VECTOR2I& padSize( aPad->GetSize( PADSTACK::ALL_LAYERS ) );
 
-    aPad->SetLocalSolderMaskMargin(
-            eagleClamp( m_rules->mlMinStopFrame,
-                        (int) ( m_rules->mvStopFrame * std::min( padSize.x, padSize.y ) ),
-                        m_rules->mlMaxStopFrame ) );
+    aPad->SetLocalSolderMaskMargin( eagleClamp( m_rules->mlMinStopFrame,
+                                                (int) ( m_rules->mvStopFrame * std::min( padSize.x, padSize.y ) ),
+                                                m_rules->mlMaxStopFrame ) );
 
     // Solid connection to copper zones
     if( aEaglePad.thermals && !*aEaglePad.thermals )
@@ -2686,6 +2676,8 @@ void PCB_IO_EAGLE::loadSignals( wxXmlNode* aSignals )
     if( !aSignals )
         return;
 
+    BOARD_DESIGN_SETTINGS& bds = m_board->GetDesignSettings();
+
     ZONES zones;      // per net
     int   netCode = 1;
 
@@ -2712,8 +2704,7 @@ void PCB_IO_EAGLE::loadSignals( wxXmlNode* aSignals )
 
             if( netclassIt != m_classMap.end() )
             {
-                m_board->GetDesignSettings().m_NetSettings->SetNetclassPatternAssignment(
-                        netName, netclassIt->second->GetName() );
+                bds.m_NetSettings->SetNetclassPatternAssignment( netName, netclassIt->second->GetName() );
                 netInfo->SetNetClass( netclassIt->second );
                 netclass = netclassIt->second;
             }
