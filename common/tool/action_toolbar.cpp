@@ -421,6 +421,18 @@ void ACTION_TOOLBAR::ClearToolbar()
 }
 
 
+const TOOL_ACTION* ACTION_TOOLBAR::GetSelectedAction( const std::string& aGroupName )
+{
+    for( const auto& [id, group] : m_actionGroups )
+    {
+        if( group->GetName() == aGroupName )
+            return m_toolActions[group->GetUIId()];
+    }
+
+    return nullptr;
+}
+
+
 void ACTION_TOOLBAR::SetToolBitmap( const TOOL_ACTION& aAction, const wxBitmap& aBitmap )
 {
     int toolId = aAction.GetUIId();

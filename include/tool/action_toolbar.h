@@ -254,6 +254,8 @@ public:
      */
     void SelectAction( ACTION_GROUP* aGroup, const TOOL_ACTION& aAction );
 
+    const TOOL_ACTION* GetSelectedAction( const std::string& aGroupName );
+
     /**
      * Update the toolbar item width of a control using its best size.
      *
