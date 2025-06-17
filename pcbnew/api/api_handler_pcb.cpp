@@ -1263,7 +1263,7 @@ HANDLER_RESULT<NetClassForNetsResponse> API_HANDLER_PCB::handleGetNetClassForNet
     NetClassForNetsResponse response;
 
     BOARD* board = frame()->GetBoard();
-    NETINFO_LIST nets = board->GetNetInfo();
+    const NETINFO_LIST& nets = board->GetNetInfo();
     google::protobuf::Any any;
 
     for( const board::types::Net& net : aCtx.Request.net() )
