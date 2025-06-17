@@ -98,22 +98,6 @@ private:
 
     void testKnockoutTextAgainstZone( BOARD_ITEM* aText, NETINFO_ITEM** aInheritedNet, ZONE* aZone );
 
-    typedef struct checked
-    {
-        checked() :
-                layers(),
-                has_error( false )
-        {}
-
-        checked( PCB_LAYER_ID aLayer ) :
-                layers( { aLayer } ),
-                has_error( false )
-        {}
-
-        LSET layers;
-        bool has_error;
-    } layers_checked;
-
 private:
     int m_drcEpsilon;
 };
@@ -601,7 +585,7 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testKnockoutTextAgainstZone( BOARD_ITEM
 void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testTrackClearances()
 {
     std::map<BOARD_ITEM*, int>                            freePadsUsageMap;
-    std::unordered_map<PTR_PTR_CACHE_KEY, layers_checked> checkedPairs;
+    std::unordered_map<PTR_PTR_CACHE_KEY, LAYERS_CHECKED> checkedPairs;
     std::mutex                                            checkedPairsMutex;
     std::mutex                                            freePadsUsageMapMutex;
     std::atomic<size_t>                                   done( 0 );
@@ -985,7 +969,7 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testPadClearances( )
 
     REPORT_AUX( wxString::Format( wxT( "Testing %d pads..." ), count ) );
 
-    std::unordered_map<PTR_PTR_CACHE_KEY, layers_checked> checkedPairs;
+    std::unordered_map<PTR_PTR_CACHE_KEY, LAYERS_CHECKED> checkedPairs;
     std::mutex                                            checkedPairsMutex;
 
     LSET boardCopperLayers = LSET::AllCuMask( m_board->GetCopperLayerCount() );
@@ -1116,7 +1100,7 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testGraphicClearances()
                 }
             };
 
-    std::unordered_map<PTR_PTR_CACHE_KEY, layers_checked> checkedPairs;
+    std::unordered_map<PTR_PTR_CACHE_KEY, LAYERS_CHECKED> checkedPairs;
     std::mutex                                            checkedPairsMutex;
 
     auto testCopperGraphic =

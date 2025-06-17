@@ -116,6 +116,23 @@ struct PTR_PTR_LAYER_CACHE_KEY
     }
 };
 
+struct LAYERS_CHECKED
+{
+    LAYERS_CHECKED() :
+            layers(),
+            has_error( false )
+    {}
+
+    LAYERS_CHECKED( PCB_LAYER_ID aLayer ) :
+            layers( { aLayer } ),
+            has_error( false )
+    {}
+
+    LSET layers;
+    bool has_error;
+};
+
+
 namespace std
 {
     template <>
