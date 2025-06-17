@@ -715,6 +715,7 @@ bool EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, BOARD_COMMIT* aCommit
         }
         else if( evt->IsAction( &ACTIONS::duplicate ) || evt->IsAction( &ACTIONS::cut ) )
         {
+            wxBell();
         }
         else if( evt->IsAction( &PCB_ACTIONS::rotateCw )
                 || evt->IsAction( &PCB_ACTIONS::rotateCcw )
