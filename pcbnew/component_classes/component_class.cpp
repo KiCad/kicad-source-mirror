@@ -20,6 +20,7 @@
 
 #include <component_classes/component_class.h>
 #include <wx/intl.h>
+#include <algorithm>
 
 
 void COMPONENT_CLASS::AddConstituentClass( COMPONENT_CLASS* componentClass )
