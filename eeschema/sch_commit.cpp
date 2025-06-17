@@ -370,6 +370,16 @@ void SCH_COMMIT::pushSchEdit( const wxString& aMessage, int aCommitFlags )
         // after edition (selected items must keep their selection flag).
         const int selected_mask = ( SELECTED | STARTPOINT | ENDPOINT );
         schItem->ClearFlags( EDA_ITEM_ALL_FLAGS - selected_mask );
+
+        if( schItem->Type() == SCH_SHEET_T || schItem->Type() == SCH_SYMBOL_T )
+        {
+            schItem->RunOnChildren(
+                    [&]( SCH_ITEM* child )
+                    {
+                        child->ClearFlags( EDA_ITEM_ALL_FLAGS - selected_mask );
+                    },
+                    RECURSE_MODE::NO_RECURSE );
+        }
     }
 
     if( schematic )
