@@ -86,7 +86,7 @@ private:
 
     void testTrackClearances();
 
-    void testPadAgainstItem( PAD* pad, SHAPE* padShape, PCB_LAYER_ID layer, BOARD_ITEM* other );
+    bool testPadAgainstItem( PAD* pad, SHAPE* padShape, PCB_LAYER_ID layer, BOARD_ITEM* other );
 
     void testPadClearances();
 
@@ -641,8 +641,8 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testTrackClearances()
                             std::lock_guard<std::mutex> lock( checkedPairsMutex );
                             auto it = checkedPairs.find( { a, b } );
 
-                            if( it != checkedPairs.end() && ( it->second.layers.test( layer )
-                                    || ( it->second.has_error && !m_drcEngine->GetReportAllTrackErrors() ) ) )
+                            if( it != checkedPairs.end()
+                                    && ( it->second.layers.test( layer ) || ( it->second.has_error ) ) )
                             {
                                 return false;
                             }
@@ -677,25 +677,27 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testTrackClearances()
                                 }
                             }
 
-                            BOARD_ITEM* a = track;
-                            BOARD_ITEM* b = other;
-
-                            // store canonical order so we don't collide in both directions
-                            // (a:b and b:a)
-                            if( static_cast<void*>( a ) > static_cast<void*>( b ) )
-                                std::swap( a, b );
-
                             // If we get an error, mark the pair as having a clearance error already
                             if( !testSingleLayerItemAgainstItem( track, trackShape.get(), layer, other ) )
                             {
-                                std::lock_guard<std::mutex> lock( checkedPairsMutex );
-                                auto it = checkedPairs.find( { a, b } );
-
-                                if( it != checkedPairs.end() )
-                                    it->second.has_error = true;
-
                                 if( !m_drcEngine->GetReportAllTrackErrors() )
+                                {
+                                    BOARD_ITEM* a = track;
+                                    BOARD_ITEM* b = other;
+
+                                    // store canonical order so we don't collide in both directions
+                                    // (a:b and b:a)
+                                    if( static_cast<void*>( a ) > static_cast<void*>( b ) )
+                                        std::swap( a, b );
+
+                                    std::lock_guard<std::mutex> lock( checkedPairsMutex );
+                                    auto it = checkedPairs.find( { a, b } );
+
+                                    if( it != checkedPairs.end() )
+                                        it->second.has_error = true;
+
                                     return false;   // We're done with this track
+                                }
                             }
 
                             return !m_drcEngine->IsCancelled();
@@ -734,7 +736,7 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testTrackClearances()
 }
 
 
-void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testPadAgainstItem( PAD* pad, SHAPE* padShape,
+bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testPadAgainstItem( PAD* pad, SHAPE* padShape,
                                                              PCB_LAYER_ID aLayer,
                                                              BOARD_ITEM* other )
 {
@@ -806,13 +808,14 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testPadAgainstItem( PAD* pad, SHAPE* pa
     }
 
     if( !testClearance && !testShorting && !testHoles )
-        return;
+        return true;
 
     std::shared_ptr<SHAPE> otherShape = other->GetEffectiveShape( aLayer );
     DRC_CONSTRAINT         constraint;
     int                    clearance = 0;
     int                    actual = 0;
     VECTOR2I               pos;
+    bool                   has_error = false;
 
     if( otherPad && pad->SameLogicalPadAs( otherPad ) )
     {
@@ -822,12 +825,12 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testPadAgainstItem( PAD* pad, SHAPE* pa
         if( testShorting )
         {
             if( pad->GetNetCode() == 0 || pad->GetNetCode() == otherPad->GetNetCode() )
-                return;
+                return true;
 
             if( pad->GetShortNetname().StartsWith( wxS( "unconnected-(" ) )
                     && otherPad->GetShortNetname().StartsWith( wxS( "unconnected-(" ) ) )
             {
-                return;
+                return true;
             }
 
             std::shared_ptr<DRC_ITEM> drce = DRC_ITEM::Create( DRCE_SHORTING_ITEMS );
@@ -841,9 +844,10 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testPadAgainstItem( PAD* pad, SHAPE* pa
             drce->SetItems( pad, otherPad );
 
             reportViolation( drce, otherPad->GetPosition(), aLayer );
+            has_error = true;
         }
 
-        return;
+        return !has_error;
     }
 
     if( testClearance || testShorting )
@@ -872,6 +876,7 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testPadAgainstItem( PAD* pad, SHAPE* pa
                     drce->SetItems( pad, other );
 
                     reportViolation( drce, pos, aLayer );
+                    has_error = true;
                     testHoles = false;  // No need for multiple violations
                 }
                 else if( testClearance )
@@ -886,6 +891,7 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testPadAgainstItem( PAD* pad, SHAPE* pa
                     drce->SetItems( pad, other );
                     drce->SetViolatingRule( constraint.GetParentRule() );
                     ReportAndShowPathCuToCu( drce, pos, aLayer, pad, other, aLayer, actual );
+                    has_error = true;
                     testHoles = false;  // No need for multiple violations
                 }
             }
@@ -917,6 +923,7 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testPadAgainstItem( PAD* pad, SHAPE* pa
             drce->SetItems( pad, other );
             drce->SetViolatingRule( constraint.GetParentRule() );
             ReportAndShowPathCuToCu( drce, pos, aLayer, pad, other, aLayer, actual );
+            has_error = true;
             testHoles = false;  // No need for multiple violations
         }
     }
@@ -938,6 +945,7 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testPadAgainstItem( PAD* pad, SHAPE* pa
             drce->SetViolatingRule( constraint.GetParentRule() );
 
             reportViolation( drce, pos, aLayer );
+            has_error = true;
             testHoles = false;  // No need for multiple violations
         }
     }
@@ -958,8 +966,11 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testPadAgainstItem( PAD* pad, SHAPE* pa
             drce->SetItems( pad, otherVia );
             drce->SetViolatingRule( constraint.GetParentRule() );
             ReportAndShowPathCuToCu( drce, pos, aLayer, pad, otherVia, aLayer, actual );
+            has_error = true;
         }
     }
+
+    return !has_error;
 }
 
 
@@ -974,7 +985,8 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testPadClearances( )
 
     REPORT_AUX( wxString::Format( wxT( "Testing %d pads..." ), count ) );
 
-    std::unordered_map<PTR_PTR_CACHE_KEY, int> checkedPairs;
+    std::unordered_map<PTR_PTR_CACHE_KEY, layers_checked> checkedPairs;
+    std::mutex                                            checkedPairsMutex;
 
     LSET boardCopperLayers = LSET::AllCuMask( m_board->GetCopperLayerCount() );
 
@@ -1004,20 +1016,34 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testPadClearances( )
                                         if( static_cast<void*>( a ) > static_cast<void*>( b ) )
                                             std::swap( a, b );
 
-                                        if( checkedPairs.find( { a, b } ) != checkedPairs.end() )
+                                        std::lock_guard<std::mutex> lock( checkedPairsMutex );
+                                        auto it = checkedPairs.find( { a, b } );
+
+                                        if( it != checkedPairs.end()
+                                                && ( it->second.layers.test( layer ) || it->second.has_error ) )
                                         {
                                             return false;
                                         }
                                         else
                                         {
-                                            checkedPairs[ { a, b } ] = 1;
+                                            checkedPairs[ { a, b } ].layers.set( layer );
                                             return true;
                                         }
                                     },
                                     // Visitor
                                     [&]( BOARD_ITEM* other ) -> bool
                                     {
-                                        testPadAgainstItem( pad, padShape.get(), layer, other );
+                                        if( !testPadAgainstItem( pad, padShape.get(), layer, other ) )
+                                        {
+                                            BOARD_ITEM* a = pad;
+                                            BOARD_ITEM* b = other;
+
+                                            std::lock_guard<std::mutex> lock( checkedPairsMutex );
+                                            auto it = checkedPairs.find( { a, b } );
+
+                                            if( it != checkedPairs.end() )
+                                                it->second.has_error = true;
+                                        }
 
                                         return !m_drcEngine->IsCancelled();
                                     },
@@ -1047,7 +1073,7 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testPadClearances( )
 }
 
 
-void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testGraphicClearances( )
+void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testGraphicClearances()
 {
     thread_pool&        tp = GetKiCadThreadPool();
     size_t              count = m_board->Drawings().size();
@@ -1091,6 +1117,7 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testGraphicClearances( )
             };
 
     std::unordered_map<PTR_PTR_CACHE_KEY, layers_checked> checkedPairs;
+    std::mutex                                            checkedPairsMutex;
 
     auto testCopperGraphic =
             [&]( PCB_SHAPE* aShape )
@@ -1121,6 +1148,7 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testGraphicClearances( )
                                 if( static_cast<void*>( a ) > static_cast<void*>( b ) )
                                     std::swap( a, b );
 
+                                std::lock_guard<std::mutex> lock( checkedPairsMutex );
                                 auto it = checkedPairs.find( { a, b } );
 
                                 if( it != checkedPairs.end() && it->second.layers.test( layer ) )
@@ -1136,23 +1164,8 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testGraphicClearances( )
                             // Visitor:
                             [&]( BOARD_ITEM* other ) -> bool
                             {
-                                BOARD_ITEM* a = aShape;
-                                BOARD_ITEM* b = other;
-
-                                // store canonical order so we don't collide in both directions
-                                // (a:b and b:a)
-                                if( static_cast<void*>( a ) > static_cast<void*>( b ) )
-                                    std::swap( a, b );
-
-                                auto it = checkedPairs.find( { a, b } );
-
-                                if( !testSingleLayerItemAgainstItem( aShape,
-                                                                     aShape->GetEffectiveShape().get(),
-                                                                     layer, other ) )
-                                {
-                                    if( it != checkedPairs.end() )
-                                        it->second.has_error = true;
-                                }
+                                testSingleLayerItemAgainstItem( aShape, aShape->GetEffectiveShape().get(),
+                                                                layer, other );
 
                                 return !m_drcEngine->IsCancelled();
                             },
