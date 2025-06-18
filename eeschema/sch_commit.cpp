@@ -377,8 +377,7 @@ void SCH_COMMIT::pushSchEdit( const wxString& aMessage, int aCommitFlags )
                     [&]( SCH_ITEM* child )
                     {
                         child->ClearFlags( EDA_ITEM_ALL_FLAGS - selected_mask );
-                    },
-                    RECURSE_MODE::NO_RECURSE );
+                    } );
         }
     }
 
