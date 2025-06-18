@@ -150,7 +150,7 @@ DIALOG_CHANGE_SYMBOLS_BASE::DIALOG_CHANGE_SYMBOLS_BASE( wxWindow* parent, wxWind
 	bSizer8->Add( m_checkAll, 0, wxEXPAND|wxTOP|wxBOTTOM, 5 );
 
 
-	m_updateOptionsSizer->Add( bSizer8, 0, wxEXPAND|wxRIGHT, 10 );
+	m_updateOptionsSizer->Add( bSizer8, 1, wxEXPAND|wxRIGHT, 10 );
 
 	wxBoxSizer* bSizer9;
 	bSizer9 = new wxBoxSizer( wxVERTICAL );
@@ -191,7 +191,7 @@ DIALOG_CHANGE_SYMBOLS_BASE::DIALOG_CHANGE_SYMBOLS_BASE( wxWindow* parent, wxWind
 	bSizer9->Add( m_uncheckAll, 0, wxEXPAND|wxTOP|wxBOTTOM, 5 );
 
 
-	m_updateOptionsSizer->Add( bSizer9, 0, wxEXPAND|wxLEFT, 5 );
+	m_updateOptionsSizer->Add( bSizer9, 1, wxEXPAND, 5 );
 
 
 	bSizerUpdate->Add( m_updateOptionsSizer, 4, wxEXPAND|wxTOP|wxRIGHT, 10 );

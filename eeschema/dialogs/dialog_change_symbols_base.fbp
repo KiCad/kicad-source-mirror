@@ -1287,7 +1287,7 @@
                 <object class="sizeritem" expanded="true">
                   <property name="border">10</property>
                   <property name="flag">wxEXPAND|wxRIGHT</property>
-                  <property name="proportion">0</property>
+                  <property name="proportion">1</property>
                   <object class="wxBoxSizer" expanded="true">
                     <property name="minimum_size"></property>
                     <property name="name">bSizer8</property>
@@ -1772,8 +1772,8 @@
                 </object>
                 <object class="sizeritem" expanded="true">
                   <property name="border">5</property>
-                  <property name="flag">wxEXPAND|wxLEFT</property>
-                  <property name="proportion">0</property>
+                  <property name="flag">wxEXPAND</property>
+                  <property name="proportion">1</property>
                   <object class="wxBoxSizer" expanded="true">
                     <property name="minimum_size"></property>
                     <property name="name">bSizer9</property>
