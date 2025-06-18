@@ -1,21 +1,22 @@
 # Latvian translation of kicad.po
 # Rihards Skuja <rhssk@posteo.eu>, 2021.
 # Henrik Kauhanen <henrik@kauhanen.se>, 2023.
+# "ℂ𝕠𝕠𝕠𝕝 (𝕘𝕚𝕥𝕙𝕦𝕓.𝕔𝕠𝕞/ℂ𝕠𝕠𝕠𝕝)" <coool@mail.lv>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad 6.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-06-08 17:02+0300\n"
-"PO-Revision-Date: 2023-01-20 06:51+0000\n"
-"Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
-"Language-Team: Latvian <https://hosted.weblate.org/projects/kicad/master-"
-"source/lv/>\n"
+"PO-Revision-Date: 2025-06-19 12:01+0000\n"
+"Last-Translator: \"ℂ𝕠𝕠𝕠𝕝 (𝕘𝕚𝕥𝕙𝕦𝕓.𝕔𝕠𝕞/ℂ𝕠𝕠𝕠𝕝)\" <coool@mail.lv>\n"
+"Language-Team: Latvian <https://hosted.weblate.org/projects/kicad/"
+"master-source/lv/>\n"
 "Language: lv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n != 0 ? 1 : 2;\n"
-"X-Generator: Weblate 4.15.1\n"
+"X-Generator: Weblate 5.12.1\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
 #: common/dialogs/panel_embedded_files.cpp:321
@@ -4313,9 +4314,8 @@ msgid "Add Color Theme"
 msgstr ""
 
 #: common/dialogs/panel_color_settings.cpp:149
-#, fuzzy
 msgid "Theme already exists!"
-msgstr "Rādīt vara biezumu"
+msgstr "Motīvs ar tādu nosaukumu jau pastāv!"
 
 #: common/dialogs/panel_color_settings.cpp:215
 #: common/dialogs/panel_color_settings.cpp:234
@@ -53769,9 +53769,8 @@ msgid "KiCad PCB Calculator"
 msgstr "Rādīt vara biezumu"
 
 #: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:11
-#, fuzzy
 msgid "PCB;Calculator;"
-msgstr "Rādīt vara biezumu"
+msgstr "PCB;Kalkulators;"
 
 #: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:12
 msgid "PCB Calculator"
