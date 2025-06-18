@@ -154,18 +154,14 @@ public:
 
     const wxString& AsString() const override
     {
-        const_cast<PCBEXPR_NETCLASS_VALUE*>( this )->Set(
-                m_item->GetEffectiveNetClass()->GetName() );
+        const_cast<PCBEXPR_NETCLASS_VALUE*>( this )->Set( m_item->GetEffectiveNetClass()->GetName() );
         return LIBEVAL::VALUE::AsString();
     }
 
     bool EqualTo( LIBEVAL::CONTEXT* aCtx, const VALUE* b ) const override
     {
         if( const PCBEXPR_NETCLASS_VALUE* bValue = dynamic_cast<const PCBEXPR_NETCLASS_VALUE*>( b ) )
-        {
-            return *( m_item->GetEffectiveNetClass() )
-                   == *( bValue->m_item->GetEffectiveNetClass() );
-        }
+            return *( m_item->GetEffectiveNetClass() ) == *( bValue->m_item->GetEffectiveNetClass() );
 
         if( b->GetType() == LIBEVAL::VT_STRING )
         {
@@ -194,10 +190,7 @@ public:
     bool NotEqualTo( LIBEVAL::CONTEXT* aCtx, const LIBEVAL::VALUE* b ) const override
     {
         if( const PCBEXPR_NETCLASS_VALUE* bValue = dynamic_cast<const PCBEXPR_NETCLASS_VALUE*>( b ) )
-        {
-            return *( m_item->GetEffectiveNetClass() )
-                   != *( bValue->m_item->GetEffectiveNetClass() );
-        }
+            return *( m_item->GetEffectiveNetClass() ) != *( bValue->m_item->GetEffectiveNetClass() );
 
         if( b->GetType() == LIBEVAL::VT_STRING )
         {
@@ -244,7 +237,8 @@ class PCBEXPR_COMPONENT_CLASS_VALUE : public LIBEVAL::VALUE
 {
 public:
     PCBEXPR_COMPONENT_CLASS_VALUE( BOARD_ITEM* aItem ) :
-            LIBEVAL::VALUE( wxEmptyString ), m_item( dynamic_cast<FOOTPRINT*>( aItem ) )
+            LIBEVAL::VALUE( wxEmptyString ),
+            m_item( dynamic_cast<FOOTPRINT*>( aItem ) )
     {};
 
     const wxString& AsString() const override
@@ -260,8 +254,7 @@ public:
 
     bool EqualTo( LIBEVAL::CONTEXT* aCtx, const VALUE* b ) const override
     {
-        if( const PCBEXPR_COMPONENT_CLASS_VALUE* bValue =
-                    dynamic_cast<const PCBEXPR_COMPONENT_CLASS_VALUE*>( b ) )
+        if( const PCBEXPR_COMPONENT_CLASS_VALUE* bValue = dynamic_cast<const PCBEXPR_COMPONENT_CLASS_VALUE*>( b ) )
         {
             if( !m_item || !bValue->m_item )
                 return LIBEVAL::VALUE::EqualTo( aCtx, b );
@@ -300,8 +293,7 @@ public:
 
     bool NotEqualTo( LIBEVAL::CONTEXT* aCtx, const LIBEVAL::VALUE* b ) const override
     {
-        if( const PCBEXPR_COMPONENT_CLASS_VALUE* bValue =
-                    dynamic_cast<const PCBEXPR_COMPONENT_CLASS_VALUE*>( b ) )
+        if( const PCBEXPR_COMPONENT_CLASS_VALUE* bValue = dynamic_cast<const PCBEXPR_COMPONENT_CLASS_VALUE*>( b ) )
         {
             if( !m_item || !bValue->m_item )
                 return LIBEVAL::VALUE::NotEqualTo( aCtx, b );
@@ -538,7 +530,7 @@ LIBEVAL::FUNC_CALL_REF PCBEXPR_UCODE::CreateFuncCall( const wxString& aName )
 
 
 std::unique_ptr<LIBEVAL::VAR_REF> PCBEXPR_UCODE::CreateVarRef( const wxString& aVar,
-                                                                const wxString& aField )
+                                                               const wxString& aField )
 {
     PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
     std::unique_ptr<PCBEXPR_VAR_REF> vref;

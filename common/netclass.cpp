@@ -294,17 +294,23 @@ const wxString NETCLASS::GetHumanReadableName() const
 
     if( m_constituents.size() == 2 )
     {
-        name.Printf( _( "%s and %s" ), m_constituents[0]->GetName(), m_constituents[1]->GetName() );
+        name.Printf( _( "%s and %s" ),
+                     m_constituents[0]->GetName(),
+                     m_constituents[1]->GetName() );
     }
     else if( m_constituents.size() == 3 )
     {
-        name.Printf( _( "%s, %s and %s" ), m_constituents[0]->GetName(),
-                     m_constituents[1]->GetName(), m_constituents[2]->GetName() );
+        name.Printf( _( "%s, %s and %s" ),
+                     m_constituents[0]->GetName(),
+                     m_constituents[1]->GetName(),
+                     m_constituents[2]->GetName() );
     }
     else if( m_constituents.size() > 3 )
     {
-        name.Printf( _( "%s, %s and %d more" ), m_constituents[0]->GetName(),
-                     m_constituents[1]->GetName(), static_cast<int>( m_constituents.size() - 2 ) );
+        name.Printf( _( "%s, %s and %d more" ),
+                     m_constituents[0]->GetName(),
+                     m_constituents[1]->GetName(),
+                     static_cast<int>( m_constituents.size() - 2 ) );
     }
 
     return name;
