@@ -1903,6 +1903,7 @@ void SCH_EDIT_FRAME::CommonSettingsChanged( int aFlags )
     SCHEMATIC_SETTINGS& settings = Schematic().Settings();
 
     settings.m_JunctionSize = GetSchematicJunctionSize();
+    settings.m_HopOverScale = GetSchematicHopOverScale();
 
     ShowAllIntersheetRefs( settings.m_IntersheetRefsShow );
 
@@ -1929,7 +1930,17 @@ void SCH_EDIT_FRAME::CommonSettingsChanged( int aFlags )
     SCH_SCREEN* screen = GetCurrentSheet().LastScreen();
 
     for( SCH_ITEM* item : screen->Items() )
+    {
         item->ClearCaches();
+
+        if( item->Type() == SCH_LINE_T )
+        {
+            SCH_LINE* line = static_cast<SCH_LINE*>( item );
+
+            if( line->IsWire() )
+                UpdateHopOveredWires( line );
+        }
+    }
 
     for( const auto& [ libItemName, libSymbol ] : screen->GetLibSymbols() )
         libSymbol->ClearCaches();

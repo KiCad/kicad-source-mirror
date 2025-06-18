@@ -87,7 +87,6 @@ public:
         bool show_pin_alt_icons;
         bool show_illegal_symbol_lib_dialog;
         bool show_page_limits;
-        bool show_hop_over;
         bool show_sexpr_file_convert_warning;
         bool show_sheet_filename_case_sensitivity_dialog;
     };
@@ -179,8 +178,9 @@ public:
         bool                auto_start_wires;
         std::vector<double> junction_size_mult_list;
 
-        // Pulldown index for user default junction dot size (e.g. smallest = 0, small = 1, etc)
-        int      junction_size_choice;
+        // Pulldown index for user default junction dot size (e.g. none = 0, smallest = 1, small = 2, etc)
+        int                 junction_size_choice;
+        int                 hop_over_size_choice;
     };
 
     struct INPUT

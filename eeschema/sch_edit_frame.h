@@ -767,6 +767,7 @@ public:
     const BOX2I GetDocumentExtents( bool aIncludeAllVisible = true ) const override;
 
     int GetSchematicJunctionSize();
+    double GetSchematicHopOverScale();
 
     void FocusOnItem( EDA_ITEM* aItem ) override;
 

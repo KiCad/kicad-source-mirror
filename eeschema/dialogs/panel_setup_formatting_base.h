@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -61,8 +61,10 @@ class PANEL_SETUP_FORMATTING_BASE : public wxPanel
 		wxStaticText* m_pinSymbolSizeLabel;
 		wxTextCtrl* m_pinSymbolSizeCtrl;
 		wxStaticText* m_pinSymbolSizeUnits;
-		wxStaticText* m_staticText261;
+		wxStaticText* m_junctionDotLabel;
 		wxChoice* m_choiceJunctionDotSize;
+		wxStaticText* m_hopOverLabel;
+		wxChoice* m_choiceHopOverSize;
 		wxStaticText* m_connectionGridLabel;
 		wxTextCtrl* m_connectionGridCtrl;
 		wxStaticText* m_connectionGridUnits;

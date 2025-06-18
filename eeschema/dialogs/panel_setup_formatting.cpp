@@ -95,6 +95,7 @@ bool PANEL_SETUP_FORMATTING::TransferDataToWindow()
     m_lineWidth.SetValue( settings.m_DefaultLineWidth );
     m_pinSymbolSize.SetValue( settings.m_PinSymbolSize );
     m_choiceJunctionDotSize->SetSelection( settings.m_JunctionSizeChoice );
+    m_choiceHopOverSize->SetSelection( settings.m_HopOverSizeChoice );
     m_connectionGridSize.SetValue( settings.m_ConnectionGridSize );
 
     m_showIntersheetsReferences->SetValue( settings.m_IntersheetRefsShow );
@@ -161,6 +162,9 @@ bool PANEL_SETUP_FORMATTING::TransferDataFromWindow()
 
     if( m_choiceJunctionDotSize->GetSelection() != wxNOT_FOUND )
         settings.m_JunctionSizeChoice = m_choiceJunctionDotSize->GetSelection();
+
+    if( m_choiceHopOverSize->GetSelection() != wxNOT_FOUND )
+        settings.m_HopOverSizeChoice = m_choiceHopOverSize->GetSelection();
 
     settings.m_IntersheetRefsShow        = m_showIntersheetsReferences->GetValue();
     settings.m_IntersheetRefsFormatShort = !m_radioFormatStandard->GetValue();

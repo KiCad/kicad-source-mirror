@@ -60,6 +60,7 @@ bool SCH_EDIT_FRAME::LoadProjectSettings()
 {
     SCHEMATIC_SETTINGS& settings = Schematic().Settings();
     settings.m_JunctionSize = GetSchematicJunctionSize();
+    settings.m_HopOverScale = GetSchematicHopOverScale();
 
     GetRenderSettings()->SetDefaultPenWidth( settings.m_DefaultLineWidth );
     GetRenderSettings()->m_LabelSizeRatio  = settings.m_LabelSizeRatio;
@@ -189,6 +190,14 @@ int SCH_EDIT_FRAME::GetSchematicJunctionSize()
     int dotSize = netSettings->GetDefaultNetclass()->GetWireWidth() * sizeMultipliers[sizeChoice];
 
     return std::max( dotSize, 1 );
+}
+
+
+double SCH_EDIT_FRAME::GetSchematicHopOverScale()
+{
+    std::vector<double>& sizeMultipliers = eeconfig()->m_Drawing.junction_size_mult_list;
+
+    return sizeMultipliers[Schematic().Settings().m_HopOverSizeChoice];
 }
 
 

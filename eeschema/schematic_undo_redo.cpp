@@ -559,7 +559,7 @@ void SCH_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
             SetSheetNumberAndCount();
 
         // Restore hop over shapes of wires, if any
-        if( eeconfig()->m_Appearance.show_hop_over )
+        if( m_schematic->Settings().m_HopOverScale > 0.0 )
         {
             for( SCH_ITEM* item : GetScreen()->Items() )
             {

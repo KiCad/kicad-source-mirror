@@ -1096,10 +1096,11 @@ std::vector<VECTOR3I> SCH_LINE::BuildWireWithHopShape( const SCH_SCREEN* aScreen
     }
     else
     {
-        auto getDistance = []( const VECTOR2I& a, const VECTOR2I& b ) -> double
-        {
-            return std::sqrt( std::pow( a.x - b.x, 2 ) + std::pow( a.y - b.y, 2 ) );
-        };
+        auto getDistance =
+                []( const VECTOR2I& a, const VECTOR2I& b ) -> double
+                {
+                    return std::sqrt( std::pow( a.x - b.x, 2 ) + std::pow( a.y - b.y, 2 ) );
+                };
 
         std::sort( intersections.begin(), intersections.end(),
                    [&]( const VECTOR2I& a, const VECTOR2I& b )
@@ -1137,14 +1138,14 @@ std::vector<VECTOR3I> SCH_LINE::BuildWireWithHopShape( const SCH_SCREEN* aScreen
             VECTOR2I arcMidPoint = {
                 hopMid.x + static_cast<int>( arcRadius
                                             * cos( ( startAngleRad + endAngleRad ) / 2.0f ) ),
-                hopMid.y + static_cast<int>( arcRadius
+                hopMid.y - static_cast<int>( arcRadius
                                             * sin( ( startAngleRad + endAngleRad ) / 2.0f ) )
             };
 
             VECTOR2I beforeHop = hopMid - VECTOR2I( arcRadius * std::cos( lineAngle ),
-                                             arcRadius * std::sin( lineAngle ) );
+                                                    arcRadius * std::sin( lineAngle ) );
             VECTOR2I afterHop = hopMid + VECTOR2I( arcRadius * std::cos( lineAngle ),
-                                            arcRadius * std::sin( lineAngle ) );
+                                                   arcRadius * std::sin( lineAngle ) );
 
             // Draw the line from the current start point to the before-hop point
             wire_shape.emplace_back( currentStart.x, currentStart.y, 0 );

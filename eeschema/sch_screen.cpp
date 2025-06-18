@@ -925,10 +925,12 @@ void SCH_SCREEN::Plot( PLOTTER* aPlotter, const SCH_PLOT_OPTS& aPlotOpts ) const
             SCH_LINE* aLine = static_cast<SCH_LINE*>( item );
 
             if( !aLine->IsWire() || !aPlotOpts.m_plotHopOver )
+            {
                 item->Plot( aPlotter, !background, aPlotOpts, 0, 0, { 0, 0 }, false );
+            }
             else
             {
-                double arcRadius = lineWidth * ADVANCED_CFG::GetCfg().m_hopOverArcRadius;
+                double arcRadius = lineWidth * aLine->Schematic()->Settings().m_HopOverScale;
                 std::vector<VECTOR3I> curr_wire_shape = aLine->BuildWireWithHopShape( this, arcRadius );
 
                 for( size_t ii = 1; ii < curr_wire_shape.size(); ii++ )

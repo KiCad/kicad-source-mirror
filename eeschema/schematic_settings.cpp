@@ -45,6 +45,8 @@ SCHEMATIC_SETTINGS::SCHEMATIC_SETTINGS( JSON_SETTINGS* aParent, const std::strin
         m_PinSymbolSize( DEFAULT_TEXT_SIZE * schIUScale.IU_PER_MILS / 2 ),
         m_JunctionSizeChoice( 3 ),
         m_JunctionSize( DEFAULT_JUNCTION_DIAM * schIUScale.IU_PER_MILS ),
+        m_HopOverSizeChoice( 0 ),
+        m_HopOverScale( 0.0 ),
         m_ConnectionGridSize( DEFAULT_CONNECTION_GRID_MILS * schIUScale.IU_PER_MILS ),
         m_AnnotateStartNum( 0 ),
         m_IntersheetRefsShow( false ),
@@ -73,6 +75,7 @@ SCHEMATIC_SETTINGS::SCHEMATIC_SETTINGS( JSON_SETTINGS* aParent, const std::strin
     int defaultTextSize = cfg ? cfg->m_Drawing.default_text_size : DEFAULT_TEXT_SIZE;
     int defaultPinSymbolSize = cfg ? cfg->m_Drawing.pin_symbol_size : DEFAULT_TEXT_SIZE / 2;
     int defaultJunctionSizeChoice = cfg ? cfg->m_Drawing.junction_size_choice : 3;
+    int defaultHopOverSizeChoice = cfg ? cfg->m_Drawing.hop_over_size_choice : 0;
     bool defaultIntersheetsRefShow = cfg ? cfg->m_Drawing.intersheets_ref_show : false;
     bool defaultIntersheetsRefOwnPage = cfg ? cfg->m_Drawing.intersheets_ref_own_page : true;
     bool defaultIntersheetsRefFormatShort = cfg ? cfg->m_Drawing.intersheets_ref_short : false;
@@ -145,6 +148,9 @@ SCHEMATIC_SETTINGS::SCHEMATIC_SETTINGS( JSON_SETTINGS* aParent, const std::strin
     // User choice for junction dot size ( e.g. none = 0, smallest = 1, small = 2, etc )
     m_params.emplace_back( new PARAM<int>( "drawing.junction_size_choice",
             &m_JunctionSizeChoice, defaultJunctionSizeChoice ) );
+
+    m_params.emplace_back( new PARAM<int>( "drawing.hop_over_size_choice",
+            &m_HopOverSizeChoice, defaultHopOverSizeChoice ) );
 
     m_params.emplace_back( new PARAM_LAMBDA<nlohmann::json>( "drawing.field_names",
             [&]() -> nlohmann::json

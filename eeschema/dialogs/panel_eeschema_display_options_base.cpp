@@ -135,11 +135,6 @@ PANEL_EESCHEMA_DISPLAY_OPTIONS_BASE::PANEL_EESCHEMA_DISPLAY_OPTIONS_BASE( wxWind
 	m_checkPageLimits->SetValue(true);
 	bAppearanceSizer->Add( m_checkPageLimits, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
-	m_cbHopOver = new wxCheckBox( this, wxID_ANY, _("Hop hover on wire crossing"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_cbHopOver->SetToolTip( _("Show a hop hover when two wires are crossing") );
-
-	bAppearanceSizer->Add( m_cbHopOver, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
-
 
 	bRightColumn->Add( bAppearanceSizer, 0, wxEXPAND|wxTOP|wxLEFT, 5 );
 

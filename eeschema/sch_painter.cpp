@@ -1364,11 +1364,10 @@ void SCH_PAINTER::draw( const SCH_LINE* aLine, int aLayer )
     bool highlightNetclassColors = false;
     double             highlightAlpha = 0.6;
     EESCHEMA_SETTINGS* eeschemaCfg = eeconfig();
-    bool               showHopOver = false;
+    double             hopOverScale = aLine->Schematic()->Settings().m_HopOverScale;
 
     if( eeschemaCfg )
     {
-        showHopOver = eeschemaCfg->m_Appearance.show_hop_over;
         highlightNetclassColors = eeschemaCfg->m_Selection.highlight_netclass_colors;
         highlightAlpha = eeschemaCfg->m_Selection.highlight_netclass_colors_alpha;
     }
@@ -1485,10 +1484,10 @@ void SCH_PAINTER::draw( const SCH_LINE* aLine, int aLayer )
 
     std::vector<VECTOR3I> curr_wire_shape;
 
-    if( aLine->IsWire() && showHopOver )
+    if( aLine->IsWire() && hopOverScale > 0.0 )
     {
         double   lineWidth = getLineWidth( aLine, false, drawingNetColorHighlights );
-        double   arcRadius = lineWidth * ADVANCED_CFG::GetCfg().m_hopOverArcRadius;
+        double   arcRadius = lineWidth * hopOverScale;
         curr_wire_shape = aLine->BuildWireWithHopShape( m_schematic->GetCurrentScreen(), arcRadius );
     }
     else

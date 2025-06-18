@@ -244,9 +244,6 @@ EESCHEMA_SETTINGS::EESCHEMA_SETTINGS() :
     m_params.emplace_back( new PARAM<bool>( "appearance.show_page_limits",
             &m_Appearance.show_page_limits, true ) );
 
-    m_params.emplace_back( new PARAM<bool>( "appearance.show_hop_over",
-            &m_Appearance.show_hop_over, false ) );
-
     m_params.emplace_back( new PARAM<bool>( "appearance.show_sexpr_file_convert_warning",
             &m_Appearance.show_sexpr_file_convert_warning, true ) );
 
@@ -385,8 +382,11 @@ EESCHEMA_SETTINGS::EESCHEMA_SETTINGS() :
     m_params.emplace_back( new PARAM_LIST<double>( "drawing.junction_size_mult_list",
             &m_Drawing.junction_size_mult_list, { 0.0, 1.7, 4.0, 6.0, 9.0, 12.0 } ) );
 
-    m_params.emplace_back(new PARAM <int>( "drawing.junction_size_choice",
+    m_params.emplace_back( new PARAM<int>( "drawing.junction_size_choice",
             &m_Drawing.junction_size_choice, 3 ) );
+
+    m_params.emplace_back( new PARAM<int>( "drawing.hop_over_size_choice",
+            &m_Drawing.hop_over_size_choice, 0 ) );
 
     m_params.emplace_back( new PARAM<bool>( "find_replace.search_all_fields",
                                             &m_FindReplaceExtra.search_all_fields, false ) );

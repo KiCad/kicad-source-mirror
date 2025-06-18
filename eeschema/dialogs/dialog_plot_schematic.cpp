@@ -432,7 +432,7 @@ void DIALOG_PLOT_SCHEMATIC::plotSchematic( bool aPlotAll )
     plotOpts.m_PDFMetadata = m_plotPDFMetadata->GetValue();
     plotOpts.m_outputDirectory = getOutputPath();
     plotOpts.m_pageSizeSelect = m_pageSizeSelect;
-    plotOpts.m_plotHopOver = cfg ? cfg->m_Appearance.show_hop_over : false;
+    plotOpts.m_plotHopOver = m_editFrame->Schematic().Settings().m_HopOverScale > 0.0;
 
     schPlotter->Plot( GetPlotFileFormat(), plotOpts, &renderSettings, &m_MessagesBox->Reporter() );
 
