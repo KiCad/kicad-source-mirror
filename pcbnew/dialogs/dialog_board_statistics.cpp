@@ -410,6 +410,14 @@ void DIALOG_BOARD_STATISTICS::getDataFromPCB()
     board->RunOnChildren(
             [&]( BOARD_ITEM* child )
             {
+                if( child->Type() == PCB_FOOTPRINT_T
+                    || child->Type() == PCB_GROUP_T
+                    || child->Type() == PCB_GENERATOR_T )
+                {
+                    // Wait for recursion into children
+                    return;
+                }
+
                 if( child->IsOnLayer( F_Cu ) )
                     child->TransformShapeToPolySet( frontCopper, F_Cu, 0, ARC_LOW_DEF, ERROR_INSIDE );
 
@@ -438,7 +446,8 @@ void DIALOG_BOARD_STATISTICS::getDataFromPCB()
                     if( via->IsOnLayer( B_Cu ) )
                         TransformCircleToPolygon( backHoles, center, R, ARC_LOW_DEF, ERROR_OUTSIDE );
                 }
-            }, RECURSE_MODE::RECURSE );
+            },
+            RECURSE_MODE::RECURSE );
 
     if( m_checkBoxSubtractHolesFromCopper->GetValue() )
     {
