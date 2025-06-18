@@ -26,8 +26,8 @@ class WX_HTML_REPORT_PANEL;
 #include <wx/image.h>
 #include <wx/icon.h>
 #include <wx/button.h>
-#include <wx/gbsizer.h>
 #include <wx/sizer.h>
+#include <wx/gbsizer.h>
 #include <wx/statline.h>
 #include <wx/stattext.h>
 #include <wx/checklst.h>
@@ -72,10 +72,12 @@ class DIALOG_CHANGE_SYMBOLS_BASE : public DIALOG_SHIM
 		wxCheckBox* m_resetFieldVisibilities;
 		wxCheckBox* m_resetFieldEffects;
 		wxCheckBox* m_resetFieldPositions;
+		wxButton* m_checkAll;
 		wxCheckBox* m_resetPinTextVisibility;
 		wxCheckBox* m_resetAlternatePin;
 		wxCheckBox* m_resetAttributes;
 		wxCheckBox* m_resetCustomPower;
+		wxButton* m_uncheckAll;
 		WX_HTML_REPORT_PANEL* m_messagePanel;
 		wxStdDialogButtonSizer* m_sdbSizer;
 		wxButton* m_sdbSizerOK;
@@ -95,6 +97,8 @@ class DIALOG_CHANGE_SYMBOLS_BASE : public DIALOG_SHIM
 		virtual void launchNewIdSymbolBrowser( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onSelectAll( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onSelectNone( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onCheckAll( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onUncheckAll( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onOkButtonClicked( wxCommandEvent& event ) { event.Skip(); }
 
 

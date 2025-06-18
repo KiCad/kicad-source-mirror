@@ -40,6 +40,8 @@
 #include <tool/tool_manager.h>
 #include <tools/pcb_selection_tool.h>
 
+#include <ranges>
+
 
 #define ID_MATCH_FP_ALL      4200
 #define ID_MATCH_FP_SELECTED 4201
@@ -242,62 +244,74 @@ void DIALOG_EXCHANGE_FOOTPRINTS::updateMatchModeRadioButtons( wxUpdateUIEvent& )
 }
 
 
-void DIALOG_EXCHANGE_FOOTPRINTS::OnMatchAllClicked( wxCommandEvent& event )
+void DIALOG_EXCHANGE_FOOTPRINTS::OnMatchAllClicked( wxCommandEvent& aEvent )
 {
     *m_matchMode = ID_MATCH_FP_ALL;
 
-    if( event.GetEventObject() == this )
+    if( aEvent.GetEventObject() == this )
         SetInitialFocus( m_matchAll );
     else
         m_matchAll->SetFocus();
 }
 
 
-void DIALOG_EXCHANGE_FOOTPRINTS::OnMatchSelectedClicked( wxCommandEvent& event )
+void DIALOG_EXCHANGE_FOOTPRINTS::OnMatchSelectedClicked( wxCommandEvent& aEvent )
 {
     *m_matchMode = ID_MATCH_FP_SELECTED;
 
-    if( event.GetEventObject() == this )
+    if( aEvent.GetEventObject() == this )
         SetInitialFocus( m_matchSelected );
     else
         m_matchSelected->SetFocus();
 }
 
 
-void DIALOG_EXCHANGE_FOOTPRINTS::OnMatchRefClicked( wxCommandEvent& event )
+void DIALOG_EXCHANGE_FOOTPRINTS::OnMatchRefClicked( wxCommandEvent& aEvent )
 {
     *m_matchMode = ID_MATCH_FP_REF;
 
-    if( event.GetEventObject() == this )
+    if( aEvent.GetEventObject() == this )
         SetInitialFocus( m_specifiedRef );
-    else if( event.GetEventObject() != m_specifiedRef )
+    else if( aEvent.GetEventObject() != m_specifiedRef )
         m_specifiedRef->SetFocus();
 }
 
 
-void DIALOG_EXCHANGE_FOOTPRINTS::OnMatchValueClicked( wxCommandEvent& event )
+void DIALOG_EXCHANGE_FOOTPRINTS::OnMatchValueClicked( wxCommandEvent& aEvent )
 {
     *m_matchMode = ID_MATCH_FP_VAL;
 
-    if( event.GetEventObject() == this )
+    if( aEvent.GetEventObject() == this )
         SetInitialFocus( m_specifiedValue );
-    else if( event.GetEventObject() != m_specifiedValue )
+    else if( aEvent.GetEventObject() != m_specifiedValue )
         m_specifiedValue->SetFocus();
 }
 
 
-void DIALOG_EXCHANGE_FOOTPRINTS::OnMatchIDClicked( wxCommandEvent& event )
+void DIALOG_EXCHANGE_FOOTPRINTS::OnMatchIDClicked( wxCommandEvent& aEvent )
 {
     *m_matchMode = ID_MATCH_FP_ID;
 
-    if( event.GetEventObject() == this )
+    if( aEvent.GetEventObject() == this )
         SetInitialFocus( m_specifiedID );
-    else if( event.GetEventObject() != m_specifiedID )
+    else if( aEvent.GetEventObject() != m_specifiedID )
         m_specifiedID->SetFocus();
 }
 
 
-void DIALOG_EXCHANGE_FOOTPRINTS::OnOKClicked( wxCommandEvent& event )
+void DIALOG_EXCHANGE_FOOTPRINTS::checkAll( bool aCheck )
+{
+    m_removeExtraBox->SetValue( aCheck );
+  	m_resetTextItemLayers->SetValue( aCheck );
+  	m_resetTextItemEffects->SetValue( aCheck );
+  	m_resetTextItemContent->SetValue( aCheck );
+  	m_resetFabricationAttrs->SetValue( aCheck );
+  	m_resetClearanceOverrides->SetValue( aCheck );
+  	m_reset3DModels->SetValue( aCheck );
+}
+
+
+void DIALOG_EXCHANGE_FOOTPRINTS::OnOKClicked( wxCommandEvent& aEvent )
 {
     PCB_SELECTION_TOOL* selTool = m_parent->GetToolManager()->GetTool<PCB_SELECTION_TOOL>();
     wxBusyCursor        dummy;
@@ -336,11 +350,8 @@ void DIALOG_EXCHANGE_FOOTPRINTS::processMatchingFootprints()
      * NB: the change is done from the last footprint because processFootprint() modifies the
      * last item in the list.
      */
-    for( auto it = m_parent->GetBoard()->Footprints().rbegin();
-            it != m_parent->GetBoard()->Footprints().rend(); it++ )
+    for( FOOTPRINT* footprint : std::ranges::reverse_view( m_parent->GetBoard()->Footprints() ) )
     {
-        FOOTPRINT* footprint = *it;
-
         if( !isMatch( footprint ) )
             continue;
 

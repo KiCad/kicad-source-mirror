@@ -41,14 +41,26 @@ public:
     ~DIALOG_EXCHANGE_FOOTPRINTS() override;
 
 private:
-    void updateMatchModeRadioButtons( wxUpdateUIEvent& event ) override;
-    void OnMatchAllClicked( wxCommandEvent& event ) override;
-    void OnMatchSelectedClicked( wxCommandEvent& event ) override;
-    void OnMatchRefClicked( wxCommandEvent& event ) override;
-    void OnMatchValueClicked( wxCommandEvent& event ) override;
-    void OnMatchIDClicked( wxCommandEvent& event ) override;
-    void OnOKClicked( wxCommandEvent& event ) override;
-    void ViewAndSelectFootprint( wxCommandEvent& event ) override;
+    void updateMatchModeRadioButtons( wxUpdateUIEvent& aEvent ) override;
+    void OnMatchAllClicked( wxCommandEvent& aEvent ) override;
+    void OnMatchSelectedClicked( wxCommandEvent& aEvent ) override;
+    void OnMatchRefClicked( wxCommandEvent& aEvent ) override;
+    void OnMatchValueClicked( wxCommandEvent& aEvent ) override;
+    void OnMatchIDClicked( wxCommandEvent& aEvent ) override;
+    void OnOKClicked( wxCommandEvent& aEvent ) override;
+    void ViewAndSelectFootprint( wxCommandEvent& aEvent ) override;
+
+    void onCheckAll( wxCommandEvent& aEvent ) override
+    {
+        checkAll( true );
+    }
+
+    void onUncheckAll( wxCommandEvent& aEvent ) override
+    {
+        checkAll( false );
+    }
+
+    void checkAll( bool aCheck );
 
     wxRadioButton* getRadioButtonForMode();
 

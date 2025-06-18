@@ -826,7 +826,7 @@ wxString DIALOG_CHANGE_SYMBOLS::getSymbolReferences( SCH_SYMBOL& aSymbol,
 {
     wxString msg;
     wxString references;
-    LIB_ID oldId = aSymbol.GetLibId();
+    const LIB_ID& oldId = aSymbol.GetLibId();
 
     wxString oldLibLinkName;    // For report
 

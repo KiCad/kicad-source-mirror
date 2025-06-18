@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf-dirty)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -21,13 +21,13 @@ class WX_HTML_REPORT_PANEL;
 #include <wx/colour.h>
 #include <wx/settings.h>
 #include <wx/textctrl.h>
-#include <wx/gbsizer.h>
 #include <wx/bmpbuttn.h>
 #include <wx/bitmap.h>
 #include <wx/image.h>
 #include <wx/icon.h>
 #include <wx/button.h>
 #include <wx/sizer.h>
+#include <wx/gbsizer.h>
 #include <wx/statline.h>
 #include <wx/stattext.h>
 #include <wx/checkbox.h>
@@ -36,7 +36,6 @@ class WX_HTML_REPORT_PANEL;
 #include <wx/dialog.h>
 
 ///////////////////////////////////////////////////////////////////////////
-
 
 ///////////////////////////////////////////////////////////////////////////////
 /// Class DIALOG_EXCHANGE_FOOTPRINTS_BASE
@@ -65,8 +64,11 @@ class DIALOG_EXCHANGE_FOOTPRINTS_BASE : public DIALOG_SHIM
 		wxCheckBox* m_resetTextItemLayers;
 		wxCheckBox* m_resetTextItemEffects;
 		wxCheckBox* m_resetTextItemContent;
+		wxButton* m_checkAll;
 		wxCheckBox* m_resetFabricationAttrs;
+		wxCheckBox* m_resetClearanceOverrides;
 		wxCheckBox* m_reset3DModels;
+		wxButton* m_uncheckAll;
 		WX_HTML_REPORT_PANEL* m_MessageWindow;
 		wxStdDialogButtonSizer* m_sdbSizer;
 		wxButton* m_sdbSizerOK;
@@ -80,6 +82,8 @@ class DIALOG_EXCHANGE_FOOTPRINTS_BASE : public DIALOG_SHIM
 		virtual void OnMatchValueClicked( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnMatchIDClicked( wxCommandEvent& event ) { event.Skip(); }
 		virtual void ViewAndSelectFootprint( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onCheckAll( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onUncheckAll( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnOKClicked( wxCommandEvent& event ) { event.Skip(); }
 
 
