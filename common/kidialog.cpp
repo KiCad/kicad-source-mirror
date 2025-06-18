@@ -32,7 +32,7 @@ static std::unordered_map<unsigned long, int> doNotShowAgainDlgs;
 
 KIDIALOG::KIDIALOG( wxWindow* aParent, const wxString& aMessage, const wxString& aCaption,
                     long aStyle )
-    : wxRichMessageDialog( aParent, aMessage, aCaption, aStyle | wxCENTRE | wxSTAY_ON_TOP ),
+    : KIDIALOG_BASE( aParent, aMessage, aCaption, aStyle | wxCENTRE | wxSTAY_ON_TOP ),
       m_hash( 0 ),
       m_cancelMeansCancel( true )
 {
@@ -41,7 +41,7 @@ KIDIALOG::KIDIALOG( wxWindow* aParent, const wxString& aMessage, const wxString&
 
 KIDIALOG::KIDIALOG( wxWindow* aParent, const wxString& aMessage, KD_TYPE aType,
                     const wxString& aCaption )
-    : wxRichMessageDialog( aParent, aMessage, getCaption( aType, aCaption ), getStyle( aType ) ),
+    : KIDIALOG_BASE( aParent, aMessage, getCaption( aType, aCaption ), getStyle( aType ) ),
       m_hash( 0 ),
       m_cancelMeansCancel( true )
 {
@@ -80,7 +80,7 @@ bool KIDIALOG::Show( bool aShow )
             return it->second;
     }
 
-    int ret = wxRichMessageDialog::Show( aShow );
+    int ret = KIDIALOG_BASE::Show( aShow );
 
     // Has the user asked not to show the dialog again?
     // Note that we don't save a Cancel value unless the Cancel button is being used for some
@@ -100,7 +100,7 @@ int KIDIALOG::ShowModal()
     if( it != doNotShowAgainDlgs.end() )
         return it->second;
 
-    int ret = wxRichMessageDialog::ShowModal();
+    int ret = KIDIALOG_BASE::ShowModal();
 
     // Has the user asked not to show the dialog again?
     // Note that we don't save a Cancel value unless the Cancel button is being used for some

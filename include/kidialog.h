@@ -36,10 +36,17 @@
 #include <wx/richmsgdlg.h>
 
 
+#if defined( _WIN32 ) && wxCHECK_VERSION( 3, 3, 0 )
+#define KIDIALOG_BASE wxGenericRichMessageDialog
+#else
+#define KIDIALOG_BASE wxRichMessageDialog
+#endif
+
+
 /**
  * Helper class to create more flexible dialogs, including 'do not show again' checkbox handling.
  */
-class KICOMMON_API KIDIALOG : public wxRichMessageDialog
+class KICOMMON_API KIDIALOG : public KIDIALOG_BASE
 {
 public:
     ///< Dialog type. Selects appropriate icon and default dialog title
@@ -53,7 +60,7 @@ public:
     bool SetOKCancelLabels( const ButtonLabel& ok, const ButtonLabel& cancel ) override
     {
         m_cancelMeansCancel = false;
-        return wxRichMessageDialog::SetOKCancelLabels( ok, cancel );
+        return KIDIALOG_BASE::SetOKCancelLabels( ok, cancel );
     }
 
     /// Shows the 'do not show again' checkbox.

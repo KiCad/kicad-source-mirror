@@ -32,6 +32,13 @@
 #include <wx/choicdlg.h>
 #include <wx/crt.h>
 
+#if defined( _WIN32 ) && wxCHECK_VERSION( 3, 3, 0 )
+#define KICAD_MESSAGE_DIALOG_BASE wxGenericMessageDialog
+#define KICAD_RICH_MESSAGE_DIALOG_BASE wxGenericRichMessageDialog
+#else
+#define KICAD_MESSAGE_DIALOG_BASE wxMessageDialog
+#define KICAD_RICH_MESSAGE_DIALOG_BASE wxRichMessageDialog
+#endif
 
 /**
  * Flag to enable confirmation dialog debugging output.
@@ -53,7 +60,7 @@ bool AskOverrideLock( wxWindow* aParent, const wxString& aMessage )
                                 + wxS( "\n" ) );
     dlg.SetYesNoLabels( _( "&Cancel" ), _( "&Open Anyway" ) );
 #else
-    wxMessageDialog dlg( aParent, aMessage, _( "File Open Warning" ),
+    KICAD_MESSAGE_DIALOG_BASE dlg( aParent, aMessage, _( "File Open Warning" ),
                          wxYES_NO | wxICON_ERROR | wxCENTER );
     dlg.SetExtendedMessage( _( "Interleaved saves may produce very unexpected results." ) );
     dlg.SetYesNoLabels( _( "&Cancel" ), _( "&Open Anyway" ) );
@@ -67,8 +74,9 @@ int UnsavedChangesDialog( wxWindow* parent, const wxString& aMessage, bool* aApp
 {
     static bool s_apply_to_all = false;
 
-    wxRichMessageDialog dlg( parent, aMessage, _( "Save Changes?" ),
-                             wxYES_NO | wxCANCEL | wxYES_DEFAULT | wxICON_WARNING | wxCENTER );
+    KICAD_RICH_MESSAGE_DIALOG_BASE dlg( parent, aMessage, _( "Save Changes?" ),
+                                        wxYES_NO | wxCANCEL |
+                                        wxYES_DEFAULT | wxICON_WARNING | wxCENTER );
     dlg.SetExtendedMessage( _( "If you don't save, all your changes will be permanently lost." )
                                 + wxS( "\n" ) );
     dlg.SetYesNoLabels( _( "&Save" ), _( "&Discard Changes" ) );
@@ -105,7 +113,7 @@ int UnsavedChangesDialog( wxWindow* parent, const wxString& aMessage )
     wxWindowDisabler disable( true );
     #endif
 
-    wxMessageDialog dlg( parent, aMessage, _( "Save Changes?" ),
+    KICAD_MESSAGE_DIALOG_BASE dlg( parent, aMessage, _( "Save Changes?" ),
                          wxYES_NO | wxCANCEL | wxYES_DEFAULT | wxICON_WARNING | wxCENTER );
     dlg.SetExtendedMessage( _( "If you don't save, all your changes will be permanently lost." ) );
     dlg.SetYesNoLabels( _( "&Save" ), _( "&Discard Changes" ) );
@@ -118,8 +126,8 @@ int UnsavedChangesDialog( wxWindow* parent, const wxString& aMessage )
 
 bool ConfirmRevertDialog( wxWindow* parent, const wxString& aMessage )
 {
-    wxMessageDialog dlg( parent, aMessage, wxEmptyString,
-                         wxOK | wxCANCEL | wxOK_DEFAULT | wxICON_WARNING | wxCENTER );
+    KICAD_MESSAGE_DIALOG_BASE dlg( parent, aMessage, wxEmptyString,
+                                   wxOK | wxCANCEL | wxOK_DEFAULT | wxICON_WARNING | wxCENTER );
     dlg.SetExtendedMessage( _( "Your current changes will be permanently lost." ) );
     dlg.SetOKCancelLabels( _( "&Revert" ), _( "&Cancel" ) );
 
@@ -144,8 +152,8 @@ int OKOrCancelDialog( wxWindow* aParent, const wxString& aWarning, const wxStrin
                       const wxString& aDetailedMessage, const wxString& aOKLabel,
                       const wxString& aCancelLabel, bool* aApplyToAll )
 {
-    wxRichMessageDialog dlg( aParent, aMessage, aWarning,
-                             wxOK | wxCANCEL | wxOK_DEFAULT | wxICON_WARNING | wxCENTER );
+    KICAD_RICH_MESSAGE_DIALOG_BASE dlg( aParent, aMessage, aWarning,
+                                        wxOK | wxCANCEL | wxOK_DEFAULT | wxICON_WARNING | wxCENTER );
 
     dlg.SetOKCancelLabels( ( aOKLabel.IsEmpty() ) ? _( "&OK" ) : aOKLabel,
                            ( aCancelLabel.IsEmpty() ) ? _( "&Cancel" ) : aCancelLabel );
@@ -181,10 +189,11 @@ void DisplayError( wxWindow* aParent, const wxString& aText )
         return;
     }
 
-    wxMessageDialog* dlg;
+    KICAD_MESSAGE_DIALOG_BASE* dlg;
 
-    dlg = new wxMessageDialog( aParent, aText, _( "Error" ),
-                               wxOK | wxCENTRE | wxRESIZE_BORDER | wxICON_ERROR | wxSTAY_ON_TOP );
+    dlg = new KICAD_MESSAGE_DIALOG_BASE( aParent, aText, _( "Error" ),
+                                         wxOK | wxCENTRE | wxRESIZE_BORDER |
+                                         wxICON_ERROR | wxSTAY_ON_TOP );
 
     dlg->ShowModal();
     dlg->Destroy();
@@ -205,10 +214,11 @@ void DisplayErrorMessage( wxWindow* aParent, const wxString& aText, const wxStri
         return;
     }
 
-    wxMessageDialog* dlg;
+    KICAD_MESSAGE_DIALOG_BASE* dlg;
 
-    dlg = new wxMessageDialog( aParent, aText, _( "Error" ),
-                               wxOK | wxCENTRE | wxRESIZE_BORDER | wxICON_ERROR | wxSTAY_ON_TOP );
+    dlg = new KICAD_MESSAGE_DIALOG_BASE( aParent, aText, _( "Error" ),
+                                         wxOK | wxCENTRE | wxRESIZE_BORDER |
+                                         wxICON_ERROR | wxSTAY_ON_TOP );
 
     if( !aExtraInfo.IsEmpty() )
         dlg->SetExtendedMessage( aExtraInfo );
@@ -232,11 +242,12 @@ void DisplayInfoMessage( wxWindow* aParent, const wxString& aMessage, const wxSt
         return;
     }
 
-    wxMessageDialog* dlg;
+    KICAD_MESSAGE_DIALOG_BASE* dlg;
     int              icon = wxICON_INFORMATION;
 
-    dlg = new wxMessageDialog( aParent, aMessage, _( "Information" ),
-                               wxOK | wxCENTRE | wxRESIZE_BORDER | icon | wxSTAY_ON_TOP );
+    dlg = new KICAD_MESSAGE_DIALOG_BASE( aParent, aMessage, _( "Information" ),
+                                         wxOK | wxCENTRE | wxRESIZE_BORDER |
+                                         icon | wxSTAY_ON_TOP );
 
     if( !aExtraInfo.IsEmpty() )
         dlg->SetExtendedMessage( aExtraInfo );
@@ -262,8 +273,9 @@ bool IsOK( wxWindow* aParent, const wxString& aMessage )
 #endif
 
 #if !defined( __WXGTK__ )
-    wxRichMessageDialog dlg( aParent, aMessage, _( "Confirmation" ),
-                             wxOK | wxCANCEL | wxOK_DEFAULT | wxCENTRE | icon | wxSTAY_ON_TOP );
+    KICAD_RICH_MESSAGE_DIALOG_BASE dlg( aParent, aMessage, _( "Confirmation" ),
+                                        wxOK | wxCANCEL | wxOK_DEFAULT |
+                                        wxCENTRE | icon | wxSTAY_ON_TOP );
 #else
     wxMessageDialog dlg( aParent, aMessage, _( "Confirmation" ),
                          wxOK | wxCANCEL | wxOK_DEFAULT | wxCENTRE | icon | wxSTAY_ON_TOP );
