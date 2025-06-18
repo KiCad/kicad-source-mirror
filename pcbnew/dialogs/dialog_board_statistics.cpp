@@ -174,17 +174,17 @@ void DIALOG_BOARD_STATISTICS::refreshItemsTypes()
     m_viaTypes.push_back( LINE_ITEM<VIATYPE>( VIATYPE::MICROVIA,     _( "Micro vias:" ) ) );
 
     // If there not enough rows in grids, append some
-    int appendRows = m_fpTypes.size() + 2 - m_gridComponents->GetNumberRows();
+    int appendRows = (int) m_fpTypes.size() + 2 - m_gridComponents->GetNumberRows();
 
     if( appendRows > 0 )
         m_gridComponents->AppendRows( appendRows );
 
-    appendRows = m_padTypes.size() + 1 - m_gridPads->GetNumberRows();
+    appendRows = (int) m_padTypes.size() + 1 - m_gridPads->GetNumberRows();
 
     if( appendRows > 0 )
         m_gridPads->AppendRows( appendRows );
 
-    appendRows = m_viaTypes.size() + 1 - m_gridVias->GetNumberRows();
+    appendRows = (int) m_viaTypes.size() + 1 - m_gridVias->GetNumberRows();
 
     if( appendRows )
         m_gridVias->AppendRows( appendRows );
@@ -403,8 +403,8 @@ void DIALOG_BOARD_STATISTICS::getDataFromPCB()
         // to be taken in account to calculate the physical board bbox
         BOX2I bbox = polySet.BBox();
 
-        m_boardWidth = bbox.GetWidth();
-        m_boardHeight = bbox.GetHeight();
+        m_boardWidth = (int) bbox.GetWidth();
+        m_boardHeight = (int) bbox.GetHeight();
     }
 
     board->RunOnChildren(
@@ -604,15 +604,15 @@ void DIALOG_BOARD_STATISTICS::printGridToStringAsTable( wxGrid* aGrid, wxString&
     if( aUseColLabels )
     {
         for( int col = 0; col < aGrid->GetNumberCols(); col++ )
-            widths[col] = aGrid->GetColLabelValue( col ).length();
+            widths[col] = (int) aGrid->GetColLabelValue( col ).length();
     }
 
     for( int row = 0; row < aGrid->GetNumberRows(); row++ )
     {
-        rowLabelsWidth = std::max<int>( rowLabelsWidth, aGrid->GetRowLabelValue( row ).length() );
+        rowLabelsWidth = std::max( rowLabelsWidth, (int) aGrid->GetRowLabelValue( row ).length() );
 
         for( int col = 0; col < aGrid->GetNumberCols(); col++ )
-            widths[col] = std::max<int>( widths[col], aGrid->GetCellValue( row, col ).length() );
+            widths[col] = std::max( widths[col], (int) aGrid->GetCellValue( row, col ).length() );
     }
 
     // Print the cells.
@@ -792,7 +792,7 @@ void DIALOG_BOARD_STATISTICS::saveReportClicked( wxCommandEvent& aEvent )
     widths.reserve( labels.size() );
 
     for( const wxString& label : labels )
-        widths.push_back( label.size() );
+        widths.push_back( (int) label.size() );
 
     int frontTotal = 0;
     int backTotal = 0;
@@ -800,18 +800,18 @@ void DIALOG_BOARD_STATISTICS::saveReportClicked( wxCommandEvent& aEvent )
     for( const FP_LINE_ITEM& line : m_fpTypes )
     {
         // Get maximum width for left label column
-        widths[0] = std::max<int>( line.title.size(), widths[0] );
+        widths[0] = std::max( (int) line.title.size(), widths[0] );
         frontTotal += line.frontSideQty;
         backTotal += line.backSideQty;
     }
 
     // Get maximum width for other columns
     tmp.Printf( wxT( "%i" ), frontTotal );
-    widths[1] = std::max<int>( tmp.size(), widths[1] );
+    widths[1] = std::max( (int) tmp.size(), widths[1] );
     tmp.Printf( wxT( "%i" ), backTotal );
-    widths[2] = std::max<int>( tmp.size(), widths[2] );
+    widths[2] = std::max( (int) tmp.size(), widths[2] );
     tmp.Printf( wxT( "%i" ), frontTotal + backTotal );
-    widths[3] = std::max<int>( tmp.size(), widths[3] );
+    widths[3] = std::max( (int) tmp.size(), widths[3] );
 
     //Write components amount to file
     msg << wxT( "\n" );
