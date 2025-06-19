@@ -351,6 +351,7 @@ const APPEARANCE_CONTROLS::APPEARANCE_SETTING APPEARANCE_CONTROLS::s_objectSetti
     RR( _HKI( "Anchors" ),              LAYER_ANCHOR,             _HKI( "Show footprint and text origins as a cross" ) ),
     RR( _HKI( "Locked Item Shadow" ),   LAYER_LOCKED_ITEM_SHADOW, _HKI( "Show a shadow on locked items" ) ),
     RR( _HKI( "Colliding Courtyards" ), LAYER_CONFLICTS_SHADOW,   _HKI( "Show colliding footprint courtyards" ) ),
+    RR( _HKI( "Board Area Shadow" ),    LAYER_BOARD_OUTLINE_AREA, _HKI( "Show board area shadow" ) ),
     RR( _HKI( "Drawing Sheet" ),        LAYER_DRAWINGSHEET,       _HKI( "Show drawing sheet borders and title block" ) ),
     RR( _HKI( "Grid" ),                 LAYER_GRID,               _HKI( "Show the (x,y) grid dots" ) )
     // clang-format on

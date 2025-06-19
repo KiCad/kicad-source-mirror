@@ -672,7 +672,6 @@ void PCB_DRAW_PANEL_GAL::SyncLayersVisibility( const BOARD* aBoard )
     m_view->SetLayerVisible( LAYER_SELECT_OVERLAY, true );
     m_view->SetLayerVisible( LAYER_RATSNEST, true );
     m_view->SetLayerVisible( LAYER_MARKER_SHADOWS, true );
-    m_view->SetLayerVisible( LAYER_BOARD_OUTLINE_AREA, true );
     m_view->SetLayerVisible( LAYER_DRC_SHAPE1, true );
     m_view->SetLayerVisible( LAYER_DRC_SHAPE2, true );
 }
