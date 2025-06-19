@@ -1367,7 +1367,7 @@ void SCH_PAINTER::draw( const SCH_LINE* aLine, int aLayer )
     double             hopOverScale = 0.0;
 
     if( aLine->Schematic() )    // Can be nullptr when run from the color selection panel
-        aLine->Schematic()->Settings().m_HopOverScale;
+        hopOverScale = aLine->Schematic()->Settings().m_HopOverScale;
 
     if( eeschemaCfg )
     {
