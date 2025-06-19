@@ -112,9 +112,7 @@ void SCH_EDIT_FRAME::ShowSchematicSetupDialog( const wxString& aInitialPage )
     if( !dialogLock.owns_lock() )
     {
         if( m_schematicSetupDialog && m_schematicSetupDialog->IsShown() )
-        {
             m_schematicSetupDialog->Raise(); // Brings the existing dialog to the front
-        }
 
         return;
     }
@@ -134,7 +132,8 @@ void SCH_EDIT_FRAME::ShowSchematicSetupDialog( const wxString& aInitialPage )
         dlg.SetInitialPage( aInitialPage, wxEmptyString );
 
     // Assign dlg to the m_schematicSetupDialog pointer to track its status.
-    m_schematicSetupDialog = &dlg;
+    // No, this does not escape the function context.
+    NULLER raii_nuller( (void*&) m_schematicSetupDialog ); m_schematicSetupDialog = &dlg;
 
     // TODO: is QuasiModal required here?
     if( dlg.ShowQuasiModal() == wxID_OK )
@@ -162,8 +161,7 @@ void SCH_EDIT_FRAME::ShowSchematicSetupDialog( const wxString& aInitialPage )
 
         std::vector<std::shared_ptr<BUS_ALIAS>> newAliases;
 
-        for( SCH_SCREEN* screen = screens.GetFirst(); screen != nullptr;
-             screen = screens.GetNext() )
+        for( SCH_SCREEN* screen = screens.GetFirst(); screen != nullptr; screen = screens.GetNext() )
         {
             for( const std::shared_ptr<BUS_ALIAS>& alias : screen->GetBusAliases() )
                 newAliases.push_back( alias );
@@ -175,9 +173,6 @@ void SCH_EDIT_FRAME::ShowSchematicSetupDialog( const wxString& aInitialPage )
         RefreshOperatingPointDisplay();
         GetCanvas()->Refresh();
     }
-
-    // Reset m_schematicSetupDialog after the dialog is closed
-    m_schematicSetupDialog = nullptr;
 }
 
 
@@ -187,7 +182,7 @@ int SCH_EDIT_FRAME::GetSchematicJunctionSize()
 
     const std::shared_ptr<NET_SETTINGS>& netSettings = Prj().GetProjectFile().NetSettings();
     int sizeChoice = Schematic().Settings().m_JunctionSizeChoice;
-    int dotSize = netSettings->GetDefaultNetclass()->GetWireWidth() * sizeMultipliers[sizeChoice];
+    int dotSize = KiROUND( netSettings->GetDefaultNetclass()->GetWireWidth() * sizeMultipliers[sizeChoice] );
 
     return std::max( dotSize, 1 );
 }
@@ -218,8 +213,7 @@ void SCH_EDIT_FRAME::saveProjectSettings()
     // Save the page layout file if doesn't exist yet (e.g. if we opened a non-kicad schematic)
 
     // TODO: We need to remove dependence on BASE_SCREEN
-    Prj().GetProjectFile().m_SchematicSettings->m_SchDrawingSheetFileName
-                                        = BASE_SCREEN::m_DrawingSheetFileName;
+    Prj().GetProjectFile().m_SchematicSettings->m_SchDrawingSheetFileName = BASE_SCREEN::m_DrawingSheetFileName;
 
     if( !BASE_SCREEN::m_DrawingSheetFileName.IsEmpty() )
     {
@@ -312,8 +306,7 @@ void SCH_EDIT_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
             cfg->m_FindReplaceExtra.search_all_fields = searchData->searchAllFields;
             cfg->m_FindReplaceExtra.search_metadata = searchData->searchMetadata;
             cfg->m_FindReplaceExtra.search_all_pins = searchData->searchAllPins;
-            cfg->m_FindReplaceExtra.search_current_sheet_only =
-                    searchData->searchCurrentSheetOnly;
+            cfg->m_FindReplaceExtra.search_current_sheet_only = searchData->searchCurrentSheetOnly;
             cfg->m_FindReplaceExtra.search_selected_only = searchData->searchSelectedOnly;
         }
 
@@ -347,7 +340,9 @@ void SCH_EDIT_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
         cfg->m_AuiPanels.design_blocks_show = designBlocksPane.IsShown();
 
         if( designBlocksPane.IsDocked() )
+        {
             cfg->m_AuiPanels.design_blocks_panel_docked_width = m_designBlocksPane->GetSize().x;
+        }
         else
         {
             cfg->m_AuiPanels.design_blocks_panel_float_height = designBlocksPane.floating_size.y;
@@ -371,7 +366,8 @@ void SCH_BASE_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
     // Move legacy user grids to grid list
     if( !aCfg->m_Window.grid.user_grid_x.empty() )
     {
-        aCfg->m_Window.grid.grids.emplace_back( GRID{ "User Grid", aCfg->m_Window.grid.user_grid_x,
+        aCfg->m_Window.grid.grids.emplace_back( GRID{ "User Grid",
+                                                      aCfg->m_Window.grid.user_grid_x,
                                                       aCfg->m_Window.grid.user_grid_y } );
         aCfg->m_Window.grid.user_grid_x = wxEmptyString;
         aCfg->m_Window.grid.user_grid_y = wxEmptyString;
@@ -387,9 +383,7 @@ void SCH_BASE_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
         aCfg->m_Window.grid.fast_grid_2 = 2;
 
     if( aCfg->m_Window.zoom_factors.empty() )
-    {
         aCfg->m_Window.zoom_factors = { ZOOM_LIST_EESCHEMA };
-    }
 }
 
 
