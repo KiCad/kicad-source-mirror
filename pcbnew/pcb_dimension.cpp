@@ -1729,11 +1729,19 @@ const BOX2I PCB_DIM_CENTER::GetBoundingBox() const
     return bBox;
 }
 
-
+// fixme: we cannot use GetBoundingBox() as it returns the bbox of the 'leader' segment (used in hit testing and other non-view logic)
 const BOX2I PCB_DIM_CENTER::ViewBBox() const
 {
-    return BOX2I( VECTOR2I( GetBoundingBox().GetPosition() ),
-                  VECTOR2I( GetBoundingBox().GetSize() ) );
+    const int maxSize = std::max(m_end.x - m_start.x, m_end.y - m_start.y) + m_lineThickness / 2.0;
+
+    BOX2I bBox;
+
+    bBox.SetX( m_start.x - maxSize );
+    bBox.SetY( m_start.y - maxSize );
+    bBox.SetWidth( maxSize * 2 );
+    bBox.SetHeight( maxSize * 2 );
+
+   return bBox;
 }
 
 
