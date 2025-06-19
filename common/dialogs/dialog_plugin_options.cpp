@@ -39,21 +39,18 @@
 
 
 DIALOG_PLUGIN_OPTIONS::DIALOG_PLUGIN_OPTIONS( wxWindow* aParent,
-                        const wxString& aNickname,
-                        const std::map<std::string, UTF8>& aPluginOptions,
-                        const wxString& aFormattedOptions,
-                        wxString* aResult ) :
-    DIALOG_PLUGIN_OPTIONS_BASE( aParent ),
-    m_callers_options( aFormattedOptions ),
-    m_result( aResult ),
-    m_choices( aPluginOptions ),
-    m_initial_help( INITIAL_HELP ),
-    m_grid_widths_dirty( true )
+                                              const wxString& aNickname,
+                                              const std::map<std::string, UTF8>& aPluginOptions,
+                                              const wxString& aFormattedOptions,
+                                              wxString* aResult ) :
+        DIALOG_PLUGIN_OPTIONS_BASE( aParent ),
+        m_callers_options( aFormattedOptions ),
+        m_result( aResult ),
+        m_choices( aPluginOptions ),
+        m_initial_help( INITIAL_HELP ),
+        m_grid_widths_dirty( true )
 {
     SetTitle( wxString::Format( _( "Options for Library '%s'" ), aNickname ) );
-
-    // Give a bit more room for combobox editors
-    m_grid->SetDefaultRowSize( m_grid->GetDefaultRowSize() + 4 );
 
     m_grid->SetSelectionMode( wxGrid::wxGridSelectionModes::wxGridSelectRows );
 
@@ -65,8 +62,7 @@ DIALOG_PLUGIN_OPTIONS::DIALOG_PLUGIN_OPTIONS( wxWindow* aParent,
     {
         unsigned int row = 0;
 
-        for( std::map<std::string, UTF8>::const_iterator it = m_choices.begin();
-             it != m_choices.end(); ++it, ++row )
+        for( std::map<std::string, UTF8>::const_iterator it = m_choices.begin(); it != m_choices.end(); ++it, ++row )
         {
             wxString item = From_UTF8( it->first.c_str() );
 
@@ -111,8 +107,7 @@ bool DIALOG_PLUGIN_OPTIONS::TransferDataToWindow()
 
         int row = 0;
 
-        for( std::map<std::string, UTF8>::const_iterator it = props->begin(); it != props->end();
-                ++it, ++row )
+        for( std::map<std::string, UTF8>::const_iterator it = props->begin(); it != props->end(); ++it, ++row )
         {
             m_grid->SetCellValue( row, 0, From_UTF8( it->first.c_str() ) );
             m_grid->SetCellValue( row, 1, it->second );
@@ -142,9 +137,7 @@ bool DIALOG_PLUGIN_OPTIONS::TransferDataFromWindow()
         UTF8        value = m_grid->GetCellValue( row, 1 ).Trim( false ).Trim();
 
         if( name.size() )
-        {
             props[name] = value;
-        }
     }
 
     *m_result = LIB_TABLE::FormatOptions( &props ).wx_str();

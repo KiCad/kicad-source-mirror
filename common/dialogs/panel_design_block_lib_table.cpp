@@ -65,81 +65,6 @@
 #include <paths.h>
 #include <macros.h>
 
-// clang-format off
-
-/**
- * Container that describes file type info for the add a library options
- */
-struct SUPPORTED_FILE_TYPE
-{
-    wxString m_Description;            ///< Description shown in the file picker dialog.
-    wxString m_FileFilter;             ///< Filter used for file pickers if m_IsFile is true.
-    wxString m_FolderSearchExtension;  ///< In case of folders it stands for extensions of files
-                                       ///< stored inside.
-    bool     m_IsFile;                 ///< Whether the library is a folder or a file.
-    DESIGN_BLOCK_IO_MGR::DESIGN_BLOCK_FILE_T m_Plugin;
-};
-
-// clang-format on
-
-/**
- * Traverser implementation that looks to find any and all "folder" libraries by looking for files
- * with a specific extension inside folders
- */
-class LIBRARY_TRAVERSER : public wxDirTraverser
-{
-public:
-    LIBRARY_TRAVERSER( std::vector<std::string> aSearchExtensions, wxString aInitialDir ) :
-            m_searchExtensions( aSearchExtensions ), m_currentDir( aInitialDir )
-    {
-    }
-
-    virtual wxDirTraverseResult OnFile( const wxString& aFileName ) override
-    {
-        wxFileName file( aFileName );
-
-        for( const std::string& ext : m_searchExtensions )
-        {
-            if( file.GetExt().IsSameAs( ext, false ) )
-                m_foundDirs.insert( { m_currentDir, 1 } );
-        }
-
-        return wxDIR_CONTINUE;
-    }
-
-    virtual wxDirTraverseResult OnOpenError( const wxString& aOpenErrorName ) override
-    {
-        m_failedDirs.insert( { aOpenErrorName, 1 } );
-        return wxDIR_IGNORE;
-    }
-
-    bool HasDirectoryOpenFailures() { return m_failedDirs.size() > 0; }
-
-    virtual wxDirTraverseResult OnDir( const wxString& aDirName ) override
-    {
-        m_currentDir = aDirName;
-        return wxDIR_CONTINUE;
-    }
-
-    void GetPaths( wxArrayString& aPathArray )
-    {
-        for( std::pair<const wxString, int>& foundDirsPair : m_foundDirs )
-            aPathArray.Add( foundDirsPair.first );
-    }
-
-    void GetFailedPaths( wxArrayString& aPathArray )
-    {
-        for( std::pair<const wxString, int>& failedDirsPair : m_failedDirs )
-            aPathArray.Add( failedDirsPair.first );
-    }
-
-private:
-    std::vector<std::string>          m_searchExtensions;
-    wxString                          m_currentDir;
-    std::unordered_map<wxString, int> m_foundDirs;
-    std::unordered_map<wxString, int> m_failedDirs;
-};
-
 
 /**
  * This class builds a wxGridTableBase by wrapping an #DESIGN_BLOCK_LIB_TABLE object.
@@ -299,8 +224,11 @@ PANEL_DESIGN_BLOCK_LIB_TABLE::PANEL_DESIGN_BLOCK_LIB_TABLE( DIALOG_EDIT_LIBRARY_
                                                             const wxString&         aProjectTblPath,
                                                             const wxString& aProjectBasePath ) :
         PANEL_DESIGN_BLOCK_LIB_TABLE_BASE( aParent ),
-        m_globalTable( aGlobalTable ), m_projectTable( aProjectTable ), m_project( aProject ),
-        m_projectBasePath( aProjectBasePath ), m_parent( aParent )
+        m_globalTable( aGlobalTable ),
+        m_projectTable( aProjectTable ),
+        m_project( aProject ),
+        m_projectBasePath( aProjectBasePath ),
+        m_parent( aParent )
 {
     m_global_grid->SetTable( new DESIGN_BLOCK_LIB_TABLE_GRID( *aGlobalTable ), true );
 
@@ -336,9 +264,6 @@ PANEL_DESIGN_BLOCK_LIB_TABLE::PANEL_DESIGN_BLOCK_LIB_TABLE( DIALOG_EDIT_LIBRARY_
     auto setupGrid =
             [&]( WX_GRID* aGrid )
             {
-                // Give a bit more room for wxChoice editors
-                aGrid->SetDefaultRowSize( aGrid->GetDefaultRowSize() + 4 );
-
                 // add Cut, Copy, and Paste to wxGrids
                 aGrid->PushEventHandler( new DESIGN_BLOCK_GRID_TRICKS( m_parent, aGrid ) );
 
@@ -1170,10 +1095,6 @@ void PANEL_DESIGN_BLOCK_LIB_TABLE::populateEnvironReadOnlyTable()
         m_path_subs_grid->SetCellValue( row, 1, evValue );
         m_path_subs_grid->SetCellEditor( row, 1, new GRID_CELL_READONLY_TEXT_EDITOR() );
     }
-
-    // No combobox editors here, but it looks better if its consistent with the other
-    // grids in the dialog.
-    m_path_subs_grid->SetDefaultRowSize( m_path_subs_grid->GetDefaultRowSize() + 2 );
 
     adjustPathSubsGridColumns( m_path_subs_grid->GetRect().GetWidth() );
 }

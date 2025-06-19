@@ -53,8 +53,7 @@
 int DIALOG_FOOTPRINT_PROPERTIES::m_page = 0;     // remember the last open page during session
 
 
-DIALOG_FOOTPRINT_PROPERTIES::DIALOG_FOOTPRINT_PROPERTIES( PCB_EDIT_FRAME* aParent,
-                                                          FOOTPRINT* aFootprint ) :
+DIALOG_FOOTPRINT_PROPERTIES::DIALOG_FOOTPRINT_PROPERTIES( PCB_EDIT_FRAME* aParent, FOOTPRINT* aFootprint ) :
         DIALOG_FOOTPRINT_PROPERTIES_BASE( aParent ),
         m_frame( aParent ),
         m_footprint( aFootprint ),
@@ -62,12 +61,9 @@ DIALOG_FOOTPRINT_PROPERTIES::DIALOG_FOOTPRINT_PROPERTIES( PCB_EDIT_FRAME* aParen
         m_posY( aParent, m_YPosLabel, m_ModPositionY, m_YPosUnit ),
         m_orientation( aParent, m_orientationLabel, m_orientationCtrl, nullptr ),
         m_netClearance( aParent, m_NetClearanceLabel, m_NetClearanceCtrl, m_NetClearanceUnits ),
-        m_solderMask( aParent, m_SolderMaskMarginLabel, m_SolderMaskMarginCtrl,
-                      m_SolderMaskMarginUnits ),
-        m_solderPaste( aParent, m_SolderPasteMarginLabel, m_SolderPasteMarginCtrl,
-                       m_SolderPasteMarginUnits ),
-        m_solderPasteRatio( aParent, m_PasteMarginRatioLabel, m_PasteMarginRatioCtrl,
-                            m_PasteMarginRatioUnits ),
+        m_solderMask( aParent, m_SolderMaskMarginLabel, m_SolderMaskMarginCtrl, m_SolderMaskMarginUnits ),
+        m_solderPaste( aParent, m_SolderPasteMarginLabel, m_SolderPasteMarginCtrl, m_SolderPasteMarginUnits ),
+        m_solderPasteRatio( aParent, m_PasteMarginRatioLabel, m_PasteMarginRatioCtrl, m_PasteMarginRatioUnits ),
         m_returnValue( FP_PROPS_CANCEL ),
         m_initialized( false ),
         m_gridSize( 0, 0 ),
@@ -100,9 +96,6 @@ DIALOG_FOOTPRINT_PROPERTIES::DIALOG_FOOTPRINT_PROPERTIES( PCB_EDIT_FRAME* aParen
     wxIcon  icon;
     icon.CopyFromBitmap( KiBitmap( BITMAPS::icon_modedit ) );
     SetIcon( icon );
-
-    // Give a bit more room for combobox editors
-    m_itemsGrid->SetDefaultRowSize( m_itemsGrid->GetDefaultRowSize() + 4 );
 
     m_itemsGrid->SetTable( m_fields );
     m_itemsGrid->PushEventHandler( new GRID_TRICKS( m_itemsGrid ) );

@@ -75,83 +75,6 @@
 #include <dialog_HTML_reporter_base.h>
 #include <widgets/wx_html_report_box.h>
 
-// clang-format off
-
-/**
- * Container that describes file type info for the add a library options
- */
-struct SUPPORTED_FILE_TYPE
-{
-    wxString m_Description;            ///< Description shown in the file picker dialog
-    wxString m_FileFilter;             ///< Filter used for file pickers if m_IsFile is true
-    wxString m_FolderSearchExtension;  ///< In case of folders it stands for extensions of files stored inside
-    bool     m_IsFile;                 ///< Whether the library is a folder or a file
-    PCB_IO_MGR::PCB_FILE_T m_Plugin;
-};
-
-// clang-format on
-
-/**
- * Traverser implementation that looks to find any and all "folder" libraries by looking for files
- * with a specific extension inside folders
- */
-class LIBRARY_TRAVERSER : public wxDirTraverser
-{
-public:
-    LIBRARY_TRAVERSER( std::vector<std::string> aSearchExtensions, wxString aInitialDir ) :
-            m_searchExtensions( aSearchExtensions ), m_currentDir( aInitialDir )
-    {
-    }
-
-    virtual wxDirTraverseResult OnFile( const wxString& aFileName ) override
-    {
-        wxFileName file( aFileName );
-
-        for( const std::string& ext : m_searchExtensions )
-        {
-            if( file.GetExt().IsSameAs( ext, false ) )
-                m_foundDirs.insert( { m_currentDir, 1 } );
-        }
-
-        return wxDIR_CONTINUE;
-    }
-
-    virtual wxDirTraverseResult OnOpenError( const wxString& aOpenErrorName ) override
-    {
-        m_failedDirs.insert( { aOpenErrorName, 1 } );
-        return wxDIR_IGNORE;
-    }
-
-    bool HasDirectoryOpenFailures()
-    {
-        return m_failedDirs.size() > 0;
-    }
-
-    virtual wxDirTraverseResult OnDir( const wxString& aDirName ) override
-    {
-        m_currentDir = aDirName;
-        return wxDIR_CONTINUE;
-    }
-
-    void GetPaths( wxArrayString& aPathArray )
-    {
-        for( std::pair<const wxString, int>& foundDirsPair : m_foundDirs )
-            aPathArray.Add( foundDirsPair.first );
-    }
-
-    void GetFailedPaths( wxArrayString& aPathArray )
-    {
-        for( std::pair<const wxString, int>& failedDirsPair : m_failedDirs )
-            aPathArray.Add( failedDirsPair.first );
-    }
-
-private:
-    std::vector<std::string>          m_searchExtensions;
-    wxString                          m_currentDir;
-    std::unordered_map<wxString, int> m_foundDirs;
-    std::unordered_map<wxString, int> m_failedDirs;
-};
-
 
 /**
  * This class builds a wxGridTableBase by wrapping an #FP_LIB_TABLE object.
@@ -394,12 +317,12 @@ PANEL_FP_LIB_TABLE::PANEL_FP_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent, PRO
                                         FP_LIB_TABLE* aGlobalTable, const wxString& aGlobalTblPath,
                                         FP_LIB_TABLE* aProjectTable, const wxString& aProjectTblPath,
                                         const wxString& aProjectBasePath ) :
-    PANEL_FP_LIB_TABLE_BASE( aParent ),
-    m_globalTable( aGlobalTable ),
-    m_projectTable( aProjectTable ),
-    m_project( aProject ),
-    m_projectBasePath( aProjectBasePath ),
-    m_parent( aParent )
+        PANEL_FP_LIB_TABLE_BASE( aParent ),
+        m_globalTable( aGlobalTable ),
+        m_projectTable( aProjectTable ),
+        m_project( aProject ),
+        m_projectBasePath( aProjectBasePath ),
+        m_parent( aParent )
 {
     m_global_grid->SetTable( new FP_LIB_TABLE_GRID( *aGlobalTable ), true );
 
@@ -484,8 +407,7 @@ PANEL_FP_LIB_TABLE::PANEL_FP_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent, PRO
 
         if( desc.m_IsFile && !desc.m_FileExtensions.empty() )
         {
-            entryStr << wxString::Format( wxS( " (%s)" ),
-                                          joinExts( desc.m_FileExtensions ) );
+            entryStr << wxString::Format( wxS( " (%s)" ), joinExts( desc.m_FileExtensions ) );
         }
         else if( !desc.m_IsFile && !desc.m_ExtensionsInDir.empty() )
         {
@@ -497,8 +419,7 @@ PANEL_FP_LIB_TABLE::PANEL_FP_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent, PRO
 
         browseMenu->Append( type, entryStr );
 
-        browseMenu->Bind( wxEVT_COMMAND_MENU_SELECTED, &PANEL_FP_LIB_TABLE::browseLibrariesHandler,
-                          this, type );
+        browseMenu->Bind( wxEVT_COMMAND_MENU_SELECTED, &PANEL_FP_LIB_TABLE::browseLibrariesHandler, this, type );
     }
 
     Layout();
@@ -634,8 +555,7 @@ bool PANEL_FP_LIB_TABLE::verifyTables()
 
                 if( nick1 == nick2 )
                 {
-                    msg = wxString::Format( _( "Multiple libraries cannot share the same "
-                                               "nickname ('%s')." ),
+                    msg = wxString::Format( _( "Multiple libraries cannot share the same nickname ('%s')." ),
                                             nick1 );
 
                     // show the tabbed panel holding the grid we have flunked:
@@ -841,14 +761,12 @@ void PANEL_FP_LIB_TABLE::onMigrateLibraries( wxCommandEvent& event )
     {
         if( rowsToMigrate.size() == 1 )
         {
-            msg.Printf( _( "Save '%s' as current KiCad format "
-                           "and replace entry in table?" ),
+            msg.Printf( _( "Save '%s' as current KiCad format and replace entry in table?" ),
                         m_cur_grid->GetCellValue( rowsToMigrate[0], COL_NICKNAME ) );
         }
         else
         {
-            msg.Printf( _( "Save %d libraries as current KiCad format "
-                           "and replace entries in table?" ),
+            msg.Printf( _( "Save %d libraries as current KiCad format and replace entries in table?" ),
                         (int) rowsToMigrate.size() );
         }
 
@@ -880,8 +798,7 @@ void PANEL_FP_LIB_TABLE::onMigrateLibraries( wxCommandEvent& event )
             msg.Printf( _( "Folder '%s' already exists. Do you want overwrite any existing footprints?" ),
                         newLib.GetFullPath() );
 
-            switch( wxMessageBox( msg, _( "Migrate Library" ),
-                                  wxYES_NO | wxCANCEL | wxICON_QUESTION, m_parent ) )
+            switch( wxMessageBox( msg, _( "Migrate Library" ), wxYES_NO|wxCANCEL|wxICON_QUESTION, m_parent ) )
             {
             case wxYES:    break;
             case wxNO:     continue;
@@ -892,11 +809,10 @@ void PANEL_FP_LIB_TABLE::onMigrateLibraries( wxCommandEvent& event )
         wxString options = m_cur_grid->GetCellValue( row, COL_OPTIONS );
         std::unique_ptr<std::map<std::string, UTF8>> props( LIB_TABLE::ParseOptions( options.ToStdString() ) );
 
-        if( PCB_IO_MGR::ConvertLibrary( props.get(), legacyLib.GetFullPath(),
-                                        newLib.GetFullPath(), errorReporter.m_Reporter ) )
+        if( PCB_IO_MGR::ConvertLibrary( props.get(), legacyLib.GetFullPath(), newLib.GetFullPath(),
+                                        errorReporter.m_Reporter ) )
         {
-            relPath = NormalizePath( newLib.GetFullPath(), &Pgm().GetLocalEnvVariables(),
-                                     m_project );
+            relPath = NormalizePath( newLib.GetFullPath(), &Pgm().GetLocalEnvVariables(), m_project );
 
             // Do not use the project path in the global library table.  This will almost
             // assuredly be wrong for a different project.
@@ -942,8 +858,7 @@ void PANEL_FP_LIB_TABLE::browseLibrariesHandler( wxCommandEvent& event )
 
     if( fileType == PCB_IO_MGR::FILE_TYPE_NONE )
     {
-        wxLogWarning( wxT( "File type selection event received but could not find the file type "
-                           "in the table" ) );
+        wxLogWarning( wxT( "File type selection event received but could not find the file type in the table" ) );
         return;
     }
 
@@ -1212,10 +1127,6 @@ void PANEL_FP_LIB_TABLE::populateEnvironReadOnlyTable()
         m_path_subs_grid->SetCellValue( row, 1, evValue );
         m_path_subs_grid->SetCellEditor( row, 1, new GRID_CELL_READONLY_TEXT_EDITOR() );
     }
-
-    // No combobox editors here, but it looks better if its consistent with the other
-    // grids in the dialog.
-    m_path_subs_grid->SetDefaultRowSize( m_path_subs_grid->GetDefaultRowSize() + 2 );
 
     adjustPathSubsGridColumns( m_path_subs_grid->GetRect().GetWidth() );
 }

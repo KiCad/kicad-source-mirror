@@ -125,20 +125,16 @@ void PRIVATE_LAYERS_GRID_TABLE::SetValueAsLong( int aRow, int aCol, long aValue 
 NOTEBOOK_PAGES DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::m_page = NOTEBOOK_PAGES::PAGE_GENERAL;
 
 
-DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR(
-                                                                    FOOTPRINT_EDIT_FRAME* aParent,
-                                                                    FOOTPRINT* aFootprint ) :
+DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR( FOOTPRINT_EDIT_FRAME* aParent,
+                                                                              FOOTPRINT* aFootprint ) :
         DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE( aParent ),
         m_frame( aParent ),
         m_footprint( aFootprint ),
         m_initialized( false ),
         m_netClearance( aParent, m_NetClearanceLabel, m_NetClearanceCtrl, m_NetClearanceUnits ),
-        m_solderMask( aParent, m_SolderMaskMarginLabel, m_SolderMaskMarginCtrl,
-                      m_SolderMaskMarginUnits ),
-        m_solderPaste( aParent, m_SolderPasteMarginLabel, m_SolderPasteMarginCtrl,
-                       m_SolderPasteMarginUnits ),
-        m_solderPasteRatio( aParent, m_PasteMarginRatioLabel, m_PasteMarginRatioCtrl,
-                            m_PasteMarginRatioUnits ),
+        m_solderMask( aParent, m_SolderMaskMarginLabel, m_SolderMaskMarginCtrl, m_SolderMaskMarginUnits ),
+        m_solderPaste( aParent, m_SolderPasteMarginLabel, m_SolderPasteMarginCtrl, m_SolderPasteMarginUnits ),
+        m_solderPasteRatio( aParent, m_PasteMarginRatioLabel, m_PasteMarginRatioCtrl, m_PasteMarginRatioUnits ),
         m_gridSize( 0, 0 ),
         m_lastRequestedSize( 0, 0 )
 {
@@ -165,10 +161,6 @@ DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR(
     wxIcon icon;
     icon.CopyFromBitmap( KiBitmap( BITMAPS::icon_modedit ) );
     SetIcon( icon );
-
-    // Give a bit more room for combobox editors
-    m_itemsGrid->SetDefaultRowSize( m_itemsGrid->GetDefaultRowSize() + 4 );
-    m_privateLayersGrid->SetDefaultRowSize( m_privateLayersGrid->GetDefaultRowSize() + 4 );
 
     m_itemsGrid->SetTable( m_fields );
     m_privateLayersGrid->SetTable( m_privateLayers );

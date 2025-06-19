@@ -34,10 +34,12 @@
 #include <widgets/paged_dialog.h>
 
 PANEL_SETUP_TIME_DOMAIN_PARAMETERS::PANEL_SETUP_TIME_DOMAIN_PARAMETERS(
-        wxWindow* aParentWindow, PCB_EDIT_FRAME* aFrame, BOARD* aBoard,
-        std::shared_ptr<TIME_DOMAIN_PARAMETERS> aTimeDomainParameters ) :
+                                            wxWindow* aParentWindow, PCB_EDIT_FRAME* aFrame, BOARD* aBoard,
+                                            std::shared_ptr<TIME_DOMAIN_PARAMETERS> aTimeDomainParameters ) :
         PANEL_SETUP_TIME_DOMAIN_PARAMETERS_BASE( aParentWindow ),
-        m_timeDomainParameters( std::move( aTimeDomainParameters ) ), m_frame( aFrame ), m_board( aFrame->GetBoard() )
+        m_timeDomainParameters( std::move( aTimeDomainParameters ) ),
+        m_frame( aFrame ),
+        m_board( aFrame->GetBoard() )
 {
     m_timeDomainParametersPane->SetBorders( true, false, false, false );
 
@@ -55,7 +57,6 @@ PANEL_SETUP_TIME_DOMAIN_PARAMETERS::PANEL_SETUP_TIME_DOMAIN_PARAMETERS(
     m_tracePropagationGrid->SetUseNativeColLabels();
 
     m_tracePropagationGrid->EnsureColLabelsVisible();
-    m_tracePropagationGrid->SetDefaultRowSize( m_tracePropagationGrid->GetDefaultRowSize() + 4 );
     m_tracePropagationGrid->PushEventHandler( new GRID_TRICKS( m_tracePropagationGrid ) );
     m_tracePropagationGrid->SetSelectionMode( wxGrid::wxGridSelectRows );
 
@@ -73,7 +74,6 @@ PANEL_SETUP_TIME_DOMAIN_PARAMETERS::PANEL_SETUP_TIME_DOMAIN_PARAMETERS(
     m_viaPropagationGrid->SetUseNativeColLabels();
 
     m_viaPropagationGrid->EnsureColLabelsVisible();
-    m_viaPropagationGrid->SetDefaultRowSize( m_viaPropagationGrid->GetDefaultRowSize() + 4 );
     m_viaPropagationGrid->PushEventHandler( new GRID_TRICKS( m_viaPropagationGrid ) );
     m_viaPropagationGrid->SetSelectionMode( wxGrid::wxGridSelectRows );
 
@@ -169,9 +169,7 @@ void PANEL_SETUP_TIME_DOMAIN_PARAMETERS::addProfileRow( const DELAY_PROFILE& aDe
         int col = m_copperLayerIdsToColumns[layerId];
 
         if( col < m_tracePropagationGrid->GetNumberCols() )
-        {
             m_tracePropagationGrid->SetUnitValue( rowId, col, velocity );
-        }
     }
 }
 

@@ -322,11 +322,11 @@ PANEL_SYM_LIB_TABLE::PANEL_SYM_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent, P
                                           const wxString& aGlobalTablePath,
                                           SYMBOL_LIB_TABLE* aProjectTable,
                                           const wxString& aProjectTablePath ) :
-    PANEL_SYM_LIB_TABLE_BASE( aParent ),
-    m_globalTable( aGlobalTable ),
-    m_projectTable( aProjectTable ),
-    m_project( aProject ),
-    m_parent( aParent )
+        PANEL_SYM_LIB_TABLE_BASE( aParent ),
+        m_globalTable( aGlobalTable ),
+        m_projectTable( aProjectTable ),
+        m_project( aProject ),
+        m_parent( aParent )
 {
     // wxGrid only supports user owned tables if they exist past end of ~wxGrid(),
     // so make it a grid owned table.
@@ -451,9 +451,8 @@ bool PANEL_SYM_LIB_TABLE::verifyTables()
                                             wxYES_NO | wxCENTER | wxICON_QUESTION | wxYES_DEFAULT );
                 badCellDlg.SetExtendedMessage( _( "Empty cells will result in all rows that are "
                                                   "invalid to be removed from the table." ) );
-                badCellDlg.SetYesNoLabels(
-                        wxMessageDialog::ButtonLabel( _( "Remove Invalid Cells" ) ),
-                        wxMessageDialog::ButtonLabel( _( "Cancel Table Update" ) ) );
+                badCellDlg.SetYesNoLabels( wxMessageDialog::ButtonLabel( _( "Remove Invalid Cells" ) ),
+                                           wxMessageDialog::ButtonLabel( _( "Cancel Table Update" ) ) );
 
                 wait.reset();
 
@@ -526,8 +525,8 @@ bool PANEL_SYM_LIB_TABLE::verifyTables()
 
                 if( nick1 == nick2 )
                 {
-                    msg = wxString::Format( _( "Multiple libraries cannot share the same "
-                                               "nickname ('%s')." ), nick1 );
+                    msg = wxString::Format( _( "Multiple libraries cannot share the same nickname ('%s')." ),
+                                            nick1 );
 
                     // show the tabbed panel holding the grid we have flunked:
                     if( model != cur_model() )
@@ -580,8 +579,7 @@ bool PANEL_SYM_LIB_TABLE::verifyTables()
 
                 wxWindow* topLevelParent = wxGetTopLevelParent( this );
                 wait.reset();
-                wxMessageDialog errdlg( topLevelParent, msg + wxS( "\n" ) + ioe.What(),
-                                        _( "Error Loading Library" ) );
+                wxMessageDialog errdlg( topLevelParent, msg + wxS( "\n" ) + ioe.What(), _( "Error Loading Library" ) );
                 errdlg.ShowModal();
 
                 return true;
@@ -983,11 +981,9 @@ void PANEL_SYM_LIB_TABLE::onConvertLegacyLibraries( wxCommandEvent& event )
         std::unique_ptr<std::map<std::string, UTF8>> props(
                 LIB_TABLE::ParseOptions( options.ToStdString() ) );
 
-        if( SCH_IO_MGR::ConvertLibrary( props.get(),
-                                        legacyLib.GetFullPath(), newLib.GetFullPath() ) )
+        if( SCH_IO_MGR::ConvertLibrary( props.get(), legacyLib.GetFullPath(), newLib.GetFullPath() ) )
         {
-            relPath = NormalizePath( newLib.GetFullPath(), &Pgm().GetLocalEnvVariables(),
-                                     m_project );
+            relPath = NormalizePath( newLib.GetFullPath(), &Pgm().GetLocalEnvVariables(), m_project );
 
             // Do not use the project path in the global library table.  This will almost
             // assuredly be wrong for a different project.
@@ -1090,10 +1086,6 @@ void PANEL_SYM_LIB_TABLE::populateEnvironReadOnlyTable()
         m_path_subs_grid->SetCellEditor( row, 1, new GRID_CELL_READONLY_TEXT_EDITOR() );
     }
 
-    // No combobox editors here, but it looks better if its consistent with the other
-    // grids in the dialog.
-    m_path_subs_grid->SetDefaultRowSize( m_path_subs_grid->GetDefaultRowSize() + 2 );
-
     adjustPathSubsGridColumns( m_path_subs_grid->GetRect().GetWidth() );
 }
 
@@ -1164,8 +1156,7 @@ void InvokeSchEditSymbolLibTable( KIWAY* aKiway, wxWindow *aParent )
         if( symbolEditor->HasLibModifications() )
         {
             msg = _( "Modifications have been made to one or more symbol libraries.\n"
-                     "Changes must be saved or discarded before the symbol library "
-                     "table can be modified." );
+                     "Changes must be saved or discarded before the symbol library table can be modified." );
 
             switch( UnsavedChangesDialog( aParent, msg ) )
             {
@@ -1218,9 +1209,7 @@ void InvokeSchEditSymbolLibTable( KIWAY* aKiway, wxWindow *aParent )
     }
 
     if( symbolEditor )
-    {
         symbolEditor->ThawLibraryTree();
-    }
 
     std::string payload = "";
     aKiway->ExpressMail( FRAME_SCH, MAIL_RELOAD_LIB, payload );

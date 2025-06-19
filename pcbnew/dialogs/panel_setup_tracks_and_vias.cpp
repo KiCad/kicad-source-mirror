@@ -53,7 +53,7 @@ enum DIFF_VAR_GRID_COLUMNS
 
 PANEL_SETUP_TRACKS_AND_VIAS::PANEL_SETUP_TRACKS_AND_VIAS( wxWindow* aParentWindow,
                                                           PCB_EDIT_FRAME* aFrame ) :
-    PANEL_SETUP_TRACKS_AND_VIAS_BASE( aParentWindow )
+        PANEL_SETUP_TRACKS_AND_VIAS_BASE( aParentWindow )
 {
     m_Frame = aFrame;
     m_Pcb = m_Frame->GetBoard();
@@ -68,12 +68,6 @@ PANEL_SETUP_TRACKS_AND_VIAS::PANEL_SETUP_TRACKS_AND_VIAS( wxWindow* aParentWindo
     m_diffPairsAddButton->SetBitmap( KiBitmapBundle( BITMAPS::small_plus ) );
     m_diffPairsSortButton->SetBitmap( KiBitmapBundle( BITMAPS::small_sort_desc ) );
     m_diffPairsRemoveButton->SetBitmap( KiBitmapBundle( BITMAPS::small_trash ) );
-
-    // Membership combobox editors require a bit more room, so increase the row size of
-    // all our grids for consistency
-    m_trackWidthsGrid->SetDefaultRowSize( m_trackWidthsGrid->GetDefaultRowSize() + FromDIP( 4 ) );
-    m_viaSizesGrid->SetDefaultRowSize( m_viaSizesGrid->GetDefaultRowSize() + FromDIP( 4 ) );
-    m_diffPairsGrid->SetDefaultRowSize( m_diffPairsGrid->GetDefaultRowSize() + FromDIP( 4 ) );
 
     m_trackWidthsGrid->PushEventHandler( new GRID_TRICKS( m_trackWidthsGrid,
                                                           [this]( wxCommandEvent& aEvent )
@@ -322,7 +316,7 @@ bool PANEL_SETUP_TRACKS_AND_VIAS::TransferDataFromWindow()
             diffPair_dim.m_Width = m_diffPairsGrid->GetUnitValue( row, DP_WIDTH_COL );
 
             if( !m_diffPairsGrid->GetCellValue( row, DP_GAP_COL ).IsEmpty() )
-            diffPair_dim.m_Gap = m_diffPairsGrid->GetUnitValue( row, DP_GAP_COL );
+                diffPair_dim.m_Gap = m_diffPairsGrid->GetUnitValue( row, DP_GAP_COL );
 
             if( !m_diffPairsGrid->GetCellValue( row, DP_VIA_GAP_COL ).IsEmpty() )
                 diffPair_dim.m_ViaGap = m_diffPairsGrid->GetUnitValue( row, DP_VIA_GAP_COL );
@@ -441,7 +435,7 @@ void removeSelectedRows( WX_GRID* aGrid )
     if( selectedRows.empty() && curRow >= 0 && curRow < aGrid->GetNumberRows() )
         selectedRows.Add( curRow );
 
-    for( int ii = selectedRows.Count() - 1; ii >= 0; --ii )
+    for( int ii = (int) selectedRows.Count() - 1; ii >= 0; --ii )
     {
         int row = selectedRows.Item( ii );
         aGrid->DeleteRows( row, 1 );

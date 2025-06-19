@@ -160,10 +160,6 @@ void DIALOG_EXECUTECOMMAND_JOB_SETTINGS::populateEnvironReadOnlyTable()
         m_path_subs_grid->SetCellEditor( row, 1, new GRID_CELL_READONLY_TEXT_EDITOR() );
     }
 
-    // No combobox editors here, but it looks better if its consistent with the other
-    // grids in the dialog.
-    m_path_subs_grid->SetDefaultRowSize( m_path_subs_grid->GetDefaultRowSize() + 2 );
-
     adjustPathSubsGridColumns( m_path_subs_grid->GetRect().GetWidth() );
 }
 

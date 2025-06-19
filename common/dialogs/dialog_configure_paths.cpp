@@ -82,9 +82,6 @@ DIALOG_CONFIGURE_PATHS::DIALOG_CONFIGURE_PATHS( wxWindow* aParent ) :
     attr->SetEditor( new GRID_CELL_PATH_EDITOR( this, m_EnvVars, &m_curdir, wxEmptyString ) );
     m_EnvVars->SetColAttr( TV_VALUE_COL, attr );
 
-    // Give a bit more room for combobox editors
-    m_EnvVars->SetDefaultRowSize( m_EnvVars->GetDefaultRowSize() + FromDIP( 4 ) );
-
     m_EnvVars->PushEventHandler( new GRID_TRICKS( m_EnvVars,
                                                   [this]( wxCommandEvent& aEvent )
                                                   {

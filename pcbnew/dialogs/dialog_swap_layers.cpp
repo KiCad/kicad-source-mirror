@@ -84,14 +84,13 @@ public:
 
 DIALOG_SWAP_LAYERS::DIALOG_SWAP_LAYERS( PCB_BASE_EDIT_FRAME* aParent,
                                         std::map<PCB_LAYER_ID, PCB_LAYER_ID>& aLayerMap ) :
-    DIALOG_SWAP_LAYERS_BASE( aParent ),
-    m_parent( aParent ),
-    m_layerMap( aLayerMap )
+        DIALOG_SWAP_LAYERS_BASE( aParent ),
+        m_parent( aParent ),
+        m_layerMap( aLayerMap )
 {
     m_gridTable = new LAYER_GRID_TABLE( m_parent->GetBoard()->GetCopperLayerCount() );
     m_grid->SetTable( m_gridTable );
     m_grid->SetMinSize( FromDIP( m_grid->GetMinSize() ) );
-    m_grid->SetDefaultRowSize( m_grid->GetDefaultRowSize() + FromDIP( 4 ) );
     m_grid->SetCellHighlightROPenWidth( 0 );
     m_grid->SetUseNativeColLabels();
 

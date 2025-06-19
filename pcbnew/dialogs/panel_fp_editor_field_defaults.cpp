@@ -175,11 +175,10 @@ static FOOTPRINT_EDITOR_SETTINGS& GetPgmSettings()
 
 PANEL_FP_EDITOR_FIELD_DEFAULTS::PANEL_FP_EDITOR_FIELD_DEFAULTS( wxWindow*       aParent,
                                                                 UNITS_PROVIDER* aUnitsProvider ) :
-        PANEL_FP_EDITOR_FIELD_DEFAULTS_BASE( aParent ), m_unitProvider( aUnitsProvider ),
+        PANEL_FP_EDITOR_FIELD_DEFAULTS_BASE( aParent ),
+        m_unitProvider( aUnitsProvider ),
         m_designSettings( GetPgmSettings().m_DesignSettings )
 {
-    m_fieldPropsGrid->SetDefaultRowSize( m_fieldPropsGrid->GetDefaultRowSize() + 4 );
-
     m_fieldPropsGrid->SetTable( new TEXT_ITEMS_GRID_TABLE( true ), true );
     m_fieldPropsGrid->PushEventHandler( new GRID_TRICKS( m_fieldPropsGrid ) );
     m_fieldPropsGrid->SetSelectionMode( wxGrid::wxGridSelectRows );
@@ -194,8 +193,6 @@ PANEL_FP_EDITOR_FIELD_DEFAULTS::PANEL_FP_EDITOR_FIELD_DEFAULTS( wxWindow*       
     attr->SetRenderer( new GRID_CELL_LAYER_RENDERER( nullptr ) );
     attr->SetEditor( new GRID_CELL_LAYER_SELECTOR( nullptr, {} ) );
     m_fieldPropsGrid->SetColAttr( 2, attr );
-
-    m_textItemsGrid->SetDefaultRowSize( m_textItemsGrid->GetDefaultRowSize() + 4 );
 
     m_textItemsGrid->SetTable( new TEXT_ITEMS_GRID_TABLE( false ), true );
     m_textItemsGrid->PushEventHandler( new GRID_TRICKS( m_textItemsGrid ) );

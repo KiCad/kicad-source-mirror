@@ -79,8 +79,6 @@ PANEL_FP_PROPERTIES_3D_MODEL::PANEL_FP_PROPERTIES_3D_MODEL( PCB_BASE_EDIT_FRAME*
     m_splitter1->SetSashPosition( FromDIP( m_splitter1->GetSashPosition() ) );
     m_splitter1->SetMinimumPaneSize( FromDIP( m_splitter1->GetMinimumPaneSize() ) );
 
-    m_modelsGrid->SetDefaultRowSize( m_modelsGrid->GetDefaultRowSize() + 4 );
-
     GRID_TRICKS* trick = new GRID_TRICKS( m_modelsGrid, [this]( wxCommandEvent& aEvent )
                                                         {
                                                             OnAdd3DRow( aEvent );
@@ -125,8 +123,7 @@ PANEL_FP_PROPERTIES_3D_MODEL::PANEL_FP_PROPERTIES_3D_MODEL( PCB_BASE_EDIT_FRAME*
 
     PROJECT_PCB::Get3DCacheManager( &m_frame->Prj() )->GetResolver()->SetProgramBase( &Pgm() );
 
-    m_previewPane = new PANEL_PREVIEW_3D_MODEL( m_lowerPanel, m_frame, m_footprint,
-                                                &m_shapes3D_list );
+    m_previewPane = new PANEL_PREVIEW_3D_MODEL( m_lowerPanel, m_frame, m_footprint, &m_shapes3D_list );
 
     m_LowerSizer3D->Add( m_previewPane, 1, wxEXPAND, 5 );
 
@@ -503,8 +500,7 @@ void PANEL_FP_PROPERTIES_3D_MODEL::updateValidateStatus( int aRow )
     }
 
     m_modelsGrid->SetCellValue( aRow, COL_PROBLEM, errStr );
-    m_modelsGrid->SetCellRenderer( aRow, COL_PROBLEM,
-                                   new GRID_CELL_STATUS_ICON_RENDERER( icon ) );
+    m_modelsGrid->SetCellRenderer( aRow, COL_PROBLEM, new GRID_CELL_STATUS_ICON_RENDERER( icon ) );
 }
 
 
@@ -524,6 +520,7 @@ MODEL_VALIDATE_ERRORS PANEL_FP_PROPERTIES_3D_MODEL::validateModelExists( const w
 
     wxString libraryName = m_footprint->GetFPID().GetLibNickname();
     const FP_LIB_TABLE_ROW* fpRow = nullptr;
+
     try
     {
         fpRow = PROJECT_PCB::PcbFootprintLibs( &m_frame->Prj() )->FindRow( libraryName, false );
@@ -568,8 +565,7 @@ void PANEL_FP_PROPERTIES_3D_MODEL::AdjustGridColumnWidths()
     // Account for scroll bars
     int modelsWidth = KIPLATFORM::UI::GetUnobscuredSize( m_modelsGrid ).x;
 
-    int width = modelsWidth - m_modelsGrid->GetColSize( COL_SHOWN )
-                - m_modelsGrid->GetColSize( COL_PROBLEM );
+    int width = modelsWidth - m_modelsGrid->GetColSize( COL_SHOWN ) - m_modelsGrid->GetColSize( COL_PROBLEM );
 
     if( width > 0 )
         m_modelsGrid->SetColSize( COL_FILENAME, width );
@@ -606,8 +602,7 @@ void PANEL_FP_PROPERTIES_3D_MODEL::onShowEvent( wxShowEvent& aEvent )
 
 void PANEL_FP_PROPERTIES_3D_MODEL::onDialogActivateEvent( wxActivateEvent& aEvent )
 {
-    postCustomPanelShownEventWithPredicate( aEvent.GetActive()
-                                            && m_previewPane->IsShownOnScreen() );
+    postCustomPanelShownEventWithPredicate( aEvent.GetActive() && m_previewPane->IsShownOnScreen() );
     aEvent.Skip();
 }
 

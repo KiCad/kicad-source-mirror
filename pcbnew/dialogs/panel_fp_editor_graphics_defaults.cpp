@@ -64,18 +64,18 @@ static FOOTPRINT_EDITOR_SETTINGS& GetPgmSettings()
 }
 
 
-PANEL_FP_EDITOR_GRAPHICS_DEFAULTS::PANEL_FP_EDITOR_GRAPHICS_DEFAULTS(
-        wxWindow* aParent, UNITS_PROVIDER* aUnitsProvider ) :
-        PANEL_FP_EDITOR_GRAPHICS_DEFAULTS_BASE( aParent ), m_unitProvider( aUnitsProvider ),
+PANEL_FP_EDITOR_GRAPHICS_DEFAULTS::PANEL_FP_EDITOR_GRAPHICS_DEFAULTS( wxWindow* aParent,
+                                                                      UNITS_PROVIDER* aUnitsProvider ) :
+        PANEL_FP_EDITOR_GRAPHICS_DEFAULTS_BASE( aParent ),
+        m_unitProvider( aUnitsProvider ),
         m_designSettings( GetPgmSettings().m_DesignSettings ),
-        m_dimensionsPanel( std::make_unique<PANEL_SETUP_DIMENSIONS>( this, *m_unitProvider,
-                                                                     m_designSettings ) )
+        m_dimensionsPanel( std::make_unique<PANEL_SETUP_DIMENSIONS>( this, *m_unitProvider, m_designSettings ) )
 {
     m_graphicsGrid->SetUnitsProvider( aUnitsProvider );
-    m_graphicsGrid->SetAutoEvalCols(
-            { COL_LINE_THICKNESS, COL_TEXT_WIDTH, COL_TEXT_HEIGHT, COL_TEXT_THICKNESS } );
-
-    m_graphicsGrid->SetDefaultRowSize( m_graphicsGrid->GetDefaultRowSize() + 4 );
+    m_graphicsGrid->SetAutoEvalCols( { COL_LINE_THICKNESS,
+                                       COL_TEXT_WIDTH,
+                                       COL_TEXT_HEIGHT,
+                                       COL_TEXT_THICKNESS } );
 
     // Work around a bug in wxWidgets where it fails to recalculate the grid height
     // after changing the default row size
@@ -140,13 +140,11 @@ void PANEL_FP_EDITOR_GRAPHICS_DEFAULTS::loadFPSettings( const FOOTPRINT_EDITOR_S
     for( int col = 0; col < m_graphicsGrid->GetNumberCols(); col++ )
     {
         // Set the minimal width to the column label size.
-        m_graphicsGrid->SetColMinimalWidth( col,
-                                            m_graphicsGrid->GetVisibleWidth( col, true, false ) );
+        m_graphicsGrid->SetColMinimalWidth( col, m_graphicsGrid->GetVisibleWidth( col, true, false ) );
 
         // Set the width to see the full contents
         if( m_graphicsGrid->IsColShown( col ) )
-            m_graphicsGrid->SetColSize( col,
-                                        m_graphicsGrid->GetVisibleWidth( col, true, true, true ) );
+            m_graphicsGrid->SetColSize( col, m_graphicsGrid->GetVisibleWidth( col, true, true, true ) );
     }
 
     m_graphicsGrid->SetRowLabelSize( m_graphicsGrid->GetVisibleWidth( -1, true, true, true ) );
@@ -225,8 +223,7 @@ bool PANEL_FP_EDITOR_GRAPHICS_DEFAULTS::TransferDataFromWindow()
         int textHeight = m_graphicsGrid->GetUnitValue( i, COL_TEXT_HEIGHT );
         int textThickness = m_graphicsGrid->GetUnitValue( i, COL_TEXT_THICKNESS );
 
-        if( textWidth < minSize || textHeight < minSize || textWidth > maxSize
-            || textHeight > maxSize )
+        if( textWidth < minSize || textHeight < minSize || textWidth > maxSize || textHeight > maxSize )
         {
             if( !errorsMsg.IsEmpty() )
                 errorsMsg += wxT( "\n\n" );
@@ -249,17 +246,19 @@ bool PANEL_FP_EDITOR_GRAPHICS_DEFAULTS::TransferDataFromWindow()
                 errorsMsg += wxT( "\n\n" );
 
             if( textThickness > textMaxThickness )
-                errorsMsg += wxString::Format(
-                        _( "%s: Text thickness is too large.\n"
-                           "It will be truncated to %s" ),
-                        m_graphicsGrid->GetRowLabelValue( i ),
-                        m_unitProvider->StringFromValue( textMaxThickness, true ) );
-
+            {
+                errorsMsg += wxString::Format( _( "%s: Text thickness is too large.\n"
+                                                  "It will be truncated to %s" ),
+                                               m_graphicsGrid->GetRowLabelValue( i ),
+                                               m_unitProvider->StringFromValue( textMaxThickness, true ) );
+            }
             else if( textThickness < minWidth )
+            {
                 errorsMsg += wxString::Format( _( "%s: Text thickness is too small.\n"
                                                   "It will be truncated to %s" ),
                                                m_graphicsGrid->GetRowLabelValue( i ),
                                                m_unitProvider->StringFromValue( minWidth, true ) );
+            }
 
             textThickness = std::min( textThickness, textMaxThickness );
             textThickness = std::max( textThickness, minWidth );
@@ -281,8 +280,7 @@ bool PANEL_FP_EDITOR_GRAPHICS_DEFAULTS::TransferDataFromWindow()
     if( errorsMsg.IsEmpty() )
         return true;
 
-    KIDIALOG dlg( wxGetTopLevelParent( this ), errorsMsg, KIDIALOG::KD_ERROR,
-                  _( "Parameter error" ) );
+    KIDIALOG dlg( wxGetTopLevelParent( this ), errorsMsg, KIDIALOG::KD_ERROR, _( "Parameter error" ) );
     dlg.ShowModal();
 
     return false;

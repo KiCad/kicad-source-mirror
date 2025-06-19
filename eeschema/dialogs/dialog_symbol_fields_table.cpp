@@ -282,9 +282,6 @@ DIALOG_SYMBOL_FIELDS_TABLE::DIALOG_SYMBOL_FIELDS_TABLE( SCH_EDIT_FRAME* parent,
     m_grid->PushEventHandler( new FIELDS_EDITOR_GRID_TRICKS( this, m_grid, m_fieldsCtrl,
                                                              m_dataModel, &m_parent->Schematic() ) );
 
-    // give a bit more room for comboboxes
-    m_grid->SetDefaultRowSize( m_grid->GetDefaultRowSize() + 4 );
-
     // Load our BOM view presets
     SetUserBomPresets( m_schSettings.m_BomPresets );
 

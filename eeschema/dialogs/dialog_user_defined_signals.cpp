@@ -40,10 +40,6 @@ DIALOG_USER_DEFINED_SIGNALS::DIALOG_USER_DEFINED_SIGNALS( SIMULATOR_FRAME* aPare
 {
     m_grid->PushEventHandler( new GRID_TRICKS( m_grid ) );
 
-    // Give a little more room for Scintilla text editor (which otherwise likes to scroll
-    // on every other keystroke).
-    m_grid->SetDefaultRowSize( m_grid->GetDefaultRowSize() + 4 );
-
     wxGridCellAttr* attr = new wxGridCellAttr;
     attr->SetReadOnly();
     m_grid->SetColAttr( 1, attr );

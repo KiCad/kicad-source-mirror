@@ -1054,9 +1054,6 @@ DIALOG_LIB_EDIT_PIN_TABLE::DIALOG_LIB_EDIT_PIN_TABLE( SYMBOL_EDIT_FRAME* parent,
     for( int i = 0; i < COL_COUNT; ++i )
         m_originalColWidths[ i ] = m_grid->GetColSize( i );
 
-    // Give a bit more room for combobox editors
-    m_grid->SetDefaultRowSize( m_grid->GetDefaultRowSize() + 4 );
-
     m_grid->SetTable( m_dataModel );
     m_grid->PushEventHandler( new GRID_TRICKS( m_grid, [this]( wxCommandEvent& aEvent )
                                                        {

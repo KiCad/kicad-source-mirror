@@ -53,23 +53,20 @@ DIALOG_SHEET_PROPERTIES::DIALOG_SHEET_PROPERTIES( SCH_EDIT_FRAME* aParent, SCH_S
                                                   bool* aIsUndoable, bool* aClearAnnotationNewItems,
                                                   bool* aUpdateHierarchyNavigator,
                                                   wxString* aSourceSheetFilename ) :
-    DIALOG_SHEET_PROPERTIES_BASE( aParent ),
-    m_frame( aParent ),
-    m_isUndoable( aIsUndoable ),
-    m_clearAnnotationNewItems( aClearAnnotationNewItems ),
-    m_updateHierarchyNavigator( aUpdateHierarchyNavigator ),
-    m_sourceSheetFilename( aSourceSheetFilename ),
-    m_borderWidth( aParent, m_borderWidthLabel, m_borderWidthCtrl, m_borderWidthUnits ),
-    m_dummySheet( *aSheet ),
-    m_dummySheetNameField( &m_dummySheet, FIELD_T::SHEET_NAME )
+        DIALOG_SHEET_PROPERTIES_BASE( aParent ),
+        m_frame( aParent ),
+        m_isUndoable( aIsUndoable ),
+        m_clearAnnotationNewItems( aClearAnnotationNewItems ),
+        m_updateHierarchyNavigator( aUpdateHierarchyNavigator ),
+        m_sourceSheetFilename( aSourceSheetFilename ),
+        m_borderWidth( aParent, m_borderWidthLabel, m_borderWidthCtrl, m_borderWidthUnits ),
+        m_dummySheet( *aSheet ),
+        m_dummySheetNameField( &m_dummySheet, FIELD_T::SHEET_NAME )
 {
     m_sheet = aSheet;
     m_fields = new FIELDS_GRID_TABLE( this, aParent, m_grid, m_sheet );
     m_delayedFocusRow = 0;
     m_delayedFocusColumn = FDC_VALUE;
-
-    // Give a bit more room for combobox editors
-    m_grid->SetDefaultRowSize( m_grid->GetDefaultRowSize() + 4 );
 
     m_grid->SetTable( m_fields );
     m_grid->PushEventHandler( new FIELDS_GRID_TRICKS( m_grid, this, { &aParent->Schematic() },

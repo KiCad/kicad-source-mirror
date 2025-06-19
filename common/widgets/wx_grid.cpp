@@ -207,6 +207,10 @@ WX_GRID::WX_GRID( wxWindow *parent, wxWindowID id, const wxPoint& pos, const wxS
         wxGrid( parent, id, pos, size, style, name ),
         m_weOwnTable( false )
 {
+    // Grids with comboboxes need a bit of extra height; other grids look better if they're
+    // consistent.
+    SetDefaultRowSize( GetDefaultRowSize() + FromDIP( 4 ) );
+
     SetDefaultCellOverflow( false );
 
     // Make sure the GUI font scales properly
@@ -214,10 +218,8 @@ WX_GRID::WX_GRID( wxWindow *parent, wxWindowID id, const wxPoint& pos, const wxS
     SetLabelFont( KIUI::GetControlFont( this ) );
 
     Connect( wxEVT_DPI_CHANGED, wxDPIChangedEventHandler( WX_GRID::onDPIChanged ), nullptr, this );
-    Connect( wxEVT_GRID_EDITOR_SHOWN, wxGridEventHandler( WX_GRID::onCellEditorShown ), nullptr,
-             this );
-    Connect( wxEVT_GRID_EDITOR_HIDDEN, wxGridEventHandler( WX_GRID::onCellEditorHidden ), nullptr,
-             this );
+    Connect( wxEVT_GRID_EDITOR_SHOWN, wxGridEventHandler( WX_GRID::onCellEditorShown ), nullptr, this );
+    Connect( wxEVT_GRID_EDITOR_HIDDEN, wxGridEventHandler( WX_GRID::onCellEditorHidden ), nullptr, this );
 }
 
 
@@ -226,22 +228,18 @@ WX_GRID::~WX_GRID()
     if( m_weOwnTable )
         DestroyTable( GetTable() );
 
-    Disconnect( wxEVT_GRID_EDITOR_SHOWN, wxGridEventHandler( WX_GRID::onCellEditorShown ), nullptr,
-                this );
-    Disconnect( wxEVT_GRID_EDITOR_HIDDEN, wxGridEventHandler( WX_GRID::onCellEditorHidden ),
-                nullptr, this );
-    Disconnect( wxEVT_DPI_CHANGED, wxDPIChangedEventHandler( WX_GRID::onDPIChanged ), nullptr,
-                this );
+    Disconnect( wxEVT_GRID_EDITOR_SHOWN, wxGridEventHandler( WX_GRID::onCellEditorShown ), nullptr, this );
+    Disconnect( wxEVT_GRID_EDITOR_HIDDEN, wxGridEventHandler( WX_GRID::onCellEditorHidden ), nullptr, this );
+    Disconnect( wxEVT_DPI_CHANGED, wxDPIChangedEventHandler( WX_GRID::onDPIChanged ), nullptr, this );
 }
 
 
 void WX_GRID::onDPIChanged(wxDPIChangedEvent& aEvt)
 {
-    CallAfter(
-            [&]()
-            {
-                wxGrid::SetColLabelSize( wxGRID_AUTOSIZE );
-            } );
+    CallAfter( [&]()
+               {
+                   wxGrid::SetColLabelSize( wxGRID_AUTOSIZE );
+               } );
 
     /// This terrible hack is a way to avoid the incredibly disruptive resizing of grids that
     /// happens on Macs when moving a window between monitors of different DPIs.
@@ -301,8 +299,7 @@ void WX_GRID::SetTable( wxGridTableBase* aTable, bool aTakeOwnership )
     EnableAlternateRowColors( Pgm().GetCommonSettings()->m_Appearance.grid_striping );
 
     Connect( wxEVT_GRID_COL_MOVE, wxGridEventHandler( WX_GRID::onGridColMove ), nullptr, this );
-    Connect( wxEVT_GRID_SELECT_CELL, wxGridEventHandler( WX_GRID::onGridCellSelect ), nullptr,
-             this );
+    Connect( wxEVT_GRID_SELECT_CELL, wxGridEventHandler( WX_GRID::onGridCellSelect ), nullptr, this );
 
     m_weOwnTable = aTakeOwnership;
 }
@@ -391,11 +388,8 @@ void WX_GRID::onCellEditorHidden( wxGridEvent& aEvent )
 
         if( cellEditor )
         {
-            GRID_CELL_MARK_AS_NULLABLE* nullableCell =
-                    dynamic_cast<GRID_CELL_MARK_AS_NULLABLE*>( cellEditor );
-
-            if( nullableCell )
-                isNullable = nullableCell->IsNullable();
+            if( GRID_CELL_MARK_AS_NULLABLE* nullable = dynamic_cast<GRID_CELL_MARK_AS_NULLABLE*>( cellEditor ) )
+                isNullable = nullable->IsNullable();
 
             cellEditor->DecRef();
         }
@@ -419,8 +413,8 @@ void WX_GRID::onCellEditorHidden( wxGridEvent& aEvent )
 
                             if( stringValue == UNITS_PROVIDER::NullUiString )
                             {
-                                val = unitsProvider->OptionalValueFromString(
-                                        UNITS_PROVIDER::NullUiString, cellDataType );
+                                val = unitsProvider->OptionalValueFromString( UNITS_PROVIDER::NullUiString,
+                                                                              cellDataType );
                             }
                             else
                             {
@@ -428,13 +422,11 @@ void WX_GRID::onCellEditorHidden( wxGridEvent& aEvent )
                                                                               cellDataType );
                             }
 
-                            evalValue = unitsProvider->StringFromOptionalValue( val, true,
-                                                                                cellDataType );
+                            evalValue = unitsProvider->StringFromOptionalValue( val, true, cellDataType );
                         }
                         else
                         {
-                            int val = unitsProvider->ValueFromString( m_eval->Result(),
-                                                                      cellDataType );
+                            int val = unitsProvider->ValueFromString( m_eval->Result(), cellDataType );
                             evalValue = unitsProvider->StringFromValue( val, true, cellDataType );
                         }
 
@@ -458,8 +450,7 @@ void WX_GRID::DestroyTable( wxGridTableBase* aTable )
     CommitPendingChanges( true /* quiet mode */ );
 
     Disconnect( wxEVT_GRID_COL_MOVE, wxGridEventHandler( WX_GRID::onGridColMove ), nullptr, this );
-    Disconnect( wxEVT_GRID_SELECT_CELL, wxGridEventHandler( WX_GRID::onGridCellSelect ), nullptr,
-                this );
+    Disconnect( wxEVT_GRID_SELECT_CELL, wxGridEventHandler( WX_GRID::onGridCellSelect ), nullptr, this );
 
     wxGrid::SetTable( nullptr );
     delete aTable;
@@ -805,8 +796,7 @@ int WX_GRID::GetVisibleWidth( int aCol, bool aHeader, bool aContents, bool aKeep
         {
             EnsureColLabelsVisible();
 
-            size = std::max( size,
-                             int( GetTextExtent( GetColLabelValue( aCol ) + wxS( "M" ) ).x ) );
+            size = std::max( size, int( GetTextExtent( GetColLabelValue( aCol ) + wxS( "M" ) ).x ) );
         }
 
         for( int row = 0; aContents && row < GetNumberRows(); row++ )

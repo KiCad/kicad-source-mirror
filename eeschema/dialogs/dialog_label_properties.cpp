@@ -141,11 +141,8 @@ DIALOG_LABEL_PROPERTIES::DIALOG_LABEL_PROPERTIES( SCH_EDIT_FRAME* aParent,
     case SCH_LABEL_T:           SetTitle( _( "Label Properties" ) );                  break;
     case SCH_DIRECTIVE_LABEL_T: SetTitle( _( "Directive Label Properties" ) );        break;
     case SCH_SHEET_PIN_T:       SetTitle( _( "Hierarchical Sheet Pin Properties" ) ); break;
-    default:            UNIMPLEMENTED_FOR( m_currentLabel->GetClass() );              break;
+    default:                    UNIMPLEMENTED_FOR( m_currentLabel->GetClass() );      break;
     }
-
-    // Give a bit more room for combobox editors
-    m_grid->SetDefaultRowSize( m_grid->GetDefaultRowSize() + 4 );
 
     m_grid->SetTable( m_fields );
     m_grid->PushEventHandler( new FIELDS_GRID_TRICKS( m_grid, this, {},

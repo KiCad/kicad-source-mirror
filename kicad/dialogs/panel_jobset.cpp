@@ -149,10 +149,7 @@ public:
 
             if( m_destination->m_lastRunReporters.contains( jobId ) )
             {
-                WX_STRING_REPORTER* reporter =
-                        static_cast<WX_STRING_REPORTER*>( m_destination->m_lastRunReporters[jobId] );
-
-                if( reporter )
+                if( auto* reporter = static_cast<WX_STRING_REPORTER*>( m_destination->m_lastRunReporters[jobId] ) )
                     m_textCtrlOutput->SetValue( reporter->GetMessages() );
             }
             else
@@ -253,9 +250,8 @@ public:
     {
         wxClientDC dc( this );
         int        width = GetSize().GetWidth();
-        wxString   msg = aMsg;
 
-        m_pathInfo->SetLabel( wxControl::Ellipsize( msg, dc, wxELLIPSIZE_MIDDLE, width ) );
+        m_pathInfo->SetLabel( wxControl::Ellipsize( aMsg, dc, wxELLIPSIZE_MIDDLE, width ) );
     }
 
     virtual void OnGenerate( wxCommandEvent& event ) override
@@ -274,15 +270,14 @@ public:
 
                     JOBS_RUNNER jobRunner( &( m_frame->Kiway() ), m_jobsFile, &project );
 
-                    auto* progressReporter = new WX_PROGRESS_REPORTER( m_frame, _( "Run Jobs" ), 1,
-                                                                       PR_NO_ABORT );
+                    {
+                        WX_PROGRESS_REPORTER progressReporter( m_frame, _( "Run Jobs" ), 1, PR_NO_ABORT );
 
-                    if( JOBSET_DESTINATION* destination = GetDestination() )
-                        jobRunner.RunJobsForDestination( destination );
+                        if( JOBSET_DESTINATION* destination = GetDestination() )
+                            jobRunner.RunJobsForDestination( destination );
 
-                    UpdateStatus();
-
-                    delete progressReporter;
+                        UpdateStatus();
+                    }
 
                     // Bring the Kicad manager frame back to the front
                     m_frame->Raise();
@@ -486,7 +481,6 @@ PANEL_JOBSET::PANEL_JOBSET( wxAuiNotebook* aParent, KICAD_MANAGER_FRAME* aFrame,
 {
     m_jobsGrid->PushEventHandler( new JOBS_GRID_TRICKS( this, m_jobsGrid ) );
 
-    m_jobsGrid->SetDefaultRowSize( m_jobsGrid->GetDefaultRowSize() + 4 );
     m_jobsGrid->OverrideMinSize( 0.6, 0.3 );
     m_jobsGrid->SetSelectionMode( wxGrid::wxGridSelectRows );
 
@@ -577,10 +571,9 @@ void PANEL_JOBSET::UpdateTitle()
         tabName = wxS( "*" ) + tabName;
 
     int pageIdx = m_parentBook->FindPage( this );
+
     if( pageIdx >= 0 )
-    {
         m_parentBook->SetPageText( pageIdx, tabName );
-    }
 }
 
 
@@ -778,7 +771,10 @@ void PANEL_JOBSET::OnJobButtonDelete( wxCommandEvent& aEvent )
     m_jobsGrid->ClearSelection();
 
     // Reverse sort so deleting a row doesn't change the indexes of the other rows.
-    selectedRows.Sort( []( int* first, int* second ) { return *second - *first; } );
+    selectedRows.Sort( []( int* first, int* second )
+                       {
+                           return *second - *first;
+                       } );
 
     int select = selectedRows[0];
 
@@ -852,7 +848,7 @@ bool PANEL_JOBSET::GetCanClose()
         if( !HandleUnsavedChanges( this, wxString::Format( msg, fileName.GetFullName() ),
                                    [&]() -> bool
                                    {
-                                       return m_jobsFile->SaveToFile(wxEmptyString, true);
+                                       return m_jobsFile->SaveToFile( wxEmptyString, true );
                                    } ) )
         {
             return false;
@@ -987,7 +983,7 @@ void PANEL_JOBSET::OnGenerateAllDestinationsClick( wxCommandEvent& event )
 	CallAfter(
 			[this]()
 			{
-				PROJECT&      project = m_frame->Kiway().Prj();
+				PROJECT& project = m_frame->Kiway().Prj();
 				EnsurePcbSchFramesOpen();
 
 				wxFileName fn = project.GetProjectFullName();
@@ -995,15 +991,14 @@ void PANEL_JOBSET::OnGenerateAllDestinationsClick( wxCommandEvent& event )
 
                 JOBS_RUNNER jobRunner( &( m_frame->Kiway() ), m_jobsFile.get(), &project );
 
-				auto* progressReporter = new WX_PROGRESS_REPORTER( m_frame, _( "Run Jobs" ), 1,
-                                                                   PR_NO_ABORT );
+                {
+                    WX_PROGRESS_REPORTER progressReporter( m_frame, _( "Run Jobs" ), 1, PR_NO_ABORT );
 
-                jobRunner.RunJobsAllDestinations();
+                    jobRunner.RunJobsAllDestinations();
 
-                for( PANEL_DESTINATION* panel : GetDestinationPanels() )
-                    panel->UpdateStatus();
-
-				delete progressReporter;
+                    for( PANEL_DESTINATION* panel : GetDestinationPanels() )
+                        panel->UpdateStatus();
+                }
 
                 // Bring the Kicad manager frame back to the front
                 m_frame->Raise();
@@ -1013,9 +1008,8 @@ void PANEL_JOBSET::OnGenerateAllDestinationsClick( wxCommandEvent& event )
 
 void PANEL_JOBSET::OnSizeGrid( wxSizeEvent& aEvent )
 {
-    m_jobsGrid->SetColSize( COL_DESCR, m_jobsGrid->GetSize().x
-                                               - m_jobsGrid->GetColSize( COL_SOURCE )
-                                               - m_jobsGrid->GetColSize( COL_NUMBER ) );
+    m_jobsGrid->SetColSize( COL_DESCR, m_jobsGrid->GetSize().x - m_jobsGrid->GetColSize( COL_SOURCE )
+                                                               - m_jobsGrid->GetColSize( COL_NUMBER ) );
 
     // Always propagate for a grid repaint (needed if the height changes, as well as width)
     aEvent.Skip();

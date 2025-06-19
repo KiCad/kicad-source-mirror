@@ -41,7 +41,8 @@
 /* ---------- GRID_TRICKS for embedded files grid ---------- */
 
 EMBEDDED_FILES_GRID_TRICKS::EMBEDDED_FILES_GRID_TRICKS( WX_GRID* aGrid ) :
-        GRID_TRICKS( aGrid ), m_curRow( -1 )
+        GRID_TRICKS( aGrid ),
+        m_curRow( -1 )
 {
 }
 
@@ -89,7 +90,9 @@ void EMBEDDED_FILES_GRID_TRICKS::doPopupSelection( wxCommandEvent& event )
 
 
 PANEL_EMBEDDED_FILES::PANEL_EMBEDDED_FILES( wxWindow* parent, EMBEDDED_FILES* aFiles ) :
-        PANEL_EMBEDDED_FILES_BASE( parent ), m_files( aFiles ), m_localFiles( new EMBEDDED_FILES() )
+        PANEL_EMBEDDED_FILES_BASE( parent ),
+        m_files( aFiles ),
+        m_localFiles( new EMBEDDED_FILES() )
 {
     for( auto& [name, file] : m_files->EmbeddedFileMap() )
     {
@@ -105,23 +108,24 @@ PANEL_EMBEDDED_FILES::PANEL_EMBEDDED_FILES( wxWindow* parent, EMBEDDED_FILES* aF
 
     m_files_grid->PushEventHandler( new EMBEDDED_FILES_GRID_TRICKS( m_files_grid ) );
 
-    m_localFiles->SetFileAddedCallback( [this](EMBEDDED_FILES::EMBEDDED_FILE* file) {
-
-        for( int ii = 0; ii < m_files_grid->GetNumberRows(); ii++ )
-        {
-            if( m_files_grid->GetCellValue( ii, 1 ) == file->GetLink() )
+    m_localFiles->SetFileAddedCallback(
+            [this](EMBEDDED_FILES::EMBEDDED_FILE* file)
             {
-                m_files_grid->DeleteRows( ii );
-                break;
-            }
-        }
+                for( int ii = 0; ii < m_files_grid->GetNumberRows(); ii++ )
+                {
+                    if( m_files_grid->GetCellValue( ii, 1 ) == file->GetLink() )
+                    {
+                        m_files_grid->DeleteRows( ii );
+                        break;
+                    }
+                }
 
-        m_files_grid->AppendRows( 1 );
-        int ii = m_files_grid->GetNumberRows() - 1;
-        m_files_grid->SetCellValue( ii, 0, file->name );
-        m_files_grid->SetCellValue( ii, 1, file->GetLink() );
+                m_files_grid->AppendRows( 1 );
+                int ii = m_files_grid->GetNumberRows() - 1;
+                m_files_grid->SetCellValue( ii, 0, file->name );
+                m_files_grid->SetCellValue( ii, 1, file->GetLink() );
 
-    });
+            } );
 }
 
 
@@ -166,6 +170,7 @@ bool PANEL_EMBEDDED_FILES::TransferDataToWindow()
         m_files_grid->DeleteRows( 0, m_files_grid->GetNumberRows() );
 
     int ii = 0;
+
     for( auto& [name, file] : m_localFiles->EmbeddedFileMap() )
     {
         while( m_files_grid->GetNumberRows() < ii + 1 )
@@ -191,11 +196,10 @@ bool PANEL_EMBEDDED_FILES::TransferDataFromWindow()
 
     std::vector<EMBEDDED_FILES::EMBEDDED_FILE*> files;
 
-    for( auto it = m_localFiles->EmbeddedFileMap().begin();
-         it != m_localFiles->EmbeddedFileMap().end(); it++ )
-        files.push_back( it->second );
+    for( const auto& [name, file] : m_localFiles->EmbeddedFileMap() )
+        files.push_back( file );
 
-    for( auto& file : files )
+    for( EMBEDDED_FILES::EMBEDDED_FILE* file : files )
     {
         m_files->AddFile( file );
         m_localFiles->RemoveFile( file->name, false );
@@ -237,8 +241,7 @@ void PANEL_EMBEDDED_FILES::onFontEmbedClick( wxCommandEvent& event )
 
         for( KIFONT::OUTLINE_FONT* font : fonts )
         {
-            EMBEDDED_FILES::EMBEDDED_FILE* result =
-                    m_localFiles->AddFile( font->GetFileName(), true );
+            EMBEDDED_FILES::EMBEDDED_FILE* result = m_localFiles->AddFile( font->GetFileName(), true );
 
             if( !result )
             {
@@ -326,7 +329,7 @@ void PANEL_EMBEDDED_FILES::onAddEmbeddedFiles( wxCommandEvent& event )
         wxArrayString paths;
         fileDialog.GetPaths( paths );
 
-        for( wxString path : paths )
+        for( const wxString& path : paths )
             AddEmbeddedFile( path );
     }
 }
@@ -396,11 +399,9 @@ void PANEL_EMBEDDED_FILES::onExportFiles( wxCommandEvent& event )
 
         if( fileName.FileExists() )
         {
-            wxString msg = wxString::Format( _( "File '%s' already exists." ),
-                        fileName.GetFullName() );
+            wxString msg = wxString::Format( _( "File '%s' already exists." ), fileName.GetFullName() );
 
-            KIDIALOG errorDlg( m_parent, msg, _( "Confirmation" ),
-                                wxOK | wxCANCEL | wxICON_WARNING );
+            KIDIALOG errorDlg( m_parent, msg, _( "Confirmation" ), wxOK | wxCANCEL | wxICON_WARNING );
             errorDlg.SetOKCancelLabels( _( "Overwrite" ), _( "Skip" ) );
             errorDlg.DoNotShowCheckbox( __FILE__, __LINE__ );
 
@@ -415,11 +416,9 @@ void PANEL_EMBEDDED_FILES::onExportFiles( wxCommandEvent& event )
             if( !fileName.IsDirWritable() )
             {
 #ifndef __WXMAC__
-                wxString msg = wxString::Format( _( "Directory '%s' is not writable." ),
-                                                    fileName.GetFullName() );
+                wxString msg = wxString::Format( _( "Directory '%s' is not writable." ), fileName.GetFullName() );
 #else
-                wxString msg = wxString::Format( _( "Folder '%s' is not writable." ),
-                                                    fileName.GetPath() );
+                wxString msg = wxString::Format( _( "Folder '%s' is not writable." ), fileName.GetPath() );
 #endif
                 // Don't set a 'do not show again' checkbox for this dialog
                 KIDIALOG errorDlg( m_parent, msg, _( "Error" ), wxYES_NO | wxCANCEL | wxICON_ERROR );
@@ -451,8 +450,7 @@ void PANEL_EMBEDDED_FILES::onExportFiles( wxCommandEvent& event )
 
         if( !out.IsOk() )
         {
-            wxString msg = wxString::Format( _( "Failed to open file '%s'." ),
-                        fileName.GetFullName() );
+            wxString msg = wxString::Format( _( "Failed to open file '%s'." ), fileName.GetFullName() );
 
             KIDIALOG errorDlg( m_parent, msg, _( "Error" ), wxOK | wxICON_ERROR );
             errorDlg.ShowModal();
@@ -463,8 +461,7 @@ void PANEL_EMBEDDED_FILES::onExportFiles( wxCommandEvent& event )
 
         if( !out.IsOk() || ( out.LastWrite() != file->decompressedData.size() ) )
         {
-            wxString msg = wxString::Format( _( "Failed to write file '%s'." ),
-                        fileName.GetFullName() );
+            wxString msg = wxString::Format( _( "Failed to write file '%s'." ), fileName.GetFullName() );
 
             KIDIALOG errorDlg( m_parent, msg, _( "Error" ), wxOK | wxICON_ERROR );
 

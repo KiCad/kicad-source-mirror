@@ -58,22 +58,20 @@ DIALOG_LIB_SYMBOL_PROPERTIES::LAST_LAYOUT DIALOG_LIB_SYMBOL_PROPERTIES::m_lastLa
 
 DIALOG_LIB_SYMBOL_PROPERTIES::DIALOG_LIB_SYMBOL_PROPERTIES( SYMBOL_EDIT_FRAME* aParent,
                                                             LIB_SYMBOL* aLibEntry ) :
-    DIALOG_LIB_SYMBOL_PROPERTIES_BASE( aParent ),
-    m_Parent( aParent ),
-    m_libEntry( aLibEntry ),
-    m_pinNameOffset( aParent, m_nameOffsetLabel, m_nameOffsetCtrl, m_nameOffsetUnits, true ),
-    m_delayedFocusCtrl( nullptr ),
-    m_delayedFocusGrid( nullptr ),
-    m_delayedFocusRow( -1 ),
-    m_delayedFocusColumn( -1 ),
-    m_delayedFocusPage( -1 ),
-    m_fpFilterTricks( std::make_unique<LISTBOX_TRICKS>( *this, *m_FootprintFilterListBox ) )
+        DIALOG_LIB_SYMBOL_PROPERTIES_BASE( aParent ),
+        m_Parent( aParent ),
+        m_libEntry( aLibEntry ),
+        m_pinNameOffset( aParent, m_nameOffsetLabel, m_nameOffsetCtrl, m_nameOffsetUnits, true ),
+        m_delayedFocusCtrl( nullptr ),
+        m_delayedFocusGrid( nullptr ),
+        m_delayedFocusRow( -1 ),
+        m_delayedFocusColumn( -1 ),
+        m_delayedFocusPage( -1 ),
+        m_fpFilterTricks( std::make_unique<LISTBOX_TRICKS>( *this, *m_FootprintFilterListBox ) )
 {
     m_embeddedFiles = new PANEL_EMBEDDED_FILES( m_NoteBook, m_libEntry );
     m_NoteBook->AddPage( m_embeddedFiles, _( "Embedded Files" ) );
 
-    // Give a bit more room for combobox editors
-    m_grid->SetDefaultRowSize( m_grid->GetDefaultRowSize() + 4 );
     m_fields = new FIELDS_GRID_TABLE( this, aParent, m_grid, m_libEntry,
                                       { m_embeddedFiles->GetLocalFiles() } );
     m_grid->SetTable( m_fields );
@@ -116,8 +114,7 @@ DIALOG_LIB_SYMBOL_PROPERTIES::DIALOG_LIB_SYMBOL_PROPERTIES( SYMBOL_EDIT_FRAME* a
 
     // wxFormBuilder doesn't include this event...
     m_grid->Connect( wxEVT_GRID_CELL_CHANGING,
-                     wxGridEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES::OnGridCellChanging ),
-                     nullptr, this );
+                     wxGridEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES::OnGridCellChanging ), nullptr, this );
 
     // Forward the delete button to the tricks
     m_deleteFilterButton->Bind( wxEVT_BUTTON,
@@ -167,8 +164,7 @@ DIALOG_LIB_SYMBOL_PROPERTIES::~DIALOG_LIB_SYMBOL_PROPERTIES()
     m_grid->DestroyTable( m_fields );
 
     m_grid->Disconnect( wxEVT_GRID_CELL_CHANGING,
-                        wxGridEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES::OnGridCellChanging ),
-                        nullptr, this );
+                        wxGridEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES::OnGridCellChanging ), nullptr, this );
 
     // Delete the GRID_TRICKS.
     m_grid->PopEventHandler( true );
@@ -224,8 +220,7 @@ bool DIALOG_LIB_SYMBOL_PROPERTIES::TransferDataToWindow()
 
     m_KeywordCtrl->ChangeValue( m_libEntry->GetKeyWords() );
     m_SelNumberOfUnits->SetValue( m_libEntry->GetUnitCount() );
-    m_OptionPartsInterchangeable->SetValue( !m_libEntry->UnitsLocked() ||
-                                            m_libEntry->GetUnitCount() == 1 );
+    m_OptionPartsInterchangeable->SetValue( !m_libEntry->UnitsLocked() || m_libEntry->GetUnitCount() == 1 );
 
     // If a symbol contains no body-style-specific pins or graphic items,
     // symbol->HasAlternateBodyStyle() will return false.
@@ -513,8 +508,7 @@ bool DIALOG_LIB_SYMBOL_PROPERTIES::TransferDataFromWindow()
     m_libEntry->SetName( newName );
     m_libEntry->SetKeyWords( m_KeywordCtrl->GetValue() );
     m_libEntry->SetUnitCount( m_SelNumberOfUnits->GetValue() );
-    m_libEntry->LockUnits( m_libEntry->GetUnitCount() > 1 &&
-                           !m_OptionPartsInterchangeable->GetValue() );
+    m_libEntry->LockUnits( m_libEntry->GetUnitCount() > 1 && !m_OptionPartsInterchangeable->GetValue() );
     m_libEntry->SetHasAlternateBodyStyle( m_hasAlternateBodyStyles->GetValue() );
     m_Parent->SetShowDeMorgan( m_hasAlternateBodyStyles->GetValue() );
 
@@ -608,8 +602,7 @@ void DIALOG_LIB_SYMBOL_PROPERTIES::OnGridCellChanging( wxGridEvent& event )
 
             if( newName.CmpNoCase( m_grid->GetCellValue( i, FDC_NAME ) ) == 0 )
             {
-                DisplayError( this, wxString::Format( _( "The name '%s' is already in use." ),
-                                                      newName ) );
+                DisplayError( this, wxString::Format( _( "The name '%s' is already in use." ), newName ) );
                 event.Veto();
                 m_delayedFocusRow = event.GetRow();
                 m_delayedFocusColumn = event.GetCol();
@@ -624,10 +617,7 @@ void DIALOG_LIB_SYMBOL_PROPERTIES::OnGridCellChanging( wxGridEvent& event )
 void DIALOG_LIB_SYMBOL_PROPERTIES::OnSymbolNameText( wxCommandEvent& event )
 {
     if( m_OptionPower->IsChecked() )
-    {
-        m_grid->SetCellValue( m_fields->GetFieldRow( FIELD_T::VALUE ), FDC_VALUE,
-                              m_SymbolNameCtrl->GetValue() );
-    }
+        m_grid->SetCellValue( m_fields->GetFieldRow( FIELD_T::VALUE ), FDC_VALUE, m_SymbolNameCtrl->GetValue() );
 
     OnModify();
 }
@@ -660,8 +650,7 @@ void DIALOG_LIB_SYMBOL_PROPERTIES::OnAddField( wxCommandEvent& event )
         return;
 
     SYMBOL_EDITOR_SETTINGS* settings = m_Parent->GetSettings();
-    SCH_FIELD               newField( m_libEntry, FIELD_T::USER,
-                                      GetUserFieldName( m_fields->size(), DO_TRANSLATE ) );
+    SCH_FIELD newField( m_libEntry, FIELD_T::USER, GetUserFieldName( m_fields->size(), DO_TRANSLATE ) );
 
     newField.SetTextSize( VECTOR2I( schIUScale.MilsToIU( settings->m_Defaults.text_size ),
                                     schIUScale.MilsToIU( settings->m_Defaults.text_size ) ) );
@@ -936,8 +925,7 @@ void DIALOG_LIB_SYMBOL_PROPERTIES::OnUpdateUI( wxUpdateUIEvent& event )
         int row = m_grid->GetGridCursorRow();
         int col = m_grid->GetGridCursorCol();
 
-        if( row == m_fields->GetFieldRow( FIELD_T::VALUE ) && col == FDC_VALUE
-                && m_OptionPower->IsChecked() )
+        if( row == m_fields->GetFieldRow( FIELD_T::VALUE ) && col == FDC_VALUE && m_OptionPower->IsChecked() )
         {
             wxGridCellEditor* editor = m_grid->GetCellEditor( row, col );
             m_SymbolNameCtrl->ChangeValue( editor->GetValue() );
@@ -982,7 +970,7 @@ void DIALOG_LIB_SYMBOL_PROPERTIES::OnUpdateUI( wxUpdateUIEvent& event )
     {
         m_delayedFocusCtrl->SetFocus();
 
-        if( auto textEntry = dynamic_cast<wxTextEntry*>( m_delayedFocusCtrl ) )
+        if( wxTextEntry* textEntry = dynamic_cast<wxTextEntry*>( m_delayedFocusCtrl ) )
             textEntry->SelectAll();
 
         m_delayedFocusCtrl = nullptr;

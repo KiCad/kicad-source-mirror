@@ -155,8 +155,6 @@ PANEL_DISPLAY_OPTIONS::PANEL_DISPLAY_OPTIONS( wxWindow* aParent, APP_SETTINGS_BA
 
     m_optionsBook->SetSelection( m_isPCBEdit ? 1 : 0 );
 
-    m_layerNameitemsGrid->SetDefaultRowSize( m_layerNameitemsGrid->GetDefaultRowSize() + 4 );
-
     m_layerNameitemsGrid->SetTable( new LAYER_NAMES_GRID_TABLE(), true );
     m_layerNameitemsGrid->PushEventHandler( new GRID_TRICKS( m_layerNameitemsGrid ) );
     m_layerNameitemsGrid->SetSelectionMode( wxGrid::wxGridSelectRows );
@@ -191,9 +189,9 @@ void PANEL_DISPLAY_OPTIONS::loadFPSettings( const FOOTPRINT_EDITOR_SETTINGS* aCf
 {
     wxGridTableBase* table = m_layerNameitemsGrid->GetTable();
 
-    for( auto& item : aCfg->m_DesignSettings.m_UserLayerNames )
+    for( const auto& [canonicalName, userName] : aCfg->m_DesignSettings.m_UserLayerNames )
     {
-        wxString orig_name = item.first;
+        wxString orig_name = canonicalName;
         int layer = LSET::NameToLayer( orig_name );
 
         if( !IsUserLayer( static_cast<PCB_LAYER_ID>( layer ) ) )
@@ -202,7 +200,7 @@ void PANEL_DISPLAY_OPTIONS::loadFPSettings( const FOOTPRINT_EDITOR_SETTINGS* aCf
         int row = m_layerNameitemsGrid->GetNumberRows();
         table->AppendRows( 1 );
         table->SetValueAsLong( row, 0, layer );
-        table->SetValue( row, 1, item.second );
+        table->SetValue( row, 1, userName );
     }
 
     Layout();
@@ -284,8 +282,7 @@ void PANEL_DISPLAY_OPTIONS::onLayerChange( wxGridEvent& event )
 
         for( int i = 0; i < m_layerNameitemsGrid->GetNumberRows(); ++i )
         {
-            if( i != event.GetRow()
-                && table->GetValueAsLong( i, 0 ) == layer )
+            if( i != event.GetRow() && table->GetValueAsLong( i, 0 ) == layer )
             {
                 table->SetValueAsLong( event.GetRow(), 0, getNextAvailableLayer() );
                 return;

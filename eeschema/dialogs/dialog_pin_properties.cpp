@@ -126,17 +126,17 @@ public:
 
 DIALOG_PIN_PROPERTIES::DIALOG_PIN_PROPERTIES( SYMBOL_EDIT_FRAME* parent, SCH_PIN* aPin,
                                               bool aFocusPinNumber ) :
-    DIALOG_PIN_PROPERTIES_BASE( parent ),
-    m_frame( parent ),
-    m_pin( aPin ),
-    m_posX( parent, m_posXLabel, m_posXCtrl, m_posXUnits ),
-    m_posY( parent, m_posYLabel, m_posYCtrl, m_posYUnits ),
-    m_pinLength( parent, m_pinLengthLabel, m_pinLengthCtrl, m_pinLengthUnits ),
-    m_nameSize( parent, m_nameSizeLabel, m_nameSizeCtrl, m_nameSizeUnits ),
-    m_numberSize( parent, m_numberSizeLabel, m_numberSizeCtrl, m_numberSizeUnits ),
-    m_delayedFocusRow( -1 ),
-    m_delayedFocusColumn( -1 ),
-    m_initialized( false )
+        DIALOG_PIN_PROPERTIES_BASE( parent ),
+        m_frame( parent ),
+        m_pin( aPin ),
+        m_posX( parent, m_posXLabel, m_posXCtrl, m_posXUnits ),
+        m_posY( parent, m_posYLabel, m_posYCtrl, m_posYUnits ),
+        m_pinLength( parent, m_pinLengthLabel, m_pinLengthCtrl, m_pinLengthUnits ),
+        m_nameSize( parent, m_nameSizeLabel, m_nameSizeCtrl, m_nameSizeUnits ),
+        m_numberSize( parent, m_numberSizeLabel, m_numberSizeCtrl, m_numberSizeUnits ),
+        m_delayedFocusRow( -1 ),
+        m_delayedFocusColumn( -1 ),
+        m_initialized( false )
 {
     // Create a dummy symbol with a single pin for the preview widget:
     m_dummyParent = new LIB_SYMBOL( *static_cast<LIB_SYMBOL*>( m_pin->GetParentSymbol() ) );
@@ -170,10 +170,7 @@ DIALOG_PIN_PROPERTIES::DIALOG_PIN_PROPERTIES( SYMBOL_EDIT_FRAME* parent, SCH_PIN
     const std::vector<BITMAPS>& orientationIcons = PinOrientationIcons();
 
     for ( unsigned ii = 0; ii < orientationNames.GetCount(); ii++ )
-    {
-        m_choiceOrientation->Insert( orientationNames[ii], KiBitmapBundle( orientationIcons[ii] ),
-                                     ii );
-    }
+        m_choiceOrientation->Insert( orientationNames[ii], KiBitmapBundle( orientationIcons[ii] ), ii );
 
     // We can't set the tab order through wxWidgets due to shortcomings in their mnemonics
     // implementation on MSW
@@ -197,8 +194,7 @@ DIALOG_PIN_PROPERTIES::DIALOG_PIN_PROPERTIES( SYMBOL_EDIT_FRAME* parent, SCH_PIN
 
     // Default alternates turndown to whether or not alternates exist, or if we've had it open
     // before
-    m_alternatesTurndown->Collapse( m_pin->GetAlternates().size() == 0
-                                 && !s_alternatesTurndownOpen );
+    m_alternatesTurndown->Collapse( m_pin->GetAlternates().size() == 0 && !s_alternatesTurndownOpen );
 
     // wxwidgets doesn't call the OnCollapseChange even at init, so we update this value if
     // the alternates pane defaults to open
@@ -210,9 +206,6 @@ DIALOG_PIN_PROPERTIES::DIALOG_PIN_PROPERTIES( SYMBOL_EDIT_FRAME* parent, SCH_PIN
     // Save original columns widths so we can do proportional sizing.
     for( int i = 0; i < COL_COUNT; ++i )
         m_originalColWidths[ i ] = m_alternatesGrid->GetColSize( i );
-
-    // Give a bit more room for combobox editors
-    m_alternatesGrid->SetDefaultRowSize( m_alternatesGrid->GetDefaultRowSize() + 4 );
 
     m_alternatesGrid->SetTable( m_alternatesDataModel );
     m_alternatesGrid->PushEventHandler( new GRID_TRICKS( m_alternatesGrid,
@@ -291,8 +284,7 @@ bool DIALOG_PIN_PROPERTIES::TransferDataToWindow()
     m_numberSize.SetValue( m_pin->GetNumberTextSize() );
     m_pinLength.SetValue( m_pin->GetLength() );
     m_checkApplyToAllParts->Enable( m_pin->GetParentSymbol()->IsMulti() );
-    m_checkApplyToAllParts->SetValue( m_pin->GetParentSymbol()->IsMulti()
-                                   && m_pin->GetUnit() == 0 );
+    m_checkApplyToAllParts->SetValue( m_pin->GetParentSymbol()->IsMulti() && m_pin->GetUnit() == 0 );
     m_checkApplyToAllBodyStyles->SetValue( m_pin->GetBodyStyle() == 0 );
     m_checkShow->SetValue( m_pin->IsVisible() );
 
@@ -302,8 +294,7 @@ bool DIALOG_PIN_PROPERTIES::TransferDataToWindow()
 
     if( m_frame->m_SyncPinEdit )
     {
-        wxHyperlinkCtrl* button = new wxHyperlinkCtrl( m_infoBar, wxID_ANY,
-                                                       _( "Exit sync pins mode" ),
+        wxHyperlinkCtrl* button = new wxHyperlinkCtrl( m_infoBar, wxID_ANY, _( "Exit sync pins mode" ),
                                                        wxEmptyString );
 
         button->Bind( wxEVT_COMMAND_HYPERLINK,
@@ -483,8 +474,7 @@ void DIALOG_PIN_PROPERTIES::adjustGridColumns()
     m_alternatesGrid->SetColSize( COL_TYPE, m_originalColWidths[COL_TYPE] );
     m_alternatesGrid->SetColSize( COL_SHAPE, m_originalColWidths[COL_SHAPE] );
 
-    m_alternatesGrid->SetColSize( COL_NAME, width - m_originalColWidths[COL_TYPE]
-                                                    - m_originalColWidths[COL_SHAPE] );
+    m_alternatesGrid->SetColSize( COL_NAME, width - m_originalColWidths[COL_TYPE] - m_originalColWidths[COL_SHAPE] );
 }
 
 
