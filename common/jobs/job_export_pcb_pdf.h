@@ -56,6 +56,9 @@ public:
 
     ///< uused by the cli, will be removed when the other behavior is deprecated
     GEN_MODE m_pdfGenMode;
+
+    ///< The background color specified in a hex string
+    wxString m_pdfBackgroundColor;
 };
 
 #endif

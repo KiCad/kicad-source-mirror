@@ -10,6 +10,7 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
+class COLOR_SWATCH;
 class STD_BITMAP_BUTTON;
 class WX_HTML_REPORT_PANEL;
 
@@ -118,6 +119,8 @@ class DIALOG_PLOT_BASE : public DIALOG_SHIM
 		wxCheckBox* m_backFPPropertyPopups;
 		wxCheckBox* m_pdfMetadata;
 		wxCheckBox* m_pdfSingle;
+		wxStaticText* m_pdfBackgroundColorText;
+		COLOR_SWATCH* m_pdfBackgroundColorSwatch;
 		WX_HTML_REPORT_PANEL* m_messagesPanel;
 		wxBoxSizer* m_sizerButtons;
 		wxButton* m_buttonDRC;
@@ -137,6 +140,7 @@ class DIALOG_PLOT_BASE : public DIALOG_SHIM
 		virtual void onBoardSetup( wxHyperlinkEvent& event ) { event.Skip(); }
 		virtual void OnGerberX2Checked( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnChangeDXFPlotMode( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onPDFColorChoice( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onRunDRC( wxCommandEvent& event ) { event.Skip(); }
 		virtual void CreateDrillFile( wxCommandEvent& event ) { event.Skip(); }
 		virtual void Plot( wxCommandEvent& event ) { event.Skip(); }

@@ -1187,6 +1187,24 @@ static void FillNegativeKnockout( PLOTTER *aPlotter, const BOX2I &aBbbox )
 }
 
 
+static void plotPdfBackground( BOARD* aBoard, const PCB_PLOT_PARAMS* aPlotOpts, PLOTTER* aPlotter )
+{
+    if( aPlotter->GetColorMode()
+        && aPlotOpts->GetPDFBackgroundColor() != COLOR4D::UNSPECIFIED )
+    {
+        aPlotter->SetColor( aPlotOpts->GetPDFBackgroundColor() );
+
+        // Use page size selected in pcb to know the schematic bg area
+        const PAGE_INFO& actualPage = aBoard->GetPageSettings();
+
+        VECTOR2I end( actualPage.GetWidthIU( pcbIUScale.IU_PER_MILS ),
+                      actualPage.GetHeightIU( pcbIUScale.IU_PER_MILS ) );
+
+        aPlotter->Rect( VECTOR2I( 0, 0 ), end, FILL_T::FILLED_SHAPE, 1.0 );
+    }
+}
+
+
 /**
  * Open a new plotfile using the options (and especially the format) specified in the options
  * and prepare the page for plotting.
@@ -1309,6 +1327,9 @@ PLOTTER* StartPlotBoard( BOARD *aBoard, const PCB_PLOT_PARAMS *aPlotOpts, int aL
 
         if( startPlotSuccess )
         {
+            if( aPlotOpts->GetFormat() == PLOT_FORMAT::PDF )
+                plotPdfBackground( aBoard, aPlotOpts, plotter );
+
             // Plot the frame reference if requested
             if( aPlotOpts->GetPlotFrameRef() )
             {
@@ -1345,6 +1366,8 @@ void setupPlotterNewPDFPage( PLOTTER* aPlotter, BOARD* aBoard, PCB_PLOT_PARAMS* 
                              const wxString& aSheetPath, const wxString& aPageNumber,
                              int aPageCount )
 {
+    plotPdfBackground( aBoard, aPlotOpts, aPlotter );
+
     // Plot the frame reference if requested
     if( aPlotOpts->GetPlotFrameRef() )
     {

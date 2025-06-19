@@ -68,6 +68,9 @@ namespace CLI
 #define ARG_SCALE "--scale"
 #define ARG_SCALE_DESC "Scale for the PCB, not for the border and title. Use 0 for autoscale"
 
+#define ARG_BACKGROUND_COLOR "--bg-color"
+#define ARG_BACKGROUND_COLOR_DESC "Background color, can be in hex #rrggbb, #rrggbbaa; or css rgb(r,g,b), rgba(r,g,b,a) format"
+
 struct PCB_EXPORT_BASE_COMMAND : public COMMAND
 {
     PCB_EXPORT_BASE_COMMAND( const std::string& aName, bool aInputCanBeDir = false,

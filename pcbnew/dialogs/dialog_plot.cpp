@@ -41,6 +41,7 @@
 #include <dialog_gendrill.h>
 #include <widgets/wx_html_report_panel.h>
 #include <widgets/std_bitmap_button.h>
+#include <widgets/color_swatch.h>
 #include <tool/tool_manager.h>
 #include <tools/zone_filler_tool.h>
 #include <tools/drc_tool.h>
@@ -117,6 +118,8 @@ DIALOG_PLOT::DIALOG_PLOT( PCB_EDIT_FRAME* aEditFrame, wxWindow* aParent,
     m_job( aJob )
 {
     BOARD* board = m_editFrame->GetBoard();
+
+    m_pdfBackgroundColorSwatch->SetDefaultColor( COLOR4D::UNSPECIFIED );
 
     SetName( DLG_WINDOW_NAME );
     m_DRCWarningTemplate = m_DRCExclusionsWarning->GetLabel();
@@ -433,6 +436,8 @@ void DIALOG_PLOT::init_Dialog()
     m_backFPPropertyPopups->SetValue( m_plotOpts.m_PDFBackFPPropertyPopups );
     m_pdfMetadata->SetValue( m_plotOpts.m_PDFMetadata );
     m_pdfSingle->SetValue( m_plotOpts.m_PDFSingle );
+    m_pdfBackgroundColorSwatch->SetSwatchColor( m_plotOpts.m_PDFBackgroundColor, false );
+    updatePdfColorOptions();
 
     // Initialize a few other parameters, which can also be modified
     // from the drill dialog
@@ -500,6 +505,7 @@ void DIALOG_PLOT::transferPlotParamsToJob()
         pdfJob->m_pdfBackFPPropertyPopups = m_plotOpts.m_PDFBackFPPropertyPopups;
         pdfJob->m_pdfMetadata = m_plotOpts.m_PDFMetadata;
         pdfJob->m_pdfSingle = m_plotOpts.m_PDFSingle;
+        pdfJob->m_pdfBackgroundColor = m_plotOpts.m_PDFBackgroundColor.ToCSSString();
 
         // we need to embed this for the cli deprecation fix
         if( pdfJob->m_pdfSingle )
@@ -1044,6 +1050,7 @@ void DIALOG_PLOT::applyPlotSettings()
         tempOptions.m_PDFBackFPPropertyPopups = m_backFPPropertyPopups->GetValue();
         tempOptions.m_PDFMetadata = m_pdfMetadata->GetValue();
         tempOptions.m_PDFSingle = m_pdfSingle->GetValue();
+        tempOptions.m_PDFBackgroundColor = m_pdfBackgroundColorSwatch->GetSwatchColor();
     }
     else
     {
@@ -1400,4 +1407,25 @@ void DIALOG_PLOT::onDNPCheckbox( wxCommandEvent& aEvent )
 void DIALOG_PLOT::onSketchPads( wxCommandEvent& aEvent )
 {
     m_plotPadNumbers->Enable( aEvent.IsChecked() );
+}
+
+
+void DIALOG_PLOT::updatePdfColorOptions()
+{
+    if( m_PDFColorChoice->GetSelection() == 1 )
+    {
+        m_pdfBackgroundColorSwatch->Disable();
+        m_pdfBackgroundColorText->Disable();
+    }
+    else
+    {
+        m_pdfBackgroundColorSwatch->Enable();
+        m_pdfBackgroundColorText->Enable();
+    }
+}
+
+
+void DIALOG_PLOT::onPDFColorChoice( wxCommandEvent& aEvent )
+{
+    updatePdfColorOptions();
 }

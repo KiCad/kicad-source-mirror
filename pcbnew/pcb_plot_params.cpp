@@ -104,6 +104,7 @@ PCB_PLOT_PARAMS::PCB_PLOT_PARAMS()
     m_PDFBackFPPropertyPopups    = true;
     m_PDFMetadata                = true;
     m_PDFSingle                  = false;
+    m_PDFBackgroundColor         = COLOR4D::UNSPECIFIED;
 
     // This parameter controls if the NPTH pads will be plotted or not
     // it is a "local" parameter

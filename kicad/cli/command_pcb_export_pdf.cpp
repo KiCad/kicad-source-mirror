@@ -119,6 +119,11 @@ CLI::PCB_EXPORT_PDF_COMMAND::PCB_EXPORT_PDF_COMMAND() :
             .scan<'g', double>()
             .default_value( 1.0 )
             .metavar( "SCALE" );
+
+    m_argParser.add_argument( ARG_BACKGROUND_COLOR )
+            .default_value( std::string() )
+            .help( UTF8STDSTR( _( ARG_BACKGROUND_COLOR_DESC ) ) )
+            .metavar( "COLOR" );
 }
 
 
@@ -156,6 +161,10 @@ int CLI::PCB_EXPORT_PDF_COMMAND::doPerform( KIWAY& aKiway )
     pdfJob->m_hideDNPFPsOnFabLayers = m_argParser.get<bool>( ARG_HIDE_DNP_FPS_ON_FAB_LAYERS );
     pdfJob->m_sketchDNPFPsOnFabLayers = m_argParser.get<bool>( ARG_SKETCH_DNP_FPS_ON_FAB_LAYERS );
     pdfJob->m_crossoutDNPFPsOnFabLayers = m_argParser.get<bool>( ARG_CROSSOUT_DNP_FPS_ON_FAB_LAYERS );
+
+    wxString bgColor = From_UTF8( m_argParser.get<std::string>( ARG_BACKGROUND_COLOR ).c_str() );
+    if( bgColor != wxEmptyString )
+        pdfJob->m_pdfBackgroundColor = bgColor;
 
     int drillShape = m_argParser.get<int>( ARG_DRILL_SHAPE_OPTION );
     pdfJob->m_drillShapeOption = static_cast<DRILL_MARKS>( drillShape );

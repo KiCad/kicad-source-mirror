@@ -33,7 +33,10 @@ JOB_EXPORT_PCB_PDF::JOB_EXPORT_PCB_PDF() :
         JOB_EXPORT_PCB_PLOT( JOB_EXPORT_PCB_PLOT::PLOT_FORMAT::PDF, "pdf", false ),
         m_pdfFrontFPPropertyPopups( true ),
         m_pdfBackFPPropertyPopups( true ),
-        m_pdfMetadata( true ), m_pdfSingle( false ), m_pdfGenMode( GEN_MODE::ALL_LAYERS_ONE_FILE )
+        m_pdfMetadata( true ),
+        m_pdfSingle( false ),
+        m_pdfGenMode( GEN_MODE::ALL_LAYERS_ONE_FILE ),
+        m_pdfBackgroundColor( "rgba(0,0,0,0)" ) // represents an unspecified color
 {
     m_plotDrawingSheet = false;
 
@@ -51,6 +54,7 @@ JOB_EXPORT_PCB_PDF::JOB_EXPORT_PCB_PDF() :
             &m_pdfBackFPPropertyPopups, m_pdfBackFPPropertyPopups ) );
     m_params.emplace_back( new JOB_PARAM<GEN_MODE>( "pdf_gen_mode",
             &m_pdfGenMode, m_pdfGenMode ) );
+    m_params.emplace_back( new JOB_PARAM<wxString>( "background_color", &m_pdfBackgroundColor, m_pdfBackgroundColor ) );
 }
 
 

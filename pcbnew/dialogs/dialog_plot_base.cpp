@@ -5,6 +5,7 @@
 // PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
+#include "widgets/color_swatch.h"
 #include "widgets/std_bitmap_button.h"
 #include "widgets/wx_html_report_panel.h"
 
@@ -392,7 +393,14 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	gbSizer4->Add( m_pdfMetadata, wxGBPosition( 3, 0 ), wxGBSpan( 1, 2 ), wxLEFT|wxRIGHT, 5 );
 
 	m_pdfSingle = new wxCheckBox( m_PDFOptionsSizer->GetStaticBox(), wxID_ANY, _("Single document"), wxDefaultPosition, wxDefaultSize, 0 );
-	gbSizer4->Add( m_pdfSingle, wxGBPosition( 4, 0 ), wxGBSpan( 1, 2 ), wxBOTTOM|wxLEFT|wxRIGHT, 5 );
+	gbSizer4->Add( m_pdfSingle, wxGBPosition( 4, 0 ), wxGBSpan( 1, 2 ), wxLEFT|wxRIGHT, 5 );
+
+	m_pdfBackgroundColorText = new wxStaticText( m_PDFOptionsSizer->GetStaticBox(), wxID_ANY, _("Background Color"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_pdfBackgroundColorText->Wrap( -1 );
+	gbSizer4->Add( m_pdfBackgroundColorText, wxGBPosition( 5, 0 ), wxGBSpan( 1, 1 ), wxALL, 5 );
+
+	m_pdfBackgroundColorSwatch = new COLOR_SWATCH( m_PDFOptionsSizer->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
+	gbSizer4->Add( m_pdfBackgroundColorSwatch, wxGBPosition( 5, 1 ), wxGBSpan( 1, 1 ), wxALL, 5 );
 
 
 	m_PDFOptionsSizer->Add( gbSizer4, 1, wxEXPAND|wxBOTTOM, 5 );
@@ -457,6 +465,7 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	m_boardSetup->Connect( wxEVT_COMMAND_HYPERLINK, wxHyperlinkEventHandler( DIALOG_PLOT_BASE::onBoardSetup ), NULL, this );
 	m_useGerberX2Format->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_PLOT_BASE::OnGerberX2Checked ), NULL, this );
 	m_DXF_plotModeOpt->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_PLOT_BASE::OnChangeDXFPlotMode ), NULL, this );
+	m_PDFColorChoice->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_PLOT_BASE::onPDFColorChoice ), NULL, this );
 	m_buttonDRC->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PLOT_BASE::onRunDRC ), NULL, this );
 	m_sdbSizer1Apply->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PLOT_BASE::CreateDrillFile ), NULL, this );
 	m_sdbSizer1OK->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PLOT_BASE::Plot ), NULL, this );
@@ -474,6 +483,7 @@ DIALOG_PLOT_BASE::~DIALOG_PLOT_BASE()
 	m_boardSetup->Disconnect( wxEVT_COMMAND_HYPERLINK, wxHyperlinkEventHandler( DIALOG_PLOT_BASE::onBoardSetup ), NULL, this );
 	m_useGerberX2Format->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_PLOT_BASE::OnGerberX2Checked ), NULL, this );
 	m_DXF_plotModeOpt->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_PLOT_BASE::OnChangeDXFPlotMode ), NULL, this );
+	m_PDFColorChoice->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_PLOT_BASE::onPDFColorChoice ), NULL, this );
 	m_buttonDRC->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PLOT_BASE::onRunDRC ), NULL, this );
 	m_sdbSizer1Apply->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PLOT_BASE::CreateDrillFile ), NULL, this );
 	m_sdbSizer1OK->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PLOT_BASE::Plot ), NULL, this );

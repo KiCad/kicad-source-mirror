@@ -424,6 +424,7 @@ void PCB_PLOTTER::PlotJobToPlotOpts( PCB_PLOT_PARAMS& aOpts, JOB_EXPORT_PCB_PLOT
         aOpts.m_PDFBackFPPropertyPopups = pdfJob->m_pdfBackFPPropertyPopups;
         aOpts.m_PDFMetadata = pdfJob->m_pdfMetadata;
         aOpts.m_PDFSingle = pdfJob->m_pdfSingle;
+        aOpts.m_PDFBackgroundColor = COLOR4D( pdfJob->m_pdfBackgroundColor );
     }
 
     if( aJob->m_plotFormat == JOB_EXPORT_PCB_PLOT::PLOT_FORMAT::POST )

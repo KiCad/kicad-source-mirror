@@ -66,6 +66,7 @@ private:
 
     void onDNPCheckbox( wxCommandEvent& event ) override;
     void onSketchPads( wxCommandEvent& event ) override;
+    void onPDFColorChoice( wxCommandEvent& event ) override;
 
     // other functions
     void init_Dialog();      // main initialization
@@ -76,6 +77,7 @@ private:
     void arrangeAllLayersList( const LSEQ& aSeq );
     void loadPlotParamsFromJob();
     void transferPlotParamsToJob();
+    void updatePdfColorOptions();
 
 private:
     PCB_EDIT_FRAME*     m_editFrame;
