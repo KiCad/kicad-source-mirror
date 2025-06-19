@@ -2,23 +2,24 @@
 # Adrian Scripcă <benishor@gmail.com>, 2021.
 # Henrik Kauhanen <henrik@kauhanen.se>, 2023.
 # Nicoara Alex <alex.nicoara@yahoo.com>, 2024.
-# Peter B <sleepyghostshark@users.noreply.hosted.weblate.org>, 2024.
+# Peter B <sleepyghostshark@users.noreply.hosted.weblate.org>, 2024, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-06-08 17:02+0300\n"
-"PO-Revision-Date: 2025-02-03 18:48+0000\n"
-"Last-Translator: Anonymous <noreply@weblate.org>\n"
-"Language-Team: Romanian <https://hosted.weblate.org/projects/kicad/master-"
-"source/ro/>\n"
+"PO-Revision-Date: 2025-06-19 12:01+0000\n"
+"Last-Translator: Peter B <sleepyghostshark@users.noreply.hosted.weblate.org>"
+"\n"
+"Language-Team: Romanian <https://hosted.weblate.org/projects/kicad/"
+"master-source/ro/>\n"
 "Language: ro\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : (n==0 || (n%100 > 0 && n%100 < "
 "20)) ? 1 : 2;\n"
-"X-Generator: Weblate 5.10-dev\n"
+"X-Generator: Weblate 5.12.1\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
 #: common/dialogs/panel_embedded_files.cpp:321
@@ -44,7 +45,7 @@ msgid ""
 "Footprint outline is missing or malformed. Run Footprint Checker for a full "
 "analysis."
 msgstr ""
-"Conturul capsulei lipsește sau este greșit. Rulați Verificator de capsule "
+"Conturul capsulei lipsește sau este greșit. Rulați Verificatorul de capsule "
 "pentru o analiză completă."
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:1019
@@ -75,7 +76,6 @@ msgid "Simplifying copper layer polygons"
 msgstr "Simplific poligoane pe straturile de cupru"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:1167
-#, fuzzy
 msgid "Calculating plated copper"
 msgstr "Calculez aria de cupru"
 
@@ -86,15 +86,15 @@ msgstr "Simplific %d straturi de cupru"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:1258
 msgid "Simplify holes contours"
-msgstr "Simplific contururile găurilor"
+msgstr "Simplifică conturul găurilor"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:1278
-#, fuzzy
 msgid "Build BVH for holes and vias"
-msgstr "Construiți BVH pentru găuri și via-uri"
+msgstr ""
+"Construiți BVH (Bounding Volume Hierarchy - Ierarhia legăturilor în volum) "
+"pentru găuri și via-uri"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:403
-#, fuzzy
 msgid "OpenGL context creation error"
 msgstr "Eroare creare context OpenGL"
 
@@ -113,17 +113,17 @@ msgid "Net %s\tNet class %s"
 msgstr "Net %s\tClasă Net %s"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:766
-#, fuzzy, c-format
+#, c-format
 msgid "Pad %s\t"
-msgstr "Pad %s\t"
+msgstr "Terminal %s\t"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:797
-#, fuzzy, c-format
+#, c-format
 msgid "Rule area %s\t"
-msgstr "Zonă reguli %s\t"
+msgstr "Zonă cu reguli %s\t"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:799
-#, fuzzy, c-format
+#, c-format
 msgid "Zone %s\t"
 msgstr "Zona %s\t"
 
@@ -545,9 +545,8 @@ msgid "Show Through Hole 3D Models"
 msgstr "Comutați modele 3D prin gaură"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:324
-#, fuzzy
 msgid "Show 3D models for 'Through hole' type footprints"
-msgstr "Comutați modele 3D pentru componentele tip 'through hole'"
+msgstr "Afișează modele 3D pentru componentele tip 'through hole'"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:332
 #, fuzzy
@@ -555,9 +554,8 @@ msgid "Show SMD 3D Models"
 msgstr "Comutați modele 3D SMD"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:333
-#, fuzzy
 msgid "Show 3D models for 'Surface mount' type footprints"
-msgstr "Comutați modele 3D pentru componente tip 'SMD'"
+msgstr "Afișează modele 3D pentru componentele tip 'SMD'"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:341
 #, fuzzy
@@ -565,9 +563,8 @@ msgid "Show Unspecified 3D Models"
 msgstr "Comutați alte modele 3D"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:342
-#, fuzzy
 msgid "Show 3D models for 'unspecified' type footprints"
-msgstr "Comutați modele 3D pentru componente de alte tipuri"
+msgstr "Afișează modele 3D pentru componentele de alte tipuri"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:350
 #, fuzzy
@@ -630,9 +627,8 @@ msgid "Show back copper / surface finish color"
 msgstr "Afișați culoarea din spate a cuprului / finisajului de suprafață"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:57
-#, fuzzy
 msgid "Adhesive"
-msgstr "B.Adeziv"
+msgstr "Adeziv"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:57
 #, fuzzy
@@ -957,7 +953,7 @@ msgstr "Valori"
 #: pcbnew/widgets/appearance_controls.cpp:342
 #, fuzzy
 msgid "Show footprint values"
-msgstr "Trasați valorile amprentei"
+msgstr "Afișare valori capsulă"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:121
 #: pcbnew/widgets/appearance_controls.cpp:343
@@ -968,18 +964,17 @@ msgstr "Referințe"
 #: pcbnew/widgets/appearance_controls.cpp:343
 #, fuzzy
 msgid "Show footprint references"
-msgstr "Preferințe"
+msgstr "Afișează referințele capsulei"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:122
 #: pcbnew/widgets/appearance_controls.cpp:344
 msgid "Footprint Text"
-msgstr "Text amprentă"
+msgstr "Text capsulă"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:122
 #: pcbnew/widgets/appearance_controls.cpp:344
-#, fuzzy
 msgid "Show all footprint text"
-msgstr "Text capsulă"
+msgstr "Afișează toate textele capsulei"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:123
 #, fuzzy
@@ -988,7 +983,7 @@ msgstr "Serigrafie"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:123
 msgid "Do not clip silk layers to board outline"
-msgstr ""
+msgstr "Nu tăia straturile de inscripționare pe conturul circuitului"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:125
 #, fuzzy
@@ -1039,6 +1034,9 @@ msgid ""
 "Successive Tabs while holding %s down will cycle through presets in the "
 "popup."
 msgstr ""
+"Salvează și restaurează combinații de culori și vizibilitate.\n"
+"Folosește %s+Tab pentru activarea selectorului.\n"
+"Tab-uri succesive în timp ce %s este apăsat va succeda schemele predefinite."
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:208
 #, c-format
@@ -1662,8 +1660,9 @@ msgid "Create Symbol Library"
 msgstr "Creați o bibliotecă de simboluri"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:537
+#, fuzzy
 msgid "Create Footprint Library"
-msgstr "Creați Biblioteca de amprente"
+msgstr "Creați biblioteca de capsule"
 
 #: bitmap2component/bitmap2cmp_panel.cpp:48 common/eda_draw_frame.cpp:683
 #: eeschema/dialogs/dialog_field_properties_base.cpp:239
@@ -1988,7 +1987,7 @@ msgstr "Simbol (fișier .kicad_sym)"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:169
 msgid "Footprint (.kicad_mod file)"
-msgstr "Amprentă (fișier .kicad_mod)"
+msgstr "Capsulă (fișier .kicad_mod)"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:175
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:53
@@ -2485,7 +2484,7 @@ msgstr "Simboluri"
 #: pcbnew/widgets/panel_selection_filter_base.cpp:29
 #: pcbnew/widgets/search_handlers.cpp:117
 msgid "Footprints"
-msgstr "Amprente"
+msgstr "Capsule"
 
 #: common/dialog_about/AboutDialog_main.cpp:929
 #, fuzzy
@@ -2822,9 +2821,8 @@ msgid "Untitled Field"
 msgstr "Actualizați câmpurile"
 
 #: common/dialogs/dialog_design_block_properties.cpp:252
-#, fuzzy
 msgid "Duplicate fields are not allowed."
-msgstr "Elementul nu este adnotat: %s%s\n"
+msgstr "Nu sunt permise atribute duplicate."
 
 #: common/dialogs/dialog_design_block_properties_base.cpp:26
 #, fuzzy
@@ -3280,6 +3278,8 @@ msgid ""
 "Do not show this dialog again until KiCad restarts. You can re-enable this "
 "dialog in Pcbnew preferences."
 msgstr ""
+"Nu afișa acest dialog până la repornirea KiCad. Reactivarea dialogului se "
+"poate face din preferințele Pcbnew."
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:30
 #, fuzzy, c-format
@@ -3366,7 +3366,7 @@ msgid ""
 "When checked, the symbol and footprint library tables from the previous "
 "version will be imported into this version"
 msgstr ""
-"Când este bifată, tabelele de biblioteci cu simboluri și amprente din "
+"Când este bifată, tabelele de biblioteci cu simboluri și capsule din "
 "versiunea anterioară vor fi importate în această versiune"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:69
@@ -5315,7 +5315,7 @@ msgstr "Pad-uri"
 #: common/dialogs/panel_grid_settings.cpp:61
 #, fuzzy
 msgid "Footprints/pads:"
-msgstr "Amprente"
+msgstr "Capsule/terminale:"
 
 #: common/dialogs/panel_grid_settings.cpp:62
 #: pcbnew/dialogs/panel_display_options_base.cpp:145
@@ -6532,7 +6532,7 @@ msgstr "Simulator..."
 #: common/tool/common_tools.cpp:623 kicad/tools/kicad_manager_actions.cpp:147
 #: pcbnew/footprint_edit_frame.cpp:1064 pcbnew/menubar_footprint_editor.cpp:92
 msgid "Footprint Editor"
-msgstr "Editor de amprente"
+msgstr "Editor de capsule"
 
 #: common/eda_base_frame.cpp:1313 common/eda_base_frame.cpp:1330
 #, fuzzy
@@ -6542,7 +6542,7 @@ msgstr "Origine"
 #: common/eda_base_frame.cpp:1320
 #, fuzzy
 msgid "Footprint Defaults"
-msgstr "Amprentă"
+msgstr "Valori implicite capsulă"
 
 #: common/eda_base_frame.cpp:1322
 #, fuzzy
@@ -6749,7 +6749,7 @@ msgstr "Ecran"
 #: pcbnew/pcb_shape.cpp:690 pcbnew/pcb_text.cpp:272
 #: pcbnew/plot_board_layers.cpp:171
 msgid "Footprint"
-msgstr "Amprentă"
+msgstr "Capsulă"
 
 #: common/eda_item.cpp:418 pcbnew/dialogs/dialog_board_statistics.cpp:577
 #: pcbnew/pad.cpp:1336
@@ -6798,8 +6798,9 @@ msgstr "Traseu"
 
 #: common/eda_item.cpp:429 pcbnew/dialogs/dialog_board_statistics.cpp:577
 #: pcbnew/pcb_track.cpp:1786 pcbnew/pcb_track.cpp:1897
+#, fuzzy
 msgid "Via"
-msgstr "Via"
+msgstr "Trecere metalizată"
 
 #: common/eda_item.cpp:430 common/eda_item.cpp:442 eeschema/sch_marker.cpp:361
 #: pcbnew/pcb_marker.cpp:199
@@ -7336,13 +7337,14 @@ msgid ""
 "The base path of locally installed system footprint libraries (.pretty "
 "folders)."
 msgstr ""
-"Calea de bază a bibliotecilor de amprentă a sistemului instalate local "
-"(dosare .pretty)."
+"Calea de bază a bibliotecilor de capsule de sistem instalate local (dosare "
+".pretty)."
 
 #: common/env_vars.cpp:120
 msgid "The base path of system footprint 3D shapes (.3Dshapes folders)."
 msgstr ""
-"Calea de bază a formelor 3D de amprentă a sistemului (folderele .3Dshapes)."
+"Calea de bază a modelelor 3D asociate capsulelor sistemului (folderele "
+".3Dshapes)."
 
 #: common/env_vars.cpp:123
 msgid "The base path of the locally installed symbol libraries."
@@ -7380,9 +7382,9 @@ msgstr ""
 "Definit intern de KiCad (nu poate fi editat) și este setat la calea absolută "
 "a fișierului de proiect încărcat în prezent.  Această variabilă de mediu "
 "poate fi utilizată pentru a defini fișiere și căi de acces relative la "
-"proiectul încărcat în mod curent.  De exemplu, ${KIPRJMOD}/libs/footprints."
-"pretty poate fi definit ca un dosar care conține o bibliotecă de amprente "
-"specifică proiectului numită footprints.pretty."
+"proiectul încărcat în mod curent.  De exemplu, ${KIPRJMOD}/libs/"
+"footprints.pretty poate fi definit ca un dosar care conține o bibliotecă de "
+"capsule specifică proiectului numită footprints.pretty."
 
 #: common/env_vars.cpp:141
 #, fuzzy
@@ -7496,7 +7498,7 @@ msgstr "Eroare la încărcare"
 
 #: common/footprint_info.cpp:123
 msgid "Errors were encountered loading footprints:"
-msgstr "Au fost întâlnite erori la încărcarea amprentelor:"
+msgstr "Au fost întâlnite erori la încărcarea capsulelor:"
 
 #: common/fp_lib_table.cpp:226
 #, c-format
@@ -7504,8 +7506,8 @@ msgid ""
 "Duplicate library nickname '%s' found in footprint library table file line "
 "%d."
 msgstr ""
-"S-a găsit o poreclă de bibliotecă duplicată \"%s\" în linia %d a fișierului "
-"de tabel al bibliotecii de amprentă."
+"S-a găsit un alias de bibliotecă duplicat \"%s\" în linia %d a fișierului de "
+"tabel al bibliotecii de capsule."
 
 #: common/gestfich.cpp:248
 #, c-format
@@ -8834,11 +8836,11 @@ msgstr "Nimic de imprimat"
 
 #: common/layer_id.cpp:123
 msgid "Footprints front"
-msgstr "Fața amprentelor"
+msgstr "Fața capsulelor"
 
 #: common/layer_id.cpp:124
 msgid "Footprints back"
-msgstr "Spatele amprentelor"
+msgstr "Spatele capsulelor"
 
 #: common/layer_id.cpp:126
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:27
@@ -9182,11 +9184,9 @@ msgstr "Afișați limitele paginilor"
 #: common/plotters/PDF_plotter.cpp:1494
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:953
 #: eeschema/tools/sch_navigate_tool.cpp:105
-#, fuzzy, c-format
+#, c-format
 msgid "Open %s"
-msgstr ""
-"\n"
-"Deschideți '%s'\n"
+msgstr "Deschide '%s'"
 
 #: common/plotters/PDF_plotter.cpp:1951
 #, fuzzy, c-format
@@ -9195,7 +9195,7 @@ msgstr "Nu s-a reușit crearea fișierului temporar '%s'."
 
 #: common/project.cpp:418 common/project.cpp:423 pcbnew/project_pcb.cpp:69
 msgid "Error loading project footprint library table."
-msgstr "Eroare la încărcarea tabelului de bibliotecă a amprentei proiectului."
+msgstr "Eroare la încărcarea tabelului biblioteci de capsule ale proiectului."
 
 #: common/project.cpp:453 common/project.cpp:459
 #, fuzzy
@@ -9339,9 +9339,8 @@ msgid "Grouped By Value"
 msgstr "Grupați după nume"
 
 #: common/settings/bom_settings.cpp:166
-#, fuzzy
 msgid "Grouped By Value and Footprint"
-msgstr "Lipiți amprenta"
+msgstr "Grupat după valoare și capsulă"
 
 #: common/settings/bom_settings.cpp:186
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:276
@@ -9370,7 +9369,7 @@ msgstr "Culori solide"
 
 #: common/settings/color_settings.cpp:389
 msgid "(Footprints)"
-msgstr "(Amprente)"
+msgstr "(Capsule)"
 
 #: common/settings/color_settings.cpp:443
 #: pagelayout_editor/dialogs/panel_pl_editor_color_settings.cpp:82
@@ -10421,12 +10420,11 @@ msgstr "Crearea, ștergerea și modificarea simbolurilor"
 #: common/tool/actions.cpp:1266 pcbnew/footprint_viewer_frame.cpp:101
 #: pcbnew/footprint_viewer_frame.cpp:1002
 msgid "Footprint Library Browser"
-msgstr "Explorator de biblioteci de amprente"
+msgstr "Explorator biblioteca de capsule"
 
 #: common/tool/actions.cpp:1275
-#, fuzzy
 msgid "Create, delete and edit board footprints"
-msgstr "Creați, ștergeți și editați amprente"
+msgstr "Creați, ștergeți și editați capsule"
 
 #: common/tool/actions.cpp:1283 kicad/tools/kicad_manager_actions.cpp:177
 #: pcb_calculator/pcb_calculator_frame.cpp:63
@@ -10484,7 +10482,7 @@ msgstr "Afișați preferințele pentru toate instrumentele deschise"
 #: common/tool/actions.cpp:1334
 #: pcbnew/dialogs/panel_fp_properties_3d_model_base.cpp:78
 msgid "Configure Paths..."
-msgstr "Configurați căi..."
+msgstr "Configurare căi..."
 
 #: common/tool/actions.cpp:1335
 msgid "Edit path configuration environment variables"
@@ -10501,11 +10499,11 @@ msgstr "Editați listele bibliotecii de simboluri globale și de proiect"
 
 #: common/tool/actions.cpp:1348
 msgid "Manage Footprint Libraries..."
-msgstr "Gestionați bibliotecile de amprente..."
+msgstr "Gestiune biblioteci de capsule..."
 
 #: common/tool/actions.cpp:1349
 msgid "Edit the global and project footprint library lists"
-msgstr "Editați listele de biblioteci de amprentă globală și de proiect"
+msgstr "Editați listele de biblioteci de capsule globale și de proiect"
 
 #: common/tool/actions.cpp:1355
 #, fuzzy
@@ -10755,9 +10753,9 @@ msgid "The value field cannot contain %s character(s)."
 msgstr "Numele semnalului nu pot conține caractere CR sau LF"
 
 #: common/validators.cpp:360
-#, fuzzy, c-format
+#, c-format
 msgid "The footprint field cannot contain %s character(s)."
-msgstr "Numele semnalului nu pot conține caractere CR sau LF"
+msgstr "Textul atributului capsulă nu poate conține caracterul %s"
 
 #: common/validators.cpp:364
 #, fuzzy, c-format
@@ -10941,18 +10939,17 @@ msgstr "Comutați afișajul corpului plăcii"
 
 #: common/widgets/footprint_preview_widget.cpp:127
 msgid "Footprint not found."
-msgstr "Amprenta nu a fost găsită."
+msgstr "Capsula nu a fost găsită."
 
 #: common/widgets/footprint_select_widget.cpp:65 cvpcb/cvpcb_mainframe.cpp:903
 #: pcbnew/footprint_edit_frame.cpp:1089
 #: pcbnew/widgets/panel_footprint_chooser.cpp:70
-#, fuzzy
 msgid "Load Footprint Libraries"
-msgstr "Se încarcă bibliotecile de amprente"
+msgstr "Încarcă bibliotecile de capsule"
 
 #: common/widgets/footprint_select_widget.cpp:141
 msgid "No default footprint"
-msgstr "Nu există amprentă predefinită"
+msgstr "Capsula nu este definită"
 
 #: common/widgets/gal_options_panel_base.cpp:19
 #, fuzzy
@@ -11460,11 +11457,11 @@ msgstr "Fișiere cu circuite imprimate KiCad"
 #: common/wildcards_and_files_ext.cpp:354
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.h:322
 msgid "KiCad footprint files"
-msgstr "Fișiere de amprentă KiCad"
+msgstr "Fișiere de capsule KiCad"
 
 #: common/wildcards_and_files_ext.cpp:360
 msgid "KiCad footprint library paths"
-msgstr "Căile bibliotecilor de amprente KiCad"
+msgstr "Căile bibliotecilor de capsule KiCad"
 
 #: common/wildcards_and_files_ext.cpp:367
 msgid "KiCad design block path"
@@ -11482,7 +11479,7 @@ msgstr "Foaie de desen"
 
 #: common/wildcards_and_files_ext.cpp:389
 msgid "KiCad symbol footprint link files"
-msgstr "KiCad simbol amprentă fișier de atribuire"
+msgstr "Fișiere de legătură cu capsula simbolurilor KiCad"
 
 #: common/wildcards_and_files_ext.cpp:397 gerbview/files.cpp:71
 msgid "Drill files"
@@ -11532,7 +11529,7 @@ msgstr "Fișiere VRML și X3D"
 
 #: common/wildcards_and_files_ext.cpp:464
 msgid "IDFv3 footprint files"
-msgstr "Fișiere de amprente IDFv3"
+msgstr "Fișiere de capsule format IDFv3"
 
 #: common/wildcards_and_files_ext.cpp:470
 msgid "Text files"
@@ -11540,7 +11537,7 @@ msgstr "Fișiere text"
 
 #: common/wildcards_and_files_ext.cpp:476
 msgid "Legacy footprint export files"
-msgstr "Fișiere de export de amprentă în format vechi"
+msgstr "Fișiere de export de capsule în format vechi"
 
 #: common/wildcards_and_files_ext.cpp:482
 msgid "Electrical rule check file"
@@ -11560,8 +11557,9 @@ msgid "CadStar netlist file"
 msgstr "Fișier CadStar netlist"
 
 #: common/wildcards_and_files_ext.cpp:506
+#, fuzzy
 msgid "Symbol footprint association files"
-msgstr "Fișiere de asociere a amprentei simbolului"
+msgstr "Fișiere de asociere a simbolului capsulei"
 
 #: common/wildcards_and_files_ext.cpp:512
 msgid "Zip file"
@@ -11634,7 +11632,7 @@ msgstr "Eroare de încărcare a fișierului de echivalență"
 #: cvpcb/auto_associate.cpp:187
 #, c-format
 msgid "%lu footprint/symbol equivalences found."
-msgstr "%lu s-au găsit echivalențe de amprentă/simbol."
+msgstr "%lu s-au găsit echivalențe de capsulă/simbol."
 
 #: cvpcb/auto_associate.cpp:264
 #, c-format
@@ -11642,8 +11640,8 @@ msgid ""
 "Component %s: footprint %s not found in any of the project footprint "
 "libraries."
 msgstr ""
-"Componenta %s: amprenta %s nu se găsește în niciuna dintre bibliotecile de "
-"amprente ale proiectului."
+"Componenta %s: capsula %s nu se găsește în niciuna dintre bibliotecile de "
+"capsule ale proiectului."
 
 #: cvpcb/auto_associate.cpp:309
 msgid "CvPcb Warning"
@@ -11661,37 +11659,36 @@ msgid ""
 "more information."
 msgstr ""
 "Ați rulat CvPcb pentru prima dată utilizând noua metodă de căutare a "
-"amprentelor prin intermediul tabelelor din biblioteca de amprente.\n"
+"capsulelor prin intermediul tabelelor din biblioteca de capsule.\n"
 "CvPcb fie a copiat tabelul implicit, fie a creat un tabel gol în dosarul "
 "dvs. de pornire.\n"
 "Trebuie mai întâi să configurați tabelul de biblioteci pentru a include "
-"toate bibliotecile de amprente care nu sunt incluse în KiCad.\n"
-"Pentru mai multe informații, consultați secțiunea \"Tabelul bibliotecii "
-"amprentelor\" din documentația CvPcb."
+"toate bibliotecile de capsule care nu sunt incluse în KiCad.\n"
+"Pentru mai multe informații, consultați secțiunea "
+"\"Tabelul bibliotecii de capsule\" din documentația CvPcb."
 
 #: cvpcb/cvpcb.cpp:206
 msgid ""
 "An error occurred attempting to load the global footprint library table."
 msgstr ""
-"S-a produs o eroare la încercarea de a încărca tabelul bibliotecii globale "
-"de amprentă."
+"S-a produs o eroare la încărcarea tabelul bibliotecii globale de capsule."
 
 #: cvpcb/cvpcb_mainframe.cpp:68 cvpcb/cvpcb_mainframe.cpp:83
 #: cvpcb/menubar.cpp:51
 msgid "Assign Footprints"
-msgstr "Atribuiți amprente"
+msgstr "Atribuire capsule"
 
 #: cvpcb/cvpcb_mainframe.cpp:118 pcbnew/dialogs/panel_fp_lib_table.cpp:1246
 msgid "Footprint Libraries"
-msgstr "Biblioteci de amprente"
+msgstr "Biblioteci de capsule"
 
 #: cvpcb/cvpcb_mainframe.cpp:122
 msgid "Symbol : Footprint Assignments"
-msgstr "Simbol : Atribuiri de amprente"
+msgstr "Simbol : Atribuiri de capsule"
 
 #: cvpcb/cvpcb_mainframe.cpp:125
 msgid "Filtered Footprints"
-msgstr "Amprente filtrate"
+msgstr "Capsule filtrate"
 
 #: cvpcb/cvpcb_mainframe.cpp:156
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:335
@@ -11700,17 +11697,16 @@ msgstr "Aplicați, salvați schema și continuați"
 
 #: cvpcb/cvpcb_mainframe.cpp:215
 msgid "Symbol to footprint changes are unsaved"
-msgstr "Modificările simbolului la amprentă sunt nesalvate"
+msgstr "Modificările de la simbolul la capsulă nu sunt salvate"
 
 #: cvpcb/cvpcb_mainframe.cpp:405
 msgid "Symbol to Footprint links have been modified. Save changes?"
-msgstr ""
-"A fost modificată atribuirea simbolurilor la amprente. Salvați modificările?"
+msgstr "Legăturile simbol către capsulă au fost modificate. Salvați?"
 
 #: cvpcb/cvpcb_mainframe.cpp:633 cvpcb/tools/cvpcb_association_tool.cpp:208
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' is not a valid footprint."
-msgstr "\"%s\" nu este o amprentă validă."
+msgstr "'%s' nu este o capsulă validă."
 
 #: cvpcb/cvpcb_mainframe.cpp:805
 msgid "Pin Count"
@@ -11730,9 +11726,9 @@ msgid "Filtered by %s"
 msgstr "Filtrat după %s"
 
 #: cvpcb/cvpcb_mainframe.cpp:839
-#, fuzzy, c-format
+#, c-format
 msgid ": %i matching footprints"
-msgstr "Atribuiți amprentă"
+msgstr ": %i capsule găsite"
 
 #: cvpcb/cvpcb_mainframe.cpp:851
 #, c-format
@@ -11752,8 +11748,7 @@ msgstr "Locația bibliotecii: necunoscută"
 msgid ""
 "No PCB footprint libraries are listed in the current footprint library table."
 msgstr ""
-"Nu există biblioteci de amprente PCB listate în tabelul actual al "
-"bibliotecilor de amprente."
+"Nu există biblioteci definite în tabelul actual al bibliotecilor de capsule."
 
 #: cvpcb/cvpcb_mainframe.cpp:899
 msgid "Configuration Error"
@@ -11783,7 +11778,7 @@ msgstr ""
 
 #: cvpcb/dialogs/dialog_config_equfiles.cpp:211
 msgid "Footprint Association File"
-msgstr "Fișier asociere amprentă"
+msgstr "Asociere fișier capsulă"
 
 #: cvpcb/dialogs/dialog_config_equfiles.cpp:250
 #, c-format
@@ -11791,9 +11786,8 @@ msgid "File '%s' already exists in list."
 msgstr "Fișierul '%s' există deja în listă."
 
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:26
-#, fuzzy
 msgid "Footprint association files:"
-msgstr "Fișier asociere amprentă"
+msgstr "Fișiere capsulă asociate:"
 
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:38
 #, fuzzy
@@ -11811,6 +11805,7 @@ msgid "Remove association file"
 msgstr "Ștergeți asocierea"
 
 #: cvpcb/dialogs/fp_conflict_assignment_selector.cpp:38
+#, fuzzy
 msgid "Ref"
 msgstr "Ref"
 
@@ -11905,9 +11900,8 @@ msgid "First check your footprint library table entries."
 msgstr "Mai întâi verificați intrările din tabelul bibliotecii de amprente."
 
 #: cvpcb/readwrite_dlgs.cpp:172
-#, fuzzy
 msgid "Problematic Footprint Library Tables"
-msgstr "Tabele de bibliotecă cu amprente problematice"
+msgstr "Tabelul bibliotecilor de capsule cu probleme"
 
 #: cvpcb/readwrite_dlgs.cpp:180
 msgid ""
@@ -14015,7 +14009,7 @@ msgstr "Bidirecțional"
 #: eeschema/pin_type.cpp:88 eeschema/sch_label.cpp:2224
 #: eeschema/sch_pin.cpp:1697
 msgid "Tri-state"
-msgstr "Tri-state"
+msgstr "Trei-stări"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:188
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:67
@@ -15198,9 +15192,8 @@ msgid "Import:"
 msgstr "Importați:"
 
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:48
-#, fuzzy
 msgid "Formatting preferences"
-msgstr "Preferințe"
+msgstr "Preferințe de formatare"
 
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:51
 msgid "Field name templates"
@@ -16843,12 +16836,8 @@ msgstr ""
 "%s"
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:246
-#, fuzzy
 msgid "Created project symbol library table.\n"
-msgstr ""
-"Eroare la încărcarea tabelului global al bibliotecii de simboluri.\n"
-"\n"
-"%s"
+msgstr "Creat tabelul cu biblioteca de simboluri ale proiectului.\n"
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:270
 #, fuzzy, c-format
@@ -18246,9 +18235,8 @@ msgid "Plotting to HPGL is no longer supported as of KiCad 10.0."
 msgstr ""
 
 #: eeschema/eeschema_jobs_handler.cpp:199
-#, fuzzy
 msgid "Failed to load schematic\n"
-msgstr "Salvarea copiei de rezervă în \"%s\" nu a reușit"
+msgstr "Încărcarea schemei a eșuat\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:265
 #: kicad/cli/command_pcb_export_hpgl.cpp:36
@@ -18268,9 +18256,8 @@ msgstr ""
 #: pcbnew/pcbnew_jobs_handler.cpp:1609 pcbnew/pcbnew_jobs_handler.cpp:1892
 #: pcbnew/pcbnew_jobs_handler.cpp:2030 pcbnew/pcbnew_jobs_handler.cpp:2226
 #: pcbnew/pcbnew_jobs_handler.cpp:2320
-#, fuzzy
 msgid "Failed to create output directory\n"
-msgstr "Nu s-a reușit eliminarea directorului %s"
+msgstr "Nu am putut crea directorul\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:388
 #: eeschema/eeschema_jobs_handler.cpp:510
@@ -18289,7 +18276,7 @@ msgstr ""
 #: eeschema/eeschema_jobs_handler.cpp:449
 #, fuzzy
 msgid "Unknown netlist format.\n"
-msgstr "Necunoscut"
+msgstr "Format netlist necunoscut\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:588
 #, fuzzy, c-format
@@ -18314,16 +18301,15 @@ msgid "Wrote bill of materials to '%s'."
 msgstr "Listă de materiale(BOM)"
 
 #: eeschema/eeschema_jobs_handler.cpp:874
-#, fuzzy, c-format
+#, c-format
 msgid "Plotting symbol '%s' unit %d to '%s'\n"
-msgstr "Schimbați simbolul %s din „%s” în „%s”"
+msgstr "Desenez simbolul '%s' elementul %d din '%s'\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:955
 #: eeschema/eeschema_jobs_handler.cpp:1055 pcbnew/pcbnew_jobs_handler.cpp:1811
 #: pcbnew/pcbnew_jobs_handler.cpp:1884
-#, fuzzy
 msgid "Unable to load library\n"
-msgstr "Nu se poate găsi secțiunea bibliotecii."
+msgstr "Biblioteca nu poate fi încărcată\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:968
 #: eeschema/symbol_editor/symbol_editor.cpp:1093
@@ -18346,32 +18332,27 @@ msgid ""
 msgstr ""
 
 #: eeschema/eeschema_jobs_handler.cpp:1065
-#, fuzzy
 msgid "Saving symbol library in updated format\n"
-msgstr "Identificator nevalabil al bibliotecii de simboluri"
+msgstr "Salvez biblioteca de simboluri în format actualizat\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:1085
-#, fuzzy
 msgid "Symbol library was not updated\n"
-msgstr "Identificatorul bibliotecii de simboluri %s nu este valid."
+msgstr "Biblioteca de simboluri nu a fost actualizată\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:1159 pcbnew/pcbnew_jobs_handler.cpp:2153
-#, fuzzy, c-format
+#, c-format
 msgid "Found %d violations\n"
-msgstr "Ignorați toate încălcările „%s”"
+msgstr "Am găsit %d contravenții\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:1173
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to save ERC report to %s\n"
-msgstr ""
-"Nu se poate analiza depozitul:\n"
-"\n"
-"%s"
+msgstr "Raportul ERC nu poate fi salvat în %s\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:1178
-#, fuzzy, c-format
+#, c-format
 msgid "Saved ERC Report to %s\n"
-msgstr "Salvați raportul în fișier"
+msgstr "Raportul ERC a fost salvat în %s\n"
 
 #: eeschema/eeschema_settings.cpp:71 eeschema/tools/sch_actions.cpp:1001
 #, fuzzy
@@ -18453,9 +18434,8 @@ msgstr "Conexiuni"
 #: eeschema/erc/erc.cpp:210 eeschema/erc/erc.cpp:229
 #: pcbnew/drc/drc_test_provider_misc.cpp:321
 #: pcbnew/drc/drc_test_provider_misc.cpp:341
-#, fuzzy
 msgid " (in drawing sheet)"
-msgstr "Trasarea foii de desen"
+msgstr " (în foaie)"
 
 #: eeschema/erc/erc.cpp:427
 #, fuzzy
@@ -19139,11 +19119,12 @@ msgid "Locked File Warning"
 msgstr "Eroare la deschiderea fișierului"
 
 #: eeschema/files-io.cpp:1092
-#, fuzzy
 msgid ""
 "You do not have write permissions to:\n"
 "\n"
-msgstr "Nu aveți permisiuni de scriere pentru folderul \"%s\"."
+msgstr ""
+"Nu este permisă scrierea pentru:\n"
+"\n"
 
 #: eeschema/files-io.cpp:1108
 msgid "Saving will overwrite existing files."
@@ -19634,9 +19615,9 @@ msgstr "Nu s-a reușit eliminarea directorului %s"
 
 #: eeschema/netlist_exporters/netlist_exporter_allegro.cpp:407
 #: pcbnew/pcbnew_jobs_handler.cpp:1353
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to create file '%s'.\n"
-msgstr "Nu s-a reușit crearea fișierului temporar '%s'."
+msgstr "Nu s-a reușit crearea fișierului '%s'.\n"
 
 #: eeschema/netlist_exporters/netlist_exporter_spice.cpp:454
 #, fuzzy, c-format
@@ -20504,11 +20485,16 @@ msgid ""
 msgstr ""
 
 #: eeschema/sch_io/cadstar/sch_io_cadstar_archive.cpp:238
+#, fuzzy
 msgid ""
 "Name of the footprint library related to the symbols in this library. You "
 "should create a separate entry for the CADSTAR PCB Archive (*.cpa) file in "
 "the footprint library tables. If none specified, 'cadstarpcblib' is assumed."
 msgstr ""
+"Numele bibliotecii de capsule legate de simbolurile din această bibliotecă. "
+"Ar trebui să creați o intrare separată pentru fișierul CADSTAR PCB Archive "
+"(*.cpa) în tabelele bibliotecii de capsule. Dacă nu este specificată nicio "
+"intrare, se presupune că este „cadstarpcblib”."
 
 #: eeschema/sch_io/cadstar/sch_io_cadstar_archive.cpp:285
 #, fuzzy, c-format
@@ -21052,7 +21038,7 @@ msgstr "Diametru"
 
 #: eeschema/sch_label.cpp:100
 msgid "Tri-State"
-msgstr "Tri-State"
+msgstr "Trei-stări"
 
 #: eeschema/sch_label.cpp:205
 #, fuzzy
@@ -21272,20 +21258,19 @@ msgid "Failed to write plot files to folder '%s'."
 msgstr "Nu s-au putut scrie fișierele de trasare în folderul „%s”."
 
 #: eeschema/sch_reference_list.cpp:677
-#, fuzzy, c-format
+#, c-format
 msgid "Item not annotated: %s%s (unit %d)"
-msgstr "Elementul nu este adnotat: %s%s (unitatea %d)\n"
+msgstr "Element ne-adnotat: %s%s ( %d)"
 
 #: eeschema/sch_reference_list.cpp:684
-#, fuzzy, c-format
+#, c-format
 msgid "Item not annotated: %s%s"
-msgstr "Elementul nu este adnotat: %s%s\n"
+msgstr "Elementul nu este adnotat: %s%s"
 
 #: eeschema/sch_reference_list.cpp:702
-#, fuzzy, c-format
+#, c-format
 msgid "Error: symbol %s%s%s (unit %d) exceeds units defined (%d)"
-msgstr ""
-"Eroare: simbolul %s%s%s (unitate %d) depășește unitățile definite (%d)\n"
+msgstr "Eroare: simbolul %s%s%s (%d) depășește unitățile definite (%d)"
 
 #: eeschema/sch_reference_list.cpp:741
 #, c-format
@@ -21293,9 +21278,9 @@ msgid "Duplicate items %s%s%s\n"
 msgstr "Elemente duplicate %s%s%s\n"
 
 #: eeschema/sch_reference_list.cpp:766
-#, fuzzy, c-format
+#, c-format
 msgid "Differing unit counts for item %s%s%s and %s%s%s\n"
-msgstr "Valori diferite pentru %s%d%s (%s) și %s%d%s (%s)"
+msgstr "Valori diferite pentru %s%s%s și %s%s%s\n"
 
 #: eeschema/sch_reference_list.cpp:782
 #, c-format
@@ -23156,9 +23141,8 @@ msgid "%s is not tunable"
 msgstr "%s nu a fost găsit"
 
 #: eeschema/sim/simulator_frame_ui.cpp:1763
-#, fuzzy
 msgid "Error: no current simulation.\n"
-msgstr "Trasați pagina curentă"
+msgstr "Eroare: nu există simulare.\n"
 
 #: eeschema/sim/simulator_frame_ui.cpp:1772
 #, fuzzy
@@ -23173,13 +23157,16 @@ msgstr "Eroare: tipul de simulare nu suportă trasare!\n"
 #: eeschema/sim/simulator_frame_ui.cpp:3157
 #: eeschema/sim/simulator_frame_ui.cpp:3272
 #: eeschema/sim/simulator_frame_ui.cpp:3315
-#, fuzzy
 msgid ""
 "\n"
 "\n"
 "Simulation results:\n"
 "\n"
-msgstr "Simulator..."
+msgstr ""
+"\n"
+"\n"
+"Rezultate simulare:\n"
+"\n"
 
 #: eeschema/sim/simulator_frame_ui_base.cpp:221
 #, fuzzy
@@ -23307,12 +23294,15 @@ msgid "Loading library %s..."
 msgstr "Se încarcă biblioteca %s..."
 
 #: eeschema/symbol_async_loader.cpp:122 eeschema/symbol_async_loader.cpp:130
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error loading symbol library %s.\n"
 "\n"
 "%s\n"
-msgstr "Eroare la încărcarea bibliotecii de simboluri '%s'."
+msgstr ""
+"Eroare la încărcarea bibliotecii de simboluri %s.\n"
+"\n"
+"%s\n"
 
 #: eeschema/symbol_checker.cpp:78
 #, c-format
@@ -23728,11 +23718,11 @@ msgid ""
 msgstr "Simbolul \"%s\" există deja în biblioteca \"%s\"."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1011
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The following symbols in the inheritance chain of '%s' already exist in "
 "library '%s':\n"
-msgstr "Simbolul \"%s\" există deja în biblioteca \"%s\"."
+msgstr "Simbolul \"%s\" există deja în biblioteca \"%s\":\n"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1018
 msgid ""
@@ -26054,9 +26044,9 @@ msgstr "Ștergeți adnotarea"
 #: eeschema/tools/sch_editor_control.cpp:2927
 #: pcbnew/tools/board_editor_control.cpp:602
 #: pcbnew/tools/footprint_editor_control.cpp:896
-#, fuzzy, c-format
+#, c-format
 msgid "%d duplicate IDs replaced.\n"
-msgstr "%d duplicate ale mărcilor temporale au fost găsite și înlocuite."
+msgstr "%d duplicate ale elementelor care au fost înlocuite.\n"
 
 #: eeschema/tools/sch_editor_control.cpp:2937
 #: pcbnew/tools/board_editor_control.cpp:617
@@ -27536,6 +27526,7 @@ msgid "Highlight items belonging to this net"
 msgstr "Evidențiați firele și pinii unei rețele"
 
 #: gerbview/toolbars_gerber.cpp:229 gerbview/toolbars_gerber.cpp:232
+#, fuzzy
 msgid "Attr:"
 msgstr "Attr:"
 
@@ -28088,9 +28079,8 @@ msgid "Specific footprint to export within the library"
 msgstr "Imposibil de exportat în mapă"
 
 #: kicad/cli/command_fp_export_svg.cpp:90
-#, fuzzy
 msgid "Footprint library does not exist or is not accessible\n"
-msgstr "Amprenta \"%s\" nu a fost găsită."
+msgstr "Biblioteca de capsule nu există sau nu este accesibilă.\n"
 
 #: kicad/cli/command_fp_upgrade.cpp:36
 msgid "Upgrades the footprint library to the current kicad version format"
@@ -28170,14 +28160,12 @@ msgstr ""
 #: kicad/cli/command_pcb_export_drill.cpp:155
 #: kicad/cli/command_pcb_export_dxf.cpp:168
 #: kicad/cli/command_pcb_export_pos.cpp:146 kicad/cli/command_sch_erc.cpp:133
-#, fuzzy
 msgid "Invalid units specified\n"
-msgstr "Prefix unitate nevalabil"
+msgstr "Unitatea de măsura specificată nu este cea corectă\n"
 
 #: kicad/cli/command_pcb_drc.cpp:161 kicad/cli/command_sch_erc.cpp:149
-#, fuzzy
 msgid "Invalid report format\n"
-msgstr "Nume de semnal nevalabil"
+msgstr "Formatul raportului este incorect\n"
 
 #: kicad/cli/command_pcb_export.h:33
 msgid "Export utilities (Gerbers, drill, position files, etc)"
@@ -28318,9 +28306,8 @@ msgid "Used with --models-dir to output relative paths in the resulting file"
 msgstr ""
 
 #: kicad/cli/command_pcb_export_3d.cpp:273
-#, fuzzy
 msgid "Invalid format specified\n"
-msgstr "Amprenta nevalabilă specificată"
+msgstr "Formatul specificat este incorect\n"
 
 #: kicad/cli/command_pcb_export_base.cpp:38
 msgid ""
@@ -28390,34 +28377,28 @@ msgid "Precision of Gerber coordinates (5 or 6)"
 msgstr ""
 
 #: kicad/cli/command_pcb_export_drill.cpp:122
-#, fuzzy
 msgid "Output must be a directory\n"
-msgstr "Trasați directorul de ieșire"
+msgstr "Definiți directorul\n"
 
 #: kicad/cli/command_pcb_export_drill.cpp:139
-#, fuzzy
 msgid "Invalid drill format\n"
-msgstr "Format de fișier de arhivă nevalabil."
+msgstr "Formatul de găurire nu este corect\n"
 
 #: kicad/cli/command_pcb_export_drill.cpp:179
-#, fuzzy
 msgid "Invalid zeros format specified\n"
-msgstr "Amprenta nevalabilă specificată"
+msgstr "Formatul zerourilor este incorect\n"
 
 #: kicad/cli/command_pcb_export_drill.cpp:196
-#, fuzzy
 msgid "Invalid oval drill format specified\n"
-msgstr "Amprenta nevalabilă specificată"
+msgstr "Formatul găurii ovale este incorect\n"
 
 #: kicad/cli/command_pcb_export_drill.cpp:224
-#, fuzzy
 msgid "Invalid map format specified\n"
-msgstr "Amprenta nevalabilă specificată"
+msgstr "Formatul de export selectat este incorect\n"
 
 #: kicad/cli/command_pcb_export_drill.cpp:240
-#, fuzzy
 msgid "Invalid origin mode specified\n"
-msgstr "Amprenta nevalabilă specificată"
+msgstr "Modul de origine specificat este incorect\n"
 
 #: kicad/cli/command_pcb_export_drill.cpp:253
 #: kicad/cli/command_pcb_export_gerber.cpp:150
@@ -28503,9 +28484,8 @@ msgstr ""
 #: kicad/cli/command_pcb_export_pos.cpp:101
 #: kicad/cli/command_pcb_export_ps.cpp:157
 #: kicad/cli/command_pcb_export_svg.cpp:181
-#, fuzzy
 msgid "Board file does not exist or is not accessible\n"
-msgstr "Amprenta \"%s\" nu a fost găsită."
+msgstr "Fișierul nu există sau nu este accesibil\n"
 
 #: kicad/cli/command_pcb_export_dxf.cpp:182
 #: kicad/cli/command_pcb_export_svg.cpp:193
@@ -28687,18 +28667,16 @@ msgstr "Include straturi"
 
 #: kicad/cli/command_pcb_export_pos.cpp:130
 #: kicad/cli/command_sch_export_netlist.cpp:95 kicad/cli/command_version.cpp:71
-#, fuzzy
 msgid "Invalid format\n"
-msgstr "Nume de semnal nevalabil"
+msgstr "Format incorect\n"
 
 #: kicad/cli/command_pcb_export_pos.cpp:156
 msgid "\"both\" not supported for Gerber format\n"
 msgstr ""
 
 #: kicad/cli/command_pcb_export_pos.cpp:172
-#, fuzzy
 msgid "Invalid side specified\n"
-msgstr "Amprenta nevalabilă specificată"
+msgstr "Fața specificată este incorectă\n"
 
 #: kicad/cli/command_pcb_export_ps.cpp:41
 #, fuzzy
@@ -28836,54 +28814,44 @@ msgid "Side lights elevation angle in degrees, range: 0-90"
 msgstr ""
 
 #: kicad/cli/command_pcb_render.cpp:334
-#, fuzzy
 msgid "Invalid preset\n"
-msgstr "Nume de semnal nevalabil"
+msgstr "Valorile predefinite sunt incorecte\n"
 
 #: kicad/cli/command_pcb_render.cpp:350
-#, fuzzy
 msgid "Invalid background\n"
-msgstr "Fundal"
+msgstr "Fundal incorect\n"
 
 #: kicad/cli/command_pcb_render.cpp:356
-#, fuzzy
 msgid "Invalid rotation format\n"
-msgstr "Nume de semnal nevalabil"
+msgstr "Formatul rotirii este incorect\n"
 
 #: kicad/cli/command_pcb_render.cpp:362
-#, fuzzy
 msgid "Invalid pan format\n"
-msgstr "Nume de semnal nevalabil"
+msgstr "Formatul mișcării este incorect\n"
 
 #: kicad/cli/command_pcb_render.cpp:368
-#, fuzzy
 msgid "Invalid pivot format\n"
-msgstr "Nume de semnal nevalabil"
+msgstr "Formatul pivotului este incorect\n"
 
 #: kicad/cli/command_pcb_render.cpp:375
-#, fuzzy
 msgid "Invalid light top intensity format\n"
-msgstr "Nume de semnal nevalabil"
+msgstr "Formatul intensității iluminării de sus este incorect\n"
 
 #: kicad/cli/command_pcb_render.cpp:382
-#, fuzzy
 msgid "Invalid light bottom intensity format\n"
-msgstr "Nume de semnal nevalabil"
+msgstr "Formatul intensității luminii de jos este incorect\n"
 
 #: kicad/cli/command_pcb_render.cpp:389
-#, fuzzy
 msgid "Invalid light side intensity format\n"
-msgstr "Nume de semnal nevalabil"
+msgstr "Formatul intensității iluminării laterale este incorect\n"
 
 #: kicad/cli/command_pcb_render.cpp:396
-#, fuzzy
 msgid "Invalid light camera intensity format\n"
-msgstr "Nume de semnal nevalabil"
+msgstr "Formatul intensității luminii aparatului foto este incorect\n"
 
 #: kicad/cli/command_pcb_render.cpp:411
-#, fuzzy
 msgid "Invalid image format\n"
-msgstr "Nume de semnal nevalabil"
+msgstr "Formatul imaginii este incorect\n"
 
 #: kicad/cli/command_sch.h:31
 #, fuzzy
@@ -28936,9 +28904,8 @@ msgstr "Listă de materiale(BOM)"
 #: kicad/cli/command_sch_export_netlist.cpp:56
 #: kicad/cli/command_sch_export_plot.cpp:134
 #: kicad/cli/command_sch_export_pythonbom.cpp:51
-#, fuzzy
 msgid "Schematic file does not exist or is not accessible\n"
-msgstr "Amprenta \"%s\" nu a fost găsită."
+msgstr "Fișierul de schemă electrică nu există sau nu este accesibil\n"
 
 #: kicad/cli/command_sch_export_netlist.cpp:35
 #, fuzzy
@@ -29027,9 +28994,8 @@ msgid "Include hidden fields"
 msgstr "Câmpuri foi"
 
 #: kicad/cli/command_sym_export_svg.cpp:84
-#, fuzzy
 msgid "Symbol file does not exist or is not accessible\n"
-msgstr "Amprenta \"%s\" nu a fost găsită."
+msgstr "Fișierul simbol nu există sau nu este accesibil.\n"
 
 #: kicad/cli/command_sym_upgrade.cpp:39
 msgid "Upgrades the symbol library to the current kicad version format"
@@ -29040,9 +29006,8 @@ msgid "Forces the symbol library to be resaved regardless of versioning"
 msgstr ""
 
 #: kicad/cli/command_sym_upgrade.cpp:59
-#, fuzzy
 msgid "Symbol library does not exist or is not accessible\n"
-msgstr "Amprenta \"%s\" nu a fost găsită."
+msgstr "Biblioteca simbolului nu există sau nu este accesibilă\n"
 
 #: kicad/cli/command_version.cpp:35
 msgid "Reports the version info in various formats"
@@ -30808,9 +30773,8 @@ msgid "Create (or open) a project to edit a pcb."
 msgstr "Creați un nou document în editor"
 
 #: kicad/tools/kicad_manager_control.cpp:846
-#, fuzzy
 msgid "Application failed to load:\n"
-msgstr "Nu s-a putut încărca biblioteca kiface \"%s\"."
+msgstr "Aplicația nu s-a putut încărca:\n"
 
 #: kicad/tools/kicad_manager_control.cpp:852
 #, fuzzy
@@ -33842,7 +33806,7 @@ msgstr "Se încarcă..."
 #: pcbnew/widgets/panel_selection_filter.cpp:200
 #: pcbnew/widgets/panel_selection_filter_base.cpp:45
 msgid "Pads"
-msgstr "Pad-uri"
+msgstr "Terminale"
 
 #: pcbnew/board.cpp:1854 pcbnew/dialogs/dialog_board_statistics.cpp:772
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:161
@@ -33868,7 +33832,7 @@ msgstr "Segment"
 #: pcbnew/board.cpp:1857 pcbnew/pcb_draw_panel_gal.cpp:720
 #, fuzzy
 msgid "Unrouted"
-msgstr "Nicio magistrală selectată"
+msgstr "Netrasate"
 
 #: pcbnew/board_connected_item.cpp:235
 #, fuzzy
@@ -34532,7 +34496,9 @@ msgstr ""
 msgid ""
 "\n"
 "%s footprints will be reannotated."
-msgstr "%s ID-ul amprentei \"%s\" nu este valid."
+msgstr ""
+"\n"
+"%s capsule re-adnotate."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:334
 #, c-format
@@ -34546,7 +34512,9 @@ msgstr ""
 msgid ""
 "\n"
 "Locked footprints will not be annotated"
-msgstr "ID-ul amprentei \"%s\" nu este valid."
+msgstr ""
+"\n"
+"Capsulele blocate nu vor fi adnotate"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:343
 #, c-format
@@ -34556,11 +34524,13 @@ msgid ""
 msgstr ""
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:352
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "\n"
 "Back footprints will start at %s."
-msgstr "Căile bibliotecilor de amprente KiCad"
+msgstr ""
+"\n"
+"Capsulele de pe spate încep la %s."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:353
 msgid "the last front footprint + 1"
@@ -34574,11 +34544,13 @@ msgid ""
 msgstr ""
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:367
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "\n"
 "Front footprints will have '%s' inserted as a prefix."
-msgstr "ID-ul amprentei \"%s\" nu este valid."
+msgstr ""
+"\n"
+"Capsulele de pe față vor avea prefixul '%s'."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:377
 #, c-format
@@ -34641,11 +34613,12 @@ msgid " will be ignored"
 msgstr " va fi ignorat"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:565
-#, fuzzy
 msgid ""
 "\n"
 "No footprints"
-msgstr "amprentă"
+msgstr ""
+"\n"
+"Nu sunt capsule"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:571
 #, c-format
@@ -34669,7 +34642,9 @@ msgstr "Indicatori de referință"
 msgid ""
 "\n"
 "Sort Code %d"
-msgstr "Cod D %d"
+msgstr ""
+"\n"
+"Sort Code %d"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:579
 #, c-format
@@ -34722,20 +34697,24 @@ msgid "Aborted: too many errors"
 msgstr "Întrerupt: prea multe erori"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:866
-#, fuzzy
 msgid ""
 "\n"
 "\n"
 "Front Footprints"
-msgstr "Amprente"
+msgstr ""
+"\n"
+"\n"
+"Capsule față"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:867
-#, fuzzy
 msgid ""
 "\n"
 "\n"
 "Back Footprints"
-msgstr "amprentă"
+msgstr ""
+"\n"
+"\n"
+"Capsule spate"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:932
 #, fuzzy
@@ -37429,9 +37408,8 @@ msgid "Cancel Export"
 msgstr "Distanţă"
 
 #: pcbnew/dialogs/dialog_export_step_process.cpp:257
-#, fuzzy
 msgid "Command line:\n"
-msgstr "Comandă:"
+msgstr "Comandă:\n"
 
 #: pcbnew/dialogs/dialog_export_step_process_base.h:46
 #, fuzzy
@@ -37498,9 +37476,8 @@ msgid "Use paths for model files in board VRML file relative to the VRML file"
 msgstr ""
 
 #: pcbnew/dialogs/dialog_export_vrml_base.h:66
-#, fuzzy
 msgid "VRML Export Options"
-msgstr "Exportul fișierului VRML a eșuat:\n"
+msgstr "Opțiuni export format VRML"
 
 #: pcbnew/dialogs/dialog_filter_selection_base.cpp:30
 #, fuzzy
@@ -37651,7 +37628,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_footprint_checker_base.h:69
 #: pcbnew/tools/pcb_actions.cpp:887
 msgid "Footprint Checker"
-msgstr "Verificator de amprentă"
+msgstr "Verificator de capsulă"
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:80
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:151
@@ -39010,18 +38987,16 @@ msgstr "amprentă"
 #, c-format
 msgid "Error occurred writing empty footprint library table '%s'."
 msgstr ""
-"S-a produs o eroare la scrierea tabelului gol al bibliotecii de amprente "
-"\"%s\"."
+"S-a produs o eroare la scrierea tabelului bibliotecii de capsule \"%s\"."
 
 #: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:73
-#, fuzzy
 msgid "Please select a footprint library table file."
-msgstr "Mai întâi verificați intrările din tabelul bibliotecii de amprente."
+msgstr "Mai întâi verificați intrările din tabelul bibliotecii de capsule."
 
 #: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:96
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' is not a valid footprint library table."
-msgstr "\"%s\" nu este o amprentă validă."
+msgstr "\"%s\" nu este o capsulă validă."
 
 #: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:107
 #, fuzzy, c-format
@@ -39035,11 +39010,15 @@ msgid ""
 "%s\n"
 "to:\n"
 "%s."
-msgstr "Nu se poate crea biblioteca de amprente '%s'."
+msgstr ""
+"Nu se poate copia biblioteca de capsule din:\n"
+"'%s'\n"
+"la:\n"
+"'%s'."
 
 #: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:135
 msgid "Error loading footprint library table."
-msgstr "Eroare la încărcarea tabelului bibliotecii de amprentă."
+msgstr "Eroare la încărcarea tabelului bibliotecii de capsule."
 
 #: pcbnew/dialogs/dialog_import_netlist.cpp:84
 msgid "Load and Test Netlist"
@@ -39073,9 +39052,8 @@ msgid "Reading netlist file '%s'.\n"
 msgstr "Citirea fișierului netlist \"%s\".\n"
 
 #: pcbnew/dialogs/dialog_import_netlist.cpp:246
-#, fuzzy
 msgid "Using reference designators to match symbols and footprints.\n"
-msgstr "Alocați indicativ de referință unici simbolurilor lipite"
+msgstr "Folosesc referințele pentru a găsi simboluri și capsule\n"
 
 #: pcbnew/dialogs/dialog_import_netlist.cpp:248
 msgid "Using tstamps (unique IDs) to match symbols and footprints.\n"
@@ -42836,14 +42814,13 @@ msgstr "Lățimea minimă a traseului"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:77
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:82
-#, fuzzy
 msgid ""
 "Minimum distance between openings in the solder mask.\n"
 "Pad openings closer than this distance will be plotted as a single opening."
 msgstr ""
-"Distanța minimă dintre deschiderile din masca de sudură.  Deschiderile pad "
-"mai apropiate decât această distanță vor fi reprezentate ca o singură "
-"deschidere."
+"Distanța minimă dintre deschiderile din masca de lipire.\n"
+"Deschiderile terminalelor mai apropiate decât această distanță vor fi "
+"reprezentate ca o singură deschidere."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:90
 #, fuzzy
@@ -44119,9 +44096,8 @@ msgid "Items shorting two nets"
 msgstr ""
 
 #: pcbnew/drc/drc_item.cpp:60
-#, fuzzy
 msgid "Items not allowed"
-msgstr "Elementul nu este adnotat: %s%s\n"
+msgstr "Elementele nu sunt permise"
 
 #: pcbnew/drc/drc_item.cpp:64
 msgid "Text (or dimension) on Edge.Cuts layer"
@@ -45093,9 +45069,8 @@ msgid "No project loaded, skipping library parity tests."
 msgstr ""
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:828
-#, fuzzy
 msgid "Loading footprint library table..."
-msgstr "Eroare la încărcarea tabelului bibliotecii de amprentă."
+msgstr "Se încarcă tabelul bibliotecii de capsule..."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:838
 #, fuzzy
@@ -45511,38 +45486,44 @@ msgid ""
 msgstr ""
 
 #: pcbnew/exporters/step/exporter_step.cpp:810
-#, fuzzy
 msgid "Could not create PCB solid model.\n"
-msgstr "Nu s-au putut scrie fișierele de trasare în folderul „%s”."
+msgstr "Nu am putut crea modelul 3D al circuitului.\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:864
-#, fuzzy
 msgid ""
 "\n"
 "** Error building STEP board model. Export aborted. **\n"
-msgstr "Eroare la scrierea fișierului '%s'."
+msgstr ""
+"\n"
+"** Eroare la construirea modelului STEP. Export eșuat. **\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:889
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "\n"
 "** Error writing %s file. **\n"
-msgstr "Eroare la scrierea fișierului '%s'."
+msgstr ""
+"\n"
+"** Eroare la scrierea fișierului: %s **\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:906
 #: pcbnew/exporters/step/exporter_step.cpp:914
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "\n"
 "** Error exporting %s file. Export aborted. **\n"
-msgstr "Eroare la scrierea fișierului '%s'."
+msgstr ""
+"\n"
+"** Eroare la exportul fișierului: %s. Export eșuat. **\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:923
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "\n"
 "Export time %.3f s\n"
-msgstr "Timp de reîncărcare %.3f s"
+msgstr ""
+"\n"
+"Timpul de export %.3f s\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:649
 msgid "** Got problems while fusing shapes **\n"
@@ -45550,15 +45531,13 @@ msgstr ""
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:653
 #: pcbnew/exporters/step/step_pcb_model.cpp:2053
-#, fuzzy
 msgid "Errors:\n"
-msgstr "Erori"
+msgstr "Erori:\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:663
 #: pcbnew/exporters/step/step_pcb_model.cpp:2063
-#, fuzzy
 msgid "Warnings:\n"
-msgstr "Avertizări"
+msgstr "Avertizări:\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:684
 msgid "** ShapeUpgrade_UnifySameDomain produced a null shape **\n"
@@ -45574,24 +45553,24 @@ msgid "Could not add shape (%d points) to copper layer %s.\n"
 msgstr ""
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1207
-#, fuzzy, c-format
+#, c-format
 msgid "No model defined for %s.\n"
-msgstr "Nicio amprentă definită pentru simbol %s."
+msgstr "Nu a fost definit modelul pentru simbolul %s.\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1222
-#, fuzzy, c-format
+#, c-format
 msgid "No model for filename '%s'.\n"
-msgstr "Simbolul \"%s\" există deja în biblioteca \"%s\"."
+msgstr "Nu există model în fișierul '%s'.\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1233
-#, fuzzy, c-format
+#, c-format
 msgid "No location data for filename '%s'.\n"
-msgstr "Exportați amprenta în fișier"
+msgstr "Nu există date de localizare în fișierul '%s'.\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1243
-#, fuzzy, c-format
+#, c-format
 msgid "Could not add component with filename '%s'.\n"
-msgstr "Nu s-a putut găsi fișierul de bibliotecă %s."
+msgstr "Nu pot adăuga componentă în fișierul '%s'.\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1413
 #, c-format
@@ -45605,9 +45584,8 @@ msgstr ""
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1440
 #: pcbnew/exporters/step/step_pcb_model.cpp:1830
-#, fuzzy
 msgid "Failed to create a prismatic shape\n"
-msgstr "Nu s-a reușit crearea fișierului temporar '%s'."
+msgstr "Nu am putut crea forma\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1512
 #, c-format
@@ -45665,18 +45643,17 @@ msgstr ""
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1931
 #: pcbnew/exporters/step/step_pcb_model.cpp:1948
-#, fuzzy
 msgid "OCC error creating main outline.\n"
-msgstr "Eroare la citirea fișierului."
+msgstr "Eroare la crearea conturului principal în format OCC\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1957
 msgid "OCC error creating hole in main outline.\n"
 msgstr ""
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2000
-#, fuzzy, c-format
+#, c-format
 msgid "Subtracting holes for %s\n"
-msgstr "Construiți stratul Tehnic %d"
+msgstr "Adaug găuri la forma: %s\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2044
 #, c-format
@@ -45703,9 +45680,10 @@ msgstr "treceri metalizate (via)"
 #: pcbnew/exporters/step/step_pcb_model.cpp:3167
 #: pcbnew/exporters/step/step_pcb_model.cpp:3241
 #: pcbnew/exporters/step/step_pcb_model.cpp:3309
-#, fuzzy, c-format
+#, c-format
 msgid "No valid PCB assembly; cannot create output file '%s'.\n"
-msgstr "Nu se poate crea directorul de ieșire '%s'."
+msgstr ""
+"Ansamblul de circuit imprimat este incorect; nu pot crea fișierul '%s'.\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2389
 msgid "Failed to set STEP product name, but will attempt to continue."
@@ -45719,19 +45697,19 @@ msgstr ""
 #: pcbnew/exporters/step/step_pcb_model.cpp:3218
 #: pcbnew/exporters/step/step_pcb_model.cpp:3290
 #: pcbnew/exporters/step/step_pcb_model.cpp:3339
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot rename temporary file '%s' to '%s'.\n"
-msgstr "Nu se poate redenumi fișierul temporar \"%s\" în \"%s"
+msgstr "Nu se poate redenumi fișierul temporar \"%s\" în \"%s\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2889
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot identify actual file type for '%s'.\n"
-msgstr "Nu se poate deschide fișierul '%s'."
+msgstr "Nu pot ideintifica tipul fișierului '%s'.\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2899
-#, fuzzy, c-format
+#, c-format
 msgid "Could not transfer model data from file '%s'.\n"
-msgstr "Nu s-a reușit crearea dosarului \"%s\"."
+msgstr "Nu pot transfera datele modelului din fișierul '%s'.\n"
 
 #: pcbnew/files.cpp:153
 #, fuzzy
@@ -45840,7 +45818,7 @@ msgstr "Eroare la încărcarea amprentei %s din biblioteca \"%s\"."
 #: pcbnew/files.cpp:893
 msgid "Error saving project specific footprint library table."
 msgstr ""
-"Eroare la salvarea tabelului bibliotecii de amprente specifice proiectului."
+"Eroare la salvarea tabelului bibliotecii de capsule specifice proiectului."
 
 #: pcbnew/files.cpp:993 pcbnew/files.cpp:1134 pcbnew/files.cpp:1311
 #: pcbnew/footprint_libraries_utils.cpp:269
@@ -46136,9 +46114,8 @@ msgid "Use Manage Footprint Libraries to edit the configuration."
 msgstr "Biblioteca \"%s\" nu se află în tabelul de biblioteci de amprentă."
 
 #: pcbnew/footprint_editor_utils.cpp:345
-#, fuzzy
 msgid "Library not found in footprint library table."
-msgstr "Biblioteca \"%s\" nu se află în tabelul de biblioteci de amprentă."
+msgstr "Biblioteca \"%s\" nu se află în tabelul de biblioteci de capsule."
 
 #: pcbnew/footprint_editor_utils.cpp:357
 #, fuzzy
@@ -46150,18 +46127,17 @@ msgid "Loading footprints..."
 msgstr "Încărcarea amprentelor..."
 
 #: pcbnew/footprint_libraries_utils.cpp:64
-#, fuzzy
 msgid ""
 "Writing/modifying legacy libraries (.mod files) is not allowed\n"
 "Please save the current library to the new .pretty format\n"
 "and update your footprint lib table\n"
 "to save your footprint (a .kicad_mod file) in the .pretty library folder"
 msgstr ""
-"Nu este permisă scrierea/modificarea bibliotecilor în format vechi "
-"(extensia .mod)\n"
+"Nu este permisă scrierea/modificarea bibliotecilor în format vechi (extensia "
+".mod)\n"
 "Salvează biblioteca curentă în noul format .pretty și actualizează tabelul "
 "cu biblioteci \n"
-"de amprentă pentru a salva amprenta (extensie .kicad_mod) \n"
+"de capsule pentru a salva capsula (extensie .kicad_mod) \n"
 "în directorul de biblioteci .pretty"
 
 #: pcbnew/footprint_libraries_utils.cpp:70
@@ -46174,7 +46150,7 @@ msgstr ""
 "Nu este permisă modificarea bibliotecilor în format\n"
 "vechi (extensia .mod). Salvează biblioteca curentă în\n"
 "noul format .pretty și actualizează tabelul cu biblioteci\n"
-"de amprentă înainte de a șterge o amprentă"
+"de capsule înainte de a șterge o capsulă"
 
 #: pcbnew/footprint_libraries_utils.cpp:123
 #, fuzzy
@@ -47359,8 +47335,8 @@ msgstr "%s ID-ul amprentei \"%s\" nu este valid."
 msgid ""
 "%s footprint '%s' not found in any libraries in the footprint library table."
 msgstr ""
-"%s amprenta \"%s\" nu se găsește în nicio bibliotecă din tabelul de "
-"biblioteci de amprente."
+"%s capsula \"%s\" nu se găsește în nicio bibliotecă din tabelul de "
+"biblioteci de capsule."
 
 #: pcbnew/netlist_reader/netlist_reader.cpp:195
 #, fuzzy, c-format
@@ -49930,18 +49906,17 @@ msgid ""
 "An error occurred attempting to load the global footprint library table.\n"
 "Please edit this global footprint library table in Preferences menu."
 msgstr ""
-"S-a produs o eroare la încercarea de a încărca tabelul bibliotecii globale "
-"de amprentă."
+"S-a produs o eroare la încărcarea tabelul bibliotecii globale de capsule.\n"
+"Editați tabelul bibliotecii globale de capsule din meniul Preferințe."
 
 #: pcbnew/pcbnew_jobs_handler.cpp:361
-#, fuzzy
 msgid "Failed to load board\n"
-msgstr "Nu s-a putut încărca biblioteca kiface \"%s\"."
+msgstr "Nu s-a putut încărca circuitul\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:426
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid layer name \"%s\"\n"
-msgstr "Nume de semnal nevalabil"
+msgstr "Numele stratului este incorect \"%s\"\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:467 pcbnew/pcbnew_jobs_handler.cpp:544
 #: pcbnew/pcbnew_jobs_handler.cpp:592
@@ -49977,48 +49952,44 @@ msgstr "Eroare la citirea fișierului."
 #: pcbnew/pcbnew_jobs_handler.cpp:860 pcbnew/pcbnew_jobs_handler.cpp:921
 #: pcbnew/pcbnew_jobs_handler.cpp:1006 pcbnew/pcbnew_jobs_handler.cpp:1091
 #: pcbnew/pcbnew_jobs_handler.cpp:1390
-#, fuzzy
 msgid "At least one layer must be specified\n"
-msgstr "Nicio magistrală selectată"
+msgstr "Trebuie specificat cel puțin un strat\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:1287 pcbnew/pcbnew_jobs_handler.cpp:1443
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to plot to '%s'.\n"
-msgstr "Nu s-a putut încărca biblioteca kiface \"%s\"."
+msgstr "Nu s-a putut desena în '%s'.\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:1359
 msgid "Successfully created genCAD file\n"
 msgstr ""
 
 #: pcbnew/pcbnew_jobs_handler.cpp:1652 pcbnew/pcbnew_jobs_handler.cpp:1725
-#, fuzzy, c-format
+#, c-format
 msgid "Wrote front position data to '%s'.\n"
-msgstr "Exportați amprenta în fișier"
+msgstr "Am scris datele de poziționare ale feței în fișierul: '%s'\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:1670 pcbnew/pcbnew_jobs_handler.cpp:1749
-#, fuzzy, c-format
+#, c-format
 msgid "Wrote back position data to '%s'.\n"
-msgstr "Nu se poate crea directorul de ieșire '%s'."
+msgstr "Am scris datele de poziționare ale spatelui în fișierul: '%s'\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:1699
-#, fuzzy, c-format
+#, c-format
 msgid "Wrote position data to '%s'.\n"
-msgstr "Exportați amprenta în fișier"
+msgstr "Am scris datele de poziționare în fișierul: '%s'\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:1797
-#, fuzzy
 msgid "Footprint library path does not exist or is not accessible\n"
-msgstr "Amprenta \"%s\" nu a fost găsită."
+msgstr "Calea către biblioteca de capsule nu există sau nu este accesibilă.\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:1837
-#, fuzzy
 msgid "Unable to save library\n"
-msgstr "Nu se poate găsi secțiunea bibliotecii."
+msgstr "Nu pot salva biblioteca\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:1843
-#, fuzzy
 msgid "Footprint library was not updated\n"
-msgstr "Amprenta \"%s\" nu a fost găsită."
+msgstr "Biblioteca de capsule nu a fost actualizată.\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:1918
 #, fuzzy
@@ -50028,9 +49999,9 @@ msgstr ""
 "predefinite."
 
 #: pcbnew/pcbnew_jobs_handler.cpp:1960
-#, fuzzy, c-format
+#, c-format
 msgid "Plotting footprint '%s' to '%s'\n"
-msgstr "Schimbați simbolul %s din „%s” în „%s”"
+msgstr "Desenez capsula: '%s' în fișierul: '%s'\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:1989
 #, fuzzy
@@ -50043,18 +50014,19 @@ msgid "Schematic parity tests require a fully annotated schematic."
 msgstr "Simulatorul necesită o schemă complet adnotată."
 
 #: pcbnew/pcbnew_jobs_handler.cpp:2080 pcbnew/pcbnew_jobs_handler.cpp:2113
-#, fuzzy
 msgid "Failed to fetch schematic netlist for parity tests.\n"
-msgstr "Salvarea copiei de rezervă în \"%s\" nu a reușit"
+msgstr ""
+"Nu am reușit să încarc rețeaua electrică din schemă pentru teste de paritate."
+"\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:2135 pcbnew/tools/drc_tool.cpp:200
 msgid "DRC"
 msgstr "DRC"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:2156
-#, fuzzy, c-format
+#, c-format
 msgid "Found %d unconnected items\n"
-msgstr "Elemente neconectate (%s)"
+msgstr "Elemente neconectate: %d\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:2162
 #, c-format
@@ -50062,27 +50034,22 @@ msgid "Found %d schematic parity issues\n"
 msgstr ""
 
 #: pcbnew/pcbnew_jobs_handler.cpp:2178
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to save DRC report to %s\n"
-msgstr ""
-"Nu se poate analiza depozitul:\n"
-"\n"
-"%s"
+msgstr "Nu pot salva raportul DRC în fișierul: %s\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:2183
-#, fuzzy, c-format
+#, c-format
 msgid "Saved DRC Report to %s\n"
-msgstr "Salvați raportul în fișier"
+msgstr "Raportul DRC este salvat în: %s\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:2330
-#, fuzzy
 msgid "Successfully created IPC-D-356 file\n"
-msgstr "Eroare la citirea fișierului."
+msgstr "Fișierul IPC-D-356 a fost creat.\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:2335
-#, fuzzy
 msgid "Failed to create IPC-D-356 file\n"
-msgstr "Nu s-a reușit crearea fișierului temporar '%s'."
+msgstr "Nu am putut crea fișierul IPC-D-356\n"
 
 #: pcbnew/pcbnew_printout.cpp:124
 #, fuzzy
@@ -52460,7 +52427,7 @@ msgstr "Vizualizator de amprente"
 
 #: pcbnew/tools/pcb_actions.cpp:888
 msgid "Show the footprint checker window"
-msgstr "Afișați fereastra de verificare a amprentei"
+msgstr "Afișați fereastra de verificare a capsulei"
 
 #: pcbnew/tools/pcb_actions.cpp:894
 #, fuzzy
