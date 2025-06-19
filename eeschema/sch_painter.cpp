@@ -1364,7 +1364,10 @@ void SCH_PAINTER::draw( const SCH_LINE* aLine, int aLayer )
     bool highlightNetclassColors = false;
     double             highlightAlpha = 0.6;
     EESCHEMA_SETTINGS* eeschemaCfg = eeconfig();
-    double             hopOverScale = aLine->Schematic()->Settings().m_HopOverScale;
+    double             hopOverScale = 0.0;
+
+    if( aLine->Schematic() )    // Can be nullptr when run from the color selection panel
+        aLine->Schematic()->Settings().m_HopOverScale;
 
     if( eeschemaCfg )
     {
