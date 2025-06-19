@@ -30,7 +30,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-06-08 17:03+0300\n"
-"PO-Revision-Date: 2025-06-14 00:01+0000\n"
+"PO-Revision-Date: 2025-06-19 12:01+0000\n"
 "Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v9/de/>\n"
 "Language: de\n"
@@ -38,7 +38,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.12-dev\n"
+"X-Generator: Weblate 5.12.1\n"
 "X-Poedit-Basepath: ../../../../../../mnt/kicad\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -35377,7 +35377,7 @@ msgstr "Gebrückte Lötstoppöffnungen zwischen Pads erlauben"
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:994
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:147
 msgid "Solder paste absolute clearance:"
-msgstr "Freiraum (absolut) für Lötpaste:"
+msgstr "Lötpastenfreiraum (absolut):"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:309
 msgid ""
@@ -35401,7 +35401,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1007
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:162
 msgid "Solder paste relative clearance:"
-msgstr "Freiraumverhältnis (relativ) für Lötpaste:"
+msgstr "Lötpastenfreiraum (relativ):"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:322
 #, c-format
@@ -36220,7 +36220,6 @@ msgid "Set Teardrops"
 msgstr "Teardrops setzen"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:141
-#, fuzzy
 msgid "Text items"
 msgstr "Textelemente"
 
@@ -36316,9 +36315,8 @@ msgid "PCB text items"
 msgstr "Platinen-Textelemente"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:45
-#, fuzzy
 msgid "Other footprint fields"
-msgstr "Weitere Footprint-Textelemente"
+msgstr "Andere Footprint-Felder"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:46
 msgid "Footprint fields that are not the reference designator or value field"
@@ -36326,41 +36324,36 @@ msgstr ""
 "Footprint-Felder, die nicht der Referenzbezeichner oder der Bauteilwert sind"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:50
-#, fuzzy
 msgid "PCB dimensions"
-msgstr "Platinen-Bemaßungselemente"
+msgstr "Platinenbemaßungen"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:53
 msgid "Footprint graphic items"
 msgstr "Footprint-Grafikelemente"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:59
-#, fuzzy
 msgid "Footprint text items"
-msgstr "Weitere Footprint-Textelemente"
+msgstr "Footprint-Textelemente"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:60
 msgid "Footprint text items not associated with a field"
 msgstr "Footprint-Textelemente, die keinem Feld zugeordnet sind"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:67
-#, fuzzy
 msgid "Footprint dimensions"
-msgstr "Footprint-Bemaßungselemente"
+msgstr "Footprint-Bemaßungen"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:85
-#, fuzzy
 msgid "By layer:"
-msgstr "Auf Lage:"
+msgstr "Nach Lage:"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:97
 msgid "By parent reference designator:"
 msgstr "Nach übergeordnetem Referenzbezeichner filtern:"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:103
-#, fuzzy
 msgid "By parent footprint library link:"
-msgstr "Neue Footprintbliotheks-ID:"
+msgstr "Nach Footprintbliotheksverknüpfung:"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:124
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:133
@@ -37826,9 +37819,8 @@ msgstr ""
 "Verwenden Sie 4, wenn Sie sich nicht sicher sind."
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:386
-#, fuzzy
 msgid "Fit page to board"
-msgstr "Konnte Grafik nicht in die Zwischenablage kopieren"
+msgstr "Seite auf Platine anpassen"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:412
 msgid "Generate property popups for front footprints"
@@ -38942,15 +38934,12 @@ msgid "Unused Pads"
 msgstr "Unbenutzte Pads"
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:39
-#, fuzzy
 msgid "Update Footprints"
-msgstr "Footprint aktualisieren"
+msgstr "Footprints aktualisieren"
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:41
-#, fuzzy
 msgid "Replace footprints with those specified by symbols"
-msgstr ""
-"Footprint Zuordnungen mit denen aus der Netzliste spezifizierten austauschen"
+msgstr "Footprints durch die in den Symbolen spezifizierten Footprints ersetzen"
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:43
 msgid ""
@@ -38976,14 +38965,12 @@ msgstr ""
 "einem Schaltplansymbol verknüpft sind."
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:52
-#, fuzzy
 msgid "Override locks"
 msgstr "Sperren ignorieren"
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:64
-#, fuzzy
 msgid "Update footprint fields from symbols"
-msgstr "Aktualisiere Footprint %s von '%s' auf '%s'"
+msgstr "Footprintfelder aus Symbolen aktualisieren"
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:68
 msgid "Remove footprint fields not found in symbols"
@@ -42271,9 +42258,8 @@ msgid "(%s clearance %s; actual < 0)"
 msgstr "(%s Freiraum %s; tatsächlich <0)"
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:1423
-#, fuzzy
 msgid "(intersecting zones must have distinct priorities)"
-msgstr "Bogen muss durch drei unterschiedliche Punkte bestimmt sein"
+msgstr "(sich überschneidende Zonen müssen unterschiedliche Prioritäten haben)"
 
 #: pcbnew/drc/drc_test_provider_courtyard_clearance.cpp:85
 msgid "Checking footprint courtyard definitions..."
@@ -43139,9 +43125,9 @@ msgid "No model for filename '%s'.\n"
 msgstr "Kein Modell namens \"%s\" in \"%s\"."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1187
-#, fuzzy, c-format
+#, c-format
 msgid "No location data for filename '%s'.\n"
-msgstr "Platzierungsdaten nach \"%s\" geschrieben.\n"
+msgstr "Kein Speicherort für Dateiname \"%s\".\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1197
 #, c-format
@@ -43203,13 +43189,13 @@ msgstr ""
 "z: %g; Begrenzungsrahmen: %s\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1675
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Wire self-interference check failed\n"
 "z: %g; bounding box: %s\n"
 msgstr ""
-"\n"
 "Prüfung auf Selbststörung der Verbindung fehlgeschlagen\n"
+"z: %g; Begrenzungsrahmen: %s\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1697
 msgid "Using non-simplified polygon.\n"
@@ -52466,9 +52452,9 @@ msgid "Zone %s %s, priority %d"
 msgstr "Zonen-Prioritätsebene:"
 
 #: pcbnew/zone.cpp:1135
-#, fuzzy, c-format
+#, c-format
 msgid "Zone '%s' %s %s, priority %d"
-msgstr "%s, %s, %s, oder %s"
+msgstr "Zone \"%s\" %s %s, Priorität %d"
 
 #: pcbnew/zone.cpp:1981
 msgid "Keepout"
