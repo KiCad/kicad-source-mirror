@@ -31,7 +31,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-06-08 17:02+0300\n"
-"PO-Revision-Date: 2025-06-14 00:01+0000\n"
+"PO-Revision-Date: 2025-06-19 12:01+0000\n"
 "Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
@@ -40,7 +40,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.12-dev\n"
+"X-Generator: Weblate 5.12.1\n"
 "X-Poedit-Basepath: ../../../../../../mnt/kicad\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -35338,9 +35338,8 @@ msgid "Update/reset fabrication attributes"
 msgstr "Fertigungsattribute aktualisieren/zurücksetzen"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:114
-#, fuzzy
 msgid "Update/reset clearance overrides"
-msgstr "Freiraum"
+msgstr "Freiraumüberschreibungen aktualisieren/zurücksetzen"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:117
 msgid "Update/reset 3D models"
@@ -36135,9 +36134,8 @@ msgstr ""
 "\"Gesperrte Elemente\" im Auswahlfilter aktiviert ist."
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:357
-#, fuzzy
 msgid "all pads with duplicate numbers"
-msgstr "Pads mit mehrfach vergebenen Nummern sind Jumper"
+msgstr "Pads mit mehrfach vergebenen Nummern"
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:458
 #, c-format
@@ -36318,7 +36316,7 @@ msgstr "Gebrückte Lötstoppöffnungen zwischen Pads erlauben"
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1023
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:150
 msgid "Solder paste absolute clearance:"
-msgstr "Freiraum (absolut) für Lötpaste:"
+msgstr "Lötpastenfreiraum (absolut):"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:304
 msgid ""
@@ -36342,7 +36340,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1036
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:165
 msgid "Solder paste relative clearance:"
-msgstr "Freiraumverhältnis (relativ) für Lötpaste:"
+msgstr "Lötpastenfreiraum (relativ):"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:317
 #, c-format
@@ -36413,9 +36411,8 @@ msgid "Jumper groups:"
 msgstr "Jumpergruppen:"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:387
-#, fuzzy
 msgid "Clearance Overrides && Pad Connections"
-msgstr "Freiraum"
+msgstr "Freiraumüberschreibungen && Padverbindungen"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:400
 msgid ""
@@ -36594,14 +36591,12 @@ msgid "Pad groups allowed to short different nets:"
 msgstr "Padgruppen, die unterschiedliche Netze kurzschließen dürfen:"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:420
-#, fuzzy
 msgid "Jumpers"
-msgstr "Überbrückung"
+msgstr "Jumper"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:422
-#, fuzzy
 msgid "All pads with duplicate numbers are jumpers"
-msgstr "Pads mit mehrfach vergebenen Nummern sind Jumper"
+msgstr "Alle Pads mit mehrfach vergebenen Nummern sind Jumper"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:423
 msgid ""
@@ -37228,7 +37223,6 @@ msgid "Set Teardrops"
 msgstr "Teardrops setzen"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:141
-#, fuzzy
 msgid "Text items"
 msgstr "Textelemente"
 
@@ -37320,9 +37314,8 @@ msgid "PCB text items"
 msgstr "Platinen-Textelemente"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:45
-#, fuzzy
 msgid "Other footprint fields"
-msgstr "Weitere Footprint-Textelemente"
+msgstr "Andere Footprint-Felder"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:46
 msgid "Footprint fields that are not the reference designator or value field"
@@ -37330,37 +37323,32 @@ msgstr ""
 "Footprint-Felder, die nicht der Referenzbezeichner oder der Bauteilwert sind"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:50
-#, fuzzy
 msgid "PCB dimensions"
-msgstr "Platinen-Bemaßungselemente"
+msgstr "Platinenbemaßungen"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:53
 msgid "Footprint graphic items"
 msgstr "Footprint-Grafikelemente"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:59
-#, fuzzy
 msgid "Footprint text items"
-msgstr "Weitere Footprint-Textelemente"
+msgstr "Footprint-Textelemente"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:60
 msgid "Footprint text items not associated with a field"
 msgstr "Footprint-Textelemente, die keinem Feld zugeordnet sind"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:67
-#, fuzzy
 msgid "Footprint dimensions"
-msgstr "Footprint-Bemaßungselemente"
+msgstr "Footprint-Bemaßungen"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:85
-#, fuzzy
 msgid "By layer:"
-msgstr "Auf Lage:"
+msgstr "Nach Lage:"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:103
-#, fuzzy
 msgid "By parent footprint library link:"
-msgstr "Neue Footprintbliotheks-ID:"
+msgstr "Nach Footprintbliotheksverknüpfung:"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:124
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:133
@@ -37606,9 +37594,8 @@ msgid "Component classes"
 msgstr "Bauteilklassen"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:81
-#, fuzzy
 msgid "Time domain parameters"
-msgstr "Schriftfeld-Parameter"
+msgstr "Zeitbereichsparameter"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:84
 msgid "Custom rules"
@@ -38167,9 +38154,8 @@ msgid "Specify pad to die length"
 msgstr "Pad-zu-Die-Länge festlegen"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:507
-#, fuzzy
 msgid "Specify pad to die delay"
-msgstr "Pad-zu-Die-Länge festlegen"
+msgstr "Pad-zu-Die-Verzögerung festlegen"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:542
 msgid ""
@@ -38803,9 +38789,8 @@ msgstr ""
 "Verwenden Sie 4, wenn Sie sich nicht sicher sind."
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:357
-#, fuzzy
 msgid "Fit page to board"
-msgstr "Konnte Grafik nicht in die Zwischenablage kopieren"
+msgstr "Seite auf Platine anpassen"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:383
 msgid "Generate property popups for front footprints"
@@ -39525,9 +39510,8 @@ msgstr "Lagen tauschen"
 #: pcbnew/dialogs/dialog_tablecell_properties_base.cpp:208
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:208
 #: pcbnew/dialogs/dialog_textbox_properties_base.cpp:197
-#, fuzzy
 msgid "Adjust the text thickness"
-msgstr "Dielektrische Dicke einstellen"
+msgstr "Schriftstärke einstellen"
 
 #: pcbnew/dialogs/dialog_target_properties.cpp:109
 msgid "Edit Alignment Target"
@@ -39869,9 +39853,8 @@ msgid "Target Length:"
 msgstr "Ziellänge:"
 
 #: pcbnew/dialogs/dialog_tuning_pattern_properties_base.cpp:58
-#, fuzzy
 msgid "Target Delay:"
-msgstr "Zielfläche:"
+msgstr "Zielverzögerung:"
 
 #: pcbnew/dialogs/dialog_tuning_pattern_properties_base.cpp:72
 msgid "Override custom rules"
@@ -39964,15 +39947,12 @@ msgid "Unused Pads"
 msgstr "Unbenutzte Pads"
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:42
-#, fuzzy
 msgid "Update Footprints"
-msgstr "Footprint aktualisieren"
+msgstr "Footprints aktualisieren"
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:44
-#, fuzzy
 msgid "Replace footprints with those specified by symbols"
-msgstr ""
-"Footprint Zuordnungen mit denen aus der Netzliste spezifizierten austauschen"
+msgstr "Footprints durch die in den Symbolen spezifizierten Footprints ersetzen"
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:46
 msgid ""
@@ -39998,14 +39978,12 @@ msgstr ""
 "einem Schaltplansymbol verknüpft sind."
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:55
-#, fuzzy
 msgid "Override locks"
 msgstr "Sperren ignorieren"
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:67
-#, fuzzy
 msgid "Update footprint fields from symbols"
-msgstr "Aktualisiere Footprint %s von '%s' auf '%s'"
+msgstr "Footprintfelder aus Symbolen aktualisieren"
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:71
 msgid "Remove footprint fields not found in symbols"
@@ -40078,14 +40056,12 @@ msgid "Component Class:"
 msgstr "Bauteilklasse:"
 
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:118
-#, fuzzy
 msgid "Match All"
-msgstr "Alles aktualisieren"
+msgstr "Übereinstimmung mit allen/-m"
 
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:122
-#, fuzzy
 msgid "Match Any"
-msgstr "Zugeordnete Lagen"
+msgstr "Übereinstimmung mit mind. einem"
 
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:294
 msgid "Footprint:"
@@ -42463,34 +42439,28 @@ msgstr "Verzögerungsprofile"
 
 #: pcbnew/dialogs/panel_setup_time_domain_parameters_base.cpp:50
 #: pcbnew/dialogs/panel_setup_time_domain_parameters_base.cpp:111
-#, fuzzy
 msgid "Profile Name"
-msgstr "Dateiname"
+msgstr "Profilname"
 
 #: pcbnew/dialogs/panel_setup_time_domain_parameters_base.cpp:92
-#, fuzzy
 msgid "Via Delay Overrides"
-msgstr "Raster-Überschreibungen"
+msgstr "Viaverzögerung-Überschreibungen"
 
 #: pcbnew/dialogs/panel_setup_time_domain_parameters_base.cpp:112
-#, fuzzy
 msgid "Signal Layer From"
-msgstr "Bestückungsdrucklagen"
+msgstr "Signallage von"
 
 #: pcbnew/dialogs/panel_setup_time_domain_parameters_base.cpp:113
-#, fuzzy
 msgid "Signal Layer To"
-msgstr "Bestückungsdrucklagen"
+msgstr "Signallage bis"
 
 #: pcbnew/dialogs/panel_setup_time_domain_parameters_base.cpp:114
-#, fuzzy
 msgid "Via Layer From"
-msgstr "KiCad-Lage"
+msgstr "Vialage von"
 
 #: pcbnew/dialogs/panel_setup_time_domain_parameters_base.cpp:115
-#, fuzzy
 msgid "Via Layer To"
-msgstr "Lage Oben"
+msgstr "Vialage bis"
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias.cpp:373
 msgid "No via hole size defined."
@@ -42672,19 +42642,19 @@ msgid "%s min thickness: %s."
 msgstr "%s Mindestdicke: %s."
 
 #: pcbnew/drc/drc_engine.cpp:970
-#, fuzzy, c-format
+#, c-format
 msgid "Local override on %s; solder mask expansion: %s."
-msgstr "Lokale Überschreibung auf %s; Freiraum: %s."
+msgstr "Lokale Überschreibung auf %s; Lötstoppmaskenerweiterung: %s."
 
 #: pcbnew/drc/drc_engine.cpp:988
-#, fuzzy, c-format
+#, c-format
 msgid "Local override on %s; solder paste absolute clearance: %s."
-msgstr "Lokale Überschreibung auf %s; Freiraum: %s."
+msgstr "Lokale Überschreibung auf %s; Lötpastenfreiraum (absolut): %s."
 
 #: pcbnew/drc/drc_engine.cpp:1006
-#, fuzzy, c-format
+#, c-format
 msgid "Local override on %s; solder paste relative clearance: %s."
-msgstr "Lokale Überschreibung auf %s; Freiraum: %s."
+msgstr "Lokale Überschreibung auf %s; Lötpastenfreiraum (relativ): %s."
 
 #: pcbnew/drc/drc_engine.cpp:1018
 #, c-format
@@ -42730,9 +42700,9 @@ msgid "Checking %s thermal spoke width: %s."
 msgstr "Prüfe %s thermische Speichenbreite: %s."
 
 #: pcbnew/drc/drc_engine.cpp:1082
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s solder mask expansion: %s."
-msgstr "Lochgröße %s wird geprüft: min %s."
+msgstr "Lötstoppmaskenerweiterung %s wird geprüft: %s."
 
 #: pcbnew/drc/drc_engine.cpp:1088
 #, c-format
@@ -42905,7 +42875,6 @@ msgstr "Ableiten von Symbol: %s."
 
 #: pcbnew/drc/drc_engine.cpp:1493 pcbnew/drc/drc_engine.cpp:1500
 #: pcbnew/drc/drc_engine.cpp:1507
-#, fuzzy
 msgid "board setup"
 msgstr "Platinenkonfiguration"
 
@@ -43315,14 +43284,13 @@ msgid "Missing component class name."
 msgstr "Fehlender Bauteilklassenname."
 
 #: pcbnew/drc/drc_rule_parser.cpp:381
-#, fuzzy, c-format
+#, c-format
 msgid "Could not parse expression '%s'."
-msgstr "Konnte Zeichenblatt von \"%s\" nicht importieren."
+msgstr "Konnte Ausdruck \"%s\" nicht verarbeiten."
 
 #: pcbnew/drc/drc_rule_parser.cpp:434
-#, fuzzy
 msgid "Time based units not allowed for constraint type."
-msgstr "within_diff_pairs-Option ist für den Einschränkungstyp ungültig."
+msgstr "Zeiteinheiten sind für diesen Einschränkungstyp ungültig."
 
 #: pcbnew/drc/drc_rule_parser.cpp:438
 msgid "Mixed units for constraint values."
@@ -43469,9 +43437,8 @@ msgid "(%s clearance %s; actual < 0)"
 msgstr "(%s Freiraum %s; tatsächlich <0)"
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:1421
-#, fuzzy
 msgid "(intersecting zones must have distinct priorities)"
-msgstr "Bogen muss durch drei unterschiedliche Punkte bestimmt sein"
+msgstr "(sich überschneidende Zonen müssen unterschiedliche Prioritäten haben)"
 
 #: pcbnew/drc/drc_test_provider_courtyard_clearance.cpp:85
 msgid "Checking footprint courtyard definitions..."
@@ -43712,7 +43679,7 @@ msgid "%s keep-out property differs."
 msgstr "%s Sperrflächeneigenschaft weicht ab."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:518
-#, fuzzy, c-format
+#, c-format
 msgid "%s keep out zone fill setting differs."
 msgstr "%s Einstellung \"Zonenfüllungen aussparen\" weicht ab."
 
@@ -44148,9 +44115,9 @@ msgid "(layer %s; %d spokes connected to isolated island)"
 msgstr "(Lage %s; %d Speichen zu isolierter Insel verbunden)"
 
 #: pcbnew/drc/drc_test_provider_zone_connections.cpp:224
-#, fuzzy, c-format
+#, c-format
 msgid "(layer %s; %s custom spoke count %d; actual %d)"
-msgstr "(Lage %s; %s min. Speichenanzahl %d; tatsächlich %d)"
+msgstr "(Lage %s; %s benutzerdef. Speichenanzahl %d; tatsächlich %d)"
 
 #: pcbnew/drc/drc_test_provider_zone_connections.cpp:290
 #, c-format
@@ -44346,9 +44313,9 @@ msgid "No model for filename '%s'.\n"
 msgstr "Kein Modell für Dateiname \"%s\".\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1233
-#, fuzzy, c-format
+#, c-format
 msgid "No location data for filename '%s'.\n"
-msgstr "Platzierungsdaten nach \"%s\" geschrieben.\n"
+msgstr "Kein Speicherort für Dateiname \"%s\".\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1243
 #, c-format
