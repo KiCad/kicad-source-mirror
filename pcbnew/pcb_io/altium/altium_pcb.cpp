@@ -1786,14 +1786,12 @@ void ALTIUM_PCB::HelperParseDimensions6Leader( const ADIMENSION6& aElem )
 
             if( dirVec.x != 0 || dirVec.y != 0 )
             {
-                double   scaling = dirVec.EuclideanNorm() / aElem.arrowsize;
-                VECTOR2I arrVec =
-                        VECTOR2I( KiROUND( dirVec.x / scaling ), KiROUND( dirVec.y / scaling ) );
+                double   scaling = (double) dirVec.EuclideanNorm() / aElem.arrowsize;
+                VECTOR2I arrVec = VECTOR2I( KiROUND( dirVec.x / scaling ), KiROUND( dirVec.y / scaling ) );
                 RotatePoint( arrVec, EDA_ANGLE( 20.0, DEGREES_T ) );
 
                 {
-                    std::unique_ptr<PCB_SHAPE> shape1 =
-                            std::make_unique<PCB_SHAPE>( m_board, SHAPE_T::SEGMENT );
+                    std::unique_ptr<PCB_SHAPE> shape1 = std::make_unique<PCB_SHAPE>( m_board, SHAPE_T::SEGMENT );
 
                     shape1->SetLayer( klayer );
                     shape1->SetStroke( STROKE_PARAMS( aElem.linewidth, LINE_STYLE::SOLID ) );
@@ -1806,8 +1804,7 @@ void ALTIUM_PCB::HelperParseDimensions6Leader( const ADIMENSION6& aElem )
                 RotatePoint( arrVec, EDA_ANGLE( -40.0, DEGREES_T ) );
 
                 {
-                    std::unique_ptr<PCB_SHAPE> shape2 =
-                            std::make_unique<PCB_SHAPE>( m_board, SHAPE_T::SEGMENT );
+                    std::unique_ptr<PCB_SHAPE> shape2 = std::make_unique<PCB_SHAPE>( m_board, SHAPE_T::SEGMENT );
 
                     shape2->SetLayer( klayer );
                     shape2->SetStroke( STROKE_PARAMS( aElem.linewidth, LINE_STYLE::SOLID ) );
@@ -1928,9 +1925,8 @@ void ALTIUM_PCB::ParseDimensions6Data( const ALTIUM_PCB_COMPOUND_FILE&     aAlti
         case ALTIUM_DIMENSION_KIND::ANGULAR:
             if( m_reporter )
             {
-                m_reporter->Report(
-                        wxString::Format( _( "Ignored Angular dimension (not yet supported)." ) ),
-                        RPT_SEVERITY_INFO );
+                m_reporter->Report( wxString::Format( _( "Ignored Angular dimension (not yet supported)." ) ),
+                                    RPT_SEVERITY_INFO );
             }
             break;
         case ALTIUM_DIMENSION_KIND::RADIAL:
@@ -1942,18 +1938,16 @@ void ALTIUM_PCB::ParseDimensions6Data( const ALTIUM_PCB_COMPOUND_FILE&     aAlti
         case ALTIUM_DIMENSION_KIND::DATUM:
             if( m_reporter )
             {
-                m_reporter->Report(
-                        wxString::Format( _( "Ignored Datum dimension (not yet supported)." ) ),
-                        RPT_SEVERITY_INFO );
+                m_reporter->Report( wxString::Format( _( "Ignored Datum dimension (not yet supported)." ) ),
+                                    RPT_SEVERITY_INFO );
             }
             // HelperParseDimensions6Datum( elem );
             break;
         case ALTIUM_DIMENSION_KIND::BASELINE:
             if( m_reporter )
             {
-                m_reporter->Report(
-                        wxString::Format( _( "Ignored Baseline dimension (not yet supported)." ) ),
-                        RPT_SEVERITY_INFO );
+                m_reporter->Report( wxString::Format( _( "Ignored Baseline dimension (not yet supported)." ) ),
+                                    RPT_SEVERITY_INFO );
             }
             break;
         case ALTIUM_DIMENSION_KIND::CENTER:
@@ -1962,17 +1956,15 @@ void ALTIUM_PCB::ParseDimensions6Data( const ALTIUM_PCB_COMPOUND_FILE&     aAlti
         case ALTIUM_DIMENSION_KIND::LINEAR_DIAMETER:
             if( m_reporter )
             {
-                m_reporter->Report(
-                        wxString::Format( _( "Ignored Linear dimension (not yet supported)." ) ),
-                        RPT_SEVERITY_INFO );
+                m_reporter->Report( wxString::Format( _( "Ignored Linear dimension (not yet supported)." ) ),
+                                    RPT_SEVERITY_INFO );
             }
             break;
         case ALTIUM_DIMENSION_KIND::RADIAL_DIAMETER:
             if( m_reporter )
             {
-                m_reporter->Report(
-                        wxString::Format( _( "Ignored Radial dimension (not yet supported)." ) ),
-                        RPT_SEVERITY_INFO );
+                m_reporter->Report( wxString::Format( _( "Ignored Radial dimension (not yet supported)." ) ),
+                                    RPT_SEVERITY_INFO );
             }
             break;
         default:
@@ -2014,10 +2006,9 @@ void ALTIUM_PCB::ParseModelsData( const ALTIUM_PCB_COMPOUND_FILE&     aAltiumPcb
         std::vector<std::string> stepPath = aRootDir;
         stepPath.emplace_back( std::to_string( idx ) );
 
-        bool           validName = !elem.name.IsEmpty() && elem.name.IsAscii() &&
-                                   wxString::npos == elem.name.find_first_of( invalidChars );
-        wxString       storageName = !validName ? wxString::Format( wxT( "model_%d" ), idx )
-                                                : elem.name;
+        bool     validName = !elem.name.IsEmpty() && elem.name.IsAscii()
+                                && wxString::npos == elem.name.find_first_of( invalidChars );
+        wxString storageName = validName ? elem.name : wxString::Format( wxT( "model_%d" ), idx );
 
         idx++;
 
@@ -2028,8 +2019,7 @@ void ALTIUM_PCB::ParseModelsData( const ALTIUM_PCB_COMPOUND_FILE&     aAltiumPcb
             if( m_reporter )
             {
                 wxString msg;
-                msg.Printf( _( "File not found: '%s'. 3D-model not imported." ),
-                            FormatPath( stepPath ) );
+                msg.Printf( _( "File not found: '%s'. 3D-model not imported." ), FormatPath( stepPath ) );
                 m_reporter->Report( msg, RPT_SEVERITY_ERROR );
             }
 
