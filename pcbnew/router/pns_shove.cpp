@@ -2471,7 +2471,7 @@ SHOVE::SHOVE_STATUS SHOVE::Run()
         {
             // Create a new NODE to store this version of the world
             assert( headLineEntry.origHead->LinkCount() == 0 );
-            m_currentNode->Add( *headLineEntry.origHead );
+            m_currentNode->Add( *headLineEntry.origHead, true );
 
             //nodeStats( Dbg(), m_currentNode, "add-head" );
 
