@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-08 17:03+0300\n"
+"POT-Creation-Date: 2025-06-20 23:57+0300\n"
 "PO-Revision-Date: 2025-06-11 07:01+0000\n"
 "Last-Translator: தமிழ்நேரம் <anishprabu.t@gmail.com>\n"
 "Language-Team: Tamil <https://hosted.weblate.org/projects/kicad/v9/ta/>\n"
@@ -2131,8 +2131,7 @@ msgstr "வடிவமைப்பு தொகுதி கோப்புற�
 #: common/design_block_io.cpp:393
 #, c-format
 msgid "Schematic file '%s' could not be saved as design block at '%s'."
-msgstr ""
-"திட்டவட்டமான கோப்பை '%s' இல் வடிவமைப்புத் '%s' தொகுதியாகச் சேமிக்க முடியவில்லை."
+msgstr "திட்டவட்டமான கோப்பை '%s' இல் வடிவமைப்புத் '%s' தொகுதியாகச் சேமிக்க முடியவில்லை."
 
 #: common/design_block_io.cpp:427
 #, c-format
@@ -5852,45 +5851,45 @@ msgstr "பக்க வரம்புகள்"
 msgid "clipboard"
 msgstr "இடைநிலைப் பலகை"
 
-#: common/dsnlexer.cpp:331
+#: common/dsnlexer.cpp:337
 #, c-format
 msgid "Expecting %s"
 msgstr "%s எதிர்பார்க்கிறது"
 
-#: common/dsnlexer.cpp:339
+#: common/dsnlexer.cpp:345
 #, c-format
 msgid "Expecting '%s'"
 msgstr "'%s' என்று எதிர்பார்க்கிறது"
 
-#: common/dsnlexer.cpp:347
+#: common/dsnlexer.cpp:353
 #, c-format
 msgid "Unexpected %s"
 msgstr "எதிர்பாராத %s"
 
-#: common/dsnlexer.cpp:355
+#: common/dsnlexer.cpp:361
 #, c-format
 msgid "%s is a duplicate"
 msgstr "%s ஒரு நகல்"
 
-#: common/dsnlexer.cpp:363
+#: common/dsnlexer.cpp:369
 #, c-format
 msgid "Unexpected '%s'"
 msgstr "எதிர்பாராத '%s'"
 
-#: common/dsnlexer.cpp:422
+#: common/dsnlexer.cpp:428
 #, c-format
 msgid "need a number for '%s'"
 msgstr "'%s' க்கு ஒரு எண் தேவை"
 
-#: common/dsnlexer.cpp:715 common/dsnlexer.cpp:776
+#: common/dsnlexer.cpp:721 common/dsnlexer.cpp:782
 msgid "Un-terminated delimited string"
 msgstr "உறுதிப்படுத்தப்படாத வரையறுக்கப்பட்ட சரம்"
 
-#: common/dsnlexer.cpp:737
+#: common/dsnlexer.cpp:743
 msgid "String delimiter must be a single character of ', \", or $"
 msgstr "சரம் டிலிமிட்டர் ', \"அல்லது $ இன் ஒற்றை எழுத்தாக இருக்க வேண்டும்"
 
-#: common/dsnlexer.cpp:859
+#: common/dsnlexer.cpp:865
 #, c-format
 msgid ""
 "Invalid floating point number in\n"
@@ -5903,7 +5902,7 @@ msgstr ""
 "வரி: %d \n"
 "ஆஃப்செட்: %d"
 
-#: common/dsnlexer.cpp:868
+#: common/dsnlexer.cpp:874
 #, c-format
 msgid ""
 "Missing floating point number in\n"
@@ -5916,7 +5915,7 @@ msgstr ""
 "வரி: %d \n"
 "ஆஃப்செட்: %d"
 
-#: common/dsnlexer.cpp:895
+#: common/dsnlexer.cpp:901
 msgid "Invalid floating point number"
 msgstr "தவறான மிதக்கும் புள்ளி எண்"
 
@@ -7261,7 +7260,7 @@ msgstr "பிழை இல்லை"
 
 #: common/grid_tricks.cpp:361 common/tool/actions.cpp:214
 #: common/widgets/listbox_tricks.cpp:52 eeschema/tools/sch_actions.cpp:249
-#: pcbnew/dialogs/panel_setup_rules.cpp:130 pcbnew/tools/edit_tool.cpp:2651
+#: pcbnew/dialogs/panel_setup_rules.cpp:130 pcbnew/tools/edit_tool.cpp:2668
 msgid "Cut"
 msgstr "வெட்டு"
 
@@ -7295,7 +7294,7 @@ msgstr "தற்போதைய கலத்தில் இடைநிலை�
 #: common/widgets/listbox_tricks.cpp:54 eeschema/tools/sch_edit_tool.cpp:1719
 #: eeschema/tools/symbol_editor_edit_tool.cpp:478
 #: kicad/dialogs/panel_jobset.cpp:394 kicad/project_tree_pane.cpp:986
-#: pcbnew/dialogs/panel_setup_rules.cpp:133 pcbnew/tools/edit_tool.cpp:2664
+#: pcbnew/dialogs/panel_setup_rules.cpp:133 pcbnew/tools/edit_tool.cpp:2681
 msgid "Delete"
 msgstr "நீக்கு"
 
@@ -8830,7 +8829,7 @@ msgstr "கிளிப்போர்டிலிருந்து விர�
 
 #: common/tool/actions.cpp:278 common/widgets/listbox_tricks.cpp:53
 #: eeschema/tools/symbol_editor_edit_tool.cpp:1103
-#: pcbnew/tools/edit_tool.cpp:2996
+#: pcbnew/tools/edit_tool.cpp:3013
 msgid "Duplicate"
 msgstr "நகல்"
 
@@ -8851,7 +8850,7 @@ msgid "Delete clicked items"
 msgstr "சொடுக்கு செய்யப்பட்ட உருப்படிகளை நீக்கு"
 
 #: common/tool/actions.cpp:307 eeschema/tools/sch_edit_tool.cpp:2885
-#: pcbnew/tools/edit_tool.cpp:2306
+#: pcbnew/tools/edit_tool.cpp:2323
 msgid "Left Justify"
 msgstr "இடது நியாயப்படுத்தவும்"
 
@@ -8860,7 +8859,7 @@ msgid "Left-justify fields and text items"
 msgstr "புலங்கள் மற்றும் உரை உருப்படிகளை இடது நியாயப்படுத்தவும்"
 
 #: common/tool/actions.cpp:314 eeschema/tools/sch_edit_tool.cpp:2887
-#: pcbnew/tools/edit_tool.cpp:2308
+#: pcbnew/tools/edit_tool.cpp:2325
 msgid "Center Justify"
 msgstr "நடுவண் நியாயப்படுத்துங்கள்"
 
@@ -8869,7 +8868,7 @@ msgid "Center-justify fields and text items"
 msgstr "சென்டர்-நியாயமான புலங்கள் மற்றும் உரை உருப்படிகள்"
 
 #: common/tool/actions.cpp:321 eeschema/tools/sch_edit_tool.cpp:2889
-#: pcbnew/tools/edit_tool.cpp:2310
+#: pcbnew/tools/edit_tool.cpp:2327
 msgid "Right Justify"
 msgstr "சரியாக நியாயப்படுத்துங்கள்"
 
@@ -8887,7 +8886,7 @@ msgstr "அனைத்தையும் சரக்கு"
 
 #: common/tool/actions.cpp:342 eeschema/tools/sch_edit_tool.cpp:3141
 #: eeschema/tools/symbol_editor_edit_tool.cpp:1216
-#: pcbnew/tools/edit_tool.cpp:3101
+#: pcbnew/tools/edit_tool.cpp:3118
 msgid "Increment"
 msgstr "அதிகரிப்பு"
 
@@ -10918,8 +10917,7 @@ msgstr "பச் நுழைவுக்கு இணைக்கப்பட�
 msgid ""
 "Hierarchical label \"%s\" in root sheet cannot be connected to non-existent "
 "parent sheet"
-msgstr ""
-"ரூட் தாளில் உள்ள படிநிலை சிட்டை \"%s\" இல்லாத பெற்றோர் தாளுடன் இணைக்க முடியாது"
+msgstr "ரூட் தாளில் உள்ள படிநிலை சிட்டை \"%s\" இல்லாத பெற்றோர் தாளுடன் இணைக்க முடியாது"
 
 #: eeschema/connection_graph.cpp:4257
 #, c-format
@@ -18900,7 +18898,7 @@ msgstr ""
 "'%s' என்பது ஈகிள் பைனரி வடிவ கோப்பு; ஈகிள் எக்ச்எம்எல்-வடிவ கோப்புகளை மட்டுமே இறக்குமதி "
 "செய்ய முடியும்."
 
-#: eeschema/sch_io/eagle/sch_io_eagle.cpp:980
+#: eeschema/sch_io/eagle/sch_io_eagle.cpp:984
 #, c-format
 msgid ""
 "No module instance '%s' found in schematic file:\n"
@@ -18909,7 +18907,7 @@ msgstr ""
 "திட்டக் கோப்பில் '%s' இல்லை தொகுதி நிகழ்வு இல்லை:\n"
 " %s"
 
-#: eeschema/sch_io/eagle/sch_io_eagle.cpp:1728
+#: eeschema/sch_io/eagle/sch_io_eagle.cpp:1732
 #, c-format
 msgid ""
 "Error parsing Eagle file. Could not find '%s' instance but it is referenced "
@@ -18918,7 +18916,7 @@ msgstr ""
 "ஈகிள் கோப்பை பாகுபடுத்துவதில் பிழை. '%s' உதாரணத்தைக் கண்டுபிடிக்க முடியவில்லை, ஆனால் "
 "இது திட்டவட்டத்தில் குறிப்பிடப்பட்டுள்ளது."
 
-#: eeschema/sch_io/eagle/sch_io_eagle.cpp:1804
+#: eeschema/sch_io/eagle/sch_io_eagle.cpp:1808
 #, c-format
 msgid "Could not find '%s' in the imported library."
 msgstr "இறக்குமதி செய்யப்பட்ட நூலகத்தில் '%s' கண்டுபிடிக்க முடியவில்லை."
@@ -20145,8 +20143,8 @@ msgstr ""
 "<Td> & nbsp; <br> <samp> Mem.d1, Mem.d2, Mem.latch </amp> </td> \n"
 "</tr> \n"
 "<tr> \n"
-"<td> & nbsp; <br> <samp> mem {d _ {[1..2]} ~ {net1 net2 ...}} </samp> </td> "
-"\n"
+"<td> & nbsp; <br> <samp> mem {d _ {[1..2]} ~ {net1 net2 ...}} </samp> </"
+"td> \n"
 "<Td> </td> \n"
 "<td> <samp> & nbsp; & nbsp; & nbsp; & nbsp; & nbsp; <sub> & nbsp; </sub> & "
 "nbsp; ! & nbsp; & nbsp; & nbsp; & nbsp; <u> & nbsp; & nbsp; & nbsp; & nbsp; "
@@ -21525,8 +21523,8 @@ msgid ""
 "<b>Duplicate pin %s</b> %s at location <b>(%s, %s)</b> conflicts with pin "
 "%s%s at location <b>(%s, %s)</b> in units %s and %s."
 msgstr ""
-"<b>நகல் முள் %s</b>%s இருப்பிடத்தில் <b> (%s, %s) </b> இடத்தில் முள் %s %s உடன் மோதல்கள்"
-" <b> (%s, %s) </b> அலகுகள் %s மற்றும் %s இல்."
+"<b>நகல் முள் %s</b>%s இருப்பிடத்தில் <b> (%s, %s) </b> இடத்தில் முள் %s %s உடன் "
+"மோதல்கள் <b> (%s, %s) </b> அலகுகள் %s மற்றும் %s இல்."
 
 #: eeschema/symbol_checker.cpp:180
 #, c-format
@@ -21539,18 +21537,15 @@ msgstr ""
 
 #: eeschema/symbol_checker.cpp:208
 msgid "<b>A Power Symbol should have only one unit</b><br><br>"
-msgstr ""
-"<b> ஒரு ஆற்றல் சின்னத்திற்கு ஒரே ஒரு அலகு மட்டுமே இருக்க வேண்டும் </b><br><br>"
+msgstr "<b> ஒரு ஆற்றல் சின்னத்திற்கு ஒரே ஒரு அலகு மட்டுமே இருக்க வேண்டும் </b><br><br>"
 
 #: eeschema/symbol_checker.cpp:214
 msgid "<b>A Power Symbol should not have DeMorgan variants</b><br><br>"
-msgstr ""
-"<b> ஒரு ஆற்றல் சின்னத்தில் டெமோர்கன் வகைகள் இருக்கக் கூடாது </b><br><br>"
+msgstr "<b> ஒரு ஆற்றல் சின்னத்தில் டெமோர்கன் வகைகள் இருக்கக் கூடாது </b><br><br>"
 
 #: eeschema/symbol_checker.cpp:220
 msgid "<b>A Power Symbol should have only one pin</b><br><br>"
-msgstr ""
-"<b> ஒரு ஆற்றல் சின்னத்திற்கு ஒரே ஒரு முள் மட்டுமே இருக்க வேண்டும் </b><br><br>"
+msgstr "<b> ஒரு ஆற்றல் சின்னத்திற்கு ஒரே ஒரு முள் மட்டுமே இருக்க வேண்டும் </b><br><br>"
 
 #: eeschema/symbol_checker.cpp:229
 msgid ""
@@ -21565,8 +21560,8 @@ msgid ""
 "<b>Suspicious Power Symbol</b><br>Invisible input power pins are no longer "
 "required<br><br>"
 msgstr ""
-"<b> சந்தேகத்திற்கிடமான ஆற்றல் அடையாளம் </b><br> கண்ணுக்குத் தெரியாத உள்ளீட்டு ஆற்றல் ஊசிகளை"
-" இனி தேவையில்லை <br><br>"
+"<b> சந்தேகத்திற்கிடமான ஆற்றல் அடையாளம் </b><br> கண்ணுக்குத் தெரியாத உள்ளீட்டு ஆற்றல் "
+"ஊசிகளை இனி தேவையில்லை <br><br>"
 
 #: eeschema/symbol_checker.cpp:261
 #, c-format
@@ -23816,13 +23811,13 @@ msgstr "மாற்றவும்"
 
 #: eeschema/tools/sch_edit_tool.cpp:1052
 #: eeschema/tools/symbol_editor_edit_tool.cpp:210
-#: pcbnew/tools/edit_tool.cpp:2066
+#: pcbnew/tools/edit_tool.cpp:2083
 msgid "Rotate"
 msgstr "சுழற்றுங்கள்"
 
 #: eeschema/tools/sch_edit_tool.cpp:1250 gerbview/gerber_draw_item.cpp:731
 #: pcbnew/pcb_tablecell.cpp:109 pcbnew/pcb_text.cpp:290
-#: pcbnew/pcb_textbox.cpp:473 pcbnew/tools/edit_tool.cpp:2233
+#: pcbnew/pcb_textbox.cpp:473 pcbnew/tools/edit_tool.cpp:2250
 msgid "Mirror"
 msgstr "கண்ணாடி"
 
@@ -24166,12 +24161,12 @@ msgid "Place Pin"
 msgstr "இடத்தை வைக்கவும்"
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:470
-#: pcbnew/tools/edit_tool.cpp:2656
+#: pcbnew/tools/edit_tool.cpp:2673
 msgid "Hide Field"
 msgstr "புலம் மறைக்க"
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:472
-#: pcbnew/tools/edit_tool.cpp:2658
+#: pcbnew/tools/edit_tool.cpp:2675
 msgid "Hide Fields"
 msgstr "புலங்களை மறைக்கவும்"
 
@@ -26013,8 +26008,7 @@ msgstr "செல்லுபடியாகும் விருப்பங�
 
 #: kicad/cli/command_pcb_export_drill.cpp:63
 msgid "Valid options are: decimal,suppressleading,suppresstrailing,keep."
-msgstr ""
-"செல்லுபடியாகும் விருப்பங்கள்: தசம, முன்அடக்குமுறை, பின்அடக்குமுறை, வைத்திருங்கள்."
+msgstr "செல்லுபடியாகும் விருப்பங்கள்: தசம, முன்அடக்குமுறை, பின்அடக்குமுறை, வைத்திருங்கள்."
 
 #: kicad/cli/command_pcb_export_drill.cpp:68
 msgid "Valid options are: route,alternate."
@@ -28753,8 +28747,8 @@ msgstr ""
 "___A___ என்பது db <br> இல் விழிப்புணர்வு \n"
 "___ சட் <சப்> </sub> ___ இல் உள்ள உள்ளீட்டு மின்மறுப்பு &#x2126; <br> இல் "
 "விரும்பப்படுகிறது \n"
-"___ சட் <சப்> அவுட் </sub> ___ என்பது விரும்பிய வெளியீட்டு மின்மறுப்பு &#x2126; <br> "
-"\n"
+"___ சட் <சப்> அவுட் </sub> ___ என்பது விரும்பிய வெளியீட்டு மின்மறுப்பு &#x2126; "
+"<br> \n"
 "\n"
 "___K = V<sub>I</sub>/V<sub>O</sub> = 10<sup>a/20</sup>___<br>\n"
 " ___L = K<sup>2</sup> = 10<sup>a/10</sup>___<br>\n"
@@ -28802,8 +28796,8 @@ msgstr ""
 "___A___ என்பது db<br> இல் விழிப்புணர்வு \n"
 "___ சட் <சப்> </sub> ___ இல் உள்ள உள்ளீட்டு மின்மறுப்பு &#x2126; <br> இல் "
 "விரும்பப்படுகிறது \n"
-"___ சட் <சப்> அவுட் </sub> ___ என்பது விரும்பிய வெளியீட்டு மின்மறுப்பு &#x2126; <br> "
-"\n"
+"___ சட் <சப்> அவுட் </sub> ___ என்பது விரும்பிய வெளியீட்டு மின்மறுப்பு &#x2126; "
+"<br> \n"
 "\n"
 "___K = V<sub>I</sub>/V<sub>O</sub> = 10<sup>a/20</sup>___<br>\n"
 " ___L = K<sup>2</sup> = 10<sup>a/10</sup>___<br>\n"
@@ -39597,24 +39591,25 @@ msgstr ""
 "\n"
 
 #: pcbnew/dialogs/panel_setup_rules_help_2constraints.h:2
+#, fuzzy
 msgid ""
 "### Constraints\n"
 "\n"
 "| Constraint type           | Argument "
 "type                                                                                                         "
 "| "
-"Description                                                                                                                                                                                                                                                                                                                                                                                                                                            "
+"Description                                                                                                                                                                                                                                                                                                                                                                                                                                             "
 "|\n"
-"|---------------------------|-----------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|\n"
+"|---------------------------|-----------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|\n"
 "| `annular_width`           | min/opt/"
 "max                                                                                                           "
 "| Checks the width of annular rings on vias."
-"<br>                                                                                                                                                                                                                                                                                                                                                                                                         "
+"<br>                                                                                                                                                                                                                                                                                                                                                                                                          "
 "|\n"
 "| `assertion`               | \"&lt;"
 "expression>\"                                                                                                     "
 "| Checks the given expression."
-"<br>                                                                                                                                                                                                                                                                                                                                                                                                  "
+"<br>                                                                                                                                                                                                                                                                                                                                                                                                                        "
 "|\n"
 "| `clearance`               | "
 "min                                                                                                                   "
@@ -39623,7 +39618,7 @@ msgid ""
 "objects regardless of net.)<br><br>To allow copper objects to overlap "
 "(collide), create a `clearance` constraint with the `min` value less than "
 "zero (for example, `-1`)."
-"<br>                                                                                                                     "
+"<br>                                                                                                                      "
 "|\n"
 "| `courtyard_clearance`     | "
 "min                                                                                                                   "
@@ -39631,12 +39626,12 @@ msgid ""
 "if any two courtyards are closer than the `min` distance.  If a footprint "
 "does not have a courtyard shape, no errors will be generated from this "
 "constraint."
-"<br>                                                                                                                                                                                                              "
+"<br>                                                                                                                                                                                                               "
 "|\n"
 "| `creepage`                | "
 "min                                                                                                                   "
 "| Specifies the creepage distance between copper objects of different nets."
-"<br>                                                                                                                                                                                                                                                                                                                                                                    "
+"<br>                                                                                                                                                                                                                                                                                                                                                                           "
 "|\n"
 "| `diff_pair_gap`           | min/opt/"
 "max                                                                                                           "
@@ -39644,7 +39639,7 @@ msgid ""
 "tracks are segments that are parallel to each other.  Differential pair gap "
 "is not tested on uncoupled portions of a differential pair (for example, the "
 "fanout from a component)."
-"<br>                                                                                                                                                                                          "
+"<br>                                                                                                                                                                                           "
 "|\n"
 "| `diff_pair_uncoupled`     | "
 "max                                                                                                                   "
@@ -39652,7 +39647,7 @@ msgid ""
 "from the other polarity track in the pair (for example, where the pair fans "
 "out from a component, or becomes uncoupled to pass around another object "
 "such as a via)."
-"<br>                                                                                                                                                                                                        "
+"<br>                                                                                                                                                                                                         "
 "|\n"
 "| `disallow`                | "
 "`track`<br>`via`<br>`micro_via`<br>`buried_via`<br>`pad`<br>`zone`<br>`text`<br>`graphic`<br>`hole`<br>`footprint`<br> "
@@ -39661,21 +39656,21 @@ msgid ""
 "pad)`.  If an object of this type matches the rule condition, a DRC error "
 "will be created.<br><br>This constraint is essentially the same as a keepout "
 "rule area, but can be used to create more specific keepout restrictions."
-"<br>                                                                  |\n"
+"<br>                                                                   |\n"
 "| `edge_clearance`          | min/opt/"
 "max                                                                                                           "
 "| Checks the clearance between objects and the board edge.<br><br>This can "
 "also be thought of as the \"milling tolerance\" as the board edge will "
 "include all graphical items on the `Edge.Cuts` layer as well as any *oval* "
 "pad holes.  (See `physical_hole_clearance` for the drilling "
-"tolerance.)<br>                                                                                                                                                   "
+"tolerance.)<br>                                                                                                                                                    "
 "|\n"
 "| `length`                  | min/"
 "max                                                                                                               "
 "| Checks the total routed length for the nets that match the rule condition "
 "and generates an error for each net that is below the `min` value (if "
 "specified) or above the `max` value (if specified) of the constraint."
-"<br>                                                                                                                                                                                                                              "
+"<br>                                                                                                                                                                                                                               "
 "|\n"
 "| `hole`                    | min/"
 "max                                                                                                               "
@@ -39683,14 +39678,14 @@ msgid ""
 "holes, the smaller (minor) diameter will be tested against the `min` value "
 "(if specified) and the larger (major) diameter will be tested against the "
 "`max` value (if specified)."
-"<br>                                                                                                                                                                                           "
+"<br>                                                                                                                                                                                            "
 "|\n"
 "| `hole_clearance`          | "
 "min                                                                                                                   "
 "| Checks the clearance between a drilled hole in a pad or via and copper "
 "objects on a different net.  The clearance is measured from the diameter of "
 "the hole, not its center."
-"<br>                                                                                                                                                                                                                                                                       "
+"<br>                                                                                                                                                                                                                                                                        "
 "|\n"
 "| `hole_to_hole`            | "
 "min                                                                                                                   "
@@ -39705,7 +39700,7 @@ msgid ""
 "| Checks the clearance between two objects on a given layer (including non-"
 "copper layers).<br><br>While this can perform more general-purpose checks "
 "than `clearance`, it is much slower.  Use `clearance` where possible."
-"<br>                                                                                                                                                                                                                           "
+"<br>                                                                                                                                                                                                                            "
 "|\n"
 "| `physical_hole_clearance` | "
 "min                                                                                                                   "
@@ -39714,13 +39709,13 @@ msgid ""
 "the hole, not its center.<br><br>This can also be thought of as the "
 "\"drilling tolerance\" as it only includes **round** holes (see "
 "`edge_clearance` for the milling tolerance)."
-"<br>                                                                                                                   "
+"<br>                                                                                                                    "
 "|\n"
 "| `silk_clearance`          | min/opt/"
 "max                                                                                                           "
 "| Checks the clearance between objects on silkscreen layers and other "
 "objects."
-"<br>                                                                                                                                                                                                                                                                                                                                                                       "
+"<br>                                                                                                                                                                                                                                                                                                                                                                        "
 "|\n"
 "| `skew`                    | "
 "max                                                                                                                   "
@@ -39729,52 +39724,71 @@ msgid ""
 "lengths of each net that is matched by the rule.  If the absolute value of "
 "the difference between that average and the length of any one net is above "
 "the constraint `max` value, an error will be generated."
-"<br>                                                                                  "
+"<br>                                                                                   "
+"|\n"
+"| `solder_mask_expansion`   | "
+"opt                                                                                                                   "
+"| Specifies the solder mask expansion for pads, shapes and "
+"tracks.                                                                                                                                                                                                                                                                                                                                                                                        "
+"|\n"
+"| `solder_paste_abs_margin` | "
+"opt                                                                                                                   "
+"| Specifies the absolute solder paste clearance for pads.  Usually negative "
+"to inset the paste.<br><br>The final solder paste clearace will be the "
+"absolute clearance plus the relative "
+"clearance.                                                                                                                                                                                                                                                        "
+"|\n"
+"| `solder_paste_rel_margin` | "
+"opt                                                                                                                   "
+"| Specifies the relative solder paste clearance for pads.  Usually negative "
+"to inset the paste.<br><br>The final solder paste clearace will be the "
+"absolute clearance plus the relative "
+"clearance.                                                                                                                                                                                                                                                        "
 "|\n"
 "| `thermal_relief_gap`      | "
 "min                                                                                                                   "
 "| Specifies the width of the gap between a pad and a zone with a thermal-"
 "relief connection."
-"<br>                                                                                                                                                                                                                                                                                                                                                          "
+"<br>                                                                                                                                                                                                                                                                                                                                                           "
 "|\n"
 "| `thermal_spoke_width`     | "
 "opt                                                                                                                   "
 "| Specifies the width of the spokes connecting a pad to a zone with a "
 "thermal-relief connection."
-"<br>                                                                                                                                                                                                                                                                                                                                                     "
+"<br>                                                                                                                                                                                                                                                                                                                                                      "
 "|\n"
 "| `track_width`             | min/opt/"
 "max                                                                                                           "
 "| Checks the width of track and arc segments.  An error will be generated "
 "for each segment that has a width below the `min` value (if specified) or "
 "above the `max` value (if specified)."
-"<br>                                                                                                                                                                                                                                                            "
+"<br>                                                                                                                                                                                                                                                             "
 "|\n"
 "| `track_angle`             | min/opt/"
 "max                                                                                                           "
 "| Checks the angle between two connected track segments.  An error will be "
 "generated for each connected pair with an angle below the `min` value (if "
 "specified) or above the `max` value (if specified)."
-"<br>                                                                                                                                                                                                                                             "
+"<br>                                                                                                                                                                                                                                              "
 "|\n"
 "| `track_segment_length`    | min/"
 "max                                                                                                               "
 "| Checks the length of track and arc segments.  An error will be generated "
 "for each segment that has a length below the `min` value (if specified) or "
 "above the `max` value (if specified)."
-"<br>                                                                                                                                                                                                                                                          "
+"<br>                                                                                                                                                                                                                                                           "
 "|\n"
 "| `via_count`               | "
 "max                                                                                                                   "
 "| Counts the number of vias on every net matched by the rule condition.  If "
 "that number exceeds the constraint `max` value on any matched net, an error "
 "will be generated for that net."
-"<br>                                                                                                                                                                                                                                                              "
+"<br>                                                                                                                                                                                                                                                               "
 "|\n"
 "| `zone_connection`         | "
 "`solid`<br>`thermal_reliefs`<br>`none`                                                                                "
 "| Specifies the connection to be made between a zone and a pad."
-"<br>                                                                                                                                                                                                                                                                                                                                                                                      "
+"<br>                                                                                                                                                                                                                                                                                                                                                                                       "
 "|\n"
 "\n"
 "\n"
@@ -39798,24 +39812,24 @@ msgstr ""
 "அல்லது இணைக்கப்படாமல் மற்றொரு பொருளைச் சுற்றி ஒரு வழியாகச் செல்கிறது, எடுத்துக்காட்டாக, "
 "ஒரு வழியாக).<br> |\n"
 "| `disallow` | "
-"`track`<br>`via`<br>`micro_via`<br>`buried_via`<br>`pad`<br>`zone`<br>`text`<br>`graphic`<br>`hole`<br>`footprint`"
-"<br> | இடைவெளிகளால் பிரிக்கப்பட்ட, அனுமதிக்கப்படாத ஒன்று அல்லது அதற்கு மேற்பட்ட பொருள் "
-"வகைகளைக் குறிப்பிடவும். எடுத்துக்காட்டாக, `(constraint disallow track)`` அல்லது `("
-"constraint disallow track via pad)`. இந்த வகை பொருள் விதி நிபந்தனையுடன் "
+"`track`<br>`via`<br>`micro_via`<br>`buried_via`<br>`pad`<br>`zone`<br>`text`<br>`graphic`<br>`hole`<br>`footprint`<br> "
+"| இடைவெளிகளால் பிரிக்கப்பட்ட, அனுமதிக்கப்படாத ஒன்று அல்லது அதற்கு மேற்பட்ட பொருள் "
+"வகைகளைக் குறிப்பிடவும். எடுத்துக்காட்டாக, `(constraint disallow track)`` அல்லது "
+"`(constraint disallow track via pad)`. இந்த வகை பொருள் விதி நிபந்தனையுடன் "
 "பொருந்தினால், ஒரு DRC பிழை உருவாக்கப்படும்.<br><br>இந்தக் கட்டுப்பாடு அடிப்படையில் ஒரு "
 "keepout விதி பகுதியைப் போன்றது, ஆனால் மிகவும் குறிப்பிட்ட keepout கட்டுப்பாடுகளை "
 "உருவாக்க இதைப் பயன்படுத்தலாம்.<br> |\n"
 "| `edge_clearance` | min/opt/max | பொருள்களுக்கும் பலகை விளிம்பிற்கும் இடையிலான "
-"இடைவெளியைச் சரிபார்க்கிறது.<br><br>இது \"அரைக்கும் சகிப்புத்தன்மை\" என்றும் கருதப்படலாம்"
-", ஏனெனில் பலகை விளிம்பில் `Edge.Cuts` அடுக்கில் உள்ள அனைத்து வரைகலை உருப்படிகளும், எந்"
-"த *ஓவல்* பேட் துளைகளும் அடங்கும். (துளையிடும் சகிப்புத்தன்மைக்கு "
+"இடைவெளியைச் சரிபார்க்கிறது.<br><br>இது \"அரைக்கும் சகிப்புத்தன்மை\" என்றும் "
+"கருதப்படலாம், ஏனெனில் பலகை விளிம்பில் `Edge.Cuts` அடுக்கில் உள்ள அனைத்து வரைகலை "
+"உருப்படிகளும், எந்த *ஓவல்* பேட் துளைகளும் அடங்கும். (துளையிடும் சகிப்புத்தன்மைக்கு "
 "`physical_hole_clearance` ஐப் பார்க்கவும்.)<br> |\n"
 "| `length` | min/max | விதி நிபந்தனையுடன் பொருந்தக்கூடிய வலைகளுக்கான மொத்த ரூட்டட் "
 "நீளத்தைச் சரிபார்த்து, கட்டுப்பாட்டின் `min` மதிப்புக்குக் கீழே (குறிப்பிட்டால்) அல்லது `max` "
-"மதிப்புக்கு (குறிப்பிட்டால்) மேலே உள்ள ஒவ்வொரு வலைக்கும் ஒரு பிழையை உருவாக்குகிறது"
-".<br> |\n"
-"| `hole` | min/max | ஒரு திண்டு அல்லது வழியாகத் துளையிடப்பட்ட துளையின் அளவை (விட்டம்)"
-" சரிபார்க்கிறது. ஓவல் துளைகளுக்கு, சிறிய (சிறிய) விட்டம் `min` மதிப்புக்கு "
+"மதிப்புக்கு (குறிப்பிட்டால்) மேலே உள்ள ஒவ்வொரு வலைக்கும் ஒரு பிழையை உருவாக்குகிறது."
+"<br> |\n"
+"| `hole` | min/max | ஒரு திண்டு அல்லது வழியாகத் துளையிடப்பட்ட துளையின் அளவை "
+"(விட்டம்) சரிபார்க்கிறது. ஓவல் துளைகளுக்கு, சிறிய (சிறிய) விட்டம் `min` மதிப்புக்கு "
 "(குறிப்பிட்டால்) எதிராகச் சோதிக்கப்படும், மேலும் பெரிய (பெரிய) விட்டம் `max` மதிப்புக்கு "
 "(குறிப்பிட்டால்) எதிராகச் சோதிக்கப்படும்.<br> |\n"
 "| `hole_clearance` | min | ஒரு திண்டு அல்லது துளையிடப்பட்ட துளைக்கும் வேறு வலையில் "
@@ -39829,17 +39843,17 @@ msgstr ""
 "சரிபார்க்கப்படவில்லை, மேலும் **அரைக்கப்பட்ட** (ஓவல் வடிவ) மற்றும் பிற இயந்திரத்தனமாகத் "
 "துளையிடப்படாத துளைகளுக்கு இடையிலான இடைவெளியும் சரிபார்க்கப்படவில்லை.<br> |\n"
 "| `இயற்பியல்_துளை` | நிமிடம் | கொடுக்கப்பட்ட அடுக்கில் (செப்பு அடுக்குகள் உட்பட) இரண்டு "
-"பொருட்களுக்கு இடையிலான இடைவெளியைச் சரிபார்க்கிறது.<br><br>இது `துளை` ஐ விடப் பொதுவா"
-"ன நோக்கத்திற்கான சோதனைகளைச் செய்ய முடியும் என்றாலும், இது மிகவும் மெதுவாக உள்ளது. "
-"முடிந்தவரை `துளை` ஐப் பயன்படுத்தவும்.<br> |\n"
+"பொருட்களுக்கு இடையிலான இடைவெளியைச் சரிபார்க்கிறது.<br><br>இது `துளை` ஐ விடப் "
+"பொதுவான நோக்கத்திற்கான சோதனைகளைச் செய்ய முடியும் என்றாலும், இது மிகவும் மெதுவாக "
+"உள்ளது. முடிந்தவரை `துளை` ஐப் பயன்படுத்தவும்.<br> |\n"
 "| `physical_hole_clearance` | min | ஒரு திண்டு அல்லது வியாவில் துளையிடப்பட்ட "
 "துளைக்கும் மற்றொரு பொருளுக்கும் இடையிலான இடைவெளியை, வலை எதுவாக இருந்தாலும் "
 "சரிபார்க்கிறது. இடைவெளி துளையின் விட்டத்திலிருந்து அளவிடப்படுகிறது, அதன் "
 "மையத்திலிருந்து அல்ல.<br><br>இது **சுற்றுத் துளைகளை மட்டுமே உள்ளடக்கியிருப்பதால், இதை "
 "\"துளையிடும் சகிப்புத்தன்மை\" என்றும் கருதலாம் (மில்லிங் சகிப்புத்தன்மைக்கு "
 "`edge_clearance` ஐப் பார்க்கவும்).<br>|\n"
-"| `பட்டு_அளவீட்டு` | நிமிடம்/opt/max | பட்டுத்திரை அடுக்குகள் மற்றும் பிற பொருட்களில் உள்"
-"ள பொருட்களுக்கு இடையே உள்ள இடைவெளியைச் சரிபார்க்கிறது.<br> |\n"
+"| `பட்டு_அளவீட்டு` | நிமிடம்/opt/max | பட்டுத்திரை அடுக்குகள் மற்றும் பிற பொருட்களில் "
+"உள்ள பொருட்களுக்கு இடையே உள்ள இடைவெளியைச் சரிபார்க்கிறது.<br> |\n"
 "| `skew` | அதிகபட்சம் | விதி நிபந்தனையுடன் பொருந்தக்கூடிய வலைகளுக்கான மொத்த சாய்வைச் "
 "சரிபார்க்கிறது, அதாவது, ஒவ்வொரு வலையின் நீளத்திற்கும் விதியால் பொருந்தக்கூடிய ஒவ்வொரு "
 "வலையின் அனைத்து நீளங்களின் சராசரிக்கும் இடையிலான வேறுபாடு. அந்தச் சராசரிக்கும் ஏதேனும் "
@@ -40196,8 +40210,8 @@ msgstr ""
 " <br><br>\n"
 "\n"
 " A.hasnetclass ('<tetclass_name>')\n"
-" கொடுக்கப்பட்ட நெட் கிளாசை அதற்கு ஒதுக்கப்பட்டிருந்தால், வெளிப்படையான நெட்க்ளாச் சிட்டை மூலம்"
-" `அ` கொடுக்கப்பட்டிருந்தால் உண்மை\n"
+" கொடுக்கப்பட்ட நெட் கிளாசை அதற்கு ஒதுக்கப்பட்டிருந்தால், வெளிப்படையான நெட்க்ளாச் சிட்டை "
+"மூலம் `அ` கொடுக்கப்பட்டிருந்தால் உண்மை\n"
 " அல்லது ஒரு மாதிரிப் போட்டி ஒதுக்கீடுமூலம்.\n"
 " <br><br>\n"
 "\n"
@@ -40272,6 +40286,7 @@ msgstr ""
 "\n"
 
 #: pcbnew/dialogs/panel_setup_rules_help_9more_examples.h:2
+#, fuzzy
 msgid ""
 "### More Examples\n"
 "\n"
@@ -40414,6 +40429,18 @@ msgid ""
 "'Micro'\")\n"
 "        (constraint hole_to_hole)\n"
 "        (severity ignore))\n"
+"\n"
+"\n"
+"    # No solder mask expansion for vias.\n"
+"    (rule \"no mask expansion on vias\"\n"
+"        (constraint solder_mask_expansion (opt 0mm))\n"
+"        (condition \"A.type == via\"))\n"
+"\n"
+"\n"
+"    # Remove solder paste from DNP footprints.\n"
+"    (rule remove_solder_paste_from_DNP\n"
+"        (constraint solder_paste_abs_margin (opt -50mm))\n"
+"        (condition \"A.Do_not_Populate\"))\n"
 "\n"
 msgstr ""
 "### மேலும் எடுத்துக்காட்டுகள்\n"
@@ -41471,8 +41498,8 @@ msgstr "செப்பு மண்டல அனுமதிகளை சரி
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:286
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:590
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:849
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:882
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:852
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:886
 #, c-format
 msgid "(nets %s and %s)"
 msgstr "(நெட்ச் %s மற்றும் %s)"
@@ -41482,11 +41509,11 @@ msgstr "(நெட்ச் %s மற்றும் %s)"
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:476
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:514
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:597
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:895
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:926
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:946
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:967
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:1431
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:900
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:932
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:953
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:975
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:1444
 #: pcbnew/drc/drc_test_provider_courtyard_clearance.cpp:245
 #: pcbnew/drc/drc_test_provider_courtyard_clearance.cpp:277
 #: pcbnew/drc/drc_test_provider_edge_clearance.cpp:118
@@ -41507,7 +41534,7 @@ msgstr "( %s இசைவு %s; உண்மையான %s)"
 msgid "(%s clearance %s; actual < 0)"
 msgstr "( %s இசைவு %s; உண்மையான <0)"
 
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:1423
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:1436
 msgid "(intersecting zones must have distinct priorities)"
 msgstr "(வெட்டு மண்டலங்களுக்கு தனித்துவமான முன்னுரிமைகள் இருக்க வேண்டும்)"
 
@@ -42507,8 +42534,7 @@ msgstr "படி தயாரிப்பு பெயரை அமைப்ப
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2330
 msgid "Failed to set surface curve mode, but will attempt to continue."
-msgstr ""
-"மேற்பரப்பு வளைவு பயன்முறையை அமைப்பதில் தோல்வி, ஆனால் தொடர முயற்சிக்கும்."
+msgstr "மேற்பரப்பு வளைவு பயன்முறையை அமைப்பதில் தோல்வி, ஆனால் தொடர முயற்சிக்கும்."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2371
 #: pcbnew/exporters/step/step_pcb_model.cpp:3153
@@ -43075,7 +43101,7 @@ msgstr "தடம் வழிகாட்டி மீண்டும் ஏற
 msgid "Documentation"
 msgstr "ஆவணப்படுத்துதல்"
 
-#: pcbnew/generate_footprint_info.cpp:127
+#: pcbnew/generate_footprint_info.cpp:135
 #, c-format
 msgid "Error loading footprint %s from library '%s'."
 msgstr "' %s' இலிருந்து தடம் %s ஐ ஏற்றுவதில் பிழை."
@@ -43433,8 +43459,7 @@ msgstr "தடம் சங்கம் (.cmp) கோப்பு ..."
 
 #: pcbnew/menubar_pcb_editor.cpp:140
 msgid "Export footprint association file (*.cmp) for schematic back annotation"
-msgstr ""
-"திட்டவட்டமான பின் சிறுகுறிப்புக்கு தடம் சங்க கோப்பு (*.CMP) ஏற்றுமதி செய்யுங்கள்"
+msgstr "திட்டவட்டமான பின் சிறுகுறிப்புக்கு தடம் சங்க கோப்பு (*.CMP) ஏற்றுமதி செய்யுங்கள்"
 
 #: pcbnew/menubar_pcb_editor.cpp:142
 msgid "Hyperlynx..."
@@ -45372,8 +45397,8 @@ msgid ""
 "with circular shape of %.2f mm diameter."
 msgstr ""
 "'%s' குறியீடு வழியாகக் கேட்ச்டார் வரையறுக்கப்பட்ட வட்டத்திலிருந்து வெவ்வேறு வடிவங்களைக் "
-"கொண்டுள்ளது. கிகாட் வட்ட வழிமம் களை மட்டுமே ஆதரிக்கிறது, எனவே இந்த வகை %.2f மிமீ விட்டம்"
-" கொண்ட வட்ட வடிவத்துடன் மாற்றப்பட்டுள்ளது."
+"கொண்டுள்ளது. கிகாட் வட்ட வழிமம் களை மட்டுமே ஆதரிக்கிறது, எனவே இந்த வகை %.2f மிமீ "
+"விட்டம் கொண்ட வட்ட வடிவத்துடன் மாற்றப்பட்டுள்ளது."
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:2802
 #, c-format
@@ -45425,10 +45450,10 @@ msgid ""
 "hatching has two hatches 90 degrees apart, oriented %.1f degrees from "
 "horizontal."
 msgstr ""
-"கேட்ச்டார் அட்ச் குறியீட்டில் உள்ள குஞ்சுகள் ' %s' %.1f டிகிரியின் கோண வேறுபாட்டைக் கொண்டுள்"
-"ளன. கிகாட் 90 டிகிரி இடைவெளியை மட்டுமே ஆதரிக்கிறது. இறக்குமதி செய்யப்பட்ட குஞ்சு "
-"பொரிக்கும் இரண்டு குஞ்சுகள் 90 டிகிரி இடைவெளியில் உள்ளன, கிடைமட்டத்திலிருந்து நோக்குநிலை"
-" %.1f டிகிரி."
+"கேட்ச்டார் அட்ச் குறியீட்டில் உள்ள குஞ்சுகள் ' %s' %.1f டிகிரியின் கோண வேறுபாட்டைக் "
+"கொண்டுள்ளன. கிகாட் 90 டிகிரி இடைவெளியை மட்டுமே ஆதரிக்கிறது. இறக்குமதி செய்யப்பட்ட "
+"குஞ்சு பொரிக்கும் இரண்டு குஞ்சுகள் 90 டிகிரி இடைவெளியில் உள்ளன, கிடைமட்டத்திலிருந்து "
+"நோக்குநிலை %.1f டிகிரி."
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:3718
 #, c-format
@@ -45718,8 +45743,8 @@ msgid ""
 "Missing X, Y, or rotation data in row %zu for refdes %s. This may be an "
 "unplaced component."
 msgstr ""
-"%z இல் x, y, அல்லது சுழற்சி தரவைக் காணவில்லை %s ரீஃப்டெச்க்கான. இது ஒரு இடமில்லாத அங்கமா"
-"க இருக்கலாம்."
+"%z இல் x, y, அல்லது சுழற்சி தரவைக் காணவில்லை %s ரீஃப்டெச்க்கான. இது ஒரு இடமில்லாத "
+"அங்கமாக இருக்கலாம்."
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:2647
 #, c-format
@@ -48068,32 +48093,32 @@ msgstr "பலகோணங்களை எளிதாக்குங்கள�
 msgid "Heal Shapes"
 msgstr "வடிவங்களை குணப்படுத்துங்கள்"
 
-#: pcbnew/tools/edit_tool.cpp:2395 pcbnew/tools/pcb_actions.cpp:547
+#: pcbnew/tools/edit_tool.cpp:2412 pcbnew/tools/pcb_actions.cpp:547
 msgid "Change Side / Flip"
 msgstr "பக்க / புரட்டலை மாற்றவும்"
 
-#: pcbnew/tools/edit_tool.cpp:2660
+#: pcbnew/tools/edit_tool.cpp:2677
 msgid "Use the Footprint Properties dialog to remove fields."
 msgstr "புலங்களை அகற்ற தடம் பண்புகள் உரையாடலைப் பயன்படுத்தவும்."
 
-#: pcbnew/tools/edit_tool.cpp:2819
+#: pcbnew/tools/edit_tool.cpp:2836
 msgid "Move Exactly"
 msgstr "சரியாக நகர்த்தவும்"
 
-#: pcbnew/tools/edit_tool.cpp:2991
+#: pcbnew/tools/edit_tool.cpp:3008
 #, c-format
 msgid "Duplicated %d item(s)"
 msgstr "நகல் %d உருப்படி(கள்)"
 
-#: pcbnew/tools/edit_tool.cpp:3332
+#: pcbnew/tools/edit_tool.cpp:3349
 msgid "Select reference point for the copy..."
 msgstr "நகலுக்கான குறிப்பு புள்ளியைத் தேர்ந்தெடுக்கவும் ..."
 
-#: pcbnew/tools/edit_tool.cpp:3333 pcbnew/tools/edit_tool.cpp:3350
+#: pcbnew/tools/edit_tool.cpp:3350 pcbnew/tools/edit_tool.cpp:3367
 msgid "Selection copied"
 msgstr "தேர்வு நகலெடுக்கப்பட்டது"
 
-#: pcbnew/tools/edit_tool.cpp:3334
+#: pcbnew/tools/edit_tool.cpp:3351
 msgid "Copy canceled"
 msgstr "நகல் ரத்து செய்யப்பட்டது"
 

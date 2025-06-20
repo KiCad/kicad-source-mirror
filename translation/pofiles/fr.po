@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-08 17:03+0300\n"
+"POT-Creation-Date: 2025-06-20 23:57+0300\n"
 "PO-Revision-Date: 2025-04-22 10:24+0200\n"
 "Last-Translator: \n"
 "Language-Team: jp-charras\n"
@@ -5953,47 +5953,47 @@ msgstr "Limites de Page"
 msgid "clipboard"
 msgstr "presse papier"
 
-#: common/dsnlexer.cpp:331
+#: common/dsnlexer.cpp:337
 #, c-format
 msgid "Expecting %s"
 msgstr "Attendu %s"
 
-#: common/dsnlexer.cpp:339
+#: common/dsnlexer.cpp:345
 #, c-format
 msgid "Expecting '%s'"
 msgstr "Attendu '%s'"
 
-#: common/dsnlexer.cpp:347
+#: common/dsnlexer.cpp:353
 #, c-format
 msgid "Unexpected %s"
 msgstr "Inattendu %s"
 
-#: common/dsnlexer.cpp:355
+#: common/dsnlexer.cpp:361
 #, c-format
 msgid "%s is a duplicate"
 msgstr "%s est un doublon"
 
-#: common/dsnlexer.cpp:363
+#: common/dsnlexer.cpp:369
 #, c-format
 msgid "Unexpected '%s'"
 msgstr "Inattendu '%s'"
 
-#: common/dsnlexer.cpp:422
+#: common/dsnlexer.cpp:428
 #, c-format
 msgid "need a number for '%s'"
 msgstr "nécessite un nombre pour '%s'"
 
-#: common/dsnlexer.cpp:715 common/dsnlexer.cpp:776
+#: common/dsnlexer.cpp:721 common/dsnlexer.cpp:782
 msgid "Un-terminated delimited string"
 msgstr "Ligne délimitée non terminée"
 
-#: common/dsnlexer.cpp:737
+#: common/dsnlexer.cpp:743
 msgid "String delimiter must be a single character of ', \", or $"
 msgstr ""
 "Le caractère de délimitation de ligne doit être un seul caractère  ', \", or "
 "$"
 
-#: common/dsnlexer.cpp:859
+#: common/dsnlexer.cpp:865
 #, c-format
 msgid ""
 "Invalid floating point number in\n"
@@ -6006,7 +6006,7 @@ msgstr ""
 "ligne: %d\n"
 "offset: %d"
 
-#: common/dsnlexer.cpp:868
+#: common/dsnlexer.cpp:874
 #, c-format
 msgid ""
 "Missing floating point number in\n"
@@ -6019,7 +6019,7 @@ msgstr ""
 "ligne: %d\n"
 "offset: %d"
 
-#: common/dsnlexer.cpp:895
+#: common/dsnlexer.cpp:901
 msgid "Invalid floating point number"
 msgstr "Nombre flottant non valide"
 
@@ -7374,7 +7374,7 @@ msgstr "Pas d'erreur"
 
 #: common/grid_tricks.cpp:361 common/tool/actions.cpp:214
 #: common/widgets/listbox_tricks.cpp:52 eeschema/tools/sch_actions.cpp:249
-#: pcbnew/dialogs/panel_setup_rules.cpp:130 pcbnew/tools/edit_tool.cpp:2651
+#: pcbnew/dialogs/panel_setup_rules.cpp:130 pcbnew/tools/edit_tool.cpp:2668
 msgid "Cut"
 msgstr "Couper"
 
@@ -7411,7 +7411,7 @@ msgstr ""
 #: common/widgets/listbox_tricks.cpp:54 eeschema/tools/sch_edit_tool.cpp:1719
 #: eeschema/tools/symbol_editor_edit_tool.cpp:478
 #: kicad/dialogs/panel_jobset.cpp:394 kicad/project_tree_pane.cpp:986
-#: pcbnew/dialogs/panel_setup_rules.cpp:133 pcbnew/tools/edit_tool.cpp:2664
+#: pcbnew/dialogs/panel_setup_rules.cpp:133 pcbnew/tools/edit_tool.cpp:2681
 msgid "Delete"
 msgstr "Supprimer"
 
@@ -8956,7 +8956,7 @@ msgstr "Coller les éléments depuis le presse-papier avec options"
 
 #: common/tool/actions.cpp:278 common/widgets/listbox_tricks.cpp:53
 #: eeschema/tools/symbol_editor_edit_tool.cpp:1103
-#: pcbnew/tools/edit_tool.cpp:2996
+#: pcbnew/tools/edit_tool.cpp:3013
 msgid "Duplicate"
 msgstr "Duplication"
 
@@ -8977,7 +8977,7 @@ msgid "Delete clicked items"
 msgstr "Supprimer les éléments cliqués"
 
 #: common/tool/actions.cpp:307 eeschema/tools/sch_edit_tool.cpp:2885
-#: pcbnew/tools/edit_tool.cpp:2306
+#: pcbnew/tools/edit_tool.cpp:2323
 msgid "Left Justify"
 msgstr "Justification à Gauche"
 
@@ -8986,7 +8986,7 @@ msgid "Left-justify fields and text items"
 msgstr "Justifier à gauche les champs et les textes"
 
 #: common/tool/actions.cpp:314 eeschema/tools/sch_edit_tool.cpp:2887
-#: pcbnew/tools/edit_tool.cpp:2308
+#: pcbnew/tools/edit_tool.cpp:2325
 msgid "Center Justify"
 msgstr "Justification au Centre"
 
@@ -8995,7 +8995,7 @@ msgid "Center-justify fields and text items"
 msgstr "Centrer les champs et les textes"
 
 #: common/tool/actions.cpp:321 eeschema/tools/sch_edit_tool.cpp:2889
-#: pcbnew/tools/edit_tool.cpp:2310
+#: pcbnew/tools/edit_tool.cpp:2327
 msgid "Right Justify"
 msgstr "Justification à Droite"
 
@@ -9013,7 +9013,7 @@ msgstr "Tout Réduire"
 
 #: common/tool/actions.cpp:342 eeschema/tools/sch_edit_tool.cpp:3141
 #: eeschema/tools/symbol_editor_edit_tool.cpp:1216
-#: pcbnew/tools/edit_tool.cpp:3101
+#: pcbnew/tools/edit_tool.cpp:3118
 msgid "Increment"
 msgstr "Incrément"
 
@@ -19247,7 +19247,7 @@ msgstr ""
 "'%s' est un fichier Eagle au format binaire. Seuls les fichiers Eagle au "
 "format XML peuvent être importés."
 
-#: eeschema/sch_io/eagle/sch_io_eagle.cpp:980
+#: eeschema/sch_io/eagle/sch_io_eagle.cpp:984
 #, c-format
 msgid ""
 "No module instance '%s' found in schematic file:\n"
@@ -19256,7 +19256,7 @@ msgstr ""
 "Aucune instance de module '%s' trouvée dans le fichier schéma schématique:\n"
 "%s"
 
-#: eeschema/sch_io/eagle/sch_io_eagle.cpp:1728
+#: eeschema/sch_io/eagle/sch_io_eagle.cpp:1732
 #, c-format
 msgid ""
 "Error parsing Eagle file. Could not find '%s' instance but it is referenced "
@@ -19265,7 +19265,7 @@ msgstr ""
 "Erreur d’analyse du fichier Eagle.  Impossible de trouver l’instance '%s' "
 "mais elle est référencée dans le schéma."
 
-#: eeschema/sch_io/eagle/sch_io_eagle.cpp:1804
+#: eeschema/sch_io/eagle/sch_io_eagle.cpp:1808
 #, c-format
 msgid "Could not find '%s' in the imported library."
 msgstr "Ne peut trouver '%s' dans la bibliothèque importée."
@@ -24272,13 +24272,13 @@ msgstr "Changer Pour"
 
 #: eeschema/tools/sch_edit_tool.cpp:1052
 #: eeschema/tools/symbol_editor_edit_tool.cpp:210
-#: pcbnew/tools/edit_tool.cpp:2066
+#: pcbnew/tools/edit_tool.cpp:2083
 msgid "Rotate"
 msgstr "Rotation"
 
 #: eeschema/tools/sch_edit_tool.cpp:1250 gerbview/gerber_draw_item.cpp:731
 #: pcbnew/pcb_tablecell.cpp:109 pcbnew/pcb_text.cpp:290
-#: pcbnew/pcb_textbox.cpp:473 pcbnew/tools/edit_tool.cpp:2233
+#: pcbnew/pcb_textbox.cpp:473 pcbnew/tools/edit_tool.cpp:2250
 msgid "Mirror"
 msgstr "Miroir"
 
@@ -24634,12 +24634,12 @@ msgid "Place Pin"
 msgstr "Placer Pin"
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:470
-#: pcbnew/tools/edit_tool.cpp:2656
+#: pcbnew/tools/edit_tool.cpp:2673
 msgid "Hide Field"
 msgstr "Cacher Champ"
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:472
-#: pcbnew/tools/edit_tool.cpp:2658
+#: pcbnew/tools/edit_tool.cpp:2675
 msgid "Hide Fields"
 msgstr "Cacher Champs"
 
@@ -40305,24 +40305,25 @@ msgstr ""
 "\n"
 
 #: pcbnew/dialogs/panel_setup_rules_help_2constraints.h:2
+#, fuzzy
 msgid ""
 "### Constraints\n"
 "\n"
 "| Constraint type           | Argument "
 "type                                                                                                         "
 "| "
-"Description                                                                                                                                                                                                                                                                                                                                                                                                                                            "
+"Description                                                                                                                                                                                                                                                                                                                                                                                                                                             "
 "|\n"
-"|---------------------------|-----------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|\n"
+"|---------------------------|-----------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|\n"
 "| `annular_width`           | min/opt/"
 "max                                                                                                           "
 "| Checks the width of annular rings on vias."
-"<br>                                                                                                                                                                                                                                                                                                                                                                                                         "
+"<br>                                                                                                                                                                                                                                                                                                                                                                                                          "
 "|\n"
 "| `assertion`               | \"&lt;"
 "expression>\"                                                                                                     "
 "| Checks the given expression."
-"<br>                                                                                                                                                                                                                                                                                                                                                                                                  "
+"<br>                                                                                                                                                                                                                                                                                                                                                                                                                        "
 "|\n"
 "| `clearance`               | "
 "min                                                                                                                   "
@@ -40331,7 +40332,7 @@ msgid ""
 "objects regardless of net.)<br><br>To allow copper objects to overlap "
 "(collide), create a `clearance` constraint with the `min` value less than "
 "zero (for example, `-1`)."
-"<br>                                                                                                                     "
+"<br>                                                                                                                      "
 "|\n"
 "| `courtyard_clearance`     | "
 "min                                                                                                                   "
@@ -40339,12 +40340,12 @@ msgid ""
 "if any two courtyards are closer than the `min` distance.  If a footprint "
 "does not have a courtyard shape, no errors will be generated from this "
 "constraint."
-"<br>                                                                                                                                                                                                              "
+"<br>                                                                                                                                                                                                               "
 "|\n"
 "| `creepage`                | "
 "min                                                                                                                   "
 "| Specifies the creepage distance between copper objects of different nets."
-"<br>                                                                                                                                                                                                                                                                                                                                                                    "
+"<br>                                                                                                                                                                                                                                                                                                                                                                           "
 "|\n"
 "| `diff_pair_gap`           | min/opt/"
 "max                                                                                                           "
@@ -40352,7 +40353,7 @@ msgid ""
 "tracks are segments that are parallel to each other.  Differential pair gap "
 "is not tested on uncoupled portions of a differential pair (for example, the "
 "fanout from a component)."
-"<br>                                                                                                                                                                                          "
+"<br>                                                                                                                                                                                           "
 "|\n"
 "| `diff_pair_uncoupled`     | "
 "max                                                                                                                   "
@@ -40360,7 +40361,7 @@ msgid ""
 "from the other polarity track in the pair (for example, where the pair fans "
 "out from a component, or becomes uncoupled to pass around another object "
 "such as a via)."
-"<br>                                                                                                                                                                                                        "
+"<br>                                                                                                                                                                                                         "
 "|\n"
 "| `disallow`                | "
 "`track`<br>`via`<br>`micro_via`<br>`buried_via`<br>`pad`<br>`zone`<br>`text`<br>`graphic`<br>`hole`<br>`footprint`<br> "
@@ -40369,21 +40370,21 @@ msgid ""
 "pad)`.  If an object of this type matches the rule condition, a DRC error "
 "will be created.<br><br>This constraint is essentially the same as a keepout "
 "rule area, but can be used to create more specific keepout restrictions."
-"<br>                                                                  |\n"
+"<br>                                                                   |\n"
 "| `edge_clearance`          | min/opt/"
 "max                                                                                                           "
 "| Checks the clearance between objects and the board edge.<br><br>This can "
 "also be thought of as the \"milling tolerance\" as the board edge will "
 "include all graphical items on the `Edge.Cuts` layer as well as any *oval* "
 "pad holes.  (See `physical_hole_clearance` for the drilling "
-"tolerance.)<br>                                                                                                                                                   "
+"tolerance.)<br>                                                                                                                                                    "
 "|\n"
 "| `length`                  | min/"
 "max                                                                                                               "
 "| Checks the total routed length for the nets that match the rule condition "
 "and generates an error for each net that is below the `min` value (if "
 "specified) or above the `max` value (if specified) of the constraint."
-"<br>                                                                                                                                                                                                                              "
+"<br>                                                                                                                                                                                                                               "
 "|\n"
 "| `hole`                    | min/"
 "max                                                                                                               "
@@ -40391,14 +40392,14 @@ msgid ""
 "holes, the smaller (minor) diameter will be tested against the `min` value "
 "(if specified) and the larger (major) diameter will be tested against the "
 "`max` value (if specified)."
-"<br>                                                                                                                                                                                           "
+"<br>                                                                                                                                                                                            "
 "|\n"
 "| `hole_clearance`          | "
 "min                                                                                                                   "
 "| Checks the clearance between a drilled hole in a pad or via and copper "
 "objects on a different net.  The clearance is measured from the diameter of "
 "the hole, not its center."
-"<br>                                                                                                                                                                                                                                                                       "
+"<br>                                                                                                                                                                                                                                                                        "
 "|\n"
 "| `hole_to_hole`            | "
 "min                                                                                                                   "
@@ -40413,7 +40414,7 @@ msgid ""
 "| Checks the clearance between two objects on a given layer (including non-"
 "copper layers).<br><br>While this can perform more general-purpose checks "
 "than `clearance`, it is much slower.  Use `clearance` where possible."
-"<br>                                                                                                                                                                                                                           "
+"<br>                                                                                                                                                                                                                            "
 "|\n"
 "| `physical_hole_clearance` | "
 "min                                                                                                                   "
@@ -40422,13 +40423,13 @@ msgid ""
 "the hole, not its center.<br><br>This can also be thought of as the "
 "\"drilling tolerance\" as it only includes **round** holes (see "
 "`edge_clearance` for the milling tolerance)."
-"<br>                                                                                                                   "
+"<br>                                                                                                                    "
 "|\n"
 "| `silk_clearance`          | min/opt/"
 "max                                                                                                           "
 "| Checks the clearance between objects on silkscreen layers and other "
 "objects."
-"<br>                                                                                                                                                                                                                                                                                                                                                                       "
+"<br>                                                                                                                                                                                                                                                                                                                                                                        "
 "|\n"
 "| `skew`                    | "
 "max                                                                                                                   "
@@ -40437,52 +40438,71 @@ msgid ""
 "lengths of each net that is matched by the rule.  If the absolute value of "
 "the difference between that average and the length of any one net is above "
 "the constraint `max` value, an error will be generated."
-"<br>                                                                                  "
+"<br>                                                                                   "
+"|\n"
+"| `solder_mask_expansion`   | "
+"opt                                                                                                                   "
+"| Specifies the solder mask expansion for pads, shapes and "
+"tracks.                                                                                                                                                                                                                                                                                                                                                                                        "
+"|\n"
+"| `solder_paste_abs_margin` | "
+"opt                                                                                                                   "
+"| Specifies the absolute solder paste clearance for pads.  Usually negative "
+"to inset the paste.<br><br>The final solder paste clearace will be the "
+"absolute clearance plus the relative "
+"clearance.                                                                                                                                                                                                                                                        "
+"|\n"
+"| `solder_paste_rel_margin` | "
+"opt                                                                                                                   "
+"| Specifies the relative solder paste clearance for pads.  Usually negative "
+"to inset the paste.<br><br>The final solder paste clearace will be the "
+"absolute clearance plus the relative "
+"clearance.                                                                                                                                                                                                                                                        "
 "|\n"
 "| `thermal_relief_gap`      | "
 "min                                                                                                                   "
 "| Specifies the width of the gap between a pad and a zone with a thermal-"
 "relief connection."
-"<br>                                                                                                                                                                                                                                                                                                                                                          "
+"<br>                                                                                                                                                                                                                                                                                                                                                           "
 "|\n"
 "| `thermal_spoke_width`     | "
 "opt                                                                                                                   "
 "| Specifies the width of the spokes connecting a pad to a zone with a "
 "thermal-relief connection."
-"<br>                                                                                                                                                                                                                                                                                                                                                     "
+"<br>                                                                                                                                                                                                                                                                                                                                                      "
 "|\n"
 "| `track_width`             | min/opt/"
 "max                                                                                                           "
 "| Checks the width of track and arc segments.  An error will be generated "
 "for each segment that has a width below the `min` value (if specified) or "
 "above the `max` value (if specified)."
-"<br>                                                                                                                                                                                                                                                            "
+"<br>                                                                                                                                                                                                                                                             "
 "|\n"
 "| `track_angle`             | min/opt/"
 "max                                                                                                           "
 "| Checks the angle between two connected track segments.  An error will be "
 "generated for each connected pair with an angle below the `min` value (if "
 "specified) or above the `max` value (if specified)."
-"<br>                                                                                                                                                                                                                                             "
+"<br>                                                                                                                                                                                                                                              "
 "|\n"
 "| `track_segment_length`    | min/"
 "max                                                                                                               "
 "| Checks the length of track and arc segments.  An error will be generated "
 "for each segment that has a length below the `min` value (if specified) or "
 "above the `max` value (if specified)."
-"<br>                                                                                                                                                                                                                                                          "
+"<br>                                                                                                                                                                                                                                                           "
 "|\n"
 "| `via_count`               | "
 "max                                                                                                                   "
 "| Counts the number of vias on every net matched by the rule condition.  If "
 "that number exceeds the constraint `max` value on any matched net, an error "
 "will be generated for that net."
-"<br>                                                                                                                                                                                                                                                              "
+"<br>                                                                                                                                                                                                                                                               "
 "|\n"
 "| `zone_connection`         | "
 "`solid`<br>`thermal_reliefs`<br>`none`                                                                                "
 "| Specifies the connection to be made between a zone and a pad."
-"<br>                                                                                                                                                                                                                                                                                                                                                                                      "
+"<br>                                                                                                                                                                                                                                                                                                                                                                                       "
 "|\n"
 "\n"
 "\n"
@@ -41080,6 +41100,7 @@ msgstr ""
 "\n"
 
 #: pcbnew/dialogs/panel_setup_rules_help_9more_examples.h:2
+#, fuzzy
 msgid ""
 "### More Examples\n"
 "\n"
@@ -41222,6 +41243,18 @@ msgid ""
 "'Micro'\")\n"
 "        (constraint hole_to_hole)\n"
 "        (severity ignore))\n"
+"\n"
+"\n"
+"    # No solder mask expansion for vias.\n"
+"    (rule \"no mask expansion on vias\"\n"
+"        (constraint solder_mask_expansion (opt 0mm))\n"
+"        (condition \"A.type == via\"))\n"
+"\n"
+"\n"
+"    # Remove solder paste from DNP footprints.\n"
+"    (rule remove_solder_paste_from_DNP\n"
+"        (constraint solder_paste_abs_margin (opt -50mm))\n"
+"        (condition \"A.Do_not_Populate\"))\n"
 "\n"
 msgstr ""
 "### More Examples\n"
@@ -42284,8 +42317,8 @@ msgstr "Vérification des isolations des zones de cuivre..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:286
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:590
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:849
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:882
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:852
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:886
 #, c-format
 msgid "(nets %s and %s)"
 msgstr "(nets %s et  %s)"
@@ -42295,11 +42328,11 @@ msgstr "(nets %s et  %s)"
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:476
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:514
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:597
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:895
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:926
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:946
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:967
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:1431
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:900
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:932
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:953
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:975
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:1444
 #: pcbnew/drc/drc_test_provider_courtyard_clearance.cpp:245
 #: pcbnew/drc/drc_test_provider_courtyard_clearance.cpp:277
 #: pcbnew/drc/drc_test_provider_edge_clearance.cpp:118
@@ -42320,7 +42353,7 @@ msgstr "(%s isolation %s; réel %s)"
 msgid "(%s clearance %s; actual < 0)"
 msgstr "(%s isolation %s; réel < 0)"
 
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:1423
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:1436
 #, fuzzy
 msgid "(intersecting zones must have distinct priorities)"
 msgstr "L'arc doit avoir 3 points distincts"
@@ -43908,7 +43941,7 @@ msgstr "Ne peut recharger l'assistant"
 msgid "Documentation"
 msgstr "Documentation"
 
-#: pcbnew/generate_footprint_info.cpp:127
+#: pcbnew/generate_footprint_info.cpp:135
 #, c-format
 msgid "Error loading footprint %s from library '%s'."
 msgstr "Erreur lors du chargement de l'empreinte %s de la librairie '%s'."
@@ -49002,33 +49035,33 @@ msgstr "Simplifier les Polygones"
 msgid "Heal Shapes"
 msgstr "Soigner Formes"
 
-#: pcbnew/tools/edit_tool.cpp:2395 pcbnew/tools/pcb_actions.cpp:547
+#: pcbnew/tools/edit_tool.cpp:2412 pcbnew/tools/pcb_actions.cpp:547
 msgid "Change Side / Flip"
 msgstr "Changer Côté / Retourner"
 
-#: pcbnew/tools/edit_tool.cpp:2660
+#: pcbnew/tools/edit_tool.cpp:2677
 msgid "Use the Footprint Properties dialog to remove fields."
 msgstr ""
 "Utiliser le dialogue Propriétés de l'Empreinte pour supprimer des champs."
 
-#: pcbnew/tools/edit_tool.cpp:2819
+#: pcbnew/tools/edit_tool.cpp:2836
 msgid "Move Exactly"
 msgstr "Déplacer Exactement"
 
-#: pcbnew/tools/edit_tool.cpp:2991
+#: pcbnew/tools/edit_tool.cpp:3008
 #, c-format
 msgid "Duplicated %d item(s)"
 msgstr "%d élément(s) dupliqué(s)"
 
-#: pcbnew/tools/edit_tool.cpp:3332
+#: pcbnew/tools/edit_tool.cpp:3349
 msgid "Select reference point for the copy..."
 msgstr "Sélectionnez le point de référence pour la copie..."
 
-#: pcbnew/tools/edit_tool.cpp:3333 pcbnew/tools/edit_tool.cpp:3350
+#: pcbnew/tools/edit_tool.cpp:3350 pcbnew/tools/edit_tool.cpp:3367
 msgid "Selection copied"
 msgstr "Sélection copiée"
 
-#: pcbnew/tools/edit_tool.cpp:3334
+#: pcbnew/tools/edit_tool.cpp:3351
 msgid "Copy canceled"
 msgstr "Copie annulée"
 
