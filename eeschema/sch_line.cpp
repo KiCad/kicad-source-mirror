@@ -1084,10 +1084,13 @@ std::vector<VECTOR3I> SCH_LINE::BuildWireWithHopShape( const SCH_SCREEN* aScreen
             if( IsEndPoint( *intersect ) || existingLine->IsEndPoint( *intersect ) )
                 continue;
 
-            intersections.push_back( *intersect );
+            // Ensure intersecting point is not yet entered. it can be already just entered
+            // if more than two wires are intersecting at the same point,
+            // creating bad hop over shapes for the current wire
+            if( intersections.size() == 0 || intersections.back() != *intersect )
+                intersections.push_back( *intersect );
         }
     }
-
 
     if( intersections.empty() )
     {
