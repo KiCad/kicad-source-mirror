@@ -664,7 +664,6 @@ void SCH_SCREEN::UpdateSymbolLinks( REPORTER* aReporter )
     wxCHECK_RET( Schematic(), "Cannot call SCH_SCREEN::UpdateSymbolLinks with no SCHEMATIC" );
 
     wxString msg;
-    std::unique_ptr< LIB_SYMBOL > libSymbol;
     std::vector<SCH_SYMBOL*> symbols;
     SYMBOL_LIB_TABLE* libs = PROJECT_SCH::SchSymbolLibTable( &Schematic()->Prj() );
 
@@ -674,7 +673,7 @@ void SCH_SCREEN::UpdateSymbolLinks( REPORTER* aReporter )
     for( SCH_ITEM* item : Items().OfType( SCH_SYMBOL_T ) )
         symbols.push_back( static_cast<SCH_SYMBOL*>( item ) );
 
-    // Remove them from the R tree.  There bounding box size may change.
+    // Remove them from the R tree.  Their bounding box size may change.
     for( SCH_SYMBOL* symbol : symbols )
         Remove( symbol );
 
@@ -684,7 +683,6 @@ void SCH_SCREEN::UpdateSymbolLinks( REPORTER* aReporter )
     for( SCH_SYMBOL* symbol : symbols )
     {
         LIB_SYMBOL* tmp = nullptr;
-        libSymbol.reset();
 
         // If the symbol is already in the internal library, map the symbol to it.
         auto it = m_libSymbols.find( symbol->GetSchSymbolLibraryName() );
@@ -777,11 +775,11 @@ void SCH_SCREEN::UpdateSymbolLinks( REPORTER* aReporter )
         if( tmp )
         {
             // We want a full symbol not just the top level child symbol.
-            libSymbol = tmp->Flatten();
+            std::unique_ptr<LIB_SYMBOL> libSymbol = tmp->Flatten();
             libSymbol->SetParent();
 
             m_libSymbols.insert( { symbol->GetSchSymbolLibraryName(),
-                                   new LIB_SYMBOL( *libSymbol.get() ) } );
+                                   new LIB_SYMBOL( *libSymbol ) } );
 
             if( aReporter )
             {
@@ -791,6 +789,8 @@ void SCH_SCREEN::UpdateSymbolLinks( REPORTER* aReporter )
                             UnescapeString( symbol->GetLibId().Format() ) );
                 aReporter->ReportTail( msg, RPT_SEVERITY_INFO );
             }
+
+            symbol->SetLibSymbol( libSymbol.release() );
         }
         else
         {
@@ -802,9 +802,6 @@ void SCH_SCREEN::UpdateSymbolLinks( REPORTER* aReporter )
                 aReporter->ReportTail( msg, RPT_SEVERITY_ERROR );
             }
         }
-
-        if( libSymbol.get() )   // Only change the old link if the new link exists
-            symbol->SetLibSymbol( libSymbol.release() );
     }
 
     // Changing the symbol may adjust the bbox of the symbol.  This re-inserts the
@@ -828,12 +825,10 @@ void SCH_SCREEN::UpdateLocalLibSymbolLinks()
 
         auto it = m_libSymbols.find( symbol->GetSchSymbolLibraryName() );
 
-        LIB_SYMBOL* libSymbol = nullptr;
-
         if( it != m_libSymbols.end() )
-            libSymbol = new LIB_SYMBOL( *it->second );
-
-        symbol->SetLibSymbol( libSymbol );
+            symbol->SetLibSymbol( new LIB_SYMBOL( *it->second ) );
+        else
+            symbol->SetLibSymbol( nullptr );
 
         m_rtree.insert( symbol );
     }
