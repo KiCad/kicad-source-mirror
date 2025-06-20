@@ -565,7 +565,7 @@ int SCH_TEXTBOX::compare( const SCH_ITEM& aOther, int aCompareFlags ) const
         return IsItalic() - tmp->IsItalic();
 
     if( GetHorizJustify() != tmp->GetHorizJustify() )
-        return GetHorizJustify() - tmp->GetHorizJustify();
+        return (int) GetHorizJustify() - (int) tmp->GetHorizJustify();
 
     if( GetTextAngle().AsTenthsOfADegree() != tmp->GetTextAngle().AsTenthsOfADegree() )
         return GetTextAngle().AsTenthsOfADegree() - tmp->GetTextAngle().AsTenthsOfADegree();
