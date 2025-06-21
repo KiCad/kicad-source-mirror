@@ -48,15 +48,15 @@ DIALOG_LIB_NEW_SYMBOL::DIALOG_LIB_NEW_SYMBOL( EDA_DRAW_FRAME*      aParent,
 {
     if( aSymbolNames.GetCount() )
     {
-        wxArrayString escapedNames;
+        wxArrayString unescapedNames;
 
         for( const wxString& name : aSymbolNames )
-            escapedNames.Add( UnescapeString( name ) );
+            unescapedNames.Add( UnescapeString( name ) );
 
-        m_comboInheritanceSelect->SetStringList( escapedNames );
+        m_comboInheritanceSelect->SetStringList( unescapedNames );
 
         if( !aInheritFromSymbolName.IsEmpty() )
-            m_comboInheritanceSelect->SetSelectedString( aInheritFromSymbolName );
+            m_comboInheritanceSelect->SetSelectedString( UnescapeString( aInheritFromSymbolName ) );
     }
 
     m_textName->SetValidator( FIELD_VALIDATOR( FIELD_T::VALUE ) );
@@ -64,15 +64,15 @@ DIALOG_LIB_NEW_SYMBOL::DIALOG_LIB_NEW_SYMBOL( EDA_DRAW_FRAME*      aParent,
 
     if( !aInheritFromSymbolName.IsEmpty() )
     {
-        m_textName->ChangeValue( getDerivativeName( aInheritFromSymbolName ) );
+        m_textName->ChangeValue( UnescapeString( getDerivativeName( aInheritFromSymbolName ) ) );
         m_nameIsDefaulted = true;
     }
 
     m_pinTextPosition.SetValue( schIUScale.MilsToIU( DEFAULT_PIN_NAME_OFFSET ) );
 
-    m_comboInheritanceSelect->Connect(
-            FILTERED_ITEM_SELECTED,
-            wxCommandEventHandler( DIALOG_LIB_NEW_SYMBOL::onParentSymbolSelect ), nullptr, this );
+    m_comboInheritanceSelect->Connect( FILTERED_ITEM_SELECTED,
+                                       wxCommandEventHandler( DIALOG_LIB_NEW_SYMBOL::onParentSymbolSelect ),
+                                       nullptr, this );
 
     m_textName->Bind( wxEVT_TEXT,
                       [this]( wxCommandEvent& aEvent )
@@ -80,8 +80,9 @@ DIALOG_LIB_NEW_SYMBOL::DIALOG_LIB_NEW_SYMBOL( EDA_DRAW_FRAME*      aParent,
                           m_nameIsDefaulted = false;
                       } );
 
-    m_checkTransferUserFields->Connect(
-            wxEVT_CHECKBOX, wxCommandEventHandler( DIALOG_LIB_NEW_SYMBOL::onCheckTransferUserFields ), nullptr, this );
+    m_checkTransferUserFields->Connect( wxEVT_CHECKBOX,
+                                        wxCommandEventHandler( DIALOG_LIB_NEW_SYMBOL::onCheckTransferUserFields ),
+                                        nullptr, this );
 
     // Trigger the event handler to show/hide the info bar message.
     wxCommandEvent dummyEvent;
@@ -103,11 +104,12 @@ DIALOG_LIB_NEW_SYMBOL::DIALOG_LIB_NEW_SYMBOL( EDA_DRAW_FRAME*      aParent,
 
 DIALOG_LIB_NEW_SYMBOL::~DIALOG_LIB_NEW_SYMBOL()
 {
-    m_comboInheritanceSelect->Disconnect(
-            FILTERED_ITEM_SELECTED,
-            wxCommandEventHandler( DIALOG_LIB_NEW_SYMBOL::onParentSymbolSelect ), nullptr, this );
-    m_checkTransferUserFields->Disconnect(
-            wxEVT_CHECKBOX, wxCommandEventHandler( DIALOG_LIB_NEW_SYMBOL::onCheckTransferUserFields ), nullptr, this );
+    m_comboInheritanceSelect->Disconnect( FILTERED_ITEM_SELECTED,
+                                          wxCommandEventHandler( DIALOG_LIB_NEW_SYMBOL::onParentSymbolSelect ),
+                                          nullptr, this );
+    m_checkTransferUserFields->Disconnect( wxEVT_CHECKBOX,
+                                           wxCommandEventHandler( DIALOG_LIB_NEW_SYMBOL::onCheckTransferUserFields ),
+                                           nullptr, this );
 }
 
 bool DIALOG_LIB_NEW_SYMBOL::TransferDataFromWindow()
@@ -123,7 +125,7 @@ void DIALOG_LIB_NEW_SYMBOL::onParentSymbolSelect( wxCommandEvent& aEvent )
     if( !parent.IsEmpty() )
     {
         m_infoBar->RemoveAllButtons();
-        m_infoBar->ShowMessage( wxString::Format( _( "Deriving from symbol '%s'." ), parent ),
+        m_infoBar->ShowMessage( wxString::Format( _( "Deriving from symbol '%s'." ), UnescapeString( parent ) ),
                                 wxICON_INFORMATION );
     }
     else

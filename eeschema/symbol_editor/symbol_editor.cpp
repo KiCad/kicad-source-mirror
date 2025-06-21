@@ -884,7 +884,7 @@ public:
         wxStaticText* label = new wxStaticText( this, wxID_ANY, _( "Name:" ) );
         bNameSizer->Add( label, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxLEFT, 5 );
 
-        m_symbolNameCtrl = new wxTextCtrl( this, wxID_ANY, aSymbolName );
+        m_symbolNameCtrl = new wxTextCtrl( this, wxID_ANY, UnescapeString( aSymbolName ) );
         bNameSizer->Add( m_symbolNameCtrl, 1, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
         wxButton* newLibraryButton = new wxButton( this, ID_MAKE_NEW_LIBRARY, _( "New Library..." ) );
@@ -919,7 +919,7 @@ public:
         symbolName.Trim( true );
         symbolName.Trim( false );
         symbolName.Replace( " ", "_" );
-        return symbolName;
+        return EscapeString( symbolName, CTX_LIBID );
     }
 
 protected:
@@ -980,7 +980,8 @@ void SYMBOL_EDIT_FRAME::saveSymbolCopyAs( bool aOpenCopy )
                 {
                     msg = wxString::Format( _( "Library '%s' is read-only. Choose a "
                                                "different library to save the symbol '%s' to." ),
-                                            newLib, newName );
+                                            newLib,
+                                            UnescapeString( newName ) );
                     wxMessageBox( msg );
                     return wxID_CANCEL;
                 }
@@ -996,7 +997,8 @@ void SYMBOL_EDIT_FRAME::saveSymbolCopyAs( bool aOpenCopy )
                 {
                     msg = wxString::Format( _( "Symbol '%s' cannot replace another symbol '%s' "
                                                "that it descends from" ),
-                                            symbolName, newName );
+                                            symbolName,
+                                            UnescapeString( newName ) );
                     wxMessageBox( msg );
                     return wxID_CANCEL;
                 }
@@ -1005,7 +1007,8 @@ void SYMBOL_EDIT_FRAME::saveSymbolCopyAs( bool aOpenCopy )
                 {
                     msg = wxString::Format( _( "Symbol '%s' cannot replace another symbol '%s' "
                                                "that is a descendent of it." ),
-                                            symbolName, newName );
+                                            symbolName,
+                                            UnescapeString( newName ) );
                     wxMessageBox( msg );
                     return wxID_CANCEL;
                 }
@@ -1018,7 +1021,8 @@ void SYMBOL_EDIT_FRAME::saveSymbolCopyAs( bool aOpenCopy )
                     // The simplest case is when the symbol itself has a conflict
                     msg = wxString::Format( _( "Symbol '%s' already exists in library '%s'. "
                                                "Do you want to overwrite it?" ),
-                                            newName, newLib );
+                                            UnescapeString( newName ),
+                                            newLib );
 
                     KIDIALOG errorDlg( this, msg, _( "Confirmation" ),
                                        wxOK | wxCANCEL | wxICON_WARNING );
@@ -1035,7 +1039,8 @@ void SYMBOL_EDIT_FRAME::saveSymbolCopyAs( bool aOpenCopy )
                     // existing symbol in the target lib, or rename all the parents somehow.
                     msg = wxString::Format( _( "The following symbols in the inheritance chain of "
                                                "'%s' already exist in library '%s':\n" ),
-                                            symbolName, newLib );
+                                            UnescapeString( symbolName ),
+                                            newLib );
 
                     for( const wxString& conflict : conflicts )
                         msg += wxString::Format( "  %s\n", conflict );
@@ -1050,10 +1055,9 @@ void SYMBOL_EDIT_FRAME::saveSymbolCopyAs( bool aOpenCopy )
                     switch( errorDlg.ShowModal() )
                     {
                     case wxID_YES: return ID_OVERWRITE_CONFLICTS;
-                    case wxID_NO: return ID_RENAME_CONFLICTS;
-                    default: break;
+                    case wxID_NO:  return ID_RENAME_CONFLICTS;
+                    default:       return wxID_CANCEL;
                     }
-                    return wxID_CANCEL;
                 }
 
                 return wxID_OK;

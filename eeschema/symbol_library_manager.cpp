@@ -679,11 +679,14 @@ bool SYMBOL_LIBRARY_MANAGER::SymbolNameInUse( const wxString& aName, const wxStr
 {
     wxArrayString existing;
 
+    // NB: GetSymbolNames() is mostly used for GUI stuff, so it returns unescaped names
     GetSymbolNames( aLibrary, existing );
+
+    wxString unescapedName = UnescapeString( aName );
 
     for( wxString& candidate : existing )
     {
-        if( candidate.CmpNoCase( aName ) == 0 )
+        if( candidate.CmpNoCase( unescapedName ) == 0 )
             return true;
     }
 
