@@ -42,7 +42,7 @@ bool TOPOLOGY::SimplifyLine( LINE* aLine )
         return false;
 
     LINKED_ITEM* root = aLine->GetLink( 0 );
-    LINE l = m_world->AssembleLine( root );
+    LINE l = m_world->AssembleLine( root, nullptr, false, false, false );
     SHAPE_LINE_CHAIN simplified( l.CLine() );
 
     simplified.Simplify();
