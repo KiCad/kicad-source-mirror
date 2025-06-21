@@ -30,7 +30,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-06-20 23:57+0300\n"
-"PO-Revision-Date: 2025-06-19 12:01+0000\n"
+"PO-Revision-Date: 2025-06-21 22:01+0000\n"
 "Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v9/de/>\n"
 "Language: de\n"
@@ -38,7 +38,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.12.1\n"
+"X-Generator: Weblate 5.13-dev\n"
 "X-Poedit-Basepath: ../../../../../../mnt/kicad\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -23584,9 +23584,8 @@ msgid "Previous Net Item"
 msgstr "Vorheriges Blatt"
 
 #: eeschema/tools/sch_actions.cpp:1084
-#, fuzzy
 msgid "Select previous item on the current net"
-msgstr "Wählt ein Verbindungselement unter dem Zeiger"
+msgstr "Wähle vorheriges Element des aktuellen Netzes"
 
 #: eeschema/tools/sch_actions.cpp:1089
 msgid "Export Drawing to Clipboard"
