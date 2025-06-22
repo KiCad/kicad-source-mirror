@@ -73,7 +73,7 @@ void DRC_RULES_PARSER::reportError( const wxString& aMessage )
 }
 
 
-void DRC_RULES_PARSER::reportDeprecation( const wxString& oldToken, const wxString newToken )
+void DRC_RULES_PARSER::reportDeprecation( const wxString& oldToken, const wxString& newToken )
 {
     if( m_reporter )
     {
@@ -102,6 +102,29 @@ void DRC_RULES_PARSER::parseUnknown()
                 break;
         }
     }
+}
+
+
+wxString DRC_RULES_PARSER::parseExpression()
+{
+    wxString expr;
+    int      depth = 1;
+
+    for( T token = NextTok();  token != T_EOF;  token = NextTok() )
+    {
+        if( token == T_LEFT )
+            depth++;
+
+        if( token == T_RIGHT )
+        {
+            if( --depth == 0 )
+                break;
+        }
+
+        expr += FromUTF8();
+    }
+
+    return expr;
 }
 
 
@@ -696,76 +719,64 @@ void DRC_RULES_PARSER::parseConstraint( DRC_RULE* aRule )
             break;
 
         case T_min:
-            token = NextTok();
+        {
+            wxString expr = parseExpression();
 
-            if( (int) token == DSN_RIGHT )
+            if( expr.IsEmpty() )
             {
                 reportError( _( "Missing min value." ) );
                 break;
             }
 
-            parseValueWithUnits( FromUTF8(), value, units, unitless );
+            parseValueWithUnits( expr, value, units, unitless );
             validateAndSetValueWithUnits( value, units,
                                           [&c]( const int aValue )
                                           {
                                               c.m_Value.SetMin( aValue );
                                           } );
 
-            if( (int) NextTok() != DSN_RIGHT )
-            {
-                reportError( wxString::Format( _( "Unrecognized item '%s'." ), FromUTF8() ) );
-                parseUnknown();
-            }
-
             break;
+        }
 
         case T_max:
-            token = NextTok();
+        {
+            wxString expr = parseExpression();
 
-            if( (int) token == DSN_RIGHT )
+            if( expr.IsEmpty() )
             {
                 reportError( _( "Missing max value." ) );
                 break;
             }
 
-            parseValueWithUnits( FromUTF8(), value, units, unitless );
+            parseValueWithUnits( expr, value, units, unitless );
             validateAndSetValueWithUnits( value, units,
                                           [&c]( const int aValue )
                                           {
                                               c.m_Value.SetMax( aValue );
                                           } );
 
-            if( (int) NextTok() != DSN_RIGHT )
-            {
-                reportError( wxString::Format( _( "Unrecognized item '%s'." ), FromUTF8() ) );
-                parseUnknown();
-            }
-
             break;
+        }
 
         case T_opt:
-            token = NextTok();
+        {
+            wxString expr = parseExpression();
 
-            if( (int) token == DSN_RIGHT )
+            if( expr.IsEmpty() )
             {
                 reportError( _( "Missing opt value." ) );
                 break;
             }
 
-            parseValueWithUnits( FromUTF8(), value, units, unitless );
+            parseValueWithUnits( expr, value, units, unitless );
             validateAndSetValueWithUnits( value, units,
                                           [&c]( const int aValue )
                                           {
                                               c.m_Value.SetOpt( aValue );
                                           } );
 
-            if( (int) NextTok() != DSN_RIGHT )
-            {
-                reportError( wxString::Format( _( "Unrecognized item '%s'." ), FromUTF8() ) );
-                parseUnknown();
-            }
-
             break;
+        }
 
         case T_EOF:
             reportError( _( "Incomplete statement." ) );

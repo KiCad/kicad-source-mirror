@@ -59,9 +59,10 @@ private:
     LSET parseLayer( wxString* aSource );
     SEVERITY parseSeverity();
     void parseUnknown();
+    wxString parseExpression();
 
     void reportError( const wxString& aMessage );
-    void reportDeprecation( const wxString& oldToken, const wxString newToken );
+    void reportDeprecation( const wxString& oldToken, const wxString& newToken );
 
 private:
     int       m_requiredVersion;
