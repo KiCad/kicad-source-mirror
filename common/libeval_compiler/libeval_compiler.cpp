@@ -815,6 +815,9 @@ bool COMPILER::generateUCode( UCODE* aCode, CONTEXT* aPreflightContext )
 {
     std::vector<TREE_NODE*> stack;
     wxString                msg;
+    int                     numericValueCount = 0;
+    wxString                missingUnitsMsg;
+    int                     missingUnitsSrcPos = 0;
 
     if( !m_tree )
     {
@@ -1031,10 +1034,10 @@ bool COMPILER::generateUCode( UCODE* aCode, CONTEXT* aPreflightContext )
             {
                 if( !m_unitResolver->GetSupportedUnitsMessage().empty() )
                 {
-                    msg.Printf( _( "Missing units for '%s'| (%s)" ),
-                                formatNode( node ),
-                                m_unitResolver->GetSupportedUnitsMessage() );
-                    reportError( CST_CODEGEN, msg, node->srcPos );
+                    missingUnitsMsg.Printf( _( "Missing units for '%s'| (%s)" ),
+                                            formatNode( node ),
+                                            m_unitResolver->GetSupportedUnitsMessage() );
+                    missingUnitsSrcPos = node->srcPos;
                 }
 
                 value = EDA_UNIT_UTILS::UI::DoubleValueFromString( formatNode( node ) );
@@ -1042,6 +1045,7 @@ bool COMPILER::generateUCode( UCODE* aCode, CONTEXT* aPreflightContext )
 
             node->SetUop( TR_UOP_PUSH_VALUE, value, unitsType );
             node->isTerminal = true;
+            numericValueCount++;
             break;
         }
 
@@ -1103,6 +1107,17 @@ bool COMPILER::generateUCode( UCODE* aCode, CONTEXT* aPreflightContext )
 
         stack.pop_back();
     }
+
+    // Report the common error condition of a single numeric value with no units (which will result in
+    // nanometers, and rarely leads to anything useful).
+    // Reporting missing units with multiple numeric values is far more complicated as we have to
+    // separate comparison operators from multiplicative operators from additive operators.  Consider:
+    //   2 * 1.5mm
+    //   2mm + 105um
+    //   2mm > 20um
+    //   (2mm + 1.5mm) * 3
+    if( !missingUnitsMsg.IsEmpty() && numericValueCount == 1 )
+        reportError( CST_CODEGEN, missingUnitsMsg, missingUnitsSrcPos );
 
     libeval_dbg(2,"dump: \n%s\n", aCode->Dump().c_str() );
 
