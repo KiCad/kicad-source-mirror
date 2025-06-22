@@ -502,6 +502,7 @@ void DRC_RULES_PARSER::parseConstraint( DRC_RULE* aRule )
             }
 
             break;
+
         case T_min:
             token = NextTok();
 
