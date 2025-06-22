@@ -427,34 +427,35 @@ void DRC_RULES_PARSER::parseConstraint( DRC_RULE* aRule )
 
     auto validateAndSetValueWithUnits =
             [this, &allowsTimeDomain, &unitsType, &c]( int aValue, const EDA_UNITS aUnits, auto aSetter )
-    {
-        const EDA_DATA_TYPE unitsTypeTmp = UNITS_PROVIDER::GetTypeFromUnits( aUnits );
-
-        if( !allowsTimeDomain && unitsTypeTmp == EDA_DATA_TYPE::TIME )
-            reportError( _( "Time based units not allowed for constraint type." ) );
-
-        if( ( c.m_Value.HasMin() || c.m_Value.HasMax() || c.m_Value.HasOpt() ) && unitsType != unitsTypeTmp )
-        {
-            reportError( _( "Mixed units for constraint values." ) );
-        }
-
-        unitsType = unitsTypeTmp;
-        aSetter( aValue );
-
-        if( allowsTimeDomain )
-        {
-            if( unitsType == EDA_DATA_TYPE::TIME )
             {
-                c.SetOption( DRC_CONSTRAINT::OPTIONS::TIME_DOMAIN );
-                c.ClearOption( DRC_CONSTRAINT::OPTIONS::SPACE_DOMAIN );
-            }
-            else
-            {
-                c.SetOption( DRC_CONSTRAINT::OPTIONS::SPACE_DOMAIN );
-                c.ClearOption( DRC_CONSTRAINT::OPTIONS::TIME_DOMAIN );
-            }
-        }
-    };
+                const EDA_DATA_TYPE unitsTypeTmp = UNITS_PROVIDER::GetTypeFromUnits( aUnits );
+
+                if( !allowsTimeDomain && unitsTypeTmp == EDA_DATA_TYPE::TIME )
+                    reportError( _( "Time based units not allowed for constraint type." ) );
+
+                if( ( c.m_Value.HasMin() || c.m_Value.HasMax() || c.m_Value.HasOpt() )
+                    && unitsType != unitsTypeTmp )
+                {
+                    reportError( _( "Mixed units for constraint values." ) );
+                }
+
+                unitsType = unitsTypeTmp;
+                aSetter( aValue );
+
+                if( allowsTimeDomain )
+                {
+                    if( unitsType == EDA_DATA_TYPE::TIME )
+                    {
+                        c.SetOption( DRC_CONSTRAINT::OPTIONS::TIME_DOMAIN );
+                        c.ClearOption( DRC_CONSTRAINT::OPTIONS::SPACE_DOMAIN );
+                    }
+                    else
+                    {
+                        c.SetOption( DRC_CONSTRAINT::OPTIONS::SPACE_DOMAIN );
+                        c.ClearOption( DRC_CONSTRAINT::OPTIONS::TIME_DOMAIN );
+                    }
+                }
+            };
 
     T token = NextTok();
 
@@ -790,26 +791,27 @@ void DRC_RULES_PARSER::parseValueWithUnits( const wxString& aExpr, int& aResult,
     aResult = 0.0;
     aUnits = EDA_UNITS::UNSCALED;
 
-    auto errorHandler = [&]( const wxString& aMessage, int aOffset )
-    {
-        wxString rest;
-        wxString first = aMessage.BeforeFirst( '|', &rest );
+    auto errorHandler =
+            [&]( const wxString& aMessage, int aOffset )
+            {
+                wxString rest;
+                wxString first = aMessage.BeforeFirst( '|', &rest );
 
-        if( m_reporter )
-        {
-            wxString msg = wxString::Format( _( "ERROR: <a href='%d:%d'>%s</a>%s" ),
-                                             CurLineNumber(), CurOffset() + aOffset, first, rest );
+                if( m_reporter )
+                {
+                    wxString msg = wxString::Format( _( "ERROR: <a href='%d:%d'>%s</a>%s" ),
+                                                     CurLineNumber(), CurOffset() + aOffset, first, rest );
 
-            m_reporter->Report( msg, RPT_SEVERITY_ERROR );
-        }
-        else
-        {
-            wxString msg = wxString::Format( _( "ERROR: %s%s" ), first, rest );
+                    m_reporter->Report( msg, RPT_SEVERITY_ERROR );
+                }
+                else
+                {
+                    wxString msg = wxString::Format( _( "ERROR: %s%s" ), first, rest );
 
-            THROW_PARSE_ERROR( msg, CurSource(), CurLine(), CurLineNumber(),
-                               CurOffset() + aOffset );
-        }
-    };
+                    THROW_PARSE_ERROR( msg, CurSource(), CurLine(), CurLineNumber(),
+                                       CurOffset() + aOffset );
+                }
+            };
 
     PCBEXPR_EVALUATOR evaluator( aUnitless ? (LIBEVAL::UNIT_RESOLVER*) new PCBEXPR_UNITLESS_RESOLVER()
                                             : (LIBEVAL::UNIT_RESOLVER*) new PCBEXPR_UNIT_RESOLVER() );

@@ -196,16 +196,32 @@ class KICOMMON_API VALUE
 {
 public:
     VALUE() :
-            m_type( VT_UNDEFINED ), m_valueDbl( 0 ), m_stringIsWildcard( false ), m_isDeferredDbl( false ),
-            m_isDeferredStr( false ), m_units( EDA_UNITS::UNSCALED ) {};
+            m_type( VT_UNDEFINED ),
+            m_valueDbl( 0 ),
+            m_stringIsWildcard( false ),
+            m_isDeferredDbl( false ),
+            m_isDeferredStr( false ),
+            m_units( EDA_UNITS::UNSCALED )
+    {};
 
     VALUE( const wxString& aStr, bool aIsWildcard = false ) :
-            m_type( VT_STRING ), m_valueDbl( 0 ), m_valueStr( aStr ), m_stringIsWildcard( aIsWildcard ),
-            m_isDeferredDbl( false ), m_isDeferredStr( false ), m_units( EDA_UNITS::UNSCALED ) {};
+            m_type( VT_STRING ),
+            m_valueDbl( 0 ),
+            m_valueStr( aStr ),
+            m_stringIsWildcard( aIsWildcard ),
+            m_isDeferredDbl( false ),
+            m_isDeferredStr( false ),
+            m_units( EDA_UNITS::UNSCALED )
+    {};
 
     VALUE( const double aVal ) :
-            m_type( VT_NUMERIC ), m_valueDbl( aVal ), m_stringIsWildcard( false ), m_isDeferredDbl( false ),
-            m_isDeferredStr( false ), m_units( EDA_UNITS::UNSCALED ) {};
+            m_type( VT_NUMERIC ),
+            m_valueDbl( aVal ),
+            m_stringIsWildcard( false ),
+            m_isDeferredDbl( false ),
+            m_isDeferredStr( false ),
+            m_units( EDA_UNITS::UNSCALED )
+    {};
 
     static VALUE* MakeNullValue()
     {

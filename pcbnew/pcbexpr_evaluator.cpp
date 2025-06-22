@@ -168,7 +168,7 @@ public:
         {
             // Test constituent net class names. The effective net class name (e.g. CLASS1,CLASS2,OTHER_CLASS) is
             // tested in the fallthrough condition.
-            for( const auto nc : m_item->GetEffectiveNetClass()->GetConstituentNetclasses() )
+            for( const NETCLASS* nc : m_item->GetEffectiveNetClass()->GetConstituentNetclasses() )
             {
                 const wxString& ncName = nc->GetName();
 
@@ -198,7 +198,7 @@ public:
             // Test constituent net class names
             bool isInConstituents = false;
 
-            for( const auto nc : m_item->GetEffectiveNetClass()->GetConstituentNetclasses() )
+            for( const NETCLASS* nc : m_item->GetEffectiveNetClass()->GetConstituentNetclasses() )
             {
                 const wxString& ncName = nc->GetName();
 
@@ -270,7 +270,7 @@ public:
         {
             // Test constituent component class names. The effective component class name
             // (e.g. CLASS1,CLASS2,OTHER_CLASS) is tested in the fallthrough condition.
-            for( const auto cc : m_item->GetComponentClass()->GetConstituentClasses() )
+            for( const COMPONENT_CLASS* cc : m_item->GetComponentClass()->GetConstituentClasses() )
             {
                 const wxString& ccName = cc->GetName();
 
@@ -308,7 +308,7 @@ public:
             // Test constituent component class names
             bool isInConstituents = false;
 
-            for( const auto cc : m_item->GetComponentClass()->GetConstituentClasses() )
+            for( const COMPONENT_CLASS* cc : m_item->GetComponentClass()->GetConstituentClasses() )
             {
                 const wxString& ccName = cc->GetName();
 
@@ -410,7 +410,7 @@ LIBEVAL::VALUE* PCBEXPR_VAR_REF::GetValue( LIBEVAL::CONTEXT* aCtx )
         {
             if( m_isOptional )
             {
-                auto val = item->Get<std::optional<int>>( it->second );
+                std::optional<int> val = item->Get<std::optional<int>>( it->second );
 
                 if( val.has_value() )
                     return new LIBEVAL::VALUE( static_cast<double>( val.value() ) );
@@ -424,7 +424,7 @@ LIBEVAL::VALUE* PCBEXPR_VAR_REF::GetValue( LIBEVAL::CONTEXT* aCtx )
         {
             if( m_isOptional )
             {
-                auto val = item->Get<std::optional<double>>( it->second );
+                std::optional<double> val = item->Get<std::optional<double>>( it->second );
 
                 if( val.has_value() )
                     return new LIBEVAL::VALUE( val.value() );
