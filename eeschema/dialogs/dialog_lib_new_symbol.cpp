@@ -48,15 +48,15 @@ DIALOG_LIB_NEW_SYMBOL::DIALOG_LIB_NEW_SYMBOL( EDA_DRAW_FRAME*      aParent,
 {
     if( aSymbolNames.GetCount() )
     {
-        wxArrayString escapedNames;
+        wxArrayString unescapedNames;
 
         for( const wxString& name : aSymbolNames )
-            escapedNames.Add( UnescapeString( name ) );
+            unescapedNames.Add( UnescapeString( name ) );
 
-        m_comboInheritanceSelect->SetStringList( escapedNames );
+        m_comboInheritanceSelect->SetStringList( unescapedNames );
 
         if( !aInheritFromSymbolName.IsEmpty() )
-            m_comboInheritanceSelect->SetSelectedString( aInheritFromSymbolName );
+            m_comboInheritanceSelect->SetSelectedString( UnescapeString( aInheritFromSymbolName ) );
     }
 
     // Trigger the event handler to show/hide the info bar message.
@@ -68,15 +68,15 @@ DIALOG_LIB_NEW_SYMBOL::DIALOG_LIB_NEW_SYMBOL( EDA_DRAW_FRAME*      aParent,
 
     if( !aInheritFromSymbolName.IsEmpty() )
     {
-        m_textName->ChangeValue( getDerivativeName( aInheritFromSymbolName ) );
+        m_textName->ChangeValue( UnescapeString( getDerivativeName( aInheritFromSymbolName ) ) );
         m_nameIsDefaulted = true;
     }
 
     m_pinTextPosition.SetValue( schIUScale.MilsToIU( DEFAULT_PIN_NAME_OFFSET ) );
 
-    m_comboInheritanceSelect->Connect(
-            FILTERED_ITEM_SELECTED,
-            wxCommandEventHandler( DIALOG_LIB_NEW_SYMBOL::onParentSymbolSelect ), nullptr, this );
+    m_comboInheritanceSelect->Connect( FILTERED_ITEM_SELECTED,
+                                       wxCommandEventHandler( DIALOG_LIB_NEW_SYMBOL::onParentSymbolSelect ),
+                                       nullptr, this );
 
     m_textName->Bind( wxEVT_TEXT,
                       [this]( wxCommandEvent& aEvent )
@@ -115,7 +115,7 @@ void DIALOG_LIB_NEW_SYMBOL::onParentSymbolSelect( wxCommandEvent& aEvent )
     if( !parent.IsEmpty() )
     {
         m_infoBar->RemoveAllButtons();
-        m_infoBar->ShowMessage( wxString::Format( _( "Deriving from symbol '%s'." ), parent ),
+        m_infoBar->ShowMessage( wxString::Format( _( "Deriving from symbol '%s'." ), UnescapeString( parent ) ),
                                 wxICON_INFORMATION );
     }
     else
