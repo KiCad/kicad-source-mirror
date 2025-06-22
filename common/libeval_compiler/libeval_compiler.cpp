@@ -60,7 +60,7 @@ namespace LIBEVAL
 
 TREE_NODE* newNode( LIBEVAL::COMPILER* compiler, int op, const T_TOKEN_VALUE& value )
 {
-    auto t2          = new TREE_NODE();
+    TREE_NODE* t2    = new TREE_NODE();
 
     t2->valid        = true;
     t2->value.str    = value.str ? new wxString( *value.str ) : nullptr;
@@ -183,10 +183,8 @@ wxString UOP::Format() const
 
 UCODE::~UCODE()
 {
-    for ( auto op : m_ucode )
-    {
+    for( UOP* op : m_ucode )
         delete op;
-    }
 }
 
 
@@ -194,7 +192,7 @@ wxString UCODE::Dump() const
 {
     wxString rv;
 
-    for( auto op : m_ucode )
+    for( UOP* op : m_ucode )
     {
         rv += op->Format();
         rv += "\n";
@@ -295,10 +293,10 @@ void COMPILER::Clear()
 
     m_tree = nullptr;
 
-    for( auto tok : m_gcItems )
+    for( TREE_NODE* tok : m_gcItems )
         delete tok;
 
-    for( auto tok: m_gcStrings )
+    for( wxString* tok: m_gcStrings )
         delete tok;
 
     m_gcItems.clear();
@@ -838,8 +836,7 @@ bool COMPILER::generateUCode( UCODE* aCode, CONTEXT* aPreflightContext )
     {
         TREE_NODE* node = stack.back();
 
-        libeval_dbg( 4, "process node %p [op %d] [stack %lu]\n",
-                     node, node->op, (unsigned long)stack.size() );
+        libeval_dbg( 4, "process node %p [op %d] [stack %lu]\n", node, node->op, (unsigned long)stack.size() );
 
         // process terminal nodes first
         switch( node->op )
@@ -847,10 +844,7 @@ bool COMPILER::generateUCode( UCODE* aCode, CONTEXT* aPreflightContext )
         case TR_OP_FUNC_CALL:
             // Function call's uop was generated inside TR_STRUCT_REF
             if( !node->uop )
-            {
-                reportError( CST_CODEGEN,  _( "Unknown parent of function parameters" ),
-                             node->srcPos );
-            }
+                reportError( CST_CODEGEN,  _( "Unknown parent of function parameters" ), node->srcPos );
 
             node->isTerminal = true;
             break;
@@ -891,14 +885,12 @@ bool COMPILER::generateUCode( UCODE* aCode, CONTEXT* aPreflightContext )
                     if( !vref )
                     {
                         msg.Printf( _( "Unrecognized item '%s'" ), itemName );
-                        reportError( CST_CODEGEN, msg,
-                                     node->leaf[0]->srcPos - (int) itemName.length() );
+                        reportError( CST_CODEGEN, msg, node->leaf[0]->srcPos - (int) itemName.length() );
                     }
                     else if( vref->GetType() == VT_PARSE_ERROR )
                     {
                         msg.Printf( _( "Unrecognized property '%s'" ), propName );
-                        reportError( CST_CODEGEN, msg,
-                                     node->leaf[1]->srcPos - (int) propName.length() );
+                        reportError( CST_CODEGEN, msg, node->leaf[1]->srcPos - (int) propName.length() );
                     }
 
                     node->leaf[0]->isVisited = true;
@@ -921,8 +913,7 @@ bool COMPILER::generateUCode( UCODE* aCode, CONTEXT* aPreflightContext )
                     if( !vref )
                     {
                         msg.Printf( _( "Unrecognized item '%s'" ), itemName );
-                        reportError( CST_CODEGEN, msg,
-                                     node->leaf[0]->srcPos - (int) itemName.length() );
+                        reportError( CST_CODEGEN, msg, node->leaf[0]->srcPos - (int) itemName.length() );
                     }
 
                     wxString functionName = formatNode( node->leaf[1]->leaf[0] );
@@ -995,8 +986,7 @@ bool COMPILER::generateUCode( UCODE* aCode, CONTEXT* aPreflightContext )
                     if( !vref )
                     {
                         msg.Printf( _( "Unrecognized item '%s'" ), itemName );
-                        reportError( CST_CODEGEN, msg,
-                                     node->leaf[0]->srcPos - (int) itemName.length() );
+                        reportError( CST_CODEGEN, msg, node->leaf[0]->srcPos - (int) itemName.length() );
                     }
 
                     msg.Printf( _( "Unrecognized property '%s'" ), propName );
@@ -1223,7 +1213,7 @@ void UOP::Exec( CONTEXT* ctx )
             break;
         }
 
-        auto rp = ctx->AllocValue();
+        VALUE* rp = ctx->AllocValue();
         rp->Set( result );
         ctx->Push( rp );
         return;
@@ -1244,7 +1234,7 @@ void UOP::Exec( CONTEXT* ctx )
             break;
         }
 
-        auto rp = ctx->AllocValue();
+        VALUE* rp = ctx->AllocValue();
         rp->Set( result );
         ctx->Push( rp );
         return;
