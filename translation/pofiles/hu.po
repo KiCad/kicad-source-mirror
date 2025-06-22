@@ -1,5 +1,5 @@
 # hu/kicad.po file updated by the 'update-po-files.sh' script from kicad-source-mirror @ commit cb83f8acdfdfc1f7659e7e87d2e0696520150bc9
-# Miklós Márton <martonmiklosqdev@gmail.com>, 2022, 2023.
+# Miklós Márton <martonmiklosqdev@gmail.com>, 2022, 2023, 2025.
 # István Farkas <sakrafi1963@gmail.com>, 2023.
 # Hajdu Norbert <norbert.hajdu.biz@gmail.com>, 2024.
 # Balázs Meskó <meskobalazs@mailbox.org>, 2024.
@@ -14,10 +14,10 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-06-20 23:57+0300\n"
-"PO-Revision-Date: 2025-06-20 20:01+0000\n"
-"Last-Translator: Sárkány Lőrinc <lsarkany@gmail.com>\n"
-"Language-Team: Hungarian <https://hosted.weblate.org/projects/kicad/master-"
-"source/hu/>\n"
+"PO-Revision-Date: 2025-06-23 21:01+0000\n"
+"Last-Translator: Miklós Márton <martonmiklosqdev@gmail.com>\n"
+"Language-Team: Hungarian <https://hosted.weblate.org/projects/kicad/"
+"master-source/hu/>\n"
 "Language: hu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -11012,22 +11012,19 @@ msgstr "Elérési útvonal kiválasztása"
 
 #: common/widgets/lib_tree.cpp:98
 msgid "Sort by Best Match"
-msgstr ""
+msgstr "Rendezés legjobb illeszkedés szerint"
 
 #: common/widgets/lib_tree.cpp:99
-#, fuzzy
 msgid "Sort Alphabetically"
-msgstr "Összes megjelenítése betűrendben"
+msgstr "Rendezés betűrendben"
 
 #: common/widgets/lib_tree.cpp:432
-#, fuzzy
 msgid "recent searches"
-msgstr "Metrikus mértékegységek használata"
+msgstr "legutóbbi keresések"
 
 #: common/widgets/lib_tree.cpp:1007
-#, fuzzy
 msgid "Select Columns"
-msgstr "Kiválasztás megszüntetése"
+msgstr "Oszlopok kiválasztása"
 
 #: common/widgets/mathplot.cpp:1402
 #, fuzzy
@@ -16118,9 +16115,8 @@ msgid "Significant digits:"
 msgstr "Értékes jegyek:"
 
 #: eeschema/dialogs/dialog_sim_format_value_base.cpp:32
-#, fuzzy
 msgid "Range:"
-msgstr "Csere:"
+msgstr "Tartomány:"
 
 #: eeschema/dialogs/dialog_sim_format_value_base.cpp:36
 msgid "f"
@@ -34678,7 +34674,7 @@ msgstr "32"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:39
 msgid "Impedance controlled"
-msgstr "Impedancia vezérelt"
+msgstr "Impedancia illesztett"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:40
 msgid ""
