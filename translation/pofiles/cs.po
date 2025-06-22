@@ -22,16 +22,16 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-06-20 23:57+0300\n"
-"PO-Revision-Date: 2025-06-01 16:38+0000\n"
+"PO-Revision-Date: 2025-06-22 20:04+0000\n"
 "Last-Translator: Jan Straka <bach@email.cz>\n"
-"Language-Team: Czech <https://hosted.weblate.org/projects/kicad/master-"
-"source/cs/>\n"
+"Language-Team: Czech <https://hosted.weblate.org/projects/kicad/"
+"master-source/cs/>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=((n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2);\n"
-"X-Generator: Weblate 5.12-dev\n"
+"X-Generator: Weblate 5.13-dev\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-Basepath: .\n"
 
@@ -3129,6 +3129,8 @@ msgid ""
 "Do not show this dialog again until KiCad restarts. You can re-enable this "
 "dialog in Pcbnew preferences."
 msgstr ""
+"Tento dialog znovu nezobrazovat, dokud nebude KiCad restartován. Toto dialog "
+"můžete znovu povolit v předvolbách Pcbnew."
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:30
 #, c-format
@@ -7365,18 +7367,17 @@ msgid "Could not look up target commit"
 msgstr "Nelze vyhledat komit"
 
 #: common/git/git_pull_handler.cpp:287
-#, fuzzy
 msgid "Could not get tree from target commit"
-msgstr "Nelze sloučit comity"
+msgstr "Nepodařilo se získat strom z cílového komitu"
 
 #: common/git/git_pull_handler.cpp:329 common/git/kicad_git_errors.cpp:55
 msgid "Failed to perform checkout operation."
 msgstr "Provedení kontrolní operace se nezdařilo."
 
 #: common/git/git_pull_handler.cpp:338
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to update reference '%s' to point to '%s'"
-msgstr "potřebuji číslo pro '%s'"
+msgstr "Selhání aktualizace reference '%s' pro zobrazení na '%s'"
 
 #: common/git/git_pull_handler.cpp:348
 #, fuzzy
@@ -8728,7 +8729,6 @@ msgid "Select Preferred Editor"
 msgstr "Vybrat preferovaný editor"
 
 #: common/pgm_base.cpp:258
-#, fuzzy
 msgid ""
 "KiCad can anonymously report crashes and special event data to developers in "
 "order to aid identifying critical bugs and help profile functionality to "
@@ -8737,12 +8737,11 @@ msgid ""
 "reports when crashes or events occur. \n"
 "Your design files such as schematic and PCB are not shared in this process."
 msgstr ""
-"KiCad umí vývojářům anonymně hlásit pády a speciální data událostí, aby "
-"efektivněji napomohl identifikaci kritických chyb napříč uživatelskou "
-"základnou a pomohl funkcionalitě profilu usměrňovat vylepšení. \n"
-"Pokud se rozhodnete pro dobrovolnou účast, KiCad bude automaticky "
-"zpracovávat odesílání zmíněných hlášení, když dojde k haváriím nebo "
-"událostem.\n"
+"KiCad může vývojářům anonymně hlásit pády a speciální data událostí s cílem "
+"pomoci při identifikaci kritických chyb a pomoci funkcionalitě profilu s "
+"naváděním vylepšení. \n"
+"Pokud se rozhodnete pro dobrovolnou účast, KiCad automaticky odešle zmíněná "
+"hlášení, když dojde k haváriím nebo událostem. \n"
 "Návrhové soubory jako schémata nebo DPS nejsou v tomto procesu sdíleny."
 
 #: common/pgm_base.cpp:263
@@ -8755,9 +8754,8 @@ msgid "Opt In"
 msgstr ""
 
 #: common/pgm_base.cpp:265
-#, fuzzy
 msgid "Decline"
-msgstr "Šrafované čáry"
+msgstr "Odmítnout"
 
 #: common/pgm_base.cpp:367
 msgid "Environment variable HOME is empty.  Unable to continue."
@@ -8896,9 +8894,9 @@ msgid "Error: "
 msgstr "Chyba: "
 
 #: common/richio.cpp:102 eeschema/tools/sch_drawing_tools.cpp:2973
-#, fuzzy, c-format
+#, c-format
 msgid "File '%s' does not exist."
-msgstr "Adresář '%s' neexistuje"
+msgstr "Soubor '%s' neexistuje."
 
 #: common/richio.cpp:129 eeschema/sch_io/eagle/sch_io_eagle.cpp:598
 #: eeschema/sch_io/eagle/sch_io_eagle.cpp:615
@@ -9662,9 +9660,8 @@ msgid "Return zoom to level prior to last zoom undo"
 msgstr "Návrat k úrovni přiblížení před posledním zrušením přiblížení"
 
 #: common/tool/actions.cpp:826
-#, fuzzy
 msgid "Pan to Center Selected Objects"
-msgstr "Pan do středu vybraných objektů"
+msgstr "Pohled do středu vybraných objektů"
 
 #: common/tool/actions.cpp:833
 msgid "Cursor Up"
@@ -10316,9 +10313,8 @@ msgid "Library Description"
 msgstr "Popis knihovny"
 
 #: common/widgets/design_block_pane.cpp:321
-#, fuzzy
 msgid "Please select a library to delete."
-msgstr "Prosím vyberte soubor tabulky knihoven symbolů."
+msgstr "Vyberte knihovnu, kterou chcete odstranit."
 
 #: common/widgets/design_block_pane.cpp:327
 #: common/widgets/design_block_pane.cpp:369
@@ -10344,14 +10340,14 @@ msgid "Design block library '%s' deleted"
 msgstr "Knihovna návrhových bloků '%s' byla smazána"
 
 #: common/widgets/design_block_pane.cpp:375
-#, fuzzy, c-format
+#, c-format
 msgid "Delete design block '%s' in library '%s' from disk?"
-msgstr "Smazat pouzdro '%s' z knihovny '%s'?"
+msgstr "Chcete odstranit blok návrhu '%s' v knihovně '%s' z disku?"
 
 #: common/widgets/design_block_pane.cpp:391
-#, fuzzy, c-format
+#, c-format
 msgid "Design block '%s' deleted from library '%s'"
-msgstr "Pouzdro '%s' smazáno z knihovny '%s'"
+msgstr "Blok návrhu '%s' odstraněn z knihovny '%s'"
 
 #: common/widgets/design_block_pane.cpp:460
 #: eeschema/sch_design_block_utils.cpp:47 pcbnew/pcb_design_block_utils.cpp:54
@@ -11575,12 +11571,13 @@ msgid "Unconnected wire to bus entry"
 msgstr "Nepřipojený drát ke vstupu na sběrnici"
 
 #: eeschema/connection_graph.cpp:4282
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Hierarchical label \"%s\" in root sheet cannot be connected to non-existent "
 "parent sheet"
 msgstr ""
-"Hierarchické označení %s nemá v nadřazeném listu odpovídající vývod listu"
+"Hierarchický štítek \"%s\" v kořenovém listu nelze připojit k neexistujícímu "
+"nadřazenému listu"
 
 #: eeschema/connection_graph.cpp:4347
 #, c-format
@@ -12605,9 +12602,8 @@ msgid "ERC Job Settings"
 msgstr "Upravit možnosti..."
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:221
-#, fuzzy
 msgid "Export netlist in KiCad format"
-msgstr "Exportovat netlist ve formátu CadStar"
+msgstr "Exportovat netlist ve formátu KiCad"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:226
 msgid "Export netlist in OrcadPCB2 format"
@@ -14611,9 +14607,8 @@ msgid "BOM presets"
 msgstr "Předvolby BOM"
 
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:57
-#, fuzzy
 msgid "BOM format presets"
-msgstr "Přednastavení formátu BOM"
+msgstr "Předvolby formátu BOM"
 
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:60
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:87
@@ -15729,20 +15724,20 @@ msgid "Column Label"
 msgstr "%d sloupec tabulky"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:202
-#, fuzzy
 msgid "Show Column"
-msgstr "Zobrazit / skrýt sloupce"
+msgstr "Zobrazit sloupec"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:203
 msgid "Group By"
 msgstr "Skupiny"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:205
-#, fuzzy
 msgid ""
 "Show\n"
 "Column"
-msgstr "Zobrazit / skrýt sloupce"
+msgstr ""
+"Zobrazit\n"
+"sloupec"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:206
 msgid ""
@@ -16210,15 +16205,13 @@ msgstr "Obsah buňky:"
 
 #: eeschema/dialogs/dialog_table_properties_base.cpp:55
 #: pcbnew/dialogs/dialog_table_properties_base.cpp:64
-#, fuzzy
 msgid "External border"
-msgstr "Externí data"
+msgstr "Vnější hranice"
 
 #: eeschema/dialogs/dialog_table_properties_base.cpp:58
 #: pcbnew/dialogs/dialog_table_properties_base.cpp:67
-#, fuzzy
 msgid "Header border"
-msgstr "Okraje listu"
+msgstr "Ohraničení záhlaví"
 
 #: eeschema/dialogs/dialog_table_properties_base.cpp:110
 #: pcbnew/dialogs/dialog_table_properties_base.cpp:99
@@ -16235,9 +16228,8 @@ msgstr "Sloupce"
 #: eeschema/dialogs/dialog_table_properties_base.h:76
 #: eeschema/sch_table.cpp:515 pcbnew/dialogs/dialog_table_properties_base.h:73
 #: pcbnew/pcb_table.cpp:665
-#, fuzzy
 msgid "Table Properties"
-msgstr "Vlastnosti označení"
+msgstr "Vlastnosti tabulky"
 
 #: eeschema/dialogs/dialog_tablecell_properties.cpp:417
 #: pcbnew/dialogs/dialog_tablecell_properties.cpp:413
@@ -16271,9 +16263,8 @@ msgstr "-- smíšené hodnoty --"
 
 #: eeschema/dialogs/dialog_tablecell_properties_base.cpp:234
 #: eeschema/dialogs/dialog_tablecell_properties_base.cpp:280
-#, fuzzy
 msgid "Set Color..."
-msgstr "Barva pájecí pasty..."
+msgstr "Nastavit barvu..."
 
 #: eeschema/dialogs/dialog_tablecell_properties_base.cpp:270
 msgid "Background fill:"
@@ -16604,9 +16595,8 @@ msgid "Highlight thickness:"
 msgstr "Zvýraznit tloušťku:"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:189
-#, fuzzy
 msgid "Highlight netclass colors"
-msgstr "barva třídy spojů DPS"
+msgstr "Zvýraznit barvy netclass"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:197
 #, fuzzy
@@ -17170,9 +17160,8 @@ msgstr "Vertikální pohyb touchpadu nebo kolečka:"
 
 #: eeschema/dialogs/panel_simulator_preferences_base.cpp:46
 #: eeschema/dialogs/panel_simulator_preferences_base.cpp:109
-#, fuzzy
 msgid "Modifier"
-msgstr "Upraveno"
+msgstr "Modifikátor"
 
 #: eeschema/dialogs/panel_simulator_preferences_base.cpp:50
 #: eeschema/dialogs/panel_simulator_preferences_base.cpp:113
@@ -17258,9 +17247,8 @@ msgid "&Pitch of repeated pins:"
 msgstr "&Rozteč opakovaných vývodů:"
 
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:146
-#, fuzzy
 msgid "General Editing"
-msgstr "Obecná nastavení"
+msgstr "Obecné úpravy"
 
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:156
 msgid "Keep pins attached when dragging edges"
@@ -17358,9 +17346,8 @@ msgstr "Přidat existující knihovnu do tabulky"
 
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:159
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:156
-#, fuzzy
 msgid "Reset Libraries"
-msgstr "Procházet knihovny"
+msgstr "Obnovit knihovny"
 
 #: eeschema/dialogs/panel_template_fieldnames.cpp:45
 #, fuzzy
@@ -17491,9 +17478,9 @@ msgstr "Předvolba formátu BOM '%s' nenalezena"
 
 #: eeschema/eeschema_jobs_handler.cpp:746
 #: eeschema/eeschema_jobs_handler.cpp:817
-#, fuzzy, c-format
+#, c-format
 msgid "Wrote bill of materials to '%s'."
-msgstr "Generovat rozpisku materiálů..."
+msgstr "Zapsán seznam materiálu do '%s'."
 
 #: eeschema/eeschema_jobs_handler.cpp:869
 #, c-format
@@ -17562,9 +17549,8 @@ msgstr "Filtr výběru"
 #: eeschema/sch_edit_frame.cpp:1979 eeschema/sch_edit_frame.cpp:1985
 #: eeschema/tools/sch_actions.cpp:123 pcbnew/menubar_pcb_editor.cpp:219
 #: pcbnew/pcb_edit_frame.cpp:327 pcbnew/tools/pcb_actions.cpp:477
-#, fuzzy
 msgid "Design Blocks"
-msgstr "Pravidla návrhu"
+msgstr "Návrhové bloky"
 
 #: eeschema/erc/erc.cpp:79 eeschema/erc/erc.cpp:96
 msgid "Input Pin"
@@ -17686,19 +17672,19 @@ msgid "Pin %s is connected to both %s and %s"
 msgstr "Vývod %s je připojen k %s i %s"
 
 #: eeschema/erc/erc.cpp:1425
-#, fuzzy, c-format
+#, c-format
 msgid "The current configuration does not include the symbol library '%s'"
-msgstr "Aktuální konfigurace neobsahuje knihovnu '%s'"
+msgstr "Aktuální konfigurace neobsahuje knihovnu symbolů '%s'"
 
 #: eeschema/erc/erc.cpp:1440
-#, fuzzy, c-format
+#, c-format
 msgid "The symbol library '%s' is not enabled in the current configuration"
-msgstr "Knihovna „%s“ není v aktuální konfiguraci povolena."
+msgstr "Knihovna symbolů '%s' není v aktuální konfiguraci povolena"
 
 #: eeschema/erc/erc.cpp:1455
-#, fuzzy, c-format
+#, c-format
 msgid "The symbol library '%s' was not found at '%s'."
-msgstr "Knihovna pouzder '%s' nenalezena."
+msgstr "Knihovna symbolů '%s' nebyla nalezena v '%s'."
 
 #: eeschema/erc/erc.cpp:1475
 #, c-format
@@ -17771,9 +17757,8 @@ msgid "Checking pins..."
 msgstr "Kontrola vývodů..."
 
 #: eeschema/erc/erc.cpp:1896
-#, fuzzy
 msgid "Checking similar labels..."
-msgstr "Kontrola označení..."
+msgstr "Kontroluji podobné popisky..."
 
 #: eeschema/erc/erc.cpp:1904
 #, fuzzy
@@ -18812,9 +18797,8 @@ msgid "Symbol unit '%s' is already placed (on sheet '%s')"
 msgstr "Schéma '%s' je již otevřeno '%s' v '%s'."
 
 #: eeschema/picksymbol.cpp:130
-#, fuzzy
 msgid "Unit Already Placed"
-msgstr "Již umístěno"
+msgstr "Jednotka je již umístěna"
 
 #: eeschema/picksymbol.cpp:132
 #, fuzzy, c-format
@@ -19115,9 +19099,8 @@ msgstr "Přepsat existující přednastavení?"
 #: eeschema/sch_design_block_utils.cpp:259
 #: pcbnew/pcb_design_block_utils.cpp:127 pcbnew/pcb_design_block_utils.cpp:187
 #: pcbnew/pcb_design_block_utils.cpp:338 pcbnew/pcb_design_block_utils.cpp:378
-#, fuzzy
 msgid "Please select a library to save the design block to."
-msgstr "Prosím vyberte soubor tabulky knihoven symbolů."
+msgstr "Vyberte knihovnu, do které chcete uložit blok návrhu."
 
 #: eeschema/sch_design_block_utils.cpp:91
 #: eeschema/sch_design_block_utils.cpp:172
@@ -19229,9 +19212,9 @@ msgid "Compare Symbol with Library"
 msgstr "Porovnat symbol s knihovnou"
 
 #: eeschema/sch_field.cpp:976
-#, fuzzy, c-format
+#, c-format
 msgid "Field %s '%s'"
-msgstr "Pole '%s' z %s"
+msgstr "Pole %s '%s'"
 
 #: eeschema/sch_field.cpp:986
 msgid "Symbol Field"
@@ -20099,12 +20082,12 @@ msgid "Expecting R0, R90, R18, R270, M0, M90, M180 or M270"
 msgstr "Očekávám R0, R90, R18, R270, M0, M90, M180 nebo M270"
 
 #: eeschema/sch_io/ltspice/ltspice_schematic.cpp:495
-#, fuzzy
 msgid ""
 "Expecting LEFT, CENTER, RIGHT, TOP, BOTTOM, VLEFT, VRIGHT, VCENTER, VTOP, "
 "VBOTTOM or INVISIBLE"
 msgstr ""
-"Očekávám LEFT, CENTER, RIGHT, TOP, BOTTOM, VLEFT, VRIGHT, VTOP nebo VBOTTOM"
+"Očekávám LEFT, CENTER, RIGHT, TOP, BOTTOM, VLEFT, VRIGHT, VCENTER, VTOP, "
+"VBOTTOM nebo INVISIBLE"
 
 #: eeschema/sch_io/ltspice/ltspice_schematic.cpp:518
 msgid ""
@@ -20358,9 +20341,8 @@ msgid "Pin Name"
 msgstr "Název vývodu"
 
 #: eeschema/sch_plotter.cpp:118
-#, fuzzy
 msgid "No sheets to plot."
-msgstr "Importovat vývod listu"
+msgstr "Žádné listy k vykreslování."
 
 #: eeschema/sch_plotter.cpp:229 pcbnew/pcbnew_jobs_handler.cpp:1282
 #, c-format
@@ -22751,10 +22733,10 @@ msgid ""
 msgstr ""
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1019
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Symbol '%s' already exists in library '%s'. Do you want to overwrite it?"
-msgstr "Symbol '%s' již existuje v knihovně '%s'."
+msgstr "Symbol '%s' již existuje v knihovně '%s'. Chcete ho přepsat?"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1036
 #, fuzzy, c-format
@@ -23227,7 +23209,7 @@ msgstr "Nápověda syntaxe"
 
 #: eeschema/tools/sch_actions.cpp:78
 msgid "Show simulation window for running SPICE or IBIS simulations."
-msgstr ""
+msgstr "Zobrazit okno Simulace pro spuštění simulací SPICE nebo IBIS."
 
 #: eeschema/tools/sch_actions.cpp:87 pcbnew/tools/pcb_actions.cpp:2199
 msgid "Create Corner"
@@ -23388,9 +23370,8 @@ msgid "Import a symbol to the current library"
 msgstr "Importovat symbol do aktuální knihovny"
 
 #: eeschema/tools/sch_actions.cpp:262
-#, fuzzy
 msgid "Export..."
-msgstr "&Export..."
+msgstr "Export..."
 
 #: eeschema/tools/sch_actions.cpp:263
 msgid "Export a symbol to a new library file"
@@ -23645,9 +23626,8 @@ msgid "Sync Sheet Pins..."
 msgstr "Synchronizovat vývody listu"
 
 #: eeschema/tools/sch_actions.cpp:605
-#, fuzzy
 msgid "Import Sheet..."
-msgstr "Importovat list"
+msgstr "Importovat list..."
 
 #: eeschema/tools/sch_actions.cpp:606
 msgid "Import sheet into project"
@@ -24074,9 +24054,8 @@ msgstr ""
 "Přemapování referencí starší knihovny symbolů do tabulky knihoven symbolů"
 
 #: eeschema/tools/sch_actions.cpp:1120
-#, fuzzy
 msgid "Next Net Item"
-msgstr "Textové položky"
+msgstr "Další prvek sítě"
 
 #: eeschema/tools/sch_actions.cpp:1121
 #, fuzzy
@@ -24307,14 +24286,12 @@ msgid "Open the previous unit of the symbol"
 msgstr "Umístěte postupně všechny jednotky symbolu."
 
 #: eeschema/tools/sch_actions.cpp:1336
-#, fuzzy
 msgid "Next Symbol Unit"
-msgstr "Jednotka symbolu"
+msgstr "Další jednotka symbolu"
 
 #: eeschema/tools/sch_actions.cpp:1337
-#, fuzzy
 msgid "Open the next unit of the symbol"
-msgstr "Smazat jednotky navíc ze součástky?"
+msgstr "Otevřít další jednotku symbolu"
 
 #: eeschema/tools/sch_actions.cpp:1345
 msgid "Change Sheet"
@@ -24593,9 +24570,8 @@ msgid "Press <ESC> to cancel symbol creation."
 msgstr "Stisknout <ESC> pro zrušení vytvoření symbolu."
 
 #: eeschema/tools/sch_drawing_tools.cpp:462
-#, fuzzy
 msgid "Place Symbol"
-msgstr "Vložit symbol"
+msgstr "Umístit symbol"
 
 #: eeschema/tools/sch_drawing_tools.cpp:605
 #, fuzzy
@@ -24621,9 +24597,8 @@ msgid "Import Schematic Sheet Content..."
 msgstr "Importovat obsah listu schématu..."
 
 #: eeschema/tools/sch_drawing_tools.cpp:852
-#, fuzzy
 msgid "Choose Schematic"
-msgstr "Nové schéma"
+msgstr "Vyberte schéma"
 
 #: eeschema/tools/sch_drawing_tools.cpp:1076 pcbnew/tools/drawing_tool.cpp:718
 msgid "Press <ESC> to cancel image creation."
@@ -25503,14 +25478,13 @@ msgid "Do not export"
 msgstr "Neexportovat"
 
 #: gerbview/dialogs/dialog_map_gerber_layers_to_pcb.cpp:214
-#, fuzzy, c-format
+#, c-format
 msgid "Gerbers with known layers: %d"
-msgstr "Gerber se známými vrstvami: "
+msgstr "Gerber se známými vrstvami: %d"
 
 #: gerbview/dialogs/dialog_map_gerber_layers_to_pcb.cpp:215
-#, fuzzy
 msgid "Assign to matching PCB layers?"
-msgstr "Přiřadit třídu spojů sítím odpovídajícím vzoru"
+msgstr "Přiřadit odpovídajícím vrstvám DPS?"
 
 #: gerbview/dialogs/dialog_map_gerber_layers_to_pcb.cpp:216
 msgid "Automatic Layer Assignment"
@@ -26885,12 +26859,14 @@ msgstr "Neplatný formát zprávy\n"
 
 #: kicad/cli/command_pcb_export.h:33
 msgid "Export utilities (Gerbers, drill, position files, etc)"
-msgstr ""
+msgstr "Nástroje exportu (Gerber, vrtání, soubory pozic atd.)"
 
 #: kicad/cli/command_pcb_export_3d.cpp:78
 msgid ""
 "Output file format, options: step, brep, xao, glb (binary glTF), ply, stl"
 msgstr ""
+"Formát výstupního souboru, volby: step, brep, xao, glb (binární glTF), ply, "
+"stl"
 
 #: kicad/cli/command_pcb_export_3d.cpp:83
 msgid "Overwrite output file"
@@ -27332,9 +27308,8 @@ msgid "Plot the layers to a single PDF file with multiple pages"
 msgstr "Všechny vrstvy v jednom souboru"
 
 #: kicad/cli/command_pcb_export_pdf.cpp:178
-#, fuzzy
 msgid "Cannot use more than one mode flag\n"
-msgstr "Šířka tepelného paprsku nesmí být menší než minimální šířka."
+msgstr "Nelze použít více než jeden příznak režimu\n"
 
 #: kicad/cli/command_pcb_export_pos.cpp:46
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:58
@@ -28174,7 +28149,7 @@ msgstr ""
 
 #: kicad/kicad_cli.cpp:122
 msgid "Export GLB (binary GLTF)"
-msgstr ""
+msgstr "Export GLB (binární GLTF)"
 
 #: kicad/kicad_cli.cpp:123
 msgid "Export STEP"
@@ -35225,9 +35200,8 @@ msgid "Export IDFv3"
 msgstr "Exportovat IDFv3"
 
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:109
-#, fuzzy
 msgid "zip files"
-msgstr "Zip soubory"
+msgstr "zip soubory"
 
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:111
 #, fuzzy
@@ -35274,11 +35248,12 @@ msgid "Cannot create temporary output directory."
 msgstr "Nelze vytvořit výstupní adresář '%s'."
 
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:408
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Output directory '%s' already exists and is not empty. Do you want to "
 "overwrite it?"
-msgstr "Symbol '%s' již existuje v knihovně '%s'."
+msgstr ""
+"Výstupní adresář '%s' již existuje a není prázdný. Přejete si jej přepsat?"
 
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:421
 #, fuzzy, c-format
@@ -35305,9 +35280,8 @@ msgid "Compressing output"
 msgstr "Komprimovat výstup"
 
 #: pcbnew/dialogs/dialog_export_odbpp_base.cpp:69
-#, fuzzy
 msgid "Compression format:"
-msgstr "Formát kóty"
+msgstr "Formát komprese:"
 
 #: pcbnew/dialogs/dialog_export_odbpp_base.cpp:71
 msgid "Select the format to compress the output ODB++ files"
@@ -35438,9 +35412,8 @@ msgid "Cut vias in board body"
 msgstr "Exportovat desku"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:72
-#, fuzzy
 msgid "Export silkscreen"
-msgstr "Potisk nahoře"
+msgstr "Export potisku"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:73
 #, fuzzy
@@ -35796,7 +35769,7 @@ msgstr "Žolíky"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:61
 msgid "Wra&p"
-msgstr ""
+msgstr "Zalome&ní"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:76
 #, fuzzy
@@ -39102,9 +39075,8 @@ msgid "Convert to Rule Area"
 msgstr "Převést na oblast pravidel"
 
 #: pcbnew/dialogs/dialog_rule_area_properties.cpp:315
-#, fuzzy
 msgid "Not found on board: "
-msgstr "Neznámé rozměry, nejsou určeny okraje desky!"
+msgstr "Nenalezeno na desce: "
 
 #: pcbnew/dialogs/dialog_rule_area_properties.cpp:484
 msgid "No layers selected."
@@ -39433,9 +39405,8 @@ msgid "Apply Anyway"
 msgstr "Přidat každopádně"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:638
-#, fuzzy
 msgid "Cancel Changes"
-msgstr "Zrušit změny?"
+msgstr "Zrušit změny"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:652
 #, c-format
@@ -43680,16 +43651,17 @@ msgid ""
 msgstr ""
 
 #: pcbnew/exporters/step/exporter_step.cpp:406
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Could not add 3D model for %s.\n"
 "OpenCASCADE error: %s\n"
-msgstr "Nelze se připojit k %s. Chyby: %s"
+msgstr ""
+"Nelze přidat 3D model pro %s.\n"
+"Chyba OpenCascade: %s\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:810
-#, fuzzy
 msgid "Could not create PCB solid model.\n"
-msgstr "Nelze vytvořit výstup BOM '%s'."
+msgstr "Nelze vytvořit kompletní model PCB.\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:864
 msgid ""
@@ -44590,9 +44562,8 @@ msgid "Length Constraints: %s"
 msgstr "Omezení díry: min. %s."
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2457
-#, fuzzy
 msgid "Tune Skew"
-msgstr "Vyladěno: zkosení "
+msgstr "Vyladěno zkosení"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2670
 msgid "Unable to tune segments inside other tuning patterns."
@@ -47011,9 +46982,9 @@ msgid "Eagle ver. 6.x XML library files"
 msgstr "Soubory knihoven Eagle ver. 6.x XML"
 
 #: pcbnew/pcb_io/easyeda/pcb_io_easyeda_parser.cpp:780
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown SVGNODE nodeType %d"
-msgstr "Neznámý typ_modelu "
+msgstr "Neznámý typ uzlu SVGNODE %d"
 
 #: pcbnew/pcb_io/easyeda/pcb_io_easyeda_plugin.cpp:170
 #, fuzzy, c-format
