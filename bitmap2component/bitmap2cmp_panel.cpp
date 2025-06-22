@@ -30,11 +30,15 @@
 #include <common.h>
 #include <math/util.h>      // for KiROUND
 #include <potracelib.h>
+#include <vector>
+#include <wx/arrstr.h>
 #include <wx/clipbrd.h>
+#include <wx/dnd.h>
 #include <wx/rawbmp.h>
 #include <wx/msgdlg.h>
 #include <wx/dcclient.h>
 #include <wx/log.h>
+#include <wx/string.h>
 
 #define DEFAULT_DPI 300     // the image DPI used in formats that do not define a DPI
 
@@ -58,8 +62,11 @@ BITMAP2CMP_PANEL::BITMAP2CMP_PANEL( BITMAP2CMP_FRAME* aParent ) :
 
     m_buttonExportFile->Enable( false );
     m_buttonExportClipboard->Enable( false );
-}
 
+    m_InitialPicturePanel->SetDropTarget( new DROP_FILE( this ) );
+    m_GreyscalePicturePanel->SetDropTarget( new DROP_FILE( this ) );
+    m_BNPicturePanel->SetDropTarget( new DROP_FILE( this ) );
+}
 
 wxWindow* BITMAP2CMP_PANEL::GetCurrentPage()
 {
@@ -561,4 +568,34 @@ void BITMAP2CMP_PANEL::OnFormatChange( wxCommandEvent& event )
 {
     m_layerLabel->Enable( m_rbFootprint->GetValue() );
     m_layerCtrl->Enable( m_rbFootprint->GetValue() );
+}
+
+
+DROP_FILE::DROP_FILE( BITMAP2CMP_PANEL* panel ) :
+        m_panel( panel )
+{
+}
+
+
+bool DROP_FILE::OnDropFiles( wxCoord x, wxCoord y, const wxArrayString& filenames )
+{
+    m_panel->SetFocus();
+
+    // If a file is already loaded
+    if( m_panel->GetOutputSizeX().GetOriginalSizePixels() != 0 )
+    {
+        wxString        cap = _( "Replace Loaded File?" );
+        wxString        msg = _( "There is already a file loaded. Do you want to replace it?" );
+        wxMessageDialog acceptFileDlg( m_panel, msg, cap, wxYES_NO | wxICON_QUESTION | wxYES_DEFAULT );
+        int             replace = acceptFileDlg.ShowModal();
+
+        if( replace == wxID_NO )
+            return false;
+    }
+
+    std::vector<wxString> fNameVec;
+    fNameVec.insert( fNameVec.begin(), filenames.begin(), filenames.end() );
+    m_panel->OpenProjectFiles( fNameVec );
+
+    return true;
 }

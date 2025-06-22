@@ -25,7 +25,7 @@
 
 #include <bitmap2cmp_panel_base.h>
 #include <eda_units.h>
-
+#include <wx/dnd.h>
 
 class BITMAP2CMP_FRAME;
 class BITMAP2CMP_SETTINGS;
@@ -134,4 +134,18 @@ private:
     bool              m_negative;
     double            m_aspectRatio;
 };
+
+
+class DROP_FILE : public wxFileDropTarget
+{
+public:
+    DROP_FILE( BITMAP2CMP_PANEL* panel );
+    DROP_FILE() = delete;
+
+    bool OnDropFiles( wxCoord x, wxCoord y, const wxArrayString& filenames ) override;
+
+private:
+    BITMAP2CMP_PANEL* m_panel;
+};
+
 #endif// BITMAP2CMP_PANEL
