@@ -13,8 +13,8 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-06-20 23:57+0300\n"
-"PO-Revision-Date: 2025-06-21 22:01+0000\n"
-"Last-Translator: Anonymous <noreply@weblate.org>\n"
+"PO-Revision-Date: 2025-06-23 21:01+0000\n"
+"Last-Translator: Miklós Márton <martonmiklosqdev@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/kicad/v9/hu/>\n"
 "Language: hu\n"
 "MIME-Version: 1.0\n"
@@ -10429,22 +10429,19 @@ msgstr "Elérési útvonal kiválasztása"
 
 #: common/widgets/lib_tree.cpp:94
 msgid "Sort by Best Match"
-msgstr ""
+msgstr "Rendezés legjobb illeszkedés szerint"
 
 #: common/widgets/lib_tree.cpp:95
-#, fuzzy
 msgid "Sort Alphabetically"
-msgstr "Összes megjelenítése betűrendben"
+msgstr "Rendezés betűrendben"
 
 #: common/widgets/lib_tree.cpp:429
-#, fuzzy
 msgid "recent searches"
-msgstr "Metrikus mértékegységek használata"
+msgstr "legutóbbi keresések"
 
 #: common/widgets/lib_tree.cpp:1004
-#, fuzzy
 msgid "Select Columns"
-msgstr "Kiválasztás megszüntetése"
+msgstr "Oszlopok kiválasztása"
 
 #: common/widgets/mathplot.cpp:1399
 #, fuzzy
@@ -15581,9 +15578,8 @@ msgid "Significant digits:"
 msgstr "Értékes jegyek:"
 
 #: eeschema/dialogs/dialog_sim_format_value_base.cpp:32
-#, fuzzy
 msgid "Range:"
-msgstr "Csere:"
+msgstr "Tartomány:"
 
 #: eeschema/dialogs/dialog_sim_format_value_base.cpp:36
 msgid "f"
@@ -33696,7 +33692,7 @@ msgstr "32"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:39
 msgid "Impedance controlled"
-msgstr "Impedancia vezérelt"
+msgstr "Impedancia illesztett"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:40
 msgid ""
