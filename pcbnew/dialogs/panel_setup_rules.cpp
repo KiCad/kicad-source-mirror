@@ -708,7 +708,18 @@ void PANEL_SETUP_RULES::OnCompile( wxCommandEvent& event )
     {
         std::vector<std::shared_ptr<DRC_RULE>> dummyRules;
 
-        DRC_RULES_PARSER parser( m_textEditor->GetText(), _( "DRC rules" ) );
+        std::function<bool( wxString* )> resolver =
+                [&]( wxString* token ) -> bool
+                {
+                    if( m_frame->Prj().TextVarResolver( token ) )
+                        return true;
+
+                    return false;
+                };
+
+        wxString rulesText = ExpandTextVars( m_textEditor->GetText(), &resolver );
+
+        DRC_RULES_PARSER parser( rulesText, _( "DRC rules" ) );
 
         parser.Parse( dummyRules, m_errorsReport );
     }

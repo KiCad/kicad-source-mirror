@@ -586,7 +586,10 @@ bool COMPILER::lexDefault( T_TOKEN& aToken )
         case ',': retval.token = G_COMMA;        break;
 
         default:
-            reportError( CST_PARSE, wxString::Format( _( "Unrecognized character '%c'" ), (char) ch ) );
+            if( m_tokenizer.MatchAhead( "${", []( int c ) -> bool { return c != '{'; } ) )
+                reportError( CST_PARSE, _( "Unresolved text variable reference" ), m_sourcePos + 2 );
+            else
+                reportError( CST_PARSE, wxString::Format( _( "Unrecognized character '%c'" ), (char) ch ) );
             break;
         }
 

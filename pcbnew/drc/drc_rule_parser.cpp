@@ -43,15 +43,6 @@ DRC_RULES_PARSER::DRC_RULES_PARSER( const wxString& aSource, const wxString& aSo
 }
 
 
-DRC_RULES_PARSER::DRC_RULES_PARSER( FILE* aFile, const wxString& aFilename ) :
-        DRC_RULES_LEXER( aFile, aFilename ),
-        m_requiredVersion( 0 ),
-        m_tooRecent( false ),
-        m_reporter( nullptr )
-{
-}
-
-
 void DRC_RULES_PARSER::reportError( const wxString& aMessage )
 {
     wxString rest;
@@ -120,6 +111,9 @@ wxString DRC_RULES_PARSER::parseExpression()
             if( --depth == 0 )
                 break;
         }
+
+        if( !expr.IsEmpty() )
+            expr += CurSeparator();
 
         expr += FromUTF8();
     }
@@ -720,6 +714,7 @@ void DRC_RULES_PARSER::parseConstraint( DRC_RULE* aRule )
 
         case T_min:
         {
+            size_t   offset = CurOffset() + GetTokenString( token ).length();
             wxString expr = parseExpression();
 
             if( expr.IsEmpty() )
@@ -728,7 +723,7 @@ void DRC_RULES_PARSER::parseConstraint( DRC_RULE* aRule )
                 break;
             }
 
-            parseValueWithUnits( expr, value, units, unitless );
+            parseValueWithUnits( offset, expr, value, units, unitless );
             validateAndSetValueWithUnits( value, units,
                                           [&c]( const int aValue )
                                           {
@@ -740,6 +735,7 @@ void DRC_RULES_PARSER::parseConstraint( DRC_RULE* aRule )
 
         case T_max:
         {
+            size_t   offset = CurOffset() + GetTokenString( token ).length();
             wxString expr = parseExpression();
 
             if( expr.IsEmpty() )
@@ -748,7 +744,7 @@ void DRC_RULES_PARSER::parseConstraint( DRC_RULE* aRule )
                 break;
             }
 
-            parseValueWithUnits( expr, value, units, unitless );
+            parseValueWithUnits( offset, expr, value, units, unitless );
             validateAndSetValueWithUnits( value, units,
                                           [&c]( const int aValue )
                                           {
@@ -760,6 +756,7 @@ void DRC_RULES_PARSER::parseConstraint( DRC_RULE* aRule )
 
         case T_opt:
         {
+            size_t   offset = CurOffset() + GetTokenString( token ).length();
             wxString expr = parseExpression();
 
             if( expr.IsEmpty() )
@@ -768,7 +765,7 @@ void DRC_RULES_PARSER::parseConstraint( DRC_RULE* aRule )
                 break;
             }
 
-            parseValueWithUnits( expr, value, units, unitless );
+            parseValueWithUnits( offset, expr, value, units, unitless );
             validateAndSetValueWithUnits( value, units,
                                           [&c]( const int aValue )
                                           {
@@ -798,21 +795,22 @@ void DRC_RULES_PARSER::parseConstraint( DRC_RULE* aRule )
 }
 
 
-void DRC_RULES_PARSER::parseValueWithUnits( const wxString& aExpr, int& aResult, EDA_UNITS& aUnits, bool aUnitless )
+void DRC_RULES_PARSER::parseValueWithUnits( int aOffset, const wxString& aExpr, int& aResult,
+                                            EDA_UNITS& aUnits, bool aUnitless )
 {
     aResult = 0.0;
     aUnits = EDA_UNITS::UNSCALED;
 
     auto errorHandler =
-            [&]( const wxString& aMessage, int aOffset )
+            [&]( const wxString& message, int offset )
             {
                 wxString rest;
-                wxString first = aMessage.BeforeFirst( '|', &rest );
+                wxString first = message.BeforeFirst( '|', &rest );
 
                 if( m_reporter )
                 {
                     wxString msg = wxString::Format( _( "ERROR: <a href='%d:%d'>%s</a>%s" ),
-                                                     CurLineNumber(), CurOffset() + aOffset, first, rest );
+                                                     CurLineNumber(), aOffset + offset, first, rest );
 
                     m_reporter->Report( msg, RPT_SEVERITY_ERROR );
                 }
@@ -826,7 +824,7 @@ void DRC_RULES_PARSER::parseValueWithUnits( const wxString& aExpr, int& aResult,
             };
 
     PCBEXPR_EVALUATOR evaluator( aUnitless ? (LIBEVAL::UNIT_RESOLVER*) new PCBEXPR_UNITLESS_RESOLVER()
-                                            : (LIBEVAL::UNIT_RESOLVER*) new PCBEXPR_UNIT_RESOLVER() );
+                                           : (LIBEVAL::UNIT_RESOLVER*) new PCBEXPR_UNIT_RESOLVER() );
     evaluator.SetErrorCallback( errorHandler );
 
     if( evaluator.Evaluate( aExpr ) )

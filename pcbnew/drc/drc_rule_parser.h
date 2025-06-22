@@ -41,7 +41,6 @@ class DRC_RULES_PARSER : public DRC_RULES_LEXER
 {
 public:
     DRC_RULES_PARSER( const wxString& aSource, const wxString& aSourceDescr );
-    DRC_RULES_PARSER( FILE* aFile, const wxString& aFilename );
 
     void Parse( std::vector<std::shared_ptr<DRC_RULE>>& aRules, REPORTER* aReporter );
 
@@ -55,7 +54,8 @@ private:
     std::shared_ptr<COMPONENT_CLASS_ASSIGNMENT_RULE> parseComponentClassAssignment();
 
     void parseConstraint( DRC_RULE* aRule );
-    void parseValueWithUnits( const wxString& aExpr, int& aResult, EDA_UNITS& aUnits, bool aUnitless = false );
+    void parseValueWithUnits( int aOffset, const wxString& aExpr, int& aResult, EDA_UNITS& aUnits,
+                              bool aUnitless = false );
     LSET parseLayer( wxString* aSource );
     SEVERITY parseSeverity();
     void parseUnknown();

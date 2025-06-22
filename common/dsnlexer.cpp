@@ -543,6 +543,7 @@ int DSNLEXER::NextTok()
     const char*   head = cur;
 
     prevTok = curTok;
+    curSeparator.clear();
 
     if( curTok == DSN_EOF )
         goto exit;
@@ -565,7 +566,10 @@ L_read:
 
         // skip leading whitespace
         while( cur < limit && isSpace( *cur ) )
+        {
+            curSeparator += *cur;
             ++cur;
+        }
 
         // If the first non-blank character is #, this line is a comment.
         // Comments cannot follow any other token on the same line.
@@ -597,7 +601,10 @@ L_read:
     {
         // skip leading whitespace
         while( cur < limit && isSpace( *cur ) )
+        {
+            curSeparator += *cur;
             ++cur;
+        }
     }
 
     if( cur >= limit )

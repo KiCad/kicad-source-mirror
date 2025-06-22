@@ -427,6 +427,11 @@ public:
         return curText;
     }
 
+    const std::string& CurSeparator() const
+    {
+        return curSeparator;
+    }
+
     /**
      * Return the current token text as a wxString, assuming that the input byte stream
      * is UTF8 encoded.
@@ -572,6 +577,7 @@ protected:
 
     int                 curTok;                 ///< The current token obtained on last NextTok().
     std::string         curText;                ///< The text of the current token.
+    std::string         curSeparator;           ///< The text of the separator preceeding the current text.
 
     const KEYWORD*      keywords;               ///< Table sorted by CMake for bsearch().
     unsigned            keywordCount;           ///< Count of keywords table.

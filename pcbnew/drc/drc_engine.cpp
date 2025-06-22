@@ -494,11 +494,24 @@ void DRC_ENGINE::loadRules( const wxFileName& aPath )
     {
         std::vector<std::shared_ptr<DRC_RULE>> rules;
 
-        FILE* fp = wxFopen( aPath.GetFullPath(), wxT( "rt" ) );
-
-        if( fp )
+        if( FILE* fp = wxFopen( aPath.GetFullPath(), wxT( "rt" ) ) )
         {
-            DRC_RULES_PARSER parser( fp, aPath.GetFullPath() );
+            FILE_LINE_READER lineReader( fp, aPath.GetFullPath() );  // Will close rules file
+            wxString         rulesText;
+
+            std::function<bool( wxString* )> resolver =
+                    [&]( wxString* token ) -> bool
+                    {
+                        if( m_board && m_board->GetProject() )
+                            return m_board->GetProject()->TextVarResolver( token );
+
+                        return false;
+                    };
+
+            while( char* line = lineReader.ReadLine() )
+                rulesText << ExpandTextVars( line, &resolver ) << '\n';
+
+            DRC_RULES_PARSER parser( rulesText, aPath.GetFullPath() );
             parser.Parse( rules, m_logReporter );
         }
 
