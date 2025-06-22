@@ -249,6 +249,7 @@ private:
 
     ///< Postprocessed world state (including marked collisions & removed loops)
     NODE* m_lastNode;
+    NODE* m_lastFixNode;
 
     SIZES_SETTINGS m_sizes;
 
@@ -277,6 +278,7 @@ private:
     ITEM* m_currentEndItem;
 
     bool m_idle;
+    bool m_hasFixedAnything;
 };
 
 }

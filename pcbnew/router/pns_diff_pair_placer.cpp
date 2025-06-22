@@ -642,6 +642,7 @@ bool DIFF_PAIR_PLACER::Start( const VECTOR2I& aP, ITEM* aStartItem )
     m_currentTraceOk = false;
     m_currentTrace = DIFF_PAIR();
     m_currentTrace.SetNets( m_netP, m_netN );
+    m_lastFixNode = nullptr;
 
     initPlacement();
 
@@ -842,9 +843,15 @@ bool DIFF_PAIR_PLACER::FixRoute( const VECTOR2I& aP, ITEM* aEndItem, bool aForce
     topo.SimplifyLine( &lineN );
 
     m_prevPair = m_currentTrace.EndingPrimitives();
+    m_lastFixNode = m_lastNode;
+
+    // avoid an use-after-free error (CommitPlacement calls NODE::Commit which will invalidate the shove heads state. Need to rethink the memory management).
+    if( Settings().Mode() == RM_Shove )
+        m_shove = std::make_unique<SHOVE>( m_world, Router() );
 
     CommitPlacement();
     m_placingVia = false;
+    m_lastFixNode = nullptr;
 
     if( m_snapOnTarget || aForceFinish )
     {
@@ -862,6 +869,7 @@ bool DIFF_PAIR_PLACER::FixRoute( const VECTOR2I& aP, ITEM* aEndItem, bool aForce
 bool DIFF_PAIR_PLACER::AbortPlacement()
 {
     m_world->KillChildren();
+    m_lastNode = nullptr;
     return true;
 }
 
@@ -874,9 +882,10 @@ bool DIFF_PAIR_PLACER::HasPlacedAnything() const
 
 bool DIFF_PAIR_PLACER::CommitPlacement()
 {
-    if( m_lastNode )
-        Router()->CommitRouting( m_lastNode );
+    if( m_lastFixNode )
+        Router()->CommitRouting( m_lastFixNode );
 
+    m_lastFixNode = nullptr;
     m_lastNode = nullptr;
     m_currentNode = nullptr;
     return true;
