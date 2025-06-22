@@ -154,14 +154,12 @@ wxString UOP::Format() const
         break;
 
     case TR_UOP_PUSH_VALUE:
-    {
         if( !m_value )
             str = wxString::Format( "PUSH nullptr" );
         else if( m_value->GetType() == VT_NUMERIC )
             str = wxString::Format( "PUSH NUM [%.10f]", m_value->AsDouble() );
         else
             str = wxString::Format( "PUSH STR [%ls]", m_value->AsString() );
-    }
         break;
 
     case TR_OP_METHOD_CALL:
@@ -251,7 +249,7 @@ bool TOKENIZER::MatchAhead( const wxString& match,
 
 
 COMPILER::COMPILER() :
-    m_lexerState( COMPILER::LS_DEFAULT )
+        m_lexerState( COMPILER::LS_DEFAULT )
 {
     m_localeDecimalSeparator = '.';
     m_sourcePos = 0;
@@ -391,6 +389,7 @@ T_TOKEN COMPILER::getToken()
         case LS_DEFAULT:
             done = lexDefault( rv );
             break;
+
         case LS_STRING:
             done = lexString( rv );
             break;
@@ -417,7 +416,11 @@ int COMPILER::resolveUnits()
 
     for( const wxString& unitName : m_unitResolver->GetSupportedUnits() )
     {
-        if( m_tokenizer.MatchAhead( unitName, []( int c ) -> bool { return !isalnum( c ); } ) )
+        if( m_tokenizer.MatchAhead( unitName,
+                                    []( int c ) -> bool
+                                    {
+                                        return !isalnum( c );
+                                    } ) )
         {
             libeval_dbg(10, "Match unit '%s'\n", unitName.c_str() );
             m_tokenizer.NextChar( unitName.length() );
@@ -483,7 +486,6 @@ bool COMPILER::lexDefault( T_TOKEN& aToken )
                         current[i - 1] = m_localeDecimalSeparator;
                 }
             };
-
 
     int ch;
 
@@ -584,8 +586,7 @@ bool COMPILER::lexDefault( T_TOKEN& aToken )
         case ',': retval.token = G_COMMA;        break;
 
         default:
-            reportError( CST_PARSE, wxString::Format( _( "Unrecognized character '%c'" ),
-                                                      (char) ch ) );
+            reportError( CST_PARSE, wxString::Format( _( "Unrecognized character '%c'" ), (char) ch ) );
             break;
         }
 
@@ -777,9 +778,7 @@ static std::vector<TREE_NODE*> squashParamList( TREE_NODE* root )
     std::vector<TREE_NODE*> args;
 
     if( !root )
-    {
         return args;
-    }
 
     if( root->op != TR_ARG_LIST && root->op != TR_NULL )
     {
@@ -797,9 +796,7 @@ static std::vector<TREE_NODE*> squashParamList( TREE_NODE* root )
         } while ( n && n->op == TR_ARG_LIST );
 
         if( n )
-        {
             args.push_back( n );
-        }
     }
 
     std::reverse( args.begin(), args.end() );
@@ -1139,8 +1136,8 @@ void UOP::Exec( CONTEXT* ctx )
             value = ctx->AllocValue();
 
         ctx->Push( value );
-    }
         break;
+    }
 
     case TR_UOP_PUSH_VALUE:
         ctx->Push( m_value.get() );
@@ -1205,30 +1202,37 @@ void UOP::Exec( CONTEXT* ctx )
             result = AS_DOUBLE( arg1 ) + AS_DOUBLE( arg2 );
             resultUnits = getOpResultUnits( arg1, arg2 );
             break;
+
         case TR_OP_SUB:
             result = AS_DOUBLE( arg1 ) - AS_DOUBLE( arg2 );
             resultUnits = getOpResultUnits( arg1, arg2 );
             break;
+
         case TR_OP_MUL:
             result = AS_DOUBLE( arg1 ) * AS_DOUBLE( arg2 );
             resultUnits = getOpResultUnits( arg1, arg2 );
             break;
+
         case TR_OP_DIV:
             result = AS_DOUBLE( arg1 ) / AS_DOUBLE( arg2 );
             resultUnits = getOpResultUnits( arg1, arg2 );
             break;
+
         case TR_OP_LESS_EQUAL:
             result = AS_DOUBLE( arg1 ) <= AS_DOUBLE( arg2 ) ? 1 : 0;
             break;
+
         case TR_OP_GREATER_EQUAL:
             result = AS_DOUBLE( arg1 ) >= AS_DOUBLE( arg2 ) ? 1 : 0;
             break;
+
         case TR_OP_LESS:
             result = AS_DOUBLE( arg1 ) < AS_DOUBLE( arg2 ) ? 1 : 0;
             break;
         case TR_OP_GREATER:
             result = AS_DOUBLE( arg1 ) > AS_DOUBLE( arg2 ) ? 1 : 0;
             break;
+
         case TR_OP_EQUAL:
             if( !arg1 || !arg2 )
                 result = arg1 == arg2 ? 1 : 0;
@@ -1237,6 +1241,7 @@ void UOP::Exec( CONTEXT* ctx )
             else
                 result = arg1->EqualTo( ctx, arg2 ) ? 1 : 0;
             break;
+
         case TR_OP_NOT_EQUAL:
             if( !arg1 || !arg2 )
                 result = arg1 != arg2 ? 1 : 0;
@@ -1245,12 +1250,15 @@ void UOP::Exec( CONTEXT* ctx )
             else
                 result = arg1->NotEqualTo( ctx, arg2 ) ? 1 : 0;
             break;
+
         case TR_OP_BOOL_AND:
             result = AS_DOUBLE( arg1 ) != 0.0 && AS_DOUBLE( arg2 ) != 0.0 ? 1 : 0;
             break;
+
         case TR_OP_BOOL_OR:
             result = AS_DOUBLE( arg1 ) != 0.0 || AS_DOUBLE( arg2 ) != 0.0 ? 1 : 0;
             break;
+
         default:
             result = 0.0;
             break;
