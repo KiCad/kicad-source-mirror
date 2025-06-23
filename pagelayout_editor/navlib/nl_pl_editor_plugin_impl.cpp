@@ -145,7 +145,8 @@ static void add_category( const std::string& aCategoryPath, CATEGORY_STORE& aCat
 
     aCategoryStore.try_emplace( aCategoryStore.end(), aCategoryPath, categoryNode.get() );
 
-    parent_iter->second->push_back( std::move( categoryNode ) );
+    if( parent_iter != aCategoryStore.end() )
+        parent_iter->second->push_back( std::move( categoryNode ) );
 }
 
 
