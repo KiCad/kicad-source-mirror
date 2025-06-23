@@ -46,6 +46,7 @@ DIFF_PAIR_PLACER::DIFF_PAIR_PLACER( ROUTER* aRouter ) :
     m_shove = nullptr;
     m_currentNode = nullptr;
     m_lastNode = nullptr;
+    m_lastFixNode = nullptr;
     m_placingVia = false;
     m_viaDiameter = 0;
     m_viaDrill = 0;
