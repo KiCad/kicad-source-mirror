@@ -331,7 +331,7 @@ bool EDIT_TOOL::Init()
 
     SELECTION_CONDITION isRoutable =
            SELECTION_CONDITIONS::NotEmpty
-           && SELECTION_CONDITIONS::OnlyTypes( routableTypes )
+           && SELECTION_CONDITIONS::HasTypes( routableTypes )
            && notMovingCondition
            && !inFootprintEditor;
 
