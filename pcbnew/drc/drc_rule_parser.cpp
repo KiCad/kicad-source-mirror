@@ -50,8 +50,11 @@ void DRC_RULES_PARSER::reportError( const wxString& aMessage )
 
     if( m_reporter )
     {
-        wxString msg = wxString::Format( _( "ERROR: <a href='%d:%d'>%s</a>%s" ), CurLineNumber(),
-                                         CurOffset(), first, rest );
+        wxString msg = wxString::Format( _( "ERROR: <a href='%d:%d'>%s</a>%s" ),
+                                         CurLineNumber(),
+                                         CurOffset(),
+                                         first,
+                                         rest );
 
         m_reporter->Report( msg, RPT_SEVERITY_ERROR );
     }
@@ -162,15 +165,13 @@ void DRC_RULES_PARSER::Parse( std::vector<std::shared_ptr<DRC_RULE>>& aRules, RE
             }
             else
             {
-                msg.Printf( _( "Unrecognized item '%s'.| Expected version number." ),
-                            FromUTF8() );
+                msg.Printf( _( "Unrecognized item '%s'.| Expected version number." ), FromUTF8() );
                 reportError( msg );
             }
 
             if( (int) token != DSN_RIGHT )
             {
-                msg.Printf( _( "Unrecognized item '%s'." ),
-                            FromUTF8() );
+                msg.Printf( _( "Unrecognized item '%s'." ), FromUTF8() );
                 reportError( msg );
                 parseUnknown();
             }
@@ -316,8 +317,7 @@ std::shared_ptr<DRC_RULE> DRC_RULES_PARSER::parseDRC_RULE()
             }
             else
             {
-                msg.Printf( _( "Unrecognized item '%s'.| Expected quoted expression." ),
-                            FromUTF8() );
+                msg.Printf( _( "Unrecognized item '%s'.| Expected quoted expression." ), FromUTF8() );
                 reportError( msg );
             }
 
@@ -394,15 +394,11 @@ std::shared_ptr<COMPONENT_CLASS_ASSIGNMENT_RULE> DRC_RULES_PARSER::parseComponen
                 condition = std::make_shared<DRC_RULE_CONDITION>( FromUTF8() );
 
                 if( !condition->Compile( m_reporter, CurLineNumber(), CurOffset() ) )
-                {
-                    reportError( wxString::Format( _( "Could not parse expression '%s'." ),
-                                                   FromUTF8() ) );
-                }
+                    reportError( wxString::Format( _( "Could not parse expression '%s'." ), FromUTF8() ) );
             }
             else
             {
-                msg.Printf( _( "Unrecognized item '%s'.| Expected quoted expression." ),
-                            FromUTF8() );
+                msg.Printf( _( "Unrecognized item '%s'.| Expected quoted expression." ), FromUTF8() );
                 reportError( msg );
             }
 
@@ -414,11 +410,12 @@ std::shared_ptr<COMPONENT_CLASS_ASSIGNMENT_RULE> DRC_RULES_PARSER::parseComponen
 
             break;
 
-        case T_EOF: reportError( _( "Incomplete statement." ) ); return nullptr;
+        case T_EOF:
+            reportError( _( "Incomplete statement." ) );
+            return nullptr;
 
         default:
-            msg.Printf( _( "Unrecognized item '%s'.| Expected %s." ), FromUTF8(),
-                        wxT( "condition" ) );
+            msg.Printf( _( "Unrecognized item '%s'.| Expected %s." ), FromUTF8(), wxT( "condition" ) );
             reportError( msg );
             parseUnknown();
         }
@@ -723,7 +720,7 @@ void DRC_RULES_PARSER::parseConstraint( DRC_RULE* aRule )
                 break;
             }
 
-            parseValueWithUnits( offset, expr, value, units, unitless );
+            parseValueWithUnits( (int) offset, expr, value, units, unitless );
             validateAndSetValueWithUnits( value, units,
                                           [&c]( const int aValue )
                                           {
@@ -744,7 +741,7 @@ void DRC_RULES_PARSER::parseConstraint( DRC_RULE* aRule )
                 break;
             }
 
-            parseValueWithUnits( offset, expr, value, units, unitless );
+            parseValueWithUnits( (int) offset, expr, value, units, unitless );
             validateAndSetValueWithUnits( value, units,
                                           [&c]( const int aValue )
                                           {
@@ -765,7 +762,7 @@ void DRC_RULES_PARSER::parseConstraint( DRC_RULE* aRule )
                 break;
             }
 
-            parseValueWithUnits( offset, expr, value, units, unitless );
+            parseValueWithUnits( (int) offset, expr, value, units, unitless );
             validateAndSetValueWithUnits( value, units,
                                           [&c]( const int aValue )
                                           {
@@ -780,8 +777,7 @@ void DRC_RULES_PARSER::parseConstraint( DRC_RULE* aRule )
             return;
 
         default:
-            msg.Printf( _( "Unrecognized item '%s'.| Expected %s." ),
-                        FromUTF8(),
+            msg.Printf( _( "Unrecognized item '%s'.| Expected %s." ), FromUTF8(),
                         wxT( "min, max, or opt" ) );
             reportError( msg );
             parseUnknown();
@@ -810,7 +806,10 @@ void DRC_RULES_PARSER::parseValueWithUnits( int aOffset, const wxString& aExpr, 
                 if( m_reporter )
                 {
                     wxString msg = wxString::Format( _( "ERROR: <a href='%d:%d'>%s</a>%s" ),
-                                                     CurLineNumber(), aOffset + offset, first, rest );
+                                                     CurLineNumber(),
+                                                     aOffset + offset,
+                                                     first,
+                                                     rest );
 
                     m_reporter->Report( msg, RPT_SEVERITY_ERROR );
                 }
@@ -909,8 +908,7 @@ SEVERITY DRC_RULES_PARSER::parseSeverity()
     case T_exclusion: retVal = RPT_SEVERITY_EXCLUSION; break;
 
     default:
-        msg.Printf( _( "Unrecognized item '%s'.| Expected %s." ),
-                    FromUTF8(),
+        msg.Printf( _( "Unrecognized item '%s'.| Expected %s." ), FromUTF8(),
                     wxT( "ignore, warning, error, or exclusion" ) );
         reportError( msg );
         parseUnknown();
