@@ -289,7 +289,7 @@ void DIALOG_PLOT::init_Dialog()
 
     if( m_job
         && !( m_job->m_plotFormat == JOB_EXPORT_PCB_PLOT::PLOT_FORMAT::POST
-              && dynamic_cast<JOB_EXPORT_PCB_PS*>( m_job )->m_useGlobalSettings ) )
+              && static_cast<JOB_EXPORT_PCB_PS*>( m_job )->m_useGlobalSettings ) )
     {
         // When we are using a job we get the PS adjust values from the plot options
         // The exception is when this is a fresh job and we want to get the global values as defaults
