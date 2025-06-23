@@ -2048,39 +2048,42 @@ int PCB_CONTROL::UpdateMessagePanel( const TOOL_EVENT& aEvent )
             }
         }
 
-        for( PCB_LAYER_ID edgeLayer : { Edge_Cuts, Margin } )
+        if( a && b )
         {
-            PCB_LAYER_ID active = m_frame->GetActiveLayer();
-            PCB_LAYER_ID layer = UNDEFINED_LAYER;
-
-            if( a->IsOnLayer( edgeLayer ) && b->Type() != PCB_FOOTPRINT_T )
+            for( PCB_LAYER_ID edgeLayer : { Edge_Cuts, Margin } )
             {
-                if( b->IsOnLayer( active ) && IsCopperLayer( active ) )
-                    layer = active;
-                else if( IsCopperLayer( b->GetLayer() ) )
-                    layer = b->GetLayer();
-            }
-            else if( b->IsOnLayer( edgeLayer ) && a->Type() != PCB_FOOTPRINT_T )
-            {
-                if( a->IsOnLayer( active ) && IsCopperLayer( active ) )
-                    layer = active;
-                else if( IsCopperLayer( a->GetLayer() ) )
-                    layer = a->GetLayer();
-            }
+                PCB_LAYER_ID active = m_frame->GetActiveLayer();
+                PCB_LAYER_ID layer = UNDEFINED_LAYER;
 
-            if( layer >= 0 )
-            {
-                constraint = drcEngine->EvalRules( EDGE_CLEARANCE_CONSTRAINT, a, b, layer );
-
-                if( edgeLayer == Edge_Cuts )
+                if( a->IsOnLayer( edgeLayer ) && b->Type() != PCB_FOOTPRINT_T )
                 {
-                    msgItems.emplace_back( _( "Resolved Edge Clearance" ),
-                                           m_frame->MessageTextFromValue( constraint.m_Value.Min() ) );
+                    if( b->IsOnLayer( active ) && IsCopperLayer( active ) )
+                        layer = active;
+                    else if( IsCopperLayer( b->GetLayer() ) )
+                        layer = b->GetLayer();
                 }
-                else
+                else if( b->IsOnLayer( edgeLayer ) && a->Type() != PCB_FOOTPRINT_T )
                 {
-                    msgItems.emplace_back( _( "Resolved Margin Clearance" ),
-                                           m_frame->MessageTextFromValue( constraint.m_Value.Min() ) );
+                    if( a->IsOnLayer( active ) && IsCopperLayer( active ) )
+                        layer = active;
+                    else if( IsCopperLayer( a->GetLayer() ) )
+                        layer = a->GetLayer();
+                }
+
+                if( layer >= 0 )
+                {
+                    constraint = drcEngine->EvalRules( EDGE_CLEARANCE_CONSTRAINT, a, b, layer );
+
+                    if( edgeLayer == Edge_Cuts )
+                    {
+                        msgItems.emplace_back( _( "Resolved Edge Clearance" ),
+                                               m_frame->MessageTextFromValue( constraint.m_Value.Min() ) );
+                    }
+                    else
+                    {
+                        msgItems.emplace_back( _( "Resolved Margin Clearance" ),
+                                               m_frame->MessageTextFromValue( constraint.m_Value.Min() ) );
+                    }
                 }
             }
         }

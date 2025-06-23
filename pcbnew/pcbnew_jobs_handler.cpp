@@ -114,8 +114,8 @@ PCBNEW_JOBS_HANDLER::PCBNEW_JOBS_HANDLER( KIWAY* aKiway ) :
               {
                   JOB_EXPORT_PCB_3D* svgJob = dynamic_cast<JOB_EXPORT_PCB_3D*>( job );
 
-                  PCB_EDIT_FRAME* editFrame = dynamic_cast<PCB_EDIT_FRAME*>(
-                          aKiway->Player( FRAME_PCB_EDITOR, false ) );
+                  PCB_EDIT_FRAME* editFrame = dynamic_cast<PCB_EDIT_FRAME*>( aKiway->Player( FRAME_PCB_EDITOR,
+                                                                                             false ) );
 
                   wxCHECK( svgJob && editFrame, false );
 
@@ -138,8 +138,8 @@ PCBNEW_JOBS_HANDLER::PCBNEW_JOBS_HANDLER( KIWAY* aKiway ) :
               {
                   JOB_EXPORT_PCB_SVG* svgJob = dynamic_cast<JOB_EXPORT_PCB_SVG*>( job );
 
-                  PCB_EDIT_FRAME* editFrame = dynamic_cast<PCB_EDIT_FRAME*>(
-                          aKiway->Player( FRAME_PCB_EDITOR, false ) );
+                  PCB_EDIT_FRAME* editFrame = dynamic_cast<PCB_EDIT_FRAME*>( aKiway->Player( FRAME_PCB_EDITOR,
+                                                                                             false ) );
 
                   wxCHECK( svgJob && editFrame, false );
 
@@ -152,8 +152,8 @@ PCBNEW_JOBS_HANDLER::PCBNEW_JOBS_HANDLER( KIWAY* aKiway ) :
               {
                   JOB_EXPORT_PCB_GENCAD* gencadJob = dynamic_cast<JOB_EXPORT_PCB_GENCAD*>( job );
 
-                  PCB_EDIT_FRAME* editFrame = dynamic_cast<PCB_EDIT_FRAME*>(
-                          aKiway->Player( FRAME_PCB_EDITOR, false ) );
+                  PCB_EDIT_FRAME* editFrame = dynamic_cast<PCB_EDIT_FRAME*>( aKiway->Player( FRAME_PCB_EDITOR,
+                                                                                             false ) );
 
                   wxCHECK( gencadJob && editFrame, false );
 
@@ -165,8 +165,8 @@ PCBNEW_JOBS_HANDLER::PCBNEW_JOBS_HANDLER( KIWAY* aKiway ) :
               {
                   JOB_EXPORT_PCB_DXF* dxfJob = dynamic_cast<JOB_EXPORT_PCB_DXF*>( job );
 
-                  PCB_EDIT_FRAME* editFrame = dynamic_cast<PCB_EDIT_FRAME*>(
-                          aKiway->Player( FRAME_PCB_EDITOR, false ) );
+                  PCB_EDIT_FRAME* editFrame = dynamic_cast<PCB_EDIT_FRAME*>( aKiway->Player( FRAME_PCB_EDITOR,
+                                                                                             false ) );
 
                   wxCHECK( dxfJob && editFrame, false );
 
@@ -178,8 +178,8 @@ PCBNEW_JOBS_HANDLER::PCBNEW_JOBS_HANDLER( KIWAY* aKiway ) :
               {
                   JOB_EXPORT_PCB_PDF* pdfJob = dynamic_cast<JOB_EXPORT_PCB_PDF*>( job );
 
-                  PCB_EDIT_FRAME* editFrame = dynamic_cast<PCB_EDIT_FRAME*>(
-                          aKiway->Player( FRAME_PCB_EDITOR, false ) );
+                  PCB_EDIT_FRAME* editFrame = dynamic_cast<PCB_EDIT_FRAME*>( aKiway->Player( FRAME_PCB_EDITOR,
+                                                                                             false ) );
 
                   wxCHECK( pdfJob && editFrame, false );
 
@@ -191,8 +191,8 @@ PCBNEW_JOBS_HANDLER::PCBNEW_JOBS_HANDLER( KIWAY* aKiway ) :
               {
                   JOB_EXPORT_PCB_PS* psJob = dynamic_cast<JOB_EXPORT_PCB_PS*>( job );
 
-                  PCB_EDIT_FRAME* editFrame =
-                          dynamic_cast<PCB_EDIT_FRAME*>( aKiway->Player( FRAME_PCB_EDITOR, false ) );
+                  PCB_EDIT_FRAME* editFrame = dynamic_cast<PCB_EDIT_FRAME*>( aKiway->Player( FRAME_PCB_EDITOR,
+                                                                                             false ) );
 
                   wxCHECK( psJob && editFrame, false );
 
@@ -205,8 +205,8 @@ PCBNEW_JOBS_HANDLER::PCBNEW_JOBS_HANDLER( KIWAY* aKiway ) :
               {
                   JOB_EXPORT_PCB_GERBER* gJob = dynamic_cast<JOB_EXPORT_PCB_GERBER*>( job );
 
-                  PCB_EDIT_FRAME* editFrame = dynamic_cast<PCB_EDIT_FRAME*>(
-                          aKiway->Player( FRAME_PCB_EDITOR, false ) );
+                  PCB_EDIT_FRAME* editFrame = dynamic_cast<PCB_EDIT_FRAME*>( aKiway->Player( FRAME_PCB_EDITOR,
+                                                                                             false ) );
 
                   wxCHECK( gJob && editFrame, false );
 
@@ -219,8 +219,8 @@ PCBNEW_JOBS_HANDLER::PCBNEW_JOBS_HANDLER( KIWAY* aKiway ) :
               {
                   JOB_EXPORT_PCB_GERBERS* gJob = dynamic_cast<JOB_EXPORT_PCB_GERBERS*>( job );
 
-                  PCB_EDIT_FRAME* editFrame = dynamic_cast<PCB_EDIT_FRAME*>(
-                          aKiway->Player( FRAME_PCB_EDITOR, false ) );
+                  PCB_EDIT_FRAME* editFrame = dynamic_cast<PCB_EDIT_FRAME*>( aKiway->Player( FRAME_PCB_EDITOR,
+                                                                                             false ) );
 
                   wxCHECK( gJob && editFrame, false );
 
@@ -236,8 +236,8 @@ PCBNEW_JOBS_HANDLER::PCBNEW_JOBS_HANDLER( KIWAY* aKiway ) :
               },
               [aKiway]( JOB* job, wxWindow* aParent ) -> bool
               {
-                  PCB_EDIT_FRAME* editFrame =
-                          dynamic_cast<PCB_EDIT_FRAME*>( aKiway->Player( FRAME_PCB_EDITOR, false ) );
+                  PCB_EDIT_FRAME* editFrame = dynamic_cast<PCB_EDIT_FRAME*>( aKiway->Player( FRAME_PCB_EDITOR,
+                                                                                             false ) );
 
                   wxCHECK( editFrame, false );
 
@@ -251,8 +251,8 @@ PCBNEW_JOBS_HANDLER::PCBNEW_JOBS_HANDLER( KIWAY* aKiway ) :
               {
                   JOB_EXPORT_PCB_DRILL* drillJob = dynamic_cast<JOB_EXPORT_PCB_DRILL*>( job );
 
-                  PCB_EDIT_FRAME* editFrame = dynamic_cast<PCB_EDIT_FRAME*>(
-                          aKiway->Player( FRAME_PCB_EDITOR, false ) );
+                  PCB_EDIT_FRAME* editFrame = dynamic_cast<PCB_EDIT_FRAME*>( aKiway->Player( FRAME_PCB_EDITOR,
+                                                                                             false ) );
 
                   wxCHECK( drillJob && editFrame, false );
 
@@ -264,8 +264,8 @@ PCBNEW_JOBS_HANDLER::PCBNEW_JOBS_HANDLER( KIWAY* aKiway ) :
 			  {
 				  JOB_EXPORT_PCB_POS* posJob = dynamic_cast<JOB_EXPORT_PCB_POS*>( job );
 
-				  PCB_EDIT_FRAME* editFrame = dynamic_cast<PCB_EDIT_FRAME*>(
-                          aKiway->Player( FRAME_PCB_EDITOR, false ) );
+				  PCB_EDIT_FRAME* editFrame = dynamic_cast<PCB_EDIT_FRAME*>( aKiway->Player( FRAME_PCB_EDITOR,
+                                                                                             false ) );
 
                   wxCHECK( posJob && editFrame, false );
 
@@ -287,8 +287,11 @@ PCBNEW_JOBS_HANDLER::PCBNEW_JOBS_HANDLER( KIWAY* aKiway ) :
     Register( "drc", std::bind( &PCBNEW_JOBS_HANDLER::JobExportDrc, this, std::placeholders::_1 ),
               []( JOB* job, wxWindow* aParent ) -> bool
               {
-                  DIALOG_DRC_JOB_CONFIG dlg( aParent, dynamic_cast<JOB_PCB_DRC*>( job ) );
+                  JOB_PCB_DRC* drcJob = dynamic_cast<JOB_PCB_DRC*>( job );
 
+                  wxCHECK( drcJob, false );
+
+                  DIALOG_DRC_JOB_CONFIG dlg( aParent, drcJob );
                   return dlg.ShowModal() == wxID_OK;
               } );
     Register( "ipc2581",
@@ -297,8 +300,8 @@ PCBNEW_JOBS_HANDLER::PCBNEW_JOBS_HANDLER( KIWAY* aKiway ) :
               {
                   JOB_EXPORT_PCB_IPC2581* ipcJob = dynamic_cast<JOB_EXPORT_PCB_IPC2581*>( job );
 
-                  PCB_EDIT_FRAME* editFrame = dynamic_cast<PCB_EDIT_FRAME*>(
-                          aKiway->Player( FRAME_PCB_EDITOR, false ) );
+                  PCB_EDIT_FRAME* editFrame = dynamic_cast<PCB_EDIT_FRAME*>( aKiway->Player( FRAME_PCB_EDITOR,
+                                                                                             false ) );
 
                   wxCHECK( ipcJob && editFrame, false );
 
@@ -317,8 +320,8 @@ PCBNEW_JOBS_HANDLER::PCBNEW_JOBS_HANDLER( KIWAY* aKiway ) :
               {
                   JOB_EXPORT_PCB_ODB* odbJob = dynamic_cast<JOB_EXPORT_PCB_ODB*>( job );
 
-                  PCB_EDIT_FRAME* editFrame = dynamic_cast<PCB_EDIT_FRAME*>(
-                          aKiway->Player( FRAME_PCB_EDITOR, false ) );
+                  PCB_EDIT_FRAME* editFrame = dynamic_cast<PCB_EDIT_FRAME*>( aKiway->Player( FRAME_PCB_EDITOR,
+                                                                                             false ) );
 
                   wxCHECK( odbJob && editFrame, false );
 
