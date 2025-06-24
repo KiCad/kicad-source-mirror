@@ -510,6 +510,9 @@ void SCH_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
     {
         ITEM_PICKER& wrapper = aList->GetItemWrapper( ii );
 
+        if( wrapper.GetStatus() == UNDO_REDO::DELETED )
+            continue;
+
         SCH_ITEM* parentGroup = Schematic().ResolveItem( wrapper.GetGroupId(), nullptr, true );
         wrapper.GetItem()->SetParentGroup( dynamic_cast<SCH_GROUP*>( parentGroup ) );
 
