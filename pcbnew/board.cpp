@@ -2137,9 +2137,7 @@ std::set<wxString> BOARD::GetNetClassAssignmentCandidates() const
 
 void BOARD::SynchronizeProperties()
 {
-    wxCHECK( m_project, /*void*/ );
-
-    if( !m_project->IsNullProject() )
+    if( m_project && !m_project->IsNullProject() )
         SetProperties( m_project->GetTextVars() );
 }
 
