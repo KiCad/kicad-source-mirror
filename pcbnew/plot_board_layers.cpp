@@ -1368,6 +1368,8 @@ void setupPlotterNewPDFPage( PLOTTER* aPlotter, BOARD* aBoard, PCB_PLOT_PARAMS* 
 {
     plotPdfBackground( aBoard, aPlotOpts, aPlotter );
 
+    aPlotter->RenderSettings()->SetLayerName( aLayerName );
+
     // Plot the frame reference if requested
     if( aPlotOpts->GetPlotFrameRef() )
     {
@@ -1376,6 +1378,7 @@ void setupPlotterNewPDFPage( PLOTTER* aPlotter, BOARD* aBoard, PCB_PLOT_PARAMS* 
         bool   oldMirror = aPlotOpts->GetMirror();
         bool   oldAutoScale = aPlotOpts->GetAutoScale();
         double oldScale = aPlotOpts->GetScale();
+
         if( oldMirror || oldAutoScale || oldScale != 1.0 )
         {
             aPlotOpts->SetMirror( false );
@@ -1399,6 +1402,4 @@ void setupPlotterNewPDFPage( PLOTTER* aPlotter, BOARD* aBoard, PCB_PLOT_PARAMS* 
             initializePlotter( aPlotter, aBoard, aPlotOpts );
         }
     }
-
-    aPlotter->RenderSettings()->SetLayerName( aLayerName );
 }

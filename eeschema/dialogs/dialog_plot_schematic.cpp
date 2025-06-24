@@ -413,8 +413,6 @@ void DIALOG_PLOT_SCHEMATIC::plotSchematic( bool aPlotAll )
     renderSettings.m_ShowHiddenPins = false;
     renderSettings.m_ShowHiddenFields = false;
 
-    EESCHEMA_SETTINGS* cfg = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
-
     getPlotOptions( &renderSettings );
 
     std::unique_ptr<SCH_PLOTTER> schPlotter = std::make_unique<SCH_PLOTTER>( m_editFrame );
