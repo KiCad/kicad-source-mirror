@@ -930,6 +930,9 @@ void FOOTPRINT_EDIT_FRAME::doCloseWindow()
     GetCanvas()->SetEventDispatcher( nullptr );
     GetCanvas()->StopDrawing();
 
+    if( GetLibTree() )
+        GetLibTree()->ShutdownPreviews();
+
     // Do not show the layer manager during closing to avoid flicker
     // on some platforms (Windows) that generate useless redraw of items in
     // the Layer Manager
