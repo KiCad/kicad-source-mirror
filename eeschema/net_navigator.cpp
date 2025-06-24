@@ -468,9 +468,13 @@ void SCH_EDIT_FRAME::SelectNetNavigatorItem( const NET_NAVIGATOR_ITEM_DATA* aSel
     if( !aSelection )
         return;
 
+    wxTreeItemId rootId = m_netNavigator->GetRootItem();
+
+    if( !rootId.IsOk() )
+        return;
+
     wxTreeItemIdValue        sheetCookie;
     NET_NAVIGATOR_ITEM_DATA* itemData = nullptr;
-    wxTreeItemId             rootId = m_netNavigator->GetRootItem();
     wxTreeItemId             sheetId = m_netNavigator->GetFirstChild( rootId, sheetCookie );
 
     while( sheetId.IsOk() )
