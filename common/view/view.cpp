@@ -302,8 +302,7 @@ void VIEW::Add( VIEW_ITEM* aItem, int aDrawPriority )
     if( !aItem->m_viewPrivData )
         aItem->m_viewPrivData = new VIEW_ITEM_DATA;
 
-    wxASSERT_MSG( aItem->m_viewPrivData->m_view == nullptr
-                    || aItem->m_viewPrivData->m_view == this,
+    wxASSERT_MSG( aItem->m_viewPrivData->m_view == nullptr || aItem->m_viewPrivData->m_view == this,
                   wxS( "Already in a different view!" ) );
 
     aItem->m_viewPrivData->m_view = this;
@@ -340,7 +339,8 @@ void VIEW::Remove( VIEW_ITEM* aItem )
         std::vector<VIEW_ITEM*>::iterator item = m_allItems->end();
         int                               cachedIndex = aItem->m_viewPrivData->m_cachedIndex;
 
-        if( cachedIndex >= 0 && cachedIndex < static_cast<ssize_t>( m_allItems->size() )
+        if( cachedIndex >= 0
+            && cachedIndex < static_cast<ssize_t>( m_allItems->size() )
             && ( *m_allItems )[cachedIndex] == aItem )
         {
             item = m_allItems->begin() + cachedIndex;

@@ -62,8 +62,8 @@ void PCB_VIEW::Add( KIGFX::VIEW_ITEM* aItem, int aDrawPriority )
 
         if( boardItem->Type() == PCB_FOOTPRINT_T )
         {
-            static_cast<FOOTPRINT*>( boardItem )
-                    ->RunOnChildren( std::bind( &PCB_VIEW::Add, this, _1, aDrawPriority ), RECURSE_MODE::NO_RECURSE );
+            static_cast<FOOTPRINT*>( boardItem )->RunOnChildren( std::bind( &PCB_VIEW::Add, this, _1, aDrawPriority ),
+                                                                 RECURSE_MODE::NO_RECURSE );
         }
     }
 
@@ -79,8 +79,8 @@ void PCB_VIEW::Remove( KIGFX::VIEW_ITEM* aItem )
 
         if( boardItem->Type() == PCB_FOOTPRINT_T )
         {
-            static_cast<FOOTPRINT*>( boardItem )
-                    ->RunOnChildren( std::bind( &PCB_VIEW::Remove, this, _1 ), RECURSE_MODE::NO_RECURSE );
+            static_cast<FOOTPRINT*>( boardItem )->RunOnChildren( std::bind( &PCB_VIEW::Remove, this, _1 ),
+                                                                 RECURSE_MODE::NO_RECURSE );
         }
     }
 

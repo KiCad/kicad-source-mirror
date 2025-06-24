@@ -333,8 +333,7 @@ void PCB_BASE_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
                     {
                         // This is an error condition - item has already been changed so should not
                         // be added
-                        wxASSERT_MSG( false,
-                                      wxT( "UndoRedo: should not add already changed item" ) );
+                        wxASSERT_MSG( false, wxT( "UndoRedo: should not add already changed item" ) );
                     }
 
                     // Otherwise, item remains CHANGED
