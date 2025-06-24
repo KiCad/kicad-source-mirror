@@ -278,7 +278,20 @@ LIB_TREE::~LIB_TREE()
         m_details_ctrl->Unbind( wxEVT_HTML_LINK_CLICKED, &LIB_TREE::onDetailsLink, this );
 
     m_hoverTimer.Stop();
-    destroyPreview();
+}
+
+
+void LIB_TREE::ShutdownPreviews()
+{
+    m_hoverTimer.Stop();
+    m_previewDisabled = true;
+
+    if( m_previewWindow )
+    {
+        m_previewWindow->Hide();
+        m_previewWindow->Destroy();
+        m_previewWindow = nullptr;
+    }
 }
 
 
@@ -748,18 +761,6 @@ void LIB_TREE::hidePreview()
 
     if( m_previewWindow )
         m_previewWindow->Hide();
-}
-
-
-void LIB_TREE::destroyPreview()
-{
-    hidePreview();
-
-    if( m_previewWindow )
-    {
-        m_previewWindow->Destroy();
-        m_previewWindow = nullptr;
-    }
 }
 
 

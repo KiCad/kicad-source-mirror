@@ -180,6 +180,8 @@ public:
         m_previewDisabled = aBlock;
     }
 
+    void ShutdownPreviews();
+
 protected:
     /**
      * Expand or collapse a node, switching it to the opposite state.
@@ -232,7 +234,6 @@ protected:
 
     void showPreview( wxDataViewItem aItem );
     void hidePreview();
-    void destroyPreview();
 
     void onQueryText( wxCommandEvent& aEvent );
     void onQueryCharHook( wxKeyEvent& aEvent );

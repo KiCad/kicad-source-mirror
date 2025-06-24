@@ -688,6 +688,9 @@ bool SYMBOL_EDIT_FRAME::canCloseWindow( wxCloseEvent& aEvent )
 
 void SYMBOL_EDIT_FRAME::doCloseWindow()
 {
+    if( GetLibTree() )
+        GetLibTree()->ShutdownPreviews();
+
     Destroy();
 }
 
