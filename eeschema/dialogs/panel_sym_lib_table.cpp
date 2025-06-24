@@ -422,6 +422,7 @@ bool PANEL_SYM_LIB_TABLE::allowAutomaticPluginTypeSelection( wxString& aLibraryP
 bool PANEL_SYM_LIB_TABLE::verifyTables()
 {
     wxString                      msg;
+    int                           cursorCol;
     std::unique_ptr<wxBusyCursor> wait;
     wait.reset( new wxBusyCursor );
 
@@ -430,7 +431,7 @@ bool PANEL_SYM_LIB_TABLE::verifyTables()
         if( !model )
             continue;
 
-        for( int r = 0; r < model->GetNumberRows(); )
+        for( int r = 0; r < model->GetNumberRows(); ++r )
         {
             wxString nick = model->GetValue( r, COL_NICKNAME ).Trim( false ).Trim();
             wxString uri  = model->GetValue( r, COL_URI ).Trim( false ).Trim();
@@ -439,33 +440,35 @@ bool PANEL_SYM_LIB_TABLE::verifyTables()
             if( !nick || !uri )
             {
                 if( !nick && !uri )
-                    msg = _( "A library table row nickname and path cells are empty." );
+                {
+                    msg = _( "Nickname and path cannot be empty." );
+                    cursorCol = COL_NICKNAME;
+                }
                 else if( !nick )
-                    msg = _( "A library table row nickname cell is empty." );
+                {
+                    msg = _( "Nickname cannot be empty." );
+                    cursorCol = COL_NICKNAME;
+                }
                 else
-                    msg = _( "A library table row path cell is empty." );
+                {
+                    msg = _( "Path cannot be empty." );
+                    cursorCol = COL_URI;
+                }
+
+                // show the tabbed panel holding the grid we have flunked:
+                if( model != cur_model() )
+                    m_notebook->SetSelection( model == global_model() ? 0 : 1 );
+
+                m_cur_grid->MakeCellVisible( r, 0 );
+                m_cur_grid->SetGridCursor( r, cursorCol );
 
                 wxWindow* topLevelParent = wxGetTopLevelParent( this );
 
-                wxMessageDialog badCellDlg( topLevelParent, msg, _( "Invalid Row Definition" ),
-                                            wxYES_NO | wxCENTER | wxICON_QUESTION | wxYES_DEFAULT );
-                badCellDlg.SetExtendedMessage( _( "Empty cells will result in all rows that are "
-                                                  "invalid to be removed from the table." ) );
-                badCellDlg.SetYesNoLabels( wxMessageDialog::ButtonLabel( _( "Remove Invalid Cells" ) ),
-                                           wxMessageDialog::ButtonLabel( _( "Cancel Table Update" ) ) );
+                wxMessageDialog errdlg( topLevelParent, msg, _( "Library Table Error" ) );
 
                 wait.reset();
-
-                if( badCellDlg.ShowModal() == wxID_NO )
-                    return false;
-
-                wait.reset( new wxBusyCursor );
-
-                // Delete the "empty" row, where empty means missing nick or uri.
-                // This also updates the UI which could be slow, but there should only be a few
-                // rows to delete, unless the user fell asleep on the Add Row
-                // button.
-                model->DeleteRows( r, 1 );
+                errdlg.ShowModal();
+                return false;
             }
             else if( ( illegalCh = LIB_ID::FindIllegalLibraryNameChar( nick ) ) )
             {
@@ -478,7 +481,7 @@ bool PANEL_SYM_LIB_TABLE::verifyTables()
                     m_notebook->SetSelection( model == global_model() ? 0 : 1 );
 
                 m_cur_grid->MakeCellVisible( r, 0 );
-                m_cur_grid->SetGridCursor( r, 1 );
+                m_cur_grid->SetGridCursor( r, COL_NICKNAME );
 
                 wxWindow* topLevelParent = wxGetTopLevelParent( this );
 
@@ -499,12 +502,10 @@ bool PANEL_SYM_LIB_TABLE::verifyTables()
                 }
                 else
                 {
-                    wxString ltype  = model->GetValue( r, COL_TYPE );
+                    wxString ltype = model->GetValue( r, COL_TYPE );
                     model->LIB_TABLE_GRID::SetValue( r, COL_URI, uri );
                     model->SetValue( r, COL_TYPE, ltype );
                 }
-
-                ++r;        // this row was OK.
             }
         }
     }
@@ -517,11 +518,11 @@ bool PANEL_SYM_LIB_TABLE::verifyTables()
 
         for( int r1 = 0; r1 < model->GetNumberRows() - 1; ++r1 )
         {
-            wxString    nick1 = model->GetValue( r1, COL_NICKNAME );
+            wxString nick1 = model->GetValue( r1, COL_NICKNAME );
 
             for( int r2 = r1 + 1; r2 < model->GetNumberRows(); ++r2 )
             {
-                wxString    nick2 = model->GetValue( r2, COL_NICKNAME );
+                wxString nick2 = model->GetValue( r2, COL_NICKNAME );
 
                 if( nick1 == nick2 )
                 {
@@ -534,7 +535,7 @@ bool PANEL_SYM_LIB_TABLE::verifyTables()
 
                     // go to the lower of the two rows, it is technically the duplicate:
                     m_cur_grid->MakeCellVisible( r2, 0 );
-                    m_cur_grid->SetGridCursor( r2, 1 );
+                    m_cur_grid->SetGridCursor( r2, COL_NICKNAME );
 
                     wxWindow* topLevelParent = wxGetTopLevelParent( this );
 

@@ -53,7 +53,7 @@ public:
                            const SYMBOL_LIBRARY_FILTER* aFilter,
                            std::vector<PICKED_SYMBOL>& aHistoryList,
                            std::vector<PICKED_SYMBOL>& aAlreadyPlaced, bool aAllowFieldEdits,
-                           bool aShowFootprints );
+                           bool aShowFootprints, bool& aCancelled );
 
     ~DIALOG_SYMBOL_CHOOSER();
 
