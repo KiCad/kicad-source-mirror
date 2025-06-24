@@ -130,6 +130,10 @@ REPORTER& CLI_REPORTER::Report( const wxString& aMsg, SEVERITY aSeverity )
     else
         wxFprintf( target, aMsg + wxS( "\n" ) );
 
+    // Needed  after wxPrintf (or printf) to be sure the message is immediately printed
+    // (i.e. not stored in some i/o buffer)
+    fflush( target );
+
     return *this;
 }
 
