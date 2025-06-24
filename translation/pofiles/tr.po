@@ -14,7 +14,7 @@
 # Mert Gülsoy <mgulsoy@gmail.com>, 2023.
 # Erkan <erkankarakas@outlook.com>, 2023, 2025.
 # Mert Kalkancı <mertkalkanci79@gmail.com>, 2024.
-# YÜKSEL AÇIKGÖZ <yukselacikgoz@gmail.com>, 2024.
+# YÜKSEL AÇIKGÖZ <yukselacikgoz@gmail.com>, 2024, 2025.
 # Mahsum Aslan <mahsumaslan@yandex.com>, 2024.
 # Bahtiyar Bayram <bahtiyar.bayramov@gmail.com>, 2024.
 # John Beard <john.j.beard@gmail.com>, 2025.
@@ -33,16 +33,16 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-06-20 23:57+0300\n"
-"PO-Revision-Date: 2025-05-12 22:02+0000\n"
-"Last-Translator: Tevfik Bagcivan <tevfik.bagcivan@gmail.com>\n"
-"Language-Team: Turkish <https://hosted.weblate.org/projects/kicad/master-"
-"source/tr/>\n"
+"PO-Revision-Date: 2025-06-24 18:42+0000\n"
+"Last-Translator: YÜKSEL AÇIKGÖZ <yukselacikgoz@gmail.com>\n"
+"Language-Team: Turkish <https://hosted.weblate.org/projects/kicad/"
+"master-source/tr/>\n"
 "Language: tr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.12-dev\n"
+"X-Generator: Weblate 5.13-dev\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
 #: common/dialogs/panel_embedded_files.cpp:324
@@ -61,23 +61,23 @@ msgstr "Katmanları oluştur"
 #: 3d-viewer/3d_canvas/board_adapter.cpp:989
 #: pcbnew/dialogs/dialog_footprint_checker.cpp:116
 msgid "No footprint loaded."
-msgstr "İz düşümü yüklenmedi."
+msgstr "Ayak izi yüklenmedi."
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:1004
 msgid ""
 "Footprint outline is missing or malformed. Run Footprint Checker for a full "
 "analysis."
 msgstr ""
-"İz düşümü ana hatları eksik veya bozuk. Tam analiz için Footprint Checker'ı "
-"çalıştırın."
+"Ayak izi dış hattı eksik veya hatalı. Tam analiz için Ayak İzi "
+"Denetleyicisini çalıştırın."
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:1013
 msgid "Board outline is missing or malformed. Run DRC for a full analysis."
-msgstr "Kart ana hatları eksik veya bozuk. Tam analiz için DRC'yi çalıştırın."
+msgstr "Kart dış hattı eksik veya hatalı. Tam analiz için DRC'yi çalıştırın."
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:294
 msgid "Create tracks and vias"
-msgstr "Yollar ve geçişler oluştur"
+msgstr "Yollar ve geçitler oluştur"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:749
 msgid "Create zones"
@@ -98,20 +98,20 @@ msgstr "Bakır katman çokgenleri basitleştir"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:1167
 msgid "Calculating plated copper"
-msgstr "Hesaplanan bakır kaplama"
+msgstr "Kaplamalı bakır hesaplanıyor"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:1217
 #, c-format
 msgid "Simplifying %d copper layers"
-msgstr "%d bakır katmanını basitleştirme"
+msgstr "Bakır katmanı %d basitleştiriliyor"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:1258
 msgid "Simplify holes contours"
-msgstr "Deliklerin dış hatlarını basitleştir"
+msgstr "Delik konturlarını basitleştir"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:1278
 msgid "Build BVH for holes and vias"
-msgstr "Delikler ve geçişler için BVH oluştur"
+msgstr "Delikler ve geçitler için BVH oluştur"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:403
 msgid "OpenGL context creation error"
@@ -119,27 +119,27 @@ msgstr "OpenGL içerik oluşturma hatası"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:434
 msgid "Your OpenGL version is not supported. Minimum required is 1.5."
-msgstr "OpenGL sürümünüz desteklenmiyor. En azın 1.5 sürümü gereklidir."
+msgstr "Sizin OpenGL sürümünüz desteklenmiyor. Minimum gereksinim 1.5'tir."
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:568
 #, c-format
 msgid "Last render time %.0f ms"
-msgstr "Son oluşturma süresi %.0f ms"
+msgstr "Son işleme süresi %.0f ms"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:756
 #, c-format
 msgid "Net %s\tNet class %s"
-msgstr "Ağ %s\tAğSınıfı %s"
+msgstr "Ağ %s\tAğ sınıfı %s"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:779
 #, c-format
 msgid "Pad %s\t"
-msgstr "ayak %s\t"
+msgstr "Ped %s\t"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:810
 #, c-format
 msgid "Rule area %s\t"
-msgstr "Kural alanı %s\t"
+msgstr "Kural Alanı %s\t"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:812
 #, c-format
@@ -148,26 +148,26 @@ msgstr "Bölge %s\t"
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:466
 msgid "Load OpenGL: board"
-msgstr "OpenGL yükle: kart"
+msgstr "Yükle OpenGL: kart"
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:492
 msgid "Load OpenGL: holes and vias"
-msgstr "OpenGL yükle: delikler ve geçişler"
+msgstr "Yükle OpenGL : delikler ve geçitler"
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:545
 msgid "Load OpenGL: layers"
-msgstr "OpenGL yükle: katmanlar"
+msgstr "Yükle OpenGL: katmanlar"
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:559
 #, c-format
 msgid "Load OpenGL layer %s"
-msgstr "%s OpenGL katmanını yükle"
+msgstr "Katman %s OpenGL yükle"
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:653
 #: 3d-viewer/3d_rendering/raytracing/create_scene.cpp:795
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1999
 msgid "Loading 3D models..."
-msgstr "3B modeller yükleniyor..."
+msgstr "3D modeller yükleniyor..."
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:662
 #: 3d-viewer/3d_rendering/raytracing/create_scene.cpp:976
@@ -188,7 +188,7 @@ msgstr "Yeniden yükleme süresi %.3f s"
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2811
 #, c-format
 msgid "Loading %s..."
-msgstr "%s yükleniyor..."
+msgstr "Yükleniyor %s..."
 
 #: 3d-viewer/3d_rendering/opengl/render_3d_opengl.cpp:508
 #: 3d-viewer/3d_rendering/raytracing/render_3d_raytrace_gl.cpp:107
@@ -198,7 +198,7 @@ msgstr "Yükleniyor..."
 
 #: 3d-viewer/3d_rendering/raytracing/create_scene.cpp:391
 msgid "Load Raytracing: board"
-msgstr "Işın İzlemeyi Yükle: kart"
+msgstr "Işın izlemeyi yükle: board"
 
 #: 3d-viewer/3d_rendering/raytracing/create_scene.cpp:565
 msgid "Load Raytracing: layers"
@@ -207,16 +207,16 @@ msgstr "Işın İzlemeyi Yükle: katmanlar"
 #: 3d-viewer/3d_rendering/raytracing/render_3d_raytrace_base.cpp:240
 #, c-format
 msgid "Rendering time %.3f s"
-msgstr "Oluşturma süresi %.3f s"
+msgstr "İşleme süresi %.3f s"
 
 #: 3d-viewer/3d_rendering/raytracing/render_3d_raytrace_base.cpp:287
 #, c-format
 msgid "Rendering: %.0f %%"
-msgstr "Oluşturuluyor: %% %.0f"
+msgstr "İşleniyor: %.0f %%"
 
 #: 3d-viewer/3d_rendering/raytracing/render_3d_raytrace_base.cpp:700
 msgid "Rendering: Post processing shader"
-msgstr "Oluşturuluyor: İşlem sonrası gölgelendirici"
+msgstr "İşleniyor: İşlem sonrası gölgelendirici"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:55
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:611
@@ -224,15 +224,15 @@ msgstr "Oluşturuluyor: İşlem sonrası gölgelendirici"
 #: common/tool/actions.cpp:1232 pcbnew/footprint_chooser_frame.cpp:347
 #: pcbnew/footprint_viewer_frame.cpp:962 pcbnew/pcb_base_frame.cpp:676
 msgid "3D Viewer"
-msgstr "3B Görüntüleyici"
+msgstr "3D Görüntüleyici"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:77
 msgid "3D Grid"
-msgstr "3B Izgara"
+msgstr "3D Izgara"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:119
 msgid "Reset to Default Settings"
-msgstr "Öntanımlı Ayarlara Sıfırla"
+msgstr "Varsayılan Ayarlara Sıfırla"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:126
 #: bitmap2component/bitmap2cmp_frame.cpp:307 cvpcb/menubar.cpp:79
@@ -252,7 +252,7 @@ msgstr "&Dosya"
 #: pagelayout_editor/menubar.cpp:151 pcbnew/menubar_footprint_editor.cpp:237
 #: pcbnew/menubar_pcb_editor.cpp:465
 msgid "&Edit"
-msgstr "Dü&zenle"
+msgstr "&Düzenle"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:128 eeschema/menubar.cpp:346
 #: eeschema/sim/toolbars_simulator_frame.cpp:175
@@ -274,7 +274,7 @@ msgstr "&Tercihler"
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:101
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:68
 msgid "KiCad 3D Viewer"
-msgstr "KiCad 3B Görüntüleyici"
+msgstr "KiCad 3D Görüntüleyici"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:168
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:617
@@ -284,19 +284,19 @@ msgstr "KiCad 3B Görüntüleyici"
 #: pcbnew/pcb_edit_frame.cpp:306 pcbnew/pcb_edit_frame.cpp:1790
 #: pcbnew/tools/pcb_actions.cpp:1524
 msgid "Appearance"
-msgstr "Görünüş"
+msgstr "Görünüm"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:332
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:692
 #: 3d-viewer/dialogs/appearance_controls_3D_base.cpp:43
 msgid "Follow PCB Editor"
-msgstr "PCB Editör'ü takip et"
+msgstr "Baskı Devre Düzenleyiciyi Takip Et"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:334
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:693
 #: 3d-viewer/dialogs/appearance_controls_3D_base.cpp:43
 msgid "Follow PCB Plot Settings"
-msgstr "PCB Çizim Ayarlarını Takip Et"
+msgstr "Kart Çizim Ayarlarını Takip Et"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:551
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:718
@@ -306,14 +306,14 @@ msgstr "eski renkler"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:677
 msgid "3D Image File Name"
-msgstr "3B Görüntü Dosyası Adı"
+msgstr "3D Görüntü Dosyası Adı"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:698
 #: common/eda_base_frame.cpp:1500 common/eda_base_frame.cpp:1504
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:337
 #, c-format
 msgid "Insufficient permissions to save file '%s'."
-msgstr "'%s' dosyasını kaydetmek için yeterli izin yok."
+msgstr "Dosya '%s' kaydetmek için yeterli izin yok."
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:699 common/confirm.cpp:194
 #: common/confirm.cpp:219 common/dialogs/dialog_design_block_properties.cpp:103
@@ -354,7 +354,7 @@ msgstr "Hata"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:739
 msgid "Failed to copy image to clipboard"
-msgstr "Görüntüyü panoya kopyalama başarısız oldu"
+msgstr "Resim panoya kopyalanamadı"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:750
 msgid "Can't save file"
@@ -374,11 +374,11 @@ msgstr "Işın İzleme kullan"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:56
 msgid "Render current view using Raytracing"
-msgstr "Geçerli görünümü ışın izleme kullanarak oluştur"
+msgstr "Işın izleme kullanarak geçerli görünümü işle"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:63
 msgid "Copy 3D image to clipboard"
-msgstr "3B görüntüyü panoya kopyala"
+msgstr "3D görüntüyü panoya kopyala"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:64
 msgid "Copy the current 3D image to the clipboard"
@@ -386,7 +386,7 @@ msgstr "Geçerli 3B görüntüyü panoya kopyala"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:71
 msgid "Export Current View as PNG..."
-msgstr "Geçerli Görünümü PNG Olarak Dışa Aktar..."
+msgstr "Mevcut Görünümü PNG Olarak Dışa Aktar..."
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:72
 msgid "Export the Current View as a PNG image"
@@ -394,7 +394,7 @@ msgstr "Geçerli Görünümü PNG Olarak Dışa Aktar"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:79
 msgid "Export Current View as JPEG..."
-msgstr "Geçerli Görünümü JPEG Olarak Dışa Aktar..."
+msgstr "Mevcut Görünümü JPEG Olarak Dışa Aktar..."
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:80
 msgid "Export the Current View as a JPEG image"
@@ -402,20 +402,21 @@ msgstr "Geçerli Görünümü JPEG Olarak Dışa Aktar"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:88
 msgid "Set Pivot"
-msgstr "Pivot Belirle"
+msgstr "Dönüş Noktasını Ayarla"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:89
 msgid "Place point around which the board will be rotated (middle mouse click)"
 msgstr ""
-"Kartın etrafında döndürülmesi için merkezi bir nokta ekle (fare orta tıklama)"
+"Kartın etrafında döndürüleceği noktayı yerleştir (orta fare tuşu ile "
+"tıklayın)"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:96
 msgid "Rotate X Clockwise"
-msgstr "X'i Saat Yönünde Döndür"
+msgstr "X 'i Saat Yönünde Döndür"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:104
 msgid "Rotate X Counterclockwise"
-msgstr "X'i Saat Yönünün Tersinde Döndür"
+msgstr "X 'i Saat Yönünün Tersinde Döndür"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:112
 msgid "Rotate Y Clockwise"
@@ -455,7 +456,7 @@ msgstr "Ana Görünüm"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:184
 msgid "Redraw at the home position and zoom"
-msgstr "Hedef konumda yeniden çiz ve yakınlaştır"
+msgstr "Varsayılan konumda yeniden çiz ve yakınlaştır"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:192
 msgid "Flip Board"
@@ -463,11 +464,11 @@ msgstr "Kartı Çevir"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:193
 msgid "Flip the board view"
-msgstr "Kart Görünümünü Ters Çevir"
+msgstr "Kart görünümünü çevir"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:201
 msgid "Toggle Orthographic Projection"
-msgstr "Ortografik Projeksiyonu Aç / Kapat"
+msgstr "Ortografik Projeksiyonu Aç/Kapat"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:202
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:202
@@ -4768,7 +4769,7 @@ msgstr "Yüklemeyi İptal Et"
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:511
 #, c-format
 msgid "Illegal character '%c' in nickname '%s'."
-msgstr "'%s' rumuzunda yasa dışı karakter '%c'."
+msgstr "Geçersiz karakter '%c' takma ad '%s' içinde."
 
 #: common/dialogs/panel_design_block_lib_table.cpp:506
 #: common/dialogs/panel_design_block_lib_table.cpp:554
@@ -4945,7 +4946,7 @@ msgstr ""
 #: include/lib_table_grid.h:217 pcbnew/dialogs/panel_fp_lib_table_base.cpp:44
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:93
 msgid "Active"
-msgstr "Etkin"
+msgstr "Aktif"
 
 #: common/dialogs/panel_design_block_lib_table_base.cpp:45
 #: common/dialogs/panel_design_block_lib_table_base.cpp:94
@@ -7109,7 +7110,7 @@ msgstr "min"
 
 #: common/eda_units.cpp:484
 msgid "opt"
-msgstr "opt"
+msgstr "opsiyon"
 
 #: common/eda_units.cpp:492
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:151
@@ -7939,7 +7940,7 @@ msgstr "ZIP arşivi '%s' okunamıyor"
 #: common/io/easyedapro/easyedapro_import_utils.cpp:301
 #, c-format
 msgid "Cannot parse JSON line %d in '%s': %s"
-msgstr "'%s' içindeki JSON satırı %d ayrıştırılamıyor: %s"
+msgstr "Satır:%d , Dosya: '%s' 'de JSON ayrıştırılamıyor: %s"
 
 #: common/io/io_base.cpp:139
 msgid "Loading file canceled by user."
@@ -8809,7 +8810,7 @@ msgstr "Detayları Görüntüle"
 
 #: common/notifications_manager.cpp:97
 msgid "Dismiss"
-msgstr "Reddet"
+msgstr "Kapat"
 
 #: common/notifications_manager.cpp:155
 msgid "Notifications"
@@ -12046,80 +12047,86 @@ msgid ""
 msgstr ""
 "# 1. Özet\n"
 "\n"
-"Malzeme Listesi aracı, tasarımdaki tüm bileşenleri listeleyen bir ürün "
-"reçetesi oluşturur.\n"
+"Malzeme Listesi aracı (BOM), tasarımdaki tüm bileşenleri listeleyen bir BOM "
+"oluşturur.\n"
 "\n"
-"Araç, istenen çıktı biçiminde bir ürün reçetesi oluşturmak için harici bir "
-"komut dosyası kullanır. Farklı bir komut dosyası seçmek, Ürün reçetesinin "
-"nasıl biçimlendirileceğini değiştirir.\n"
+"Araç, istenen çıktı biçiminde bir BOM oluşturmak için harici bir betik "
+"kullanır. Farklı bir betik seçmek, BOM'un nasıl biçimlendirileceğini "
+"değiştirir.\n"
 "\n"
-"Bir Ürün Reçetesi oluşturmak, Şematik Düzenleyici kılavuzunda daha ayrıntılı "
-"olarak açıklanmıştır.\n"
+"BOM oluşturma, Şematik Düzenleyici kılavuzunda daha ayrıntılı olarak "
+"açıklanmıştır.\n"
 "\n"
 "# 2. Kullanım\n"
 "\n"
-"**MALZEME Listesi oluşturucu komut dosyaları** listesinden bir oluşturucu "
-"komut dosyası seçin. Seçilen jeneratör için ayrıntılar iletişim kutusunun "
-"sağında gösterilir.\n"
+"**BOM oluşturucu betikleri** listesinde bir oluşturucu betiği seçin. Seçilen "
+"oluşturucunun ayrıntıları iletişim kutusunun sağında gösterilir.\n"
 "\n"
-"** Üret ** düğmesine tıklamak, seçilen üreteci içeren bir ürün reçetesi "
-"dosyası oluşturur.\n"
+"**Oluştur** düğmesine tıklandığında, seçilen oluşturucuyla bir BOM dosyası "
+"oluşturulur.\n"
 "\n"
-"Varsayılan ayarlar birkaç jeneratör komut dosyası seçeneği sunar, ancak bazı "
-"ek komut dosyaları KiCad ile yüklenir ve listeye **+** düğmesiyle "
-"eklenebilir.\n"
+"Varsayılan ayarlar birkaç oluşturucu betik seçeneği sunar; ancak bazı ek "
+"betikler KiCad ile birlikte kurulur ve **+** düğmesiyle listeye eklenebilir."
 "\n"
-"** Not: ** Windows'ta ek bir seçenek vardır ** Konsol penceresini göster **. "
-"Bu seçenek işaretlenmediğinde, ürün reçetesi oluşturucuları gizli bir konsol "
-"penceresinde çalışır ve tüm çıktılar yeniden yönlendirilir ve iletişim "
-"kutusuna yazdırılır. Bu seçenek işaretlendiğinde, ÜRÜN reçetesi "
-"oluşturucuları görünür bir konsol penceresinde çalışır.\n"
 "\n"
-"# 3. Özel jeneratörler ve komut satırları\n"
+"**Not:** Windows'ta ek bir **Konsol penceresini göster** seçeneği vardır. Bu "
+"seçenek işaretli olmadığında, BOM oluşturucuları gizli bir konsol "
+"penceresinde çalışır ve tüm çıktılar iletişim kutusunda yönlendirilir ve "
+"yazdırılır. Bu seçenek işaretlendiğinde, BOM üreteçleri görünür bir konsol "
+"penceresinde çalışır.\n"
 "\n"
-"Dahili olarak KiCad, tasarımdaki tüm bileşenler hakkında bilgi içeren XML "
-"biçiminde bir ara netlist dosyası oluşturur. Ürün reçetesi oluşturucu komut "
-"dosyası, ara netlist dosyasını istenen çıktı biçimine dönüştürür. KiCad, "
-"ÜRÜN reçetesi oluşturucu komut dosyalarını ÜRÜN REÇETESİ iletişim kutusunun "
-"altına girilen komut satırına göre çalıştırır.\n"
+"# 3. Özel üreteçler ve komut satırları\n"
+"\n"
+"Dahili olarak, KiCad tasarımdaki tüm bileşenler hakkında bilgi içeren XML "
+"biçiminde bir ara ağ listesi dosyası oluşturur. Bir BOM üreteci betiği, ara "
+"ağ listesi dosyasını istenen çıktı biçimine dönüştürür. KiCad, BOM üreteci "
+"betiklerini BOM iletişim kutusunun altına girilen komut satırına göre "
+"çalıştırır.\n"
 "\n"
 "Komut satırı biçimi, dosya adları için parametreleri kabul eder. Her "
 "biçimlendirme parametresi, projeye özgü bir yol veya dosya adıyla "
 "değiştirilir. Desteklenen biçimlendirme parametreleri şunlardır:\n"
 "\n"
-"* '%İ': Ürün reçetesi oluşturucunun girdisi olan ara netlist dosyasının "
-"mutlak yolu ve dosya adı\n"
-"* '%O': çıktı MALZEME listesi dosyasının mutlak yolu ve dosya adı (dosya "
-"uzantısı olmadan)\n"
-"* '%B': çıktı MALZEME listesi dosyasının temel dosya adı (dosya uzantısı "
+"* `%I`: BOM üretecinin girdisi olan ara ağ listesi dosyasının mutlak yolu ve "
+"dosya adı\n"
+"* `%O`: çıktı BOM dosyasının mutlak yolu ve dosya adı (dosya uzantısı "
 "olmadan)\n"
-"* '%P': eğik çizgi izlemeden proje dizininin mutlak yolu\n"
+"* `%B`: çıktı BOM dosyasının temel dosya adı (dosya uzantısı olmadan)\n"
+"* `%P`: Proje dizininin mutlak yolu (sonda eğik çizgi olmadan)\n"
 "\n"
-"** Not: ** `%O' çıktı dosyası parametresi bir dosya uzantısı içermez. KiCad, "
+"**Not:** `%O` çıktı dosyası parametresi bir dosya uzantısı içermez. KiCad, "
 "komut satırına otomatik olarak uygun bir uzantı eklemeye çalışacaktır, ancak "
 "bir uzantının elle eklenmesi gerekebilir.\n"
 "\n"
-"Python, BOM oluşturucu komut dosyaları için önerilen araçtır, ancak başka "
-"araçlar da kullanılabilir.\n"
+"Python, BOM üreteci betikleri için önerilen araçtır, ancak başka araçlar da "
+"kullanılabilir.\n"
 "\n"
 "## Python betikleri için örnek komut satırları\n"
 "\n"
-"Bir Python betiğinin komut satırı biçimi şu şekildedir:\n"
+"Bir Python betiği için komut satırı biçimi şu şekildedir:\n"
 "\n"
-"python <komut dosyası adı> <girdi dosya adı> <çıktı dosya adı>\n"
+"```\n"
+"python <betik_dosya_adı> <girdi_dosya_adı> <çıktı_dosya_adı>\n"
+"```\n"
 "\n"
-"Windows'ta, bir CSV BOM için istenen oluşturucu komut dosyası `C:"
-"\\Users\\username\\kicad\\my_python_script.py ', komut satırı şöyle olurdu:\n"
+"Windows'ta, bir CSV BOM'u için istenen oluşturucu betiği `C:\\Users"
+"\\kullaniciadi\\kicad\\python_betigim.py` ise, komut satırı şu şekilde "
+"olacaktır:\n"
 "\n"
-"piton.exe C:\\Users\\username\\kicad\\my_python_script.py \"%I\" \"%O.csv\"\n"
+"```\n"
+"python.exe C:\\Users\\username\\kicad\\my_python_script.py \"%I\" \"%O.csv\""
 "\n"
-"Linux'ta, bir CSV BOM için istenen jeneratör betiği `/home/username/kicad/"
-"my_python_script.py ', komut satırı şöyle olurdu:\n"
+"```\n"
 "\n"
+"Linux'ta, bir CSV BOM için istenen oluşturucu betiği `/home/username/kicad/"
+"my_python_script.py` ise, komut satırı şu şekilde olur:\n"
+"\n"
+"```\n"
 "python /home/username/kicad/my_python_script.py \"%I\" \"%O.csv\"\n"
+"```\n"
 "\n"
-"Dosya adlarının boşluk veya özel karakterler içermesi durumunda bağımsız "
-"değişkenlerin etrafında çift tırnak işareti (`\"`) kullanılması önerilir.\n"
+"Dosya adlarının boşluk veya özel karakterler içermesi durumunda, "
+"argümanların etrafına çift tırnak (`\"`) konulması önerilir.\n"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:70
 msgid "Change all symbols in schematic"
@@ -43022,7 +43029,6 @@ msgstr ""
 "\n"
 
 #: pcbnew/dialogs/panel_setup_rules_help_2constraints.h:2
-#, fuzzy
 msgid ""
 "### Constraints\n"
 "\n"
@@ -43226,67 +43232,197 @@ msgid ""
 msgstr ""
 "### Kısıtlamalar\n"
 "\n"
-"/ Kısıtlama türü / Bağımsız değişken türü / Açıklama |\n"
-"|---------------------------|-----------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|\n"
-"| `annular_width' / min/opt|max / Halka şeklindeki halkaların açıklıklardaki "
-"genişliğini kontrol eder.<br> |\n"
-"| 'onaylama' | \"&lt;ifade>\" / Verilen ifadeyi kontrol eder.<br> |\n"
-"/ 'boşluk' | dak / Farklı ağlardaki bakır nesneler arasındaki ** elektriksel "
-"** boşluğu belirtir.  Net'ten bağımsız olarak nesneler arasında boşluk "
-"belirtmek istiyorsanız `physical_clearance` bölümüne bakın.)<br><br>Bakır "
-"nesnelerin üst üste gelmesine (çarpışmasına) izin vermek için, `min` değeri "
-"sıfırdan küçük olan bir `boşluk` kısıtlaması oluşturun (örneğin, `-1`).<br> "
+"| Kısıtlama türü            | Argüman "
+"türü                                                                                                          "
+"| "
+"Açıklama                                                                                                                                                                                                                                                                                                                                                                                                                                                "
 "|\n"
-"| `courtyard_clearance' | min / Ayak izi avluları arasındaki boşluğu kontrol "
-"eder ve herhangi iki avlu `min` mesafesinden daha yakınsa bir hata üretir.  "
-"Bir ayak izinin avlu şekli yoksa, bu kısıtlamadan herhangi bir hata oluşmaz."
-"<br> |\n"
-"/ 'sürünme` / dak / Farklı ağlardaki bakır nesneler arasındaki sürünme "
-"mesafesini belirtir.<br> |\n"
-"| `diff_pair_gap' / min / opt | max / Diferansiyel bir çiftteki bağlı "
-"parçalar arasındaki boşluğu kontrol eder.  Birleştirilmiş parçalar birbirine "
-"paralel olan parçalardır.  Diferansiyel çift boşluğu, bir diferansiyel "
-"çiftin ayrılmamış kısımları üzerinde test edilmez (örneğin, bir bileşenden "
-"fan çıkışı).<br> |\n"
-"| `diff_pair_uncoupled' | max / Bir diferansiyel çift izinin, çiftteki diğer "
-"polarite izinden ayrılmamış olarak yönlendirildiği mesafeyi kontrol eder "
-"(örneğin, çiftin bir bileşenden dışarı fırladığı veya vıa gibi başka bir "
-"nesnenin etrafından geçmek için ayrıldığı yer).<br> |\n"
-"| 'izin verme` | "
-"`track`<br>`via`<br>`micro_via`<br>`buried_via`<br>`pad`<br>`zone`<br>`text`<br>`graphic`<br>`hole`<br>`footprint'<br> "
-"| Boşluklarla ayrılmış, izin verilmeyecek bir veya daha fazla nesne türü "
-"belirtin.  Örneğin, `(kısıt parçaya izin vermiyor)` veya '(kısıt ped "
-"aracılığıyla parçaya izin vermiyor)'.  Bu tür bir nesne kural koşuluyla "
-"eşleşirse, bir DRC hatası oluşturulur.<br><br>Bu kısıtlama esas olarak bir "
-"saklama kuralı alanıyla aynıdır, ancak daha spesifik saklama kısıtlamaları "
-"oluşturmak için kullanılabilir.<br> |\n"
-"| `edge_clearance' / min /opt | max / Nesneler ile tahta kenarı arasındaki "
-"boşluğu kontrol eder.<br><br>Bu, tahta kenarı `Kenardaki tüm grafik "
-"öğelerini içereceğinden \"frezeleme toleransı\" olarak da düşünülebilir."
-"Tabakanın yanı sıra * oval * ped deliklerini de keser.  Delme toleransı için "
-"`physical_hole_clearance` bölümüne bakın.)<br> |\n"
-"/ 'uzunluk| / min / maks / Kural koşuluyla eşleşen ağlar için yönlendirilen "
-"toplam uzunluğu kontrol eder ve her ağ için kısıtlamanın `min` değerinin "
-"(belirtilmişse) altında veya `maks` değerinin (belirtilmişse) üzerinde bir "
-"hata oluşturur.<br> |\n"
-"| `delik' / min | maks / Bir pedde veya içinden delinmiş bir deliğin "
-"boyutunu (çapını) kontrol eder.  Oval delikler için, daha küçük (küçük) çap "
-"`min` değerine (belirtilmişse) ve daha büyük (büyük) çap `max` değerine "
-"(belirtilmişse) karşı test edilecektir.<br> |\n"
-"| `hole_clearance' | dak / Bir pedde veya içinden delinmiş bir delik ile "
-"farklı bir ağdaki bakır nesneler arasındaki boşluğu kontrol eder.  Açıklık, "
-"merkezinden değil deliğin çapından ölçülür.<br> |\n"
-"| `hole_to_hole' | dak / Pedlerde ve deliklerde mekanik olarak delinmiş "
-"delikler arasındaki boşluğu kontrol eder.  Açıklık, merkezleri arasında "
-"değil, deliklerin çapları arasında ölçülür.<br><br>Bu kısıtlama, matkap "
-"uçlarının korunması içindir.  ** Lazerle delinmiş ** (mikrovyalar) ile "
-"mekanik olarak delinmemiş diğer delikler arasındaki boşluk kontrol edilmez "
-"ve ** öğütülmüş ** (oval şekilli) ile mekanik olarak delinmemiş diğer "
-"delikler arasındaki boşluk kontrol edilmez.<br> |\n"
-"/ 'physical_clearance| / min / Belirli bir katmandaki (bakır olmayan "
-"katmanlar dahil) iki nesne arasındaki boşluğu kontrol eder.<br><br>Bu, "
-"`temizleme` işleminden daha genel amaçlı kontroller gerçekleştirebilirken, "
-"çok daha yavaştır.  Mümkün olduğunda 'boşluk' kullanın.<br> |\n"
+"|---------------------------|-----------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|"
+"\n"
+"| `annular_width`           | min/opt/"
+"max                                                                                                           "
+"| Geçitlerdeki halka genişliğini kontrol "
+"eder.<br>                                                                                                                                                                                                                                                                                                                                                                                                        "
+"|\n"
+"| `assertion`               | \"&lt;ifade>\""
+"                                                                                                          "
+"| Verilen ifadeyi kontrol "
+"eder.<br>                                                                                                                                                                                                                                                                                                                                                                                                                       "
+"|\n"
+"| `clearance`               | "
+"min                                                                                                                   "
+"| Farklı ağlara ait bakır nesneler arasındaki **elektriksel** boşluğu "
+"belirtir. (Netten bağımsız nesneler arası boşluk için `physical_clearance` "
+"kullanın.)<br><br>Bakır nesnelerin üst üste gelmesine (çarpışmasına) izin "
+"vermek için, `min` değeri sıfırdan küçük bir `clearance` kısıtlaması "
+"oluşturun (örneğin, `-1`)"
+".<br>                                                                                                                            "
+"|\n"
+"| `courtyard_clearance`     | "
+"min                                                                                                                   "
+"| Footprint courtyard'ları arasındaki boşluğu kontrol eder ve herhangi iki "
+"courtyard `min` mesafesinden daha yakınsa hata üretir. Eğer bir footprint'in "
+"courtyard şekli yoksa, bu kısıtlamadan hata "
+"üretilmez.<br>                                                                                                                                                                                                                                        "
+"|\n"
+"| `creepage`                | "
+"min                                                                                                                   "
+"| Farklı ağlara ait bakır nesneler arasındaki sızıntı mesafesini "
+"belirtir.<br>                                                                                                                                                                                                                                                                                                                                                                            "
+"|\n"
+"| `diff_pair_gap`           | min/opt/"
+"max                                                                                                           "
+"| Diferansiyel çiftlerde birbirine paralel olan eşleşmiş izler arasındaki "
+"boşluğu kontrol eder. Diferansiyel çift boşluğu, çiftin eşleşmemiş "
+"bölümlerinde test edilmez (örneğin, bir bileşenden çıkış yapılan kısımlar)"
+".<br>                                                                                                                                                                                                                              "
+"|\n"
+"| `diff_pair_uncoupled`     | "
+"max                                                                                                                   "
+"| Bir diferansiyel çift izinin, çiftin diğer kutup izinden ayrı olarak ne "
+"kadar mesafe boyunca yönlendirildiğini kontrol eder (örneğin, bir bileşenden "
+"çıkış yapılırken veya başka bir nesneyi (geçit gibi) geçmek için ayrıldığı "
+"durumlar)"
+".<br>                                                                                                                                                                                                          "
+"|\n"
+"| `disallow`                | "
+"`track`<br>`via`<br>`micro_via`<br>`buried_via`<br>`pad`<br>`zone`<br>`text`<br>`graphic`<br>`hole`<br>`footprint`"
+"<br> | Yasaklanacak bir veya daha fazla nesne türünü boşlukla ayırarak "
+"belirtin. Örneğin, `(constraint disallow track)` veya `(constraint disallow "
+"track via pad)`. Bu türde bir nesne kural koşuluyla eşleşirse, DRC hatası "
+"oluşturulur.<br><br>Bu kısıtlama temelde bir keepout alanı kuralıyla "
+"aynıdır, ancak daha spesifik keepout kısıtlamaları oluşturmak için "
+"kullanılabilir.<br>                                                                      "
+"|\n"
+"| `edge_clearance`          | min/opt/"
+"max                                                                                                           "
+"| Nesneler ile PCB kenarı arasındaki boşluğu kontrol eder.<br><br>Bu aynı "
+"zamanda \"freze toleransı\" olarak da düşünülebilir, çünkü PCB kenarı "
+"`Edge.Cuts` katmanındaki tüm grafik öğeleri ve *oval* pad deliklerini "
+"içerir. (Delme toleransı için `physical_hole_clearance` kullanın.)"
+"<br>                                                                                                                                                                "
+"|\n"
+"| `length`                  | min/"
+"max                                                                                                               "
+"| Kural koşuluyla eşleşen ağların toplam yönlendirme uzunluğunu kontrol eder "
+"ve `min` değerinin altında (belirtilmişse) veya `max` değerinin üzerinde "
+"(belirtilmişse) olan her ağ için hata "
+"üretir.<br>                                                                                                                                                                                                                                                   "
+"|\n"
+"| `hole`                    | min/"
+"max                                                                                                               "
+"| Pad veya geçitdeki delik çapını kontrol eder. Oval delikler için, küçük "
+"(minör) çap `min` değerine, büyük (major) çap `max` değerine karşı test "
+"edilir.<br>                                                                                                                                                                                                                                                                                             "
+"|\n"
+"| `hole_clearance`          | "
+"min                                                                                                                   "
+"| Pad veya geçit delikleri ile farklı ağa ait bakır nesneler arasındaki "
+"boşluğu kontrol eder. Boşluk deliğin merkezinden değil, çapından "
+"ölçülür.<br>                                                                                                                                                                                                                                                                                                     "
+"|\n"
+"| `hole_to_hole`            | "
+"min                                                                                                                   "
+"| Pad ve geçitlerdeki mekanik olarak delinmiş delikler arasındaki boşluğu "
+"kontrol eder. Boşluk delik merkezleri arasında değil, çapları arasında "
+"ölçülür.<br><br>Bu kısıtlama yalnızca matkap uçlarını korumak içindir. **"
+"Lazerle delinmiş** (mikrogeçit) ve diğer mekanik olmayan delikler arasındaki "
+"boşluk kontrol edilmez, aynı şekilde **freze ile açılmış** (oval şekilli) "
+"delikler de kontrol edilmez.<br>                                         |\n"
+"| `physical_clearance`      | "
+"min                                                                                                                   "
+"| Belirli bir katmandaki (bakır olmayan katmanlar dahil) iki nesne "
+"arasındaki boşluğu kontrol eder.<br><br>`clearance` kısıtlamasına göre daha "
+"genel amaçlı kontroller yapabilir, ancak çok daha yavaştır. Mümkün olduğunda "
+"`clearance` "
+"kullanın.<br>                                                                                                                                                                                                     "
+"|\n"
+"| `physical_hole_clearance` | "
+"min                                                                                                                   "
+"| Netten bağımsız olarak, pad veya geçit delikleri ile diğer nesneler "
+"arasındaki boşluğu kontrol eder. Boşluk deliğin merkezinden değil, çapından "
+"ölçülür.<br><br>Bu aynı zamanda \"delme toleransı\" olarak da düşünülebilir "
+"çünkü yalnızca **yuvarlak** delikleri içerir (freze toleransı için "
+"`edge_clearance` kullanın)"
+".<br>                                                                                                                            "
+"|\n"
+"| `silk_clearance`          | min/opt/"
+"max                                                                                                           "
+"| Silkscreen katmanlarındaki nesneler ile diğer nesneler arasındaki boşluğu "
+"kontrol "
+"eder.<br>                                                                                                                                                                                                                                                                                                                                                             "
+"|\n"
+"| `skew`                    | "
+"max                                                                                                                   "
+"| Kural koşuluyla eşleşen ağların toplam skew'ını (çarpıklık) kontrol eder, "
+"yani her bir ağın uzunluğu ile kural tarafından eşleşen tüm ağların uzunluk "
+"ortalaması arasındaki farkı hesaplar. Bu farkın mutlak değeri `max` değerini "
+"aşarsa, hata "
+"üretilir.<br>                                                                                                                                                                                           "
+"|\n"
+"| `solder_mask_expansion`   | "
+"opt                                                                                                                   "
+"| Pad, şekil ve izler için lehim maskesi genişlemesini "
+"belirtir.                                                                                                                                                                                                                                                                                                                                                                                          "
+"|\n"
+"| `solder_paste_abs_margin` | "
+"opt                                                                                                                   "
+"| Padler için mutlak lehim macunu boşluğunu belirtir. Genellikle macunu "
+"içeri çekmek için negatif değer kullanılır.<br><br>Nihai lehim macunu "
+"boşluğu, mutlak boşluk ile göreceli boşluğun toplamı "
+"olacaktır.                                                                                                                                                                                                                                             "
+"|\n"
+"| `solder_paste_rel_margin` | "
+"opt                                                                                                                   "
+"| Padler için göreceli lehim macunu boşluğunu belirtir. Genellikle macunu "
+"içeri çekmek için negatif değer kullanılır.<br><br>Nihai lehim macunu "
+"boşluğu, mutlak boşluk ile göreceli boşluğun toplamı "
+"olacaktır.                                                                                                                                                                                                                                           "
+"|\n"
+"| `thermal_relief_gap`      | "
+"min                                                                                                                   "
+"| Bir pad ile thermal-relief bağlantısı olan bir zone arasındaki boşluğun "
+"genişliğini "
+"belirtir.<br>                                                                                                                                                                                                                                                                                                                                                       "
+"|\n"
+"| `thermal_spoke_width`     | "
+"opt                                                                                                                   "
+"| Bir pad ile thermal-relief bağlantısı olan bir zone arasındaki bağlantı "
+"çubuklarının genişliğini "
+"belirtir.<br>                                                                                                                                                                                                                                                                                                                                          "
+"|\n"
+"| `track_width`             | min/opt/"
+"max                                                                                                           "
+"| İz ve yay segmentlerinin genişliğini kontrol eder. `min` değerinin altında "
+"(belirtilmişse) veya `max` değerinin üzerinde (belirtilmişse) genişliğe "
+"sahip her segment için hata "
+"üretilir.<br>                                                                                                                                                                                                                                                            "
+"|\n"
+"| `track_angle`             | min/opt/"
+"max                                                                                                           "
+"| Bağlı iki iz segmenti arasındaki açıyı kontrol eder. `min` değerinin "
+"altında (belirtilmişse) veya `max` değerinin üzerinde (belirtilmişse) açıya "
+"sahip her bağlı çift için hata "
+"üretilir.<br>                                                                                                                                                                                                                                                           "
+"|\n"
+"| `track_segment_length`    | min/"
+"max                                                                                                               "
+"| İz ve yay segmentlerinin uzunluğunu kontrol eder. `min` değerinin altında "
+"(belirtilmişse) veya `max` değerinin üzerinde (belirtilmişse) uzunluğa sahip "
+"her segment için hata "
+"üretilir.<br>                                                                                                                                                                                                                                                              "
+"|\n"
+"| `via_count`               | "
+"max                                                                                                                   "
+"| Kural koşuluyla eşleşen her ağdaki geçit sayısını sayar. Eşleşen herhangi "
+"bir ağdaki geçit sayısı `max` değerini aşarsa, o ağ için hata "
+"üretilir.<br>                                                                                                                                                                                                                                                                                                   "
+"|\n"
+"| `zone_connection`         | `solid`<br>`thermal_reliefs`<br>`none`"
+"                                                                                "
+"| Bir zone ile bir pad arasındaki bağlantı türünü "
+"belirtir.<br>                                                                                                                                                                                                                                                                                                                                                                                           "
+"|\n"
 "\n"
 "\n"
 
@@ -45683,9 +45819,8 @@ msgid "Checking PCB to schematic parity..."
 msgstr "Ayak izleri kontrol ediliyor..."
 
 #: pcbnew/drc/drc_test_provider_silk_clearance.cpp:87
-#, fuzzy
 msgid "Checking silkscreen for overlapping items..."
-msgstr "Ayak izleri kontrol ediliyor..."
+msgstr "Serigrafideki üst üste binen ögeler denetleniyor..."
 
 #: pcbnew/drc/drc_test_provider_sliver_checker.cpp:73
 msgid "Running sliver detection on copper layers..."
