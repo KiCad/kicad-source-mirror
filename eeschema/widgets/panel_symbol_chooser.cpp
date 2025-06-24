@@ -56,7 +56,7 @@ PANEL_SYMBOL_CHOOSER::PANEL_SYMBOL_CHOOSER( SCH_BASE_FRAME* aFrame, wxWindow* aP
                                             const SYMBOL_LIBRARY_FILTER* aFilter,
                                             std::vector<PICKED_SYMBOL>&  aHistoryList,
                                             std::vector<PICKED_SYMBOL>&  aAlreadyPlaced,
-                                            bool aAllowFieldEdits, bool aShowFootprints,
+                                            bool aAllowFieldEdits, bool aShowFootprints, bool& aCancelled,
                                             std::function<void()> aAcceptHandler,
                                             std::function<void()> aEscapeHandler ) :
         wxPanel( aParent, wxID_ANY, wxDefaultPosition, wxDefaultSize ),
@@ -188,7 +188,7 @@ PANEL_SYMBOL_CHOOSER::PANEL_SYMBOL_CHOOSER( SCH_BASE_FRAME* aFrame, wxWindow* aP
         if( !adapter->AddLibraries( libNicknames, m_frame ) )
         {
             // loading cancelled by user
-            m_acceptHandler();
+            aCancelled = true;
         }
     }
 

@@ -208,8 +208,16 @@ static struct IFACE : public KIFACE_BASE, public UNITS_PROVIDER
 
         case FRAME_SYMBOL_CHOOSER:
         {
-            SYMBOL_CHOOSER_FRAME* frame = new SYMBOL_CHOOSER_FRAME( aKiway, aParent );
-            return frame;
+            bool cancelled = false;
+            SYMBOL_CHOOSER_FRAME* chooser = new SYMBOL_CHOOSER_FRAME( aKiway, aParent, cancelled );
+
+            if( cancelled )
+            {
+                chooser->Destroy();
+                return nullptr;
+            }
+
+            return chooser;
         }
 
         case DIALOG_SCH_LIBRARY_TABLE:

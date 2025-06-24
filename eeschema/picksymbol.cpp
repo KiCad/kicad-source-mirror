@@ -60,10 +60,12 @@ PICKED_SYMBOL SCH_BASE_FRAME::PickSymbolFromLibrary( const SYMBOL_LIBRARY_FILTER
     if( !dialogLock.try_lock() )
         return PICKED_SYMBOL();
 
-    DIALOG_SYMBOL_CHOOSER dlg( this, aHighlight, aFilter, aHistoryList, aAlreadyPlaced,
-                               aAllowFields, aShowFootprints );
+    bool aCancelled = false;
 
-    if( dlg.ShowModal() == wxID_CANCEL )
+    DIALOG_SYMBOL_CHOOSER dlg( this, aHighlight, aFilter, aHistoryList, aAlreadyPlaced,
+                               aAllowFields, aShowFootprints, aCancelled );
+
+    if( aCancelled || dlg.ShowModal() == wxID_CANCEL )
         return PICKED_SYMBOL();
 
     PICKED_SYMBOL sel;

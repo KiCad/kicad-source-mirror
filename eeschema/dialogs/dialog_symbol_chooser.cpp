@@ -42,17 +42,20 @@ DIALOG_SYMBOL_CHOOSER::DIALOG_SYMBOL_CHOOSER( SCH_BASE_FRAME* aParent, const LIB
                                               const SYMBOL_LIBRARY_FILTER* aFilter,
                                               std::vector<PICKED_SYMBOL>&  aHistoryList,
                                               std::vector<PICKED_SYMBOL>&  aAlreadyPlaced,
-                                              bool aAllowFieldEdits, bool aShowFootprints ) :
+                                              bool aAllowFieldEdits, bool aShowFootprints,
+                                              bool& aCancelled ) :
         DIALOG_SHIM( aParent, wxID_ANY, _( "Choose Symbol" ), wxDefaultPosition, wxDefaultSize,
                      wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER )
 {
     wxBoxSizer* sizer = new wxBoxSizer( wxVERTICAL );
     m_chooserPanel = new PANEL_SYMBOL_CHOOSER( aParent, this, aFilter, aHistoryList, aAlreadyPlaced,
-                                               aAllowFieldEdits, aShowFootprints,
+                                               aAllowFieldEdits, aShowFootprints, aCancelled,
+                                               // Accept handler
                                                [this]()
                                                {
                                                    EndModal( wxID_OK );
                                                },
+                                               // Escape handler
                                                [this]()
                                                {
                                                    EndModal( wxID_CANCEL );

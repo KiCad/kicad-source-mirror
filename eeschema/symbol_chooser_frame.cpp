@@ -65,7 +65,7 @@ END_EVENT_TABLE()
 #define MODAL_FRAME ( wxRESIZE_BORDER | wxSYSTEM_MENU | wxCAPTION | wxCLOSE_BOX | wxCLIP_CHILDREN \
                       | wxWANTS_CHARS | wxFRAME_NO_TASKBAR | wxSTAY_ON_TOP )
 
-SYMBOL_CHOOSER_FRAME::SYMBOL_CHOOSER_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
+SYMBOL_CHOOSER_FRAME::SYMBOL_CHOOSER_FRAME( KIWAY* aKiway, wxWindow* aParent, bool& aCancelled ) :
         SCH_BASE_FRAME( aKiway, aParent, FRAME_SYMBOL_CHOOSER, _( "Symbol Chooser" ),
                         wxDefaultPosition, wxDefaultSize, MODAL_FRAME, SYMBOL_CHOOSER_FRAME_NAME )
 {
@@ -78,12 +78,14 @@ SYMBOL_CHOOSER_FRAME::SYMBOL_CHOOSER_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     std::vector<PICKED_SYMBOL> dummyAlreadyPlaced;
     m_chooserPanel = new PANEL_SYMBOL_CHOOSER( this, this, nullptr /* no filter */,
                                                s_SymbolHistoryList,
-                                               dummyAlreadyPlaced, false, false,
+                                               dummyAlreadyPlaced, false, false, aCancelled,
+                                               // Accept handler
                                                [this]()
                                                {
                                                    wxCommandEvent dummy;
                                                    OnOK( dummy );
                                                },
+                                               // Escape handler
                                                [this]()
                                                {
                                                    DismissModal( false );
