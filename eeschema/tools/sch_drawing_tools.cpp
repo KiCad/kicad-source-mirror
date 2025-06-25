@@ -524,6 +524,7 @@ int SCH_DRAWING_TOOLS::PlaceSymbol( const TOOL_EVENT& aEvent )
 
             // Exit.  The duplicate will run in its own loop.
             m_frame->PopTool( aEvent );
+            evt->SetPassEvent();
             break;
         }
         else if( symbol && ( evt->IsAction( &ACTIONS::refreshPreview ) || evt->IsMotion() ) )
@@ -1119,6 +1120,7 @@ int SCH_DRAWING_TOOLS::PlaceImage( const TOOL_EVENT& aEvent )
 
             // Exit.  The duplicate will run in its own loop.
             m_frame->PopTool( aEvent );
+            evt->SetPassEvent();
             break;
         }
         else if( image && ( evt->IsAction( &ACTIONS::refreshPreview ) || evt->IsMotion() ) )
@@ -2177,6 +2179,7 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
 
             // Exit.  The duplicate will run in its own loop.
             m_frame->PopTool( aEvent );
+            evt->SetPassEvent();
             break;
         }
         else if( item && ( evt->IsAction( &ACTIONS::refreshPreview ) || evt->IsMotion() ) )
@@ -2435,6 +2438,7 @@ int SCH_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
 
             // Exit.  The duplicate will run in its own loop.
             m_frame->PopTool( aEvent );
+            evt->SetPassEvent();
             break;
         }
         else if( item && ( evt->IsAction( &ACTIONS::refreshPreview ) || evt->IsMotion() ) )
@@ -3156,6 +3160,7 @@ int SCH_DRAWING_TOOLS::DrawSheet( const TOOL_EVENT& aEvent )
 
             // Exit.  The duplicate will run in its own loop.
             m_frame->PopTool( aEvent );
+            evt->SetPassEvent();
             break;
         }
         else if( sheet && ( evt->IsAction( &ACTIONS::refreshPreview ) || evt->IsMotion() ) )
