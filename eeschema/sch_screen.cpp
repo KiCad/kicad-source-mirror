@@ -119,7 +119,9 @@ void SCH_SCREEN::clearLibSymbols()
 
 void SCH_SCREEN::SetFileName( const wxString& aFileName )
 {
-    wxASSERT( aFileName.IsEmpty() || wxIsAbsolutePath( aFileName ) );
+    // Don't assert here.  We still call this after failing to load a file in order to show the
+    // user what we *tried* to load.
+    // wxASSERT( aFileName.IsEmpty() || wxIsAbsolutePath( aFileName ) );
 
     m_fileName = aFileName;
 }
