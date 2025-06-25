@@ -1438,17 +1438,23 @@ int PCB_SELECTION_TOOL::unrouteSegment( const TOOL_EVENT& aEvent )
     // This will select the unroute items too, so filter them out
     for( EDA_ITEM* item : m_selection.GetItemsSortedByTypeAndXY() )
     {
+        if( !item->IsBOARD_ITEM() )
+            continue;
+
         if( std::find( toUnroute.begin(), toUnroute.end(), item ) == toUnroute.end() )
             toSelectAfter.push_back( item );
     }
 
     ClearSelection( true );
+
     for( EDA_ITEM* item : toUnroute )
         select( item );
+
     m_toolMgr->RunAction( ACTIONS::doDelete );
 
     // Now our after tracks so the user can continue backing up as desired
     ClearSelection( true );
+
     for( EDA_ITEM* item : toSelectAfter )
         select( item );
 
@@ -3268,6 +3274,9 @@ bool PCB_SELECTION_TOOL::selectionContains( const VECTOR2I& aPoint ) const
     // Check if the point is located close to any of the currently selected items
     for( EDA_ITEM* item : m_selection )
     {
+        if( !item->IsBOARD_ITEM() )
+            continue;
+
         BOX2I itemBox = item->ViewBBox();
         itemBox.Inflate( margin ); // Give some margin for gripping an item
 
