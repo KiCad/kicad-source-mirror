@@ -24,7 +24,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-06-20 23:57+0300\n"
-"PO-Revision-Date: 2025-06-25 17:02+0000\n"
+"PO-Revision-Date: 2025-06-25 22:19+0000\n"
 "Last-Translator: YÜKSEL AÇIKGÖZ <yukselacikgoz@gmail.com>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/kicad/v9/tr/>\n"
 "Language: tr\n"
@@ -955,7 +955,7 @@ msgstr ""
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:548
 msgid "Left double click or middle click to change color"
-msgstr "Renk değiştirmek için sol çift tıklama veya orta tıklama"
+msgstr "Renk değiştirmek için sol çift tıklayın veya orta tıklayın"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:558
 msgid "Uncheck 'Use board stackup colors' to allow color editing."
@@ -2310,7 +2310,7 @@ msgstr "Semboller"
 #: pcbnew/widgets/panel_selection_filter_base.cpp:29
 #: pcbnew/widgets/search_handlers.cpp:116
 msgid "Footprints"
-msgstr "Ayak izi"
+msgstr "Ayak izleri"
 
 #: common/dialog_about/AboutDialog_main.cpp:929
 msgid "Icons"
@@ -2925,7 +2925,7 @@ msgstr "Proje Adı"
 #: common/dialogs/dialog_import_choose_project.cpp:34
 #: kicad/cli/command_pcb.h:31 pcbnew/board.cpp:1402
 msgid "PCB"
-msgstr "PCB"
+msgstr "Baskı Devre"
 
 #: common/dialogs/dialog_import_choose_project.cpp:35
 #: eeschema/sch_edit_frame.cpp:1334 eeschema/sch_plotter.cpp:1060
@@ -3645,7 +3645,7 @@ msgstr "Her parça için tüm hataları bildirin"
 #: common/dialogs/dialog_rc_job_base.cpp:80 kicad/cli/command_pcb_drc.cpp:60
 #: pcbnew/dialogs/dialog_drc_base.cpp:41
 msgid "Test for parity between PCB and schematic"
-msgstr "PCB ve şematik arasında parite testi"
+msgstr "Baskı Devre ile şema arasında eşitliği test et"
 
 #: common/dialogs/dialog_text_entry_base.cpp:20
 #: common/dialogs/dialog_text_entry_base.cpp:32
@@ -3795,7 +3795,7 @@ msgstr "Tamam"
 #: pcbnew/dialogs/dialog_drc.cpp:348
 #: pcbnew/dialogs/dialog_unused_pad_layers.cpp:53
 msgid "Cancel"
-msgstr "İptal"
+msgstr "Vazgeç"
 
 #: common/dialogs/git/dialog_git_auth.cpp:58
 msgid "Url"
@@ -5229,7 +5229,7 @@ msgstr "Yakınlaştır"
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:83
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:157
 msgid "None"
-msgstr "hiçbiri"
+msgstr "Hiçbiri"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:148
 msgid "Right button drag:"
@@ -5566,7 +5566,7 @@ msgstr "Şema çizgi stili"
 
 #: common/dialogs/panel_setup_netclasses.cpp:718
 msgid "PCB netclass color"
-msgstr "Baskıdevre parça sınıfı rengi"
+msgstr "Baskı Devre ağ sınıfı rengi"
 
 #: common/dialogs/panel_setup_netclasses.cpp:775
 msgid "The default net class is required."
@@ -5621,7 +5621,7 @@ msgstr "DP Boşluğu"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:60
 msgid "PCB Color"
-msgstr "Baskıdevre Rengi"
+msgstr "Baskı Devre Rengi"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:61
 msgid "Wire Thickness"
@@ -5884,7 +5884,7 @@ msgstr "Sayfa Sınırları"
 
 #: common/dsnlexer.cpp:34
 msgid "clipboard"
-msgstr "Pano"
+msgstr "pano"
 
 #: common/dsnlexer.cpp:337
 #, c-format
@@ -6436,7 +6436,7 @@ msgstr "Yay"
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:45 pcbnew/pad.cpp:1548
 #: pcbnew/pad.cpp:2682 pcbnew/pcb_dimension.cpp:2014
 msgid "Circle"
-msgstr "Daire"
+msgstr "Çember"
 
 #: common/eda_shape.cpp:332
 msgid "Bezier Curve"
@@ -7633,7 +7633,7 @@ msgstr "3B Model Dışa Aktarma İş Ayarları"
 
 #: common/jobs/job_export_pcb_3d.cpp:170
 msgid "PCB: Export 3D Model"
-msgstr "Kart: 3B Model Dışa Aktar"
+msgstr "Baskı Devre: 3B Model Dışa Aktar"
 
 #: common/jobs/job_export_pcb_drill.cpp:123
 msgid "Export drill data"
@@ -7645,7 +7645,7 @@ msgstr "Matkap Veri İş Ayarlarını Dışa Aktar"
 
 #: common/jobs/job_export_pcb_drill.cpp:132
 msgid "PCB: Export Drill Data"
-msgstr "Kart: Delik Verilerini Dışa Aktar"
+msgstr "Baskı Devre: Delik Verilerini Dışa Aktar"
 
 #: common/jobs/job_export_pcb_dxf.cpp:57
 #: common/jobs/job_export_sch_plot.cpp:160 kicad/kicad_cli.cpp:143
@@ -7659,7 +7659,7 @@ msgstr "DXF İş Ayarlarını Dışa Aktar"
 
 #: common/jobs/job_export_pcb_dxf.cpp:67
 msgid "PCB: Export DXF"
-msgstr "Kart: DXF Dışa Aktar"
+msgstr "Baskı Devre: DXF Dışa Aktar"
 
 #: common/jobs/job_export_pcb_gencad.cpp:38
 msgid "Export GenCAD Job Settings"
@@ -7683,7 +7683,7 @@ msgstr "Gerber Dışa Aktarma İş Ayarları"
 
 #: common/jobs/job_export_pcb_gerbers.cpp:47
 msgid "PCB: Export Gerbers"
-msgstr "PCB: Gerber dosyalarını dışa aktar"
+msgstr "Baskı Devre: Gerber dosyalarını dışa aktar"
 
 #: common/jobs/job_export_pcb_ipc2581.cpp:72
 #: pcbnew/dialogs/dialog_export_2581_base.h:85
@@ -7696,7 +7696,7 @@ msgstr "IPC-2581 Dışa Aktarma İş Ayarları"
 
 #: common/jobs/job_export_pcb_ipc2581.cpp:91
 msgid "PCB: Export IPC-2581"
-msgstr "Kart: IPC-2581 Dışa Aktar"
+msgstr "Baskı Devre: IPC-2581 Dışa Aktar"
 
 #: common/jobs/job_export_pcb_ipcd356.cpp:33
 msgid "Export IPC-D-356"
@@ -7708,7 +7708,7 @@ msgstr "IPC-D-356 Dışa Aktarma İş Ayarları"
 
 #: common/jobs/job_export_pcb_ipcd356.cpp:52
 msgid "PCB: Export IPC-D-356"
-msgstr "Kart: IPC-D-356 Dışa Aktar"
+msgstr "Baskı Devre: IPC-D-356 Dışa Aktar"
 
 #: common/jobs/job_export_pcb_odb.cpp:57
 #: pcbnew/dialogs/dialog_export_odbpp_base.h:65
@@ -7721,7 +7721,7 @@ msgstr "ODB++ İş Ayarlarını Dışa Aktar"
 
 #: common/jobs/job_export_pcb_odb.cpp:76
 msgid "PCB: Export ODB++"
-msgstr "Kart: ODB++ Dışa Aktar"
+msgstr "Baskı Devre: ODB++ Dışa Aktar"
 
 #: common/jobs/job_export_pcb_pdf.cpp:58
 #: common/jobs/job_export_sch_plot.cpp:141 kicad/kicad_cli.cpp:145
@@ -7735,7 +7735,7 @@ msgstr "PDF İş Ayarlarını Dışa Aktar"
 
 #: common/jobs/job_export_pcb_pdf.cpp:68
 msgid "PCB: Export PDF"
-msgstr "Kart: PDF Dışa Aktar"
+msgstr "Baskı Devre: PDF Dışa Aktar"
 
 #: common/jobs/job_export_pcb_pos.cpp:97
 msgid "Export position data"
@@ -7747,7 +7747,7 @@ msgstr "Konum Verileri Dışa Aktarma İş Ayarları"
 
 #: common/jobs/job_export_pcb_pos.cpp:121
 msgid "PCB: Export Position Data"
-msgstr "PCB: Konum verilerini dışa aktar"
+msgstr "Baskı Devre: Konum verilerini dışa aktar"
 
 #: common/jobs/job_export_pcb_svg.cpp:49
 #: common/jobs/job_export_sch_plot.cpp:179 kicad/kicad_cli.cpp:147
@@ -7761,7 +7761,7 @@ msgstr "SVG İş Ayarlarını Dışa Aktar"
 
 #: common/jobs/job_export_pcb_svg.cpp:59
 msgid "PCB: Export SVG"
-msgstr "Kart: SVG Dışa Aktar"
+msgstr "Baskı Devre: SVG Dışa Aktar"
 
 #: common/jobs/job_export_sch_bom.cpp:92
 msgid "Generate bill of materials"
@@ -7778,7 +7778,7 @@ msgstr "Şematik: Malzeme Listesi Oluştur"
 #: common/jobs/job_export_sch_netlist.cpp:80
 #, c-format
 msgid "Export %s netlist"
-msgstr "%s netlistesini dışa aktar"
+msgstr "%s ağ listesini dışa aktar"
 
 #: common/jobs/job_export_sch_netlist.cpp:86
 msgid "Export Netlist Job Settings"
@@ -7838,7 +7838,7 @@ msgstr "DRC İş Ayarları"
 
 #: common/jobs/job_pcb_drc.cpp:47
 msgid "PCB: Perform DRC"
-msgstr "PCB: DRC gerçekleştir"
+msgstr "Baskı Devre: Tasarım Kuralı Kontrolü (DRC) Yap"
 
 #: common/jobs/job_pcb_render.cpp:127
 #, c-format
@@ -7847,11 +7847,11 @@ msgstr "%s'yi işle"
 
 #: common/jobs/job_pcb_render.cpp:133
 msgid "Render PCB Job Settings"
-msgstr "PCB İş Ayarlarını Oluştur"
+msgstr "Baskı Devre İş Ayarlarını Oluştur"
 
 #: common/jobs/job_pcb_render.cpp:137
 msgid "PCB: Render"
-msgstr "PCB:Render al"
+msgstr "Baskı Devre: Oluştur"
 
 #: common/jobs/job_sch_erc.cpp:33
 msgid "Perform ERC"
@@ -8194,7 +8194,7 @@ msgstr "Kör/Gömülü Geçitler"
 
 #: common/layer_id.cpp:131
 msgid "Micro-vias"
-msgstr "Mikro-katmansal geçişler"
+msgstr "mikro-geçitler"
 
 #: common/layer_id.cpp:132
 msgid "Via holes"
@@ -8825,11 +8825,11 @@ msgstr "Sağ fare düğmesi eylemini gerçekleştir"
 
 #: common/tool/actions.cpp:215
 msgid "Cut selected item(s) to clipboard"
-msgstr "Seçili öğe(leri) panoya kes"
+msgstr "Seçili öge(ler)i panoya kes"
 
 #: common/tool/actions.cpp:226
 msgid "Copy selected item(s) to clipboard"
-msgstr "Seçili öğe(leri) panoya kopyala"
+msgstr "Seçili öge(leri) panoya kopyala"
 
 #: common/tool/actions.cpp:235
 msgid "Copy as Text"
@@ -8841,7 +8841,7 @@ msgstr "Seçili öge(ler)i panoya metin olarak kopyala"
 
 #: common/tool/actions.cpp:246
 msgid "Paste item(s) from clipboard"
-msgstr "Panodan öğe(ler) yapıştırma"
+msgstr "Öge(ler)i panodan yapıştır"
 
 #: common/tool/actions.cpp:256
 msgid "Select all items on screen"
@@ -9258,7 +9258,7 @@ msgstr "Çift tıklama"
 
 #: common/tool/actions.cpp:782
 msgid "Performs left mouse button double-click"
-msgstr "Sol fare düğmesine çift tıklama gerçekleştirir"
+msgstr "Sol fare düğmesine çift tıklamayla gerçekleştirir"
 
 #: common/tool/actions.cpp:793
 msgid "Pin Library"
@@ -9503,19 +9503,19 @@ msgstr "Veri sayfasını bir tarayıcıda aç"
 
 #: common/tool/actions.cpp:1133
 msgid "Update PCB from Schematic..."
-msgstr "PCB'i Şematik'ten Güncelleştir..."
+msgstr "Şematikten Baskı Devreyi Güncelle..."
 
 #: common/tool/actions.cpp:1134
 msgid "Update PCB with changes made to schematic"
-msgstr "Devre şemasında yapılan değişikliklerle PCB'yi güncelleyin"
+msgstr "Şemada yapılan değişikliklerle Baskı Devreyi güncelle"
 
 #: common/tool/actions.cpp:1140
 msgid "Update Schematic from PCB..."
-msgstr "PCB'den Şematik Güncelleştir..."
+msgstr "Baskı Devreden Şematiği Güncelle..."
 
 #: common/tool/actions.cpp:1141
 msgid "Update schematic with changes made to PCB"
-msgstr "PCB'de yapılan değişikliklerle şemayı güncelleştir"
+msgstr "Baskı Devrede yapılan değişikliklerle şematiği güncelle"
 
 #: common/tool/actions.cpp:1148
 msgid "Preferences..."
@@ -10274,19 +10274,19 @@ msgstr "Eagle XML dosyaları"
 
 #: common/wildcards_and_files_ext.cpp:307
 msgid "OrcadPCB2 netlist files"
-msgstr "OrcadPCB2 netlist dosyaları"
+msgstr "OrcadPCB2 Ağ Listesi Dosyaları"
 
 #: common/wildcards_and_files_ext.cpp:314
 msgid "KiCad netlist files"
-msgstr "KiCad netlist dosyaları"
+msgstr "KiCad Ağ Listesi Dosyaları"
 
 #: common/wildcards_and_files_ext.cpp:320
 msgid "Allegro netlist files"
-msgstr "Allegro parça listesi dosyaları"
+msgstr "Allegro Ağ Listesi Dosyaları"
 
 #: common/wildcards_and_files_ext.cpp:327
 msgid "PADS netlist files"
-msgstr "PADS parça listesi dosyaları"
+msgstr "PADS Ağ Listesi Dosyaları"
 
 #: common/wildcards_and_files_ext.cpp:333
 msgid "EasyEDA (JLCEDA) Std backup archive"
@@ -10391,11 +10391,11 @@ msgstr "SPICE kütüphane dosyası"
 
 #: common/wildcards_and_files_ext.cpp:486
 msgid "SPICE netlist file"
-msgstr "SPICE netlist dosyası"
+msgstr "SPICE Ağ Listesi Dosyası"
 
 #: common/wildcards_and_files_ext.cpp:492
 msgid "CadStar netlist file"
-msgstr "CadStar netlist dosyası"
+msgstr "CadStar Ağ Listesi dosyası"
 
 #: common/wildcards_and_files_ext.cpp:498
 msgid "Symbol footprint association files"
@@ -10594,7 +10594,8 @@ msgstr "Kütüphane konumu: bilinmiyor"
 msgid ""
 "No PCB footprint libraries are listed in the current footprint library table."
 msgstr ""
-"Geçerli ayak izi kitaplığı tablosunda PCB ayak izi kitaplığı listelenmez."
+"Mevcut ayak izi kütüphane tablosunda listelenmiş Baskı Devre ayak izi "
+"kütüphanesi yok."
 
 #: cvpcb/cvpcb_mainframe.cpp:895
 msgid "Configuration Error"
@@ -10665,7 +10666,7 @@ msgid ""
 "\n"
 "Please choose the assignment."
 msgstr ""
-"Şematik ağlistesi ve sembol ayak izi ilişkilendirme dosyasından (.cmp) ayak "
+"Şematik ağ listesi ve sembol ayak izi ilişkilendirme dosyasından (.cmp) ayak "
 "izi atamaları çakışıyor.\n"
 "\n"
 "Lütfen görevi seçin."
@@ -10761,8 +10762,9 @@ msgid ""
 "correctly the next time you import the netlist in Pcbnew."
 msgstr ""
 "\n"
-"Ağlistesi'ni Pcbnew'e bir sonraki içe aktarışınızda doğru şekilde "
-"güncelleştirilmelerini istiyorsanız, bunları el ile yeniden atamanız gerekir."
+"Onları bir dahaki sefere ağ listesini Baskı Devre Düzenleyici'ye (Pcbnew) "
+"aktardığınızda doğru şekilde güncellenmelerini istiyorsanız, elle yeniden "
+"atamanız gerekecektir."
 
 #: cvpcb/readwrite_dlgs.cpp:309
 msgid "Schematic saved"
@@ -10942,7 +10944,8 @@ msgstr ""
 #, c-format
 msgid ""
 "Both %s and %s are attached to the same items; %s will be used in the netlist"
-msgstr "%s ve %s aynı öğelere eklenir; %s ağlistesinde kullanılacak"
+msgstr ""
+"Hem %s aynı zamanda %s aynı ögelere bağlı; ağ listesinde %s kullanılacak"
 
 #: eeschema/connection_graph.cpp:3529
 #, c-format
@@ -11135,7 +11138,7 @@ msgstr "Numaralandırma Mesajları:"
 #: eeschema/dialogs/dialog_annotate.cpp:92
 #: eeschema/dialogs/dialog_annotate.cpp:226
 msgid "Annotate"
-msgstr "Notlandır"
+msgstr "Numaralandır"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:40
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:25
@@ -12133,19 +12136,19 @@ msgstr "Ağ Listesini KiCad formatında dışa aktar"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:226
 msgid "Export netlist in OrcadPCB2 format"
-msgstr "Parça listesini OrcadPCB2 formatında dışa aktar"
+msgstr "Ağ listesini OrcadPCB2 biçiminde dışa aktar"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:231
 msgid "Export netlist in Allegro format"
-msgstr "Parça listesini Allegro formatında dışa aktar"
+msgstr "Ağ listesini Allegro biçiminde dışa aktar"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:236
 msgid "Export netlist in PADS format"
-msgstr "Parça listesini PADS formatında dışa aktar"
+msgstr "Ağ listesini PADS biçiminde dışa aktar"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:241
 msgid "Export netlist in CadStar format"
-msgstr "Parça listesini CadStar formatında dışa aktar"
+msgstr "Ağ listesini CadStar biçiminde dışa aktar"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:256
 #: eeschema/dialogs/dialog_export_netlist_base.h:66
@@ -12154,7 +12157,7 @@ msgstr "Ağ Listesini Dışa Aktar"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:307
 msgid "Export netlist in SPICE format"
-msgstr "Parça listesini SPICE formatında dışa aktar"
+msgstr "Ağ listesini SPICE biçiminde dışa aktar"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:311
 #: eeschema/dialogs/dialog_export_netlist.cpp:372
@@ -12164,7 +12167,7 @@ msgstr "Geçerli sayfayı kök olarak kullan"
 #: eeschema/dialogs/dialog_export_netlist.cpp:312
 #: eeschema/dialogs/dialog_export_netlist.cpp:373
 msgid "Export netlist only for the current sheet"
-msgstr "Sadece geçerli sayfa için parça listesini dışa aktar"
+msgstr "Ağ listesini yalnızca mevcut sayfa için dışa aktar"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:316
 #: eeschema/dialogs/dialog_sim_command_base.cpp:647
@@ -12222,11 +12225,11 @@ msgid ""
 msgstr ""
 "SPICE'i çalıştırmak için komut satırını girin \n"
 "Genellikle '<SPICE ikili dosyasının yolu> \"%I\"' şeklindedir \n"
-"%I, parça listesi dosya yoluyla değiştirilecektir"
+"%I, ağ listesi dosya yoluyla değiştirilecektir"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:368
 msgid "Export netlist as a SPICE .subckt model"
-msgstr "Parça listesini bir SPICE .subckt modeli olarak dışa aktar"
+msgstr "Ağ listesini bir SPICE .subckt modeli olarak dışa aktar"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:415
 msgid "Netlist command:"
@@ -12234,7 +12237,7 @@ msgstr "Ağ listesi komutu:"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:496
 msgid "Save Netlist File"
-msgstr "Ağlistesi Dosyasını Kaydet"
+msgstr "Ağ listesi Dosyasını Kaydet"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:566
 #, c-format
@@ -12244,7 +12247,7 @@ msgstr "%s Dışa Aktar"
 #: eeschema/dialogs/dialog_export_netlist.cpp:605
 #: eeschema/netlist_exporters/netlist_generator.cpp:56
 msgid "Exporting netlist requires a fully annotated schematic."
-msgstr "Ağlistesi vermek için tam numaralandırılmış bir şema gerekir."
+msgstr "Ağ Listesi vermek için tam numaralandırılmış bir şema gerekir."
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:655
 msgid "external simulator not found"
@@ -12275,7 +12278,7 @@ msgstr "İletişim kutusuna eklenebilecek maksimum eklenti sayısına ulaşıld�
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:862
 msgid "You must provide a netlist generator title"
-msgstr "Bir netlist oluşturucu başlığı sağlamalısınız"
+msgstr "Ağ listesi oluşturucu başlığı sağlamalısınız"
 
 #: eeschema/dialogs/dialog_export_netlist_base.cpp:27
 #: kicad/dialogs/dialog_executecommand_job_settings_base.cpp:36
@@ -12300,7 +12303,7 @@ msgstr "Komutlara Gözat..."
 
 #: eeschema/dialogs/dialog_export_netlist_base.h:95
 msgid "Add Script-based Netlist Exporter"
-msgstr "Komut tabanlı parça listesi dışa aktarıcı ekle"
+msgstr "Betik tabanlı ağ listesi dışa aktarıcısı ekle"
 
 #: eeschema/dialogs/dialog_field_properties.cpp:252
 msgid "Sheet filename can only be modified in Sheet Properties dialog."
@@ -12785,7 +12788,7 @@ msgstr "Etiket boş olamaz."
 #: eeschema/dialogs/dialog_sheet_properties.cpp:397
 #: eeschema/dialogs/dialog_symbol_properties.cpp:743 include/project.h:43
 msgid "untitled"
-msgstr "isimsiz"
+msgstr "başlıksız"
 
 #: eeschema/dialogs/dialog_label_properties.cpp:641
 msgid "Edit Label Properties"
@@ -14238,7 +14241,7 @@ msgstr "Dolgu Stili"
 
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:165
 msgid "Do not fill"
-msgstr "Doldurma"
+msgstr "Doldurmayın"
 
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:168
 msgid "Fill with body outline color"
@@ -15807,8 +15810,8 @@ msgid ""
 "Update footprint associations of symbols whose footprints have been replaced "
 "with different footprints in PCB."
 msgstr ""
-"PCB'de ayak izleri farklı ayak izleriyle değiştirilen sembollerin ayak izi "
-"ilişkilerini güncelleyin."
+"Ayak izleri Baskı Devre'de farklı ayak izleriyle değiştirilmiş sembollerin "
+"ayak izi ilişkilendirmelerini güncelle."
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:65
 msgid "Update symbols values that have been replaced in the PCB editor."
@@ -15829,7 +15832,7 @@ msgstr "Semboldeki diğer tüm alanları ayak izinden güncelleyin"
 #: eeschema/dialogs/dialog_update_from_pcb_base.h:57
 #: eeschema/tools/backannotate.cpp:579
 msgid "Update Schematic from PCB"
-msgstr "PCB'den Şemayı Güncelle"
+msgstr "Baskı Devreden Şematiği Güncelle"
 
 #: eeschema/dialogs/dialog_update_symbol_fields.cpp:227
 #: eeschema/dialogs/dialog_update_symbol_fields_base.h:68
@@ -15929,7 +15932,7 @@ msgstr "Çapraz yoklama"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:43
 msgid "Select/highlight objects corresponding to PCB selection"
-msgstr "Kart seçimine karşılık gelen nesneleri seç/vurgula"
+msgstr "Baskı Devre seçimine karşılık gelen ögeleri seç/vurgula"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:45
 msgid "Highlight symbols corresponding to selected footprints"
@@ -17040,7 +17043,7 @@ msgstr "%s ve %s tipi pimler bağlı"
 #: eeschema/erc/erc.cpp:1211
 #, c-format
 msgid "Pin %s is connected to both %s and %s"
-msgstr "Pin %s hem %s hem de %s'ye bağlı"
+msgstr "Pin %s hem %s aynı zamanda %s'ye bağlı"
 
 #: eeschema/erc/erc.cpp:1424
 #, c-format
@@ -17799,12 +17802,12 @@ msgstr "Da"
 #: eeschema/import_gfx/dialog_import_gfx_sch_base.cpp:74
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:115
 msgid "DXF origin on PCB Grid, X Coordinate"
-msgstr "X Coordinate"
+msgstr "Baskı Devre Izgarasında DXF başlangıç noktası, X Koordinatı"
 
 #: eeschema/import_gfx/dialog_import_gfx_sch_base.cpp:95
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:132
 msgid "DXF origin on PCB Grid, Y Coordinate"
-msgstr "Y Coordinate"
+msgstr "Baskı Devre Izgarasında DXF başlangıç noktası, Y Koordinatı"
 
 #: eeschema/import_gfx/dialog_import_gfx_sch_base.cpp:116
 msgid "Import Parameters"
@@ -17854,7 +17857,7 @@ msgstr "Simülasyondan Hariç Tutuldu"
 #: eeschema/sch_symbol.cpp:2044 eeschema/widgets/search_handlers.cpp:169
 #: pcbnew/footprint.cpp:1766
 msgid "DNP"
-msgstr "Yerleştirilmemeli"
+msgstr "Monte Etme"
 
 #: eeschema/lib_symbol.cpp:1606
 msgid "Power flag differs."
@@ -19594,7 +19597,7 @@ msgstr "Hat Tipi"
 
 #: eeschema/sch_line.cpp:936
 msgid "from netclass"
-msgstr "Ağ sınıfından"
+msgstr "ağ sınıfından"
 
 #: eeschema/sch_marker.cpp:365 pcbnew/pcb_marker.cpp:200
 msgid "Violation"
@@ -21229,11 +21232,11 @@ msgstr "SPICE Simülatörü"
 
 #: eeschema/sim/simulator_frame.cpp:372 eeschema/tools/simulator_control.cpp:84
 msgid "Errors during netlist generation."
-msgstr "Netlist oluşturma sırasında hatalar."
+msgstr "Ağ listesi oluşturulurken hatalar oluştu."
 
 #: eeschema/sim/simulator_frame.cpp:377 eeschema/tools/simulator_control.cpp:89
 msgid "Warnings during netlist generation."
-msgstr "Netlist oluşturma sırasında uyarılar."
+msgstr "Ağ listesi oluşturulurken uyarılar oluştu."
 
 #: eeschema/sim/simulator_frame.cpp:387
 msgid "Simulator requires a fully annotated schematic."
@@ -22370,8 +22373,8 @@ msgid ""
 "Footprint '%s' is not present on PCB. Corresponding symbols in schematic "
 "must be manually deleted (if desired)."
 msgstr ""
-"PCB'de '%s' izi yok. Şemadaki karşılık gelen semboller manuel olarak "
-"silinmelidir (istenirse)."
+"Ayak izi '%s' Baskı Devre'de bulunmuyor. Şematikteki karşılık gelen "
+"semboller manuel olarak silinmelidir (istenirse)."
 
 #: eeschema/tools/backannotate.cpp:353
 msgid "Re-linking footprints requires a fully annotated schematic."
@@ -23298,7 +23301,7 @@ msgstr "2D çizim dosyasını içe aktar"
 
 #: eeschema/tools/sch_actions.cpp:1106
 msgid "Switch to PCB Editor"
-msgstr "PCB Editörüne Geç"
+msgstr "Baskı Devre Düzenleyiciye Geç"
 
 #: eeschema/tools/sch_actions.cpp:1107
 msgid "Open PCB in board editor"
@@ -23306,11 +23309,11 @@ msgstr "Kartı Baskı Devre Düzenleyicide aç"
 
 #: eeschema/tools/sch_actions.cpp:1113
 msgid "Export Netlist..."
-msgstr "Netlist'i dışa aktar..."
+msgstr "Ağ Listesini Dışa Aktar..."
 
 #: eeschema/tools/sch_actions.cpp:1114
 msgid "Export file containing netlist in one of several formats"
-msgstr "Netlist içeren dosyayı çeşitli biçimlerden birinde dışa aktarın"
+msgstr "Ağ listesini çeşitli biçimlerden birinde içeren dosyayı dışa aktar"
 
 #: eeschema/tools/sch_actions.cpp:1120
 msgid "Generate Bill of Materials..."
@@ -23366,11 +23369,11 @@ msgstr ""
 
 #: eeschema/tools/sch_actions.cpp:1158
 msgid "Select on PCB"
-msgstr "Kart Üzerinde Seç"
+msgstr "Baskı Devre üzerinden seç"
 
 #: eeschema/tools/sch_actions.cpp:1159
 msgid "Select corresponding items in PCB editor"
-msgstr "Baskı Devre Düzenleyicide ilgili öğeleri seçin"
+msgstr "Baskı Devre düzenleyicideki karşılık gelen ögeleri seç"
 
 #: eeschema/tools/sch_actions.cpp:1176
 msgid "Show Directive Labels"
@@ -23976,7 +23979,7 @@ msgstr "Sayfa yolu %s için sayfa numarası girin"
 #: eeschema/tools/sch_edit_tool.cpp:3037
 #: eeschema/widgets/hierarchy_pane.cpp:417
 msgid "Edit Sheet Page Number"
-msgstr "Sayfa Numarasını Düzenle"
+msgstr "Yaprak Numarasını Düzenle"
 
 #: eeschema/tools/sch_edit_tool.cpp:3231
 msgid "Toggle Attribute"
@@ -24581,7 +24584,7 @@ msgstr "Bilinen katmanlara sahip gerberler: %d"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb.cpp:216
 msgid "Assign to matching PCB layers?"
-msgstr "Eşleşen PCB katmanlarına atama?"
+msgstr "Eşleşen Baskı Devre katmanlarına atansın mı?"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb.cpp:217
 msgid "Automatic Layer Assignment"
@@ -25456,7 +25459,7 @@ msgstr "Baskı Devre Düzenleyiciye Aktar..."
 
 #: gerbview/tools/gerbview_actions.cpp:97
 msgid "Export data as a KiCad PCB file"
-msgstr "Verileri bir KiCad PCB dosyası olarak dışa aktarın"
+msgstr "Verileri bir KiCad Baskı Devre dosyası olarak dışa aktar"
 
 #: gerbview/tools/gerbview_actions.cpp:103
 #: gerbview/widgets/gerbview_layer_widget.cpp:196
@@ -25649,7 +25652,7 @@ msgstr "Çizim sayfası sınırlarını göster"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:142
 msgid "PCB Background"
-msgstr "Kart Arka Planı"
+msgstr "Baskı Devre Arka Planı"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:161
 #: pcbnew/widgets/appearance_controls.cpp:1883
@@ -25704,7 +25707,8 @@ msgstr "Render Rengini Şununla Değiştir"
 msgid ""
 "Left double click or middle click for color change, right click for menu"
 msgstr ""
-"Renk değişimi için sol çift tıklama veya orta tıklama, menü için sağ tıklama"
+"Renk değişimi için sol çift tıklayın veya orta tıklayın, menü için sağ "
+"tıklayın"
 
 #: gerbview/widgets/layer_widget.cpp:351
 msgid "Enable this for visibility"
@@ -26276,7 +26280,7 @@ msgstr "Yeni davranış --mode-multi ile eşleşecektir"
 
 #: kicad/cli/command_pcb_export_gencad.cpp:33
 msgid "Export the PCB in Gencad format"
-msgstr "Kartı Gencad formatında dışa aktar"
+msgstr "Baskı Devreyi Gencad biçiminde dışa aktar"
 
 #: kicad/cli/command_pcb_export_gencad.cpp:39
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:134
@@ -26315,7 +26319,7 @@ msgstr "Genişletilmiş X2 biçimini kullanma"
 
 #: kicad/cli/command_pcb_export_gerber.cpp:75
 msgid "Do not generate netlist attributes"
-msgstr "Netlist öznitelikleri oluşturmayın"
+msgstr "Ağ listesi öznitelikleri oluşturma"
 
 #: kicad/cli/command_pcb_export_gerber.cpp:83
 msgid "Disable aperture macros"
@@ -26347,8 +26351,8 @@ msgid ""
 "Plot multiple Gerbers for a PCB, including the ability to use stored board "
 "plot settings"
 msgstr ""
-"Kaydedilen kart çizim ayarlarını kullanma yeteneği de dahil olmak üzere bir "
-"PCB için birden fazla Gerber çiz"
+"Baskı Devre için saklı kart çizim ayarlarını kullanarak birden fazla Gerber "
+"çizdir"
 
 #: kicad/cli/command_pcb_export_gerbers.cpp:41
 msgid "Use the Gerber plot settings already configured in the board file"
@@ -26475,7 +26479,7 @@ msgstr "Çizim sayfası yok"
 
 #: kicad/cli/command_pcb_render.cpp:219
 msgid "Renders the PCB in 3D view to PNG or JPEG image"
-msgstr "PCB'yi 3D görünümde PNG veya JPEG görüntüsüne dönüştürür"
+msgstr "Baskı Devreyi 3B görünümde PNG veya JPEG görüntü olarak oluşturur"
 
 #: kicad/cli/command_pcb_render.cpp:225
 msgid "Image width"
@@ -26646,7 +26650,7 @@ msgstr "ERC ihlalleri varsa sıfır olmayan bir çıkış kodu döndür"
 
 #: kicad/cli/command_sch_export.h:33
 msgid "Export utilities (netlist, pdf, bom, etc)"
-msgstr "Dışa aktarma yardımcı programları (netlist, pdf, bom, vb.)"
+msgstr "Dışa Aktarma Araçları (Ağ Listesi, PDF, BOM vb.)"
 
 #: kicad/cli/command_sch_export_bom.cpp:36
 msgid "Generate a Bill of Materials (BOM)"
@@ -26668,7 +26672,7 @@ msgid ""
 "Netlist output format, valid options: kicadsexpr, kicadxml, cadstar, "
 "orcadpcb2, spice, spicemodel, pads, allegro"
 msgstr ""
-"Ağ listesi çıkış formatı, geçerli seçenekler: kicadsexpr, kicadxml, cadstar, "
+"Ağ listesi çıktı biçimi, geçerli seçenekler: kicadsexpr, kicadxml, cadstar, "
 "orcadpcb2, spice, spicemodel, pads, allegro"
 
 #: kicad/cli/command_sch_export_plot.cpp:68
@@ -27059,8 +27063,8 @@ msgid ""
 "Edit drawing sheet borders and title blocks for use in schematics and PCB "
 "designs"
 msgstr ""
-"Şemalarda ve PCB tasarımlarında kullanılmak üzere çizim sayfası "
-"kenarlıklarını ve başlık bloklarını düzenleyin"
+"Şematik ve Baskı Devre tasarımlarında kullanılmak üzere çizim sayfası "
+"kenarlıkları ve başlık bloklarını düzenle"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:171
 msgid "Manage downloadable packages from KiCad and 3rd party repositories"
@@ -27261,7 +27265,7 @@ msgstr "Altium Projesi..."
 
 #: kicad/menubar.cpp:116
 msgid "Import Altium Schematic and PCB (*.PrjPcb)"
-msgstr "Altium Şematik ve Kart İçe Aktar (*.PrjPcb)"
+msgstr "Altium Şematiği ve Baskı Devreyi İçe Aktar (*.PrjPcb)"
 
 #: kicad/menubar.cpp:119
 msgid "CADSTAR Project..."
@@ -27269,7 +27273,7 @@ msgstr "CADSTAR Projesi..."
 
 #: kicad/menubar.cpp:120
 msgid "Import CADSTAR Archive Schematic and PCB (*.csa, *.cpa)"
-msgstr "CADSTAR Arşiv Şemasını ve PCB'yi içe aktarın (*.csa, *.ebm)"
+msgstr "CADSTAR Arşiv Şematiği ve Baskı Devreyi İçe Aktar (*.csa, *.cpa)"
 
 #: kicad/menubar.cpp:124
 msgid "EAGLE Project..."
@@ -28230,7 +28234,7 @@ msgstr "Baskı Devre Düzenleyicide Baskı Devreyi düzenle"
 
 #: kicad/tools/kicad_manager_actions.cpp:148
 msgid "Create, delete and edit PCB footprints"
-msgstr "Kart ayak izlerini oluştur, sil ve düzenle"
+msgstr "Baskı Devre ayak izlerini oluştur, sil ve düzenle"
 
 #: kicad/tools/kicad_manager_actions.cpp:159
 msgid "Preview Gerber output files"
@@ -28238,7 +28242,7 @@ msgstr "Gerber çıktı dosyalarını ön izle"
 
 #: kicad/tools/kicad_manager_actions.cpp:169
 msgid "Convert bitmap images to schematic or PCB components"
-msgstr "Bitmap görüntülerini şematik veya PCB bileşenlerine dönüştürün"
+msgstr "Bit eşlem görüntülerini şematik veya Baskı Devre bileşenlerine dönüştür"
 
 #: kicad/tools/kicad_manager_actions.cpp:177
 #: pcb_calculator/pcb_calculator_frame.cpp:63
@@ -28947,7 +28951,7 @@ msgstr "Sınıf 6"
 
 #: pcb_calculator/calculator_panels/panel_board_class_base.cpp:73
 msgid "Lines width"
-msgstr "Çizgi genişliği"
+msgstr "Yolların genişliği"
 
 #: pcb_calculator/calculator_panels/panel_board_class_base.cpp:74
 msgid "Minimum clearance"
@@ -29530,7 +29534,7 @@ msgstr "IIIb"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:209
 msgid "PCB material:"
-msgstr "PCB malzemesi:"
+msgstr "Baskı Devre malzemesi:"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:211
 msgid ""
@@ -29927,11 +29931,11 @@ msgstr "4R çözümü:"
 
 #: pcb_calculator/calculator_panels/panel_regulator.cpp:190
 msgid "PCB Calculator data file"
-msgstr "Kart Hesaplayıcı veri dosyası"
+msgstr "Baskı Devre Hesaplayıcı veri dosyası"
 
 #: pcb_calculator/calculator_panels/panel_regulator.cpp:196
 msgid "Select PCB Calculator Data File"
-msgstr "PCB Hesap Makinesi Veri Dosyasını Seçin"
+msgstr "Baskı Devre Hesaplayıcı Veri Dosyasını Seç"
 
 #: pcb_calculator/calculator_panels/panel_regulator.cpp:211
 msgid "Do you want to load this file and replace current regulator list?"
@@ -31000,7 +31004,7 @@ msgstr "İletkenin bağıl geçirgenliği (mu)"
 #: pcb_calculator/transline_ident.cpp:333
 #: pcb_calculator/transline_ident.cpp:375
 msgid "Line width"
-msgstr "Çizgi genişliği"
+msgstr "Yol genişliği"
 
 #: pcb_calculator/transline_ident.cpp:148
 #: pcb_calculator/transline_ident.cpp:183
@@ -31316,7 +31320,7 @@ msgstr "AğAdı"
 #: pcbnew/dialogs/dialog_global_edit_teardrops.cpp:132
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:609
 msgid "Teardrops"
-msgstr "Damlacık"
+msgstr "Damlalar"
 
 #: pcbnew/board_connected_item.cpp:278
 msgid "Enable Teardrops"
@@ -31749,7 +31753,7 @@ msgstr "Belirtilmemiş"
 
 #: pcbnew/build_BOM_from_board.cpp:80
 msgid "Cannot export BOM: there are no footprints on the PCB."
-msgstr "BOM dışa aktarılamıyor: PCB'de ayak izi yok."
+msgstr "BOM dışa aktarılamıyor: Baskı Devre üzerinde ayak izi yok."
 
 #: pcbnew/build_BOM_from_board.cpp:90
 msgid "Save Bill of Materials"
@@ -31844,7 +31848,7 @@ msgstr "(kapalı bir şekil değil)"
 
 #: pcbnew/convert_shape_list_to_polygon.cpp:563
 msgid "(multiple board outlines not supported)"
-msgstr "(çoklu pano anahatları desteklenmez)"
+msgstr "(birden fazla kart dış hattı desteklenmiyor)"
 
 #: pcbnew/convert_shape_list_to_polygon.cpp:685
 #, c-format
@@ -31894,7 +31898,7 @@ msgstr "Geçersiz"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:124
 msgid "Reannotate PCB"
-msgstr "PCB'yi yeniden açıkla"
+msgstr "Baskı Devreyi Yeniden Numaralandır"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:303
 msgid "No PCB to reannotate!"
@@ -31902,15 +31906,16 @@ msgstr "Yeniden açıklama yapmak için PCB yok!"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:315
 msgid "PCB successfully reannotated"
-msgstr "PCB başarıyla yeniden onaylandı"
+msgstr "Baskı Devre başarıyla yeniden numaralandırıldı"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:316
 msgid ""
 "PCB annotation changes should be synchronized with schematic using the "
 "\"Update Schematic from PCB\" tool."
 msgstr ""
-"PCB ek açıklama değişiklikleri, \"PCB'den Şemayı Güncelle\" aracı "
-"kullanılarak şematik ile senkronize edilmelidir."
+"Baskı Devre numaralandırma değişiklikleri, "
+"\"Baskı Devreden Şematiği Güncelle\" aracı kullanılarak şematik ile "
+"senkronize edilmelidir."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:329
 #, c-format
@@ -32129,7 +32134,7 @@ msgstr "Yine de yeniden açıkla?"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:644
 msgid "Annotation"
-msgstr "Adlandırma"
+msgstr "Numaralandırma"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:806
 #, c-format
@@ -32520,8 +32525,8 @@ msgid ""
 "PCB statistics report\n"
 "====================="
 msgstr ""
-"PCB istatistik raporu\n"
-"====================="
+"Baskı Devre istatistik raporu\n"
+"========================"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:676
 msgid "Date"
@@ -33474,7 +33479,7 @@ msgstr "Değeri geçersiz kıl"
 msgid ""
 "When checked, the actual measurement is ignored and any value can be entered"
 msgstr ""
-"İşaretlendiğinde, gerçek ölçüm yok sayılır ve herhangi bir değer girilebilir."
+"İşaretlendiğinde, gerçek ölçüm yok sayılır ve herhangi bir değer girilebilir"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:116
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:57
@@ -33808,7 +33813,8 @@ msgstr "Onlar %s listesinden hariç tutulacaktır"
 
 #: pcbnew/dialogs/dialog_drc.cpp:739 pcbnew/dialogs/dialog_drc.cpp:746
 msgid "Violation severities can also be edited in the Board Setup... dialog"
-msgstr "İhlal önemleri Pano Kurulumu'nda da düzenlenebilir... Iletişim"
+msgstr ""
+"İhlal ciddiyetleri, Kart Ayarları... iletişim kutusunda da düzenlenebilir"
 
 #: pcbnew/dialogs/dialog_drc.cpp:757
 msgid "Open the Board Setup... dialog"
@@ -34272,7 +34278,9 @@ msgstr "Model Ölçek Uyarısı"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:406
 msgid "STEP export failed!  Please save the PCB and try again"
-msgstr "STEP dışa aktarma başarısız oldu!  Lütfen PCB'yi kaydet ve tekrar dene"
+msgstr ""
+"STEP dışa aktarma başarısız oldu! Lütfen Baskı Devreyi kaydedin ve tekrar "
+"deneyin"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:455
 msgid "STEP files"
@@ -36052,7 +36060,7 @@ msgstr "Grup Özellikleri"
 
 #: pcbnew/dialogs/dialog_import_netlist.cpp:83
 msgid "Load and Test Netlist"
-msgstr "Netlisti Yükle ve Test Et"
+msgstr "Ağ Listesini Yükle ve Test Et"
 
 #: pcbnew/dialogs/dialog_import_netlist.cpp:137
 #: pcbnew/dialogs/dialog_import_netlist_base.h:71
@@ -36061,22 +36069,22 @@ msgstr "Ağ Listesini İçe Aktar"
 
 #: pcbnew/dialogs/dialog_import_netlist.cpp:162
 msgid "Please choose a valid netlist file."
-msgstr "Lütfen geçerli bir netlist dosyası seçin."
+msgstr "Lütfen geçerli bir ağ listesi dosyası seçin."
 
 #: pcbnew/dialogs/dialog_import_netlist.cpp:168
 #: pcbnew/dialogs/dialog_import_netlist.cpp:205
 msgid "The netlist file does not exist."
-msgstr "Netlist dosyası mevcut değil."
+msgstr "Ağ listesi dosyası mevcut değil."
 
 #: pcbnew/dialogs/dialog_import_netlist.cpp:172
 #: pcbnew/dialogs/dialog_update_pcb.cpp:150
 msgid "Changes Applied to PCB"
-msgstr "PCB'ye Uygulanan Değişiklikler"
+msgstr "Baskı Devreye Uygulanan Değişiklikler"
 
 #: pcbnew/dialogs/dialog_import_netlist.cpp:240
 #, c-format
 msgid "Reading netlist file '%s'.\n"
-msgstr "'%s' netlist dosyası okunuşu.\n"
+msgstr "Ağ listesi dosyası '%s' okunuyor.\n"
 
 #: pcbnew/dialogs/dialog_import_netlist.cpp:244
 msgid "Using reference designators to match symbols and footprints.\n"
@@ -37257,9 +37265,10 @@ msgid ""
 "They are comments in the X1 format.\n"
 "Used to check connectivity in CAM tools and Gerber viewers."
 msgstr ""
-"Gerber dosyalarına netlist meta verilerini ve açıklık niteliklerini ekle.\n"
-"Bunlar X1 formatındaki yorumlardır.\n"
-"CAM araçlarında ve Gerber görüntüleyicilerinde bağlantıyı kontrol etmek için "
+"Gerber dosyalarına ağ listesi meta verilerini ve diyafram özniteliklerini "
+"dahil et.\n"
+"Bunlar X1 biçiminde yorumlardır.\n"
+"CAM araçlarında ve Gerber görüntüleyicilerde bağlantıyı kontrol etmek için "
 "kullanılır."
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:236
@@ -37310,11 +37319,13 @@ msgid ""
 "The reasonable width correction value must be in a range of [-"
 "(MinTrackWidth-1), +(MinClearanceValue-1)]."
 msgstr ""
-"İç geçitler PostScript çıktısı için genel genişlik düzeltmesini ayarla.\n"
-"Bu genişlik düzeltmesi, iz genişliğini ve ayrıca ped ve viyols boyut "
-"hatalarını telafi etmek için tasarlanmıştır.\n"
-"Makul genişlik düzeltme değeri [-(MinTrackWidth-1), +(MinClearanceValue-1)] "
-"aralığında olmalıdır."
+"Tam genişlikte PostScript çıktısı için genel genişlik düzeltmesini ayarlayın."
+"\n"
+"Bu genişlik düzeltmesi, yol genişliği ile ped ve geçit boyutlarındaki "
+"hataları telafi etmek amacıyla kullanılır.\n"
+"Makul genişlik düzeltme değeri, "
+"[-(Minimum Yol Genişliği-1), +(Minimum Boşluk Değeri-1)] aralığında "
+"olmalıdır."
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:318
 msgid "Force A4 output"
@@ -37366,7 +37377,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:386
 msgid "Fit page to board"
-msgstr "Sayfayı karta sığdır"
+msgstr "Kartı sayfaya sığdır"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:412
 msgid "Generate property popups for front footprints"
@@ -37627,8 +37638,8 @@ msgid ""
 "Click and select a board item.\n"
 "The anchor position will be the position of the selected item."
 msgstr ""
-"Bir pano öğesine tıkla ve seç.\n"
-"Bağlantı konumu, seçilen öğenin konumu olacaktır."
+"Bir kart ögesine tıklayıp seçin.\n"
+"Çıpa konumu, seçilen ögenin konumu olacaktır."
 
 #: pcbnew/dialogs/dialog_position_relative_base.h:73
 msgid "Position Relative To Reference Item"
@@ -37660,7 +37671,7 @@ msgstr "Her bir katmanı farklı sayfada yazdır"
 
 #: pcbnew/dialogs/dialog_print_pcbnew.cpp:274
 msgid "Print board edges on all pages"
-msgstr "Tüm sayfalarda pano kenarları yazdır"
+msgstr "Tüm sayfalara kart kenarlarını yazdır"
 
 #: pcbnew/dialogs/dialog_print_pcbnew.cpp:300
 msgid "Select all Copper Layers"
@@ -37702,11 +37713,11 @@ msgstr "Üretim dosyalarını KiCad'den üreticiye gönderir"
 
 #: pcbnew/dialogs/dialog_produce_pcb_base.cpp:41
 msgid "Produce PCB"
-msgstr "PCB üret"
+msgstr "Baskı Devre Üret"
 
 #: pcbnew/dialogs/dialog_produce_pcb_base.h:44
 msgid "Send PCB for production"
-msgstr "PCB'yi üretim için gönder"
+msgstr "Baskı Devreyi üretime gönder"
 
 #: pcbnew/dialogs/dialog_push_pad_properties.cpp:49
 msgid "Change Pads on Current Footprint"
@@ -38520,7 +38531,7 @@ msgstr "Sembollerde bulunmayan ayak izi alanlarını kaldır"
 
 #: pcbnew/dialogs/dialog_update_pcb_base.h:56
 msgid "Update PCB from Schematic"
-msgstr "PCB'yi Şematikten Güncelle"
+msgstr "Şematikten Baskı Devreyi Güncelle"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:33
 msgid "Constrain actions to H, V, 45 degrees"
@@ -39296,7 +39307,7 @@ msgstr "Metni hizalı tut"
 
 #: pcbnew/dialogs/panel_setup_dimensions_base.cpp:67
 msgid "When checked, dimension text will be kept aligned with dimension lines"
-msgstr "dimension text will be kept aligned with dimension lines"
+msgstr "İşaretlendiğinde, boyut metni boyut çizgileriyle hizalı kalır"
 
 #: pcbnew/dialogs/panel_setup_dimensions_base.cpp:79
 msgid "How many digits of precision to show"
@@ -39329,7 +39340,7 @@ msgstr "Bakır olmayan ayak izi şekillerine kart varsayılanlarını uygula"
 #: pcbnew/dialogs/panel_setup_layers.cpp:87
 #: pcbnew/dialogs/panel_setup_layers.cpp:293
 msgid "Off-board, testing"
-msgstr "testing"
+msgstr "Kart dışı, test"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:97
 msgid "If you want a fabrication layer for the front side of the board"
@@ -39338,7 +39349,7 @@ msgstr "Kartın ön tarafı için bir imalat katmanı istiyorsanız"
 #: pcbnew/dialogs/panel_setup_layers.cpp:107
 #: pcbnew/dialogs/panel_setup_layers.cpp:275
 msgid "Off-board, manufacturing"
-msgstr "manufacturing"
+msgstr "Kart dışı, üretim"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:115
 msgid "If you want an adhesive template for the front side of the board"
@@ -39353,7 +39364,7 @@ msgstr "Levhanın ön tarafı için yapışkanlı bir şablon istiyorsanız"
 #: pcbnew/dialogs/panel_setup_layers.cpp:239
 #: pcbnew/dialogs/panel_setup_layers.cpp:257
 msgid "On-board, non-copper"
-msgstr "non-copper"
+msgstr "Kart üzerinde, bakır olmayan"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:133
 msgid "If you want a solder paste layer for front side of the board"
@@ -39542,7 +39553,7 @@ msgstr ""
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:36
 msgid "If none are provided, setting the values to zero is suggested."
-msgstr "setting the values to zero is suggested."
+msgstr "Hiçbiri sağlanmazsa, değerleri sıfıra ayarlamanız önerilir."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:49
 msgid "Solder Mask Settings"
@@ -41049,7 +41060,7 @@ msgstr "kart en azı"
 #: pcbnew/drc/drc_engine.cpp:1466
 #, c-format
 msgid "Board minimum clearance: %s."
-msgstr "Pano minimum açıklığı: %s."
+msgstr "Kart minimum boşluğu: %s."
 
 #: pcbnew/drc/drc_engine.cpp:854
 msgid "board minimum hole"
@@ -41382,7 +41393,7 @@ msgstr "Eksik bölgeye termal tahliye bağlantısı"
 
 #: pcbnew/drc/drc_item.cpp:96
 msgid "Via is not connected or connected on only one layer"
-msgstr "viyol bağlı değil veya sadece bir katmana bağlı"
+msgstr "Geçit bağlı değil veya yalnızca tek bir katmana bağlı"
 
 #: pcbnew/drc/drc_item.cpp:100
 msgid "Track has unconnected end"
@@ -41518,7 +41529,7 @@ msgstr "Serigrafi lehim maskesi tarafından kesildi"
 
 #: pcbnew/drc/drc_item.cpp:244
 msgid "Silkscreen clipped by board edge"
-msgstr "Serigrafi pano kenarından kırpılmış"
+msgstr "Serigrafi kart kenarı tarafından kırpıldı"
 
 #: pcbnew/drc/drc_item.cpp:248
 msgid "Silkscreen overlap"
@@ -42219,7 +42230,7 @@ msgstr "Kural alan sayısı farklılık gösterir."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:828
 msgid "No project loaded, skipping library parity tests."
-msgstr "skipping library parity tests."
+msgstr "Yüklü proje yok, kütüphane uyumluluk testleri atlanıyor."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:832
 msgid "Loading footprint library table..."
@@ -42517,7 +42528,7 @@ msgid ""
 "IPC-D-356 netlist file created:\n"
 "'%s'."
 msgstr ""
-"IPC-D-356 netlist dosyası oluşturuldu:\n"
+"IPC-D-356 ağ listesi dosyası oluşturuldu:\n"
 "'%s'."
 
 #: pcbnew/exporters/export_d356.cpp:407
@@ -42583,7 +42594,7 @@ msgstr "'%s' Gerber iş dosyası oluşturuldu."
 
 #: pcbnew/exporters/gerber_jobfile_writer.cpp:571
 msgid "Board stackup settings not up to date."
-msgstr "Pano yığın ayarları güncel değil."
+msgstr "Kart katman yığını ayarları güncel değil."
 
 #: pcbnew/exporters/step/exporter_step.cpp:373
 #, c-format
@@ -42866,7 +42877,9 @@ msgstr "Kurtarma dosyası '%s' yüklensin mi?"
 #: pcbnew/files.cpp:363
 #, c-format
 msgid "Current board will be closed, save changes to '%s' before continuing?"
-msgstr "save changes to '%s' before continuing?"
+msgstr ""
+"Mevcut kart kapatılacak, devam etmeden önce '%s' konumuna yapılan "
+"değişiklikler kaydedilsin mi?"
 
 #: pcbnew/files.cpp:377
 msgid "Current Board will be closed. Continue?"
@@ -42887,7 +42900,7 @@ msgstr ""
 #: pcbnew/files.cpp:541
 #, c-format
 msgid "PCB '%s' is already open by '%s' at '%s'."
-msgstr "PCB '%s' zaten '%s' tarafından '%s' saatinde açıldı."
+msgstr "Baskı Devre '%s' zaten '%s' tarafından '%s' konumunda açık."
 
 #: pcbnew/files.cpp:554
 msgid "The current PCB has been modified.  Save changes?"
@@ -42896,7 +42909,7 @@ msgstr "Mevcut Baskı Devre değiştirildi. Değişiklikler kaydedilsin mi?"
 #: pcbnew/files.cpp:573
 #, c-format
 msgid "PCB '%s' does not exist. Do you wish to create it?"
-msgstr "PCB '%s' mevcut değil. Oluşturmak istiyor musunuz?"
+msgstr "Baskı Devre '%s' mevcut değil. Oluşturmak ister misiniz?"
 
 #: pcbnew/files.cpp:582
 msgid "Creating PCB"
@@ -42909,12 +42922,12 @@ msgstr "Dosya biçimi desteklenmiyor"
 #: pcbnew/files.cpp:726 pcbnew/files.cpp:736
 #, c-format
 msgid "Error loading PCB '%s'."
-msgstr "PCB '%s' yüklenirken hata oluştu."
+msgstr "Baskı Devre '%s' yüklenirken hata oluştu."
 
 #: pcbnew/files.cpp:745
 #, c-format
 msgid "Memory exhausted loading PCB '%s'"
-msgstr "Pcb '%s' yüklenirken bellek tükendi"
+msgstr "Baskı Devre '%s' yüklenirken bellek tükendi"
 
 #: pcbnew/files.cpp:867
 #, c-format
@@ -42942,7 +42955,7 @@ msgid ""
 "Error saving board file '%s'.\n"
 "%s"
 msgstr ""
-"'%s' pano dosyası kaydedilirken hata oluştu.\n"
+"Baskı Devre dosyası '%s' kaydedilirken hata oluştu.\n"
 "%s"
 
 #: pcbnew/files.cpp:1070
@@ -42951,7 +42964,7 @@ msgid ""
 "Error saving board file '%s'.\n"
 "Failed to rename temporary file '%s."
 msgstr ""
-"Pano dosyası '%s' kaydedilirken hata oluştu.\n"
+"Kart dosyası '%s' kaydedilirken hata oluştu.\n"
 "Geçici dosya '%s' yeniden adlandırılamadı."
 
 #: pcbnew/files.cpp:1188
@@ -43083,7 +43096,7 @@ msgstr "(ped %s birden fazla net-tie ped grubunda görünüyor)"
 
 #: pcbnew/footprint.cpp:4124 pcbnew/pad.cpp:2709 pcbnew/zone.cpp:1869
 msgid "Inherited"
-msgstr "Miras"
+msgstr "devralınan"
 
 #: pcbnew/footprint.cpp:4128 pcbnew/pad.cpp:2713 pcbnew/zone.cpp:1873
 msgid "Thermal reliefs for PTH"
@@ -43156,7 +43169,7 @@ msgstr "Ayak izi değişiklikleri kaydedilmedi"
 #: pcbnew/footprint_edit_frame.cpp:601
 #, c-format
 msgid "Editing %s from board.  Saving will update the board only."
-msgstr "Panodan %s düzenleniyor.  Kaydetmek sadece panoyu güncelleyecektir."
+msgstr "Karttan %s düzenleniyor.  Kaydetmek sadece kartı güncelleyecektir."
 
 #: pcbnew/footprint_edit_frame.cpp:603
 #, c-format
@@ -43538,7 +43551,7 @@ msgstr "Özel Kuralları Geçersiz Kıl"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2712
 msgid "Rounded"
-msgstr "Yuvarlak"
+msgstr "Yuvarlatılmış"
 
 #: pcbnew/import_gfx/dialog_import_graphics.cpp:230
 msgid "Please select a file to import."
@@ -43680,7 +43693,7 @@ msgstr "K&urtar"
 #: pcbnew/menubar_pcb_editor.cpp:105
 msgid "Clear board and get last rescue file automatically saved by PCB editor"
 msgstr ""
-"Kartı temizleyin ve PCB editörü tarafından otomatik olarak kaydedilen son "
+"Kartı temizle ve Baskı Devre düzenleyici tarafından otomatik kaydedilen son "
 "kurtarma dosyasını al"
 
 #: pcbnew/menubar_pcb_editor.cpp:115
@@ -43693,7 +43706,7 @@ msgstr "KiCad Olmayan Kart Dosyası..."
 
 #: pcbnew/menubar_pcb_editor.cpp:118
 msgid "Import board file from other applications"
-msgstr "Pano dosyasını diğer uygulamalardan içe aktar"
+msgstr "Diğer uygulamalardan kart dosyası içe aktar"
 
 #: pcbnew/menubar_pcb_editor.cpp:129
 msgid "Specctra DSN..."
@@ -43705,7 +43718,7 @@ msgstr "GenCAD..."
 
 #: pcbnew/menubar_pcb_editor.cpp:130
 msgid "Export GenCAD board representation"
-msgstr "GenCAD pano gösterimini dışa aktar"
+msgstr "GenCAD kart temsilini dışa aktar"
 
 #: pcbnew/menubar_pcb_editor.cpp:132
 msgid "VRML..."
@@ -43713,7 +43726,7 @@ msgstr "VRML..."
 
 #: pcbnew/menubar_pcb_editor.cpp:132
 msgid "Export VRML 3D board representation"
-msgstr "VRML 3D pano gösterimini dışa aktar"
+msgstr "VRML 3B kart temsilini dışa aktar"
 
 #: pcbnew/menubar_pcb_editor.cpp:134
 msgid "IDFv3..."
@@ -44255,37 +44268,37 @@ msgstr ""
 
 #: pcbnew/netlist_reader/legacy_netlist_reader.cpp:114
 msgid "Cannot parse time stamp in symbol section of netlist."
-msgstr "Netlist'in sembol bölümündeki zaman damgası ayrıştırılamıyor."
+msgstr "Ağ listesinin sembol bölümündeki zaman damgası ayrıştırılamıyor."
 
 #: pcbnew/netlist_reader/legacy_netlist_reader.cpp:124
 msgid "Cannot parse footprint name in symbol section of netlist."
-msgstr "Netlist'in sembol bölümündeki ayak izi adı ayrıştırılamıyor."
+msgstr "Ağ listesinin sembol bölümündeki ayak izi adı ayrıştırılamıyor."
 
 #: pcbnew/netlist_reader/legacy_netlist_reader.cpp:138
 msgid "Cannot parse reference designator in symbol section of netlist."
-msgstr "Netlist'in sembol bölümündeki referans tanımlayıcısı ayrıştırılamıyor."
+msgstr "Ağ listesinin sembol bölümündeki referans tanımlayıcı ayrıştırılamıyor."
 
 #: pcbnew/netlist_reader/legacy_netlist_reader.cpp:148
 msgid "Cannot parse value in symbol section of netlist."
-msgstr "Netlist'in sembol bölümündeki değer ayrıştırılamıyor."
+msgstr "Ağ listesinin sembol bölümündeki değer ayrıştırılamıyor."
 
 #: pcbnew/netlist_reader/legacy_netlist_reader.cpp:185
 msgid "Cannot parse pin name in symbol net section of netlist."
-msgstr "Netlist'in sembol net bölümündeki pin adı ayrıştırılamıyor."
+msgstr "Ağ listesinin sembol ağ bölümündeki pin adı ayrıştırılamıyor."
 
 #: pcbnew/netlist_reader/legacy_netlist_reader.cpp:194
 msgid "Cannot parse net name in symbol net section of netlist."
-msgstr "Netlist'in sembol net bölümündeki net adı ayrıştırılamıyor."
+msgstr "Ağ listesinin sembol ağ bölümündeki ağ adı ayrıştırılamıyor."
 
 #: pcbnew/netlist_reader/legacy_netlist_reader.cpp:242
 #, c-format
 msgid "Cannot find symbol %s in footprint filter section of netlist."
-msgstr "Netlist'in ayak izi filtresi bölümünde %s sembolü bulunamıyor."
+msgstr "Ağ listesinin ayak izi filtreleme bölümünde sembol %s bulunamıyor."
 
 #: pcbnew/netlist_reader/netlist.cpp:65
 #, c-format
 msgid "Cannot open netlist file '%s'."
-msgstr "'%s' ağlistesi dosyası açılamıyor."
+msgstr "'%s' ağ listesi dosyası açılamıyor."
 
 #: pcbnew/netlist_reader/netlist.cpp:76
 #, c-format
@@ -44304,7 +44317,9 @@ msgstr "%s sembolü için ayak izi tanımlanmadı."
 #: pcbnew/netlist_reader/netlist.cpp:206
 #, c-format
 msgid "Footprint of %s changed: board footprint '%s', netlist footprint '%s'."
-msgstr "%s ayak izi değiştirildi: pano ayak izi '%s', netlist ayak izi '%s'."
+msgstr ""
+"%s ögesinin ayak izi değişti: Baskı Devre ayak izi '%s', ağ listesi ayak izi "
+"'%s'."
 
 #: pcbnew/netlist_reader/netlist.cpp:229
 #, c-format
@@ -44735,11 +44750,11 @@ msgstr "KiCad Baskı Devre Düzenleyici"
 
 #: pcbnew/pcb_edit_frame.cpp:236
 msgid "Export netlist used to update schematics"
-msgstr "Şemaları güncellemek için kullanılan netlist'i dışa aktar"
+msgstr "Şematikleri güncellemek için kullanılan ağ listesini dışa aktar"
 
 #: pcbnew/pcb_edit_frame.cpp:502
 msgid "New PCB file is unsaved"
-msgstr "Yeni PCB dosyası kaydedilmemiş"
+msgstr "Yeni Baskı Devre dosyası kaydedilmedi"
 
 #: pcbnew/pcb_edit_frame.cpp:1634
 msgid "Board file is read only."
@@ -44772,7 +44787,7 @@ msgid ""
 "Received an error while reading netlist.  Please report this issue to the "
 "KiCad team using the menu Help->Report Bug."
 msgstr ""
-"Netlist okunurken bir hata alındı.  Lütfen bu sorunu Yardım->Hata Bildir "
+"Ağ listesi okunurken bir hata alındı. Lütfen bu sorunu Yardım->Hata Bildir "
 "menüsünü kullanarak KiCad ekibine bildirin."
 
 #: pcbnew/pcb_edit_frame.cpp:2072
@@ -45290,11 +45305,11 @@ msgstr "Dikdörtgenler yükleniyor..."
 
 #: pcbnew/pcb_io/altium/pcb_io_altium_circuit_maker.h:38
 msgid "Altium Circuit Maker PCB files"
-msgstr "Altium Circuit Maker PCB dosyaları"
+msgstr "Altium Circuit Maker Baskı Devre Dosyaları"
 
 #: pcbnew/pcb_io/altium/pcb_io_altium_circuit_studio.h:37
 msgid "Altium Circuit Studio PCB files"
-msgstr "Altium Circuit Studio PCB dosyaları"
+msgstr "Altium Circuit Studio Baskı Devre Dosyaları"
 
 #: pcbnew/pcb_io/altium/pcb_io_altium_designer.cpp:312
 #, c-format
@@ -45308,11 +45323,11 @@ msgstr "'%s' ayak izi '%s' içinde bulunamadı."
 
 #: pcbnew/pcb_io/altium/pcb_io_altium_designer.h:44
 msgid "Altium Designer PCB files"
-msgstr "Altium Designer PCB dosyaları"
+msgstr "Altium Designer Baskı Devre Dosyaları"
 
 #: pcbnew/pcb_io/altium/pcb_io_altium_designer.h:49
 msgid "Altium PCB Library or Integrated Library"
-msgstr "Altium PCB Kütüphanesi veya Entegre Kütüphane"
+msgstr "Altium Baskı Devre Kütüphanesi veya Entegre Kütüphane"
 
 #: pcbnew/pcb_io/altium/pcb_io_solidworks.h:32
 msgid "Solidworks PCB files"
@@ -45324,7 +45339,11 @@ msgid ""
 "the schematic. It is recommended that you carry out an 'Align Nets' "
 "procedure in CADSTAR and re-import, to avoid inconsistencies between the PCB "
 "and the schematic. "
-msgstr "to avoid inconsistencies between the PCB and the schematic. "
+msgstr ""
+"Seçilen dosya, ağların şematik ile senkronize olmayabileceğini gösteriyor. "
+"Baskı Devre ve şematik arasındaki tutarsızlıkları önlemek için CADSTAR'da "
+"bir 'Ağları Hizala' prosedürü uygulamanız ve yeniden içe aktarmanız "
+"önerilir. "
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:131
 #, c-format
@@ -45661,7 +45680,9 @@ msgstr "Yüklü bir proje olmadığı için Metin Değişkenleri ayarlanamadı."
 msgid ""
 "The CADSTAR design contains teardrops. This importer does not yet support "
 "them, so the teardrops in the design have been ignored."
-msgstr "so the teardrops in the design have been ignored."
+msgstr ""
+"CADSTAR tasarımı damla desenleri içeriyor. Bu içe aktarıcı henüz onları "
+"desteklemediği için, tasarımdaki damla desenleri yok sayıldı."
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:2598
 #, c-format
@@ -45764,7 +45785,7 @@ msgstr ""
 
 #: pcbnew/pcb_io/cadstar/pcb_io_cadstar_archive.h:37
 msgid "CADSTAR PCB Archive files"
-msgstr "CADSTAR PCB Arşiv dosyaları"
+msgstr "CADSTAR Baskı Devre Arşiv Dosyaları"
 
 #: pcbnew/pcb_io/eagle/pcb_io_eagle.cpp:362
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:222
@@ -45830,7 +45851,7 @@ msgstr "Eagle katmanı '%s' (%d) eşlenmediği için bir daire yok sayılıyor"
 #: pcbnew/pcb_io/eagle/pcb_io_eagle.h:137
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.h:72
 msgid "Eagle ver. 6.x XML PCB files"
-msgstr "Kartal ver. 6.x XML PCB dosyaları"
+msgstr "Eagle Sürüm 6.x XML Baskı Devre Dosyaları"
 
 #: pcbnew/pcb_io/eagle/pcb_io_eagle.h:142
 msgid "Eagle ver. 6.x XML library files"
@@ -45844,13 +45865,13 @@ msgstr "Bilinmeyen SVGNODE düğüm tipi %d"
 #: pcbnew/pcb_io/easyeda/pcb_io_easyeda_plugin.cpp:170
 #, c-format
 msgid "Unable to find a valid board in '%s'"
-msgstr "'%s' içinde geçerli bir pano bulunamadı"
+msgstr "'%s' içinde geçerli bir kart bulunamadı"
 
 #: pcbnew/pcb_io/easyeda/pcb_io_easyeda_plugin.cpp:268
 #: pcbnew/pcb_io/easyeda/pcb_io_easyeda_plugin.cpp:273
 #, c-format
 msgid "Error loading board '%s': %s"
-msgstr "'%s' panosu yüklenirken hata oluştu: %s"
+msgstr "'%s' kart yüklenirken hata oluştu: %s"
 
 #: pcbnew/pcb_io/easyeda/pcb_io_easyeda_plugin.cpp:298
 #: pcbnew/pcb_io/easyeda/pcb_io_easyeda_plugin.cpp:400
@@ -46068,7 +46089,7 @@ msgstr "Dosya okunamadı "
 
 #: pcbnew/pcb_io/fabmaster/pcb_io_fabmaster.h:38
 msgid "Fabmaster PCB files"
-msgstr "Fabmaster PCB dosyaları"
+msgstr "Fabmaster Baskı Devre dosyaları"
 
 #: pcbnew/pcb_io/geda/pcb_io_geda.cpp:94
 #, c-format
@@ -46300,7 +46321,7 @@ msgstr "bilinmeyen bölge köşe yumuşatma tipi %d"
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2760
 msgid "This file does not contain a PCB."
-msgstr "Bu dosya bir PCB içermez."
+msgstr "Bu dosya bir Baskı Devre içermiyor."
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2932
 #, c-format
@@ -46446,10 +46467,10 @@ msgid ""
 "line: %d\n"
 "offset: %d"
 msgstr ""
-"içinde %s'ye sabitlenmiş geçersiz sıfır boyutlu ped\n"
+"İçinde %s'ye sabitlenmiş geçersiz sıfır boyutlu ped\n"
 "dosya: %s\n"
 "satır: %d\n"
-"ofset: %d"
+"konum: %d"
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5657
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6595
@@ -46555,7 +46576,7 @@ msgstr "Burada viaStyleDef %s bulunamadı."
 
 #: pcbnew/pcb_io/pcad/pcb_io_pcad.h:44
 msgid "P-Cad 200x ASCII PCB files"
-msgstr "P-Cad 200x ASCII PCB dosyaları"
+msgstr "P-Cad 200x ASCII Baskı Devre dosyaları"
 
 #: pcbnew/pcb_io/pcb_io.cpp:115
 msgid ""
@@ -46597,7 +46618,7 @@ msgstr "Özel bir kütüphane sunucusuna <b>giriş</b> için parola."
 #: pcbnew/pcb_io/pcb_io.cpp:196
 msgid ""
 "Enter the python module which implements the PCB_IO::Footprint*() functions."
-msgstr "PCB_IO::Footprint*() işlevlerini uygulayan Python modülünü."
+msgstr "PCB_IO::Footprint*() fonksiyonlarını uygulayan Python modülünü girin."
 
 #: pcbnew/pcb_layer_box_selector.cpp:73
 msgid "(not activated)"
@@ -46660,7 +46681,7 @@ msgstr "Teknik Katmanlar"
 
 #: pcbnew/pcb_shape.cpp:977 pcbnew/pcb_track.cpp:2140
 msgid "Soldermask"
-msgstr "Lehim Maskesi"
+msgstr "Lehim maskesi"
 
 #: pcbnew/pcb_target.cpp:151
 msgid "PCB Target"
@@ -46797,7 +46818,7 @@ msgstr "%s için eksik ayak izi (A, B veya referans tanımlayıcı) argümanı."
 
 #: pcbnew/pcbexpr_functions.cpp:506
 msgid "Footprint's courtyard is not a single, closed shape."
-msgstr "closed shape."
+msgstr "Ayak izinin yerleşimi tek, kapalı bir şekil değil."
 
 #: pcbnew/pcbexpr_functions.cpp:518
 msgid "Footprint has no front courtyard."
@@ -46952,7 +46973,7 @@ msgstr "Karşılıklı şema testi tamamen isimlendirilmiş şema gerektirir."
 
 #: pcbnew/pcbnew_jobs_handler.cpp:1981 pcbnew/pcbnew_jobs_handler.cpp:2014
 msgid "Failed to fetch schematic netlist for parity tests.\n"
-msgstr "Eşlik testleri için şematik net liste alınamadı.\n"
+msgstr "Şematik ağ listesi denklik testleri için alınamadı.\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:2036 pcbnew/tools/drc_tool.cpp:200
 msgid "DRC"
@@ -47164,7 +47185,7 @@ msgstr "Şu anda yönlendirilen izin sonuna bir mikrogeçit ekler."
 
 #: pcbnew/router/router_tool.cpp:151
 msgid "Select Layer and Place Through Via..."
-msgstr "Katman Seç ve viyol Üzerinden Yerleştir..."
+msgstr "Katman Seç ve İçinden Geçen Geçit Yerleştir..."
 
 #: pcbnew/router/router_tool.cpp:152
 msgid ""
@@ -47176,7 +47197,7 @@ msgstr ""
 
 #: pcbnew/router/router_tool.cpp:162
 msgid "Select Layer and Place Blind/Buried Via..."
-msgstr "Katmanı Seç ve Kör/Gömülü viyol yerleştir..."
+msgstr "Katman Seç ve Kör/Gömülü Geçit Yerleştir..."
 
 #: pcbnew/router/router_tool.cpp:163
 msgid ""
@@ -47188,7 +47209,7 @@ msgstr ""
 
 #: pcbnew/router/router_tool.cpp:171
 msgid "Select Layer and Place Micro Via..."
-msgstr "Katman'ı seç ve Mikro viyol'ü yerleştir..."
+msgstr "Katman Seç ve Mikro Geçit Yerleştir..."
 
 #: pcbnew/router/router_tool.cpp:172
 msgid ""
@@ -47199,12 +47220,12 @@ msgstr ""
 
 #: pcbnew/router/router_tool.cpp:182
 msgid "Custom Track/Via Size..."
-msgstr "Özel Parça/viyol Boyutu..."
+msgstr "Özel Yol/Geçit Boyutu..."
 
 #: pcbnew/router/router_tool.cpp:183
 msgid "Shows a dialog for changing the track width and via size."
 msgstr ""
-"yol genişliğini ve geçit boyutunu değiştirmek için bir iletişim kutusu "
+"Yol genişliğini ve geçit boyutunu değiştirmek için bir iletişim kutusu "
 "gösterir."
 
 #: pcbnew/router/router_tool.cpp:191
@@ -47243,7 +47264,7 @@ msgstr "Ağ Sınıfı Değerlerini Kullan"
 
 #: pcbnew/router/router_tool.cpp:248
 msgid "Use track and via sizes from the net class"
-msgstr "Net sınıfındaki palet ve viyol boyutlarını kullan"
+msgstr "Yol ve geçit boyutlarını ağ sınıfından kullan"
 
 #: pcbnew/router/router_tool.cpp:252 pcbnew/router/router_tool.cpp:377
 #: pcbnew/tools/drawing_tool.cpp:114
@@ -47418,7 +47439,7 @@ msgstr "KART dışa aktarıldı Tamam."
 
 #: pcbnew/specctra_import_export/specctra_export.cpp:100
 msgid "Unable to export, please fix and try again"
-msgstr "please fix and try again"
+msgstr "Dışa aktarılamıyor, lütfen düzeltin ve tekrar deneyin"
 
 #: pcbnew/specctra_import_export/specctra_export.cpp:1095
 #, c-format
@@ -47492,11 +47513,11 @@ msgstr "Bir kablo_geçidi, eksik ped yığını '%s' referans veriyor."
 
 #: pcbnew/toolbars_footprint_editor.cpp:94
 msgid "Load footprint from current board"
-msgstr "Mevcut panodan yük ayak izi"
+msgstr "Mevcut karttan ayak izi yükle"
 
 #: pcbnew/toolbars_footprint_editor.cpp:98
 msgid "Insert footprint into current board"
-msgstr "Ayak izini mevcut panoya yerleştir"
+msgstr "Ayak izini mevcut karta yerleştir"
 
 #: pcbnew/toolbars_footprint_editor.cpp:288 pcbnew/toolbars_pcb_editor.cpp:677
 msgid "+/- to switch"
@@ -47520,8 +47541,9 @@ msgid ""
 "overridden by the board minimum width, or by the width of an existing track "
 "if the 'Use Existing Track Width' feature is enabled."
 msgstr ""
-"or by the width of an existing track if the 'Use Existing Track Width' "
-"feature is enabled."
+"Yeni yollar için varsayılan genişliği seçin. Bu genişliğin, kartın minimum "
+"genişliği veya 'Mevcut Yol Genişliğini Kullan' özelliği etkinse, mevcut bir "
+"yolun genişliği tarafından geçersiz kılınabileceğini unutmayın."
 
 #: pcbnew/toolbars_pcb_editor.cpp:465
 msgid ""
@@ -47593,7 +47615,8 @@ msgstr "Kartta sorun bulunamadı."
 
 #: pcbnew/tools/board_editor_control.cpp:647
 msgid "Updating PCB requires a fully annotated schematic."
-msgstr "Kartın güncellenebilmesi için tamamen isimlendirilmiş şema gerekir."
+msgstr ""
+"Baskı Devreyi güncellemek için tam numaralandırılmış bir şematik gerekiyor."
 
 #: pcbnew/tools/board_editor_control.cpp:661
 msgid ""
@@ -48156,7 +48179,7 @@ msgstr "Kalınlık (mil)"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:279
 msgid "Loss Tangent"
-msgstr "kayıp tanjantı"
+msgstr "Kayıp Tanjantı"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:302
 msgid "Dielectric"
@@ -48168,7 +48191,7 @@ msgstr "Kart Katman Tablosu Ekle"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:399
 msgid "BOARD CHARACTERISTICS"
-msgstr "PANO ÖZELLİKLERİ"
+msgstr "KART ÖZELLİKLERİ"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:414
 msgid "Copper Layer Count: "
@@ -48176,7 +48199,7 @@ msgstr "Bakır Katman Sayısı: "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:426
 msgid "Board overall dimensions: "
-msgstr "Pano genel boyutları: "
+msgstr "Kart genel boyutları: "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:436
 msgid "Min track/spacing: "
@@ -48338,7 +48361,7 @@ msgstr "Çizgileri Pahla"
 
 #: pcbnew/tools/edit_tool.cpp:1344
 msgid "Chamfer setback:"
-msgstr "Pah mesafesi:"
+msgstr "Pah geri çekme:"
 
 #: pcbnew/tools/edit_tool.cpp:1439
 msgid "Exactly two lines must be selected to extend them."
@@ -48761,7 +48784,7 @@ msgstr "Kart Özellikleri Ekle"
 
 #: pcbnew/tools/pcb_actions.cpp:160
 msgid "Add a board characteristics table on a graphic layer"
-msgstr "Bir grafik katmanına pano özellikleri tablosu ekle"
+msgstr "Grafik katmanına bir kart özellikleri tablosu ekle"
 
 #: pcbnew/tools/pcb_actions.cpp:167
 msgid "Add Stackup Table"
@@ -48769,7 +48792,7 @@ msgstr "Yığın Tablosu Ekle"
 
 #: pcbnew/tools/pcb_actions.cpp:168
 msgid "Add a board stackup table on a graphic layer"
-msgstr "Bir grafik katmanına pano yığın tablosu ekle"
+msgstr "Grafik katmanına bir kart katman yığını tablosu ekle"
 
 #: pcbnew/tools/pcb_actions.cpp:174
 msgid "Place Reference Images"
@@ -49004,7 +49027,9 @@ msgstr "Ayak İzlerini Paketle ve Taşı"
 msgid ""
 "Sorts selected footprints by reference, packs based on size and initiates "
 "movement"
-msgstr "packs based on size and initiates movement"
+msgstr ""
+"Seçilen ayak izlerini referansa göre sıralar, boyuta göre paketler ve "
+"hareketi başlatır"
 
 #: pcbnew/tools/pcb_actions.cpp:586
 msgid "Skip to next item"
@@ -49241,7 +49266,7 @@ msgstr "Global Silmeler..."
 
 #: pcbnew/tools/pcb_actions.cpp:848
 msgid "Delete tracks, footprints and graphic items from board"
-msgstr "footprints and graphic items from board"
+msgstr "Karttan yolları, ayak izlerini ve grafik ögelerini sil"
 
 #: pcbnew/tools/pcb_actions.cpp:854
 msgid "Cleanup Tracks & Vias..."
@@ -49257,7 +49282,7 @@ msgstr "Grafikleri Temizle..."
 
 #: pcbnew/tools/pcb_actions.cpp:862
 msgid "Cleanup redundant items, etc."
-msgstr "etc."
+msgstr "Gereksiz ögeleri temizle, vb."
 
 #: pcbnew/tools/pcb_actions.cpp:870
 msgid "Draw Microwave Gaps"
@@ -49380,15 +49405,17 @@ msgstr "Kart Kurulumu..."
 
 #: pcbnew/tools/pcb_actions.cpp:996
 msgid "Edit board setup including layers, design rules and various defaults"
-msgstr "design rules and various defaults"
+msgstr ""
+"Katmanlar, tasarım kuralları ve çeşitli varsayılanlar dahil olmak üzere kart "
+"ayarlarını düzenle"
 
 #: pcbnew/tools/pcb_actions.cpp:1002
 msgid "Import Netlist..."
-msgstr "Netlist'i içe aktar..."
+msgstr "Ağ Listesini İçe Aktar..."
 
 #: pcbnew/tools/pcb_actions.cpp:1003
 msgid "Read netlist and update board connectivity"
-msgstr "Netlisti okuma ve kart bağlantısını güncelle"
+msgstr "Ağ listesini oku ve kart bağlantısını güncelle"
 
 #: pcbnew/tools/pcb_actions.cpp:1009
 msgid "Import Specctra Session..."
@@ -49436,7 +49463,7 @@ msgstr "Ayak İzi Raporu (.rpt)..."
 
 #: pcbnew/tools/pcb_actions.cpp:1045
 msgid "Create report of all footprints from current board"
-msgstr "Mevcut panodaki tüm ayak izlerinin raporunu oluştur"
+msgstr "Mevcut karttaki tüm ayak izlerinin raporunu oluştur"
 
 #: pcbnew/tools/pcb_actions.cpp:1051
 msgid "IPC-2581 File (.xml)..."
@@ -49456,7 +49483,7 @@ msgstr "ODB++ çıkış dosyaları oluştur"
 
 #: pcbnew/tools/pcb_actions.cpp:1065
 msgid "IPC-D-356 Netlist File..."
-msgstr "IPC-D-356 Netlist Dosyası..."
+msgstr "IPC-D-356 Ağ Listesini Dosyası..."
 
 #: pcbnew/tools/pcb_actions.cpp:1072
 msgid "Bill of Materials..."
@@ -49525,7 +49552,7 @@ msgstr "Seçili ögeleri kilitle veya kilidini aç"
 #: pcbnew/tools/pcb_actions.cpp:1175
 msgid ""
 "Limit actions to horizontal, vertical, or 45 degrees from the starting point"
-msgstr "vertical"
+msgstr "Eylemleri başlangıç noktasından yatay, dikey veya 45 derece ile sınırla"
 
 #: pcbnew/tools/pcb_actions.cpp:1182
 msgid "Prevent items from being moved and/or resized on the canvas"
@@ -49573,11 +49600,11 @@ msgstr "Mevcut gruptan çık"
 
 #: pcbnew/tools/pcb_actions.cpp:1230
 msgid "Append Board..."
-msgstr "Pano Ekle…"
+msgstr "Kart Ekle…"
 
 #: pcbnew/tools/pcb_actions.cpp:1231
 msgid "Open another board and append its contents to this board"
-msgstr "Başka bir pano aç ve içeriğini bu panoya ekle"
+msgstr "Başka bir kart aç ve içeriğini bu kart ekle"
 
 #: pcbnew/tools/pcb_actions.cpp:1248
 msgid "Toggle Last Net Highlight"
@@ -49654,7 +49681,7 @@ msgstr "Kart Görünümünü Çevir"
 
 #: pcbnew/tools/pcb_actions.cpp:1353
 msgid "View board from the opposite side"
-msgstr "Panoyu karşı taraftan görüntüle"
+msgstr "Kartı karşı taraftan görüntüle"
 
 #: pcbnew/tools/pcb_actions.cpp:1360
 msgid "Show Ratsnest"
@@ -49980,7 +50007,7 @@ msgstr "Coğrafi Yeniden Notlandır..."
 
 #: pcbnew/tools/pcb_actions.cpp:1874
 msgid "Reannotate PCB in geographical order"
-msgstr "PCB'yi coğrafi sıraya göre yeniden notlayın"
+msgstr "Baskı Devreyi konumsal sıraya göre yeniden numaralandır"
 
 #: pcbnew/tools/pcb_actions.cpp:1880
 msgid "Repair Board"
@@ -49988,7 +50015,7 @@ msgstr "Kartı Onar"
 
 #: pcbnew/tools/pcb_actions.cpp:1881
 msgid "Run various diagnostics and attempt to repair board"
-msgstr "Çeşitli arıza teşhislerini çalıştır ve panoyu onarmaya çalış"
+msgstr "Çeşitli tanılama işlemleri çalıştır ve kartı onarmayı dene"
 
 #: pcbnew/tools/pcb_actions.cpp:1888
 msgid "Repair Footprint"
@@ -50162,7 +50189,9 @@ msgstr "Bağlantıyı Seç/Genişlet"
 msgid ""
 "Selects a connection or expands an existing selection to junctions, pads, or "
 "entire connections"
-msgstr "pads"
+msgstr ""
+"Bir bağlantı seçer veya mevcut seçimi birleşim yerlerine, pedlere veya tüm "
+"bağlantılara genişletir"
 
 #: pcbnew/tools/pcb_actions.cpp:2107
 msgid "Unroute Selected"
@@ -50287,8 +50316,7 @@ msgstr "Gemi Dışı Ayak İzlerini Yerleştirin"
 
 #: pcbnew/tools/pcb_actions.cpp:2228
 msgid "Performs automatic placement of components outside board area"
-msgstr ""
-"Bileşenlerin pano alanı dışına otomatik yerleştirilmesini gerçekleştirir"
+msgstr "Bileşenlerin kart alanı dışına otomatik yerleşimini gerçekleştirir"
 
 #: pcbnew/tools/pcb_actions.cpp:2233
 msgid "Generate Placement Rule Areas..."
@@ -50541,8 +50569,8 @@ msgid ""
 "current board.\n"
 "These items could not be pasted.\n"
 msgstr ""
-"Uyarı: yapıştırılan bazı öğeler mevcut panoda bulunmayan katmanlardaydı.\n"
-"Bu öğeler yapıştırılamadı.\n"
+"Uyarı: Yapıştırılan bazı ögeler, mevcut kartta bulunmayan katmanlardaydı.\n"
+"Bu ögeler yapıştırılamadı.\n"
 
 #: pcbnew/tools/pcb_control.cpp:1074
 msgid "Paste Text"
@@ -50851,7 +50879,7 @@ msgstr "Ayak İzleri(footprint) Arka"
 
 #: pcbnew/widgets/appearance_controls.cpp:339
 msgid "Show footprints that are on board's back"
-msgstr "Panonun arkasındaki ayak izlerini göster"
+msgstr "Kartın arka yüzündeki ayak izlerini göster"
 
 #: pcbnew/widgets/appearance_controls.cpp:345
 msgid "Show unconnected nets as a ratsnest"
@@ -51133,7 +51161,8 @@ msgstr "Nesneler"
 
 #: pcbnew/widgets/appearance_controls.cpp:1581
 msgid "Double click or middle click for color change, right click for menu"
-msgstr "right click for menu"
+msgstr ""
+"Renk değişimi için çift tıklayın veya orta tıklayın, menü için sağ tıklayın"
 
 #: pcbnew/widgets/appearance_controls.cpp:1587
 msgid "Show or hide this layer"
@@ -51141,11 +51170,11 @@ msgstr "Bu katmanı göster veya gizle"
 
 #: pcbnew/widgets/appearance_controls.cpp:1660
 msgid "Adhesive on board's front"
-msgstr "Panonun önündeki yapışkan"
+msgstr "Kartın önündeki yapışkan"
 
 #: pcbnew/widgets/appearance_controls.cpp:1661
 msgid "Adhesive on board's back"
-msgstr "Panonun arkasındaki yapışkan"
+msgstr "Kartın arkasındaki yapışkan"
 
 #: pcbnew/widgets/appearance_controls.cpp:1662
 msgid "Solder paste on board's front"
@@ -51506,7 +51535,7 @@ msgstr "Yolun önüne ayak izi UUID'si eklemeyin."
 #: pcbnew/widgets/net_inspector_panel.cpp:46
 #: pcbnew/widgets/net_inspector_panel.cpp:96
 msgid "Configure netlist inspector"
-msgstr "Ağ listesi denetleyicisini yapılandır"
+msgstr "Ağ Listesi denetleyicisini yapılandır"
 
 #: pcbnew/widgets/panel_footprint_chooser.cpp:361
 msgid "No footprint selected"
@@ -51525,7 +51554,7 @@ msgstr "Boyutlar"
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:122
 #: pcbnew/widgets/pcb_net_inspector_panel_data_model.h:708
 msgid "Netclass"
-msgstr "Ağsınıfı"
+msgstr "Ağ sınıfı"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:124
 msgid "Total Length"
@@ -51958,7 +51987,7 @@ msgstr "[BİLGİ] yükleme başarısız oldu: %s"
 
 #: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:6
 msgid "bitmap2component;Bitmap;Converter;"
-msgstr "Bitmap/Bileşen Dönüştürücü;"
+msgstr "bitmap2component/Bileşen Dönüştürücü;"
 
 #: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:12
 msgid "Bitmap to Component Converter"
@@ -52010,11 +52039,11 @@ msgstr "Şematik tasarım ve Baskı Devre yerleşimi için araç paketi"
 
 #: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:10
 msgid "KiCad PCB Calculator"
-msgstr "KiCad PCB Hesaplayıcı"
+msgstr "KiCad Baskı Devre Hesaplayıcı"
 
 #: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:11
 msgid "PCB;Calculator;"
-msgstr "KiCad PCB Hesaplayıcı;"
+msgstr "KiCad Baskı Devre Hesaplayıcı;"
 
 #: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:12
 msgid "PCB Calculator"
@@ -52026,15 +52055,17 @@ msgstr "Elektronikle ilgili çeşitli hesaplamalar için hesap makinesi"
 
 #: resources/linux/launchers/org.kicad.pcbnew.desktop.in:5
 msgid "pcbnew;PCB;Circuit;Layout;Design;Editor;Footprint;"
-msgstr "pcbnew;PCB; Devre;Düzen;Tasarım;Editör;Ayak İzi;"
+msgstr ""
+"Baskı Devre Düzenleyici;Baskı Devre;Devre;Yerleşim;Tasarım;Düzenleyici;Ayak "
+"İzi;"
 
 #: resources/linux/launchers/org.kicad.pcbnew.desktop.in:12
 msgid "KiCad PCB Editor (Standalone)"
-msgstr "KiCad PCB Editörü (Bağımsız)"
+msgstr "KiCad Baskı Devre Düzenleyici (Bağımsız)"
 
 #: resources/linux/launchers/org.kicad.pcbnew.desktop.in:13
 msgid "PCB layout editor"
-msgstr "PCB düzenleme editörü"
+msgstr "Baskı Devre Yerleşim Düzenleyici"
 
 #: resources/linux/launchers/org.kicad.pcbnew.desktop.in:14
 msgid "Standalone circuit board editor for KiCad boards"
@@ -52054,15 +52085,16 @@ msgid ""
 "system requirements and runs on Linux, Windows, and macOS."
 msgstr ""
 "KiCad, ücretsiz ve açık kaynaklı bir elektronik tasarım otomasyonu (EDA) "
-"paketidir. Şematik çizimi, entegre devre simülasyonu, baskılı devre kartı "
-"(PCB) çizimi, 3D render ve çok sayıda formata çizim / veri dışa aktarma "
-"özelliklerine sahiptir. KiCad ayrıca binlerce sembol, ayak izi ve 3D model "
-"içeren yüksek kaliteli bir bileşen kitaplığı içerir. KiCad minimum sistem "
-"gereksinimlerine sahiptir ve Linux, Windows ve macOS üzerinde çalışır."
+"paketidir. Şematik yakalama, entegre devre simülasyonu, baskı devre kartı ("
+"Baskı Devre) yerleşimi, 3B oluşturma ve çok sayıda formata çizim/veri dışa "
+"aktarma özelliklerine sahiptir. KiCad ayrıca binlerce sembol, ayak izi ve 3B "
+"model içeren yüksek kaliteli bir bileşen kütüphanesi içerir. KiCad'in "
+"minimum sistem gereksinimleri vardır ve Linux, Windows ve macOS üzerinde "
+"çalışır."
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:63
 msgid "KiCad PCB Layout Editor"
-msgstr "KiCad PCB Tasarım Editörü"
+msgstr "KiCad Baskı Devre Yerleşim Düzenleyici"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:83
 msgid "The KiCad Developers"
