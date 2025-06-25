@@ -35,11 +35,17 @@
 #include <kicommon.h>
 #include <wx/string.h>
 #include <wx/arrstr.h>
-//#include <wx/richmsgdlg.h>
-//#include <vector>
-//#include <functional>
 
 class wxWindow;
+
+
+#if defined( _WIN32 ) && wxCHECK_VERSION( 3, 3, 0 )
+#define KICAD_MESSAGE_DIALOG_BASE wxGenericMessageDialog
+#define KICAD_RICH_MESSAGE_DIALOG_BASE wxGenericRichMessageDialog
+#else
+#define KICAD_MESSAGE_DIALOG_BASE wxMessageDialog
+#define KICAD_RICH_MESSAGE_DIALOG_BASE wxRichMessageDialog
+#endif
 
 
 /**

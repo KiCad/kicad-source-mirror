@@ -31,15 +31,6 @@
 #include <wx/msgdlg.h>
 #include <wx/choicdlg.h>
 #include <wx/crt.h>
-
-#if defined( _WIN32 ) && wxCHECK_VERSION( 3, 3, 0 )
-#define KICAD_MESSAGE_DIALOG_BASE wxGenericMessageDialog
-#define KICAD_RICH_MESSAGE_DIALOG_BASE wxGenericRichMessageDialog
-#else
-#define KICAD_MESSAGE_DIALOG_BASE wxMessageDialog
-#define KICAD_RICH_MESSAGE_DIALOG_BASE wxRichMessageDialog
-#endif
-
 /**
  * Flag to enable confirmation dialog debugging output.
  *
