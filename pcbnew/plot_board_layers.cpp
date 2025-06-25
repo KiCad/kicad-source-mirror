@@ -1356,6 +1356,8 @@ void setupPlotterNewPDFPage( PLOTTER* aPlotter, BOARD* aBoard, const PCB_PLOT_PA
                              const wxString& aSheetPath, const wxString& aPageNumber,
                              int aPageCount )
 {
+    aPlotter->RenderSettings()->SetLayerName( aLayerName );
+
     // Plot the frame reference if requested
     if( aPlotOpts->GetPlotFrameRef() )
     {
@@ -1368,6 +1370,4 @@ void setupPlotterNewPDFPage( PLOTTER* aPlotter, BOARD* aBoard, const PCB_PLOT_PA
         if( aPlotOpts->GetMirror() )
             initializePlotter( aPlotter, aBoard, aPlotOpts );
     }
-
-    aPlotter->RenderSettings()->SetLayerName( aLayerName );
 }
