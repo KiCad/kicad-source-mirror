@@ -88,10 +88,7 @@ enum ERCE_T
     ERCE_LABEL_MULTIPLE_WIRES,    ///< A label is connected to more than one wire.
     ERCE_UNCONNECTED_WIRE_ENDPOINT, ///< A label is connected to more than one wire.
 
-
     ERCE_LAST = ERCE_UNCONNECTED_WIRE_ENDPOINT,
-
-    // Errors after this point will not automatically appear in the Severities Panel
 
     ERCE_DUPLICATE_PIN_ERROR,
     ERCE_PIN_TO_PIN_WARNING,    // pin connected to an other pin: warning level

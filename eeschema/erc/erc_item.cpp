@@ -265,6 +265,7 @@ std::vector<std::reference_wrapper<RC_ITEM>> ERC_ITEM::allItemTypes(
             ERC_ITEM::heading_misc,
             ERC_ITEM::unannotated,
             ERC_ITEM::unresolvedVariable,
+            ERC_ITEM::undefinedNetclass,
             ERC_ITEM::simulationModelIssues,
             ERC_ITEM::similarLabels,
             ERC_ITEM::similarPower,
