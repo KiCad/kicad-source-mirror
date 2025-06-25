@@ -366,6 +366,7 @@ std::set<wxString>::iterator FindByFirstNFields( std::set<wxString>& strSet, con
     {
         if( searchPrefix[pos] == delimiter )
             delimiterCount++;
+
         pos++;
     }
 
@@ -375,9 +376,7 @@ std::set<wxString>::iterator FindByFirstNFields( std::set<wxString>& strSet, con
     for( auto it = strSet.begin(); it != strSet.end(); ++it )
     {
         if( it->StartsWith( searchPrefix + delimiter ) || *it == searchPrefix )
-        {
             return it;
-        }
     }
 
     return strSet.end();
@@ -400,24 +399,20 @@ std::vector<PCB_MARKER*> BOARD::ResolveDRCExclusions( bool aCreateMarkers )
         if( !serialized.Contains( "unconnected_items" ) )
         {
             it = exclusions.find( serialized );
+
             if( it != exclusions.end() )
-            {
                 matchedExclusion = *it;
-            }
         }
         else
         {
             const int  numberOfFieldsExcludingIds = 3;
             const char delimiter = '|';
             it = FindByFirstNFields( exclusions, serialized, delimiter, numberOfFieldsExcludingIds );
+
             if( it != exclusions.end() )
-            {
                 matchedExclusion = *it;
-            }
-            else
-            {
-            }
         }
+
         if( it != exclusions.end() )
         {
             marker->SetExcluded( true, comments[matchedExclusion] );
@@ -439,13 +434,12 @@ std::vector<PCB_MARKER*> BOARD::ResolveDRCExclusions( bool aCreateMarkers )
             PCB_MARKER* marker = PCB_MARKER::DeserializeFromString( serialized );
 
             if( !marker )
-            {
                 continue;
-            }
 
             std::vector<KIID> ids = marker->GetRCItem()->GetIDs();
 
             int uuidCount = 0;
+
             for( const KIID& uuid : ids )
             {
                 if( uuidCount < 1 || uuid != niluuid )
@@ -1076,7 +1070,8 @@ void BOARD::CacheTriangulation( PROGRESS_REPORTER* aReporter, const std::vector<
 
     returns.reserve( zones.size() );
 
-    auto cache_zones = [aReporter]( ZONE* aZone ) -> size_t
+    auto cache_zones =
+            [aReporter]( ZONE* aZone ) -> size_t
             {
                 if( aReporter && aReporter->IsCancelled() )
                     return 0;
@@ -2457,8 +2452,7 @@ BOARD_STACKUP BOARD::GetStackupOrDefault() const
 
 std::tuple<int, double, double, double, double> BOARD::GetTrackLength( const PCB_TRACK& aTrack ) const
 {
-    auto connectivity = GetBoard()->GetConnectivity();
-
+    std::shared_ptr<CONNECTIVITY_DATA>         connectivity = GetBoard()->GetConnectivity();
     std::vector<LENGTH_DELAY_CALCULATION_ITEM> items;
 
     for( BOARD_CONNECTED_ITEM* boardItem : connectivity->GetConnectedItems( &aTrack, EXCLUDE_ZONES ) )
@@ -2675,7 +2669,7 @@ std::set<KIFONT::OUTLINE_FONT*> BOARD::GetFonts() const
                 continue;
 
             using EMBEDDING_PERMISSION = KIFONT::OUTLINE_FONT::EMBEDDING_PERMISSION;
-            auto* outline = static_cast<KIFONT::OUTLINE_FONT*>( font );
+            KIFONT::OUTLINE_FONT* outline = static_cast<KIFONT::OUTLINE_FONT*>( font );
 
             if( outline->GetEmbeddingPermission() == EMBEDDING_PERMISSION::EDITABLE
                 || outline->GetEmbeddingPermission() == EMBEDDING_PERMISSION::INSTALLABLE )
@@ -2695,7 +2689,7 @@ void BOARD::EmbedFonts()
 
     for( KIFONT::OUTLINE_FONT* font : fonts )
     {
-        auto file = GetEmbeddedFiles()->AddFile( font->GetFileName(), false );
+        EMBEDDED_FILES::EMBEDDED_FILE* file = GetEmbeddedFiles()->AddFile( font->GetFileName(), false );
         file->type = EMBEDDED_FILES::EMBEDDED_FILE::FILE_TYPE::FONT;
     }
 }

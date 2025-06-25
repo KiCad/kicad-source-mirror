@@ -111,11 +111,17 @@ wxString PCB_MARKER::SerializeToString() const
     else if( m_rcItem->GetErrorCode() == DRCE_UNCONNECTED_ITEMS )
     {
         PCB_LAYER_ID layer = m_layer;
+
         if( m_layer == UNDEFINED_LAYER )
             layer = F_Cu;
 
-        return wxString::Format( wxT( "%s|%d|%d|%s|%d|%s|%s" ), m_rcItem->GetSettingsKey(), m_Pos.x, m_Pos.y,
-                                 LayerName( layer ), GetMarkerType(), m_rcItem->GetMainItemID().AsString(),
+        return wxString::Format( wxT( "%s|%d|%d|%s|%d|%s|%s" ),
+                                 m_rcItem->GetSettingsKey(),
+                                 m_Pos.x,
+                                 m_Pos.y,
+                                 LayerName( layer ),
+                                 GetMarkerType(),
+                                 m_rcItem->GetMainItemID().AsString(),
                                  m_rcItem->GetAuxItemID().AsString() );
     }
     else if( m_rcItem->GetErrorCode() == DRCE_STARVED_THERMAL )
@@ -184,15 +190,11 @@ PCB_MARKER* PCB_MARKER::DeserializeFromString( const wxString& data )
     }
     else if( drcItem->GetErrorCode() == DRCE_UNCONNECTED_ITEMS )
     {
-        // Pre-9.0.3 versions didn't have KIIDs as last two properties to allow sorting stability
+        // Pre-9.0.4 versions didn't have KIIDs as last two properties to allow sorting stability
         if( props.size() < 6 )
-        {
             drcItem->SetItems( KIID( props[3] ), KIID( props[4] ) );
-        }
         else
-        {
             drcItem->SetItems( KIID( props[5] ), KIID( props[6] ) );
-        }
     }
     else if( drcItem->GetErrorCode() == DRCE_STARVED_THERMAL )
     {
