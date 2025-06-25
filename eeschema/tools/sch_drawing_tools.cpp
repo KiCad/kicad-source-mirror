@@ -132,8 +132,7 @@ bool SCH_DRAWING_TOOLS::Init()
 
 int SCH_DRAWING_TOOLS::PlaceSymbol( const TOOL_EVENT& aEvent )
 {
-    const SCH_ACTIONS::PLACE_SYMBOL_PARAMS& toolParams =
-            aEvent.Parameter<SCH_ACTIONS::PLACE_SYMBOL_PARAMS>();
+    const SCH_ACTIONS::PLACE_SYMBOL_PARAMS& toolParams = aEvent.Parameter<SCH_ACTIONS::PLACE_SYMBOL_PARAMS>();
 
     SCH_SYMBOL* symbol = toolParams.m_Symbol;
     // If we get an parameterised symbol, we probably just want to place
@@ -290,8 +289,7 @@ int SCH_DRAWING_TOOLS::PlaceSymbol( const TOOL_EVENT& aEvent )
         controls->ForceCursorPosition( true, cursorPos );
 
         // The tool hotkey is interpreted as a click when drawing
-        bool isSyntheticClick = symbol && evt->IsActivate() && evt->HasPosition()
-                                && evt->Matches( aEvent );
+        bool isSyntheticClick = symbol && evt->IsActivate() && evt->HasPosition() && evt->Matches( aEvent );
 
         if( evt->IsCancelInteractive() || ( symbol && evt->IsAction( &ACTIONS::undo ) ) )
         {
@@ -715,14 +713,15 @@ int SCH_DRAWING_TOOLS::ImportSheet( const TOOL_EVENT& aEvent )
 
                 if( !m_frame->LoadSheetFromFile( sheetPath.Last(), &sheetPath, sheetFileName, true,
                                                  placingDesignBlock ) )
+                {
                     return false;
+                }
 
                 m_frame->SetSheetNumberAndCount();
 
                 m_frame->SyncView();
                 m_frame->OnModify();
                 m_frame->HardRedraw(); // Full reinit of the current screen and the display.
-
 
                 SCH_GROUP* group = nullptr;
 
@@ -817,10 +816,14 @@ int SCH_DRAWING_TOOLS::ImportSheet( const TOOL_EVENT& aEvent )
                 cursorPos = grid.Align( controls->GetMousePosition(), GRID_HELPER_GRIDS::GRID_CONNECTABLE );
 
                 if( placed )
+                {
                     commit.Push( placingDesignBlock ? _( "Add design block" )
                                                     : _( "Import Schematic Sheet Content..." ) );
+                }
                 else
+                {
                     commit.Revert();
+                }
 
                 m_frame->UpdateHierarchyNavigator();
 
@@ -834,8 +837,8 @@ int SCH_DRAWING_TOOLS::ImportSheet( const TOOL_EVENT& aEvent )
         wxString path;
         wxString file;
 
-        if (!placingDesignBlock) {
-
+        if (!placingDesignBlock)
+        {
             if( sheetFileName.IsEmpty() )
             {
                 path = wxPathOnly( m_frame->Prj().GetProjectFullName() );
@@ -850,8 +853,7 @@ int SCH_DRAWING_TOOLS::ImportSheet( const TOOL_EVENT& aEvent )
             // Open file chooser dialog even if we have been provided a file so the user
             // can select the options they want
             wxFileDialog dlg( m_frame, _( "Choose Schematic" ), path, file,
-                              FILEEXT::KiCadSchematicFileWildcard(),
-                              wxFD_OPEN | wxFD_FILE_MUST_EXIST );
+                              FILEEXT::KiCadSchematicFileWildcard(), wxFD_OPEN | wxFD_FILE_MUST_EXIST );
 
             FILEDLG_IMPORT_SHEET_CONTENTS dlgHook( cfg );
             dlg.SetCustomizeHook( dlgHook );
@@ -873,7 +875,7 @@ int SCH_DRAWING_TOOLS::ImportSheet( const TOOL_EVENT& aEvent )
     if( !cfg->m_DesignBlockChooserPanel.place_as_sheet )
     {
             while( placeSheetContents() && cfg->m_DesignBlockChooserPanel.repeated_placement )
-                ;
+            {}
 
             m_toolMgr->RunAction( ACTIONS::selectionClear );
             m_view->ClearPreview();
@@ -908,8 +910,7 @@ int SCH_DRAWING_TOOLS::ImportSheet( const TOOL_EVENT& aEvent )
         controls->ForceCursorPosition( true, cursorPos );
 
         // The tool hotkey is interpreted as a click when drawing
-        bool isSyntheticClick = designBlock && evt->IsActivate() && evt->HasPosition()
-                                && evt->Matches( aEvent );
+        bool isSyntheticClick = designBlock && evt->IsActivate() && evt->HasPosition() && evt->Matches( aEvent );
 
         if( evt->IsCancelInteractive() || ( designBlock && evt->IsAction( &ACTIONS::undo ) ) )
         {
@@ -926,8 +927,7 @@ int SCH_DRAWING_TOOLS::ImportSheet( const TOOL_EVENT& aEvent )
             else
             {
                 // drawSheet must delete sheetFileName
-                m_toolMgr->PostAction( SCH_ACTIONS::drawSheetFromFile,
-                                       new wxString( sheetFileName ) );
+                m_toolMgr->PostAction( SCH_ACTIONS::drawSheetFromFile, new wxString( sheetFileName ) );
             }
 
             break;
@@ -1039,8 +1039,7 @@ int SCH_DRAWING_TOOLS::PlaceImage( const TOOL_EVENT& aEvent )
         controls->ForceCursorPosition( true, cursorPos );
 
         // The tool hotkey is interpreted as a click when drawing
-        bool isSyntheticClick = image && evt->IsActivate() && evt->HasPosition()
-                                && evt->Matches( aEvent );
+        bool isSyntheticClick = image && evt->IsActivate() && evt->HasPosition() && evt->Matches( aEvent );
 
         if( evt->IsCancelInteractive() || ( image && evt->IsAction( &ACTIONS::undo ) ) )
         {
@@ -1282,10 +1281,11 @@ int SCH_DRAWING_TOOLS::ImportGraphics( const TOOL_EVENT& aEvent )
 
     m_frame->PushTool( aEvent );
 
-    auto setCursor = [&]()
-    {
-        m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::MOVING );
-    };
+    auto setCursor =
+            [&]()
+            {
+                m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::MOVING );
+            };
 
     Activate();
     // Must be done after Activate() so that it gets set into the correct context
@@ -1495,8 +1495,7 @@ int SCH_DRAWING_TOOLS::SingleClickPlace( const TOOL_EVENT& aEvent )
                 {
                     if( !screen->IsExplicitJunctionAllowed( cursorPos ) )
                     {
-                        m_frame->ShowInfoBarError( _( "Junction location contains no joinable "
-                                                      "wires and/or pins." ) );
+                        m_frame->ShowInfoBarError( _( "Junction location contains no joinable wires and/or pins." ) );
                         loggedInfoBarError = true;
                         continue;
                     }
@@ -1579,8 +1578,8 @@ int SCH_DRAWING_TOOLS::SingleClickPlace( const TOOL_EVENT& aEvent )
                     strokeItems.push_back( previewItem );
 
                     DIALOG_WIRE_BUS_PROPERTIES dlg( m_frame, strokeItems );
-                }
                     break;
+                }
 
                 case SCH_JUNCTION_T:
                 {
@@ -1588,8 +1587,9 @@ int SCH_DRAWING_TOOLS::SingleClickPlace( const TOOL_EVENT& aEvent )
                     junctions.push_back( static_cast<SCH_JUNCTION*>( previewItem ) );
 
                     DIALOG_JUNCTION_PROPS dlg( m_frame, junctions );
-                }
                     break;
+                }
+
                 default:
                     // Do nothing
                     break;
@@ -1655,7 +1655,7 @@ wxString SCH_DRAWING_TOOLS::findWireLabelDriverName( SCH_LINE* aWire )
 
 
 bool SCH_DRAWING_TOOLS::createNewLabel( const VECTOR2I& aPosition, int aType,
-                                       std::list<std::unique_ptr<SCH_LABEL_BASE>>& aLabelList )
+                                        std::list<std::unique_ptr<SCH_LABEL_BASE>>& aLabelList )
 {
     SCHEMATIC*          schematic = getModel<SCHEMATIC>();
     SCHEMATIC_SETTINGS& settings = schematic->Settings();
@@ -2194,7 +2194,6 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
                 }
                 else if( !itemsToPlace.empty() )
                 {
-
                     item = itemsToPlace.front().release();
                     itemsToPlace.pop_front();
                     prepItemForPlacement( item, cursorPos );
@@ -2226,8 +2225,7 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
         }
         else if( evt->IsAction( &ACTIONS::increment ) )
         {
-            m_toolMgr->RunSynchronousAction( ACTIONS::increment, &commit,
-                                             evt->Parameter<ACTIONS::INCREMENT>() );
+            m_toolMgr->RunSynchronousAction( ACTIONS::increment, &commit, evt->Parameter<ACTIONS::INCREMENT>() );
         }
         else if( evt->IsAction( &ACTIONS::duplicate )
                  || evt->IsAction( &SCH_ACTIONS::repeatDrawItem ) )
@@ -2349,8 +2347,7 @@ int SCH_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
         controls->ForceCursorPosition( true, cursorPos );
 
         // The tool hotkey is interpreted as a click when drawing
-        bool isSyntheticClick = item && evt->IsActivate() && evt->HasPosition()
-                                && evt->Matches( aEvent );
+        bool isSyntheticClick = item && evt->IsActivate() && evt->HasPosition() && evt->Matches( aEvent );
 
         if( evt->IsCancelInteractive() || ( item && evt->IsAction( &ACTIONS::undo ) ) )
         {
@@ -2572,14 +2569,15 @@ int SCH_DRAWING_TOOLS::DrawRuleArea( const TOOL_EVENT& aEvent )
                 m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::PENCIL );
             };
 
-    auto cleanup = [&]()
-    {
-        polyGeomMgr.Reset();
-        started = false;
-        getViewControls()->SetAutoPan( false );
-        getViewControls()->CaptureCursor( false );
-        m_toolMgr->RunAction( ACTIONS::selectionClear );
-    };
+    auto cleanup =
+            [&]()
+            {
+                polyGeomMgr.Reset();
+                started = false;
+                getViewControls()->SetAutoPan( false );
+                getViewControls()->CaptureCursor( false );
+                m_toolMgr->RunAction( ACTIONS::selectionClear );
+            };
 
     Activate();
 
@@ -2774,10 +2772,7 @@ int SCH_DRAWING_TOOLS::DrawTable( const TOOL_EVENT& aEvent )
         controls->ForceCursorPosition( true, cursorPos );
 
         // The tool hotkey is interpreted as a click when drawing
-        bool isSyntheticClick = table
-                                    && evt->IsActivate()
-                                    && evt->HasPosition()
-                                    && evt->Matches( aEvent );
+        bool isSyntheticClick = table && evt->IsActivate() && evt->HasPosition() && evt->Matches( aEvent );
 
         if( evt->IsCancelInteractive() || ( table && evt->IsAction( &ACTIONS::undo ) ) )
         {
@@ -3272,9 +3267,7 @@ void SCH_DRAWING_TOOLS::sizeSheet( SCH_SHEET* aSheet, const VECTOR2I& aPos )
 int SCH_DRAWING_TOOLS::doSyncSheetsPins( std::list<SCH_SHEET_PATH> sheetPaths )
 {
     if( !sheetPaths.size() )
-    {
         return 0;
-    }
 
     m_dialogSyncSheetPin = std::make_unique<DIALOG_SYNC_SHEET_PINS>(
             m_frame, std::move( sheetPaths ),
@@ -3398,36 +3391,34 @@ int SCH_DRAWING_TOOLS::AutoPlaceAllSheetPins( const TOOL_EVENT& aEvent )
     m_toolMgr->RunAction( ACTIONS::selectionClear );
 
     SCH_COMMIT commit( m_toolMgr );
-    BOX2I      boundingBox = sheet->GetBoundingBox();
-    VECTOR2I   cursorPos = boundingBox.GetPosition();
+    BOX2I      bbox = sheet->GetBoundingBox();
+    VECTOR2I   cursorPos = bbox.GetPosition();
     SCH_ITEM*  lastPlacedLabel = nullptr;
 
-    auto calculatePositionForLabel = [&]( const SCH_ITEM* lastLabel,
-                                          const SCH_HIERLABEL* currentLabel ) -> VECTOR2I
-    {
-        if( !lastLabel )
-            return cursorPos;
+    auto calculatePositionForLabel =
+            [&]( const SCH_ITEM* lastLabel, const SCH_HIERLABEL* currentLabel ) -> VECTOR2I
+            {
+                if( !lastLabel )
+                    return cursorPos;
 
-        int lastX = lastLabel->GetPosition().x;
-        int lastY = lastLabel->GetPosition().y;
-        int lastWidth = lastLabel->GetBoundingBox().GetWidth();
-        int lastHeight = lastLabel->GetBoundingBox().GetHeight();
+                int lastX = lastLabel->GetPosition().x;
+                int lastY = lastLabel->GetPosition().y;
+                int lastWidth = lastLabel->GetBoundingBox().GetWidth();
+                int lastHeight = lastLabel->GetBoundingBox().GetHeight();
 
-        int currentWidth = currentLabel->GetBoundingBox().GetWidth();
-        int currentHeight = currentLabel->GetBoundingBox().GetHeight();
+                int currentWidth = currentLabel->GetBoundingBox().GetWidth();
+                int currentHeight = currentLabel->GetBoundingBox().GetHeight();
 
-        // If there is enough space, place the label to the right of the last placed label
-        if( ( lastX + lastWidth + currentWidth )
-            <= ( boundingBox.GetPosition().x + boundingBox.GetSize().x ) )
-            return { lastX + lastWidth, lastY };
+                // If there is enough space, place the label to the right of the last placed label
+                if( ( lastX + lastWidth + currentWidth ) <= ( bbox.GetPosition().x + bbox.GetSize().x ) )
+                    return { lastX + lastWidth, lastY };
 
-        // If not enough space to the right, move to the next row if vertical space allows
-        if( ( lastY + lastHeight + currentHeight )
-            <= ( boundingBox.GetPosition().y + boundingBox.GetSize().y ) )
-            return { boundingBox.GetPosition().x, lastY + lastHeight };
+                // If not enough space to the right, move to the next row if vertical space allows
+                if( ( lastY + lastHeight + currentHeight ) <= ( bbox.GetPosition().y + bbox.GetSize().y ) )
+                    return { bbox.GetPosition().x, lastY + lastHeight };
 
-        return cursorPos;
-    };
+                return cursorPos;
+            };
 
     for( SCH_HIERLABEL* label : labels )
     {
@@ -3478,27 +3469,27 @@ int SCH_DRAWING_TOOLS::AutoPlaceAllSheetPins( const TOOL_EVENT& aEvent )
 
 int SCH_DRAWING_TOOLS::SyncAllSheetsPins( const TOOL_EVENT& aEvent )
 {
-    static const std::function<void( std::list<SCH_SHEET_PATH>&, SCH_SCREEN*,
-                                     std::set<SCH_SCREEN*>&, SCH_SHEET_PATH const& )>
-            getSheetChildren = []( std::list<SCH_SHEET_PATH>& aPaths, SCH_SCREEN* aScene,
-                                   std::set<SCH_SCREEN*>& aVisited, SCH_SHEET_PATH const& aCurPath )
-    {
-        if( ! aScene || aVisited.find(aScene) != aVisited.end() )
-            return ;
+    static const std::function<void( std::list<SCH_SHEET_PATH>&, SCH_SCREEN*, std::set<SCH_SCREEN*>&,
+                                     SCH_SHEET_PATH const& )> getSheetChildren =
+            []( std::list<SCH_SHEET_PATH>& aPaths, SCH_SCREEN* aScene, std::set<SCH_SCREEN*>& aVisited,
+                SCH_SHEET_PATH const& aCurPath )
+            {
+                if( ! aScene || aVisited.find(aScene) != aVisited.end() )
+                    return ;
 
-        std::vector<SCH_ITEM*> sheetChildren;
-        aScene->GetSheets( &sheetChildren );
-        aVisited.insert( aScene );
+                std::vector<SCH_ITEM*> sheetChildren;
+                aScene->GetSheets( &sheetChildren );
+                aVisited.insert( aScene );
 
-        for( SCH_ITEM* child : sheetChildren )
-        {
-            SCH_SHEET_PATH cp = aCurPath;
-            SCH_SHEET* sheet = static_cast<SCH_SHEET*>( child );
-            cp.push_back( sheet );
-            aPaths.push_back( cp );
-            getSheetChildren( aPaths, sheet->GetScreen(), aVisited, cp );
-        }
-    };
+                for( SCH_ITEM* child : sheetChildren )
+                {
+                    SCH_SHEET_PATH cp = aCurPath;
+                    SCH_SHEET* sheet = static_cast<SCH_SHEET*>( child );
+                    cp.push_back( sheet );
+                    aPaths.push_back( cp );
+                    getSheetChildren( aPaths, sheet->GetScreen(), aVisited, cp );
+                }
+            };
 
     std::list<SCH_SHEET_PATH> sheetPaths;
     std::set<SCH_SCREEN*> visited;
@@ -3522,6 +3513,7 @@ SCH_HIERLABEL* SCH_DRAWING_TOOLS::importHierLabel( SCH_SHEET* aSheet )
         return nullptr;
 
     std::vector<SCH_HIERLABEL*> labels;
+
     for( EDA_ITEM* item : aSheet->GetScreen()->Items().OfType( SCH_HIER_LABEL_T ) )
     {
         SCH_HIERLABEL* label = static_cast<SCH_HIERLABEL*>( item );
@@ -3556,9 +3548,7 @@ std::vector<SCH_HIERLABEL*> SCH_DRAWING_TOOLS::importHierLabels( SCH_SHEET* aShe
         SCH_HIERLABEL* label = static_cast<SCH_HIERLABEL*>( item );
 
         if( !aSheet->HasPin( label->GetText() ) )
-        {
             labels.push_back( label );
-        }
     }
 
     return labels;
