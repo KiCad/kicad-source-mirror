@@ -804,7 +804,6 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
 
         // we should not ask PCB_IOs to do these items:
         loadedBoard->BuildListOfNets();
-        ResolveDRCExclusions( true );
         m_toolManager->RunAction( PCB_ACTIONS::repairBoard, true);
         m_toolManager->RunAction( PCB_ACTIONS::rehatchShapes );
 
@@ -939,6 +938,9 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
     // Load project settings after setting up board; some of them depend on the nets list
     LoadProjectSettings();
     LoadDrawingSheet();
+
+    // Resolve DRC exclusions after project settings are loaded
+    ResolveDRCExclusions( true );
 
     // Initialise caches used by component classes
     GetBoard()->GetComponentClassManager().RebuildRequiredCaches();

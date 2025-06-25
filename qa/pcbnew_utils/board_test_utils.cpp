@@ -23,6 +23,7 @@
 
 #include <pcbnew_utils/board_test_utils.h>
 
+#include <iostream>
 #include <filesystem>
 
 #include <wx/filename.h>
@@ -86,9 +87,17 @@ void LoadBoard( SETTINGS_MANAGER& aSettingsManager, const wxString& aRelPath,
     wxFileName  rulesFile( absPath + ".kicad_dru" );
 
     if( projectFile.Exists() )
+    {
         aSettingsManager.LoadProject( projectFile.GetFullPath() );
+        BOOST_TEST_MESSAGE( "Loading project file: " << projectFile.GetFullPath() );
+    }
     else if( legacyProject.Exists() )
+    {
         aSettingsManager.LoadProject( legacyProject.GetFullPath() );
+        BOOST_TEST_MESSAGE( "Loading project file: " << projectFile.GetFullPath() );
+    }
+    else
+        BOOST_TEST_MESSAGE( "Could not load project: " << projectFile.GetFullPath() );
 
     BOOST_TEST_MESSAGE( "Loading board file: " << boardPath );
 
@@ -100,7 +109,7 @@ void LoadBoard( SETTINGS_MANAGER& aSettingsManager, const wxString& aRelPath,
         BOOST_TEST_ERROR( ioe.What() );
     }
 
-    BOOST_REQUIRE( aBoard );
+    BOOST_REQUIRE_MESSAGE( aBoard, "aBoard is null or invalid" );
 
     if( projectFile.Exists() || legacyProject.Exists() )
         aBoard->SetProject( &aSettingsManager.Prj() );

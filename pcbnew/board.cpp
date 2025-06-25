@@ -339,8 +339,49 @@ void BOARD::RecordDRCExclusions()
             m_designSettings->m_DrcExclusionComments[ serialized ] = marker->GetComment();
         }
     }
+
+    if( m_project )
+    {
+        if( PROJECT_FILE* projectFile = &m_project->GetProjectFile() )
+        {
+            if( BOARD_DESIGN_SETTINGS* prjSettings = projectFile->m_BoardSettings )
+            {
+                prjSettings->m_DrcExclusions = m_designSettings->m_DrcExclusions;
+                prjSettings->m_DrcExclusionComments = m_designSettings->m_DrcExclusionComments;
+            }
+        }
+    }
 }
 
+std::set<wxString>::iterator FindByFirstNFields( std::set<wxString>& strSet, const wxString& searchStr, char delimiter,
+                                                 int n )
+{
+    wxString searchPrefix = searchStr;
+
+    // Extract first n fields from the search string
+    int    delimiterCount = 0;
+    size_t pos = 0;
+
+    while( pos < searchPrefix.length() && delimiterCount < n )
+    {
+        if( searchPrefix[pos] == delimiter )
+            delimiterCount++;
+        pos++;
+    }
+
+    if( delimiterCount == n )
+        searchPrefix = searchPrefix.Left( pos - 1 ); // Exclude the nth delimiter
+
+    for( auto it = strSet.begin(); it != strSet.end(); ++it )
+    {
+        if( it->StartsWith( searchPrefix + delimiter ) || *it == searchPrefix )
+        {
+            return it;
+        }
+    }
+
+    return strSet.end();
+}
 
 std::vector<PCB_MARKER*> BOARD::ResolveDRCExclusions( bool aCreateMarkers )
 {
@@ -352,16 +393,38 @@ std::vector<PCB_MARKER*> BOARD::ResolveDRCExclusions( bool aCreateMarkers )
 
     for( PCB_MARKER* marker : GetBoard()->Markers() )
     {
+        std::set<wxString>::iterator it;
         wxString                     serialized = marker->SerializeToString();
-        std::set<wxString>::iterator it = exclusions.find( serialized );
+        wxString                     matchedExclusion;
 
+        if( !serialized.Contains( "unconnected_items" ) )
+        {
+            it = exclusions.find( serialized );
+            if( it != exclusions.end() )
+            {
+                matchedExclusion = *it;
+            }
+        }
+        else
+        {
+            const int  numberOfFieldsExcludingIds = 3;
+            const char delimiter = '|';
+            it = FindByFirstNFields( exclusions, serialized, delimiter, numberOfFieldsExcludingIds );
+            if( it != exclusions.end() )
+            {
+                matchedExclusion = *it;
+            }
+            else
+            {
+            }
+        }
         if( it != exclusions.end() )
         {
-            marker->SetExcluded( true, comments[ serialized ] );
+            marker->SetExcluded( true, comments[matchedExclusion] );
 
             // Exclusion still valid; store back to BOARD_DESIGN_SETTINGS
-            m_designSettings->m_DrcExclusions.insert( serialized );
-            m_designSettings->m_DrcExclusionComments[ serialized ] = comments[ serialized ];
+            m_designSettings->m_DrcExclusions.insert( matchedExclusion );
+            m_designSettings->m_DrcExclusionComments[matchedExclusion] = comments[matchedExclusion];
 
             exclusions.erase( it );
         }
@@ -376,17 +439,25 @@ std::vector<PCB_MARKER*> BOARD::ResolveDRCExclusions( bool aCreateMarkers )
             PCB_MARKER* marker = PCB_MARKER::DeserializeFromString( serialized );
 
             if( !marker )
-                continue;
-
-            // Check to see if items still exist
-            for( const KIID& guid : marker->GetRCItem()->GetIDs() )
             {
-                if( !ResolveItem( guid, true ) )
+                continue;
+            }
+
+            std::vector<KIID> ids = marker->GetRCItem()->GetIDs();
+
+            int uuidCount = 0;
+            for( const KIID& uuid : ids )
+            {
+                if( uuidCount < 1 || uuid != niluuid )
                 {
-                    delete marker;
-                    marker = nullptr;
-                    break;
+                    if( !ResolveItem( uuid, true ) )
+                    {
+                        delete marker;
+                        marker = nullptr;
+                        break;
+                    }
                 }
+                uuidCount++;
             }
 
             if( marker )
