@@ -423,8 +423,9 @@ void DIALOG_COLOR_PICKER::drawRGBPalette()
     // Use Y axis from bottom to top and origin to center
     bitmapDC.SetAxisOrientation( true, true );
 
-#if defined( __WXMSW__ )
+#if defined( __WXMSW__ ) && !wxCHECK_VERSION( 3, 3, 0 )
     // For some reason, SetDeviceOrigin has changed in wxWidgets 3.1.6 or 3.1.7
+    // It was fixed in wx >= 3.3
     bitmapDC.SetDeviceOrigin( half_size, -half_size );
 #else
     bitmapDC.SetDeviceOrigin( half_size, half_size );
@@ -496,8 +497,9 @@ void DIALOG_COLOR_PICKER::drawHSVPalette()
 
     // Use Y axis from bottom to top and origin to center
     bitmapDC.SetAxisOrientation( true, true );
-#if defined( __WXMSW__)
+#if defined( __WXMSW__ ) && !wxCHECK_VERSION(3,3,0)
     // For some reason, SetDeviceOrigin has changed in wxWidgets 3.1.6 or 3.1.7
+    // It was fixed in wx >= 3.3
     bitmapDC.SetDeviceOrigin( half_size, -half_size );
 #else
     bitmapDC.SetDeviceOrigin( half_size, half_size );
