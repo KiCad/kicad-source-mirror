@@ -116,7 +116,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-06-20 23:57+0300\n"
-"PO-Revision-Date: 2025-05-28 04:01+0000\n"
+"PO-Revision-Date: 2025-06-27 06:01+0000\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/v9/it/>\n"
 "Language: it\n"
@@ -124,7 +124,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.12-dev\n"
+"X-Generator: Weblate 5.13-dev\n"
 "X-Poedit-Basepath: /home/marco/git/github/kicad/kicad-source-mirror\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SearchPath-0: kicad\n"
@@ -21239,6 +21239,8 @@ msgstr "era attesa definizione formato misura"
 #: eeschema/sim/ngspice.cpp:501
 msgid "Unable to load ngspice shared library. Please check your install."
 msgstr ""
+"Impossibile caricare la libreria condivisa ngspice. Controllare "
+"l'installazione."
 
 #: eeschema/sim/sim_lib_mgr.cpp:91 eeschema/sim/sim_lib_mgr.cpp:144
 #, c-format
@@ -27445,7 +27447,7 @@ msgstr "Esporta XAO"
 
 #: kicad/kicad_cli.cpp:124
 msgid "Export VRML"
-msgstr "Esporta VRLM"
+msgstr "Esporta VRML"
 
 #: kicad/kicad_cli.cpp:125
 msgid "Export PLY"
@@ -34876,7 +34878,7 @@ msgstr "Impossibile creare la cartella '%s'."
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:26
 msgid "Save VRML Board File"
-msgstr "Salva file scheda VRLM"
+msgstr "Salva file scheda VRML"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:26
 msgid "*.wrl"
@@ -38795,14 +38797,12 @@ msgid "Unused Pads"
 msgstr "Piazzole inutilizzate"
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:39
-#, fuzzy
 msgid "Update Footprints"
-msgstr "Aggiorna impronta"
+msgstr "Aggiorna impronte"
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:41
-#, fuzzy
 msgid "Replace footprints with those specified by symbols"
-msgstr "Rimpiazza le impronte con quelle specificate nella netlist"
+msgstr "Rimpiazza le impronte con quelle specificate dai simboli"
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:43
 msgid ""
@@ -38828,19 +38828,16 @@ msgstr ""
 "simbolo dello schema."
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:52
-#, fuzzy
 msgid "Override locks"
-msgstr "Superamento blocchi"
+msgstr "Imposizione blocchi"
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:64
-#, fuzzy
 msgid "Update footprint fields from symbols"
-msgstr "Nessuna impronta definita per il simbolo %s."
+msgstr "Aggiorna i campi impronta dai simboli"
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:68
-#, fuzzy
 msgid "Remove footprint fields not found in symbols"
-msgstr "Rimuovi %s campi impronte non nel simbolo."
+msgstr "Rimuovi i campi impronte non nei simboli"
 
 #: pcbnew/dialogs/dialog_update_pcb_base.h:56
 msgid "Update PCB from Schematic"
