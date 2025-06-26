@@ -1477,8 +1477,6 @@ void SCH_EDIT_FRAME::OnOpenPcbnew()
     }
     else
     {
-        // If we are running inside a project, it should be impossible for this case to happen
-        wxASSERT( Kiface().IsSingle() );
         ExecuteFile( PCBNEW_EXE );
     }
 }
