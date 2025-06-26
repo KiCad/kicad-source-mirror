@@ -15,16 +15,16 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-06-20 23:57+0300\n"
-"PO-Revision-Date: 2025-05-30 20:01+0000\n"
-"Last-Translator: Hildo Guillardi Júnior <hildogjr@gmail.com>\n"
-"Language-Team: Portuguese <https://hosted.weblate.org/projects/kicad/v9/pt/"
-">\n"
+"PO-Revision-Date: 2025-06-27 06:01+0000\n"
+"Last-Translator: Manuela Silva <mmsrs@sky.com>\n"
+"Language-Team: Portuguese <https://hosted.weblate.org/projects/kicad/v9/pt/>"
+"\n"
 "Language: pt\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.12-dev\n"
+"X-Generator: Weblate 5.13-dev\n"
 "X-Poedit-Basepath: ../../kicad-source-mirror\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
@@ -3252,7 +3252,9 @@ msgstr "Arquivo da folha do desenho"
 msgid ""
 "Error loading drawing sheet '%s'.\n"
 "%s"
-msgstr "Erro ao carregar a folha de desenho '%s'."
+msgstr ""
+"Erro ao carregar a folha de desenho '%s'.\n"
+"%s"
 
 #: common/dialogs/dialog_page_settings_base.cpp:41
 msgid "dummy text"
@@ -15433,18 +15435,20 @@ msgid "Group By"
 msgstr "Agrupar por"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:208
-#, fuzzy
 msgid ""
 "Show\n"
 "Column"
-msgstr "Exibe / Oculta as colunas"
+msgstr ""
+"Mostrar\n"
+"Coluna"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:209
-#, fuzzy
 msgid ""
 "Group\n"
 "By"
-msgstr "Agrupar por"
+msgstr ""
+"Agrupar\n"
+"por"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:710
 msgid "Qty"
@@ -17270,9 +17274,8 @@ msgstr "Desconectado"
 #: eeschema/erc/erc.cpp:210 eeschema/erc/erc.cpp:229
 #: pcbnew/drc/drc_test_provider_misc.cpp:319
 #: pcbnew/drc/drc_test_provider_misc.cpp:339
-#, fuzzy
 msgid " (in drawing sheet)"
-msgstr "Imprimir o desenho"
+msgstr " (na folha de desenho)"
 
 #: eeschema/erc/erc.cpp:426
 msgid "Unresolved text variable in drawing sheet"
@@ -22206,10 +22209,10 @@ msgid "Manage symbol libraries"
 msgstr "Gerir bibliotecas de símbolos"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:915
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol %s is a derived symbol. Symbol graphics will not be editable."
 msgstr ""
-"O símbolo %s é um símbolo derivado.  Os gráficos do símbolo não serão "
+"O símbolo %s é um símbolo derivado. Os gráficos do símbolo não serão "
 "editáveis."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:944
@@ -22384,17 +22387,19 @@ msgid ""
 msgstr ""
 
 #: eeschema/symbol_editor/symbol_editor.cpp:996
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Symbol '%s' already exists in library '%s'. Do you want to overwrite it?"
-msgstr "O símbolo '%s' já existe na biblioteca '%s'."
+msgstr "O símbolo '%s' já existe na biblioteca '%s'. Deseja substitui-lo?"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1013
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The following symbols in the inheritance chain of '%s' already exist in "
 "library '%s':\n"
-msgstr "O símbolo '%s' já existe na biblioteca '%s'"
+msgstr ""
+"Os símbolos seguintes na cadeia de secessão de '%s' já existe na biblioteca "
+"'%s'.\n"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1020
 msgid ""
@@ -23911,9 +23916,8 @@ msgid "Next Symbol Unit"
 msgstr "Unidade de Símbolo"
 
 #: eeschema/tools/sch_actions.cpp:1279
-#, fuzzy
 msgid "Open the next unit of the symbol"
-msgstr "Apagar unidades extras do símbolo?"
+msgstr "Abrir a unidade seguinte do símbolo"
 
 #: eeschema/tools/sch_actions.cpp:1287
 msgid "Change Sheet"
@@ -24322,9 +24326,8 @@ msgid "Symbol Unit"
 msgstr "Unidade de Símbolo"
 
 #: eeschema/tools/sch_edit_tool.cpp:112
-#, fuzzy
 msgid " (already placed)"
-msgstr "Já posicionado"
+msgstr " (já posicionado)"
 
 #: eeschema/tools/sch_edit_tool.cpp:180
 msgid "Pin Function"
@@ -25018,9 +25021,8 @@ msgid "Gerbers with known layers: %d"
 msgstr "Gerbers com camadas conhecidas: "
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb.cpp:216
-#, fuzzy
 msgid "Assign to matching PCB layers?"
-msgstr "Atribua uma netclass às redes que correspondam a um padrão"
+msgstr "Atribuir às camadas PCB correspondentes?"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb.cpp:217
 msgid "Automatic Layer Assignment"
@@ -26817,9 +26819,8 @@ msgid "Plot the layers to a single PDF file with multiple pages"
 msgstr "Plotar determinadas camadas num único ficheiro Gerber"
 
 #: kicad/cli/command_pcb_export_pdf.cpp:161
-#, fuzzy
 msgid "Cannot use more than one mode flag\n"
-msgstr "A etiqueta conecta mais que um fio"
+msgstr "Não pode utilizar mais de um sinalizador de modo\n"
 
 #: kicad/cli/command_pcb_export_pos.cpp:45
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:58
@@ -27237,9 +27238,8 @@ msgid "Generate error if no files copied"
 msgstr "Criar ficheiro de trabalho Gerber"
 
 #: kicad/dialogs/dialog_copyfiles_job_settings_base.cpp:51
-#, fuzzy
 msgid "Overwrite files in destination"
-msgstr "Substituir a predefinição existente?"
+msgstr "Substituir os ficheiros no destino"
 
 #: kicad/dialogs/dialog_copyfiles_job_settings_base.h:53
 #, fuzzy
@@ -31324,32 +31324,20 @@ msgid ""
 "\tR1 | R2 |...| Rn\tresistors in parallel\n"
 "\tR1 + (R2|R3)...\t\tany combination of the above\n"
 msgstr ""
-"A série E definida pela IEC 60063.\n"
+"- Esta calculadora encontra combinações das E-series padrão (entre 10Ω e 1MΩ)"
+" para criar valores opcionais.\n"
+"- Pode inserir a resistência necessária de 0.0025 até 4000 kΩ.\n"
+"- São fornecidas soluções que utilizam até 4 componentes.\n"
 "\n"
-"Os valores disponíveis são aproximadamente espaçados igualmente numa escala "
-"logarítmica.\n"
+"O valor solicitado é sempre excluído do conjunto de solução.<br>\n"
+"Opcionalmente podem ser excluídos até 2 valores adicionais no caso de "
+"problemas com a disponibilidade do componente.\n"
 "\n"
-"\tE24(5%):  1.0 1.1 1.2 1.3 1.5 1.6 1.8 2.0 2.2 2.4 2.7 3.0 3.3 3.6 3.9 4.3 "
-"4.7 5.1 5.6 6.2 6.8 7.5 8.2 9.1\n"
-"\tE12(10%): 1.0 1.2 1.5 1.8 2.2 2.7 3.3 3.9 4.7 5.6 6.8 8.2\n"
-"\tE6(20%):  1.0  -  1.5  -  2.2  -  3.3  -  4.7  -  6.8  -\n"
-"\tE3(50%):  1.0  -   -   -  2.2  -   -   -  4.7  -   -   -\n"
-"\tE1     :  1.0  -   -   -   -   -   -   -   -   -   -   -\n"
+"As soluções são apresentadas nos seguintes formatos:\n"
 "\n"
-"- Esta calculadora encontra diferentes combinações dos componentes "
-"predefinidos da série E (entre 10Ω e 1MΩ) para criar valores arbitrários.\n"
-"- Pode inserir a resistência necessária a partir de 0,0025 até 4000 kΩ.\n"
-"- As soluções que usem até 4 componentes são fornecidas.\n"
-"\n"
-"O valor solicitado sempre é excluído do conjunto das soluções.<br>\n"
-"Opcionalmente, até dois valores adicionais podem ser excluídos no caso de "
-"problemas de disponibilidade dos componentes.\n"
-"\n"
-"As soluções são oferecidas nos seguintes formatos:\n"
-"\n"
-"\tR1 + R2 +...+ Rn\tresistores em série\n"
-"\tR1 | R2 |...| Rn\tresistores em paralelo\n"
-"\tR1 + (R2|R3)...\t\tqualquer combinação das opções acima\n"
+"\tR1 + R2 +...+ Rn\tresistências em série\n"
+"\tR1 | R2 |...| Rn\tresistências em paralelo\n"
+"\tR1 + (R2|R3)...\t\tqualquer combinação do acima\n"
 
 #: pcb_calculator/tracks_width_versus_current_formula.h:2
 #, fuzzy
@@ -34741,9 +34729,8 @@ msgid "Export ODB++ File"
 msgstr "Exportar para ficheiro"
 
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:151
-#, fuzzy
 msgid "The selected output file name is not a supported archive format."
-msgstr "O ficheiro selecionado é inválido ou pode estar corrompido!"
+msgstr "O ficheiro de saída selecionado não é um formato de arquivo suportado."
 
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:204
 #, fuzzy
@@ -34775,11 +34762,12 @@ msgid "Cannot create temporary output directory."
 msgstr "Não foi possível criar a pasta de saída '%s'."
 
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:410
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Output directory '%s' already exists and is not empty. Do you want to "
 "overwrite it?"
-msgstr "O símbolo '%s' já existe na biblioteca '%s'."
+msgstr ""
+"A diretoria de saída '%s' já existe e não está vazia. Deseja substitui-la?"
 
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:423
 #, fuzzy, c-format
@@ -35134,11 +35122,8 @@ msgid "Success"
 msgstr "Sucesso"
 
 #: pcbnew/dialogs/dialog_export_step_process.cpp:213
-#, fuzzy
 msgid "Do you want to cancel the export process?"
-msgstr ""
-"Deseja usar um caminho relativo ao\n"
-"'%s'?"
+msgstr "Deseja cancelar o processo de exportação?"
 
 #: pcbnew/dialogs/dialog_export_step_process.cpp:214
 #, fuzzy
@@ -38887,9 +38872,8 @@ msgid "Apply Anyway"
 msgstr "Adicionar Assim Mesmo"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:557
-#, fuzzy
 msgid "Cancel Changes"
-msgstr "Cancela as alterações?"
+msgstr "Cancela Alterações"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:571
 #, c-format
@@ -40308,14 +40292,13 @@ msgstr "Largura mínima da tela da máscara de solda:"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:77
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:82
-#, fuzzy
 msgid ""
 "Minimum distance between openings in the solder mask.\n"
 "Pad openings closer than this distance will be plotted as a single opening."
 msgstr ""
-"A distância mínima entre as aberturas na máscara de solda.  As aberturas das "
-"ilhas mais próximas do que esta distância serão traçadas como uma abertura "
-"única."
+"A distância mínima entre as aberturas na máscara de solda.\n"
+"As aberturas de bloco mais próximas do que esta distância serão traçadas "
+"como uma única abertura."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:90
 msgid "Solder mask to copper clearance:"
@@ -42730,16 +42713,17 @@ msgid "Generate IPC-D-356 netlist file"
 msgstr "Gerar ficheiro netlist IPC-D-356"
 
 #: pcbnew/exporters/export_d356.cpp:406
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "IPC-D-356 netlist file created:\n"
 "'%s'."
-msgstr "Ficheiro de Netlist IPC-D-356…"
+msgstr ""
+"Ficheiro de Netlist IPC-D-356:\n"
+"'%s'."
 
 #: pcbnew/exporters/export_d356.cpp:407
-#, fuzzy
 msgid "IPC-D-356 Netlist File"
-msgstr "Ficheiro de Netlist IPC-D-356…"
+msgstr "Ficheiro de Netlist IPC-D-356"
 
 #: pcbnew/exporters/export_footprint_associations.cpp:73
 msgid "Save Footprint Association File"
@@ -42961,9 +42945,7 @@ msgstr "Fio não concluído (pontos de contorno %d): Erro OCC %d\n"
 msgid ""
 "Wire self-interference check failed\n"
 "z: %g; bounding box: %s\n"
-msgstr ""
-"\n"
-"Falha na verificação de auto-interferência do fio\n"
+msgstr "Falha na verificação de auto-interferência do fio\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1697
 msgid "Using non-simplified polygon.\n"
@@ -42994,11 +42976,9 @@ msgid "Subtracting holes for %s\n"
 msgstr "Construir furos para %s\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1976
-#, fuzzy, c-format
+#, c-format
 msgid "** Got problems while cutting %s net '%s' **\n"
-msgstr ""
-"\n"
-"** Houve problemas ao cortar %s número %d **\n"
+msgstr "** Ocorreram problemas ao cortar %s número %d **\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2029
 msgid "shapes"
@@ -48758,8 +48738,8 @@ msgid ""
 "Click to place %s (item %zu of %zu)\n"
 "Press <esc> to cancel all; double-click to finish"
 msgstr ""
-"Clique para  %s (item %zu de %zu)\n"
-"Pressione <esc> para cancelar tudo; clique duas vezes para concluir"
+"Clique para colocar %s (item %zu de %zu)\n"
+"Pressione <esc> para cancelar tudo; duplo clique para terminar"
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:354
 #, c-format
