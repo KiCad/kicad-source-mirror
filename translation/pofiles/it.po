@@ -116,7 +116,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-06-20 23:57+0300\n"
-"PO-Revision-Date: 2025-06-26 07:05+0000\n"
+"PO-Revision-Date: 2025-06-27 08:05+0000\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/"
 "master-source/it/>\n"
@@ -28224,7 +28224,7 @@ msgstr "Esporta XAO"
 
 #: kicad/kicad_cli.cpp:126
 msgid "Export VRML"
-msgstr "Esporta VRLM"
+msgstr "Esporta VRML"
 
 #: kicad/kicad_cli.cpp:127
 msgid "Export PLY"
@@ -28268,9 +28268,9 @@ msgid "Edit File in Text Editor"
 msgstr "Modifica file in un editor di testo"
 
 #: kicad/kicad_manager_frame.cpp:1059
-#, fuzzy, c-format
+#, c-format
 msgid "Project '%s' is already open by '%s' at '%s'."
-msgstr "Il file del C.S. '%s' è già aperto da '%s' su '%s'."
+msgstr "Il progetto '%s' è già aperto da '%s' in '%s'."
 
 #: kicad/kicad_manager_frame.cpp:1085
 msgid "[no project loaded]"
@@ -28571,9 +28571,8 @@ msgid "Save Package"
 msgstr "Salva pacchetto"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:540
-#, fuzzy
 msgid "Download Package"
-msgstr "Scaricamento pacchetto"
+msgstr "Scarica pacchetto"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:558
 msgid ""
@@ -29095,9 +29094,8 @@ msgstr "Fallita impostazione remoto predefinito."
 
 #: kicad/project_tree_pane.cpp:1792 kicad/project_tree_pane.cpp:1824
 #: kicad/project_tree_pane.cpp:1847
-#, fuzzy
 msgid "Fetch Remote"
-msgstr "Recupero remoto"
+msgstr "Recupera remoto"
 
 #: kicad/project_tree_pane.cpp:1831
 msgid "Failed to pull project"
@@ -29274,18 +29272,16 @@ msgid "Launch preferred text editor"
 msgstr "Lancia l'editor di testo preferito"
 
 #: kicad/tools/kicad_manager_actions.cpp:221
-#, fuzzy
 msgid "Archive Project..."
-msgstr "&Archivia progetto..."
+msgstr "Archivia progetto..."
 
 #: kicad/tools/kicad_manager_actions.cpp:222
 msgid "Archive all project files"
 msgstr "Archivia tutti i file del progetto"
 
 #: kicad/tools/kicad_manager_actions.cpp:228
-#, fuzzy
 msgid "Unarchive Project..."
-msgstr "Rec&upera progetto..."
+msgstr "Recupera progetto..."
 
 #: kicad/tools/kicad_manager_actions.cpp:229
 msgid "Unarchive project files from zip archive"
@@ -29324,9 +29320,8 @@ msgid "Clone Project from Git Repository"
 msgstr "Clona un progetto da un repository git"
 
 #: kicad/tools/kicad_manager_control.cpp:181
-#, fuzzy
 msgid "Clone Repository"
-msgstr "Clonazione repository"
+msgstr "Clona repository"
 
 #: kicad/tools/kicad_manager_control.cpp:194
 msgid "No project files were found in the repository."
@@ -30811,7 +30806,7 @@ msgstr "Calcola"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:85
 msgid "Rhodium"
-msgstr ""
+msgstr "Rodio"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:89
 msgid "Platinum"
@@ -30819,29 +30814,27 @@ msgstr "Platino"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:93
 msgid "Palladium"
-msgstr ""
+msgstr "Palladio"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:97
 msgid "Gold"
 msgstr "Oro"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:101
-#, fuzzy
 msgid "Stainless steel 316L"
-msgstr "Acciaio inossidabile 18-9"
+msgstr "Acciaio inossidabile 316L"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:105
 msgid "Inconel"
-msgstr ""
+msgstr "Inconel"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:109
 msgid "Indium"
-msgstr ""
+msgstr "Indio"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:113
-#, fuzzy
 msgid "Titanium, passive"
-msgstr "Titanio"
+msgstr "Titanio, passivato"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:117
 msgid "Stainless steel 18-9"
@@ -30857,20 +30850,19 @@ msgstr "Mercurio"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:129
 msgid "ENEPIG (Ni/Pd/Au)"
-msgstr ""
+msgstr "ENEPIG (Ni/Pd/Au)"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:133
 msgid "ENIG (Ni/Au)"
-msgstr ""
+msgstr "ENIG (Ni/Au)"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:137
 msgid "Nickel"
 msgstr "Nickel"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:141
-#, fuzzy
 msgid "Carbon (Graphitic)"
-msgstr "Pulizia grafica"
+msgstr "Carbonio (grafite)"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:145
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:854
@@ -30888,16 +30880,15 @@ msgstr "Ottone"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:157
 msgid "Beryllium copper"
-msgstr ""
+msgstr "Rame berillio"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:161
-#, fuzzy
 msgid "Lead-free Solder"
-msgstr "HAL senza piombo"
+msgstr "Saldatura senza piombo"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:165
 msgid "Phosphor bronze"
-msgstr ""
+msgstr "Bronzo fosforoso"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:169
 msgid "Bronze"
@@ -30905,15 +30896,15 @@ msgstr "Bronzo"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:173
 msgid "Tin-Nickel (Sn/Ni)"
-msgstr ""
+msgstr "Stagno-Nichel (Sn/Ni)"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:177
 msgid "Solder 63/37 (Eutectic)"
-msgstr ""
+msgstr "Saldatura 63/37 (eutettica)"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:181
 msgid "Solder 60/40 (Leaded)"
-msgstr ""
+msgstr "Saldatura 60/40 (con piombo)"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:185
 msgid "Tin"
@@ -30925,7 +30916,7 @@ msgstr "Piombo"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:193
 msgid "2xxx series Al alloy"
-msgstr ""
+msgstr "Lega di alluminio serie 2xxx"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:197
 msgid "Cast iron"
@@ -30936,14 +30927,12 @@ msgid "Carbon steel"
 msgstr "Acciaio al carbone"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:205
-#, fuzzy
 msgid "Aluminium, chromated"
-msgstr "Alluminio"
+msgstr "Alluminio, cromato"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:209
-#, fuzzy
 msgid "Aluminium, pure, passive"
-msgstr "Alluminio-Rame"
+msgstr "Alluminio, puro, passivato"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:213
 msgid "Cadmium"
@@ -30955,7 +30944,7 @@ msgstr "Ferro"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:221
 msgid "Chrome, passive"
-msgstr ""
+msgstr "Cromo, passivato"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:225
 msgid "Zinc"
@@ -30963,7 +30952,7 @@ msgstr "Zinco"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:229
 msgid "Steel, zinc-plated"
-msgstr ""
+msgstr "Acciaio zincato"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:233
 msgid "Manganese"
@@ -32437,9 +32426,8 @@ msgstr "Dei bordi scheda devono essere definiti sullo strato %s."
 
 #: pcbnew/autorouter/autoplace_tool.cpp:125
 #: pcbnew/autorouter/autoplace_tool.cpp:131
-#, fuzzy
 msgid "Autoplace Footprints"
-msgstr "Autopiazzamento impronte"
+msgstr "Autopiazza impronte"
 
 #: pcbnew/board.cpp:1001 pcbnew/drc/drc_cache_generator.cpp:157
 msgid "Tessellating copper zones..."
@@ -33075,86 +33063,65 @@ msgstr ""
 "schema usando lo strumento \"Aggiorna lo schema dal C.S.\"."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:408
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<br/>There are %i reference designator prefixes in use<br/"
 ">**********************************************************<br/>"
 msgstr ""
-"\n"
-"\n"
-"Ci sono %i tipi di riferimenti\n"
-"**********************************************************\n"
+"<br/>Ci sono %i prefissi di riferimenti in uso<br/"
+">**********************************************************<br/>"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:424
-#, fuzzy, c-format
+#, c-format
 msgid "Excluding: %s from reannotation<br/>"
-msgstr ""
-"\n"
-"Esclusione di %s dalla riannotazione\n"
-"\n"
+msgstr "Esclusione: %s dalla riannotazione<br/>"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:427
-#, fuzzy
 msgid ""
 "<br/>Change Array\n"
 "***********************<br/>"
 msgstr ""
-"\n"
-"    Cambia schiera\n"
-"***********************\n"
+"<br/>Cambia schiera\n"
+"***********************<br/>"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:435
-#, fuzzy
 msgid "(will be ignored)"
-msgstr " saranno ignorati"
+msgstr "(saranno ignorati)"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:448
-#, fuzzy
 msgid "<br/>No footprints"
-msgstr "No impronte"
+msgstr "<br/>No impronte"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:454
-#, fuzzy
 msgid "<br/>*********** Sort on Footprint Coordinates ***********"
-msgstr ""
-"\n"
-"******** ordinato per %s *********"
+msgstr "<br/>******** Ordinato per coordinate impronte *********"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:456
-#, fuzzy
 msgid "<br/>*********** Sort on Reference Coordinates ***********"
-msgstr ""
-"\n"
-"******** ordinato per %s *********"
+msgstr "<br/>******** Ordinato per coordinate riferimenti *********"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:460
-#, fuzzy, c-format
+#, c-format
 msgid "<br/>%d %s X, Y: %s; rounded X, Y: %s"
-msgstr ""
-"\n"
-"%d %s UUID: [%s], X, Y: %s, Arrotondato X, Y, %s"
+msgstr "<br/>%d %s X, Y: %s, X, Y arrotondati: %s"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:482
 msgid "Selected options resulted in errors! Change them and try again."
 msgstr "Le opzioni selezionate generano errori! Cambiarle e riprovare."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:489
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<br/>PCB has %d empty or invalid reference designations.<br/>Recommend "
 "running DRC with 'Test for parity between PCB and schematic' checked.\n"
 msgstr ""
-"\n"
-"Il C.S. ha %d riferimenti vuoti o non validi.\n"
-"Si raccomanda di eseguire il DRC con l'opzione 'Controlla la parità tra C.S. "
-"e schema elettrico' selezionata.\n"
+"<br/>Il C.S. ha %d riferimenti vuoti o non validi.<br/>Eseguire il DRC con "
+"l'opzione 'Controlla la parità tra C.S. e schema elettrico' selezionata.\n"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:495
-#, fuzzy, c-format
+#, c-format
 msgid "<br/>RefDes: %s Footprint: %s:%s at %s on PCB."
-msgstr ""
-"\n"
-"RefDes: %s Impronta: %s:%s a %s sul C.S."
+msgstr "<br/>RefDes: %s Impronta: %s:%s in %s sul C.S."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:503
 msgid "Reannotate anyway?"
@@ -33174,20 +33141,12 @@ msgid "Aborted: too many errors"
 msgstr "Interrotto: troppi errori"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:707
-#, fuzzy
 msgid "<br/><br/>Front Footprints"
-msgstr ""
-"\n"
-"\n"
-"Impronte fronte"
+msgstr "<br/><br/>Impronte fronte"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:708
-#, fuzzy
 msgid "<br/><br/>Back Footprints"
-msgstr ""
-"\n"
-"\n"
-"Impronte retro"
+msgstr "<br/><br/>Impronte retro"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:772
 msgid "Footprint not found in changelist"
@@ -33450,9 +33409,8 @@ msgstr ""
 #: pcbnew/dialogs/dialog_board_setup.cpp:354 pcbnew/files.cpp:569
 #: pcbnew/tools/pcb_control.cpp:1691
 #: pcbnew/widgets/pcb_design_block_preview_widget.cpp:186
-#, fuzzy
 msgid "Load PCB"
-msgstr "Caricamento C.S."
+msgstr "Carica C.S."
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:377
 #: pcbnew/widgets/pcb_design_block_preview_widget.cpp:202
@@ -34896,7 +34854,6 @@ msgid "Show design rules."
 msgstr "Mostra regole di progettazione."
 
 #: pcbnew/dialogs/dialog_drc.cpp:351
-#, fuzzy
 msgid "-------- DRC canceled by user.<br><br>"
 msgstr "-------- DRC annullato dall'utente.<br><br>"
 
@@ -35032,9 +34989,8 @@ msgid "Update fabrication attributes"
 msgstr "Aggiorna attributi di fabbricazione"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:89
-#, fuzzy
 msgid "Update clearance overrides"
-msgstr "Aggiorna imposizioni clearance e impostazioni"
+msgstr "Aggiorna imposizioni clearance"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:90
 msgid "Update 3D models"
@@ -35103,9 +35059,8 @@ msgid "New footprint library id:"
 msgstr "Nuovo id libreria impronte:"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:107
-#, fuzzy
 msgid "Remove text items if not in library footprint"
-msgstr "Rimuovi gli elementi di testo che non sono nell'impronta di libreria"
+msgstr "Rimuovi elementi testo assenti dall'impronta di libreria"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:112
 msgid "Update/reset text layers and visibilities"
@@ -35124,9 +35079,8 @@ msgid "Update/reset fabrication attributes"
 msgstr "Aggiorna/reimposta attributi di fabbricazione"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:136
-#, fuzzy
 msgid "Update/reset clearance overrides"
-msgstr "Aggiorna/reimposta imposizioni clearance e impostazioni"
+msgstr "Aggiorna/reimposta imposizioni clearance"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:139
 msgid "Update/reset 3D models"
@@ -35724,7 +35678,7 @@ msgstr "Impossibile creare la cartella '%s'."
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:26
 msgid "Save VRML Board File"
-msgstr "Salva file scheda VRLM"
+msgstr "Salva file scheda VRML"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:26
 msgid "*.wrl"
@@ -35919,9 +35873,8 @@ msgstr ""
 "\"Elementi bloccati\" è selezionata nel filtro di selezione."
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:337
-#, fuzzy
 msgid "all pads with duplicate numbers"
-msgstr "Le piazzole con numeri duplicati sono ponticelli"
+msgstr "tutte le piazzole con numeri duplicati"
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:438
 #, c-format
@@ -36001,9 +35954,8 @@ msgstr "Lato:"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:179
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:184
-#, fuzzy
 msgid "Fabrication Attributes"
-msgstr "Aggiorna attributi di fabbricazione"
+msgstr "Attributi di fabbricazione"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:184
 msgid "Footprint type:"
@@ -36198,14 +36150,12 @@ msgid "Thermal relief"
 msgstr "Raccordi termici"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:369
-#, fuzzy
 msgid "Jumper groups:"
-msgstr "Gruppi di pin ponticelli"
+msgstr "Gruppi di ponticelli:"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:387
-#, fuzzy
 msgid "Clearance Overrides && Pad Connections"
-msgstr "Impostazioni e scavalcamenti clearance"
+msgstr "Imposizioni clearance && connessioni piazzole"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:400
 msgid ""
@@ -36382,12 +36332,10 @@ msgid "Pad groups allowed to short different nets:"
 msgstr "Ai gruppi di piazzole è permesso collegare net differenti:"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:420
-#, fuzzy
 msgid "Jumpers"
-msgstr "jumper"
+msgstr "Ponticelli"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:422
-#, fuzzy
 msgid "All pads with duplicate numbers are jumpers"
 msgstr "Le piazzole con numeri duplicati sono ponticelli"
 
@@ -36402,9 +36350,8 @@ msgstr ""
 "tra loro internamente."
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:430
-#, fuzzy
 msgid "Explicit jumper pad groups:"
-msgstr "Aggiorna %s gruppi di piazzola ponticelli"
+msgstr "Gruppi di piazzole ponticelli espliciti:"
 
 #: pcbnew/dialogs/dialog_footprint_wizard_list.cpp:140
 msgid "All footprint generator scripts were loaded"
@@ -37559,14 +37506,12 @@ msgid "Target areas:"
 msgstr "Aree obiettivo:"
 
 #: pcbnew/dialogs/dialog_multichannel_repeat_layout_base.cpp:59
-#, fuzzy
 msgid "Reference rule area:"
 msgstr "Area regole di riferimento:"
 
 #: pcbnew/dialogs/dialog_multichannel_repeat_layout_base.cpp:75
-#, fuzzy
 msgid "Anchor footprint:"
-msgstr "No impronte"
+msgstr "Àncora impronta:"
 
 #: pcbnew/dialogs/dialog_multichannel_repeat_layout_base.cpp:82
 msgid ""
@@ -37574,6 +37519,10 @@ msgid ""
 "Select reference rule area footprint, place corresponding\n"
 "target rule area footprint(s)."
 msgstr ""
+"Facoltativo, da utilizzare per un posizionamento preciso e/o ruotato.\n"
+"Selezionare l'impronta dell'area regole di riferimento, posizionare le "
+"corrispondenti\n"
+"impronta/e dell'area regole di destinazione."
 
 #: pcbnew/dialogs/dialog_multichannel_repeat_layout_base.cpp:93
 msgid "Copy footprint placement"
@@ -37585,11 +37534,11 @@ msgstr "Copia sbroglio"
 
 #: pcbnew/dialogs/dialog_multichannel_repeat_layout_base.cpp:102
 msgid "Restrict to routing connected within the area"
-msgstr ""
+msgstr "Limitare allo sbroglio connesso all'interno dell'area"
 
 #: pcbnew/dialogs/dialog_multichannel_repeat_layout_base.cpp:104
 msgid "Can be useful if unrelated tracks pass through the area"
-msgstr ""
+msgstr "Può essere utile se nell'area passano piste non correlate"
 
 #: pcbnew/dialogs/dialog_multichannel_repeat_layout_base.cpp:111
 msgid "Copy other items"
@@ -37610,13 +37559,14 @@ msgid "Group items with their target rule areas"
 msgstr "Raggruppa gli elementi con le relative aree di regola di destinazione"
 
 #: pcbnew/dialogs/dialog_multichannel_repeat_layout_base.cpp:124
-#, fuzzy
 msgid "Include locked items"
-msgstr "Includi impronte b&loccate"
+msgstr "Includi elementi bloccati"
 
 #: pcbnew/dialogs/dialog_multichannel_repeat_layout_base.cpp:125
 msgid "Copy from reference area + delete / update in target area if included"
 msgstr ""
+"Copia dall'area di riferimento + elimina / aggiorna nell'area di "
+"destinazione se inclusa"
 
 #: pcbnew/dialogs/dialog_multichannel_repeat_layout_base.h:61
 msgid "Repeat Multichannel Layout"
@@ -39750,14 +39700,12 @@ msgid "Unused Pads"
 msgstr "Piazzole inutilizzate"
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:42
-#, fuzzy
 msgid "Update Footprints"
-msgstr "Aggiorna impronta"
+msgstr "Aggiorna impronte"
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:44
-#, fuzzy
 msgid "Replace footprints with those specified by symbols"
-msgstr "Rimpiazza le impronte con quelle specificate nella netlist"
+msgstr "Rimpiazza le impronte con quelle specificate dai simboli"
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:46
 msgid ""
@@ -39783,19 +39731,16 @@ msgstr ""
 "simbolo dello schema."
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:55
-#, fuzzy
 msgid "Override locks"
-msgstr "Superamento blocchi"
+msgstr "Imposizione blocchi"
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:67
-#, fuzzy
 msgid "Update footprint fields from symbols"
-msgstr "Nessuna impronta definita per il simbolo %s."
+msgstr "Aggiorna i campi impronta dai simboli"
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:71
-#, fuzzy
 msgid "Remove footprint fields not found in symbols"
-msgstr "Rimuovi %s campi impronte non nel simbolo."
+msgstr "Rimuovi i campi impronte non nei simboli"
 
 #: pcbnew/dialogs/dialog_update_pcb_base.h:57
 msgid "Update PCB from Schematic"
@@ -39865,9 +39810,8 @@ msgid "Component Class:"
 msgstr "Classe componente:"
 
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:95
-#, fuzzy
 msgid "Highlight matching footprints"
-msgstr ": %i riscontri impronte"
+msgstr "Evidenzia impronte corrispondenti"
 
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:100
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:183
@@ -39877,9 +39821,8 @@ msgstr ": %i riscontri impronte"
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:389
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:432
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:475
-#, fuzzy
 msgid "Delete row"
-msgstr "Cancella riga"
+msgstr "Elimina riga"
 
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:122
 msgid "Match All"
@@ -39890,18 +39833,16 @@ msgid "Match Any"
 msgstr "Abbina qualsiasi"
 
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:178
-#, fuzzy
 msgid "Import references"
-msgstr "Riferimenti simboli"
+msgstr "Importa riferimenti"
 
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:306
 msgid "Footprint:"
 msgstr "Impronta:"
 
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:319
-#, fuzzy
 msgid "Show library"
-msgstr "Copia libreria"
+msgstr "Mostra libreria"
 
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:374
 msgid "Field Value:"
@@ -40069,20 +40010,17 @@ msgstr ""
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:141
 #: pcbnew/dialogs/panel_edit_options_base.cpp:215
-#, fuzzy
 msgid "Click:"
-msgstr "Clic"
+msgstr "Clic:"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:151
 #: pcbnew/dialogs/panel_edit_options_base.cpp:225
-#, fuzzy
 msgid "Long Click:"
-msgstr "Clic lungo"
+msgstr "Clic lungo:"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:171
-#, fuzzy
 msgid "Ctrl+Shift:"
-msgstr "Ctrl+Maiusc"
+msgstr "Ctrl+Maiusc:"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:188
 #: pcbnew/dialogs/panel_edit_options_base.cpp:262
@@ -40091,23 +40029,20 @@ msgstr "Commuta selezione"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:191
 #: pcbnew/dialogs/panel_edit_options_base.cpp:265
-#, fuzzy
 msgid "Highlight net (for pads/tracks)"
-msgstr "Evidenzia net (per piazzole o piste)"
+msgstr "Evidenzia net (per piazzole/piste)"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:245
-#, fuzzy
 msgid "Shift+Cmd:"
-msgstr "Maiusc+Cmd"
+msgstr "Maiusc+Cmd:"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:255
 msgid "Cmd:"
-msgstr ""
+msgstr "Cmd:"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:272
-#, fuzzy
 msgid "Option:"
-msgstr "Opzione"
+msgstr "Opzione:"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:299
 #: pcbnew/dialogs/panel_edit_options_base.cpp:329
@@ -40566,7 +40501,7 @@ msgstr ""
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:300
 msgid "Silk"
-msgstr ""
+msgstr "Serigrafia"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:328
 msgid "Minimum item clearance:"
@@ -40591,9 +40526,8 @@ msgid "Minimum text thickness:"
 msgstr "Spessore minimo testo:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:384
-#, fuzzy
 msgid "Arc/Circle Approximations"
-msgstr "Arco/cerchio approssimato a segmenti"
+msgstr "Approssimazioni arco/cerchio"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:397
 msgid "Maximum allowed deviation:"
@@ -42773,19 +42707,19 @@ msgid "%s min thickness: %s."
 msgstr "Spessore minimo %s: %s."
 
 #: pcbnew/drc/drc_engine.cpp:972
-#, fuzzy, c-format
+#, c-format
 msgid "Local override on %s; solder mask expansion: %s."
-msgstr "Superamento locale su %s; clearance: %s"
+msgstr "Imposizione locale su %s; espansione maschera saldatura: %s."
 
 #: pcbnew/drc/drc_engine.cpp:990
-#, fuzzy, c-format
+#, c-format
 msgid "Local override on %s; solder paste absolute clearance: %s."
-msgstr "Superamento locale su %s; clearance: %s"
+msgstr "Imposizione locale su %s; clearance assoluto pastasalda: %s."
 
 #: pcbnew/drc/drc_engine.cpp:1008
-#, fuzzy, c-format
+#, c-format
 msgid "Local override on %s; solder paste relative clearance: %s."
-msgstr "Superamento locale su %s; clearance: %s"
+msgstr "Imposizione locale su %s; clearance relativo pastasalda: %s."
 
 #: pcbnew/drc/drc_engine.cpp:1020
 #, c-format
@@ -42831,19 +42765,19 @@ msgid "Checking %s thermal spoke width: %s."
 msgstr "Controllo larghezza raggio termico %s: %s."
 
 #: pcbnew/drc/drc_engine.cpp:1084
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s solder mask expansion: %s."
-msgstr "Controllo %s dimensione foro: min %s."
+msgstr "Controllo %s espansione maschera saldatura: %s."
 
 #: pcbnew/drc/drc_engine.cpp:1090
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s solder paste absolute cleraance: %s."
-msgstr "Clearance assoluta pasta salda:"
+msgstr "Controllo %s clearance assoluto pastasalda: %s."
 
 #: pcbnew/drc/drc_engine.cpp:1096
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s solder paste relative clearance: %s."
-msgstr "Clearance relativa pasta salda:"
+msgstr "Controllo %s clearance relativo pastasalda: %s."
 
 #: pcbnew/drc/drc_engine.cpp:1102
 #, c-format
@@ -43005,9 +42939,8 @@ msgstr "Eredita dal genitore: %s."
 
 #: pcbnew/drc/drc_engine.cpp:1495 pcbnew/drc/drc_engine.cpp:1502
 #: pcbnew/drc/drc_engine.cpp:1509
-#, fuzzy
 msgid "board setup"
-msgstr "Impostazione scheda"
+msgstr "impostazione scheda"
 
 #: pcbnew/drc/drc_engine.cpp:1534 pcbnew/drc/drc_engine.cpp:1558
 #, c-format
@@ -44669,9 +44602,8 @@ msgid "PCB '%s' does not exist. Do you wish to create it?"
 msgstr "Il circuito stampato '%s' non esiste. Crearlo?"
 
 #: pcbnew/files.cpp:569
-#, fuzzy
 msgid "Create PCB"
-msgstr "Creazione C.S."
+msgstr "Crea C.S."
 
 #: pcbnew/files.cpp:583 pcbnew/files.cpp:669
 msgid "File format is not supported"
@@ -44741,9 +44673,8 @@ msgid "The board must be saved before generating IPC-2581 file."
 msgstr "La scheda deve essere salvata prima di generare il file IPC-2581."
 
 #: pcbnew/files.cpp:1320
-#, fuzzy
 msgid "Generate IPC-2581 File"
-msgstr "Genera un file IPC-2581"
+msgstr "Genera file IPC-2581"
 
 #: pcbnew/files.cpp:1344 pcbnew/pcbnew_jobs_handler.cpp:2252
 #, c-format
@@ -44764,9 +44695,8 @@ msgstr ""
 "Fallita rinomina del file temporaneo '%s'."
 
 #: pcbnew/files.cpp:1443
-#, fuzzy
 msgid "Generate ODB++ Files"
-msgstr "Genera file d'uscita ODB++"
+msgstr "Genera file ODB++"
 
 #: pcbnew/footprint.cpp:1294
 msgid "Other"
@@ -44961,9 +44891,8 @@ msgid "[no footprint loaded]"
 msgstr "[nessuna impronta caricata]"
 
 #: pcbnew/footprint_edit_frame.cpp:1113
-#, fuzzy
 msgid "Update Footprint Libraries"
-msgstr "Aggiornamento librerie di impronte"
+msgstr "Aggiorna librerie impronte"
 
 #: pcbnew/footprint_edit_frame.cpp:1501
 msgid "No footprint selected."
@@ -45476,9 +45405,8 @@ msgid "IDFv3..."
 msgstr "IDFv3..."
 
 #: pcbnew/menubar_pcb_editor.cpp:128
-#, fuzzy
 msgid "STEP/GLB/BREP/XAO/PLY/STL..."
-msgstr "STEP / GLB / BREP / XAO / PLY / STL..."
+msgstr "STEP/GLB/BREP/XAO/PLY/STL..."
 
 #: pcbnew/menubar_pcb_editor.cpp:129
 msgid "Footprint Association (.cmp) File..."
@@ -49975,39 +49903,35 @@ msgid "Resolved hole size constraints: min %s; opt %s; max %s."
 msgstr "Vincoli dimensioni foro risolti: min %s; ott %s; max %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1432
-#, fuzzy
 msgid "Solder Mask"
-msgstr "Maschera di saldatura"
+msgstr "Maschera saldatura"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1433
-#, fuzzy
 msgid "Solder mask expansion resolution for:"
-msgstr "Espansioni maschera di saldatura:"
+msgstr "Risoluzione espansione maschera saldatura per:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1441
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved solder mask expansion: %s."
-msgstr "Espansioni maschera di saldatura:"
+msgstr "Risolta espansione maschera saldatura: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1450
-#, fuzzy
 msgid "Solder paste absolute clearance resolution for:"
-msgstr "Clearance assoluta pasta salda:"
+msgstr "Risoluzione clearance assoluto pastasalda per:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1458
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved solder paste absolute clearance: %s."
-msgstr "Clearance assoluta pasta salda:"
+msgstr "Risolto clearance assoluto pastasalda: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1461
-#, fuzzy
 msgid "Solder paste relative clearance resolution for:"
-msgstr "Clearance relativa pasta salda:"
+msgstr "Risoluzione clearance relativo pastasalda per:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1471
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved solder paste relative clearance: %s."
-msgstr "Clearance relativa pasta salda:"
+msgstr "Risolto clearance relativo pastasalda: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1488
 #, c-format
@@ -51435,46 +51359,40 @@ msgid "Create bill of materials from board"
 msgstr "Crea una distinta di base dalla scheda"
 
 #: pcbnew/tools/pcb_actions.cpp:1257
-#, fuzzy
 msgid "Export GenCAD..."
-msgstr "Esporta file GenCAD"
+msgstr "Esporta GenCAD..."
 
 #: pcbnew/tools/pcb_actions.cpp:1258
 msgid "Export GenCAD board representation"
 msgstr "Esporta rappresentazione scheda 3D GenCAD"
 
 #: pcbnew/tools/pcb_actions.cpp:1264
-#, fuzzy
 msgid "Export VRML..."
-msgstr "Esporta VRLM"
+msgstr "Esporta VRML..."
 
 #: pcbnew/tools/pcb_actions.cpp:1265
 msgid "Export VRML 3D board representation"
 msgstr "Esporta rappresentazione VRML 3D scheda"
 
 #: pcbnew/tools/pcb_actions.cpp:1271
-#, fuzzy
 msgid "Export IDFv3..."
-msgstr "Esporta IDFv3"
+msgstr "Esporta IDFv3..."
 
 #: pcbnew/tools/pcb_actions.cpp:1272
 msgid "Export IDF 3D board representation"
 msgstr "Esporta rappresentazione IDF 3D scheda"
 
 #: pcbnew/tools/pcb_actions.cpp:1278
-#, fuzzy
 msgid "Export STEP/GLB/BREP/XAO/PLY/STL..."
-msgstr "STEP / GLB / BREP / XAO / PLY / STL..."
+msgstr "Esporta STEP/GLB/BREP/XAO/PLY/STL..."
 
 #: pcbnew/tools/pcb_actions.cpp:1279
-#, fuzzy
 msgid "Export STEP, GLB, BREP, XAO, PLY or STL 3D board representation"
-msgstr "Esporta rappresentazione 3D scheda STEP / GLB / BREP / XAO / PLY / STL"
+msgstr "Esporta rappresentazione 3D scheda STEP, GLB, BREP, XAO, PLY o STL"
 
 #: pcbnew/tools/pcb_actions.cpp:1285
-#, fuzzy
 msgid "Export Footprint Association (.cmp) File..."
-msgstr "File di associazione impronte (.cmp)..."
+msgstr "Esporta file di associazione impronte (.cmp)..."
 
 #: pcbnew/tools/pcb_actions.cpp:1286
 msgid "Export footprint association file (*.cmp) for schematic back annotation"
@@ -52833,9 +52751,8 @@ msgid "Draw Polygon"
 msgstr "Disegna poligono"
 
 #: pcbnew/tools/zone_filler_tool.cpp:89
-#, fuzzy
 msgid "Check Zones"
-msgstr "Controllo zone"
+msgstr "Controlla zone"
 
 #: pcbnew/tools/zone_filler_tool.cpp:96 pcbnew/tools/zone_filler_tool.cpp:176
 #: pcbnew/tools/zone_filler_tool.cpp:358
@@ -53035,14 +52952,12 @@ msgid "Show colliding footprint courtyards"
 msgstr "Mostra gli ingombri impronte in collisione"
 
 #: pcbnew/widgets/appearance_controls.cpp:354
-#, fuzzy
 msgid "Board Area Shadow"
-msgstr "Soltanto area scheda"
+msgstr "Ombra area scheda"
 
 #: pcbnew/widgets/appearance_controls.cpp:354
-#, fuzzy
 msgid "Show board area shadow"
-msgstr "Mostra ratsnest scheda"
+msgstr "Mostra ombra area scheda"
 
 #: pcbnew/widgets/appearance_controls.cpp:355
 msgid "Show drawing sheet borders and title block"
