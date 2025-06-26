@@ -1518,8 +1518,9 @@ int SCH_DRAWING_TOOLS::SingleClickPlace( const TOOL_EVENT& aEvent )
                     strokeItems.push_back( previewItem );
 
                     DIALOG_WIRE_BUS_PROPERTIES dlg( m_frame, strokeItems );
-                }
+                    dlg.ShowModal();
                     break;
+                }
 
                 case SCH_JUNCTION_T:
                 {
@@ -1527,8 +1528,10 @@ int SCH_DRAWING_TOOLS::SingleClickPlace( const TOOL_EVENT& aEvent )
                     junctions.push_back( static_cast<SCH_JUNCTION*>( previewItem ) );
 
                     DIALOG_JUNCTION_PROPS dlg( m_frame, junctions );
-                }
+                    dlg.ShowModal();
                     break;
+                }
+
                 default:
                     // Do nothing
                     break;
