@@ -3206,7 +3206,7 @@ bool EDIT_TOOL::pickReferencePoint( const wxString& aTooltip, const wxString& aS
                                     const wxString& aCanceledMessage, VECTOR2I& aReferencePoint )
 {
     PCB_PICKER_TOOL*        picker = m_toolMgr->GetTool<PCB_PICKER_TOOL>();
-    PCB_EDIT_FRAME&         editFrame = *getEditFrame<PCB_EDIT_FRAME>();
+    PCB_BASE_EDIT_FRAME*    editFrame = getEditFrame<PCB_BASE_EDIT_FRAME>();
     std::optional<VECTOR2I> pickedPoint;
     bool                    done = false;
 
@@ -3215,17 +3215,19 @@ bool EDIT_TOOL::pickReferencePoint( const wxString& aTooltip, const wxString& aS
     /// This allow the option of snapping in the tool
     picker->SetSnapping( true );
 
-    const auto setPickerLayerSet = [&]()
-    {
-        MAGNETIC_SETTINGS& magSettings = *editFrame.GetMagneticItemsSettings();
-        LSET               layerFilter;
-        if( !magSettings.allLayers )
-            layerFilter = LSET( { editFrame.GetActiveLayer() } );
-        else
-            layerFilter = LSET::AllLayersMask();
+    const auto setPickerLayerSet =
+            [&]()
+            {
+                MAGNETIC_SETTINGS* magSettings = editFrame->GetMagneticItemsSettings();
+                LSET               layerFilter;
 
-        picker->SetLayerSet( layerFilter );
-    };
+                if( !magSettings->allLayers )
+                    layerFilter = LSET( { editFrame->GetActiveLayer() } );
+                else
+                    layerFilter = LSET::AllLayersMask();
+
+                picker->SetLayerSet( layerFilter );
+            };
 
     // Initial set
     setPickerLayerSet();
@@ -3294,7 +3296,9 @@ bool EDIT_TOOL::pickReferencePoint( const wxString& aTooltip, const wxString& aS
             evt->SetPassEvent();
         }
         else
+        {
             break;
+        }
     }
 
     // Ensure statusPopup is hidden after use and before deleting it:
@@ -3311,8 +3315,7 @@ bool EDIT_TOOL::pickReferencePoint( const wxString& aTooltip, const wxString& aS
 int EDIT_TOOL::copyToClipboard( const TOOL_EVENT& aEvent )
 {
     CLIPBOARD_IO io;
-    PCB_GRID_HELPER grid( m_toolMgr,
-                          getEditFrame<PCB_BASE_EDIT_FRAME>()->GetMagneticItemsSettings() );
+    PCB_GRID_HELPER grid( m_toolMgr, getEditFrame<PCB_BASE_EDIT_FRAME>()->GetMagneticItemsSettings() );
     TOOL_EVENT      selectReferencePoint( aEvent.Category(), aEvent.Action(),
                                           "pcbnew.InteractiveEdit.selectReferencePoint",
                                           TOOL_ACTION_SCOPE::AS_GLOBAL );
