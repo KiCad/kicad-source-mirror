@@ -16,8 +16,8 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-06-20 23:57+0300\n"
-"PO-Revision-Date: 2025-06-25 06:38+0000\n"
-"Last-Translator: co8 j <co8@nifty.com>\n"
+"PO-Revision-Date: 2025-06-26 07:04+0000\n"
+"Last-Translator: 2tama3 <2tama3@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
 "Language: ja\n"
@@ -4653,20 +4653,18 @@ msgid ""
 "sending said reports when crashes or events occur. Your design files such as "
 "schematic or PCB are never shared in this process."
 msgstr ""
-"KiCadはクラッシュや稀なイベントのデータを匿名で開発者に報告し、\n"
-"ユーザーベース全体を通じて重要なバグをより効果的に特定したり、\n"
-"機能改善のための分析の手がかりにします。\n"
+"KiCadはクラッシュや稀なイベントのデータを匿名で開発者に報告し、ユーザーベース"
+"全体を通じて重要なバグをより効果的に特定したり、機能改善のための分析の手がか"
+"りにします。\n"
 "\n"
-"インストールされたKiCadと自動的に送信するレポートを紐づけるために\n"
-"完全にランダムで一意の識別子を生成し、\n"
-"クラッシュのレポートの目的だけに使用します。\n"
-"IPアドレスを含む個人情報はこの識別子に保存されたり関連付けたりしません。\n"
-"この識別子はボタンを押すことでいつでもリセットすることができます。\n"
+"インストールされたKiCadと自動的に送信するレポートを紐づけるために完全にランダ"
+"ムで一意の識別子を生成し、クラッシュのレポートの目的だけに使用します。IPアド"
+"レスを含む個人情報はこの識別子に保存されたり関連付けたりしません。この識別子"
+"はボタンを押すことでいつでもリセットすることができます。\n"
 "\n"
-"この活動に参加することを選択した場合、\n"
-"KiCadはクラッシュやイベントが発生した時に自動的にレポートを送信します。\n"
-"回路図やPCBのようなユーザーの設計ファイルはこの過程で共有されることはありませ"
-"ん。"
+"この活動に参加することを選択した場合、KiCadはクラッシュやイベントが発生した時"
+"に自動的にレポートを送信します。回路図やPCBのようなユーザーの設計ファイルはこ"
+"の過程で共有されることはありません。"
 
 #: common/dialogs/panel_data_collection_base.cpp:24
 msgid "I agree to provide anonymous reports"
@@ -23467,19 +23465,16 @@ msgid "Place Linked Design Block"
 msgstr "デザインブロックを配置"
 
 #: eeschema/tools/sch_actions.cpp:469 pcbnew/tools/pcb_actions.cpp:462
-#, fuzzy
 msgid "Place design block linked to selected group"
-msgstr "デザインブロックを新しいシートとして配置します。"
+msgstr "デザインブロックを選択したグループにリンクし配置します"
 
 #: eeschema/tools/sch_actions.cpp:476 pcbnew/tools/pcb_actions.cpp:469
-#, fuzzy
 msgid "Save to Linked Design Block"
-msgstr "選択内容をデザイン ブロックとして保存..."
+msgstr "リンクされたデザインブロックに保存"
 
 #: eeschema/tools/sch_actions.cpp:477 pcbnew/tools/pcb_actions.cpp:470
-#, fuzzy
 msgid "Save selected group to linked design block"
-msgstr "選択内容をデザイン ブロックとして保存..."
+msgstr "選択したグループをリンクされたデザインブロックに保存"
 
 #: eeschema/tools/sch_actions.cpp:487
 msgid "Place No Connect Flags"
@@ -24783,9 +24778,9 @@ msgid "Could not find design block %s."
 msgstr "列ラベル %s が見つかりませんでした。"
 
 #: eeschema/tools/sch_editor_control.cpp:3011
-#, fuzzy, c-format
+#, c-format
 msgid "Design block %s does not have a schematic file."
-msgstr "デザイン ブロックには回路図またはボード ファイルがありません。"
+msgstr "デザイン ブロック %s には回路図ファイルがありません。"
 
 #: eeschema/tools/sch_find_replace_tool.cpp:317
 msgid "Reached end of schematic."
@@ -25607,14 +25602,12 @@ msgstr ""
 "せん。"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:37
-#, fuzzy
 msgid "File units:"
-msgstr "ファイルの単位"
+msgstr "ファイルの単位:"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:47
-#, fuzzy
 msgid "Zero format:"
-msgstr "ゼロのフォーマット"
+msgstr "ゼロのフォーマット:"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:51
 msgid "No leading zeros (TZ format)"
@@ -25637,9 +25630,8 @@ msgid "(The decimal format does not use these settings)"
 msgstr "(10進形式はこれらの設定を使用しません)"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:89
-#, fuzzy
 msgid "Format for mm:"
-msgstr "mm向けのフォーマット"
+msgstr "mm向けのフォーマット:"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:96
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:106
@@ -25708,9 +25700,8 @@ msgid ":"
 msgstr ":"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:115
-#, fuzzy
 msgid "Format for inches:"
-msgstr "inch向けのフォーマット"
+msgstr "inch向けのフォーマット:"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:144
 msgid "Usually: 3:3 in mm and 2:4 in inches"
@@ -28834,9 +28825,8 @@ msgid "Local path: monitoring folder changes"
 msgstr "ローカル パス: フォルダーの変更を監視します"
 
 #: kicad/project_tree_pane.cpp:1629
-#, fuzzy
 msgid "Please wait"
-msgstr "お待ちください..."
+msgstr "お待ちください"
 
 #: kicad/project_tree_pane.cpp:1630
 msgid "Waiting for Git operations to finish..."
@@ -32849,40 +32839,32 @@ msgstr ""
 "*********** %sで並べ替え***********"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:456
-#, fuzzy
 msgid "<br/>*********** Sort on Reference Coordinates ***********"
-msgstr ""
-"\n"
-"*********** %sで並べ替え***********"
+msgstr "<br/>********** 参照座標で並べ替え ***********"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:460
-#, fuzzy, c-format
+#, c-format
 msgid "<br/>%d %s X, Y: %s; rounded X, Y: %s"
-msgstr ""
-"\n"
-"%d %s UUID: [%s], X, Y: %s, 丸められたX, Y, %s"
+msgstr "<br/>%d %s X, Y: %s; 丸められた X, Y: %s"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:482
 msgid "Selected options resulted in errors! Change them and try again."
 msgstr "選択したオプションでエラーが発生しました！変更してやり直してください。"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:489
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<br/>PCB has %d empty or invalid reference designations.<br/>Recommend "
 "running DRC with 'Test for parity between PCB and schematic' checked.\n"
 msgstr ""
-"\n"
-"PCB には%d 個の空または無効なリファレンス指定子があります。\n"
-"「回路図に対するフットプリントのテスト」を有効にしてDRCを実行することをお勧め"
-"します。\n"
+"<br/>PCB には%d 個の空または無効なリファレンス指定子があります。<br/"
+">「回路図に対するフットプリントのテスト」を有効にしてDRCを実行することをお勧"
+"めします。\n"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:495
-#, fuzzy, c-format
+#, c-format
 msgid "<br/>RefDes: %s Footprint: %s:%s at %s on PCB."
-msgstr ""
-"\n"
-"リファレンス指定子: %s フットプリント: %s:%s (PCB 上の %s)."
+msgstr "<br/>リファレンス指定子: %s フットプリント: %s:%s PCB 上の %s。"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:503
 msgid "Reannotate anyway?"
@@ -32902,20 +32884,12 @@ msgid "Aborted: too many errors"
 msgstr "中断: 大量のエラーのため"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:707
-#, fuzzy
 msgid "<br/><br/>Front Footprints"
-msgstr ""
-"\n"
-"\n"
-"表面のフットプリント"
+msgstr "<br/><br/>表面のフットプリント"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:708
-#, fuzzy
 msgid "<br/><br/>Back Footprints"
-msgstr ""
-"\n"
-"\n"
-"裏面のフットプリント"
+msgstr "<br/><br/>裏面のフットプリント"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:772
 msgid "Footprint not found in changelist"
@@ -35906,9 +35880,8 @@ msgid "Thermal relief"
 msgstr "サーマルリリーフ"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:369
-#, fuzzy
 msgid "Jumper groups:"
-msgstr "ジャンパーピングループ"
+msgstr "ジャンパーピングループ:"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:387
 #, fuzzy
@@ -36104,9 +36077,8 @@ msgid ""
 msgstr ""
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:430
-#, fuzzy
 msgid "Explicit jumper pad groups:"
-msgstr "%s ジャンパーパッドグループを更新"
+msgstr "ジャンパーパッドグループを更新:"
 
 #: pcbnew/dialogs/dialog_footprint_wizard_list.cpp:140
 msgid "All footprint generator scripts were loaded"
@@ -37020,9 +36992,8 @@ msgstr "ネットリスト中の指定でフットプリントを置換"
 
 #: pcbnew/dialogs/dialog_import_netlist_base.cpp:59
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:32
-#, fuzzy
 msgid "Group footprints based on symbol group"
-msgstr "シンボル %s に対してフットプリントが定義されていません。"
+msgstr "シンボルグループに基づいてフットプリントをグループ化する"
 
 #: pcbnew/dialogs/dialog_import_netlist_base.cpp:62
 msgid "Delete/replace footprints even if locked"
