@@ -7,17 +7,17 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-06-20 23:57+0300\n"
-"PO-Revision-Date: 2025-06-17 07:01+0000\n"
+"PO-Revision-Date: 2025-06-27 08:05+0000\n"
 "Last-Translator: Luka Borkovic <borkovic@gmail.com>\n"
-"Language-Team: Serbian <https://hosted.weblate.org/projects/kicad/master-"
-"source/sr/>\n"
+"Language-Team: Serbian <https://hosted.weblate.org/projects/kicad/"
+"master-source/sr/>\n"
 "Language: sr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 5.12.1\n"
+"X-Generator: Weblate 5.13-dev\n"
 "X-Poedit-Bookmarks: -1,-1,5234,-1,-1,-1,-1,-1,-1,-1\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
@@ -54,9 +54,8 @@ msgstr ""
 "анализу."
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:294
-#, fuzzy
 msgid "Create tracks and vias"
-msgstr "Креирање стаза и via"
+msgstr "Креираj vodove i vie"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:749
 msgid "Create zones"
@@ -473,7 +472,6 @@ msgid "View Top"
 msgstr "Поглед одозго"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:255
-#, fuzzy
 msgid "View Bottom"
 msgstr "Поглед одоздо"
 
@@ -570,9 +568,8 @@ msgid "Show 3D model bounding boxes in realtime renderer"
 msgstr "Прикажи оквире 3D модела у исцртавању у реалном времену"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:375
-#, fuzzy
 msgid "Show 3D Navigator"
-msgstr "Прикажи"
+msgstr "Прикажи 3D навигатор"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:382
 msgid "Show Appearance Manager"
@@ -895,9 +892,8 @@ msgid "Do not clip silk layers to board outline"
 msgstr "Не исецај слојеве ситоштампе према контури плоче"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:125
-#, fuzzy
 msgid "3D Navigator"
-msgstr "Прикажи"
+msgstr "3D навигатор"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:126
 msgid "Background Start"
@@ -1157,7 +1153,6 @@ msgid "Camera Options"
 msgstr "Опције камере"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:84
-#, fuzzy
 msgid "Rotation increment:"
 msgstr "Инкремент ротације:"
 
@@ -2353,9 +2348,8 @@ msgstr "О"
 #: common/dialog_about/dialog_about.cpp:139
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:87
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:90
-#, fuzzy
 msgid "Version"
-msgstr "Информације о верзији"
+msgstr "Верзија"
 
 #: common/dialog_about/dialog_about.cpp:141
 msgid "Developers"
@@ -3530,7 +3524,7 @@ msgstr ""
 "одабране опције</b>."
 
 #: common/dialogs/dialog_plugin_options.cpp:53
-#, fuzzy, c-format
+#, c-format
 msgid "Options for Library '%s'"
 msgstr "Опције за библиотеку \"%s\""
 
@@ -4607,17 +4601,20 @@ msgid ""
 "Number of minutes since the last backup before another will be created the "
 "next time you save (set to 0 for no minimum)"
 msgstr ""
+"Број минута од последнје резервне копије након што ће нова бити направљена "
+"следећи пут када снимите промене (поставите на 0 за искључивање минимума)"
 
 #: common/dialogs/panel_common_settings_base.cpp:435
-#, fuzzy
 msgid "Maximum total backup size:"
-msgstr "Величина текста:"
+msgstr "Максимална укупна величина резервне копије:"
 
 #: common/dialogs/panel_common_settings_base.cpp:437
 msgid ""
 "If the total size of backup files grows above this limit, old backups will "
 "be deleted (set to 0 for no limit)"
 msgstr ""
+"Ако је укупна величина фајлова резервних копија изнад ове границе, старе "
+"резервне копије биће обрисане (подесите на 0 за неограничено)"
 
 #: common/dialogs/panel_common_settings_base.cpp:444
 msgid "MB"
@@ -4639,49 +4636,58 @@ msgid ""
 "sending said reports when crashes or events occur. Your design files such as "
 "schematic or PCB are never shared in this process."
 msgstr ""
+"KiCad може анонимно пријавити кварове и специјалне догађаје програмерима "
+"како би помогао да откривање критичних багова широм корисничке базе буде "
+"ефикасније и да помогне да профилише функционалност ка унапређењима.\n"
+"\n"
+"Да бисте повезали аутоматске извештаје из исте инсталације KiCad-а, "
+"јединствени идентификатор се креира који је у потпуности насумичан и користи "
+"се само за потребе пријављивања кварова. Никакве информације за "
+"индентификацију особа, укључујући IP адресе се не чувају нити су везане за "
+"овај идентификатор. Можете ресетовати овај идентификатор у сваком тренутку "
+"притиском на доступно дугме.\n"
+"\n"
+"Ако изаберете да добровољно учествујете, KiCad ће аутоматски обавити процес "
+"слања поменутих извештаја када се квар или догађај деси. Ваши дизајн фајлови "
+"као што су шеме или плочице никада неће бити емитоване током овог процеса."
 
 #: common/dialogs/panel_data_collection_base.cpp:24
 msgid "I agree to provide anonymous reports"
-msgstr ""
+msgstr "Сагласан сам да делим анонимне извештаје"
 
 #: common/dialogs/panel_data_collection_base.cpp:35
-#, fuzzy
 msgid "Reset Unique Id"
-msgstr "Јединствени ID:"
+msgstr "Ресетуј јединствени ID"
 
 #: common/dialogs/panel_design_block_lib_table.cpp:390
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:414
 #, c-format
 msgid "folder with %s files"
-msgstr ""
+msgstr "директоријум са %s фајловима"
 
 #: common/dialogs/panel_design_block_lib_table.cpp:467
 #: eeschema/dialogs/panel_sym_lib_table.cpp:442
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:485
-#, fuzzy
 msgid "A library table row nickname and path cells are empty."
-msgstr "Попуњавање зона"
+msgstr "Надимак реда табеле библиотеке и ћелије путања су празни."
 
 #: common/dialogs/panel_design_block_lib_table.cpp:469
 #: eeschema/dialogs/panel_sym_lib_table.cpp:444
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:487
-#, fuzzy
 msgid "A library table row nickname cell is empty."
-msgstr "Попуњавање зона"
+msgstr "Надимак реда табеле библиотеке је празан."
 
 #: common/dialogs/panel_design_block_lib_table.cpp:471
 #: eeschema/dialogs/panel_sym_lib_table.cpp:446
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:489
-#, fuzzy
 msgid "A library table row path cell is empty."
-msgstr "Попуњавање зона"
+msgstr "Путања табеле библиотеке је празна."
 
 #: common/dialogs/panel_design_block_lib_table.cpp:475
 #: eeschema/dialogs/panel_sym_lib_table.cpp:450
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:493
-#, fuzzy
 msgid "Invalid Row Definition"
-msgstr "Изабери језик"
+msgstr "Невалидна дефиниција реда"
 
 #: common/dialogs/panel_design_block_lib_table.cpp:477
 #: eeschema/dialogs/panel_sym_lib_table.cpp:452
@@ -4689,27 +4695,25 @@ msgstr "Изабери језик"
 msgid ""
 "Empty cells will result in all rows that are invalid to be removed from the "
 "table."
-msgstr ""
+msgstr "Празне ћелије ће резултовати брисањем свих невалидних редова из табеле."
 
 #: common/dialogs/panel_design_block_lib_table.cpp:480
 #: eeschema/dialogs/panel_sym_lib_table.cpp:454
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:497
-#, fuzzy
 msgid "Remove Invalid Cells"
-msgstr "Помјери"
+msgstr "Избриши невалидне ћелије"
 
 #: common/dialogs/panel_design_block_lib_table.cpp:481
 #: eeschema/dialogs/panel_sym_lib_table.cpp:455
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:498
-#, fuzzy
 msgid "Cancel Table Update"
-msgstr "Прекид"
+msgstr "Откажи ажурирање табеле"
 
 #: common/dialogs/panel_design_block_lib_table.cpp:494
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:511
 #, c-format
 msgid "Illegal character '%c' in nickname '%s'."
-msgstr ""
+msgstr "Нелегални карактер '%c' у надимку '%s'."
 
 #: common/dialogs/panel_design_block_lib_table.cpp:506
 #: common/dialogs/panel_design_block_lib_table.cpp:554
@@ -4717,21 +4721,20 @@ msgstr ""
 #: eeschema/dialogs/panel_sym_lib_table.cpp:542
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:524
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:571
-#, fuzzy
 msgid "Library Nickname Error"
-msgstr "Текстуални едитор"
+msgstr "Грешка у надимку библиотеке"
 
 #: common/dialogs/panel_design_block_lib_table.cpp:540
 #: eeschema/dialogs/panel_sym_lib_table.cpp:528
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:558
 #, c-format
 msgid "Multiple libraries cannot share the same nickname ('%s')."
-msgstr ""
+msgstr "Вишеструке библиотеке не могу делити исти надимак ('%s')."
 
 #: common/dialogs/panel_design_block_lib_table.cpp:589
-#, fuzzy, c-format
+#, c-format
 msgid "Design block library '%s' failed to load."
-msgstr "Симбол"
+msgstr "Дизајн блок библиотека '%s' се не може учитати."
 
 #: common/dialogs/panel_design_block_lib_table.cpp:592
 #: eeschema/dialogs/panel_sym_lib_table.cpp:582
@@ -4743,18 +4746,21 @@ msgstr "Грешка у учитавању библиотеке"
 msgid ""
 "Select one or more rows containing libraries to save as current KiCad format."
 msgstr ""
+"Изабери један или више редова који садрже библиотеке да би их сачувао као "
+"тренутни KiCad формат."
 
 #: common/dialogs/panel_design_block_lib_table.cpp:786
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:764
 #, c-format
 msgid "Save '%s' as current KiCad format and replace entry in table?"
-msgstr ""
+msgstr "Сачувај '%s' као тренутни KiCad формат и замени унос у табели?"
 
 #: common/dialogs/panel_design_block_lib_table.cpp:791
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:769
 #, c-format
 msgid "Save %d libraries as current KiCad format and replace entries in table?"
 msgstr ""
+"Сачувај %d библиотека као тренутни KiCad формат и замени уносе у табели?"
 
 #: common/dialogs/panel_design_block_lib_table.cpp:808
 #: eeschema/dialogs/dialog_symbol_remap.cpp:222
@@ -4765,21 +4771,23 @@ msgid "Library '%s' not found."
 msgstr "Библиотека \"%s\" није пронађена."
 
 #: common/dialogs/panel_design_block_lib_table.cpp:820
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Folder '%s' already exists. Do you want overwrite any existing design blocks?"
-msgstr "\"%s\" већ постоји."
+msgstr ""
+"Директоријум \"%s\" већ постоји. Желите ли да препишете преко постојећих "
+"дизајн блокова?"
 
 #: common/dialogs/panel_design_block_lib_table.cpp:824
 #: eeschema/dialogs/panel_sym_lib_table.cpp:971
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:801
 msgid "Migrate Library"
-msgstr "Премјестити библиотеку"
+msgstr "Премести библиотеку"
 
 #: common/dialogs/panel_design_block_lib_table.cpp:851
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to save design block library file '%s'."
-msgstr "Учитавање  "
+msgstr "Неуспешно чување библиотеке дизајн блока '%s'."
 
 #: common/dialogs/panel_design_block_lib_table.cpp:886
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:868
@@ -4789,22 +4797,22 @@ msgstr "Изабери %s библиотеку"
 
 #: common/dialogs/panel_design_block_lib_table.cpp:933
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:916
-#, fuzzy
 msgid "Warning: Duplicate Nicknames"
-msgstr "Попуњавање зона"
+msgstr "Упозорење: Дупли надимци"
 
 #: common/dialogs/panel_design_block_lib_table.cpp:934
 #: eeschema/dialogs/panel_sym_lib_table.cpp:666
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:917
-#, fuzzy, c-format
+#, c-format
 msgid "A library nicknamed '%s' already exists."
-msgstr "Попуњавање зона"
+msgstr "Библитека са надимком '%s' већ постоји."
 
 #: common/dialogs/panel_design_block_lib_table.cpp:935
 #: eeschema/dialogs/panel_sym_lib_table.cpp:668
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:918
 msgid "One of the nicknames will need to be changed after adding this library."
 msgstr ""
+"Један од надимака ће морати да се промени након додавања ове билбиотеке."
 
 #: common/dialogs/panel_design_block_lib_table.cpp:954
 #: common/dialogs/panel_embedded_files.cpp:405
@@ -4820,23 +4828,25 @@ msgstr "Прескочи"
 #: eeschema/dialogs/panel_sym_lib_table.cpp:670
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:940
 msgid "Add Anyway"
-msgstr "Додај свакако"
+msgstr "Додај свеједно"
 
 #: common/dialogs/panel_design_block_lib_table.cpp:1116
-#, fuzzy
 msgid "Design Block Libraries"
-msgstr "Библиотеке"
+msgstr "Библиотеке дизајн блокова"
 
 #: common/dialogs/panel_design_block_lib_table.cpp:1137
 #: eeschema/dialogs/panel_sym_lib_table.cpp:1193
 #: eeschema/tools/sch_editor_control.cpp:500
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:1171
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error saving global library table:\n"
 "\n"
 "%s"
-msgstr "Грешка: "
+msgstr ""
+"Грешка при чувању глобалне табеле библиотека:\n"
+"\n"
+"%s"
 
 #: common/dialogs/panel_design_block_lib_table.cpp:1138
 #: common/dialogs/panel_design_block_lib_table.cpp:1151
@@ -4848,20 +4858,22 @@ msgstr "Грешка: "
 #: eeschema/tools/sch_editor_control.cpp:516
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:1172
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:1185
-#, fuzzy
 msgid "File Save Error"
-msgstr "Сачувај као .csv фајл"
+msgstr "Грешка при чувању фајла"
 
 #: common/dialogs/panel_design_block_lib_table.cpp:1150
 #: eeschema/cross-probing.cpp:878 eeschema/dialogs/panel_sym_lib_table.cpp:1206
 #: eeschema/tools/sch_editor_control.cpp:515
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:1184
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error saving project-specific library table:\n"
 "\n"
 "%s"
-msgstr "Грешка: "
+msgstr ""
+"Грешка при чувању табеле библиотеке специфичне за пројекат:\n"
+"\n"
+"%s"
 
 #: common/dialogs/panel_design_block_lib_table_base.cpp:44
 #: common/dialogs/panel_design_block_lib_table_base.cpp:93
@@ -4899,7 +4911,7 @@ msgstr "Видљив"
 #: pcbnew/footprint_libraries_utils.cpp:1016
 #: pcbnew/footprint_libraries_utils.cpp:1352
 msgid "Nickname"
-msgstr ""
+msgstr "Надимак"
 
 #: common/dialogs/panel_design_block_lib_table_base.cpp:47
 #: common/dialogs/panel_design_block_lib_table_base.cpp:96
@@ -4914,9 +4926,8 @@ msgstr "Путања библиотеке"
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:48
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:98
 #: include/lib_table_grid.h:214 pcbnew/dialogs/panel_fp_lib_table_base.cpp:48
-#, fuzzy
 msgid "Library Format"
-msgstr "Путања библиотеке"
+msgstr "Формат библиотеке"
 
 #: common/dialogs/panel_design_block_lib_table_base.cpp:69
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:70
@@ -4926,75 +4937,68 @@ msgstr "Глобалне библиотеке"
 
 #: common/dialogs/panel_design_block_lib_table_base.cpp:97
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:97
-#, fuzzy
 msgid "LIbrary Format"
-msgstr "Путања библиотеке"
+msgstr "Формат библиотеке"
 
 #: common/dialogs/panel_design_block_lib_table_base.cpp:118
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:121
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:118
-#, fuzzy
 msgid "Project Specific Libraries"
-msgstr "Пројект"
+msgstr "Библиотеке специфичне за пројекат"
 
 #: common/dialogs/panel_design_block_lib_table_base.cpp:126
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:129
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:126
 msgid "Add empty row to table"
-msgstr ""
+msgstr "Додај празан ред на табелу"
 
 #: common/dialogs/panel_design_block_lib_table_base.cpp:130
 #: common/dialogs/panel_design_block_lib_table_base.cpp:131
 #: kicad/pcm/dialogs/dialog_manage_repositories_base.cpp:58
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:130
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:131
-#, fuzzy
 msgid "Add Existing"
-msgstr "Додај поље"
+msgstr "Додај постојеће"
 
 #: common/dialogs/panel_design_block_lib_table_base.cpp:149
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:152
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:149
-#, fuzzy
 msgid "Remove library from table"
-msgstr "Симбол"
+msgstr "Избриши библиотеку из табеле"
 
 #: common/dialogs/panel_design_block_lib_table_base.cpp:156
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:165
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:162
-#, fuzzy
 msgid "Migrate Libraries"
-msgstr "Премјестити библиотеке..."
+msgstr "Премести библиотеке"
 
 #: common/dialogs/panel_design_block_lib_table_base.cpp:163
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:72
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:175
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:169
-#, fuzzy
 msgid "Available path substitutions:"
-msgstr "Доступне путање:"
+msgstr "Доступне замене путање:"
 
 #: common/dialogs/panel_design_block_lib_table_base.cpp:197
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:209
 #: kicad/dialogs/dialog_executecommand_job_settings_base.cpp:126
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:203
 msgid "This is a read-only table which shows pertinent environment variables."
-msgstr ""
+msgstr "Ово је непроменљива табела која показује значајне променљиве окружења."
 
 #: common/dialogs/panel_embedded_files.cpp:55
-#, fuzzy
 msgid "Copy Embedded Reference"
-msgstr "Окрени референцу"
+msgstr "Копирај уграђену референцу"
 
 #: common/dialogs/panel_embedded_files.cpp:56
 msgid "Copy the reference for this embedded file"
-msgstr ""
+msgstr "Копирај референцу за овај уграђени фајл"
 
 #: common/dialogs/panel_embedded_files.cpp:287
 #: common/dialogs/panel_embedded_files.cpp:402
-#, fuzzy, c-format
+#, c-format
 msgid "File '%s' already exists."
-msgstr "\"%s\" већ постоји."
+msgstr "Фајл \"%s\" већ постоји."
 
 #: common/dialogs/panel_embedded_files.cpp:290
 #: common/dialogs/panel_embedded_files.cpp:405
@@ -5018,116 +5022,105 @@ msgstr "\"%s\" већ постоји."
 #: pcbnew/footprint_libraries_utils.cpp:1161
 #: pcbnew/pcb_design_block_utils.cpp:57 pcbnew/pcb_design_block_utils.cpp:71
 #: pcbnew/tools/footprint_editor_control.cpp:473
-#, fuzzy
 msgid "Overwrite"
-msgstr "Сакривен текст"
+msgstr "Препиши преко"
 
 #: common/dialogs/panel_embedded_files.cpp:309
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to add file '%s'."
-msgstr "Грешка у креирању датотеке '%s'."
+msgstr "Грешка у додавању фајла '%s'."
 
 #: common/dialogs/panel_embedded_files.cpp:323
-#, fuzzy
 msgid "Select a file to embed"
-msgstr "Изабери"
+msgstr "Изабери фајл за уградњу"
 
 #: common/dialogs/panel_embedded_files.cpp:389
-#, fuzzy
 msgid "Select a directory to export files"
-msgstr "Сачувај као .csv фајл"
+msgstr "Изабери директоријум за извоз фајлова"
 
 #: common/dialogs/panel_embedded_files.cpp:419
-#, fuzzy, c-format
+#, c-format
 msgid "Directory '%s' is not writable."
-msgstr "Симбол"
+msgstr "Директоријум '%s' није доступан за упис."
 
 #: common/dialogs/panel_embedded_files.cpp:421
-#, fuzzy, c-format
+#, c-format
 msgid "Folder '%s' is not writable."
-msgstr "Симбол"
+msgstr "Директоријум '%s' није доступан за упис."
 
 #: common/dialogs/panel_embedded_files.cpp:425
 msgid "Retry"
-msgstr ""
+msgstr "Покушај поново"
 
 #: common/dialogs/panel_embedded_files.cpp:453
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to open file '%s'."
-msgstr "Грешка у креирању датотеке '%s'."
+msgstr "Грешка у отварању фајла '%s'."
 
 #: common/dialogs/panel_embedded_files.cpp:464
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to write file '%s'."
-msgstr "Грешка у креирању датотеке '%s'."
+msgstr "Грешка у писању фајла '%s'."
 
 #: common/dialogs/panel_embedded_files_base.cpp:38
-#, fuzzy
 msgid "Embedded Reference"
-msgstr "Окрени референцу"
+msgstr "Угради референцу"
 
 #: common/dialogs/panel_embedded_files_base.cpp:61
 msgid "Add embedded file"
-msgstr ""
+msgstr "Додај уграђени фајл"
 
 #: common/dialogs/panel_embedded_files_base.cpp:69
-#, fuzzy
 msgid "Remove embedded file"
-msgstr "Доле"
+msgstr "Избриши уграђени фајл"
 
 #: common/dialogs/panel_embedded_files_base.cpp:76
-#, fuzzy
 msgid "Embed fonts"
-msgstr "Модел"
+msgstr "Угради фонтове"
 
 #: common/dialogs/panel_embedded_files_base.cpp:77
 msgid "Store a copy of all fonts used"
-msgstr ""
+msgstr "Сачувај копију свих коришћених фонтова"
 
 #: common/dialogs/panel_embedded_files_base.cpp:84
-#, fuzzy
 msgid "&Export..."
-msgstr "Унеси..."
+msgstr "Извези..."
 
 #: common/dialogs/panel_grid_settings.cpp:53
 msgid "Pads:"
-msgstr ""
+msgstr "Ножице:"
 
 #: common/dialogs/panel_grid_settings.cpp:61
-#, fuzzy
 msgid "Footprints/pads:"
-msgstr "Попуњавање зона"
+msgstr "Подножја/ножице:"
 
 #: common/dialogs/panel_grid_settings.cpp:62
 #: pcbnew/dialogs/panel_display_options_base.cpp:148
-#, fuzzy
 msgid "Tracks:"
-msgstr "Попуњавање зона"
+msgstr "Водови:"
 
 #: common/dialogs/panel_grid_settings.cpp:145 common/tool/grid_menu.cpp:100
-#, fuzzy, c-format
+#, c-format
 msgid "%s%s (%s)"
-msgstr "Иди на страницу %s (%s)"
+msgstr "%s %s (%s)"
 
 #: common/dialogs/panel_grid_settings.cpp:272
 #: common/dialogs/panel_grid_settings.cpp:316
-#, fuzzy, c-format
+#, c-format
 msgid "Grid size '%s' already exists."
-msgstr "\"%s\" већ постоји."
+msgstr "Величина координатне мреже \"%s\" већ постоји."
 
 #: common/dialogs/panel_grid_settings_base.cpp:25
 #: common/eda_base_frame.cpp:1270 common/eda_base_frame.cpp:1282
 #: common/eda_base_frame.cpp:1312 common/eda_base_frame.cpp:1329
 #: common/eda_base_frame.cpp:1374 common/eda_base_frame.cpp:1396
 #: common/tool/common_tools.cpp:614
-#, fuzzy
 msgid "Grids"
-msgstr "Координатна мрежа"
+msgstr "Координатне мреже"
 
 #: common/dialogs/panel_grid_settings_base.cpp:67
-#, fuzzy
 msgid "Fast Grid Switching"
-msgstr "Промјени јединице"
+msgstr "Брза промена координатне мреже"
 
 #: common/dialogs/panel_grid_settings_base.cpp:80
 msgid "Grid 1:"
@@ -5136,32 +5129,27 @@ msgstr "Координатна мрежа 1:"
 #: common/dialogs/panel_grid_settings_base.cpp:89
 #: common/dialogs/panel_grid_settings_base.cpp:102
 msgid "(hotkey)"
-msgstr ""
+msgstr "(пречица тастатуре)"
 
 #: common/dialogs/panel_grid_settings_base.cpp:93
-#, fuzzy
 msgid "Grid 2:"
-msgstr "Координатна мрежа 1:"
+msgstr "Координатна мрежа 2:"
 
 #: common/dialogs/panel_grid_settings_base.cpp:109 common/tool/actions.cpp:1062
-#, fuzzy
 msgid "Grid Overrides"
-msgstr "Сакривен текст"
+msgstr "Премошћавања координатне мреже"
 
 #: common/dialogs/panel_grid_settings_base.cpp:122
-#, fuzzy
 msgid "Connected items:"
-msgstr "Додај поље"
+msgstr "Повезане ставке:"
 
 #: common/dialogs/panel_grid_settings_base.cpp:130
-#, fuzzy
 msgid "Wires:"
-msgstr "Жица"
+msgstr "Жице:"
 
 #: common/dialogs/panel_grid_settings_base.cpp:138
-#, fuzzy
 msgid "Vias:"
-msgstr "Додај"
+msgstr "Вие:"
 
 #: common/dialogs/panel_grid_settings_base.cpp:146
 #: eeschema/dialogs/dialog_field_properties_base.cpp:33
@@ -5175,74 +5163,70 @@ msgid "Text:"
 msgstr "Текст:"
 
 #: common/dialogs/panel_grid_settings_base.cpp:154
-#, fuzzy
 msgid "Graphics:"
-msgstr "Графика"
+msgstr "Графика:"
 
 #: common/dialogs/panel_hotkeys_editor.cpp:78
 msgid "Type filter text"
-msgstr "Унесите текст филтера"
+msgstr "Унеси текст филтера"
 
 #: common/dialogs/panel_hotkeys_editor.cpp:128
 msgid "Undo All Changes"
-msgstr "Врати све промјене"
+msgstr "Врати све промене"
 
 #: common/dialogs/panel_hotkeys_editor.cpp:129
 msgid "Undo all changes made so far in this dialog"
-msgstr ""
+msgstr "Врати све промене до сада направљене у овом дијалогу"
 
 #: common/dialogs/panel_hotkeys_editor.cpp:137
-#, fuzzy
 msgid "Import Hotkeys..."
-msgstr "Листа грешака:"
+msgstr "Увези пречице тастатуре..."
 
 #: common/dialogs/panel_hotkeys_editor.cpp:138
 msgid ""
 "Import hotkey definitions from an external file, replacing the current values"
 msgstr ""
+"Увези дефиниције пречица тастатуре из спољашњег фајла, притом мењајући "
+"тренутне вредности"
 
 #: common/dialogs/panel_hotkeys_editor.cpp:201
-#, fuzzy
 msgid "Import Hotkeys File:"
-msgstr "Унеси "
+msgstr "Увези фајл пречица тастатуре:"
 
 #: common/dialogs/panel_hotkeys_editor.cpp:254
 msgid "| Action | Default Hotkey | Description"
-msgstr ""
+msgstr "| Радња | Подразумевана пречица | Опис"
 
 #: common/dialogs/panel_image_editor.cpp:79
-#, fuzzy
 msgid "Incorrect scale number"
-msgstr "Скалирање"
+msgstr "Нетачан број размере"
 
 #: common/dialogs/panel_image_editor.cpp:90
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "This scale results in an image which is too small (%.2f mm or %.1f mil)."
-msgstr "Ова скала Вам даје премалу величину слике (%.2f mm или %.1f mil)"
+msgstr "Ова размера резултује премалом сликом (%.2f mm или %.1f mil)."
 
 #: common/dialogs/panel_image_editor.cpp:102
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "This scale results in an image which is very large (%.1f mm or %.2f in). Are "
 "you sure?"
 msgstr ""
-"Ова скала Вам даје веома велику величину слике (%.1f mm или %.2f in). Да ли "
+"Ова размера резултује превише великом сликом (%.1f mm или %.2f in). Да ли "
 "сте сигурни?"
 
 #: common/dialogs/panel_image_editor_base.cpp:33
-#, fuzzy
 msgid "Scale:"
-msgstr "Скалирање"
+msgstr "Размера:"
 
 #: common/dialogs/panel_image_editor_base.cpp:40
 msgid "PPI:"
-msgstr ""
+msgstr "PPI:"
 
 #: common/dialogs/panel_image_editor_base.cpp:48
-#, fuzzy
 msgid "Convert to Greyscale"
-msgstr "Квадрат"
+msgstr "Претвори у монохроматску слику"
 
 #: common/dialogs/panel_mouse_settings.cpp:46
 #: eeschema/dialogs/panel_simulator_preferences.cpp:32
@@ -5252,101 +5236,95 @@ msgstr "Cmd"
 #: common/dialogs/panel_mouse_settings.cpp:84
 msgid "Only one action can be assigned to each vertical scroll setting"
 msgstr ""
+"Само једна радња може бити додељена сваком од подешавања вертикалног скрола"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:20
 msgid "Pan and Zoom"
-msgstr ""
+msgstr "Померање и зумирање"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:35
-#, fuzzy
 msgid "Center and warp cursor on zoom"
-msgstr "Центар"
+msgstr "Центрирај и обмотај курсор при зумирању"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:36
 msgid "Center the cursor on screen when zooming."
-msgstr ""
+msgstr "Центрирај курсор на екрану током зумирања."
 
 #: common/dialogs/panel_mouse_settings_base.cpp:43
-#, fuzzy
 msgid "Automatically pan while moving object"
-msgstr "Недостаје.\n"
+msgstr "Аутоматски померај током померања објекта"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:44
 msgid ""
 "When drawing a track or moving an item, pan when approaching the edge of the "
 "display."
 msgstr ""
+"Током цртања вода или померања предмета, померај приказ док прилазиш ивицама "
+"приказа."
 
 #: common/dialogs/panel_mouse_settings_base.cpp:48
 msgid "Use zoom acceleration"
-msgstr ""
+msgstr "Користи убрзање зума"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:49
 msgid "Zoom faster when scrolling quickly"
-msgstr ""
+msgstr "Зумирај брже када скролујеш брзо"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:55
-#, fuzzy
 msgid "Zoom speed:"
-msgstr "Центар"
+msgstr "Брзина зумирања:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:61
 msgid "How far to zoom in for each rotation of the mouse wheel"
-msgstr ""
+msgstr "Колико зумирати за сваку ротацију точкића миша"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:68
-#, fuzzy
 msgid "Pick the zoom speed automatically"
-msgstr "Стави  "
+msgstr "Изабери брзину зумирања аутоматски"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:77
-#, fuzzy
 msgid "Auto pan speed:"
-msgstr "Попуњавање зона"
+msgstr "Аутоматска брзина померања приказа:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:82
 msgid "How fast to pan when moving an object off the edge of the screen"
-msgstr ""
+msgstr "Колико брзо померати приказ при померању објекта ван ивица екрана"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:103
-#, fuzzy
 msgid "Drag Gestures"
-msgstr "Повлачење предмета"
+msgstr "Гестикулације вучења"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:122
 msgid "Left button drag:"
-msgstr ""
+msgstr "Повлачење левим дугметом:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:126
-#, fuzzy
 msgid "Draw selection rectangle"
-msgstr "Појасни избор"
+msgstr "Исцртај правоугаоник за одабир"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:126
 msgid "Drag selected objects; otherwise draw selection rectangle"
-msgstr ""
+msgstr "Вуци изабране објекте, у супротном исцртај правоугаоник за одабир"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:126
-#, fuzzy
 msgid "Drag any object (selected or not)"
-msgstr "Ниједан облик није изабран"
+msgstr "Вуци било који објекат (одабран или не)"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:135
 msgid "Middle button drag:"
-msgstr ""
+msgstr "Вучење средњим дугметом:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:139
 #: common/dialogs/panel_mouse_settings_base.cpp:152
-#, fuzzy
 msgid "Pan"
-msgstr "Струја"
+msgstr "Померање приказа"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:139
 #: common/dialogs/panel_mouse_settings_base.cpp:152
 #: common/tool/zoom_menu.cpp:56
 #: eeschema/dialogs/panel_simulator_preferences.cpp:45
 msgid "Zoom"
-msgstr "Увећати"
+msgstr "Зумирање"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:139
 #: common/dialogs/panel_mouse_settings_base.cpp:152 common/eda_shape.cpp:2540
@@ -5380,25 +5358,24 @@ msgstr "Увећати"
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:83
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:157
 msgid "None"
-msgstr ""
+msgstr "Ниједно"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:148
 msgid "Right button drag:"
-msgstr ""
+msgstr "Вучење десним дугметом:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:170
 #: eeschema/dialogs/panel_simulator_preferences_base.cpp:20
-#, fuzzy
 msgid "Scroll Gestures"
-msgstr "Повлачење предмета"
+msgstr "Гестикулације скрола"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:186
 msgid "Vertical touchpad or scroll wheel movement:"
-msgstr ""
+msgstr "Вертикални touchpad померај или померање точкића миша:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:191
 msgid "Only one action can be assigned to each column"
-msgstr ""
+msgstr "Само једна радња се може доделити свакој од колона"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:208
 msgid "--"
@@ -5420,46 +5397,40 @@ msgstr "Alt"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:228
 #: pcbnew/dialogs/dialog_render_job_base.cpp:135
-#, fuzzy
 msgid "Zoom:"
-msgstr "Увећати"
+msgstr "Зумирање:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:244
 #: common/dialogs/panel_mouse_settings_base.cpp:283
-#, fuzzy
 msgid "Reverse"
-msgstr "Врати"
+msgstr "Уназад"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:247
-#, fuzzy
 msgid "Pan up/down:"
-msgstr "Доле"
+msgstr "Померај приказа горе-доле:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:267
-#, fuzzy
 msgid "Pan left/right:"
-msgstr "Дужина чиоде:"
+msgstr "Померај приказа лево-десно:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:304
 msgid "Pan left/right with horizontal movement"
-msgstr ""
+msgstr "Померај лево-десно са хоризонталним померањем"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:305
 msgid ""
 "Pan the canvas left and right when scrolling left to right on the touchpad"
-msgstr ""
+msgstr "Померај приказ лево и десно када скролујеш лево и десно на touchpad-у"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:315
 #: eeschema/dialogs/panel_simulator_preferences_base.cpp:135
-#, fuzzy
 msgid "Reset to Mouse Defaults"
-msgstr "Врати на почетна подешавања"
+msgstr "Врати на подразумевана подешавања миша"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:318
 #: eeschema/dialogs/panel_simulator_preferences_base.cpp:138
-#, fuzzy
 msgid "Reset to Trackpad Defaults"
-msgstr "Врати на почетна подешавања"
+msgstr "Врати на подразумевана подешавања Trackpad-а"
 
 #: common/dialogs/panel_packages_and_updates_base.cpp:17
 #: common/eda_base_frame.cpp:1343
@@ -5480,131 +5451,128 @@ msgid "General"
 msgstr "Генерално"
 
 #: common/dialogs/panel_packages_and_updates_base.cpp:30
-#, fuzzy
 msgid "Check for KiCad updates on startup"
-msgstr "Потврди промјену"
+msgstr "Провери за надоградње KiCad-а при стартовању"
 
 #: common/dialogs/panel_packages_and_updates_base.cpp:40
 #: kicad/dialogs/dialog_update_check_prompt_base.cpp:34
 #: kicad/pcm/dialogs/dialog_pcm.cpp:216
 #: kicad/tools/kicad_manager_actions.cpp:196
 msgid "Plugin and Content Manager"
-msgstr ""
+msgstr "Менаџер Plugin-а и садржаја"
 
 #: common/dialogs/panel_packages_and_updates_base.cpp:50
 msgid "Check for package updates on startup"
-msgstr ""
+msgstr "Провери за надоградње пакета при стартовању"
 
 #: common/dialogs/panel_packages_and_updates_base.cpp:60
-#, fuzzy
 msgid "Library Package Handling"
-msgstr "Библиотека:"
+msgstr "Руковање пакетима библиотека"
 
 #: common/dialogs/panel_packages_and_updates_base.cpp:70
-#, fuzzy
 msgid "Automatically add installed libraries to global library table"
-msgstr "Недостаје.\n"
+msgstr "Аутоматски додај инсталиране библиотеке глобалној табели библиотека"
 
 #: common/dialogs/panel_packages_and_updates_base.cpp:74
-#, fuzzy
 msgid "Automatically remove uninstalled libraries"
-msgstr "Недостаје.\n"
+msgstr "Аутоматски обриши деинсталиране библиотеке"
 
 #: common/dialogs/panel_packages_and_updates_base.cpp:81
-#, fuzzy
 msgid "Library nickname prefix:"
-msgstr "Текстуални едитор"
+msgstr "Префикс надимка библиотеке:"
 
 #: common/dialogs/panel_plugin_settings.cpp:104
-#, fuzzy, c-format
+#, c-format
 msgid "Listening at %s"
-msgstr "Постојећа путања:"
+msgstr "Слушам на %s"
 
 #: common/dialogs/panel_plugin_settings.cpp:112
 msgid "This installation of KiCad does not have API support enabled."
-msgstr ""
+msgstr "Ова инсталација KiCad-а нема омогућену подршку за API."
 
 #: common/dialogs/panel_plugin_settings.cpp:121
 msgid "KiCad API is not enabled; external Python plugins will not be available"
-msgstr ""
+msgstr "KiCad API није омогућен, спољашњи Python plugin-и неће бити доступни"
 
 #: common/dialogs/panel_plugin_settings.cpp:132
 msgid ""
 "No valid Python interpreter chosen; external Python plugins will not be "
 "available"
 msgstr ""
+"Није изабран валидан Python интерпретер, спољашњи Python plugin-и неће бити "
+"доступни"
 
 #: common/dialogs/panel_plugin_settings.cpp:146
-#, fuzzy, c-format
+#, c-format
 msgid "Found %s"
-msgstr "Фајл није пронађен."
+msgstr "Пронађен %s"
 
 #: common/dialogs/panel_plugin_settings.cpp:151
 msgid "Not a valid Python 3 interpreter"
-msgstr ""
+msgstr "Није валидан Python 3 интерпретер"
 
 #: common/dialogs/panel_plugin_settings_base.cpp:20
-#, fuzzy
 msgid "KiCad API"
-msgstr "KiCad"
+msgstr "KiCad API"
 
 #: common/dialogs/panel_plugin_settings_base.cpp:30
 msgid ""
 "When the KiCad API is enabled, plugins and other software running on this "
 "computer can connect to KiCad."
 msgstr ""
+"Кад се KiCad API омогући, plugin-и и други софтвер који је на овом рачунару "
+"могу да се повежу са KiCad-ом."
 
 #: common/dialogs/panel_plugin_settings_base.cpp:34 kicad/pcm/pcm.cpp:781
 msgid "Enable KiCad API"
-msgstr ""
+msgstr "Омогући KiCad API"
 
 #: common/dialogs/panel_plugin_settings_base.cpp:35
 msgid ""
 "Enable the KiCad API.  Doing so will allow third-party software running on "
 "your computer to access KiCad."
 msgstr ""
+"Омогући KiCad API. Овом радњом осталом софтверу на твом рачунару биће "
+"омогућен приступ KiCad-у."
 
 #: common/dialogs/panel_plugin_settings_base.cpp:42
 msgid "Python Interpreter"
-msgstr ""
+msgstr "Python интерпретер"
 
 #: common/dialogs/panel_plugin_settings_base.cpp:55
 msgid "Path to Python interpreter:"
-msgstr ""
+msgstr "Путања до Python интерпретера:"
 
 #: common/dialogs/panel_plugin_settings_base.cpp:59
-#, fuzzy
 msgid "Select the path to a Python interpreter"
-msgstr "Избриши"
+msgstr "Изабери путању до Python интерпретера"
 
 #: common/dialogs/panel_plugin_settings_base.cpp:59
 msgid "*.*"
-msgstr ""
+msgstr "*.*"
 
 #: common/dialogs/panel_plugin_settings_base.cpp:62
-#, fuzzy
 msgid "Detect Automatically"
-msgstr "Додјела шеме"
+msgstr "Аутоматски детектуј"
 
 #: common/dialogs/panel_plugin_settings_base.cpp:68
 msgid ""
 "No Python interpreter chosen; external Python plugins will not be available"
 msgstr ""
+"Није изабран Python интерпретер, спољни Python plugin-и неће бити доступни"
 
 #: common/dialogs/panel_plugin_settings_base.cpp:70
 msgid "Python interpreter status"
-msgstr ""
+msgstr "Статус Python интерпретера"
 
 #: common/dialogs/panel_printer_list.cpp:155
 #: common/dialogs/panel_printer_list.cpp:176
-#, fuzzy
 msgid "Default printer"
-msgstr "Дужина линије:"
+msgstr "Подразумевани штампач"
 
 #: common/dialogs/panel_printer_list_base.cpp:17
-#, fuzzy
 msgid "Printers"
-msgstr "&Пројект..."
+msgstr "Штампачи"
 
 #: common/dialogs/panel_printer_list_base.cpp:27
 #: common/widgets/wx_html_report_panel.cpp:246
@@ -5612,9 +5580,8 @@ msgid "Info:"
 msgstr "Информација:"
 
 #: common/dialogs/panel_setup_netclasses.cpp:100
-#, fuzzy
 msgid "<Not defined>"
-msgstr "Нема конекције"
+msgstr "<Недефинисано>"
 
 #: common/dialogs/panel_setup_netclasses.cpp:102 common/eda_shape.cpp:2529
 #: common/eda_shape.cpp:2541 common/stroke_params.cpp:40
@@ -5631,7 +5598,7 @@ msgstr "Нема конекције"
 #: pcbnew/pcb_textbox.cpp:803 pcbnew/zone.cpp:900 pcbnew/zone.cpp:1770
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:157
 msgid "Solid"
-msgstr ""
+msgstr "Пуна"
 
 #: common/dialogs/panel_setup_netclasses.cpp:104 common/eda_shape.cpp:2530
 #: common/stroke_params.cpp:41
@@ -5639,9 +5606,8 @@ msgstr ""
 #: eeschema/sch_bus_entry.cpp:632 eeschema/sch_line.cpp:1184
 #: eeschema/sch_line.cpp:1196 pcbnew/pcb_table.cpp:644
 #: pcbnew/pcb_textbox.cpp:804
-#, fuzzy
 msgid "Dashed"
-msgstr "Додај линију"
+msgstr "Испрекидана"
 
 #: common/dialogs/panel_setup_netclasses.cpp:106 common/eda_shape.cpp:2531
 #: common/stroke_params.cpp:42
@@ -5650,7 +5616,7 @@ msgstr "Додај линију"
 #: eeschema/sch_line.cpp:1197 pcbnew/pcb_table.cpp:645
 #: pcbnew/pcb_textbox.cpp:805
 msgid "Dotted"
-msgstr "Тачкасто"
+msgstr "Тачкаста"
 
 #: common/dialogs/panel_setup_netclasses.cpp:108 common/eda_shape.cpp:2532
 #: common/stroke_params.cpp:43
@@ -5659,7 +5625,7 @@ msgstr "Тачкасто"
 #: eeschema/sch_line.cpp:1198 pcbnew/pcb_table.cpp:646
 #: pcbnew/pcb_textbox.cpp:806
 msgid "Dash-Dot"
-msgstr ""
+msgstr "Тачка-црта"
 
 #: common/dialogs/panel_setup_netclasses.cpp:110 common/eda_shape.cpp:2533
 #: common/stroke_params.cpp:44
@@ -5668,176 +5634,151 @@ msgstr ""
 #: eeschema/sch_line.cpp:1199 pcbnew/pcb_table.cpp:647
 #: pcbnew/pcb_textbox.cpp:807
 msgid "Dash-Dot-Dot"
-msgstr ""
+msgstr "Црта-тачка-тачка"
 
 #: common/dialogs/panel_setup_netclasses.cpp:183
 msgid "Set color to transparent to use layer default color."
-msgstr ""
+msgstr "Постави провидну као подразумевану боју слоја."
 
 #: common/dialogs/panel_setup_netclasses.cpp:415
 msgid ""
 "The netclasses have been changed outside the Setup dialog.\n"
 "Do you wish to reload them?"
 msgstr ""
+"Класе веза су промењене ван дијалога за подешавање.\n"
+"Желиш ли да их поново учиташ?"
 
 #: common/dialogs/panel_setup_netclasses.cpp:570
-#, fuzzy
 msgid "Netclass must have a name."
-msgstr "Поља морају имати име."
+msgstr "Класа вода мора имати име."
 
 #: common/dialogs/panel_setup_netclasses.cpp:579
-#, fuzzy
 msgid "Netclass name already in use."
-msgstr "Име'%s' је већ у употреби."
+msgstr "Име класе вода већ употребљено."
 
 #: common/dialogs/panel_setup_netclasses.cpp:599
 #, c-format
 msgid "Clearance was too large.  It has been clipped to %s."
-msgstr ""
+msgstr "Одстојање је било превелико. Смањено је на %s."
 
 #: common/dialogs/panel_setup_netclasses.cpp:716
-#, fuzzy
 msgid "Minimum copper clearance"
-msgstr "Дужина:"
+msgstr "Минимално одстојање бакра"
 
 #: common/dialogs/panel_setup_netclasses.cpp:717
-#, fuzzy
 msgid "Minimum track width"
-msgstr "Дужина:"
+msgstr "Минимална ширина вода"
 
 #: common/dialogs/panel_setup_netclasses.cpp:718
-#, fuzzy
 msgid "Via pad diameter"
-msgstr "Параметри:"
+msgstr "Параметри пречника вие"
 
 #: common/dialogs/panel_setup_netclasses.cpp:719
-#, fuzzy
 msgid "Via plated hole diameter"
-msgstr "Параметри:"
+msgstr "Пречник рупе метализиране вие"
 
 #: common/dialogs/panel_setup_netclasses.cpp:720
-#, fuzzy
 msgid "Microvia pad diameter"
-msgstr "Параметри:"
+msgstr "Пречник ножице микровие"
 
 #: common/dialogs/panel_setup_netclasses.cpp:721
-#, fuzzy
 msgid "Microvia plated hole diameter"
-msgstr "Параметри:"
+msgstr "Пречник рупе метализиране микровие"
 
 #: common/dialogs/panel_setup_netclasses.cpp:722
-#, fuzzy
 msgid "Differential pair track width"
-msgstr "Дужина:"
+msgstr "Ширина вода диференцијалног пара"
 
 #: common/dialogs/panel_setup_netclasses.cpp:723
-#, fuzzy
 msgid "Differential pair gap"
-msgstr "Дужина:"
+msgstr "Размак диференцијалног пара"
 
 #: common/dialogs/panel_setup_netclasses.cpp:724
-#, fuzzy
 msgid "Schematic wire thickness"
-msgstr "Schematic фајлови"
+msgstr "Дебљина жице шеме"
 
 #: common/dialogs/panel_setup_netclasses.cpp:725
-#, fuzzy
 msgid "Bus wire thickness"
-msgstr "Дебљина:"
+msgstr "Дебљина жице буса"
 
 #: common/dialogs/panel_setup_netclasses.cpp:726
-#, fuzzy
 msgid "Schematic wire color"
-msgstr "Додјела шеме"
+msgstr "Боја жице шеме"
 
 #: common/dialogs/panel_setup_netclasses.cpp:727
-#, fuzzy
 msgid "Schematic wire line style"
-msgstr "Schematic фајлови"
+msgstr "Стил жице шеме"
 
 #: common/dialogs/panel_setup_netclasses.cpp:728
-#, fuzzy
 msgid "PCB netclass color"
-msgstr "Нова библиотека"
+msgstr "Боја PCB класе везе"
 
 #: common/dialogs/panel_setup_netclasses.cpp:785
 msgid "The default net class is required."
-msgstr ""
+msgstr "Подразумевана класа веза је обавезна."
 
 #: common/dialogs/panel_setup_netclasses.cpp:955
 #, c-format
 msgid "<b>Nets matching '%s':</b>"
-msgstr ""
+msgstr "<b>Безе које се поклапају '%s':</b>"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:32
-#, fuzzy
 msgid "Netclasses"
-msgstr "Нова библиотека"
+msgstr "Класе веза"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:52
 #: pcbnew/tools/board_inspection_tool.cpp:642
 #: pcbnew/tools/board_inspection_tool.cpp:1193 pcbnew/zone.cpp:2007
-#, fuzzy
 msgid "Clearance"
-msgstr "Прикажи"
+msgstr "Одстојање"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:53
 #: pcb_calculator/pcb_calculator_frame.cpp:177
 #: pcbnew/tools/board_inspection_tool.cpp:434
 #: pcbnew/tools/board_inspection_tool.cpp:1356
 msgid "Track Width"
-msgstr "Прати ширину"
+msgstr "Ширина вода"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:54
 #: pcb_calculator/pcb_calculator_frame.cpp:176
-#, fuzzy
 msgid "Via Size"
-msgstr "Величина текста"
+msgstr "Величина вие"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:55
-#, fuzzy
 msgid "Via Hole"
-msgstr "Величина текста"
+msgstr "Рупа вие"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:56
-#, fuzzy
 msgid "uVia Size"
-msgstr "Величина текста"
+msgstr "Величина микровие"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:57
-#, fuzzy
 msgid "uVia Hole"
-msgstr "Величина текста"
+msgstr "Рупа микровие"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:58
-#, fuzzy
 msgid "DP Width"
-msgstr "Дужина"
+msgstr "Ширина ДП"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:59
-#, fuzzy
 msgid "DP Gap"
-msgstr "Додај рупу"
+msgstr "Размак ДП"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:60
-#, fuzzy
 msgid "Delay Profile"
-msgstr "Изабери фајл"
+msgstr "Профил одлагања"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:61
-#, fuzzy
 msgid "PCB Color"
-msgstr "PCB курсор"
+msgstr "PCB боја"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:62
-#, fuzzy
 msgid "Wire Thickness"
-msgstr "Дебљина линије"
+msgstr "Дебљина жице"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:63
-#, fuzzy
 msgid "Bus Thickness"
-msgstr "Дебљина:"
+msgstr "Дебљина баса"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:65 common/eda_shape.cpp:2643
 #: common/stroke_params.cpp:272 eeschema/sch_bus_entry.cpp:639
@@ -5866,34 +5807,30 @@ msgstr "Стил линије"
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2825 pcbnew/pcb_dimension.cpp:642
 #: pcbnew/pcb_tablecell.cpp:119 pcbnew/pcb_text.cpp:292
 #: pcbnew/pcb_textbox.cpp:476
-#, fuzzy
 msgid "Default"
-msgstr "Врати на почетна подешавања"
+msgstr "Врати на подразумевана подешавања"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:102
 msgid "Set color to transparent to use KiCad default color."
-msgstr ""
+msgstr "Постави транспарентну боју као подразумевану KiCad боју."
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:106
-#, fuzzy
 msgid "Import colors from schematic"
-msgstr "Додјела шеме"
+msgstr "Увези боје из шеме"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:123
-#, fuzzy
 msgid "Netclass Assignments"
-msgstr "Додјела шеме"
+msgstr "Додела класе везе"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:147
 msgid "Pattern"
-msgstr ""
+msgstr "Шаблон"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:148
 #: eeschema/sch_field.cpp:1125 eeschema/sch_label.cpp:208
 #: pcbnew/board_connected_item.cpp:227 pcbnew/pad.cpp:2796 pcbnew/zone.cpp:1870
-#, fuzzy
 msgid "Net Class"
-msgstr "Класа 1"
+msgstr "Класа везе"
 
 #: common/dialogs/panel_setup_severities.cpp:44 common/kidialog.cpp:125
 #: eeschema/dialogs/dialog_erc.cpp:873
@@ -5920,24 +5857,27 @@ msgstr "Упозорење"
 #: eeschema/dialogs/dialog_erc.cpp:874 eeschema/sch_marker.cpp:366
 #: pcbnew/dialogs/dialog_drc.cpp:976 pcbnew/pcb_marker.cpp:205
 msgid "Ignore"
-msgstr ""
+msgstr "Игнориши"
 
 #: common/dialogs/panel_setup_severities.cpp:118
-#, fuzzy
 msgid "From Pin Conflicts Map"
-msgstr "Закључане ствари"
+msgstr "Из мапе конфликата чиода"
 
 #: common/dialogs/panel_setup_severities.cpp:179
 msgid ""
 "The violation severities have been changed outside the Setup dialog.\n"
 "Do you wish to reload them?"
 msgstr ""
+"Нивоји кршења су измењени ван дијалога за подешавање.\n"
+"Желиш ли да их поново учиташ?"
 
 #: common/dialogs/panel_text_variables.cpp:114
 msgid ""
 "The text variables have been changed outside the Setup dialog.\n"
 "Do you wish to reload them?"
 msgstr ""
+"Текстуалне променљиве су измењене ван дијалога за подешавање.\n"
+"Желиш ли да их поново учиташ?"
 
 #: common/dialogs/panel_text_variables.cpp:168
 #: common/dialogs/panel_text_variables.cpp:196
@@ -5945,14 +5885,12 @@ msgid "Variable name cannot be empty."
 msgstr "Име промјенљиве не може бити празно."
 
 #: common/dialogs/panel_text_variables_base.cpp:37
-#, fuzzy
 msgid "Variable Name"
-msgstr "Име табле"
+msgstr "Име променљиве"
 
 #: common/dialogs/panel_text_variables_base.cpp:38
-#, fuzzy
 msgid "Text Substitution"
-msgstr "Додај поље"
+msgstr "Замена текста"
 
 #: common/dialogs/panel_toolbar_customization.cpp:46 common/eda_text.cpp:1327
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:238
@@ -5963,7 +5901,7 @@ msgstr "Додај поље"
 #: eeschema/sch_pin.cpp:1718 pcbnew/dialogs/dialog_render_job.cpp:40
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2823
 msgid "Left"
-msgstr "Лијево"
+msgstr "Лево"
 
 #: common/dialogs/panel_toolbar_customization.cpp:47 common/eda_text.cpp:1329
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:238
@@ -5978,65 +5916,56 @@ msgstr "Десно"
 
 #: common/dialogs/panel_toolbar_customization.cpp:48
 msgid "Top main"
-msgstr ""
+msgstr "Горњи главни"
 
 #: common/dialogs/panel_toolbar_customization.cpp:49
-#, fuzzy
 msgid "Top auxillary"
-msgstr "У слој:"
+msgstr "Горњи помоћни"
 
 #: common/dialogs/panel_toolbar_customization.cpp:143
 #: common/dialogs/panel_toolbar_customization_base.cpp:71
-#, fuzzy
 msgid "Insert separator"
-msgstr "Унеси"
+msgstr "Додај сепаратор"
 
 #: common/dialogs/panel_toolbar_customization.cpp:149
-#, fuzzy
 msgid "Insert spacer"
-msgstr "Унеси"
+msgstr "Додај одстојник"
 
 #: common/dialogs/panel_toolbar_customization.cpp:150
-#, fuzzy
 msgid "Insert group"
-msgstr "Групиши по"
+msgstr "Додај групу"
 
 #: common/dialogs/panel_toolbar_customization.cpp:552 common/eda_item.cpp:440
 #: common/eda_item.cpp:464 eeschema/sch_group.cpp:328 pcbnew/pcb_group.cpp:340
 #: pcbnew/widgets/search_handlers.cpp:384 pcbnew/zone.cpp:1800
-#, fuzzy
 msgid "Group"
-msgstr "Групиши по"
+msgstr "Групиши"
 
 #: common/dialogs/panel_toolbar_customization_base.cpp:19
-#, fuzzy
 msgid "Customize toolbars"
-msgstr "Изабери језик"
+msgstr "Прилагоди линије са алаткама"
 
 #: common/draw_panel_gal.cpp:320 common/draw_panel_gal.cpp:507
 msgid "Could not use OpenGL, falling back to software rendering"
-msgstr ""
+msgstr "OpenGL не може да се користи, враћам се на софтверско исцртавање"
 
 #: common/draw_panel_gal.cpp:328
-#, fuzzy
 msgid "Graphics error"
-msgstr "Стил"
+msgstr "Графичка грешка"
 
 #: common/draw_panel_gal.cpp:514
-#, fuzzy
 msgid "Could not use OpenGL"
-msgstr "Отвори"
+msgstr "Неуспешно коришћење OpenGL"
 
 #: common/draw_panel_gal.cpp:542
 msgid "Error switching GAL backend"
-msgstr ""
+msgstr "Грешка при преласку на GAL backend"
 
 #: common/drawing_sheet/drawing_sheet_parser.cpp:559
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:3490
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:3367
-#, fuzzy
 msgid "Failed to read image data."
-msgstr "Попуњавање зона"
+msgstr "Неуспешно читање података слике."
 
 #: common/drawing_sheet/drawing_sheet_parser.cpp:984
 #: eeschema/dialogs/dialog_sch_import_settings.cpp:74
@@ -6045,18 +5974,16 @@ msgid "File not found."
 msgstr "Фајл није пронађен."
 
 #: common/drawing_sheet/drawing_sheet_parser.cpp:996
-#, fuzzy
 msgid "File could not be opened."
-msgstr "Фајл '%s' није пронађен."
+msgstr "Фајл не може да се отвори."
 
 #: common/drawing_sheet/drawing_sheet_parser.cpp:1010
-#, fuzzy
 msgid "Drawing sheet was not fully read."
-msgstr "Фајл \"%s\" није до краја учитан"
+msgstr "Лист цртежа није прочитан у потпуности."
 
 #: common/drawing_sheet/drawing_sheet_parser.cpp:1037
 msgid "Ran out of memory."
-msgstr ""
+msgstr "Нестало је меморије."
 
 #: common/drawing_sheet/ds_data_item.cpp:365
 #: common/drawing_sheet/ds_draw_item.cpp:132 common/eda_item.cpp:422
@@ -6109,9 +6036,8 @@ msgstr "Правоугаоник"
 #: common/drawing_sheet/ds_data_item.cpp:368
 #: common/drawing_sheet/ds_draw_item.cpp:137
 #: common/drawing_sheet/ds_draw_item.cpp:339
-#, fuzzy
 msgid "Imported Shape"
-msgstr "Унеси шему"
+msgstr "Увежени облик"
 
 #: common/drawing_sheet/ds_data_item.cpp:369
 #: common/drawing_sheet/ds_draw_item.cpp:141
@@ -6123,42 +6049,36 @@ msgstr "Слика"
 
 #: common/drawing_sheet/ds_data_model_io.cpp:102
 #: common/drawing_sheet/ds_data_model_io.cpp:133
-#, fuzzy
 msgid "Error writing drawing sheet file"
-msgstr "Грешка: "
+msgstr "Грешка при упису у фајл листа цртежа"
 
 #: common/drawing_sheet/ds_draw_item.cpp:147
 msgid "First Page Only"
 msgstr "Само прва страница"
 
 #: common/drawing_sheet/ds_draw_item.cpp:148
-#, fuzzy
 msgid "Subsequent Pages"
-msgstr "Струја"
+msgstr "Наредне странице"
 
 #: common/drawing_sheet/ds_draw_item.cpp:149
 msgid "All Pages"
 msgstr "Све странице"
 
 #: common/drawing_sheet/ds_draw_item.cpp:152
-#, fuzzy
 msgid "First Page Option"
-msgstr "Опције слика:"
+msgstr "Опције прве странице"
 
 #: common/drawing_sheet/ds_draw_item.cpp:156
-#, fuzzy
 msgid "Repeat Count"
-msgstr "Тијело"
+msgstr "Број понављања"
 
 #: common/drawing_sheet/ds_draw_item.cpp:160
-#, fuzzy
 msgid "Repeat Label Increment"
-msgstr "Повећање текста:"
+msgstr "Инкремент понављања лабеле"
 
 #: common/drawing_sheet/ds_draw_item.cpp:166
-#, fuzzy
 msgid "Repeat Position Increment"
-msgstr "Позиција:"
+msgstr "Инкремент понављања позиције"
 
 #: common/drawing_sheet/ds_draw_item.cpp:168
 #: pagelayout_editor/dialogs/dialog_design_inspector_base.cpp:38
@@ -6173,7 +6093,7 @@ msgstr "Текст '%s'"
 #: common/drawing_sheet/ds_draw_item.cpp:439 eeschema/sch_shape.cpp:342
 #, c-format
 msgid "Rectangle, width %s height %s"
-msgstr ""
+msgstr "Правоугаоник, ширина %s висина %s"
 
 #: common/drawing_sheet/ds_draw_item.cpp:472
 #, c-format
@@ -6183,14 +6103,12 @@ msgstr "Линија, дужина %s"
 #: common/drawing_sheet/ds_draw_item.cpp:530
 #: gerbview/dialogs/panel_gerbview_color_settings.cpp:97
 #: gerbview/widgets/gerbview_layer_widget.cpp:139
-#, fuzzy
 msgid "Page Limits"
-msgstr "Прикажи"
+msgstr "Границе странице"
 
 #: common/dsnlexer.cpp:34
-#, fuzzy
 msgid "clipboard"
-msgstr "Грешка у међуспремнику"
+msgstr "клипборд"
 
 #: common/dsnlexer.cpp:344
 #, c-format
@@ -6224,35 +6142,38 @@ msgstr "потребан је број за '%s'"
 
 #: common/dsnlexer.cpp:725 common/dsnlexer.cpp:786
 msgid "Un-terminated delimited string"
-msgstr ""
+msgstr "Незавршен текст са сепаратором"
 
 #: common/dsnlexer.cpp:747
 msgid "String delimiter must be a single character of ', \", or $"
-msgstr ""
+msgstr "Сепаратор текста мора бити један од карактера ', \", или $"
 
 #: common/dsnlexer.cpp:869
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Invalid floating point number in\n"
 "file: '%s'\n"
 "line: %d\n"
 "offset: %d"
-msgstr "%s у \"%s\", линија %d, помак %d"
+msgstr ""
+"Невалидан децималан број у\n"
+"фајлу: \"%s\"\n"
+"линија: %d\n"
+"офсет: %d"
 
 #: common/dsnlexer.cpp:896
-#, fuzzy
 msgid "Invalid floating point number"
-msgstr "Попуњавање зона"
+msgstr "Невалидан децимални број"
 
 #: common/eda_base_frame.cpp:436 common/tool/actions.cpp:288
 #: pcbnew/dialogs/panel_setup_rules.cpp:125
 msgid "Undo"
-msgstr ""
+msgstr "Врати"
 
 #: common/eda_base_frame.cpp:445 common/tool/actions.cpp:300
 #: pcbnew/dialogs/panel_setup_rules.cpp:126
 msgid "Redo"
-msgstr ""
+msgstr "Понови"
 
 #: common/eda_base_frame.cpp:1147
 #, fuzzy, c-format
@@ -6260,41 +6181,35 @@ msgid "File '%s' was not found."
 msgstr "Фајл \"%s\" није пронађен."
 
 #: common/eda_base_frame.cpp:1196
-#, fuzzy
 msgid "Preferences"
-msgstr "&Преференце"
+msgstr "Преференце"
 
 #: common/eda_base_frame.cpp:1224 common/hotkey_store.cpp:75
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:20
-#, fuzzy
 msgid "Common"
-msgstr "Коментар"
+msgstr "Заједничко"
 
 #: common/eda_base_frame.cpp:1230
 msgid "Mouse and Touchpad"
-msgstr ""
+msgstr "Миш и Touchpad"
 
 #: common/eda_base_frame.cpp:1232
-#, fuzzy
 msgid "Hotkeys"
-msgstr "Листа грешака:"
+msgstr "Тастери пречица"
 
 #: common/eda_base_frame.cpp:1238 kicad/project_tree_pane.cpp:1087
-#, fuzzy
 msgid "Version Control"
-msgstr "Изабери"
+msgstr "Контрола верзије"
 
 #: common/eda_base_frame.cpp:1245
-#, fuzzy
 msgid "Data Collection"
-msgstr "Нема конекције"
+msgstr "Колекција података"
 
 #: common/eda_base_frame.cpp:1268 common/tool/actions.cpp:1247
 #: common/tool/common_tools.cpp:621 eeschema/symbol_editor/symbol_editor.cpp:84
 #: kicad/tools/kicad_manager_actions.cpp:125
-#, fuzzy
 msgid "Symbol Editor"
-msgstr "Симбол"
+msgstr "Уређивач симбола"
 
 #: common/eda_base_frame.cpp:1269 common/eda_base_frame.cpp:1281
 #: common/eda_base_frame.cpp:1311 common/eda_base_frame.cpp:1328
@@ -6307,7 +6222,7 @@ msgstr "Опције приказивања"
 #: pcbnew/dialogs/panel_edit_options_base.cpp:23
 #: pcbnew/tools/zone_filler_tool.cpp:285
 msgid "Editing Options"
-msgstr "Уређујем опције"
+msgstr "Опције уређивања"
 
 #: common/eda_base_frame.cpp:1272 common/eda_base_frame.cpp:1285
 #: common/eda_base_frame.cpp:1315 common/eda_base_frame.cpp:1332
@@ -6319,111 +6234,94 @@ msgstr "Боје"
 #: common/eda_base_frame.cpp:1318 common/eda_base_frame.cpp:1335
 #: common/eda_base_frame.cpp:1346 common/eda_base_frame.cpp:1372
 #: common/eda_base_frame.cpp:1400
-#, fuzzy
 msgid "Toolbars"
-msgstr "&Алатке"
+msgstr "Линије алатки"
 
 #: common/eda_base_frame.cpp:1280 common/hotkey_store.cpp:77
 #: common/tool/common_tools.cpp:620 eeschema/menubar.cpp:133
 #: eeschema/sch_edit_frame.cpp:1768 kicad/tools/kicad_manager_actions.cpp:114
-#, fuzzy
 msgid "Schematic Editor"
-msgstr "Додјела шеме"
+msgstr "Уређивач шеме"
 
 #: common/eda_base_frame.cpp:1284
-#, fuzzy
 msgid "Annotation Options"
-msgstr "Опције:"
+msgstr "Опције анотација"
 
 #: common/eda_base_frame.cpp:1291
 #: eeschema/dialogs/dialog_schematic_setup.cpp:71
 #: eeschema/dialogs/panel_template_fieldnames_base.cpp:20
-#, fuzzy
 msgid "Field Name Templates"
-msgstr "Поље"
+msgstr "Шаблони имена поља"
 
 #: common/eda_base_frame.cpp:1292 eeschema/sim/simulator_frame.cpp:117
 #: eeschema/sim/toolbars_simulator_frame.cpp:112
 #: eeschema/tools/sch_actions.cpp:77
-#, fuzzy
 msgid "Simulator"
-msgstr "Покрени"
+msgstr "Симулатор"
 
 #: common/eda_base_frame.cpp:1310 common/tool/actions.cpp:1264
 #: common/tool/common_tools.cpp:623 kicad/tools/kicad_manager_actions.cpp:147
 #: pcbnew/footprint_edit_frame.cpp:1060 pcbnew/menubar_footprint_editor.cpp:92
-#, fuzzy
 msgid "Footprint Editor"
-msgstr "Текстуални едитор"
+msgstr "Уређивач подножја"
 
 #: common/eda_base_frame.cpp:1313 common/eda_base_frame.cpp:1330
-#, fuzzy
 msgid "Origins & Axes"
-msgstr "Почетак:"
+msgstr "Координатни почетак и осе"
 
 #: common/eda_base_frame.cpp:1320
-#, fuzzy
 msgid "Footprint Defaults"
-msgstr "Нови"
+msgstr "Подразумевана подешавања подножја"
 
 #: common/eda_base_frame.cpp:1322
-#, fuzzy
 msgid "Graphics Defaults"
-msgstr "Стил"
+msgstr "Подразумевана подешавања графике"
 
 #: common/eda_base_frame.cpp:1327 common/hotkey_store.cpp:78
 #: common/tool/common_tools.cpp:622 kicad/tools/kicad_manager_actions.cpp:136
 #: pcbnew/menubar_pcb_editor.cpp:166 pcbnew/pcb_edit_frame.cpp:177
 #: pcbnew/pcb_edit_frame.cpp:1886 pcbnew/tools/zone_filler_tool.cpp:286
-#, fuzzy
 msgid "PCB Editor"
-msgstr "Отвори"
+msgstr "Уређивач PCB"
 
 #: common/eda_base_frame.cpp:1337 common/eda_base_frame.cpp:1413
-#, fuzzy
 msgid "Plugins"
-msgstr "Тип:"
+msgstr "Plugin-ови"
 
 #: common/eda_base_frame.cpp:1348
-#, fuzzy
 msgid "Realtime Renderer"
-msgstr "Raytracing опције"
+msgstr "Исцртавач у реалном времену"
 
 #: common/eda_base_frame.cpp:1349
-#, fuzzy
 msgid "Raytracing Renderer"
-msgstr "Raytracing опције"
+msgstr "Raytracing исцртавач"
 
 #: common/eda_base_frame.cpp:1367 common/hotkey_store.cpp:81
 #: common/tool/common_tools.cpp:625 gerbview/gerbview_frame.cpp:685
 #: gerbview/gerbview_frame.cpp:709 gerbview/menubar.cpp:159
 #: kicad/tools/kicad_manager_actions.cpp:158
-#, fuzzy
 msgid "Gerber Viewer"
-msgstr "Gerber фајлови"
+msgstr "Gerber прегледач"
 
 #: common/eda_base_frame.cpp:1376
-#, fuzzy
 msgid "Excellon Options"
-msgstr "Опције:"
+msgstr "Опције Excellon"
 
 #: common/eda_base_frame.cpp:1394 common/hotkey_store.cpp:79
 #: common/tool/common_tools.cpp:624 kicad/tools/kicad_manager_actions.cpp:187
 #: pagelayout_editor/menubar.cpp:88 pagelayout_editor/menubar.cpp:89
 #: pagelayout_editor/pl_editor_frame.cpp:588
-#, fuzzy
 msgid "Drawing Sheet Editor"
-msgstr "Опције цртања"
+msgstr "Уређивач листа цртежа"
 
 #: common/eda_base_frame.cpp:1406
-#, fuzzy
 msgid "Packages and Updates"
-msgstr "Прекид"
+msgstr "Пакети и унаређења"
 
 #: common/eda_base_frame.cpp:1496 pcbnew/dialogs/dialog_export_odbpp.cpp:323
-#, fuzzy, c-format
+#, c-format
 msgid "Insufficient permissions to folder '%s'."
-msgstr "Немогуће сачувати фајл %s."
+msgstr "Недовољне дозволе за директоријум \"%s\"."
 
 #: common/eda_base_frame.cpp:1537
 #, c-format
@@ -6435,39 +6333,42 @@ msgid ""
 "\n"
 "Do you wish to open the auto-saved file instead?"
 msgstr ""
+"Па ово је потенцијално срамота!\n"
+"Изгледа да последњи пут када си уређивао\n"
+"%s\n"
+"KiCad је изашао пре чувања.\n"
+"\n"
+"Желиш ли да отвориш аутоматски сачувани фајл?"
 
 #: common/eda_base_frame.cpp:1558
 msgid "The auto save file could not be renamed to the board file name."
-msgstr ""
+msgstr "Ауто-сачувани фајл није могао да се преименује у име фајла плочице."
 
 #: common/eda_base_frame.cpp:1791
 msgid "Set Language"
 msgstr "Изабери језик"
 
 #: common/eda_doc.cpp:153
-#, fuzzy
 msgid "Documentation File"
-msgstr "Отворити документацију"
+msgstr "Фајл документације"
 
 #: common/eda_doc.cpp:163
-#, fuzzy, c-format
+#, c-format
 msgid "Documentation file '%s' not found."
-msgstr "Фајл '%s' није пронађен."
+msgstr "Фајл документације '%s' није пронађен."
 
 #: common/eda_doc.cpp:209
 #, c-format
 msgid "Unknown MIME type for documentation file '%s'"
-msgstr ""
+msgstr "Непознати MIME тип за фајл документације \"%s\""
 
 #: common/eda_draw_frame.cpp:417 common/tool/actions.cpp:1070
-#, fuzzy
 msgid "Edit Grids..."
-msgstr "Уреди поље..."
+msgstr "Уреди коодринатну мрежу..."
 
 #: common/eda_draw_frame.cpp:576
-#, fuzzy
 msgid "Zoom Auto"
-msgstr "Умањити"
+msgstr "Ауто зум"
 
 #: common/eda_draw_frame.cpp:585
 #, c-format
@@ -6475,9 +6376,9 @@ msgid "Zoom %.2f"
 msgstr "Увећај %.2f"
 
 #: common/eda_draw_frame.cpp:668
-#, fuzzy, c-format
+#, c-format
 msgid "grid %s"
-msgstr "поље %s"
+msgstr "координатна мрежа %s"
 
 #: common/eda_draw_frame.cpp:681 pagelayout_editor/pl_editor_frame.cpp:772
 msgid "inches"
@@ -6528,9 +6429,8 @@ msgstr "инчи"
 #: common/eda_draw_frame.cpp:732 pagelayout_editor/pl_editor_frame.cpp:173
 #: pcbnew/tools/drawing_tool.cpp:336 pcbnew/tools/edit_tool_move_fct.cpp:334
 #: pcbnew/tools/pcb_actions.cpp:1404
-#, fuzzy
 msgid "Constrain to H, V, 45"
-msgstr "Портрет"
+msgstr "Ограничи на Х, В, 45"
 
 #: common/eda_draw_frame.cpp:1151 pcbnew/footprint_libraries_utils.cpp:1387
 msgid "Select Library"
@@ -6543,29 +6443,25 @@ msgstr "Нова библиотека"
 #: common/eda_draw_frame.cpp:1212 common/tool/actions.cpp:594
 #: common/widgets/search_pane.cpp:148 eeschema/sch_edit_frame.cpp:270
 #: pcbnew/pcb_edit_frame.cpp:362
-#, fuzzy
 msgid "Search"
-msgstr "претражи текст"
+msgstr "Претрага"
 
 #: common/eda_draw_frame.cpp:1218 common/tool/actions.cpp:1282
 #: eeschema/eeschema_settings.cpp:93 eeschema/sch_edit_frame.cpp:1984
 #: pagelayout_editor/pl_editor_frame.cpp:197
 #: pcbnew/footprint_edit_frame.cpp:236 pcbnew/pcb_edit_frame.cpp:341
 #: pcbnew/pcb_edit_frame.cpp:1792
-#, fuzzy
 msgid "Properties"
-msgstr "Својства лука"
+msgstr "Својства"
 
 #: common/eda_draw_frame.cpp:1224 pcbnew/pcb_edit_frame.cpp:353
 #: pcbnew/pcb_edit_frame.cpp:1793 pcbnew/tools/pcb_actions.cpp:1532
-#, fuzzy
 msgid "Net Inspector"
-msgstr "Прикажи"
+msgstr "Инспектор веза"
 
 #: common/eda_item.cpp:415
-#, fuzzy
 msgid "Screen"
-msgstr "Зелена:"
+msgstr "Екран"
 
 #: common/eda_item.cpp:417 eeschema/sch_symbol.cpp:1937
 #: eeschema/widgets/search_handlers.cpp:162 pcbnew/build_BOM_from_board.cpp:111
@@ -6573,63 +6469,53 @@ msgstr "Зелена:"
 #: pcbnew/load_select_footprint.cpp:294 pcbnew/pad.cpp:1333
 #: pcbnew/pcb_shape.cpp:690 pcbnew/pcb_text.cpp:272
 #: pcbnew/plot_board_layers.cpp:171
-#, fuzzy
 msgid "Footprint"
-msgstr "Попуњавање зона"
+msgstr "Подножје"
 
 #: common/eda_item.cpp:418 pcbnew/dialogs/dialog_board_statistics.cpp:586
 #: pcbnew/pad.cpp:1336
-#, fuzzy
 msgid "Pad"
-msgstr "Додај"
+msgstr "Ножица"
 
 #: common/eda_item.cpp:419 common/eda_item.cpp:449
-#, fuzzy
 msgid "Graphic"
 msgstr "Графика"
 
 #: common/eda_item.cpp:420 pcbnew/pcb_reference_image.cpp:215
 #: pcbnew/pcb_reference_image.h:82
-#, fuzzy
 msgid "Reference Image"
-msgstr "Референца"
+msgstr "Референтна слика"
 
 #: common/eda_item.cpp:421 pcbnew/pcb_generator.cpp:215
 #: pcbnew/widgets/search_handlers.cpp:386
-#, fuzzy
 msgid "Generator"
-msgstr "Генериши"
+msgstr "Генератор"
 
 #: common/eda_item.cpp:424 common/eda_item.cpp:452 eeschema/sch_textbox.cpp:363
 #: eeschema/sch_textbox.cpp:456 eeschema/widgets/search_handlers.cpp:400
 #: pcbnew/pcb_textbox.cpp:467 pcbnew/pcb_textbox.h:70
-#, fuzzy
 msgid "Text Box"
-msgstr "Текст фајлови"
+msgstr "Текстуално поље"
 
 #: common/eda_item.cpp:425 common/eda_item.cpp:453 eeschema/sch_table.cpp:449
 #: pcbnew/pcb_table.cpp:497
-#, fuzzy
 msgid "Table"
-msgstr "Уреди вриједност..."
+msgstr "Табела"
 
 #: common/eda_item.cpp:426 common/eda_item.cpp:454
 #: eeschema/sch_tablecell.cpp:109 pcbnew/pcb_tablecell.cpp:103
 #: pcbnew/pcb_tablecell.h:49
-#, fuzzy
 msgid "Table Cell"
-msgstr "Пола величине"
+msgstr "Ћелија табеле"
 
 #: common/eda_item.cpp:427 common/eda_item.cpp:428 pcbnew/pcb_track.cpp:1790
-#, fuzzy
 msgid "Track"
-msgstr "Попуњавање зона"
+msgstr "Вод"
 
 #: common/eda_item.cpp:429 pcbnew/dialogs/dialog_board_statistics.cpp:586
 #: pcbnew/pcb_track.cpp:1788 pcbnew/pcb_track.cpp:1899
-#, fuzzy
 msgid "Via"
-msgstr "Попуњавање зона"
+msgstr "Виа"
 
 #: common/eda_item.cpp:430 common/eda_item.cpp:442 eeschema/sch_marker.cpp:360
 #: pcbnew/pcb_marker.cpp:199
@@ -6639,90 +6525,74 @@ msgstr "Маркер"
 #: common/eda_item.cpp:431 common/eda_item.cpp:432 common/eda_item.cpp:433
 #: common/eda_item.cpp:434 pcbnew/pcb_dimension.cpp:609
 #: pcbnew/widgets/search_handlers.cpp:318
-#, fuzzy
 msgid "Dimension"
-msgstr "Димензије"
+msgstr "Димензија"
 
 #: common/eda_item.cpp:435 pcbnew/pcb_dimension.cpp:1313
 #: pcbnew/pcb_dimension.cpp:1480
-#, fuzzy
 msgid "Leader"
-msgstr "Додај"
+msgstr "Вођа"
 
 #: common/eda_item.cpp:436 pcbnew/pcb_target.cpp:125
-#, fuzzy
 msgid "Target"
-msgstr "Величина текста"
+msgstr "Мета"
 
 #: common/eda_item.cpp:437 pcbnew/tools/board_inspection_tool.cpp:824
-#, fuzzy
 msgid "Zone"
-msgstr "Зоне"
+msgstr "Зона"
 
 #: common/eda_item.cpp:438
-#, fuzzy
 msgid "ItemList"
-msgstr "Листа грешака:"
+msgstr "Листа ставки"
 
 #: common/eda_item.cpp:439
-#, fuzzy
 msgid "NetInfo"
-msgstr "Информације"
+msgstr "Информације о вези"
 
 #: common/eda_item.cpp:443 eeschema/sch_junction.cpp:287
 #: eeschema/sch_junction.h:102
-#, fuzzy
 msgid "Junction"
-msgstr "Величина текста:"
+msgstr "Спој"
 
 #: common/eda_item.cpp:444
-#, fuzzy
 msgid "No-Connect Flag"
-msgstr "Додај поље"
+msgstr "Без-споја ознака"
 
 #: common/eda_item.cpp:445
-#, fuzzy
 msgid "Wire Entry"
-msgstr "Додајте унос жице"
+msgstr "Улаз жице"
 
 #: common/eda_item.cpp:446
-#, fuzzy
 msgid "Bus Entry"
-msgstr "Додај поље"
+msgstr "Бас улаз"
 
 #: common/eda_item.cpp:448 eeschema/sch_bitmap.cpp:184
-#, fuzzy
 msgid "Bitmap"
-msgstr "Додај Bitmap..."
+msgstr "Битмапа"
 
 #: common/eda_item.cpp:450 eeschema/sch_rule_area.cpp:51
 #: eeschema/sch_rule_area.cpp:368 pcbnew/zone.cpp:961
-#, fuzzy
 msgid "Rule Area"
-msgstr "Додај поље"
+msgstr "Површина правила"
 
 #: common/eda_item.cpp:455 eeschema/tools/sch_edit_tool.cpp:257
-#, fuzzy
 msgid "Net Label"
-msgstr "Нови"
+msgstr "Ознака везе"
 
 #: common/eda_item.cpp:456 eeschema/sch_label.cpp:1277
 #: eeschema/sch_label.cpp:1818
-#, fuzzy
 msgid "Directive Label"
-msgstr "Нови"
+msgstr "Ознака директиве"
 
 #: common/eda_item.cpp:457 eeschema/sch_label.cpp:1278
 #: eeschema/tools/sch_edit_tool.cpp:259
-#, fuzzy
 msgid "Global Label"
-msgstr "Попуњавање зона"
+msgstr "Глобална ознака"
 
 #: common/eda_item.cpp:458 eeschema/sch_label.cpp:1279
 #: eeschema/tools/sch_edit_tool.cpp:258
-#, fuzzy
 msgid "Hierarchical Label"
-msgstr "Попуњавање зона"
+msgstr "Хијерархијска ознака"
 
 #: common/eda_item.cpp:459 eeschema/dialogs/dialog_symbol_fields_table.cpp:196
 #: eeschema/sch_field.h:90 eeschema/sch_label.cpp:210
@@ -6735,45 +6605,37 @@ msgid "Symbol"
 msgstr "Симбол"
 
 #: common/eda_item.cpp:461 eeschema/sch_pin.cpp:1165 eeschema/sch_pin.h:85
-#, fuzzy
 msgid "Pin"
-msgstr "in"
+msgstr "Пин"
 
 #: common/eda_item.cpp:462
-#, fuzzy
 msgid "Sheet Pin"
-msgstr "Име:"
+msgstr "Пин листа"
 
 #: common/eda_item.cpp:463 eeschema/dialogs/dialog_migrate_buses.cpp:114
 #: pcbnew/tools/pcb_actions.cpp:2311
-#, fuzzy
 msgid "Sheet"
-msgstr "Име:"
+msgstr "Лист"
 
 #: common/eda_item.cpp:471
-#, fuzzy
 msgid "SCH Screen"
-msgstr "Зелена:"
+msgstr "Екран шеме"
 
 #: common/eda_item.cpp:475
-#, fuzzy
 msgid "Gerber Layout"
-msgstr "Gerber"
+msgstr "Шаблон гербера"
 
 #: common/eda_item.cpp:476
-#, fuzzy
 msgid "Draw Item"
-msgstr "Нови"
+msgstr "Ставка за цртање"
 
 #: common/eda_shape.cpp:321
-#, fuzzy
 msgid "Thermal Spoke"
-msgstr "Дужина:"
+msgstr "Термални крак"
 
 #: common/eda_shape.cpp:322 pcbnew/pcb_shape.cpp:1053
-#, fuzzy
 msgid "Number Box"
-msgstr "Број"
+msgstr "Бројчано поље"
 
 #: common/eda_shape.cpp:331 pcbnew/pad.cpp:1570
 #, fuzzy
@@ -6794,28 +6656,24 @@ msgid "Circle"
 msgstr "Круг"
 
 #: common/eda_shape.cpp:334
-#, fuzzy
 msgid "Bezier Curve"
-msgstr "Безијер"
+msgstr "Безијеова крива"
 
 #: common/eda_shape.cpp:335 common/eda_shape.cpp:1137 common/eda_shape.cpp:2522
 msgid "Polygon"
 msgstr "Полигон"
 
 #: common/eda_shape.cpp:1125
-#, fuzzy
 msgid "Pad Number Box"
-msgstr "Број"
+msgstr "Поље броја ножице"
 
 #: common/eda_shape.cpp:1126 pcbnew/pcb_shape.cpp:1060
-#, fuzzy
 msgid "Thermal Spoke Template"
-msgstr "Дужина:"
+msgstr "Шаблон термалних кракова"
 
 #: common/eda_shape.cpp:1127 common/eda_shape.cpp:1140
-#, fuzzy
 msgid "Unrecognized"
-msgstr "Непрепознат слој '%s'"
+msgstr "Непрепознато"
 
 #: common/eda_shape.cpp:1136
 msgid "Curve"
@@ -6862,9 +6720,8 @@ msgid "Angle"
 msgstr "Угао"
 
 #: common/eda_shape.cpp:1174 eeschema/sch_rule_area.cpp:372
-#, fuzzy
 msgid "Points"
-msgstr "Завршна тачка"
+msgstr "Тачке"
 
 #: common/eda_shape.cpp:1178 common/eda_shape.cpp:2627 common/eda_text.cpp:1393
 #: eeschema/sch_bitmap.cpp:191 eeschema/sch_bitmap.cpp:330
@@ -6906,28 +6763,24 @@ msgstr "Безијер"
 #: common/eda_shape.cpp:2542
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:149
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:238
-#, fuzzy
 msgid "Hatch"
-msgstr "Дужина:"
+msgstr "Шрафирање"
 
 #: common/eda_shape.cpp:2543
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:149
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:238
-#, fuzzy
 msgid "Reverse Hatch"
-msgstr "Врати"
+msgstr "Врати шрафирање"
 
 #: common/eda_shape.cpp:2544
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:149
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:238
-#, fuzzy
 msgid "Cross-hatch"
-msgstr "Појасни избор"
+msgstr "Шрафирање"
 
 #: common/eda_shape.cpp:2580 eeschema/sch_shape.cpp:566
-#, fuzzy
 msgid "Shape Properties"
-msgstr "Својства текста"
+msgstr "Својства облика"
 
 #: common/eda_shape.cpp:2586 eeschema/sch_table.cpp:508
 #: eeschema/sch_tablecell.cpp:184 pcbnew/pcb_table.cpp:658
@@ -6935,7 +6788,7 @@ msgstr "Својства текста"
 #: pcbnew/pcb_track.cpp:2356
 #, fuzzy
 msgid "Start X"
-msgstr "X:"
+msgstr "X старт:"
 
 #: common/eda_shape.cpp:2591 eeschema/sch_table.cpp:511
 #: eeschema/sch_tablecell.cpp:185 pcbnew/pcb_table.cpp:661
@@ -6943,17 +6796,15 @@ msgstr "X:"
 #: pcbnew/pcb_track.cpp:2360
 #, fuzzy
 msgid "Start Y"
-msgstr "Y:"
+msgstr "Y старт:"
 
 #: common/eda_shape.cpp:2597
-#, fuzzy
 msgid "Center X"
-msgstr "Центар"
+msgstr "Центар X"
 
 #: common/eda_shape.cpp:2603
-#, fuzzy
 msgid "Center Y"
-msgstr "Центар"
+msgstr "Центар Y"
 
 #: common/eda_shape.cpp:2615 eeschema/sch_tablecell.cpp:186
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2837 pcbnew/pcb_tablecell.cpp:202
@@ -6978,9 +6829,8 @@ msgstr "Ширина линије"
 
 #: common/eda_shape.cpp:2647 eeschema/sch_tablecell.cpp:192
 #: pcbnew/pcb_shape.cpp:979 pcbnew/pcb_tablecell.cpp:209
-#, fuzzy
 msgid "Line Color"
-msgstr "Дефинисане боје"
+msgstr "Боја линије"
 
 #: common/eda_shape.cpp:2694
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:217
@@ -6993,9 +6843,8 @@ msgstr "Попуњавање"
 
 #: common/eda_shape.cpp:2699 eeschema/sch_shape.cpp:559
 #: pcbnew/pcb_shape.cpp:980
-#, fuzzy
 msgid "Fill Color"
-msgstr "Дефинисане боје"
+msgstr "Боја испуне"
 
 #: common/eda_text.cpp:978 common/eda_text.cpp:1368
 #: eeschema/dialogs/dialog_field_properties_base.cpp:162
@@ -7019,9 +6868,8 @@ msgstr "Дефинисане боје"
 #: pcbnew/dialogs/panel_fp_editor_graphics_defaults_base.cpp:57
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:58
 #: pcbnew/pcb_fields_grid_table.cpp:153
-#, fuzzy
 msgid "Italic"
-msgstr "Италијански"
+msgstr "Курзив"
 
 #: common/eda_text.cpp:979 common/eda_text.cpp:1372
 #: eeschema/dialogs/dialog_field_properties_base.cpp:157
@@ -7045,7 +6893,7 @@ msgstr "Подебљано"
 
 #: common/eda_text.cpp:980
 msgid "Bold+Italic"
-msgstr ""
+msgstr "Подебљано+курзив"
 
 #: common/eda_text.cpp:1328 common/eda_text.cpp:1337
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:279
@@ -7071,7 +6919,7 @@ msgstr "Центар"
 #: eeschema/sch_field.cpp:1594 eeschema/sch_text.cpp:576
 #: pcbnew/dialogs/dialog_render_job.cpp:42
 msgid "Top"
-msgstr ""
+msgstr "Горе"
 
 #: common/eda_text.cpp:1338
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:303
@@ -7079,9 +6927,8 @@ msgstr ""
 #: eeschema/fields_grid_table.cpp:884 eeschema/sch_field.cpp:1013
 #: eeschema/sch_field.cpp:1596 eeschema/sch_text.cpp:578
 #: pcbnew/dialogs/dialog_render_job.cpp:38
-#, fuzzy
 msgid "Bottom"
-msgstr "Поглед одоздо"
+msgstr "Доле"
 
 #: common/eda_text.cpp:1344
 #: eeschema/dialogs/dialog_label_properties_base.cpp:118
@@ -7124,12 +6971,11 @@ msgstr "Својства текста"
 #: pcbnew/pcb_tablecell.cpp:119 pcbnew/pcb_text.cpp:292
 #: pcbnew/pcb_textbox.cpp:476 pcbnew/widgets/pcb_properties_panel.cpp:302
 msgid "Font"
-msgstr ""
+msgstr "Фонт"
 
 #: common/eda_text.cpp:1361
-#, fuzzy
 msgid "Auto Thickness"
-msgstr "Дебљина:"
+msgstr "Ауто дебљина"
 
 #: common/eda_text.cpp:1364 eeschema/sch_field.cpp:1629
 #: eeschema/sch_label.cpp:2358 eeschema/sch_tablecell.cpp:196
