@@ -116,16 +116,16 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-06-20 23:57+0300\n"
-"PO-Revision-Date: 2025-05-28 04:01+0000\n"
+"PO-Revision-Date: 2025-06-26 07:05+0000\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
-"Language-Team: Italian <https://hosted.weblate.org/projects/kicad/master-"
-"source/it/>\n"
+"Language-Team: Italian <https://hosted.weblate.org/projects/kicad/"
+"master-source/it/>\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.12-dev\n"
+"X-Generator: Weblate 5.13-dev\n"
 "X-Poedit-Basepath: /home/marco/git/github/kicad/kicad-source-mirror\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SearchPath-0: kicad\n"
@@ -697,9 +697,8 @@ msgstr ""
 "reale"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:375
-#, fuzzy
 msgid "Show 3D Navigator"
-msgstr "Mostra navigatore collegamenti"
+msgstr "Mostra navigatore 3D"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:382
 msgid "Show Appearance Manager"
@@ -1022,9 +1021,8 @@ msgid "Do not clip silk layers to board outline"
 msgstr "Non bloccare gli strati della serigrafia ai bordi scheda"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:125
-#, fuzzy
 msgid "3D Navigator"
-msgstr "Navigatore collegamenti"
+msgstr "Navigatore 3D"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:126
 msgid "Background Start"
@@ -7936,7 +7934,6 @@ msgstr "Impossibile aprire il file \"%s\""
 #: pcbnew/pcb_io/easyedapro/pcb_io_easyedapro.cpp:119
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:82
 #: pcbnew/pcb_io/fabmaster/pcb_io_fabmaster.cpp:62
-#, fuzzy
 msgid "File import canceled by user."
 msgstr "Importazione file annullata dall'utente."
 
@@ -8687,9 +8684,8 @@ msgid "Courtyard collision shadow"
 msgstr "Ombra collisione ingombri"
 
 #: common/layer_id.cpp:155
-#, fuzzy
 msgid "Board outline area"
-msgstr "Contorni scheda"
+msgstr "Area contorni scheda"
 
 #: common/layer_id.cpp:156
 msgid "Track net names"
@@ -10550,9 +10546,8 @@ msgstr "Impronta non trovata."
 #: common/widgets/footprint_select_widget.cpp:65 cvpcb/cvpcb_mainframe.cpp:903
 #: pcbnew/footprint_edit_frame.cpp:1085
 #: pcbnew/widgets/panel_footprint_chooser.cpp:70
-#, fuzzy
 msgid "Load Footprint Libraries"
-msgstr "Caricamento librerie di impronte"
+msgstr "Carica librerie impronte"
 
 #: common/widgets/footprint_select_widget.cpp:141
 msgid "No default footprint"
@@ -10740,14 +10735,12 @@ msgid "Reset %s to Defaults"
 msgstr "Reimposta %s ai predefiniti"
 
 #: common/widgets/panel_design_block_chooser.cpp:71
-#, fuzzy
 msgid "Load Design Block Libraries"
-msgstr "Caricamento librerie blocchi progetto"
+msgstr "Carica librerie blocchi progetto"
 
 #: common/widgets/panel_design_block_chooser.cpp:274
-#, fuzzy
 msgid "Update Design Block Libraries"
-msgstr "Aggiornamento librerie blocchi progetto"
+msgstr "Aggiorna librerie blocchi progetto"
 
 #: common/widgets/panel_design_block_chooser.cpp:433
 msgid "Errors were encountered loading design blocks:"
@@ -12164,15 +12157,13 @@ msgid "Update symbol attributes"
 msgstr "Aggiorna attributi simboli"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:148
-#, fuzzy
 msgid "Update pin name/number visibilities"
-msgstr "Aggiorna visibilità campi"
+msgstr "Aggiorna visibilità numeri/nomi pin"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:149
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:178
-#, fuzzy
 msgid "Reset alternate pin functions"
-msgstr "Reimposta pin alternativo al predefinito"
+msgstr "Reimposta funzioni alternative pin"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:150
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:187
@@ -12306,9 +12297,8 @@ msgstr "Aggiorna/reimposta posizioni campi"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:149
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:124
-#, fuzzy
 msgid "Check All Update Options"
-msgstr "Aggiorna opzioni"
+msgstr "Seleziona tutte le opzioni di aggiornamento"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:159
 msgid "Update symbol shape and pins"
@@ -12319,9 +12309,8 @@ msgid "Update keywords and footprint filters"
 msgstr "Aggiorna parole chiave e filtri impronta"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:175
-#, fuzzy
 msgid "Update/reset pin name/number visibilities"
-msgstr "Aggiorna/reimposta visibilità campi"
+msgstr "Aggiorna/reimposta visibilità numero/nome pin"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:184
 msgid "Update/reset symbol attributes"
@@ -12329,9 +12318,8 @@ msgstr "Aggiorna/reimposta attributi di fabbricazione"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:190
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:145
-#, fuzzy
 msgid "Uncheck All Update Options"
-msgstr "Aggiorna opzioni"
+msgstr "Deseleziona tutte le opzioni di aggiornamento"
 
 #: eeschema/dialogs/dialog_change_symbols_base.h:107
 msgid "Update Symbols from Library"
@@ -12526,7 +12514,6 @@ msgid "%d symbol(s) require annotation.<br><br>"
 msgstr "%d simboli richiedono annotazione.<br><br>"
 
 #: eeschema/dialogs/dialog_erc.cpp:456
-#, fuzzy
 msgid "-------- ERC canceled by user.<br><br>"
 msgstr "-------- ERC annullato dall'utente.<br><br>"
 
@@ -13656,6 +13643,8 @@ msgid ""
 "The value '%s' can't be converted to boolean correctly, it has been "
 "interpreted as 'False'"
 msgstr ""
+"Il valore '%s' non può essere convertito correttamente in booleano, è stato "
+"interpretato come 'False'"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:1005
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:1562
@@ -13723,9 +13712,8 @@ msgid "Duplicate pins:"
 msgstr "Pin duplicati:"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:133
-#, fuzzy
 msgid "Filter Pin Table"
-msgstr "Tabella pin"
+msgstr "Filtra tabella pin"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:140
 msgid "Filter by unit:"
@@ -13867,24 +13855,20 @@ msgid "Exclude from board"
 msgstr "Escludi dalla scheda"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:95
-#, fuzzy
 msgid "Keep linked datasheet"
-msgstr "Mantieni i ritorni a capo"
+msgstr "Mantieni il datasheet collegato"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:98
-#, fuzzy
 msgid "Keep linked footprint"
-msgstr "Impronte proibite"
+msgstr "Mantieni l'impronta collegata"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:101
-#, fuzzy
 msgid "Transfer user-defined fields"
-msgstr "Usa segnali personalizzati"
+msgstr "Trasferisci i campi personalizzati"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:104
-#, fuzzy
 msgid "Keep content of user-defined fields"
-msgstr "Cancella i contenuti delle celle selezionate"
+msgstr "Mantieni i contenuti dei campi definiti dall'utente"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:122
 msgid "Pin name position offset:"
@@ -14876,9 +14860,8 @@ msgstr ""
 "File progetto %s impossibile da caricare."
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:258
-#, fuzzy
 msgid "Load Bus Aliases"
-msgstr "Caricamento alias di bus"
+msgstr "Carica alias bus"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:269 eeschema/files-io.cpp:282
 #: eeschema/picksymbol.cpp:124
@@ -17053,13 +17036,12 @@ msgid "Largest"
 msgstr "Enorme"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:168
-#, fuzzy
 msgid "Hop-over size:"
-msgstr "Dimensione vertice:"
+msgstr "Dimensione salto:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:172
 msgid "Medium"
-msgstr ""
+msgstr "Media"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:178
 msgid "Connection grid:"
@@ -17611,7 +17593,7 @@ msgid "There is no symbol selected to save."
 msgstr "Nessun simbolo selezionato da salvare."
 
 #: eeschema/eeschema_jobs_handler.cpp:973
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to create output directory '%s'."
 msgstr "Impossibile creare la cartella risultati '%s'."
 
@@ -18172,14 +18154,12 @@ msgid "Schematic '%s' does not exist.  Do you wish to create it?"
 msgstr "Lo schema elettrico \"%s\" non esiste. Vuoi crearlo?"
 
 #: eeschema/files-io.cpp:158
-#, fuzzy
 msgid "Create Schematic"
 msgstr "Crea schema elettrico"
 
 #: eeschema/files-io.cpp:159
-#, fuzzy
 msgid "Load Schematic"
-msgstr "Caricamento schema"
+msgstr "Carica schema elettrico"
 
 #: eeschema/files-io.cpp:224
 msgid "Schematic file changes are unsaved"
@@ -18292,9 +18272,8 @@ msgstr ""
 "convertito al nuovo formato al salvataggio."
 
 #: eeschema/files-io.cpp:542 eeschema/files-io.cpp:1388
-#, fuzzy
 msgid "Updating connections..."
-msgstr "Aggiornamento net..."
+msgstr "Aggiornamento connessioni..."
 
 #: eeschema/files-io.cpp:549
 msgid ""
@@ -19399,9 +19378,9 @@ msgid "Members"
 msgstr "Membri"
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:836
-#, fuzzy, c-format
+#, c-format
 msgid "Importing %s"
-msgstr "Importa impostazioni"
+msgstr "Importazione %s"
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:906
 #, c-format
@@ -19943,7 +19922,6 @@ msgstr "File librerie HTTP di KiCad"
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:506
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2814
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:155
-#, fuzzy
 msgid "Open canceled by user."
 msgstr "Apertura annullata dall'utente."
 
@@ -21872,6 +21850,8 @@ msgstr "era attesa definizione formato misura"
 #: eeschema/sim/ngspice.cpp:501
 msgid "Unable to load ngspice shared library. Please check your install."
 msgstr ""
+"Impossibile caricare la libreria condivisa ngspice. Controllare "
+"l'installazione."
 
 #: eeschema/sim/sim_lib_mgr.cpp:91 eeschema/sim/sim_lib_mgr.cpp:144
 #, c-format
@@ -22316,10 +22296,10 @@ msgstr "Formato"
 
 #: eeschema/sim/spice_model_parser.cpp:101
 #: eeschema/sim/spice_model_parser.cpp:215
-#, fuzzy, c-format
+#, c-format
 msgid "Could not find parent model '%s' for \"A Kind Of\" model '%s'"
 msgstr ""
-"Impossibile trovare il modello '%s' da copiare per \"A Kind Of\" modello '%s'"
+"Impossibile trovare il modello genitore '%s' per \"un tipo di\" modello '%s'"
 
 #: eeschema/sim/spice_simulator.cpp:57
 msgid "DC Operating Point"
@@ -22667,16 +22647,14 @@ msgstr "Editor di simboli KiCad"
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:150
 #: eeschema/symbol_tree_model_adapter.cpp:73
 #: eeschema/symbol_viewer_frame.cpp:277
-#, fuzzy
 msgid "Load Symbol Libraries"
-msgstr "Caricamento librerie simboli"
+msgstr "Carica librerie simboli"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:271
 msgid "Library changes are unsaved"
 msgstr "Cambiamenti libreria non salvati"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:282
-#, fuzzy
 msgid "Symbol library loading canceled by user."
 msgstr "Caricamento libreria simboli annullato dall'utente."
 
@@ -23274,7 +23252,6 @@ msgstr ""
 "Il ri-collegamento delle impronte richiede uno schema completamente annotato."
 
 #: eeschema/tools/backannotate.cpp:356
-#, fuzzy
 msgid "Footprint re-linking canceled by user."
 msgstr "Ri-collegamento impronte annullato dall'utente."
 
@@ -24624,14 +24601,12 @@ msgid "Export Current Plot to Schematic"
 msgstr "Esporta tracciamento corrente nello schema"
 
 #: eeschema/tools/sch_actions.cpp:1586
-#, fuzzy
 msgid "Show Simulation Side Panel"
-msgstr "Mostra pannello laterale"
+msgstr "Mostra pannello laterale di simulazione"
 
 #: eeschema/tools/sch_actions.cpp:1591
-#, fuzzy
 msgid "Show Simulation Console Panel"
-msgstr "Mostra pannello console"
+msgstr "Mostra pannello console di simulazione"
 
 #: eeschema/tools/sch_actions.cpp:1596
 msgid "Show Legend"
@@ -25848,14 +25823,12 @@ msgid "These parameters are usually specified in files, but not always."
 msgstr "Questi parametri sono solitamente specificati in file, ma non sempre."
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:37
-#, fuzzy
 msgid "File units:"
-msgstr "Unità file"
+msgstr "Unità file:"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:47
-#, fuzzy
 msgid "Zero format:"
-msgstr "Formato zeri"
+msgstr "Formato zeri:"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:51
 msgid "No leading zeros (TZ format)"
@@ -25878,9 +25851,8 @@ msgid "(The decimal format does not use these settings)"
 msgstr "(il formato decimale non usa queste impostazioni)"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:89
-#, fuzzy
 msgid "Format for mm:"
-msgstr "Formato per mm"
+msgstr "Formato per mm:"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:96
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:106
@@ -25949,9 +25921,8 @@ msgid ":"
 msgstr ":"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:115
-#, fuzzy
 msgid "Format for inches:"
-msgstr "Formato per pollici"
+msgstr "Formato per pollici:"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:144
 msgid "Usually: 3:3 in mm and 2:4 in inches"
@@ -26097,9 +26068,8 @@ msgstr ""
 "<i>%s</i>"
 
 #: gerbview/files.cpp:303
-#, fuzzy
 msgid "Load Files"
-msgstr "Nessun file"
+msgstr "Carica file"
 
 #: gerbview/files.cpp:305 gerbview/files.cpp:312
 #, c-format
@@ -27750,7 +27720,7 @@ msgstr "Nome font predefinito"
 
 #: kicad/cli/command_sch_export_plot.cpp:77
 msgid "Draw hop over at wire crossings"
-msgstr ""
+msgstr "Disegna il salto agli incroci dei collegamenti"
 
 #: kicad/cli/command_sch_export_plot.cpp:84
 msgid "Do not generate property popups in PDF"
@@ -27888,7 +27858,7 @@ msgstr "Includi lavori:"
 
 #: kicad/dialogs/dialog_executecommand_job_settings.cpp:151
 msgid "<value set at runtime>"
-msgstr ""
+msgstr "<valore impostato in fase di esecuzione>"
 
 #: kicad/dialogs/dialog_executecommand_job_settings_base.cpp:79
 msgid "Record output messages"
@@ -27899,9 +27869,8 @@ msgid "Ignore non-zero exit code"
 msgstr "Ignora il codice di uscita diverso da zero"
 
 #: kicad/dialogs/dialog_executecommand_job_settings_base.cpp:92
-#, fuzzy
 msgid "Available text variables:"
-msgstr "Variabili testo"
+msgstr "Variabili testo disponibili:"
 
 #: kicad/dialogs/dialog_executecommand_job_settings_base.h:58
 msgid "Execute Command Job Settings"
