@@ -33,7 +33,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-06-20 23:57+0300\n"
-"PO-Revision-Date: 2025-06-26 07:05+0000\n"
+"PO-Revision-Date: 2025-06-27 08:05+0000\n"
 "Last-Translator: YÜKSEL AÇIKGÖZ <yukselacikgoz@gmail.com>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/kicad/"
 "master-source/tr/>\n"
@@ -124,7 +124,7 @@ msgstr "Sizin OpenGL sürümünüz desteklenmiyor. Minimum gereksinim 1.5'tir."
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:568
 #, c-format
 msgid "Last render time %.0f ms"
-msgstr "Son işleme süresi %.0f ms"
+msgstr "Son oluşturma süresi %.0f ms"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:756
 #, c-format
@@ -167,7 +167,7 @@ msgstr "Katman %s OpenGL yükle"
 #: 3d-viewer/3d_rendering/raytracing/create_scene.cpp:795
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1999
 msgid "Loading 3D models..."
-msgstr "3D modeller yükleniyor..."
+msgstr "3B modeller yükleniyor..."
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:662
 #: 3d-viewer/3d_rendering/raytracing/create_scene.cpp:976
@@ -207,16 +207,16 @@ msgstr "Işın İzlemeyi Yükle: katmanlar"
 #: 3d-viewer/3d_rendering/raytracing/render_3d_raytrace_base.cpp:240
 #, c-format
 msgid "Rendering time %.3f s"
-msgstr "İşleme süresi %.3f s"
+msgstr "Oluşturma süresi %.3f s"
 
 #: 3d-viewer/3d_rendering/raytracing/render_3d_raytrace_base.cpp:287
 #, c-format
 msgid "Rendering: %.0f %%"
-msgstr "İşleniyor: %.0f %%"
+msgstr "Oluşturuluyor: %.0f %%"
 
 #: 3d-viewer/3d_rendering/raytracing/render_3d_raytrace_base.cpp:700
 msgid "Rendering: Post processing shader"
-msgstr "İşleniyor: İşlem sonrası gölgelendirici"
+msgstr "Oluşturma: Görüntü Sonrası İşleme Gölgelendiricisi"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:55
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:611
@@ -224,11 +224,11 @@ msgstr "İşleniyor: İşlem sonrası gölgelendirici"
 #: common/tool/actions.cpp:1232 pcbnew/footprint_chooser_frame.cpp:347
 #: pcbnew/footprint_viewer_frame.cpp:962 pcbnew/pcb_base_frame.cpp:676
 msgid "3D Viewer"
-msgstr "3D Görüntüleyici"
+msgstr "3B Görüntüleyici"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:77
 msgid "3D Grid"
-msgstr "3D Izgara"
+msgstr "3B Izgara"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:119
 msgid "Reset to Default Settings"
@@ -306,7 +306,7 @@ msgstr "eski renkler"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:677
 msgid "3D Image File Name"
-msgstr "3D Görüntü Dosyası Adı"
+msgstr "3B Görüntü Dosyası Adı"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:698
 #: common/eda_base_frame.cpp:1500 common/eda_base_frame.cpp:1504
@@ -436,19 +436,19 @@ msgstr "Z'yi Saat Yönünün Tersinde Döndür"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:147
 msgid "Move Board Left"
-msgstr "Kartı Sola Hareket Ettir"
+msgstr "Kartı Sola Taşı"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:156
 msgid "Move Board Right"
-msgstr "Kartı Sağa Hareket Ettir"
+msgstr "Kartı Sağa Taşı"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:165
 msgid "Move Board Up"
-msgstr "Kartı Yukarı Hareket Ettir"
+msgstr "Kartı Yukarı Taşı"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:174
 msgid "Move Board Down"
-msgstr "Kartı Aşağı Hareket Ettir"
+msgstr "Kartı Aşağı Taşı"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:183
 msgid "Home View"
@@ -464,7 +464,7 @@ msgstr "Kartı Çevir"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:193
 msgid "Flip the board view"
-msgstr "Kart görünümünü çevir"
+msgstr "Kart görünümünü ters çevir"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:201
 msgid "Toggle Orthographic Projection"
@@ -1284,8 +1284,7 @@ msgstr "Kenar yumuşatma (yavaş)"
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:42
 msgid ""
 "Screen space ambient occlusions and global illumination reflections (slow)"
-msgstr ""
-"Ekran alanı ortam tıkanıklıkları ve küresel aydınlatma yansımaları (yavaş)"
+msgstr "Ekran alanı ortam kapatmaları ve genel aydınlatma yansımaları (yavaş)"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:57
 msgid "Number of Samples"
@@ -8240,7 +8239,7 @@ msgstr "Etiketler"
 #: common/layer_id.cpp:76
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:45
 msgid "Global labels"
-msgstr "Genel Etiket"
+msgstr "Genel etiketler"
 
 #: common/layer_id.cpp:77
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:48
@@ -10329,7 +10328,7 @@ msgstr "Mevcut tasarım bloğunun üzerine yazılsın mı?"
 #: common/widgets/design_block_pane.cpp:482 eeschema/sch_base_frame.cpp:288
 #: pcbnew/footprint_libraries_utils.cpp:414
 msgid "Add the library to the global library table?"
-msgstr "Kütüphaneyi global kütüphane tablosuna eklemek ister misiniz?"
+msgstr "Kitaplığı genel kütüphane tablosuna eklemek ister misiniz?"
 
 #: common/widgets/design_block_pane.cpp:483 eeschema/sch_base_frame.cpp:289
 #: pcbnew/footprint_libraries_utils.cpp:415
@@ -10341,7 +10340,7 @@ msgstr "Genel Kütüphane Tablosuna Ekle"
 #: eeschema/sch_base_frame.cpp:299 eeschema/widgets/search_handlers.cpp:476
 #: pcbnew/footprint_libraries_utils.cpp:425
 msgid "Global"
-msgstr "Küresel"
+msgstr "Genel"
 
 #: common/widgets/design_block_pane.cpp:494
 #: eeschema/dialogs/dialog_schematic_setup.cpp:101
@@ -11079,9 +11078,7 @@ msgstr ""
 #: cvpcb/cvpcb.cpp:206
 msgid ""
 "An error occurred attempting to load the global footprint library table."
-msgstr ""
-"Genel ayak izi(footprint) kitaplığı tablosu yüklenmeye çalışılırken bir hata "
-"oluştu."
+msgstr "Genel ayak izi kütüphane tablosu yüklenirken bir hata oluştu."
 
 #: cvpcb/cvpcb_mainframe.cpp:68 cvpcb/cvpcb_mainframe.cpp:83
 #: cvpcb/menubar.cpp:51
@@ -17200,8 +17197,7 @@ msgid ""
 "This action will reset your global library table on disk and cannot be "
 "undone."
 msgstr ""
-"Bu işlem, disk üzerindeki global kütüphane tablonuzu sıfırlayacak ve geri "
-"alınamaz."
+"Bu eylem, diskteki genel kütüphane tablonuzu sıfırlayacak ve geri alınamaz."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:923
 msgid ""
@@ -17805,7 +17801,7 @@ msgstr "Genel etiket şemada yalnızca bir kez görünüyor"
 
 #: eeschema/erc/erc_item.cpp:129
 msgid "Local and global labels have same name"
-msgstr "Yerel ve global etiketler aynı ada sahip"
+msgstr "Yerel ve genel etiketler aynı ada sahip"
 
 #: eeschema/erc/erc_item.cpp:133
 msgid "Different footprint assigned in another unit of the symbol"
@@ -19437,8 +19433,8 @@ msgid ""
 "Symbol ID '%s' is a signal reference or global signal but it has too many "
 "pins. The expected number of pins is 1 but %d were found."
 msgstr ""
-"Sembol Kimliği '%s' bir sinyal referansı veya genel sinyaldir, ancak çok "
-"fazla pimi vardır. Beklenen pin sayısı 1'dir ancak%d bulunmuştur."
+"Sembol Kimliği '%s' bir sinyal referansı veya genel sinyal olmasına rağmen "
+"çok fazla pine sahip. Beklenen pin sayısı 1 iken %d tane bulundu."
 
 #: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:990
 #, c-format
@@ -23733,7 +23729,7 @@ msgstr "Genel Etikete Dönüştür"
 
 #: eeschema/tools/sch_actions.cpp:902
 msgid "Change existing item to a global label"
-msgstr "Varolan öğeyi genel etikete değiştirme"
+msgstr "Mevcut ögeyi genel bir etikete dönüştür"
 
 #: eeschema/tools/sch_actions.cpp:910
 msgid "Change to Text"
@@ -35970,11 +35966,11 @@ msgid ""
 "This value can be overridden on a pad-by-pad basis in the Local\n"
 "Clearance and Settings tab of Pad Properties."
 msgstr ""
-"Bu, pedler ile lehim maskesi arasındaki.\n"
+"Bu, bu ayak izi için pedler ve lehim maskesi arasındaki\n"
 "yerel boşluktur.\n"
-"0 ise, genel değer kullanılır.\n"
-"Bu değer, Pad Özellikleri'nin Yerel Boşluk ve Ayarlar sekmesinde\n"
-"ped bazında geçersiz kılınabilir."
+"Eğer 0 ise, genel değer kullanılır.\n"
+"Bu değer, Ped Özellikleri'nin Yerel Boşluk ve Ayarlar\n"
+"sekmesinde ped bazında geçersiz kılınabilir."
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:273
 msgid ""
@@ -37871,14 +37867,12 @@ msgid ""
 "The final clearance value is the sum of this value and the clearance value.\n"
 "A negative value means a smaller mask size than pad size."
 msgstr ""
-"Bu, bu ayak ile lehim pastası arasındaki yüzde cinsinden yerel boşluk "
-"oranıdır.\n"
-"10 değeri, boşluk değerinin ayak boyutunun yüzde 10'u olduğu anlamına "
-"gelir.\n"
-"0 ise, ayak izi değeri veya genel değer kullanılır.\n"
+"Bu, bu ped ile lehim pastası arasındaki yerel boşluk oranıdır, yüzde olarak "
+"ifade edilir.\n"
+"10 değeri, boşluk değerinin ped boyutunun yüzde 10'u olduğu anlamına gelir.\n"
+"Eğer 0 ise, ayak izi değeri veya genel değer kullanılır.\n"
 "Nihai boşluk değeri, bu değer ile boşluk değerinin toplamıdır.\n"
-"Negatif bir değer, ayak boyutundan daha küçük bir maske boyutu anlamına "
-"gelir."
+"Negatif bir değer, ped boyutundan daha küçük bir maske boyutu anlamına gelir."
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1241
 msgid "Preview pad in sketch mode"
@@ -38056,8 +38050,8 @@ msgstr "Negatif çizim"
 #: pcbnew/dialogs/dialog_plot_base.cpp:160
 msgid "Global solder mask minimum width and/or margin are not set to 0. "
 msgstr ""
-"Global lehim maskesi minimum genişliği ve/veya marjı 0 olarak "
-"ayarlanmamıştır. "
+"Genel lehim maskesi minimum genişliği ve/veya kenar boşluğu 0 olarak "
+"ayarlanmamış. "
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:164
 msgid ""
@@ -38170,7 +38164,7 @@ msgstr "X ölçek faktörü:"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:255
 msgid "Set global X scale adjust for exact scale PostScript output."
-msgstr "Tam ölçekli PostScript çıktısı için global X ölçek ayarını ayarlayın."
+msgstr "Tam ölçekli PostScript çıktısı için genel X ölçek ayarlamasını yap."
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:262
 msgid "Y scale factor:"
@@ -38178,7 +38172,7 @@ msgstr "Y ölçek faktörü:"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:267
 msgid "Set global Y scale adjust for exact scale PostScript output."
-msgstr "Tam ölçekli PostScript çıktısı için global Y ölçek ayarını ayarlayın."
+msgstr "Tam ölçekli PostScript çıktısı için genel Y ölçek ayarlamasını yap."
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:274
 msgid "Track width correction:"
@@ -45499,7 +45493,7 @@ msgstr "BGA"
 
 #: pcbnew/pad.cpp:1380
 msgid "Fiducial global"
-msgstr "Genel Merkezleme"
+msgstr "Genel Referans Noktası"
 
 #: pcbnew/pad.cpp:1381
 msgid "Fiducial local"
@@ -50431,7 +50425,7 @@ msgstr "Kart genelinde damlacıkları ekle, kaldır veya düzenle"
 
 #: pcbnew/tools/pcb_actions.cpp:987
 msgid "Global Deletions..."
-msgstr "Global Silmeler..."
+msgstr "Genel Silmeler..."
 
 #: pcbnew/tools/pcb_actions.cpp:988
 msgid "Delete tracks, footprints and graphic items from board"
@@ -52352,7 +52346,7 @@ msgstr "Etkin olmayan katmanlar tam renkli olarak gösterilecektir"
 #: pcbnew/widgets/appearance_controls.cpp:653
 #: pcbnew/widgets/appearance_controls.cpp:1865
 msgid "Dim"
-msgstr "Loş"
+msgstr "Karart"
 
 #: pcbnew/widgets/appearance_controls.cpp:655
 #: pcbnew/widgets/appearance_controls.cpp:1866
