@@ -672,6 +672,7 @@ HANDLER_RESULT<GetItemsResponse> API_HANDLER_PCB::handleGetItemsById(
     GetItemsResponse response;
 
     std::vector<BOARD_ITEM*> items;
+
     for( const kiapi::common::types::KIID& id : aCtx.Request.items() )
     {
         if( std::optional<BOARD_ITEM*> item = getItemById( KIID( id.value() ) ) )

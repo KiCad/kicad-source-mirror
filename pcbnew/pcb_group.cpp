@@ -79,21 +79,17 @@ bool PCB_GROUP::Deserialize( const google::protobuf::Any &aContainer )
     const_cast<KIID&>( m_Uuid ) = KIID( group.id().value() );
     SetName( wxString( group.name().c_str(), wxConvUTF8 ) );
 
-
     BOARD* board = GetBoard();
+
     if( !board )
         return false;
 
-    for ( const kiapi::common::types::KIID& itemId : group.items() )
+    for( const kiapi::common::types::KIID& itemId : group.items() )
     {
+        KIID id( itemId.value() );
 
-        KIID        id( itemId.value() );
-        BOARD_ITEM* item = board->ResolveItem( id, true ); 
-        
-        if( item )
-        {
+        if( BOARD_ITEM* item = board->ResolveItem( id, true ) )
             AddItem( item );
-        }
     }
 
     return true;
