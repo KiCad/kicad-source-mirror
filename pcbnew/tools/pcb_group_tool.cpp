@@ -134,6 +134,14 @@ int PCB_GROUP_TOOL::Group( const TOOL_EVENT& aEvent )
         selection = selTool->RequestSelection(
                 []( const VECTOR2I&, GENERAL_COLLECTOR& aCollector, PCB_SELECTION_TOOL* )
                 {
+                    // Iterate from the back so we don't have to worry about removals.
+                    for( int i = aCollector.GetCount() - 1; i >= 0; --i )
+                    {
+                        BOARD_ITEM* item = aCollector[i];
+
+                        if( !item->IsGroupableType() )
+                            aCollector.Remove( item );
+                    }
                 } );
     }
     else
@@ -147,6 +155,9 @@ int PCB_GROUP_TOOL::Group( const TOOL_EVENT& aEvent )
                         BOARD_ITEM* item = aCollector[i];
 
                         if( item->GetParentFootprint() )
+                            aCollector.Remove( item );
+
+                        if( !item->IsGroupableType() )
                             aCollector.Remove( item );
                     }
                 } );
