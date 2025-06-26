@@ -859,8 +859,6 @@ void FIELDS_GRID_TABLE::SetValue( int aRow, int aCol, const wxString &aValue )
             horizontalJustification = GR_TEXT_H_ALIGN_CENTER;
         else if( value == _( "Right" ) )
             horizontalJustification = GR_TEXT_H_ALIGN_RIGHT;
-        else
-            wxFAIL_MSG( wxT( "unknown horizontal alignment: " ) + value );
 
         // Note that we must set justifications before we can ask if they're flipped.  If the old
         // justification is center then it won't know (whereas if the new justification is center
@@ -883,8 +881,6 @@ void FIELDS_GRID_TABLE::SetValue( int aRow, int aCol, const wxString &aValue )
             verticalJustification = GR_TEXT_V_ALIGN_CENTER;
         else if( value == _( "Bottom" ) )
             verticalJustification = GR_TEXT_V_ALIGN_BOTTOM;
-        else
-            wxFAIL_MSG( wxT( "unknown vertical alignment: " ) + value);
 
         // Note that we must set justifications before we can ask if they're flipped.  If the old
         // justification is center then it won't know (whereas if the new justification is center
