@@ -1243,6 +1243,9 @@ bool SCH_EDIT_FRAME::SaveProject( bool aSaveAs )
 
 bool SCH_EDIT_FRAME::doAutoSave()
 {
+    if( !Schematic().IsValid() )
+        return true;
+
     wxFileName  tmpFileName = Schematic().Root().GetFileName();
     wxFileName  fn = tmpFileName;
     wxFileName  tmp;
