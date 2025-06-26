@@ -824,7 +824,8 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnRenameField( wxCommandEvent& event )
     {
         if( m_mandatoryFieldListIndexes[id] == row )
         {
-            wxBell();
+            DisplayError( this, wxString::Format( _( "The first %d fields are mandatory and names cannot be changed." ),
+                                                  (int) m_mandatoryFieldListIndexes.size() ) );
             return;
         }
     }
@@ -834,7 +835,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnRenameField( wxCommandEvent& event )
     int col = m_dataModel->GetFieldNameCol( fieldName );
     wxCHECK_RET( col != -1, wxS( "Existing field name missing from data model" ) );
 
-    wxTextEntryDialog dlg( this, _( "New field name:" ), _( "Rename Field" ) );
+    wxTextEntryDialog dlg( this, _( "New field name:" ), _( "Rename Field" ), fieldName );
 
     if( dlg.ShowModal() != wxID_OK )
          return;
@@ -1068,7 +1069,10 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnColLabelChange( wxDataViewEvent& aEvent )
     int            col = m_dataModel->GetFieldNameCol( fieldName );
 
     if( col != -1 )
+    {
         m_dataModel->SetColLabelValue( col, label );
+        m_grid->SetColLabelValue( col, label );
+    }
 
     syncBomPresetSelection();
 

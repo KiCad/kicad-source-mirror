@@ -40,15 +40,21 @@ DIALOG_SYMBOL_FIELDS_TABLE_BASE::DIALOG_SYMBOL_FIELDS_TABLE_BASE( wxWindow* pare
 	bFieldsButtons = new wxBoxSizer( wxHORIZONTAL );
 
 	m_addFieldButton = new STD_BITMAP_BUTTON( m_leftPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
+	m_addFieldButton->SetToolTip( _("Add a new field") );
+
 	bFieldsButtons->Add( m_addFieldButton, 0, wxBOTTOM|wxLEFT, 5 );
 
 	m_renameFieldButton = new STD_BITMAP_BUTTON( m_leftPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
+	m_renameFieldButton->SetToolTip( _("Rename selected field") );
+
 	bFieldsButtons->Add( m_renameFieldButton, 0, wxBOTTOM|wxLEFT, 5 );
 
 
 	bFieldsButtons->Add( 15, 0, 0, wxEXPAND, 5 );
 
 	m_removeFieldButton = new STD_BITMAP_BUTTON( m_leftPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
+	m_removeFieldButton->SetToolTip( _("Remove selected field") );
+
 	bFieldsButtons->Add( m_removeFieldButton, 0, wxBOTTOM|wxLEFT, 5 );
 
 
@@ -107,7 +113,7 @@ DIALOG_SYMBOL_FIELDS_TABLE_BASE::DIALOG_SYMBOL_FIELDS_TABLE_BASE( wxWindow* pare
 	m_staticline32 = new wxStaticLine( m_rightPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_VERTICAL );
 	bControls->Add( m_staticline32, 0, wxEXPAND | wxALL, 3 );
 
-	m_groupSymbolsBox = new wxCheckBox( m_rightPanel, OPT_GROUP_COMPONENTS, _("Group symbols"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_groupSymbolsBox = new wxCheckBox( m_rightPanel, wxID_ANY, _("Group symbols"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_groupSymbolsBox->SetValue(true);
 	m_groupSymbolsBox->SetToolTip( _("Group symbols together based on common properties") );
 
