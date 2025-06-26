@@ -570,7 +570,7 @@ void DIALOG_SIM_COMMAND::updateDCSources( wxChar aType, wxChoice* aSource )
 {
     wxString prevSelection;
 
-    if( !aSource->IsEmpty() )
+    if( !aSource->IsEmpty() && aSource->GetSelection() >= 0 )
         prevSelection = aSource->GetString( aSource->GetSelection() );
 
     std::set<wxString> sourcesList;
