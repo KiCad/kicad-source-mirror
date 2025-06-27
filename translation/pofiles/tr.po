@@ -554,7 +554,7 @@ msgstr "3B modelleri .pos dosyasında olmasa bile göster"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:315
 msgid "Show 3D Models marked DNP"
-msgstr "Sanal olarak işaretlenmiş 3B modelleri göster"
+msgstr "Monte etme olarak işaretlenmiş 3B modelleri göster"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:316
 msgid "Show 3D models even if marked 'Do Not Place'"
@@ -843,11 +843,11 @@ msgstr "Modeller POS Dosyasında Değil"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:118
 msgid "Models marked DNP"
-msgstr "Yertleştirilmemeli olarak (DNP) işaretlenmiş modeller"
+msgstr "Monte etme olarak işaretlenmiş modeller"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:119
 msgid "Model Bounding Boxes"
-msgstr "Model Sınır Çerçevesi"
+msgstr "Model Sınırlayıcı Kutular"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:121 common/layer_id.cpp:125
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:30
@@ -861,7 +861,7 @@ msgstr "Değerler"
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:121
 #: pcbnew/widgets/appearance_controls.cpp:340
 msgid "Show footprint values"
-msgstr "İz düşümü değerlerini göster"
+msgstr "Ayak izi değerlerini göster"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:122
 #: pcbnew/widgets/appearance_controls.cpp:341
@@ -871,17 +871,17 @@ msgstr "Referanslar"
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:122
 #: pcbnew/widgets/appearance_controls.cpp:341
 msgid "Show footprint references"
-msgstr "İz düşümü referanslarını göster"
+msgstr "Ayak izi referanslarını göster"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:123
 #: pcbnew/widgets/appearance_controls.cpp:342
 msgid "Footprint Text"
-msgstr "Ayak İzi(footprint) Metni"
+msgstr "Ayak İzi Metni"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:123
 #: pcbnew/widgets/appearance_controls.cpp:342
 msgid "Show all footprint text"
-msgstr "Tüm iz düşümü metnini göster"
+msgstr "Tüm ayak izi metinlerini göster"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:124
 msgid "Off-board Silkscreen"
@@ -889,7 +889,7 @@ msgstr "Kart Dışı Serigrafi"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:124
 msgid "Do not clip silk layers to board outline"
-msgstr "Kart sınırında ipek katmalarını kırpma"
+msgstr "İpek katmanlarını kart dış hattına göre kırpma"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:126
 msgid "3D Axis"
@@ -901,7 +901,7 @@ msgstr "Arka Planda Başlat"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:127
 msgid "Background gradient start color"
-msgstr "Arkaplan gradyan başlangıç rengi"
+msgstr "Arka plan gradyan başlangıç rengi"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:128
 msgid "Background End"
@@ -949,7 +949,7 @@ msgid ""
 "popup."
 msgstr ""
 "Görünüm konumunu ve yakınlaştırmayı kaydet ve geri yükle.\n"
-"Seçiciyi etkinleştirmek için %s+Tab tuşlarını kullan.\n"
+"Seçiciyi etkinleştirmek için %s+Tab tuşlarını kullanın.\n"
 "%s tuşunu basılı tutarken art arda Sekmeler açılır pencerede görünüm "
 "alanları arasında geçiş yapacaktır."
 
@@ -8170,7 +8170,7 @@ msgstr "Referans belirteçleri"
 
 #: common/layer_id.cpp:127
 msgid "Footprint text"
-msgstr "Ayak çizimi metni"
+msgstr "Ayak izi metni"
 
 #: common/layer_id.cpp:128
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:27
