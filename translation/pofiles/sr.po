@@ -6,8 +6,8 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-06-27 22:51+0300\n"
-"PO-Revision-Date: 2025-06-27 13:19+0000\n"
-"Last-Translator: Luka Borkovic <borkovic@gmail.com>\n"
+"PO-Revision-Date: 2025-06-28 07:04+0000\n"
+"Last-Translator: Anonymous <noreply@weblate.org>\n"
 "Language-Team: Serbian <https://hosted.weblate.org/projects/kicad/v9/sr/>\n"
 "Language: sr\n"
 "MIME-Version: 1.0\n"
@@ -6533,6 +6533,7 @@ msgstr "Својства облика"
 #: eeschema/sch_tablecell.cpp:192 pcbnew/pcb_table.cpp:616
 #: pcbnew/pcb_tablecell.cpp:192 pcbnew/pcb_textbox.cpp:800
 #: pcbnew/pcb_track.cpp:2115
+#, fuzzy
 msgid "Start X"
 msgstr "X старт:"
 
@@ -6540,6 +6541,7 @@ msgstr "X старт:"
 #: eeschema/sch_tablecell.cpp:193 pcbnew/pcb_table.cpp:619
 #: pcbnew/pcb_tablecell.cpp:193 pcbnew/pcb_textbox.cpp:801
 #: pcbnew/pcb_track.cpp:2119
+#, fuzzy
 msgid "Start Y"
 msgstr "Y старт:"
 
