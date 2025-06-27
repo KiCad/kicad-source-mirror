@@ -3318,12 +3318,12 @@ msgstr "Çizim sayfası '%s' yüklenirken hata oluştu."
 #: common/dialogs/dialog_page_settings.cpp:713
 #: common/dialogs/dialog_page_settings_base.cpp:54
 msgid "Portrait"
-msgstr "Dikey görünüm"
+msgstr "Dikey Resim"
 
 #: common/dialogs/dialog_page_settings.cpp:715
 #: common/dialogs/dialog_page_settings_base.cpp:54
 msgid "Landscape"
-msgstr "Yatay"
+msgstr "Yatay Resim"
 
 #: common/dialogs/dialog_page_settings.cpp:803 pagelayout_editor/files.cpp:59
 msgid "Drawing Sheet File"
@@ -3354,7 +3354,7 @@ msgstr "dummy metin"
 #: pcbnew/dialogs/dialog_textbox_properties_base.cpp:204
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:221
 msgid "Orientation:"
-msgstr "Oryantasyon:"
+msgstr "Yönlendirme:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:60
 msgid "Custom paper size:"
@@ -3387,7 +3387,7 @@ msgstr "Genişlik:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:106
 msgid "Custom paper width."
-msgstr "Özel Kağıt Genişliği."
+msgstr "Özel kağıt genişliği."
 
 #: common/dialogs/dialog_page_settings_base.cpp:117
 #: common/dialogs/dialog_page_settings_base.cpp:237
@@ -3439,7 +3439,7 @@ msgstr "Sayfa numarası: %d"
 
 #: common/dialogs/dialog_page_settings_base.cpp:216
 msgid "Issue Date:"
-msgstr "Veriliş tarihi:"
+msgstr "Yayın Tarihi:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:228
 msgid "<<<"
@@ -3505,24 +3505,24 @@ msgstr ""
 #: common/dialogs/dialog_paste_special.cpp:44
 #, c-format
 msgid "Replaces reference designators with '%s'."
-msgstr "Referans göstergelerini '%s' ile değiştirir."
+msgstr "Referans tanımlayıcıları '%s' ile değiştirir."
 
 #: common/dialogs/dialog_paste_special_base.cpp:22
 msgid "Assign unique reference designators to pasted symbols"
-msgstr "Yapıştırılan sembollere benzersiz referans göstergeleri atayın"
+msgstr "Yapıştırılan sembollere benzersiz referans tanımlayıcıları ata"
 
 #: common/dialogs/dialog_paste_special_base.cpp:22
 msgid "Keep existing reference designators, even if they are duplicated"
-msgstr "Mevcut referans tanımlayıcılarını kopyalanmış olsalar bile saklayın"
+msgstr "Mevcut referans tanımlayıcılarını, yinelenmiş olsalar bile koru"
 
 #: common/dialogs/dialog_paste_special_base.cpp:22
 msgid "Clear reference designators on all pasted symbols"
-msgstr "Yapıştırılan tüm sembollerdeki referans göstergelerini temizle"
+msgstr "Yapıştırılan tüm sembollerdeki referans tanımlayıcılarını temizle"
 
 #: common/dialogs/dialog_paste_special_base.cpp:24
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:213
 msgid "Reference Designators"
-msgstr "Başvuru Belirleyicileri"
+msgstr "Referans Tanımlayıcıları"
 
 #: common/dialogs/dialog_paste_special_base.cpp:28
 msgid "Clear net assignments"
@@ -3530,19 +3530,19 @@ msgstr "Ağ atamalarını temizle"
 
 #: common/dialogs/dialog_paste_special_base.cpp:29
 msgid "Remove the net information from all connected items before pasting"
-msgstr "Yapıştırmadan önce tüm bağlı öğelerden parça bilgilerini kaldırın"
+msgstr "Yapıştırmadan önce tüm bağlı ögelerden ağ bilgisini kaldır"
 
 #: common/dialogs/dialog_paste_special_base.h:47
 msgid "Paste Special"
-msgstr "Özel yapıştır"
+msgstr "Özel Yapıştır"
 
 #: common/dialogs/dialog_plugin_options.cpp:37
 msgid ""
 "Select an <b>Option Choice</b> in the listbox above, and then click the "
 "<b>Append Selected Option</b> button."
 msgstr ""
-"Yukarıdaki <b>Seçim seçeneği</b> listesinden seç, ve <b>Seçili Seçeneği "
-"Ekle</b> butonuna tıkla."
+"Yukarıdaki liste kutusundan bir <b>Seçenek Seçimi</b> seçin ve ardından "
+"<b>Seçili Seçeneği Ekle</b> düğmesine tıklayın."
 
 #: common/dialogs/dialog_plugin_options.cpp:53
 #, c-format
@@ -3570,7 +3570,7 @@ msgstr "Mevcut eklenti tarafından desteklenen seçenekler"
 
 #: common/dialogs/dialog_plugin_options_base.cpp:85
 msgid "<<    Append Selected Option"
-msgstr "<< Seçili Seçeneği Ekle"
+msgstr "<<     Seçili Seçeneği Ekle"
 
 #: common/dialogs/dialog_print_generic.cpp:101
 #: common/dialogs/dialog_print_generic.cpp:322
@@ -3621,7 +3621,7 @@ msgstr "Kapat"
 
 #: common/dialogs/dialog_print_generic.cpp:161
 msgid "Warning: scale is not a number."
-msgstr "Uyarı: Ölçek bir sayı değildir."
+msgstr "Uyarı: ölçek bir sayı değildir."
 
 #: common/dialogs/dialog_print_generic.cpp:169
 #, c-format
@@ -3630,7 +3630,7 @@ msgid ""
 "It will be clamped to %f."
 msgstr ""
 "Uyarı: ölçek çok büyük bir değere ayarlandı.\n"
-"%f'ye sabitlenecek."
+"%f değerine sabitlenecek."
 
 #: common/dialogs/dialog_print_generic.cpp:177
 #, c-format
@@ -3639,7 +3639,7 @@ msgid ""
 "It will be clamped to %f."
 msgstr ""
 "Uyarı: ölçek çok küçük bir değere ayarlandı.\n"
-"%f'ye sabitlenecek."
+"%f değerine sabitlenecek."
 
 #: common/dialogs/dialog_print_generic.cpp:249
 #: common/dialogs/dialog_print_generic.cpp:307
@@ -3653,7 +3653,7 @@ msgstr "Önceki yazdırma işi henüz tamamlanmadı."
 
 #: common/dialogs/dialog_print_generic.cpp:330
 msgid "There was a problem printing."
-msgstr "Yazdırmada bir sorun oluştu."
+msgstr "Yazdırmada sırasında bir sorun oluştu."
 
 #: common/dialogs/dialog_print_generic.cpp:372
 msgid "An error occurred initializing the printer information."
@@ -3665,7 +3665,7 @@ msgstr "Yazıcı bilgileri başlatılırken bir hata oluştu."
 #: pcbnew/dialogs/dialog_plot_base.cpp:348
 #: pcbnew/dialogs/dialog_plot_base.cpp:374
 msgid "Output mode:"
-msgstr "Çıkış Modu:"
+msgstr "Çıkış modu:"
 
 #: common/dialogs/dialog_print_generic_base.cpp:46
 #: common/dialogs/panel_setup_netclasses_base.cpp:64 common/eda_text.cpp:1412
@@ -3696,11 +3696,11 @@ msgstr "Siyah ve beyaz"
 #: common/dialogs/dialog_print_generic_base.cpp:52
 #: eeschema/printing/dialog_print_base.cpp:33
 msgid "Print drawing sheet"
-msgstr "Çizim Sayfasını Yazdır"
+msgstr "Çizim sayfasını yazdır"
 
 #: common/dialogs/dialog_print_generic_base.cpp:54
 msgid "Print Frame references."
-msgstr "Çerçeve referanslarını yazdırın."
+msgstr "Çerçeve referanslarını yazdır."
 
 #: common/dialogs/dialog_print_generic_base.cpp:69
 #: pcbnew/dialogs/dialog_plot_base.cpp:129
@@ -3718,11 +3718,11 @@ msgstr "Özel:"
 
 #: common/dialogs/dialog_print_generic_base.cpp:88
 msgid "Set X scale adjust for exact scale plotting"
-msgstr "Kesin ölçek çizimi için X ölçek ayarını ayarlayın"
+msgstr "Kesin ölçekli çizim için X ölçek ayarını yap"
 
 #: common/dialogs/dialog_print_generic_base.cpp:107
 msgid "Info text"
-msgstr "Bilgi metini"
+msgstr "Bilgi metni"
 
 #: common/dialogs/dialog_print_generic_base.cpp:119
 #: eeschema/printing/dialog_print_base.cpp:84
@@ -3763,12 +3763,12 @@ msgstr "Uyarılar"
 
 #: common/dialogs/dialog_rc_job_base.cpp:68
 msgid "Report job failure when violations present"
-msgstr "İhlaller mevcut olduğunda iş hatasını bildir"
+msgstr "İhlal durumunda iş başarısızlığını raporla"
 
 #: common/dialogs/dialog_rc_job_base.cpp:74 kicad/cli/command_pcb_drc.cpp:56
 #: pcbnew/dialogs/dialog_drc_base.cpp:30
 msgid "Report all errors for each track"
-msgstr "Her parça için tüm hataları bildirin"
+msgstr "Her yol için tüm hataları raporla"
 
 #: common/dialogs/dialog_rc_job_base.cpp:80 kicad/cli/command_pcb_drc.cpp:60
 #: pcbnew/dialogs/dialog_drc_base.cpp:41
@@ -3824,11 +3824,11 @@ msgstr "Noktayı Konuma Taşı"
 #: pcbnew/widgets/net_inspector_panel.cpp:42
 #: pcbnew/widgets/net_inspector_panel.cpp:98
 msgid "Filter"
-msgstr "Filtre"
+msgstr "Filtrele"
 
 #: common/dialogs/eda_list_dialog_base.cpp:22
 msgid "Items:"
-msgstr "Öğeler:"
+msgstr "Ögeler:"
 
 #: common/dialogs/eda_reorderable_list_dialog_base.cpp:32
 msgid "Available:"
@@ -4026,7 +4026,7 @@ msgstr "Seçilen dosya geçerli bir SSH özel anahtarı değil"
 #: common/dialogs/git/dialog_git_repository.cpp:377
 #, c-format
 msgid "Could not open public key '%s'"
-msgstr "Genel anahtar '%s' açılamadı"
+msgstr "Ortak anahtar '%s' açılamadı"
 
 #: common/dialogs/git/dialog_git_repository.cpp:396
 msgid "Missing information"
@@ -4066,11 +4066,11 @@ msgstr "Yerel"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:91
 msgid "SSH private key:     "
-msgstr "SSH Özel Anahtarı:     "
+msgstr "SSH özel anahtarı:     "
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:94
 msgid "Select SSH private key file"
-msgstr "SSH özel anahtar dosyasını seçin"
+msgstr "SSH özel anahtar dosyasını seç"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:94
 msgid "*"
@@ -4082,15 +4082,15 @@ msgstr "Kullanıcı adı:"
 
 #: common/dialogs/git/dialog_git_repository_base.h:76
 msgid "Git Repository"
-msgstr "Git Depo"
+msgstr "'Git' Deposu"
 
 #: common/dialogs/git/dialog_git_switch.cpp:44
 msgid "Git Branch Switch"
-msgstr "GIT Dal Anahtarı"
+msgstr "Git Dal Değiştirme"
 
 #: common/dialogs/git/dialog_git_switch.cpp:52
 msgid "Select or enter a branch name:"
-msgstr "Dal için bir isim seçin veya girin:"
+msgstr "Bir dal adı seçin veya girin:"
 
 #: common/dialogs/git/dialog_git_switch.cpp:58
 msgid "Branch"
@@ -4098,7 +4098,7 @@ msgstr "Dal"
 
 #: common/dialogs/git/dialog_git_switch.cpp:59
 msgid "Last Commit"
-msgstr "Son Kabul"
+msgstr "Son Onay"
 
 #: common/dialogs/git/dialog_git_switch.cpp:60
 msgid "Last Updated"
@@ -4156,7 +4156,7 @@ msgstr "Yazar adı:"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:96
 msgid "Author e-mail:"
-msgstr "Yazar e-posta:"
+msgstr "Yazar e-postası:"
 
 #: common/dialogs/panel_color_settings.cpp:52
 msgid "Reveal Themes in Finder"
@@ -4172,7 +4172,7 @@ msgstr "Renk Teması Ekle"
 
 #: common/dialogs/panel_color_settings.cpp:149
 msgid "Theme already exists!"
-msgstr "Tema zaten var!"
+msgstr "Tema zaten mevcut!"
 
 #: common/dialogs/panel_color_settings.cpp:215
 #: common/dialogs/panel_color_settings.cpp:234
@@ -4194,7 +4194,7 @@ msgstr "Kaydedilen renge geri dön"
 #: common/dialogs/panel_color_settings.cpp:390
 #: eeschema/symbol_tree_synchronizing_adapter.cpp:275
 msgid "(read-only)"
-msgstr "(Yalnızca-okunur)"
+msgstr "(salt okunur)"
 
 #: common/dialogs/panel_color_settings_base.cpp:21
 msgid "Theme:"
@@ -4261,14 +4261,15 @@ msgid ""
 "File explorer command.\n"
 "example:"
 msgstr ""
-"Dosya gezgini komutu.\n"
+"Dosya Gezgini komutu.\n"
 "örnek:"
 
 #: common/dialogs/panel_common_settings.cpp:360
 #, c-format
 msgid ""
 "Explorer command with mandatory '%s' suffix after last entered character."
-msgstr "Son girilen karakterden sonra zorunlu '%s' eki ile Explorer komutu."
+msgstr ""
+"Son girilen karakterden sonra zorunlu '%s' sonekine sahip Gezgin komutu."
 
 #: common/dialogs/panel_common_settings.cpp:374
 msgid "Executable files ("
@@ -4303,7 +4304,7 @@ msgstr "Yüksek Kaliteli Kenar Yumuşatma"
 
 #: common/dialogs/panel_common_settings_base.cpp:49
 msgid "Fallback graphics:"
-msgstr "Hızlandırılmamış grafikler:"
+msgstr "İndirgenmiş grafikler:"
 
 #: common/dialogs/panel_common_settings_base.cpp:70
 msgid "Helper Applications"
@@ -4327,7 +4328,7 @@ msgstr "Diğer:"
 
 #: common/dialogs/panel_common_settings_base.cpp:142
 msgid "User Interface"
-msgstr "Kullanıcı arayüzü"
+msgstr "Kullanıcı Arayüzü"
 
 #: common/dialogs/panel_common_settings_base.cpp:155
 msgid "Show icons in menus"
@@ -4339,7 +4340,7 @@ msgstr "Düzenleyicilerde kaydırma çubuklarını göster"
 
 #: common/dialogs/panel_common_settings_base.cpp:160
 msgid "This change takes effect when relaunching the editor."
-msgstr "Bu değişiklik, düzenleyiciyi yeniden başlatırken etkili olur."
+msgstr "Bu değişiklik, düzenleyici yeniden başlatıldığında etkinleşir"
 
 #: common/dialogs/panel_common_settings_base.cpp:164
 msgid "Focus follows mouse between schematic and PCB editors"
@@ -9051,7 +9052,7 @@ msgstr "Bir kütüphane dosyasını metin düzenleyici ile aç"
 
 #: common/tool/actions.cpp:83
 msgid "Open in file explorer..."
-msgstr "Dosya gezgini ile aç..."
+msgstr "Dosya Gezgini ile aç..."
 
 #: common/tool/actions.cpp:84
 msgid "Open a library file with system file explorer"
