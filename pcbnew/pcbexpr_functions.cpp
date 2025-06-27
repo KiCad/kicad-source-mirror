@@ -1161,10 +1161,17 @@ static void isCoupledDiffPairFunc( LIBEVAL::CONTEXT* aCtx, void* self )
                 {
                     // DRC engine evaluates these only in the context of a diffpair, but doesn't
                     // always supply the second (B) item.
-                    return 1.0;
+                    if( BOARD* board = a->GetBoard() )
+                    {
+                        if( board->FindNet( coupledNet ) )
+                            return 1.0;
+                    }
                 }
 
-                return b && b->GetNetname() == coupledNet;
+                if( b && b->GetNetname() == coupledNet )
+                    return 1.0;
+
+                return 0.0;
             } );
 }
 
