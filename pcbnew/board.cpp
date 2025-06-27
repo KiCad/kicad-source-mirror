@@ -1390,8 +1390,7 @@ void BOARD::RemoveAll( std::initializer_list<KICAD_T> aTypes )
         }
     }
 
-    for( BOARD_ITEM* item : removed )
-        m_itemByIdCache.erase( item->m_Uuid );
+    IncrementTimeStamp();
 
     FinalizeBulkRemove( removed );
 }
@@ -1431,30 +1430,24 @@ void BOARD::UpdateUserUnits( BOARD_ITEM* aItem, KIGFX::VIEW* aView )
 
 void BOARD::DeleteMARKERs()
 {
-    // the vector does not know how to delete the PCB_MARKER, it holds pointers
     for( PCB_MARKER* marker : m_markers )
-    {
-        // We also must clear the cache
-        m_itemByIdCache.erase( marker->m_Uuid );
         delete marker;
-    }
 
     m_markers.clear();
+    IncrementTimeStamp();
 }
 
 
 void BOARD::DeleteMARKERs( bool aWarningsAndErrors, bool aExclusions )
 {
     // Deleting lots of items from a vector can be very slow.  Copy remaining items instead.
-    MARKERS remaining;
+    std::vector<PCB_MARKER*> remaining;
 
     for( PCB_MARKER* marker : m_markers )
     {
         if( ( marker->GetSeverity() == RPT_SEVERITY_EXCLUSION && aExclusions )
                 || ( marker->GetSeverity() != RPT_SEVERITY_EXCLUSION && aWarningsAndErrors ) )
         {
-            // We also must clear the cache
-            m_itemByIdCache.erase( marker->m_Uuid );
             delete marker;
         }
         else
@@ -1463,7 +1456,8 @@ void BOARD::DeleteMARKERs( bool aWarningsAndErrors, bool aExclusions )
         }
     }
 
-    m_markers = remaining;
+    m_markers = std::move( remaining );
+    IncrementTimeStamp();
 }
 
 
