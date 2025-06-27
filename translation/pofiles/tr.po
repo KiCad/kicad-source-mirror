@@ -2543,7 +2543,7 @@ msgid ""
 msgstr ""
 "KiCad bir dahaki sefere başlatıldığında, önceden tanımlanmış tüm\n"
 "yollar geçerli olacak ve yol yapılandırma iletişim kutusunda tanımlanan\n"
-"tüm ayarlar yok sayılacaktır.  Eğer bu davranışı istemiyorsanız, çakışan\n"
+"tüm ayarlar yok sayılacaktır.   Eğer bu davranışı istemiyorsanız, çakışan\n"
 "girdileri yeniden adlandırın veya harici ortam değişkenleri sisteminizden "
 "kaldırın."
 
