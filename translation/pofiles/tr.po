@@ -4340,7 +4340,7 @@ msgstr "Düzenleyicilerde kaydırma çubuklarını göster"
 
 #: common/dialogs/panel_common_settings_base.cpp:160
 msgid "This change takes effect when relaunching the editor."
-msgstr "Bu değişiklik, düzenleyici yeniden başlatıldığında etkinleşir"
+msgstr "Bu değişiklik, düzenleyici yeniden başlatıldığında etkinleşir."
 
 #: common/dialogs/panel_common_settings_base.cpp:164
 msgid "Focus follows mouse between schematic and PCB editors"
@@ -4352,8 +4352,8 @@ msgid ""
 "If the mouse cursor is moved over the canvas of a schematic or PCB editor "
 "window, that window is raised."
 msgstr ""
-"Fare imleci bir şematik veya Baskı Devre düzenleyici penceresinin tuvalinin "
-"üzerine getirilirse, bu pencere kaldırılır."
+"Fare imleci bir şematik veya Kart düzenleyici penceresinin tuvali üzerine "
+"getirilirse, o pencere öne alınır."
 
 #: common/dialogs/panel_common_settings_base.cpp:169
 msgid "Show popup indicator when toggling settings with hotkeys"
@@ -4370,12 +4370,13 @@ msgstr ""
 
 #: common/dialogs/panel_common_settings_base.cpp:174
 msgid "Use alternating row colors in tables"
-msgstr "Tablolarda satır renklerini dönüşümlü olarak kullan"
+msgstr "Tablolarda alternatif satır renkleri kullan"
 
 #: common/dialogs/panel_common_settings_base.cpp:175
 msgid "When enabled, use a different color for every other table row"
 msgstr ""
-"Etkinleştirildiğinde, her iki tablonun satırına farklı bir renk kullanın"
+"Etkinleştirildiğinde, tablodaki her ikinci satır için farklı bir renk "
+"kullanılır"
 
 #: common/dialogs/panel_common_settings_base.cpp:185
 msgid "Icon theme:"
@@ -4387,7 +4388,7 @@ msgstr "Açık"
 
 #: common/dialogs/panel_common_settings_base.cpp:190
 msgid "Use icons designed for light window backgrounds"
-msgstr "Açık pencere arka planları için tasarlanmış simgeleri kullanın"
+msgstr "Açık pencere arka planları için tasarlanmış simgeleri kullan"
 
 #: common/dialogs/panel_common_settings_base.cpp:194
 #: gerbview/gerber_draw_item.cpp:725
@@ -4410,11 +4411,12 @@ msgstr "Otomatik"
 #: common/dialogs/panel_common_settings_base.cpp:201
 msgid ""
 "Automatically choose light or dark icons based on the system color theme"
-msgstr "Sistem renk temasına göre açık veya koyu simgeleri otomatik olarak seç"
+msgstr ""
+"Sistem renk temasına göre açık veya koyu simgeleri otomatik olarak seçer"
 
 #: common/dialogs/panel_common_settings_base.cpp:211
 msgid "Toolbar icon size:"
-msgstr "Araç çubuğu ikon boyutu:"
+msgstr "Araç çubuğu simge boyutu:"
 
 #: common/dialogs/panel_common_settings_base.cpp:215
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:162
@@ -4456,13 +4458,13 @@ msgstr "Araç çubuklarında daha büyük simgeler kullan"
 
 #: common/dialogs/panel_common_settings_base.cpp:233
 msgid "Apply icon scaling to fonts"
-msgstr "Yazı tiplerine simge ölçekleme uygula"
+msgstr "Simge ölçeklendirmesini yazı tiplerine uygula"
 
 #: common/dialogs/panel_common_settings_base.cpp:236
 msgid "(This workaround will improve some GTK HiDPI font scaling issues.)"
 msgstr ""
-"(Bu geçici çözüm bazı GTK HiDPI yazı tipi ölçeklendirme sorunlarını "
-"iyileştirecektir.)"
+"(Bu geçici çözüm, bazı GTK HiDPI yazı tipi ölçeklendirme sorunlarını "
+"giderecektir.)"
 
 #: common/dialogs/panel_common_settings_base.cpp:244
 msgid "Canvas scale:"
