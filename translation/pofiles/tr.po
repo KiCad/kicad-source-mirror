@@ -974,18 +974,18 @@ msgid ""
 msgstr ""
 "Görünüm konumunu ve yakınlaştırmayı kaydet ve geri yükle.\n"
 "Seçiciyi etkinleştirmek için %s+Tab tuşlarını kullanın.\n"
-"%s tuşunu basılı tutarken art arda Sekmeler açılır pencerede görünüm "
+"%s tuşunu basılı tutarken ardışık Sekmeler, açılır penceredeki görünüm "
 "alanları arasında geçiş yapacaktır."
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:544
 msgid "Left double click or middle click to change color"
-msgstr "Renk değiştirmek için sol çift tıklayın veya orta tıklayın"
+msgstr "Rengi değiştirmek için sol çift tıklayın veya orta tuşu tıklayın"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:554
 msgid "Uncheck 'Use board stackup colors' to allow color editing."
 msgstr ""
-"Renk düzenlemesine izin vermek için 'Kart yığın renklerini kullan' "
-"seçeneğini işaretlemeyin."
+"Renk düzenlemeye izin vermek için 'Kart katman renklerini kullan' seçimini "
+"kaldırın."
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:610
 #: pcbnew/widgets/appearance_controls.cpp:2256
@@ -1162,7 +1162,7 @@ msgstr "Malzeme özellikleri:"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:56
 msgid "Realistic"
-msgstr "Gerçekçi mod"
+msgstr "Gerçekçi"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:56
 msgid "Solid colors"
@@ -1196,7 +1196,7 @@ msgstr "derece"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:102
 msgid "Redraw while moving"
-msgstr "Hareket ederken yeniden çiz"
+msgstr "Taşırken yeniden çiz"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:106
 msgid "Redraw speed:"
@@ -1217,7 +1217,7 @@ msgstr "Bakır ve teknik katman kalınlıklarını göster (yavaş)"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:38
 msgid "Highlight items on rollover"
-msgstr "Rollover'da öğeleri vurgula"
+msgstr "Üzerine gelince ögeleri vurgula"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:44
 msgid "Anti-aliasing:"
@@ -1271,7 +1271,7 @@ msgstr "Kaplamalı tüm delikleri devre dışı bırak"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:30
 msgid "Procedural textures (slow)"
-msgstr "İşlemsel dokular (yavaş)"
+msgstr "Prosedürel dokular (yavaş)"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:34
 msgid "Add floor (slow)"
@@ -1288,15 +1288,15 @@ msgstr "Ekran alanı ortam kapatmaları ve genel aydınlatma yansımaları (yava
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:57
 msgid "Number of Samples"
-msgstr "Numune Sayısı"
+msgstr "Örnek Sayısı"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:61
 msgid "Spread Factor %"
-msgstr "Dağıtma Çarpanı (%)"
+msgstr "Yayılma Faktörü %"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:65
 msgid "Recursion Level"
-msgstr "Özyineleme (Recursion) Seviyesi"
+msgstr "Yineleme Seviyesi"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:69
 msgid "Shadows:"
@@ -1307,7 +1307,7 @@ msgid ""
 "Number of rays that will be cast, into light direction, to evaluate a shadow "
 "point"
 msgstr ""
-"Bir gölge noktasını değerlendirmek için ışık yönüne atılacak ışınların sayısı"
+"Bir gölge noktasını değerlendirmek için ışık yönüne atılacak ışın sayısı"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:84
 msgid "Reflections:"
@@ -1315,15 +1315,15 @@ msgstr "Yansımalar:"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:89
 msgid "Number of rays that will be cast to evaluate a reflection point"
-msgstr "Bir yansıma noktasını değerlendirmek için atılacak ışınların sayısı"
+msgstr "Bir yansıma noktasını değerlendirmek için atılacak ışın sayısı"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:97
 msgid ""
 "Interactions number that a ray can travel through objects. (higher number of "
 "levels improve results, specially on very transparent boards)"
 msgstr ""
-"Etkileşimler, bir ışının nesneler arasında seyahat edebileceği sayıdır. "
-"(daha fazla seviye, özellikle çok şeffaf tahtalarda sonuçları iyileştirir)"
+"Bir ışının nesneler üzerinden geçebileceği etkileşim sayısı. (daha yüksek "
+"seviye sayısı, özellikle çok şeffaf kartlarda sonuçları iyileştirir)"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:101
 msgid "Refractions:"
@@ -1331,7 +1331,7 @@ msgstr "Kırılmalar:"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:106
 msgid "Number of rays that will be cast to evaluate a refraction point"
-msgstr "Bir kırılma noktasını değerlendirmek için atılacak ışınların sayısı"
+msgstr "Bir kırılma noktasını değerlendirmek için atılacak ışın sayısı"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:114
 msgid "Number of bounces that a ray can hit reflective objects"
@@ -1339,7 +1339,7 @@ msgstr "Bir ışının yansıtıcı nesnelerden sekebileceği sayı"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:124
 msgid "Lights Configuration"
-msgstr "Işık Yapılandırması"
+msgstr "Işıklandırma Yapılandırması"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:137
 msgid "Ambient camera light:"
@@ -1356,7 +1356,7 @@ msgstr "Alt ışık:"
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:187
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:204
 msgid "Elevation (deg)"
-msgstr "Yükseklik (deg)"
+msgstr "Yükseklik (derece)"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:191
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:208
@@ -1468,11 +1468,11 @@ msgstr "Döndürme"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:113
 msgid "Offset"
-msgstr "Kaydırma"
+msgstr "Denkleştirme"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:158
 msgid "Opacity"
-msgstr "Matlık"
+msgstr "Opaklık"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:178
 #: common/dialogs/dialog_page_settings_base.cpp:123
@@ -1487,7 +1487,7 @@ msgid ""
 "If hidden, show only copper and silkscreen layers."
 msgstr ""
 "Kart gövdesini göster veya gizle\n"
-"Gizli ise, sadece bakır ve serigrafi katmanlarını gösterin."
+"Gizlenirse, yalnızca bakır ve serigrafi katmanları gösterilir."
 
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:236
 msgid "Reload board and 3D models"
@@ -1503,11 +1503,11 @@ msgstr "Resim Dönüştürücü"
 #: bitmap2component/bitmap2cmp_frame.cpp:155
 #: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:11
 msgid "KiCad Image Converter"
-msgstr "KiCad Görüntü Dönüştürücü"
+msgstr "KiCad Resim Dönüştürücü"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:232
 msgid "Image files"
-msgstr "Görüntü dosyaları"
+msgstr "Resim dosyaları"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:282 eeschema/menubar.cpp:72
 #: kicad/menubar.cpp:74 pagelayout_editor/menubar.cpp:63
@@ -1519,7 +1519,7 @@ msgstr "Son Kullanılanları Aç"
 #: include/file_history.h:54 pagelayout_editor/menubar.cpp:64
 #: pcbnew/menubar_pcb_editor.cpp:74
 msgid "Clear Recent Files"
-msgstr "Son Dosyaları Temizle"
+msgstr "Son Kullanılan Dosyaları Temizle"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:396
 #: eeschema/tools/sch_drawing_tools.cpp:1098
@@ -1531,7 +1531,7 @@ msgstr "Görüntü Seç"
 #: eeschema/tools/sch_drawing_tools.cpp:1099
 #: pagelayout_editor/pl_editor_frame.cpp:860 pcbnew/tools/drawing_tool.cpp:741
 msgid "Image Files"
-msgstr "Görüntü Dosyaları"
+msgstr "Resim Dosyaları"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:438
 msgid "Create Drawing Sheet File"
@@ -2537,7 +2537,7 @@ msgstr "Tanımlı Renkler"
 
 #: common/dialogs/dialog_color_picker_base.cpp:163
 msgid "Opacity:"
-msgstr "Matlık:"
+msgstr "Opaklık:"
 
 #: common/dialogs/dialog_color_picker_base.cpp:179
 msgid "Preview (old/new):"
@@ -25967,17 +25967,17 @@ msgstr "Grafik katmanı %d"
 #: gerbview/gerbview_frame.cpp:72 gerbview/menubar.cpp:134
 #: gerbview/menubar.cpp:140
 msgid "Clear Recent Zip Files"
-msgstr "Son Zip Dosyalarını Temizle"
+msgstr "Son kullanılan Zip Dosyalarını Temizle"
 
 #: gerbview/gerbview_frame.cpp:74 gerbview/menubar.cpp:92
 #: gerbview/menubar.cpp:98
 msgid "Clear Recent Drill Files"
-msgstr "Son Matkap Dosyalarını Temizle"
+msgstr "Son kullanılan Matkap Dosyalarını Temizle"
 
 #: gerbview/gerbview_frame.cpp:76 gerbview/menubar.cpp:112
 #: gerbview/menubar.cpp:119
 msgid "Clear Recent Job Files"
-msgstr "Son İş Dosyalarını Temizle"
+msgstr "Son kullanılan İş Dosyalarını Temizle"
 
 #: gerbview/gerbview_frame.cpp:92
 #: resources/linux/launchers/org.kicad.gerbview.desktop.in:11
@@ -26011,7 +26011,7 @@ msgstr "Gerber İş Dosyasını Aç"
 
 #: gerbview/menubar.cpp:68 gerbview/menubar.cpp:75
 msgid "Clear Recent Gerber Files"
-msgstr "Son Gerber Dosyalarını Temizle"
+msgstr "Son kullanılan  Gerber Dosyalarını Temizle"
 
 #: gerbview/menubar.cpp:74 gerbview/menubar.cpp:97
 msgid "Open Recent Gerber File"
@@ -50432,7 +50432,7 @@ msgstr "Karttan yolları, ayak izlerini ve grafik ögelerini sil"
 
 #: pcbnew/tools/pcb_actions.cpp:994
 msgid "Cleanup Tracks & Vias..."
-msgstr "İzleri & Geçişleri Temizle..."
+msgstr "İzleri & Geçitleri Temizle..."
 
 #: pcbnew/tools/pcb_actions.cpp:995
 msgid "Cleanup redundant items, shorting items, etc."
@@ -52451,13 +52451,13 @@ msgstr "%s'i Vurgula"
 #: pcbnew/widgets/appearance_controls.cpp:2449
 #, c-format
 msgid "Select Tracks and Vias in %s"
-msgstr "%s içinde İzler ve Geçişleri seç"
+msgstr "%s içinde İzler ve Geçitleri seç"
 
 #: pcbnew/widgets/appearance_controls.cpp:945
 #: pcbnew/widgets/appearance_controls.cpp:2452
 #, c-format
 msgid "Unselect Tracks and Vias in %s"
-msgstr "%s'de İzler ve Geçişlerin Seçimini Kaldır"
+msgstr "%s'de İzler ve Geçitlerin Seçimini Kaldır"
 
 #: pcbnew/widgets/appearance_controls.cpp:950
 msgid "Show All Nets"
