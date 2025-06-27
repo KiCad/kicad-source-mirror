@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-06-20 23:57+0300\n"
-"PO-Revision-Date: 2025-06-27 08:05+0000\n"
+"PO-Revision-Date: 2025-06-27 13:19+0000\n"
 "Last-Translator: Luka Borkovic <borkovic@gmail.com>\n"
 "Language-Team: Serbian <https://hosted.weblate.org/projects/kicad/"
 "master-source/sr/>\n"
@@ -6997,18 +6997,16 @@ msgstr "у огледалу"
 
 #: common/eda_text.cpp:1404 eeschema/sch_field.cpp:1609
 #: eeschema/sch_field.cpp:1612 eeschema/sch_label.cpp:2362
-#, fuzzy
 msgid "Horizontal Justification"
-msgstr "Хоризонтално"
+msgstr "Хоризонтално поравнавање"
 
 #: common/eda_text.cpp:1408 eeschema/sch_field.cpp:1616
 #: eeschema/sch_field.cpp:1619 eeschema/sch_label.cpp:2364
 #: pcbnew/pcb_dimension.cpp:1932 pcbnew/pcb_dimension.cpp:1965
 #: pcbnew/pcb_dimension.cpp:2003 pcbnew/pcb_dimension.cpp:2045
 #: pcbnew/pcb_dimension.cpp:2079
-#, fuzzy
 msgid "Vertical Justification"
-msgstr "Вертикално"
+msgstr "Вертикално поравнавање"
 
 #: common/eda_text.cpp:1416 eeschema/sch_field.cpp:1628
 #: eeschema/sch_label.cpp:2322 eeschema/sch_tablecell.cpp:200
@@ -7018,55 +7016,57 @@ msgstr "Вертикално"
 #: pcbnew/pcb_tablecell.cpp:215 pcbnew/pcb_text.cpp:685
 #: pcbnew/pcb_textbox.cpp:870
 msgid "Hyperlink"
-msgstr ""
+msgstr "Хиперлинк"
 
 #: common/eda_units.cpp:476
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:143
 #: pcbnew/generators/pcb_tuning_pattern.cpp:210
-#, fuzzy
 msgid "min"
-msgstr "in"
+msgstr "мин"
 
 #: common/eda_units.cpp:484
-#, fuzzy
 msgid "opt"
-msgstr "Тачкице"
+msgstr "опт"
 
 #: common/eda_units.cpp:492
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:151
 #: pcbnew/generators/pcb_tuning_pattern.cpp:213
 msgid "max"
-msgstr ""
+msgstr "макс"
 
 #: common/env_vars.cpp:117
 msgid ""
 "The base path of locally installed system footprint libraries (.pretty "
 "folders)."
 msgstr ""
+"Базна путања локално инсталираних системских библиотека подножја (.pretty "
+"директоријуми)."
 
 #: common/env_vars.cpp:120
 msgid "The base path of system footprint 3D shapes (.3Dshapes folders)."
-msgstr ""
+msgstr "Базна путања системских 3D облика (.3Dshapes директоријуми)."
 
 #: common/env_vars.cpp:123
 msgid "The base path of the locally installed symbol libraries."
-msgstr ""
+msgstr "Базна путања локално инсталираних библиотека симбола."
 
 #: common/env_vars.cpp:126
 msgid "A directory containing project templates installed with KiCad."
-msgstr ""
+msgstr "Директоријум који саджи шаблоне пројеката инталираних уз KiCad."
 
 #: common/env_vars.cpp:129
 msgid ""
 "Optional. Can be defined if you want to create your own project templates "
 "folder."
 msgstr ""
+"Опционо. Може се дефинисати ако желите да направите свој директоријум "
+"пројекних шаблона."
 
 #: common/env_vars.cpp:132
 msgid ""
 "A directory containing 3rd party plugins, libraries and other downloadable "
 "content."
-msgstr ""
+msgstr "Директоријум који садржи екстерне plugin-е библиотеке и други садржај."
 
 #: common/env_vars.cpp:135
 msgid ""
@@ -7076,14 +7076,23 @@ msgid ""
 "For instance, ${KIPRJMOD}/libs/footprints.pretty can be defined as a folder "
 "containing a project specific footprint library named footprints.pretty."
 msgstr ""
+"Интерно дефинисан од стране KiCad-а (не може се изменити) и подешен је на "
+"апсолутну путању тренутно учитаног фајла пројекта.  Ова променљива окружења "
+"може се користити за дефинисање фајлова и путања релативним тренутно "
+"учитаном пројекту.  Нпр, ${KIPRJMOD}/libs/footprints.pretty се може "
+"дефинисати као директоријум који садржи библиотеку подножја специфичну за "
+"пројекат под називом \"footprints.pretty\"."
 
 #: common/env_vars.cpp:141
 msgid "A directory containing system-wide scripts installed with KiCad."
 msgstr ""
+"Директоријум који садржи системски доступне скрипте инсталиране уз KiCad."
 
 #: common/env_vars.cpp:144
 msgid "A directory containing user-specific scripts installed with KiCad."
 msgstr ""
+"Директоријум који садржи скрипте инсталиране уз KiCad, специфичне за "
+"корисника."
 
 #: common/env_vars.cpp:147
 #, fuzzy, c-format
@@ -7103,6 +7112,11 @@ msgid ""
 "\n"
 "To open it you will need to upgrade KiCad to a version dated %s or later."
 msgstr ""
+"KiCad није успео да отвори овај фајл, јер је креиран са новијом верзијом "
+"KiCad-а од оне коју ви користите. \n"
+"\n"
+"Да бисте га отворили, мораћете унапредити KiCad на верзију са датумом %s или "
+"новијом."
 
 #: common/exceptions.cpp:117
 #, c-format
@@ -7113,6 +7127,11 @@ msgid ""
 "To open it you will need to upgrade KiCad to version %s or later (file "
 "format dated %s or later)."
 msgstr ""
+"KiCad није успео да отвори овај фајл, јер је креиран са новијом верзијом "
+"KiCad-а од оне коју ви користите. \n"
+"\n"
+"Да бисте га отворили, мораћете унапредити KiCad на верзију %s или новију ("
+"фајл формат са датумом %s или новијим)."
 
 #: common/exceptions.cpp:153
 #, fuzzy
@@ -7126,7 +7145,7 @@ msgstr "Doc фајлови"
 
 #: common/filename_resolver.cpp:494
 msgid "The given path does not exist"
-msgstr ""
+msgstr "Задата путања не постоји"
 
 #: common/filename_resolver.cpp:522
 msgid "Alias: "
@@ -7179,7 +7198,7 @@ msgstr "Грешка у учитавању"
 
 #: common/footprint_info.cpp:123
 msgid "Errors were encountered loading footprints:"
-msgstr ""
+msgstr "Грешке су се десиле током учитавања подножја:"
 
 #: common/fp_lib_table.cpp:226
 #, fuzzy, c-format
@@ -7214,12 +7233,12 @@ msgstr "Немогуће копирати датотеку \"%s\"."
 
 #: common/gestfich.cpp:320
 msgid "Invalid directory name, cannot remove root"
-msgstr ""
+msgstr "Невалидно име директоријума, не може се уклонити корен"
 
 #: common/gestfich.cpp:328
 #, c-format
 msgid "Directory '%s' does not exist"
-msgstr ""
+msgstr "Директоријум \"%s\" не постоји"
 
 #: common/gestfich.cpp:338
 #, fuzzy, c-format
