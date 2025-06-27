@@ -1555,7 +1555,7 @@ msgstr "Sembol Kütüphanesi Oluştur"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:537
 msgid "Create Footprint Library"
-msgstr "İz Düşümü Kütüphanesi Oluştur"
+msgstr "Ayak İzi Kütüphanesi Oluştur"
 
 #: bitmap2component/bitmap2cmp_panel.cpp:48 common/eda_draw_frame.cpp:683
 #: eeschema/dialogs/dialog_field_properties_base.cpp:239
@@ -1731,7 +1731,7 @@ msgstr "DPI"
 
 #: bitmap2component/bitmap2cmp_panel.cpp:504
 msgid "Unable to export to the Clipboard"
-msgstr "Panoya aktarılamıyor"
+msgstr "Panoya dışa aktarılamadı"
 
 #: bitmap2component/bitmap2cmp_panel.cpp:516
 msgid "Error allocating memory for potrace bitmap"
@@ -1759,7 +1759,7 @@ msgstr "Gri Tonlamalı Resim"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:28
 msgid "Black && White Picture"
-msgstr "Siyah && Beyaz Resim"
+msgstr "Siyah Beyaz Resim"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:36
 msgid "Image Information"
@@ -1802,11 +1802,11 @@ msgstr "bit"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:98
 msgid "Load Source Image"
-msgstr "Kaynak Resmi Yükle"
+msgstr "Kaynak Resim Yükle"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:105
 msgid "Output Size"
-msgstr "Çıkiş Boyutu"
+msgstr "Çıkış Boyutu"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:110
 #: common/dialogs/dialog_page_settings_base.cpp:37
@@ -1822,7 +1822,7 @@ msgstr "300"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:134
 msgid "Lock height / width ratio"
-msgstr "Yükseklik/genişlik oranını kilitle"
+msgstr "Yükseklik / genişlik oranını kilitle"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:141
 #: common/dialogs/dialog_print_generic_base.cpp:35
@@ -1844,7 +1844,7 @@ msgstr "Seçenekler"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:143
 msgid "Black / white threshold:"
-msgstr "Siyah / Beyaz Eşiği:"
+msgstr "Siyah / Beyaz eşiği:"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:148
 msgid ""
@@ -1869,7 +1869,7 @@ msgstr "Sembol (.kicad_sym dosyası)"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:169
 msgid "Footprint (.kicad_mod file)"
-msgstr "İz düşümü (.kicad_mod dosyası)"
+msgstr "Ayak İzi (.kicad_mod dosyası)"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:175
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:53
@@ -1889,19 +1889,19 @@ msgstr "Katman:"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:179
 msgid "F.Cu"
-msgstr "Ö.Bkr"
+msgstr "Ön Yüzey Bakır"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:179
 msgid "F.Silkscreen"
-msgstr "Ö.Yüzbaskısı"
+msgstr "Ön Yüzey İpek Baskı"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:179
 msgid "F.Mask"
-msgstr "Ö.Maske"
+msgstr "Ön Yüzey Lehim Maskesi"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:179
 msgid "User.Drawings"
-msgstr "Kullanıcı Çizimleri"
+msgstr "Kullanıcı.Çizimleri"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:179
 msgid "User.Comments"
@@ -1913,11 +1913,11 @@ msgstr "Kullanıcı.Eko1"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:179
 msgid "User.Eco2"
-msgstr "Kullanıcı.Eco2"
+msgstr "Kullanıcı.Eko2"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:179
 msgid "F.Fab"
-msgstr "Ö.Fab"
+msgstr "Ön İmalat"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:188
 msgid "Postscript (.ps file)"
@@ -1925,7 +1925,7 @@ msgstr "PostScript (.ps dosyası)"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:191
 msgid "Drawing Sheet (.kicad_wks file)"
-msgstr "Çizim sayfası (.kicad_wks dosyası)"
+msgstr "Çizim Sayfası (.kicad_wks dosyası)"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:200
 msgid "Export to File..."
@@ -1938,8 +1938,7 @@ msgstr "Panoya Aktar"
 
 #: bitmap2component/bitmap2component.cpp:406
 msgid "No shape in black and white image to convert: no outline created."
-msgstr ""
-"Siyah beyaz görüntüde dönüştürülecek bir şekil yok: dış hat oluşturulmadı."
+msgstr "Siyah beyaz görüntüde dönüştürülecek şekil yok: dış hat oluşturulmadı."
 
 #: common/api/api_handler.cpp:27
 msgid "Modification from API"
@@ -1947,20 +1946,20 @@ msgstr "API'den yapılan değişiklik"
 
 #: common/background_jobs_monitor.cpp:98
 msgid "Background Jobs"
-msgstr "Arka Plan İşleri"
+msgstr "Arka Plan İşlemleri"
 
 #: common/common.cpp:305
 #, c-format
 msgid ""
 "Environment variables expansion failed: missing '%c' at position %u in '%s'."
 msgstr ""
-"Ortam değişkenleri genişletme başarısız oldu: eksik '%c' %u içinde '%s' "
-"konumunda."
+"Ortam değişkenleri genişletmesi başarısız: '%c' eksik, %u konumunda '%s' "
+"içinde."
 
 #: common/common.cpp:387
 #, c-format
 msgid "Cannot make path '%s' absolute with respect to '%s'."
-msgstr "'%s' yolu '%s' ile ilgili olarak mutlak yapılamaz."
+msgstr "'%s' yolu '%s'e göre mutlak yapılamıyor."
 
 #: common/common.cpp:406
 #, c-format
@@ -1978,7 +1977,7 @@ msgstr "Bu işletim sistemi KiCad ve bağımlılıkları tarafından desteklenme
 
 #: common/common.cpp:708
 msgid "Unsupported Operating System"
-msgstr "Desteklenmeyen işletim sistemi"
+msgstr "Desteklenmeyen İşletim Sistemi"
 
 #: common/common.cpp:711
 msgid ""
@@ -1994,7 +1993,7 @@ msgstr "Dosya Açma Uyarısı"
 
 #: common/confirm.cpp:59 common/confirm.cpp:65
 msgid "Interleaved saves may produce very unexpected results."
-msgstr "Araya eklenen kaydetmeler çok beklenmedik sonuçlar doğurabilir."
+msgstr "Aralıklı kaydetmeler çok beklenmedik sonuçlar doğurabilir."
 
 #: common/confirm.cpp:61 common/confirm.cpp:66 common/confirm.cpp:132
 #: common/confirm.cpp:159 common/dialog_shim.cpp:795
@@ -2007,7 +2006,7 @@ msgstr "&Yine de Aç"
 
 #: common/confirm.cpp:77 common/confirm.cpp:116
 msgid "Save Changes?"
-msgstr "Değişiklikler Kayıt Edilsin Mi?"
+msgstr "Değişiklikler Kaydedilsin mi?"
 
 #: common/confirm.cpp:80 common/confirm.cpp:118
 msgid "If you don't save, all your changes will be permanently lost."
@@ -2040,7 +2039,7 @@ msgstr "&Tamam"
 
 #: common/confirm.cpp:248
 msgid "Information"
-msgstr "Bilgilendirme"
+msgstr "Bilgi"
 
 #: common/confirm.cpp:276 common/confirm.cpp:280
 #: common/dialogs/panel_embedded_files.cpp:289
@@ -2072,7 +2071,7 @@ msgstr "Bilgilendirme"
 #: pcbnew/tools/footprint_editor_control.cpp:471 pcbnew/zone_filler.cpp:890
 #: pcbnew/zone_filler.cpp:907
 msgid "Confirmation"
-msgstr "Doğrula"
+msgstr "Onay"
 
 #: common/confirm.cpp:284 common/dialog_shim.cpp:796
 msgid "&Yes"
@@ -2084,7 +2083,7 @@ msgstr "&Hayır"
 
 #: common/design_block_info_impl.cpp:132
 msgid "Loading design_blocks..."
-msgstr "design_blocks yükleniyor..."
+msgstr "Tasarım blokları yükleniyor..."
 
 #: common/design_block_io.cpp:47 common/design_block_io.cpp:56
 #: kicad/dialogs/dialog_update_check_prompt_base.cpp:31
@@ -2106,7 +2105,7 @@ msgstr "KiCad Tasarım Blok klasörleri"
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:3150
 #, c-format
 msgid "Cannot overwrite library path '%s'."
-msgstr "'%s' kitaplık yolunun üzerine yazılamıyor."
+msgstr "Kütüphane yolu '%s' üzerine yazılamadı."
 
 #: common/design_block_io.cpp:184
 #, c-format
@@ -2117,28 +2116,28 @@ msgid ""
 msgstr ""
 "Kütüphane yolu '%s' oluşturulamadı.\n"
 "\n"
-"Yazma izinlerinizin olduğundan emin olun ve tekrar deneyin."
+"Yazma izinleriniz olduğundan emin olun ve tekrar deneyin."
 
 #: common/design_block_io.cpp:203 pcbnew/pcb_io/geda/pcb_io_geda.cpp:970
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:3176
 #, c-format
 msgid "Insufficient permissions to delete folder '%s'."
-msgstr "'%s' klasörünü silmek için izin yok."
+msgstr "'%s' klasörünü silmek için yetersiz izinler."
 
 #: common/design_block_io.cpp:212
 #, c-format
 msgid "Library folder '%s' has unexpected files."
-msgstr "Kütüphane klasörü '%s' beklenmeyen dosyalara sahip."
+msgstr "Kütüphane klasörü '%s' beklenmedik dosyalar içeriyor."
 
 #: common/design_block_io.cpp:230
 #, c-format
 msgid "Unexpected folder '%s' found in library path '%s'."
-msgstr "'%s' kütüphane yolunda beklenmeyen '%s' klasörü bulundu."
+msgstr "'%s' kütüphane yolunda beklenmedik klasör '%s' bulundu."
 
 #: common/design_block_io.cpp:247
 #, c-format
 msgid "Design block library '%s' cannot be deleted."
-msgstr "Tasarım blok kütüphanesi '%s' silinemiyor."
+msgstr "Tasarım bloğu kütüphanesi '%s' silinemedi."
 
 #: common/design_block_io.cpp:271 common/design_block_io.cpp:298
 #: common/design_block_io.cpp:492
@@ -2149,7 +2148,7 @@ msgstr "Tasarım bloğu '%s' mevcut değil."
 #: common/design_block_io.cpp:348
 #, c-format
 msgid "Design block metadata file '%s' could not be read."
-msgstr "Tasarım blok meta veri dosyası '%s' okunamadı."
+msgstr "Tasarım bloğu üst veri dosyası '%s' okunamadı."
 
 #: common/design_block_io.cpp:374
 msgid "Design block does not have a valid library ID."
@@ -2162,7 +2161,7 @@ msgstr "Tasarım bloğunun şematik veya kart dosyası yok."
 #: common/design_block_io.cpp:388
 #, c-format
 msgid "Schematic source file '%s' does not exist."
-msgstr "Şematik kaynak dosyası %s mevcut değil."
+msgstr "Şematik kaynak dosya '%s' mevcut değil."
 
 #: common/design_block_io.cpp:393
 #, c-format
@@ -2177,7 +2176,7 @@ msgstr "Tasarım bloğu klasörü '%s' oluşturulamadı."
 #: common/design_block_io.cpp:425
 #, c-format
 msgid "Schematic file '%s' could not be saved as design block at '%s'."
-msgstr "Şema dosyası '%s' tasarım bloğu olarak '%s' konumuna kaydedilemedi."
+msgstr "Şematik dosya '%s', '%s' konumunda tasarım bloğu olarak kaydedilemedi."
 
 #: common/design_block_io.cpp:444
 #, c-format
@@ -2212,13 +2211,13 @@ msgstr ""
 #: common/design_block_lib_table.cpp:592 common/fp_lib_table.cpp:567
 #: eeschema/symbol_lib_table.cpp:605
 msgid "Added by Plugin and Content Manager"
-msgstr "Eklenti ve içerik Yöneticisi tarafından eklendi"
+msgstr "Eklenti ve İçerik Yöneticisi Tarafından Eklendi"
 
 #: common/design_block_lib_table.cpp:618 common/fp_lib_table.cpp:593
 #: eeschema/symbol_lib_table.cpp:634
 #, c-format
 msgid "Cannot create global library table path '%s'."
-msgstr "'%s' genel kütüphane tablo yolu oluşturulamıyor."
+msgstr "Genel kütüphane tablo yolu '%s' oluşturulamadı."
 
 #: common/design_block_tree_model_adapter.cpp:128 cvpcb/cvpcb_mainframe.cpp:789
 #: eeschema/generate_alias_info.cpp:40 eeschema/sch_symbol.cpp:1942
@@ -2263,7 +2262,7 @@ msgid ""
 "electronic schematics and printed circuit boards."
 msgstr ""
 "KiCad EDA Paketi, elektronik şemaların ve baskı devre kartlarının "
-"oluşturulması için kullanılan açık kaynaklı uygulamalar kümesidir."
+"oluşturulmasına yönelik açık kaynaklı uygulamalar paketidir."
 
 #: common/dialog_about/AboutDialog_main.cpp:124
 msgid "KiCad on the web"
@@ -2303,16 +2302,15 @@ msgstr "KiCad EDA Paketinin tamamı"
 
 #: common/dialog_about/AboutDialog_main.cpp:179
 msgid "GNU General Public License (GPL) version 3 or any later version"
-msgstr ""
-"GNU Genel Kamu Lisansı (GPL) sürüm 3 veya sonrası altında yayınlanmıştır"
+msgstr "GNU Genel Kamu Lisansı (GPL) sürüm 3 veya sonraki herhangi bir sürüm"
 
 #: common/dialog_about/AboutDialog_main.cpp:199
 msgid "Lead Development Team"
-msgstr "Lider Geliştirme Takımı"
+msgstr "Baş Geliştirme Ekibi"
 
 #: common/dialog_about/AboutDialog_main.cpp:200
 msgid "Lead Development Alumni"
-msgstr "Eski Lider Geliştiriciler"
+msgstr "Eski Baş Geliştirme Ekibi"
 
 #: common/dialog_about/AboutDialog_main.cpp:201
 msgid "Additional Contributions By"
@@ -2324,7 +2322,7 @@ msgstr "Dokümantasyon Ekibi"
 
 #: common/dialog_about/AboutDialog_main.cpp:854
 msgid "Librarian Team"
-msgstr "Kütüphaneci Takımı"
+msgstr "Kütüphaneci Ekibi"
 
 #: common/dialog_about/AboutDialog_main.cpp:907
 msgid "3D models"
@@ -2347,7 +2345,7 @@ msgstr "Semboller"
 #: pcbnew/widgets/panel_selection_filter_base.cpp:29
 #: pcbnew/widgets/search_handlers.cpp:117
 msgid "Footprints"
-msgstr "Ayak izleri"
+msgstr "Ayak İzleri"
 
 #: common/dialog_about/AboutDialog_main.cpp:929
 msgid "Icons"
@@ -2403,7 +2401,7 @@ msgstr "Lisans"
 
 #: common/dialog_about/dialog_about.cpp:257
 msgid "Could not open clipboard to write version information."
-msgstr "Sürüm bilgilerini yazmak için pano açılamadı."
+msgstr "Sürüm bilgisini yazmak için pano açılamıyor."
 
 #: common/dialog_about/dialog_about.cpp:258
 msgid "Clipboard Error"
@@ -2419,19 +2417,19 @@ msgstr "Uygulama Başlığı"
 
 #: common/dialog_about/dialog_about_base.cpp:37
 msgid "Build Version Info"
-msgstr "Derleme Sürüm Bilgileri"
+msgstr "Derleme Sürüm Bilgisi"
 
 #: common/dialog_about/dialog_about_base.cpp:41
 msgid "Lib Version Info"
-msgstr "Kütüphane Sürüm Bilgileri"
+msgstr "Kütüphane Sürüm Bilgisi"
 
 #: common/dialog_about/dialog_about_base.cpp:54
 msgid "&Copy Version Info"
-msgstr "Sürüm Bilgilerini &Kopyala"
+msgstr "&Sürüm Bilgisini &Kopyala"
 
 #: common/dialog_about/dialog_about_base.cpp:55
 msgid "Copy KiCad version info to the clipboard"
-msgstr "KiCad sürüm bilgilerini panoya kopyalayın"
+msgstr "KiCad sürüm bilgisini panoya kopyala"
 
 #: common/dialog_about/dialog_about_base.cpp:59
 msgid "&Report Bug"
@@ -2439,16 +2437,16 @@ msgstr "Hata &Bildir"
 
 #: common/dialog_about/dialog_about_base.cpp:60 common/tool/actions.cpp:1396
 msgid "Report a problem with KiCad"
-msgstr "KiCad ile ilgili bir sorun bildirin"
+msgstr "KiCad ile ilgili bir sorun bildir"
 
 #: common/dialog_about/dialog_about_base.cpp:64 common/tool/actions.cpp:1389
 msgid "Donate"
-msgstr "Bağış yapın"
+msgstr "Bağış yap"
 
 #: common/dialog_about/dialog_about_base.cpp:65
 #: common/tool/common_control.cpp:387
 msgid "Donate to KiCad"
-msgstr "KiCad'e bağış yapın"
+msgstr "KiCad'e bağış yap"
 
 #: common/dialog_shim.cpp:798
 msgid "&Apply"
@@ -2467,7 +2465,7 @@ msgstr "Rapor"
 
 #: common/dialogs/dialog_assign_netclass.cpp:95
 msgid "<b>Currently matching nets:</b>"
-msgstr "<b>Şu anda eşleşen ağlar</b>"
+msgstr "<b>Mevcut eşleşen ağlar:</b>"
 
 #: common/dialogs/dialog_assign_netclass_base.cpp:24
 msgid "Pattern:"
@@ -2545,7 +2543,7 @@ msgstr "Ön izleme (eski/yeni):"
 
 #: common/dialogs/dialog_color_picker_base.cpp:201
 msgid "Reset to Default"
-msgstr "Öntanımlı Değere Sıfırla"
+msgstr "Varsayılana Sıfırla"
 
 #: common/dialogs/dialog_configure_paths.cpp:202
 #: common/dialogs/dialog_configure_paths.cpp:260
@@ -2570,7 +2568,7 @@ msgid ""
 "This path was defined  externally to the running process and\n"
 "will only be temporarily overwritten."
 msgstr ""
-"Bu yol, çalışan sürece harici olarak tanımlandı ve\n"
+"Bu yol, çalışan sürecin haricinde tanımlanmıştır ve\n"
 "yalnızca geçici olarak üzerine yazılacaktır."
 
 #: common/dialogs/dialog_configure_paths.cpp:286
@@ -2581,11 +2579,11 @@ msgid ""
 "this behavior, either rename any conflicting entries or remove\n"
 "the external environment variable(s) from your system."
 msgstr ""
-"KiCad bir sonraki başlatılışında, zaten\n"
-"tanımlanmıştır, onur ve yolda tanımlanan ayarlar\n"
-"yapılandırma iletişim kutusu yoksayılır.  Eğer niyetin buysa.\n"
-"Bu davranış, çakışan girdileri yeniden adlandırın veya\n"
-"sisteminizdeki dış ortam değişkenlerini."
+"KiCad bir dahaki sefere başlatıldığında, önceden tanımlanmış tüm\n"
+"yollar geçerli olacak ve yol yapılandırma iletişim kutusunda tanımlanan\n"
+"tüm ayarlar yok sayılacaktır. Eğer bu davranışı istemiyorsanız, çakışan\n"
+"girdileri yeniden adlandırın veya harici ortam değişkenleri sisteminizden "
+"kaldırın."
 
 #: common/dialogs/dialog_configure_paths.cpp:304
 #, c-format
@@ -26011,7 +26009,7 @@ msgstr "Gerber İş Dosyasını Aç"
 
 #: gerbview/menubar.cpp:68 gerbview/menubar.cpp:75
 msgid "Clear Recent Gerber Files"
-msgstr "Son kullanılan  Gerber Dosyalarını Temizle"
+msgstr "Son kullanılan Gerber Dosyalarını Temizle"
 
 #: gerbview/menubar.cpp:74 gerbview/menubar.cpp:97
 msgid "Open Recent Gerber File"
