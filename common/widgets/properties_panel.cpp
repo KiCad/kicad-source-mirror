@@ -465,13 +465,19 @@ void PROPERTIES_PANEL::onCharHook( wxKeyEvent& aEvent )
     // m_grid->IsAnyModified() doesn't work for the first modification
     if( aEvent.GetKeyCode() == WXK_TAB && !aEvent.ShiftDown() )
     {
-        wxVariant oldValue = m_grid->GetSelectedProperty()->GetValue();
+        wxVariant oldValue;
+
+        if( wxPGProperty* prop = m_grid->GetSelectedProperty() )
+            oldValue = prop->GetValue();
 
         m_grid->CommitChangesFromEditor();
 
         // If there was no change, treat it as a navigation key
-        if( oldValue == m_grid->GetSelectedProperty()->GetValue() )
-            aEvent.Skip();
+        if( wxPGProperty* prop = m_grid->GetSelectedProperty() )
+        {
+            if( prop->GetValue() == oldValue )
+                aEvent.Skip();
+        }
 
         return;
     }
