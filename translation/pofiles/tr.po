@@ -33,7 +33,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-06-20 23:57+0300\n"
-"PO-Revision-Date: 2025-06-27 08:05+0000\n"
+"PO-Revision-Date: 2025-06-27 19:49+0000\n"
 "Last-Translator: YÜKSEL AÇIKGÖZ <yukselacikgoz@gmail.com>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/kicad/"
 "master-source/tr/>\n"
@@ -52,7 +52,7 @@ msgstr "Tüm Dosyalar"
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:330
 msgid "Build board outline"
-msgstr "Kart sınırlarını oluştur"
+msgstr "Kart dış hattını oluştur"
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:564
 msgid "Create layers"
@@ -115,11 +115,11 @@ msgstr "Delikler ve geçitler için BVH oluştur"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:403
 msgid "OpenGL context creation error"
-msgstr "OpenGL içerik oluşturma hatası"
+msgstr "OpenGL bağlam oluşturma hatası"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:434
 msgid "Your OpenGL version is not supported. Minimum required is 1.5."
-msgstr "Sizin OpenGL sürümünüz desteklenmiyor. Minimum gereksinim 1.5'tir."
+msgstr "OpenGL sürümünüz desteklenmiyor. Minimum gereksinim 1.5."
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:568
 #, c-format
@@ -148,20 +148,20 @@ msgstr "Bölge %s\t"
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:466
 msgid "Load OpenGL: board"
-msgstr "Yükle OpenGL: kart"
+msgstr "OpenGL'i Yükle: kart"
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:492
 msgid "Load OpenGL: holes and vias"
-msgstr "Yükle OpenGL : delikler ve geçitler"
+msgstr "OpenGL'i Yükle: delikler ve geçitler"
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:545
 msgid "Load OpenGL: layers"
-msgstr "Yükle OpenGL: katmanlar"
+msgstr "OpenGL'i Yükle: katmanlar"
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:559
 #, c-format
 msgid "Load OpenGL layer %s"
-msgstr "Katman %s OpenGL yükle"
+msgstr "OpenGL katmanı %s yükle"
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:653
 #: 3d-viewer/3d_rendering/raytracing/create_scene.cpp:795
@@ -198,7 +198,7 @@ msgstr "Yükleniyor..."
 
 #: 3d-viewer/3d_rendering/raytracing/create_scene.cpp:391
 msgid "Load Raytracing: board"
-msgstr "Işın izlemeyi yükle: board"
+msgstr "Işın İzlemeyi Yükle: kart"
 
 #: 3d-viewer/3d_rendering/raytracing/create_scene.cpp:565
 msgid "Load Raytracing: layers"
@@ -378,7 +378,7 @@ msgstr "Işın izleme kullanarak geçerli görünümü işle"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:63
 msgid "Copy 3D image to clipboard"
-msgstr "3D görüntüyü panoya kopyala"
+msgstr "3B görüntüyü panoya kopyala"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:64
 msgid "Copy the current 3D image to the clipboard"
@@ -501,23 +501,23 @@ msgstr "Alttan Görünüm"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:263
 msgid "No 3D Grid"
-msgstr "3D Izgara Yok"
+msgstr "3B Izgara Yok"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:270
 msgid "3D Grid 10mm"
-msgstr "3D Izgara 10mm"
+msgstr "3B Izgara 10mm"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:277
 msgid "3D Grid 5mm"
-msgstr "3D Izgara 5mm"
+msgstr "3B Izgara 5mm"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:284
 msgid "3D Grid 2.5mm"
-msgstr "3D Izgara 2.5mm"
+msgstr "3B Izgara 2.5mm"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:291
 msgid "3D Grid 1mm"
-msgstr "3D Izgara 1mm"
+msgstr "3B Izgara 1mm"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:298
 msgid "Render Realistic Materials"
@@ -581,7 +581,7 @@ msgstr "Sanal olarak işaretlenmiş 3D modelleri göster"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:360
 msgid "Show 3D models even if marked 'Do Not Place'"
-msgstr "3D modeller 'Sanal' olarak işaretlenmiş olsa bile göster"
+msgstr "\"Monte Etme\" olarak işaretlense bile 3B modelleri göster"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:367
 msgid "Show Model Bounding Boxes"
@@ -589,7 +589,7 @@ msgstr "Model Sınırlama Kutusunu Göster"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:368
 msgid "Show 3D model bounding boxes in realtime renderer"
-msgstr "3D model sınırlama kutularını gerçek zamanlı olarak göster"
+msgstr "3B modellerin sınırlayıcı kutularını gerçek zamanlı oluşturucuda göster"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:375
 msgid "Show 3D Navigator"
@@ -917,7 +917,7 @@ msgstr "Kart sınırında ipek katmalarını kırpma"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:125
 msgid "3D Navigator"
-msgstr "3D Gezgini"
+msgstr "3B Gezgini"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:126
 msgid "Background Start"
@@ -2563,7 +2563,7 @@ msgstr "3B arama yolu takma adı boş olamaz."
 
 #: common/dialogs/dialog_configure_paths.cpp:269
 msgid "3D search path cannot be empty."
-msgstr "3D arama yolu boş olamaz."
+msgstr "3B arama yolu boş olamaz."
 
 #: common/dialogs/dialog_configure_paths.cpp:284
 msgid ""
@@ -4554,15 +4554,15 @@ msgstr "Dosya geçmişi boyutu:"
 
 #: common/dialogs/panel_common_settings_base.cpp:355
 msgid "3D cache file duration:"
-msgstr "3D önbellek dosyası süresi:"
+msgstr "3B önbellek dosyası süresi:"
 
 #: common/dialogs/panel_common_settings_base.cpp:360
 msgid ""
 "3D cache files older than this are deleted.\n"
 "If set to 0, cache clearing is disabled"
 msgstr ""
-"Bundan daha eski 3D önbellek dosyaları silinir.\n"
-"0 olarak ayarlanırsa, önbellek temizleme devre dışı bırakılır"
+"3B önbellek dosyaları bu süreden eskiyse silinir.\n"
+"Eğer 0 olarak ayarlanırsa, önbellek temizleme devre dışı bırakılır."
 
 #: common/dialogs/panel_common_settings_base.cpp:364
 msgid "days"
@@ -5976,7 +5976,7 @@ msgstr "Araç çubuklarını özelleştir"
 
 #: common/draw_panel_gal.cpp:320 common/draw_panel_gal.cpp:507
 msgid "Could not use OpenGL, falling back to software rendering"
-msgstr "OpenGL kullanılamadı, yazılım işlemeye geri döndü"
+msgstr "OpenGL kullanılamadı, yazılımsal oluşturmaya geri dönülüyor"
 
 #: common/draw_panel_gal.cpp:328
 msgid "Graphics error"
@@ -9885,7 +9885,7 @@ msgstr "Proje penceresini göster"
 
 #: common/tool/actions.cpp:1233
 msgid "Show 3D viewer window"
-msgstr "3D görüntüleyici penceresini göster"
+msgstr "3B görüntüleyici penceresini göster"
 
 #: common/tool/actions.cpp:1239 eeschema/symbol_diff_frame.cpp:57
 #: eeschema/symbol_viewer_frame.cpp:105 eeschema/symbol_viewer_frame.cpp:1112
@@ -39630,7 +39630,7 @@ msgstr "Şematik düzenleyicide vurgulandıklarında ağları vurgula"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:219
 msgid "Refresh 3D view automatically"
-msgstr "3D görünümü otomatik olarak yenile"
+msgstr "3B görünümü otomatik olarak yenile"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:220
 msgid ""
@@ -39887,7 +39887,7 @@ msgstr "Ayak izi kütüphane dosyası '%s' kaydedilemedi."
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:394
 msgid "Error adding 3D model"
-msgstr "3D model ekleme hatası"
+msgstr "3B model ekleme hatası"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:478
 msgid "No filename entered"
@@ -48081,11 +48081,11 @@ msgstr "Geçersiz resim boyutları"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:806
 msgid "Successfully created 3D render image"
-msgstr "3B render görüntüsü başarıyla oluşturuldu"
+msgstr "3B oluşturma görseli başarıyla oluşturuldu"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:811
 msgid "Error creating 3D render image"
-msgstr "3D render görüntüsü oluşturulurken hata oluştu"
+msgstr "3B oluşturma görseli oluşturulurken hata oluştu"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:863 pcbnew/pcbnew_jobs_handler.cpp:924
 #: pcbnew/pcbnew_jobs_handler.cpp:1009 pcbnew/pcbnew_jobs_handler.cpp:1094
