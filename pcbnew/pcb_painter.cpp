@@ -3014,6 +3014,13 @@ void PCB_PAINTER::draw( const PCB_BOARD_OUTLINE* aBoardOutline, int aLayer )
     if( !aBoardOutline->HasOutline() )
         return;
 
+    // aBoardOutline makes sense only for the board editor. for fp holder boards
+    // there are no board outlines area.
+    const BOARD* brd = aBoardOutline->GetBoard();
+
+    if( !brd || brd->GetBoardUse() == BOARD_USE::FPHOLDER )
+        return;
+
     GAL_SCOPED_ATTRS scopedAttrs( *m_gal, GAL_SCOPED_ATTRS::ALL_ATTRS );
     m_gal->Save();
 
