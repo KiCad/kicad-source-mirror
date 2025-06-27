@@ -817,6 +817,8 @@ void PANEL_PCBNEW_COLOR_SETTINGS::createPreviewItems()
     }
 
     m_preview->UpdateColors();
+    // Ensure board use is normal, not FPHOLDER, in order to display the board like in board editor
+    m_preview->GetBoard()->SetBoardUse( BOARD_USE::NORMAL );
     m_preview->DisplayBoard( m_preview->GetBoard() );
 
     DS_PROXY_VIEW_ITEM* drawingSheet = new DS_PROXY_VIEW_ITEM( pcbIUScale, m_page, nullptr,
