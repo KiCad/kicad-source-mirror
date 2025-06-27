@@ -2583,7 +2583,7 @@ msgstr ""
 "yollar geçerli olacak ve yol yapılandırma iletişim kutusunda tanımlanan\n"
 "tüm ayarlar yok sayılacaktır. Eğer bu davranışı istemiyorsanız, çakışan\n"
 "girdileri yeniden adlandırın veya harici ortam değişkenleri sisteminizden "
-"kaldırın."
+"kaldırın"
 
 #: common/dialogs/dialog_configure_paths.cpp:304
 #, c-format
