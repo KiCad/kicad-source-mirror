@@ -2952,6 +2952,9 @@ void SIMULATOR_FRAME_UI::onPlotClosed( wxAuiNotebookEvent& event )
                    rebuildSignalsGrid( m_filter->GetValue() );
                    updatePlotCursors();
 
+                   //To avoid a current side effect in dynamic cursors while closing one out of many sim tabs
+                   updateSignalsGrid();
+
                    SIM_TAB* panel = GetCurrentSimTab();
 
                    if( !panel || panel->GetSimType() != ST_OP )
@@ -3012,6 +3015,9 @@ void SIMULATOR_FRAME_UI::onPlotChanged( wxAuiNotebookEvent& event )
         simulator()->Command( "setplot " + simTab->GetSpicePlotName().ToStdString() );
 
     OnPlotSettingsChanged();
+
+    //To avoid a current side effect in dynamic cursors while switching sim tabs
+    updateSignalsGrid();
 
     event.Skip();
 }
