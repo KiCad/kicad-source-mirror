@@ -274,7 +274,7 @@ msgstr "&Tercihler"
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:101
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:68
 msgid "KiCad 3D Viewer"
-msgstr "KiCad 3D Görüntüleyici"
+msgstr "KiCad 3B Görüntüleyici"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:168
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:617
@@ -366,7 +366,7 @@ msgstr "Kartı yeniden yükle"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:49
 msgid "Reload board and refresh 3D view"
-msgstr "Kartı yeniden yükle ve 3D modelleri yenile"
+msgstr "Kartı yeniden yükle ve 3B modelleri yenile"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:55
 msgid "Use raytracing"
@@ -525,7 +525,7 @@ msgstr "Gerçekçi Malzemeler Oluşturun"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:299
 msgid "Use all material properties from each 3D model file"
-msgstr "Her 3D model dosyasındaki tüm malzeme özelliklerini kullanın"
+msgstr "Her 3B model dosyasındaki tüm malzeme özelliklerini kullan"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:306
 msgid "Render Solid Colors"
@@ -545,19 +545,19 @@ msgstr "Malzemenin temel rengine dayalı bir CAD renk stili kullan"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:323
 msgid "Show Through Hole 3D Models"
-msgstr "Delik İçi 3D Modelleri Göster"
+msgstr "Delik İçi 3B Modelleri Göster"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:324
 msgid "Show 3D models for 'Through hole' type footprints"
-msgstr "'Delik içi' tipi olan 3D modelleri göster"
+msgstr "Delik İçi Ayak İzlerinin 3B Modellerini Göster"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:332
 msgid "Show SMD 3D Models"
-msgstr "SMD 3D modelleri göster"
+msgstr "SMD 3B modelleri göster"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:333
 msgid "Show 3D models for 'Surface mount' type footprints"
-msgstr "'Yüzey monte' özelliği olan 3D modelleri göster"
+msgstr "Yüzey Montaj Tipi ayak izlerinin 3B modellerini göster"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:341
 msgid "Show Unspecified 3D Models"
@@ -577,7 +577,7 @@ msgstr "3B modelleri .pos dosyasında olmasa bile göster"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:359
 msgid "Show 3D Models marked DNP"
-msgstr "Sanal olarak işaretlenmiş 3D modelleri göster"
+msgstr "Sanal olarak işaretlenmiş 3B modelleri göster"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:360
 msgid "Show 3D models even if marked 'Do Not Place'"
@@ -593,7 +593,7 @@ msgstr "3B modellerin sınırlayıcı kutularını gerçek zamanlı oluşturucud
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:375
 msgid "Show 3D Navigator"
-msgstr "KiCad 3D Gezgini"
+msgstr "KiCad 3B Gezgini"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:382
 msgid "Show Appearance Manager"
@@ -639,11 +639,11 @@ msgstr "Lehim pastasını göster"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:59
 msgid "Show front silkscreen"
-msgstr "Önyüz baskısını göster"
+msgstr "Ön serigrafiyi göster"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:60
 msgid "Show back silkscreen"
-msgstr "Arka yüzey baskısını göster"
+msgstr "Arka serigrafiyi göster"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:61
 msgid "Show front solder mask"
@@ -655,7 +655,7 @@ msgstr "Arka lehim maskesini göster"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:63
 msgid "Show user drawings layer"
-msgstr "Kullanıcı katmanlarını göster"
+msgstr "Kullanıcı çizimleri katmanını göster"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:64
 msgid "Show user comments layer"
@@ -4562,7 +4562,7 @@ msgid ""
 "If set to 0, cache clearing is disabled"
 msgstr ""
 "3B önbellek dosyaları bu süreden eskiyse silinir.\n"
-"Eğer 0 olarak ayarlanırsa, önbellek temizleme devre dışı bırakılır."
+"Eğer 0 olarak ayarlanırsa, önbellek temizleme devre dışı bırakılır"
 
 #: common/dialogs/panel_common_settings_base.cpp:364
 msgid "days"
@@ -7067,8 +7067,7 @@ msgstr ""
 
 #: common/env_vars.cpp:120
 msgid "The base path of system footprint 3D shapes (.3Dshapes folders)."
-msgstr ""
-"Sistem ayak izi(footprint) 3D şekillerinin (.3Dshapes klasörleri) temel yolu."
+msgstr "Sistem ayak izi 3B şekillerinin (.3Dshapes klasörleri) temel yolu."
 
 #: common/env_vars.cpp:123
 msgid "The base path of the locally installed symbol libraries."
@@ -26748,8 +26747,8 @@ msgid ""
 "Only include component 3D models matching this list of reference designators "
 "(comma-separated, wildcards supported)"
 msgstr ""
-"Yalnızca bu listeye uygun referans tasarımcılarıyla eşleşen bileşen 3D "
-"modellerini dahil et (virgülle ayrılmış, joker karakterler desteklenir)"
+"Yalnızca bu referans tanımlayıcı listesiyle (virgülle ayrılmış, joker "
+"karakterler desteklenir) eşleşen bileşen 3B modellerini dahil et"
 
 #: kicad/cli/command_pcb_export_3d.cpp:137
 #: pcbnew/dialogs/dialog_export_step_base.cpp:121
@@ -35440,7 +35439,7 @@ msgid ""
 "If not checked: Embed 3D models in the VRML board file"
 msgstr ""
 "İşaretliyse: 3B modelleri hedef klasöre kopyala\n"
-"İşaretlenmemişse: 3D modelleri VRML pano dosyasına göm"
+"İşaretlenmemişse: 3B modelleri VRML pano dosyasına göm"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:135
 msgid "Use relative paths to model files in board VRML file"
@@ -50724,7 +50723,7 @@ msgstr "IDFv3 Dışa Aktar..."
 
 #: pcbnew/tools/pcb_actions.cpp:1272
 msgid "Export IDF 3D board representation"
-msgstr "IDF 3D pano temsilini dışa aktar"
+msgstr "IDF 3B kart temsilini dışa aktar"
 
 #: pcbnew/tools/pcb_actions.cpp:1278
 msgid "Export STEP/GLB/BREP/XAO/PLY/STL..."
