@@ -402,6 +402,9 @@ unsigned int RC_TREE_MODEL::GetChildren( wxDataViewItem const& aItem,
 void RC_TREE_MODEL::GetValue( wxVariant& aVariant, wxDataViewItem const& aItem,
                               unsigned int aCol ) const
 {
+    if( !aItem.IsOk() )
+        return;
+
     const RC_TREE_NODE*            node = ToNode( aItem );
     const std::shared_ptr<RC_ITEM> rcItem = node->m_RcItem;
     MARKER_BASE*                   marker = rcItem->GetParent();
@@ -474,8 +477,10 @@ bool RC_TREE_MODEL::GetAttr( wxDataViewItem const&   aItem,
                              unsigned int            aCol,
                              wxDataViewItemAttr&     aAttr ) const
 {
+    if( !aItem.IsOk() )
+        return false;
+
     const RC_TREE_NODE* node = ToNode( aItem );
-    wxASSERT( node );
 
     bool ret = false;
     bool heading = node->m_Type == RC_TREE_NODE::MARKER;
