@@ -1540,9 +1540,7 @@ void BOARD::DeleteMARKERs( bool aWarningsAndErrors, bool aExclusions )
 void BOARD::DeleteAllFootprints()
 {
     for( FOOTPRINT* footprint : m_footprints )
-    {
         delete footprint;
-    }
 
     m_footprints.clear();
     IncrementTimeStamp();
@@ -1552,9 +1550,7 @@ void BOARD::DeleteAllFootprints()
 void BOARD::DetachAllFootprints()
 {
     for( FOOTPRINT* footprint : m_footprints )
-    {
         footprint->SetParent( nullptr );
-    }
 
     m_footprints.clear();
     IncrementTimeStamp();
@@ -1666,7 +1662,7 @@ BOARD_ITEM* BOARD::ResolveItem( const KIID& aID, bool aAllowNullptrReturn ) cons
     // Not found; weak reference has been deleted.
     if( aAllowNullptrReturn )
         return nullptr;
-    else
+
     return DELETED_BOARD_ITEM::GetInstance();
 }
 

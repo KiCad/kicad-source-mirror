@@ -374,16 +374,9 @@ bool DRC_TEST_PROVIDER_MATCHED_LENGTH::runInternal( bool aDelayReportMode )
                 if( !reportProgress( ii++, count, progressDelta ) )
                     return false;
 
-                const DRC_CONSTRAINT_T constraintsToCheck[] = {
-                        LENGTH_CONSTRAINT,
-                        SKEW_CONSTRAINT,
-                        VIA_COUNT_CONSTRAINT,
-                };
-
-                for( int i = 0; i < 3; i++ )
+                for( DRC_CONSTRAINT_T jj : { LENGTH_CONSTRAINT, SKEW_CONSTRAINT, VIA_COUNT_CONSTRAINT } )
                 {
-                    auto constraint = m_drcEngine->EvalRules( constraintsToCheck[i], item, nullptr,
-                                                              item->GetLayer() );
+                    DRC_CONSTRAINT constraint = m_drcEngine->EvalRules( jj, item, nullptr, item->GetLayer() );
 
                     if( constraint.IsNull() )
                         continue;
