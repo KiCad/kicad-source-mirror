@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-20 23:57+0300\n"
+"POT-Creation-Date: 2025-06-27 22:51+0300\n"
 "PO-Revision-Date: 2025-06-27 13:19+0000\n"
 "Last-Translator: Luka Borkovic <borkovic@gmail.com>\n"
 "Language-Team: Serbian <https://hosted.weblate.org/projects/kicad/v9/sr/>\n"
@@ -4572,7 +4572,8 @@ msgstr "Невалидна дефиниција реда"
 msgid ""
 "Empty cells will result in all rows that are invalid to be removed from the "
 "table."
-msgstr "Празне ћелије ће резултовати брисањем свих невалидних редова из табеле."
+msgstr ""
+"Празне ћелије ће резултовати брисањем свих невалидних редова из табеле."
 
 #: common/dialogs/panel_design_block_lib_table.cpp:554
 #: eeschema/dialogs/panel_sym_lib_table.cpp:458
@@ -6887,8 +6888,8 @@ msgstr ""
 "KiCad није успео да отвори овај фајл, јер је креиран са новијом верзијом "
 "KiCad-а од оне коју ви користите. \n"
 "\n"
-"Да бисте га отворили, мораћете унапредити KiCad на верзију %s или новију ("
-"фајл формат са датумом %s или новијим)."
+"Да бисте га отворили, мораћете унапредити KiCad на верзију %s или новију "
+"(фајл формат са датумом %s или новијим)."
 
 #: common/exceptions.cpp:153
 #, fuzzy
