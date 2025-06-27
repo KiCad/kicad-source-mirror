@@ -2579,16 +2579,16 @@ msgid ""
 "this behavior, either rename any conflicting entries or remove\n"
 "the external environment variable(s) from your system."
 msgstr ""
-"KiCad bir dahaki sefere başlatıldığında, önceden tanımlanmış tüm\n"
-"yollar geçerli olacak ve yol yapılandırma iletişim kutusunda tanımlanan\n"
-"tüm ayarlar yok sayılacaktır.   Eğer bu davranışı istemiyorsanız, çakışan\n"
-"girdileri yeniden adlandırın veya harici ortam değişkenleri sisteminizden "
-"kaldırın."
+"KiCad bir dahaki sefere başlatıldığında, önceden tanımlanmış\n"
+"tüm yollar geçerli olacak ve yol yapılandırma iletişim\n"
+"kutusunda tanımlanan tüm ayarlar yok sayılacaktır.\n"
+"Eğer bu davranışı istemiyorsanız, çakışan girdileri yeniden\n"
+"adlandırın veya harici ortam değişken(ler)ini sisteminizden kaldırın."
 
 #: common/dialogs/dialog_configure_paths.cpp:304
 #, c-format
 msgid "The name %s is reserved, and cannot be used."
-msgstr "%s adı ayrılmıştır ve burada kullanılamaz."
+msgstr "%s adı ayrılmıştır ve kullanılamaz."
 
 #: common/dialogs/dialog_configure_paths.cpp:386
 msgid ""
@@ -2598,10 +2598,10 @@ msgid ""
 "over the ones defined in this table.  This means the values in this table "
 "are ignored."
 msgstr ""
-"Her ortam değişkeni için adı ve değeri girin.  Gri girdiler, sistem veya "
-"kullanıcı düzeyinde harici olarak tanımlanan adlardır.  Sistem veya "
-"kullanıcı düzeyinde tanımlanan ortam değişkenleri, bu tabloda "
-"tanımlananlardan önceliklidir.  Bu, bu tablodaki değerlerin yok sayıldığı "
+"Her ortam değişkeni için bir ad ve değer girin. Gri girdiler, sistem veya "
+"kullanıcı düzeyinde harici olarak tanımlanmış adlardır. Sistem veya "
+"kullanıcı düzeyinde tanımlanan ortam değişkenleri, bu tablodaki "
+"tanımlananlara göre önceliklidir. Bu, bu tablodaki değerlerin yok sayılacağı "
 "anlamına gelir."
 
 #: common/dialogs/dialog_configure_paths.cpp:392
@@ -2729,7 +2729,7 @@ msgstr "Değer"
 #: pcbnew/board_stackup_manager/dialog_dielectric_list_manager_base.cpp:31
 #: pcbnew/footprint_libraries_utils.cpp:1051
 msgid "Name:"
-msgstr "İsim:"
+msgstr "Ad:"
 
 #: common/dialogs/dialog_design_block_properties_base.cpp:104
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:137
@@ -2785,7 +2785,7 @@ msgstr ""
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:107
 #, c-format
 msgid "Cannot create global library table '%s'."
-msgstr "Genel kütüphane tablosu '%s' oluşturulamıyor."
+msgstr "Genel kütüphane tablosu '%s' oluşturulamadı."
 
 #: common/dialogs/dialog_global_design_block_lib_table_config.cpp:122
 #, c-format
@@ -2808,9 +2808,9 @@ msgid ""
 "of the options below.  If you are not sure which option to select, please\n"
 "use the default selection."
 msgstr ""
-"KiCad, yeni kütüphanelere erişim için %s kitaplık tablosu kullanılarak\n"
+"KiCad, yeni kütüphanelere erişim için yeni %s kitaplık tablosu kullanarak\n"
 "ilk kez çalıştırıldı. KiCad'in %s kitaplıklarına erişebilmesi için,\n"
-"global %s kitaplık tablonuzu yapılandırmanız gerekir. Lütfen aşağıdaki\n"
+"genel %s kitaplık tablonuzu yapılandırmanız gerekir. Lütfen aşağıdaki\n"
 "seçeneklerden birini seçin. Hangi seçeneği seçeceğinizden emin değilseniz, "
 "lütfen\n"
 "varsayılan seçimi kullanın."
@@ -2818,7 +2818,7 @@ msgstr ""
 #: common/dialogs/dialog_global_lib_table_config.cpp:51
 #, c-format
 msgid "Copy default global %s library table (recommended)"
-msgstr "Öntanımlı genel %s kütüphane tablosunu kopyala (tavsiye edilen)"
+msgstr "Varsayılan genel %s kütüphane tablosunu kopyala (önerilir)"
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:53
 #, c-format
@@ -2916,7 +2916,7 @@ msgstr "Genel %s kütüphane tablosu dosyasını seç:"
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:340
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:196
 msgid "dummy"
-msgstr "sahte"
+msgstr "yapay"
 
 #: common/dialogs/dialog_global_lib_table_config_base.cpp:51
 msgid "Select a file"
@@ -2924,15 +2924,15 @@ msgstr "Bir dosya seç"
 
 #: common/dialogs/dialog_global_lib_table_config_base.h:55
 msgid "Configure Global Library Table"
-msgstr "Genel Kitaplık Tablosunu Yapılandır"
+msgstr "Genel Kütüphane Tablosunu Yapılandır"
 
 #: common/dialogs/dialog_grid_settings.cpp:82
 msgid "Grid size X out of range."
-msgstr "Izgara boyutu X aralık dışında."
+msgstr "Izgara boyutu X geçerli aralığın dışında."
 
 #: common/dialogs/dialog_grid_settings.cpp:89
 msgid "Grid size Y out of range."
-msgstr "Izgara boyutu Y aralık dışında."
+msgstr "Izgara boyutu Y geçerli aralığın dışında."
 
 #: common/dialogs/dialog_grid_settings_base.cpp:32
 msgid "(optional)"
@@ -3022,7 +3022,7 @@ msgstr "Bağlı"
 
 #: common/dialogs/dialog_grid_settings_base.h:57
 msgid "Grid Settings"
-msgstr "Elek Ayarları"
+msgstr "Izgara Ayarları"
 
 #: common/dialogs/dialog_group_properties.cpp:112
 #, c-format
@@ -3101,8 +3101,8 @@ msgid ""
 "This project file contains multiple PCB+Schematic combinations.\n"
 "Choose which one should be imported to KiCad."
 msgstr ""
-"Bu proje dosyası birden fazla Baskı Devre + Şematik kombinasyonu içerir.\n"
-"Hangisinin KiCad'a aktarılması gerektiğini seçin."
+"Bu proje dosyası birden fazla Baskı Devre+Şematik kombinasyonu içerir.\n"
+"Hangisinin KiCad'e aktarılacağını seçin."
 
 #: common/dialogs/dialog_import_choose_project_base.h:48
 msgid "Choose Project to Import"
@@ -3110,14 +3110,14 @@ msgstr "İçe Aktarılacak Projeyi Seç"
 
 #: common/dialogs/dialog_locked_items_query.cpp:38
 msgid "Skip Locked Items"
-msgstr "Kilitli Öğeleri Atla"
+msgstr "Kilitli Ögeleri Atla"
 
 #: common/dialogs/dialog_locked_items_query.cpp:39
 msgid ""
 "Remove locked items from the selection and only apply the operation to the "
 "unlocked items (if any)."
 msgstr ""
-"Seçimden kilitli öğeleri kaldırın ve işlemi yalnızca kilidi açılmış öğelere "
+"Kilitli ögeleri seçimden kaldırın ve işlemi yalnızca kilidi açılmış ögelere "
 "(varsa) uygulayın."
 
 #: common/dialogs/dialog_locked_items_query.cpp:42
@@ -3135,7 +3135,7 @@ msgstr "Seçim %zu adet kilitli öge içeriyor."
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:34
 msgid "These items will be skipped unless you override the locks."
-msgstr "Kilitleri geçersiz kılmadığınız sürece bu öğeler atlanacaktır."
+msgstr "Bu ögeler, kilitleri geçersiz kılmadığınız sürece atlanacaktır."
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:44
 msgid "Remember decision for this session."
@@ -3158,30 +3158,30 @@ msgid ""
 "Override locks and apply the operation on all the items selected.\n"
 "Any locked items will remain locked after the operation is complete."
 msgstr ""
-"Kilitleri geçersiz kıl ve işlemi seçilen tüm öğelere uygula.\n"
-"İşlem tamamlandıktan sonra kilitli öğeler kilitli kalacaktır."
+"Kilitleri geçersiz kıl ve işlemi seçilen tüm ögelere uygula.\n"
+"İşlem tamamlandıktan sonra kilitli ögeler kilitli kalacaktır."
 
 #: common/dialogs/dialog_locked_items_query_base.h:55
 msgid "Locked Items"
-msgstr "Kilitli Öğeler"
+msgstr "Kilitli Ögeler"
 
 #: common/dialogs/dialog_migrate_settings.cpp:33
 msgid "Quit KiCad"
-msgstr "KiCad Çık"
+msgstr "KiCad'den Çık"
 
 #: common/dialogs/dialog_migrate_settings.cpp:59
 #: common/dialogs/dialog_migrate_settings_base.cpp:23
 #, c-format
 msgid "Welcome to KiCad %s!"
-msgstr "KiCad'e hoş geldiniz %s!"
+msgstr "KiCad %s'e Hoş Geldiniz!"
 
 #: common/dialogs/dialog_migrate_settings.cpp:68
 msgid "Import settings from a previous version (none found)"
-msgstr "Ayarları önceki bir sürümden içe aktarın (hiçbiri bulunamadı)"
+msgstr "Önceki bir sürümden ayarları içe aktar (bulunamadı)"
 
 #: common/dialogs/dialog_migrate_settings.cpp:139
 msgid "Select Settings Path"
-msgstr "Ayarlar Yolunu Seçin"
+msgstr "Ayarlar Yolunu Seç"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:32
 msgid "How would you like to configure KiCad?"
@@ -3189,11 +3189,11 @@ msgstr "KiCad'i nasıl yapılandırmak istersiniz?"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:36
 msgid "Import settings from a previous version at:"
-msgstr "Ayarları önceki bir sürümden içe aktarın:"
+msgstr "Ayarları önceki bir sürümden şuradan içe aktar:"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:49
 msgid "Choose a different path"
-msgstr "Farklı bir yol seçin"
+msgstr "Farklı bir yol seç"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:56
 msgid "The selected path does not contain valid KiCad settings!"
@@ -3201,19 +3201,19 @@ msgstr "Seçilen yol, geçerli KiCad ayarları içermiyor!"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:63
 msgid "Import library configuration from previous version"
-msgstr "Önceki sürümden kitaplık yapılandırmasını içe aktar"
+msgstr "Kütüphane yapılandırmasını önceki sürümden içe aktar"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:65
 msgid ""
 "When checked, the symbol and footprint library tables from the previous "
 "version will be imported into this version"
 msgstr ""
-"İşaretlendiğinde, önceki sürümdeki sembol ve ayak izi kitaplığı tabloları bu "
+"İşaretlendiğinde, önceki sürümdeki sembol ve ayak izi kütüphane tabloları bu "
 "sürüme aktarılacaktır"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:69
 msgid "Start with default settings"
-msgstr "Öntanımlı ayarlarla başlat"
+msgstr "Varsayılan ayarlarla başla"
 
 #: common/dialogs/dialog_migrate_settings_base.h:68
 msgid "Configure KiCad Settings Path"
@@ -3285,11 +3285,11 @@ msgstr "Önizleme Ayarları"
 
 #: common/dialogs/dialog_page_settings.cpp:112
 msgid "Preview Paper"
-msgstr "Önizleme Sayfası"
+msgstr "Önizleme Kağıdı"
 
 #: common/dialogs/dialog_page_settings.cpp:113
 msgid "Preview Title Block Data"
-msgstr "Başlık Bloğu Verilerini Önizleme"
+msgstr "Başlık Bloğu Verilerini Önizle"
 
 #: common/dialogs/dialog_page_settings.cpp:117
 #: common/dialogs/dialog_page_settings_base.h:146
@@ -3313,7 +3313,7 @@ msgstr "Başlık Bloğu"
 #: pcbnew/pcbnew_jobs_handler.cpp:2433
 #, c-format
 msgid "Error loading drawing sheet '%s'."
-msgstr "'%s' çizim sayfası yüklenirken hata oluştu."
+msgstr "Çizim sayfası '%s' yüklenirken hata oluştu."
 
 #: common/dialogs/dialog_page_settings.cpp:713
 #: common/dialogs/dialog_page_settings_base.cpp:54
@@ -3323,7 +3323,7 @@ msgstr "Dikey görünüm"
 #: common/dialogs/dialog_page_settings.cpp:715
 #: common/dialogs/dialog_page_settings_base.cpp:54
 msgid "Landscape"
-msgstr "Yatay Sayfa Düzeni"
+msgstr "Yatay"
 
 #: common/dialogs/dialog_page_settings.cpp:803 pagelayout_editor/files.cpp:59
 msgid "Drawing Sheet File"
@@ -3340,7 +3340,7 @@ msgstr ""
 
 #: common/dialogs/dialog_page_settings_base.cpp:41
 msgid "dummy text"
-msgstr "sahte metin"
+msgstr "dummy metin"
 
 #: common/dialogs/dialog_page_settings_base.cpp:50
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:234
@@ -8524,7 +8524,7 @@ msgstr "Kılavuz eksenleri"
 
 #: common/layer_id.cpp:153
 msgid "Locked item shadow"
-msgstr "Kilitli Öğeler"
+msgstr "Kilitli öge gölgesi"
 
 #: common/layer_id.cpp:154
 msgid "Courtyard collision shadow"
@@ -25087,7 +25087,7 @@ msgstr "Kilitli ögeler"
 #: pcbnew/widgets/panel_selection_filter.cpp:195
 #: pcbnew/widgets/panel_selection_filter_base.cpp:25
 msgid "Allow selection of locked items"
-msgstr "Kilitli öğelerin seçimine izin ver"
+msgstr "Kilitli ögelerin seçimine izin ver"
 
 #: eeschema/widgets/panel_sch_selection_filter.cpp:207
 #: eeschema/widgets/panel_sch_selection_filter_base.cpp:45
@@ -39692,7 +39692,7 @@ msgid ""
 "If checked, no prompt will be shown when attempting to edit locked items.  "
 "This setting is reset when KiCad restarts."
 msgstr ""
-"Eğer işaretlenirse, kilitli öğeleri düzenlemeye çalışırken herhangi bir "
+"Eğer işaretlenirse, kilitli ögeleri düzenlemeye çalışırken herhangi bir "
 "uyarı gösterilmez. Bu ayar, KiCad yeniden başlatıldığında sıfırlanır."
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:141
