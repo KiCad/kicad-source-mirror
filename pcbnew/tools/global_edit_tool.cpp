@@ -264,7 +264,7 @@ int GLOBAL_EDIT_TOOL::ZonesManager( const TOOL_EVENT& aEvent )
     for( ZONE* zone : board->Zones() )
         editFrame->GetCanvas()->GetView()->Update( zone );
 
-
+    zoneInfo.m_Netcode = NETINFO_LIST::ORPHANED;
     board->GetDesignSettings().SetDefaultZoneSettings( zoneInfo );
     commit.Push( _( "Modify zones properties with zone manager" ), SKIP_CONNECTIVITY );
     editFrame->OnModify();
@@ -273,18 +273,14 @@ int GLOBAL_EDIT_TOOL::ZonesManager( const TOOL_EVENT& aEvent )
     board->BuildConnectivity();
 
     if( TOOL_MANAGER* manger = GetManager() )
-    {
         manger->PostEvent( EVENTS::ConnectivityChangedEvent );
-    }
 
     editFrame->GetCanvas()->RedrawRatsnest();
 
     if( dialogResult == ZONE_MANAGER_REPOUR )
     {
         if( TOOL_MANAGER* manger = GetManager() )
-        {
             manger->PostAction( PCB_ACTIONS::zoneFillAll );
-        }
     }
 
     return 0;

@@ -47,7 +47,7 @@ void PCB_EDIT_FRAME::Edit_Zone_Params( ZONE* aZone )
     // store default layer properties
     std::map<PCB_LAYER_ID, ZONE_LAYER_PROPERTIES> layer_properties;
 
-    std::ranges::copy( zoneInfo.m_layerProperties,
+    std::ranges::copy( zoneInfo.m_LayerProperties,
                        std::inserter( layer_properties, std::end( layer_properties ) ) );
 
     if( aZone->GetIsRuleArea() )
@@ -81,15 +81,14 @@ void PCB_EDIT_FRAME::Edit_Zone_Params( ZONE* aZone )
 
     zoneInfo.ExportSetting( *aZone );
 
-    NETINFO_ITEM* net = GetBoard()->FindNet( zoneInfo.m_NetcodeSelection );
-
-    if( net )   // net == NULL should not occur
+    if( NETINFO_ITEM* net = GetBoard()->FindNet( zoneInfo.m_Netcode ) )
         aZone->SetNetCode( net->GetNetCode() );
 
-    // restore default layer properties
-    zoneInfo.m_layerProperties.clear();
-    std::ranges::copy( layer_properties, std::inserter( zoneInfo.m_layerProperties,
-                                                        std::end( zoneInfo.m_layerProperties ) ) );
+    // restore default layer & net properties
+    zoneInfo.m_LayerProperties.clear();
+    std::ranges::copy( layer_properties, std::inserter( zoneInfo.m_LayerProperties,
+                                                        std::end( zoneInfo.m_LayerProperties ) ) );
+    zoneInfo.m_Netcode = NETINFO_LIST::ORPHANED;
 
     m_pcb->GetDesignSettings().SetDefaultZoneSettings( zoneInfo );
 

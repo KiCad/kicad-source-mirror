@@ -56,7 +56,7 @@ ZONE_SETTINGS::ZONE_SETTINGS()
     m_HatchSmoothingValue = 0.1;    // Grid pattern chamfer value relative to the gap value
     m_HatchHoleMinArea = 0.15;      // Min size before holes are dropped (ratio of hole size)
     m_HatchBorderAlgorithm = 1;     // 0 = use zone min thickness; 1 = use hatch width
-    m_NetcodeSelection = 0;         // Net code selection for the current zone
+    m_Netcode = 0;                  // Net code for the current zone
     m_ZoneBorderDisplayStyle = ZONE_BORDER_DISPLAY_STYLE::DIAGONAL_EDGE; // Option to show the zone
                                                                          // outlines only, short
                                                                          // hatches or full hatches
@@ -106,7 +106,7 @@ bool ZONE_SETTINGS::operator==( const ZONE_SETTINGS& aOther ) const
     if( m_HatchSmoothingValue         != aOther.m_HatchSmoothingValue ) return false;
     if( m_HatchBorderAlgorithm        != aOther.m_HatchBorderAlgorithm ) return false;
     if( m_HatchHoleMinArea            != aOther.m_HatchHoleMinArea ) return false;
-    if( m_NetcodeSelection            != aOther.m_NetcodeSelection ) return false;
+    if( m_Netcode                     != aOther.m_Netcode ) return false;
     if( m_Name                        != aOther.m_Name ) return false;
     if( m_ZoneBorderDisplayStyle      != aOther.m_ZoneBorderDisplayStyle ) return false;
     if( m_BorderHatchPitch            != aOther.m_BorderHatchPitch ) return false;
@@ -128,8 +128,8 @@ bool ZONE_SETTINGS::operator==( const ZONE_SETTINGS& aOther ) const
     if( m_removeIslands               != aOther.m_removeIslands ) return false;
     if( m_minIslandArea               != aOther.m_minIslandArea ) return false;
 
-    if( !std::equal( std::begin( m_layerProperties ), std::end( m_layerProperties ),
-                     std::begin( aOther.m_layerProperties ) ) )
+    if( !std::equal( std::begin( m_LayerProperties ), std::end( m_LayerProperties ),
+                     std::begin( aOther.m_LayerProperties ) ) )
         return false;
 
     // Currently, the teardrop area type is not really a ZONE_SETTINGS parameter,
@@ -156,7 +156,7 @@ ZONE_SETTINGS& ZONE_SETTINGS::operator << ( const ZONE& aSource )
     m_HatchSmoothingValue         = aSource.GetHatchSmoothingValue();
     m_HatchBorderAlgorithm        = aSource.GetHatchBorderAlgorithm();
     m_HatchHoleMinArea            = aSource.GetHatchHoleMinArea();
-    m_NetcodeSelection            = aSource.GetNetCode();
+    m_Netcode                     = aSource.GetNetCode();
     m_Name                        = aSource.GetZoneName();
     m_ZoneBorderDisplayStyle      = aSource.GetHatchStyle();
     m_BorderHatchPitch            = aSource.GetBorderHatchPitch();
@@ -178,10 +178,10 @@ ZONE_SETTINGS& ZONE_SETTINGS::operator << ( const ZONE& aSource )
     m_removeIslands               = aSource.GetIslandRemovalMode();
     m_minIslandArea               = aSource.GetMinIslandArea();
 
-    m_layerProperties.clear();
+    m_LayerProperties.clear();
 
     std::ranges::copy( aSource.LayerProperties(),
-                       std::inserter( m_layerProperties, std::end( m_layerProperties ) ) );
+                       std::inserter( m_LayerProperties, std::end( m_LayerProperties ) ) );
 
     // Currently, the teardrop area type is not really a ZONE_SETTINGS parameter,
     // but a ZONE parameter only.
@@ -234,13 +234,13 @@ void ZONE_SETTINGS::ExportSetting( ZONE& aTarget, bool aFullExport ) const
     {
         aTarget.SetAssignedPriority( m_ZonePriority );
 
-        aTarget.SetLayerProperties( m_layerProperties );
+        aTarget.SetLayerProperties( m_LayerProperties );
         aTarget.SetLayerSet( m_Layers );
 
         aTarget.SetZoneName( m_Name );
 
         if( !m_isRuleArea )
-            aTarget.SetNetCode( m_NetcodeSelection );
+            aTarget.SetNetCode( m_Netcode );
     }
 
     // call SetBorderDisplayStyle last, because hatch lines will be rebuilt,
@@ -263,7 +263,7 @@ void ZONE_SETTINGS::CopyFrom( const ZONE_SETTINGS& aOther, bool aCopyFull )
     m_HatchSmoothingValue         = aOther.m_HatchSmoothingValue;
     m_HatchBorderAlgorithm        = aOther.m_HatchBorderAlgorithm;
     m_HatchHoleMinArea            = aOther.m_HatchHoleMinArea;
-    m_NetcodeSelection            = aOther.m_NetcodeSelection;
+    m_Netcode                     = aOther.m_Netcode;
     m_Name                        = aOther.m_Name;
     m_ZoneBorderDisplayStyle      = aOther.m_ZoneBorderDisplayStyle;
     m_BorderHatchPitch            = aOther.m_BorderHatchPitch;
@@ -288,10 +288,10 @@ void ZONE_SETTINGS::CopyFrom( const ZONE_SETTINGS& aOther, bool aCopyFull )
 
     if( aCopyFull )
     {
-        m_layerProperties.clear();
+        m_LayerProperties.clear();
 
-        std::ranges::copy( aOther.m_layerProperties,
-                           std::inserter( m_layerProperties, std::end( m_layerProperties ) ) );
+        std::ranges::copy( aOther.m_LayerProperties,
+                           std::inserter( m_LayerProperties, std::end( m_LayerProperties ) ) );
 
         m_TeardropType = aOther.m_TeardropType;
 

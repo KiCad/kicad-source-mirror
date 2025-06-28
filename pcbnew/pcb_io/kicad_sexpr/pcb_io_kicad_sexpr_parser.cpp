@@ -2564,7 +2564,7 @@ void PCB_IO_KICAD_SEXPR_PARSER::parseZoneDefaults( ZONE_SETTINGS& aZoneSettings 
         switch( token )
         {
         case T_property:
-            parseZoneLayerProperty( aZoneSettings.m_layerProperties );
+            parseZoneLayerProperty( aZoneSettings.m_LayerProperties );
             break;
         default:
             Unexpected( CurText() );

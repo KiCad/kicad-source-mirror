@@ -2567,12 +2567,11 @@ bool ZONE_FILLER::addHatchFillTypeOnZone( const ZONE* aZone, PCB_LAYER_ID aLayer
 
     if( !zone_has_offset )
     {
-        if( m_board->GetDesignSettings().GetDefaultZoneSettings().m_layerProperties.contains(
-                    aLayer ) )
+        ZONE_SETTINGS& defaultZoneSettings = m_board->GetDesignSettings().GetDefaultZoneSettings();
+
+        if( defaultZoneSettings.m_LayerProperties.contains( aLayer ) )
         {
-            const ZONE_LAYER_PROPERTIES& properties =
-                    m_board->GetDesignSettings().GetDefaultZoneSettings().m_layerProperties.at(
-                            aLayer );
+            const ZONE_LAYER_PROPERTIES& properties = defaultZoneSettings.m_LayerProperties.at( aLayer );
 
             offset_opt = properties.hatching_offset.value_or( VECTOR2I( 0, 0 ) );
         }
