@@ -1755,9 +1755,8 @@ msgid "Replace Loaded File?"
 msgstr "Yüklü Dosya Değiştirilsin mi?"
 
 #: bitmap2component/bitmap2cmp_panel.cpp:588
-#, fuzzy
 msgid "There is already a file loaded. Do you want to replace it?"
-msgstr "Çıktı dosyaları '%s' zaten mevcut. Üzerine yazmak ister misiniz?"
+msgstr "Zaten yüklü bir dosya var. Değiştirmek ister misiniz?"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:22
 msgid "Original Picture"
@@ -8618,9 +8617,8 @@ msgid "Already Placed"
 msgstr "Zaten Yerleştirildi"
 
 #: common/libeval_compiler/libeval_compiler.cpp:590
-#, fuzzy
 msgid "Unresolved text variable reference"
-msgstr "Çözümlenmemiş metin değişkeni"
+msgstr "Çözümlenemeyen metin değişkeni referansı"
 
 #: common/libeval_compiler/libeval_compiler.cpp:592
 #, c-format
@@ -15545,9 +15543,9 @@ msgid "Are you sure you want to remove the field '%s'?"
 msgstr "Alanı kaldırmak istediğinizden emin misiniz '%s'?"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:827
-#, fuzzy, c-format
+#, c-format
 msgid "The first %d fields are mandatory and names cannot be changed."
-msgstr "İlk %d alanları zorunludur."
+msgstr "İlk %d alan zorunludur ve adları değiştirilemez."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:838
 msgid "Rename Field"
@@ -15635,18 +15633,16 @@ msgstr ""
 "Lütfen farklı bir isim kullanın."
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:43
-#, fuzzy
 msgid "Add a new field"
-msgstr "Alan ekle"
+msgstr "Yeni bir alan ekle"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:48
 msgid "Rename selected field"
-msgstr "Seçili Ağı Yeniden Adlandır"
+msgstr "Seçili alanı yeniden adlandır"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:56
-#, fuzzy
 msgid "Remove selected field"
-msgstr "Gömülü dosyayı kaldır"
+msgstr "Seçili alanı kaldır"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:69
 msgid "View presets:"
@@ -17029,14 +17025,12 @@ msgid "Keep pins attached when dragging edges"
 msgstr "Kenarları sürüklerken pinleri bağlı tut"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:444
-#, fuzzy
 msgid "Nickname and path cannot be empty."
-msgstr "Pin adı boş olamaz."
+msgstr "Takma ad ve yol boş olamaz."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:449
-#, fuzzy
 msgid "Nickname cannot be empty."
-msgstr "Pin adı boş olamaz."
+msgstr "Takma ad ve yol boş olamaz."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:454
 #, fuzzy
