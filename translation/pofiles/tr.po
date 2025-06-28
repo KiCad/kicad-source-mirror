@@ -4622,7 +4622,7 @@ msgstr "Kütüphane Takma Adı Hatası"
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:636
 #, c-format
 msgid "Multiple libraries cannot share the same nickname ('%s')."
-msgstr "Birden fazla kütüphane aynı takma ad ('%s') paylaşamaz"
+msgstr "Birden fazla kütüphane aynı takma ad ('%s') paylaşamaz."
 
 #: common/dialogs/panel_design_block_lib_table.cpp:814
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:835
@@ -4698,8 +4698,8 @@ msgstr "'%s' takma adlı bir kütüphane zaten var."
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:1012
 msgid "One of the nicknames will need to be changed after adding this library."
 msgstr ""
-"Bu kitaplığı ekledikten sonra takma adlardan birinin değiştirilmesi "
-"gerekecektir."
+"Bu kütüphaneyi ekledikten sonra takma adlardan birinin değiştirilmesi "
+"gerekecek."
 
 #: common/dialogs/panel_design_block_lib_table.cpp:1010
 #: common/dialogs/panel_embedded_files.cpp:404
@@ -4814,13 +4814,13 @@ msgstr "Kütüphane Yolu"
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:98
 #: include/lib_table_grid.h:214 pcbnew/dialogs/panel_fp_lib_table_base.cpp:48
 msgid "Library Format"
-msgstr "Kitaplık Formatı"
+msgstr "Kütüphane Biçimi"
 
 #: common/dialogs/panel_design_block_lib_table_base.cpp:69
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:70
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:69
 msgid "Global Libraries"
-msgstr "Genel Kitaplıklar"
+msgstr "Genel Kütüphaneler"
 
 #: common/dialogs/panel_design_block_lib_table_base.cpp:97
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:97
@@ -4857,7 +4857,7 @@ msgstr "Kütüphaneyi tablodan kaldır"
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:165
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:162
 msgid "Migrate Libraries"
-msgstr "Kitaplıkları Taşı"
+msgstr "Kütüphaneleri Taşı"
 
 #: common/dialogs/panel_design_block_lib_table_base.cpp:163
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:72
@@ -4970,7 +4970,7 @@ msgstr "&Dışa Aktar..."
 
 #: common/dialogs/panel_grid_settings.cpp:53
 msgid "Footprints/pads:"
-msgstr "Baskı izleri/padler:"
+msgstr "Ayak İzleri/padler:"
 
 #: common/dialogs/panel_grid_settings.cpp:54
 #: pcbnew/dialogs/panel_pcb_display_options_base.cpp:81
@@ -4994,7 +4994,7 @@ msgstr "'%s' ızgara boyutu listede zaten var."
 #: common/eda_base_frame.cpp:1212 common/eda_base_frame.cpp:1234
 #: common/tool/common_tools.cpp:608
 msgid "Grids"
-msgstr "Kılavuzlar"
+msgstr "Izgaralar"
 
 #: common/dialogs/panel_grid_settings_base.cpp:67
 msgid "Fast Grid Switching"
@@ -5002,7 +5002,7 @@ msgstr "Hızlı Izgara Değişimi"
 
 #: common/dialogs/panel_grid_settings_base.cpp:80
 msgid "Grid 1:"
-msgstr "Elek 1:"
+msgstr "Izgara 1:"
 
 #: common/dialogs/panel_grid_settings_base.cpp:89
 #: common/dialogs/panel_grid_settings_base.cpp:102
@@ -5011,7 +5011,7 @@ msgstr "(kısayol)"
 
 #: common/dialogs/panel_grid_settings_base.cpp:93
 msgid "Grid 2:"
-msgstr "Elek 2:"
+msgstr "Izgara 2:"
 
 #: common/dialogs/panel_grid_settings_base.cpp:109 common/tool/actions.cpp:919
 msgid "Grid Overrides"
@@ -5019,15 +5019,15 @@ msgstr "Izgara Geçersiz Kılmaları"
 
 #: common/dialogs/panel_grid_settings_base.cpp:122
 msgid "Connected items:"
-msgstr "Bağlanan öğeler:"
+msgstr "Bağlı ögeler:"
 
 #: common/dialogs/panel_grid_settings_base.cpp:130
 msgid "Wires:"
-msgstr "Yollar:"
+msgstr "Teller:"
 
 #: common/dialogs/panel_grid_settings_base.cpp:138
 msgid "Vias:"
-msgstr "Yollar:"
+msgstr "Geçitler:"
 
 #: common/dialogs/panel_grid_settings_base.cpp:146
 #: eeschema/dialogs/dialog_field_properties_base.cpp:33
@@ -5072,7 +5072,7 @@ msgstr "Kısayol Tuşları Dosyasını İçe Aktar:"
 
 #: common/dialogs/panel_hotkeys_editor.cpp:254
 msgid "| Action | Default Hotkey | Description"
-msgstr "| Eylem | Varsayılan Kısayol Tuşu | Tarif"
+msgstr "| Eylem | Varsayılan Kısayol Tuşları | Açıklama"
 
 #: common/dialogs/panel_image_editor.cpp:79
 msgid "Incorrect scale number"
@@ -5121,7 +5121,7 @@ msgstr "Kaydırma ve Yakınlaştırma"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:35
 msgid "Center and warp cursor on zoom"
-msgstr "Yakınlaştırmada imleci merkeze taşı"
+msgstr "Yakınlaştırmada imleci ortala ve taşı"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:36
 msgid "Center the cursor on screen when zooming."
@@ -5136,7 +5136,7 @@ msgid ""
 "When drawing a track or moving an item, pan when approaching the edge of the "
 "display."
 msgstr ""
-"Bir parça çizerken veya bir öğeyi taşırken, ekranın kenarına yaklaşırken "
+"Bir yol çizerken veya bir ögeyi taşırken, ekranın kenarına yaklaşırken "
 "kaydır."
 
 #: common/dialogs/panel_mouse_settings_base.cpp:48
