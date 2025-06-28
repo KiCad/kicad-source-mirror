@@ -17030,12 +17030,11 @@ msgstr "Takma ad ve yol boş olamaz."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:449
 msgid "Nickname cannot be empty."
-msgstr "Takma ad ve yol boş olamaz."
+msgstr "Takma ad boş olamaz."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:454
-#, fuzzy
 msgid "Path cannot be empty."
-msgstr "Metin boş olamaz."
+msgstr "Yol boş olamaz"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:467
 #, fuzzy
