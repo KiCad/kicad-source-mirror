@@ -54,8 +54,7 @@ std::map<JOBSET_DESTINATION_T, JOBSET_DESTINATION_T_INFO> JobsetDestinationTypeI
 class DIALOG_JOBSET_RUN_LOG : public DIALOG_JOBSET_RUN_LOG_BASE
 {
 public:
-    DIALOG_JOBSET_RUN_LOG( wxWindow* aParent, JOBSET* aJobsFile,
-                           JOBSET_DESTINATION* aDestination ) :
+    DIALOG_JOBSET_RUN_LOG( wxWindow* aParent, JOBSET* aJobsFile, JOBSET_DESTINATION* aDestination ) :
             DIALOG_JOBSET_RUN_LOG_BASE( aParent ),
             m_jobsFile( aJobsFile ),
             m_destination( aDestination ),
@@ -79,7 +78,8 @@ public:
         m_jobList->SetImageList( imageList, wxIMAGE_LIST_SMALL );
 
         int num = 1;
-        for( auto& job : aJobsFile->GetJobsForDestination( aDestination ) )
+
+        for( JOBSET_JOB& job : aJobsFile->GetJobsForDestination( aDestination ) )
         {
             int imageIdx = -1;
 
@@ -268,10 +268,10 @@ public:
                     wxFileName fn = project.GetProjectFullName();
                     wxSetWorkingDirectory( fn.GetPath() );
 
-                    JOBS_RUNNER jobRunner( &( m_frame->Kiway() ), m_jobsFile, &project );
-
                     {
-                        WX_PROGRESS_REPORTER progressReporter( m_frame, _( "Run Jobs" ), 1, PR_NO_ABORT );
+                        JOBS_PROGRESS_REPORTER progressReporter( m_frame, _( "Running Jobs" ) );
+                        JOBS_RUNNER            jobRunner( &m_frame->Kiway(), m_jobsFile, &project,
+                                                          NULL_REPORTER::GetInstance(), &progressReporter );
 
                         if( JOBSET_DESTINATION* destination = GetDestination() )
                             jobRunner.RunJobsForDestination( destination );
@@ -989,10 +989,10 @@ void PANEL_JOBSET::OnGenerateAllDestinationsClick( wxCommandEvent& event )
 				wxFileName fn = project.GetProjectFullName();
 				wxSetWorkingDirectory( fn.GetPath() );
 
-                JOBS_RUNNER jobRunner( &( m_frame->Kiway() ), m_jobsFile.get(), &project );
-
                 {
-                    WX_PROGRESS_REPORTER progressReporter( m_frame, _( "Run Jobs" ), 1, PR_NO_ABORT );
+                    JOBS_PROGRESS_REPORTER progressReporter( m_frame, _( "Running Jobs" ) );
+                    JOBS_RUNNER            jobRunner( &m_frame->Kiway(), m_jobsFile.get(), &project,
+                                                      NULL_REPORTER::GetInstance(), &progressReporter );
 
                     jobRunner.RunJobsAllDestinations();
 

@@ -134,6 +134,7 @@ class wxTopLevelWindow;
 class TOOL_ACTION;
 class JOB;
 class REPORTER;
+class PROGRESS_REPORTER;
 
 
 /**
@@ -242,7 +243,7 @@ struct KIFACE
      */
     virtual void GetActions( std::vector<TOOL_ACTION*>& aActions ) const = 0;
 
-    virtual int HandleJob( JOB* aJob, REPORTER* aReporter )
+    virtual int HandleJob( JOB* aJob, REPORTER* aReporter, PROGRESS_REPORTER* aProgressReporter )
     {
         return 0;
     }
@@ -432,7 +433,8 @@ public:
 
     bool ProcessEvent( wxEvent& aEvent ) override;
 
-    int  ProcessJob( KIWAY::FACE_T aFace, JOB* aJob, REPORTER* aReporter = nullptr );
+    int  ProcessJob( KIWAY::FACE_T aFace, JOB* aJob, REPORTER* aReporter = nullptr,
+                     PROGRESS_REPORTER* aProgressReporter = nullptr );
     bool ProcessJobConfigDialog( KIWAY::FACE_T aFace, JOB* aJob, wxWindow* aWindow );
 
     /**

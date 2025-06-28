@@ -440,16 +440,18 @@ void DIALOG_ERC::OnRunERCClick( wxCommandEvent& event )
                 else
                     ercItem->SetItems( aItemA->GetSymbol() );
 
-                SCH_MARKER* marker = new SCH_MARKER( std::move( ercItem ),
-                                                     aItemA->GetSymbol()->GetPosition() );
+                SCH_MARKER* marker = new SCH_MARKER( ercItem, aItemA->GetSymbol()->GetPosition() );
                 aItemA->GetSheetPath().LastScreen()->Append( marker );
             } );
 
     testErc();
 
     if( itemsNotAnnotated )
+    {
         m_messages->ReportHead( wxString::Format( _( "%d symbol(s) require annotation.<br><br>" ),
-                                                  itemsNotAnnotated ), RPT_SEVERITY_INFO );
+                                                  itemsNotAnnotated ),
+                                RPT_SEVERITY_INFO );
+    }
 
     if( m_cancelled )
         // @spellingerror
