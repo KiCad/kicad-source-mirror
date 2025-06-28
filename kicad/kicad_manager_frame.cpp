@@ -131,14 +131,16 @@ KICAD_MANAGER_FRAME::KICAD_MANAGER_FRAME( wxWindow* parent, const wxString& titl
                                           const wxPoint& pos, const wxSize&   size ) :
         EDA_BASE_FRAME( parent, KICAD_MAIN_FRAME_T, title, pos, size, KICAD_DEFAULT_DRAWFRAME_STYLE,
                         KICAD_MANAGER_FRAME_NAME, &::Kiway, unityScale ),
+        m_active_project( false ),
         m_leftWin( nullptr ),
         m_launcher( nullptr ),
         m_mainToolBar( nullptr ),
-        m_lastToolbarIconSize( 0 )
+        m_lastToolbarIconSize( 0 ),
+        m_pcmButton( nullptr ),
+        m_pcmUpdateCount( 0 )
 {
     const int defaultLeftWinWidth = FromDIP( 250 );
 
-    m_active_project = false;
     m_leftWinWidth = defaultLeftWinWidth; // Default value
     m_aboutTitle = "KiCad";
 
@@ -195,9 +197,6 @@ KICAD_MANAGER_FRAME::KICAD_MANAGER_FRAME( wxWindow* parent, const wxString& titl
 
     // Load the settings
     LoadSettings( config() );
-
-    m_pcmButton = nullptr;
-    m_pcmUpdateCount = 0;
 
     // Left window: is the box which display tree project
     m_leftWin = new PROJECT_TREE_PANE( this );
