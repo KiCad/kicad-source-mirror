@@ -318,7 +318,8 @@ void BOARD_ADAPTER::createTrackWithMargin( const PCB_TRACK* aTrack, CONTAINER_2D
         VECTOR2I  center( arc->GetCenter() );
         EDA_ANGLE arc_angle = arc->GetAngle();
         double    radius = arc->GetRadius();
-        int       arcsegcount = GetArcToSegmentCount( KiROUND( radius ), ARC_HIGH_DEF, arc_angle );
+        int       arcsegcount = GetArcToSegmentCount( KiROUND( radius ), m_board->GetDesignSettings().m_MaxError,
+                                                      arc_angle );
         int       circlesegcount;
 
         // Avoid arcs that cannot be drawn
@@ -638,7 +639,8 @@ void BOARD_ADAPTER::addShape( const PCB_SHAPE* aShape, CONTAINER_2D_BASE* aConta
             {
                 SHAPE_POLY_SET polyList;
 
-                aShape->TransformShapeToPolySet( polyList, UNDEFINED_LAYER, 0, ARC_HIGH_DEF, ERROR_INSIDE );
+                aShape->TransformShapeToPolySet( polyList, UNDEFINED_LAYER, 0,
+                                                 m_board->GetDesignSettings().m_MaxError, ERROR_INSIDE );
 
                 polyList.Simplify();
 
@@ -683,7 +685,8 @@ void BOARD_ADAPTER::addShape( const PCB_SHAPE* aShape, CONTAINER_2D_BASE* aConta
         {
             SHAPE_POLY_SET polyList;
 
-            aShape->TransformShapeToPolygon( polyList, UNDEFINED_LAYER, 0, ARC_HIGH_DEF, ERROR_INSIDE );
+            aShape->TransformShapeToPolygon( polyList, UNDEFINED_LAYER, 0,
+                                             m_board->GetDesignSettings().m_MaxError, ERROR_INSIDE );
 
             // Some polygons can be a bit complex (especially when coming from a
             // picture of a text converted to a polygon
@@ -711,7 +714,8 @@ void BOARD_ADAPTER::addShape( const PCB_SHAPE* aShape, CONTAINER_2D_BASE* aConta
             {
                 SHAPE_POLY_SET polyList;
 
-                aShape->TransformShapeToPolygon( polyList, UNDEFINED_LAYER, 0, ARC_HIGH_DEF, ERROR_INSIDE );
+                aShape->TransformShapeToPolygon( polyList, UNDEFINED_LAYER, 0,
+                                                 m_board->GetDesignSettings().m_MaxError, ERROR_INSIDE );
 
                 // Some polygons can be a bit complex (especially when coming from a
                 // picture of a text converted to a polygon
@@ -804,8 +808,8 @@ void BOARD_ADAPTER::addShape( const PCB_TEXTBOX* aTextBox, CONTAINER_2D_BASE* aC
     {
         SHAPE_POLY_SET polyList;
 
-        aTextBox->PCB_SHAPE::TransformShapeToPolygon( polyList, UNDEFINED_LAYER, 0, ARC_HIGH_DEF,
-                                                      ERROR_INSIDE );
+        aTextBox->PCB_SHAPE::TransformShapeToPolygon( polyList, UNDEFINED_LAYER, 0,
+                                                      m_board->GetDesignSettings().m_MaxError, ERROR_INSIDE );
 
         ConvertPolygonToTriangles( polyList, *aContainer, m_biuTo3Dunits, *aOwner );
     }
