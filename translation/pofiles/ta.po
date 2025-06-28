@@ -51167,12 +51167,11 @@ msgstr "மோதும் தடம் முற்றங்களைக் க
 
 #: pcbnew/widgets/appearance_controls.cpp:354
 msgid "Board Area Shadow"
-msgstr "பூட்டப்பட்ட உருப்படி நிழல்"
+msgstr "அட்டை உருப்படி நிழல்"
 
 #: pcbnew/widgets/appearance_controls.cpp:354
-#, fuzzy
 msgid "Show board area shadow"
-msgstr "பலகை அமைப்பைக் காட்டு"
+msgstr "பலகை பகுதி நிழலைக் காட்டு"
 
 #: pcbnew/widgets/appearance_controls.cpp:355
 msgid "Show drawing sheet borders and title block"
