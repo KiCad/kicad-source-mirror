@@ -75,9 +75,7 @@ void PCB_EDIT_FRAME::Edit_Zone_Params( ZONE* aZone )
 
     zoneInfo.ExportSetting( *aZone );
 
-    NETINFO_ITEM* net = GetBoard()->FindNet( zoneInfo.m_NetcodeSelection );
-
-    if( net )   // net == NULL should not occur
+    if( NETINFO_ITEM* net = GetBoard()->FindNet( zoneInfo.m_Netcode ) )
         aZone->SetNetCode( net->GetNetCode() );
 
     m_pcb->GetDesignSettings().SetDefaultZoneSettings( zoneInfo );

@@ -100,7 +100,7 @@ public:
     double          m_HatchHoleMinArea;      // min size before holes are dropped (ratio)
     int             m_HatchBorderAlgorithm;  // 0 = use min zone thickness
 
-    int             m_NetcodeSelection;      // Net code selection for the current zone
+    int             m_Netcode;               // Net code selection for the current zone
 
     wxString        m_Name;                  // Unique name for the current zone (can be blank)
 
@@ -182,8 +182,7 @@ public:
      * @param aTarget: the given zone
      * @param aFullExport: if false: some parameters are NOT exported
      *   because they must not be  exported when export settings from a zone to others zones
-     *   Currently:
-     *      m_NetcodeSelection
+     *   Currently: m_ZonePriority, m_Layers & m_LayersProperties, m_Name and m_Netcode
      */
     void ExportSetting( ZONE& aTarget, bool aFullExport = true ) const;
 

@@ -51,7 +51,7 @@ ZONE_SETTINGS::ZONE_SETTINGS()
     m_HatchSmoothingValue = 0.1;    // Grid pattern chamfer value relative to the gap value
     m_HatchHoleMinArea = 0.3;       // Min size before holes are dropped (ratio of hole size)
     m_HatchBorderAlgorithm = 1;     // 0 = use zone min thickness; 1 = use hatch width
-    m_NetcodeSelection = 0;         // Net code selection for the current zone
+    m_Netcode = 0;                  // Net code for the current zone
     m_ZoneBorderDisplayStyle = ZONE_BORDER_DISPLAY_STYLE::DIAGONAL_EDGE; // Option to show the zone
                                                                          // outlines only, short
                                                                          // hatches or full hatches
@@ -101,7 +101,7 @@ bool ZONE_SETTINGS::operator==( const ZONE_SETTINGS& aOther ) const
     if( m_HatchSmoothingValue         != aOther.m_HatchSmoothingValue ) return false;
     if( m_HatchBorderAlgorithm        != aOther.m_HatchBorderAlgorithm ) return false;
     if( m_HatchHoleMinArea            != aOther.m_HatchHoleMinArea ) return false;
-    if( m_NetcodeSelection            != aOther.m_NetcodeSelection ) return false;
+    if( m_Netcode                     != aOther.m_Netcode ) return false;
     if( m_Name                        != aOther.m_Name ) return false;
     if( m_ZoneBorderDisplayStyle      != aOther.m_ZoneBorderDisplayStyle ) return false;
     if( m_BorderHatchPitch            != aOther.m_BorderHatchPitch ) return false;
@@ -148,7 +148,7 @@ ZONE_SETTINGS& ZONE_SETTINGS::operator << ( const ZONE& aSource )
     m_HatchSmoothingValue         = aSource.GetHatchSmoothingValue();
     m_HatchBorderAlgorithm        = aSource.GetHatchBorderAlgorithm();
     m_HatchHoleMinArea            = aSource.GetHatchHoleMinArea();
-    m_NetcodeSelection            = aSource.GetNetCode();
+    m_Netcode                     = aSource.GetNetCode();
     m_Name                        = aSource.GetZoneName();
     m_ZoneBorderDisplayStyle      = aSource.GetHatchStyle();
     m_BorderHatchPitch            = aSource.GetBorderHatchPitch();
@@ -224,7 +224,7 @@ void ZONE_SETTINGS::ExportSetting( ZONE& aTarget, bool aFullExport ) const
         aTarget.SetZoneName( m_Name );
 
         if( !m_isRuleArea )
-            aTarget.SetNetCode( m_NetcodeSelection );
+            aTarget.SetNetCode( m_Netcode );
     }
 
     // call SetBorderDisplayStyle last, because hatch lines will be rebuilt,

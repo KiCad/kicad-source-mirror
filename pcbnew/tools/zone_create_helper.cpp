@@ -95,7 +95,7 @@ std::unique_ptr<ZONE> ZONE_CREATE_HELPER::createNewZone( bool aKeepout )
     // Get the current default settings for zones
     ZONE_SETTINGS         zoneInfo = board->GetDesignSettings().GetDefaultZoneSettings();
     zoneInfo.m_Layers.reset().set( m_params.m_layer );  // TODO(JE) multilayer defaults?
-    zoneInfo.m_NetcodeSelection = highlightedNets.empty() ? -1 : *highlightedNets.begin();
+    zoneInfo.m_Netcode = highlightedNets.empty() ? -1 : *highlightedNets.begin();
     zoneInfo.SetIsRuleArea( m_params.m_keepout );
 
     if( m_params.m_mode != ZONE_MODE::GRAPHIC_POLYGON
@@ -107,13 +107,12 @@ std::unique_ptr<ZONE> ZONE_CREATE_HELPER::createNewZone( bool aKeepout )
     // If we don't have a net from highlighting, maybe we can get one from the selection
     PCB_SELECTION_TOOL* selectionTool = m_tool.GetManager()->GetTool<PCB_SELECTION_TOOL>();
 
-    if( selectionTool && !selectionTool->GetSelection().Empty()
-            && zoneInfo.m_NetcodeSelection == -1 )
+    if( selectionTool && !selectionTool->GetSelection().Empty() && zoneInfo.m_Netcode == -1 )
     {
         EDA_ITEM* item = *selectionTool->GetSelection().GetItems().begin();
 
         if( BOARD_CONNECTED_ITEM* bci = dynamic_cast<BOARD_CONNECTED_ITEM*>( item ) )
-            zoneInfo.m_NetcodeSelection = bci->GetNetCode();
+            zoneInfo.m_Netcode = bci->GetNetCode();
     }
 
     if( m_params.m_mode != ZONE_MODE::GRAPHIC_POLYGON )
