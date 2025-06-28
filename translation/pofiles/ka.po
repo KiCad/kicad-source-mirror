@@ -4,16 +4,16 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-06-27 22:51+0300\n"
-"PO-Revision-Date: 2025-02-16 13:37+0000\n"
+"PO-Revision-Date: 2025-06-29 09:02+0000\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
-"Language-Team: Georgian <https://hosted.weblate.org/projects/kicad/master-"
-"source/ka/>\n"
+"Language-Team: Georgian <https://hosted.weblate.org/projects/kicad/"
+"master-source/ka/>\n"
 "Language: ka\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.10\n"
+"X-Generator: Weblate 5.13-dev\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
 #: common/dialogs/panel_embedded_files.cpp:324
@@ -264,9 +264,8 @@ msgstr ""
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:334
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:693
 #: 3d-viewer/dialogs/appearance_controls_3D_base.cpp:43
-#, fuzzy
 msgid "Follow PCB Plot Settings"
-msgstr "ფილტრის მორგება"
+msgstr "PCB-ის ნახაზის პარამეტრების მიყოლა"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:551
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:718
@@ -407,19 +406,16 @@ msgid "Move Board Left"
 msgstr ""
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:156
-#, fuzzy
 msgid "Move Board Right"
-msgstr "წერტილის გადატანა"
+msgstr "დაფის გადატანა მარჯვნივ"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:165
-#, fuzzy
 msgid "Move Board Up"
-msgstr "აწევა"
+msgstr "დაფის აწევა"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:174
-#, fuzzy
 msgid "Move Board Down"
-msgstr "ჩამოწევა"
+msgstr "დაფის ჩამოწევა"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:183
 msgid "Home View"
@@ -943,18 +939,16 @@ msgid "Background Start"
 msgstr "ფონის დასაწყისი"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:126
-#, fuzzy
 msgid "Background gradient start color"
-msgstr "ფონის ფერი"
+msgstr "ფონის გრადიენტის საწყისი ფერი"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:127
 msgid "Background End"
 msgstr "ფონის დასასრული"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:127
-#, fuzzy
 msgid "Background gradient end color"
-msgstr "ფონის ფერი"
+msgstr "ფონის გრადიენტის საბოლოო ფერი"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:168
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:269
@@ -1510,9 +1504,8 @@ msgid "KiCad Image Converter"
 msgstr ""
 
 #: bitmap2component/bitmap2cmp_frame.cpp:232
-#, fuzzy
 msgid "Image files"
-msgstr "ასლის ფაილები"
+msgstr "გამოსახულების ფაილები"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:282 eeschema/menubar.cpp:72
 #: kicad/menubar.cpp:74 pagelayout_editor/menubar.cpp:63
@@ -1539,9 +1532,8 @@ msgid "Image Files"
 msgstr "ასლის ფაილები"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:438
-#, fuzzy
 msgid "Create Drawing Sheet File"
-msgstr "ბოლო ფაილების გასუფთავება"
+msgstr "ნახაზის ფურცის ფაილის შექმნა"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:452
 #: bitmap2component/bitmap2cmp_frame.cpp:485
@@ -1756,9 +1748,8 @@ msgid "Errors"
 msgstr "შედომები"
 
 #: bitmap2component/bitmap2cmp_panel.cpp:587
-#, fuzzy
 msgid "Replace Loaded File?"
-msgstr "ფაილის არჩევა"
+msgstr "ჩავანაცვლო ჩატვირთული ფაილი?"
 
 #: bitmap2component/bitmap2cmp_panel.cpp:588
 msgid "There is already a file loaded. Do you want to replace it?"
@@ -2192,9 +2183,9 @@ msgid "Schematic file '%s' could not be saved as design block at '%s'."
 msgstr ""
 
 #: common/design_block_io.cpp:444
-#, fuzzy, c-format
+#, c-format
 msgid "Board file '%s' could not be saved as design block at '%s'."
-msgstr "ფაილის ინდექსში ჩამატება ჩავარდა: %s"
+msgstr "დაფის ფაილის '%s' შენახვა შეუძლებელია დიზაინის ბლოკით '%s'-სთან."
 
 #: common/design_block_io.cpp:478
 #, c-format
@@ -2772,11 +2763,13 @@ msgid "File '%s' not found."
 msgstr ""
 
 #: common/dialogs/dialog_global_design_block_lib_table_config.cpp:100
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error reading design block library table '%s'.\n"
 "%s"
-msgstr "ფაილის ინდექსში ჩამატება ჩავარდა: %s"
+msgstr ""
+"დიზაინის ბლოკის ბიბლიოთეკის ცხრილის '%s' ჩატვირთვის შეცდომა.\n"
+"%s"
 
 #: common/dialogs/dialog_global_design_block_lib_table_config.cpp:112
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:107
@@ -2785,9 +2778,11 @@ msgid "Cannot create global library table '%s'."
 msgstr ""
 
 #: common/dialogs/dialog_global_design_block_lib_table_config.cpp:122
-#, fuzzy, c-format
+#, c-format
 msgid "Error copying global design block library table '%s' to '%s'."
-msgstr "ფაილის ინდექსში ჩამატება ჩავარდა: %s"
+msgstr ""
+"გლობალური დიზაინის ბლოკის ბიბლიოთეკის ცხრილის '%s'-დან '%s'-ში კოპირების "
+"შეცდომა."
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:41
 #, c-format
@@ -3068,9 +3063,8 @@ msgid "Hotkey List"
 msgstr ""
 
 #: common/dialogs/dialog_import_choose_project.cpp:33
-#, fuzzy
 msgid "Project Name"
-msgstr "პროექტის მმართველი"
+msgstr "პროექტის სახელი"
 
 #: common/dialogs/dialog_import_choose_project.cpp:34
 #: kicad/cli/command_pcb.h:31 pcbnew/board.cpp:1471
@@ -3090,9 +3084,8 @@ msgid ""
 msgstr ""
 
 #: common/dialogs/dialog_import_choose_project_base.h:48
-#, fuzzy
 msgid "Choose Project to Import"
-msgstr "პროექტის დახურვა"
+msgstr "აირჩიეთ პროექტი შემოსატანად"
 
 #: common/dialogs/dialog_locked_items_query.cpp:38
 msgid "Skip Locked Items"
@@ -3903,18 +3896,16 @@ msgid "Authentication"
 msgstr "ავთენტიკაცია"
 
 #: common/dialogs/git/dialog_git_auth.cpp:62
-#, fuzzy
 msgid "User Name"
-msgstr "ფურცლის სახელი"
+msgstr "მომხმარებლის სახელი"
 
 #: common/dialogs/git/dialog_git_auth.cpp:64
 msgid "Password"
 msgstr ""
 
 #: common/dialogs/git/dialog_git_commit.cpp:41
-#, fuzzy
 msgid "Commit Changes"
-msgstr "ცვლილებების გაუქმება"
+msgstr "ცვლილებების გადაცემა"
 
 #: common/dialogs/git/dialog_git_commit.cpp:52
 #: common/dialogs/panel_embedded_files_base.cpp:37
@@ -3972,9 +3963,8 @@ msgid "Enter the password for the SSH key"
 msgstr ""
 
 #: common/dialogs/git/dialog_git_repository.cpp:315
-#, fuzzy
 msgid "Connection successful"
-msgstr "კავშირები"
+msgstr "კავშირი წარმატებულია."
 
 #: common/dialogs/git/dialog_git_repository.cpp:319
 #, c-format
@@ -3982,28 +3972,26 @@ msgid "Could not connect to '%s' "
 msgstr ""
 
 #: common/dialogs/git/dialog_git_repository.cpp:339
-#, fuzzy, c-format
+#, c-format
 msgid "Could not open private key '%s'"
-msgstr "ფაილის გახსნის შეცდომა: %s"
+msgstr "პირადი გასაღების ფაილის '%s' გახსნის შეცდომა"
 
 #: common/dialogs/git/dialog_git_repository.cpp:352
-#, fuzzy
 msgid "Invalid SSH Key"
-msgstr "არასწორი"
+msgstr "არასწორი SSH გასაღები"
 
 #: common/dialogs/git/dialog_git_repository.cpp:353
 msgid "The selected file is not a valid SSH private key"
 msgstr ""
 
 #: common/dialogs/git/dialog_git_repository.cpp:377
-#, fuzzy, c-format
+#, c-format
 msgid "Could not open public key '%s'"
-msgstr "ფაილის გახსნის შეცდომა: %s"
+msgstr "ვერ გავხსენი საჯარო გასაღები '%s'"
 
 #: common/dialogs/git/dialog_git_repository.cpp:396
-#, fuzzy
 msgid "Missing information"
-msgstr "გამოსახულების ინფორმაცია"
+msgstr "ნაკლული ინფორმაცია"
 
 #: common/dialogs/git/dialog_git_repository.cpp:397
 msgid "Please enter a URL for the repository"
@@ -4020,14 +4008,12 @@ msgid "Password:"
 msgstr ""
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:42
-#, fuzzy
 msgid "Location:"
-msgstr "მდებარეობა"
+msgstr "მდებარეობა:"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:49
-#, fuzzy
 msgid "Connection type:"
-msgstr "შეერთების სახელი"
+msgstr "კავშირის ტიპი:"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:58
 msgid "HTTPS"
@@ -4040,28 +4026,24 @@ msgid "Local"
 msgstr "ლოკალური"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:91
-#, fuzzy
 msgid "SSH private key:     "
-msgstr "პირადი"
+msgstr "SSH-ის პირადი გასაღები:     "
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:94
-#, fuzzy
 msgid "Select SSH private key file"
-msgstr "აირჩიეთ ფაილი"
+msgstr "აირჩიეთ SSH-ის პირადი გასაღების ფაილი"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:94
 msgid "*"
 msgstr ""
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:99
-#, fuzzy
 msgid "User name:"
-msgstr "მომხმარებლის სახელი"
+msgstr "მომხმარებლის სახელი:"
 
 #: common/dialogs/git/dialog_git_repository_base.h:76
-#, fuzzy
 msgid "Git Repository"
-msgstr "საცავი"
+msgstr "Git რეპოზიტორია"
 
 #: common/dialogs/git/dialog_git_switch.cpp:44
 msgid "Git Branch Switch"
@@ -4080,9 +4062,8 @@ msgid "Last Commit"
 msgstr ""
 
 #: common/dialogs/git/dialog_git_switch.cpp:60
-#, fuzzy
 msgid "Last Updated"
-msgstr "განახლდა"
+msgstr "ბოლო განახლება"
 
 #: common/dialogs/git/dialog_git_switch.cpp:70
 #: common/dialogs/git/dialog_git_switch.cpp:151
@@ -4106,9 +4087,8 @@ msgid "Remote Tracking"
 msgstr ""
 
 #: common/dialogs/git/panel_git_repos_base.cpp:41
-#, fuzzy
 msgid "Update interval:"
-msgstr "განახლდა"
+msgstr "განახლების შუალედი:"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:46
 msgid ""
@@ -4127,14 +4107,12 @@ msgid "Git Commit Data"
 msgstr ""
 
 #: common/dialogs/git/panel_git_repos_base.cpp:78
-#, fuzzy
 msgid "Use default values"
-msgstr "ნაგულისხმები მნიშვნელობები"
+msgstr "ნაგულისხმევი მნიშვნელობების გამოყენება"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:85
-#, fuzzy
 msgid "Author name:"
-msgstr "საქაღალდის სახელი:"
+msgstr "ავტორის სახელი:"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:96
 msgid "Author e-mail:"
@@ -4671,9 +4649,9 @@ msgid "Multiple libraries cannot share the same nickname ('%s')."
 msgstr ""
 
 #: common/dialogs/panel_design_block_lib_table.cpp:589
-#, fuzzy, c-format
+#, c-format
 msgid "Design block library '%s' failed to load."
-msgstr "ბიბლიოთეკები"
+msgstr "დიზაინის ბლოკის ბიბლიოთეკის '%s' ჩატვირთვა ჩავარდა"
 
 #: common/dialogs/panel_design_block_lib_table.cpp:592
 #: eeschema/dialogs/panel_sym_lib_table.cpp:583
@@ -4719,9 +4697,9 @@ msgid "Migrate Library"
 msgstr ""
 
 #: common/dialogs/panel_design_block_lib_table.cpp:851
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to save design block library file '%s'."
-msgstr "ფაილის ინდექსში ჩამატება ჩავარდა: %s"
+msgstr "დიზაინის ბლოკის ბიბლიოთეკის ფაილის '%s' შენახვა ჩავარდა."
 
 #: common/dialogs/panel_design_block_lib_table.cpp:886
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:868
@@ -4954,9 +4932,9 @@ msgid "Overwrite"
 msgstr "თავზე გადაწერა"
 
 #: common/dialogs/panel_embedded_files.cpp:309
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to add file '%s'."
-msgstr "ფაილის ინდექსში ჩამატება ჩავარდა: %s"
+msgstr "ვერ დავამატე ფაილი '%s'."
 
 #: common/dialogs/panel_embedded_files.cpp:323
 #, fuzzy
@@ -4983,14 +4961,14 @@ msgid "Retry"
 msgstr ""
 
 #: common/dialogs/panel_embedded_files.cpp:453
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to open file '%s'."
-msgstr "ფაილის გახსნა შეუძლებელია"
+msgstr "ვერ გავხსენი ფაილი '%s'."
 
 #: common/dialogs/panel_embedded_files.cpp:464
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to write file '%s'."
-msgstr "ფაილის გახსნა შეუძლებელია"
+msgstr "ვერ ჩავწერე ფაილი '%s'."
 
 #: common/dialogs/panel_embedded_files_base.cpp:38
 #, fuzzy
@@ -5051,9 +5029,8 @@ msgid "Grids"
 msgstr "ბადეები"
 
 #: common/dialogs/panel_grid_settings_base.cpp:67
-#, fuzzy
 msgid "Fast Grid Switching"
-msgstr "ბადის მორგება"
+msgstr "სწრაფი ბადის გადართვა"
 
 #: common/dialogs/panel_grid_settings_base.cpp:80
 msgid "Grid 1:"
@@ -5154,9 +5131,8 @@ msgid "PPI:"
 msgstr ""
 
 #: common/dialogs/panel_image_editor_base.cpp:48
-#, fuzzy
 msgid "Convert to Greyscale"
-msgstr "Greyscale"
+msgstr "გადაყვანა ნაცრისფერში"
 
 #: common/dialogs/panel_mouse_settings.cpp:46
 #: eeschema/dialogs/panel_simulator_preferences.cpp:32
@@ -5378,9 +5354,8 @@ msgid "General"
 msgstr ""
 
 #: common/dialogs/panel_packages_and_updates_base.cpp:30
-#, fuzzy
 msgid "Check for KiCad updates on startup"
-msgstr "განახლებების შემოწმება"
+msgstr "KiCad-ის განახლებების შემოწმება გაშვებისას"
 
 #: common/dialogs/panel_packages_and_updates_base.cpp:40
 #: kicad/dialogs/dialog_update_check_prompt_base.cpp:34
@@ -6119,9 +6094,8 @@ msgid "Hotkeys"
 msgstr "კლავიატურის მალსახმობები"
 
 #: common/eda_base_frame.cpp:1238 kicad/project_tree_pane.cpp:1087
-#, fuzzy
 msgid "Version Control"
-msgstr "ვერსია"
+msgstr "ვერსიის კონტროლი"
 
 #: common/eda_base_frame.cpp:1245
 msgid "Data Collection"
@@ -6402,9 +6376,8 @@ msgstr "გრაფიკა"
 
 #: common/eda_item.cpp:420 pcbnew/pcb_reference_image.cpp:215
 #: pcbnew/pcb_reference_image.h:82
-#, fuzzy
 msgid "Reference Image"
-msgstr "მითითება"
+msgstr "მითითება გამოსახულებაზე"
 
 #: common/eda_item.cpp:421 pcbnew/pcb_generator.cpp:215
 #: pcbnew/widgets/search_handlers.cpp:386
@@ -7148,19 +7121,19 @@ msgid "Could not open source directory: %s"
 msgstr "ფაილის გახსნის შეცდომა: %s"
 
 #: common/gestfich.cpp:373 common/gestfich.cpp:511
-#, fuzzy, c-format
+#, c-format
 msgid "Could not create destination directory: %s"
-msgstr "გამოტანს საქაღალდის შექმნა ჩავარდა\n"
+msgstr "ვერ შევქმენი სამიზნე საქაღალდე: %s"
 
 #: common/gestfich.cpp:397 common/gestfich.cpp:428
-#, fuzzy, c-format
+#, c-format
 msgid "Could not copy file: %s to %s"
-msgstr "ფაილის გახსნის შეცდომა: %s"
+msgstr "ვერ დავაკოპირე ფაილი: %s-დან %s-ში"
 
 #: common/gestfich.cpp:477
-#, fuzzy, c-format
+#, c-format
 msgid "Could not copy directory: %s to %s"
-msgstr "ფაილის გახსნის შეცდომა: %s"
+msgstr "ვერ დავაკოპირე საქაღალდე: %s-დან %s-ში"
 
 #: common/gestfich.cpp:529
 #, c-format
@@ -7188,14 +7161,14 @@ msgid "Could not lookup remote '%s'"
 msgstr ""
 
 #: common/git/git_pull_handler.cpp:87
-#, fuzzy, c-format
+#, c-format
 msgid "Could not connect to remote '%s': %s"
-msgstr "ფაილის გახსნის შეცდომა: %s"
+msgstr "ვერ დავუკავშირდი დაშორებულს '%s': %s"
 
 #: common/git/git_pull_handler.cpp:99
-#, fuzzy, c-format
+#, c-format
 msgid "Could not fetch data from remote '%s': %s"
-msgstr "ფაილის გახსნის შეცდომა: %s"
+msgstr "მონაცემების გამოთხოვის შეცდომა დაშორებულიდან '%s': %s"
 
 #: common/git/git_pull_handler.cpp:127
 msgid "Could not read 'FETCH_HEAD'"
@@ -7240,9 +7213,9 @@ msgid "Failed to perform checkout operation."
 msgstr ""
 
 #: common/git/git_pull_handler.cpp:338
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to update reference '%s' to point to '%s'"
-msgstr "ფაილის გახსნა შეუძლებელია"
+msgstr "მიმართვის '%s' განახლება, რომელიც მიუთითებს '%s'-ზე, შეუძლებელია"
 
 #: common/git/git_pull_handler.cpp:348
 #, fuzzy
@@ -7417,7 +7390,6 @@ msgid "Unknown error."
 msgstr "უცნობი შეცდომა."
 
 #: common/git/kicad_git_errors.cpp:75
-#, fuzzy
 msgid "No error."
 msgstr "შეცდომების გარეშე."
 
@@ -7738,9 +7710,9 @@ msgid ""
 msgstr ""
 
 #: common/io/easyedapro/easyedapro_import_utils.cpp:210
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot read ZIP archive '%s'"
-msgstr "ფაილის გახსნის შეცდომა: %s"
+msgstr "წაკითხვის შეცდომა ZIP არქივისთვის '%s'"
 
 #: common/io/easyedapro/easyedapro_import_utils.cpp:262
 #: common/io/easyedapro/easyedapro_import_utils.cpp:301
@@ -7789,9 +7761,8 @@ msgstr "სარჩილავი პასტა"
 
 #: common/jobs/job_export_pcb_dxf.cpp:58
 #: common/jobs/job_export_sch_plot.cpp:127 kicad/kicad_cli.cpp:147
-#, fuzzy
 msgid "Export DXF"
-msgstr "ფაილში გატანა"
+msgstr "PDF-ში გატანა"
 
 #: common/jobs/job_export_pcb_dxf.cpp:64
 #: common/jobs/job_export_sch_plot.cpp:133
@@ -7855,9 +7826,8 @@ msgstr "PDF-ში გატანა"
 
 #: common/jobs/job_export_pcb_ipc2581.cpp:72
 #: pcbnew/dialogs/dialog_export_2581_base.h:85
-#, fuzzy
 msgid "Export IPC-2581"
-msgstr "ფაილში გატანა"
+msgstr "IPC-2581-ში გატანა"
 
 #: common/jobs/job_export_pcb_ipc2581.cpp:78
 #, fuzzy
@@ -7976,9 +7946,9 @@ msgid "Schematic: Generate Bill of Materials"
 msgstr "გამორიცხული"
 
 #: common/jobs/job_export_sch_netlist.cpp:80
-#, fuzzy, c-format
+#, c-format
 msgid "Export %s netlist"
-msgstr "ფაილში გატანა"
+msgstr "%s ბადეების სიის გატანა"
 
 #: common/jobs/job_export_sch_netlist.cpp:86
 #, fuzzy
