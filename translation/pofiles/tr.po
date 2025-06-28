@@ -17034,12 +17034,11 @@ msgstr "Takma ad boş olamaz."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:454
 msgid "Path cannot be empty."
-msgstr "Yol boş olamaz"
+msgstr "Yol boş olamaz."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:467
-#, fuzzy
 msgid "Library Table Error"
-msgstr "Kütüphane Takma Adı Hatası"
+msgstr "Kütüphane Tablosu Hatası"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:475
 #, c-format
