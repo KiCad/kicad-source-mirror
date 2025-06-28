@@ -460,42 +460,44 @@ void HIERARCHY_PANE::onTreeEditFinished( wxTreeEvent& event )
     TREE_ITEM_DATA* data = static_cast<TREE_ITEM_DATA*>( m_tree->GetItemData( event.GetItem() ) );
     wxString        newName = event.GetLabel();
 
-    if( !newName.IsEmpty() )
+    if( data && data->m_SheetPath.Last() )
     {
-        // The editor holds only the page name as a text, while normally
-        // the tree items displaying it suffixed with the page number
-        if( data->m_SheetPath.Last()->GetName() != newName )
+        if( !newName.IsEmpty() )
         {
-            const SCH_SHEET* parentSheet =
-                    data->m_SheetPath.GetSheet( data->m_SheetPath.size() - 2 );
-
-            if( parentSheet )
+            // The editor holds only the page name as a text, while normally
+            // the tree items displaying it suffixed with the page number
+            if( data->m_SheetPath.Last()->GetName() != newName )
             {
-                SCH_COMMIT commit( m_frame );
-                commit.Modify( data->m_SheetPath.Last()->GetField( FIELD_T::SHEET_NAME ),
-                               parentSheet->GetScreen() );
+                const SCH_SHEET* parentSheet = data->m_SheetPath.GetSheet( data->m_SheetPath.size() - 2 );
 
-                data->m_SheetPath.Last()->SetName( newName );
-
-                renameIdenticalSheets( data->m_SheetPath, newName, &commit );
-
-                if( !commit.Empty() )
-                    commit.Push( _( "Renaming sheet" ) );
-
-                if( data->m_SheetPath == m_frame->GetCurrentSheet() )
+                if( parentSheet )
                 {
-                    m_frame->OnPageSettingsChange();
+                    SCH_COMMIT commit( m_frame );
+                    commit.Modify( data->m_SheetPath.Last()->GetField( FIELD_T::SHEET_NAME ),
+                                   parentSheet->GetScreen() );
+
+                    data->m_SheetPath.Last()->SetName( newName );
+
+                    renameIdenticalSheets( data->m_SheetPath, newName, &commit );
+
+                    if( !commit.Empty() )
+                        commit.Push( _( "Renaming sheet" ) );
+
+                    if( data->m_SheetPath == m_frame->GetCurrentSheet() )
+                    {
+                        m_frame->OnPageSettingsChange();
+                    }
                 }
             }
         }
-    }
 
-    m_tree->SetItemText( event.GetItem(), formatPageString( data->m_SheetPath.Last()->GetName(),
-                                                            data->m_SheetPath.GetPageNumber() ) );
-    setIdenticalSheetsHighlighted( data->m_SheetPath, false );
-    // The event needs to be rejected otherwise the SetItemText call above
-    // will be ineffective (the treeview item will hold the editor's content)
-    event.Veto();
+        m_tree->SetItemText( event.GetItem(), formatPageString( data->m_SheetPath.Last()->GetName(),
+                                                                data->m_SheetPath.GetPageNumber() ) );
+        setIdenticalSheetsHighlighted( data->m_SheetPath, false );
+        // The event needs to be rejected otherwise the SetItemText call above
+        // will be ineffective (the treeview item will hold the editor's content)
+        event.Veto();
+    }
 }
 
 
