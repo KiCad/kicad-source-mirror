@@ -33,7 +33,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-06-27 22:51+0300\n"
-"PO-Revision-Date: 2025-06-28 07:37+0000\n"
+"PO-Revision-Date: 2025-06-29 09:02+0000\n"
 "Last-Translator: YÜKSEL AÇIKGÖZ <yukselacikgoz@gmail.com>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/kicad/"
 "master-source/tr/>\n"
@@ -664,11 +664,11 @@ msgstr "Kullanıcı yorumları katmanını göster"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:65
 msgid "Show user ECO1 layer"
-msgstr "ECO1 kullanıcı katmanlarını göster"
+msgstr "Kullanıcı ECO1 katmanını göster"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:66
 msgid "Show user ECO2 layer"
-msgstr "Kullanıcı ECO2 katmanlarını göster"
+msgstr "Kullanıcı ECO2 katmanını göster"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:67
 msgid "Show user defined layer 1"
@@ -906,7 +906,7 @@ msgstr "Ayak İzi Metni"
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:122
 #: pcbnew/widgets/appearance_controls.cpp:344
 msgid "Show all footprint text"
-msgstr "Tüm ayak izi metinlerini göster"
+msgstr "Tüm ayak izi metnini göster"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:123
 msgid "Off-board Silkscreen"
@@ -939,7 +939,7 @@ msgstr "Arka plan gradyan bitiş rengi"
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:168
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:269
 msgid "Use board stackup colors"
-msgstr "Kart yığın renklerini kullan"
+msgstr "Kart katman renklerini kullan"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:182
 msgid "Use PCB editor copper colors"
@@ -1526,7 +1526,7 @@ msgstr "Son Kullanılan Dosyaları Temizle"
 #: eeschema/tools/sch_drawing_tools.cpp:1098
 #: pagelayout_editor/pl_editor_frame.cpp:859 pcbnew/tools/drawing_tool.cpp:740
 msgid "Choose Image"
-msgstr "Görüntü Seç"
+msgstr "Resim Seç"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:397
 #: eeschema/tools/sch_drawing_tools.cpp:1099
@@ -4406,7 +4406,7 @@ msgstr "Koyu"
 
 #: common/dialogs/panel_common_settings_base.cpp:195
 msgid "Use icons designed for dark window backgrounds"
-msgstr "Koyu pencere arka planları için tasarlanmış simgeleri kullanın"
+msgstr "Koyu pencere arka planları için tasarlanmış simgeleri kullan"
 
 #: common/dialogs/panel_common_settings_base.cpp:199
 #: common/dialogs/panel_common_settings_base.cpp:252
@@ -4670,48 +4670,49 @@ msgid ""
 "sending said reports when crashes or events occur. Your design files such as "
 "schematic or PCB are never shared in this process."
 msgstr ""
-"KiCad, geliştiricilere kritik hataları daha etkili bir şekilde "
-"belirlemelerine ve iyileştirmeleri yönlendirmelerine yardımcı olmak "
-"amacıyla, çökme ve özel olay verilerini anonim olarak raporlayabilir.\n"
+"KiCad, kritik hataları kullanıcı tabanında daha etkili bir şekilde "
+"belirlemek ve iyileştirmelere rehberlik etmek amacıyla işlevselliği "
+"profillemek için geliştiricilere isimsiz olarak çökme ve özel olay verileri "
+"bildirebilir.\n"
 "\n"
 "Aynı KiCad kurulumundan gelen otomatik raporları bağlamak için tamamen "
-"rastgele bir benzersiz tanımlayıcı oluşturulur ve bu tanımlayıcı sadece "
-"çökme raporlama amacıyla kullanılır. Bu tanımlayıcıya bağlı olarak hiçbir "
-"kişisel tanımlanabilir bilgi (PII) veya IP adresi saklanmaz. Sağlanan düğme "
-"ile bu kimliği istediğiniz zaman sıfırlayabilirsiniz.\n"
+"rastgele ve yalnızca çökme raporlama amacıyla kullanılan benzersiz bir "
+"tanımlayıcı oluşturulur. IP adresi de dahil olmak üzere hiçbir kişisel "
+"tanımlayıcı bilgi (PII) bu tanımlayıcıyla depolanmaz veya bağlantı kurulmaz. "
+"Bu kimliği, sağlanan düğmeyle istediğiniz zaman sıfırlayabilirsiniz.\n"
 "\n"
-"Gönüllü olarak katılmayı seçerseniz, çökme veya olaylar meydana geldiğinde "
-"KiCad bu raporları otomatik olarak göndermeyi halledecektir. Tasarım "
-"dosyalarınız, örneğin şema veya PCB, bu süreçte asla paylaşılmaz."
+"Gönüllü olarak katılmayı seçerseniz, çökme veya olay meydana geldiğinde "
+"KiCad söz konusu raporları otomatik olarak gönderecektir. Şematik veya Baskı "
+"Devre gibi tasarım dosyalarınız bu süreçte asla paylaşılmaz."
 
 #: common/dialogs/panel_data_collection_base.cpp:24
 msgid "I agree to provide anonymous reports"
-msgstr "Anonim raporlar vermeyi kabul ediyorum"
+msgstr "Anonim raporlar sağlamayı kabul ediyorum"
 
 #: common/dialogs/panel_data_collection_base.cpp:35
 msgid "Reset Unique Id"
-msgstr "Görünümü Sıfırla"
+msgstr "Benzersiz Kimliği Sıfırla"
 
 #: common/dialogs/panel_design_block_lib_table.cpp:390
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:414
 #, c-format
 msgid "folder with %s files"
-msgstr "%s dosyalı klasör"
+msgstr "%s dosyaları içeren klasör"
 
 #: common/dialogs/panel_design_block_lib_table.cpp:467
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:485
 msgid "A library table row nickname and path cells are empty."
-msgstr "Kitaplık tablosu satır takma adı ve yol hücreleri boştur."
+msgstr "Bir kütüphane tablosu satırında takma ad ve yol hücreleri boş."
 
 #: common/dialogs/panel_design_block_lib_table.cpp:469
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:487
 msgid "A library table row nickname cell is empty."
-msgstr "Kitaplık tablosu satır takma adı hücresi boştur."
+msgstr "Bir kütüphane tablosu satırında takma ad hücresi boş."
 
 #: common/dialogs/panel_design_block_lib_table.cpp:471
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:489
 msgid "A library table row path cell is empty."
-msgstr "Kitaplık tablosu satır yolu hücresi boştur."
+msgstr "Bir kütüphane tablosu satırında yol hücresi boş."
 
 #: common/dialogs/panel_design_block_lib_table.cpp:475
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:493
@@ -4757,7 +4758,7 @@ msgstr "Kütüphane Takma Adı Hatası"
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:558
 #, c-format
 msgid "Multiple libraries cannot share the same nickname ('%s')."
-msgstr "Birden çok kitaplık aynı takma adı paylaşamaz ('%s')."
+msgstr "Birden fazla kütüphane aynı takma ad ('%s') paylaşamaz"
 
 #: common/dialogs/panel_design_block_lib_table.cpp:589
 #, c-format
