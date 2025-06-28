@@ -372,8 +372,6 @@ double PCB_VIA::Similarity( const BOARD_ITEM& aOther ) const
 
 void PCB_VIA::SetWidth( int aWidth )
 {
-    // This is present because of the parent class.  It should never be actually called on a via.
-    wxASSERT_MSG( false, "Warning: PCB_VIA::SetWidth called without a layer argument" );
     m_padStack.SetSize( { aWidth, aWidth }, PADSTACK::ALL_LAYERS );
 }
 
