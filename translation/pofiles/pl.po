@@ -18,10 +18,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-06-27 22:51+0300\n"
-"PO-Revision-Date: 2025-06-26 07:04+0000\n"
+"PO-Revision-Date: 2025-06-28 07:04+0000\n"
 "Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
-"Language-Team: Polish <https://hosted.weblate.org/projects/kicad/master-"
-"source/pl/>\n"
+"Language-Team: Polish <https://hosted.weblate.org/projects/kicad/"
+"master-source/pl/>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1748,14 +1748,12 @@ msgid "Errors"
 msgstr "Błędy"
 
 #: bitmap2component/bitmap2cmp_panel.cpp:587
-#, fuzzy
 msgid "Replace Loaded File?"
-msgstr "Zamień i wyszukaj następny"
+msgstr "Zastąpić wczytany plik?"
 
 #: bitmap2component/bitmap2cmp_panel.cpp:588
-#, fuzzy
 msgid "There is already a file loaded. Do you want to replace it?"
-msgstr "Pliki wyjściowe '%s' już istnieją. Czy chcesz je zastąpić?"
+msgstr "Istnieje już wczytany plik. Czy chcesz go zamienić?"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:22
 msgid "Original Picture"
@@ -8662,9 +8660,8 @@ msgid "Already Placed"
 msgstr "Obecnie umieszczone"
 
 #: common/libeval_compiler/libeval_compiler.cpp:590
-#, fuzzy
 msgid "Unresolved text variable reference"
-msgstr "Nierozwiązana zmienna tekstowa"
+msgstr "Nierozwiązany odnośnik zmiennej tekstowej"
 
 #: common/libeval_compiler/libeval_compiler.cpp:592
 #, c-format
@@ -15629,9 +15626,9 @@ msgid "Are you sure you want to remove the field '%s'?"
 msgstr "Czy jesteś pewien, by usunąć pole '%s'?"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:827
-#, fuzzy, c-format
+#, c-format
 msgid "The first %d fields are mandatory and names cannot be changed."
-msgstr "Pierwsze %d pól jest obowiązkowych."
+msgstr "Pierwsze %d pól jest obowiązkowych i ich nazwy nie można zmienić."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:838
 msgid "Rename Field"
@@ -15720,19 +15717,16 @@ msgstr ""
 "Proszę użyć innej nazwy."
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:43
-#, fuzzy
 msgid "Add a new field"
-msgstr "Dodaj pole"
+msgstr "Dodaj nowe pole"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:48
-#, fuzzy
 msgid "Rename selected field"
-msgstr "Zmień nazwę wybranej sieci..."
+msgstr "Zmień nazwę wybranego pola"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:56
-#, fuzzy
 msgid "Remove selected field"
-msgstr "Usuń osadzony plik"
+msgstr "Usuń zaznaczone pole"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:69
 msgid "View presets:"
@@ -17121,24 +17115,20 @@ msgid "Keep pins attached when dragging edges"
 msgstr "Zachowaj piny na pozycjach w czasie przeciągania krawędzi"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:444
-#, fuzzy
 msgid "Nickname and path cannot be empty."
-msgstr "Nazwa pinu nie może być pusta."
+msgstr "Nazwa skrótowa oraz ścieżka nie może być pusta."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:449
-#, fuzzy
 msgid "Nickname cannot be empty."
-msgstr "Nazwa pinu nie może być pusta."
+msgstr "Nazwa skrótowa nie może być pusta."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:454
-#, fuzzy
 msgid "Path cannot be empty."
-msgstr "Pole tekstu nie może być puste."
+msgstr "Ścieżka nie może być pusta."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:467
-#, fuzzy
 msgid "Library Table Error"
-msgstr "Błąd w nazwie skrótowej biblioteki"
+msgstr "Błąd w tabeli bibliotek"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:475
 #, c-format
