@@ -107,7 +107,7 @@ DIALOG_EXCHANGE_FOOTPRINTS_BASE::DIALOG_EXCHANGE_FOOTPRINTS_BASE( wxWindow* pare
 	m_removeExtraBox = new wxCheckBox( m_updateOptionsSizer->GetStaticBox(), wxID_ANY, _("Remove text items if not in library footprint"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_removeExtraBox->SetToolTip( _("Removes fields that do not occur in the original library symbols") );
 
-	bSizer5->Add( m_removeExtraBox, 0, wxBOTTOM|wxRIGHT, 5 );
+	bSizer5->Add( m_removeExtraBox, 0, wxTOP|wxBOTTOM|wxRIGHT, 5 );
 
 	m_resetTextItemLayers = new wxCheckBox( m_updateOptionsSizer->GetStaticBox(), wxID_ANY, _("Update/reset text layers and visibilities"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer5->Add( m_resetTextItemLayers, 0, wxBOTTOM|wxRIGHT, 5 );
@@ -131,7 +131,7 @@ DIALOG_EXCHANGE_FOOTPRINTS_BASE::DIALOG_EXCHANGE_FOOTPRINTS_BASE( wxWindow* pare
 	bSizer6 = new wxBoxSizer( wxVERTICAL );
 
 	m_resetFabricationAttrs = new wxCheckBox( m_updateOptionsSizer->GetStaticBox(), wxID_ANY, _("Update/reset fabrication attributes"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer6->Add( m_resetFabricationAttrs, 0, wxBOTTOM|wxRIGHT, 5 );
+	bSizer6->Add( m_resetFabricationAttrs, 0, wxTOP|wxBOTTOM|wxRIGHT, 5 );
 
 	m_resetClearanceOverrides = new wxCheckBox( m_updateOptionsSizer->GetStaticBox(), wxID_ANY, _("Update/reset clearance overrides"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer6->Add( m_resetClearanceOverrides, 0, wxBOTTOM|wxRIGHT, 5 );
@@ -149,7 +149,7 @@ DIALOG_EXCHANGE_FOOTPRINTS_BASE::DIALOG_EXCHANGE_FOOTPRINTS_BASE( wxWindow* pare
 	m_updateOptionsSizer->Add( bSizer6, 1, wxEXPAND, 5 );
 
 
-	m_mainSizer->Add( m_updateOptionsSizer, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 10 );
+	m_mainSizer->Add( m_updateOptionsSizer, 0, wxEXPAND|wxALL, 10 );
 
 	m_MessageWindow = new WX_HTML_REPORT_PANEL( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	m_MessageWindow->SetMinSize( wxSize( -1,208 ) );
