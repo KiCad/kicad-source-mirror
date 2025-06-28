@@ -901,7 +901,15 @@ SHAPE_POLY_SET CONVERT_TOOL::makePolysFromClosedGraphics( const std::deque<EDA_I
         case PCB_PAD_T:
         {
             PAD* pad = static_cast<PAD*>( item );
-            pad->TransformShapeToPolygon( poly, UNDEFINED_LAYER, 0, pad->GetMaxError(), ERROR_INSIDE );
+
+            pad->Padstack().ForEachUniqueLayer(
+                    [&]( PCB_LAYER_ID aLayer )
+                    {
+                        SHAPE_POLY_SET layerPoly;
+                        pad->TransformShapeToPolygon( layerPoly, aLayer, 0, pad->GetMaxError(), ERROR_INSIDE );
+                        poly.BooleanAdd( layerPoly );
+                    } );
+
             pad->SetFlags( SKIP_STRUCT );
             break;
         }

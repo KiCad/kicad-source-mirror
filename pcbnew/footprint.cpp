@@ -1556,10 +1556,10 @@ SHAPE_POLY_SET FOOTPRINT::GetBoundingHull() const
     for( PAD* pad : m_pads )
     {
         pad->Padstack().ForEachUniqueLayer(
-            [&]( PCB_LAYER_ID aLayer )
-            {
-                pad->TransformShapeToPolygon( rawPolys, aLayer, 0, ARC_LOW_DEF, ERROR_OUTSIDE );
-            } );
+                [&]( PCB_LAYER_ID aLayer )
+                {
+                    pad->TransformShapeToPolygon( rawPolys, aLayer, 0, ARC_LOW_DEF, ERROR_OUTSIDE );
+                } );
 
         // In case hole is larger than pad
         pad->TransformHoleToPolygon( rawPolys, 0, ARC_LOW_DEF, ERROR_OUTSIDE );
@@ -2871,12 +2871,12 @@ double FOOTPRINT::GetCoverageArea( const BOARD_ITEM* aItem, const GENERAL_COLLEC
     else if( aItem->Type() == PCB_PAD_T )
     {
         static_cast<const PAD*>( aItem )->Padstack().ForEachUniqueLayer(
-            [&]( PCB_LAYER_ID aLayer )
-            {
-                SHAPE_POLY_SET padPoly;
-                aItem->TransformShapeToPolygon( padPoly, aLayer, 0, ARC_LOW_DEF, ERROR_OUTSIDE );
-                poly.BooleanAdd( padPoly );
-            } );
+                [&]( PCB_LAYER_ID aLayer )
+                {
+                    SHAPE_POLY_SET layerPoly;
+                    aItem->TransformShapeToPolygon( layerPoly, aLayer, 0, ARC_LOW_DEF, ERROR_OUTSIDE );
+                    poly.BooleanAdd( layerPoly );
+                } );
     }
     else
     {
