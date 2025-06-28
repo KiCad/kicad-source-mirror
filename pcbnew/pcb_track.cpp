@@ -1956,6 +1956,10 @@ EDA_ANGLE PCB_ARC::GetArcAngleEnd() const
 
 bool PCB_ARC::IsDegenerated( int aThreshold ) const
 {
+    // We have lots of code that will blow up if the radius overflows an int.
+    if( GetRadius() >= (double)INT_MAX/2.0 )
+        return true;
+
     // Too small arcs cannot be really handled: arc center (and arc radius)
     // cannot be safely computed if the distance between mid and end points
     // is too small (a few internal units)
