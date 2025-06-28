@@ -2597,7 +2597,7 @@ bool BOARD::GetBoardPolygonOutlines( SHAPE_POLY_SET& aOutlines,
                     continue;
 
                 SHAPE_POLY_SET hole;
-                pad->TransformHoleToPolygon( hole, 0, GetDesignSettings().m_MaxError, ERROR_INSIDE );
+                pad->TransformHoleToPolygon( hole, 0, pad->GetMaxError(), ERROR_INSIDE );
 
                 if( hole.OutlineCount() > 0 )   // can be not the case for malformed NPTH holes
                 {

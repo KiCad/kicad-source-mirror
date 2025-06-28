@@ -318,7 +318,7 @@ unsigned int BOARD_ADAPTER::GetCircleSegmentCount( int aDiameterBIU ) const
 {
     wxASSERT( aDiameterBIU > 0 );
 
-    return GetArcToSegmentCount( aDiameterBIU / 2, ARC_HIGH_DEF, FULL_CIRCLE );
+    return GetArcToSegmentCount( aDiameterBIU / 2, m_board->GetDesignSettings().m_MaxError, FULL_CIRCLE );
 }
 
 

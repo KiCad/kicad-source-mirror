@@ -1459,8 +1459,7 @@ bool PNS_KICAD_IFACE_BASE::syncTextItem( PNS::NODE* aWorld, BOARD_ITEM* aItem, P
 
     SHAPE_POLY_SET cornerBuffer;
 
-    aItem->TransformShapeToPolygon( cornerBuffer, aItem->GetLayer(), 0,
-                                    m_board->GetDesignSettings().m_MaxError, ERROR_OUTSIDE );
+    aItem->TransformShapeToPolygon( cornerBuffer, aItem->GetLayer(), 0, aItem->GetMaxError(), ERROR_OUTSIDE );
 
     cornerBuffer.Simplify();
 

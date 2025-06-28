@@ -1161,7 +1161,7 @@ bool DIALOG_SHAPE_PROPERTIES::TransferDataFromWindow()
     else
         m_item->SetLocalSolderMaskMargin( m_solderMaskMargin.GetIntValue() );
 
-    m_item->RebuildBezierToSegmentsPointsList( m_parent->GetDesignSettings().m_MaxError );
+    m_item->RebuildBezierToSegmentsPointsList( m_item->GetMaxError() );
 
     if( m_item->IsOnCopperLayer() )
         m_item->SetNetCode( m_netSelector->GetSelectedNetcode() );

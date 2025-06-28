@@ -325,6 +325,8 @@ public:
     bool IsLocked() const override;
     void SetLocked( bool aLocked ) override { m_isLocked = aLocked; }
 
+    int GetMaxError() const;
+
     virtual void StyleFromSettings( const BOARD_DESIGN_SETTINGS& settings ) { }
 
     /**

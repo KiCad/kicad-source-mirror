@@ -40,7 +40,6 @@
 #include <pcb_text.h>
 #include <pcb_textbox.h>
 #include <pcb_table.h>
-#include <board_design_settings.h>
 #include <pcb_painter.h>        // for PCB_RENDER_SETTINGS
 #include <zone.h>
 #include <convert_basic_shapes_to_polygon.h>
@@ -96,7 +95,6 @@ void addROUND_SEGMENT_2D( CONTAINER_2D_BASE* aContainer, const SFVEC2F& aStart, 
 void BOARD_ADAPTER::addText( const EDA_TEXT* aText, CONTAINER_2D_BASE* aContainer,
                              const BOARD_ITEM* aOwner )
 {
-    int                        maxError = m_board->GetDesignSettings().m_MaxError;
     KIGFX::GAL_DISPLAY_OPTIONS empty_opts;
     TEXT_ATTRIBUTES            attrs = aText->GetAttributes();
     float                      penWidth_3DU = TO_3DU( aText->GetEffectiveTextPenWidth() );
@@ -111,7 +109,7 @@ void BOARD_ADAPTER::addText( const EDA_TEXT* aText, CONTAINER_2D_BASE* aContaine
         SHAPE_POLY_SET  finalPoly;
         const PCB_TEXT* pcbText = static_cast<const PCB_TEXT*>( aOwner );
 
-        pcbText->TransformTextToPolySet( finalPoly, 0, maxError, ERROR_INSIDE );
+        pcbText->TransformTextToPolySet( finalPoly, 0, aOwner->GetMaxError(), ERROR_INSIDE );
 
         // Do not call finalPoly.Fracture() here: ConvertPolygonToTriangles() call it
         // if needed, and Fracture() called twice can create bad results and is useless
@@ -318,8 +316,7 @@ void BOARD_ADAPTER::createTrackWithMargin( const PCB_TRACK* aTrack, CONTAINER_2D
         VECTOR2I  center( arc->GetCenter() );
         EDA_ANGLE arc_angle = arc->GetAngle();
         double    radius = arc->GetRadius();
-        int       arcsegcount = GetArcToSegmentCount( KiROUND( radius ), m_board->GetDesignSettings().m_MaxError,
-                                                      arc_angle );
+        int       arcsegcount = GetArcToSegmentCount( KiROUND( radius ), arc->GetMaxError(), arc_angle );
         int       circlesegcount;
 
         // Avoid arcs that cannot be drawn
@@ -360,7 +357,6 @@ void BOARD_ADAPTER::createPadWithMargin( const PAD* aPad, CONTAINER_2D_BASE* aCo
                                          PCB_LAYER_ID aLayer, const VECTOR2I& aMargin ) const
 {
     SHAPE_POLY_SET poly;
-    int            maxError = GetBoard()->GetDesignSettings().m_MaxError;
     VECTOR2I       clearance = aMargin;
 
     // Our shape-based builder can't handle negative or differing x:y clearance values (the
@@ -379,7 +375,7 @@ void BOARD_ADAPTER::createPadWithMargin( const PAD* aPad, CONTAINER_2D_BASE* aCo
 
         PAD dummy( *aPad );
         dummy.SetSize( aLayer, VECTOR2I( dummySize.x, dummySize.y ) );
-        dummy.TransformShapeToPolygon( poly, aLayer, 0, maxError, ERROR_INSIDE );
+        dummy.TransformShapeToPolygon( poly, aLayer, 0, aPad->GetMaxError(), ERROR_INSIDE );
         clearance = { 0, 0 };
     }
     else if( aPad->GetShape( aLayer ) == PAD_SHAPE::CUSTOM )
@@ -387,7 +383,7 @@ void BOARD_ADAPTER::createPadWithMargin( const PAD* aPad, CONTAINER_2D_BASE* aCo
         // A custom pad can have many complex subshape items. To avoid issues, use its
         // final polygon shape, not its basic shape set. One cannot apply the clearance
         // to each subshape: it does no work
-        aPad->TransformShapeToPolygon( poly, aLayer, 0, maxError );
+        aPad->TransformShapeToPolygon( poly, aLayer, 0, aPad->GetMaxError() );
     }
     else
     {
@@ -443,7 +439,7 @@ void BOARD_ADAPTER::createPadWithMargin( const PAD* aPad, CONTAINER_2D_BASE* aCo
             case SH_ARC:
             {
                 const SHAPE_ARC* arc = static_cast<const SHAPE_ARC*>( shape );
-                SHAPE_LINE_CHAIN l = arc->ConvertToPolyline( maxError );
+                SHAPE_LINE_CHAIN l = arc->ConvertToPolyline( aPad->GetMaxError() );
 
                 for( int i = 0; i < l.SegmentCount(); i++ )
                 {
@@ -469,7 +465,7 @@ void BOARD_ADAPTER::createPadWithMargin( const PAD* aPad, CONTAINER_2D_BASE* aCo
     if( !poly.IsEmpty() )
     {
         if( clearance.x )
-            poly.Inflate( clearance.x, CORNER_STRATEGY::ROUND_ALL_CORNERS, maxError );
+            poly.Inflate( clearance.x, CORNER_STRATEGY::ROUND_ALL_CORNERS, aPad->GetMaxError() );
 
         // Add the PAD polygon
         ConvertPolygonToTriangles( poly, *aContainer, m_biuTo3Dunits, *aPad );
@@ -639,15 +635,14 @@ void BOARD_ADAPTER::addShape( const PCB_SHAPE* aShape, CONTAINER_2D_BASE* aConta
             {
                 SHAPE_POLY_SET polyList;
 
-                aShape->TransformShapeToPolySet( polyList, UNDEFINED_LAYER, 0,
-                                                 m_board->GetDesignSettings().m_MaxError, ERROR_INSIDE );
+                aShape->TransformShapeToPolySet( polyList, UNDEFINED_LAYER, 0, aShape->GetMaxError(),
+                                                 ERROR_INSIDE );
 
                 polyList.Simplify();
 
                 if( margin != 0 )
                 {
-                    polyList.Inflate( margin, CORNER_STRATEGY::ROUND_ALL_CORNERS,
-                                      GetBoard()->GetDesignSettings().m_MaxError );
+                    polyList.Inflate( margin, CORNER_STRATEGY::ROUND_ALL_CORNERS, aShape->GetMaxError() );
                 }
 
                 ConvertPolygonToTriangles( polyList, *aContainer, m_biuTo3Dunits, *aOwner );
@@ -685,8 +680,8 @@ void BOARD_ADAPTER::addShape( const PCB_SHAPE* aShape, CONTAINER_2D_BASE* aConta
         {
             SHAPE_POLY_SET polyList;
 
-            aShape->TransformShapeToPolygon( polyList, UNDEFINED_LAYER, 0,
-                                             m_board->GetDesignSettings().m_MaxError, ERROR_INSIDE );
+            aShape->TransformShapeToPolygon( polyList, UNDEFINED_LAYER, 0, aShape->GetMaxError(),
+                                             ERROR_INSIDE );
 
             // Some polygons can be a bit complex (especially when coming from a
             // picture of a text converted to a polygon
@@ -701,7 +696,7 @@ void BOARD_ADAPTER::addShape( const PCB_SHAPE* aShape, CONTAINER_2D_BASE* aConta
                 CORNER_STRATEGY cornerStr = margin >= 0 ? CORNER_STRATEGY::ROUND_ALL_CORNERS
                                                         : CORNER_STRATEGY::ALLOW_ACUTE_CORNERS;
 
-                polyList.Inflate( margin, cornerStr, GetBoard()->GetDesignSettings().m_MaxError );
+                polyList.Inflate( margin, cornerStr, aShape->GetMaxError() );
             }
 
             ConvertPolygonToTriangles( polyList, *aContainer, m_biuTo3Dunits, *aOwner );
@@ -714,8 +709,8 @@ void BOARD_ADAPTER::addShape( const PCB_SHAPE* aShape, CONTAINER_2D_BASE* aConta
             {
                 SHAPE_POLY_SET polyList;
 
-                aShape->TransformShapeToPolygon( polyList, UNDEFINED_LAYER, 0,
-                                                 m_board->GetDesignSettings().m_MaxError, ERROR_INSIDE );
+                aShape->TransformShapeToPolygon( polyList, UNDEFINED_LAYER, 0, aShape->GetMaxError(),
+                                                 ERROR_INSIDE );
 
                 // Some polygons can be a bit complex (especially when coming from a
                 // picture of a text converted to a polygon
@@ -730,7 +725,7 @@ void BOARD_ADAPTER::addShape( const PCB_SHAPE* aShape, CONTAINER_2D_BASE* aConta
                     CORNER_STRATEGY cornerStr = margin >= 0 ? CORNER_STRATEGY::ROUND_ALL_CORNERS
                                                             : CORNER_STRATEGY::ALLOW_ACUTE_CORNERS;
 
-                    polyList.Inflate( margin, cornerStr, GetBoard()->GetDesignSettings().m_MaxError );
+                    polyList.Inflate( margin, cornerStr, aShape->GetMaxError() );
                 }
 
                 ConvertPolygonToTriangles( polyList, *aContainer, m_biuTo3Dunits, *aOwner );
@@ -808,8 +803,8 @@ void BOARD_ADAPTER::addShape( const PCB_TEXTBOX* aTextBox, CONTAINER_2D_BASE* aC
     {
         SHAPE_POLY_SET polyList;
 
-        aTextBox->PCB_SHAPE::TransformShapeToPolygon( polyList, UNDEFINED_LAYER, 0,
-                                                      m_board->GetDesignSettings().m_MaxError, ERROR_INSIDE );
+        aTextBox->PCB_SHAPE::TransformShapeToPolygon( polyList, UNDEFINED_LAYER, 0, aTextBox->GetMaxError(),
+                                                      ERROR_INSIDE );
 
         ConvertPolygonToTriangles( polyList, *aContainer, m_biuTo3Dunits, *aOwner );
     }

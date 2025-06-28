@@ -771,8 +771,7 @@ void RENDER_3D_OPENGL::generateViasAndPads()
 
                 wxASSERT( zbot < ztop );
 
-                generateCylinder( via_center, hole_inner_radius,
-                                  hole_inner_radius + platingThickness3d,
+                generateCylinder( via_center, hole_inner_radius, hole_inner_radius + platingThickness3d,
                                   ztop, zbot, nrSegments, layerTriangleVIA );
             }
         }
@@ -802,10 +801,10 @@ void RENDER_3D_OPENGL::generateViasAndPads()
                 {
                     TransformCircleToPolygon( tht_outer_holes_poly, via->GetPosition(),
                                               via->GetDrill() / 2 + platingThickness,
-                                              ARC_HIGH_DEF, ERROR_INSIDE );
+                                              via->GetMaxError(), ERROR_INSIDE );
 
-                    TransformCircleToPolygon( tht_inner_holes_poly, via->GetPosition(),
-                                              via->GetDrill() / 2, ARC_HIGH_DEF, ERROR_INSIDE );
+                    TransformCircleToPolygon( tht_inner_holes_poly, via->GetPosition(), via->GetDrill() / 2,
+                                              via->GetMaxError(), ERROR_INSIDE );
                 }
             }
         }
@@ -824,9 +823,9 @@ void RENDER_3D_OPENGL::generateViasAndPads()
                         continue;
 
                     pad->TransformHoleToPolygon( tht_outer_holes_poly, platingThickness,
-                                                 ARC_HIGH_DEF, ERROR_INSIDE );
-                    pad->TransformHoleToPolygon( tht_inner_holes_poly, 0, ARC_HIGH_DEF,
-                                                 ERROR_INSIDE );
+                                                 pad->GetMaxError(), ERROR_INSIDE );
+                    pad->TransformHoleToPolygon( tht_inner_holes_poly, 0,
+                                                 pad->GetMaxError(), ERROR_INSIDE );
                 }
             }
         }

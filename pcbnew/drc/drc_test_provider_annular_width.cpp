@@ -178,12 +178,11 @@ bool DRC_TEST_PROVIDER_ANNULAR_WIDTH::Run()
                 if( !handled )
                 {
                     // Slow (but general purpose) method.
-                    int            maxError = pad->GetBoard()->GetDesignSettings().m_MaxError;
                     SEG::ecoord    dist_sq;
                     SHAPE_POLY_SET padOutline;
                     std::shared_ptr<SHAPE_SEGMENT> slot = pad->GetEffectiveHoleShape();
 
-                    pad->TransformShapeToPolygon( padOutline, aLayer, 0, maxError, ERROR_INSIDE );
+                    pad->TransformShapeToPolygon( padOutline, aLayer, 0, pad->GetMaxError(), ERROR_INSIDE );
 
                     if( sameNumPads.empty() )
                     {
@@ -213,11 +212,10 @@ bool DRC_TEST_PROVIDER_ANNULAR_WIDTH::Run()
                         for( const PAD* sameNumPad : sameNumPads )
                         {
                             // Construct the full pad with outline and hole.
-                            sameNumPad->TransformShapeToPolygon( aggregatePadOutline,
-                                                                 PADSTACK::ALL_LAYERS, 0,
-                                                                 maxError, ERROR_OUTSIDE );
+                            sameNumPad->TransformShapeToPolygon( aggregatePadOutline, PADSTACK::ALL_LAYERS,
+                                                                 0, pad->GetMaxError(), ERROR_OUTSIDE );
 
-                            sameNumPad->TransformHoleToPolygon( otherPadHoles, 0, maxError,
+                            sameNumPad->TransformHoleToPolygon( otherPadHoles, 0, pad->GetMaxError(),
                                                                 ERROR_INSIDE );
                         }
 

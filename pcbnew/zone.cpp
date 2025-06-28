@@ -1337,7 +1337,6 @@ bool ZONE::BuildSmoothedPoly( SHAPE_POLY_SET& aSmoothedPoly, PCB_LAYER_ID aLayer
     }
 
     const BOARD* board = GetBoard();
-    int          maxError = ARC_HIGH_DEF;
     bool         keepExternalFillets = false;
     bool         smooth_requested = m_cornerSmoothingType == ZONE_SETTINGS::SMOOTHING_CHAMFER
                                     || m_cornerSmoothingType == ZONE_SETTINGS::SMOOTHING_FILLET;
@@ -1349,12 +1348,7 @@ bool ZONE::BuildSmoothedPoly( SHAPE_POLY_SET& aSmoothedPoly, PCB_LAYER_ID aLayer
     }
 
     if( board )
-    {
-        BOARD_DESIGN_SETTINGS& bds = board->GetDesignSettings();
-
-        maxError = bds.m_MaxError;
-        keepExternalFillets = bds.m_ZoneKeepExternalFillets;
-    }
+        keepExternalFillets = board->GetDesignSettings().m_ZoneKeepExternalFillets;
 
     auto smooth =
             [&]( SHAPE_POLY_SET& aPoly )
@@ -1369,7 +1363,7 @@ bool ZONE::BuildSmoothedPoly( SHAPE_POLY_SET& aSmoothedPoly, PCB_LAYER_ID aLayer
                     break;
 
                 case ZONE_SETTINGS::SMOOTHING_FILLET:
-                    aPoly = aPoly.Fillet( (int) m_cornerRadius, maxError );
+                    aPoly = aPoly.Fillet( (int) m_cornerRadius, GetMaxError() );
                     break;
 
                 default:
@@ -1460,7 +1454,7 @@ bool ZONE::BuildSmoothedPoly( SHAPE_POLY_SET& aSmoothedPoly, PCB_LAYER_ID aLayer
         // pre-inflate the contour by the min-thickness within the same-net-intersecting-zones
         // envelope.
         SHAPE_POLY_SET poly = maxExtents->CloneDropTriangulation();
-        poly.Inflate( m_ZoneMinThickness, CORNER_STRATEGY::ROUND_ALL_CORNERS, maxError );
+        poly.Inflate( m_ZoneMinThickness, CORNER_STRATEGY::ROUND_ALL_CORNERS, GetMaxError() );
 
         if( !keepExternalFillets )
             poly.BooleanIntersection( withSameNetIntersectingZones );
@@ -1507,16 +1501,10 @@ void ZONE::TransformSmoothedOutlineToPolygon( SHAPE_POLY_SET& aBuffer, int aClea
     // holes are linked to the main outline, so only one polygon is created.
     if( aClearance )
     {
-        const BOARD* board = GetBoard();
-        int          maxError = ARC_HIGH_DEF;
-
-        if( board )
-            maxError = board->GetDesignSettings().m_MaxError;
-
         if( aErrorLoc == ERROR_OUTSIDE )
-            aClearance += maxError;
+            aClearance += GetMaxError();
 
-        polybuffer.Inflate( aClearance, CORNER_STRATEGY::ROUND_ALL_CORNERS, maxError );
+        polybuffer.Inflate( aClearance, CORNER_STRATEGY::ROUND_ALL_CORNERS, GetMaxError() );
     }
 
     polybuffer.Fracture();

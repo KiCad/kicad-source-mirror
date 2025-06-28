@@ -646,9 +646,6 @@ void PAD::BuildEffectiveShapes() const
 
 const SHAPE_COMPOUND& PAD::buildEffectiveShape( PCB_LAYER_ID aLayer ) const
 {
-    const BOARD* board = GetBoard();
-    int          maxError = board ? board->GetDesignSettings().m_MaxError : ARC_HIGH_DEF;
-
     m_effectiveShapes[aLayer] = std::make_shared<SHAPE_COMPOUND>();
 
     auto add = [this, aLayer]( SHAPE* aShape )
@@ -767,7 +764,7 @@ const SHAPE_COMPOUND& PAD::buildEffectiveShape( PCB_LAYER_ID aLayer ) const
         TransformRoundChamferedRectToPolygon( outline, shapePos, GetSize( aLayer ),
                                               GetOrientation(), GetRoundRectCornerRadius( aLayer ),
                                               GetChamferRectRatio( aLayer ),
-                                              GetChamferPositions( aLayer ), 0, maxError,
+                                              GetChamferPositions( aLayer ), 0, GetMaxError(),
                                               ERROR_INSIDE );
 
         add( new SHAPE_SIMPLE( outline.COutline( 0 ) ) );
@@ -809,9 +806,6 @@ void PAD::BuildEffectivePolygon( ERROR_LOC aErrorLoc ) const
     if( !m_polyDirty[ aErrorLoc ] )
         return;
 
-    const BOARD* board = GetBoard();
-    int          maxError = board ? board->GetDesignSettings().m_MaxError : ARC_HIGH_DEF;
-
     Padstack().ForEachUniqueLayer(
         [&]( PCB_LAYER_ID aLayer )
         {
@@ -820,7 +814,7 @@ void PAD::BuildEffectivePolygon( ERROR_LOC aErrorLoc ) const
                     m_effectivePolygons[ aLayer ][ aErrorLoc ];
 
             effectivePolygon = std::make_shared<SHAPE_POLY_SET>();
-            TransformShapeToPolygon( *effectivePolygon, aLayer, 0, maxError, aErrorLoc );
+            TransformShapeToPolygon( *effectivePolygon, aLayer, 0, GetMaxError(), aErrorLoc );
 
             // Bounding radius
 
@@ -2377,10 +2371,9 @@ void PAD::doCheckPad( PCB_LAYER_ID aLayer, UNITS_PROVIDER* aUnitsProvider, bool 
             aErrorHandler( DRCE_PADSTACK_INVALID, msg );
         }
 
-        int            maxError = GetBoard()->GetDesignSettings().m_MaxError;
         SHAPE_POLY_SET padOutline;
 
-        TransformShapeToPolygon( padOutline, aLayer, 0, maxError, ERROR_INSIDE );
+        TransformShapeToPolygon( padOutline, aLayer, 0, GetMaxError(), ERROR_INSIDE );
 
         if( GetAttribute() == PAD_ATTRIB::PTH )
         {
@@ -2388,8 +2381,8 @@ void PAD::doCheckPad( PCB_LAYER_ID aLayer, UNITS_PROVIDER* aUnitsProvider, bool 
             std::shared_ptr<SHAPE_SEGMENT> hole = GetEffectiveHoleShape();
             SHAPE_POLY_SET                 holeOutline;
 
-            TransformOvalToPolygon( holeOutline, hole->GetSeg().A, hole->GetSeg().B,
-                                    hole->GetWidth(), ARC_HIGH_DEF, ERROR_OUTSIDE );
+            TransformOvalToPolygon( holeOutline, hole->GetSeg().A, hole->GetSeg().B, hole->GetWidth(),
+                                    GetMaxError(), ERROR_OUTSIDE );
 
             SHAPE_POLY_SET copper = padOutline;
             copper.BooleanSubtract( holeOutline );
@@ -2654,9 +2647,6 @@ void PAD::DeletePrimitivesList( PCB_LAYER_ID aLayer )
 void PAD::MergePrimitivesAsPolygon( PCB_LAYER_ID aLayer, SHAPE_POLY_SET* aMergedPolygon,
                                     ERROR_LOC aErrorLoc ) const
 {
-    const BOARD* board = GetBoard();
-    int          maxError = board ? board->GetDesignSettings().m_MaxError : ARC_HIGH_DEF;
-
     aMergedPolygon->RemoveAllContours();
 
     // Add the anchor pad shape in aMergedPolygon, others in aux_polyset:
@@ -2674,8 +2664,7 @@ void PAD::MergePrimitivesAsPolygon( PCB_LAYER_ID aLayer, SHAPE_POLY_SET* aMerged
 
     default:
     case PAD_SHAPE::CIRCLE:
-        TransformCircleToPolygon( *aMergedPolygon, VECTOR2I( 0, 0 ), padSize.x / 2, maxError,
-                                  aErrorLoc );
+        TransformCircleToPolygon( *aMergedPolygon, VECTOR2I( 0, 0 ), padSize.x / 2, GetMaxError(), aErrorLoc );
         break;
     }
 
@@ -2684,7 +2673,7 @@ void PAD::MergePrimitivesAsPolygon( PCB_LAYER_ID aLayer, SHAPE_POLY_SET* aMerged
     for( const std::shared_ptr<PCB_SHAPE>& primitive : m_padStack.Primitives( aLayer ) )
     {
         if( !primitive->IsProxyItem() )
-            primitive->TransformShapeToPolygon( polyset, UNDEFINED_LAYER, 0, maxError, aErrorLoc );
+            primitive->TransformShapeToPolygon( polyset, UNDEFINED_LAYER, 0, GetMaxError(), aErrorLoc );
     }
 
     polyset.Simplify();

@@ -44,6 +44,8 @@
 #include <decompress.hpp>
 
 #include <thread_pool.h>
+#include <board.h>
+#include <board_design_settings.h>
 #include <footprint.h>
 #include <pad.h>
 #include <pcb_track.h>
@@ -783,7 +785,6 @@ STEP_PCB_MODEL::STEP_PCB_MODEL( const wxString& aPcbName, REPORTER* aReporter ) 
     m_mergeOCCMaxDist = OCC_MAX_DISTANCE_TO_MERGE_POINTS;
     m_minx = 1.0e10;    // absurdly large number; any valid PCB X value will be smaller
     m_pcbName = aPcbName;
-    m_maxError = pcbIUScale.mmToIU( ARC_TO_SEGMENT_MAX_ERROR_MM );
     m_fuseShapes = false;
     m_outFmt = OUTPUT_FORMAT::FMT_OUT_UNKNOWN;
 }
@@ -831,7 +832,7 @@ bool STEP_PCB_MODEL::AddPadShape( const PAD* aPad, const VECTOR2D& aOrigin, bool
 
         // Make a shape on copper layers
         SHAPE_POLY_SET polySet;
-        aPad->TransformShapeToPolygon( polySet, pcb_layer, 0, ARC_HIGH_DEF, ERROR_INSIDE );
+        aPad->TransformShapeToPolygon( polySet, pcb_layer, 0, aPad->GetMaxError(), ERROR_INSIDE );
 
         if( castellated )
         {
@@ -920,14 +921,14 @@ bool STEP_PCB_MODEL::AddPadShape( const PAD* aPad, const VECTOR2D& aOrigin, bool
 
             if( seg_hole->GetSeg().A == seg_hole->GetSeg().B )  // Hole is a circle
             {
-                TransformCircleToPolygon( polyHole, seg_hole->GetSeg().A, width/2, ARC_HIGH_DEF,
-                                          ERROR_OUTSIDE );
+                TransformCircleToPolygon( polyHole, seg_hole->GetSeg().A, width/2,
+                                          aPad->GetMaxError(), ERROR_OUTSIDE );
 
             }
             else
             {
                 TransformOvalToPolygon( polyHole, seg_hole->GetSeg().A, seg_hole->GetSeg().B,
-                                        width, ARC_HIGH_DEF, ERROR_OUTSIDE );
+                                        width, aPad->GetMaxError(), ERROR_OUTSIDE );
             }
 
             polyHole.ClearArcs();

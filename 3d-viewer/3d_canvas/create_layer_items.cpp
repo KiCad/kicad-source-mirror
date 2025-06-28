@@ -219,13 +219,10 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
     trackList.clear();
     trackList.reserve( m_board->Tracks().size() );
 
-    int maxError = m_board->GetDesignSettings().m_MaxError;
-
     for( PCB_TRACK* track : m_board->Tracks() )
     {
          // Skip tracks (not vias theyt are on more than one layer ) on disabled layers
-        if( track->Type() != PCB_VIA_T
-            && !Is3dLayerEnabled( track->GetLayer(), visibilityFlags ) )
+        if( track->Type() != PCB_VIA_T && !Is3dLayerEnabled( track->GetLayer(), visibilityFlags ) )
         {
             continue;
         }
@@ -382,9 +379,15 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
             }
 
             if( cfg.DifferentiatePlatedCopper() && layer == F_Cu )
-                track->TransformShapeToPolygon( *m_frontPlatedCopperPolys, F_Cu, 0, maxError, ERROR_INSIDE );
+            {
+                track->TransformShapeToPolygon( *m_frontPlatedCopperPolys, F_Cu, 0, track->GetMaxError(),
+                                                ERROR_INSIDE );
+            }
             else if( cfg.DifferentiatePlatedCopper() && layer == B_Cu )
-                track->TransformShapeToPolygon( *m_backPlatedCopperPolys, B_Cu, 0, maxError, ERROR_INSIDE );
+            {
+                track->TransformShapeToPolygon( *m_backPlatedCopperPolys, B_Cu, 0, track->GetMaxError(),
+                                                ERROR_INSIDE );
+            }
         }
     }
 
@@ -441,10 +444,10 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
                     const int hole_outer_radius = (holediameter / 2) + GetHolePlatingThickness();
 
                     TransformCircleToPolygon( *layerOuterHolesPoly, via->GetStart(), hole_outer_radius,
-                                              maxError, ERROR_INSIDE );
+                                              via->GetMaxError(), ERROR_INSIDE );
 
                     TransformCircleToPolygon( *layerInnerHolesPoly, via->GetStart(), holediameter / 2,
-                                              maxError, ERROR_INSIDE );
+                                              via->GetMaxError(), ERROR_INSIDE );
                 }
                 else if( layer == layer_ids[0] ) // it only adds once the THT holes
                 {
@@ -454,16 +457,16 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
 
                     // Add through hole contours
                     TransformCircleToPolygon( m_TH_ODPolys, via->GetStart(), hole_outer_radius,
-                                              maxError, ERROR_INSIDE );
+                                              via->GetMaxError(), ERROR_INSIDE );
 
                     // Add same thing for vias only
                     TransformCircleToPolygon( m_viaTH_ODPolys, via->GetStart(), hole_outer_radius,
-                                              maxError, ERROR_INSIDE );
+                                              via->GetMaxError(), ERROR_INSIDE );
 
                     if( cfg.clip_silk_on_via_annuli )
                     {
                         TransformCircleToPolygon( m_viaAnnuliPolys, via->GetStart(), hole_outer_ring_radius,
-                                                  maxError, ERROR_INSIDE );
+                                                  via->GetMaxError(), ERROR_INSIDE );
                     }
                 }
             }
@@ -490,14 +493,11 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
                     continue;
 
                 // Skip vias annulus when not flashed on this layer
-                if( track->Type() == PCB_VIA_T
-                        && !static_cast<const PCB_VIA*>( track )->FlashLayer( layer ) )
-                {
+                if( track->Type() == PCB_VIA_T && !static_cast<const PCB_VIA*>( track )->FlashLayer( layer ) )
                     continue;
-                }
 
                 // Add the track/via contour
-                track->TransformShapeToPolygon( *layerPoly, layer, 0, maxError, ERROR_INSIDE );
+                track->TransformShapeToPolygon( *layerPoly, layer, 0, track->GetMaxError(), ERROR_INSIDE );
             }
         }
     }
@@ -550,17 +550,17 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
             if( pad->GetAttribute() != PAD_ATTRIB::NPTH )
             {
                 if( cfg.clip_silk_on_via_annuli )
-                    pad->TransformHoleToPolygon( m_viaAnnuliPolys, inflate, maxError, ERROR_INSIDE );
+                    pad->TransformHoleToPolygon( m_viaAnnuliPolys, inflate, pad->GetMaxError(), ERROR_INSIDE );
 
-                pad->TransformHoleToPolygon( m_TH_ODPolys, inflate, maxError, ERROR_INSIDE );
+                pad->TransformHoleToPolygon( m_TH_ODPolys, inflate, pad->GetMaxError(), ERROR_INSIDE );
             }
             else
             {
                 // If not plated, no copper.
                 if( cfg.clip_silk_on_via_annuli )
-                    pad->TransformHoleToPolygon( m_viaAnnuliPolys, 0, maxError, ERROR_INSIDE );
+                    pad->TransformHoleToPolygon( m_viaAnnuliPolys, 0, pad->GetMaxError(), ERROR_INSIDE );
 
-                pad->TransformHoleToPolygon( m_NPTH_ODPolys, 0, maxError, ERROR_INSIDE );
+                pad->TransformHoleToPolygon( m_NPTH_ODPolys, 0, pad->GetMaxError(), ERROR_INSIDE );
             }
         }
     }
@@ -582,9 +582,9 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
             {
                 SHAPE_POLY_SET* layerPoly = layer == F_Cu ? m_frontPlatedCopperPolys : m_backPlatedCopperPolys;
 
-                fp->TransformPadsToPolySet( *layerPoly, layer, 0, maxError, ERROR_INSIDE );
-                transformFPTextToPolySet( fp, layer, visibilityFlags, *layerPoly, maxError, ERROR_INSIDE );
-                transformFPShapesToPolySet( fp, layer, *layerPoly, maxError, ERROR_INSIDE );
+                fp->TransformPadsToPolySet( *layerPoly, layer, 0, fp->GetMaxError(), ERROR_INSIDE );
+                transformFPTextToPolySet( fp, layer, visibilityFlags, *layerPoly, fp->GetMaxError(), ERROR_INSIDE );
+                transformFPShapesToPolySet( fp, layer, *layerPoly, fp->GetMaxError(), ERROR_INSIDE );
             }
 
             // Add copper item to poly contours (vertical outlines) if required
@@ -594,9 +594,9 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
 
                 SHAPE_POLY_SET* layerPoly = m_layers_poly[layer];
 
-                fp->TransformPadsToPolySet( *layerPoly, layer, 0, maxError, ERROR_INSIDE );
-                transformFPTextToPolySet( fp, layer, visibilityFlags, *layerPoly, maxError, ERROR_INSIDE );
-                transformFPShapesToPolySet( fp, layer, *layerPoly, maxError, ERROR_INSIDE );
+                fp->TransformPadsToPolySet( *layerPoly, layer, 0, fp->GetMaxError(), ERROR_INSIDE );
+                transformFPTextToPolySet( fp, layer, visibilityFlags, *layerPoly, fp->GetMaxError(), ERROR_INSIDE );
+                transformFPShapesToPolySet( fp, layer, *layerPoly, fp->GetMaxError(), ERROR_INSIDE );
             }
         }
     }
@@ -655,18 +655,20 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
                 if( item->Type() == PCB_TEXTBOX_T )
                 {
                     PCB_TEXTBOX* text_box = static_cast<PCB_TEXTBOX*>( item );
-                    text_box->TransformTextToPolySet( *copperPolys, 0, maxError, ERROR_INSIDE );
+                    text_box->TransformTextToPolySet( *copperPolys, 0, text_box->GetMaxError(), ERROR_INSIDE );
+
                     // Add box outlines
-                    text_box->PCB_SHAPE::TransformShapeToPolygon( *copperPolys, layer, 0, maxError, ERROR_INSIDE );
+                    text_box->PCB_SHAPE::TransformShapeToPolygon( *copperPolys, layer, 0, text_box->GetMaxError(),
+                                                                  ERROR_INSIDE );
                 }
                 else if( item->Type() == PCB_TEXT_T )
                 {
                     PCB_TEXT* text = static_cast<PCB_TEXT*>( item );
-                    text->TransformTextToPolySet( *copperPolys, 0, maxError, ERROR_INSIDE );
+                    text->TransformTextToPolySet( *copperPolys, 0, text->GetMaxError(), ERROR_INSIDE );
                 }
                 else
                 {
-                    item->TransformShapeToPolySet( *copperPolys, layer, 0, maxError, ERROR_INSIDE );
+                    item->TransformShapeToPolySet( *copperPolys, layer, 0, item->GetMaxError(), ERROR_INSIDE );
                 }
             }
 
@@ -680,14 +682,14 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
                 switch( item->Type() )
                 {
                 case PCB_SHAPE_T:
-                    item->TransformShapeToPolySet( *layerPoly, layer, 0, maxError, ERROR_INSIDE );
+                    item->TransformShapeToPolySet( *layerPoly, layer, 0, item->GetMaxError(), ERROR_INSIDE );
                     break;
 
                 case PCB_TEXT_T:
                 {
                     PCB_TEXT* text = static_cast<PCB_TEXT*>( item );
 
-                    text->TransformTextToPolySet( *layerPoly, 0, maxError, ERROR_INSIDE );
+                    text->TransformTextToPolySet( *layerPoly, 0, text->GetMaxError(), ERROR_INSIDE );
                     break;
                 }
 
@@ -696,9 +698,12 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
                     PCB_TEXTBOX* textbox = static_cast<PCB_TEXTBOX*>( item );
 
                     if( textbox->IsBorderEnabled() )
-                        textbox->PCB_SHAPE::TransformShapeToPolygon( *layerPoly, layer, 0, maxError, ERROR_INSIDE );
+                    {
+                        textbox->PCB_SHAPE::TransformShapeToPolygon( *layerPoly, layer, 0, textbox->GetMaxError(),
+                                                                     ERROR_INSIDE );
+                    }
 
-                    textbox->TransformTextToPolySet( *layerPoly, 0, maxError, ERROR_INSIDE );
+                    textbox->TransformTextToPolySet( *layerPoly, 0, textbox->GetMaxError(), ERROR_INSIDE );
                     break;
                 }
 
@@ -707,14 +712,14 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
                     PCB_TABLE* table = static_cast<PCB_TABLE*>( item );
 
                     for( PCB_TABLECELL* cell : table->GetCells() )
-                        cell->TransformTextToPolySet( *layerPoly, 0, maxError, ERROR_INSIDE );
+                        cell->TransformTextToPolySet( *layerPoly, 0, cell->GetMaxError(), ERROR_INSIDE );
 
                     table->DrawBorders(
                             [&]( const VECTOR2I& ptA, const VECTOR2I& ptB,
                                  const STROKE_PARAMS& stroke )
                             {
                                 SHAPE_SEGMENT seg( ptA, ptB, stroke.GetWidth()  );
-                                seg.TransformToPolygon( *layerPoly, maxError, ERROR_INSIDE );
+                                seg.TransformToPolygon( *layerPoly, table->GetMaxError(), ERROR_INSIDE );
                             } );
                     break;
                 }
@@ -727,10 +732,10 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
                 {
                     PCB_DIMENSION_BASE* dimension = static_cast<PCB_DIMENSION_BASE*>( item );
 
-                    dimension->TransformTextToPolySet( *layerPoly, 0, maxError, ERROR_INSIDE );
+                    dimension->TransformTextToPolySet( *layerPoly, 0, dimension->GetMaxError(), ERROR_INSIDE );
 
                     for( const std::shared_ptr<SHAPE>& shape : dimension->GetShapes() )
-                        shape->TransformToPolygon( *layerPoly, maxError, ERROR_INSIDE );
+                        shape->TransformToPolygon( *layerPoly, dimension->GetMaxError(), ERROR_INSIDE );
 
                     break;
                 }
@@ -762,7 +767,7 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
                 {
                     SHAPE_POLY_SET* copperPolys = layer == F_Cu ? m_frontPlatedCopperPolys : m_backPlatedCopperPolys;
 
-                    zone->TransformShapeToPolygon( *copperPolys, layer, 0, maxError, ERROR_INSIDE );
+                    zone->TransformShapeToPolygon( *copperPolys, layer, 0, zone->GetMaxError(), ERROR_INSIDE );
                 }
             }
         }
@@ -1025,14 +1030,14 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
                 switch( item->Type() )
                 {
                 case PCB_SHAPE_T:
-                    item->TransformShapeToPolySet( *layerPoly, layer, 0, maxError, ERROR_INSIDE );
+                    item->TransformShapeToPolySet( *layerPoly, layer, 0, item->GetMaxError(), ERROR_INSIDE );
                     break;
 
                 case PCB_TEXT_T:
                 {
                     PCB_TEXT* text = static_cast<PCB_TEXT*>( item );
 
-                    text->TransformTextToPolySet( *layerPoly, 0, maxError, ERROR_INSIDE );
+                    text->TransformTextToPolySet( *layerPoly, 0, text->GetMaxError(), ERROR_INSIDE );
                     break;
                 }
 
@@ -1041,9 +1046,12 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
                     PCB_TEXTBOX* textbox = static_cast<PCB_TEXTBOX*>( item );
 
                     if( textbox->IsBorderEnabled() )
-                        textbox->PCB_SHAPE::TransformShapeToPolygon( *layerPoly, layer, 0, maxError, ERROR_INSIDE );
+                    {
+                        textbox->PCB_SHAPE::TransformShapeToPolygon( *layerPoly, layer, 0, textbox->GetMaxError(),
+                                                                     ERROR_INSIDE );
+                    }
 
-                    textbox->TransformTextToPolySet( *layerPoly, 0, maxError, ERROR_INSIDE );
+                    textbox->TransformTextToPolySet( *layerPoly, 0, textbox->GetMaxError(), ERROR_INSIDE );
                     break;
                 }
 
@@ -1052,14 +1060,14 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
                     PCB_TABLE* table = static_cast<PCB_TABLE*>( item );
 
                     for( PCB_TABLECELL* cell : table->GetCells() )
-                        cell->TransformTextToPolySet( *layerPoly, 0, maxError, ERROR_INSIDE );
+                        cell->TransformTextToPolySet( *layerPoly, 0, cell->GetMaxError(), ERROR_INSIDE );
 
                     table->DrawBorders(
                             [&]( const VECTOR2I& ptA, const VECTOR2I& ptB,
                                  const STROKE_PARAMS& stroke )
                             {
                                 SHAPE_SEGMENT seg( ptA, ptB, stroke.GetWidth()  );
-                                seg.TransformToPolygon( *layerPoly, maxError, ERROR_INSIDE );
+                                seg.TransformToPolygon( *layerPoly, table->GetMaxError(), ERROR_INSIDE );
                             } );
 
                     break;
@@ -1083,7 +1091,7 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
 
                         if( via->FlashLayer( layer ) && !via->IsTented( layer ) )
                         {
-                            track->TransformShapeToPolygon( *layerPoly, layer, maskExpansion, maxError,
+                            track->TransformShapeToPolygon( *layerPoly, layer, maskExpansion, track->GetMaxError(),
                                                             ERROR_INSIDE );
                         }
                     }
@@ -1091,7 +1099,7 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
                     {
                         if( track->HasSolderMask() )
                         {
-                            track->TransformShapeToPolySet( *layerPoly, layer, maskExpansion, maxError,
+                            track->TransformShapeToPolySet( *layerPoly, layer, maskExpansion, track->GetMaxError(),
                                                             ERROR_INSIDE );
                         }
                     }
@@ -1108,16 +1116,20 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
                     for( PAD* pad : footprint->Pads() )
                     {
                         if( pad->IsOnLayer( layer ) )
-                            buildPadOutlineAsPolygon( pad, layer, *layerPoly, linewidth, maxError, ERROR_INSIDE );
+                        {
+                            buildPadOutlineAsPolygon( pad, layer, *layerPoly, linewidth, pad->GetMaxError(),
+                                                      ERROR_INSIDE );
+                        }
                     }
                 }
                 else
                 {
-                    footprint->TransformPadsToPolySet( *layerPoly, layer, 0, maxError, ERROR_INSIDE );
+                    footprint->TransformPadsToPolySet( *layerPoly, layer, 0, footprint->GetMaxError(), ERROR_INSIDE );
                 }
 
-                transformFPTextToPolySet( footprint, layer, visibilityFlags, *layerPoly, maxError, ERROR_INSIDE );
-                transformFPShapesToPolySet( footprint, layer, *layerPoly, maxError, ERROR_INSIDE );
+                transformFPTextToPolySet( footprint, layer, visibilityFlags, *layerPoly, footprint->GetMaxError(),
+                                          ERROR_INSIDE );
+                transformFPShapesToPolySet( footprint, layer, *layerPoly, footprint->GetMaxError(), ERROR_INSIDE );
             }
 
             if( cfg.show_zones || layer == F_Mask || layer == B_Mask )

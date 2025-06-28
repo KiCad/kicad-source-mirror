@@ -1103,7 +1103,7 @@ HANDLER_RESULT<PadShapeAsPolygonResponse> API_HANDLER_PCB::handleGetPadShapeAsPo
         PAD* pad = static_cast<PAD*>( *optPad );
         SHAPE_POLY_SET poly;
         pad->TransformShapeToPolygon( poly, pad->Padstack().EffectiveLayerFor( layer ), 0,
-                                      ARC_HIGH_DEF, ERROR_INSIDE );
+                                      pad->GetMaxError(), ERROR_INSIDE );
 
         types::PolygonWithHoles* polyMsg = response.mutable_polygons()->Add();
         PackPolyLine( *polyMsg->mutable_outline(), poly.COutline( 0 ) );

@@ -1057,10 +1057,7 @@ void BRDITEMS_PLOTTER::PlotShape( const PCB_SHAPE* aShape )
                     tmpPoly.Fracture();
 
                     if( margin < 0 )
-                    {
-                        tmpPoly.Inflate( margin / 2, CORNER_STRATEGY::ROUND_ALL_CORNERS,
-                                         m_board->GetDesignSettings().m_MaxError );
-                    }
+                        tmpPoly.Inflate( margin / 2, CORNER_STRATEGY::ROUND_ALL_CORNERS, aShape->GetMaxError() );
 
                     FILL_T fill = isSolidFill ? FILL_T::FILLED_SHAPE : FILL_T::NO_FILL;
 
@@ -1105,10 +1102,7 @@ void BRDITEMS_PLOTTER::PlotShape( const PCB_SHAPE* aShape )
                     poly.Append( pt );
 
                 if( margin < 0 )
-                {
-                    poly.Inflate( margin / 2, CORNER_STRATEGY::ROUND_ALL_CORNERS,
-                                  m_board->GetDesignSettings().m_MaxError );
-                }
+                    poly.Inflate( margin / 2, CORNER_STRATEGY::ROUND_ALL_CORNERS, aShape->GetMaxError() );
 
                 FILL_T fill_mode = isSolidFill ? FILL_T::FILLED_SHAPE : FILL_T::NO_FILL;
 

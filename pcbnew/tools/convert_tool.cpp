@@ -52,6 +52,8 @@
 #include <macros.h>
 #include <zone.h>
 
+#include <ranges>
+
 #include "convert_tool.h"
 
 
@@ -598,8 +600,7 @@ SHAPE_POLY_SET CONVERT_TOOL::makePolysFromChainedSegs( const std::deque<EDA_ITEM
     // rouding errors in the conversion.
     int chainingEpsilon = 100; // max dist from one endPt to next startPt in IU
 
-    BOARD_DESIGN_SETTINGS& bds = m_frame->GetBoard()->GetDesignSettings();
-    SHAPE_POLY_SET         poly;
+    SHAPE_POLY_SET poly;
 
     // Stores pairs of (anchor, item) where anchor == 0 -> SEG.A, anchor == 1 -> SEG.B
     std::map<VECTOR2I, std::vector<std::pair<int, EDA_ITEM*>>> connections;
@@ -680,27 +681,23 @@ SHAPE_POLY_SET CONVERT_TOOL::makePolysFromChainedSegs( const std::deque<EDA_ITEM
 
                         if( aAnchor == graphic->GetStart() )
                         {
-                            for( auto it = graphic->GetBezierPoints().begin();
-                                 it != graphic->GetBezierPoints().end();
-                                 ++it )
+                            for( const VECTOR2I& pt : graphic->GetBezierPoints() )
                             {
                                 if( aDirection )
-                                    outline.Append( *it );
+                                    outline.Append( pt );
                                 else
-                                    outline.Insert( 0, *it );
+                                    outline.Insert( 0, pt );
                             }
 
                         }
                         else
                         {
-                            for( auto it = graphic->GetBezierPoints().rbegin();
-                                 it != graphic->GetBezierPoints().rend();
-                                 ++it )
+                            for( const VECTOR2I& pt : std::ranges::reverse_view( graphic->GetBezierPoints() ) )
                             {
                                 if( aDirection )
-                                    outline.Append( *it );
+                                    outline.Append( pt );
                                 else
-                                    outline.Insert( 0, *it );
+                                    outline.Insert( 0, pt );
                             }
                         }
 
@@ -787,10 +784,7 @@ SHAPE_POLY_SET CONVERT_TOOL::makePolysFromChainedSegs( const std::deque<EDA_ITEM
         if( aStrategy == BOUNDING_HULL )
         {
             for( BOARD_ITEM* item : insertedItems )
-            {
-                item->TransformShapeToPolygon( poly, UNDEFINED_LAYER, 0, bds.m_MaxError, ERROR_INSIDE,
-                                               false );
-            }
+                item->TransformShapeToPolygon( poly, UNDEFINED_LAYER, 0, item->GetMaxError(), ERROR_INSIDE );
         }
 
         insertedItems.clear();
@@ -802,8 +796,7 @@ SHAPE_POLY_SET CONVERT_TOOL::makePolysFromChainedSegs( const std::deque<EDA_ITEM
 
 SHAPE_POLY_SET CONVERT_TOOL::makePolysFromOpenGraphics( const std::deque<EDA_ITEM*>& aItems, int aGap )
 {
-    BOARD_DESIGN_SETTINGS& bds = m_frame->GetBoard()->GetDesignSettings();
-    SHAPE_POLY_SET         poly;
+    SHAPE_POLY_SET poly;
 
     for( EDA_ITEM* item : aItems )
     {
@@ -819,8 +812,7 @@ SHAPE_POLY_SET CONVERT_TOOL::makePolysFromOpenGraphics( const std::deque<EDA_ITE
             if( shape->IsClosed() )
                 continue;
 
-            shape->TransformShapeToPolygon( poly, UNDEFINED_LAYER, aGap, bds.m_MaxError, ERROR_INSIDE,
-                                            false );
+            shape->TransformShapeToPolygon( poly, UNDEFINED_LAYER, aGap, shape->GetMaxError(), ERROR_INSIDE );
             shape->SetFlags( SKIP_STRUCT );
 
             break;
@@ -832,8 +824,7 @@ SHAPE_POLY_SET CONVERT_TOOL::makePolysFromOpenGraphics( const std::deque<EDA_ITE
         {
             PCB_TRACK* track = static_cast<PCB_TRACK*>( item );
 
-            track->TransformShapeToPolygon( poly, UNDEFINED_LAYER, aGap, bds.m_MaxError, ERROR_INSIDE,
-                                            false );
+            track->TransformShapeToPolygon( poly, UNDEFINED_LAYER, aGap, track->GetMaxError(), ERROR_INSIDE );
             track->SetFlags( SKIP_STRUCT );
 
             break;
@@ -851,8 +842,7 @@ SHAPE_POLY_SET CONVERT_TOOL::makePolysFromOpenGraphics( const std::deque<EDA_ITE
 SHAPE_POLY_SET CONVERT_TOOL::makePolysFromClosedGraphics( const std::deque<EDA_ITEM*>& aItems,
                                                           CONVERT_STRATEGY aStrategy )
 {
-    BOARD_DESIGN_SETTINGS& bds = m_frame->GetBoard()->GetDesignSettings();
-    SHAPE_POLY_SET         poly;
+    SHAPE_POLY_SET poly;
 
     for( EDA_ITEM* item : aItems )
     {
@@ -883,7 +873,7 @@ SHAPE_POLY_SET CONVERT_TOOL::makePolysFromClosedGraphics( const std::deque<EDA_I
                 if( aStrategy != BOUNDING_HULL )
                     shape->SetFilled( true );
 
-                shape->TransformShapeToPolygon( poly, UNDEFINED_LAYER, 0, bds.m_MaxError, ERROR_INSIDE,
+                shape->TransformShapeToPolygon( poly, UNDEFINED_LAYER, 0, shape->GetMaxError(), ERROR_INSIDE,
                                                 aStrategy != BOUNDING_HULL );
 
                 if( aStrategy != BOUNDING_HULL )
@@ -903,7 +893,7 @@ SHAPE_POLY_SET CONVERT_TOOL::makePolysFromClosedGraphics( const std::deque<EDA_I
         case PCB_TEXT_T:
         {
             PCB_TEXT* text = static_cast<PCB_TEXT*>( item );
-            text->TransformTextToPolySet( poly, 0, bds.m_MaxError, ERROR_INSIDE );
+            text->TransformTextToPolySet( poly, 0, text->GetMaxError(), ERROR_INSIDE );
             text->SetFlags( SKIP_STRUCT );
             break;
         }
@@ -911,7 +901,7 @@ SHAPE_POLY_SET CONVERT_TOOL::makePolysFromClosedGraphics( const std::deque<EDA_I
         case PCB_PAD_T:
         {
             PAD* pad = static_cast<PAD*>( item );
-            pad->TransformShapeToPolygon( poly, UNDEFINED_LAYER, 0, bds.m_MaxError, ERROR_INSIDE, false );
+            pad->TransformShapeToPolygon( poly, UNDEFINED_LAYER, 0, pad->GetMaxError(), ERROR_INSIDE );
             pad->SetFlags( SKIP_STRUCT );
             break;
         }
@@ -1023,8 +1013,7 @@ int CONVERT_TOOL::CreateLines( const TOOL_EVENT& aEvent )
                 for( int i = 1; i < aPoly.VertexCount(); i++ )
                     segs.emplace_back( SEG( aPoly.CVertex( i - 1 ), aPoly.CVertex( i ) ) );
 
-                segs.emplace_back( SEG( aPoly.CVertex( aPoly.VertexCount() - 1 ),
-                                        aPoly.CVertex( 0 ) ) );
+                segs.emplace_back( SEG( aPoly.CVertex( aPoly.VertexCount() - 1 ), aPoly.CVertex( 0 ) ) );
 
                 return segs;
             };
@@ -1185,12 +1174,8 @@ int CONVERT_TOOL::SegmentToArc( const TOOL_EVENT& aEvent )
                 {
                     BOARD_ITEM* item = aCollector[i];
 
-                    if( !( item->Type() == PCB_SHAPE_T ||
-                           item->Type() == PCB_TRACE_T ||
-                           item->Type() == PCB_ARC_T ) )
-                    {
+                    if( !item->IsType( { PCB_SHAPE_T, PCB_TRACE_T, PCB_ARC_T } ) )
                         aCollector.Remove( item );
-                    }
                 }
             } );
 
@@ -1300,8 +1285,7 @@ std::optional<SEG> CONVERT_TOOL::getStartEndPoints( EDA_ITEM* aItem )
             if( shape->GetStart() == shape->GetEnd() )
                 return std::nullopt;
 
-            return std::make_optional<SEG>( VECTOR2I( shape->GetStart() ),
-                                            VECTOR2I( shape->GetEnd() ) );
+            return std::make_optional<SEG>( VECTOR2I( shape->GetStart() ), VECTOR2I( shape->GetEnd() ) );
 
         default:
             return std::nullopt;

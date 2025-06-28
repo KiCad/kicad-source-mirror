@@ -133,8 +133,6 @@ public:
     // and can be merged
     void OCCSetMergeMaxDistance( double aDistance = OCC_MAX_DISTANCE_TO_MERGE_POINTS );
 
-    void SetMaxError( int aMaxError ) { m_maxError = aMaxError; }
-
     // create the PCB model using the current outlines and drill holes
     bool CreatePCB( SHAPE_POLY_SET& aOutline, VECTOR2D aOrigin, bool aPushBoardBody );
 
@@ -303,8 +301,6 @@ private:
 
     /// Name of the PCB, which will most likely be the file name of the path.
     wxString m_pcbName;
-
-    int      m_maxError;
 
     /// The current output format for created file
     OUTPUT_FORMAT m_outFmt;

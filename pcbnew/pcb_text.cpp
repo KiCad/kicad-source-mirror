@@ -476,9 +476,9 @@ std::shared_ptr<SHAPE> PCB_TEXT::GetEffectiveShape( PCB_LAYER_ID aLayer, FLASHIN
     {
         SHAPE_POLY_SET poly;
 
-        TransformTextToPolySet( poly, 0, GetBoard()->GetDesignSettings().m_MaxError, ERROR_INSIDE );
+        TransformTextToPolySet( poly, 0, GetMaxError(), ERROR_INSIDE );
 
-        return std::make_shared<SHAPE_POLY_SET>( poly );
+        return std::make_shared<SHAPE_POLY_SET>( std::move( poly ) );
     }
 
     return GetEffectiveTextShape();

@@ -3420,10 +3420,7 @@ void FOOTPRINT::CheckNetTies( const std::function<void( const BOARD_ITEM* aItem,
         for( BOARD_ITEM* item : copperItems )
         {
             if( item->IsOnLayer( layer ) )
-            {
-                item->TransformShapeToPolygon( copperOutlines, layer, 0, ARC_HIGH_DEF,
-                                               ERROR_OUTSIDE );
-            }
+                item->TransformShapeToPolygon( copperOutlines, layer, 0, GetMaxError(), ERROR_OUTSIDE );
         }
 
         copperOutlines.Simplify();

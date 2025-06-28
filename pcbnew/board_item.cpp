@@ -135,6 +135,15 @@ const KIFONT::METRICS& BOARD_ITEM::GetFontMetrics() const
 }
 
 
+int BOARD_ITEM::GetMaxError() const
+{
+    if( const BOARD* board = GetBoard() )
+        return board->GetDesignSettings().m_MaxError;
+
+    return ARC_HIGH_DEF;
+}
+
+
 int BOARD_ITEM::BoardLayerCount() const
 {
     const BOARD* board = GetBoard();

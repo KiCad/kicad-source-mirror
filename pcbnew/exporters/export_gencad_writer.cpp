@@ -481,7 +481,6 @@ void GENCAD_EXPORTER::createPadsShapesSection()
             fprintf( m_file, " POLYGON %g\n", pad->GetDrillSize().x / SCALE_FACTOR );
 
             SHAPE_POLY_SET outline;
-            int            maxError = m_board->GetDesignSettings().m_MaxError;
             VECTOR2I       padOffset( 0, 0 );
 
             TransformRoundChamferedRectToPolygon( outline, padOffset,
@@ -490,7 +489,7 @@ void GENCAD_EXPORTER::createPadsShapesSection()
                                                   pad->GetRoundRectCornerRadius( PADSTACK::ALL_LAYERS ),
                                                   pad->GetChamferRectRatio( PADSTACK::ALL_LAYERS ),
                                                   pad->GetChamferPositions( PADSTACK::ALL_LAYERS ),
-                                                  0, maxError, ERROR_INSIDE );
+                                                  0, pad->GetMaxError(), ERROR_INSIDE );
 
             for( int jj = 0; jj < outline.OutlineCount(); ++jj )
             {

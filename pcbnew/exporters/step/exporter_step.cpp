@@ -164,7 +164,6 @@ bool EXPORTER_STEP::buildFootprint3DShapes( FOOTPRINT* aFootprint, VECTOR2D aOri
 {
     bool              hasdata = false;
     std::vector<PAD*> padsMatchingNetFilter;
-    int               maxError = m_board->GetDesignSettings().m_MaxError;
 
     // Dump the pad holes into the PCB
     for( PAD* pad : aFootprint->Pads() )
@@ -173,10 +172,10 @@ bool EXPORTER_STEP::buildFootprint3DShapes( FOOTPRINT* aFootprint, VECTOR2D aOri
         std::shared_ptr<SHAPE_SEGMENT> holeShape = pad->GetEffectiveHoleShape();
 
         SHAPE_POLY_SET holePoly;
-        holeShape->TransformToPolygon( holePoly, maxError, ERROR_INSIDE );
+        holeShape->TransformToPolygon( holePoly, pad->GetMaxError(), ERROR_INSIDE );
 
         // This helps with fusing
-        holePoly.Deflate( m_platingThickness / 2, CORNER_STRATEGY::ROUND_ALL_CORNERS, maxError );
+        holePoly.Deflate( m_platingThickness / 2, CORNER_STRATEGY::ROUND_ALL_CORNERS, pad->GetMaxError() );
 
         for( PCB_LAYER_ID pcblayer : pad->GetLayerSet().Seq() )
         {
@@ -188,11 +187,8 @@ bool EXPORTER_STEP::buildFootprint3DShapes( FOOTPRINT* aFootprint, VECTOR2D aOri
         {
             int platingThickness = pad->GetAttribute() == PAD_ATTRIB::PTH ? m_platingThickness : 0;
 
-            if( m_pcbModel->AddHole( *holeShape, platingThickness, F_Cu, B_Cu, false, aOrigin, true,
-                                     true ) )
-            {
+            if( m_pcbModel->AddHole( *holeShape, platingThickness, F_Cu, B_Cu, false, aOrigin, true, true ) )
                 hasdata = true;
-            }
 
             //// Cut holes in silkscreen (buggy: insufficient polyset self-intersection checking)
             //if( m_layersToExport.Contains( F_SilkS ) || m_layersToExport.Contains( B_SilkS ) )
@@ -207,8 +203,7 @@ bool EXPORTER_STEP::buildFootprint3DShapes( FOOTPRINT* aFootprint, VECTOR2D aOri
 
         if( m_params.m_ExportPads )
         {
-            if( m_pcbModel->AddPadShape( pad, aOrigin, false,
-                                         castellated ? aClipPolygon : nullptr) )
+            if( m_pcbModel->AddPadShape( pad, aOrigin, false, castellated ? aClipPolygon : nullptr) )
                 hasdata = true;
 
             if( m_params.m_ExportSoldermask )
@@ -220,9 +215,8 @@ bool EXPORTER_STEP::buildFootprint3DShapes( FOOTPRINT* aFootprint, VECTOR2D aOri
 
                     SHAPE_POLY_SET poly;
                     PCB_LAYER_ID cuLayer = ( pcblayer == F_Mask ) ? F_Cu : B_Cu;
-                    pad->TransformShapeToPolygon( poly, cuLayer,
-                                                  pad->GetSolderMaskExpansion( cuLayer ), maxError,
-                                                  ERROR_INSIDE );
+                    pad->TransformShapeToPolygon( poly, cuLayer, pad->GetSolderMaskExpansion( cuLayer ),
+                                                  pad->GetMaxError(), ERROR_INSIDE );
 
                     m_poly_shapes[pcblayer][wxEmptyString].Append( poly );
                 }
@@ -240,7 +234,7 @@ bool EXPORTER_STEP::buildFootprint3DShapes( FOOTPRINT* aFootprint, VECTOR2D aOri
 
         SHAPE_POLY_SET buffer;
 
-        aFootprint->TransformFPShapesToPolySet( buffer, pcblayer, 0, maxError, ERROR_INSIDE,
+        aFootprint->TransformFPShapesToPolySet( buffer, pcblayer, 0, aFootprint->GetMaxError(), ERROR_INSIDE,
                                                 true, /* include text */
                                                 true, /* include shapes */
                                                 false /* include private items */ );
@@ -422,18 +416,18 @@ bool EXPORTER_STEP::buildTrack3DShape( PCB_TRACK* aTrack, VECTOR2D aOrigin )
                       || ( !m_params.m_NetFilter.IsEmpty()
                            && !aTrack->GetNetname().Matches( m_params.m_NetFilter ) );
 
-    int maxError = m_board->GetDesignSettings().m_MaxError;
-
     if( m_params.m_ExportSoldermask && aTrack->IsOnLayer( F_Mask ) )
     {
         aTrack->TransformShapeToPolygon( m_poly_shapes[F_Mask][wxEmptyString], F_Mask,
-                                         aTrack->GetSolderMaskExpansion(), maxError, ERROR_INSIDE );
+                                         aTrack->GetSolderMaskExpansion(), aTrack->GetMaxError(),
+                                         ERROR_INSIDE );
     }
 
     if( m_params.m_ExportSoldermask && aTrack->IsOnLayer( B_Mask ) )
     {
         aTrack->TransformShapeToPolygon( m_poly_shapes[B_Mask][wxEmptyString], B_Mask,
-                                         aTrack->GetSolderMaskExpansion(), maxError, ERROR_INSIDE );
+                                         aTrack->GetSolderMaskExpansion(), aTrack->GetMaxError(),
+                                         ERROR_INSIDE );
     }
 
     if( aTrack->Type() == PCB_VIA_T )
@@ -442,10 +436,10 @@ bool EXPORTER_STEP::buildTrack3DShape( PCB_TRACK* aTrack, VECTOR2D aOrigin )
 
         std::shared_ptr<SHAPE_SEGMENT> holeShape = via->GetEffectiveHoleShape();
         SHAPE_POLY_SET                 holePoly;
-        holeShape->TransformToPolygon( holePoly, maxError, ERROR_INSIDE );
+        holeShape->TransformToPolygon( holePoly, via->GetMaxError(), ERROR_INSIDE );
 
         // This helps with fusing
-        holePoly.Deflate( m_platingThickness / 2, CORNER_STRATEGY::ROUND_ALL_CORNERS, maxError );
+        holePoly.Deflate( m_platingThickness / 2, CORNER_STRATEGY::ROUND_ALL_CORNERS, via->GetMaxError() );
 
         LSET layers( via->GetLayerSet() & m_layersToExport );
 
@@ -459,7 +453,7 @@ bool EXPORTER_STEP::buildTrack3DShape( PCB_TRACK* aTrack, VECTOR2D aOrigin )
                 const std::shared_ptr<SHAPE>& shape = via->GetEffectiveShape( pcblayer );
 
                 SHAPE_POLY_SET poly;
-                shape->TransformToPolygon( poly, maxError, ERROR_INSIDE );
+                shape->TransformToPolygon( poly, via->GetMaxError(), ERROR_INSIDE );
                 m_poly_shapes[pcblayer][via->GetNetname()].Append( poly );
                 m_poly_holes[pcblayer].Append( holePoly );
             }
@@ -489,7 +483,7 @@ bool EXPORTER_STEP::buildTrack3DShape( PCB_TRACK* aTrack, VECTOR2D aOrigin )
         return false;
 
     aTrack->TransformShapeToPolygon( m_poly_shapes[pcblayer][aTrack->GetNetname()], pcblayer, 0,
-                                     maxError, ERROR_INSIDE );
+                                     aTrack->GetMaxError(), ERROR_INSIDE );
 
     return true;
 }
@@ -534,8 +528,6 @@ bool EXPORTER_STEP::buildGraphic3DShape( BOARD_ITEM* aItem, VECTOR2D aOrigin )
     if( IsInnerCopperLayer( pcblayer ) && !m_params.m_ExportInnerCopper )
         return false;
 
-    int maxError = m_board->GetDesignSettings().m_MaxError;
-
     switch( aItem->Type() )
     {
     case PCB_SHAPE_T:
@@ -553,7 +545,7 @@ bool EXPORTER_STEP::buildGraphic3DShape( BOARD_ITEM* aItem, VECTOR2D aOrigin )
         if( lineStyle == LINE_STYLE::SOLID )
         {
             graphic->TransformShapeToPolySet( m_poly_shapes[pcblayer][graphic->GetNetname()],
-                                              pcblayer, 0, maxError, ERROR_INSIDE );
+                                              pcblayer, 0, graphic->GetMaxError(), ERROR_INSIDE );
         }
         else
         {
@@ -571,7 +563,7 @@ bool EXPORTER_STEP::buildGraphic3DShape( BOARD_ITEM* aItem, VECTOR2D aOrigin )
                         {
                             SHAPE_SEGMENT seg( a, b, graphic->GetWidth() );
                             seg.TransformToPolygon( m_poly_shapes[pcblayer][graphic->GetNetname()],
-                                                    maxError, ERROR_INSIDE );
+                                                    graphic->GetMaxError(), ERROR_INSIDE );
                         } );
             }
 
@@ -585,13 +577,15 @@ bool EXPORTER_STEP::buildGraphic3DShape( BOARD_ITEM* aItem, VECTOR2D aOrigin )
         if( m_params.m_ExportSoldermask && graphic->IsOnLayer( F_Mask ) )
         {
             graphic->TransformShapeToPolygon( m_poly_shapes[F_Mask][wxEmptyString], F_Mask,
-                                              graphic->GetSolderMaskExpansion(), maxError, ERROR_INSIDE );
+                                              graphic->GetSolderMaskExpansion(), graphic->GetMaxError(),
+                                              ERROR_INSIDE );
         }
 
         if( m_params.m_ExportSoldermask && graphic->IsOnLayer( B_Mask ) )
         {
             graphic->TransformShapeToPolygon( m_poly_shapes[B_Mask][wxEmptyString], B_Mask,
-                                              graphic->GetSolderMaskExpansion(), maxError, ERROR_INSIDE );
+                                              graphic->GetSolderMaskExpansion(), graphic->GetMaxError(),
+                                              ERROR_INSIDE );
         }
 
         break;
@@ -601,7 +595,7 @@ bool EXPORTER_STEP::buildGraphic3DShape( BOARD_ITEM* aItem, VECTOR2D aOrigin )
     {
         PCB_TEXT* text = static_cast<PCB_TEXT*>( aItem );
 
-        text->TransformTextToPolySet( m_poly_shapes[pcblayer][wxEmptyString], 0, maxError,
+        text->TransformTextToPolySet( m_poly_shapes[pcblayer][wxEmptyString], 0, text->GetMaxError(),
                                       ERROR_INSIDE );
         break;
     }
@@ -614,11 +608,11 @@ bool EXPORTER_STEP::buildGraphic3DShape( BOARD_ITEM* aItem, VECTOR2D aOrigin )
         if( textbox->IsBorderEnabled() )
         {
             textbox->PCB_SHAPE::TransformShapeToPolygon( m_poly_shapes[pcblayer][wxEmptyString],
-                                                         pcblayer, 0, maxError, ERROR_INSIDE );
+                                                         pcblayer, 0, textbox->GetMaxError(), ERROR_INSIDE );
         }
 
         // text
-        textbox->TransformTextToPolySet( m_poly_shapes[pcblayer][wxEmptyString], 0, maxError,
+        textbox->TransformTextToPolySet( m_poly_shapes[pcblayer][wxEmptyString], 0, textbox->GetMaxError(),
                                          ERROR_INSIDE );
         break;
     }
@@ -629,7 +623,7 @@ bool EXPORTER_STEP::buildGraphic3DShape( BOARD_ITEM* aItem, VECTOR2D aOrigin )
 
         for( PCB_TABLECELL* cell : table->GetCells() )
         {
-            cell->TransformTextToPolySet( m_poly_shapes[pcblayer][wxEmptyString], 0, maxError,
+            cell->TransformTextToPolySet( m_poly_shapes[pcblayer][wxEmptyString], 0, cell->GetMaxError(),
                                           ERROR_INSIDE );
         }
 
@@ -637,7 +631,7 @@ bool EXPORTER_STEP::buildGraphic3DShape( BOARD_ITEM* aItem, VECTOR2D aOrigin )
                 [&]( const VECTOR2I& ptA, const VECTOR2I& ptB, const STROKE_PARAMS& stroke )
                 {
                     SHAPE_SEGMENT seg( ptA, ptB, stroke.GetWidth() );
-                    seg.TransformToPolygon( m_poly_shapes[pcblayer][wxEmptyString], maxError,
+                    seg.TransformToPolygon( m_poly_shapes[pcblayer][wxEmptyString], table->GetMaxError(),
                                             ERROR_INSIDE );
                 } );
 
@@ -741,8 +735,6 @@ bool EXPORTER_STEP::buildBoard3DShapes()
     // min dist must be much smaller (we use 0.001 mm giving good results)
     m_pcbModel->OCCSetMergeMaxDistance( OCC_MAX_DISTANCE_TO_MERGE_POINTS );
 
-    m_pcbModel->SetMaxError( m_board->GetDesignSettings().m_MaxError );
-
     // For copper layers, only pads and tracks are added, because adding everything on copper
     // generate unreasonable file sizes and take a unreasonable calculation time.
     for( FOOTPRINT* fp : m_board->Footprints() )
@@ -755,9 +747,7 @@ bool EXPORTER_STEP::buildBoard3DShapes()
         buildGraphic3DShape( item, origin );
 
     if( m_params.m_ExportZones )
-    {
         buildZones3DShape( origin );
-    }
 
     for( PCB_LAYER_ID pcblayer : m_layersToExport.Seq() )
     {
