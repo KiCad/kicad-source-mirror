@@ -778,7 +778,7 @@ struct ATEXT6
 
     // Justification only applies when there is a text box size specified
     // Then, the text is justified within the box
-    ALTIUM_TEXT_POSITION textbox_rect_justification;
+    ALTIUM_TEXT_POSITION textbox_rect_justification = ALTIUM_TEXT_POSITION::CENTER_CENTER;
 
     uint32_t widestring_index = 0;
 
