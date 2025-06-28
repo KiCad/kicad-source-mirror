@@ -49,8 +49,7 @@
  */
 #define UNITS3D_TO_UNITSPCB ( pcbIUScale.IU_PER_MM )
 
-RENDER_3D_OPENGL::RENDER_3D_OPENGL( EDA_3D_CANVAS* aCanvas, BOARD_ADAPTER& aAdapter,
-                                    CAMERA& aCamera ) :
+RENDER_3D_OPENGL::RENDER_3D_OPENGL( EDA_3D_CANVAS* aCanvas, BOARD_ADAPTER& aAdapter, CAMERA& aCamera ) :
         RENDER_3D_BASE( aAdapter, aCamera ),
         m_canvas( aCanvas )
 {
@@ -93,6 +92,8 @@ RENDER_3D_OPENGL::~RENDER_3D_OPENGL()
     freeAllLists();
 
     glDeleteTextures( 1, &m_circleTexture );
+
+    delete m_spheres_gizmo;
 }
 
 

@@ -140,6 +140,8 @@ JOBSET_DESTINATION::~JOBSET_DESTINATION()
         delete reporter;
 
     m_lastRunReporters.clear();
+
+    delete m_outputHandler;
 }
 
 
