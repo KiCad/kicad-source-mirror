@@ -725,7 +725,7 @@ bool SCH_SYMBOL::IsAnnotated( const SCH_SHEET_PATH* aSheet ) const
     for( const SCH_SYMBOL_INSTANCE& instance : m_instanceReferences )
     {
         if( instance.m_Path == path )
-            return instance.m_Reference.Last() != '?';
+            return !instance.m_Reference.IsEmpty() && instance.m_Reference.Last() != '?';
     }
 
     return false;
