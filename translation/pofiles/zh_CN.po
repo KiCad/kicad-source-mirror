@@ -38314,10 +38314,7 @@ msgstr ""
 "### 子句\n"
 "\n"
 "\n"
-"\n"
 "    (condition \"<expression>\")\n"
-"\n"
-"\n"
 "\n"
 "<br>"
 
@@ -38329,6 +38326,11 @@ msgid ""
 "<br><br><br>\n"
 "\n"
 msgstr ""
+"### 提示\n"
+"\n"
+"使用快捷键 Ctrl+/ 可以对行进行注释或取消注释。\n"
+"<br><br><br>\n"
+"\n"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:46
 msgid "Minimum clearance:"
@@ -41066,9 +41068,8 @@ msgid "(%s clearance %s; actual < 0)"
 msgstr "(%s 间距 %s; 实际 < 0)"
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:1436
-#, fuzzy
 msgid "(intersecting zones must have distinct priorities)"
-msgstr "弧线必须由 3 个不同的点构成"
+msgstr "(相交的填充区必须具有不同的优先级)"
 
 #: pcbnew/drc/drc_test_provider_courtyard_clearance.cpp:85
 msgid "Checking footprint courtyard definitions..."
@@ -42017,9 +42018,8 @@ msgstr "** 跳过 Face **\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1864
 #: pcbnew/exporters/step/step_pcb_model.cpp:1881
-#, fuzzy
 msgid "OCC error creating main outline.\n"
-msgstr "读取文件时出错。"
+msgstr ""
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1890
 msgid "OCC error creating hole in main outline.\n"
