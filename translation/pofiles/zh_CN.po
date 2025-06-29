@@ -49927,7 +49927,7 @@ msgstr "在锁定的项目上显示阴影标记"
 
 #: pcbnew/widgets/appearance_controls.cpp:351
 msgid "Colliding Courtyards"
-msgstr "碰触到外框"
+msgstr "外框碰撞"
 
 #: pcbnew/widgets/appearance_controls.cpp:351
 msgid "Show colliding footprint courtyards"
