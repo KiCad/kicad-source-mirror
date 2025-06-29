@@ -13549,7 +13549,7 @@ msgstr "Uteslut från mönsterkort"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:95
 msgid "Keep linked datasheet"
-msgstr "Behåll länkade datablad"
+msgstr "Behåll länkat datablad"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:98
 msgid "Keep linked footprint"
@@ -15568,9 +15568,9 @@ msgid "Are you sure you want to remove the field '%s'?"
 msgstr "Är du säker på att du vill ta bort fältet '%s'?"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:827
-#, fuzzy, c-format
+#, c-format
 msgid "The first %d fields are mandatory and names cannot be changed."
-msgstr "De första %d fälten är obligatoriska."
+msgstr "De första %d fälten är obligatoriska och deras namn kan inte ändras."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:838
 msgid "Rename Field"
@@ -15659,19 +15659,16 @@ msgstr ""
 "Vänligen använd ett annat namn."
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:43
-#, fuzzy
 msgid "Add a new field"
-msgstr "Lägg till fält"
+msgstr "Lägg till ett nytt fält"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:48
-#, fuzzy
 msgid "Rename selected field"
-msgstr "Byt namn på valt nät..."
+msgstr "Byt namn på valt fält"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:56
-#, fuzzy
 msgid "Remove selected field"
-msgstr "Ta bort inbäddad fil"
+msgstr "Ta bort valt fält"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:69
 msgid "View presets:"
@@ -16747,9 +16744,8 @@ msgid "Largest"
 msgstr "Största"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:168
-#, fuzzy
 msgid "Hop-over size:"
-msgstr "Hörnstorlek:"
+msgstr "Övergångars storlek:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:172
 msgid "Medium"
@@ -17069,14 +17065,12 @@ msgid "Nickname cannot be empty."
 msgstr "Stiftnamnet kan inte utelämnas."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:454
-#, fuzzy
 msgid "Path cannot be empty."
-msgstr "Text kan inte utelämnas."
+msgstr "Sökväg kan inte vara tom."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:467
-#, fuzzy
 msgid "Library Table Error"
-msgstr "Fel i bibliotekets kortnamn"
+msgstr "Fel i bibliotekstabell"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:475
 #, c-format
