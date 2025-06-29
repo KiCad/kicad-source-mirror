@@ -8340,7 +8340,7 @@ msgstr "Прикажи"
 
 #: common/layer_id.cpp:130
 msgid "Blind/Buried vias"
-msgstr "Слепе/сахрањене вие"
+msgstr "Слепе/закопане вие"
 
 #: common/layer_id.cpp:131
 #, fuzzy
@@ -8364,7 +8364,7 @@ msgstr "Попуњавање зона"
 
 #: common/layer_id.cpp:135
 msgid "Plated hole walls"
-msgstr ""
+msgstr "Зидови метализиране рупе"
 
 #: common/layer_id.cpp:136
 #, fuzzy
@@ -8422,7 +8422,7 @@ msgstr "Закључано: Да"
 
 #: common/layer_id.cpp:154
 msgid "Courtyard collision shadow"
-msgstr ""
+msgstr "Површина преклопа оквира"
 
 #: common/layer_id.cpp:155
 #, fuzzy
@@ -8441,7 +8441,7 @@ msgstr "Име:"
 
 #: common/lib_id.cpp:145
 msgid "Illegal character found in library nickname"
-msgstr ""
+msgstr "Нелегални карактер пронађен у надимку библиотеке"
 
 #: common/lib_table_base.cpp:544
 #, fuzzy, c-format
@@ -8518,7 +8518,7 @@ msgstr "Непрепознат слој '%s'"
 
 #: common/libeval_compiler/libeval_compiler.cpp:851
 msgid "Unknown parent of function parameters"
-msgstr ""
+msgstr "Непознати родитељ параметара функције"
 
 #: common/libeval_compiler/libeval_compiler.cpp:870
 #, fuzzy
@@ -8557,12 +8557,12 @@ msgstr "Недостаје.\n"
 #: common/libeval_compiler/libeval_compiler.cpp:1161
 #, c-format
 msgid "Type mismatch between '%s' and %lf"
-msgstr ""
+msgstr "Непоклапање типа између \"%s\" и %lf"
 
 #: common/libeval_compiler/libeval_compiler.cpp:1167
 #, c-format
 msgid "Type mismatch between %lf and '%s'"
-msgstr ""
+msgstr "Непоклапање типа између \"%lf\" и %s"
 
 #: common/netclass.cpp:297 pcbnew/component_class_manager.cpp:61
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1084 pcbnew/zone.cpp:836
