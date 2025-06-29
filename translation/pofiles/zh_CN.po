@@ -11409,7 +11409,7 @@ msgstr "导线没有连到总线入口"
 msgid ""
 "Hierarchical label \"%s\" in root sheet cannot be connected to non-existent "
 "parent sheet"
-msgstr ""
+msgstr "根图纸中的层次标签 \"%s\" 无法连接到不存在的父图纸"
 
 #: eeschema/connection_graph.cpp:4347
 #, c-format
@@ -12931,7 +12931,7 @@ msgstr "输入文本将在原理图中使用"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:63
 msgid "Multiple label input"
-msgstr ""
+msgstr "多标签输入"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:69
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:42
@@ -31534,19 +31534,16 @@ msgstr ""
 "\n"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:427
-#, fuzzy
 msgid ""
 "<br/>Change Array\n"
 "***********************<br/>"
 msgstr ""
-"\n"
-"    变更阵列\n"
-"***********************\n"
+"<br/>变更阵列\n"
+"***********************<br/>"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:435
-#, fuzzy
 msgid "(will be ignored)"
-msgstr " 将被忽略"
+msgstr "(将被忽略)"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:448
 #, fuzzy
@@ -31568,11 +31565,9 @@ msgstr ""
 "*********** 对 %s 排序 ***********"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:460
-#, fuzzy, c-format
+#, c-format
 msgid "<br/>%d %s X, Y: %s; rounded X, Y: %s"
-msgstr ""
-"\n"
-"%d %s UUID: [%s], X, Y: %s, 四舍五入的 X, Y, %s"
+msgstr "<br/>%d %s X, Y: %s; rounded X, Y(四舍五入): %s"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:482
 msgid "Selected options resulted in errors! Change them and try again."
