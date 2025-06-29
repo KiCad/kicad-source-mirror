@@ -41,7 +41,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-06-27 22:51+0300\n"
-"PO-Revision-Date: 2025-06-29 04:05+0000\n"
+"PO-Revision-Date: 2025-06-29 11:25+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/kicad/v9/zh_Hans/>\n"
@@ -10848,7 +10848,7 @@ msgstr "导线没有连到总线入口"
 msgid ""
 "Hierarchical label \"%s\" in root sheet cannot be connected to non-existent "
 "parent sheet"
-msgstr ""
+msgstr "根图纸中的层次标签 \"%s\" 无法连接到不存在的父图纸"
 
 #: eeschema/connection_graph.cpp:4257
 #, c-format
@@ -12654,7 +12654,7 @@ msgstr "输入文本将在原理图中使用"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:62
 msgid "Multiple label input"
-msgstr ""
+msgstr "多标签输入"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:68
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:42
@@ -25735,7 +25735,7 @@ msgstr "无效的钻孔格式\n"
 
 #: kicad/cli/command_pcb_export_drill.cpp:174
 msgid "Invalid zeros format specified\n"
-msgstr "指定的零格式无效\n"
+msgstr "指定的数字零格式无效\n"
 
 #: kicad/cli/command_pcb_export_drill.cpp:191
 msgid "Invalid oval drill format specified\n"
@@ -31543,7 +31543,7 @@ msgid ""
 "%d %s UUID: [%s], X, Y: %s, Rounded X, Y, %s"
 msgstr ""
 "\n"
-"%d %s UUID: [%s], X, Y: %s, 四舍五入的 X, Y, %s"
+"%d %s UUID: [%s], X, Y: %s, X, Y(四舍五入), %s"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:602
 msgid "Selected options resulted in errors! Change them and try again."
@@ -31715,7 +31715,7 @@ msgstr "不填写则从顶层位号继续, 或输入大于顶层位号最大的�
 msgid ""
 "Leave blank or zero, or enter a number greater than the highest reference "
 "designation on the front."
-msgstr "不填写或为零, 或输入一个大于顶层位号最大的数字。"
+msgstr "为零或为空, 或输入一个大于顶层位号最大的数字。"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:232
 msgid "Front prefix:"
@@ -37219,7 +37219,7 @@ msgstr "用于网格区域的平行线距离"
 
 #: pcbnew/dialogs/dialog_set_offset.cpp:66
 msgid "Reset this value to zero."
-msgstr "将该值重置为零。"
+msgstr "将该值重置为 0。"
 
 #: pcbnew/dialogs/dialog_set_offset.cpp:76
 msgid "Reset this value to the original value."
@@ -37235,7 +37235,7 @@ msgstr "设置偏移量"
 
 #: pcbnew/dialogs/dialog_shape_properties.cpp:192
 msgid "Rectangle cannot be zero-sized."
-msgstr "矩形大小不能为0。"
+msgstr "矩形大小不能为 0。"
 
 #: pcbnew/dialogs/dialog_shape_properties.cpp:451
 msgid "Arc angle must be greater than 0"
@@ -41914,12 +41914,12 @@ msgstr "** ShapeUpgrade_UnifySameDomain 产生了一个空形状 **\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:898
 msgid "OCC error adding pad/via polygon.\n"
-msgstr ""
+msgstr "添加焊盘/过孔多边形时发生 OCC 错误。\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1143
 #, c-format
 msgid "Could not add shape (%d points) to copper layer %s.\n"
-msgstr ""
+msgstr "无法将形状 (%d 点) 添加到铜层 %s。\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1161
 #, c-format
@@ -41944,12 +41944,12 @@ msgstr "无法添加文件名为'%s'的组件。\n"
 #: pcbnew/exporters/step/step_pcb_model.cpp:1367
 #, c-format
 msgid "OCC exception building shape segment: %s\n"
-msgstr ""
+msgstr "构建形状段时发生 OCC 异常: %s\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1382
 #, c-format
 msgid "OCC exception building face: %s\n"
-msgstr ""
+msgstr "构建面时发生 OCC 异常: %s\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1394
 #: pcbnew/exporters/step/step_pcb_model.cpp:1763
@@ -41959,29 +41959,30 @@ msgstr "创建 prismatic 形状失败\n"
 #: pcbnew/exporters/step/step_pcb_model.cpp:1446
 #, c-format
 msgid "Failed to make segment edge (%d %d) -> (%d %d), skipping\n"
-msgstr ""
+msgstr "生成线段边 (%d %d) -> (%d %d) 失败, 跳过该段\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1458
 #, c-format
 msgid "Failed to add segment edge (%d %d) -> (%d %d)\n"
-msgstr ""
+msgstr "添加线段边 (%d %d) -> (%d %d) 失败\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1494
 #, c-format
 msgid ""
 "Failed to add arc curve from (%d %d), arc p0 (%d %d), mid (%d %d), p1 (%d "
 "%d)\n"
-msgstr ""
+msgstr "添加弧形曲线失败, 起点 (%d %d), 弧点 p0 (%d %d), 中点 (%d %d), 终点 p1 (%d "
+"%d)\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1570
 #, c-format
 msgid "Failed to close wire at %d, %d -> %d, %d **\n"
-msgstr ""
+msgstr "闭合连线失败, 位置 %d, %d -> %d, %d **\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1580
 #, c-format
 msgid "OCC exception creating wire: %s\n"
-msgstr ""
+msgstr "创建连时发生 OCC 异常: %s\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1661
 #, c-format
@@ -42008,7 +42009,7 @@ msgstr "使用非简化的多边形\n"
 #: pcbnew/exporters/step/step_pcb_model.cpp:1744
 #, c-format
 msgid "OCC exception creating contour %d: %s\n"
-msgstr ""
+msgstr "创建轮廓 %d 时发生 OCC 异常: %s\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1774
 msgid "** Face skipped **\n"
@@ -42017,11 +42018,11 @@ msgstr "** 跳过 Face **\n"
 #: pcbnew/exporters/step/step_pcb_model.cpp:1864
 #: pcbnew/exporters/step/step_pcb_model.cpp:1881
 msgid "OCC error creating main outline.\n"
-msgstr ""
+msgstr "创建主轮廓时发生 OCC 错误。\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1890
 msgid "OCC error creating hole in main outline.\n"
-msgstr ""
+msgstr "在主轮廓中创建孔时发生 OCC 错误。\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1932
 #, c-format
@@ -42061,7 +42062,7 @@ msgstr "STEP 产物名称设置失败, 但将尝试继续。"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2330
 msgid "Failed to set surface curve mode, but will attempt to continue."
-msgstr ""
+msgstr "设置曲面曲线模式失败, 但将尝试继续。"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2371
 #: pcbnew/exporters/step/step_pcb_model.cpp:3153
@@ -50697,7 +50698,7 @@ msgstr "移除所有自定义分组"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1416
 msgid "Show Zero Pad Nets"
-msgstr "显示 0 焊盘网络"
+msgstr "显示零焊盘网络"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1422
 msgid "Show Unconnected Nets"
