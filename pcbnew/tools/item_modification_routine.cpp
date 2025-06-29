@@ -108,13 +108,10 @@ wxString LINE_FILLET_ROUTINE::GetCommitDescription() const
 std::optional<wxString> LINE_FILLET_ROUTINE::GetStatusMessage( int aSegmentCount ) const
 {
     if( GetSuccesses() == 0 )
-    {
         return _( "Unable to fillet the selected lines." );
-    }
     else if( GetFailures() > 0 || (int) GetSuccesses() < aSegmentCount - 1 )
-    {
         return _( "Some of the lines could not be filleted." );
-    }
+
     return std::nullopt;
 }
 
@@ -203,13 +200,10 @@ wxString LINE_CHAMFER_ROUTINE::GetCommitDescription() const
 std::optional<wxString> LINE_CHAMFER_ROUTINE::GetStatusMessage( int aSegmentCount ) const
 {
     if( GetSuccesses() == 0 )
-    {
         return _( "Unable to chamfer the selected lines." );
-    }
     else if( GetFailures() > 0 || (int) GetSuccesses() < aSegmentCount - 1 )
-    {
         return _( "Some of the lines could not be chamfered." );
-    }
+
     return std::nullopt;
 }
 
@@ -272,13 +266,9 @@ std::optional<wxString> DOGBONE_CORNER_ROUTINE::GetStatusMessage( int aSegmentCo
     wxString msg;
 
     if( GetSuccesses() == 0 )
-    {
         msg += _( "Unable to add dogbone corners to the selected lines." );
-    }
     else if( GetFailures() > 0 || (int) GetSuccesses() < aSegmentCount - 1 )
-    {
         msg += _( "Some of the lines could not have dogbone corners added." );
-    }
 
     if( m_haveNarrowMouths )
     {
@@ -389,13 +379,10 @@ wxString LINE_EXTENSION_ROUTINE::GetCommitDescription() const
 std::optional<wxString> LINE_EXTENSION_ROUTINE::GetStatusMessage( int aSegmentCount ) const
 {
     if( GetSuccesses() == 0 )
-    {
         return _( "Unable to extend the selected lines to meet." );
-    }
     else if( GetFailures() > 0 || (int) GetSuccesses() < aSegmentCount - 1 )
-    {
         return _( "Some of the lines could not be extended to meet." );
-    }
+
     return std::nullopt;
 }
 
@@ -553,20 +540,17 @@ void POLYGON_BOOLEAN_ROUTINE::Finalize()
 
 wxString POLYGON_MERGE_ROUTINE::GetCommitDescription() const
 {
-    return _( "Merge polygons." );
+    return _( "Merge Polygons" );
 }
 
 
 std::optional<wxString> POLYGON_MERGE_ROUTINE::GetStatusMessage() const
 {
     if( GetSuccesses() == 0 )
-    {
         return _( "Unable to merge the selected polygons." );
-    }
     else if( GetFailures() > 0 )
-    {
         return _( "Some of the polygons could not be merged." );
-    }
+
     return std::nullopt;
 }
 
@@ -580,20 +564,17 @@ bool POLYGON_MERGE_ROUTINE::ProcessSubsequentPolygon( const SHAPE_POLY_SET& aPol
 
 wxString POLYGON_SUBTRACT_ROUTINE::GetCommitDescription() const
 {
-    return _( "Subtract polygons." );
+    return _( "Subtract Polygons" );
 }
 
 
 std::optional<wxString> POLYGON_SUBTRACT_ROUTINE::GetStatusMessage() const
 {
     if( GetSuccesses() == 0 )
-    {
         return _( "Unable to subtract the selected polygons." );
-    }
     else if( GetFailures() > 0 )
-    {
         return _( "Some of the polygons could not be subtracted." );
-    }
+
     return std::nullopt;
 }
 
@@ -621,20 +602,17 @@ bool POLYGON_SUBTRACT_ROUTINE::ProcessSubsequentPolygon( const SHAPE_POLY_SET& a
 
 wxString POLYGON_INTERSECT_ROUTINE::GetCommitDescription() const
 {
-    return _( "Intersect polygons." );
+    return _( "Intersect Polygons" );
 }
 
 
 std::optional<wxString> POLYGON_INTERSECT_ROUTINE::GetStatusMessage() const
 {
     if( GetSuccesses() == 0 )
-    {
         return _( "Unable to intersect the selected polygons." );
-    }
     else if( GetFailures() > 0 )
-    {
         return _( "Some of the polygons could not be intersected." );
-    }
+
     return std::nullopt;
 }
 
@@ -660,19 +638,16 @@ bool POLYGON_INTERSECT_ROUTINE::ProcessSubsequentPolygon( const SHAPE_POLY_SET& 
 
 wxString OUTSET_ROUTINE::GetCommitDescription() const
 {
-    return _( "Outset items." );
+    return _( "Outset Items" );
 }
 
 std::optional<wxString> OUTSET_ROUTINE::GetStatusMessage() const
 {
     if( GetSuccesses() == 0 )
-    {
         return _( "Unable to outset the selected items." );
-    }
     else if( GetFailures() > 0 )
-    {
         return _( "Some of the items could not be outset." );
-    }
+
     return std::nullopt;
 }
 
