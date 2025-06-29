@@ -38291,7 +38291,7 @@ msgstr "单击:"
 #: pcbnew/dialogs/panel_edit_options_base.cpp:151
 #: pcbnew/dialogs/panel_edit_options_base.cpp:225
 msgid "Long Click:"
-msgstr "长按:"
+msgstr "长击:"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:171
 msgid "Ctrl+Shift:"
@@ -38309,13 +38309,12 @@ msgid "Highlight net (for pads/tracks)"
 msgstr "高亮网络 (焊盘或走线)"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:245
-#, fuzzy
 msgid "Shift+Cmd:"
-msgstr "Shift+Cmd"
+msgstr "Shift+Cmd:"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:255
 msgid "Cmd:"
-msgstr ""
+msgstr "Cmd:"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:272
 #, fuzzy
