@@ -41,7 +41,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-06-27 22:51+0300\n"
-"PO-Revision-Date: 2025-06-29 02:37+0000\n"
+"PO-Revision-Date: 2025-06-29 04:05+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/kicad/v9/zh_Hans/>\n"
@@ -8172,7 +8172,7 @@ msgstr "锁定的项目阴影"
 
 #: common/layer_id.cpp:154
 msgid "Courtyard collision shadow"
-msgstr "元件外框碰撞阴影"
+msgstr "安全边界碰撞阴影"
 
 #: common/layer_id.cpp:155
 msgid "Track net names"
@@ -34284,7 +34284,7 @@ msgstr "从定位文件中移除"
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:209
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:211
 msgid "Exempt from courtyard requirement"
-msgstr "忽略封装外框要求"
+msgstr "忽略封装安全边界要求"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:210
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:212
