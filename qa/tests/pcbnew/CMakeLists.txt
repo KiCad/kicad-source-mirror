@@ -65,6 +65,7 @@ set( QA_PCBNEW_SRCS
     drc/test_drc_skew.cpp
     drc/test_drc_component_classes.cpp
     drc/test_drc_incorrect_text_mirror.cpp
+    drc/test_drc_unconnected_items_exclusion_loss.cpp
 
     pcb_io/altium/test_altium_rule_transformer.cpp
     pcb_io/altium/test_altium_pcblib_import.cpp

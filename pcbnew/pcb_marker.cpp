@@ -23,6 +23,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include "connectivity/connectivity_data.h"
 #include <bitmaps.h>
 #include <base_units.h>
 #include <eda_draw_frame.h>
@@ -107,6 +108,17 @@ wxString PCB_MARKER::SerializeToString() const
                                  m_rcItem->GetMainItemID().AsString(),
                                  LayerName( m_layer ) );
     }
+    else if( m_rcItem->GetErrorCode() == DRCE_UNCONNECTED_ITEMS )
+    {
+        PCB_LAYER_ID layer = m_layer;
+        if( m_layer == UNDEFINED_LAYER )
+            layer = F_Cu;
+
+        return wxString::Format( wxT( "%s|%d|%d|%s|%d|%s|%s" ), m_rcItem->GetSettingsKey(), m_Pos.x,
+                                 m_Pos.y, LayerName( layer ), GetMarkerType(),
+                                 m_rcItem->GetMainItemID().AsString(),
+                                 m_rcItem->GetAuxItemID().AsString() );
+    }
     else if( m_rcItem->GetErrorCode() == DRCE_STARVED_THERMAL )
     {
         return wxString::Format( wxT( "%s|%d|%d|%s|%s|%s" ),
@@ -171,6 +183,18 @@ PCB_MARKER* PCB_MARKER::DeserializeFromString( const wxString& data )
         drcItem->SetItems( KIID( props[3] ) );
         markerLayer = getMarkerLayer( props[4] );
     }
+    else if( drcItem->GetErrorCode() == DRCE_UNCONNECTED_ITEMS )
+    {
+        // Pre-9.0.3 versions didn't have KIIDs as last two properties to allow sorting stability
+        if( props.size() < 6 )
+        {
+            drcItem->SetItems( KIID( props[3] ), KIID( props[4] ) );
+        }
+        else
+        {
+            drcItem->SetItems( KIID( props[5] ), KIID( props[6] ) );
+        }
+    }
     else if( drcItem->GetErrorCode() == DRCE_STARVED_THERMAL )
     {
         drcItem->SetItems( KIID( props[3] ), KIID( props[4] ) );
@@ -204,9 +228,7 @@ void PCB_MARKER::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_
     case RPT_SEVERITY_IGNORE:
         aList.emplace_back( _( "Severity" ), _( "Ignore" ) );
         break;
-    case RPT_SEVERITY_WARNING:
-        aList.emplace_back( _( "Severity" ), _( "Warning" ) );
-        break;
+    case RPT_SEVERITY_WARNING: aList.emplace_back( _( "Severity" ), _( "Warning" ) ); break;
     case RPT_SEVERITY_ERROR:
         aList.emplace_back( _( "Severity" ), _( "Error" ) );
         break;

@@ -32,6 +32,7 @@
 #ifndef RATSNEST_DATA_H
 #define RATSNEST_DATA_H
 
+#include <algorithm>
 #include <core/typeinfo.h>
 #include <math/box2.h>
 
@@ -93,8 +94,28 @@ public:
 
     unsigned int GetNodeCount() const { return m_nodes.size(); }
 
-    const std::vector<CN_EDGE>& GetEdges() const { return m_rnEdges; }
-    std::vector<CN_EDGE>& GetEdges() { return m_rnEdges; }
+    const std::vector<CN_EDGE>& GetEdges() const
+    {
+        // Use a const_cast to allow sorting in the const method
+        // This is safe because we're not changing the logical content of the vector,
+        // just the ordering of elements
+        std::stable_sort( const_cast<std::vector<CN_EDGE>&>( m_rnEdges ).begin(),
+                          const_cast<std::vector<CN_EDGE>&>( m_rnEdges ).end(),
+                          []( const CN_EDGE& a, const CN_EDGE& b )
+                          {
+                              return a.StableSortCompare( b );
+                          } );
+        return m_rnEdges;
+    }
+    std::vector<CN_EDGE>& GetEdges()
+    {
+        std::stable_sort( m_rnEdges.begin(), m_rnEdges.end(),
+                          []( const CN_EDGE& a, const CN_EDGE& b )
+                          {
+                              return a.StableSortCompare( b );
+                          } );
+        return m_rnEdges;
+    }
 
     bool NearestBicoloredPair( RN_NET* aOtherNet, VECTOR2I& aPos1, VECTOR2I& aPos2 ) const;
 

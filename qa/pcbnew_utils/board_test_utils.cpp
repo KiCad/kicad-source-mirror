@@ -84,9 +84,17 @@ void LoadBoard( SETTINGS_MANAGER& aSettingsManager, const wxString& aRelPath,
     wxFileName  rulesFile( absPath + ".kicad_dru" );
 
     if( projectFile.Exists() )
+    {
         aSettingsManager.LoadProject( projectFile.GetFullPath() );
+        BOOST_TEST_MESSAGE( "Loading project file: " << projectFile.GetFullPath() );
+    }
     else if( legacyProject.Exists() )
+    {
         aSettingsManager.LoadProject( legacyProject.GetFullPath() );
+        BOOST_TEST_MESSAGE( "Loading project file: " << projectFile.GetFullPath() );
+    }
+    else
+        BOOST_TEST_MESSAGE( "Could not load project: " << projectFile.GetFullPath() );
 
     BOOST_TEST_MESSAGE( "Loading board file: " << boardPath );
 

@@ -1184,6 +1184,7 @@ void DIALOG_DRC::ExcludeMarker()
         return;
 
     RC_TREE_NODE* node = RC_TREE_MODEL::ToNode( m_markerDataView->GetCurrentItem() );
+
     PCB_MARKER*   marker = dynamic_cast<PCB_MARKER*>( node->m_RcItem->GetParent() );
 
     if( marker && marker->GetSeverity() != RPT_SEVERITY_EXCLUSION )

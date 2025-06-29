@@ -86,6 +86,42 @@ public:
         return m_weight < aOther.m_weight;
     }
 
+    /**
+     * Comparison operator for std::stable_sort.
+     *
+     * @param aOther the other edge to compare.
+     * @return true if this edge should come before aOther in the sorted order.
+     *
+     * Comparison order:
+     * 1. Compare source nodes by position (x, then y)
+     * 2. Then compare by weight
+     * 3. Then by visibility
+     * 4. If everything is equal, return false for stable ordering
+     */
+    bool StableSortCompare( const CN_EDGE& aOther ) const
+    {
+        const VECTOR2I& thisPos = GetSourcePos();
+        const VECTOR2I& otherPos = aOther.GetSourcePos();
+
+        // First compare by source node position
+        if( thisPos.x != otherPos.x )
+            return thisPos.x < otherPos.x;
+
+        if( thisPos.y != otherPos.y )
+            return thisPos.y < otherPos.y;
+
+        // Then compare by weight
+        if( m_weight != aOther.m_weight )
+            return m_weight < aOther.m_weight;
+
+        // Then by visibility
+        if( m_visible != aOther.m_visible )
+            return m_visible && !aOther.m_visible;
+
+        // If everything is equal, return false for stable ordering
+        return false;
+    }
+
     std::shared_ptr<const CN_ANCHOR> GetSourceNode() const { return m_source; }
     std::shared_ptr<const CN_ANCHOR> GetTargetNode() const { return m_target; }
 
