@@ -42,7 +42,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-06-27 22:51+0300\n"
-"PO-Revision-Date: 2025-06-22 20:04+0000\n"
+"PO-Revision-Date: 2025-06-29 09:01+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/kicad/master-source/zh_Hans/>\n"
@@ -8438,7 +8438,7 @@ msgstr "锁定的项目阴影"
 
 #: common/layer_id.cpp:154
 msgid "Courtyard collision shadow"
-msgstr "元件外框碰撞阴影"
+msgstr "安全边界碰撞阴影"
 
 #: common/layer_id.cpp:155
 #, fuzzy
@@ -34708,7 +34708,7 @@ msgstr "元件外框"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:326
 msgid "Exempt from courtyard requirement"
-msgstr "忽略封装外框要求"
+msgstr "忽略封装安全边界要求"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:327
 msgid "Will not generate \"missing courtyard\" DRC violations"
@@ -38019,9 +38019,8 @@ msgid "Update Footprints"
 msgstr "更新封装"
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:44
-#, fuzzy
 msgid "Replace footprints with those specified by symbols"
-msgstr "将封装替换为网表中指定的封装"
+msgstr "用符号指定的封装替换原有封装"
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:46
 msgid ""
@@ -38047,9 +38046,8 @@ msgid "Override locks"
 msgstr "忽略锁定设置"
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:67
-#, fuzzy
 msgid "Update footprint fields from symbols"
-msgstr "没有为符号 %s 定义封装。"
+msgstr "从符号更新封装字段"
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:71
 #, fuzzy
