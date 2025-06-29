@@ -11405,11 +11405,11 @@ msgid "Unconnected wire to bus entry"
 msgstr "导线没有连到总线入口"
 
 #: eeschema/connection_graph.cpp:4282
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Hierarchical label \"%s\" in root sheet cannot be connected to non-existent "
 "parent sheet"
-msgstr "层次标签 %s 在父图纸内没有匹配的图纸引脚"
+msgstr ""
 
 #: eeschema/connection_graph.cpp:4347
 #, c-format
@@ -12931,7 +12931,7 @@ msgstr "输入文本将在原理图中使用"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:63
 msgid "Multiple label input"
-msgstr "多标签输入"
+msgstr ""
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:69
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:42
@@ -38051,7 +38051,7 @@ msgstr "从符号更新封装字段"
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:71
 msgid "Remove footprint fields not found in symbols"
-msgstr "移除无法在符号中找到的封装字段。"
+msgstr "移除无法在符号中找到的封装字段"
 
 #: pcbnew/dialogs/dialog_update_pcb_base.h:57
 msgid "Update PCB from Schematic"
@@ -42370,12 +42370,12 @@ msgstr "** ShapeUpgrade_UnifySameDomain 产生了一个空形状 **\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:944
 msgid "OCC error adding pad/via polygon.\n"
-msgstr ""
+msgstr "添加焊盘/过孔多边形时发生 OCC 错误。\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1189
 #, c-format
 msgid "Could not add shape (%d points) to copper layer %s.\n"
-msgstr ""
+msgstr "无法将形状 (%d 点) 添加到铜层 %s。\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1207
 #, c-format
@@ -42400,12 +42400,12 @@ msgstr "无法添加文件名为'%s'的组件。\n"
 #: pcbnew/exporters/step/step_pcb_model.cpp:1413
 #, c-format
 msgid "OCC exception building shape segment: %s\n"
-msgstr ""
+msgstr "构建形状段时发生 OCC 异常: %s\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1428
 #, c-format
 msgid "OCC exception building face: %s\n"
-msgstr ""
+msgstr "构建面时发生 OCC 异常: %s\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1440
 #: pcbnew/exporters/step/step_pcb_model.cpp:1830
@@ -42415,29 +42415,30 @@ msgstr "创建 prismatic 形状失败\n"
 #: pcbnew/exporters/step/step_pcb_model.cpp:1512
 #, c-format
 msgid "Failed to make segment edge (%d %d) -> (%d %d), skipping\n"
-msgstr ""
+msgstr "生成线段边 (%d %d) -> (%d %d) 失败, 跳过该段\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1524
 #, c-format
 msgid "Failed to add segment edge (%d %d) -> (%d %d)\n"
-msgstr ""
+msgstr "添加线段边 (%d %d) -> (%d %d) 失败\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1560
 #, c-format
 msgid ""
 "Failed to add arc curve from (%d %d), arc p0 (%d %d), mid (%d %d), p1 (%d "
 "%d)\n"
-msgstr ""
+msgstr "添加弧形曲线失败, 起点 (%d %d), 弧点 p0 (%d %d), 中点 (%d %d), 终点 p1 (%d "
+"%d)\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1636
 #, c-format
 msgid "Failed to close wire at %d, %d -> %d, %d **\n"
-msgstr ""
+msgstr "闭合连线失败, 位置 %d, %d -> %d, %d **\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1646
 #, c-format
 msgid "OCC exception creating wire: %s\n"
-msgstr ""
+msgstr "创建连时发生 OCC 异常: %s\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1728
 #, c-format
@@ -42464,7 +42465,7 @@ msgstr "使用非简化的多边形\n"
 #: pcbnew/exporters/step/step_pcb_model.cpp:1811
 #, c-format
 msgid "OCC exception creating contour %d: %s\n"
-msgstr ""
+msgstr "创建轮廓 %d 时发生 OCC 异常: %s\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1841
 msgid "** Face skipped **\n"
@@ -42473,11 +42474,11 @@ msgstr "** 跳过 Face **\n"
 #: pcbnew/exporters/step/step_pcb_model.cpp:1931
 #: pcbnew/exporters/step/step_pcb_model.cpp:1948
 msgid "OCC error creating main outline.\n"
-msgstr ""
+msgstr "创建主轮廓时发生 OCC 错误。\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1957
 msgid "OCC error creating hole in main outline.\n"
-msgstr ""
+msgstr "在主轮廓中创建孔时发生 OCC 错误。\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2000
 #, c-format
@@ -42517,7 +42518,7 @@ msgstr "STEP 产物名称设置失败, 但将尝试继续。"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2397
 msgid "Failed to set surface curve mode, but will attempt to continue."
-msgstr ""
+msgstr "设置曲面曲线模式失败, 但将尝试继续。"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2438
 #: pcbnew/exporters/step/step_pcb_model.cpp:3218
