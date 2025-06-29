@@ -35,14 +35,13 @@
 #include <gestfich.h>
 
 JOBS_RUNNER::JOBS_RUNNER( KIWAY* aKiway, JOBSET* aJobsFile, PROJECT* aProject,
-                          REPORTER* aReporter ) :
+                          REPORTER& aReporter, JOBS_PROGRESS_REPORTER* aProgressReporter ) :
         m_kiway( aKiway ),
         m_jobsFile( aJobsFile ),
         m_reporter( aReporter ),
+        m_progressReporter( aProgressReporter ),
         m_project( aProject )
 {
-    if( !m_reporter )
-        m_reporter = &NULL_REPORTER::GetInstance();
 }
 
 
@@ -138,8 +137,9 @@ int JOBS_RUNNER::runSpecialCopyFiles( const JOBSET_JOB* aJob, PROJECT* aProject 
 class JOBSET_OUTPUT_REPORTER : public WX_STRING_REPORTER
 {
 public:
-    JOBSET_OUTPUT_REPORTER( const wxString& aTempDirPath ) :
-            m_tempDirPath( aTempDirPath )
+    JOBSET_OUTPUT_REPORTER( const wxString& aTempDirPath, PROGRESS_REPORTER* aProgressReporter ) :
+            m_tempDirPath( aTempDirPath ),
+            m_progressReporter( aProgressReporter )
     {
     }
 
@@ -153,12 +153,19 @@ public:
         if( aSeverity == RPT_SEVERITY_ACTION )
             text.Replace( m_tempDirPath, wxEmptyString );
 
+        if( m_progressReporter )
+        {
+            m_progressReporter->Report( text );
+            m_progressReporter->KeepRefreshing();
+        }
+
         return WX_STRING_REPORTER::Report( text, aSeverity );
     }
 
 private:
-    wxString m_tempDirPath;
-    bool     m_includeDebug;
+    wxString           m_tempDirPath;
+    bool               m_includeDebug;
+    PROGRESS_REPORTER* m_progressReporter;
 };
 
 
@@ -184,11 +191,8 @@ bool JOBS_RUNNER::RunJobsForDestination( JOBSET_DESTINATION* aDestination, bool 
 
     if( !wxFileName::Mkdir( tempDirPath, wxS_DIR_DEFAULT ) )
     {
-		if( m_reporter )
-		{
-			msg = wxString::Format( wxT( "Failed to create temporary directory %s" ), tempDirPath );
-			m_reporter->Report( msg, RPT_SEVERITY_ERROR );
-		}
+        msg = wxString::Format( wxT( "Failed to create temporary directory %s" ), tempDirPath );
+        m_reporter.Report( msg, RPT_SEVERITY_ERROR );
 
         aDestination->m_lastRunSuccess = false;
 
@@ -199,45 +203,39 @@ bool JOBS_RUNNER::RunJobsForDestination( JOBSET_DESTINATION* aDestination, bool 
 
     if( !continueOuput )
     {
-        if( m_reporter )
-        {
-            msg = wxString::Format( wxT( "Output precheck failed for output %s" ),
-                                    aDestination->m_id );
-            m_reporter->Report( msg, RPT_SEVERITY_ERROR );
-        }
+        msg = wxString::Format( wxT( "Destination precheck failed for destination %s" ),
+                                aDestination->m_id );
+        m_reporter.Report( msg, RPT_SEVERITY_ERROR );
 
         aDestination->m_lastRunSuccess = false;
         return false;
     }
 
-    if( m_reporter != nullptr )
+    msg += wxT( "|--------------------------------\n" );
+    msg += wxT( "| " );
+    msg += wxString::Format( wxT( "Running jobs for destination %s" ), aDestination->m_id );
+    msg += wxT( "\n" );
+    msg += wxT( "|--------------------------------\n" );
+
+    msg += wxString::Format( wxT( "|%-5s | %-50s\n" ), wxT( "No." ), wxT( "Description" ) );
+
+    int jobNum = 1;
+
+    for( const JOBSET_JOB& job : jobsForDestination )
     {
-        msg += wxT( "|--------------------------------\n" );
-        msg += wxT( "| " );
-        msg += wxString::Format( wxT( "Performing jobs for output %s" ), aDestination->m_id );
-        msg += wxT( "\n" );
-        msg += wxT( "|--------------------------------\n" );
-
-        msg += wxString::Format( wxT( "|%-5s | %-50s\n" ), wxT( "No." ), wxT( "Description" ) );
-
-        int jobNum = 1;
-
-        for( const JOBSET_JOB& job : jobsForDestination )
-        {
-            msg += wxString::Format( wxT( "|%-5d | %-50s\n" ), jobNum, job.GetDescription() );
-            jobNum++;
-        }
-
-        msg += wxT( "|--------------------------------\n" );
-        msg += wxT( "\n" );
-        msg += wxT( "\n" );
-
-        m_reporter->Report( msg, RPT_SEVERITY_INFO );
+        msg += wxString::Format( wxT( "|%-5d | %-50s\n" ), jobNum, job.GetDescription() );
+        jobNum++;
     }
+
+    msg += wxT( "|--------------------------------\n" );
+    msg += wxT( "\n" );
+    msg += wxT( "\n" );
+
+    m_reporter.Report( msg, RPT_SEVERITY_INFO );
 
     std::vector<JOB_OUTPUT> outputs;
 
-    int jobNum = 1;
+    jobNum = 1;
     int failCount = 0;
     int successCount = 0;
 
@@ -245,28 +243,33 @@ bool JOBS_RUNNER::RunJobsForDestination( JOBSET_DESTINATION* aDestination, bool 
 
     for( const JOBSET_JOB& job : jobsForDestination )
     {
-        if( m_reporter != nullptr )
+        msg = wxT( "|--------------------------------\n" );
+
+        msg += wxString::Format( wxT( "| Running job %d: %s" ), jobNum, job.GetDescription() );
+
+        msg += wxT( "\n" );
+        msg += wxT( "|--------------------------------\n" );
+
+        m_reporter.Report( msg, RPT_SEVERITY_INFO );
+
+        if( m_progressReporter )
         {
-            msg = wxT( "|--------------------------------\n" );
-
-            msg += wxString::Format( wxT( "| Running job %d, %s" ), jobNum, job.GetDescription() );
-            jobNum++;
-
-            msg += wxT( "\n" );
-            msg += wxT( "|--------------------------------\n" );
-
-            m_reporter->Report( msg, RPT_SEVERITY_INFO );
+            msg.Printf( _( "Running job %d: %s" ), jobNum, job.GetDescription() );
+            m_progressReporter->AdvanceJob( msg );
+            m_progressReporter->KeepRefreshing();
         }
+
+        jobNum++;
 
         KIWAY::FACE_T iface = JOB_REGISTRY::GetKifaceType( job.m_type );
 
         job.m_job->SetTempOutputDirectory( tempDirPath );
 
-        REPORTER* reporterToUse = m_reporter;
+        REPORTER* reporterToUse = &m_reporter;
 
-        if( !reporterToUse || reporterToUse == &NULL_REPORTER::GetInstance() )
+        if( reporterToUse == &NULL_REPORTER::GetInstance() )
         {
-            reporterToUse = new JOBSET_OUTPUT_REPORTER( tempDirPath );
+            reporterToUse = new JOBSET_OUTPUT_REPORTER( tempDirPath, m_progressReporter );
             aDestination->m_lastRunReporters[job.m_id] = reporterToUse;
         }
 
@@ -275,7 +278,7 @@ bool JOBS_RUNNER::RunJobsForDestination( JOBSET_DESTINATION* aDestination, bool 
 
         if( iface < KIWAY::KIWAY_FACE_COUNT )
         {
-            result = m_kiway->ProcessJob( iface, job.m_job.get(), reporterToUse );
+            result = m_kiway->ProcessJob( iface, job.m_job.get(), reporterToUse, m_progressReporter );
         }
         else
         {
@@ -292,26 +295,23 @@ bool JOBS_RUNNER::RunJobsForDestination( JOBSET_DESTINATION* aDestination, bool 
 
         aDestination->m_lastRunSuccessMap[job.m_id] = ( result == CLI::EXIT_CODES::SUCCESS );
 
-        if( m_reporter )
+        if( result == CLI::EXIT_CODES::SUCCESS )
         {
-            if( result == CLI::EXIT_CODES::SUCCESS )
-            {
-                wxString msg_fmt = wxT( "\033[32;1m%s\033[0m\n" );
-                msg = wxString::Format( msg_fmt, _( "Job successful" ) );
+            wxString msg_fmt = wxT( "\033[32;1m%s\033[0m\n" );
+            msg = wxString::Format( msg_fmt, _( "Job successful" ) );
 
-                successCount++;
-            }
-            else
-            {
-                wxString msg_fmt = wxT( "\033[31;1m%s\033[0m\n" );
-                msg = wxString::Format( msg_fmt, _( "Job failed" ) );
-
-                failCount++;
-            }
-
-            msg += wxT( "\n\n" );
-            m_reporter->Report( msg, RPT_SEVERITY_INFO );
+            successCount++;
         }
+        else
+        {
+            wxString msg_fmt = wxT( "\033[31;1m%s\033[0m\n" );
+            msg = wxString::Format( msg_fmt, _( "Job failed" ) );
+
+            failCount++;
+        }
+
+        msg += wxT( "\n\n" );
+        m_reporter.Report( msg, RPT_SEVERITY_INFO );
 
         if( result == CLI::EXIT_CODES::ERR_RC_VIOLATIONS )
         {
@@ -337,16 +337,13 @@ bool JOBS_RUNNER::RunJobsForDestination( JOBSET_DESTINATION* aDestination, bool 
 
     aDestination->m_lastRunSuccess = success;
 
-    if( m_reporter )
-    {
-        msg = wxString::Format( wxT( "\n\n\033[33;1m%d %s, %d %s\033[0m\n" ),
-                                successCount,
-                                wxT( "jobs succeeded" ),
-                                failCount,
-                                wxT( "job failed" ) );
+    msg = wxString::Format( wxT( "\n\n\033[33;1m%d %s, %d %s\033[0m\n" ),
+                            successCount,
+                            wxT( "jobs succeeded" ),
+                            failCount,
+                            wxT( "job failed" ) );
 
-        m_reporter->Report( msg, RPT_SEVERITY_INFO );
-    }
+    m_reporter.Report( msg, RPT_SEVERITY_INFO );
 
 	return success;
 }

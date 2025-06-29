@@ -20,18 +20,48 @@
 
 #pragma once
 
+#include <widgets/wx_progress_reporters.h>
+
 class JOBSET;
 struct JOBSET_DESTINATION;
 struct JOBSET_JOB;
 class KIWAY;
 class REPORTER;
+class PROGRESS_REPORTER;
 class PROJECT;
+
+class JOBS_PROGRESS_REPORTER : public WX_PROGRESS_REPORTER
+{
+public:
+    JOBS_PROGRESS_REPORTER(wxWindow* aParent, const wxString& aTitle ) :
+            WX_PROGRESS_REPORTER( aParent, aTitle, 1000, false )
+    {}
+
+    void AdvancePhase() override
+    {
+    }
+
+    void AdvanceJob( const wxString& aMessage )
+    {
+        m_jobStatus = aMessage;
+        WX_PROGRESS_REPORTER::Report( aMessage );
+    }
+
+    void Report( const wxString& aMessage ) override
+    {
+        WX_PROGRESS_REPORTER::Report( m_jobStatus + wxS( "\n" ) + aMessage );
+    }
+
+private:
+    wxString m_jobStatus;
+};
+
 
 class JOBS_RUNNER
 {
 public:
     JOBS_RUNNER( KIWAY* aKiway, JOBSET* aJobsFile, PROJECT* aProject,
-                 REPORTER* aReporter = nullptr );
+                 REPORTER& aReporter, JOBS_PROGRESS_REPORTER* aProgressReporter );
 
     bool RunJobsAllDestinations( bool aBail = false );
     bool RunJobsForDestination( JOBSET_DESTINATION* aDestination, bool aBail = false );
@@ -41,8 +71,9 @@ private:
     int runSpecialCopyFiles( const JOBSET_JOB* aJob, PROJECT* aProject );
 
 private:
-    KIWAY*          m_kiway;
-    JOBSET*         m_jobsFile;
-    REPORTER*       m_reporter;
-    PROJECT*        m_project;
+    KIWAY*                  m_kiway;
+    JOBSET*                 m_jobsFile;
+    REPORTER&               m_reporter;
+    JOBS_PROGRESS_REPORTER* m_progressReporter;
+    PROJECT*                m_project;
 };

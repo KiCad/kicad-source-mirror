@@ -50,6 +50,7 @@
 #include <drawing_sheet/ds_data_model.h>
 #include <paths.h>
 #include <reporter.h>
+#include <progress_reporter.h>
 #include <string_utils.h>
 
 #include <settings/settings_manager.h>
@@ -228,8 +229,7 @@ void EESCHEMA_JOBS_HANDLER::InitRenderSettings( SCH_RENDER_SETTINGS* aRenderSett
 
                 if( !DS_DATA_MODEL::GetTheInstance().LoadDrawingSheet( absolutePath, &msg ) )
                 {
-                    m_reporter->Report( wxString::Format( _( "Error loading drawing sheet '%s'." ),
-                                                          path )
+                    m_reporter->Report( wxString::Format( _( "Error loading drawing sheet '%s'." ), path )
                                             + wxS( "\n" ) + msg + wxS( "\n" ),
                                         RPT_SEVERITY_ERROR );
                     return false;
@@ -981,6 +981,9 @@ int EESCHEMA_JOBS_HANDLER::JobSymExportSvg( JOB* aJob )
         return CLI::EXIT_CODES::ERR_UNKNOWN;
     }
 
+    if( m_progressReporter )
+        m_progressReporter->KeepRefreshing();
+
     LIB_SYMBOL* symbol = nullptr;
 
     if( !svgJob->m_symbol.IsEmpty() )
@@ -1021,6 +1024,12 @@ int EESCHEMA_JOBS_HANDLER::JobSymExportSvg( JOB* aJob )
 
         for( const auto& [name, libSymbol] : libSymMap )
         {
+            if( m_progressReporter )
+            {
+                m_progressReporter->AdvancePhase( wxString::Format( _( "Exporting %s" ), name ) );
+                m_progressReporter->KeepRefreshing();
+            }
+
             exitCode = doSymExportSvg( svgJob, &renderSettings, libSymbol );
 
             if( exitCode != CLI::EXIT_CODES::OK )
@@ -1076,9 +1085,11 @@ int EESCHEMA_JOBS_HANDLER::JobSymUpgrade( JOB* aJob )
             return CLI::EXIT_CODES::ERR_UNKNOWN;
         }
 
-        bool shouldSave =
-                upgradeJob->m_force
-                || schLibrary.GetFileFormatVersionAtLoad() < SEXPR_SYMBOL_LIB_FILE_VERSION;
+        if( m_progressReporter )
+            m_progressReporter->KeepRefreshing();
+
+        bool shouldSave = upgradeJob->m_force
+                            || schLibrary.GetFileFormatVersionAtLoad() < SEXPR_SYMBOL_LIB_FILE_VERSION;
 
         if( shouldSave )
         {
@@ -1088,9 +1099,7 @@ int EESCHEMA_JOBS_HANDLER::JobSymUpgrade( JOB* aJob )
             try
             {
                 if( !upgradeJob->m_outputLibraryPath.IsEmpty() )
-                {
                     schLibrary.SetFileName( upgradeJob->m_outputLibraryPath );
-                }
 
                 schLibrary.SetModified();
                 schLibrary.Save();
@@ -1108,8 +1117,7 @@ int EESCHEMA_JOBS_HANDLER::JobSymUpgrade( JOB* aJob )
     }
     else
     {
-        if( !SCH_IO_MGR::ConvertLibrary( nullptr, fn.GetAbsolutePath(),
-                                         upgradeJob->m_outputLibraryPath ) )
+        if( !SCH_IO_MGR::ConvertLibrary( nullptr, fn.GetAbsolutePath(), upgradeJob->m_outputLibraryPath ) )
         {
             m_reporter->Report( ( "Unable to convert library\n" ), RPT_SEVERITY_ERROR );
             return CLI::EXIT_CODES::ERR_UNKNOWN;

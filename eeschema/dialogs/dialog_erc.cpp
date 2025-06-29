@@ -447,8 +447,11 @@ void DIALOG_ERC::OnRunERCClick( wxCommandEvent& event )
     testErc();
 
     if( itemsNotAnnotated )
+    {
         m_messages->ReportHead( wxString::Format( _( "%d symbol(s) require annotation.<br><br>" ),
-                                                  itemsNotAnnotated ), RPT_SEVERITY_INFO );
+                                                  itemsNotAnnotated ),
+                                RPT_SEVERITY_INFO );
+    }
 
     if( m_cancelled )
         // @spellingerror

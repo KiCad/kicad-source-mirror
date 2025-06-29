@@ -80,8 +80,7 @@ int CLI::JOBSET_RUN_COMMAND::doPerform( KIWAY& aKiway )
 
     jobFile.LoadFromFile();
 
-    JOBS_RUNNER jobsRunner( &aKiway, &jobFile, project,
-                            &CLI_REPORTER::GetInstance() );
+    JOBS_RUNNER jobsRunner( &aKiway, &jobFile, project, CLI_REPORTER::GetInstance(), nullptr );
 
     int return_code = CLI::EXIT_CODES::SUCCESS;
 

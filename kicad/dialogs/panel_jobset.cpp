@@ -53,8 +53,7 @@ std::map<JOBSET_DESTINATION_T, JOBSET_DESTINATION_T_INFO> JobsetDestinationTypeI
 class DIALOG_JOBSET_RUN_LOG : public DIALOG_JOBSET_RUN_LOG_BASE
 {
 public:
-    DIALOG_JOBSET_RUN_LOG( wxWindow* aParent, JOBSET* aJobsFile,
-                           JOBSET_DESTINATION* aDestination ) :
+    DIALOG_JOBSET_RUN_LOG( wxWindow* aParent, JOBSET* aJobsFile, JOBSET_DESTINATION* aDestination ) :
             DIALOG_JOBSET_RUN_LOG_BASE( aParent ),
             m_jobsFile( aJobsFile ),
             m_destination( aDestination ),
@@ -78,7 +77,8 @@ public:
         m_jobList->SetImageList( imageList, wxIMAGE_LIST_SMALL );
 
         int num = 1;
-        for( auto& job : aJobsFile->GetJobsForDestination( aDestination ) )
+
+        for( JOBSET_JOB& job : aJobsFile->GetJobsForDestination( aDestination ) )
         {
             int imageIdx = -1;
 
@@ -260,17 +260,16 @@ public:
                     wxFileName fn = project.GetProjectFullName();
                     wxSetWorkingDirectory( fn.GetPath() );
 
-                    JOBS_RUNNER jobRunner( &( m_frame->Kiway() ), m_jobsFile, &project );
+                    {
+                        JOBS_PROGRESS_REPORTER progressReporter( m_frame, _( "Running Jobs" ) );
+                        JOBS_RUNNER            jobRunner( &m_frame->Kiway(), m_jobsFile, &project,
+                                                          NULL_REPORTER::GetInstance(), &progressReporter );
 
-                    auto* progressReporter = new WX_PROGRESS_REPORTER( m_frame, _( "Running jobs" ),
-                                                                       1 );
+                        if( JOBSET_DESTINATION* destination = GetDestination() )
+                            jobRunner.RunJobsForDestination( destination );
 
-                    if( JOBSET_DESTINATION* destination = GetDestination() )
-                        jobRunner.RunJobsForDestination( destination );
-
-                    UpdateStatus();
-
-                    delete progressReporter;
+                        UpdateStatus();
+                    }
 
                     // Bring the Kicad manager frame back to the front
                     m_frame->Raise();
@@ -973,17 +972,16 @@ void PANEL_JOBSET::OnGenerateAllDestinationsClick( wxCommandEvent& event )
 				wxFileName fn = project.GetProjectFullName();
 				wxSetWorkingDirectory( fn.GetPath() );
 
-                JOBS_RUNNER jobRunner( &( m_frame->Kiway() ), m_jobsFile.get(), &project );
+                {
+                    JOBS_PROGRESS_REPORTER progressReporter( m_frame, _( "Running Jobs" ) );
+                    JOBS_RUNNER            jobRunner( &m_frame->Kiway(), m_jobsFile.get(), &project,
+                                                      NULL_REPORTER::GetInstance(), &progressReporter );
 
-				WX_PROGRESS_REPORTER* progressReporter =
-						new WX_PROGRESS_REPORTER( m_frame, _( "Running jobs" ), 1 );
+                    jobRunner.RunJobsAllDestinations();
 
-                jobRunner.RunJobsAllDestinations();
-
-                for( PANEL_DESTINATION* panel : GetDestinationPanels() )
-                    panel->UpdateStatus();
-
-				delete progressReporter;
+                    for( PANEL_DESTINATION* panel : GetDestinationPanels() )
+                        panel->UpdateStatus();
+                }
 
                 // Bring the Kicad manager frame back to the front
                 m_frame->Raise();

@@ -42,22 +42,20 @@ void JOB_DISPATCHER::Register( const std::string&             aJobTypeName,
 }
 
 
-int JOB_DISPATCHER::RunJob( JOB* job, REPORTER* aReporter )
+int JOB_DISPATCHER::RunJob( JOB* job, REPORTER* aReporter, PROGRESS_REPORTER* aProgressReporter )
 {
     int       result = CLI::EXIT_CODES::ERR_UNKNOWN;
     REPORTER* existingReporter = m_reporter;
 
     if( aReporter )
-    {
         m_reporter = aReporter;
-    }
+
+    m_progressReporter = aProgressReporter;
 
     job->ClearExistingOutputs();
 
     if( m_jobHandlers.count( job->GetType() ) )
-    {
         result = m_jobHandlers[job->GetType()]( job );
-    }
 
     m_reporter = existingReporter;
 

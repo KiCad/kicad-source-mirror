@@ -369,7 +369,7 @@ static struct IFACE : public KIFACE_BASE, public UNITS_PROVIDER
                      const wxString& aSrcFilePath, wxString& aErrors ) override;
 
 
-    int HandleJob( JOB* aJob, REPORTER* aReporter ) override;
+    int HandleJob( JOB* aJob, REPORTER* aReporter, PROGRESS_REPORTER* aProgressReporter ) override;
 
     bool HandleJobConfig( JOB* aJob, wxWindow* aParent ) override;
 
@@ -710,9 +710,9 @@ void IFACE::SaveFileAs( const wxString& aProjectBasePath, const wxString& aProje
 }
 
 
-int IFACE::HandleJob( JOB* aJob, REPORTER* aReporter )
+int IFACE::HandleJob( JOB* aJob, REPORTER* aReporter, PROGRESS_REPORTER* aProgressReporter )
 {
-    return m_jobHandler->RunJob( aJob, aReporter );
+    return m_jobHandler->RunJob( aJob, aReporter, aProgressReporter );
 }
 
 

@@ -76,6 +76,7 @@
 #include <project_pcb.h>
 #include <pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.h>
 #include <reporter.h>
+#include <progress_reporter.h>
 #include <wildcards_and_files_ext.h>
 #include <export_vrml.h>
 #include <wx/wfstream.h>
@@ -1139,6 +1140,12 @@ int PCBNEW_JOBS_HANDLER::JobExportGerbers( JOB* aJob )
         BuildPlotFileName( &fn, outPath, layerName, fileExt );
         wxString fullname = fn.GetFullName();
 
+        if( m_progressReporter )
+        {
+            m_progressReporter->AdvancePhase( wxString::Format( _( "Exporting %s" ), fullname ) );
+            m_progressReporter->KeepRefreshing();
+        }
+
         jobfile_writer.AddGbrFile( layer, fullname );
 
         if( aJob->GetVarOverrides().contains( wxT( "LAYER" ) ) )
@@ -1168,8 +1175,7 @@ int PCBNEW_JOBS_HANDLER::JobExportGerbers( JOB* aJob )
         }
         else
         {
-            m_reporter->Report( wxString::Format( _( "Failed to plot to '%s'.\n" ),
-                                                  fn.GetFullPath() ),
+            m_reporter->Report( wxString::Format( _( "Failed to plot to '%s'.\n" ), fn.GetFullPath() ),
                                 RPT_SEVERITY_ERROR );
             exitCode = CLI::EXIT_CODES::ERR_INVALID_OUTPUT_CONFLICT;
         }
@@ -1538,15 +1544,15 @@ int PCBNEW_JOBS_HANDLER::JobExportPos( JOB* aJob )
                     wxCHECK( file, false );
 
                     PLACE_FILE_EXPORTER exporter( brd,
-                                          aPosJob->m_units == JOB_EXPORT_PCB_POS::UNITS::MM,
-                                          aPosJob->m_smdOnly,
-                                          aPosJob->m_excludeFootprintsWithTh,
-                                          aPosJob->m_excludeDNP,
-                                          frontSide,
-                                          backSide,
-                                          aPosJob->m_format == JOB_EXPORT_PCB_POS::FORMAT::CSV,
-                                          aPosJob->m_useDrillPlaceFileOrigin,
-                                          aPosJob->m_negateBottomX );
+                                                  aPosJob->m_units == JOB_EXPORT_PCB_POS::UNITS::MM,
+                                                  aPosJob->m_smdOnly,
+                                                  aPosJob->m_excludeFootprintsWithTh,
+                                                  aPosJob->m_excludeDNP,
+                                                  frontSide,
+                                                  backSide,
+                                                  aPosJob->m_format == JOB_EXPORT_PCB_POS::FORMAT::CSV,
+                                                  aPosJob->m_useDrillPlaceFileOrigin,
+                                                  aPosJob->m_negateBottomX );
 
                     std::string data = exporter.GenPositionData();
                     fputs( data.c_str(), file );
@@ -1727,15 +1733,15 @@ int PCBNEW_JOBS_HANDLER::JobExportFpUpgrade( JOB* aJob )
             return CLI::EXIT_CODES::ERR_UNKNOWN;
         }
 
+        if( m_progressReporter )
+            m_progressReporter->KeepRefreshing();
+
         bool shouldSave = upgradeJob->m_force;
 
         for( const auto& footprint : fpLib.GetFootprints() )
         {
-            if( footprint.second->GetFootprint()->GetFileFormatVersionAtLoad()
-                < SEXPR_BOARD_FILE_VERSION )
-            {
+            if( footprint.second->GetFootprint()->GetFileFormatVersionAtLoad() < SEXPR_BOARD_FILE_VERSION )
                 shouldSave = true;
-            }
         }
 
         if( shouldSave )
@@ -1810,6 +1816,12 @@ int PCBNEW_JOBS_HANDLER::JobExportFpSvg( JOB* aJob )
 
     for( const auto& [fpName, fpCacheEntry] : fpLib.GetFootprints() )
     {
+        if( m_progressReporter )
+        {
+            m_progressReporter->AdvancePhase( wxString::Format( _( "Exporting %s" ), fpName ) );
+            m_progressReporter->KeepRefreshing();
+        }
+
         if( !svgJob->m_footprint.IsEmpty() )
         {
             // skip until we find the right footprint
@@ -2019,7 +2031,7 @@ int PCBNEW_JOBS_HANDLER::JobExportDrc( JOB* aJob )
         drcEngine->SetSchematicNetlist( netlist.get() );
     }
 
-    drcEngine->SetProgressReporter( nullptr );
+    drcEngine->SetProgressReporter( m_progressReporter );
     drcEngine->SetViolationHandler(
             [&]( const std::shared_ptr<DRC_ITEM>& aItem, VECTOR2I aPos, int aLayer,
                  DRC_CUSTOM_MARKER_HANDLER* aCustomHandler )
