@@ -243,8 +243,9 @@ DIALOG_PIN_PROPERTIES::DIALOG_PIN_PROPERTIES( SYMBOL_EDIT_FRAME* parent, SCH_PIN
 
     SetInitialFocus( aFocusPinNumber ? m_textPinNumber : m_textPinName );
 
-    // Now all widgets have the size fixed, call FinishDialogSettings
-    finishDialogSettings();
+    // We should call FinishDialogSettings() when all widgets have the size fixed.
+    // However m_infoBar is not yet initialized, so it will called later
+    // See TransferDataToWindow()
 
     // On some window managers (Unity, XFCE) the dialog is not always raised, depending on
     // how it is run.
@@ -324,6 +325,9 @@ bool DIALOG_PIN_PROPERTIES::TransferDataToWindow()
 
     for( const std::pair<const wxString, SCH_PIN::ALT>& alt : m_pin->GetAlternates() )
         m_alternatesDataModel->AppendRow( alt.second );
+
+    // We can call FinishDialogSettings() now all widgets have the size fixed.
+    finishDialogSettings();
 
     return true;
 }
@@ -406,7 +410,10 @@ void DIALOG_PIN_PROPERTIES::OnPropertiesChange( wxCommandEvent& event )
     m_dummyPin->SetVisible( m_checkShow->GetValue() );
 
     if( event.GetEventObject() == m_checkApplyToAllParts && m_frame->m_SyncPinEdit )
+    {
         m_infoBar->ShowMessage( getSyncPinsMessage() );
+        m_infoBar->GetSizer()->Layout();
+    }
 
     m_previewWidget->DisplayPart( m_dummyParent, m_dummyPin->GetUnit(), 0 );
 }
