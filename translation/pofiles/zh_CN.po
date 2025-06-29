@@ -1753,14 +1753,12 @@ msgid "Errors"
 msgstr "错误"
 
 #: bitmap2component/bitmap2cmp_panel.cpp:587
-#, fuzzy
 msgid "Replace Loaded File?"
-msgstr "替换并查找下一项"
+msgstr "替换已加载的文件?"
 
 #: bitmap2component/bitmap2cmp_panel.cpp:588
-#, fuzzy
 msgid "There is already a file loaded. Do you want to replace it?"
-msgstr "输出文件 '%s' 已存在, 是否覆盖?"
+msgstr "已有文件被加载, 是否替换?"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:22
 msgid "Original Picture"
@@ -11866,9 +11864,8 @@ msgstr "更新/重置符号特性"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:190
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:145
-#, fuzzy
 msgid "Uncheck All Update Options"
-msgstr "更新选项"
+msgstr "取消选中所有更新选项"
 
 #: eeschema/dialogs/dialog_change_symbols_base.h:107
 msgid "Update Symbols from Library"
@@ -12058,9 +12055,8 @@ msgid "%d symbol(s) require annotation.<br><br>"
 msgstr "%d 个符号需要批注。<br><br>"
 
 #: eeschema/dialogs/dialog_erc.cpp:456
-#, fuzzy
 msgid "-------- ERC canceled by user.<br><br>"
-msgstr "-------- 用户取消 ERC。<br><br>"
+msgstr "-------- 用户已取消 ERC。<br><br>"
 
 #: eeschema/dialogs/dialog_erc.cpp:458 pcbnew/dialogs/dialog_drc.cpp:353
 msgid "Done.<br><br>"
@@ -15465,19 +15461,16 @@ msgstr ""
 "请使用其他名称。"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:43
-#, fuzzy
 msgid "Add a new field"
-msgstr "添加字段"
+msgstr "添加新的字段"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:48
-#, fuzzy
 msgid "Rename selected field"
-msgstr "重命名选中网络..."
+msgstr "重命名选中字段"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:56
-#, fuzzy
 msgid "Remove selected field"
-msgstr "移除嵌入文件"
+msgstr "移除选中字段"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:69
 msgid "View presets:"
@@ -16833,24 +16826,20 @@ msgid "Keep pins attached when dragging edges"
 msgstr "拖动边缘时保持引脚附着"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:444
-#, fuzzy
 msgid "Nickname and path cannot be empty."
-msgstr "引脚名不能为空。"
+msgstr "名称或路径不能为空。"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:449
-#, fuzzy
 msgid "Nickname cannot be empty."
-msgstr "引脚名不能为空。"
+msgstr "名称不能为空。"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:454
-#, fuzzy
 msgid "Path cannot be empty."
-msgstr "文本不能为空。"
+msgstr "路径不能为空。"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:467
-#, fuzzy
 msgid "Library Table Error"
-msgstr "库名称错误"
+msgstr "库表错误"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:475
 #, c-format
@@ -24741,9 +24730,8 @@ msgid "File units:"
 msgstr "文件单位"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:47
-#, fuzzy
 msgid "Zero format:"
-msgstr "Zero 格式"
+msgstr "数字零的格式:"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:51
 msgid "No leading zeros (TZ format)"
@@ -31567,7 +31555,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:460
 #, c-format
 msgid "<br/>%d %s X, Y: %s; rounded X, Y: %s"
-msgstr "<br/>%d %s X, Y: %s; rounded X, Y(四舍五入): %s"
+msgstr "<br/>%d %s X, Y: %s; X, Y(四舍五入): %s"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:482
 msgid "Selected options resulted in errors! Change them and try again."
@@ -31584,11 +31572,9 @@ msgstr ""
 "建议选中\"检查 PCB 和原理图是否一致\"选项, 然后运行 DRC。\n"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:495
-#, fuzzy, c-format
+#, c-format
 msgid "<br/>RefDes: %s Footprint: %s:%s at %s on PCB."
-msgstr ""
-"\n"
-"参考位号: %s 封装: %s: %s, 位于 PCB 上的 %s。"
+msgstr "<br/>参考位号: %s 封装: %s: %s, 位于 PCB 上的 %s。"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:503
 msgid "Reannotate anyway?"
@@ -31608,20 +31594,12 @@ msgid "Aborted: too many errors"
 msgstr "已中止: 错误太多"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:707
-#, fuzzy
 msgid "<br/><br/>Front Footprints"
-msgstr ""
-"\n"
-"\n"
-"顶层封装"
+msgstr "<br/><br/>顶层封装"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:708
-#, fuzzy
 msgid "<br/><br/>Back Footprints"
-msgstr ""
-"\n"
-"\n"
-"底层封装"
+msgstr "<br/><br/>底层封装"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:772
 msgid "Footprint not found in changelist"
