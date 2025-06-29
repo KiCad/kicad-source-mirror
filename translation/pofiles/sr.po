@@ -7,10 +7,10 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-06-27 22:51+0300\n"
-"PO-Revision-Date: 2025-06-27 13:19+0000\n"
+"PO-Revision-Date: 2025-06-30 19:02+0000\n"
 "Last-Translator: Luka Borkovic <borkovic@gmail.com>\n"
-"Language-Team: Serbian <https://hosted.weblate.org/projects/kicad/master-"
-"source/sr/>\n"
+"Language-Team: Serbian <https://hosted.weblate.org/projects/kicad/"
+"master-source/sr/>\n"
 "Language: sr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -7513,7 +7513,7 @@ msgstr ""
 
 #: common/git/kicad_git_errors.cpp:60
 msgid "Rebase conflict encountered."
-msgstr ""
+msgstr "Конфликт при ребазирању."
 
 #: common/git/kicad_git_errors.cpp:63
 #, fuzzy
@@ -7527,7 +7527,7 @@ msgstr "Попуњавање зона"
 
 #: common/git/kicad_git_errors.cpp:65
 msgid "No upstream branch configured."
-msgstr ""
+msgstr "upstream грана није конфигурисана."
 
 #: common/git/kicad_git_errors.cpp:67
 #, fuzzy
@@ -7572,7 +7572,7 @@ msgstr "Исјеци"
 
 #: common/grid_tricks.cpp:362
 msgid "Clear selected cells placing original contents on clipboard"
-msgstr ""
+msgstr "Обриши изабране ћелије смештајући оригинални садржај у клиборд"
 
 #: common/grid_tricks.cpp:363 common/tool/actions.cpp:323
 #: common/widgets/listbox_tricks.cpp:205 eeschema/tools/sch_actions.cpp:243
@@ -7595,7 +7595,7 @@ msgstr "Залијепи"
 
 #: common/grid_tricks.cpp:369
 msgid "Paste clipboard cells to matrix at current cell"
-msgstr ""
+msgstr "Налепи клиборд ћелије на матрицу код тренутне ћелије"
 
 #: common/grid_tricks.cpp:370 common/tool/actions.cpp:389
 #: common/widgets/listbox_tricks.cpp:209 eeschema/tools/sch_edit_tool.cpp:1759
@@ -7675,11 +7675,11 @@ msgstr "Појасни избор"
 
 #: common/hotkey_store.cpp:53
 msgid "Ignore Grid Snaps"
-msgstr ""
+msgstr "Игнориши лепљење на координатну мрежу"
 
 #: common/hotkey_store.cpp:54
 msgid "Ignore Other Snaps"
-msgstr ""
+msgstr "Игнориши остала лепљења"
 
 #: common/hotkey_store.cpp:61 common/tool/action_menu.cpp:233
 #: common/tool/action_menu.cpp:249 common/tool/actions.cpp:151
@@ -7699,7 +7699,7 @@ msgstr "Повлачење предмета"
 
 #: common/http_lib/http_lib_connection.cpp:74
 msgid "KiCad received an empty response!"
-msgstr ""
+msgstr "KiCad је примио празан одговор!"
 
 #: common/http_lib/http_lib_connection.cpp:90
 #: common/http_lib/http_lib_connection.cpp:162
@@ -7715,17 +7715,17 @@ msgstr "Грешка: %s"
 #: common/http_lib/http_lib_connection.cpp:366
 #, c-format
 msgid "API Response:  %s"
-msgstr ""
+msgstr "API одговор: %s"
 
 #: common/http_lib/http_lib_connection.cpp:384
 #, c-format
 msgid "API responded with error code: %s"
-msgstr ""
+msgstr "API је одговорио грешком: %s"
 
 #: common/import_gfx/dxf_import_plugin.cpp:134
 #: common/import_gfx/dxf_import_plugin.cpp:154
 msgid "Memory was exhausted trying to load the DXF, it may be too large."
-msgstr ""
+msgstr "Меморија је потрошена покушавајући да се учита DXF, можда је превелик."
 
 #: common/import_gfx/dxf_import_plugin.cpp:1549
 #, fuzzy
@@ -7788,12 +7788,13 @@ msgstr "Отвори"
 #: common/import_gfx/graphics_importer_buffer.cpp:126
 #, c-format
 msgid "Imported graphic is too large. Maximum scale is %f"
-msgstr ""
+msgstr "Увежена графика је превелика. Максимална размера је %f"
 
 #: common/import_gfx/graphics_importer_buffer.cpp:180
 #, c-format
 msgid "Import offset adjusted to (%f, %f) to fit within numeric limits"
 msgstr ""
+"Офсет увоза је подешен на (%f, %f) да би стао унутар нумеричких ограничења"
 
 #: common/io/altium/altium_binary_parser.cpp:62 common/richio.cpp:108
 #, fuzzy, c-format
@@ -7835,12 +7836,12 @@ msgstr "Попуњавање зона"
 #: common/io/cadstar/cadstar_archive_parser.cpp:2562
 #: common/io/cadstar/cadstar_archive_parser.cpp:2573
 msgid "The selected file is not valid or might be corrupt!"
-msgstr ""
+msgstr "Изабрани фајл није валидан или је оштећен!"
 
 #: common/io/cadstar/cadstar_archive_parser.cpp:2680
 #, c-format
 msgid "Unexpected number of points in '%s'. Found %d but expected %d."
-msgstr ""
+msgstr "Неочекивани број тачака у \"%s\", Пронађено %d али очекивано %d."
 
 #: common/io/cadstar/cadstar_archive_parser.h:43
 #, fuzzy, c-format
@@ -7875,7 +7876,7 @@ msgstr "Учитавање  "
 #: common/io/eagle/eagle_parser.cpp:507
 #, c-format
 msgid "Invalid Arc with radius %f and angle %f"
-msgstr ""
+msgstr "Невалидан лук са радијусом %f и углом %f"
 
 #: common/io/easyeda/easyeda_parser_base.cpp:38
 #, fuzzy, c-format
@@ -7900,6 +7901,8 @@ msgid ""
 "'%s' does not appear to be a valid EasyEDA (JLCEDA) Pro project or library "
 "file. Cannot find project.json or device.json."
 msgstr ""
+"\"%s\" не делује као валидан EasyEDA (JLCEDA) Pro пројекат нити библиотека. "
+"Не могу да пронађем project.json нити device.json."
 
 #: common/io/easyedapro/easyedapro_import_utils.cpp:210
 #, fuzzy, c-format
@@ -8007,7 +8010,7 @@ msgstr "Поставке..."
 
 #: common/jobs/job_export_pcb_gerbers.cpp:47
 msgid "PCB: Export Gerbers"
-msgstr ""
+msgstr "PCB: Извези гербере"
 
 #: common/jobs/job_export_pcb_hpgl.cpp:33
 #: common/jobs/job_export_sch_plot.cpp:184 kicad/kicad_cli.cpp:148
@@ -8096,7 +8099,7 @@ msgstr "Поставке..."
 
 #: common/jobs/job_export_pcb_pos.cpp:121
 msgid "PCB: Export Position Data"
-msgstr ""
+msgstr "PCB: Извези податке позиција"
 
 #: common/jobs/job_export_pcb_ps.cpp:57 common/jobs/job_export_sch_plot.cpp:165
 #, fuzzy
@@ -8202,7 +8205,7 @@ msgstr "3D поставке"
 
 #: common/jobs/job_pcb_drc.cpp:47
 msgid "PCB: Perform DRC"
-msgstr ""
+msgstr "PCB: Изврши DRC"
 
 #: common/jobs/job_pcb_render.cpp:131
 #, fuzzy, c-format
@@ -8216,7 +8219,7 @@ msgstr "Уреди опције"
 
 #: common/jobs/job_pcb_render.cpp:141
 msgid "PCB: Render"
-msgstr ""
+msgstr "PCB: Исцртај"
 
 #: common/jobs/job_sch_erc.cpp:33
 #, fuzzy
@@ -8240,11 +8243,11 @@ msgstr "Specctra DSN фајл"
 
 #: common/jobs/job_special_execute.cpp:42
 msgid "Special: Execute Command"
-msgstr ""
+msgstr "Специјално: Изврши комадну"
 
 #: common/jobs/jobs_output_archive.cpp:93 common/jobs/jobset.cpp:44
 msgid "Archive"
-msgstr ""
+msgstr "Архива"
 
 #: common/jobs/jobs_output_folder.cpp:80 common/jobs/jobset.cpp:42
 #, fuzzy
@@ -8286,7 +8289,7 @@ msgstr "Грешка у учитавању kiface библиотеке '%s'."
 #: common/kiway.cpp:279
 #, c-format
 msgid "Could not read instance name and version from kiface library '%s'."
-msgstr ""
+msgstr "Не могу да прочитам име инстанце и верзију из kiface библиотеке \"%s\"."
 
 #: common/kiway.cpp:443
 msgid "Error loading editor."
@@ -8320,7 +8323,7 @@ msgstr "Жица"
 
 #: common/layer_id.cpp:72
 msgid "Buses"
-msgstr ""
+msgstr "Магистрале"
 
 #: common/layer_id.cpp:73
 #, fuzzy
@@ -8425,7 +8428,7 @@ msgstr "Додјела шеме"
 #: common/layer_id.cpp:92 eeschema/widgets/panel_sch_selection_filter.cpp:206
 #: eeschema/widgets/panel_sch_selection_filter_base.cpp:33
 msgid "Pins"
-msgstr ""
+msgstr "Ножице"
 
 #: common/layer_id.cpp:93
 #, fuzzy
@@ -8491,7 +8494,7 @@ msgstr "Избриши"
 #: common/layer_id.cpp:105 common/layer_id.cpp:144
 #: pcbnew/widgets/appearance_controls.cpp:351
 msgid "Anchors"
-msgstr ""
+msgstr "Сидра"
 
 #: common/layer_id.cpp:106 common/layer_id.cpp:148
 #, fuzzy
@@ -8509,7 +8512,7 @@ msgstr "Координатна мрежа"
 #: common/layer_id.cpp:108
 #: gerbview/dialogs/panel_gerbview_color_settings.cpp:95
 msgid "Axes"
-msgstr ""
+msgstr "Осе"
 
 #: common/layer_id.cpp:109 common/layer_id.cpp:151
 #: gerbview/dialogs/panel_gerbview_color_settings.cpp:98
@@ -8611,7 +8614,7 @@ msgstr "Прикажи"
 
 #: common/layer_id.cpp:130
 msgid "Blind/Buried vias"
-msgstr ""
+msgstr "Слепе/сахрањене вие"
 
 #: common/layer_id.cpp:131
 #, fuzzy
