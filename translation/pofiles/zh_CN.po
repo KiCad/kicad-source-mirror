@@ -24731,7 +24731,7 @@ msgstr "文件单位"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:47
 msgid "Zero format:"
-msgstr "数字零的格式:"
+msgstr "数字「零」的格式:"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:51
 msgid "No leading zeros (TZ format)"
@@ -26019,7 +26019,7 @@ msgstr "无效的钻孔格式\n"
 
 #: kicad/cli/command_pcb_export_drill.cpp:179
 msgid "Invalid zeros format specified\n"
-msgstr "指定的零格式无效\n"
+msgstr "指定的数字零格式无效\n"
 
 #: kicad/cli/command_pcb_export_drill.cpp:196
 msgid "Invalid oval drill format specified\n"
@@ -31725,7 +31725,7 @@ msgstr "不填写则从顶层位号继续, 或输入大于顶层位号最大的�
 msgid ""
 "Leave blank or zero, or enter a number greater than the highest reference "
 "designation on the front."
-msgstr "不填写或为零, 或输入一个大于顶层位号最大的数字。"
+msgstr "为零或为空, 或输入一个大于顶层位号最大的数字。"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:250
 msgid "Front prefix:"
@@ -33407,9 +33407,8 @@ msgid "Update fabrication attributes"
 msgstr "更新制造特性"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:89
-#, fuzzy
 msgid "Update clearance overrides"
-msgstr "间距重写和设置"
+msgstr "更新间距重写"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:90
 msgid "Update 3D models"
@@ -33497,9 +33496,8 @@ msgid "Update/reset fabrication attributes"
 msgstr "更新/重置制造特性"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:136
-#, fuzzy
 msgid "Update/reset clearance overrides"
-msgstr "间距重写和设置"
+msgstr "更新/重置间距重写"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:139
 msgid "Update/reset 3D models"
@@ -37378,7 +37376,7 @@ msgstr "用于网格区域的平行线距离"
 
 #: pcbnew/dialogs/dialog_set_offset.cpp:66
 msgid "Reset this value to zero."
-msgstr "将该值重置为零。"
+msgstr "将该值重置为 0。"
 
 #: pcbnew/dialogs/dialog_set_offset.cpp:76
 msgid "Reset this value to the original value."
@@ -37394,7 +37392,7 @@ msgstr "设置偏移量"
 
 #: pcbnew/dialogs/dialog_shape_properties.cpp:194
 msgid "Rectangle cannot be zero-sized."
-msgstr "矩形大小不能为0。"
+msgstr "矩形大小不能为 0。"
 
 #: pcbnew/dialogs/dialog_shape_properties.cpp:453
 msgid "Arc angle must be greater than 0"
@@ -38033,7 +38031,7 @@ msgstr "从原理图更新 PCB"
 #: pcbnew/dialogs/panel_assign_component_classes.cpp:194
 #, c-format
 msgid "Error with conditions for component class assignment %s"
-msgstr ""
+msgstr "元件类分配条件错误 %s"
 
 #: pcbnew/dialogs/panel_assign_component_classes.cpp:371
 msgid "Reference..."
@@ -38073,32 +38071,28 @@ msgid "Footprint Field:"
 msgstr "封装字段:"
 
 #: pcbnew/dialogs/panel_assign_component_classes.cpp:618
-#, fuzzy
 msgid "Import references from selection"
-msgstr "从选区创建走线"
+msgstr "从选区导入参考位号"
 
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:19
-#, fuzzy
 msgid "Assign component class per sheet"
-msgstr "元件类"
+msgstr "为每个图纸分配元件类"
 
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:31
 msgid "Custom Assignments:"
 msgstr "自定义分配:"
 
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:38
-#, fuzzy
 msgid "Add Custom Assignment"
-msgstr "添加网络类分配"
+msgstr "添加自定义分配"
 
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:84
 msgid "Component Class:"
 msgstr "元件类:"
 
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:95
-#, fuzzy
 msgid "Highlight matching footprints"
-msgstr ": %i 个匹配的封装"
+msgstr "高亮匹配的封装"
 
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:100
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:183
@@ -38121,18 +38115,16 @@ msgid "Match Any"
 msgstr "匹配任意"
 
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:178
-#, fuzzy
 msgid "Import references"
-msgstr "符号位号"
+msgstr "导入参考位号"
 
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:306
 msgid "Footprint:"
 msgstr "封装:"
 
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:319
-#, fuzzy
 msgid "Show library"
-msgstr "浏览库"
+msgstr "显示库"
 
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:374
 msgid "Field Value:"
@@ -38293,20 +38285,17 @@ msgstr ""
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:141
 #: pcbnew/dialogs/panel_edit_options_base.cpp:215
-#, fuzzy
 msgid "Click:"
-msgstr "单击"
+msgstr "单击:"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:151
 #: pcbnew/dialogs/panel_edit_options_base.cpp:225
-#, fuzzy
 msgid "Long Click:"
-msgstr "长按"
+msgstr "长按:"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:171
-#, fuzzy
 msgid "Ctrl+Shift:"
-msgstr "Ctrl+Shift"
+msgstr "Ctrl+Shift:"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:188
 #: pcbnew/dialogs/panel_edit_options_base.cpp:262
@@ -38783,9 +38772,8 @@ msgstr ""
 "他设置减少。"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:300
-#, fuzzy
 msgid "Silk"
-msgstr "底层丝印层"
+msgstr "丝印"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:328
 msgid "Minimum item clearance:"
@@ -51393,7 +51381,7 @@ msgstr "移除所有自定义分组"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1267
 msgid "Show Zero Pad Nets"
-msgstr "显示 0 焊盘网络"
+msgstr "显示零焊盘网络"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1273
 msgid "Show Unconnected Nets"
