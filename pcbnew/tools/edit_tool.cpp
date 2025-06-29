@@ -1829,13 +1829,8 @@ int EDIT_TOOL::BooleanPolygons( const TOOL_EVENT& aEvent )
                 {
                     BOARD_ITEM* item = aCollector[i];
 
-                    if( !item->IsType( {
-                                PCB_SHAPE_LOCATE_POLY_T,
-                                PCB_SHAPE_LOCATE_RECT_T,
-                        } ) )
-                    {
+                    if( !item->IsType( { PCB_SHAPE_LOCATE_POLY_T, PCB_SHAPE_LOCATE_RECT_T } ) )
                         aCollector.Remove( item );
-                    }
                 }
             },
             true /* prompt user regarding locked items */ );
@@ -1881,25 +1876,24 @@ int EDIT_TOOL::BooleanPolygons( const TOOL_EVENT& aEvent )
             };
 
     // Combine these callbacks into a CHANGE_HANDLER to inject in the ROUTINE
-    ITEM_MODIFICATION_ROUTINE::CALLABLE_BASED_HANDLER change_handler(
-            item_creation_handler, item_modification_handler, item_removal_handler );
+    ITEM_MODIFICATION_ROUTINE::CALLABLE_BASED_HANDLER change_handler( item_creation_handler,
+                                                                      item_modification_handler,
+                                                                      item_removal_handler );
 
     // Construct an appropriate routine
     std::unique_ptr<POLYGON_BOOLEAN_ROUTINE> boolean_routine;
+
     if( aEvent.IsAction( &PCB_ACTIONS::mergePolygons ) )
     {
-        boolean_routine = std::make_unique<POLYGON_MERGE_ROUTINE>( frame()->GetModel(),
-                                                                   change_handler );
+        boolean_routine = std::make_unique<POLYGON_MERGE_ROUTINE>( frame()->GetModel(), change_handler );
     }
     else if( aEvent.IsAction( &PCB_ACTIONS::subtractPolygons ) )
     {
-        boolean_routine = std::make_unique<POLYGON_SUBTRACT_ROUTINE>( frame()->GetModel(),
-                                                                      change_handler );
+        boolean_routine = std::make_unique<POLYGON_SUBTRACT_ROUTINE>( frame()->GetModel(), change_handler );
     }
     else if( aEvent.IsAction( &PCB_ACTIONS::intersectPolygons ) )
     {
-        boolean_routine = std::make_unique<POLYGON_INTERSECT_ROUTINE>( frame()->GetModel(),
-                                                                       change_handler );
+        boolean_routine = std::make_unique<POLYGON_INTERSECT_ROUTINE>( frame()->GetModel(), change_handler );
     }
     else
     {
@@ -2563,17 +2557,7 @@ void EDIT_TOOL::DeleteItems( const PCB_SELECTION& aItems, bool aIsCut )
         case PCB_DIM_CENTER_T:
         case PCB_DIM_RADIAL_T:
         case PCB_DIM_ORTHOGONAL_T:
-            if( parentFP )
-            {
-                commit.Modify( parentFP );
-                parentFP->Delete( board_item );
-                getView()->Update( parentFP );
-            }
-            else
-            {
-                commit.Remove( board_item );
-            }
-
+            commit.Remove( board_item );
             itemsDeleted++;
             break;
 
@@ -2599,9 +2583,7 @@ void EDIT_TOOL::DeleteItems( const PCB_SELECTION& aItems, bool aIsCut )
         case PCB_PAD_T:
             if( IsFootprintEditor() || frame()->GetPcbNewSettings()->m_AllowFreePads )
             {
-                commit.Modify( parentFP );
-                getView()->Remove( board_item );
-                parentFP->Remove( board_item );
+                commit.Remove( board_item );
                 itemsDeleted++;
             }
 
