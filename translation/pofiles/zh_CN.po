@@ -10844,11 +10844,11 @@ msgid "Unconnected wire to bus entry"
 msgstr "导线没有连到总线入口"
 
 #: eeschema/connection_graph.cpp:4192
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Hierarchical label \"%s\" in root sheet cannot be connected to non-existent "
 "parent sheet"
-msgstr "层次标签 %s 在父图纸内没有匹配的图纸引脚"
+msgstr ""
 
 #: eeschema/connection_graph.cpp:4257
 #, c-format
@@ -12653,9 +12653,8 @@ msgid "Enter the text to be used within the schematic"
 msgstr "输入文本将在原理图中使用"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:62
-#, fuzzy
 msgid "Multiple label input"
-msgstr "多层"
+msgstr ""
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:68
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:42
@@ -37821,7 +37820,7 @@ msgstr "从符号更新封装字段"
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:68
 msgid "Remove footprint fields not found in symbols"
-msgstr "移除无法在符号中找到的封装字段。"
+msgstr "移除无法在符号中找到的封装字段"
 
 #: pcbnew/dialogs/dialog_update_pcb_base.h:56
 msgid "Update PCB from Schematic"
@@ -38312,7 +38311,6 @@ msgid ""
 "<br>"
 msgstr ""
 "### 子句\n"
-"\n"
 "\n"
 "    (condition \"<expression>\")\n"
 "\n"
