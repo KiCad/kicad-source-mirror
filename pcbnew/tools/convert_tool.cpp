@@ -1340,9 +1340,7 @@ int CONVERT_TOOL::OutsetItems( const TOOL_EVENT& aEvent )
                     // We've converted the polygon and rectangle to segments, so drop everything
                     // that isn't a segment at this point
                     if( !item->IsType( { PCB_PAD_T, PCB_SHAPE_T } ) )
-                    {
                         aCollector.Remove( item );
-                    }
                 }
             },
             true /* prompt user regarding locked items */ );
@@ -1419,10 +1417,9 @@ int CONVERT_TOOL::OutsetItems( const TOOL_EVENT& aEvent )
 
     {
         DIALOG_OUTSET_ITEMS dlg( frame, outset_params );
+
         if( dlg.ShowModal() == wxID_CANCEL )
-        {
             return 0;
-        }
     }
 
     OUTSET_ROUTINE outset_routine( frame.GetModel(), change_handler, outset_params );
