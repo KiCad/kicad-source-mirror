@@ -7034,7 +7034,7 @@ msgstr "Yatay Yaslama"
 #: pcbnew/pcb_dimension.cpp:2003 pcbnew/pcb_dimension.cpp:2045
 #: pcbnew/pcb_dimension.cpp:2079
 msgid "Vertical Justification"
-msgstr "Yatay Hizalama"
+msgstr "Dikey Hizalama"
 
 #: common/eda_text.cpp:1416 eeschema/sch_field.cpp:1628
 #: eeschema/sch_label.cpp:2322 eeschema/sch_tablecell.cpp:200
@@ -7095,8 +7095,8 @@ msgid ""
 "A directory containing 3rd party plugins, libraries and other downloadable "
 "content."
 msgstr ""
-"3. taraf eklentileri, kitaplıkları ve diğer indirilebilir içerikleri içeren "
-"bir dizin."
+"3. parti eklentileri, kütüphaneleri ve diğer indirilebilir içerikleri "
+"barındıran dizin."
 
 #: common/env_vars.cpp:135
 msgid ""
@@ -7199,7 +7199,7 @@ msgstr "Hatalı diğer takma ad (yinelenen ad)"
 #: eeschema/widgets/sch_properties_panel.cpp:260
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:155
 msgid "Default Font"
-msgstr "Varsayılan yazı tipi"
+msgstr "Varsayılan Yazı Tipi"
 
 #: common/font/fontconfig.cpp:359
 #, c-format
@@ -7209,7 +7209,7 @@ msgstr "'%s' yazı tipi yüklenirken hata oluştu."
 #: common/font/fontconfig.cpp:371
 #, c-format
 msgid "Font '%s' not found; substituting '%s'."
-msgstr "'%s' yazı tipi bulunamadı; '%s' ile değiştirilir."
+msgstr "'%s' yazı tipi bulunamadı; '%s' ile değiştiriliyor."
 
 #: common/footprint_info.cpp:121
 #: common/widgets/panel_design_block_chooser.cpp:431
@@ -7221,7 +7221,7 @@ msgstr "Yükleme Hatası"
 
 #: common/footprint_info.cpp:123
 msgid "Errors were encountered loading footprints:"
-msgstr "Ayak izleri yüklenirken hatalarla karşılaşıldı:"
+msgstr "Ayak izleri yüklenirken hatalar oluştu:"
 
 #: common/fp_lib_table.cpp:226
 #, c-format
@@ -7245,7 +7245,7 @@ msgstr "'%s' için bir PDF görüntüleyici bulunamadı."
 #: common/gestfich.cpp:280
 #, c-format
 msgid "Problem while running the PDF viewer '%s'."
-msgstr "'%s' PDF görüntüleyici çalıştırılırken sorun."
+msgstr "%s' PDF görüntüleyici çalıştırılırken sorun oluştu."
 
 #: common/gestfich.cpp:299 eeschema/eeschema.cpp:682 eeschema/eeschema.cpp:717
 #: gerbview/gerbview.cpp:262 kicad/project_template.cpp:309
