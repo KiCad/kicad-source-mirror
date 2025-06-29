@@ -89,30 +89,12 @@ bool ALIGN_DISTRIBUTE_TOOL::Init()
 }
 
 
-template <class T>
-std::vector<std::pair<BOARD_ITEM*, BOX2I>> GetBoundingBoxes( const T& aItems )
+BOX2I getBoundingBox( BOARD_ITEM* aItem )
 {
-    std::vector<std::pair<BOARD_ITEM*, BOX2I>> rects;
-
-    for( EDA_ITEM* item : aItems )
-    {
-        if( !item->IsBOARD_ITEM() )
-            continue;
-
-        BOARD_ITEM* boardItem = static_cast<BOARD_ITEM*>( item );
-
-        if( boardItem->Type() == PCB_FOOTPRINT_T )
-        {
-            FOOTPRINT* footprint = static_cast<FOOTPRINT*>( boardItem );
-            rects.emplace_back( std::make_pair( footprint, footprint->GetBoundingBox( false ) ) );
-        }
-        else
-        {
-            rects.emplace_back( std::make_pair( boardItem, boardItem->GetBoundingBox() ) );
-        }
-    }
-
-    return rects;
+    if( aItem->Type() == PCB_FOOTPRINT_T )
+        return static_cast<FOOTPRINT*>( aItem )->GetBoundingBox( false );
+    else
+        return aItem->GetBoundingBox();
 }
 
 
@@ -165,8 +147,43 @@ size_t ALIGN_DISTRIBUTE_TOOL::GetSelections( std::vector<std::pair<BOARD_ITEM*, 
                 }
             } );
 
-    std::vector<BOARD_ITEM*> lockedItems;
-    std::vector<BOARD_ITEM*> itemsToAlign;
+    bool                  allPads = true;
+    BOARD_ITEM_CONTAINER* currentParent = nullptr;
+    bool                  differentParents = false;
+
+    for( EDA_ITEM* item : selection )
+    {
+        if( !item->IsBOARD_ITEM() )
+            continue;
+
+        if( item->Type() != PCB_PAD_T )
+            allPads = false;
+
+        BOARD_ITEM*           boardItem = static_cast<BOARD_ITEM*>( item );
+        BOARD_ITEM_CONTAINER* parent = boardItem->GetParentFootprint();
+
+        if( !parent )
+            parent = boardItem->GetBoard();
+
+        if( !currentParent )
+            currentParent = parent;
+        else if( parent != currentParent )
+            differentParents = true;
+    }
+
+    auto addToList =
+            []( std::vector<std::pair<BOARD_ITEM*, BOX2I>>& list, BOARD_ITEM* item, FOOTPRINT* parentFp )
+            {
+                BOARD_ITEM* listItem = parentFp ? parentFp : item;
+
+                for( const auto& [candidate, bbox] : list )
+                {
+                    if( candidate == listItem )
+                        return;
+                }
+
+                list.emplace_back( std::make_pair( listItem, getBoundingBox( item ) ) );
+            };
 
     for( EDA_ITEM* item : selection )
     {
@@ -175,24 +192,24 @@ size_t ALIGN_DISTRIBUTE_TOOL::GetSelections( std::vector<std::pair<BOARD_ITEM*, 
 
         BOARD_ITEM* boardItem = static_cast<BOARD_ITEM*>( item );
 
-        // We do not lock items in the footprint editor
-        if( boardItem->IsLocked() && m_frame->IsType( FRAME_PCB_EDITOR ) )
+        if( allPads && differentParents )
         {
-            // Locking a pad but not the footprint means that we align the footprint using
-            // the pad position.  So we test for footprint locking here
-            if( boardItem->Type() == PCB_PAD_T && !boardItem->GetParent()->IsLocked() )
-                itemsToAlign.push_back( boardItem );
+            FOOTPRINT* parentFp = boardItem->GetParentFootprint();
+
+            if( parentFp && parentFp->IsLocked() )
+                addToList( aLockedItems, boardItem, parentFp );
             else
-                lockedItems.push_back( boardItem );
+                addToList( aItemsToAlign, boardItem, parentFp );
+
+            continue;
         }
+
+        if( boardItem->IsLocked() )
+            addToList( aLockedItems, boardItem, nullptr );
         else
-        {
-            itemsToAlign.push_back( boardItem );
-        }
+            addToList( aItemsToAlign, boardItem, nullptr );
     }
 
-    aItemsToAlign = GetBoundingBoxes( itemsToAlign );
-    aLockedItems = GetBoundingBoxes( lockedItems );
     std::sort( aItemsToAlign.begin(), aItemsToAlign.end(), aCompare );
     std::sort( aLockedItems.begin(), aLockedItems.end(), aCompare );
 
@@ -223,17 +240,12 @@ int ALIGN_DISTRIBUTE_TOOL::AlignTop( const TOOL_EVENT& aEvent )
             } );
 
     // Move the selected items
-    for( const std::pair<BOARD_ITEM*, BOX2I>& i : itemsToAlign )
+    for( const auto& [item, bbox] : itemsToAlign )
     {
-        BOARD_ITEM* item = i.first;
-        int difference = targetTop - i.second.GetTop();
-
         if( item->GetParent() && item->GetParent()->IsSelected() )
             continue;
 
-        // Don't move a pad by itself unless editing the footprint
-        if( item->Type() == PCB_PAD_T && m_frame->IsType( FRAME_PCB_EDITOR ) )
-            item = item->GetParent();
+        int difference = targetTop - bbox.GetTop();
 
         commit.Stage( item, CHT_MODIFY );
         item->Move( VECTOR2I( 0, difference ) );
@@ -267,17 +279,12 @@ int ALIGN_DISTRIBUTE_TOOL::AlignBottom( const TOOL_EVENT& aEvent )
             } );
 
     // Move the selected items
-    for( const std::pair<BOARD_ITEM*, BOX2I>& i : itemsToAlign )
+    for( const auto& [item, bbox] : itemsToAlign )
     {
-        int difference = targetBottom - i.second.GetBottom();
-        BOARD_ITEM* item = i.first;
-
         if( item->GetParent() && item->GetParent()->IsSelected() )
             continue;
 
-        // Don't move a pad by itself unless editing the footprint
-        if( item->Type() == PCB_PAD_T && m_frame->IsType( FRAME_PCB_EDITOR ) )
-            item = item->GetParent();
+        int difference = targetBottom - bbox.GetBottom();
 
         commit.Stage( item, CHT_MODIFY );
         item->Move( VECTOR2I( 0, difference ) );
@@ -322,17 +329,12 @@ int ALIGN_DISTRIBUTE_TOOL::doAlignLeft()
             } );
 
     // Move the selected items
-    for( const std::pair<BOARD_ITEM*, BOX2I>& i : itemsToAlign )
+    for( const auto& [item, bbox] : itemsToAlign )
     {
-        int difference = targetLeft - i.second.GetLeft();
-        BOARD_ITEM* item = i.first;
-
         if( item->GetParent() && item->GetParent()->IsSelected() )
             continue;
 
-        // Don't move a pad by itself unless editing the footprint
-        if( item->Type() == PCB_PAD_T && m_frame->IsType( FRAME_PCB_EDITOR ) )
-            item = item->GetParent();
+        int difference = targetLeft - bbox.GetLeft();
 
         commit.Stage( item, CHT_MODIFY );
         item->Move( VECTOR2I( difference, 0 ) );
@@ -377,17 +379,12 @@ int ALIGN_DISTRIBUTE_TOOL::doAlignRight()
             } );
 
     // Move the selected items
-    for( const std::pair<BOARD_ITEM*, BOX2I>& i : itemsToAlign )
+    for( const auto& [item, bbox] : itemsToAlign )
     {
-        int difference = targetRight - i.second.GetRight();
-        BOARD_ITEM* item = i.first;
-
         if( item->GetParent() && item->GetParent()->IsSelected() )
             continue;
 
-        // Don't move a pad by itself unless editing the footprint
-        if( item->Type() == PCB_PAD_T && m_frame->IsType( FRAME_PCB_EDITOR ) )
-            item = item->GetParent();
+        int difference = targetRight - bbox.GetRight();
 
         commit.Stage( item, CHT_MODIFY );
         item->Move( VECTOR2I( difference, 0 ) );
@@ -421,17 +418,12 @@ int ALIGN_DISTRIBUTE_TOOL::AlignCenterX( const TOOL_EVENT& aEvent )
             } );
 
     // Move the selected items
-    for( const std::pair<BOARD_ITEM*, BOX2I>& i : itemsToAlign )
+    for( const auto& [item, bbox] : itemsToAlign )
     {
-        int difference = targetX - i.second.Centre().x;
-        BOARD_ITEM* item = i.first;
-
         if( item->GetParent() && item->GetParent()->IsSelected() )
             continue;
 
-        // Don't move a pad by itself unless editing the footprint
-        if( item->Type() == PCB_PAD_T && m_frame->IsType( FRAME_PCB_EDITOR ) )
-            item = item->GetParent();
+        int difference = targetX - bbox.Centre().x;
 
         commit.Stage( item, CHT_MODIFY );
         item->Move( VECTOR2I( difference, 0 ) );
@@ -465,17 +457,12 @@ int ALIGN_DISTRIBUTE_TOOL::AlignCenterY( const TOOL_EVENT& aEvent )
             } );
 
     // Move the selected items
-    for( const std::pair<BOARD_ITEM*, BOX2I>& i : itemsToAlign )
+    for( const auto& [item, bbox] : itemsToAlign )
     {
-        int difference = targetY - i.second.Centre().y;
-        BOARD_ITEM* item = i.first;
-
         if( item->GetParent() && item->GetParent()->IsSelected() )
             continue;
 
-        // Don't move a pad by itself unless editing the footprint
-        if( item->Type() == PCB_PAD_T && m_frame->IsType( FRAME_PCB_EDITOR ) )
-            item = item->GetParent();
+        int difference = targetY - bbox.Centre().y;
 
         commit.Stage( item, CHT_MODIFY );
         item->Move( VECTOR2I( 0, difference ) );
@@ -505,7 +492,16 @@ int ALIGN_DISTRIBUTE_TOOL::DistributeItems( const TOOL_EVENT& aEvent )
 
     BOARD_COMMIT                               commit( m_frame );
     wxString                                   commitMsg;
-    std::vector<std::pair<BOARD_ITEM*, BOX2I>> itemsToDistribute = GetBoundingBoxes( selection );
+    std::vector<std::pair<BOARD_ITEM*, BOX2I>> itemsToDistribute;
+
+    for( EDA_ITEM* item : selection )
+    {
+        if( !item->IsBOARD_ITEM() )
+            continue;
+
+        BOARD_ITEM* boardItem = static_cast<BOARD_ITEM*>( item );
+        itemsToDistribute.emplace_back( std::make_pair( boardItem, getBoundingBox( boardItem ) ) );
+    }
 
     if( aEvent.Matches( PCB_ACTIONS::distributeHorizontallyCenters.MakeEvent() ) )
     {
