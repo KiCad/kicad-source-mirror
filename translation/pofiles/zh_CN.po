@@ -11546,7 +11546,7 @@ msgstr "更新/重置引脚名称/编号的可见性设置"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:172
 msgid "Reset alternate pin to default"
-msgstr "重置复用引脚为默认值"
+msgstr "重置复用引脚为默认状态"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:178
 msgid "Update/reset symbol attributes"
