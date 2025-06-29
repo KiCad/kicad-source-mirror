@@ -24,7 +24,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-06-27 22:51+0300\n"
-"PO-Revision-Date: 2025-06-29 02:37+0000\n"
+"PO-Revision-Date: 2025-06-29 11:25+0000\n"
 "Last-Translator: YÜKSEL AÇIKGÖZ <yukselacikgoz@gmail.com>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/kicad/v9/tr/>\n"
 "Language: tr\n"
@@ -2443,7 +2443,8 @@ msgid ""
 "Note: complete netclass assignments can be edited in Schematic Setup > "
 "Project."
 msgstr ""
-"Not: Tam ağsınıfı atamaları Şematik Kurulum > Proje bölümünde düzenlenebilir."
+"Not: Tam ağ sınıfı atamaları Şematik Kurulum > Proje bölümünde "
+"düzenlenebilir."
 
 #: common/dialogs/dialog_assign_netclass_base.h:56
 msgid "Add Netclass Assignment"
@@ -5265,7 +5266,7 @@ msgstr "Ctrl"
 #: pcbnew/dialogs/panel_edit_options_base.cpp:155
 #: pcbnew/dialogs/panel_edit_options_base.cpp:223
 msgid "Shift"
-msgstr "Kaydırma"
+msgstr "Shift Tuşu"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:220
 msgid "Alt"
@@ -5291,7 +5292,7 @@ msgstr "Sola/sağa kaydır:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:304
 msgid "Pan left/right with horizontal movement"
-msgstr "Yatay hareketle sola/sağa kaydırma"
+msgstr "Yatay hareketle sola/sağa kaydır"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:305
 msgid ""
@@ -5306,7 +5307,7 @@ msgstr "Fareyi Varsayılanlarına Sıfırla"
 #: common/dialogs/panel_mouse_settings_base.cpp:318
 #: eeschema/dialogs/panel_simulator_preferences_base.cpp:138
 msgid "Reset to Trackpad Defaults"
-msgstr "Trackpad Varsayılana Sıfırla"
+msgstr "Dokunmatik Yüzey Varsayılanlarına Sıfırla"
 
 #: common/dialogs/panel_packages_and_updates_base.cpp:17
 #: common/eda_base_frame.cpp:1189
@@ -5328,7 +5329,7 @@ msgstr "Genel"
 
 #: common/dialogs/panel_packages_and_updates_base.cpp:30
 msgid "Check for KiCad updates on startup"
-msgstr "Başlangıçta KiCAD güncellemelerini kontrol et"
+msgstr "Başlangıçta KiCad güncellemelerini kontrol et"
 
 #: common/dialogs/panel_packages_and_updates_base.cpp:40
 #: kicad/dialogs/dialog_update_check_prompt_base.cpp:34
@@ -5347,7 +5348,7 @@ msgstr "Kütüphane Paketi İşleme"
 
 #: common/dialogs/panel_packages_and_updates_base.cpp:70
 msgid "Automatically add installed libraries to global library table"
-msgstr "Yüklenen kütüphaneleri otomatik olarak global kütüphane tablosuna ekle"
+msgstr "Yüklü kütüphaneleri otomatik olarak genel kütüphane tablosuna ekle"
 
 #: common/dialogs/panel_packages_and_updates_base.cpp:74
 msgid "Automatically remove uninstalled libraries"
@@ -5364,7 +5365,7 @@ msgstr "%s de dinleniyor"
 
 #: common/dialogs/panel_plugin_settings.cpp:112
 msgid "This installation of KiCad does not have API support enabled."
-msgstr "Bu KiCad kurulumu API desteği etkinleştirilmiş değil."
+msgstr "Bu KiCad kurulumunda API desteği etkinleştirilmemiş."
 
 #: common/dialogs/panel_plugin_settings.cpp:121
 msgid "KiCad API is not enabled; external Python plugins will not be available"
@@ -5486,7 +5487,7 @@ msgstr "Noktalı"
 #: eeschema/sch_line.cpp:1062 pcbnew/pcb_table.cpp:604
 #: pcbnew/pcb_textbox.cpp:788
 msgid "Dash-Dot"
-msgstr "Çizgi Nokta"
+msgstr "Çizgi-Nokta"
 
 #: common/dialogs/panel_setup_netclasses.cpp:108 common/eda_shape.cpp:2334
 #: common/stroke_params.cpp:44
@@ -5495,7 +5496,7 @@ msgstr "Çizgi Nokta"
 #: eeschema/sch_line.cpp:1063 pcbnew/pcb_table.cpp:605
 #: pcbnew/pcb_textbox.cpp:789
 msgid "Dash-Dot-Dot"
-msgstr "Tire-Nokta-Nokta"
+msgstr "Çizgi-Nokta-Nokta"
 
 #: common/dialogs/panel_setup_netclasses.cpp:184
 msgid "Set color to transparent to use layer default color."
@@ -5507,16 +5508,16 @@ msgid ""
 "The netclasses have been changed outside the Setup dialog.\n"
 "Do you wish to reload them?"
 msgstr ""
-"Parça dizgisi Kurulum iletişim kutusunun dışında değiştirildi.\n"
-"Bunları yeniden yüklemek istiyor musunuz?"
+"Ağ sınıfları Kurulum iletişim kutusunun dışında değiştirildi.\n"
+"Onları yeniden yüklemek ister misiniz?"
 
 #: common/dialogs/panel_setup_netclasses.cpp:584
 msgid "Netclass must have a name."
-msgstr "Ağsınıfı'nın bir adı olmalıdır."
+msgstr "Ağ sınıfının bir adı olmalı."
 
 #: common/dialogs/panel_setup_netclasses.cpp:593
 msgid "Netclass name already in use."
-msgstr "Netclass'ın adı zaten kullanılıyor."
+msgstr "Ağ sınıfı adı zaten kullanılıyor."
 
 #: common/dialogs/panel_setup_netclasses.cpp:706
 msgid "Minimum copper clearance"
@@ -5528,11 +5529,11 @@ msgstr "En ince yol genişliği"
 
 #: common/dialogs/panel_setup_netclasses.cpp:708
 msgid "Via pad diameter"
-msgstr "Geçiş dış çapı"
+msgstr "Geçit ped çapı"
 
 #: common/dialogs/panel_setup_netclasses.cpp:709
 msgid "Via plated hole diameter"
-msgstr "Geçiş kaplanmış delik çapı"
+msgstr "Kaplamalı geçit delik çapı"
 
 #: common/dialogs/panel_setup_netclasses.cpp:710
 msgid "Microvia pad diameter"
@@ -5540,11 +5541,11 @@ msgstr "Mikrogeçit ped çapı"
 
 #: common/dialogs/panel_setup_netclasses.cpp:711
 msgid "Microvia plated hole diameter"
-msgstr "Mikro geçiş (microvia) kaplanmış delik çapı"
+msgstr "Mikro geçit kaplamalı delik çapı"
 
 #: common/dialogs/panel_setup_netclasses.cpp:712
 msgid "Differential pair track width"
-msgstr "Diferansiyel çift yol kalınlığı"
+msgstr "Diferansiyel çift yol genişliği"
 
 #: common/dialogs/panel_setup_netclasses.cpp:713
 msgid "Differential pair gap"
@@ -5552,19 +5553,19 @@ msgstr "Diferansiyel çift aralığı"
 
 #: common/dialogs/panel_setup_netclasses.cpp:714
 msgid "Schematic wire thickness"
-msgstr "Şema bağlantı kalınlığı"
+msgstr "Şematik tel kalınlığı"
 
 #: common/dialogs/panel_setup_netclasses.cpp:715
 msgid "Bus wire thickness"
-msgstr "Veri yolu bağlantı kalınlığı"
+msgstr "Veri yolu tel kalınlığı"
 
 #: common/dialogs/panel_setup_netclasses.cpp:716
 msgid "Schematic wire color"
-msgstr "Şema bağlantı rengi"
+msgstr "Şematik tel rengi"
 
 #: common/dialogs/panel_setup_netclasses.cpp:717
 msgid "Schematic wire line style"
-msgstr "Şema çizgi stili"
+msgstr "Şematik tel çizgi stili"
 
 #: common/dialogs/panel_setup_netclasses.cpp:718
 msgid "PCB netclass color"
@@ -5572,7 +5573,7 @@ msgstr "Baskı Devre ağ sınıfı rengi"
 
 #: common/dialogs/panel_setup_netclasses.cpp:775
 msgid "The default net class is required."
-msgstr "Varsayılan net sınıfı gereklidir."
+msgstr "Varsayılan ağ sınıfı gereklidir."
 
 #: common/dialogs/panel_setup_netclasses.cpp:945
 #, c-format
@@ -5581,7 +5582,7 @@ msgstr "<b>Eşleşen ağlar%s':</b>"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:32
 msgid "Netclasses"
-msgstr "Netclasslar"
+msgstr "Ağ Sınıfları"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:52
 #: pcbnew/tools/board_inspection_tool.cpp:642
@@ -5594,24 +5595,24 @@ msgstr "Boşluk"
 #: pcbnew/tools/board_inspection_tool.cpp:434
 #: pcbnew/tools/board_inspection_tool.cpp:1365
 msgid "Track Width"
-msgstr "İz Genişliği"
+msgstr "Yol Genişliği"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:54
 #: pcb_calculator/pcb_calculator_frame.cpp:176
 msgid "Via Size"
-msgstr "Delik Büyüklüğü"
+msgstr "Geçit Boyutu"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:55
 msgid "Via Hole"
-msgstr "Geçiş Deliği"
+msgstr "Geçit Deliği"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:56
 msgid "uVia Size"
-msgstr "uGeçiş Büyüklüğü"
+msgstr "Mikro Geçit Boyutu"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:57
 msgid "uVia Hole"
-msgstr "uGeçiş Deliği"
+msgstr "Mikro Geçit Deliği"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:58
 msgid "DP Width"
@@ -5671,7 +5672,7 @@ msgstr "Renkleri şemadan içe aktar"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:128
 msgid "Netclass Assignments"
-msgstr "Netclass Atamaları"
+msgstr "Ağ Sınıfı Atamaları"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:152
 msgid "Pattern"
@@ -5737,7 +5738,7 @@ msgstr "OpenGL kullanılamadı"
 
 #: common/draw_panel_gal.cpp:541
 msgid "Error switching GAL backend"
-msgstr "GAL arkaplanına geçişte hata oluştu"
+msgstr "GAL arka ucu değiştirilirken hata oluştu"
 
 #: common/drawing_sheet/drawing_sheet_parser.cpp:558
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:3429
@@ -5757,7 +5758,7 @@ msgstr "Dosya açılamadı."
 
 #: common/drawing_sheet/drawing_sheet_parser.cpp:1009
 msgid "Drawing sheet was not fully read."
-msgstr "Çizim sayfası tam olarak okunamadı."
+msgstr "Çizim sayfası tamamen okunamadı."
 
 #: common/drawing_sheet/drawing_sheet_parser.cpp:1036
 msgid "Ran out of memory."
@@ -5799,7 +5800,7 @@ msgstr "Metin"
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:75
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:59
 msgid "Line"
-msgstr "Satır"
+msgstr "Yol"
 
 #: common/drawing_sheet/ds_data_item.cpp:367
 #: common/drawing_sheet/ds_draw_item.cpp:124 common/eda_shape.cpp:975
@@ -5828,11 +5829,11 @@ msgstr "Resim"
 #: common/drawing_sheet/ds_data_model_io.cpp:102
 #: common/drawing_sheet/ds_data_model_io.cpp:133
 msgid "Error writing drawing sheet file"
-msgstr "Çizim sayfası dosyası yazılır hata"
+msgstr "Çizim sayfası dosyası yazılırken hata"
 
 #: common/drawing_sheet/ds_draw_item.cpp:147
 msgid "First Page Only"
-msgstr "Yalnızca İlk Sayfa"
+msgstr "Sadece İlk Sayfa"
 
 #: common/drawing_sheet/ds_draw_item.cpp:148
 msgid "Subsequent Pages"
@@ -5852,11 +5853,11 @@ msgstr "Yineleme Sayısı"
 
 #: common/drawing_sheet/ds_draw_item.cpp:160
 msgid "Repeat Label Increment"
-msgstr "Etiket Artışlarını Yinele"
+msgstr "Etiket Tekrarı Artışı"
 
 #: common/drawing_sheet/ds_draw_item.cpp:166
 msgid "Repeat Position Increment"
-msgstr "Konum Artışını Tekrarla"
+msgstr "Konum Tekrarı Artışı"
 
 #: common/drawing_sheet/ds_draw_item.cpp:168
 #: pagelayout_editor/dialogs/dialog_design_inspector_base.cpp:38
@@ -5871,7 +5872,7 @@ msgstr "Metin '%s'"
 #: common/drawing_sheet/ds_draw_item.cpp:439 eeschema/sch_shape.cpp:548
 #, c-format
 msgid "Rectangle, width %s height %s"
-msgstr "Dikdörtgen, genişlik %s yüksekliği %s"
+msgstr "Dikdörtgen, genişlik %s yükseklik %s"
 
 #: common/drawing_sheet/ds_draw_item.cpp:472
 #, c-format
@@ -5906,7 +5907,7 @@ msgstr "Beklenmeyen %s"
 #: common/dsnlexer.cpp:361
 #, c-format
 msgid "%s is a duplicate"
-msgstr "%s bir kopyadır"
+msgstr "%s bir yinelemedir"
 
 #: common/dsnlexer.cpp:369
 #, c-format
@@ -5916,15 +5917,15 @@ msgstr "Beklenmeyen '%s'"
 #: common/dsnlexer.cpp:428
 #, c-format
 msgid "need a number for '%s'"
-msgstr "'%s' için bir rakama ihtiyacınız var"
+msgstr "'%s' için bir sayı gerekli"
 
 #: common/dsnlexer.cpp:721 common/dsnlexer.cpp:782
 msgid "Un-terminated delimited string"
-msgstr "Sonlandırılmamış sınırlandırılmış dize"
+msgstr "Sonlandırılmamış sınırlı dize"
 
 #: common/dsnlexer.cpp:743
 msgid "String delimiter must be a single character of ', \", or $"
-msgstr "Dize sınırlayıcısı tek bir ', \"veya $ karakteri olmalıdır"
+msgstr "Dize sınırlayıcı tek bir karakter olmalı: ', \\\", veya $"
 
 #: common/dsnlexer.cpp:865
 #, c-format
@@ -5934,10 +5935,10 @@ msgid ""
 "line: %d\n"
 "offset: %d"
 msgstr ""
-"Geçersiz kayan nokta sayısı\n"
+"Geçersiz ondalık sayı\n"
 "dosya: '%s'\n"
-"çizgi: %d\n"
-"offset: %d"
+"satır: %d\n"
+"konum: %d"
 
 #: common/dsnlexer.cpp:874
 #, c-format
@@ -5964,7 +5965,7 @@ msgstr "Geri al"
 #: common/eda_base_frame.cpp:438 common/tool/actions.cpp:202
 #: pcbnew/dialogs/panel_setup_rules.cpp:126
 msgid "Redo"
-msgstr "Yeniden yap"
+msgstr "Yinele"
 
 #: common/eda_base_frame.cpp:1008
 #, c-format
@@ -5990,11 +5991,11 @@ msgstr "Kısayol Tuşları"
 
 #: common/eda_base_frame.cpp:1099 kicad/project_tree_pane.cpp:1053
 msgid "Version Control"
-msgstr "Versiyon Kontrolü"
+msgstr "Sürüm Kontrolü"
 
 #: common/eda_base_frame.cpp:1106
 msgid "Data Collection"
-msgstr "Bağlantı Yok"
+msgstr "Veri Toplama"
 
 #: common/eda_base_frame.cpp:1129 common/tool/actions.cpp:1089
 #: common/tool/common_tools.cpp:615 eeschema/symbol_editor/symbol_editor.cpp:84
@@ -6029,7 +6030,7 @@ msgstr "Şematik Düzenleyici"
 
 #: common/eda_base_frame.cpp:1142
 msgid "Annotation Options"
-msgstr "Ek açıklamalar"
+msgstr "Açıklama Seçenekleri"
 
 #: common/eda_base_frame.cpp:1145
 #: eeschema/dialogs/dialog_schematic_setup.cpp:71
@@ -6117,12 +6118,12 @@ msgid ""
 "\n"
 "Do you wish to open the auto-saved file instead?"
 msgstr ""
-"Peki bu potansiyel olarak utandırıcı!\n"
-"En son düzenleme yaptığınız anlaşılıyor\n"
+"Bu potansiyel olarak utanç verici!\n"
+"Görünüşe göre son düzenleme yaptığınızda\n"
 "%s\n"
-"KiCad'dan kaydetmeden çıkıldı.\n"
+"KiCad kaydetmeden önce kapandı.\n"
 "\n"
-"Bunun yerine otomatik olarak kaydedilen dosyayı açmak ister misiniz?"
+"Bunun yerine otomatik kaydedilen dosyayı açmak ister misiniz?"
 
 #: common/eda_base_frame.cpp:1393
 msgid "The auto save file could not be renamed to the board file name."
@@ -6130,7 +6131,7 @@ msgstr "Otomatik kaydetme dosyası, kart dosya adıyla yeniden adlandırılamad�
 
 #: common/eda_base_frame.cpp:1626
 msgid "Set Language"
-msgstr "Dili ayarla"
+msgstr "Dili Ayarla"
 
 #: common/eda_doc.cpp:153
 msgid "Documentation File"
@@ -6148,7 +6149,7 @@ msgstr "'%s' belge dosyası için bilinmeyen MIME türü"
 
 #: common/eda_draw_frame.cpp:382 common/tool/actions.cpp:926
 msgid "Edit Grids..."
-msgstr "Kılavuzları Düzenle..."
+msgstr "Izgaraları Düzenle..."
 
 #: common/eda_draw_frame.cpp:547
 msgid "Zoom Auto"
@@ -6166,7 +6167,7 @@ msgstr "ızgara %s"
 
 #: common/eda_draw_frame.cpp:652 pagelayout_editor/pl_editor_frame.cpp:771
 msgid "inches"
-msgstr "inçler"
+msgstr "inç"
 
 #: common/eda_draw_frame.cpp:653
 #: eeschema/dialogs/dialog_junction_props_base.cpp:34
@@ -6207,17 +6208,17 @@ msgstr "Birim"
 #: pcbnew/import_gfx/dialog_import_graphics.cpp:53
 #: pcbnew/pcb_dimension.cpp:1786
 msgid "Inches"
-msgstr "İnçler"
+msgstr "İnç"
 
 #: common/eda_draw_frame.cpp:703 pagelayout_editor/pl_editor_frame.cpp:171
 #: pcbnew/tools/drawing_tool.cpp:345 pcbnew/tools/edit_tool_move_fct.cpp:334
 #: pcbnew/tools/pcb_actions.cpp:1174
 msgid "Constrain to H, V, 45"
-msgstr "Y, D, 45 ile sınırla"
+msgstr "Yatay, Dikey, 45 Derece ile kısıtla"
 
 #: common/eda_draw_frame.cpp:1122 pcbnew/footprint_libraries_utils.cpp:1388
 msgid "Select Library"
-msgstr "Kütüphane Seçin"
+msgstr "Kütüphane Seç"
 
 #: common/eda_draw_frame.cpp:1122
 msgid "New Library"
@@ -6240,7 +6241,7 @@ msgstr "Özellikler"
 #: common/eda_draw_frame.cpp:1232 pcbnew/pcb_edit_frame.cpp:362
 #: pcbnew/pcb_edit_frame.cpp:1716 pcbnew/tools/pcb_actions.cpp:1339
 msgid "Net Inspector"
-msgstr "Parça Denetleyici"
+msgstr "Ağ Denetleyici"
 
 #: common/eda_item.cpp:384
 msgid "Screen"
@@ -6258,7 +6259,7 @@ msgstr "Ayak izi"
 #: common/eda_item.cpp:387 pcbnew/dialogs/dialog_board_statistics.cpp:515
 #: pcbnew/pad.cpp:1316
 msgid "Pad"
-msgstr "Ayak"
+msgstr "Ped"
 
 #: common/eda_item.cpp:388 common/eda_item.cpp:418
 msgid "Graphic"
@@ -6277,7 +6278,7 @@ msgstr "Üreteç"
 #: eeschema/sch_textbox.cpp:532 eeschema/widgets/search_handlers.cpp:391
 #: pcbnew/pcb_textbox.cpp:467 pcbnew/pcb_textbox.h:70
 msgid "Text Box"
-msgstr "Metin kutusu"
+msgstr "Metin Kutusu"
 
 #: common/eda_item.cpp:394 common/eda_item.cpp:422 eeschema/sch_table.cpp:582
 #: pcbnew/pcb_table.cpp:455
@@ -6292,12 +6293,12 @@ msgstr "Tablo Hücresi"
 
 #: common/eda_item.cpp:396 common/eda_item.cpp:397 pcbnew/pcb_track.cpp:1606
 msgid "Track"
-msgstr "İz"
+msgstr "Yol"
 
 #: common/eda_item.cpp:398 pcbnew/dialogs/dialog_board_statistics.cpp:515
 #: pcbnew/pcb_track.cpp:1604 pcbnew/pcb_track.cpp:1680
 msgid "Via"
-msgstr "Geçiş"
+msgstr "Geçit"
 
 #: common/eda_item.cpp:399 common/eda_item.cpp:411 eeschema/sch_marker.cpp:364
 #: pcbnew/pcb_marker.cpp:199
@@ -6325,11 +6326,11 @@ msgstr "Bölge"
 
 #: common/eda_item.cpp:407
 msgid "ItemList"
-msgstr "Öğe Listesi"
+msgstr "Öge Listesi"
 
 #: common/eda_item.cpp:408
 msgid "NetInfo"
-msgstr "NetBilgi"
+msgstr "Ağ Bilgisi"
 
 #: common/eda_item.cpp:409 pcbnew/pcb_group.cpp:392
 msgid "Group"
@@ -6338,7 +6339,7 @@ msgstr "Grup"
 #: common/eda_item.cpp:412 eeschema/sch_junction.cpp:304
 #: eeschema/sch_junction.h:102
 msgid "Junction"
-msgstr "Bağlantı"
+msgstr "Bağlantı Noktası"
 
 #: common/eda_item.cpp:413
 msgid "No-Connect Flag"
@@ -6396,7 +6397,7 @@ msgstr "Pin"
 
 #: common/eda_item.cpp:431
 msgid "Sheet Pin"
-msgstr "Sayfa Bacağı"
+msgstr "Sayfa Pini"
 
 #: common/eda_item.cpp:432 eeschema/dialogs/dialog_migrate_buses.cpp:114
 #: pcbnew/tools/pcb_actions.cpp:2150
@@ -6405,7 +6406,7 @@ msgstr "Yaprak"
 
 #: common/eda_item.cpp:439
 msgid "SCH Screen"
-msgstr "SCH Ekranı"
+msgstr "Şematik Ekran"
 
 #: common/eda_item.cpp:443
 msgid "Gerber Layout"
@@ -6413,11 +6414,11 @@ msgstr "Gerber Düzeni"
 
 #: common/eda_item.cpp:444
 msgid "Draw Item"
-msgstr "Öğe Çiz"
+msgstr "Öge Çiz"
 
 #: common/eda_shape.cpp:319
 msgid "Thermal Spoke"
-msgstr "Termal Bağlantı"
+msgstr "Termal Bağlantı Kolu"
 
 #: common/eda_shape.cpp:320 pcbnew/pcb_shape.cpp:952
 msgid "Number Box"
@@ -6425,7 +6426,7 @@ msgstr "Sayı Kutusu"
 
 #: common/eda_shape.cpp:329 pcbnew/pad.cpp:1550
 msgid "Rect"
-msgstr "Drtgn"
+msgstr "Dörtgen"
 
 #: common/eda_shape.cpp:330 common/eda_shape.cpp:972 common/eda_shape.cpp:2321
 #: gerbview/gerber_draw_item.cpp:230
@@ -6450,11 +6451,11 @@ msgstr "Çokgen"
 
 #: common/eda_shape.cpp:962
 msgid "Pad Number Box"
-msgstr "Pad Numarası Kutusu"
+msgstr "Ped Numarası Kutusu"
 
 #: common/eda_shape.cpp:963 pcbnew/pcb_shape.cpp:959
 msgid "Thermal Spoke Template"
-msgstr "Termal Bağlantı Şablonu"
+msgstr "Termal Bağlantı Kolu Şablonu"
 
 #: common/eda_shape.cpp:964 common/eda_shape.cpp:977
 msgid "Unrecognized"
@@ -6466,7 +6467,7 @@ msgstr "Eğri"
 
 #: common/eda_shape.cpp:976 common/eda_shape.cpp:2319
 msgid "Segment"
-msgstr "Parça"
+msgstr "Segment"
 
 #: common/eda_shape.cpp:987 common/eda_shape.cpp:2372
 #: eeschema/dialogs/dialog_label_properties_base.cpp:173
@@ -6555,14 +6556,14 @@ msgstr "Şekil Özellikleri"
 #: pcbnew/pcb_tablecell.cpp:192 pcbnew/pcb_textbox.cpp:800
 #: pcbnew/pcb_track.cpp:2115
 msgid "Start X"
-msgstr "X'i Başlat"
+msgstr "X'ten Başlat"
 
 #: common/eda_shape.cpp:2381 eeschema/sch_table.cpp:663
 #: eeschema/sch_tablecell.cpp:193 pcbnew/pcb_table.cpp:619
 #: pcbnew/pcb_tablecell.cpp:193 pcbnew/pcb_textbox.cpp:801
 #: pcbnew/pcb_track.cpp:2119
 msgid "Start Y"
-msgstr "Y'yi başlat"
+msgstr "Y'den başlat"
 
 #: common/eda_shape.cpp:2387
 msgid "Center X"
@@ -6582,7 +6583,7 @@ msgstr "X'i sonlandır"
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2623 pcbnew/pcb_tablecell.cpp:195
 #: pcbnew/pcb_textbox.cpp:803 pcbnew/pcb_track.cpp:2125
 msgid "End Y"
-msgstr "Y'yi bitir"
+msgstr "Y'debitir"
 
 #: common/eda_shape.cpp:2429 common/stroke_params.cpp:276
 #: eeschema/sch_bus_entry.cpp:673 eeschema/sch_line.cpp:1096
@@ -6773,7 +6774,7 @@ msgstr "Kalınlık"
 #: pcbnew/microwave/microwave_polygon.cpp:127
 #: pcbnew/pcb_fields_grid_table.cpp:160
 msgid "Mirrored"
-msgstr "Aynalı"
+msgstr "Yansıtılmış"
 
 #: common/eda_text.cpp:1400 eeschema/sch_field.cpp:1868
 #: eeschema/sch_field.cpp:1871 eeschema/sch_label.cpp:2322
@@ -6786,7 +6787,7 @@ msgstr "Yatay Yaslama"
 #: pcbnew/pcb_dimension.cpp:1995 pcbnew/pcb_dimension.cpp:2037
 #: pcbnew/pcb_dimension.cpp:2071
 msgid "Vertical Justification"
-msgstr "Dikey Yaslama"
+msgstr "Yatay Hizalama"
 
 #: common/eda_text.cpp:1412 eeschema/sch_field.cpp:1887
 #: eeschema/sch_label.cpp:2282 eeschema/sch_tablecell.cpp:208
@@ -7956,7 +7957,7 @@ msgstr "Veri Yolu Birleşimleri"
 
 #: common/layer_id.cpp:74
 msgid "Junctions"
-msgstr "Kesişimler"
+msgstr "Bağlantı Noktaları"
 
 #: common/layer_id.cpp:75 eeschema/widgets/panel_sch_selection_filter.cpp:205
 #: eeschema/widgets/panel_sch_selection_filter_base.cpp:41
@@ -8183,7 +8184,7 @@ msgstr "Ayak izi metni"
 #: pcbnew/widgets/panel_selection_filter.cpp:198
 #: pcbnew/widgets/panel_selection_filter_base.cpp:37
 msgid "Tracks"
-msgstr "İzler"
+msgstr "Yollar"
 
 #: common/layer_id.cpp:129
 msgid "Through vias"
@@ -8199,11 +8200,11 @@ msgstr "mikro-geçitler"
 
 #: common/layer_id.cpp:132
 msgid "Via holes"
-msgstr "Geçiş Deliği"
+msgstr "Geçit Delikleri"
 
 #: common/layer_id.cpp:133
 msgid "Via hole walls"
-msgstr "Geçiş deliği duvarları"
+msgstr "Geçit deliği duvarları"
 
 #: common/layer_id.cpp:134
 msgid "Plated holes"
@@ -8664,7 +8665,7 @@ msgstr "CSV"
 
 #: common/settings/bom_settings.cpp:266
 msgid "TSV"
-msgstr "TSV (Silisyum Üzerinden Geçiş)"
+msgstr "TSV (Silisyum Üzerinden Geçit)"
 
 #: common/settings/bom_settings.cpp:273
 msgid "Semicolons"
@@ -12751,7 +12752,7 @@ msgstr "Şema Düzenleyici renklerini kullanmak için rengi temizleyin."
 
 #: eeschema/dialogs/dialog_junction_props_base.h:57
 msgid "Junction Properties"
-msgstr "Birleşim Özellikleri"
+msgstr "Bağlantı Noktası Özellikleri"
 
 #: eeschema/dialogs/dialog_label_properties.cpp:129
 msgid "Pin length:"
@@ -16249,7 +16250,7 @@ msgstr "Ağ / İç İçe Veriyolu Adı"
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:27
 #: pcbnew/dialogs/panel_pcb_display_options_base.cpp:37
 msgid "Annotations"
-msgstr "Ek açıklamalar"
+msgstr "Açıklamalar"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:30
 msgid "Symbol unit notation:"
@@ -24693,7 +24694,7 @@ msgstr "Katman Seçimi"
 #: gerbview/dialogs/dialog_print_gerbview.cpp:170
 #: pcbnew/dialogs/dialog_print_pcbnew.cpp:262
 msgid "Print mirrored"
-msgstr "Aynalı yazdır"
+msgstr "Yansıtılmış yazdır"
 
 #: gerbview/dialogs/dialog_print_gerbview.cpp:178
 #: pcbnew/dialogs/dialog_plot_base.cpp:59
@@ -31284,7 +31285,7 @@ msgstr "Bakır bölgeler üçgenleniyor..."
 #: pcbnew/widgets/panel_selection_filter.cpp:200
 #: pcbnew/widgets/panel_selection_filter_base.cpp:45
 msgid "Pads"
-msgstr "Ayaklar"
+msgstr "Pedler"
 
 #: pcbnew/board.cpp:1848 pcbnew/dialogs/dialog_board_statistics.cpp:707
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:155
@@ -31299,7 +31300,7 @@ msgstr "Ayaklar"
 #: pcbnew/widgets/panel_selection_filter.cpp:199
 #: pcbnew/widgets/panel_selection_filter_base.cpp:41
 msgid "Vias"
-msgstr "Geçişler"
+msgstr "Geçitler"
 
 #: pcbnew/board.cpp:1849 pcbnew/pcb_draw_panel_gal.cpp:717
 msgid "Track Segments"
@@ -32583,7 +32584,7 @@ msgstr "Kaplama"
 
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:232
 msgid "Via/Pad"
-msgstr "Geçiş/Ayak"
+msgstr "Geçit/Ped"
 
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:233
 msgid "Start Layer"
@@ -33247,7 +33248,7 @@ msgstr "Değer -1, 0 veya 1 bu seçeneği devre dışı bırakır."
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:164
 msgid "Rows"
-msgstr "Satır"
+msgstr "Satırlar"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:167
 msgid "Columns"
@@ -37170,7 +37171,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:149
 msgid "Mirrored plot"
-msgstr "Aynalı çizim"
+msgstr "Yansıtılmış çizim"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:152
 msgid "Negative plot"
@@ -38275,16 +38276,16 @@ msgstr "Ön / İç / Arka"
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:301
 #: pcbnew/dialogs/dialog_track_via_size_base.cpp:36
 msgid "Via diameter:"
-msgstr "Geçiş çapı:"
+msgstr "Geçit çapı:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:312
 #: pcbnew/dialogs/dialog_track_via_size_base.cpp:47
 msgid "Via hole:"
-msgstr "Geçiş deliği:"
+msgstr "Geçit deliği:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:346
 msgid "Via type:"
-msgstr "Geçiş türü:"
+msgstr "Geçit türü:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:350
 #: pcbnew/pcb_track.cpp:2086
@@ -38369,7 +38370,7 @@ msgstr "(ped/geçit/yol boyutunun yüzdesi olarak)"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.h:162
 msgid "Track & Via Properties"
-msgstr "Yol ve Geçiş Özellikleri"
+msgstr "Yol ve Geçit Özellikleri"
 
 #: pcbnew/dialogs/dialog_track_via_size_base.h:53
 msgid "Track and Via Dimensions"
@@ -39167,7 +39168,7 @@ msgstr ""
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:242
 msgid "uVias"
-msgstr "uGeçiş"
+msgstr "Mikro Geçit"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:258
 msgid "Minimum uVia diameter:"
@@ -40999,7 +41000,7 @@ msgstr "tahta kurulum kısıtlamaları avlu"
 
 #: pcbnew/drc/drc_engine.cpp:227
 msgid "board setup micro-via constraints"
-msgstr "kart kurulumu mikro geçiş kısıtlamaları"
+msgstr "kart kurulumu mikro geçit kısıtlamaları"
 
 #: pcbnew/drc/drc_engine.cpp:255 pcbnew/drc/drc_engine.cpp:271
 #: pcbnew/drc/drc_engine.cpp:340 pcbnew/drc/drc_engine.cpp:357
@@ -41373,7 +41374,7 @@ msgstr "Sızıntı yolu ihlali"
 
 #: pcbnew/drc/drc_item.cpp:76
 msgid "Tracks crossing"
-msgstr "Demiryolu geçişi"
+msgstr "Yollar Kesişiyor"
 
 #: pcbnew/drc/drc_item.cpp:80
 msgid "Board edge clearance violation"
@@ -44350,7 +44351,7 @@ msgstr ""
 #: pcbnew/pad.cpp:1114 pcbnew/pad.cpp:1274 pcbnew/pad.cpp:1290
 #: pcbnew/pad.cpp:1299
 msgid "pad"
-msgstr "ayak"
+msgstr "ped"
 
 #: pcbnew/pad.cpp:1322 pcbnew/pad.cpp:2787
 msgid "Pin Type"
@@ -46246,8 +46247,8 @@ msgid ""
 "Invalid floating point number in file: '%s'\n"
 "line: %d, offset: %d"
 msgstr ""
-"Dosyada geçersiz kayan nokta sayısı: '%s'\n"
-"satır: %d, ofset: %d"
+"Geçersiz ondalık sayı dosya: '%s'\n"
+"satır: %d, konum: %d"
 
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:2867
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:2906
@@ -48290,7 +48291,7 @@ msgstr "Ağ Seç:"
 
 #: pcbnew/tools/drawing_tool.cpp:4013
 msgid "Via location violates DRC."
-msgstr "Geçiş yeri tasarım kurallarını (DRC) ihlal ediyor."
+msgstr "Geçit konumu DRC'yi ihlal ediyor."
 
 #: pcbnew/tools/drawing_tool.cpp:4103
 msgid "Place via"
@@ -49546,7 +49547,7 @@ msgstr "Matkap Orijinini Sıfırla"
 
 #: pcbnew/tools/pcb_actions.cpp:1166
 msgid "Toggle Lock"
-msgstr "Geçiş Kilidi"
+msgstr "Kilitle/Kilidi Aç"
 
 #: pcbnew/tools/pcb_actions.cpp:1167
 msgid "Lock or unlock selected items"
