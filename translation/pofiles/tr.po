@@ -7185,7 +7185,7 @@ msgstr "%u nesnenin %u'i alındı"
 #: common/git/kicad_git_common.cpp:873
 #, c-format
 msgid "* [updated] %s..%s %s"
-msgstr "[güncellendi] %s"
+msgstr "[güncellendi]%s..%s %s"
 
 #: common/git/kicad_git_common.cpp:877
 #, c-format
@@ -7249,7 +7249,7 @@ msgstr "Dal silme başarısız oldu."
 
 #: common/git/kicad_git_errors.cpp:56
 msgid "File not found during checkout operation."
-msgstr "Çıkış işlemi sırasında dosya bulunamadı."
+msgstr "Dosya, denetleme sırasında bulunamadı."
 
 #: common/git/kicad_git_errors.cpp:59
 msgid "Merge conflict encountered."
@@ -7307,7 +7307,7 @@ msgstr "Kes"
 
 #: common/grid_tricks.cpp:362
 msgid "Clear selected cells placing original contents on clipboard"
-msgstr "Panoya özgün içerik yerleştiren seçili hücreleri temizle"
+msgstr "Seçili hücreleri temizle ve orijinal içeriği panoya yerleştir"
 
 #: common/grid_tricks.cpp:363 common/tool/actions.cpp:225
 #: common/widgets/listbox_tricks.cpp:50 eeschema/tools/sch_actions.cpp:255
@@ -7329,7 +7329,7 @@ msgstr "Yapıştır"
 
 #: common/grid_tricks.cpp:369
 msgid "Paste clipboard cells to matrix at current cell"
-msgstr "Pano hücrelerini geçerli hücredeki matrise yapıştırın"
+msgstr "Panodaki hücreleri geçerli hücredeki matrise yapıştır"
 
 #: common/grid_tricks.cpp:370 common/tool/actions.cpp:291
 #: common/widgets/listbox_tricks.cpp:54 eeschema/tools/sch_edit_tool.cpp:1719
@@ -7399,7 +7399,7 @@ msgstr "Seçimden Kaldır"
 
 #: common/hotkey_store.cpp:53
 msgid "Ignore Grid Snaps"
-msgstr "Kılavuza Yapışmayı Yoksay"
+msgstr "Izgara Yakalamalarını Yok Say"
 
 #: common/hotkey_store.cpp:54
 msgid "Ignore Other Snaps"
@@ -7506,8 +7506,7 @@ msgstr "İçe aktarılan grafik çok büyük. Maksimum ölçek %f"
 #, c-format
 msgid "Import offset adjusted to (%f, %f) to fit within numeric limits"
 msgstr ""
-"İçe aktarma ofseti, sayısal sınırlara sığdırmak için (%f, %f) olarak "
-"ayarlandı"
+"Sayısal sınırlara sığması için içe aktarma ofseti (%f, %f) olarak ayarlandı"
 
 #: common/io/altium/altium_binary_parser.cpp:62 common/richio.cpp:108
 #, c-format
