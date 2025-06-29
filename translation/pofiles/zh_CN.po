@@ -42,7 +42,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-06-27 22:51+0300\n"
-"PO-Revision-Date: 2025-06-29 09:01+0000\n"
+"PO-Revision-Date: 2025-06-29 09:02+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/kicad/master-source/zh_Hans/>\n"
@@ -8438,7 +8438,7 @@ msgstr "锁定的项目阴影"
 
 #: common/layer_id.cpp:154
 msgid "Courtyard collision shadow"
-msgstr "安全边界碰撞阴影"
+msgstr "外框碰撞阴影"
 
 #: common/layer_id.cpp:155
 #, fuzzy
@@ -34708,7 +34708,7 @@ msgstr "元件外框"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:326
 msgid "Exempt from courtyard requirement"
-msgstr "忽略封装安全边界要求"
+msgstr "忽略封装外框要求"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:327
 msgid "Will not generate \"missing courtyard\" DRC violations"
@@ -50632,7 +50632,7 @@ msgstr "在锁定的项目上显示阴影标记"
 
 #: pcbnew/widgets/appearance_controls.cpp:353
 msgid "Colliding Courtyards"
-msgstr "碰触到 Courtyards"
+msgstr "碰触到外框"
 
 #: pcbnew/widgets/appearance_controls.cpp:353
 msgid "Show colliding footprint courtyards"
