@@ -3839,7 +3839,7 @@ msgstr "Yeni"
 
 #: common/dialogs/git/dialog_git_commit.cpp:108
 msgid "Modified"
-msgstr "Değiştirilmiş"
+msgstr "Değiştirildi"
 
 #: common/dialogs/git/dialog_git_commit.cpp:117
 msgid "Deleted"
@@ -6997,7 +6997,7 @@ msgstr "'%s' için bir PDF görüntüleyici bulunamadı."
 #: common/gestfich.cpp:280
 #, c-format
 msgid "Problem while running the PDF viewer '%s'."
-msgstr "%s' PDF görüntüleyici çalıştırılırken sorun oluştu."
+msgstr "'%s' PDF görüntüleyici çalıştırılırken sorun oluştu."
 
 #: common/gestfich.cpp:299 eeschema/eeschema.cpp:659 eeschema/eeschema.cpp:694
 #: gerbview/gerbview.cpp:243 kicad/project_template.cpp:309
@@ -7008,22 +7008,22 @@ msgstr "'%s' dosyası kopyalanamıyor."
 
 #: common/gestfich.cpp:320
 msgid "Invalid directory name, cannot remove root"
-msgstr "Geçersiz dizin adı, kök kaldırılamıyor"
+msgstr "Geçersiz dizin adı, kök silinemez"
 
 #: common/gestfich.cpp:328
 #, c-format
 msgid "Directory '%s' does not exist"
-msgstr "'%s' klasörü bulunamadı"
+msgstr "'%s' dizini mevcut değil"
 
 #: common/gestfich.cpp:338
 #, c-format
 msgid "'%s' is not a directory"
-msgstr "'%s' klasör değil"
+msgstr "'%s' bir dizin değil"
 
 #: common/gestfich.cpp:350
 #, c-format
 msgid "Error removing directory '%s': %s"
-msgstr "Dizin '%s' kaldırılırken hata oluştu: %s"
+msgstr "'%s' dizini silinirken hata oluştu: %s"
 
 #: common/gestfich.cpp:366 common/gestfich.cpp:440 common/gestfich.cpp:554
 #, c-format
@@ -7038,12 +7038,12 @@ msgstr "Hedef dizin oluşturulamadı: %s"
 #: common/gestfich.cpp:397 common/gestfich.cpp:428
 #, c-format
 msgid "Could not copy file: %s to %s"
-msgstr "Dosya kopyalanamadı: %s - %s"
+msgstr "Dosya kopyalanamadı: %s'den %s'ye"
 
 #: common/gestfich.cpp:477
 #, c-format
 msgid "Could not copy directory: %s to %s"
-msgstr "Dizin kopyalanamadı: %s - %s"
+msgstr "Dizin kopyalanamadı: %s'den %s'ye"
 
 #: common/gestfich.cpp:529
 #, c-format
@@ -7063,7 +7063,7 @@ msgstr "'%s' klasörü oluşturulamıyor"
 #: common/git/git_clone_handler.cpp:81
 #, c-format
 msgid "Could not clone repository '%s'"
-msgstr "'%s' reposu knonlanamıyor"
+msgstr "'%s' deposu klonlanamadı"
 
 #: common/git/git_pull_handler.cpp:67
 #, c-format
@@ -7185,7 +7185,7 @@ msgstr "%u nesnenin %u'i alındı"
 #: common/git/kicad_git_common.cpp:873
 #, c-format
 msgid "* [updated] %s..%s %s"
-msgstr "* [güncellenmiş] %s..%s %s"
+msgstr "[güncellendi] %s"
 
 #: common/git/kicad_git_common.cpp:877
 #, c-format
@@ -7205,7 +7205,7 @@ msgstr "* [reddedildi] %s (%s)"
 #: common/git/kicad_git_common.cpp:917
 #, c-format
 msgid "[updated] %s"
-msgstr "[güncellenmiş] %s"
+msgstr "[güncellendi] %s"
 
 #: common/git/kicad_git_common.cpp:981
 msgid "Unable to authenticate"
