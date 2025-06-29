@@ -5713,9 +5713,8 @@ msgid "DP Gap"
 msgstr "差分对间隙"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:60
-#, fuzzy
 msgid "Delay Profile"
-msgstr "延迟时间："
+msgstr "延迟配置"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:61
 msgid "PCB Color"
@@ -5868,8 +5867,9 @@ msgid "Top main"
 msgstr ""
 
 #: common/dialogs/panel_toolbar_customization.cpp:49
+#, fuzzy
 msgid "Top auxillary"
-msgstr ""
+msgstr "顶部辅助区"
 
 #: common/dialogs/panel_toolbar_customization.cpp:143
 #: common/dialogs/panel_toolbar_customization_base.cpp:71
@@ -11841,9 +11841,8 @@ msgstr "更新/重置字段位置"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:149
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:124
-#, fuzzy
 msgid "Check All Update Options"
-msgstr "更新选项"
+msgstr "选中所有更新选项"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:159
 msgid "Update symbol shape and pins"
@@ -24725,9 +24724,8 @@ msgid "These parameters are usually specified in files, but not always."
 msgstr "这些参数通常在文件中指定, 但并不总是如此。"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:37
-#, fuzzy
 msgid "File units:"
-msgstr "文件单位"
+msgstr "文件单位:"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:47
 msgid "Zero format:"
@@ -24754,9 +24752,8 @@ msgid "(The decimal format does not use these settings)"
 msgstr "(十进制格式不使用这些设置)"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:89
-#, fuzzy
 msgid "Format for mm:"
-msgstr "毫米格式"
+msgstr "单位「毫米」的格式:"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:96
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:106
@@ -24825,9 +24822,8 @@ msgid ":"
 msgstr ":"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:115
-#, fuzzy
 msgid "Format for inches:"
-msgstr "英寸格式"
+msgstr "单位「英寸」的格式:"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:144
 msgid "Usually: 3:3 in mm and 2:4 in inches"
@@ -38291,7 +38287,7 @@ msgstr "单击:"
 #: pcbnew/dialogs/panel_edit_options_base.cpp:151
 #: pcbnew/dialogs/panel_edit_options_base.cpp:225
 msgid "Long Click:"
-msgstr "长击:"
+msgstr "长按:"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:171
 msgid "Ctrl+Shift:"
@@ -40466,15 +40462,13 @@ msgid "Via override configuration is duplicated"
 msgstr ""
 
 #: pcbnew/dialogs/panel_setup_time_domain_parameters_base.cpp:31
-#, fuzzy
 msgid "Delay Profiles"
-msgstr "延迟时间："
+msgstr "延迟配置"
 
 #: pcbnew/dialogs/panel_setup_time_domain_parameters_base.cpp:50
 #: pcbnew/dialogs/panel_setup_time_domain_parameters_base.cpp:111
-#, fuzzy
 msgid "Profile Name"
-msgstr "文件名称"
+msgstr "配置名称"
 
 #: pcbnew/dialogs/panel_setup_time_domain_parameters_base.cpp:92
 #, fuzzy
@@ -43067,9 +43061,8 @@ msgid "current skew"
 msgstr "当前 skew"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2240
-#, fuzzy
 msgid "current delay"
-msgstr "当前层:"
+msgstr "当前延迟"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2242
 msgid "current length"
@@ -43080,18 +43073,16 @@ msgid "Routed Lengths"
 msgstr "已布线长度"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2347
-#, fuzzy
 msgid "Routed Delays"
-msgstr "已布线长度"
+msgstr "已布线延迟"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2356 pcbnew/pcb_track.cpp:1840
 msgid "Routed Length"
 msgstr "已布线长度"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2360 pcbnew/pcb_track.cpp:1853
-#, fuzzy
 msgid "Routed Delay"
-msgstr "已布线长度"
+msgstr "已布线延迟"
 
 # Die 裸芯片
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2368 pcbnew/pad.cpp:2902
@@ -43106,9 +43097,8 @@ msgstr "完整长度"
 # Die 裸芯片
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2376 pcbnew/pad.cpp:2908
 #: pcbnew/pcb_track.cpp:1859
-#, fuzzy
 msgid "Pad To Die Delay"
-msgstr "焊盘到 Die 长度"
+msgstr "焊盘到 Die 延迟"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2379 pcbnew/pcb_track.cpp:1862
 #, fuzzy
@@ -43131,9 +43121,9 @@ msgid "Skew Constraints: %s"
 msgstr "skew 约束: %s"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2415
-#, fuzzy, c-format
+#, c-format
 msgid "Target Delay: %s"
-msgstr "目标 skew: %s"
+msgstr "目标延迟: %s"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2421
 #, c-format
@@ -43141,9 +43131,9 @@ msgid "Target Length: %s"
 msgstr "目标长度: %s"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2432
-#, fuzzy, c-format
+#, c-format
 msgid "Delay Constraints: %s"
-msgstr "DP 间隙约束: %s"
+msgstr "延迟约束: %s"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2432
 #, c-format
@@ -43212,18 +43202,16 @@ msgid "Target Length"
 msgstr "目标长度"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2932
-#, fuzzy
 msgid "Target Delay"
-msgstr "目标域:"
+msgstr "目标延迟"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2939
 msgid "Target Skew"
 msgstr "目标 skew"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2946
-#, fuzzy
 msgid "Target Skew Delay"
-msgstr "目标 skew"
+msgstr "目标 Skew 延迟"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2953
 msgid "Override Custom Rules"
@@ -47898,9 +47886,8 @@ msgid "Edit Track Width/Via Size"
 msgstr "编辑走线宽度/过孔大小"
 
 #: pcbnew/tools/edit_tool.cpp:1115
-#, fuzzy
 msgid "Edit Track Layer"
-msgstr "底层"
+msgstr "编辑走线层"
 
 #: pcbnew/tools/edit_tool.cpp:1150
 msgid "At least two straight track segments must be selected."
@@ -50642,14 +50629,12 @@ msgid "Show colliding footprint courtyards"
 msgstr "显示重叠 (碰撞) 的封装外框"
 
 #: pcbnew/widgets/appearance_controls.cpp:354
-#, fuzzy
 msgid "Board Area Shadow"
-msgstr "仅电路板区域"
+msgstr "电路板区域阴影"
 
 #: pcbnew/widgets/appearance_controls.cpp:354
-#, fuzzy
 msgid "Show board area shadow"
-msgstr "显示电路板飞线"
+msgstr "显示电路板区域阴影"
 
 #: pcbnew/widgets/appearance_controls.cpp:355
 msgid "Show drawing sheet borders and title block"
