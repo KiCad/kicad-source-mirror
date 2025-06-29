@@ -67,7 +67,7 @@
         <property name="permission">none</property>
         <object class="sizeritem" expanded="true">
           <property name="border">5</property>
-          <property name="flag">wxEXPAND</property>
+          <property name="flag">wxEXPAND|wxALL</property>
           <property name="proportion">1</property>
           <object class="wxGridBagSizer" expanded="true">
             <property name="empty_cell_size"></property>
@@ -84,7 +84,7 @@
               <property name="border">5</property>
               <property name="colspan">1</property>
               <property name="column">0</property>
-              <property name="flag">wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxALL</property>
+              <property name="flag">wxALIGN_CENTER_VERTICAL|wxALL</property>
               <property name="row">0</property>
               <property name="rowspan">1</property>
               <object class="wxStaticText" expanded="false">
@@ -218,7 +218,7 @@
               <property name="border">5</property>
               <property name="colspan">1</property>
               <property name="column">3</property>
-              <property name="flag">wxALIGN_CENTER_VERTICAL|wxALL</property>
+              <property name="flag">wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxRIGHT</property>
               <property name="row">0</property>
               <property name="rowspan">1</property>
               <object class="wxStaticText" expanded="false">
@@ -420,7 +420,7 @@
               <property name="border">5</property>
               <property name="colspan">1</property>
               <property name="column">0</property>
-              <property name="flag">wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxALL</property>
+              <property name="flag">wxALIGN_CENTER_VERTICAL|wxALL</property>
               <property name="row">3</property>
               <property name="rowspan">1</property>
               <object class="wxStaticText" expanded="false">
@@ -554,7 +554,7 @@
               <property name="border">5</property>
               <property name="colspan">1</property>
               <property name="column">3</property>
-              <property name="flag">wxALIGN_CENTER_VERTICAL|wxALL</property>
+              <property name="flag">wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxRIGHT</property>
               <property name="row">3</property>
               <property name="rowspan">1</property>
               <object class="wxStaticText" expanded="false">
@@ -619,7 +619,7 @@
               <property name="border">5</property>
               <property name="colspan">4</property>
               <property name="column">0</property>
-              <property name="flag">wxALL|wxEXPAND</property>
+              <property name="flag">wxEXPAND|wxTOP|wxBOTTOM</property>
               <property name="row">4</property>
               <property name="rowspan">1</property>
               <object class="wxStaticLine" expanded="false">
@@ -681,7 +681,7 @@
               <property name="border">5</property>
               <property name="colspan">4</property>
               <property name="column">0</property>
-              <property name="flag">wxALL|wxEXPAND</property>
+              <property name="flag">wxEXPAND|wxTOP|wxRIGHT|wxLEFT</property>
               <property name="row">5</property>
               <property name="rowspan">1</property>
               <object class="wxCheckBox" expanded="false">
@@ -750,7 +750,7 @@
               <property name="border">5</property>
               <property name="colspan">1</property>
               <property name="column">0</property>
-              <property name="flag">wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxALL</property>
+              <property name="flag">wxALIGN_CENTER_VERTICAL|wxALL</property>
               <property name="row">6</property>
               <property name="rowspan">1</property>
               <object class="wxStaticText" expanded="false">
@@ -1017,7 +1017,7 @@
               <property name="border">5</property>
               <property name="colspan">1</property>
               <property name="column">1</property>
-              <property name="flag">wxALL|wxEXPAND</property>
+              <property name="flag">wxALL|wxEXPAND|wxALIGN_CENTER_VERTICAL</property>
               <property name="row">8</property>
               <property name="rowspan">1</property>
               <object class="wxComboBox" expanded="true">
@@ -1083,10 +1083,10 @@
               </object>
             </object>
             <object class="gbsizeritem" expanded="false">
-              <property name="border">5</property>
+              <property name="border">10</property>
               <property name="colspan">1</property>
               <property name="column">2</property>
-              <property name="flag">wxALIGN_CENTER_VERTICAL|wxALL</property>
+              <property name="flag">wxALIGN_CENTER_VERTICAL|wxRIGHT</property>
               <property name="row">8</property>
               <property name="rowspan">1</property>
               <object class="wxStaticText" expanded="false">
@@ -1151,7 +1151,7 @@
               <property name="border">5</property>
               <property name="colspan">1</property>
               <property name="column">3</property>
-              <property name="flag">wxALL</property>
+              <property name="flag">wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL</property>
               <property name="row">8</property>
               <property name="rowspan">1</property>
               <object class="wxButton" expanded="true">
@@ -1189,7 +1189,7 @@
                 <property name="gripper">0</property>
                 <property name="hidden">0</property>
                 <property name="id">wxID_ANY</property>
-                <property name="label">Layer default</property>
+                <property name="label">Layer Default</property>
                 <property name="margins"></property>
                 <property name="markup">0</property>
                 <property name="max_size"></property>
@@ -1229,7 +1229,7 @@
               <property name="border">5</property>
               <property name="colspan">4</property>
               <property name="column">0</property>
-              <property name="flag">wxEXPAND | wxALL</property>
+              <property name="flag">wxEXPAND|wxTOP|wxBOTTOM</property>
               <property name="row">9</property>
               <property name="rowspan">1</property>
               <object class="wxStaticLine" expanded="true">

@@ -94,7 +94,7 @@ TOOL_ACTION PCB_ACTIONS::convertToTracks( TOOL_ACTION_ARGS()
 TOOL_ACTION PCB_ACTIONS::outsetItems( TOOL_ACTION_ARGS()
         .Name( "pcbnew.Convert.outsetItems" )
         .Scope( AS_GLOBAL )
-        .FriendlyName( _( "Create Outsets from Selection" ) )
+        .FriendlyName( _( "Create Outsets from Selection..." ) )
         .Tooltip( _( "Create outset lines from the selected item" ) )
         .Icon( BITMAPS::outset_from_selection ) );
 
