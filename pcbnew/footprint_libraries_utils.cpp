@@ -114,6 +114,7 @@ FOOTPRINT* FOOTPRINT_EDIT_FRAME::ImportFootprint( const wxString& aName )
         }
 
         wxString allWildcardsStr;
+
         for( const wxString& wildcard : allWildcardsSet )
             allWildcardsStr << wildcard;
 
@@ -123,7 +124,11 @@ FOOTPRINT* FOOTPRINT_EDIT_FRAME::ImportFootprint( const wxString& aName )
         wxFileDialog dlg( this, _( "Import Footprint" ), m_mruPath, wxEmptyString, fileFiltersStr,
                           wxFD_OPEN | wxFD_FILE_MUST_EXIST );
 
-        dlg.SetFilterIndex( lastFilterIndex );
+        wxArrayString dummy1, dummy2;
+        const int nWildcards = wxParseCommonDialogsFilter( fileFiltersStr, dummy1, dummy2 );
+
+        if( lastFilterIndex >= 0 && lastFilterIndex < nWildcards )
+            dlg.SetFilterIndex( lastFilterIndex );
 
         if( dlg.ShowModal() == wxID_CANCEL )
             return nullptr;

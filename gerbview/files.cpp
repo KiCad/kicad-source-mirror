@@ -142,7 +142,12 @@ bool GERBVIEW_FRAME::LoadFileOrShowDialog( const wxString& aFileName,
 
         wxFileDialog dlg( this, dialogTitle, currentPath, filename.GetFullName(), dialogFiletypes,
                           wxFD_OPEN | wxFD_FILE_MUST_EXIST | wxFD_MULTIPLE | wxFD_CHANGE_DIR );
-        dlg.SetFilterIndex( lastGerberFileWildcard );
+
+        wxArrayString dummy1, dummy2;
+        const int nWildcards = wxParseCommonDialogsFilter( dialogFiletypes, dummy1, dummy2 );
+
+        if( lastGerberFileWildcard >= 0 && lastGerberFileWildcard < nWildcards )
+            dlg.SetFilterIndex( lastGerberFileWildcard );
 
         if( dlg.ShowModal() == wxID_CANCEL )
             return false;
