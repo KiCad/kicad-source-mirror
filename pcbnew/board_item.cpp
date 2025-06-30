@@ -207,7 +207,10 @@ bool BOARD_ITEM::IsSideSpecific() const
 wxString BOARD_ITEM::layerMaskDescribe() const
 {
     const BOARD* board = GetBoard();
-    LSET         layers = GetLayerSet() & board->GetEnabledLayers();
+    LSET         layers = GetLayerSet();
+
+    if( board )
+        layers &= board->GetEnabledLayers();
 
     LSET copperLayers = layers & LSET::AllCuMask();
     LSET techLayers = layers & LSET::AllTechMask();
