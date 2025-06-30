@@ -30053,7 +30053,7 @@ msgstr "Regülatör Ekle"
 
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:113
 msgid "Enter a new item to the current list of available regulators"
-msgstr "Mevcut düzenleyiciler listesine yeni bir öge girin"
+msgstr "Mevcut düzenleyiciler listesine yeni bir öge gir"
 
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:118
 msgid "Remove an item from the current list of available regulators"
@@ -33273,7 +33273,7 @@ msgstr "Izgara Konumu"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:177
 msgid "Source items remain in place"
-msgstr "Kaynak öğeler yerinde kalır"
+msgstr "Kaynak ögeler yerinde kalır"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:180
 msgid "Centre on source items"
@@ -33397,7 +33397,7 @@ msgstr "Öge sayısı:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:381
 msgid "How many items in the array."
-msgstr "Dizideki öğe sayısı."
+msgstr "Dizideki öge sayısı."
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:388
 msgid "Rotate items"
@@ -33457,7 +33457,7 @@ msgid ""
 "This item was on a non-existing layer.\n"
 "It has been moved to the first defined layer."
 msgstr ""
-"Bu öğe var olmayan bir katmandaydı.\n"
+"Bu öge var olmayan bir katmandaydı.\n"
 "İlk tanımlanan katmana taşındı."
 
 #: pcbnew/dialogs/dialog_dimension_properties.cpp:318
@@ -34481,9 +34481,7 @@ msgstr "Ağ filtresi (joker karakterleri destekler):"
 #: pcbnew/dialogs/dialog_export_step_base.cpp:152
 msgid ""
 "Only copper items belonging to nets matching this filter will be exported."
-msgstr ""
-"Bu filtreyle eşleşen parçalara ait bakır öğeleri yalnızca dışa "
-"aktarılacaktır."
+msgstr "Yalnızca bu filtreyle eşleşen ağlara ait bakır ögeler dışa aktarılacak."
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:166
 msgid "Coordinates"
@@ -35458,7 +35456,7 @@ msgstr "Kesinlik"
 
 #: pcbnew/dialogs/dialog_generators_base.cpp:31
 msgid "Click on items to highlight them on the board."
-msgstr "Panoda vurgulamak için öğelere tıklayın."
+msgstr "Ögeleri kart üzerinde vurgulamak için tıklayın."
 
 #: pcbnew/dialogs/dialog_generators_base.cpp:42
 #, c-format
@@ -35488,8 +35486,7 @@ msgstr "Referans tanımlayıcı:"
 
 #: pcbnew/dialogs/dialog_get_footprint_by_name_base.cpp:35
 msgid "(specify multiple items separated by spaces for successive placement)"
-msgstr ""
-"(ardışık yerleştirme için boşluklarla ayrılmış birden fazla öğe belirt)"
+msgstr "(ardışık yerleştirme için birden fazla ögeyi boşluklarla ayırın)"
 
 #: pcbnew/dialogs/dialog_get_footprint_by_name_base.cpp:39
 msgid "Available footprints:"
@@ -36404,8 +36401,8 @@ msgstr "Diğer ögeleri kopyala"
 #: pcbnew/dialogs/dialog_multichannel_repeat_layout_base.cpp:84
 msgid "Copy text, shapes, zones, and other items inside the source rule area"
 msgstr ""
-"Kaynak kural alanı içindeki metni, şekilleri, bölgeleri ve diğer öğeleri "
-"kopyalayın"
+"Kaynak kural alanındaki metinleri, şekilleri, bölgeleri ve diğer ögeleri "
+"kopyala"
 
 #: pcbnew/dialogs/dialog_multichannel_repeat_layout_base.cpp:88
 msgid "Include footprints outside the reference rule area"
@@ -36417,7 +36414,7 @@ msgstr "Ögeleri hedef kural alanlarıyla gruplandır"
 
 #: pcbnew/dialogs/dialog_multichannel_repeat_layout_base.cpp:96
 msgid "Remove locked items from target rule areas"
-msgstr "Hedef kural alanlarından kilitli öğeleri kaldırın"
+msgstr "Hedef kural alanlarından kilitli ögeleri kaldır"
 
 #: pcbnew/dialogs/dialog_multichannel_repeat_layout_base.h:58
 msgid "Repeat Multichannel Layout"
@@ -36482,7 +36479,7 @@ msgid ""
 "This is not possible for items like pads, which will still use the value "
 "below."
 msgstr ""
-"Bu, pedler gibi öğeler için mümkün değildir; bu öğeler hala aşağıdaki değeri "
+"Pedler gibi ögeler için bu mümkün değildir, bu ögeler hala aşağıdaki değeri "
 "kullanacaktır."
 
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:86
@@ -37358,7 +37355,7 @@ msgstr "DXF Seçenekleri"
 #: pcbnew/dialogs/dialog_plot_base.cpp:333
 msgid "Uncheck to plot graphic items using their center lines"
 msgstr ""
-"Grafik öğelerini merkez çizgilerini kullanarak çizmek için işareti kaldır"
+"Grafik ögelerini merkez çizgilerini kullanarak çizdirmek için işareti kaldır"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:337
 msgid "Export units:"
@@ -39099,7 +39096,7 @@ msgstr "Minimum bağlantı genişliği:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:84
 msgid "The minimum copper width of connected copper items."
-msgstr "Bağlı bakır öğelerin minimum bakır genişliği."
+msgstr "Bağlı bakır ögelerin en küçük bakır genişliği."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:96
 msgid "Minimum annular width:"
@@ -39235,9 +39232,9 @@ msgid ""
 "this can improve legibility.  (Note: does not apply to multiple shapes "
 "within a single footprint.)"
 msgstr ""
-"Aynı serigrafi katmanındaki iki öğe arasındaki minimum boşluk. Bu "
-"ayarlanırsa okunabilirliği artırabilir. (Not: tek bir ayak izindeki birden "
-"fazla şekil için geçerli değildir.)"
+"Aynı serigrafi katmanındaki iki öge arasındaki en küçük boşluk. Ayarlanırsa "
+"bu, okunabilirliği artırabilir. (Not: Tek bir ayak izindeki birden fazla "
+"şekil için geçerli değildir.)"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:331
 msgid "Minimum text height:"
@@ -39509,9 +39506,9 @@ msgid ""
 "These items will be no longer accessible\n"
 "Do you wish to continue?"
 msgstr ""
-"Ayak izlerinde kaldırılmış katmanlarda bazı öğeler var:\n"
+"Ayak izlerinde kaldırılmış katmanlarda bazı ögeler var:\n"
 "%s\n"
-"Bu öğelere artık erişilemeyecek\n"
+"Bu ögelere artık erişilemeyecek\n"
 "Devam etmek istiyor musunuz?"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:836
@@ -39520,9 +39517,9 @@ msgid ""
 "items from removed layers and cannot be undone.\n"
 "Do you wish to continue?"
 msgstr ""
-"Kaldırılan katmanlarda öğeler bulundu. Bu işlem kaldırılan katmanlardaki tüm "
-"öğeleri silecektir ve geri alınamaz.\n"
-"Devam etmek istiyor musunuz?"
+"Kaldırılan katmanlarda ögeler bulundu. Bu işlem, kaldırılan katmanlardaki "
+"tüm ögeleri silecek ve geri alınamayacaktır.\n"
+"Devam etmek ister misiniz?"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:964
 msgid "Layer must have a name."
@@ -41382,11 +41379,11 @@ msgstr "Ögeler arasında eksik bağlantı"
 
 #: pcbnew/drc/drc_item.cpp:56
 msgid "Items shorting two nets"
-msgstr "İki ağa kısa devre yaptıran öğeler"
+msgstr "İki ağa kısa devre yaptıran ögeler"
 
 #: pcbnew/drc/drc_item.cpp:60
 msgid "Items not allowed"
-msgstr "İzin verilmeyen öğeler"
+msgstr "İzin verilmeyen ögeler"
 
 #: pcbnew/drc/drc_item.cpp:64
 msgid "Text (or dimension) on Edge.Cuts layer"
@@ -41550,7 +41547,7 @@ msgstr "Bakır şerit"
 
 #: pcbnew/drc/drc_item.cpp:236
 msgid "Solder mask aperture bridges items with different nets"
-msgstr "Lehim maskesi açıklığı farklı ağlara sahip öğeleri köprüler"
+msgstr "Lehim maskesi açıklığı, farklı ağlara sahip ögeleri köprüler"
 
 #: pcbnew/drc/drc_item.cpp:240
 msgid "Silkscreen clipped by solder mask"
@@ -41668,7 +41665,7 @@ msgstr "Sürüm numarası eksik."
 #: pcbnew/drc/drc_rule_parser.cpp:147
 #, c-format
 msgid "Unrecognized item '%s'.| Expected version number."
-msgstr "Tanınmayan öğe '%s'.| Beklenen sürüm numarası."
+msgstr "Tanınmayan öge '%s'.| Beklenen sürüm numarası."
 
 #: pcbnew/drc/drc_rule_parser.cpp:154 pcbnew/drc/drc_rule_parser.cpp:233
 #: pcbnew/drc/drc_rule_parser.cpp:472 pcbnew/drc/drc_rule_parser.cpp:500
@@ -41689,7 +41686,7 @@ msgstr "Eksik ifade."
 #: pcbnew/drc/drc_rule_parser.cpp:692
 #, c-format
 msgid "Unrecognized item '%s'.| Expected %s."
-msgstr "Tanınmayan öğe '%s'.| Beklenen %s."
+msgstr "Tanınmayan öge '%s'.| Beklenen %s."
 
 #: pcbnew/drc/drc_rule_parser.cpp:193
 msgid "Missing rule name."
@@ -41702,7 +41699,7 @@ msgstr "Eksik koşul ifadesi."
 #: pcbnew/drc/drc_rule_parser.cpp:226 pcbnew/drc/drc_rule_parser.cpp:466
 #, c-format
 msgid "Unrecognized item '%s'.| Expected quoted expression."
-msgstr "Tanınmayan öğe '%s'.| Beklenen tırnaklı ifade."
+msgstr "Tanınmayan öge '%s'.| Tırnaklı ifade bekleniyor."
 
 #: pcbnew/drc/drc_rule_parser.cpp:241
 msgid "'layer' keyword already present."
@@ -42432,7 +42429,7 @@ msgstr "kart kurulumu lehim maskesi min genişliği"
 #: pcbnew/drc/drc_test_provider_solder_mask.cpp:571
 #: pcbnew/drc/drc_test_provider_solder_mask.cpp:665
 msgid "Front solder mask aperture bridges items with different nets"
-msgstr "Ön lehim maskesi açıklığı farklı ağlara sahip öğeleri köprüler"
+msgstr "Ön lehim maskesi açıklığı, farklı ağlara sahip ögeleri köprüler"
 
 #: pcbnew/drc/drc_test_provider_solder_mask.cpp:573
 #: pcbnew/drc/drc_test_provider_solder_mask.cpp:667
@@ -43598,7 +43595,7 @@ msgstr "DXF varsayılan çizgi genişliği:"
 
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:61
 msgid "Used when the DXF items in file have no line thickness set"
-msgstr "Dosyadaki DXF öğelerinin çizgi kalınlığı ayarlanmadığında kullanılır"
+msgstr "Dosyadaki DXF ögelerinin çizgi kalınlığı ayarlanmadığında kullanılır."
 
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:72
 msgid "DXF default units:"
