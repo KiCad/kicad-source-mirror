@@ -8115,7 +8115,7 @@ msgstr "DRC (Tasarım Kuralı Kontrolü) İş Ayarları"
 
 #: common/jobs/job_pcb_drc.cpp:47
 msgid "PCB: Perform DRC"
-msgstr "Baskı Devre: Tasarım Kuralı Kontrolü (DRC) Uygula"
+msgstr "Baskı Devre: (DRC) Tasarım Kuralı Kontrolü Uygula"
 
 #: common/jobs/job_pcb_render.cpp:131
 #, c-format
@@ -8504,27 +8504,27 @@ msgstr "Bağlantı ağı"
 
 #: common/layer_id.cpp:138
 msgid "DRC warnings"
-msgstr "DRC uyarıları"
+msgstr "DRC (Tasarım Kuralı Kontrolü) uyarıları"
 
 #: common/layer_id.cpp:139
 msgid "DRC errors"
-msgstr "DRC hataları"
+msgstr "DRC (Tasarım Kuralı Kontrolü) hataları"
 
 #: common/layer_id.cpp:140
 msgid "DRC shape 1"
-msgstr "DRC şekil 1"
+msgstr "DRC (Tasarım Kuralı Kontrolü) şekil 1"
 
 #: common/layer_id.cpp:141
 msgid "DRC shape 2"
-msgstr "DRC şekil 2"
+msgstr "DRC (Tasarım Kuralı Kontrolü) şekil 2"
 
 #: common/layer_id.cpp:142
 msgid "DRC exclusions"
-msgstr "DRC istisnaları"
+msgstr "DRC (Tasarım Kuralı Kontrolü) istisnaları"
 
 #: common/layer_id.cpp:143
 msgid "DRC marker shadows"
-msgstr "DRC işaretleyici gölgeleri"
+msgstr "DRC (Tasarım Kuralı Kontrolü) işaretleyici gölgeleri"
 
 #: common/layer_id.cpp:150
 msgid "Grid axes"
@@ -26151,7 +26151,7 @@ msgstr ""
 #: kicad/cli/command_pcb_drc.cpp:47
 msgid "Runs the Design Rules Check (DRC) on the PCB and creates a report"
 msgstr ""
-"PCB üzerinde Tasarım Kuralları Kontrolünü (DRC) çalıştırır ve bir rapor "
+"Baskı Devre üzerinde DRC (Tasarım Kuralı Kontrolü) çalıştırır ve bir rapor "
 "oluşturur"
 
 #: kicad/cli/command_pcb_drc.cpp:52 kicad/cli/command_sch_erc.cpp:50
@@ -26167,36 +26167,38 @@ msgid ""
 "Report all DRC violations, this is equivalent to including all the other "
 "severity arguments"
 msgstr ""
-"Tüm DRC ihlallerini bildir, bu diğer tüm önem derecesi argümanlarını dahil "
-"etmeye eşdeğerdir"
+"Tüm DRC (Tasarım Kuralı Kontrolü) ihlallerini bildir, bu diğer tüm önem "
+"derecesi argümanlarını dahil etmeye eşdeğerdir"
 
 #: kicad/cli/command_pcb_drc.cpp:74
 msgid ""
 "Report all DRC error level violations, this can be combined with the other "
 "severity arguments"
 msgstr ""
-"Tüm DRC hata seviyesi ihlallerini bildir, bu diğer önem derecesi argümanları "
-"ile birleştirilebilir"
+"Tüm DRC (Tasarım Kuralı Kontrolü) hata seviyesi ihlallerini bildir, bu diğer "
+"önem derecesi argümanları ile birleştirilebilir"
 
 #: kicad/cli/command_pcb_drc.cpp:79
 msgid ""
 "Report all DRC warning level violations, this can be combined with the other "
 "severity arguments"
 msgstr ""
-"Tüm DRC uyarı seviyesi ihlallerini bildir, bu diğer önem derecesi "
-"argümanları ile birleştirilebilir"
+"Tüm DRC (Tasarım Kuralı Kontrolü) uyarı seviyesi ihlallerini bildir, bu "
+"diğer önem derecesi argümanları ile birleştirilebilir"
 
 #: kicad/cli/command_pcb_drc.cpp:84
 msgid ""
 "Report all excluded DRC violations, this can be combined with the other "
 "severity arguments"
 msgstr ""
-"Hariç tutulan tüm DRC ihlallerini bildir, bu diğer önem derecesi argümanları "
-"ile birleştirilebilir"
+"Hariç tutulan tüm DRC (Tasarım Kuralı Kontrolü) ihlallerini bildir, bu diğer "
+"önem derecesi argümanları ile birleştirilebilir"
 
 #: kicad/cli/command_pcb_drc.cpp:89
 msgid "Return a nonzero exit code if DRC violations exist"
-msgstr "DRC ihlalleri varsa sıfır olmayan bir çıkış kodu döndür"
+msgstr ""
+"DRC (Tasarım Kuralı Kontrolü) ihlalleri varsa sıfır olmayan bir çıkış kodu "
+"döndür"
 
 #: kicad/cli/command_pcb_drc.cpp:146 kicad/cli/command_pcb_export_3d.cpp:292
 #: kicad/cli/command_pcb_export_drill.cpp:155
@@ -32078,7 +32080,7 @@ msgid ""
 msgstr ""
 "<br/>Baskı Devrede %d boş veya geçersiz referans tanımlayıcı var.<br/>R "
 "'Baskı Devre ile şema arasında eşitliği test et' seçeneği işaretli olarak "
-"DRC çalıştırmanız önerilir..\n"
+"DRC (Tasarım Kuralı Kontrolü) çalıştırmanız önerilir..\n"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:495
 #, c-format
@@ -32847,7 +32849,9 @@ msgstr "Bölge adı:"
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:97
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:31
 msgid "A unique name for this zone to identify it for DRC"
-msgstr "DRC için tanımlamak üzere bu bölge için özgün bir ad"
+msgstr ""
+"DRC (Tasarım Kuralı Kontrolü) için tanımlamak üzere bu bölge için özgün bir "
+"ad"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:104
 msgid "Zone priority level:"
@@ -32865,7 +32869,7 @@ msgstr ""
 "yüksek önceliğe sahiptir.\n"
 "Bir bölge başka bir bölgenin içinde olduğunda:\n"
 "* Önceliği daha yüksekse, dış hatları diğer bölgeden kaldırılır.\n"
-"* Önceliği eşitse, bir DRC hatası ayarlanır."
+"* Önceliği eşitse, bir DRC (Tasarım Kuralı Kontrolü) hatası ayarlanır."
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:130
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:71
@@ -33801,11 +33805,13 @@ msgstr "Boyut Özellikleri"
 
 #: pcbnew/dialogs/dialog_drc.cpp:148
 msgid "Run DRC"
-msgstr "DRC Çalıştır"
+msgstr "DRC (Tasarım Kuralı Kontrolü) Çalıştır"
 
 #: pcbnew/dialogs/dialog_drc.cpp:296
 msgid "DRC incomplete: could not compile custom design rules."
-msgstr "DRC eksik: özel tasarım kuralları derlenemedi."
+msgstr ""
+"DRC (Tasarım Kuralı Kontrolü) tamamlanmadı: özel tasarım kuralları "
+"derlenemedi."
 
 #: pcbnew/dialogs/dialog_drc.cpp:298 pcbnew/tools/board_inspection_tool.cpp:214
 msgid "Show design rules."
@@ -33813,7 +33819,9 @@ msgstr "Tasarım kurallarını göster."
 
 #: pcbnew/dialogs/dialog_drc.cpp:351
 msgid "-------- DRC canceled by user.<br><br>"
-msgstr "-------- DRC kullanıcı tarafından iptal edildi. <br><br>"
+msgstr ""
+"-------- DRC (Tasarım Kuralı Kontrolü) kullanıcı tarafından iptal edildi. "
+"<br><br>"
 
 #: pcbnew/dialogs/dialog_drc.cpp:693
 #, c-format
@@ -33869,7 +33877,8 @@ msgstr ""
 "Seçilirse, tüm DRC ihlalleri raylar için raporlanacaktır. Bu, karmaşık "
 "tasarımlar için yavaş olabilir.\n"
 "\n"
-"Seçilmezse, her ray bağlantısı için yalnızca ilk DRC ihlali raporlanacaktır."
+"Seçilmezse, her ray bağlantısı için yalnızca ilk DRC (Tasarım Kuralı "
+"Kontrolü) ihlali raporlanacaktır."
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:123
 #, c-format
@@ -34362,7 +34371,7 @@ msgid ""
 "Run DRC for a full analysis."
 msgstr ""
 "Kart ana hatları eksik veya %.3f mm tolerans kullanılarak kapatılmadı.\n"
-"Tam analiz için DRC'yi çalıştırın."
+"Tam analiz için DRC (Tasarım Kuralı Kontrolü) çalıştırın."
 
 #: pcbnew/dialogs/dialog_export_step.cpp:610
 msgid "STEP/GLTF Export"
@@ -34767,7 +34776,7 @@ msgstr "Ayak izi referans tanımlayıcılarını ara"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:80
 msgid "Search DRC &markers"
-msgstr "DRC &işaretleyicilerini ara"
+msgstr "DRC (Tasarım Kuralı Kontrolü) &işaretleyicilerini ara"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:84
 msgid "Search footprint &values"
@@ -35256,7 +35265,8 @@ msgstr "Avlu gerekliliğinden muaf"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:327
 msgid "Will not generate \"missing courtyard\" DRC violations"
-msgstr "\"Eksik avlu\" DRC ihlalleri oluşturmayacaktır"
+msgstr ""
+"\"Eksik yerleşim\" DRC (Tasarım Kuralı Kontrolü) ihlallerini oluşturmayacak"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:338
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:976
@@ -37489,12 +37499,12 @@ msgstr "Tek belge"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:430
 msgid "Run DRC..."
-msgstr "DRC'yi çalıştır..."
+msgstr "DRC (Tasarım Kuralı Kontrolü) çalıştır..."
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:433
 #, c-format
 msgid "(%d known DRC violations; %d exclusions)"
-msgstr "(%d bilinen DRC ihlalleri; %d istisnalar)"
+msgstr "(%d bilinen DRC (Tasarım Kuralı Kontrolü) ihlalleri; %d istisnalar)"
 
 #: pcbnew/dialogs/dialog_pns_diff_pair_dimensions.cpp:55
 msgid "Track gap must be greater than 0."
@@ -37539,15 +37549,15 @@ msgstr "Serbest açı modu"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:34
 msgid "Allow DRC violations"
-msgstr "DRC ihlallerine izin ver"
+msgstr "DRC (Tasarım Kuralı Kontrolü) ihlallerine izin ver"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:35
 msgid ""
 "(Highlight collisions mode only) - allows one to establish a track even if "
 "is violating the DRC rules."
 msgstr ""
-"(Yalnızca çarpışmaları vurgula modu) - DRC kurallarını ihlal etse bile bir "
-"iz oluşturmaya izin verir."
+"(Yalnızca çarpışmaları vurgula modu) - DRC (Tasarım Kuralı Kontrolü) "
+"kurallarını ihlal etse bile bir iz oluşturmaya izin verir."
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:45
 #: pcbnew/router/router_tool.cpp:2764
@@ -37999,7 +38009,9 @@ msgstr "Alan adı:"
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:43
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:51
 msgid "A unique name for this rule area for use in DRC rules"
-msgstr "DRC kurallarında kullanılmak üzere bu kural alanı için özgün bir ad"
+msgstr ""
+"DRC (Tasarım Kuralı Kontrolü) kurallarında kullanılmak üzere bu kural alanı "
+"için özgün bir ad"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:86
 msgid "Distance between parallel lines used for hatching the area"
