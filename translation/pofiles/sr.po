@@ -10618,7 +10618,7 @@ msgstr "Маркер није пронађен"
 #: common/validators.cpp:364
 #, c-format
 msgid "The datasheet field cannot contain %s character(s)."
-msgstr "Datasheet не може садржати %s карактер(е)."
+msgstr "Datasheet пољњ не може садржати %s карактер(е)."
 
 #: common/validators.cpp:368
 #, c-format
