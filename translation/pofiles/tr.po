@@ -8261,7 +8261,7 @@ msgstr "Kilitli öge gölgesi"
 
 #: common/layer_id.cpp:154
 msgid "Courtyard collision shadow"
-msgstr "Avlu çarpışma gölgesi"
+msgstr "Yerleşim alanı çakışma gölgesi"
 
 #: common/layer_id.cpp:155
 msgid "Track net names"
@@ -8282,7 +8282,7 @@ msgstr "Kütüphane takma adında geçersiz karakter bulundu"
 #: common/lib_table_base.cpp:544
 #, c-format
 msgid "Failed to get writer for %s"
-msgstr "%s için yazar alınamadı"
+msgstr "%s için yazıcı alınamadı"
 
 #: common/lib_table_grid_tricks.cpp:33
 msgid "Edit options..."
@@ -8326,14 +8326,14 @@ msgstr "Birim"
 #: common/lib_tree_model_adapter.cpp:152 common/lib_tree_model_adapter.cpp:154
 #: common/lib_tree_model_adapter.cpp:155
 msgid "Item"
-msgstr "Kalem"
+msgstr "Öge"
 
 #: common/lib_tree_model_adapter.cpp:404
 #: eeschema/widgets/panel_design_block_chooser.cpp:416
 #: eeschema/widgets/panel_symbol_chooser.cpp:173
 #: pcbnew/widgets/panel_footprint_chooser.cpp:98
 msgid "Recently Used"
-msgstr "Son zamanlarda kullanılmış"
+msgstr "Son Kullanılanlar"
 
 #: common/lib_tree_model_adapter.cpp:406
 #: eeschema/widgets/panel_symbol_chooser.cpp:180
@@ -8347,7 +8347,7 @@ msgstr "Tanınmayan karakter '%c'"
 
 #: common/libeval_compiler/libeval_compiler.cpp:851
 msgid "Unknown parent of function parameters"
-msgstr "Fonksiyon parametrelerinin bilinmeyen ebeveyni"
+msgstr "Fonksiyon parametrelerinin bilinmeyen üstü"
 
 #: common/libeval_compiler/libeval_compiler.cpp:870
 msgid "Unknown parent of property"
@@ -8385,12 +8385,12 @@ msgstr "'%s' için eksik birimler| (%s)"
 #: common/libeval_compiler/libeval_compiler.cpp:1161
 #, c-format
 msgid "Type mismatch between '%s' and %lf"
-msgstr "'%s' ve %lf arasında tip uyuşmazlığı"
+msgstr "'%s' ile %lf arasında tür uyumsuzluğu"
 
 #: common/libeval_compiler/libeval_compiler.cpp:1167
 #, c-format
 msgid "Type mismatch between %lf and '%s'"
-msgstr "%lf ve '%s' arasında tip uyuşmazlığı"
+msgstr "%lf ile '%s' arasında tür uyumsuzluğu"
 
 #: common/netclass.cpp:297 pcbnew/component_class_manager.cpp:61
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1084 pcbnew/zone.cpp:836
@@ -8428,7 +8428,7 @@ msgstr "Kullanılabilir bildirim yok"
 
 #: common/pgm_base.cpp:216
 msgid "No default editor found, you must choose one."
-msgstr "Varsayılan düzenleyici bulunamadı, birini seçmelisiniz."
+msgstr "Varsayılan düzenleyici bulunamadı, bir tane seçmelisiniz."
 
 #: common/pgm_base.cpp:236 common/pgm_base.cpp:238
 msgid "Executable file"
@@ -8510,7 +8510,7 @@ msgstr "Proje tasarım bloğu kütüphane tablosu yüklenirken hata oluştu."
 
 #: common/project/net_settings.cpp:66 pcbnew/board.cpp:132
 msgid "This is the default net class."
-msgstr "Bu varsayılan parça listesi sınıfıdır."
+msgstr "Bu varsayılan ağ sınıfıdır."
 
 #: common/project/project_archiver.cpp:87
 #: common/project/project_archiver.cpp:120 kicad/pcm/pcm_task_manager.cpp:329
@@ -8524,7 +8524,7 @@ msgstr "Geçersiz arşiv dosyası biçimi."
 #: common/project/project_archiver.cpp:140
 #, c-format
 msgid "Extracting file '%s'."
-msgstr "'%s' dosyası genişletiliyor."
+msgstr "'%s' dosyası çıkartılıyor."
 
 #: common/project/project_archiver.cpp:163 kicad/pcm/pcm_task_manager.cpp:251
 #: kicad/pcm/pcm_task_manager.cpp:294
@@ -8683,7 +8683,7 @@ msgstr "KiCad Varsayılanı"
 
 #: common/settings/color_settings.cpp:448
 msgid "KiCad Classic"
-msgstr "KiCad Classic"
+msgstr "KiCad Kasik"
 
 #: common/tool/action_menu.cpp:215 common/tool/action_menu.cpp:220
 #, c-format
@@ -8852,11 +8852,11 @@ msgstr "Ekrandaki tüm ögeleri seç"
 
 #: common/tool/actions.cpp:262
 msgid "Unselect All"
-msgstr "Tümünü Seçme"
+msgstr "Tüm Seçimleri Kaldır"
 
 #: common/tool/actions.cpp:263
 msgid "Unselect all items on screen"
-msgstr "Ekrandaki tüm ögeleri seçme"
+msgstr "Ekrandaki tüm ögelerin seçimini kaldır"
 
 #: common/tool/actions.cpp:269
 msgid "Paste Special..."
@@ -8870,7 +8870,7 @@ msgstr "Öge(ler)i panodan seçeneklerle yapıştır"
 #: eeschema/tools/symbol_editor_edit_tool.cpp:1103
 #: pcbnew/tools/edit_tool.cpp:3013
 msgid "Duplicate"
-msgstr "Çiftle"
+msgstr "Çoğalt"
 
 #: common/tool/actions.cpp:279
 msgid "Duplicates the selected item(s)"
@@ -8900,7 +8900,7 @@ msgstr "Alanları ve metin ögelerini sola yasla"
 #: common/tool/actions.cpp:314 eeschema/tools/sch_edit_tool.cpp:2887
 #: pcbnew/tools/edit_tool.cpp:2325
 msgid "Center Justify"
-msgstr "Ortaya Yasla"
+msgstr "Ortala"
 
 #: common/tool/actions.cpp:315
 msgid "Center-justify fields and text items"
@@ -8935,7 +8935,7 @@ msgstr "Seçili öge(ler)i artır"
 
 #: common/tool/actions.cpp:348
 msgid "Increment Primary"
-msgstr "Artış Birincil"
+msgstr "Birincil Artış"
 
 #: common/tool/actions.cpp:349
 msgid "Increment the primary field of the selected item(s)"
@@ -8999,7 +8999,7 @@ msgstr "Seçili hücrenin/hücrelerin üzerine yeni bir tablo satırı ekle"
 
 #: common/tool/actions.cpp:404 include/tool/edit_table_tool_base.h:220
 msgid "Add Row Below"
-msgstr "Aşağıya Satır Ekle"
+msgstr "Alta Satır Ekle"
 
 #: common/tool/actions.cpp:405
 msgid "Insert a new table row below the selected cell(s)"
@@ -9061,7 +9061,7 @@ msgstr "Tabloyu Düzenle..."
 
 #: common/tool/actions.cpp:465
 msgid "Cycle Arc Editing Mode"
-msgstr "Yay Düzenleme Modunu Döngüye Al"
+msgstr "Yay Düzenleme Modunu Değiştir"
 
 #: common/tool/actions.cpp:466
 msgid "Switch to a different method of editing arcs"
@@ -9088,11 +9088,11 @@ msgstr "Sonrakini Bul"
 
 #: common/tool/actions.cpp:506 pcbnew/dialogs/dialog_find_base.cpp:96
 msgid "Find Previous"
-msgstr "Önceki Bul"
+msgstr "Öncekini Bul"
 
 #: common/tool/actions.cpp:514
 msgid "Find Next Marker"
-msgstr "Sonraki İşaretçiyi Bul"
+msgstr "Sonraki İşaretleyiciyi Bul"
 
 #: common/tool/actions.cpp:520
 msgid "Replace and Find Next"
@@ -9105,15 +9105,15 @@ msgstr "Tümünü Değiştir"
 
 #: common/tool/actions.cpp:538
 msgid "Previous Marker"
-msgstr "Önceki İşaretçi"
+msgstr "Önceki İşaretleyici"
 
 #: common/tool/actions.cpp:544
 msgid "Next Marker"
-msgstr "Sonraki İşaretçi"
+msgstr "Sonraki İşaretleyici"
 
 #: common/tool/actions.cpp:550
 msgid "Exclude Marker"
-msgstr "İşaretçiyi Hariç Tut"
+msgstr "İşaretleyiciyi Hariç Tut"
 
 #: common/tool/actions.cpp:551
 msgid "Mark current violation in Checker window as an exclusion"
@@ -9203,7 +9203,7 @@ msgstr "Yakınlaştırmayı son yakınlaştırma eyleminden önceki seviyeye dö
 
 #: common/tool/actions.cpp:682 common/widgets/mathplot.cpp:1396
 msgid "Redo Last Zoom"
-msgstr "Son Yakınlaştırmayı Tekrar Yap"
+msgstr "Son Yakınlaştırmayı Tekrarla"
 
 #: common/tool/actions.cpp:683 common/widgets/mathplot.cpp:1397
 msgid "Return zoom to level prior to last zoom undo"
@@ -9249,7 +9249,7 @@ msgstr "İmleç Sağ Hızlı"
 #: common/tool/actions.cpp:771 pcbnew/dialogs/panel_edit_options_base.cpp:135
 #: pcbnew/dialogs/panel_edit_options_base.cpp:203
 msgid "Click"
-msgstr "Tıklama"
+msgstr "Tıkla"
 
 #: common/tool/actions.cpp:772
 msgid "Performs left mouse button click"
@@ -9257,7 +9257,7 @@ msgstr "Sol fare düğmesi tıklatır"
 
 #: common/tool/actions.cpp:781
 msgid "Double-click"
-msgstr "Çift tıklama"
+msgstr "Çift tıkla"
 
 #: common/tool/actions.cpp:782
 msgid "Performs left mouse button double-click"
@@ -12124,7 +12124,7 @@ msgstr "İstisnalar"
 #: pcbnew/dialogs/dialog_drc_base.cpp:216
 #: pcbnew/dialogs/dialog_footprint_checker_base.cpp:76
 msgid "Delete Marker"
-msgstr "İşaretçiyi Sil"
+msgstr "İşaretleyiciyi Sil"
 
 #: eeschema/dialogs/dialog_erc_base.h:101 eeschema/tools/sch_actions.cpp:47
 msgid "Electrical Rules Checker"
@@ -13096,7 +13096,7 @@ msgstr "Bacak sayısı:"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:48
 msgid "Duplicate pins:"
-msgstr "Çiftlenmiş pinler:"
+msgstr "Yinelenmiş pinler:"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:137
 msgid "Group by name"
@@ -16129,7 +16129,7 @@ msgstr ""
 #: pcbnew/dialogs/panel_edit_options_base.cpp:145
 #: pcbnew/dialogs/panel_edit_options_base.cpp:213
 msgid "Long Click"
-msgstr "Uzun Tıklama"
+msgstr "Uzun Tıkla"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:129
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:187
@@ -19622,7 +19622,7 @@ msgstr "Hariç tutulan"
 
 #: eeschema/sch_marker.h:102
 msgid "ERC Marker"
-msgstr "ERC (Elektriksel Kural Kontrolü) İşaretçisi"
+msgstr "ERC (Elektriksel Kural Kontrolü) İşaretleyici"
 
 #: eeschema/sch_no_connect.h:98 eeschema/tools/sch_edit_tool.cpp:255
 msgid "No Connect"
@@ -25724,7 +25724,7 @@ msgstr "Görünürlük için bunu etkinleştirin"
 
 #: gerbview/widgets/layer_widget.cpp:446
 msgid "Left double click or middle click for color change"
-msgstr "Renk değişimi için sol çift tıklama veya orta tıklama"
+msgstr "Renk değişimi için sol çift tıklama veya orta tıkla"
 
 #: include/dialogs/panel_color_settings.h:50
 msgid "Reset all colors in this theme to the KiCad defaults"
@@ -36109,8 +36109,8 @@ msgstr "Ağ listesi dosyası '%s' okunuyor.\n"
 #: pcbnew/dialogs/dialog_import_netlist.cpp:244
 msgid "Using reference designators to match symbols and footprints.\n"
 msgstr ""
-"Sembolleri ve ayak izlerini eşleştirmek için referans referans "
-"tanımlayıcılar kullanma.\n"
+"Sembolleri ve ayak izlerini eşleştirmek için referans tanımlayıcılar "
+"kullanma.\n"
 
 #: pcbnew/dialogs/dialog_import_netlist.cpp:246
 msgid "Using tstamps (unique IDs) to match symbols and footprints.\n"
