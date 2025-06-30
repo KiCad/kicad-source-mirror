@@ -37462,7 +37462,7 @@ msgid ""
 "(Highlight collisions mode only) - allows one to establish a track even if "
 "is violating the DRC rules."
 msgstr ""
-"(Yalnızca çarpışmaları vurgula modu) - DRC (Tasarım Kuralı Kontrolü) "
+"(Yalnızca çakışmaları vurgula modu) - DRC (Tasarım Kuralı Kontrolü) "
 "kurallarını ihlal etse bile bir iz oluşturmaya izin verir."
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:45
@@ -38998,7 +38998,8 @@ msgstr "Pedleri dışarıda tut"
 
 #: pcbnew/dialogs/panel_rule_area_properties_keepout_base.cpp:29
 msgid "Raise a DRC error if a pad overlaps this area"
-msgstr "Bir ped bu alanla çakışırsa DRC hatası oluştur"
+msgstr ""
+"Bir ped bu alanla çakışırsa DRC (Tasarım Kuralı Kontrolü) hatası oluştur"
 
 #: pcbnew/dialogs/panel_rule_area_properties_keepout_base.cpp:33
 msgid "Keep out zone fills"
@@ -39014,7 +39015,9 @@ msgstr "Ayak izlerini dışarıda tut"
 
 #: pcbnew/dialogs/panel_rule_area_properties_keepout_base.cpp:39
 msgid "Raise a DRC error if a footprint courtyard overlaps this area"
-msgstr "Bir ayak izi avlusu bu alanla çakışırsa DRC hatası oluştur"
+msgstr ""
+"Bir ayak izi yerleşimi bu alanla çakışırsa DRC (Tasarım Kuralı Kontrolü) "
+"hatası oluştur"
 
 #: pcbnew/dialogs/panel_rule_area_properties_placement_base.cpp:20
 msgid "No placement"
@@ -39148,7 +39151,9 @@ msgstr "Sürünme yolu için minimum oluk genişliği:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:165
 msgid "The minimum slot width from DRC creepage checks"
-msgstr "DRC kaçak kontrollerinden elde edilen minimum yuva genişliği"
+msgstr ""
+"DRC (Tasarım Kuralı Kontrolü) kaçak akın kontrollerinden elde edilen en "
+"küçük yuva genişliği"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:185
 msgid "Holes"
@@ -39613,9 +39618,10 @@ msgid ""
 "different net than the solder mask opening's parent.\n"
 "Distances smaller than this minimum will create a DRC error."
 msgstr ""
-"Bir lehim maskesi açıklığı ile, lehim maskesi açıklığının bağlı olduğu ağdan "
-"farklı bir ağa ait bakır öğesi arasındaki minimum mesafe. \n"
-"Bu minimumdan daha küçük mesafeler, DRC hatasına neden olacaktır."
+"Lehim maskesi açıklığı ile lehim maskesi açıklığının bağlı olduğundan farklı "
+"bir ağı olan bir bakır öge arasındaki en küçük mesafe.\n"
+"Bu en küçükten daha küçük mesafeler bir DRC (Tasarım Kuralı Kontrolü) hatası "
+"oluşturacaktır."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:105
 msgid "Allow bridged solder mask apertures between pads within footprints"
@@ -39628,8 +39634,8 @@ msgid ""
 "Disable DRC error checking for solder mask aperture bridging between pads in "
 "the same footprint."
 msgstr ""
-"Aynı ayak izindeki pedler arasındaki lehim maskesi açıklığı köprülemesi için "
-"DRC hata denetimini devre dışı bırakın."
+"Aynı ayak izindeki pedler arasında lehim maskesi açıklığı köprülemesi için "
+"DRC (Tasarım Kuralı Kontrolü) hata kontrolünü devre dışı bırak."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:113
 msgid "Tent vias:"
@@ -39696,7 +39702,7 @@ msgstr "Değişikliklerden Vazgeçilsin mi?"
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:705
 msgid "DRC rules"
-msgstr "DRC kuralları"
+msgstr "DRC (Tasarım Kuralı Kontrolü) kuralları"
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:712
 #: pcbnew/drc/drc_rule_condition.cpp:64
@@ -39709,7 +39715,7 @@ msgstr "Tasarım kuralları proje olmadan eklenemez"
 
 #: pcbnew/dialogs/panel_setup_rules_base.cpp:23
 msgid "DRC Rules"
-msgstr "DRC Kuralları"
+msgstr "DRC (Tasarım Kuralı Kontrolü) Kuralları"
 
 #: pcbnew/dialogs/panel_setup_rules_base.cpp:77
 msgid "Check rule syntax"
@@ -42572,7 +42578,9 @@ msgstr "Oval pedler olarak ihraç edilmişlerdir."
 #: pcbnew/exporters/step/exporter_step.cpp:693
 #: pcbnew/specctra_import_export/specctra_export.cpp:119
 msgid "Board outline is malformed. Run DRC for a full analysis."
-msgstr "Kart dış hattı bozuk. Tam bir analiz için DRC çalıştırın."
+msgstr ""
+"Kart dış hattı bozuk. Tam bir analiz için DRC (Tasarım Kuralı Kontrolü) "
+"çalıştırın."
 
 #: pcbnew/exporters/export_idf.cpp:665 pcbnew/exporters/export_idf.cpp:674
 #: pcbnew/exporters/export_idf.cpp:682
@@ -45371,8 +45379,8 @@ msgid ""
 "of the zone priorities is required."
 msgstr ""
 "%s' katmanı için bölge doldurma öncelikleri belirlenemiyor. En iyi deneme "
-"yapıldı ancak DRC hatalarının olması ve bölge önceliklerinin manuel olarak "
-"düzenlenmesi gerekebilir."
+"yapıldı ancak DRC (Tasarım Kuralı Kontrolü) hatalarının olması ve bölge "
+"önceliklerinin manuel olarak düzenlenmesi gerekebilir."
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:145
 msgid ""
@@ -45395,10 +45403,10 @@ msgid ""
 "alignment issues that may cause DRC errors. Please review the imported text "
 "elements carefully and correct manually if required."
 msgstr ""
-"CADSTAR yazı tipleri KiCad'dekilerden farklıdır. Bu muhtemelen DRC "
-"hatalarına neden olabilecek hizalama sorunlarına yol açacaktır. Lütfen içe "
-"aktarılan metin öğelerini dikkatlice inceleyin ve gerekirse manuel olarak "
-"düzeltin."
+"CADSTAR yazı tipleri KiCad'dekilerden farklıdır. Bu muhtemelen DRC (Tasarım "
+"Kuralı Kontrolü) hatalarına neden olabilecek hizalama sorunlarına yol "
+"açacaktır. Lütfen içe aktarılan metin öğelerini dikkatlice inceleyin ve "
+"gerekirse manuel olarak düzeltin."
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:240
 #, c-format
@@ -47010,12 +47018,12 @@ msgstr "Bulunan %d şematik eşlik sorunları\n"
 #: pcbnew/pcbnew_jobs_handler.cpp:2079
 #, c-format
 msgid "Unable to save DRC report to %s\n"
-msgstr "DRC raporu %s'ye kaydedilemiyor\n"
+msgstr "DRC (Tasarım Kuralı Kontrolü) raporu %s'ye kaydedilemiyor\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:2084
 #, c-format
 msgid "Saved DRC Report to %s\n"
-msgstr "DRC Raporu %s olarak kaydedildi\n"
+msgstr "DRC (Tasarım Kuralı Kontrolü) Raporu %s olarak kaydedildi\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:2231
 msgid "Successfully created IPC-D-356 file\n"
@@ -47170,7 +47178,8 @@ msgstr "Metin öğesinden yönlendirme başlatılamıyor."
 
 #: pcbnew/router/pns_router.cpp:333 pcbnew/router/pns_router.cpp:398
 msgid "The routing start point violates DRC."
-msgstr "Yönlendirme başlangıç noktası DRC'yi ihlal ediyor."
+msgstr ""
+"Yönlendirme başlangıç noktası DRC (Tasarım Kuralı Kontrolü)i ihlal ediyor."
 
 #: pcbnew/router/pns_router.cpp:342
 msgid "Cannot start a differential pair in the middle of nowhere."
@@ -47379,7 +47388,7 @@ msgstr "(%s zaten işlenecek.)"
 
 #: pcbnew/router/router_tool.cpp:1927 pcbnew/router/router_tool.cpp:2462
 msgid "Track violates DRC."
-msgstr "Yol DRC'yi ihlal ediyor."
+msgstr "Yol DRC (Tasarım Kuralı Kontrolü) ihlal ediyor."
 
 #: pcbnew/router/router_tool.cpp:2619 pcbnew/tools/pcb_actions.cpp:2415
 msgid "Break Track"
@@ -48112,7 +48121,7 @@ msgstr "Rapor eksik olabilir: bazı ayak izi yerleşimleri hatalı."
 #: pcbnew/tools/board_inspection_tool.cpp:1488
 #: pcbnew/tools/board_inspection_tool.cpp:1512
 msgid "Run DRC for a full analysis."
-msgstr "Tam bir analiz için DRC'yi çalıştır."
+msgstr "Tam bir analiz içinDRC (Tasarım Kuralı Kontrolü) çalıştır."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1495
 msgid "Item <b>disallowed</b> at current location."
