@@ -432,31 +432,27 @@ int PCB_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
             m_frame->FocusOnItem( nullptr );
             m_toolMgr->ProcessEvent( EVENTS::InhibitSelectionEditing );
 
-            GENERAL_COLLECTORS_GUIDE guide = getCollectorsGuide();
-            GENERAL_COLLECTOR        collector;
+            GENERAL_COLLECTOR hoverCells;
 
-            if( m_isFootprintEditor )
+            if( m_isFootprintEditor && board()->GetFirstFootprint() )
             {
-                if( board()->GetFirstFootprint() )
-                {
-                    collector.Collect( board()->GetFirstFootprint(), { PCB_TABLECELL_T },
-                                       evt->DragOrigin(), guide );
-                }
+                hoverCells.Collect( board()->GetFirstFootprint(), { PCB_TABLECELL_T }, evt->DragOrigin(),
+                                    getCollectorsGuide() );
             }
             else
             {
-                collector.Collect( board(), { PCB_TABLECELL_T }, evt->DragOrigin(), guide );
+                hoverCells.Collect( board(), { PCB_TABLECELL_T }, evt->DragOrigin(), getCollectorsGuide() );
             }
 
-            if( collector.GetCount() )
+            if( hoverCells.GetCount() )
             {
-                if( m_selection.GetSize() == 1 && dynamic_cast<PCB_TABLE*>( m_selection.GetItem( 0 ) ) )
+                if( m_selection.Empty() || SELECTION_CONDITIONS::OnlyTypes( { PCB_TABLECELL_T } )( m_selection ) )
                 {
-                    m_toolMgr->RunAction( PCB_ACTIONS::move );
+                    selectTableCells( static_cast<PCB_TABLE*>( hoverCells[0]->GetParent() ) );
                 }
                 else
                 {
-                    selectTableCells( static_cast<PCB_TABLE*>( collector[0]->GetParent() ) );
+                    m_toolMgr->RunAction( PCB_ACTIONS::move );
                 }
             }
             else if( hasModifier() || dragAction == MOUSE_DRAG_ACTION::SELECT )
@@ -471,8 +467,7 @@ int PCB_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
             {
                 // Don't allow starting a drag from a zone filled area that isn't already selected
                 auto zoneFilledAreaFilter =
-                        []( const VECTOR2I& aWhere, GENERAL_COLLECTOR& aCollector,
-                            PCB_SELECTION_TOOL* aTool )
+                        []( const VECTOR2I& aWhere, GENERAL_COLLECTOR& aCollector, PCB_SELECTION_TOOL* aTool )
                         {
                             int accuracy = aCollector.GetGuide()->Accuracy();
                             std::set<EDA_ITEM*> remove;
