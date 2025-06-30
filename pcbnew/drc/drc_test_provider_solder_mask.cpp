@@ -449,16 +449,13 @@ void DRC_TEST_PROVIDER_SOLDER_MASK::testItemAgainstItems( BOARD_ITEM* aItem, con
                                                           PCB_LAYER_ID aRefLayer,
                                                           PCB_LAYER_ID aTargetLayer )
 {
-    int itemNet = -1;
+    PAD*     pad = aItem->Type() == PCB_PAD_T ? static_cast<PAD*>( aItem ) : nullptr;
+    PCB_VIA* via = aItem->Type() == PCB_VIA_T ? static_cast<PCB_VIA*>( aItem ) : nullptr;
+    int      itemNet = -1;
 
     if( aItem->IsConnected() )
         itemNet = static_cast<BOARD_CONNECTED_ITEM*>( aItem )->GetNetCode();
 
-    BOARD_DESIGN_SETTINGS& bds = aItem->GetBoard()->GetDesignSettings();
-    PAD*                   pad = aItem->Type() == PCB_PAD_T ? static_cast<PAD*>( aItem )
-                                                            : nullptr;
-    PCB_VIA*               via = aItem->Type() == PCB_VIA_T ? static_cast<PCB_VIA*>( aItem )
-                                                            : nullptr;
     std::shared_ptr<SHAPE> itemShape = aItem->GetEffectiveShape( aRefLayer );
 
     m_itemTree->QueryColliding( aItem, aRefLayer, aTargetLayer,
@@ -482,8 +479,11 @@ void DRC_TEST_PROVIDER_SOLDER_MASK::testItemAgainstItems( BOARD_ITEM* aItem, con
                 if( itemFP && itemFP == other->GetParentFootprint() )
                 {
                     // Board-wide exclusion
-                    if( bds.m_AllowSoldermaskBridgesInFPs )
-                        return false;
+                    if( BOARD* board = itemFP->GetBoard() )
+                    {
+                        if( board->GetDesignSettings().m_AllowSoldermaskBridgesInFPs )
+                            return false;
+                    }
 
                     // Footprint-specific exclusion
                     if( itemFP->AllowSolderMaskBridges() )
