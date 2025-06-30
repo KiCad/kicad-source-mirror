@@ -19213,8 +19213,8 @@ msgid ""
 "The CADSTAR design contains grouped items which has no KiCad equivalent. Any "
 "grouped items have been ungrouped."
 msgstr ""
-"CADSTAR tasarımı, KiCad eşdeğeri olmayan gruplandırılmış öğeler içerir. "
-"Gruplandırılmış tüm öğeler gruplandırılmadı."
+"CADSTAR tasarımı, KiCad eşdeğeri olmayan gruplandırılmış ögeler içeriyor. "
+"Gruplandırılmış tüm ögelerin grubu çözüldü."
 
 #: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:400
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:160
@@ -19736,7 +19736,7 @@ msgstr "Geçersiz ana sembol adı"
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:463
 #, c-format
 msgid "No parent for extended symbol %s"
-msgstr "Uzatılmış sembol %s için bağlı olduğu bulunamadı."
+msgstr "Uzatılmış sembol %s için bağlı olduğu bulunamadı"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:478
 msgid "Invalid symbol unit name"
@@ -20161,12 +20161,12 @@ msgstr "Çizim dosyaları '%s' klasörüne yazılamadı."
 #: eeschema/sch_reference_list.cpp:677
 #, c-format
 msgid "Item not annotated: %s%s (unit %d)"
-msgstr "Açıklanmamış öğe: %s%s (birim %d)"
+msgstr "Açıklanmamış öge: %s%s (birim %d)"
 
 #: eeschema/sch_reference_list.cpp:684
 #, c-format
 msgid "Item not annotated: %s%s"
-msgstr "Açıklama eklenmemiş öğe: %s%s"
+msgstr "Açıklama eklenmemiş öge: %s%s"
 
 #: eeschema/sch_reference_list.cpp:702
 #, c-format
@@ -20176,7 +20176,7 @@ msgstr "Hata: %s%s%s sembolü (birim %d) tanımlanan birimleri (%d) aşıyor"
 #: eeschema/sch_reference_list.cpp:741
 #, c-format
 msgid "Duplicate items %s%s%s\n"
-msgstr "Yinelenen öğeler %s%s%s\n"
+msgstr "Yinelenen ögeler %s%s%s\n"
 
 #: eeschema/sch_reference_list.cpp:766
 #, c-format
@@ -20672,7 +20672,7 @@ msgstr "Bantlı matrislerin bant genişliği> = 1 olmalıdır."
 #: eeschema/sim/kibis/ibis_parser.cpp:82 eeschema/sim/kibis/ibis_parser.cpp:105
 #: eeschema/sim/kibis/ibis_parser.cpp:128
 msgid "There are NaN elements in a matrix."
-msgstr "Bir matriste NaN öğeleri vardır."
+msgstr "Bir matriste NaN ögeler var."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:167
 msgid "Invalid R_pkg value."
@@ -20975,7 +20975,7 @@ msgstr "Bu matris için çok fazla veri var."
 #: eeschema/sim/kibis/ibis_parser.cpp:1592
 #: eeschema/sim/kibis/ibis_parser.cpp:1623
 msgid "Can't read a matrix element"
-msgstr "Bir matris öğesi okunamıyor"
+msgstr "Bir matris ögesi okunamıyor"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1628
 msgid "Can't read a matrix index"
@@ -21032,7 +21032,7 @@ msgstr "Başlamayan bir modeli okumaya devam edin. (dahili hata)"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2206
 msgid "A [Package] line requires exactly 4 elements."
-msgstr "Bir [Paket] satırı tam olarak 4 öğe gerektirir."
+msgstr "Bir [Paket] satırı tam olarak 4 öge gerektirir."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2260
 msgid "Invalid pin entry: 6 values from a table with only 3."
@@ -22669,7 +22669,7 @@ msgstr "Düğüm Seç"
 
 #: eeschema/tools/sch_actions.cpp:104
 msgid "Select a connection item under the cursor"
-msgstr "İmlecin altında bir bağlantı öğesi seçin"
+msgstr "İmlecin altında bir bağlantı ögesi seçin"
 
 #: eeschema/tools/sch_actions.cpp:111
 msgid "Select Connection"
@@ -23093,7 +23093,7 @@ msgstr "Son Noktayı Sil"
 
 #: eeschema/tools/sch_actions.cpp:706 pcbnew/tools/pcb_actions.cpp:428
 msgid "Delete the last point added to the current item"
-msgstr "Geçerli öğeye eklenen son noktayı sil"
+msgstr "Geçerli ögeye eklenen son noktayı sil"
 
 #: eeschema/tools/sch_actions.cpp:712 pcbnew/tools/pcb_actions.cpp:434
 msgid "Close Outline"
@@ -23142,7 +23142,7 @@ msgstr "Takas"
 
 #: eeschema/tools/sch_actions.cpp:769 pcbnew/tools/pcb_actions.cpp:668
 msgid "Swap positions of selected items"
-msgstr "Seçili öğelerin konumlarını değiştirin"
+msgstr "Seçili ögelerin konumlarını değiştirin"
 
 #: eeschema/tools/sch_actions.cpp:785
 msgid "Edit Reference Designator..."
@@ -23250,7 +23250,7 @@ msgstr "Hiyerarşik Etikete Dönüştür"
 
 #: eeschema/tools/sch_actions.cpp:893
 msgid "Change existing item to a hierarchical label"
-msgstr "Varolan öğeyi hiyerarşik bir etikete değiştirin"
+msgstr "Varolan ögeyi hiyerarşik bir etikete değiştirin"
 
 #: eeschema/tools/sch_actions.cpp:901
 msgid "Change to Global Label"
