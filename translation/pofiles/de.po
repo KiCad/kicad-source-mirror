@@ -31,10 +31,10 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-06-27 22:51+0300\n"
-"PO-Revision-Date: 2025-06-23 21:01+0000\n"
+"PO-Revision-Date: 2025-06-30 19:01+0000\n"
 "Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
-"Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
-"source/de/>\n"
+"Language-Team: German <https://hosted.weblate.org/projects/kicad/"
+"master-source/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1783,15 +1783,12 @@ msgid "Errors"
 msgstr "Fehler"
 
 #: bitmap2component/bitmap2cmp_panel.cpp:587
-#, fuzzy
 msgid "Replace Loaded File?"
-msgstr "Nächstes Element suchen und ersetzen"
+msgstr "Geladene Datei ersetzen?"
 
 #: bitmap2component/bitmap2cmp_panel.cpp:588
-#, fuzzy
 msgid "There is already a file loaded. Do you want to replace it?"
-msgstr ""
-"Die Ausgabedatei ‚%s‘ existiert bereits. Möchten Sie diese überschreiben?"
+msgstr "Es ist bereits eine Datei geladen. Möchten Sie diese ersetzen?"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:22
 msgid "Original Picture"
@@ -8720,9 +8717,8 @@ msgid "Already Placed"
 msgstr "Bereits platziert"
 
 #: common/libeval_compiler/libeval_compiler.cpp:590
-#, fuzzy
 msgid "Unresolved text variable reference"
-msgstr "Nicht-aufgelöste Textvariable"
+msgstr "Nicht-aufgelöste Textvariablenreferenz"
 
 #: common/libeval_compiler/libeval_compiler.cpp:592
 #, c-format
@@ -13688,9 +13684,8 @@ msgid "Transfer user-defined fields"
 msgstr "Benutzerdefinierte Felder übertragen"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:104
-#, fuzzy
 msgid "Keep content of user-defined fields"
-msgstr "Inhalt der ausgewählten Zellen löschen"
+msgstr "Inhalt benutzerdefinierter Felder erhalten"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:122
 msgid "Pin name position offset:"
@@ -15711,9 +15706,9 @@ msgid "Are you sure you want to remove the field '%s'?"
 msgstr "Sind Sie sicher, dass Sie das Feld \"%s\" entfernen möchten?"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:827
-#, fuzzy, c-format
+#, c-format
 msgid "The first %d fields are mandatory and names cannot be changed."
-msgstr "Die ersten %d Felder sind notwendig."
+msgstr "Die ersten %d Felder sind notwendig und ihre Namen sind unveränderbar."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:838
 msgid "Rename Field"
@@ -15803,19 +15798,16 @@ msgstr ""
 "Bitte einen anderen Namen wählen."
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:43
-#, fuzzy
 msgid "Add a new field"
 msgstr "Feld hinzufügen"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:48
-#, fuzzy
 msgid "Rename selected field"
-msgstr "Ausgewähltes Netz umbenennen..."
+msgstr "Ausgewähltes Netz umbenennen"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:56
-#, fuzzy
 msgid "Remove selected field"
-msgstr "Eingebettete Datei entfernen"
+msgstr "Gewähltes Feld entfernen"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:69
 msgid "View presets:"
@@ -16902,9 +16894,8 @@ msgid "Hop-over size:"
 msgstr "Abrundung der Ecken:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:172
-#, fuzzy
 msgid "Medium"
-msgstr "Indium"
+msgstr "Mittel"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:178
 msgid "Connection grid:"
@@ -17220,14 +17211,12 @@ msgid "Nickname cannot be empty."
 msgstr "Der Pin-Name darf nicht leer sein."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:454
-#, fuzzy
 msgid "Path cannot be empty."
-msgstr "Text darf nicht leer sein."
+msgstr "Pfad darf nicht leer sein."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:467
-#, fuzzy
 msgid "Library Table Error"
-msgstr "Bibliothek-Aliasnamen-Fehler"
+msgstr "Bibliothekstabellen-Fehler"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:475
 #, c-format
@@ -21945,11 +21934,11 @@ msgstr "Format"
 
 #: eeschema/sim/spice_model_parser.cpp:101
 #: eeschema/sim/spice_model_parser.cpp:215
-#, fuzzy, c-format
+#, c-format
 msgid "Could not find parent model '%s' for \"A Kind Of\" model '%s'"
 msgstr ""
-"Konnte Modell \"%s\" nicht finden, um es für das \"A Kind Of\"-Modell \"%s\" "
-"zu kopieren"
+"Konnte übergeordnetes Modell \"%s\" für das \"A Kind Of\"-Modell \"%s\" "
+"nicht finden"
 
 #: eeschema/sim/spice_simulator.cpp:57
 msgid "DC Operating Point"
@@ -24200,14 +24189,12 @@ msgid "Export Current Plot to Schematic"
 msgstr "Aktuellen Plot in Schaltplan exportieren"
 
 #: eeschema/tools/sch_actions.cpp:1586
-#, fuzzy
 msgid "Show Simulation Side Panel"
-msgstr "Seitenpanel anzeigen"
+msgstr "Simulationsseitenpanel anzeigen"
 
 #: eeschema/tools/sch_actions.cpp:1591
-#, fuzzy
 msgid "Show Simulation Console Panel"
-msgstr "Konsolenpanel anzeigen"
+msgstr "Simulationskonsolenpanel anzeigen"
 
 #: eeschema/tools/sch_actions.cpp:1596
 msgid "Show Legend"
