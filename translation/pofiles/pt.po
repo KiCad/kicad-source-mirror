@@ -15,10 +15,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-06-27 22:51+0300\n"
-"PO-Revision-Date: 2025-06-27 06:01+0000\n"
-"Last-Translator: Manuela Silva <mmsrs@sky.com>\n"
-"Language-Team: Portuguese <https://hosted.weblate.org/projects/kicad/v9/pt/"
-">\n"
+"PO-Revision-Date: 2025-06-30 21:01+0000\n"
+"Last-Translator: Julio Dias <jcesardias@gmail.com>\n"
+"Language-Team: Portuguese <https://hosted.weblate.org/projects/kicad/v9/pt/>"
+"\n"
 "Language: pt\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -16985,8 +16985,8 @@ msgid ""
 "Save '%s' as current KiCad format (*.kicad_sym) and replace legacy entry in "
 "table?"
 msgstr ""
-"Deseja Gravar o '%s' como um formato KiCad atual (*.kicad_sym) e substituir "
-"a entrada legada na tabela?"
+"Deseja Gravar '%s' como um formato KiCad atual (*.kicad_sym) e substituir a "
+"entrada legada na tabela?"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:945
 #, c-format
@@ -17021,7 +17021,7 @@ msgstr ""
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:1186
 msgid "Symbol Libraries"
-msgstr "Bibliotecas de Símbolo"
+msgstr "Bibliotecas de Símbolos"
 
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:134
 msgid "Add existing library to table"
@@ -17033,14 +17033,12 @@ msgid "Reset Libraries"
 msgstr "Redefinir as bibliotecas"
 
 #: eeschema/dialogs/panel_template_fieldnames.cpp:45
-#, fuzzy
 msgid "Project Field Name Templates"
-msgstr "Modelos de nome do campo do projeto:"
+msgstr "Modelos de nome de campo do projeto:"
 
 #: eeschema/dialogs/panel_template_fieldnames.cpp:51
-#, fuzzy
 msgid "Global Field Name Templates"
-msgstr "Modelos de nome global do campo:"
+msgstr "Modelos de nome global de campo:"
 
 #: eeschema/dialogs/panel_template_fieldnames.cpp:209
 #, fuzzy, c-format
@@ -17053,11 +17051,13 @@ msgid ""
 "unique names differing only by white space characters.  Removing the white "
 "space characters will have no effect on existing symbol field names."
 msgstr ""
+"Isto pode resultar no que aparenta ser nomes de campos duplicados, mas são "
+"na verdade nomes únicos que diferem somente por espaços em branco. Remover "
+"os espaços não surtará efeito nos campos existentes de nomes de símbolos."
 
 #: eeschema/dialogs/panel_template_fieldnames.cpp:221
-#, fuzzy
 msgid "Remove White Space"
-msgstr "Remover pista duplicada"
+msgstr "Remover espaço em branco"
 
 #: eeschema/dialogs/panel_template_fieldnames.cpp:222
 #, fuzzy
