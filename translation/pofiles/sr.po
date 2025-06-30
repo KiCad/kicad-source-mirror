@@ -13227,7 +13227,7 @@ msgid ""
 "symbol value when loaded in the schematic."
 msgstr ""
 "Име симбола у библиотеци и такође подразумевана\n"
-" вредност симбола кад се учита у шему."
+"вредност симбола кад се учита у шему."
 
 #: eeschema/dialogs/dialog_increment_annotations_base.cpp:37
 #, fuzzy
@@ -13487,14 +13487,14 @@ msgstr "Излазне јединице:"
 #: eeschema/pin_type.cpp:87 eeschema/sch_label.cpp:99
 #: eeschema/sch_label.cpp:2242 eeschema/sch_pin.cpp:2119
 msgid "Bidirectional"
-msgstr ""
+msgstr "Двосмерно"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:184
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:64
 #: eeschema/pin_type.cpp:88 eeschema/sch_label.cpp:2243
 #: eeschema/sch_pin.cpp:2120
 msgid "Tri-state"
-msgstr ""
+msgstr "Тростатичко"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:187
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:67
