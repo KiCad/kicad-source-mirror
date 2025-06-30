@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-06-27 22:51+0300\n"
-"PO-Revision-Date: 2025-06-30 21:01+0000\n"
+"PO-Revision-Date: 2025-06-30 21:02+0000\n"
 "Last-Translator: Luka Borkovic <borkovic@gmail.com>\n"
 "Language-Team: Serbian <https://hosted.weblate.org/projects/kicad/v9/sr/>\n"
 "Language: sr\n"
@@ -10144,26 +10144,26 @@ msgstr "Маркер није пронађен"
 #: common/validators.cpp:430
 #, c-format
 msgid "The datasheet field cannot contain %s character(s)."
-msgstr "Datasheet пољњ не може садржати %s карактер(е)."
+msgstr "Datasheet поље не може садржати %s карактер(е)."
 
 #: common/validators.cpp:434
 #, c-format
 msgid "The sheet name cannot contain %s character(s)."
-msgstr ""
+msgstr "Име цртежа не може садржати %s карактер(е)."
 
 #: common/validators.cpp:438
 #, c-format
 msgid "The sheet filename cannot contain %s character(s)."
-msgstr ""
+msgstr "Име фајла цртежа не може садржати %s карактер(е)."
 
 #: common/validators.cpp:442
 #, c-format
 msgid "The field cannot contain %s character(s)."
-msgstr ""
+msgstr "Поље не може садржати %s карактер(е)."
 
 #: common/validators.cpp:448
 msgid "The reference designator cannot contain text variable references"
-msgstr ""
+msgstr "Обележје референце не може садржати референце на текстуалне променљиве"
 
 #: common/validators.cpp:452
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:310
@@ -10177,7 +10177,7 @@ msgstr "Поље"
 
 #: common/view/view.cpp:549
 msgid "Mirroring for Y axis is not supported yet"
-msgstr ""
+msgstr "Пресликавање по Y оси још увек није подржано"
 
 #: common/widgets/filter_combobox.cpp:72
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:803
@@ -10238,7 +10238,7 @@ msgstr "Убрзана графика:"
 
 #: common/widgets/gal_options_panel_base.cpp:32
 msgid "Hardware-accelerated graphics (recommended)"
-msgstr ""
+msgstr "Хардверски убрзана графика (препоручено)"
 
 #: common/widgets/gal_options_panel_base.cpp:36
 #, fuzzy
@@ -10250,6 +10250,8 @@ msgid ""
 "Software graphics (for computers which do not support KiCad's hardware "
 "acceleration requirements)"
 msgstr ""
+"Софтверска графика (за рачунаре који не подржавају хардверске захтеве "
+"KiCad-а)"
 
 #: common/widgets/gal_options_panel_base.cpp:47
 #, fuzzy
@@ -10350,7 +10352,7 @@ msgstr "Изабери путању"
 
 #: common/widgets/lib_tree.cpp:94
 msgid "Sort by Best Match"
-msgstr ""
+msgstr "Сортирај по најбољем поклапању"
 
 #: common/widgets/lib_tree.cpp:95
 #, fuzzy
@@ -10374,7 +10376,7 @@ msgstr "Увећати "
 
 #: common/widgets/mathplot.cpp:1400
 msgid "Zoom out plot view."
-msgstr ""
+msgstr "Одзумирај приказ плотовања."
 
 #: common/widgets/mathplot.cpp:1402
 #, fuzzy
@@ -10388,7 +10390,7 @@ msgstr "Зелена:"
 
 #: common/widgets/mathplot.cpp:1403
 msgid "Set plot view to show all items"
-msgstr ""
+msgstr "Подеси приказ плотовања да прикаже све објекте"
 
 #: common/widgets/net_selector.cpp:32 gerbview/gerber_draw_item.cpp:751
 #: pcbnew/dialogs/dialog_copper_zones.cpp:404
@@ -10447,7 +10449,7 @@ msgstr "Својства лука"
 
 #: common/widgets/search_pane.cpp:45
 msgid "Toggle zooming to selections in the search pane"
-msgstr ""
+msgstr "Укључи/искључи зумирање у односу на избор у панелу претраге"
 
 #: common/widgets/search_pane.cpp:47
 #, fuzzy
@@ -10457,6 +10459,7 @@ msgstr "Појасни избор"
 #: common/widgets/search_pane.cpp:47
 msgid "Toggle panning to selections in the search pane"
 msgstr ""
+"Укључи/искључи померање приказа у односу на одабране ставке у панелу претраге"
 
 #: common/widgets/search_pane.cpp:51
 #, fuzzy
@@ -11499,7 +11502,7 @@ msgstr "Пројект"
 #: eeschema/design_block_utils.cpp:84 eeschema/sch_base_frame.cpp:300
 #: pcbnew/footprint_libraries_utils.cpp:428
 msgid "Choose the Library Table to add the library to:"
-msgstr ""
+msgstr "Изабери табелу библиотеке на коју ћеш додати библиотеку:"
 
 #: eeschema/design_block_utils.cpp:85 eeschema/sch_base_frame.cpp:301
 #: pcbnew/footprint_libraries_utils.cpp:429
@@ -11565,6 +11568,8 @@ msgid ""
 "Delete design block library '%s' from disk? This will delete all design "
 "blocks within the library."
 msgstr ""
+"Избриши библиотеку design block-а \"%s\" са диска? Ово ће избрисати све "
+"design block-ове унутар библиотеке."
 
 #: eeschema/design_block_utils.cpp:498
 #, fuzzy, c-format
