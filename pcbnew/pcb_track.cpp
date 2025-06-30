@@ -378,8 +378,6 @@ void PCB_VIA::SetWidth( int aWidth )
 
 int PCB_VIA::GetWidth() const
 {
-    // This is present because of the parent class.  It should never be actually called on a via.
-    wxASSERT_MSG( false, "Warning: PCB_VIA::GetWidth called without a layer argument" );
     return m_padStack.Size( PADSTACK::ALL_LAYERS ).x;
 }
 
