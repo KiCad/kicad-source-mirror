@@ -9337,7 +9337,7 @@ msgstr "Izgara başlangıç noktasını yerleştir"
 
 #: common/tool/actions.cpp:901
 msgid "Reset Grid Origin"
-msgstr "Elek Başlangıç Noktası Sıfırlama"
+msgstr "Izgara Başlangıç Noktası Sıfırlama"
 
 #: common/tool/actions.cpp:911
 msgid "Show Grid"
@@ -9396,7 +9396,7 @@ msgstr "Birimleri değiştir"
 
 #: common/tool/actions.cpp:980
 msgid "Switch between imperial and metric units"
-msgstr "İngiliz ve metrik birimler arasında geçiş yapın"
+msgstr "İngiliz ve metrik birimler arasında geçiş yap"
 
 #: common/tool/actions.cpp:986
 msgid "Polar Coordinates"
@@ -9404,7 +9404,7 @@ msgstr "Kutupsal Koordinatlar"
 
 #: common/tool/actions.cpp:987
 msgid "Switch between polar and cartesian coordinate systems"
-msgstr "Kutupsal ve kartezyen koordinat sistemleri arasında geçiş yapın"
+msgstr "Kutupsal ve kartezyen koordinat sistemleri arasında geçiş yap"
 
 #: common/tool/actions.cpp:995
 msgid "Reset Local Coordinates"
@@ -14149,7 +14149,7 @@ msgstr "BOM malzeme listesi Ön Ayarları"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:82
 msgid "Electrical Rules"
-msgstr "Elektriksel Kuralları"
+msgstr "Elektriksel Kurallar"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:112
 #: pcbnew/dialogs/dialog_board_setup.cpp:186
@@ -15769,7 +15769,7 @@ msgstr "Link:"
 
 #: eeschema/dialogs/dialog_text_properties_base.cpp:294
 msgid "Make this text item a clickable hyperlink"
-msgstr "Bu metin ögesini tıklanabilir bir köprü yapın"
+msgstr "Bu metin ögesini tıklanabilir bir köprü yap"
 
 #: eeschema/dialogs/dialog_update_from_pcb.cpp:43
 #: pcbnew/dialogs/dialog_import_netlist.cpp:79
@@ -21724,7 +21724,7 @@ msgstr "<b> Kapalı ızgara pimi %s </b> %s konumunda <b> (%s, %s) </b>."
 #: eeschema/symbol_checker.cpp:352
 #, c-format
 msgid "<b>Off grid pin %s</b> %s at location <b>(%s, %s)</b> in unit %c."
-msgstr "Izgara dışı pin %s , (%s, %s) konumunda birim %c içinde"
+msgstr "Izgara dışı pin %s , (%s, %s) konumunda birim %c içinde."
 
 #: eeschema/symbol_checker.cpp:394
 #, c-format
@@ -22418,7 +22418,7 @@ msgstr "%s değerini '%s'den '%s'e değiştirin."
 #: eeschema/tools/backannotate.cpp:431
 #, c-format
 msgid "Change %s 'Do not populate' from '%s' to '%s'."
-msgstr "%s'nin 'Boş Bırak' durumunu '%s' iken '%s' yapın."
+msgstr "%s'nin 'Boş Bırak' durumunu '%s' iken '%s' yap."
 
 #: eeschema/tools/backannotate.cpp:445
 #, c-format
@@ -22433,7 +22433,7 @@ msgstr "%s pin '%s' bulunamadı."
 #: eeschema/tools/backannotate.cpp:508
 #, c-format
 msgid "Change %s field '%s' value to '%s'."
-msgstr "%s: '%s' alanının değerini '%s' yapın."
+msgstr "%s: '%s' alanının değerini '%s' ile değiştir."
 
 #: eeschema/tools/backannotate.cpp:523
 #, c-format
@@ -30260,15 +30260,15 @@ msgstr "Mikroşerit Hattı"
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:23
 msgid "Coplanar wave guide"
-msgstr "Eş düzlemli dalga kılavuzu"
+msgstr "Ortak düzlem dalga kılavuzu"
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:23
 msgid "Coplanar wave guide w/ ground plane"
-msgstr "Yer düzlemi ile eş düzlemli dalga kılavuzu"
+msgstr "Topraklı ortak düzlem dalga kılavuzu"
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:23
 msgid "Rectangular Waveguide"
-msgstr "Dikdörtgen Dalga Kılavuzu"
+msgstr "Dikdörtgen dalga kılavuzu"
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:23
 msgid "Coaxial Line"
