@@ -10618,26 +10618,26 @@ msgstr "Маркер није пронађен"
 #: common/validators.cpp:364
 #, c-format
 msgid "The datasheet field cannot contain %s character(s)."
-msgstr "Datasheet пољњ не може садржати %s карактер(е)."
+msgstr "Datasheet поље не може садржати %s карактер(е)."
 
 #: common/validators.cpp:368
 #, c-format
 msgid "The sheet name cannot contain %s character(s)."
-msgstr ""
+msgstr "Име цртежа не може садржати %s карактер(е)."
 
 #: common/validators.cpp:372
 #, c-format
 msgid "The sheet filename cannot contain %s character(s)."
-msgstr ""
+msgstr "Име фајла цртежа не може садржати %s карактер(е)."
 
 #: common/validators.cpp:376
 #, c-format
 msgid "The field cannot contain %s character(s)."
-msgstr ""
+msgstr "Поље не може садржати %s карактер(е)."
 
 #: common/validators.cpp:382
 msgid "The reference designator cannot contain text variable references"
-msgstr ""
+msgstr "Обележје референце не може садржати референце на текстуалне променљиве"
 
 #: common/validators.cpp:386
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:345
@@ -10651,7 +10651,7 @@ msgstr "Поље"
 
 #: common/view/view.cpp:549
 msgid "Mirroring for Y axis is not supported yet"
-msgstr ""
+msgstr "Пресликавање по Y оси још увек није подржано"
 
 #: common/widgets/design_block_pane.cpp:212
 #: pcbnew/footprint_libraries_utils.cpp:372
@@ -10699,6 +10699,8 @@ msgid ""
 "Delete design block library '%s' from disk? This will delete all design "
 "blocks within the library."
 msgstr ""
+"Избриши библиотеку design block-а \"%s\" са диска? Ово ће избрисати све "
+"design block-ове унутар библиотеке."
 
 #: common/widgets/design_block_pane.cpp:350
 #, fuzzy, c-format
@@ -10758,7 +10760,7 @@ msgstr "Пројект"
 #: common/widgets/design_block_pane.cpp:496 eeschema/sch_base_frame.cpp:302
 #: pcbnew/footprint_libraries_utils.cpp:428
 msgid "Choose the Library Table to add the library to:"
-msgstr ""
+msgstr "Изабери табелу библиотеке на коју ћеш додати библиотеку:"
 
 #: common/widgets/design_block_pane.cpp:497 eeschema/sch_base_frame.cpp:303
 #: pcbnew/footprint_libraries_utils.cpp:429
@@ -10824,7 +10826,7 @@ msgstr "Убрзана графика:"
 
 #: common/widgets/gal_options_panel_base.cpp:32
 msgid "Hardware-accelerated graphics (recommended)"
-msgstr ""
+msgstr "Хардверски убрзана графика (препоручено)"
 
 #: common/widgets/gal_options_panel_base.cpp:36
 #, fuzzy
@@ -10836,6 +10838,8 @@ msgid ""
 "Software graphics (for computers which do not support KiCad's hardware "
 "acceleration requirements)"
 msgstr ""
+"Софтверска графика (за рачунаре који не подржавају хардверске захтеве "
+"KiCad-а)"
 
 #: common/widgets/gal_options_panel_base.cpp:47
 #, fuzzy
@@ -10935,7 +10939,7 @@ msgstr "Изабери путању"
 
 #: common/widgets/lib_tree.cpp:98
 msgid "Sort by Best Match"
-msgstr ""
+msgstr "Сортирај по најбољем поклапању"
 
 #: common/widgets/lib_tree.cpp:99
 #, fuzzy
@@ -10959,7 +10963,7 @@ msgstr "Увећати "
 
 #: common/widgets/mathplot.cpp:1403
 msgid "Zoom out plot view."
-msgstr ""
+msgstr "Одзумирај приказ плотовања."
 
 #: common/widgets/mathplot.cpp:1405
 #, fuzzy
@@ -10973,7 +10977,7 @@ msgstr "Зелена:"
 
 #: common/widgets/mathplot.cpp:1406
 msgid "Set plot view to show all items"
-msgstr ""
+msgstr "Подеси приказ плотовања да прикаже све објекте"
 
 #: common/widgets/net_selector.cpp:32 gerbview/gerber_draw_item.cpp:751
 #: pcbnew/dialogs/dialog_copper_zones.cpp:404
@@ -11026,7 +11030,7 @@ msgstr "Учитавање  "
 
 #: common/widgets/panel_design_block_chooser.cpp:433
 msgid "Errors were encountered loading design blocks:"
-msgstr ""
+msgstr "Грешке су се десиле током учитавања design block-ова:"
 
 #: common/widgets/properties_panel.cpp:77
 #: common/widgets/properties_panel.cpp:207
@@ -11051,7 +11055,7 @@ msgstr "Појасни избор"
 
 #: common/widgets/search_pane.cpp:46
 msgid "Toggle zooming to selections in the search pane"
-msgstr ""
+msgstr "Укључи/искључи зумирање у односу на избор у панелу претраге"
 
 #: common/widgets/search_pane.cpp:48
 #, fuzzy
@@ -11061,6 +11065,7 @@ msgstr "Појасни избор"
 #: common/widgets/search_pane.cpp:48
 msgid "Toggle panning to selections in the search pane"
 msgstr ""
+"Укључи/искључи померање приказа у односу на одабране ставке у панелу претраге"
 
 #: common/widgets/search_pane.cpp:52
 #, fuzzy
