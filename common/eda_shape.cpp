@@ -1020,6 +1020,9 @@ int EDA_SHAPE::GetRadius() const
     }
 
     // don't allow degenerate circles/arcs
+    if( radius > INT_MAX / 2.0 )
+        radius = INT_MAX / 2.0;
+
     return std::max( 1, KiROUND( radius ) );
 }
 
