@@ -2821,7 +2821,7 @@ msgid ""
 "use the default selection."
 msgstr ""
 "KiCad, yeni kütüphanelere erişim için yeni %s kütüphane tablosu kullanarak\n"
-"ilk kez çalıştırıldı. KiCad'in %s kitaplıklarına erişebilmesi için,\n"
+"ilk kez çalıştırıldı. KiCad'in %s kütüphanelerine erişebilmesi için,\n"
 "genel %s kütüphane tablonuzu yapılandırmanız gerekir. Lütfen aşağıdaki\n"
 "seçeneklerden birini seçin. Hangi seçeneği seçeceğinizden emin değilseniz, "
 "lütfen\n"
@@ -3053,7 +3053,7 @@ msgstr "Grup adı:"
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:312
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:394
 msgid "Library link:"
-msgstr "Kitaplık bağlantısı:"
+msgstr "kütüphane bağlantısı:"
 
 #: common/dialogs/dialog_group_properties_base.cpp:47 eeschema/sch_item.cpp:656
 #: pcbnew/board_item.cpp:420 pcbnew/dialogs/dialog_copper_zones_base.cpp:127
