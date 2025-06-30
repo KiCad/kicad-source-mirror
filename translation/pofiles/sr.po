@@ -8846,7 +8846,7 @@ msgstr "Непоклапање типа између \"%s\" и %lf"
 #: common/libeval_compiler/libeval_compiler.cpp:1175
 #, c-format
 msgid "Type mismatch between %lf and '%s'"
-msgstr "Непоклапање типа између \"%lf\" и %s"
+msgstr "Непоклапање типа између %lf и \"%s\""
 
 #: common/netclass.cpp:299 pcbnew/component_classes/component_class.cpp:67
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1077 pcbnew/zone.cpp:874
@@ -8873,7 +8873,7 @@ msgstr "Класа 1"
 
 #: common/notifications_manager.cpp:97
 msgid "Dismiss"
-msgstr ""
+msgstr "Откажи"
 
 #: common/notifications_manager.cpp:155
 #, fuzzy
@@ -8882,11 +8882,11 @@ msgstr "Вертикално"
 
 #: common/notifications_manager.cpp:180
 msgid "There are no notifications available"
-msgstr ""
+msgstr "Нема доступних обавештења"
 
 #: common/pgm_base.cpp:208
 msgid "No default editor found, you must choose one."
-msgstr ""
+msgstr "Није пронађен подразумевани уређивач, мораш га изабрати."
 
 #: common/pgm_base.cpp:228 common/pgm_base.cpp:230
 #, fuzzy
@@ -9990,7 +9990,7 @@ msgstr ""
 
 #: common/tool/actions.cpp:919
 msgid "Performs left mouse button double-click"
-msgstr ""
+msgstr "Извршава дупли клик левим дугметом миша"
 
 #: common/tool/actions.cpp:932
 #, fuzzy
@@ -9999,7 +9999,7 @@ msgstr "Библиотека"
 
 #: common/tool/actions.cpp:933
 msgid "Keep the library at the top of the list"
-msgstr ""
+msgstr "Држи библиотеку на врху листе"
 
 #: common/tool/actions.cpp:938
 #, fuzzy
@@ -10008,7 +10008,7 @@ msgstr "Библиотека"
 
 #: common/tool/actions.cpp:939
 msgid "No longer keep the library at the top of the list"
-msgstr ""
+msgstr "Немој више држати библиотеку на врху листе"
 
 #: common/tool/actions.cpp:944
 #, fuzzy
@@ -10027,7 +10027,7 @@ msgstr "Додај поље"
 
 #: common/tool/actions.cpp:965
 msgid "Pan Up"
-msgstr ""
+msgstr "Помери приказ на горе"
 
 #: common/tool/actions.cpp:973
 #, fuzzy
@@ -10097,6 +10097,8 @@ msgstr "Бијела и смеђа"
 #: common/tool/actions.cpp:1063
 msgid "Enables item-specific grids that override the current grid"
 msgstr ""
+"Омогућује координатне мреже везане за одређене ставке које надјачавају "
+"тренутну мрежу"
 
 #: common/tool/actions.cpp:1071
 #, fuzzy
@@ -10121,7 +10123,7 @@ msgstr "Изабери језик"
 #: pcbnew/import_gfx/dialog_import_graphics.cpp:55
 #: pcbnew/pcb_dimension.cpp:1795
 msgid "Mils"
-msgstr ""
+msgstr "милс"
 
 #: common/tool/actions.cpp:1102
 #: eeschema/import_gfx/dialog_import_gfx_sch.cpp:59
@@ -10161,7 +10163,7 @@ msgstr "Опције приказивања"
 
 #: common/tool/actions.cpp:1137
 msgid "Switch between polar and cartesian coordinate systems"
-msgstr ""
+msgstr "Мењај између поларног и декартовог координатниг система"
 
 #: common/tool/actions.cpp:1146
 #, fuzzy
@@ -10175,15 +10177,15 @@ msgstr "Прикажи"
 
 #: common/tool/actions.cpp:1154
 msgid "Display crosshairs even when not drawing objects"
-msgstr ""
+msgstr "Прикажи крст чак и кад не црташ објекте"
 
 #: common/tool/actions.cpp:1160
 msgid "Full-Window Crosshairs"
-msgstr ""
+msgstr "Крст преко целог екрана"
 
 #: common/tool/actions.cpp:1161
 msgid "Switch display of full-window crosshairs"
-msgstr ""
+msgstr "Промени приказ крста преко целог екрана"
 
 #: common/tool/actions.cpp:1169
 #, fuzzy
@@ -10192,7 +10194,7 @@ msgstr "Креирање слојева"
 
 #: common/tool/actions.cpp:1170
 msgid "Toggle inactive layers between normal and dimmed"
-msgstr ""
+msgstr "Пребацуј змеђу нормалног и затамњеног изгледа неактивних слојева"
 
 #: common/tool/actions.cpp:1178
 #, fuzzy
