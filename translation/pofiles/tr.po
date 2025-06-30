@@ -15202,7 +15202,7 @@ msgstr "Gerilim"
 #: eeschema/dialogs/dialog_sim_format_value.cpp:41
 #: eeschema/sim/sim_plot_tab.cpp:660 eeschema/sim/sim_plot_tab.cpp:780
 msgid "Current"
-msgstr "Akım"
+msgstr "Mevcut Geçerli"
 
 #: eeschema/dialogs/dialog_sim_format_value.cpp:46
 #: eeschema/sim/sim_plot_tab.cpp:658 eeschema/sim/simulator_frame_ui.cpp:745
@@ -19335,9 +19335,9 @@ msgid ""
 "supported in KiCad. When the symbol is reloaded from the library, it will "
 "revert to the original 1:1 scale."
 msgstr ""
-"'%s' sembolü orijinal CADSTAR şemasında ölçeklendirilmiştir, ancak bu "
-"kıcad'de desteklenmemektedir. Sembol kütüphanesinden yeniden yüklendiğinde, "
-"orijinal 1:1 ölçeğine geri döner."
+"Sembol '%s' orijinal CADSTAR şematiğinde ölçeklendirilmiş ancak bu KiCad'de "
+"desteklenmiyor. Sembol kütüphaneden yeniden yüklendiğinde, orijinal 1:1 "
+"ölçeğine geri dönecektir."
 
 #: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:1470
 #, c-format
@@ -20204,8 +20204,8 @@ msgid ""
 "Schematic symbol reference '%s' library identifier is not valid. Unable to "
 "link library symbol."
 msgstr ""
-"Şematik sembol referansı '%s' kitaplık tanımlayıcısı geçerli değil. Kitaplık "
-"simgesi bağlanamıyor."
+"Şematik sembol referansı '%s' kütüphane tanımlayıcısı geçerli değil. "
+"Kütüphane simgesi bağlanamıyor."
 
 #: eeschema/sch_screen.cpp:728
 #, c-format
@@ -20213,13 +20213,13 @@ msgid ""
 "Symbol library '%s' not found and no fallback cache library available.  "
 "Unable to link library symbol."
 msgstr ""
-"Sembol kitaplığı '%s' bulunamadı ve geri dönüş önbellek kitaplığı mevcut "
-"değil. Kitaplık simgesi bağlanamıyor."
+"Sembol kütüphanesi '%s' bulunamadı ve geri dönüş önbellek kitaplığı mevcut "
+"değil. Kütüphane simgesi bağlanamıyor."
 
 #: eeschema/sch_screen.cpp:747
 #, c-format
 msgid "I/O error %s resolving library symbol %s"
-msgstr "G/Ç hatası %s kitaplık simgesi çözümleniyor %s"
+msgstr "G/Ç hatası %s kütüphane simgesi çözümleniyor %s"
 
 #: eeschema/sch_screen.cpp:767
 #, c-format
@@ -20229,7 +20229,7 @@ msgstr "'%s:%s' link '%s' sembolünü ayarlamak için önbelleğe geri dönülü
 #: eeschema/sch_screen.cpp:801
 #, c-format
 msgid "No library symbol found for schematic symbol '%s %s'."
-msgstr "'%s %s' şematik sembolü için kitaplık sembolü bulunamadı."
+msgstr "'%s %s' şematik sembolü için kütüphane sembolü bulunamadı."
 
 #: eeschema/sch_shape.cpp:334
 #, c-format
@@ -20394,7 +20394,7 @@ msgstr "Y ekseninde yansıt"
 #: eeschema/sch_symbol.cpp:2895 eeschema/widgets/search_handlers.cpp:170
 #: pcbnew/footprint.cpp:4147 pcbnew/widgets/search_handlers.cpp:124
 msgid "Library Link"
-msgstr "Kitaplık Bağlantısı"
+msgstr "Kütüphane Bağlantısı"
 
 #: eeschema/sch_table.cpp:291 pcbnew/pcb_table.cpp:461
 #, c-format
@@ -20519,7 +20519,7 @@ msgid ""
 "symbol library table.  The project this schematic belongs to must first be "
 "remapped before it can be imported into the current project."
 msgstr ""
-"'%s' şemasının sembol kitaplığı bağlantıları sembol kitaplığı tablosuyla "
+"'%s' şemasının sembol kütüphanesi bağlantıları sembol kütüphanesi tablosuyla "
 "yeniden eşlenmemiştir. Bu şemanın ait olduğu proje, mevcut projeye "
 "aktarılmadan önce yeniden eşleştirilmelidir."
 
@@ -20580,8 +20580,8 @@ msgid ""
 "\n"
 "Do you wish to continue?"
 msgstr ""
-"Seçili şemada geçerli proje kitaplığı tablosunda eksik olan kitaplık adları "
-"vardır. Bu, yüklenen şema için sembol kitaplığı referanslarının bozulmasına "
+"Seçili şemada geçerli proje kütüphane tablosunda eksik olan kitaplık adları "
+"vardır. Bu, yüklenen şema için sembol kütüphane referanslarının bozulmasına "
 "neden olabilir.\n"
 "\n"
 "Devam etmek istiyor musun?"
@@ -20595,7 +20595,7 @@ msgid ""
 "Do you wish to continue?"
 msgstr ""
 "Seçilen dosya farklı bir projenin parçası olarak oluşturuldu. Dosyayı bu "
-"projeye bağlamak, eksik veya yanlış sembol kitaplığı başvurularına neden "
+"projeye bağlamak, eksik veya yanlış sembol kütüphane başvurularına neden "
 "olabilir.\n"
 "\n"
 "Devam etmek istiyor musun?"
@@ -20608,9 +20608,9 @@ msgid ""
 "\n"
 "Do you wish to continue?"
 msgstr ""
-"Seçili şemada, seçili şematik proje kitaplığı tablosunda eksik olan sembol "
-"kitaplığı adları vardır. Bu, sembol kitaplığı başvurularının bozulmasına "
-"neden olabilir.\n"
+"Seçili şemada, seçili şematik proje kütüphane tablosunda eksik olan sembol "
+"kütüphane adları var. Bu, sembol kitaplığı başvurularının bozulmasına neden "
+"olabilir.\n"
 "\n"
 "Devam etmek istiyor musun?"
 
@@ -20622,9 +20622,9 @@ msgid ""
 "\n"
 "Do you wish to continue?"
 msgstr ""
-"Geçerli kitaplık tablosunda farklı bir kitaplığa başvuran yinelenen kitaplık "
-"adı bulunur. Bu çakışma çözülemez ve sembol kitaplığı başvurularının "
-"bozulmasına neden olabilir.\n"
+"Geçerli kütüphane tablosunda farklı bir kütüphaneye başvuran yinelenen "
+"kütüphane adı bulunuyor. Bu çakışma çözülemezse ve sembol kitaplığı "
+"başvurularının bozulmasına neden olabilir.\n"
 "\n"
 "Devam etmek istiyor musun?"
 
