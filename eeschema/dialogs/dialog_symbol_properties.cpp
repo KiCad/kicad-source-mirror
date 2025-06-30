@@ -1075,8 +1075,11 @@ void DIALOG_SYMBOL_PROPERTIES::AdjustPinsGridColumns()
             pinTblWidth -= m_pinGrid->GetColSize( i );
     }
 
-    m_pinGrid->SetColSize( COL_BASE_NAME, pinTblWidth / 2 );
-    m_pinGrid->SetColSize( COL_ALT_NAME, pinTblWidth / 2 );
+    if( pinTblWidth > 2 )
+    {
+        m_pinGrid->SetColSize( COL_BASE_NAME, pinTblWidth / 2 );
+        m_pinGrid->SetColSize( COL_ALT_NAME, pinTblWidth / 2 );
+    }
 }
 
 
