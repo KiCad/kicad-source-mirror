@@ -9967,7 +9967,7 @@ msgstr "Tüm açık araçlar için tercihleri göster"
 #: common/tool/actions.cpp:1324
 #: pcbnew/dialogs/panel_fp_properties_3d_model_base.cpp:78
 msgid "Configure Paths..."
-msgstr "Dosya Yollarını Yapılandır..."
+msgstr "Yolları Yapılandır..."
 
 #: common/tool/actions.cpp:1325
 msgid "Edit path configuration environment variables"
@@ -9999,7 +9999,7 @@ msgstr "Genel ve proje tasarım bloğu kütüphane listelerini düzenle"
 
 #: common/tool/actions.cpp:1352
 msgid "Getting Started with KiCad"
-msgstr "KiCad'i Kullanmaya Başlayın"
+msgstr "KiCad'i Kullanmaya Başlaken"
 
 #: common/tool/actions.cpp:1353
 msgid "Open \"Getting Started in KiCad\" guide for beginners"
