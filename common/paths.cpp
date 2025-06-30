@@ -151,6 +151,7 @@ wxString PATHS::GetDefaultUserProjectsPath()
 }
 
 
+#if !defined( __WXMAC__ ) && !defined( __WXMSW__ )
 /**
  * Get the CMake build root directory for the current executable
  * (which assumes the executable is in a build directory).
@@ -191,6 +192,7 @@ static wxString getBuildDirectoryRoot()
 
     return fn.GetPath();
 }
+#endif
 
 
 wxString PATHS::GetStockDataPath( bool aRespectRunFromBuildDir )

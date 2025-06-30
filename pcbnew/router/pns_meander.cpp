@@ -669,8 +669,9 @@ bool MEANDER_SHAPE::Fit( MEANDER_TYPE aType, const SEG& aSeg, const VECTOR2I& aP
 {
     const MEANDER_SETTINGS& st = Settings();
 
-    bool checkMode = false;
-    MEANDER_TYPE prim1, prim2;
+    bool         checkMode = false;
+    MEANDER_TYPE prim1 = MT_EMPTY;
+    MEANDER_TYPE prim2 = MT_EMPTY;
 
     if( aType == MT_CHECK_START )
     {

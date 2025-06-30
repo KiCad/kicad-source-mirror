@@ -713,7 +713,7 @@ void KIBIS_PIN::getKuKdFromFile( const std::string& aSimul )
                 i = ( i + 1 ) % 3;
             }
         }
-        catch( const std::exception& e )
+        catch( const std::exception& )
         {
             Report( _( "Error while reading temporary file" ), RPT_SEVERITY_ERROR );
         }

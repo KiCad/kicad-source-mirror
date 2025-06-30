@@ -340,7 +340,9 @@ const wxCursorBundle& CURSOR_STORE::storeGetBundle( KICURSOR aIdKey ) const
     wxASSERT_MSG( false, wxString::Format( "Could not find cursor bundle with ID %d",
                                            static_cast<int>( aIdKey ) ) );
 
-    return wxCursorBundle();
+    static const wxCursorBundle invalid;
+
+    return invalid;
 }
 #else
 const wxCursor& CURSOR_STORE::storeGetCursor( KICURSOR aIdKey, bool aHiDPI ) const
