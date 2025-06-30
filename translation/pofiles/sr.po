@@ -10449,7 +10449,7 @@ msgstr "Својства лука"
 
 #: common/widgets/search_pane.cpp:45
 msgid "Toggle zooming to selections in the search pane"
-msgstr "Укључи/искључи зумирање у односу на избор у панелу претраге"
+msgstr "Укључи/искључи зумирање у односу на одабране ставке у панелу претраге"
 
 #: common/widgets/search_pane.cpp:47
 #, fuzzy
@@ -10478,7 +10478,7 @@ msgstr "%s мора бити најмање %s."
 
 #: common/widgets/widget_hotkey_list.cpp:103
 msgid "Press a new hotkey, or press Esc to cancel..."
-msgstr ""
+msgstr "Притисни пречицу тастатуре или Esc за одустајање..."
 
 #: common/widgets/widget_hotkey_list.cpp:116
 #: kicad/dialogs/dialog_executecommand_job_settings_base.cpp:26
@@ -10540,6 +10540,8 @@ msgid ""
 "'%s' is already assigned to '%s' in section '%s'. Are you sure you want to "
 "change its assignment?"
 msgstr ""
+"\"%s\" је већ додељено \"%s\" у одељку \"%s\". Да ли си сигуран да желиш да "
+"промениш доделу?"
 
 #: common/widgets/widget_hotkey_list.cpp:501
 msgid "Confirm change"
@@ -10552,7 +10554,7 @@ msgstr "Покрени команду:"
 
 #: common/widgets/widget_hotkey_list.cpp:524
 msgid "(double-click to edit)"
-msgstr ""
+msgstr "(дупли клик да уредиш)"
 
 #: common/widgets/widget_hotkey_list.cpp:527
 #, fuzzy
@@ -10717,14 +10719,14 @@ msgstr "SPICE netlist фајл"
 
 #: common/wildcards_and_files_ext.cpp:333
 msgid "EasyEDA (JLCEDA) Std backup archive"
-msgstr ""
+msgstr "EasyEDA (JLCEDA) Std архива резервне копије"
 
 #: common/wildcards_and_files_ext.cpp:339
 #: eeschema/sch_io/easyedapro/sch_io_easyedapro.h:46
 #: eeschema/sch_io/easyedapro/sch_io_easyedapro.h:51
 #: pcbnew/pcb_io/easyedapro/pcb_io_easyedapro.h:51
 msgid "EasyEDA (JLCEDA) Pro files"
-msgstr ""
+msgstr "EasyEDA (JLCEDA) Pro фајлови"
 
 #: common/wildcards_and_files_ext.cpp:345
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.h:302
@@ -10744,7 +10746,7 @@ msgstr "библиотека"
 
 #: common/wildcards_and_files_ext.cpp:365
 msgid "KiCad design block path"
-msgstr ""
+msgstr "KiCad design block путања"
 
 #: common/wildcards_and_files_ext.cpp:372
 #, fuzzy
@@ -10846,7 +10848,7 @@ msgstr "Zip фајл"
 
 #: common/wildcards_and_files_ext.cpp:510
 msgid "GenCAD 1.4 board files"
-msgstr ""
+msgstr "GenCAD 1.4 фајлови плочице"
 
 #: common/wildcards_and_files_ext.cpp:516
 msgid "DXF Files"
@@ -10904,7 +10906,7 @@ msgstr "Сви фајлови (*.*)|*.*"
 
 #: cvpcb/auto_associate.cpp:180
 msgid "Equivalence File Load Error"
-msgstr ""
+msgstr "Грешка при учивањану фајла еквиваленција"
 
 #: cvpcb/auto_associate.cpp:187
 #, fuzzy, c-format
@@ -10933,6 +10935,14 @@ msgid ""
 "See the \"Footprint Library Table\" section of the CvPcb documentation for "
 "more information."
 msgstr ""
+"Покренули сте CvPcb први пут коришћењем новог метода за проналажење подножја "
+"у библиотеци подножја.\n"
+"CvPcb је или копирао подразумевану табелу или креирао празну у вашем "
+"корисничком директоријуму.\n"
+"Морате прво конфигурисате табелу библиотека да укључује сва подножја која "
+"нису укључена са KiCad-ом.\n"
+"Видите секцију у CvPcb документацији под називом "
+"\"Табела библиотеке подножја\"."
 
 #: cvpcb/cvpcb.cpp:206
 #, fuzzy
@@ -10973,7 +10983,7 @@ msgstr "Симбол: Додјеле отисака"
 
 #: cvpcb/cvpcb_mainframe.cpp:401
 msgid "Symbol to Footprint links have been modified. Save changes?"
-msgstr ""
+msgstr "Линкови симбола и подножја су измењени. Сачувај промене?"
 
 #: cvpcb/cvpcb_mainframe.cpp:629 cvpcb/tools/cvpcb_association_tool.cpp:208
 #, fuzzy, c-format
@@ -11018,7 +11028,7 @@ msgstr "Недостаје.\n"
 #: cvpcb/cvpcb_mainframe.cpp:847
 #, c-format
 msgid "Description: %s;  Keywords: %s"
-msgstr ""
+msgstr "Опис: \"%s\", кључне речи: %s"
 
 #: cvpcb/cvpcb_mainframe.cpp:879
 #, c-format
@@ -11057,7 +11067,7 @@ msgstr "Датотека пројекта: '%s'"
 #: gerbview/tools/gerbview_inspection_tool.cpp:185
 #: kicad/project_tree_pane.cpp:1067
 msgid "No text editor selected in KiCad.  Please choose one."
-msgstr ""
+msgstr "Уређивач текста није изабран у KiCad-у. Молим изаберите га."
 
 #: cvpcb/dialogs/dialog_config_equfiles.cpp:211
 #, fuzzy
@@ -11110,6 +11120,10 @@ msgid ""
 "\n"
 "Please choose the assignment."
 msgstr ""
+"Доделе подножја за листу веза шеме и симбол-подножје фајл асоцијација (.cmp) "
+"су у конфликту.\n"
+"\n"
+"Молим изаберите доделу."
 
 #: cvpcb/dialogs/fp_conflict_assignment_selector_base.h:53
 #, fuzzy
@@ -12759,7 +12773,7 @@ msgstr "Избриши угао"
 
 #: eeschema/dialogs/dialog_export_netlist_base.cpp:116
 msgid "Command line to run the exporter:"
-msgstr ""
+msgstr "Командна линија за покретање извозника:"
 
 #: eeschema/dialogs/dialog_export_netlist_base.cpp:131
 #, fuzzy
@@ -12768,7 +12782,7 @@ msgstr "Претражи..."
 
 #: eeschema/dialogs/dialog_export_netlist_base.h:95
 msgid "Add Script-based Netlist Exporter"
-msgstr ""
+msgstr "Додај извозник за листу веза базран на скрипти"
 
 #: eeschema/dialogs/dialog_field_properties.cpp:252
 #, fuzzy
@@ -12781,6 +12795,8 @@ msgid ""
 "Intersheet reference visibility is controlled globally from Schematic Setup "
 "> General > Formatting"
 msgstr ""
+"Видљивост међулисних референци је контролисана гловално кроз Подешњавање "
+"Шеме > Опште > Форматирање"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:85
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:133
@@ -12801,7 +12817,7 @@ msgstr "Ново име поља:"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:115
 msgid "Show the field name in addtion to its value"
-msgstr ""
+msgstr "Прикажи име поља уз његову вредност"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:122
 #, fuzzy
@@ -12810,7 +12826,7 @@ msgstr "Аутоматски стави компоненте"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:125
 msgid "Allow automatic placement of this field in the schematic"
-msgstr ""
+msgstr "Дозволи аутоматско постављање овог поља у шеми"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:138
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:173
@@ -12825,7 +12841,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:116
 #: pcbnew/dialogs/dialog_textbox_properties_base.cpp:83
 msgid "Font:"
-msgstr ""
+msgstr "Фонт:"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:142
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:177
@@ -12977,11 +12993,11 @@ msgstr "Поља"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:39
 msgid "Wires && wire labels"
-msgstr ""
+msgstr "Жице и ознаке жица"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:42
 msgid "Buses && bus labels"
-msgstr ""
+msgstr "Магистрале и ознаке магистрала"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:51
 #, fuzzy
@@ -13179,11 +13195,11 @@ msgstr "Грешка: "
 
 #: eeschema/dialogs/dialog_ibis_parser_reporter.cpp:31
 msgid "Ibis parser log"
-msgstr ""
+msgstr "Дневник Ibis парсера"
 
 #: eeschema/dialogs/dialog_ibis_parser_reporter_base.h:46
 msgid "Ibis parser"
-msgstr ""
+msgstr "Ibis парсер"
 
 #: eeschema/dialogs/dialog_image_properties.cpp:78
 #: eeschema/dialogs/dialog_image_properties_base.h:56
@@ -13210,6 +13226,8 @@ msgid ""
 "The symbol name in library and also the default\n"
 "symbol value when loaded in the schematic."
 msgstr ""
+"Име симбола у библиотеци и такође подразумевана\n"
+" вредност симбола кад се учита у шему."
 
 #: eeschema/dialogs/dialog_increment_annotations_base.cpp:37
 #, fuzzy
