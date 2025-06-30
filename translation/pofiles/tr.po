@@ -23399,7 +23399,7 @@ msgstr "Sembol Kütüphanesi Bağlantılarını Düzenle..."
 
 #: eeschema/tools/sch_actions.cpp:1057
 msgid "Edit links between schematic and library symbols"
-msgstr "Şematik ve kütüphane sembolleri arasındaki bağlantıları düzenleme"
+msgstr "Şematik ve kütüphane sembolleri arasındaki bağlantıları düzenle"
 
 #: eeschema/tools/sch_actions.cpp:1063
 msgid "Assign Footprints..."
@@ -26124,7 +26124,7 @@ msgstr "Ayak izi kütüphanesini mevcut kicad sürüm formatına yükseltir"
 #: kicad/cli/command_fp_upgrade.cpp:41
 msgid "Forces the footprint library to be resaved regardless of versioning"
 msgstr ""
-"Sürüm oluşturmadan bağımsız olarak ayak izi kitaplığının kaydedilmesini "
+"Sürüm oluşturmadan bağımsız olarak ayak izi kütüphanesinin kaydedilmesini "
 "zorlar"
 
 #: kicad/cli/command_jobset.h:32
@@ -27052,7 +27052,7 @@ msgstr "Sembol ve Sembol Kütüphaneleri"
 
 #: kicad/cli/command_sym_export_svg.cpp:43
 msgid "Exports the symbol or entire symbol library to SVG"
-msgstr "Sembolü veya tüm sembol kitaplığını SVG'ye aktarır"
+msgstr "Sembolü veya tüm sembol kütüphaneyi SVG'ye aktarır"
 
 #: kicad/cli/command_sym_export_svg.cpp:48
 msgid "Color theme to use (will default to symbol editor settings)"
@@ -27082,7 +27082,8 @@ msgstr "Sembol kütüphanesini mevcut kicad sürüm formatına yükseltir"
 #: kicad/cli/command_sym_upgrade.cpp:44
 msgid "Forces the symbol library to be resaved regardless of versioning"
 msgstr ""
-"Sürüm oluşturmadan bağımsız olarak sembol kitaplığının kaydedilmesini zorlar"
+"Sürüm oluşturmadan bağımsız olarak sembol kütüphanesinin kaydedilmesini "
+"zorlar"
 
 #: kicad/cli/command_sym_upgrade.cpp:59
 msgid "Symbol library does not exist or is not accessible\n"
@@ -27668,7 +27669,7 @@ msgstr "Üretim eklentileri (%d)"
 #: kicad/pcm/dialogs/dialog_pcm.cpp:53
 #, c-format
 msgid "Libraries (%d)"
-msgstr "Kitaplıklar (%d)"
+msgstr "Kütüphaneler (%d)"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:54
 #, c-format
@@ -33997,7 +33998,7 @@ msgstr "Ayak izi %s '%s' ile '%s' olarak değiştirildi"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:394
 msgid "*** library footprint not found ***"
-msgstr "kitaplık ayak izi bulunamadı ***"
+msgstr "***kütüphane ayak izi bulunamadı ***"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:419
 msgid ": (no changes)"
@@ -36120,7 +36121,7 @@ msgstr "ayak izi"
 #: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:60
 #, c-format
 msgid "Error occurred writing empty footprint library table '%s'."
-msgstr "Boş ayak izi kitaplığı tablosu '%s' yazılırken hata oluştu."
+msgstr "Boş ayak izi kütüphane tablosu '%s' yazılırken hata oluştu."
 
 #: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:73
 msgid "Please select a footprint library table file."
@@ -36129,12 +36130,12 @@ msgstr "Lütfen bir ayak izi kütüphane tablo dosyası seçin."
 #: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:96
 #, c-format
 msgid "'%s' is not a valid footprint library table."
-msgstr "'%s' geçerli bir ayak izi kitaplığı tablosu değil."
+msgstr "'%s' geçerli bir ayak izi kütüphane tablosu değil."
 
 #: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:107
 #, c-format
 msgid "Cannot create library table path '%s'."
-msgstr "'%s' kitaplık tablo yolu oluşturulamıyor."
+msgstr "'%s' kütüphane tablo yolu oluşturulamıyor."
 
 #: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:116
 #, c-format
@@ -36151,7 +36152,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:135
 msgid "Error loading footprint library table."
-msgstr "Ayak izi kitaplığı tablosu yüklenirken hata oluştu."
+msgstr "Ayak izi kütüphane tablosu yüklenirken hata oluştu."
 
 #: pcbnew/dialogs/dialog_import_netlist.cpp:85
 msgid "Load and Test Netlist"
@@ -39121,7 +39122,7 @@ msgstr "Yeni Grafik Ögeleri İçin Varsayılan Özellikler"
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:232
 msgid "Hidden footprint libraries are not yet supported."
-msgstr "Gizli ayak izi kitaplıkları henüz desteklenmiyor."
+msgstr "Gizli ayak izi kütüphaneleri henüz desteklenmiyor."
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:798
 #, c-format
@@ -41843,7 +41844,7 @@ msgstr "Kütüphanelerde ayak izi bulunamadı"
 
 #: pcbnew/drc/drc_item.cpp:212
 msgid "Footprint doesn't match copy in library"
-msgstr "Ayak izi kitaplıktaki kopyayla eşleşmiyor"
+msgstr "Ayak izi kütüphanedeki kopyayla eşleşmiyor"
 
 #: pcbnew/drc/drc_item.cpp:220
 msgid "Assertion failure"
@@ -42584,7 +42585,7 @@ msgstr "Yüklü proje yok, kütüphane uyumluluk testleri atlanıyor."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:822
 msgid "Loading footprint library table..."
-msgstr "Ayak izi kitaplığı tablosu yükleniyor..."
+msgstr "Ayak izi kütüphane tablosu yükleniyor..."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:832
 msgid "Checking board footprints against library..."
@@ -43305,7 +43306,7 @@ msgstr "Ayak izi %s projeye özel kitaplığa kaydedilirken hata oluştu."
 
 #: pcbnew/files.cpp:893
 msgid "Error saving project specific footprint library table."
-msgstr "Projeye özel ayak izi kitaplığı tablosu kaydedilirken hata oluştu."
+msgstr "Projeye özel ayak izi kütüphane tablosu kaydedilirken hata oluştu."
 
 #: pcbnew/files.cpp:996 pcbnew/files.cpp:1137 pcbnew/files.cpp:1314
 #: pcbnew/footprint_libraries_utils.cpp:269
@@ -43744,7 +43745,7 @@ msgstr "Belgeler"
 #: pcbnew/generate_footprint_info.cpp:135
 #, c-format
 msgid "Error loading footprint %s from library '%s'."
-msgstr "'%s' kitaplığından %s ayak izi(footprint) yüklenirken hata oluştu."
+msgstr "'%s' kütüphanesinden %s ayak izi yüklenirken hata oluştu."
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:260
 #: pcbnew/generators/pcb_tuning_pattern.cpp:265
@@ -44028,7 +44029,7 @@ msgstr "Ayak izi '%s' kaydedildi."
 
 #: pcbnew/load_select_footprint.cpp:377
 msgid "Error saving footprint library"
-msgstr "Ayak izi kitaplığını kaydediliyor"
+msgstr "Ayak izi kütüphanesi kaydediliyor"
 
 #: pcbnew/load_select_footprint.cpp:381
 #, c-format
@@ -49853,7 +49854,8 @@ msgid ""
 "Add footprints used on board to an existing footprint library\n"
 "(does not remove other footprints from this library)"
 msgstr ""
-"Mevcut bir ayak izi kitaplığına pano üzerinde kullanılan ayak izlerini ekle\n"
+"Mevcut bir ayak izi kütüphanesini pano üzerinde kullanılan ayak izlerini "
+"ekle\n"
 "(bu kütüphanedeki diğer ayak izlerini kaldırmaz)"
 
 #: pcbnew/tools/pcb_actions.cpp:1165
@@ -49865,8 +49867,9 @@ msgid ""
 "Create a new footprint library containing the footprints used on board\n"
 "(if the library already exists it will be replaced)"
 msgstr ""
-"Gemide kullanılan ayak izlerini içeren yeni bir ayak izi kitaplığı oluştur\n"
-"(kütüphane zaten mevcutsa değiştirilecektir)"
+"Kartta kullanılan ayak izlerini içeren yeni bir ayak izi kütüphanesi "
+"oluştur\n"
+"(kütüphane zaten varsa değiştirilecektir)."
 
 #: pcbnew/tools/pcb_actions.cpp:1173
 msgid "Board Setup..."
