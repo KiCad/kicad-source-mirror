@@ -21724,7 +21724,7 @@ msgstr "<b> Kapalı ızgara pimi %s </b> %s konumunda <b> (%s, %s) </b>."
 #: eeschema/symbol_checker.cpp:352
 #, c-format
 msgid "<b>Off grid pin %s</b> %s at location <b>(%s, %s)</b> in unit %c."
-msgstr "Izgara dışı pin %s %s, birim %c içinde (%s, %s) konumunda."
+msgstr "Izgara dışı pin %s %s, birim %c içinde (%s, %s) konumunda"
 
 #: eeschema/symbol_checker.cpp:394
 #, c-format
