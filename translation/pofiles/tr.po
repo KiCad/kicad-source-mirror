@@ -73,7 +73,9 @@ msgstr ""
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:1013
 msgid "Board outline is missing or malformed. Run DRC for a full analysis."
-msgstr "Kart dış hattı eksik veya hatalı. Tam analiz için DRC'yi çalıştırın."
+msgstr ""
+"Kart dış hattı eksik veya hatalı. Tam analiz için DRC (Tasarım Kuralı "
+"Kontrolü) çalıştırın."
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:294
 msgid "Create tracks and vias"
@@ -8105,15 +8107,15 @@ msgstr "Şematik PythonBOM dışa aktarımı"
 
 #: common/jobs/job_pcb_drc.cpp:37
 msgid "Perform DRC"
-msgstr "DRC Uygula"
+msgstr "DRC (Tasarım Kuralı Kontrolü) Uygula"
 
 #: common/jobs/job_pcb_drc.cpp:43 pcbnew/dialogs/dialog_drc_job_config.cpp:24
 msgid "DRC Job Settings"
-msgstr "DRC İş Ayarları"
+msgstr "DRC (Tasarım Kuralı Kontrolü) İş Ayarları"
 
 #: common/jobs/job_pcb_drc.cpp:47
 msgid "PCB: Perform DRC"
-msgstr "Baskı Devre: Tasarım Kuralı Kontrolü (DRC) Yap"
+msgstr "Baskı Devre: Tasarım Kuralı Kontrolü (DRC) Uygula"
 
 #: common/jobs/job_pcb_render.cpp:131
 #, c-format
@@ -33853,7 +33855,8 @@ msgstr "çalıştırılmadı"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:27
 msgid "Refill all zones before performing DRC"
-msgstr "DRC gerçekleştirmeden önce tüm bölgeleri yeniden doldurun"
+msgstr ""
+"DRC (Tasarım Kuralı Kontrolü) uygulamadan önce tüm bölgeleri yeniden doldur"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:31
 msgid ""
@@ -47381,7 +47384,7 @@ msgstr "Şematik ağ listesi denklik testleri için alınamadı.\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:2141 pcbnew/tools/drc_tool.cpp:200
 msgid "DRC"
-msgstr "DRC"
+msgstr "DRC (Tasarım Kuralı Kontrolü)"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:2162
 #, c-format
