@@ -25036,15 +25036,15 @@ msgstr "Çizim Modu"
 
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:60
 msgid "Sketch flashed items"
-msgstr "Taslak flaşlı ögelerler"
+msgstr "Taslak flaşlı ögeler"
 
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:61
 msgid ""
 "Display flashed items (items drawn using standard or macro apertures) in "
 "outlines mode"
 msgstr ""
-"Açıklamalar modunda flaşlanmış öğeleri (standart veya makro açıklıklar "
-"kullanılarak çizilmiş öğeler) görüntüle"
+"Flaşlanmış ögeleri (standart veya makro açıklıklar kullanılarak çizilen "
+"ögeler) dış hatlar modunda göster"
 
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:65
 msgid "Sketch lines"
@@ -25574,7 +25574,7 @@ msgid ""
 "Therefore the size of some items is undefined"
 msgstr ""
 "Uyarı: Bu dosyanın D Kodu tanımı yok\n"
-"Bu nedenle, bazı öğelerin boyutu tanımsızdır"
+"Bu nedenle, bazı ögelerin boyutu tanımsızdır"
 
 #: gerbview/readgerb.cpp:93
 msgid ""
@@ -25582,7 +25582,7 @@ msgid ""
 "Therefore the size of some items is undefined"
 msgstr ""
 "Uyarı: Bu dosyada bazı eksik D Kodu tanımları var\n"
-"Bu nedenle, bazı öğelerin boyutu tanımsızdır"
+"Bu nedenle, bazı ögelerin boyutu tanımsızdır"
 
 #: gerbview/rs274d.cpp:417
 msgid "Invalid Code Number"
@@ -25628,7 +25628,7 @@ msgstr "Özntlik:"
 
 #: gerbview/toolbars_gerber.cpp:231 gerbview/toolbars_gerber.cpp:276
 msgid "Highlight items with this aperture attribute"
-msgstr "Bu diyafram özelliğine sahip öğeleri vurgulayın"
+msgstr "Bu açıklık özniteliğine sahip ögeleri vurgula"
 
 #: gerbview/toolbars_gerber.cpp:255 gerbview/toolbars_gerber.cpp:257
 msgid "DCode:"
@@ -26326,7 +26326,7 @@ msgstr ""
 #: kicad/cli/command_pcb_export_3d.cpp:176
 msgid "Only include copper items belonging to nets matching this wildcard"
 msgstr ""
-"Bu joker karakterle eşleşen parçalara ait bakır öğelerini yalnızca dahil et"
+"Bu joker karakterle eşleşen parçalara ait bakır ögelerini yalnızca dahil et"
 
 #: kicad/cli/command_pcb_export_3d.cpp:183
 msgid "Do not optimize STEP file (enables writing parametric curves)"
@@ -26495,7 +26495,7 @@ msgstr "Lehim maskesini ipek baskıdan çıkar"
 #: kicad/cli/command_pcb_export_dxf.cpp:76
 #: pcbnew/dialogs/dialog_plot_base.cpp:303
 msgid "Plot graphic items using their contours"
-msgstr "Konturlarını kullanarak grafik öğeleri çizin"
+msgstr "Konturlarını kullanarak grafik ögeleri çizin"
 
 #: kicad/cli/command_pcb_export_dxf.cpp:80
 msgid "Plot using the drill/place file origin"
@@ -27015,7 +27015,7 @@ msgstr "PDF'de özellik açılır pencereleri oluşturma"
 
 #: kicad/cli/command_sch_export_plot.cpp:88
 msgid "Do not generate clickable links for hierarchical elements in PDF"
-msgstr "PDF içinde hiyerarşik öğeler için tıklanabilir bağlantılar oluşturma"
+msgstr "PDF'de hiyerarşik ögeler için tıklanabilir bağlantılar oluşturma"
 
 #: kicad/cli/command_sch_export_plot.cpp:92
 msgid "Do not generate PDF metadata from AUTHOR and SUBJECT variables"
@@ -30347,11 +30347,11 @@ msgstr "Regülatör Ekle"
 
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:113
 msgid "Enter a new item to the current list of available regulators"
-msgstr "Mevcut düzenleyiciler listesine yeni bir öğe girin"
+msgstr "Mevcut düzenleyiciler listesine yeni bir öge girin"
 
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:118
 msgid "Remove an item from the current list of available regulators"
-msgstr "Mevcut düzenleyiciler listesinden bir öğeyi kaldırma"
+msgstr "Mevcut düzenleyiciler listesinden bir ögeyi kaldır"
 
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:147
 msgid "typ"
