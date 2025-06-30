@@ -317,16 +317,12 @@ void SCH_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
                         {
                             SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( schItem );
 
-                            wxCHECK( symbol, /* void */ );
-
                             for( SCH_PIN* pin : symbol->GetPins( &undoSheet ) )
                                 pin->SetConnectivityDirty();
                         }
                         else if( schItem->Type() == SCH_SHEET_T )
                         {
                             SCH_SHEET* sheet = static_cast<SCH_SHEET*>( schItem );
-
-                            wxCHECK( sheet, /* void */ );
 
                             for( SCH_SHEET_PIN* pin : sheet->GetPins() )
                                 pin->SetConnectivityDirty();
