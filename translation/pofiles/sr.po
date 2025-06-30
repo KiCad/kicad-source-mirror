@@ -10194,7 +10194,7 @@ msgstr "Креирање слојева"
 
 #: common/tool/actions.cpp:1170
 msgid "Toggle inactive layers between normal and dimmed"
-msgstr "Пребацуј између нормалног и затамњеног изгледа неактивних слојева"
+msgstr "Пребацуј између нормалног и затамњеног приказа неактивних слојева"
 
 #: common/tool/actions.cpp:1178
 #, fuzzy
@@ -10273,7 +10273,7 @@ msgstr "Покрени"
 
 #: common/tool/actions.cpp:1274 kicad/tools/kicad_manager_actions.cpp:178
 msgid "Run component calculations, track width calculations, etc."
-msgstr ""
+msgstr "Изврши рачунање за компоненте, ширине водова, итд."
 
 #: common/tool/actions.cpp:1283
 #, fuzzy
@@ -10299,7 +10299,7 @@ msgstr "Отвори шему"
 
 #: common/tool/actions.cpp:1302
 msgid "Update PCB with changes made to schematic"
-msgstr ""
+msgstr "Ажурирај PCB са променама на шеми"
 
 #: common/tool/actions.cpp:1308
 #, fuzzy
@@ -10318,7 +10318,7 @@ msgstr "&Преференце"
 
 #: common/tool/actions.cpp:1317
 msgid "Show preferences for all open tools"
-msgstr ""
+msgstr "Покажи подешавања за све отворене алате"
 
 #: common/tool/actions.cpp:1324
 #: pcbnew/dialogs/panel_fp_properties_3d_model_base.cpp:78
@@ -10327,7 +10327,7 @@ msgstr "Конфигуриши путање..."
 
 #: common/tool/actions.cpp:1325
 msgid "Edit path configuration environment variables"
-msgstr ""
+msgstr "Уреди конфигурацију путања променљивих окружења"
 
 #: common/tool/actions.cpp:1331
 #, fuzzy
@@ -10366,7 +10366,7 @@ msgstr "&Почетак у KiCad-у"
 
 #: common/tool/actions.cpp:1353
 msgid "Open \"Getting Started in KiCad\" guide for beginners"
-msgstr ""
+msgstr "Отвори \"Како почети са KiCad-ом\" приручник за почетнике"
 
 #: common/tool/actions.cpp:1359
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:330
@@ -10393,11 +10393,11 @@ msgstr "Листа грешака:"
 
 #: common/tool/actions.cpp:1376
 msgid "Displays current hotkeys table and corresponding commands"
-msgstr ""
+msgstr "Приказује табелу тренутних пречица тастатуре и одговарајуће команде"
 
 #: common/tool/actions.cpp:1382
 msgid "Get Involved"
-msgstr ""
+msgstr "Укључи се"
 
 #: common/tool/actions.cpp:1383
 #, fuzzy
@@ -10421,7 +10421,7 @@ msgstr "Претражи"
 
 #: common/tool/actions.cpp:1409
 msgid "Reload all python plugins and refresh plugin menus"
-msgstr ""
+msgstr "Поново учитај све python plugin-е и освежи мени plugin-а"
 
 #: common/tool/actions.cpp:1417
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:73
@@ -10460,7 +10460,7 @@ msgstr "Сви фајлови (*.*)|*.*"
 
 #: common/tool/common_control.cpp:269
 msgid "Can not switch to project manager in stand-alone mode."
-msgstr ""
+msgstr "Не могу да се пребацим на менаџер пројекта у самосталном моду."
 
 #: common/tool/common_control.cpp:311
 #, c-format
@@ -10469,6 +10469,9 @@ msgid ""
 "'%s' could not be found.\n"
 "Do you want to access the KiCad online help?"
 msgstr ""
+"Фајл за помоћ \"%s\" или\n"
+"\"%s\" није пронађен.\n"
+"Желите ли да приступите KiCad помоћи на интернету?"
 
 #: common/tool/common_control.cpp:314 common/tool/common_control.cpp:334
 #, fuzzy
@@ -10481,6 +10484,8 @@ msgid ""
 "Help file '%s' could not be found.\n"
 "Do you want to access the KiCad online help?"
 msgstr ""
+"Фајл за помоћ \"%s\".\n"
+"Желите ли да приступите KiCad помоћи на интернету?"
 
 #: common/tool/common_control.cpp:369
 #, c-format
@@ -10488,6 +10493,8 @@ msgid ""
 "Could not launch the default browser.\n"
 "For information on how to help the KiCad project, visit %s"
 msgstr ""
+"Стартовање подразумеваног интернет прегледача неуспешно.\n"
+"За информације како да помогнете KiCad пројекту, посетите %s"
 
 #: common/tool/common_control.cpp:372
 #, fuzzy
@@ -10500,6 +10507,8 @@ msgid ""
 "Could not launch the default browser.\n"
 "To donate to the KiCad project, visit %s"
 msgstr ""
+"Стартовање подразумеваног интернет прегледача неуспешно.\n"
+"Да бисте донирали KiCad пројекту, посетите %s"
 
 #: common/tool/group_tool.cpp:43
 #, fuzzy
@@ -10543,7 +10552,7 @@ msgstr "Попуњавање зона"
 
 #: common/validators.cpp:216
 msgid "Signal names cannot contain CR or LF characters"
-msgstr ""
+msgstr "Имена сигнала не могу садржати CR или LF карактере"
 
 #: common/validators.cpp:219
 #, fuzzy
@@ -10577,11 +10586,11 @@ msgstr "Линија"
 
 #: common/validators.cpp:319
 msgid "tab"
-msgstr ""
+msgstr "таб"
 
 #: common/validators.cpp:321
 msgid "space"
-msgstr ""
+msgstr "размак"
 
 #: common/validators.cpp:335
 msgid " or "
@@ -10609,7 +10618,7 @@ msgstr "Маркер није пронађен"
 #: common/validators.cpp:364
 #, c-format
 msgid "The datasheet field cannot contain %s character(s)."
-msgstr ""
+msgstr "Datasheet не може садржати %s карактер(е)."
 
 #: common/validators.cpp:368
 #, c-format
