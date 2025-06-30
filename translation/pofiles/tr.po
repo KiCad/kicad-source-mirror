@@ -46392,8 +46392,7 @@ msgstr "'%s' record_tag dizesi için geçersiz format, satır %zu."
 #, c-format
 msgid "Invalid row size in row %zu.  Expecting %zu elements but found %zu."
 msgstr ""
-"%zu satırında geçersiz satır boyutu. %zu ögeleri bekleniyordu ancak %zu "
-"bulundu."
+"Satır %zu'da geçersiz satır boyutu. %zu öge bekleniyordu ancak %zu bulundu."
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:1763
 #, c-format
@@ -46728,10 +46727,10 @@ msgid ""
 "\n"
 "Zones will need to be refilled."
 msgstr ""
-"Tanımsız katmanlarda (%s) bulunan öğeler.\n"
+"Tanımsız katmanlarda ögeler (%s) bulundu.\n"
 "Bunları %s katmanına kurtarmak ister misiniz?\n"
 "\n"
-"Bölgelerin yeniden doldurulması gerekecektir."
+"Bölgelerin yeniden doldurulması gerekecek."
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:1152
 msgid "Undefined Layers Warning"
@@ -47414,7 +47413,7 @@ msgstr "DRC (Tasarım Kuralı Kontrolü)"
 #: pcbnew/pcbnew_jobs_handler.cpp:2162
 #, c-format
 msgid "Found %d unconnected items\n"
-msgstr "Bağlantısız %d öğe bulundu\n"
+msgstr "%d bağlantısız öge bulundu\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:2168
 #, c-format
@@ -47584,7 +47583,7 @@ msgstr "Kural alanı izlere izin vermez."
 
 #: pcbnew/router/pns_router.cpp:287
 msgid "Cannot start routing from a text item."
-msgstr "Metin öğesinden yönlendirme başlatılamıyor."
+msgstr "Metin ögesinden yönlendirme başlatılamıyor."
 
 #: pcbnew/router/pns_router.cpp:333 pcbnew/router/pns_router.cpp:398
 msgid "The routing start point violates DRC."
@@ -48492,7 +48491,7 @@ msgstr ""
 
 #: pcbnew/tools/board_inspection_tool.cpp:1332
 msgid "Select an item for a constraints resolution report."
-msgstr "Kısıtlama çözümleme raporu için bir öğe seçin."
+msgstr "Kısıtlama çözüm raporu için bir öge seçin."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1365
 #, c-format
@@ -48575,11 +48574,11 @@ msgstr "Tam bir analiz için DRC (Tasarım Kuralı Kontrolü) çalıştır."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1532
 msgid "Item <b>disallowed</b> at current location."
-msgstr "Geçerli konumda <b>izin verilmeyen</b> öğe."
+msgstr "Geçerli konumda <b>izin verilmeyen</b> öge."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1534
 msgid "Item allowed at current location."
-msgstr "Mevcut konumda izin verilen öğe."
+msgstr "Mevcut konumda izin verilen öge."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1587
 msgid "Select a footprint to diff with its library equivalent."
@@ -48990,11 +48989,11 @@ msgstr "Poligonların bazıları kesiştirilemedi."
 
 #: pcbnew/tools/item_modification_routine.cpp:663
 msgid "Outset items."
-msgstr "Başlangıç öğeleri."
+msgstr "Dışa doğru ögeler."
 
 #: pcbnew/tools/item_modification_routine.cpp:670
 msgid "Unable to outset the selected items."
-msgstr "Seçili öğelerin başlatılması mümkün değil."
+msgstr "Seçili ögelerin başlatılması mümkün değil."
 
 #: pcbnew/tools/item_modification_routine.cpp:674
 msgid "Some of the items could not be outset."
@@ -49695,7 +49694,7 @@ msgstr "İzleri & Geçitleri Temizle..."
 
 #: pcbnew/tools/pcb_actions.cpp:995
 msgid "Cleanup redundant items, shorting items, etc."
-msgstr "Gereksiz öğeleri temizleyin, öğeleri kısaltın, vb."
+msgstr "Gereksiz ögeleri, kısa devre yapan ögeleri temizle, vb."
 
 #: pcbnew/tools/pcb_actions.cpp:1001
 msgid "Cleanup Graphics..."
@@ -50635,7 +50634,9 @@ msgstr "...Göre Pozisyon..."
 
 #: pcbnew/tools/pcb_actions.cpp:2225
 msgid "Positions the selected item(s) by an exact amount relative to another"
-msgstr "Seçilen öğeyi/öğeleri diğerine göre tam bir miktar kadar konumlandırır"
+msgstr ""
+"Seçilen öge(ler)i bir diğerine göre belirli bir miktar uzaklıkta "
+"konumlandırır."
 
 #: pcbnew/tools/pcb_actions.cpp:2231
 msgid "Position Interactively..."
