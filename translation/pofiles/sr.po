@@ -10194,7 +10194,7 @@ msgstr "Креирање слојева"
 
 #: common/tool/actions.cpp:1170
 msgid "Toggle inactive layers between normal and dimmed"
-msgstr "Пребацуј змеђу нормалног и затамњеног изгледа неактивних слојева"
+msgstr "Пребацуј између нормалног и затамњеног изгледа неактивних слојева"
 
 #: common/tool/actions.cpp:1178
 #, fuzzy
@@ -10204,6 +10204,7 @@ msgstr "Креирање слојева"
 #: common/tool/actions.cpp:1179
 msgid "Cycle inactive layers between normal, dimmed, and hidden"
 msgstr ""
+"Врти између нормалног, затамњеног и скривеног приказа неактивних слојева"
 
 #: common/tool/actions.cpp:1185
 #, fuzzy
