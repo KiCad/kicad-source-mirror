@@ -8446,7 +8446,7 @@ msgstr "Ayak izleri arka"
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:53
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:33
 msgid "Reference designators"
-msgstr "Referans belirteçleri"
+msgstr "Referans tanımlayıcılar"
 
 #: common/layer_id.cpp:127
 msgid "Footprint text"
@@ -14466,7 +14466,7 @@ msgstr "Sadece geçerli &seçimde ara"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:105
 msgid "Replace matches in reference designators"
-msgstr "Referans belirteçlerindeki eşleşmeleri değiştirin"
+msgstr "Referans tanımlayıcılarındaki eşleşmeleri değiştirin"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:110
 #: pcbnew/dialogs/dialog_find_base.cpp:88
@@ -17774,7 +17774,7 @@ msgstr "Aynı sembolün birimleri farklı değerlere sahiptir"
 
 #: eeschema/erc/erc_item.cpp:221
 msgid "Duplicate reference designators"
-msgstr "Çift referans belirteçleri"
+msgstr "Yinelenmiş referans tanımlayıcılar"
 
 #: eeschema/erc/erc_item.cpp:225
 msgid "Bus Entry needed"
@@ -36182,8 +36182,8 @@ msgstr "Ağ listesi dosyası '%s' okunuyor.\n"
 #: pcbnew/dialogs/dialog_import_netlist.cpp:236
 msgid "Using reference designators to match symbols and footprints.\n"
 msgstr ""
-"Sembolleri ve ayak izlerini eşleştirmek için referans belirteçleri "
-"kullanma.\n"
+"Sembolleri ve ayak izlerini eşleştirmek için referans referans "
+"tanımlayıcılar kullanma.\n"
 
 #: pcbnew/dialogs/dialog_import_netlist.cpp:238
 msgid "Using tstamps (unique IDs) to match symbols and footprints.\n"
@@ -50636,7 +50636,7 @@ msgstr "...Göre Pozisyon..."
 msgid "Positions the selected item(s) by an exact amount relative to another"
 msgstr ""
 "Seçilen öge(ler)i bir diğerine göre belirli bir miktar uzaklıkta "
-"konumlandırır."
+"konumlandırır"
 
 #: pcbnew/tools/pcb_actions.cpp:2231
 msgid "Position Interactively..."
@@ -50668,7 +50668,7 @@ msgstr "Seçili Yönlendirmeyi Kaldır"
 
 #: pcbnew/tools/pcb_actions.cpp:2261
 msgid "Unroutes selected items to the nearest pad."
-msgstr "Seçili öğeleri en yakın pad'e yönlendirir."
+msgstr "Seçili ögeleri en yakın pad'e yönlendirir."
 
 #: pcbnew/tools/pcb_actions.cpp:2268
 msgid "Unroute Segment"
@@ -50732,7 +50732,7 @@ msgstr "Şematikte Seç"
 
 #: pcbnew/tools/pcb_actions.cpp:2326
 msgid "Selects corresponding items in Schematic editor"
-msgstr "Şematik düzenleyicide ilgili öğeleri seçer"
+msgstr "Şematik düzenleyicide ilgili ögeleri seçer"
 
 #: pcbnew/tools/pcb_actions.cpp:2332
 msgid "Filter Selected Items..."
@@ -51290,7 +51290,7 @@ msgstr "Merkeze Hizala"
 
 #: pcbnew/tools/position_relative_tool.cpp:220
 msgid "Select the reference point on the item to move."
-msgstr "Taşınacak öğenin referans noktasını seçin."
+msgstr "Taşınacak ögenin referans noktasını seçin."
 
 #: pcbnew/tools/position_relative_tool.cpp:226
 msgid "Select the point to define the new offset from."
@@ -51423,7 +51423,7 @@ msgstr "Doğrusal yollar birleştiriliyor..."
 
 #: pcbnew/undo_redo.cpp:545
 msgid "Incomplete undo/redo operation: some items not found"
-msgstr "Tamamlanmamış geri alma/yineleme işlemi: bazı öğeler bulunamadı"
+msgstr "Eksik geri al/yinele işlemi: Bazı ögeler bulunamadı"
 
 #: pcbnew/widgets/appearance_controls.cpp:333
 msgid "Show tracks"
