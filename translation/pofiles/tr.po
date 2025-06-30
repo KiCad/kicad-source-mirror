@@ -17480,7 +17480,7 @@ msgstr ""
 
 #: eeschema/files-io.cpp:405
 msgid "Illegal entry found in project file symbol library list."
-msgstr "Proje dosyası sembol kitaplığı listesinde kural dışı giriş bulundu."
+msgstr "Proje dosyası sembol kütüphanesi listesinde kural dışı giriş bulundu."
 
 #: eeschema/files-io.cpp:406
 msgid "Project Load Warning"
@@ -18307,7 +18307,8 @@ msgstr "%s'yi %s olarak yeniden adlandır"
 msgid ""
 "Cannot rescue symbol %s which is not available in any library or the cache."
 msgstr ""
-"Herhangi bir kitaplıkta veya önbellekte bulunmayan %s sembolü kurtarılamıyor."
+"Herhangi bir kütüphanede veya önbellekte bulunmayan %s sembolü "
+"kurtarılamıyor."
 
 #: eeschema/project_rescue.cpp:313 eeschema/project_rescue.cpp:493
 #, c-format
@@ -18331,7 +18332,7 @@ msgstr "Hiçbir sembol kurtarılamadı."
 #: eeschema/symbol_editor/symbol_editor.cpp:1210
 #, c-format
 msgid "Failed to create symbol library file '%s'."
-msgstr "'%s' sembol kitaplığı dosyası oluşturulamadı."
+msgstr "'%s' sembol kütüphane dosyası oluşturulamadı."
 
 #: eeschema/project_rescue.cpp:870
 #, c-format
@@ -18353,7 +18354,7 @@ msgstr "Aşağıdaki kütüphaneler bulunamadı:"
 #: eeschema/project_sch.cpp:169 eeschema/sheet.cpp:407
 #, c-format
 msgid "Error loading the symbol library table '%s'."
-msgstr "'%s' sembol kitaplığı tablosu yüklenirken hata oluştu."
+msgstr "'%s' sembol kütüphane tablosu yüklenirken hata oluştu."
 
 #: eeschema/sch_base_frame.cpp:251
 #, c-format
@@ -18698,7 +18699,7 @@ msgstr "Dosya bulunamadı %s."
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:4925
 msgid "Expected Altium Schematic Library file version 5.0"
-msgstr "Altium Şematik Kitaplığı dosyası sürüm 5.0 bekleniyor"
+msgstr "Altium Şematik Kütüphane dosyası sürüm 5.0 bekleniyor"
 
 #: eeschema/sch_io/altium/sch_io_altium.h:83
 msgid "Altium schematic files"
@@ -18795,8 +18796,8 @@ msgid ""
 "The selected file is a CADSTAR symbol library. It does not contain a "
 "schematic design so cannot be imported/opened in this way."
 msgstr ""
-"Seçilen dosya bir CADSTAR sembol kitaplığıdır. Bir şematik tasarım içermez, "
-"bu nedenle bu şekilde içe aktarılamaz/açılamaz."
+"Seçilen dosya bir CADSTAR sembol kütüphanesidir. Bir şematik tasarım "
+"içermez, bu nedenle bu şekilde içe aktarılamaz/açılamaz."
 
 #: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:604
 msgid "The CADSTAR schematic might be corrupt: there is no root sheet."
@@ -18809,8 +18810,8 @@ msgid ""
 "be found in the symbol library. The part has not been loaded into the KiCad "
 "library."
 msgstr ""
-"Parça tanımı '%s', sembol kitaplığında bulunamayan '%s' sembolüne "
-"(alternatif '%s') başvurur. Parça KiCad kütüphanesine yüklenmedi."
+"Parça tanımı '%s', sembol kütüphanesinde bulunamayan '%s' sembolüne ("
+"alternatif '%s') başvurur. Parça KiCad kütüphanesine yüklenmedi."
 
 #: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:703
 #, c-format
@@ -18827,7 +18828,8 @@ msgid ""
 "Symbol '%s' references part '%s' which could not be found in the library. "
 "The symbol was not loaded"
 msgstr ""
-"'%s' sembolü, kitaplıkta bulunamayan '%s' kısmına başvurur. Sembol yüklenmedi"
+"'%s' sembolü, kütüphanede bulunamayan '%s' kısmına başvurur. Sembol "
+"yüklenmedi"
 
 #: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:842
 #, c-format
@@ -18835,7 +18837,7 @@ msgid ""
 "Symbol ID '%s' references library symbol '%s' which could not be found in "
 "the library. Did you export all items of the design?"
 msgstr ""
-"'%s' sembol kimliği, kitaplıkta bulunamayan '%s' kütüphane sembolüne "
+"'%s' sembol kimliği, kütüphanede bulunamayan '%s' kütüphane sembolüne "
 "başvurur. Tasarımın tüm öğelerini dışa aktardınız mı?"
 
 #: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:854
@@ -18864,7 +18866,7 @@ msgid ""
 "revert to the original 1:1 scale."
 msgstr ""
 "'%s' sembolü orijinal CADSTAR şemasında ölçeklendirilmiştir, ancak bu "
-"kıcad'de desteklenmemektedir. Sembol kitaplıktan yeniden yüklendiğinde, "
+"kıcad'de desteklenmemektedir. Sembol kütüphanesinden yeniden yüklendiğinde, "
 "orijinal 1:1 ölçeğine geri döner."
 
 #: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:1477
@@ -18946,7 +18948,7 @@ msgid ""
 "the footprint library tables. If none specified, 'cadstarpcblib' is assumed."
 msgstr ""
 "Bu kütüphanedeki sembollerle ilgili ayak izi kütüphanesinin adı. Ayak izi "
-"kitaplığı tablolarında CADSTAR PCB Arşivi (*.cpa) dosyası için ayrı bir "
+"kütüphanesi tablolarında CADSTAR PCB Arşivi (*.cpa) dosyası için ayrı bir "
 "giriş oluşturmalısınız. Hiçbiri belirtilmemişse, 'cadstarpcblib' varsayılır."
 
 #: eeschema/sch_io/cadstar/sch_io_cadstar_archive.cpp:285
@@ -18970,16 +18972,16 @@ msgstr "Veritabanı tablosu %s okunurken hata oluştu: %s"
 #: eeschema/sch_io/database/sch_io_database.cpp:258
 #, c-format
 msgid "Could not load database library: settings file %s missing or invalid"
-msgstr "Veritabanı kitaplığı yüklenemedi: %s ayar dosyası eksik veya geçersiz"
+msgstr "Veritabanı kütüphanesi yüklenemedi: %s ayar dosyası eksik veya geçersiz"
 
 #: eeschema/sch_io/database/sch_io_database.cpp:299
 #, c-format
 msgid "Could not load database library: could not connect to database %s (%s)"
-msgstr "Veritabanı kitaplığı yüklenemedi: %s (%s) veritabanına bağlanılamadı"
+msgstr "Veritabanı kütüphanesi yüklenemedi: %s (%s) veritabanına bağlanılamadı"
 
 #: eeschema/sch_io/database/sch_io_database.h:51
 msgid "KiCad database library files"
-msgstr "KiCad veritabanı kitaplığı dosyaları"
+msgstr "KiCad veritabanı kütüphanesi dosyaları"
 
 #: eeschema/sch_io/eagle/sch_io_eagle.cpp:607
 #, c-format
@@ -19094,7 +19096,7 @@ msgstr "HTTP kütüphane ayarları dosyası %s'nin kök URL'si eksik!"
 #: eeschema/sch_io/http_lib/sch_io_http_lib.cpp:260
 #, c-format
 msgid "HTTP library settings file %s has an invalid library type"
-msgstr "HTTP kitaplık ayarları dosyası %s geçersiz bir kitaplık türüne sahip"
+msgstr "HTTP kütüphane ayarları dosyası %s geçersiz bir kütüphane türüne sahip"
 
 #: eeschema/sch_io/http_lib/sch_io_http_lib.cpp:305
 #, c-format
@@ -19173,7 +19175,7 @@ msgstr "sembol alanı metin öznitelikleri 3 karakter genişliğinde olmalıdır
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr.cpp:1663
 #, c-format
 msgid "Symbol library '%s' already exists."
-msgstr "'%s' sembol kitaplığı zaten var."
+msgstr "'%s' sembol kütüphanesi zaten var."
 
 #: eeschema/sch_io/kicad_legacy/sch_io_kicad_legacy.cpp:2269
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr.cpp:1689
@@ -19183,7 +19185,7 @@ msgstr "'%s' sembol kütüphanesi silinemiyor."
 
 #: eeschema/sch_io/kicad_legacy/sch_io_kicad_legacy.h:80
 msgid "KiCad legacy symbol library files"
-msgstr "KiCad eski sembol kitaplığı dosyaları"
+msgstr "KiCad eski sembol kütüphanesi dosyaları"
 
 #: eeschema/sch_io/kicad_legacy/sch_io_kicad_legacy_helpers.cpp:222
 msgid "expected unquoted string"
@@ -19202,17 +19204,17 @@ msgstr "Beklenmeyen dosya sonu."
 #: eeschema/sch_io/kicad_legacy/sch_io_kicad_legacy_lib_cache.cpp:185
 #, c-format
 msgid "Insufficient permissions to read library '%s'."
-msgstr "'%s' kitaplığını okumak için izinler yetersiz."
+msgstr "'%s' kütüphanesini okumak için izinler yetersiz."
 
 #: eeschema/sch_io/kicad_legacy/sch_io_kicad_legacy_lib_cache.cpp:194
 msgid "symbol document library file is empty"
-msgstr "sembol belge kitaplığı dosyası boş"
+msgstr "sembol belge kütüphanesi dosyası boş"
 
 #: eeschema/sch_io/kicad_legacy/sch_io_kicad_legacy_lib_cache.cpp:1963
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_lib_cache.cpp:541
 #, c-format
 msgid "library %s does not contain a symbol named %s"
-msgstr "%s kitaplığı %s adlı bir simge içermiyor"
+msgstr "%s kütüphanesi %s adlı bir simge içermiyor"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr.cpp:211
 #, c-format
@@ -19336,11 +19338,11 @@ msgstr "Şematik nesnesi yok"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:3021
 msgid "Invalid symbol library name"
-msgstr "Geçersiz sembol kitaplığı adı"
+msgstr "Geçersiz sembol kütüphanesi adı"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:3062
 msgid "Invalid symbol library ID"
-msgstr "Geçersiz sembol kitaplığı ID"
+msgstr "Geçersiz sembol kütüphanesi kimliği"
 
 #: eeschema/sch_io/ltspice/ltspice_schematic.cpp:223
 #, c-format
