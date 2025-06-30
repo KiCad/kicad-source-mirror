@@ -20213,7 +20213,7 @@ msgid ""
 "Symbol library '%s' not found and no fallback cache library available.  "
 "Unable to link library symbol."
 msgstr ""
-"Sembol kütüphanesi '%s' bulunamadı ve geri dönüş önbellek kitaplığı mevcut "
+"Sembol kütüphanesi '%s' bulunamadı ve geri dönüş önbellek kütüphanesi mevcut "
 "değil. Kütüphane simgesi bağlanamıyor."
 
 #: eeschema/sch_screen.cpp:747
@@ -20609,8 +20609,8 @@ msgid ""
 "Do you wish to continue?"
 msgstr ""
 "Seçili şemada, seçili şematik proje kütüphane tablosunda eksik olan sembol "
-"kütüphane adları var. Bu, sembol kitaplığı başvurularının bozulmasına neden "
-"olabilir.\n"
+"kütüphane adları var. Bu, sembol kütüphanesi başvurularının bozulmasına "
+"neden olabilir.\n"
 "\n"
 "Devam etmek istiyor musun?"
 
@@ -20623,7 +20623,7 @@ msgid ""
 "Do you wish to continue?"
 msgstr ""
 "Geçerli kütüphane tablosunda farklı bir kütüphaneye başvuran yinelenen "
-"kütüphane adı bulunuyor. Bu çakışma çözülemezse ve sembol kitaplığı "
+"kütüphane adı bulunuyor. Bu çakışma çözülemezse ve sembol kütüphanesi "
 "başvurularının bozulmasına neden olabilir.\n"
 "\n"
 "Devam etmek istiyor musun?"
@@ -21796,8 +21796,8 @@ msgid ""
 "<b>Warning: reference prefix</b><br>prefix ending by '%s' can create issues "
 "if saved in a symbol library"
 msgstr ""
-"<b>Uyarı: referans öneki</b><br> '%s' ile biten önek, bir sembol kitaplığına "
-"kaydedilirse sorun yaratabilir"
+"<b>Uyarı: referans öneki</b><br> '%s' ile biten önek, bir sembol "
+"kütüphanesine kaydedilirse sorun yaratabilir"
 
 #: eeschema/symbol_checker.cpp:208
 msgid "<b>A Power Symbol should have only one unit</b><br><br>"
@@ -21923,9 +21923,9 @@ msgid ""
 "Not all symbol libraries could be loaded.  Use the Manage Symbol\n"
 "Libraries dialog to adjust paths and add or remove libraries."
 msgstr ""
-"Tüm sembol kitaplıkları yüklenemedi.  Yönet Sembolünü Kullanın\n"
-"Yolları ayarlamak ve kitaplık eklemek veya kaldırmak için Kitaplıklar "
-"iletişim kutusu."
+"Tüm sembol kütüphaneleri yüklenemedi. Yolları ayarlamak ve kütüphane "
+"eklemek\n"
+"veya kaldırmak için Sembol Kütüphanelerini Yönet iletişim kutusunu kullanın."
 
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:70
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:79
@@ -21980,8 +21980,8 @@ msgid ""
 "Symbols in legacy libraries are not editable.  Use Manage Symbol Libraries "
 "to migrate to current format."
 msgstr ""
-"Eski kitaplıklardaki simgeler düzenlenemez. Geçerli biçime geçmek için "
-"Sembol Kitaplıklarını Yönet'i kullanın."
+"Eski kütüphanelerindeki simgeler düzenlenemez. Geçerli biçime geçmek için "
+"Sembol Kütüphanelerini Yönet'i kullanın."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:930
 msgid "Manage symbol libraries"
@@ -22032,7 +22032,7 @@ msgid ""
 "Could not create the library file '%s'.\n"
 "Make sure you have write permissions and try again."
 msgstr ""
-"'%s' kitaplık dosyası oluşturulamadı.\n"
+"'%s' kütüphane dosyası oluşturulamadı.\n"
 "Yazma izinleriniz olduğundan emin olun ve tekrar deneyin."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1118
@@ -22043,7 +22043,7 @@ msgstr "Kütüphane dosyası açılamadı."
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1237
 #: eeschema/symbol_library.cpp:523
 msgid "Loading Symbol Libraries"
-msgstr "Sembol Kitaplıkları Yükleniyor"
+msgstr "Sembol Kütüphaneleri Yükleniyor"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1243
 #, c-format
@@ -22114,7 +22114,7 @@ msgstr "Şu anda açık bir şema yok."
 #: eeschema/tools/symbol_editor_control.cpp:448
 #, c-format
 msgid "Symbol library '%s' is not writable."
-msgstr "'%s' sembol kitaplığı yazılabilir değil."
+msgstr "'%s' sembol kütüphanesi yazılabilir değil."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:131
 #: eeschema/symbol_editor/symbol_editor.cpp:529
@@ -22216,7 +22216,7 @@ msgstr "Kütüphane '%s' salt okunurdur."
 #: eeschema/symbol_editor/symbol_editor.cpp:1197
 #, c-format
 msgid "Error occurred attempting to load symbol library file '%s'."
-msgstr "'%s' sembol kitaplığı dosyası yüklenmeye çalışılırken hata oluştu."
+msgstr "'%s' sembol kütüphane dosyası yüklenmeye çalışılırken hata oluştu."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1205
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:135
@@ -22227,17 +22227,17 @@ msgstr "Sembol %s, kütüphane '%s' içinde zaten mevcut."
 #: eeschema/symbol_editor/symbol_editor.cpp:1220
 #, c-format
 msgid "Insufficient permissions to save library '%s'."
-msgstr "'%s' kitaplığını kaydetmek için izinler yetersiz."
+msgstr "'%s' kütüphanesini kaydetmek için izinler yetersiz."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1239
 #, c-format
 msgid "Error creating symbol library '%s'."
-msgstr "'%s' sembol kitaplığı oluşturulurken hata oluştu."
+msgstr "'%s' sembol kütüphanesi oluşturulurken hata oluştu."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1246
 #, c-format
 msgid "Symbol %s saved to library '%s'."
-msgstr "Simge %s , '%s' kitaplığına kaydedildi."
+msgstr "Simge %s , '%s' kütüphanesine kaydedildi."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1264
 #, c-format
@@ -22284,7 +22284,7 @@ msgstr "'%s' değerini kaydedilen son sürüme mi döndürüyorsunuz?"
 #: eeschema/symbol_editor/symbol_editor.cpp:1535
 #, c-format
 msgid "Symbol %s not found in library '%s'."
-msgstr "%s sembolü '%s' kitaplığında bulunamadı."
+msgstr "%s sembolü '%s' kütüphanesinde bulunamadı."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1564
 msgid "No library specified."
@@ -22293,7 +22293,7 @@ msgstr "Hiçbir kütüphane belirtilmedi."
 #: eeschema/symbol_editor/symbol_editor.cpp:1583
 #, c-format
 msgid "Save Library '%s' As..."
-msgstr "'%s' Kitaplığını Farklı Kaydet..."
+msgstr "'%s' Kütüphaneyi Farklı Kaydet..."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1623
 #, c-format
@@ -22302,12 +22302,12 @@ msgstr "Sembol kütüphane dosyası '%s' üzerindeki değişiklikler kaydedileme
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1625
 msgid "Error Saving Library"
-msgstr "Kitaplık Kaydedilirken Hata Oluştu"
+msgstr "Kütüphane Kaydedilirken Hata Oluştu"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1671
 #, c-format
 msgid "Symbol library file '%s' saved."
-msgstr "Sembol kitaplığı dosyası '%s' kaydedildi."
+msgstr "Sembol kütüphanesi dosyası '%s' kaydedildi."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1770
 msgid "Undefined!"
@@ -22348,7 +22348,7 @@ msgstr "'%s' için bir okuyucu bulunamadı."
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:116
 #, c-format
 msgid "Cannot import symbol library '%s'."
-msgstr "'%s' sembol kitaplığı alınamıyor."
+msgstr "'%s' sembol kütüphanesi alınamıyor."
 
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:123
 #, c-format
@@ -22366,7 +22366,7 @@ msgstr ""
 #: eeschema/symbol_library.cpp:605 eeschema/symbol_tree_model_adapter.cpp:221
 #, c-format
 msgid "Error loading symbol library '%s'."
-msgstr "'%s' sembol kitaplığı yüklenirken hata oluştu."
+msgstr "'%s' sembol kütüphanesi yüklenirken hata oluştu."
 
 #: eeschema/symbol_library_manager.cpp:84
 #: eeschema/symbol_tree_model_adapter.cpp:108
@@ -22386,12 +22386,12 @@ msgstr "Sembol bulunamadı."
 #: eeschema/symbol_library_manager.cpp:646
 #, c-format
 msgid "Cannot load symbol '%s' from library '%s'."
-msgstr "'%s' kitaplığından '%s' simgesi yüklenemiyor."
+msgstr "'%s' kütüphanesinden '%s' simgesi yüklenemiyor."
 
 #: eeschema/symbol_library_manager.cpp:827
 #, c-format
 msgid "Cannot enumerate library '%s'."
-msgstr "'%s' kitaplığı numaralandırmaz."
+msgstr "'%s' kütüphanesi numaralandırmaz."
 
 #: eeschema/symbol_library_manager.cpp:889
 #: eeschema/symbol_library_manager.cpp:894
@@ -22407,7 +22407,7 @@ msgstr "Kütüphane arabelleği güncellenirken hata."
 #: eeschema/tools/sch_editor_control.cpp:456
 #, c-format
 msgid "Error saving symbol %s to library '%s'."
-msgstr "%s simgesi '%s' kitaplığına kaydedilirken hata oluştu."
+msgstr "%s simgesi '%s' kütüphaneye kaydedilirken hata oluştu."
 
 #: eeschema/symbol_tree_synchronizing_adapter.cpp:273
 msgid "(failed to load)"
@@ -22420,7 +22420,7 @@ msgstr "KiCad Sembol Kütüphanesi Tarayıcısı"
 #: eeschema/symbol_viewer_frame.cpp:1110 pcbnew/footprint_viewer_frame.cpp:988
 #: pcbnew/footprint_viewer_frame.cpp:993
 msgid "[no library selected]"
-msgstr "[kitaplık seçilmedi]"
+msgstr "[kütüphane seçilmedi]"
 
 #: eeschema/sync_sheet_pin/dialog_sync_sheet_pins_base.cpp:28
 msgid ""
@@ -22738,7 +22738,7 @@ msgstr "Kütüphaneyi Farklı Kaydet..."
 
 #: eeschema/tools/sch_actions.cpp:177
 msgid "Save the current library to a new file"
-msgstr "Mevcut kitaplığı yeni bir dosyaya kaydet"
+msgstr "Mevcut kütüphaneyi yeni bir dosyaya kaydet"
 
 #: eeschema/tools/sch_actions.cpp:183
 msgid "New Symbol..."
@@ -23383,7 +23383,7 @@ msgstr "Doldurma özelliğini ayarla"
 
 #: eeschema/tools/sch_actions.cpp:1043
 msgid "Open the library symbol in the Symbol Editor"
-msgstr "Sembol Düzenleyicide kitaplık sembolünü açın"
+msgstr "Sembol Düzenleyicide kütüphane sembolünü açın"
 
 #: eeschema/tools/sch_actions.cpp:1049
 msgid "Edit Symbol Fields..."
@@ -23399,7 +23399,7 @@ msgstr "Sembol Kütüphanesi Bağlantılarını Düzenle..."
 
 #: eeschema/tools/sch_actions.cpp:1057
 msgid "Edit links between schematic and library symbols"
-msgstr "Şematik ve kitaplık sembolleri arasındaki bağlantıları düzenleme"
+msgstr "Şematik ve kütüphane sembolleri arasındaki bağlantıları düzenleme"
 
 #: eeschema/tools/sch_actions.cpp:1063
 msgid "Assign Footprints..."
@@ -23474,8 +23474,8 @@ msgid ""
 "Remap library symbol references in legacy schematics to the symbol library "
 "table"
 msgstr ""
-"Eski şemalardaki kitaplık sembol referanslarını sembol kitaplığı tablosuna "
-"yeniden eşleyin"
+"Eski şematiklerdeki kütüphane sembol referanslarını sembol kütüphane "
+"tablosuna yeniden eşle"
 
 #: eeschema/tools/sch_actions.cpp:1120
 msgid "Next Net Item"
@@ -23562,8 +23562,8 @@ msgid ""
 "Add symbols used in schematic to an existing symbol library\n"
 "(does not remove other symbols from this library)"
 msgstr ""
-"Şematikte kullanılan sembolleri mevcut bir sembol kitaplığına ekleyin\n"
-"(bu kitaplıktan diğer sembolleri kaldırmaz)"
+"Şematikte kullanılan sembolleri mevcut bir sembol kütüphaneye ekleyin\n"
+"(bu kütüphaneden diğer sembolleri kaldırmaz)"
 
 #: eeschema/tools/sch_actions.cpp:1194
 msgid "Export Symbols to New Library..."
@@ -23574,7 +23574,7 @@ msgid ""
 "Create a new symbol library using the symbols used in the schematic\n"
 "(if the library already exists it will be replaced)"
 msgstr ""
-"Şemada kullanılan sembolleri kullanarak yeni bir sembol kitaplığı oluşturun\n"
+"Şemada kullanılan sembolleri kullanarak yeni bir sembol kütüphane oluşturun\n"
 "(kütüphane zaten mevcutsa, değiştirilecektir)"
 
 #: eeschema/tools/sch_actions.cpp:1202
