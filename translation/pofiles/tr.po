@@ -42758,7 +42758,7 @@ msgstr "Ön lehim maskesi açıklığı, farklı ağlara sahip ögeleri köprül
 #: pcbnew/drc/drc_test_provider_solder_mask.cpp:564
 #: pcbnew/drc/drc_test_provider_solder_mask.cpp:658
 msgid "Rear solder mask aperture bridges items with different nets"
-msgstr "Arka lehim maskesi açıklığı farklı ağlara sahip öğeleri köprüler"
+msgstr "Arka lehim maskesi açıklığı farklı ağlara sahip ögeleri köprüler"
 
 #: pcbnew/drc/drc_test_provider_solder_mask.cpp:779
 msgid "Building solder mask..."
@@ -43951,7 +43951,7 @@ msgstr "DXF varsayılan çizgi genişliği:"
 
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:61
 msgid "Used when the DXF items in file have no line thickness set"
-msgstr "Dosyadaki DXF ögelerinin çizgi kalınlığı ayarlanmadığında kullanılır."
+msgstr "Dosyadaki DXF ögelerinin çizgi kalınlığı ayarlanmadığında kullanılır"
 
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:72
 msgid "DXF default units:"
@@ -45758,8 +45758,8 @@ msgid ""
 msgstr ""
 "CADSTAR yazı tipleri KiCad'dekilerden farklıdır. Bu muhtemelen DRC (Tasarım "
 "Kuralı Kontrolü) hatalarına neden olabilecek hizalama sorunlarına yol "
-"açacaktır. Lütfen içe aktarılan metin öğelerini dikkatlice inceleyin ve "
-"gerekirse manuel olarak düzeltin."
+"açacaktır. Lütfen içe aktarılan metin ögelerini dikkatlice inceleyin ve "
+"gerekirse elle düzeltin."
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:240
 #, c-format
@@ -45815,9 +45815,9 @@ msgid ""
 "multiple layers. Custom padstacks are not supported in KiCad. The copper "
 "items have been imported as graphical elements."
 msgstr ""
-"Ayak izi tanımı '%s', birden fazla katmanda bir ped ile ilişkili bileşen "
-"bakırına sahiptir. Özel ped yığınları KiCad'de desteklenmez. Bakır öğeler "
-"grafiksel elemanlar olarak içe aktarılmıştır."
+"Ayak izi tanımı '%s', birden fazla katmanda bir pede bağlı bileşen bakırına "
+"sahip. Özel ped yığınları KiCad'de desteklenmiyor. Bakır ögeler grafiksel "
+"unsurlar olarak içe aktarıldı."
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:994
 #, c-format
@@ -46295,7 +46295,7 @@ msgstr "Bilinmeyen FABMASTER bölümü %s:%s satır %zu'da."
 #, c-format
 msgid "Invalid row size in J row %zu. Expecting 11 elements but found %zu."
 msgstr ""
-"J satırında geçersiz satır boyutu %zu. 11 öğe bekleniyordu ancak %zu bulundu."
+"J satırında geçersiz satır boyutu %zu. 11 öge bekleniyordu ancak %zu bulundu."
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:309
 msgid "Could not find units value, defaulting to mils."
@@ -46319,7 +46319,7 @@ msgstr "%s sütun etiketi bulunamadı."
 #, c-format
 msgid "Invalid row size in row %zu. Expecting %zu elements but found %zu."
 msgstr ""
-"%zu satırında geçersiz satır boyutu. %zu öğeleri bekleniyordu ancak %zu "
+"%zu satırında geçersiz satır boyutu. %zu ögeleri bekleniyordu ancak %zu "
 "bulundu."
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:513
@@ -46392,7 +46392,7 @@ msgstr "'%s' record_tag dizesi için geçersiz format, satır %zu."
 #, c-format
 msgid "Invalid row size in row %zu.  Expecting %zu elements but found %zu."
 msgstr ""
-"%zu satırında geçersiz satır boyutu. %zu öğeleri bekleniyordu ancak %zu "
+"%zu satırında geçersiz satır boyutu. %zu ögeleri bekleniyordu ancak %zu "
 "bulundu."
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:1763
