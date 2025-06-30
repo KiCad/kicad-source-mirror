@@ -23048,7 +23048,7 @@ msgstr "Hiyerarşik Etikete Dönüştür"
 
 #: eeschema/tools/sch_actions.cpp:850
 msgid "Change existing item to a hierarchical label"
-msgstr "Varolan ögeyi hiyerarşik bir etikete değiştirin"
+msgstr "Mevcut ögeyi hiyerarşik bir etikete değiştirin"
 
 #: eeschema/tools/sch_actions.cpp:858
 msgid "Change to Global Label"
@@ -23064,7 +23064,7 @@ msgstr "Metne Dönüştür"
 
 #: eeschema/tools/sch_actions.cpp:868
 msgid "Change existing item to a text comment"
-msgstr "Varolan öğeyi bir metin açıklamasına değiştirme"
+msgstr "Mevcut ögeyi bir metin açıklamasına dönüştür"
 
 #: eeschema/tools/sch_actions.cpp:876
 msgid "Change to Text Box"
@@ -23419,7 +23419,7 @@ msgstr "Simülasyondan hariç tutulan ögeleri işaretle"
 
 #: eeschema/tools/sch_actions.cpp:1200
 msgid "Draw 'X's over items which have been excluded from simulation"
-msgstr "Simülasyondan hariç tutulan öğelerin üzerini 'X' ile çizin"
+msgstr "Simülasyondan hariç tutulan ögelerin üzerini 'X' ile çizin"
 
 #: eeschema/tools/sch_actions.cpp:1205
 msgid "Show OP Voltages"
@@ -23801,7 +23801,7 @@ msgstr "Resim Yerleştir"
 #: eeschema/tools/symbol_editor_drawing_tools.cpp:691
 #: pcbnew/tools/drawing_tool.cpp:1830
 msgid "No graphic items found in file."
-msgstr "Dosyada grafik öğe bulunamadı."
+msgstr "Dosyada grafik ögeler bulunamadı."
 
 #: eeschema/tools/sch_drawing_tools.cpp:1208
 #: eeschema/tools/sch_drawing_tools.cpp:1290
@@ -24787,7 +24787,7 @@ msgstr "Çizim Modu"
 
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:60
 msgid "Sketch flashed items"
-msgstr "Taslak flaşlı öğeler"
+msgstr "Taslak flaşlı ögelerler"
 
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:61
 msgid ""
