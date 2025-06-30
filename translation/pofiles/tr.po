@@ -4073,14 +4073,14 @@ msgstr "Tema:"
 
 #: common/dialogs/panel_color_settings_base.cpp:35
 msgid "Override individual item colors"
-msgstr "Tek tek öğe renklerini geçersiz kıl"
+msgstr "Tek tek öge renklerini geçersiz kıl"
 
 #: common/dialogs/panel_color_settings_base.cpp:36
 msgid ""
 "Show all items in their default color even if they have specific colors set "
 "in their properties."
 msgstr ""
-"Özelliklerinde belirli renkler ayarlanmış olsalar bile tüm öğeleri "
+"Özelliklerinde belirli renkler ayarlanmış olsalar bile tüm ögeleri "
 "varsayılan renklerinde gösterin."
 
 #: common/dialogs/panel_color_settings_base.cpp:43
@@ -7928,7 +7928,7 @@ msgstr "Düzenleyici yüklenirken hata oluştu."
 #: common/kiway.cpp:575
 #, c-format
 msgid "Unable to switch language to %s"
-msgstr "Dil %s diline geçirilemiyor"
+msgstr "Dil %s olarak değiştirilemiyor"
 
 #: common/layer_id.cpp:36 pcbnew/drc/drc_engine.cpp:1022
 #: pcbnew/drc/drc_engine.cpp:1023 pcbnew/drc/drc_engine.cpp:1024
@@ -7978,7 +7978,7 @@ msgstr "Hiyerarşik etiketler"
 
 #: common/layer_id.cpp:78 eeschema/sch_symbol.cpp:3004
 msgid "Pin numbers"
-msgstr "Bacak numaraları"
+msgstr "Pin numaraları"
 
 #: common/layer_id.cpp:79 eeschema/sch_symbol.cpp:3008
 msgid "Pin names"
@@ -8002,7 +8002,7 @@ msgstr "Sayfa başvuruları"
 
 #: common/layer_id.cpp:84
 msgid "Net class references"
-msgstr "Net class başvuruları"
+msgstr "Ağ sınıfı başvuruları"
 
 #: common/layer_id.cpp:85
 msgid "Rule areas"
@@ -8010,7 +8010,7 @@ msgstr "Kural alanları"
 
 #: common/layer_id.cpp:86
 msgid "Symbol body outlines"
-msgstr "Sembol gövdesi ana hatları"
+msgstr "Sembol gövdesi dış hatları"
 
 #: common/layer_id.cpp:87
 msgid "Symbol body fills"
@@ -8023,15 +8023,15 @@ msgstr "Şekil dolguları"
 #: common/layer_id.cpp:89
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:72
 msgid "Schematic text && graphics"
-msgstr "Şematik metin && grafikler"
+msgstr "Şematik metin ve grafikler"
 
 #: common/layer_id.cpp:90
 msgid "Symbol private text && graphics"
-msgstr "Şematik metin && grafikler"
+msgstr "Sembol metin ve grafikler"
 
 #: common/layer_id.cpp:91
 msgid "Schematic text && graphics backgrounds"
-msgstr "Şematik metin && grafik arka planları"
+msgstr "Şematik metin ve grafik arka planları"
 
 #: common/layer_id.cpp:92 eeschema/widgets/panel_sch_selection_filter.cpp:206
 #: eeschema/widgets/panel_sch_selection_filter_base.cpp:33
@@ -8056,12 +8056,12 @@ msgstr "Sayfa alanları"
 
 #: common/layer_id.cpp:97
 msgid "Sheet file names"
-msgstr "Sayfa dosyası adları"
+msgstr "Sayfa dosya adları"
 
 #: common/layer_id.cpp:98
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:63
 msgid "Sheet pins"
-msgstr "Sayfa Bacakları"
+msgstr "Sayfa Pinleri"
 
 #: common/layer_id.cpp:99
 msgid "No-connect symbols"
@@ -8085,7 +8085,7 @@ msgstr "ERC (Elektriksel Kural Kontrolü) hataları"
 
 #: common/layer_id.cpp:104
 msgid "ERC exclusions"
-msgstr "ERC (Elektriksel Kural Kontrolü) istisnaları"
+msgstr "ERC (Elektriksel Kural Kontrolü) hariç tutulanlar"
 
 #: common/layer_id.cpp:105 common/layer_id.cpp:144
 #: pcbnew/widgets/appearance_controls.cpp:349
@@ -8094,7 +8094,7 @@ msgstr "Çapalar"
 
 #: common/layer_id.cpp:106 common/layer_id.cpp:148
 msgid "Helper items"
-msgstr "Yardımcı öğeler"
+msgstr "Yardımcı ögeler"
 
 #: common/layer_id.cpp:107 common/layer_id.cpp:149 common/tool/grid_menu.cpp:56
 #: eeschema/tools/sch_editor_control.cpp:2903
@@ -8124,15 +8124,15 @@ msgstr "İmleç"
 
 #: common/layer_id.cpp:111
 msgid "Hovered items"
-msgstr "İşaretlenmiş parçalar"
+msgstr "Üzerine gelinen ögeler"
 
 #: common/layer_id.cpp:112
 msgid "Highlighted items"
-msgstr "Vurgulanan öğeler"
+msgstr "Vurgulanan ögeler"
 
 #: common/layer_id.cpp:113
 msgid "Hidden items"
-msgstr "Gizli öğeler"
+msgstr "Gizli ögeler"
 
 #: common/layer_id.cpp:114 common/layer_id.cpp:152
 msgid "Selection highlight"
@@ -8351,7 +8351,7 @@ msgstr "Fonksiyon parametrelerinin bilinmeyen ebeveyni"
 
 #: common/libeval_compiler/libeval_compiler.cpp:870
 msgid "Unknown parent of property"
-msgstr "Özelliğin bilinmeyen üst öğesi"
+msgstr "Sahiplik bağı bilinmeyen"
 
 #: common/libeval_compiler/libeval_compiler.cpp:893
 #: common/libeval_compiler/libeval_compiler.cpp:923
@@ -8359,7 +8359,7 @@ msgstr "Özelliğin bilinmeyen üst öğesi"
 #: common/libeval_compiler/libeval_compiler.cpp:1070
 #, c-format
 msgid "Unrecognized item '%s'"
-msgstr "Tanınmayan öğe '%s'"
+msgstr "Tanınmayan öge '%s'"
 
 #: common/libeval_compiler/libeval_compiler.cpp:899
 #: common/libeval_compiler/libeval_compiler.cpp:1002
@@ -8848,7 +8848,7 @@ msgstr "Öge(ler)i panodan yapıştır"
 
 #: common/tool/actions.cpp:256
 msgid "Select all items on screen"
-msgstr "Ekrandaki tüm öğeleri seç"
+msgstr "Ekrandaki tüm ögeleri seç"
 
 #: common/tool/actions.cpp:262
 msgid "Unselect All"
@@ -8856,7 +8856,7 @@ msgstr "Tümünü Seçme"
 
 #: common/tool/actions.cpp:263
 msgid "Unselect all items on screen"
-msgstr "Ekrandaki tüm öğeleri seçme"
+msgstr "Ekrandaki tüm ögeleri seçme"
 
 #: common/tool/actions.cpp:269
 msgid "Paste Special..."
@@ -8874,7 +8874,7 @@ msgstr "Çiftle"
 
 #: common/tool/actions.cpp:279
 msgid "Duplicates the selected item(s)"
-msgstr "Seçili öğe(leri) çoğalt"
+msgstr "Seçili öge(leri) çoğalt"
 
 #: common/tool/actions.cpp:292
 msgid "Delete selected item(s)"
@@ -8886,7 +8886,7 @@ msgstr "Etkileşimli Silme Aracı"
 
 #: common/tool/actions.cpp:300
 msgid "Delete clicked items"
-msgstr "Tıklanan öğeleri sil"
+msgstr "Tıklanan ögeleri sil"
 
 #: common/tool/actions.cpp:307 eeschema/tools/sch_edit_tool.cpp:2885
 #: pcbnew/tools/edit_tool.cpp:2323
@@ -8895,7 +8895,7 @@ msgstr "Sola Yasla"
 
 #: common/tool/actions.cpp:308
 msgid "Left-justify fields and text items"
-msgstr "Alanları ve metin öğelerini sola yasla"
+msgstr "Alanları ve metin ögelerini sola yasla"
 
 #: common/tool/actions.cpp:314 eeschema/tools/sch_edit_tool.cpp:2887
 #: pcbnew/tools/edit_tool.cpp:2325
@@ -8904,7 +8904,7 @@ msgstr "Ortaya Yasla"
 
 #: common/tool/actions.cpp:315
 msgid "Center-justify fields and text items"
-msgstr "Alanları ve metin öğelerini ortala"
+msgstr "Alanları ve metin ögelerini ortala"
 
 #: common/tool/actions.cpp:321 eeschema/tools/sch_edit_tool.cpp:2889
 #: pcbnew/tools/edit_tool.cpp:2327
@@ -8913,7 +8913,7 @@ msgstr "Sağa Yasla"
 
 #: common/tool/actions.cpp:322
 msgid "Right-justify fields and text items"
-msgstr "Alanları ve metin öğelerini sağa yasla"
+msgstr "Alanları ve metin ögelerini sağa yasla"
 
 #: common/tool/actions.cpp:328
 msgid "Expand All"
@@ -9349,7 +9349,7 @@ msgstr "Düzenleme penceresinde arka plan ızgarasını görüntüle"
 
 #: common/tool/actions.cpp:920
 msgid "Enables item-specific grids that override the current grid"
-msgstr "Geçerli ızgarayı geçersiz kılan, öğeye özgü ızgaraları etkinleştirir"
+msgstr "Geçerli ızgarayı geçersiz kılan, ögeye özgü ızgaraları etkinleştirir"
 
 #: common/tool/actions.cpp:927
 msgid "Edit grid definitions"
@@ -9998,7 +9998,7 @@ msgstr "Ekrana Sığdır"
 
 #: common/widgets/mathplot.cpp:1403
 msgid "Set plot view to show all items"
-msgstr "Çizim görünümünü tüm öğeleri gösterecek şekilde ayarla"
+msgstr "Çizim görünümünü tüm ögeleri gösterecek şekilde ayarla"
 
 #: common/widgets/net_selector.cpp:32 gerbview/gerber_draw_item.cpp:751
 #: pcbnew/dialogs/dialog_copper_zones.cpp:404
@@ -10924,7 +10924,7 @@ msgstr "Numaralandırma tamamlandı."
 
 #: eeschema/api/api_handler_sch.cpp:259
 msgid "Added items via API"
-msgstr "API aracılığıyla eklenen öğeler"
+msgstr "API aracılığıyla eklenen ögeler"
 
 #: eeschema/api/api_handler_sch.cpp:277 pcbnew/api/api_handler_pcb.cpp:506
 msgid "Created items via API"
@@ -11092,7 +11092,7 @@ msgstr ""
 
 #: eeschema/design_block_utils.cpp:378
 msgid "Please select some items to save as a design block."
-msgstr "Lütfen bir tasarım bloğu olarak kaydetmek için bazı öğeleri seçin."
+msgstr "Lütfen bir tasarım bloğu olarak kaydetmek için bazı ögeleri seçin."
 
 #: eeschema/design_block_utils.cpp:469
 msgid "Please select a library to delete."
@@ -12200,7 +12200,7 @@ msgstr "Tüm güç tüketimlerini kaydet"
 msgid ""
 "Write directives to save power dissipation of all items (.probe p(<item>))"
 msgstr ""
-"Tüm öğelerin güç dağıtımını kaydetmek için yönergeler yazın (.probe "
+"Tüm ögelerin güç dağıtımını kaydetmek için yönergeler yazın (.probe "
 "p(<item>))"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:334
@@ -12567,7 +12567,7 @@ msgstr "Öğeleri ağalara göre filtreleyin:"
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:109
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:121
 msgid "Selected items only"
-msgstr "Sadece seçili öğeler"
+msgstr "Sadece seçili ögeler"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:159
 msgid "Set To"
@@ -13057,7 +13057,7 @@ msgstr "Değişiklikler kaydedilsin mi?"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:26
 msgid "Pin numbers:"
-msgstr "Bacak numaraları:"
+msgstr "Pin numaraları:"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:30
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:41
@@ -13347,7 +13347,7 @@ msgstr "Bacak numarasını göster"
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:217
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:179
 msgid "Show or hide pin numbers"
-msgstr "Bacak numaralarını göster veya gizle"
+msgstr "Pin numaralarını göster veya gizle"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:221
 msgid "Show pin name"
@@ -13367,9 +13367,9 @@ msgid ""
 "Check this option to have pin names inside the body and pin number outside.\n"
 "If not checked pins names and pins numbers are outside."
 msgstr ""
-"Gövdenin içinde bacak adları ve dışarıda bacak numarasının olması için bu "
+"Pin adlarının gövde içinde ve pin numaralarının dışarıda olması için bu "
 "seçeneği işaretleyin.\n"
-"İşaretli değilse bacak adları ve bacak numaraları dışarıdadır."
+"İşaretli değilse pin adları ve pin numaraları dışarıdadır."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:239
 msgid "Position offset:"
@@ -13842,7 +13842,7 @@ msgid ""
 "Selection of the default pen thickness used to draw items, when their "
 "thickness is set to 0."
 msgstr ""
-"Kalınlıkları 0 olarak ayarlandığında, öğeleri çizmek için kullanılan "
+"Kalınlıkları 0 olarak ayarlandığında, ögeleri çizmek için kullanılan "
 "varsayılan kalem kalınlığının seçimi."
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:124
@@ -13885,7 +13885,7 @@ msgstr "Özellik açılır pencereleri oluştur"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:167
 msgid "Generate clickable links for hierarchical elements"
-msgstr "Hiyerarşik öğeler için tıklanabilir bağlantılar oluştur"
+msgstr "Hiyerarşik ögeler için tıklanabilir bağlantılar oluştur"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:171
 #: pcbnew/dialogs/dialog_plot_base.cpp:418
@@ -14209,7 +14209,7 @@ msgstr ""
 #: eeschema/dialogs/dialog_tablecell_properties.cpp:54
 #: eeschema/dialogs/dialog_text_properties.cpp:72
 msgid "Note: individual item colors overridden in Preferences."
-msgstr "Not: Tercihlerde tek tek öğe renkleri geçersiz kılınır."
+msgstr "Not: Tercihlerde tek tek öge renkleri geçersiz kılınır."
 
 #: eeschema/dialogs/dialog_shape_properties.cpp:374
 #: eeschema/dialogs/dialog_wire_bus_properties.cpp:233
@@ -14316,7 +14316,7 @@ msgstr "Adsız Sayfa"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:415
 msgid "Note: item colors are overridden in the current color theme."
-msgstr "Not: öğe renkleri geçerli renk temasında geçersiz kılınır."
+msgstr "Not: öge renkleri geçerli renk temasında geçersiz kılınır."
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:417
 #, c-format
@@ -14324,7 +14324,7 @@ msgid ""
 "To see individual item colors uncheck '%s'\n"
 "in Preferences > Schematic Editor > Colors."
 msgstr ""
-"Tek tek öğe renklerini görmek için işaretini kaldırın '%s'\n"
+"Tek tek öge renklerini görmek için işaretini kaldırın '%s'\n"
 "Tercihler> Şematik Düzenleyici> Renkler'de."
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:470
@@ -15115,7 +15115,7 @@ msgstr "Güç Sembolü Seç"
 #: eeschema/symbol_chooser_frame.cpp:112 pcbnew/footprint_chooser_frame.cpp:184
 #, c-format
 msgid " (%d items loaded)"
-msgstr " (%d öğeler yüklendi)"
+msgstr " (%d ögeler yüklendi)"
 
 #: eeschema/dialogs/dialog_symbol_chooser.cpp:74
 #: eeschema/widgets/design_block_pane.cpp:39
@@ -15769,7 +15769,7 @@ msgstr "Link:"
 
 #: eeschema/dialogs/dialog_text_properties_base.cpp:294
 msgid "Make this text item a clickable hyperlink"
-msgstr "Bu metin öğesini tıklanabilir bir köprü yapın"
+msgstr "Bu metin ögesini tıklanabilir bir köprü yapın"
 
 #: eeschema/dialogs/dialog_update_from_pcb.cpp:43
 #: pcbnew/dialogs/dialog_import_netlist.cpp:79
@@ -15913,7 +15913,7 @@ msgid ""
 "and they will not be seen on the screen.  Are you\n"
 "sure you want to use these colors?"
 msgstr ""
-"Bazı öğeler arka planla aynı renge sahiptir\n"
+"Bazı ögeler arka planla aynı renge sahiptir\n"
 "ve ekranda görünmeyecekler.  Bu renkleri \n"
 "kullanmak istediğinizden emin misiniz?"
 
@@ -15946,7 +15946,7 @@ msgstr "Seçili ayak izlerine karşılık gelen sembolleri vurgula"
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:49
 #: pcbnew/dialogs/panel_pcb_display_options_base.cpp:136
 msgid "Center view on cross-probed items"
-msgstr "Çapraz problanmış öğeler üzerinde orta görünüm"
+msgstr "Çapraz problanmış ögeler üzerinde orta görünüm"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:51
 msgid "Ensures that cross-probed symbols are visible in the current view"
@@ -15955,7 +15955,7 @@ msgstr "Çapraz problu sembollerin geçerli görünümde görünür olmasını s
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:55
 #: pcbnew/dialogs/panel_pcb_display_options_base.cpp:142
 msgid "Zoom to fit cross-probed items"
-msgstr "Çapraz problanmış öğelere uyacak şekilde yakınlaştırın"
+msgstr "Çapraz problanmış ögelere uyacak şekilde yakınlaştırın"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:59
 #: pcbnew/dialogs/panel_pcb_display_options_base.cpp:146
@@ -15990,7 +15990,7 @@ msgstr "ERC (Elektriksel Kural Kontrolü) uyarılarını göster"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:115
 msgid "Show ERC exclusions"
-msgstr "ERC (Elektriksel Kural Kontrolü) istisnalarını göster"
+msgstr "ERC (Elektriksel Kural Kontrolü) hariç tutulanlarını göster"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:118
 msgid "Mark items which are excluded from simulation"
@@ -17033,7 +17033,7 @@ msgstr "Etiket, %d, %d konumunda birden fazla bağlantı kuruyor"
 #: eeschema/erc/erc.cpp:852
 #, c-format
 msgid "Four items connected at %d, %d"
-msgstr "%d'de dört öğe birbirine bağlı, %d"
+msgstr "%d'de dört ögeler birbirine bağlı, %d"
 
 #: eeschema/erc/erc.cpp:924
 msgid "Pin with 'no connection' type is connected"
@@ -17293,7 +17293,7 @@ msgstr "Veriyolları grafiksel olarak bağlı ancak ortak veriyolu üyesi yok"
 
 #: eeschema/erc/erc_item.cpp:157
 msgid "Invalid connection between bus and net items"
-msgstr "Veri yolu ve ağ öğeleri arasında geçersiz bağlantı"
+msgstr "Veri yolu ve ağ ögeleri arasında geçersiz bağlantı"
 
 #: eeschema/erc/erc_item.cpp:161 pcbnew/drc/drc_item.cpp:216
 msgid "Unresolved text variable"
@@ -17774,7 +17774,7 @@ msgstr "Dosya seçilmedi!"
 #: eeschema/import_gfx/dialog_import_gfx_sch.cpp:262
 #: pcbnew/import_gfx/dialog_import_graphics.cpp:294
 msgid "Items in the imported file could not be handled properly."
-msgstr "İçe aktarılan dosyadaki öğeler düzgün şekilde işlenemedi."
+msgstr "İçe aktarılan dosyadaki ögeler düzgün şekilde işlenemedi."
 
 #: eeschema/import_gfx/dialog_import_gfx_sch.cpp:272
 #: pcbnew/import_gfx/dialog_import_graphics.cpp:304
@@ -17874,7 +17874,7 @@ msgstr "Birim sayısı farklılık göstermektedir."
 #: eeschema/lib_symbol.cpp:1655
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:761
 msgid "Graphic item count differs."
-msgstr "Grafiksel öğe sayısı farklılık göstermektedir."
+msgstr "Grafiksel öge sayısı farklılık göstermektedir."
 
 #: eeschema/lib_symbol.cpp:1667
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:775
@@ -18100,7 +18100,7 @@ msgstr "Netclass etiketi '%s' %s konumunda, %s"
 #: eeschema/net_navigator.cpp:190
 #, c-format
 msgid "Unhandled item type %d"
-msgstr "İşlenmemiş öğe türü %d"
+msgstr "İşlenmemiş öge türü %d"
 
 #: eeschema/net_navigator.cpp:318 pcbnew/board.cpp:1850
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2124
@@ -18761,9 +18761,9 @@ msgid ""
 "alignment issues. Please review the imported text elements carefully and "
 "correct manually if required."
 msgstr ""
-"CADSTAR yazı tipleri kicad'dakilerden farklıdır. Bu muhtemelen uyum "
-"sorunlarına neden olacaktır. Lütfen içe aktarılan metin öğelerini dikkatlice "
-"inceleyin ve gerekirse manuel olarak düzeltin."
+"CADSTAR yazı tipleri KiCad'dekilerden farklıdır. Bu durum büyük olasılıkla "
+"hizalama sorunlarına yol açacaktır. Lütfen içe aktarılan metin ögelerini "
+"dikkatlice inceleyin ve gerekirse elle düzeltin."
 
 #: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:519
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:169
@@ -18838,7 +18838,7 @@ msgid ""
 "the library. Did you export all items of the design?"
 msgstr ""
 "'%s' sembol kimliği, kütüphanede bulunamayan '%s' kütüphane sembolüne "
-"başvurur. Tasarımın tüm öğelerini dışa aktardınız mı?"
+"başvurur. Tasarımın tüm ögelerini dışa aktardınız mı?"
 
 #: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:854
 #, c-format
@@ -18908,8 +18908,8 @@ msgid ""
 "Net %s references unknown net element %s. The net was not properly loaded "
 "and may require manual fixing."
 msgstr ""
-"Net %s bilinmeyen net öğeye başvurur %s. Ağ düzgün yüklenmedi ve manuel "
-"sabitleme gerektirebilir."
+"Ağ %s, bilinmeyen ağ ögesi %s'ye referans veriyor. Ağ düzgün yüklenmedi ve "
+"elle düzeltme gerektirebilir."
 
 #: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:2538
 #, c-format
@@ -19251,7 +19251,7 @@ msgstr "Geçersiz ana sembol adı"
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:424
 #, c-format
 msgid "No parent for extended symbol %s"
-msgstr "Genişletilmiş sembol %s için üst öğe yok"
+msgstr "Uzatılmış sembol %s için bağlı olduğu bulunamadı."
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:439
 msgid "Invalid symbol unit name"
@@ -23405,7 +23405,7 @@ msgstr "Elektriksel kural denetleyicisi hataları için işaretleyicileri göste
 
 #: eeschema/tools/sch_actions.cpp:1193
 msgid "Show ERC Exclusions"
-msgstr "ERC (Elektriksel Kural Kontrolü) İstisnalarını Göster"
+msgstr "ERC (Elektriksel Kural Kontrolü) Hariç Tutulanlarını Göster"
 
 #: eeschema/tools/sch_actions.cpp:1194
 msgid "Show markers for excluded electrical rules checker violations"
@@ -42963,7 +42963,7 @@ msgstr "Baskı Devre '%s' yüklenirken bellek tükendi"
 #: pcbnew/files.cpp:867
 #, c-format
 msgid "Error saving footprint %s to project specific library."
-msgstr "Ayak izi %s projeye özel kitaplığa kaydedilirken hata oluştu."
+msgstr "Ayak izi %s projeye özel kütüphaneye kaydedilirken hata oluştu."
 
 #: pcbnew/files.cpp:898
 msgid "Error saving project specific footprint library table."
@@ -43812,7 +43812,7 @@ msgid ""
 msgstr ""
 "Kartta kullanılan ayak izlerini içeren yeni bir ayak izi kütüphanesi "
 "oluştur\n"
-"(kütüphane zaten varsa değiştirilecektir)."
+"(kütüphane zaten varsa değiştirilecektir)"
 
 #: pcbnew/menubar_pcb_editor.cpp:163
 msgid "Fabrication Outputs"
@@ -44366,7 +44366,7 @@ msgstr "%s ayak izi ID'si '%s' geçerli değil."
 msgid ""
 "%s footprint '%s' not found in any libraries in the footprint library table."
 msgstr ""
-"%s ayak izi '%s' ayak izi kitaplığı tablosundaki hiçbir kitaplıkta "
+"%s ayak izi '%s' ayak izi kütüphane tablosundaki hiçbir kütüphanede "
 "bulunamadı."
 
 #: pcbnew/netlist_reader/netlist_reader.cpp:195
@@ -45483,7 +45483,7 @@ msgid ""
 "equivalent. The area is neither a via nor route keepout area. The area was "
 "not imported."
 msgstr ""
-"Kitaplık bileşeni '%s' içindeki CADSTAR alanı '%s' KiCad eşdeğerine sahip "
+"Kütüphane bileşeni '%s' içindeki CADSTAR alanı '%s' KiCad eşdeğerine sahip "
 "değil. Bu alan ne bir geçit ne de yol dışlama alanıdır. Alan içe aktarılmadı."
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:1088
@@ -45832,12 +45832,12 @@ msgstr "'%s' dosyası okunamıyor"
 #: pcbnew/pcb_io/eagle/pcb_io_eagle.cpp:1202
 #, c-format
 msgid "<package> '%s' duplicated in <library> '%s'"
-msgstr "<paket> '%s' <kitaplık> '%s' içinde çoğaltıldı"
+msgstr "<paket> '%s' <kütüphane> '%s' içinde çoğaltıldı"
 
 #: pcbnew/pcb_io/eagle/pcb_io_eagle.cpp:1284
 #, c-format
 msgid "No '%s' package in library '%s'."
-msgstr "'%s' kitaplığında '%s' paketi yok."
+msgstr "'%s' kütüphanesinde '%s' paketi yok."
 
 #: pcbnew/pcb_io/eagle/pcb_io_eagle.cpp:1517
 #: pcbnew/pcb_io/eagle/pcb_io_eagle.cpp:2347
@@ -45891,7 +45891,7 @@ msgstr "Eagle Sürüm 6.x XML Baskı Devre Dosyaları"
 
 #: pcbnew/pcb_io/eagle/pcb_io_eagle.h:142
 msgid "Eagle ver. 6.x XML library files"
-msgstr "Eagle ver. 6.x XML kitaplık dosyaları"
+msgstr "Eagle ver. 6.x XML kütüphane dosyaları"
 
 #: pcbnew/pcb_io/easyeda/pcb_io_easyeda_parser.cpp:778
 #, c-format
@@ -46137,13 +46137,13 @@ msgstr "'%s' bir tam sayıya dönüştürülemiyor."
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:182
 #, c-format
 msgid "Footprint library '%s' not found."
-msgstr "'%s' ayak izi kitaplığı bulunamadı."
+msgstr "'%s' ayak izi kütüphanesi bulunamadı."
 
 #: pcbnew/pcb_io/geda/pcb_io_geda.cpp:279
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:242
 #, c-format
 msgid "Library '%s' has no footprint '%s'."
-msgstr "'%s' kitaplığında '%s' ayak izi yok."
+msgstr "'%s' kütüphanesinde '%s' ayak izi yok."
 
 #: pcbnew/pcb_io/geda/pcb_io_geda.cpp:343
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:874
@@ -46304,12 +46304,12 @@ msgstr "'%s' dosyası eski bir kütüphane değil."
 
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.h:77
 msgid "Legacy footprint library files"
-msgstr "Eski ayak izi kitaplığı dosyaları"
+msgstr "Eski ayak izi kütüphane dosyaları"
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:97
 #, c-format
 msgid "Cannot create footprint library '%s'."
-msgstr "'%s' ayak izi(footprint) kitaplığı oluşturulamıyor."
+msgstr "'%s' ayak izi kütüphanesi oluşturulamıyor."
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:103
 #, c-format
@@ -46603,7 +46603,7 @@ msgstr "KiCad sadece 32 sinyal katmanını destekler."
 
 #: pcbnew/pcb_io/pcad/pcad_via.cpp:93
 msgid "Unable to find library section."
-msgstr "Kitaplık bölümü bulunamıyor."
+msgstr "Kütüphane bölümü bulunamıyor."
 
 #: pcbnew/pcb_io/pcad/pcad_via.cpp:108
 #, c-format
@@ -46622,7 +46622,7 @@ msgid ""
 "Footprint Libraries..."
 msgstr ""
 "Seçili dosya birden fazla ayak izi içeriyor. Sadece ilki içe aktarılacak.\n"
-"Tüm ayak izlerini yüklemek için Tercihler -> Ayak İzi Kitaplıklarını "
+"Tüm ayak izlerini yüklemek için Tercihler -> Ayak İzi Kütüphanelerini "
 "Yönet... seçeneğini kullanarak bir kitaplık olarak ekleyin."
 
 #: pcbnew/pcb_io/pcb_io.cpp:175
@@ -46645,7 +46645,7 @@ msgstr ""
 
 #: pcbnew/pcb_io/pcb_io.cpp:186
 msgid "User name for <b>login</b> to some special library server."
-msgstr "Özel bir kitaplık sunucusuna <b>giriş</b> için kullanıcı adı."
+msgstr "Özel bir kütüphane sunucusuna <b>giriş</b> için kullanıcı adı."
 
 #: pcbnew/pcb_io/pcb_io.cpp:189
 msgid "Password for <b>login</b> to some special library server."
@@ -46980,7 +46980,7 @@ msgstr "Konum verileri '%s'e yazıldı.\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:1712
 msgid "Footprint library path does not exist or is not accessible\n"
-msgstr "Ayak izi kitaplığı yolu mevcut değil veya erişilebilir değil\n"
+msgstr "Ayak izi kütüphanesi yolu mevcut değil veya erişilebilir değil\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:1752
 msgid "Unable to save library\n"
@@ -46988,7 +46988,7 @@ msgstr "Kütüphane kaydedilemiyor\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:1758
 msgid "Footprint library was not updated\n"
-msgstr "Ayak izi kitaplığı güncellenmedi\n"
+msgstr "Ayak izi kütüphanesi güncellenmedi\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:1830
 msgid "The given footprint could not be found to export."
@@ -47049,7 +47049,7 @@ msgstr "Çoklu Katmanlar"
 
 #: pcbnew/project_pcb.cpp:64
 msgid "Error loading project footprint libraries."
-msgstr "Proje ayak izi kitaplıkları yüklenirken hata oluştu."
+msgstr "Proje ayak izi kütüphaneleri yüklenirken hata oluştu."
 
 #: pcbnew/python/scripting/pcbnew_action_plugins.cpp:83
 msgid "Exception on python action plugin code"
@@ -48488,7 +48488,7 @@ msgid ""
 "The footprint could not be added to the selected library ('%s'). This "
 "library is read-only."
 msgstr ""
-"Ayak izi seçilen kitaplığa eklenemedi ('%s'). Bu kitaplık salt okunurdur."
+"Ayak izi seçilen kütüphaneye eklenemedi ('%s'). Bu kitaplık salt okunurdur."
 
 #: pcbnew/tools/footprint_editor_control.cpp:406
 msgid "_copy"
@@ -49244,7 +49244,7 @@ msgstr "Kütüphaneden Ayak İzlerini Güncelle..."
 
 #: pcbnew/tools/pcb_actions.cpp:792
 msgid "Update footprints to include any changes from the library"
-msgstr "Kitaplıktaki değişiklikleri içerecek şekilde ayak izlerini güncelleyin"
+msgstr "Kütüphanedeki değişiklikleri içerecek şekilde ayak izlerini güncelleyin"
 
 #: pcbnew/tools/pcb_actions.cpp:798
 msgid "Remove Unused Pads..."
