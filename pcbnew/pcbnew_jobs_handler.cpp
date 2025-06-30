@@ -374,20 +374,21 @@ BOARD* PCBNEW_JOBS_HANDLER::getBoard( const wxString& aPath )
 
 LSEQ PCBNEW_JOBS_HANDLER::convertLayerArg( wxString& aLayerString, BOARD* aBoard ) const
 {
+    std::map<wxString, LSET> layerUserMasks;
     std::map<wxString, LSET> layerMasks;
     std::map<wxString, LSET> layerGuiMasks;
 
     // Build list of layer names and their layer mask:
     for( PCB_LAYER_ID layer : LSET::AllLayersMask().Seq() )
     {
+        // Add user layer name
+        if( aBoard )
+            layerUserMasks[ aBoard->GetLayerName( layer ) ] = LSET( { layer } );
+
         // Add layer name used in pcb files
         layerMasks[ LSET::Name( layer ) ] = LSET( { layer } );
         // Add layer name using GUI canonical layer name
         layerGuiMasks[ LayerName( layer ) ] = LSET( { layer } );
-
-        // Add user layer name
-        if( aBoard )
-            layerGuiMasks[ aBoard->GetLayerName( layer ) ] = LSET( { layer } );
     }
 
     // Add list of grouped layer names used in pcb files
@@ -409,6 +410,13 @@ LSEQ PCBNEW_JOBS_HANDLER::convertLayerArg( wxString& aLayerString, BOARD* aBoard
 
     LSEQ layerMask;
 
+    auto pushLayers =
+            [&]( const LSET& layerSet )
+            {
+                for( PCB_LAYER_ID layer : layerSet.Seq() )
+                    layerMask.push_back( layer );
+            };
+
     if( !aLayerString.IsEmpty() )
     {
         wxStringTokenizer layerTokens( aLayerString, "," );
@@ -417,23 +425,14 @@ LSEQ PCBNEW_JOBS_HANDLER::convertLayerArg( wxString& aLayerString, BOARD* aBoard
         {
             std::string token = TO_UTF8( layerTokens.GetNextToken() );
 
-            // Search for a layer name in canonical layer name used in .kicad_pcb files:
-            if( layerMasks.count( token ) )
-            {
-                for( PCB_LAYER_ID layer : layerMasks.at( token ).Seq() )
-                    layerMask.push_back( layer );
-            }
-            // Search for a layer name in canonical layer name used in GUI (not translated):
+            if( layerUserMasks.contains( token ) )
+                pushLayers( layerUserMasks.at( token ) );
+            else if( layerMasks.count( token ) )
+                pushLayers( layerMasks.at( token ) );
             else if( layerGuiMasks.count( token ) )
-            {
-                for( PCB_LAYER_ID layer : layerGuiMasks.at( token ).Seq() )
-                    layerMask.push_back( layer );
-            }
+                pushLayers( layerGuiMasks.at( token ) );
             else
-            {
-                m_reporter->Report( wxString::Format( _( "Invalid layer name \"%s\"\n" ),
-                                                      token ) );
-            }
+                m_reporter->Report( wxString::Format( _( "Invalid layer name \"%s\"\n" ), token ) );
         }
     }
 
