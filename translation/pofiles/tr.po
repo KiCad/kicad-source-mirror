@@ -33,7 +33,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-06-27 22:51+0300\n"
-"PO-Revision-Date: 2025-06-29 11:25+0000\n"
+"PO-Revision-Date: 2025-06-30 19:02+0000\n"
 "Last-Translator: YÜKSEL AÇIKGÖZ <yukselacikgoz@gmail.com>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/kicad/"
 "master-source/tr/>\n"
@@ -8105,7 +8105,7 @@ msgstr "Şematik PythonBOM dışa aktarımı"
 
 #: common/jobs/job_pcb_drc.cpp:37
 msgid "Perform DRC"
-msgstr "DRC'yi gerçekleştirin"
+msgstr "DRC Uygula"
 
 #: common/jobs/job_pcb_drc.cpp:43 pcbnew/dialogs/dialog_drc_job_config.cpp:24
 msgid "DRC Job Settings"
@@ -8130,7 +8130,7 @@ msgstr "Baskı Devre: Oluştur"
 
 #: common/jobs/job_sch_erc.cpp:33
 msgid "Perform ERC"
-msgstr "ERC gerçekleştirin"
+msgstr "ERC (Elektriksel Kural Kontrolü) Uygula"
 
 #: common/jobs/job_sch_erc.cpp:39
 msgid "Schematic ERC Job Settings"
@@ -8138,7 +8138,7 @@ msgstr "Şematik ERC İş Ayarları"
 
 #: common/jobs/job_sch_erc.cpp:43
 msgid "Schematic: Perform ERC"
-msgstr "Şema: ERC'yi gerçekleştirin"
+msgstr "Şematik: ERC (Elektriksel Kural Kontrolü) Uygula"
 
 #: common/jobs/job_special_copyfiles.cpp:46
 msgid "Special: Copy Files"
