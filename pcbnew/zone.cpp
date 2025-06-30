@@ -1406,6 +1406,8 @@ bool ZONE::BuildSmoothedPoly( SHAPE_POLY_SET& aSmoothedPoly, PCB_LAYER_ID aLayer
         // (And we wouldn't need to collect all the diffNetIntersectingZones either.)
 
         SHAPE_POLY_SET sameNetPoly = sameNetZone->Outline()->CloneDropTriangulation();
+        sameNetPoly.ClearArcs();
+
         SHAPE_POLY_SET diffNetPoly;
 
         // Of course there's always a wrinkle.  The same-net intersecting zone *might* get knocked
@@ -1415,7 +1417,10 @@ bool ZONE::BuildSmoothedPoly( SHAPE_POLY_SET& aSmoothedPoly, PCB_LAYER_ID aLayer
             if( diffNetZone->HigherPriority( sameNetZone )
                     && diffNetZone->GetBoundingBox().Intersects( sameNetBoundingBox ) )
             {
-                diffNetPoly.BooleanAdd( *diffNetZone->Outline() );
+                SHAPE_POLY_SET diffNetOutline = diffNetZone->Outline()->CloneDropTriangulation();
+                diffNetOutline.ClearArcs();
+
+                diffNetPoly.BooleanAdd( diffNetOutline );
             }
         }
 
@@ -1427,20 +1432,23 @@ bool ZONE::BuildSmoothedPoly( SHAPE_POLY_SET& aSmoothedPoly, PCB_LAYER_ID aLayer
         if( diffNetPoly.OutlineCount() )
         {
             SHAPE_POLY_SET thisPoly = Outline()->CloneDropTriangulation();
+            thisPoly.ClearArcs();
 
             thisPoly.BooleanSubtract( diffNetPoly );
             isolated = thisPoly.OutlineCount() == 0;
         }
 
         if( !isolated )
-        {
-            sameNetPoly.ClearArcs();
             aSmoothedPoly.BooleanAdd( sameNetPoly );
-        }
     }
 
     if( aBoardOutline )
-        aSmoothedPoly.BooleanIntersection( *aBoardOutline );
+    {
+        SHAPE_POLY_SET boardOutline = aBoardOutline->CloneDropTriangulation();
+        boardOutline.ClearArcs();
+
+        aSmoothedPoly.BooleanIntersection( boardOutline );
+    }
 
     SHAPE_POLY_SET withSameNetIntersectingZones = aSmoothedPoly.CloneDropTriangulation();
 
