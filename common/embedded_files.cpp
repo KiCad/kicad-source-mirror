@@ -545,6 +545,7 @@ const std::vector<wxString>* EMBEDDED_FILES::UpdateFontFiles()
     return &m_fontFiles;
 }
 
+
 // Move constructor
 EMBEDDED_FILES::EMBEDDED_FILES( EMBEDDED_FILES&& other ) noexcept :
         m_files( std::move( other.m_files ) ),
@@ -554,6 +555,7 @@ EMBEDDED_FILES::EMBEDDED_FILES( EMBEDDED_FILES&& other ) noexcept :
 {
     other.m_embedFonts = false;
 }
+
 
 // Move assignment operator
 EMBEDDED_FILES& EMBEDDED_FILES::operator=(EMBEDDED_FILES&& other) noexcept
@@ -567,19 +569,22 @@ EMBEDDED_FILES& EMBEDDED_FILES::operator=(EMBEDDED_FILES&& other) noexcept
         m_embedFonts = other.m_embedFonts;
         other.m_embedFonts = false;
     }
+
     return *this;
 }
 
+
 // Copy constructor
-EMBEDDED_FILES::EMBEDDED_FILES( const EMBEDDED_FILES& other ) : m_embedFonts( other.m_embedFonts )
+EMBEDDED_FILES::EMBEDDED_FILES( const EMBEDDED_FILES& other ) :
+        m_embedFonts( other.m_embedFonts )
 {
     for( const auto& [name, file] : other.m_files )
-    {
         m_files[name] = new EMBEDDED_FILE( *file );
-    }
+
     m_fontFiles = other.m_fontFiles;
     m_fileAddedCallback = other.m_fileAddedCallback;
 }
+
 
 // Copy assignment operator
 EMBEDDED_FILES& EMBEDDED_FILES::operator=( const EMBEDDED_FILES& other )
@@ -587,13 +592,14 @@ EMBEDDED_FILES& EMBEDDED_FILES::operator=( const EMBEDDED_FILES& other )
     if( this != &other )
     {
         ClearEmbeddedFiles();
+
         for( const auto& [name, file] : other.m_files )
-        {
             m_files[name] = new EMBEDDED_FILE( *file );
-        }
+
         m_fontFiles = other.m_fontFiles;
         m_fileAddedCallback = other.m_fileAddedCallback;
         m_embedFonts = other.m_embedFonts;
     }
+
     return *this;
 }
