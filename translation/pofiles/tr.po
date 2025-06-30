@@ -8528,7 +8528,7 @@ msgstr "DRC (Tasarım Kuralı Kontrolü) işaretleyici gölgeleri"
 
 #: common/layer_id.cpp:150
 msgid "Grid axes"
-msgstr "Kılavuz eksenleri"
+msgstr "Izgara eksenleri"
 
 #: common/layer_id.cpp:153
 msgid "Locked item shadow"
@@ -9731,11 +9731,11 @@ msgstr "Sağa Kaydır"
 
 #: common/tool/actions.cpp:999
 msgid "Switch to Fast Grid 1"
-msgstr "Hızlı Izgara 1'e geçme"
+msgstr "Hızlı Izgara 1'e geç"
 
 #: common/tool/actions.cpp:1006
 msgid "Switch to Fast Grid 2"
-msgstr "Hızlı Izgara 2'ye geçme"
+msgstr "Hızlı Izgara 2'ye geç"
 
 #: common/tool/actions.cpp:1013
 msgid "Cycle Fast Grid"
@@ -9743,7 +9743,7 @@ msgstr "Hızlı Izgarayı Döngüye Al"
 
 #: common/tool/actions.cpp:1020
 msgid "Switch to Next Grid"
-msgstr "Sonraki Kılavuza Geç"
+msgstr "Sonraki Izgaraya Geç"
 
 #: common/tool/actions.cpp:1027
 msgid "Switch to Previous Grid"
@@ -9763,7 +9763,7 @@ msgstr "Elek Başlangıç Noktası Sıfırlama"
 
 #: common/tool/actions.cpp:1053
 msgid "Show Grid"
-msgstr "Kılavuzu Göster"
+msgstr "Izgarayı Göster"
 
 #: common/tool/actions.cpp:1054
 msgid "Display background grid in the edit window"
@@ -9783,7 +9783,7 @@ msgstr "Izgara Başlangıç noktası..."
 
 #: common/tool/actions.cpp:1078
 msgid "Set the grid origin point"
-msgstr "Kılavuz başlangıç noktasını ayarlama"
+msgstr "Izgara başlangıç noktasını ayarlama"
 
 #: common/tool/actions.cpp:1093
 #: eeschema/import_gfx/dialog_import_gfx_sch.cpp:60
@@ -9836,11 +9836,11 @@ msgstr "Yerel Koordinatları Sıfırla"
 
 #: common/tool/actions.cpp:1153
 msgid "Always Show Crosshairs"
-msgstr "Kılavuz Çizgilerini Her Zaman Göster"
+msgstr "Hedefleme Artısını Her Zaman Göster"
 
 #: common/tool/actions.cpp:1154
 msgid "Display crosshairs even when not drawing objects"
-msgstr "Nesne çizilmediğinde bile kılavuz çizgilerini görüntüle"
+msgstr "Nesne çizilmediğinde bile hedefleme artılarını görüntüle"
 
 #: common/tool/actions.cpp:1160
 msgid "Full-Window Crosshairs"
@@ -10486,7 +10486,7 @@ msgstr "Her zaman"
 
 #: common/widgets/gal_options_panel_base.cpp:106
 msgid "When grid shown"
-msgstr "Kılavuz gösterildiğinde"
+msgstr "Izgara gösterildiğinde"
 
 #: common/widgets/gal_options_panel_base.cpp:106
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:357
@@ -21886,8 +21886,7 @@ msgstr "<b> Kapalı ızgara pimi %s </b> %s konumunda <b> (%s, %s) </b>."
 #: eeschema/symbol_checker.cpp:352
 #, c-format
 msgid "<b>Off grid pin %s</b> %s at location <b>(%s, %s)</b> in unit %c."
-msgstr ""
-"<b>Kapalı kılavuz pimi %s</b> %s konumunda <b> (%s,, %s)</b> in unit %c."
+msgstr "Izgara dışı pin %s %s, birim %c içinde (%s, %s) konumunda."
 
 #: eeschema/symbol_checker.cpp:394
 #, c-format
@@ -25987,7 +25986,7 @@ msgstr "Görünürlük için bunu etkinleştirin"
 
 #: gerbview/widgets/layer_widget.cpp:446
 msgid "Left double click or middle click for color change"
-msgstr "Renk değişimi için sol çift tıklama veya orta tıkla"
+msgstr "Renk değişimi için sol çift tıkla veya orta tıkla"
 
 #: include/dialogs/panel_color_settings.h:50
 msgid "Reset all colors in this theme to the KiCad defaults"
