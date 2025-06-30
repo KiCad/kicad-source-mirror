@@ -91,6 +91,8 @@ bool DRC_TEST_PROVIDER_SILK_CLEARANCE::Run()
     DRC_RTREE targetTree;
     int       ii = 0;
     int       items = 0;
+    LSET      silkLayers = LSET( { F_SilkS, B_SilkS } );
+    LSET      targetLayers = LSET::FrontMask() | LSET::BackMask() | LSET( { Edge_Cuts, Margin } );
 
     auto countItems =
             [&]( BOARD_ITEM* item ) -> bool
@@ -120,23 +122,17 @@ bool DRC_TEST_PROVIDER_SILK_CLEARANCE::Run()
                 if( !reportProgress( ii++, items, progressDelta ) )
                     return false;
 
-                for( PCB_LAYER_ID layer : item->GetLayerSet().Seq() )
+                for( PCB_LAYER_ID layer : LSET( item->GetLayerSet() & targetLayers ).Seq() )
                     targetTree.Insert( item, layer );
 
                 return true;
             };
 
-    forEachGeometryItem( s_allBasicItems, LSET( { F_SilkS, B_SilkS } ), countItems );
+    forEachGeometryItem( s_allBasicItems, silkLayers, countItems );
+    forEachGeometryItem( s_allBasicItems, targetLayers, countItems );
 
-    forEachGeometryItem( s_allBasicItems,
-                         LSET::FrontMask() | LSET::BackMask() | LSET( { Edge_Cuts, Margin } ),
-                         countItems );
-
-    forEachGeometryItem( s_allBasicItems, LSET( { F_SilkS, B_SilkS } ), addToSilkTree );
-
-    forEachGeometryItem( s_allBasicItems,
-                         LSET::FrontMask() | LSET::BackMask() | LSET( { Edge_Cuts, Margin } ),
-                         addToTargetTree );
+    forEachGeometryItem( s_allBasicItems, silkLayers, addToSilkTree );
+    forEachGeometryItem( s_allBasicItems, targetLayers, addToTargetTree );
 
     REPORT_AUX( wxString::Format( wxT( "Testing %d silkscreen features against %d board items." ),
                                   silkTree.size(),
