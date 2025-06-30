@@ -9752,7 +9752,7 @@ msgstr "Креирање слојева"
 
 #: common/tool/actions.cpp:1018
 msgid "Toggle inactive layers between normal and dimmed"
-msgstr "Пребацуј између нормалног и затамњеног изгледа неактивних слојева"
+msgstr "Пребацуј између нормалног и затамњеног приказа неактивних слојева"
 
 #: common/tool/actions.cpp:1025
 #, fuzzy
@@ -9844,7 +9844,7 @@ msgstr "Отвори шему"
 
 #: common/tool/actions.cpp:1134
 msgid "Update PCB with changes made to schematic"
-msgstr ""
+msgstr "Ажурирај PCB са променама на шеми"
 
 #: common/tool/actions.cpp:1140
 #, fuzzy
@@ -9863,7 +9863,7 @@ msgstr "&Преференце"
 
 #: common/tool/actions.cpp:1149
 msgid "Show preferences for all open tools"
-msgstr ""
+msgstr "Покажи подешавања за све отворене алате"
 
 #: common/tool/actions.cpp:1156
 #: pcbnew/dialogs/panel_fp_properties_3d_model_base.cpp:78
@@ -9872,7 +9872,7 @@ msgstr "Конфигуриши путање..."
 
 #: common/tool/actions.cpp:1157
 msgid "Edit path configuration environment variables"
-msgstr ""
+msgstr "Уреди конфигурацију путања променљивих окружења"
 
 #: common/tool/actions.cpp:1163
 #, fuzzy
@@ -9911,7 +9911,7 @@ msgstr "&Почетак у KiCad-у"
 
 #: common/tool/actions.cpp:1185
 msgid "Open \"Getting Started in KiCad\" guide for beginners"
-msgstr ""
+msgstr "Отвори \"Како почети са KiCad-ом\" приручник за почетнике"
 
 #: common/tool/actions.cpp:1191
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:35
@@ -9939,11 +9939,11 @@ msgstr "Листа грешака:"
 
 #: common/tool/actions.cpp:1208
 msgid "Displays current hotkeys table and corresponding commands"
-msgstr ""
+msgstr "Приказује табелу тренутних пречица тастатуре и одговарајуће команде"
 
 #: common/tool/actions.cpp:1214
 msgid "Get Involved"
-msgstr ""
+msgstr "Укључи се"
 
 #: common/tool/actions.cpp:1215
 #, fuzzy
@@ -9967,7 +9967,7 @@ msgstr "Претражи"
 
 #: common/tool/actions.cpp:1241
 msgid "Reload all python plugins and refresh plugin menus"
-msgstr ""
+msgstr "Поново учитај све python plugin-е и освежи мени plugin-а"
 
 #: common/tool/actions.cpp:1249
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:73
@@ -10006,7 +10006,7 @@ msgstr "Сви фајлови (*.*)|*.*"
 
 #: common/tool/common_control.cpp:203
 msgid "Can not switch to project manager in stand-alone mode."
-msgstr ""
+msgstr "Не могу да се пребацим на менаџер пројекта у самосталном моду."
 
 #: common/tool/common_control.cpp:245
 #, c-format
@@ -10015,6 +10015,9 @@ msgid ""
 "'%s' could not be found.\n"
 "Do you want to access the KiCad online help?"
 msgstr ""
+"Фајл за помоћ \"%s\" или\n"
+"\"%s\" није пронађен.\n"
+"Желите ли да приступите KiCad помоћи на интернету?"
 
 #: common/tool/common_control.cpp:248 common/tool/common_control.cpp:268
 #, fuzzy
@@ -10027,6 +10030,8 @@ msgid ""
 "Help file '%s' could not be found.\n"
 "Do you want to access the KiCad online help?"
 msgstr ""
+"Фајл за помоћ \"%s\".\n"
+"Желите ли да приступите KiCad помоћи на интернету?"
 
 #: common/tool/common_control.cpp:303
 #, c-format
@@ -10034,6 +10039,8 @@ msgid ""
 "Could not launch the default browser.\n"
 "For information on how to help the KiCad project, visit %s"
 msgstr ""
+"Стартовање подразумеваног интернет прегледача неуспешно.\n"
+"За информације како да помогнете KiCad пројекту, посетите %s"
 
 #: common/tool/common_control.cpp:306
 #, fuzzy
@@ -10046,6 +10053,8 @@ msgid ""
 "Could not launch the default browser.\n"
 "To donate to the KiCad project, visit %s"
 msgstr ""
+"Стартовање подразумеваног интернет прегледача неуспешно.\n"
+"Да бисте донирали KiCad пројекту, посетите %s"
 
 #: common/tool/library_editor_control.cpp:177
 #, fuzzy
@@ -10079,7 +10088,7 @@ msgstr "Попуњавање зона"
 
 #: common/validators.cpp:293
 msgid "Signal names cannot contain CR or LF characters"
-msgstr ""
+msgstr "Имена сигнала не могу садржати CR или LF карактере"
 
 #: common/validators.cpp:296
 #, fuzzy
@@ -10103,11 +10112,11 @@ msgstr "Линија"
 
 #: common/validators.cpp:385
 msgid "tab"
-msgstr ""
+msgstr "таб"
 
 #: common/validators.cpp:387
 msgid "space"
-msgstr ""
+msgstr "размак"
 
 #: common/validators.cpp:401
 msgid " or "
@@ -10135,7 +10144,7 @@ msgstr "Маркер није пронађен"
 #: common/validators.cpp:430
 #, c-format
 msgid "The datasheet field cannot contain %s character(s)."
-msgstr ""
+msgstr "Datasheet не може садржати %s карактер(е)."
 
 #: common/validators.cpp:434
 #, c-format
@@ -29655,7 +29664,7 @@ msgstr "Покрени"
 
 #: kicad/tools/kicad_manager_actions.cpp:178
 msgid "Run component calculations, track width calculations, etc."
-msgstr ""
+msgstr "Изврши рачунање за компоненте, ширине водова, итд."
 
 #: kicad/tools/kicad_manager_actions.cpp:188
 msgid "Edit drawing sheet borders and title block"
