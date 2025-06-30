@@ -3053,7 +3053,7 @@ msgstr "Grup adı:"
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:312
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:394
 msgid "Library link:"
-msgstr "kütüphane bağlantısı:"
+msgstr "Kütüphane bağlantısı:"
 
 #: common/dialogs/dialog_group_properties_base.cpp:47 eeschema/sch_item.cpp:656
 #: pcbnew/board_item.cpp:420 pcbnew/dialogs/dialog_copper_zones_base.cpp:127
@@ -4817,7 +4817,7 @@ msgstr ""
 #: eeschema/dialogs/panel_sym_lib_table.cpp:972
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:801
 msgid "Migrate Library"
-msgstr "Kitaplığı Taşı"
+msgstr "Kütüphaneyi Taşı"
 
 #: common/dialogs/panel_design_block_lib_table.cpp:851
 #, c-format
@@ -7069,7 +7069,7 @@ msgid ""
 "The base path of locally installed system footprint libraries (.pretty "
 "folders)."
 msgstr ""
-"Yerel olarak yüklenen sistem ayak izi(footprint) kitaplıklarının (.pretty "
+"Yerel olarak yüklenen sistem ayak izi(footprint) kütüphanelerinin (.pretty "
 "klasörleri) temel yolu."
 
 #: common/env_vars.cpp:120
@@ -7078,7 +7078,7 @@ msgstr "Sistem ayak izi 3B şekillerinin (.3Dshapes klasörleri) temel yolu."
 
 #: common/env_vars.cpp:123
 msgid "The base path of the locally installed symbol libraries."
-msgstr "Yerel olarak yüklenen sembol kitaplıklarının temel yolu."
+msgstr "Yerel olarak yüklenen sembol kütüphanelerinin temel yolu."
 
 #: common/env_vars.cpp:126
 msgid "A directory containing project templates installed with KiCad."
@@ -7111,9 +7111,9 @@ msgstr ""
 "KiCad tarafından dahili olarak tanımlanır (düzenlenemez) ve şu anda yüklü "
 "olan proje dosyasının mutlak yoluna ayarlanır.  Bu ortam değişkeni, şu anda "
 "yüklü olan projeye göre dosyaları ve yolları tanımlamak için "
-"kullanılabilir.  Örneğin, ${KIPRJMOD}/libs/footprints.pretty, footprints."
-"pretty adlı projeye özgü ayak izi kitaplığı içeren bir klasör olarak "
-"tanımlanabilir."
+"kullanılabilir.  Örneğin, ${KIPRJMOD}/libs/footprints.pretty, "
+"footprints.pretty adlı projeye özgü ayak izi kütüphanesi içeren bir klasör "
+"olarak tanımlanabilir."
 
 #: common/env_vars.cpp:141
 msgid "A directory containing system-wide scripts installed with KiCad."
@@ -8188,12 +8188,12 @@ msgstr "Kiface kütüphanesi '%s' imzası doğrulanamadı."
 #: common/kiway.cpp:271
 #, c-format
 msgid "Failed to load kiface library '%s'."
-msgstr "'%s' kiface kitaplığı yüklenemedi."
+msgstr "'%s' kiface kütüphanesi yüklenemedi."
 
 #: common/kiway.cpp:279
 #, c-format
 msgid "Could not read instance name and version from kiface library '%s'."
-msgstr "'%s' kiface kitaplığından örnek adı ve sürümü okunamadı."
+msgstr "'%s' kiface kütüphanesinden örnek adı ve sürümü okunamadı."
 
 #: common/kiway.cpp:443
 msgid "Error loading editor."
@@ -8790,7 +8790,7 @@ msgstr "3B model dosyası açılamadı: %s"
 
 #: common/project.cpp:418 common/project.cpp:423 pcbnew/project_pcb.cpp:69
 msgid "Error loading project footprint library table."
-msgstr "Proje ayak içizimi kitaplığı tablosu yüklenirken hata oluştu."
+msgstr "Proje ayak izi kütüphane tablosu yüklenirken hata oluştu."
 
 #: common/project.cpp:453 common/project.cpp:459
 msgid "Error loading project design block library table."
@@ -9035,7 +9035,7 @@ msgstr "Yeni Kütüphane..."
 
 #: common/tool/actions.cpp:54
 msgid "Create a new library folder"
-msgstr "Yeni kitaplık klasörü oluşturun"
+msgstr "Yeni kütüphane klasörü oluşturun"
 
 #: common/tool/actions.cpp:60
 msgid "Add Library..."
@@ -9695,11 +9695,11 @@ msgstr "Kütüphaneyi listenin başında tut"
 
 #: common/tool/actions.cpp:938
 msgid "Unpin Library"
-msgstr "Kitaplığı Sabitlemeyi Geri Alın"
+msgstr "Kütüphaneyi Sabitlemeyi Geri Alın"
 
 #: common/tool/actions.cpp:939
 msgid "No longer keep the library at the top of the list"
-msgstr "Kitaplığı artık listenin başında tutma"
+msgstr "Kütüphaneyi artık listenin başında tutma"
 
 #: common/tool/actions.cpp:944
 msgid "Library Tree"
@@ -9899,7 +9899,7 @@ msgstr "3B görüntüleyici penceresini göster"
 #: common/tool/actions.cpp:1239 eeschema/symbol_diff_frame.cpp:57
 #: eeschema/symbol_viewer_frame.cpp:105 eeschema/symbol_viewer_frame.cpp:1112
 msgid "Symbol Library Browser"
-msgstr "Sembol Kitaplığı Tarayıcısı"
+msgstr "Sembol Kütüphanesi Tarayıcısı"
 
 #: common/tool/actions.cpp:1248 kicad/tools/kicad_manager_actions.cpp:126
 msgid "Create, delete and edit schematic symbols"
@@ -9908,7 +9908,7 @@ msgstr "Şematik sembolleri oluştur, sil ve düzenle"
 #: common/tool/actions.cpp:1256 pcbnew/footprint_viewer_frame.cpp:101
 #: pcbnew/footprint_viewer_frame.cpp:996
 msgid "Footprint Library Browser"
-msgstr "Ayak İzi Kitaplığı Tarayıcısı"
+msgstr "Ayak İzi Kütüphanesi Tarayıcısı"
 
 #: common/tool/actions.cpp:1265
 msgid "Create, delete and edit board footprints"
@@ -9975,15 +9975,15 @@ msgstr "Dosya Yollarını yapılandırma ortamı değişkenlerini düzenleyin"
 
 #: common/tool/actions.cpp:1331
 msgid "Manage Symbol Libraries..."
-msgstr "Sembol Kitaplıklarını Yönet..."
+msgstr "Sembol Kütüphanesini Yönet..."
 
 #: common/tool/actions.cpp:1332
 msgid "Edit the global and project symbol library lists"
-msgstr "Genel ve proje sembolü kitaplığı listelerini düzenleme"
+msgstr "Genel ve proje sembolü kütüphanesi listelerini düzenleme"
 
 #: common/tool/actions.cpp:1338
 msgid "Manage Footprint Libraries..."
-msgstr "Ayak İzi Kitaplıklarını Yönet..."
+msgstr "Ayak İzi Kütüphanelerini Yönet..."
 
 #: common/tool/actions.cpp:1339
 msgid "Edit the global and project footprint library lists"
@@ -12113,7 +12113,7 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
-"%s kitaplığından %s sembolü yüklenirken hata oluştu.\n"
+"%s kütüphanesi %s sembolü yüklenirken hata oluştu.\n"
 "\n"
 "%s"
 
@@ -12929,7 +12929,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:74
 msgid "Please select a symbol library table file."
-msgstr "Lütfen bir sembol kitaplığı tablo dosyası seçin."
+msgstr "Lütfen bir sembol kütüphanesi tablo dosyası seçin."
 
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:96
 #, c-format
@@ -12977,7 +12977,7 @@ msgid ""
 "The symbol name in library and also the default\n"
 "symbol value when loaded in the schematic."
 msgstr ""
-"Kitaplıktaki sembol adı ve ayrıca varsayılan\n"
+"Kütüphanedeki sembol adı ve ayrıca varsayılan\n"
 "şemaya yüklendiğinde sembol değeri."
 
 #: eeschema/dialogs/dialog_increment_annotations_base.cpp:37
@@ -14265,10 +14265,10 @@ msgid ""
 "\n"
 "The following changes are recommended to update the project."
 msgstr ""
-"Bu şema, şemayı kırabilecek eski sembol kitaplıkları kullanılarak "
+"Bu şema, şemayı kırabilecek eski sembol kütüphaneleri kullanılarak "
 "yapılmıştır..  Sbazı sembollerin farklı bir sembol adına bağlanması "
-"gerekebilir.  Bazı sembollerin yeni bir kütüphaneye "
-"\"kurtarılması\" (kopyalanması ve yeniden adlandırılması) gerekebilir.\n"
+"gerekebilir.  Bazı sembollerin yeni bir kütüphaneye \"kurtarılması\" ("
+"kopyalanması ve yeniden adlandırılması) gerekebilir.\n"
 "\n"
 "Projeyi güncellemek için aşağıdaki değişiklikler önerilir."
 
@@ -15910,7 +15910,7 @@ msgstr "Proje sembol kütüphanesi tablosu oluşturuldu.\n"
 #: eeschema/dialogs/dialog_symbol_remap.cpp:270
 #, c-format
 msgid "No symbol %s found in symbol library table."
-msgstr "Sembol kitaplığı tablosunda %s simgesi bulunamadı."
+msgstr "Sembol kütüphanesi tablosunda %s simgesi bulunamadı."
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:277
 #, c-format
@@ -17054,7 +17054,7 @@ msgstr "Geçersiz karakter '%c' Takma ad '%s' içinde"
 #: eeschema/dialogs/panel_sym_lib_table.cpp:579 eeschema/symbol_library.cpp:583
 #, c-format
 msgid "Symbol library '%s' failed to load."
-msgstr "'%s' sembol kitaplığı yüklenemedi."
+msgstr "'%s' sembol kütüphanesi yüklenemedi."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:626 eeschema/files-io.cpp:666
 #: eeschema/import_gfx/dialog_import_gfx_sch.cpp:200
@@ -17125,12 +17125,12 @@ msgid ""
 "modified."
 msgstr ""
 "Bir veya daha fazla sembol kütüphanesinde değişiklikler yapılmıştır.\n"
-"Sembol kitaplığı tablosu değiştirilmeden önce değişikliklerin kaydedilmesi "
+"Sembol kütüphanesi tablosu değiştirilmeden önce değişikliklerin kaydedilmesi "
 "veya atılması gerekir."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:1172
 msgid "Symbol Libraries"
-msgstr "Sembol Kitaplıkları"
+msgstr "Sembol Kütüphaneleri"
 
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:134
 msgid "Add existing library to table"
@@ -17309,11 +17309,11 @@ msgstr ""
 
 #: eeschema/eeschema_jobs_handler.cpp:1060
 msgid "Saving symbol library in updated format\n"
-msgstr "Sembol kitaplığını güncellenmiş biçimde kaydetme\n"
+msgstr "Sembol kütüphanesi güncellenmiş biçimde kaydediliyor\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:1080
 msgid "Symbol library was not updated\n"
-msgstr "Sembol kitaplığı güncellenmedi\n"
+msgstr "Sembol kütüphanesi güncellenmedi\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:1154 pcbnew/pcbnew_jobs_handler.cpp:2159
 #, c-format
@@ -17897,7 +17897,7 @@ msgstr ""
 
 #: eeschema/files-io.cpp:408
 msgid "Illegal entry found in project file symbol library list."
-msgstr "Proje dosyası sembol kitaplığı listesinde yasa dışı giriş bulundu."
+msgstr "Proje dosyası sembol kitaplığı listesinde kural dışı giriş bulundu."
 
 #: eeschema/files-io.cpp:409
 msgid "Project Load Warning"
@@ -17936,7 +17936,7 @@ msgstr ""
 "Bu, belirli koşullar altında bozuk bir şemaya neden olabilir.   Açıldıktan "
 "sonra şemada eksik sembol yoksa, veri kaybını önlemek için herhangi bir "
 "değişiklik yapmadan hemen önce kaydedin.   Eksik semboller varsa, şemanın "
-"manuel olarak kurtarılması veya sembol önbellek kitaplığı dosyasının "
+"manuel olarak kurtarılması veya sembol önbellek kütüphanesi dosyasının "
 "kurtarılması ve şemanın yeniden yüklenmesi gerekir."
 
 #: eeschema/files-io.cpp:458
@@ -18161,7 +18161,7 @@ msgstr "Türetilmiş"
 #: eeschema/widgets/symbol_preview_widget.cpp:203
 #, c-format
 msgid "Error loading symbol %s from library '%s'."
-msgstr "'%s' kitaplığından %s sembolü yüklenirken hata oluştu."
+msgstr "'%s' kütüphanesinden %s sembolü yüklenirken hata oluştu."
 
 #: eeschema/generate_alias_info.cpp:122 eeschema/sim/spice_simulator.cpp:69
 #: kicad/pcm/pcm.cpp:766 pcbnew/zone.cpp:902
@@ -18361,7 +18361,7 @@ msgstr "Panodan hariç tutma ayarları farklıdır."
 #: eeschema/libarch.cpp:77
 #, c-format
 msgid "Failed to add symbol %s to library file '%s'."
-msgstr "'%s' kitaplık dosyasına %s simgesi eklenemedi."
+msgstr "'%s' kütüphane dosyasına %s simgesi eklenemedi."
 
 #: eeschema/libarch.cpp:86
 msgid "Unexpected exception occurred."
