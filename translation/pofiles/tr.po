@@ -9420,11 +9420,11 @@ msgstr "Nesne çizilmediğinde bile hedefleme artılarını görüntüle"
 
 #: common/tool/actions.cpp:1009
 msgid "Full-Window Crosshairs"
-msgstr "Tam Pencere Artıları"
+msgstr "Tam Pencere Artı İmleci"
 
 #: common/tool/actions.cpp:1010
 msgid "Switch display of full-window crosshairs"
-msgstr "Tam pencere artı işaretinin görüntüsünü değiştir"
+msgstr "Tam ekran artı imlecini göster/gizle"
 
 #: common/tool/actions.cpp:1017
 msgid "Inactive Layer View Mode"
@@ -9510,7 +9510,7 @@ msgstr "Şematikten Baskı Devreyi Güncelle..."
 
 #: common/tool/actions.cpp:1134
 msgid "Update PCB with changes made to schematic"
-msgstr "Şemada yapılan değişikliklerle Baskı Devreyi güncelle"
+msgstr "Şematikte yapılan değişikliklerle Baskı Devreyi güncelle"
 
 #: common/tool/actions.cpp:1140
 msgid "Update Schematic from PCB..."
@@ -9531,7 +9531,7 @@ msgstr "Tüm açık araçlar için tercihleri göster"
 #: common/tool/actions.cpp:1156
 #: pcbnew/dialogs/panel_fp_properties_3d_model_base.cpp:78
 msgid "Configure Paths..."
-msgstr "Dosya Yollarını Yapılandırın..."
+msgstr "Dosya Yollarını Yapılandır..."
 
 #: common/tool/actions.cpp:1157
 msgid "Edit path configuration environment variables"
@@ -22418,12 +22418,13 @@ msgstr "%s değerini '%s'den '%s'e değiştirin."
 #: eeschema/tools/backannotate.cpp:431
 #, c-format
 msgid "Change %s 'Do not populate' from '%s' to '%s'."
-msgstr "%s'nin 'Boş Bırak' durumunu '%s' iken '%s' yap."
+msgstr "%s'nin 'Boş Bırak' durumunu '%s' iken '%s' ile değiştir."
 
 #: eeschema/tools/backannotate.cpp:445
 #, c-format
 msgid "Change %s 'Exclude from bill of materials' from '%s' to '%s'."
-msgstr "%s'nin 'Malzeme Listesinden Hariç Tut' durumunu '%s' iken '%s' yapın."
+msgstr ""
+"%s'nin 'Malzeme Listesinden Hariç Tut' durumunu '%s' iken '%s' ile değiştir."
 
 #: eeschema/tools/backannotate.cpp:466
 #, c-format
