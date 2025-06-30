@@ -2689,9 +2689,9 @@ msgid ""
 "of the options below.  If you are not sure which option to select, please\n"
 "use the default selection."
 msgstr ""
-"KiCad, yeni kütüphanelere erişim için yeni %s kitaplık tablosu kullanarak\n"
+"KiCad, yeni kütüphanelere erişim için yeni %s kütüphane tablosu kullanarak\n"
 "ilk kez çalıştırıldı. KiCad'in %s kitaplıklarına erişebilmesi için,\n"
-"genel %s kitaplık tablonuzu yapılandırmanız gerekir. Lütfen aşağıdaki\n"
+"genel %s kütüphane tablonuzu yapılandırmanız gerekir. Lütfen aşağıdaki\n"
 "seçeneklerden birini seçin. Hangi seçeneği seçeceğinizden emin değilseniz, "
 "lütfen\n"
 "varsayılan seçimi kullanın."
@@ -7846,7 +7846,7 @@ msgstr "Baskı Devre: (DRC) Tasarım Kuralı Kontrolü Uygula"
 #: common/jobs/job_pcb_render.cpp:127
 #, c-format
 msgid "Render %s"
-msgstr "%s'yi işle"
+msgstr "%s'yi oluştur"
 
 #: common/jobs/job_pcb_render.cpp:133
 msgid "Render PCB Job Settings"
@@ -7862,7 +7862,7 @@ msgstr "ERC (Elektriksel Kural Kontrolü) Uygula"
 
 #: common/jobs/job_sch_erc.cpp:39
 msgid "Schematic ERC Job Settings"
-msgstr "Şematik ERC İş Ayarları"
+msgstr "Şematik ERC (Elektriksel Kural Kontrolü) İş Ayarları"
 
 #: common/jobs/job_sch_erc.cpp:43
 msgid "Schematic: Perform ERC"
@@ -7909,7 +7909,7 @@ msgstr "Soru"
 #: common/kiway.cpp:242
 #, c-format
 msgid "Failed to verify kiface library '%s' signature."
-msgstr "Kiface kitaplığı '%s' imzası doğrulanamadı."
+msgstr "Kiface kütüphanesi '%s' imzası doğrulanamadı."
 
 #: common/kiway.cpp:282
 #, c-format
@@ -8077,15 +8077,15 @@ msgstr "Simülasyondan hariç tutulan işaretler"
 
 #: common/layer_id.cpp:102
 msgid "ERC warnings"
-msgstr "ERC uyarıları"
+msgstr "ERC (Elektriksel Kural Kontrolü) uyarıları"
 
 #: common/layer_id.cpp:103
 msgid "ERC errors"
-msgstr "ERC hataları"
+msgstr "ERC (Elektriksel Kural Kontrolü) hataları"
 
 #: common/layer_id.cpp:104
 msgid "ERC exclusions"
-msgstr "ERC istisnaları"
+msgstr "ERC (Elektriksel Kural Kontrolü) istisnaları"
 
 #: common/layer_id.cpp:105 common/layer_id.cpp:144
 #: pcbnew/widgets/appearance_controls.cpp:349
@@ -11890,7 +11890,7 @@ msgstr "Sembol Kütüphane Referansları"
 
 #: eeschema/dialogs/dialog_erc.cpp:118
 msgid "Run ERC"
-msgstr "ERC'yi çalıştırın"
+msgstr "ERC (Elektriksel Kural Kontrolü) çalıştır"
 
 #: eeschema/dialogs/dialog_erc.cpp:173
 msgid "Show Annotation dialog"
@@ -11899,7 +11899,8 @@ msgstr "Numaralandırma iletişim kutusunu göster"
 #: eeschema/dialogs/dialog_erc.cpp:186
 msgid "Schematic is not fully annotated. ERC results will be incomplete."
 msgstr ""
-"Şematik tam olarak numaralandırılmış değil. ERC sonuçları eksik olacaktır."
+"Şematik tam olarak numaralandırılmış değil. ERC (Elektriksel Kural Kontrolü) "
+"sonuçları eksik olacaktır."
 
 #: eeschema/dialogs/dialog_erc.cpp:317 pcbnew/dialogs/dialog_drc.cpp:1265
 msgid "Delete exclusions too?"
@@ -11926,7 +11927,9 @@ msgstr "%d sembol(ler) numaralanmış olmalı. <br><br>"
 
 #: eeschema/dialogs/dialog_erc.cpp:455
 msgid "-------- ERC cancelled by user.<br><br>"
-msgstr "-------- ERC kullanıcı tarafından iptal edildi. <br><br>"
+msgstr ""
+"-------- ERC (Elektriksel Kural Kontrolü) kullanıcı tarafından iptal edildi. "
+"<br><br>"
 
 #: eeschema/dialogs/dialog_erc.cpp:457 pcbnew/dialogs/dialog_drc.cpp:362
 msgid "Done.<br><br>"
@@ -12129,7 +12132,7 @@ msgstr "Elektrik Kuralları Denetleyicisi"
 
 #: eeschema/dialogs/dialog_erc_job_config.cpp:23
 msgid "ERC Job Settings"
-msgstr "ERC İş Ayarları"
+msgstr "ERC (Elektriksel Kural Kontrolü) İş Ayarları"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:221
 msgid "Export netlist in KiCad format"
@@ -13605,7 +13608,7 @@ msgstr "Elektriksel tipi:"
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:99
 msgid "Used by the ERC."
-msgstr "ERC tarafından kullanılır."
+msgstr "ERC (Elektriksel Kural Kontrolü) tarafından kullanılır."
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:106
 msgid "Graphic style:"
@@ -15979,15 +15982,15 @@ msgstr "Gizli alanları göster"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:109
 msgid "Show ERC errors"
-msgstr "ERC hatalarını göster"
+msgstr "ERC (Elektriksel Kural Kontrolü) hatalarını göster"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:112
 msgid "Show ERC warnings"
-msgstr "ERC uyarılarını göster"
+msgstr "ERC (Elektriksel Kural Kontrolü) uyarılarını göster"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:115
 msgid "Show ERC exclusions"
-msgstr "ERC istisnalarını göster"
+msgstr "ERC (Elektriksel Kural Kontrolü) istisnalarını göster"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:118
 msgid "Mark items which are excluded from simulation"
@@ -16904,12 +16907,12 @@ msgstr "%d ihlal bulundu\n"
 #: eeschema/eeschema_jobs_handler.cpp:1195
 #, c-format
 msgid "Unable to save ERC report to %s\n"
-msgstr "ERC raporu %s'ye kaydedilemiyor\n"
+msgstr "ERC (Elektriksel Kural Kontrolü) raporu %s'ye kaydedilemiyor\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:1200
 #, c-format
 msgid "Saved ERC Report to %s\n"
-msgstr "ERC Raporu %s'ye kaydedildi\n"
+msgstr "ERC (Elektriksel Kural Kontrolü) Raporu %s'ye kaydedildi\n"
 
 #: eeschema/eeschema_settings.cpp:71 eeschema/tools/sch_actions.cpp:958
 msgid "Net Navigator"
@@ -17363,7 +17366,7 @@ msgstr "Veriyolu Girişi gerekli"
 #: eeschema/erc/erc_report.cpp:48
 #, c-format
 msgid "ERC report (%s, Encoding UTF8)\n"
-msgstr "ERC raporu (%s, UTF8 Kodlaması)\n"
+msgstr "ERC (Elektriksel Kural Kontrolü) raporu (%s, UTF8 Kodlaması)\n"
 
 #: eeschema/erc/erc_report.cpp:80
 #, c-format
@@ -17381,7 +17384,7 @@ msgid ""
 " ** ERC messages: %d  Errors %d  Warnings %d\n"
 msgstr ""
 "\n"
-" ** ERC mesajları: %d Hatalar %d Uyarılar %d\n"
+" ** ERC (Elektriksel Kural Kontrolü) mesajları: %d Hatalar %d Uyarılar %d\n"
 
 #: eeschema/fields_grid_table.cpp:286 eeschema/files-io.cpp:912
 #: eeschema/tools/sch_editor_control.cpp:129
@@ -19617,7 +19620,7 @@ msgstr "Hariç tutulan"
 
 #: eeschema/sch_marker.h:102
 msgid "ERC Marker"
-msgstr "ERC İşaretçisi"
+msgstr "ERC (Elektriksel Kural Kontrolü) İşaretçisi"
 
 #: eeschema/sch_no_connect.h:98 eeschema/tools/sch_edit_tool.cpp:255
 msgid "No Connect"
@@ -23384,7 +23387,7 @@ msgstr "Yönerge Etiketlerini Göster"
 
 #: eeschema/tools/sch_actions.cpp:1181
 msgid "Show ERC Warnings"
-msgstr "ERC Uyarılarını Göster"
+msgstr "ERC (Elektriksel Kural Kontrolü) Uyarılarını Göster"
 
 #: eeschema/tools/sch_actions.cpp:1182
 msgid "Show markers for electrical rules checker warnings"
@@ -23392,7 +23395,7 @@ msgstr "Elektriksel kurallar denetleyicisi uyarıları için işaretleri göster
 
 #: eeschema/tools/sch_actions.cpp:1187
 msgid "Show ERC Errors"
-msgstr "ERC Hatalarını Göster"
+msgstr "ERC (Elektriksel Kural Kontrolü) Hatalarını Göster"
 
 #: eeschema/tools/sch_actions.cpp:1188
 msgid "Show markers for electrical rules checker errors"
@@ -23400,7 +23403,7 @@ msgstr "Elektriksel kural denetleyicisi hataları için işaretleyicileri göste
 
 #: eeschema/tools/sch_actions.cpp:1193
 msgid "Show ERC Exclusions"
-msgstr "ERC İstisnalarını Göster"
+msgstr "ERC (Elektriksel Kural Kontrolü) İstisnalarını Göster"
 
 #: eeschema/tools/sch_actions.cpp:1194
 msgid "Show markers for excluded electrical rules checker violations"
@@ -26614,7 +26617,7 @@ msgstr "Şematikler"
 msgid ""
 "Runs the Electrical Rules Check (ERC) on the schematic and creates a report"
 msgstr ""
-"Şematik üzerinde Elektrik Kuralları Kontrolünü (ERC) çalıştırır ve bir rapor "
+"Şematik üzerinde ERC (Elektriksel Kural Kontrolü) çalıştırır ve bir rapor "
 "oluştur"
 
 #: kicad/cli/command_sch_erc.cpp:58
@@ -26622,36 +26625,38 @@ msgid ""
 "Report all ERC violations, this is equivalent to including all the other "
 "severity arguments"
 msgstr ""
-"Tüm ERC ihlallerini bildir, bu diğer tüm önem derecesi argümanlarını dahil "
-"etmeye eşdeğerdir"
+"Tüm ERC (Elektriksel Kural Kontrolü) ihlallerini bildir, bu diğer tüm önem "
+"derecesi argümanlarını dahil etmeye eşdeğerdir"
 
 #: kicad/cli/command_sch_erc.cpp:63
 msgid ""
 "Report all ERC error level violations, this can be combined with the other "
 "severity arguments"
 msgstr ""
-"Tüm ERC hata seviyesi ihlallerini bildir, bu diğer önem derecesi argümanları "
-"ile birleştirilebilir"
+"Tüm ERC (Elektriksel Kural Kontrolü) hata seviyesi ihlallerini bildir, bu "
+"diğer önem derecesi argümanları ile birleştirilebilir"
 
 #: kicad/cli/command_sch_erc.cpp:68
 msgid ""
 "Report all ERC warning level violations, this can be combined with the other "
 "severity arguments"
 msgstr ""
-"Tüm ERC uyarı seviyesi ihlallerini bildir, bu diğer önem derecesi "
-"argümanları ile birleştirilebilir"
+"Tüm ERC (Elektriksel Kural Kontrolü) uyarı seviyesi ihlallerini bildir, bu "
+"diğer önem derecesi argümanları ile birleştirilebilir"
 
 #: kicad/cli/command_sch_erc.cpp:74
 msgid ""
 "Report all excluded ERC violations, this can be combined with the other "
 "severity arguments"
 msgstr ""
-"Hariç tutulan tüm ERC ihlallerini raporla, bu diğer önem derecesi "
-"argümanlarıyla birleştirilebilir"
+"Hariç tutulan tüm ERC (Elektriksel Kural Kontrolü) ihlallerini raporla, bu "
+"diğer önem derecesi argümanlarıyla birleştirilebilir"
 
 #: kicad/cli/command_sch_erc.cpp:79
 msgid "Return a nonzero exit code if ERC violations exist"
-msgstr "ERC ihlalleri varsa sıfır olmayan bir çıkış kodu döndür"
+msgstr ""
+"ERC (Elektriksel Kural Kontrolü) ihlalleri varsa sıfır olmayan bir çıkış "
+"kodu döndür"
 
 #: kicad/cli/command_sch_export.h:33
 msgid "Export utilities (netlist, pdf, bom, etc)"
@@ -48121,7 +48126,7 @@ msgstr "Rapor eksik olabilir: bazı ayak izi yerleşimleri hatalı."
 #: pcbnew/tools/board_inspection_tool.cpp:1488
 #: pcbnew/tools/board_inspection_tool.cpp:1512
 msgid "Run DRC for a full analysis."
-msgstr "Tam bir analiz içinDRC (Tasarım Kuralı Kontrolü) çalıştır."
+msgstr "Tam bir analiz için DRC (Tasarım Kuralı Kontrolü) çalıştır."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1495
 msgid "Item <b>disallowed</b> at current location."
@@ -48314,7 +48319,7 @@ msgstr "Ağ Seç:"
 
 #: pcbnew/tools/drawing_tool.cpp:4013
 msgid "Via location violates DRC."
-msgstr "Geçit konumu DRC'yi ihlal ediyor."
+msgstr "Geçit konumu DRC (Tasarım Kuralı Kontrolü) ihlal ediyor."
 
 #: pcbnew/tools/drawing_tool.cpp:4103
 msgid "Place via"
@@ -50769,7 +50774,7 @@ msgstr "Bölge(leri) Doldur"
 
 #: pcbnew/tools/zone_filler_tool.cpp:143 pcbnew/tools/zone_filler_tool.cpp:230
 msgid "Show DRC rules"
-msgstr "DRC kurallarını göster"
+msgstr "DRC (Tasarım Kuralı Kontrolü) kurallarını göster"
 
 #: pcbnew/tools/zone_filler_tool.cpp:150 pcbnew/tools/zone_filler_tool.cpp:237
 msgid "Rules"
@@ -50777,7 +50782,9 @@ msgstr "Kurallar"
 
 #: pcbnew/tools/zone_filler_tool.cpp:156 pcbnew/tools/zone_filler_tool.cpp:243
 msgid "Zone fills may be inaccurate.  DRC rules contain errors."
-msgstr "Bölge dolguları yanlış olabilir.  DRC kuralları hatalar içermektedir."
+msgstr ""
+"Bölge dolguları yanlış olabilir.  DRC (Tasarım Kuralı Kontrolü) kural "
+"hataları içermektedir."
 
 #: pcbnew/tools/zone_filler_tool.cpp:257
 #, c-format
@@ -50915,27 +50922,27 @@ msgstr "Bağlantısız ağları bağlantı ağı olarak göster"
 
 #: pcbnew/widgets/appearance_controls.cpp:346
 msgid "DRC Warnings"
-msgstr "DRC Uyarıları"
+msgstr "DRC (Tasarım Kuralı Kontrolü) Uyarıları"
 
 #: pcbnew/widgets/appearance_controls.cpp:346
 msgid "DRC violations with a Warning severity"
-msgstr "Uyarı önem derecesine sahip DRC ihlalleri"
+msgstr "Uyarı önem derecesine sahip DRC (Tasarım Kuralı Kontrolü) ihlalleri"
 
 #: pcbnew/widgets/appearance_controls.cpp:347
 msgid "DRC Errors"
-msgstr "DRC Hataları"
+msgstr "DRC (Tasarım Kuralı Kontrolü) Hataları"
 
 #: pcbnew/widgets/appearance_controls.cpp:347
 msgid "DRC violations with an Error severity"
-msgstr "Hata önem derecesine sahip DRC ihlalleri"
+msgstr "Hata önem derecesine sahip DRC (Tasarım Kuralı Kontrolü) ihlalleri"
 
 #: pcbnew/widgets/appearance_controls.cpp:348
 msgid "DRC Exclusions"
-msgstr "DRC İstisnaları"
+msgstr "DRC (Tasarım Kuralı Kontrolü) İstisnaları"
 
 #: pcbnew/widgets/appearance_controls.cpp:348
 msgid "DRC violations which have been individually excluded"
-msgstr "Ayrı ayrı hariç tutulan DRC ihlalleri"
+msgstr "Ayrı ayrı hariç tutulan DRC (Tasarım Kuralı Kontrolü) ihlalleri"
 
 #: pcbnew/widgets/appearance_controls.cpp:349
 msgid "Show footprint and text origins as a cross"
