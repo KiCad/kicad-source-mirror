@@ -1096,8 +1096,7 @@ int SCH_EDITOR_CONTROL::UpdateNetHighlighting( const TOOL_EVENT& aEvent )
     {
         connNames.emplace( selectedName );
 
-        if( CONNECTION_SUBGRAPH* sg =
-                    connectionGraph->FindSubgraphByName( selectedName, sheetPath ) )
+        if( CONNECTION_SUBGRAPH* sg = connectionGraph->FindSubgraphByName( selectedName, sheetPath ) )
         {
             if( m_highlightBusMembers )
             {
@@ -1107,8 +1106,7 @@ int SCH_EDITOR_CONTROL::UpdateNetHighlighting( const TOOL_EVENT& aEvent )
 
                     if( SCH_CONNECTION* connection = item->Connection() )
                     {
-                        for( const std::shared_ptr<SCH_CONNECTION>& member :
-                             connection->AllMembers() )
+                        for( const std::shared_ptr<SCH_CONNECTION>& member : connection->AllMembers() )
                         {
                             if( member )
                                 connNames.emplace( member->Name() );
@@ -1126,9 +1124,7 @@ int SCH_EDITOR_CONTROL::UpdateNetHighlighting( const TOOL_EVENT& aEvent )
             for( const auto& [_, bus_sgs] : sg->GetBusParents() )
             {
                 for( CONNECTION_SUBGRAPH* bus_sg : bus_sgs )
-                {
                     connNames.emplace( bus_sg->GetNetName() );
-                }
             }
 
         }
@@ -1136,9 +1132,7 @@ int SCH_EDITOR_CONTROL::UpdateNetHighlighting( const TOOL_EVENT& aEvent )
 
     for( SCH_ITEM* item : screen->Items() )
     {
-        wxCHECK2( item, continue );
-
-        if( !item->IsConnectable() )
+        if( !item || !item->IsConnectable() )
             continue;
 
         SCH_ITEM* redrawItem = nullptr;
