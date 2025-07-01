@@ -180,9 +180,9 @@ int SCH_EDIT_FRAME::GetSchematicJunctionSize()
 {
     std::vector<double>& sizeMultipliers = eeconfig()->m_Drawing.junction_size_mult_list;
 
-    const std::shared_ptr<NET_SETTINGS>& netSettings = Prj().GetProjectFile().NetSettings();
-    int sizeChoice = Schematic().Settings().m_JunctionSizeChoice;
-    int dotSize = KiROUND( netSettings->GetDefaultNetclass()->GetWireWidth() * sizeMultipliers[sizeChoice] );
+    PROJECT_FILE& projectFile = Prj().GetProjectFile();
+    double        multiplier = sizeMultipliers[projectFile.m_SchematicSettings->m_JunctionSizeChoice];
+    int           dotSize = KiROUND( projectFile.NetSettings()->GetDefaultNetclass()->GetWireWidth() * multiplier );
 
     return std::max( dotSize, 1 );
 }
@@ -192,7 +192,7 @@ double SCH_EDIT_FRAME::GetSchematicHopOverScale()
 {
     std::vector<double>& sizeMultipliers = eeconfig()->m_Drawing.junction_size_mult_list;
 
-    return sizeMultipliers[Schematic().Settings().m_HopOverSizeChoice];
+    return sizeMultipliers[Prj().GetProjectFile().m_SchematicSettings->m_HopOverSizeChoice];
 }
 
 
