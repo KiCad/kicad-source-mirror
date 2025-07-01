@@ -882,6 +882,9 @@ bool FOOTPRINT_EDIT_FRAME::SaveFootprintToBoard( bool aAddNew )
     FOOTPRINT* sourceFootprint  = nullptr;
     FOOTPRINT* editorFootprint = GetBoard()->GetFirstFootprint();
 
+    if( !editorFootprint )
+        return false;
+
     // Search the old footprint (source) if exists
     // Because this source could be deleted when editing the main board...
     if( editorFootprint->GetLink() != niluuid )        // this is not a new footprint ...
