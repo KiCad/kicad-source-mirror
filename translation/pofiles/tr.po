@@ -24,7 +24,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-06-27 22:51+0300\n"
-"PO-Revision-Date: 2025-06-30 21:02+0000\n"
+"PO-Revision-Date: 2025-07-02 13:01+0000\n"
 "Last-Translator: YÜKSEL AÇIKGÖZ <yukselacikgoz@gmail.com>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/kicad/v9/tr/>\n"
 "Language: tr\n"
@@ -21724,7 +21724,8 @@ msgstr "<b> Kapalı ızgara pimi %s </b> %s konumunda <b> (%s, %s) </b>."
 #: eeschema/symbol_checker.cpp:352
 #, c-format
 msgid "<b>Off grid pin %s</b> %s at location <b>(%s, %s)</b> in unit %c."
-msgstr "Izgara dışı pin %s , (%s, %s) konumunda birim %c içinde."
+msgstr ""
+"<b>Izgara dışı pin %s</b> %s konumunda <b>(%s, %s)</b>biriminde %c içinde."
 
 #: eeschema/symbol_checker.cpp:394
 #, c-format
