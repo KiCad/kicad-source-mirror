@@ -2073,8 +2073,6 @@ NETINFO_ITEM* BOARD::FindNet( int aNetcode ) const
     // zero is reserved for "no connection" and is not actually a net.
     // nullptr is returned for non valid netcodes
 
-    wxASSERT( m_NetInfo.GetNetCount() > 0 );
-
     if( aNetcode == NETINFO_LIST::UNCONNECTED && m_NetInfo.GetNetCount() == 0 )
         return NETINFO_LIST::OrphanedItem();
     else
