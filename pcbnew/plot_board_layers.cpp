@@ -510,8 +510,8 @@ void PlotStandardLayer( BOARD* aBoard, PLOTTER* aPlotter, LSET aLayerMask,
 
                             // Shape polygon can have holes so use InflateWithLinkedHoles(), not Inflate()
                             // which can create bad shapes if margin.x is < 0
-                            outline.InflateWithLinkedHoles( mask_clearance,
-                                                            CORNER_STRATEGY::ROUND_ALL_CORNERS, maxError );
+                            outline.InflateWithLinkedHoles( mask_clearance, CORNER_STRATEGY::ROUND_ALL_CORNERS,
+                                                            maxError );
                             dummy.DeletePrimitivesList();
                             dummy.AddPrimitivePoly( aLayer, outline, 0, true );
 
@@ -558,10 +558,9 @@ void PlotStandardLayer( BOARD* aBoard, PLOTTER* aPlotter, LSET aLayerMask,
                             dummy.SetOffset( aLayer, VECTOR2I( 0, 0 ) );
                             dummy.SetOrientation( ANGLE_0 );
                             SHAPE_POLY_SET outline;
-                            dummy.TransformShapeToPolygon( outline, UNDEFINED_LAYER, 0, maxError,
-                                                           ERROR_INSIDE );
-                            outline.InflateWithLinkedHoles( mask_clearance,
-                                                            CORNER_STRATEGY::ROUND_ALL_CORNERS, maxError );
+                            dummy.TransformShapeToPolygon( outline, aLayer, 0, maxError, ERROR_INSIDE );
+                            outline.InflateWithLinkedHoles( mask_clearance, CORNER_STRATEGY::ROUND_ALL_CORNERS,
+                                                            maxError );
 
                             // Initialize the dummy pad shape:
                             dummy.SetAnchorPadShape( aLayer, PAD_SHAPE::CIRCLE );
@@ -1085,8 +1084,7 @@ void GenerateLayerPoly( SHAPE_POLY_SET* aResult, BOARD *aBoard, PCB_LAYER_ID aLa
  *      page size is the 'drawing' page size,
  *      paper size is the physical page size
  */
-static void initializePlotter( PLOTTER* aPlotter, const BOARD* aBoard,
-                               const PCB_PLOT_PARAMS* aPlotOpts )
+static void initializePlotter( PLOTTER* aPlotter, const BOARD* aBoard, const PCB_PLOT_PARAMS* aPlotOpts )
 {
     PAGE_INFO pageA4( wxT( "A4" ) );
     const PAGE_INFO& pageInfo = aBoard->GetPageSettings();
