@@ -286,8 +286,6 @@ void LIB_TREE_MODEL_ADAPTER::UpdateSearchString( const wxString& aSearch, bool a
         Freeze();
         BeforeReset();
 
-        m_tree.ResetScore();
-
         // Don't cause KiCad to hang if someone accidentally pastes the PCB or schematic into
         // the search box.
         constexpr int MAX_TERMS = 100;
