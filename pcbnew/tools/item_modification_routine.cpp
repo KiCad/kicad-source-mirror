@@ -674,14 +674,13 @@ void OUTSET_ROUTINE::ProcessItem( BOARD_ITEM& aItem )
     // Not all items have a width, even if the parameters want to copy it
     // So fall back to the given width if we can't get one.
     int width = m_params.lineWidth;
+
     if( m_params.useSourceWidths )
     {
         std::optional<int> item_width = GetBoardItemWidth( aItem );
 
         if( item_width.has_value() )
-        {
             width = *item_width;
-        }
     }
 
     CHANGE_HANDLER& handler = GetHandler();
