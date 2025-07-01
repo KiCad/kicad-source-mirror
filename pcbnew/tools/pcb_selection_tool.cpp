@@ -1161,18 +1161,18 @@ bool PCB_SELECTION_TOOL::selectMultiple()
 
             for( const auto& [item, layer] : candidates )
             {
-                if( !candidate.first->IsBOARD_ITEM() )
+                if( !item->IsBOARD_ITEM() )
                     continue;
 
-                BOARD_ITEM* item = static_cast<BOARD_ITEM*>( item );
+                BOARD_ITEM* boardItem = static_cast<BOARD_ITEM*>( item );
 
-                if( item && Selectable( item ) && item->HitTest( selectionRect, !greedySelection )
-                        && ( greedySelection || !group_items.count( item ) ) )
+                if( Selectable( boardItem ) && boardItem->HitTest( selectionRect, !greedySelection )
+                        && ( greedySelection || !group_items.count( boardItem ) ) )
                 {
-                    if( item->Type() == PCB_PAD_T && !m_isFootprintEditor )
-                        padsCollector.Append( item );
+                    if( boardItem->Type() == PCB_PAD_T && !m_isFootprintEditor )
+                        padsCollector.Append( boardItem );
                     else
-                        collector.Append( item );
+                        collector.Append( boardItem );
                 }
             }
 
