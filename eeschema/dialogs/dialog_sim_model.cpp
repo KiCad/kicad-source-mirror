@@ -1354,8 +1354,11 @@ void DIALOG_SIM_MODEL<T>::onModelFilter( wxCommandEvent& aEvent )
     m_modelListBox->Clear();
     m_modelListBox->Append( modelNames );
 
-    if( !m_modelListBox->SetStringSelection( current ) )
-        m_modelListBox->SetSelection( 0 );
+    if( !m_modelListBox->IsEmpty() )
+    {
+        if( !m_modelListBox->SetStringSelection( current ) )
+            m_modelListBox->SetSelection( 0 );
+    }
 }
 
 
