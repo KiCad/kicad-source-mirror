@@ -61,8 +61,9 @@ PROJECT_TREE::PROJECT_TREE( PROJECT_TREE_PANE* parent ) :
 
 PROJECT_TREE::~PROJECT_TREE()
 {
-    delete m_imageList;
-    delete m_statusImageList;
+    // We pass ownership of these to wxWidgets in SetImageList() and SetStateImageList()
+    //delete m_imageList;
+    //delete m_statusImageList;
 }
 
 
