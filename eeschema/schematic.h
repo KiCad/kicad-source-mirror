@@ -97,7 +97,10 @@ public:
     SCH_SHEET_LIST BuildUnorderedSheetList() const
     {
         SCH_SHEET_LIST sheets;
-        sheets.BuildSheetList( m_rootSheet, false );
+
+        if( m_rootSheet )
+            sheets.BuildSheetList( m_rootSheet, false );
+
         return sheets;
     }
 
