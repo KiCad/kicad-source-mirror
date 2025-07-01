@@ -2160,12 +2160,10 @@ bool SCH_SELECTION_TOOL::selectMultiple()
             // Ensure candidates only have unique items
             std::set<SCH_ITEM*> uniqueCandidates;
 
-            for( const auto& candidate : candidates )
+            for( const auto& [viewItem, layer] : candidates )
             {
-                SCH_ITEM* schItem = dynamic_cast<SCH_ITEM*>( candidate.first );
-
-                if( schItem )
-                    uniqueCandidates.insert( schItem );
+                if( viewItem->IsSCH_ITEM() )
+                    uniqueCandidates.insert( static_cast<SCH_ITEM*>( viewItem ) );
             }
 
             for( KIGFX::VIEW_ITEM* item : uniqueCandidates )
@@ -2192,7 +2190,7 @@ bool SCH_SELECTION_TOOL::selectMultiple()
                 }
             }
 
-            // Construct a BOX2I to determine BOARD_ITEM selection
+            // Construct a BOX2I to determine SCH_ITEM selection
             BOX2I selectionRect( area.GetOrigin(), VECTOR2I( width, height ) );
 
             // Build lists of nearby items and their children
@@ -2216,6 +2214,9 @@ bool SCH_SELECTION_TOOL::selectMultiple()
                 {
                     for( EDA_ITEM* group_item : newset )
                     {
+                        if( !group_item->IsSCH_ITEM() )
+                            continue;
+
                         if( Selectable( static_cast<SCH_ITEM*>( group_item ) ) )
                             collector.Append( *newset.begin() );
                     }

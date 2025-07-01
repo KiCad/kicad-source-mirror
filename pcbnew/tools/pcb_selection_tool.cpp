@@ -1147,6 +1147,9 @@ bool PCB_SELECTION_TOOL::selectMultiple()
                 {
                     for( EDA_ITEM* group_item : newset )
                     {
+                        if( !group_item->IsBOARD_ITEM() )
+                            continue;
+
                         if( Selectable( static_cast<BOARD_ITEM*>( group_item ) ) )
                             collector.Append( *newset.begin() );
                     }
@@ -1156,12 +1159,12 @@ bool PCB_SELECTION_TOOL::selectMultiple()
                     group_items.emplace( group_item );
             }
 
-            for( const KIGFX::VIEW::LAYER_ITEM_PAIR& candidate : candidates )
+            for( const auto& [item, layer] : candidates )
             {
                 if( !candidate.first->IsBOARD_ITEM() )
                     continue;
 
-                BOARD_ITEM* item = static_cast<BOARD_ITEM*>( candidate.first );
+                BOARD_ITEM* item = static_cast<BOARD_ITEM*>( item );
 
                 if( item && Selectable( item ) && item->HitTest( selectionRect, !greedySelection )
                         && ( greedySelection || !group_items.count( item ) ) )
