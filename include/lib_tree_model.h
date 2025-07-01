@@ -51,7 +51,6 @@
  * Quick summary of methods used to drive this class:
  *
  * - `UpdateScore()` - accumulate scores recursively given a new search token
- * - `ResetScore()` - reset scores recursively for a new search string
  * - `AssignIntrinsicRanks()` - calculate and cache the initial sort order
  * - `SortNodes()` - recursively sort the tree by score
  * - `Compare()` - compare two nodes; used by `SortNodes()`
@@ -83,13 +82,6 @@ public:
      */
     virtual void UpdateScore( const std::vector<std::unique_ptr<EDA_COMBINED_MATCHER>>& aMatchers,
                               std::function<bool( LIB_TREE_NODE& aNode )>* aFilter ) = 0;
-
-    /**
-     * Initialize scores recursively.
-     */
-    virtual void ResetScore();
-
-    virtual void ForceScore( int aScore ) { m_Score = aScore; }
 
     /**
      * Store intrinsic ranks on all children of this node. See m_IntrinsicRank
