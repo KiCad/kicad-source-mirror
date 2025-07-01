@@ -2622,6 +2622,8 @@ const EMBEDDED_FILES* BOARD::GetEmbeddedFiles() const
 
 std::set<KIFONT::OUTLINE_FONT*> BOARD::GetFonts() const
 {
+    using PERMISSION = KIFONT::OUTLINE_FONT::EMBEDDING_PERMISSION;
+
     std::set<KIFONT::OUTLINE_FONT*> fonts;
 
     for( BOARD_ITEM* item : Drawings() )
@@ -2630,16 +2632,13 @@ std::set<KIFONT::OUTLINE_FONT*> BOARD::GetFonts() const
         {
             KIFONT::FONT* font = text->GetFont();
 
-            if( !font || font->IsStroke() )
-                continue;
-
-            using EMBEDDING_PERMISSION = KIFONT::OUTLINE_FONT::EMBEDDING_PERMISSION;
-            auto* outline = static_cast<KIFONT::OUTLINE_FONT*>( font );
-
-            if( outline->GetEmbeddingPermission() == EMBEDDING_PERMISSION::EDITABLE
-                || outline->GetEmbeddingPermission() == EMBEDDING_PERMISSION::INSTALLABLE )
+            if( font && font->IsOutline() )
             {
-                fonts.insert( outline );
+                KIFONT::OUTLINE_FONT* outlineFont = static_cast<KIFONT::OUTLINE_FONT*>( font );
+                PERMISSION            permission = outlineFont->GetEmbeddingPermission();
+
+                if( permission == PERMISSION::EDITABLE || permission == PERMISSION::INSTALLABLE )
+                    fonts.insert( outlineFont );
             }
         }
     }
@@ -2650,9 +2649,7 @@ std::set<KIFONT::OUTLINE_FONT*> BOARD::GetFonts() const
 
 void BOARD::EmbedFonts()
 {
-    std::set<KIFONT::OUTLINE_FONT*> fonts = GetFonts();
-
-    for( KIFONT::OUTLINE_FONT* font : fonts )
+    for( KIFONT::OUTLINE_FONT* font : GetFonts() )
     {
         auto file = GetEmbeddedFiles()->AddFile( font->GetFileName(), false );
         file->type = EMBEDDED_FILES::EMBEDDED_FILE::FILE_TYPE::FONT;

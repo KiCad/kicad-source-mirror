@@ -3969,8 +3969,7 @@ void FOOTPRINT::TransformPadsToPolySet( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID aL
             }
             else
             {
-                pad->TransformShapeToPolygon( aBuffer, padLayer, clearance.x, aMaxError,
-                                              aErrorLoc );
+                pad->TransformShapeToPolygon( aBuffer, padLayer, clearance.x, aMaxError, aErrorLoc );
             }
         };
 
@@ -3995,10 +3994,9 @@ void FOOTPRINT::TransformPadsToPolySet( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID aL
 }
 
 
-void FOOTPRINT::TransformFPShapesToPolySet( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID aLayer,
-                                            int aClearance, int aError, ERROR_LOC aErrorLoc,
-                                            bool aIncludeText, bool aIncludeShapes,
-                                            bool aIncludePrivateItems ) const
+void FOOTPRINT::TransformFPShapesToPolySet( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID aLayer, int aClearance,
+                                            int aError, ERROR_LOC aErrorLoc, bool aIncludeText,
+                                            bool aIncludeShapes, bool aIncludePrivateItems ) const
 {
     for( BOARD_ITEM* item : GraphicalItems() )
     {
@@ -4021,10 +4019,7 @@ void FOOTPRINT::TransformFPShapesToPolySet( SHAPE_POLY_SET& aBuffer, PCB_LAYER_I
             {
                 // border
                 if( textbox->IsBorderEnabled() )
-                {
-                    textbox->PCB_SHAPE::TransformShapeToPolygon( aBuffer, aLayer, 0, aError,
-                                                                 aErrorLoc );
-                }
+                    textbox->PCB_SHAPE::TransformShapeToPolygon( aBuffer, aLayer, 0, aError, aErrorLoc );
 
                 // text
                 textbox->TransformTextToPolySet( aBuffer, 0, aError, aErrorLoc );
@@ -4053,28 +4048,33 @@ void FOOTPRINT::TransformFPShapesToPolySet( SHAPE_POLY_SET& aBuffer, PCB_LAYER_I
 
 std::set<KIFONT::OUTLINE_FONT*> FOOTPRINT::GetFonts() const
 {
-    using OUTLINE_FONT = KIFONT::OUTLINE_FONT;
-    using EMBEDDING_PERMISSION = OUTLINE_FONT::EMBEDDING_PERMISSION;
+    using PERMISSION = KIFONT::OUTLINE_FONT::EMBEDDING_PERMISSION;
 
-    std::set<OUTLINE_FONT*> fonts;
+    std::set<KIFONT::OUTLINE_FONT*> fonts;
+
+    auto processItem =
+            [&]( BOARD_ITEM* item )
+            {
+                if( EDA_TEXT* text = dynamic_cast<EDA_TEXT*>( item ) )
+                {
+                    KIFONT::FONT* font = text->GetFont();
+
+                    if( font && font->IsOutline() )
+                    {
+                        KIFONT::OUTLINE_FONT* outlineFont = static_cast<KIFONT::OUTLINE_FONT*>( font );
+                        PERMISSION            permission = outlineFont->GetEmbeddingPermission();
+
+                        if( permission == PERMISSION::EDITABLE || permission == PERMISSION::INSTALLABLE )
+                            fonts.insert( outlineFont );
+                    }
+                }
+            };
 
     for( BOARD_ITEM* item : GraphicalItems() )
-    {
-        if( auto* text = dynamic_cast<EDA_TEXT*>( item ) )
-        {
-            if( auto* font = text->GetFont(); font && !font->IsStroke() )
-            {
-                auto* outline = static_cast<OUTLINE_FONT*>( font );
-                auto permission = outline->GetEmbeddingPermission();
+        processItem( item );
 
-                if( permission == EMBEDDING_PERMISSION::EDITABLE
-                    || permission == EMBEDDING_PERMISSION::INSTALLABLE )
-                {
-                    fonts.insert( outline );
-                }
-            }
-        }
-    }
+    for( PCB_FIELD* field : GetFields() )
+        processItem( field );
 
     return fonts;
 }
@@ -4082,11 +4082,9 @@ std::set<KIFONT::OUTLINE_FONT*> FOOTPRINT::GetFonts() const
 
 void FOOTPRINT::EmbedFonts()
 {
-    std::set<KIFONT::OUTLINE_FONT*> fonts = GetFonts();
-
-    for( auto* font : fonts )
+    for( KIFONT::OUTLINE_FONT* font : GetFonts() )
     {
-        auto file = GetEmbeddedFiles()->AddFile( font->GetFileName(), false );
+        EMBEDDED_FILES::EMBEDDED_FILE* file = GetEmbeddedFiles()->AddFile( font->GetFileName(), false );
         file->type = EMBEDDED_FILES::EMBEDDED_FILE::FILE_TYPE::FONT;
     }
 }
