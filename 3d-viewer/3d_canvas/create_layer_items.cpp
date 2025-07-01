@@ -671,6 +671,9 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
                 addShape( static_cast<PCB_DIMENSION_BASE*>( item ), layerContainer, item );
                 break;
 
+            case PCB_REFERENCE_IMAGE_T:     // ignore
+                break;
+
             default:
                 wxLogTrace( m_logTrace, wxT( "createLayers: item type: %d not implemented" ), item->Type() );
                 break;
@@ -696,7 +699,7 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
                     PCB_TEXT* text = static_cast<PCB_TEXT*>( item );
                     text->TransformTextToPolySet( *copperPolys, 0, maxError, ERROR_INSIDE );
                 }
-                else
+                else if( item->Type() != PCB_REFERENCE_IMAGE_T )
                 {
                     item->TransformShapeToPolygon( *copperPolys, layer, 0, maxError, ERROR_INSIDE );
                 }
@@ -769,6 +772,9 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
 
                     break;
                 }
+
+                case PCB_REFERENCE_IMAGE_T:     // ignore
+                    break;
 
                 default:
                     wxLogTrace( m_logTrace, wxT( "createLayers: item type: %d not implemented" ), item->Type() );
