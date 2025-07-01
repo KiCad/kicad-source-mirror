@@ -73,7 +73,7 @@ void SYMBOL_EDIT_FRAME::UpdateTitle()
 
         title += UnescapeString( GetCurSymbol()->GetLibId().Format() );
 
-        if( m_libMgr && m_libMgr->IsLibraryReadOnly( GetCurLib() ) )
+        if( m_libMgr && m_libMgr->LibraryExists( GetCurLib() ) && m_libMgr->IsLibraryReadOnly( GetCurLib() ) )
             title += wxS( " " ) + _( "[Read Only Library]" );
     }
     else
