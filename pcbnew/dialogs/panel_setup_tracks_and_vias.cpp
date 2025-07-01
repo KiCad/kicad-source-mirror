@@ -138,6 +138,9 @@ void PANEL_SETUP_TRACKS_AND_VIAS::OnSortTrackWidthsClick( wxCommandEvent& aEvent
     std::vector<int> trackWidths;
     wxString         msg;
 
+    m_trackWidthsGrid->ClearSelection();
+    wxSafeYield();
+
     wxGridUpdateLocker lock( m_trackWidthsGrid );
 
     for( int row = 0; row < m_trackWidthsGrid->GetNumberRows();  ++row )
@@ -149,7 +152,7 @@ void PANEL_SETUP_TRACKS_AND_VIAS::OnSortTrackWidthsClick( wxCommandEvent& aEvent
     }
 
     std::sort( trackWidths.begin(), trackWidths.end() );
-    m_trackWidthsGrid->DeleteRows(0, m_trackWidthsGrid->GetNumberRows(), false);
+    m_trackWidthsGrid->DeleteRows( 0, m_trackWidthsGrid->GetNumberRows(), false );
 
     for( int width : trackWidths )
         AppendTrackWidth( width );
@@ -160,6 +163,9 @@ void PANEL_SETUP_TRACKS_AND_VIAS::OnSortViaSizesClick( wxCommandEvent& aEvent )
 {
     std::vector<VIA_DIMENSION> vias;
     wxString                   msg;
+
+    m_trackWidthsGrid->ClearSelection();
+    wxSafeYield();
 
     wxGridUpdateLocker lock( m_viaSizesGrid );
 
@@ -182,7 +188,7 @@ void PANEL_SETUP_TRACKS_AND_VIAS::OnSortViaSizesClick( wxCommandEvent& aEvent )
     }
 
     std::sort( vias.begin(), vias.end() );
-    m_viaSizesGrid->DeleteRows(0, m_viaSizesGrid->GetNumberRows(), false );
+    m_viaSizesGrid->DeleteRows( 0, m_viaSizesGrid->GetNumberRows(), false );
 
     for( const VIA_DIMENSION& via : vias )
         AppendViaSize( via.m_Diameter, via.m_Drill );
@@ -193,6 +199,9 @@ void PANEL_SETUP_TRACKS_AND_VIAS::OnSortDiffPairsClick( wxCommandEvent& aEvent )
 {
     wxString                         msg;
     std::vector<DIFF_PAIR_DIMENSION> diffPairs;
+
+    m_trackWidthsGrid->ClearSelection();
+    wxSafeYield();
 
     wxGridUpdateLocker lock( m_diffPairsGrid );
 
@@ -218,7 +227,7 @@ void PANEL_SETUP_TRACKS_AND_VIAS::OnSortDiffPairsClick( wxCommandEvent& aEvent )
     }
 
     std::sort( diffPairs.begin(), diffPairs.end() );
-    m_diffPairsGrid->DeleteRows(0, m_diffPairsGrid->GetNumberRows(), false );
+    m_diffPairsGrid->DeleteRows( 0, m_diffPairsGrid->GetNumberRows(), false );
 
     for( const DIFF_PAIR_DIMENSION& dp : diffPairs )
         AppendDiffPairs( dp.m_Width, dp.m_Gap, dp.m_ViaGap );
