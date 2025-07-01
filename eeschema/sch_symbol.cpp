@@ -1107,15 +1107,13 @@ SCH_PIN* SCH_SYMBOL::GetPin( SCH_PIN* aLibPin ) const
 std::vector<SCH_PIN*> SCH_SYMBOL::GetPins( const SCH_SHEET_PATH* aSheet ) const
 {
     std::vector<SCH_PIN*> pins;
+    int                   unit = m_unit;
 
-    if( aSheet == nullptr )
-    {
-        wxCHECK_MSG( Schematic(), pins, "Can't call GetPins on a symbol with no schematic" );
-
+    if( !aSheet && Schematic() )
         aSheet = &Schematic()->CurrentSheet();
-    }
 
-    int unit = GetUnitSelection( aSheet );
+    if( aSheet )
+        unit = GetUnitSelection( aSheet );
 
     for( const std::unique_ptr<SCH_PIN>& p : m_pins )
     {
