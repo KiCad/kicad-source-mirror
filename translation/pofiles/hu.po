@@ -13,8 +13,8 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-06-27 22:51+0300\n"
-"PO-Revision-Date: 2025-06-23 21:01+0000\n"
-"Last-Translator: Miklós Márton <martonmiklosqdev@gmail.com>\n"
+"PO-Revision-Date: 2025-07-02 22:11+0000\n"
+"Last-Translator: Sárkány Lőrinc <lsarkany@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/kicad/v9/hu/>\n"
 "Language: hu\n"
 "MIME-Version: 1.0\n"
@@ -40940,9 +40940,8 @@ msgstr "Átmenő"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:350
 #: pcbnew/pcb_track.cpp:2088
-#, fuzzy
 msgid "Micro"
-msgstr "μVia"
+msgstr "Mikro"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:350
 #: pcbnew/pcb_track.cpp:2087
