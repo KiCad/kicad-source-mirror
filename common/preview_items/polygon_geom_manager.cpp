@@ -107,7 +107,8 @@ bool POLYGON_GEOM_MANAGER::IsSelfIntersecting( bool aIncludeLeaderPts ) const
 
 void POLYGON_GEOM_MANAGER::SetCursorPosition( const VECTOR2I& aPos )
 {
-    updateTemporaryLines( aPos );
+    if( m_lockedPoints.PointCount() > 0 )
+        updateTemporaryLines( aPos );
 }
 
 
