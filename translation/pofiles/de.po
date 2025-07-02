@@ -31,7 +31,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-06-27 22:51+0300\n"
-"PO-Revision-Date: 2025-07-02 12:01+0000\n"
+"PO-Revision-Date: 2025-07-02 22:11+0000\n"
 "Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
@@ -44947,9 +44947,9 @@ msgid "Add %s to group \"%s\"."
 msgstr "%s zur Gruppe \"%s\" hinzufügen."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:899
-#, fuzzy, c-format
+#, c-format
 msgid "Added %s group \"%s\"."
-msgstr "%s hinzugefügt (Footprint \"%s\")."
+msgstr "%s hinzugefügt Gruppe \"%s\"."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1001
 #, c-format
@@ -45131,14 +45131,14 @@ msgstr ""
 "Spalte: %d"
 
 #: pcbnew/netlist_reader/kicad_netlist_reader.cpp:675
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Invalid lib_id ID in\n"
 "file: '%s'\n"
 "line: %d\n"
 "offf: %d"
 msgstr ""
-"Unzulässige Footprint-ID in\n"
+"Unzulässige lib_id ID in\n"
 "Datei: \"%s\"\n"
 "Zeile: %d\n"
 "Spalte: %d"
@@ -45583,17 +45583,14 @@ msgid "Design block '%s' already has a layout."
 msgstr "Designblock \"%s\" hat bereits ein Layout."
 
 #: pcbnew/pcb_design_block_utils.cpp:71
-#, fuzzy
 msgid "Overwrite existing layout?"
-msgstr "Bestehende Voreinstellung überschreiben?"
+msgstr "Bestehendes Layout überschreiben?"
 
 #: pcbnew/pcb_design_block_utils.cpp:154 pcbnew/pcb_design_block_utils.cpp:211
 #: pcbnew/pcb_design_block_utils.cpp:305
-#, fuzzy
 msgid "Error saving temporary board file to create design block."
 msgstr ""
-"Fehler beim Speichern der temporären Schaltplandatei um Designblock zu "
-"erstellen."
+"Fehler beim Speichern temporärer Platinendatei um Designblock zu erstellen."
 
 #: pcbnew/pcb_dimension.cpp:611 pcbnew/pcb_dimension.cpp:1834
 msgid "Prefix"
@@ -47543,11 +47540,11 @@ msgid "No layers selected for plotting."
 msgstr "Keine Lage fürs Plotten ausgewählt."
 
 #: pcbnew/pcb_plotter.cpp:481
-#, fuzzy, c-format
+#, c-format
 msgid "Color theme '%s' not found, will use theme from PCB Editor.\n"
 msgstr ""
-"Farbthema \"%s\" nicht gefunden, stattdessen werden die PCB-Editor-"
-"Einstellungen verwendet.\n"
+"Farbthema \"%s\" nicht gefunden, stattdessen werden das des "
+"Leiterplatteneditors verwendet.\n"
 
 #: pcbnew/pcb_reference_image.cpp:350
 msgid "Associated Layer"
@@ -47644,14 +47641,12 @@ msgid "Segment Length"
 msgstr "Segmentlänge"
 
 #: pcbnew/pcb_track.cpp:1823
-#, fuzzy
 msgid "Segment Delay"
-msgstr "Abschnitt"
+msgstr "Abschnittsverzögerung"
 
 #: pcbnew/pcb_track.cpp:1869
-#, fuzzy
 msgid "Copper Area"
-msgstr "Kupferzone"
+msgstr "Kupferfläche"
 
 #: pcbnew/pcb_track.cpp:1884
 #, c-format
@@ -47704,14 +47699,12 @@ msgid "Not tented"
 msgstr "Nicht abgedeckt"
 
 #: pcbnew/pcb_track.cpp:2315
-#, fuzzy
 msgid "Covered"
-msgstr "Schwebende Elemente"
+msgstr "Bedeckt"
 
 #: pcbnew/pcb_track.cpp:2316
-#, fuzzy
 msgid "Not covered"
-msgstr "Nicht gespiegelt"
+msgstr "Unbedeckt"
 
 #: pcbnew/pcb_track.cpp:2321
 #, fuzzy
@@ -47733,9 +47726,8 @@ msgid "Not capped"
 msgstr "Nicht verbunden"
 
 #: pcbnew/pcb_track.cpp:2334
-#, fuzzy
 msgid "Not filled"
-msgstr "<Nicht definiert>"
+msgstr "Nicht gefüllt"
 
 #: pcbnew/pcb_track.cpp:2398
 msgid "Via Properties"
@@ -47786,14 +47778,12 @@ msgid "Capping"
 msgstr "Überkontaktieren"
 
 #: pcbnew/pcb_track.cpp:2427
-#, fuzzy
 msgid "Filling"
-msgstr "Füllen"
+msgstr "Füllung"
 
 #: pcbnew/pcbexpr_evaluator.cpp:681
-#, fuzzy
 msgid "must be mm, in, mil, deg, fs, or ps"
-msgstr "muss mm, in oder mil sein"
+msgstr "muss mm, in, mil, deg, fs, oder ps sein"
 
 #: pcbnew/pcbexpr_functions.cpp:76
 #, c-format
@@ -47858,9 +47848,8 @@ msgid "Missing netclass name argument to hasNetclass()"
 msgstr "Fehlendes Netzklassen-Argument für hasNetclass()"
 
 #: pcbnew/pcbexpr_functions.cpp:1325
-#, fuzzy
 msgid "Missing netclass name argument to hasExactNetclass()"
-msgstr "Fehlendes Netzklassen-Argument für hasNetclass()"
+msgstr "Fehlendes Netzklassen-Argument für hasExactNetclass()"
 
 #: pcbnew/pcbexpr_functions.cpp:1365
 msgid "Missing component class name argument to hasComponentClass()"
@@ -48524,9 +48513,8 @@ msgid "A wire_via refers to missing padstack '%s'."
 msgstr "Ein wire_via verweist auf den fehlenden Padstack \"%s\"."
 
 #: pcbnew/toolbars_footprint_editor.cpp:103 pcbnew/toolbars_pcb_editor.cpp:217
-#, fuzzy
 msgid "Dimension objects"
-msgstr "Bemaßungstext"
+msgstr "Bemaßungsobjekte"
 
 #: pcbnew/toolbars_pcb_editor.cpp:124
 msgid "Track width selector"
@@ -48549,14 +48537,12 @@ msgid "Track routing tools"
 msgstr "Leiterbahn-Verlegewerkzeuge"
 
 #: pcbnew/toolbars_pcb_editor.cpp:198
-#, fuzzy
 msgid "Track tuning tools"
-msgstr "Leiterbahnwinkel"
+msgstr "Leiterbahnabstimmungswerkzeuge"
 
 #: pcbnew/toolbars_pcb_editor.cpp:226
-#, fuzzy
 msgid "PCB origins"
-msgstr "Seitenursprung"
+msgstr "Leiterplattenursprung"
 
 #: pcbnew/toolbars_pcb_editor.cpp:376
 msgid ""
