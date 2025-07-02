@@ -139,7 +139,7 @@ bool DIALOG_DESTINATION::TransferDataFromWindow()
     if( m_destination->m_type == JOBSET_DESTINATION_T::ARCHIVE )
     {
         JOBS_OUTPUT_ARCHIVE* archive =
-                static_cast<JOBS_OUTPUT_ARCHIVE*>( m_destination->m_outputHandler );
+                static_cast<JOBS_OUTPUT_ARCHIVE*>( m_destination->m_outputHandler.get() );
 
         archive->SetFormat( JOBS_OUTPUT_ARCHIVE::FORMAT::ZIP );
     }
