@@ -41,10 +41,7 @@ bool NETLIST_EXPORTER_ALLEGRO::WriteNetlist( const wxString& aOutFileName,
                                              REPORTER& aReporter )
 {
     m_f = nullptr;
-    wxString    field;
-    wxString    footprint;
-    int         ret = 0;        // zero now, OR in the sign bit on error
-    wxString    netName;
+    int ret = 0; // zero now, OR in the sign bit on error
 
     // Create the devices directory
     m_exportPath = wxFileName( aOutFileName ).GetPath( wxPATH_GET_VOLUME | wxPATH_GET_SEPARATOR )
@@ -188,10 +185,6 @@ void NETLIST_EXPORTER_ALLEGRO::extractComponentsInfo()
         }
     }
 
-    wxString    netCodeTxt;
-    wxString    netName;
-    wxString    ref;
-
     struct NET_RECORD
     {
         NET_RECORD( const wxString& aName ) :
@@ -275,7 +268,6 @@ void NETLIST_EXPORTER_ALLEGRO::extractComponentsInfo()
         for( const NET_NODE& netNode : net_record->m_Nodes )
         {
             wxString refText = netNode.m_Pin->GetParentSymbol()->GetRef( &netNode.m_Sheet );
-            wxString pinText = netNode.m_Pin->GetShownNumber();
 
             // Skip power symbols and virtual symbols
             if( refText[0] == wxChar( '#' ) )

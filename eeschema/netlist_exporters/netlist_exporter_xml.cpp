@@ -806,12 +806,9 @@ XNODE* NETLIST_EXPORTER_XML::makeLibParts()
 
 XNODE* NETLIST_EXPORTER_XML::makeListOfNets( unsigned aCtl )
 {
-    XNODE*      xnets = node( wxT( "nets" ) );      // auto_ptr if exceptions ever get used.
-    wxString    netCodeTxt;
-    wxString    netName;
-    wxString    ref;
-
-    XNODE*      xnet = nullptr;
+    wxString netCodeTxt;
+    XNODE*   xnets = node( wxT( "nets" ) ); // auto_ptr if exceptions ever get used.
+    XNODE*   xnet = nullptr;
 
     /*  output:
         <net code="123" name="/cfcard.sch/WAIT#" class="signal">

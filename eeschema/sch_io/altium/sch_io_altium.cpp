@@ -956,8 +956,8 @@ void SCH_IO_ALTIUM::ParseStorage( const ALTIUM_COMPOUND_FILE& aAltiumSchFile )
     ALTIUM_BINARY_PARSER reader( aAltiumSchFile, file );
 
     std::map<wxString, wxString> properties = reader.ReadProperties();
-    wxString header = ALTIUM_PROPS_UTILS::ReadString( properties, "HEADER", "" );
-    int      weight = ALTIUM_PROPS_UTILS::ReadInt( properties, "WEIGHT", 0 );
+    ALTIUM_PROPS_UTILS::ReadString( properties, "HEADER", "" );
+    int weight = ALTIUM_PROPS_UTILS::ReadInt( properties, "WEIGHT", 0 );
 
     if( weight < 0 )
         THROW_IO_ERROR( "Storage weight is negative!" );

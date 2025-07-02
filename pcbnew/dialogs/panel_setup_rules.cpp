@@ -198,7 +198,6 @@ void PANEL_SETUP_RULES::onScintillaCharAdded( wxStyledTextEvent &aEvent )
 
     m_textEditor->SearchAnchor();
 
-    wxString rules = m_textEditor->GetText();
     int currentPos = m_textEditor->GetCurrentPos();
     int startPos = 0;
 

@@ -121,7 +121,6 @@ void NETLIST_EXPORTER_SPICE::WriteTail( OUTPUTFORMATTER& aFormatter, unsigned aN
 bool NETLIST_EXPORTER_SPICE::ReadSchematicAndLibraries( unsigned aNetlistOptions,
                                                         REPORTER& aReporter )
 {
-    wxString              msg;
     std::set<std::string> refNames; // Set of reference names to check for duplication.
     int                   ncCounter = 1;
 
@@ -297,7 +296,6 @@ const SPICE_ITEM* NETLIST_EXPORTER_SPICE::FindItem( const wxString& aRefName ) c
 
 void NETLIST_EXPORTER_SPICE::ReadDirectives( unsigned aNetlistOptions )
 {
-    wxString msg;
     wxString text;
 
     m_directives.clear();

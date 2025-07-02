@@ -445,7 +445,7 @@ void SCH_CONNECTION::SetSuffix( const wxString& aSuffix )
 
 void SCH_CONNECTION::AppendInfoToMsgPanel( std::vector<MSG_PANEL_ITEM>& aList ) const
 {
-    wxString msg, group_name, members;
+    wxString msg, group_name;
     std::vector<wxString> group_members;
 
     aList.emplace_back( _( "Connection Name" ), UnescapeString( Name() ) );

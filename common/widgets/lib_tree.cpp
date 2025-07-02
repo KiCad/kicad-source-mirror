@@ -151,8 +151,7 @@ LIB_TREE::LIB_TREE( wxWindow* aParent, const wxString& aRecentSearchesKey, LIB_T
         m_query_ctrl->Bind( wxEVT_MENU,
                 [this]( wxCommandEvent& aEvent )
                 {
-                    wxString search;
-                    size_t   idx = aEvent.GetId() - 1;
+                    size_t idx = aEvent.GetId() - 1;
 
                     if( idx < g_recentSearches[ m_recentSearchesKey ].size() )
                         m_query_ctrl->SetValue( g_recentSearches[ m_recentSearchesKey ][idx] );

@@ -207,7 +207,6 @@ void SCH_EDIT_FRAME::MakeNetNavigatorNode( const wxString& aNetName, wxTreeItemI
 
     wxCHECK( connectionGraph, /* void */ );
 
-    wxString sheetPathPrefix;
     std::set<CONNECTION_SUBGRAPH*> subgraphs;
 
     {

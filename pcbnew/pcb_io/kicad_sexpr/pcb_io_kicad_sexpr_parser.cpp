@@ -1324,8 +1324,6 @@ void PCB_IO_KICAD_SEXPR_PARSER::resolveGroups( BOARD_ITEM* aParent )
             static_cast<BOARD*>( groupInfo->parent )->Add( group, ADD_MODE::INSERT, true );
     }
 
-    wxString error;
-
     for( const GROUP_INFO* groupInfo : groupTypeObjects )
     {
         if( PCB_GROUP* group = dynamic_cast<PCB_GROUP*>( getItem( groupInfo->uuid ) ) )
@@ -4623,8 +4621,6 @@ FOOTPRINT* PCB_IO_KICAD_SEXPR_PARSER::parseFOOTPRINT_unchecked( wxArrayString* a
 
         case T_property:
         {
-            wxString value;
-
             NeedSYMBOL();
             wxString pName = FromUTF8();
             NeedSYMBOL();

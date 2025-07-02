@@ -254,8 +254,7 @@ bool PROJECT_ARCHIVER::Archive( const wxString& aSrcDir, const wxString& aDestFi
 
     wxZipOutputStream zipstream( ostream, -1, wxConvUTF8 );
 
-    wxDir         projectDir( aSrcDir );
-    wxString      currFilename;
+    wxDir projectDir( aSrcDir );
 
     if( !projectDir.IsOpened() )
     {

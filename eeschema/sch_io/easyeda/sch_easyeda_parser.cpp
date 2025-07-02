@@ -717,7 +717,7 @@ void SCH_EASYEDA_PARSER::ParseSymbolShapes( LIB_SYMBOL*                  aSymbol
             wxString pinName = pinNameParts[4];
 
             bool     numVisible = pinNumParts[0] != wxS( "0" );
-            wxString ptSize = pinNumParts[4];
+            // wxString ptSize = pinNumParts[4];
 
             VECTOR2D startPoint;
             bool     vertical = false;
@@ -846,7 +846,7 @@ void SCH_EASYEDA_PARSER::ParseSymbolShapes( LIB_SYMBOL*                  aSymbol
             wxString textType = arr[1];
             VECTOR2D pos( Convert( arr[2] ), Convert( arr[3] ) );
             int      angle = Convert( arr[4] );
-            wxString color = arr[5];
+            // wxString color = arr[5];
             wxString fontname = arr[6];
             wxString fontSize = arr[7];
             wxString baselineAlign = arr[10];
@@ -1145,8 +1145,8 @@ void SCH_EASYEDA_PARSER::ParseSchematic( SCHEMATIC* aSchematic, SCH_SHEET* aRoot
             sepShapeStr.Replace( wxS( "^^" ), wxS( "\n" ) );
 
             wxArrayString segments = wxSplit( sepShapeStr, '\n', '\0' );
-            wxArrayString mainParts = wxSplit( segments[0], '~', '\0' );
-            wxArrayString uselessParts = wxSplit( segments[1], '~', '\0' );
+            // wxArrayString mainParts = wxSplit( segments[0], '~', '\0' );
+            // wxArrayString uselessParts = wxSplit( segments[1], '~', '\0' );
             wxArrayString valueParts = wxSplit( segments[2], '~', '\0' );
 
             wxString flagTypename = arr[1];
@@ -1305,10 +1305,10 @@ void SCH_EASYEDA_PARSER::ParseSchematic( SCHEMATIC* aSchematic, SCH_SHEET* aRoot
         else if( rootType == wxS( "W" ) )
         {
             wxArrayString ptArr = wxSplit( arr[1], ' ', '\0' );
-            wxString      strokeColor = arr[2];
+            //wxString      strokeColor = arr[2];
             //double        lineWidth = Convert( arr[3] );
             //LINE_STYLE    strokeStyle = ConvertStrokeStyle( arr[4] );
-            wxString      fillColor = arr[5].Lower();
+            //wxString      fillColor = arr[5].Lower();
             //bool          locked = arr[7] != wxS( "0" );
 
             SHAPE_LINE_CHAIN chain;
@@ -1335,8 +1335,8 @@ void SCH_EASYEDA_PARSER::ParseSchematic( SCHEMATIC* aSchematic, SCH_SHEET* aRoot
             VECTOR2D text_pos( Convert( arr[8] ),
                                Convert( arr[9] ) ); // TODO: detect top/bottom align
 
-            wxString fontname = arr[10];
-            wxString fontSize = arr[11];
+            // wxString fontname = arr[10];
+            // wxString fontSize = arr[11];
 
             std::unique_ptr<SCH_LABEL> label =
                     std::make_unique<SCH_LABEL>( RelPos( pos ), netname );
@@ -1376,7 +1376,7 @@ void SCH_EASYEDA_PARSER::ParseSchematic( SCHEMATIC* aSchematic, SCH_SHEET* aRoot
         {
             VECTOR2D pos( Convert( arr[2] ), Convert( arr[3] ) );
             int      angle = Convert( arr[4] );
-            wxString color = arr[5];
+            // wxString color = arr[5];
             wxString fontname = arr[6];
             wxString fontSize = arr[7];
             wxString baselineAlign = arr[10];

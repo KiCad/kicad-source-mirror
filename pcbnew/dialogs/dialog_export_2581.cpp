@@ -367,7 +367,6 @@ bool DIALOG_EXPORT_2581::TransferDataFromWindow()
         }
 
         PROJECT_FILE& prj = Prj().GetProjectFile();
-        wxString      empty;
 
         prj.m_IP2581Bom.id = GetOEM();
         prj.m_IP2581Bom.mfg = GetMfg();

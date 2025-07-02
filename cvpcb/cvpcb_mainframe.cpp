@@ -1030,9 +1030,7 @@ void CVPCB_MAINFRAME::BuildLibrariesList()
 
     if( tbl )
     {
-        wxArrayString libNames;
-
-        std::vector< wxString > libNickNames = tbl->GetLogicalLibs();
+        std::vector<wxString> libNickNames = tbl->GetLogicalLibs();
 
         for( const wxString& libNickName : libNickNames )
             process( libNickName );

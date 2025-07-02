@@ -1230,7 +1230,6 @@ void PCB_BASE_FRAME::OnFpChangeDebounceTimer( wxTimerEvent& aEvent )
 
                 for( const EDA_ITEM* item : GetCurrentSelection() )
                 {
-                    wxString uuidStr = item->m_Uuid.AsString();
                     selectedItems.emplace_back( item->m_Uuid );
                 }
 

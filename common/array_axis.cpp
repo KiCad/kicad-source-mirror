@@ -134,7 +134,6 @@ void ARRAY_AXIS::SetStep( int aStep )
 
 wxString ARRAY_AXIS::GetItemNumber( int n ) const
 {
-    wxString        itemNum;
     const wxString& alphabet = GetAlphabet();
     const bool      nonUnitColsStartAt0 = schemeNonUnitColsStartAt0( m_type );
 

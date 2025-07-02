@@ -83,8 +83,6 @@ void NETINFO_ITEM::SetNetClass( const std::shared_ptr<NETCLASS>& aNetClass )
 
 void NETINFO_ITEM::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList )
 {
-    wxString msg;
-
     aList.emplace_back( _( "Net Name" ), UnescapeString( GetNetname() ) );
 
     aList.emplace_back( _( "Net Code" ), fmt::format( "{}", GetNetCode() ) );

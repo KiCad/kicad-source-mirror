@@ -1311,8 +1311,6 @@ bool SCH_SYMBOL::ResolveTextVar( const SCH_SHEET_PATH* aPath, wxString* token, i
             return true;
     }
 
-    wxString upperToken = token->Upper();
-
     for( const SCH_FIELD& field : m_fields )
     {
         wxString fieldName = field.IsMandatory() ? field.GetCanonicalName()

@@ -437,8 +437,6 @@ void DIALOG_EXPORT_ODBPP::GenerateODBPPFiles( const JOB_EXPORT_PCB_ODB& aJob, BO
         }
     }
 
-    wxString                    upperTxt;
-    wxString                    lowerTxt;
     std::map<std::string, UTF8> props;
 
     props["units"] = aJob.m_units == JOB_EXPORT_PCB_ODB::ODB_UNITS::MM ? "mm" : "inch";

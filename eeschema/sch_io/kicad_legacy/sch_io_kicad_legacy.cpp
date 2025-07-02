@@ -1665,10 +1665,8 @@ void SCH_IO_KICAD_LEGACY::Format( SELECTION* aSelection, OUTPUTFORMATTER* aForma
 
 void SCH_IO_KICAD_LEGACY::saveSymbol( SCH_SYMBOL* aSymbol )
 {
-    std::string     name1;
-    std::string     name2;
-
-    static wxString delimiters( wxT( " " ) );
+    std::string name1;
+    std::string name2;
 
     // This is redundant with the AR entries below, but it makes the files backwards-compatible.
     if( aSymbol->GetInstances().size() > 0 )

@@ -776,7 +776,6 @@ void PANEL_FP_LIB_TABLE::onMigrateLibraries( wxCommandEvent& event )
 
     for( int row : rowsToMigrate )
     {
-        wxString   libName = m_cur_grid->GetCellValue( row, COL_NICKNAME );
         wxString   relPath = m_cur_grid->GetCellValue( row, COL_URI );
         wxString   resolvedPath = ExpandEnvVarSubstitutions( relPath, m_project );
         wxFileName legacyLib( resolvedPath );

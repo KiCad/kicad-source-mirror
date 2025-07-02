@@ -1589,8 +1589,6 @@ SCH_PIN* SCH_IO_KICAD_SEXPR_PARSER::parseSymbolPin()
                  wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as a pin token." ) );
 
     T                        token;
-    wxString                 tmp;
-    wxString                 error;
     std::unique_ptr<SCH_PIN> pin = std::make_unique<SCH_PIN>( nullptr );
 
     pin->SetUnit( m_unit );

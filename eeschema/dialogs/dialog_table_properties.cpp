@@ -63,8 +63,6 @@ DIALOG_TABLE_PROPERTIES::DIALOG_TABLE_PROPERTIES( SCH_EDIT_FRAME* aFrame, SCH_TA
     m_gridSizer->Add( m_grid, 1, wxEXPAND, 5 );
     m_grid->PushEventHandler( new GRID_TRICKS( m_grid ) );
 
-    wxColor coveredColor = wxSystemSettings::GetColour( wxSYS_COLOUR_GRAYTEXT );
-
     for( int row = 0; row < m_table->GetRowCount(); ++row )
     {
         for( int col = 0; col < m_table->GetColCount(); ++col )

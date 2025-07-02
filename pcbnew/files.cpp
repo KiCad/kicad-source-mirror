@@ -391,8 +391,6 @@ int BOARD_EDITOR_CONTROL::New( const TOOL_EVENT& aEvent )
 
 bool PCB_EDIT_FRAME::SaveBoard( bool aSaveAs, bool aSaveCopy )
 {
-    wxString   msg;
-
     if( !aSaveAs )
     {
         if( !GetBoard()->GetFileName().IsEmpty() )
@@ -598,8 +596,6 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
         setProject = pro.GetFullPath() != mgr->Prj().GetProjectFullName();
     else
         setProject = Prj().GetProjectFullName().IsEmpty();
-
-    wxString path = wxPathOnly( Prj().GetProjectFullName() );
 
     if( setProject )
     {

@@ -100,9 +100,7 @@ bool NETLIST_EXPORTER_PADS::WriteNetlist( const wxString& aOutFileName,
 
 bool NETLIST_EXPORTER_PADS::writeListOfNets( FILE* f )
 {
-    int ret       = 0;
-
-    wxString initialSignalLine;
+    int      ret = 0;
     wxString netName;
 
     ret |= fputs( "*NET*\n", f );

@@ -2159,7 +2159,6 @@ bool SCH_IO_EAGLE::loadSymbol( const std::unique_ptr<ESYMBOL>& aEsymbol,
 {
     wxCHECK( aEsymbol && aSymbol && aDevice, false );
 
-    wxString               symbolName = aEsymbol->name;
     std::vector<SCH_ITEM*> items;
 
     bool showRefDes = false;

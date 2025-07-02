@@ -134,7 +134,6 @@ void HIERARCHY_PANE::buildHierarchyTree( SCH_SHEET_PATH* aList, const wxTreeItem
 
         wxString     sheetNameBase = sheet->GetField( FIELD_T::SHEET_NAME )->GetShownText( false );
         wxString     sheetName = formatPageString( sheetNameBase, aList->GetPageNumber() );
-        wxString     sheetNumber = aList->GetPageNumber();
         wxTreeItemId child = m_tree->AppendItem( aParent, sheetName, 0, 1 );
         m_tree->SetItemData( child, new TREE_ITEM_DATA( *aList ) );
 

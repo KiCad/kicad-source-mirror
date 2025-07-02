@@ -72,8 +72,6 @@
 void PCB_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
 {
     char        line[1024];
-    wxString    msg;
-    wxString    modName;
     char*       idcmd;
     char*       text;
     int         netcode = -1;

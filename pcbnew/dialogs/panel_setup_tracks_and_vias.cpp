@@ -290,7 +290,6 @@ bool PANEL_SETUP_TRACKS_AND_VIAS::TransferDataFromWindow()
         return false;
     }
 
-    wxString                         msg;
     std::vector<int>                 trackWidths;
     std::vector<VIA_DIMENSION>       vias;
     std::vector<DIFF_PAIR_DIMENSION> diffPairs;

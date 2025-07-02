@@ -344,7 +344,6 @@ void SYMBOL_EDIT_FRAME::CreateNewSymbol( const wxString& aInheritFrom )
 {
     m_toolManager->RunAction( ACTIONS::cancelInteractive );
 
-    wxArrayString symbolNames;
     wxString lib = getTargetLib();
 
     if( !m_libMgr->LibraryExists( lib ) )

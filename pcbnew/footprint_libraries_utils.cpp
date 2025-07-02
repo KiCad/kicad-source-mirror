@@ -599,9 +599,7 @@ void PCB_EDIT_FRAME::ExportFootprintsToLibrary( bool aStoreInNewLib, const wxStr
         DisplayInfoMessage( this, _( "No footprints to export!" ) );
         return;
     }
-
-    wxString footprintName;
-
+    
     auto resetReference =
             []( FOOTPRINT* aFootprint )
             {

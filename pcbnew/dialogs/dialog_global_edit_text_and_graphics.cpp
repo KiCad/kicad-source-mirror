@@ -403,8 +403,6 @@ void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::processItem( BOARD_COMMIT& aCommit, B
             else if(( m_italic->Get3StateValue() != wxCHK_UNDETERMINED
                     || m_bold->Get3StateValue() != wxCHK_UNDETERMINED ) )
             {
-                wxString fontName = text->GetFontName();
-
                 if( !text->GetFontName().IsEmpty() )
                 {
                     text->SetFont( KIFONT::FONT::GetFont( text->GetFontName(), text->IsBold(),

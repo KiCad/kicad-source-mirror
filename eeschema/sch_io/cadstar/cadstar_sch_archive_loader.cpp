@@ -1719,7 +1719,6 @@ const LIB_SYMBOL* CADSTAR_SCH_ARCHIVE_LOADER::loadSymdef( const SYMDEF_ID& aSymd
         {
             wxArrayString strings;
             wxStringSplit( csText.Text, strings, '\n' );
-            wxPoint firstLinePos;
 
             for( size_t ii = 0; ii < strings.size(); ++ii )
             {

@@ -384,7 +384,7 @@ bool IPC356D_WRITER::Write( const wxString& aFilename )
 int BOARD_EDITOR_CONTROL::GenD356File( const TOOL_EVENT& aEvent )
 {
     wxFileName  fn = m_frame->GetBoard()->GetFileName();
-    wxString    ext, wildcard, msg;
+    wxString    ext, wildcard;
 
     ext = FILEEXT::IpcD356FileExtension;
     wildcard = FILEEXT::IpcD356FileWildcard();

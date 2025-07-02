@@ -525,7 +525,6 @@ int DIALOG_CHANGE_SYMBOLS::processMatchingSymbols( SCH_COMMIT* aCommit )
     wxCHECK( frame, false );
 
     LIB_ID      newId;
-    wxString    msg;
     int         matchesProcessed = 0;
     SCH_SYMBOL* symbol = nullptr;
 

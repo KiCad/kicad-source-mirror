@@ -700,9 +700,6 @@ void SYMBOL_EDITOR_EDIT_TOOL::editFieldProperties( SCH_FIELD* aField )
     if( dlg.ShowQuasiModal() != wxID_OK )
         return;
 
-    wxString newFieldValue = EscapeString( dlg.GetText(), CTX_LIBID );
-    wxString oldFieldValue = aField->GetFullText( m_frame->GetUnit() );
-
     SCH_COMMIT commit( m_toolMgr );
     commit.Modify( aField, m_frame->GetScreen() );
 

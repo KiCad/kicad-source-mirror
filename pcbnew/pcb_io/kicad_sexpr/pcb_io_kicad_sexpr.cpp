@@ -1499,8 +1499,6 @@ void PCB_IO_KICAD_SEXPR::formatLayers( LSET aLayerMask, bool aEnumerateLayers ) 
     }
 
     // output any individual layers not handled in wildcard combos above
-    wxString layerName;
-
     for( int layer = 0; layer < PCB_LAYER_ID_COUNT; ++layer )
     {
         if( aLayerMask[layer] )

@@ -101,9 +101,6 @@ static COL_ORDER GetColTypeForString( const wxString& aStr )
 {
     for( int i = 0; i < COL_COUNT; i++ )
     {
-        const wxString nativeLabel = GetPinTableColLabel( i );
-        const wxString translatedLabel = wxGetTranslation( nativeLabel );
-
         if( MatchTranslationOrNative( aStr, GetPinTableColLabel( i ), false ) )
             return (COL_ORDER) i;
     }

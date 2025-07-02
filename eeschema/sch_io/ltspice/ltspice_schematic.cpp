@@ -1004,7 +1004,7 @@ std::vector<LTSPICE_SCHEMATIC::LT_ASC> LTSPICE_SCHEMATIC::StructureBuilder()
             {
                 tokensSizeRangeCheck( tokens.size(), 6, 7, lineNumber, fileName );
 
-                wxString lineWidth = tokens[1];
+                // wxString lineWidth = tokens[1];
                 wxString botRightX = tokens[2];
                 wxString botRightY = tokens[3];
                 wxString topLeftX = tokens[4];

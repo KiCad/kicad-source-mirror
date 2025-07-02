@@ -195,9 +195,7 @@ bool doConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aShapeList, SHAPE_POLY_
     if( aShapeList.size() == 0 )
         return true;
 
-    bool selfIntersecting = false;
-
-    wxString   msg;
+    bool       selfIntersecting = false;
     PCB_SHAPE* graphic = nullptr;
 
     std::set<PCB_SHAPE*> startCandidates( aShapeList.begin(), aShapeList.end() );

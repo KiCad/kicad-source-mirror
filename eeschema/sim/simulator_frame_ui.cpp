@@ -1219,7 +1219,6 @@ wxString SIMULATOR_FRAME_UI::vectorNameFromSignalName( SIM_PLOT_TAB* aPlotTab,
         }
     }
 
-    wxString suffix;
     wxString name = aSignalName;
 
     for( const auto& [ candidate, type ] : suffixes )
@@ -1429,9 +1428,8 @@ void SIMULATOR_FRAME_UI::onMeasurementsGridCellChanged( wxGridEvent& aEvent )
     if( !plotTab )
         return;
 
-    int      row = aEvent.GetRow();
-    int      col = aEvent.GetCol();
-    wxString text = m_measurementsGrid->GetCellValue( row, col );
+    int row = aEvent.GetRow();
+    int col = aEvent.GetCol();
 
     if( col == COL_MEASUREMENT )
     {
@@ -1711,8 +1709,7 @@ void SIMULATOR_FRAME_UI::AddMeasurement( const wxString& aCmd )
     if( !plotTab )
         return;
 
-    wxString simType = simulator()->TypeToName( plotTab->GetSimType(), true );
-    int      row;
+    int row;
 
     for( row = 0; row < m_measurementsGrid->GetNumberRows(); ++row )
     {

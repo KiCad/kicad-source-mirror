@@ -625,8 +625,6 @@ bool SCH_ITEM::RenderAsBitmap( double aWorldScale ) const
 void SCH_ITEM::getSymbolEditorMsgPanelInfo( EDA_DRAW_FRAME* aFrame,
                                             std::vector<MSG_PANEL_ITEM>& aList )
 {
-    wxString msg;
-
     aList.emplace_back( _( "Type" ), GetFriendlyName() );
 
     if( const SYMBOL* parent = GetParentSymbol() )
