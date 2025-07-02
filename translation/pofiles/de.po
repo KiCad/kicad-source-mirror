@@ -30,7 +30,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-06-27 22:51+0300\n"
-"PO-Revision-Date: 2025-06-23 21:01+0000\n"
+"PO-Revision-Date: 2025-07-02 22:11+0000\n"
 "Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v9/de/>\n"
 "Language: de\n"
@@ -47454,9 +47454,8 @@ msgid "Missing netclass name argument to hasNetclass()"
 msgstr "Fehlendes Netzklassen-Argument für hasNetclass()"
 
 #: pcbnew/pcbexpr_functions.cpp:1317
-#, fuzzy
 msgid "Missing netclass name argument to hasExactNetclass()"
-msgstr "Fehlendes Netzklassen-Argument für hasNetclass()"
+msgstr "Fehlendes Netzklassen-Argument für hasExactNetclass()"
 
 #: pcbnew/pcbexpr_functions.cpp:1357
 msgid "Missing component class name argument to hasComponentClass()"
