@@ -51,6 +51,10 @@ bool DRC_CACHE_GENERATOR::Run()
     if( m_drcEngine->QueryWorstConstraint( PHYSICAL_HOLE_CLEARANCE_CONSTRAINT, worstConstraint ) )
         largestPhysicalClearance = std::max( largestPhysicalClearance, worstConstraint.GetValue().Min() );
 
+    // Ensure algorithmic safety
+    largestClearance = std::min( largestClearance, INT_MAX / 3 );
+    largestPhysicalClearance = std::min( largestPhysicalClearance, INT_MAX / 3 );
+
     std::set<ZONE*> allZones;
 
     for( ZONE* zone : m_board->Zones() )
