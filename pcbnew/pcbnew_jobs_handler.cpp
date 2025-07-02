@@ -1732,10 +1732,9 @@ int PCBNEW_JOBS_HANDLER::JobExportPos( JOB* aJob )
             if( aPosJob->m_side == JOB_EXPORT_PCB_POS::SIDE::BOTH || !aPosJob->m_nakedFilename )
                 outPath = exporter.GetPlaceFileName( outPath, gbrLayer );
 
-            if( exporter.CreatePlaceFile( outPath, gbrLayer, aPosJob->m_gerberBoardEdge ) >= 0 )
+            if( exporter.CreatePlaceFile( outPath, gbrLayer, aPosJob->m_gerberBoardEdge, aPosJob->m_excludeDNP ) >= 0 )
             {
-                m_reporter->Report( wxString::Format( _( "Wrote front position data to '%s'.\n" ),
-                                                      outPath ),
+                m_reporter->Report( wxString::Format( _( "Wrote front position data to '%s'.\n" ), outPath ),
                                     RPT_SEVERITY_ACTION );
 
                 aPosJob->AddOutput( outPath );
@@ -1756,10 +1755,9 @@ int PCBNEW_JOBS_HANDLER::JobExportPos( JOB* aJob )
             if( aPosJob->m_side == JOB_EXPORT_PCB_POS::SIDE::BOTH || !aPosJob->m_nakedFilename )
                 outPath = exporter.GetPlaceFileName( outPath, gbrLayer );
 
-            if( exporter.CreatePlaceFile( outPath, gbrLayer, aPosJob->m_gerberBoardEdge ) >= 0 )
+            if( exporter.CreatePlaceFile( outPath, gbrLayer, aPosJob->m_gerberBoardEdge, aPosJob->m_excludeDNP ) >= 0 )
             {
-                m_reporter->Report( wxString::Format( _( "Wrote back position data to '%s'.\n" ),
-                                                      outPath ),
+                m_reporter->Report( wxString::Format( _( "Wrote back position data to '%s'.\n" ), outPath ),
                                     RPT_SEVERITY_ACTION );
 
                 aPosJob->AddOutput( outPath );

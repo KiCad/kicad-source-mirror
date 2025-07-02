@@ -49,7 +49,7 @@ PLACEFILE_GERBER_WRITER::PLACEFILE_GERBER_WRITER( BOARD* aPcb )
 
 
 int PLACEFILE_GERBER_WRITER::CreatePlaceFile( const wxString& aFullFilename, PCB_LAYER_ID aLayer,
-                                              bool aIncludeBrdEdges )
+                                              bool aIncludeBrdEdges, bool aExcludeDNP )
 {
     m_layer = aLayer;
 
@@ -65,6 +65,9 @@ int PLACEFILE_GERBER_WRITER::CreatePlaceFile( const wxString& aFullFilename, PCB
     {
         if( footprint->GetAttributes() & FP_EXCLUDE_FROM_POS_FILES )
              continue;
+
+        if( aExcludeDNP && ( footprint->GetAttributes() & FP_DNP ) )
+            continue;
 
         if( footprint->GetLayer() == aLayer )
            fp_list.push_back( footprint );
