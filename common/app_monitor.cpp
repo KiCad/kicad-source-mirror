@@ -264,7 +264,7 @@ void SENTRY::LogException( const wxString& aMsg )
 #endif
 }
 
-
+#ifdef KICAD_USE_SENTRY
 static std::string GetSentryBreadCrumbType( BREADCRUMB_TYPE aType )
 {
     // the only special case due to collisions with defines
@@ -305,6 +305,7 @@ static std::string GetSentryBreadCrumbLevel( BREADCRUMB_LEVEL aLevel )
 
     return ret;
 }
+#endif
 
 namespace APP_MONITOR
 {
