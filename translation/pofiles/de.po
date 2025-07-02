@@ -31,7 +31,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-06-27 22:51+0300\n"
-"PO-Revision-Date: 2025-06-30 19:01+0000\n"
+"PO-Revision-Date: 2025-07-02 12:01+0000\n"
 "Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
@@ -16889,9 +16889,8 @@ msgid "Largest"
 msgstr "Größte"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:168
-#, fuzzy
 msgid "Hop-over size:"
-msgstr "Abrundung der Ecken:"
+msgstr "Hop-over-Größe:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:172
 msgid "Medium"
@@ -17201,14 +17200,12 @@ msgid "Keep pins attached when dragging edges"
 msgstr "Beim Ziehen von Kanten Pins verbunden halten"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:444
-#, fuzzy
 msgid "Nickname and path cannot be empty."
-msgstr "Der Pin-Name darf nicht leer sein."
+msgstr "Nickname und Pfad dürfen nicht leer sein."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:449
-#, fuzzy
 msgid "Nickname cannot be empty."
-msgstr "Der Pin-Name darf nicht leer sein."
+msgstr "Nickname darf nicht leer sein."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:454
 msgid "Path cannot be empty."
@@ -34385,10 +34382,9 @@ msgid "New footprint library id:"
 msgstr "Neue Footprintbliotheks-ID:"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:107
-#, fuzzy
 msgid "Remove text items if not in library footprint"
 msgstr ""
-"Textelemente entfernen, welche im Bibliotheks-Footprint nicht enthalten sind"
+"Textelemente, die nicht im Bibliotheks-Footprint enthalten sind, entfernen"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:112
 msgid "Update/reset text layers and visibilities"
@@ -36853,7 +36849,6 @@ msgid "Target areas:"
 msgstr "Zielfläche:"
 
 #: pcbnew/dialogs/dialog_multichannel_repeat_layout_base.cpp:59
-#, fuzzy
 msgid "Reference rule area:"
 msgstr "Referenz-Regelbereich:"
 
@@ -36908,9 +36903,8 @@ msgid "Group items with their target rule areas"
 msgstr "Komponenten mit Zielregelbereichen gruppieren"
 
 #: pcbnew/dialogs/dialog_multichannel_repeat_layout_base.cpp:124
-#, fuzzy
 msgid "Include locked items"
-msgstr "Ge&sperrte Footprints einbeziehen"
+msgstr "Gesperrte Footprints einbeziehen"
 
 #: pcbnew/dialogs/dialog_multichannel_repeat_layout_base.cpp:125
 msgid "Copy from reference area + delete / update in target area if included"
@@ -39162,9 +39156,8 @@ msgid "Component Class:"
 msgstr "Bauteilklasse:"
 
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:95
-#, fuzzy
 msgid "Highlight matching footprints"
-msgstr ": %i passende Footprints"
+msgstr "Passende Footprints hervorheben"
 
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:100
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:183
@@ -39174,7 +39167,6 @@ msgstr ": %i passende Footprints"
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:389
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:432
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:475
-#, fuzzy
 msgid "Delete row"
 msgstr "Zeile löschen"
 
@@ -39187,18 +39179,16 @@ msgid "Match Any"
 msgstr "Übereinstimmung mit mind. einem"
 
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:178
-#, fuzzy
 msgid "Import references"
-msgstr "Symbolreferenzen"
+msgstr "Referenzen importieren"
 
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:306
 msgid "Footprint:"
 msgstr "Footprint:"
 
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:319
-#, fuzzy
 msgid "Show library"
-msgstr "Bibliotheken durchsuchen"
+msgstr "Bibliothek anzeigen"
 
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:374
 msgid "Field Value:"
@@ -39388,9 +39378,8 @@ msgstr "Auswahl umschalten"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:191
 #: pcbnew/dialogs/panel_edit_options_base.cpp:265
-#, fuzzy
 msgid "Highlight net (for pads/tracks)"
-msgstr "Netz hervorheben (für Pads und Leiterbahnen)"
+msgstr "Netz hervorheben (für Pads/Leiterbahnen)"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:245
 msgid "Shift+Cmd:"
@@ -39401,9 +39390,8 @@ msgid "Cmd:"
 msgstr "Cmd:"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:272
-#, fuzzy
 msgid "Option:"
-msgstr "Optionen:"
+msgstr "Option:"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:299
 #: pcbnew/dialogs/panel_edit_options_base.cpp:329
@@ -39899,9 +39887,8 @@ msgid "Minimum text thickness:"
 msgstr "Minimale Schriftstärke:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:384
-#, fuzzy
 msgid "Arc/Circle Approximations"
-msgstr "Durch Segmente angenäherter Bogen/Kreis"
+msgstr "Segmentierte Bogen/Kreis-Annäherungen"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:397
 msgid "Maximum allowed deviation:"
@@ -43745,9 +43732,8 @@ msgid "PCB '%s' does not exist. Do you wish to create it?"
 msgstr "Leiterplatte \"%s\" existiert nicht. Soll diese erstellt werden?"
 
 #: pcbnew/files.cpp:569
-#, fuzzy
 msgid "Create PCB"
-msgstr "Leiterplatte wird erzeugt"
+msgstr "Leiterplatte erzeugen"
 
 #: pcbnew/files.cpp:583 pcbnew/files.cpp:669
 msgid "File format is not supported"
@@ -43816,9 +43802,8 @@ msgstr ""
 "Vor dem Erzeugen der IPC2581-Datei muss die Platine gespeichert werden."
 
 #: pcbnew/files.cpp:1322
-#, fuzzy
 msgid "Generate IPC-2581 File"
-msgstr "Eine IPC-2581-Datei erstellen"
+msgstr "IPC-2581-Datei erstellen"
 
 #: pcbnew/files.cpp:1346 pcbnew/pcbnew_jobs_handler.cpp:2255
 #, c-format
@@ -43839,9 +43824,8 @@ msgstr ""
 "Konnte temporäre Datei \"%s\" nicht umbenennen."
 
 #: pcbnew/files.cpp:1445
-#, fuzzy
 msgid "Generate ODB++ Files"
-msgstr "ODB++-Ausgabedateien erzeugen"
+msgstr "ODB++-Dateien erzeugen"
 
 #: pcbnew/footprint.cpp:1294
 msgid "Other"
@@ -44038,9 +44022,8 @@ msgid "[no footprint loaded]"
 msgstr "[Kein Footprint geladen]"
 
 #: pcbnew/footprint_edit_frame.cpp:1116
-#, fuzzy
 msgid "Update Footprint Libraries"
-msgstr "Aktualisiere Footprintbibliotheken"
+msgstr "Footprintbibliotheken aktualisieren"
 
 #: pcbnew/footprint_edit_frame.cpp:1504
 msgid "No footprint selected."
@@ -44280,18 +44263,16 @@ msgid "Routed Lengths"
 msgstr "Geroutete Längen"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2347
-#, fuzzy
 msgid "Routed Delays"
-msgstr "Geroutete Längen"
+msgstr "Geroutete Verzögerungen"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2356 pcbnew/pcb_track.cpp:1840
 msgid "Routed Length"
 msgstr "Geroutete Länge"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2360 pcbnew/pcb_track.cpp:1853
-#, fuzzy
 msgid "Routed Delay"
-msgstr "Geroutete Länge"
+msgstr "Geroutete Verzögerung"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2368 pcbnew/pad.cpp:2902
 #: pcbnew/pcb_track.cpp:1845
@@ -44304,14 +44285,12 @@ msgstr "Volle Länge"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2376 pcbnew/pad.cpp:2908
 #: pcbnew/pcb_track.cpp:1859
-#, fuzzy
 msgid "Pad To Die Delay"
-msgstr "Pad-zu-Die-Länge"
+msgstr "Pad-zu-Die-Verzögerung"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2379 pcbnew/pcb_track.cpp:1862
-#, fuzzy
 msgid "Full Delay"
-msgstr "Verzögerung"
+msgstr "Gesamtverzögerung"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2391
 #, c-format
@@ -44329,9 +44308,9 @@ msgid "Skew Constraints: %s"
 msgstr "Versatzbeschränkungen: %s"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2415
-#, fuzzy, c-format
+#, c-format
 msgid "Target Delay: %s"
-msgstr "Zielversatz: %s"
+msgstr "Zielverzögerung: %s"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2421
 #, c-format
@@ -44339,9 +44318,9 @@ msgid "Target Length: %s"
 msgstr "Ziellänge: %s"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2432
-#, fuzzy, c-format
+#, c-format
 msgid "Delay Constraints: %s"
-msgstr "DP-Abstandsbeschränkungen: %s"
+msgstr "Verzögerungsbeschränkungen: %s"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2432
 #, c-format
@@ -44418,9 +44397,8 @@ msgid "Target Skew"
 msgstr "Zielversatz"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2946
-#, fuzzy
 msgid "Target Skew Delay"
-msgstr "Zielversatz"
+msgstr "Zielverzögerungsversatz"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2953
 msgid "Override Custom Rules"
@@ -44568,9 +44546,8 @@ msgid "IDFv3..."
 msgstr "IDFv3..."
 
 #: pcbnew/menubar_pcb_editor.cpp:128
-#, fuzzy
 msgid "STEP/GLB/BREP/XAO/PLY/STL..."
-msgstr "STEP / GLB / BREP / XAO / PLY / STL..."
+msgstr "STEP/GLB/BREP/XAO/PLY/STL..."
 
 #: pcbnew/menubar_pcb_editor.cpp:129
 msgid "Footprint Association (.cmp) File..."
@@ -44710,9 +44687,8 @@ msgid "In Package"
 msgstr "Im Gehäuse"
 
 #: pcbnew/netinfo_item.cpp:150 pcbnew/widgets/pcb_net_inspector_panel.cpp:125
-#, fuzzy
 msgid "Net Delay"
-msgstr "Verzögerung"
+msgstr "Netzverzögerung"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:146
 #, c-format
