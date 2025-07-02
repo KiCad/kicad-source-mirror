@@ -502,7 +502,7 @@ int PCB_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
                         doDrag = true;
                     }
                     // Check if dragging has started within any of selected items bounding box.
-                    else if( selectionContains( evt->DragOrigin() ) )
+                    else if( evt->HasPosition() && selectionContains( evt->DragOrigin() ) )
                     {
                         doDrag = true;
                     }

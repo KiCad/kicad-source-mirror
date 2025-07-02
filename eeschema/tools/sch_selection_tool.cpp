@@ -636,7 +636,7 @@ int SCH_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
                 }
 
                 // Check if dragging has started within any of selected items bounding box
-                if( selectionContains( evt->DragOrigin() ) )
+                if( evt->HasPosition() && selectionContains( evt->DragOrigin() ) )
                 {
                     // drag_is_move option exists only in schematic editor, not in symbol editor
                     // (m_frame->eeconfig() returns nullptr in Symbol Editor)
