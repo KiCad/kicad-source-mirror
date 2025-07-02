@@ -2123,7 +2123,7 @@ VECTOR2I PCB_ARC::GetPosition() const
 double PCB_ARC::GetRadius() const
 {
     auto center = CalcArcCenter( m_Start, m_Mid , m_End );
-    return center.Distance( m_Start );
+    return std::min( center.Distance( m_Start ), INT_MAX / 2.0 );
 }
 
 
