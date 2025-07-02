@@ -32,6 +32,7 @@
 #include <reporter.h>
 
 #include <algorithm>
+#include <memory>
 
 const int jobsFileSchemaVersion = 1;
 
@@ -140,8 +141,6 @@ JOBSET_DESTINATION::~JOBSET_DESTINATION()
         delete reporter;
 
     m_lastRunReporters.clear();
-
-    delete m_outputHandler;
 }
 
 
@@ -149,11 +148,11 @@ void JOBSET_DESTINATION::InitOutputHandler()
 {
     if( m_type == JOBSET_DESTINATION_T::FOLDER )
     {
-        m_outputHandler = new JOBS_OUTPUT_FOLDER();
+        m_outputHandler = std::make_shared<JOBS_OUTPUT_FOLDER>( );
     }
     else if( m_type == JOBSET_DESTINATION_T::ARCHIVE )
     {
-        m_outputHandler = new JOBS_OUTPUT_ARCHIVE();
+        m_outputHandler = std::make_shared<JOBS_OUTPUT_ARCHIVE>( );
     }
 }
 

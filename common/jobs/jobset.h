@@ -86,7 +86,7 @@ struct KICOMMON_API JOBSET_DESTINATION
     wxString              m_id;
     JOBSET_DESTINATION_T  m_type;
     wxString              m_description;
-    JOBS_OUTPUT_HANDLER*  m_outputHandler;
+    std::shared_ptr<JOBS_OUTPUT_HANDLER>  m_outputHandler;
     std::vector<wxString> m_only;
 
     wxString GetDescription() const;
