@@ -373,6 +373,10 @@ void BACKGROUND_JOBS_MONITOR::jobUpdated( std::shared_ptr<BACKGROUND_JOB> aJob )
 void BACKGROUND_JOBS_MONITOR::RegisterStatusBar( KISTATUSBAR* aStatusBar )
 {
     m_statusBars.push_back( aStatusBar );
+
+    // Make sure the newly-registered bar gets the active job, if any
+    if( !m_jobs.empty() )
+        jobUpdated( m_jobs.front() );
 }
 
 

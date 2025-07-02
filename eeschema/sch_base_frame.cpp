@@ -60,6 +60,7 @@
 #include <tools/sch_selection_tool.h>
 #include <trace_helpers.h>
 #include <view/view_controls.h>
+#include <widgets/kistatusbar.h>
 #include <wx/choicdlg.h>
 #include <wx/fswatcher.h>
 #include <wx/log.h>
@@ -117,8 +118,7 @@ SCH_BASE_FRAME::SCH_BASE_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aWindo
         m_selectionFilterPanel( nullptr ),
         m_findReplaceDialog( nullptr ),
         m_base_frame_defaults( nullptr, "base_Frame_defaults" ),
-        m_inSymChangeTimerEvent( false ),
-        m_libraryPreloadInProgress( false )
+        m_inSymChangeTimerEvent( false )
 {
     m_findReplaceData = std::make_unique<SCH_SEARCH_DATA>();
 
@@ -139,7 +139,7 @@ SCH_BASE_FRAME::SCH_BASE_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aWindo
               }
           } );
 
-    Pgm().GetBackgroundJobMonitor().RegisterStatusBar( (KISTATUSBAR*) GetStatusBar() );
+    Pgm().GetBackgroundJobMonitor().RegisterStatusBar( static_cast<KISTATUSBAR*>( GetStatusBar() ) );
 
     m_watcherDebounceTimer.Bind( wxEVT_TIMER, &SCH_BASE_FRAME::OnSymChangeDebounceTimer, this );
 }
@@ -147,7 +147,9 @@ SCH_BASE_FRAME::SCH_BASE_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aWindo
 
 /// Needs to be in the cpp file to encode the sizeof() for std::unique_ptr
 SCH_BASE_FRAME::~SCH_BASE_FRAME()
-{}
+{
+    Pgm().GetBackgroundJobMonitor().UnregisterStatusBar( static_cast<KISTATUSBAR*>( GetStatusBar() ) );
+}
 
 
 void SCH_BASE_FRAME::doCloseWindow()
@@ -267,75 +269,6 @@ void SCH_BASE_FRAME::UpdateStatusBar()
 
     DisplayGridMsg();
     DisplayUnitsMsg();
-}
-
-
-void SCH_BASE_FRAME::ProjectChanged()
-{
-    m_libraryPreloadRestart.store( true );
-    m_libraryPreloadAbort.store( true );
-}
-
-
-void SCH_BASE_FRAME::PreloadLibraries()
-{
-    constexpr static int interval = 150;
-    constexpr static int timeLimit = 60000;
-
-    if( m_libraryPreloadInProgress.load() )
-        return;
-
-    m_libraryPreloadBackgroundJob =
-            Pgm().GetBackgroundJobMonitor().Create( _( "Loading Symbol Libraries" ) );
-
-    auto preload =
-        [this]() -> void
-        {
-            std::shared_ptr<BACKGROUND_JOB_REPORTER> reporter =
-                    m_libraryPreloadBackgroundJob->m_reporter;
-
-            SYMBOL_LIBRARY_MANAGER_ADAPTER* adapter = PROJECT_SCH::SymbolLibManager( &Prj() );
-
-            int elapsed = 0;
-
-            reporter->Report( _( "Loading Symbol Libraries" ) );
-            adapter->AsyncLoad();
-
-            while( true )
-            {
-                if( m_libraryPreloadAbort.load() )
-                {
-                    m_libraryPreloadAbort.store( false );
-                    break;
-                }
-
-                std::this_thread::sleep_for( std::chrono::milliseconds( interval ) );
-
-                if( std::optional<float> loadStatus = adapter->AsyncLoadProgress() )
-                {
-                    float progress = *loadStatus;
-                    reporter->SetCurrentProgress( progress );
-
-                    if( progress >= 1 )
-                        break;
-                }
-
-                elapsed += interval;
-
-                if( elapsed > timeLimit )
-                    break;
-            }
-
-            adapter->BlockUntilLoaded();
-
-            Pgm().GetBackgroundJobMonitor().Remove( m_libraryPreloadBackgroundJob );
-            m_libraryPreloadBackgroundJob.reset();
-            m_libraryPreloadInProgress.store( false );
-        };
-
-    thread_pool& tp = GetKiCadThreadPool();
-    m_libraryPreloadInProgress.store( true );
-    m_libraryPreloadReturn = tp.submit_task( preload );
 }
 
 

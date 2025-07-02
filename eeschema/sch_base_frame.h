@@ -134,8 +134,6 @@ public:
     void LoadSettings( APP_SETTINGS_BASE* aCfg ) override;
     void SaveSettings( APP_SETTINGS_BASE* aCfg ) override;
 
-    void ProjectChanged() override;
-
     SCH_RENDER_SETTINGS* GetRenderSettings();
 
     COLOR4D GetDrawBgColor() const override;
@@ -160,8 +158,6 @@ public:
     void SetTitleBlock( const TITLE_BLOCK& aTitleBlock ) override;
 
     void UpdateStatusBar() override;
-
-    void PreloadLibraries();
 
     /**
      * Call the library viewer to select symbol to import into schematic.
@@ -338,12 +334,6 @@ private:
 #else
     std::unique_ptr<SPNAV_2D_PLUGIN>        m_spaceMouse;
 #endif
-
-    std::shared_ptr<BACKGROUND_JOB>         m_libraryPreloadBackgroundJob;
-    std::future<void>                       m_libraryPreloadReturn;
-    std::atomic_bool                        m_libraryPreloadInProgress;
-    std::atomic_bool                        m_libraryPreloadAbort;
-    std::atomic_bool                        m_libraryPreloadRestart;
 };
 
 #endif // SCH_BASE_FRAME_H_

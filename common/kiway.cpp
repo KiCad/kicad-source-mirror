@@ -647,6 +647,13 @@ void KIWAY::ProjectChanged()
             top->ProjectChanged();
     }
 
+    // Cancel an in-progress load of libraries; handled through the schematic and PCB ifaces
+    if ( KIFACE* schface = KiFACE( KIWAY::FACE_SCH ) )
+        schface->ProjectChanged();
+
+    if ( KIFACE* pcbface = KiFACE( KIWAY::FACE_PCB ) )
+        pcbface->ProjectChanged();
+
     for( unsigned i=0;  i < KIWAY_PLAYER_COUNT;  ++i )
     {
         KIWAY_PLAYER* frame = GetPlayerFrame( ( FRAME_T )i );

@@ -252,6 +252,10 @@ struct KIFACE
     {
         return 0;
     }
+
+    virtual void PreloadLibraries( PROJECT* aProject ) {}
+
+    virtual void ProjectChanged() {}
 };
 
 

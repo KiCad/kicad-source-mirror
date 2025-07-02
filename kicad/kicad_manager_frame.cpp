@@ -847,6 +847,14 @@ void KICAD_MANAGER_FRAME::LoadProject( const wxFileName& aProjectFileName )
     m_openSavedWindows = true;
 
     KIPLATFORM::ENV::AddToRecentDocs( aProjectFileName.GetFullPath() );
+
+    // Now that we have a new project, trigger a library preload, which will load in any
+    // project-specific symbol and footprint libraries into the manager
+    CallAfter( [&]()
+        {
+            KIFACE *schface = Kiway().KiFACE( KIWAY::FACE_SCH );
+            schface->PreloadLibraries( &Prj() );
+        } );
 }
 
 

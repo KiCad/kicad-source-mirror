@@ -25,6 +25,7 @@
 
 #include <pgm_base.h>
 #include <kiface_base.h>
+#include <background_jobs_monitor.h>
 #include <cli_progress_reporter.h>
 #include <confirm.h>
 #include <gestfich.h>
@@ -34,6 +35,7 @@
 #include <eeschema_settings.h>
 #include <sch_edit_frame.h>
 #include <design_block_lib_table.h>
+#include <libraries/symbol_library_manager_adapter.h>
 #include <symbol_edit_frame.h>
 #include <symbol_viewer_frame.h>
 #include <symbol_chooser_frame.h>
@@ -45,11 +47,13 @@
 #include <dialogs/panel_design_block_lib_table.h>
 #include <dialogs/panel_sym_lib_table.h>
 #include <kiway.h>
+#include <project_sch.h>
 #include <settings/settings_manager.h>
 #include <symbol_editor_settings.h>
 #include <sexpr/sexpr.h>
 #include <sexpr/sexpr_parser.h>
 #include <trace_helpers.h>
+#include <thread_pool.h>
 #include <kiface_ids.h>
 #include <netlist_exporters/netlist_exporter_kicad.h>
 #include <wx/ffile.h>
@@ -170,7 +174,8 @@ static struct IFACE : public KIFACE_BASE, public UNITS_PROVIDER
 
     IFACE( const char* aName, KIWAY::FACE_T aType ) :
             KIFACE_BASE( aName, aType ),
-            UNITS_PROVIDER( schIUScale, EDA_UNITS::MM )
+            UNITS_PROVIDER( schIUScale, EDA_UNITS::MM ),
+            m_libraryPreloadInProgress( false )
     {}
 
     bool OnKifaceStart( PGM_BASE* aProgram, int aCtlBits, KIWAY* aKiway ) override;
@@ -193,6 +198,10 @@ static struct IFACE : public KIFACE_BASE, public UNITS_PROVIDER
             {
                 // only run this under single_top, not under a project manager.
                 frame->CreateServer( KICAD_SCH_PORT_SERVICE_NUMBER );
+
+                // Preload libraries, since this won't have been started by the manager
+                wxCHECK( aKiway, frame );
+                Kiface().PreloadLibraries( &aKiway->Prj() );
             }
 
             return frame;
@@ -401,11 +410,18 @@ static struct IFACE : public KIFACE_BASE, public UNITS_PROVIDER
 
     bool HandleJobConfig( JOB* aJob, wxWindow* aParent ) override;
 
+    void PreloadLibraries( PROJECT* aProject ) override;
+    void ProjectChanged() override;
+
 private:
     bool loadGlobalLibTable();
     bool loadGlobalDesignBlockLibTable();
 
     std::unique_ptr<EESCHEMA_JOBS_HANDLER> m_jobHandler;
+    std::shared_ptr<BACKGROUND_JOB>        m_libraryPreloadBackgroundJob;
+    std::future<void>                      m_libraryPreloadReturn;
+    std::atomic_bool                       m_libraryPreloadInProgress;
+    std::atomic_bool                       m_libraryPreloadAbort;
 
 } kiface( "eeschema", KIWAY::FACE_SCH );
 
@@ -467,6 +483,75 @@ bool IFACE::OnKifaceStart( PGM_BASE* aProgram, int aCtlBits, KIWAY* aKiway )
 void IFACE::Reset()
 {
     loadGlobalLibTable();
+}
+
+
+void IFACE::PreloadLibraries( PROJECT* aProject )
+{
+    constexpr static int interval = 150;
+    constexpr static int timeLimit = 120000;
+
+    if( m_libraryPreloadInProgress.load() )
+        return;
+
+    m_libraryPreloadBackgroundJob =
+            Pgm().GetBackgroundJobMonitor().Create( _( "Loading Symbol Libraries" ) );
+
+    auto preload =
+        [this, aProject]() -> void
+        {
+            std::shared_ptr<BACKGROUND_JOB_REPORTER> reporter =
+                    m_libraryPreloadBackgroundJob->m_reporter;
+
+            SYMBOL_LIBRARY_MANAGER_ADAPTER* adapter = PROJECT_SCH::SymbolLibManager( aProject );
+
+            int elapsed = 0;
+
+            reporter->Report( _( "Loading Symbol Libraries" ) );
+            adapter->AsyncLoad();
+
+            while( true )
+            {
+                if( m_libraryPreloadAbort.load() )
+                {
+                    m_libraryPreloadAbort.store( false );
+                    break;
+                }
+
+                std::this_thread::sleep_for( std::chrono::milliseconds( interval ) );
+
+                if( std::optional<float> loadStatus = adapter->AsyncLoadProgress() )
+                {
+                    float progress = *loadStatus;
+                    reporter->SetCurrentProgress( progress );
+
+                    if( progress >= 1 )
+                        break;
+                }
+
+                elapsed += interval;
+
+                if( elapsed > timeLimit )
+                    break;
+            }
+
+            adapter->BlockUntilLoaded();
+
+            Pgm().GetBackgroundJobMonitor().Remove( m_libraryPreloadBackgroundJob );
+            m_libraryPreloadBackgroundJob.reset();
+            m_libraryPreloadInProgress.store( false );
+        };
+
+    thread_pool& tp = GetKiCadThreadPool();
+    m_libraryPreloadInProgress.store( true );
+    m_libraryPreloadReturn = tp.submit_task( preload );
+}
+
+
+void IFACE::ProjectChanged()
+{
+    if( m_libraryPreloadInProgress.load() )
+        m_libraryPreloadAbort.store( true );
 }
 
 

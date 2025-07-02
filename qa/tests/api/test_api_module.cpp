@@ -46,12 +46,6 @@ bool init_unit_test()
         wxSetAssertHandler( &KI_TEST::wxAssertThrower );
 
         Pgm().InitPgm( true, true, true );
-
-        const MOCK_PGM_BASE& program = static_cast<MOCK_PGM_BASE&>( Pgm() );
-
-        MOCK_EXPECT( program.GetCommonSettings )
-                .returns( Pgm().GetSettingsManager().GetCommonSettings() );
-
         Pgm().GetSettingsManager().LoadProject( "" );
     }
 

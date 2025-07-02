@@ -715,7 +715,11 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
         GetCanvas()->DisplaySheet( GetCurrentSheet().LastScreen() );
 
     // Trigger a library load to handle any project-specific libraries
-    CallAfter( [&]() { PreloadLibraries(); } );
+    CallAfter( [&]()
+            {
+                KIFACE *schface = Kiway().KiFACE( KIWAY::FACE_SCH );
+                schface->PreloadLibraries( &Prj() );
+            } );
 
     return true;
 }
