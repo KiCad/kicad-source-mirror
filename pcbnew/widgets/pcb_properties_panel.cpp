@@ -233,7 +233,12 @@ void PCB_PROPERTIES_PANEL::valueChanged( wxPropertyGridEvent& aEvent )
             continue;
 
         BOARD_ITEM* item = static_cast<BOARD_ITEM*>( edaItem );
-        changes.Modify( item, nullptr, RECURSE_MODE::NO_RECURSE );
+
+        if( item->Type() == PCB_TABLECELL_T )
+            changes.Modify( item->GetParent(), nullptr, RECURSE_MODE::NO_RECURSE );
+        else
+            changes.Modify( item, nullptr, RECURSE_MODE::NO_RECURSE );
+
         item->Set( property, newValue );
     }
 

@@ -71,6 +71,12 @@ public:
     int  GetRowSpan() const { return m_rowSpan; }
     void SetRowSpan( int aSpan ) { m_rowSpan = aSpan; }
 
+    int GetRowHeight() const;
+    void SetRowHeight( int aHeight );
+
+    int GetColumnWidth() const;
+    void SetColumnWidth( int aWidth );
+
     wxString GetItemDescription( UNITS_PROVIDER* aUnitsProvider, bool aFull ) const override;
 
     void GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList ) override;

@@ -98,6 +98,36 @@ wxString PCB_TABLECELL::GetAddr() const
 }
 
 
+int PCB_TABLECELL::GetColumnWidth() const
+{
+    return static_cast<PCB_TABLE*>( GetParent() )->GetColWidth( GetColumn() );
+}
+
+
+void PCB_TABLECELL::SetColumnWidth( int aWidth )
+{
+    PCB_TABLE* table = static_cast<PCB_TABLE*>( GetParent() );
+
+    table->SetColWidth( GetColumn(), aWidth );
+    table->Normalize();
+}
+
+
+int PCB_TABLECELL::GetRowHeight() const
+{
+    return static_cast<PCB_TABLE*>( GetParent() )->GetRowHeight( GetRow() );
+}
+
+
+void PCB_TABLECELL::SetRowHeight( int aHeight )
+{
+    PCB_TABLE* table = static_cast<PCB_TABLE*>( GetParent() );
+
+    table->SetRowHeight( GetRow(), aHeight );
+    table->Normalize();
+}
+
+
 void PCB_TABLECELL::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList )
 {
     aList.emplace_back( _( "Table Cell" ), GetAddr() );
@@ -214,5 +244,17 @@ static struct PCB_TABLECELL_DESC
         propMgr.Mask( TYPE_HASH( PCB_TABLECELL ), TYPE_HASH( EDA_TEXT ), _HKI( "Orientation" ) );
         propMgr.Mask( TYPE_HASH( PCB_TABLECELL ), TYPE_HASH( EDA_TEXT ), _HKI( "Hyperlink" ) );
         propMgr.Mask( TYPE_HASH( PCB_TABLECELL ), TYPE_HASH( EDA_TEXT ), _HKI( "Color" ) );
+
+        const wxString tableProps = _( "Table" );
+
+        propMgr.AddProperty( new PROPERTY<PCB_TABLECELL, int>( _HKI( "Column Width" ),
+                    &PCB_TABLECELL::SetColumnWidth, &PCB_TABLECELL::GetColumnWidth,
+                    PROPERTY_DISPLAY::PT_SIZE ),
+                tableProps );
+
+        propMgr.AddProperty( new PROPERTY<PCB_TABLECELL, int>( _HKI( "Row Height" ),
+                    &PCB_TABLECELL::SetRowHeight, &PCB_TABLECELL::GetRowHeight,
+                    PROPERTY_DISPLAY::PT_SIZE ),
+                tableProps );
     }
 } _PCB_TABLECELL_DESC;
