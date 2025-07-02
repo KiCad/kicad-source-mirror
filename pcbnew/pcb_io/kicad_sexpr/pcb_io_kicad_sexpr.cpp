@@ -1271,7 +1271,9 @@ void PCB_IO_KICAD_SEXPR::format( const FOOTPRINT* aFootprint ) const
     }
 
     // Attributes
-    if( aFootprint->GetAttributes() )
+    if( aFootprint->GetAttributes()
+            || aFootprint->AllowMissingCourtyard()
+            || aFootprint->AllowSolderMaskBridges() )
     {
         m_out->Print( "(attr" );
 
