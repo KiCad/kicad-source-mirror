@@ -447,8 +447,9 @@ bool JSON_SETTINGS::SaveToFile( const wxString& aDirectory, bool aForce )
 
     for( NESTED_SETTINGS* settings : m_nested_settings )
     {
-        if( settings )
-            modified |= settings->SaveToFile();
+        wxCHECK2( settings, continue );
+
+        modified |= settings->SaveToFile();
     }
 
     modified |= Store();
