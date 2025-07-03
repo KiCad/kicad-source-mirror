@@ -848,8 +848,6 @@ int SYMBOL_EDITOR_CONTROL::AddSymbolToSchematic( const TOOL_EVENT& aEvent )
             return 0;
         }
 
-        wxCHECK( libSymbol->GetLibId().IsValid(), 0 );
-
         SCH_SYMBOL* symbol = new SCH_SYMBOL( *libSymbol, libId, &schframe->GetCurrentSheet(),
                                              unit, bodyStyle );
 
