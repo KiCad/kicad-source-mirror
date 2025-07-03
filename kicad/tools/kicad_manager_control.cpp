@@ -408,8 +408,13 @@ int KICAD_MANAGER_CONTROL::openProject( const wxString& aDefaultDir )
     if( !pro.IsAbsolute() )
         pro.MakeAbsolute();
 
-    if( !pro.FileExists() )
+    // You'd think wxFD_FILE_MUST_EXIST and the wild-cards would enforce these.  Sentry
+    // indicates otherwise (at least on MSW).
+    if( !pro.Exists() || (   pro.GetExt() != FILEEXT::ProjectFileExtension
+                          && pro.GetExt() != FILEEXT::LegacyProjectFileExtension ) )
+    {
         return -1;
+    }
 
     m_frame->LoadProject( pro );
 
