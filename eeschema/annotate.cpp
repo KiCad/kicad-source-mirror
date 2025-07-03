@@ -105,8 +105,8 @@ void SCH_EDIT_FRAME::DeleteAnnotation( ANNOTATE_SCOPE_T aAnnotateScope, bool aRe
     {
     case ANNOTATE_ALL:
     {
-        for( const SCH_SHEET_PATH& sheet : sheets )
-            clearSheetAnnotation( sheet.LastScreen(), nullptr, false );
+        for( SCH_SHEET_PATH& sheet : sheets )
+            clearSheetAnnotation( sheet.LastScreen(), &sheet, false );
 
         break;
     }
