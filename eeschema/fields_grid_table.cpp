@@ -63,8 +63,6 @@ enum
 
 static wxString netList( SCH_SYMBOL* aSymbol, SCH_SHEET_PATH& aSheetPath )
 {
-    wxCHECK( aSymbol && aSymbol->GetLibSymbolRef(), wxEmptyString );
-
     /*
      * Symbol netlist format:
      *   pinNumber pinName <tab> pinNumber pinName...
@@ -90,10 +88,13 @@ static wxString netList( SCH_SYMBOL* aSymbol, SCH_SHEET_PATH& aSheetPath )
 
     netlist << wxS( "\r" );
 
-    wxArrayString fpFilters = aSymbol->GetLibSymbolRef()->GetFPFilters();
+    if( lib_symbol )
+    {
+        wxArrayString fpFilters = lib_symbol->GetFPFilters();
 
-    if( !fpFilters.IsEmpty() )
-        netlist << EscapeString( wxJoin( fpFilters, ' ' ), CTX_LINE );
+        if( !fpFilters.IsEmpty() )
+            netlist << EscapeString( wxJoin( fpFilters, ' ' ), CTX_LINE );
+    }
 
     netlist << wxS( "\r" );
 
