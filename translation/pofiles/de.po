@@ -30,7 +30,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-06-27 22:51+0300\n"
-"PO-Revision-Date: 2025-07-02 22:11+0000\n"
+"PO-Revision-Date: 2025-07-03 17:15+0000\n"
 "Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v9/de/>\n"
 "Language: de\n"
@@ -8570,7 +8570,7 @@ msgstr "Datensammlung"
 
 #: common/pgm_base.cpp:391
 msgid "Opt In"
-msgstr ""
+msgstr "Opt-In"
 
 #: common/pgm_base.cpp:391
 msgid "Decline"
@@ -39484,6 +39484,11 @@ msgid ""
 "\n"
 "<br>"
 msgstr ""
+"### Regelbestimmungen\n"
+"\n"
+"    (condition \"<Ausdruck>\")\n"
+"\n"
+"<br>"
 
 #: pcbnew/dialogs/panel_setup_condition_help_6notes.h:2
 msgid ""
@@ -39493,6 +39498,11 @@ msgid ""
 "<br><br><br>\n"
 "\n"
 msgstr ""
+"### Anmerkungen\n"
+"\n"
+"Strg+/ verwenden, um Zeile(n) aus zu kommentieren oder ein zu kommentieren.\n"
+"<br><br><br>\n"
+"\n"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:46
 msgid "Minimum clearance:"
@@ -43279,7 +43289,7 @@ msgstr "OCC-Fehler während der Erstellung der Hauptkontur.\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1890
 msgid "OCC error creating hole in main outline.\n"
-msgstr ""
+msgstr "OCC-Fehler während der Erstellung eines Lochs in der Hauptkontur.\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1932
 #, c-format
@@ -43287,11 +43297,9 @@ msgid "Subtracting holes for %s\n"
 msgstr "Erstelle Löcher für %s\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1976
-#, fuzzy, c-format
+#, c-format
 msgid "** Got problems while cutting %s net '%s' **\n"
-msgstr ""
-"\n"
-"** Probleme beim Schneiden von %s Netz \"%s\" **\n"
+msgstr "** Probleme beim Schneiden von %s Netz \"%s\" **\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2029
 msgid "shapes"
@@ -48648,11 +48656,12 @@ msgid "No 'physical_clearance' constraints in effect on %s."
 msgstr "Für %s ist keine \"physical_clearance\" Einschränkung definiert."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1279
-#, fuzzy
 msgid ""
 "Items share no relevant layers.  No 'physical_clearance' constraints will be "
 "applied."
-msgstr "Keine \"physical_clearance\" Einschränkung definiert."
+msgstr ""
+"Elemente haben keine gemeinsamen relevanten Lagen.  Es werden keine "
+"\"physical_clearance\"-Beschränkungen angewendet."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1341
 msgid "Select an item for a constraints resolution report."
@@ -51600,9 +51609,8 @@ msgid "Locked Item Shadow"
 msgstr "Schatten gesperrter Elemente"
 
 #: pcbnew/widgets/appearance_controls.cpp:350
-#, fuzzy
 msgid "Show a shadow on locked items"
-msgstr "Eine Schattenmarkierung auf gesperrten Elementen anzeigen"
+msgstr "Schatten auf gesperrten Elementen anzeigen"
 
 #: pcbnew/widgets/appearance_controls.cpp:351
 msgid "Colliding Courtyards"
@@ -52554,9 +52562,8 @@ msgid "Source Name"
 msgstr "Quellename"
 
 #: pcbnew/zone.cpp:2042
-#, fuzzy
 msgid "Hatch Orientation"
-msgstr "Ausrichtung"
+msgstr "Schraffierungsrichtung"
 
 #: pcbnew/zone.cpp:2060
 msgid "Cannot be less than zone minimum width"
@@ -52620,7 +52627,7 @@ msgstr "Neu ausfüllen"
 
 #: pcbnew/zone_filler.cpp:888
 msgid "Continue without Refill"
-msgstr "Fortfahren ohne neu Ausfüllen"
+msgstr "Ohne Neufüllung fortfahren"
 
 #: pcbnew/zone_manager/dialog_zone_manager_base.cpp:57
 #: pcbnew/zone_manager/dialog_zone_manager_base.cpp:62
