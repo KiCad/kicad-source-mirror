@@ -67,32 +67,32 @@ void SCH_EDIT_FRAME::DeleteAnnotation( ANNOTATE_SCOPE_T aAnnotateScope, bool aRe
     SCH_COMMIT     commit( this );
 
     auto clearSymbolAnnotation =
-        [&]( EDA_ITEM* aItem, SCH_SCREEN* aScreen, SCH_SHEET_PATH* aSheet, bool aResetPrefixes )
-        {
-            SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( aItem );
-            commit.Modify( aItem, aScreen );
-
-            // aSheet == nullptr means all sheets
-            if( !aSheet || symbol->IsAnnotated( aSheet ) )
+            [&]( EDA_ITEM* aItem, SCH_SCREEN* aScreen, SCH_SHEET_PATH* aSheet, bool aResetPrefixes )
             {
-                wxString msg;
+                SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( aItem );
+                commit.Modify( aItem, aScreen );
 
-                if( symbol->GetUnitCount() > 1 )
+                // aSheet == nullptr means all sheets
+                if( !aSheet || symbol->IsAnnotated( aSheet ) )
                 {
-                    msg.Printf( _( "Cleared annotation for %s (unit %s)." ),
-                                symbol->GetValue( true, aSheet, false ),
-                                symbol->SubReference( symbol->GetUnit(), false ) );
-                }
-                else
-                {
-                    msg.Printf( _( "Cleared annotation for %s." ),
-                                symbol->GetValue( true, aSheet, false ) );
-                }
+                    wxString msg;
 
-                symbol->ClearAnnotation( aSheet, aResetPrefixes );
-                aReporter.Report( msg, RPT_SEVERITY_ACTION );
-            }
-        };
+                    if( symbol->GetUnitCount() > 1 )
+                    {
+                        msg.Printf( _( "Cleared annotation for %s (unit %s)." ),
+                                    symbol->GetValue( true, aSheet, false ),
+                                    symbol->SubReference( symbol->GetUnit(), false ) );
+                    }
+                    else
+                    {
+                        msg.Printf( _( "Cleared annotation for %s." ),
+                                    symbol->GetValue( true, aSheet, false ) );
+                    }
+
+                    symbol->ClearAnnotation( aSheet, aResetPrefixes );
+                    aReporter.Report( msg, RPT_SEVERITY_ACTION );
+                }
+            };
 
     auto clearSheetAnnotation =
             [&]( SCH_SCREEN* aScreen, SCH_SHEET_PATH* aSheet, bool aResetPrefixes )
