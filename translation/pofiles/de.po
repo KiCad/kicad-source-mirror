@@ -8843,7 +8843,7 @@ msgstr "Datenerfassungs Opt-In"
 
 #: common/pgm_base.cpp:265
 msgid "Opt In"
-msgstr "Opt-in"
+msgstr "Opt-In"
 
 #: common/pgm_base.cpp:265
 msgid "Decline"
@@ -51841,7 +51841,7 @@ msgstr "Randsteckverbinder: "
 
 #: pcbnew/tools/pcb_control.cpp:2392
 msgid "Place Board Characteristics"
-msgstr "Platineneigenschaften hinzufügen"
+msgstr "Platineneigenschaften einzufügen"
 
 #: pcbnew/tools/pcb_control.cpp:2445
 msgid "Loss Tangent"
@@ -51948,7 +51948,6 @@ msgid "Draw Polygon"
 msgstr "Polygon zeichnen"
 
 #: pcbnew/tools/zone_filler_tool.cpp:89
-#, fuzzy
 msgid "Check Zones"
 msgstr "Zonen prüfen"
 
@@ -52139,9 +52138,8 @@ msgid "Locked Item Shadow"
 msgstr "Schatten gesperrter Elemente"
 
 #: pcbnew/widgets/appearance_controls.cpp:352
-#, fuzzy
 msgid "Show a shadow on locked items"
-msgstr "Eine Schattenmarkierung auf gesperrten Elementen anzeigen"
+msgstr "Schatten auf gesperrten Elementen anzeigen"
 
 #: pcbnew/widgets/appearance_controls.cpp:353
 msgid "Colliding Courtyards"
@@ -52152,14 +52150,12 @@ msgid "Show colliding footprint courtyards"
 msgstr "Zeige kollidierende Footprint-Abstandsflächen"
 
 #: pcbnew/widgets/appearance_controls.cpp:354
-#, fuzzy
 msgid "Board Area Shadow"
-msgstr "Nur Platinenfläche"
+msgstr "Platinenflächeschatten"
 
 #: pcbnew/widgets/appearance_controls.cpp:354
-#, fuzzy
 msgid "Show board area shadow"
-msgstr "Netzlinien der Platine anzeigen"
+msgstr "Platinenflächeschatten anzeigen"
 
 #: pcbnew/widgets/appearance_controls.cpp:355
 msgid "Show drawing sheet borders and title block"
@@ -52780,12 +52776,10 @@ msgid "Rule Areas"
 msgstr "Regelbereiche"
 
 #: pcbnew/widgets/pcb_design_block_pane.cpp:113
-#, fuzzy
 msgid ""
 "Preserve reference designators in the source layout. Otherwise, clear them."
 msgstr ""
-"Referenzbezeichner aus Quellenschaltplan erhalten. Andererseits diese "
-"zurücksetzen und nach Einstellungen neu annotiertieren."
+"Referenzbezeichner aus Quelllayout erhalten. Wenn nicht, diese zurücksetzen."
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:120
 #: pcbnew/widgets/pcb_net_inspector_panel_data_model.h:842
@@ -52805,9 +52799,8 @@ msgid "Via Count"
 msgstr "Via-Anzahl"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:139
-#, fuzzy
 msgid "Via Delay"
-msgstr "Verzögerung"
+msgstr "Viaverzögerung"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:141
 msgid "Track Delay"
@@ -52903,9 +52896,8 @@ msgid "Show Unconnected Nets"
 msgstr "Unverbundene Netze zeigen"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1281
-#, fuzzy
 msgid "Show Time Domain Details"
-msgstr "Seitenpanel anzeigen"
+msgstr "Zeitbereichdetails anzeigen"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1289
 msgid "Save Net Inspector Report..."
@@ -52988,9 +52980,8 @@ msgid "No pads"
 msgstr "Keine Pads"
 
 #: pcbnew/zone.cpp:834
-#, fuzzy
 msgid "No zone fills"
-msgstr "Zonenfüllungen aussparen"
+msgstr "Keine Zonenfüllungen"
 
 #: pcbnew/zone.cpp:837
 msgid "No footprints"
@@ -53091,7 +53082,6 @@ msgid "Keep Out Pads"
 msgstr "Pads fernhalten"
 
 #: pcbnew/zone.cpp:1899
-#, fuzzy
 msgid "Keep Out Zone Fills"
 msgstr "Zonenfüllungen aussparen"
 
@@ -53112,9 +53102,8 @@ msgid "Source Name"
 msgstr "Quellename"
 
 #: pcbnew/zone.cpp:1940
-#, fuzzy
 msgid "Hatch Orientation"
-msgstr "Ausrichtung"
+msgstr "Schraffierungsrichtung"
 
 #: pcbnew/zone.cpp:1955
 msgid "Cannot be less than zone minimum width"
@@ -53171,13 +53160,12 @@ msgstr ""
 "füllen?"
 
 #: pcbnew/zone_filler.cpp:891
-#, fuzzy
 msgid "Disable and refill"
-msgstr "Kein Anti-Aliasing"
+msgstr "Deaktivieren und neu füllen"
 
 #: pcbnew/zone_filler.cpp:891 pcbnew/zone_filler.cpp:908
 msgid "Continue without Refill"
-msgstr "Fortfahren ohne neu Ausfüllen"
+msgstr "Ohne Neufüllung fortfahren"
 
 #: pcbnew/zone_filler.cpp:906
 msgid "Zone fills are out-of-date. Refill?"
