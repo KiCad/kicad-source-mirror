@@ -343,14 +343,13 @@ bool PGM_KICAD::OnPgmInit()
         {
             wxFileName fn( projToLoad );
 
-            if( fn.Exists() )
+            if( fn.Exists() && (   fn.GetExt() == FILEEXT::ProjectFileExtension
+                                || fn.GetExt() == FILEEXT::LegacyProjectFileExtension ) )
             {
                 fn.MakeAbsolute();
 
                 if( appType == KICAD_MAIN_FRAME_T )
-                {
                     managerFrame->LoadProject( fn );
-                }
             }
         }
     }
