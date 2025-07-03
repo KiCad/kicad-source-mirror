@@ -37476,7 +37476,7 @@ msgstr "(Lödytan måste ha positiv storlek)"
 
 #: pcbnew/dialogs/dialog_outset_items.cpp:183
 msgid "Line width must be a positive value."
-msgstr "Linjebredden måste vara större än noll."
+msgstr "Linjebredden måste ha ett positivt värde."
 
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:26
 msgid "Outset:"
@@ -48270,14 +48270,12 @@ msgid "Soldermask"
 msgstr "Lödmask"
 
 #: pcbnew/pcb_tablecell.cpp:250
-#, fuzzy
 msgid "Column Width"
-msgstr "Cellbredd"
+msgstr "Kolumnbredd"
 
 #: pcbnew/pcb_tablecell.cpp:255
-#, fuzzy
 msgid "Row Height"
-msgstr "Textrutans höjd"
+msgstr "Radhöjd"
 
 #: pcbnew/pcb_target.cpp:151
 msgid "PCB Target"
