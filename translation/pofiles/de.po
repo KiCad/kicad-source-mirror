@@ -50633,7 +50633,7 @@ msgstr "Via-Größe auf die vorhergehende vordefinierte Größe setzen"
 
 #: pcbnew/tools/pcb_actions.cpp:1332
 msgid "Automatically select track width"
-msgstr "Leiterbahnbreite automatisch anzupassen"
+msgstr "Leiterbahnbreite automatisch wählen"
 
 #: pcbnew/tools/pcb_actions.cpp:1333
 msgid ""
@@ -50876,9 +50876,8 @@ msgid "Cycle between showing zone fills and just their outlines"
 msgstr "Anzeige wechseln zwischen ausgefüllten Zonen und nur deren Konturen"
 
 #: pcbnew/tools/pcb_actions.cpp:1674
-#, fuzzy
 msgid "Automatic zoom"
-msgstr "Automatisch"
+msgstr "Automatischer Zoom"
 
 #: pcbnew/tools/pcb_actions.cpp:1675
 msgid "Automatic Zoom on footprint change"
@@ -51288,14 +51287,12 @@ msgid "Unroutes selected items to the nearest pad."
 msgstr "Entfernt Leiterbahnen an ausgewählten Elementen bis zum nächsten Pad."
 
 #: pcbnew/tools/pcb_actions.cpp:2268
-#, fuzzy
 msgid "Unroute Segment"
-msgstr "Leiterbahnen an Auswahl entfernen"
+msgstr "Leiterbahnsegment entfernen"
 
 #: pcbnew/tools/pcb_actions.cpp:2269
-#, fuzzy
 msgid "Unroutes segment to the nearest segment."
-msgstr "Entfernt Leiterbahnen an ausgewählten Elementen bis zum nächsten Pad."
+msgstr "Entfernt Leiterbahnsegment bis zum nächsten Segment"
 
 #: pcbnew/tools/pcb_actions.cpp:2283
 msgid "Select All Tracks in Net"
@@ -51641,18 +51638,16 @@ msgid "Displays tuning pattern properties dialog"
 msgstr "Dialogfeld mit Abstimmmustereigenschaften anzeigen"
 
 #: pcbnew/tools/pcb_actions.cpp:2685
-#, fuzzy
 msgid "Show wizards selector"
-msgstr "Es wurde noch kein Wizard ausgewählt"
+msgstr "Wizardauswahl anzeigen"
 
 #: pcbnew/tools/pcb_actions.cpp:2686
 msgid "Select wizard script to run"
 msgstr "Auswahl Wizard-Skript welches geladen und gestartet werden soll"
 
 #: pcbnew/tools/pcb_actions.cpp:2692
-#, fuzzy
 msgid "Reset wizard parameters"
-msgstr "Zurücksetzen der Wizard-Parameter auf Standardwerte"
+msgstr "Wizardparameter zurücksetzen"
 
 #: pcbnew/tools/pcb_actions.cpp:2693
 msgid "Reset wizard parameters to default"
@@ -51761,22 +51756,18 @@ msgid "DP Gap Constraints: %s"
 msgstr "DP-Abstandsbeschränkungen: %s"
 
 #: pcbnew/tools/pcb_control.cpp:1986
-#, fuzzy
 msgid "Resolved Clearance"
 msgstr "Ermittelter Freiraum"
 
 #: pcbnew/tools/pcb_control.cpp:1996
-#, fuzzy
 msgid "Actual Clearance"
 msgstr "Tatsächlicher Freiraum"
 
 #: pcbnew/tools/pcb_control.cpp:2039
-#, fuzzy
 msgid "Resolved Hole Clearance"
 msgstr "Ermittelter Loch-Freiraum"
 
 #: pcbnew/tools/pcb_control.cpp:2044
-#, fuzzy
 msgid "Actual Hole Clearance"
 msgstr "Tatsächlicher Loch-Freiraum"
 
