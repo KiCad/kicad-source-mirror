@@ -31,7 +31,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-06-27 22:51+0300\n"
-"PO-Revision-Date: 2025-07-02 22:11+0000\n"
+"PO-Revision-Date: 2025-07-03 17:15+0000\n"
 "Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
@@ -47707,23 +47707,20 @@ msgid "Not covered"
 msgstr "Unbedeckt"
 
 #: pcbnew/pcb_track.cpp:2321
-#, fuzzy
 msgid "Plugged"
-msgstr "Plugin"
+msgstr "Geplugged"
 
 #: pcbnew/pcb_track.cpp:2322
-#, fuzzy
 msgid "Not plugged"
-msgstr "Nicht gefunden"
+msgstr "Nicht geplugged"
 
 #: pcbnew/pcb_track.cpp:2327
 msgid "Capped"
 msgstr "Überkontaktiert"
 
 #: pcbnew/pcb_track.cpp:2328
-#, fuzzy
 msgid "Not capped"
-msgstr "Nicht verbunden"
+msgstr "Nicht gedeckelt"
 
 #: pcbnew/pcb_track.cpp:2334
 msgid "Not filled"
@@ -47754,24 +47751,20 @@ msgid "Back tenting"
 msgstr "Rücks. Abdeckung"
 
 #: pcbnew/pcb_track.cpp:2417
-#, fuzzy
 msgid "Front covering"
 msgstr "Vorders. Abdeckung"
 
 #: pcbnew/pcb_track.cpp:2419
-#, fuzzy
 msgid "Back covering"
 msgstr "Rücks. Abdeckung"
 
 #: pcbnew/pcb_track.cpp:2421
-#, fuzzy
 msgid "Front plugging"
-msgstr "Vorders. Abdeckung"
+msgstr "Vorders. Plugging"
 
 #: pcbnew/pcb_track.cpp:2423
-#, fuzzy
 msgid "Back plugging"
-msgstr "Rücks. Abdeckung"
+msgstr "Rücks. Plugging"
 
 #: pcbnew/pcb_track.cpp:2425
 msgid "Capping"
@@ -49056,11 +49049,12 @@ msgid "No 'physical_clearance' constraints in effect on %s."
 msgstr "Für %s ist keine \"physical_clearance\" Einschränkung definiert."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1270
-#, fuzzy
 msgid ""
 "Items share no relevant layers.  No 'physical_clearance' constraints will be "
 "applied."
-msgstr "Keine \"physical_clearance\" Einschränkung definiert."
+msgstr ""
+"Elemente haben keine gemeinsamen relevanten Lagen.  Es werden keine "
+"\"physical_clearance\"-Beschränkungen angewendet."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1332
 msgid "Select an item for a constraints resolution report."
@@ -49093,14 +49087,12 @@ msgid "Resolved hole size constraints: min %s; opt %s; max %s."
 msgstr "Ermittelte Lochgrößenbeschränkungen: min %s; opt %s; max %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1432
-#, fuzzy
 msgid "Solder Mask"
 msgstr "Lötstoppmaske"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1433
-#, fuzzy
 msgid "Solder mask expansion resolution for:"
-msgstr "Lötstoppmaskenerweiterung:"
+msgstr "Ermittlung der Lötstoppmaskenerweiterung für:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1441
 #, c-format
@@ -49108,9 +49100,8 @@ msgid "Resolved solder mask expansion: %s."
 msgstr "Ermittelte Lötstoppmaskenerweiterung: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1450
-#, fuzzy
 msgid "Solder paste absolute clearance resolution for:"
-msgstr "Ermittlung des Loch-zu-Loch-Freiraums für:"
+msgstr "Ermittlung des absoluten Lötpastenfreiraums für:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1458
 #, c-format
@@ -49118,9 +49109,8 @@ msgid "Resolved solder paste absolute clearance: %s."
 msgstr "Ermittelter absoluter Lötpastenfreiraum: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1461
-#, fuzzy
 msgid "Solder paste relative clearance resolution for:"
-msgstr "Freiraumverhältnis (relativ) für Lötpaste:"
+msgstr "Ermittlung des relativen Lötpastenfreiraums für:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1471
 #, c-format
@@ -49296,9 +49286,8 @@ msgid "Edit Track Width/Via Size"
 msgstr "Leiterbahnbreite/Via-Größe bearbeiten"
 
 #: pcbnew/tools/edit_tool.cpp:1115
-#, fuzzy
 msgid "Edit Track Layer"
-msgstr "Hintere Lagen"
+msgstr "Leiterbahnlage bearbeiten"
 
 #: pcbnew/tools/edit_tool.cpp:1150
 msgid "At least two straight track segments must be selected."
@@ -49904,27 +49893,24 @@ msgid "Show the design rules checker window"
 msgstr "Öffnet das Fenster für die Überprüfung der Designregeln (DRC)"
 
 #: pcbnew/tools/pcb_actions.cpp:453
-#, fuzzy
 msgid "Add selected design block to current board"
-msgstr "Gewählten Designblock auf aktueller Schaltplanseite einfügen"
+msgstr "Gewählten Designblock in aktuelle Leiterplatte einfügen"
 
 #: pcbnew/tools/pcb_actions.cpp:484
 msgid "Save Current Board as Design Block..."
 msgstr "Aktuelle Platine als Designblock speichern..."
 
 #: pcbnew/tools/pcb_actions.cpp:485
-#, fuzzy
 msgid "Create a new design block from the current board"
-msgstr "Neuen Designblock aus aktueller Schaltplanseite erstellen"
+msgstr "Neuen Designblock aus aktueller Leiterplatte erstellen"
 
 #: pcbnew/tools/pcb_actions.cpp:498
 msgid "Save Current Board to Design Block..."
 msgstr "Aktuelle Platine als Designblock speichern..."
 
 #: pcbnew/tools/pcb_actions.cpp:499
-#, fuzzy
 msgid "Add current board to design block"
-msgstr "Designblock einzufügen"
+msgstr "Aktuelle Leiterplatte zu Designblock hinzufügen"
 
 #: pcbnew/tools/pcb_actions.cpp:530
 msgid "Open in Footprint Editor"
@@ -50033,14 +50019,12 @@ msgid "Updates selected track & via sizes"
 msgstr "Ausgewählte Leiterbahn- und Via-Größen aktualisieren"
 
 #: pcbnew/tools/pcb_actions.cpp:698
-#, fuzzy
 msgid "Switch track to next enabled copper layer"
-msgstr "Element auf einer deaktivierten Kupferlage"
+msgstr "Leiterbahn auf nächste aktive Kupferlage verschieben"
 
 #: pcbnew/tools/pcb_actions.cpp:705
-#, fuzzy
 msgid "Switch track to previous enabled copper layer"
-msgstr "Wechsel zur vorherigen Lage"
+msgstr "Leiterbahn auf vorherige aktive Kupferlage verschieben"
 
 #: pcbnew/tools/pcb_actions.cpp:711
 msgid "Adds arcs tangent to the selected straight track segments"
@@ -50195,18 +50179,16 @@ msgid "Show the footprint checker window"
 msgstr "Zeigt das Footprint-Checker-Fenster an"
 
 #: pcbnew/tools/pcb_actions.cpp:894
-#, fuzzy
 msgid "Load footprint from current PCB"
-msgstr "Footprint von aktueller Platine laden"
+msgstr "Footprint von aktueller Leiterplatte laden"
 
 #: pcbnew/tools/pcb_actions.cpp:895
 msgid "Load footprint from current board"
 msgstr "Footprint von aktueller Platine laden"
 
 #: pcbnew/tools/pcb_actions.cpp:901
-#, fuzzy
 msgid "Insert footprint into PCB"
-msgstr "Footprint in Platine e&infügen"
+msgstr "Footprint in Leiterplatte einfügen"
 
 #: pcbnew/tools/pcb_actions.cpp:902
 msgid "Insert footprint into current board"
@@ -50604,19 +50586,16 @@ msgid "Export IDF 3D board representation"
 msgstr "Eine IDF 3D-Platinendarstellung exportieren"
 
 #: pcbnew/tools/pcb_actions.cpp:1278
-#, fuzzy
 msgid "Export STEP/GLB/BREP/XAO/PLY/STL..."
-msgstr "STEP / GLB / BREP / XAO / PLY / STL..."
+msgstr "STEP/GLB/BREP/XAO/PLY/STL exportieren ..."
 
 #: pcbnew/tools/pcb_actions.cpp:1279
-#, fuzzy
 msgid "Export STEP, GLB, BREP, XAO, PLY or STL 3D board representation"
-msgstr "STEP / GLB / BREP / XAO / PLY exportieren / STL 3D-Platinendaten"
+msgstr "STEP, GLB, BREP, XAO, PLY oder STL 3D-Platinendaten exportieren"
 
 #: pcbnew/tools/pcb_actions.cpp:1285
-#, fuzzy
 msgid "Export Footprint Association (.cmp) File..."
-msgstr "Footprints Assoziierungsdatei (.cmp)..."
+msgstr "Footprint-Assoziierungsdatei (.cmp) exportieren ..."
 
 #: pcbnew/tools/pcb_actions.cpp:1286
 msgid "Export footprint association file (*.cmp) for schematic back annotation"
@@ -50653,9 +50632,8 @@ msgid "Change via size to previous pre-defined size"
 msgstr "Via-Größe auf die vorhergehende vordefinierte Größe setzen"
 
 #: pcbnew/tools/pcb_actions.cpp:1332
-#, fuzzy
 msgid "Automatically select track width"
-msgstr "Automatisch zoomen, um anzupassen"
+msgstr "Leiterbahnbreite automatisch anzupassen"
 
 #: pcbnew/tools/pcb_actions.cpp:1333
 msgid ""
