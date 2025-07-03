@@ -38,7 +38,7 @@ LAYERS_MAP_DIALOG_BASE::LAYERS_MAP_DIALOG_BASE( wxWindow* parent, wxWindowID id,
 
 	m_bSizerLayerList->Add( 0, 0, 0, wxRIGHT|wxLEFT, 10 );
 
-	m_flexLeftColumnBoxSizer = new wxFlexGridSizer( 16, 4, 0, 0 );
+	m_flexLeftColumnBoxSizer = new wxFlexGridSizer( 4, 0, 0 );
 	m_flexLeftColumnBoxSizer->AddGrowableCol( 0 );
 	m_flexLeftColumnBoxSizer->AddGrowableCol( 1 );
 	m_flexLeftColumnBoxSizer->AddGrowableCol( 2 );
@@ -52,7 +52,7 @@ LAYERS_MAP_DIALOG_BASE::LAYERS_MAP_DIALOG_BASE( wxWindow* parent, wxWindowID id,
 	m_staticlineSep = new wxStaticLine( this, ID_M_STATICLINESEP, wxDefaultPosition, wxDefaultSize, wxLI_VERTICAL );
 	m_bSizerLayerList->Add( m_staticlineSep, 0, wxEXPAND | wxALL, 5 );
 
-	m_flexRightColumnBoxSizer = new wxFlexGridSizer( 16, 4, 0, 0 );
+	m_flexRightColumnBoxSizer = new wxFlexGridSizer( 4, 0, 0 );
 	m_flexRightColumnBoxSizer->AddGrowableCol( 0 );
 	m_flexRightColumnBoxSizer->AddGrowableCol( 1 );
 	m_flexRightColumnBoxSizer->AddGrowableCol( 2 );
