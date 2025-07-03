@@ -17034,11 +17034,11 @@ msgstr "Redefinir as bibliotecas"
 
 #: eeschema/dialogs/panel_template_fieldnames.cpp:45
 msgid "Project Field Name Templates"
-msgstr "Modelos de nome de campo do projeto"
+msgstr "Modelos de nome de campo do projeto:"
 
 #: eeschema/dialogs/panel_template_fieldnames.cpp:51
 msgid "Global Field Name Templates"
-msgstr "Modelos de nome global de campo"
+msgstr "Modelos de nome global de campo:"
 
 #: eeschema/dialogs/panel_template_fieldnames.cpp:209
 #, fuzzy, c-format
