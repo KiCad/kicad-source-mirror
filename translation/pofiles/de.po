@@ -51292,7 +51292,7 @@ msgstr "Leiterbahnsegment entfernen"
 
 #: pcbnew/tools/pcb_actions.cpp:2269
 msgid "Unroutes segment to the nearest segment."
-msgstr "Entfernt Leiterbahnsegment bis zum nächsten Segment"
+msgstr "Entfernt Leiterbahnsegment bis zum nächsten Segment."
 
 #: pcbnew/tools/pcb_actions.cpp:2283
 msgid "Select All Tracks in Net"
@@ -51772,12 +51772,10 @@ msgid "Actual Hole Clearance"
 msgstr "Tatsächlicher Loch-Freiraum"
 
 #: pcbnew/tools/pcb_control.cpp:2079
-#, fuzzy
 msgid "Resolved Edge Clearance"
 msgstr "Ermittelter Kanten-Abstand"
 
 #: pcbnew/tools/pcb_control.cpp:2084
-#, fuzzy
 msgid "Resolved Margin Clearance"
 msgstr "Ermittelter Randabstand"
 
@@ -51790,9 +51788,8 @@ msgid "Selected 2D Length"
 msgstr "Gewählte 2D-Länge"
 
 #: pcbnew/tools/pcb_control.cpp:2249
-#, fuzzy
 msgid "Selected 2D Copper Area"
-msgstr "Kupferlagenpaar wählen"
+msgstr "Ausgewählte 2D-Kupferfläche"
 
 #: pcbnew/tools/pcb_control.cpp:2318
 msgid "BOARD CHARACTERISTICS"
@@ -51823,7 +51820,6 @@ msgid "Copper finish: "
 msgstr "Kupferoberfläche: "
 
 #: pcbnew/tools/pcb_control.cpp:2358
-#, fuzzy
 msgid "Impedance control: "
 msgstr "Impedanzkontrolle: "
 
@@ -51844,9 +51840,8 @@ msgid "Edge card connectors: "
 msgstr "Randsteckverbinder: "
 
 #: pcbnew/tools/pcb_control.cpp:2392
-#, fuzzy
 msgid "Place Board Characteristics"
-msgstr "Platineneigenschaften"
+msgstr "Platineneigenschaften hinzufügen"
 
 #: pcbnew/tools/pcb_control.cpp:2445
 msgid "Loss Tangent"
@@ -51857,9 +51852,8 @@ msgid "Dielectric"
 msgstr "Dielektrikum"
 
 #: pcbnew/tools/pcb_control.cpp:2491
-#, fuzzy
 msgid "Place Board Stackup Table"
-msgstr "Platinenlagenaufbau-Tabelle einfügen"
+msgstr "Platinenlagenaufbau einfügen"
 
 #: pcbnew/tools/pcb_point_editor.cpp:1980
 msgid "Resize Table Cells"
