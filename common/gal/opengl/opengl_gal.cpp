@@ -1460,7 +1460,8 @@ void OPENGL_GAL::DrawPolygon( const SHAPE_POLY_SET& aPolySet, bool aStrokeTriang
 
 void OPENGL_GAL::DrawPolygon( const SHAPE_LINE_CHAIN& aPolygon )
 {
-    wxCHECK( aPolygon.PointCount() >= 2, /* void */ );
+    if( aPolygon.PointCount() < 2 )
+        return;
 
     const int                   pointCount = aPolygon.SegmentCount() + 1;
     std::unique_ptr<GLdouble[]> points( new GLdouble[3 * pointCount] );
