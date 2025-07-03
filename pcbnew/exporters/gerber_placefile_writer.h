@@ -66,7 +66,8 @@ public:
      * @param aIncludeBrdEdges use true to include board outlines.
      * @return component count, or -1 if the file cannot be created.
      */
-    int CreatePlaceFile( const wxString& aFullFilename, PCB_LAYER_ID aLayer, bool aIncludeBrdEdges );
+    int CreatePlaceFile( const wxString& aFullFilename, PCB_LAYER_ID aLayer, bool aIncludeBrdEdges,
+                         bool aExcludeDNP );
 
     /**
      * @param aFullBaseFilename = a full filename. it will be modified

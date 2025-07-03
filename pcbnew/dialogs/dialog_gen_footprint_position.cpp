@@ -348,7 +348,8 @@ bool DIALOG_GEN_FOOTPRINT_POSITION::CreateGerberFiles()
     PLACEFILE_GERBER_WRITER exporter( brd );
     wxString                filename = exporter.GetPlaceFileName( fn.GetFullPath(), F_Cu );
 
-    int fpcount = exporter.CreatePlaceFile( filename, F_Cu, m_cbIncludeBoardEdge->GetValue() );
+    int fpcount = exporter.CreatePlaceFile( filename, F_Cu, m_cbIncludeBoardEdge->GetValue(),
+                                            m_excludeDNP->GetValue() );
 
     if( fpcount < 0 )
     {
@@ -369,7 +370,8 @@ bool DIALOG_GEN_FOOTPRINT_POSITION::CreateGerberFiles()
 
     filename = exporter.GetPlaceFileName( fn.GetFullPath(), B_Cu );
 
-    fpcount = exporter.CreatePlaceFile( filename, B_Cu, m_cbIncludeBoardEdge->GetValue() );
+    fpcount = exporter.CreatePlaceFile( filename, B_Cu, m_cbIncludeBoardEdge->GetValue(),
+                                        m_excludeDNP->GetValue() );
 
     if( fpcount < 0 )
     {
@@ -464,9 +466,8 @@ bool DIALOG_GEN_FOOTPRINT_POSITION::CreateAsciiFiles()
     }
 
     int fpcount = m_editFrame->DoGenFootprintsPositionFile( fn.GetFullPath(), UnitsMM(), OnlySMD(),
-                                                         ExcludeAllTH(), ExcludeDNP(), topSide,
-                                                         bottomSide, useCSVfmt, useAuxOrigin,
-                                                         negateBottomX );
+                                                            ExcludeAllTH(), ExcludeDNP(), topSide, bottomSide,
+                                                            useCSVfmt, useAuxOrigin, negateBottomX );
     if( fpcount < 0 )
     {
         msg.Printf( _( "Failed to create file '%s'." ), fn.GetFullPath() );
@@ -507,9 +508,8 @@ bool DIALOG_GEN_FOOTPRINT_POSITION::CreateAsciiFiles()
     }
 
     fpcount = m_editFrame->DoGenFootprintsPositionFile( fn.GetFullPath(), UnitsMM(), OnlySMD(),
-                                                        ExcludeAllTH(), ExcludeDNP(), topSide,
-                                                        bottomSide, useCSVfmt,
-                                                        useAuxOrigin, negateBottomX );
+                                                        ExcludeAllTH(), ExcludeDNP(), topSide, bottomSide,
+                                                        useCSVfmt, useAuxOrigin, negateBottomX );
 
     if( fpcount < 0 )
     {
