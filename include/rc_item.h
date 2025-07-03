@@ -267,6 +267,14 @@ public:
     wxString GetColumnType( unsigned int aCol ) const override { return "string"; }
     bool HasContainerColumns( wxDataViewItem const& aItem ) const override { return true; }
 
+    bool HasValue( const wxDataViewItem& item, unsigned col ) const override
+    {
+        if( m_tree.empty() )
+            return false;
+        else
+            return wxDataViewModel::HasValue( item, col );
+    }
+
     /**
      * Called by the wxDataView to fetch an item's value.
      */
