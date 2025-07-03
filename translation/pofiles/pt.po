@@ -11,15 +11,16 @@
 # John Beard <john.j.beard@gmail.com>, 2025.
 # Seth Hillbrand <seth@kipro-pcb.com>, 2025.
 # Manuela Silva <mmsrs@sky.com>, 2025.
+# dsa-t <dudesuchamazing@gmail.com>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-03 20:15+0300\n"
-"PO-Revision-Date: 2025-06-30 19:01+0000\n"
-"Last-Translator: Julio Dias <jcesardias@gmail.com>\n"
-"Language-Team: Portuguese <https://hosted.weblate.org/projects/kicad/master-"
-"source/pt/>\n"
+"PO-Revision-Date: 2025-07-04 18:01+0000\n"
+"Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
+"Language-Team: Portuguese <https://hosted.weblate.org/projects/kicad/"
+"master-source/pt/>\n"
 "Language: pt\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -17690,14 +17691,12 @@ msgid "Reset Libraries"
 msgstr "Redefinir as bibliotecas"
 
 #: eeschema/dialogs/panel_template_fieldnames.cpp:45
-#, fuzzy
 msgid "Project Field Name Templates"
-msgstr "Modelos de nome de campo do projeto:"
+msgstr "Modelos de nome de campo do projeto"
 
 #: eeschema/dialogs/panel_template_fieldnames.cpp:51
-#, fuzzy
 msgid "Global Field Name Templates"
-msgstr "Modelos de nome global de campo:"
+msgstr "Modelos de nome global de campo"
 
 #: eeschema/dialogs/panel_template_fieldnames.cpp:271
 #, fuzzy, c-format
