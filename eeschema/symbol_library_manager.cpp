@@ -173,8 +173,6 @@ bool SYMBOL_LIBRARY_MANAGER::SaveLibrary( const wxString& aLibrary, const wxStri
                                           SCH_IO_MGR::SCH_FILE_T aFileType )
 {
     wxCHECK( aFileType != SCH_IO_MGR::SCH_FILE_T::SCH_LEGACY, false );
-    wxCHECK_MSG( LibraryExists( aLibrary ), false,
-                 wxString::Format( "Library missing: %s", aLibrary ) );
 
     wxFileName fn( aFileName );
     wxCHECK( !fn.FileExists() || fn.IsFileWritable(), false );
@@ -197,6 +195,7 @@ bool SYMBOL_LIBRARY_MANAGER::SaveLibrary( const wxString& aLibrary, const wxStri
         for( const std::shared_ptr<SYMBOL_BUFFER>& symbolBuf : symbolBuffers )
         {
             wxCHECK2( symbolBuf, continue );
+
             if( !libBuf.SaveBuffer( *symbolBuf, aFileName, &*pi, true ) )
             {
                 // Something went wrong, but try to save other libraries
@@ -233,12 +232,10 @@ bool SYMBOL_LIBRARY_MANAGER::SaveLibrary( const wxString& aLibrary, const wxStri
                     std::shared_ptr< LIB_SYMBOL > oldParent = symbol->GetParent().lock();
 
                     wxCHECK_MSG( oldParent, false,
-                                 wxString::Format( wxT( "Derived symbol '%s' found with "
-                                                        "undefined parent." ),
+                                 wxString::Format( wxT( "Derived symbol '%s' found with undefined parent." ),
                                                    symbol->GetName() ) );
 
-                    LIB_SYMBOL* libParent = pi->LoadSymbol( aLibrary, oldParent->GetName(),
-                                                            &properties );
+                    LIB_SYMBOL* libParent = pi->LoadSymbol( aLibrary, oldParent->GetName(), &properties );
 
                     if( !libParent )
                     {
