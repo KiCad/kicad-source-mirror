@@ -14,10 +14,10 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-03 20:15+0300\n"
-"PO-Revision-Date: 2025-06-30 19:01+0000\n"
+"PO-Revision-Date: 2025-07-04 18:02+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
-"Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/master-"
-"source/sv/>\n"
+"Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/"
+"master-source/sv/>\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -17494,9 +17494,9 @@ msgstr "Det går inte att skapa utmatningskatalogen '%s'."
 
 #: eeschema/eeschema_jobs_handler.cpp:1004 pcbnew/pcbnew_jobs_handler.cpp:1267
 #: pcbnew/pcbnew_jobs_handler.cpp:1913
-#, fuzzy, c-format
+#, c-format
 msgid "Exporting %s"
-msgstr "Importerar %s"
+msgstr "Exporterar %s"
 
 #: eeschema/eeschema_jobs_handler.cpp:1034 pcbnew/pcbnew_jobs_handler.cpp:1790
 msgid "Output path must not conflict with existing path\n"
@@ -25063,9 +25063,9 @@ msgstr "Inget symbolbibliotek valt."
 #: eeschema/tools/symbol_editor_control.cpp:263
 #: eeschema/tools/symbol_editor_control.cpp:413
 #: eeschema/tools/symbol_editor_control.cpp:457
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol library '%s' not found."
-msgstr "Välj bibliotek att bläddra i"
+msgstr "Symbolbiblioteket '%s' hittades inte."
 
 #: eeschema/tools/symbol_editor_control.cpp:349
 #: pcbnew/tools/footprint_editor_control.cpp:650
@@ -26813,13 +26813,12 @@ msgid "Export utilities (Gerbers, drill, position files, etc)"
 msgstr "Exportverktyg (Gerber, borr- och positionsfiler etc.)"
 
 #: kicad/cli/command_pcb_export_3d.cpp:78
-#, fuzzy
 msgid ""
 "Output file format, options: step, stepz, brep, xao, glb (binary glTF), ply, "
 "stl"
 msgstr ""
-"Filformat för utmatning; alternativ: step, brep, xao, glb (binär glTF), ply, "
-"stl"
+"Filformat för utmatning; alternativ: step, stepz, brep, xao, glb (binär glTF)"
+", ply, stl"
 
 #: kicad/cli/command_pcb_export_3d.cpp:83
 msgid "Overwrite output file"
@@ -28077,7 +28076,7 @@ msgstr "Importera EasyEDA Pro projekt"
 #: kicad/jobs_runner.cpp:258
 #, fuzzy, c-format
 msgid "Running job %d: %s"
-msgstr "Pågående arbeten"
+msgstr "Pågående arbete %d: %s"
 
 #: kicad/jobs_runner.cpp:302
 msgid "Job successful"
@@ -28125,9 +28124,8 @@ msgid "Export STL"
 msgstr "Exportera STL"
 
 #: kicad/kicad_cli.cpp:129
-#, fuzzy
 msgid "Export STEPZ"
-msgstr "Exportera STEP"
+msgstr "Exportera STEPZ"
 
 #: kicad/kicad_cli.cpp:151
 msgid "Export PS"
@@ -35327,8 +35325,9 @@ msgid "STL"
 msgstr "STL"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:27
+#, fuzzy
 msgid "STPZ"
-msgstr ""
+msgstr "STPZ"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:56
 msgid "Board Options"
@@ -37476,7 +37475,6 @@ msgid "Outset must be a positive value."
 msgstr "(Lödytan måste ha positiv storlek)"
 
 #: pcbnew/dialogs/dialog_outset_items.cpp:183
-#, fuzzy
 msgid "Line width must be a positive value."
 msgstr "Linjebredden måste vara större än noll."
 
