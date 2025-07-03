@@ -576,6 +576,23 @@ void EDA_3D_VIEWER_FRAME::LoadSettings( APP_SETTINGS_BASE *aCfg )
 
         m_boardAdapter.SetBoard( GetBoard() );
 
+        wxString legacyColorsPresetName = _( "legacy colors" );
+
+        if( LAYER_PRESET_3D* preset = cfg->FindPreset( legacyColorsPresetName ) )
+        {
+            // Something corrupts the legacy colours in 9.0, so just make sure that it always
+            // has the correct values.
+            *preset = { legacyColorsPresetName,
+                        GetAdapter().GetDefaultVisibleLayers(),
+                        GetAdapter().GetDefaultColors() };
+        }
+        else
+        {
+            cfg->m_LayerPresets.emplace_back( legacyColorsPresetName,
+                                              GetAdapter().GetDefaultVisibleLayers(),
+                                              GetAdapter().GetDefaultColors() );
+        }
+
         // When opening the 3D viewer, we use the OpenGL mode, never the ray tracing engine
         // because the ray tracing is very time consuming, and can be seen as not working
         // (freeze window) with large boards.
@@ -583,17 +600,7 @@ void EDA_3D_VIEWER_FRAME::LoadSettings( APP_SETTINGS_BASE *aCfg )
 
         if( cfg->m_CurrentPreset == LEGACY_PRESET_FLAG )
         {
-            wxString legacyColorsPresetName = _( "legacy colors" );
-
             cfg->m_UseStackupColors = false;
-
-            if( !cfg->FindPreset( legacyColorsPresetName ) )
-            {
-                cfg->m_LayerPresets.emplace_back( legacyColorsPresetName,
-                                                  GetAdapter().GetDefaultVisibleLayers(),
-                                                  GetAdapter().GetDefaultColors() );
-            }
-
             cfg->m_CurrentPreset = FOLLOW_PLOT_SETTINGS;
         }
 

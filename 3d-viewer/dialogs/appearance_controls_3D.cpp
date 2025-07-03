@@ -236,7 +236,7 @@ APPEARANCE_CONTROLS_3D::~APPEARANCE_CONTROLS_3D()
 wxSize APPEARANCE_CONTROLS_3D::GetBestSize() const
 {
     DPI_SCALING_COMMON dpi( nullptr, m_frame );
-    wxSize      size( 220 * dpi.GetScaleFactor(), 480 * dpi.GetScaleFactor() );
+    wxSize      size( 228 * dpi.GetScaleFactor(), 480 * dpi.GetScaleFactor() );
     return size;
 }
 
