@@ -2697,24 +2697,25 @@ void PROJECT_TREE_PANE::onGitSyncTimer( wxTimerEvent& aEvent )
 
     thread_pool& tp = GetKiCadThreadPool();
 
-    tp.push_task( [this]()
-    {
-        KIGIT_COMMON* gitCommon = m_TreeProject->GitCommon();
+    tp.push_task(
+            [this]()
+            {
+                KIGIT_COMMON* gitCommon = m_TreeProject->GitCommon();
 
-        if( !gitCommon )
-        {
-            wxLogTrace( traceGit, "onGitSyncTimer: No git repository found" );
-            return;
-        }
+                if( !gitCommon )
+                {
+                    wxLogTrace( traceGit, "onGitSyncTimer: No git repository found" );
+                    return;
+                }
 
-        GIT_PULL_HANDLER handler( gitCommon );
-        handler.PerformFetch();
+                GIT_PULL_HANDLER handler( gitCommon );
+                handler.PerformFetch();
 
-        CallAfter( [this]()
-        {
-            gitStatusTimerHandler();
-        } );
-    } );
+                CallAfter( [this]()
+                {
+                    gitStatusTimerHandler();
+                } );
+            } );
 
     if( gitSettings.updatInterval > 0 )
     {
@@ -2740,6 +2741,7 @@ void PROJECT_TREE_PANE::gitStatusTimerHandler()
 void PROJECT_TREE_PANE::onGitStatusTimer( wxTimerEvent& aEvent )
 {
     wxLogTrace( traceGit, "onGitStatusTimer" );
+
     if( !Pgm().GetCommonSettings()->m_Git.enableGit || !m_TreeProject )
         return;
 
