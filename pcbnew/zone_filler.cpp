@@ -2427,6 +2427,8 @@ bool ZONE_FILLER::addHatchFillTypeOnZone( const ZONE* aZone, PCB_LAYER_ID aLayer
     if( !aZone->GetHatchOrientation().IsZero() )
         holes.Rotate( aZone->GetHatchOrientation() );
 
+    holes.ClearArcs();
+
     DUMP_POLYS_TO_COPPER_LAYER( holes, In10_Cu, wxT( "hatch-holes" ) );
 
     int outline_margin = aZone->GetMinThickness() * 1.1;
@@ -2438,12 +2440,14 @@ bool ZONE_FILLER::addHatchFillTypeOnZone( const ZONE* aZone, PCB_LAYER_ID aLayer
     // The fill has already been deflated to ensure GetMinThickness() so we just have to
     // account for anything beyond that.
     SHAPE_POLY_SET deflatedFilledPolys = aFillPolys.CloneDropTriangulation();
+    deflatedFilledPolys.ClearArcs();
     deflatedFilledPolys.Deflate( outline_margin - aZone->GetMinThickness(),
                                  CORNER_STRATEGY::CHAMFER_ALL_CORNERS, maxError );
     holes.BooleanIntersection( deflatedFilledPolys );
     DUMP_POLYS_TO_COPPER_LAYER( holes, In11_Cu, wxT( "fill-clipped-hatch-holes" ) );
 
     SHAPE_POLY_SET deflatedOutline = aZone->Outline()->CloneDropTriangulation();
+    deflatedOutline.ClearArcs();
     deflatedOutline.Deflate( outline_margin, CORNER_STRATEGY::CHAMFER_ALL_CORNERS, maxError );
     holes.BooleanIntersection( deflatedOutline );
     DUMP_POLYS_TO_COPPER_LAYER( holes, In12_Cu, wxT( "outline-clipped-hatch-holes" ) );
@@ -2468,11 +2472,9 @@ bool ZONE_FILLER::addHatchFillTypeOnZone( const ZONE* aZone, PCB_LAYER_ID aLayer
                     && via->IsOnLayer( aLayer )
                     && via->GetBoundingBox().Intersects( zone_boundingbox ) )
                 {
-                    int r = std::max( min_apron_radius,
-                                      via->GetDrillValue() / 2 + outline_margin );
+                    int r = std::max( min_apron_radius, via->GetDrillValue() / 2 + outline_margin );
 
-                    TransformCircleToPolygon( aprons, via->GetPosition(), r, maxError,
-                                              ERROR_OUTSIDE );
+                    TransformCircleToPolygon( aprons, via->GetPosition(), r, maxError, ERROR_OUTSIDE );
                 }
             }
         }
@@ -2497,8 +2499,7 @@ bool ZONE_FILLER::addHatchFillTypeOnZone( const ZONE* aZone, PCB_LAYER_ID aLayer
                                               outline_margin - min_annular_ring_width );
 
                     clearance = std::max( 0, clearance - linethickness / 2 );
-                    pad->TransformShapeToPolygon( aprons, aLayer, clearance, maxError,
-                                                  ERROR_OUTSIDE );
+                    pad->TransformShapeToPolygon( aprons, aLayer, clearance, maxError, ERROR_OUTSIDE );
                 }
             }
         }
