@@ -463,11 +463,13 @@ void DIALOG_PIN_PROPERTIES::OnDeleteAlternate( wxCommandEvent& event )
     if( curRow < 0 )
         return;
 
-    m_alternatesDataModel->RemoveRow( curRow );
+    // move the selection first because wx internally will try to reselect the row we deleted in
+    // out of order events
+    int nextSelRow = std::max( curRow-1, 0 );
+    m_alternatesGrid->GoToCell( nextSelRow, m_alternatesGrid->GetGridCursorCol() );
+    m_alternatesGrid->SetGridCursor( nextSelRow, m_alternatesGrid->GetGridCursorCol() );
 
-    curRow = std::max( 0, curRow - 1 );
-    m_alternatesGrid->MakeCellVisible( curRow, m_alternatesGrid->GetGridCursorCol() );
-    m_alternatesGrid->SetGridCursor( curRow, m_alternatesGrid->GetGridCursorCol() );
+    m_alternatesDataModel->RemoveRow( curRow );
 }
 
 
