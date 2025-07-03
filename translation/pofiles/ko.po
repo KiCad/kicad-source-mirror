@@ -35,7 +35,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-27 22:51+0300\n"
+"POT-Creation-Date: 2025-07-03 20:16+0300\n"
 "PO-Revision-Date: 2025-06-05 14:56+0000\n"
 "Last-Translator: 김랑기 <korearf@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/v9/ko/>\n"
@@ -1417,7 +1417,7 @@ msgstr "배율"
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:76
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:121
 #: common/dialogs/dialog_grid_settings_base.cpp:36
-#: common/tool/common_tools.cpp:630
+#: common/tool/common_tools.cpp:636
 #: eeschema/dialogs/dialog_image_properties_base.cpp:34
 #: eeschema/import_gfx/dialog_import_gfx_sch_base.cpp:61
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:248
@@ -1435,7 +1435,7 @@ msgstr "X:"
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:86
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:131
 #: common/dialogs/dialog_grid_settings_base.cpp:57
-#: common/tool/common_tools.cpp:630
+#: common/tool/common_tools.cpp:636
 #: eeschema/dialogs/dialog_image_properties_base.cpp:45
 #: eeschema/import_gfx/dialog_import_gfx_sch_base.cpp:82
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:259
@@ -1564,7 +1564,7 @@ msgstr "풋프린트 라이브러리 생성"
 #: eeschema/dialogs/dialog_field_properties_base.cpp:239
 #: eeschema/dialogs/dialog_field_properties_base.cpp:273
 #: eeschema/dialogs/dialog_field_properties_base.cpp:284
-#: eeschema/dialogs/dialog_label_properties_base.cpp:277
+#: eeschema/dialogs/dialog_label_properties_base.cpp:278
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:109
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:148
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:59
@@ -2081,8 +2081,8 @@ msgstr "정보"
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:414
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:411
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:119
-#: pcbnew/dialogs/dialog_track_via_properties.cpp:556
-#: pcbnew/dialogs/dialog_track_via_properties.cpp:594
+#: pcbnew/dialogs/dialog_track_via_properties.cpp:555
+#: pcbnew/dialogs/dialog_track_via_properties.cpp:593
 #: pcbnew/footprint_libraries_utils.cpp:379
 #: pcbnew/footprint_libraries_utils.cpp:1161 pcbnew/router/router_tool.cpp:1863
 #: pcbnew/router/router_tool.cpp:2617
@@ -2606,7 +2606,7 @@ msgstr "환경 변수"
 #: common/dialogs/panel_setup_netclasses_base.cpp:51
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:88
 #: eeschema/dialogs/dialog_design_block_properties_base.cpp:42
-#: eeschema/dialogs/dialog_label_properties_base.cpp:108
+#: eeschema/dialogs/dialog_label_properties_base.cpp:109
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:121
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:89
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:59
@@ -3193,7 +3193,7 @@ msgstr "더미 텍스트"
 
 #: common/dialogs/dialog_page_settings_base.cpp:50
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:238
-#: eeschema/dialogs/dialog_label_properties.cpp:209
+#: eeschema/dialogs/dialog_label_properties.cpp:210
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:113
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:296
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:338
@@ -3416,7 +3416,7 @@ msgstr "옵션"
 #: common/dialogs/panel_design_block_lib_table.cpp:411
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:89
 #: eeschema/dialogs/dialog_design_block_properties_base.cpp:43
-#: eeschema/dialogs/dialog_label_properties_base.cpp:109
+#: eeschema/dialogs/dialog_label_properties_base.cpp:110
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:60
 #: eeschema/dialogs/dialog_rescue_each.cpp:135
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:61
@@ -3554,7 +3554,7 @@ msgstr "출력 모드:"
 
 #: common/dialogs/dialog_print_generic_base.cpp:35
 #: common/dialogs/panel_setup_netclasses_base.cpp:63 common/eda_text.cpp:1408
-#: eeschema/dialogs/dialog_label_properties_base.cpp:121
+#: eeschema/dialogs/dialog_label_properties_base.cpp:122
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:72
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:78
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:72
@@ -3735,7 +3735,7 @@ msgstr "<"
 #: common/dialogs/eda_reorderable_list_dialog_base.cpp:75
 #: common/dialogs/panel_design_block_lib_table_base.cpp:136
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:43
-#: eeschema/dialogs/dialog_label_properties_base.cpp:147
+#: eeschema/dialogs/dialog_label_properties_base.cpp:148
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:97
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:98
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:95
@@ -3748,7 +3748,7 @@ msgstr "위로 이동"
 #: common/dialogs/eda_reorderable_list_dialog_base.cpp:80
 #: common/dialogs/panel_design_block_lib_table_base.cpp:141
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:48
-#: eeschema/dialogs/dialog_label_properties_base.cpp:152
+#: eeschema/dialogs/dialog_label_properties_base.cpp:153
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:102
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:103
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:100
@@ -4975,7 +4975,7 @@ msgstr "그리드 크기 '%s'이(가) 이미 존재함."
 #: common/eda_base_frame.cpp:1131 common/eda_base_frame.cpp:1140
 #: common/eda_base_frame.cpp:1166 common/eda_base_frame.cpp:1179
 #: common/eda_base_frame.cpp:1212 common/eda_base_frame.cpp:1234
-#: common/tool/common_tools.cpp:608
+#: common/tool/common_tools.cpp:614
 msgid "Grids"
 msgstr "그리드"
 
@@ -5199,9 +5199,9 @@ msgstr "줌"
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:363
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:332
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:91
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1080
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1089
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1099
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1079
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1088
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1098
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:587
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:858
 #: pcbnew/dialogs/dialog_plot_base.cpp:118 pcbnew/footprint.cpp:4125
@@ -5783,7 +5783,7 @@ msgstr "선"
 #: common/drawing_sheet/ds_data_item.cpp:367
 #: common/drawing_sheet/ds_draw_item.cpp:124 common/eda_shape.cpp:975
 #: common/eda_shape.cpp:2320
-#: eeschema/dialogs/dialog_label_properties_base.cpp:199
+#: eeschema/dialogs/dialog_label_properties_base.cpp:200
 #: eeschema/sch_label.cpp:2298
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:45 pcbnew/pad.cpp:2683
 #: pcbnew/pcb_dimension.cpp:2013
@@ -5976,7 +5976,7 @@ msgid "Data Collection"
 msgstr "데이터 수집"
 
 #: common/eda_base_frame.cpp:1129 common/tool/actions.cpp:1089
-#: common/tool/common_tools.cpp:615 eeschema/symbol_editor/symbol_editor.cpp:84
+#: common/tool/common_tools.cpp:621 eeschema/symbol_editor/symbol_editor.cpp:84
 #: kicad/tools/kicad_manager_actions.cpp:125
 msgid "Symbol Editor"
 msgstr "심볼 편집기"
@@ -6001,7 +6001,7 @@ msgid "Colors"
 msgstr "색상"
 
 #: common/eda_base_frame.cpp:1138 common/hotkey_store.cpp:77
-#: common/tool/common_tools.cpp:614 eeschema/menubar.cpp:133
+#: common/tool/common_tools.cpp:620 eeschema/menubar.cpp:133
 #: eeschema/sch_edit_frame.cpp:1753 kicad/tools/kicad_manager_actions.cpp:114
 msgid "Schematic Editor"
 msgstr "회로도 편집기"
@@ -6023,7 +6023,7 @@ msgid "Simulator"
 msgstr "시뮬레이터"
 
 #: common/eda_base_frame.cpp:1164 common/tool/actions.cpp:1106
-#: common/tool/common_tools.cpp:617 kicad/tools/kicad_manager_actions.cpp:147
+#: common/tool/common_tools.cpp:623 kicad/tools/kicad_manager_actions.cpp:147
 #: pcbnew/footprint_edit_frame.cpp:1107 pcbnew/menubar_footprint_editor.cpp:92
 msgid "Footprint Editor"
 msgstr "풋프린트 편집기"
@@ -6041,7 +6041,7 @@ msgid "Graphics Defaults"
 msgstr "그래픽 기본값"
 
 #: common/eda_base_frame.cpp:1177 common/hotkey_store.cpp:78
-#: common/tool/common_tools.cpp:616 kicad/tools/kicad_manager_actions.cpp:136
+#: common/tool/common_tools.cpp:622 kicad/tools/kicad_manager_actions.cpp:136
 #: pcbnew/menubar_pcb_editor.cpp:186 pcbnew/pcb_edit_frame.cpp:201
 #: pcbnew/pcb_edit_frame.cpp:1809 pcbnew/tools/zone_filler_tool.cpp:284
 msgid "PCB Editor"
@@ -6060,7 +6060,7 @@ msgid "Raytracing Renderer"
 msgstr "레이트레이싱 렌더러"
 
 #: common/eda_base_frame.cpp:1209 common/hotkey_store.cpp:81
-#: common/tool/common_tools.cpp:619 gerbview/gerbview_frame.cpp:686
+#: common/tool/common_tools.cpp:625 gerbview/gerbview_frame.cpp:686
 #: gerbview/gerbview_frame.cpp:710 gerbview/menubar.cpp:159
 #: kicad/tools/kicad_manager_actions.cpp:158
 msgid "Gerber Viewer"
@@ -6071,7 +6071,7 @@ msgid "Excellon Options"
 msgstr "Excellon 설정"
 
 #: common/eda_base_frame.cpp:1232 common/hotkey_store.cpp:79
-#: common/tool/common_tools.cpp:618 kicad/tools/kicad_manager_actions.cpp:187
+#: common/tool/common_tools.cpp:624 kicad/tools/kicad_manager_actions.cpp:187
 #: pagelayout_editor/menubar.cpp:88 pagelayout_editor/menubar.cpp:89
 #: pagelayout_editor/pl_editor_frame.cpp:586
 msgid "Drawing Sheet Editor"
@@ -6412,7 +6412,7 @@ msgid "Arc"
 msgstr "호"
 
 #: common/eda_shape.cpp:331 common/eda_shape.cpp:971 common/eda_shape.cpp:2322
-#: eeschema/dialogs/dialog_label_properties_base.cpp:193
+#: eeschema/dialogs/dialog_label_properties_base.cpp:194
 #: eeschema/sch_label.cpp:2296 gerbview/gerber_draw_item.cpp:231
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:45 pcbnew/pad.cpp:1548
 #: pcbnew/pad.cpp:2682 pcbnew/pcb_dimension.cpp:2014
@@ -6448,7 +6448,7 @@ msgid "Segment"
 msgstr "세그먼트"
 
 #: common/eda_shape.cpp:987 common/eda_shape.cpp:2372
-#: eeschema/dialogs/dialog_label_properties_base.cpp:173
+#: eeschema/dialogs/dialog_label_properties_base.cpp:174
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:53
 #: eeschema/sch_label.cpp:2278 eeschema/sch_label.cpp:2310
 #: eeschema/sch_tablecell.cpp:197 eeschema/sch_textbox.cpp:679
@@ -6588,8 +6588,8 @@ msgstr "채움 색상"
 #: common/eda_text.cpp:977 common/eda_text.cpp:1364
 #: eeschema/dialogs/dialog_field_properties_base.cpp:162
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:217
-#: eeschema/dialogs/dialog_label_properties_base.cpp:114
-#: eeschema/dialogs/dialog_label_properties_base.cpp:235
+#: eeschema/dialogs/dialog_label_properties_base.cpp:115
+#: eeschema/dialogs/dialog_label_properties_base.cpp:236
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:65
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:105
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:65
@@ -6614,8 +6614,8 @@ msgstr "이탤릭체"
 #: common/eda_text.cpp:978 common/eda_text.cpp:1368
 #: eeschema/dialogs/dialog_field_properties_base.cpp:157
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:214
-#: eeschema/dialogs/dialog_label_properties_base.cpp:115
-#: eeschema/dialogs/dialog_label_properties_base.cpp:230
+#: eeschema/dialogs/dialog_label_properties_base.cpp:116
+#: eeschema/dialogs/dialog_label_properties_base.cpp:231
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:66
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:100
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:66
@@ -6694,7 +6694,7 @@ msgid "Bottom"
 msgstr "하"
 
 #: common/eda_text.cpp:1343
-#: eeschema/dialogs/dialog_label_properties_base.cpp:117
+#: eeschema/dialogs/dialog_label_properties_base.cpp:118
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:124
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:92
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:68
@@ -6723,7 +6723,7 @@ msgid "Text Properties"
 msgstr "텍스트 속성"
 
 #: common/eda_text.cpp:1355
-#: eeschema/dialogs/dialog_label_properties_base.cpp:120
+#: eeschema/dialogs/dialog_label_properties_base.cpp:121
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:71
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:71
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:68
@@ -6916,7 +6916,7 @@ msgstr "잘못된 별칭 (중복된 이름)"
 
 #: common/font/font.cpp:177 common/widgets/font_choice.cpp:49
 #: eeschema/dialogs/dialog_field_properties_base.cpp:142
-#: eeschema/dialogs/dialog_label_properties_base.cpp:216
+#: eeschema/dialogs/dialog_label_properties_base.cpp:217
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:85
 #: eeschema/dialogs/dialog_tablecell_properties_base.cpp:129
 #: eeschema/dialogs/dialog_text_properties_base.cpp:93
@@ -8288,7 +8288,7 @@ msgstr "표시 플래그 설정 해제"
 msgid "Library settings for %s..."
 msgstr "%s에 대한 라이브러리 설정…"
 
-#: common/lib_tree_model.cpp:153
+#: common/lib_tree_model.cpp:144
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:131
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:99
 #: eeschema/dialogs/dialog_sim_model.cpp:632 eeschema/sch_item.cpp:541
@@ -8303,14 +8303,14 @@ msgstr "유닛"
 msgid "Item"
 msgstr "항목"
 
-#: common/lib_tree_model_adapter.cpp:404
+#: common/lib_tree_model_adapter.cpp:402
 #: eeschema/widgets/panel_design_block_chooser.cpp:416
 #: eeschema/widgets/panel_symbol_chooser.cpp:173
 #: pcbnew/widgets/panel_footprint_chooser.cpp:98
 msgid "Recently Used"
 msgstr "최근에 사용"
 
-#: common/lib_tree_model_adapter.cpp:406
+#: common/lib_tree_model_adapter.cpp:404
 #: eeschema/widgets/panel_symbol_chooser.cpp:180
 msgid "Already Placed"
 msgstr "이미 배치됨"
@@ -8368,7 +8368,7 @@ msgid "Type mismatch between %lf and '%s'"
 msgstr "%lf와 '%s' 간의 유형 불일치"
 
 #: common/netclass.cpp:297 pcbnew/component_class_manager.cpp:61
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1084 pcbnew/zone.cpp:836
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1083 pcbnew/zone.cpp:836
 #, c-format
 msgid "%s and %s"
 msgstr "%s와%s"
@@ -8564,12 +8564,12 @@ msgid "Excluded error: "
 msgstr "제외된 오류: "
 
 #: common/rc_item.cpp:431 eeschema/erc/erc_item.cpp:410
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1422
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1421
 msgid "Warning: "
 msgstr "경고: "
 
 #: common/rc_item.cpp:435 eeschema/erc/erc_item.cpp:414
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1420
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1419
 msgid "Error: "
 msgstr "오류: "
 
@@ -9301,7 +9301,7 @@ msgstr "다음 그리드로 전환"
 msgid "Switch to Previous Grid"
 msgstr "이전 그리드로 전환"
 
-#: common/tool/actions.cpp:892 common/tool/common_tools.cpp:630
+#: common/tool/actions.cpp:892 common/tool/common_tools.cpp:636
 msgid "Grid Origin"
 msgstr "그리드 원점"
 
@@ -11984,7 +11984,7 @@ msgid "Violation Severity"
 msgstr "위반 심각도"
 
 #: eeschema/dialogs/dialog_erc.cpp:859
-#: eeschema/dialogs/dialog_label_properties_base.cpp:206
+#: eeschema/dialogs/dialog_label_properties_base.cpp:207
 #: eeschema/dialogs/dialog_schematic_setup.cpp:63
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:74
 #: pcbnew/dialogs/dialog_board_setup.cpp:134
@@ -12261,7 +12261,7 @@ msgid "Sheet filename can only be modified in Sheet Properties dialog."
 msgstr "시트 파일명은 시트 설정 대화 상자에서만 변경할 수 있습니다."
 
 #: eeschema/dialogs/dialog_field_properties.cpp:626
-#: eeschema/dialogs/dialog_label_properties.cpp:521
+#: eeschema/dialogs/dialog_label_properties.cpp:520
 msgid ""
 "Intersheet reference visibility is controlled globally from Schematic Setup "
 "> General > Formatting"
@@ -12297,7 +12297,7 @@ msgstr "회로도에서 이 필드의 자동 배치 허용"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:138
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:173
-#: eeschema/dialogs/dialog_label_properties_base.cpp:212
+#: eeschema/dialogs/dialog_label_properties_base.cpp:213
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:81
 #: eeschema/dialogs/dialog_tablecell_properties_base.cpp:125
 #: eeschema/dialogs/dialog_text_properties_base.cpp:89
@@ -12312,7 +12312,7 @@ msgstr "폰트:"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:142
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:177
-#: eeschema/dialogs/dialog_label_properties_base.cpp:216
+#: eeschema/dialogs/dialog_label_properties_base.cpp:217
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:85
 #: eeschema/dialogs/dialog_tablecell_properties_base.cpp:129
 #: eeschema/dialogs/dialog_text_properties_base.cpp:93
@@ -12384,7 +12384,7 @@ msgstr "세로 텍스트"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:229
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:198
-#: eeschema/dialogs/dialog_label_properties_base.cpp:267
+#: eeschema/dialogs/dialog_label_properties_base.cpp:268
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:117
 #: eeschema/dialogs/dialog_text_properties_base.cpp:180
 msgid "Text size:"
@@ -12392,7 +12392,7 @@ msgstr "텍스트 크기:"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:243
 #: eeschema/dialogs/dialog_junction_props_base.cpp:38
-#: eeschema/dialogs/dialog_label_properties_base.cpp:281
+#: eeschema/dialogs/dialog_label_properties_base.cpp:282
 #: eeschema/dialogs/dialog_line_properties_base.cpp:45
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:63
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:131
@@ -12681,8 +12681,8 @@ msgstr "접합점 편집"
 
 #: eeschema/dialogs/dialog_junction_props_base.cpp:27
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:46
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1639
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1657
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1638
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1656
 msgid "Diameter:"
 msgstr "직경:"
 
@@ -12700,66 +12700,66 @@ msgstr "회로도의 편집기 색상을 사용하려면 색상을 지웁니다.
 msgid "Junction Properties"
 msgstr "접합부 속성"
 
-#: eeschema/dialogs/dialog_label_properties.cpp:129
+#: eeschema/dialogs/dialog_label_properties.cpp:130
 msgid "Pin length:"
 msgstr "핀 길이:"
 
-#: eeschema/dialogs/dialog_label_properties.cpp:137
+#: eeschema/dialogs/dialog_label_properties.cpp:138
 msgid "Global Label Properties"
 msgstr "전역 라벨 속성"
 
-#: eeschema/dialogs/dialog_label_properties.cpp:138
+#: eeschema/dialogs/dialog_label_properties.cpp:139
 msgid "Hierarchical Label Properties"
 msgstr "계층 라벨 속성"
 
-#: eeschema/dialogs/dialog_label_properties.cpp:139
-#: eeschema/dialogs/dialog_label_properties_base.h:122
+#: eeschema/dialogs/dialog_label_properties.cpp:140
+#: eeschema/dialogs/dialog_label_properties_base.h:123
 msgid "Label Properties"
 msgstr "라벨 속성"
 
-#: eeschema/dialogs/dialog_label_properties.cpp:140
+#: eeschema/dialogs/dialog_label_properties.cpp:141
 msgid "Directive Label Properties"
 msgstr "지시문 레이블 속성"
 
-#: eeschema/dialogs/dialog_label_properties.cpp:141
+#: eeschema/dialogs/dialog_label_properties.cpp:142
 msgid "Hierarchical Sheet Pin Properties"
 msgstr "계층 시트 핀 속성"
 
-#: eeschema/dialogs/dialog_label_properties.cpp:501
+#: eeschema/dialogs/dialog_label_properties.cpp:500
 msgid "Label can not be empty."
 msgstr "레이블은 비워둘 수 없습니다."
 
-#: eeschema/dialogs/dialog_label_properties.cpp:565
+#: eeschema/dialogs/dialog_label_properties.cpp:564
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:443
 #: eeschema/dialogs/dialog_sheet_properties.cpp:397
 #: eeschema/dialogs/dialog_symbol_properties.cpp:743 include/project.h:43
 msgid "untitled"
 msgstr "제목 없음"
 
-#: eeschema/dialogs/dialog_label_properties.cpp:641
+#: eeschema/dialogs/dialog_label_properties.cpp:640
 msgid "Edit Label Properties"
 msgstr "라벨 속성 편집"
 
-#: eeschema/dialogs/dialog_label_properties.cpp:784
+#: eeschema/dialogs/dialog_label_properties.cpp:783
 msgid "The first field is mandatory."
 msgstr "첫 번째 필드는 필수입니다."
 
-#: eeschema/dialogs/dialog_label_properties_base.cpp:31
-#: eeschema/dialogs/dialog_label_properties_base.cpp:40
-#: eeschema/dialogs/dialog_label_properties_base.cpp:47
+#: eeschema/dialogs/dialog_label_properties_base.cpp:32
+#: eeschema/dialogs/dialog_label_properties_base.cpp:41
+#: eeschema/dialogs/dialog_label_properties_base.cpp:48
 msgid "Label:"
 msgstr "라벨:"
 
-#: eeschema/dialogs/dialog_label_properties_base.cpp:33
-#: eeschema/dialogs/dialog_label_properties_base.cpp:49
+#: eeschema/dialogs/dialog_label_properties_base.cpp:34
+#: eeschema/dialogs/dialog_label_properties_base.cpp:50
 msgid "Enter the text to be used within the schematic"
 msgstr "회로도 내에서 사용할 텍스트 입력"
 
-#: eeschema/dialogs/dialog_label_properties_base.cpp:62
+#: eeschema/dialogs/dialog_label_properties_base.cpp:63
 msgid "Multiple label input"
 msgstr "다중 레이블 입력"
 
-#: eeschema/dialogs/dialog_label_properties_base.cpp:68
+#: eeschema/dialogs/dialog_label_properties_base.cpp:69
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:42
 #: eeschema/dialogs/dialog_text_properties_base.cpp:78
 #: eeschema/dialogs/dialog_user_defined_signals_base.cpp:78
@@ -12767,7 +12767,7 @@ msgstr "다중 레이블 입력"
 msgid "Syntax help"
 msgstr "구문 도움말"
 
-#: eeschema/dialogs/dialog_label_properties_base.cpp:69
+#: eeschema/dialogs/dialog_label_properties_base.cpp:70
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:43
 #: eeschema/dialogs/dialog_text_properties_base.cpp:79
 #: eeschema/dialogs/dialog_user_defined_signals_base.cpp:79
@@ -12775,7 +12775,7 @@ msgstr "구문 도움말"
 msgid "Show syntax help window"
 msgstr "문법 도움말 창 표시"
 
-#: eeschema/dialogs/dialog_label_properties_base.cpp:80
+#: eeschema/dialogs/dialog_label_properties_base.cpp:81
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:31
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:33
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:28
@@ -12786,7 +12786,7 @@ msgstr "문법 도움말 창 표시"
 msgid "Fields"
 msgstr "필드"
 
-#: eeschema/dialogs/dialog_label_properties_base.cpp:110
+#: eeschema/dialogs/dialog_label_properties_base.cpp:111
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:61
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:62
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:58
@@ -12801,14 +12801,14 @@ msgstr "필드"
 msgid "Show"
 msgstr "표시"
 
-#: eeschema/dialogs/dialog_label_properties_base.cpp:111
+#: eeschema/dialogs/dialog_label_properties_base.cpp:112
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:62
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:59
 #: eeschema/fields_grid_table.cpp:480
 msgid "Show Name"
 msgstr "이름 표시"
 
-#: eeschema/dialogs/dialog_label_properties_base.cpp:112
+#: eeschema/dialogs/dialog_label_properties_base.cpp:113
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:63
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:63
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:60
@@ -12816,7 +12816,7 @@ msgstr "이름 표시"
 msgid "H Align"
 msgstr "H 정렬"
 
-#: eeschema/dialogs/dialog_label_properties_base.cpp:113
+#: eeschema/dialogs/dialog_label_properties_base.cpp:114
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:64
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:64
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:61
@@ -12824,7 +12824,7 @@ msgstr "H 정렬"
 msgid "V Align"
 msgstr "V 정렬"
 
-#: eeschema/dialogs/dialog_label_properties_base.cpp:116
+#: eeschema/dialogs/dialog_label_properties_base.cpp:117
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:67
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:67
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:64
@@ -12836,7 +12836,7 @@ msgstr "V 정렬"
 msgid "Text Size"
 msgstr "텍스트 크기"
 
-#: eeschema/dialogs/dialog_label_properties_base.cpp:118
+#: eeschema/dialogs/dialog_label_properties_base.cpp:119
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:128
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:96
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:69
@@ -12846,7 +12846,7 @@ msgstr "텍스트 크기"
 msgid "X Position"
 msgstr "X 위치"
 
-#: eeschema/dialogs/dialog_label_properties_base.cpp:119
+#: eeschema/dialogs/dialog_label_properties_base.cpp:120
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:129
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:97
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:70
@@ -12856,7 +12856,7 @@ msgstr "X 위치"
 msgid "Y Position"
 msgstr "Y 위치"
 
-#: eeschema/dialogs/dialog_label_properties_base.cpp:142
+#: eeschema/dialogs/dialog_label_properties_base.cpp:143
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:92
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:93
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:90
@@ -12864,7 +12864,7 @@ msgstr "Y 위치"
 msgid "Add field"
 msgstr "필드 추가"
 
-#: eeschema/dialogs/dialog_label_properties_base.cpp:160
+#: eeschema/dialogs/dialog_label_properties_base.cpp:161
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:110
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:111
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:108
@@ -12872,52 +12872,52 @@ msgstr "필드 추가"
 msgid "Delete field"
 msgstr "필드 삭제"
 
-#: eeschema/dialogs/dialog_label_properties_base.cpp:175
+#: eeschema/dialogs/dialog_label_properties_base.cpp:176
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:55
 #: eeschema/pin_type.cpp:85 eeschema/sch_label.cpp:97
 #: eeschema/sch_label.cpp:2240 eeschema/sch_pin.cpp:2117
 msgid "Input"
 msgstr "입력"
 
-#: eeschema/dialogs/dialog_label_properties_base.cpp:178
+#: eeschema/dialogs/dialog_label_properties_base.cpp:179
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:58
 #: eeschema/pin_type.cpp:86 eeschema/sch_label.cpp:98
 #: eeschema/sch_label.cpp:2241 eeschema/sch_pin.cpp:2118
 msgid "Output"
 msgstr "출력"
 
-#: eeschema/dialogs/dialog_label_properties_base.cpp:181
+#: eeschema/dialogs/dialog_label_properties_base.cpp:182
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:61
 #: eeschema/pin_type.cpp:87 eeschema/sch_label.cpp:99
 #: eeschema/sch_label.cpp:2242 eeschema/sch_pin.cpp:2119
 msgid "Bidirectional"
 msgstr "양방향"
 
-#: eeschema/dialogs/dialog_label_properties_base.cpp:184
+#: eeschema/dialogs/dialog_label_properties_base.cpp:185
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:64
 #: eeschema/pin_type.cpp:88 eeschema/sch_label.cpp:2243
 #: eeschema/sch_pin.cpp:2120
 msgid "Tri-state"
 msgstr "3-상태"
 
-#: eeschema/dialogs/dialog_label_properties_base.cpp:187
+#: eeschema/dialogs/dialog_label_properties_base.cpp:188
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:67
 #: eeschema/pin_type.cpp:89 eeschema/sch_label.cpp:101
 #: eeschema/sch_label.cpp:2244 eeschema/sch_pin.cpp:2121
 msgid "Passive"
 msgstr "수동"
 
-#: eeschema/dialogs/dialog_label_properties_base.cpp:190
+#: eeschema/dialogs/dialog_label_properties_base.cpp:191
 #: eeschema/sch_label.cpp:2295
 msgid "Dot"
 msgstr "점"
 
-#: eeschema/dialogs/dialog_label_properties_base.cpp:196
+#: eeschema/dialogs/dialog_label_properties_base.cpp:197
 #: eeschema/sch_label.cpp:2297
 msgid "Diamond"
 msgstr "다이아몬드"
 
-#: eeschema/dialogs/dialog_label_properties_base.cpp:256
+#: eeschema/dialogs/dialog_label_properties_base.cpp:257
 #: eeschema/dialogs/dialog_sim_format_value_base.cpp:36
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:300
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:319
@@ -13056,7 +13056,7 @@ msgstr "유닛 필터링:"
 msgid "Pin Table"
 msgstr "핀 테이블"
 
-#: eeschema/dialogs/dialog_lib_new_symbol.cpp:120
+#: eeschema/dialogs/dialog_lib_new_symbol.cpp:118
 #, c-format
 msgid "Deriving from symbol '%s'."
 msgstr "심볼 '%s'에서 파생됨."
@@ -13460,11 +13460,11 @@ msgstr "대체 핀 이름"
 msgid "Alternate pin assignments are not available for De Morgan symbols."
 msgstr "드 모르간 기호에는 대체 핀 할당을 사용할 수 없습니다."
 
-#: eeschema/dialogs/dialog_pin_properties.cpp:286
+#: eeschema/dialogs/dialog_pin_properties.cpp:287
 msgid "Exit sync pins mode"
 msgstr "핀 동기화 모드 나가기"
 
-#: eeschema/dialogs/dialog_pin_properties.cpp:301
+#: eeschema/dialogs/dialog_pin_properties.cpp:302
 msgid ""
 "Synchronized pins mode is enabled.\n"
 "Similar pins will be edited regardless of this option."
@@ -13472,21 +13472,21 @@ msgstr ""
 "동기화 핀 편집 모드가 활성화되었습니다.\n"
 "이 옵션과 상관없이, 비슷한 핀들은 편집됩니다."
 
-#: eeschema/dialogs/dialog_pin_properties.cpp:306
+#: eeschema/dialogs/dialog_pin_properties.cpp:307
 msgid "If checked, this pin will exist in all units."
 msgstr "체크할 경우, 이 핀은 모든 유닛에 대해 존재하게 됩니다."
 
-#: eeschema/dialogs/dialog_pin_properties.cpp:310
+#: eeschema/dialogs/dialog_pin_properties.cpp:311
 msgid "This symbol only has one unit. This control has no effect."
 msgstr ""
 "이 심볼은 단 하나의 유닛만을 갖고 있습니다. 이 조작은 아무런 영향도 주지 않습"
 "니다."
 
-#: eeschema/dialogs/dialog_pin_properties.cpp:331
+#: eeschema/dialogs/dialog_pin_properties.cpp:335
 msgid "Alternate pin definitions must have a name."
 msgstr "대체 핀 정의에는 이름이 있어야 합니다."
 
-#: eeschema/dialogs/dialog_pin_properties.cpp:351
+#: eeschema/dialogs/dialog_pin_properties.cpp:355
 #, c-format
 msgid ""
 "This pin is not on a %d mils grid which will make it difficult to connect to "
@@ -13496,15 +13496,15 @@ msgstr ""
 "이 핀은 %d mils 그리드에 있지 않으므로 회로도에서 연결하기가 어렵습니다.\n"
 "계속하시겠습니까?"
 
-#: eeschema/dialogs/dialog_pin_properties.cpp:445
+#: eeschema/dialogs/dialog_pin_properties.cpp:452
 msgid "Synchronized Pins Mode."
 msgstr "동기화된 핀 편집 모드."
 
-#: eeschema/dialogs/dialog_pin_properties.cpp:447
+#: eeschema/dialogs/dialog_pin_properties.cpp:454
 msgid "Synchronized Pins Mode.  New pin will be added to all units."
 msgstr "동기화 된 핀 모드.  모든 장치에 새로운 핀이 추가됩니다."
 
-#: eeschema/dialogs/dialog_pin_properties.cpp:449
+#: eeschema/dialogs/dialog_pin_properties.cpp:456
 msgid "Synchronized Pins Mode.  Matching pins in other units will be updated."
 msgstr "동기화된 핀 모드. 다른 장치의 일치하는 핀이 업데이트됩니다."
 
@@ -24430,7 +24430,7 @@ msgstr "활성레이어"
 
 #: gerbview/dialogs/dialog_draw_layers_settings_base.cpp:77
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:87
-#: pcbnew/dialogs/dialog_track_via_properties.cpp:1037
+#: pcbnew/dialogs/dialog_track_via_properties.cpp:1036
 msgid "All layers"
 msgstr "모든 레이어"
 
@@ -32413,7 +32413,7 @@ msgid "Update Footprint"
 msgstr "풋프린트 업데이트"
 
 #: pcbnew/dialogs/dialog_cleanup_graphics.cpp:56
-#: pcbnew/dialogs/dialog_cleanup_tracks_and_vias.cpp:136
+#: pcbnew/dialogs/dialog_cleanup_tracks_and_vias.cpp:135
 #: pcbnew/dialogs/dialog_import_netlist.cpp:85
 #: pcbnew/dialogs/dialog_update_pcb.cpp:60
 msgid "Update PCB"
@@ -32456,25 +32456,25 @@ msgstr "허용오차:"
 msgid "Changes to be applied:"
 msgstr "적용할 변경 사항:"
 
-#: pcbnew/dialogs/dialog_cleanup_tracks_and_vias.cpp:134
+#: pcbnew/dialogs/dialog_cleanup_tracks_and_vias.cpp:133
 msgid "Build Changes"
 msgstr "변경 사항"
 
-#: pcbnew/dialogs/dialog_cleanup_tracks_and_vias.cpp:267
+#: pcbnew/dialogs/dialog_cleanup_tracks_and_vias.cpp:266
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:189
 msgid "Checking zones..."
 msgstr "영역 확인 중..."
 
-#: pcbnew/dialogs/dialog_cleanup_tracks_and_vias.cpp:277
+#: pcbnew/dialogs/dialog_cleanup_tracks_and_vias.cpp:276
 msgid "Rebuilding connectivity..."
 msgstr "연결 재구축 중..."
 
-#: pcbnew/dialogs/dialog_cleanup_tracks_and_vias.cpp:291
+#: pcbnew/dialogs/dialog_cleanup_tracks_and_vias.cpp:290
 #: pcbnew/tools/drc_tool.cpp:151
 msgid "Refilling all zones..."
 msgstr "모든 영역을 다시 채우는 중..."
 
-#: pcbnew/dialogs/dialog_cleanup_tracks_and_vias.cpp:305
+#: pcbnew/dialogs/dialog_cleanup_tracks_and_vias.cpp:304
 msgid "Board Cleanup"
 msgstr "보드 정리"
 
@@ -35346,10 +35346,10 @@ msgstr "지정된 값으로 물방울모양을 추가:"
 msgid "Apply and Close"
 msgstr "적용 및 닫기"
 
-#: pcbnew/dialogs/dialog_global_edit_teardrops.cpp:529
-#: pcbnew/dialogs/dialog_global_edit_teardrops.cpp:533
-#: pcbnew/dialogs/dialog_global_edit_teardrops.cpp:537
-#: pcbnew/dialogs/dialog_global_edit_teardrops.cpp:556
+#: pcbnew/dialogs/dialog_global_edit_teardrops.cpp:528
+#: pcbnew/dialogs/dialog_global_edit_teardrops.cpp:532
+#: pcbnew/dialogs/dialog_global_edit_teardrops.cpp:536
+#: pcbnew/dialogs/dialog_global_edit_teardrops.cpp:555
 msgid "Edit Teardrops"
 msgstr "물방울모양 편집"
 
@@ -35487,9 +35487,9 @@ msgstr "%("
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:245
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:292
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1659
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1660
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1661
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1662
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:682
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:750
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:798
@@ -35747,7 +35747,7 @@ msgid "Annular rings:"
 msgstr "환형 폭:"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:175
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1075
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1074
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:388 pcbnew/pad.cpp:2717
 msgid "All copper layers"
 msgstr "모든 구리 레이어"
@@ -35758,7 +35758,7 @@ msgid "Start, end, and connected layers"
 msgstr "시작, 끝 그리고 연결된 레이어"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:175
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1079
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1078
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:388 pcbnew/pad.cpp:2718
 msgid "Connected layers only"
 msgstr "연결된 레이어만"
@@ -36238,70 +36238,70 @@ msgstr "시작 후 소스 항목 삭제"
 msgid "Outset Items"
 msgstr "시작 항목"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:179
+#: pcbnew/dialogs/dialog_pad_properties.cpp:178
 #: pcbnew/dialogs/dialog_pad_properties_base.h:287 pcbnew/pad.cpp:2768
 msgid "Pad Properties"
 msgstr "패드 속성"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:187
+#: pcbnew/dialogs/dialog_pad_properties.cpp:186
 msgid "Default Pad Properties for Add Pad Tool"
 msgstr "패드 도구 추가를 위한 기본 패드 속성"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:597
+#: pcbnew/dialogs/dialog_pad_properties.cpp:596
 #, c-format
 msgid "Footprint %s (%s), %s, rotated %g deg"
 msgstr "풋프린트 %s (%s), %s, 회전 %g deg"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:600
+#: pcbnew/dialogs/dialog_pad_properties.cpp:599
 #: pcbnew/dialogs/dialog_text_properties.cpp:311
 msgid "back side (mirrored)"
 msgstr "후면 (미러 처리됨)"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:600
+#: pcbnew/dialogs/dialog_pad_properties.cpp:599
 #: pcbnew/dialogs/dialog_text_properties.cpp:312
 msgid "front side"
 msgstr "전면"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:855
+#: pcbnew/dialogs/dialog_pad_properties.cpp:854
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:109
-#: pcbnew/dialogs/dialog_track_via_properties.cpp:1050
+#: pcbnew/dialogs/dialog_track_via_properties.cpp:1049
 msgid "Inner Layers"
 msgstr "내부 레이어"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1076
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1075
 #, c-format
 msgid "%s, %s and connected layers"
 msgstr "%s, %s 및 연결된 레이어"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1424
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1423
 msgid "Error: Through hole pad has no hole."
 msgstr "오류: 스루홀 패드에 홀이 없습니다."
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1429
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1428
 msgid "Pad Properties Errors"
 msgstr "패드 속성 오류"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1430
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1429
 msgid "Pad Properties Warnings"
 msgstr "패드 속성 경고"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1609
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1608
 msgid "Edit Pad Properties"
 msgstr "패드 속성 편집"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1644
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1643
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:447
 msgid "Hole size X:"
 msgstr "홀 크기 X:"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1666
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1665
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:339
 msgid "Pad size X:"
 msgstr "패드 사이즈 X:"
 
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1668
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1669
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1670
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1671
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:234
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:276
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:327
@@ -37728,32 +37728,32 @@ msgstr "제어점 1"
 msgid "Control Point 2"
 msgstr "제어점 2"
 
-#: pcbnew/dialogs/dialog_shape_properties.cpp:1177
+#: pcbnew/dialogs/dialog_shape_properties.cpp:1176
 msgid "Edit Shape Properties"
 msgstr "도형 속성 편집"
 
-#: pcbnew/dialogs/dialog_shape_properties.cpp:1205
-#: pcbnew/dialogs/dialog_shape_properties.cpp:1228
+#: pcbnew/dialogs/dialog_shape_properties.cpp:1204
+#: pcbnew/dialogs/dialog_shape_properties.cpp:1227
 msgid "Line width must be greater than zero."
 msgstr "라인 폭은 0보다 커야 합니다."
 
-#: pcbnew/dialogs/dialog_shape_properties.cpp:1210
+#: pcbnew/dialogs/dialog_shape_properties.cpp:1209
 msgid "Line width must be greater than zero for an unfilled circle."
 msgstr "채워지지 않은 원의 경우 선 너비가 0보다 커야 합니다."
 
-#: pcbnew/dialogs/dialog_shape_properties.cpp:1216
+#: pcbnew/dialogs/dialog_shape_properties.cpp:1215
 msgid "Line width must be greater than zero for an unfilled rectangle."
 msgstr "채워지지 않은 사각형의 경우 선 너비가 0보다 커야 합니다."
 
-#: pcbnew/dialogs/dialog_shape_properties.cpp:1222
+#: pcbnew/dialogs/dialog_shape_properties.cpp:1221
 msgid "Line width must be greater than zero for an unfilled polygon."
 msgstr "채워지지 않은 다각형의 경우 선 너비가 0보다 커야 합니다."
 
-#: pcbnew/dialogs/dialog_shape_properties.cpp:1234
+#: pcbnew/dialogs/dialog_shape_properties.cpp:1233
 msgid "Line width must be greater than zero for an unfilled curve."
 msgstr "채워지지 않은 곡선의 경우 선 너비는 0보다 커야 합니다."
 
-#: pcbnew/dialogs/dialog_shape_properties.cpp:1245
+#: pcbnew/dialogs/dialog_shape_properties.cpp:1244
 msgid "Error List"
 msgstr "오류 목록"
 
@@ -37920,57 +37920,57 @@ msgstr "테두리 폭:"
 msgid "Border style:"
 msgstr "테두리 스타일:"
 
-#: pcbnew/dialogs/dialog_track_via_properties.cpp:546
+#: pcbnew/dialogs/dialog_track_via_properties.cpp:545
 #, c-format
 msgid "Applying these changes will short net %s with %s."
 msgstr "이 변경 사항을 적용하면 네트 %s와 %s가 단락됩니다."
 
-#: pcbnew/dialogs/dialog_track_via_properties.cpp:552
+#: pcbnew/dialogs/dialog_track_via_properties.cpp:551
 #, c-format
 msgid "Applying these changes will short net %s with other nets."
 msgstr "이 변경 사항을 적용하면 %s 네트가 다른 네트들과 단락됩니다."
 
-#: pcbnew/dialogs/dialog_track_via_properties.cpp:557
+#: pcbnew/dialogs/dialog_track_via_properties.cpp:556
 msgid "Apply Anyway"
 msgstr "그래도 적용"
 
-#: pcbnew/dialogs/dialog_track_via_properties.cpp:557
+#: pcbnew/dialogs/dialog_track_via_properties.cpp:556
 msgid "Cancel Changes"
 msgstr "변경 취소"
 
-#: pcbnew/dialogs/dialog_track_via_properties.cpp:571
+#: pcbnew/dialogs/dialog_track_via_properties.cpp:570
 #, c-format
 msgid "Changing the net will also update %s pad %s to %s."
 msgstr "네트를 변경하면 %s 패드 %s 또한 %s(으)로 업데이트됩니다."
 
-#: pcbnew/dialogs/dialog_track_via_properties.cpp:580
+#: pcbnew/dialogs/dialog_track_via_properties.cpp:579
 #, c-format
 msgid "Changing the net will also update %s pad %s and %s pad %s to %s."
 msgstr "네트를 변경하면 %s 패드 %s 와 %s 패드 %s 또한 %s(으)로 업데이트됩니다."
 
-#: pcbnew/dialogs/dialog_track_via_properties.cpp:589
+#: pcbnew/dialogs/dialog_track_via_properties.cpp:588
 #, c-format
 msgid "Changing the net will also update %lu connected pads to %s."
 msgstr "네트를 변경하면 %lu개의 연결된 패드 또한 %s(으)로 업데이트됩니다."
 
-#: pcbnew/dialogs/dialog_track_via_properties.cpp:595
+#: pcbnew/dialogs/dialog_track_via_properties.cpp:594
 msgid "Change Nets"
 msgstr "네트 변경"
 
-#: pcbnew/dialogs/dialog_track_via_properties.cpp:595
+#: pcbnew/dialogs/dialog_track_via_properties.cpp:594
 msgid "Leave Nets Unchanged"
 msgstr "네트 변경되지 않은 채로 놔두기"
 
-#: pcbnew/dialogs/dialog_track_via_properties.cpp:641
+#: pcbnew/dialogs/dialog_track_via_properties.cpp:640
 #: pcbnew/dialogs/dialog_track_via_size.cpp:59
 msgid "Via hole size must be smaller than via diameter"
 msgstr "비아 홀 크기는 비아 직경보다 작아야 함"
 
-#: pcbnew/dialogs/dialog_track_via_properties.cpp:650
+#: pcbnew/dialogs/dialog_track_via_properties.cpp:649
 msgid "Via start layer and end layer cannot be the same"
 msgstr "비아의 시작 레이어와 끝 레이어는 같을 수 없습니다"
 
-#: pcbnew/dialogs/dialog_track_via_properties.cpp:918
+#: pcbnew/dialogs/dialog_track_via_properties.cpp:917
 msgid "Edit Track/Via Properties"
 msgstr "트랙/비아 속성 편집"
 
@@ -46711,7 +46711,7 @@ msgstr "python 풋프린트 마법사 코드에서의 예외 사항"
 msgid "Error loading drawing sheet '%s': %s"
 msgstr "도면 시트 '%s'을(를) 불러오는 중에 오류 발생:%s"
 
-#: pcbnew/router/pns_diff_pair_placer.cpp:523
+#: pcbnew/router/pns_diff_pair_placer.cpp:524
 msgid ""
 "Unable to find complementary differential pair nets. Make sure the names of "
 "the nets belonging to a differential pair end with either N/P or +/-."
@@ -46719,7 +46719,7 @@ msgstr ""
 "보조 차동 쌍 네트를 찾을 수 없습니다. 차동 쌍에 속한 네트의 이름이 N/P 또는 "
 "+/-으로 끝나는지 확인하세요."
 
-#: pcbnew/router/pns_diff_pair_placer.cpp:540
+#: pcbnew/router/pns_diff_pair_placer.cpp:541
 msgid ""
 "Can't find a suitable starting point.  If starting from an existing "
 "differential pair make sure you are at the end."
@@ -46727,7 +46727,7 @@ msgstr ""
 "적합한 시작 지점을 찾을 수 없습니다. 이미 존재하는 차동 쌍에서 시작한다면, "
 "끝 지점에 도달하였는지 확인하세요."
 
-#: pcbnew/router/pns_diff_pair_placer.cpp:595
+#: pcbnew/router/pns_diff_pair_placer.cpp:596
 #, c-format
 msgid "Can't find a suitable starting point for coupled net \"%s\"."
 msgstr "네트 쌍 \"%s\" 에 대한 적합한 시작 지점을 찾을 수 없습니다."

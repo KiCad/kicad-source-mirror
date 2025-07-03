@@ -19,7 +19,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-27 22:51+0300\n"
+"POT-Creation-Date: 2025-07-03 20:16+0300\n"
 "PO-Revision-Date: 2025-05-01 03:03+0000\n"
 "Last-Translator: Toni Laiho <apelegeos@gmail.com>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/v9/fi/>\n"
@@ -1447,7 +1447,7 @@ msgstr "Mittakaava"
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:76
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:121
 #: common/dialogs/dialog_grid_settings_base.cpp:36
-#: common/tool/common_tools.cpp:630
+#: common/tool/common_tools.cpp:636
 #: eeschema/dialogs/dialog_image_properties_base.cpp:34
 #: eeschema/import_gfx/dialog_import_gfx_sch_base.cpp:61
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:248
@@ -1465,7 +1465,7 @@ msgstr "X:"
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:86
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:131
 #: common/dialogs/dialog_grid_settings_base.cpp:57
-#: common/tool/common_tools.cpp:630
+#: common/tool/common_tools.cpp:636
 #: eeschema/dialogs/dialog_image_properties_base.cpp:45
 #: eeschema/import_gfx/dialog_import_gfx_sch_base.cpp:82
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:259
@@ -1594,7 +1594,7 @@ msgstr "Luo jalanjälkikirjasto"
 #: eeschema/dialogs/dialog_field_properties_base.cpp:239
 #: eeschema/dialogs/dialog_field_properties_base.cpp:273
 #: eeschema/dialogs/dialog_field_properties_base.cpp:284
-#: eeschema/dialogs/dialog_label_properties_base.cpp:277
+#: eeschema/dialogs/dialog_label_properties_base.cpp:278
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:109
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:148
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:59
@@ -2115,8 +2115,8 @@ msgstr "Tietoa"
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:414
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:411
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:119
-#: pcbnew/dialogs/dialog_track_via_properties.cpp:556
-#: pcbnew/dialogs/dialog_track_via_properties.cpp:594
+#: pcbnew/dialogs/dialog_track_via_properties.cpp:555
+#: pcbnew/dialogs/dialog_track_via_properties.cpp:593
 #: pcbnew/footprint_libraries_utils.cpp:379
 #: pcbnew/footprint_libraries_utils.cpp:1161 pcbnew/router/router_tool.cpp:1863
 #: pcbnew/router/router_tool.cpp:2617
@@ -2647,7 +2647,7 @@ msgstr "Ympäristömuuttujat"
 #: common/dialogs/panel_setup_netclasses_base.cpp:51
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:88
 #: eeschema/dialogs/dialog_design_block_properties_base.cpp:42
-#: eeschema/dialogs/dialog_label_properties_base.cpp:108
+#: eeschema/dialogs/dialog_label_properties_base.cpp:109
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:121
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:89
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:59
@@ -3241,7 +3241,7 @@ msgstr "esimerkkitekstiä"
 
 #: common/dialogs/dialog_page_settings_base.cpp:50
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:238
-#: eeschema/dialogs/dialog_label_properties.cpp:209
+#: eeschema/dialogs/dialog_label_properties.cpp:210
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:113
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:296
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:338
@@ -3464,7 +3464,7 @@ msgstr "Asetus"
 #: common/dialogs/panel_design_block_lib_table.cpp:411
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:89
 #: eeschema/dialogs/dialog_design_block_properties_base.cpp:43
-#: eeschema/dialogs/dialog_label_properties_base.cpp:109
+#: eeschema/dialogs/dialog_label_properties_base.cpp:110
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:60
 #: eeschema/dialogs/dialog_rescue_each.cpp:135
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:61
@@ -3602,7 +3602,7 @@ msgstr "Tulostustila:"
 
 #: common/dialogs/dialog_print_generic_base.cpp:35
 #: common/dialogs/panel_setup_netclasses_base.cpp:63 common/eda_text.cpp:1408
-#: eeschema/dialogs/dialog_label_properties_base.cpp:121
+#: eeschema/dialogs/dialog_label_properties_base.cpp:122
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:72
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:78
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:72
@@ -3783,7 +3783,7 @@ msgstr "<"
 #: common/dialogs/eda_reorderable_list_dialog_base.cpp:75
 #: common/dialogs/panel_design_block_lib_table_base.cpp:136
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:43
-#: eeschema/dialogs/dialog_label_properties_base.cpp:147
+#: eeschema/dialogs/dialog_label_properties_base.cpp:148
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:97
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:98
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:95
@@ -3796,7 +3796,7 @@ msgstr "Siirrä ylös"
 #: common/dialogs/eda_reorderable_list_dialog_base.cpp:80
 #: common/dialogs/panel_design_block_lib_table_base.cpp:141
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:48
-#: eeschema/dialogs/dialog_label_properties_base.cpp:152
+#: eeschema/dialogs/dialog_label_properties_base.cpp:153
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:102
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:103
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:100
@@ -5058,7 +5058,7 @@ msgstr "Ruudukkokoko '%s' on jo olemassa."
 #: common/eda_base_frame.cpp:1131 common/eda_base_frame.cpp:1140
 #: common/eda_base_frame.cpp:1166 common/eda_base_frame.cpp:1179
 #: common/eda_base_frame.cpp:1212 common/eda_base_frame.cpp:1234
-#: common/tool/common_tools.cpp:608
+#: common/tool/common_tools.cpp:614
 msgid "Grids"
 msgstr "Ruudukot"
 
@@ -5287,9 +5287,9 @@ msgstr "Zoomaus"
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:363
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:332
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:91
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1080
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1089
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1099
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1079
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1088
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1098
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:587
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:858
 #: pcbnew/dialogs/dialog_plot_base.cpp:118 pcbnew/footprint.cpp:4125
@@ -5875,7 +5875,7 @@ msgstr "Viiva"
 #: common/drawing_sheet/ds_data_item.cpp:367
 #: common/drawing_sheet/ds_draw_item.cpp:124 common/eda_shape.cpp:975
 #: common/eda_shape.cpp:2320
-#: eeschema/dialogs/dialog_label_properties_base.cpp:199
+#: eeschema/dialogs/dialog_label_properties_base.cpp:200
 #: eeschema/sch_label.cpp:2298
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:45 pcbnew/pad.cpp:2683
 #: pcbnew/pcb_dimension.cpp:2013
@@ -6068,7 +6068,7 @@ msgid "Data Collection"
 msgstr "Tiedonkeruu"
 
 #: common/eda_base_frame.cpp:1129 common/tool/actions.cpp:1089
-#: common/tool/common_tools.cpp:615 eeschema/symbol_editor/symbol_editor.cpp:84
+#: common/tool/common_tools.cpp:621 eeschema/symbol_editor/symbol_editor.cpp:84
 #: kicad/tools/kicad_manager_actions.cpp:125
 msgid "Symbol Editor"
 msgstr "Symbolieditori"
@@ -6093,7 +6093,7 @@ msgid "Colors"
 msgstr "Värit"
 
 #: common/eda_base_frame.cpp:1138 common/hotkey_store.cpp:77
-#: common/tool/common_tools.cpp:614 eeschema/menubar.cpp:133
+#: common/tool/common_tools.cpp:620 eeschema/menubar.cpp:133
 #: eeschema/sch_edit_frame.cpp:1753 kicad/tools/kicad_manager_actions.cpp:114
 msgid "Schematic Editor"
 msgstr "Kytkentäkaavioeditori"
@@ -6115,7 +6115,7 @@ msgid "Simulator"
 msgstr "Simulaattori"
 
 #: common/eda_base_frame.cpp:1164 common/tool/actions.cpp:1106
-#: common/tool/common_tools.cpp:617 kicad/tools/kicad_manager_actions.cpp:147
+#: common/tool/common_tools.cpp:623 kicad/tools/kicad_manager_actions.cpp:147
 #: pcbnew/footprint_edit_frame.cpp:1107 pcbnew/menubar_footprint_editor.cpp:92
 msgid "Footprint Editor"
 msgstr "Jalanjälkieditori"
@@ -6133,7 +6133,7 @@ msgid "Graphics Defaults"
 msgstr "Grafiikkaoletukset"
 
 #: common/eda_base_frame.cpp:1177 common/hotkey_store.cpp:78
-#: common/tool/common_tools.cpp:616 kicad/tools/kicad_manager_actions.cpp:136
+#: common/tool/common_tools.cpp:622 kicad/tools/kicad_manager_actions.cpp:136
 #: pcbnew/menubar_pcb_editor.cpp:186 pcbnew/pcb_edit_frame.cpp:201
 #: pcbnew/pcb_edit_frame.cpp:1809 pcbnew/tools/zone_filler_tool.cpp:284
 msgid "PCB Editor"
@@ -6152,7 +6152,7 @@ msgid "Raytracing Renderer"
 msgstr "Säteenseuranta Renderöinti"
 
 #: common/eda_base_frame.cpp:1209 common/hotkey_store.cpp:81
-#: common/tool/common_tools.cpp:619 gerbview/gerbview_frame.cpp:686
+#: common/tool/common_tools.cpp:625 gerbview/gerbview_frame.cpp:686
 #: gerbview/gerbview_frame.cpp:710 gerbview/menubar.cpp:159
 #: kicad/tools/kicad_manager_actions.cpp:158
 msgid "Gerber Viewer"
@@ -6163,7 +6163,7 @@ msgid "Excellon Options"
 msgstr "Excellon Vaihtoehdot"
 
 #: common/eda_base_frame.cpp:1232 common/hotkey_store.cpp:79
-#: common/tool/common_tools.cpp:618 kicad/tools/kicad_manager_actions.cpp:187
+#: common/tool/common_tools.cpp:624 kicad/tools/kicad_manager_actions.cpp:187
 #: pagelayout_editor/menubar.cpp:88 pagelayout_editor/menubar.cpp:89
 #: pagelayout_editor/pl_editor_frame.cpp:586
 msgid "Drawing Sheet Editor"
@@ -6506,7 +6506,7 @@ msgid "Arc"
 msgstr "Kaari"
 
 #: common/eda_shape.cpp:331 common/eda_shape.cpp:971 common/eda_shape.cpp:2322
-#: eeschema/dialogs/dialog_label_properties_base.cpp:193
+#: eeschema/dialogs/dialog_label_properties_base.cpp:194
 #: eeschema/sch_label.cpp:2296 gerbview/gerber_draw_item.cpp:231
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:45 pcbnew/pad.cpp:1548
 #: pcbnew/pad.cpp:2682 pcbnew/pcb_dimension.cpp:2014
@@ -6542,7 +6542,7 @@ msgid "Segment"
 msgstr "Segmentti"
 
 #: common/eda_shape.cpp:987 common/eda_shape.cpp:2372
-#: eeschema/dialogs/dialog_label_properties_base.cpp:173
+#: eeschema/dialogs/dialog_label_properties_base.cpp:174
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:53
 #: eeschema/sch_label.cpp:2278 eeschema/sch_label.cpp:2310
 #: eeschema/sch_tablecell.cpp:197 eeschema/sch_textbox.cpp:679
@@ -6682,8 +6682,8 @@ msgstr "Täyttöväri"
 #: common/eda_text.cpp:977 common/eda_text.cpp:1364
 #: eeschema/dialogs/dialog_field_properties_base.cpp:162
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:217
-#: eeschema/dialogs/dialog_label_properties_base.cpp:114
-#: eeschema/dialogs/dialog_label_properties_base.cpp:235
+#: eeschema/dialogs/dialog_label_properties_base.cpp:115
+#: eeschema/dialogs/dialog_label_properties_base.cpp:236
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:65
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:105
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:65
@@ -6708,8 +6708,8 @@ msgstr "Kursiivi"
 #: common/eda_text.cpp:978 common/eda_text.cpp:1368
 #: eeschema/dialogs/dialog_field_properties_base.cpp:157
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:214
-#: eeschema/dialogs/dialog_label_properties_base.cpp:115
-#: eeschema/dialogs/dialog_label_properties_base.cpp:230
+#: eeschema/dialogs/dialog_label_properties_base.cpp:116
+#: eeschema/dialogs/dialog_label_properties_base.cpp:231
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:66
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:100
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:66
@@ -6788,7 +6788,7 @@ msgid "Bottom"
 msgstr "Ala"
 
 #: common/eda_text.cpp:1343
-#: eeschema/dialogs/dialog_label_properties_base.cpp:117
+#: eeschema/dialogs/dialog_label_properties_base.cpp:118
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:124
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:92
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:68
@@ -6817,7 +6817,7 @@ msgid "Text Properties"
 msgstr "Tekstin Ominaisuudet"
 
 #: common/eda_text.cpp:1355
-#: eeschema/dialogs/dialog_label_properties_base.cpp:120
+#: eeschema/dialogs/dialog_label_properties_base.cpp:121
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:71
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:71
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:68
@@ -7016,7 +7016,7 @@ msgstr "Virheellinen alias (kaksoisnimi)"
 
 #: common/font/font.cpp:177 common/widgets/font_choice.cpp:49
 #: eeschema/dialogs/dialog_field_properties_base.cpp:142
-#: eeschema/dialogs/dialog_label_properties_base.cpp:216
+#: eeschema/dialogs/dialog_label_properties_base.cpp:217
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:85
 #: eeschema/dialogs/dialog_tablecell_properties_base.cpp:129
 #: eeschema/dialogs/dialog_text_properties_base.cpp:93
@@ -8396,7 +8396,7 @@ msgstr "Poista näkyvä lippu"
 msgid "Library settings for %s..."
 msgstr "Kirjastoasetukset kohteelle %s..."
 
-#: common/lib_tree_model.cpp:153
+#: common/lib_tree_model.cpp:144
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:131
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:99
 #: eeschema/dialogs/dialog_sim_model.cpp:632 eeschema/sch_item.cpp:541
@@ -8411,14 +8411,14 @@ msgstr "Yksikkö"
 msgid "Item"
 msgstr "Kohde"
 
-#: common/lib_tree_model_adapter.cpp:404
+#: common/lib_tree_model_adapter.cpp:402
 #: eeschema/widgets/panel_design_block_chooser.cpp:416
 #: eeschema/widgets/panel_symbol_chooser.cpp:173
 #: pcbnew/widgets/panel_footprint_chooser.cpp:98
 msgid "Recently Used"
 msgstr "Äskettäin käytetty"
 
-#: common/lib_tree_model_adapter.cpp:406
+#: common/lib_tree_model_adapter.cpp:404
 #: eeschema/widgets/panel_symbol_chooser.cpp:180
 msgid "Already Placed"
 msgstr "Jo sijoitettu"
@@ -8476,7 +8476,7 @@ msgid "Type mismatch between %lf and '%s'"
 msgstr "Tyypin yhteensopimattomuus %lf ja '%s' välillä"
 
 #: common/netclass.cpp:297 pcbnew/component_class_manager.cpp:61
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1084 pcbnew/zone.cpp:836
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1083 pcbnew/zone.cpp:836
 #, c-format
 msgid "%s and %s"
 msgstr "%s ja %s"
@@ -8677,12 +8677,12 @@ msgid "Excluded error: "
 msgstr "Poissuljettu virhe: "
 
 #: common/rc_item.cpp:431 eeschema/erc/erc_item.cpp:410
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1422
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1421
 msgid "Warning: "
 msgstr "Varoitus: "
 
 #: common/rc_item.cpp:435 eeschema/erc/erc_item.cpp:414
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1420
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1419
 msgid "Error: "
 msgstr "Virhe: "
 
@@ -9414,7 +9414,7 @@ msgstr "Vaihda Neuraavaan Ruudukkoon"
 msgid "Switch to Previous Grid"
 msgstr "Vaihda Edelliseen Ruudukkoon"
 
-#: common/tool/actions.cpp:892 common/tool/common_tools.cpp:630
+#: common/tool/actions.cpp:892 common/tool/common_tools.cpp:636
 msgid "Grid Origin"
 msgstr "Ruudukon Alkupiste"
 
@@ -12131,7 +12131,7 @@ msgid "Violation Severity"
 msgstr "Rikkomuksen Vakavuus"
 
 #: eeschema/dialogs/dialog_erc.cpp:859
-#: eeschema/dialogs/dialog_label_properties_base.cpp:206
+#: eeschema/dialogs/dialog_label_properties_base.cpp:207
 #: eeschema/dialogs/dialog_schematic_setup.cpp:63
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:74
 #: pcbnew/dialogs/dialog_board_setup.cpp:134
@@ -12411,7 +12411,7 @@ msgid "Sheet filename can only be modified in Sheet Properties dialog."
 msgstr "Lehden tiedostonimeä voi muokata vain Lehden ominaisuudet -dialogista."
 
 #: eeschema/dialogs/dialog_field_properties.cpp:626
-#: eeschema/dialogs/dialog_label_properties.cpp:521
+#: eeschema/dialogs/dialog_label_properties.cpp:520
 msgid ""
 "Intersheet reference visibility is controlled globally from Schematic Setup "
 "> General > Formatting"
@@ -12449,7 +12449,7 @@ msgstr "Salli tämän kentän automaattinen sijoittaminen kytkentäkaavioon"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:138
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:173
-#: eeschema/dialogs/dialog_label_properties_base.cpp:212
+#: eeschema/dialogs/dialog_label_properties_base.cpp:213
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:81
 #: eeschema/dialogs/dialog_tablecell_properties_base.cpp:125
 #: eeschema/dialogs/dialog_text_properties_base.cpp:89
@@ -12464,7 +12464,7 @@ msgstr "Kirjasin:"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:142
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:177
-#: eeschema/dialogs/dialog_label_properties_base.cpp:216
+#: eeschema/dialogs/dialog_label_properties_base.cpp:217
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:85
 #: eeschema/dialogs/dialog_tablecell_properties_base.cpp:129
 #: eeschema/dialogs/dialog_text_properties_base.cpp:93
@@ -12536,7 +12536,7 @@ msgstr "Pystysuora teksti"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:229
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:198
-#: eeschema/dialogs/dialog_label_properties_base.cpp:267
+#: eeschema/dialogs/dialog_label_properties_base.cpp:268
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:117
 #: eeschema/dialogs/dialog_text_properties_base.cpp:180
 msgid "Text size:"
@@ -12544,7 +12544,7 @@ msgstr "Tekstin koko:"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:243
 #: eeschema/dialogs/dialog_junction_props_base.cpp:38
-#: eeschema/dialogs/dialog_label_properties_base.cpp:281
+#: eeschema/dialogs/dialog_label_properties_base.cpp:282
 #: eeschema/dialogs/dialog_line_properties_base.cpp:45
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:63
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:131
@@ -12833,8 +12833,8 @@ msgstr "Muokkaa Risteyksiä"
 
 #: eeschema/dialogs/dialog_junction_props_base.cpp:27
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:46
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1639
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1657
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1638
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1656
 msgid "Diameter:"
 msgstr "Halkaisija:"
 
@@ -12853,67 +12853,67 @@ msgstr "Poista väri, käyttääksesi kytkentäkaavioeditorin värejä."
 msgid "Junction Properties"
 msgstr "Risteyksen ominaisuudet"
 
-#: eeschema/dialogs/dialog_label_properties.cpp:129
+#: eeschema/dialogs/dialog_label_properties.cpp:130
 msgid "Pin length:"
 msgstr "Nastan pituus:"
 
-#: eeschema/dialogs/dialog_label_properties.cpp:137
+#: eeschema/dialogs/dialog_label_properties.cpp:138
 msgid "Global Label Properties"
 msgstr "Globaalin nimiön ominaisuudet"
 
-#: eeschema/dialogs/dialog_label_properties.cpp:138
+#: eeschema/dialogs/dialog_label_properties.cpp:139
 msgid "Hierarchical Label Properties"
 msgstr "Hierarkisen nimiön ominaisuudet"
 
-#: eeschema/dialogs/dialog_label_properties.cpp:139
-#: eeschema/dialogs/dialog_label_properties_base.h:122
+#: eeschema/dialogs/dialog_label_properties.cpp:140
+#: eeschema/dialogs/dialog_label_properties_base.h:123
 msgid "Label Properties"
 msgstr "Nimiön ominaisuudet"
 
-#: eeschema/dialogs/dialog_label_properties.cpp:140
+#: eeschema/dialogs/dialog_label_properties.cpp:141
 msgid "Directive Label Properties"
 msgstr "Ohjaavan Nimikkeen Ominaisuudet"
 
-#: eeschema/dialogs/dialog_label_properties.cpp:141
+#: eeschema/dialogs/dialog_label_properties.cpp:142
 msgid "Hierarchical Sheet Pin Properties"
 msgstr "Hierarkkisen lehden nastan ominaisuudet"
 
-#: eeschema/dialogs/dialog_label_properties.cpp:501
+#: eeschema/dialogs/dialog_label_properties.cpp:500
 msgid "Label can not be empty."
 msgstr "Etiketti ei voi olla tyhjä."
 
-#: eeschema/dialogs/dialog_label_properties.cpp:565
+#: eeschema/dialogs/dialog_label_properties.cpp:564
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:443
 #: eeschema/dialogs/dialog_sheet_properties.cpp:397
 #: eeschema/dialogs/dialog_symbol_properties.cpp:743 include/project.h:43
 msgid "untitled"
 msgstr "nimetön"
 
-#: eeschema/dialogs/dialog_label_properties.cpp:641
+#: eeschema/dialogs/dialog_label_properties.cpp:640
 msgid "Edit Label Properties"
 msgstr "Muokkaa nimiön ominaisuuksia"
 
-#: eeschema/dialogs/dialog_label_properties.cpp:784
+#: eeschema/dialogs/dialog_label_properties.cpp:783
 msgid "The first field is mandatory."
 msgstr "Ensimmäinen kenttä on pakollinen."
 
-#: eeschema/dialogs/dialog_label_properties_base.cpp:31
-#: eeschema/dialogs/dialog_label_properties_base.cpp:40
-#: eeschema/dialogs/dialog_label_properties_base.cpp:47
+#: eeschema/dialogs/dialog_label_properties_base.cpp:32
+#: eeschema/dialogs/dialog_label_properties_base.cpp:41
+#: eeschema/dialogs/dialog_label_properties_base.cpp:48
 msgid "Label:"
 msgstr "Nimiö:"
 
-#: eeschema/dialogs/dialog_label_properties_base.cpp:33
-#: eeschema/dialogs/dialog_label_properties_base.cpp:49
+#: eeschema/dialogs/dialog_label_properties_base.cpp:34
+#: eeschema/dialogs/dialog_label_properties_base.cpp:50
 msgid "Enter the text to be used within the schematic"
 msgstr "Syötä kytkentäkaaviossa käytettävä teksti"
 
-#: eeschema/dialogs/dialog_label_properties_base.cpp:62
+#: eeschema/dialogs/dialog_label_properties_base.cpp:63
 #, fuzzy
 msgid "Multiple label input"
 msgstr "Useita kerroksia"
 
-#: eeschema/dialogs/dialog_label_properties_base.cpp:68
+#: eeschema/dialogs/dialog_label_properties_base.cpp:69
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:42
 #: eeschema/dialogs/dialog_text_properties_base.cpp:78
 #: eeschema/dialogs/dialog_user_defined_signals_base.cpp:78
@@ -12921,7 +12921,7 @@ msgstr "Useita kerroksia"
 msgid "Syntax help"
 msgstr "Syntaksiohje"
 
-#: eeschema/dialogs/dialog_label_properties_base.cpp:69
+#: eeschema/dialogs/dialog_label_properties_base.cpp:70
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:43
 #: eeschema/dialogs/dialog_text_properties_base.cpp:79
 #: eeschema/dialogs/dialog_user_defined_signals_base.cpp:79
@@ -12929,7 +12929,7 @@ msgstr "Syntaksiohje"
 msgid "Show syntax help window"
 msgstr "Näytä syntaksin apuikkuna"
 
-#: eeschema/dialogs/dialog_label_properties_base.cpp:80
+#: eeschema/dialogs/dialog_label_properties_base.cpp:81
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:31
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:33
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:28
@@ -12940,7 +12940,7 @@ msgstr "Näytä syntaksin apuikkuna"
 msgid "Fields"
 msgstr "Kentät"
 
-#: eeschema/dialogs/dialog_label_properties_base.cpp:110
+#: eeschema/dialogs/dialog_label_properties_base.cpp:111
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:61
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:62
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:58
@@ -12955,14 +12955,14 @@ msgstr "Kentät"
 msgid "Show"
 msgstr "Näytä"
 
-#: eeschema/dialogs/dialog_label_properties_base.cpp:111
+#: eeschema/dialogs/dialog_label_properties_base.cpp:112
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:62
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:59
 #: eeschema/fields_grid_table.cpp:480
 msgid "Show Name"
 msgstr "Näytä Nimi"
 
-#: eeschema/dialogs/dialog_label_properties_base.cpp:112
+#: eeschema/dialogs/dialog_label_properties_base.cpp:113
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:63
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:63
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:60
@@ -12970,7 +12970,7 @@ msgstr "Näytä Nimi"
 msgid "H Align"
 msgstr "H Kohdista"
 
-#: eeschema/dialogs/dialog_label_properties_base.cpp:113
+#: eeschema/dialogs/dialog_label_properties_base.cpp:114
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:64
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:64
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:61
@@ -12978,7 +12978,7 @@ msgstr "H Kohdista"
 msgid "V Align"
 msgstr "V Kohdista"
 
-#: eeschema/dialogs/dialog_label_properties_base.cpp:116
+#: eeschema/dialogs/dialog_label_properties_base.cpp:117
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:67
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:67
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:64
@@ -12990,7 +12990,7 @@ msgstr "V Kohdista"
 msgid "Text Size"
 msgstr "Tekstin koko"
 
-#: eeschema/dialogs/dialog_label_properties_base.cpp:118
+#: eeschema/dialogs/dialog_label_properties_base.cpp:119
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:128
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:96
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:69
@@ -13000,7 +13000,7 @@ msgstr "Tekstin koko"
 msgid "X Position"
 msgstr "X-sijainti"
 
-#: eeschema/dialogs/dialog_label_properties_base.cpp:119
+#: eeschema/dialogs/dialog_label_properties_base.cpp:120
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:129
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:97
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:70
@@ -13010,7 +13010,7 @@ msgstr "X-sijainti"
 msgid "Y Position"
 msgstr "Y-sijainti"
 
-#: eeschema/dialogs/dialog_label_properties_base.cpp:142
+#: eeschema/dialogs/dialog_label_properties_base.cpp:143
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:92
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:93
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:90
@@ -13018,7 +13018,7 @@ msgstr "Y-sijainti"
 msgid "Add field"
 msgstr "Lisää kenttä"
 
-#: eeschema/dialogs/dialog_label_properties_base.cpp:160
+#: eeschema/dialogs/dialog_label_properties_base.cpp:161
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:110
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:111
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:108
@@ -13026,52 +13026,52 @@ msgstr "Lisää kenttä"
 msgid "Delete field"
 msgstr "Poista kenttä"
 
-#: eeschema/dialogs/dialog_label_properties_base.cpp:175
+#: eeschema/dialogs/dialog_label_properties_base.cpp:176
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:55
 #: eeschema/pin_type.cpp:85 eeschema/sch_label.cpp:97
 #: eeschema/sch_label.cpp:2240 eeschema/sch_pin.cpp:2117
 msgid "Input"
 msgstr "Tulo"
 
-#: eeschema/dialogs/dialog_label_properties_base.cpp:178
+#: eeschema/dialogs/dialog_label_properties_base.cpp:179
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:58
 #: eeschema/pin_type.cpp:86 eeschema/sch_label.cpp:98
 #: eeschema/sch_label.cpp:2241 eeschema/sch_pin.cpp:2118
 msgid "Output"
 msgstr "Lähtö"
 
-#: eeschema/dialogs/dialog_label_properties_base.cpp:181
+#: eeschema/dialogs/dialog_label_properties_base.cpp:182
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:61
 #: eeschema/pin_type.cpp:87 eeschema/sch_label.cpp:99
 #: eeschema/sch_label.cpp:2242 eeschema/sch_pin.cpp:2119
 msgid "Bidirectional"
 msgstr "Kaksisuuntainen"
 
-#: eeschema/dialogs/dialog_label_properties_base.cpp:184
+#: eeschema/dialogs/dialog_label_properties_base.cpp:185
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:64
 #: eeschema/pin_type.cpp:88 eeschema/sch_label.cpp:2243
 #: eeschema/sch_pin.cpp:2120
 msgid "Tri-state"
 msgstr "Kolmitila"
 
-#: eeschema/dialogs/dialog_label_properties_base.cpp:187
+#: eeschema/dialogs/dialog_label_properties_base.cpp:188
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:67
 #: eeschema/pin_type.cpp:89 eeschema/sch_label.cpp:101
 #: eeschema/sch_label.cpp:2244 eeschema/sch_pin.cpp:2121
 msgid "Passive"
 msgstr "Passiivinen"
 
-#: eeschema/dialogs/dialog_label_properties_base.cpp:190
+#: eeschema/dialogs/dialog_label_properties_base.cpp:191
 #: eeschema/sch_label.cpp:2295
 msgid "Dot"
 msgstr "Piste"
 
-#: eeschema/dialogs/dialog_label_properties_base.cpp:196
+#: eeschema/dialogs/dialog_label_properties_base.cpp:197
 #: eeschema/sch_label.cpp:2297
 msgid "Diamond"
 msgstr "Timantti"
 
-#: eeschema/dialogs/dialog_label_properties_base.cpp:256
+#: eeschema/dialogs/dialog_label_properties_base.cpp:257
 #: eeschema/dialogs/dialog_sim_format_value_base.cpp:36
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:300
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:319
@@ -13210,7 +13210,7 @@ msgstr "Suodata yksikön mukaan:"
 msgid "Pin Table"
 msgstr "Flipperi"
 
-#: eeschema/dialogs/dialog_lib_new_symbol.cpp:120
+#: eeschema/dialogs/dialog_lib_new_symbol.cpp:118
 #, c-format
 msgid "Deriving from symbol '%s'."
 msgstr "Johdettu symbolista '%s'."
@@ -13618,11 +13618,11 @@ msgid "Alternate pin assignments are not available for De Morgan symbols."
 msgstr ""
 "Vaihtoehtoisia nastojen määrityksiä ei ole saatavana De Morgan symboleille."
 
-#: eeschema/dialogs/dialog_pin_properties.cpp:286
+#: eeschema/dialogs/dialog_pin_properties.cpp:287
 msgid "Exit sync pins mode"
 msgstr "Poistu synkronoi nastat -tilasta"
 
-#: eeschema/dialogs/dialog_pin_properties.cpp:301
+#: eeschema/dialogs/dialog_pin_properties.cpp:302
 msgid ""
 "Synchronized pins mode is enabled.\n"
 "Similar pins will be edited regardless of this option."
@@ -13630,20 +13630,20 @@ msgstr ""
 "Synkronoitu nastojen muokkaustila on käytössä.\n"
 "Vastaavia nastoja muutetaan riippumatta tästä valinnasta."
 
-#: eeschema/dialogs/dialog_pin_properties.cpp:306
+#: eeschema/dialogs/dialog_pin_properties.cpp:307
 msgid "If checked, this pin will exist in all units."
 msgstr "Jos valittu, tämä pinni esiintyy kaikissa yksiköissä."
 
-#: eeschema/dialogs/dialog_pin_properties.cpp:310
+#: eeschema/dialogs/dialog_pin_properties.cpp:311
 msgid "This symbol only has one unit. This control has no effect."
 msgstr ""
 "Tällä symbolilla on vain yksi yksikkö. Tällä asetuksella ei ole vaikutusta."
 
-#: eeschema/dialogs/dialog_pin_properties.cpp:331
+#: eeschema/dialogs/dialog_pin_properties.cpp:335
 msgid "Alternate pin definitions must have a name."
 msgstr "Vaihtoehtoisilla pin-määrityksillä on oltava nimi."
 
-#: eeschema/dialogs/dialog_pin_properties.cpp:351
+#: eeschema/dialogs/dialog_pin_properties.cpp:355
 #, c-format
 msgid ""
 "This pin is not on a %d mils grid which will make it difficult to connect to "
@@ -13654,16 +13654,16 @@ msgstr ""
 "kytkentäkaavioon.\n"
 "Haluatko jatkaa?"
 
-#: eeschema/dialogs/dialog_pin_properties.cpp:445
+#: eeschema/dialogs/dialog_pin_properties.cpp:452
 msgid "Synchronized Pins Mode."
 msgstr "Synkronoitujen nastojen käytäntö."
 
-#: eeschema/dialogs/dialog_pin_properties.cpp:447
+#: eeschema/dialogs/dialog_pin_properties.cpp:454
 msgid "Synchronized Pins Mode.  New pin will be added to all units."
 msgstr ""
 "Synkronoitu Nastan -Tila.  Uusi nasta tullaan lisäämään kaikkiin yksiköihin."
 
-#: eeschema/dialogs/dialog_pin_properties.cpp:449
+#: eeschema/dialogs/dialog_pin_properties.cpp:456
 msgid "Synchronized Pins Mode.  Matching pins in other units will be updated."
 msgstr ""
 "Synkronoitu Nastan -Tila.  Vastaavat nastat muissa yksiköissa tullaan "
@@ -24675,7 +24675,7 @@ msgstr "Aktiivinen kerros"
 
 #: gerbview/dialogs/dialog_draw_layers_settings_base.cpp:77
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:87
-#: pcbnew/dialogs/dialog_track_via_properties.cpp:1037
+#: pcbnew/dialogs/dialog_track_via_properties.cpp:1036
 msgid "All layers"
 msgstr "Kaikki kerrokset"
 
@@ -32750,7 +32750,7 @@ msgid "Update Footprint"
 msgstr "Päivitä Jalanjälki"
 
 #: pcbnew/dialogs/dialog_cleanup_graphics.cpp:56
-#: pcbnew/dialogs/dialog_cleanup_tracks_and_vias.cpp:136
+#: pcbnew/dialogs/dialog_cleanup_tracks_and_vias.cpp:135
 #: pcbnew/dialogs/dialog_import_netlist.cpp:85
 #: pcbnew/dialogs/dialog_update_pcb.cpp:60
 msgid "Update PCB"
@@ -32795,25 +32795,25 @@ msgstr "Toleranssi:"
 msgid "Changes to be applied:"
 msgstr "Sovellettavat muutokset:"
 
-#: pcbnew/dialogs/dialog_cleanup_tracks_and_vias.cpp:134
+#: pcbnew/dialogs/dialog_cleanup_tracks_and_vias.cpp:133
 msgid "Build Changes"
 msgstr "Rakenna Muutokset"
 
-#: pcbnew/dialogs/dialog_cleanup_tracks_and_vias.cpp:267
+#: pcbnew/dialogs/dialog_cleanup_tracks_and_vias.cpp:266
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:189
 msgid "Checking zones..."
 msgstr "Tarkistetaan vyöhykkeet..."
 
-#: pcbnew/dialogs/dialog_cleanup_tracks_and_vias.cpp:277
+#: pcbnew/dialogs/dialog_cleanup_tracks_and_vias.cpp:276
 msgid "Rebuilding connectivity..."
 msgstr "Rakennetaan uudelleen liitettävyyttä.."
 
-#: pcbnew/dialogs/dialog_cleanup_tracks_and_vias.cpp:291
+#: pcbnew/dialogs/dialog_cleanup_tracks_and_vias.cpp:290
 #: pcbnew/tools/drc_tool.cpp:151
 msgid "Refilling all zones..."
 msgstr "Uudelleentäytetään kaikki alueet..."
 
-#: pcbnew/dialogs/dialog_cleanup_tracks_and_vias.cpp:305
+#: pcbnew/dialogs/dialog_cleanup_tracks_and_vias.cpp:304
 msgid "Board Cleanup"
 msgstr "Piirilevyn tyhjennys"
 
@@ -35724,10 +35724,10 @@ msgstr "Lisää kupariviisteitä tietyillä arvoilla:"
 msgid "Apply and Close"
 msgstr "Ota käyttöön ja sulje"
 
-#: pcbnew/dialogs/dialog_global_edit_teardrops.cpp:529
-#: pcbnew/dialogs/dialog_global_edit_teardrops.cpp:533
-#: pcbnew/dialogs/dialog_global_edit_teardrops.cpp:537
-#: pcbnew/dialogs/dialog_global_edit_teardrops.cpp:556
+#: pcbnew/dialogs/dialog_global_edit_teardrops.cpp:528
+#: pcbnew/dialogs/dialog_global_edit_teardrops.cpp:532
+#: pcbnew/dialogs/dialog_global_edit_teardrops.cpp:536
+#: pcbnew/dialogs/dialog_global_edit_teardrops.cpp:555
 msgid "Edit Teardrops"
 msgstr "Muokkaa kupariviisteitä"
 
@@ -35869,9 +35869,9 @@ msgstr "%("
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:245
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:292
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1659
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1660
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1661
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1662
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:682
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:750
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:798
@@ -36130,7 +36130,7 @@ msgid "Annular rings:"
 msgstr "Sormuskehät:"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:175
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1075
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1074
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:388 pcbnew/pad.cpp:2717
 msgid "All copper layers"
 msgstr "Kaikki kuparikerrokset"
@@ -36141,7 +36141,7 @@ msgid "Start, end, and connected layers"
 msgstr "Alku, Loppu, ja yhdistetyt kerrokset"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:175
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1079
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1078
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:388 pcbnew/pad.cpp:2718
 msgid "Connected layers only"
 msgstr "Vain yhdistetyt kerrokset"
@@ -36632,70 +36632,70 @@ msgstr "Poista lähdekohteet alun jälkeen"
 msgid "Outset Items"
 msgstr "Outset kohteet"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:179
+#: pcbnew/dialogs/dialog_pad_properties.cpp:178
 #: pcbnew/dialogs/dialog_pad_properties_base.h:287 pcbnew/pad.cpp:2768
 msgid "Pad Properties"
 msgstr "Anturan ominaisuudet"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:187
+#: pcbnew/dialogs/dialog_pad_properties.cpp:186
 msgid "Default Pad Properties for Add Pad Tool"
 msgstr "Oletusanturan ominaisuudet Lisää Antura Työkalulle"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:597
+#: pcbnew/dialogs/dialog_pad_properties.cpp:596
 #, c-format
 msgid "Footprint %s (%s), %s, rotated %g deg"
 msgstr "Jalanjälki %s (%s), %s, kierretty %g astetta"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:600
+#: pcbnew/dialogs/dialog_pad_properties.cpp:599
 #: pcbnew/dialogs/dialog_text_properties.cpp:311
 msgid "back side (mirrored)"
 msgstr "kääntöpuoli (peilattu)"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:600
+#: pcbnew/dialogs/dialog_pad_properties.cpp:599
 #: pcbnew/dialogs/dialog_text_properties.cpp:312
 msgid "front side"
 msgstr "etupuoli"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:855
+#: pcbnew/dialogs/dialog_pad_properties.cpp:854
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:109
-#: pcbnew/dialogs/dialog_track_via_properties.cpp:1050
+#: pcbnew/dialogs/dialog_track_via_properties.cpp:1049
 msgid "Inner Layers"
 msgstr "Sisäkerrokset"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1076
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1075
 #, c-format
 msgid "%s, %s and connected layers"
 msgstr "%s, %s ja yhdistetyt kerrokset"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1424
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1423
 msgid "Error: Through hole pad has no hole."
 msgstr "Virhe: Läpireikäanturassa ei ole reikää."
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1429
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1428
 msgid "Pad Properties Errors"
 msgstr "Anturan ominaisuuksien Virheet"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1430
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1429
 msgid "Pad Properties Warnings"
 msgstr "Anturan Ominaisuusvaroitukset"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1609
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1608
 msgid "Edit Pad Properties"
 msgstr "Muokkaa anturan ominaisuuksia"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1644
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1643
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:447
 msgid "Hole size X:"
 msgstr "Reiän koko X:"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1666
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1665
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:339
 msgid "Pad size X:"
 msgstr "Anturan koko X:"
 
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1668
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1669
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1670
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1671
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:234
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:276
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:327
@@ -38143,35 +38143,35 @@ msgstr "Ohjauspiste 1"
 msgid "Control Point 2"
 msgstr "Ohjauspiste 2"
 
-#: pcbnew/dialogs/dialog_shape_properties.cpp:1177
+#: pcbnew/dialogs/dialog_shape_properties.cpp:1176
 msgid "Edit Shape Properties"
 msgstr "Muokkaa muodon ominaisuuksia"
 
-#: pcbnew/dialogs/dialog_shape_properties.cpp:1205
-#: pcbnew/dialogs/dialog_shape_properties.cpp:1228
+#: pcbnew/dialogs/dialog_shape_properties.cpp:1204
+#: pcbnew/dialogs/dialog_shape_properties.cpp:1227
 msgid "Line width must be greater than zero."
 msgstr "Viivan leveyden on oltava suurempi kuin nolla."
 
-#: pcbnew/dialogs/dialog_shape_properties.cpp:1210
+#: pcbnew/dialogs/dialog_shape_properties.cpp:1209
 msgid "Line width must be greater than zero for an unfilled circle."
 msgstr "Täyttämättömän ympyrän viivan leveyden on oltava suurempi kuin nolla."
 
-#: pcbnew/dialogs/dialog_shape_properties.cpp:1216
+#: pcbnew/dialogs/dialog_shape_properties.cpp:1215
 msgid "Line width must be greater than zero for an unfilled rectangle."
 msgstr ""
 "Viivan leveyden on oltava suurempi kuin nolla täyttämättömässä "
 "suorakulmiossa."
 
-#: pcbnew/dialogs/dialog_shape_properties.cpp:1222
+#: pcbnew/dialogs/dialog_shape_properties.cpp:1221
 msgid "Line width must be greater than zero for an unfilled polygon."
 msgstr ""
 "Täyttämättömän polygonin viivan leveyden on oltava suurempi kuin nolla."
 
-#: pcbnew/dialogs/dialog_shape_properties.cpp:1234
+#: pcbnew/dialogs/dialog_shape_properties.cpp:1233
 msgid "Line width must be greater than zero for an unfilled curve."
 msgstr "Viivaleveyden on oltava suurempi kuin nolla täyttämättömälle kaarelle."
 
-#: pcbnew/dialogs/dialog_shape_properties.cpp:1245
+#: pcbnew/dialogs/dialog_shape_properties.cpp:1244
 msgid "Error List"
 msgstr "Virheluettelo"
 
@@ -38338,60 +38338,60 @@ msgstr "Reunan leveys:"
 msgid "Border style:"
 msgstr "Reunan tyyli:"
 
-#: pcbnew/dialogs/dialog_track_via_properties.cpp:546
+#: pcbnew/dialogs/dialog_track_via_properties.cpp:545
 #, c-format
 msgid "Applying these changes will short net %s with %s."
 msgstr ""
 
-#: pcbnew/dialogs/dialog_track_via_properties.cpp:552
+#: pcbnew/dialogs/dialog_track_via_properties.cpp:551
 #, c-format
 msgid "Applying these changes will short net %s with other nets."
 msgstr ""
 
-#: pcbnew/dialogs/dialog_track_via_properties.cpp:557
+#: pcbnew/dialogs/dialog_track_via_properties.cpp:556
 msgid "Apply Anyway"
 msgstr "Tee kuitenkin"
 
-#: pcbnew/dialogs/dialog_track_via_properties.cpp:557
+#: pcbnew/dialogs/dialog_track_via_properties.cpp:556
 msgid "Cancel Changes"
 msgstr "Peruuta muutokset"
 
-#: pcbnew/dialogs/dialog_track_via_properties.cpp:571
+#: pcbnew/dialogs/dialog_track_via_properties.cpp:570
 #, c-format
 msgid "Changing the net will also update %s pad %s to %s."
 msgstr "Verkon vaihtaminen päivittää myös %s arvosta %s arvoon %s."
 
-#: pcbnew/dialogs/dialog_track_via_properties.cpp:580
+#: pcbnew/dialogs/dialog_track_via_properties.cpp:579
 #, c-format
 msgid "Changing the net will also update %s pad %s and %s pad %s to %s."
 msgstr ""
 "Verkon vaihtaminen päivittää myös %s juotospisteen %s ja %s juotospisteen %s "
 "arvoon %s."
 
-#: pcbnew/dialogs/dialog_track_via_properties.cpp:589
+#: pcbnew/dialogs/dialog_track_via_properties.cpp:588
 #, c-format
 msgid "Changing the net will also update %lu connected pads to %s."
 msgstr ""
 "Verkon vaihtaminen päivittää myös %lu yhdistettyä juotospistettä arvoon %s."
 
-#: pcbnew/dialogs/dialog_track_via_properties.cpp:595
+#: pcbnew/dialogs/dialog_track_via_properties.cpp:594
 msgid "Change Nets"
 msgstr "Vaihda Verkot"
 
-#: pcbnew/dialogs/dialog_track_via_properties.cpp:595
+#: pcbnew/dialogs/dialog_track_via_properties.cpp:594
 msgid "Leave Nets Unchanged"
 msgstr "Jätä verkot muuttumattomaksi"
 
-#: pcbnew/dialogs/dialog_track_via_properties.cpp:641
+#: pcbnew/dialogs/dialog_track_via_properties.cpp:640
 #: pcbnew/dialogs/dialog_track_via_size.cpp:59
 msgid "Via hole size must be smaller than via diameter"
 msgstr "Läpiviennin reiän koko on oltava pienempi kuin läpiviennin halkaisija"
 
-#: pcbnew/dialogs/dialog_track_via_properties.cpp:650
+#: pcbnew/dialogs/dialog_track_via_properties.cpp:649
 msgid "Via start layer and end layer cannot be the same"
 msgstr "Aloituskerros ja lopetuskerros eivät voi olla samat"
 
-#: pcbnew/dialogs/dialog_track_via_properties.cpp:918
+#: pcbnew/dialogs/dialog_track_via_properties.cpp:917
 msgid "Edit Track/Via Properties"
 msgstr "Muokkaa johdinraidan/läpiviennin asetuksia"
 
@@ -46716,7 +46716,7 @@ msgstr "Poikkeus python-jalanjälkivelhon koodissa"
 msgid "Error loading drawing sheet '%s': %s"
 msgstr "Virhe ladattaessa piirustusarkkia '%s':%s"
 
-#: pcbnew/router/pns_diff_pair_placer.cpp:523
+#: pcbnew/router/pns_diff_pair_placer.cpp:524
 msgid ""
 "Unable to find complementary differential pair nets. Make sure the names of "
 "the nets belonging to a differential pair end with either N/P or +/-."
@@ -46724,7 +46724,7 @@ msgstr ""
 "Täydentäviä differentiaalipariverkkoja ei löydy. Varmista, että nimet jotka "
 "kuuluvat differentiaalipariverkkoon päättyvät joko _N / _P tai +/-."
 
-#: pcbnew/router/pns_diff_pair_placer.cpp:540
+#: pcbnew/router/pns_diff_pair_placer.cpp:541
 msgid ""
 "Can't find a suitable starting point.  If starting from an existing "
 "differential pair make sure you are at the end."
@@ -46732,7 +46732,7 @@ msgstr ""
 "Ei löydy sopivaa lähtöpistettä. Jos aloitat olemassa olevasta "
 "differentiaaliparista, varmista, että olet lopussa."
 
-#: pcbnew/router/pns_diff_pair_placer.cpp:595
+#: pcbnew/router/pns_diff_pair_placer.cpp:596
 #, c-format
 msgid "Can't find a suitable starting point for coupled net \"%s\"."
 msgstr "Ei löydy sopivaa lähtöpistettä kytketylle verkolle \"%s\"."

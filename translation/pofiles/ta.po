@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-27 22:51+0300\n"
+"POT-Creation-Date: 2025-07-03 20:16+0300\n"
 "PO-Revision-Date: 2025-06-29 02:37+0000\n"
 "Last-Translator: தமிழ்நேரம் <anishprabu.t@gmail.com>\n"
 "Language-Team: Tamil <https://hosted.weblate.org/projects/kicad/v9/ta/>\n"
@@ -1366,7 +1366,7 @@ msgstr "அளவு"
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:76
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:121
 #: common/dialogs/dialog_grid_settings_base.cpp:36
-#: common/tool/common_tools.cpp:630
+#: common/tool/common_tools.cpp:636
 #: eeschema/dialogs/dialog_image_properties_base.cpp:34
 #: eeschema/import_gfx/dialog_import_gfx_sch_base.cpp:61
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:248
@@ -1384,7 +1384,7 @@ msgstr "X:"
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:86
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:131
 #: common/dialogs/dialog_grid_settings_base.cpp:57
-#: common/tool/common_tools.cpp:630
+#: common/tool/common_tools.cpp:636
 #: eeschema/dialogs/dialog_image_properties_base.cpp:45
 #: eeschema/import_gfx/dialog_import_gfx_sch_base.cpp:82
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:259
@@ -1513,7 +1513,7 @@ msgstr "தடம் நூலகத்தை உருவாக்கவும�
 #: eeschema/dialogs/dialog_field_properties_base.cpp:239
 #: eeschema/dialogs/dialog_field_properties_base.cpp:273
 #: eeschema/dialogs/dialog_field_properties_base.cpp:284
-#: eeschema/dialogs/dialog_label_properties_base.cpp:277
+#: eeschema/dialogs/dialog_label_properties_base.cpp:278
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:109
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:148
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:59
@@ -2034,8 +2034,8 @@ msgstr "தகவல்"
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:414
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:411
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:119
-#: pcbnew/dialogs/dialog_track_via_properties.cpp:556
-#: pcbnew/dialogs/dialog_track_via_properties.cpp:594
+#: pcbnew/dialogs/dialog_track_via_properties.cpp:555
+#: pcbnew/dialogs/dialog_track_via_properties.cpp:593
 #: pcbnew/footprint_libraries_utils.cpp:379
 #: pcbnew/footprint_libraries_utils.cpp:1161 pcbnew/router/router_tool.cpp:1863
 #: pcbnew/router/router_tool.cpp:2617
@@ -2560,7 +2560,7 @@ msgstr "சுற்றுச்சூழல் மாறிகள்"
 #: common/dialogs/panel_setup_netclasses_base.cpp:51
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:88
 #: eeschema/dialogs/dialog_design_block_properties_base.cpp:42
-#: eeschema/dialogs/dialog_label_properties_base.cpp:108
+#: eeschema/dialogs/dialog_label_properties_base.cpp:109
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:121
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:89
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:59
@@ -3152,7 +3152,7 @@ msgstr "போலி உரை"
 
 #: common/dialogs/dialog_page_settings_base.cpp:50
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:238
-#: eeschema/dialogs/dialog_label_properties.cpp:209
+#: eeschema/dialogs/dialog_label_properties.cpp:210
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:113
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:296
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:338
@@ -3375,7 +3375,7 @@ msgstr "சூதம்"
 #: common/dialogs/panel_design_block_lib_table.cpp:411
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:89
 #: eeschema/dialogs/dialog_design_block_properties_base.cpp:43
-#: eeschema/dialogs/dialog_label_properties_base.cpp:109
+#: eeschema/dialogs/dialog_label_properties_base.cpp:110
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:60
 #: eeschema/dialogs/dialog_rescue_each.cpp:135
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:61
@@ -3513,7 +3513,7 @@ msgstr "வெளியீட்டு முறை:"
 
 #: common/dialogs/dialog_print_generic_base.cpp:35
 #: common/dialogs/panel_setup_netclasses_base.cpp:63 common/eda_text.cpp:1408
-#: eeschema/dialogs/dialog_label_properties_base.cpp:121
+#: eeschema/dialogs/dialog_label_properties_base.cpp:122
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:72
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:78
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:72
@@ -3694,7 +3694,7 @@ msgstr "<"
 #: common/dialogs/eda_reorderable_list_dialog_base.cpp:75
 #: common/dialogs/panel_design_block_lib_table_base.cpp:136
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:43
-#: eeschema/dialogs/dialog_label_properties_base.cpp:147
+#: eeschema/dialogs/dialog_label_properties_base.cpp:148
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:97
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:98
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:95
@@ -3707,7 +3707,7 @@ msgstr "மேலே செல்லுங்கள்"
 #: common/dialogs/eda_reorderable_list_dialog_base.cpp:80
 #: common/dialogs/panel_design_block_lib_table_base.cpp:141
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:48
-#: eeschema/dialogs/dialog_label_properties_base.cpp:152
+#: eeschema/dialogs/dialog_label_properties_base.cpp:153
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:102
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:103
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:100
@@ -4953,7 +4953,7 @@ msgstr "கட்டம் அளவு '%s' ஏற்கனவே உள்ள�
 #: common/eda_base_frame.cpp:1131 common/eda_base_frame.cpp:1140
 #: common/eda_base_frame.cpp:1166 common/eda_base_frame.cpp:1179
 #: common/eda_base_frame.cpp:1212 common/eda_base_frame.cpp:1234
-#: common/tool/common_tools.cpp:608
+#: common/tool/common_tools.cpp:614
 msgid "Grids"
 msgstr "கட்டங்கள்"
 
@@ -5181,9 +5181,9 @@ msgstr "பெரிதாக்கு"
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:363
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:332
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:91
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1080
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1089
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1099
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1079
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1088
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1098
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:587
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:858
 #: pcbnew/dialogs/dialog_plot_base.cpp:118 pcbnew/footprint.cpp:4125
@@ -5767,7 +5767,7 @@ msgstr "வரி"
 #: common/drawing_sheet/ds_data_item.cpp:367
 #: common/drawing_sheet/ds_draw_item.cpp:124 common/eda_shape.cpp:975
 #: common/eda_shape.cpp:2320
-#: eeschema/dialogs/dialog_label_properties_base.cpp:199
+#: eeschema/dialogs/dialog_label_properties_base.cpp:200
 #: eeschema/sch_label.cpp:2298
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:45 pcbnew/pad.cpp:2683
 #: pcbnew/pcb_dimension.cpp:2013
@@ -5960,7 +5960,7 @@ msgid "Data Collection"
 msgstr "தரவு சேகரிப்பு"
 
 #: common/eda_base_frame.cpp:1129 common/tool/actions.cpp:1089
-#: common/tool/common_tools.cpp:615 eeschema/symbol_editor/symbol_editor.cpp:84
+#: common/tool/common_tools.cpp:621 eeschema/symbol_editor/symbol_editor.cpp:84
 #: kicad/tools/kicad_manager_actions.cpp:125
 msgid "Symbol Editor"
 msgstr "அடையாளம் ஆசிரியர்"
@@ -5985,7 +5985,7 @@ msgid "Colors"
 msgstr "நிறங்கள்"
 
 #: common/eda_base_frame.cpp:1138 common/hotkey_store.cpp:77
-#: common/tool/common_tools.cpp:614 eeschema/menubar.cpp:133
+#: common/tool/common_tools.cpp:620 eeschema/menubar.cpp:133
 #: eeschema/sch_edit_frame.cpp:1753 kicad/tools/kicad_manager_actions.cpp:114
 msgid "Schematic Editor"
 msgstr "திட்ட ஆசிரியர்"
@@ -6007,7 +6007,7 @@ msgid "Simulator"
 msgstr "பாவிப்பி"
 
 #: common/eda_base_frame.cpp:1164 common/tool/actions.cpp:1106
-#: common/tool/common_tools.cpp:617 kicad/tools/kicad_manager_actions.cpp:147
+#: common/tool/common_tools.cpp:623 kicad/tools/kicad_manager_actions.cpp:147
 #: pcbnew/footprint_edit_frame.cpp:1107 pcbnew/menubar_footprint_editor.cpp:92
 msgid "Footprint Editor"
 msgstr "தடம் ஆசிரியர்"
@@ -6025,7 +6025,7 @@ msgid "Graphics Defaults"
 msgstr "கிராபிக்ச் இயல்புநிலை"
 
 #: common/eda_base_frame.cpp:1177 common/hotkey_store.cpp:78
-#: common/tool/common_tools.cpp:616 kicad/tools/kicad_manager_actions.cpp:136
+#: common/tool/common_tools.cpp:622 kicad/tools/kicad_manager_actions.cpp:136
 #: pcbnew/menubar_pcb_editor.cpp:186 pcbnew/pcb_edit_frame.cpp:201
 #: pcbnew/pcb_edit_frame.cpp:1809 pcbnew/tools/zone_filler_tool.cpp:284
 msgid "PCB Editor"
@@ -6044,7 +6044,7 @@ msgid "Raytracing Renderer"
 msgstr "ரேட்ரேசிங் ரெண்டரர்"
 
 #: common/eda_base_frame.cpp:1209 common/hotkey_store.cpp:81
-#: common/tool/common_tools.cpp:619 gerbview/gerbview_frame.cpp:686
+#: common/tool/common_tools.cpp:625 gerbview/gerbview_frame.cpp:686
 #: gerbview/gerbview_frame.cpp:710 gerbview/menubar.cpp:159
 #: kicad/tools/kicad_manager_actions.cpp:158
 msgid "Gerber Viewer"
@@ -6055,7 +6055,7 @@ msgid "Excellon Options"
 msgstr "சிறந்த விருப்பங்கள்"
 
 #: common/eda_base_frame.cpp:1232 common/hotkey_store.cpp:79
-#: common/tool/common_tools.cpp:618 kicad/tools/kicad_manager_actions.cpp:187
+#: common/tool/common_tools.cpp:624 kicad/tools/kicad_manager_actions.cpp:187
 #: pagelayout_editor/menubar.cpp:88 pagelayout_editor/menubar.cpp:89
 #: pagelayout_editor/pl_editor_frame.cpp:586
 msgid "Drawing Sheet Editor"
@@ -6396,7 +6396,7 @@ msgid "Arc"
 msgstr "வில்"
 
 #: common/eda_shape.cpp:331 common/eda_shape.cpp:971 common/eda_shape.cpp:2322
-#: eeschema/dialogs/dialog_label_properties_base.cpp:193
+#: eeschema/dialogs/dialog_label_properties_base.cpp:194
 #: eeschema/sch_label.cpp:2296 gerbview/gerber_draw_item.cpp:231
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:45 pcbnew/pad.cpp:1548
 #: pcbnew/pad.cpp:2682 pcbnew/pcb_dimension.cpp:2014
@@ -6432,7 +6432,7 @@ msgid "Segment"
 msgstr "பிரிவு"
 
 #: common/eda_shape.cpp:987 common/eda_shape.cpp:2372
-#: eeschema/dialogs/dialog_label_properties_base.cpp:173
+#: eeschema/dialogs/dialog_label_properties_base.cpp:174
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:53
 #: eeschema/sch_label.cpp:2278 eeschema/sch_label.cpp:2310
 #: eeschema/sch_tablecell.cpp:197 eeschema/sch_textbox.cpp:679
@@ -6572,8 +6572,8 @@ msgstr "நிறத்தை நிரப்பவும்"
 #: common/eda_text.cpp:977 common/eda_text.cpp:1364
 #: eeschema/dialogs/dialog_field_properties_base.cpp:162
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:217
-#: eeschema/dialogs/dialog_label_properties_base.cpp:114
-#: eeschema/dialogs/dialog_label_properties_base.cpp:235
+#: eeschema/dialogs/dialog_label_properties_base.cpp:115
+#: eeschema/dialogs/dialog_label_properties_base.cpp:236
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:65
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:105
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:65
@@ -6598,8 +6598,8 @@ msgstr "சாய்வு"
 #: common/eda_text.cpp:978 common/eda_text.cpp:1368
 #: eeschema/dialogs/dialog_field_properties_base.cpp:157
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:214
-#: eeschema/dialogs/dialog_label_properties_base.cpp:115
-#: eeschema/dialogs/dialog_label_properties_base.cpp:230
+#: eeschema/dialogs/dialog_label_properties_base.cpp:116
+#: eeschema/dialogs/dialog_label_properties_base.cpp:231
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:66
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:100
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:66
@@ -6678,7 +6678,7 @@ msgid "Bottom"
 msgstr "கீழே"
 
 #: common/eda_text.cpp:1343
-#: eeschema/dialogs/dialog_label_properties_base.cpp:117
+#: eeschema/dialogs/dialog_label_properties_base.cpp:118
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:124
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:92
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:68
@@ -6707,7 +6707,7 @@ msgid "Text Properties"
 msgstr "உரை பண்புகள்"
 
 #: common/eda_text.cpp:1355
-#: eeschema/dialogs/dialog_label_properties_base.cpp:120
+#: eeschema/dialogs/dialog_label_properties_base.cpp:121
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:71
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:71
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:68
@@ -6903,7 +6903,7 @@ msgstr "மோசமான மாற்றுப்பெயர் (நகல்
 
 #: common/font/font.cpp:177 common/widgets/font_choice.cpp:49
 #: eeschema/dialogs/dialog_field_properties_base.cpp:142
-#: eeschema/dialogs/dialog_label_properties_base.cpp:216
+#: eeschema/dialogs/dialog_label_properties_base.cpp:217
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:85
 #: eeschema/dialogs/dialog_tablecell_properties_base.cpp:129
 #: eeschema/dialogs/dialog_text_properties_base.cpp:93
@@ -8273,7 +8273,7 @@ msgstr "புலப்படும் கொடி"
 msgid "Library settings for %s..."
 msgstr "%s க்கான நூலக அமைப்புகள் ..."
 
-#: common/lib_tree_model.cpp:153
+#: common/lib_tree_model.cpp:144
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:131
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:99
 #: eeschema/dialogs/dialog_sim_model.cpp:632 eeschema/sch_item.cpp:541
@@ -8288,14 +8288,14 @@ msgstr "அலகு"
 msgid "Item"
 msgstr "உருப்படி"
 
-#: common/lib_tree_model_adapter.cpp:404
+#: common/lib_tree_model_adapter.cpp:402
 #: eeschema/widgets/panel_design_block_chooser.cpp:416
 #: eeschema/widgets/panel_symbol_chooser.cpp:173
 #: pcbnew/widgets/panel_footprint_chooser.cpp:98
 msgid "Recently Used"
 msgstr "அண்மைக் காலத்தில் பயன்படுத்தப்பட்டது"
 
-#: common/lib_tree_model_adapter.cpp:406
+#: common/lib_tree_model_adapter.cpp:404
 #: eeschema/widgets/panel_symbol_chooser.cpp:180
 msgid "Already Placed"
 msgstr "ஏற்கனவே வைக்கப்பட்டுள்ளது"
@@ -8353,7 +8353,7 @@ msgid "Type mismatch between %lf and '%s'"
 msgstr "%lf மற்றும் '%s' க்கு இடையில் பொருந்தாத தன்மையைத் தட்டச்சு செய்க"
 
 #: common/netclass.cpp:297 pcbnew/component_class_manager.cpp:61
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1084 pcbnew/zone.cpp:836
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1083 pcbnew/zone.cpp:836
 #, c-format
 msgid "%s and %s"
 msgstr "%s மற்றும் %s"
@@ -8550,12 +8550,12 @@ msgid "Excluded error: "
 msgstr "விலக்கப்பட்ட பிழை: "
 
 #: common/rc_item.cpp:431 eeschema/erc/erc_item.cpp:410
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1422
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1421
 msgid "Warning: "
 msgstr "எச்சரிக்கை: "
 
 #: common/rc_item.cpp:435 eeschema/erc/erc_item.cpp:414
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1420
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1419
 msgid "Error: "
 msgstr "பிழை: "
 
@@ -9290,7 +9290,7 @@ msgstr "அடுத்த கட்டத்திற்கு மாறவு�
 msgid "Switch to Previous Grid"
 msgstr "முந்தைய கட்டத்திற்கு மாறவும்"
 
-#: common/tool/actions.cpp:892 common/tool/common_tools.cpp:630
+#: common/tool/actions.cpp:892 common/tool/common_tools.cpp:636
 msgid "Grid Origin"
 msgstr "கட்டம் தோற்றம்"
 
@@ -11971,7 +11971,7 @@ msgid "Violation Severity"
 msgstr "மீறல் தீவிரம்"
 
 #: eeschema/dialogs/dialog_erc.cpp:859
-#: eeschema/dialogs/dialog_label_properties_base.cpp:206
+#: eeschema/dialogs/dialog_label_properties_base.cpp:207
 #: eeschema/dialogs/dialog_schematic_setup.cpp:63
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:74
 #: pcbnew/dialogs/dialog_board_setup.cpp:134
@@ -12249,7 +12249,7 @@ msgid "Sheet filename can only be modified in Sheet Properties dialog."
 msgstr "தாள் கோப்பு பெயரை தாள் பண்புகள் உரையாடலில் மட்டுமே மாற்ற முடியும்."
 
 #: eeschema/dialogs/dialog_field_properties.cpp:626
-#: eeschema/dialogs/dialog_label_properties.cpp:521
+#: eeschema/dialogs/dialog_label_properties.cpp:520
 msgid ""
 "Intersheet reference visibility is controlled globally from Schematic Setup "
 "> General > Formatting"
@@ -12287,7 +12287,7 @@ msgstr "திட்டத்தில் இந்த புலத்தின�
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:138
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:173
-#: eeschema/dialogs/dialog_label_properties_base.cpp:212
+#: eeschema/dialogs/dialog_label_properties_base.cpp:213
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:81
 #: eeschema/dialogs/dialog_tablecell_properties_base.cpp:125
 #: eeschema/dialogs/dialog_text_properties_base.cpp:89
@@ -12302,7 +12302,7 @@ msgstr "எழுத்துரு:"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:142
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:177
-#: eeschema/dialogs/dialog_label_properties_base.cpp:216
+#: eeschema/dialogs/dialog_label_properties_base.cpp:217
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:85
 #: eeschema/dialogs/dialog_tablecell_properties_base.cpp:129
 #: eeschema/dialogs/dialog_text_properties_base.cpp:93
@@ -12374,7 +12374,7 @@ msgstr "செங்குத்து உரை"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:229
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:198
-#: eeschema/dialogs/dialog_label_properties_base.cpp:267
+#: eeschema/dialogs/dialog_label_properties_base.cpp:268
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:117
 #: eeschema/dialogs/dialog_text_properties_base.cpp:180
 msgid "Text size:"
@@ -12382,7 +12382,7 @@ msgstr "உரை அளவு:"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:243
 #: eeschema/dialogs/dialog_junction_props_base.cpp:38
-#: eeschema/dialogs/dialog_label_properties_base.cpp:281
+#: eeschema/dialogs/dialog_label_properties_base.cpp:282
 #: eeschema/dialogs/dialog_line_properties_base.cpp:45
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:63
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:131
@@ -12671,8 +12671,8 @@ msgstr "சந்திப்புகளைத் திருத்து"
 
 #: eeschema/dialogs/dialog_junction_props_base.cpp:27
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:46
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1639
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1657
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1638
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1656
 msgid "Diameter:"
 msgstr "விட்டம்:"
 
@@ -12690,66 +12690,66 @@ msgstr "திட்டமிட்ட ஆசிரியர் வண்ணங�
 msgid "Junction Properties"
 msgstr "சந்தி பண்புகள்"
 
-#: eeschema/dialogs/dialog_label_properties.cpp:129
+#: eeschema/dialogs/dialog_label_properties.cpp:130
 msgid "Pin length:"
 msgstr "முள் நீளம்:"
 
-#: eeschema/dialogs/dialog_label_properties.cpp:137
+#: eeschema/dialogs/dialog_label_properties.cpp:138
 msgid "Global Label Properties"
 msgstr "உலகளாவிய சிட்டை பண்புகள்"
 
-#: eeschema/dialogs/dialog_label_properties.cpp:138
+#: eeschema/dialogs/dialog_label_properties.cpp:139
 msgid "Hierarchical Label Properties"
 msgstr "படிநிலை சிட்டை பண்புகள்"
 
-#: eeschema/dialogs/dialog_label_properties.cpp:139
-#: eeschema/dialogs/dialog_label_properties_base.h:122
+#: eeschema/dialogs/dialog_label_properties.cpp:140
+#: eeschema/dialogs/dialog_label_properties_base.h:123
 msgid "Label Properties"
 msgstr "சிட்டை பண்புகள்"
 
-#: eeschema/dialogs/dialog_label_properties.cpp:140
+#: eeschema/dialogs/dialog_label_properties.cpp:141
 msgid "Directive Label Properties"
 msgstr "டைரெக்டிவ் சிட்டை பண்புகள்"
 
-#: eeschema/dialogs/dialog_label_properties.cpp:141
+#: eeschema/dialogs/dialog_label_properties.cpp:142
 msgid "Hierarchical Sheet Pin Properties"
 msgstr "படிநிலை தாள் முள் பண்புகள்"
 
-#: eeschema/dialogs/dialog_label_properties.cpp:501
+#: eeschema/dialogs/dialog_label_properties.cpp:500
 msgid "Label can not be empty."
 msgstr "சிட்டை காலியாக இருக்க முடியாது."
 
-#: eeschema/dialogs/dialog_label_properties.cpp:565
+#: eeschema/dialogs/dialog_label_properties.cpp:564
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:443
 #: eeschema/dialogs/dialog_sheet_properties.cpp:397
 #: eeschema/dialogs/dialog_symbol_properties.cpp:743 include/project.h:43
 msgid "untitled"
 msgstr "தலைப்பிடப்படாத"
 
-#: eeschema/dialogs/dialog_label_properties.cpp:641
+#: eeschema/dialogs/dialog_label_properties.cpp:640
 msgid "Edit Label Properties"
 msgstr "சிட்டை பண்புகளைத் திருத்தவும்"
 
-#: eeschema/dialogs/dialog_label_properties.cpp:784
+#: eeschema/dialogs/dialog_label_properties.cpp:783
 msgid "The first field is mandatory."
 msgstr "முதல் புலம் கட்டாயமாகும்."
 
-#: eeschema/dialogs/dialog_label_properties_base.cpp:31
-#: eeschema/dialogs/dialog_label_properties_base.cpp:40
-#: eeschema/dialogs/dialog_label_properties_base.cpp:47
+#: eeschema/dialogs/dialog_label_properties_base.cpp:32
+#: eeschema/dialogs/dialog_label_properties_base.cpp:41
+#: eeschema/dialogs/dialog_label_properties_base.cpp:48
 msgid "Label:"
 msgstr "லேபிள்:"
 
-#: eeschema/dialogs/dialog_label_properties_base.cpp:33
-#: eeschema/dialogs/dialog_label_properties_base.cpp:49
+#: eeschema/dialogs/dialog_label_properties_base.cpp:34
+#: eeschema/dialogs/dialog_label_properties_base.cpp:50
 msgid "Enter the text to be used within the schematic"
 msgstr "திட்டத்திற்குள் பயன்படுத்த வேண்டிய உரையை உள்ளிடவும்"
 
-#: eeschema/dialogs/dialog_label_properties_base.cpp:62
+#: eeschema/dialogs/dialog_label_properties_base.cpp:63
 msgid "Multiple label input"
 msgstr "பல சிட்டை உள்ளீடு"
 
-#: eeschema/dialogs/dialog_label_properties_base.cpp:68
+#: eeschema/dialogs/dialog_label_properties_base.cpp:69
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:42
 #: eeschema/dialogs/dialog_text_properties_base.cpp:78
 #: eeschema/dialogs/dialog_user_defined_signals_base.cpp:78
@@ -12757,7 +12757,7 @@ msgstr "பல சிட்டை உள்ளீடு"
 msgid "Syntax help"
 msgstr "தொடரியல் உதவி"
 
-#: eeschema/dialogs/dialog_label_properties_base.cpp:69
+#: eeschema/dialogs/dialog_label_properties_base.cpp:70
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:43
 #: eeschema/dialogs/dialog_text_properties_base.cpp:79
 #: eeschema/dialogs/dialog_user_defined_signals_base.cpp:79
@@ -12765,7 +12765,7 @@ msgstr "தொடரியல் உதவி"
 msgid "Show syntax help window"
 msgstr "தொடரியல் உதவி சாளரத்தைக் காட்டு"
 
-#: eeschema/dialogs/dialog_label_properties_base.cpp:80
+#: eeschema/dialogs/dialog_label_properties_base.cpp:81
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:31
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:33
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:28
@@ -12776,7 +12776,7 @@ msgstr "தொடரியல் உதவி சாளரத்தைக் க
 msgid "Fields"
 msgstr "புலங்கள்"
 
-#: eeschema/dialogs/dialog_label_properties_base.cpp:110
+#: eeschema/dialogs/dialog_label_properties_base.cpp:111
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:61
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:62
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:58
@@ -12791,14 +12791,14 @@ msgstr "புலங்கள்"
 msgid "Show"
 msgstr "காட்டு"
 
-#: eeschema/dialogs/dialog_label_properties_base.cpp:111
+#: eeschema/dialogs/dialog_label_properties_base.cpp:112
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:62
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:59
 #: eeschema/fields_grid_table.cpp:480
 msgid "Show Name"
 msgstr "பெயரைக் காட்டு"
 
-#: eeschema/dialogs/dialog_label_properties_base.cpp:112
+#: eeschema/dialogs/dialog_label_properties_base.cpp:113
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:63
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:63
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:60
@@ -12806,7 +12806,7 @@ msgstr "பெயரைக் காட்டு"
 msgid "H Align"
 msgstr "H சீரல்"
 
-#: eeschema/dialogs/dialog_label_properties_base.cpp:113
+#: eeschema/dialogs/dialog_label_properties_base.cpp:114
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:64
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:64
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:61
@@ -12814,7 +12814,7 @@ msgstr "H சீரல்"
 msgid "V Align"
 msgstr "V சீரல்"
 
-#: eeschema/dialogs/dialog_label_properties_base.cpp:116
+#: eeschema/dialogs/dialog_label_properties_base.cpp:117
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:67
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:67
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:64
@@ -12826,7 +12826,7 @@ msgstr "V சீரல்"
 msgid "Text Size"
 msgstr "உரை அளவு"
 
-#: eeschema/dialogs/dialog_label_properties_base.cpp:118
+#: eeschema/dialogs/dialog_label_properties_base.cpp:119
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:128
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:96
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:69
@@ -12836,7 +12836,7 @@ msgstr "உரை அளவு"
 msgid "X Position"
 msgstr "ஃச் நிலை"
 
-#: eeschema/dialogs/dialog_label_properties_base.cpp:119
+#: eeschema/dialogs/dialog_label_properties_base.cpp:120
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:129
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:97
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:70
@@ -12846,7 +12846,7 @@ msgstr "ஃச் நிலை"
 msgid "Y Position"
 msgstr "ஒய் நிலை"
 
-#: eeschema/dialogs/dialog_label_properties_base.cpp:142
+#: eeschema/dialogs/dialog_label_properties_base.cpp:143
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:92
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:93
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:90
@@ -12854,7 +12854,7 @@ msgstr "ஒய் நிலை"
 msgid "Add field"
 msgstr "புலத்தைச் சேர்க்கவும்"
 
-#: eeschema/dialogs/dialog_label_properties_base.cpp:160
+#: eeschema/dialogs/dialog_label_properties_base.cpp:161
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:110
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:111
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:108
@@ -12862,52 +12862,52 @@ msgstr "புலத்தைச் சேர்க்கவும்"
 msgid "Delete field"
 msgstr "புலத்தை நீக்கு"
 
-#: eeschema/dialogs/dialog_label_properties_base.cpp:175
+#: eeschema/dialogs/dialog_label_properties_base.cpp:176
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:55
 #: eeschema/pin_type.cpp:85 eeschema/sch_label.cpp:97
 #: eeschema/sch_label.cpp:2240 eeschema/sch_pin.cpp:2117
 msgid "Input"
 msgstr "உள்ளீடு"
 
-#: eeschema/dialogs/dialog_label_properties_base.cpp:178
+#: eeschema/dialogs/dialog_label_properties_base.cpp:179
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:58
 #: eeschema/pin_type.cpp:86 eeschema/sch_label.cpp:98
 #: eeschema/sch_label.cpp:2241 eeschema/sch_pin.cpp:2118
 msgid "Output"
 msgstr "வெளியீடு"
 
-#: eeschema/dialogs/dialog_label_properties_base.cpp:181
+#: eeschema/dialogs/dialog_label_properties_base.cpp:182
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:61
 #: eeschema/pin_type.cpp:87 eeschema/sch_label.cpp:99
 #: eeschema/sch_label.cpp:2242 eeschema/sch_pin.cpp:2119
 msgid "Bidirectional"
 msgstr "இருதரப்பு"
 
-#: eeschema/dialogs/dialog_label_properties_base.cpp:184
+#: eeschema/dialogs/dialog_label_properties_base.cpp:185
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:64
 #: eeschema/pin_type.cpp:88 eeschema/sch_label.cpp:2243
 #: eeschema/sch_pin.cpp:2120
 msgid "Tri-state"
 msgstr "முத்தரப்பு"
 
-#: eeschema/dialogs/dialog_label_properties_base.cpp:187
+#: eeschema/dialogs/dialog_label_properties_base.cpp:188
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:67
 #: eeschema/pin_type.cpp:89 eeschema/sch_label.cpp:101
 #: eeschema/sch_label.cpp:2244 eeschema/sch_pin.cpp:2121
 msgid "Passive"
 msgstr "செயலற்ற"
 
-#: eeschema/dialogs/dialog_label_properties_base.cpp:190
+#: eeschema/dialogs/dialog_label_properties_base.cpp:191
 #: eeschema/sch_label.cpp:2295
 msgid "Dot"
 msgstr "புள்ளி"
 
-#: eeschema/dialogs/dialog_label_properties_base.cpp:196
+#: eeschema/dialogs/dialog_label_properties_base.cpp:197
 #: eeschema/sch_label.cpp:2297
 msgid "Diamond"
 msgstr "வைர"
 
-#: eeschema/dialogs/dialog_label_properties_base.cpp:256
+#: eeschema/dialogs/dialog_label_properties_base.cpp:257
 #: eeschema/dialogs/dialog_sim_format_value_base.cpp:36
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:300
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:319
@@ -13046,7 +13046,7 @@ msgstr "அலகு மூலம் வடிகட்டவும்:"
 msgid "Pin Table"
 msgstr "முள் அட்டவணை"
 
-#: eeschema/dialogs/dialog_lib_new_symbol.cpp:120
+#: eeschema/dialogs/dialog_lib_new_symbol.cpp:118
 #, c-format
 msgid "Deriving from symbol '%s'."
 msgstr "'%s' குறியீட்டிலிருந்து பெறப்படுகிறது."
@@ -13454,11 +13454,11 @@ msgstr "மாற்று முள் பெயர்"
 msgid "Alternate pin assignments are not available for De Morgan symbols."
 msgstr "டி மோர்கன் சின்னங்களுக்கு மாற்று முள் பணிகள் கிடைக்கவில்லை."
 
-#: eeschema/dialogs/dialog_pin_properties.cpp:286
+#: eeschema/dialogs/dialog_pin_properties.cpp:287
 msgid "Exit sync pins mode"
 msgstr "ஒத்திசைவு பின்ச் பயன்முறையிலிருந்து வெளியேறவும்"
 
-#: eeschema/dialogs/dialog_pin_properties.cpp:301
+#: eeschema/dialogs/dialog_pin_properties.cpp:302
 msgid ""
 "Synchronized pins mode is enabled.\n"
 "Similar pins will be edited regardless of this option."
@@ -13466,20 +13466,20 @@ msgstr ""
 "ஒத்திசைக்கப்பட்ட பின்ச் பயன்முறை இயக்கப்பட்டது. \n"
 "இந்த விருப்பத்தைப் பொருட்படுத்தாமல் இதே போன்ற ஊசிகளும் திருத்தப்படும்."
 
-#: eeschema/dialogs/dialog_pin_properties.cpp:306
+#: eeschema/dialogs/dialog_pin_properties.cpp:307
 msgid "If checked, this pin will exist in all units."
 msgstr "சரிபார்க்கப்பட்டால், இந்த முள் அனைத்து அலகுகளிலும் இருக்கும்."
 
-#: eeschema/dialogs/dialog_pin_properties.cpp:310
+#: eeschema/dialogs/dialog_pin_properties.cpp:311
 msgid "This symbol only has one unit. This control has no effect."
 msgstr ""
 "இந்த சின்னத்திற்கு ஒரு அலகு மட்டுமே உள்ளது. இந்த கட்டுப்பாடு எந்த விளைவையும் ஏற்படுத்தாது."
 
-#: eeschema/dialogs/dialog_pin_properties.cpp:331
+#: eeschema/dialogs/dialog_pin_properties.cpp:335
 msgid "Alternate pin definitions must have a name."
 msgstr "மாற்று முள் வரையறைகளுக்கு ஒரு பெயர் இருக்க வேண்டும்."
 
-#: eeschema/dialogs/dialog_pin_properties.cpp:351
+#: eeschema/dialogs/dialog_pin_properties.cpp:355
 #, c-format
 msgid ""
 "This pin is not on a %d mils grid which will make it difficult to connect to "
@@ -13489,15 +13489,15 @@ msgstr ""
 "இந்த முள் %d மில்ச் கட்டத்தில் இல்லை, இது திட்டவட்டத்தில் இணைப்பது கடினம். \n"
 "நீங்கள் தொடர விரும்புகிறீர்களா?"
 
-#: eeschema/dialogs/dialog_pin_properties.cpp:445
+#: eeschema/dialogs/dialog_pin_properties.cpp:452
 msgid "Synchronized Pins Mode."
 msgstr "ஒத்திசைக்கப்பட்ட ஊசிகள் பயன்முறை."
 
-#: eeschema/dialogs/dialog_pin_properties.cpp:447
+#: eeschema/dialogs/dialog_pin_properties.cpp:454
 msgid "Synchronized Pins Mode.  New pin will be added to all units."
 msgstr "ஒத்திசைக்கப்பட்ட ஊசிகள் பயன்முறை. அனைத்து அலகுகளிலும் புதிய முள் சேர்க்கப்படும்."
 
-#: eeschema/dialogs/dialog_pin_properties.cpp:449
+#: eeschema/dialogs/dialog_pin_properties.cpp:456
 msgid "Synchronized Pins Mode.  Matching pins in other units will be updated."
 msgstr ""
 "ஒத்திசைக்கப்பட்ட ஊசிகள் பயன்முறை. மற்ற அலகுகளில் பொருந்தக்கூடிய ஊசிகள் புதுப்பிக்கப்படும்."
@@ -24441,7 +24441,7 @@ msgstr "செயலில் அடுக்கு"
 
 #: gerbview/dialogs/dialog_draw_layers_settings_base.cpp:77
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:87
-#: pcbnew/dialogs/dialog_track_via_properties.cpp:1037
+#: pcbnew/dialogs/dialog_track_via_properties.cpp:1036
 msgid "All layers"
 msgstr "அனைத்து அடுக்குகளும்"
 
@@ -32491,7 +32491,7 @@ msgid "Update Footprint"
 msgstr "தடம் புதுப்பி"
 
 #: pcbnew/dialogs/dialog_cleanup_graphics.cpp:56
-#: pcbnew/dialogs/dialog_cleanup_tracks_and_vias.cpp:136
+#: pcbnew/dialogs/dialog_cleanup_tracks_and_vias.cpp:135
 #: pcbnew/dialogs/dialog_import_netlist.cpp:85
 #: pcbnew/dialogs/dialog_update_pcb.cpp:60
 msgid "Update PCB"
@@ -32534,25 +32534,25 @@ msgstr "சகிப்புத்தன்மை:"
 msgid "Changes to be applied:"
 msgstr "பயன்படுத்த வேண்டிய மாற்றங்கள்:"
 
-#: pcbnew/dialogs/dialog_cleanup_tracks_and_vias.cpp:134
+#: pcbnew/dialogs/dialog_cleanup_tracks_and_vias.cpp:133
 msgid "Build Changes"
 msgstr "மாற்றங்களை உருவாக்குங்கள்"
 
-#: pcbnew/dialogs/dialog_cleanup_tracks_and_vias.cpp:267
+#: pcbnew/dialogs/dialog_cleanup_tracks_and_vias.cpp:266
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:189
 msgid "Checking zones..."
 msgstr "மண்டலங்களை சரிபார்க்கிறது ..."
 
-#: pcbnew/dialogs/dialog_cleanup_tracks_and_vias.cpp:277
+#: pcbnew/dialogs/dialog_cleanup_tracks_and_vias.cpp:276
 msgid "Rebuilding connectivity..."
 msgstr "இணைப்பை மீண்டும் உருவாக்குதல் ..."
 
-#: pcbnew/dialogs/dialog_cleanup_tracks_and_vias.cpp:291
+#: pcbnew/dialogs/dialog_cleanup_tracks_and_vias.cpp:290
 #: pcbnew/tools/drc_tool.cpp:151
 msgid "Refilling all zones..."
 msgstr "அனைத்து மண்டலங்களையும் நிரப்புதல் ..."
 
-#: pcbnew/dialogs/dialog_cleanup_tracks_and_vias.cpp:305
+#: pcbnew/dialogs/dialog_cleanup_tracks_and_vias.cpp:304
 msgid "Board Cleanup"
 msgstr "போர்டு தூய்மை"
 
@@ -35441,10 +35441,10 @@ msgstr "குறிப்பிட்ட மதிப்புகளுடன�
 msgid "Apply and Close"
 msgstr "விண்ணப்பித்து மூடு"
 
-#: pcbnew/dialogs/dialog_global_edit_teardrops.cpp:529
-#: pcbnew/dialogs/dialog_global_edit_teardrops.cpp:533
-#: pcbnew/dialogs/dialog_global_edit_teardrops.cpp:537
-#: pcbnew/dialogs/dialog_global_edit_teardrops.cpp:556
+#: pcbnew/dialogs/dialog_global_edit_teardrops.cpp:528
+#: pcbnew/dialogs/dialog_global_edit_teardrops.cpp:532
+#: pcbnew/dialogs/dialog_global_edit_teardrops.cpp:536
+#: pcbnew/dialogs/dialog_global_edit_teardrops.cpp:555
 msgid "Edit Teardrops"
 msgstr "கண்ணீர் துளிகளைத் திருத்தவும்"
 
@@ -35583,9 +35583,9 @@ msgstr "%("
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:245
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:292
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1659
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1660
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1661
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1662
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:682
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:750
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:798
@@ -35835,7 +35835,7 @@ msgid "Annular rings:"
 msgstr "வருடாந்திர மோதிரங்கள்:"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:175
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1075
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1074
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:388 pcbnew/pad.cpp:2717
 msgid "All copper layers"
 msgstr "அனைத்து செப்பு அடுக்குகளும்"
@@ -35846,7 +35846,7 @@ msgid "Start, end, and connected layers"
 msgstr "தொடங்க, முடிவு மற்றும் இணைக்கப்பட்ட அடுக்குகள்"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:175
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1079
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1078
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:388 pcbnew/pad.cpp:2718
 msgid "Connected layers only"
 msgstr "இணைக்கப்பட்ட அடுக்குகள் மட்டுமே"
@@ -36328,70 +36328,70 @@ msgstr "ஆரம்பத்திற்குப் பிறகு மூல 
 msgid "Outset Items"
 msgstr "தொடக்க உருப்படிகள்"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:179
+#: pcbnew/dialogs/dialog_pad_properties.cpp:178
 #: pcbnew/dialogs/dialog_pad_properties_base.h:287 pcbnew/pad.cpp:2768
 msgid "Pad Properties"
 msgstr "திண்டு பண்புகள்"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:187
+#: pcbnew/dialogs/dialog_pad_properties.cpp:186
 msgid "Default Pad Properties for Add Pad Tool"
 msgstr "பேட் கருவியைச் சேர் இயல்புநிலை பிஏடி பண்புகள்"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:597
+#: pcbnew/dialogs/dialog_pad_properties.cpp:596
 #, c-format
 msgid "Footprint %s (%s), %s, rotated %g deg"
 msgstr "தடம் %s ( %s), %s, சுழற்றப்பட்ட %g டெக்"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:600
+#: pcbnew/dialogs/dialog_pad_properties.cpp:599
 #: pcbnew/dialogs/dialog_text_properties.cpp:311
 msgid "back side (mirrored)"
 msgstr "பின் பக்க (பிரதிபலித்தது)"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:600
+#: pcbnew/dialogs/dialog_pad_properties.cpp:599
 #: pcbnew/dialogs/dialog_text_properties.cpp:312
 msgid "front side"
 msgstr "முன் பக்கம்"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:855
+#: pcbnew/dialogs/dialog_pad_properties.cpp:854
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:109
-#: pcbnew/dialogs/dialog_track_via_properties.cpp:1050
+#: pcbnew/dialogs/dialog_track_via_properties.cpp:1049
 msgid "Inner Layers"
 msgstr "உள் அடுக்குகள்"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1076
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1075
 #, c-format
 msgid "%s, %s and connected layers"
 msgstr "%s, %s மற்றும் இணைக்கப்பட்ட அடுக்குகள்"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1424
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1423
 msgid "Error: Through hole pad has no hole."
 msgstr "பிழை: துளை திண்டு வழியாக துளை இல்லை."
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1429
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1428
 msgid "Pad Properties Errors"
 msgstr "திண்டு பண்புகள் பிழைகள்"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1430
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1429
 msgid "Pad Properties Warnings"
 msgstr "திண்டு பண்புகள் எச்சரிக்கைகள்"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1609
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1608
 msgid "Edit Pad Properties"
 msgstr "பேட் பண்புகளைத் திருத்து"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1644
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1643
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:447
 msgid "Hole size X:"
 msgstr "துளை அளவு x:"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1666
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1665
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:339
 msgid "Pad size X:"
 msgstr "திண்டு அளவு x:"
 
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1668
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1669
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1670
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1671
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:234
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:276
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:327
@@ -37829,32 +37829,32 @@ msgstr "கட்டுப்பாட்டு புள்ளி 1"
 msgid "Control Point 2"
 msgstr "கட்டுப்பாட்டு புள்ளி 2"
 
-#: pcbnew/dialogs/dialog_shape_properties.cpp:1177
+#: pcbnew/dialogs/dialog_shape_properties.cpp:1176
 msgid "Edit Shape Properties"
 msgstr "வடிவ பண்புகளைத் திருத்தவும்"
 
-#: pcbnew/dialogs/dialog_shape_properties.cpp:1205
-#: pcbnew/dialogs/dialog_shape_properties.cpp:1228
+#: pcbnew/dialogs/dialog_shape_properties.cpp:1204
+#: pcbnew/dialogs/dialog_shape_properties.cpp:1227
 msgid "Line width must be greater than zero."
 msgstr "வரி அகலம் பூச்சியத்தை விட அதிகமாக இருக்க வேண்டும்."
 
-#: pcbnew/dialogs/dialog_shape_properties.cpp:1210
+#: pcbnew/dialogs/dialog_shape_properties.cpp:1209
 msgid "Line width must be greater than zero for an unfilled circle."
 msgstr "நிரப்பப்படாத வட்டத்திற்கு வரி அகலம் பூச்சியத்தை விட அதிகமாக இருக்க வேண்டும்."
 
-#: pcbnew/dialogs/dialog_shape_properties.cpp:1216
+#: pcbnew/dialogs/dialog_shape_properties.cpp:1215
 msgid "Line width must be greater than zero for an unfilled rectangle."
 msgstr "நிரப்பப்படாத செவ்வகத்திற்கு வரி அகலம் பூச்சியத்தை விட அதிகமாக இருக்க வேண்டும்."
 
-#: pcbnew/dialogs/dialog_shape_properties.cpp:1222
+#: pcbnew/dialogs/dialog_shape_properties.cpp:1221
 msgid "Line width must be greater than zero for an unfilled polygon."
 msgstr "நிரப்பப்படாத பலகோணத்திற்கு வரி அகலம் பூச்சியத்தை விட அதிகமாக இருக்க வேண்டும்."
 
-#: pcbnew/dialogs/dialog_shape_properties.cpp:1234
+#: pcbnew/dialogs/dialog_shape_properties.cpp:1233
 msgid "Line width must be greater than zero for an unfilled curve."
 msgstr "நிரப்பப்படாத வளைவுக்கு வரி அகலம் பூச்சியத்தை விட அதிகமாக இருக்க வேண்டும்."
 
-#: pcbnew/dialogs/dialog_shape_properties.cpp:1245
+#: pcbnew/dialogs/dialog_shape_properties.cpp:1244
 msgid "Error List"
 msgstr "பிழை பட்டியல்"
 
@@ -38021,59 +38021,59 @@ msgstr "எல்லை அகலம்:"
 msgid "Border style:"
 msgstr "எல்லை நடை:"
 
-#: pcbnew/dialogs/dialog_track_via_properties.cpp:546
+#: pcbnew/dialogs/dialog_track_via_properties.cpp:545
 #, c-format
 msgid "Applying these changes will short net %s with %s."
 msgstr "இந்த மாற்றங்களைப் பயன்படுத்துவது %s உடன் நிகர %s ஐக் குறைக்கும்."
 
-#: pcbnew/dialogs/dialog_track_via_properties.cpp:552
+#: pcbnew/dialogs/dialog_track_via_properties.cpp:551
 #, c-format
 msgid "Applying these changes will short net %s with other nets."
 msgstr "இந்த மாற்றங்களைப் பயன்படுத்துவது மற்ற வலைகளுடன் நிகர %s குறுகியதாக இருக்கும்."
 
-#: pcbnew/dialogs/dialog_track_via_properties.cpp:557
+#: pcbnew/dialogs/dialog_track_via_properties.cpp:556
 msgid "Apply Anyway"
 msgstr "எப்படியும் விண்ணப்பிக்கவும்"
 
-#: pcbnew/dialogs/dialog_track_via_properties.cpp:557
+#: pcbnew/dialogs/dialog_track_via_properties.cpp:556
 msgid "Cancel Changes"
 msgstr "மாற்றங்களை நீக்கறல்"
 
-#: pcbnew/dialogs/dialog_track_via_properties.cpp:571
+#: pcbnew/dialogs/dialog_track_via_properties.cpp:570
 #, c-format
 msgid "Changing the net will also update %s pad %s to %s."
 msgstr "வலையை மாற்றுவது %s நிரப்பிடம் %s இல் %s க்கு புதுப்பிக்கப்படும்."
 
-#: pcbnew/dialogs/dialog_track_via_properties.cpp:580
+#: pcbnew/dialogs/dialog_track_via_properties.cpp:579
 #, c-format
 msgid "Changing the net will also update %s pad %s and %s pad %s to %s."
 msgstr ""
 "வலையை மாற்றுவது %s நிரப்பிடம் %s மற்றும் %s நிரப்பிடம் %s முதல் %s வரை "
 "புதுப்பிக்கப்படும்."
 
-#: pcbnew/dialogs/dialog_track_via_properties.cpp:589
+#: pcbnew/dialogs/dialog_track_via_properties.cpp:588
 #, c-format
 msgid "Changing the net will also update %lu connected pads to %s."
 msgstr "வலையை மாற்றுவது %lu இணைக்கப்பட்ட பட்டைகளை %s க்கு புதுப்பிக்கும்."
 
-#: pcbnew/dialogs/dialog_track_via_properties.cpp:595
+#: pcbnew/dialogs/dialog_track_via_properties.cpp:594
 msgid "Change Nets"
 msgstr "வலைகளை மாற்றவும்"
 
-#: pcbnew/dialogs/dialog_track_via_properties.cpp:595
+#: pcbnew/dialogs/dialog_track_via_properties.cpp:594
 msgid "Leave Nets Unchanged"
 msgstr "வலைகளை மாற்றாமல் விடுங்கள்"
 
-#: pcbnew/dialogs/dialog_track_via_properties.cpp:641
+#: pcbnew/dialogs/dialog_track_via_properties.cpp:640
 #: pcbnew/dialogs/dialog_track_via_size.cpp:59
 msgid "Via hole size must be smaller than via diameter"
 msgstr "துளை அளவு வழியாக விட்டம் வழியாக சிறியதாக இருக்க வேண்டும்"
 
-#: pcbnew/dialogs/dialog_track_via_properties.cpp:650
+#: pcbnew/dialogs/dialog_track_via_properties.cpp:649
 msgid "Via start layer and end layer cannot be the same"
 msgstr "தொடக்க அடுக்கு மற்றும் இறுதி அடுக்கு வழியாக ஒரே மாதிரியாக இருக்க முடியாது"
 
-#: pcbnew/dialogs/dialog_track_via_properties.cpp:918
+#: pcbnew/dialogs/dialog_track_via_properties.cpp:917
 msgid "Edit Track/Via Properties"
 msgstr "டிராக்/பண்புகள் வழியாக திருத்தவும்"
 
@@ -39811,24 +39811,24 @@ msgstr ""
 "அல்லது இணைக்கப்படாமல் மற்றொரு பொருளைச் சுற்றி ஒரு வழியாகச் செல்கிறது, எடுத்துக்காட்டாக, "
 "ஒரு வழியாக).<br> |\n"
 "| `disallow` | "
-"`track`<br>`via`<br>`micro_via`<br>`buried_via`<br>`pad`<br>`zone`<br>`text`<br>`graphic`<br>`hole`<br>`footprint`"
-"<br> | இடைவெளிகளால் பிரிக்கப்பட்ட, அனுமதிக்கப்படாத ஒன்று அல்லது அதற்கு மேற்பட்ட பொருள் "
-"வகைகளைக் குறிப்பிடவும். எடுத்துக்காட்டாக, `(constraint disallow track)`` அல்லது `("
-"constraint disallow track via pad)`. இந்த வகை பொருள் விதி நிபந்தனையுடன் "
+"`track`<br>`via`<br>`micro_via`<br>`buried_via`<br>`pad`<br>`zone`<br>`text`<br>`graphic`<br>`hole`<br>`footprint`<br> "
+"| இடைவெளிகளால் பிரிக்கப்பட்ட, அனுமதிக்கப்படாத ஒன்று அல்லது அதற்கு மேற்பட்ட பொருள் "
+"வகைகளைக் குறிப்பிடவும். எடுத்துக்காட்டாக, `(constraint disallow track)`` அல்லது "
+"`(constraint disallow track via pad)`. இந்த வகை பொருள் விதி நிபந்தனையுடன் "
 "பொருந்தினால், ஒரு DRC பிழை உருவாக்கப்படும்.<br><br>இந்தக் கட்டுப்பாடு அடிப்படையில் ஒரு "
 "keepout விதி பகுதியைப் போன்றது, ஆனால் மிகவும் குறிப்பிட்ட keepout கட்டுப்பாடுகளை "
 "உருவாக்க இதைப் பயன்படுத்தலாம்.<br> |\n"
 "| `edge_clearance` | min/opt/max | பொருள்களுக்கும் பலகை விளிம்பிற்கும் இடையிலான "
-"இடைவெளியைச் சரிபார்க்கிறது.<br><br>இது \"அரைக்கும் சகிப்புத்தன்மை\" என்றும் கருதப்படலாம்"
-", ஏனெனில் பலகை விளிம்பில் `Edge.Cuts` அடுக்கில் உள்ள அனைத்து வரைகலை உருப்படிகளும், எந்"
-"த *ஓவல்* பேட் துளைகளும் அடங்கும். (துளையிடும் சகிப்புத்தன்மைக்கு "
+"இடைவெளியைச் சரிபார்க்கிறது.<br><br>இது \"அரைக்கும் சகிப்புத்தன்மை\" என்றும் "
+"கருதப்படலாம், ஏனெனில் பலகை விளிம்பில் `Edge.Cuts` அடுக்கில் உள்ள அனைத்து வரைகலை "
+"உருப்படிகளும், எந்த *ஓவல்* பேட் துளைகளும் அடங்கும். (துளையிடும் சகிப்புத்தன்மைக்கு "
 "`physical_hole_clearance` ஐப் பார்க்கவும்.)<br> |\n"
 "| `length` | min/max | விதி நிபந்தனையுடன் பொருந்தக்கூடிய வலைகளுக்கான மொத்த ரூட்டட் "
 "நீளத்தைச் சரிபார்த்து, கட்டுப்பாட்டின் `min` மதிப்புக்குக் கீழே (குறிப்பிட்டால்) அல்லது `max` "
-"மதிப்புக்கு (குறிப்பிட்டால்) மேலே உள்ள ஒவ்வொரு வலைக்கும் ஒரு பிழையை உருவாக்குகிறது"
-".<br> |\n"
-"| `hole` | min/max | ஒரு திண்டு அல்லது வழியாகத் துளையிடப்பட்ட துளையின் அளவை (விட்டம்)"
-" சரிபார்க்கிறது. ஓவல் துளைகளுக்கு, சிறிய (சிறிய) விட்டம் `min` மதிப்புக்கு "
+"மதிப்புக்கு (குறிப்பிட்டால்) மேலே உள்ள ஒவ்வொரு வலைக்கும் ஒரு பிழையை உருவாக்குகிறது."
+"<br> |\n"
+"| `hole` | min/max | ஒரு திண்டு அல்லது வழியாகத் துளையிடப்பட்ட துளையின் அளவை "
+"(விட்டம்) சரிபார்க்கிறது. ஓவல் துளைகளுக்கு, சிறிய (சிறிய) விட்டம் `min` மதிப்புக்கு "
 "(குறிப்பிட்டால்) எதிராகச் சோதிக்கப்படும், மேலும் பெரிய (பெரிய) விட்டம் `max` மதிப்புக்கு "
 "(குறிப்பிட்டால்) எதிராகச் சோதிக்கப்படும்.<br> |\n"
 "| `hole_clearance` | min | ஒரு திண்டு அல்லது துளையிடப்பட்ட துளைக்கும் வேறு வலையில் "
@@ -39842,17 +39842,17 @@ msgstr ""
 "சரிபார்க்கப்படவில்லை, மேலும் **அரைக்கப்பட்ட** (ஓவல் வடிவ) மற்றும் பிற இயந்திரத்தனமாகத் "
 "துளையிடப்படாத துளைகளுக்கு இடையிலான இடைவெளியும் சரிபார்க்கப்படவில்லை.<br> |\n"
 "| `இயற்பியல்_துளை` | நிமிடம் | கொடுக்கப்பட்ட அடுக்கில் (செப்பு அடுக்குகள் உட்பட) இரண்டு "
-"பொருட்களுக்கு இடையிலான இடைவெளியைச் சரிபார்க்கிறது.<br><br>இது `துளை` ஐ விடப் பொதுவா"
-"ன நோக்கத்திற்கான சோதனைகளைச் செய்ய முடியும் என்றாலும், இது மிகவும் மெதுவாக உள்ளது. "
-"முடிந்தவரை `துளை` ஐப் பயன்படுத்தவும்.<br> |\n"
+"பொருட்களுக்கு இடையிலான இடைவெளியைச் சரிபார்க்கிறது.<br><br>இது `துளை` ஐ விடப் "
+"பொதுவான நோக்கத்திற்கான சோதனைகளைச் செய்ய முடியும் என்றாலும், இது மிகவும் மெதுவாக "
+"உள்ளது. முடிந்தவரை `துளை` ஐப் பயன்படுத்தவும்.<br> |\n"
 "| `physical_hole_clearance` | min | ஒரு திண்டு அல்லது வியாவில் துளையிடப்பட்ட "
 "துளைக்கும் மற்றொரு பொருளுக்கும் இடையிலான இடைவெளியை, வலை எதுவாக இருந்தாலும் "
 "சரிபார்க்கிறது. இடைவெளி துளையின் விட்டத்திலிருந்து அளவிடப்படுகிறது, அதன் "
 "மையத்திலிருந்து அல்ல.<br><br>இது **சுற்றுத் துளைகளை மட்டுமே உள்ளடக்கியிருப்பதால், இதை "
 "\"துளையிடும் சகிப்புத்தன்மை\" என்றும் கருதலாம் (மில்லிங் சகிப்புத்தன்மைக்கு "
 "`edge_clearance` ஐப் பார்க்கவும்).<br>|\n"
-"| `பட்டு_அளவீட்டு` | நிமிடம்/opt/max | பட்டுத்திரை அடுக்குகள் மற்றும் பிற பொருட்களில் உள்"
-"ள பொருட்களுக்கு இடையே உள்ள இடைவெளியைச் சரிபார்க்கிறது.<br> |\n"
+"| `பட்டு_அளவீட்டு` | நிமிடம்/opt/max | பட்டுத்திரை அடுக்குகள் மற்றும் பிற பொருட்களில் "
+"உள்ள பொருட்களுக்கு இடையே உள்ள இடைவெளியைச் சரிபார்க்கிறது.<br> |\n"
 "| `skew` | அதிகபட்சம் | விதி நிபந்தனையுடன் பொருந்தக்கூடிய வலைகளுக்கான மொத்த சாய்வைச் "
 "சரிபார்க்கிறது, அதாவது, ஒவ்வொரு வலையின் நீளத்திற்கும் விதியால் பொருந்தக்கூடிய ஒவ்வொரு "
 "வலையின் அனைத்து நீளங்களின் சராசரிக்கும் இடையிலான வேறுபாடு. அந்தச் சராசரிக்கும் ஏதேனும் "
@@ -40517,8 +40517,8 @@ msgstr ""
 " .\n"
 " .\n"
 "\n"
-" # வெப்ப நிவாரண இடைவெளியை மேலெழுதவும் & சி.என்.டி மற்றும் பி.டபிள்யூ.ஆர் மண்டலங்களுக்கா"
-"ன அகலம் பேசவும்\n"
+" # வெப்ப நிவாரண இடைவெளியை மேலெழுதவும் & சி.என்.டி மற்றும் பி.டபிள்யூ.ஆர் "
+"மண்டலங்களுக்கான அகலம் பேசவும்\n"
 " (விதி வரையறுக்கப்பட்ட_ரெலிஃப்_பிவ்\n"
 " .\n"
 " .\n"
@@ -46748,7 +46748,7 @@ msgstr "பைதான் தடம் வழிகாட்டி குறி
 msgid "Error loading drawing sheet '%s': %s"
 msgstr "பிழை ஏற்றுதல் வரைதல் தாள் ' %s': %s"
 
-#: pcbnew/router/pns_diff_pair_placer.cpp:523
+#: pcbnew/router/pns_diff_pair_placer.cpp:524
 msgid ""
 "Unable to find complementary differential pair nets. Make sure the names of "
 "the nets belonging to a differential pair end with either N/P or +/-."
@@ -46756,7 +46756,7 @@ msgstr ""
 "நிரப்பு வேறுபாடு இணை வலைகளைக் கண்டுபிடிக்க முடியவில்லை. வேறுபட்ட சோடியைச் சேர்ந்த "
 "வலைகளின் பெயர்கள் n/p அல்லது +/- உடன் முடிவடைகின்றன என்பதை உறுதிப்படுத்திக் கொள்ளுங்கள்."
 
-#: pcbnew/router/pns_diff_pair_placer.cpp:540
+#: pcbnew/router/pns_diff_pair_placer.cpp:541
 msgid ""
 "Can't find a suitable starting point.  If starting from an existing "
 "differential pair make sure you are at the end."
@@ -46764,7 +46764,7 @@ msgstr ""
 "பொருத்தமான தொடக்க புள்ளியைக் கண்டுபிடிக்க முடியவில்லை. ஏற்கனவே உள்ள வேறுபட்ட "
 "சோடியிலிருந்து தொடங்கினால், நீங்கள் முடிவில் இருப்பதை உறுதிசெய்க."
 
-#: pcbnew/router/pns_diff_pair_placer.cpp:595
+#: pcbnew/router/pns_diff_pair_placer.cpp:596
 #, c-format
 msgid "Can't find a suitable starting point for coupled net \"%s\"."
 msgstr "இணைந்த நிகர \"%s\" க்கு பொருத்தமான தொடக்க புள்ளியைக் கண்டுபிடிக்க முடியவில்லை."
