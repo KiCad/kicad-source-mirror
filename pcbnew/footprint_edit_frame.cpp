@@ -543,17 +543,20 @@ void FOOTPRINT_EDIT_FRAME::updateEnabledLayers()
     GetBoard()->SetCopperLayerCount( 3 );
     GetBoard()->SetLayerName( In1_Cu, _( "Inner layers" ) );
 
-    // Don't drop pre-existing user layers
     LSET enabledLayers = GetBoard()->GetEnabledLayers();
 
-    m_originalFootprintCopy->RunOnDescendants(
-            [&]( BOARD_ITEM* child )
-            {
-                LSET childLayers = child->GetLayerSet() & LSET::UserDefinedLayersMask();
+    // Don't drop pre-existing user layers
+    if( m_originalFootprintCopy )
+    {
+        m_originalFootprintCopy->RunOnDescendants(
+                [&]( BOARD_ITEM* child )
+                {
+                    LSET childLayers = child->GetLayerSet() & LSET::UserDefinedLayersMask();
 
-                for( PCB_LAYER_ID layer : childLayers )
-                    enabledLayers.set( layer );
-            } );
+                    for( PCB_LAYER_ID layer : childLayers )
+                        enabledLayers.set( layer );
+                } );
+    }
 
     // Enable any layers that the user has gone to the trouble to name
     SETTINGS_MANAGER&          mgr = Pgm().GetSettingsManager();
