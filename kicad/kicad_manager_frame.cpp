@@ -812,12 +812,15 @@ void KICAD_MANAGER_FRAME::LoadProject( const wxFileName& aProjectFileName )
 
     m_active_project = true;
 
-    Pgm().GetSettingsManager().LoadProject( aProjectFileName.GetFullPath() );
+    // NB: when loading a legacy project SETTINGS_MANAGER::LoadProject() will convert it to
+    // current extension.  Be very careful with aProjectFileName vs. Prj().GetProjectPath()
+    // from here on out.
 
+    Pgm().GetSettingsManager().LoadProject( aProjectFileName.GetFullPath() );
     LoadWindowState( aProjectFileName.GetFullName() );
 
     if( aProjectFileName.IsDirWritable() )
-        SetMruPath( Prj().GetProjectPath() ); // Only set MRU path if we have write access. Why?
+        SetMruPath( Prj().GetProjectPath() );
 
     // Save history & window state to disk now.  Don't wait around for a crash.
     KICAD_SETTINGS* settings = kicadSettings();
