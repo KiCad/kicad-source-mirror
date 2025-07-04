@@ -433,7 +433,7 @@ wxString EnsureFileExtension( const wxString& aFilename, const wxString& aExtens
     // extension, such as "Schematic_1.1".
     if( newFilename.Lower().AfterLast( '.' ) != aExtension )
     {
-        if( newFilename.Last() != '.' )
+        if( !newFilename.EndsWith( '.' ) )
             newFilename.Append( '.' );
 
         newFilename.Append( aExtension );
