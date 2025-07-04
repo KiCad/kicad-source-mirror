@@ -32,6 +32,8 @@ public:
     BOARD_EDGES_BOUNDING_ITEM( BOX2I aBox );
     ~BOARD_EDGES_BOUNDING_ITEM() override {};
 
+    wxString GetClass() const override;
+
     const BOX2I ViewBBox() const override;
 
     std::vector<int> ViewGetLayers() const override;

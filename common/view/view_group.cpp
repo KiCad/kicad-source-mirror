@@ -55,6 +55,12 @@ VIEW_GROUP::~VIEW_GROUP()
 }
 
 
+wxString VIEW_GROUP::GetClass() const
+{
+    return wxT( "VIEW_GROUP" );
+}
+
+
 void VIEW_GROUP::Add( VIEW_ITEM* aItem )
 {
     m_groupItems.push_back( aItem );

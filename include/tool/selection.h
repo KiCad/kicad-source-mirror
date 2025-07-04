@@ -66,6 +66,11 @@ public:
         return *this;
     }
 
+    wxString GetClass() const override
+    {
+        return wxT( "SELECTION" );
+    }
+
     bool operator==( const SELECTION& aOther ) const;
 
     using ITER = std::deque<EDA_ITEM*>::iterator;

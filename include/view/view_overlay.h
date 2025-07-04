@@ -48,6 +48,8 @@ public:
     VIEW_OVERLAY();
     virtual ~VIEW_OVERLAY();
 
+    wxString GetClass() const override;
+
     struct COMMAND;
     struct COMMAND_ARC;
     struct COMMAND_LINE;

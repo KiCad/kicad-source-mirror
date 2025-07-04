@@ -273,6 +273,12 @@ VIEW_OVERLAY::~VIEW_OVERLAY()
 }
 
 
+wxString VIEW_OVERLAY::GetClass() const
+{
+    return wxT( "VIEW_OVERLAY" );
+}
+
+
 void VIEW_OVERLAY::releaseCommands()
 {
     for( VIEW_OVERLAY::COMMAND* cmd : m_commands )

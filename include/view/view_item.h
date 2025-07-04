@@ -100,6 +100,12 @@ public:
 
     bool IsSCH_ITEM() const { return m_isSCH_ITEM; }
     bool IsBOARD_ITEM() const { return m_isBOARD_ITEM; }
+
+    /**
+     * Return the class name.
+     */
+    virtual wxString GetClass() const = 0;
+
     /**
      * Return the bounding box of the item covering all its layers.
      *
