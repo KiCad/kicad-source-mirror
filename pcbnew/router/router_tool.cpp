@@ -2121,7 +2121,6 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
 {
     const PCB_SELECTION selection = m_toolMgr->GetTool<PCB_SELECTION_TOOL>()->GetSelection();
 
-
     if( selection.Empty() )
     {
         m_toolMgr->RunAction<CLIENT_SELECTION_FILTER>( PCB_ACTIONS::selectionCursor,
@@ -2250,16 +2249,22 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
     }
     else
     {
-        for ( const EDA_ITEM* bitem : selectedItems )
+        for( const EDA_ITEM* selItem : selectedItems )
         {
-            PNS::ITEM* pitem = m_router->GetWorld()->FindItemByParent( static_cast<const BOARD_ITEM*>( bitem ) );
-
-            if( !pitem )
+            if( !selItem->IsBOARD_ITEM() )
                 continue;
 
-            if( pitem->OfKind( PNS::ITEM::SEGMENT_T ) || pitem->OfKind( PNS::ITEM::VIA_T ) || pitem->OfKind( PNS::ITEM::ARC_T ) )
+            const BOARD_ITEM* boardItem = static_cast<const BOARD_ITEM*>( selItem );
+            PNS::ITEM*        pnsItem = m_router->GetWorld()->FindItemByParent( boardItem );
+
+            if( !pnsItem )
+                continue;
+
+            if( pnsItem->OfKind( PNS::ITEM::SEGMENT_T )
+                || pnsItem->OfKind( PNS::ITEM::VIA_T )
+                || pnsItem->OfKind( PNS::ITEM::ARC_T ) )
             {
-                itemsToDrag.Add( pitem );
+                itemsToDrag.Add( pnsItem );
             }
         }
     }
