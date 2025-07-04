@@ -525,23 +525,16 @@ void SCH_IO_KICAD_SEXPR::Format( SCH_SELECTION* aSelection, SCH_SHEET_PATH* aSel
     m_out = aFormatter;
 
     size_t                          i;
-    SCH_ITEM*                       item;
     std::map<wxString, LIB_SYMBOL*> libSymbols;
     SCH_SCREEN*                     screen = aSelection->GetScreen();
     std::set<SCH_TABLE*>            promotedTables;
 
-    for( i = 0; i < aSelection->GetSize(); ++i )
+    for( EDA_ITEM* item : *aSelection )
     {
-        item = dynamic_cast<SCH_ITEM*>( aSelection->GetItem( i ) );
-
-        wxCHECK2( item, continue );
-
         if( item->Type() != SCH_SYMBOL_T )
             continue;
 
-        SCH_SYMBOL* symbol = dynamic_cast<SCH_SYMBOL*>( item );
-
-        wxCHECK2( symbol, continue );
+        SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item );
 
         wxString libSymbolLookup = symbol->GetLibId().Format().wx_str();
 
@@ -558,49 +551,48 @@ void SCH_IO_KICAD_SEXPR::Format( SCH_SELECTION* aSelection, SCH_SHEET_PATH* aSel
     {
         m_out->Print( "(lib_symbols" );
 
-        for( const std::pair<const wxString, LIB_SYMBOL*>& libSymbol : libSymbols )
-        {
-            SCH_IO_KICAD_SEXPR_LIB_CACHE::SaveSymbol( libSymbol.second, *m_out, libSymbol.first,
-                                                      false );
-        }
+        for( const auto& [name, libSymbol] : libSymbols )
+            SCH_IO_KICAD_SEXPR_LIB_CACHE::SaveSymbol( libSymbol, *m_out, name, false );
 
         m_out->Print( ")" );
     }
 
-    for( i = 0; i < aSelection->GetSize(); ++i )
+    for( EDA_ITEM* edaItem : *aSelection )
     {
-        item = (SCH_ITEM*) aSelection->GetItem( i );
+        if( !edaItem->IsSCH_ITEM() )
+            continue;
+
+        SCH_ITEM* item = static_cast<SCH_ITEM*>( edaItem );
 
         switch( item->Type() )
         {
         case SCH_SYMBOL_T:
-            saveSymbol( static_cast<SCH_SYMBOL*>( item ), aSchematic, sheets, aForClipboard,
-                        aSelectionPath );
+            saveSymbol( static_cast<SCH_SYMBOL*>( item ), aSchematic, sheets, aForClipboard, aSelectionPath );
             break;
 
         case SCH_BITMAP_T:
-            saveBitmap( static_cast< SCH_BITMAP& >( *item ) );
+            saveBitmap( static_cast<SCH_BITMAP&>( *item ) );
             break;
 
         case SCH_SHEET_T:
-            saveSheet( static_cast< SCH_SHEET* >( item ), sheets );
+            saveSheet( static_cast<SCH_SHEET*>( item ), sheets );
             break;
 
         case SCH_JUNCTION_T:
-            saveJunction( static_cast< SCH_JUNCTION* >( item ) );
+            saveJunction( static_cast<SCH_JUNCTION*>( item ) );
             break;
 
         case SCH_NO_CONNECT_T:
-            saveNoConnect( static_cast< SCH_NO_CONNECT* >( item ) );
+            saveNoConnect( static_cast<SCH_NO_CONNECT*>( item ) );
             break;
 
         case SCH_BUS_WIRE_ENTRY_T:
         case SCH_BUS_BUS_ENTRY_T:
-            saveBusEntry( static_cast< SCH_BUS_ENTRY_BASE* >( item ) );
+            saveBusEntry( static_cast<SCH_BUS_ENTRY_BASE*>( item ) );
             break;
 
         case SCH_LINE_T:
-            saveLine( static_cast< SCH_LINE* >( item ) );
+            saveLine( static_cast<SCH_LINE*>( item ) );
             break;
 
         case SCH_SHAPE_T:
