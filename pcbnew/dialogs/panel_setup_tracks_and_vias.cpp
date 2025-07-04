@@ -170,7 +170,7 @@ void PANEL_SETUP_TRACKS_AND_VIAS::OnSortViaSizesClick( wxCommandEvent& aEvent )
     std::vector<VIA_DIMENSION> vias;
     wxString                   msg;
 
-    m_trackWidthsGrid->ClearSelection();
+    m_viaSizesGrid->ClearSelection();
     wxSafeYield();
 
     wxGridUpdateLocker lock( m_viaSizesGrid );
@@ -206,7 +206,7 @@ void PANEL_SETUP_TRACKS_AND_VIAS::OnSortDiffPairsClick( wxCommandEvent& aEvent )
     wxString                         msg;
     std::vector<DIFF_PAIR_DIMENSION> diffPairs;
 
-    m_trackWidthsGrid->ClearSelection();
+    m_diffPairsGrid->ClearSelection();
     wxSafeYield();
 
     wxGridUpdateLocker lock( m_diffPairsGrid );
