@@ -464,9 +464,8 @@ static void intersectsBackCourtyardFunc( LIBEVAL::CONTEXT* aCtx, void* self )
 
 bool collidesWithArea( BOARD_ITEM* aItem, PCBEXPR_CONTEXT* aCtx, ZONE* aArea )
 {
-    BOARD*                 board = aArea->GetBoard();
-    BOX2I                  areaBBox = aArea->GetBoundingBox();
-    std::shared_ptr<SHAPE> shape;
+    BOARD* board = aArea->GetBoard();
+    BOX2I  areaBBox = aArea->GetBoundingBox();
 
     // Collisions include touching, so we need to deflate outline by enough to exclude it.
     // This is particularly important for detecting copper fills as they will be exactly
@@ -553,22 +552,31 @@ bool collidesWithArea( BOARD_ITEM* aItem, PCBEXPR_CONTEXT* aCtx, ZONE* aArea )
 
         if( zoneRTree )
         {
-            for( size_t ii = 0; ii < aArea->GetLayerSet().size(); ++ii )
+            for( PCB_LAYER_ID layer : aArea->GetLayerSet().Seq() )
             {
-                if( aArea->GetLayerSet().test( ii ) )
+                if( aCtx->GetLayer() == layer || aCtx->GetLayer() == UNDEFINED_LAYER )
                 {
-                    PCB_LAYER_ID layer = PCB_LAYER_ID( ii );
-
-                    if( aCtx->GetLayer() == layer || aCtx->GetLayer() == UNDEFINED_LAYER )
-                    {
-                        if( zoneRTree->QueryColliding( areaBBox, &areaOutline, layer ) )
-                            return true;
-                    }
+                    if( zoneRTree->QueryColliding( areaBBox, &areaOutline, layer ) )
+                        return true;
                 }
             }
         }
 
         return false;
+    }
+    else if( aItem->Type() == PCB_PAD_T )
+    {
+        PAD* pad = static_cast<PAD*>( aItem );
+        bool collision = false;
+
+        pad->Padstack().ForEachUniqueLayer(
+                [&]( PCB_LAYER_ID layer )
+                {
+                    if( !collision && aArea->IsOnLayer( layer ) )
+                        collision = areaOutline.Collide( pad->GetEffectiveShape( layer ).get() );
+                } );
+
+        return collision;
     }
     else
     {
@@ -577,10 +585,7 @@ bool collidesWithArea( BOARD_ITEM* aItem, PCBEXPR_CONTEXT* aCtx, ZONE* aArea )
         if( layer != UNDEFINED_LAYER && !( aArea->GetLayerSet().Contains( layer ) ) )
             return false;
 
-        if( !shape )
-            shape = aItem->GetEffectiveShape( layer );
-
-        return areaOutline.Collide( shape.get() );
+        return areaOutline.Collide( aItem->GetEffectiveShape( layer ).get() );
     }
 }
 
