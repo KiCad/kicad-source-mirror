@@ -6716,7 +6716,7 @@ msgstr "Eğri"
 
 #: common/eda_shape.cpp:1142 common/eda_shape.cpp:2521
 msgid "Segment"
-msgstr "Segment"
+msgstr "Bölüm"
 
 #: common/eda_shape.cpp:1153 common/eda_shape.cpp:2585
 #: eeschema/dialogs/dialog_label_properties_base.cpp:174
@@ -6793,7 +6793,7 @@ msgstr "Yükseklik"
 
 #: common/eda_shape.cpp:2526
 msgid "Bezier"
-msgstr "Bezier"
+msgstr "Parametrik eğri"
 
 #: common/eda_shape.cpp:2545
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:149
@@ -13480,7 +13480,7 @@ msgstr "Ad Metin Boyutu"
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:87
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:106
 msgid "De Morgan"
-msgstr "De Morgan"
+msgstr "De Morgan Yasası"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:325
 #, c-format
@@ -15259,15 +15259,15 @@ msgstr "Kullanıcı yapılandırması"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:666
 msgid "Spice"
-msgstr "Spice"
+msgstr "Spice Simülasyon"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:666
 msgid "PSpice"
-msgstr "PSpice"
+msgstr "PSpice Simülatör"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:666
 msgid "LTSpice"
-msgstr "LTSpice"
+msgstr "LTSpice Simülatör"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:666
 msgid "PSpice and LTSpice"
@@ -15275,7 +15275,7 @@ msgstr "PSpice ve LTSpice"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:666
 msgid "HSpice"
-msgstr "HSpice"
+msgstr "HSpice Simülasyon"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:682
 msgid "SPICE Command"
@@ -28018,7 +28018,7 @@ msgstr "EasyEDA Pro Projeyi İçe Aktar"
 #: kicad/jobs_runner.cpp:258
 #, c-format
 msgid "Running job %d: %s"
-msgstr "Çalışan iş  %d: %s"
+msgstr "Çalışan iş %d: %s"
 
 #: kicad/jobs_runner.cpp:302
 msgid "Job successful"
@@ -31249,7 +31249,7 @@ msgstr "Tan delta:"
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:96
 msgid "Rho:"
-msgstr "Rho:"
+msgstr "Ro:"
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:98
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:126
@@ -31467,7 +31467,7 @@ msgstr "nH"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:330
 msgid "nano-Henry"
-msgstr "nano-Henry"
+msgstr "nano Henry"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:334
 msgid "Reactance:"
@@ -32449,7 +32449,7 @@ msgstr "Çekirdek"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:122
 msgid "PrePreg"
-msgstr "PrePreg"
+msgstr "Emdirilmiş"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:218
 #, c-format
@@ -32629,7 +32629,7 @@ msgstr "ENEPIG"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:40
 msgid "HAL SnPb"
-msgstr "HAL SnPb"
+msgstr "HAL Kurşun-Kalay"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:41
 msgid "HAL lead-free"
@@ -35916,7 +35916,7 @@ msgid ""
 msgstr ""
 "Bu, bu ayak izi için ped genişliği ve yüksekliğinin yüzdesi olarak uygulanan "
 "yerel aralık oranıdır.\n"
-"10 değeri, yatay aralık değerinin ped genişliğinin 10%'u ve dikey aralık "
+"10 değeri, yatay aralık değerinin ped genişliğinin 10% 'u ve dikey aralık "
 "değerinin ped yüksekliğinin 10%'u olduğu anlamına gelir.\n"
 "Bu değer, bir pedin yerel değeriyle geçersiz kılınabilir.\n"
 "Son aralık değeri, bu değer ile mutlak aralık değerinin toplamıdır.\n"
@@ -44045,12 +44045,12 @@ msgstr "Geçerli Baskı Devre montajı yok; '%s' çıktı dosyası oluşturulam�
 #: pcbnew/exporters/step/step_pcb_model.cpp:2375
 #, c-format
 msgid "Cannot create input stream '%s'.\n"
-msgstr "Çıktı dizini oluşturulamıyor '%s'.\n"
+msgstr "Girdi akışı '%s' oluşturulamıyor.\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2381
 #, c-format
 msgid "Cannot create output stream '%s'.\n"
-msgstr "Çıktı dizini oluşturulamıyor '%s'.\n"
+msgstr "Çıktı akışı '%s' oluşturulamıyor.\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2389
 msgid "Impossible create compress stream"
