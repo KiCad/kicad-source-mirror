@@ -37600,7 +37600,7 @@ msgstr "Początek musi być wartością dodatnią."
 
 #: pcbnew/dialogs/dialog_outset_items.cpp:183
 msgid "Line width must be a positive value."
-msgstr "Grubość linii musi być większa niż zero."
+msgstr "Grubość linii musi mieć wartość dodatnią."
 
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:26
 msgid "Outset:"
@@ -37649,7 +37649,6 @@ msgstr ""
 "będą używać poniższych wartości."
 
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:86
-#, fuzzy
 msgid "Layer Default"
 msgstr "Domyślna warstwa"
 
@@ -44298,22 +44297,22 @@ msgstr ""
 "'%s'.\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2375
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot create input stream '%s'.\n"
-msgstr "Nie można utworzyć folderu wyjściowego '%s'."
+msgstr "Nie można utworzyć strumienia wejściowego '%s'.\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2381
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot create output stream '%s'.\n"
-msgstr "Nie można utworzyć folderu wyjściowego '%s'."
+msgstr "Nie można utworzyć strumienia wyjściowego '%s'.\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2389
 msgid "Impossible create compress stream"
-msgstr ""
+msgstr "Brak możliwości utworzenia strumienia kompresji"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2397
 msgid "Compress read or write error"
-msgstr ""
+msgstr "Błąd odczytu lub zapisu kompresji"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2432
 msgid "Failed to set STEP product name, but will attempt to continue."
@@ -48247,14 +48246,12 @@ msgid "Soldermask"
 msgstr "Soldermaska"
 
 #: pcbnew/pcb_tablecell.cpp:250
-#, fuzzy
 msgid "Column Width"
-msgstr "Szerokość komórki"
+msgstr "Szerokość kolumny"
 
 #: pcbnew/pcb_tablecell.cpp:255
-#, fuzzy
 msgid "Row Height"
-msgstr "Wysokość pola"
+msgstr "Wysokość wiersza"
 
 #: pcbnew/pcb_target.cpp:151
 msgid "PCB Target"
@@ -50377,9 +50374,8 @@ msgid "Creates tracks from the selected graphic lines"
 msgstr "Tworzy ścieżki z zaznaczonych linii graficznych"
 
 #: pcbnew/tools/pcb_actions.cpp:97
-#, fuzzy
 msgid "Create Outsets from Selection..."
-msgstr "Utwórz zaokrąglenia z zaznaczenia"
+msgstr "Tworzenie początków z zaznaczenia..."
 
 #: pcbnew/tools/pcb_actions.cpp:98
 msgid "Create outset lines from the selected item"
