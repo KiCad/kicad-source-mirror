@@ -202,7 +202,12 @@ void SCH_PROPERTIES_PANEL::valueChanged( wxPropertyGridEvent& aEvent )
             continue;
 
         SCH_ITEM* item = static_cast<SCH_ITEM*>( edaItem );
-        changes.Modify( item, screen, RECURSE_MODE::NO_RECURSE );
+
+        if( item->Type() == SCH_TABLECELL_T )
+            changes.Modify( item->GetParent(), screen, RECURSE_MODE::NO_RECURSE );
+        else
+            changes.Modify( item, screen, RECURSE_MODE::NO_RECURSE );
+
         item->Set( property, newValue );
 
         if( SCH_SYMBOL* symbol = dynamic_cast<SCH_SYMBOL*>( item ) )
