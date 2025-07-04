@@ -33,10 +33,10 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-03 20:15+0300\n"
-"PO-Revision-Date: 2025-07-02 12:01+0000\n"
-"Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
-"Language-Team: Turkish <https://hosted.weblate.org/projects/kicad/master-"
-"source/tr/>\n"
+"PO-Revision-Date: 2025-07-04 18:02+0000\n"
+"Last-Translator: YÜKSEL AÇIKGÖZ <yukselacikgoz@gmail.com>\n"
+"Language-Team: Turkish <https://hosted.weblate.org/projects/kicad/"
+"master-source/tr/>\n"
 "Language: tr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -17464,9 +17464,9 @@ msgstr "Çıktı dizini '%s' oluşturulamadı."
 
 #: eeschema/eeschema_jobs_handler.cpp:1004 pcbnew/pcbnew_jobs_handler.cpp:1267
 #: pcbnew/pcbnew_jobs_handler.cpp:1913
-#, fuzzy, c-format
+#, c-format
 msgid "Exporting %s"
-msgstr "%s içe aktarılıyor"
+msgstr "%s dışa aktarılıyor"
 
 #: eeschema/eeschema_jobs_handler.cpp:1034 pcbnew/pcbnew_jobs_handler.cpp:1790
 msgid "Output path must not conflict with existing path\n"
@@ -25004,9 +25004,9 @@ msgstr "Sembol kütüphanesi seçilmedi."
 #: eeschema/tools/symbol_editor_control.cpp:263
 #: eeschema/tools/symbol_editor_control.cpp:413
 #: eeschema/tools/symbol_editor_control.cpp:457
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol library '%s' not found."
-msgstr "Kütüphane '%s' bulunamadı."
+msgstr "Sembol kütüphanesi '%s' bulunamadı."
 
 #: eeschema/tools/symbol_editor_control.cpp:349
 #: pcbnew/tools/footprint_editor_control.cpp:650
@@ -26759,13 +26759,12 @@ msgstr ""
 "Dışa aktarma yardımcı programları (Gerber, matkap, konum dosyaları, vb.)"
 
 #: kicad/cli/command_pcb_export_3d.cpp:78
-#, fuzzy
 msgid ""
 "Output file format, options: step, stepz, brep, xao, glb (binary glTF), ply, "
 "stl"
 msgstr ""
-"Çıkış dosyası formatı, seçenekler: step, brep, xao, glb (ikili glTF), ply, "
-"stl"
+"Çıktı dosyası formatı, seçenekler: step, stepz, brep, xao, glb (binary glTF)"
+", ply, stl"
 
 #: kicad/cli/command_pcb_export_3d.cpp:83
 msgid "Overwrite output file"
@@ -27814,9 +27813,8 @@ msgid "Last run failed"
 msgstr "Son çalıştırma başarısız oldu"
 
 #: kicad/dialogs/panel_jobset.cpp:272 kicad/dialogs/panel_jobset.cpp:993
-#, fuzzy
 msgid "Running Jobs"
-msgstr "Ayar Modu"
+msgstr "Çalışan İşler"
 
 #: kicad/dialogs/panel_jobset.cpp:302
 msgid "Edit Destination Options..."
@@ -28018,9 +28016,9 @@ msgid "Import EasyEDA Pro Project"
 msgstr "EasyEDA Pro Projeyi İçe Aktar"
 
 #: kicad/jobs_runner.cpp:258
-#, fuzzy, c-format
+#, c-format
 msgid "Running job %d: %s"
-msgstr "Ayar Modu"
+msgstr "Çalışan iş  %d: %s"
 
 #: kicad/jobs_runner.cpp:302
 msgid "Job successful"
@@ -28068,9 +28066,8 @@ msgid "Export STL"
 msgstr "STL Dışa Aktar"
 
 #: kicad/kicad_cli.cpp:129
-#, fuzzy
 msgid "Export STEPZ"
-msgstr "STEP Dışa Aktar"
+msgstr "STEPZ Dışa Aktar"
 
 #: kicad/kicad_cli.cpp:151
 msgid "Export PS"
@@ -35261,7 +35258,7 @@ msgstr "STL"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:27
 msgid "STPZ"
-msgstr ""
+msgstr "STPZ"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:56
 msgid "Board Options"
@@ -37400,14 +37397,12 @@ msgid "Non Copper Zone Properties"
 msgstr "Bakır Olmayan Bölge Özellikleri"
 
 #: pcbnew/dialogs/dialog_outset_items.cpp:174
-#, fuzzy
 msgid "Outset must be a positive value."
-msgstr "(Blok pozitif bir boyuta sahip olmalı)"
+msgstr "Dışa hat değeri pozitif olmalı."
 
 #: pcbnew/dialogs/dialog_outset_items.cpp:183
-#, fuzzy
 msgid "Line width must be a positive value."
-msgstr "Çizgi genişliği sıfırdan büyük olmalı."
+msgstr "Çizgi genişliği pozitif değer olmalı."
 
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:26
 msgid "Outset:"
@@ -37456,9 +37451,8 @@ msgstr ""
 "kullanacaktır."
 
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:86
-#, fuzzy
 msgid "Layer Default"
-msgstr "Katman varsayılanı"
+msgstr "Katman Varsayılanı"
 
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:92
 msgid "Delete source items after outset"
@@ -44049,22 +44043,22 @@ msgid "No valid PCB assembly; cannot create output file '%s'.\n"
 msgstr "Geçerli Baskı Devre montajı yok; '%s' çıktı dosyası oluşturulamıyor.\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2375
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot create input stream '%s'.\n"
-msgstr "Çıktı dizini oluşturulamıyor '%s'."
+msgstr "Çıktı dizini oluşturulamıyor '%s'.\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2381
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot create output stream '%s'.\n"
-msgstr "Çıktı dizini oluşturulamıyor '%s'."
+msgstr "Çıktı dizini oluşturulamıyor '%s'.\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2389
 msgid "Impossible create compress stream"
-msgstr ""
+msgstr "Sıkıştırma akışı oluşturulamıyor"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2397
 msgid "Compress read or write error"
-msgstr ""
+msgstr "Sıkıştırma okuma veya yazma hatası"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2432
 msgid "Failed to set STEP product name, but will attempt to continue."
@@ -47925,14 +47919,12 @@ msgid "Soldermask"
 msgstr "Lehim maskesi"
 
 #: pcbnew/pcb_tablecell.cpp:250
-#, fuzzy
 msgid "Column Width"
-msgstr "Hücre Genişliği"
+msgstr "Sütun Genişliği"
 
 #: pcbnew/pcb_tablecell.cpp:255
-#, fuzzy
 msgid "Row Height"
-msgstr "Kutu Yüksekliği"
+msgstr "Satır Yüksekliği"
 
 #: pcbnew/pcb_target.cpp:151
 msgid "PCB Target"
@@ -50033,9 +50025,8 @@ msgid "Creates tracks from the selected graphic lines"
 msgstr "Seçili grafik çizgilerden yol oluşturur"
 
 #: pcbnew/tools/pcb_actions.cpp:97
-#, fuzzy
 msgid "Create Outsets from Selection..."
-msgstr "Seçimden Dış Hatlar Oluştur"
+msgstr "Seçimden Dış Hatlar Oluştur..."
 
 #: pcbnew/tools/pcb_actions.cpp:98
 msgid "Create outset lines from the selected item"
