@@ -352,8 +352,7 @@ void PCB_BASE_FRAME::FocusOnItems( std::vector<BOARD_ITEM*> aItems, PCB_LAYER_ID
                 }
                 catch( const std::exception& e )
                 {
-                    wxFAIL_MSG( wxString::Format( wxT( "Clipper exception occurred: %s" ),
-                                                  e.what() ) );
+                    wxFAIL_MSG( wxString::Format( wxT( "Clipper exception occurred: %s" ), e.what() ) );
                 }
 
                 break;
@@ -376,27 +375,25 @@ void PCB_BASE_FRAME::FocusOnItems( std::vector<BOARD_ITEM*> aItems, PCB_LAYER_ID
             case PCB_DIM_CENTER_T:
             case PCB_DIM_RADIAL_T:
             case PCB_DIM_ORTHOGONAL_T:
-                item->TransformShapeToPolygon( itemPoly, aLayer, 0, pcbIUScale.mmToIU( 0.1 ),
-                                               ERROR_INSIDE );
+                item->TransformShapeToPolygon( itemPoly, aLayer, 0, pcbIUScale.mmToIU( 0.1 ), ERROR_INSIDE );
                 break;
 
             case PCB_ZONE_T:
             {
                 ZONE* zone = static_cast<ZONE*>( item );
-                #if 0
+#if 0
                 // Using the filled area shapes to find a Focus point can give good results, but
                 // unfortunately the calculations are highly time consuming, even for not very
                 // large areas (can be easily a few minutes for large areas).
                 // so we used only the zone outline that usually do not have too many vertices.
-                zone->TransformShapeToPolygon( itemPoly, aLayer, 0, pcbIUScale.mmToIU( 0.1 ),
-                                               ERROR_INSIDE );
+                zone->TransformShapeToPolygon( itemPoly, aLayer, 0, pcbIUScale.mmToIU( 0.1 ), ERROR_INSIDE );
 
                 if( itemPoly.IsEmpty() )
                     itemPoly = *zone->Outline();
-                #else
+#else
                 // much faster calculation time when using only the zone outlines
                 itemPoly = *zone->Outline();
-                #endif
+#endif
 
                 break;
             }
@@ -416,6 +413,8 @@ void PCB_BASE_FRAME::FocusOnItems( std::vector<BOARD_ITEM*> aItems, PCB_LAYER_ID
 
             try
             {
+                itemPoly.ClearArcs();
+                viewportPoly.ClearArcs();
                 clippedPoly.BooleanIntersection( itemPoly, viewportPoly );
             }
             catch( const std::exception& e )
