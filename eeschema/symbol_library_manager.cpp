@@ -175,7 +175,9 @@ bool SYMBOL_LIBRARY_MANAGER::SaveLibrary( const wxString& aLibrary, const wxStri
     wxCHECK( aFileType != SCH_IO_MGR::SCH_FILE_T::SCH_LEGACY, false );
 
     wxFileName fn( aFileName );
-    wxCHECK( !fn.FileExists() || fn.IsFileWritable(), false );
+
+    if( fn.FileExists() && !fn.IsFileWritable() )
+        return false;
 
     IO_RELEASER<SCH_IO> pi( SCH_IO_MGR::FindPlugin( aFileType ) );
     bool                res = true;    // assume all libraries are successfully saved
