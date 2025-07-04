@@ -173,6 +173,18 @@ typedef long time_t;
 %include <core/utf8.h>
 
 
+%extend EDA_ITEM
+{
+    wxString PyGetClass() const { return self->GetClass(); }
+
+    %pythoncode
+    %{
+    def GetClass(self):
+        return self.PyGetClass()
+    %}
+}
+
+
 %extend UTF8
 {
     const char*   Cast_to_CChar()    { return (self->c_str()); }
