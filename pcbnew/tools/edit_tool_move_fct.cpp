@@ -320,6 +320,7 @@ bool EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, BOARD_COMMIT* aCommit
     if( m_dragging || selection.Empty() )
         return false;
 
+    TOOL_EVENT pushedEvent = aEvent;
     editFrame->PushTool( aEvent );
     Activate();
 
@@ -400,7 +401,7 @@ bool EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, BOARD_COMMIT* aCommit
         if( selection.IsHover() )
             m_toolMgr->RunAction( PCB_ACTIONS::selectionClear );
 
-        editFrame->PopTool( aEvent );
+        editFrame->PopTool( pushedEvent );
         return false;
     }
 
@@ -841,7 +842,7 @@ bool EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, BOARD_COMMIT* aCommit
     // Remove the dynamic ratsnest from the screen
     m_toolMgr->RunAction( PCB_ACTIONS::hideLocalRatsnest );
 
-    editFrame->PopTool( aEvent );
+    editFrame->PopTool( pushedEvent );
     editFrame->GetCanvas()->SetCurrentCursor( KICURSOR::ARROW );
 
     return !restore_state;
