@@ -95,6 +95,36 @@ wxString SCH_TABLECELL::GetAddr() const
 }
 
 
+int SCH_TABLECELL::GetColumnWidth() const
+{
+    return static_cast<SCH_TABLE*>( GetParent() )->GetColWidth( GetColumn() );
+}
+
+
+void SCH_TABLECELL::SetColumnWidth( int aWidth )
+{
+    SCH_TABLE* table = static_cast<SCH_TABLE*>( GetParent() );
+
+    table->SetColWidth( GetColumn(), aWidth );
+    table->Normalize();
+}
+
+
+int SCH_TABLECELL::GetRowHeight() const
+{
+    return static_cast<SCH_TABLE*>( GetParent() )->GetRowHeight( GetRow() );
+}
+
+
+void SCH_TABLECELL::SetRowHeight( int aHeight )
+{
+    SCH_TABLE* table = static_cast<SCH_TABLE*>( GetParent() );
+
+    table->SetRowHeight( GetRow(), aHeight );
+    table->Normalize();
+}
+
+
 void SCH_TABLECELL::Print( const SCH_RENDER_SETTINGS* aSettings, int aUnit, int aBodyStyle,
                            const VECTOR2I& aOffset, bool aForceNoFill, bool aDimmed )
 {
@@ -206,5 +236,17 @@ static struct SCH_TABLECELL_DESC
         propMgr.Mask( TYPE_HASH( SCH_TABLECELL ), TYPE_HASH( EDA_TEXT ), _HKI( "Mirrored" ) );
         propMgr.Mask( TYPE_HASH( SCH_TABLECELL ), TYPE_HASH( EDA_TEXT ), _HKI( "Visible" ) );
         propMgr.Mask( TYPE_HASH( SCH_TABLECELL ), TYPE_HASH( EDA_TEXT ), _HKI( "Hyperlink" ) );
+
+        const wxString tableProps = _( "Table" );
+
+        propMgr.AddProperty( new PROPERTY<SCH_TABLECELL, int>( _HKI( "Column Width" ),
+                    &SCH_TABLECELL::SetColumnWidth, &SCH_TABLECELL::GetColumnWidth,
+                    PROPERTY_DISPLAY::PT_SIZE ),
+                tableProps );
+
+        propMgr.AddProperty( new PROPERTY<SCH_TABLECELL, int>( _HKI( "Row Height" ),
+                    &SCH_TABLECELL::SetRowHeight, &SCH_TABLECELL::GetRowHeight,
+                    PROPERTY_DISPLAY::PT_SIZE ),
+                tableProps );
     }
 } _SCH_TABLECELL_DESC;
