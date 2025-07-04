@@ -18,10 +18,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-03 20:15+0300\n"
-"PO-Revision-Date: 2025-06-28 07:04+0000\n"
+"PO-Revision-Date: 2025-07-04 18:01+0000\n"
 "Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
-"Language-Team: Polish <https://hosted.weblate.org/projects/kicad/master-"
-"source/pl/>\n"
+"Language-Team: Polish <https://hosted.weblate.org/projects/kicad/"
+"master-source/pl/>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -17552,9 +17552,9 @@ msgstr "Nie można utworzyć folderu wyjściowego '%s'."
 
 #: eeschema/eeschema_jobs_handler.cpp:1004 pcbnew/pcbnew_jobs_handler.cpp:1267
 #: pcbnew/pcbnew_jobs_handler.cpp:1913
-#, fuzzy, c-format
+#, c-format
 msgid "Exporting %s"
-msgstr "Importowanie %s"
+msgstr "Eksportowanie %s"
 
 #: eeschema/eeschema_jobs_handler.cpp:1034 pcbnew/pcbnew_jobs_handler.cpp:1790
 msgid "Output path must not conflict with existing path\n"
@@ -25165,9 +25165,9 @@ msgstr "Nie wybrano biblioteki symboli."
 #: eeschema/tools/symbol_editor_control.cpp:263
 #: eeschema/tools/symbol_editor_control.cpp:413
 #: eeschema/tools/symbol_editor_control.cpp:457
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol library '%s' not found."
-msgstr "Biblioteka symboli nie została znaleziona."
+msgstr "Biblioteka symboli '%s' nie została znaleziona."
 
 #: eeschema/tools/symbol_editor_control.cpp:349
 #: pcbnew/tools/footprint_editor_control.cpp:650
@@ -26924,13 +26924,12 @@ msgid "Export utilities (Gerbers, drill, position files, etc)"
 msgstr "Eksportuj narzędzia (gerbery, owierty, pliki położeń, itp.)"
 
 #: kicad/cli/command_pcb_export_3d.cpp:78
-#, fuzzy
 msgid ""
 "Output file format, options: step, stepz, brep, xao, glb (binary glTF), ply, "
 "stl"
 msgstr ""
-"Format pliku wyjściowego, opcje: step, brep, xao, glb (binarny glTF), ply, "
-"stl"
+"Format pliku wyjściowego, opcje: step, stepz, brep, xao, glb (binarny glTF), "
+"ply, stl"
 
 #: kicad/cli/command_pcb_export_3d.cpp:83
 msgid "Overwrite output file"
@@ -27980,7 +27979,6 @@ msgid "Last run failed"
 msgstr "Ostatnie uruchomienie nie powiodło się"
 
 #: kicad/dialogs/panel_jobset.cpp:272 kicad/dialogs/panel_jobset.cpp:993
-#, fuzzy
 msgid "Running Jobs"
 msgstr "Uruchomione zadania"
 
@@ -28183,9 +28181,9 @@ msgid "Import EasyEDA Pro Project"
 msgstr "Import projektów z programu EasyEDA Pro"
 
 #: kicad/jobs_runner.cpp:258
-#, fuzzy, c-format
+#, c-format
 msgid "Running job %d: %s"
-msgstr "Uruchomione zadania"
+msgstr "Uruchomione zadanie %d: %s"
 
 #: kicad/jobs_runner.cpp:302
 msgid "Job successful"
@@ -28233,9 +28231,8 @@ msgid "Export STL"
 msgstr "Eksportuj STL"
 
 #: kicad/kicad_cli.cpp:129
-#, fuzzy
 msgid "Export STEPZ"
-msgstr "Eksportuj w formacie STEP"
+msgstr "Eksportuj w formacie STEPZ"
 
 #: kicad/kicad_cli.cpp:151
 msgid "Export PS"
@@ -35443,7 +35440,7 @@ msgstr "STL"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:27
 msgid "STPZ"
-msgstr ""
+msgstr "STPZ"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:56
 msgid "Board Options"
@@ -37598,12 +37595,10 @@ msgid "Non Copper Zone Properties"
 msgstr "Właściwości obszarów nie będących warstwami miedzi"
 
 #: pcbnew/dialogs/dialog_outset_items.cpp:174
-#, fuzzy
 msgid "Outset must be a positive value."
-msgstr "(Pole lutownicze nie może posiadać ujemnego rozmiaru)"
+msgstr "Początek musi być wartością dodatnią."
 
 #: pcbnew/dialogs/dialog_outset_items.cpp:183
-#, fuzzy
 msgid "Line width must be a positive value."
 msgstr "Grubość linii musi być większa niż zero."
 
