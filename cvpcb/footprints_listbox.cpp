@@ -66,7 +66,7 @@ wxString FOOTPRINTS_LISTBOX::GetSelectedFootprint()
     wxString footprintName;
     int      ii = GetFirstSelected();
 
-    if( ii >= 0 )
+    if( ii >= 0 && ii < m_footprintList.size() )
     {
         wxString msg = m_footprintList[ii];
         msg.Trim( true );
