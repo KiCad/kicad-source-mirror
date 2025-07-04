@@ -918,6 +918,11 @@ int SCH_DRAWING_TOOLS::ImportSheet( const TOOL_EVENT& aEvent )
             m_frame->GetInfoBar()->Dismiss();
             break;
         }
+        else if( evt->IsActivate() && !isSyntheticClick )
+        {
+            m_frame->GetInfoBar()->Dismiss();
+            break;
+        }
         else if( evt->IsClick( BUT_LEFT ) || evt->IsDblClick( BUT_LEFT ) || isSyntheticClick )
         {
             if( placingDesignBlock )
@@ -1956,8 +1961,7 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
         controls->ForceCursorPosition( true, cursorPos );
 
         // The tool hotkey is interpreted as a click when drawing
-        bool isSyntheticClick = item && evt->IsActivate() && evt->HasPosition()
-                                && evt->Matches( aEvent );
+        bool isSyntheticClick = item && evt->IsActivate() && evt->HasPosition() && evt->Matches( aEvent );
 
         if( evt->IsCancelInteractive() || evt->IsAction( &ACTIONS::undo ) )
         {

@@ -2373,7 +2373,7 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
     {
         setCursor();
 
-        if( evt->IsCancelInteractive() )
+        if( evt->IsCancelInteractive() || evt->IsActivate() )
         {
             if( wasLocked )
                 item->SetLocked( true );
