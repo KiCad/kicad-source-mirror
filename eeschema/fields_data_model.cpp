@@ -392,6 +392,8 @@ bool FIELDS_EDITOR_GRID_DATA_MODEL::cmp( const DATA_MODEL_ROW&          lhGroup,
             };
 
     // Primary sort key is sortCol; secondary is always REFERENCE (column 0)
+    if( sortCol < 0 || sortCol >= dataModel->GetNumberCols() )
+        sortCol = 0;
 
     wxString lhs = dataModel->GetValue( lhGroup, sortCol ).Trim( true ).Trim( false );
     wxString rhs = dataModel->GetValue( rhGroup, sortCol ).Trim( true ).Trim( false );
