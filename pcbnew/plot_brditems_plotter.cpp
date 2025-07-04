@@ -716,6 +716,10 @@ void BRDITEMS_PLOTTER::PlotFootprintGraphicItems( const FOOTPRINT* aFootprint )
             // Plotted in PlotFootprintTextItems()
             break;
 
+        case PCB_REFERENCE_IMAGE_T:
+            // Not plotted at all
+            break;
+
         default:
             UNIMPLEMENTED_FOR( item->GetClass() );
         }
