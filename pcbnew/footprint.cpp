@@ -1188,6 +1188,10 @@ void FOOTPRINT::Add( BOARD_ITEM* aBoardItem, ADD_MODE aMode, bool aSkipConnectiv
 
         break;
 
+    case PCB_FOOTPRINT_T:
+        wxFAIL_MSG( wxT( "FOOTPRINT::Add(): Nested footprints not supported" ) );
+        return;
+
     default:
     {
         wxString msg;
