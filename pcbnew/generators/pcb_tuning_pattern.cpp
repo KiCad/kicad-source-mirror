@@ -1835,8 +1835,8 @@ SHAPE_LINE_CHAIN PCB_TUNING_PATTERN::getOutline() const
 
                 SHAPE_LINE_CHAIN chain;
 
-                if( clBase.OffsetLine( amplitude, CORNER_STRATEGY::ROUND_ALL_CORNERS, ARC_LOW_DEF,
-                                       left, right, true ) )
+                if( clBase.OffsetLine( amplitude, CORNER_STRATEGY::ROUND_ALL_CORNERS, ARC_LOW_DEF, left, right,
+                                       true ) )
                 {
                     chain.Append( m_settings.m_initialSide >= 0 ? right : left );
                     chain.Append( clBase.Reverse() );
@@ -1852,17 +1852,16 @@ SHAPE_LINE_CHAIN PCB_TUNING_PATTERN::getOutline() const
                 SHAPE_LINE_CHAIN clCoupled = *m_baseLineCoupled;
                 SHAPE_LINE_CHAIN chain1, chain2;
 
-                if( clBase.OffsetLine( amplitude, CORNER_STRATEGY::ROUND_ALL_CORNERS, ARC_LOW_DEF,
-                                       left, right, true ) )
+                if( clBase.OffsetLine( amplitude, CORNER_STRATEGY::ROUND_ALL_CORNERS, ARC_LOW_DEF, left, right,
+                                       true ) )
                 {
                     if( m_settings.m_initialSide >= 0 )
                         chain1.Append( right );
                     else
                         chain1.Append( left );
 
-                    if( clBase.OffsetLine( KiROUND( m_trackWidth / 2.0 ),
-                                           CORNER_STRATEGY::ROUND_ALL_CORNERS, ARC_LOW_DEF, left,
-                                           right, true ) )
+                    if( clBase.OffsetLine( KiROUND( m_trackWidth / 2.0 ), CORNER_STRATEGY::ROUND_ALL_CORNERS,
+                                           ARC_LOW_DEF, left, right, true ) )
                     {
                         if( m_settings.m_initialSide >= 0 )
                             chain1.Append( left.Reverse() );
@@ -1873,17 +1872,16 @@ SHAPE_LINE_CHAIN PCB_TUNING_PATTERN::getOutline() const
                     chain1.SetClosed( true );
                 }
 
-                if( clCoupled.OffsetLine( amplitude, CORNER_STRATEGY::ROUND_ALL_CORNERS,
-                                          ARC_LOW_DEF, left, right, true ) )
+                if( clCoupled.OffsetLine( amplitude, CORNER_STRATEGY::ROUND_ALL_CORNERS, ARC_LOW_DEF, left, right,
+                                          true ) )
                 {
                     if( m_settings.m_initialSide >= 0 )
                         chain2.Append( right );
                     else
                         chain2.Append( left );
 
-                    if( clCoupled.OffsetLine( KiROUND( m_trackWidth / 2.0 ),
-                                              CORNER_STRATEGY::ROUND_ALL_CORNERS, ARC_LOW_DEF, left,
-                                              right, true ) )
+                    if( clCoupled.OffsetLine( KiROUND( m_trackWidth / 2.0 ), CORNER_STRATEGY::ROUND_ALL_CORNERS,
+                                              ARC_LOW_DEF, left, right, true ) )
                     {
                         if( m_settings.m_initialSide >= 0 )
                             chain2.Append( left.Reverse() );
@@ -1913,14 +1911,16 @@ SHAPE_LINE_CHAIN PCB_TUNING_PATTERN::getOutline() const
         else
             amplitude = clampedMaxAmplitude + KiROUND( m_trackWidth / 2.0 );
 
-        poly.OffsetLineChain( *m_baseLine, amplitude, CORNER_STRATEGY::ROUND_ALL_CORNERS,
-                              ARC_LOW_DEF, false );
+        poly.OffsetLineChain( *m_baseLine, amplitude, CORNER_STRATEGY::ROUND_ALL_CORNERS, ARC_LOW_DEF, false );
 
         if( m_tuningMode == DIFF_PAIR && m_baseLineCoupled )
         {
             SHAPE_POLY_SET polyCoupled;
-            polyCoupled.OffsetLineChain( *m_baseLineCoupled, amplitude,
-                                         CORNER_STRATEGY::ROUND_ALL_CORNERS, ARC_LOW_DEF, false );
+            polyCoupled.OffsetLineChain( *m_baseLineCoupled, amplitude, CORNER_STRATEGY::ROUND_ALL_CORNERS,
+                                         ARC_LOW_DEF, false );
+
+            poly.ClearArcs();
+            polyCoupled.ClearArcs();
 
             SHAPE_POLY_SET merged;
             merged.BooleanAdd( poly, polyCoupled );
