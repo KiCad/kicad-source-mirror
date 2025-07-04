@@ -948,6 +948,9 @@ PCB_LAYER_ID PADSTACK::EffectiveLayerFor( PCB_LAYER_ID aLayer ) const
     case LAYER_VIA_HOLES:
     case LAYER_PAD_HOLEWALLS:
     case LAYER_VIA_HOLEWALLS:
+    case Dwgs_User:
+    case Eco1_User:
+    case Eco2_User:
         return ALL_LAYERS;
 
     default:
