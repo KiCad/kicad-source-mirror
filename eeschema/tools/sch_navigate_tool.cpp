@@ -218,6 +218,9 @@ bool SCH_NAVIGATE_TOOL::CanGoPrevious()
 
 bool SCH_NAVIGATE_TOOL::CanGoNext()
 {
+    if( !m_frame->Schematic().IsValid() )
+        return false;
+
     return m_frame->GetCurrentSheet().GetVirtualPageNumber()
            < (int) m_frame->Schematic().Hierarchy().size();
 }
