@@ -1003,7 +1003,6 @@ void PCB_IO_KICAD_SEXPR::format( const PCB_SHAPE* aShape ) const
         }
         else
         {
-            wxFAIL_MSG( wxT( "Cannot format invalid polygon." ) );
             return;
         }
 
