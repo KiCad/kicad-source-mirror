@@ -338,14 +338,15 @@ void RULER_ITEM::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
     DrawTextNextToCursor( aView, end, -rulerVec, cursorStrings, drawingDropShadows );
 
     // basic tick size
-    const double minorTickLen = 5.0 / gal->GetWorldScale();
-    const double majorTickLen = minorTickLen * majorTickLengthFactor;
+    double minorTickLen = 5.0 / gal->GetWorldScale();
+    double majorTickLen = minorTickLen * majorTickLengthFactor;
+
+    minorTickLen = std::min( minorTickLen, (double) INT_MAX / 2.0 );
+    majorTickLen = std::min( majorTickLen, (double) INT_MAX / 2.0 );
 
     if( m_showTicks )
     {
-        drawTicksAlongLine( aView, origin, rulerVec, minorTickLen, m_iuScale, m_userUnits,
-                            drawingDropShadows );
-
+        drawTicksAlongLine( aView, origin, rulerVec, minorTickLen, m_iuScale, m_userUnits, drawingDropShadows );
         drawBacksideTicks( aView, origin, rulerVec, majorTickLen, 2, drawingDropShadows );
     }
 
@@ -388,11 +389,10 @@ wxArrayString RULER_ITEM::GetDimensionStrings() const
     cursorStrings.push_back( DimensionLabel( "x", temp.x, m_iuScale, m_userUnits ) );
     cursorStrings.push_back( DimensionLabel( "y", temp.y, m_iuScale, m_userUnits ) );
 
-    cursorStrings.push_back(
-            DimensionLabel( "r", rulerVec.EuclideanNorm(), m_iuScale, m_userUnits ) );
+    cursorStrings.push_back( DimensionLabel( "r", rulerVec.EuclideanNorm(), m_iuScale, m_userUnits ) );
 
     EDA_ANGLE angle = -EDA_ANGLE( rulerVec );
-    cursorStrings.push_back( DimensionLabel( wxString::FromUTF8( "θ" ), angle.AsDegrees(),
-                                             m_iuScale, EDA_UNITS::DEGREES ) );
+    cursorStrings.push_back( DimensionLabel( wxString::FromUTF8( "θ" ), angle.AsDegrees(), m_iuScale,
+                                             EDA_UNITS::DEGREES ) );
     return cursorStrings;
 }
