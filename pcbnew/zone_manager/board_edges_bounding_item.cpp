@@ -32,6 +32,12 @@ BOARD_EDGES_BOUNDING_ITEM::BOARD_EDGES_BOUNDING_ITEM( BOX2I box ) :
 }
 
 
+wxString BOARD_EDGES_BOUNDING_ITEM::GetClass() const
+{
+    return wxT( "BOARD_EDGES_BOUNDING_ITEM" );
+}
+
+
 const BOX2I BOARD_EDGES_BOUNDING_ITEM::ViewBBox() const
 {
     return m_box;

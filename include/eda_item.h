@@ -346,11 +346,6 @@ public:
     }
 
     /**
-     * Return the class name.
-     */
-    virtual wxString GetClass() const = 0;
-
-    /**
      * Return a translated description of the type for this EDA_ITEM for display in user facing
      * messages.
      */

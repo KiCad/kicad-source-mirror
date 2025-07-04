@@ -334,7 +334,7 @@ void VIEW::Remove( VIEW_ITEM* aItem )
 
     if( aItem && aItem->m_viewPrivData )
     {
-        wxCHECK( aItem->m_viewPrivData->m_view == this, /*void*/ );
+        wxCHECK_MSG( aItem->m_viewPrivData->m_view == this, /*void*/, aItem->GetClass() );
 
         std::vector<VIEW_ITEM*>::iterator item = m_allItems->end();
         int                               cachedIndex = aItem->m_viewPrivData->m_cachedIndex;

@@ -50,6 +50,8 @@ public:
     VIEW_GROUP( VIEW* aView = nullptr );
     virtual ~VIEW_GROUP();
 
+    wxString GetClass() const override;
+
     /**
      * Return the number of stored items.
      */

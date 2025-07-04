@@ -64,8 +64,7 @@ PANEL_ZONE_GAL::PANEL_ZONE_GAL( BOARD* aPcb, wxWindow* aParentWindow,
         PCB_DRAW_PANEL_GAL( aParentWindow, aWindowId, aPosition, wxDefaultSize, aOptions,
                             aGalType ),
         m_pcb( aPcb ), m_layer( UNDEFINED_LAYER ),
-        m_pcb_bounding_box(
-                std::make_unique<BOARD_EDGES_BOUNDING_ITEM>( aPcb->GetBoardEdgesBoundingBox() ) ),
+        m_pcb_bounding_box( std::make_unique<BOARD_EDGES_BOUNDING_ITEM>( aPcb->GetBoardEdgesBoundingBox() ) ),
         m_zone( nullptr )
 {
     m_view->UseDrawPriority( true );
