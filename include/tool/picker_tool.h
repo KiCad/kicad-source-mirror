@@ -65,6 +65,14 @@ public:
 
     inline void SetSnapping( bool aSnap ) { m_snap = aSnap; }
 
+    void ClearHandlers()
+    {
+        m_clickHandler.reset();
+        m_motionHandler.reset();
+        m_cancelHandler.reset();
+        m_finalizeHandler.reset();
+    }
+
     /**
      * Set a handler for mouse click event.
      *

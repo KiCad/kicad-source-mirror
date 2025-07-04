@@ -558,6 +558,7 @@ int SCH_EDITOR_CONTROL::SimProbe( const TOOL_EVENT& aEvent )
 
     picker->SetCursor( KICURSOR::VOLTAGE_PROBE );
     picker->SetSnapping( false );
+    picker->ClearHandlers();
 
     picker->SetClickHandler(
             [this, simFrame]( const VECTOR2D& aPosition )
@@ -724,6 +725,7 @@ int SCH_EDITOR_CONTROL::SimTune( const TOOL_EVENT& aEvent )
 
     picker->SetCursor( KICURSOR::TUNE );
     picker->SetSnapping( false );
+    picker->ClearHandlers();
 
     picker->SetClickHandler(
             [this]( const VECTOR2D& aPosition )
@@ -1251,6 +1253,7 @@ int SCH_EDITOR_CONTROL::HighlightNetCursor( const TOOL_EVENT& aEvent )
 
     picker->SetCursor( KICURSOR::BULLSEYE );
     picker->SetSnapping( false );
+    picker->ClearHandlers();
 
     picker->SetClickHandler(
         [this] ( const VECTOR2D& aPos )

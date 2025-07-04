@@ -49,6 +49,10 @@ int PCB_GROUP_TOOL::PickNewMember( const TOOL_EVENT& aEvent )
 
     statusPopup.SetText( _( "Click on new member..." ) );
 
+    picker->SetCursor( KICURSOR::BULLSEYE );
+    picker->SetSnapping( false );
+    picker->ClearHandlers();
+
     picker->SetClickHandler(
             [&]( const VECTOR2D& aPoint ) -> bool
             {
