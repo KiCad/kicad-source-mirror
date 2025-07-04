@@ -864,7 +864,8 @@ void APPEARANCE_CONTROLS_3D::onLayerPresetChanged( wxCommandEvent& aEvent )
             if( cfg->m_CurrentPreset == name )
                 cfg->m_CurrentPreset = wxEmptyString;
 
-            m_presetMRU.Remove( name );
+            if( m_presetMRU.Index( name ) >= 0 )
+                m_presetMRU.Remove( name );
         }
 
         resetSelection();

@@ -2802,7 +2802,9 @@ void APPEARANCE_CONTROLS::onLayerPresetChanged( wxCommandEvent& aEvent )
             preset->flipBoard    = m_cbFlipBoard->GetValue();
 
             index = m_cbLayerPresets->FindString( name );
-            m_presetMRU.Remove( name );
+
+            if( index != wxNOT_FOUND )
+                m_presetMRU.Remove( name );
         }
 
         m_currentPreset      = preset;
