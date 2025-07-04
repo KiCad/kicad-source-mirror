@@ -14760,7 +14760,7 @@ msgstr "Spice Simülasyon"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:666
 msgid "PSpice"
-msgstr "PSpice Simülatör"
+msgstr "PSpice Dosyası"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:666
 msgid "LTSpice"
@@ -32530,7 +32530,7 @@ msgstr "YOK"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:513 pcbnew/pad.cpp:1564
 msgid "PTH"
-msgstr "PTH"
+msgstr "Delik Boyutu Toleransı"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:513 pcbnew/pad.cpp:1567
 msgid "NPTH"
@@ -34616,7 +34616,7 @@ msgstr "VRML Kart Dosyasını Kaydet"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:26
 msgid "*.wrl"
-msgstr "*.wrl"
+msgstr "*.wrl dosyası"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:31
 msgid "Footprint 3D model path:"
@@ -35028,8 +35028,8 @@ msgid ""
 msgstr ""
 "Bu, bu ayak izi için ped genişliği ve yüksekliğinin yüzdesi olarak uygulanan "
 "yerel aralık oranıdır.\n"
-"10 değeri, yatay aralık değerinin ped genişliğinin %10'u ve dikey aralık "
-"değerinin ped yüksekliğinin %10'u olduğu anlamına gelir.\n"
+"10 değeri, yatay aralık değerinin ped genişliğinin Yüzde 10'u ve dikey "
+"aralık değerinin ped yüksekliğinin Yüzde 10'u olduğu anlamına gelir.\n"
 "Bu değer, bir pedin yerel değeriyle geçersiz kılınabilir.\n"
 "Son aralık değeri, bu değer ile mutlak aralık değerinin toplamıdır.\n"
 "Negatif bir değer, ped boyutundan daha küçük bir stensil açıklığı anlamına "
@@ -35211,8 +35211,8 @@ msgid ""
 msgstr ""
 "Bu, bu ayak izi için ped genişliği ve yüksekliğinin yüzdesi olarak uygulanan "
 "yerel aralık oranıdır.\n"
-"10 değeri, yatay aralık değerinin ped genişliğinin 10%'u ve dikey aralık "
-"değerinin ped yüksekliğinin 10%'u olduğu anlamına gelir.\n"
+"10 değeri, yatay aralık değerinin ped genişliğinin Yüzde 10'u ve dikey "
+"aralık değerinin ped yüksekliğinin Yüzde 10'u olduğu anlamına gelir.\n"
 "Son aralık değeri, bu değer ile mutlak aralık değerinin toplamıdır.\n"
 "Negatif bir değer, ped boyutundan daha küçük bir stensil açıklığı anlamına "
 "gelir.\n"
@@ -35330,7 +35330,7 @@ msgstr "ASCII"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:59
 msgid "Gerber X3"
-msgstr "Gerber X3"
+msgstr "Gerber X3 dosyası"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:93
 msgid "Include only SMD footprints"
@@ -35379,7 +35379,7 @@ msgstr "Çıkış klasörü:"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:52
 msgid "Excellon"
-msgstr "Excellon"
+msgstr "Excellon Matkap"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:61
 msgid ""
@@ -35418,7 +35418,7 @@ msgstr "Oval delikler için alternatif delme modunu kullan"
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:84
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:96
 msgid "Gerber X2"
-msgstr "Gerber X2"
+msgstr "Gerber X2 Dosyası"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:93
 msgid "Generate map:"
@@ -36625,7 +36625,7 @@ msgstr "Dairesel"
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:127 pcbnew/pad.cpp:1549
 #: pcbnew/pad.cpp:2684
 msgid "Oval"
-msgstr "Oval"
+msgstr "Oval şekil"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:127
 msgid "Rectangular"
@@ -37101,7 +37101,7 @@ msgstr "Çizim formatı:"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:28
 msgid "Gerber"
-msgstr "Gerber"
+msgstr "Gerber Dosyası"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:47
 msgid "Open output directory"
@@ -37863,7 +37863,7 @@ msgstr "Z"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:163
 msgid "Pivot:"
-msgstr "Pivot:"
+msgstr "Eksen:"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:183
 msgid "Pan:"
@@ -43741,11 +43741,11 @@ msgstr "Diğer uygulamalardan kart dosyası içe aktar"
 
 #: pcbnew/menubar_pcb_editor.cpp:129
 msgid "Specctra DSN..."
-msgstr "Specctra DSN..."
+msgstr "Specctra DSN Dosyası..."
 
 #: pcbnew/menubar_pcb_editor.cpp:130
 msgid "GenCAD..."
-msgstr "GenCAD..."
+msgstr "GenCAD Dosyası..."
 
 #: pcbnew/menubar_pcb_editor.cpp:130
 msgid "Export GenCAD board representation"
@@ -43761,7 +43761,7 @@ msgstr "VRML 3B kart temsilini dışa aktar"
 
 #: pcbnew/menubar_pcb_editor.cpp:134
 msgid "IDFv3..."
-msgstr "IDFv3..."
+msgstr "IDFv3 Dosyası..."
 
 #: pcbnew/menubar_pcb_editor.cpp:134
 msgid "Export IDF 3D board representation"
@@ -43786,7 +43786,7 @@ msgstr ""
 
 #: pcbnew/menubar_pcb_editor.cpp:142
 msgid "Hyperlynx..."
-msgstr "Hyperlynx..."
+msgstr "Hyperlynx Analiz..."
 
 #: pcbnew/menubar_pcb_editor.cpp:149
 msgid "Footprints to Library..."
