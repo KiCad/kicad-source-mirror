@@ -270,7 +270,9 @@ bool DIALOG_LIB_SYMBOL_PROPERTIES::TransferDataToWindow()
                 } );
 
         // Do allow an inherited symbol to be derived from itself.
-        symbolNames.Remove( m_libEntry->GetName() );
+        if( symbolNames.Index( m_libEntry->GetName() ) != wxNOT_FOUND )
+            symbolNames.Remove( m_libEntry->GetName() );
+
         m_inheritanceSelectCombo->Append( symbolNames );
 
         if( LIB_SYMBOL_SPTR rootSymbol = m_libEntry->GetParent().lock() )
