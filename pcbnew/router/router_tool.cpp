@@ -1594,6 +1594,7 @@ int ROUTER_TOOL::RouteSelected( const TOOL_EVENT& aEvent )
 
     m_toolMgr->RunAction( ACTIONS::selectionClear );
 
+    TOOL_EVENT pushedEvent = aEvent;
     frame->PushTool( aEvent );
 
     auto setCursor =
@@ -1701,7 +1702,7 @@ int ROUTER_TOOL::RouteSelected( const TOOL_EVENT& aEvent )
     }
 
     m_iface->SetCommitFlags( 0 );
-    frame->PopTool( aEvent );
+    frame->PopTool( pushedEvent );
     return 0;
 }
 
@@ -1728,6 +1729,7 @@ int ROUTER_TOOL::MainLoop( const TOOL_EVENT& aEvent )
     // Deselect all items
     m_toolMgr->RunAction( ACTIONS::selectionClear );
 
+    TOOL_EVENT pushedEvent = aEvent;
     frame->PushTool( aEvent );
 
     auto setCursor =
@@ -1757,7 +1759,7 @@ int ROUTER_TOOL::MainLoop( const TOOL_EVENT& aEvent )
 
         if( evt->IsCancelInteractive() )
         {
-            frame->PopTool( aEvent );
+            frame->PopTool( pushedEvent );
             break;
         }
         else if( evt->IsActivate() )
@@ -1769,7 +1771,7 @@ int ROUTER_TOOL::MainLoop( const TOOL_EVENT& aEvent )
             }
             else
             {
-                frame->PopTool( aEvent );
+                frame->PopTool( pushedEvent );
                 break;
             }
         }
@@ -1838,7 +1840,7 @@ int ROUTER_TOOL::MainLoop( const TOOL_EVENT& aEvent )
 
         if( m_cancelled )
         {
-            frame->PopTool( aEvent );
+            frame->PopTool( pushedEvent );
             break;
         }
     }
@@ -2086,8 +2088,7 @@ void ROUTER_TOOL::NeighboringSegmentFilter( const VECTOR2I& aPt, GENERAL_COLLECT
 
 bool ROUTER_TOOL::CanInlineDrag( int aDragMode )
 {
-    m_toolMgr->RunAction<CLIENT_SELECTION_FILTER>( ACTIONS::selectionCursor,
-                                                   NeighboringSegmentFilter );
+    m_toolMgr->RunAction<CLIENT_SELECTION_FILTER>( ACTIONS::selectionCursor, NeighboringSegmentFilter );
     const PCB_SELECTION& selection = m_toolMgr->GetTool<PCB_SELECTION_TOOL>()->GetSelection();
 
     if( selection.Size() == 1 )
@@ -2174,6 +2175,7 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
 
     m_toolMgr->RunAction( ACTIONS::selectionClear );
 
+    TOOL_EVENT pushedEvent = aEvent;
     frame()->PushTool( aEvent );
     Activate();
 
@@ -2337,7 +2339,7 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
 
         restoreSelection( selection );
         controls()->ForceCursorPosition( false );
-        frame()->PopTool( aEvent );
+        frame()->PopTool( pushedEvent );
         highlightNets( false );
         return 0;
     }
@@ -2569,7 +2571,7 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
     controls()->SetAutoPan( false );
     controls()->ForceCursorPosition( false );
     frame()->UndoRedoBlock( false );
-    frame()->PopTool( aEvent );
+    frame()->PopTool( pushedEvent );
     highlightNets( false );
     view()->ClearPreview();
     view()->ShowPreview( false );

@@ -1117,6 +1117,7 @@ int BOARD_EDITOR_CONTROL::PlaceFootprint( const TOOL_EVENT& aEvent )
 
     m_toolMgr->RunAction( ACTIONS::selectionClear );
 
+    TOOL_EVENT pushedEvent = aEvent;
     m_frame->PushTool( aEvent );
 
     auto setCursor =
@@ -1192,7 +1193,7 @@ int BOARD_EDITOR_CONTROL::PlaceFootprint( const TOOL_EVENT& aEvent )
             }
             else
             {
-                m_frame->PopTool( aEvent );
+                m_frame->PopTool( pushedEvent );
                 break;
             }
         }
@@ -1208,7 +1209,7 @@ int BOARD_EDITOR_CONTROL::PlaceFootprint( const TOOL_EVENT& aEvent )
             }
             else
             {
-                frame()->PopTool( aEvent );
+                frame()->PopTool( pushedEvent );
                 break;
             }
         }
