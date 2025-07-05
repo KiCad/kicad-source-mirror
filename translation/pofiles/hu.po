@@ -23778,7 +23778,7 @@ msgstr "Rajzjel könyvtárak betöltése"
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1243
 #, c-format
 msgid "Loading library '%s'..."
-msgstr "A(z) '%s' könyvtár betöltése..."
+msgstr "'%s' könyvtár betöltése..."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1326
 #, fuzzy, c-format
@@ -23786,9 +23786,9 @@ msgid "Failed to save backup to '%s'."
 msgstr "Nem sikerült menteni a biztonsági mentést a(z) \"%s\"-ba."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1568
-#, fuzzy, c-format
+#, c-format
 msgid "The current configuration does not include the symbol library '%s'."
-msgstr "A jelenlegi konfiguráció nem tartalmazza a könyvtárat '%s'"
+msgstr "A jelenlegi konfiguráció nem tartalmazza a(z) '%s' könyvtárat."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1570
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1581
@@ -23836,23 +23836,19 @@ msgstr ""
 "%s"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:67
-#, fuzzy
 msgid "[from schematic]"
 msgstr "[kapcsolási rajzból]"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:77
-#, fuzzy
 msgid "[Read Only Library]"
-msgstr "[Csak olvasható]"
+msgstr "[Csak olvasható könyvtár]"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:81
-#, fuzzy
 msgid "[no symbol loaded]"
 msgstr "[nincs rajzjel betöltve]"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:113
 #: eeschema/tools/symbol_editor_control.cpp:840
-#, fuzzy
 msgid "No schematic currently open."
 msgstr "Nincs kapcsolási rajz megnyitva."
 
@@ -23862,53 +23858,50 @@ msgstr "Nincs kapcsolási rajz megnyitva."
 #: eeschema/tools/symbol_editor_control.cpp:270
 #: eeschema/tools/symbol_editor_control.cpp:415
 #: eeschema/tools/symbol_editor_control.cpp:464
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol library '%s' is not writable."
-msgstr "A könyvtár nincs engedélyezve"
+msgstr "A(z) \"%s\" rajzjel könyvtár nem írható."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:131
 #: eeschema/symbol_editor/symbol_editor.cpp:528
 #: eeschema/symbol_editor/symbol_editor.cpp:1715
-#, fuzzy
 msgid "You must save to a different location."
-msgstr "Differenciális jelvezeték jelcsúszás kompenzálása"
+msgstr "Válasszon egy másik mentési helyet."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:188
 #: eeschema/symbol_editor/symbol_editor.cpp:1520
-#, fuzzy
 msgid "The current symbol has been modified.  Save changes?"
 msgstr "A rajzjel módosult. Kívánja menteni a módosításokat?"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:370
 #: eeschema/symbol_editor/symbol_editor.cpp:1163
 #: eeschema/tools/symbol_editor_control.cpp:506
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol '%s' already exists in library '%s'."
-msgstr "A(z) \"%s\" rajzjel már létezik a(z) \"%s\" könyvtárban"
+msgstr "A(z) \"%s\" rajzjel már létezik a(z) \"%s\" könyvtárban."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:839
-#, fuzzy
 msgid "Save Symbol As"
-msgstr "Új rajzjel..."
+msgstr "Rajzjel mentése másként"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:878
 #: pcbnew/footprint_libraries_utils.cpp:1052
-#, fuzzy
 msgid "Save in library:"
 msgstr "Könyvtárba mentés:"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:968
 #: pcbnew/footprint_libraries_utils.cpp:1135
-#, fuzzy
 msgid "A library must be specified."
 msgstr "Nincs könyvtár kiválasztva."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:980
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Library '%s' is read-only. Choose a different library to save the symbol "
 "'%s' to."
-msgstr "A könyvtár nem található az alkatrészrajzolat könyvtártáblázatban."
+msgstr ""
+"A(z) \"%s\" könyvtár csak olvasható. Válasszon másik könyvtárat a(z) \"%s\" "
+"rajzjel mentéséhez."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:997
 #, c-format
@@ -23942,38 +23935,35 @@ msgid ""
 msgstr "Biztos benne, hogy felülírja a fájlokat a célmappában?"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1051
-#, fuzzy
 msgid "Overwrite All"
-msgstr "Felülír"
+msgstr "Mindent felülír"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1051
-#, fuzzy
 msgid "Rename All"
-msgstr "Fájl átnevezése"
+msgstr "Mindent átnevez"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1130
-#, fuzzy
 msgid "Export Symbol"
 msgstr "Rajzjel exportálása"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1156
-#, fuzzy, c-format
+#, c-format
 msgid "Library '%s' is read-only."
 msgstr "A(z) '%s' könyvtár csak olvasható."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1196
-#, fuzzy, c-format
+#, c-format
 msgid "Error occurred attempting to load symbol library file '%s'."
-msgstr "Hiba történt a(z) \"%s\" könyvtár fájl betöltése során"
+msgstr "Hiba történt a(z) \"%s\" rajzjel könyvtár fájl betöltése közben."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1204
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:135
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol %s already exists in library '%s'."
-msgstr "A(z) \"%s\" rajzjel már létezik a(z) \"%s\" könyvtárban"
+msgstr "A(z) \"%s\" rajzjel már létezik a(z) \"%s\" könyvtárban."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1219
-#, fuzzy, c-format
+#, c-format
 msgid "Insufficient permissions to save library '%s'."
 msgstr "A(z) \"%s\" könyvtár mentéséhez írási jogosultságokra van szükség."
 
@@ -24010,9 +24000,8 @@ msgstr ""
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1318
 #: eeschema/tools/sch_actions.cpp:230
-#, fuzzy
 msgid "Delete Symbol"
-msgstr "Rajzjel Törlés"
+msgstr "Rajzjel törlése"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1319
 #, fuzzy
@@ -24081,7 +24070,6 @@ msgid "Power Symbol (Local)"
 msgstr "Táp szimbólum"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1797
-#, fuzzy
 msgid "Datasheet"
 msgstr "Adatlap"
 
