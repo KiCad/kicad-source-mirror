@@ -23965,17 +23965,17 @@ msgstr "A(z) \"%s\" rajzjel már létezik a(z) \"%s\" könyvtárban."
 #: eeschema/symbol_editor/symbol_editor.cpp:1219
 #, c-format
 msgid "Insufficient permissions to save library '%s'."
-msgstr "A(z) \"%s\" könyvtár mentéséhez írási jogosultságokra van szükség."
+msgstr "A(z) \"%s\" könyvtár mentéséhez írási jogosultságra van szükség."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1238
-#, fuzzy, c-format
+#, c-format
 msgid "Error creating symbol library '%s'."
-msgstr "Hiba a(z) \"%s\" könyvtár létrehozásakor"
+msgstr "Hiba a(z) \"%s\" rajzjel könyvtár létrehozásakor."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1245
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol %s saved to library '%s'."
-msgstr "A(z) \"%s\" rajzjel el lett mentve a(z) \"%s\" könyvtárba"
+msgstr "\"%s\" rajzjel mentve a(z) \"%s\" könyvtárba."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1263
 #, fuzzy, c-format
@@ -24004,50 +24004,46 @@ msgid "Delete Symbol"
 msgstr "Rajzjel törlése"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1319
-#, fuzzy
 msgid "Keep Symbol"
-msgstr "Új rajzjel"
+msgstr "Rajzjel megtartása"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1456 pcbnew/files.cpp:334
 #: pcbnew/footprint_libraries_utils.cpp:1221
-#, fuzzy, c-format
+#, c-format
 msgid "Revert '%s' to last version saved?"
 msgstr "'%s' visszaállítása az utolsó mentett verzióra?"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1534
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol %s not found in library '%s'."
 msgstr "A(z) \"%s\" rajzjel nem található a(z) \"%s\" könyvtárban."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1563
-#, fuzzy
 msgid "No library specified."
 msgstr "Nincs könyvtár kiválasztva."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1582
-#, fuzzy, c-format
+#, c-format
 msgid "Save Library '%s' As..."
 msgstr "A(z) \"%s\" könyvtár mentése másként..."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1622
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to save changes to symbol library file '%s'."
-msgstr "Nem sikerült menteni a(z) \"%s\" könyvtár fájl változásokat"
+msgstr "Nem sikerült menteni a(z) \"%s\" könyvtár fájl változásait."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1624
-#, fuzzy
 msgid "Error Saving Library"
 msgstr "Hiba történt a könyvtár mentésekor"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1670
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol library file '%s' saved."
-msgstr "A(z) \"%s\" könyvtár fájl mentve"
+msgstr "\"%s\" könyvtár fájl mentve."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1769
-#, fuzzy
 msgid "Undefined!"
-msgstr "Meghatározatlan!!!"
+msgstr "Definiálatlan!"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1770
 #: eeschema/symbol_viewer_frame.cpp:460 pcbnew/board_item.cpp:419
@@ -24065,16 +24061,14 @@ msgid "Power Symbol"
 msgstr "Táp szimbólum"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1790
-#, fuzzy
 msgid "Power Symbol (Local)"
-msgstr "Táp szimbólum"
+msgstr "Táp szimbólum (lokális)"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1797
 msgid "Datasheet"
 msgstr "Adatlap"
 
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:81
-#, fuzzy
 msgid "Import Symbol"
 msgstr "Rajzjel importálása"
 
@@ -24086,20 +24080,20 @@ msgstr "A PDF olvasó nem található a megadott útvonalon: \"%s\""
 
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:110
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:116
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot import symbol library '%s'."
 msgstr "A(z) \"%s\" könyvtár nem importálható."
 
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:123
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol library file '%s' is empty."
 msgstr "A(z) \"%s\" könyvtár fájl üres."
 
 #: eeschema/symbol_lib_table.cpp:283
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Duplicate library nickname '%s' found in symbol library table file line %d"
-msgstr "Ismétlődő \"%s\" könyvtári megnevezés a könyvtártáblázat %d. sorában "
+msgstr "Ismétlődő \"%s\" könyvtári megnevezés a könyvtártáblázat %d. sorában."
 
 #: eeschema/symbol_library.cpp:605 eeschema/symbol_tree_model_adapter.cpp:221
 #, fuzzy, c-format
