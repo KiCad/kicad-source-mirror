@@ -24,7 +24,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-03 20:16+0300\n"
-"PO-Revision-Date: 2025-07-04 18:02+0000\n"
+"PO-Revision-Date: 2025-07-05 23:04+0000\n"
 "Last-Translator: YÜKSEL AÇIKGÖZ <yukselacikgoz@gmail.com>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/kicad/v9/tr/>\n"
 "Language: tr\n"
@@ -7982,7 +7982,7 @@ msgstr "Pin numaraları"
 
 #: common/layer_id.cpp:79 eeschema/sch_symbol.cpp:3008
 msgid "Pin names"
-msgstr "Bacak adları"
+msgstr "Pin adları"
 
 #: common/layer_id.cpp:80
 msgid "Symbol references"
@@ -10557,7 +10557,7 @@ msgstr "Anahtar kelimeler"
 
 #: cvpcb/cvpcb_mainframe.cpp:801
 msgid "Pin Count"
-msgstr "Bacak sayısı"
+msgstr "Pin sayısı"
 
 #: cvpcb/cvpcb_mainframe.cpp:827
 msgid "Search Text"
@@ -10575,7 +10575,7 @@ msgstr "%s tarafından filtrelendi"
 #: cvpcb/cvpcb_mainframe.cpp:835
 #, c-format
 msgid ": %i matching footprints"
-msgstr ": %i eşleşen bacak çizimleri"
+msgstr ": %i eşleşen ayak izi"
 
 #: cvpcb/cvpcb_mainframe.cpp:847
 #, c-format
@@ -10634,7 +10634,7 @@ msgstr "'%s' dosyası listede zaten var."
 
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:26
 msgid "Footprint association files:"
-msgstr "Bacak çizimi ilişkilendirme dosyaları:"
+msgstr "Ayak izi ilişkilendirme dosyaları:"
 
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:38
 msgid "Add association file"
@@ -10781,7 +10781,7 @@ msgstr "Seçili Ayak İzini Görüntüle"
 
 #: cvpcb/tools/cvpcb_actions.cpp:63
 msgid "Manage Footprint Association Files..."
-msgstr "Bacak Çizimi İlişkilendirme Dosyalarını Yönet..."
+msgstr "Ayak İzi İlişkilendirme Dosyalarını Yönet..."
 
 #: cvpcb/tools/cvpcb_actions.cpp:64
 msgid ""
@@ -10861,11 +10861,11 @@ msgstr ""
 
 #: cvpcb/tools/cvpcb_actions.cpp:162
 msgid "Filter by pin count"
-msgstr "Bacak sayısına göre filtrele"
+msgstr "Pin sayısına göre filtrele"
 
 #: cvpcb/tools/cvpcb_actions.cpp:163
 msgid "Filter footprint list by pin count"
-msgstr "Ayak izi listesini bacak sayısına göre filtrele"
+msgstr "Ayak izi listesini pin sayısına göre filtrele"
 
 #: cvpcb/tools/cvpcb_actions.cpp:171
 msgid "Filter by library"
@@ -10990,7 +10990,7 @@ msgstr "%s bacağı %s bulundu"
 #: eeschema/cross-probing.cpp:162
 #, c-format
 msgid "%s found but pin %s not found"
-msgstr "%s bulundu ancak bacak %s bulunamadı"
+msgstr "%s bulundu ancak pin %s bulunamadı"
 
 #: eeschema/cross-probing.cpp:166
 #, c-format
@@ -11683,7 +11683,7 @@ msgstr "Sembol şekli ve pinlerini güncelle"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:160
 msgid "Update keywords and footprint filters"
-msgstr "Anahtar kelimeleri ve bacak çizimi filtrelerini güncelle"
+msgstr "Anahtar kelimeleri ve ayak izi filtrelerini güncelle"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:169
 msgid "Update/reset visibility of pin names/numbers"
@@ -12024,7 +12024,7 @@ msgstr "Hariç tutma Yorumu"
 #: eeschema/dialogs/dialog_erc.cpp:851
 #: eeschema/dialogs/dialog_schematic_setup.cpp:99
 msgid "Pin Conflicts Map"
-msgstr "Bacak Çakışmaları Haritası"
+msgstr "Pin Çakışmaları Haritası"
 
 #: eeschema/dialogs/dialog_erc.cpp:855 eeschema/dialogs/dialog_erc.cpp:982
 #: eeschema/dialogs/dialog_schematic_setup.cpp:92
@@ -12760,7 +12760,7 @@ msgstr "Bağlantı Noktası Özellikleri"
 
 #: eeschema/dialogs/dialog_label_properties.cpp:130
 msgid "Pin length:"
-msgstr "Bacak uzunluğu:"
+msgstr "Pin uzunluğu:"
 
 #: eeschema/dialogs/dialog_label_properties.cpp:138
 msgid "Global Label Properties"
@@ -13092,7 +13092,7 @@ msgstr "0"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:37
 msgid "Pin count:"
-msgstr "Bacak sayısı:"
+msgstr "Pin sayısı:"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:48
 msgid "Duplicate pins:"
@@ -13112,7 +13112,7 @@ msgstr "Birime göre filtrele:"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.h:83
 msgid "Pin Table"
-msgstr "Bacak Tablosu"
+msgstr "Pin Tablosu"
 
 #: eeschema/dialogs/dialog_lib_new_symbol.cpp:118
 #, c-format
@@ -13181,7 +13181,7 @@ msgstr "Karta ekleme"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:109
 msgid "Pin name position offset:"
-msgstr "Bacak adı konumu uzaklığı:"
+msgstr "Pin adı konum kaydırma:"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:126
 msgid "Show pin number text"
@@ -13338,11 +13338,11 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:213
 msgid "Pin Text Options"
-msgstr "Bacak Metin Seçenekleri"
+msgstr "Pin Metni Seçenekleri"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:215
 msgid "Show pin number"
-msgstr "Bacak numarasını göster"
+msgstr "Pin numarasını göster"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:217
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:179
@@ -13351,12 +13351,12 @@ msgstr "Pin numaralarını göster veya gizle"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:221
 msgid "Show pin name"
-msgstr "Bacak adını göster"
+msgstr "Pin adını göster"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:223
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:185
 msgid "Show or hide pin names"
-msgstr "Bacak adlarını göster veya gizle"
+msgstr "Pin adlarını göster veya gizle"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:230
 msgid "Place pin names inside"
@@ -13515,7 +13515,7 @@ msgstr "Veri Yollarını Geçir"
 #: eeschema/dialogs/dialog_pin_properties.cpp:53
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:212
 msgid "Alternate Pin Name"
-msgstr "Alternatif Bacak Adı"
+msgstr "Alternatif Pin Adı"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:207
 #: eeschema/dialogs/dialog_symbol_properties.cpp:358
@@ -13572,7 +13572,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:44
 msgid "Pin &name:"
-msgstr "Bacak &ad:"
+msgstr "Pin ve Adı:"
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:51
 msgid "Pin num&ber:"
