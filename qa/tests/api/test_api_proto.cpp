@@ -38,8 +38,7 @@ BOOST_AUTO_TEST_SUITE( ApiProto )
 
 struct PROTO_TEST_FIXTURE
 {
-    PROTO_TEST_FIXTURE() :
-            m_settingsManager( true /* headless */ )
+    PROTO_TEST_FIXTURE()
     { }
 
     SETTINGS_MANAGER       m_settingsManager;

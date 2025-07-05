@@ -34,8 +34,7 @@
 
 struct CONNECTIVITY_TEST_FIXTURE
 {
-    CONNECTIVITY_TEST_FIXTURE() :
-            m_settingsManager( true /* headless */ )
+    CONNECTIVITY_TEST_FIXTURE()
     { }
 
     SETTINGS_MANAGER           m_settingsManager;

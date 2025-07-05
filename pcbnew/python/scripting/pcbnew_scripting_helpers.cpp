@@ -116,7 +116,7 @@ SETTINGS_MANAGER* GetSettingsManager()
         {
             // Ensure wx system settings stuff is available
             ignore_unused( wxTheApp );
-            s_SettingsManager = new SETTINGS_MANAGER( true );
+            s_SettingsManager = new SETTINGS_MANAGER();
         }
     }
 

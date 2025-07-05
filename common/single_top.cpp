@@ -57,6 +57,7 @@
 
 #include <git2.h>
 #include <libraries/library_manager.h>
+#include <startwizard/startwizard.h>
 
 #ifdef KICAD_USE_SENTRY
 #include <sentry.h>
@@ -380,8 +381,6 @@ bool PGM_SINGLE_TOP::OnPgmInit()
 
     GetSettingsManager().RegisterSettings( new KICAD_SETTINGS );
 
-    GetLibraryManager().LoadGlobalTables();
-
 #ifdef KICAD_IPC_API
     // Create the API server thread once the app event loop exists
     m_api_server = std::make_unique<KICAD_API_SERVER>();
@@ -400,6 +399,16 @@ bool PGM_SINGLE_TOP::OnPgmInit()
     }
 
     Kiway.SetTop( frame );
+
+    STARTWIZARD startWizard;
+    startWizard.CheckAndRun( frame );
+
+    // Load library tables after startup wizard
+    GetLibraryManager().LoadGlobalTables();
+
+    // Preload libraries, since for single-top this won't have been done earlier
+    if( KIFACE* topFrame = Kiway.KiFACE( KIWAY::KifaceType( TOP_FRAME ) ) )
+        topFrame->PreloadLibraries( &Kiway.Prj() );
 
     App().SetTopWindow( frame );      // wxApp gets a face.
     App().SetAppDisplayName( frame->GetAboutTitle() );

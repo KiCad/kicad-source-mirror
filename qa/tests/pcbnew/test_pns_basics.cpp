@@ -303,8 +303,7 @@ private:
 
 struct PNS_TEST_FIXTURE
 {
-    PNS_TEST_FIXTURE() :
-        m_settingsManager( true /* headless */ )
+    PNS_TEST_FIXTURE()
     {
         m_router = new PNS::ROUTER;
         m_iface = new MOCK_PNS_KICAD_IFACE( this );

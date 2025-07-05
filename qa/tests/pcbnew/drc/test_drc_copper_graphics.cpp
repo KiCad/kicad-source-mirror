@@ -32,8 +32,7 @@
 
 struct DRC_COPPER_GRAPHICS_TEST_FIXTURE
 {
-    DRC_COPPER_GRAPHICS_TEST_FIXTURE() :
-            m_settingsManager( true /* headless */ )
+    DRC_COPPER_GRAPHICS_TEST_FIXTURE()
     { }
 
     SETTINGS_MANAGER       m_settingsManager;

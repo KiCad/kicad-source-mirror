@@ -42,8 +42,7 @@
 
 struct DRC_REGRESSION_TEST_FIXTURE
 {
-    DRC_REGRESSION_TEST_FIXTURE() :
-            m_settingsManager( true /* headless */ )
+    DRC_REGRESSION_TEST_FIXTURE()
     { }
 
     ~DRC_REGRESSION_TEST_FIXTURE()

@@ -29,7 +29,6 @@
 
 #include <build_version.h>
 #include <confirm.h>
-#include <dialogs/dialog_migrate_settings.h>
 #include <gestfich.h>
 #include <kiplatform/environment.h>
 #include <kiplatform/io.h>
@@ -53,18 +52,26 @@
 #include <libraries/library_manager.h>
 
 
-SETTINGS_MANAGER::SETTINGS_MANAGER( bool aHeadless ) :
-        m_headless( aHeadless ),
+SETTINGS_MANAGER::SETTINGS_MANAGER() :
         m_kiway( nullptr ),
         m_common_settings( nullptr ),
-        m_migration_source(),
         m_migrateLibraryTables( true )
 {
-    // Check if the settings directory already exists, and if not, perform a migration if possible
-    if( !MigrateIfNeeded() )
+    wxFileName path( PATHS::GetUserSettingsPath(), wxS( "" ) );
+    wxLogTrace( traceSettings, wxT( "Using settings path %s" ), path.GetFullPath() );
+
+    if( !path.DirExists() )
     {
-        m_ok = false;
-        return;
+        wxLogTrace( traceSettings, wxT( "Path didn't exist; creating it" ) );
+        path.Mkdir( wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL );
+    }
+
+    if( !SettingsDirectoryValid() )
+    {
+        // This will be picked up by the first-run wizard later in application start,
+        // but we allow it for now because many things rely on being able to access the
+        // settings manager.  For now, default settings in memory will be used.
+        wxLogTrace( traceSettings, wxT( "Note: no valid settings directory on disk" ) );
     }
 
     m_ok = true;
@@ -75,15 +82,6 @@ SETTINGS_MANAGER::SETTINGS_MANAGER( bool aHeadless ) :
     // Create the built-in color settings
     // Here to allow the Python API to access the built-in colors
     registerBuiltinColorSettings();
-
-    wxFileName commonSettings( GetPathForSettingsFile( m_common_settings ),
-                               m_common_settings->GetFullFilename() );
-
-    if( !wxFileExists( commonSettings.GetFullPath() ) )
-    {
-        m_common_settings->Load();
-        Save( m_common_settings );
-    }
 }
 
 
@@ -587,26 +585,9 @@ public:
 };
 
 
-bool SETTINGS_MANAGER::MigrateIfNeeded()
+bool SETTINGS_MANAGER::SettingsDirectoryValid() const
 {
     wxFileName path( PATHS::GetUserSettingsPath(), wxS( "" ) );
-    wxLogTrace( traceSettings, wxT( "Using settings path %s" ), path.GetFullPath() );
-
-    if( m_headless )
-    {
-        // Special case namely for cli
-        // Ensure the settings directory at least exists to prevent additional loading errors
-        // from subdirectories.
-        // TODO review headless (unit tests) vs cli needs, this should be fine for unit tests though
-        if( !path.DirExists() )
-        {
-            wxLogTrace( traceSettings, wxT( "Path didn't exist; creating it" ) );
-            path.Mkdir( wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL );
-        }
-
-        wxLogTrace( traceSettings, wxT( "Settings migration not checked; running headless" ) );
-        return true;
-    }
 
     if( path.DirExists() )
     {
@@ -621,31 +602,22 @@ bool SETTINGS_MANAGER::MigrateIfNeeded()
         }
     }
 
-    // Now we have an empty path, let's figure out what to put in it
-    DIALOG_MIGRATE_SETTINGS dlg( this );
+    return false;
+}
 
-    if( dlg.ShowModal() != wxID_OK )
-    {
-        wxLogTrace( traceSettings, wxT( "Migration dialog canceled; exiting" ) );
+
+bool SETTINGS_MANAGER::MigrateFromPreviousVersion( const wxString& aSourcePath )
+{
+    wxFileName path( PATHS::GetUserSettingsPath(), wxS( "" ) );
+
+    if( aSourcePath.IsEmpty() )
         return false;
-    }
 
-    if( !path.DirExists() )
-    {
-        wxLogTrace( traceSettings, wxT( "Path didn't exist; creating it" ) );
-        path.Mkdir( wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL );
-    }
+    wxLogTrace( traceSettings, wxT( "Migrating from path %s" ), aSourcePath );
 
-    if( m_migration_source.IsEmpty() )
-    {
-        wxLogTrace( traceSettings, wxT( "No migration source given; starting with defaults" ) );
-        return true;
-    }
-
-    wxLogTrace( traceSettings, wxT( "Migrating from path %s" ), m_migration_source );
-
-    MIGRATION_TRAVERSER traverser( m_migration_source, path.GetFullPath(), m_migrateLibraryTables );
-    wxDir source_dir( m_migration_source );
+    // TODO(JE) library tables - move library table migration out of here probably
+    MIGRATION_TRAVERSER traverser( aSourcePath, path.GetFullPath(), m_migrateLibraryTables );
+    wxDir source_dir( aSourcePath );
 
     source_dir.Traverse( traverser );
 
@@ -683,7 +655,7 @@ bool SETTINGS_MANAGER::MigrateIfNeeded()
         for( const wxString& key : libKeys )
             common.m_Env.vars.erase( key );
 
-        common.SaveToFile( commonPath  );
+        common.SaveToFile( commonPath );
     }
 
     return true;

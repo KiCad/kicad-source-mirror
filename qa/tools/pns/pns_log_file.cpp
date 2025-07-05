@@ -358,7 +358,7 @@ bool PNS_LOG_FILE::Load( const wxFileName& logFileName, REPORTER* aRpt )
     aRpt->Report( wxString::Format( wxT( "Loading project settings from '%s'" ),
                                     fname_settings.GetFullPath() ) );
 
-    m_settingsMgr.reset( new SETTINGS_MANAGER ( true ) );
+    m_settingsMgr.reset( new SETTINGS_MANAGER );
     m_settingsMgr->LoadProject( fname_project.GetFullPath() );
     PROJECT* project = m_settingsMgr->GetProject( fname_project.GetFullPath() );
     project->SetReadOnly();

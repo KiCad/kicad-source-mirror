@@ -415,7 +415,6 @@ set( EESCHEMA_SRCS
     schematic.cpp
     schematic_settings.cpp
     schematic_undo_redo.cpp
-    startwizard_provider_schlib.cpp
     sheet.cpp
     symbol.cpp
     symbol_async_loader.cpp

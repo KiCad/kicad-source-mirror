@@ -49,6 +49,11 @@ LIBRARY_MANAGER::LIBRARY_MANAGER()
 
 LIBRARY_MANAGER::~LIBRARY_MANAGER() = default;
 
+const std::map<LIBRARY_TABLE_TYPE, const std::string&> LIBRARY_MANAGER::m_typeToFilenameMap =
+        { { LIBRARY_TABLE_TYPE::SYMBOL,       FILEEXT::SymbolLibraryTableFileName },
+          { LIBRARY_TABLE_TYPE::FOOTPRINT,    FILEEXT::FootprintLibraryTableFileName },
+          { LIBRARY_TABLE_TYPE::DESIGN_BLOCK, FILEEXT::DesignBlockLibraryTableFileName } };
+
 
 void LIBRARY_MANAGER::loadTables( const wxString& aTablePath, LIBRARY_TABLE_SCOPE aScope )
 {
@@ -318,6 +323,60 @@ private:
     LIBRARY_TABLE*   m_fpTable;
     LIBRARY_TABLE*   m_designBlockTable;
 };
+
+
+bool LIBRARY_MANAGER::GlobalTablesValid()
+{
+    return InvalidGlobalTables().empty();
+}
+
+
+std::vector<LIBRARY_TABLE_TYPE> LIBRARY_MANAGER::InvalidGlobalTables()
+{
+    std::vector<LIBRARY_TABLE_TYPE> invalidTables;
+    wxString basePath = PATHS::GetUserSettingsPath();
+
+    for( auto [type, name] : m_typeToFilenameMap )
+    {
+        if( wxFileName fn( basePath, name ); fn.IsFileReadable() )
+        {
+            if( LIBRARY_TABLE temp( fn, LIBRARY_TABLE_SCOPE::GLOBAL ); !temp.IsOk() )
+                invalidTables.emplace_back( type );
+        }
+        else
+        {
+            invalidTables.emplace_back( type );
+        }
+    }
+
+    return invalidTables;
+}
+
+
+bool LIBRARY_MANAGER::CreateGlobalTable( LIBRARY_TABLE_TYPE aType, bool aPopulateDefaultLibraries )
+{
+    wxCHECK( m_typeToFilenameMap.contains( aType ), false );
+    wxString basePath = PATHS::GetUserSettingsPath();
+
+    wxFileName fn( basePath, m_typeToFilenameMap.at( aType ) );
+    fn.Normalize( FN_NORMALIZE_FLAGS | wxPATH_NORM_ENV_VARS );
+
+    LIBRARY_TABLE temp( fn, LIBRARY_TABLE_SCOPE::GLOBAL );
+    temp.SetType( aType );
+
+    try
+    {
+        PRETTIFIED_FILE_OUTPUTFORMATTER formatter( fn.GetFullPath(), KICAD_FORMAT::FORMAT_MODE::LIBRARY_TABLE );
+        temp.Format( &formatter );
+    }
+    catch( IO_ERROR& e )
+    {
+        wxLogTrace( traceLibraries, "Exception while saving: %s", e.What() );
+        return false;
+    }
+
+    return true;
+}
 
 
 void LIBRARY_MANAGER::LoadGlobalTables()

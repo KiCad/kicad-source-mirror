@@ -73,8 +73,7 @@ struct FileCleaner
 
 struct DRC_BASE_FIXTURE
 {
-    DRC_BASE_FIXTURE() :
-            m_settingsManager( true /* headless */ )
+    DRC_BASE_FIXTURE()
     {
     }
 

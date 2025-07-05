@@ -37,7 +37,7 @@
 struct BUS_ENTRY_CONCURRENCY_FIXTURE
 {
     BUS_ENTRY_CONCURRENCY_FIXTURE() :
-            m_mgr( true /* headless */ )
+            m_mgr()
     {
         m_mgr.LoadProject( "" );
         m_schematic = std::make_unique<SCHEMATIC>( &m_mgr.Prj() );

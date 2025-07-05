@@ -37,8 +37,7 @@
 
 struct ZONE_FILL_TEST_FIXTURE
 {
-    ZONE_FILL_TEST_FIXTURE() :
-            m_settingsManager( true /* headless */ )
+    ZONE_FILL_TEST_FIXTURE()
     { }
 
     SETTINGS_MANAGER       m_settingsManager;

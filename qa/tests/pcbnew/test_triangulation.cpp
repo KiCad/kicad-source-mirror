@@ -39,8 +39,7 @@ namespace {
 
 struct TRIANGULATE_TEST_FIXTURE
 {
-    TRIANGULATE_TEST_FIXTURE() :
-            m_settingsManager( true /* headless */ )
+    TRIANGULATE_TEST_FIXTURE()
     { }
 
     SETTINGS_MANAGER       m_settingsManager;

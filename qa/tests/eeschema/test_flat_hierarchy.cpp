@@ -38,7 +38,7 @@
 struct FLAT_HIERARCHY_FIXTURE
 {
     FLAT_HIERARCHY_FIXTURE() :
-            m_settingsManager( true /* headless */ )
+            m_settingsManager()
     {
         m_settingsManager.LoadProject( "" );
         m_schematic = std::make_unique<SCHEMATIC>( nullptr );

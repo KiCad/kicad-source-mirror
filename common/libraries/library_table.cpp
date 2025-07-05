@@ -152,8 +152,6 @@ bool LIBRARY_TABLE::addRowFromIR( const LIBRARY_TABLE_ROW_IR& aIR )
 
 void LIBRARY_TABLE::Format( OUTPUTFORMATTER* aOutput ) const
 {
-    wxCHECK_MSG( IsOk(), /* void */, "Don't attempt to format a table that isn't OK!" );
-
     static const std::map<LIBRARY_TABLE_TYPE, wxString> types = {
         { LIBRARY_TABLE_TYPE::SYMBOL, "sym_lib_table" },
         { LIBRARY_TABLE_TYPE::FOOTPRINT, "fp_lib_table" },

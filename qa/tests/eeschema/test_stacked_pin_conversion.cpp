@@ -31,7 +31,7 @@ struct STACKED_PIN_CONVERSION_FIXTURE
 {
     STACKED_PIN_CONVERSION_FIXTURE()
     {
-        m_settingsManager = std::make_unique<SETTINGS_MANAGER>( true );
+        m_settingsManager = std::make_unique<SETTINGS_MANAGER>();
         m_symbol = std::make_unique<LIB_SYMBOL>( "TestSymbol" );
     }
 

@@ -44,7 +44,7 @@
 #include <richio.h>
 #include <settings/settings_manager.h>
 #include <settings/kicad_settings.h>
-#include <startwizard.h>
+#include <../include/startwizard/startwizard.h>
 #include <systemdirsappend.h>
 #include <trace_helpers.h>
 #include <wildcards_and_files_ext.h>
@@ -239,7 +239,7 @@ bool PGM_KICAD::OnPgmInit()
                                                 wxWindow::FromDIP( wxSize( 775, -1 ), NULL ) );
         frame = managerFrame;
 
-        STARTWIZARD startWizard( &Kiway );
+        STARTWIZARD startWizard;
         startWizard.CheckAndRun( frame );
     }
     else

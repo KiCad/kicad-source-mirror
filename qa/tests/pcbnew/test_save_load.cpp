@@ -36,8 +36,7 @@ namespace
 {
 struct SAVE_LOAD_TEST_FIXTURE
 {
-    SAVE_LOAD_TEST_FIXTURE() :
-            m_settingsManager( true /* headless */ )
+    SAVE_LOAD_TEST_FIXTURE()
     { }
 
     SETTINGS_MANAGER       m_settingsManager;

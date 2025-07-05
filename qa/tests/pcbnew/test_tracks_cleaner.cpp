@@ -39,8 +39,7 @@ namespace
 {
 struct TRACK_CLEANER_TEST_FIXTURE
 {
-    TRACK_CLEANER_TEST_FIXTURE() :
-            m_settingsManager( true /* headless */ )
+    TRACK_CLEANER_TEST_FIXTURE()
     { }
 
     SETTINGS_MANAGER       m_settingsManager;

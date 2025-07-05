@@ -40,8 +40,7 @@
 
 struct PRETTIFIER_TEST_FIXTURE
 {
-    PRETTIFIER_TEST_FIXTURE() :
-            m_settingsManager( true /* headless */ )
+    PRETTIFIER_TEST_FIXTURE()
     { }
 
     SETTINGS_MANAGER       m_settingsManager;

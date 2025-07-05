@@ -165,10 +165,11 @@ set( KICOMMON_SRCS
     # This is basically a settings object, but for the toolbar
     tool/ui/toolbar_configuration.cpp
 
-    dialogs/dialog_migrate_settings.cpp
-    dialogs/dialog_migrate_settings_base.cpp
     dialogs/dialog_rc_job.cpp
     dialogs/dialog_rc_job_base.cpp
+    dialogs/panel_startwizard_libraries_base.cpp
+    dialogs/panel_startwizard_privacy_base.cpp
+    dialogs/panel_startwizard_settings_base.cpp
 
     widgets/bitmap_button.cpp
     widgets/aui_json_serializer.cpp
@@ -257,6 +258,11 @@ set( KICOMMON_SRCS
 
     api/serializable.cpp
     api/api_utils.cpp
+
+    startwizard/startwizard.cpp
+    startwizard/startwizard_provider_libraries.cpp
+    startwizard/startwizard_provider_privacy.cpp
+    startwizard/startwizard_provider_settings.cpp
     )
 
 if( UNIX AND NOT APPLE )
@@ -500,10 +506,6 @@ if( KICAD_USE_SENTRY )
     list( APPEND COMMON_DLG_SRCS
     dialogs/panel_data_collection.cpp
     dialogs/panel_data_collection_base.cpp
-    )
-
-    list( APPEND COMMON_SRCS
-    startwizard_provider_datacollection.cpp
     )
 endif()
 

@@ -18,32 +18,38 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef STARTWIZARD_PROVIDER_H
-#define STARTWIZARD_PROVIDER_H
+#ifndef STARTWIZARD_PROVIDER_PCM_H
+#define STARTWIZARD_PROVIDER_PCM_H
 
-#include <wx/string.h>
+#include <startwizard/startwizard_provider.h>
+#include <memory>
 
-class wxWizardPageSimple;
-class wxPanel;
-class wxWindow;
+struct STARTWIZARD_PROVIDER_PRIVACY_MODEL
+{
+    bool m_autoUpdateKiCad = true;
+    bool m_autoUpdatePCM   = true;
+    bool m_enableSentry    = false;
+};
 
-class STARTWIZARD_PROVIDER
+class STARTWIZARD_PROVIDER_PRIVACY : public STARTWIZARD_PROVIDER
 {
 public:
-    STARTWIZARD_PROVIDER( const wxString& aPageName ) : m_pageName( aPageName ) {}
+    STARTWIZARD_PROVIDER_PRIVACY();
 
-    virtual ~STARTWIZARD_PROVIDER() {}
+    virtual ~STARTWIZARD_PROVIDER_PRIVACY() {}
 
-    virtual bool NeedsUserInput() const { return false; }
+    wxString Name() const override { return wxT( "privacy" ); }
 
-    virtual wxPanel* GetWizardPanel( wxWindow* aParent ) { return nullptr; }
+    bool NeedsUserInput() const override;
 
-    const wxString& GetPageName() const { return m_pageName; }
+    wxPanel* GetWizardPanel( wxWindow* aParent, STARTWIZARD* aWizard ) override;
 
-    virtual void Finish() {}
+    void Finish() override;
+
+    void ApplyDefaults() override;
 
 private:
-    wxString m_pageName;
+    std::shared_ptr<STARTWIZARD_PROVIDER_PRIVACY_MODEL> m_model;
 };
 
 #endif

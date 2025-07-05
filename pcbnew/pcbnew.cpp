@@ -69,7 +69,6 @@
 #include <3d_viewer/toolbars_3d.h>
 #include <toolbars_footprint_editor.h>
 #include <toolbars_pcb_editor.h>
-#include "startwizard_provider_fplib.h"
 
 #include <wx/crt.h>
 
@@ -392,8 +391,6 @@ static struct IFACE : public KIFACE_BASE, public UNITS_PROVIDER
 
     bool HandleJobConfig( JOB* aJob, wxWindow* aParent ) override;
 
-    void GetStartupProviders( std::vector<std::unique_ptr<STARTWIZARD_PROVIDER>>& aProviders ) override;
-
 private:
     bool loadGlobalLibTable();
 
@@ -621,10 +618,4 @@ int IFACE::HandleJob( JOB* aJob, REPORTER* aReporter, PROGRESS_REPORTER* aProgre
 bool IFACE::HandleJobConfig( JOB* aJob, wxWindow* aParent )
 {
     return m_jobHandler->HandleJobConfig( aJob, aParent );
-}
-
-
-void IFACE::GetStartupProviders( std::vector<std::unique_ptr<STARTWIZARD_PROVIDER>>& aProviders )
-{
-    aProviders.push_back( std::make_unique<STARTWIZARD_PROVIDER_FPLIB>() );
 }

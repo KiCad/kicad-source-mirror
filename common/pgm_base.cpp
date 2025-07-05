@@ -415,7 +415,7 @@ bool PGM_BASE::InitPgm( bool aHeadless, bool aSkipPyInit, bool aIsUnitTest )
     winrt::init_apartment(winrt::apartment_type::single_threaded);
 #endif
 
-    m_settings_manager = std::make_unique<SETTINGS_MANAGER>( aHeadless );
+    m_settings_manager = std::make_unique<SETTINGS_MANAGER>();
     m_library_manager = std::make_unique<LIBRARY_MANAGER>();
     m_background_jobs_monitor = std::make_unique<BACKGROUND_JOBS_MONITOR>();
     m_notifications_manager = std::make_unique<NOTIFICATIONS_MANAGER>();

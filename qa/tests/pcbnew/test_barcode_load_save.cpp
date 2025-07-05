@@ -37,7 +37,7 @@
 
 BOOST_AUTO_TEST_CASE( BarcodeWriteRead )
 {
-    SETTINGS_MANAGER settingsManager( true );
+    SETTINGS_MANAGER settingsManager;
 
     std::unique_ptr<BOARD> board = std::make_unique<BOARD>();
 
@@ -75,7 +75,7 @@ BOOST_AUTO_TEST_CASE( BarcodeWriteRead )
 
 BOOST_AUTO_TEST_CASE( BarcodeFootprintWriteRead )
 {
-    SETTINGS_MANAGER settingsManager( true );
+    SETTINGS_MANAGER settingsManager;
 
     FOOTPRINT footprint( nullptr );
 
@@ -123,7 +123,7 @@ BOOST_AUTO_TEST_CASE( BarcodeFootprintWriteRead )
 
 BOOST_AUTO_TEST_CASE( BarcodePositioningAlignment )
 {
-    SETTINGS_MANAGER settingsManager( true );
+    SETTINGS_MANAGER settingsManager;
 
     std::unique_ptr<BOARD> board = std::make_unique<BOARD>();
 

@@ -31,7 +31,7 @@
 
 struct ERC_REGRESSION_TEST_FIXTURE
 {
-    ERC_REGRESSION_TEST_FIXTURE() : m_settingsManager( true /* headless */ ) {}
+    ERC_REGRESSION_TEST_FIXTURE() {}
 
     SETTINGS_MANAGER           m_settingsManager;
     std::unique_ptr<SCHEMATIC> m_schematic;

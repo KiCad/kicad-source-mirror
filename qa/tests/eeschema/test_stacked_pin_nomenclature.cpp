@@ -33,7 +33,7 @@
 
 struct STACKED_PIN_FIXTURE
 {
-    STACKED_PIN_FIXTURE() : m_settingsManager( true /* headless */ ) {}
+    STACKED_PIN_FIXTURE() {}
 
     SETTINGS_MANAGER           m_settingsManager;
     std::unique_ptr<SCHEMATIC> m_schematic;

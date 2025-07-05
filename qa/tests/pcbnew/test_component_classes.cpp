@@ -36,8 +36,7 @@
 
 struct PCB_COMPONENT_CLASS_FIXTURE
 {
-    PCB_COMPONENT_CLASS_FIXTURE() :
-            m_settingsManager( true /* headless */ )
+    PCB_COMPONENT_CLASS_FIXTURE()
     { }
 
     SETTINGS_MANAGER       m_settingsManager;

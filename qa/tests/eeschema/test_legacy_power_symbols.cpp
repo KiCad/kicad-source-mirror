@@ -29,8 +29,7 @@
 
 struct LEGACY_POWER_SYMBOLS_TEST_FIXTURE
 {
-    LEGACY_POWER_SYMBOLS_TEST_FIXTURE() :
-            m_settingsManager( true /* headless */ )
+    LEGACY_POWER_SYMBOLS_TEST_FIXTURE()
     { }
 
     void CheckSymbols()

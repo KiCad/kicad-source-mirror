@@ -36,7 +36,7 @@
 struct DRC_REGRESSION_TEST_FIXTURE
 {
     // clang-format off : suggestions look worse.
-    DRC_REGRESSION_TEST_FIXTURE() : m_settingsManager( true /* headless */ ) {}
+    DRC_REGRESSION_TEST_FIXTURE() {}
     // clang-format on
 
     SETTINGS_MANAGER       m_settingsManager;

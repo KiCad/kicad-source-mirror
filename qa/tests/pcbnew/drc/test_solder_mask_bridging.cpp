@@ -32,8 +32,7 @@
 
 struct DRC_SOLDER_MASK_BRIDGING_TEST_FIXTURE
 {
-    DRC_SOLDER_MASK_BRIDGING_TEST_FIXTURE() :
-            m_settingsManager( true /* headless */ )
+    DRC_SOLDER_MASK_BRIDGING_TEST_FIXTURE()
     { }
 
     SETTINGS_MANAGER       m_settingsManager;

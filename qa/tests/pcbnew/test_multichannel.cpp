@@ -36,7 +36,7 @@
 
 struct MULTICHANNEL_TEST_FIXTURE
 {
-    MULTICHANNEL_TEST_FIXTURE() : m_settingsManager( true /* headless */ ) {}
+    MULTICHANNEL_TEST_FIXTURE() {}
 
     SETTINGS_MANAGER       m_settingsManager;
     std::unique_ptr<BOARD> m_board;

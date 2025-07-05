@@ -392,8 +392,6 @@ set( PCBNEW_CLASS_SRCS
     zone_filler.cpp
     edit_zone_helpers.cpp
 
-    startwizard_provider_fplib.cpp
-
     ratsnest/ratsnest.cpp
 
     tools/array_tool.cpp

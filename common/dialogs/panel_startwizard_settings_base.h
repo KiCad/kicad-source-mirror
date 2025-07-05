@@ -12,7 +12,6 @@
 #include <wx/intl.h>
 class STD_BITMAP_BUTTON;
 
-#include "dialog_shim.h"
 #include <wx/string.h>
 #include <wx/stattext.h>
 #include <wx/gdicmn.h>
@@ -27,33 +26,27 @@ class STD_BITMAP_BUTTON;
 #include <wx/icon.h>
 #include <wx/button.h>
 #include <wx/sizer.h>
-#include <wx/checkbox.h>
-#include <wx/dialog.h>
+#include <wx/panel.h>
 
 #include "kicommon.h"
 
 ///////////////////////////////////////////////////////////////////////////
 
 ///////////////////////////////////////////////////////////////////////////////
-/// Class DIALOG_MIGRATE_SETTINGS_BASE
+/// Class PANEL_STARTWIZARD_SETTINGS_BASE
 ///////////////////////////////////////////////////////////////////////////////
-class KICOMMON_API DIALOG_MIGRATE_SETTINGS_BASE : public DIALOG_SHIM
+class KICOMMON_API PANEL_STARTWIZARD_SETTINGS_BASE : public wxPanel
 {
 	private:
 
 	protected:
 		wxBoxSizer* m_sizer;
-		wxStaticText* m_lblWelcome;
 		wxStaticText* m_staticText2;
 		wxRadioButton* m_btnPrevVer;
 		wxComboBox* m_cbPath;
 		STD_BITMAP_BUTTON* m_btnCustomPath;
 		wxStaticText* m_lblPathError;
-		wxCheckBox* m_cbCopyLibraryTables;
 		wxRadioButton* m_btnUseDefaults;
-		wxStdDialogButtonSizer* m_standardButtons;
-		wxButton* m_standardButtonsOK;
-		wxButton* m_standardButtonsCancel;
 
 		// Virtual event handlers, override them in your derived class
 		virtual void OnPrevVerSelected( wxCommandEvent& event ) { event.Skip(); }
@@ -65,9 +58,9 @@ class KICOMMON_API DIALOG_MIGRATE_SETTINGS_BASE : public DIALOG_SHIM
 
 	public:
 
-		DIALOG_MIGRATE_SETTINGS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Configure KiCad Settings Path"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxCAPTION|wxRESIZE_BORDER );
+		PANEL_STARTWIZARD_SETTINGS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 500,300 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
 
-		~DIALOG_MIGRATE_SETTINGS_BASE();
+		~PANEL_STARTWIZARD_SETTINGS_BASE();
 
 };
 

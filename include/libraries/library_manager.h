@@ -47,6 +47,14 @@ public:
 
     ~LIBRARY_MANAGER();
 
+    /// @return true if all required global tables are present on disk and valid
+    static bool GlobalTablesValid();
+
+    /// @return a list of global tables that are not valid (or an empty list if GlobalTablesValid() returns true)
+    static std::vector<LIBRARY_TABLE_TYPE> InvalidGlobalTables();
+
+    static bool CreateGlobalTable( LIBRARY_TABLE_TYPE aType, bool aPopulateDefaultLibraries );
+
     void LoadGlobalTables();
 
     /// Notify all adapters that the project has changed
@@ -136,6 +144,8 @@ private:
     std::map<LIBRARY_TABLE_TYPE, std::unique_ptr<LIBRARY_TABLE>> m_projectTables;
 
     std::map<LIBRARY_TABLE_TYPE, std::unique_ptr<LIBRARY_MANAGER_ADAPTER>> m_adapters;
+
+    static const std::map<LIBRARY_TABLE_TYPE, const std::string&> m_typeToFilenameMap;
 };
 
 

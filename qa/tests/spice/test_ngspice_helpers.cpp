@@ -42,7 +42,6 @@ class TEST_NGSPICE_HELPERS
 {
 public:
     TEST_NGSPICE_HELPERS() :
-            m_manager( true ),
             m_schematic( nullptr ),
             m_exporter( &m_schematic )
     {

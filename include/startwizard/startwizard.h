@@ -1,8 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2023 Mark Roszko <mark.roszko@gmail.com>
- * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright The KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -18,26 +17,29 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef STARTWIZARD_PROVIDER_DATACOLLECTION_H
-#define STARTWIZARD_PROVIDER_DATACOLLECTION_H
+#ifndef STARTWIZARD_H
+#define STARTWIZARD_H
 
-#include <dialogs/panel_data_collection.h>
-#include <startwizard_provider.h>
-#include <memory>
+#include <kicommon.h>
 
-class STARTWIZARD_PROVIDER_DATACOLLECTION : public STARTWIZARD_PROVIDER
+class wxWizard;
+class wxWindow;
+class STARTWIZARD_PROVIDER;
+
+class KICOMMON_API STARTWIZARD
 {
 public:
-    STARTWIZARD_PROVIDER_DATACOLLECTION() : STARTWIZARD_PROVIDER( wxT( "Data Collection" ) ){};
+    STARTWIZARD();
 
-    virtual bool NeedsUserInput() const override;
+    ~STARTWIZARD();
 
-    virtual wxPanel* GetWizardPanel( wxWindow* aParent ) override;
+    void CheckAndRun( wxWindow* parent );
 
-    virtual void Finish() override;
+    STARTWIZARD_PROVIDER* GetProvider( const wxString& aName );
 
 private:
-    std::shared_ptr<PANEL_DATA_COLLECTION_MODEL> m_model;
+    wxWizard* m_wizard;
+    std::vector<std::unique_ptr<STARTWIZARD_PROVIDER>> m_providers;
 };
 
 #endif

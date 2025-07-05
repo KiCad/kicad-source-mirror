@@ -48,9 +48,16 @@ class LOCKFILE;
 class KICOMMON_API SETTINGS_MANAGER
 {
 public:
-    SETTINGS_MANAGER( bool aHeadless = false );
+    SETTINGS_MANAGER();
 
     ~SETTINGS_MANAGER();
+
+    /**
+     * @return true if the settings directory for this version of KiCad exists and has at least a
+     * common settings file (kicad_common.json).  Used to know whether or not the first-run wizard
+     * needs to be shown.
+     */
+    bool SettingsDirectoryValid() const;
 
     /**
      * @return true if settings load was successful
@@ -272,28 +279,11 @@ public:
     wxString GetPathForSettingsFile( JSON_SETTINGS* aSettings );
 
     /**
-     * Handle the initialization of the user settings directory and migration from previous
-     * KiCad versions as needed.
+     * Handle migration of the settings from previous KiCad versions.
      *
-     * This method will check for the existence of the user settings path for this KiCad version.
-     * If it exists, settings load will proceed normally using that path.
-     *
-     * If that directory is empty or does not exist, the migration wizard will be launched, which
-     * will give users the option to migrate settings from a previous KiCad version (if one is
-     * found), manually specify a directory to migrate from, or start with default settings.
-     *
-     * @return true if migration was successful or not necessary, false otherwise.
+     * @return true if migration was successful, false otherwise.
      */
-    bool MigrateIfNeeded();
-
-    /**
-     * Helper for #DIALOG_MIGRATE_SETTINGS to specify a source for migration.
-     *
-     * @param aSource is a directory containing settings files to migrate from (can be empty).
-     */
-    void SetMigrationSource( const wxString& aSource ) { m_migration_source = aSource; }
-
-    void SetMigrateLibraryTables( bool aMigrate = true ) { m_migrateLibraryTables = aMigrate; }
+    bool MigrateFromPreviousVersion( const wxString& aSourcePath );
 
     /**
      * Retrieve the name of the most recent previous KiCad version that can be found in the
@@ -510,9 +500,6 @@ private:
 
 private:
 
-    /// True if running outside a UI context.
-    bool m_headless;
-
     /// The kiway this settings manager interacts with.
     KIWAY* m_kiway;
 
@@ -526,8 +513,6 @@ private:
 
     // Convenience shortcut
     COMMON_SETTINGS* m_common_settings;
-
-    wxString m_migration_source;
 
     /// If true, the symbol and footprint library tables will be migrated from the previous version.
     bool m_migrateLibraryTables;

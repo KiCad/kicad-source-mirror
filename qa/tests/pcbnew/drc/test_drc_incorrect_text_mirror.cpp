@@ -31,7 +31,7 @@
 
 struct DRC_INCORRECT_TEXT_MIRROR_TEST_FIXTURE
 {
-    DRC_INCORRECT_TEXT_MIRROR_TEST_FIXTURE() : m_settingsManager( true /* headless */ ) {}
+    DRC_INCORRECT_TEXT_MIRROR_TEST_FIXTURE() {}
 
     SETTINGS_MANAGER       m_settingsManager;
     std::unique_ptr<BOARD> m_board;

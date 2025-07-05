@@ -22,7 +22,7 @@
 #define STARTWIZARD_PROVIDER_SCHLIB_H
 
 #include <memory>
-#include <startwizard_provider.h>
+#include <../include/startwizard/startwizard_provider.h>
 
 class PANEL_GLOBAL_LIB_TABLE_CONFIG_MODEL;
 

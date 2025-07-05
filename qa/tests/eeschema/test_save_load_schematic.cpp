@@ -45,7 +45,7 @@
 struct SAVE_LOAD_FIXTURE
 {
     SAVE_LOAD_FIXTURE() :
-            m_settingsManager( true /* headless */ )
+            m_settingsManager()
     {
         // Create a temporary project file so we have a valid project name
         wxString tempDir = wxStandardPaths::Get().GetTempDir();

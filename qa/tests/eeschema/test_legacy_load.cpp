@@ -51,7 +51,7 @@ BOOST_AUTO_TEST_SUITE( LegacyLoad )
 
 BOOST_AUTO_TEST_CASE( TestLoadWithLogging )
 {
-    SETTINGS_MANAGER settingsManager( true );
+    SETTINGS_MANAGER settingsManager;
 
     // Create a temporary project
     wxString tempDir = wxStandardPaths::Get().GetTempDir();

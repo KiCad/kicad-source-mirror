@@ -42,7 +42,7 @@
 struct ERC_GROUND_PIN_TEST_FIXTURE
 {
     ERC_GROUND_PIN_TEST_FIXTURE() :
-            m_settingsManager( true /* headless */ )
+            m_settingsManager()
     { }
 
     SETTINGS_MANAGER           m_settingsManager;

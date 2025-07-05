@@ -18,30 +18,38 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "startwizard_provider_datacollection.h"
+#ifndef STARTWIZARD_PROVIDER_H
+#define STARTWIZARD_PROVIDER_H
 
-#include <app_monitor.h>
+#include <wx/string.h>
 
-#include "pgm_base.h"
-#include <settings/common_settings.h>
+class wxWizardPageSimple;
+class wxPanel;
+class wxWindow;
+class STARTWIZARD;
 
-
-wxPanel* STARTWIZARD_PROVIDER_DATACOLLECTION::GetWizardPanel( wxWindow* aParent )
+class STARTWIZARD_PROVIDER
 {
-    m_model = std::make_shared<PANEL_DATA_COLLECTION_MODEL>();
-    return new PANEL_DATA_COLLECTION( m_model, aParent );
-}
+public:
+    STARTWIZARD_PROVIDER( const wxString& aPageName ) : m_pageName( aPageName ) {}
 
+    virtual ~STARTWIZARD_PROVIDER() {}
 
-void STARTWIZARD_PROVIDER_DATACOLLECTION::Finish()
-{
-    APP_MONITOR::SENTRY::Instance()->SetSentryOptIn( m_model->m_enableSentry );
+    virtual wxString Name() const = 0;
 
-    Pgm().GetCommonSettings()->m_DoNotShowAgain.data_collection_prompt = true;
-}
+    virtual bool NeedsUserInput() const { return false; }
 
+    virtual wxPanel* GetWizardPanel( wxWindow* aParent, STARTWIZARD* aWizard ) { return nullptr; }
 
-bool STARTWIZARD_PROVIDER_DATACOLLECTION::NeedsUserInput() const
-{
-    return !Pgm().GetCommonSettings()->m_DoNotShowAgain.data_collection_prompt;
-}
+    const wxString& GetPageName() const { return m_pageName; }
+
+    virtual void Finish() {}
+
+    /// Apply whatever actions and settings should happen if the user cancels the startup wizard
+    virtual void ApplyDefaults() {}
+
+private:
+    wxString m_pageName;
+};
+
+#endif

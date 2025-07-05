@@ -59,7 +59,7 @@ SETTINGS_MANAGER* EESCHEMA_HELPERS::GetSettingsManager()
         }
         else
         {
-            s_SettingsManager = new SETTINGS_MANAGER( true );
+            s_SettingsManager = new SETTINGS_MANAGER();
         }
     }
 
