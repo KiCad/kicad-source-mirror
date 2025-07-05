@@ -247,9 +247,6 @@ int COMMON_CONTROL::Execute( const TOOL_EVENT& aEvent )
     if( execFile.IsEmpty() )
         return 0;
 
-    if( aEvent.Parameter<wxString*>() )
-        param = *aEvent.Parameter<wxString*>();
-
     return Execute( execFile, param );
 }
 
