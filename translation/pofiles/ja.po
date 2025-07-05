@@ -50884,46 +50884,40 @@ msgid "Create bill of materials from board"
 msgstr "基板から 部品表(Bill of materials)を作成"
 
 #: pcbnew/tools/pcb_actions.cpp:1257
-#, fuzzy
 msgid "Export GenCAD..."
-msgstr "GenCADファイルをエクスポート"
+msgstr "GenCADファイルをエクスポート..."
 
 #: pcbnew/tools/pcb_actions.cpp:1258
 msgid "Export GenCAD board representation"
 msgstr "GenCAD ボード表示をエクスポート"
 
 #: pcbnew/tools/pcb_actions.cpp:1264
-#, fuzzy
 msgid "Export VRML..."
-msgstr "VRMLとしてエクスポート"
+msgstr "VRMLとしてエクスポート..."
 
 #: pcbnew/tools/pcb_actions.cpp:1265
 msgid "Export VRML 3D board representation"
 msgstr "VRML 3D ボード表示をエクスポート"
 
 #: pcbnew/tools/pcb_actions.cpp:1271
-#, fuzzy
 msgid "Export IDFv3..."
-msgstr "IDFv3のエクスポート"
+msgstr "IDFv3のエクスポート..."
 
 #: pcbnew/tools/pcb_actions.cpp:1272
 msgid "Export IDF 3D board representation"
 msgstr "IDF 3D ボード表示をエクスポート"
 
 #: pcbnew/tools/pcb_actions.cpp:1278
-#, fuzzy
 msgid "Export STEP/GLB/BREP/XAO/PLY/STL..."
-msgstr "STEP / GLB / BREP / XAO / PLY / STL..."
+msgstr "STEP / GLB / BREP / XAO / PLY / STLをエクスポート..."
 
 #: pcbnew/tools/pcb_actions.cpp:1279
-#, fuzzy
 msgid "Export STEP, GLB, BREP, XAO, PLY or STL 3D board representation"
 msgstr "STEP / GLB / BREP / XAO / PLY / STL 3D 基板表現のエクスポート"
 
 #: pcbnew/tools/pcb_actions.cpp:1285
-#, fuzzy
 msgid "Export Footprint Association (.cmp) File..."
-msgstr "フットプリント関連付け (.cmp) ファイル..."
+msgstr "フットプリント関連付け (.cmp) ファイルをエクスポート..."
 
 #: pcbnew/tools/pcb_actions.cpp:1286
 msgid "Export footprint association file (*.cmp) for schematic back annotation"
@@ -50960,9 +50954,8 @@ msgid "Change via size to previous pre-defined size"
 msgstr "ビア サイズを前の[定義済みのサイズ]の値に切り替えます"
 
 #: pcbnew/tools/pcb_actions.cpp:1332
-#, fuzzy
 msgid "Automatically select track width"
-msgstr "フットプリントを自動配置"
+msgstr "配線幅を自動選択"
 
 #: pcbnew/tools/pcb_actions.cpp:1333
 msgid ""
@@ -51196,9 +51189,8 @@ msgid "Cycle between showing zone fills and just their outlines"
 msgstr "ゾーンの塗りつぶし表示とアウトライン表示を切り替えます"
 
 #: pcbnew/tools/pcb_actions.cpp:1674
-#, fuzzy
 msgid "Automatic zoom"
-msgstr "自動"
+msgstr "自動ズーム"
 
 #: pcbnew/tools/pcb_actions.cpp:1675
 msgid "Automatic Zoom on footprint change"
@@ -51583,14 +51575,12 @@ msgid "Unroutes selected items to the nearest pad."
 msgstr "選択したアイテムから最も近いパッドまでの配線を削除します。"
 
 #: pcbnew/tools/pcb_actions.cpp:2268
-#, fuzzy
 msgid "Unroute Segment"
-msgstr "配線を削除"
+msgstr "セグメントを削除"
 
 #: pcbnew/tools/pcb_actions.cpp:2269
-#, fuzzy
 msgid "Unroutes segment to the nearest segment."
-msgstr "選択したアイテムから最も近いパッドまでの配線を削除します。"
+msgstr "セグメントから最も近いセグメントまでの配線を削除します。"
 
 #: pcbnew/tools/pcb_actions.cpp:2283
 msgid "Select All Tracks in Net"
@@ -51919,36 +51909,32 @@ msgid "Displays tuning pattern properties dialog"
 msgstr "配線の調整のプロパティ ダイアログを表示"
 
 #: pcbnew/tools/pcb_actions.cpp:2685
-#, fuzzy
 msgid "Show wizards selector"
-msgstr "ウィザードが未選択です"
+msgstr "ウィザードのセレクターを表示"
 
 #: pcbnew/tools/pcb_actions.cpp:2686
 msgid "Select wizard script to run"
 msgstr "読み込んで実行するウィザードのスクリプトを選択"
 
 #: pcbnew/tools/pcb_actions.cpp:2692
-#, fuzzy
 msgid "Reset wizard parameters"
-msgstr "ウィザード の パラメーター を既定値へ リセット"
+msgstr "ウィザードのパラメーターをリセット"
 
 #: pcbnew/tools/pcb_actions.cpp:2693
 msgid "Reset wizard parameters to default"
 msgstr "ウィザード の パラメーター を既定値へ リセット"
 
 #: pcbnew/tools/pcb_actions.cpp:2699
-#, fuzzy
 msgid "Select previous wizard page"
-msgstr "前のパラメーター ページを選択"
+msgstr "前のウィザードページを選択"
 
 #: pcbnew/tools/pcb_actions.cpp:2700
 msgid "Select previous parameters page"
 msgstr "前のパラメーター ページを選択"
 
 #: pcbnew/tools/pcb_actions.cpp:2706
-#, fuzzy
 msgid "Select next wizard page"
-msgstr "次のパラメーター ページを選択"
+msgstr "次のウィザードページを選択"
 
 #: pcbnew/tools/pcb_actions.cpp:2707
 msgid "Select next parameters page"
@@ -52012,7 +51998,7 @@ msgstr "不正なクリップボードのデータ"
 #: pcbnew/tools/pcb_control.cpp:1391
 #, c-format
 msgid "Design block %s does not have a board file."
-msgstr "デザイン ブロック % にはボード ファイルがありません。"
+msgstr "デザイン ブロック %s にはボード ファイルがありません。"
 
 #: pcbnew/tools/pcb_control.cpp:1699
 msgid "Error loading board."
