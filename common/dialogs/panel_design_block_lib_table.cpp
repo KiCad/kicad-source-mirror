@@ -461,16 +461,15 @@ PANEL_DESIGN_BLOCK_LIB_TABLE::PANEL_DESIGN_BLOCK_LIB_TABLE( DIALOG_EDIT_LIBRARY_
         }
         else if( !desc.m_IsFile && !desc.m_ExtensionsInDir.empty() )
         {
-            wxString midPart = wxString::Format( _( "folder with %s files" ),
-                                                 joinExts( desc.m_ExtensionsInDir ) );
+            wxString midPart = wxString::Format( _( "folder with %s files" ), joinExts( desc.m_ExtensionsInDir ) );
 
             entryStr << wxString::Format( wxS( " (%s)" ), midPart );
         }
 
         browseMenu->Append( type, entryStr );
 
-        browseMenu->Bind( wxEVT_COMMAND_MENU_SELECTED,
-                          &PANEL_DESIGN_BLOCK_LIB_TABLE::browseLibrariesHandler, this, type );
+        browseMenu->Bind( wxEVT_COMMAND_MENU_SELECTED, &PANEL_DESIGN_BLOCK_LIB_TABLE::browseLibrariesHandler,
+                          this, type );
     }
 
     Layout();
@@ -487,11 +486,11 @@ PANEL_DESIGN_BLOCK_LIB_TABLE::~PANEL_DESIGN_BLOCK_LIB_TABLE()
 
     for( auto& [type, desc] : m_supportedDesignBlockFiles )
     {
-        browseMenu->Unbind( wxEVT_COMMAND_MENU_SELECTED,
-                            &PANEL_DESIGN_BLOCK_LIB_TABLE::browseLibrariesHandler, this, type );
+        browseMenu->Unbind( wxEVT_COMMAND_MENU_SELECTED, &PANEL_DESIGN_BLOCK_LIB_TABLE::browseLibrariesHandler,
+                            this, type );
     }
-    m_browseButton->Unbind( wxEVT_BUTTON, &PANEL_DESIGN_BLOCK_LIB_TABLE::browseLibrariesHandler,
-                            this );
+
+    m_browseButton->Unbind( wxEVT_BUTTON, &PANEL_DESIGN_BLOCK_LIB_TABLE::browseLibrariesHandler, this );
 
     // Delete the GRID_TRICKS.
     // Any additional event handlers should be popped before the window is deleted.
@@ -550,9 +549,8 @@ bool PANEL_DESIGN_BLOCK_LIB_TABLE::verifyTables()
                                             wxYES_NO | wxCENTER | wxICON_QUESTION | wxYES_DEFAULT );
                 badCellDlg.SetExtendedMessage( _( "Empty cells will result in all rows that are "
                                                   "invalid to be removed from the table." ) );
-                badCellDlg.SetYesNoLabels(
-                        wxMessageDialog::ButtonLabel( _( "Remove Invalid Cells" ) ),
-                        wxMessageDialog::ButtonLabel( _( "Cancel Table Update" ) ) );
+                badCellDlg.SetYesNoLabels( wxMessageDialog::ButtonLabel( _( "Remove Invalid Cells" ) ),
+                                           wxMessageDialog::ButtonLabel( _( "Cancel Table Update" ) ) );
 
                 if( badCellDlg.ShowModal() == wxID_NO )
                     return false;
@@ -561,19 +559,19 @@ bool PANEL_DESIGN_BLOCK_LIB_TABLE::verifyTables()
                 // This also updates the UI which could be slow, but there should only be a few
                 // rows to delete, unless the user fell asleep on the Add Row
                 // button.
+                model->GetView()->ClearSelection();
                 model->DeleteRows( r, 1 );
             }
             else if( ( illegalCh = LIB_ID::FindIllegalLibraryNameChar( nick ) ) )
             {
-                msg = wxString::Format( _( "Illegal character '%c' in nickname '%s'." ), illegalCh,
-                                        nick );
+                msg = wxString::Format( _( "Illegal character '%c' in nickname '%s'." ), illegalCh, nick );
 
                 // show the tabbed panel holding the grid we have flunked:
                 if( model != cur_model() )
                     m_notebook->SetSelection( model == global_model() ? 0 : 1 );
 
-                m_cur_grid->MakeCellVisible( r, 0 );
-                m_cur_grid->SetGridCursor( r, 1 );
+                model->GetView()->MakeCellVisible( r, 0 );
+                model->GetView()->SetGridCursor( r, 1 );
 
                 wxWindow* topLevelParent = wxGetTopLevelParent( this );
 
@@ -611,8 +609,7 @@ bool PANEL_DESIGN_BLOCK_LIB_TABLE::verifyTables()
 
                 if( nick1 == nick2 )
                 {
-                    msg = wxString::Format( _( "Multiple libraries cannot share the same "
-                                               "nickname ('%s')." ),
+                    msg = wxString::Format( _( "Multiple libraries cannot share the same nickname ('%s')." ),
                                             nick1 );
 
                     // show the tabbed panel holding the grid we have flunked:
