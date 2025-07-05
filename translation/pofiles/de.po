@@ -37798,7 +37798,7 @@ msgstr "Der Wert für Außenlinien muss positiv sein."
 
 #: pcbnew/dialogs/dialog_outset_items.cpp:183
 msgid "Line width must be a positive value."
-msgstr "Linienbreite muss größer als Null sein."
+msgstr "Linienbreite muss positiv sein."
 
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:26
 msgid "Outset:"
@@ -37847,7 +37847,6 @@ msgstr ""
 "untenstehenden Wert nutzen."
 
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:86
-#, fuzzy
 msgid "Layer Default"
 msgstr "Lagenvoreinstellung"
 
@@ -48475,14 +48474,12 @@ msgid "Soldermask"
 msgstr "Lötstoppmaske"
 
 #: pcbnew/pcb_tablecell.cpp:250
-#, fuzzy
 msgid "Column Width"
-msgstr "Zellbreite"
+msgstr "Spaltenbreite"
 
 #: pcbnew/pcb_tablecell.cpp:255
-#, fuzzy
 msgid "Row Height"
-msgstr "Feldhöhe"
+msgstr "Zeilenhöhe"
 
 #: pcbnew/pcb_target.cpp:151
 msgid "PCB Target"
