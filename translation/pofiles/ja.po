@@ -52010,9 +52010,9 @@ msgid "Invalid clipboard contents"
 msgstr "不正なクリップボードのデータ"
 
 #: pcbnew/tools/pcb_control.cpp:1391
-#, fuzzy, c-format
+#, c-format
 msgid "Design block %s does not have a board file."
-msgstr "デザイン ブロックには回路図またはボード ファイルがありません。"
+msgstr "デザイン ブロック % にはボード ファイルがありません。"
 
 #: pcbnew/tools/pcb_control.cpp:1699
 msgid "Error loading board."
@@ -52041,32 +52041,26 @@ msgid "DP Gap Constraints: %s"
 msgstr "差動ペアのギャップの制約: %s"
 
 #: pcbnew/tools/pcb_control.cpp:1986
-#, fuzzy
 msgid "Resolved Clearance"
 msgstr "解決済みクリアランス"
 
 #: pcbnew/tools/pcb_control.cpp:1996
-#, fuzzy
 msgid "Actual Clearance"
 msgstr "実際のクリアランス"
 
 #: pcbnew/tools/pcb_control.cpp:2039
-#, fuzzy
 msgid "Resolved Hole Clearance"
 msgstr "解決済みの穴のクリアランス"
 
 #: pcbnew/tools/pcb_control.cpp:2044
-#, fuzzy
 msgid "Actual Hole Clearance"
 msgstr "実際の穴のクリアランス"
 
 #: pcbnew/tools/pcb_control.cpp:2079
-#, fuzzy
 msgid "Resolved Edge Clearance"
 msgstr "解決済みのエッジクリアランス"
 
 #: pcbnew/tools/pcb_control.cpp:2084
-#, fuzzy
 msgid "Resolved Margin Clearance"
 msgstr "解決済みのマージンクリアランス"
 
@@ -52080,7 +52074,7 @@ msgstr "選択された 2D 長"
 
 #: pcbnew/tools/pcb_control.cpp:2249
 msgid "Selected 2D Copper Area"
-msgstr "2D 導体レイヤーエリアを選択"
+msgstr "選択された2D 導体レイヤーエリア"
 
 #: pcbnew/tools/pcb_control.cpp:2318
 msgid "BOARD CHARACTERISTICS"
