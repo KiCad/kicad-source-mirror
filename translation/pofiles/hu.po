@@ -23344,40 +23344,32 @@ msgstr "A(z) \"%s\" könyvtár fájl üres."
 #, c-format
 msgid ""
 "Duplicate library nickname '%s' found in symbol library table file line %d"
-msgstr "Ismétlődő \"%s\" könyvtári megnevezés a könyvtártáblázat %d. sorában."
+msgstr "Ismétlődő \"%s\" könyvtári megnevezés a könyvtártáblázat %d. sorában"
 
 #: eeschema/symbol_library.cpp:605 eeschema/symbol_tree_model_adapter.cpp:222
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading symbol library '%s'."
-msgstr ""
-"Hiba történt a(z) %s könyvtár betöltése során.\n"
-"\n"
-"%s"
+msgstr "Hiba történt a(z) %s rajzjel könyvtár betöltése során."
 
 #: eeschema/symbol_library_manager.cpp:84
 #: eeschema/symbol_tree_model_adapter.cpp:109
 #: eeschema/symbol_viewer_frame.cpp:307
-#, fuzzy
 msgid "Errors loading symbols:"
-msgstr ""
-"Hiba a nyákterv betöltése során.\n"
-"%s"
+msgstr "Hiba a rajzjelek betöltése közben:"
 
 #: eeschema/symbol_library_manager.cpp:164
-#, fuzzy, c-format
+#, c-format
 msgid "Library '%s' not found in the Symbol Library Table."
-msgstr "A könyvtár nem található a könyvtártáblázatban."
+msgstr "A(z) \"%s\" könyvtár nem található a könyvtártáblázatban."
 
 #: eeschema/symbol_library_manager.cpp:423
-#, fuzzy
 msgid "Symbol not found."
 msgstr "A rajzjel nem található."
 
 #: eeschema/symbol_library_manager.cpp:642
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot load symbol '%s' from library '%s'."
-msgstr ""
-"Hiba történt a(z) '%s' rajzjel '%s' könyvtárból történő betöltése során."
+msgstr "Nem sikerült betölteni a(z) '%s' rajzjelet a(z) '%s' könyvtárból."
 
 #: eeschema/symbol_library_manager.cpp:801
 #, fuzzy, c-format
@@ -23403,24 +23395,20 @@ msgstr ""
 
 #: eeschema/symbol_library_manager.cpp:1010
 #: eeschema/tools/sch_editor_control.cpp:460
-#, fuzzy, c-format
+#, c-format
 msgid "Error saving symbol %s to library '%s'."
-msgstr ""
-"Hiba történt a(z) '%s' rajzjel '%s' könyvtárból történő betöltése során."
+msgstr "Hiba történt a(z) '%s' rajzjel '%s' könyvtárba történő mentése során."
 
 #: eeschema/symbol_tree_synchronizing_adapter.cpp:273
-#, fuzzy
 msgid "(failed to load)"
-msgstr "(betöltése sikertelen)"
+msgstr "(betöltés sikertelen)"
 
 #: eeschema/symbol_viewer_frame.cpp:111
-#, fuzzy
 msgid "KiCad Symbol Library Browser"
-msgstr "Könyvtár böngésző"
+msgstr "KiCad Rajzjel Könyvtár Böngésző"
 
 #: eeschema/symbol_viewer_frame.cpp:1109 pcbnew/footprint_viewer_frame.cpp:1026
 #: pcbnew/footprint_viewer_frame.cpp:1031
-#, fuzzy
 msgid "[no library selected]"
 msgstr "[nincs könyvtár kiválasztva]"
 
@@ -23437,12 +23425,10 @@ msgid "Synchronize sheet pins and hierarchical labels"
 msgstr "Meglévő elem átváltoztatása hierarchikus címkévé"
 
 #: eeschema/sync_sheet_pin/panel_sync_sheet_pins_base.cpp:24
-#, fuzzy
 msgid "Symbol name"
-msgstr "Rajzjel neve:"
+msgstr "Rajzjel neve"
 
 #: eeschema/sync_sheet_pin/panel_sync_sheet_pins_base.cpp:34
-#, fuzzy
 msgid "Add Hierarchical Labels"
 msgstr "Hierarchikus címke hozzáadása"
 
@@ -23461,9 +23447,8 @@ msgid "Add Sheet Pins"
 msgstr "Lap kivezető láb hozzáadása"
 
 #: eeschema/sync_sheet_pin/panel_sync_sheet_pins_base.cpp:72
-#, fuzzy
 msgid "Delete Hierarchical Labels"
-msgstr "Hierarchikus címke"
+msgstr "Hierarchikus címke törlése"
 
 #: eeschema/sync_sheet_pin/panel_sync_sheet_pins_base.cpp:99
 #, fuzzy
@@ -23491,9 +23476,8 @@ msgid "Display next symbol"
 msgstr "Következő rajzjel megjelenítése"
 
 #: eeschema/toolbars_symbol_viewer.cpp:109
-#, fuzzy
 msgid "Symbol Viewer"
-msgstr "A rajzjel néző"
+msgstr "Rajzjel Nézegető"
 
 #: eeschema/tools/assign_footprints.cpp:207
 #, fuzzy
@@ -23521,9 +23505,8 @@ msgid "Select the footprint field visibility setting."
 msgstr "Válassza ki az alkatrészrajzolat mező láthatóságot."
 
 #: eeschema/tools/assign_footprints.cpp:223
-#, fuzzy
 msgid "Change Visibility"
-msgstr "A láthatóság módosítása"
+msgstr "Láthatóság módosítása"
 
 #: eeschema/tools/assign_footprints.cpp:233
 #, fuzzy, c-format
@@ -23584,11 +23567,11 @@ msgstr "A(z) \"%s\" könyvtár már létezik"
 
 #: eeschema/tools/backannotate.cpp:382
 msgid "true"
-msgstr ""
+msgstr "igaz"
 
 #: eeschema/tools/backannotate.cpp:382
 msgid "false"
-msgstr ""
+msgstr "hamis"
 
 #: eeschema/tools/backannotate.cpp:390
 #, fuzzy, c-format
@@ -23661,7 +23644,6 @@ msgid "Show the electrical rules checker window"
 msgstr "A tervezési szabályok ellenőrző ablakának megjelenítése"
 
 #: eeschema/tools/sch_actions.cpp:54
-#, fuzzy
 msgid "Symbol Checker"
 msgstr "Rajzjel ellenőrző"
 
@@ -23685,13 +23667,11 @@ msgid "Show simulation window for running SPICE or IBIS simulations."
 msgstr ""
 
 #: eeschema/tools/sch_actions.cpp:84 pcbnew/tools/pcb_actions.cpp:1978
-#, fuzzy
 msgid "Create Corner"
 msgstr "Sarok létrehozása"
 
 #: eeschema/tools/sch_actions.cpp:90 eeschema/tools/sch_point_editor.cpp:1391
 #: pcbnew/tools/pcb_actions.cpp:1985
-#, fuzzy
 msgid "Remove Corner"
 msgstr "Sarok eltávolítása"
 
@@ -23751,7 +23731,6 @@ msgstr "Kattintson duplán a rajzjel kiválasztásához a könyvtár böngésző
 
 #: eeschema/tools/sch_actions.cpp:177 eeschema/tools/sch_actions.cpp:736
 #: pcbnew/tools/pcb_actions.cpp:677
-#, fuzzy
 msgid "Properties..."
 msgstr "Tulajdonságok..."
 
@@ -23761,17 +23740,14 @@ msgid "Edit properies of design block"
 msgstr "A(z) \"%s\" fájlt nem lehet betölteni"
 
 #: eeschema/tools/sch_actions.cpp:188
-#, fuzzy
 msgid "Save Library As..."
-msgstr "Rajzjel könyvtár mentése másként..."
+msgstr "Könyvtár mentése másként..."
 
 #: eeschema/tools/sch_actions.cpp:189
-#, fuzzy
 msgid "Save the current library to a new file"
-msgstr "Aktuális könyvtár egy új fájlba mentése."
+msgstr "Aktuális könyvtár mentése új fájlba"
 
 #: eeschema/tools/sch_actions.cpp:195
-#, fuzzy
 msgid "New Symbol..."
 msgstr "Új rajzjel..."
 
@@ -23784,12 +23760,10 @@ msgid "Derive from Existing Symbol..."
 msgstr "Származtatás meglévő rajzjelből..."
 
 #: eeschema/tools/sch_actions.cpp:203
-#, fuzzy
 msgid "Create a new symbol, derived from an existing symbol"
-msgstr "Törli az extra egységeket a rajzjelből?"
+msgstr "Új rajzjel létrehozása, másik rajzjelből származtatva"
 
 #: eeschema/tools/sch_actions.cpp:209
-#, fuzzy
 msgid "Edit Symbol"
 msgstr "Rajzjel Szerkesztése"
 
@@ -23799,14 +23773,12 @@ msgid "Show selected symbol on editor canvas"
 msgstr "Rajzjel kiválasztása böngészővel"
 
 #: eeschema/tools/sch_actions.cpp:216
-#, fuzzy
 msgid "Duplicate Symbol"
 msgstr "Rajzjel Duplikálása"
 
 #: eeschema/tools/sch_actions.cpp:222
-#, fuzzy
 msgid "Rename Symbol..."
-msgstr "Rajzjelek Átnevezése..."
+msgstr "Rajzjel Átnevezése..."
 
 #: eeschema/tools/sch_actions.cpp:229
 #, fuzzy
@@ -23828,29 +23800,24 @@ msgid "Remove the selected symbol from its library"
 msgstr "Kattintson duplán a rajzjel kiválasztásához a könyvtár böngészőjéből"
 
 #: eeschema/tools/sch_actions.cpp:261
-#, fuzzy
 msgid "Paste Symbol"
 msgstr "Rajzjel beillesztése"
 
 #: eeschema/tools/sch_actions.cpp:267
-#, fuzzy
 msgid "Import Symbol..."
 msgstr "Rajzjel importálása..."
 
 #: eeschema/tools/sch_actions.cpp:268
-#, fuzzy
 msgid "Import a symbol to the current library"
 msgstr "Rajzjel importálása az aktuális könyvtárba"
 
 #: eeschema/tools/sch_actions.cpp:274
-#, fuzzy
 msgid "Export..."
-msgstr "Exportolás..."
+msgstr "Exportálás..."
 
 #: eeschema/tools/sch_actions.cpp:275
-#, fuzzy
 msgid "Export a symbol to a new library file"
-msgstr "Rajzjel importálása az új könyvtárba"
+msgstr "Rajzjel exportálása egy új könyvtár fájlba"
 
 #: eeschema/tools/sch_actions.cpp:281
 #, fuzzy
@@ -23863,7 +23830,6 @@ msgid "Update symbol to match changes made in parent symbol"
 msgstr "Rajzjel frissítése a könyvtárból"
 
 #: eeschema/tools/sch_actions.cpp:288
-#, fuzzy
 msgid "Set Unit Display Name..."
 msgstr "Egység megjelenített nevének beállítása..."
 
@@ -23873,9 +23839,8 @@ msgid "Set the display name for a particular unit in a multi-unit symbol"
 msgstr "szükség van egy számra a(z) \"%s\" számára"
 
 #: eeschema/tools/sch_actions.cpp:294
-#, fuzzy
 msgid "Add Symbol to Schematic"
-msgstr "Rajzjel beillesztése a kapcsolási rajzba"
+msgstr "Rajzjel hozzáadása a kapcsolási rajzhoz"
 
 #: eeschema/tools/sch_actions.cpp:295
 #, fuzzy
@@ -23903,7 +23868,6 @@ msgid "Annotate pins with their numbers"
 msgstr "Lábak sorszámozása elektromos típusaik alapján"
 
 #: eeschema/tools/sch_actions.cpp:315
-#, fuzzy
 msgid "Export View as PNG..."
 msgstr "Aktuális nézet exportálása PNG fájlba..."
 
