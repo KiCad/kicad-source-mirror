@@ -1153,10 +1153,8 @@ void SCH_FIELD::Rotate( const VECTOR2I& aCenter, bool aRotateCCW )
     }
     else
     {
-        wxASSERT_MSG(
-                false,
-                wxString::Format( wxT( "SCH_FIELD text angle is not horizontal or vertical: %d" ),
-                                  GetTextAngle().AsDegrees() ) );
+        wxFAIL_MSG( wxString::Format( wxT( "SCH_FIELD text angle is not horizontal or vertical: %f" ),
+                                      GetTextAngle().AsDegrees() ) );
     }
 
     VECTOR2I pt = GetPosition();
