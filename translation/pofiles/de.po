@@ -31,10 +31,10 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-03 20:15+0300\n"
-"PO-Revision-Date: 2025-07-03 17:15+0000\n"
+"PO-Revision-Date: 2025-07-05 22:37+0000\n"
 "Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
-"Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
-"source/de/>\n"
+"Language-Team: German <https://hosted.weblate.org/projects/kicad/"
+"master-source/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -17637,9 +17637,9 @@ msgstr "Konnte Ausgabeverzeichnis \"%s\" nicht erstellen."
 
 #: eeschema/eeschema_jobs_handler.cpp:1004 pcbnew/pcbnew_jobs_handler.cpp:1267
 #: pcbnew/pcbnew_jobs_handler.cpp:1913
-#, fuzzy, c-format
+#, c-format
 msgid "Exporting %s"
-msgstr "Importiere %s"
+msgstr "Exportiere %s"
 
 #: eeschema/eeschema_jobs_handler.cpp:1034 pcbnew/pcbnew_jobs_handler.cpp:1790
 msgid "Output path must not conflict with existing path\n"
@@ -25309,9 +25309,9 @@ msgstr "Keine Symbolbibliothek gewählt."
 #: eeschema/tools/symbol_editor_control.cpp:263
 #: eeschema/tools/symbol_editor_control.cpp:413
 #: eeschema/tools/symbol_editor_control.cpp:457
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol library '%s' not found."
-msgstr "Bauteilbibliothek nicht gefunden."
+msgstr "Symbolbibliothek \"%s\" nicht gefunden."
 
 #: eeschema/tools/symbol_editor_control.cpp:349
 #: pcbnew/tools/footprint_editor_control.cpp:650
@@ -27073,12 +27073,12 @@ msgid "Export utilities (Gerbers, drill, position files, etc)"
 msgstr "Export-Werkzeuge (Gerber-, Bohr-, Positionsdateien, etc.)"
 
 #: kicad/cli/command_pcb_export_3d.cpp:78
-#, fuzzy
 msgid ""
 "Output file format, options: step, stepz, brep, xao, glb (binary glTF), ply, "
 "stl"
 msgstr ""
-"Ausgabedateiformat, Optionen: step, brep, xao, glb (binäres glTF), ply, stl"
+"Ausgabedateiformat, Optionen: step, stepz, brep, xao, glb (binäres glTF), "
+"ply, stl"
 
 #: kicad/cli/command_pcb_export_3d.cpp:83
 msgid "Overwrite output file"
@@ -28130,7 +28130,6 @@ msgid "Last run failed"
 msgstr "Letzter Lauf fehlgeschlagen"
 
 #: kicad/dialogs/panel_jobset.cpp:272 kicad/dialogs/panel_jobset.cpp:993
-#, fuzzy
 msgid "Running Jobs"
 msgstr "Führe Aufträge aus"
 
@@ -28338,9 +28337,9 @@ msgid "Import EasyEDA Pro Project"
 msgstr "EasyEDA Pro-Projekt importieren"
 
 #: kicad/jobs_runner.cpp:258
-#, fuzzy, c-format
+#, c-format
 msgid "Running job %d: %s"
-msgstr "Führe Aufträge aus"
+msgstr "Führe Auftrag %d aus: %s"
 
 #: kicad/jobs_runner.cpp:302
 msgid "Job successful"
@@ -28388,9 +28387,8 @@ msgid "Export STL"
 msgstr "STL exportieren"
 
 #: kicad/kicad_cli.cpp:129
-#, fuzzy
 msgid "Export STEPZ"
-msgstr "STEP exportieren"
+msgstr "STEPZ exportieren"
 
 #: kicad/kicad_cli.cpp:151
 msgid "Export PS"
@@ -35623,7 +35621,7 @@ msgstr "STL"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:27
 msgid "STPZ"
-msgstr ""
+msgstr "STPZ"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:56
 msgid "Board Options"
@@ -37795,12 +37793,10 @@ msgid "Non Copper Zone Properties"
 msgstr "Nicht-Kupfer-Zonen-Eigenschaften"
 
 #: pcbnew/dialogs/dialog_outset_items.cpp:174
-#, fuzzy
 msgid "Outset must be a positive value."
-msgstr "(Pad muss eine positive Größe haben.)"
+msgstr "Der Wert für Außenlinien muss positiv sein."
 
 #: pcbnew/dialogs/dialog_outset_items.cpp:183
-#, fuzzy
 msgid "Line width must be a positive value."
 msgstr "Linienbreite muss größer als Null sein."
 
@@ -44509,22 +44505,22 @@ msgstr ""
 "Keine gültige Platinenbestückung; kann Ausgabedatei \"%s\" nicht erstellen.\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2375
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot create input stream '%s'.\n"
-msgstr "Kann das Ausgabeverzeichnis \"%s\" nicht erstellen."
+msgstr "Kann Eingangsdatenstrom \"%s\" nicht erstellen.\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2381
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot create output stream '%s'.\n"
-msgstr "Kann das Ausgabeverzeichnis \"%s\" nicht erstellen."
+msgstr "Kann Ausgangsdatenstrom \"%s\" nicht erstellen.\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2389
 msgid "Impossible create compress stream"
-msgstr ""
+msgstr "Es war nicht möglich einen komprimierten Datenstrom zu erstellen"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2397
 msgid "Compress read or write error"
-msgstr ""
+msgstr "Lese- oder Schreibfehler während der Kompression"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2432
 msgid "Failed to set STEP product name, but will attempt to continue."
@@ -50618,9 +50614,8 @@ msgid "Creates tracks from the selected graphic lines"
 msgstr "Erzeugt Leiterbahnen aus den ausgewählten Grafiklinien"
 
 #: pcbnew/tools/pcb_actions.cpp:97
-#, fuzzy
 msgid "Create Outsets from Selection..."
-msgstr "Außenlinien für Auswahl erzeugen"
+msgstr "Außenlinien für Auswahl erzeugen ..."
 
 #: pcbnew/tools/pcb_actions.cpp:98
 msgid "Create outset lines from the selected item"
