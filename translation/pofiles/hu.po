@@ -23388,12 +23388,11 @@ msgstr "Kérjük, töltse ki a kötelező mezőket"
 #: eeschema/sim/spice_value.cpp:417
 #, c-format
 msgid "'%s' is not a valid SPICE value."
-msgstr "A(z) \"%s\" nem egy érvényes SPICE érték."
+msgstr "\"%s\" nem egy érvényes SPICE érték."
 
 #: eeschema/sim/toolbars_simulator_frame.cpp:176
-#, fuzzy
 msgid "&Simulation"
-msgstr "Szimulátor"
+msgstr "&Szimuláció"
 
 #: eeschema/sim/user_defined_signals_help_md.h:2
 msgid ""
@@ -23433,6 +23432,41 @@ msgid ""
 "    aunif(nom, avar)\n"
 "    limit(nom, avar)\n"
 msgstr ""
+"SPICE függvények:\n"
+"\n"
+"    sqrt(x)\n"
+"    sin(x)\n"
+"    cos(x)\n"
+"    tan(x)\n"
+"    sinh(x)\n"
+"    cosh(x)\n"
+"    tanh(x)\n"
+"    asin(x)\n"
+"    acos(x)\n"
+"    atan(x)\n"
+"    asinh(x)\n"
+"    acosh(x)\n"
+"    atanh(x)\n"
+"    arctan(x)\n"
+"    exp(x)\n"
+"    ln(x)\n"
+"    log(x)\n"
+"    abs(x)\n"
+"    nint(x)\n"
+"    int(x)\n"
+"    floor(x)\n"
+"    ceil(x)\n"
+"    pow(x, y)\n"
+"    pwr(x, y)\n"
+"    min(x, y)\n"
+"    max(x, y)\n"
+"    sgn(x)\n"
+"    ternary_fcn(x, y, z)\n"
+"    gauss(nom, rvar, sigma)\n"
+"    agauss(nom, avar, sigma)\n"
+"    unif(nom, rvar)\n"
+"    aunif(nom, avar)\n"
+"    limit(nom, avar)\n"
 
 #: eeschema/symbol_async_loader.cpp:108
 #, c-format
@@ -23440,13 +23474,13 @@ msgid "Loading library %s..."
 msgstr "A(z) %s könyvtár betöltése..."
 
 #: eeschema/symbol_async_loader.cpp:122 eeschema/symbol_async_loader.cpp:130
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error loading symbol library %s.\n"
 "\n"
 "%s\n"
 msgstr ""
-"Hiba történt a(z) %s könyvtár betöltése során.\n"
+"Hiba történt a(z) %s rajzjel könyvtár betöltése közben.\n"
 "\n"
 "%s\n"
 
@@ -23590,9 +23624,8 @@ msgstr ""
 "<b>Rácshoz nem illeszkedő láb %s</b> \"%s\" a <b>(%.3f, %.3f)</b> pozícióban"
 
 #: eeschema/symbol_chooser_frame.cpp:71
-#, fuzzy
 msgid "Symbol Chooser"
-msgstr "Rajzjel ellenőrző"
+msgstr "Rajzjel választó"
 
 #: eeschema/symbol_diff_frame.cpp:62
 #, fuzzy
@@ -23624,35 +23657,29 @@ msgstr ""
 
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:70
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:79
-#, fuzzy
 msgid "Symbol..."
 msgstr "Rajzjel..."
 
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:80
-#, fuzzy
 msgid "View as PNG..."
 msgstr "Megtekintés PNG-ként..."
 
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:81
-#, fuzzy
 msgid "Symbol as SVG..."
 msgstr "Rajzjel SVG fájlként..."
 
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:88
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:109
-#, fuzzy
 msgid "Library Editor"
 msgstr "Könyvtár szerkesztő"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:123
-#, fuzzy
 msgid "KiCad Symbol Editor"
 msgstr "KiCad Rajzjel szerkesztő"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:150
 #: eeschema/symbol_tree_model_adapter.cpp:73
 #: eeschema/symbol_viewer_frame.cpp:277
-#, fuzzy
 msgid "Load Symbol Libraries"
 msgstr "Rajzjel könyvtárak betöltése"
 
@@ -23662,9 +23689,8 @@ msgid "Library changes are unsaved"
 msgstr "Papírelrendezés fájlok"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:282
-#, fuzzy
 msgid "Symbol library loading canceled by user."
-msgstr "A(z) \"%s\" könyvtár már létezik"
+msgstr "Rajzjel könyvtár betöltése megszakítva."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:910
 #, fuzzy, c-format
@@ -23686,7 +23712,6 @@ msgid ""
 msgstr ""
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:930
-#, fuzzy
 msgid "Manage symbol libraries"
 msgstr "Rajzjel könyvtárak kezelése"
 
@@ -23717,21 +23742,19 @@ msgid "Select type of item to save"
 msgstr "Rajzjelkönyvtár / alkatrészkönyvtár kiválasztása"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:987
-#, fuzzy
 msgid "Copy symbol"
-msgstr "Rajzjelek csoportosítása"
+msgstr "Rajzjel másolása"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:988
-#, fuzzy
 msgid "Copy library"
-msgstr "könyvtár"
+msgstr "Könyvtár másolása"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1099
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1150
 #: eeschema/tools/sch_editor_control.cpp:408
-#, fuzzy, c-format
+#, c-format
 msgid "Library '%s' already exists."
-msgstr "A(z) \"%s\" könyvtár már létezik"
+msgstr "A(z) \"%s\" könyvtár már létezik."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1107
 #, fuzzy, c-format
@@ -23744,18 +23767,16 @@ msgstr ""
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1118
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1156
-#, fuzzy
 msgid "Could not open the library file."
 msgstr "A könyvtár fájlt nem lehet megnyitni."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1237
 #: eeschema/symbol_library.cpp:523
-#, fuzzy
 msgid "Loading Symbol Libraries"
 msgstr "Rajzjel könyvtárak betöltése"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1243
-#, fuzzy, c-format
+#, c-format
 msgid "Loading library '%s'..."
 msgstr "A(z) '%s' könyvtár betöltése..."
 
