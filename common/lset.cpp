@@ -223,9 +223,10 @@ wxString LSET::Name( PCB_LAYER_ID aLayerId )
     case Rescue:            txt = wxT( "Rescue" );          break;
 
     default:
-
         if( aLayerId < 0 )
+        {
             txt = wxT( "UNDEFINED" );
+        }
         else if( static_cast<int>( aLayerId ) & 1 )
         {
             int offset = ( aLayerId - Rescue ) / 2;
@@ -236,8 +237,6 @@ wxString LSET::Name( PCB_LAYER_ID aLayerId )
             int offset = ( aLayerId - B_Cu ) / 2;
             txt = wxString::Format( wxT( "In%d.Cu" ), offset );
         }
-
-
     }
 
     return txt;
