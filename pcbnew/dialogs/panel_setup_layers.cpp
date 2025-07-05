@@ -898,7 +898,7 @@ bool PANEL_SETUP_LAYERS::TransferDataFromWindow()
 
     // Delete all objects on layers that have been removed.  Leaving them in copper layers
     // can (will?) result in DRC errors and it pollutes the board file with cruft.
-    bool hasRemovedBoardItems = false;
+    bool hasRemovedBoardItemLayers = false;
 
     if( !removedLayers.empty() )
     {
@@ -924,7 +924,6 @@ bool PANEL_SETUP_LAYERS::TransferDataFromWindow()
                 if( item->Type() == PCB_FOOTPRINT_T )
                     continue;
 
-                // Vias are also specific
                 // Note: vias are specific. They are only on copper layers,  and
                 // do not use a layer set, only store the copper top and the copper bottom.
                 // So reinit the layer set does not work with vias
@@ -933,29 +932,34 @@ bool PANEL_SETUP_LAYERS::TransferDataFromWindow()
                     PCB_VIA* via = static_cast<PCB_VIA*>( item );
 
                     if( via->GetViaType() == VIATYPE::THROUGH )
+                    {
+                        hasRemovedBoardItemLayers = true;
                         continue;
-                    else
+                    }
+                    else if( via->IsOnLayer( layer_id ) )
                     {
                         PCB_LAYER_ID top_layer;
                         PCB_LAYER_ID bottom_layer;
                         via->LayerPair( &top_layer, &bottom_layer );
 
-                        if( top_layer != layer_id && bottom_layer != layer_id )
-                            continue;
+                        if( top_layer == layer_id || bottom_layer == layer_id )
+                        {
+                            // blind/buried vias with a top or bottom layer on a removed layer
+                            // are removed. Perhaps one could just modify the top/bottom layer,
+                            // but I am not sure this is better.
+                            m_pcb->Remove( item );
+                            delete item;
+                            modified = true;
+                        }
+
+                        hasRemovedBoardItemLayers = true;
                     }
-                    // blind/buried vias with a top or bottom layer on a removed layer
-                    // are removed. Perhaps one could just modify the top/bottom layer,
-                    // but I am not sure this is better.
-                    m_pcb->Remove( item );
-                    delete item;
                 }
-                else
+                else if( item->IsOnLayer( layer_id ) )
                 {
-                    LSET        layers = item->GetLayerSet();
+                    LSET layers = item->GetLayerSet();
 
                     layers.reset( layer_id );
-                    hasRemovedBoardItems = true;
-                    modified = true;
 
                     if( layers.any() )
                     {
@@ -965,7 +969,10 @@ bool PANEL_SETUP_LAYERS::TransferDataFromWindow()
                     {
                         m_pcb->Remove( item );
                         delete item;
+                        modified = true;
                     }
+
+                    hasRemovedBoardItemLayers = true;
                 }
             }
         }
@@ -978,7 +985,7 @@ bool PANEL_SETUP_LAYERS::TransferDataFromWindow()
 
     // If some board items are deleted: Rebuild the connectivity, because it is likely some
     // tracks and vias were removed
-    if( hasRemovedBoardItems )
+    if( hasRemovedBoardItemLayers )
         m_pcb->BuildConnectivity();
 
     if( modified )
