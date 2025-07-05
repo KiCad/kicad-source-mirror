@@ -179,10 +179,7 @@ std::vector<double> NGSPICE::GetRealVector( const std::string& aName, int aMaxLe
         else if( vi->v_compdata )
         {
             for( int i = 0; i < length; i++ )
-            {
-                wxASSERT( vi->v_compdata[i].cx_imag == 0.0 );
                 data.push_back( vi->v_compdata[i].cx_real );
-            }
         }
     }
 
