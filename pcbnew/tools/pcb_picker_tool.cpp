@@ -264,6 +264,10 @@ int PCB_PICKER_TOOL::SelectPointInteractively( const TOOL_EVENT& aEvent )
         params.m_Receiver->UpdatePickedPoint( aPoint );
     };
 
+    SetSnapping( true );
+    SetCursor( KICURSOR::PLACE );
+    ClearHandlers();
+
     SetClickHandler(
             [&]( const VECTOR2D& aPoint ) -> bool
             {
@@ -324,6 +328,10 @@ int PCB_PICKER_TOOL::SelectItemInteractively( const TOOL_EVENT& aEvent )
         statusPopup.Hide();
         params.m_Receiver->UpdatePickedItem( aItem );
     };
+
+    SetCursor( KICURSOR::BULLSEYE );
+    SetSnapping( false );
+    ClearHandlers();
 
     SetClickHandler(
             [&]( const VECTOR2D& aPoint ) -> bool

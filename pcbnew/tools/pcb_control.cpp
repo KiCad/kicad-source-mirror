@@ -732,6 +732,9 @@ int PCB_CONTROL::GridPlaceOrigin( const TOOL_EVENT& aEvent )
         // Deactivate other tools; particularly important if another PICKER is currently running
         Activate();
 
+        picker->SetCursor( KICURSOR::PLACE );
+        picker->ClearHandlers();
+
         picker->SetClickHandler(
                 [this]( const VECTOR2D& pt ) -> bool
                 {
@@ -772,6 +775,8 @@ int PCB_CONTROL::InteractiveDelete( const TOOL_EVENT& aEvent )
     Activate();
 
     picker->SetCursor( KICURSOR::REMOVE );
+    picker->SetSnapping( false );
+    picker->ClearHandlers();
 
     picker->SetClickHandler(
             [this]( const VECTOR2D& aPosition ) -> bool

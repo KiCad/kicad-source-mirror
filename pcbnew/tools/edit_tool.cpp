@@ -3201,6 +3201,8 @@ bool EDIT_TOOL::pickReferencePoint( const wxString& aTooltip, const wxString& aS
 
     /// This allow the option of snapping in the tool
     picker->SetSnapping( true );
+    picker->SetCursor( KICURSOR::PLACE );
+    picker->ClearHandlers();
 
     const auto setPickerLayerSet =
             [&]()

@@ -1908,6 +1908,8 @@ int BOARD_INSPECTION_TOOL::LocalRatsnestTool( const TOOL_EVENT& aEvent )
     Activate();
 
     picker->SetCursor( KICURSOR::BULLSEYE );
+    picker->SetSnapping( false );
+    picker->ClearHandlers();
 
     picker->SetClickHandler(
             [this, board]( const VECTOR2D& pt ) -> bool
