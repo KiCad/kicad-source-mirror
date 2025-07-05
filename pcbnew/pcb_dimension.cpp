@@ -446,7 +446,7 @@ wxString PCB_DIMENSION_BASE::GetValueText() const
         {
             text.RemoveLast();
 
-            if( text.Last() == '.' || text.Last() == sep )
+            if( text.EndsWith( '.' ) || text.EndsWith( sep ) )
             {
                 text.RemoveLast();
                 break;
