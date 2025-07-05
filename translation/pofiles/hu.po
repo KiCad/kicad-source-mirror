@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-03 20:16+0300\n"
-"PO-Revision-Date: 2025-07-02 22:11+0000\n"
+"PO-Revision-Date: 2025-07-05 22:37+0000\n"
 "Last-Translator: Sárkány Lőrinc <lsarkany@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/kicad/v9/hu/>\n"
 "Language: hu\n"
@@ -22157,30 +22157,27 @@ msgstr ""
 #: pcbnew/dialogs/dialog_board_statistics.cpp:696
 #: pcbnew/dialogs/dialog_board_statistics.cpp:697
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1467
-#, fuzzy
 msgid "unknown"
 msgstr "ismeretlen"
 
 #: eeschema/sim/sim_lib_mgr.cpp:320
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error loading simulation model: could not find base model '%s' in library "
 "'%s'"
 msgstr ""
-"Hiba történt a(z) '%s' rajzjel '%s' könyvtárból történő betöltése során."
+"Hiba a szimulációs modell betöltése közben: nem található a(z) %s alapmodell "
+"a(z) %s könyvtárban"
 
 #: eeschema/sim/sim_library_ibis.cpp:39 eeschema/sim/sim_model_ibis.cpp:81
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid IBIS file '%s'"
-msgstr "Érvénytelen rajzjel könyvtár azonosító"
+msgstr "Érvénytelen IBIS fájl %s"
 
 #: eeschema/sim/sim_model.cpp:413
-#, fuzzy, c-format
+#, c-format
 msgid "No simulation model definition found for symbol '%s'."
-msgstr ""
-"Hiba történt a(z) %s könyvtár betöltése során.\n"
-"\n"
-"%s"
+msgstr "Nem található szimulációs modell a(z) %s rajzjelhez."
 
 #: eeschema/sim/sim_model.cpp:420
 #, fuzzy
@@ -22279,41 +22276,37 @@ msgstr "Forrpontok száma"
 
 #: eeschema/sim/sim_model_ibis.cpp:471
 msgid "Bitrate"
-msgstr ""
+msgstr "Bitráta"
 
 #: eeschema/sim/sim_model_ibis.cpp:487
-#, fuzzy
 msgid "Number of bits"
-msgstr "Részegységek száma:"
+msgstr "Bitek száma"
 
 #: eeschema/sim/sim_plot_tab.cpp:324
-#, fuzzy, c-format
+#, c-format
 msgid "%d"
-msgstr "%"
+msgstr "%d"
 
 #: eeschema/sim/sim_plot_tab.cpp:586
-#, fuzzy
 msgid "Amplitude"
-msgstr "Amplitúdó:"
+msgstr "Amplitúdó"
 
 #: eeschema/sim/sim_plot_tab.cpp:618
 msgid "Noise (V/√Hz)"
-msgstr ""
+msgstr "Feszültségzaj (V/√Hz)"
 
 #: eeschema/sim/sim_plot_tab.cpp:621
 msgid "Noise (A/√Hz)"
-msgstr ""
+msgstr "Áramzaj (A/√Hz)"
 
 #: eeschema/sim/sim_plot_tab.cpp:638
-#, fuzzy
 msgid "Intensity"
-msgstr "Aktuális gyorsbillentyű:"
+msgstr "Intenzitás"
 
 #: eeschema/sim/sim_plot_tab.cpp:673 eeschema/sim/sim_plot_tab.cpp:786
 #: eeschema/widgets/search_handlers.cpp:247
-#, fuzzy
 msgid "Power"
-msgstr "Tápszimbólum hozzáadása"
+msgstr "Teljesítmény"
 
 #: eeschema/sim/sim_plot_tab.cpp:728
 #, fuzzy
@@ -22367,9 +22360,8 @@ msgid ""
 msgstr ""
 
 #: eeschema/sim/simulator_frame.cpp:348
-#, fuzzy
 msgid "SPICE Simulator"
-msgstr "Szimulátor..."
+msgstr "SPICE Szimulátor"
 
 #: eeschema/sim/simulator_frame.cpp:372 eeschema/tools/simulator_control.cpp:84
 #, fuzzy
@@ -22477,9 +22469,8 @@ msgstr "Jelek"
 #: eeschema/sim/simulator_frame_ui.cpp:770
 #: eeschema/sim/simulator_frame_ui.cpp:876
 #: eeschema/sim/simulator_frame_ui.cpp:1046
-#, fuzzy
 msgid " (amplitude)"
-msgstr "Amplitúdó:"
+msgstr " (amplitudó)"
 
 #: eeschema/sim/simulator_frame_ui.cpp:274
 #, fuzzy, c-format
@@ -22586,14 +22577,12 @@ msgid ""
 msgstr "Szimulátor beállítások"
 
 #: eeschema/sim/simulator_frame_ui_base.cpp:221
-#, fuzzy
 msgid "Measurement"
 msgstr "Mérés"
 
 #: eeschema/sim/simulator_frame_ui_base.cpp:223
 #: gerbview/gerber_file_image.cpp:354
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:42
-#, fuzzy
 msgid "Format"
 msgstr "Formátum"
 
@@ -22604,9 +22593,8 @@ msgid "Could not find model '%s' to copy for \"A Kind Of\" model '%s'"
 msgstr "A(z) \"%s\" könyvtár fájl nem található"
 
 #: eeschema/sim/spice_simulator.cpp:57
-#, fuzzy
 msgid "DC Operating Point"
-msgstr "Munkapont"
+msgstr "DC Munkapont"
 
 #: eeschema/sim/spice_simulator.cpp:58
 #, fuzzy
@@ -22619,38 +22607,32 @@ msgid "DC Sweep Analysis"
 msgstr "DC/AC analízis:"
 
 #: eeschema/sim/spice_simulator.cpp:60
-#, fuzzy
 msgid "Transient Analysis"
-msgstr "Tranziens analízis:"
+msgstr "Tranziens analízis"
 
 #: eeschema/sim/spice_simulator.cpp:61
 msgid "Small-Signal Distortion Analysis"
 msgstr ""
 
 #: eeschema/sim/spice_simulator.cpp:62
-#, fuzzy
 msgid "Noise Analysis"
-msgstr "Tranziens analízis:"
+msgstr "Zaj analízis"
 
 #: eeschema/sim/spice_simulator.cpp:63
-#, fuzzy
 msgid "Pole-Zero Analysis"
-msgstr "Pólus-zérus"
+msgstr "Pólus-zérus analízis"
 
 #: eeschema/sim/spice_simulator.cpp:64
-#, fuzzy
 msgid "Sensitivity Analysis"
-msgstr "Érzékenység"
+msgstr "Érzékenység analízis"
 
 #: eeschema/sim/spice_simulator.cpp:65
-#, fuzzy
 msgid "Transfer Function Analysis"
-msgstr "Átviteli függvény"
+msgstr "Átviteli függvény analízis"
 
 #: eeschema/sim/spice_simulator.cpp:66
-#, fuzzy
 msgid "S-Parameter Analysis"
-msgstr "Tranziens analízis:"
+msgstr "S-paraméter analízis"
 
 #: eeschema/sim/spice_simulator.cpp:67
 #, fuzzy
@@ -22658,14 +22640,13 @@ msgid "Frequency Content Analysis"
 msgstr "A bemeneti jel frekvenciája"
 
 #: eeschema/sim/spice_value.cpp:399
-#, fuzzy
 msgid "Please, fill required fields"
 msgstr "Kérjük, töltse ki a kötelező mezőket"
 
 #: eeschema/sim/spice_value.cpp:417
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' is not a valid SPICE value."
-msgstr "A(z) \"%s\" nem érvényes SPICE érték"
+msgstr "A(z) \"%s\" nem egy érvényes SPICE érték."
 
 #: eeschema/sim/toolbars_simulator_frame.cpp:173
 #, fuzzy
