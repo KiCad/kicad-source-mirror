@@ -13572,11 +13572,11 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:44
 msgid "Pin &name:"
-msgstr "Pin ve Adı:"
+msgstr "Pin &Adı:"
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:51
 msgid "Pin num&ber:"
-msgstr "&Bacak Numarası:"
+msgstr "Pin numa&rası:"
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:53
 msgid "Pin number: 1 to 4 ASCII letters and/or digits"
@@ -13640,7 +13640,7 @@ msgstr "Alternatif pin fonksiyon tanımları"
 
 #: eeschema/dialogs/dialog_pin_properties_base.h:104
 msgid "Pin Properties"
-msgstr "Bacak Özellikleri"
+msgstr "Pin Özellikleri"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:80
 msgid "Plot All Pages"
@@ -15494,7 +15494,7 @@ msgstr "Kütüphane Sembolünü Düzenle..."
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:279
 #: eeschema/sch_pin.cpp:2174
 msgid "Pin Number"
-msgstr "Bacak Numarası"
+msgstr "Pin Numarası"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:280
 msgid "Base Pin Name"
@@ -16940,15 +16940,15 @@ msgstr "Çıkış Bacağı"
 
 #: eeschema/erc/erc.cpp:81 eeschema/erc/erc.cpp:98
 msgid "Bidirectional Pin"
-msgstr "Çift Yönlü Bacak"
+msgstr "Çift Yönlü Pin"
 
 #: eeschema/erc/erc.cpp:82 eeschema/erc/erc.cpp:99
 msgid "Tri-State Pin"
-msgstr "Üç Durumlu Bacak"
+msgstr "Üç Durumlu Pin"
 
 #: eeschema/erc/erc.cpp:83 eeschema/erc/erc.cpp:100
 msgid "Passive Pin"
-msgstr "Pasif Bacak"
+msgstr "Pasif Pin"
 
 #: eeschema/erc/erc.cpp:84 eeschema/erc/erc.cpp:101
 msgid "Free Pin"
@@ -16956,7 +16956,7 @@ msgstr "Boş Pin"
 
 #: eeschema/erc/erc.cpp:85 eeschema/erc/erc.cpp:102
 msgid "Unspecified Pin"
-msgstr "Belirtilmemiş Bacak"
+msgstr "Belirtilmemiş Pin"
 
 #: eeschema/erc/erc.cpp:86 eeschema/erc/erc.cpp:103
 msgid "Power Input Pin"
@@ -17132,7 +17132,7 @@ msgstr "Ayak izleri kontrol ediliyor..."
 
 #: eeschema/erc/erc.cpp:1871
 msgid "Checking pins..."
-msgstr "Bacaklar kontrol ediliyor..."
+msgstr "Pimler kontrol ediliyor..."
 
 #: eeschema/erc/erc.cpp:1891
 msgid "Checking similar labels..."
@@ -17152,7 +17152,7 @@ msgstr "SPICE modelleri kontrol ediliyor..."
 
 #: eeschema/erc/erc.cpp:1923
 msgid "Checking no connect pins for connections..."
-msgstr "Bağlantılar için eksik bağlantı bacakları kontrol ediliyor..."
+msgstr "Bağlantısız pinler için bağlantılar kontrol ediliyor..."
 
 #: eeschema/erc/erc.cpp:1932
 msgid "Checking for library symbol issues..."
@@ -48435,8 +48435,7 @@ msgstr "Tarafı Değiştir / Çevir"
 
 #: pcbnew/tools/edit_tool.cpp:2677
 msgid "Use the Footprint Properties dialog to remove fields."
-msgstr ""
-"Alanları kaldırmak için Bacak Çizimi Özellikleri iletişim kutusunu kullanın."
+msgstr "Ayak İzi Özellikleri iletişim kutusunu kullanarak alanları kaldır."
 
 #: pcbnew/tools/edit_tool.cpp:2836
 msgid "Move Exactly"
