@@ -163,7 +163,11 @@ struct CONSTRUCTION_MANAGER::PENDING_BATCH
 
 
 CONSTRUCTION_MANAGER::CONSTRUCTION_MANAGER( CONSTRUCTION_VIEW_HANDLER& aHelper ) :
-        m_viewHandler( aHelper )
+        m_viewHandler( aHelper ),
+        m_persistentConstructionBatch(),
+        m_temporaryConstructionBatches(),
+        m_involvedItems(),
+        m_batchesMutex()
 {
     const std::chrono::milliseconds acceptanceTimeout(
             ADVANCED_CFG::GetCfg().m_ExtensionSnapTimeoutMs );
