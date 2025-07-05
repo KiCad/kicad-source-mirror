@@ -24,7 +24,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-03 20:16+0300\n"
-"PO-Revision-Date: 2025-07-05 23:04+0000\n"
+"PO-Revision-Date: 2025-07-06 03:44+0000\n"
 "Last-Translator: YÜKSEL AÇIKGÖZ <yukselacikgoz@gmail.com>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/kicad/v9/tr/>\n"
 "Language: tr\n"
@@ -8710,7 +8710,7 @@ msgstr "Yeni Kütüphane..."
 
 #: common/tool/actions.cpp:53
 msgid "Create a new library folder"
-msgstr "Yeni kütüphane klasörü oluşturun"
+msgstr "Yeni bir kütüphane klasörü oluştur"
 
 #: common/tool/actions.cpp:59
 msgid "Add Library..."
@@ -8726,7 +8726,7 @@ msgstr "Aç..."
 
 #: common/tool/actions.cpp:69
 msgid "Open existing document"
-msgstr "Varolan belgeyi aç"
+msgstr "Mevcut belgeyi aç"
 
 #: common/tool/actions.cpp:75
 msgid "Edit in a Text Editor..."
@@ -8927,7 +8927,7 @@ msgstr "Tümünü Daralt"
 #: eeschema/tools/symbol_editor_edit_tool.cpp:1216
 #: pcbnew/tools/edit_tool.cpp:3118
 msgid "Increment"
-msgstr "Artış"
+msgstr "Artır"
 
 #: common/tool/actions.cpp:343
 msgid "Increment the selected item(s)"
@@ -8951,7 +8951,7 @@ msgstr "Seçili öge(ler)in birincil alanını azalt"
 
 #: common/tool/actions.cpp:362
 msgid "Increment Secondary"
-msgstr "Birincil Azaltma"
+msgstr "İkincil Artır"
 
 #: common/tool/actions.cpp:363
 msgid "Increment the secondary field of the selected item(s)"
@@ -8975,7 +8975,7 @@ msgstr "Geçerli seçili hücre(ler)i içeren sütun(lar)ın tamamını seç"
 
 #: common/tool/actions.cpp:383
 msgid "Select Row(s)"
-msgstr "Satır(lar) Seç"
+msgstr "Satır(lar)ı Seç"
 
 #: common/tool/actions.cpp:384
 msgid "Select complete row(s) containing the current selected cell(s)"
@@ -8995,7 +8995,7 @@ msgstr "Üste Satır Ekle"
 
 #: common/tool/actions.cpp:398
 msgid "Insert a new table row above the selected cell(s)"
-msgstr "Seçili hücrenin/hücrelerin üzerine yeni bir tablo satırı ekle"
+msgstr "Seçili hücre(ler)in üzerine yeni bir tablo satırı ekle"
 
 #: common/tool/actions.cpp:404 include/tool/edit_table_tool_base.h:220
 msgid "Add Row Below"
@@ -9003,7 +9003,7 @@ msgstr "Alta Satır Ekle"
 
 #: common/tool/actions.cpp:405
 msgid "Insert a new table row below the selected cell(s)"
-msgstr "Seçilen hücrelerin altına yeni bir tablo satırı ekle"
+msgstr "Seçili hücre(ler)in altına yeni bir tablo satırı ekle"
 
 #: common/tool/actions.cpp:411 include/tool/edit_table_tool_base.h:271
 msgid "Add Column Before"
@@ -9337,7 +9337,7 @@ msgstr "Izgara başlangıç noktasını yerleştir"
 
 #: common/tool/actions.cpp:901
 msgid "Reset Grid Origin"
-msgstr "Izgara Başlangıç Noktası Sıfırlama"
+msgstr "Izgara Başlangıç Noktası Sıfırla"
 
 #: common/tool/actions.cpp:911
 msgid "Show Grid"
@@ -9345,7 +9345,7 @@ msgstr "Izgarayı Göster"
 
 #: common/tool/actions.cpp:912
 msgid "Display background grid in the edit window"
-msgstr "Düzenleme penceresinde arka plan ızgarasını görüntüle"
+msgstr "Düzenleme penceresinde arka plan ızgarasını göster"
 
 #: common/tool/actions.cpp:920
 msgid "Enables item-specific grids that override the current grid"
@@ -9535,15 +9535,15 @@ msgstr "Yolları Yapılandır..."
 
 #: common/tool/actions.cpp:1157
 msgid "Edit path configuration environment variables"
-msgstr "Dosya Yollarını yapılandırma ortamı değişkenlerini düzenleyin"
+msgstr "Yol yapılandırma ortam değişkenlerini düzenle"
 
 #: common/tool/actions.cpp:1163
 msgid "Manage Symbol Libraries..."
-msgstr "Sembol Kütüphanesini Yönet..."
+msgstr "Sembol Kütüphanelerini Yönet..."
 
 #: common/tool/actions.cpp:1164
 msgid "Edit the global and project symbol library lists"
-msgstr "Genel ve proje sembolü kütüphanesi listelerini düzenleme"
+msgstr "Genel ve proje sembolü kütüphanesi listelerini düzenle"
 
 #: common/tool/actions.cpp:1170
 msgid "Manage Footprint Libraries..."
@@ -9551,7 +9551,7 @@ msgstr "Ayak İzi Kütüphanelerini Yönet..."
 
 #: common/tool/actions.cpp:1171
 msgid "Edit the global and project footprint library lists"
-msgstr "Genel ve proje ayak izi kitaplığı listelerini düzenle"
+msgstr "Genel ve proje ayak izi kütüphane listelerini düzenle"
 
 #: common/tool/actions.cpp:1177
 msgid "Manage Design Block Libraries..."
@@ -9600,7 +9600,7 @@ msgstr "Katılın"
 
 #: common/tool/actions.cpp:1215
 msgid "Open \"Contribute to KiCad\" in a web browser"
-msgstr "Web tarayıcısında \"KiCad'e Katkıda Bulun\" ı aç"
+msgstr "\\\"KiCad'e Katkıda Bulun\\\" bağlantısını bir web tarayıcısında aç"
 
 #: common/tool/actions.cpp:1222
 msgid "Open \"Donate to KiCad\" in a web browser"
@@ -11323,7 +11323,7 @@ msgstr ""
 msgid "Reset the list of BOM generator scripts to the default settings"
 msgstr ""
 "Ürün reçetesi oluşturucu komut dosyalarının listesini varsayılan ayarlara "
-"sıfırlama"
+"sıfırla"
 
 #: eeschema/dialogs/dialog_bom_base.h:81
 msgid "Bill of Materials"
@@ -23230,7 +23230,7 @@ msgstr "Şematik sembol referans göstergelerini doldurun"
 
 #: eeschema/tools/sch_actions.cpp:1040
 msgid "Increment Annotations From..."
-msgstr "Açıklamaları Artır..."
+msgstr "Açıklamaları Şuradan Artır..."
 
 #: eeschema/tools/sch_actions.cpp:1041
 msgid ""
@@ -24045,7 +24045,7 @@ msgstr "Bozuk kütüphane sembol bağlantılarına sahip semboller düzenlenemez
 
 #: eeschema/tools/sch_editor_control.cpp:2440
 msgid "Increment Annotations"
-msgstr "Ek ları Artır"
+msgstr "Ek Açıklamaları Artır"
 
 #: eeschema/tools/sch_editor_control.cpp:2860
 #: pcbnew/tools/board_editor_control.cpp:614
@@ -38566,7 +38566,8 @@ msgstr "Döndürme komutları için adım:"
 #: pcbnew/dialogs/panel_edit_options_base.cpp:44
 msgid "Set increment (in degrees) for context menu and hotkey rotation."
 msgstr ""
-"İçerik menüsü ve kısayol tuşu döndürme için artışı (derece cinsinden) ayarla."
+"Bağlam menüsü ve kısayol tuşu döndürme için artırma miktarını (derece olarak)"
+" ayarla."
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:56
 msgid "Arc editing mode:"
@@ -48555,7 +48556,7 @@ msgstr "Grup Ögelerini Kaldır"
 
 #: pcbnew/tools/item_modification_routine.cpp:112
 msgid "Unable to fillet the selected lines."
-msgstr "Seçili satırlara fillet yapılamıyor."
+msgstr "Seçilen çizgiler pahlanamıyor."
 
 #: pcbnew/tools/item_modification_routine.cpp:116
 msgid "Some of the lines could not be filleted."
@@ -48575,7 +48576,7 @@ msgstr "Köpek Kemiği Köşeleri"
 
 #: pcbnew/tools/item_modification_routine.cpp:276
 msgid "Unable to add dogbone corners to the selected lines."
-msgstr "Seçili satırlara dogbone köşeleri eklenemiyor."
+msgstr "Seçilen çizgilere kemik köşe eklenemiyor."
 
 #: pcbnew/tools/item_modification_routine.cpp:280
 msgid "Some of the lines could not have dogbone corners added."
