@@ -16,8 +16,8 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-03 20:16+0300\n"
-"PO-Revision-Date: 2025-06-27 06:01+0000\n"
-"Last-Translator: 2tama3 <2tama3@gmail.com>\n"
+"PO-Revision-Date: 2025-07-05 22:37+0000\n"
+"Last-Translator: co8 j <co8@nifty.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/v9/ja/>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
@@ -18416,7 +18416,7 @@ msgstr "バス-バス エントリー"
 #: eeschema/sch_bus_entry.cpp:527 eeschema/sch_line.cpp:143
 #: eeschema/sch_line.cpp:926 eeschema/tools/sch_edit_tool.cpp:254
 msgid "Wire"
-msgstr "配線済み"
+msgstr "配線済み、配線"
 
 #: eeschema/sch_bus_entry.cpp:528 eeschema/sch_line.cpp:144
 #: eeschema/sch_line.cpp:927
@@ -40480,7 +40480,6 @@ msgstr ""
 "\n"
 
 #: pcbnew/dialogs/panel_setup_rules_help_9more_examples.h:2
-#, fuzzy
 msgid ""
 "### More Examples\n"
 "\n"
@@ -40650,7 +40649,7 @@ msgstr ""
 "       (condition \"A.intersectsCourtyard('U3')\"))\n"
 "\n"
 "\n"
-"    # テンティングされたビアにシルクがかかるのを防ぐ\n"
+"    #  テンティングされたビアにシルクがかかるのを防ぐ\n"
 "    (rule silk_over_via\n"
 "       (constraint silk_clearance (min 0.2mm))\n"
 "       (condition \"A.Type == '*Text' && B.Type == 'Via'\"))\n"
@@ -40658,13 +40657,13 @@ msgstr ""
 "\n"
 "    (rule \"Distance between Vias of Different Nets\"\n"
 "        (constraint hole_to_hole (min 0.254mm))\n"
-"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B."
-"Net\"))\n"
+"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B.Net\"))"
+"\n"
 "\n"
 "    (rule \"Clearance between Pads of Different Nets\"\n"
 "        (constraint clearance (min 3.0mm))\n"
-"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B."
-"Net\"))\n"
+"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B.Net\"))"
+"\n"
 "\n"
 "\n"
 "    (rule \"Via Hole to Track Clearance\"\n"
@@ -40715,8 +40714,9 @@ msgstr ""
 "        (constraint thermal_relief_gap (min 10mil))\n"
 "        (constraint thermal_spoke_width (min 12mil)))\n"
 "\n"
-"    # GNDとPWRのゾーンに対してサーマルリリーフギャップとスポーク幅をオーバラ"
-"イドする\n"
+"    # "
+"GNDとPWRのゾーンに対してサーマルリリーフギャップとスポーク幅をオーバライドす"
+"る\n"
 "    (rule defined_relief_pwr\n"
 "        (constraint thermal_relief_gap (min 10mil))\n"
 "        (constraint thermal_spoke_width (min 12mil))\n"
@@ -40760,7 +40760,7 @@ msgstr ""
 "        (condition \"A.hasNetclass('Power')\"))\n"
 "\n"
 "\n"
-"    # ドリルビットとフライスのそれぞれのサイズ制約\n"
+"    # Separate drill bit and milling cutter size constraints\n"
 "    (rule \"Plated through-hole size\"\n"
 "        (constraint hole_size (min 0.2mm) (max 6.35mm))\n"
 "        (condition \"A.isPlated() && A.Hole_Size_X == A.Hole_Size_Y\"))\n"
@@ -40775,10 +40775,22 @@ msgstr ""
 "drilling \n"
 "    # micro-vias.\n"
 "    (rule hole_to_hole_uvia_exclusion\n"
-"        (condition \"A.Via_Type == 'Blind/buried' && B.Via_Type == "
-"'Micro'\")\n"
+"        (condition \"A.Via_Type == 'Blind/buried' && B.Via_Type == 'Micro'\")"
+"\n"
 "        (constraint hole_to_hole)\n"
 "        (severity ignore))\n"
+"\n"
+"\n"
+"    # No solder mask expansion for vias.\n"
+"    (rule \"no mask expansion on vias\"\n"
+"        (constraint solder_mask_expansion (opt 0mm))\n"
+"        (condition \"A.type == via\"))\n"
+"\n"
+"\n"
+"    # Remove solder paste from DNP footprints.\n"
+"    (rule remove_solder_paste_from_DNP\n"
+"        (constraint solder_paste_abs_margin (opt -50mm))\n"
+"        (condition \"A.Do_not_Populate\"))\n"
 "\n"
 
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:19
@@ -42617,7 +42629,7 @@ msgstr "形状セグメント構築中にOCC例外: %s\n"
 #: pcbnew/exporters/step/step_pcb_model.cpp:1382
 #, c-format
 msgid "OCC exception building face: %s\n"
-msgstr ""
+msgstr "フェイスの構築中にOCC例外:%s\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1394
 #: pcbnew/exporters/step/step_pcb_model.cpp:1763
@@ -42627,45 +42639,48 @@ msgstr "多面体の形状を作成できませんでした\n"
 #: pcbnew/exporters/step/step_pcb_model.cpp:1446
 #, c-format
 msgid "Failed to make segment edge (%d %d) -> (%d %d), skipping\n"
-msgstr ""
+msgstr "セグメントの端を作成できません (%d %d) -> (%d %d) スキップします\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1458
 #, c-format
 msgid "Failed to add segment edge (%d %d) -> (%d %d)\n"
-msgstr ""
+msgstr "セグメントの端を追加できませんでした (%d %d) -> (%d %d)\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1494
 #, c-format
 msgid ""
 "Failed to add arc curve from (%d %d), arc p0 (%d %d), mid (%d %d), p1 (%d "
 "%d)\n"
-msgstr ""
+msgstr "円弧の曲線を (%d %d) から追加するのに失敗、円弧 p0 (%d %d)、mid (%d %d)、p1 ("
+"%d %d)\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1570
 #, c-format
 msgid "Failed to close wire at %d, %d -> %d, %d **\n"
-msgstr ""
+msgstr "配線を閉じるのに失敗しました %d,%d -> %d,%d **\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1580
 #, c-format
 msgid "OCC exception creating wire: %s\n"
-msgstr ""
+msgstr "配線作成中のOCC例外: %s\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1661
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Wire not done (contour points %d): OCC error %d\n"
 "z: %g; bounding box: %s\n"
-msgstr "配線が完了していません (輪郭点 %d ): OCC エラー %d\n"
+msgstr ""
+"配線が完了していません (輪郭点 %d ): OCC エラー %d\n"
+"z: %g; bounding box:%s\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1675
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Wire self-interference check failed\n"
 "z: %g; bounding box: %s\n"
 msgstr ""
-"\n"
 "配線の自己干渉チェックに失敗しました\n"
+"z: %g; bounding box: %s\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1697
 msgid "Using non-simplified polygon.\n"
@@ -42674,7 +42689,7 @@ msgstr "単純化されていないポリゴンを使用します。\n"
 #: pcbnew/exporters/step/step_pcb_model.cpp:1744
 #, c-format
 msgid "OCC exception creating contour %d: %s\n"
-msgstr ""
+msgstr "輪郭作成中のOCC例外 %d:%s\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1774
 msgid "** Face skipped **\n"
@@ -42682,13 +42697,12 @@ msgstr "** Face はスキップされました **\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1864
 #: pcbnew/exporters/step/step_pcb_model.cpp:1881
-#, fuzzy
 msgid "OCC error creating main outline.\n"
-msgstr "ファイル読み込み中のエラー。"
+msgstr "メインのアウトラインを作成中のOCCエラー。\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1890
 msgid "OCC error creating hole in main outline.\n"
-msgstr ""
+msgstr "メインのアウトライン中にスルーホールを作成中にOCCエラー。\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1932
 #, c-format
@@ -42696,11 +42710,9 @@ msgid "Subtracting holes for %s\n"
 msgstr "%s の穴を削除しています\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1976
-#, fuzzy, c-format
+#, c-format
 msgid "** Got problems while cutting %s net '%s' **\n"
-msgstr ""
-"\n"
-"** %s ネット %s 切断中に問題が発生しました **\n"
+msgstr "** %s ネット '%s' 切断中に問題が発生しました **\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2029
 msgid "shapes"
@@ -42720,35 +42732,35 @@ msgstr "ビア"
 #: pcbnew/exporters/step/step_pcb_model.cpp:3102
 #: pcbnew/exporters/step/step_pcb_model.cpp:3176
 #: pcbnew/exporters/step/step_pcb_model.cpp:3245
-#, fuzzy, c-format
+#, c-format
 msgid "No valid PCB assembly; cannot create output file '%s'.\n"
-msgstr "出力ディレクトリ '%s' を作成できませんでした。"
+msgstr "有効な基板アセンブリがありません。出力ファイル '%s' を作成できません。\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2322
 msgid "Failed to set STEP product name, but will attempt to continue."
-msgstr ""
+msgstr "STEP製品名の設定に失敗しましたが、続行します。"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2330
 msgid "Failed to set surface curve mode, but will attempt to continue."
-msgstr ""
+msgstr "表面曲線モードの設定に失敗しましたが、続行します。"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2371
 #: pcbnew/exporters/step/step_pcb_model.cpp:3153
 #: pcbnew/exporters/step/step_pcb_model.cpp:3226
 #: pcbnew/exporters/step/step_pcb_model.cpp:3275
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot rename temporary file '%s' to '%s'.\n"
-msgstr "一時ファイル '%s' を '%s' にリネームできません"
+msgstr "一時ファイル '%s' を '%s' にリネームできません。\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2822
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot identify actual file type for '%s'.\n"
-msgstr "ネットリスト ファイル '%s' を開くことができません。"
+msgstr "'%s' の実際のファイルタイプを識別できません。\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2832
-#, fuzzy, c-format
+#, c-format
 msgid "Could not transfer model data from file '%s'.\n"
-msgstr "値 '%s' からモデルを推論できませんでした"
+msgstr "ファイル '%s' からモデルを推論できませんでした。\n"
 
 #: pcbnew/files.cpp:152
 msgid "All KiCad Board Files"
@@ -51717,9 +51729,9 @@ msgid "Rule Area %s"
 msgstr "ルールエリア %s"
 
 #: pcbnew/zone.cpp:1113
-#, fuzzy, c-format
+#, c-format
 msgid "Rule Area '%s' %s"
-msgstr "ルールエリア %s"
+msgstr "ルールエリア '%s' %s"
 
 #: pcbnew/zone.cpp:1120
 #, c-format
@@ -51727,14 +51739,14 @@ msgid "Teardrop %s %s"
 msgstr "ティアドロップ %s %s"
 
 #: pcbnew/zone.cpp:1128
-#, fuzzy, c-format
+#, c-format
 msgid "Zone %s %s, priority %d"
-msgstr "ゾーン優先度:"
+msgstr "ゾーン %s %s, 優先度 %d"
 
 #: pcbnew/zone.cpp:1135
-#, fuzzy, c-format
+#, c-format
 msgid "Zone '%s' %s %s, priority %d"
-msgstr "%s, %s, %s, または %s"
+msgstr "ゾーン '%s' %s %s, 優先度 %d"
 
 #: pcbnew/zone.cpp:1981
 msgid "Keepout"
