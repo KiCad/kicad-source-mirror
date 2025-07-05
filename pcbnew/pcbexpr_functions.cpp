@@ -461,7 +461,7 @@ static void intersectsBackCourtyardFunc( LIBEVAL::CONTEXT* aCtx, void* self )
 }
 
 
-bool collidesWithArea( BOARD_ITEM* aItem, PCBEXPR_CONTEXT* aCtx, ZONE* aArea )
+bool collidesWithArea( BOARD_ITEM* aItem, PCB_LAYER_ID aLayer, PCBEXPR_CONTEXT* aCtx, ZONE* aArea )
 {
     BOARD* board = aArea->GetBoard();
     BOX2I  areaBBox = aArea->GetBoundingBox();
@@ -551,40 +551,18 @@ bool collidesWithArea( BOARD_ITEM* aItem, PCBEXPR_CONTEXT* aCtx, ZONE* aArea )
 
         if( zoneRTree )
         {
-            for( PCB_LAYER_ID layer : aArea->GetLayerSet().Seq() )
-            {
-                if( aCtx->GetLayer() == layer || aCtx->GetLayer() == UNDEFINED_LAYER )
-                {
-                    if( zoneRTree->QueryColliding( areaBBox, &areaOutline, layer ) )
-                        return true;
-                }
-            }
+            if( zoneRTree->QueryColliding( areaBBox, &areaOutline, aLayer ) )
+                return true;
         }
 
         return false;
     }
-    else if( aItem->Type() == PCB_PAD_T )
-    {
-        PAD* pad = static_cast<PAD*>( aItem );
-        bool collision = false;
-
-        pad->Padstack().ForEachUniqueLayer(
-                [&]( PCB_LAYER_ID layer )
-                {
-                    if( !collision && aArea->IsOnLayer( layer ) )
-                        collision = areaOutline.Collide( pad->GetEffectiveShape( layer ).get() );
-                } );
-
-        return collision;
-    }
     else
     {
-        PCB_LAYER_ID layer = aCtx->GetLayer();
-
-        if( layer != UNDEFINED_LAYER && !( aArea->GetLayerSet().Contains( layer ) ) )
+        if( !aArea->GetLayerSet().Contains( aLayer ) )
             return false;
 
-        return areaOutline.Collide( aItem->GetEffectiveShape( layer ).get() );
+        return areaOutline.Collide( aItem->GetEffectiveShape( aLayer ).get() );
     }
 }
 
@@ -760,7 +738,7 @@ static void intersectsAreaFunc( LIBEVAL::CONTEXT* aCtx, void* self )
                                         return true;
                                 }
 
-                                bool collides = collidesWithArea( item, context, aArea );
+                                bool collides = collidesWithArea( item, layer, context, aArea );
 
                                 if( ( item->GetFlags() & ROUTER_TRANSIENT ) == 0 )
                                 {
