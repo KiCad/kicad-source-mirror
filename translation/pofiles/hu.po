@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-03 20:16+0300\n"
-"PO-Revision-Date: 2025-07-05 22:37+0000\n"
+"PO-Revision-Date: 2025-07-06 13:55+0000\n"
 "Last-Translator: Sárkány Lőrinc <lsarkany@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/kicad/v9/hu/>\n"
 "Language: hu\n"
@@ -23872,17 +23872,14 @@ msgid "Export View as PNG..."
 msgstr "Aktuális nézet exportálása PNG fájlba..."
 
 #: eeschema/tools/sch_actions.cpp:316
-#, fuzzy
 msgid "Create PNG file from the current view"
-msgstr "Aktuális képernyőtartalom mentése PNG fájlba"
+msgstr "Aktuális nézet mentése PNG fájlba"
 
 #: eeschema/tools/sch_actions.cpp:322
-#, fuzzy
 msgid "Export Symbol as SVG..."
-msgstr "Rajzjel SVG fájlként..."
+msgstr "Rajzjel exportálása SVG fájlba..."
 
 #: eeschema/tools/sch_actions.cpp:323
-#, fuzzy
 msgid "Create SVG file from the current symbol"
 msgstr "SVG fájl létrehozása az aktuális rajzjelből"
 
@@ -23904,37 +23901,31 @@ msgstr ""
 "Alapértelmezetten engedélyezve van több egységből álló rajzjelekre."
 
 #: eeschema/tools/sch_actions.cpp:338 eeschema/tools/sch_actions.cpp:1165
-#, fuzzy
 msgid "Show Hidden Pins"
 msgstr "Rejtett lábak megjelenítése"
 
 #: eeschema/tools/sch_actions.cpp:344 eeschema/tools/sch_actions.cpp:1171
-#, fuzzy
 msgid "Show Hidden Fields"
-msgstr "Rejtett lábak megjelenítése"
+msgstr "Rejtett mezők megjelenítése"
 
 #: eeschema/tools/sch_actions.cpp:355
-#, fuzzy
 msgid "Draw Pins"
-msgstr "Rajzok"
+msgstr "Lábak rajzolása"
 
 #: eeschema/tools/sch_actions.cpp:363 eeschema/tools/sch_actions.cpp:595
 #: eeschema/tools/symbol_editor_drawing_tools.cpp:301
 #: pagelayout_editor/tools/pl_actions.cpp:61 pcbnew/tools/drawing_tool.cpp:1049
 #: pcbnew/tools/pcb_actions.cpp:185
-#, fuzzy
 msgid "Draw Text"
-msgstr "Vonal rajzolása"
+msgstr "Szöveg rajzolása"
 
 #: eeschema/tools/sch_actions.cpp:371 eeschema/tools/sch_actions.cpp:602
 #: pcbnew/tools/pcb_actions.cpp:192
-#, fuzzy
 msgid "Draw Text Boxes"
-msgstr "Vonal rajzolása"
+msgstr "Szövegdoboz rajzolása"
 
 #: eeschema/tools/sch_actions.cpp:378 eeschema/tools/sch_actions.cpp:1397
 #: pagelayout_editor/tools/pl_actions.cpp:45 pcbnew/tools/pcb_actions.cpp:108
-#, fuzzy
 msgid "Draw Lines"
 msgstr "Vonal rajzolása"
 
@@ -23944,7 +23935,6 @@ msgid "Draw connected graphic lines"
 msgstr "Vonal hozzáadása"
 
 #: eeschema/tools/sch_actions.cpp:387 pcbnew/tools/pcb_actions.cpp:117
-#, fuzzy
 msgid "Draw Polygons"
 msgstr "Sokszög rajzolása"
 
@@ -24099,24 +24089,20 @@ msgstr "Vonal rajzolása"
 
 #: eeschema/tools/sch_actions.cpp:617 pagelayout_editor/tools/pl_actions.cpp:53
 #: pcbnew/tools/pcb_actions.cpp:125
-#, fuzzy
 msgid "Draw Rectangles"
-msgstr "Négyzet rajzolása"
+msgstr "Téglalap rajzolása"
 
 #: eeschema/tools/sch_actions.cpp:625 pcbnew/tools/pcb_actions.cpp:134
-#, fuzzy
 msgid "Draw Circles"
 msgstr "Kör rajzolása"
 
 #: eeschema/tools/sch_actions.cpp:633 pcbnew/tools/pcb_actions.cpp:143
-#, fuzzy
 msgid "Draw Arcs"
 msgstr "Körív rajzolása"
 
 #: eeschema/tools/sch_actions.cpp:641 pcbnew/tools/pcb_actions.cpp:151
-#, fuzzy
 msgid "Draw Bezier Curve"
-msgstr "Bezier görbe"
+msgstr "Bezier görbe rajzolása"
 
 #: eeschema/tools/sch_actions.cpp:649
 #, fuzzy
@@ -24129,19 +24115,16 @@ msgid "Draw Rule Areas"
 msgstr "Kizárt terület tulajdonságok"
 
 #: eeschema/tools/sch_actions.cpp:665 pcbnew/tools/pcb_actions.cpp:404
-#, fuzzy
 msgid "Delete Last Point"
 msgstr "Utolsó pont törlése"
 
 #: eeschema/tools/sch_actions.cpp:666 pcbnew/tools/pcb_actions.cpp:405
-#, fuzzy
 msgid "Delete the last point added to the current item"
 msgstr "Törölje az aktuális elemhez utoljára hozzáadott pontot"
 
 #: eeschema/tools/sch_actions.cpp:672 pcbnew/tools/pcb_actions.cpp:411
-#, fuzzy
 msgid "Close Outline"
-msgstr "Zóna körvonal lezárása"
+msgstr "Körvonal bezárása"
 
 #: eeschema/tools/sch_actions.cpp:673
 #, fuzzy
@@ -24149,42 +24132,34 @@ msgid "Close the in-progress outline"
 msgstr "Zóna körvonal lezárása"
 
 #: eeschema/tools/sch_actions.cpp:688
-#, fuzzy
 msgid "Repeat Last Item"
 msgstr "Utolsó elem megismétlése"
 
 #: eeschema/tools/sch_actions.cpp:689
-#, fuzzy
 msgid "Duplicates the last drawn item"
 msgstr "Utoljára rajzolt elem duplikálása"
 
 #: eeschema/tools/sch_actions.cpp:694 pcbnew/tools/pcb_actions.cpp:527
-#, fuzzy
 msgid "Rotate Clockwise"
 msgstr "Forgatás jobbra"
 
 #: eeschema/tools/sch_actions.cpp:702 pcbnew/tools/pcb_actions.cpp:537
-#, fuzzy
 msgid "Rotate Counterclockwise"
 msgstr "Forgatás balra"
 
 #: eeschema/tools/sch_actions.cpp:710 pcbnew/tools/pcb_actions.cpp:561
-#, fuzzy
 msgid "Mirror Vertically"
 msgstr "Tükrözés Függőlegesen"
 
 #: eeschema/tools/sch_actions.cpp:711
-#, fuzzy
 msgid "Flips selected item(s) from top to bottom"
 msgstr "Kijelölt elem(ek) tükrözése a vízszintes tengelyre"
 
 #: eeschema/tools/sch_actions.cpp:719 pcbnew/tools/pcb_actions.cpp:554
-#, fuzzy
 msgid "Mirror Horizontally"
-msgstr "Tükrözés Visszintesen"
+msgstr "Tükrözés Vízszintesen"
 
 #: eeschema/tools/sch_actions.cpp:720
-#, fuzzy
 msgid "Flips selected item(s) from left to right"
 msgstr "Kijelölt elem(ek) tükrözése a függőleges tengelyre"
 
@@ -24204,13 +24179,11 @@ msgid "Edit Reference Designator..."
 msgstr "Referencia Mező szerkesztése..."
 
 #: eeschema/tools/sch_actions.cpp:752
-#, fuzzy
 msgid "Edit Value..."
 msgstr "Érték szerkesztése..."
 
 #: eeschema/tools/sch_actions.cpp:760
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:235
-#, fuzzy
 msgid "Edit Footprint..."
 msgstr "Alkatrészrajzolat szerkesztése..."
 
@@ -24226,19 +24199,16 @@ msgid ""
 msgstr "Rajzjel mezők automatikus elhelyezése"
 
 #: eeschema/tools/sch_actions.cpp:775
-#, fuzzy
 msgid "Change Symbols..."
 msgstr "Rajzjel Cseréje..."
 
 #: eeschema/tools/sch_actions.cpp:776
-#, fuzzy
 msgid "Assign different symbols from the library"
-msgstr "Másik alkatrészrajzolat hozzárendelése a könyvtárból"
+msgstr "Másik rajzjel hozzárendelése a könyvtárból"
 
 #: eeschema/tools/sch_actions.cpp:782
-#, fuzzy
 msgid "Update Symbols from Library..."
-msgstr "Rajzjel frissítése könyvtárból..."
+msgstr "Rajzjelek frissítése könyvtárból..."
 
 #: eeschema/tools/sch_actions.cpp:783
 #, fuzzy
@@ -24246,12 +24216,10 @@ msgid "Update symbols to include any changes from the library"
 msgstr "Alkatrészrajzolatok frissítése a könyvtárból"
 
 #: eeschema/tools/sch_actions.cpp:790
-#, fuzzy
 msgid "Assign a different symbol from the library"
-msgstr "Egy másik alkatrészrajzolat hozzárendelése a könyvtárból"
+msgstr "Egy másik rajzjel hozzárendelése a könyvtárból"
 
 #: eeschema/tools/sch_actions.cpp:796
-#, fuzzy
 msgid "Update Symbol..."
 msgstr "Rajzjel frissítése..."
 
@@ -24271,9 +24239,8 @@ msgid "Assign a netclass to nets matching a pattern"
 msgstr "Lap kivezető láb hozzáadása a kijelölt laphoz"
 
 #: eeschema/tools/sch_actions.cpp:810
-#, fuzzy
 msgid "De Morgan Conversion"
-msgstr "\"De Morgan\" átalakítás"
+msgstr "De Morgan átalakítás"
 
 #: eeschema/tools/sch_actions.cpp:811
 #, fuzzy
