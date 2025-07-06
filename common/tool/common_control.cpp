@@ -247,6 +247,9 @@ int COMMON_CONTROL::Execute( const TOOL_EVENT& aEvent )
     if( execFile.IsEmpty() )
         return 0;
 
+    if( aEvent.Parameter<wxString*>() )
+        param = *aEvent.Parameter<wxString*>();
+
     return Execute( execFile, param );
 }
 
@@ -419,7 +422,7 @@ void COMMON_CONTROL::setTransitions()
     Go( &COMMON_CONTROL::ShowPlayer,         ACTIONS::showSymbolEditor.MakeEvent() );
     Go( &COMMON_CONTROL::ShowPlayer,         ACTIONS::showFootprintBrowser.MakeEvent() );
     Go( &COMMON_CONTROL::ShowPlayer,         ACTIONS::showFootprintEditor.MakeEvent() );
-    Go( &COMMON_CONTROL::ShowPlayer,         ACTIONS::showCalculatorTools.MakeEvent() );
+    Go( &COMMON_CONTROL::Execute,         ACTIONS::showCalculatorTools.MakeEvent() );
     Go( &COMMON_CONTROL::ShowProjectManager, ACTIONS::showProjectManager.MakeEvent() );
 
     Go( &COMMON_CONTROL::ShowHelp,           ACTIONS::gettingStarted.MakeEvent() );
