@@ -9820,7 +9820,7 @@ msgstr "Filtre:"
 
 #: common/widgets/font_choice.cpp:64
 msgid "<not found>"
-msgstr "< bulunamadı>"
+msgstr "<bulunamadı>"
 
 #: common/widgets/footprint_diff_widget.cpp:41 eeschema/sch_sheet.cpp:895
 #: eeschema/sch_symbol.cpp:2041 pcbnew/dialogs/dialog_board_statistics.cpp:681
@@ -9905,7 +9905,7 @@ msgstr "Çizgiler"
 
 #: common/widgets/gal_options_panel_base.cpp:67
 msgid "Small crosses"
-msgstr "Küçük Artı"
+msgstr "Küçük Artılar"
 
 #: common/widgets/gal_options_panel_base.cpp:78
 msgid "Grid thickness:"
@@ -9939,15 +9939,15 @@ msgstr "Izgara gösterildiğinde"
 #: pcbnew/dialogs/panel_edit_options_base.cpp:357 pcbnew/zone.cpp:1891
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:282
 msgid "Never"
-msgstr "Hiçbir Zaman"
+msgstr "Asla"
 
 #: common/widgets/gal_options_panel_base.cpp:132
 msgid "Small crosshairs"
-msgstr "Küçük çapraz işaretler"
+msgstr "Küçük artı işaretleri"
 
 #: common/widgets/gal_options_panel_base.cpp:135
 msgid "Full window crosshairs"
-msgstr "Tam pencere çapraz işaretler"
+msgstr "Tam pencere artı imleci"
 
 #: common/widgets/gal_options_panel_base.cpp:141
 msgid "Always show crosshairs"
@@ -9959,7 +9959,7 @@ msgstr "Dosya aç"
 
 #: common/widgets/grid_text_button_helpers.cpp:502
 msgid "Select a File"
-msgstr "Dosya Seç"
+msgstr "Bir Dosya Seç"
 
 #: common/widgets/grid_text_button_helpers.cpp:534
 msgid "Select Path"
@@ -10007,7 +10007,7 @@ msgstr "Çizim görünümünü tüm ögeleri gösterecek şekilde ayarla"
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:287
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:288
 msgid "<no net>"
-msgstr "< ağ yok>"
+msgstr "<ağ yok>"
 
 #: common/widgets/net_selector.cpp:33
 msgid "<create net>"
@@ -10038,7 +10038,7 @@ msgstr "%s Varsayılanlara Sıfırla"
 #: common/widgets/properties_panel.cpp:77
 #: common/widgets/properties_panel.cpp:207
 msgid "No objects selected"
-msgstr "Seçilmiş nesne yok"
+msgstr "Hiç nesne seçilmedi"
 
 #: common/widgets/properties_panel.cpp:217
 #, c-format
@@ -10091,7 +10091,7 @@ msgstr "Geçerli tuş:"
 
 #: common/widgets/widget_hotkey_list.cpp:135
 msgid "Clear assigned hotkey"
-msgstr "Atanan kısayolu temizle"
+msgstr "Atanan kısayol tuşunu temizle"
 
 #: common/widgets/widget_hotkey_list.cpp:160
 msgid "Set Hotkey"
@@ -10137,7 +10137,7 @@ msgstr ""
 
 #: common/widgets/widget_hotkey_list.cpp:501
 msgid "Confirm change"
-msgstr "Değişimi onaylayın"
+msgstr "Değişikliği Onayla"
 
 #: common/widgets/widget_hotkey_list.cpp:521
 msgid "Command"
@@ -10184,7 +10184,7 @@ msgstr "Rapor Dosyasını Kaydet"
 #: common/widgets/wx_html_report_panel.cpp:389
 #, c-format
 msgid "Cannot write report to file '%s'."
-msgstr "Çıktı dizini '%s' oluşturulamıyor."
+msgstr "Rapor '%s' dosyasına yazılamıyor."
 
 #: common/widgets/wx_html_report_panel.cpp:391
 msgid "File save error"
@@ -10236,7 +10236,7 @@ msgstr "Tüm dosyalar"
 #: common/wildcards_and_files_ext.cpp:241
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr.h:82
 msgid "KiCad symbol library files"
-msgstr "KiCad sembol kitaplığı dosyaları"
+msgstr "KiCad sembol kütüphanesi dosyaları"
 
 #: common/wildcards_and_files_ext.cpp:248
 msgid "KiCad project files"
@@ -10315,7 +10315,7 @@ msgstr "KiCad ayak izi dosyaları"
 
 #: common/wildcards_and_files_ext.cpp:358
 msgid "KiCad footprint library paths"
-msgstr "KiCad ayak izi kitaplığı yolları"
+msgstr "KiCad ayak izi kütüphane yolları"
 
 #: common/wildcards_and_files_ext.cpp:365
 msgid "KiCad design block path"
@@ -10331,7 +10331,7 @@ msgstr "Çizim sayfası dosyaları"
 
 #: common/wildcards_and_files_ext.cpp:387
 msgid "KiCad symbol footprint link files"
-msgstr "KiCad sembolü ayak izi bağlantı dosyaları"
+msgstr "KiCad sembol ayak izi bağlantı dosyaları"
 
 #: common/wildcards_and_files_ext.cpp:395 gerbview/files.cpp:71
 msgid "Drill files"
@@ -10387,7 +10387,7 @@ msgstr "Eski ayak izi dışa aktarma dosyaları"
 
 #: common/wildcards_and_files_ext.cpp:474
 msgid "Electrical rule check file"
-msgstr "Elektrik kuralı kontrol dosyası"
+msgstr "Elektriksel kural kontrol dosyası"
 
 #: common/wildcards_and_files_ext.cpp:480
 msgid "SPICE library file"
@@ -10436,7 +10436,7 @@ msgstr "IPC-D-356 Test Dosyaları"
 
 #: common/wildcards_and_files_ext.cpp:549
 msgid "Workbook file"
-msgstr "Workbook dosyası"
+msgstr "Çalışma kitabı dosyası"
 
 #: common/wildcards_and_files_ext.cpp:556
 msgid "PNG file"
@@ -10466,7 +10466,7 @@ msgstr "'%s' eşdeğerlik dosyası açılırken hata oluştu."
 
 #: cvpcb/auto_associate.cpp:180
 msgid "Equivalence File Load Error"
-msgstr "Denklik Dosyası Yükleme Hatası"
+msgstr "Eşdeğerlik Dosyası Yükleme Hatası"
 
 #: cvpcb/auto_associate.cpp:187
 #, c-format
@@ -10530,16 +10530,16 @@ msgstr "Filtre Uygulanmış Ayak İzleri"
 #: cvpcb/cvpcb_mainframe.cpp:152
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:335
 msgid "Apply, Save Schematic && Continue"
-msgstr "Uygula, Şemayı Kaydet && Devam Et"
+msgstr "Uygula, Şematiği Kaydet ve Devam Et"
 
 #: cvpcb/cvpcb_mainframe.cpp:211
 msgid "Symbol to footprint changes are unsaved"
-msgstr "Ayak izi değişikliklerinin sembolü kaydedilmedi"
+msgstr "Sembole ait ayak izi değişiklikleri kaydedilmedi"
 
 #: cvpcb/cvpcb_mainframe.cpp:401
 msgid "Symbol to Footprint links have been modified. Save changes?"
 msgstr ""
-"Ayak İzi bağlantıları simgesi değiştirildi. Değişiklikler kaydedilsin mi?"
+"Sembolden Ayak İzi bağlantıları değiştirildi. Değişiklikler kaydedilsin mi?"
 
 #: cvpcb/cvpcb_mainframe.cpp:629 cvpcb/tools/cvpcb_association_tool.cpp:208
 #, c-format
@@ -10571,7 +10571,7 @@ msgstr "Filtreleme Yok"
 #: cvpcb/cvpcb_mainframe.cpp:833
 #, c-format
 msgid "Filtered by %s"
-msgstr "%s tarafından filtrelendi"
+msgstr "%s'e göre filtrelendi"
 
 #: cvpcb/cvpcb_mainframe.cpp:835
 #, c-format
@@ -10659,7 +10659,7 @@ msgstr "Şematik atama"
 
 #: cvpcb/dialogs/fp_conflict_assignment_selector.cpp:42
 msgid "Cmp file assignment"
-msgstr "Cmp dosyası atama"
+msgstr "Cmp dosya ataması"
 
 #: cvpcb/dialogs/fp_conflict_assignment_selector_base.cpp:19
 msgid ""
@@ -10746,7 +10746,7 @@ msgstr "Öncelikle ayak izi kitaplığı tablo girişlerinizi kontrol edin."
 
 #: cvpcb/readwrite_dlgs.cpp:172
 msgid "Problematic Footprint Library Tables"
-msgstr "Sorunlu Ayak İzi Kitaplığı Tabloları"
+msgstr "Sorunlu Ayak İzi Kütüphane Tabloları"
 
 #: cvpcb/readwrite_dlgs.cpp:180
 msgid ""
@@ -10799,7 +10799,7 @@ msgstr "Şemaya Kaydet"
 #: cvpcb/tools/cvpcb_actions.cpp:73
 msgid "Save footprint assignments in 'footprint' fields of schematic symbols"
 msgstr ""
-"Şematik sembollerin 'ayak izi' alanlarına ayak izi atamalarını kaydedin"
+"Şematik sembollerin 'ayak izi' alanlarındaki ayak izi atamalarını kaydet"
 
 #: cvpcb/tools/cvpcb_actions.cpp:81
 msgid "Save to Schematic and File"
@@ -10810,8 +10810,8 @@ msgid ""
 "Save footprint assignments in 'footprint' fields of schematic symbols and "
 "then save schematic files"
 msgstr ""
-"Şematik sembollerin 'ayak izi' alanlarına ayak izi atamalarını kaydedin ve "
-"ardından şematik dosyalarını kaydedin"
+"Şematik sembollerin ayak izi alanlarındaki ayak izi atamalarını kaydet ve "
+"ardından şematik dosyaları kaydet"
 
 #: cvpcb/tools/cvpcb_actions.cpp:105
 msgid "Select Next Unassigned Symbol"
@@ -48488,7 +48488,7 @@ msgid ""
 "The footprint could not be added to the selected library ('%s'). This "
 "library is read-only."
 msgstr ""
-"Ayak izi seçilen kütüphaneye eklenemedi ('%s'). Bu kütphane salt okunurdur."
+"Ayak izi seçilen kütüphaneye eklenemedi ('%s'). Bu kütüphane salt okunurdur."
 
 #: pcbnew/tools/footprint_editor_control.cpp:406
 msgid "_copy"
