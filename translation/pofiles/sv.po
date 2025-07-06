@@ -9,13 +9,14 @@
 # dsa-t <dudesuchamazing@gmail.com>, 2024.
 # John Beard <john.j.beard@gmail.com>, 2025.
 # Joakim Lundborg <joakim.lundborg@gmail.com>, 2025.
+# Johan Heikkilä <johan.heikkila@gmail.com>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-03 20:15+0300\n"
-"PO-Revision-Date: 2025-07-04 18:02+0000\n"
-"Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
+"PO-Revision-Date: 2025-07-06 13:55+0000\n"
+"Last-Translator: Johan Heikkilä <johan.heikkila@gmail.com>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/"
 "master-source/sv/>\n"
 "Language: sv\n"
@@ -36623,7 +36624,7 @@ msgstr "Skapa kragförstärkningar med specificerade värden:"
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:173
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias.cpp:99
 msgid "Apply and Close"
-msgstr "Verkställ och stäg"
+msgstr "Verkställ och stäng"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops.cpp:528
 #: pcbnew/dialogs/dialog_global_edit_teardrops.cpp:532
