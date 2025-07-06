@@ -1336,7 +1336,6 @@ void PCB_VIA::SetLayerSet( const LSET& aLayerSet )
 
 void PCB_VIA::SetLayerPair( PCB_LAYER_ID aTopLayer, PCB_LAYER_ID aBottomLayer )
 {
-
     Padstack().Drill().start = aTopLayer;
     Padstack().Drill().end = aBottomLayer;
     SanitizeLayers();
@@ -1345,12 +1344,30 @@ void PCB_VIA::SetLayerPair( PCB_LAYER_ID aTopLayer, PCB_LAYER_ID aBottomLayer )
 
 void PCB_VIA::SetTopLayer( PCB_LAYER_ID aLayer )
 {
+    // refuse invalid via
+    if( aLayer == Padstack().Drill().end )
+        return;
+
+    if( IsCopperLayerLowerThan( aLayer, Padstack().Drill().end ) )
+    {
+        std::swap( aLayer, Padstack().Drill().end );
+    }
+
     Padstack().Drill().start = aLayer;
 }
 
 
 void PCB_VIA::SetBottomLayer( PCB_LAYER_ID aLayer )
 {
+    // refuse invalid via
+    if( aLayer == Padstack().Drill().start || !IsCopperLayerLowerThan( aLayer, Padstack().Drill().start ) )
+        return;
+
+    if( !IsCopperLayerLowerThan( aLayer, Padstack().Drill().start ) )
+    {
+        std::swap( aLayer, Padstack().Drill().start );
+    }
+
     Padstack().Drill().end = aLayer;
 }
 
@@ -2405,7 +2422,7 @@ static struct TRACK_VIA_DESC
         propMgr.AddProperty( new PROPERTY<PCB_VIA, int>( _HKI( "Hole" ),
             &PCB_VIA::SetDrill, &PCB_VIA::GetDrillValue, PROPERTY_DISPLAY::PT_SIZE ), groupVia );
         propMgr.AddProperty( new PROPERTY_ENUM<PCB_VIA, PCB_LAYER_ID>( _HKI( "Layer Top" ),
-            &PCB_VIA::SetLayer, &PCB_VIA::GetLayer ), groupVia );
+            &PCB_VIA::SetTopLayer, &PCB_VIA::GetLayer ), groupVia );
         propMgr.AddProperty( new PROPERTY_ENUM<PCB_VIA, PCB_LAYER_ID>( _HKI( "Layer Bottom" ),
             &PCB_VIA::SetBottomLayer, &PCB_VIA::BottomLayer ), groupVia );
         propMgr.AddProperty( new PROPERTY_ENUM<PCB_VIA, VIATYPE>( _HKI( "Via Type" ),
