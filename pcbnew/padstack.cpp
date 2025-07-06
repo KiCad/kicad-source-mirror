@@ -940,7 +940,7 @@ PCB_LAYER_ID PADSTACK::EffectiveLayerFor( PCB_LAYER_ID aLayer ) const
     case LAYER_PAD_BK_NETNAMES:
         return Mode() == MODE::NORMAL ? F_Cu : B_Cu;
 
-        // For these, just give the front copper geometry, it doesn't matter.
+    // For these, just give the front copper geometry, it doesn't matter.
     case LAYER_PAD_NETNAMES:
     case LAYER_VIA_NETNAMES:
     case LAYER_PADS:
@@ -948,6 +948,11 @@ PCB_LAYER_ID PADSTACK::EffectiveLayerFor( PCB_LAYER_ID aLayer ) const
     case LAYER_VIA_HOLES:
     case LAYER_PAD_HOLEWALLS:
     case LAYER_VIA_HOLEWALLS:
+    case LAYER_LOCKED_ITEM_SHADOW:
+        return ALL_LAYERS;
+
+    // It's not 100% clear what people use these for, but presumably it's some form of documentation.
+    // In any case, there's no way for us to know which shape they want, so just give them the front.
     case Dwgs_User:
     case Eco1_User:
     case Eco2_User:
