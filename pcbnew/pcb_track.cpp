@@ -1348,27 +1348,19 @@ void PCB_VIA::SetTopLayer( PCB_LAYER_ID aLayer )
     if( aLayer == Padstack().Drill().end )
         return;
 
-    if( IsCopperLayerLowerThan( aLayer, Padstack().Drill().end ) )
-    {
-        std::swap( aLayer, Padstack().Drill().end );
-    }
-
     Padstack().Drill().start = aLayer;
+    SanitizeLayers();
 }
 
 
 void PCB_VIA::SetBottomLayer( PCB_LAYER_ID aLayer )
 {
     // refuse invalid via
-    if( aLayer == Padstack().Drill().start || !IsCopperLayerLowerThan( aLayer, Padstack().Drill().start ) )
+    if( aLayer == Padstack().Drill().start )
         return;
 
-    if( !IsCopperLayerLowerThan( aLayer, Padstack().Drill().start ) )
-    {
-        std::swap( aLayer, Padstack().Drill().start );
-    }
-
     Padstack().Drill().end = aLayer;
+    SanitizeLayers();
 }
 
 

@@ -448,7 +448,12 @@ public:
     bool HasValidLayerPair( int aCopperLayerCount );
 
     VIATYPE GetViaType() const { return m_viaType; }
-    void SetViaType( VIATYPE aViaType ) { m_viaType = aViaType; }
+    void    SetViaType( VIATYPE aViaType )
+    {
+        m_viaType = aViaType;
+        // If someone updates a VIA to TH, we want to kick out any non-outer layers
+        SanitizeLayers();
+    }
 
     const PADSTACK& Padstack() const              { return m_padStack; }
     PADSTACK& Padstack()                          { return m_padStack; }
