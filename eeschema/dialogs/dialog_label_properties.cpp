@@ -72,7 +72,7 @@ DIALOG_LABEL_PROPERTIES::DIALOG_LABEL_PROPERTIES( SCH_EDIT_FRAME* aParent,
     if( m_currentLabel->Type() == SCH_GLOBAL_LABEL_T || m_currentLabel->Type() == SCH_LABEL_T )
     {
         m_activeTextEntry = m_valueCombo;
-        SetInitialFocus( m_valueCombo );
+        SetInitialFocus( m_valueCombo->GetTextCtrl() );
 
         m_labelSingleLine->Show( false );
         m_valueSingleLine->Show( false );
