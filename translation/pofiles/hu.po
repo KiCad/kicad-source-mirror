@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-03 20:16+0300\n"
-"PO-Revision-Date: 2025-07-06 13:55+0000\n"
+"PO-Revision-Date: 2025-07-07 14:41+0000\n"
 "Last-Translator: Sárkány Lőrinc <lsarkany@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/kicad/v9/hu/>\n"
 "Language: hu\n"
@@ -30288,19 +30288,18 @@ msgid "Roundrect radius must be non-negative"
 msgstr ""
 
 #: libs/kiplatform/os/windows/environment.cpp:72
-#, fuzzy, c-format
+#, c-format
 msgid "Error code: %d"
-msgstr "Hiba: "
+msgstr "Hibakód: %d"
 
 #: pagelayout_editor/dialogs/design_inspector.cpp:226
-#, fuzzy
 msgid "Layout"
-msgstr "Elrendezés előnézete"
+msgstr "Elrendezés"
 
 #: pagelayout_editor/dialogs/design_inspector.cpp:233
 #, c-format
 msgid "Size: %.1fx%.1fmm"
-msgstr ""
+msgstr "Méret:%.1f x %.1f mm"
 
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.cpp:30
 #, fuzzy
@@ -30405,19 +30404,16 @@ msgid "These build-in keywords are always available:"
 msgstr ""
 
 #: pagelayout_editor/dialogs/properties_frame.cpp:688
-#, fuzzy
 msgid "(sheet number)"
-msgstr "Oldalszám: %d"
+msgstr "(oldalszám)"
 
 #: pagelayout_editor/dialogs/properties_frame.cpp:689
-#, fuzzy
 msgid "(sheet count)"
-msgstr "Ismétlődés száma:"
+msgstr "(oldalak száma)"
 
 #: pagelayout_editor/dialogs/properties_frame.cpp:695
-#, fuzzy
 msgid "(paper size)"
-msgstr "Egyedi papírméret:"
+msgstr "(papírméret)"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:38
 #, fuzzy
