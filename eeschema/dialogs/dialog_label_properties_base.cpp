@@ -329,7 +329,7 @@ DIALOG_LABEL_PROPERTIES_BASE::DIALOG_LABEL_PROPERTIES_BASE( wxWindow* parent, wx
 	this->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_LABEL_PROPERTIES_BASE::OnUpdateUI ) );
 	m_valueSingleLine->Connect( wxEVT_CHAR_HOOK, wxKeyEventHandler( DIALOG_LABEL_PROPERTIES_BASE::OnValueCharHook ), NULL, this );
 	m_valueSingleLine->Connect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_LABEL_PROPERTIES_BASE::OnEnterKey ), NULL, this );
-	m_valueCombo->Connect( wxEVT_CHAR_HOOK, wxKeyEventHandler( DIALOG_LABEL_PROPERTIES_BASE::OnValueCharHook ), NULL, this );
+	m_valueCombo->Connect( wxEVT_CHAR_HOOK, wxKeyEventHandler( DIALOG_LABEL_PROPERTIES_BASE::OnCBValueCharHook ), NULL, this );
 	m_valueCombo->Connect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_LABEL_PROPERTIES_BASE::OnEnterKey ), NULL, this );
 	m_valueMultiLine->Connect( wxEVT_CHAR_HOOK, wxKeyEventHandler( DIALOG_LABEL_PROPERTIES_BASE::OnValueCharHook ), NULL, this );
 	m_cbMultiLine->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LABEL_PROPERTIES_BASE::onMultiLabelCheck ), NULL, this );
@@ -347,7 +347,7 @@ DIALOG_LABEL_PROPERTIES_BASE::~DIALOG_LABEL_PROPERTIES_BASE()
 	this->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_LABEL_PROPERTIES_BASE::OnUpdateUI ) );
 	m_valueSingleLine->Disconnect( wxEVT_CHAR_HOOK, wxKeyEventHandler( DIALOG_LABEL_PROPERTIES_BASE::OnValueCharHook ), NULL, this );
 	m_valueSingleLine->Disconnect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_LABEL_PROPERTIES_BASE::OnEnterKey ), NULL, this );
-	m_valueCombo->Disconnect( wxEVT_CHAR_HOOK, wxKeyEventHandler( DIALOG_LABEL_PROPERTIES_BASE::OnValueCharHook ), NULL, this );
+	m_valueCombo->Disconnect( wxEVT_CHAR_HOOK, wxKeyEventHandler( DIALOG_LABEL_PROPERTIES_BASE::OnCBValueCharHook ), NULL, this );
 	m_valueCombo->Disconnect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_LABEL_PROPERTIES_BASE::OnEnterKey ), NULL, this );
 	m_valueMultiLine->Disconnect( wxEVT_CHAR_HOOK, wxKeyEventHandler( DIALOG_LABEL_PROPERTIES_BASE::OnValueCharHook ), NULL, this );
 	m_cbMultiLine->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LABEL_PROPERTIES_BASE::onMultiLabelCheck ), NULL, this );
