@@ -336,7 +336,7 @@
                 <property name="window_extra_style"></property>
                 <property name="window_name"></property>
                 <property name="window_style"></property>
-                <event name="OnCharHook">OnValueCharHook</event>
+                <event name="OnCharHook">OnCBValueCharHook</event>
                 <event name="OnTextEnter">OnEnterKey</event>
               </object>
             </object>
