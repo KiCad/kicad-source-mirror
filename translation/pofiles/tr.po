@@ -9783,7 +9783,7 @@ msgstr "Veri sayfası alanı %s karakter(ler) içeremez."
 #: common/validators.cpp:434
 #, c-format
 msgid "The sheet name cannot contain %s character(s)."
-msgstr "Sayfa dosya adı %s karakter(ler) içeremez."
+msgstr "Sayfa adı %s karakter(ler) içeremez."
 
 #: common/validators.cpp:438
 #, c-format
@@ -9797,12 +9797,12 @@ msgstr "Alan %s karakter(ler) içeremez."
 
 #: common/validators.cpp:448
 msgid "The reference designator cannot contain text variable references"
-msgstr "Referans belirteci metin değişkeni referansları içeremez"
+msgstr "Referans tanımlayıcı metin değişkeni referansları içeremez"
 
 #: common/validators.cpp:452
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:310
 msgid "References must start with a letter."
-msgstr "Başvurular bir harfle başlamalıdır."
+msgstr "Referanslar bir harfle başlamalıdır."
 
 #: common/validators.cpp:460
 msgid "Field Validation Error"
@@ -11062,7 +11062,7 @@ msgstr "Kütüphane Tablosuna Ekle"
 #: eeschema/design_block_utils.cpp:176 pcbnew/footprint_libraries_utils.cpp:372
 #, c-format
 msgid "Library %s is read only."
-msgstr "Kitaplık %s salt okunurdur."
+msgstr "Kütüphane %s salt okunurdur."
 
 #: eeschema/design_block_utils.cpp:182 pcbnew/footprint_libraries_utils.cpp:378
 #, c-format
@@ -48488,7 +48488,7 @@ msgid ""
 "The footprint could not be added to the selected library ('%s'). This "
 "library is read-only."
 msgstr ""
-"Ayak izi seçilen kütüphaneye eklenemedi ('%s'). Bu kitaplık salt okunurdur."
+"Ayak izi seçilen kütüphaneye eklenemedi ('%s'). Bu kütphane salt okunurdur."
 
 #: pcbnew/tools/footprint_editor_control.cpp:406
 msgid "_copy"
