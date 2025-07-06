@@ -24,7 +24,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-03 20:16+0300\n"
-"PO-Revision-Date: 2025-07-06 03:44+0000\n"
+"PO-Revision-Date: 2025-07-06 13:55+0000\n"
 "Last-Translator: YÜKSEL AÇIKGÖZ <yukselacikgoz@gmail.com>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/kicad/v9/tr/>\n"
 "Language: tr\n"
@@ -5703,7 +5703,7 @@ msgid ""
 "Do you wish to reload them?"
 msgstr ""
 "Uyarı seviyeleri Kurulum iletişim kutusunun dışında değiştirildi.\n"
-"Bunları yeniden yüklemek istiyor musunuz?"
+"Bunları yeniden yüklemek ister misiniz?"
 
 #: common/dialogs/panel_text_variables.cpp:111
 msgid ""
@@ -5711,7 +5711,7 @@ msgid ""
 "Do you wish to reload them?"
 msgstr ""
 "Metin değişkenleri Kurulum iletişim kutusunun dışında değiştirildi.\n"
-"Bunları yeniden yüklemek istiyor musunuz?"
+"Bunları yeniden yüklemek ister misiniz?"
 
 #: common/dialogs/panel_text_variables.cpp:165
 #: common/dialogs/panel_text_variables.cpp:193
@@ -6160,7 +6160,7 @@ msgstr "Otomatik Yakınlaştır"
 #: common/eda_draw_frame.cpp:556
 #, c-format
 msgid "Zoom %.2f"
-msgstr "%.2f Yakınlaştır"
+msgstr "Yakınlaştırma: %.2f"
 
 #: common/eda_draw_frame.cpp:639
 #, c-format
@@ -9660,7 +9660,7 @@ msgid ""
 msgstr ""
 "Yardım dosyası '%s' veya\n"
 "'%s' bulunamadı.\n"
-"KiCad çevrimiçi yardımına erişmek istiyor musunuz?"
+"KiCad çevrimiçi yardımına erişmek ister misiniz?"
 
 #: common/tool/common_control.cpp:248 common/tool/common_control.cpp:268
 msgid "File Not Found"
@@ -9673,7 +9673,7 @@ msgid ""
 "Do you want to access the KiCad online help?"
 msgstr ""
 "'%s' yardım dosyası bulunamadı.\n"
-"KiCad çevrimiçi yardımına erişmek istiyor musunuz?"
+"KiCad çevrimiçi yardımına erişmek ister misiniz?"
 
 #: common/tool/common_control.cpp:303
 #, c-format
@@ -9682,7 +9682,8 @@ msgid ""
 "For information on how to help the KiCad project, visit %s"
 msgstr ""
 "Varsayılan tarayıcı başlatılamadı.\n"
-"KiCad projesine nasıl yardımcı olundu hakkında bilgi için %s"
+"KiCad projesine nasıl yardım edileceği hakkında bilgi için %s adresini "
+"ziyaret edin"
 
 #: common/tool/common_control.cpp:306
 msgid "Get involved with KiCad"
@@ -9712,7 +9713,7 @@ msgstr "&Seçimi Genişlet\tE"
 #: common/tool/zoom_menu.cpp:67
 #, c-format
 msgid "Zoom: %.2f"
-msgstr "%.2f Yakınlaştır"
+msgstr "Yakınlaştırma: %.2f"
 
 #: common/validators.cpp:224
 #, c-format
@@ -9762,7 +9763,7 @@ msgstr ", veya "
 #: common/validators.cpp:418
 #, c-format
 msgid "The reference designator cannot contain %s character(s)."
-msgstr "Referans belirleyici %s karakter(ler) içeremez."
+msgstr "Referans tanımlayıcı %s karakter(ler) içeremez."
 
 #: common/validators.cpp:422
 #, c-format
@@ -9772,7 +9773,7 @@ msgstr "Değer alanı %s karakter(ler) içeremez."
 #: common/validators.cpp:426
 #, c-format
 msgid "The footprint field cannot contain %s character(s)."
-msgstr "Baskı izi alanı %s karakter(ler) içeremez."
+msgstr "Ayak izi alanı %s karakter(ler) içeremez."
 
 #: common/validators.cpp:430
 #, c-format
@@ -9782,12 +9783,12 @@ msgstr "Veri sayfası alanı %s karakter(ler) içeremez."
 #: common/validators.cpp:434
 #, c-format
 msgid "The sheet name cannot contain %s character(s)."
-msgstr "Sayfa adı %s karakter(ler) içeremez."
+msgstr "Sayfa dosya adı %s karakter(ler) içeremez."
 
 #: common/validators.cpp:438
 #, c-format
 msgid "The sheet filename cannot contain %s character(s)."
-msgstr "Sayfa adı %s karakter(ler) içeremez."
+msgstr "Sayfa dosya adı %s karakter(ler) içeremez."
 
 #: common/validators.cpp:442
 #, c-format
@@ -11124,8 +11125,7 @@ msgstr "Tasarım bloğu kütüphanesi '%s' silindi"
 #: eeschema/design_block_utils.cpp:523
 #, c-format
 msgid "Delete design block '%s' in library '%s' from disk?"
-msgstr ""
-"'%s' kütüphanesindeki '%s' tasarım bloğunu diskten silmek istiyor musunuz?"
+msgstr "Diskten, tasarım bloğu '%s' , kütüphane '%s' içinden silinsin mi?"
 
 #: eeschema/design_block_utils.cpp:539
 #, c-format
@@ -13554,8 +13554,9 @@ msgid ""
 "in the schematic.\n"
 "Do you wish to continue?"
 msgstr ""
-"Bu pin, şematikte bağlanmasını zorlaştıracak %d milslik bir ızgarada değil.\n"
-"Devam etmek istiyor musunuz?"
+"Bu pin %d mil ızgarada değil, bu da şemada bağlantı kurmayı zorlaştıracaktır."
+"\n"
+"Devam etmek ister misiniz?"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:452
 msgid "Synchronized Pins Mode."
@@ -14387,7 +14388,7 @@ msgstr "Bir sayfanın bir adı olmalı."
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:730
 msgid "A sheet must have a file specified."
-msgstr "Bir sayfanın belirtilen bir dosyası olmalıdır."
+msgstr "Bir sayfanın belirtilmiş bir dosyası olmalıdır."
 
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:133
 msgid "Page number:"
@@ -23979,7 +23980,7 @@ msgstr "Yolu Ayır"
 
 #: eeschema/tools/sch_edit_tool.cpp:2973
 msgid "Do you wish to delete the unreferenced pins from this sheet?"
-msgstr "Bu sayfadaki başvurulmamış pimleri silmek istiyor musunuz?"
+msgstr "Bu sayfadan referanssız pinleri silmek ister misiniz?"
 
 #: eeschema/tools/sch_edit_tool.cpp:3034
 #, c-format
@@ -44718,7 +44719,7 @@ msgid ""
 "Do you want to reload the footprint?"
 msgstr ""
 "Geçerli ayak izini içeren kütüphane değişti.\n"
-"Ayak izini yeniden yüklemek istiyor musunuz?"
+"Ayak izini yeniden yüklemek ister misiniz?"
 
 #: pcbnew/pcb_dimension.cpp:611 pcbnew/pcb_dimension.cpp:1826
 msgid "Prefix"
