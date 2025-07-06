@@ -10803,14 +10803,14 @@ msgstr ""
 
 #: cvpcb/tools/cvpcb_actions.cpp:81
 msgid "Save to Schematic and File"
-msgstr "Şematik ve Dosyaya Kaydet"
+msgstr "Şematiğe ve Dosyaya Kaydet"
 
 #: cvpcb/tools/cvpcb_actions.cpp:82
 msgid ""
 "Save footprint assignments in 'footprint' fields of schematic symbols and "
 "then save schematic files"
 msgstr ""
-"Şematik sembollerin ayak izi alanlarındaki ayak izi atamalarını kaydet ve "
+"Şematik sembollerin 'ayak izi' alanlarındaki ayak izi atamalarını kaydet ve "
 "ardından şematik dosyaları kaydet"
 
 #: cvpcb/tools/cvpcb_actions.cpp:105
@@ -10819,7 +10819,7 @@ msgstr "Sonraki Atanmamış Sembolü Seç"
 
 #: cvpcb/tools/cvpcb_actions.cpp:106
 msgid "Select next symbol with no footprint assignment"
-msgstr "Ayak izi ataması olmayan bir sonraki sembolü seçin"
+msgstr "Ayak izi ataması olmayan bir sonraki sembolü seç"
 
 #: cvpcb/tools/cvpcb_actions.cpp:114
 msgid "Select Previous Unassigned Symbol"
@@ -10827,7 +10827,7 @@ msgstr "Önceki Atanmamış Sembolü Seç"
 
 #: cvpcb/tools/cvpcb_actions.cpp:115
 msgid "Select previous symbol with no footprint assignment"
-msgstr "Ayak izi ataması olmayan önceki sembolü seçin"
+msgstr "Ayak izi ataması olmayan önceki sembolü seç"
 
 #: cvpcb/tools/cvpcb_actions.cpp:126
 msgid "Assign Footprint"
@@ -10840,8 +10840,7 @@ msgstr "Ayak izlerini Otomatik Ata"
 #: cvpcb/tools/cvpcb_actions.cpp:133
 msgid "Assign footprints automatically using a footprint association file"
 msgstr ""
-"Ayak izi ilişkilendirme dosyasını kullanarak ayak izlerini otomatik olarak "
-"atayın"
+"Bir ayak izi ilişkilendirme dosyası kullanarak ayak izlerini otomatik atar"
 
 #: cvpcb/tools/cvpcb_actions.cpp:140
 msgid "Delete Footprint Assignment"
@@ -10853,12 +10852,12 @@ msgstr "Tüm Ayak izi Atamalarını Sil"
 
 #: cvpcb/tools/cvpcb_actions.cpp:153
 msgid "Use symbol footprint filters"
-msgstr "Sembol ayak izini filtre kullanın"
+msgstr "Sembol ayak izi filtrelerini kullan"
 
 #: cvpcb/tools/cvpcb_actions.cpp:154
 msgid "Filter footprint list by footprint filters defined in the symbol"
 msgstr ""
-"Sembolde tanımlanan ayak izi filtrelerine göre ayak izi listesini filtreleyin"
+"Ayak izi listesini sembolde tanımlanmış ayak izi filtrelerine göre filtreler"
 
 #: cvpcb/tools/cvpcb_actions.cpp:162
 msgid "Filter by pin count"
@@ -10878,7 +10877,7 @@ msgstr "Ayak izi listesini kütüphaneye göre filtrele"
 
 #: cvpcb/tools/cvpcb_association_tool.cpp:255
 msgid "Delete all associations?"
-msgstr "Tüm atamaları silin?"
+msgstr "Tüm ilişkilendirmeler silinsin mi?"
 
 #: eeschema/annotate.cpp:82
 #, c-format
@@ -10929,7 +10928,7 @@ msgstr "API aracılığıyla eklenen ögeler"
 
 #: eeschema/api/api_handler_sch.cpp:277 pcbnew/api/api_handler_pcb.cpp:506
 msgid "Created items via API"
-msgstr "API aracılığıyla oluşturulan ögeler"
+msgstr "API aracılığıyla ögeler oluşturuldu"
 
 #: eeschema/bom_plugins.cpp:47
 #, c-format
@@ -10976,17 +10975,17 @@ msgstr ""
 #: eeschema/connection_graph.cpp:4257
 #, c-format
 msgid "Sheet pin %s has no matching hierarchical label inside the sheet"
-msgstr "Sayfa bacağı %s sayfanın içinde eşleşen hiyerarşik etiket yok"
+msgstr "%s sayfa pininin sayfa içinde eşleşen bir hiyerarşik etiketi yok"
 
 #: eeschema/connection_graph.cpp:4274
 #, c-format
 msgid "Hierarchical label %s has no matching sheet pin in the parent sheet"
-msgstr "Hiyerarşik etiket %s üst sayfada eşleşen sayfa bacağı yok"
+msgstr "%s hiyerarşik etiketinin üst sayfada eşleşen bir sayfa pini yok"
 
 #: eeschema/cross-probing.cpp:160
 #, c-format
 msgid "%s pin %s found"
-msgstr "%s bacağı %s bulundu"
+msgstr "%s pini %s bulundu"
 
 #: eeschema/cross-probing.cpp:162
 #, c-format
@@ -11152,7 +11151,7 @@ msgstr "Kapsam"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:42
 msgid "Entire schematic"
-msgstr "Şemanın tamamı"
+msgstr "Tüm şematik"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:45
 #: eeschema/dialogs/dialog_increment_annotations_base.cpp:50
@@ -11172,12 +11171,12 @@ msgstr "Alt sayfalara yinele"
 #: eeschema/dialogs/dialog_annotate_base.cpp:58
 #: eeschema/dialogs/panel_eeschema_annotation_options_base.cpp:27
 msgid "Order"
-msgstr "Emir"
+msgstr "Sırala"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:63
 #: eeschema/dialogs/panel_eeschema_annotation_options_base.cpp:37
 msgid "Sort symbols by &X position"
-msgstr "Sembolleri &X konumuna göre sıralama"
+msgstr "Sembolleri &X konumuna göre sırala"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:75
 #: eeschema/dialogs/panel_eeschema_annotation_options_base.cpp:49
@@ -11200,17 +11199,17 @@ msgstr "Numaralama"
 #: eeschema/dialogs/dialog_annotate_base.cpp:101
 #: eeschema/dialogs/panel_eeschema_annotation_options_base.cpp:73
 msgid "Use first free number after:"
-msgstr "İlk kullanılmayan numarayı kullan:"
+msgstr "İlk boş numarayı şundan sonra kullan:"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:107
 #: eeschema/dialogs/panel_eeschema_annotation_options_base.cpp:79
 msgid "First free after sheet number X 100"
-msgstr "Sayfa numarası X 100'den sonra ilk kullanılmayan numarayı kullan"
+msgstr "Sayfa numarası X 100'den sonraki ilk boş"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:110
 #: eeschema/dialogs/panel_eeschema_annotation_options_base.cpp:82
 msgid "First free after sheet number X 1000"
-msgstr "Sayfa numarası X 1000'den sonra ilk kullanılmayan numarayı kullan"
+msgstr "Sayfa numarası X 1000'den sonraki ilk boş"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:133
 msgid "Clear Annotation"
@@ -11234,7 +11233,7 @@ msgstr "(dosya eksik)"
 #: eeschema/dialogs/dialog_bom.cpp:244
 #, c-format
 msgid "The selected BOM generator script %s could not be found."
-msgstr "Seçilen reçete(BOM) oluşturma komut dosyası %s bulunamadı."
+msgstr "Seçilen BOM malzeme listesi oluşturucu betiği %s bulunamadı."
 
 #: eeschema/dialogs/dialog_bom.cpp:249
 #, c-format
@@ -11253,7 +11252,8 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_bom.cpp:296
 msgid "Generating BOM requires a fully annotated schematic."
-msgstr "Ürün reçetesi oluşturmak için tam numaralandırılmış bir şema gerekir."
+msgstr ""
+"BOM malzeme listesi oluşturmak için tam olarak açıklanmış bir şematik gerekir"
 
 #: eeschema/dialogs/dialog_bom.cpp:301
 msgid "Failed to create file."
@@ -29814,7 +29814,7 @@ msgstr "Alüminyum-Bakır"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:60
 msgid "Cast iron"
-msgstr "Sağlamdemir"
+msgstr "Dökme Demir"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:61
 msgid "Carbon steel"
