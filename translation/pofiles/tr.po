@@ -10901,12 +10901,12 @@ msgstr "%d yinelenen zaman damgaları bulundu ve değiştirildi."
 #: eeschema/annotate.cpp:397
 #, c-format
 msgid "Updated %s (unit %s) from %s to %s."
-msgstr "%s (birim %s) %s ile %s arasında güncelleştirildi."
+msgstr "%s (birim %s) %s ile %s arasında güncellendi."
 
 #: eeschema/annotate.cpp:405
 #, c-format
 msgid "Updated %s from %s to %s."
-msgstr "%s %s ile %s arasında güncelleştirildi."
+msgstr "%s %s ile %s arasında güncellendi."
 
 #: eeschema/annotate.cpp:415
 #, c-format
@@ -11253,7 +11253,8 @@ msgstr ""
 #: eeschema/dialogs/dialog_bom.cpp:296
 msgid "Generating BOM requires a fully annotated schematic."
 msgstr ""
-"BOM malzeme listesi oluşturmak için tam olarak açıklanmış bir şematik gerekir"
+"BOM malzeme listesi oluşturmak için tam olarak açıklanmış bir şematik "
+"gerekir."
 
 #: eeschema/dialogs/dialog_bom.cpp:301
 msgid "Failed to create file."
@@ -11261,7 +11262,7 @@ msgstr "Dosya oluşturulamadı."
 
 #: eeschema/dialogs/dialog_bom.cpp:337 eeschema/dialogs/dialog_bom_base.cpp:45
 msgid "Generator nickname:"
-msgstr "Oluşturanın takma adı:"
+msgstr "Jeneratör takma adı:"
 
 #: eeschema/dialogs/dialog_bom.cpp:337
 msgid "Add Generator"
@@ -11287,11 +11288,11 @@ msgstr "Malzeme Listesi Oluşturma Yardımı"
 
 #: eeschema/dialogs/dialog_bom_base.cpp:27
 msgid "BOM generator scripts:"
-msgstr "Ürün reçetesi oluşturucu komut dosyaları:"
+msgstr "BOM malzeme listesi oluşturucu betikleri:"
 
 #: eeschema/dialogs/dialog_bom_base.cpp:71
 msgid "Add a new BOM generator and its command line to the list"
-msgstr "Listeye yeni bir ürün reçetesi oluşturucusu ve komut satırı ekleme"
+msgstr "Listeye yeni bir BOM malzeme listesi oluşturucu ve komut satırını ekle"
 
 #: eeschema/dialogs/dialog_bom_base.cpp:76
 msgid "Edit the script file in the text editor"
@@ -11322,7 +11323,7 @@ msgstr ""
 #: eeschema/dialogs/dialog_bom_base.cpp:115
 msgid "Reset the list of BOM generator scripts to the default settings"
 msgstr ""
-"Ürün reçetesi oluşturucu komut dosyalarının listesini varsayılan ayarlara "
+"BOM malzeme listesi oluşturucu betikleri listesini varsayılan ayarlara "
 "sıfırla"
 
 #: eeschema/dialogs/dialog_bom_base.h:81
@@ -11496,7 +11497,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:69
 msgid "Change all symbols in schematic"
-msgstr "Şemadaki tüm simgeleri değiştirme"
+msgstr "Şematikteki tüm simgeleri değiştir"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:70
 #: eeschema/dialogs/dialog_change_symbols.cpp:438
@@ -11509,7 +11510,7 @@ msgstr "Seçili sembolleri değiştir"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:97
 msgid "Change symbols matching reference designator:"
-msgstr "Referans tasarımcısı ile eşleşen sembolleri değiştirin:"
+msgstr "Referans tanımlayıcıya uyan sembolleri değiştir:"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:98
 msgid "Change symbols matching value:"
@@ -11517,20 +11518,20 @@ msgstr "Değerle eşleşen sembolleri değiştirin:"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:99
 msgid "Change symbols matching library identifier:"
-msgstr "Kütüphane tanımlayıcısıyla eşleşen sembolleri değiştirin:"
+msgstr "Kütüphane tanımlayıcıya uyan sembolleri değiştir:"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:136
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:62
 msgid "Update Fields"
-msgstr "Alanları Güncelleştir"
+msgstr "Alanları Güncelle"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:137
 msgid "Remove fields if not in new symbol"
-msgstr "Yeni simgede değilse alanları kaldırma"
+msgstr "Yeni sembolde yoksa alanları kaldır"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:138
 msgid "Reset fields if empty in new symbol"
-msgstr "Yeni sembolde boşsa alanları sıfırlayın"
+msgstr "Yeni sembolde boşsa alanları sıfırla"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:139
 msgid "Update field text"
@@ -11542,11 +11543,11 @@ msgstr "Alan görünürlüklerini güncelle"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:141
 msgid "Update field sizes and styles"
-msgstr "Alan boyutlarını ve stillerini güncelleyin"
+msgstr "Alan boyutlarını ve stillerini güncelle"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:142
 msgid "Update field positions"
-msgstr "Alan konumlarını güncelleyin"
+msgstr "Alan konumlarını güncelle"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:143
 msgid "Update symbol attributes"
@@ -11611,23 +11612,23 @@ msgstr "Şematikteki tüm sembolleri güncelle"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:31
 msgid "Update selected symbol(s)"
-msgstr "Seçili simge(leri) güncelleştir"
+msgstr "Seçili simge(leri) güncelle"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:34
 msgid "Update symbols matching reference designator:"
-msgstr "Referans tasarımcıyla eşleşen sembolleri güncelleyin:"
+msgstr "Referans tanımlayıcıya uyan sembolleri güncelle:"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:40
 msgid "Update symbols matching value:"
-msgstr "Değerle eşleşen sembolleri güncelleştir:"
+msgstr "Değerle eşleşen sembolleri güncelle:"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:46
 msgid "Update symbols matching library identifier:"
-msgstr "Kütüphane tanımlayıcısıyla eşleşen sembolleri güncelleyin:"
+msgstr "Kütüphane tanımlayıcısıyla eşleşen sembolleri güncelle:"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:73
 msgid "New library identifier:"
-msgstr "Yeni kütüphane tanımlayıcısı:"
+msgstr "Yeni kütüphane tanımlayıcı:"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:95
 msgid "Update/Reset Fields"
@@ -11642,11 +11643,11 @@ msgstr "Seçimi kaldır"
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:59
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:95
 msgid "Update Options"
-msgstr "Seçenekleri Güncelle"
+msgstr "Güncelleme Seçenekleri"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:123
 msgid "Remove fields if not in library symbol"
-msgstr "Kütüphane simgesinde değilse alanları kaldırma"
+msgstr "Kütüphane sembolünde yoksa alanları kaldır"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:124
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:62
@@ -11670,16 +11671,16 @@ msgstr "Alan görünürlüklerini güncelle/sıfırla"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:140
 msgid "Update/reset field text sizes and styles"
-msgstr "Alan metin boyutlarını ve stillerini güncelle / sıfırla"
+msgstr "Alan metin boyutlarını ve stillerini güncelle/sıfırla"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:143
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:81
 msgid "Update/reset field positions"
-msgstr "Alan konumlarını güncelleştir/sıfırla"
+msgstr "Alan konumlarını güncelle/sıfırla"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:153
 msgid "Update symbol shape and pins"
-msgstr "Sembol şekli ve pinlerini güncelle"
+msgstr "Sembol şeklini ve pinleri güncelle"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:160
 msgid "Update keywords and footprint filters"
@@ -11729,7 +11730,7 @@ msgstr "DSN:"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:45
 msgid "Username:"
-msgstr "Kullanıcıadı:"
+msgstr "Kullanıcı adı:"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:71
 msgid "Connection String:"
@@ -11823,7 +11824,7 @@ msgstr "%s için Mevcut Adaylar "
 #: eeschema/dialogs/dialog_edit_symbols_libid.cpp:651
 #, c-format
 msgid "Candidates count %d "
-msgstr "Adaylar sayıldı %d "
+msgstr "Adaylar sayısı %d "
 
 #: eeschema/dialogs/dialog_edit_symbols_libid.cpp:662
 #, c-format
@@ -11868,7 +11869,7 @@ msgid ""
 "try to find a candidate having the same name in one of loaded symbol "
 "libraries."
 msgstr ""
-"Bazı semboller yetimse (bağlantılı sembol her yerde bulunmaz)\n"
+"Bazı semboller sahipsizse (bağlantılı sembol her yerde bulunmaz)\n"
 "Yüklenen sembol kütüphanelerinden birinde aynı isime sahip bir aday bulmaya "
 "çalışın."
 
@@ -11968,7 +11969,7 @@ msgstr "Bu ihlali hariç tut"
 #: pcbnew/dialogs/dialog_drc.cpp:712 pcbnew/dialogs/dialog_drc.cpp:716
 #, c-format
 msgid "It will be excluded from the %s list"
-msgstr "%s listesinden çıkarılır"
+msgstr "%s listesinden çıkarılacak"
 
 #: eeschema/dialogs/dialog_erc.cpp:660 pcbnew/dialogs/dialog_drc.cpp:715
 msgid "Exclude with comment..."
@@ -11977,7 +11978,7 @@ msgstr "Yorum ekleyerek hariç tut..."
 #: eeschema/dialogs/dialog_erc.cpp:679 pcbnew/dialogs/dialog_drc.cpp:737
 #, c-format
 msgid "Change severity to Error for all '%s' violations"
-msgstr "Tüm '%s' ihlalleri için önem derecesini Hataya değiştirme"
+msgstr "Tüm '%s' ihlallerinin önem derecesini Hata olarak değiştir"
 
 #: eeschema/dialogs/dialog_erc.cpp:681 eeschema/dialogs/dialog_erc.cpp:688
 msgid ""
@@ -11988,7 +11989,7 @@ msgstr ""
 #: eeschema/dialogs/dialog_erc.cpp:686 pcbnew/dialogs/dialog_drc.cpp:744
 #, c-format
 msgid "Change severity to Warning for all '%s' violations"
-msgstr "Tüm '%s' ihlalleri için önem derecesini Uyarı olarak değiştirme"
+msgstr "Tüm '%s' ihlallerinin önem derecesini Uyarı olarak değiştir"
 
 #: eeschema/dialogs/dialog_erc.cpp:693 pcbnew/dialogs/dialog_drc.cpp:750
 #, c-format
@@ -12006,7 +12007,7 @@ msgstr "Pin pin'e çakışma haritasını düzenle..."
 #: eeschema/dialogs/dialog_erc.cpp:703 eeschema/dialogs/dialog_erc.cpp:709
 #: eeschema/dialogs/dialog_erc.cpp:716
 msgid "Open the Schematic Setup... dialog"
-msgstr "Şematik Kurulum... iletişim kutusunu açın"
+msgstr "Şematik Kurulum... iletişim kutusunu aç"
 
 #: eeschema/dialogs/dialog_erc.cpp:708 pcbnew/dialogs/dialog_drc.cpp:756
 msgid "Edit violation severities..."
@@ -12213,8 +12214,7 @@ msgid ""
 "If not set, write a directive to prevent the saving of digital event data "
 "(esave none)"
 msgstr ""
-"Eğer ayarlanmamışsa, dijital etkinlik verilerinin kaydedilmesini engellemek "
-"için bir yönerge yazın (esave none)"
+"Ayarlanmazsa, dijital olay verilerinin kaydedilmesini önleyen bir yönerge yaz"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:342
 msgid "Run external simulator command:"
@@ -12251,7 +12251,7 @@ msgstr "%s Dışa Aktar"
 #: eeschema/dialogs/dialog_export_netlist.cpp:605
 #: eeschema/netlist_exporters/netlist_generator.cpp:56
 msgid "Exporting netlist requires a fully annotated schematic."
-msgstr "Ağ Listesi vermek için tam numaralandırılmış bir şema gerekir."
+msgstr "Ağ Listesini dışa aktarmak için tam açıklanmış bir şematik gereklidir."
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:655
 msgid "external simulator not found"
@@ -12491,7 +12491,7 @@ msgstr "Tüm gövde stillerine ortak"
 
 #: eeschema/dialogs/dialog_field_properties_base.h:104
 msgid "Text Item Properties"
-msgstr "Metin Öğesi Özellikleri"
+msgstr "Metin Ögesi Özellikleri"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics.cpp:593
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:628
@@ -12512,7 +12512,7 @@ msgstr "Veri yolu ve veri yolu etiketleri"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:51
 msgid "Label fields"
-msgstr "Alan adlarını etiketle"
+msgstr "Etiket alanları"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:57
 msgid "Sheet titles"
@@ -15780,7 +15780,7 @@ msgstr "Uygulanacak Değişiklikler"
 
 #: eeschema/dialogs/dialog_update_from_pcb.cpp:67
 msgid "Update Schematic"
-msgstr "Şemayı Güncelleştir"
+msgstr "Şematiği Güncelle"
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:32
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:27
@@ -15863,7 +15863,7 @@ msgstr "Üst sembolde boşsa alanları sıfırla"
 
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:78
 msgid "Update/reset field sizes and styles"
-msgstr "Alan boyutlarını ve stillerini güncelleştir/sıfırla"
+msgstr "Alan boyutlarını ve stillerini güncelle/sıfırla"
 
 #: eeschema/dialogs/dialog_user_defined_signals.cpp:259
 #: eeschema/sch_label.cpp:2217 pcbnew/dialogs/panel_setup_rules.cpp:877
@@ -33968,7 +33968,7 @@ msgstr "Ayak İzini Değiştir"
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:363
 #, c-format
 msgid "Updated footprint %s (%s)"
-msgstr "Güncelleştirilmiş ayak izi(footprint) %s (%s)"
+msgstr "Güncellenmiş ayak izi %s (%s)"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:369
 #, c-format
@@ -44003,7 +44003,7 @@ msgstr "%s güncellenemiyor (ayak izi atanmamış)."
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:304
 #, c-format
 msgid "Cannot update %s (footprint '%s' not found)."
-msgstr "%s güncelleştirilemiyor (ayak izi '%s' bulunamadı)."
+msgstr "%s güncellenemiyor (ayak izi '%s' bulunamadı)."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:316
 #, c-format
