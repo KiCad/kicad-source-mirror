@@ -1051,8 +1051,8 @@ const PADSTACK::COPPER_LAYER_PROPS& PADSTACK::CopperLayer( PCB_LAYER_ID aLayer )
     auto it = m_copperProps.find( layer );
 
     wxCHECK_MSG( it != m_copperProps.end(), m_copperProps.at( ALL_LAYERS ),
-        "Attempt to retrieve layer " + std::string( magic_enum::enum_name( layer ) ) + " from a "
-        "padstack that does not contain it" );
+                 wxString::Format( wxT( "Attempt to retrieve layer %d from a padstack that does not contain it" ),
+                                   layer ) );
 
     return it->second;
 }

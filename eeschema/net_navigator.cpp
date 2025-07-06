@@ -459,7 +459,8 @@ const SCH_ITEM* SCH_EDIT_FRAME::SelectNextPrevNetNavigatorItem( bool aNext )
 
 void SCH_EDIT_FRAME::SelectNetNavigatorItem( const NET_NAVIGATOR_ITEM_DATA* aSelection )
 {
-    wxCHECK( m_netNavigator && !m_netNavigator->IsFrozen(), /* void */ );
+    wxCHECK( m_netNavigator, /* void */ );
+    wxCHECK( !m_netNavigator->IsFrozen(), /* void */ );
 
     // Maybe in the future we can do something like collapse the tree for an empty selection.
     // For now, leave the tree selection in its current state.
@@ -529,7 +530,8 @@ const SCH_ITEM* SCH_EDIT_FRAME::GetSelectedNetNavigatorItem() const
 
 void SCH_EDIT_FRAME::onNetNavigatorSelection( wxTreeEvent& aEvent )
 {
-    wxCHECK( m_netNavigator && !m_netNavigator->IsFrozen(), /* void */ );
+    wxCHECK( m_netNavigator, /* void */ );
+    wxCHECK( !m_netNavigator->IsFrozen(), /* void */ );
 
     wxTreeItemId id = aEvent.GetItem();
 
@@ -544,14 +546,10 @@ void SCH_EDIT_FRAME::onNetNavigatorSelection( wxTreeEvent& aEvent )
         return;
 
     if( GetCurrentSheet() != itemData->GetSheetPath() )
-    {
-        GetToolManager()->RunAction<SCH_SHEET_PATH*>( SCH_ACTIONS::changeSheet,
-                                                      &itemData->GetSheetPath() );
-    }
+        GetToolManager()->RunAction<SCH_SHEET_PATH*>( SCH_ACTIONS::changeSheet, &itemData->GetSheetPath() );
 
     // Do not focus on item when a sheet tree node is selected.
-    if( m_netNavigator->GetItemParent( id ) != m_netNavigator->GetRootItem()
-            && itemData->GetItem() )
+    if( m_netNavigator->GetItemParent( id ) != m_netNavigator->GetRootItem() && itemData->GetItem() )
     {
         // Make sure we didn't remove the item and/or the screen it resides on before we access it.
         const SCH_ITEM* item = itemData->GetItem();
@@ -575,7 +573,8 @@ void SCH_EDIT_FRAME::onNetNavigatorSelection( wxTreeEvent& aEvent )
 
 void SCH_EDIT_FRAME::onNetNavigatorSelChanging( wxTreeEvent& aEvent )
 {
-    wxCHECK( m_netNavigator && !m_netNavigator->IsFrozen(), /* void */ );
+    wxCHECK( m_netNavigator, /* void */ );
+    wxCHECK( !m_netNavigator->IsFrozen(), /* void */ );
 
     aEvent.Skip();
 }

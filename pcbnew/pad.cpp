@@ -573,8 +573,12 @@ std::shared_ptr<SHAPE> PAD::GetEffectiveShape( PCB_LAYER_ID aLayer, FLASHING fla
 
     aLayer = Padstack().EffectiveLayerFor( aLayer );
 
-    wxCHECK_MSG( m_effectiveShapes.contains( aLayer ) && m_effectiveShapes.at( aLayer ), nullptr,
-                 wxT( "Null shape in PAD::GetEffectiveShape!" ) );
+    wxCHECK_MSG( m_effectiveShapes.contains( aLayer ), nullptr,
+                 wxString::Format( wxT( "Missing shape in PAD::GetEffectiveShape for layer %s." ),
+                                   magic_enum::enum_name( aLayer ) ) );
+    wxCHECK_MSG( m_effectiveShapes.at( aLayer ), nullptr,
+                 wxString::Format( wxT( "Null shape in PAD::GetEffectiveShape for layer %s." ),
+                                   magic_enum::enum_name( aLayer ) ) );
 
     return m_effectiveShapes[aLayer];
 }
