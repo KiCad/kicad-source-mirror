@@ -1973,8 +1973,9 @@ int EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
     PCB_SELECTION& selection = m_selectionTool->RequestSelection(
             []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, PCB_SELECTION_TOOL* sTool )
             {
-                sTool->FilterCollectorForHierarchy( aCollector, true );
                 sTool->FilterCollectorForMarkers( aCollector );
+                sTool->FilterCollectorForHierarchy( aCollector, true );
+                sTool->FilterCollectorForFreePads( aCollector, false );
                 sTool->FilterCollectorForTableCells( aCollector );
             },
             // Prompt user regarding locked items if in board editor and in free-pad-mode (if
@@ -2172,9 +2173,8 @@ int EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
     updateModificationPoint( selection );
     VECTOR2I mirrorPoint = selection.GetReferencePoint();
 
-    FLIP_DIRECTION flipDirection = aEvent.IsAction( &PCB_ACTIONS::mirrorV )
-                                           ? FLIP_DIRECTION::TOP_BOTTOM
-                                           : FLIP_DIRECTION::LEFT_RIGHT;
+    FLIP_DIRECTION flipDirection = aEvent.IsAction( &PCB_ACTIONS::mirrorV ) ? FLIP_DIRECTION::TOP_BOTTOM
+                                                                            : FLIP_DIRECTION::LEFT_RIGHT;
 
     std::vector<EDA_ITEM*> items;
 
@@ -2769,6 +2769,7 @@ int EDIT_TOOL::MoveExact( const TOOL_EVENT& aEvent )
             {
                 sTool->FilterCollectorForMarkers( aCollector );
                 sTool->FilterCollectorForHierarchy( aCollector, true );
+                sTool->FilterCollectorForFreePads( aCollector, false );
                 sTool->FilterCollectorForTableCells( aCollector );
             },
             true /* prompt user regarding locked items */ );
@@ -2865,9 +2866,9 @@ int EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
     const PCB_SELECTION& selection = m_selectionTool->RequestSelection(
                 []( const VECTOR2I&, GENERAL_COLLECTOR& aCollector, PCB_SELECTION_TOOL* sTool )
                 {
-                    sTool->FilterCollectorForFreePads( aCollector, true );
                     sTool->FilterCollectorForMarkers( aCollector );
                     sTool->FilterCollectorForHierarchy( aCollector, true );
+                    sTool->FilterCollectorForFreePads( aCollector, true );
                     sTool->FilterCollectorForTableCells( aCollector );
                 } );
 
@@ -3042,8 +3043,8 @@ int EDIT_TOOL::Increment( const TOOL_EVENT& aEvent )
         }
     };
 
-    PCB_SELECTION& selection = m_selectionTool->RequestSelection(
-            incrementableFilter, true /* prompt user regarding locked items */ );
+    PCB_SELECTION& selection = m_selectionTool->RequestSelection( incrementableFilter,
+                                                                  true /* prompt user regarding locked items */ );
 
     if( selection.Empty() )
         return 0;
@@ -3084,8 +3085,8 @@ int EDIT_TOOL::Increment( const TOOL_EVENT& aEvent )
                 continue;
 
             // Increment on the pad numbers
-            std::optional<wxString> newNumber =
-                    incrementer.Increment( pad.GetNumber(), incParam.Delta, incParam.Index );
+            std::optional<wxString> newNumber = incrementer.Increment( pad.GetNumber(), incParam.Delta,
+                                                                       incParam.Index );
 
             if( newNumber )
             {
@@ -3099,8 +3100,8 @@ int EDIT_TOOL::Increment( const TOOL_EVENT& aEvent )
         {
             PCB_TEXT& text = static_cast<PCB_TEXT&>( *item );
 
-            std::optional<wxString> newText =
-                    incrementer.Increment( text.GetText(), incParam.Delta, incParam.Index );
+            std::optional<wxString> newText = incrementer.Increment( text.GetText(), incParam.Delta,
+                                                                     incParam.Index );
 
             if( newText )
             {
@@ -3121,8 +3122,7 @@ int EDIT_TOOL::Increment( const TOOL_EVENT& aEvent )
 }
 
 
-void EDIT_TOOL::PadFilter( const VECTOR2I&, GENERAL_COLLECTOR& aCollector,
-                           PCB_SELECTION_TOOL* sTool )
+void EDIT_TOOL::PadFilter( const VECTOR2I&, GENERAL_COLLECTOR& aCollector, PCB_SELECTION_TOOL* sTool )
 {
     for( int i = aCollector.GetCount() - 1; i >= 0; i-- )
     {
@@ -3132,8 +3132,7 @@ void EDIT_TOOL::PadFilter( const VECTOR2I&, GENERAL_COLLECTOR& aCollector,
 }
 
 
-void EDIT_TOOL::FootprintFilter( const VECTOR2I&, GENERAL_COLLECTOR& aCollector,
-                                 PCB_SELECTION_TOOL* sTool )
+void EDIT_TOOL::FootprintFilter( const VECTOR2I&, GENERAL_COLLECTOR& aCollector, PCB_SELECTION_TOOL* sTool )
 {
     for( int i = aCollector.GetCount() - 1; i >= 0; i-- )
     {
