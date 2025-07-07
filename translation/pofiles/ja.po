@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-03 20:15+0300\n"
-"PO-Revision-Date: 2025-07-05 22:37+0000\n"
+"PO-Revision-Date: 2025-07-07 14:41+0000\n"
 "Last-Translator: co8 j <co8@nifty.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -13684,9 +13684,8 @@ msgid "Keep linked footprint"
 msgstr "リンクされたフットプリントを保持"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:101
-#, fuzzy
 msgid "Transfer user-defined fields"
-msgstr "ユーザー定義フィールド"
+msgstr "ユーザー定義フィールドを転送"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:104
 msgid "Keep content of user-defined fields"
@@ -23540,14 +23539,12 @@ msgid "Place Sheet Pins"
 msgstr "シートピンを配置"
 
 #: eeschema/tools/sch_actions.cpp:583
-#, fuzzy
 msgid "Autoplace All Sheet Pins"
-msgstr "シートピンを配置"
+msgstr "すべてのシートピンを自動配置"
 
 #: eeschema/tools/sch_actions.cpp:584
-#, fuzzy
 msgid "Imports and auto places all sheet pins"
-msgstr "階層シートピンをインポート"
+msgstr "すべてのシートピンをインポートして自動配置"
 
 #: eeschema/tools/sch_actions.cpp:589 eeschema/tools/sch_actions.cpp:597
 msgid "Sync Sheet Pins..."
@@ -24392,9 +24389,8 @@ msgid "Export Current Plot to Schematic"
 msgstr "現在のプロットを回路図にエクスポート"
 
 #: eeschema/tools/sch_actions.cpp:1586
-#, fuzzy
 msgid "Show Simulation Side Panel"
-msgstr "非表示ピンを表示"
+msgstr "シミュレーション再度パネルを表示"
 
 #: eeschema/tools/sch_actions.cpp:1591
 #, fuzzy
