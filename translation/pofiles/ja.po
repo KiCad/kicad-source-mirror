@@ -24390,12 +24390,11 @@ msgstr "現在のプロットを回路図にエクスポート"
 
 #: eeschema/tools/sch_actions.cpp:1586
 msgid "Show Simulation Side Panel"
-msgstr "シミュレーション再度パネルを表示"
+msgstr "シミュレーションサイドパネルを表示"
 
 #: eeschema/tools/sch_actions.cpp:1591
-#, fuzzy
 msgid "Show Simulation Console Panel"
-msgstr "コンソールパネルを表示"
+msgstr "シミュレーションコンソールパネルを表示"
 
 #: eeschema/tools/sch_actions.cpp:1596
 msgid "Show Legend"
@@ -24784,9 +24783,9 @@ msgstr "エラーは見つかりませんでした。"
 #: eeschema/tools/sch_editor_control.cpp:2996
 #: eeschema/tools/sch_editor_control.cpp:3043 pcbnew/tools/pcb_control.cpp:1383
 #: pcbnew/tools/pcb_control.cpp:1437
-#, fuzzy, c-format
+#, c-format
 msgid "Could not find design block %s."
-msgstr "列ラベル %s が見つかりませんでした。"
+msgstr "デザインブロック %s が見つかりませんでした。"
 
 #: eeschema/tools/sch_editor_control.cpp:3004
 #, c-format
@@ -24970,9 +24969,9 @@ msgstr "シンボル ライブラリが選択されていません。"
 #: eeschema/tools/symbol_editor_control.cpp:263
 #: eeschema/tools/symbol_editor_control.cpp:413
 #: eeschema/tools/symbol_editor_control.cpp:457
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol library '%s' not found."
-msgstr "シンボル ライブラリーが見つかりません。"
+msgstr "シンボル ライブラリー '%s' が見つかりません。"
 
 #: eeschema/tools/symbol_editor_control.cpp:349
 #: pcbnew/tools/footprint_editor_control.cpp:650
@@ -25166,9 +25165,8 @@ msgstr "シートとして配置"
 
 #: eeschema/widgets/sch_design_block_pane.cpp:43
 #: pcbnew/widgets/pcb_design_block_pane.cpp:44
-#, fuzzy
 msgid "Place as group"
-msgstr "モジュールを配置"
+msgstr "グループとして配置"
 
 #: eeschema/widgets/sch_design_block_pane.cpp:44
 #: pcbnew/widgets/pcb_design_block_pane.cpp:45
@@ -25182,9 +25180,8 @@ msgstr "続くクリックでデザイン ブロックのコピーを配置し�
 
 #: eeschema/widgets/sch_design_block_pane.cpp:113
 #: pcbnew/widgets/pcb_design_block_pane.cpp:107
-#, fuzzy
 msgid "Place the design block as a group."
-msgstr "デザインブロックを新しいシートとして配置します。"
+msgstr "デザインブロックをグループとして配置します。"
 
 #: eeschema/widgets/sch_design_block_pane.cpp:119
 msgid "Place the design block as a new sheet."
@@ -25204,7 +25201,6 @@ msgid "Edit Properties"
 msgstr "プロパティを編集"
 
 #: eeschema/widgets/search_handlers.cpp:166
-#, fuzzy
 msgid "Excl. Sim"
 msgstr "シミュレーションから除外"
 
@@ -25213,7 +25209,6 @@ msgid "Excl. BOM"
 msgstr "部品表から除外"
 
 #: eeschema/widgets/search_handlers.cpp:168
-#, fuzzy
 msgid "Excl. Board"
 msgstr "基板から除外"
 
@@ -25228,7 +25223,6 @@ msgstr "指示"
 #: eeschema/widgets/search_handlers.cpp:496
 #: pcbnew/dialogs/dialog_multichannel_generate_rule_areas.cpp:123
 #: pcbnew/widgets/search_handlers.cpp:341
-#, fuzzy
 msgid "Groups"
 msgstr "グループ"
 
@@ -25254,7 +25248,7 @@ msgid "Tune %s"
 msgstr "調整 %s"
 
 #: eeschema/widgets/tuner_slider.cpp:84
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s has simulation model of type '%s %s'.\n"
 "\n"
@@ -25866,9 +25860,8 @@ msgstr ""
 "ん</b> <i>%s</i>"
 
 #: gerbview/files.cpp:308
-#, fuzzy
 msgid "Load Files"
-msgstr "ファイルなし"
+msgstr "ファイルをロード"
 
 #: gerbview/files.cpp:310 gerbview/files.cpp:317
 #, c-format
@@ -26156,29 +26149,24 @@ msgid "Text info entry"
 msgstr "表面テキスト"
 
 #: gerbview/toolbars_gerber.cpp:271
-#, fuzzy
 msgid "Component highlight"
-msgstr "ネットのハイライトを切り替え"
+msgstr "コンポーネントハイライト"
 
 #: gerbview/toolbars_gerber.cpp:273
-#, fuzzy
 msgid "Net highlight"
-msgstr "ネットカラーハイライト"
+msgstr "ネットハイライト"
 
 #: gerbview/toolbars_gerber.cpp:275
-#, fuzzy
 msgid "Aperture highlight"
-msgstr "ネットカラーハイライト"
+msgstr "アパーチャハイライト"
 
 #: gerbview/toolbars_gerber.cpp:277
-#, fuzzy
 msgid "DCode Selector"
-msgstr "選択対象を配線"
+msgstr "Dコード選択"
 
 #: gerbview/toolbars_gerber.cpp:278
-#, fuzzy
 msgid "Select all items with the selected DCode"
-msgstr "画面上のすべてのアイテムを選択"
+msgstr "選択したDコードによりすべてのアイテムを選択"
 
 #: gerbview/toolbars_gerber.cpp:281
 msgid "<No selection>"
@@ -26737,13 +26725,12 @@ msgid "Export utilities (Gerbers, drill, position files, etc)"
 msgstr "エクスポート ユーティリティ (ガーバー、ドリル、部品配置ファイルなど)"
 
 #: kicad/cli/command_pcb_export_3d.cpp:78
-#, fuzzy
 msgid ""
 "Output file format, options: step, stepz, brep, xao, glb (binary glTF), ply, "
 "stl"
 msgstr ""
-"出力ファイルフォーマット, オプション: step, brep, xao, glb (binary glTF), "
-"ply, stl"
+"出力ファイルフォーマット, オプション: step, stepz, brep, xao, glb (binary "
+"glTF), ply, stl"
 
 #: kicad/cli/command_pcb_export_3d.cpp:83
 msgid "Overwrite output file"
@@ -27146,7 +27133,7 @@ msgstr "基板ファイルで設定されているガーバーのプロット設
 
 #: kicad/cli/command_pcb_export_hpgl.cpp:30
 msgid "No longer supported as of KiCad 10.0."
-msgstr ""
+msgstr "KiCad 10.0 ではサポートしていません。"
 
 #: kicad/cli/command_pcb_export_pdf.cpp:37
 msgid "Generate PDF from a list of layers"
@@ -27238,9 +27225,8 @@ msgid "Invalid side specified\n"
 msgstr "不正な面が指定されました\n"
 
 #: kicad/cli/command_pcb_export_ps.cpp:41
-#, fuzzy
 msgid "Generate Postscript from a list of layers"
-msgstr "レイヤーのリストからPDFを生成"
+msgstr "レイヤーのリストからPostScriptを生成"
 
 #: kicad/cli/command_pcb_export_ps.cpp:116
 msgid ""
@@ -27965,9 +27951,9 @@ msgid "Import EasyEDA Pro Project"
 msgstr "EasyEDA Pro プロジェクトをインポート"
 
 #: kicad/jobs_runner.cpp:258
-#, fuzzy, c-format
+#, c-format
 msgid "Running job %d: %s"
-msgstr "実行中のジョブ"
+msgstr "実行中のジョブ %d: %s"
 
 #: kicad/jobs_runner.cpp:302
 msgid "Job successful"
@@ -32838,32 +32824,25 @@ msgstr ""
 "**********************************************************\n"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:424
-#, fuzzy, c-format
+#, c-format
 msgid "Excluding: %s from reannotation<br/>"
-msgstr ""
-"\n"
-"%s を再アノテーションから除外\n"
-"\n"
+msgstr "%s を再アノテーションから除外<br/>"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:427
-#, fuzzy
 msgid ""
 "<br/>Change Array\n"
 "***********************<br/>"
 msgstr ""
-"\n"
-"    配列の変更\n"
-"***********************\n"
+"<br/>配列の変更\n"
+"***********************<br/>"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:435
-#, fuzzy
 msgid "(will be ignored)"
-msgstr " は無視されます"
+msgstr "(は無視されます)"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:448
-#, fuzzy
 msgid "<br/>No footprints"
-msgstr "フットプリントなし"
+msgstr "<br/>フットプリントなし"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:454
 #, fuzzy
@@ -39773,20 +39752,17 @@ msgstr ""
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:141
 #: pcbnew/dialogs/panel_edit_options_base.cpp:215
-#, fuzzy
 msgid "Click:"
-msgstr "クリック"
+msgstr "クリック:"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:151
 #: pcbnew/dialogs/panel_edit_options_base.cpp:225
-#, fuzzy
 msgid "Long Click:"
-msgstr "長くクリック"
+msgstr "長くクリック:"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:171
-#, fuzzy
 msgid "Ctrl+Shift:"
-msgstr "Ctrl+Shift"
+msgstr "Ctrl+Shift:"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:188
 #: pcbnew/dialogs/panel_edit_options_base.cpp:262
@@ -39800,9 +39776,8 @@ msgid "Highlight net (for pads/tracks)"
 msgstr "ネットをハイライトします(パッドまたはトラック)"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:245
-#, fuzzy
 msgid "Shift+Cmd:"
-msgstr "Shift+Cmd"
+msgstr "Shift+Cmd:"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:255
 msgid "Cmd:"
@@ -45321,19 +45296,19 @@ msgid "Update %s jumper pad groups"
 msgstr "%s ジャンパーパッドグループを更新"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:870
-#, fuzzy, c-format
+#, c-format
 msgid "Remove %s from group \"%s\"."
-msgstr "グループからアイテムを削除"
+msgstr "%s をグループ \"%s\"から削除。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:876
-#, fuzzy, c-format
+#, c-format
 msgid "Removed %s from group \"%s\"."
-msgstr "グループからアイテムを削除"
+msgstr "アイテム%sをグループ\"%s\"から削除しました。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:893
-#, fuzzy, c-format
+#, c-format
 msgid "Add %s to group \"%s\"."
-msgstr "カスタムグループを追加…"
+msgstr "%sをグループ\"%s\"に追加"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:899
 #, fuzzy, c-format
@@ -50076,9 +50051,8 @@ msgid "Creates tracks from the selected graphic lines"
 msgstr "選択した図形ラインから配線を作成"
 
 #: pcbnew/tools/pcb_actions.cpp:97
-#, fuzzy
 msgid "Create Outsets from Selection..."
-msgstr "選択対象から最初を作成"
+msgstr "選択対象から最初を作成…"
 
 #: pcbnew/tools/pcb_actions.cpp:98
 msgid "Create outset lines from the selected item"
