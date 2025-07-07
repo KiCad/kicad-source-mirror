@@ -3694,8 +3694,8 @@ void SCH_IO_ALTIUM::ParsePowerPort( const std::map<wxString, wxString>& aPropert
         libSymbol->GetReferenceField().SetVisible( false );
         libSymbol->GetValueField().SetText( elem.text );
         libSymbol->GetValueField().SetVisible( true );
-        libSymbol->SetDescription( wxString::Format( _( "Power symbol creates a global "
-                                                        "label with name '%s'" ), elem.text ) );
+        libSymbol->SetDescription( wxString::Format( _( "Power symbol creates a global label with name '%s'" ),
+                                                     elem.text ) );
         libSymbol->SetKeyWords( "power-flag" );
         libSymbol->SetLibId( libId );
 
@@ -3709,8 +3709,7 @@ void SCH_IO_ALTIUM::ParsePowerPort( const std::map<wxString, wxString>& aPropert
         pin->SetType( ELECTRICAL_PINTYPE::PT_POWER_IN );
         pin->SetVisible( false );
 
-        VECTOR2I valueFieldPos = HelperGeneratePowerPortGraphics( libSymbol, elem.style,
-                                                                  m_reporter );
+        VECTOR2I valueFieldPos = HelperGeneratePowerPortGraphics( libSymbol, elem.style, m_reporter );
 
         libSymbol->GetValueField().SetPosition( valueFieldPos );
 
