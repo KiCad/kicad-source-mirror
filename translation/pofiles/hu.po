@@ -31228,7 +31228,7 @@ msgstr "Elrendezés"
 #: pagelayout_editor/dialogs/design_inspector.cpp:233
 #, c-format
 msgid "Size: %.1fx%.1fmm"
-msgstr "Méret:%.1f x %.1f mm"
+msgstr "Méret: %.1f x %.1f mm"
 
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.cpp:30
 #, fuzzy
@@ -31242,15 +31242,13 @@ msgstr "X kezdete:"
 
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.cpp:64
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.cpp:124
-#, fuzzy
 msgid "Origin"
-msgstr "Kezdőpont"
+msgstr "Origó"
 
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.cpp:68
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.cpp:128
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:275
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:328
-#, fuzzy
 msgid "Upper Right"
 msgstr "Jobb felső"
 
@@ -31258,7 +31256,6 @@ msgstr "Jobb felső"
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.cpp:128
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:276
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:329
-#, fuzzy
 msgid "Upper Left"
 msgstr "Bal felső"
 
@@ -31267,7 +31264,6 @@ msgstr "Bal felső"
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:274
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:277
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:330
-#, fuzzy
 msgid "Lower Right"
 msgstr "Jobb alsó"
 
@@ -31276,7 +31272,6 @@ msgstr "Jobb alsó"
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:278
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:327
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:331
-#, fuzzy
 msgid "Lower Left"
 msgstr "Bal alsó"
 
@@ -31291,7 +31286,6 @@ msgid "Y end:"
 msgstr "Y vége:"
 
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.h:69
-#, fuzzy
 msgid "New Item"
 msgstr "Új elem"
 
@@ -31306,14 +31300,12 @@ msgid "An error occurred attempting to print the drawing sheet."
 msgstr "Hiba történt a kapcsolási rajz nyomtatásakor."
 
 #: pagelayout_editor/dialogs/dialogs_for_printing.cpp:240
-#, fuzzy
 msgid "Printing"
 msgstr "Nyomtatás"
 
 #: pagelayout_editor/dialogs/properties_frame.cpp:678
-#, fuzzy
 msgid "Predefined Keywords"
-msgstr "Előre definiált szélességek:"
+msgstr "Előre definiált kulcsszavak"
 
 #: pagelayout_editor/dialogs/properties_frame.cpp:681
 #, fuzzy
@@ -31349,17 +31341,14 @@ msgid "Item Type"
 msgstr "Elem típusa"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:38
-#, fuzzy
 msgid "Show on all pages"
 msgstr "Megjelenítés az összes lapon"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:38
-#, fuzzy
 msgid "First page only"
 msgstr "Csak az első lapon"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:38
-#, fuzzy
 msgid "Subsequent pages only"
 msgstr "Csak a következő lapokon"
 
@@ -31368,7 +31357,6 @@ msgstr "Csak a következő lapokon"
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:207
 #: pcbnew/dialogs/dialog_tablecell_properties_base.cpp:168
 #: pcbnew/dialogs/dialog_textbox_properties_base.cpp:151
-#, fuzzy
 msgid "Text width:"
 msgstr "Szöveg szélesség:"
 
@@ -31377,51 +31365,42 @@ msgstr "Szöveg szélesség:"
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:226
 #: pcbnew/dialogs/dialog_tablecell_properties_base.cpp:181
 #: pcbnew/dialogs/dialog_textbox_properties_base.cpp:167
-#, fuzzy
 msgid "Text height:"
 msgstr "Szöveg magasság:"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:183
-#, fuzzy
 msgid "Maximum width:"
-msgstr "Minimális szélesség:"
+msgstr "Maximális szélesség:"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:185
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:198
-#, fuzzy
 msgid "Set to 0 to disable this constraint"
 msgstr "0 = nem alkalmazza ezt a megkötést"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:196
-#, fuzzy
 msgid "Maximum height:"
 msgstr "Maximális magasság:"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:226
-#, fuzzy
 msgid "Set to 0 to use default values"
 msgstr "0 = alapértelmezett érték használata"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:233
-#, fuzzy
 msgid "Comment:"
 msgstr "Megjegyzés:"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:270
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:323
-#, fuzzy
 msgid "From:"
 msgstr "Ettől:"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:293
-#, fuzzy
 msgid "End Position"
 msgstr "Végpont"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:365
 #: pcbnew/dialogs/dialog_render_job_base.cpp:224
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:260
-#, fuzzy
 msgid "Rotation:"
 msgstr "Forgatás:"
 
@@ -31468,42 +31447,35 @@ msgid "Distance to step on Y axis for each repeat."
 msgstr ""
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:454
-#, fuzzy
 msgid "Item Properties"
 msgstr "Elem tulajdonságai"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:461
-#, fuzzy
 msgid "Default Values"
 msgstr "Alapértelmezett értékek"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:497
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:385
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:156
-#, fuzzy
 msgid "Line thickness:"
 msgstr "Vonalvastagság:"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:511
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:244
-#, fuzzy
 msgid "Text thickness:"
 msgstr "Szövegvastagság:"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:531
-#, fuzzy
 msgid "Set to Default"
-msgstr "Visszaállítás alapértelmezésre"
+msgstr "Visszaállítás az alapértelmezett értékekre"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:538
-#, fuzzy
 msgid "Page Margins"
 msgstr "Lap Margók"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:612
 #: pcbnew/dialogs/dialog_plot_base.cpp:74
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:77
-#, fuzzy
 msgid "General Options"
 msgstr "Általános Beállítások"
 
@@ -31513,9 +31485,9 @@ msgid "The current drawing sheet has been modified. Save changes?"
 msgstr "Az alkatrészrajzolat módosult. Menti a módosításokat?"
 
 #: pagelayout_editor/files.cpp:81
-#, fuzzy, c-format
+#, c-format
 msgid "File \"%s\" loaded"
-msgstr "A(z) \"%s\" fájl betöltve"
+msgstr "\"%s\" fájl betöltve"
 
 #: pagelayout_editor/files.cpp:131
 #, fuzzy
@@ -31523,14 +31495,14 @@ msgid "Append Existing Drawing Sheet"
 msgstr "Meglévő papírelrendezés fájl hozzáfűzése"
 
 #: pagelayout_editor/files.cpp:142 pagelayout_editor/files.cpp:167
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to load %s file"
-msgstr "A(z) \"%s\" fájlt nem lehet betölteni"
+msgstr "A(z) \"%s\" fájlt nem sikerült betölteni"
 
 #: pagelayout_editor/files.cpp:149
-#, fuzzy, c-format
+#, c-format
 msgid "File \"%s\" inserted"
-msgstr "A(z) \"%s\" fájl beillesztve"
+msgstr "\"%s\" fájl beillesztve"
 
 #: pagelayout_editor/files.cpp:157
 #, fuzzy
@@ -31847,24 +31819,20 @@ msgid "NP Pad: (diameter - drill)"
 msgstr "Nem furatfémezett forrszem: (átmérő - furat)"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:94
-#, fuzzy
 msgid "AWG0000"
-msgstr "0000"
+msgstr "AWG0000"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:95
-#, fuzzy
 msgid "AWG000"
-msgstr "0000"
+msgstr "AWG000"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:96
-#, fuzzy
 msgid "AWG00"
-msgstr "0000"
+msgstr "AWG00"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:97
-#, fuzzy
 msgid "AWG0"
-msgstr "0000"
+msgstr "AWG0"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:98
 msgid "AWG1"
@@ -32119,7 +32087,6 @@ msgstr "Vezető DC ellenállása"
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:254
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:234
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:344
-#, fuzzy
 msgid "ohm"
 msgstr "Ω"
 
@@ -32218,19 +32185,19 @@ msgstr ""
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:60
 msgid "OVC I"
-msgstr ""
+msgstr "OVC I"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:60
 msgid "OVC II"
-msgstr ""
+msgstr "OVC II"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:60
 msgid "OVC III"
-msgstr ""
+msgstr "OVC III"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:60
 msgid "OVC IV"
-msgstr ""
+msgstr "OVC IV"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:83
 #, fuzzy
@@ -32367,22 +32334,20 @@ msgid ""
 msgstr ""
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:200
-#, fuzzy
 msgid "II"
-msgstr "I"
+msgstr "II"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:200
 msgid "IIIa"
-msgstr ""
+msgstr "IIIa"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:200
 msgid "IIIb"
-msgstr ""
+msgstr "IIIb"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:209
-#, fuzzy
 msgid "PCB material:"
-msgstr "Közös az összes részegységre"
+msgstr "NYÁK anyaga:"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:211
 msgid ""
@@ -32597,7 +32562,7 @@ msgstr "Számolás"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:85
 msgid "Rhodium"
-msgstr ""
+msgstr "Ródium"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:89
 msgid "Platinum"
@@ -32605,29 +32570,27 @@ msgstr "Platina"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:93
 msgid "Palladium"
-msgstr ""
+msgstr "Palládium"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:97
 msgid "Gold"
 msgstr "Arany"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:101
-#, fuzzy
 msgid "Stainless steel 316L"
-msgstr "Rozsdamentes acél 18-9"
+msgstr "Rozsdamentes acél 316L"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:105
 msgid "Inconel"
-msgstr ""
+msgstr "Inconel"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:109
 msgid "Indium"
-msgstr ""
+msgstr "Indium"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:113
-#, fuzzy
 msgid "Titanium, passive"
-msgstr "Titán"
+msgstr "Titán, passzív"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:117
 msgid "Stainless steel 18-9"
@@ -32643,20 +32606,19 @@ msgstr "Higany"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:129
 msgid "ENEPIG (Ni/Pd/Au)"
-msgstr ""
+msgstr "ENEPIG (Ni/Pd/Au)"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:133
 msgid "ENIG (Ni/Au)"
-msgstr ""
+msgstr "ENIG (Ni/Au)"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:137
 msgid "Nickel"
 msgstr "Nikkel"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:141
-#, fuzzy
 msgid "Carbon (Graphitic)"
-msgstr "Grafika Tisztázása"
+msgstr "Szén (grafit)"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:145
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:854
@@ -32674,7 +32636,7 @@ msgstr "Sárgaréz"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:157
 msgid "Beryllium copper"
-msgstr ""
+msgstr "Berillium réz"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:161
 #, fuzzy
@@ -32683,7 +32645,7 @@ msgstr "HAL ólommentes"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:165
 msgid "Phosphor bronze"
-msgstr ""
+msgstr "Foszforbronz"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:169
 msgid "Bronze"
@@ -32691,7 +32653,7 @@ msgstr "Bronz"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:173
 msgid "Tin-Nickel (Sn/Ni)"
-msgstr ""
+msgstr "Ón-Nikkel (Sn/Ni)"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:177
 msgid "Solder 63/37 (Eutectic)"
@@ -32711,7 +32673,7 @@ msgstr "Ólom"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:193
 msgid "2xxx series Al alloy"
-msgstr ""
+msgstr "2xxx sorozatú Al-ötvözet"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:197
 msgid "Cast iron"
@@ -32722,14 +32684,12 @@ msgid "Carbon steel"
 msgstr "Szénacél"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:205
-#, fuzzy
 msgid "Aluminium, chromated"
-msgstr "Alumínium"
+msgstr "Alumínium, krómozott"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:209
-#, fuzzy
 msgid "Aluminium, pure, passive"
-msgstr "Alumínium-réz"
+msgstr "Alumínium, vegytiszta, passzív"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:213
 msgid "Cadmium"
@@ -32741,7 +32701,7 @@ msgstr "Vas"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:221
 msgid "Chrome, passive"
-msgstr ""
+msgstr "Króm, passzív"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:225
 msgid "Zinc"
@@ -32749,7 +32709,7 @@ msgstr "Cink"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:229
 msgid "Steel, zinc-plated"
-msgstr ""
+msgstr "Acél, horganyzott"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:233
 msgid "Manganese"
@@ -32761,9 +32721,8 @@ msgstr "Magnézium"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion_base.cpp:33
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion_base.cpp:38
-#, fuzzy
 msgid "Copper (Cu)"
-msgstr "Vezető réteg: ( Réz)"
+msgstr "Réz (Cu)"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion_base.cpp:64
 #, fuzzy
@@ -32826,29 +32785,24 @@ msgid "Exclude value 2:"
 msgstr "Mező érték:"
 
 #: pcb_calculator/calculator_panels/panel_r_calculator_base.cpp:71
-#, fuzzy
 msgid "E1"
-msgstr "E"
+msgstr "E1"
 
 #: pcb_calculator/calculator_panels/panel_r_calculator_base.cpp:74
-#, fuzzy
 msgid "E3"
-msgstr "E"
+msgstr "E3"
 
 #: pcb_calculator/calculator_panels/panel_r_calculator_base.cpp:77
-#, fuzzy
 msgid "E6"
-msgstr "E"
+msgstr "E6"
 
 #: pcb_calculator/calculator_panels/panel_r_calculator_base.cpp:81
-#, fuzzy
 msgid "E12"
-msgstr "12"
+msgstr "E12"
 
 #: pcb_calculator/calculator_panels/panel_r_calculator_base.cpp:84
-#, fuzzy
 msgid "E24"
-msgstr "24"
+msgstr "E24"
 
 #: pcb_calculator/calculator_panels/panel_r_calculator_base.cpp:94
 #, fuzzy
@@ -33039,21 +32993,19 @@ msgid "R2:"
 msgstr "R2:"
 
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:210
-#, fuzzy
 msgid "Vout:"
-msgstr "Uki:"
+msgstr "Vki:"
 
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:234
 msgid "Vref:"
 msgstr "Vref:"
 
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:236
-#, fuzzy
 msgid ""
 "The internal reference voltage of the regulator.\n"
 "Should not be 0."
 msgstr ""
-"Belső referenciafeszültsége.\n"
+"A regulátor belső referenciafeszültsége.\n"
 "Nem lehet 0."
 
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:256
@@ -33106,9 +33058,8 @@ msgid "Attenuation more than %f dB"
 msgstr "A csillapítás több mint %f dB"
 
 #: pcb_calculator/calculator_panels/panel_rf_attenuators_base.cpp:24
-#, fuzzy
 msgid "Pi"
-msgstr "Láb"
+msgstr "Pi"
 
 #: pcb_calculator/calculator_panels/panel_rf_attenuators_base.cpp:24
 #, fuzzy
@@ -33165,9 +33116,8 @@ msgid "Temperature rise"
 msgstr "Hőmérséklet-emelkedés:"
 
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:31
-#, fuzzy
 msgid "Current (I):"
-msgstr "Áram:"
+msgstr "Áram (I):"
 
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:42
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:167
@@ -33295,9 +33245,8 @@ msgid "Er:"
 msgstr "εᵣ:"
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:77
-#, fuzzy
 msgid "Tan delta:"
-msgstr "Trapéz delta:"
+msgstr "tg δ"
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:96
 msgid "Rho:"
