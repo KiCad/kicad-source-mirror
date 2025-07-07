@@ -330,9 +330,10 @@ FOOTPRINT_EDIT_FRAME::~FOOTPRINT_EDIT_FRAME()
     // Clear the watched file
     setFPWatcher( nullptr );
 
-    delete m_selectionFilterPanel;
-    delete m_appearancePanel;
-    delete m_treePane;
+    // We passed ownership of these to wxAuiManager.
+    // delete m_selectionFilterPanel;
+    // delete m_appearancePanel;
+    // delete m_treePane;
 }
 
 

@@ -594,11 +594,13 @@ PCB_EDIT_FRAME::~PCB_EDIT_FRAME()
     if( GetBoard() )
         GetBoard()->RemoveAllListeners();
 
-    delete m_selectionFilterPanel;
-    delete m_appearancePanel;
+    // We passed ownership of these to wxAuiManager.
+    // delete m_selectionFilterPanel;
+    // delete m_appearancePanel;
+    // delete m_propertiesPanel;
+    // delete m_netInspectorPanel;
+
     delete m_exportNetlistAction;
-    delete m_propertiesPanel;
-    delete m_netInspectorPanel;
 }
 
 
