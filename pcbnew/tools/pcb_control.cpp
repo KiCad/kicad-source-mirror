@@ -1744,8 +1744,11 @@ int PCB_CONTROL::UpdateMessagePanel( const TOOL_EVENT& aEvent )
         BOARD_ITEM* a = dynamic_cast<BOARD_ITEM*>( selection[0] );
         BOARD_ITEM* b = dynamic_cast<BOARD_ITEM*>( selection[1] );
 
-        msgItems.emplace_back( MSG_PANEL_ITEM( a->GetItemDescription( m_frame, false ),
-                                               b->GetItemDescription( m_frame, false ) ) );
+        if( a && b )
+        {
+            msgItems.emplace_back( MSG_PANEL_ITEM( a->GetItemDescription( m_frame, false ),
+                                                   b->GetItemDescription( m_frame, false ) ) );
+        }
 
         BOARD_CONNECTED_ITEM* a_conn = dynamic_cast<BOARD_CONNECTED_ITEM*>( a );
         BOARD_CONNECTED_ITEM* b_conn = dynamic_cast<BOARD_CONNECTED_ITEM*>( b );
@@ -1756,14 +1759,16 @@ int PCB_CONTROL::UpdateMessagePanel( const TOOL_EVENT& aEvent )
             int  a_netcode = a_conn->GetNetCode();
             int  b_netcode = b_conn->GetNetCode();
 
-            if( overlap.count() > 0
-                    && ( a_netcode != b_netcode || a_netcode < 0 || b_netcode < 0 ) )
+            if( overlap.count() > 0 )
             {
                 PCB_LAYER_ID layer = overlap.CuStack().front();
 
-                constraint = drcEngine->EvalRules( CLEARANCE_CONSTRAINT, a, b, layer );
-                msgItems.emplace_back( _( "Resolved clearance" ),
-                                       m_frame->MessageTextFromValue( constraint.m_Value.Min() ) );
+                if( a_netcode != b_netcode || a_netcode < 0 || b_netcode < 0 )
+                {
+                    constraint = drcEngine->EvalRules( CLEARANCE_CONSTRAINT, a, b, layer );
+                    msgItems.emplace_back( _( "Resolved Clearance" ),
+                                           m_frame->MessageTextFromValue( constraint.m_Value.Min() ) );
+                }
 
                 std::shared_ptr<SHAPE> a_shape( a_conn->GetEffectiveShape( layer ) );
                 std::shared_ptr<SHAPE> b_shape( b_conn->GetEffectiveShape( layer ) );
@@ -1772,8 +1777,8 @@ int PCB_CONTROL::UpdateMessagePanel( const TOOL_EVENT& aEvent )
 
                 if( actual_clearance > -1 && actual_clearance < std::numeric_limits<int>::max() )
                 {
-                    msgItems.emplace_back( _( "Actual clearance" ),
-                                        m_frame->MessageTextFromValue( actual_clearance ) );
+                    msgItems.emplace_back( _( "Actual Clearance" ),
+                                           m_frame->MessageTextFromValue( actual_clearance ) );
                 }
             }
         }
@@ -1815,51 +1820,54 @@ int PCB_CONTROL::UpdateMessagePanel( const TOOL_EVENT& aEvent )
                 if( actual < std::numeric_limits<int>::max() )
                 {
                     constraint = drcEngine->EvalRules( HOLE_CLEARANCE_CONSTRAINT, a, b, layer );
-                    msgItems.emplace_back( _( "Resolved hole clearance" ),
-                            m_frame->MessageTextFromValue( constraint.m_Value.Min() ) );
+                    msgItems.emplace_back( _( "Resolved Hole Clearance" ),
+                                           m_frame->MessageTextFromValue( constraint.m_Value.Min() ) );
 
                     if( actual > -1 && actual < std::numeric_limits<int>::max() )
                     {
-                        msgItems.emplace_back( _( "Actual hole clearance" ),
-                                m_frame->MessageTextFromValue( actual ) );
+                        msgItems.emplace_back( _( "Actual Hole Clearance" ),
+                                               m_frame->MessageTextFromValue( actual ) );
                     }
                 }
             }
         }
 
-        for( PCB_LAYER_ID edgeLayer : { Edge_Cuts, Margin } )
+        if( a && b )
         {
-            PCB_LAYER_ID active = m_frame->GetActiveLayer();
-            PCB_LAYER_ID layer = UNDEFINED_LAYER;
-
-            if( a->IsOnLayer( edgeLayer ) && b->Type() != PCB_FOOTPRINT_T )
+            for( PCB_LAYER_ID edgeLayer : { Edge_Cuts, Margin } )
             {
-                if( b->IsOnLayer( active ) && IsCopperLayer( active ) )
-                    layer = active;
-                else if( IsCopperLayer( b->GetLayer() ) )
-                    layer = b->GetLayer();
-            }
-            else if( b->IsOnLayer( edgeLayer ) && a->Type() != PCB_FOOTPRINT_T )
-            {
-                if( a->IsOnLayer( active ) && IsCopperLayer( active ) )
-                    layer = active;
-                else if( IsCopperLayer( a->GetLayer() ) )
-                    layer = a->GetLayer();
-            }
+                PCB_LAYER_ID active = m_frame->GetActiveLayer();
+                PCB_LAYER_ID layer = UNDEFINED_LAYER;
 
-            if( layer >= 0 )
-            {
-                constraint = drcEngine->EvalRules( EDGE_CLEARANCE_CONSTRAINT, a, b, layer );
-
-                if( edgeLayer == Edge_Cuts )
+                if( a->IsOnLayer( edgeLayer ) && b->Type() != PCB_FOOTPRINT_T )
                 {
-                    msgItems.emplace_back( _( "Resolved edge clearance" ),
-                                           m_frame->MessageTextFromValue( constraint.m_Value.Min() ) );
+                    if( b->IsOnLayer( active ) && IsCopperLayer( active ) )
+                        layer = active;
+                    else if( IsCopperLayer( b->GetLayer() ) )
+                        layer = b->GetLayer();
                 }
-                else
+                else if( b->IsOnLayer( edgeLayer ) && a->Type() != PCB_FOOTPRINT_T )
                 {
-                    msgItems.emplace_back( _( "Resolved margin clearance" ),
-                                           m_frame->MessageTextFromValue( constraint.m_Value.Min() ) );
+                    if( a->IsOnLayer( active ) && IsCopperLayer( active ) )
+                        layer = active;
+                    else if( IsCopperLayer( a->GetLayer() ) )
+                        layer = a->GetLayer();
+                }
+
+                if( layer >= 0 )
+                {
+                    constraint = drcEngine->EvalRules( EDGE_CLEARANCE_CONSTRAINT, a, b, layer );
+
+                    if( edgeLayer == Edge_Cuts )
+                    {
+                        msgItems.emplace_back( _( "Resolved Edge Clearance" ),
+                                               m_frame->MessageTextFromValue( constraint.m_Value.Min() ) );
+                    }
+                    else
+                    {
+                        msgItems.emplace_back( _( "Resolved Margin Clearance" ),
+                                               m_frame->MessageTextFromValue( constraint.m_Value.Min() ) );
+                    }
                 }
             }
         }
