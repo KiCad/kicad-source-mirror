@@ -1982,14 +1982,16 @@ int PCB_CONTROL::UpdateMessagePanel( const TOOL_EVENT& aEvent )
             int  a_netcode = a_conn->GetNetCode();
             int  b_netcode = b_conn->GetNetCode();
 
-            if( overlap.count() > 0
-                    && ( a_netcode != b_netcode || a_netcode < 0 || b_netcode < 0 ) )
+            if( overlap.count() > 0 )
             {
                 PCB_LAYER_ID layer = overlap.CuStack().front();
 
-                constraint = drcEngine->EvalRules( CLEARANCE_CONSTRAINT, a, b, layer );
-                msgItems.emplace_back( _( "Resolved Clearance" ),
-                                       m_frame->MessageTextFromValue( constraint.m_Value.Min() ) );
+                if( a_netcode != b_netcode || a_netcode < 0 || b_netcode < 0 )
+                {
+                    constraint = drcEngine->EvalRules( CLEARANCE_CONSTRAINT, a, b, layer );
+                    msgItems.emplace_back( _( "Resolved Clearance" ),
+                                           m_frame->MessageTextFromValue( constraint.m_Value.Min() ) );
+                }
 
                 std::shared_ptr<SHAPE> a_shape( a_conn->GetEffectiveShape( layer ) );
                 std::shared_ptr<SHAPE> b_shape( b_conn->GetEffectiveShape( layer ) );
