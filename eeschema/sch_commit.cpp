@@ -204,7 +204,8 @@ void SCH_COMMIT::pushSchEdit( const wxString& aMessage, int aCommitFlags )
         SCH_ITEM*   schItem = dynamic_cast<SCH_ITEM*>( ent.m_item );
         SCH_SCREEN* screen = dynamic_cast<SCH_SCREEN*>( ent.m_screen );
 
-        wxCHECK2( schItem && screen, continue );
+        wxCHECK2( schItem, continue );
+        wxCHECK2( screen, continue );
 
         if( !schematic )
             schematic = schItem->Schematic();
