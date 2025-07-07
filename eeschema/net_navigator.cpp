@@ -326,8 +326,7 @@ void SCH_EDIT_FRAME::RefreshNetNavigator( const NET_NAVIGATOR_ITEM_DATA* aSelect
                 continue;
 
             nodeCnt++;
-            wxTreeItemId netId = m_netNavigator->AppendItem( rootId,
-                                                             UnescapeString( net.first.Name ) );
+            wxTreeItemId netId = m_netNavigator->AppendItem( rootId, UnescapeString( net.first.Name ) );
             MakeNetNavigatorNode( net.first.Name, netId, aSelection, singleSheetSchematic );
         }
 
@@ -531,7 +530,8 @@ const SCH_ITEM* SCH_EDIT_FRAME::GetSelectedNetNavigatorItem() const
 
 void SCH_EDIT_FRAME::onNetNavigatorSelection( wxTreeEvent& aEvent )
 {
-    wxCHECK( m_netNavigator && !m_netNavigator->IsFrozen(), /* void */ );
+    if( !m_netNavigator || m_netNavigator->IsFrozen() )
+        return;
 
     wxTreeItemId id = aEvent.GetItem();
 
