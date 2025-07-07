@@ -159,7 +159,8 @@ EXPORTER_STEP::~EXPORTER_STEP()
 }
 
 
-bool EXPORTER_STEP::buildFootprint3DShapes( FOOTPRINT* aFootprint, VECTOR2D aOrigin )
+bool EXPORTER_STEP::buildFootprint3DShapes( FOOTPRINT* aFootprint, VECTOR2D aOrigin,
+                                            SHAPE_POLY_SET* aClipPolygon )
 {
     bool              hasdata = false;
     std::vector<PAD*> padsMatchingNetFilter;
@@ -168,6 +169,7 @@ bool EXPORTER_STEP::buildFootprint3DShapes( FOOTPRINT* aFootprint, VECTOR2D aOri
     // Dump the pad holes into the PCB
     for( PAD* pad : aFootprint->Pads() )
     {
+        bool castellated = pad->GetProperty() == PAD_PROP::CASTELLATED;
         std::shared_ptr<SHAPE_SEGMENT> holeShape = pad->GetEffectiveHoleShape();
 
         SHAPE_POLY_SET holePoly;
@@ -205,7 +207,8 @@ bool EXPORTER_STEP::buildFootprint3DShapes( FOOTPRINT* aFootprint, VECTOR2D aOri
 
         if( m_params.m_ExportPads )
         {
-            if( m_pcbModel->AddPadShape( pad, aOrigin, false ) )
+            if( m_pcbModel->AddPadShape( pad, aOrigin, false,
+                                         castellated ? aClipPolygon : nullptr) )
                 hasdata = true;
 
             if( m_params.m_ExportSoldermask )
@@ -693,6 +696,9 @@ bool EXPORTER_STEP::buildBoard3DShapes()
         wxLogWarning( _( "Board outline is malformed. Run DRC for a full analysis." ) );
     }
 
+    SHAPE_POLY_SET pcbOutlinesNoArcs = pcbOutlines;
+    pcbOutlinesNoArcs.ClearArcs();
+
     VECTOR2D origin;
 
     // Determine the coordinate system reference:
@@ -730,7 +736,7 @@ bool EXPORTER_STEP::buildBoard3DShapes()
     // For copper layers, only pads and tracks are added, because adding everything on copper
     // generate unreasonable file sizes and take a unreasonable calculation time.
     for( FOOTPRINT* fp : m_board->Footprints() )
-        buildFootprint3DShapes( fp, origin );
+        buildFootprint3DShapes( fp, origin, &pcbOutlinesNoArcs );
 
     for( PCB_TRACK* track : m_board->Tracks() )
         buildTrack3DShape( track, origin );
@@ -742,9 +748,6 @@ bool EXPORTER_STEP::buildBoard3DShapes()
     {
         buildZones3DShape( origin );
     }
-
-    SHAPE_POLY_SET pcbOutlinesNoArcs = pcbOutlines;
-    pcbOutlinesNoArcs.ClearArcs();
 
     for( PCB_LAYER_ID pcblayer : m_layersToExport.Seq() )
     {

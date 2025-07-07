@@ -96,7 +96,10 @@ public:
     void SpecializeVariant( OUTPUT_FORMAT aVariant ) { m_outFmt = aVariant; }
 
     // add a pad shape (must be in final position)
-    bool AddPadShape( const PAD* aPad, const VECTOR2D& aOrigin, bool aVia );
+    // if aClipPolygon is not nullptr, the pad shape will be clipped by aClipPolygon
+    // (usually aClipPolygon is the board outlines and use for castelleted pads)
+    bool AddPadShape( const PAD* aPad, const VECTOR2D& aOrigin, bool aVia,
+                      SHAPE_POLY_SET* aClipPolygon = nullptr );
 
     // add a pad hole or slot (must be in final position)
     bool AddHole( const SHAPE_SEGMENT& aShape, int aPlatingThickness, PCB_LAYER_ID aLayerTop,
@@ -137,7 +140,7 @@ public:
     /**
      * Convert a SHAPE_POLY_SET to TopoDS_Shape's (polygonal vertical prisms, or flat faces)
      * @param aShapes is the TopoDS_Shape list to append to
-     * @param aPolySet is a polygon set
+     * @param aPolySet is the polygon set
      * @param aConvertToArcs set to approximate with arcs
      * @param aThickness is the height of the created prism, or 0.0: flat face pointing up, -0.0: down.
      * @param aOrigin is the origin of the coordinates
@@ -162,6 +165,21 @@ public:
                                   VECTOR2D aStartPoint, VECTOR2D aEndPoint,
                                   double aWidth, double aThickness, double aZposition,
                                   const VECTOR2D& aOrigin );
+
+    /**
+     * Make a polygonal shape to create a vertical wall.
+     * It is a specialized version of MakeShape()
+     * @param aShape is the TopoDS_Shape to initialize (must be empty)
+     * @param aPolySet is the outline of the wall
+     * @param aHeight is the height of the wall.
+     * @param aZposition is the Z postion of the wall
+     * @param aOrigin is the origin of the coordinates
+     * @return true if success
+     */
+    bool MakePolygonAsWall( TopoDS_Shape& aShape,
+                            SHAPE_POLY_SET& aPolySet,
+                            double aHeight,
+                            double aZposition, const VECTOR2D& aOrigin );
 
 #ifdef SUPPORTS_IGES
     // write the assembly model in IGES format
