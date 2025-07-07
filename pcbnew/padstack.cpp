@@ -28,6 +28,7 @@
 #include <macros.h>
 #include <magic_enum.hpp>
 #include <pad.h>
+#include <board.h>
 #include <pcb_shape.h>
 
 
@@ -990,21 +991,21 @@ PCB_LAYER_ID PADSTACK::EffectiveLayerFor( PCB_LAYER_ID aLayer ) const
            return INNER_LAYERS;
 
         // Custom padstack: Clamp to parent board's stackup if present
-        if( m_parent )
+        BOARD* board = m_parent ? m_parent->GetBoard() : nullptr;
+
+        if( board && !board->GetEnabledLayers().Contains( boardCuLayer ) )
         {
-            LSET boardCopper = m_parent->BoardLayerSet() & LSET::AllCuMask();
-
-            if( boardCopper.Contains( boardCuLayer ) )
-                return boardCuLayer;
-
             // We're asked for an inner copper layer not present in the board.  There is no right
             // answer here, so fall back on the front shape
-            wxFAIL_MSG( "Asked for inner padstack layer not present on the board" );
+
+            // Lots of people get around our "single-inner-layer" in footprint editor, so only
+            // assert if in the PCB editor.
+            if( !board->IsFootprintHolder() )
+                wxFAIL_MSG( "Asked for inner padstack layer not present on the board" );
 
             return ALL_LAYERS;
         }
 
-        // No parent, just pass through
         return boardCuLayer;
     }
 
