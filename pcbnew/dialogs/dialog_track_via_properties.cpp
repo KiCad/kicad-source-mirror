@@ -35,6 +35,8 @@
 #include <kidialog.h>
 #include <connectivity/connectivity_data.h>
 #include <board_commit.h>
+#include <magic_enum.hpp>
+#include <macros.h>
 
 
 DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent,
@@ -327,7 +329,7 @@ DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_EDIT_FRAME* a
 
             default:
             {
-                wxASSERT( false );
+                UNIMPLEMENTED_FOR( item->GetClass() );
                 break;
             }
         }
@@ -840,7 +842,7 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataFromWindow()
             }
 
             default:
-                wxASSERT( false );
+                UNIMPLEMENTED_FOR( track->GetClass() );
                 break;
         }
     }
