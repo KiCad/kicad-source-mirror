@@ -482,11 +482,52 @@ void FOOTPRINT_CHOOSER_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
             for( const wxString& pin : wxSplit( strings[0], '\t' ) )
                 pinNames[ pin.BeforeFirst( ' ' ) ] = pin.AfterFirst( ' ' );
 
-            m_pinCount = pinNames.size();
+            m_pinCount = (int) pinNames.size();
+        }
 
-            if( m_pinCount > 0 )
+        if( strings.size() >= 2 && !strings[1].empty() )
+        {
+            for( const wxString& filter : wxSplit( strings[1], ' ' ) )
             {
-                msg.Printf( _( "Filter by pin count (%d)" ), m_pinCount );
+                m_fpFilters.push_back( std::make_unique<EDA_PATTERN_MATCH_WILDCARD_ANCHORED>() );
+                m_fpFilters.back()->SetPattern( filter.Lower() );
+            }
+        }
+
+        if( !m_fpFilters.empty() )
+        {
+            msg.Printf( _( "Apply footprint filters (%s)" ), strings[1] );
+
+            if( !m_filterByFPFilters )
+            {
+                m_filterByFPFilters = new wxCheckBox( filtersWindow, wxID_ANY, msg );
+
+                m_filterByFPFilters->Bind( wxEVT_CHECKBOX,
+                        [&]( wxCommandEvent& evt )
+                        {
+                            m_chooserPanel->Regenerate();
+                        } );
+
+                if( PCBNEW_SETTINGS* cfg = dynamic_cast<PCBNEW_SETTINGS*>( Kiface().KifaceSettings() ) )
+                    m_filterByFPFilters->SetValue( cfg->m_FootprintChooser.use_fp_filters );
+
+                m_chooserPanel->GetFiltersSizer()->Add( m_filterByFPFilters, 0, wxEXPAND|wxBOTTOM, 4 );
+            }
+
+            m_filterByFPFilters->SetLabel( msg );
+        }
+        else
+        {
+            if( m_filterByFPFilters )
+                m_filterByFPFilters->Hide();
+        }
+
+        if( m_pinCount > 0 )
+        {
+            msg.Printf( _( "Filter by pin count (%d)" ), m_pinCount );
+
+            if( !m_filterByPinCount )
+            {
                 m_filterByPinCount = new wxCheckBox( filtersWindow, wxID_ANY, msg );
 
                 m_filterByPinCount->Bind( wxEVT_CHECKBOX,
@@ -497,35 +538,17 @@ void FOOTPRINT_CHOOSER_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
 
                 if( PCBNEW_SETTINGS* cfg = dynamic_cast<PCBNEW_SETTINGS*>( Kiface().KifaceSettings() ) )
                     m_filterByPinCount->SetValue( cfg->m_FootprintChooser.filter_on_pin_count );
-            }
-        }
 
-        if( strings.size() >= 2 && !strings[1].empty() )
+                m_chooserPanel->GetFiltersSizer()->Add( m_filterByPinCount, 0, wxEXPAND|wxBOTTOM, 4 );
+            }
+
+            m_filterByPinCount->SetLabel( msg );
+        }
+        else
         {
-            for( const wxString& filter : wxSplit( strings[1], ' ' ) )
-            {
-                m_fpFilters.push_back( std::make_unique<EDA_PATTERN_MATCH_WILDCARD_ANCHORED>() );
-                m_fpFilters.back()->SetPattern( filter.Lower() );
-            }
-
-            msg.Printf( _( "Apply footprint filters (%s)" ), strings[1] );
-            m_filterByFPFilters = new wxCheckBox( filtersWindow, wxID_ANY, msg );
-
-            m_filterByFPFilters->Bind( wxEVT_CHECKBOX,
-                    [&]( wxCommandEvent& evt )
-                    {
-                        m_chooserPanel->Regenerate();
-                    } );
-
-            if( PCBNEW_SETTINGS* cfg = dynamic_cast<PCBNEW_SETTINGS*>( Kiface().KifaceSettings() ) )
-                m_filterByFPFilters->SetValue( cfg->m_FootprintChooser.use_fp_filters );
+            if( m_filterByPinCount )
+                m_filterByPinCount->Hide();
         }
-
-        if( m_filterByFPFilters )
-            m_chooserPanel->GetFiltersSizer()->Add( m_filterByFPFilters, 0, wxEXPAND|wxBOTTOM, 4 );
-
-        if( m_filterByPinCount )
-            m_chooserPanel->GetFiltersSizer()->Add( m_filterByPinCount, 0, wxEXPAND|wxBOTTOM, 4 );
 
         m_chooserPanel->GetViewerPanel()->SetPinFunctions( pinNames );
 
