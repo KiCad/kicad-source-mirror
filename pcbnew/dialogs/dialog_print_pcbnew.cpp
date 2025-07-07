@@ -460,7 +460,10 @@ void DIALOG_PRINT_PCBNEW::saveSettings()
     cfg->m_Printing.use_theme  = m_checkUseTheme->GetValue();
 
     int sel = m_colorTheme->GetSelection();
-    COLOR_SETTINGS* theme = static_cast<COLOR_SETTINGS*>( m_colorTheme->GetClientData( sel ) );
+    COLOR_SETTINGS* theme = nullptr;
+
+    if( sel >= 0 && sel < (int) m_colorTheme->GetCount() )
+        theme = static_cast<COLOR_SETTINGS*>( m_colorTheme->GetClientData( sel ) );
 
     if( theme && m_checkUseTheme->IsChecked() )
     {
