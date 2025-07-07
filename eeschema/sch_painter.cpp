@@ -2286,8 +2286,7 @@ void SCH_PAINTER::draw( const SCH_SYMBOL* aSymbol, int aLayer )
         tempPin->SetOperatingPoint( symbolPin->GetOperatingPoint() );
     }
 
-    draw( &tempSymbol, aLayer, false, aSymbol->GetUnit(), aSymbol->GetBodyStyle(),
-          DNP );
+    draw( &tempSymbol, aLayer, false, aSymbol->GetUnit(), aSymbol->GetBodyStyle(), DNP );
 
     for( unsigned i = 0; i < tempPins.size(); ++i )
     {
@@ -2300,9 +2299,12 @@ void SCH_PAINTER::draw( const SCH_SYMBOL* aSymbol, int aLayer )
                                                         // IS_SHOWN_AS_BITMAP
     }
 
-    if( DNP )
+    // Draw DNP and EXCLUDE from SIM markers.
+    // These drawings are associated to the symbol body, so draw them only when the LAYER_DEVICE
+    // is drawn (to avoid draw artifacts).
+    if( DNP && aLayer == LAYER_DEVICE )
     {
-        int      layer = LAYER_DNP_MARKER;
+        COLOR4D marker_color = m_schSettings.GetLayerColor( LAYER_DNP_MARKER );
         BOX2I    bbox = aSymbol->GetBodyBoundingBox();
         BOX2I    pins = aSymbol->GetBodyAndPinsBoundingBox();
         VECTOR2D margins( std::max( bbox.GetX() - pins.GetX(), pins.GetEnd().x - bbox.GetEnd().x ),
@@ -2321,17 +2323,17 @@ void SCH_PAINTER::draw( const SCH_SYMBOL* aSymbol, int aLayer )
         m_gal->AdvanceDepth();
         m_gal->SetIsStroke( true );
         m_gal->SetIsFill( true );
-        m_gal->SetStrokeColor( m_schSettings.GetLayerColor( layer ) );
-        m_gal->SetFillColor( m_schSettings.GetLayerColor( layer ) );
+        m_gal->SetStrokeColor( marker_color );
+        m_gal->SetFillColor( marker_color );
 
         m_gal->DrawSegment( pt1, pt2, strokeWidth );
         std::swap( pt1.x, pt2.x );
         m_gal->DrawSegment( pt1, pt2, strokeWidth );
     }
 
-    if( markExclusion )
+    if( markExclusion && aLayer == LAYER_DEVICE )
     {
-        int   layer = LAYER_EXCLUDED_FROM_SIM;
+        COLOR4D marker_color = m_schSettings.GetLayerColor( LAYER_EXCLUDED_FROM_SIM );
         BOX2I bbox = aSymbol->GetBodyBoundingBox();
         int   strokeWidth = schIUScale.MilsToIU( ADVANCED_CFG::GetCfg().m_ExcludeFromSimulationLineWidth );
 
@@ -2341,8 +2343,8 @@ void SCH_PAINTER::draw( const SCH_SYMBOL* aSymbol, int aLayer )
         m_gal->AdvanceDepth();
         m_gal->SetIsStroke( true );
         m_gal->SetIsFill( true );
-        m_gal->SetStrokeColor( m_schSettings.GetLayerColor( layer ).WithAlpha( 0.5 ) );
-        m_gal->SetFillColor( m_schSettings.GetLayerColor( layer ).WithAlpha( 0.5 ) );
+        m_gal->SetStrokeColor( marker_color );
+        m_gal->SetFillColor( marker_color );
 
         m_gal->DrawSegment( bbox.GetPosition(), VECTOR2D( bbox.GetEnd().x, bbox.GetY() ), strokeWidth );
         m_gal->DrawSegment( VECTOR2D( bbox.GetEnd().x, bbox.GetY() ), bbox.GetEnd(), strokeWidth );
@@ -2356,10 +2358,10 @@ void SCH_PAINTER::draw( const SCH_SYMBOL* aSymbol, int aLayer )
         VECTOR2D top = center + VECTOR2D( 0, offset );
         VECTOR2D bottom = center + VECTOR2D( 0, -offset );
 
-        m_gal->SetFillColor( m_schSettings.GetLayerColor( layer ).WithAlpha( 0.1 ) );
+        m_gal->SetFillColor( marker_color.WithAlpha( 0.1 ) );
         m_gal->DrawCircle( center, offset );
         m_gal->AdvanceDepth();
-        m_gal->SetFillColor( m_schSettings.GetLayerColor( layer ).WithAlpha( 0.5 ) );
+        m_gal->SetFillColor( marker_color );
         m_gal->DrawCurve( left, top, bottom, right, 1 );
     }
 }
