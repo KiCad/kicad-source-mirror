@@ -1485,8 +1485,8 @@ msgid ""
 "Show or hide the board body\n"
 "If hidden, show only copper and silkscreen layers."
 msgstr ""
-"A board megjelenítése vagy elrejtése. Ha elrejti, csak a réz és a "
-"szitanyomás rétegek jelennek meg."
+"A panel megjelenítése vagy elrejtése.\n"
+"Ha elrejti, csak a réz és a szitanyomás rétegek jelennek meg."
 
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:236
 msgid "Reload board and 3D models"
@@ -13655,7 +13655,7 @@ msgstr "Függőleges igazítás:"
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:212
 #: pcbnew/tools/convert_tool.cpp:107
 msgid "Line width:"
-msgstr "Vonalvastagság:"
+msgstr "Vonalszélesség:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:355
 msgid "Line color:"
@@ -33246,7 +33246,7 @@ msgstr "εᵣ:"
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:77
 msgid "Tan delta:"
-msgstr "tg δ"
+msgstr "tg δ:"
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:96
 msgid "Rho:"
@@ -33521,7 +33521,7 @@ msgstr "Hullámhossz közegben:"
 
 #: pcb_calculator/calculator_panels/panel_wavelength_base.cpp:75
 msgid "Speed in medium:"
-msgstr ""
+msgstr "Terjedési sebesség a közegben:"
 
 #: pcb_calculator/calculator_panels/panel_wavelength_base.cpp:87
 msgid "er:"
@@ -33548,9 +33548,8 @@ msgid "Vref (min/typ/max):"
 msgstr ""
 
 #: pcb_calculator/dialogs/dialog_regulator_form_base.cpp:56
-#, fuzzy
 msgid "Volt"
-msgstr "V"
+msgstr "Volt"
 
 #: pcb_calculator/dialogs/dialog_regulator_form_base.cpp:73
 msgid "Iadj (typ/max):"
@@ -39080,7 +39079,7 @@ msgstr "Legjobb szélesség:"
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:290
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:460
 msgid "Maximum width (W):"
-msgstr "Maximális szélesség:"
+msgstr "Maximális szélesség (W):"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:325
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:857
