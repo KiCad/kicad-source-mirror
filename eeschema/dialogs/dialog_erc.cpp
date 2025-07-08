@@ -934,6 +934,9 @@ void DIALOG_ERC::SelectMarker( const SCH_MARKER* aMarker )
 
 void DIALOG_ERC::centerMarkerIdleHandler( wxIdleEvent& aEvent )
 {
+    if( m_markerTreeModel->GetView()->IsFrozen() )
+        return;
+
     m_markerTreeModel->CenterMarker( m_centerMarkerOnIdle );
     m_centerMarkerOnIdle = nullptr;
     Unbind( wxEVT_IDLE, &DIALOG_ERC::centerMarkerIdleHandler, this );

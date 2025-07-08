@@ -240,6 +240,8 @@ public:
         return static_cast<RC_TREE_NODE*>( aItem.GetID() );
     }
 
+    const wxDataViewCtrl* GetView() const { return m_view; }
+
     static KIID ToUUID( wxDataViewItem aItem );
 
     RC_TREE_MODEL( EDA_DRAW_FRAME* aParentFrame, wxDataViewCtrl* aView );
