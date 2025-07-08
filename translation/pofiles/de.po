@@ -27596,7 +27596,7 @@ msgstr "Nicht-KiCad-Projekt importieren..."
 
 #: kicad/menubar.cpp:115
 msgid "Altium Project..."
-msgstr "Altium-Projekt..."
+msgstr "EAGLE-Projekt..."
 
 #: kicad/menubar.cpp:116
 msgid "Import Altium Schematic and PCB (*.PrjPcb)"
