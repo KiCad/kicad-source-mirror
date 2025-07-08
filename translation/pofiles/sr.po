@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-07 17:43+0300\n"
-"PO-Revision-Date: 2025-06-30 21:02+0000\n"
+"PO-Revision-Date: 2025-07-09 01:02+0000\n"
 "Last-Translator: Luka Borkovic <borkovic@gmail.com>\n"
 "Language-Team: Serbian <https://hosted.weblate.org/projects/kicad/v9/sr/>\n"
 "Language: sr\n"
@@ -13929,6 +13929,8 @@ msgid ""
 "Check this option to have pin names inside the body and pin number outside.\n"
 "If not checked pins names and pins numbers are outside."
 msgstr ""
+"Штиклирај ову опцију да име пина буде унутар тела, а број пина ван.\n"
+"Ако није штиклирано, име пина и број пина су споља."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:239
 msgid "Position offset:"
@@ -13936,7 +13938,7 @@ msgstr "Помак позиције:"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:241
 msgid "Margin between the pin name position and the symbol body."
-msgstr ""
+msgstr "Маргина између позиције имена пина и тела симбола."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:248
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:120
@@ -13977,6 +13979,9 @@ msgid ""
 "Footprints names can used wildcards like sm* to allow all footprints names "
 "starting by sm."
 msgstr ""
+"Листа имена подножја које се могу искористити за овај симбол.\n"
+"Имена подножја могу да користе џокер карактере попут sm* што омогућава да "
+"сва имена подножја почињу на sm."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:316
 #, fuzzy
