@@ -290,6 +290,9 @@ void LIB_TREE::ShutdownPreviews()
 
     if( m_previewWindow )
     {
+        // Shutdown the preview window's canvas
+        m_adapter->ShutdownPreview( m_previewWindow );
+
         m_previewWindow->Hide();
         m_previewWindow->Destroy();
         m_previewWindow = nullptr;

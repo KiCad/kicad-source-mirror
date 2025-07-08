@@ -46,8 +46,9 @@ public:
 
     wxDataViewItem GetCurrentDataViewItem() override;
 
-    virtual bool HasPreview( const wxDataViewItem& aItem ) override;
-    virtual void ShowPreview( wxWindow* aParent, const wxDataViewItem& aItem ) override;
+    bool HasPreview( const wxDataViewItem& aItem ) override;
+    void ShowPreview( wxWindow* aParent, const wxDataViewItem& aItem ) override;
+    void ShutdownPreview( wxWindow* aParent ) override;
 
 protected:
     FP_TREE_SYNCHRONIZING_ADAPTER( FOOTPRINT_EDIT_FRAME* aFrame, FP_LIB_TABLE* aLibs );

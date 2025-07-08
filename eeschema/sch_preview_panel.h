@@ -55,7 +55,6 @@ public:
 
     SCH_RENDER_SETTINGS* GetRenderSettings() const;
 
-
 protected:
 
     void onPaint( wxPaintEvent& WXUNUSED( aEvent ) ) override;

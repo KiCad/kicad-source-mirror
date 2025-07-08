@@ -60,6 +60,8 @@ public:
 
     void DisplayPart( LIB_SYMBOL* aSymbol, int aUnit, int aBodyStyle = 0 );
 
+    EDA_DRAW_PANEL_GAL* GetCanvas() const { return m_preview; }
+
 protected:
     void onSize( wxSizeEvent& aEvent );
 

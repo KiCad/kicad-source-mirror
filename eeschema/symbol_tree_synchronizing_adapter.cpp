@@ -381,11 +381,12 @@ bool SYMBOL_TREE_SYNCHRONIZING_ADAPTER::HasPreview( const wxDataViewItem& aItem 
 }
 
 
+static const wxString c_previewName = wxS( "symHoverPreview" );
+
+
 void SYMBOL_TREE_SYNCHRONIZING_ADAPTER::ShowPreview( wxWindow*             aParent,
                                                      const wxDataViewItem& aItem )
 {
-    static const wxString c_previewName = wxS( "symHoverPreview" );
-
     LIB_TREE_NODE* node = ToNode( aItem );
     wxCHECK( node, /* void */ );
 
@@ -415,4 +416,16 @@ void SYMBOL_TREE_SYNCHRONIZING_ADAPTER::ShowPreview( wxWindow*             aPare
     }
 
     preview->DisplaySymbol( node->m_LibId, node->m_Unit );
+}
+
+
+void SYMBOL_TREE_SYNCHRONIZING_ADAPTER::ShutdownPreview( wxWindow* aParent )
+{
+    wxWindow* previewWindow = wxWindow::FindWindowByName( c_previewName, aParent );
+
+    if( SYMBOL_PREVIEW_WIDGET* preview = dynamic_cast<SYMBOL_PREVIEW_WIDGET*>( previewWindow ) )
+    {
+        preview->GetCanvas()->SetEvtHandlerEnabled( false );
+        preview->GetCanvas()->StopDrawing();
+    }
 }
