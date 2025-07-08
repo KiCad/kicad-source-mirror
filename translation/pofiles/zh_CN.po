@@ -42,7 +42,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-07 17:42+0300\n"
-"PO-Revision-Date: 2025-06-29 09:02+0000\n"
+"PO-Revision-Date: 2025-07-09 01:02+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/kicad/master-source/zh_Hans/>\n"
@@ -24620,9 +24620,9 @@ msgstr "未选中符号库。"
 #: eeschema/tools/symbol_editor_control.cpp:263
 #: eeschema/tools/symbol_editor_control.cpp:413
 #: eeschema/tools/symbol_editor_control.cpp:457
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol library '%s' not found."
-msgstr "符号库未找到。"
+msgstr "找不到符号库 '%s'。"
 
 #: eeschema/tools/symbol_editor_control.cpp:349
 #: pcbnew/tools/footprint_editor_control.cpp:650
@@ -27323,9 +27323,8 @@ msgid "Last run failed"
 msgstr "作业运行失败"
 
 #: kicad/dialogs/panel_jobset.cpp:272 kicad/dialogs/panel_jobset.cpp:993
-#, fuzzy
 msgid "Running Jobs"
-msgstr "正在运行中的作业"
+msgstr "运行中的作业"
 
 #: kicad/dialogs/panel_jobset.cpp:302
 msgid "Edit Destination Options..."
@@ -27520,9 +27519,9 @@ msgid "Import EasyEDA Pro Project"
 msgstr "导入 EasyEDA Pro 工程"
 
 #: kicad/jobs_runner.cpp:258
-#, fuzzy, c-format
+#, c-format
 msgid "Running job %d: %s"
-msgstr "正在运行中的作业"
+msgstr "运行中的作业 %d: %s"
 
 #: kicad/jobs_runner.cpp:302
 msgid "Job successful"
@@ -32355,9 +32354,8 @@ msgid "(will be ignored)"
 msgstr "(将被忽略)"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:448
-#, fuzzy
 msgid "<br/>No footprints"
-msgstr "没有封装"
+msgstr "<br/>没有封装"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:454
 #, fuzzy
