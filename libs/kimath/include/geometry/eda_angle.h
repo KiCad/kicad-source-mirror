@@ -135,17 +135,20 @@ public:
 
     bool IsZero() const
     {
-        return equals( m_value, 0.0 );
+        return m_value == 0.0;
+        // return equals( m_value, 0.0 );
     }
 
     bool IsHorizontal() const
     {
-        return equals( m_value, 0.0 ) || equals( m_value, 180.0 );
+        return m_value == 0.0 || m_value == 180.0;
+        // return equals( m_value, 0.0 ) || equals( m_value, 180.0 );
     }
 
     bool IsVertical() const
     {
-        return equals( m_value, 90.0 ) || equals( m_value, 270.0 );
+        return m_value == 90.0 || m_value == 270.0;
+        //return equals( m_value, 90.0 ) || equals( m_value, 270.0 );
     }
 
     bool IsParallelTo( EDA_ANGLE aAngle ) const
@@ -350,13 +353,15 @@ inline double operator/( const EDA_ANGLE& aAngleA, const EDA_ANGLE& aOperator )
 
 inline bool operator==( const EDA_ANGLE& aAngleA, const EDA_ANGLE& aAngleB )
 {
-    return equals( aAngleA.AsDegrees(), aAngleB.AsDegrees() );
+    return aAngleA.AsDegrees() == aAngleB.AsDegrees();
+    //return equals( aAngleA.AsDegrees(), aAngleB.AsDegrees() );
 }
 
 
 inline bool operator!=( const EDA_ANGLE& aAngleA, const EDA_ANGLE& aAngleB )
 {
-    return !equals( aAngleA.AsDegrees(), aAngleB.AsDegrees() );
+    return aAngleA.AsDegrees() != aAngleB.AsDegrees();
+    // return !equals( aAngleA.AsDegrees(), aAngleB.AsDegrees() );
 }
 
 
