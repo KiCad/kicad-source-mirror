@@ -1208,7 +1208,7 @@ void SCH_EASYEDAPRO_PARSER::ParseSchematic( SCHEMATIC* aSchematic, SCH_SHEET* aR
                 }
                 else if( auto nameAttr = get_opt( attributes, "Name" ) )
                 {
-                    ApplyAttrToField( fontStyles, schSym->GetField( FIELD_T::VALUE ),
+                    ApplyAttrToField( fontStyles, schSym->GetField( VALUE_FIELD ),
                                       *nameAttr, false, true, compAttrs, schSym.get() );
 
                     for( SCH_PIN* pin : schSym->GetAllLibPins() )
