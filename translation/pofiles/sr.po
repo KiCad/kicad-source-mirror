@@ -14601,7 +14601,7 @@ msgstr "Додај поље"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:356
 msgid "Pins with duplicate numbers are jumpers"
-msgstr "Пинови са дуплираним бројевима су кратки спојеви."
+msgstr "Пинови са дуплираним бројевима су кратки спојеви"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:357
 msgid ""
