@@ -16855,7 +16855,7 @@ msgstr "最大"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:168
 msgid "Hop-over size:"
-msgstr "非接続点のサイズ:"
+msgstr "非接続点（ジャンプ（半円）記号）のサイズ:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:172
 msgid "Medium"
