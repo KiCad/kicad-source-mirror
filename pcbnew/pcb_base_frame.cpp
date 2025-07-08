@@ -286,15 +286,7 @@ void PCB_BASE_FRAME::FocusOnItems( std::vector<BOARD_ITEM*> aItems, PCB_LAYER_ID
         if( lastItem && lastItem != DELETED_BOARD_ITEM::GetInstance() )
         {
             lastItem->ClearBrightened();
-
-            lastItem->RunOnDescendants(
-                    [&]( BOARD_ITEM* child )
-                    {
-                        child->ClearBrightened();
-                    } );
-
             GetCanvas()->GetView()->Update( lastItem );
-            lastBrightenedItemID = niluuid;
             GetCanvas()->Refresh();
         }
     }
@@ -331,15 +323,16 @@ void PCB_BASE_FRAME::FocusOnItems( std::vector<BOARD_ITEM*> aItems, PCB_LAYER_ID
         if( item && item != DELETED_BOARD_ITEM::GetInstance() )
         {
             item->SetBrightened();
+            lastBrightenedItemIDs.push_back( item->m_Uuid );
 
             item->RunOnDescendants(
                     [&]( BOARD_ITEM* child )
                     {
                         child->SetBrightened();
-                    });
+                        lastBrightenedItemIDs.push_back( child->m_Uuid );
+                    } );
 
             GetCanvas()->GetView()->Update( item );
-            lastBrightenedItemIDs.push_back( item->m_Uuid );
 
             // Focus on the object's location.  Prefer a visible part of the object to its anchor
             // in order to keep from scrolling around.
