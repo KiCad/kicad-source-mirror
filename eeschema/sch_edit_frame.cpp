@@ -489,9 +489,10 @@ void SCH_EDIT_FRAME::OnResizeHierarchyNavigator( wxSizeEvent& aEvent )
     CaptureHierarchyPaneSize();
 
     // Defer the second size capture
-    CallAfter( [this]() {
-        CaptureHierarchyPaneSize();
-    } );
+    CallAfter( [this]()
+               {
+                   CaptureHierarchyPaneSize();
+               } );
 }
 
 
@@ -1067,8 +1068,7 @@ void SCH_EDIT_FRAME::doCloseWindow()
 
 #ifdef KICAD_IPC_API
     Pgm().GetApiServer().DeregisterHandler( m_apiHandler.get() );
-    wxTheApp->Unbind( EDA_EVT_PLUGIN_AVAILABILITY_CHANGED,
-                      &SCH_EDIT_FRAME::onPluginAvailabilityChanged, this );
+    wxTheApp->Unbind( EDA_EVT_PLUGIN_AVAILABILITY_CHANGED, &SCH_EDIT_FRAME::onPluginAvailabilityChanged, this );
 #endif
 
     // Shutdown all running tools
@@ -1078,12 +1078,9 @@ void SCH_EDIT_FRAME::doCloseWindow()
     // Close modeless dialogs.  They're trouble when they get destroyed after the frame.
     Unbind( EDA_EVT_CLOSE_DIALOG_BOOK_REPORTER, &SCH_EDIT_FRAME::onCloseSymbolDiffDialog, this );
     Unbind( EDA_EVT_CLOSE_ERC_DIALOG, &SCH_EDIT_FRAME::onCloseErcDialog, this );
-    Unbind( EDA_EVT_CLOSE_DIALOG_SYMBOL_FIELDS_TABLE,
-            &SCH_EDIT_FRAME::onCloseSymbolFieldsTableDialog, this );
-    m_netNavigator->Unbind( wxEVT_TREE_SEL_CHANGING, &SCH_EDIT_FRAME::onNetNavigatorSelChanging,
-                            this );
-    m_netNavigator->Unbind( wxEVT_TREE_SEL_CHANGED, &SCH_EDIT_FRAME::onNetNavigatorSelection,
-                            this );
+    Unbind( EDA_EVT_CLOSE_DIALOG_SYMBOL_FIELDS_TABLE, &SCH_EDIT_FRAME::onCloseSymbolFieldsTableDialog, this );
+    m_netNavigator->Unbind( wxEVT_TREE_SEL_CHANGING, &SCH_EDIT_FRAME::onNetNavigatorSelChanging, this );
+    m_netNavigator->Unbind( wxEVT_TREE_SEL_CHANGED, &SCH_EDIT_FRAME::onNetNavigatorSelection, this );
 
     // Close the find dialog and preserve its setting if it is displayed.
     if( m_findReplaceDialog )
@@ -1322,9 +1319,10 @@ void SCH_EDIT_FRAME::ShowFindReplaceDialog( bool aReplace )
     if( m_findReplaceDialog )
         m_findReplaceDialog->Destroy();
 
-    m_findReplaceDialog = new DIALOG_SCH_FIND(
-            this, static_cast<SCH_SEARCH_DATA*>( m_findReplaceData.get() ), wxDefaultPosition,
-            wxDefaultSize, aReplace ? wxFR_REPLACEDIALOG : 0 );
+    m_findReplaceDialog = new DIALOG_SCH_FIND( this,
+                                               static_cast<SCH_SEARCH_DATA*>( m_findReplaceData.get() ),
+                                               wxDefaultPosition, wxDefaultSize,
+                                               aReplace ? wxFR_REPLACEDIALOG : 0 );
 
     m_findReplaceDialog->SetFindEntries( m_findStringHistoryList, findString );
     m_findReplaceDialog->SetReplaceEntries( m_replaceStringHistoryList );
@@ -1812,8 +1810,8 @@ void SCH_EDIT_FRAME::RecalculateConnections( SCH_COMMIT* aCommit, SCH_CLEANUP_FL
                                         aProgressReporter,
                                         GetCanvas()->GetView(),
                                         &changeHandler,
-                                        m_undoList.m_CommandsList.empty()
-                                            ? nullptr : m_undoList.m_CommandsList.back() );
+                                        m_undoList.m_CommandsList.empty() ? nullptr
+                                                                          : m_undoList.m_CommandsList.back() );
 
     GetCanvas()->GetView()->UpdateAllItemsConditionally(
             [&]( KIGFX::VIEW_ITEM* aItem ) -> int
@@ -2303,8 +2301,10 @@ void SCH_EDIT_FRAME::DisplayCurrentSheet()
 DIALOG_BOOK_REPORTER* SCH_EDIT_FRAME::GetSymbolDiffDialog()
 {
     if( !m_diffSymbolDialog )
+    {
         m_diffSymbolDialog = new DIALOG_BOOK_REPORTER( this, DIFF_SYMBOLS_DIALOG_NAME,
                                                        _( "Compare Symbol with Library" ) );
+    }
 
     return m_diffSymbolDialog;
 }
@@ -2360,8 +2360,7 @@ void SCH_EDIT_FRAME::onCloseSymbolFieldsTableDialog( wxCommandEvent& aEvent )
 
 void SCH_EDIT_FRAME::AddSchematicChangeListener( wxEvtHandler* aListener )
 {
-    auto it = std::find( m_schematicChangeListeners.begin(), m_schematicChangeListeners.end(),
-                         aListener );
+    auto it = std::find( m_schematicChangeListeners.begin(), m_schematicChangeListeners.end(), aListener );
 
     // Don't add duplicate listeners.
     if( it == m_schematicChangeListeners.end() )
@@ -2371,8 +2370,7 @@ void SCH_EDIT_FRAME::AddSchematicChangeListener( wxEvtHandler* aListener )
 
 void SCH_EDIT_FRAME::RemoveSchematicChangeListener( wxEvtHandler* aListener )
 {
-    auto it = std::find( m_schematicChangeListeners.begin(), m_schematicChangeListeners.end(),
-                         aListener );
+    auto it = std::find( m_schematicChangeListeners.begin(), m_schematicChangeListeners.end(), aListener );
 
     // Don't add duplicate listeners.
     if( it != m_schematicChangeListeners.end() )
@@ -2382,8 +2380,7 @@ void SCH_EDIT_FRAME::RemoveSchematicChangeListener( wxEvtHandler* aListener )
 
 wxTreeCtrl* SCH_EDIT_FRAME::createHighlightedNetNavigator()
 {
-    m_netNavigator = new wxTreeCtrl( this, wxID_ANY, wxPoint( 0, 0 ),
-                                     FromDIP( wxSize( 160, 250 ) ),
+    m_netNavigator = new wxTreeCtrl( this, wxID_ANY, wxPoint( 0, 0 ), FromDIP( wxSize( 160, 250 ) ),
                                      wxTR_DEFAULT_STYLE | wxNO_BORDER );
 
     return m_netNavigator;
@@ -2442,6 +2439,7 @@ void SCH_EDIT_FRAME::updateSelectionFilterVisbility()
 
     selectionFilterPane.Show( showFilter );
 }
+
 
 #ifdef KICAD_IPC_API
 void SCH_EDIT_FRAME::onPluginAvailabilityChanged( wxCommandEvent& aEvt )
