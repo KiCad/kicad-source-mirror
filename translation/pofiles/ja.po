@@ -16,8 +16,8 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-07 17:43+0300\n"
-"PO-Revision-Date: 2025-07-05 22:37+0000\n"
-"Last-Translator: co8 j <co8@nifty.com>\n"
+"PO-Revision-Date: 2025-07-09 01:02+0000\n"
+"Last-Translator: 2tama3 <2tama3@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/v9/ja/>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
@@ -16319,7 +16319,7 @@ msgstr "接続"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:158
 msgid "Junction dot size:"
-msgstr "ジャンクションの点のサイズ:"
+msgstr "接続点のサイズ:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:162
 msgid "Smallest"
