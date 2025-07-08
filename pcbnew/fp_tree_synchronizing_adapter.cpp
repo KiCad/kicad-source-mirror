@@ -333,10 +333,11 @@ bool FP_TREE_SYNCHRONIZING_ADAPTER::HasPreview( const wxDataViewItem& aItem )
 }
 
 
+static const wxString c_previewName = wxS( "fpHoverPreview" );
+
+
 void FP_TREE_SYNCHRONIZING_ADAPTER::ShowPreview( wxWindow* aParent, const wxDataViewItem& aItem )
 {
-    static const wxString c_previewName = wxS( "fpHoverPreview" );
-
     LIB_TREE_NODE* node = ToNode( aItem );
     wxCHECK( node, /* void */ );
 
@@ -358,4 +359,16 @@ void FP_TREE_SYNCHRONIZING_ADAPTER::ShowPreview( wxWindow* aParent, const wxData
     }
 
     preview->DisplayFootprint( node->m_LibId );
+}
+
+
+void FP_TREE_SYNCHRONIZING_ADAPTER::ShutdownPreview( wxWindow* aParent )
+{
+    wxWindow* previewWindow = wxWindow::FindWindowByName( c_previewName, aParent );
+
+    if( FOOTPRINT_PREVIEW_PANEL* preview = dynamic_cast<FOOTPRINT_PREVIEW_PANEL*>( previewWindow ) )
+    {
+        preview->GetCanvas()->SetEvtHandlerEnabled( false );
+        preview->GetCanvas()->StopDrawing();
+    }
 }

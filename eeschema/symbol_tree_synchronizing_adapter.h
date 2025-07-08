@@ -50,8 +50,9 @@ public:
 
     wxDataViewItem GetCurrentDataViewItem() override;
 
-    virtual bool HasPreview( const wxDataViewItem& aItem ) override;
-    virtual void ShowPreview( wxWindow* aParent, const wxDataViewItem& aItem ) override;
+    bool HasPreview( const wxDataViewItem& aItem ) override;
+    void ShowPreview( wxWindow* aParent, const wxDataViewItem& aItem ) override;
+    void ShutdownPreview( wxWindow* aParent ) override;
 
 protected:
     void updateLibrary( LIB_TREE_NODE_LIBRARY& aLibNode );

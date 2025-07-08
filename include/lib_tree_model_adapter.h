@@ -265,6 +265,7 @@ public:
 
     virtual bool HasPreview( const wxDataViewItem& aItem ) { return false; }
     virtual void ShowPreview( wxWindow* aParent, const wxDataViewItem& aItem ) {}
+    virtual void ShutdownPreview( wxWindow* aParent ) {}
 
     TOOL_DISPATCHER* GetToolDispatcher() const { return m_parent->GetToolDispatcher(); }
 
