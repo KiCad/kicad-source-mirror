@@ -951,7 +951,8 @@ class PCB_TABLECELL_POINT_EDIT_BEHAVIOR : public EDA_TABLECELL_POINT_EDIT_BEHAVI
 {
 public:
     PCB_TABLECELL_POINT_EDIT_BEHAVIOR( PCB_TABLECELL& aCell ) :
-            EDA_TABLECELL_POINT_EDIT_BEHAVIOR( aCell ), m_cell( aCell )
+            EDA_TABLECELL_POINT_EDIT_BEHAVIOR( aCell ),
+            m_cell( aCell )
     {
     }
 
@@ -1253,7 +1254,9 @@ private:
 class GENERATOR_POINT_EDIT_BEHAVIOR : public POINT_EDIT_BEHAVIOR
 {
 public:
-    GENERATOR_POINT_EDIT_BEHAVIOR( PCB_GENERATOR& aGenerator ) : m_generator( aGenerator ) {}
+    GENERATOR_POINT_EDIT_BEHAVIOR( PCB_GENERATOR& aGenerator ) :
+            m_generator( aGenerator )
+    {}
 
     void MakePoints( EDIT_POINTS& aPoints ) override
     {
@@ -1288,7 +1291,8 @@ class DIM_ALIGNED_TEXT_UPDATER
 {
 public:
     DIM_ALIGNED_TEXT_UPDATER( PCB_DIM_ALIGNED& aDimension ) :
-            m_dimension( aDimension ), m_originalTextPos( aDimension.GetTextPos() ),
+            m_dimension( aDimension ),
+            m_originalTextPos( aDimension.GetTextPos() ),
             m_oldCrossBar( SEG{ aDimension.GetCrossbarStart(), aDimension.GetCrossbarEnd() } )
     {
     }
@@ -1398,7 +1402,8 @@ private:
 class ALIGNED_DIMENSION_POINT_EDIT_BEHAVIOR : public POINT_EDIT_BEHAVIOR
 {
 public:
-    ALIGNED_DIMENSION_POINT_EDIT_BEHAVIOR( PCB_DIM_ALIGNED& aDimension ) : m_dimension( aDimension )
+    ALIGNED_DIMENSION_POINT_EDIT_BEHAVIOR( PCB_DIM_ALIGNED& aDimension ) :
+            m_dimension( aDimension )
     {
     }
 
@@ -1417,11 +1422,9 @@ public:
         {
             // Dimension height setting - edit points should move only along the feature lines
             aPoints.Point( DIM_CROSSBARSTART )
-                    .SetConstraint( new EC_LINE( aPoints.Point( DIM_CROSSBARSTART ),
-                                                 aPoints.Point( DIM_START ) ) );
+                    .SetConstraint( new EC_LINE( aPoints.Point( DIM_CROSSBARSTART ), aPoints.Point( DIM_START ) ) );
             aPoints.Point( DIM_CROSSBAREND )
-                    .SetConstraint( new EC_LINE( aPoints.Point( DIM_CROSSBAREND ),
-                                                 aPoints.Point( DIM_END ) ) );
+                    .SetConstraint( new EC_LINE( aPoints.Point( DIM_CROSSBAREND ), aPoints.Point( DIM_END ) ) );
         }
     }
 
@@ -1500,11 +1503,9 @@ private:
             m_dimension.Update();
 
             aPoints.Point( DIM_CROSSBARSTART )
-                    .SetConstraint( new EC_LINE( aPoints.Point( DIM_CROSSBARSTART ),
-                                                 aPoints.Point( DIM_START ) ) );
+                    .SetConstraint( new EC_LINE( aPoints.Point( DIM_CROSSBARSTART ), aPoints.Point( DIM_START ) ) );
             aPoints.Point( DIM_CROSSBAREND )
-                    .SetConstraint( new EC_LINE( aPoints.Point( DIM_CROSSBAREND ),
-                                                 aPoints.Point( DIM_END ) ) );
+                    .SetConstraint( new EC_LINE( aPoints.Point( DIM_CROSSBAREND ), aPoints.Point( DIM_END ) ) );
         }
         else if( isModified( aEditedPoint, aPoints.Point( DIM_END ) ) )
         {
@@ -1512,11 +1513,9 @@ private:
             m_dimension.Update();
 
             aPoints.Point( DIM_CROSSBARSTART )
-                    .SetConstraint( new EC_LINE( aPoints.Point( DIM_CROSSBARSTART ),
-                                                 aPoints.Point( DIM_START ) ) );
+                    .SetConstraint( new EC_LINE( aPoints.Point( DIM_CROSSBARSTART ), aPoints.Point( DIM_START ) ) );
             aPoints.Point( DIM_CROSSBAREND )
-                    .SetConstraint( new EC_LINE( aPoints.Point( DIM_CROSSBAREND ),
-                                                 aPoints.Point( DIM_END ) ) );
+                    .SetConstraint( new EC_LINE( aPoints.Point( DIM_CROSSBAREND ), aPoints.Point( DIM_END ) ) );
         }
         else if( isModified( aEditedPoint, aPoints.Point( DIM_TEXT ) ) )
         {
@@ -1606,7 +1605,9 @@ private:
 class DIM_CENTER_POINT_EDIT_BEHAVIOR : public POINT_EDIT_BEHAVIOR
 {
 public:
-    DIM_CENTER_POINT_EDIT_BEHAVIOR( PCB_DIM_CENTER& aDimension ) : m_dimension( aDimension ) {}
+    DIM_CENTER_POINT_EDIT_BEHAVIOR( PCB_DIM_CENTER& aDimension ) :
+            m_dimension( aDimension )
+    {}
 
     void MakePoints( EDIT_POINTS& aPoints ) override
     {
@@ -1658,7 +1659,9 @@ private:
 class DIM_RADIAL_POINT_EDIT_BEHAVIOR : public POINT_EDIT_BEHAVIOR
 {
 public:
-    DIM_RADIAL_POINT_EDIT_BEHAVIOR( PCB_DIM_RADIAL& aDimension ) : m_dimension( aDimension ) {}
+    DIM_RADIAL_POINT_EDIT_BEHAVIOR( PCB_DIM_RADIAL& aDimension ) :
+            m_dimension( aDimension )
+    {}
 
     void MakePoints( EDIT_POINTS& aPoints ) override
     {
@@ -1671,13 +1674,11 @@ public:
         aPoints.Point( DIM_END ).SetSnapConstraint( ALL_LAYERS );
 
         aPoints.Point( DIM_KNEE )
-                .SetConstraint(
-                        new EC_LINE( aPoints.Point( DIM_START ), aPoints.Point( DIM_END ) ) );
+                .SetConstraint( new EC_LINE( aPoints.Point( DIM_START ), aPoints.Point( DIM_END ) ) );
         aPoints.Point( DIM_KNEE ).SetSnapConstraint( IGNORE_SNAPS );
 
         aPoints.Point( DIM_TEXT )
-                .SetConstraint(
-                        new EC_45DEGREE( aPoints.Point( DIM_TEXT ), aPoints.Point( DIM_KNEE ) ) );
+                .SetConstraint( new EC_45DEGREE( aPoints.Point( DIM_TEXT ), aPoints.Point( DIM_KNEE ) ) );
         aPoints.Point( DIM_TEXT ).SetSnapConstraint( IGNORE_SNAPS );
     }
 
@@ -1702,8 +1703,7 @@ public:
             m_dimension.Update();
 
             aPoints.Point( DIM_KNEE )
-                    .SetConstraint(
-                            new EC_LINE( aPoints.Point( DIM_START ), aPoints.Point( DIM_END ) ) );
+                    .SetConstraint( new EC_LINE( aPoints.Point( DIM_START ), aPoints.Point( DIM_END ) ) );
         }
         else if( isModified( aEditedPoint, aPoints.Point( DIM_END ) ) )
         {
@@ -1717,14 +1717,12 @@ public:
             m_dimension.Update();
 
             aPoints.Point( DIM_KNEE )
-                    .SetConstraint(
-                            new EC_LINE( aPoints.Point( DIM_START ), aPoints.Point( DIM_END ) ) );
+                    .SetConstraint( new EC_LINE( aPoints.Point( DIM_START ), aPoints.Point( DIM_END ) ) );
         }
         else if( isModified( aEditedPoint, aPoints.Point( DIM_KNEE ) ) )
         {
             VECTOR2I oldKnee = m_dimension.GetKnee();
-            VECTOR2I arrowVec = aPoints.Point( DIM_KNEE ).GetPosition()
-                                - aPoints.Point( DIM_END ).GetPosition();
+            VECTOR2I arrowVec = aPoints.Point( DIM_KNEE ).GetPosition() - aPoints.Point( DIM_END ).GetPosition();
 
             m_dimension.SetLeaderLength( arrowVec.EuclideanNorm() );
             m_dimension.Update();
@@ -1757,7 +1755,9 @@ private:
 class DIM_LEADER_POINT_EDIT_BEHAVIOR : public POINT_EDIT_BEHAVIOR
 {
 public:
-    DIM_LEADER_POINT_EDIT_BEHAVIOR( PCB_DIM_LEADER& aDimension ) : m_dimension( aDimension ) {}
+    DIM_LEADER_POINT_EDIT_BEHAVIOR( PCB_DIM_LEADER& aDimension ) :
+            m_dimension( aDimension )
+    {}
 
     void MakePoints( EDIT_POINTS& aPoints ) override
     {
@@ -1769,8 +1769,7 @@ public:
         aPoints.Point( DIM_END ).SetSnapConstraint( ALL_LAYERS );
 
         aPoints.Point( DIM_TEXT )
-                .SetConstraint(
-                        new EC_45DEGREE( aPoints.Point( DIM_TEXT ), aPoints.Point( DIM_END ) ) );
+                .SetConstraint( new EC_45DEGREE( aPoints.Point( DIM_TEXT ), aPoints.Point( DIM_END ) ) );
         aPoints.Point( DIM_TEXT ).SetSnapConstraint( IGNORE_SNAPS );
     }
 
@@ -1819,7 +1818,9 @@ private:
 class TEXTBOX_POINT_EDIT_BEHAVIOR : public POINT_EDIT_BEHAVIOR
 {
 public:
-    TEXTBOX_POINT_EDIT_BEHAVIOR( PCB_TEXTBOX& aTextbox ) : m_textbox( aTextbox ) {}
+    TEXTBOX_POINT_EDIT_BEHAVIOR( PCB_TEXTBOX& aTextbox ) :
+            m_textbox( aTextbox )
+    {}
 
     void MakePoints( EDIT_POINTS& aPoints ) override
     {
@@ -1837,9 +1838,8 @@ public:
     void UpdatePoints( EDIT_POINTS& aPoints ) override
     {
         // When textboxes are rotated, they act as polygons, not rectangles
-        const unsigned target = m_textbox.GetShape() == SHAPE_T::RECTANGLE
-                                        ? TEXTBOX_POINT_COUNT::WHEN_RECTANGLE
-                                        : TEXTBOX_POINT_COUNT::WHEN_POLYGON;
+        const unsigned target = m_textbox.GetShape() == SHAPE_T::RECTANGLE ? TEXTBOX_POINT_COUNT::WHEN_RECTANGLE
+                                                                           : TEXTBOX_POINT_COUNT::WHEN_POLYGON;
 
         // Careful; textbox shape is mutable between cardinal and non-cardinal rotations...
         if( aPoints.PointsSize() != target )
@@ -1876,10 +1876,13 @@ private:
 PCB_POINT_EDITOR::PCB_POINT_EDITOR() :
         PCB_TOOL_BASE( "pcbnew.PointEditor" ),
         m_frame( nullptr ),
-        m_selectionTool( nullptr ), m_editedPoint( nullptr ),
-        m_hoveredPoint( nullptr ), m_original( VECTOR2I( 0, 0 ) ),
+        m_selectionTool( nullptr ),
+        m_editedPoint( nullptr ),
+        m_hoveredPoint( nullptr ),
+        m_original( VECTOR2I( 0, 0 ) ),
         m_arcEditMode( ARC_EDIT_MODE::KEEP_CENTER_ADJUST_ANGLE_RADIUS ),
-        m_altConstrainer( VECTOR2I( 0, 0 ) ), m_inPointEditorTool( false )
+        m_altConstrainer( VECTOR2I( 0, 0 ) ),
+        m_inPointEditorTool( false )
 {
 }
 
@@ -1898,7 +1901,7 @@ void PCB_POINT_EDITOR::Reset( RESET_REASON aReason )
  */
 static bool canAddCorner( const EDA_ITEM& aItem )
 {
-    const auto type = aItem.Type();
+    const KICAD_T type = aItem.Type();
 
     if( type == PCB_ZONE_T )
         return true;
@@ -2041,7 +2044,11 @@ std::shared_ptr<EDIT_POINTS> PCB_POINT_EDITOR::makePoints( EDA_ITEM* aItem )
     case PCB_TABLECELL_T:
     {
         PCB_TABLECELL* cell = static_cast<PCB_TABLECELL*>( aItem );
-        m_editorBehavior = std::make_unique<PCB_TABLECELL_POINT_EDIT_BEHAVIOR>( *cell );
+
+        // No support for point-editing of a rotated table
+        if( cell->GetShape() == SHAPE_T::RECTANGLE )
+            m_editorBehavior = std::make_unique<PCB_TABLECELL_POINT_EDIT_BEHAVIOR>( *cell );
+
         break;
     }
 

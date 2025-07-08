@@ -308,10 +308,10 @@ private:
 class EDA_TABLECELL_POINT_EDIT_BEHAVIOR : public POINT_EDIT_BEHAVIOR
 {
 public:
-    EDA_TABLECELL_POINT_EDIT_BEHAVIOR( EDA_SHAPE& aCell ) : m_cell( aCell )
+    EDA_TABLECELL_POINT_EDIT_BEHAVIOR( EDA_SHAPE& aCell ) :
+            m_cell( aCell )
     {
-        // While PCB_TEXTBOXES are not always RECTANGLEs, they are when they
-        // are TABLECELLs.
+        // Point editor only supports cardinally-rotated table cells.
         wxASSERT( aCell.GetShape() == SHAPE_T::RECTANGLE );
     }
 
