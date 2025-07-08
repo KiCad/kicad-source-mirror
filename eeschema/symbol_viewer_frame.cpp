@@ -469,6 +469,7 @@ void SYMBOL_VIEWER_FRAME::updatePreviewSymbol()
 
 void SYMBOL_VIEWER_FRAME::doCloseWindow()
 {
+    GetCanvas()->SetEvtHandlerEnabled( false );
     GetCanvas()->StopDrawing();
     Destroy();
 }

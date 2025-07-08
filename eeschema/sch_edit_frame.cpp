@@ -1062,6 +1062,9 @@ bool SCH_EDIT_FRAME::canCloseWindow( wxCloseEvent& aEvent )
 
 void SCH_EDIT_FRAME::doCloseWindow()
 {
+    GetCanvas()->SetEvtHandlerEnabled( false );
+    GetCanvas()->StopDrawing();
+
     SCH_SHEET_LIST sheetlist = Schematic().Hierarchy();
 
 #ifdef KICAD_IPC_API
