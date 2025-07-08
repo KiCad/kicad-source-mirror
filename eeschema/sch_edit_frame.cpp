@@ -142,12 +142,12 @@ wxDEFINE_EVENT( EDA_EVT_SCHEMATIC_CHANGED, wxCommandEvent );
 SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
         SCH_BASE_FRAME( aKiway, aParent, FRAME_SCH, wxT( "Eeschema" ), wxDefaultPosition,
                         wxDefaultSize, KICAD_DEFAULT_DRAWFRAME_STYLE, SCH_EDIT_FRAME_NAME ),
-    m_ercDialog( nullptr ),
-    m_diffSymbolDialog( nullptr ),
-    m_symbolFieldsTableDialog( nullptr ),
-    m_netNavigator( nullptr ),
-    m_highlightedConnChanged( false ),
-    m_designBlocksPane( nullptr )
+        m_ercDialog( nullptr ),
+        m_diffSymbolDialog( nullptr ),
+        m_symbolFieldsTableDialog( nullptr ),
+        m_netNavigator( nullptr ),
+        m_highlightedConnChanged( false ),
+        m_designBlocksPane( nullptr )
 {
     m_maximizeByDefault = true;
     m_schematic = new SCHEMATIC( nullptr );
@@ -198,8 +198,7 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     RecreateToolbars();
 
 #ifdef KICAD_IPC_API
-    wxTheApp->Bind( EDA_EVT_PLUGIN_AVAILABILITY_CHANGED,
-                    &SCH_EDIT_FRAME::onPluginAvailabilityChanged, this );
+    wxTheApp->Bind( EDA_EVT_PLUGIN_AVAILABILITY_CHANGED, &SCH_EDIT_FRAME::onPluginAvailabilityChanged, this );
 #endif
 
     m_hierarchy = new HIERARCHY_PANE( this );
@@ -399,8 +398,7 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     initScreenZoom();
 
     m_hierarchy->Bind( wxEVT_SIZE, &SCH_EDIT_FRAME::OnResizeHierarchyNavigator, this );
-    m_netNavigator->Bind( wxEVT_TREE_SEL_CHANGING, &SCH_EDIT_FRAME::onNetNavigatorSelChanging,
-                          this );
+    m_netNavigator->Bind( wxEVT_TREE_SEL_CHANGING, &SCH_EDIT_FRAME::onNetNavigatorSelChanging, this );
     m_netNavigator->Bind( wxEVT_TREE_SEL_CHANGED, &SCH_EDIT_FRAME::onNetNavigatorSelection, this );
     m_netNavigator->Bind( wxEVT_SIZE, &SCH_EDIT_FRAME::onResizeNetNavigator, this );
 
