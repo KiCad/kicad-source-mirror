@@ -22580,7 +22580,9 @@ msgstr "Gewählten Schaltplanpin und hierarchischen Bezeichner synchronisieren"
 
 #: eeschema/sync_sheet_pin/panel_sync_sheet_pins_base.cpp:104
 msgid "Associate selected sheet pin and hierarchical label using the pin name"
-msgstr "Verbindung von Schaltplanpin und hierarchischem Bezeichner auflösen"
+msgstr ""
+"Gewählten Schaltplanpin und hierarchischen Bezeichner mittels Pinnamen "
+"synchronisieren"
 
 #: eeschema/sync_sheet_pin/panel_sync_sheet_pins_base.cpp:109
 msgid "Break sheet pin and hierarchical label association(s)"
@@ -23129,7 +23131,7 @@ msgstr "Schaltplanpins einfügen"
 
 #: eeschema/tools/sch_actions.cpp:559 eeschema/tools/sch_actions.cpp:567
 msgid "Sync Sheet Pins..."
-msgstr "Schaltplanpins synchronisieren"
+msgstr "Schaltplanpins synchronisieren..."
 
 #: eeschema/tools/sch_actions.cpp:575
 msgid "Import Sheet..."
@@ -23569,11 +23571,11 @@ msgstr "Nächstes Netzelement"
 
 #: eeschema/tools/sch_actions.cpp:1077
 msgid "Select next item on the current net"
-msgstr "Wählt ein Verbindungselement unter dem Zeiger"
+msgstr "Wähle nächstes Element des aktuellen Netzes"
 
 #: eeschema/tools/sch_actions.cpp:1083
 msgid "Previous Net Item"
-msgstr "Vorheriges Blatt"
+msgstr "Vorheriges Netzelement"
 
 #: eeschema/tools/sch_actions.cpp:1084
 msgid "Select previous item on the current net"
@@ -26604,7 +26606,7 @@ msgstr "Das neue Verhalten wird identisch zu \"--mode-multi\" sein"
 
 #: kicad/cli/command_pcb_export_gencad.cpp:33
 msgid "Export the PCB in Gencad format"
-msgstr "PCB in Genad-Format exportieren"
+msgstr "PCB in Gencad-Format exportieren"
 
 #: kicad/cli/command_pcb_export_gencad.cpp:39
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:134
