@@ -41,7 +41,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-07 17:43+0300\n"
-"PO-Revision-Date: 2025-06-29 11:25+0000\n"
+"PO-Revision-Date: 2025-07-09 01:02+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/kicad/v9/zh_Hans/>\n"
@@ -26468,7 +26468,7 @@ msgstr "作业运行失败"
 
 #: kicad/dialogs/panel_jobset.cpp:265 kicad/dialogs/panel_jobset.cpp:979
 msgid "Running jobs"
-msgstr "正在运行中的作业"
+msgstr "运行中的作业"
 
 #: kicad/dialogs/panel_jobset.cpp:295
 msgid "Edit Destination Options..."
