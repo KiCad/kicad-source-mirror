@@ -619,18 +619,27 @@ void EDA_DRAW_FRAME::AddStandardSubMenus( TOOL_MENU& aToolMenu )
 
 void EDA_DRAW_FRAME::DisplayToolMsg( const wxString& msg )
 {
+    if( m_isClosing )
+        return;
+
     SetStatusText( msg, 6 );
 }
 
 
 void EDA_DRAW_FRAME::DisplayConstraintsMsg( const wxString& msg )
 {
+    if( m_isClosing )
+        return;
+
     SetStatusText( msg, 7 );
 }
 
 
 void EDA_DRAW_FRAME::DisplayGridMsg()
 {
+    if( m_isClosing )
+        return;
+
     wxString msg;
 
     GRID_SETTINGS& gridSettings = m_toolManager->GetSettings()->m_Window.grid;
@@ -645,6 +654,9 @@ void EDA_DRAW_FRAME::DisplayGridMsg()
 
 void EDA_DRAW_FRAME::DisplayUnitsMsg()
 {
+    if( m_isClosing )
+        return;
+
     wxString msg;
 
     switch( GetUserUnits() )
@@ -712,6 +724,9 @@ void EDA_DRAW_FRAME::updateStatusBarWidths()
 
 void EDA_DRAW_FRAME::UpdateStatusBar()
 {
+    if( m_isClosing )
+        return;
+
     SetStatusText( GetZoomLevelIndicator(), 1 );
 
     // Absolute and relative cursor positions are handled by overloading this function and
