@@ -27422,7 +27422,7 @@ msgstr "Das neue Verhalten wird identisch zu \"--mode-multi\" sein"
 
 #: kicad/cli/command_pcb_export_gencad.cpp:34
 msgid "Export the PCB in Gencad format"
-msgstr "Netzliste in KiCad-Format exportieren"
+msgstr "PCB in Genad-Format exportieren"
 
 #: kicad/cli/command_pcb_export_gencad.cpp:40
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:222
@@ -28463,7 +28463,7 @@ msgstr "Nicht-KiCad-Projekt importieren..."
 
 #: kicad/menubar.cpp:115
 msgid "Altium Project..."
-msgstr "EAGLE-Projekt..."
+msgstr "Altium Project ..."
 
 #: kicad/menubar.cpp:116
 msgid "Import Altium Schematic and PCB (*.PrjPcb)"
