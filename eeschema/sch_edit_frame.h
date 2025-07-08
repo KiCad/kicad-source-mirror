@@ -1104,34 +1104,32 @@ private:
     friend class SCH_EDITOR_CONTROL;
     friend class SCH_FIND_REPLACE_TOOL;
 
-    SCHEMATIC*              m_schematic;          ///< The currently loaded schematic
-    wxString                m_highlightedConn;    ///< The highlighted net or bus or empty string.
+    SCHEMATIC*                  m_schematic;          ///< The currently loaded schematic
+    wxString                    m_highlightedConn;    ///< The highlighted net or bus or empty string.
 
-    wxPageSetupDialogData   m_pageSetupData;
+    wxPageSetupDialogData       m_pageSetupData;
     std::vector<std::unique_ptr<SCH_ITEM>> m_items_to_repeat;  ///< For the repeat-last-item cmd
 
-    wxString                m_netListerCommand;   ///< Command line to call a custom net list
-                                                  ///< generator.
-    int                     m_exec_flags;         ///< Flags of the wxExecute() function
-                                                  ///< to call a custom net list generator.
+    wxString                    m_netListerCommand;   ///< Command line to call a custom net list
+                                                      ///< generator.
+    int                         m_exec_flags;         ///< Flags of the wxExecute() function
+                                                      ///< to call a custom net list generator.
 
-    DIALOG_SCH_FIND*        m_findReplaceDialog;
-    DIALOG_ERC*             m_ercDialog;
-    DIALOG_BOOK_REPORTER*   m_diffSymbolDialog;
-    HIERARCHY_PANE*         m_hierarchy;
+    DIALOG_SCH_FIND*            m_findReplaceDialog;
+    DIALOG_ERC*                 m_ercDialog;
+    DIALOG_BOOK_REPORTER*       m_diffSymbolDialog;
+    HIERARCHY_PANE*             m_hierarchy;
     DIALOG_SYMBOL_FIELDS_TABLE* m_symbolFieldsTableDialog;
     DIALOG_SCHEMATIC_SETUP*     m_schematicSetupDialog;
 
 
-    wxTreeCtrl*             m_netNavigator;
+    wxTreeCtrl*                 m_netNavigator;
 
-	bool m_syncingPcbToSchSelection; // Recursion guard when synchronizing selection from PCB
+	bool                        m_syncingPcbToSchSelection; // Recursion guard when synchronizing selection from PCB
+    bool                        m_show_search;
+    bool                        m_highlightedConnChanged;
 
-    bool m_show_search;
-
-    bool m_highlightedConnChanged;
-
-    std::vector<wxEvtHandler*> m_schematicChangeListeners;
+    std::vector<wxEvtHandler*>  m_schematicChangeListeners;
 
     std::vector<LIB_ID> m_designBlockHistoryList;
 
