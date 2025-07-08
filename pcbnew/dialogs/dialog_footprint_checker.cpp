@@ -216,6 +216,9 @@ void DIALOG_FOOTPRINT_CHECKER::SelectMarker( const PCB_MARKER* aMarker )
 
 void DIALOG_FOOTPRINT_CHECKER::centerMarkerIdleHandler( wxIdleEvent& aEvent )
 {
+    if( m_markersTreeModel->GetView()->IsFrozen() )
+        return;
+
     m_markersTreeModel->CenterMarker( m_centerMarkerOnIdle );
     m_centerMarkerOnIdle = nullptr;
     Unbind( wxEVT_IDLE, &DIALOG_FOOTPRINT_CHECKER::centerMarkerIdleHandler, this );

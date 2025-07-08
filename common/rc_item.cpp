@@ -406,7 +406,7 @@ void RC_TREE_MODEL::GetValue( wxVariant&              aVariant,
                               wxDataViewItem const&   aItem,
                               unsigned int            aCol ) const
 {
-    if( !aItem.IsOk() )
+    if( !aItem.IsOk() || m_view->IsFrozen() )
         return;
 
     const RC_TREE_NODE*            node = ToNode( aItem );
@@ -481,7 +481,7 @@ bool RC_TREE_MODEL::GetAttr( wxDataViewItem const&   aItem,
                              unsigned int            aCol,
                              wxDataViewItemAttr&     aAttr ) const
 {
-    if( !aItem.IsOk() )
+    if( !aItem.IsOk() || m_view->IsFrozen() )
         return false;
 
     const RC_TREE_NODE* node = ToNode( aItem );
@@ -742,6 +742,8 @@ void RC_TREE_MODEL::NextMarker()
 
 void RC_TREE_MODEL::SelectMarker( const MARKER_BASE* aMarker )
 {
+    wxCHECK( !m_view->IsFrozen(), /* void */ );
+
     for( RC_TREE_NODE* candidate : m_tree )
     {
         if( candidate->m_RcItem->GetParent() == aMarker )
@@ -755,6 +757,8 @@ void RC_TREE_MODEL::SelectMarker( const MARKER_BASE* aMarker )
 
 void RC_TREE_MODEL::CenterMarker( const MARKER_BASE* aMarker )
 {
+    wxCHECK( !m_view->IsFrozen(), /* void */ );
+
     for( RC_TREE_NODE* candidate : m_tree )
     {
         if( candidate->m_RcItem->GetParent() == aMarker )
