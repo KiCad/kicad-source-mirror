@@ -108,6 +108,8 @@ WX_INFOBAR::WX_INFOBAR( wxWindow* aParent, wxAuiManager* aMgr, wxWindowID aWinid
 
 WX_INFOBAR::~WX_INFOBAR()
 {
+    m_parent->Unbind( wxEVT_SIZE, &WX_INFOBAR::onSize, this );
+
     delete m_showTimer;
 }
 
