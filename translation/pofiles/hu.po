@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-07 17:43+0300\n"
-"PO-Revision-Date: 2025-07-07 14:41+0000\n"
+"PO-Revision-Date: 2025-07-09 01:02+0000\n"
 "Last-Translator: Sárkány Lőrinc <lsarkany@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/kicad/v9/hu/>\n"
 "Language: hu\n"
@@ -1928,9 +1928,8 @@ msgstr ""
 "Nincs alakzat a fekete-fehér képen a konvertáláshoz: nem jön létre körvonal."
 
 #: common/api/api_handler.cpp:27
-#, fuzzy
 msgid "Modification from API"
-msgstr "Alakzat beállítása"
+msgstr "Módosítás API-ból"
 
 #: common/background_jobs_monitor.cpp:98
 msgid "Background Jobs"
