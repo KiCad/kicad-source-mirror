@@ -355,7 +355,7 @@ void PCB_EDIT_FRAME::ReCreateVToolbar()
     }
 
     if( currentOriginGroupAction )
-        dimensionGroup->SetDefaultAction( *currentOriginGroupAction );
+        originGroup->SetDefaultAction( *currentOriginGroupAction );
 
     if( !routingGroup )
     {
