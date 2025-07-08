@@ -1577,4 +1577,9 @@ void BOARD_DESIGN_SETTINGS::SetDefaultMasterPad()
 
     constexpr double RR_RADIUS = DEFAULT_PAD_HEIGTH_MM * DEFAULT_PAD_RR_RADIUS_RATIO;
     m_Pad_Master->SetRoundRectCornerRadius( PADSTACK::ALL_LAYERS, pcbIUScale.mmToIU( RR_RADIUS ) );
+
+    if( m_Pad_Master->GetFrontShape() == PAD_SHAPE::CIRCLE )
+        m_Pad_Master->SetThermalSpokeAngle( ANGLE_45 );
+    else
+        m_Pad_Master->SetThermalSpokeAngle( ANGLE_90 );
 }
