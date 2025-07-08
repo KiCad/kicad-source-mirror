@@ -382,6 +382,9 @@ wxBitmapButton* WX_INFOBAR::GetCloseButton() const
 {
     wxSizer* sizer = GetSizer();
 
+    if( !sizer )
+        return nullptr;
+
     if( sizer->GetItemCount() == 0 )
         return nullptr;
 
@@ -390,7 +393,7 @@ wxBitmapButton* WX_INFOBAR::GetCloseButton() const
 
     wxSizerItem* item = sizer->GetItem( sizer->GetItemCount() - 1 );
 
-    if( item->GetWindow()->GetId() == ID_CLOSE_INFOBAR )
+    if( item && item->GetWindow() && item->GetWindow()->GetId() == ID_CLOSE_INFOBAR )
         return static_cast<wxBitmapButton*>( item->GetWindow() );
 
     return nullptr;
