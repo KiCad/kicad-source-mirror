@@ -28463,11 +28463,11 @@ msgstr "Nicht-KiCad-Projekt importieren..."
 
 #: kicad/menubar.cpp:115
 msgid "Altium Project..."
-msgstr "EAGLE-Projekt..."
+msgstr "Altium-Projekt..."
 
 #: kicad/menubar.cpp:116
 msgid "Import Altium Schematic and PCB (*.PrjPcb)"
-msgstr "CADSTAR-Archivschema und PCB importieren (*.csa, *.cpa)"
+msgstr "Altium-Schaltplan und -PCB importieren (*.PrjPcb)"
 
 #: kicad/menubar.cpp:119
 msgid "CADSTAR Project..."
