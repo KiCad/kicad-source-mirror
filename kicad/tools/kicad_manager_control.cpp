@@ -215,8 +215,7 @@ int KICAD_MANAGER_CONTROL::NewFromRepository( const TOOL_EVENT& aEvent )
 int KICAD_MANAGER_CONTROL::NewJobsetFile( const TOOL_EVENT& aEvent )
 {
     wxString     default_dir = wxFileName( Prj().GetProjectFullName() ).GetPathWithSep();
-    wxFileDialog dlg( m_frame, _( "Create New Jobset" ), default_dir, wxEmptyString,
-                      FILEEXT::JobsetFileWildcard(),
+    wxFileDialog dlg( m_frame, _( "Create New Jobset" ), default_dir, wxEmptyString, FILEEXT::JobsetFileWildcard(),
                       wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
     if( dlg.ShowModal() == wxID_CANCEL )
@@ -257,8 +256,8 @@ int KICAD_MANAGER_CONTROL::NewFromTemplate( const TOOL_EVENT& aEvent )
         titleDirMap.emplace( _( "User Templates" ), templatePath );
     }
 
-    DIALOG_TEMPLATE_SELECTOR ps( m_frame, settings->m_TemplateWindowPos,
-                                 settings->m_TemplateWindowSize, titleDirMap );
+    DIALOG_TEMPLATE_SELECTOR ps( m_frame, settings->m_TemplateWindowPos, settings->m_TemplateWindowSize,
+                                 titleDirMap );
 
     // Show the project template selector dialog
     int result = ps.ShowModal();
@@ -271,8 +270,8 @@ int KICAD_MANAGER_CONTROL::NewFromTemplate( const TOOL_EVENT& aEvent )
 
     if( !ps.GetSelectedTemplate() )
     {
-        wxMessageBox( _( "No project template was selected.  Cannot generate new project." ),
-                      _( "Error" ), wxOK | wxICON_ERROR, m_frame );
+        wxMessageBox( _( "No project template was selected.  Cannot generate new project." ), _( "Error" ),
+                      wxOK | wxICON_ERROR, m_frame );
 
         return -1;
     }
@@ -354,10 +353,8 @@ int KICAD_MANAGER_CONTROL::NewFromTemplate( const TOOL_EVENT& aEvent )
             for( const wxFileName& file : overwrittenFiles )
                 extendedMsg += "\n" + file.GetFullName();
 
-            KIDIALOG msgDlg( m_frame,
-                             _( "Similar files already exist in the destination folder." ),
-                             _( "Confirmation" ),
-                             wxOK | wxCANCEL | wxICON_WARNING );
+            KIDIALOG msgDlg( m_frame, _( "Similar files already exist in the destination folder." ),
+                             _( "Confirmation" ), wxOK | wxCANCEL | wxICON_WARNING );
             msgDlg.SetExtendedMessage( extendedMsg );
             msgDlg.SetOKLabel( _( "Overwrite" ) );
             msgDlg.DoNotShowCheckbox( __FILE__, __LINE__ );
@@ -373,10 +370,8 @@ int KICAD_MANAGER_CONTROL::NewFromTemplate( const TOOL_EVENT& aEvent )
     // create a project
     if( !ps.GetSelectedTemplate()->CreateProject( fn, &errorMsg ) )
     {
-        wxMessageDialog createDlg( m_frame,
-                                   _( "A problem occurred creating new project from template." ),
-                                   _( "Error" ),
-                                   wxOK | wxICON_ERROR );
+        wxMessageDialog createDlg( m_frame, _( "A problem occurred creating new project from template." ),
+                                   _( "Error" ), wxOK | wxICON_ERROR );
 
         if( !errorMsg.empty() )
             createDlg.SetExtendedMessage( errorMsg );
@@ -437,8 +432,8 @@ int KICAD_MANAGER_CONTROL::OpenProject( const TOOL_EVENT& aEvent )
 int KICAD_MANAGER_CONTROL::OpenJobsetFile( const TOOL_EVENT& aEvent )
 {
     wxString     default_dir = wxFileName( Prj().GetProjectFullName() ).GetPathWithSep();
-    wxFileDialog dlg( m_frame, _( "Open Jobset" ), default_dir, wxEmptyString,
-                      FILEEXT::JobsetFileWildcard(), wxFD_OPEN | wxFD_FILE_MUST_EXIST );
+    wxFileDialog dlg( m_frame, _( "Open Jobset" ), default_dir, wxEmptyString, FILEEXT::JobsetFileWildcard(),
+                      wxFD_OPEN | wxFD_FILE_MUST_EXIST );
 
     if( dlg.ShowModal() == wxID_CANCEL )
         return -1;
@@ -545,7 +540,7 @@ public:
                  || ext == FILEEXT::LegacySymbolDocumentFileExtension
                  || ext == FILEEXT::KiCadSymbolLibFileExtension
                  || ext == FILEEXT::NetlistFileExtension
-               || destFile.GetName() == FILEEXT::SymbolLibraryTableFileName )
+                 || destFile.GetName() == FILEEXT::SymbolLibraryTableFileName )
         {
             KIFACE* eeschema = m_frame->Kiway().KiFACE( KIWAY::FACE_SCH );
             eeschema->SaveFileAs( m_projectDirPath, m_projectName, m_newProjectDirPath,
@@ -557,7 +552,7 @@ public:
                  || ext == FILEEXT::KiCadFootprintFileExtension
                  || ext == FILEEXT::LegacyFootprintLibPathExtension
                  || ext == FILEEXT::FootprintAssignmentFileExtension
-               || destFile.GetName() == FILEEXT::FootprintLibraryTableFileName )
+                 || destFile.GetName() == FILEEXT::FootprintLibraryTableFileName )
         {
             KIFACE* pcbnew = m_frame->Kiway().KiFACE( KIWAY::FACE_PCB );
             pcbnew->SaveFileAs( m_projectDirPath, m_projectName, m_newProjectDirPath,
@@ -690,8 +685,7 @@ int KICAD_MANAGER_CONTROL::SaveProjectAs( const TOOL_EVENT& aEvent )
         default_dir = default_dir_fn.GetPath();
     }
 
-    wxFileDialog dlg( m_frame, _( "Save Project To" ), default_dir, wxEmptyString, wxEmptyString,
-                      wxFD_SAVE );
+    wxFileDialog dlg( m_frame, _( "Save Project To" ), default_dir, wxEmptyString, wxEmptyString, wxFD_SAVE );
 
     if( dlg.ShowModal() == wxID_CANCEL )
         return -1;
@@ -730,8 +724,8 @@ int KICAD_MANAGER_CONTROL::SaveProjectAs( const TOOL_EVENT& aEvent )
     const wxString&   newProjectName = newProjectDir.GetDirs().Last();
     wxDir             currentProjectDir( currentProjectDirPath );
 
-    SAVE_AS_TRAVERSER traverser( m_frame, currentProjectDirPath, currentProjectName,
-                                 newProjectDirPath, newProjectName );
+    SAVE_AS_TRAVERSER traverser( m_frame, currentProjectDirPath, currentProjectName, newProjectDirPath,
+                                 newProjectName );
 
     currentProjectDir.Traverse( traverser );
 
@@ -777,14 +771,12 @@ int KICAD_MANAGER_CONTROL::ShowPlayer( const TOOL_EVENT& aEvent )
 
     if( playerType == FRAME_SCH && !m_frame->IsProjectActive() )
     {
-        DisplayInfoMessage( m_frame, _( "Create (or open) a project to edit a schematic." ),
-                            wxEmptyString );
+        DisplayInfoMessage( m_frame, _( "Create (or open) a project to edit a schematic." ), wxEmptyString );
         return -1;
     }
     else if( playerType == FRAME_PCB_EDITOR && !m_frame->IsProjectActive() )
     {
-        DisplayInfoMessage( m_frame, _( "Create (or open) a project to edit a pcb." ),
-                            wxEmptyString );
+        DisplayInfoMessage( m_frame, _( "Create (or open) a project to edit a pcb." ), wxEmptyString );
         return -1;
     }
 
