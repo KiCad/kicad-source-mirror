@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-07 17:42+0300\n"
-"PO-Revision-Date: 2025-07-09 01:02+0000\n"
+"PO-Revision-Date: 2025-07-10 06:02+0000\n"
 "Last-Translator: Luka Borkovic <borkovic@gmail.com>\n"
 "Language-Team: Serbian <https://hosted.weblate.org/projects/kicad/"
 "master-source/sr/>\n"
@@ -1334,7 +1334,6 @@ msgstr "Доње светло:"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:187
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:204
-#, fuzzy
 msgid "Elevation (deg)"
 msgstr "Нагиб у степенима:"
 
