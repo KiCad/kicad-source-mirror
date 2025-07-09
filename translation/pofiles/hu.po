@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-07 17:43+0300\n"
-"PO-Revision-Date: 2025-07-09 01:02+0000\n"
+"PO-Revision-Date: 2025-07-10 06:01+0000\n"
 "Last-Translator: Sárkány Lőrinc <lsarkany@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/kicad/v9/hu/>\n"
 "Language: hu\n"
@@ -10064,34 +10064,28 @@ msgstr "Python pluginok újratöltése és menük frissítése"
 #: pcbnew/dialogs/dialog_board_setup.cpp:210
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:79
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:151
-#, fuzzy
 msgid "Embedded Files"
-msgstr "Képfájlok"
+msgstr "Beágyazott fájlok"
 
 #: common/tool/actions.cpp:1250
-#, fuzzy
 msgid "Manage embedded files"
-msgstr "Fájl átnevezése"
+msgstr "Beágyazott fájlok kezelése"
 
 #: common/tool/actions.cpp:1255
-#, fuzzy
 msgid "Remove File"
-msgstr "Fájl átnevezése"
+msgstr "Fájl eltávolítása"
 
 #: common/tool/actions.cpp:1256
-#, fuzzy
 msgid "Remove an embedded file"
-msgstr "Összes egyező cseréje"
+msgstr "Beágyazott fájl eltávolítása"
 
 #: common/tool/actions.cpp:1261
-#, fuzzy
 msgid "Extract File"
-msgstr "Exportálás fájlba"
+msgstr "Fájl kicsomagolása"
 
 #: common/tool/actions.cpp:1262
-#, fuzzy
 msgid "Extract an embedded file"
-msgstr "Végrehajtható fájl ("
+msgstr "Beágyazott fájl kicsomagolása"
 
 #: common/tool/common_control.cpp:203
 msgid "Can not switch to project manager in stand-alone mode."
@@ -15837,9 +15831,8 @@ msgstr "Alkatrészrajzolat böngésző"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:102
 #: eeschema/fields_grid_table.cpp:1069
-#, fuzzy
 msgid "Show datasheet in browser"
-msgstr "Megjelenítés böngészőben"
+msgstr "Adatlap megjelenítése a böngészőben"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:200
 #, fuzzy
@@ -15905,14 +15898,13 @@ msgid "Rename Field"
 msgstr "Mező átnevezése"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:853
-#, fuzzy, c-format
+#, c-format
 msgid "Field name %s already exists."
-msgstr "A(z) \"%s\" fájl már létezik."
+msgstr "Van már \"%s\" nevű mező."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:947
-#, fuzzy
 msgid "The Quantity column cannot be grouped by."
-msgstr "A Referencia oszlop nem rejthető el."
+msgstr "A Mennyiség oszlop szerint nem lehet csoportosítani."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:955
 #, fuzzy
@@ -16010,7 +16002,6 @@ msgid "Show 'Exclude from BOM'"
 msgstr "Nem kerül a BOM listára"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:110
-#, fuzzy
 msgid "Group symbols"
 msgstr "Rajzjelek csoportosítása"
 
@@ -16024,9 +16015,8 @@ msgid "Scope:"
 msgstr "Hatáskör:"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:167
-#, fuzzy
 msgid "Entire project"
-msgstr "Projekt kitömörítése"
+msgstr "A teljes projekt"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:173
 msgid "Recursive"
