@@ -102,6 +102,8 @@ bool PGM_KICAD::OnPgmInit()
 
     static const wxCmdLineEntryDesc desc[] = {
         { wxCMD_LINE_OPTION, "f", "frame", "Frame to load", wxCMD_LINE_VAL_STRING, 0 },
+        { wxCMD_LINE_SWITCH, "n", "new", "New instance of KiCad, does not attempt to load previously open files",
+          wxCMD_LINE_VAL_NONE, 0 },
         { wxCMD_LINE_PARAM, nullptr, nullptr, "File to load", wxCMD_LINE_VAL_STRING,
           wxCMD_LINE_PARAM_MULTIPLE | wxCMD_LINE_PARAM_OPTIONAL },
         { wxCMD_LINE_NONE, nullptr, nullptr, nullptr, wxCMD_LINE_VAL_NONE, 0 }
@@ -239,7 +241,7 @@ bool PGM_KICAD::OnPgmInit()
 
     Kiway.SetTop( frame );
 
-    KIPLATFORM::ENV::SetAppDetailsForWindow( frame, KIPLATFORM::ENV::GetCommandLineStr(), frame->GetTitle() );
+    KIPLATFORM::ENV::SetAppDetailsForWindow( frame, PATHS::GetExecutablePath() + " -n", frame->GetTitle() );
 
     KICAD_SETTINGS* settings = static_cast<KICAD_SETTINGS*>( PgmSettings() );
 
@@ -306,9 +308,9 @@ bool PGM_KICAD::OnPgmInit()
     }
     else if( managerFrame )
     {
-        if( App().argc > 1 )
+        if( parser.GetParamCount() > 0 )
         {
-            wxFileName tmp = App().argv[1];
+            wxFileName tmp = parser.GetParam( 0 );
 
             if( tmp.GetExt() != FILEEXT::ProjectFileExtension
                 && tmp.GetExt() != FILEEXT::LegacyProjectFileExtension )
@@ -327,7 +329,7 @@ bool PGM_KICAD::OnPgmInit()
         }
 
         // If no file was given as an argument, check that there was a file open.
-        if( projToLoad.IsEmpty() && settings->m_OpenProjects.size() )
+        if( projToLoad.IsEmpty() && settings->m_OpenProjects.size() && !parser.FoundSwitch( "new" ) )
         {
             wxString last_pro = settings->m_OpenProjects.front();
             settings->m_OpenProjects.erase( settings->m_OpenProjects.begin() );

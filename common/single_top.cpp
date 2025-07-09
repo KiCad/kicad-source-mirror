@@ -50,6 +50,7 @@
 #include <confirm.h>
 #include <settings/kicad_settings.h>
 #include <settings/settings_manager.h>
+#include <paths.h>
 
 #include <kiplatform/app.h>
 #include <kiplatform/environment.h>
@@ -390,7 +391,7 @@ bool PGM_SINGLE_TOP::OnPgmInit()
     App().SetAppDisplayName( frame->GetAboutTitle() );
 
     wxString relaunchDisplayName = frame->GetAboutTitle() + " " + GetMajorMinorVersion();
-    KIPLATFORM::ENV::SetAppDetailsForWindow( frame, KIPLATFORM::ENV::GetCommandLineStr(), relaunchDisplayName );
+    KIPLATFORM::ENV::SetAppDetailsForWindow( frame, PATHS::GetExecutablePath(), relaunchDisplayName );
 
     // Allocate a slice of time to show the frame and update wxWidgets widgets
     // (especially setting valid sizes) after creating frame and before calling
