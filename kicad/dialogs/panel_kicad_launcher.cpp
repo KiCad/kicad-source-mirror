@@ -24,6 +24,7 @@
 #include <policy_keys.h>
 #include <tool/tool_manager.h>
 #include <tools/kicad_manager_actions.h>
+#include <tools/kicad_manager_control.h>
 #include <widgets/bitmap_button.h>
 #include <wx/stattext.h>
 
@@ -58,6 +59,11 @@ PANEL_KICAD_LAUNCHER::~PANEL_KICAD_LAUNCHER()
 
 void PANEL_KICAD_LAUNCHER::onLauncherButtonClick( wxCommandEvent& aEvent )
 {
+    // Don't accept clicks processed during wxProgressReporter updating.  In particular, the wxSafeYield()
+    // call below will puke.
+    if( m_frame->GetToolManager()->GetTool<KICAD_MANAGER_CONTROL>()->InShowPlayer() )
+        return;
+
     // Defocus the button because leaving the large buttons focused after a click looks out of place in
     // the launcher
     m_frame->SetFocus();

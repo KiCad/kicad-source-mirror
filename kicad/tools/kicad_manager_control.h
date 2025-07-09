@@ -73,16 +73,16 @@ public:
     ///< Set up handlers for various events.
     void setTransitions() override;
 
+    bool InShowPlayer() const { return m_inShowPlayer; }
+
 private:
-    ///< Pointer to the currently used edit/draw frame.
-    KICAD_MANAGER_FRAME* m_frame;
-
-    // Mutex to allow only a single KiFace to load at one time (released when loaded)
-    std::mutex m_loading;
-
     int openProject( const wxString& aDefaultDir );
 
     wxFileName newProjectDirectory( wxString* aFileName = nullptr, bool isRepo = false );
+
+private:
+    KICAD_MANAGER_FRAME* m_frame;           ///< Pointer to the currently used edit/draw frame.
+    bool                 m_inShowPlayer;    ///< Re-entrancy guard
 };
 
 #endif
