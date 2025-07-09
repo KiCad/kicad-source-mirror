@@ -137,7 +137,7 @@ SIMULATOR_FRAME::SIMULATOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     mainSizer->Add( m_infoBar, 0, wxEXPAND, 0 );
 
     m_tbTopMain = new ACTION_TOOLBAR( this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
-                                        wxAUI_TB_DEFAULT_STYLE|wxAUI_TB_HORZ_LAYOUT|wxAUI_TB_PLAIN_BACKGROUND );
+                                      wxAUI_TB_DEFAULT_STYLE|wxAUI_TB_HORZ_LAYOUT|wxAUI_TB_PLAIN_BACKGROUND );
     m_tbTopMain->Realize();
     mainSizer->Add( m_tbTopMain, 0, wxEXPAND, 5 );
 
@@ -151,12 +151,10 @@ SIMULATOR_FRAME::SIMULATOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     LoadSettings( config() );
 
-    NGSPICE_SETTINGS* settings = dynamic_cast<NGSPICE_SETTINGS*>( m_simulator->Settings().get() );
+    std::shared_ptr<NGSPICE_SETTINGS> cfg = Prj().GetProjectFile().m_SchematicSettings->m_NgspiceSettings;
 
-    wxCHECK2( settings, /* do nothing in release builds*/ );
-
-    if( settings && settings->GetWorkbookFilename().IsEmpty() )
-        settings->SetCompatibilityMode( NGSPICE_COMPATIBILITY_MODE::LT_PSPICE );
+    if( cfg->GetWorkbookFilename().IsEmpty() )
+        cfg->SetCompatibilityMode( NGSPICE_COMPATIBILITY_MODE::LT_PSPICE );
 
     m_simulator->Init();
 
@@ -177,8 +175,7 @@ SIMULATOR_FRAME::SIMULATOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     RecreateToolbars();
     ReCreateMenuBar();
 
-    Bind( wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( SIMULATOR_FRAME::onExit ), this,
-          wxID_EXIT );
+    Bind( wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( SIMULATOR_FRAME::onExit ), this, wxID_EXIT );
 
     Bind( EVT_SIM_UPDATE, &SIMULATOR_FRAME::onUpdateSim, this );
     Bind( EVT_SIM_REPORT, &SIMULATOR_FRAME::onSimReport, this );
@@ -245,44 +242,29 @@ void SIMULATOR_FRAME::ShowChangedLanguage()
 
 void SIMULATOR_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
 {
-    EESCHEMA_SETTINGS* cfg = dynamic_cast<EESCHEMA_SETTINGS*>( aCfg );
-    wxASSERT( cfg );
-
-    if( cfg )
+    if( EESCHEMA_SETTINGS* cfg = dynamic_cast<EESCHEMA_SETTINGS*>( aCfg ) )
     {
         EDA_BASE_FRAME::LoadSettings( cfg );
         m_ui->LoadSettings( cfg );
     }
 
-    PROJECT_FILE& project = Prj().GetProjectFile();
-
-    NGSPICE* currentSim = dynamic_cast<NGSPICE*>( m_simulator.get() );
-
-    if( currentSim )
-        m_simulator->Settings() = project.m_SchematicSettings->m_NgspiceSettings;
+    if( m_simulator )
+        m_simulator->Settings() = Prj().GetProjectFile().m_SchematicSettings->m_NgspiceSettings;
 }
 
 
 void SIMULATOR_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
 {
-    EESCHEMA_SETTINGS* cfg = dynamic_cast<EESCHEMA_SETTINGS*>( aCfg );
-    wxASSERT( cfg );
-
-    if( cfg )
+    if( EESCHEMA_SETTINGS* cfg = dynamic_cast<EESCHEMA_SETTINGS*>( aCfg ) )
     {
         EDA_BASE_FRAME::SaveSettings( cfg );
         m_ui->SaveSettings( cfg );
     }
 
-    PROJECT_FILE& project = Prj().GetProjectFile();
+    bool modified = Prj().GetProjectFile().m_SchematicSettings->m_NgspiceSettings->SaveToFile();
 
-    if( project.m_SchematicSettings )
-    {
-        bool modified = project.m_SchematicSettings->m_NgspiceSettings->SaveToFile();
-
-        if( m_schematicFrame && modified )
-            m_schematicFrame->OnModify();
-    }
+    if( m_schematicFrame && modified )
+        m_schematicFrame->OnModify();
 }
 
 
@@ -330,10 +312,11 @@ int SIMULATOR_FRAME::GetCurrentOptions() const
 
 void SIMULATOR_FRAME::UpdateTitle()
 {
-    bool       unsaved = true;
-    bool       readOnly = false;
-    wxString   title;
-    wxFileName filename = Prj().AbsolutePath( m_simulator->Settings()->GetWorkbookFilename() );
+    bool                              unsaved = true;
+    bool                              readOnly = false;
+    wxString                          title;
+    std::shared_ptr<NGSPICE_SETTINGS> cfg = Prj().GetProjectFile().m_SchematicSettings->m_NgspiceSettings;
+    wxFileName                        filename = Prj().AbsolutePath( cfg->GetWorkbookFilename() );
 
     if( filename.IsOk() && filename.FileExists() )
     {
@@ -677,7 +660,7 @@ void SIMULATOR_FRAME::doCloseWindow()
 
     SaveSettings( config() );
 
-    m_simulator->Settings() = nullptr;
+    m_simulator->Settings().reset();
 
     Destroy();
 }
