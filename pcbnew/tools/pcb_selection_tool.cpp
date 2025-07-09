@@ -1485,11 +1485,9 @@ int PCB_SELECTION_TOOL::expandConnection( const TOOL_EVENT& aEvent )
 }
 
 
-void PCB_SELECTION_TOOL::selectAllConnectedTracks(
-        const std::vector<BOARD_CONNECTED_ITEM*>& aStartItems, STOP_CONDITION aStopCondition )
+void PCB_SELECTION_TOOL::selectAllConnectedTracks( const std::vector<BOARD_CONNECTED_ITEM*>& aStartItems,
+                                                   STOP_CONDITION aStopCondition )
 {
-    const LSET        allCuMask = LSET::AllCuMask();
-
     PROF_TIMER refreshTimer;
     double     refreshIntervalMs = 500; // Refresh display with this interval to indicate progress
     int        lastSelectionSize = (int) m_selection.GetSize();
@@ -1612,7 +1610,7 @@ void PCB_SELECTION_TOOL::selectAllConnectedTracks(
             for( int i = (int) activePts.size() - 1; i >= 0; --i )
             {
                 VECTOR2I pt = activePts[i].first;
-                LSET     layerSetCu = activePts[i].second & allCuMask;
+                LSET     layerSetCu = activePts[i].second & LSET::AllCuMask();
 
                 auto viaIt = viaMap.find( pt );
                 auto padIt = padMap.find( pt );

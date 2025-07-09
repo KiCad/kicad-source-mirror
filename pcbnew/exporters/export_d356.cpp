@@ -55,6 +55,7 @@ static int compute_pad_access_code( BOARD *aPcb, LSET aLayerMask )
 {
     // Non-copper is not interesting here
     aLayerMask &= LSET::AllCuMask();
+
     if( !aLayerMask.any() )
         return -1;
 

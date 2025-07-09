@@ -92,7 +92,8 @@ bool DRC_TEST_PROVIDER_PHYSICAL_CLEARANCE::Run()
     m_board = m_drcEngine->GetBoard();
     m_itemTree.clear();
 
-    int errorMax = m_board->GetDesignSettings().m_MaxError;
+    int  errorMax = m_board->GetDesignSettings().m_MaxError;
+    LSET boardCopperLayers = LSET::AllCuMask( m_board->GetCopperLayerCount() );
 
     if( m_board->m_DRCMaxPhysicalClearance <= 0 )
     {
@@ -154,7 +155,7 @@ bool DRC_TEST_PROVIDER_PHYSICAL_CLEARANCE::Run()
                         layers |= LSET( LSET::BackBoardTechMask() ).set( B_CrtYd );
 
                     if( layers.Contains( F_Cu ) && layers.Contains( B_Cu ) )
-                        layers |= LSET::AllCuMask();
+                        layers |= boardCopperLayers;
                 }
                 else if( item->Type() == PCB_FOOTPRINT_T )
                 {
@@ -261,8 +262,7 @@ bool DRC_TEST_PROVIDER_PHYSICAL_CLEARANCE::Run()
     // Generate a count for progress reporting.
     //
 
-    forEachGeometryItem( { PCB_ZONE_T, PCB_SHAPE_T },
-            LSET::AllCuMask(),
+    forEachGeometryItem( { PCB_ZONE_T, PCB_SHAPE_T }, boardCopperLayers,
             [&]( BOARD_ITEM* item ) -> bool
             {
                 ZONE* zone = dynamic_cast<ZONE*>( item );
@@ -270,7 +270,7 @@ bool DRC_TEST_PROVIDER_PHYSICAL_CLEARANCE::Run()
                 if( zone && zone->GetIsRuleArea() )
                     return true;    // Continue with other items
 
-                count += ( item->GetLayerSet() & LSET::AllCuMask() ).count();
+                count += ( item->GetLayerSet() & boardCopperLayers ).count();
 
                 return true;
             } );
@@ -279,8 +279,7 @@ bool DRC_TEST_PROVIDER_PHYSICAL_CLEARANCE::Run()
     // Run clearance checks -within- polygonal items.
     //
 
-    forEachGeometryItem( { PCB_ZONE_T, PCB_SHAPE_T },
-            LSET::AllCuMask(),
+    forEachGeometryItem( { PCB_ZONE_T, PCB_SHAPE_T }, boardCopperLayers,
             [&]( BOARD_ITEM* item ) -> bool
             {
                 PCB_SHAPE* shape = dynamic_cast<PCB_SHAPE*>( item );
@@ -611,10 +610,8 @@ void DRC_TEST_PROVIDER_PHYSICAL_CLEARANCE::testZoneLayer( ZONE* aZone, PCB_LAYER
 }
 
 
-int DRC_TEST_PROVIDER_PHYSICAL_CLEARANCE::testItemAgainstItem( BOARD_ITEM* aItem,
-                                                               SHAPE* aItemShape,
-                                                               PCB_LAYER_ID aLayer,
-                                                               BOARD_ITEM* aOther )
+int DRC_TEST_PROVIDER_PHYSICAL_CLEARANCE::testItemAgainstItem( BOARD_ITEM* aItem, SHAPE* aItemShape,
+                                                               PCB_LAYER_ID aLayer, BOARD_ITEM* aOther )
 {
     bool           testClearance = !m_drcEngine->IsErrorLimitExceeded( DRCE_CLEARANCE );
     bool           testHoles = !m_drcEngine->IsErrorLimitExceeded( DRCE_HOLE_CLEARANCE );
@@ -623,6 +620,7 @@ int DRC_TEST_PROVIDER_PHYSICAL_CLEARANCE::testItemAgainstItem( BOARD_ITEM* aItem
     int            actual;
     int            violations = 0;
     VECTOR2I       pos;
+    LSET           boardCopperLayers = LSET::AllCuMask( m_board->GetCopperLayerCount() );
 
     std::shared_ptr<SHAPE> otherShapeStorage = aOther->GetEffectiveShape( aLayer );
     SHAPE*                 otherShape = otherShapeStorage.get();
@@ -677,7 +675,7 @@ int DRC_TEST_PROVIDER_PHYSICAL_CLEARANCE::testItemAgainstItem( BOARD_ITEM* aItem
                 layers |= LSET( LSET::BackBoardTechMask() ).set( B_CrtYd );
 
             if( layers.Contains( F_Cu ) && layers.Contains( B_Cu ) )
-                layers |= LSET::AllCuMask();
+                layers |= boardCopperLayers;
 
             wxCHECK_MSG( layers.Contains( aLayer ), violations,
                     wxT( "Bug!  Vias should only be checked for layers on which they exist" ) );
@@ -700,7 +698,7 @@ int DRC_TEST_PROVIDER_PHYSICAL_CLEARANCE::testItemAgainstItem( BOARD_ITEM* aItem
                 layers |= LSET( LSET::BackBoardTechMask() ).set( B_CrtYd );
 
             if( layers.Contains( F_Cu ) && layers.Contains( B_Cu ) )
-                layers |= LSET::AllCuMask();
+                layers |= boardCopperLayers;
 
             wxCHECK_MSG( layers.Contains( aLayer ), violations,
                     wxT( "Bug!  Vias should only be checked for layers on which they exist" ) );

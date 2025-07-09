@@ -424,11 +424,9 @@ bool GENDRILL_WRITER_BASE::GenDrillReportFile( const wxString& aFullFileName )
     out.Print( 0, "Copper Layer Stackup:\n" );
     out.Print( 0, separator );
 
-    LSET cu = m_pcb->GetEnabledLayers() & LSET::AllCuMask();
-
     int conventional_layer_num = 1;
 
-    for( PCB_LAYER_ID layer : cu.UIOrder() )
+    for( PCB_LAYER_ID layer : LSET::AllCuMask( m_pcb->GetCopperLayerCount() ).UIOrder() )
     {
         out.Print( 0, "    L%-2d:  %-25s %s\n",
                    conventional_layer_num++,

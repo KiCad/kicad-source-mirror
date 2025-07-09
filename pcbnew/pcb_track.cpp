@@ -1470,7 +1470,7 @@ std::vector<int> PCB_VIA::ViewGetLayers() const
     LSET cuMask = LSET::AllCuMask();
 
     if( const BOARD* board = GetBoard() )
-        cuMask = board->GetEnabledLayers();
+        cuMask &= board->GetEnabledLayers();
 
     for( PCB_LAYER_ID layer : layers )
     {

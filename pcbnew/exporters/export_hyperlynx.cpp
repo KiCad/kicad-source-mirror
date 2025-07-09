@@ -101,8 +101,7 @@ public:
 
     bool IsEmpty() const
     {
-        LSET layerMask = LSET::AllCuMask() & m_board->GetEnabledLayers();
-        LSET outLayers = m_layers & layerMask;
+        LSET outLayers = m_layers & LSET::AllCuMask( m_board->GetCopperLayerCount() );
 
         return outLayers.none();
     }
@@ -254,7 +253,7 @@ bool HYPERLYNX_EXPORTER::generateHeaders()
 
 void HYPERLYNX_EXPORTER::writeSinglePadStack( HYPERLYNX_PAD_STACK& aStack )
 {
-    LSET layerMask = LSET::AllCuMask() & m_board->GetEnabledLayers();
+    LSET layerMask = LSET::AllCuMask( m_board->GetCopperLayerCount() );
     LSET outLayers = aStack.m_layers & layerMask;
 
     if( outLayers.none() )

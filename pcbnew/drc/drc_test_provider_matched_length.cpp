@@ -300,6 +300,7 @@ bool DRC_TEST_PROVIDER_MATCHED_LENGTH::runInternal( bool aDelayReportMode )
             return false;
     }
 
+    LSET boardCopperLayers = LSET::AllCuMask( m_board->GetCopperLayerCount() );
     std::map<DRC_RULE*, std::set<BOARD_CONNECTED_ITEM*> > itemSets;
 
     std::shared_ptr<FROM_TO_CACHE> ftCache = m_board->GetConnectivity()->GetFromToCache();
@@ -310,14 +311,14 @@ bool DRC_TEST_PROVIDER_MATCHED_LENGTH::runInternal( bool aDelayReportMode )
     size_t       count = 0;
     size_t       ii = 0;
 
-    forEachGeometryItem( { PCB_TRACE_T, PCB_ARC_T, PCB_VIA_T, PCB_PAD_T }, LSET::AllCuMask(),
+    forEachGeometryItem( { PCB_TRACE_T, PCB_ARC_T, PCB_VIA_T, PCB_PAD_T }, boardCopperLayers,
             [&]( BOARD_ITEM *item ) -> bool
             {
                 count++;
                 return true;
             } );
 
-    forEachGeometryItem( { PCB_TRACE_T, PCB_ARC_T, PCB_VIA_T, PCB_PAD_T }, LSET::AllCuMask(),
+    forEachGeometryItem( { PCB_TRACE_T, PCB_ARC_T, PCB_VIA_T, PCB_PAD_T }, boardCopperLayers,
             [&]( BOARD_ITEM *item ) -> bool
             {
                 if( !reportProgress( ii++, count, progressDelta ) )

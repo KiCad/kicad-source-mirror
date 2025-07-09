@@ -248,9 +248,9 @@ PADSTACK* SPECCTRA_DB::makePADSTACK( BOARD* aBoard, PAD* aPad )
 
     uniqifier = '[';
 
-    const int   copperCount = aBoard->GetCopperLayerCount();
-    static const LSET all_cu = LSET::AllCuMask( copperCount );
-    int         reportedLayers = 0;
+    const int                copperCount = aBoard->GetCopperLayerCount();
+    static const LSET        all_cu = LSET::AllCuMask( copperCount );
+    int                      reportedLayers = 0;
     std::vector<std::string> layerName( copperCount );
 
     bool onAllCopperLayers = ( (aPad->GetLayerSet() & all_cu) == all_cu );
@@ -258,7 +258,7 @@ PADSTACK* SPECCTRA_DB::makePADSTACK( BOARD* aBoard, PAD* aPad )
     if( onAllCopperLayers )
         uniqifier += 'A'; // A for all layers
 
-    for( int layer=0; layer<copperCount; ++layer )
+    for( int layer=0; layer < copperCount; ++layer )
     {
         PCB_LAYER_ID kilayer = m_pcbLayer2kicad[layer];
 
@@ -889,7 +889,7 @@ IMAGE* SPECCTRA_DB::makeIMAGE( BOARD* aBoard, FOOTPRINT* aFootprint )
 
         // Now, build keepout polygon on each copper layer where the zone
         // keepout is living (keepout zones can live on many copper layers)
-        LSET layerset = aBoard->GetEnabledLayers() & zone->GetLayerSet() & LSET::AllCuMask();
+        LSET layerset = zone->GetLayerSet() & LSET::AllCuMask( aBoard->GetCopperLayerCount() );
 
         for( PCB_LAYER_ID layer : layerset.CuStack() )
         {
@@ -1215,7 +1215,7 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
 
             // Now, build zone polygon on each copper layer where the zone
             // is living (zones can live on many copper layers)
-            LSET layerset = aBoard->GetEnabledLayers() & zone->GetLayerSet() & LSET::AllCuMask();
+            LSET layerset = zone->GetLayerSet() & LSET::AllCuMask( aBoard->GetCopperLayerCount() );
 
             for( PCB_LAYER_ID layer : layerset )
             {
@@ -1339,7 +1339,7 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
 
             // Now, build keepout polygon on each copper layer where the zone
             // keepout is living (keepout zones can live on many copper layers)
-            LSET layerset = aBoard->GetEnabledLayers() & zone->GetLayerSet() & LSET::AllCuMask();
+            LSET layerset = zone->GetLayerSet() & LSET::AllCuMask( aBoard->GetCopperLayerCount() );
 
             for( PCB_LAYER_ID layer : layerset )
             {

@@ -1031,7 +1031,7 @@ PAD* CADSTAR_PCB_ARCHIVE_LOADER::getKiCadPad( const COMPONENT_PAD& aCadstarPad, 
         break;
 
     case PAD_SIDE::THROUGH_HOLE:
-        padLayerSet = LSET::AllCuMask() | LSET( { F_Mask, B_Mask, F_Paste, B_Paste } );
+        padLayerSet = LSET::AllCuMask( m_numCopperLayers ) | LSET( { F_Mask, B_Mask, F_Paste, B_Paste } );
         break;
 
     default:

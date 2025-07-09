@@ -971,10 +971,9 @@ void ODB_STEP_ENTITY::MakeLayerEntity()
 
             for( PCB_LAYER_ID layer : pad_layers )
             {
-                bool onCopperLayer = ( LSET::AllCuMask() & LSET( { layer } ) ).any();
-                bool onSolderMaskLayer = ( LSET( { F_Mask, B_Mask } ) & LSET( { layer } ) ).any();
-                bool onSolderPasteLayer =
-                        ( LSET( { F_Paste, B_Paste } ) & LSET( { layer } ) ).any();
+                bool onCopperLayer = LSET::AllCuMask().test( layer );
+                bool onSolderMaskLayer = LSET( { F_Mask, B_Mask } ).test( layer );
+                bool onSolderPasteLayer = LSET( { F_Paste, B_Paste } ).test( layer );
 
                 if( onSolderMaskLayer )
                     margin.x = margin.y = pad->GetSolderMaskExpansion( PADSTACK::ALL_LAYERS );

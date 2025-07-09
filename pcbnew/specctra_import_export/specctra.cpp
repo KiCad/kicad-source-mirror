@@ -80,7 +80,7 @@ void SPECCTRA_DB::buildLayerMaps( BOARD* aBoard )
     // specctra wants top physical layer first, then going down to the
     // bottom most physical layer in physical sequence.
 
-    LSET layerset = aBoard->GetEnabledLayers() & LSET::AllCuMask();
+    LSET layerset = LSET::AllCuMask( aBoard->GetCopperLayerCount() );
     int  pcbLayer = 0;
 
     for( PCB_LAYER_ID kiLayer : layerset.CuStack() )
