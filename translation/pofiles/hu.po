@@ -20899,7 +20899,7 @@ msgstr "Érvénytelen jel név"
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:491
 #, c-format
 msgid "Invalid symbol unit name prefix %s"
-msgstr "Érvénytelen rajzjel egység előtag"
+msgstr "Érvénytelen rajzjel egység előtag %s"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:501
 #, fuzzy, c-format
@@ -20923,9 +20923,9 @@ msgstr ""
 "%d. sor, %d. betű"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:862
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid hyperlink url '%s'"
-msgstr "Érvénytelen jel név"
+msgstr "Érvénytelen hiperhivatkozás \"%s\""
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:1022
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:2245
@@ -20966,9 +20966,8 @@ msgid "Invalid text string"
 msgstr "Érvénytelen SPICE érték karakterlánc"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:2085
-#, fuzzy
 msgid "Invalid page type"
-msgstr "Érvénytelen átvezetőfurat forrpont átmérő."
+msgstr "Érvénytelen oldaltípus"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:2212
 #, fuzzy
@@ -21013,9 +21012,8 @@ msgstr "A(z) \"%s\" rajzjel nem található a(z) \"%s\" könyvtárban."
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:4919
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6190
-#, fuzzy
 msgid "Invalid library ID"
-msgstr "Érvénytelen rajzjel könyvtár azonosító"
+msgstr "Érvénytelen könyvtár azonosító"
 
 #: eeschema/sch_io/ltspice/ltspice_schematic.cpp:223
 #, c-format
@@ -30446,12 +30444,12 @@ msgstr ""
 #: kicad/pcm/pcm_task_manager.cpp:206 kicad/pcm/pcm_task_manager.cpp:426
 #, c-format
 msgid "Removing previous version of package '%s'."
-msgstr ""
+msgstr "A(z) \"%s\" csomag korábbi verzióinak eltávolítása."
 
 #: kicad/pcm/pcm_task_manager.cpp:214
-#, fuzzy, c-format
+#, c-format
 msgid "Installing package '%s'."
-msgstr "\"%s\" fájl kibontása"
+msgstr "Csomag telepítése: \"%s\"."
 
 #: kicad/pcm/pcm_task_manager.cpp:312
 msgid "Aborting package installation."
@@ -30483,19 +30481,18 @@ msgid ""
 msgstr ""
 
 #: kicad/pcm/pcm_task_manager.cpp:408
-#, fuzzy
 msgid "Update package"
-msgstr "Változások mentése"
+msgstr "Csomag frissítése"
 
 #: kicad/pcm/pcm_task_manager.cpp:506
-#, fuzzy, c-format
+#, c-format
 msgid "Removing directory %s"
-msgstr "konfigurációs könyvtár"
+msgstr "Mappa törlése: %s"
 
 #: kicad/pcm/pcm_task_manager.cpp:514
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to remove directory %s"
-msgstr "Nem lehet létrehozni a(z) \"%s\" fájlt."
+msgstr "Nem sikerült törölni a(z) %s könyvtárat"
 
 #: kicad/pcm/pcm_task_manager.cpp:575
 #, fuzzy, c-format
@@ -30549,7 +30546,6 @@ msgstr ""
 "Folytatja?"
 
 #: kicad/project_tree_item.cpp:134
-#, fuzzy
 msgid "Rename File"
 msgstr "Fájl átnevezése"
 
@@ -30658,24 +30654,20 @@ msgid "Run Jobs"
 msgstr "%s vagy %s"
 
 #: kicad/project_tree_pane.cpp:990
-#, fuzzy
 msgid "Rename File..."
 msgstr "Fájl átnevezése..."
 
 #: kicad/project_tree_pane.cpp:991
-#, fuzzy
 msgid "Rename file"
 msgstr "Fájl átnevezése"
 
 #: kicad/project_tree_pane.cpp:995
-#, fuzzy
 msgid "Rename Files..."
-msgstr "Fájl átnevezése..."
+msgstr "Fájlok átnevezése..."
 
 #: kicad/project_tree_pane.cpp:996
-#, fuzzy
 msgid "Rename files"
-msgstr "Fájl átnevezése"
+msgstr "Fájlok átnevezése"
 
 #: kicad/project_tree_pane.cpp:1006
 #, fuzzy
@@ -30688,9 +30680,8 @@ msgid "Delete the files and their contents"
 msgstr "Mappa és tartalmának törlése"
 
 #: kicad/project_tree_pane.cpp:1023
-#, fuzzy
 msgid "Move to Trash"
-msgstr "Csatlakozó vezetősávok"
+msgstr "Áthelyezés a kukába"
 
 #: kicad/project_tree_pane.cpp:1035
 msgid "Add Project to Version Control..."
