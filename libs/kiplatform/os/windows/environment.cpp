@@ -26,10 +26,13 @@
 #include <wx/tokenzr.h>
 #include <wx/app.h>
 #include <wx/uri.h>
+#include <wx/window.h>
 
 #include <windows.h>
 #include <shellapi.h>
 #include <shlwapi.h>
+#include <propkey.h>
+#include <propvarutil.h>
 #if defined( __MINGW32__ )
     #include <shobjidl.h>
 #else
@@ -416,4 +419,66 @@ wxString KIPLATFORM::ENV::GetAppUserModelId()
     // the other limitation is 127 characters but we arent trying to hit that limit yet
 
     return modelId;
+}
+
+
+void KIPLATFORM::ENV::SetAppDetailsForWindow( wxWindow* aWindow, const wxString& aRelaunchCommand,
+                                              const wxString& aRelaunchDisplayName )
+{
+    IPropertyStore* pps;
+    HRESULT         hr = ::SHGetPropertyStoreForWindow( aWindow->GetHWND(), IID_PPV_ARGS( &pps ) );
+    if( SUCCEEDED( hr ) )
+    {
+        PROPVARIANT pv;
+
+        // This is required for any the other properties to actually work
+        hr = ::InitPropVariantFromString( GetAppUserModelId(), &pv );
+
+        if( SUCCEEDED( hr ) )
+        {
+            hr = pps->SetValue( PKEY_AppUserModel_ID, pv );
+            PropVariantClear( &pv );
+        }
+
+
+        if( !aRelaunchCommand.empty() )
+        {
+            hr = ::InitPropVariantFromString( aRelaunchCommand.wc_str(), &pv );
+        }
+        else
+        {
+            // empty var
+            ::PropVariantInit( &pv );
+        }
+
+        if( SUCCEEDED( hr ) )
+        {
+            hr = pps->SetValue( PKEY_AppUserModel_RelaunchCommand, pv );
+            PropVariantClear( &pv );
+        }
+
+        if( !aRelaunchDisplayName.empty() )
+        {
+            hr = ::InitPropVariantFromString( aRelaunchDisplayName.wc_str(), &pv );
+        }
+        else
+        {
+            // empty var
+            ::PropVariantInit( &pv );
+        }
+
+        if( SUCCEEDED( hr ) )
+        {
+            hr = pps->SetValue( PKEY_AppUserModel_RelaunchDisplayNameResource, pv );
+            PropVariantClear( &pv );
+        }
+
+        pps->Release();
+    }
+}
+
+
+wxString KIPLATFORM::ENV::GetCommandLineStr()
+{
+    return ::GetCommandLine();
 }

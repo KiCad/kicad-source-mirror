@@ -239,6 +239,8 @@ bool PGM_KICAD::OnPgmInit()
 
     Kiway.SetTop( frame );
 
+    KIPLATFORM::ENV::SetAppDetailsForWindow( frame, KIPLATFORM::ENV::GetCommandLineStr(), frame->GetTitle() );
+
     KICAD_SETTINGS* settings = static_cast<KICAD_SETTINGS*>( PgmSettings() );
 
 #ifdef KICAD_IPC_API

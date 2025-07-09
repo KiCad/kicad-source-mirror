@@ -124,3 +124,15 @@ wxString KIPLATFORM::ENV::GetAppUserModelId()
 {
     return wxEmptyString;
 }
+
+
+void KIPLATFORM::ENV::SetAppDetailsForWindow( wxWindow* aWindow, const wxString& aRelaunchCommand,
+                                              const wxString& aRelaunchDisplayName )
+{
+}
+
+
+wxString KIPLATFORM::ENV::GetCommandLineStr()
+{
+    return wxEmptyString;
+}
