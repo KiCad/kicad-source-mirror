@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-07 17:43+0300\n"
-"PO-Revision-Date: 2025-07-10 06:01+0000\n"
+"PO-Revision-Date: 2025-07-10 06:02+0000\n"
 "Last-Translator: Sárkány Lőrinc <lsarkany@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/kicad/v9/hu/>\n"
 "Language: hu\n"
@@ -19944,7 +19944,7 @@ msgstr "\"%s\" nem található az importált könyvtárban"
 
 #: eeschema/sch_io/eagle/sch_io_eagle.h:88
 msgid "Eagle XML schematic files"
-msgstr "Eagle XML kapcsolási rajz fájlok"
+msgstr "Eagle XML kapcsolási rajz fájl"
 
 #: eeschema/sch_io/eagle/sch_io_eagle.h:93
 msgid "Eagle XML library files"
@@ -19955,17 +19955,17 @@ msgstr "Eagle XML könyvtár fájl"
 #: eeschema/sch_io/easyeda/sch_io_easyeda.cpp:443
 #: eeschema/sch_io/easyeda/sch_io_easyeda.cpp:487
 #: eeschema/sch_io/easyeda/sch_io_easyeda.cpp:521
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to find a valid schematic file in '%s'"
-msgstr "A(z) \"%s\" adatfájt nem lehet olvasni."
+msgstr "Nem találtunk érvényes kapcsolási rajz fájlt \"%s\"-ban"
 
 #: eeschema/sch_io/easyeda/sch_io_easyeda.cpp:293
 #: eeschema/sch_io/easyeda/sch_io_easyeda.cpp:298
 #: eeschema/sch_io/easyeda/sch_io_easyeda.cpp:495
 #: eeschema/sch_io/easyeda/sch_io_easyeda.cpp:500
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading symbol '%s' from library '%s': %s"
-msgstr "Hiba a(z) \"%s\" rajzjel \"%s\" könyvtárból történő betöltése során."
+msgstr "Hiba a(z) \"%s\" rajzjel \"%s\" könyvtárból történő betöltése során: %s"
 
 #: eeschema/sch_io/easyeda/sch_io_easyeda.cpp:421
 #: eeschema/sch_io/easyeda/sch_io_easyeda.cpp:426
@@ -19977,9 +19977,9 @@ msgstr "Hiba a(z) \"%s\" könyvtár létrehozásakor"
 
 #: eeschema/sch_io/easyeda/sch_io_easyeda.cpp:602
 #: eeschema/sch_io/easyeda/sch_io_easyeda.cpp:607
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading schematic '%s': %s"
-msgstr "Hiba a '%s' kapcsolási rajz betöltésekor."
+msgstr "Hiba a(z) '%s' kapcsolási rajz betöltése közben: %s"
 
 #: eeschema/sch_io/easyeda/sch_io_easyeda.h:50
 #: pcbnew/pcb_io/easyeda/pcb_io_easyeda_plugin.h:37
@@ -20071,7 +20071,6 @@ msgstr "Hiányzó 'EELAYER END'"
 #: eeschema/sch_io/kicad_legacy/sch_io_kicad_legacy.cpp:453
 #: eeschema/sch_io/kicad_legacy/sch_io_kicad_legacy.cpp:726
 #: eeschema/sch_io/kicad_legacy/sch_io_kicad_legacy.cpp:736
-#, fuzzy
 msgid "unexpected end of file"
 msgstr "váratlan fájlvége jelzés"
 
@@ -20086,14 +20085,12 @@ msgstr "váratlan fájlvége jelzés"
 #: eeschema/sch_io/kicad_legacy/sch_io_kicad_legacy_helpers.cpp:257
 #: eeschema/sch_io/kicad_legacy/sch_io_kicad_legacy_helpers.cpp:276
 #: eeschema/sch_io/kicad_legacy/sch_io_kicad_legacy_lib_cache.cpp:575
-#, fuzzy
 msgid "unexpected end of line"
 msgstr "váratlan sorvég"
 
 #: eeschema/sch_io/kicad_legacy/sch_io_kicad_legacy.cpp:689
-#, fuzzy
 msgid "Unexpected end of file"
-msgstr "Váratlan fájlvége jelzés"
+msgstr "Váratlan fájl vége jelzés"
 
 #: eeschema/sch_io/kicad_legacy/sch_io_kicad_legacy.cpp:1083
 #, fuzzy
@@ -20136,9 +20133,8 @@ msgid "Library file '%s' not found."
 msgstr "\"%s\" könyvtár nem található."
 
 #: eeschema/sch_io/kicad_legacy/sch_io_kicad_legacy_lib_cache.cpp:88
-#, fuzzy
 msgid "Unexpected end of file."
-msgstr "Váratlan fájlvége jelzés"
+msgstr "Váratlan fájl vége jelzés."
 
 #: eeschema/sch_io/kicad_legacy/sch_io_kicad_legacy_lib_cache.cpp:185
 #, fuzzy, c-format
