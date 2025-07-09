@@ -58,6 +58,7 @@ DIFF_PAIR_PLACER::DIFF_PAIR_PLACER( ROUTER* aRouter ) :
     m_currentEndItem = nullptr;
     m_currentTraceOk = false;
     m_idle = true;
+    m_hasFixedAnything = false;
 }
 
 DIFF_PAIR_PLACER::~DIFF_PAIR_PLACER()
@@ -397,7 +398,7 @@ bool DIFF_PAIR_PLACER::rhShoveOnly( const VECTOR2I& aP )
         // bring back previous state
         m_currentTrace.SetShape( pLine.CLine(), nLine.CLine() );
     }
-    
+
 
     return m_fitOk;
 }

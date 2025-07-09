@@ -1826,7 +1826,6 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
         if( item->Type() == SCH_SHEET_T )
         {
             SCH_SHEET* sheet = static_cast<SCH_SHEET*>( item );
-            SCH_FIELD* nameField = sheet->GetField( FIELD_T::SHEET_NAME );
             wxFileName srcFn = sheet->GetFileName();
 
             if( srcFn.IsRelative() )
