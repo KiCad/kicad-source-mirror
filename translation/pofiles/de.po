@@ -31,7 +31,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-07 17:42+0300\n"
-"PO-Revision-Date: 2025-07-09 01:02+0000\n"
+"PO-Revision-Date: 2025-07-10 06:01+0000\n"
 "Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
@@ -10033,7 +10033,7 @@ msgstr "Berechnungswerkzeuge"
 
 #: common/tool/actions.cpp:1274 kicad/tools/kicad_manager_actions.cpp:178
 msgid "Run component calculations, track width calculations, etc."
-msgstr "Berechnen von Bauteilen, Leiterbahnbreiten und vieles mehr"
+msgstr "Berechnen von Bauteilen, Leiterbahnbreiten und vielem mehr"
 
 #: common/tool/actions.cpp:1283
 msgid "Show/hide the properties manager"
@@ -15688,7 +15688,7 @@ msgstr ""
 "%s\n"
 "nicht parsen.\n"
 "\n"
-"Nutzer generisches SPICE-Modell."
+"Nutze generisches SPICE-Modell."
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:38
 msgid "SPICE model from file (*.lib, *.sub or *.ibs)"
@@ -19260,8 +19260,8 @@ msgstr "Bestehenden Schaltplan überschreiben?"
 #: pcbnew/pcb_design_block_utils.cpp:338 pcbnew/pcb_design_block_utils.cpp:378
 msgid "Please select a library to save the design block to."
 msgstr ""
-"Wählen Sie bitte eine Bibliothek in der der Designblock gespeichert werden "
-"soll."
+"Wählen Sie bitte eine Bibliothek in welcher der Designblock gespeichert "
+"werden soll."
 
 #: eeschema/sch_design_block_utils.cpp:91
 #: eeschema/sch_design_block_utils.cpp:172
@@ -29306,7 +29306,7 @@ msgstr "Konnte Git-Verzeichnis nicht entfernen"
 
 #: kicad/project_tree_pane.cpp:2363
 msgid "The selected directory is not a Git project."
-msgstr "Das ausgewählt Verzeichnis ist kein git-Projekt."
+msgstr "Das ausgewählt Verzeichnis ist kein Git-Projekt."
 
 #: kicad/project_tree_pane.cpp:2509
 msgid "Discarding commit due to empty commit message."
