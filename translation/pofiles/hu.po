@@ -20738,9 +20738,9 @@ msgid "Open canceled by user."
 msgstr "A felhasználó megszakította a fájl betöltését."
 
 #: eeschema/sch_io/kicad_legacy/sch_io_kicad_legacy.cpp:375
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' does not appear to be an Eeschema file."
-msgstr "A(z) \"%s\" nem kapcsolási rajz fájl"
+msgstr "A(z) \"%s\" nem egy Eeschema kapcsolási rajz fájl."
 
 #: eeschema/sch_io/kicad_legacy/sch_io_kicad_legacy.cpp:405
 #, fuzzy
@@ -20751,7 +20751,7 @@ msgstr "Hiányzó 'EELAYER END'"
 #: eeschema/sch_io/kicad_legacy/sch_io_kicad_legacy.cpp:727
 #: eeschema/sch_io/kicad_legacy/sch_io_kicad_legacy.cpp:737
 msgid "unexpected end of file"
-msgstr "váratlan fájlvége jelzés"
+msgstr "váratlan fájl vége jelzés"
 
 #: eeschema/sch_io/kicad_legacy/sch_io_kicad_legacy.cpp:599
 #: eeschema/sch_io/kicad_legacy/sch_io_kicad_legacy_helpers.cpp:78
@@ -20785,9 +20785,9 @@ msgstr ""
 
 #: eeschema/sch_io/kicad_legacy/sch_io_kicad_legacy.cpp:2213
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr.cpp:1684
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol library '%s' already exists."
-msgstr "A(z) \"%s\" könyvtár már létezik"
+msgstr "A(z) \"%s\" rajzjel könyvtár már létezik."
 
 #: eeschema/sch_io/kicad_legacy/sch_io_kicad_legacy.cpp:2239
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr.cpp:1710
@@ -20854,9 +20854,8 @@ msgstr ""
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr.cpp:349
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:321
-#, fuzzy
 msgid "Save Anyway"
-msgstr "Vonszolás mindenképpen"
+msgstr "Mentés mindenképpen"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:293
 #, fuzzy, c-format
@@ -20898,9 +20897,9 @@ msgid "Invalid symbol unit name"
 msgstr "Érvénytelen jel név"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:491
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid symbol unit name prefix %s"
-msgstr "Érvénytelen mértékegység előtag"
+msgstr "Érvénytelen rajzjel egység előtag"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:501
 #, fuzzy, c-format
@@ -20930,9 +20929,8 @@ msgstr "Érvénytelen jel név"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:1022
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:2245
-#, fuzzy
 msgid "Invalid property name"
-msgstr "Érvénytelen jel név"
+msgstr "Érvénytelen tulajdonság"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:1030
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:2253
