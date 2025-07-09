@@ -30,7 +30,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-07 17:43+0300\n"
-"PO-Revision-Date: 2025-07-09 01:01+0000\n"
+"PO-Revision-Date: 2025-07-10 06:01+0000\n"
 "Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v9/de/>\n"
 "Language: de\n"
@@ -28415,7 +28415,6 @@ msgid "Set default remote"
 msgstr "Standard-Remote setzen"
 
 #: kicad/project_tree_pane.cpp:1663
-#, fuzzy
 msgid "Failed to initialize Git project."
 msgstr "Initialisieren des Git-Projekts fehlgeschlagen."
 
@@ -28457,21 +28456,18 @@ msgid "Failed to update HEAD reference for branch '%s'"
 msgstr "Konnte HEAD-Referenz für Branch \"%s\" nicht aktualisieren"
 
 #: kicad/project_tree_pane.cpp:1923
-#, fuzzy
 msgid "Are you sure you want to remove Git tracking from this project?"
 msgstr ""
-"Sind Sie sicher, dass Sie die git-Versionsverwaltung aus diesem Projekt "
+"Sind Sie sicher, dass Sie die Git-Versionsverwaltung aus diesem Projekt "
 "entfernen möchten?"
 
 #: kicad/project_tree_pane.cpp:1940
-#, fuzzy
 msgid "Failed to remove Git directory"
-msgstr "Konnte git-Verzeichnis nicht entfernen"
+msgstr "Konnte Git-Verzeichnis nicht entfernen"
 
 #: kicad/project_tree_pane.cpp:2307
-#, fuzzy
 msgid "The selected directory is not a Git project."
-msgstr "Der ausgewählte Ordner ist schon ein git-Projekt."
+msgstr "Das ausgewählt Verzeichnis ist kein Git-Projekt."
 
 #: kicad/project_tree_pane.cpp:2453
 msgid "Discarding commit due to empty commit message."
@@ -43041,11 +43037,13 @@ msgstr ""
 "Datei nicht gefunden: %s\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:403
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Could not add 3D model for %s.\n"
 "OpenCASCADE error: %s\n"
-msgstr "Kann nicht mit %s verbinden. Fehler: %s"
+msgstr ""
+"Konnte 3D-Modell für %s nicht hinzufügen.\n"
+"OpenCASCADE-Fehler: %s\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:801
 msgid "Could not create PCB solid model.\n"
@@ -43115,14 +43113,14 @@ msgid "Could not add shape (%d points) to copper layer %s.\n"
 msgstr "Konnte Form (%d Punkte) nicht zu Kupferlage %s hinzufügen\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1161
-#, fuzzy, c-format
+#, c-format
 msgid "No model defined for %s.\n"
-msgstr "Es wurde kein Footprint für das Symbol \"%s\" definiert."
+msgstr "Kein Modell für %s definiert.\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1176
-#, fuzzy, c-format
+#, c-format
 msgid "No model for filename '%s'.\n"
-msgstr "Kein Modell namens \"%s\" in \"%s\"."
+msgstr "Kein Modell für Dateiname \"%s\".\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1187
 #, c-format
@@ -43247,9 +43245,10 @@ msgstr "Vias"
 #: pcbnew/exporters/step/step_pcb_model.cpp:3102
 #: pcbnew/exporters/step/step_pcb_model.cpp:3176
 #: pcbnew/exporters/step/step_pcb_model.cpp:3245
-#, fuzzy, c-format
+#, c-format
 msgid "No valid PCB assembly; cannot create output file '%s'.\n"
-msgstr "Kann das Ausgabeverzeichnis \"%s\" nicht erstellen."
+msgstr ""
+"Keine gültige Platinenbestückung; kann Ausgabedatei \"%s\" nicht erstellen.\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2322
 msgid "Failed to set STEP product name, but will attempt to continue."
@@ -43265,19 +43264,19 @@ msgstr ""
 #: pcbnew/exporters/step/step_pcb_model.cpp:3153
 #: pcbnew/exporters/step/step_pcb_model.cpp:3226
 #: pcbnew/exporters/step/step_pcb_model.cpp:3275
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot rename temporary file '%s' to '%s'.\n"
-msgstr "Kann temporäre Datei \"%s\" nicht in \"%s\" umbenennen"
+msgstr "Kann temporäre Datei \"%s\" nicht in \"%s\" umbenennen.\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2822
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot identify actual file type for '%s'.\n"
-msgstr "Kann Netzlistendatei \"%s\" nicht öffnen."
+msgstr "Kann tatsächlichen Typ der Datei \"%s\" nicht identifizieren.\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2832
-#, fuzzy, c-format
+#, c-format
 msgid "Could not transfer model data from file '%s'.\n"
-msgstr "Ordner \"%s\" konnte nicht erstellt werden."
+msgstr "Konnte Modelldaten von Datei \"%s\" nicht übertragen.\n"
 
 #: pcbnew/files.cpp:152
 msgid "All KiCad Board Files"
@@ -49200,7 +49199,6 @@ msgid "Repeat layout"
 msgstr "Layout wiederholen"
 
 #: pcbnew/tools/multichannel_tool.cpp:547
-#, fuzzy
 msgid "Group repeated items"
 msgstr "Importierte Elemente gruppieren"
 
