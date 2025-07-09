@@ -43,6 +43,7 @@
 #include <wx/html/htmlwin.h>
 
 #include <kiway.h>
+#include <build_version.h>
 #include <pgm_base.h>
 #include <kiway_player.h>
 #include <macros.h>
@@ -387,6 +388,9 @@ bool PGM_SINGLE_TOP::OnPgmInit()
 
     App().SetTopWindow( frame );      // wxApp gets a face.
     App().SetAppDisplayName( frame->GetAboutTitle() );
+
+    wxString relaunchDisplayName = frame->GetAboutTitle() + " " + GetMajorMinorVersion();
+    KIPLATFORM::ENV::SetAppDetailsForWindow( frame, KIPLATFORM::ENV::GetCommandLineStr(), relaunchDisplayName );
 
     // Allocate a slice of time to show the frame and update wxWidgets widgets
     // (especially setting valid sizes) after creating frame and before calling

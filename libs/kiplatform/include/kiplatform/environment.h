@@ -20,6 +20,8 @@
 
 #include <wx/string.h>
 
+class wxWindow;
+
 namespace KIPLATFORM
 {
     namespace ENV
@@ -118,5 +120,15 @@ namespace KIPLATFORM
          * @returns The app user model id on Windows, empty on all other platforms
          */
         wxString GetAppUserModelId();
+
+        /**
+         * Sets the relaunch command for taskbar pins, this is intended for Windows
+         */
+        void SetAppDetailsForWindow( wxWindow* aWindow, const wxString& aRelaunchCommand, const wxString& aRelaunchDisplayName );
+
+        /**
+         * @returns the command line string used to launch the process
+         */
+        wxString GetCommandLineStr();
     }
 }
