@@ -432,7 +432,7 @@ void KIPLATFORM::ENV::SetAppDetailsForWindow( wxWindow* aWindow, const wxString&
         PROPVARIANT pv;
 
         // This is required for any the other properties to actually work
-        hr = ::InitPropVariantFromString( GetAppUserModelId(), &pv );
+        hr = ::InitPropVariantFromString( GetAppUserModelId().wc_str(), &pv );
 
         if( SUCCEEDED( hr ) )
         {
