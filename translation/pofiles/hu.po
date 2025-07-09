@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-07 17:42+0300\n"
-"PO-Revision-Date: 2025-07-10 06:01+0000\n"
+"PO-Revision-Date: 2025-07-10 06:02+0000\n"
 "Last-Translator: Sárkány Lőrinc <lsarkany@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/kicad/"
 "master-source/hu/>\n"
@@ -5675,9 +5675,8 @@ msgid "Path to Python interpreter:"
 msgstr "Útvonal a Python interpreterhez:"
 
 #: common/dialogs/panel_plugin_settings_base.cpp:59
-#, fuzzy
 msgid "Select the path to a Python interpreter"
-msgstr "Törölje az aktuális elemhez utoljára hozzáadott pontot"
+msgstr "Válassza ki a Python interpreter elérési útját"
 
 #: common/dialogs/panel_plugin_settings_base.cpp:59
 msgid "*.*"
@@ -16580,7 +16579,7 @@ msgstr "Hatáskör:"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:173
 msgid "Entire project"
-msgstr "A teljes projekt"
+msgstr "Teljes projekt"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:179
 msgid "Recursive"
@@ -20409,6 +20408,9 @@ msgid ""
 "alignment issues. Please review the imported text elements carefully and "
 "correct manually if required."
 msgstr ""
+"A CADSTAR betűtípusai különböznek a KiCad által használataktól. Emiatt "
+"várhatóan el fognak csúszni a szöveg elemek. Kérjük, ellenőrizze az "
+"importált elemeket, és korrigálja a helyzetüket, ha szükséges."
 
 #: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:519
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:169
@@ -20416,6 +20418,8 @@ msgid ""
 "The CADSTAR design has been imported successfully.\n"
 "Please review the import errors and warnings (if any)."
 msgstr ""
+"A CADSTAR terv importálása sikeresen befejeződött.\n"
+"Kérjük, nézze át az importálási hibákat és figyelmeztetéseket (ha vannak)."
 
 #: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:538
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:73
@@ -20427,16 +20431,23 @@ msgid ""
 "Current Design size: %.2f, %.2f millimeters. \n"
 "Maximum permitted design size: %.2f, %.2f millimeters.\n"
 msgstr ""
+"A terv túl nagy, ezért nem lehet importálni a KiCad-be.\n"
+"Kérjük, csökkentse a maximális tervméretet a CADSTAR-ban az alábbi helyen:\n"
+"Tervezés fül -> Tulajdonságok -> Terv beállítások -> Maximum Terv Méret.\n"
+"A jelenlegi terv mérete: %.2f, %.2f mm.\n"
+"A maximális megengedett méret: %.2f, %.2f mm.\n"
 
 #: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:599
 msgid ""
 "The selected file is a CADSTAR symbol library. It does not contain a "
 "schematic design so cannot be imported/opened in this way."
 msgstr ""
+"A választott fájl egy CADSTAR rajzjel könyvtár. Nem tartalmaz kapcsolási "
+"rajzot, ezért nem lehet ily módon importálni ill. megnyitni."
 
 #: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:604
 msgid "The CADSTAR schematic might be corrupt: there is no root sheet."
-msgstr ""
+msgstr "A CADSTAR kapcsolási rajz sérült: nincs gyökér lap."
 
 #: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:678
 #, c-format
@@ -20459,6 +20470,8 @@ msgid ""
 "Symbol '%s' references part '%s' which could not be found in the library. "
 "The symbol was not loaded"
 msgstr ""
+"A(z) '%s' rajzjel hivatkozik a(z) '%s' elemre, amely nem található a "
+"könyvtárban. A rajzjel nem lett betöltve"
 
 #: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:835
 #, c-format
@@ -20552,10 +20565,9 @@ msgid ""
 msgstr ""
 
 #: eeschema/sch_io/cadstar/sch_io_cadstar_archive.cpp:285
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot find the .csa file corresponding to library '%s'."
-msgstr ""
-"Nem hozható létre az alkatrészrajzolat könyvtár \"%s\" elérési útvonala"
+msgstr "Nem találjuk a(z) \"%s\" könyvtárhoz tartozó .csa fájlt."
 
 #: eeschema/sch_io/cadstar/sch_io_cadstar_archive.h:55
 #, fuzzy
@@ -20563,19 +20575,20 @@ msgid "CADSTAR Schematic Archive files"
 msgstr "CADSTAR kapcsolási rajz fájl"
 
 #: eeschema/sch_io/cadstar/sch_io_cadstar_archive.h:61
-#, fuzzy
 msgid "CADSTAR Parts Library files"
-msgstr "CADSTAR Archívum fájl"
+msgstr "CADSTAR alkatrész könyvtár fájlok"
 
 #: eeschema/sch_io/database/sch_io_database.cpp:222
-#, fuzzy, c-format
+#, c-format
 msgid "Error reading database table %s: %s"
-msgstr "Lap szerkesztés befejezése"
+msgstr "Hiba a(z) \"%s\" adatbázis tábla olvasása közben: %s"
 
 #: eeschema/sch_io/database/sch_io_database.cpp:258
 #, c-format
 msgid "Could not load database library: settings file %s missing or invalid"
 msgstr ""
+"Nem sikerült betölteni az adatbázis könyvtárat: a(z) %s beállítás fájl nem "
+"található vagy hibás"
 
 #: eeschema/sch_io/database/sch_io_database.cpp:299
 #, c-format
@@ -20616,14 +20629,12 @@ msgid "Could not find '%s' in the imported library."
 msgstr "\"%s\" nem található az importált könyvtárban"
 
 #: eeschema/sch_io/eagle/sch_io_eagle.h:88
-#, fuzzy
 msgid "Eagle XML schematic files"
-msgstr "Eagle XML kapcsolási rajz fájl"
+msgstr "Eagle XML kapcsolási rajz fájlok"
 
 #: eeschema/sch_io/eagle/sch_io_eagle.h:93
-#, fuzzy
 msgid "Eagle XML library files"
-msgstr "Eagle ver. 6.x XML könyvtár fájl (*.lbr)"
+msgstr "Eagle XML könyvtár fájl"
 
 #: eeschema/sch_io/easyeda/sch_io_easyeda.cpp:147
 #: eeschema/sch_io/easyeda/sch_io_easyeda.cpp:324
