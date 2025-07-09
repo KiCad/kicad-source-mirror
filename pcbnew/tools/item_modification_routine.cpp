@@ -488,6 +488,9 @@ void POLYGON_BOOLEAN_ROUTINE::ProcessShape( PCB_SHAPE& aPcbShape )
         m_workingPolygons = std::move( *poly );
         m_firstPolygon = false;
 
+        // Boolean ops work, but assert on arcs
+        m_workingPolygons.ClearArcs();
+
         GetHandler().DeleteItem( aPcbShape );
     }
     else
@@ -560,7 +563,10 @@ std::optional<wxString> POLYGON_MERGE_ROUTINE::GetStatusMessage() const
 
 bool POLYGON_MERGE_ROUTINE::ProcessSubsequentPolygon( const SHAPE_POLY_SET& aPolygon )
 {
-    GetWorkingPolygons().BooleanAdd( aPolygon );
+    SHAPE_POLY_SET no_arcs_poly = aPolygon;
+    no_arcs_poly.ClearArcs();
+
+    GetWorkingPolygons().BooleanAdd( no_arcs_poly );
     return true;
 }
 
@@ -586,7 +592,11 @@ bool POLYGON_SUBTRACT_ROUTINE::ProcessSubsequentPolygon( const SHAPE_POLY_SET& a
 {
     SHAPE_POLY_SET& working_polygons = GetWorkingPolygons();
     SHAPE_POLY_SET  working_copy = working_polygons;
-    working_copy.BooleanSubtract( aPolygon );
+
+    SHAPE_POLY_SET no_arcs_poly = aPolygon;
+    no_arcs_poly.ClearArcs();
+
+    working_copy.BooleanSubtract( no_arcs_poly );
 
     working_polygons = std::move( working_copy );
     return true;
@@ -614,7 +624,11 @@ bool POLYGON_INTERSECT_ROUTINE::ProcessSubsequentPolygon( const SHAPE_POLY_SET& 
 {
     SHAPE_POLY_SET& working_polygons = GetWorkingPolygons();
     SHAPE_POLY_SET  working_copy = working_polygons;
-    working_copy.BooleanIntersection( aPolygon );
+
+    SHAPE_POLY_SET no_arcs_poly = aPolygon;
+    no_arcs_poly.ClearArcs();
+
+    working_copy.BooleanIntersection( no_arcs_poly );
 
     // Is there anything left?
     if( working_copy.OutlineCount() == 0 )
