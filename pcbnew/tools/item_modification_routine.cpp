@@ -540,7 +540,8 @@ void POLYGON_BOOLEAN_ROUTINE::Finalize()
         std::unique_ptr<PCB_SHAPE> new_poly_shape =
                 std::make_unique<PCB_SHAPE>( GetBoard(), SHAPE_T::POLY );
 
-        SHAPE_POLY_SET poly_set = m_workingPolygons.Outline( i );
+        SHAPE_POLY_SET poly_set = m_workingPolygons.UnitSet( i );
+
         new_poly_shape->SetPolyShape( poly_set );
 
         // Copy properties from the source polygon
@@ -605,16 +606,6 @@ bool POLYGON_SUBTRACT_ROUTINE::ProcessSubsequentPolygon( const SHAPE_POLY_SET& a
     SHAPE_POLY_SET& working_polygons = GetWorkingPolygons();
     SHAPE_POLY_SET  working_copy = working_polygons;
     working_copy.BooleanSubtract( aPolygon );
-
-    // Subtraction can create holes or delete the polygon
-    // In theory we can allow holes as the EDA_SHAPE will fracture for us, but that's
-    // probably not what the user has in mind (?)
-    if( working_copy.OutlineCount() != 1 || working_copy.HoleCount( 0 ) > 0
-        || working_copy.VertexCount( 0 ) == 0 )
-    {
-        // If that happens, just skip the operation
-        return false;
-    }
 
     working_polygons = std::move( working_copy );
     return true;
