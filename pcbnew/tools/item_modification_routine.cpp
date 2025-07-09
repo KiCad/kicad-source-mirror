@@ -448,6 +448,8 @@ void POLYGON_BOOLEAN_ROUTINE::ProcessShape( PCB_SHAPE& aPcbShape )
     case SHAPE_T::POLY:
     {
         poly = std::make_unique<SHAPE_POLY_SET>( aPcbShape.GetPolyShape() );
+        // Arcs cannot be handled by polygon boolean transforms
+        poly->ClearArcs();
         break;
     }
     case SHAPE_T::RECTANGLE:
