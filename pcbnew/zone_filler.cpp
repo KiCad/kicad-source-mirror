@@ -286,7 +286,7 @@ bool ZONE_FILLER::Fill( const std::vector<ZONE*>& aZones, bool aCheck, wxWindow*
         footprint->BuildNetTieCache();
     }
 
-    LSET boardCuMask = m_board->GetEnabledLayers() & LSET::AllCuMask();
+    LSET boardCuMask = LSET::AllCuMask( m_board->GetCopperLayerCount() );
 
     auto findHighestPriorityZone =
             [&]( const BOX2I& bbox, PCB_LAYER_ID itemLayer, int netcode,
@@ -768,7 +768,7 @@ bool ZONE_FILLER::Fill( const std::vector<ZONE*>& aZones, bool aCheck, wxWindow*
         // Don't check for connections on layers that only exist in the zone but
         // were disabled in the board
         BOARD* board = zone->GetBoard();
-        LSET zoneCopperLayers = zone->GetLayerSet() & LSET::AllCuMask() & board->GetEnabledLayers();
+        LSET zoneCopperLayers = zone->GetLayerSet() & LSET::AllCuMask( board->GetCopperLayerCount() );
 
         // Min-thickness is the web thickness.  On the other hand, a blob min-thickness by
         // min-thickness is not useful.  Since there's no obvious definition of web vs. blob, we

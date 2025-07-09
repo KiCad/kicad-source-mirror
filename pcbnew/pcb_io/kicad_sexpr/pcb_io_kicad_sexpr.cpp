@@ -1436,9 +1436,7 @@ void PCB_IO_KICAD_SEXPR::formatLayers( LSET aLayerMask, bool aEnumerateLayers ) 
     static const LSET crt_yd( { B_CrtYd, F_CrtYd } );
     static const LSET fab(    { B_Fab, F_Fab } );
 
-    LSET cu_board_mask = LSET::AllCuMask( m_board
-                                           ? m_board->GetCopperLayerCount()
-                                           : MAX_CU_LAYERS );
+    LSET cu_board_mask = LSET::AllCuMask( m_board ? m_board->GetCopperLayerCount() : MAX_CU_LAYERS );
 
     std::string output;
 

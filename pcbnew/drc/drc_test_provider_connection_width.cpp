@@ -307,7 +307,7 @@ bool DRC_TEST_PROVIDER_CONNECTION_WIDTH::Run()
         return false;   // DRC cancelled
 
     BOARD* board = m_drcEngine->GetBoard();
-    LSET   copperLayerSet = board->GetEnabledLayers() & LSET::AllCuMask();
+    LSET   copperLayerSet = LSET::AllCuMask( board->GetCopperLayerCount() );
     LSEQ   copperLayers = copperLayerSet.Seq();
     int    epsilon = board->GetDesignSettings().GetDRCEpsilon();
 

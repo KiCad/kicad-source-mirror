@@ -432,7 +432,7 @@ void TRACKS_CLEANER::cleanup( bool aDeleteDuplicateVias, bool aDeleteNullSegment
             // Examine the list of connected pads: if a through pad is found, the via is redundant
             for( PAD* pad : m_brd->GetConnectivity()->GetConnectedPads( via ) )
             {
-                const LSET all_cu = LSET::AllCuMask();
+                const LSET all_cu = LSET::AllCuMask( m_brd->GetCopperLayerCount() );
 
                 if( ( pad->GetLayerSet() & all_cu ) == all_cu )
                 {

@@ -460,7 +460,8 @@ bool test::DRC_TEST_PROVIDER_DIFF_PAIR_COUPLING::Run()
 {
     m_board = m_drcEngine->GetBoard();
 
-    int epsilon = m_board->GetDesignSettings().GetDRCEpsilon();
+    int  epsilon = m_board->GetDesignSettings().GetDRCEpsilon();
+    LSET boardCopperLayers = LSET::AllCuMask( m_board->GetCopperLayerCount() );
 
     std::map<DIFF_PAIR_KEY, DIFF_PAIR_ITEMS> dpRuleMatches;
 
@@ -520,8 +521,7 @@ bool test::DRC_TEST_PROVIDER_DIFF_PAIR_COUPLING::Run()
 
     m_board->GetConnectivity()->GetFromToCache()->Rebuild( m_board );
 
-    forEachGeometryItem( { PCB_TRACE_T, PCB_VIA_T, PCB_ARC_T }, LSET::AllCuMask(),
-                         evaluateDpConstraints );
+    forEachGeometryItem( { PCB_TRACE_T, PCB_VIA_T, PCB_ARC_T }, boardCopperLayers, evaluateDpConstraints );
 
     // drc_dbg( 10, wxT( "dp rule matches %d\n" ), (int) dpRuleMatches.size() );
 

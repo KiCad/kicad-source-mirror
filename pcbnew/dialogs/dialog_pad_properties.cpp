@@ -1967,8 +1967,7 @@ bool DIALOG_PAD_PROPERTIES::transferDataToPad( PAD* aPad )
         case 1:
             // Front, back and connected
             padLayerMask |= LSET::AllCuMask();
-            aPad->Padstack().SetUnconnectedLayerMode(
-                    PADSTACK::UNCONNECTED_LAYER_MODE::REMOVE_EXCEPT_START_AND_END );
+            aPad->Padstack().SetUnconnectedLayerMode( PADSTACK::UNCONNECTED_LAYER_MODE::REMOVE_EXCEPT_START_AND_END );
             break;
 
         case 2:

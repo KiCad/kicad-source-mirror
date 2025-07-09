@@ -78,8 +78,7 @@ bool DRC_TEST_PROVIDER_SLIVER_CHECKER::Run()
 
     double angleTolerance = ADVANCED_CFG::GetCfg().m_SliverAngleTolerance;
     double cosangleTol = 2.0 * cos( DEG2RAD( angleTolerance ) );
-    LSET   copperLayerSet = m_drcEngine->GetBoard()->GetEnabledLayers() & LSET::AllCuMask();
-    LSEQ   copperLayers = copperLayerSet.Seq();
+    LSEQ   copperLayers = LSET::AllCuMask( m_drcEngine->GetBoard()->GetCopperLayerCount() ).Seq();
     int    layerCount = copperLayers.size();
 
     // Report progress on board zones only.  Everything else is in the noise.

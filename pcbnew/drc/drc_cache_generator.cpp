@@ -137,7 +137,7 @@ bool DRC_CACHE_GENERATOR::Run()
         PCB_DIMENSION_T
     };
 
-    forEachGeometryItem( itemTypes, LSET::AllCuMask(), countItems );
+    forEachGeometryItem( itemTypes, boardCopperLayers, countItems );
 
     std::future<void> retn = tp.submit(
             [&]()
@@ -147,7 +147,7 @@ bool DRC_CACHE_GENERATOR::Run()
                 if( !m_board->m_CopperItemRTreeCache )
                     m_board->m_CopperItemRTreeCache = std::make_shared<DRC_RTREE>();
 
-                forEachGeometryItem( itemTypes, LSET::AllCuMask(), addToCopperTree );
+                forEachGeometryItem( itemTypes, boardCopperLayers, addToCopperTree );
             } );
 
     std::future_status status = retn.wait_for( std::chrono::milliseconds( 250 ) );
