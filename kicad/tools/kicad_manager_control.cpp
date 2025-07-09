@@ -59,7 +59,8 @@
 
 KICAD_MANAGER_CONTROL::KICAD_MANAGER_CONTROL() :
         TOOL_INTERACTIVE( "kicad.Control" ),
-        m_frame( nullptr )
+        m_frame( nullptr ),
+        m_inShowPlayer( false )
 {
 }
 
@@ -825,11 +826,10 @@ int KICAD_MANAGER_CONTROL::ShowPlayer( const TOOL_EVENT& aEvent )
         return -1;
     }
 
-    // Prevent multiple KIWAY_PLAYER loading at one time
-    if( !m_loading.try_lock() )
+    if( m_inShowPlayer )
         return -1;
 
-    const std::lock_guard<std::mutex> lock( m_loading, std::adopt_lock );
+    REENTRANCY_GUARD guard( &m_inShowPlayer );
 
     try
     {
