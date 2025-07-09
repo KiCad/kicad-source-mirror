@@ -11218,8 +11218,8 @@ msgstr "Bibliotheksbeschreibung"
 #: eeschema/design_block_utils.cpp:291 eeschema/design_block_utils.cpp:369
 msgid "Please select a library to save the design block to."
 msgstr ""
-"Wählen Sie bitte eine Bibliothek in der der Designblock gespeichert werden "
-"soll."
+"Wählen Sie bitte eine Bibliothek in welcher der Designblock gespeichert "
+"werden soll."
 
 #: eeschema/design_block_utils.cpp:301 eeschema/design_block_utils.cpp:395
 msgid "Design blocks with nested sheets are not supported."
@@ -15195,7 +15195,7 @@ msgstr ""
 "%s\n"
 "nicht parsen.\n"
 "\n"
-"Nutzer generisches SPICE-Modell."
+"Nutze generisches SPICE-Modell."
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:38
 msgid "SPICE model from file (*.lib, *.sub or *.ibs)"
@@ -28597,7 +28597,7 @@ msgstr "Berechnungswerkzeuge"
 
 #: kicad/tools/kicad_manager_actions.cpp:178
 msgid "Run component calculations, track width calculations, etc."
-msgstr "Berechnen von Bauteilen, Leiterbahnbreiten und vieles mehr"
+msgstr "Berechnen von Bauteilen, Leiterbahnbreiten und vielem mehr"
 
 #: kicad/tools/kicad_manager_actions.cpp:188
 msgid "Edit drawing sheet borders and title block"
@@ -49200,7 +49200,7 @@ msgstr "Layout wiederholen"
 
 #: pcbnew/tools/multichannel_tool.cpp:547
 msgid "Group repeated items"
-msgstr "Importierte Elemente gruppieren"
+msgstr "Widerholte Elemente gruppieren"
 
 #: pcbnew/tools/multichannel_tool.cpp:553
 #, c-format
@@ -52432,9 +52432,9 @@ msgid "Rule Area %s"
 msgstr "Regelbereich %s"
 
 #: pcbnew/zone.cpp:1113
-#, fuzzy, c-format
+#, c-format
 msgid "Rule Area '%s' %s"
-msgstr "Regelbereich %s"
+msgstr "Regelbereich \"%s\" %s"
 
 #: pcbnew/zone.cpp:1120
 #, c-format
