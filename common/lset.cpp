@@ -560,10 +560,10 @@ const LSET& LSET::BackAssembly()
 const LSET& LSET::InternalCuMask()
 {
     static LSET saved( { In1_Cu,  In2_Cu,  In3_Cu,  In4_Cu,  In5_Cu,  In6_Cu,
-                               In7_Cu,  In8_Cu,  In9_Cu,  In10_Cu, In11_Cu, In12_Cu,
-                               In13_Cu, In14_Cu, In15_Cu, In16_Cu, In17_Cu, In18_Cu,
-                               In19_Cu, In20_Cu, In21_Cu, In22_Cu, In23_Cu, In24_Cu,
-                               In25_Cu, In26_Cu, In27_Cu, In28_Cu, In29_Cu, In30_Cu } );
+                         In7_Cu,  In8_Cu,  In9_Cu,  In10_Cu, In11_Cu, In12_Cu,
+                         In13_Cu, In14_Cu, In15_Cu, In16_Cu, In17_Cu, In18_Cu,
+                         In19_Cu, In20_Cu, In21_Cu, In22_Cu, In23_Cu, In24_Cu,
+                         In25_Cu, In26_Cu, In27_Cu, In28_Cu, In29_Cu, In30_Cu } );
     return saved;
 }
 
@@ -581,20 +581,18 @@ LSET allCuMask( int aCuLayerCount )
 
 LSET LSET::AllCuMask( int aCuLayerCount )
 {
-    static LSET savedMax = allCuMask( MAX_CU_LAYERS );
-    static LSET cache;
-    static int  cacheCuLayerCount = -1;
-
     if( aCuLayerCount == MAX_CU_LAYERS )
-        return savedMax;
+        return AllCuMask();
 
-    if( aCuLayerCount != cacheCuLayerCount )
-    {
-        cache = allCuMask( aCuLayerCount );
-        cacheCuLayerCount = aCuLayerCount;
-    }
+    return allCuMask( aCuLayerCount );
+}
 
-    return cache;
+
+LSET LSET::AllCuMask()
+{
+    static LSET s_savedMax = allCuMask( MAX_CU_LAYERS );
+
+    return s_savedMax;
 }
 
 
