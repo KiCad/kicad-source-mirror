@@ -117,7 +117,12 @@ public:
     /**
      * Return a mask holding the requested number of Cu PCB_LAYER_IDs.
      */
-    static LSET AllCuMask( int aCuLayerCount = MAX_CU_LAYERS );
+    static LSET AllCuMask( int aCuLayerCount );
+
+    /**
+     * return AllCuMask( MAX_CU_LAYERS );
+     */
+    static LSET AllCuMask();
 
     /**
      * Return a mask holding the Front and Bottom layers.
