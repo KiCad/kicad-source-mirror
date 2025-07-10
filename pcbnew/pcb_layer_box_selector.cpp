@@ -32,16 +32,16 @@
 #include <settings/color_settings.h>
 #include <tools/pcb_actions.h>
 #include <dpi_scaling_common.h>
+#include <core/raii.h>
 
 
-PCB_LAYER_BOX_SELECTOR::PCB_LAYER_BOX_SELECTOR( wxWindow* parent, wxWindowID id,
-                                                const wxString& value, const wxPoint& pos,
-                                                const wxSize& size, int n, const wxString choices[],
-                                                int style ) :
-        LAYER_BOX_SELECTOR( parent, id, pos, size, n, choices ), m_boardFrame( nullptr ),
+PCB_LAYER_BOX_SELECTOR::PCB_LAYER_BOX_SELECTOR( wxWindow* parent, wxWindowID id, const wxString& value,
+                                                const wxPoint& pos, const wxSize& size, int n,
+                                                const wxString choices[], int style ) :
+        LAYER_BOX_SELECTOR( parent, id, pos, size, n, choices ),
+        m_boardFrame( nullptr ),
         m_showNotEnabledBrdlayers( false ),
-        m_layerPresentation( std::make_unique<PCB_LAYER_PRESENTATION>(
-                nullptr ) ) // The parent isn't awlays the frame
+        m_layerPresentation( std::make_unique<PCB_LAYER_PRESENTATION>( nullptr ) ) // The parent isn't always the frame
 {
 }
 
@@ -56,7 +56,8 @@ void PCB_LAYER_BOX_SELECTOR::SetBoardFrame( PCB_BASE_FRAME* aFrame )
 // Reload the Layers
 void PCB_LAYER_BOX_SELECTOR::Resync()
 {
-    Freeze();
+    WINDOW_FREEZER raiiFreezer( this );
+
     Clear();
 
     const int size = 14;
@@ -118,7 +119,6 @@ void PCB_LAYER_BOX_SELECTOR::Resync()
 
     SetSelection( wxNOT_FOUND );
     Fit();
-    Thaw();
 }
 
 

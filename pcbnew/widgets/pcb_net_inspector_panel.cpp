@@ -895,7 +895,7 @@ void PCB_NET_INSPECTOR_PANEL::updateNets( const std::vector<NETINFO_ITEM*>& aNet
             netsToUpdate.emplace_back( net );
     }
 
-    m_netsList->Freeze();
+    WINDOW_FREEZER raiiFreezer( m_netsList );
 
     std::vector<std::unique_ptr<LIST_ITEM>> newListItems = calculateNets( aNets, true );
 
@@ -946,8 +946,6 @@ void PCB_NET_INSPECTOR_PANEL::updateNets( const std::vector<NETINFO_ITEM*>& aNet
     // Delete any nets we have not yet handled
     for( const NETINFO_ITEM* netToDelete : netsToDelete )
         m_dataModel->deleteItem( m_dataModel->findItem( netToDelete->GetNetCode() ) );
-
-    m_netsList->Thaw();
 }
 
 

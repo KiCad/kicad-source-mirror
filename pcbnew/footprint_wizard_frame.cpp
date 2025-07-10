@@ -380,7 +380,7 @@ void FOOTPRINT_WIZARD_FRAME::ReCreateParameterList()
     if( footprintWizard == nullptr )
         return;
 
-    m_parameterGrid->Freeze();
+    WINDOW_FREEZER raiiFreezer( m_parameterGrid );
 
     m_parameterGrid->ClearGrid();
     m_parameterGridPage = m_pageList->GetSelection();
@@ -429,12 +429,9 @@ void FOOTPRINT_WIZARD_FRAME::ReCreateParameterList()
             wxArrayString options;
 
             while( tokenizer.HasMoreTokens() )
-            {
                 options.Add( tokenizer.GetNextToken() );
-            }
 
-            m_parameterGrid->SetCellEditor( i, WIZ_COL_VALUE,
-                                            new wxGridCellChoiceEditor( options ) );
+            m_parameterGrid->SetCellEditor( i, WIZ_COL_VALUE, new wxGridCellChoiceEditor( options ) );
 
             units = wxT( "" );
         }
@@ -466,8 +463,6 @@ void FOOTPRINT_WIZARD_FRAME::ReCreateParameterList()
     }
 
     ResizeParamColumns();
-
-    m_parameterGrid->Thaw();
 }
 
 void FOOTPRINT_WIZARD_FRAME::ResizeParamColumns()

@@ -504,7 +504,7 @@ void PANEL_SETUP_TIME_DOMAIN_PARAMETERS::OnDelayProfileGridCellChanging( wxGridE
 
             if( !oldName.IsEmpty() )
             {
-                m_viaPropagationGrid->Freeze();
+                WINDOW_FREEZER raiiFreezer( m_viaPropagationGrid );
 
                 updateViaProfileNamesEditor( oldName, newName );
 
@@ -514,8 +514,6 @@ void PANEL_SETUP_TIME_DOMAIN_PARAMETERS::OnDelayProfileGridCellChanging( wxGridE
                     if( m_viaPropagationGrid->GetCellValue( row, VIA_GRID_PROFILE_NAME ) == oldName )
                         m_viaPropagationGrid->SetCellValue( row, VIA_GRID_PROFILE_NAME, newName );
                 }
-
-                m_viaPropagationGrid->Thaw();
             }
             else
             {

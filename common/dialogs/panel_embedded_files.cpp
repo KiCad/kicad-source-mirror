@@ -25,6 +25,7 @@
 #include <dialogs/panel_embedded_files.h>
 #include <embedded_files.h>
 #include <font/outline_font.h>
+#include <core/raii.h>
 #include <kidialog.h>
 #include <widgets/std_bitmap_button.h>
 #include <widgets/wx_grid.h>
@@ -213,7 +214,8 @@ bool PANEL_EMBEDDED_FILES::TransferDataFromWindow()
 
 void PANEL_EMBEDDED_FILES::onFontEmbedClick( wxCommandEvent& event )
 {
-    Freeze();
+    WINDOW_FREEZER raiiFreezer( this );
+
     int row_pos = m_files_grid->GetGridCursorRow();
     int col_pos = m_files_grid->GetGridCursorCol();
     wxString row_name;
@@ -272,8 +274,6 @@ void PANEL_EMBEDDED_FILES::onFontEmbedClick( wxCommandEvent& event )
             }
         }
     }
-
-    Thaw();
 }
 
 

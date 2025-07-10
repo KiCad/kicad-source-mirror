@@ -118,7 +118,8 @@ PANEL_SETUP_NETCLASSES::PANEL_SETUP_NETCLASSES( wxWindow* aParentWindow, EDA_DRA
     m_membershipPane->SetBorders( true, false, false, false );
 
     // Prevent Size events from firing before we are ready
-    Freeze();
+    WINDOW_FREEZER raiiFreezer( this );
+
     m_netclassGrid->BeginBatch();
     m_netclassGrid->SetUseNativeColLabels();
     m_assignmentGrid->BeginBatch();
@@ -236,7 +237,6 @@ PANEL_SETUP_NETCLASSES::PANEL_SETUP_NETCLASSES( wxWindow* aParentWindow, EDA_DRA
 
     m_netclassGrid->EndBatch();
     m_assignmentGrid->EndBatch();
-    Thaw();
 
     Bind( wxEVT_IDLE,
           [this]( wxIdleEvent& aEvent )

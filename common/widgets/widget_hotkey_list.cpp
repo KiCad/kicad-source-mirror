@@ -585,7 +585,7 @@ void WIDGET_HOTKEY_LIST::ApplyFilterString( const wxString& aFilterStr )
 
 void WIDGET_HOTKEY_LIST::ResetAllHotkeys( bool aResetToDefault )
 {
-    Freeze();
+    WINDOW_FREEZER raiiFreezer( this );
 
     // Reset all the hotkeys, not just the ones shown
     // Should not need to check conflicts, as the state we're about
@@ -597,8 +597,6 @@ void WIDGET_HOTKEY_LIST::ResetAllHotkeys( bool aResetToDefault )
 
     updateFromClientData();
     updateColumnWidths();
-
-    Thaw();
 }
 
 
@@ -633,7 +631,8 @@ void WIDGET_HOTKEY_LIST::updateColumnWidths()
 
 void WIDGET_HOTKEY_LIST::updateShownItems( const wxString& aFilterStr )
 {
-    Freeze();
+    WINDOW_FREEZER raiiFreezer( this );
+
     DeleteAllItems();
 
     HOTKEY_FILTER filter( aFilterStr );
@@ -656,7 +655,6 @@ void WIDGET_HOTKEY_LIST::updateShownItems( const wxString& aFilterStr )
     }
 
     updateFromClientData();
-    Thaw();
 }
 
 
