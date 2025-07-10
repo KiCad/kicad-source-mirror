@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-07 17:42+0300\n"
-"PO-Revision-Date: 2025-07-11 20:01+0000\n"
+"PO-Revision-Date: 2025-07-11 20:02+0000\n"
 "Last-Translator: Sárkány Lőrinc <lsarkany@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/kicad/"
 "master-source/hu/>\n"
@@ -13314,7 +13314,7 @@ msgstr "Generátor parancssori kódja:"
 
 #: eeschema/dialogs/dialog_export_netlist_base.cpp:131
 msgid "Browse Scripts..."
-msgstr "Szkriptek böngészése"
+msgstr "Szkriptek böngészése..."
 
 #: eeschema/dialogs/dialog_export_netlist_base.h:95
 msgid "Add Script-based Netlist Exporter"
@@ -13330,14 +13330,12 @@ msgstr ""
 #: eeschema/dialogs/dialog_field_properties_base.cpp:85
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:133
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_ipc2221_base.cpp:22
-#, fuzzy
 msgid "Unit:"
 msgstr "Egység:"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:97
-#, fuzzy
 msgid "Sheet filename can only be modified in Sheet Properties dialog."
-msgstr "Elem tulajdonságok párbeszédablak megnyitása"
+msgstr "Az oldal neve csak az Oldal Tulajdonságai ablakban módosítható."
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:113
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:316
@@ -13615,9 +13613,8 @@ msgid "-- leave unchanged --"
 msgstr "-- változatlanul hagy --"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:244
-#, fuzzy
 msgid "(labels only)"
-msgstr "(mező)"
+msgstr "(csak címkék)"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:275
 msgid "H Align:"
@@ -13762,9 +13759,8 @@ msgid "Increment Annotations From"
 msgstr "Sorszámozások törlése"
 
 #: eeschema/dialogs/dialog_junction_props.cpp:113
-#, fuzzy
 msgid "Edit Junction"
-msgstr "Csomópont hozzáadása"
+msgstr "Csomópont szerkesztése"
 
 #: eeschema/dialogs/dialog_junction_props.cpp:113
 #, fuzzy
