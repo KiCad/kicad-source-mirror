@@ -41,7 +41,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-07 17:43+0300\n"
-"PO-Revision-Date: 2025-07-09 01:02+0000\n"
+"PO-Revision-Date: 2025-07-10 08:29+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/kicad/v9/zh_Hans/>\n"
@@ -31288,7 +31288,7 @@ msgstr "正在更新网络..."
 #: pcbnew/convert_shape_list_to_polygon.cpp:613
 #: pcbnew/convert_shape_list_to_polygon.cpp:625
 msgid "(self-intersecting)"
-msgstr "(自交)"
+msgstr "(自相交)"
 
 #: pcbnew/convert_shape_list_to_polygon.cpp:510
 msgid "(not a closed shape)"
