@@ -41,6 +41,14 @@ BOOST_AUTO_TEST_CASE( Grammar )
 }
 
 
+BOOST_AUTO_TEST_CASE( EmptyString )
+{
+    LIBRARY_TABLE_PARSER parser;
+    tl::expected<LIBRARY_TABLE_IR, LIBRARY_PARSE_ERROR> result = parser.ParseBuffer( "" );
+    BOOST_REQUIRE( !result.has_value() );
+}
+
+
 BOOST_AUTO_TEST_CASE( ParseFromFile )
 {
     std::vector<std::string> cases = {

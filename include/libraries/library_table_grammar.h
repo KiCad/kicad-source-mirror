@@ -123,7 +123,7 @@ struct LIB_TABLE : if_must<
         pad< RPAREN, space >
         > {};
 
-struct LIB_TABLE_FILE : until< eof, LIB_TABLE > {};
+struct LIB_TABLE_FILE : seq< LIB_TABLE, eof > {};
 
 } // namespace LIBRARY_TABLE_GRAMMAR
 
