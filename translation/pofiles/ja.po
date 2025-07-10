@@ -44137,7 +44137,7 @@ msgstr ""
 
 #: pcbnew/files.cpp:1441
 msgid "Generate ODB++ Files"
-msgstr "ODB++ 出力ファイルを生成"
+msgstr "ODB++ ファイルを生成"
 
 #: pcbnew/footprint.cpp:1302
 msgid "Other"
@@ -44331,7 +44331,6 @@ msgid "[no footprint loaded]"
 msgstr "[フットプリントがロードされていません]"
 
 #: pcbnew/footprint_edit_frame.cpp:1112
-#, fuzzy
 msgid "Update Footprint Libraries"
 msgstr "フットプリント ライブラリを更新"
 
