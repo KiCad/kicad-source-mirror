@@ -1,0 +1,129 @@
+(footprint "MountingHole_2.2mm_M2_DIN965_Pad_TopBottom"
+	(version 20250513)
+	(generator "pcbnew")
+	(generator_version "9.99")
+	(layer "F.Cu")
+	(descr "Mounting Hole 2.2mm, M2, DIN965")
+	(tags "mounting hole 2.2mm m2 din965")
+	(property "Reference" "REF**"
+		(at 0 -2.9 0)
+		(layer "F.SilkS")
+		(hide yes)
+		(uuid "33dc1268-1a71-46ea-9a7f-0c0d1d4736d7")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Value" "MountingHole_Pad"
+		(at 0 2.9 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "7cb8be9d-c6b2-4a05-8500-a512d8fabb24")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Datasheet" ""
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "51279c28-8571-49b8-b1f4-33cc1e256f11")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Description" "Mounting Hole with connection"
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "98618d57-0b4a-4937-9654-e062a43a4fbb")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property ki_fp_filters "MountingHole*Pad*")
+	(sheetname "/")
+	(sheetfile "CM5_MINIMA_3.kicad_sch")
+	(attr exclude_from_pos_files exclude_from_bom)
+	(duplicate_pad_numbers_are_jumpers no)
+	(fp_circle
+		(center 0 0)
+		(end 1.9 0)
+		(stroke
+			(width 0.15)
+			(type solid)
+		)
+		(fill no)
+		(layer "Cmts.User")
+		(uuid "a0182bd1-95c5-4571-b0b1-958de885c11f")
+	)
+	(fp_circle
+		(center 0 0)
+		(end 2.15 0)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(fill no)
+		(layer "F.CrtYd")
+		(uuid "5fced7a9-1661-4c5c-a1a5-dbacbbf7a81b")
+	)
+	(fp_text user "${REFERENCE}"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(uuid "40980639-edb4-42ac-ad61-43fb80bb2296")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(pad "1" thru_hole circle
+		(at 0 0)
+		(size 2.6 2.6)
+		(drill 2.2)
+		(layers "*.Cu" "*.Mask")
+		(remove_unused_layers no)
+		(tenting
+			(front none)
+			(back none)
+		)
+		(uuid "0338ddee-a6e0-44d6-ac21-24b71835094d")
+	)
+	(pad "1" connect circle
+		(at 0 0)
+		(size 3.8 3.8)
+		(layers "F.Cu" "F.Mask")
+		(tenting
+			(front none)
+			(back none)
+		)
+		(uuid "348ca5f8-933e-4f2d-b524-b81316f02614")
+	)
+	(pad "1" connect circle
+		(at 0 0)
+		(size 3.8 3.8)
+		(layers "B.Cu" "B.Mask")
+		(tenting
+			(front none)
+			(back none)
+		)
+		(uuid "8d712439-2f84-4cef-bbeb-b185f664a049")
+	)
+	(embedded_fonts no)
+)

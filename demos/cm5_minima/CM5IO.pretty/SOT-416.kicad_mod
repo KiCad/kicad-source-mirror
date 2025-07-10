@@ -1,0 +1,260 @@
+(footprint "SOT-416"
+	(version 20250513)
+	(generator "pcbnew")
+	(generator_version "9.99")
+	(layer "F.Cu")
+	(descr "SOT-416, https://www.nxp.com/docs/en/package-information/SOT416.pdf")
+	(tags "SOT-416")
+	(property "Reference" "REF**"
+		(at 0 -2.25 0)
+		(layer "F.SilkS")
+		(hide yes)
+		(uuid "f51ef373-ef4a-443e-bf88-cae38bfb3f96")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Value" "RCLAMP0502BA"
+		(at 0 2.25 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "171f4786-fd59-4246-a044-77db11203926")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Datasheet" "https://www.semtech.com/products/circuit-protection/low-capacitance/rclamp0502ba"
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "e9de5734-ce22-4843-98f2-7cd12393607e")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Description" ""
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "46815762-4e52-4990-8854-e440def51ee4")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property ki_fp_filters "SOT?416*")
+	(sheetname "/IO/")
+	(sheetfile "IO.kicad_sch")
+	(attr smd)
+	(duplicate_pad_numbers_are_jumpers no)
+	(fp_line
+		(start 0.51 -0.96)
+		(end -0.65 -0.96)
+		(stroke
+			(width 0.12)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "7a97737c-1c07-4481-9419-17128cc08dca")
+	)
+	(fp_line
+		(start 0.51 -0.96)
+		(end 0.51 -0.65)
+		(stroke
+			(width 0.12)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "1a64820f-43dc-4e53-ad1e-bc32773e9b16")
+	)
+	(fp_line
+		(start 0.51 0.96)
+		(end -0.65 0.96)
+		(stroke
+			(width 0.12)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "2d44d9f9-fde4-4a8a-8648-8008c90fc2b3")
+	)
+	(fp_line
+		(start 0.51 0.96)
+		(end 0.51 0.65)
+		(stroke
+			(width 0.12)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "88f254c8-b60f-4461-ad3b-9a0cdc16c85c")
+	)
+	(fp_circle
+		(center -1.3 -0.5)
+		(end -1.15 -0.5)
+		(stroke
+			(width 0)
+			(type solid)
+		)
+		(fill yes)
+		(layer "F.SilkS")
+		(uuid "dd4e8b6c-f5d9-47a4-bb7b-db9c2b1defee")
+	)
+	(fp_line
+		(start -1.2 -1.15)
+		(end 1.2 -1.15)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "F.CrtYd")
+		(uuid "a0c24ad9-f54e-4942-9ede-81a53ffff6ea")
+	)
+	(fp_line
+		(start -1.2 1.15)
+		(end -1.2 -1.15)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "F.CrtYd")
+		(uuid "d17a55e4-60c2-4630-8947-5da74b29c8ba")
+	)
+	(fp_line
+		(start 1.2 -1.15)
+		(end 1.2 1.15)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "F.CrtYd")
+		(uuid "b93b49e5-5e32-4bcc-93b2-9f166d0c6166")
+	)
+	(fp_line
+		(start 1.2 1.15)
+		(end -1.2 1.15)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "F.CrtYd")
+		(uuid "8e2587e7-79e2-46c0-bc36-5d0d62e3faa2")
+	)
+	(fp_line
+		(start -0.45 -0.6)
+		(end -0.45 0.9)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "F.Fab")
+		(uuid "f1b41575-c366-48a2-ae27-46294a84553e")
+	)
+	(fp_line
+		(start -0.45 0.9)
+		(end 0.45 0.9)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "F.Fab")
+		(uuid "8b8bc3af-c273-491f-946d-a303fffef588")
+	)
+	(fp_line
+		(start -0.15 -0.9)
+		(end -0.45 -0.6)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "F.Fab")
+		(uuid "293d175b-bc95-4e98-a117-1e16900a8d27")
+	)
+	(fp_line
+		(start -0.15 -0.9)
+		(end 0.45 -0.9)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "F.Fab")
+		(uuid "b29c1ee1-a29f-410a-b4a6-dda7007a6521")
+	)
+	(fp_line
+		(start 0.45 -0.9)
+		(end 0.45 0.9)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "F.Fab")
+		(uuid "faa5e3eb-93b2-4ae7-9ffc-56750c38f2d9")
+	)
+	(fp_text user "${REFERENCE}"
+		(at 0 0 90)
+		(layer "F.Fab")
+		(uuid "215e8bcb-28c7-4142-a988-3cccc20cbd18")
+		(effects
+			(font
+				(size 0.35 0.35)
+				(thickness 0.05)
+			)
+		)
+	)
+	(pad "1" smd roundrect
+		(at -0.65 -0.5)
+		(size 0.6 0.5)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(roundrect_rratio 0.25)
+		(tenting
+			(front none)
+			(back none)
+		)
+		(uuid "3885d9f0-b93d-4d42-b808-0c8e6c36ae0d")
+	)
+	(pad "2" smd roundrect
+		(at -0.65 0.5)
+		(size 0.6 0.5)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(roundrect_rratio 0.25)
+		(tenting
+			(front none)
+			(back none)
+		)
+		(uuid "e96822a5-0176-41a3-b7bf-af6c7cea9eb4")
+	)
+	(pad "3" smd roundrect
+		(at 0.65 0)
+		(size 0.6 0.5)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(roundrect_rratio 0.25)
+		(tenting
+			(front none)
+			(back none)
+		)
+		(uuid "89122f69-2b8b-4264-b38b-3201ad1a4e6a")
+	)
+	(embedded_fonts no)
+	(model "${KICAD8_3DMODEL_DIR}/Package_TO_SOT_SMD.3dshapes/SOT-23.step"
+		(offset
+			(xyz 0 0 0)
+		)
+		(scale
+			(xyz 0.6 0.5 0.6)
+		)
+		(rotate
+			(xyz 0 0 0)
+		)
+	)
+)

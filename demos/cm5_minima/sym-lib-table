@@ -1,0 +1,4 @@
+(sym_lib_table
+  (version 7)
+  (lib (name "CM5IO")(type "KiCad")(uri "${KIPRJMOD}/CM5IO.kicad_sym")(options "")(descr ""))
+)

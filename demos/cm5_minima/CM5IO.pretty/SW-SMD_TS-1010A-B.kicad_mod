@@ -1,0 +1,269 @@
+(footprint "SW-SMD_TS-1010A-B"
+	(version 20250513)
+	(generator "pcbnew")
+	(generator_version "9.99")
+	(layer "F.Cu")
+	(property "Reference" "REF**"
+		(at 0 -6.15 0)
+		(layer "F.SilkS")
+		(hide yes)
+		(uuid "ca019807-29f3-4442-874a-88af81a25819")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Value" "TS-1010A-B"
+		(at 0 6.15 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "2a25dd4d-e438-46e6-a390-14f8cdf5f977")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Datasheet" "https://lcsc.com/product-detail/Tactile-Switches_XKB-Enterprise-TS-1010A-B_C381059.html"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "24ac834b-77ac-4ad8-8138-a243e6eeba21")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Description" ""
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "2815b198-617d-4971-8508-3915c4030ea7")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "LCSC Part" "C381059"
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "92e4d227-acd7-4dfd-982a-d61ffc8292f6")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(sheetname "/IO/")
+	(sheetfile "IO.kicad_sch")
+	(attr smd)
+	(duplicate_pad_numbers_are_jumpers no)
+	(fp_line
+		(start -0.4 -2.3)
+		(end -0.95 -2.3)
+		(stroke
+			(width 0.25)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "205c5b41-3091-4a85-b6f4-e26e96c4035b")
+	)
+	(fp_line
+		(start -0.4 2.3)
+		(end -0.95 2.3)
+		(stroke
+			(width 0.25)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "672f0087-6b3b-4889-aa27-3e9bd482fd17")
+	)
+	(fp_line
+		(start 2.02 -2.29)
+		(end 1.9 -2.29)
+		(stroke
+			(width 0.25)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "4dda7956-906a-487a-bdf6-36dbc6895dc9")
+	)
+	(fp_line
+		(start 2.02 -1)
+		(end 2.02 -2.29)
+		(stroke
+			(width 0.25)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "e2660dc2-926d-498d-a509-93a2ff5a1874")
+	)
+	(fp_line
+		(start 2.02 1)
+		(end 2.02 2.29)
+		(stroke
+			(width 0.25)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "b20db614-e587-4025-9312-23a5acee2564")
+	)
+	(fp_line
+		(start 2.02 2.29)
+		(end 1.9 2.29)
+		(stroke
+			(width 0.25)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "7fa8fdef-e721-4c5a-9c39-26b6885bbb0a")
+	)
+	(fp_line
+		(start 2.7 -1)
+		(end 2.02 -1)
+		(stroke
+			(width 0.25)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "97b2d74d-2463-44fe-a225-4487d1467eac")
+	)
+	(fp_line
+		(start 2.7 -1)
+		(end 2.7 1)
+		(stroke
+			(width 0.25)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "bbf9eb2a-0fe9-4cf1-af75-6dde8237147b")
+	)
+	(fp_line
+		(start 2.7 1)
+		(end 2.02 1)
+		(stroke
+			(width 0.25)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "a9271485-8d5f-4758-ae3b-848a4c559f51")
+	)
+	(fp_circle
+		(center -1.11 -2.25)
+		(end -1.08 -2.25)
+		(stroke
+			(width 0.06)
+			(type solid)
+		)
+		(fill no)
+		(layer "F.Fab")
+		(uuid "b281a8fe-0f5f-4bbe-ab8f-cdb8b90000b0")
+	)
+	(fp_text user "${REFERENCE}"
+		(at 1.015 -0.005 90)
+		(layer "F.Fab")
+		(uuid "3f9b9609-cecb-46d4-b629-69516780fd44")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(pad "1" smd rect
+		(at -0.9 -1.65)
+		(size 1.2 0.7)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(tenting
+			(front none)
+			(back none)
+		)
+		(uuid "0b7af568-5ef6-4143-94f6-d9a28e5b39a6")
+	)
+	(pad "2" smd rect
+		(at -0.9 1.63)
+		(size 1.2 0.7)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(tenting
+			(front none)
+			(back none)
+		)
+		(uuid "4a33903a-b19c-4fa7-ac5b-9b103f9499cb")
+	)
+	(pad "3" smd rect
+		(at -1.025 0)
+		(size 0.95 1.3)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(tenting
+			(front none)
+			(back none)
+		)
+		(uuid "5beaf8a5-b7b7-41e1-a95c-07ff23b6fe7d")
+	)
+	(pad "4" thru_hole circle
+		(at 0.5 -2.15)
+		(size 1.2 1.2)
+		(drill 0.900024)
+		(layers "*.Cu" "*.Mask")
+		(remove_unused_layers no)
+		(tenting
+			(front none)
+			(back none)
+		)
+		(uuid "26003e78-bb44-489b-bd81-f8b939d066e1")
+	)
+	(pad "4" smd rect
+		(at 1.1 -2)
+		(size 1 1.5)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(tenting
+			(front none)
+			(back none)
+		)
+		(uuid "a77f37d5-7e2b-4dbd-9867-b3a6d049c934")
+	)
+	(pad "5" thru_hole circle
+		(at 0.5 2.15)
+		(size 1.2 1.2)
+		(drill 0.900024)
+		(layers "*.Cu" "*.Mask")
+		(remove_unused_layers no)
+		(tenting
+			(front none)
+			(back none)
+		)
+		(uuid "27f8638b-e8ab-4c62-9f76-b22697a63488")
+	)
+	(pad "5" smd rect
+		(at 1.1 2)
+		(size 1 1.5)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(tenting
+			(front none)
+			(back none)
+		)
+		(uuid "d0822fcf-9abb-4a14-b4cc-0a2a0bf53b31")
+	)
+	(embedded_fonts no)
+	(model "${KICAD_3RD_PARTY}/EasyEDA.3dshapes/SW-SMD_TS-1010A-B.wrl"
+		(offset
+			(xyz 0.37 -0 0)
+		)
+		(scale
+			(xyz 1 1 1)
+		)
+		(rotate
+			(xyz 0 0 0)
+		)
+	)
+)

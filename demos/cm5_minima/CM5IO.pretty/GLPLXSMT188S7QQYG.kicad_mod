@@ -1,0 +1,539 @@
+(footprint "GLPLXSMT188S7QQYG"
+	(version 20250513)
+	(generator "pcbnew")
+	(generator_version "9.99")
+	(layer "F.Cu")
+	(descr "GLPLX-SMT-188S7-QQ-Y/G-3")
+	(tags "Connector")
+	(property "Reference" "REF**"
+		(at 0.29 -5.26 180)
+		(layer "F.SilkS")
+		(hide yes)
+		(uuid "f3a21c42-01ed-402b-9fdd-8c43a0db52a7")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.254)
+			)
+		)
+	)
+	(property "Value" "GLPLX-SMT-188S7"
+		(at 0 0.289 180)
+		(layer "F.SilkS")
+		(hide yes)
+		(uuid "beac2f48-d156-457b-9587-937792919b93")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.254)
+			)
+		)
+	)
+	(property "Datasheet" "https://www.kycon.com/Pub_Eng_Draw/GLPLX-SMT-188S7-QQ-YG.pdf"
+		(at 0 0 180)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "990f883c-0703-428d-8afd-ded12c4e62e8")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Description" "Modular Connectors / Ethernet Connectors Low Prof. RJ45 ModJk w Gb. Magnetics LED"
+		(at 0 0 180)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "32d9e595-d2d5-4b20-83b8-d42a54007756")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Height" "11.6"
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "d636a504-4993-4936-8627-b965f50476d8")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Manufacturer_Name" "Kycon"
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "f77e8d93-487d-4847-a580-998edefc5da5")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Manufacturer_Part_Number" "GLPLX-SMT-188S7-QQ-Y/G"
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "c3031204-066d-4681-83eb-4328e35c5cda")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Mouser Part Number" "806-GLPLXSMT188S7-YG"
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "09a1f76c-d3c3-4b8c-ada0-7da4e930bea5")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Mouser Price/Stock" "https://www.mouser.co.uk/ProductDetail/Kycon/GLPLX-SMT-188S7-QQ-Y-G?qs=82jvyl5dHWc8OxJA1mC80A%3D%3D"
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "64edd878-a09d-43c6-9255-2138b658f4b3")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Arrow Part Number" ""
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "34003352-ff6c-4068-bc7c-215f34d38859")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Arrow Price/Stock" ""
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "ea7a5cb6-8464-4ff5-bb78-33feff75de3f")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(sheetname "/Ethernet/")
+	(sheetfile "Ethernet.kicad_sch")
+	(attr through_hole)
+	(duplicate_pad_numbers_are_jumpers no)
+	(fp_line
+		(start -7.75 2.744)
+		(end -7.75 -8.597)
+		(stroke
+			(width 0.2)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "f2b1cce7-11c9-49ef-8dd9-cd3134b9b3a1")
+	)
+	(fp_line
+		(start -7.75 6.553)
+		(end -7.75 12.903)
+		(stroke
+			(width 0.2)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "b32acb3d-0610-4e02-a662-dc61deefd8da")
+	)
+	(fp_line
+		(start -7.75 12.903)
+		(end 7.75 12.903)
+		(stroke
+			(width 0.2)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "b85775fb-fef5-4ee7-86fd-c3a4871ea2f4")
+	)
+	(fp_line
+		(start 4.59 -10.903)
+		(end 4.59 -10.903)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "7d6b8f79-a38f-4bc5-bd6d-4e6ec4823077")
+	)
+	(fp_line
+		(start 4.59 -10.803)
+		(end 4.59 -10.803)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "94d0425e-9f8d-4e88-a02f-c411d1345eb7")
+	)
+	(fp_line
+		(start 7.75 -8.597)
+		(end 7.75 2.744)
+		(stroke
+			(width 0.2)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "98ea6d74-fa37-42ac-98e6-3929598cd597")
+	)
+	(fp_line
+		(start 7.75 12.903)
+		(end 7.75 6.553)
+		(stroke
+			(width 0.2)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "97000b85-394a-4881-a1da-385306509046")
+	)
+	(fp_arc
+		(start 4.59 -10.903)
+		(mid 4.64 -10.853)
+		(end 4.59 -10.803)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "55c1cf33-d07b-4e4a-9386-e7766a047f79")
+	)
+	(fp_arc
+		(start 4.59 -10.803)
+		(mid 4.54 -10.853)
+		(end 4.59 -10.903)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "688d34a0-776f-4ad2-9d53-bf0fe1955b9b")
+	)
+	(fp_line
+		(start -11.2 -11.326)
+		(end 11.2 -11.326)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "F.CrtYd")
+		(uuid "96b5ae17-15d1-49c0-9f6d-47095d8aa43a")
+	)
+	(fp_line
+		(start -11.2 12.903)
+		(end -11.2 -11.326)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "F.CrtYd")
+		(uuid "87408b3e-763a-4de5-b504-cfe4d2ddf408")
+	)
+	(fp_line
+		(start 11.2 -11.326)
+		(end 11.2 12.903)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "F.CrtYd")
+		(uuid "94cce1f3-fc1e-4a9a-a4ac-614217b9c1c9")
+	)
+	(fp_line
+		(start 11.2 12.903)
+		(end -11.2 12.903)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "F.CrtYd")
+		(uuid "ba400cef-0d75-4588-95da-cba442a3ff50")
+	)
+	(fp_line
+		(start -7.75 -8.597)
+		(end 7.75 -8.597)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "F.Fab")
+		(uuid "a532fc75-d992-4078-9309-1d2d808cc93a")
+	)
+	(fp_line
+		(start -7.75 12.903)
+		(end -7.75 -8.597)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "F.Fab")
+		(uuid "72ae217e-c1b8-4574-a83b-23497c771f36")
+	)
+	(fp_line
+		(start 7.75 -8.597)
+		(end 7.75 12.903)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "F.Fab")
+		(uuid "345be30b-4977-467b-8445-f4c6965785cc")
+	)
+	(fp_line
+		(start 7.75 12.903)
+		(end -7.75 12.903)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "F.Fab")
+		(uuid "9e94ec2d-1922-470b-83a7-6f6092cdccfe")
+	)
+	(fp_rect
+		(start -7.75 -0.4)
+		(end 7.75 12.903)
+		(stroke
+			(width 0.1)
+			(type default)
+		)
+		(fill no)
+		(layer "User.2")
+		(uuid "f42af76e-487d-49bd-b428-db28ee52ce80")
+	)
+	(fp_text user "${REFERENCE}"
+		(at 0 0.289 180)
+		(layer "F.Fab")
+		(uuid "af86ecce-54de-46da-b6a2-27db61718d72")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.254)
+			)
+		)
+	)
+	(pad "" np_thru_hole circle
+		(at -3.5 -5.146)
+		(size 1.5 1.5)
+		(drill 1.5)
+		(layers "*.Cu" "*.Mask")
+		(tenting
+			(front none)
+			(back none)
+		)
+		(uuid "e46f2176-6288-43a0-999a-8b55701a3162")
+	)
+	(pad "" np_thru_hole circle
+		(at 3.5 -5.146)
+		(size 1.5 1.5)
+		(drill 1.5)
+		(layers "*.Cu" "*.Mask")
+		(tenting
+			(front none)
+			(back none)
+		)
+		(uuid "78d294e7-8e6b-43ba-a141-68ee908c5b18")
+	)
+	(pad "1" smd rect
+		(at 4.59 -9.312)
+		(size 0.7 2.03)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(tenting
+			(front none)
+			(back none)
+		)
+		(uuid "92a35fe8-a280-4e42-a266-84633ce70e33")
+	)
+	(pad "2" smd rect
+		(at 3.57 -9.312)
+		(size 0.7 2.03)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(tenting
+			(front none)
+			(back none)
+		)
+		(uuid "4641bc70-bd8c-4818-bb06-bbdc1d561ff3")
+	)
+	(pad "3" smd rect
+		(at 2.55 -9.312)
+		(size 0.7 2.03)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(tenting
+			(front none)
+			(back none)
+		)
+		(uuid "3f35c3a6-f016-45f0-91da-e1bd164c36d2")
+	)
+	(pad "4" smd rect
+		(at 1.53 -9.312)
+		(size 0.7 2.03)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(tenting
+			(front none)
+			(back none)
+		)
+		(uuid "51511552-1863-4510-8ac6-835d92fbee41")
+	)
+	(pad "5" smd rect
+		(at 0.51 -9.312)
+		(size 0.7 2.03)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(tenting
+			(front none)
+			(back none)
+		)
+		(uuid "10f3cc87-d50c-4aee-89ee-2d4f0f461eb5")
+	)
+	(pad "6" smd rect
+		(at -0.51 -9.312)
+		(size 0.7 2.03)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(tenting
+			(front none)
+			(back none)
+		)
+		(uuid "2f7395de-96c5-4aec-8d09-eb15a205b200")
+	)
+	(pad "7" smd rect
+		(at -1.53 -9.312)
+		(size 0.7 2.03)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(tenting
+			(front none)
+			(back none)
+		)
+		(uuid "11c44b2b-2a75-4686-a9d5-bf7ca4c20f6f")
+	)
+	(pad "8" smd rect
+		(at -2.55 -9.312)
+		(size 0.7 2.03)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(tenting
+			(front none)
+			(back none)
+		)
+		(uuid "bf290ce4-8acb-4f29-be6e-42d6b35a0925")
+	)
+	(pad "9" smd rect
+		(at -3.57 -9.312)
+		(size 0.7 2.03)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(tenting
+			(front none)
+			(back none)
+		)
+		(uuid "4aaf2ef3-d8fd-4198-ada3-91800f293a8a")
+	)
+	(pad "10" smd rect
+		(at -4.59 -9.312)
+		(size 0.7 2.03)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(tenting
+			(front none)
+			(back none)
+		)
+		(uuid "1299636c-5f9b-495f-b3af-1a946b1ed19d")
+	)
+	(pad "11" smd rect
+		(at 6.63 -9.312)
+		(size 0.7 2.03)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(tenting
+			(front none)
+			(back none)
+		)
+		(uuid "0ce09b20-3ee9-4329-b3a2-0b78af6ea7d1")
+	)
+	(pad "12" smd rect
+		(at 5.61 -9.312)
+		(size 0.7 2.03)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(tenting
+			(front none)
+			(back none)
+		)
+		(uuid "a81cbc57-6c9a-4479-9c42-ec24933118b0")
+	)
+	(pad "13" smd rect
+		(at -5.61 -9.312)
+		(size 0.7 2.03)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(tenting
+			(front none)
+			(back none)
+		)
+		(uuid "15dfcf22-054e-4b0b-8f73-0f924a331e56")
+	)
+	(pad "14" smd rect
+		(at -6.63 -9.312)
+		(size 0.7 2.03)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(tenting
+			(front none)
+			(back none)
+		)
+		(uuid "5ea4eb89-ec90-478a-9816-93a2c409a57b")
+	)
+	(pad "15" smd rect
+		(at 9.15 4.904)
+		(size 2.1 3.1)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(tenting
+			(front none)
+			(back none)
+		)
+		(uuid "269c1584-ed74-4a7f-84d5-f16a47e5bcc0")
+	)
+	(pad "16" smd rect
+		(at -9.15 4.904)
+		(size 2.1 3.1)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(tenting
+			(front none)
+			(back none)
+		)
+		(uuid "a8b6eb23-1f53-4f33-b98e-d8a5b5ac673a")
+	)
+	(embedded_fonts no)
+	(model "${KICAD9_3RD_PARTY}/Samacsys.3dshapes/GLPLX-SMT-188S7-QQ-Y_G.stp"
+		(offset
+			(xyz 0 -12.9999998 -2.41000005)
+		)
+		(scale
+			(xyz 1 1 1)
+		)
+		(rotate
+			(xyz -90 0 0)
+		)
+	)
+)
