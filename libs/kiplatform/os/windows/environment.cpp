@@ -41,7 +41,13 @@
 #include <winhttp.h>
 
 #include <softpub.h>
-#include <shlobj_core.h>
+
+#if defined( __MINGW32__ )
+    #include <shlobj.h>
+#else
+    #include <shlobj_core.h>
+#endif
+
 #include <wincrypt.h>
 #include <wintrust.h>
 
