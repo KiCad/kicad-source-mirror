@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-07 17:43+0300\n"
-"PO-Revision-Date: 2025-07-10 06:02+0000\n"
+"PO-Revision-Date: 2025-07-11 20:01+0000\n"
 "Last-Translator: Sárkány Lőrinc <lsarkany@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/kicad/v9/hu/>\n"
 "Language: hu\n"
@@ -11261,9 +11261,8 @@ msgid "First check your footprint library table entries."
 msgstr "Ellenőrizze a alkatrészrajzolat könyvtáblázat bejegyzéseit."
 
 #: cvpcb/readwrite_dlgs.cpp:172
-#, fuzzy
 msgid "Problematic Footprint Library Tables"
-msgstr "Problematikus alkatrészrajzolat könyvtáblázat"
+msgstr "Problémás alkatrészrajzolat könyvtár táblázatok"
 
 #: cvpcb/readwrite_dlgs.cpp:180
 #, fuzzy
@@ -11292,14 +11291,12 @@ msgid "Schematic saved"
 msgstr "A kapcsolási rajz elmentve"
 
 #: cvpcb/toolbars_cvpcb.cpp:70
-#, fuzzy
 msgid "Footprint Filters:"
 msgstr "Alkatrészrajzolat szűrők:"
 
 #: cvpcb/tools/cvpcb_actions.cpp:55
-#, fuzzy
 msgid "View Selected Footprint"
-msgstr "Kiválasztott alkatrészrajzolat megjelenítése"
+msgstr "Kiválasztott alkatrészrajzolat megtekintése"
 
 #: cvpcb/tools/cvpcb_actions.cpp:63
 #, fuzzy
@@ -12849,9 +12846,8 @@ msgid "Command line to run the exporter:"
 msgstr "Generátor parancssori kódja:"
 
 #: eeschema/dialogs/dialog_export_netlist_base.cpp:131
-#, fuzzy
 msgid "Browse Scripts..."
-msgstr "Generátorok böngészése"
+msgstr "Szkriptek böngészése"
 
 #: eeschema/dialogs/dialog_export_netlist_base.h:95
 msgid "Add Script-based Netlist Exporter"
