@@ -149,7 +149,7 @@ int PL_EDITOR_CONTROL::UpdateMessagePanel( const TOOL_EVENT& aEvent )
     PL_SELECTION&      selection = selTool->GetSelection();
 
     // The Properties frame will be updated. Avoid flicker during update:
-    m_frame->GetPropertiesFrame()->Freeze();
+    WINDOW_FREEZER raiiFreezer( m_frame->GetPropertiesFrame() );
 
     if( selection.GetSize() == 1 )
     {
@@ -172,9 +172,6 @@ int PL_EDITOR_CONTROL::UpdateMessagePanel( const TOOL_EVENT& aEvent )
     }
 
     m_frame->GetPropertiesFrame()->CopyPrmsFromGeneralToPanel();
-
-    // The Properties frame is updated. Reenable it:
-    m_frame->GetPropertiesFrame()->Thaw();
 
     return 0;
 }

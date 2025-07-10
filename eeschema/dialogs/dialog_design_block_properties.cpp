@@ -208,7 +208,7 @@ void DIALOG_DESIGN_BLOCK_PROPERTIES::OnMoveFieldDown( wxCommandEvent& event )
 
 bool DIALOG_DESIGN_BLOCK_PROPERTIES::TransferDataToGrid()
 {
-    m_fieldsGrid->Freeze();
+    WINDOW_FREEZER raiiFreezer( m_fieldsGrid );
 
     m_fieldsGrid->ClearRows();
     m_fieldsGrid->AppendRows( m_fields.size() );
@@ -226,8 +226,6 @@ bool DIALOG_DESIGN_BLOCK_PROPERTIES::TransferDataToGrid()
 
         row++;
     }
-
-    m_fieldsGrid->Thaw();
 
     return true;
 }

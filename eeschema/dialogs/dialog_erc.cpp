@@ -1021,14 +1021,14 @@ void DIALOG_ERC::deleteAllMarkers( bool aIncludeExclusions )
     // Clear current selection list to avoid selection of deleted items
     // Freeze to avoid repainting the dialog, which can cause a RePaint()
     // of the screen as well
-    Freeze();
+    WINDOW_FREEZER raiiFreezer( this );
+
     m_parent->GetToolManager()->RunAction( SCH_ACTIONS::clearSelection );
 
     m_markerTreeModel->DeleteItems( false, aIncludeExclusions, false );
 
     SCH_SCREENS screens( m_parent->Schematic().Root() );
     screens.DeleteAllMarkers( MARKER_BASE::MARKER_ERC, aIncludeExclusions );
-    Thaw();
 }
 
 

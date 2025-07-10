@@ -24,6 +24,7 @@
 #include <string_utils.h>
 #include <wx/clipbrd.h>
 #include <core/kicad_algo.h>
+#include <core/raii.h>
 
 SEARCH_PANE_LISTVIEW::SEARCH_PANE_LISTVIEW( SEARCH_HANDLER* handler, wxWindow* parent,
                                             wxWindowID winid, const wxPoint& pos,
@@ -203,7 +204,8 @@ std::vector<long> SEARCH_PANE_LISTVIEW::Sort()
 
 void SEARCH_PANE_LISTVIEW::RefreshColumnNames()
 {
-    Freeze();
+    WINDOW_FREEZER raiiFreezer( this );
+
     DeleteAllColumns();
 
     std::vector<std::tuple<wxString, int, wxListColumnFormat>> columns = m_handler->GetColumns();
@@ -215,8 +217,6 @@ void SEARCH_PANE_LISTVIEW::RefreshColumnNames()
 
     for( int ii = 0; ii < (int) columns.size(); ++ii )
         SetColumnWidth( ii, widthUnit * std::get<1>( columns[ ii ] ) );
-
-    Thaw();
 }
 
 

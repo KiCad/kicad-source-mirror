@@ -24,6 +24,7 @@
  */
 
 #include <bitmaps.h>
+#include <core/raii.h>
 #include <sch_edit_frame.h>
 #include <sch_sheet.h>
 #include <sch_sheet_path.h>
@@ -211,7 +212,7 @@ void HIERARCHY_PANE::UpdateHierarchySelection()
 
 void HIERARCHY_PANE::UpdateHierarchyTree( bool aClear )
 {
-    Freeze();
+    WINDOW_FREEZER raiiFreezer( this );
 
     bool eventsWereBound = m_events_bound;
 
@@ -303,8 +304,6 @@ void HIERARCHY_PANE::UpdateHierarchyTree( bool aClear )
 
         m_events_bound = true;
     }
-
-    Thaw();
 }
 
 

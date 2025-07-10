@@ -22,6 +22,7 @@
 
 #include <wx/log.h>
 #include <core/profile.h>
+#include <core/raii.h>
 #include <tool/tool_manager.h>
 #include <kiface_base.h>
 #include <sch_edit_frame.h>
@@ -306,9 +307,8 @@ void SCH_EDIT_FRAME::RefreshNetNavigator( const NET_NAVIGATOR_ITEM_DATA* aSelect
     bool   singleSheetSchematic = m_schematic->Hierarchy().size() == 1;
     size_t nodeCnt = 0;
 
-    m_netNavigator->Freeze();
-
-    PROF_TIMER timer;
+    WINDOW_FREEZER raiiFreezer( m_netNavigator );
+    PROF_TIMER     timer;
 
     if( m_highlightedConn.IsEmpty() )
     {
@@ -376,8 +376,6 @@ void SCH_EDIT_FRAME::RefreshNetNavigator( const NET_NAVIGATOR_ITEM_DATA* aSelect
 
     wxLogTrace( traceUiProfile, wxS( "Adding %zu nodes to net navigator took %s." ),
                 nodeCnt, timer.to_string() );
-
-    m_netNavigator->Thaw();
 }
 
 

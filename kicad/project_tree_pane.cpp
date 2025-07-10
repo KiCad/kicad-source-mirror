@@ -632,8 +632,10 @@ void PROJECT_TREE_PANE::ReCreateTreePrj()
 
     if( !m_TreeProject )
         m_TreeProject = new PROJECT_TREE( this );
-    else
-        m_TreeProject->DeleteAllItems();
+
+    WINDOW_FREEZER raiiFreezer( m_TreeProject );
+
+    m_TreeProject->DeleteAllItems();
 
     if( !pro_dir )  // This is empty from PROJECT_TREE_PANE constructor
         return;
@@ -689,8 +691,8 @@ void PROJECT_TREE_PANE::ReCreateTreePrj()
     m_TreeProject->SetItemBold( m_root, true );
 
     // The main project file is now a JSON file
-    PROJECT_TREE_ITEM* data = new PROJECT_TREE_ITEM( TREE_FILE_TYPE::JSON_PROJECT,
-                                                  fn.GetFullPath(), m_TreeProject );
+    PROJECT_TREE_ITEM* data = new PROJECT_TREE_ITEM( TREE_FILE_TYPE::JSON_PROJECT, fn.GetFullPath(),
+                                                     m_TreeProject );
 
     m_TreeProject->SetItemData( m_root, data );
 
@@ -731,12 +733,13 @@ void PROJECT_TREE_PANE::ReCreateTreePrj()
     // Sort filenames by alphabetic order
     m_TreeProject->SortChildren( m_root );
 
-    CallAfter( [this] ()
-    {
-        wxLogTrace( traceGit, "PROJECT_TREE_PANE::ReCreateTreePrj: starting timers" );
-        m_gitSyncTimer.Start( 100, wxTIMER_ONE_SHOT );
-        m_gitStatusTimer.Start( 500, wxTIMER_ONE_SHOT );
-    } );
+    CallAfter(
+            [this] ()
+            {
+                wxLogTrace( traceGit, "PROJECT_TREE_PANE::ReCreateTreePrj: starting timers" );
+                m_gitSyncTimer.Start( 100, wxTIMER_ONE_SHOT );
+                m_gitStatusTimer.Start( 500, wxTIMER_ONE_SHOT );
+            } );
 }
 
 
@@ -1578,6 +1581,8 @@ void PROJECT_TREE_PANE::EmptyTreePrj()
 {
     // Make sure we don't try to inspect the tree after we've deleted its items.
     shutdownFileWatcher();
+
+    m_TreeProject->Freeze();
 
     m_TreeProject->DeleteAllItems();
 
