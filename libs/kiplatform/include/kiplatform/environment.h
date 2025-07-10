@@ -130,5 +130,7 @@ namespace KIPLATFORM
          * @returns the command line string used to launch the process
          */
         wxString GetCommandLineStr();
+
+        void AddToRecentDocs( const wxString &aPath );
     }
 }
