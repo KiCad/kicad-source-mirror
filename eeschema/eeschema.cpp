@@ -408,7 +408,6 @@ static struct IFACE : public KIFACE_BASE, public UNITS_PROVIDER
     void ProjectChanged() override;
 
 private:
-    bool loadGlobalLibTable();
     bool loadGlobalDesignBlockLibTable();
 
     std::unique_ptr<EESCHEMA_JOBS_HANDLER> m_jobHandler;
@@ -454,7 +453,8 @@ bool IFACE::OnKifaceStart( PGM_BASE* aProgram, int aCtlBits, KIWAY* aKiway )
 
     start_common( aCtlBits );
 
-    if( !loadGlobalLibTable() || !loadGlobalDesignBlockLibTable() )
+    // TODO(JE) library tables - remove once design block table is handled
+    if( !loadGlobalDesignBlockLibTable() )
     {
         // we didnt get anywhere deregister the settings
         aProgram->GetSettingsManager().FlushAndRelease( symSettings, false );
@@ -476,7 +476,6 @@ bool IFACE::OnKifaceStart( PGM_BASE* aProgram, int aCtlBits, KIWAY* aKiway )
 
 void IFACE::Reset()
 {
-    loadGlobalLibTable();
 }
 
 
@@ -546,40 +545,6 @@ void IFACE::ProjectChanged()
 {
     if( m_libraryPreloadInProgress.load() )
         m_libraryPreloadAbort.store( true );
-}
-
-
-bool IFACE::loadGlobalLibTable()
-{
-    wxFileName fn = SYMBOL_LIB_TABLE::GetGlobalTableFileName();
-
-    if( !fn.FileExists() )
-    {
-    }
-    else
-    {
-        try
-        {
-            // The global table is not related to a specific project.  All projects
-            // will use the same global table.  So the KIFACE::OnKifaceStart() contract
-            // of avoiding anything project specific is not violated here.
-            if( !SYMBOL_LIB_TABLE::LoadGlobalTable( SYMBOL_LIB_TABLE::GetGlobalLibTable() ) )
-                return false;
-        }
-        catch( const IO_ERROR& ioe )
-        {
-            // if we are here, a incorrect global symbol library table was found.
-            // Incorrect global symbol library table is not a fatal error:
-            // the user just has to edit the (partially) loaded table.
-            wxString msg =
-                    _( "An error occurred attempting to load the global symbol library table.\n"
-                       "Please edit this global symbol library table in Preferences menu." );
-
-            DisplayErrorMessage( nullptr, msg, ioe.What() );
-        }
-    }
-
-    return true;
 }
 
 
