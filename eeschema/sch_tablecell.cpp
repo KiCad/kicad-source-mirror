@@ -225,6 +225,10 @@ static struct SCH_TABLECELL_DESC
         propMgr.Mask( TYPE_HASH( SCH_TABLECELL ), TYPE_HASH( EDA_SHAPE ), _HKI( "End Y" ) );
 
         propMgr.Mask( TYPE_HASH( SCH_TABLECELL ), TYPE_HASH( EDA_SHAPE ), _HKI( "Shape" ) );
+        propMgr.Mask( TYPE_HASH( SCH_TABLECELL ), TYPE_HASH( EDA_SHAPE ), _HKI( "Width" ) );
+        propMgr.Mask( TYPE_HASH( SCH_TABLECELL ), TYPE_HASH( EDA_SHAPE ), _HKI( "Height" ) );
+        propMgr.Mask( TYPE_HASH( SCH_TABLECELL ), TYPE_HASH( EDA_SHAPE ), _HKI( "Fill" ) );
+        propMgr.Mask( TYPE_HASH( SCH_TABLECELL ), TYPE_HASH( EDA_SHAPE ), _HKI( "Fill Color" ) );
         propMgr.Mask( TYPE_HASH( SCH_TABLECELL ), TYPE_HASH( EDA_SHAPE ), _HKI( "Line Width" ) );
         propMgr.Mask( TYPE_HASH( SCH_TABLECELL ), TYPE_HASH( EDA_SHAPE ), _HKI( "Line Style" ) );
         propMgr.Mask( TYPE_HASH( SCH_TABLECELL ), TYPE_HASH( EDA_SHAPE ), _HKI( "Line Color" ) );
@@ -248,5 +252,17 @@ static struct SCH_TABLECELL_DESC
                     &SCH_TABLECELL::SetRowHeight, &SCH_TABLECELL::GetRowHeight,
                     PROPERTY_DISPLAY::PT_SIZE ),
                 tableProps );
+
+        const wxString cellProps = _( "Cell Properties" );
+
+        propMgr.AddProperty( new PROPERTY<EDA_SHAPE, bool>( _HKI( "Background Fill" ),
+                    &EDA_SHAPE::SetFilled, &EDA_SHAPE::IsFilled ),
+                cellProps );
+
+        propMgr.AddProperty( new PROPERTY<EDA_SHAPE, COLOR4D>( _HKI( "Background Fill Color" ),
+                    &EDA_SHAPE::SetFillColor, &EDA_SHAPE::GetFillColor ),
+                cellProps )
+                .SetIsHiddenFromRulesEditor();
+
     }
 } _SCH_TABLECELL_DESC;

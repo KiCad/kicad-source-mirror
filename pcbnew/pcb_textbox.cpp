@@ -808,6 +808,9 @@ static struct PCB_TEXTBOX_DESC
         propMgr.Mask( TYPE_HASH( PCB_TEXTBOX ), TYPE_HASH( EDA_SHAPE ), _HKI( "Filled" ) );
         propMgr.Mask( TYPE_HASH( PCB_TEXTBOX ), TYPE_HASH( EDA_TEXT ), _HKI( "Color" ) );
 
+        propMgr.Mask( TYPE_HASH( PCB_TEXTBOX ), TYPE_HASH( PCB_SHAPE ), _HKI( "Soldermask" ) );
+        propMgr.Mask( TYPE_HASH( PCB_TEXTBOX ), TYPE_HASH( PCB_SHAPE ), _HKI( "Soldermask Margin Override" ) );
+
         const wxString borderProps = _( "Border Properties" );
 
         void ( PCB_TEXTBOX::*lineStyleSetter )( LINE_STYLE ) = &PCB_TEXTBOX::SetLineStyle;
