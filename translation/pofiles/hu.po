@@ -11898,7 +11898,7 @@ msgstr "Alkatrészrajzolat szűrők:"
 
 #: cvpcb/toolbars_cvpcb.cpp:122
 msgid "Footprint filters"
-msgstr "Alkatrészrajzolat szűrők:"
+msgstr "Alkatrészrajzolat szűrők"
 
 #: cvpcb/toolbars_cvpcb.cpp:123
 #, fuzzy
@@ -11906,9 +11906,8 @@ msgid "Footprint filtering controls"
 msgstr "Alkatrészrajzolat szűrők:"
 
 #: cvpcb/tools/cvpcb_actions.cpp:48
-#, fuzzy
 msgid "View Selected Footprint"
-msgstr "Kiválasztott alkatrészrajzolat megjelenítése"
+msgstr "Kiválasztott alkatrészrajzolat megtekintése"
 
 #: cvpcb/tools/cvpcb_actions.cpp:56
 #, fuzzy
@@ -13314,9 +13313,8 @@ msgid "Command line to run the exporter:"
 msgstr "Generátor parancssori kódja:"
 
 #: eeschema/dialogs/dialog_export_netlist_base.cpp:131
-#, fuzzy
 msgid "Browse Scripts..."
-msgstr "Generátorok böngészése"
+msgstr "Szkriptek böngészése"
 
 #: eeschema/dialogs/dialog_export_netlist_base.h:95
 msgid "Add Script-based Netlist Exporter"
