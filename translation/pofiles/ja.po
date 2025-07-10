@@ -28050,7 +28050,7 @@ msgstr "ファイルをテキスト エディターで編集"
 #: kicad/kicad_manager_frame.cpp:1061
 #, c-format
 msgid "Project '%s' is already open by '%s' at '%s'."
-msgstr "プロジェクト '%s' はすでに[ユーザー:'%s' ホスト:'%s']によって開かれています。"
+msgstr "プロジェクト '%s' はすでに'%s' ホスト:'%s'によって開かれています。"
 
 #: kicad/kicad_manager_frame.cpp:1087
 msgid "[no project loaded]"
@@ -37066,7 +37066,6 @@ msgid "Length-tuning pattern defaults"
 msgstr "配線長の調整パターンのデフォルト値"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:78
-#, fuzzy
 msgid "Component classes"
 msgstr "コンポーネントクラス"
 
@@ -37254,7 +37253,6 @@ msgid "Target areas:"
 msgstr "対象領域:"
 
 #: pcbnew/dialogs/dialog_multichannel_repeat_layout_base.cpp:59
-#, fuzzy
 msgid "Reference rule area:"
 msgstr "リファレンスルール領域:"
 
@@ -37304,9 +37302,8 @@ msgid "Group items with their target rule areas"
 msgstr "ターゲットルール領域でアイテムをグループ化する"
 
 #: pcbnew/dialogs/dialog_multichannel_repeat_layout_base.cpp:124
-#, fuzzy
 msgid "Include locked items"
-msgstr "ロックされているフットプリントを含む (&l)"
+msgstr "ロックされているアイテムを含む"
 
 #: pcbnew/dialogs/dialog_multichannel_repeat_layout_base.cpp:125
 msgid "Copy from reference area + delete / update in target area if included"
@@ -37388,7 +37385,6 @@ msgstr ""
 "これはパッドのようなアイテムには不可能で、引き続き以下の値が使用される。"
 
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:86
-#, fuzzy
 msgid "Layer Default"
 msgstr "デフォルトのレイヤー"
 
@@ -38705,9 +38701,8 @@ msgid "Add floor"
 msgstr "床面を追加"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:104
-#, fuzzy
 msgid "Anti-aliasing"
-msgstr "アンチエイリアシング:"
+msgstr "アンチエイリアシング"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:108
 #, fuzzy
@@ -38765,7 +38760,6 @@ msgid "°"
 msgstr "°"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:254
-#, fuzzy
 msgid "Lights Intensity"
 msgstr "光源の強さ"
 
@@ -38774,7 +38768,6 @@ msgid "Camera:"
 msgstr "カメラ:"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:303
-#, fuzzy
 msgid "Lights Position"
 msgstr "光源の位置"
 
@@ -39140,9 +39133,8 @@ msgid "Edit Track/Via Properties"
 msgstr "配線/ビアのプロパティを編集"
 
 #: pcbnew/dialogs/dialog_track_via_properties.h:178
-#, fuzzy
 msgid "From rules"
-msgstr "デザインルールより"
+msgstr "ルールより"
 
 #: pcbnew/dialogs/dialog_track_via_properties.h:180
 msgid "Type I a ( tented top )"
@@ -42380,9 +42372,8 @@ msgstr "親 %s から派生."
 
 #: pcbnew/drc/drc_engine.cpp:1508 pcbnew/drc/drc_engine.cpp:1515
 #: pcbnew/drc/drc_engine.cpp:1522
-#, fuzzy
 msgid "board setup"
-msgstr "基板セットアップ"
+msgstr "基板の設定"
 
 #: pcbnew/drc/drc_engine.cpp:1547 pcbnew/drc/drc_engine.cpp:1571
 #, c-format
@@ -43949,9 +43940,9 @@ msgid "Cannot create input stream '%s'.\n"
 msgstr "出力ディレクトリ '%s' を作成できませんでした。"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2381
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot create output stream '%s'.\n"
-msgstr "出力ディレクトリ '%s' を作成できませんでした。"
+msgstr "出力ストリーム '%s' を作成できませんでした。\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2389
 msgid "Impossible create compress stream"
@@ -44053,7 +44044,6 @@ msgid "PCB '%s' does not exist. Do you wish to create it?"
 msgstr "基板 ’%s' は存在しません。 作成しますか?"
 
 #: pcbnew/files.cpp:567
-#, fuzzy
 msgid "Create PCB"
 msgstr "PCBを作成"
 
@@ -44124,7 +44114,6 @@ msgid "The board must be saved before generating IPC-2581 file."
 msgstr "IPC-2581 ファイルを生成する前にボードを保存する必要があります。"
 
 #: pcbnew/files.cpp:1318
-#, fuzzy
 msgid "Generate IPC-2581 File"
 msgstr "IPC-2581ファイルを生成"
 
@@ -44147,7 +44136,6 @@ msgstr ""
 "一時ファイル '%s' のリネームに失敗しました。"
 
 #: pcbnew/files.cpp:1441
-#, fuzzy
 msgid "Generate ODB++ Files"
 msgstr "ODB++ 出力ファイルを生成"
 
