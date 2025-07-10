@@ -348,6 +348,12 @@ void SYMBOL_LIBRARY_MANAGER_ADAPTER::AsyncLoad()
     m_loadTotal = rows.size();
     m_loadCount.store( 0 );
 
+    if( m_loadTotal == 0 )
+    {
+        wxLogTrace( traceLibraries, "AsyncLoad: no libraries left to load; exiting" );
+        return;
+    }
+
     thread_pool& tp = GetKiCadThreadPool();
 
     auto check =
