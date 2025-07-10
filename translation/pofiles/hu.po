@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-07 17:42+0300\n"
-"PO-Revision-Date: 2025-07-10 06:02+0000\n"
+"PO-Revision-Date: 2025-07-11 20:01+0000\n"
 "Last-Translator: Sárkány Lőrinc <lsarkany@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/kicad/"
 "master-source/hu/>\n"
@@ -11863,9 +11863,8 @@ msgid "First check your footprint library table entries."
 msgstr "Ellenőrizze a alkatrészrajzolat könyvtáblázat bejegyzéseit."
 
 #: cvpcb/readwrite_dlgs.cpp:172
-#, fuzzy
 msgid "Problematic Footprint Library Tables"
-msgstr "Problematikus alkatrészrajzolat könyvtáblázat"
+msgstr "Problémás alkatrészrajzolat könyvtár táblázatok"
 
 #: cvpcb/readwrite_dlgs.cpp:180
 #, fuzzy
@@ -11894,12 +11893,10 @@ msgid "Schematic saved"
 msgstr "A kapcsolási rajz elmentve"
 
 #: cvpcb/toolbars_cvpcb.cpp:89
-#, fuzzy
 msgid "Footprint Filters:"
 msgstr "Alkatrészrajzolat szűrők:"
 
 #: cvpcb/toolbars_cvpcb.cpp:122
-#, fuzzy
 msgid "Footprint filters"
 msgstr "Alkatrészrajzolat szűrők:"
 
