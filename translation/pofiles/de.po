@@ -30,7 +30,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-07 17:43+0300\n"
-"PO-Revision-Date: 2025-07-10 06:01+0000\n"
+"PO-Revision-Date: 2025-07-10 08:29+0000\n"
 "Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v9/de/>\n"
 "Language: de\n"
@@ -38766,7 +38766,7 @@ msgstr "Nicht abgedeckt"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:402
 msgid "Whether to tent (cover with soldermask) this via on the front side"
-msgstr "Bestimmt, ob ein Via vorderseitig mit Lötstopplack abgedeckt wird."
+msgstr "Bestimmt, ob ein Via vorderseitig mit Lötstopplack abgedeckt wird"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:408
 msgid "Link front and back tenting settings"
@@ -38778,7 +38778,7 @@ msgstr "Rückseitiges Abdecken:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:423
 msgid "Whether to tent (cover with soldermask) this via on the back side"
-msgstr "Bestimmt, ob ein Via rückseitig mit Lötstopplack abgedeckt wird."
+msgstr "Bestimmt, ob ein Via rückseitig mit Lötstopplack abgedeckt wird"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:473
 msgid "Add teardrops on via's track connections"
@@ -44019,7 +44019,7 @@ msgstr "DXF Standardlinienbreite:"
 msgid "Used when the DXF items in file have no line thickness set"
 msgstr ""
 "Wird verwendet, wenn für die DXF-Elemente in der Datei keine Linienstärke "
-"festgelegt ist."
+"festgelegt ist"
 
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:72
 msgid "DXF default units:"
