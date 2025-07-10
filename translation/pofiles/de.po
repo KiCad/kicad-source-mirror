@@ -44019,7 +44019,7 @@ msgstr "DXF Standardlinienbreite:"
 msgid "Used when the DXF items in file have no line thickness set"
 msgstr ""
 "Wird verwendet, wenn für die DXF-Elemente in der Datei keine Linienstärke "
-"festgelegt ist"
+"festgelegt ist."
 
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:72
 msgid "DXF default units:"
