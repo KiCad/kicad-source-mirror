@@ -41,6 +41,7 @@
 #include <winhttp.h>
 
 #include <softpub.h>
+#include <shlobj_core.h>
 #include <wincrypt.h>
 #include <wintrust.h>
 
@@ -481,4 +482,24 @@ void KIPLATFORM::ENV::SetAppDetailsForWindow( wxWindow* aWindow, const wxString&
 wxString KIPLATFORM::ENV::GetCommandLineStr()
 {
     return ::GetCommandLine();
+}
+
+
+void KIPLATFORM::ENV::AddToRecentDocs( const wxString& aPath )
+{
+    IShellItem* psi = nullptr;
+    HRESULT     hr = SHCreateItemFromParsingName( aPath.wc_str(), NULL, IID_PPV_ARGS( &psi ) );
+
+    if( SUCCEEDED( hr ) )
+    {
+        wxString       appID = GetAppUserModelId();
+        SHARDAPPIDINFO info;
+        info.psi = psi;
+        info.pszAppID = appID.wc_str();
+        ::SHAddToRecentDocs( SHARD_APPIDINFO, &info );
+
+        psi->Release();
+    }
+
+    ::SHAddToRecentDocs( SHARD_PATHW, aPath.wc_str() );
 }

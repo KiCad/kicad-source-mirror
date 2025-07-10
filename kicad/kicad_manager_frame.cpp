@@ -43,6 +43,7 @@
 #include <policy_keys.h>
 #include <gestfich.h>
 #include <kiplatform/app.h>
+#include <kiplatform/environment.h>
 #include <kiplatform/policy.h>
 #include <build_version.h>
 #include <kiway.h>
@@ -849,6 +850,8 @@ void KICAD_MANAGER_FRAME::LoadProject( const wxFileName& aProjectFileName )
 
     KIPLATFORM::APP::RegisterApplicationRestart( aProjectFileName.GetFullPath() );
     m_openSavedWindows = true;
+
+    KIPLATFORM::ENV::AddToRecentDocs( aProjectFileName.GetFullPath() );
 }
 
 

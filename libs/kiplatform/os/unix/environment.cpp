@@ -145,3 +145,8 @@ wxString KIPLATFORM::ENV::GetCommandLineStr()
 {
     return wxEmptyString;
 }
+
+
+void KIPLATFORM::ENV::AddToRecentDocs( const wxString& aPath )
+{
+}
