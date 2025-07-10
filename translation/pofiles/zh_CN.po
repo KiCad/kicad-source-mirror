@@ -43268,7 +43268,7 @@ msgstr "没有有效的 PCB 组件; 无法创建输出文件 '%s'。\n"
 #: pcbnew/exporters/step/step_pcb_model.cpp:2375
 #, c-format
 msgid "Cannot create input stream '%s'.\n"
-msgstr ""
+msgstr "无法创建输入流 '%s'\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2381
 #, c-format
