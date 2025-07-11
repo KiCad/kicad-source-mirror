@@ -24,22 +24,16 @@
  */
 
 #include <bitmaps.h>
-#include <core/raii.h>
 #include <sch_edit_frame.h>
-#include <sch_sheet.h>
-#include <sch_sheet_path.h>
 #include <sch_commit.h>
-#include <schematic.h>
 #include <tool/tool_manager.h>
 #include <tools/sch_actions.h>
-
 #include <hierarchy_pane.h>
 #include <kiface_base.h>
-#include <eeschema_settings.h>
-
 #include <wx/object.h>
 #include <wx/generic/textdlgg.h>
 #include <wx/menu.h>
+#include <wx/wupdlock.h>
 
 /**
  * Store an SCH_SHEET_PATH of each sheet in hierarchy.
@@ -212,7 +206,7 @@ void HIERARCHY_PANE::UpdateHierarchySelection()
 
 void HIERARCHY_PANE::UpdateHierarchyTree( bool aClear )
 {
-    WINDOW_FREEZER raiiFreezer( this );
+    wxWindowUpdateLocker updateLock( this );
 
     bool eventsWereBound = m_events_bound;
 

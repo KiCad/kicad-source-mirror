@@ -25,7 +25,7 @@
 
 #include <algorithm>
 #include <limits>
-
+#include <wx/wupdlock.h>
 #include <pgm_base.h>
 #include <eda_draw_frame.h>
 #include <bitmaps.h>
@@ -116,7 +116,7 @@ PANEL_SETUP_NETCLASSES::PANEL_SETUP_NETCLASSES( wxWindow* aParentWindow, EDA_DRA
     m_membershipPane->SetBorders( true, false, false, false );
 
     // Prevent Size events from firing before we are ready
-    WINDOW_FREEZER raiiFreezer( this );
+    wxWindowUpdateLocker updateLock( this );
 
     m_netclassGrid->BeginBatch();
     m_netclassGrid->SetUseNativeColLabels();

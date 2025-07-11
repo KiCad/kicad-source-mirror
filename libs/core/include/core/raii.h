@@ -82,26 +82,6 @@ protected:
 };
 
 
-// Temporarily freeze a window, and then un-freeze on destruction
-class WINDOW_FREEZER
-{
-public:
-    WINDOW_FREEZER( wxWindow* aWindow )
-    {
-        m_window = aWindow;
-        m_window->Freeze();
-    }
-
-    ~WINDOW_FREEZER()
-    {
-        m_window->Thaw();
-    }
-
-protected:
-    wxWindow* m_window;
-};
-
-
 /// Temporarily disable a window, and then re-enable on destruction.
 class WINDOW_DISABLER
 {

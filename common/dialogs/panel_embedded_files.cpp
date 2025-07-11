@@ -25,19 +25,18 @@
 #include <dialogs/panel_embedded_files.h>
 #include <embedded_files.h>
 #include <font/outline_font.h>
-#include <core/raii.h>
 #include <kidialog.h>
 #include <widgets/std_bitmap_button.h>
 #include <widgets/wx_grid.h>
 
 #include <wx/clipbrd.h>
 #include <wx/dirdlg.h>
-#include <wx/ffile.h>
 #include <wx/filedlg.h>
 #include <wx/filename.h>
 #include <wx/log.h>
 #include <wx/menu.h>
 #include <wx/wfstream.h>
+#include <wx/wupdlock.h>
 
 /* ---------- GRID_TRICKS for embedded files grid ---------- */
 
@@ -210,7 +209,7 @@ bool PANEL_EMBEDDED_FILES::TransferDataFromWindow()
 
 void PANEL_EMBEDDED_FILES::onFontEmbedClick( wxCommandEvent& event )
 {
-    WINDOW_FREEZER raiiFreezer( this );
+    wxWindowUpdateLocker updateLock( this );
 
     int row_pos = m_files_grid->GetGridCursorRow();
     int col_pos = m_files_grid->GetGridCursorCol();

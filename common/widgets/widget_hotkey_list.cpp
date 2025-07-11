@@ -39,6 +39,7 @@
 #include <wx/statline.h>
 #include <wx/stattext.h>
 #include <wx/treelist.h>
+#include <wx/wupdlock.h>
 
 /**
  * Menu IDs for the hotkey context menu
@@ -585,7 +586,7 @@ void WIDGET_HOTKEY_LIST::ApplyFilterString( const wxString& aFilterStr )
 
 void WIDGET_HOTKEY_LIST::ResetAllHotkeys( bool aResetToDefault )
 {
-    WINDOW_FREEZER raiiFreezer( this );
+    wxWindowUpdateLocker updateLock( this );
 
     // Reset all the hotkeys, not just the ones shown
     // Should not need to check conflicts, as the state we're about
@@ -631,7 +632,7 @@ void WIDGET_HOTKEY_LIST::updateColumnWidths()
 
 void WIDGET_HOTKEY_LIST::updateShownItems( const wxString& aFilterStr )
 {
-    WINDOW_FREEZER raiiFreezer( this );
+    wxWindowUpdateLocker updateLock( this );
 
     DeleteAllItems();
 

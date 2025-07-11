@@ -27,7 +27,6 @@
 #include <gestfich.h>
 #include <sch_screen.h>
 #include <sch_edit_frame.h>
-#include <schematic.h>
 #include <project.h>
 #include <kiface_base.h>
 #include <reporter.h>
@@ -41,11 +40,8 @@
 #include <erc/erc_report.h>
 #include <id.h>
 #include <confirm.h>
-#include <common.h>
 #include <widgets/wx_html_report_box.h>
 #include <dialogs/dialog_text_entry.h>
-#include <erc/erc_item.h>
-#include <eeschema_settings.h>
 #include <string_utils.h>
 #include <kiplatform/ui.h>
 
@@ -53,6 +49,7 @@
 #include <wx/filedlg.h>
 #include <wx/hyperlink.h>
 #include <wx/msgdlg.h>
+#include <wx/wupdlock.h>
 
 
 wxDEFINE_EVENT( EDA_EVT_CLOSE_ERC_DIALOG, wxCommandEvent );
@@ -1021,7 +1018,7 @@ void DIALOG_ERC::deleteAllMarkers( bool aIncludeExclusions )
     // Clear current selection list to avoid selection of deleted items
     // Freeze to avoid repainting the dialog, which can cause a RePaint()
     // of the screen as well
-    WINDOW_FREEZER raiiFreezer( this );
+    wxWindowUpdateLocker updateLock( this );
 
     m_parent->GetToolManager()->RunAction( SCH_ACTIONS::clearSelection );
 

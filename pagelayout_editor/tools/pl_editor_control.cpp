@@ -31,13 +31,14 @@
 #include <drawing_sheet/ds_data_model.h>
 #include <drawing_sheet/ds_painter.h>
 
-#include "pl_editor_frame.h"
-#include "pl_editor_id.h"
-#include "properties_frame.h"
-#include "tools/pl_actions.h"
-#include "tools/pl_editor_control.h"
-#include "tools/pl_selection_tool.h"
+#include <pl_editor_frame.h>
+#include <pl_editor_id.h>
+#include <properties_frame.h>
+#include <tools/pl_actions.h>
+#include <tools/pl_editor_control.h>
+#include <tools/pl_selection_tool.h>
 #include <wx/msgdlg.h>
+#include <wx/wupdlock.h>
 
 
 bool PL_EDITOR_CONTROL::Init()
@@ -149,7 +150,7 @@ int PL_EDITOR_CONTROL::UpdateMessagePanel( const TOOL_EVENT& aEvent )
     PL_SELECTION&      selection = selTool->GetSelection();
 
     // The Properties frame will be updated. Avoid flicker during update:
-    WINDOW_FREEZER raiiFreezer( m_frame->GetPropertiesFrame() );
+    wxWindowUpdateLocker updateLock( m_frame->GetPropertiesFrame() );
 
     if( selection.GetSize() == 1 )
     {
