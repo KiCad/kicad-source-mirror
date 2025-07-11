@@ -170,8 +170,7 @@ void LTSPICE_SCHEMATIC::Load( SCHEMATIC* aSchematic, SCH_SHEET* aRootSheet,
 
             ascFiles[ascFiles[i].ParentIndex].Sheet->GetScreen()->Append( curSheet );
 
-            curSheet->GetScreen()->SetFileName( m_schematic->Prj().GetProjectPath() + sheetName
-                                                 + ".kicad_sch" );
+            curSheet->GetScreen()->SetFileName( m_schematic->Prj().GetProjectPath() + sheetName + ".kicad_sch" );
         }
         else
         {
@@ -219,10 +218,10 @@ void LTSPICE_SCHEMATIC::GetAscAndAsyFilePaths( const wxDir& aDir, bool aRecursiv
                 {
                     if( m_reporter )
                     {
-                        m_reporter->Report( wxString::Format(
-                                _( "File at '%s' was ignored. Using previously found "
-                                   "file at '%s' instead." ),
-                                path.GetFullPath(), aMapToLogTo.at( aKey ) ) );
+                        m_reporter->Report( wxString::Format( _( "File at '%s' was ignored. Using previously "
+                                                                 "found file at '%s' instead." ),
+                                                              path.GetFullPath(),
+                                                              aMapToLogTo.at( aKey ) ) );
                     }
                 }
                 else
@@ -315,7 +314,7 @@ std::vector<LTSPICE_FILE> LTSPICE_SCHEMATIC::GetSchematicElements( const wxStrin
     {
         wxArrayString tokens = wxSplit( line, ' ' );
 
-        if( !tokens.IsEmpty() && tokens[0].Upper() == wxS( "SYMBOL" ) )
+        if( tokens.size() >= 4 && tokens[0].Upper() == wxS( "SYMBOL" ) )
         {
             wxString elementName( tokens[1] );
             long     posX, posY;
