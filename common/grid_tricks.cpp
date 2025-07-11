@@ -508,7 +508,9 @@ void GRID_TRICKS::onCharHook( wxKeyEvent& ev )
                     stripped.Replace( COL_SEP, " " );
 
                     // Write to the CellEditControl if we can
-                    if( wxTextEntry* te = dynamic_cast<wxTextEntry*>( ev.GetEventObject() ) )
+                    wxTextEntry* te = dynamic_cast<wxTextEntry*>( ev.GetEventObject() );
+
+                    if( te && te->IsEditable() )
                         te->WriteText( stripped );
                     else
                         paste_text( stripped );
