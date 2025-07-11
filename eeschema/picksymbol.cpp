@@ -175,7 +175,10 @@ void SCH_EDIT_FRAME::SelectUnit( SCH_SYMBOL* aSymbol, int aUnit )
                 aSymbol->AutoplaceFields( GetScreen(), fieldsAutoplaced );
         }
 
-        commit.Push( _( "Change Unit" ) );
+        if( swapWithOther )
+            commit.Push( _( "Swap Units" ) );
+        else
+            commit.Push( _( "Change Unit" ) );
     }
 }
 
