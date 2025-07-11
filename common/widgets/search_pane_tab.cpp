@@ -19,12 +19,11 @@
 
 #include <widgets/search_pane_tab.h>
 #include <widgets/search_pane.h>
-#include <kiway.h>
 #include <vector>
 #include <string_utils.h>
 #include <wx/clipbrd.h>
+#include <wx/wupdlock.h>
 #include <core/kicad_algo.h>
-#include <core/raii.h>
 
 SEARCH_PANE_LISTVIEW::SEARCH_PANE_LISTVIEW( SEARCH_HANDLER* handler, wxWindow* parent,
                                             wxWindowID winid, const wxPoint& pos,
@@ -204,7 +203,7 @@ std::vector<long> SEARCH_PANE_LISTVIEW::Sort()
 
 void SEARCH_PANE_LISTVIEW::RefreshColumnNames()
 {
-    WINDOW_FREEZER raiiFreezer( this );
+    wxWindowUpdateLocker updateLock( this );
 
     DeleteAllColumns();
 

@@ -21,8 +21,8 @@
  */
 
 #include <wx/log.h>
+#include <wx/wupdlock.h>
 #include <core/profile.h>
-#include <core/raii.h>
 #include <tool/tool_manager.h>
 #include <kiface_base.h>
 #include <sch_edit_frame.h>
@@ -31,7 +31,6 @@
 #include <sch_junction.h>
 #include <sch_no_connect.h>
 #include <sch_sheet_pin.h>
-#include <schematic.h>
 #include <string_utils.h>
 #include <trace_helpers.h>
 #include <connection_graph.h>
@@ -306,8 +305,8 @@ void SCH_EDIT_FRAME::RefreshNetNavigator( const NET_NAVIGATOR_ITEM_DATA* aSelect
     bool   singleSheetSchematic = m_schematic->Hierarchy().size() == 1;
     size_t nodeCnt = 0;
 
-    WINDOW_FREEZER raiiFreezer( m_netNavigator );
-    PROF_TIMER     timer;
+    wxWindowUpdateLocker updateLock( m_netNavigator );
+    PROF_TIMER           timer;
 
     if( m_highlightedConn.IsEmpty() )
     {

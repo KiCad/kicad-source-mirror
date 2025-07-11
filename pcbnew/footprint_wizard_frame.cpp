@@ -35,14 +35,11 @@
 #include <footprint_edit_frame.h>
 #include <footprint_editor_settings.h>
 #include <pcbnew_id.h>
-#include <pcbnew_settings.h>
-#include "footprint_wizard_frame.h"
 #include <wx/listbox.h>
 #include <wx/statline.h>
 #include <wx/tokenzr.h>
 #include <wx/numformatter.h>
-#include <wildcards_and_files_ext.h>
-#include <base_units.h>
+#include <wx/wupdlock.h>
 #include <pgm_base.h>
 #include <settings/color_settings.h>
 #include <settings/settings_manager.h>
@@ -50,12 +47,13 @@
 #include <tool/tool_dispatcher.h>
 #include <tool/action_toolbar.h>
 #include <tool/common_tools.h>
-#include "tools/pcb_selection_tool.h"
-#include "tools/pcb_control.h"
-#include "tools/pcb_actions.h"
-#include "tools/footprint_wizard_tools.h"
+#include <tools/pcb_selection_tool.h>
+#include <tools/pcb_control.h>
+#include <tools/pcb_actions.h>
+#include <tools/footprint_wizard_tools.h>
 #include <toolbars_footprint_wizard.h>
 #include <python/scripting/pcb_scripting_tool.h>
+#include "footprint_wizard_frame.h"
 
 
 BEGIN_EVENT_TABLE( FOOTPRINT_WIZARD_FRAME, PCB_BASE_EDIT_FRAME )
@@ -380,7 +378,7 @@ void FOOTPRINT_WIZARD_FRAME::ReCreateParameterList()
     if( footprintWizard == nullptr )
         return;
 
-    WINDOW_FREEZER raiiFreezer( m_parameterGrid );
+    wxWindowUpdateLocker updateLock( m_parameterGrid );
 
     m_parameterGrid->ClearGrid();
     m_parameterGridPage = m_pageList->GetSelection();

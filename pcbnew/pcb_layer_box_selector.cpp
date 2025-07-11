@@ -32,7 +32,7 @@
 #include <settings/color_settings.h>
 #include <tools/pcb_actions.h>
 #include <dpi_scaling_common.h>
-#include <core/raii.h>
+#include <wx/wupdlock.h>
 
 
 PCB_LAYER_BOX_SELECTOR::PCB_LAYER_BOX_SELECTOR( wxWindow* parent, wxWindowID id, const wxString& value,
@@ -56,7 +56,7 @@ void PCB_LAYER_BOX_SELECTOR::SetBoardFrame( PCB_BASE_FRAME* aFrame )
 // Reload the Layers
 void PCB_LAYER_BOX_SELECTOR::Resync()
 {
-    WINDOW_FREEZER raiiFreezer( this );
+    wxWindowUpdateLocker updateLock( this );
 
     Clear();
 

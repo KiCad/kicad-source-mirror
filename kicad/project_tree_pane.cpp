@@ -24,7 +24,6 @@
  */
 
 #include <stack>
-#include <thread>
 #include <git2.h>
 
 #include <wx/regex.h>
@@ -33,6 +32,7 @@
 #include <wx/msgdlg.h>
 #include <wx/textdlg.h>
 #include <wx/timer.h>
+#include <wx/wupdlock.h>
 
 #include <advanced_config.h>
 #include <bitmaps.h>
@@ -61,10 +61,6 @@
 #include <git/git_push_handler.h>
 #include <git/git_resolve_conflict_handler.h>
 #include <git/git_revert_handler.h>
-#include <git/git_switch_branch_handler.h>
-#include <git/git_compare_handler.h>
-#include <git/git_remove_vcs_handler.h>
-#include <git/git_add_to_index_handler.h>
 #include <git/git_remove_from_index_handler.h>
 #include <git/git_sync_handler.h>
 #include <git/git_clone_handler.h>
@@ -80,8 +76,6 @@
 #include "kicad_manager_frame.h"
 
 #include "project_tree_pane.h"
-#include <widgets/kistatusbar.h>
-
 #include <kiplatform/io.h>
 #include <kiplatform/secrets.h>
 
@@ -666,10 +660,8 @@ void PROJECT_TREE_PANE::ReCreateTreePrj()
 
     if( !m_TreeProject )
         m_TreeProject = new PROJECT_TREE( this );
-
-    WINDOW_FREEZER raiiFreezer( m_TreeProject );
-
-    m_TreeProject->DeleteAllItems();
+    else
+        m_TreeProject->DeleteAllItems();
 
     if( !pro_dir )  // This is empty from PROJECT_TREE_PANE constructor
         return;
@@ -1615,8 +1607,6 @@ void PROJECT_TREE_PANE::EmptyTreePrj()
 {
     // Make sure we don't try to inspect the tree after we've deleted its items.
     shutdownFileWatcher();
-
-    m_TreeProject->Freeze();
 
     m_TreeProject->DeleteAllItems();
 

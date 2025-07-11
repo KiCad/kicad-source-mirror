@@ -28,6 +28,7 @@
 #include <wx/debug.h>
 #include <wx/event.h>
 #include <wx/gdicmn.h>
+#include <wx/wupdlock.h>
 #include <kiface_base.h>
 #include <pcb_edit_frame.h>
 #include <pcbnew_settings.h>
@@ -213,7 +214,7 @@ void DIALOG_ZONE_MANAGER::onDialogResize( wxSizeEvent& event )
 
 void DIALOG_ZONE_MANAGER::OnZoneSelectionChanged( ZONE* zone )
 {
-    WINDOW_FREEZER raiiFreezer( this );
+    wxWindowUpdateLocker updateLock( this );
 
     for( ZONE_SELECTION_CHANGE_NOTIFIER* i :
          std::list<ZONE_SELECTION_CHANGE_NOTIFIER*>{ m_panelZoneProperties, m_zoneViewer } )

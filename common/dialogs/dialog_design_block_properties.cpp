@@ -26,6 +26,7 @@
 #include <dialogs/dialog_design_block_properties.h>
 #include <wx/msgdlg.h>
 #include <wx/tooltip.h>
+#include <wx/wupdlock.h>
 #include <grid_tricks.h>
 #include <widgets/std_bitmap_button.h>
 #include <bitmaps.h>
@@ -209,7 +210,7 @@ void DIALOG_DESIGN_BLOCK_PROPERTIES::OnMoveFieldDown( wxCommandEvent& event )
 
 bool DIALOG_DESIGN_BLOCK_PROPERTIES::TransferDataToGrid()
 {
-    WINDOW_FREEZER raiiFreezer( m_fieldsGrid );
+    wxWindowUpdateLocker updateLock( m_fieldsGrid );
 
     m_fieldsGrid->ClearRows();
     m_fieldsGrid->AppendRows( m_fields.size() );

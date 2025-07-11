@@ -895,7 +895,7 @@ void PCB_NET_INSPECTOR_PANEL::updateNets( const std::vector<NETINFO_ITEM*>& aNet
             netsToUpdate.emplace_back( net );
     }
 
-    WINDOW_FREEZER raiiFreezer( m_netsList );
+    wxWindowUpdateLocker updateLocker( m_netsList );
 
     std::vector<std::unique_ptr<LIST_ITEM>> newListItems = calculateNets( aNets, true );
 

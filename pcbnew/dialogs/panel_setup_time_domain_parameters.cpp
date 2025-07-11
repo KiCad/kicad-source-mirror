@@ -32,6 +32,7 @@
 #include <pgm_base.h>
 #include <widgets/grid_icon_text_helpers.h>
 #include <widgets/paged_dialog.h>
+#include <wx/wupdlock.h>
 
 PANEL_SETUP_TIME_DOMAIN_PARAMETERS::PANEL_SETUP_TIME_DOMAIN_PARAMETERS(
                                             wxWindow* aParentWindow, PCB_EDIT_FRAME* aFrame, BOARD* aBoard,
@@ -504,7 +505,7 @@ void PANEL_SETUP_TIME_DOMAIN_PARAMETERS::OnDelayProfileGridCellChanging( wxGridE
 
             if( !oldName.IsEmpty() )
             {
-                WINDOW_FREEZER raiiFreezer( m_viaPropagationGrid );
+                wxWindowUpdateLocker updateLocker( m_viaPropagationGrid );
 
                 updateViaProfileNamesEditor( oldName, newName );
 
