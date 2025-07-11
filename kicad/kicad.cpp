@@ -241,7 +241,8 @@ bool PGM_KICAD::OnPgmInit()
 
     Kiway.SetTop( frame );
 
-    KIPLATFORM::ENV::SetAppDetailsForWindow( frame, PATHS::GetExecutablePath() + " -n", frame->GetTitle() );
+    KIPLATFORM::ENV::SetAppDetailsForWindow( frame, wxStandardPaths::Get().GetExecutablePath() + " -n",
+                                             frame->GetTitle() );
 
     KICAD_SETTINGS* settings = static_cast<KICAD_SETTINGS*>( PgmSettings() );
 
