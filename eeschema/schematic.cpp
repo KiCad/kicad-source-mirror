@@ -765,7 +765,7 @@ wxString SCHEMATIC::GetOperatingPoint( const wxString& aNetName, int aPrecision,
 }
 
 
-void SCHEMATIC::FixupJunctions()
+void SCHEMATIC::FixupJunctionsAfterImport()
 {
     SCH_SCREENS screens( Root() );
 
@@ -785,7 +785,7 @@ void SCHEMATIC::FixupJunctions()
             // Breakup wires
             for( SCH_LINE* wire : screen->GetBusesAndWires( point, true ) )
             {
-                SCH_LINE* newSegment = wire->BreakAt( nullptr, point );
+                SCH_LINE* newSegment = wire->NonGroupAware_BreakAt( point );
                 screen->Append( newSegment );
             }
         }

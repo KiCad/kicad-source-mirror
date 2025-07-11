@@ -164,7 +164,7 @@ SCH_SHEET* SCH_IO_CADSTAR_ARCHIVE::LoadSchematicFile( const wxString&        aFi
     }
 
     // Need to fix up junctions after import to retain connectivity
-    aSchematic->FixupJunctions();
+    aSchematic->FixupJunctionsAfterImport();
 
     return rootSheet;
 }

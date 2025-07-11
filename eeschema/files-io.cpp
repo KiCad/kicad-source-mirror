@@ -570,7 +570,7 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
     // I can't put it right now because of the extra code that is above to convert legacy bus-bus
     // entries to bus wires
     if( schFileType == SCH_IO_MGR::SCH_LEGACY )
-        Schematic().FixupJunctions();
+        Schematic().FixupJunctionsAfterImport();
 
     SyncView();
     GetScreen()->ClearDrawingState();

@@ -284,7 +284,7 @@ public:
      * This function is needed for some plugins (e.g. Legacy and Cadstar) in order to retain
      * connectivity after loading.
      */
-    void FixupJunctions();
+    void FixupJunctionsAfterImport();
 
     /**
      * Break a single segment into two at the specified point.

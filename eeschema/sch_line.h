@@ -259,6 +259,12 @@ public:
      */
     SCH_LINE* BreakAt( SCH_COMMIT* aCommit, const VECTOR2I& aPoint );
 
+    /**
+     * This version should only be used when importing files.  It cannot handle breaking wires
+     * that are part of groups (as it has no commit to modify the parent group within).
+     */
+    SCH_LINE* NonGroupAware_BreakAt( const VECTOR2I& aPoint );
+
     bool IsParallel( const SCH_LINE* aLine ) const;
 
     /**

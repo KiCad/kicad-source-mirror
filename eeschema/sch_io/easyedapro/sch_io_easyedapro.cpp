@@ -641,7 +641,7 @@ SCH_SHEET* SCH_IO_EASYEDAPRO::LoadSchematicFile( const wxString& aFileName,
     sch_plugin->SaveLibrary( libFileName.GetFullPath() );
 
     aSchematic->CurrentSheet().UpdateAllScreenReferences();
-    aSchematic->FixupJunctions();
+    aSchematic->FixupJunctionsAfterImport();
 
     return rootSheet;
 }
