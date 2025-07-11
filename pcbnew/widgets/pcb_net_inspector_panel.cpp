@@ -44,7 +44,9 @@
 #include <thread_pool.h>
 
 PCB_NET_INSPECTOR_PANEL::PCB_NET_INSPECTOR_PANEL( wxWindow* parent, PCB_EDIT_FRAME* aFrame ) :
-        NET_INSPECTOR_PANEL( parent, aFrame ), m_frame( aFrame ), m_dataModel( new DATA_MODEL( *this ) )
+        NET_INSPECTOR_PANEL( parent, aFrame ),
+        m_frame( aFrame ),
+        m_dataModel( new DATA_MODEL( *this ) )
 {
     m_board = m_frame->GetBoard();
 
@@ -64,18 +66,12 @@ PCB_NET_INSPECTOR_PANEL::PCB_NET_INSPECTOR_PANEL( wxWindow* parent, PCB_EDIT_FRA
     m_frame->Bind( EDA_EVT_UNITS_CHANGED, &PCB_NET_INSPECTOR_PANEL::onUnitsChanged, this );
 
     // Connect to wxDataViewCtrl events
-    m_netsList->Bind( wxEVT_DATAVIEW_ITEM_EXPANDED, &PCB_NET_INSPECTOR_PANEL::OnExpandCollapseRow,
-                      this );
-    m_netsList->Bind( wxEVT_DATAVIEW_ITEM_COLLAPSED, &PCB_NET_INSPECTOR_PANEL::OnExpandCollapseRow,
-                      this );
-    m_netsList->Bind( wxEVT_DATAVIEW_COLUMN_HEADER_RIGHT_CLICK,
-                      &PCB_NET_INSPECTOR_PANEL::OnHeaderContextMenu, this );
-    m_netsList->Bind( wxEVT_DATAVIEW_ITEM_CONTEXT_MENU,
-                      &PCB_NET_INSPECTOR_PANEL::OnNetsListContextMenu, this );
-    m_netsList->Bind( wxEVT_DATAVIEW_ITEM_ACTIVATED,
-                      &PCB_NET_INSPECTOR_PANEL::OnNetsListItemActivated, this );
-    m_netsList->Bind( wxEVT_DATAVIEW_COLUMN_SORTED,
-                      &PCB_NET_INSPECTOR_PANEL::OnColumnSorted, this );
+    m_netsList->Bind( wxEVT_DATAVIEW_ITEM_EXPANDED, &PCB_NET_INSPECTOR_PANEL::OnExpandCollapseRow, this );
+    m_netsList->Bind( wxEVT_DATAVIEW_ITEM_COLLAPSED, &PCB_NET_INSPECTOR_PANEL::OnExpandCollapseRow, this );
+    m_netsList->Bind( wxEVT_DATAVIEW_COLUMN_HEADER_RIGHT_CLICK, &PCB_NET_INSPECTOR_PANEL::OnHeaderContextMenu, this );
+    m_netsList->Bind( wxEVT_DATAVIEW_ITEM_CONTEXT_MENU, &PCB_NET_INSPECTOR_PANEL::OnNetsListContextMenu, this );
+    m_netsList->Bind( wxEVT_DATAVIEW_ITEM_ACTIVATED, &PCB_NET_INSPECTOR_PANEL::OnNetsListItemActivated, this );
+    m_netsList->Bind( wxEVT_DATAVIEW_COLUMN_SORTED, &PCB_NET_INSPECTOR_PANEL::OnColumnSorted, this );
 }
 
 PCB_NET_INSPECTOR_PANEL::~PCB_NET_INSPECTOR_PANEL()
@@ -88,18 +84,12 @@ PCB_NET_INSPECTOR_PANEL::~PCB_NET_INSPECTOR_PANEL()
     m_frame->Unbind( EDA_EVT_UNITS_CHANGED, &PCB_NET_INSPECTOR_PANEL::onUnitsChanged, this );
 
     // Connect to wxDataViewCtrl events
-    m_netsList->Unbind( wxEVT_DATAVIEW_ITEM_EXPANDED, &PCB_NET_INSPECTOR_PANEL::OnExpandCollapseRow,
-                        this );
-    m_netsList->Unbind( wxEVT_DATAVIEW_ITEM_COLLAPSED,
-                        &PCB_NET_INSPECTOR_PANEL::OnExpandCollapseRow, this );
-    m_netsList->Unbind( wxEVT_DATAVIEW_COLUMN_HEADER_RIGHT_CLICK,
-                        &PCB_NET_INSPECTOR_PANEL::OnHeaderContextMenu, this );
-    m_netsList->Unbind( wxEVT_DATAVIEW_ITEM_CONTEXT_MENU,
-                        &PCB_NET_INSPECTOR_PANEL::OnNetsListContextMenu, this );
-    m_netsList->Unbind( wxEVT_DATAVIEW_ITEM_ACTIVATED,
-                        &PCB_NET_INSPECTOR_PANEL::OnNetsListItemActivated, this );
-    m_netsList->Unbind( wxEVT_DATAVIEW_COLUMN_SORTED,
-                        &PCB_NET_INSPECTOR_PANEL::OnColumnSorted, this );
+    m_netsList->Unbind( wxEVT_DATAVIEW_ITEM_EXPANDED, &PCB_NET_INSPECTOR_PANEL::OnExpandCollapseRow, this );
+    m_netsList->Unbind( wxEVT_DATAVIEW_ITEM_COLLAPSED, &PCB_NET_INSPECTOR_PANEL::OnExpandCollapseRow, this );
+    m_netsList->Unbind( wxEVT_DATAVIEW_COLUMN_HEADER_RIGHT_CLICK, &PCB_NET_INSPECTOR_PANEL::OnHeaderContextMenu, this );
+    m_netsList->Unbind( wxEVT_DATAVIEW_ITEM_CONTEXT_MENU, &PCB_NET_INSPECTOR_PANEL::OnNetsListContextMenu, this );
+    m_netsList->Unbind( wxEVT_DATAVIEW_ITEM_ACTIVATED, &PCB_NET_INSPECTOR_PANEL::OnNetsListItemActivated, this );
+    m_netsList->Unbind( wxEVT_DATAVIEW_COLUMN_SORTED, &PCB_NET_INSPECTOR_PANEL::OnColumnSorted, this );
 }
 
 
@@ -115,10 +105,8 @@ void PCB_NET_INSPECTOR_PANEL::buildColumns()
     m_columns.clear();
 
     // Set up the column display vector
-    m_columns.emplace_back( 0u, UNDEFINED_LAYER, _( "Name" ), _( "Net Name" ),
-                            CSV_COLUMN_DESC::CSV_QUOTE, false );
-    m_columns.emplace_back( 1u, UNDEFINED_LAYER, _( "Netclass" ), _( "Netclass" ),
-                            CSV_COLUMN_DESC::CSV_QUOTE, false );
+    m_columns.emplace_back( 0u, UNDEFINED_LAYER, _( "Name" ), _( "Net Name" ), CSV_COLUMN_DESC::CSV_QUOTE, false );
+    m_columns.emplace_back( 1u, UNDEFINED_LAYER, _( "Netclass" ), _( "Netclass" ), CSV_COLUMN_DESC::CSV_QUOTE, false );
 
     if( m_showTimeDomainDetails )
     {
@@ -131,8 +119,7 @@ void PCB_NET_INSPECTOR_PANEL::buildColumns()
                                 true );
     }
 
-    m_columns.emplace_back( 3u, UNDEFINED_LAYER, _( "Via Count" ), _( "Via Count" ),
-                            CSV_COLUMN_DESC::CSV_NONE, false );
+    m_columns.emplace_back( 3u, UNDEFINED_LAYER, _( "Via Count" ), _( "Via Count" ), CSV_COLUMN_DESC::CSV_NONE, false );
 
     if( m_showTimeDomainDetails )
     {
