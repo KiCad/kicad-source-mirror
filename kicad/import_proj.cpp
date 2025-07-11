@@ -161,25 +161,26 @@ void IMPORT_PROJ_HELPER::ImportIndividualFile( KICAD_T aFT, int aImportedFileTyp
 
 void IMPORT_PROJ_HELPER::doImport( const wxString& aFile, FRAME_T aFrameType, int aImportedFileType )
 {
-    KIWAY_PLAYER* frame = m_frame->Kiway().Player( aFrameType, true );
+    if( KIWAY_PLAYER* frame = m_frame->Kiway().Player( aFrameType, true ) )
+    {
+        std::stringstream ss;
+        ss << aImportedFileType << '\n' << TO_UTF8( aFile );
 
-    std::stringstream ss;
-    ss << aImportedFileType << '\n' << TO_UTF8( aFile );
+        for( const auto& [key, value] : m_properties )
+            ss << '\n' << key << '\n' << value.wx_str();
 
-    for( const auto& [key, value] : m_properties )
-        ss << '\n' << key << '\n' << value.wx_str();
+        std::string packet = ss.str();
+        frame->Kiway().ExpressMail( aFrameType, MAIL_IMPORT_FILE, packet, m_frame );
 
-    std::string packet = ss.str();
-    frame->Kiway().ExpressMail( aFrameType, MAIL_IMPORT_FILE, packet, m_frame );
+        if( !frame->IsShownOnScreen() )
+            frame->Show( true );
 
-    if( !frame->IsShownOnScreen() )
-        frame->Show( true );
+        // On Windows, Raise() does not bring the window on screen, when iconized
+        if( frame->IsIconized() )
+            frame->Iconize( false );
 
-    // On Windows, Raise() does not bring the window on screen, when iconized
-    if( frame->IsIconized() )
-        frame->Iconize( false );
-
-    frame->Raise();
+        frame->Raise();
+    }
 }
 
 
