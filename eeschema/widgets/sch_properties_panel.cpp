@@ -159,24 +159,26 @@ void SCH_PROPERTIES_PANEL::valueChanging( wxPropertyGridEvent& aEvent )
 
     SCH_SELECTION_TOOL* selectionTool = m_frame->GetToolManager()->GetTool<SCH_SELECTION_TOOL>();
     const SELECTION&    selection = selectionTool->GetSelection();
-    EDA_ITEM*           item = selection.Front();
+    EDA_ITEM*           frontItem = selection.Front();
 
-    PROPERTY_BASE* property = getPropertyFromEvent( aEvent );
-    wxCHECK( property, /* void */ );
-    wxCHECK( item, /* void */ );
-
-    wxVariant newValue = aEvent.GetPropertyValue();
-
-    if( VALIDATOR_RESULT validationFailure = property->Validate( newValue.GetAny(), item ) )
-    {
-        wxString errorMsg = wxString::Format( wxS( "%s: %s" ), wxGetTranslation( property->Name() ),
-                                              validationFailure->get()->Format( m_frame ) );
-        m_frame->ShowInfoBarError( errorMsg );
-        aEvent.Veto();
+    if( !frontItem )
         return;
-    }
 
-    aEvent.Skip();
+    if( PROPERTY_BASE* property = getPropertyFromEvent( aEvent ) )
+    {
+        wxVariant newValue = aEvent.GetPropertyValue();
+
+        if( VALIDATOR_RESULT validationFailure = property->Validate( newValue.GetAny(), frontItem ) )
+        {
+            wxString errorMsg = wxString::Format( wxS( "%s: %s" ), wxGetTranslation( property->Name() ),
+                                                  validationFailure->get()->Format( m_frame ) );
+            m_frame->ShowInfoBarError( errorMsg );
+            aEvent.Veto();
+            return;
+        }
+
+        aEvent.Skip();
+    }
 }
 
 
