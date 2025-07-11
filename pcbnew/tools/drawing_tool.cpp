@@ -3180,6 +3180,11 @@ int DRAWING_TOOL::DrawZone( const TOOL_EVENT& aEvent )
     if( m_isFootprintEditor && !m_frame->GetModel() )
         return 0;
 
+    if( m_inDrawingTool )
+        return 0;
+
+    REENTRANCY_GUARD guard( &m_inDrawingTool );
+
     ZONE_MODE zoneMode = aEvent.Parameter<ZONE_MODE>();
     MODE      drawMode = MODE::ZONE;
 
@@ -3415,6 +3420,11 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
 {
     if( m_isFootprintEditor )
         return 0;
+
+    if( m_inDrawingTool )
+        return 0;
+
+    REENTRANCY_GUARD guard( &m_inDrawingTool );
 
     struct VIA_PLACER : public INTERACTIVE_PLACER_BASE
     {
