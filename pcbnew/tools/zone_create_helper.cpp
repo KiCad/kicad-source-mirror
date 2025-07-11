@@ -167,7 +167,7 @@ void ZONE_CREATE_HELPER::performZoneCutout( ZONE& aZone, const ZONE& aCutout )
     std::vector<ZONE*> newZones;
 
     // Clear the selection before removing the old zone
-    auto toolMgr = m_tool.GetManager();
+    TOOL_MANAGER* toolMgr = m_tool.GetManager();
     toolMgr->RunAction( ACTIONS::selectionClear );
 
     SHAPE_POLY_SET originalOutline( *aZone.Outline() );
@@ -178,15 +178,15 @@ void ZONE_CREATE_HELPER::performZoneCutout( ZONE& aZone, const ZONE& aCutout )
     // contains main outlines:
     for( int outline = 0; outline < originalOutline.OutlineCount(); outline++ )
     {
-        auto newZoneOutline = new SHAPE_POLY_SET;
+        SHAPE_POLY_SET* newZoneOutline = new SHAPE_POLY_SET;
         newZoneOutline->AddOutline( originalOutline.Outline( outline ) );
 
         // Add holes (if any) to the new zone outline:
         for (int hole = 0; hole < originalOutline.HoleCount( outline ) ; hole++ )
             newZoneOutline->AddHole( originalOutline.CHole( outline, hole ) );
 
-        auto newZone = new ZONE( aZone );
-        newZone->SetOutline( newZoneOutline );
+        ZONE* newZone = new ZONE( aZone );
+        newZone->SetOutline( newZoneOutline );  // zone takes ownership
         newZone->SetLocalFlags( 1 );
         newZone->HatchBorder();
         newZone->UnFill();
@@ -273,8 +273,8 @@ bool ZONE_CREATE_HELPER::OnFirstPoint( POLYGON_GEOM_MANAGER& aMgr )
             m_tool.GetManager()->RunAction( ACTIONS::selectionClear );
 
             // set up properties from zone
-            const auto& settings = *m_parentView.GetPainter()->GetSettings();
-            COLOR4D color = settings.GetColor( nullptr, m_zone->GetFirstLayer() );
+            const RENDER_SETTINGS& settings = *m_parentView.GetPainter()->GetSettings();
+            COLOR4D                color = settings.GetColor( nullptr, m_zone->GetFirstLayer() );
 
             m_previewItem.SetStrokeColor( COLOR4D::WHITE );
             m_previewItem.SetFillColor( color.WithAlpha( 0.2 ) );
@@ -309,7 +309,7 @@ void ZONE_CREATE_HELPER::OnGeometryChange( const POLYGON_GEOM_MANAGER& aMgr )
 
 void ZONE_CREATE_HELPER::OnComplete( const POLYGON_GEOM_MANAGER& aMgr )
 {
-    auto& finalPoints = aMgr.GetLockedInPoints();
+    const SHAPE_LINE_CHAIN& finalPoints = aMgr.GetLockedInPoints();
 
     if( finalPoints.PointCount() < 3 )
     {
@@ -321,7 +321,7 @@ void ZONE_CREATE_HELPER::OnComplete( const POLYGON_GEOM_MANAGER& aMgr )
         // if m_params.m_mode == DRAWING_TOOL::ZONE_MODE::CUTOUT, m_zone will be merged to the
         // existing zone as a new hole.
         m_zone->Outline()->NewOutline();
-        auto* outline = m_zone->Outline();
+        SHAPE_POLY_SET* outline = m_zone->Outline();
 
         for( int i = 0; i < finalPoints.PointCount(); ++i )
             outline->Append( finalPoints.CPoint( i ) );
@@ -331,10 +331,12 @@ void ZONE_CREATE_HELPER::OnComplete( const POLYGON_GEOM_MANAGER& aMgr )
         if( aMgr.GetLeaderMode() == POLYGON_GEOM_MANAGER::LEADER_MODE::DEG45 )
         {
             const SHAPE_LINE_CHAIN leaderPts = aMgr.GetLeaderLinePoints();
+
             for( int i = 1; i < leaderPts.PointCount(); i++ )
                 outline->Append( leaderPts.CPoint( i ) );
 
             const SHAPE_LINE_CHAIN loopPts = aMgr.GetLoopLinePoints();
+
             for( int i = 1; i < loopPts.PointCount() - 1; i++ )
                 outline->Append( loopPts.CPoint( i ) );
         }

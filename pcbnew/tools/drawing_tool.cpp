@@ -3110,6 +3110,7 @@ std::unique_ptr<PCB_SHAPE> DRAWING_TOOL::drawOneBezier( const TOOL_EVENT&   aToo
     return bezier;
 };
 
+
 bool DRAWING_TOOL::getSourceZoneForAction( ZONE_MODE aMode, ZONE** aZone )
 {
     bool clearSelection = false;
@@ -3143,6 +3144,7 @@ bool DRAWING_TOOL::getSourceZoneForAction( ZONE_MODE aMode, ZONE** aZone )
 
     return true;
 }
+
 
 int DRAWING_TOOL::DrawZone( const TOOL_EVENT& aEvent )
 {
