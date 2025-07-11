@@ -75,6 +75,8 @@
 #include "kicad_manager_frame.h"
 
 #include "project_tree_pane.h"
+#include <widgets/kistatusbar.h>
+
 #include <kiplatform/io.h>
 #include <kiplatform/secrets.h>
 
