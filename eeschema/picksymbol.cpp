@@ -113,8 +113,9 @@ void SCH_EDIT_FRAME::SelectUnit( SCH_SYMBOL* aSymbol, int aUnit )
 
     const SCH_SHEET_PATH&        sheetPath = GetCurrentSheet();
     bool                         swapWithOther = false;
-    std::optional<SCH_REFERENCE> otherSymbolRef = FindSymbolByRefAndUnit(
-            *aSymbol->Schematic(), aSymbol->GetRef( &sheetPath, false ), aUnit );
+    std::optional<SCH_REFERENCE> otherSymbolRef = FindSymbolByRefAndUnit( *aSymbol->Schematic(),
+                                                                          aSymbol->GetRef( &sheetPath, false ),
+                                                                          aUnit );
 
     if( otherSymbolRef )
     {
@@ -125,14 +126,12 @@ void SCH_EDIT_FRAME::SelectUnit( SCH_SYMBOL* aSymbol, int aUnit )
         if( otherSheetName.IsEmpty() )
             otherSheetName = _( "Root" );
 
-        const wxString msg =
-                wxString::Format( _( "Symbol unit '%s' is already placed (on sheet '%s')" ),
-                                  targetUnitName, otherSheetName );
+        const wxString msg = wxString::Format( _( "Symbol unit '%s' is already placed (on sheet '%s')" ),
+                                               targetUnitName, otherSheetName );
 
         KIDIALOG dlg( this, msg, _( "Unit Already Placed" ), wxYES_NO | wxCANCEL | wxICON_WARNING );
-        dlg.SetYesNoLabels(
-                wxString::Format( _( "&Swap '%s' and '%s'" ), targetUnitName, currUnitName ),
-                wxString::Format( _( "&Duplicate '%s'" ), targetUnitName ) );
+        dlg.SetYesNoLabels( wxString::Format( _( "&Swap '%s' and '%s'" ), targetUnitName, currUnitName ),
+                            wxString::Format( _( "&Duplicate '%s'" ), targetUnitName ) );
         dlg.DoNotShowCheckbox( __FILE__, __LINE__ );
 
         int ret = dlg.ShowModal();
