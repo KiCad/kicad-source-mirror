@@ -308,6 +308,13 @@ void SCH_GROUP::MirrorVertically( int aCenter )
 }
 
 
+void SCH_GROUP::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS& aPlotOpts,
+                      int aUnit, int aBodyStyle, const VECTOR2I& aOffset, bool aDimmed )
+{
+    // TODO: should we plot the name & border of named groups?
+}
+
+
 wxString SCH_GROUP::GetItemDescription( UNITS_PROVIDER* aUnitsProvider, bool aFull ) const
 {
     if( m_name.empty() )
