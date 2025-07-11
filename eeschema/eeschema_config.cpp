@@ -240,9 +240,6 @@ void SCH_EDIT_FRAME::saveProjectSettings()
 
 void SCH_EDIT_FRAME::SaveProjectLocalSettings()
 {
-    if( m_schematic )
-        m_schematic->RecordERCExclusions();
-
     PROJECT_LOCAL_SETTINGS& localSettings = Prj().GetLocalSettings();
     SCH_SELECTION_TOOL*     selTool = GetToolManager()->GetTool<SCH_SELECTION_TOOL>();
 
