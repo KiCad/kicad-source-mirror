@@ -282,49 +282,52 @@ void PANEL_COLOR_SETTINGS::createSwatch( int aLayer, const wxString& aName )
 
 void PANEL_COLOR_SETTINGS::ShowColorContextMenu( wxMouseEvent& aEvent, int aLayer )
 {
-    auto selected =
-            static_cast<COLOR_SETTINGS*>( m_cbTheme->GetClientData( m_cbTheme->GetSelection() ) );
+    int themeSel = m_cbTheme->GetSelection();
 
-    wxCHECK_RET( selected, wxT( "Invalid color theme selected" ) );
+    if( themeSel >= 0 )
+    {
+        COLOR_SETTINGS* selected = static_cast<COLOR_SETTINGS*>( m_cbTheme->GetClientData( themeSel ) );
 
-    COLOR4D current  = m_currentSettings->GetColor( aLayer );
-    COLOR4D saved    = selected->GetColor( aLayer );
-    bool    readOnly = m_currentSettings->IsReadOnly();
+        wxCHECK_RET( selected, wxT( "Invalid color theme selected" ) );
 
-    wxMenu menu;
+        COLOR4D current  = m_currentSettings->GetColor( aLayer );
+        COLOR4D saved    = selected->GetColor( aLayer );
+        bool    readOnly = m_currentSettings->IsReadOnly();
 
-    KIUI::AddMenuItem( &menu, ID_COPY, _( "Copy color" ), KiBitmap( BITMAPS::copy ) );
+        wxMenu menu;
 
-    if( !readOnly && m_copied != COLOR4D::UNSPECIFIED )
-        KIUI::AddMenuItem( &menu, ID_PASTE, _( "Paste color" ), KiBitmap( BITMAPS::paste ) );
+        KIUI::AddMenuItem( &menu, ID_COPY, _( "Copy color" ), KiBitmap( BITMAPS::copy ) );
 
-    if( !readOnly && current != saved )
-        KIUI::AddMenuItem( &menu, ID_REVERT, _( "Revert to saved color" ),
-                           KiBitmap( BITMAPS::undo ) );
+        if( !readOnly && m_copied != COLOR4D::UNSPECIFIED )
+            KIUI::AddMenuItem( &menu, ID_PASTE, _( "Paste color" ), KiBitmap( BITMAPS::paste ) );
 
-    menu.Bind( wxEVT_COMMAND_MENU_SELECTED,
-            [&]( wxCommandEvent& aCmd )
-            {
-                switch( aCmd.GetId() )
+        if( !readOnly && current != saved )
+            KIUI::AddMenuItem( &menu, ID_REVERT, _( "Revert to saved color" ), KiBitmap( BITMAPS::undo ) );
+
+        menu.Bind( wxEVT_COMMAND_MENU_SELECTED,
+                [&]( wxCommandEvent& aCmd )
                 {
-                case ID_COPY:
-                    m_copied = current;
-                    break;
+                    switch( aCmd.GetId() )
+                    {
+                    case ID_COPY:
+                        m_copied = current;
+                        break;
 
-                case ID_PASTE:
-                    updateColor( aLayer, m_copied );
-                    break;
+                    case ID_PASTE:
+                        updateColor( aLayer, m_copied );
+                        break;
 
-                case ID_REVERT:
-                    updateColor( aLayer, saved );
-                    break;
+                    case ID_REVERT:
+                        updateColor( aLayer, saved );
+                        break;
 
-                default:
-                    aCmd.Skip();
-                }
-            } );
+                    default:
+                        aCmd.Skip();
+                    }
+                } );
 
-    PopupMenu( &menu );
+        PopupMenu( &menu );
+    }
 }
 
 
