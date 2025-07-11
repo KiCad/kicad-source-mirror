@@ -177,7 +177,7 @@ CLI::PCB_EXPORT_3D_COMMAND::PCB_EXPORT_3D_COMMAND( const std::string&        aNa
                                       "wildcard" ) ) );
     }
 
-    if( m_format == JOB_EXPORT_PCB_3D::FORMAT::STEP )
+    if( m_format == JOB_EXPORT_PCB_3D::FORMAT::STEP || m_format == JOB_EXPORT_PCB_3D::FORMAT::STEPZ )
     {
         m_argParser.add_argument( ARG_NO_OPTIMIZE_STEP )
                 .help( UTF8STDSTR( _( "Do not optimize STEP file (enables writing parametric "
@@ -238,7 +238,7 @@ int CLI::PCB_EXPORT_3D_COMMAND::doPerform( KIWAY& aKiway )
 
     }
 
-    if( m_format == JOB_EXPORT_PCB_3D::FORMAT::STEP )
+    if( m_format == JOB_EXPORT_PCB_3D::FORMAT::STEP || m_format == JOB_EXPORT_PCB_3D::FORMAT::STEPZ )
     {
         params.m_OptimizeStep = !m_argParser.get<bool>( ARG_NO_OPTIMIZE_STEP );
     }
