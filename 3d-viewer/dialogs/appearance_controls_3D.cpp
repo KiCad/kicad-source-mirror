@@ -495,10 +495,27 @@ void APPEARANCE_CONTROLS_3D::onColorSwatchChanged( COLOR_SWATCH* aSwatch )
 
     colors[ layer ] = newColor;
 
+    // The internals of the 3D viewer only supports a single color for copper, which must
+    // be applied to all copper layers.
+    COLOR_SWATCH* otherSwatch = nullptr;
+
     if( layer == LAYER_3D_COPPER_TOP )
+    {
         colors[ LAYER_3D_COPPER_BOTTOM ] = newColor;
+        otherSwatch = m_layerSettingsMap[LAYER_3D_COPPER_BOTTOM]->m_Ctl_color;
+    }
     else if( layer == LAYER_3D_COPPER_BOTTOM )
+    {
         colors[ LAYER_3D_COPPER_TOP ] = newColor;
+        otherSwatch = m_layerSettingsMap[LAYER_3D_COPPER_TOP]->m_Ctl_color;
+    }
+
+    if( otherSwatch )
+    {
+        // Don't send an event, because that will cause an event loop
+        otherSwatch->SetSwatchColor( newColor, false );
+    }
+
 
     m_frame->GetAdapter().SetLayerColors( colors );
 
