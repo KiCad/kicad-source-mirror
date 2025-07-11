@@ -1114,8 +1114,9 @@ void DIALOG_LIB_SYMBOL_PROPERTIES::OnBtnCreateJumperPinGroup( wxCommandEvent& aE
 void DIALOG_LIB_SYMBOL_PROPERTIES::OnBtnRemoveJumperPinGroup( wxCommandEvent& aEvent )
 {
     wxArrayInt selections;
-    int n = m_listJumperPinGroups->GetSelections( selections );
-    wxCHECK( n > 0, /* void */ );
+
+    if( m_listJumperPinGroups->GetSelections( selections ) <= 0 )
+        return;
 
     m_listJumperPinGroups->Freeze();
     m_listAvailablePins->Freeze();
