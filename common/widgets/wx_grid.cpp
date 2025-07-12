@@ -401,6 +401,11 @@ void WX_GRID::onCellEditorHidden( wxGridEvent& aEvent )
         CallAfter(
                 [this, row, col, isNullable, unitsProvider]()
                 {
+                    // Careful; if called from CommitPendingChange() in a delete operation, the cell may
+                    // no longer exist.
+                    if( row >= GetNumberRows() || col >= GetNumberCols() )
+                        return;
+
                     wxString stringValue = GetCellValue( row, col );
                     bool     processedOk = true;
 
