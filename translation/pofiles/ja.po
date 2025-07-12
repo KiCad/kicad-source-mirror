@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-07 17:42+0300\n"
-"PO-Revision-Date: 2025-07-10 12:13+0000\n"
+"PO-Revision-Date: 2025-07-13 08:01+0000\n"
 "Last-Translator: co8 j <co8@nifty.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -20610,14 +20610,12 @@ msgid "Cell Height"
 msgstr "セルの高さ"
 
 #: eeschema/sch_tablecell.cpp:234 pcbnew/pcb_tablecell.cpp:250
-#, fuzzy
 msgid "Column Width"
-msgstr "セルの幅"
+msgstr "列の幅"
 
 #: eeschema/sch_tablecell.cpp:239 pcbnew/pcb_tablecell.cpp:255
-#, fuzzy
 msgid "Row Height"
-msgstr "ボックスの高さ"
+msgstr "行の高さ"
 
 #: eeschema/sch_text.cpp:375
 #, c-format
@@ -27518,9 +27516,8 @@ msgstr ""
 
 #: kicad/cli/command_sch_export_plot.cpp:114
 #: kicad/cli/command_sch_export_plot.cpp:120
-#, fuzzy
 msgid "Deprecated.  Has no effect."
-msgstr "%s 推奨されないバージョン。"
+msgstr "非推奨です。何も作用しません。"
 
 #: kicad/cli/command_sch_export_pythonbom.cpp:36
 msgid ""
@@ -27637,9 +27634,8 @@ msgid "Ignore non-zero exit code"
 msgstr "ゼロ以外の終了コードを無視する"
 
 #: kicad/dialogs/dialog_executecommand_job_settings_base.cpp:92
-#, fuzzy
 msgid "Available text variables:"
-msgstr "利用可能な材料:"
+msgstr "利用可能なテキスト:"
 
 #: kicad/dialogs/dialog_executecommand_job_settings_base.h:58
 msgid "Execute Command Job Settings"
@@ -28858,7 +28854,7 @@ msgstr "お待ちください"
 
 #: kicad/project_tree_pane.cpp:1630
 msgid "Waiting for Git operations to finish..."
-msgstr ""
+msgstr "Git の操作が完了するのを待っています..."
 
 #: kicad/project_tree_pane.cpp:1704
 msgid "The selected directory is already a Git project."
@@ -28878,7 +28874,6 @@ msgstr "デフォルトのリモートの設定に失敗しました。"
 
 #: kicad/project_tree_pane.cpp:1792 kicad/project_tree_pane.cpp:1824
 #: kicad/project_tree_pane.cpp:1847
-#, fuzzy
 msgid "Fetch Remote"
 msgstr "リモートをフェッチ"
 
@@ -39280,9 +39275,8 @@ msgid "End layer:"
 msgstr "終了レイヤー:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:387
-#, fuzzy
 msgid "Protection features:"
-msgstr "断面積:"
+msgstr "保護機能:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:394
 msgid ""
@@ -39504,9 +39498,8 @@ msgid "Rotation..."
 msgstr "回転..."
 
 #: pcbnew/dialogs/panel_assign_component_classes.cpp:375
-#, fuzzy
 msgid "Footprint Field..."
-msgstr "フットプリント フィールドを編集..."
+msgstr "フットプリント フィールド..."
 
 #: pcbnew/dialogs/panel_assign_component_classes.cpp:376
 msgid "Sheet Name..."
@@ -39520,14 +39513,12 @@ msgstr "シート名..."
 #: pcbnew/dialogs/panel_assign_component_classes.cpp:756
 #: pcbnew/dialogs/panel_assign_component_classes.cpp:773
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:360
-#, fuzzy
 msgid "Footprint Field:"
 msgstr "フットプリント フィールド:"
 
 #: pcbnew/dialogs/panel_assign_component_classes.cpp:618
-#, fuzzy
 msgid "Import references from selection"
-msgstr "選択対象から配線を作成"
+msgstr "選択対象からリファレンスをインポート"
 
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:19
 msgid "Assign component class per sheet"
@@ -39547,9 +39538,8 @@ msgid "Component Class:"
 msgstr "コンポーネントクラス:"
 
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:95
-#, fuzzy
 msgid "Highlight matching footprints"
-msgstr ":%i 個の該当するフットプリント"
+msgstr "ハイライトに該当するフットプリント"
 
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:100
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:183
@@ -39559,7 +39549,6 @@ msgstr ":%i 個の該当するフットプリント"
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:389
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:432
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:475
-#, fuzzy
 msgid "Delete row"
 msgstr "行を削除"
 
@@ -39574,18 +39563,16 @@ msgid "Match Any"
 msgstr "一致するレイヤー"
 
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:178
-#, fuzzy
 msgid "Import references"
-msgstr "シンボルのリファレンス"
+msgstr "リファレンスのインポート"
 
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:306
 msgid "Footprint:"
 msgstr "フットプリント:"
 
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:319
-#, fuzzy
 msgid "Show library"
-msgstr "ライブラリーを参照"
+msgstr "ライブラリーを表示"
 
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:374
 msgid "Field Value:"
@@ -39601,7 +39588,6 @@ msgid "Layer name %s already in use."
 msgstr "レイヤー名 '%s' はすでに使われています。"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:37
-#, fuzzy
 msgid "Layer Names"
 msgstr "レイヤー名"
 
@@ -39771,7 +39757,6 @@ msgstr "選択状態を切り替える"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:191
 #: pcbnew/dialogs/panel_edit_options_base.cpp:265
-#, fuzzy
 msgid "Highlight net (for pads/tracks)"
 msgstr "ネットをハイライトします(パッドまたはトラック)"
 
@@ -39781,10 +39766,9 @@ msgstr "Shift+Cmd:"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:255
 msgid "Cmd:"
-msgstr ""
+msgstr "Cmd:"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:272
-#, fuzzy
 msgid "Option:"
 msgstr "オプション:"
 
@@ -40252,7 +40236,7 @@ msgstr ""
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:300
 msgid "Silk"
-msgstr ""
+msgstr "シルク"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:328
 msgid "Minimum item clearance:"
@@ -41931,9 +41915,8 @@ msgstr "遅延時間 [s]"
 
 #: pcbnew/dialogs/panel_setup_time_domain_parameters_base.cpp:50
 #: pcbnew/dialogs/panel_setup_time_domain_parameters_base.cpp:111
-#, fuzzy
 msgid "Profile Name"
-msgstr "ファイル名"
+msgstr "プロファイル名"
 
 #: pcbnew/dialogs/panel_setup_time_domain_parameters_base.cpp:92
 #, fuzzy
