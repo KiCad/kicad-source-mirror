@@ -14094,7 +14094,7 @@ msgstr "Алтернативне доделе пинова нису доступ
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:287
 msgid "Exit sync pins mode"
-msgstr "Режим синхронизације излазних пинова"
+msgstr "Изађи из режима синхронизованих пинова"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:302
 msgid ""
@@ -14102,15 +14102,15 @@ msgid ""
 "Similar pins will be edited regardless of this option."
 msgstr ""
 "Режим синхронизованих пинова је омогућен.\n"
-"Слични пинови ће бити уређени без обзира на ову опцију"
+"Слични пинови ће бити уређени без обзира на ову опцију."
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:307
 msgid "If checked, this pin will exist in all units."
-msgstr ""
+msgstr "Ако је штиклирано, овај пин ће постојати у свим јединицама."
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:311
 msgid "This symbol only has one unit. This control has no effect."
-msgstr ""
+msgstr "Овај симбол има само једну јединицу. Овај параметар нема ефекта."
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:335
 #, fuzzy
@@ -14124,6 +14124,9 @@ msgid ""
 "in the schematic.\n"
 "Do you wish to continue?"
 msgstr ""
+"Овај пин није на %d mils координатној мрежи, што ће отежати повезивање на "
+"шеми.\n"
+"Желите ли да наставите?"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:452
 #, fuzzy
@@ -14132,11 +14135,13 @@ msgstr "Прикажи"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:454
 msgid "Synchronized Pins Mode.  New pin will be added to all units."
-msgstr ""
+msgstr "Режим синхронизованих пинова. Нови пин ће бити додат свим јединицама."
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:456
 msgid "Synchronized Pins Mode.  Matching pins in other units will be updated."
 msgstr ""
+"Режим синхронизованих пинова. Одговарајући пинови у другим јединицама ће "
+"бити ажурирани."
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:44
 #, fuzzy
@@ -14150,7 +14155,7 @@ msgstr "Име:"
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:53
 msgid "Pin number: 1 to 4 ASCII letters and/or digits"
-msgstr ""
+msgstr "Број пина: 1 до 4 ASCII слова и/или цифри"
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:60
 #, fuzzy
