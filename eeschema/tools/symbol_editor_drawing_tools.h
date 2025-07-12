@@ -86,6 +86,7 @@ private:
 
     ///< Re-entrancy guards
     bool              m_inDrawShape;
+    bool              m_inPlaceAnchor;
     bool              m_inTwoClickPlace;
 
 private:

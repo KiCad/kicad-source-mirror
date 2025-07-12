@@ -57,6 +57,7 @@ SYMBOL_EDITOR_DRAWING_TOOLS::SYMBOL_EDITOR_DRAWING_TOOLS() :
         m_drawSpecificBodyStyle( true ),
         m_drawSpecificUnit( false ),
         m_inDrawShape( false ),
+        m_inPlaceAnchor( false ),
         m_inTwoClickPlace( false )
 {
 }
@@ -608,6 +609,11 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::doDrawShape( const TOOL_EVENT& aEvent, std::opt
 
 int SYMBOL_EDITOR_DRAWING_TOOLS::PlaceAnchor( const TOOL_EVENT& aEvent )
 {
+    if( m_inPlaceAnchor )
+        return 0;
+
+    REENTRANCY_GUARD guard( &m_inPlaceAnchor );
+
     m_frame->PushTool( aEvent );
 
     auto setCursor =
