@@ -1410,7 +1410,8 @@ int ERC_TESTER::TestLibSymbolIssues()
             SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item );
             LIB_SYMBOL* libSymbolInSchematic = symbol->GetLibSymbolRef().get();
 
-            wxCHECK2( libSymbolInSchematic, continue );
+            if( !libSymbolInSchematic )
+                continue;
 
             wxString             libName = symbol->GetLibId().GetLibNickname();
             const LIB_TABLE_ROW* libTableRow = libTable->FindRow( libName, true );
