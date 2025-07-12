@@ -160,7 +160,8 @@ static std::shared_ptr<CONDITIONAL_MENU> makeShapeModificationMenu( TOOL_INTERAC
     static const std::vector<KICAD_T> lineExtendTypes = { PCB_SHAPE_LOCATE_SEGMENT_T };
 
     static const std::vector<KICAD_T> polygonBooleanTypes = { PCB_SHAPE_LOCATE_RECT_T,
-                                                              PCB_SHAPE_LOCATE_POLY_T };
+                                                              PCB_SHAPE_LOCATE_POLY_T,
+                                                              PCB_SHAPE_LOCATE_CIRCLE_T };
 
     static const std::vector<KICAD_T> polygonSimplifyTypes = { PCB_SHAPE_LOCATE_POLY_T,
                                                                PCB_ZONE_T };
@@ -1765,7 +1766,13 @@ int EDIT_TOOL::BooleanPolygons( const TOOL_EVENT& aEvent )
                 {
                     BOARD_ITEM* item = aCollector[i];
 
-                    if( !item->IsType( { PCB_SHAPE_LOCATE_POLY_T, PCB_SHAPE_LOCATE_RECT_T } ) )
+                    static const std::vector<KICAD_T> polygonBooleanTypes = {
+                        PCB_SHAPE_LOCATE_POLY_T,
+                        PCB_SHAPE_LOCATE_RECT_T,
+                        PCB_SHAPE_LOCATE_CIRCLE_T,
+                    };
+
+                    if( !item->IsType( polygonBooleanTypes ) )
                         aCollector.Remove( item );
                 }
             },
