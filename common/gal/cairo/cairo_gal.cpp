@@ -1210,7 +1210,7 @@ void CAIRO_GAL_BASE::blitCursor( wxMemoryDC& clientDC )
 
 void CAIRO_GAL_BASE::drawPoly( const std::deque<VECTOR2D>& aPointList )
 {
-    if( aLineChain.PointCount() <= 1 )
+    if( aPointList.size() <= 1 )
         return;
 
     // Iterate over the point list and draw the segments
@@ -1236,7 +1236,7 @@ void CAIRO_GAL_BASE::drawPoly( const std::deque<VECTOR2D>& aPointList )
 
 void CAIRO_GAL_BASE::drawPoly( const std::vector<VECTOR2D>& aPointList )
 {
-    if( aLineChain.PointCount() <= 1 )
+    if( aPointList.size() <= 1 )
         return;
 
     // Iterate over the point list and draw the segments
@@ -1262,7 +1262,7 @@ void CAIRO_GAL_BASE::drawPoly( const std::vector<VECTOR2D>& aPointList )
 
 void CAIRO_GAL_BASE::drawPoly( const VECTOR2D aPointList[], int aListSize )
 {
-    if( aLineChain.PointCount() <= 1 )
+    if( aListSize <= 1 )
         return;
 
     // Iterate over the point list and draw the segments
