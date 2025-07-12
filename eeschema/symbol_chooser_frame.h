@@ -63,6 +63,8 @@ public:
      */
     void SetFilter( std::function<bool( LIB_TREE_NODE& aNode )>* aFilter );
 
+    EDA_DRAW_PANEL_GAL* GetPreviewCanvas() const;
+
 private:
     void OnPaint( wxPaintEvent& aEvent );
     void OnOK( wxCommandEvent& aEvent );

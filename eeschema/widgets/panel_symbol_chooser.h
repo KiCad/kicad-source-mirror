@@ -102,6 +102,8 @@ public:
         return m_field_edits;
     }
 
+    void ShutdownCanvases();
+
 protected:
     static constexpr int DBLCLICK_DELAY = 100; // milliseconds
 
