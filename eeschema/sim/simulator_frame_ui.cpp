@@ -2407,7 +2407,10 @@ SIM_TRACE_TYPE SIMULATOR_FRAME_UI::getXAxisType( SIM_TYPE aType ) const
     case ST_DC:    return SPT_SWEEP;
     case ST_TRAN:  return SPT_TIME;
     case ST_NOISE: return SPT_LIN_FREQUENCY;
-    default:       wxFAIL_MSG( wxS( "Unhandled simulation type" ) ); return SPT_UNKNOWN;
+
+    default:
+        wxFAIL_MSG( wxString::Format( wxS( "Unhandled simulation type: %d" ), (int) aType ) );
+        return SPT_UNKNOWN;
     }
 }
 
