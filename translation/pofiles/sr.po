@@ -14155,7 +14155,7 @@ msgstr "Име:"
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:53
 msgid "Pin number: 1 to 4 ASCII letters and/or digits"
-msgstr "Број пина: 1 до 4 ASCII слова и/или цифри"
+msgstr "Број пина: 1 до 4 ASCII слова и/или цифара"
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:60
 #, fuzzy
@@ -14254,6 +14254,8 @@ msgid ""
 "Do you want to use a path relative to\n"
 "'%s'?"
 msgstr ""
+"Желите ли да користите релативну путању до\n"
+"\"%s\"?"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:272
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:244
