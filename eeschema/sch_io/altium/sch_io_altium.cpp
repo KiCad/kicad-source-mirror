@@ -505,35 +505,6 @@ SCH_SHEET* SCH_IO_ALTIUM::LoadSchematicFile( const wxString& aFileName, SCHEMATI
 
     wxCHECK_MSG( libTable, nullptr, "Could not load symbol lib table." );
 
-    m_pi.reset( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_KICAD ) );
-
-    /// @note No check is being done here to see if the existing symbol library exists so this
-    ///       will overwrite the existing one.
-    if( !libTable->HasLibrary( getLibName() ) )
-    {
-        // Create a new empty symbol library.
-        m_pi->CreateLibrary( getLibFileName().GetFullPath() );
-        wxString libTableUri = "${KIPRJMOD}/" + getLibFileName().GetFullName();
-
-        // Add the new library to the project symbol library table.
-        libTable->InsertRow( new SYMBOL_LIB_TABLE_ROW( getLibName(), libTableUri,
-                                                       wxString( "KiCad" ) ) );
-
-        // Save project symbol library table.
-        wxFileName fn( m_schematic->Prj().GetProjectPath(),
-                       SYMBOL_LIB_TABLE::GetSymbolLibTableFileName() );
-
-        // So output formatter goes out of scope and closes the file before reloading.
-        {
-            FILE_OUTPUTFORMATTER formatter( fn.GetFullPath() );
-            libTable->Format( &formatter, 0 );
-        }
-
-        // Reload the symbol library table.
-        m_schematic->Prj().SetElem( PROJECT::ELEM::SYMBOL_LIB_TABLE, nullptr );
-        PROJECT_SCH::SchSymbolLibTable( &m_schematic->Prj() );
-    }
-
     if( aFileName.empty() )
         LoadSchematicProject( aSchematic, aProperties );
     else
@@ -546,8 +517,6 @@ SCH_SHEET* SCH_IO_ALTIUM::LoadSchematicFile( const wxString& aFileName, SCHEMATI
     }
 
     m_errorMessages.clear();
-
-    m_pi->SaveLibrary( getLibFileName().GetFullPath() );
 
     SCH_SCREENS allSheets( m_rootSheet );
     allSheets.UpdateSymbolLinks(); // Update all symbol library links for all sheets.
