@@ -1563,6 +1563,10 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE* aZone, PCB_LAYER_ID aLa
         if( checkForCancel( m_progressReporter ) )
             return;
 
+        // Only check zones whose bounding box overlaps the max clearance
+        if( !otherZone->GetBoundingBox().Intersects( zone_boundingbox ) )
+            continue;
+
         // Negative clearance permits zones to short
         if( evalRulesForItems( CLEARANCE_CONSTRAINT, aZone, otherZone, aLayer ) < 0 )
             continue;
@@ -1585,6 +1589,10 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE* aZone, PCB_LAYER_ID aLa
         {
             if( checkForCancel( m_progressReporter ) )
                 return;
+
+            // Only check zones whose bounding box overlaps
+            if( !otherZone->GetBoundingBox().Intersects( zone_boundingbox ) )
+                continue;
 
             if( otherZone->GetIsRuleArea() )
             {
