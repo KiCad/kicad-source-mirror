@@ -523,6 +523,19 @@ LIB_ID PANEL_SYMBOL_CHOOSER::GetSelectedLibId( int* aUnit ) const
 }
 
 
+void PANEL_SYMBOL_CHOOSER::ShutdownCanvases()
+{
+    m_symbol_preview->GetCanvas()->SetEvtHandlerEnabled( false );
+    m_symbol_preview->GetCanvas()->StopDrawing();
+
+    if( m_fp_preview )
+    {
+        m_fp_preview->GetPreviewPanel()->GetCanvas()->SetEvtHandlerEnabled( false );
+        m_fp_preview->GetPreviewPanel()->GetCanvas()->StopDrawing();
+    }
+}
+
+
 void PANEL_SYMBOL_CHOOSER::onCloseTimer( wxTimerEvent& aEvent )
 {
     // Hack because of eaten MouseUp event. See PANEL_SYMBOL_CHOOSER::onSymbolChosen

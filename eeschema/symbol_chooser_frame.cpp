@@ -140,8 +140,7 @@ bool SYMBOL_CHOOSER_FRAME::ShowModal( wxString* aSymbol, wxWindow* aParent )
 
 void SYMBOL_CHOOSER_FRAME::doCloseWindow()
 {
-    GetCanvas()->SetEvtHandlerEnabled( false );
-    GetCanvas()->StopDrawing();
+    m_chooserPanel->ShutdownCanvases();
 
     // Only dismiss a modal frame once, so that the return values set by
     // the prior DismissModal() are not bashed for ShowModal().
