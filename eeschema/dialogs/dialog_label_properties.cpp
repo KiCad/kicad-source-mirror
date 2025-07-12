@@ -421,6 +421,14 @@ void DIALOG_LABEL_PROPERTIES::OnCBValueCharHook( wxKeyEvent& aEvent )
     // and we only want to accept the entered string.
     if( aEvent.GetKeyCode() == WXK_RETURN )
         wxPostEvent( this, wxCommandEvent( wxEVT_COMMAND_BUTTON_CLICKED, wxID_OK ) );
+    else if( aEvent.GetKeyCode() == WXK_SPACE )
+    {
+        // our FILTER_COMBOBOX uses the space as special command, not wanted here,
+        // to open the dropdown list of labels.
+        // So just add the space char to the current text, at current insertion point,
+        // and do not skip this event
+        m_activeTextEntry->WriteText( wxT(" " ) );
+    }
     else
         aEvent.Skip();
 }
