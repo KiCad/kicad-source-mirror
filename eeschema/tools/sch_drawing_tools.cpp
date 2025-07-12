@@ -818,8 +818,8 @@ int SCH_DRAWING_TOOLS::ImportSheet( const TOOL_EVENT& aEvent )
 
                 if( placed )
                 {
-                    commit.Push( placingDesignBlock ? _( "Add design block" )
-                                                    : _( "Import Schematic Sheet Content..." ) );
+                    commit.Push( placingDesignBlock ? _( "Add Design Block" )
+                                                    : _( "Import Schematic Sheet Content" ) );
                 }
                 else
                 {
