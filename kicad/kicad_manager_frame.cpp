@@ -35,7 +35,6 @@
 #include <build_version.h>
 #include <confirm.h>
 #include <dialogs/panel_kicad_launcher.h>
-#include <dialogs/dialog_update_check_prompt.h>
 #include <dialogs/panel_jobset.h>
 #include <dialogs/dialog_edit_cfg.h>
 #include <eda_base_frame.h>
@@ -1217,14 +1216,6 @@ void KICAD_MANAGER_FRAME::OnIdle( wxIdleEvent& aEvent )
     Prj().GetLocalSettings().ClearFileState();
 
     KICAD_SETTINGS* settings = kicadSettings();
-
-    if( !Pgm().GetCommonSettings()->m_DoNotShowAgain.update_check_prompt )
-    {
-        auto prompt = new DIALOG_UPDATE_CHECK_PROMPT( this );
-        prompt->ShowModal();
-
-        Pgm().GetCommonSettings()->m_DoNotShowAgain.update_check_prompt = true;
-    }
 
     if( KIPLATFORM::POLICY::GetPolicyBool( POLICY_KEY_PCM ) != KIPLATFORM::POLICY::PBOOL::DISABLED
         && settings->m_PcmUpdateCheck )

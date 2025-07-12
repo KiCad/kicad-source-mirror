@@ -471,8 +471,7 @@ set( COMMON_DLG_SRCS
     dialogs/panel_embedded_files.cpp
     dialogs/panel_embedded_files_base.cpp
     dialogs/panel_base_display_options.cpp
-    dialogs/panel_global_lib_table_config.cpp
-    dialogs/panel_global_lib_table_config_base.cpp
+    dialogs/panel_base_display_options.cpp
     dialogs/panel_hotkeys_editor.cpp
     dialogs/panel_image_editor.cpp
     dialogs/panel_image_editor_base.cpp

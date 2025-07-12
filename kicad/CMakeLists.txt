@@ -23,8 +23,6 @@ set( KICAD_SRCS
     dialogs/dialog_copyfiles_job_settings_base.cpp
     dialogs/dialog_executecommand_job_settings.cpp
     dialogs/dialog_executecommand_job_settings_base.cpp
-    dialogs/dialog_update_check_prompt_base.cpp
-    dialogs/dialog_update_check_prompt.cpp
     dialogs/dialog_update_notice_base.cpp
     dialogs/dialog_update_notice.cpp
     dialogs/dialog_template_selector_base.cpp
