@@ -454,18 +454,26 @@ void POLYGON_BOOLEAN_ROUTINE::ProcessShape( PCB_SHAPE& aPcbShape )
     }
     case SHAPE_T::RECTANGLE:
     {
-        SHAPE_POLY_SET rect_poly;
+        poly = std::make_unique<SHAPE_POLY_SET>();
 
         const std::vector<VECTOR2I> rect_pts = aPcbShape.GetRectCorners();
 
-        rect_poly.NewOutline();
+        poly->NewOutline();
 
         for( const VECTOR2I& pt : rect_pts )
         {
-            rect_poly.Append( pt );
+            poly->Append( pt );
         }
+        break;
+    }
+    case SHAPE_T::CIRCLE:
+    {
+        poly = std::make_unique<SHAPE_POLY_SET>();
+        const SHAPE_ARC arc{ aPcbShape.GetCenter(), aPcbShape.GetCenter() + VECTOR2I{ aPcbShape.GetRadius(), 0 },
+                             FULL_CIRCLE, 0 };
 
-        poly = std::make_unique<SHAPE_POLY_SET>( std::move( rect_poly ) );
+        poly->NewOutline();
+        poly->Append( arc );
         break;
     }
     default:
