@@ -753,10 +753,14 @@ int SCH_DRAWING_TOOLS::ImportSheet( const TOOL_EVENT& aEvent )
                 cursorPos = grid.Align( controls->GetMousePosition(), GRID_HELPER_GRIDS::GRID_CONNECTABLE );
 
                 if( placed )
-                    commit.Push( placingDesignBlock ? _( "Add design block" )
-                                                    : _( "Import Schematic Sheet Content..." ) );
+                {
+                    commit.Push( placingDesignBlock ? _( "Add Design Block" )
+                                                    : _( "Import Schematic Sheet Content" ) );
+                }
                 else
+                {
                     commit.Revert();
+                }
 
                 m_frame->UpdateHierarchyNavigator();
 
