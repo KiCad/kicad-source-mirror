@@ -604,11 +604,10 @@ PANEL_COMPONENT_CLASS_CONDITION_REFERENCE::PANEL_COMPONENT_CLASS_CONDITION_REFER
 
 void PANEL_COMPONENT_CLASS_CONDITION_REFERENCE::OnDeleteConditionClick( wxCommandEvent& event )
 {
-    m_panelParent->RemoveCondition( this );
-
     Disconnect( wxEVT_MENU,
                 wxCommandEventHandler( PANEL_COMPONENT_CLASS_CONDITION_REFERENCE::onMenu ), nullptr,
                 this );
+    m_panelParent->RemoveCondition( this );
 }
 
 
