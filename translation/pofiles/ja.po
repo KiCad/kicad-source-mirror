@@ -28854,7 +28854,7 @@ msgstr "お待ちください"
 
 #: kicad/project_tree_pane.cpp:1630
 msgid "Waiting for Git operations to finish..."
-msgstr "Git の操作が完了するのを待っています..."
+msgstr "Git の操作完了を待っています..."
 
 #: kicad/project_tree_pane.cpp:1704
 msgid "The selected directory is already a Git project."
