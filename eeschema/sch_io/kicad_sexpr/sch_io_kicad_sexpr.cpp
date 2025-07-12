@@ -524,7 +524,6 @@ void SCH_IO_KICAD_SEXPR::Format( SCH_SELECTION* aSelection, SCH_SHEET_PATH* aSel
     m_schematic = &aSchematic;
     m_out = aFormatter;
 
-    size_t                          i;
     std::map<wxString, LIB_SYMBOL*> libSymbols;
     SCH_SCREEN*                     screen = aSelection->GetScreen();
     std::set<SCH_TABLE*>            promotedTables;

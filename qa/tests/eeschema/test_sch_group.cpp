@@ -55,7 +55,7 @@ public:
 
     void CreateTestSchematic()
     {
-        m_schematic.release();
+        m_schematic.reset();
 
         m_manager.LoadProject( "" );
         m_schematic = std::make_unique<SCHEMATIC>( &m_manager.Prj() );
