@@ -1210,7 +1210,8 @@ void CAIRO_GAL_BASE::blitCursor( wxMemoryDC& clientDC )
 
 void CAIRO_GAL_BASE::drawPoly( const std::deque<VECTOR2D>& aPointList )
 {
-    wxCHECK( aPointList.size() > 1, /* void */ );
+    if( aLineChain.PointCount() <= 1 )
+        return;
 
     // Iterate over the point list and draw the segments
     std::deque<VECTOR2D>::const_iterator it = aPointList.begin();
@@ -1235,7 +1236,8 @@ void CAIRO_GAL_BASE::drawPoly( const std::deque<VECTOR2D>& aPointList )
 
 void CAIRO_GAL_BASE::drawPoly( const std::vector<VECTOR2D>& aPointList )
 {
-    wxCHECK( aPointList.size() > 1, /* void */ );
+    if( aLineChain.PointCount() <= 1 )
+        return;
 
     // Iterate over the point list and draw the segments
     std::vector<VECTOR2D>::const_iterator it = aPointList.begin();
@@ -1260,7 +1262,8 @@ void CAIRO_GAL_BASE::drawPoly( const std::vector<VECTOR2D>& aPointList )
 
 void CAIRO_GAL_BASE::drawPoly( const VECTOR2D aPointList[], int aListSize )
 {
-    wxCHECK( aListSize > 1, /* void */ );
+    if( aLineChain.PointCount() <= 1 )
+        return;
 
     // Iterate over the point list and draw the segments
     const VECTOR2D* ptr = aPointList;
@@ -1284,7 +1287,8 @@ void CAIRO_GAL_BASE::drawPoly( const VECTOR2D aPointList[], int aListSize )
 
 void CAIRO_GAL_BASE::drawPoly( const SHAPE_LINE_CHAIN& aLineChain )
 {
-    wxCHECK( aLineChain.PointCount() > 1, /* void */ );
+    if( aLineChain.PointCount() <= 1 )
+        return;
 
     syncLineWidth();
 
