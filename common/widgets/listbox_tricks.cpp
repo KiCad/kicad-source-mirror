@@ -165,9 +165,12 @@ void LISTBOX_TRICKS::listBoxPaste()
         wxTheClipboard->Close();
     }
 
+    if( lines.IsEmpty() )
+        return;
+
     wxArrayInt selections;
     m_listBox.GetSelections( selections );
-    int insertAt = selections.GetCount() > 0 ? selections.back() + 1 : m_listBox.GetCount();
+    int insertAt = selections.GetCount() > 0 ? (int) selections.back() + 1 : (int) m_listBox.GetCount();
 
     for( wxString& line : lines )
     {
