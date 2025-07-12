@@ -3698,7 +3698,6 @@ void SCH_IO_ALTIUM::ParsePowerPort( const std::map<wxString, wxString>& aPropert
     SCH_SCREEN* screen = getCurrentScreen();
     wxCHECK( screen, /* void */ );
 
-    // each symbol has its own powerSymbolIt for now
     SCH_SYMBOL* symbol = new SCH_SYMBOL();
     symbol->SetRef( &m_sheetPath, "#PWR?" );
     symbol->GetField( FIELD_T::REFERENCE )->SetVisible( false );
@@ -3708,8 +3707,6 @@ void SCH_IO_ALTIUM::ParsePowerPort( const std::map<wxString, wxString>& aPropert
 
     SCH_FIELD* valueField = symbol->GetField( FIELD_T::VALUE );
     valueField->SetVisible( elem.showNetName );
-
-    // TODO: Why do I need to set this a second time?
     valueField->SetPosition( libSymbol->GetValueField().GetPosition() );
 
     symbol->SetPosition( elem.location + m_sheetOffset );
