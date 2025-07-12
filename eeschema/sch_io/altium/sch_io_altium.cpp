@@ -1901,9 +1901,8 @@ void SCH_IO_ALTIUM::ParseLabel( const std::map<wxString, wxString>& aProperties,
     }
     else
     {
-        LIB_SYMBOL* symbol = (int) aSymbol.size() <= elem.ownerpartdisplaymode
-                                                            ? nullptr
-                                                            : aSymbol[elem.ownerpartdisplaymode];
+        LIB_SYMBOL* symbol = (int) aSymbol.size() <= elem.ownerpartdisplaymode ? nullptr
+                                                                               : aSymbol[elem.ownerpartdisplaymode];
         SCH_SYMBOL* schsym = nullptr;
 
         if( !symbol )
@@ -1913,9 +1912,8 @@ void SCH_IO_ALTIUM::ParseLabel( const std::map<wxString, wxString>& aProperties,
             if( libSymbolIt == m_libSymbols.end() )
             {
                 // TODO: e.g. can depend on Template (RECORD=39
-                m_errorMessages.emplace( wxString::Format( wxT( "Label's owner (%d) not found." ),
-                                                      elem.ownerindex ),
-                                    RPT_SEVERITY_DEBUG );
+                m_errorMessages.emplace( wxString::Format( wxT( "Label's owner (%d) not found." ), elem.ownerindex ),
+                                         RPT_SEVERITY_DEBUG );
                 return;
             }
 
@@ -1997,11 +1995,9 @@ void SCH_IO_ALTIUM::AddTextBox( const ASCH_TEXT_FRAME *aElem )
         textBox->SetFilled( false );
 
     if( aElem->ShowBorder )
-        textBox->SetStroke( STROKE_PARAMS( 0, LINE_STYLE::DEFAULT,
-                                           GetColorFromInt( aElem->BorderColor ) ) );
+        textBox->SetStroke( STROKE_PARAMS( 0, LINE_STYLE::DEFAULT, GetColorFromInt( aElem->BorderColor ) ) );
     else
-        textBox->SetStroke( STROKE_PARAMS( -1, LINE_STYLE::DEFAULT,
-                                           GetColorFromInt( aElem->BorderColor ) ) );
+        textBox->SetStroke( STROKE_PARAMS( -1, LINE_STYLE::DEFAULT, GetColorFromInt( aElem->BorderColor ) ) );
 
     switch( aElem->Alignment )
     {
@@ -2054,8 +2050,7 @@ void SCH_IO_ALTIUM::AddLibTextBox( const ASCH_TEXT_FRAME *aElem, std::vector<LIB
         if( libSymbolIt == m_libSymbols.end() )
         {
             // TODO: e.g. can depend on Template (RECORD=39
-            m_errorMessages.emplace( wxString::Format( wxT( "Label's owner (%d) not found." ),
-                                                       aElem->ownerindex ),
+            m_errorMessages.emplace( wxString::Format( wxT( "Label's owner (%d) not found." ), aElem->ownerindex ),
                                      RPT_SEVERITY_DEBUG );
             return;
         }
@@ -2091,8 +2086,7 @@ void SCH_IO_ALTIUM::AddLibTextBox( const ASCH_TEXT_FRAME *aElem, std::vector<LIB
         textBox->SetFilled( false );
 
     if( aElem->ShowBorder )
-        textBox->SetStroke( STROKE_PARAMS( 0, LINE_STYLE::DEFAULT,
-                                           GetColorFromInt( aElem->BorderColor ) ) );
+        textBox->SetStroke( STROKE_PARAMS( 0, LINE_STYLE::DEFAULT, GetColorFromInt( aElem->BorderColor ) ) );
     else
         textBox->SetStroke( STROKE_PARAMS( -1 ) );
 
@@ -2125,10 +2119,9 @@ void SCH_IO_ALTIUM::ParseBezier( const std::map<wxString, wxString>& aProperties
 
     if( elem.points.size() < 2 )
     {
-        m_errorMessages.emplace( wxString::Format( _( "Bezier has %d control points. At least 2 are "
-                                                 "expected." ),
-                                              static_cast<int>( elem.points.size() ) ),
-                            RPT_SEVERITY_WARNING );
+        m_errorMessages.emplace( wxString::Format( _( "Bezier has %d control points. At least 2 are expected." ),
+                                                   static_cast<int>( elem.points.size() ) ),
+                                 RPT_SEVERITY_WARNING );
         return;
     }
 
@@ -2180,9 +2173,8 @@ void SCH_IO_ALTIUM::ParseBezier( const std::map<wxString, wxString>& aProperties
     }
     else
     {
-        LIB_SYMBOL* symbol = (int) aSymbol.size() <= elem.ownerpartdisplaymode
-                                                            ? nullptr
-                                                            : aSymbol[elem.ownerpartdisplaymode];
+        LIB_SYMBOL* symbol = (int) aSymbol.size() <= elem.ownerpartdisplaymode ? nullptr
+                                                                               : aSymbol[elem.ownerpartdisplaymode];
         SCH_SYMBOL* schsym = nullptr;
 
         if( !symbol )
@@ -2593,8 +2585,7 @@ void SCH_IO_ALTIUM::ParseArc( const std::map<wxString, wxString>& aProperties,
             if( libSymbolIt == m_libSymbols.end() )
             {
                 // TODO: e.g. can depend on Template (RECORD=39
-                m_errorMessages.emplace( wxString::Format( wxT( "Arc's owner (%d) not found." ),
-                                                           elem.ownerindex ),
+                m_errorMessages.emplace( wxString::Format( wxT( "Arc's owner (%d) not found." ), elem.ownerindex ),
                                          RPT_SEVERITY_DEBUG );
                 return;
             }
@@ -2904,8 +2895,7 @@ void SCH_IO_ALTIUM::ParseEllipse( const std::map<wxString, wxString>& aPropertie
             if( libSymbolIt == m_libSymbols.end() )
             {
                 // TODO: e.g. can depend on Template (RECORD=39
-                m_errorMessages.emplace( wxString::Format( wxT( "Ellipse's owner (%d) not found." ),
-                                                           elem.ownerindex ),
+                m_errorMessages.emplace( wxString::Format( wxT( "Ellipse's owner (%d) not found." ), elem.ownerindex ),
                                          RPT_SEVERITY_DEBUG );
                 return;
             }
@@ -3008,8 +2998,7 @@ void SCH_IO_ALTIUM::ParseCircle( const std::map<wxString, wxString>& aProperties
             if( libSymbolIt == m_libSymbols.end() )
             {
                 // TODO: e.g. can depend on Template (RECORD=39
-                m_errorMessages.emplace( wxString::Format( wxT( "Ellipse's owner (%d) not found." ),
-                                                           elem.ownerindex ),
+                m_errorMessages.emplace( wxString::Format( wxT( "Ellipse's owner (%d) not found." ), elem.ownerindex ),
                                          RPT_SEVERITY_DEBUG );
                 return;
             }
@@ -3043,7 +3032,6 @@ void SCH_IO_ALTIUM::ParseLine( const std::map<wxString, wxString>& aProperties,
 
     if( aSymbol.empty() && ShouldPutItemOnSheet( elem.ownerindex ) )
     {
-
         SCH_SCREEN* screen = getCurrentScreen();
         wxCHECK( screen, /* void */ );
 
@@ -3069,8 +3057,7 @@ void SCH_IO_ALTIUM::ParseLine( const std::map<wxString, wxString>& aProperties,
             if( libSymbolIt == m_libSymbols.end() )
             {
                 // TODO: e.g. can depend on Template (RECORD=39
-                m_errorMessages.emplace( wxString::Format( wxT( "Line's owner (%d) not found." ),
-                                                           elem.ownerindex ),
+                m_errorMessages.emplace( wxString::Format( wxT( "Line's owner (%d) not found." ), elem.ownerindex ),
                                          RPT_SEVERITY_DEBUG );
                 return;
             }
@@ -3115,11 +3102,9 @@ void SCH_IO_ALTIUM::ParseSignalHarness( const std::map<wxString, wxString>& aPro
 
         for( size_t ii = 0; ii < elem.points.size() - 1; ii++ )
         {
-            SCH_LINE* line = new SCH_LINE( elem.points[ii] + m_sheetOffset,
-                                           SCH_LAYER_ID::LAYER_BUS );
+            SCH_LINE* line = new SCH_LINE( elem.points[ii] + m_sheetOffset, SCH_LAYER_ID::LAYER_BUS );
             line->SetEndPoint( elem.points[ii + 1] + m_sheetOffset );
-            line->SetStroke( STROKE_PARAMS( elem.lineWidth, LINE_STYLE::SOLID,
-                                            GetColorFromInt( elem.color ) ) );
+            line->SetStroke( STROKE_PARAMS( elem.lineWidth, LINE_STYLE::SOLID, GetColorFromInt( elem.color ) ) );
 
             line->SetFlags( IS_NEW );
             screen->Append( line );
@@ -3289,7 +3274,7 @@ void SCH_IO_ALTIUM::ParseRectangle( const std::map<wxString, wxString>& aPropert
             {
                 // TODO: e.g. can depend on Template (RECORD=39
                 m_errorMessages.emplace( wxString::Format( wxT( "Rectangle's owner (%d) not found." ),
-                                                         elem.ownerindex ),
+                                                           elem.ownerindex ),
                                          RPT_SEVERITY_DEBUG );
                 return;
             }
@@ -3367,8 +3352,7 @@ void SCH_IO_ALTIUM::ParseSheetEntry( const std::map<wxString, wxString>& aProper
 
     if( sheetIt == m_sheets.end() )
     {
-        m_errorMessages.emplace( wxString::Format( wxT( "Sheet entry's owner (%d) not found." ),
-                                                   elem.ownerindex ),
+        m_errorMessages.emplace( wxString::Format( wxT( "Sheet entry's owner (%d) not found." ), elem.ownerindex ),
                                  RPT_SEVERITY_DEBUG );
         return;
     }
@@ -3833,7 +3817,7 @@ void SCH_IO_ALTIUM::ParsePortHelper( const ASCH_PORT& aElem )
         if( !connectionFound )
         {
             m_errorMessages.emplace( wxString::Format( _( "Port %s has no connections." ), aElem.Name ),
-                            RPT_SEVERITY_WARNING );
+                                     RPT_SEVERITY_WARNING );
         }
     }
 
@@ -3955,8 +3939,7 @@ void SCH_IO_ALTIUM::ParseBus( const std::map<wxString, wxString>& aProperties )
 
     for( size_t i = 0; i + 1 < elem.points.size(); i++ )
     {
-        SCH_LINE* bus = new SCH_LINE( elem.points.at( i ) + m_sheetOffset,
-                                      SCH_LAYER_ID::LAYER_BUS );
+        SCH_LINE* bus = new SCH_LINE( elem.points.at( i ) + m_sheetOffset, SCH_LAYER_ID::LAYER_BUS );
         bus->SetEndPoint( elem.points.at( i + 1 ) + m_sheetOffset );
         bus->SetLineWidth( elem.lineWidth );
 
@@ -3975,8 +3958,7 @@ void SCH_IO_ALTIUM::ParseWire( const std::map<wxString, wxString>& aProperties )
 
     for( size_t i = 0; i + 1 < elem.points.size(); i++ )
     {
-        SCH_LINE* wire = new SCH_LINE( elem.points.at( i ) + m_sheetOffset,
-                                       SCH_LAYER_ID::LAYER_WIRE );
+        SCH_LINE* wire = new SCH_LINE( elem.points.at( i ) + m_sheetOffset, SCH_LAYER_ID::LAYER_WIRE );
         wire->SetEndPoint( elem.points.at( i + 1 ) + m_sheetOffset );
         // wire->SetLineWidth( elem.lineWidth );
 
@@ -4024,9 +4006,9 @@ void SCH_IO_ALTIUM::ParseImage( const std::map<wxString, wxString>& aProperties 
 
         if( !storageFile )
         {
-            wxString msg = wxString::Format( _( "Embedded file %s not found in storage." ),
-                                             elem.filename );
-            m_errorMessages.emplace( msg, RPT_SEVERITY_ERROR );
+            m_errorMessages.emplace( wxString::Format( _( "Embedded file %s not found in storage." ),
+                                                       elem.filename ),
+                                     RPT_SEVERITY_ERROR );
             return;
         }
 
@@ -4042,7 +4024,7 @@ void SCH_IO_ALTIUM::ParseImage( const std::map<wxString, wxString>& aProperties 
         if( !refImage.ReadImageFile( storagePath ) )
         {
             m_errorMessages.emplace( wxString::Format( _( "Error reading image %s." ), storagePath ),
-                                RPT_SEVERITY_ERROR );
+                                     RPT_SEVERITY_ERROR );
             return;
         }
 
@@ -4054,15 +4036,14 @@ void SCH_IO_ALTIUM::ParseImage( const std::map<wxString, wxString>& aProperties 
         if( !wxFileExists( elem.filename ) )
         {
             m_errorMessages.emplace( wxString::Format( _( "File not found %s." ), elem.filename ),
-                                RPT_SEVERITY_ERROR );
+                                     RPT_SEVERITY_ERROR );
             return;
         }
 
         if( !refImage.ReadImageFile( elem.filename ) )
         {
-            m_errorMessages.emplace(
-                    wxString::Format( _( "Error reading image %s." ), elem.filename ),
-                    RPT_SEVERITY_ERROR );
+            m_errorMessages.emplace( wxString::Format( _( "Error reading image %s." ), elem.filename ),
+                                     RPT_SEVERITY_ERROR );
             return;
         }
     }
@@ -4070,10 +4051,8 @@ void SCH_IO_ALTIUM::ParseImage( const std::map<wxString, wxString>& aProperties 
     // we only support one scale, thus we need to select one in case it does not keep aspect ratio
     const VECTOR2I currentImageSize = refImage.GetSize();
     const VECTOR2I expectedImageSize = elem.location - elem.corner;
-    const double   scaleX =
-            std::abs( static_cast<double>( expectedImageSize.x ) / currentImageSize.x );
-    const double scaleY =
-            std::abs( static_cast<double>( expectedImageSize.y ) / currentImageSize.y );
+    const double   scaleX = std::abs( static_cast<double>( expectedImageSize.x ) / currentImageSize.x );
+    const double   scaleY = std::abs( static_cast<double>( expectedImageSize.y ) / currentImageSize.y );
     refImage.SetImageScale( std::min( scaleX, scaleY ) );
 
     bitmap->SetFlags( IS_NEW );
@@ -4103,24 +4082,24 @@ void SCH_IO_ALTIUM::ParseSheet( const std::map<wxString, wxString>& aProperties 
         switch( m_altiumSheet->sheetSize )
         {
         default:
-        case ASCH_SHEET_SIZE::A4: pageInfo.SetType( "A4", isPortrait ); break;
-        case ASCH_SHEET_SIZE::A3: pageInfo.SetType( "A3", isPortrait ); break;
-        case ASCH_SHEET_SIZE::A2: pageInfo.SetType( "A2", isPortrait ); break;
-        case ASCH_SHEET_SIZE::A1: pageInfo.SetType( "A1", isPortrait ); break;
-        case ASCH_SHEET_SIZE::A0: pageInfo.SetType( "A0", isPortrait ); break;
-        case ASCH_SHEET_SIZE::A: pageInfo.SetType( "A", isPortrait ); break;
-        case ASCH_SHEET_SIZE::B: pageInfo.SetType( "B", isPortrait ); break;
-        case ASCH_SHEET_SIZE::C: pageInfo.SetType( "C", isPortrait ); break;
-        case ASCH_SHEET_SIZE::D: pageInfo.SetType( "D", isPortrait ); break;
-        case ASCH_SHEET_SIZE::E: pageInfo.SetType( "E", isPortrait ); break;
-        case ASCH_SHEET_SIZE::LETTER: pageInfo.SetType( "USLetter", isPortrait ); break;
-        case ASCH_SHEET_SIZE::LEGAL: pageInfo.SetType( "USLegal", isPortrait ); break;
-        case ASCH_SHEET_SIZE::TABLOID: pageInfo.SetType( "A3", isPortrait ); break;
-        case ASCH_SHEET_SIZE::ORCAD_A: pageInfo.SetType( "A", isPortrait ); break;
-        case ASCH_SHEET_SIZE::ORCAD_B: pageInfo.SetType( "B", isPortrait ); break;
-        case ASCH_SHEET_SIZE::ORCAD_C: pageInfo.SetType( "C", isPortrait ); break;
-        case ASCH_SHEET_SIZE::ORCAD_D: pageInfo.SetType( "D", isPortrait ); break;
-        case ASCH_SHEET_SIZE::ORCAD_E: pageInfo.SetType( "E", isPortrait ); break;
+        case ASCH_SHEET_SIZE::A4:      pageInfo.SetType( "A4", isPortrait );       break;
+        case ASCH_SHEET_SIZE::A3:      pageInfo.SetType( "A3", isPortrait );       break;
+        case ASCH_SHEET_SIZE::A2:      pageInfo.SetType( "A2", isPortrait );       break;
+        case ASCH_SHEET_SIZE::A1:      pageInfo.SetType( "A1", isPortrait );       break;
+        case ASCH_SHEET_SIZE::A0:      pageInfo.SetType( "A0", isPortrait );       break;
+        case ASCH_SHEET_SIZE::A:       pageInfo.SetType( "A", isPortrait );        break;
+        case ASCH_SHEET_SIZE::B:       pageInfo.SetType( "B", isPortrait );        break;
+        case ASCH_SHEET_SIZE::C:       pageInfo.SetType( "C", isPortrait );        break;
+        case ASCH_SHEET_SIZE::D:       pageInfo.SetType( "D", isPortrait );        break;
+        case ASCH_SHEET_SIZE::E:       pageInfo.SetType( "E", isPortrait );        break;
+        case ASCH_SHEET_SIZE::LETTER:  pageInfo.SetType( "USLetter", isPortrait ); break;
+        case ASCH_SHEET_SIZE::LEGAL:   pageInfo.SetType( "USLegal", isPortrait );  break;
+        case ASCH_SHEET_SIZE::TABLOID: pageInfo.SetType( "A3", isPortrait );       break;
+        case ASCH_SHEET_SIZE::ORCAD_A: pageInfo.SetType( "A", isPortrait );        break;
+        case ASCH_SHEET_SIZE::ORCAD_B: pageInfo.SetType( "B", isPortrait );        break;
+        case ASCH_SHEET_SIZE::ORCAD_C: pageInfo.SetType( "C", isPortrait );        break;
+        case ASCH_SHEET_SIZE::ORCAD_D: pageInfo.SetType( "D", isPortrait );        break;
+        case ASCH_SHEET_SIZE::ORCAD_E: pageInfo.SetType( "E", isPortrait );        break;
         }
     }
 
@@ -4133,7 +4112,7 @@ void SCH_IO_ALTIUM::ParseSheet( const std::map<wxString, wxString>& aProperties 
 void SCH_IO_ALTIUM::ParseSheetName( const std::map<wxString, wxString>& aProperties )
 {
     ASCH_SHEET_NAME elem( aProperties );
-    SCH_SCREEN* currentScreen = getCurrentScreen();
+    SCH_SCREEN*     currentScreen = getCurrentScreen();
 
     wxCHECK( currentScreen, /* void */ );
 
@@ -4142,16 +4121,17 @@ void SCH_IO_ALTIUM::ParseSheetName( const std::map<wxString, wxString>& aPropert
     if( sheetIt == m_sheets.end() )
     {
         m_errorMessages.emplace( wxString::Format( wxT( "Sheetname's owner (%d) not found." ),
-                                              elem.ownerindex ),
-                            RPT_SEVERITY_DEBUG );
+                                                   elem.ownerindex ),
+                                 RPT_SEVERITY_DEBUG );
         return;
     }
-    wxString sheetName = elem.text;
+
+    wxString           sheetName = elem.text;
     std::set<wxString> sheetNames;
 
-    for( auto items : currentScreen->Items().OfType( SCH_SHEET_T ) )
+    for( EDA_ITEM* item : currentScreen->Items().OfType( SCH_SHEET_T ) )
     {
-        SCH_SHEET* sheet = static_cast<SCH_SHEET*>( items );
+        SCH_SHEET* sheet = static_cast<SCH_SHEET*>( item );
         sheetNames.insert( sheet->GetName() );
     }
 
@@ -4181,8 +4161,8 @@ void SCH_IO_ALTIUM::ParseFileName( const std::map<wxString, wxString>& aProperti
     if( sheetIt == m_sheets.end() )
     {
         m_errorMessages.emplace( wxString::Format( wxT( "Filename's owner (%d) not found." ),
-                                              elem.ownerindex ),
-                            RPT_SEVERITY_DEBUG );
+                                                   elem.ownerindex ),
+                                 RPT_SEVERITY_DEBUG );
         return;
     }
 
@@ -4208,7 +4188,7 @@ void SCH_IO_ALTIUM::ParseDesignator( const std::map<wxString, wxString>& aProper
         // TODO: e.g. can depend on Template (RECORD=39
         m_errorMessages.emplace( wxString::Format( wxT( "Designator's owner (%d) not found." ),
                                                    elem.ownerindex ),
-                            RPT_SEVERITY_DEBUG );
+                                 RPT_SEVERITY_DEBUG );
         return;
     }
 
@@ -4377,8 +4357,8 @@ void SCH_IO_ALTIUM::ParseParameter( const std::map<wxString, wxString>& aPropert
 
 
 void SCH_IO_ALTIUM::ParseLibParameter( const std::map<wxString, wxString>& aProperties,
-                                       std::vector<LIB_SYMBOL*>&           aSymbol,
-                                       std::vector<int>&                   aFontSizes )
+                                       std::vector<LIB_SYMBOL*>& aSymbol,
+                                       std::vector<int>& aFontSizes )
 {
     ASCH_PARAMETER elem( aProperties );
 
@@ -4471,7 +4451,7 @@ void SCH_IO_ALTIUM::ParseImplementationList( int aIndex,
 
 
 void SCH_IO_ALTIUM::ParseImplementation( const std::map<wxString, wxString>& aProperties,
-                                         std::vector<LIB_SYMBOL*>&           aSymbol )
+                                         std::vector<LIB_SYMBOL*>& aSymbol )
 {
     ASCH_IMPLEMENTATION elem( aProperties );
 
@@ -4507,8 +4487,8 @@ void SCH_IO_ALTIUM::ParseImplementation( const std::map<wxString, wxString>& aPr
     if( implementationOwnerIt == m_altiumImplementationList.end() )
     {
         m_errorMessages.emplace( wxString::Format( wxT( "Implementation's owner (%d) not found." ),
-                                              elem.ownerindex ),
-                            RPT_SEVERITY_DEBUG );
+                                                   elem.ownerindex ),
+                                 RPT_SEVERITY_DEBUG );
         return;
     }
 
@@ -4517,8 +4497,8 @@ void SCH_IO_ALTIUM::ParseImplementation( const std::map<wxString, wxString>& aPr
     if( libSymbolIt == m_libSymbols.end() )
     {
         m_errorMessages.emplace( wxString::Format( wxT( "Footprint's owner (%d) not found." ),
-                                              implementationOwnerIt->second ),
-                            RPT_SEVERITY_DEBUG );
+                                                   implementationOwnerIt->second ),
+                                 RPT_SEVERITY_DEBUG );
         return;
     }
 
@@ -4547,8 +4527,7 @@ std::vector<LIB_SYMBOL*> SCH_IO_ALTIUM::ParseLibComponent( const std::map<wxStri
         LIB_SYMBOL* symbol = new LIB_SYMBOL( wxEmptyString );
 
         if( elem.displaymodecount > 1 )
-            symbol->SetName( wxString::Format( "%s (Altium Display %d)", elem.libreference,
-                                               i + 1 ) );
+            symbol->SetName( wxString::Format( "%s (Altium Display %d)", elem.libreference, i + 1 ) );
         else
             symbol->SetName( elem.libreference );
 
@@ -4581,36 +4560,33 @@ SCH_IO_ALTIUM::ParseLibFile( const ALTIUM_COMPOUND_FILE& aAltiumLibFile )
 
     for( auto& [name, entry] : syms )
     {
-
         std::map<int, SYMBOL_PIN_FRAC> pinFracs;
 
         if( entry.m_pinsFrac )
         {
             auto parse_binary_pin_frac =
                     [&]( const std::string& binaryData ) -> std::map<wxString, wxString>
-            {
-                std::map<wxString, wxString> result;
-                ALTIUM_COMPRESSED_READER     cmpreader( binaryData );
+                    {
+                        std::map<wxString, wxString> result;
+                        ALTIUM_COMPRESSED_READER     cmpreader( binaryData );
 
-                std::pair<int, std::string*> pinFracData = cmpreader.ReadCompressedString();
+                        std::pair<int, std::string*> pinFracData = cmpreader.ReadCompressedString();
 
-                ALTIUM_BINARY_READER binreader( *pinFracData.second );
-                SYMBOL_PIN_FRAC      pinFrac;
+                        ALTIUM_BINARY_READER binreader( *pinFracData.second );
+                        SYMBOL_PIN_FRAC      pinFrac;
 
-                pinFrac.x_frac = binreader.ReadInt32();
-                pinFrac.y_frac = binreader.ReadInt32();
-                pinFrac.len_frac = binreader.ReadInt32();
-                pinFracs.insert( { pinFracData.first, pinFrac } );
+                        pinFrac.x_frac = binreader.ReadInt32();
+                        pinFrac.y_frac = binreader.ReadInt32();
+                        pinFrac.len_frac = binreader.ReadInt32();
+                        pinFracs.insert( { pinFracData.first, pinFrac } );
 
-                return result;
-            };
+                        return result;
+                    };
 
-            ALTIUM_BINARY_PARSER       reader( aAltiumLibFile, entry.m_pinsFrac );
+            ALTIUM_BINARY_PARSER reader( aAltiumLibFile, entry.m_pinsFrac );
 
             while( reader.GetRemainingBytes() > 0 )
-            {
                 reader.ReadProperties( parse_binary_pin_frac );
-            }
         }
 
         ALTIUM_BINARY_PARSER reader( aAltiumLibFile, entry.m_symbol );
@@ -4618,9 +4594,7 @@ SCH_IO_ALTIUM::ParseLibFile( const ALTIUM_COMPOUND_FILE& aAltiumLibFile )
         int pin_index = 0;
 
         if( reader.GetRemainingBytes() <= 0 )
-        {
             THROW_IO_ERROR( "LibSymbol does not contain any data" );
-        }
 
         {
             std::map<wxString, wxString> properties = reader.ReadProperties();
@@ -4665,7 +4639,6 @@ SCH_IO_ALTIUM::ParseLibFile( const ALTIUM_COMPOUND_FILE& aAltiumLibFile )
                     result["DESIGNATOR"] = binreader.ReadShortPascalString();
                     result["SWAPIDGROUP"] = binreader.ReadShortPascalString();
 
-
                     if( auto it = pinFracs.find( pin_index ); it != pinFracs.end() )
                     {
                         result["LOCATION.X_FRAC"] = wxString::Format( "%d", it->second.x_frac );
@@ -4698,60 +4671,49 @@ SCH_IO_ALTIUM::ParseLibFile( const ALTIUM_COMPOUND_FILE& aAltiumLibFile )
             switch( record )
             {
             case ALTIUM_SCH_RECORD::PIN:
-            {
                 ParsePin( properties, symbols );
                 pin_index++;
                 break;
-            }
 
-            case ALTIUM_SCH_RECORD::LABEL: ParseLabel( properties, symbols, fontSizes ); break;
+            case ALTIUM_SCH_RECORD::LABEL:           ParseLabel( properties, symbols, fontSizes );         break;
+            case ALTIUM_SCH_RECORD::BEZIER:          ParseBezier( properties, symbols );                   break;
+            case ALTIUM_SCH_RECORD::POLYLINE:        ParsePolyline( properties, symbols );                 break;
+            case ALTIUM_SCH_RECORD::POLYGON:         ParsePolygon( properties, symbols );                  break;
+            case ALTIUM_SCH_RECORD::ELLIPSE:         ParseEllipse( properties, symbols );                  break;
+            case ALTIUM_SCH_RECORD::PIECHART:        ParsePieChart( properties, symbols );                 break;
+            case ALTIUM_SCH_RECORD::ROUND_RECTANGLE: ParseRoundRectangle( properties, symbols );           break;
+            case ALTIUM_SCH_RECORD::ELLIPTICAL_ARC:  ParseEllipticalArc( properties, symbols );            break;
+            case ALTIUM_SCH_RECORD::ARC:             ParseArc( properties, symbols );                      break;
+            case ALTIUM_SCH_RECORD::LINE:            ParseLine( properties, symbols );                     break;
+            case ALTIUM_SCH_RECORD::RECTANGLE:       ParseRectangle( properties, symbols );                break;
+            case ALTIUM_SCH_RECORD::DESIGNATOR:      ParseLibDesignator( properties, symbols, fontSizes ); break;
+            case ALTIUM_SCH_RECORD::PARAMETER:       ParseLibParameter( properties, symbols, fontSizes );  break;
+            case ALTIUM_SCH_RECORD::TEXT_FRAME:      ParseTextFrame( properties, symbols, fontSizes );     break;
+            case ALTIUM_SCH_RECORD::IMPLEMENTATION:  ParseImplementation( properties, symbols );           break;
 
-            case ALTIUM_SCH_RECORD::BEZIER: ParseBezier( properties, symbols ); break;
+            case ALTIUM_SCH_RECORD::IMPL_PARAMS:
+                break;
 
-            case ALTIUM_SCH_RECORD::POLYLINE: ParsePolyline( properties, symbols ); break;
+            case ALTIUM_SCH_RECORD::MAP_DEFINER:
+            case ALTIUM_SCH_RECORD::MAP_DEFINER_LIST:
+                break;
 
-            case ALTIUM_SCH_RECORD::POLYGON: ParsePolygon( properties, symbols ); break;
+            case ALTIUM_SCH_RECORD::IEEE_SYMBOL:
+                // TODO: add support for these.  They are just drawn symbols, so we can probably hardcode
+                break;
 
-            case ALTIUM_SCH_RECORD::ELLIPSE: ParseEllipse( properties, symbols ); break;
+            case ALTIUM_SCH_RECORD::IMAGE:
+                // TODO: Handle images once libedit supports them
+                break;
 
-            case ALTIUM_SCH_RECORD::PIECHART: ParsePieChart( properties, symbols ); break;
-
-            case ALTIUM_SCH_RECORD::ROUND_RECTANGLE: ParseRoundRectangle( properties, symbols ); break;
-
-            case ALTIUM_SCH_RECORD::ELLIPTICAL_ARC: ParseEllipticalArc( properties, symbols ); break;
-
-            case ALTIUM_SCH_RECORD::ARC: ParseArc( properties, symbols ); break;
-
-            case ALTIUM_SCH_RECORD::LINE: ParseLine( properties, symbols ); break;
-
-            case ALTIUM_SCH_RECORD::RECTANGLE: ParseRectangle( properties, symbols ); break;
-
-            case ALTIUM_SCH_RECORD::DESIGNATOR: ParseLibDesignator( properties, symbols, fontSizes ); break;
-
-            case ALTIUM_SCH_RECORD::PARAMETER: ParseLibParameter( properties, symbols, fontSizes ); break;
-
-            case ALTIUM_SCH_RECORD::TEXT_FRAME: ParseTextFrame( properties, symbols, fontSizes ); break;
-
-            // Nothing for now.  TODO: Figure out how implementation lists are generted in libs
-            case ALTIUM_SCH_RECORD::IMPLEMENTATION_LIST: break;
-
-            case ALTIUM_SCH_RECORD::IMPLEMENTATION: ParseImplementation( properties, symbols ); break;
-
-            case ALTIUM_SCH_RECORD::IMPL_PARAMS: break;
-
-            case ALTIUM_SCH_RECORD::MAP_DEFINER_LIST: break;
-            case ALTIUM_SCH_RECORD::MAP_DEFINER: break;
-
-            // TODO: add support for these.  They are just drawn symbols, so we can probably hardcode
-            case ALTIUM_SCH_RECORD::IEEE_SYMBOL: break;
-
-            // TODO: Hanlde images once libedit supports them
-            case ALTIUM_SCH_RECORD::IMAGE: break;
+            case ALTIUM_SCH_RECORD::IMPLEMENTATION_LIST:
+                // Nothing for now.  TODO: Figure out how implementation lists are generated in libs
+                break;
 
             default:
-                m_errorMessages.emplace( wxString::Format( _( "Unknown or unexpected record id %d found "
-                                                         "in %s." ),
-                                                      recordId, symbols[0]->GetName() ),
+                m_errorMessages.emplace( wxString::Format( _( "Unknown or unexpected record id %d found in %s." ),
+                                                           recordId,
+                                                           symbols[0]->GetName() ),
                                     RPT_SEVERITY_ERROR );
                 break;
             }
@@ -4796,7 +4758,7 @@ long long SCH_IO_ALTIUM::getLibraryTimestamp( const wxString& aLibraryPath ) con
 }
 
 
-void SCH_IO_ALTIUM::ensureLoadedLibrary( const wxString&        aLibraryPath,
+void SCH_IO_ALTIUM::ensureLoadedLibrary( const wxString& aLibraryPath,
                                          const std::map<std::string, UTF8>* aProperties )
 {
     // Suppress font substitution warnings
@@ -4827,15 +4789,13 @@ void SCH_IO_ALTIUM::ensureLoadedLibrary( const wxString&        aLibraryPath,
         {
             m_isIntLib = true;
 
-            std::unique_ptr<ALTIUM_COMPOUND_FILE> intCom =
-                    std::make_unique<ALTIUM_COMPOUND_FILE>( aLibraryPath );
+            std::unique_ptr<ALTIUM_COMPOUND_FILE> intCom = std::make_unique<ALTIUM_COMPOUND_FILE>( aLibraryPath );
 
-            std::map<wxString, const CFB::COMPOUND_FILE_ENTRY*> schLibFiles =
-                    intCom->EnumDir( L"SchLib" );
+            std::map<wxString, const CFB::COMPOUND_FILE_ENTRY*> schLibFiles = intCom->EnumDir( L"SchLib" );
 
             for( const auto& [schLibName, cfe] : schLibFiles )
             {
-                auto decodedStream = std::make_unique<ALTIUM_COMPOUND_FILE>();
+                std::unique_ptr<ALTIUM_COMPOUND_FILE> decodedStream = std::make_unique<ALTIUM_COMPOUND_FILE>();
 
                 if( intCom->DecodeIntLibStream( *cfe, decodedStream.get() ) )
                     compoundFiles.emplace_back( std::move( decodedStream ) );
@@ -4844,7 +4804,7 @@ void SCH_IO_ALTIUM::ensureLoadedLibrary( const wxString&        aLibraryPath,
 
         CASE_INSENSITIVE_MAP<LIB_SYMBOL*>& cacheMapRef = m_libCache[aLibraryPath];
 
-        for( auto& altiumSchFilePtr : compoundFiles )
+        for( const std::unique_ptr<ALTIUM_COMPOUND_FILE>& altiumSchFilePtr : compoundFiles )
         {
             CASE_INSENSITIVE_MAP<LIB_SYMBOL*> parsed = ParseLibFile( *altiumSchFilePtr );
             cacheMapRef.insert( parsed.begin(), parsed.end() );
@@ -4876,9 +4836,7 @@ void SCH_IO_ALTIUM::ParseLibHeader( const ALTIUM_COMPOUND_FILE& aAltiumSchFile,
     ALTIUM_BINARY_PARSER reader( aAltiumSchFile, file );
 
     if( reader.GetRemainingBytes() <= 0 )
-    {
         THROW_IO_ERROR( "FileHeader does not contain any data" );
-    }
 
     std::map<wxString, wxString> properties = reader.ReadProperties();
 
@@ -4907,19 +4865,17 @@ void SCH_IO_ALTIUM::ParseLibHeader( const ALTIUM_COMPOUND_FILE& aAltiumSchFile,
             }
         }
     }
-
 }
 
 
 void SCH_IO_ALTIUM::doEnumerateSymbolLib( const wxString& aLibraryPath,
-        const std::map<std::string, UTF8>* aProperties,
-        std::function<void(const wxString&, LIB_SYMBOL*)> aInserter )
+                                          const std::map<std::string, UTF8>* aProperties,
+                                          std::function<void(const wxString&, LIB_SYMBOL*)> aInserter )
 {
     ensureLoadedLibrary( aLibraryPath, aProperties );
 
     bool powerSymbolsOnly = ( aProperties &&
-                              aProperties->find( SYMBOL_LIB_TABLE::PropPowerSymsOnly )
-                                      != aProperties->end() );
+                              aProperties->find( SYMBOL_LIB_TABLE::PropPowerSymsOnly ) != aProperties->end() );
 
     auto it = m_libCache.find( aLibraryPath );
 
@@ -4936,8 +4892,7 @@ void SCH_IO_ALTIUM::doEnumerateSymbolLib( const wxString& aLibraryPath,
 }
 
 
-void SCH_IO_ALTIUM::EnumerateSymbolLib( wxArrayString&         aSymbolNameList,
-                                        const wxString&        aLibraryPath,
+void SCH_IO_ALTIUM::EnumerateSymbolLib( wxArrayString& aSymbolNameList, const wxString& aLibraryPath,
                                         const std::map<std::string, UTF8>* aProperties )
 {
     doEnumerateSymbolLib( aLibraryPath, aProperties,
@@ -4949,8 +4904,8 @@ void SCH_IO_ALTIUM::EnumerateSymbolLib( wxArrayString&         aSymbolNameList,
 
 
 void SCH_IO_ALTIUM::EnumerateSymbolLib( std::vector<LIB_SYMBOL*>& aSymbolList,
-                                        const wxString&           aLibraryPath,
-                                        const std::map<std::string, UTF8>*    aProperties )
+                                        const wxString& aLibraryPath,
+                                        const std::map<std::string, UTF8>* aProperties )
 {
     doEnumerateSymbolLib( aLibraryPath, aProperties,
                           [&]( const wxString&, LIB_SYMBOL* aSymbol )
@@ -4960,8 +4915,7 @@ void SCH_IO_ALTIUM::EnumerateSymbolLib( std::vector<LIB_SYMBOL*>& aSymbolList,
 }
 
 
-LIB_SYMBOL* SCH_IO_ALTIUM::LoadSymbol( const wxString&        aLibraryPath,
-                                       const wxString&        aAliasName,
+LIB_SYMBOL* SCH_IO_ALTIUM::LoadSymbol( const wxString& aLibraryPath, const wxString& aAliasName,
                                        const std::map<std::string, UTF8>* aProperties )
 {
     ensureLoadedLibrary( aLibraryPath, aProperties );
