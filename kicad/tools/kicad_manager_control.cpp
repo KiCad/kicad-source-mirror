@@ -80,6 +80,8 @@ wxFileName KICAD_MANAGER_CONTROL::newProjectDirectory( wxString* aFileName, bool
                          ( isRepo ? wxString( "" ) : FILEEXT::ProjectFileWildcard() ),
                          wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
+    dlg.AddShortcut( PATHS::GetDefaultUserProjectsPath() );
+
     // Add a "Create a new directory" checkbox
     FILEDLG_NEW_PROJECT newProjectHook;
     dlg.SetCustomizeHook( newProjectHook );
@@ -138,7 +140,6 @@ wxFileName KICAD_MANAGER_CONTROL::newProjectDirectory( wxString* aFileName, bool
 
 int KICAD_MANAGER_CONTROL::NewProject( const TOOL_EVENT& aEvent )
 {
-
     wxFileName pro = newProjectDirectory();
 
     if( !pro.IsOk() )
@@ -284,6 +285,8 @@ int KICAD_MANAGER_CONTROL::NewFromTemplate( const TOOL_EVENT& aEvent )
     wxFileDialog    dlg( m_frame, title, default_dir, wxEmptyString, FILEEXT::ProjectFileWildcard(),
                          wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
+    dlg.AddShortcut( PATHS::GetDefaultUserProjectsPath() );
+
     // Add a "Create a new directory" checkbox
     FILEDLG_NEW_PROJECT newProjectHook;
     dlg.SetCustomizeHook( newProjectHook );
@@ -396,6 +399,8 @@ int KICAD_MANAGER_CONTROL::openProject( const wxString& aDefaultDir )
 
     wxFileDialog dlg( m_frame, _( "Open Existing Project" ), aDefaultDir, wxEmptyString, wildcard,
                       wxFD_OPEN | wxFD_FILE_MUST_EXIST );
+
+    dlg.AddShortcut( PATHS::GetDefaultUserProjectsPath() );
 
     if( dlg.ShowModal() == wxID_CANCEL )
         return -1;
@@ -732,6 +737,8 @@ int KICAD_MANAGER_CONTROL::SaveProjectAs( const TOOL_EVENT& aEvent )
     }
 
     wxFileDialog dlg( m_frame, _( "Save Project To" ), default_dir, wxEmptyString, wxEmptyString, wxFD_SAVE );
+
+    dlg.AddShortcut( PATHS::GetDefaultUserProjectsPath() );
 
     if( dlg.ShowModal() == wxID_CANCEL )
         return -1;
