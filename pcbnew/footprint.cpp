@@ -2734,7 +2734,7 @@ BOARD_ITEM* FOOTPRINT::DuplicateItem( const BOARD_ITEM* aItem, bool aAddToFootpr
         PCB_REFERENCE_IMAGE* new_image = new PCB_REFERENCE_IMAGE( *static_cast<const PCB_REFERENCE_IMAGE*>( aItem ) );
         const_cast<KIID&>( new_image->m_Uuid ) = KIID();
 
-        if( addToFootprint )
+        if( aAddToFootprint )
             Add( new_image );
 
         new_item = new_image;
