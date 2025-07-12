@@ -19,6 +19,8 @@
  */
 
 #include <pgm_base.h>
+#include <bitmaps/bitmaps_list.h>
+#include <bitmaps/bitmap_types.h>
 #include <dialogs/panel_startwizard_libraries_base.h>
 #include <libraries/library_manager.h>
 #include <startwizard/startwizard.h>
@@ -34,7 +36,10 @@ public:
             PANEL_STARTWIZARD_LIBRARIES_BASE( aParent ),
             m_model( aModel ),
             m_wizard( aWizard )
-    {}
+    {
+        m_bmpWarning->SetBitmap( KiBitmapBundle( BITMAPS::dialog_warning ) );
+        m_sizerWarning->Layout();
+    }
 
     bool TransferDataFromWindow() override
     {
@@ -82,9 +87,13 @@ public:
         }
 
         wxString missingTablesText;
+        bool showWarning = false;
 
         for( const LIBRARY_TABLE_TYPE& type : m_model->missing_tables )
         {
+            if( !LIBRARY_MANAGER::IsTableValid( LIBRARY_MANAGER::DefaultGlobalTablePath( type ) ) )
+                showWarning = true;
+
             switch( type )
             {
             case LIBRARY_TABLE_TYPE::SYMBOL:
@@ -102,6 +111,8 @@ public:
         }
 
         m_stRequiredTables->SetLabel( missingTablesText.BeforeLast( '\n' ) );
+
+        m_sizerWarning->Hide( !showWarning );
 
         return true;
     }

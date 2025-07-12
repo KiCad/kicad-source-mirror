@@ -31,6 +31,9 @@ PANEL_STARTWIZARD_LIBRARIES_BASE::PANEL_STARTWIZARD_LIBRARIES_BASE( wxWindow* pa
 	m_stRequiredTables->Wrap( -1 );
 	bSizer8->Add( m_stRequiredTables, 0, wxALL, 5 );
 
+
+	bSizer8->Add( 0, 10, 0, wxEXPAND, 5 );
+
 	m_stQuery = new wxStaticText( this, wxID_ANY, _("How would you like KiCad to create them?"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_stQuery->Wrap( 400 );
 	bSizer8->Add( m_stQuery, 0, wxALL, 5 );
@@ -46,6 +49,23 @@ PANEL_STARTWIZARD_LIBRARIES_BASE::PANEL_STARTWIZARD_LIBRARIES_BASE( wxWindow* pa
 
 	m_rbBlankTables = new wxRadioButton( this, wxID_ANY, _("Start with no libraries"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer8->Add( m_rbBlankTables, 0, wxALL, 5 );
+
+
+	bSizer8->Add( 0, 10, 0, wxEXPAND, 5 );
+
+	m_sizerWarning = new wxBoxSizer( wxHORIZONTAL );
+
+	m_bmpWarning = new wxStaticBitmap( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 48,48 ), 0 );
+	m_bmpWarning->SetMinSize( wxSize( 48,48 ) );
+
+	m_sizerWarning->Add( m_bmpWarning, 0, wxALL, 4 );
+
+	m_stWarning = new wxStaticText( this, wxID_ANY, _("The built-in library tables could not be found in the expected location. This usually means that you have installed the KiCad software without also installing the libraries. You can proceed with setup, but you will need to install the libraries separately in order for them to be available."), wxDefaultPosition, wxDefaultSize, 0 );
+	m_stWarning->Wrap( 540 );
+	m_sizerWarning->Add( m_stWarning, 0, wxALL, 5 );
+
+
+	bSizer8->Add( m_sizerWarning, 0, wxEXPAND, 5 );
 
 
 	bPanelSizer->Add( bSizer8, 1, wxEXPAND, 5 );

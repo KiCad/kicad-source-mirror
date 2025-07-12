@@ -30,6 +30,9 @@
 #include <libraries/library_manager.h>
 
 
+const wxString LIBRARY_TABLE_ROW::TABLE_TYPE_NAME = wxT( "Table" );
+
+
 bool LIBRARY_TABLE_ROW::operator==( const LIBRARY_TABLE_ROW& aOther ) const
 {
     return m_scope == aOther.m_scope

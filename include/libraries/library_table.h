@@ -56,6 +56,8 @@ class KICOMMON_API LIBRARY_TABLE_ROW
 public:
     friend class LIBRARY_TABLE;
 
+    static const wxString TABLE_TYPE_NAME;
+
     LIBRARY_TABLE_ROW() = default;
 
     bool operator==( const LIBRARY_TABLE_ROW& aOther ) const;

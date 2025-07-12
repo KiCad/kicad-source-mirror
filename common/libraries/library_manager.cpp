@@ -113,7 +113,7 @@ void LIBRARY_MANAGER::loadNestedTables( LIBRARY_TABLE& aRootTable )
 
             for( LIBRARY_TABLE_ROW& row : aTable.Rows() )
             {
-                if( row.Type() == wxT( "Table" ) )
+                if( row.Type() == LIBRARY_TABLE_ROW::TABLE_TYPE_NAME )
                 {
                     wxFileName file( row.URI() );
 
@@ -325,6 +325,30 @@ private:
 };
 
 
+wxString LIBRARY_MANAGER::DefaultGlobalTablePath( LIBRARY_TABLE_TYPE aType )
+{
+    wxCHECK( m_typeToFilenameMap.contains( aType ), wxEmptyString );
+    wxString basePath = PATHS::GetUserSettingsPath();
+
+    wxFileName fn( basePath, m_typeToFilenameMap.at( aType ) );
+    fn.Normalize( FN_NORMALIZE_FLAGS | wxPATH_NORM_ENV_VARS );
+
+    return fn.GetFullPath();
+}
+
+
+bool LIBRARY_MANAGER::IsTableValid( const wxString& aPath )
+{
+    if( wxFileName fn( aPath ); fn.IsFileReadable() )
+    {
+        if( LIBRARY_TABLE temp( fn, LIBRARY_TABLE_SCOPE::GLOBAL ); temp.IsOk() )
+            return true;
+    }
+
+    return false;
+}
+
+
 bool LIBRARY_MANAGER::GlobalTablesValid()
 {
     return InvalidGlobalTables().empty();
@@ -338,15 +362,8 @@ std::vector<LIBRARY_TABLE_TYPE> LIBRARY_MANAGER::InvalidGlobalTables()
 
     for( auto [type, name] : m_typeToFilenameMap )
     {
-        if( wxFileName fn( basePath, name ); fn.IsFileReadable() )
-        {
-            if( LIBRARY_TABLE temp( fn, LIBRARY_TABLE_SCOPE::GLOBAL ); !temp.IsOk() )
-                invalidTables.emplace_back( type );
-        }
-        else
-        {
+        if( wxFileName fn( basePath, name ); !IsTableValid( fn.GetFullPath() ) )
             invalidTables.emplace_back( type );
-        }
     }
 
     return invalidTables;
@@ -356,18 +373,32 @@ std::vector<LIBRARY_TABLE_TYPE> LIBRARY_MANAGER::InvalidGlobalTables()
 bool LIBRARY_MANAGER::CreateGlobalTable( LIBRARY_TABLE_TYPE aType, bool aPopulateDefaultLibraries )
 {
     wxCHECK( m_typeToFilenameMap.contains( aType ), false );
-    wxString basePath = PATHS::GetUserSettingsPath();
+    wxFileName fn( DefaultGlobalTablePath( aType ) );
 
-    wxFileName fn( basePath, m_typeToFilenameMap.at( aType ) );
-    fn.Normalize( FN_NORMALIZE_FLAGS | wxPATH_NORM_ENV_VARS );
+    LIBRARY_TABLE table( fn, LIBRARY_TABLE_SCOPE::GLOBAL );
+    table.SetType( aType );
 
-    LIBRARY_TABLE temp( fn, LIBRARY_TABLE_SCOPE::GLOBAL );
-    temp.SetType( aType );
+    wxFileName defaultLib( PATHS::GetStockTemplatesPath(), m_typeToFilenameMap.at( aType ) );
+
+    if( !defaultLib.IsFileReadable() )
+    {
+        wxLogTrace( traceLibraries, "Warning: couldn't read default library table for %s at '%s'",
+                    magic_enum::enum_name( aType ), defaultLib.GetFullPath() );
+    }
+
+    if( aPopulateDefaultLibraries )
+    {
+        LIBRARY_TABLE_ROW& chained = table.InsertRow();
+        chained.SetType( LIBRARY_TABLE_ROW::TABLE_TYPE_NAME );
+        chained.SetNickname( wxT( "KiCad" ) );
+        chained.SetDescription( _( "KiCad Default Libraries" ) );
+        chained.SetURI( defaultLib.GetFullPath() );
+    }
 
     try
     {
         PRETTIFIED_FILE_OUTPUTFORMATTER formatter( fn.GetFullPath(), KICAD_FORMAT::FORMAT_MODE::LIBRARY_TABLE );
-        temp.Format( &formatter );
+        table.Format( &formatter );
     }
     catch( IO_ERROR& e )
     {
@@ -559,7 +590,7 @@ std::vector<LIBRARY_TABLE_ROW*> LIBRARY_MANAGER::Rows( LIBRARY_TABLE_TYPE aType,
                     {
                         if( row.IsOk() || aIncludeInvalid )
                         {
-                            if( row.Type() == "Table" )
+                            if( row.Type() == LIBRARY_TABLE_ROW::TABLE_TYPE_NAME )
                             {
                                 if( !m_childTables.contains( row.URI() ) )
                                     continue;

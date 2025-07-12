@@ -47,6 +47,10 @@ public:
 
     ~LIBRARY_MANAGER();
 
+    static wxString DefaultGlobalTablePath( LIBRARY_TABLE_TYPE aType );
+
+    static bool IsTableValid( const wxString& aPath );
+
     /// @return true if all required global tables are present on disk and valid
     static bool GlobalTablesValid();
 

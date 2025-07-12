@@ -17,6 +17,10 @@
 #include <wx/colour.h>
 #include <wx/settings.h>
 #include <wx/radiobut.h>
+#include <wx/bitmap.h>
+#include <wx/image.h>
+#include <wx/icon.h>
+#include <wx/statbmp.h>
 #include <wx/sizer.h>
 #include <wx/panel.h>
 
@@ -37,6 +41,9 @@ class PANEL_STARTWIZARD_LIBRARIES_BASE : public wxPanel
 		wxRadioButton* m_rbDefaultTables;
 		wxRadioButton* m_rbImport;
 		wxRadioButton* m_rbBlankTables;
+		wxBoxSizer* m_sizerWarning;
+		wxStaticBitmap* m_bmpWarning;
+		wxStaticText* m_stWarning;
 
 	public:
 
