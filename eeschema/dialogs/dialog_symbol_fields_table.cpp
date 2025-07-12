@@ -1503,7 +1503,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnClose( wxCloseEvent& aEvent )
     // This is a cancel, so commit quietly as we're going to throw the results away anyway.
     m_grid->CommitPendingChanges( true );
 
-    if( m_dataModel->IsEdited() )
+    if( m_dataModel->IsEdited() && aEvent.CanVeto() )
     {
         if( !HandleUnsavedChanges( this, _( "Save changes?" ),
                                    [&]() -> bool
