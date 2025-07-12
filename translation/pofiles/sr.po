@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-07 17:43+0300\n"
-"PO-Revision-Date: 2025-07-10 06:02+0000\n"
+"PO-Revision-Date: 2025-07-13 08:01+0000\n"
 "Last-Translator: Luka Borkovic <borkovic@gmail.com>\n"
 "Language-Team: Serbian <https://hosted.weblate.org/projects/kicad/v9/sr/>\n"
 "Language: sr\n"
@@ -14090,17 +14090,19 @@ msgstr "Додјела шеме"
 #: eeschema/dialogs/dialog_pin_properties.cpp:207
 #: eeschema/dialogs/dialog_symbol_properties.cpp:358
 msgid "Alternate pin assignments are not available for De Morgan symbols."
-msgstr ""
+msgstr "Алтернативне доделе пинова нису доступне за Де Морганове симболе."
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:287
 msgid "Exit sync pins mode"
-msgstr ""
+msgstr "Режим синхронизације излазних пинова"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:302
 msgid ""
 "Synchronized pins mode is enabled.\n"
 "Similar pins will be edited regardless of this option."
 msgstr ""
+"Режим синхронизованих пинова је омогућен.\n"
+"Слични пинови ће бити уређени без обзира на ову опцију"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:307
 msgid "If checked, this pin will exist in all units."
