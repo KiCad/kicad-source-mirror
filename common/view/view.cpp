@@ -177,7 +177,7 @@ private:
         for( int layer : aLayers )
         {
             wxCHECK2_MSG( layer >= 0 && layer < VIEW::VIEW_MAX_LAYERS, continue,
-                          wxT( "Invalid layer number" ) );
+                          wxString::Format( wxT( "Invalid layer number: %d" ), layer ) );
             m_layers.push_back( layer );
         }
     }
