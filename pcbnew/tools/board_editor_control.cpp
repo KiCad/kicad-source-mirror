@@ -1318,9 +1318,13 @@ static bool mergeZones( EDA_DRAW_FRAME* aFrame, BOARD_COMMIT& aCommit,
 {
     aCommit.Modify( aOriginZones[0] );
 
+    aOriginZones[0]->Outline()->ClearArcs();
+
     for( unsigned int i = 1; i < aOriginZones.size(); i++ )
     {
-        aOriginZones[0]->Outline()->BooleanAdd( *aOriginZones[i]->Outline() );
+        SHAPE_POLY_SET otherOutline = aOriginZones[i]->Outline()->CloneDropTriangulation();
+        otherOutline.ClearArcs();
+        aOriginZones[0]->Outline()->BooleanAdd( otherOutline );
     }
 
     aOriginZones[0]->Outline()->Simplify();
@@ -1328,8 +1332,7 @@ static bool mergeZones( EDA_DRAW_FRAME* aFrame, BOARD_COMMIT& aCommit,
     // We should have one polygon, possibly with holes.  If we end up with two polygons (either
     // because the intersection was a single point or because the intersection was within one of
     // the zone's holes) then we can't merge.
-    if( aOriginZones[0]->Outline()->IsSelfIntersecting()
-            || aOriginZones[0]->Outline()->OutlineCount() > 1 )
+    if( aOriginZones[0]->Outline()->IsSelfIntersecting() || aOriginZones[0]->Outline()->OutlineCount() > 1 )
     {
         DisplayErrorMessage( aFrame, _( "Zones have insufficient overlap for merging." ) );
         aCommit.Revert();
