@@ -58,21 +58,21 @@ COMMIT& COMMIT::Stage( EDA_ITEM* aItem, CHANGE_TYPE aChangeType, BASE_SCREEN* aS
         break;
 
     case CHT_REMOVE:
-        wxASSERT( m_deletedItems.find( aItem ) == m_deletedItems.end() );
-        m_deletedItems.insert( aItem );
-        makeEntry( aItem, CHT_REMOVE | flag, makeImage( aItem ), aScreen );
+        if( m_deletedItems.insert( aItem ).second )
+        {
+            makeEntry( aItem, CHT_REMOVE | flag, makeImage( aItem ), aScreen );
 
-        if( EDA_GROUP* parentGroup = aItem->GetParentGroup() )
-            Modify( parentGroup->AsEdaItem(), aScreen, RECURSE_MODE::NO_RECURSE );
+            if( EDA_GROUP* parentGroup = aItem->GetParentGroup() )
+                Modify( parentGroup->AsEdaItem(), aScreen, RECURSE_MODE::NO_RECURSE );
+        }
 
         break;
 
     case CHT_MODIFY:
-    {
-        EDA_ITEM* parent = parentObject( aItem );
-        createModified( parent, makeImage( parent ), flag, aScreen );
+        if( EDA_ITEM* parent = parentObject( aItem ) )
+            createModified( parent, makeImage( parent ), flag, aScreen );
+
         break;
-    }
 
     default:
         wxFAIL;
