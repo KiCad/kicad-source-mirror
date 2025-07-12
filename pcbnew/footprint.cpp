@@ -2653,6 +2653,18 @@ BOARD_ITEM* FOOTPRINT::DuplicateItem( bool addToParentGroup, BOARD_COMMIT* aComm
         break;
     }
 
+    case PCB_REFERENCE_IMAGE_T:
+    {
+        PCB_REFERENCE_IMAGE* new_image = new PCB_REFERENCE_IMAGE( *static_cast<const PCB_REFERENCE_IMAGE*>( aItem ) );
+        const_cast<KIID&>( new_image->m_Uuid ) = KIID();
+
+        if( addToFootprint )
+            Add( new_image );
+
+        new_item = new_image;
+        break;
+    }
+
     case PCB_TEXTBOX_T:
     {
         PCB_TEXTBOX* new_textbox = new PCB_TEXTBOX( *static_cast<const PCB_TEXTBOX*>( aItem ) );
