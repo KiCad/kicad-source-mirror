@@ -92,14 +92,18 @@ bool PANEL_COLOR_SETTINGS::Show( bool show )
     if( show )
     {
         // In case changes have been made to the current theme in another panel:
-        int idx = m_cbTheme->GetSelection();
-        COLOR_SETTINGS* settings = static_cast<COLOR_SETTINGS*>( m_cbTheme->GetClientData( idx ) );
+        int themeSel = m_cbTheme->GetSelection();
 
-        if( settings )
-            *m_currentSettings = *settings;
+        if( themeSel >= 0 )
+        {
+            COLOR_SETTINGS* settings = static_cast<COLOR_SETTINGS*>( m_cbTheme->GetClientData( themeSel ) );
 
-        onNewThemeSelected();
-        updateSwatches();
+            if( settings )
+                *m_currentSettings = *settings;
+
+            onNewThemeSelected();
+            updateSwatches();
+        }
     }
 
     return PANEL_COLOR_SETTINGS_BASE::Show( show );
