@@ -41,13 +41,13 @@
 #include <wx/wfstream.h>
 
 
-void FOOTPRINT_INFO_IMPL::load()
+void FOOTPRINT_INFO_IMPL::load( const LOCALE_IO* aLocale )
 {
     FP_LIB_TABLE* fptable = m_owner->GetTable();
 
     wxASSERT( fptable );
 
-    const FOOTPRINT* footprint = fptable->GetEnumeratedFootprint( m_nickname, m_fpname, true );
+    const FOOTPRINT* footprint = fptable->GetEnumeratedFootprint( m_nickname, m_fpname, aLocale );
 
     if( footprint == nullptr ) // Should happen only with malformed/broken libraries
     {
@@ -180,7 +180,7 @@ void FOOTPRINT_LIST_IMPL::loadFootprints()
     std::vector<std::future<size_t>>            returns( num_elements );
 
     auto fp_thread =
-            [ this, &queue_parsed ]() -> size_t
+            [ this, &queue_parsed, &toggle_locale ]() -> size_t
             {
                 wxString nickname;
 
@@ -192,7 +192,7 @@ void FOOTPRINT_LIST_IMPL::loadFootprints()
                 CatchErrors(
                         [&]()
                         {
-                            m_lib_table->FootprintEnumerate( fpnames, nickname, false, true );
+                            m_lib_table->FootprintEnumerate( fpnames, nickname, false, &toggle_locale );
                         } );
 
                 for( wxString fpname : fpnames )
@@ -200,7 +200,7 @@ void FOOTPRINT_LIST_IMPL::loadFootprints()
                     CatchErrors(
                             [&]()
                             {
-                                auto* fpinfo = new FOOTPRINT_INFO_IMPL( this, nickname, fpname );
+                                auto* fpinfo = new FOOTPRINT_INFO_IMPL( this, nickname, fpname, &toggle_locale );
                                 queue_parsed.move_push( std::unique_ptr<FOOTPRINT_INFO>( fpinfo ) );
                             } );
 

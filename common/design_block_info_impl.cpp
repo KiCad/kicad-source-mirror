@@ -35,14 +35,14 @@
 #include <wx/wfstream.h>
 
 
-void DESIGN_BLOCK_INFO_IMPL::load()
+void DESIGN_BLOCK_INFO_IMPL::load( const LOCALE_IO* locale )
 {
     DESIGN_BLOCK_LIB_TABLE* dbtable = m_owner->GetTable();
 
     wxASSERT( dbtable );
 
     std::unique_ptr<const DESIGN_BLOCK> design_block( dbtable->GetEnumeratedDesignBlock( m_nickname, m_dbname,
-                                                                                         true ) );
+                                                                                         locale ) );
 
     if( design_block )
     {
@@ -164,7 +164,7 @@ void DESIGN_BLOCK_LIST_IMPL::loadDesignBlocks()
     std::vector<std::future<size_t>> returns( num_elements );
 
     auto db_thread =
-            [ this, &queue_parsed ]() -> size_t
+            [ this, &queue_parsed, &toggle_locale ]() -> size_t
             {
                 wxString nickname;
 
@@ -176,7 +176,7 @@ void DESIGN_BLOCK_LIST_IMPL::loadDesignBlocks()
                 CatchErrors(
                         [&]()
                         {
-                            m_lib_table->DesignBlockEnumerate( dbnames, nickname, false, true );
+                            m_lib_table->DesignBlockEnumerate( dbnames, nickname, false, &toggle_locale );
                         } );
 
                 for( wxString dbname : dbnames )
@@ -184,7 +184,7 @@ void DESIGN_BLOCK_LIST_IMPL::loadDesignBlocks()
                     CatchErrors(
                             [&]()
                             {
-                                auto* dbinfo = new DESIGN_BLOCK_INFO_IMPL( this, nickname, dbname );
+                                auto* dbinfo = new DESIGN_BLOCK_INFO_IMPL( this, nickname, dbname, &toggle_locale );
                                 queue_parsed.move_push( std::unique_ptr<DESIGN_BLOCK_INFO>( dbinfo ) );
                             } );
 

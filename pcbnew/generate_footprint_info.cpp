@@ -122,8 +122,7 @@ public:
         try
         {
             m_footprint = m_fp_lib_table->GetEnumeratedFootprint( m_lib_id.GetLibNickname(),
-                                                                  m_lib_id.GetLibItemName(),
-                                                                  false );
+                                                                  m_lib_id.GetLibItemName() );
         }
         catch( const IO_ERROR& ioe )
         {

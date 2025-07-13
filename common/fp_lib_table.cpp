@@ -308,12 +308,12 @@ long long FP_LIB_TABLE::GenerateTimestamp( const wxString* aNickname )
 
 
 void FP_LIB_TABLE::FootprintEnumerate( wxArrayString& aFootprintNames, const wxString& aNickname,
-                                       bool aBestEfforts, bool aThreadSafe )
+                                       bool aBestEfforts, const LOCALE_IO* aLocale )
 {
     const FP_LIB_TABLE_ROW* row = FindRow( aNickname, true );
     wxASSERT( row->plugin );
 
-    if( !aThreadSafe )
+    if( !aLocale )
     {
         LOCALE_IO toggle_locale;
 
@@ -375,12 +375,12 @@ static void setLibNickname( FOOTPRINT* aModule, const wxString& aNickname,
 
 const FOOTPRINT* FP_LIB_TABLE::GetEnumeratedFootprint( const wxString& aNickname,
                                                        const wxString& aFootprintName,
-                                                       bool aThreadSafe )
+                                                       const LOCALE_IO* aLocale )
 {
     const FP_LIB_TABLE_ROW* row = FindRow( aNickname, true );
     wxASSERT( row->plugin );
 
-    if( !aThreadSafe )
+    if( !aLocale )
     {
         LOCALE_IO toggle_locale;
 

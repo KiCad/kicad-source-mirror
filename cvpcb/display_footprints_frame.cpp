@@ -304,7 +304,7 @@ FOOTPRINT* DISPLAY_FOOTPRINTS_FRAME::GetFootprint( const wxString& aFootprintNam
 
     try
     {
-        if( const FOOTPRINT* fp = fpTable->GetEnumeratedFootprint( libNickname, fpName, false ) )
+        if( const FOOTPRINT* fp = fpTable->GetEnumeratedFootprint( libNickname, fpName ) )
             footprint = static_cast<FOOTPRINT*>( fp->Duplicate( IGNORE_PARENT_GROUP ) );
     }
     catch( const IO_ERROR& ioe )
