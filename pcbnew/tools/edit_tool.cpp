@@ -1867,16 +1867,32 @@ int EDIT_TOOL::BooleanPolygons( const TOOL_EVENT& aEvent )
     run_routine();
 
     // If we are doing a non-commutative operation (e.g. subtract), and we just got null,
-    // assume the user meant go in the opposite order (this is probably mainly useful
-    // with a selection size of 2 items)
+    // assume the user meant go in a different opposite order
     if( !boolean_routine->IsCommutative() && items_to_select_on_success.empty() )
     {
         // Clear the commit and the selection
         commit.Revert();
         items_to_select_on_success.clear();
 
-        // Reverse the order of the shapes and try again
-        std::reverse( items_to_process.begin(), items_to_process.end() );
+        std::map<const PCB_SHAPE*, VECTOR2I::extended_type> items_area;
+
+        for( PCB_SHAPE* shape : items_to_process )
+        {
+            VECTOR2I::extended_type area = shape->GetBoundingBox().GetArea();
+            items_area[shape] = area;
+        }
+
+        // Sort the shapes by their bounding box area in descending order
+        // This way we will start with the largest shape first and subtract the smaller ones
+        // This may not work perfectly in all cases, but it works well when the larger
+        // shape completely contains the smaller ones, which is probably the most common case.
+        // In other cases, the user will need to select the shapes in the correct order (i.e.
+        // the largest shape last), or do the subtractions in multiple steps.
+        std::sort( items_to_process.begin(), items_to_process.end(),
+                   [&]( const PCB_SHAPE* a, const PCB_SHAPE* b )
+                   {
+                       return items_area[a] > items_area[b];
+                   } );
 
         // Run the routine again
         boolean_routine = create_routine();
