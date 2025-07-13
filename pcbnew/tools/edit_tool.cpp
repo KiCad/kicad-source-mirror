@@ -1890,29 +1890,62 @@ int EDIT_TOOL::BooleanPolygons( const TOOL_EVENT& aEvent )
     // Construct an appropriate routine
     std::unique_ptr<POLYGON_BOOLEAN_ROUTINE> boolean_routine;
 
-    if( aEvent.IsAction( &PCB_ACTIONS::mergePolygons ) )
+    const auto create_routine = [&]() -> std::unique_ptr<POLYGON_BOOLEAN_ROUTINE>
     {
-        boolean_routine = std::make_unique<POLYGON_MERGE_ROUTINE>( frame()->GetModel(), change_handler );
-    }
-    else if( aEvent.IsAction( &PCB_ACTIONS::subtractPolygons ) )
-    {
-        boolean_routine = std::make_unique<POLYGON_SUBTRACT_ROUTINE>( frame()->GetModel(), change_handler );
-    }
-    else if( aEvent.IsAction( &PCB_ACTIONS::intersectPolygons ) )
-    {
-        boolean_routine = std::make_unique<POLYGON_INTERSECT_ROUTINE>( frame()->GetModel(), change_handler );
-    }
-    else
-    {
-        wxASSERT_MSG( false, "Could not find a polygon routine for this action" );
-        return 0;
-    }
+        // (Re-)construct the boolean routine based on the action
+        // This is done here so that we can re-init the routine if we need to
+        // go again in the reverse order.
 
-    // Perform the operation on each polygon
-    for( PCB_SHAPE* shape : items_to_process )
-        boolean_routine->ProcessShape( *shape );
+        BOARD_ITEM_CONTAINER* const model = frame()->GetModel();
+        wxCHECK( model, nullptr );
 
-    boolean_routine->Finalize();
+        if( aEvent.IsAction( &PCB_ACTIONS::mergePolygons ) )
+        {
+            return std::make_unique<POLYGON_MERGE_ROUTINE>( model, change_handler );
+        }
+        else if( aEvent.IsAction( &PCB_ACTIONS::subtractPolygons ) )
+        {
+            return std::make_unique<POLYGON_SUBTRACT_ROUTINE>( model, change_handler );
+        }
+        else if( aEvent.IsAction( &PCB_ACTIONS::intersectPolygons ) )
+        {
+            return std::make_unique<POLYGON_INTERSECT_ROUTINE>( model, change_handler );
+        }
+        return nullptr;
+    };
+
+    const auto run_routine = [&]()
+    {
+        // Perform the operation on each polygon
+        for( PCB_SHAPE* shape : items_to_process )
+            boolean_routine->ProcessShape( *shape );
+
+        boolean_routine->Finalize();
+    };
+
+    boolean_routine = create_routine();
+
+    wxCHECK_MSG( boolean_routine, 0, "Could not find a polygon routine for this action" );
+
+    // First run the routine and see what we get
+    run_routine();
+
+    // If we are doing a non-commutative operation (e.g. subtract), and we just got null,
+    // assume the user meant go in the opposite order (this is probably mainly useful
+    // with a selection size of 2 items)
+    if( !boolean_routine->IsCommutative() && items_to_select_on_success.empty() )
+    {
+        // Clear the commit and the selection
+        commit.Revert();
+        items_to_select_on_success.clear();
+
+        // Reverse the order of the shapes and try again
+        std::reverse( items_to_process.begin(), items_to_process.end() );
+
+        // Run the routine again
+        boolean_routine = create_routine();
+        run_routine();
+    }
 
     // Select new items
     for( BOARD_ITEM* item : items_to_select_on_success )
