@@ -1159,13 +1159,21 @@ void BOARD::Add( BOARD_ITEM* aBoardItem, ADD_MODE aMode, bool aSkipConnectivity 
         m_zones.push_back( (ZONE*) aBoardItem );
         break;
 
-    case PCB_TRACE_T:
     case PCB_VIA_T:
-    case PCB_ARC_T:
+        if( aMode == ADD_MODE::APPEND || aMode == ADD_MODE::BULK_APPEND )
+            m_tracks.push_back( static_cast<PCB_VIA*>( aBoardItem ) );
+        else
+            m_tracks.push_front( static_cast<PCB_VIA*>( aBoardItem ) );
 
-        // N.B. This inserts a small memory leak as we lose the
+        break;
+
+
+    case PCB_TRACE_T:
+    case PCB_ARC_T:
         if( !IsCopperLayer( aBoardItem->GetLayer() ) )
         {
+            // The only current known source of these is SWIG (KICAD-BY7, et al).
+            // N.B. This inserts a small memory leak as we lose the track/via/arc.
             wxFAIL_MSG( wxString::Format( "BOARD::Add() Cannot place Track on non-copper layer: %d = %s",
                                           static_cast<int>( aBoardItem->GetLayer() ),
                                           GetLayerName( aBoardItem->GetLayer() ) ) );

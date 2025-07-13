@@ -1052,15 +1052,21 @@ BOARD* PCB_IO_KICAD_SEXPR_PARSER::parseBOARD_unchecked()
             break;
 
         case T_segment:
-            item = parsePCB_TRACK();
-            m_board->Add( item, ADD_MODE::BULK_APPEND, true );
-            bulkAddedItems.push_back( item );
+            if( PCB_TRACK* track = parsePCB_TRACK() )
+            {
+                m_board->Add( item, ADD_MODE::BULK_APPEND, true );
+                bulkAddedItems.push_back( item );
+            }
+
             break;
 
         case T_arc:
-            item = parseARC();
-            m_board->Add( item, ADD_MODE::BULK_APPEND, true );
-            bulkAddedItems.push_back( item );
+            if( PCB_ARC* arc = parseARC() )
+            {
+                m_board->Add( item, ADD_MODE::BULK_APPEND, true );
+                bulkAddedItems.push_back( item );
+            }
+
             break;
 
         case T_group:
@@ -6455,6 +6461,12 @@ PCB_ARC* PCB_IO_KICAD_SEXPR_PARSER::parseARC()
         }
     }
 
+    if( !IsCopperLayer( arc->GetLayer() ) )
+    {
+        // No point in asserting; these usually come from hand-edited boards
+        return nullptr;
+    }
+
     return arc.release();
 }
 
@@ -6548,6 +6560,12 @@ PCB_TRACK* PCB_IO_KICAD_SEXPR_PARSER::parsePCB_TRACK()
             Expecting( "start, end, width, layer, solder_mask_margin, net, tstamp, uuid, "
                        "or locked" );
         }
+    }
+
+    if( !IsCopperLayer( track->GetLayer() ) )
+    {
+        // No point in asserting; these usually come from hand-edited boards
+        return nullptr;
     }
 
     return track.release();
