@@ -542,7 +542,7 @@ long long SCH_IO_EAGLE::getLibraryTimestamp( const wxString& aLibraryPath ) cons
     if( fn.IsFileReadable() && fn.GetModificationTime().IsValid() )
         return fn.GetModificationTime().GetValue().GetValue();
     else
-        return wxDateTime( 0.0 ).GetValue().GetValue();
+        return 0;
 }
 
 

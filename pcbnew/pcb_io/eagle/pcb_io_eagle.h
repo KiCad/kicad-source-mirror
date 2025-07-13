@@ -158,10 +158,7 @@ public:
                               bool  aKeepUUID = false,
                               const std::map<std::string, UTF8>* aProperties = nullptr ) override;
 
-    long long GetLibraryTimestamp( const wxString& aLibraryPath ) const override
-    {
-        return getModificationTime( aLibraryPath ).GetValue().GetValue();
-    }
+    long long GetLibraryTimestamp( const wxString& aLibraryPath ) const override;
 
     bool IsLibraryWritable( const wxString& aLibraryPath ) override
     {
@@ -355,13 +352,13 @@ private:
     unsigned            m_lastProgressCount;
     unsigned            m_totalCount;         ///< for progress reporting
 
-    int         m_min_trace;        ///< smallest trace we find on Load(), in BIU.
-    int         m_min_hole;         ///< smallest diameter hole we find on Load(), in BIU.
-    int         m_min_via;          ///< smallest via we find on Load(), in BIU.
-    int         m_min_annulus;      ///< smallest via annulus we find on Load(), in BIU.
+    int                 m_min_trace;        ///< smallest trace we find on Load(), in BIU.
+    int                 m_min_hole;         ///< smallest diameter hole we find on Load(), in BIU.
+    int                 m_min_via;          ///< smallest via we find on Load(), in BIU.
+    int                 m_min_annulus;      ///< smallest via annulus we find on Load(), in BIU.
 
-    wxString    m_lib_path;
-    wxDateTime  m_mod_time;
+    wxString            m_lib_path;
+    long long           m_timestamp;
 };
 
 #endif  // PCB_IO_EAGLE_H_

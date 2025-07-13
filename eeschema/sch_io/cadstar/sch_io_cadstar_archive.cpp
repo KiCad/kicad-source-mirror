@@ -298,9 +298,8 @@ void SCH_IO_CADSTAR_ARCHIVE::ensureLoadedLibrary( const wxString& aLibraryPath,
     long long  timestamp = 0;
     wxFileName fn( aLibraryPath );
 
-    if( fn.IsFileReadable() )
+    if( fn.IsFileReadable() && fn.GetModificationTime().IsValid() )
         timestamp = fn.GetModificationTime().GetValue().GetValue();
-
 
     if( fn.IsFileReadable()
         && m_cachePath == aLibraryPath

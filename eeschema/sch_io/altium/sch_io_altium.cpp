@@ -4719,7 +4719,7 @@ long long SCH_IO_ALTIUM::getLibraryTimestamp( const wxString& aLibraryPath ) con
     if( fn.IsFileReadable() && fn.GetModificationTime().IsValid() )
         return fn.GetModificationTime().GetValue().GetValue();
     else
-        return wxDateTime( 0.0 ).GetValue().GetValue();
+        return 0;
 }
 
 

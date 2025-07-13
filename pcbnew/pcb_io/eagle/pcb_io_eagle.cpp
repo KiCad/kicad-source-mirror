@@ -230,7 +230,7 @@ PCB_IO_EAGLE::PCB_IO_EAGLE() :
         m_doneCount( 0 ),
         m_lastProgressCount( 0 ),
         m_totalCount( 0 ),
-        m_mod_time( wxDateTime::Now() )
+        m_timestamp( wxDateTime::Now().GetValue().GetValue() )
 {
     using namespace std::placeholders;
 
@@ -3172,18 +3172,18 @@ void PCB_IO_EAGLE::centerBoard()
 }
 
 
-wxDateTime PCB_IO_EAGLE::getModificationTime( const wxString& aPath )
+long long PCB_IO_EAGLE::GetLibraryTimestamp( const wxString& aPath ) const
 {
     // File hasn't been loaded yet.
     if( aPath.IsEmpty() )
-        return wxDateTime::Now();
+        return wxDateTime::Now().GetValue().GetValue();
 
     wxFileName  fn( aPath );
 
-    if( fn.IsFileReadable() )
-        return fn.GetModificationTime();
+    if( fn.IsFileReadable() && fn.GetModificationTime().IsValid() )
+        return fn.GetModificationTime().GetValue().GetValue();
     else
-        return wxDateTime( 0.0 );
+        return 0;
 }
 
 
@@ -3193,14 +3193,9 @@ void PCB_IO_EAGLE::cacheLib( const wxString& aLibPath )
 
     try
     {
-        wxDateTime  modtime = getModificationTime( aLibPath );
+        long long timestamp = GetLibraryTimestamp( aLibPath );
 
-        // Fixes assertions in wxWidgets debug builds for the wxDateTime object.  Refresh the
-        // cache if either of the wxDateTime objects are invalid or the last file modification
-        // time differs from the current file modification time.
-        bool load = !m_mod_time.IsValid() || !modtime.IsValid() || m_mod_time != modtime;
-
-        if( aLibPath != m_lib_path || load )
+        if( aLibPath != m_lib_path || m_timestamp != timestamp )
         {
             wxXmlNode*  doc;
             LOCALE_IO   toggle;     // toggles on, then off, the C locale.
@@ -3245,10 +3240,12 @@ void PCB_IO_EAGLE::cacheLib( const wxString& aLibPath )
             loadLibrary( library, nullptr );
             m_xpath->pop();
 
-            m_mod_time = modtime;
+            m_timestamp = timestamp;
         }
     }
-    catch(...){}
+    catch(...)
+    {
+    }
     // TODO: Handle exceptions
     // catch( file_parser_error fpe )
     // {
