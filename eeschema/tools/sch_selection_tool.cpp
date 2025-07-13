@@ -2107,14 +2107,11 @@ bool SCH_SELECTION_TOOL::selectMultiple()
 
     while( TOOL_EVENT* evt = Wait() )
     {
-        int width = area.GetEnd().x - area.GetOrigin().x;
-        int height = area.GetEnd().y - area.GetOrigin().y;
-
         /* Selection mode depends on direction of drag-selection:
          * Left > Right : Select objects that are fully enclosed by selection
          * Right > Left : Select objects that are crossed by selection
          */
-        bool isGreedy = width < 0;
+        bool isGreedy = area.GetEnd().x < area.GetOrigin().x;
 
         if( view->IsMirroredX() )
             isGreedy = !isGreedy;
@@ -2154,8 +2151,8 @@ bool SCH_SELECTION_TOOL::selectMultiple()
 
             // Fetch items from the RTree that are in our area of interest
             std::vector<KIGFX::VIEW::LAYER_ITEM_PAIR> candidates;
-            BOX2I selectionBox = area.ViewBBox();
-            view->Query( selectionBox, candidates );
+            BOX2I selectionRect = area.ViewBBox();
+            view->Query( selectionRect, candidates );
 
             // Ensure candidates only have unique items
             std::set<SCH_ITEM*> uniqueCandidates;
@@ -2175,7 +2172,7 @@ bool SCH_SELECTION_TOOL::selectMultiple()
                     for( SCH_SHEET_PIN* pin : sheet->GetPins() )
                     {
                         // If the pin is within the selection box, add it as a candidate
-                        if( selectionBox.Intersects( pin->GetBoundingBox() ) )
+                        if( selectionRect.Intersects( pin->GetBoundingBox() ) )
                             uniqueCandidates.insert( pin );
                     }
                 }
@@ -2184,14 +2181,11 @@ bool SCH_SELECTION_TOOL::selectMultiple()
                     for( SCH_PIN* pin : symbol->GetPins() )
                     {
                         // If the pin is within the selection box, add it as a candidate
-                        if( selectionBox.Intersects( pin->GetBoundingBox() ) )
+                        if( selectionRect.Intersects( pin->GetBoundingBox() ) )
                             uniqueCandidates.insert( pin );
                     }
                 }
             }
-
-            // Construct a BOX2I to determine SCH_ITEM selection
-            BOX2I selectionRect( area.GetOrigin(), VECTOR2I( width, height ) );
 
             // Build lists of nearby items and their children
             SCH_COLLECTOR       collector;

@@ -352,13 +352,11 @@ bool PL_SELECTION_TOOL::selectMultiple()
 
     while( TOOL_EVENT* evt = Wait() )
     {
-        int width = area.GetEnd().x - area.GetOrigin().x;
-
         /* Selection mode depends on direction of drag-selection:
          * Left > Right : Select objects that are fully enclosed by selection
          * Right > Left : Select objects that are crossed by selection
          */
-        bool windowSelection = width >= 0 ? true : false;
+        bool windowSelection = area.GetEnd().x > area.GetOrigin().x;
 
         m_frame->GetCanvas()->SetCurrentCursor( windowSelection ? KICURSOR::SELECT_WINDOW
                                                                 : KICURSOR::SELECT_LASSO );
@@ -393,13 +391,11 @@ bool PL_SELECTION_TOOL::selectMultiple()
             // End drawing the selection box
             view->SetVisible( &area, false );
 
-            int height = area.GetEnd().y - area.GetOrigin().y;
-
             bool anyAdded = false;
             bool anySubtracted = false;
 
             // Construct a BOX2I to determine EDA_ITEM selection
-            BOX2I selectionRect( area.GetOrigin(), VECTOR2I( width, height ) );
+            BOX2I selectionRect( area.ViewBBox() );
 
             selectionRect.Normalize();
 

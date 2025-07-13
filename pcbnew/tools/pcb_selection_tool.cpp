@@ -1066,13 +1066,11 @@ bool PCB_SELECTION_TOOL::selectMultiple()
 
     while( TOOL_EVENT* evt = Wait() )
     {
-        int width = area.GetEnd().x - area.GetOrigin().x;
-
         /* Selection mode depends on direction of drag-selection:
          * Left > Right : Select objects that are fully enclosed by selection
          * Right > Left : Select objects that are crossed by selection
          */
-        bool greedySelection = width >= 0 ? false : true;
+        bool greedySelection = area.GetEnd().x < area.GetOrigin().x;
 
         if( view->IsMirroredX() )
             greedySelection = !greedySelection;
@@ -1117,13 +1115,8 @@ bool PCB_SELECTION_TOOL::selectMultiple()
             view->SetVisible( &area, false );
 
             std::vector<KIGFX::VIEW::LAYER_ITEM_PAIR> candidates;
-            BOX2I selectionBox = area.ViewBBox();
-            view->Query( selectionBox, candidates );    // Get the list of nearby items
-
-            int height = area.GetEnd().y - area.GetOrigin().y;
-
-            // Construct a BOX2I to determine BOARD_ITEM selection
-            BOX2I selectionRect( area.GetOrigin(), VECTOR2I( width, height ) );
+            BOX2I selectionRect = area.ViewBBox();
+            view->Query( selectionRect, candidates );    // Get the list of nearby items
 
             selectionRect.Normalize();
 
