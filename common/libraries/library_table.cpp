@@ -170,9 +170,6 @@ void LIBRARY_TABLE::Format( OUTPUTFORMATTER* aOutput ) const
 
     for( const LIBRARY_TABLE_ROW& row : Rows() )
     {
-        if( !row.IsOk() )
-            continue;
-
         wxString uri = row.URI();
         uri.Replace( '\\', '/' );
 

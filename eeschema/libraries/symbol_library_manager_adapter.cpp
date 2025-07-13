@@ -472,6 +472,7 @@ void SYMBOL_LIBRARY_MANAGER_ADAPTER::abortLoad()
 
     m_abort.store( false );
     m_futures.clear();
+    m_loadTotal = 0;
 }
 
 

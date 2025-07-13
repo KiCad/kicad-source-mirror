@@ -130,7 +130,7 @@ public:
             {
             case COL_NICKNAME: r.SetNickname( EscapeString( aValue, CTX_LIBID ) );  break;
             case COL_URI:      r.SetURI( aValue );                                  break;
-            case COL_TYPE:     r.SetType( aValue  );                                break;
+            case COL_TYPE:     r.SetType( aValue );                                break;
             case COL_OPTIONS:  r.SetOptions( aValue );                              break;
             case COL_DESCR:    r.SetDescription( aValue );                          break;
             case COL_ENABLED:  r.SetDisabled( aValue == wxT( "0" ) );               break;

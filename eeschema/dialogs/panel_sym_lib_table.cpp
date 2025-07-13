@@ -130,14 +130,24 @@ public:
         // If setting a filepath, attempt to auto-detect the format
         if( aCol == COL_URI )
         {
-            LIBRARY_TABLE_ROW& row = at( static_cast<size_t>(aRow) );
+            LIBRARY_TABLE_ROW& row = at( static_cast<size_t>( aRow ) );
             wxString uri = LIBRARY_MANAGER::ExpandURI( row.URI(), Pgm().GetSettingsManager().Prj() );
-            SCH_IO_MGR::SCH_FILE_T pluginType = SCH_IO_MGR::GuessPluginTypeFromLibPath( uri );
 
-            if( pluginType == SCH_IO_MGR::SCH_FILE_UNKNOWN )
-                pluginType = SCH_IO_MGR::SCH_KICAD;
+            wxFileName fn( uri );
 
-            SetValue( aRow, COL_TYPE, SCH_IO_MGR::ShowType( pluginType ) );
+            if( fn.GetName() == FILEEXT::SymbolLibraryTableFileName )
+            {
+                SetValue( aRow, COL_TYPE, _( "Table" ) );
+            }
+            else
+            {
+                SCH_IO_MGR::SCH_FILE_T pluginType = SCH_IO_MGR::GuessPluginTypeFromLibPath( uri );
+
+                if( pluginType == SCH_IO_MGR::SCH_FILE_UNKNOWN )
+                    pluginType = SCH_IO_MGR::SCH_KICAD;
+
+                SetValue( aRow, COL_TYPE, SCH_IO_MGR::ShowType( pluginType ) );
+            }
         }
     }
 
@@ -380,6 +390,13 @@ void PANEL_SYM_LIB_TABLE::setupGrid( WX_GRID* aGrid )
                         if( desc.m_IsFile )
                             return desc.FileFilter();
                     }
+                    else if( tableRow.Type() == LIBRARY_TABLE_ROW::TABLE_TYPE_NAME )
+                    {
+                        // TODO(JE) library tables - wxWidgets doesn't allow filtering on no-extension filenames
+                        return wxString::Format( _( "Symbol Library Tables (%s)|*" ),
+                                                 FILEEXT::SymbolLibraryTableFileName,
+                                                 FILEEXT::SymbolLibraryTableFileName );
+                    }
 
                     return wxEmptyString;
                 } ) );
@@ -439,6 +456,10 @@ PANEL_SYM_LIB_TABLE::PANEL_SYM_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent, P
     // wxGrid only supports user owned tables if they exist past end of ~wxGrid(),
     // so make it a grid owned table.
     m_global_grid->SetTable( new SYMBOL_LIB_TABLE_GRID( *table.value() ) );
+
+    // TODO(JE) should use translated string here but type is stored as untranslated string
+    // Maybe type storage needs to be enum?
+    m_pluginChoices.Add( wxT( "Table" ) );
 
     for( const SCH_IO_MGR::SCH_FILE_T& type : SCH_IO_MGR::SCH_FILE_T_vector )
     {
@@ -1258,6 +1279,8 @@ void InvokeSchEditSymbolLibTable( KIWAY* aKiway, wxWindow *aParent )
                 wxMessageBox( wxString::Format( _( "Error saving global library table:\n\n%s" ), aError.message ),
                               _( "File Save Error" ), wxOK | wxICON_ERROR );
             } );
+
+        Pgm().GetLibraryManager().LoadGlobalTables();
     }
 
     std::optional<LIBRARY_TABLE*> projectTable =
@@ -1272,7 +1295,14 @@ void InvokeSchEditSymbolLibTable( KIWAY* aKiway, wxWindow *aParent )
                                                 aError.message ),
                               _( "File Save Error" ), wxOK | wxICON_ERROR );
             } );
+
+        // Trigger a reload of the table and cancel an in-progress background load
+        Pgm().GetLibraryManager().ProjectChanged();
     }
+
+    // Trigger a reload in case any libraries have been added or removed
+    if( KIFACE *schface = aKiway->KiFACE( KIWAY::FACE_SCH ) )
+        schface->PreloadLibraries( &aKiway->Prj() );
 
     if( symbolEditor )
         symbolEditor->ThawLibraryTree();

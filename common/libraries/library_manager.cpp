@@ -412,6 +412,10 @@ bool LIBRARY_MANAGER::CreateGlobalTable( LIBRARY_TABLE_TYPE aType, bool aPopulat
 
 void LIBRARY_MANAGER::LoadGlobalTables()
 {
+    // Cancel any in-progress load
+    for( const std::unique_ptr<LIBRARY_MANAGER_ADAPTER>& adapter : m_adapters | std::views::values )
+        adapter->ProjectChanged();
+
     loadTables( PATHS::GetUserSettingsPath(), LIBRARY_TABLE_SCOPE::GLOBAL );
 
     SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
