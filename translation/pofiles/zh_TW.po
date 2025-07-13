@@ -20,7 +20,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-07 17:42+0300\n"
-"PO-Revision-Date: 2025-06-27 08:05+0000\n"
+"PO-Revision-Date: 2025-07-14 16:07+0000\n"
 "Last-Translator: pominglee <pominglee@gmail.com>\n"
 "Language-Team: Chinese (Traditional Han script) <https://hosted.weblate.org/"
 "projects/kicad/master-source/zh_Hant/>\n"
@@ -9426,7 +9426,7 @@ msgstr "自適應縮放"
 
 #: common/tool/actions.cpp:699
 msgid "Zoom to worksheet area if exists or edited object"
-msgstr ""
+msgstr "如果存在或編輯物件，則縮放至工作表區域"
 
 #: common/tool/actions.cpp:706
 #, fuzzy
@@ -9508,7 +9508,7 @@ msgstr "縮放至選區大小"
 
 #: common/tool/actions.cpp:795
 msgid "Zoom to an area selection created by a mouse drag"
-msgstr ""
+msgstr "縮放到透過滑鼠拖曳建立的區域選擇"
 
 #: common/tool/actions.cpp:803 common/widgets/mathplot.cpp:1397
 msgid "Undo Last Zoom"
@@ -10535,7 +10535,7 @@ msgstr "元數據"
 
 #: common/widgets/search_pane.cpp:54
 msgid "Search library links, descriptions and keywords"
-msgstr ""
+msgstr "搜尋元件庫連結、描述和關鍵字"
 
 #: common/widgets/unit_binder.cpp:351
 #, c-format
@@ -12826,7 +12826,7 @@ msgstr "電源符號"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:128
 msgid "By net:"
-msgstr ""
+msgstr "透過網路："
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:140
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:123
@@ -13252,7 +13252,7 @@ msgstr "自動"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:56
 msgid "True"
-msgstr ""
+msgstr "真"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:57
 #, fuzzy
