@@ -2250,7 +2250,7 @@ void SCH_IO_KICAD_LEGACY::CreateLibrary( const wxString& aLibraryPath,
     m_cache = new SCH_IO_KICAD_LEGACY_LIB_CACHE( aLibraryPath );
     m_cache->SetModified();
     m_cache->Save( writeDocFile( aProperties ) );
-    m_cache->Load();    // update m_writable and m_mod_time
+    m_cache->Load();    // update m_writable and m_timestamp
 }
 
 

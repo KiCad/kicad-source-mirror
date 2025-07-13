@@ -3015,7 +3015,12 @@ bool LP_CACHE::IsModified()
 
 long long LP_CACHE::GetTimestamp( const wxString& aLibPath )
 {
-    return wxFileName( aLibPath ).GetModificationTime().GetValue().GetValue();
+    wxFileName fn( aLibPath );
+
+    if( fn.IsFileReadable() && fn.GetModificationTime().IsValid() )
+        return fn.GetModificationTime().GetValue().GetValue();
+    else
+        return 0;
 }
 
 

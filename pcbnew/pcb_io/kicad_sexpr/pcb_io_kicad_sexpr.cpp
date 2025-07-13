@@ -162,7 +162,8 @@ void FP_CACHE::Save( FOOTPRINT* aFootprintFilter )
         m_cache_timestamp += fn.GetTimestamp();
     }
 
-    m_cache_timestamp += m_lib_path.GetModificationTime().GetValue().GetValue();
+    if( m_lib_path.IsFileReadable() && m_lib_path.GetModificationTime().IsValid() )
+        m_cache_timestamp += m_lib_path.GetModificationTime().GetValue().GetValue();
 
     // If we've saved the full cache, we clear the dirty flag.
     if( !aFootprintFilter )

@@ -157,20 +157,14 @@ long long PCB_IO_ALTIUM_DESIGNER::GetLibraryTimestamp( const wxString& aLibraryP
 {
     // File hasn't been loaded yet.
     if( aLibraryPath.IsEmpty() )
-    {
         return 0;
-    }
 
     wxFileName fn( aLibraryPath );
 
     if( fn.IsFileReadable() && fn.GetModificationTime().IsValid() )
-    {
         return fn.GetModificationTime().GetValue().GetValue();
-    }
     else
-    {
         return 0;
-    }
 }
 
 
