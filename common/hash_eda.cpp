@@ -351,7 +351,7 @@ size_t hash_fp_item( const EDA_ITEM* aItem, int aFlags )
         break;
 
     default:
-        wxASSERT_MSG( false, "Unhandled type in function hash_fp_item() (exporter_gencad.cpp)" );
+        UNIMPLEMENTED_FOR( aItem->GetClass() );
     }
 
     return ret;
