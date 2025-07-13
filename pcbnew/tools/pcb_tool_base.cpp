@@ -228,8 +228,7 @@ void PCB_TOOL_BASE::doInteractiveItemPlacement( const TOOL_EVENT&        aTool,
             }
             else if( evt->IsAction( &PCB_ACTIONS::flip ) && ( aOptions & IPO_FLIP ) )
             {
-                newItem->Flip( newItem->GetPosition(),
-                               frame()->GetPcbNewSettings()->m_FlipDirection );
+                newItem->Flip( newItem->GetPosition(), frame()->GetPcbNewSettings()->m_FlipDirection );
                 view()->Update( &preview );
             }
             else if( evt->IsAction( &PCB_ACTIONS::properties ) )
@@ -309,7 +308,7 @@ PCBNEW_SETTINGS::DISPLAY_OPTIONS& PCB_TOOL_BASE::displayOptions() const
 
 PCB_DRAW_PANEL_GAL* PCB_TOOL_BASE::canvas() const
 {
-    return static_cast<PCB_DRAW_PANEL_GAL*>( frame()->GetCanvas() );
+    return static_cast<PCB_DRAW_PANEL_GAL*>( frame<PCB_BASE_FRAME>()->GetCanvas() );
 }
 
 
@@ -331,7 +330,7 @@ PCB_SELECTION& PCB_TOOL_BASE::selection()
 
 bool PCB_TOOL_BASE::Is45Limited() const
 {
-    if( frame()->IsType( FRAME_PCB_EDITOR ) )
+    if( frame<PCB_BASE_FRAME>()->IsType( FRAME_PCB_EDITOR ) )
         return GetAppSettings<PCBNEW_SETTINGS>( "pcbnew" )->m_Use45DegreeLimit;
     else
         return GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>( "fpedit" )->m_Use45Limit;
