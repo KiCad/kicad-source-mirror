@@ -47,7 +47,7 @@ void FOOTPRINT_INFO_IMPL::load()
 
     wxASSERT( fptable );
 
-    const FOOTPRINT* footprint = fptable->GetEnumeratedFootprint( m_nickname, m_fpname );
+    const FOOTPRINT* footprint = fptable->GetEnumeratedFootprint( m_nickname, m_fpname, true );
 
     if( footprint == nullptr ) // Should happen only with malformed/broken libraries
     {
@@ -192,7 +192,7 @@ void FOOTPRINT_LIST_IMPL::loadFootprints()
                 CatchErrors(
                         [&]()
                         {
-                            m_lib_table->FootprintEnumerate( fpnames, nickname, false );
+                            m_lib_table->FootprintEnumerate( fpnames, nickname, false, true );
                         } );
 
                 for( wxString fpname : fpnames )

@@ -141,7 +141,7 @@ wxString DESIGN_BLOCK_TREE_MODEL_ADAPTER::GenerateInfo( LIB_ID const& aLibId, in
 
     try
     {
-        db = m_libs->GetEnumeratedDesignBlock( aLibId.GetLibNickname(), aLibId.GetLibItemName() );
+        db = m_libs->GetEnumeratedDesignBlock( aLibId.GetLibNickname(), aLibId.GetLibItemName(), false );
     }
     catch( const IO_ERROR& ioe )
     {

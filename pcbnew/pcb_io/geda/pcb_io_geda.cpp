@@ -860,7 +860,6 @@ FOOTPRINT* PCB_IO_GEDA::ImportFootprint( const wxString&        aFootprintPath,
 void PCB_IO_GEDA::FootprintEnumerate( wxArrayString& aFootprintNames, const wxString& aLibraryPath,
                                       bool aBestEfforts, const std::map<std::string, UTF8>* aProperties )
 {
-    LOCALE_IO toggle;     // toggles on, then off, the C locale.
     wxDir     dir( aLibraryPath );
     wxString  errorMsg;
 
@@ -869,10 +868,7 @@ void PCB_IO_GEDA::FootprintEnumerate( wxArrayString& aFootprintNames, const wxSt
         if( aBestEfforts )
             return;
         else
-        {
-            THROW_IO_ERROR( wxString::Format( _( "Footprint library '%s' not found." ),
-                                              aLibraryPath ) );
-        }
+            THROW_IO_ERROR( wxString::Format( _( "Footprint library '%s' not found." ), aLibraryPath ) );
     }
 
     init( aProperties );
@@ -902,8 +898,6 @@ const FOOTPRINT* PCB_IO_GEDA::getFootprint( const wxString& aLibraryPath,
                                             const std::map<std::string, UTF8>* aProperties,
                                             bool checkModified )
 {
-    LOCALE_IO   toggle;     // toggles on, then off, the C locale.
-
     init( aProperties );
 
     validateCache( aLibraryPath, checkModified );

@@ -75,7 +75,7 @@
 #include <widgets/filedlg_import_non_kicad.h>
 #include <widgets/wx_html_report_box.h>
 #include <wx_filename.h>  // For ::ResolvePossibleSymlinks()
-
+#include <locale_io.h>
 #include <kiplatform/io.h>
 
 #include <wx/stdpaths.h>
@@ -840,6 +840,7 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
             // which prompts the user to continue with overwrite or abort)
             if( newLibPath.Length() > 0 )
             {
+                LOCALE_IO           toggle_locale;
                 IO_RELEASER<PCB_IO> piSexpr( PCB_IO_MGR::PluginFind( PCB_IO_MGR::KICAD_SEXP ) );
 
                 for( FOOTPRINT* footprint : loadedFootprints )

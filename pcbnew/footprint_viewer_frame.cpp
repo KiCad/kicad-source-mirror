@@ -1033,7 +1033,7 @@ void FOOTPRINT_VIEWER_FRAME::SelectAndViewFootprint( FPVIEWER_CONSTANTS aMode )
         GetBoard()->RemoveUnusedNets( nullptr );
 
         FOOTPRINT* footprint = PROJECT_PCB::PcbFootprintLibs( &Prj() )->FootprintLoad( getCurNickname(),
-                                                                        getCurFootprintName() );
+                                                                                       getCurFootprintName() );
 
         if( footprint )
             displayFootprint( footprint );
