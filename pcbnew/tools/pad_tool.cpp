@@ -303,7 +303,7 @@ GetSequentialPadNumberingParams( wxWindow* aFrame )
 
 int PAD_TOOL::EnumeratePads( const TOOL_EVENT& aEvent )
 {
-    if( !m_isFootprintEditor )
+    if( !m_isFootprintEditor || InPadEditMode() )
         return 0;
 
     if( !board()->GetFirstFootprint() || board()->GetFirstFootprint()->Pads().empty() )
@@ -316,8 +316,7 @@ int PAD_TOOL::EnumeratePads( const TOOL_EVENT& aEvent )
     guide.SetIgnoreFPValues( true );
     guide.SetIgnoreFPReferences( true );
 
-    const std::optional<SEQUENTIAL_PAD_ENUMERATION_PARAMS> params =
-            GetSequentialPadNumberingParams( frame() );
+    const std::optional<SEQUENTIAL_PAD_ENUMERATION_PARAMS> params = GetSequentialPadNumberingParams( frame() );
 
     // Cancelled or otherwise failed to get any useful parameters
     if( !params )
@@ -367,8 +366,7 @@ int PAD_TOOL::EnumeratePads( const TOOL_EVENT& aEvent )
 
                 for( PCB_LAYER_ID layer : item->GetLayerSet().Seq() )
                 {
-                    if( ( isHighContrast && activeLayers.count( layer ) )
-                            || view->IsLayerVisible( layer ) )
+                    if( ( isHighContrast && activeLayers.count( layer ) ) || view->IsLayerVisible( layer ) )
                     {
                         if( item->ViewGetLOD( layer, view ) < view->GetScale() )
                             return true;
