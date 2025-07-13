@@ -81,7 +81,8 @@ PCB_BASE_FRAME::PCB_BASE_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrame
         EDA_DRAW_FRAME( aKiway, aParent, aFrameType, aTitle, aPos, aSize, aStyle, aFrameName,
                         pcbIUScale ),
         m_pcb( nullptr ),
-        m_originTransforms( *this )
+        m_originTransforms( *this ),
+        m_inFpChangeTimerEvent( false )
 {
     m_watcherDebounceTimer.Bind( wxEVT_TIMER, &PCB_BASE_FRAME::OnFpChangeDebounceTimer, this );
 }
@@ -1189,6 +1190,18 @@ void PCB_BASE_FRAME::OnFPChange( wxFileSystemWatcherEvent& aEvent )
 
 void PCB_BASE_FRAME::OnFpChangeDebounceTimer( wxTimerEvent& aEvent )
 {
+    if( aEvent.GetId() != m_watcherDebounceTimer.GetId() )
+    {
+        aEvent.Skip();
+        return;
+    }
+
+    if( m_inFpChangeTimerEvent )
+    {
+        wxLogTrace( "KICAD_LIB_WATCH", "Restarting debounce timer" );
+        m_watcherDebounceTimer.StartOnce( 3000 );
+    }
+
     wxLogTrace( "KICAD_LIB_WATCH", "OnFpChangeDebounceTimer" );
 
     // Disable logging to avoid spurious messages and check if the file has changed
@@ -1211,6 +1224,8 @@ void PCB_BASE_FRAME::OnFpChangeDebounceTimer( wxTimerEvent& aEvent )
     if( !fp || !tbl )
         return;
 
+    m_inFpChangeTimerEvent = true;
+
     if( !GetScreen()->IsContentModified()
         || IsOK( this, _( "The library containing the current footprint has changed.\n"
                           "Do you want to reload the footprint?" ) ) )
@@ -1227,10 +1242,7 @@ void PCB_BASE_FRAME::OnFpChangeDebounceTimer( wxTimerEvent& aEvent )
                 std::vector<KIID> selectedItems;
 
                 for( const EDA_ITEM* item : GetCurrentSelection() )
-                {
-                    wxString uuidStr = item->m_Uuid.AsString();
                     selectedItems.emplace_back( item->m_Uuid );
-                }
 
                 m_toolManager->ResetTools( TOOL_BASE::MODEL_RELOAD );
 
@@ -1260,4 +1272,6 @@ void PCB_BASE_FRAME::OnFpChangeDebounceTimer( wxTimerEvent& aEvent )
             DisplayError( this, ioe.What() );
         }
     }
+
+    m_inFpChangeTimerEvent = false;
 }

@@ -433,12 +433,13 @@ protected:
     PCB_ORIGIN_TRANSFORMS   m_originTransforms;
 
 private:
-    std::unique_ptr<NL_PCBNEW_PLUGIN>       m_spaceMouse;
+    std::unique_ptr<NL_PCBNEW_PLUGIN>    m_spaceMouse;
 
-    std::unique_ptr<wxFileSystemWatcher>    m_watcher;
-    wxFileName                              m_watcherFileName;
-    wxDateTime                              m_watcherLastModified;
-    wxTimer                                 m_watcherDebounceTimer;
+    std::unique_ptr<wxFileSystemWatcher> m_watcher;
+    wxFileName                           m_watcherFileName;
+    wxDateTime                           m_watcherLastModified;
+    wxTimer                              m_watcherDebounceTimer;
+    bool                                 m_inFpChangeTimerEvent;
 
     std::vector<wxEvtHandler*> m_boardChangeListeners;
 };
