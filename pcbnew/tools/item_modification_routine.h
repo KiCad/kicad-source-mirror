@@ -343,6 +343,11 @@ public:
     {
     }
 
+    /**
+     * @brief False if the order of the polygons matters
+     */
+    virtual bool IsCommutative() const = 0;
+
     void ProcessShape( PCB_SHAPE& aPcbShape );
 
     /**
@@ -380,6 +385,8 @@ public:
     {
     }
 
+    bool IsCommutative() const override { return true; }
+
     wxString                GetCommitDescription() const override;
     std::optional<wxString> GetStatusMessage() const override;
 
@@ -396,6 +403,8 @@ public:
     {
     }
 
+    bool IsCommutative() const override { return false; }
+
     wxString                GetCommitDescription() const override;
     std::optional<wxString> GetStatusMessage() const override;
 
@@ -411,6 +420,8 @@ public:
             POLYGON_BOOLEAN_ROUTINE( aBoard, aHandler )
     {
     }
+
+    bool IsCommutative() const override { return true; }
 
     wxString                GetCommitDescription() const override;
     std::optional<wxString> GetStatusMessage() const override;
