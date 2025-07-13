@@ -113,12 +113,17 @@ SYMBOL_CHOOSER_FRAME::SYMBOL_CHOOSER_FRAME( KIWAY* aKiway, wxWindow* aParent, bo
     frameSizer->Add( bottomPanel, 0, wxEXPAND );
 
     SetSizer( frameSizer );
-
-    SetTitle( GetTitle() + wxString::Format( _( " (%d items loaded)" ),
-                                             m_chooserPanel->GetItemCount() ) );
-
+    SetTitle( GetTitle() + wxString::Format( _( " (%d items loaded)" ), m_chooserPanel->GetItemCount() ) );
     Layout();
     m_chooserPanel->FinishSetup();
+
+    Bind( wxEVT_CHAR_HOOK, &PANEL_SYMBOL_CHOOSER::OnChar, m_chooserPanel );
+}
+
+
+SYMBOL_CHOOSER_FRAME::~SYMBOL_CHOOSER_FRAME()
+{
+    Unbind( wxEVT_CHAR_HOOK, &PANEL_SYMBOL_CHOOSER::OnChar, m_chooserPanel );
 }
 
 

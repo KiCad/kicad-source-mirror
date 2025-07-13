@@ -44,7 +44,7 @@ public:
      */
     SYMBOL_CHOOSER_FRAME( KIWAY* aKiway, wxWindow* aParent, bool& aCancelled );
 
-    ~SYMBOL_CHOOSER_FRAME() {};
+    ~SYMBOL_CHOOSER_FRAME();
 
     /**
      * Runs the symbol viewer as a modal dialog.

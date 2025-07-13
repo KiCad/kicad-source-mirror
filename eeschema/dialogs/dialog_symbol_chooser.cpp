@@ -119,6 +119,8 @@ DIALOG_SYMBOL_CHOOSER::~DIALOG_SYMBOL_CHOOSER()
         cfg->m_SymChooserPanel.keep_symbol = m_keepSymbol->GetValue();
         cfg->m_SymChooserPanel.place_all_units = m_useUnits->GetValue();
     }
+
+    Unbind( wxEVT_CHAR_HOOK, &PANEL_SYMBOL_CHOOSER::OnChar, m_chooserPanel );
 }
 
 
