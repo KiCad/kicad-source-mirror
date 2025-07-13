@@ -304,7 +304,7 @@ void PCB_TOOL_BASE::setTransitions()
 
 PCBNEW_SETTINGS::DISPLAY_OPTIONS& PCB_TOOL_BASE::displayOptions() const
 {
-    return frame()->GetPcbNewSettings()->m_Display;
+    return frame<PCB_BASE_FRAME>()->GetPcbNewSettings()->m_Display;
 }
 
 PCB_DRAW_PANEL_GAL* PCB_TOOL_BASE::canvas() const
