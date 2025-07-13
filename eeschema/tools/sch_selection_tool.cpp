@@ -348,8 +348,8 @@ bool SCH_SELECTION_TOOL::Init()
     // clang-format on
 
     m_disambiguateTimer.SetOwner( this );
-    Connect( wxEVT_TIMER, wxTimerEventHandler( SCH_SELECTION_TOOL::onDisambiguationExpire ),
-             nullptr, this );
+    Connect( m_disambiguateTimer.GetId(), wxEVT_TIMER,
+             wxTimerEventHandler( SCH_SELECTION_TOOL::onDisambiguationExpire ), nullptr, this );
 
     return true;
 }
