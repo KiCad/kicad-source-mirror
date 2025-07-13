@@ -1057,8 +1057,8 @@ BOARD* PCB_IO_KICAD_SEXPR_PARSER::parseBOARD_unchecked()
         case T_segment:
             if( PCB_TRACK* track = parsePCB_TRACK() )
             {
-                m_board->Add( item, ADD_MODE::BULK_APPEND, true );
-                bulkAddedItems.push_back( item );
+                m_board->Add( track, ADD_MODE::BULK_APPEND, true );
+                bulkAddedItems.push_back( track );
             }
 
             break;
@@ -1066,8 +1066,8 @@ BOARD* PCB_IO_KICAD_SEXPR_PARSER::parseBOARD_unchecked()
         case T_arc:
             if( PCB_ARC* arc = parseARC() )
             {
-                m_board->Add( item, ADD_MODE::BULK_APPEND, true );
-                bulkAddedItems.push_back( item );
+                m_board->Add( arc, ADD_MODE::BULK_APPEND, true );
+                bulkAddedItems.push_back( arc );
             }
 
             break;
