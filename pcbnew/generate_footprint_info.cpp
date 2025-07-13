@@ -101,18 +101,12 @@ std::optional<wxString> GetFootprintDocumentationURL( const FOOTPRINT& aFootprin
 
 class FOOTPRINT_INFO_GENERATOR
 {
-    wxString      m_html;
-    FP_LIB_TABLE* m_fp_lib_table;
-    LIB_ID const  m_lib_id;
-
-    const FOOTPRINT*    m_footprint;
-
 public:
-    FOOTPRINT_INFO_GENERATOR( FP_LIB_TABLE* aFpLibTable, LIB_ID const& aLibId )
-        : m_html( DescriptionFormat ),
-          m_fp_lib_table( aFpLibTable ),
-          m_lib_id( aLibId ),
-          m_footprint( nullptr )
+    FOOTPRINT_INFO_GENERATOR( FP_LIB_TABLE* aFpLibTable, LIB_ID const& aLibId ) :
+            m_html( DescriptionFormat ),
+            m_fp_lib_table( aFpLibTable ),
+            m_lib_id( aLibId ),
+            m_footprint( nullptr )
     { }
 
     /**
@@ -128,7 +122,8 @@ public:
         try
         {
             m_footprint = m_fp_lib_table->GetEnumeratedFootprint( m_lib_id.GetLibNickname(),
-                                                                  m_lib_id.GetLibItemName() );
+                                                                  m_lib_id.GetLibItemName(),
+                                                                  false );
         }
         catch( const IO_ERROR& ioe )
         {
@@ -183,6 +178,12 @@ public:
         return m_html;
     }
 
+private:
+    wxString         m_html;
+    FP_LIB_TABLE*    m_fp_lib_table;
+    LIB_ID const     m_lib_id;
+
+    const FOOTPRINT* m_footprint;
 };
 
 

@@ -3211,7 +3211,6 @@ void PCB_IO_KICAD_LEGACY::cacheLib( const wxString& aLibraryPath )
 void PCB_IO_KICAD_LEGACY::FootprintEnumerate( wxArrayString& aFootprintNames, const wxString& aLibPath,
                                         bool aBestEfforts, const std::map<std::string, UTF8>* aProperties )
 {
-    LOCALE_IO toggle;     // toggles on, then off, the C locale.
     wxString  errorMsg;
 
     init( aProperties );
@@ -3237,22 +3236,18 @@ void PCB_IO_KICAD_LEGACY::FootprintEnumerate( wxArrayString& aFootprintNames, co
 
 
 FOOTPRINT* PCB_IO_KICAD_LEGACY::FootprintLoad( const wxString& aLibraryPath,
-                                         const wxString& aFootprintName, bool aKeepUUID,
-                                         const std::map<std::string, UTF8>* aProperties )
+                                               const wxString& aFootprintName, bool aKeepUUID,
+                                               const std::map<std::string, UTF8>* aProperties )
 {
-    LOCALE_IO   toggle;     // toggles on, then off, the C locale.
-
     init( aProperties );
 
     cacheLib( aLibraryPath );
 
-    const FOOTPRINT_MAP&   footprints = m_cache->m_footprints;
+    const FOOTPRINT_MAP&          footprints = m_cache->m_footprints;
     FOOTPRINT_MAP::const_iterator it = footprints.find( TO_UTF8( aFootprintName ) );
 
     if( it == footprints.end() )
-    {
         return nullptr;
-    }
 
     // Return copy of already loaded FOOTPRINT
     FOOTPRINT* copy = (FOOTPRINT*) it->second->Duplicate();

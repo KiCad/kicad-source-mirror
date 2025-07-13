@@ -49,6 +49,7 @@ using namespace std::placeholders;
 #include <widgets/wx_progress_reporters.h>
 #include <dialog_pad_properties.h>
 #include <project_pcb.h>
+#include <locale_io.h>
 
 
 static wxArrayString s_FootprintHistoryList;
@@ -333,6 +334,7 @@ bool FOOTPRINT_EDIT_FRAME::SaveLibraryAs( const wxString& aLibraryPath )
     wxBusyCursor dummy;
     wxString msg;
 
+    LOCALE_IO              toggle_locale;
     PCB_IO_MGR::PCB_FILE_T dstType = PCB_IO_MGR::GuessPluginTypeFromLibPath( dstLibPath );
     PCB_IO_MGR::PCB_FILE_T curType = PCB_IO_MGR::GuessPluginTypeFromLibPath( curLibPath );
 
@@ -362,12 +364,12 @@ bool FOOTPRINT_EDIT_FRAME::SaveLibraryAs( const wxString& aLibraryPath )
 
         cur->FootprintEnumerate( footprints, curLibPath, false );
 
-        for( unsigned i = 0;  i < footprints.size();  ++i )
+        for( const wxString& fp : footprints )
         {
-            const FOOTPRINT* footprint = cur->GetEnumeratedFootprint( curLibPath, footprints[i] );
+            const FOOTPRINT* footprint = cur->GetEnumeratedFootprint( curLibPath, fp );
             dst->FootprintSave( dstLibPath, footprint );
 
-            msg = wxString::Format( _( "Footprint '%s' saved." ), footprints[i] );
+            msg = wxString::Format( _( "Footprint '%s' saved." ), fp );
             SetStatusText( msg );
         }
     }

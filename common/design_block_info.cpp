@@ -37,6 +37,7 @@
 #include <utility>
 #include <wx/tokenzr.h>
 #include <kiface_base.h>
+#include <locale_io.h>
 
 DESIGN_BLOCK_INFO* DESIGN_BLOCK_LIST::GetDesignBlockInfo( const wxString& aLibNickname,
                                                           const wxString& aDesignBlockName )
@@ -92,6 +93,16 @@ std::vector<SEARCH_TERM> DESIGN_BLOCK_INFO::GetSearchTerms()
 bool DESIGN_BLOCK_INFO::InLibrary( const wxString& aLibrary ) const
 {
     return aLibrary == m_nickname;
+}
+
+
+void DESIGN_BLOCK_INFO::ensure_loaded()
+{
+    // Lazy-loading.  MUST NOT be called from multi-threaded environment.
+    LOCALE_IO toggle_locale;
+
+    if( !m_loaded )
+        load();
 }
 
 

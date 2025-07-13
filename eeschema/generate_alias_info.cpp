@@ -48,19 +48,13 @@ static const wxString LinkFormat = wxS( "<a href=\"__HREF__\">__TEXT__</a>" );
 
 class FOOTPRINT_INFO_GENERATOR
 {
-    wxString m_html;
-    SYMBOL_LIB_TABLE* m_sym_lib_table;
-    LIB_ID const m_lib_id;
-    LIB_SYMBOL* m_symbol;
-    int m_unit;
-
 public:
-    FOOTPRINT_INFO_GENERATOR( SYMBOL_LIB_TABLE* aSymbolLibTable, LIB_ID const& aLibId, int aUnit )
-        : m_html( DescriptionFormat ),
-          m_sym_lib_table( aSymbolLibTable ),
-          m_lib_id( aLibId ),
-          m_symbol( nullptr ),
-          m_unit( aUnit )
+    FOOTPRINT_INFO_GENERATOR( SYMBOL_LIB_TABLE* aSymbolLibTable, LIB_ID const& aLibId, int aUnit ) :
+            m_html( DescriptionFormat ),
+            m_sym_lib_table( aSymbolLibTable ),
+            m_lib_id( aLibId ),
+            m_symbol( nullptr ),
+            m_unit( aUnit )
     { }
 
     /**
@@ -110,7 +104,6 @@ protected:
         m_html.Replace( wxS( "__NAME__" ), EscapeHTML( UnescapeString( m_symbol->GetName() ) ) );
     }
 
-
     void SetHtmlAliasOf()
     {
         if( m_symbol->IsRoot() )
@@ -130,13 +123,11 @@ protected:
                 root_desc = parent->GetDesc();
             }
 
-            m_html.Replace( wxS( "__ALIASOF__" ),
-                            wxString::Format(  AliasOfFormat,
-                                               EscapeHTML( UnescapeString( root_name ) ),
-                                               EscapeHTML( root_desc ) ) );
+            m_html.Replace( wxS( "__ALIASOF__" ), wxString::Format( AliasOfFormat,
+                                                                    EscapeHTML( UnescapeString( root_name ) ),
+                                                                    EscapeHTML( root_desc ) ) );
         }
     }
-
 
     void SetHtmlDesc()
     {
@@ -151,7 +142,6 @@ protected:
         m_html.Replace( wxS( "__DESC__" ), wxString::Format( DescFormat, esc_desc ) );
     }
 
-
     void SetHtmlKeywords()
     {
         wxString keywords = m_symbol->GetKeyWords();
@@ -159,10 +149,8 @@ protected:
         if( keywords.empty() )
             m_html.Replace( wxS( "__KEY__" ), wxEmptyString );
         else
-            m_html.Replace( wxS( "__KEY__" ),
-                            wxString::Format( KeywordsFormat, EscapeHTML( keywords ) ) );
+            m_html.Replace( wxS( "__KEY__" ), wxString::Format( KeywordsFormat, EscapeHTML( keywords ) ) );
     }
-
 
     wxString GetHtmlFieldRow( const SCH_FIELD& aField ) const
     {
@@ -263,6 +251,13 @@ protected:
 
         m_html.Replace( wxS( "__FIELDS__" ), fieldtable );
     }
+
+private:
+    wxString          m_html;
+    SYMBOL_LIB_TABLE* m_sym_lib_table;
+    LIB_ID const      m_lib_id;
+    LIB_SYMBOL*       m_symbol;
+    int               m_unit;
 };
 
 

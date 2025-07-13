@@ -39,6 +39,7 @@
 
 #include <wx/dir.h>
 #include <wx/hash.h>
+#include <locale_io.h>
 
 #define OPT_SEP '|' ///< options separator character
 
@@ -315,13 +316,24 @@ long long DESIGN_BLOCK_LIB_TABLE::GenerateTimestamp( const wxString* aNickname )
 }
 
 
-void DESIGN_BLOCK_LIB_TABLE::DesignBlockEnumerate( wxArrayString&  aDesignBlockNames,
-                                                   const wxString& aNickname, bool aBestEfforts )
+void DESIGN_BLOCK_LIB_TABLE::DesignBlockEnumerate( wxArrayString&  aDesignBlockNames, const wxString& aNickname,
+                                                   bool aBestEfforts, bool aThreadSafe )
 {
     const DESIGN_BLOCK_LIB_TABLE_ROW* row = FindRow( aNickname, true );
     wxASSERT( row->plugin );
-    row->plugin->DesignBlockEnumerate( aDesignBlockNames, row->GetFullURI( true ), aBestEfforts,
-                                       row->GetProperties() );
+
+    if( !aThreadSafe )
+    {
+        LOCALE_IO toggle_locale;
+
+        row->plugin->DesignBlockEnumerate( aDesignBlockNames, row->GetFullURI( true ), aBestEfforts,
+                                           row->GetProperties() );
+    }
+    else
+    {
+        row->plugin->DesignBlockEnumerate( aDesignBlockNames, row->GetFullURI( true ), aBestEfforts,
+                                           row->GetProperties() );
+    }
 }
 
 
@@ -372,19 +384,34 @@ static void setLibNickname( DESIGN_BLOCK* aModule, const wxString& aNickname,
 
 const DESIGN_BLOCK*
 DESIGN_BLOCK_LIB_TABLE::GetEnumeratedDesignBlock( const wxString& aNickname,
-                                                  const wxString& aDesignBlockName )
+                                                  const wxString& aDesignBlockName,
+                                                  bool aThreadSafe )
 {
     const DESIGN_BLOCK_LIB_TABLE_ROW* row = FindRow( aNickname, true );
     wxASSERT( row->plugin );
 
-    return row->plugin->GetEnumeratedDesignBlock( row->GetFullURI( true ), aDesignBlockName,
-                                                  row->GetProperties() );
+    if( !aThreadSafe )
+    {
+        LOCALE_IO toggle_locale;
+
+        return row->plugin->GetEnumeratedDesignBlock( row->GetFullURI( true ), aDesignBlockName,
+                                                      row->GetProperties() );
+    }
+    else
+    {
+        return row->plugin->GetEnumeratedDesignBlock( row->GetFullURI( true ), aDesignBlockName,
+                                                      row->GetProperties() );
+    }
 }
 
 
 bool DESIGN_BLOCK_LIB_TABLE::DesignBlockExists( const wxString& aNickname,
                                                 const wxString& aDesignBlockName )
 {
+    // NOT THREAD-SAFE!  LOCALE_IO is global!
+
+    LOCALE_IO toggle_locale;
+
     try
     {
         const DESIGN_BLOCK_LIB_TABLE_ROW* row = FindRow( aNickname, true );
@@ -404,6 +431,10 @@ DESIGN_BLOCK* DESIGN_BLOCK_LIB_TABLE::DesignBlockLoad( const wxString& aNickname
                                                        const wxString& aDesignBlockName,
                                                        bool            aKeepUUID )
 {
+    // NOT THREAD-SAFE!  LOCALE_IO is global!
+
+    LOCALE_IO toggle_locale;
+
     const DESIGN_BLOCK_LIB_TABLE_ROW* row = FindRow( aNickname, true );
     wxASSERT( row->plugin );
 
@@ -420,6 +451,10 @@ DESIGN_BLOCK_LIB_TABLE::SAVE_T
 DESIGN_BLOCK_LIB_TABLE::DesignBlockSave( const wxString&     aNickname,
                                          const DESIGN_BLOCK* aDesignBlock, bool aOverwrite )
 {
+    // NOT THREAD-SAFE!  LOCALE_IO is global!
+
+    LOCALE_IO toggle_locale;
+
     const DESIGN_BLOCK_LIB_TABLE_ROW* row = FindRow( aNickname, true );
     wxASSERT( row->plugin );
 

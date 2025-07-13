@@ -435,9 +435,7 @@ FOOTPRINT* DISPLAY_FOOTPRINTS_FRAME::GetFootprint( const wxString& aFootprintNam
 
     try
     {
-        const FOOTPRINT* fp = fpTable->GetEnumeratedFootprint( libNickname, fpName );
-
-        if( fp )
+        if( const FOOTPRINT* fp = fpTable->GetEnumeratedFootprint( libNickname, fpName, false ) )
             footprint = static_cast<FOOTPRINT*>( fp->Duplicate() );
     }
     catch( const IO_ERROR& ioe )

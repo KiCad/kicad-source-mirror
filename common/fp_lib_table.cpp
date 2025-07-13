@@ -40,6 +40,7 @@
 
 #include <wx/dir.h>
 #include <wx/hash.h>
+#include <locale_io.h>
 
 #define OPT_SEP     '|'         ///< options separator character
 
@@ -307,12 +308,23 @@ long long FP_LIB_TABLE::GenerateTimestamp( const wxString* aNickname )
 
 
 void FP_LIB_TABLE::FootprintEnumerate( wxArrayString& aFootprintNames, const wxString& aNickname,
-                                       bool aBestEfforts )
+                                       bool aBestEfforts, bool aThreadSafe )
 {
     const FP_LIB_TABLE_ROW* row = FindRow( aNickname, true );
     wxASSERT( row->plugin );
-    row->plugin->FootprintEnumerate( aFootprintNames, row->GetFullURI( true ), aBestEfforts,
-                                     row->GetProperties() );
+
+    if( !aThreadSafe )
+    {
+        LOCALE_IO toggle_locale;
+
+        row->plugin->FootprintEnumerate( aFootprintNames, row->GetFullURI( true ), aBestEfforts,
+                                         row->GetProperties() );
+    }
+    else
+    {
+        row->plugin->FootprintEnumerate( aFootprintNames, row->GetFullURI( true ), aBestEfforts,
+                                         row->GetProperties() );
+    }
 }
 
 
@@ -362,18 +374,33 @@ static void setLibNickname( FOOTPRINT* aModule, const wxString& aNickname,
 
 
 const FOOTPRINT* FP_LIB_TABLE::GetEnumeratedFootprint( const wxString& aNickname,
-                                                       const wxString& aFootprintName )
+                                                       const wxString& aFootprintName,
+                                                       bool aThreadSafe )
 {
     const FP_LIB_TABLE_ROW* row = FindRow( aNickname, true );
     wxASSERT( row->plugin );
 
-    return row->plugin->GetEnumeratedFootprint( row->GetFullURI( true ), aFootprintName,
-                                                row->GetProperties() );
+    if( !aThreadSafe )
+    {
+        LOCALE_IO toggle_locale;
+
+        return row->plugin->GetEnumeratedFootprint( row->GetFullURI( true ), aFootprintName,
+                                                    row->GetProperties() );
+    }
+    else
+    {
+        return row->plugin->GetEnumeratedFootprint( row->GetFullURI( true ), aFootprintName,
+                                                    row->GetProperties() );
+    }
 }
 
 
 bool FP_LIB_TABLE::FootprintExists( const wxString& aNickname, const wxString& aFootprintName )
 {
+    // NOT THREAD-SAFE!  LOCALE_IO is global!
+
+    LOCALE_IO toggle_locale;
+
     try
     {
         const FP_LIB_TABLE_ROW* row = FindRow( aNickname, true );
@@ -392,6 +419,10 @@ bool FP_LIB_TABLE::FootprintExists( const wxString& aNickname, const wxString& a
 FOOTPRINT* FP_LIB_TABLE::FootprintLoad( const wxString& aNickname,
                                         const wxString& aFootprintName, bool aKeepUUID )
 {
+    // NOT THREAD-SAFE!  LOCALE_IO is global!
+
+    LOCALE_IO toggle_locale;
+
     const FP_LIB_TABLE_ROW* row = FindRow( aNickname, true );
     wxASSERT( row->plugin );
 
@@ -407,6 +438,10 @@ FOOTPRINT* FP_LIB_TABLE::FootprintLoad( const wxString& aNickname,
 FP_LIB_TABLE::SAVE_T FP_LIB_TABLE::FootprintSave( const wxString& aNickname,
                                                   const FOOTPRINT* aFootprint, bool aOverwrite )
 {
+    // NOT THREAD-SAFE!  LOCALE_IO is global!
+
+    LOCALE_IO toggle_locale;
+
     const FP_LIB_TABLE_ROW* row = FindRow( aNickname, true );
     wxASSERT( row->plugin );
 

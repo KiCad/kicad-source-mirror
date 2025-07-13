@@ -2788,7 +2788,6 @@ void PCB_IO_KICAD_SEXPR::validateCache( const wxString& aLibraryPath, bool check
 void PCB_IO_KICAD_SEXPR::FootprintEnumerate( wxArrayString& aFootprintNames, const wxString& aLibPath,
                                      bool aBestEfforts, const std::map<std::string, UTF8>* aProperties )
 {
-    LOCALE_IO toggle;     // toggles on, then off, the C locale.
     wxDir     dir( aLibPath );
     wxString  errorMsg;
 
@@ -2819,8 +2818,6 @@ const FOOTPRINT* PCB_IO_KICAD_SEXPR::getFootprint( const wxString& aLibraryPath,
                                                    const std::map<std::string, UTF8>* aProperties,
                                                    bool checkModified )
 {
-    LOCALE_IO   toggle;     // toggles on, then off, the C locale.
-
     init( aProperties );
 
     try
@@ -2913,8 +2910,6 @@ FOOTPRINT* PCB_IO_KICAD_SEXPR::FootprintLoad( const wxString& aLibraryPath,
 void PCB_IO_KICAD_SEXPR::FootprintSave( const wxString& aLibraryPath, const FOOTPRINT* aFootprint,
                                         const std::map<std::string, UTF8>* aProperties )
 {
-    LOCALE_IO   toggle;     // toggles on, then off, the C locale.
-
     init( aProperties );
 
     // In this public PLUGIN API function, we can safely assume it was
@@ -2931,9 +2926,7 @@ void PCB_IO_KICAD_SEXPR::FootprintSave( const wxString& aLibraryPath, const FOOT
                                                       "Would you like to create it?"),
                                                       aLibraryPath );
 
-            if( !Pgm().IsGUI()
-                || wxMessageBox( msg, _( "Library Not Found" ), wxYES_NO | wxICON_QUESTION )
-                           != wxYES )
+            if( !Pgm().IsGUI() || wxMessageBox( msg, _( "Library Not Found" ), wxYES_NO | wxICON_QUESTION ) != wxYES )
                 return;
 
             // Save throws its own IO_ERROR on failure, so no need to recreate here

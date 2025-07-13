@@ -39,6 +39,7 @@
 #include <utility>
 #include <wx/tokenzr.h>
 #include <kiface_base.h>
+#include <locale_io.h>
 
 FOOTPRINT_INFO* FOOTPRINT_LIST::GetFootprintInfo( const wxString& aLibNickname,
                                                   const wxString& aFootprintName )
@@ -94,6 +95,16 @@ std::vector<SEARCH_TERM> FOOTPRINT_INFO::GetSearchTerms()
 bool FOOTPRINT_INFO::InLibrary( const wxString& aLibrary ) const
 {
     return aLibrary == m_nickname;
+}
+
+
+void FOOTPRINT_INFO::ensure_loaded()
+{
+    // Lazy-loading.  MUST NOT be called from multi-threaded environment.
+    LOCALE_IO toggle_locale;
+
+    if( !m_loaded )
+        load();
 }
 
 

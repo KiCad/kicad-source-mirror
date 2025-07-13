@@ -41,8 +41,8 @@ void DESIGN_BLOCK_INFO_IMPL::load()
 
     wxASSERT( dbtable );
 
-    std::unique_ptr<const DESIGN_BLOCK> design_block( dbtable->GetEnumeratedDesignBlock( m_nickname,
-                                                                                         m_dbname ) );
+    std::unique_ptr<const DESIGN_BLOCK> design_block( dbtable->GetEnumeratedDesignBlock( m_nickname, m_dbname,
+                                                                                         true ) );
 
     if( design_block )
     {
@@ -176,7 +176,7 @@ void DESIGN_BLOCK_LIST_IMPL::loadDesignBlocks()
                 CatchErrors(
                         [&]()
                         {
-                            m_lib_table->DesignBlockEnumerate( dbnames, nickname, false );
+                            m_lib_table->DesignBlockEnumerate( dbnames, nickname, false, true );
                         } );
 
                 for( wxString dbname : dbnames )

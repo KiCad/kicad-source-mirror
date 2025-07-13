@@ -58,7 +58,7 @@ static int guessNickname( FP_LIB_TABLE* aTbl, LIB_ID* aFootprintId )
     {
         wxArrayString fpnames;
 
-        aTbl->FootprintEnumerate( fpnames, nicks[libNdx], true );
+        aTbl->FootprintEnumerate( fpnames, nicks[libNdx], true, false );
 
         for( unsigned nameNdx = 0; nameNdx < fpnames.size(); ++nameNdx )
         {

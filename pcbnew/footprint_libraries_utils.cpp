@@ -51,6 +51,7 @@
 #include <footprint_editor_settings.h>
 #include <footprint_viewer_frame.h>
 #include <io/kicad/kicad_io_utils.h>
+#include <locale_io.h>
 #include <view/view_controls.h>
 #include <wx/choicdlg.h>
 #include <wx/filedlg.h>
@@ -688,6 +689,7 @@ void PCB_EDIT_FRAME::ExportFootprintsToLibrary( bool aStoreInNewLib, const wxStr
                 libNickname = row->GetNickName();
         }
 
+        LOCALE_IO              toggle_locale;
         PCB_IO_MGR::PCB_FILE_T piType = PCB_IO_MGR::KICAD_SEXP;
         IO_RELEASER<PCB_IO>    pi( PCB_IO_MGR::PluginFind( piType ) );
         std::map<std::string, UTF8> options { { "skip_cache_validation", "1" } }; // Skip cache validation -- we just created it
@@ -1264,7 +1266,7 @@ FOOTPRINT* PCB_BASE_FRAME::CreateNewFootprint( wxString aFootprintName, const wx
         // Try to infer the footprint attributes from an existing footprint in the library
         try
         {
-            tbl->FootprintEnumerate( fpnames, aLibName, true );
+            tbl->FootprintEnumerate( fpnames, aLibName, true, false );
 
             if( !fpnames.empty() )
                 footprintAttrs = tbl->FootprintLoad( aLibName, fpnames.Last() )->GetAttributes();

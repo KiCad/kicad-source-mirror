@@ -106,11 +106,7 @@ public:
     friend bool operator<( const DESIGN_BLOCK_INFO& lhs, const DESIGN_BLOCK_INFO& rhs );
 
 protected:
-    void ensure_loaded()
-    {
-        if( !m_loaded )
-            load();
-    }
+    void ensure_loaded();
 
     /// lazily load stuff not filled in by constructor.  This may throw IO_ERRORS.
     virtual void load(){};
