@@ -100,7 +100,8 @@ SCH_BASE_FRAME::SCH_BASE_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aWindo
         EDA_DRAW_FRAME( aKiway, aParent, aWindowType, aTitle, aPosition, aSize, aStyle,
                         aFrameName, schIUScale ),
         m_base_frame_defaults( nullptr, "base_Frame_defaults" ),
-        m_selectionFilterPanel( nullptr )
+        m_selectionFilterPanel( nullptr ),
+        m_inSymChangeTimerEvent( false )
 {
     if( ( aStyle & wxFRAME_NO_TASKBAR ) == 0 )
         createCanvas();
@@ -765,6 +766,12 @@ void SCH_BASE_FRAME::OnSymChangeDebounceTimer( wxTimerEvent& aEvent )
         return;
     }
 
+    if( m_inSymChangeTimerEvent )
+    {
+        wxLogTrace( "KICAD_LIB_WATCH", "Restarting debounce timer" );
+        m_watcherDebounceTimer.StartOnce( 3000 );
+    }
+
     wxLogTrace( "KICAD_LIB_WATCH", "OnSymChangeDebounceTimer" );
 
     // Disable logging to avoid spurious messages and check if the file has changed
@@ -777,6 +784,8 @@ void SCH_BASE_FRAME::OnSymChangeDebounceTimer( wxTimerEvent& aEvent )
 
     m_watcherLastModified = lastModified;
 
+    m_inSymChangeTimerEvent = true;
+
     if( !GetScreen()->IsContentModified()
       || IsOK( this, _( "The library containing the current symbol has changed.\n"
                         "Do you want to reload the library?" ) ) )
@@ -786,6 +795,8 @@ void SCH_BASE_FRAME::OnSymChangeDebounceTimer( wxTimerEvent& aEvent )
         Kiway().ExpressMail( FRAME_SCH_VIEWER, MAIL_REFRESH_SYMBOL, libName );
         Kiway().ExpressMail( FRAME_SCH_SYMBOL_EDITOR, MAIL_REFRESH_SYMBOL, libName );
     }
+
+    m_inSymChangeTimerEvent = false;
 }
 
 

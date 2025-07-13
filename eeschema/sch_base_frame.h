@@ -308,6 +308,7 @@ private:
     wxFileName                              m_watcherFileName;
     wxDateTime                              m_watcherLastModified;
     wxTimer                                 m_watcherDebounceTimer;
+    bool                                    m_inSymChangeTimerEvent;
 
     std::unique_ptr<NL_SCHEMATIC_PLUGIN>    m_spaceMouse;
 };
