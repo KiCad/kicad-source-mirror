@@ -190,7 +190,8 @@ void HIERARCHY_PANE::UpdateHierarchySelection()
                 }
             };
 
-    recursiveDescent( m_tree->GetRootItem() );
+    if( m_tree->GetRootItem().IsOk() )
+        recursiveDescent( m_tree->GetRootItem() );
 
     if( eventsWereBound )
     {
