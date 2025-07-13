@@ -96,16 +96,6 @@ bool DESIGN_BLOCK_INFO::InLibrary( const wxString& aLibrary ) const
 }
 
 
-void DESIGN_BLOCK_INFO::ensure_loaded()
-{
-    // Lazy-loading.  MUST NOT be called from multi-threaded environment.
-    LOCALE_IO toggle_locale;
-
-    if( !m_loaded )
-        load();
-}
-
-
 bool operator<( const DESIGN_BLOCK_INFO& lhs, const DESIGN_BLOCK_INFO& rhs )
 {
     int retv = StrNumCmp( lhs.m_nickname, rhs.m_nickname, false );

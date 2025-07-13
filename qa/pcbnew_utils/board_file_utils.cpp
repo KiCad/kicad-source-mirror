@@ -27,7 +27,6 @@
 #include <pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.h>
 #include <pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.h>
 #include <richio.h>
-#include <locale_io.h>
 #include <board.h>
 #include <footprint.h>
 
@@ -148,7 +147,6 @@ std::unique_ptr<FOOTPRINT> ReadFootprintFromFileOrStream( const std::string& aFi
 
 void DumpFootprintToFile( const FOOTPRINT& aFootprint, const std::string& aLibraryPath )
 {
-    LOCALE_IO          toggle_locale;
     PCB_IO_KICAD_SEXPR io;
     io.FootprintSave( aLibraryPath, &aFootprint, nullptr );
 }

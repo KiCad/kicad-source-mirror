@@ -36,7 +36,7 @@ class KICOMMON_API DESIGN_BLOCK_INFO_IMPL : public DESIGN_BLOCK_INFO
 {
 public:
     DESIGN_BLOCK_INFO_IMPL( DESIGN_BLOCK_LIST* aOwner, const wxString& aNickname,
-                            const wxString& aDesignBlockName )
+                            const wxString& aDesignBlockName, const LOCALE_IO* aLocale )
     {
         m_nickname = aNickname;
         m_dbname = aDesignBlockName;
@@ -44,7 +44,7 @@ public:
 
         m_owner = aOwner;
         m_loaded = false;
-        load();
+        load( aLocale );
     }
 
     // A constructor for cached items
@@ -73,7 +73,7 @@ public:
     }
 
 protected:
-    virtual void load() override;
+    virtual void load( const LOCALE_IO* aLocale = nullptr ) override;
 };
 
 

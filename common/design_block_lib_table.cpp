@@ -317,12 +317,12 @@ long long DESIGN_BLOCK_LIB_TABLE::GenerateTimestamp( const wxString* aNickname )
 
 
 void DESIGN_BLOCK_LIB_TABLE::DesignBlockEnumerate( wxArrayString&  aDesignBlockNames, const wxString& aNickname,
-                                                   bool aBestEfforts, bool aThreadSafe )
+                                                   bool aBestEfforts, const LOCALE_IO* aLocale )
 {
     const DESIGN_BLOCK_LIB_TABLE_ROW* row = FindRow( aNickname, true );
     wxASSERT( row->plugin );
 
-    if( !aThreadSafe )
+    if( !aLocale )
     {
         LOCALE_IO toggle_locale;
 
@@ -385,12 +385,12 @@ static void setLibNickname( DESIGN_BLOCK* aModule, const wxString& aNickname,
 const DESIGN_BLOCK*
 DESIGN_BLOCK_LIB_TABLE::GetEnumeratedDesignBlock( const wxString& aNickname,
                                                   const wxString& aDesignBlockName,
-                                                  bool aThreadSafe )
+                                                  const LOCALE_IO* aLocale )
 {
     const DESIGN_BLOCK_LIB_TABLE_ROW* row = FindRow( aNickname, true );
     wxASSERT( row->plugin );
 
-    if( !aThreadSafe )
+    if( !aLocale )
     {
         LOCALE_IO toggle_locale;
 

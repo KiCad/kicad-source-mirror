@@ -98,16 +98,6 @@ bool FOOTPRINT_INFO::InLibrary( const wxString& aLibrary ) const
 }
 
 
-void FOOTPRINT_INFO::ensure_loaded()
-{
-    // Lazy-loading.  MUST NOT be called from multi-threaded environment.
-    LOCALE_IO toggle_locale;
-
-    if( !m_loaded )
-        load();
-}
-
-
 bool operator<( const FOOTPRINT_INFO& lhs, const FOOTPRINT_INFO& rhs )
 {
     int retv = StrNumCmp( lhs.m_nickname, rhs.m_nickname, false );

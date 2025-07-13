@@ -392,7 +392,7 @@ wxArrayString GetFootprints( const wxString& aNickName )
     if( !tbl )
         return footprintNames;
 
-    tbl->FootprintEnumerate( footprintNames, aNickName, true, false );
+    tbl->FootprintEnumerate( footprintNames, aNickName, true );
 
     return footprintNames;
 }
