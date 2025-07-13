@@ -53,6 +53,7 @@
 #include <dialogs/dialog_text_entry.h>
 #include <dialogs/dialog_sim_format_value.h>
 #include <eeschema_settings.h>
+#include <magic_enum.hpp>
 
 
 SIM_TRACE_TYPE operator|( SIM_TRACE_TYPE aFirst, SIM_TRACE_TYPE aSecond )
@@ -3179,7 +3180,8 @@ void SIMULATOR_FRAME_UI::OnSimRefresh( bool aFinal )
         }
 
         SIM_PLOT_TAB* plotTab = dynamic_cast<SIM_PLOT_TAB*>( simTab );
-        wxCHECK_RET( plotTab, wxT( "not a SIM_PLOT_TAB" ) );
+        wxCHECK_RET( plotTab, wxString::Format( wxT( "No SIM_PLOT_TAB for: %s" ),
+                                                magic_enum::enum_name( simType ) ) );
 
         struct TRACE_INFO
         {
