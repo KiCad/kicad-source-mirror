@@ -2929,6 +2929,7 @@ bool PCB_SELECTION_TOOL::Selectable( const BOARD_ITEM* aItem, bool checkVisibili
     const PAD*      pad = nullptr;
     const PCB_TEXT* text = nullptr;
     const PCB_FIELD* field = nullptr;
+    const PCB_MARKER* marker = nullptr;
 
     // Most footprint children can only be selected in the footprint editor.
     if( aItem->GetParentFootprint() && !m_isFootprintEditor && !checkVisibilityOnly )
@@ -3080,6 +3081,14 @@ bool PCB_SELECTION_TOOL::Selectable( const BOARD_ITEM* aItem, bool checkVisibili
             if( !( pad->GetLayerSet() & visibleLayers() ).any() )
                 return false;
         }
+
+        break;
+
+    case PCB_MARKER_T:
+        marker = static_cast<const PCB_MARKER*>( aItem );
+
+        if( marker && marker->IsExcluded() && !board()->IsElementVisible( LAYER_DRC_EXCLUSION ) )
+            return false;
 
         break;
 
