@@ -153,8 +153,7 @@ PCB_SELECTION_TOOL::~PCB_SELECTION_TOOL()
     getView()->Remove( &m_selection );
     getView()->Remove( &m_enteredGroupOverlay );
 
-    Disconnect( wxEVT_TIMER, wxTimerEventHandler( PCB_SELECTION_TOOL::onDisambiguationExpire ),
-                nullptr, this );
+    Disconnect( wxEVT_TIMER, wxTimerEventHandler( PCB_SELECTION_TOOL::onDisambiguationExpire ), nullptr, this );
 }
 
 
@@ -225,8 +224,8 @@ bool PCB_SELECTION_TOOL::Init()
         frame->AddStandardSubMenus( *m_menu.get() );
 
     m_disambiguateTimer.SetOwner( this );
-    Connect( wxEVT_TIMER, wxTimerEventHandler( PCB_SELECTION_TOOL::onDisambiguationExpire ),
-             nullptr, this );
+    Connect( m_disambiguateTimer.GetId(), wxEVT_TIMER,
+             wxTimerEventHandler( PCB_SELECTION_TOOL::onDisambiguationExpire ), nullptr, this );
 
     return true;
 }

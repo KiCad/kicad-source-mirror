@@ -737,6 +737,12 @@ void SCH_BASE_FRAME::OnSymChange( wxFileSystemWatcherEvent& aEvent )
 
 void SCH_BASE_FRAME::OnSymChangeDebounceTimer( wxTimerEvent& aEvent )
 {
+    if( aEvent.GetId() != m_watcherDebounceTimer.GetId() )
+    {
+        aEvent.Skip();
+        return;
+    }
+
     wxLogTrace( "KICAD_LIB_WATCH", "OnSymChangeDebounceTimer" );
 
     // Disable logging to avoid spurious messages and check if the file has changed

@@ -44,7 +44,7 @@ STATUS_POPUP::STATUS_POPUP( wxWindow* aParent ) :
     m_panel->SetSizer( m_topSizer );
     m_panel->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOW ) );
 
-    Connect( wxEVT_TIMER, wxTimerEventHandler( STATUS_POPUP::onExpire ), nullptr, this );
+    Connect( m_expireTimer.GetId(), wxEVT_TIMER, wxTimerEventHandler( STATUS_POPUP::onExpire ), nullptr, this );
 
 #ifdef __WXOSX_MAC__
     // Key events from popups don't get put through the wxWidgets event system on OSX,
