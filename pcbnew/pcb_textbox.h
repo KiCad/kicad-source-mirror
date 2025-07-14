@@ -114,6 +114,8 @@ public:
 
     bool HitTest( const BOX2I& aRect, bool aContained, int aAccuracy = 0 ) const override;
 
+    bool HitTest( const SHAPE_LINE_CHAIN& aPoly, bool aContained ) const override;
+
     wxString GetClass() const override
     {
         return wxT( "PCB_TEXTBOX" );

@@ -106,6 +106,7 @@ public:
 
     bool TextHitTest( const VECTOR2I& aPoint, int aAccuracy = 0 ) const override;
     bool TextHitTest( const BOX2I& aRect, bool aContains, int aAccuracy = 0 ) const override;
+    bool TextHitTest( const SHAPE_LINE_CHAIN& aPoly, bool aContained ) const;
 
     bool HitTest( const VECTOR2I& aPosition, int aAccuracy ) const override
     {
@@ -115,6 +116,11 @@ public:
     bool HitTest( const BOX2I& aRect, bool aContained, int aAccuracy = 0 ) const override
     {
         return TextHitTest( aRect, aContained, aAccuracy );
+    }
+
+    bool HitTest( const SHAPE_LINE_CHAIN& aPoly, bool aContained ) const override
+    {
+        return TextHitTest( aPoly, aContained );
     }
 
     wxString GetClass() const override

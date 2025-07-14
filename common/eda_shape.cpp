@@ -35,6 +35,7 @@
 #include <geometry/shape_simple.h>
 #include <geometry/shape_segment.h>
 #include <geometry/shape_rect.h>
+#include <geometry/geometry_utils.h>
 #include <macros.h>
 #include <math/util.h>      // for KiROUND
 #include <eda_item.h>
@@ -1584,6 +1585,14 @@ bool EDA_SHAPE::hitTest( const BOX2I& aRect, bool aContained, int aAccuracy ) co
         UNIMPLEMENTED_FOR( SHAPE_T_asString() );
         return false;
     }
+}
+
+
+bool EDA_SHAPE::hitTest( const SHAPE_LINE_CHAIN& aPoly, bool aContained ) const
+{
+    SHAPE_COMPOUND shape( MakeEffectiveShapes() );
+
+    return KIGEOM::ShapeHitTest( aPoly, shape, aContained );
 }
 
 

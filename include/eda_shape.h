@@ -451,6 +451,7 @@ protected:
 
     bool hitTest( const VECTOR2I& aPosition, int aAccuracy = 0 ) const;
     bool hitTest( const BOX2I& aRect, bool aContained, int aAccuracy = 0 ) const;
+    bool hitTest( const SHAPE_LINE_CHAIN& aPoly, bool aContained ) const;
 
     const std::vector<VECTOR2I> buildBezierToSegmentsPointsList( int aMaxError ) const;
 

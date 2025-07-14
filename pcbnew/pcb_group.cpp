@@ -256,6 +256,13 @@ bool PCB_GROUP::HitTest( const BOX2I& aRect, bool aContained, int aAccuracy ) co
 }
 
 
+bool PCB_GROUP::HitTest( const SHAPE_LINE_CHAIN& aPoly, bool aContained ) const
+{
+    // Groups are selected by promoting a selection of one of their children
+    return false;
+}
+
+
 const BOX2I PCB_GROUP::GetBoundingBox() const
 {
     BOX2I bbox;

@@ -31,6 +31,7 @@
 #include <wx/debug.h>
 #include <gal/graphics_abstraction_layer.h>
 #include <geometry/shape_circle.h>
+#include <geometry/geometry_utils.h>
 #include <kiplatform/ui.h>
 #include <dialogs/dialog_unit_entry.h>
 #include <collectors.h>
@@ -382,6 +383,11 @@ public:
             return sel.Contains( GetBoundingBox() );
 
         return sel.Intersects( GetBoundingBox() );
+    }
+
+    bool HitTest( const SHAPE_LINE_CHAIN& aPoly, bool aContained ) const override
+    {
+        return KIGEOM::ShapeHitTest( aPoly, getOutline(), aContained );
     }
 
     const BOX2I ViewBBox() const override { return GetBoundingBox(); }

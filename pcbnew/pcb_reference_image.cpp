@@ -203,6 +203,12 @@ bool PCB_REFERENCE_IMAGE::HitTest( const BOX2I& aRect, bool aContained, int aAcc
 }
 
 
+bool PCB_REFERENCE_IMAGE::HitTest( const SHAPE_LINE_CHAIN& aPoly, bool aContained ) const
+{
+    return KIGEOM::BoxHitTest( aPoly, GetBoundingBox(), aContained );
+}
+
+
 BITMAPS PCB_REFERENCE_IMAGE::GetMenuImage() const
 {
     return BITMAPS::image;

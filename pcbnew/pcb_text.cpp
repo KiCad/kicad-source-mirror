@@ -38,6 +38,7 @@
 #include <trigo.h>
 #include <string_utils.h>
 #include <geometry/shape_compound.h>
+#include <geometry/geometry_utils.h>
 #include <callback_gal.h>
 #include <convert_basic_shapes_to_polygon.h>
 #include <api/api_enums.h>
@@ -378,6 +379,17 @@ bool PCB_TEXT::TextHitTest( const BOX2I& aRect, bool aContains, int aAccuracy ) 
         return rect.Contains( GetBoundingBox() );
 
     return rect.Intersects( GetBoundingBox() );
+}
+
+
+bool PCB_TEXT::TextHitTest( const SHAPE_LINE_CHAIN& aPoly, bool aContained ) const
+{
+    BOX2I rect = GetTextBox( nullptr );
+
+    if( IsKnockout() )
+        rect.Inflate( getKnockoutMargin() );
+
+    return KIGEOM::BoxHitTest( aPoly, rect, GetDrawRotation(), GetDrawPos(), aContained );
 }
 
 

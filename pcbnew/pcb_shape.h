@@ -130,6 +130,11 @@ public:
         return hitTest( aRect, aContained, aAccuracy );
     }
 
+    bool HitTest( const SHAPE_LINE_CHAIN& aPoly, bool aContained ) const override
+    {
+        return hitTest( aPoly, aContained );
+    }
+
     void Normalize() override;
 
     /**

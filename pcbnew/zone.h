@@ -448,9 +448,14 @@ public:
                          SHAPE_POLY_SET::VERTEX_INDEX* aCornerHit = nullptr ) const;
 
     /**
-     * @copydoc BOARD_ITEM::HitTest(const BOX2I& aRect, bool aContained, int aAccuracy) const
+     * @copydoc EDA_ITEM::HitTest(const BOX2I& aRect, bool aContained, int aAccuracy) const
      */
     bool HitTest( const BOX2I& aRect, bool aContained = true, int aAccuracy = 0 ) const override;
+
+    /**
+     * @copydoc EDA_ITEM::HitTest(const SHAPE_LINE_CHAIN& aPoly, bool aContained ) const
+     */
+    bool HitTest( const SHAPE_LINE_CHAIN& aPoly, bool aContained ) const;
 
     /**
      * Removes the zone filling.

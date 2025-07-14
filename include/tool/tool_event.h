@@ -522,6 +522,11 @@ public:
         m_param = aParam;
     }
 
+    bool HasParameter() const
+    {
+        return m_param.has_value();
+    }
+
     std::optional<int> GetCommandId() const
     {
         return m_commandId;

@@ -38,6 +38,7 @@
 #include <dialog_find.h>
 #include <dialog_filter_selection.h>
 #include <zone_filler.h>
+#include <preview_items/selection_area.h>
 
 FP_LIB_TABLE GFootprintTable;
 
@@ -262,9 +263,9 @@ bool PCB_SELECTION_TOOL::selectCursor( bool aForceSelect, CLIENT_SELECTION_FILTE
 }
 
 
-bool PCB_SELECTION_TOOL::selectMultiple()
+void PCB_SELECTION_TOOL::SelectMultiple( KIGFX::PREVIEW::SELECTION_AREA& aArea, bool aSubtractive,
+                                         bool aExclusiveOr )
 {
-    return false;
 }
 
 

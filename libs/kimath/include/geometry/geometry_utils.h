@@ -34,6 +34,10 @@
 #include <stdlib.h>         // for abs
 #include <math/box2.h>
 #include <geometry/eda_angle.h>
+#include <geometry/shape_line_chain.h>
+#include <geometry/shape_rect.h>
+#include <geometry/shape_simple.h>
+#include <geometry/shape_compound.h>
 
 /**
  * @return the number of segments to approximate a arc by segments
@@ -226,4 +230,40 @@ bool BoxHitTest( const VECTOR2I& aHitPoint, const BOX2I& aHittee, int aAccuracy 
  * @param aAccuracy - The accuracy of the hit test.
  */
 bool BoxHitTest( const BOX2I& aHitter, const BOX2I& aHittee, bool aHitteeContained, int aAccuracy );
+
+/**
+ * Perform a shape-to-box hit test.
+ *
+ * @param aHitter - The selection shape that is either hitting or containing the hittee.
+ * @param aHittee - The box that is either being hit or contained by the hitter
+ *                  (this is possibly an object's bounding box).
+ * @param aHitteeContained - True if the hittee is tested for total containment,
+ *                           false if it is tested for intersection.
+ */
+bool BoxHitTest( const SHAPE_LINE_CHAIN& aHitter, const BOX2I& aHittee, bool aHitteeContained );
+
+/**
+ * Perform a shape-to-box hit test with rotated box.
+ *
+ * @param aHitter - The selection shape that is either hitting or containing the hittee.
+ * @param aHittee - The box that is either being hit or contained by the hitter
+ *                  (this is possibly an object's bounding box).
+ * @param aHitteeRotation - The rotation of the hittee box.
+ * @param aHitteeRotationCenter - The center of the hittee box rotation.
+ * @param aHitteeContained - True if the hittee is tested for total containment,
+ *                           false if it is tested for intersection.
+ */
+bool BoxHitTest( const SHAPE_LINE_CHAIN& aHitter, const BOX2I& aHittee, const EDA_ANGLE& aHitteeRotation,
+                 const VECTOR2I& aHitteeRotationCenter, bool aHitteeContained );
+
+/**
+ * Perform a shape-to-shape hit test.
+ *
+ * @param aHitter - The selection shape that is either hitting or containing the hittee.
+ * @param aHittee - The shape that is either being hit or contained by the hitter
+ *                  (this is possibly an object's bounding box).
+ * @param aHitteeContained - True if the hittee is tested for total containment,
+ *                           false if it is tested for intersection.
+ */
+bool ShapeHitTest( const SHAPE_LINE_CHAIN& aHitter, const SHAPE& aHittee, bool aHitteeContained );
 }; // namespace KIGEOM

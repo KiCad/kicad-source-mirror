@@ -33,6 +33,7 @@
 #include <geometry/shape_rect.h>
 #include <geometry/shape_compound.h>
 #include <geometry/shape_null.h>
+#include <geometry/geometry_utils.h>
 #include <layer_range.h>
 #include <string_utils.h>
 #include <i18n_utility.h>
@@ -1552,6 +1553,24 @@ bool PAD::HitTest( const BOX2I& aRect, bool aContained, int aAccuracy ) const
 
         return hit;
     }
+}
+
+
+bool PAD::HitTest( const SHAPE_LINE_CHAIN& aPoly, bool aContained ) const
+{
+    SHAPE_COMPOUND effectiveShape;
+
+    // Add padstack shapes
+    Padstack().ForEachUniqueLayer(
+            [&]( PCB_LAYER_ID aLayer )
+            {
+                effectiveShape.AddShape( GetEffectiveShape( aLayer ) );
+            } );
+
+    // Add hole shape
+    effectiveShape.AddShape( GetEffectiveHoleShape() );
+
+    return KIGEOM::ShapeHitTest( aPoly, effectiveShape, aContained );
 }
 
 

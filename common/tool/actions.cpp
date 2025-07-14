@@ -30,6 +30,7 @@
 #include <tool/actions.h>
 #include <tool/tool_action.h>
 #include <tool/tool_event.h>
+#include <tool/selection_tool.h>
 
 // Actions, being statically-defined, require specialized I18N handling.  We continue to
 // use the _() macro so that string harvesting by the I18N framework doesn't have to be
@@ -345,6 +346,51 @@ TOOL_ACTION ACTIONS::paste( TOOL_ACTION_ARGS()
         .Icon( BITMAPS::paste )
         .Flags( AF_NONE )
         .UIId( wxID_PASTE ) );
+
+TOOL_ACTION ACTIONS::selectInsideRectangle( TOOL_ACTION_ARGS()
+        .Name( "common.Interactive.selectInsideRectangle" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Inside Rectangle" ) )
+        .Tooltip( _( "Select all items fully contained within the rectangular area" ) )
+        .Parameter( SELECTION_MODE::INSIDE_RECTANGLE ) );
+
+TOOL_ACTION ACTIONS::selectTouchingRectangle( TOOL_ACTION_ARGS()
+        .Name( "common.Interactive.selectTouchingRectangle" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Touching Rectangle" ) )
+        .Tooltip( _( "Select all items that touch or intersect the rectangular area" ) )
+        .Parameter( SELECTION_MODE::TOUCHING_RECTANGLE ) );
+
+TOOL_ACTION ACTIONS::selectInsideLasso( TOOL_ACTION_ARGS()
+        .Name( "common.Interactive.selectInsideLasso" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Inside Lasso" ) )
+        .Tooltip( _( "Select all items fully contained within the lasso area" ) )
+        .Icon( BITMAPS::add_graphical_polygon ) // TODO: add proper icon
+        .Parameter( SELECTION_MODE::INSIDE_LASSO ) );
+
+TOOL_ACTION ACTIONS::selectTouchingLasso( TOOL_ACTION_ARGS()
+        .Name( "common.Interactive.selectTouchingLasso" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Touching Lasso" ) )
+        .Tooltip( _( "Select all items that touch or intersect the lasso area" ) )
+        .Icon( BITMAPS::add_dashed_line ) // TODO: add proper icon
+        .Parameter( SELECTION_MODE::TOUCHING_LASSO ) );
+
+TOOL_ACTION ACTIONS::selectAutoLasso( TOOL_ACTION_ARGS()
+        .Name( "common.Interactive.selectAutoLasso" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Lasso" ) )
+        .Tooltip( _( "Select all items fully contained within or touching the lasso area, depending on the drawing direction" ) )
+        .Icon( BITMAPS::opt_show_polygon ) ); // TODO: add proper icon
+
+TOOL_ACTION ACTIONS::selectTouchingPath( TOOL_ACTION_ARGS()
+        .Name( "common.Interactive.selectTouchingPath" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Touching Path" ) )
+        .Tooltip( _( "Select all items that touch or intersect the drawn path" ) )
+        .Icon( BITMAPS::add_line ) // TODO: add proper icon
+        .Parameter( SELECTION_MODE::TOUCHING_PATH ) );
 
 TOOL_ACTION ACTIONS::selectAll( TOOL_ACTION_ARGS()
         .Name( "common.Interactive.selectAll" )

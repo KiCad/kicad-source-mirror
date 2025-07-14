@@ -29,6 +29,7 @@
 
 #include <deque>
 
+#include <geometry/shape_line_chain.h>
 #include <api/serializable.h>
 #include <core/typeinfo.h>
 #include <eda_item_flags.h>
@@ -245,6 +246,18 @@ public:
     virtual bool HitTest( const BOX2I& aRect, bool aContained, int aAccuracy = 0 ) const
     {
         return false;   // derived classes should override this function
+    }
+
+    /**
+     * Test if \a aPoly intersects this item.
+     *
+     * @param aPoly A reference to a #SHAPE_LINE_CHAIN object containing the polygon or polyline to test.
+     * @param aContained Set to true to test for containment instead of an intersection.
+     * @return True if \a aPoly contains or intersects the item.
+     */
+    virtual bool HitTest( const SHAPE_LINE_CHAIN& aPoly, bool aContained ) const
+    {
+        return false; // derived classes should override this function
     }
 
     /**

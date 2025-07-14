@@ -90,6 +90,14 @@ public:
         return HitTestMarker( aRect, aContained, aAccuracy );
     }
 
+    bool HitTest( const SHAPE_LINE_CHAIN& aPoly, bool aContained ) const override
+    {
+        if( GetMarkerType() == MARKER_RATSNEST )
+            return false;
+
+        return HitTestMarker( aPoly, aContained );
+    }
+
     EDA_ITEM* Clone() const override
     {
         return new PCB_MARKER( *this );

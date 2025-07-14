@@ -36,6 +36,8 @@
 #include <geometry/shape_compound.h>
 #include <geometry/shape_circle.h>
 #include <geometry/shape_segment.h>
+#include <geometry/shape_rect.h>
+#include <geometry/geometry_utils.h>
 #include <settings/color_settings.h>
 #include <settings/settings_manager.h>
 #include <trigo.h>
@@ -722,6 +724,22 @@ bool PCB_DIMENSION_BASE::HitTest( const BOX2I& aRect, bool aContained, int aAccu
         return arect.Contains( rect );
 
     return arect.Intersects( rect );
+}
+
+
+bool PCB_DIMENSION_BASE::HitTest( const SHAPE_LINE_CHAIN& aPoly, bool aContained ) const
+{
+    // Note: Can't use GetEffectiveShape() because we want text as BoundingBox, not as graphics.
+    SHAPE_COMPOUND effShape;
+
+    // Add shapes
+    for( const std::shared_ptr<SHAPE>& shape : GetShapes() )
+        effShape.AddShape( shape );
+
+    if( aContained )
+        return TextHitTest( aPoly, aContained ) && KIGEOM::ShapeHitTest( aPoly, effShape, aContained );
+    else
+        return TextHitTest( aPoly, aContained ) || KIGEOM::ShapeHitTest( aPoly, effShape, aContained );
 }
 
 
@@ -1742,6 +1760,16 @@ const BOX2I PCB_DIM_CENTER::ViewBBox() const
     bBox.SetHeight( maxSize * 2 );
 
    return bBox;
+}
+
+
+void PCB_DIM_CENTER::updateText()
+{
+    // Even if PCB_DIM_CENTER has no text, we still need to update its text position
+    // so GetTextPos() users get a valid value. Required at least for lasso hit-testing.
+    SetTextPos( m_start );
+
+    PCB_DIMENSION_BASE::updateText();
 }
 
 

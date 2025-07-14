@@ -765,6 +765,52 @@ bool ZONE::HitTest( const BOX2I& aRect, bool aContained, int aAccuracy ) const
 }
 
 
+bool ZONE::HitTest( const SHAPE_LINE_CHAIN& aPoly, bool aContained ) const
+{
+    if( aContained )
+    {
+        auto outlineIntersectingSelection =
+                [&]()
+                {
+                    for( auto segment = m_Poly->IterateSegments(); segment; segment++ )
+                    {
+                        if( aPoly.Intersects( *segment ) )
+                            return true;
+                    }
+
+                    return false;
+                };
+
+        // In the case of contained selection, all vertices of the zone outline must be inside
+        // the selection polygon, so we can check only the first vertex.
+        auto vertexInsideSelection =
+                [&]()
+                {
+                    return aPoly.PointInside( m_Poly->CVertex( 0 ) );
+                };
+
+        return vertexInsideSelection() && !outlineIntersectingSelection();
+    }
+    else
+    {
+        // Touching selection - check if any segment of the zone contours collides with the
+        // selection shape.
+        for( auto segment = m_Poly->IterateSegmentsWithHoles(); segment; segment++ )
+        {
+            if( aPoly.PointInside( ( *segment ).A ) )
+                return true;
+
+            if( aPoly.Intersects( *segment ) )
+                return true;
+
+            // Note: aPoly.Collide() could be used instead of two test above, but it is 3x slower.
+        }
+
+        return false;
+    }
+}
+
+
 std::optional<int> ZONE::GetLocalClearance() const
 {
     return m_isRuleArea ? 0 : m_ZoneClearance;

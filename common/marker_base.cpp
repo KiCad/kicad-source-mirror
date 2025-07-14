@@ -34,6 +34,7 @@
 #include "marker_base.h"
 #include <core/arraydim.h>
 #include <geometry/shape_line_chain.h>
+#include <geometry/geometry_utils.h>
 #include "dialogs/dialog_display_html_text_base.h"
 
 
@@ -111,6 +112,16 @@ bool MARKER_BASE::HitTestMarker( const BOX2I& aRect, bool aContained, int aAccur
         return aRect.Contains( bbox );
 
     return aRect.Intersects( bbox );
+}
+
+
+bool MARKER_BASE::HitTestMarker( const SHAPE_LINE_CHAIN& aPoly, bool aContained ) const
+{
+    SHAPE_LINE_CHAIN shape;
+    ShapeToPolygon( shape );
+    shape.Move( m_Pos );
+
+    return KIGEOM::ShapeHitTest( aPoly, shape, aContained );
 }
 
 

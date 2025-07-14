@@ -2148,6 +2148,8 @@ bool SCH_SELECTION_TOOL::selectMultiple()
             area.SetAdditive( m_drag_additive );
             area.SetSubtractive( m_drag_subtractive );
             area.SetExclusiveOr( false );
+            area.SetMode( isGreedy ? SELECTION_MODE::TOUCHING_RECTANGLE
+                                   : SELECTION_MODE::INSIDE_RECTANGLE );
 
             view->SetVisible( &area, true );
             view->Update( &area );

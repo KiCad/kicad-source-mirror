@@ -43,6 +43,7 @@
 #include <geometry/convex_hull.h>
 #include <geometry/shape_segment.h>
 #include <geometry/shape_simple.h>
+#include <geometry/geometry_utils.h>
 #include <i18n_utility.h>
 #include <lset.h>
 #include <macros.h>
@@ -1957,6 +1958,49 @@ bool FOOTPRINT::HitTest( const BOX2I& aRect, bool aContained, int aAccuracy ) co
 
         // No items were hit
         return false;
+    }
+}
+
+
+bool FOOTPRINT::HitTest( const SHAPE_LINE_CHAIN& aPoly, bool aContained ) const
+{
+    using std::ranges::all_of;
+    using std::ranges::any_of;
+
+    // If there are no pads, zones, or drawings, test footprint text instead.
+    if( m_pads.empty() && m_zones.empty() && m_drawings.empty() )
+        return KIGEOM::BoxHitTest( aPoly, GetBoundingBox( true ), aContained );
+
+    auto hitTest =
+            [&]( const auto* aItem )
+            {
+                return aItem && aItem->HitTest( aPoly, aContained );
+            };
+
+    // Filter out text items from the drawings, since they are selectable on their own,
+    // and we don't want to select the whole footprint when text is hit. TextBox items are NOT
+    // selectable on their own, so they are not excluded here.
+    auto drawings = m_drawings | std::views::filter( []( const auto* aItem )
+                                                     {
+                                                         return aItem && aItem->Type() != PCB_TEXT_T;
+                                                     } );
+
+    // Test pads, zones and drawings with text excluded. PCB fields are also selectable
+    // on their own, so they don't get tested. Groups are not hit-tested, only their members.
+    // Bitmaps aren't selectable since they aren't displayed.
+    if( aContained )
+    {
+        // All items must be contained in the selection poly.
+        return all_of( drawings, hitTest )
+            && all_of( m_pads,   hitTest )
+            && all_of( m_zones,  hitTest );
+    }
+    else
+    {
+        // Any item intersecting the selection poly is sufficient.
+        return any_of( drawings, hitTest )
+            || any_of( m_pads,   hitTest )
+            || any_of( m_zones,  hitTest );
     }
 }
 

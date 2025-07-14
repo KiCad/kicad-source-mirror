@@ -378,6 +378,8 @@ bool PL_SELECTION_TOOL::selectMultiple()
             area.SetAdditive( m_drag_additive );
             area.SetSubtractive( m_drag_subtractive );
             area.SetExclusiveOr( false );
+            area.SetMode( windowSelection ? SELECTION_MODE::INSIDE_RECTANGLE
+                                          : SELECTION_MODE::TOUCHING_RECTANGLE );
 
             view->SetVisible( &area, true );
             view->Update( &area );

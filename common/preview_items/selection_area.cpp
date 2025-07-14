@@ -66,7 +66,8 @@ static const SELECTION_COLORS selectionColorScheme[2] = {
 SELECTION_AREA::SELECTION_AREA() :
         m_additive( false ),
         m_subtractive( false ),
-        m_exclusiveOr( false )
+        m_exclusiveOr( false ),
+        m_mode( SELECTION_MODE::INSIDE_RECTANGLE )
 {
 
 }
@@ -76,9 +77,23 @@ const BOX2I SELECTION_AREA::ViewBBox() const
 {
     BOX2I tmp;
 
-    tmp.SetOrigin( m_origin );
-    tmp.SetEnd( m_end );
+    switch( m_mode )
+    {
+    default:
+    case SELECTION_MODE::INSIDE_RECTANGLE:
+    case SELECTION_MODE::TOUCHING_RECTANGLE:
+        tmp.SetOrigin( m_origin );
+        tmp.SetEnd( m_end );
+        break;
+    case SELECTION_MODE::INSIDE_LASSO:
+    case SELECTION_MODE::TOUCHING_LASSO:
+    case SELECTION_MODE::TOUCHING_PATH:
+        tmp = m_shape_poly.BBox();
+        break;
+    }
+
     tmp.Normalize();
+
     return tmp;
 }
 
@@ -91,10 +106,9 @@ void SELECTION_AREA::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
     const SELECTION_COLORS& scheme = settings->IsBackgroundDark() ? selectionColorScheme[0]
                                                                   : selectionColorScheme[1];
 
-    // Set the fill of the selection rectangle
-    // based on the selection mode
+    // Set the colors of the selection shape based on the selection mode
     if( m_additive )
-        gal.SetFillColor( scheme.additive  );
+        gal.SetFillColor( scheme.additive );
     else if( m_subtractive )
         gal.SetFillColor( scheme.subtract );
     else if( m_exclusiveOr )
@@ -102,24 +116,44 @@ void SELECTION_AREA::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
     else
         gal.SetFillColor( scheme.normal );
 
-    gal.SetIsStroke( true );
-    gal.SetIsFill( true );
+    if( m_mode == SELECTION_MODE::INSIDE_RECTANGLE || m_mode == SELECTION_MODE::INSIDE_LASSO )
+        gal.SetStrokeColor( scheme.outline_l2r );
+    else
+        gal.SetStrokeColor( scheme.outline_r2l );
 
+    auto drawSelectionShape =
+            [&]()
+            {
+                switch( m_mode )
+                {
+                default:
+                case SELECTION_MODE::INSIDE_RECTANGLE:
+                case SELECTION_MODE::TOUCHING_RECTANGLE:
+                    gal.DrawRectangle( m_origin, m_end );
+                    break;
+                case SELECTION_MODE::INSIDE_LASSO:
+                case SELECTION_MODE::TOUCHING_LASSO:
+                    if( m_shape_poly.PointCount() > 1 )
+                        gal.DrawPolygon( m_shape_poly );
+                    break;
+                case SELECTION_MODE::TOUCHING_PATH:
+                    if( m_shape_poly.PointCount() > 0 )
+                        gal.DrawPolyline( m_shape_poly );
+                    break;
+                }
+            };
+
+    gal.SetIsStroke( true );
+    gal.SetIsFill( false );
     // force 1-pixel-wide line
     gal.SetLineWidth( 0.0 );
-
-    // Set the stroke color to indicate window or crossing selection
-    bool windowSelection = ( m_origin.x <= m_end.x ) ? true : false;
-
-    if( aView->IsMirroredX() )
-        windowSelection = !windowSelection;
-
-    gal.SetStrokeColor( windowSelection ? scheme.outline_l2r : scheme.outline_r2l );
-    gal.SetIsFill( false );
-    gal.DrawRectangle( m_origin, m_end );
-    gal.SetIsFill( true );
+    drawSelectionShape();
 
     // draw the fill as the second object so that Z test will not clamp
     // the single-pixel-wide rectangle sides
-    gal.DrawRectangle( m_origin, m_end );
+    if( m_mode != SELECTION_MODE::TOUCHING_PATH )
+    {
+        gal.SetIsFill( true );
+        drawSelectionShape();
+    }
 }

@@ -54,7 +54,6 @@ using namespace std::placeholders;
 #include <dialogs/dialog_locked_items_query.h>
 #include <class_draw_panel_gal.h>
 #include <view/view_controls.h>
-#include <preview_items/selection_area.h>
 #include <gal/painter.h>
 #include <router/router_tool.h>
 #include <pcbnew_settings.h>
@@ -68,6 +67,7 @@ using namespace std::placeholders;
 #include <connectivity/connectivity_data.h>
 #include <ratsnest/ratsnest_data.h>
 #include <footprint_viewer_frame.h>
+#include <geometry/geometry_utils.h>
 #include <wx/event.h>
 #include <wx/timer.h>
 #include <wx/log.h>
@@ -452,11 +452,11 @@ int PCB_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
             }
             else if( hasModifier() || dragAction == MOUSE_DRAG_ACTION::SELECT )
             {
-                selectMultiple();
+                SelectRectArea( aEvent );
             }
             else if( m_selection.Empty() && dragAction != MOUSE_DRAG_ACTION::DRAG_ANY )
             {
-                selectMultiple();
+                SelectRectArea( aEvent );
             }
             else
             {
@@ -485,7 +485,7 @@ int PCB_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
                                 aCollector.Remove( item );
                         };
 
-                // See if we can drag before falling back to selectMultiple()
+                // See if we can drag before falling back to SelectRectArea()
                 bool doDrag = false;
 
                 if( evt->HasPosition() )
@@ -522,7 +522,7 @@ int PCB_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
                 else
                 {
                     // Otherwise drag a selection box
-                    selectMultiple();
+                    SelectRectArea( aEvent );
                 }
             }
         }
@@ -946,6 +946,19 @@ const TOOL_ACTION* allowedActions[] = { &ACTIONS::panUp,          &ACTIONS::panD
                                         &ACTIONS::zoomFitObjects, nullptr };
 
 
+static void passEvent( TOOL_EVENT* const aEvent, const TOOL_ACTION* const aAllowedActions[] )
+{
+    for( int i = 0; aAllowedActions[i]; ++i )
+    {
+        if( aEvent->IsAction( aAllowedActions[i] ) )
+        {
+            aEvent->SetPassEvent();
+            break;
+        }
+    }
+}
+
+
 bool PCB_SELECTION_TOOL::selectTableCells( PCB_TABLE* aTable )
 {
     bool cancelled = false;     // Was the tool canceled while it was running?
@@ -1030,14 +1043,7 @@ bool PCB_SELECTION_TOOL::selectTableCells( PCB_TABLE* aTable )
         else
         {
             // Allow some actions for navigation
-            for( int i = 0; allowedActions[i]; ++i )
-            {
-                if( evt->IsAction( allowedActions[i] ) )
-                {
-                    evt->SetPassEvent();
-                    break;
-                }
-            }
+            passEvent( evt, allowedActions );
         }
     }
 
@@ -1052,31 +1058,46 @@ bool PCB_SELECTION_TOOL::selectTableCells( PCB_TABLE* aTable )
 }
 
 
-bool PCB_SELECTION_TOOL::selectMultiple()
+int PCB_SELECTION_TOOL::SelectRectArea( const TOOL_EVENT& aEvent )
 {
     bool cancelled = false;     // Was the tool canceled while it was running?
     m_multiple = true;          // Multiple selection mode is active
-    KIGFX::VIEW* view = getView();
+    KIGFX::VIEW*   view = getView();
+    bool           fixedMode = false;
+    SELECTION_MODE selectionMode = SELECTION_MODE::INSIDE_RECTANGLE;
+
+    if( aEvent.HasParameter() )
+    {
+        fixedMode = true;
+        selectionMode = aEvent.Parameter<SELECTION_MODE>();
+    }
 
     KIGFX::PREVIEW::SELECTION_AREA area;
     view->Add( &area );
 
-    bool anyAdded = false;
-    bool anySubtracted = false;
-
     while( TOOL_EVENT* evt = Wait() )
     {
-        /* Selection mode depends on direction of drag-selection:
-         * Left > Right : Select objects that are fully enclosed by selection
-         * Right > Left : Select objects that are crossed by selection
-         */
-        bool greedySelection = area.GetEnd().x < area.GetOrigin().x;
+        if( !fixedMode )
+        {
+            int width = area.GetEnd().x - area.GetOrigin().x;
 
-        if( view->IsMirroredX() )
-            greedySelection = !greedySelection;
+            /* Selection mode depends on direction of drag-selection:
+            * Left > Right : Select objects that are fully enclosed by selection
+            * Right > Left : Select objects that are crossed by selection
+            */
+            bool touchingSelection = width >= 0 ? false : true;
 
-        m_frame->GetCanvas()->SetCurrentCursor( !greedySelection ? KICURSOR::SELECT_WINDOW
-                                                                 : KICURSOR::SELECT_LASSO );
+            if( view->IsMirroredX() )
+                touchingSelection = !touchingSelection;
+
+            selectionMode = touchingSelection ? SELECTION_MODE::TOUCHING_RECTANGLE
+                                              : SELECTION_MODE::INSIDE_RECTANGLE;
+        }
+
+        if( selectionMode == SELECTION_MODE::INSIDE_RECTANGLE )
+            m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::SELECT_WINDOW );
+        else
+            m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::SELECT_LASSO );
 
         if( evt->IsCancelInteractive() || evt->IsActivate() )
         {
@@ -1090,8 +1111,8 @@ bool PCB_SELECTION_TOOL::selectMultiple()
             {
                 if( m_selection.GetSize() > 0 )
                 {
-                    anySubtracted = true;
                     ClearSelection( true /*quiet mode*/ );
+                    m_toolMgr->ProcessEvent( EVENTS::UnselectedEvent );
                 }
             }
 
@@ -1101,6 +1122,7 @@ bool PCB_SELECTION_TOOL::selectMultiple()
             area.SetAdditive( m_drag_additive );
             area.SetSubtractive( m_drag_subtractive );
             area.SetExclusiveOr( false );
+            area.SetMode( selectionMode );
 
             view->SetVisible( &area, true );
             view->Update( &area );
@@ -1114,133 +1136,20 @@ bool PCB_SELECTION_TOOL::selectMultiple()
             // End drawing the selection box
             view->SetVisible( &area, false );
 
-            std::vector<KIGFX::VIEW::LAYER_ITEM_PAIR> candidates;
-            BOX2I selectionRect = area.ViewBBox();
-            view->Query( selectionRect, candidates );    // Get the list of nearby items
+            SelectMultiple( area, m_subtractive, m_exclusive_or );
 
-            selectionRect.Normalize();
-
-            GENERAL_COLLECTOR collector;
-            GENERAL_COLLECTOR padsCollector;
-            std::set<EDA_ITEM*> group_items;
-
-            for( PCB_GROUP* group : board()->Groups() )
-            {
-                // The currently entered group does not get limited
-                if( m_enteredGroup == group )
-                    continue;
-
-                std::unordered_set<EDA_ITEM*>& newset = group->GetItems();
-
-                // If we are not greedy and have selected the whole group, add just one item
-                // to allow it to be promoted to the group later
-                if( !greedySelection && selectionRect.Contains( group->GetBoundingBox() )
-                        && newset.size() )
-                {
-                    for( EDA_ITEM* group_item : newset )
-                    {
-                        if( !group_item->IsBOARD_ITEM() )
-                            continue;
-
-                        if( Selectable( static_cast<BOARD_ITEM*>( group_item ) ) )
-                            collector.Append( *newset.begin() );
-                    }
-                }
-
-                for( EDA_ITEM* group_item : newset )
-                    group_items.emplace( group_item );
-            }
-
-            for( const auto& [item, layer] : candidates )
-            {
-                if( !item->IsBOARD_ITEM() )
-                    continue;
-
-                BOARD_ITEM* boardItem = static_cast<BOARD_ITEM*>( item );
-
-                if( Selectable( boardItem ) && boardItem->HitTest( selectionRect, !greedySelection )
-                        && ( greedySelection || !group_items.count( boardItem ) ) )
-                {
-                    if( boardItem->Type() == PCB_PAD_T && !m_isFootprintEditor )
-                        padsCollector.Append( boardItem );
-                    else
-                        collector.Append( boardItem );
-                }
-            }
-
-            // Apply the stateful filter
-            FilterCollectedItems( collector, true );
-
-            FilterCollectorForHierarchy( collector, true );
-
-            // If we selected nothing but pads, allow them to be selected
-            if( collector.GetCount() == 0 )
-            {
-                collector = padsCollector;
-                FilterCollectedItems( collector, true );
-                FilterCollectorForHierarchy( collector, true );
-            }
-
-            // Sort the filtered selection by rows and columns to have a nice default
-            // for tools that can use it.
-            std::sort( collector.begin(), collector.end(),
-                       []( EDA_ITEM* a, EDA_ITEM* b )
-                       {
-                           VECTOR2I aPos = a->GetPosition();
-                           VECTOR2I bPos = b->GetPosition();
-
-                           if( aPos.y == bPos.y )
-                               return aPos.x < bPos.x;
-
-                           return aPos.y < bPos.y;
-                       } );
-
-            for( EDA_ITEM* i : collector )
-            {
-                if( !i->IsBOARD_ITEM() )
-                    continue;
-
-                BOARD_ITEM* item = static_cast<BOARD_ITEM*>( i );
-
-                if( m_subtractive || ( m_exclusive_or && item->IsSelected() ) )
-                {
-                    unselect( item );
-                    anySubtracted = true;
-                }
-                else
-                {
-                    select( item );
-                    anyAdded = true;
-                }
-            }
-
-            m_selection.SetIsHover( false );
-
-            // Inform other potentially interested tools
-            if( anyAdded )
-                m_toolMgr->ProcessEvent( EVENTS::SelectedEvent );
-            else if( anySubtracted )
-                m_toolMgr->ProcessEvent( EVENTS::UnselectedEvent );
-
-            break;  // Stop waiting for events
+            break; // Stop waiting for events
         }
 
         // Allow some actions for navigation
-        for( int i = 0; allowedActions[i]; ++i )
-        {
-            if( evt->IsAction( allowedActions[i] ) )
-            {
-                evt->SetPassEvent();
-                break;
-            }
-        }
+        passEvent( evt, allowedActions );
     }
 
     getViewControls()->SetAutoPan( false );
 
     // Stop drawing the selection box
     view->Remove( &area );
-    m_multiple = false;         // Multiple selection mode is inactive
+    m_multiple = false; // Multiple selection mode is inactive
 
     if( !cancelled )
         m_selection.ClearReferencePoint();
@@ -1248,6 +1157,141 @@ bool PCB_SELECTION_TOOL::selectMultiple()
     m_toolMgr->ProcessEvent( EVENTS::UninhibitSelectionEditing );
 
     return cancelled;
+}
+
+
+void PCB_SELECTION_TOOL::SelectMultiple( KIGFX::PREVIEW::SELECTION_AREA& aArea, bool aSubtractive,
+                                         bool aExclusiveOr )
+{
+    KIGFX::VIEW* view = getView();
+
+    bool anyAdded = false;
+    bool anySubtracted = false;
+
+    SELECTION_MODE selectionMode = aArea.GetMode();
+    bool containedMode = (    selectionMode == SELECTION_MODE::INSIDE_RECTANGLE
+                           || selectionMode == SELECTION_MODE::INSIDE_LASSO ) ? true : false;
+    bool boxMode = (    selectionMode == SELECTION_MODE::INSIDE_RECTANGLE
+                     || selectionMode == SELECTION_MODE::TOUCHING_RECTANGLE ) ? true : false;
+
+    std::vector<KIGFX::VIEW::LAYER_ITEM_PAIR> candidates;
+    BOX2I selectionBox = aArea.ViewBBox();
+    view->Query( selectionBox, candidates ); // Get the list of nearby items
+
+    GENERAL_COLLECTOR collector;
+    GENERAL_COLLECTOR padsCollector;
+    std::set<EDA_ITEM*> group_items;
+
+    for( PCB_GROUP* group : board()->Groups() )
+    {
+        // The currently entered group does not get limited
+        if( m_enteredGroup == group )
+            continue;
+
+        std::unordered_set<EDA_ITEM*>& newset = group->GetItems();
+
+        auto boxContained =
+            [&]( const BOX2I& aBox )
+            {
+                return boxMode ? selectionBox.Contains( aBox )
+                               : KIGEOM::BoxHitTest( aArea.GetPoly(), aBox, true );
+            };
+
+        // If we are not greedy and have selected the whole group, add just one item
+        // to allow it to be promoted to the group later
+        if( containedMode && boxContained( group->GetBoundingBox() ) && newset.size() )
+        {
+            for( EDA_ITEM* group_item : newset )
+            {
+                if( !group_item->IsBOARD_ITEM() )
+                    continue;
+
+                if( Selectable( static_cast<BOARD_ITEM*>( group_item ) ) )
+                    collector.Append( *newset.begin() );
+            }
+        }
+
+        for( EDA_ITEM* group_item : newset )
+            group_items.emplace( group_item );
+    }
+
+    auto hitTest =
+        [&]( const EDA_ITEM* aItem )
+        {
+            return boxMode ? aItem->HitTest( selectionBox, containedMode )
+                           : aItem->HitTest( aArea.GetPoly(), containedMode );
+        };
+
+    for( const auto& [item, layer] : candidates )
+    {
+        if( !item->IsBOARD_ITEM() )
+            continue;
+
+        BOARD_ITEM* boardItem = static_cast<BOARD_ITEM*>( item );
+
+        if( Selectable( boardItem ) && hitTest( boardItem )
+                && ( !containedMode || !group_items.count( boardItem ) ) )
+        {
+            if( boardItem->Type() == PCB_PAD_T && !m_isFootprintEditor )
+                padsCollector.Append( boardItem );
+            else
+                collector.Append( boardItem );
+        }
+    }
+
+    // Apply the stateful filter
+    FilterCollectedItems( collector, true );
+
+    FilterCollectorForHierarchy( collector, true );
+
+    // If we selected nothing but pads, allow them to be selected
+    if( collector.GetCount() == 0 )
+    {
+        collector = padsCollector;
+        FilterCollectedItems( collector, true );
+        FilterCollectorForHierarchy( collector, true );
+    }
+
+    // Sort the filtered selection by rows and columns to have a nice default
+    // for tools that can use it.
+    std::sort( collector.begin(), collector.end(),
+               []( EDA_ITEM* a, EDA_ITEM* b )
+               {
+                   VECTOR2I aPos = a->GetPosition();
+                   VECTOR2I bPos = b->GetPosition();
+
+                   if( aPos.y == bPos.y )
+                       return aPos.x < bPos.x;
+
+                   return aPos.y < bPos.y;
+               } );
+
+    for( EDA_ITEM* i : collector )
+    {
+        if( !i->IsBOARD_ITEM() )
+            continue;
+
+        BOARD_ITEM* item = static_cast<BOARD_ITEM*>( i );
+
+        if( aSubtractive || ( aExclusiveOr && item->IsSelected() ) )
+        {
+            unselect( item );
+            anySubtracted = true;
+        }
+        else
+        {
+            select( item );
+            anyAdded = true;
+        }
+    }
+
+    m_selection.SetIsHover( false );
+
+    // Inform other potentially interested tools
+    if( anyAdded )
+        m_toolMgr->ProcessEvent( EVENTS::SelectedEvent );
+    else if( anySubtracted )
+        m_toolMgr->ProcessEvent( EVENTS::UnselectedEvent );
 }
 
 
@@ -4205,8 +4249,205 @@ void PCB_SELECTION_TOOL::setTransitions()
     Go( &PCB_SELECTION_TOOL::SelectRows,          ACTIONS::selectRows.MakeEvent() );
     Go( &PCB_SELECTION_TOOL::SelectTable,         ACTIONS::selectTable.MakeEvent() );
 
+    Go( &PCB_SELECTION_TOOL::SelectRectArea,      ACTIONS::selectInsideRectangle.MakeEvent() );
+    Go( &PCB_SELECTION_TOOL::SelectRectArea,      ACTIONS::selectTouchingRectangle.MakeEvent() );
     Go( &PCB_SELECTION_TOOL::SelectAll,           ACTIONS::selectAll.MakeEvent() );
     Go( &PCB_SELECTION_TOOL::UnselectAll,         ACTIONS::unselectAll.MakeEvent() );
 
     Go( &PCB_SELECTION_TOOL::disambiguateCursor,  EVENTS::DisambiguatePoint );
+}
+
+
+PCB_LASSO_SELECTION_TOOL::PCB_LASSO_SELECTION_TOOL() :
+        PCB_TOOL_BASE( "common.InteractiveLassoSelection" )
+{
+}
+
+
+PCB_LASSO_SELECTION_TOOL::~PCB_LASSO_SELECTION_TOOL()
+{
+}
+
+
+bool PCB_LASSO_SELECTION_TOOL::Init()
+{
+    return true;
+}
+
+
+void PCB_LASSO_SELECTION_TOOL::Reset( RESET_REASON aReason )
+{
+}
+
+
+int PCB_LASSO_SELECTION_TOOL::SelectPolyArea( const TOOL_EVENT& aEvent )
+{
+    bool cancelled = false; // Was the tool canceled while it was running?
+    bool fixedMode = false;
+    bool additive = false;
+    bool subtractive = false;
+    bool exclusiveOr = false;
+    PCB_SELECTION_TOOL* selectionTool = m_toolMgr->GetTool<PCB_SELECTION_TOOL>();
+    SELECTION_MODE      selectionMode = SELECTION_MODE::TOUCHING_LASSO;
+
+    auto updateModifiersAndCursor =
+            [&]( wxTimerEvent& aEvent )
+            {
+                KICURSOR     cursor;
+                wxMouseState keyboardState = wxGetMouseState();
+
+                subtractive = keyboardState.ControlDown() && keyboardState.ShiftDown();
+                additive    = !keyboardState.ControlDown() && keyboardState.ShiftDown();
+                exclusiveOr = keyboardState.ControlDown() && !keyboardState.ShiftDown();
+
+                if( additive )
+                    cursor = KICURSOR::ADD;
+                else if( subtractive )
+                    cursor = KICURSOR::SUBTRACT;
+                else if( exclusiveOr )
+                    cursor = KICURSOR::XOR ;
+                else if( selectionMode == SELECTION_MODE::INSIDE_LASSO )
+                    cursor = KICURSOR::SELECT_WINDOW;
+                else
+                    cursor = KICURSOR::SELECT_LASSO;
+
+                frame()->GetCanvas()->SetCurrentCursor( cursor );
+            };
+
+    // No events are sent for modifier keys, so we need to poll them using a timer.
+    wxTimer timer;
+    timer.Bind( wxEVT_TIMER, updateModifiersAndCursor );
+    timer.Start( 100 );
+
+    if( aEvent.HasParameter() )
+    {
+        fixedMode = true;
+        selectionMode = aEvent.Parameter<SELECTION_MODE>();
+    }
+
+    SHAPE_LINE_CHAIN points;
+
+    if( selectionMode != SELECTION_MODE::TOUCHING_PATH )
+        points.SetClosed( true );
+
+    KIGFX::PREVIEW::SELECTION_AREA area;
+    view()->Add( &area );
+    view()->SetVisible( &area, true );
+
+    controls()->SetAutoPan( true );
+
+    frame()->PushTool( aEvent );
+    Activate();
+
+    while( TOOL_EVENT* evt = Wait() )
+    {
+        if( !fixedMode )
+        {
+            // Auto Mode: The selection mode depends on the drawing direction of the selection shape:
+            // - Clockwise: Contained selection
+            // - Counterclockwise: Touching selection
+            double shapeArea = area.GetPoly().Area( false );
+            bool isClockwise = shapeArea > 0 ? true : false;
+
+            // Flip the selection mode if the view is mirrored, but only if the area is non-zero.
+            // A zero area means the selection shape is a line, so the mode should always be "touching".
+            if( view()->IsMirroredX() && shapeArea != 0 )
+                isClockwise = !isClockwise;
+
+            selectionMode = isClockwise ? SELECTION_MODE::INSIDE_LASSO
+                                        : SELECTION_MODE::TOUCHING_LASSO;
+        }
+
+        if( evt->IsCancelInteractive() || evt->IsActivate() )
+        {
+            // Cancel the selection
+            cancelled = true;
+            evt->SetPassEvent( false );
+
+            break;
+        }
+        else if( evt->IsDrag( BUT_LEFT )                     // Lasso selection
+                 || evt->IsClick( BUT_LEFT )                 // Polygon selection
+                 || evt->IsAction( &ACTIONS::cursorClick ) ) // Return key
+        {
+            // Add a point to the selection shape
+            points.Append( evt->Position() );
+        }
+        else if( evt->IsDblClick( BUT_LEFT )
+                 || evt->IsAction( &ACTIONS::cursorDblClick ) // End key
+                 || evt->IsAction( &ACTIONS::finishInteractive ) )
+        {
+            // Finish the selection
+            area.GetPoly().GenerateBBoxCache();
+
+            selectionTool->SelectMultiple( area, subtractive, exclusiveOr );
+
+            evt->SetPassEvent( false );
+
+            break;
+        }
+        else if( evt->IsAction( &PCB_ACTIONS::deleteLastPoint )
+                 || evt->IsAction( &ACTIONS::doDelete )
+                 || evt->IsAction( &ACTIONS::undo ) )
+        {
+            // Delete the last point in the selection shape
+            if( points.GetPointCount() > 0 )
+            {
+                controls()->SetCursorPosition( points.CLastPoint() );
+                points.Remove( points.GetPointCount() - 1 );
+            }
+        }
+        else
+        {
+            // Allow some actions for navigation
+            passEvent( evt, allowedActions );
+        }
+
+        if( points.PointCount() > 0 )
+        {
+            // Clear existing selection if not in add/sub/xor mode
+            if( !additive && !subtractive && !exclusiveOr )
+            {
+                if( !selectionTool->GetSelection().Empty() )
+                {
+                   selectionTool->ClearSelection( true /*quiet mode*/ );
+                   m_toolMgr->ProcessEvent( EVENTS::UnselectedEvent );
+                }
+            }
+        }
+
+        // Draw selection shape
+        area.SetPoly( points );
+        area.GetPoly().Append( m_toolMgr->GetMousePosition() );
+
+        area.SetAdditive( additive );
+        area.SetSubtractive( subtractive );
+        area.SetExclusiveOr( exclusiveOr );
+        area.SetMode( selectionMode );
+
+        view()->Update( &area );
+    }
+
+    frame()->PopTool( aEvent );
+
+    controls()->SetAutoPan( false );
+    view()->SetVisible( &area, false );
+    view()->Remove( &area ); // Stop drawing the selection shape
+    frame()->GetCanvas()->SetCurrentCursor( KICURSOR::ARROW ); // Reset cursor to default
+
+    if( !cancelled )
+        selectionTool->GetSelection().ClearReferencePoint();
+
+    m_toolMgr->ProcessEvent( EVENTS::UninhibitSelectionEditing );
+
+    return cancelled;
+}
+
+
+void PCB_LASSO_SELECTION_TOOL::setTransitions()
+{
+    Go( &PCB_LASSO_SELECTION_TOOL::SelectPolyArea, ACTIONS::selectInsideLasso.MakeEvent() );
+    Go( &PCB_LASSO_SELECTION_TOOL::SelectPolyArea, ACTIONS::selectTouchingLasso.MakeEvent() );
+    Go( &PCB_LASSO_SELECTION_TOOL::SelectPolyArea, ACTIONS::selectAutoLasso.MakeEvent() );
+    Go( &PCB_LASSO_SELECTION_TOOL::SelectPolyArea, ACTIONS::selectTouchingPath.MakeEvent() );
 }

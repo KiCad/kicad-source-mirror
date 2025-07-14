@@ -660,6 +660,7 @@ public:
         VECTOR2I m_origin;
     };
 
+    bool Intersects( const SEG& aSeg) const;
     bool Intersects( const SHAPE_LINE_CHAIN& aChain ) const;
 
     /**

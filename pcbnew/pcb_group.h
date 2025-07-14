@@ -142,6 +142,9 @@ public:
     /// @copydoc EDA_ITEM::HitTest
     bool HitTest( const BOX2I& aRect, bool aContained, int aAccuracy = 0 ) const override;
 
+    /// @copydoc EDA_ITEM::HitTest
+    bool HitTest( const SHAPE_LINE_CHAIN& aPoly, bool aContained ) const override;
+
     /// @copydoc EDA_ITEM::GetBoundingBox
     const BOX2I GetBoundingBox() const override;
 

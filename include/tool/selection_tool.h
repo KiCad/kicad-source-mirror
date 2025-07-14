@@ -34,6 +34,16 @@ class COLLECTOR;
 class KIID;
 
 
+enum class SELECTION_MODE
+{
+    INSIDE_RECTANGLE,
+    TOUCHING_RECTANGLE,
+    INSIDE_LASSO,
+    TOUCHING_LASSO,
+    TOUCHING_PATH
+};
+
+
 class SELECTION_TOOL : public TOOL_INTERACTIVE, public wxEvtHandler
 {
 public:

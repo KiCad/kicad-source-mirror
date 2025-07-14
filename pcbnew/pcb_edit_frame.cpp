@@ -731,6 +731,7 @@ void PCB_EDIT_FRAME::setupTools()
     m_toolManager->RegisterTool( new COMMON_CONTROL );
     m_toolManager->RegisterTool( new COMMON_TOOLS );
     m_toolManager->RegisterTool( new PCB_SELECTION_TOOL );
+    m_toolManager->RegisterTool( new PCB_LASSO_SELECTION_TOOL );
     m_toolManager->RegisterTool( new ZOOM_TOOL );
     m_toolManager->RegisterTool( new PCB_PICKER_TOOL );
     m_toolManager->RegisterTool( new ROUTER_TOOL );
@@ -832,6 +833,12 @@ void PCB_EDIT_FRAME::setupUIConditions()
     mgr->SetConditions( ACTIONS::copy,         ENABLE( cond.HasItems() ) );
     mgr->SetConditions( ACTIONS::paste,        ENABLE( SELECTION_CONDITIONS::Idle && cond.NoActiveTool() ) );
     mgr->SetConditions( ACTIONS::pasteSpecial, ENABLE( SELECTION_CONDITIONS::Idle && cond.NoActiveTool() ) );
+    mgr->SetConditions( ACTIONS::selectInsideRectangle,   ENABLE( cond.HasItems() ) );
+    mgr->SetConditions( ACTIONS::selectTouchingRectangle, ENABLE( cond.HasItems() ) );
+    mgr->SetConditions( ACTIONS::selectInsideLasso,       ENABLE( cond.HasItems() ) );
+    mgr->SetConditions( ACTIONS::selectTouchingLasso,     ENABLE( cond.HasItems() ) );
+    mgr->SetConditions( ACTIONS::selectAutoLasso,         ENABLE( cond.HasItems() ) );
+    mgr->SetConditions( ACTIONS::selectTouchingPath,      ENABLE( cond.HasItems() ) );
     mgr->SetConditions( ACTIONS::selectAll,    ENABLE( cond.HasItems() ) );
     mgr->SetConditions( ACTIONS::unselectAll,  ENABLE( cond.HasItems() ) );
     mgr->SetConditions( ACTIONS::doDelete,     ENABLE( cond.HasItems() ) );

@@ -1745,6 +1745,18 @@ int SHAPE_LINE_CHAIN::Intersect( const SEG& aSeg, INTERSECTIONS& aIp ) const
 }
 
 
+bool SHAPE_LINE_CHAIN::Intersects( const SEG& aSeg ) const
+{
+    for( int s = 0; s < SegmentCount(); s++ )
+    {
+        if( CSegment( s ).Intersects( aSeg ) )
+            return true;
+    }
+
+    return false;
+}
+
+
 static inline void addIntersection( SHAPE_LINE_CHAIN::INTERSECTIONS& aIps, int aPc,
                                     const SHAPE_LINE_CHAIN::INTERSECTION& aP )
 {

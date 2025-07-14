@@ -607,6 +607,8 @@ public:
 
     bool HitTest( const BOX2I& aRect, bool aContained, int aAccuracy = 0 ) const override;
 
+    bool HitTest( const SHAPE_LINE_CHAIN& aPoly, bool aContained ) const override;
+
     /**
      * Test if the point hits one or more of the footprint elements on a given layer.
      *

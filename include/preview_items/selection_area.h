@@ -28,7 +28,8 @@
 #define PREVIEW_ITEMS_SELECTION_AREA_H
 
 #include <preview_items/simple_overlay_item.h>
-
+#include <geometry/shape_line_chain.h>
+#include <tool/selection_tool.h>
 
 namespace KIGFX
 {
@@ -82,6 +83,12 @@ public:
     void SetSubtractive( bool aSubtractive ) { m_subtractive = aSubtractive; }
     void SetExclusiveOr( bool aExclusiveOr ) { m_exclusiveOr = aExclusiveOr; }
 
+    void              SetMode( SELECTION_MODE aMode )    { m_mode = aMode; }
+    SELECTION_MODE    GetMode() const                    { return m_mode; }
+
+    void              SetPoly( SHAPE_LINE_CHAIN& aPoly ) { m_shape_poly = aPoly; }
+    SHAPE_LINE_CHAIN& GetPoly()                          { return m_shape_poly; }
+
     void ViewDraw( int aLayer, KIGFX::VIEW* aView ) const override final;
 
 private:
@@ -90,7 +97,10 @@ private:
     bool m_subtractive;
     bool m_exclusiveOr;
 
-    VECTOR2I m_origin, m_end;
+    SELECTION_MODE   m_mode;
+
+    VECTOR2I         m_origin, m_end; // Used for box selection
+    SHAPE_LINE_CHAIN m_shape_poly;    // Used for lasso selection
 };
 
 } // PREVIEW

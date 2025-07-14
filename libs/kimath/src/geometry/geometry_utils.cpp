@@ -216,3 +216,104 @@ bool KIGEOM::BoxHitTest( const BOX2I& aHitter, const BOX2I& aHittee, bool aHitte
 
     return hitter.Intersects( aHittee );
 }
+
+
+bool KIGEOM::BoxHitTest( const SHAPE_LINE_CHAIN& aHitter, const BOX2I& aHittee, bool aHitteeContained )
+{
+    SHAPE_RECT bbox( aHittee );
+
+    return KIGEOM::ShapeHitTest( aHitter, bbox, aHitteeContained );
+}
+
+
+bool KIGEOM::BoxHitTest( const SHAPE_LINE_CHAIN& aHitter, const BOX2I& aHittee, const EDA_ANGLE& aHitteeRotation,
+                         const VECTOR2I& aHitteeRotationCenter, bool aHitteeContained )
+{
+    // Optimization: use SHAPE_RECT collision test if possible
+    if( aHitteeRotation.IsZero() )
+    {
+        return KIGEOM::BoxHitTest( aHitter, aHittee, aHitteeContained );
+    }
+    else if( aHitteeRotation.IsCardinal() )
+    {
+        BOX2I box = aHittee.GetBoundingBoxRotated( aHitteeRotationCenter, aHitteeRotation );
+        return KIGEOM::BoxHitTest( aHitter, box, aHitteeContained );
+    }
+
+    // Non-cardinal angle: convert to simple polygon and rotate
+    const std::vector<VECTOR2I> corners =
+    {
+        aHittee.GetOrigin(),
+        VECTOR2I( aHittee.GetRight(), aHittee.GetTop() ),
+        aHittee.GetEnd(),
+        VECTOR2I( aHittee.GetLeft(), aHittee.GetBottom() )
+    };
+
+    SHAPE_SIMPLE shape( corners );
+    shape.Rotate( aHitteeRotation, aHitteeRotationCenter );
+
+    return KIGEOM::ShapeHitTest( aHitter, shape, aHitteeContained );
+}
+
+
+bool KIGEOM::ShapeHitTest( const SHAPE_LINE_CHAIN& aHitter, const SHAPE& aHittee, bool aHitteeContained )
+{
+    // Check if the selection polygon collides with any of the hittee's subshapes.
+    auto collidesAny =
+            [&]()
+            {
+                return aHittee.Collide( &aHitter );
+            };
+
+    // Check if the selection polygon collides with all of the hittee's subshapes.
+    auto collidesAll =
+            [&]()
+            {
+                if( const auto compoundHittee = dynamic_cast<const SHAPE_COMPOUND*>( &aHittee ) )
+                {
+                    // If the hittee is a compound shape, all subshapes must collide.
+                    return std::ranges::all_of(
+                                compoundHittee->Shapes(),
+                                [&]( const SHAPE* subshape )
+                                {
+                                    return subshape && subshape->Collide( &aHitter );
+                                } );
+                }
+                else
+                {
+                    // If the hittee is a simple shape, we can check it directly.
+                    return aHittee.Collide( &aHitter );
+                }
+            };
+
+    // Check if the selection polygon outline collides with the hittee's shape.
+    auto intersectsAny =
+            [&]()
+            {
+                const int count = aHitter.SegmentCount();
+
+                for( int i = 0; i < count; ++i )
+                {
+                    if( aHittee.Collide( aHitter.CSegment( i ) ) )
+                        return true;
+                }
+
+                return false;
+            };
+
+    if( aHitter.IsClosed() )
+    {
+        if( aHitteeContained )
+            // Containing polygon - all of the subshapes must collide with the selection polygon,
+            // but none of them can intersect its outline.
+            return collidesAll() && !intersectsAny();
+        else
+            // Touching polygon - any of the subshapes should collide with the selection polygon.
+            return collidesAny();
+    }
+    else
+    {
+        // Touching (poly)line - any of the subshapes should intersect the selection polyline.
+        return intersectsAny();
+    }
+}

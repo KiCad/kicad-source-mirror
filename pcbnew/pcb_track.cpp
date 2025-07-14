@@ -2085,6 +2085,12 @@ bool PCB_VIA::HitTest( const BOX2I& aRect, bool aContained, int aAccuracy ) cons
 }
 
 
+bool PCB_TRACK::HitTest( const SHAPE_LINE_CHAIN& aPoly, bool aContained ) const
+{
+    return KIGEOM::ShapeHitTest( aPoly, *GetEffectiveShape(), aContained );
+}
+
+
 wxString PCB_TRACK::GetItemDescription( UNITS_PROVIDER* aUnitsProvider, bool aFull ) const
 {
     return wxString::Format( Type() == PCB_ARC_T ? _("Track (arc) %s on %s, length %s" )

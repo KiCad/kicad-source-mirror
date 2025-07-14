@@ -28,6 +28,7 @@
 #include <geometry/shape_simple.h>
 #include <geometry/shape_segment.h>
 #include <geometry/shape_compound.h>
+#include <geometry/geometry_utils.h>
 
 
 PCB_TABLE::PCB_TABLE( BOARD_ITEM* aParent, int aLineWidth ) :
@@ -488,6 +489,12 @@ bool PCB_TABLE::HitTest( const BOX2I& aRect, bool aContained, int aAccuracy ) co
         return rect.Contains( GetBoundingBox() );
 
     return rect.Intersects( GetBoundingBox() );
+}
+
+
+bool PCB_TABLE::HitTest( const SHAPE_LINE_CHAIN& aPoly, bool aContained ) const
+{
+    return KIGEOM::ShapeHitTest( aPoly, *GetEffectiveShape(), aContained );
 }
 
 
