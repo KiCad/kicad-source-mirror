@@ -56,7 +56,6 @@
 #include <specctra.h>
 #include <project/project_local_settings.h>
 #include <wildcards_and_files_ext.h>
-#include <locale_io.h>
 #include <wx/app.h>
 #include <wx/crt.h>
 #include <wx/image.h>
@@ -127,10 +126,6 @@ SETTINGS_MANAGER* GetSettingsManager()
 
 PROJECT* GetDefaultProject()
 {
-    // For some reasons, LoadProject() needs a C locale, so ensure we have the right locale
-    // This is mainly when running QA Python tests
-    LOCALE_IO dummy;
-
     PROJECT* project = GetSettingsManager()->GetProject( "" );
 
     if( !project )
@@ -159,11 +154,6 @@ BOARD* LoadBoard( const wxString& aFileName, PCB_IO_MGR::PCB_FILE_T aFormat, boo
     // using various formats.
     // By default only the BMP handler is available.
     wxInitAllImageHandlers();
-
-
-    // Ensure the "C" locale is temporary set, before reading any file
-    // It also avoid wxWidget alerts about locale issues, later, when using Python 3
-    LOCALE_IO dummy;
 
     PROJECT* project = GetSettingsManager()->GetProject( projectPath );
 
@@ -281,10 +271,6 @@ BOARD* NewBoard( wxString& aFileName )
 
     wxString projectPath = proFn.GetFullPath();
 
-    // Ensure the "C" locale is temporary set, before reading any file
-    // It also avoids wxWidgets alerts about locale issues, later, when using Python 3
-    LOCALE_IO dummy;
-
     GetSettingsManager()->LoadProject( projectPath, false );
     PROJECT* project = GetSettingsManager()->GetProject( projectPath );
 
@@ -318,10 +304,6 @@ bool SaveBoard( wxString& aFileName, BOARD* aBoard, PCB_IO_MGR::PCB_FILE_T aForm
 {
     aBoard->BuildConnectivity();
     aBoard->SynchronizeNetsAndNetClasses( false );
-
-    // Ensure the "C" locale is temporary set, before saving any file
-    // It also avoid wxWidget alerts about locale issues, later, when using Python 3
-    LOCALE_IO dummy;
 
     try
     {

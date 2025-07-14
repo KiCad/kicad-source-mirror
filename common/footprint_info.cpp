@@ -39,7 +39,6 @@
 #include <utility>
 #include <wx/tokenzr.h>
 #include <kiface_base.h>
-#include <locale_io.h>
 
 FOOTPRINT_INFO* FOOTPRINT_LIST::GetFootprintInfo( const wxString& aLibNickname,
                                                   const wxString& aFootprintName )

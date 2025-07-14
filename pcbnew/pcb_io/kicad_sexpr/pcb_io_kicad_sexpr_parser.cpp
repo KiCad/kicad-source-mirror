@@ -61,7 +61,6 @@
 #include <pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.h>
 #include <pcb_plot_params_parser.h>
 #include <pcb_plot_params.h>
-#include <locale_io.h>
 #include <zones.h>
 #include <pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.h>
 #include <convert_basic_shapes_to_polygon.h>    // for RECT_CHAMFER_POSITIONS definition
@@ -809,8 +808,6 @@ FP_3DMODEL* PCB_IO_KICAD_SEXPR_PARSER::parse3DModel()
 
 bool PCB_IO_KICAD_SEXPR_PARSER::IsValidBoardHeader()
 {
-    LOCALE_IO       toggle;
-
     m_groupInfos.clear();
 
     // See Parse() - FOOTPRINTS can be prefixed with an initial block of single line comments,
@@ -831,7 +828,6 @@ BOARD_ITEM* PCB_IO_KICAD_SEXPR_PARSER::Parse()
 {
     T               token;
     BOARD_ITEM*     item;
-    LOCALE_IO       toggle;
 
     m_groupInfos.clear();
 

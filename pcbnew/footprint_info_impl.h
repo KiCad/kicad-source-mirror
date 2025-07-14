@@ -34,8 +34,7 @@ class LOCALE_IO;
 class FOOTPRINT_INFO_IMPL : public FOOTPRINT_INFO
 {
 public:
-    FOOTPRINT_INFO_IMPL( FOOTPRINT_LIST* aOwner, const wxString& aNickname, const wxString& aFootprintName,
-                         const LOCALE_IO* aLocale )
+    FOOTPRINT_INFO_IMPL( FOOTPRINT_LIST* aOwner, const wxString& aNickname, const wxString& aFootprintName )
     {
         m_nickname = aNickname;
         m_fpname = aFootprintName;
@@ -45,7 +44,7 @@ public:
 
         m_owner = aOwner;
         m_loaded = false;
-        load( aLocale );
+        load();
     }
 
     // A constructor for cached items
@@ -77,7 +76,7 @@ public:
     }
 
 protected:
-    virtual void load( const LOCALE_IO* aLocale ) override;
+    virtual void load() override;
 };
 
 

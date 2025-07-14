@@ -24,7 +24,6 @@
 
 #include "ki_exception.h"
 #include <string_utils.h>
-#include <locale_io.h>
 #include <gerbview.h>
 #include <gerbview_frame.h>
 #include <gerber_file_image.h>
@@ -244,8 +243,6 @@ bool GERBER_FILE_IMAGE::LoadGerberFile( const wxString& aFullFileName )
         return false;
 
     m_FileName = aFullFileName;
-
-    LOCALE_IO toggleIo;
 
     wxString msg;
 

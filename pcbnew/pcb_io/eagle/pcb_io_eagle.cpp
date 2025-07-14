@@ -64,7 +64,6 @@ Load() TODO's
 #include <font/fontconfig.h>
 #include <geometry/geometry_utils.h>
 #include <string_utils.h>
-#include <locale_io.h>
 #include <trigo.h>
 #include <progress_reporter.h>
 #include <project.h>
@@ -324,7 +323,6 @@ VECTOR2I inline PCB_IO_EAGLE::kicad_fontsize( const ECOORD& d, int aTextThicknes
 BOARD* PCB_IO_EAGLE::LoadBoard( const wxString& aFileName, BOARD* aAppendToMe,
                                 const std::map<std::string, UTF8>* aProperties, PROJECT* aProject )
 {
-    LOCALE_IO       toggle;     // toggles on, then off, the C locale.
     wxXmlNode*      doc;
 
     fontconfig::FONTCONFIG::SetReporter( &WXLOG_REPORTER::GetInstance() );
@@ -3198,7 +3196,6 @@ void PCB_IO_EAGLE::cacheLib( const wxString& aLibPath )
         if( aLibPath != m_lib_path || m_timestamp != timestamp )
         {
             wxXmlNode*  doc;
-            LOCALE_IO   toggle;     // toggles on, then off, the C locale.
 
             deleteTemplates();
 

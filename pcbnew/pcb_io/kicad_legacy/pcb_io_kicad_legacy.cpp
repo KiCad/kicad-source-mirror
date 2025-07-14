@@ -71,7 +71,6 @@
 #include <boost/ptr_container/ptr_map.hpp>
 
 #include <string_utils.h>
-#include <locale_io.h>
 #include <macros.h>
 #include <filter_reader.h>
 #include <zones.h>
@@ -469,8 +468,6 @@ bool PCB_IO_KICAD_LEGACY::CanReadFootprint( const wxString& aFileName ) const
 BOARD* PCB_IO_KICAD_LEGACY::LoadBoard( const wxString& aFileName, BOARD* aAppendToMe,
                                  const std::map<std::string, UTF8>* aProperties, PROJECT* aProject )
 {
-    LOCALE_IO   toggle;     // toggles on, then off, the C locale.
-
     init( aProperties );
 
     std::unique_ptr<BOARD> boardDeleter;
@@ -3318,8 +3315,6 @@ bool PCB_IO_KICAD_LEGACY::DeleteLibrary( const wxString& aLibraryPath,
 
 bool PCB_IO_KICAD_LEGACY::IsLibraryWritable( const wxString& aLibraryPath )
 {
-    LOCALE_IO   toggle;
-
     init( nullptr );
 
     cacheLib( aLibraryPath );

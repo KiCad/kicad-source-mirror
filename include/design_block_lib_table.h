@@ -158,13 +158,11 @@ public:
      *                          \a aNickname.
      * @param aNickname is a locator for the "library", it is a "name" in LIB_TABLE_ROW.
      * @param aBestEfforts if true, don't throw on errors.
-     * @param aLocale a previously set-up locale.  Currently required for multi-threading, as LOCALE_IO
-     *                uses global storage.
      *
      * @throw IO_ERROR if the library cannot be found, or design block cannot be loaded.
      */
     void DesignBlockEnumerate( wxArrayString& aDesignBlockNames, const wxString& aNickname,
-                               bool aBestEfforts, const LOCALE_IO* aLocale = nullptr );
+                               bool aBestEfforts );
 
     /**
      * Generate a hashed timestamp representing the last-mod-times of the library indicated
@@ -202,8 +200,7 @@ public:
      *
      * The return value is const to allow it to return a reference to a cached item.
      */
-    const DESIGN_BLOCK* GetEnumeratedDesignBlock( const wxString& aNickname, const wxString& aDesignBlockName,
-                                                  const LOCALE_IO* aLocale = nullptr );
+    const DESIGN_BLOCK* GetEnumeratedDesignBlock( const wxString& aNickname, const wxString& aDesignBlockName );
     /**
      * The set of return values from DesignBlockSave() below.
      */

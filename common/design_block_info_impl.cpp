@@ -23,7 +23,6 @@
 #include <design_block.h>
 #include <design_block_lib_table.h>
 #include <kiway.h>
-#include <locale_io.h>
 #include <progress_reporter.h>
 #include <string_utils.h>
 #include <thread_pool.h>
@@ -35,14 +34,13 @@
 #include <wx/wfstream.h>
 
 
-void DESIGN_BLOCK_INFO_IMPL::load( const LOCALE_IO* locale )
+void DESIGN_BLOCK_INFO_IMPL::load()
 {
     DESIGN_BLOCK_LIB_TABLE* dbtable = m_owner->GetTable();
 
     wxASSERT( dbtable );
 
-    std::unique_ptr<const DESIGN_BLOCK> design_block( dbtable->GetEnumeratedDesignBlock( m_nickname, m_dbname,
-                                                                                         locale ) );
+    std::unique_ptr<const DESIGN_BLOCK> design_block( dbtable->GetEnumeratedDesignBlock( m_nickname, m_dbname ) );
 
     if( design_block )
     {
@@ -148,14 +146,7 @@ bool DESIGN_BLOCK_LIST_IMPL::ReadDesignBlockFiles( DESIGN_BLOCK_LIB_TABLE* aTabl
 
 void DESIGN_BLOCK_LIST_IMPL::loadDesignBlocks()
 {
-    LOCALE_IO toggle_locale;
-
-    // Parse the design_blocks in parallel. WARNING! This requires changing the locale, which is
-    // GLOBAL. It is only thread safe to construct the LOCALE_IO before the threads are created,
-    // destroy it after they finish, and block the main (GUI) thread while they work. Any deviation
-    // from this will cause nasal demons.
-    //
-    // TODO: blast LOCALE_IO into the sun
+    // Parse the design_blocks in parallel.
 
     SYNC_QUEUE<std::unique_ptr<DESIGN_BLOCK_INFO>> queue_parsed;
 
@@ -164,7 +155,7 @@ void DESIGN_BLOCK_LIST_IMPL::loadDesignBlocks()
     std::vector<std::future<size_t>> returns( num_elements );
 
     auto db_thread =
-            [ this, &queue_parsed, &toggle_locale ]() -> size_t
+            [ this, &queue_parsed ]() -> size_t
             {
                 wxString nickname;
 
@@ -176,7 +167,7 @@ void DESIGN_BLOCK_LIST_IMPL::loadDesignBlocks()
                 CatchErrors(
                         [&]()
                         {
-                            m_lib_table->DesignBlockEnumerate( dbnames, nickname, false, &toggle_locale );
+                            m_lib_table->DesignBlockEnumerate( dbnames, nickname, false );
                         } );
 
                 for( wxString dbname : dbnames )
@@ -184,7 +175,7 @@ void DESIGN_BLOCK_LIST_IMPL::loadDesignBlocks()
                     CatchErrors(
                             [&]()
                             {
-                                auto* dbinfo = new DESIGN_BLOCK_INFO_IMPL( this, nickname, dbname, &toggle_locale );
+                                auto* dbinfo = new DESIGN_BLOCK_INFO_IMPL( this, nickname, dbname );
                                 queue_parsed.move_push( std::unique_ptr<DESIGN_BLOCK_INFO>( dbinfo ) );
                             } );
 

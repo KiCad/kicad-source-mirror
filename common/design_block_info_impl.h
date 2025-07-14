@@ -30,13 +30,11 @@
 #include <design_block_info.h>
 #include <core/sync_queue.h>
 
-class LOCALE_IO;
-
 class KICOMMON_API DESIGN_BLOCK_INFO_IMPL : public DESIGN_BLOCK_INFO
 {
 public:
     DESIGN_BLOCK_INFO_IMPL( DESIGN_BLOCK_LIST* aOwner, const wxString& aNickname,
-                            const wxString& aDesignBlockName, const LOCALE_IO* aLocale )
+                            const wxString& aDesignBlockName )
     {
         m_nickname = aNickname;
         m_dbname = aDesignBlockName;
@@ -44,7 +42,7 @@ public:
 
         m_owner = aOwner;
         m_loaded = false;
-        load( aLocale );
+        load();
     }
 
     // A constructor for cached items
@@ -73,7 +71,7 @@ public:
     }
 
 protected:
-    virtual void load( const LOCALE_IO* aLocale = nullptr ) override;
+    virtual void load() override;
 };
 
 

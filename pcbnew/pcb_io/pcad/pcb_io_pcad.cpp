@@ -33,7 +33,6 @@
 #include <io/io_utils.h>
 
 #include <board.h>
-#include <locale_io.h>
 
 #include <cerrno>
 #include <wx/string.h>
@@ -76,8 +75,6 @@ BOARD* PCB_IO_PCAD::LoadBoard( const wxString& aFileName, BOARD* aAppendToMe,
         m_board->SetFileName( aFileName );
 
     PCAD_PCB pcb( m_board );
-
-    LOCALE_IO toggle;    // toggles on, then off, the C locale.
 
     LoadInputFile( aFileName, &xmlDoc );
     pcb.ParseBoard( nullptr, &xmlDoc, wxT( "PCB" ) );

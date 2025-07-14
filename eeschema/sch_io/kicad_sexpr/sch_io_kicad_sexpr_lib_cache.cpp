@@ -28,7 +28,6 @@
 #include <sch_shape.h>
 #include <lib_symbol.h>
 #include <sch_textbox.h>
-#include <locale_io.h>
 #include <macros.h>
 #include <richio.h>
 #include "sch_io_kicad_sexpr_lib_cache.h"
@@ -63,10 +62,6 @@ void SCH_IO_KICAD_SEXPR_LIB_CACHE::Load()
                  wxString::Format( "Cannot use relative file paths in sexpr plugin to "
                                    "open library '%s'.", m_libFileName.GetFullPath() ) );
 
-    // The current locale must use period as the decimal point.
-    // Yes, we did this earlier, but it's sadly not thread-safe.
-    LOCALE_IO toggle;
-
     wxLogTrace( traceSchLegacyPlugin, "Loading sexpr symbol library file '%s'",
                 m_libFileName.GetFullPath() );
 
@@ -88,8 +83,6 @@ void SCH_IO_KICAD_SEXPR_LIB_CACHE::Save( const std::optional<bool>& aOpt )
 {
     if( !m_isModified )
         return;
-
-    LOCALE_IO   toggle;     // toggles on, then off, the C locale.
 
     // Write through symlinks, don't replace them.
     wxFileName fn = GetRealFile();
@@ -138,11 +131,6 @@ void SCH_IO_KICAD_SEXPR_LIB_CACHE::SaveSymbol( LIB_SYMBOL* aSymbol, OUTPUTFORMAT
                                                const wxString& aLibName, bool aIncludeData )
 {
     wxCHECK_RET( aSymbol, "Invalid LIB_SYMBOL pointer." );
-
-    // The current locale must use period as the decimal point.
-    wxCHECK2( wxLocale::GetInfo( wxLOCALE_DECIMAL_POINT, wxLOCALE_CAT_NUMBER ) == ".",
-              LOCALE_IO toggle );
-
 
     // If we've requested to embed the fonts in the symbol, do so.
     // Otherwise, clear the embedded fonts from the symbol.  Embedded

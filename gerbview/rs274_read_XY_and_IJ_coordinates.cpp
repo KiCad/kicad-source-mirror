@@ -114,7 +114,9 @@ VECTOR2I GERBER_FILE_IMAGE::ReadXYCoord( char*& aText, bool aExcellonMode )
             line.push_back( *( aText++ ) );
         }
 
-        double val = strtod( line.data(), nullptr );
+        double val;
+        wxString text( line.data() );
+        text.ToCDouble( &val );
 
         if( is_float )
         {
@@ -202,7 +204,10 @@ VECTOR2I GERBER_FILE_IMAGE::ReadIJCoord( char*& aText )
             line.push_back( *( aText++ ) );
         }
 
-        double val = strtod( line.data(), nullptr );
+        double val;
+        wxString text( line.data() );
+        text.Trim( true ).Trim( false );
+        text.ToCDouble( &val );
 
         if( is_float )
         {
@@ -314,7 +319,21 @@ double ReadDouble( char*& text, bool aSkipSeparator = true )
     }
     else
     {
-        ret = strtod( text, &text );
+        wxString line( text );
+        auto endpos = line.find_first_not_of( "0123456789.-+eE" );
+        line.Trim( false );
+        line.ToCDouble( &ret );
+
+        if( endpos != wxString::npos )
+        {
+            // Advance the text pointer to the end of the number
+            text += endpos;
+        }
+        else
+        {
+            // If no non-number characters found, advance to the end of the string
+            text += line.length();
+        }
     }
 
     if( *text == ',' || isspace( *text ) )

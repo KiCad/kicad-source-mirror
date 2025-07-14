@@ -42,7 +42,6 @@ class DESIGN_BLOCK_LIST_IMPL;
 class PROGRESS_REPORTER;
 class wxTopLevelWindow;
 class KIWAY;
-class LOCALE_IO;
 class wxTextFile;
 
 
@@ -114,7 +113,7 @@ protected:
     }
 
     /// lazily load stuff not filled in by constructor.  This may throw IO_ERRORS.
-    virtual void load( const LOCALE_IO* locale = nullptr ) {};
+    virtual void load() {};
 
 protected:
     DESIGN_BLOCK_LIST* m_owner;    ///< provides access to DESIGN_BLOCK_LIB_TABLE

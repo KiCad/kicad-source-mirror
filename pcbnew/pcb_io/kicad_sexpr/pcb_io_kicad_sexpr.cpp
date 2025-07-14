@@ -39,7 +39,6 @@
 #include <io/kicad/kicad_io_utils.h>
 #include <kiface_base.h>
 #include <layer_range.h>
-#include <locale_io.h>
 #include <macros.h>
 #include <pad.h>
 #include <pcb_dimension.h>
@@ -309,8 +308,6 @@ bool PCB_IO_KICAD_SEXPR::CanReadBoard( const wxString& aFileName ) const
 void PCB_IO_KICAD_SEXPR::SaveBoard( const wxString& aFileName, BOARD* aBoard,
                                     const std::map<std::string, UTF8>* aProperties )
 {
-    LOCALE_IO   toggle;     // toggles on, then off, the C locale.
-
     wxString sanityResult = aBoard->GroupsSanityCheck();
 
     if( sanityResult != wxEmptyString && m_queryUserCallback )
@@ -379,8 +376,6 @@ BOARD_ITEM* PCB_IO_KICAD_SEXPR::Parse( const wxString& aClipboardSourceInput )
 
 void PCB_IO_KICAD_SEXPR::Format( const BOARD_ITEM* aItem ) const
 {
-    LOCALE_IO   toggle;     // public API function, perform anything convenient for caller
-
     switch( aItem->Type() )
     {
     case PCB_T:
@@ -3107,8 +3102,6 @@ void PCB_IO_KICAD_SEXPR::FootprintDelete( const wxString& aLibraryPath,
                                           const wxString& aFootprintName,
                                           const std::map<std::string, UTF8>* aProperties )
 {
-    LOCALE_IO   toggle;     // toggles on, then off, the C locale.
-
     init( aProperties );
 
     validateCache( aLibraryPath );
@@ -3138,8 +3131,6 @@ void PCB_IO_KICAD_SEXPR::CreateLibrary( const wxString& aLibraryPath,
         THROW_IO_ERROR( wxString::Format( _( "Cannot overwrite library path '%s'." ),
                                           aLibraryPath.GetData() ) );
     }
-
-    LOCALE_IO   toggle;
 
     init( aProperties );
 
@@ -3229,8 +3220,6 @@ bool PCB_IO_KICAD_SEXPR::DeleteLibrary( const wxString& aLibraryPath,
 
 bool PCB_IO_KICAD_SEXPR::IsLibraryWritable( const wxString& aLibraryPath )
 {
-    LOCALE_IO   toggle;
-
     init( nullptr );
 
     validateCache( aLibraryPath );

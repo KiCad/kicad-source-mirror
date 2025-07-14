@@ -22,6 +22,8 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <fmt/format.h>
+
 #include <wx/app.h>
 #include <wx/msgdlg.h>
 
@@ -30,7 +32,6 @@
 #include <class_regulator_data.h>
 #include <datafile_read_write.h>
 #include <string_utils.h>
-#include <locale_io.h>
 #include <macros.h>
 #include <pcb_calculator_datafile_lexer.h>
 #include <pcb_calculator_frame.h>
@@ -53,8 +54,6 @@ bool PANEL_REGULATOR::ReadDataFile()
     if( file == nullptr )
         return false;
 
-    // Switch the locale to standard C (needed to read/write floating point numbers)
-    LOCALE_IO toggle;
     m_RegulatorList.Clear();
 
     PCB_CALCULATOR_DATAFILE* datafile = new PCB_CALCULATOR_DATAFILE( &m_RegulatorList );
@@ -92,9 +91,6 @@ bool PANEL_REGULATOR::ReadDataFile()
 
 bool PANEL_REGULATOR::WriteDataFile()
 {
-    // Switch the locale to standard C (needed to read/write floating point numbers)
-    LOCALE_IO toggle;
-
     auto datafile = std::make_unique<PCB_CALCULATOR_DATAFILE>( &m_RegulatorList );
 
     try
@@ -155,19 +151,19 @@ void PCB_CALCULATOR_DATAFILE::Format( OUTPUTFORMATTER* aFormatter,
         aFormatter->Print( aNestLevel, "(%s %s\n", getTokenName( T_regulator ),
                            aFormatter->Quotew( item->m_Name ).c_str() );
 
-        aFormatter->Print( aNestLevel + 1, "(%s %g)\n", getTokenName( T_reg_vref_min ),
-                           item->m_VrefMin );
-        aFormatter->Print( aNestLevel + 1, "(%s %g)\n", getTokenName( T_reg_vref_typ ),
-                           item->m_VrefTyp );
-        aFormatter->Print( aNestLevel + 1, "(%s %g)\n", getTokenName( T_reg_vref_max ),
-                           item->m_VrefMax );
+        aFormatter->Print( aNestLevel + 1, "%s", fmt::format( "({} {:g})\n", getTokenName( T_reg_vref_min ),
+                           item->m_VrefMin ).c_str() );
+        aFormatter->Print( aNestLevel + 1, "%s", fmt::format( "({} {:g})\n", getTokenName( T_reg_vref_typ ),
+                           item->m_VrefTyp ).c_str() );
+        aFormatter->Print( aNestLevel + 1, "%s", fmt::format( "({} {:g})\n", getTokenName( T_reg_vref_max ),
+                           item->m_VrefMax ).c_str() );
 
         if( item->m_Type == 1 )
         {
-            aFormatter->Print( aNestLevel + 1, "(%s %g)\n", getTokenName( T_reg_iadj_typ ),
-                               item->m_IadjTyp );
-            aFormatter->Print( aNestLevel + 1, "(%s %g)\n", getTokenName( T_reg_iadj_max ),
-                               item->m_IadjMax );
+            aFormatter->Print( aNestLevel + 1, "%s", fmt::format( "({} {:g})\n", getTokenName( T_reg_iadj_typ ),
+                               item->m_IadjTyp ).c_str() );
+            aFormatter->Print( aNestLevel + 1, "%s", fmt::format( "({} {:g})\n", getTokenName( T_reg_iadj_max ),
+                               item->m_IadjMax ).c_str() );
         }
 
         aFormatter->Print( aNestLevel+1, "(%s %s)\n", getTokenName( T_reg_type ),
@@ -233,7 +229,10 @@ void PCB_CALCULATOR_DATAFILE_PARSER::ParseRegulatorDescr( PCB_CALCULATOR_DATAFIL
         if( token != T_NUMBER )
             Expecting( T_NUMBER );
 
-        sscanf( CurText(), "%lf", &val );
+        wxString text = CurText();
+        text.Trim( true ).Trim( false );
+
+        text.ToCDouble( &val );
         NeedRIGHT();
         return val;
     };

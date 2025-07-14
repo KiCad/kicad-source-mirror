@@ -74,7 +74,6 @@
 #include <macros.h>
 #include <richio.h>
 #include <string_utils.h>
-#include <locale_io.h>
 #include <X2_gerber_attributes.h>
 #include <view/view.h>
 #include <gerbview_settings.h>
@@ -480,8 +479,6 @@ bool EXCELLON_IMAGE::LoadFile( const wxString & aFullFileName, EXCELLON_DEFAULTS
 
     wxString msg;
     m_FileName = aFullFileName;
-
-    LOCALE_IO toggleIo;
 
     // FILE_LINE_READER will close the file.
     FILE_LINE_READER excellonReader( m_Current_File, m_FileName );

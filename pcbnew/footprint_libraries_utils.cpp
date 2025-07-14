@@ -599,7 +599,7 @@ void PCB_EDIT_FRAME::ExportFootprintsToLibrary( bool aStoreInNewLib, const wxStr
         DisplayInfoMessage( this, _( "No footprints to export!" ) );
         return;
     }
-    
+
     auto resetReference =
             []( FOOTPRINT* aFootprint )
             {
@@ -1265,7 +1265,7 @@ FOOTPRINT* PCB_BASE_FRAME::CreateNewFootprint( wxString aFootprintName, const wx
         // Try to infer the footprint attributes from an existing footprint in the library
         try
         {
-            tbl->FootprintEnumerate( fpnames, aLibName, true, nullptr );
+            tbl->FootprintEnumerate( fpnames, aLibName, true );
 
             if( !fpnames.empty() )
                 footprintAttrs = tbl->FootprintLoad( aLibName, fpnames.Last() )->GetAttributes();

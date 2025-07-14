@@ -28,7 +28,6 @@
 #include <config.h>
 #include <kiway_player.h>
 #include <wildcards_and_files_ext.h>
-#include <locale_io.h>
 #include <pcb_io/pcb_io_mgr.h>
 
 #include <pcb_io/eagle/pcb_io_eagle.h>
@@ -196,7 +195,6 @@ bool PCB_IO_MGR::ConvertLibrary( std::map<std::string, UTF8>* aOldFileProps, con
     if( oldFileType == PCB_IO_MGR::FILE_TYPE_NONE )
         return false;
 
-    LOCALE_IO           toggle_locale;
     IO_RELEASER<PCB_IO> oldFilePI( PCB_IO_MGR::PluginFind( oldFileType ) );
     IO_RELEASER<PCB_IO> kicadPI( PCB_IO_MGR::PluginFind( PCB_IO_MGR::KICAD_SEXP ) );
     wxArrayString fpNames;

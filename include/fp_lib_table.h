@@ -32,7 +32,6 @@
 class FOOTPRINT;
 class FP_LIB_TABLE_GRID;
 class PCB_IO;
-class LOCALE_IO;
 
 
 /**
@@ -144,13 +143,11 @@ public:
      * @param aFootprintNames is the list to fill with the footprint names found in \a aNickname
      * @param aNickname is a locator for the "library", it is a "name" in LIB_TABLE_ROW.
      * @param aBestEfforts if true, don't throw on errors.
-     * @param aLocale a previously set-up locale.  Currently required for multi-threading, as LOCALE_IO
-     *                uses global storage.
      *
      * @throw IO_ERROR if the library cannot be found, or footprint cannot be loaded.
      */
     void FootprintEnumerate( wxArrayString& aFootprintNames, const wxString& aNickname,
-                             bool aBestEfforts, const LOCALE_IO* aLocale = nullptr );
+                             bool aBestEfforts );
 
     /**
      * Generate a hashed timestamp representing the last-mod-times of the library indicated
@@ -183,14 +180,10 @@ public:
      * A version of #FootprintLoad() for use after #FootprintEnumerate() for more efficient
      * cache management.
      *
-     * @param aLocale a previously set-up locale.  Currently required for multi-threading, as LOCALE_IO
-     *                uses global storage.
-     *
      * The return value is const to allow it to return a reference to a cached item.
      */
     const FOOTPRINT* GetEnumeratedFootprint( const wxString& aNickname,
-                                             const wxString& aFootprintName,
-                                             const LOCALE_IO* aLocale = nullptr );
+                                             const wxString& aFootprintName );
     /**
      * The set of return values from FootprintSave() below.
      */

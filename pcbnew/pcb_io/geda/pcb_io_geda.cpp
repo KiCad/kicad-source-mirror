@@ -35,7 +35,6 @@
 #include <font/fontconfig.h>
 #include <footprint.h>
 #include <pad.h>
-#include <locale_io.h>
 #include <macros.h>
 #include <pcb_text.h>
 #include <pcb_shape.h>
@@ -934,8 +933,6 @@ FOOTPRINT* PCB_IO_GEDA::FootprintLoad( const wxString& aLibraryPath,
 void PCB_IO_GEDA::FootprintDelete( const wxString& aLibraryPath, const wxString& aFootprintName,
                                    const std::map<std::string, UTF8>* aProperties )
 {
-    LOCALE_IO   toggle;     // toggles on, then off, the C locale.
-
     init( aProperties );
 
     validateCache( aLibraryPath );
@@ -1036,8 +1033,6 @@ long long PCB_IO_GEDA::GetLibraryTimestamp( const wxString& aLibraryPath ) const
 
 bool PCB_IO_GEDA::IsLibraryWritable( const wxString& aLibraryPath )
 {
-    LOCALE_IO   toggle;
-
     init( nullptr );
 
     validateCache( aLibraryPath );

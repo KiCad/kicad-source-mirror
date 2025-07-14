@@ -37,7 +37,6 @@
 #include <utility>
 #include <wx/tokenzr.h>
 #include <kiface_base.h>
-#include <locale_io.h>
 
 DESIGN_BLOCK_INFO* DESIGN_BLOCK_LIST::GetDesignBlockInfo( const wxString& aLibNickname,
                                                           const wxString& aDesignBlockName )

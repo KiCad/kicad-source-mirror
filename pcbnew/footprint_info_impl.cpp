@@ -27,7 +27,6 @@
 #include <footprint_info.h>
 #include <fp_lib_table.h>
 #include <kiway.h>
-#include <locale_io.h>
 #include <lib_id.h>
 #include <progress_reporter.h>
 #include <string_utils.h>
@@ -41,13 +40,13 @@
 #include <wx/wfstream.h>
 
 
-void FOOTPRINT_INFO_IMPL::load( const LOCALE_IO* aLocale )
+void FOOTPRINT_INFO_IMPL::load()
 {
     FP_LIB_TABLE* fptable = m_owner->GetTable();
 
     wxASSERT( fptable );
 
-    const FOOTPRINT* footprint = fptable->GetEnumeratedFootprint( m_nickname, m_fpname, aLocale );
+    const FOOTPRINT* footprint = fptable->GetEnumeratedFootprint( m_nickname, m_fpname );
 
     if( footprint == nullptr ) // Should happen only with malformed/broken libraries
     {
@@ -165,14 +164,7 @@ bool FOOTPRINT_LIST_IMPL::ReadFootprintFiles( FP_LIB_TABLE* aTable, const wxStri
 
 void FOOTPRINT_LIST_IMPL::loadFootprints()
 {
-    LOCALE_IO toggle_locale;
-
-    // Parse the footprints in parallel. WARNING! This requires changing the locale, which is
-    // GLOBAL. It is only thread safe to construct the LOCALE_IO before the threads are created,
-    // destroy it after they finish, and block the main (GUI) thread while they work. Any deviation
-    // from this will cause nasal demons.
-    //
-    // TODO: blast LOCALE_IO into the sun
+    // Parse the footprints in parallel.
 
     SYNC_QUEUE<std::unique_ptr<FOOTPRINT_INFO>> queue_parsed;
     thread_pool&                                tp = GetKiCadThreadPool();
@@ -180,7 +172,7 @@ void FOOTPRINT_LIST_IMPL::loadFootprints()
     std::vector<std::future<size_t>>            returns( num_elements );
 
     auto fp_thread =
-            [ this, &queue_parsed, &toggle_locale ]() -> size_t
+            [ this, &queue_parsed ]() -> size_t
             {
                 wxString nickname;
 
@@ -192,7 +184,7 @@ void FOOTPRINT_LIST_IMPL::loadFootprints()
                 CatchErrors(
                         [&]()
                         {
-                            m_lib_table->FootprintEnumerate( fpnames, nickname, false, &toggle_locale );
+                            m_lib_table->FootprintEnumerate( fpnames, nickname, false );
                         } );
 
                 for( wxString fpname : fpnames )
@@ -200,7 +192,7 @@ void FOOTPRINT_LIST_IMPL::loadFootprints()
                     CatchErrors(
                             [&]()
                             {
-                                auto* fpinfo = new FOOTPRINT_INFO_IMPL( this, nickname, fpname, &toggle_locale );
+                                auto* fpinfo = new FOOTPRINT_INFO_IMPL( this, nickname, fpname );
                                 queue_parsed.move_push( std::unique_ptr<FOOTPRINT_INFO>( fpinfo ) );
                             } );
 

@@ -24,8 +24,6 @@
 
 #include <sch_io/eagle/sch_io_eagle.h>
 
-#include <locale_io.h>
-
 #include <algorithm>
 #include <memory>
 #include <wx/filename.h>
@@ -351,7 +349,6 @@ SCH_SHEET* SCH_IO_EAGLE::LoadSchematicFile( const wxString& aFileName, SCHEMATIC
                                             const std::map<std::string, UTF8>* aProperties )
 {
     wxASSERT( !aFileName || aSchematic != nullptr );
-    LOCALE_IO toggle; // toggles on, then off, the C locale.
 
     // Show the font substitution warnings
     fontconfig::FONTCONFIG::SetReporter( &WXLOG_REPORTER::GetInstance() );
@@ -558,8 +555,6 @@ void SCH_IO_EAGLE::ensureLoadedLibrary( const wxString& aLibraryPath )
         if( m_timestamps.at( m_libName ) == getLibraryTimestamp( aLibraryPath ) )
             return;
     }
-
-    LOCALE_IO toggle; // toggles on, then off, the C locale.
 
     if( m_progressReporter )
     {

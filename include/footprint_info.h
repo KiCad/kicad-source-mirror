@@ -46,7 +46,6 @@ class FOOTPRINT_LIST_IMPL;
 class PROGRESS_REPORTER;
 class wxTopLevelWindow;
 class KIWAY;
-class LOCALE_IO;
 class wxTextFile;
 
 
@@ -135,7 +134,7 @@ protected:
     }
 
     /// lazily load stuff not filled in by constructor.  This may throw IO_ERRORS.
-    virtual void load( const LOCALE_IO* aLocale = nullptr ) { };
+    virtual void load() { };
 
     FOOTPRINT_LIST* m_owner; ///< provides access to FP_LIB_TABLE
 

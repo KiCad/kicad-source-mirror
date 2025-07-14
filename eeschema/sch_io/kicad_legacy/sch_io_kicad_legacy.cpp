@@ -37,7 +37,6 @@
 #include <fmt/format.h>
 #include <kiway.h>
 #include <string_utils.h>
-#include <locale_io.h>
 #include <richio.h>
 #include <trace_helpers.h>
 #include <trigo.h>
@@ -130,9 +129,7 @@ SCH_SHEET* SCH_IO_KICAD_LEGACY::LoadSchematicFile( const wxString& aFileName, SC
 {
     wxASSERT( !aFileName || aSchematic != nullptr );
 
-    LOCALE_IO   toggle;     // toggles on, then off, the C locale.
     SCH_SHEET*  sheet;
-
     wxFileName fn = aFileName;
 
     // Unfortunately child sheet file names the legacy schematic file format are not fully
@@ -1502,8 +1499,6 @@ void SCH_IO_KICAD_LEGACY::SaveSchematicFile( const wxString& aFileName, SCH_SHEE
     wxCHECK_RET( aSheet != nullptr, "NULL SCH_SHEET object." );
     wxCHECK_RET( !aFileName.IsEmpty(), "No schematic file name defined." );
 
-    LOCALE_IO   toggle;     // toggles on, then off, the C locale, to write floating point values.
-
     init( aSchematic, aProperties );
 
     wxFileName fn = aFileName;
@@ -1804,7 +1799,7 @@ void SCH_IO_KICAD_LEGACY::saveBitmap( const SCH_BITMAP& aBitmap )
     m_out->Print( 0, "Pos %-4d %-4d\n",
                   schIUScale.IUToMils( aBitmap.GetPosition().x ),
                   schIUScale.IUToMils( aBitmap.GetPosition().y ) );
-    m_out->Print( "%s", fmt::format("Scale {:g}\n atof", refImage.GetImageScale()).c_str() );
+    m_out->Print( "%s", fmt::format("Scale {:g}\n", refImage.GetImageScale()).c_str() );
     m_out->Print( 0, "Data\n" );
 
     wxMemoryOutputStream stream;
@@ -2123,8 +2118,6 @@ void SCH_IO_KICAD_LEGACY::EnumerateSymbolLib( wxArrayString&    aSymbolNameList,
                                               const wxString&   aLibraryPath,
                                               const std::map<std::string, UTF8>* aProperties )
 {
-    LOCALE_IO   toggle;     // toggles on, then off, the C locale.
-
     bool powerSymbolsOnly = ( aProperties &&
                               aProperties->find( SYMBOL_LIB_TABLE::PropPowerSymsOnly ) != aProperties->end() );
 
@@ -2144,8 +2137,6 @@ void SCH_IO_KICAD_LEGACY::EnumerateSymbolLib( std::vector<LIB_SYMBOL*>& aSymbolL
                                               const wxString&   aLibraryPath,
                                             const std::map<std::string, UTF8>* aProperties )
 {
-    LOCALE_IO   toggle;     // toggles on, then off, the C locale.
-
     bool powerSymbolsOnly = ( aProperties &&
                               aProperties->find( SYMBOL_LIB_TABLE::PropPowerSymsOnly ) != aProperties->end() );
 
@@ -2165,8 +2156,6 @@ LIB_SYMBOL* SCH_IO_KICAD_LEGACY::LoadSymbol( const wxString& aLibraryPath,
                                              const wxString& aSymbolName,
                                              const std::map<std::string, UTF8>* aProperties )
 {
-    LOCALE_IO toggle;     // toggles on, then off, the C locale.
-
     cacheLib( aLibraryPath, aProperties );
 
     LIB_SYMBOL_MAP::const_iterator it = m_cache->m_symbols.find( aSymbolName );
@@ -2181,8 +2170,6 @@ LIB_SYMBOL* SCH_IO_KICAD_LEGACY::LoadSymbol( const wxString& aLibraryPath,
 void SCH_IO_KICAD_LEGACY::SaveSymbol( const wxString& aLibraryPath, const LIB_SYMBOL* aSymbol,
                                       const std::map<std::string, UTF8>* aProperties )
 {
-    LOCALE_IO toggle;     // toggles on, then off, the C locale.
-
     cacheLib( aLibraryPath, aProperties );
 
     m_cache->AddSymbol( aSymbol );
@@ -2195,8 +2182,6 @@ void SCH_IO_KICAD_LEGACY::SaveSymbol( const wxString& aLibraryPath, const LIB_SY
 void SCH_IO_KICAD_LEGACY::DeleteSymbol( const wxString& aLibraryPath, const wxString& aSymbolName,
                                         const std::map<std::string, UTF8>* aProperties )
 {
-    LOCALE_IO toggle;     // toggles on, then off, the C locale.
-
     cacheLib( aLibraryPath, aProperties );
 
     m_cache->DeleteSymbol( aSymbolName );
@@ -2214,8 +2199,6 @@ void SCH_IO_KICAD_LEGACY::CreateLibrary( const wxString& aLibraryPath,
         THROW_IO_ERROR( wxString::Format( _( "Symbol library '%s' already exists." ),
                                           aLibraryPath.GetData() ) );
     }
-
-    LOCALE_IO toggle;
 
     delete m_cache;
     m_cache = new SCH_IO_KICAD_LEGACY_LIB_CACHE( aLibraryPath );

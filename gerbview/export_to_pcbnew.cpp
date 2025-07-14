@@ -28,7 +28,6 @@
 
 #include <confirm.h>
 #include <string_utils.h>
-#include <locale_io.h>
 #include <lset.h>
 #include <macros.h>
 #include <trigo.h>
@@ -57,8 +56,6 @@ GBR_TO_PCB_EXPORTER::~GBR_TO_PCB_EXPORTER()
 
 bool GBR_TO_PCB_EXPORTER::ExportPcb( const int* aLayerLookUpTable, int aCopperLayers )
 {
-    LOCALE_IO   toggle;     // toggles on, then off, the C locale.
-
     m_fp = wxFopen( m_pcb_file_name, wxT( "wt" ) );
 
     if( m_fp == nullptr )

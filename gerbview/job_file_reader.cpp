@@ -32,7 +32,6 @@
 #include <wildcards_and_files_ext.h>
 #include <gerbview.h>
 #include <richio.h>
-#include <locale_io.h>
 #include <string_utils.h>
 #include <gerber_file_image.h>
 #include <gerber_file_image_list.h>
@@ -110,8 +109,6 @@ bool GERBER_JOBFILE_READER::ReadGerberJobFile()
 
     if( jobFile == nullptr )
         return false;
-
-    LOCALE_IO toggleIo;
 
     FILE_LINE_READER jobfileReader( jobFile, m_filename.GetFullPath() );  // Will close jobFile
 
