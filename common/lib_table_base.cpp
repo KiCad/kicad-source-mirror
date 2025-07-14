@@ -482,8 +482,6 @@ void LIB_TABLE::reindex()
 
 bool LIB_TABLE::migrate()
 {
-    std::lock_guard<std::shared_mutex> lock( m_mutex );
-
     bool table_updated = false;
 
     for( LIB_TABLE_ROW& row : m_rows )
