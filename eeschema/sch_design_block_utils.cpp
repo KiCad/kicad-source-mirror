@@ -270,9 +270,20 @@ bool SCH_EDIT_FRAME::SaveSelectionAsDesignBlock( const wxString& aLibraryName )
     }
 
     DESIGN_BLOCK blk;
-    wxFileName   fn = wxFileNameFromPath( GetScreen()->GetFileName() );
+    SCH_GROUP*   group = nullptr;
 
-    blk.SetLibId( LIB_ID( aLibraryName, fn.GetName() ) );
+    if( selection.Size() == 1 && selection.HasType( SCH_GROUP_T ) )
+        group = static_cast<SCH_GROUP*>( selection.Front() );
+
+    if( group && !group->GetName().IsEmpty() )
+        // If the user has selected a single group, they probably want the design block named after the group
+        blk.SetLibId( LIB_ID( aLibraryName, group->GetName() ) );
+    else
+    {
+        // Otherwise, use the current screen name
+        wxFileName fn = wxFileNameFromPath( GetScreen()->GetFileName() );
+        blk.SetLibId( LIB_ID( aLibraryName, fn.GetName() ) );
+    }
 
     DIALOG_DESIGN_BLOCK_PROPERTIES dlg( this, &blk );
 
@@ -288,11 +299,42 @@ bool SCH_EDIT_FRAME::SaveSelectionAsDesignBlock( const wxString& aLibraryName )
     // Create a temporary screen
     SCH_SCREEN* tempScreen = new SCH_SCREEN( m_schematic );
 
+    // If we have a single group, we want to strip the group and select the children
+    if( group )
+    {
+        selection.Remove( group );
+
+        // Don't recurse; if we have a group of groups the user probably intends the inner groups to be saved
+        group->RunOnChildren(
+                [&]( EDA_ITEM* aItem )
+                {
+                    selection.Add( aItem );
+                },
+                RECURSE_MODE::NO_RECURSE );
+    }
+
     // Copy the selected items to the temporary screen
     for( EDA_ITEM* item : selection )
     {
-        EDA_ITEM* copy = item->Clone();
-        tempScreen->Append( static_cast<SCH_ITEM*>( copy ) );
+        // We need to deep copy since selections of groups will not have the children
+        if( item->Type() == SCH_GROUP_T )
+        {
+            SCH_GROUP* clonedGroup = static_cast<SCH_GROUP*>( item )->DeepClone();
+
+            tempScreen->Append( clonedGroup );
+
+            clonedGroup->RunOnChildren(
+                                        [&]( EDA_ITEM* aItem )
+                                        {
+                                            tempScreen->Append( static_cast<SCH_ITEM*>( aItem ) );
+                                        },
+                                        RECURSE_MODE::RECURSE );
+        }
+        else
+        {
+            EDA_ITEM* copy = item->Clone();
+            tempScreen->Append( static_cast<SCH_ITEM*>( copy ) );
+        }
     }
 
     // Create a sheet for the temporary screen
