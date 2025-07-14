@@ -208,6 +208,20 @@ void PROJECT_TREE::LoadIcons()
 }
 
 
+void PROJECT_TREE::GetItemsRecursively( const wxTreeItemId& aParentId, std::vector<wxTreeItemId>& aItems )
+{
+    wxTreeItemIdValue cookie;
+    wxTreeItemId      child = GetFirstChild( aParentId, cookie );
+
+    while( child.IsOk() )
+    {
+        aItems.push_back( child );
+        GetItemsRecursively( child, aItems );
+        child = GetNextChild( aParentId, cookie );
+    }
+}
+
+
 int PROJECT_TREE::OnCompareItems( const wxTreeItemId& item1, const wxTreeItemId& item2 )
 {
     PROJECT_TREE_ITEM* myitem1 = (PROJECT_TREE_ITEM*) GetItemData( item1 );
