@@ -71,9 +71,8 @@ wxString ExpandTextVars( const wxString& aSource, const PROJECT* aProject, int a
 wxString ExpandTextVars( const wxString& aSource,
                          const std::function<bool( wxString* )>* aResolver, int aFlags )
 {
-    static wxRegEx userDefinedWarningError( wxS( "^(ERC|DRC)_(WARNING|ERROR).*$" ) );
-    wxString       newbuf;
-    size_t         sourceLen = aSource.length();
+    wxString newbuf;
+    size_t   sourceLen = aSource.length();
 
     newbuf.Alloc( sourceLen );  // best guess (improves performance)
 
@@ -94,7 +93,10 @@ wxString ExpandTextVars( const wxString& aSource,
             if( token.IsEmpty() )
                 continue;
 
-            if( ( aFlags & FOR_ERC_DRC ) == 0 && userDefinedWarningError.Matches( token ) )
+            if( ( aFlags & FOR_ERC_DRC ) == 0 && (   token.StartsWith( wxS( "ERC_WARNING" ) )
+                                                  || token.StartsWith( wxS( "ERC_ERROR" ) )
+                                                  || token.StartsWith( wxS( "DRC_WARNING" ) )
+                                                  || token.StartsWith( wxS( "DRC_ERROR" ) ) ) )
             {
                 // Only show user-defined warnings/errors during ERC/DRC
             }
