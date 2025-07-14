@@ -10,15 +10,17 @@
 # John Beard <john.j.beard@gmail.com>, 2025.
 # Joakim Lundborg <joakim.lundborg@gmail.com>, 2025.
 # Johan Heikkilä <johan.heikkila@gmail.com>, 2025.
+# Stefan Bjornelund the Gnome <stefan.bjornelund.gnome@gmail.com>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-07 17:42+0300\n"
-"PO-Revision-Date: 2025-07-06 13:55+0000\n"
-"Last-Translator: Johan Heikkilä <johan.heikkila@gmail.com>\n"
-"Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/master-"
-"source/sv/>\n"
+"PO-Revision-Date: 2025-07-14 16:07+0000\n"
+"Last-Translator: Stefan Bjornelund the Gnome "
+"<stefan.bjornelund.gnome@gmail.com>\n"
+"Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/"
+"master-source/sv/>\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -31726,14 +31728,14 @@ msgstr ""
 "\n"
 "Emellertid täcks vissa fall inte av denna kalkylator:\n"
 "\n"
-"- För frekvenser över 30kHz är den dielektriska förmågan försämrad. "
-"IEC60664-4 behandlar dessa fall.\n"
+"- För frekvenser över 30kHz är den dielektriska förmågan försämrad. IEC60664-"
+"4 behandlar dessa fall.\n"
 "- Om täckande skikt eller ingjutning används för att skydda mot "
 "nedsmutsning, och alla villkor specificerade i IEC60664-3 uppfylls, kan "
 "isolations- och krypavstånd reduceras. Lödmask anses vanligen inte som "
 "täckande skikt.\n"
 "- Isolation medelst vätskor, komprimerad luft eller andra gaser än luft "
-"innefattas inte av IEC60664."
+"innefattas inte av IEC60664"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:69
 msgid "KiCad Calculator Tools"
@@ -44367,11 +44369,12 @@ msgstr "Det går inte att skapa utmatningskatalogen '%s'."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2389
 msgid "Impossible create compress stream"
-msgstr ""
+msgstr "Omöjligt att skapa komprimerad ström"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2397
+#, fuzzy
 msgid "Compress read or write error"
-msgstr ""
+msgstr "Fel vid komprimering av läsning eller skrivning"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2432
 msgid "Failed to set STEP product name, but will attempt to continue."
