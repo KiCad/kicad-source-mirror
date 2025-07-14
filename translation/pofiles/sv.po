@@ -44073,14 +44073,14 @@ msgid "No valid PCB assembly; cannot create output file '%s'.\n"
 msgstr "Inget giltigt kretskort; kan inte skapa utmatningsfil '%s'.\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2375
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot create input stream '%s'.\n"
-msgstr "Det går inte att skapa utmatningskatalogen '%s'."
+msgstr "Det går inte att skapa utmatningskatalogen '%s'.\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2381
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot create output stream '%s'.\n"
-msgstr "Det går inte att skapa utmatningskatalogen '%s'."
+msgstr "Det går inte att skapa utmatningskatalogen '%s'.\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2389
 msgid "Impossible create compress stream"
