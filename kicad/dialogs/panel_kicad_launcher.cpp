@@ -32,13 +32,12 @@
 
 
 PANEL_KICAD_LAUNCHER::PANEL_KICAD_LAUNCHER( wxWindow* aParent ) :
-        PANEL_KICAD_LAUNCHER_BASE( aParent )
+        PANEL_KICAD_LAUNCHER_BASE( aParent ),
+        m_frame( static_cast<KICAD_MANAGER_FRAME*>( aParent->GetParent() ) )
 {
-    m_frame = static_cast<KICAD_MANAGER_FRAME*>( aParent->GetParent() );
     CreateLaunchers();
 
-    Bind( wxEVT_SYS_COLOUR_CHANGED, wxSysColourChangedEventHandler( PANEL_KICAD_LAUNCHER::onThemeChanged ),
-          this );
+    Bind( wxEVT_SYS_COLOUR_CHANGED, wxSysColourChangedEventHandler( PANEL_KICAD_LAUNCHER::onThemeChanged ), this );
 }
 
 
@@ -52,8 +51,7 @@ PANEL_KICAD_LAUNCHER::~PANEL_KICAD_LAUNCHER()
             window->Unbind( wxEVT_BUTTON, &PANEL_KICAD_LAUNCHER::onLauncherButtonClick, this );
     }
 
-    Unbind( wxEVT_SYS_COLOUR_CHANGED, wxSysColourChangedEventHandler( PANEL_KICAD_LAUNCHER::onThemeChanged ),
-            this );
+    Unbind( wxEVT_SYS_COLOUR_CHANGED, wxSysColourChangedEventHandler( PANEL_KICAD_LAUNCHER::onThemeChanged ), this );
 }
 
 
