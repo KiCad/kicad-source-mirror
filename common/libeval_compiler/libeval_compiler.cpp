@@ -88,16 +88,25 @@ static const wxString formatOpName( int op )
 {
     static const struct
     {
-        int         op;
+        int      op;
         wxString mnemonic;
     }
     simpleOps[] =
     {
-        { TR_OP_MUL, "MUL" }, { TR_OP_DIV, "DIV" }, { TR_OP_ADD, "ADD" },
-        { TR_OP_SUB, "SUB" }, { TR_OP_LESS, "LESS" }, { TR_OP_GREATER, "GREATER" },
-        { TR_OP_LESS_EQUAL, "LESS_EQUAL" }, { TR_OP_GREATER_EQUAL, "GREATER_EQUAL" },
-        { TR_OP_EQUAL, "EQUAL" }, { TR_OP_NOT_EQUAL, "NEQUAL" }, { TR_OP_BOOL_AND, "AND" },
-        { TR_OP_BOOL_OR, "OR" }, { TR_OP_BOOL_NOT, "NOT" }, { -1, "" }
+        { TR_OP_MUL, "MUL" },
+        { TR_OP_DIV, "DIV" },
+        { TR_OP_ADD, "ADD" },
+        { TR_OP_SUB, "SUB" },
+        { TR_OP_LESS, "LESS" },
+        { TR_OP_GREATER, "GREATER" },
+        { TR_OP_LESS_EQUAL, "LESS_EQUAL" },
+        { TR_OP_GREATER_EQUAL, "GREATER_EQUAL" },
+        { TR_OP_EQUAL, "EQUAL" },
+        { TR_OP_NOT_EQUAL, "NEQUAL" },
+        { TR_OP_BOOL_AND, "AND" },
+        { TR_OP_BOOL_OR, "OR" },
+        { TR_OP_BOOL_NOT, "NOT" },
+        { -1, "" }
     };
 
     for( int i = 0; simpleOps[i].op >= 0; i++ )
@@ -1267,8 +1276,6 @@ void UOP::Exec( CONTEXT* ctx )
 
 VALUE* UCODE::Run( CONTEXT* ctx )
 {
-    static VALUE g_false( 0 );
-
     try
     {
         for( UOP* op : m_ucode )
@@ -1277,7 +1284,8 @@ VALUE* UCODE::Run( CONTEXT* ctx )
     catch(...)
     {
         // rules which fail outright should not be fired
-        return &g_false;
+        std::unique_ptr<VALUE> temp_false = std::make_unique<VALUE>( 0 );
+        return ctx->StoreValue( temp_false.get() );
     }
 
     if( ctx->SP() == 1 )
@@ -1293,7 +1301,8 @@ VALUE* UCODE::Run( CONTEXT* ctx )
         wxASSERT( ctx->SP() == 1 );
 
         // non-well-formed rules should not be fired on a release build
-        return &g_false;
+        std::unique_ptr<VALUE> temp_false = std::make_unique<VALUE>( 0 );
+        return ctx->StoreValue( temp_false.get() );
     }
 }
 
