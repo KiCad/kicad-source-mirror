@@ -217,17 +217,14 @@ const wxString LIB_TABLE::GetDescription( const wxString& aNickname )
 
 bool LIB_TABLE::HasLibrary( const wxString& aNickname, bool aCheckEnabled ) const
 {
-    const LIB_TABLE_ROW* row = findRow( aNickname, aCheckEnabled );
-
-    if( row == nullptr )
-        return false;
-
-    return true;
+    return findRow( aNickname, aCheckEnabled ) != nullptr;
 }
 
 
 bool LIB_TABLE::HasLibraryWithPath( const wxString& aPath ) const
 {
+    std::shared_lock<std::shared_mutex> lock( m_mutex );
+
     for( const LIB_TABLE_ROW& row : m_rows )
     {
         if( row.GetFullURI() == aPath )
@@ -253,7 +250,7 @@ wxString LIB_TABLE::GetFullURI( const wxString& aNickname, bool aExpandEnvVars )
 
 LIB_TABLE_ROW* LIB_TABLE::findRow( const wxString& aNickName, bool aCheckIfEnabled ) const
 {
-    LIB_TABLE* cur = (LIB_TABLE*) this;
+    const LIB_TABLE* cur = this;
 
     do
     {
@@ -296,16 +293,18 @@ LIB_TABLE_ROW* LIB_TABLE::findRow( const wxString& aNickName, bool aCheckIfEnabl
 
 const LIB_TABLE_ROW* LIB_TABLE::FindRowByURI( const wxString& aURI )
 {
-    LIB_TABLE* cur = this;
+    const LIB_TABLE* cur = this;
 
     do
     {
-        for( unsigned i = 0; i < cur->m_rows.size(); i++ )
+        std::shared_lock<std::shared_mutex> lock( cur->m_mutex );
+
+        for( const LIB_TABLE_ROW& row : cur->m_rows)
         {
-            const wxString tmp = cur->m_rows[i].GetFullURI( true );
+            const wxString tmp = row.GetFullURI( true );
 
             if( m_io->UrisAreEquivalent( tmp, aURI ) )
-                return &cur->m_rows[i];
+                return &row;
         }
 
         // not found, search fall back table(s), if any
@@ -326,6 +325,8 @@ std::vector<wxString> LIB_TABLE::GetLogicalLibs()
 
     do
     {
+        std::shared_lock<std::shared_mutex> lock( cur->m_mutex );
+
         for( const LIB_TABLE_ROW& row : cur->m_rows )
         {
             if( row.GetIsEnabled() )
@@ -337,8 +338,8 @@ std::vector<wxString> LIB_TABLE::GetLogicalLibs()
     ret.reserve( unique.size() );
 
     // return a sorted, unique set of nicknames in a std::vector<wxString> to caller
-    for( std::set< wxString >::const_iterator it = unique.begin();  it!=unique.end();  ++it )
-        ret.push_back( *it );
+    for( const wxString& nickname : unique )
+        ret.push_back( nickname );
 
     // We want to allow case-sensitive duplicates but sort by case-insensitive ordering
     std::sort( ret.begin(), ret.end(),
@@ -356,7 +357,6 @@ bool LIB_TABLE::InsertRow( LIB_TABLE_ROW* aRow, bool doReplace )
     std::lock_guard<std::shared_mutex> lock( m_mutex );
 
     doInsertRow( aRow, doReplace );
-    reindex();
 
     return true;
 }
@@ -482,6 +482,8 @@ void LIB_TABLE::reindex()
 
 bool LIB_TABLE::migrate()
 {
+    std::lock_guard<std::shared_mutex> lock( m_mutex );
+
     bool table_updated = false;
 
     for( LIB_TABLE_ROW& row : m_rows )
@@ -540,9 +542,7 @@ void LIB_TABLE::Save( const wxString& aFileName ) const
     std::unique_ptr<OUTPUTFORMATTER> sf = m_io->GetWriter( aFileName );
 
     if( !sf )
-    {
         THROW_IO_ERROR( wxString::Format( _( "Failed to get writer for %s" ), aFileName ) );
-    }
 
     // Force the lib table version to 7 before saving
     m_version = 7;
