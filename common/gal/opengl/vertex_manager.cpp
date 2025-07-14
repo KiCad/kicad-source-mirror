@@ -89,10 +89,7 @@ bool VERTEX_MANAGER::Reserve( unsigned int aSize )
     {
         if( show_err_reserve )
         {
-            DisplayError(
-                    nullptr,
-                    wxT( "VERTEX_MANAGER::Reserve: Did not use all previous vertices allocated" ) );
-
+            DisplayError( nullptr, wxT( "VERTEX_MANAGER::Reserve: Did not use all previous vertices allocated" ) );
             show_err_reserve = false;
         }
     }
