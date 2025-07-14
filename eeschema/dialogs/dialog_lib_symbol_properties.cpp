@@ -828,7 +828,9 @@ void DIALOG_LIB_SYMBOL_PROPERTIES::OnEditSpiceModel( wxCommandEvent& event )
 
         if( !found )
         {
+            m_grid->ClearSelection();
             m_fields->erase( m_fields->begin() + ii );
+
             wxGridTableMessage msg( m_fields, wxGRIDTABLE_NOTIFY_ROWS_DELETED, ii, 1 );
             m_grid->ProcessTableMessage( msg );
         }

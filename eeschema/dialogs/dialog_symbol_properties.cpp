@@ -609,9 +609,10 @@ void DIALOG_SYMBOL_PROPERTIES::OnEditSpiceModel( wxCommandEvent& event )
 
         if( !found )
         {
-            m_fields->erase( m_fields->begin() + ii );
-            wxGridTableMessage msg( m_fields, wxGRIDTABLE_NOTIFY_ROWS_DELETED, ii, 1 );
             m_fieldsGrid->ClearSelection();
+            m_fields->erase( m_fields->begin() + ii );
+
+            wxGridTableMessage msg( m_fields, wxGRIDTABLE_NOTIFY_ROWS_DELETED, ii, 1 );
             m_fieldsGrid->ProcessTableMessage( msg );
         }
     }
