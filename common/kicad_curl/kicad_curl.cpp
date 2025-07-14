@@ -32,13 +32,11 @@
 
 
 static std::shared_mutex s_curlMutex;
-static bool              s_curlShuttingDown = false;
+static std::atomic<bool> s_curlShuttingDown = false;
 
 
 void KICAD_CURL::Init()
 {
-    std::unique_lock lock( s_curlMutex );
-
     s_curlShuttingDown = false;
 
     if( curl_global_init( CURL_GLOBAL_ALL ) != CURLE_OK )
@@ -48,9 +46,9 @@ void KICAD_CURL::Init()
 
 void KICAD_CURL::Cleanup()
 {
-    std::unique_lock lock( s_curlMutex );
-
     s_curlShuttingDown = true;
+
+    std::unique_lock lock( s_curlMutex );
 
     curl_global_cleanup();
 }
@@ -64,8 +62,6 @@ std::shared_mutex& KICAD_CURL::Mutex()
 
 bool KICAD_CURL::IsShuttingDown()
 {
-    std::unique_lock lock( s_curlMutex );
-
     return s_curlShuttingDown;
 }
 
