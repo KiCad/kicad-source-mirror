@@ -151,7 +151,7 @@ bool DRC_TEST_PROVIDER_PHYSICAL_CLEARANCE::Run()
                     layers |= LSET::PhysicalLayersMask() | courtyards;
                 }
 
-                for( PCB_LAYER_ID layer : layers.Seq() )
+                for( PCB_LAYER_ID layer : layers )
                     m_itemTree.Insert( item, layer, m_board->m_DRCMaxPhysicalClearance );
 
                 return true;
@@ -182,7 +182,7 @@ bool DRC_TEST_PROVIDER_PHYSICAL_CLEARANCE::Run()
                     if( item->Type() == PCB_FOOTPRINT_T )
                         layers = courtyards;
 
-                    for( PCB_LAYER_ID layer : layers.Seq() )
+                    for( PCB_LAYER_ID layer : layers )
                     {
                         std::shared_ptr<SHAPE> itemShape = item->GetEffectiveShape( layer );
 
@@ -273,23 +273,23 @@ bool DRC_TEST_PROVIDER_PHYSICAL_CLEARANCE::Run()
                 if( zone && zone->GetIsRuleArea() )
                     return true;    // Continue with other items
 
-                for( PCB_LAYER_ID layer : item->GetLayerSet().Seq() )
+                for( PCB_LAYER_ID layer : item->GetLayerSet() )
                 {
                     if( IsCopperLayer( layer ) )
                     {
                         if( !reportProgress( ii++, count, progressDelta ) )
                             return false;
 
-                        DRC_CONSTRAINT c = m_drcEngine->EvalRules( PHYSICAL_CLEARANCE_CONSTRAINT,
-                                                                   item, nullptr, layer );
+                        DRC_CONSTRAINT c = m_drcEngine->EvalRules( PHYSICAL_CLEARANCE_CONSTRAINT, item, nullptr,
+                                                                   layer );
 
                         if( shape )
                         {
                             switch( shape->GetShape() )
                             {
                             case SHAPE_T::POLY:
-                                testShapeLineChain( shape->GetPolyShape().Outline( 0 ),
-                                                    shape->GetWidth(), layer, item, c );
+                                testShapeLineChain( shape->GetPolyShape().Outline( 0 ), shape->GetWidth(), layer,
+                                                    item, c );
                                 break;
 
                             case SHAPE_T::BEZIER:

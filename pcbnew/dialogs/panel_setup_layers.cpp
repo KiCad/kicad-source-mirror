@@ -1000,7 +1000,7 @@ bool PANEL_SETUP_LAYERS::testLayerNames()
     std::vector<wxString>    names;
     wxTextCtrl*  ctl;
 
-    for( PCB_LAYER_ID layer : LSET::AllLayersMask().Seq() )
+    for( PCB_LAYER_ID layer : LSET::AllLayersMask() )
     {
         // we _can_ rely on m_enabledLayers being current here:
 
@@ -1036,8 +1036,7 @@ bool PANEL_SETUP_LAYERS::testLayerNames()
 
         if( name == wxT( "signal" ) )
         {
-            PAGED_DIALOG::GetDialog( this )->SetError( _( "Layer name \"signal\" is reserved." ),
-                                                       this, ctl );
+            PAGED_DIALOG::GetDialog( this )->SetError( _( "Layer name \"signal\" is reserved." ), this, ctl );
             return false;
         }
 
@@ -1068,7 +1067,6 @@ LSEQ PANEL_SETUP_LAYERS::getRemovedLayersWithItems()
         return removedLayers;
 
     PCB_LAYER_COLLECTOR collector;
-    LSEQ newLayerSeq = newLayers.Seq();
 
     for( PCB_LAYER_ID layer_id : curLayers )
     {
@@ -1130,14 +1128,13 @@ LSEQ PANEL_SETUP_LAYERS::getNonRemovableLayers()
         return inUseLayers;
 
     PCB_LAYER_COLLECTOR collector;
-    LSEQ newLayerSeq = newLayers.Seq();
 
-    for( PCB_LAYER_ID layer_id : curLayers.Seq() )
+    for( PCB_LAYER_ID layer_id : curLayers )
     {
         if( IsCopperLayer( layer_id ) ) // Copper layers are not taken into account here
             continue;
 
-        if( !alg::contains( newLayerSeq, layer_id ) )
+        if( !alg::contains( newLayers, layer_id ) )
         {
             collector.SetLayerId( layer_id );
             collector.Collect( m_pcb, GENERAL_COLLECTOR::FootprintItems );

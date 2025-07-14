@@ -1655,7 +1655,7 @@ bool PNS_KICAD_IFACE::IsItemVisible( const PNS::ITEM* aItem ) const
 
     if( m_view->IsVisible( item ) && isOnVisibleLayer )
     {
-        for( PCB_LAYER_ID layer : item->GetLayerSet().Seq() )
+        for( PCB_LAYER_ID layer : item->GetLayerSet() )
         {
             if( item->ViewGetLOD( layer, m_view ) < m_view->GetScale() )
                 return true;

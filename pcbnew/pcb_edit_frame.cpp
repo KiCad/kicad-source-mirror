@@ -1680,7 +1680,7 @@ void PCB_EDIT_FRAME::OnBoardLoaded()
     layerEnum.Choices().Clear();
     layerEnum.Undefined( UNDEFINED_LAYER );
 
-    for( PCB_LAYER_ID layer : LSET::AllLayersMask().Seq() )
+    for( PCB_LAYER_ID layer : LSET::AllLayersMask() )
     {
         // Canonical name
         layerEnum.Map( layer, LSET::Name( layer ) );
@@ -1914,7 +1914,7 @@ void PCB_EDIT_FRAME::UpdateUserInterface()
     layerEnum.Choices().Clear();
     layerEnum.Undefined( UNDEFINED_LAYER );
 
-    for( PCB_LAYER_ID layer : LSET::AllLayersMask().Seq() )
+    for( PCB_LAYER_ID layer : LSET::AllLayersMask() )
     {
         // Canonical name
         layerEnum.Map( layer, LSET::Name( layer ) );
@@ -1924,7 +1924,7 @@ void PCB_EDIT_FRAME::UpdateUserInterface()
     }
 
     // Sync visibility with canvas
-    for( PCB_LAYER_ID layer : LSET::AllLayersMask().Seq() )
+    for( PCB_LAYER_ID layer : LSET::AllLayersMask() )
         GetCanvas()->GetView()->SetLayerVisible( layer, GetBoard()->IsLayerVisible( layer ) );
 
     // Stackup and/or color theme may have changed

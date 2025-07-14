@@ -876,8 +876,7 @@ bool STEP_PCB_MODEL::AddPadShape( const PAD* aPad, const VECTOR2D& aOrigin, bool
         }
     }
 
-    if( aPad->GetAttribute() == PAD_ATTRIB::PTH && aPad->IsOnLayer( F_Cu )
-        && aPad->IsOnLayer( B_Cu ) )
+    if( aPad->GetAttribute() == PAD_ATTRIB::PTH && aPad->IsOnLayer( F_Cu ) && aPad->IsOnLayer( B_Cu ) )
     {
         double f_pos, f_thickness;
         double b_pos, b_thickness;
@@ -927,8 +926,8 @@ bool STEP_PCB_MODEL::AddPadShape( const PAD* aPad, const VECTOR2D& aOrigin, bool
             }
             else
             {
-                TransformOvalToPolygon( polyHole, seg_hole->GetSeg().A, seg_hole->GetSeg().B,
-                                        width, aPad->GetMaxError(), ERROR_OUTSIDE );
+                TransformOvalToPolygon( polyHole, seg_hole->GetSeg().A, seg_hole->GetSeg().B, width,
+                                        aPad->GetMaxError(), ERROR_OUTSIDE );
             }
 
             polyHole.ClearArcs();

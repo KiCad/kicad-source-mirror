@@ -107,13 +107,12 @@ int GLOBAL_EDIT_TOOL::ExchangeFootprints( const TOOL_EVENT& aEvent )
 }
 
 
-bool GLOBAL_EDIT_TOOL::swapBoardItem( BOARD_ITEM* aItem,
-                                      std::map<PCB_LAYER_ID, PCB_LAYER_ID>& aLayerMap )
+bool GLOBAL_EDIT_TOOL::swapBoardItem( BOARD_ITEM* aItem, std::map<PCB_LAYER_ID, PCB_LAYER_ID>& aLayerMap )
 {
     LSET originalLayers = aItem->GetLayerSet();
     LSET newLayers;
 
-    for( PCB_LAYER_ID original : originalLayers.Seq() )
+    for( PCB_LAYER_ID original : originalLayers )
     {
         if( aLayerMap.count( original ) )
             newLayers.set( aLayerMap[ original ] );
@@ -121,7 +120,7 @@ bool GLOBAL_EDIT_TOOL::swapBoardItem( BOARD_ITEM* aItem,
             newLayers.set( original );
     }
 
-    if( originalLayers.Seq() != newLayers.Seq() )
+    if( originalLayers != newLayers )
     {
         m_commit->Modify( aItem );
         aItem->SetLayerSet( newLayers );

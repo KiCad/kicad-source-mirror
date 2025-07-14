@@ -5599,7 +5599,7 @@ PAD* PCB_IO_KICAD_SEXPR_PARSER::parsePAD( FOOTPRINT* aParent )
         {
             LSET cuLayers = pad->GetLayerSet() & LSET::AllCuMask();
 
-            for( PCB_LAYER_ID layer : cuLayers.Seq() )
+            for( PCB_LAYER_ID layer : cuLayers )
                 pad->SetZoneLayerOverride( layer, ZLO_FORCE_NO_ZONE_CONNECTION );
 
             for( token = NextTok(); token != T_RIGHT; token = NextTok() )
@@ -6670,7 +6670,7 @@ PCB_VIA* PCB_IO_KICAD_SEXPR_PARSER::parsePCB_VIA()
             // Ensure only copper layers are stored int ZoneLayerOverride array
             LSET cuLayers = via->GetLayerSet() & LSET::AllCuMask();
 
-            for( PCB_LAYER_ID layer : cuLayers.Seq() )
+            for( PCB_LAYER_ID layer : cuLayers )
             {
                 via->SetZoneLayerOverride( layer, ZLO_FORCE_NO_ZONE_CONNECTION );
             }

@@ -595,7 +595,7 @@ void ALTIUM_PCB::Parse( const ALTIUM_PCB_COMPOUND_FILE&                  altiumP
         if( !zone )
             continue;
 
-        for( PCB_LAYER_ID layer : zone->GetLayerSet().Seq() )
+        for( PCB_LAYER_ID layer : zone->GetLayerSet() )
         {
             if( !zone->HasFilledPolysForLayer( layer ) )
                 continue;
@@ -843,27 +843,27 @@ FOOTPRINT* ALTIUM_PCB::ParseFootprint( ALTIUM_PCB_COMPOUND_FILE& altiumLibFile,
         changes = false;
 
         alg::for_all_pairs( footprint->Pads().begin(), footprint->Pads().end(),
-            [&changes]( PAD* aPad1, PAD* aPad2 )
-            {
-                if( !( aPad1->GetNumber().IsEmpty() ^ aPad2->GetNumber().IsEmpty() ) )
-                    return;
-
-                for( PCB_LAYER_ID layer : aPad1->GetLayerSet().Seq() )
+                [&changes]( PAD* aPad1, PAD* aPad2 )
                 {
-                    std::shared_ptr<SHAPE> shape1 = aPad1->GetEffectiveShape( layer );
-                    std::shared_ptr<SHAPE> shape2 = aPad2->GetEffectiveShape( layer );
+                    if( !( aPad1->GetNumber().IsEmpty() ^ aPad2->GetNumber().IsEmpty() ) )
+                        return;
 
-                    if( shape1->Collide( shape2.get() ) )
+                    for( PCB_LAYER_ID layer : aPad1->GetLayerSet() )
                     {
-                        if( aPad1->GetNumber().IsEmpty() )
-                            aPad1->SetNumber( aPad2->GetNumber() );
-                        else
-                            aPad2->SetNumber( aPad1->GetNumber() );
+                        std::shared_ptr<SHAPE> shape1 = aPad1->GetEffectiveShape( layer );
+                        std::shared_ptr<SHAPE> shape2 = aPad2->GetEffectiveShape( layer );
 
-                        changes = true;
+                        if( shape1->Collide( shape2.get() ) )
+                        {
+                            if( aPad1->GetNumber().IsEmpty() )
+                                aPad1->SetNumber( aPad2->GetNumber() );
+                            else
+                                aPad2->SetNumber( aPad1->GetNumber() );
+
+                            changes = true;
+                        }
                     }
-                }
-            } );
+                } );
     }
 
     // Auto-position reference and value
@@ -2169,13 +2169,12 @@ void ALTIUM_PCB::ParsePolygons6Data( const ALTIUM_PCB_COMPOUND_FILE&     aAltium
             m_highest_pour_index = elem.pourindex;
 
         const ARULE6* planeClearanceRule = GetRuleDefault( ALTIUM_RULE_KIND::PLANE_CLEARANCE );
-        const ARULE6* zoneClearanceRule = GetRule( ALTIUM_RULE_KIND::CLEARANCE,
-                                                   wxT( "PolygonClearance" ) );
+        const ARULE6* zoneClearanceRule = GetRule( ALTIUM_RULE_KIND::CLEARANCE, wxT( "PolygonClearance" ) );
         int planeLayers = 0;
         int signalLayers = 0;
         int clearance = 0;
 
-        for( PCB_LAYER_ID layer : zone->GetLayerSet().Seq() )
+        for( PCB_LAYER_ID layer : zone->GetLayerSet() )
         {
             LAYER_T layerType = m_board->GetLayerType( layer );
 

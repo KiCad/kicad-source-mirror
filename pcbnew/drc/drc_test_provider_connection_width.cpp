@@ -307,8 +307,6 @@ bool DRC_TEST_PROVIDER_CONNECTION_WIDTH::Run()
         return false;   // DRC cancelled
 
     BOARD* board = m_drcEngine->GetBoard();
-    LSET   copperLayerSet = LSET::AllCuMask( board->GetCopperLayerCount() );
-    LSEQ   copperLayers = copperLayerSet.Seq();
     int    epsilon = board->GetDesignSettings().GetDRCEpsilon();
 
     // Zone knockouts can be approximated, and always have extra clearance built in
@@ -418,9 +416,8 @@ bool DRC_TEST_PROVIDER_CONNECTION_WIDTH::Run()
 
                         std::vector<BOARD_ITEM*> contributingItems;
 
-                        for( auto* item : board->m_CopperItemRTreeCache->GetObjectsAt( location,
-                                                                                       aLayer,
-                                                                                       aMinWidth ) )
+                        for( BOARD_ITEM* item : board->m_CopperItemRTreeCache->GetObjectsAt( location, aLayer,
+                                                                                             aMinWidth ) )
                         {
                             if( item->HitTest( location, aMinWidth ) )
                                 contributingItems.push_back( item );
@@ -474,7 +471,7 @@ bool DRC_TEST_PROVIDER_CONNECTION_WIDTH::Run()
                 return 1;
             };
 
-    for( PCB_LAYER_ID layer : copperLayers )
+    for( PCB_LAYER_ID layer : LSET::AllCuMask( board->GetCopperLayerCount() ) )
     {
         for( ZONE* zone : board->m_DRCCopperZones )
         {

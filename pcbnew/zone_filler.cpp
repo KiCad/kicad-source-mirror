@@ -390,7 +390,7 @@ bool ZONE_FILLER::Fill( const std::vector<ZONE*>& aZones, bool aCheck, wxWindow*
                         return aZone->Outline()->Contains( center, -1, holeRadius );
                     };
 
-            for( PCB_LAYER_ID layer : layers.Seq() )
+            for( PCB_LAYER_ID layer : layers )
             {
                 if( !via->ConditionallyFlashed( layer ) )
                     continue;
@@ -433,7 +433,7 @@ bool ZONE_FILLER::Fill( const std::vector<ZONE*>& aZones, bool aCheck, wxWindow*
                         return aZone->Outline()->Contains( center );
                     };
 
-            for( PCB_LAYER_ID layer : layers.Seq() )
+            for( PCB_LAYER_ID layer : layers )
             {
                 if( !pad->ConditionallyFlashed( layer ) )
                     continue;
@@ -470,7 +470,7 @@ bool ZONE_FILLER::Fill( const std::vector<ZONE*>& aZones, bool aCheck, wxWindow*
 
         // calculate the hash value for filled areas. it will be used later to know if the
         // current filled areas are up to date
-        for( PCB_LAYER_ID layer : zone->GetLayerSet().Seq() )
+        for( PCB_LAYER_ID layer : zone->GetLayerSet() )
         {
             zone->BuildHashValue( layer );
             oldFillHashes[ { zone, layer } ] = zone->GetHashValue( layer );
@@ -778,7 +778,7 @@ bool ZONE_FILLER::Fill( const std::vector<ZONE*>& aZones, bool aCheck, wxWindow*
         // arbitrarily choose "at least 3X the area".
         double minArea = (double) zone->GetMinThickness() * zone->GetMinThickness() * 3;
 
-        for( PCB_LAYER_ID layer : zoneCopperLayers.Seq() )
+        for( PCB_LAYER_ID layer : zoneCopperLayers )
         {
             if( m_debugZoneFiller && LSET::InternalCuMask().Contains( layer ) )
                 continue;
@@ -878,7 +878,7 @@ bool ZONE_FILLER::Fill( const std::vector<ZONE*>& aZones, bool aCheck, wxWindow*
             if( zone->GetIsRuleArea() )
                 continue;
 
-            for( PCB_LAYER_ID layer : zone->GetLayerSet().Seq() )
+            for( PCB_LAYER_ID layer : zone->GetLayerSet() )
             {
                 zone->BuildHashValue( layer );
 

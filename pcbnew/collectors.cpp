@@ -345,18 +345,16 @@ INSPECT_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* aTestItem, void* aTestData 
 
         if( zone )
         {
-            if( zone->HitTestForCorner( m_refPos, accuracy * 2 )
-                    || zone->HitTestForEdge( m_refPos, accuracy ) )
+            if( zone->HitTestForCorner( m_refPos, accuracy * 2 ) || zone->HitTestForEdge( m_refPos, accuracy ) )
             {
                 Append( aTestItem );
                 return INSPECT_RESULT::CONTINUE;
             }
             else if( !m_Guide->IgnoreZoneFills() )
             {
-                for( PCB_LAYER_ID layer : zone->GetLayerSet().Seq() )
+                for( PCB_LAYER_ID layer : zone->GetLayerSet() )
                 {
-                    if( m_Guide->IsLayerVisible( layer )
-                            && zone->HitTestFilledArea( layer, m_refPos ) )
+                    if( m_Guide->IsLayerVisible( layer ) && zone->HitTestFilledArea( layer, m_refPos ) )
                     {
                         Append( aTestItem );
                         return INSPECT_RESULT::CONTINUE;
@@ -366,8 +364,7 @@ INSPECT_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* aTestItem, void* aTestData 
         }
         else if( aTestItem == footprint )
         {
-            if( footprint->HitTest( m_refPos, accuracy )
-                    && footprint->HitTestAccurate( m_refPos, accuracy ) )
+            if( footprint->HitTest( m_refPos, accuracy ) && footprint->HitTestAccurate( m_refPos, accuracy ) )
             {
                 Append( aTestItem );
                 return INSPECT_RESULT::CONTINUE;
@@ -419,18 +416,16 @@ INSPECT_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* aTestItem, void* aTestData 
 
         if( zone )
         {
-            if( zone->HitTestForCorner( m_refPos, accuracy * 2 )
-                    || zone->HitTestForEdge( m_refPos, accuracy ) )
+            if( zone->HitTestForCorner( m_refPos, accuracy * 2 ) || zone->HitTestForEdge( m_refPos, accuracy ) )
             {
                 Append2nd( aTestItem );
                 return INSPECT_RESULT::CONTINUE;
             }
             else if( !m_Guide->IgnoreZoneFills() )
             {
-                for( PCB_LAYER_ID layer : zone->GetLayerSet().Seq() )
+                for( PCB_LAYER_ID layer : zone->GetLayerSet() )
                 {
-                    if( m_Guide->IsLayerVisible( layer )
-                            && zone->HitTestFilledArea( layer, m_refPos ) )
+                    if( m_Guide->IsLayerVisible( layer ) && zone->HitTestFilledArea( layer, m_refPos ) )
                     {
                         Append2nd( aTestItem );
                         return INSPECT_RESULT::CONTINUE;
@@ -443,8 +438,7 @@ INSPECT_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* aTestItem, void* aTestData 
             // Already tested above, but Coverity can't figure that out
             wxCHECK( footprint, INSPECT_RESULT::CONTINUE );
 
-            if( footprint->HitTest( m_refPos, accuracy )
-                    && footprint->HitTestAccurate( m_refPos, accuracy ) )
+            if( footprint->HitTest( m_refPos, accuracy ) && footprint->HitTestAccurate( m_refPos, accuracy ) )
             {
                 Append2nd( aTestItem );
                 return INSPECT_RESULT::CONTINUE;

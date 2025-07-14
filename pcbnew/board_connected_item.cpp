@@ -195,7 +195,7 @@ static struct BOARD_CONNECTED_ITEM_DESC
         {
             layerEnum.Undefined( UNDEFINED_LAYER );
 
-            for( PCB_LAYER_ID layer : LSET::AllLayersMask().Seq() )
+            for( PCB_LAYER_ID layer : LSET::AllLayersMask() )
                 layerEnum.Map( layer, LSET::Name( layer ) );
         }
 

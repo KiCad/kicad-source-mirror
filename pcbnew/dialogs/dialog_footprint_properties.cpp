@@ -378,7 +378,7 @@ bool DIALOG_FOOTPRINT_PROPERTIES::TransferDataToWindow()
         {
             BOARD* board = m_footprint->GetBoard();
 
-            for( PCB_LAYER_ID layer : board->GetEnabledLayers().Seq() )
+            for( PCB_LAYER_ID layer : board->GetEnabledLayers() )
                 col_size = std::max( col_size, GetTextExtent( board->GetLayerName( layer ) ).x );
 
             // Swatch and gaps:

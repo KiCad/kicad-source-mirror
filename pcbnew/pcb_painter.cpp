@@ -269,9 +269,13 @@ COLOR4D PCB_RENDER_SETTINGS::GetColor( const BOARD_ITEM* aItem, int aLayer ) con
                                  & aItem->GetLayerSet();
 
             if( GetActiveLayer() == F_Mask && visibleLayers.test( F_Mask ) )
+            {
                 aLayer = F_Mask;
+            }
             else if( GetActiveLayer() == B_Mask && visibleLayers.test( B_Mask ) )
+            {
                 aLayer = B_Mask;
+            }
             else if( ( visibleLayers & LSET::AllCuMask() ).none() )
             {
                 if( visibleLayers.any() )

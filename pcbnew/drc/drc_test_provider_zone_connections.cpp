@@ -308,7 +308,7 @@ bool DRC_TEST_PROVIDER_ZONE_CONNECTIONS::Run()
     {
         if( !zone->IsTeardropArea() )
         {
-            for( PCB_LAYER_ID layer : zone->GetLayerSet().Seq() )
+            for( PCB_LAYER_ID layer : zone->GetLayerSet() )
             {
                 zoneLayers.push_back( { zone, layer } );
                 total_effort += zone->GetFilledPolysList( layer )->FullPointCount();

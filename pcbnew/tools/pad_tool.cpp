@@ -364,7 +364,7 @@ int PAD_TOOL::EnumeratePads( const TOOL_EVENT& aEvent )
                 if( !view->IsVisible( item ) )
                     return false;
 
-                for( PCB_LAYER_ID layer : item->GetLayerSet().Seq() )
+                for( PCB_LAYER_ID layer : item->GetLayerSet() )
                 {
                     if( ( isHighContrast && activeLayers.count( layer ) ) || view->IsLayerVisible( layer ) )
                     {

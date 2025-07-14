@@ -122,7 +122,7 @@ bool DRC_TEST_PROVIDER_SILK_CLEARANCE::Run()
                 if( !reportProgress( ii++, items, progressDelta ) )
                     return false;
 
-                for( PCB_LAYER_ID layer : LSET( item->GetLayerSet() & targetLayers ).Seq() )
+                for( PCB_LAYER_ID layer : LSET( item->GetLayerSet() & targetLayers ) )
                     targetTree.Insert( item, layer );
 
                 return true;

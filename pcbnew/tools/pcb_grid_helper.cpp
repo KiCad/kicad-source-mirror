@@ -1139,7 +1139,7 @@ void PCB_GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos
                 bool onActiveLayer = !isHighContrast;
                 bool isLODVisible = false;
 
-                for( PCB_LAYER_ID layer : item->GetLayerSet().Seq() )
+                for( PCB_LAYER_ID layer : item->GetLayerSet() )
                 {
                     if( !onActiveLayer && activeLayers.count( layer ) )
                         onActiveLayer = true;

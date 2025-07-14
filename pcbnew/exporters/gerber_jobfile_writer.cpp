@@ -466,7 +466,7 @@ void GERBER_JOBFILE_WRITER::addJSONDesignRules()
     {
         for( PAD* pad : footprint->Pads() )
         {
-            for( PCB_LAYER_ID layer : pad->GetLayerSet().Seq() )
+            for( PCB_LAYER_ID layer : pad->GetLayerSet() )
             {
                 int padClearance = pad->GetOwnClearance( layer );
 
@@ -517,7 +517,7 @@ void GERBER_JOBFILE_WRITER::addJSONDesignRules()
         if( zone->GetIsRuleArea() || !zone->IsOnCopperLayer() )
             continue;
 
-        for( PCB_LAYER_ID layer : zone->GetLayerSet().Seq() )
+        for( PCB_LAYER_ID layer : zone->GetLayerSet() )
         {
             int zclerance = zone->GetOwnClearance( layer );
 

@@ -405,7 +405,7 @@ void DIALOG_DRC::OnDRCItemSelected( wxDataViewEvent& aEvent )
                     PAD* pad = static_cast<PAD*>( aItem );
                     LSET layers;
 
-                    for( int layer : aItem->GetLayerSet().Seq() )
+                    for( int layer : aItem->GetLayerSet() )
                     {
                         if( pad->FlashLayer( layer ) )
                             layers.set( layer );

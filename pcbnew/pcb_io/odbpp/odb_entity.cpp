@@ -169,9 +169,7 @@ void ODB_MATRIX_ENTITY::InitMatrixLayerData()
         }
     }
 
-    LSEQ layer_seq = m_board->GetEnabledLayers().Seq();
-
-    for( PCB_LAYER_ID layer : layer_seq )
+    for( PCB_LAYER_ID layer : m_board->GetEnabledLayers().Seq() )
     {
         if( added_layers.find( layer ) != added_layers.end() )
             continue;
@@ -964,9 +962,10 @@ void ODB_STEP_ENTITY::InitEdaData()
         for( PCB_LAYER_ID layer : zone->GetLayerSet().Seq() )
         {
             auto& eda_net = m_edaData.GetNet( zone->GetNetCode() );
-            auto& subnet = eda_net.AddSubnet<EDA_DATA::SUB_NET_PLANE>(
-                    &m_edaData, EDA_DATA::SUB_NET_PLANE::FILL_TYPE::SOLID,
-                    EDA_DATA::SUB_NET_PLANE::CUTOUT_TYPE::EXACT, 0 );
+            auto& subnet = eda_net.AddSubnet<EDA_DATA::SUB_NET_PLANE>( &m_edaData,
+                                                                       EDA_DATA::SUB_NET_PLANE::FILL_TYPE::SOLID,
+                                                                       EDA_DATA::SUB_NET_PLANE::CUTOUT_TYPE::EXACT,
+                                                                       0 );
             m_plugin->GetPlaneSubnetMap().emplace( std::piecewise_construct,
                                                    std::forward_as_tuple( layer, zone ),
                                                    std::forward_as_tuple( &subnet ) );
@@ -1094,13 +1093,12 @@ bool ODB_STEP_ENTITY::CreateDirectoryTree( ODB_TREE_WRITER& writer )
 
 void ODB_STEP_ENTITY::MakeLayerEntity()
 {
-    LSEQ                layers = m_board->GetEnabledLayers().Seq();
+    LSET                layers = m_board->GetEnabledLayers();
     const NETINFO_LIST& nets = m_board->GetNetInfo();
 
     // To avoid the overhead of repeatedly cycling through the layers and nets,
     // we pre-sort the board items into a map of layer -> net -> items
-    std::map<PCB_LAYER_ID, std::map<int, std::vector<BOARD_ITEM*>>>& elements =
-            m_plugin->GetLayerElementsMap();
+    std::map<PCB_LAYER_ID, std::map<int, std::vector<BOARD_ITEM*>>>& elements = m_plugin->GetLayerElementsMap();
 
     std::for_each( m_board->Tracks().begin(), m_board->Tracks().end(),
                    [&layers, &elements]( PCB_TRACK* aTrack )
@@ -1124,12 +1122,8 @@ void ODB_STEP_ENTITY::MakeLayerEntity()
     std::for_each( m_board->Zones().begin(), m_board->Zones().end(),
                    [&elements]( ZONE* zone )
                    {
-                       LSEQ zone_layers = zone->GetLayerSet().Seq();
-
-                       for( PCB_LAYER_ID layer : zone_layers )
-                       {
+                       for( PCB_LAYER_ID layer : zone->GetLayerSet() )
                            elements[layer][zone->GetNetCode()].push_back( zone );
-                       }
                    } );
 
     for( BOARD_ITEM* item : m_board->Drawings() )
@@ -1150,10 +1144,9 @@ void ODB_STEP_ENTITY::MakeLayerEntity()
 
         for( PAD* pad : fp->Pads() )
         {
-            LSEQ     pad_layers = pad->GetLayerSet().Seq();
             VECTOR2I margin;
 
-            for( PCB_LAYER_ID layer : pad_layers )
+            for( PCB_LAYER_ID layer : pad->GetLayerSet() )
             {
                 bool onCopperLayer = LSET::AllCuMask().test( layer );
                 bool onSolderMaskLayer = LSET( { F_Mask, B_Mask } ).test( layer );
@@ -1175,7 +1168,9 @@ void ODB_STEP_ENTITY::MakeLayerEntity()
 
                 if( pad->GetShape( PADSTACK::ALL_LAYERS ) != PAD_SHAPE::CUSTOM
                     && ( padPlotsSize.x <= 0 || padPlotsSize.y <= 0 ) )
+                {
                     continue;
+                }
 
                 elements[layer][pad->GetNetCode()].push_back( pad );
             }

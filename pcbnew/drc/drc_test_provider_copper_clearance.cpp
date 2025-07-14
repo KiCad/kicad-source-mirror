@@ -601,7 +601,7 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testTrackClearances()
         {
             PCB_TRACK* track = m_board->Tracks()[trackIdx];
 
-            for( PCB_LAYER_ID layer : LSET( track->GetLayerSet() & boardCopperLayers ).Seq() )
+            for( PCB_LAYER_ID layer : LSET( track->GetLayerSet() & boardCopperLayers ) )
             {
                 std::shared_ptr<SHAPE> trackShape = track->GetEffectiveShape( layer );
 
@@ -981,7 +981,7 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testPadClearances( )
                 {
                     for( PAD* pad : footprint->Pads() )
                     {
-                        for( PCB_LAYER_ID layer : LSET( pad->GetLayerSet() & boardCopperLayers ).Seq() )
+                        for( PCB_LAYER_ID layer : LSET( pad->GetLayerSet() & boardCopperLayers ) )
                         {
                             if( m_drcEngine->IsCancelled() )
                                 return;

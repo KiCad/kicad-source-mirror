@@ -264,7 +264,7 @@ void DRC_TEST_PROVIDER_SOLDER_MASK::testSilkToMaskClearance()
                 if( isInvisibleText( item ) )
                     return true;
 
-                for( PCB_LAYER_ID layer : silkLayers.Seq() )
+                for( PCB_LAYER_ID layer : silkLayers )
                 {
                     if( !item->IsOnLayer( layer ) )
                         continue;

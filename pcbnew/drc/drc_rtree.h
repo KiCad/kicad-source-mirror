@@ -81,7 +81,7 @@ public:
 
     DRC_RTREE()
     {
-        for( int layer : LSET::AllLayersMask().Seq() )
+        for( int layer : LSET::AllLayersMask() )
             m_tree[layer] = new drc_rtree();
 
         m_count = 0;

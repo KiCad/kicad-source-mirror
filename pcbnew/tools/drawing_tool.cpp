@@ -3553,7 +3553,7 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
                     return false;
             }
 
-            for( PCB_LAYER_ID layer : aOther->GetLayerSet().Seq() )
+            for( PCB_LAYER_ID layer : aOther->GetLayerSet() )
             {
                 // Reference images are "on" a copper layer but are not actually part of it
                 if( !IsCopperLayer( layer ) || aOther->Type() == PCB_REFERENCE_IMAGE_T )
@@ -3815,7 +3815,7 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
 
             for( ZONE* z : m_board->Zones() )
             {
-                for( PCB_LAYER_ID layer : lset.Seq() )
+                for( PCB_LAYER_ID layer : lset )
                 {
                     if( z->IsOnLayer( layer ) )
                     {

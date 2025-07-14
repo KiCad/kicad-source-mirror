@@ -379,7 +379,7 @@ LSEQ PCBNEW_JOBS_HANDLER::convertLayerArg( wxString& aLayerString, BOARD* aBoard
     std::map<wxString, LSET> layerGuiMasks;
 
     // Build list of layer names and their layer mask:
-    for( PCB_LAYER_ID layer : LSET::AllLayersMask().Seq() )
+    for( PCB_LAYER_ID layer : LSET::AllLayersMask() )
     {
         // Add user layer name
         if( aBoard )

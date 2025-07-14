@@ -1575,7 +1575,7 @@ SHAPE_POLY_SET FOOTPRINT::GetBoundingHull() const
 
     for( ZONE* zone : m_zones )
     {
-        for( PCB_LAYER_ID layer : zone->GetLayerSet().Seq() )
+        for( PCB_LAYER_ID layer : zone->GetLayerSet() )
         {
             const SHAPE_POLY_SET& layerPoly = *zone->GetFilledPolysList( layer );
 
@@ -3794,7 +3794,7 @@ bool FOOTPRINT::cmp_pads::operator()( const PAD* aFirst, const PAD* aSecond ) co
     if( padCopperMatches.has_value() )
         return *padCopperMatches;
 
-    if( aFirst->GetLayerSet().Seq() != aSecond->GetLayerSet().Seq() )
+    if( aFirst->GetLayerSet() != aSecond->GetLayerSet() )
         return aFirst->GetLayerSet().Seq() < aSecond->GetLayerSet().Seq();
 
     if( aFirst->m_Uuid != aSecond->m_Uuid )
@@ -3815,7 +3815,7 @@ bool FOOTPRINT::cmp_padstack::operator()( const PAD* aFirst, const PAD* aSecond 
     if( aFirst->GetShape() != aSecond->GetShape() )
         return aFirst->GetShape() < aSecond->GetShape();
 
-    if( aFirst->GetLayerSet().Seq() != aSecond->GetLayerSet().Seq() )
+    if( aFirst->GetLayerSet() != aSecond->GetLayerSet() )
         return aFirst->GetLayerSet().Seq() < aSecond->GetLayerSet().Seq();
 
     if( aFirst->GetDrillSizeX() != aSecond->GetDrillSizeX() )
@@ -3866,7 +3866,7 @@ bool FOOTPRINT::cmp_zones::operator()( const ZONE* aFirst, const ZONE* aSecond )
     if( aFirst->GetAssignedPriority() != aSecond->GetAssignedPriority() )
         return aFirst->GetAssignedPriority() < aSecond->GetAssignedPriority();
 
-    if( aFirst->GetLayerSet().Seq() != aSecond->GetLayerSet().Seq() )
+    if( aFirst->GetLayerSet() != aSecond->GetLayerSet() )
         return aFirst->GetLayerSet().Seq() < aSecond->GetLayerSet().Seq();
 
     if( aFirst->Outline()->TotalVertices() != aSecond->Outline()->TotalVertices() )
@@ -4123,7 +4123,7 @@ static struct FOOTPRINT_DESC
         {
             layerEnum.Undefined( UNDEFINED_LAYER );
 
-            for( PCB_LAYER_ID layer : LSET::AllLayersMask().Seq() )
+            for( PCB_LAYER_ID layer : LSET::AllLayersMask() )
                 layerEnum.Map( layer, LSET::Name( layer ) );
         }
 

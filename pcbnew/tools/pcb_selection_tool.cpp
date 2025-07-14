@@ -2875,7 +2875,7 @@ bool PCB_SELECTION_TOOL::Selectable( const BOARD_ITEM* aItem, bool checkVisibili
                 {
                     LSET set;
 
-                    for( PCB_LAYER_ID layer : LSET::AllLayersMask().Seq() )
+                    for( PCB_LAYER_ID layer : LSET::AllLayersMask() )
                         set.set( layer, view()->IsLayerVisible( layer ) );
 
                     return set;
@@ -3973,7 +3973,7 @@ void PCB_SELECTION_TOOL::FilterCollectorForFootprints( GENERAL_COLLECTOR& aColle
                 {
                     LSET set;
 
-                    for( PCB_LAYER_ID layer : LSET::AllLayersMask().Seq() )
+                    for( PCB_LAYER_ID layer : LSET::AllLayersMask() )
                         set.set( layer, view()->IsLayerVisible( layer ) );
 
                     return set;
@@ -4020,7 +4020,7 @@ void PCB_SELECTION_TOOL::FilterCollectorForFootprints( GENERAL_COLLECTOR& aColle
 
         bool has_hit = false;
 
-        for( PCB_LAYER_ID layer : layers.Seq() )
+        for( PCB_LAYER_ID layer : layers )
         {
             if( fp->HitTestOnLayer( extents, false, layer ) )
             {
@@ -4046,7 +4046,7 @@ void PCB_SELECTION_TOOL::FilterCollectorForFootprints( GENERAL_COLLECTOR& aColle
         {
             has_hit = false;
 
-            for( PCB_LAYER_ID layer : layers.Seq() )
+            for( PCB_LAYER_ID layer : layers )
             {
                 if( fp->HitTestOnLayer( aWhere, layer ) )
                 {

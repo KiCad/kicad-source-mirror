@@ -177,7 +177,7 @@ bool EXPORTER_STEP::buildFootprint3DShapes( FOOTPRINT* aFootprint, VECTOR2D aOri
         // This helps with fusing
         holePoly.Deflate( m_platingThickness / 2, CORNER_STRATEGY::ROUND_ALL_CORNERS, pad->GetMaxError() );
 
-        for( PCB_LAYER_ID pcblayer : pad->GetLayerSet().Seq() )
+        for( PCB_LAYER_ID pcblayer : pad->GetLayerSet() )
         {
             if( pad->IsOnLayer( pcblayer ) )
                 m_poly_holes[pcblayer].Append( holePoly );
@@ -208,7 +208,7 @@ bool EXPORTER_STEP::buildFootprint3DShapes( FOOTPRINT* aFootprint, VECTOR2D aOri
 
             if( m_params.m_ExportSoldermask )
             {
-                for( PCB_LAYER_ID pcblayer : pad->GetLayerSet().Seq() )
+                for( PCB_LAYER_ID pcblayer : pad->GetLayerSet() )
                 {
                     if( pcblayer != F_Mask && pcblayer != B_Mask )
                         continue;
@@ -227,7 +227,7 @@ bool EXPORTER_STEP::buildFootprint3DShapes( FOOTPRINT* aFootprint, VECTOR2D aOri
     }
 
     // Build 3D shapes of the footprint graphic items:
-    for( PCB_LAYER_ID pcblayer : m_layersToExport.Seq() )
+    for( PCB_LAYER_ID pcblayer : m_layersToExport )
     {
         if( IsCopperLayer( pcblayer ) && !m_params.m_ExportTracksVias )
             continue;
@@ -448,7 +448,7 @@ bool EXPORTER_STEP::buildTrack3DShape( PCB_TRACK* aTrack, VECTOR2D aOrigin )
 
         if( !skipCopper )
         {
-            for( PCB_LAYER_ID pcblayer : layers.Seq() )
+            for( PCB_LAYER_ID pcblayer : layers )
             {
                 const std::shared_ptr<SHAPE>& shape = via->GetEffectiveShape( pcblayer );
 
@@ -501,7 +501,7 @@ void EXPORTER_STEP::buildZones3DShape( VECTOR2D aOrigin )
             continue;
         }
 
-        for( PCB_LAYER_ID layer : layers.Seq() )
+        for( PCB_LAYER_ID layer : layers )
         {
             SHAPE_POLY_SET fill_shape;
             zone->TransformSolidAreasShapesToPolygon( layer, fill_shape );

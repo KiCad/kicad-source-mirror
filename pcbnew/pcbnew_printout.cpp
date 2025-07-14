@@ -142,7 +142,7 @@ void PCBNEW_PRINTOUT::setupViewLayers( KIGFX::VIEW& aView, const LSET& aLayerSet
 {
     BOARD_PRINTOUT::setupViewLayers( aView, aLayerSet );
 
-    for( PCB_LAYER_ID layer : m_settings.m_LayerSet.Seq() )
+    for( PCB_LAYER_ID layer : m_settings.m_LayerSet )
     {
         aView.SetLayerVisible( PCBNEW_LAYER_ID_START + layer, true );
 

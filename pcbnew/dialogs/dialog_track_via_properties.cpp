@@ -977,7 +977,7 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataFromWindow()
     auto collide =
             [&]( BOARD_CONNECTED_ITEM* a, BOARD_CONNECTED_ITEM* b )
             {
-                for( PCB_LAYER_ID layer : LSET( a->GetLayerSet() & b->GetLayerSet() ).Seq() )
+                for( PCB_LAYER_ID layer : LSET( a->GetLayerSet() & b->GetLayerSet() ) )
                 {
                     if( a->GetEffectiveShape( layer )->Collide( b->GetEffectiveShape( layer ).get() ) )
                         return true;
