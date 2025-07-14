@@ -1143,12 +1143,23 @@ void PROJECT_TREE_PANE::onIdle( wxIdleEvent& aEvent )
 
     if( m_selectedItem != nullptr )
     {
-        // Activate launches a window which may run the event loop on top of us and cause OnIdle
-        // to get called again, so be sure to block off the activation condition first.
-        PROJECT_TREE_ITEM* item = m_selectedItem;
-        m_selectedItem          = nullptr;
+        // Make sure m_selectedItem still exists in the tree before activating it.
+        std::vector<wxTreeItemId> validItemIds;
+        m_TreeProject->GetItemsRecursively( m_TreeProject->GetRootItem(), validItemIds );
 
-        item->Activate( this );
+        for( wxTreeItemId id : validItemIds )
+        {
+            if( GetItemIdData( id ) == m_selectedItem )
+            {
+                // Activate launches a window which may run the event loop on top of us and cause
+                // onIdle to get called again, so be sure to null out m_selectedItem first.
+                PROJECT_TREE_ITEM* item = m_selectedItem;
+                m_selectedItem          = nullptr;
+
+                item->Activate( this );
+                break;
+            }
+        }
     }
 }
 
@@ -1220,19 +1231,18 @@ void PROJECT_TREE_PANE::onExpand( wxTreeEvent& Event )
 
 std::vector<PROJECT_TREE_ITEM*> PROJECT_TREE_PANE::GetSelectedData()
 {
-    wxArrayTreeItemIds             selection;
+    wxArrayTreeItemIds              selection;
     std::vector<PROJECT_TREE_ITEM*> data;
 
     m_TreeProject->GetSelections( selection );
 
-    for( auto it = selection.begin(); it != selection.end(); it++ )
+    for( const wxTreeItemId itemId : selection )
     {
-        PROJECT_TREE_ITEM* item = GetItemIdData( *it );
+        PROJECT_TREE_ITEM* item = GetItemIdData( itemId );
 
         if( !item )
         {
-            wxLogTrace( traceGit, wxS( "Null tree item returned for selection, dynamic_cast "
-                                       "failed?" ) );
+            wxLogTrace( traceGit, wxS( "Null tree item returned for selection, dynamic_cast failed?" ) );
             continue;
         }
 

@@ -57,6 +57,8 @@ public:
 
     void LoadIcons();
 
+    void GetItemsRecursively( const wxTreeItemId& aParentId, std::vector<wxTreeItemId>& aItems );
+
     void SetGitRepo( git_repository* aRepo )    { m_gitCommon->SetRepo( aRepo ); }
     git_repository* GetGitRepo() const          { return m_gitCommon->GetRepo(); }
 
