@@ -1113,7 +1113,7 @@ void PCB_IO_KICAD_SEXPR::format( const PCB_REFERENCE_IMAGE* aBitmap ) const
     formatLayer( aBitmap->GetLayer() );
 
     if( refImage.GetImageScale() != 1.0 )
-        m_out->Print( "(scale %g)", refImage.GetImageScale() );
+        m_out->Print( "%s", fmt::format("(scale {:g})", refImage.GetImageScale()).c_str() );
 
     if( aBitmap->IsLocked() )
         KICAD_FORMAT::FormatBool( m_out, "locked", true );
@@ -1399,7 +1399,7 @@ void PCB_IO_KICAD_SEXPR::format( const FOOTPRINT* aFootprint ) const
                 KICAD_FORMAT::FormatBool( m_out, "hide", !bs3D->m_Show );
 
             if( bs3D->m_Opacity != 1.0 )
-                m_out->Print( "(opacity %0.4f)", bs3D->m_Opacity );
+                m_out->Print( "%s", fmt::format("(opacity {:.4f})", bs3D->m_Opacity).c_str() );
 
             m_out->Print( "(offset (xyz %s %s %s))",
                           FormatDouble2Str( bs3D->m_Offset.x ).c_str(),

@@ -1856,8 +1856,8 @@ void SCH_IO_KICAD_LEGACY_LIB_CACHE::saveText( const SCH_TEXT* aText, OUTPUTFORMA
         text = wxT( "\"" ) + text + wxT( "\"" );
     }
 
-    aFormatter.Print( 0, "T %g %d %d %d %d %d %d %s",
-                      (double) aText->GetTextAngle().AsTenthsOfADegree(),
+    aFormatter.Print( 0, "T %d %d %d %d %d %d %d %s",
+                      aText->GetTextAngle().AsTenthsOfADegree(),
                       schIUScale.IUToMils( aText->GetTextPos().x ),
                       schIUScale.IUToMils( -aText->GetTextPos().y ),
                       schIUScale.IUToMils( aText->GetTextWidth() ),

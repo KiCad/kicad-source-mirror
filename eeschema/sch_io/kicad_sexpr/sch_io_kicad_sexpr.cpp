@@ -22,6 +22,8 @@
 
 #include <algorithm>
 
+#include <fmt/format.h>
+
 #include <wx/log.h>
 #include <wx/mstream.h>
 
@@ -951,7 +953,7 @@ void SCH_IO_KICAD_SEXPR::saveBitmap( const SCH_BITMAP& aBitmap )
         scale = scale * 300.0 / bitmapBase.GetPPI();
 
     if( scale != 1.0 )
-        m_out->Print( "(scale %g)", scale );
+        m_out->Print( "%s", fmt::format("(scale {:g})", refImage.GetImageScale()).c_str() );
 
     KICAD_FORMAT::FormatUuid( m_out, aBitmap.m_Uuid );
 

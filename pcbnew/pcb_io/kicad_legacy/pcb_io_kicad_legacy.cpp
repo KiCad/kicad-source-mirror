@@ -1812,7 +1812,36 @@ void PCB_IO_KICAD_LEGACY::load3D( FOOTPRINT* aFootprint )
 {
     FP_3DMODEL t3D;
 
-    char*   line;
+    // Lambda to parse three space-separated doubles using wxString::ToCDouble with C locale
+    auto parseThreeDoubles = []( const char* str, double& x, double& y, double& z ) -> bool
+    {
+        wxString wxStr( str );
+        wxStr.Trim( false ).Trim( true );
+
+        wxStringTokenizer tokenizer( wxStr, wxT( " \t" ), wxTOKEN_STRTOK );
+
+        if( !tokenizer.HasMoreTokens() )
+            return false;
+
+        wxString token1 = tokenizer.GetNextToken();
+
+        if( !token1.ToCDouble( &x ) || !tokenizer.HasMoreTokens() )
+            return false;
+
+        wxString token2 = tokenizer.GetNextToken();
+
+        if( !token2.ToCDouble( &y ) || !tokenizer.HasMoreTokens() )
+            return false;
+
+        wxString token3 = tokenizer.GetNextToken();
+
+        if( !token3.ToCDouble( &z ) )
+            return false;
+
+        return true;
+    };
+
+    char* line;
 
     while( ( line = READLINE( m_reader ) ) != nullptr )
     {
@@ -1824,18 +1853,24 @@ void PCB_IO_KICAD_LEGACY::load3D( FOOTPRINT* aFootprint )
         }
         else if( TESTLINE( "Sc" ) )     // Scale
         {
-            sscanf( line + SZ( "Sc" ), "%lf %lf %lf\n", &t3D.m_Scale.x, &t3D.m_Scale.y,
-                    &t3D.m_Scale.z );
+            if (!parseThreeDoubles(line + SZ("Sc"), t3D.m_Scale.x, t3D.m_Scale.y, t3D.m_Scale.z))
+            {
+                THROW_IO_ERROR( wxT( "Invalid scale values in 3D model" ) );
+            }
         }
         else if( TESTLINE( "Of" ) )     // Offset
         {
-            sscanf( line + SZ( "Of" ), "%lf %lf %lf\n", &t3D.m_Offset.x, &t3D.m_Offset.y,
-                    &t3D.m_Offset.z );
+            if (!parseThreeDoubles(line + SZ("Of"), t3D.m_Offset.x, t3D.m_Offset.y, t3D.m_Offset.z))
+            {
+                THROW_IO_ERROR( wxT( "Invalid offset values in 3D model" ) );
+            }
         }
         else if( TESTLINE( "Ro" ) )     // Rotation
         {
-            sscanf( line + SZ( "Ro" ), "%lf %lf %lf\n", &t3D.m_Rotation.x, &t3D.m_Rotation.y,
-                    &t3D.m_Rotation.z );
+            if (!parseThreeDoubles(line + SZ("Ro"), t3D.m_Rotation.x, t3D.m_Rotation.y, t3D.m_Rotation.z))
+            {
+                THROW_IO_ERROR( wxT( "Invalid rotation values in 3D model" ) );
+            }
         }
         else if( TESTLINE( "$EndSHAPE3D" ) )
         {

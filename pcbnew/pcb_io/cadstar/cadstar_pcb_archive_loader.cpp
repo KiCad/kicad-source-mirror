@@ -69,12 +69,14 @@ void CADSTAR_PCB_ARCHIVE_LOADER::Load( BOARD* aBoard, PROJECT* aProject )
 
     if( designSizeXkicad > maxDesignSizekicad || designSizeYkicad > maxDesignSizekicad )
     {
+        // Note that we allow the floating point output here because this message is displayed to the user and should
+        // be in their locale.
         THROW_IO_ERROR( wxString::Format(
                 _( "The design is too large and cannot be imported into KiCad. \n"
                    "Please reduce the maximum design size in CADSTAR by navigating to: \n"
                    "Design Tab -> Properties -> Design Options -> Maximum Design Size. \n"
-                   "Current Design size: %.2f, %.2f millimeters. \n"
-                   "Maximum permitted design size: %.2f, %.2f millimeters.\n" ),
+                   "Current Design size: %.2f, %.2f millimeters. \n"                //format:allow
+                   "Maximum permitted design size: %.2f, %.2f millimeters.\n" ),    //format:allow
                 (double) designSizeXkicad / PCB_IU_PER_MM,
                 (double) designSizeYkicad / PCB_IU_PER_MM,
                 (double) maxDesignSizekicad / PCB_IU_PER_MM,
@@ -2056,8 +2058,8 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadTemplates()
             {
                 wxLogWarning( wxString::Format(
                         _( "The CADSTAR template '%s' has thermal reliefs in the original design "
-                           "but the spoke width (%.2f mm) is thinner than the minimum thickness of "
-                           "the zone (%.2f mm). KiCad requires the minimum thickness of the zone "
+                           "but the spoke width (%.2f mm) is thinner than the minimum thickness of " //format:allow
+                           "the zone (%.2f mm). KiCad requires the minimum thickness of the zone "   //format:allow
                            "to be preserved. Therefore the minimum thickness has been applied as "
                            "the new spoke width and will be applied next time the zones are "
                            "filled." ),
@@ -2597,7 +2599,7 @@ int CADSTAR_PCB_ARCHIVE_LOADER::loadNetVia(
     {
         wxLogError( _( "The CADSTAR via code '%s' has different shape from a circle defined. "
                        "KiCad only supports circular vias so this via type has been changed to "
-                       "be a via with circular shape of %.2f mm diameter." ),
+                       "be a via with circular shape of %.2f mm diameter." ),                   //format:allow
                     csViaCode.Name,
                     (double) ( (double) getKiCadLength( csViaCode.Shape.Size ) / 1E6 ) );
     }
@@ -3623,7 +3625,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::checkAndLogHatchCode( const HATCHCODE_ID& aCads
                         _( "The CADSTAR Hatching code '%s' has different line widths for each "
                            "hatch. KiCad only supports one width for the hatching. The imported "
                            "hatching uses the width defined in the first hatch definition, i.e. "
-                           "%.2f mm." ),
+                           "%.2f mm." ),    //format:allow
                         hcode.Name,
                         (double) ( (double) getKiCadLength( hcode.Hatches.at( 0 ).LineWidth ) )
                                 / 1E6 ) );
@@ -3635,7 +3637,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::checkAndLogHatchCode( const HATCHCODE_ID& aCads
                         _( "The CADSTAR Hatching code '%s' has different step sizes for each "
                            "hatch. KiCad only supports one step size for the hatching. The imported "
                            "hatching uses the step size defined in the first hatching definition, "
-                           "i.e. %.2f mm." ),
+                           "i.e. %.2f mm." ), //format:allow
                         hcode.Name,
                         (double) ( (double) getKiCadLength( hcode.Hatches.at( 0 ).Step ) )
                                 / 1E6 ) );
@@ -3646,9 +3648,9 @@ void CADSTAR_PCB_ARCHIVE_LOADER::checkAndLogHatchCode( const HATCHCODE_ID& aCads
             {
                 wxLogWarning( wxString::Format(
                         _( "The hatches in CADSTAR Hatching code '%s' have an angle  "
-                           "difference of %.1f degrees. KiCad only supports hatching 90 "
+                           "difference of %.1f degrees. KiCad only supports hatching 90 "   //format:allow
                            "degrees apart.  The imported hatching has two hatches 90 "
-                           "degrees apart, oriented %.1f degrees from horizontal." ),
+                           "degrees apart, oriented %.1f degrees from horizontal." ),       //format:allow
                         hcode.Name,
                         getAngle( abs( hcode.Hatches.at( 0 ).OrientAngle
                                          - hcode.Hatches.at( 1 ).OrientAngle ) ).AsDegrees(),

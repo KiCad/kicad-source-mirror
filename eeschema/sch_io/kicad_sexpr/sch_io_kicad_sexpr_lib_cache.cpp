@@ -19,7 +19,10 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <fmt/format.h>
+
 #include <wx/log.h>
+
 #include <base_units.h>
 #include <build_version.h>
 #include <sch_shape.h>
@@ -426,7 +429,7 @@ void SCH_IO_KICAD_SEXPR_LIB_CACHE::saveField( SCH_FIELD* aField, OUTPUTFORMATTER
     if( aField->IsMandatory() )
         fieldName = GetCanonicalFieldName( aField->GetId() );
 
-    aFormatter.Print( "(property %s %s %s (at %s %s %g)",
+    aFormatter.Print( "(property %s %s %s (at %s %s %s)",
                       aField->IsPrivate() ? "private" : "",
                       aFormatter.Quotew( fieldName ).c_str(),
                       aFormatter.Quotew( aField->GetText() ).c_str(),
@@ -434,7 +437,7 @@ void SCH_IO_KICAD_SEXPR_LIB_CACHE::saveField( SCH_FIELD* aField, OUTPUTFORMATTER
                                                            aField->GetPosition().x ).c_str(),
                       EDA_UNIT_UTILS::FormatInternalUnits( schIUScale,
                                                            -aField->GetPosition().y ).c_str(),
-                      aField->GetTextAngle().AsDegrees() );
+                      fmt::format( "{:g}", aField->GetTextAngle().AsDegrees() ).c_str() );
 
     if( aField->IsNameShown() )
         aFormatter.Print( "(show_name)" );
@@ -508,14 +511,14 @@ void SCH_IO_KICAD_SEXPR_LIB_CACHE::saveText( SCH_TEXT* aText, OUTPUTFORMATTER& a
 {
     wxCHECK_RET( aText && aText->Type() == SCH_TEXT_T, "Invalid SCH_TEXT object." );
 
-    aFormatter.Print( "(text %s %s (at %s %s %g)",
+    aFormatter.Print( "(text %s %s (at %s %s %d)",
                       aText->IsPrivate() ? "private" : "",
                       aFormatter.Quotew( aText->GetText() ).c_str(),
                       EDA_UNIT_UTILS::FormatInternalUnits( schIUScale,
                                                            aText->GetPosition().x ).c_str(),
                       EDA_UNIT_UTILS::FormatInternalUnits( schIUScale,
                                                            -aText->GetPosition().y ).c_str(),
-                      (double) aText->GetTextAngle().AsTenthsOfADegree() );
+                      aText->GetTextAngle().AsTenthsOfADegree() );
 
     aText->EDA_TEXT::Format( &aFormatter, 0 );
     aFormatter.Print( ")" );

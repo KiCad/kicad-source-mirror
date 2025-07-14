@@ -469,7 +469,7 @@ void CADSTAR_SCH_ARCHIVE_LOADER::Load( SCHEMATIC* aSchematic, SCH_SHEET* aRootSh
                         return aNumber - error;
                 };
 
-        // When exporting to pdf, CADSTAR applies a margin of 3% of the longest dimension (height
+        // When exporting to pdf, CADSTAR applies a margin of 3percent of the longest dimension (height
         // or width) to all 4 sides (top, bottom, left right). For the import, we are also rounding
         // the margin to the nearest grid, ensuring all items remain on the grid.
         VECTOR2I targetSheetSize = sheetBoundingBox.GetSize();
@@ -538,8 +538,8 @@ void CADSTAR_SCH_ARCHIVE_LOADER::checkDesignLimits()
                 _( "The design is too large and cannot be imported into KiCad. \n"
                    "Please reduce the maximum design size in CADSTAR by navigating to: \n"
                    "Design Tab -> Properties -> Design Options -> Maximum Design Size. \n"
-                   "Current Design size: %.2f, %.2f millimeters. \n"
-                   "Maximum permitted design size: %.2f, %.2f millimeters.\n" ),
+                   "Current Design size: %.2f, %.2f millimeters. \n" //format:allow
+                   "Maximum permitted design size: %.2f, %.2f millimeters.\n" ), //format:allow
                 (double) designSizeXkicad / SCH_IU_PER_MM,
                 (double) designSizeYkicad / SCH_IU_PER_MM,
                 (double) maxDesignSizekicad / SCH_IU_PER_MM,
@@ -2107,7 +2107,7 @@ SCH_SYMBOL* CADSTAR_SCH_ARCHIVE_LOADER::loadSchematicSymbol( const SYMBOL& aCads
 
     if( test1.Normalize180() != test2.Normalize180() )
     {
-        m_reporter->Report( wxString::Format( _( "Symbol '%s' is rotated by an angle of %.1f "
+        m_reporter->Report( wxString::Format( _( "Symbol '%s' is rotated by an angle of %.1f " //format:allow
                                                  "degrees in the original CADSTAR design but "
                                                  "KiCad only supports rotation angles multiples "
                                                  "of 90 degrees. The connecting wires will need "

@@ -47,6 +47,12 @@ add_custom_target(
     COMMENT "Generating version string header"
     )
 
+add_custom_target(
+    banned_functions ALL
+    COMMAND ${CMAKE_COMMAND}
+        -DBANNED_DIRS="${PROJECT_SOURCE_DIR}/common/io;${PROJECT_SOURCE_DIR}/pcbnew/pcb_io;${PROJECT_SOURCE_DIR}/eeschema/sch_io"
+        -P ${KICAD_CMAKE_MODULE_PATH}/CheckBannedFunctions.cmake
+)
 # A shared library used by multiple *.kiface files and one or two program
 # launchers.  Object files can migrate into here over time, but only if they are
 # surely needed and certainly used from more than one place without recompilation.

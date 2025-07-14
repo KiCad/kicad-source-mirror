@@ -34,6 +34,7 @@
 #include <wx_filename.h>       // For ::ResolvePossibleSymlinks()
 
 #include <bitmap_base.h>
+#include <fmt/format.h>
 #include <kiway.h>
 #include <string_utils.h>
 #include <locale_io.h>
@@ -1803,7 +1804,7 @@ void SCH_IO_KICAD_LEGACY::saveBitmap( const SCH_BITMAP& aBitmap )
     m_out->Print( 0, "Pos %-4d %-4d\n",
                   schIUScale.IUToMils( aBitmap.GetPosition().x ),
                   schIUScale.IUToMils( aBitmap.GetPosition().y ) );
-    m_out->Print( 0, "Scale %f\n", refImage.GetImageScale() );
+    m_out->Print( "%s", fmt::format("Scale {:g}\n atof", refImage.GetImageScale()).c_str() );
     m_out->Print( 0, "Data\n" );
 
     wxMemoryOutputStream stream;

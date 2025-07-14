@@ -407,11 +407,30 @@ EROT Convert<EROT>( const wxString& aRot )
 
     value.spin    = aRot.find( 'S' ) != aRot.npos;
     value.mirror  = aRot.find( 'M' ) != aRot.npos;
-    value.degrees = strtod( aRot.c_str()
-                            + 1                        // skip leading 'R'
-                            + int( value.spin )       // skip optional leading 'S'
-                            + int( value.mirror ),    // skip optional leading 'M'
-                            nullptr );
+
+    size_t rPos = aRot.find( 'R' );
+
+    if( rPos == wxString::npos )
+    {
+        value.degrees = 0.0;
+        return value;
+    }
+
+    // Calculate the offset after 'R', 'S', and 'M'
+    size_t offset = rPos + 1;
+
+    if( value.spin )
+        ++offset;
+
+    if( value.mirror )
+        ++offset;
+
+
+    wxString degreesStr = aRot.Mid( offset );
+
+    // Use locale-independent conversion
+    if( !degreesStr.ToCDouble( &value.degrees ) )
+        value.degrees = 0.0;
 
     return value;
 }
@@ -504,7 +523,9 @@ VECTOR2I ConvertArcCenter( const VECTOR2I& aStart, const VECTOR2I& aEnd, double 
 
     if( !std::isnormal( dlen ) || !std::isnormal( aAngle ) )
     {
-        THROW_IO_ERROR( wxString::Format( _( "Invalid Arc with radius %f and angle %f" ),
+        // Note that we allow the floating point output here because this message is displayed to the user and should
+        // be in their locale.
+        THROW_IO_ERROR( wxString::Format( _( "Invalid Arc with radius %0.2f and angle %0.2f" ), //format:allow
                                           dlen,
                                           aAngle ) );
     }

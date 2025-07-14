@@ -3373,12 +3373,12 @@ void ALTIUM_PCB::ConvertPads6ToFootprintItemOnCopper( FOOTPRINT* aFootprint, con
                         {
                             wxString msg;
                             msg.Printf( _( "Loading library '%s':\n"
-                                         "Footprint %s pad %s has a hole-rotation of %f degrees. "
+                                         "Footprint %s pad %s has a hole-rotation of %d degrees. "
                                          "KiCad only supports 90 degree rotations." ),
                                       m_library,
                                       m_footprintName,
                                       aElem.name,
-                                      slotRotation.AsDegrees() );
+                                      KiROUND( slotRotation.AsDegrees() ) );
                             m_reporter->Report( msg, RPT_SEVERITY_DEBUG );
                         }
                     }
@@ -3387,11 +3387,11 @@ void ALTIUM_PCB::ConvertPads6ToFootprintItemOnCopper( FOOTPRINT* aFootprint, con
                         if( m_reporter )
                         {
                             wxString msg;
-                            msg.Printf( _( "Footprint %s pad %s has a hole-rotation of %f degrees. "
+                            msg.Printf( _( "Footprint %s pad %s has a hole-rotation of %d degrees. "
                                          "KiCad only supports 90 degree rotations." ),
                                       aFootprint->GetReference(),
                                       aElem.name,
-                                      slotRotation.AsDegrees() );
+                                      KiROUND( slotRotation.AsDegrees() ) );
                             m_reporter->Report( msg, RPT_SEVERITY_DEBUG );
                         }
                     }

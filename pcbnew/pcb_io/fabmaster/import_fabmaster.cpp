@@ -1311,7 +1311,8 @@ FABMASTER::GRAPHIC_POLYGON* FABMASTER::processPolygon( const FABMASTER::GRAPHIC_
 
     if( s.x != s.y )
     {
-        wxLogError( _( "Expected x and y to be the same, got x = %f and y = %f " ), s.x, s.y );
+        wxLogDebug( "FABMASTER::processPolygon: Expected x and y to be the same, got x = %s and y = %s ",
+                    aData.graphic_data3, aData.graphic_data4 );
     }
 
     auto new_poly = std::make_unique<GRAPHIC_POLYGON>();
