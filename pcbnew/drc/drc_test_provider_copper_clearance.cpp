@@ -1206,15 +1206,15 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testZonesToZones()
 
     // Contains the index for zoneA, zoneB, the conflict point, the actual clearance, the
     // constraint, and the layer
-    using report_data = std::tuple<int, int, VECTOR2I, int, DRC_CONSTRAINT, PCB_LAYER_ID>;
+    using REPORT_DATA = std::tuple<int, int, VECTOR2I, int, DRC_CONSTRAINT, PCB_LAYER_ID>;
 
-    std::vector<std::future<report_data>> futures;
+    std::vector<std::future<REPORT_DATA>> futures;
     thread_pool&                          tp = GetKiCadThreadPool();
     std::atomic<size_t>                   done( 1 );
 
     auto checkZones =
             [this, testClearance, testIntersects, &poly_segments, &done]
-            ( int zoneA_idx, int zoneB_idx, bool sameNet, PCB_LAYER_ID layer ) -> report_data
+            ( int zoneA_idx, int zoneB_idx, bool sameNet, PCB_LAYER_ID layer ) -> REPORT_DATA
             {
                 ZONE*    zoneA = m_board->m_DRCCopperZones[zoneA_idx];
                 ZONE*    zoneB = m_board->m_DRCCopperZones[zoneB_idx];
@@ -1231,8 +1231,7 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testZonesToZones()
                 }
                 else if( !sameNet && testClearance )
                 {
-                    DRC_CONSTRAINT constraint = m_drcEngine->EvalRules( CLEARANCE_CONSTRAINT,
-                                                                        zoneA, zoneB, layer );
+                    DRC_CONSTRAINT constraint = m_drcEngine->EvalRules( CLEARANCE_CONSTRAINT,  zoneA, zoneB, layer );
                     int            clearance = constraint.GetValue().Min();
 
                     if( constraint.GetSeverity() != RPT_SEVERITY_IGNORE && clearance > 0 )
@@ -1259,21 +1258,18 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testZonesToZones()
                                 int bx2 = testSegment.B.x;
                                 int by2 = testSegment.B.y;
 
-                                // We have ensured that the 'A' segment starts before the 'B' segment,
-                                // so if the 'A' segment ends before the 'B' segment starts, we can skip
-                                // to the next 'A'
+                                // We have ensured that the 'A' segment starts before the 'B' segment, so if the
+                                // 'A' segment ends before the 'B' segment starts, we can skip to the next 'A'
                                 if( ax2 < bx1 )
                                     break;
 
-                                actual = GetClearanceBetweenSegments( bx1, by1, bx2, by2, 0,
-                                                                      ax1, ay1, ax2, ay2, 0,
+                                actual = GetClearanceBetweenSegments( bx1, by1, bx2, by2, 0, ax1, ay1, ax2, ay2, 0,
                                                                       clearance, &pt.x, &pt.y );
 
                                 if( actual < clearance )
                                 {
                                     done.fetch_add( 1 );
-                                    return std::make_tuple( zoneA_idx, zoneB_idx, pt, actual, constraint,
-                                                            layer );
+                                    return std::make_tuple( zoneA_idx, zoneB_idx, pt, actual, constraint, layer );
                                 }
                             }
                         }
@@ -1295,23 +1291,23 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testZonesToZones()
         {
             if( m_board->m_DRCCopperZones[ii]->IsOnLayer( layer ) )
             {
-                SHAPE_POLY_SET poly = *m_board->m_DRCCopperZones[ii]->GetFilledPolysList( layer );
-                std::vector<SEG>& zone_layer_poly_segs = poly_segments[ii][layer];
-
-                poly.BuildBBoxCaches();
-                zone_layer_poly_segs.reserve( poly.FullPointCount() );
-
-                for( auto it = poly.IterateSegmentsWithHoles(); it; it++ )
+                if( SHAPE_POLY_SET* poly = m_board->m_DRCCopperZones[ii]->GetFill( layer ) )
                 {
-                    SEG seg = *it;
+                    std::vector<SEG>& zone_layer_poly_segs = poly_segments[ii][layer];
+                    zone_layer_poly_segs.reserve( poly->FullPointCount() );
 
-                    if( seg.A.x > seg.B.x )
-                        seg.Reverse();
+                    for( auto it = poly->IterateSegmentsWithHoles(); it; it++ )
+                    {
+                        SEG seg = *it;
 
-                    zone_layer_poly_segs.push_back( seg );
+                        if( seg.A.x > seg.B.x )
+                            seg.Reverse();
+
+                        zone_layer_poly_segs.push_back( seg );
+                    }
+
+                    std::sort( zone_layer_poly_segs.begin(), zone_layer_poly_segs.end() );
                 }
-
-                std::sort( zone_layer_poly_segs.begin(), zone_layer_poly_segs.end() );
             }
         }
 
@@ -1366,7 +1362,7 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testZonesToZones()
 
     size_t count = futures.size();
 
-    for( auto& task : futures )
+    for( std::future<REPORT_DATA>& task : futures )
     {
         if( !task.valid() )
             continue;
@@ -1384,7 +1380,7 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testZonesToZones()
 
             if( result == std::future_status::ready )
             {
-                report_data    data = task.get();
+                REPORT_DATA    data = task.get();
                 int            zoneA_idx = std::get<0>( data );
                 int            zoneB_idx = std::get<1>( data );
                 VECTOR2I       pt = std::get<2>( data );

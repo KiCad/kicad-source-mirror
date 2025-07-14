@@ -42,7 +42,6 @@ bool DRC_CACHE_GENERATOR::Run()
     LSET           boardCopperLayers = LSET::AllCuMask( m_board->GetCopperLayerCount() );
     thread_pool&   tp = GetKiCadThreadPool();
 
-
     largestClearance = std::max( largestClearance, m_board->GetMaxClearanceValue() );
 
     if( m_drcEngine->QueryWorstConstraint( PHYSICAL_CLEARANCE_CONSTRAINT, worstConstraint ) )
@@ -57,6 +56,18 @@ bool DRC_CACHE_GENERATOR::Run()
 
     std::set<ZONE*> allZones;
 
+    auto cacheBBoxes =
+            []( ZONE* zone, const LSET& copperLayers )
+            {
+                zone->Outline()->BuildBBoxCaches();
+
+                for( PCB_LAYER_ID layer : copperLayers )
+                {
+                    if( SHAPE_POLY_SET* fill = zone->GetFill( layer ) )
+                        fill->BuildBBoxCaches();
+                }
+            };
+
     for( ZONE* zone : m_board->Zones() )
     {
         allZones.insert( zone );
@@ -65,8 +76,11 @@ bool DRC_CACHE_GENERATOR::Run()
         {
             m_board->m_DRCZones.push_back( zone );
 
-            if( ( zone->GetLayerSet() & boardCopperLayers ).any() )
+            LSET zoneCopperLayers = zone->GetLayerSet() & boardCopperLayers;
+
+            if( zoneCopperLayers.any() )
             {
+                cacheBBoxes( zone, zoneCopperLayers );
                 m_board->m_DRCCopperZones.push_back( zone );
             }
         }
@@ -82,8 +96,13 @@ bool DRC_CACHE_GENERATOR::Run()
             {
                 m_board->m_DRCZones.push_back( zone );
 
-                if( ( zone->GetLayerSet() & boardCopperLayers ).any() )
+                LSET zoneCopperLayers = zone->GetLayerSet() & boardCopperLayers;
+
+                if( zoneCopperLayers.any() )
+                {
+                    cacheBBoxes( zone, zoneCopperLayers );
                     m_board->m_DRCCopperZones.push_back( zone );
+                }
             }
         }
     }
