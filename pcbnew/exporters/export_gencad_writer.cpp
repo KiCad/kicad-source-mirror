@@ -300,7 +300,8 @@ void GENCAD_EXPORTER::createPadsShapesSection()
     {
         viastacks.push_back( via );
         fprintf( m_file, "PAD V%d.%d.%s ROUND %g\nCIRCLE 0 0 %g\n",
-                 via->GetWidth( PADSTACK::ALL_LAYERS ), via->GetDrillValue(),
+                 via->GetWidth( PADSTACK::ALL_LAYERS ),
+                 via->GetDrillValue(),
                  fmt_mask( via->GetLayerSet() & master_layermask ).c_str(),
                  via->GetDrillValue() / SCALE_FACTOR,
                  via->GetWidth( PADSTACK::ALL_LAYERS ) / (SCALE_FACTOR * 2) );
@@ -380,9 +381,11 @@ void GENCAD_EXPORTER::createPadsShapesSection()
             // bottom left arc
             fprintf( m_file, "ARC %g %g %g %g %g %g\n",
                      ( off.x - lineX - radius ) / SCALE_FACTOR,
-                     ( -off.y - lineY ) / SCALE_FACTOR, ( off.x - lineX ) / SCALE_FACTOR,
+                     ( -off.y - lineY ) / SCALE_FACTOR,
+                     ( off.x - lineX ) / SCALE_FACTOR,
                      ( -off.y - lineY - radius ) / SCALE_FACTOR,
-                     ( off.x - lineX ) / SCALE_FACTOR, ( -off.y - lineY ) / SCALE_FACTOR );
+                     ( off.x - lineX ) / SCALE_FACTOR,
+                     ( -off.y - lineY ) / SCALE_FACTOR );
 
             // bottom line
             if( lineX > 0 )
@@ -399,7 +402,8 @@ void GENCAD_EXPORTER::createPadsShapesSection()
                      ( off.x + lineX ) / SCALE_FACTOR,
                      ( -off.y - lineY - radius ) / SCALE_FACTOR,
                      ( off.x + lineX + radius ) / SCALE_FACTOR,
-                     ( -off.y - lineY ) / SCALE_FACTOR, ( off.x + lineX ) / SCALE_FACTOR,
+                     ( -off.y - lineY ) / SCALE_FACTOR,
+                     ( off.x + lineX ) / SCALE_FACTOR,
                      ( -off.y - lineY ) / SCALE_FACTOR );
 
             // right line
@@ -415,9 +419,11 @@ void GENCAD_EXPORTER::createPadsShapesSection()
             // top right arc
             fprintf( m_file, "ARC %g %g %g %g %g %g\n",
                      ( off.x + lineX + radius ) / SCALE_FACTOR,
-                     ( -off.y + lineY ) / SCALE_FACTOR, ( off.x + lineX ) / SCALE_FACTOR,
+                     ( -off.y + lineY ) / SCALE_FACTOR,
+                     ( off.x + lineX ) / SCALE_FACTOR,
                      ( -off.y + lineY + radius ) / SCALE_FACTOR,
-                     ( off.x + lineX ) / SCALE_FACTOR, ( -off.y + lineY ) / SCALE_FACTOR );
+                     ( off.x + lineX ) / SCALE_FACTOR,
+                     ( -off.y + lineY ) / SCALE_FACTOR );
 
             // top line
             if( lineX > 0 )
@@ -434,7 +440,8 @@ void GENCAD_EXPORTER::createPadsShapesSection()
                      ( off.x - lineX ) / SCALE_FACTOR,
                      ( -off.y + lineY + radius ) / SCALE_FACTOR,
                      ( off.x - lineX - radius ) / SCALE_FACTOR,
-                     ( -off.y + lineY ) / SCALE_FACTOR, ( off.x - lineX ) / SCALE_FACTOR,
+                     ( -off.y + lineY ) / SCALE_FACTOR,
+                     ( off.x - lineX ) / SCALE_FACTOR,
                      ( -off.y + lineY ) / SCALE_FACTOR );
 
             // left line
@@ -576,25 +583,32 @@ void GENCAD_EXPORTER::createPadsShapesSection()
         PAD* pad = padstacks[i];
 
         // Straight padstack
-        fprintf( m_file, "PADSTACK PAD%u %g\n", i, pad->GetDrillSize().x / SCALE_FACTOR );
+        fprintf( m_file, "PADSTACK PAD%u %g\n",
+                 i,
+                 pad->GetDrillSize().x / SCALE_FACTOR );
 
         LSET pad_set = pad->GetLayerSet() & master_layermask;
 
         // the special gc_seq
         for( PCB_LAYER_ID layer : pad_set.Seq( gc_seq ) )
         {
-            fprintf( m_file, "PAD P%u %s 0 0\n", i, genCADLayerName( cu_count, layer ).c_str() );
+            fprintf( m_file, "PAD P%u %s 0 0\n",
+                     i,
+                     genCADLayerName( cu_count, layer ).c_str() );
         }
 
         // Flipped padstack
         if( m_flipBottomPads )
         {
-            fprintf( m_file, "PADSTACK PAD%uF %g\n", i, pad->GetDrillSize().x / SCALE_FACTOR );
+            fprintf( m_file, "PADSTACK PAD%uF %g\n",
+                     i,
+                     pad->GetDrillSize().x / SCALE_FACTOR );
 
             // the normal PCB_LAYER_ID sequence is inverted from gc_seq[]
             for( PCB_LAYER_ID layer : pad_set.Seq() )
             {
-                fprintf( m_file, "PAD P%u %s 0 0\n", i,
+                fprintf( m_file, "PAD P%u %s 0 0\n",
+                         i,
                          genCADLayerNameFlipped( cu_count, layer ).c_str() );
             }
         }
@@ -720,13 +734,16 @@ void GENCAD_EXPORTER::createShapesSection()
             VECTOR2I padPos = pad->GetFPRelativePosition();
 
             // Bottom side footprints use the flipped padstack
-            fprintf( m_file, ( m_flipBottomPads && footprint->GetFlag() ) ?
-                     "PIN \"%s\" PAD%dF %g %g %s %g %s\n" :
-                     "PIN \"%s\" PAD%d %g %g %s %g %s\n",
-                     TO_UTF8( escapeString( pinname ) ), pad->GetSubRatsnest(),
+            fprintf( m_file,
+                     ( m_flipBottomPads && footprint->GetFlag() ) ? "PIN \"%s\" PAD%dF %g %g %s %g %s\n"
+                                                                  : "PIN \"%s\" PAD%d %g %g %s %g %s\n",
+                     TO_UTF8( escapeString( pinname ) ),
+                     pad->GetSubRatsnest(),
                      padPos.x / SCALE_FACTOR,
                      -padPos.y / SCALE_FACTOR,
-                     layer, orient.AsDegrees(), mirror );
+                     layer,
+                     orient.AsDegrees(),
+                     mirror );
         }
     }
 
@@ -1005,10 +1022,12 @@ void GENCAD_EXPORTER::createRoutesSection()
             LSET vset = via->GetLayerSet() & master_layermask;
 
             fprintf( m_file, "VIA VIA%d.%d.%s %g %g ALL %g via%d\n",
-                     via->GetWidth( PADSTACK::ALL_LAYERS ), via->GetDrillValue(),
+                     via->GetWidth( PADSTACK::ALL_LAYERS ),
+                     via->GetDrillValue(),
                      fmt_mask( vset ).c_str(),
                      mapXTo( via->GetStart().x ), mapYTo( via->GetStart().y ),
-                     via->GetDrillValue() / SCALE_FACTOR, vianum++ );
+                     via->GetDrillValue() / SCALE_FACTOR,
+                     vianum++ );
         }
     }
 
