@@ -1264,6 +1264,8 @@ bool PCB_EDIT_FRAME::doAutoSave()
 bool PCB_EDIT_FRAME::importFile( const wxString& aFileName, int aFileType,
                                  const std::map<std::string, UTF8>* aProperties )
 {
+    NULLER raiiNuller( (void*&) m_importProperties );
+
     m_importProperties = aProperties;
 
     switch( (PCB_IO_MGR::PCB_FILE_T) aFileType )
@@ -1272,23 +1274,17 @@ bool PCB_EDIT_FRAME::importFile( const wxString& aFileName, int aFileType,
     case PCB_IO_MGR::EAGLE:
     case PCB_IO_MGR::EASYEDA:
     case PCB_IO_MGR::EASYEDAPRO:
-        return OpenProjectFiles( std::vector<wxString>( 1, aFileName ),
-                                 KICTL_NONKICAD_ONLY | KICTL_IMPORT_LIB );
-        break;
+        return OpenProjectFiles( std::vector<wxString>( 1, aFileName ), KICTL_NONKICAD_ONLY | KICTL_IMPORT_LIB );
 
     case PCB_IO_MGR::ALTIUM_DESIGNER:
     case PCB_IO_MGR::ALTIUM_CIRCUIT_MAKER:
     case PCB_IO_MGR::ALTIUM_CIRCUIT_STUDIO:
     case PCB_IO_MGR::SOLIDWORKS_PCB:
-        return OpenProjectFiles( std::vector<wxString>( 1, aFileName ),
-                                 KICTL_NONKICAD_ONLY );
+        return OpenProjectFiles( std::vector<wxString>( 1, aFileName ), KICTL_NONKICAD_ONLY );
 
-    default: break;
+    default:
+        return false;
     }
-
-    m_importProperties = nullptr;
-
-    return false;
 }
 
 

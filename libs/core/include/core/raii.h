@@ -37,8 +37,8 @@
 class NULLER
 {
 public:
-    NULLER( void*& aPtr )
-            : m_what( aPtr )
+    NULLER( void*& aPtr ) :
+            m_what( aPtr )
     {}
 
     ~NULLER()
