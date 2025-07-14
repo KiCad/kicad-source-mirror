@@ -84,10 +84,9 @@ ZONE::ZONE( BOARD_ITEM_CONTAINER* aParent ) :
         SetIsRuleArea( true );        // Zones living in footprints have the rule area option
 
     if( aParent->GetBoard() )
-        aParent->GetBoard()->GetDesignSettings().GetDefaultZoneSettings().ExportSetting( *this,
-                                                                                         false );
+        aParent->GetBoard()->GetDesignSettings().GetDefaultZoneSettings().ExportSetting( *this, false );
     else
-        ZONE_SETTINGS().ExportSetting( *this );
+        ZONE_SETTINGS().ExportSetting( *this, false );
 
     m_needRefill = false;   // True only after edits.
 }
