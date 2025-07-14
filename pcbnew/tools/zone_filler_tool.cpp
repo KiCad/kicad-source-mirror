@@ -86,8 +86,7 @@ void ZONE_FILLER_TOOL::CheckAllZones( wxWindow* aCaller, PROGRESS_REPORTER* aRep
     }
     else
     {
-        reporter = std::make_unique<WX_PROGRESS_REPORTER>( aCaller, _( "Check Zones" ), 4,
-                                                           PR_CAN_ABORT );
+        reporter = std::make_unique<WX_PROGRESS_REPORTER>( aCaller, _( "Check Zones" ), 4, PR_CAN_ABORT );
         m_filler->SetProgressReporter( reporter.get() );
     }
 
@@ -141,8 +140,7 @@ void ZONE_FILLER_TOOL::FillAllZones( wxWindow* aCaller, PROGRESS_REPORTER* aRepo
     if( !board()->GetDesignSettings().m_DRCEngine->RulesValid() )
     {
         WX_INFOBAR* infobar = frame->GetInfoBar();
-        wxHyperlinkCtrl* button = new wxHyperlinkCtrl( infobar, wxID_ANY, _( "Show DRC rules" ),
-                                                       wxEmptyString );
+        wxHyperlinkCtrl* button = new wxHyperlinkCtrl( infobar, wxID_ANY, _( "Show DRC rules" ), wxEmptyString );
 
         button->Bind( wxEVT_COMMAND_HYPERLINK,
                       std::function<void( wxHyperlinkEvent& aEvent )>(
@@ -154,8 +152,8 @@ void ZONE_FILLER_TOOL::FillAllZones( wxWindow* aCaller, PROGRESS_REPORTER* aRepo
         infobar->RemoveAllButtons();
         infobar->AddButton( button );
 
-        infobar->ShowMessageFor( _( "Zone fills may be inaccurate.  DRC rules contain errors." ),
-                                 10000, wxICON_WARNING );
+        infobar->ShowMessageFor( _( "Zone fills may be inaccurate.  DRC rules contain errors." ), 10000,
+                                 wxICON_WARNING );
     }
 
     if( aReporter )
@@ -164,8 +162,7 @@ void ZONE_FILLER_TOOL::FillAllZones( wxWindow* aCaller, PROGRESS_REPORTER* aRepo
     }
     else
     {
-        reporter = std::make_unique<WX_PROGRESS_REPORTER>( aCaller, _( "Fill All Zones" ), 5,
-                                                           PR_CAN_ABORT );
+        reporter = std::make_unique<WX_PROGRESS_REPORTER>( aCaller, _( "Fill All Zones" ), 5, PR_CAN_ABORT );
         m_filler->SetProgressReporter( reporter.get() );
     }
 
@@ -229,8 +226,7 @@ int ZONE_FILLER_TOOL::ZoneFillDirty( const TOOL_EVENT& aEvent )
     if( !board()->GetDesignSettings().m_DRCEngine->RulesValid() )
     {
         WX_INFOBAR* infobar = frame->GetInfoBar();
-        wxHyperlinkCtrl* button = new wxHyperlinkCtrl( infobar, wxID_ANY, _( "Show DRC rules" ),
-                                                       wxEmptyString );
+        wxHyperlinkCtrl* button = new wxHyperlinkCtrl( infobar, wxID_ANY, _( "Show DRC rules" ), wxEmptyString );
 
         button->Bind( wxEVT_COMMAND_HYPERLINK,
                       std::function<void( wxHyperlinkEvent& aLocEvent )>(
@@ -242,8 +238,8 @@ int ZONE_FILLER_TOOL::ZoneFillDirty( const TOOL_EVENT& aEvent )
         infobar->RemoveAllButtons();
         infobar->AddButton( button );
 
-        infobar->ShowMessageFor( _( "Zone fills may be inaccurate.  DRC rules contain errors." ),
-                                 10000, wxICON_WARNING );
+        infobar->ShowMessageFor( _( "Zone fills may be inaccurate.  DRC rules contain errors." ), 10000,
+                                 wxICON_WARNING );
     }
 
     for( ZONE* zone : toFill )
@@ -282,14 +278,13 @@ int ZONE_FILLER_TOOL::ZoneFillDirty( const TOOL_EVENT& aEvent )
         button->Bind( wxEVT_COMMAND_HYPERLINK, std::function<void( wxHyperlinkEvent& )>(
                 [this]( wxHyperlinkEvent& )
                 {
-                    getEditFrame<PCB_EDIT_FRAME>()->ShowPreferences( _( "Editing Options" ),
-                                                                     _( "PCB Editor" ) );
+                    getEditFrame<PCB_EDIT_FRAME>()->ShowPreferences( _( "Editing Options" ), _( "PCB Editor" ) );
                 } ) );
 
         infobar->RemoveAllButtons();
         infobar->AddButton( button );
-        infobar->ShowMessageFor( _( "Automatic refill of zones can be turned off in Preferences "
-                                    "if it becomes too slow." ),
+        infobar->ShowMessageFor( _( "Automatic refill of zones can be turned off in Preferences if it becomes "
+                                    "too slow." ),
                                  10000, wxICON_INFORMATION, WX_INFOBAR::MESSAGE_TYPE::GENERIC );
     }
 

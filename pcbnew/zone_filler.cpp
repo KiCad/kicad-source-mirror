@@ -196,7 +196,7 @@ private:
 };
 
 
-ZONE_FILLER::ZONE_FILLER(  BOARD* aBoard, COMMIT* aCommit ) :
+ZONE_FILLER::ZONE_FILLER( BOARD* aBoard, COMMIT* aCommit ) :
         m_board( aBoard ),
         m_brdOutlinesValid( false ),
         m_commit( aCommit ),
@@ -218,8 +218,7 @@ ZONE_FILLER::~ZONE_FILLER()
 void ZONE_FILLER::SetProgressReporter( PROGRESS_REPORTER* aReporter )
 {
     m_progressReporter = aReporter;
-    wxASSERT_MSG( m_commit, wxT( "ZONE_FILLER must have a valid commit to call "
-                                 "SetProgressReporter" ) );
+    wxASSERT_MSG( m_commit, wxT( "ZONE_FILLER must have a valid commit to call SetProgressReporter" ) );
 }
 
 
@@ -242,6 +241,10 @@ bool ZONE_FILLER::Fill( const std::vector<ZONE*>& aZones, bool aCheck, wxWindow*
     std::map<ZONE*, std::map<PCB_LAYER_ID, ISOLATED_ISLANDS>> isolatedIslandsMap;
 
     std::shared_ptr<CONNECTIVITY_DATA> connectivity = m_board->GetConnectivity();
+
+    // Ensure that multiple threads don't attempt to initialize the advanced cfg global at the same
+    // time.
+    ADVANCED_CFG::GetCfg();
 
     // Rebuild (from scratch, ignoring dirty flags) just in case. This really needs to be reliable.
     connectivity->ClearRatsnest();
