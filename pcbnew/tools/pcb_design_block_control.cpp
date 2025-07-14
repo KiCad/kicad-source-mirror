@@ -154,6 +154,8 @@ int PCB_DESIGN_BLOCK_CONTROL::SaveSelectionToDesignBlock( const TOOL_EVENT& aEve
 
 void PCB_DESIGN_BLOCK_CONTROL::setTransitions()
 {
+    DESIGN_BLOCK_CONTROL::setTransitions();
+
     Go( &PCB_DESIGN_BLOCK_CONTROL::SaveBoardAsDesignBlock,      PCB_ACTIONS::saveBoardAsDesignBlock.MakeEvent() );
     Go( &PCB_DESIGN_BLOCK_CONTROL::SaveSelectionAsDesignBlock,  PCB_ACTIONS::saveSelectionAsDesignBlock.MakeEvent() );
     Go( &PCB_DESIGN_BLOCK_CONTROL::SaveBoardToDesignBlock,      PCB_ACTIONS::saveBoardToDesignBlock.MakeEvent() );
