@@ -1134,7 +1134,7 @@ LSEQ PANEL_SETUP_LAYERS::getNonRemovableLayers()
         if( IsCopperLayer( layer_id ) ) // Copper layers are not taken into account here
             continue;
 
-        if( !alg::contains( newLayers, layer_id ) )
+        if( !newLayers.Contains( layer_id ) )
         {
             collector.SetLayerId( layer_id );
             collector.Collect( m_pcb, GENERAL_COLLECTOR::FootprintItems );
