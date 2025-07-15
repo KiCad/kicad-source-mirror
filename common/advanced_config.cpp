@@ -129,6 +129,7 @@ static const wxChar NetInspectorBulkUpdateOptimisationThreshold[] =
 static const wxChar ExcludeFromSimulationLineWidth[] = wxT( "ExcludeFromSimulationLineWidth" );
 static const wxChar GitIconRefreshInterval[] = wxT( "GitIconRefreshInterval" );
 static const wxChar MaxPastedTextLength[] = wxT( "MaxPastedTextLength" );
+static const wxChar PNSProcessClusterTimeout[] = wxT( "PNSProcessClusterTimeout" );
 
 } // namespace KEYS
 
@@ -313,6 +314,8 @@ ADVANCED_CFG::ADVANCED_CFG()
     m_GitIconRefreshInterval = 10000;
 
     m_MaxPastedTextLength = 100;
+
+    m_PNSProcessClusterTimeout = 100; // Default: 100 ms
 
     loadFromConfigFile();
 }
@@ -607,6 +610,9 @@ void ADVANCED_CFG::loadSettings( wxConfigBase& aCfg )
     configParams.push_back( new PARAM_CFG_INT( true, AC_KEYS::MaxPastedTextLength,
                                                   &m_MaxPastedTextLength,
                                                   m_MaxPastedTextLength, 0, 100000 ) );
+
+    configParams.push_back( new PARAM_CFG_INT( true, AC_KEYS::PNSProcessClusterTimeout,
+                                               &m_PNSProcessClusterTimeout, 100, 10, 10000 ) );
 
     // Special case for trace mask setting...we just grab them and set them immediately
     // Because we even use wxLogTrace inside of advanced config

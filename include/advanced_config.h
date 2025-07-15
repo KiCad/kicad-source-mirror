@@ -767,6 +767,15 @@ public:
      */
     int m_MaxPastedTextLength;
 
+    /**
+     * Timeout for the PNS router's processCluster wallclock timeout, in milliseconds.
+     *
+     * Setting name: "PNSProcessClusterTimeoutMs"
+     * Valid values: 10 to 10000
+     * Default value: 100
+     */
+    int m_PNSProcessClusterTimeout;
+
     ///@}
 
 private:
