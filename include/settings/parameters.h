@@ -476,17 +476,19 @@ class PARAM_LIST : public PARAM_BASE
 {
 public:
     PARAM_LIST( const std::string& aJsonPath, std::vector<Type>* aPtr,
-                std::initializer_list<Type> aDefault, bool aReadOnly = false ) :
-            PARAM_BASE( aJsonPath, aReadOnly ),
+                std::initializer_list<Type> aDefault, bool aResetIfEmpty = false ) :
+            PARAM_BASE( aJsonPath, false ),
             m_ptr( aPtr ),
-            m_default( aDefault )
+            m_default( aDefault ),
+            m_resetIfEmpty( aResetIfEmpty )
     { }
 
     PARAM_LIST( const std::string& aJsonPath, std::vector<Type>* aPtr,
-                std::vector<Type> aDefault, bool aReadOnly = false ) :
-            PARAM_BASE( aJsonPath, aReadOnly ),
+                std::vector<Type> aDefault, bool aResetIfEmpty = false ) :
+            PARAM_BASE( aJsonPath, false ),
             m_ptr( aPtr ),
-            m_default( std::move( aDefault ) )
+            m_default( std::move( aDefault ) ),
+            m_resetIfEmpty( aResetIfEmpty )
     { }
 
     void Load( const JSON_SETTINGS& aSettings, bool aResetIfMissing = true ) const override
@@ -504,10 +506,15 @@ public:
                     val.push_back( el.value().get<Type>() );
             }
 
-            *m_ptr = val;
+            if( val.empty() && m_resetIfEmpty )
+                *m_ptr = m_default;
+            else
+                *m_ptr = val;
         }
         else if( aResetIfMissing )
+        {
             *m_ptr = m_default;
+        }
     }
 
     void Store( JSON_SETTINGS* aSettings ) const override
@@ -555,6 +562,7 @@ public:
 protected:
     std::vector<Type>* m_ptr;
     std::vector<Type>  m_default;
+    bool               m_resetIfEmpty;
 };
 
 
@@ -667,13 +675,13 @@ class KICOMMON_API PARAM_PATH_LIST : public PARAM_LIST<wxString>
 {
 public:
     PARAM_PATH_LIST( const std::string& aJsonPath, std::vector<wxString>* aPtr,
-                     std::initializer_list<wxString> aDefault, bool aReadOnly = false ) :
-            PARAM_LIST( aJsonPath, aPtr, aDefault, aReadOnly )
+                     std::initializer_list<wxString> aDefault ) :
+            PARAM_LIST( aJsonPath, aPtr, aDefault )
     { }
 
     PARAM_PATH_LIST( const std::string& aJsonPath, std::vector<wxString>* aPtr,
-                     std::vector<wxString> aDefault, bool aReadOnly = false ) :
-            PARAM_LIST( aJsonPath, aPtr, aDefault, aReadOnly )
+                     std::vector<wxString> aDefault ) :
+            PARAM_LIST( aJsonPath, aPtr, aDefault )
     { }
 
     void Load( const JSON_SETTINGS& aSettings, bool aResetIfMissing = true ) const override

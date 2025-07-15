@@ -53,7 +53,6 @@
 #include <pgm_base.h>
 #include <project_pcb.h>
 #include <wildcards_and_files_ext.h>
-#include <zoom_defines.h>
 
 #include <math/vector2d.h>
 #include <math/vector2wx.h>
@@ -814,9 +813,6 @@ void PCB_BASE_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
 {
     EDA_DRAW_FRAME::LoadSettings( aCfg );
 
-    if( aCfg->m_Window.grid.grids.empty() )
-        aCfg->m_Window.grid.grids = aCfg->DefaultGridSizeList();
-
     // Move legacy user grids to grid list
     if( !aCfg->m_Window.grid.user_grid_x.empty() )
     {
@@ -824,16 +820,6 @@ void PCB_BASE_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
                                                       aCfg->m_Window.grid.user_grid_y } );
         aCfg->m_Window.grid.user_grid_x = wxEmptyString;
         aCfg->m_Window.grid.user_grid_y = wxEmptyString;
-    }
-
-    // Currently values read from config file are not used because the user cannot
-    // change this config
-    // if( aCfg->m_Window.zoom_factors.empty() )
-    {
-        if( ADVANCED_CFG::GetCfg().m_HyperZoom )
-            aCfg->m_Window.zoom_factors = { ZOOM_LIST_PCBNEW_HYPER };
-        else
-            aCfg->m_Window.zoom_factors = { ZOOM_LIST_PCBNEW };
     }
 
     // Some, but not all, derived classes have a PCBNEW_SETTINGS.

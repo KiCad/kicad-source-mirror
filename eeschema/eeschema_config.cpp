@@ -43,7 +43,6 @@
 #include <settings/settings_manager.h>
 #include <wildcards_and_files_ext.h>
 #include <drawing_sheet/ds_data_model.h>
-#include <zoom_defines.h>
 #include <sim/spice_settings.h>
 #include <tool/tool_manager.h>
 #include <tools/sch_selection_tool.h>
@@ -357,9 +356,6 @@ void SCH_BASE_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
 
     EDA_DRAW_FRAME::LoadSettings( aCfg );
 
-    if( aCfg->m_Window.grid.grids.empty() )
-        aCfg->m_Window.grid.grids = aCfg->DefaultGridSizeList();
-
     // Move legacy user grids to grid list
     if( !aCfg->m_Window.grid.user_grid_x.empty() )
     {
@@ -378,9 +374,6 @@ void SCH_BASE_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
 
     if( aCfg->m_Window.grid.fast_grid_2 > (int) aCfg->m_Window.grid.grids.size() )
         aCfg->m_Window.grid.fast_grid_2 = 2;
-
-    if( aCfg->m_Window.zoom_factors.empty() )
-        aCfg->m_Window.zoom_factors = { ZOOM_LIST_EESCHEMA };
 }
 
 

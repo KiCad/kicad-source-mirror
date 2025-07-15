@@ -58,7 +58,6 @@
 #include "invoke_pl_editor_dialog.h"
 #include "tools/pl_editor_control.h"
 #include <view/view_controls.h>
-#include <zoom_defines.h>
 
 #include <wx/filedlg.h>
 #include <wx/print.h>
@@ -517,25 +516,6 @@ const BOX2I PL_EDITOR_FRAME::GetDocumentExtents( bool aIncludeAllVisible ) const
 void PL_EDITOR_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
 {
     EDA_DRAW_FRAME::LoadSettings( aCfg );
-
-    if( aCfg->m_Window.grid.grids.empty() )
-    {
-        aCfg->m_Window.grid.grids = { GRID{ wxEmptyString, wxS( "5.00 mm" ), wxS( "5.00 mm" ) },
-                                      GRID{ wxEmptyString, wxS( "2.50 mm" ), wxS( "2.50 mm" ) },
-                                      GRID{ wxEmptyString, wxS( "2.00 mm" ), wxS( "2.00 mm" ) },
-                                      GRID{ wxEmptyString, wxS( "1.00 mm" ), wxS( "1.00 mm" ) },
-                                      GRID{ wxEmptyString, wxS( "0.50 mm" ), wxS( "0.50 mm" ) },
-                                      GRID{ wxEmptyString, wxS( "0.25 mm" ), wxS( "0.25 mm" ) },
-                                      GRID{ wxEmptyString, wxS( "0.20 mm" ), wxS( "0.20 mm" ) },
-                                      GRID{ wxEmptyString, wxS( "0.10 mm" ), wxS( "0.10 mm" ) } };
-    }
-
-    // Currently values read from config file are not used because the user cannot
-    // change this config
-    // if( aCfg->m_Window.zoom_factors.empty() )
-    {
-        aCfg->m_Window.zoom_factors = { ZOOM_LIST_PL_EDITOR };
-    }
 
     PL_EDITOR_SETTINGS* cfg = dynamic_cast<PL_EDITOR_SETTINGS*>( aCfg );
     wxCHECK( cfg, /*void*/ );

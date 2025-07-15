@@ -43,7 +43,6 @@
 #include <settings/settings_manager.h>
 #include <view/view.h>
 #include <wx/stattext.h>
-#include <zoom_defines.h>
 #include <dialog_shim.h>
 #include <project_pcb.h>
 
@@ -242,19 +241,6 @@ FOOTPRINT_PREVIEW_PANEL* FOOTPRINT_PREVIEW_PANEL::New( KIWAY* aKiway, wxWindow* 
                                                        UNITS_PROVIDER* aUnitsProvider )
 {
     PCBNEW_SETTINGS* cfg = Pgm().GetSettingsManager().GetAppSettings<PCBNEW_SETTINGS>( "pcbnew" );
-
-    if( cfg->m_Window.grid.grids.empty() )
-        cfg->m_Window.grid.grids = cfg->DefaultGridSizeList();
-
-    // Currently values read from config file are not used because the user cannot
-    // change this config
-    //if( cfg->m_Window.zoom_factors.empty() )
-    {
-        if( ADVANCED_CFG::GetCfg().m_HyperZoom )
-            cfg->m_Window.zoom_factors = { ZOOM_LIST_PCBNEW_HYPER };
-        else
-            cfg->m_Window.zoom_factors = { ZOOM_LIST_PCBNEW };
-    }
 
     std::unique_ptr<GAL_DISPLAY_OPTIONS_IMPL> gal_opts;
 

@@ -208,6 +208,8 @@ public:
 
     const std::vector<GRID> DefaultGridSizeList() const;
 
+    const std::vector<double> DefaultZoomList() const;
+
 public:
     CROSS_PROBING_SETTINGS m_CrossProbing;
 
