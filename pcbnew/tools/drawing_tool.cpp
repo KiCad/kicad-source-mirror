@@ -3339,9 +3339,9 @@ int DRAWING_TOOL::DrawZone( const TOOL_EVENT& aEvent )
                 polyGeomMgr.SetFinished();
                 polyGeomMgr.Reset();
 
-                started = false;
-                m_controls->SetAutoPan( false );
-                m_controls->CaptureCursor( false );
+                cleanup();
+                m_frame->PopTool( aEvent );
+                break;
             }
             // adding a corner
             else if( polyGeomMgr.AddPoint( cursorPos ) )
