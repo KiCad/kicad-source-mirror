@@ -42,7 +42,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-07 17:42+0300\n"
-"PO-Revision-Date: 2025-07-10 12:13+0000\n"
+"PO-Revision-Date: 2025-07-15 19:28+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/kicad/master-source/zh_Hans/>\n"
@@ -17227,9 +17227,9 @@ msgstr "无法创建输出目录 '%s'。"
 
 #: eeschema/eeschema_jobs_handler.cpp:1004 pcbnew/pcbnew_jobs_handler.cpp:1267
 #: pcbnew/pcbnew_jobs_handler.cpp:1913
-#, fuzzy, c-format
+#, c-format
 msgid "Exporting %s"
-msgstr "导入 %s"
+msgstr "导出 %s 中"
 
 #: eeschema/eeschema_jobs_handler.cpp:1034 pcbnew/pcbnew_jobs_handler.cpp:1790
 msgid "Output path must not conflict with existing path\n"
