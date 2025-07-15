@@ -599,8 +599,8 @@ LIB_TREE::STATE LIB_TREE::getState() const
     state.selection = GetSelectedLibId();
 
     state.scrollpos = {
-        m_tree_ctrl->GetScrollPos( wxHORIZONTAL ),
-        m_tree_ctrl->GetScrollPos( wxVERTICAL )
+        m_tree_ctrl->HasScrollbar( wxHORIZONTAL ) ? m_tree_ctrl->GetScrollPos( wxHORIZONTAL ) : 0,
+        m_tree_ctrl->HasScrollbar( wxVERTICAL ) ? m_tree_ctrl->GetScrollPos( wxVERTICAL ) : 0
     };
 
     return state;

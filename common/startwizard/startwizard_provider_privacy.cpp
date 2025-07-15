@@ -99,20 +99,14 @@ void STARTWIZARD_PROVIDER_PRIVACY::Finish()
     COMMON_SETTINGS* commonSettings = Pgm().GetCommonSettings();
     KICAD_SETTINGS* settings = Pgm().GetSettingsManager().GetAppSettings<KICAD_SETTINGS>( "kicad" );
 
-    if( !commonSettings->m_DoNotShowAgain.update_check_prompt )
-    {
-        settings->m_KiCadUpdateCheck = m_model->m_autoUpdateKiCad;
-        settings->m_PcmUpdateCheck   = m_model->m_autoUpdatePCM;
-        commonSettings->m_DoNotShowAgain.update_check_prompt = true;
-    }
+    settings->m_KiCadUpdateCheck = m_model->m_autoUpdateKiCad;
+    settings->m_PcmUpdateCheck   = m_model->m_autoUpdatePCM;
+    commonSettings->m_DoNotShowAgain.update_check_prompt = true;
 
-    if( !commonSettings->m_DoNotShowAgain.data_collection_prompt )
-    {
-        APP_MONITOR::SENTRY::Instance()->SetSentryOptIn( m_model->m_enableSentry );
-        commonSettings->m_DoNotShowAgain.data_collection_prompt = true;
-    }
+    APP_MONITOR::SENTRY::Instance()->SetSentryOptIn( m_model->m_enableSentry );
+    commonSettings->m_DoNotShowAgain.data_collection_prompt = true;
 
-    Pgm().SaveCommonSettings();
+    Pgm().GetSettingsManager().Save();
 }
 
 
