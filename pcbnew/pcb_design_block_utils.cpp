@@ -252,12 +252,24 @@ bool PCB_EDIT_FRAME::saveSelectionToDesignBlock( const wxString& aNickname, PCB_
             {
                 BOARD_CONNECTED_ITEM* cItem = dynamic_cast<BOARD_CONNECTED_ITEM*>( aItem );
 
-                if( cItem && cItem->GetNetCode() )
+                if( cItem )
                 {
                     NETINFO_ITEM* netinfo = cItem->GetNet();
 
-                    if( netinfo && !tempBoard->FindNet( netinfo->GetNetname() ) )
-                        tempBoard->Add( netinfo );
+                    if( netinfo )
+                    {
+                        NETINFO_ITEM* existingInfo = tempBoard->FindNet( netinfo->GetNetname() );
+
+                        // If the net has already been added to the new board, update our info to match
+                        if( existingInfo )
+                            cItem->SetNet( existingInfo );
+                        else
+                        {
+                            NETINFO_ITEM* newNet = new NETINFO_ITEM( tempBoard, netinfo->GetNetname() );
+                            tempBoard->Add( newNet );
+                            cItem->SetNet( newNet );
+                        }
+                    }
                 }
             };
 
@@ -275,14 +287,18 @@ bool PCB_EDIT_FRAME::saveSelectionToDesignBlock( const wxString& aNickname, PCB_
     // Copy the selected items to the temporary board
     for( EDA_ITEM* item : aSelection )
     {
-        if( BOARD_ITEM* copy = cloneAndAdd( item ) )
-            copy->SetParentGroup( nullptr );
+        BOARD_ITEM* copy = cloneAndAdd( item );
 
-        if( item->Type() == PCB_FOOTPRINT_T )
+        if( !copy )
+            continue;
+
+        copy->SetParentGroup( nullptr );
+
+        if( copy->Type() == PCB_FOOTPRINT_T )
         {
-            static_cast<FOOTPRINT*>( item )->RunOnChildren( addNetIfNeeded, RECURSE_MODE::NO_RECURSE );
+            static_cast<FOOTPRINT*>( copy )->RunOnChildren( addNetIfNeeded, RECURSE_MODE::NO_RECURSE );
         }
-        else if( item->Type() == PCB_GROUP_T || item->Type() == PCB_GENERATOR_T )
+        else if( copy->Type() == PCB_GROUP_T || copy->Type() == PCB_GENERATOR_T )
         {
             PCB_GROUP* group = static_cast<PCB_GROUP*>( item );
 
@@ -291,12 +307,8 @@ bool PCB_EDIT_FRAME::saveSelectionToDesignBlock( const wxString& aNickname, PCB_
             group->RunOnChildren( addNetIfNeeded, RECURSE_MODE::RECURSE );
         }
         else
-            addNetIfNeeded( item );
+            addNetIfNeeded( copy );
     }
-
-    // Rebuild connectivity, remove any unused nets
-    tempBoard->BuildListOfNets();
-    tempBoard->BuildConnectivity();
 
     wxString tempFile = wxFileName::CreateTempFileName( "design_block" );
 
