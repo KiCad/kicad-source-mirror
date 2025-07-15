@@ -19,6 +19,8 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <chrono>
+#include <advanced_config.h>
 #include <optional>
 
 #include <geometry/shape_line_chain.h>
@@ -138,10 +140,29 @@ bool WALKAROUND::singleStep()
 
     auto processCluster = [ & ] ( TOPOLOGY::CLUSTER& aCluster, LINE& aLine, bool aCw ) -> bool
     {
+        using namespace std::chrono;
+        auto start_time = steady_clock::now();
+
+        int timeout_ms = ADVANCED_CFG::GetCfg().m_PNSProcessClusterTimeout;
+
         PNS_DBG( Dbg(), BeginGroup, wxString::Format( "cluster-details [cw %d]", aCw?1:0 ), 1 );
 
         for( auto& clItem : aCluster.m_items )
         {
+            // Check for wallclock timeout
+            // Emprically, 100ms seems to be about where you're not going to find a valid path
+            // if you haven't found it by then.  This allows the user to adjust their mouse position
+            // to get a better path without waiting too long.
+            auto now = steady_clock::now();
+            auto elapsed = duration_cast<milliseconds>( now - start_time ).count();
+
+            if( elapsed > timeout_ms )
+            {
+                PNS_DBG( Dbg(), Message, wxString::Format( "processCluster timeout after %d ms", timeout_ms ) );
+                PNS_DBGN( Dbg(), EndGroup );
+                return false;
+            }
+
             int clearance = m_world->GetClearance( clItem, &aLine, false );
             SHAPE_LINE_CHAIN hull = clItem->Hull( clearance + 1000, aLine.Width(), aLine.Layer() );
 
