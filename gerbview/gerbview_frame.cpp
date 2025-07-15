@@ -57,7 +57,6 @@
 #include "widgets/gerbview_layer_widget.h"
 #include "widgets/dcode_selection_box.h"
 #include <dialog_draw_layers_settings.h>
-#include <zoom_defines.h>
 
 #include <navlib/nl_gerbview_plugin.h>
 #include <wx/log.h>
@@ -318,44 +317,11 @@ void GERBVIEW_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
 {
     EDA_DRAW_FRAME::LoadSettings( aCfg );
 
-    if( aCfg->m_Window.grid.grids.empty() )
-    {
-        aCfg->m_Window.grid.grids = { GRID{ wxEmptyString, wxS( "100 mil" ), wxS( "100 mil" ) },
-                                      GRID{ wxEmptyString, wxS( "50 mil" ), wxS( "50 mil" ) },
-                                      GRID{ wxEmptyString, wxS( "25 mil" ), wxS( "25 mil" ) },
-                                      GRID{ wxEmptyString, wxS( "20 mil" ), wxS( "20 mil" ) },
-                                      GRID{ wxEmptyString, wxS( "10 mil" ), wxS( "10 mil" ) },
-                                      GRID{ wxEmptyString, wxS( "5 mil" ), wxS( "5 mil" ) },
-                                      GRID{ wxEmptyString, wxS( "2.5 mil" ), wxS( "2.5 mil" ) },
-                                      GRID{ wxEmptyString, wxS( "2 mil" ), wxS( "2 mil" ) },
-                                      GRID{ wxEmptyString, wxS( "1 mil" ), wxS( "1 mil" ) },
-                                      GRID{ wxEmptyString, wxS( "0.5 mil" ), wxS( "0.5 mil" ) },
-                                      GRID{ wxEmptyString, wxS( "0.2 mil" ), wxS( "0.2 mil" ) },
-                                      GRID{ wxEmptyString, wxS( "0.1 mil" ), wxS( "0.1 mil" ) },
-                                      GRID{ wxEmptyString, wxS( "5.0 mm" ), wxS( "5.0 mm" ) },
-                                      GRID{ wxEmptyString, wxS( "1.5 mm" ), wxS( "2.5 mm" ) },
-                                      GRID{ wxEmptyString, wxS( "1.0 mm" ), wxS( "1.0 mm" ) },
-                                      GRID{ wxEmptyString, wxS( "0.5 mm" ), wxS( "0.5 mm" ) },
-                                      GRID{ wxEmptyString, wxS( "0.25 mm" ), wxS( "0.25 mm" ) },
-                                      GRID{ wxEmptyString, wxS( "0.2 mm" ), wxS( "0.2 mm" ) },
-                                      GRID{ wxEmptyString, wxS( "0.1 mm" ), wxS( "0.1 mm" ) },
-                                      GRID{ wxEmptyString, wxS( "0.05 mm" ), wxS( "0.0 mm" ) },
-                                      GRID{ wxEmptyString, wxS( "0.025 mm" ), wxS( "0.0 mm" ) },
-                                      GRID{ wxEmptyString, wxS( "0.01 mm" ), wxS( "0.0 mm" ) } };
-    }
-
-    if( aCfg->m_Window.zoom_factors.empty() )
-    {
-        aCfg->m_Window.zoom_factors = { ZOOM_LIST_GERBVIEW };
-    }
-
     GERBVIEW_SETTINGS* cfg = dynamic_cast<GERBVIEW_SETTINGS*>( aCfg );
     wxCHECK( cfg, /*void*/ );
 
-    SetElementVisibility( LAYER_GERBVIEW_DRAWINGSHEET,
-                          cfg->m_Appearance.show_border_and_titleblock );
-    SetElementVisibility( LAYER_GERBVIEW_PAGE_LIMITS,
-                          cfg->m_Display.m_DisplayPageLimits );
+    SetElementVisibility( LAYER_GERBVIEW_DRAWINGSHEET, cfg->m_Appearance.show_border_and_titleblock );
+    SetElementVisibility( LAYER_GERBVIEW_PAGE_LIMITS, cfg->m_Display.m_DisplayPageLimits );
 
     PAGE_INFO pageInfo( wxT( "GERBER" ) );
     pageInfo.SetType( cfg->m_Appearance.page_type );

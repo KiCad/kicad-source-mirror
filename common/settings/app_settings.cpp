@@ -29,6 +29,7 @@
 #include <settings/common_settings.h>
 #include <settings/grid_settings.h>
 #include <settings/parameters.h>
+#include <zoom_defines.h>
 
 
 APP_SETTINGS_BASE::APP_SETTINGS_BASE( const std::string& aFilename, int aSchemaVersion ) :
@@ -372,7 +373,7 @@ void APP_SETTINGS_BASE::addParamsForWindow( WINDOW_SETTINGS* aWindow, const std:
                                                     &aWindow->state.display, 0 ) );
 
     m_params.emplace_back( new PARAM_LIST<double>( aJsonPath + ".zoom_factors",
-            &aWindow->zoom_factors, {} ) );
+            &aWindow->zoom_factors, DefaultZoomList(), true /* resetIfEmpty */ ) );
 
     m_params.emplace_back( new PARAM<bool>( aJsonPath + ".grid.axes_enabled",
             &aWindow->grid.axes_enabled, false ) );
@@ -393,11 +394,7 @@ void APP_SETTINGS_BASE::addParamsForWindow( WINDOW_SETTINGS* aWindow, const std:
     }
 
     m_params.emplace_back( new PARAM_LIST<GRID>( aJsonPath + ".grid.sizes", &aWindow->grid.grids,
-                                                 DefaultGridSizeList() ) );
-
-    // Force grids to have at least 1 entry.  If not, reset to default.
-    if( aWindow->grid.grids.empty() )
-        aWindow->grid.grids = DefaultGridSizeList();
+                                                 DefaultGridSizeList(), true /* resetIfEmpty */ ) );
 
     m_params.emplace_back( new PARAM<int>( aJsonPath + ".grid.last_size",
             &aWindow->grid.last_size_idx, defaultGridIdx ) );
@@ -491,6 +488,30 @@ void APP_SETTINGS_BASE::addParamsForWindow( WINDOW_SETTINGS* aWindow, const std:
 }
 
 
+const std::vector<double> APP_SETTINGS_BASE::DefaultZoomList() const
+{
+    if( m_filename == wxS( "eeschema" ) || m_filename == wxS( "symbol_editor" ) )
+    {
+        return { ZOOM_LIST_EESCHEMA };
+    }
+    else if( m_filename == wxS( "pl_editor" ) )
+    {
+        return { ZOOM_LIST_PL_EDITOR };
+    }
+    else if( m_filename == wxS( "gerbview" ) )
+    {
+        return { ZOOM_LIST_GERBVIEW };
+    }
+    else
+    {
+        if( ADVANCED_CFG::GetCfg().m_HyperZoom )
+            return { ZOOM_LIST_PCBNEW_HYPER };
+        else
+            return { ZOOM_LIST_PCBNEW };
+    }
+}
+
+
 const std::vector<GRID> APP_SETTINGS_BASE::DefaultGridSizeList() const
 {
     if( m_filename == wxS( "eeschema" ) || m_filename == wxS( "symbol_editor" ) )
@@ -499,6 +520,42 @@ const std::vector<GRID> APP_SETTINGS_BASE::DefaultGridSizeList() const
                  GRID{ wxEmptyString, wxS( "50 mil" ), wxS( "50 mil" ) },
                  GRID{ wxEmptyString, wxS( "25 mil" ), wxS( "25 mil" ) },
                  GRID{ wxEmptyString, wxS( "10 mil" ), wxS( "10 mil" ) } };
+    }
+    else if( m_filename == wxS( "pl_editor" ) )
+    {
+        return { GRID{ wxEmptyString, wxS( "5.00 mm" ), wxS( "5.00 mm" ) },
+                 GRID{ wxEmptyString, wxS( "2.50 mm" ), wxS( "2.50 mm" ) },
+                 GRID{ wxEmptyString, wxS( "2.00 mm" ), wxS( "2.00 mm" ) },
+                 GRID{ wxEmptyString, wxS( "1.00 mm" ), wxS( "1.00 mm" ) },
+                 GRID{ wxEmptyString, wxS( "0.50 mm" ), wxS( "0.50 mm" ) },
+                 GRID{ wxEmptyString, wxS( "0.25 mm" ), wxS( "0.25 mm" ) },
+                 GRID{ wxEmptyString, wxS( "0.20 mm" ), wxS( "0.20 mm" ) },
+                 GRID{ wxEmptyString, wxS( "0.10 mm" ), wxS( "0.10 mm" ) } };
+    }
+    else if( m_filename == wxS( "gerbview" ) )
+    {
+        return { GRID{ wxEmptyString, wxS( "100 mil" ), wxS( "100 mil" ) },
+                 GRID{ wxEmptyString, wxS( "50 mil" ), wxS( "50 mil" ) },
+                 GRID{ wxEmptyString, wxS( "25 mil" ), wxS( "25 mil" ) },
+                 GRID{ wxEmptyString, wxS( "20 mil" ), wxS( "20 mil" ) },
+                 GRID{ wxEmptyString, wxS( "10 mil" ), wxS( "10 mil" ) },
+                 GRID{ wxEmptyString, wxS( "5 mil" ), wxS( "5 mil" ) },
+                 GRID{ wxEmptyString, wxS( "2.5 mil" ), wxS( "2.5 mil" ) },
+                 GRID{ wxEmptyString, wxS( "2 mil" ), wxS( "2 mil" ) },
+                 GRID{ wxEmptyString, wxS( "1 mil" ), wxS( "1 mil" ) },
+                 GRID{ wxEmptyString, wxS( "0.5 mil" ), wxS( "0.5 mil" ) },
+                 GRID{ wxEmptyString, wxS( "0.2 mil" ), wxS( "0.2 mil" ) },
+                 GRID{ wxEmptyString, wxS( "0.1 mil" ), wxS( "0.1 mil" ) },
+                 GRID{ wxEmptyString, wxS( "5.0 mm" ), wxS( "5.0 mm" ) },
+                 GRID{ wxEmptyString, wxS( "1.5 mm" ), wxS( "2.5 mm" ) },
+                 GRID{ wxEmptyString, wxS( "1.0 mm" ), wxS( "1.0 mm" ) },
+                 GRID{ wxEmptyString, wxS( "0.5 mm" ), wxS( "0.5 mm" ) },
+                 GRID{ wxEmptyString, wxS( "0.25 mm" ), wxS( "0.25 mm" ) },
+                 GRID{ wxEmptyString, wxS( "0.2 mm" ), wxS( "0.2 mm" ) },
+                 GRID{ wxEmptyString, wxS( "0.1 mm" ), wxS( "0.1 mm" ) },
+                 GRID{ wxEmptyString, wxS( "0.05 mm" ), wxS( "0.0 mm" ) },
+                 GRID{ wxEmptyString, wxS( "0.025 mm" ), wxS( "0.0 mm" ) },
+                 GRID{ wxEmptyString, wxS( "0.01 mm" ), wxS( "0.0 mm" ) } };
     }
     else
     {

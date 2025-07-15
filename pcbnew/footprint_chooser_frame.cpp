@@ -43,6 +43,7 @@
 #include <tools/pcb_actions.h>
 #include <tools/pcb_picker_tool.h>
 #include <tools/pcb_viewer_tools.h>
+#include "settings/cvpcb_settings.h"
 #include "wx/display.h"
 #include <footprint_preview_panel.h>
 #include <3d_canvas/eda_3d_canvas.h>
@@ -409,10 +410,13 @@ void FOOTPRINT_CHOOSER_FRAME::doCloseWindow()
 
 WINDOW_SETTINGS* FOOTPRINT_CHOOSER_FRAME::GetWindowSettings( APP_SETTINGS_BASE* aCfg )
 {
-    PCBNEW_SETTINGS* cfg = dynamic_cast<PCBNEW_SETTINGS*>( aCfg );
-    wxCHECK_MSG( cfg, nullptr, wxT( "config not existing" ) );
+    if( PCBNEW_SETTINGS* pcb_cfg = dynamic_cast<PCBNEW_SETTINGS*>( aCfg ) )
+        return &pcb_cfg->m_FootprintViewer;
+    else if( CVPCB_SETTINGS* cvpcb_cfg = dynamic_cast<CVPCB_SETTINGS*>( aCfg ) )
+        return &cvpcb_cfg->m_FootprintViewer;
 
-    return &cfg->m_FootprintViewer;
+    wxFAIL_MSG( wxT( "FOOTPRINT_CHOOSER not running with PCBNEW_SETTINGS or CVPCB_SETTINGS" ) );
+    return &aCfg->m_Window;     // non-null fail-safe
 }
 
 
