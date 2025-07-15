@@ -34,6 +34,8 @@
 #include <exporters/place_file_exporter.h>
 #include <pad.h>
 
+#include <fmt/format.h>
+
 #include <wx/dirdlg.h>
 
 class LIST_MOD      // An helper class used to build a list of useful footprints.
@@ -298,15 +300,11 @@ std::string PLACE_FILE_EXPORTER::GenReportData()
     LOCALE_IO   toggle;
 
     // Generate header file comments.)
-    char line[1024];
-    snprintf( line, sizeof(line), "## Footprint report - date %s\n",
-              TO_UTF8( GetISO8601CurrentDateTime() ) );
-    buffer += line;
+
+    buffer += fmt::format( "## Footprint report - date {}\n", TO_UTF8( GetISO8601CurrentDateTime() ) );
 
     wxString Title = GetBuildVersion();
-    snprintf( line, sizeof(line), "## Created by KiCad version %s\n",
-              TO_UTF8( Title ) );
-    buffer += line;
+    buffer += fmt::format( "## Printed by KiCad version {}\n", TO_UTF8( Title ) );
 
     buffer += unit_text;
 
@@ -316,15 +314,9 @@ std::string PLACE_FILE_EXPORTER::GenReportData()
 
     buffer += "\n$BOARD\n";
 
-    snprintf( line, sizeof(line), "upper_left_corner %9.6f %9.6f\n",
+    buffer += fmt::format( "upper_left_corner {:9.6f} {:9.6f}\n",
               bbbox.GetX() * conv_unit,
               bbbox.GetY() * conv_unit );
-    buffer += line;
-
-    snprintf( line, sizeof(line), "lower_right_corner %9.6f %9.6f\n",
-              bbbox.GetRight()  * conv_unit,
-              bbbox.GetBottom() * conv_unit );
-    buffer += line;
 
     buffer += "$EndBOARD\n\n";
 
@@ -344,13 +336,11 @@ std::string PLACE_FILE_EXPORTER::GenReportData()
         wxString ref = footprint->Reference().GetShownText( false );
         wxString value = footprint->Value().GetShownText( false );
 
-        snprintf( line, sizeof(line), "$MODULE %s\n", TO_UTF8( ref ) );
-        buffer += line;
+        buffer += fmt::format( "$MODULE {}\n", TO_UTF8( ref ) );
 
-        snprintf( line, sizeof(line), "reference %s\n", TO_UTF8( ref ) );
-        snprintf( line, sizeof(line), "value %s\n",  TO_UTF8( value ) );
-        snprintf( line, sizeof(line), "footprint %s\n", footprint->GetFPID().Format().c_str() );
-        buffer += line;
+        buffer += fmt::format( "reference {}\n", TO_UTF8( ref ) );
+        buffer += fmt::format( "value {}\n", TO_UTF8( value ) );
+        buffer += fmt::format( "footprint {}\n", footprint->GetFPID().Format().c_str() );
 
         buffer += "attribut";
 
@@ -368,11 +358,10 @@ std::string PLACE_FILE_EXPORTER::GenReportData()
         VECTOR2I footprint_pos = footprint->GetPosition();
         footprint_pos -= m_place_Offset;
 
-        snprintf( line, sizeof(line), "position %9.6f %9.6f  orientation %.2f\n",
+        buffer += fmt::format( "position {:9.6f} {:9.6f}  orientation {:.2f}\n",
                   footprint_pos.x * conv_unit,
                   footprint_pos.y * conv_unit,
                   footprint->GetOrientation().AsDegrees() );
-        buffer += line;
 
         if( footprint->GetLayer() == F_Cu )
             buffer += "layer front\n";
@@ -394,8 +383,7 @@ std::string PLACE_FILE_EXPORTER::GenReportData()
 
         for( PAD* pad : sortedPads )
         {
-            snprintf( line, sizeof(line), "$PAD \"%s\"\n", TO_UTF8( pad->GetNumber() ) );
-            buffer += line;
+            buffer += fmt::format( "$PAD \"{}\"\n", TO_UTF8( pad->GetNumber() ) );
 
             int layer = 0;
 
@@ -407,34 +395,29 @@ std::string PLACE_FILE_EXPORTER::GenReportData()
 
             // TODO(JE) padstacks
             static const char* layer_name[4] = { "nocopper", "back", "front", "both" };
-            snprintf( line, sizeof(line), "Shape %s Layer %s\n",
+            buffer += fmt::format( "Shape {} Layer {}\n",
                       TO_UTF8( pad->ShowPadShape( PADSTACK::ALL_LAYERS ) ),
                       layer_name[layer] );
-            buffer += line;
 
             VECTOR2I padPos = pad->GetFPRelativePosition();
 
-            snprintf( line, sizeof(line), "position %9.6f %9.6f  size %9.6f %9.6f  orientation %.2f\n",
+            buffer += fmt::format( "position {:9.6f} {:9.6f} size {:9.6f} {:9.6f} orientation {:.2f}\n",
                       padPos.x * conv_unit,
                       padPos.y * conv_unit,
                       pad->GetSize( PADSTACK::ALL_LAYERS ).x * conv_unit,
                       pad->GetSize( PADSTACK::ALL_LAYERS ).y * conv_unit,
-                      ( pad->GetOrientation() - footprint->GetOrientation() ).AsDegrees() );
-            buffer += line;
+                      pad->GetOrientation().AsDegrees() );
 
-            snprintf( line, sizeof(line), "drill %9.6f\n", pad->GetDrillSize().x * conv_unit );
-            buffer += line;
+            buffer += fmt::format( "drill {:9.6f}\n", pad->GetDrillSize().x * conv_unit );
 
-            snprintf( line, sizeof(line), "shape_offset %9.6f %9.6f\n",
+            buffer += fmt::format( "shape_offset {:9.6f} {:9.6f}\n",
                       pad->GetOffset( PADSTACK::ALL_LAYERS ).x * conv_unit,
                       pad->GetOffset( PADSTACK::ALL_LAYERS ).y * conv_unit );
-            buffer += line;
 
             buffer += "$EndPAD\n";
         }
 
-        snprintf( line, sizeof(line), "$EndMODULE  %s\n\n", TO_UTF8( ref ) );
-        buffer += line;
+        buffer += fmt::format( "$EndMODULE {}\n\n", TO_UTF8( ref ) );
     }
 
     // Generate EOF.

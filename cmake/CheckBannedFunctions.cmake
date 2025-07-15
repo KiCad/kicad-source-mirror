@@ -44,7 +44,7 @@ macro(check_banned_functions)
             # Only error if the line does not end with //format:allow (allow spaces between // and format)
             # we allow this for specific cases where the format specifier is needed because the
             # string is shown to the user and needs to be formatted in their locale e.g. error messages
-            if(line MATCHES "%\\d*\\.?\\d*[fg]" AND NOT line MATCHES "format:allow")
+            if(line MATCHES "%[0-9]*\\.?[0-9]*[fg]" AND NOT line MATCHES "format:allow")
                 message(FATAL_ERROR "Banned format specifier '%f' or '%g' found in ${file}")
             endif()
         endforeach()

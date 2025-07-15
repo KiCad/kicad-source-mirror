@@ -26,6 +26,7 @@
 #include <macros.h>
 #include <eda_units.h>
 #include <richio.h>         // for OUTPUTFORMATTER and IO_ERROR
+#include <string_utils.h>
 
 
 // late arriving wxPAPER_A0, wxPAPER_A1
@@ -280,9 +281,9 @@ void PAGE_INFO::Format( OUTPUTFORMATTER* aFormatter ) const
     // Internally, the page size is in mils
     if( GetType() == PAGE_INFO::Custom )
     {
-        aFormatter->Print( " %g %g",
-                           GetWidthMils() * 25.4 / 1000.0,
-                           GetHeightMils() * 25.4 / 1000.0 );
+        aFormatter->Print( " %s %s",
+                           FormatDouble2Str( GetWidthMils() * 25.4 / 1000.0 ).c_str(),
+                           FormatDouble2Str( GetHeightMils() * 25.4 / 1000.0 ).c_str() );
     }
 
     if( !IsCustom() && IsPortrait() )

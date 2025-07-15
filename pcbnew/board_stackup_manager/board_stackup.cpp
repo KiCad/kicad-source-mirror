@@ -793,7 +793,7 @@ void BOARD_STACKUP::FormatBoardStackup( OUTPUTFORMATTER* aFormatter, const BOARD
             }
 
             if( item->HasEpsilonRValue() && item->HasMaterialValue( idx ) )
-                aFormatter->Print( "(epsilon_r %g)", item->GetEpsilonR( idx ) );
+                aFormatter->Print( "(epsilon_r %s)", FormatDouble2Str( item->GetEpsilonR( idx ) ).c_str() );
 
             if( item->HasLossTangentValue() && item->HasMaterialValue( idx ) )
             {

@@ -989,11 +989,11 @@ void SCH_IO_KICAD_SEXPR::saveSheet( SCH_SHEET* aSheet, const SCH_SHEET_LIST& aSh
     stroke.SetWidth( aSheet->GetBorderWidth() );
     stroke.Format( m_out, schIUScale );
 
-    m_out->Print( "(fill (color %d %d %d %0.4f))",
+    m_out->Print( "(fill (color %d %d %d %s))",
                   KiROUND( aSheet->GetBackgroundColor().r * 255.0 ),
                   KiROUND( aSheet->GetBackgroundColor().g * 255.0 ),
                   KiROUND( aSheet->GetBackgroundColor().b * 255.0 ),
-                  aSheet->GetBackgroundColor().a );
+                  FormatDouble2Str( aSheet->GetBackgroundColor().a ).c_str() );
 
     KICAD_FORMAT::FormatUuid( m_out, aSheet->m_Uuid );
 

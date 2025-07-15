@@ -24,11 +24,12 @@
 #include <build_version.h>
 #include "drc_report.h"
 #include <drc/drc_item.h>
-#include <fstream>
+#include <locale_io.h>
 #include <macros.h>
 #include <json_common.h>
 #include <rc_json_schema.h>
 
+#include <fstream>
 
 DRC_REPORT::DRC_REPORT( BOARD* aBoard, EDA_UNITS aReportUnits,
                         std::shared_ptr<RC_ITEMS_PROVIDER> aMarkersProvider,
@@ -46,7 +47,10 @@ DRC_REPORT::DRC_REPORT( BOARD* aBoard, EDA_UNITS aReportUnits,
 
 bool DRC_REPORT::WriteTextReport( const wxString& aFullFileName )
 {
-    FILE* fp = wxFopen( aFullFileName, wxT( "w" ) );
+    // We need the global LOCALE_IO here in order to
+    // write the report in the c-locale.
+    LOCALE_IO locale;
+    FILE*     fp = wxFopen( aFullFileName, wxT( "w" ) );
 
     if( fp == nullptr )
         return false;
@@ -113,6 +117,9 @@ bool DRC_REPORT::WriteTextReport( const wxString& aFullFileName )
 
 bool DRC_REPORT::WriteJsonReport( const wxString& aFullFileName )
 {
+    // We need the global LOCALE_IO here in order to
+    // write the report in the c-locale.
+    LOCALE_IO     locale;
     std::ofstream jsonFileStream( aFullFileName.fn_str() );
 
     UNITS_PROVIDER            unitsProvider( pcbIUScale, m_reportUnits );

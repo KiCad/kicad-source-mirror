@@ -55,6 +55,7 @@
 
 #include <board.h>
 #include <pcb_track.h>
+#include <string_utils.h>
 
 #include "specctra.h"
 #include <macros.h>
@@ -3949,9 +3950,9 @@ void PLACE::Format( OUTPUTFORMATTER* out, int nestLevel )
 
     if( m_hasVertex )
     {
-        out->Print( 0, " %.6f %.6f", m_vertex.x, m_vertex.y );
+        out->Print( 0, " %s %s", FormatDouble2Str( m_vertex.x ).c_str(), FormatDouble2Str( m_vertex.y ).c_str() );
         out->Print( 0, " %s", GetTokenText( m_side ) );
-        out->Print( 0, " %.6f", m_rotation );
+        out->Print( 0, " %s", FormatDouble2Str( m_rotation ).c_str() );
     }
 
     const char* space = " ";    // one space, as c string.

@@ -20,6 +20,7 @@
 #include <wx/ffile.h>
 #include <wx/string.h>
 
+#include <locale_io.h>
 #include <sch_screen.h>
 #include <sch_marker.h>
 #include <schematic.h>
@@ -43,6 +44,9 @@ ERC_REPORT::ERC_REPORT( SCHEMATIC* aSchematic, EDA_UNITS aReportUnits ) :
 
 wxString ERC_REPORT::GetTextReport()
 {
+    // We need the global LOCALE_IO here in order to
+    // write the report in the c-locale.
+    LOCALE_IO      locale;
     UNITS_PROVIDER unitsProvider( schIUScale, m_reportUnits );
 
     wxString msg = wxString::Format( _( "ERC report (%s, Encoding UTF8)\n" ),
@@ -119,6 +123,10 @@ bool ERC_REPORT::WriteTextReport( const wxString& aFullFileName )
 
 bool ERC_REPORT::WriteJsonReport( const wxString& aFullFileName )
 {
+    // We need the global LOCALE_IO here in order to
+    // write the report in the c-locale.
+    LOCALE_IO locale;
+
     std::ofstream jsonFileStream( aFullFileName.fn_str() );
 
     UNITS_PROVIDER            unitsProvider( pcbIUScale, m_reportUnits );
