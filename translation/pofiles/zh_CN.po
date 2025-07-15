@@ -17229,7 +17229,7 @@ msgstr "无法创建输出目录 '%s'。"
 #: pcbnew/pcbnew_jobs_handler.cpp:1913
 #, c-format
 msgid "Exporting %s"
-msgstr "导出 %s 中"
+msgstr "正在导出 %s"
 
 #: eeschema/eeschema_jobs_handler.cpp:1034 pcbnew/pcbnew_jobs_handler.cpp:1790
 msgid "Output path must not conflict with existing path\n"
@@ -17881,9 +17881,8 @@ msgid ""
 msgstr "此文件由较旧版本的 KiCad 创建, 保存文件时将转换为新版格式。"
 
 #: eeschema/files-io.cpp:542 eeschema/files-io.cpp:1391
-#, fuzzy
 msgid "Updating connections..."
-msgstr "正在更新网络..."
+msgstr "正在更新连接..."
 
 #: eeschema/files-io.cpp:549
 msgid ""
@@ -20325,14 +20324,12 @@ msgid "Cell Height"
 msgstr "单元格高度"
 
 #: eeschema/sch_tablecell.cpp:234 pcbnew/pcb_tablecell.cpp:250
-#, fuzzy
 msgid "Column Width"
-msgstr "单元格宽度"
+msgstr "列宽度"
 
 #: eeschema/sch_tablecell.cpp:239 pcbnew/pcb_tablecell.cpp:255
-#, fuzzy
 msgid "Row Height"
-msgstr "框高度"
+msgstr "行高度"
 
 #: eeschema/sch_text.cpp:375
 #, c-format
@@ -24046,9 +24043,8 @@ msgid "Show Simulation Side Panel"
 msgstr "显示侧边栏面板"
 
 #: eeschema/tools/sch_actions.cpp:1591
-#, fuzzy
 msgid "Show Simulation Console Panel"
-msgstr "显示控制台面板"
+msgstr "显示仿真控制台面板"
 
 #: eeschema/tools/sch_actions.cpp:1596
 msgid "Show Legend"
@@ -33685,9 +33681,8 @@ msgid "How many items in the array."
 msgstr "阵列中有多少个项目。"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:403
-#, fuzzy
 msgid "First item angle:"
-msgstr "按网络筛选项目:"
+msgstr "首个项目角度:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:408
 msgid "Angle offset of the first item in the array"
@@ -36729,9 +36724,8 @@ msgid "Group items with their target rule areas"
 msgstr "根据目标规则域进行分组"
 
 #: pcbnew/dialogs/dialog_multichannel_repeat_layout_base.cpp:124
-#, fuzzy
 msgid "Include locked items"
-msgstr "包含锁定封装 (&L)"
+msgstr "包含锁定封装"
 
 #: pcbnew/dialogs/dialog_multichannel_repeat_layout_base.cpp:125
 msgid "Copy from reference area + delete / update in target area if included"
@@ -37509,7 +37503,7 @@ msgstr "全局阻焊最小宽度/边距未设置为 0。 "
 msgid ""
 "Most board manufacturers expect 0 and use their own constraints for solder "
 "mask minimum width."
-msgstr "大多数电路板制造商期望 0 并使用自己的阻焊层最小宽度约束。"
+msgstr "大多数电路板制造商期望该值为 0, 并对阻焊层最小宽度使用自己的宽度约束条件。"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:174
 msgid "Board setup"
