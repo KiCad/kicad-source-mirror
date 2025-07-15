@@ -232,7 +232,7 @@ bool SYMBOL_EDITOR_PIN_TOOL::PlacePin( SCH_COMMIT* aCommit, SCH_PIN* aPin )
                         test->GetUnit() );
 
             KIDIALOG dlg( m_frame, msg, _( "Confirmation" ), wxOK | wxCANCEL | wxICON_WARNING );
-            dlg.SetExtendedMessage( _( "Disable the 'Synchronize pins editing' option to avoid this message." ) );
+            dlg.SetExtendedMessage( _( "Disable the 'Synchronize Pins Mode' option to avoid this message." ) );
             dlg.SetOKLabel( _( "Place Pin Anyway" ) );
             dlg.DoNotShowCheckbox( __FILE__, __LINE__ );
 
