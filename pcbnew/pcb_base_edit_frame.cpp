@@ -60,6 +60,10 @@ PCB_BASE_EDIT_FRAME::PCB_BASE_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent,
 {
     m_darkMode = KIPLATFORM::UI::IsDarkTheme();
 
+    // Do not register the idle event handler if we are running in headless mode.
+    if( !wxApp::GetGUIInstance() )
+        return;
+
     Bind( wxEVT_IDLE,
           [this]( wxIdleEvent& aEvent )
           {
