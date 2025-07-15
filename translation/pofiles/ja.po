@@ -45217,7 +45217,7 @@ msgstr "アイテム%sをグループ\"%s\"から削除しました。"
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:893
 #, c-format
 msgid "Add %s to group \"%s\"."
-msgstr "%s をグループ \"%s\" に追加。"
+msgstr "%s をグループ \"%s\" に追加します。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:899
 #, fuzzy, c-format
@@ -45317,19 +45317,19 @@ msgid "Change group name to '%s' to '%s'."
 msgstr "グループ名を '%s' から '%s' に変更します。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1386
-#, fuzzy, c-format
+#, c-format
 msgid "Changed group name to '%s' to '%s'."
-msgstr "%s の値を '%s' から '%s' に変更します。"
+msgstr "グループ名を '%s' から '%s' に変更しました。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1398
-#, fuzzy, c-format
+#, c-format
 msgid "Change group library link to '%s'."
-msgstr "\"%s\" のグローバル ラベルを \"%s\" に変更します。"
+msgstr "グループ ライブラリ リンクを '%s' に変更します。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1405
-#, fuzzy, c-format
+#, c-format
 msgid "Changed group library link to '%s'."
-msgstr "\"%s\" のグローバル ラベルを \"%s\" に変更します。"
+msgstr "グループ ライブラリ リンクを '%s' に変更しました。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1442
 #, c-format
@@ -49335,9 +49335,9 @@ msgid "Solder mask expansion resolution for:"
 msgstr "ハンダマスクの拡張:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1441
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved solder mask expansion: %s."
-msgstr "ハンダマスクの拡張:"
+msgstr "ハンダマスクの拡張を解決しました: %s。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1450
 #, fuzzy
@@ -49345,9 +49345,9 @@ msgid "Solder paste absolute clearance resolution for:"
 msgstr "穴から穴のクリアランスの解決:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1458
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved solder paste absolute clearance: %s."
-msgstr "ハンダペーストの絶対クリアランス:"
+msgstr "ハンダペーストの絶対クリアランスを解決しました: %s。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1461
 #, fuzzy
@@ -49355,9 +49355,9 @@ msgid "Solder paste relative clearance resolution for:"
 msgstr "ハンダペーストの相対クリアランス:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1471
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved solder paste relative clearance: %s."
-msgstr "ハンダペーストの相対クリアランス:"
+msgstr "ハンダペーストの相対クリアランスを解決しました: %s。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1488
 #, c-format
