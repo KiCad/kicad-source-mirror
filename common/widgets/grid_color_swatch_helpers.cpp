@@ -116,7 +116,7 @@ void GRID_CELL_COLOR_RENDERER::Draw( wxGrid& aGrid, wxGridCellAttr& aAttr, wxDC&
 
 void GRID_CELL_COLOR_RENDERER::OnDarkModeToggle()
 {
-    m_checkerboardBg = m_parent->GetBackgroundColour();
+    m_checkerboardBg = m_parent ? m_parent->GetBackgroundColour() : wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOW );
 }
 
 
