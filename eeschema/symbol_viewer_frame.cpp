@@ -68,7 +68,7 @@
 
 #include <default_values.h>
 #include <string_utils.h>
-#include <libraries/symbol_library_manager_adapter.h>
+#include <libraries/symbol_library_adapter.h>
 
 #include "eda_pattern_match.h"
 
@@ -357,7 +357,7 @@ LIB_SYMBOL* SYMBOL_VIEWER_FRAME::GetSelectedSymbol() const
     LIB_SYMBOL* symbol = nullptr;
 
     if( m_currentSymbol.IsValid() )
-        symbol = PROJECT_SCH::SymbolLibManager( &Prj() )->LoadSymbol( m_currentSymbol );
+        symbol = PROJECT_SCH::SymbolLibAdapter( &Prj() )->LoadSymbol( m_currentSymbol );
 
     return symbol;
 }
@@ -488,7 +488,7 @@ bool SYMBOL_VIEWER_FRAME::ReCreateLibList()
 
     COMMON_SETTINGS*      cfg = Pgm().GetCommonSettings();
     PROJECT_FILE&         project = Kiway().Prj().GetProjectFile();
-    SYMBOL_LIBRARY_MANAGER_ADAPTER* adapter = PROJECT_SCH::SymbolLibManager( &Prj() );
+    SYMBOL_LIBRARY_ADAPTER* adapter = PROJECT_SCH::SymbolLibAdapter( &Prj() );
     std::vector<wxString> libNicknames = adapter->GetLibraryNames();
     std::vector<wxString> pinnedMatches;
     std::vector<wxString> otherMatches;
@@ -521,7 +521,7 @@ bool SYMBOL_VIEWER_FRAME::ReCreateLibList()
                 if( m_listPowerOnly )
                 {
                     std::vector<wxString> symbolNames = adapter->GetSymbolNames(
-                            aLib, SYMBOL_LIBRARY_MANAGER_ADAPTER::SYMBOL_TYPE::POWER_ONLY );
+                            aLib, SYMBOL_LIBRARY_ADAPTER::SYMBOL_TYPE::POWER_ONLY );
 
                     if( symbolNames.empty() )
                         return;
@@ -621,7 +621,7 @@ bool SYMBOL_VIEWER_FRAME::ReCreateSymbolList()
     if( libName.IsEmpty() )
         return false;
 
-    SYMBOL_LIBRARY_MANAGER_ADAPTER* adapter = PROJECT_SCH::SymbolLibManager( &Prj() );
+    SYMBOL_LIBRARY_ADAPTER* adapter = PROJECT_SCH::SymbolLibAdapter( &Prj() );
     std::vector<LIB_SYMBOL*> symbols = adapter->GetSymbols( libName );
 
     std::set<wxString> excludes;
@@ -703,7 +703,7 @@ void SYMBOL_VIEWER_FRAME::ClickOnLibList( wxCommandEvent& event )
 
     wxString selection = EscapeString( m_libList->GetBaseString( ii ), CTX_LIBID );
 
-    SYMBOL_LIBRARY_MANAGER_ADAPTER* adapter = PROJECT_SCH::SymbolLibManager( &Prj() );
+    SYMBOL_LIBRARY_ADAPTER* adapter = PROJECT_SCH::SymbolLibAdapter( &Prj() );
 
     if( !adapter->HasLibrary( selection ) && selection.Find( '-' ) != wxNOT_FOUND )
     {
@@ -1066,7 +1066,7 @@ void SYMBOL_VIEWER_FRAME::DisplayLibInfos()
 
     if( m_libList && !m_libList->IsEmpty() && !libName.IsEmpty() )
     {
-        SYMBOL_LIBRARY_MANAGER_ADAPTER* adapter = PROJECT_SCH::SymbolLibManager( &Prj() );
+        SYMBOL_LIBRARY_ADAPTER* adapter = PROJECT_SCH::SymbolLibAdapter( &Prj() );
         LIBRARY_TABLE_ROW* row = adapter->GetRow( libName ).value_or( nullptr );
 
         wxString title = row
@@ -1100,7 +1100,7 @@ void SYMBOL_VIEWER_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
         LIB_SYMBOL* symbol = GetSelectedSymbol();
         wxCHECK2( symbol, break );
 
-        SYMBOL_LIBRARY_MANAGER_ADAPTER* adapter = PROJECT_SCH::SymbolLibManager( &Prj() );
+        SYMBOL_LIBRARY_ADAPTER* adapter = PROJECT_SCH::SymbolLibAdapter( &Prj() );
         LIBRARY_TABLE_ROW* row =
                 adapter->GetRow( symbol->GetLibId().GetLibNickname() ).value_or( nullptr );
 

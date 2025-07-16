@@ -35,7 +35,7 @@
 #include <eeschema_settings.h>
 #include <sch_edit_frame.h>
 #include <design_block_lib_table.h>
-#include <libraries/symbol_library_manager_adapter.h>
+#include <libraries/symbol_library_adapter.h>
 #include <symbol_edit_frame.h>
 #include <symbol_viewer_frame.h>
 #include <symbol_chooser_frame.h>
@@ -496,7 +496,7 @@ void IFACE::PreloadLibraries( PROJECT* aProject )
             std::shared_ptr<BACKGROUND_JOB_REPORTER> reporter =
                     m_libraryPreloadBackgroundJob->m_reporter;
 
-            SYMBOL_LIBRARY_MANAGER_ADAPTER* adapter = PROJECT_SCH::SymbolLibManager( aProject );
+            SYMBOL_LIBRARY_ADAPTER* adapter = PROJECT_SCH::SymbolLibAdapter( aProject );
 
             int elapsed = 0;
 

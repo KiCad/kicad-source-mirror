@@ -46,7 +46,7 @@
 #include <preview_items/selection_area.h>
 #include <project_sch.h>
 #include <libraries/legacy_symbol_library.h>
-#include <libraries/symbol_library_manager_adapter.h>
+#include <libraries/symbol_library_adapter.h>
 #include <symbol_lib_table.h>
 #include <sch_base_frame.h>
 #include <dialogs/dialog_sch_find.h>
@@ -75,7 +75,7 @@
 #endif
 
 
-LIB_SYMBOL* SchGetLibSymbol( const LIB_ID& aLibId, SYMBOL_LIBRARY_MANAGER_ADAPTER* aLibMgr,
+LIB_SYMBOL* SchGetLibSymbol( const LIB_ID& aLibId, SYMBOL_LIBRARY_ADAPTER* aLibMgr,
                              LEGACY_SYMBOL_LIB* aCacheLib, wxWindow* aParent, bool aShowErrorMsg )
 {
     wxCHECK_MSG( aLibMgr, nullptr, wxS( "Invalid symbol library manager adapter." ) );
@@ -278,7 +278,7 @@ LIB_SYMBOL* SCH_BASE_FRAME::GetLibSymbol( const LIB_ID& aLibId, bool aUseCacheLi
     LEGACY_SYMBOL_LIB* cache =
             ( aUseCacheLib ) ? PROJECT_SCH::LegacySchLibs( &Prj() )->GetCacheLibrary() : nullptr;
 
-    return SchGetLibSymbol( aLibId, PROJECT_SCH::SymbolLibManager( &Prj() ), cache, this,
+    return SchGetLibSymbol( aLibId, PROJECT_SCH::SymbolLibAdapter( &Prj() ), cache, this,
                             aShowErrorMsg );
 }
 
@@ -657,7 +657,7 @@ void SCH_BASE_FRAME::GetLibraryItemsForListDialog( wxArrayString& aHeaders,
 {
     COMMON_SETTINGS*      cfg = Pgm().GetCommonSettings();
     PROJECT_FILE&         project = Prj().GetProjectFile();
-    SYMBOL_LIBRARY_MANAGER_ADAPTER* adapter = PROJECT_SCH::SymbolLibManager( &Prj() );
+    SYMBOL_LIBRARY_ADAPTER* adapter = PROJECT_SCH::SymbolLibAdapter( &Prj() );
     std::vector<wxString> libNicknames = adapter->GetLibraryNames();
 
     aHeaders.Add( _( "Library" ) );
@@ -753,7 +753,7 @@ wxString SCH_BASE_FRAME::SelectLibrary( const wxString& aDialogTitle, const wxSt
             Prj().SetRString( PROJECT::SCH_LIB_PATH, fn.GetPath() );
 
             LIBRARY_TABLE_SCOPE scope = tableChooser.GetUseGlobalTable() ? LIBRARY_TABLE_SCOPE::GLOBAL : LIBRARY_TABLE_SCOPE::PROJECT;
-            SYMBOL_LIBRARY_MANAGER_ADAPTER* adapter = PROJECT_SCH::SymbolLibManager( &Prj() );
+            SYMBOL_LIBRARY_ADAPTER* adapter = PROJECT_SCH::SymbolLibAdapter( &Prj() );
 
             if( adapter->HasLibrary( libraryName, false ) )
             {

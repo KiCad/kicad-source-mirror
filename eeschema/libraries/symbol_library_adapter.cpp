@@ -27,7 +27,7 @@
 
 #include <lib_symbol.h>
 #include <locale_io.h>
-#include <libraries/symbol_library_manager_adapter.h>
+#include <libraries/symbol_library_adapter.h>
 #include <pgm_base.h>
 #include <project.h>
 #include <thread_pool.h>
@@ -35,22 +35,22 @@
 #include <settings/settings_manager.h>
 
 
-std::map<wxString, LIB_DATA> SYMBOL_LIBRARY_MANAGER_ADAPTER::GlobalLibraries;
+std::map<wxString, LIB_DATA> SYMBOL_LIBRARY_ADAPTER::GlobalLibraries;
 
-std::mutex SYMBOL_LIBRARY_MANAGER_ADAPTER::GlobalLibraryMutex;
+std::mutex SYMBOL_LIBRARY_ADAPTER::GlobalLibraryMutex;
 
-const char* SYMBOL_LIBRARY_MANAGER_ADAPTER::PropPowerSymsOnly = "pwr_sym_only";
-const char* SYMBOL_LIBRARY_MANAGER_ADAPTER::PropNonPowerSymsOnly = "non_pwr_sym_only";
+const char* SYMBOL_LIBRARY_ADAPTER::PropPowerSymsOnly = "pwr_sym_only";
+const char* SYMBOL_LIBRARY_ADAPTER::PropNonPowerSymsOnly = "non_pwr_sym_only";
 
 
-SYMBOL_LIBRARY_MANAGER_ADAPTER::SYMBOL_LIBRARY_MANAGER_ADAPTER( LIBRARY_MANAGER& aManager ) :
+SYMBOL_LIBRARY_ADAPTER::SYMBOL_LIBRARY_ADAPTER( LIBRARY_MANAGER& aManager ) :
             LIBRARY_MANAGER_ADAPTER( aManager ),
             m_loadTotal( 0 )
 {
 }
 
 
-void SYMBOL_LIBRARY_MANAGER_ADAPTER::ProjectChanged()
+void SYMBOL_LIBRARY_ADAPTER::ProjectChanged()
 {
     abortLoad();
 
@@ -61,7 +61,7 @@ void SYMBOL_LIBRARY_MANAGER_ADAPTER::ProjectChanged()
 }
 
 
-std::optional<LIB_STATUS> SYMBOL_LIBRARY_MANAGER_ADAPTER::LoadOne( const wxString& aNickname )
+std::optional<LIB_STATUS> SYMBOL_LIBRARY_ADAPTER::LoadOne( const wxString& aNickname )
 {
     LOCALE_IO toggle;
 
@@ -94,7 +94,7 @@ std::optional<LIB_STATUS> SYMBOL_LIBRARY_MANAGER_ADAPTER::LoadOne( const wxStrin
 }
 
 
-LIBRARY_RESULT<LIB_DATA*> SYMBOL_LIBRARY_MANAGER_ADAPTER::loadIfNeeded( const wxString& aNickname )
+LIBRARY_RESULT<LIB_DATA*> SYMBOL_LIBRARY_ADAPTER::loadIfNeeded( const wxString& aNickname )
 {
     auto tryLoadFromScope =
         [&]( LIBRARY_TABLE_SCOPE aScope, std::map<wxString, LIB_DATA>& aTarget,
@@ -165,7 +165,7 @@ LIBRARY_RESULT<LIB_DATA*> SYMBOL_LIBRARY_MANAGER_ADAPTER::loadIfNeeded( const wx
 }
 
 
-std::optional<const LIB_DATA*> SYMBOL_LIBRARY_MANAGER_ADAPTER::fetchIfLoaded(
+std::optional<const LIB_DATA*> SYMBOL_LIBRARY_ADAPTER::fetchIfLoaded(
         const wxString& aNickname ) const
 {
     if( m_libraries.contains( aNickname )
@@ -184,7 +184,7 @@ std::optional<const LIB_DATA*> SYMBOL_LIBRARY_MANAGER_ADAPTER::fetchIfLoaded(
 }
 
 
-std::optional<LIB_DATA*> SYMBOL_LIBRARY_MANAGER_ADAPTER::fetchIfLoaded(
+std::optional<LIB_DATA*> SYMBOL_LIBRARY_ADAPTER::fetchIfLoaded(
         const wxString& aNickname )
 {
     if( m_libraries.contains( aNickname ) && m_libraries.at( aNickname ).status.load_status == LOAD_STATUS::LOADED )
@@ -200,13 +200,13 @@ std::optional<LIB_DATA*> SYMBOL_LIBRARY_MANAGER_ADAPTER::fetchIfLoaded(
 }
 
 
-wxString SYMBOL_LIBRARY_MANAGER_ADAPTER::getUri( const LIBRARY_TABLE_ROW* aRow )
+wxString SYMBOL_LIBRARY_ADAPTER::getUri( const LIBRARY_TABLE_ROW* aRow )
 {
     return LIBRARY_MANAGER::ExpandURI( aRow->URI(), Pgm().GetSettingsManager().Prj() );
 }
 
 
-std::vector<LIB_SYMBOL*> SYMBOL_LIBRARY_MANAGER_ADAPTER::GetSymbols( const wxString& aNickname,
+std::vector<LIB_SYMBOL*> SYMBOL_LIBRARY_ADAPTER::GetSymbols( const wxString& aNickname,
                                                                      SYMBOL_TYPE aType )
 {
     std::vector<LIB_SYMBOL*> symbols;
@@ -243,7 +243,7 @@ std::vector<LIB_SYMBOL*> SYMBOL_LIBRARY_MANAGER_ADAPTER::GetSymbols( const wxStr
 }
 
 
-std::vector<wxString> SYMBOL_LIBRARY_MANAGER_ADAPTER::GetSymbolNames( const wxString& aNickname,
+std::vector<wxString> SYMBOL_LIBRARY_ADAPTER::GetSymbolNames( const wxString& aNickname,
                                                                       SYMBOL_TYPE aType )
 {
     // TODO(JE) can we kill wxArrayString in internal API?
@@ -268,7 +268,7 @@ std::vector<wxString> SYMBOL_LIBRARY_MANAGER_ADAPTER::GetSymbolNames( const wxSt
 }
 
 
-LIB_SYMBOL* SYMBOL_LIBRARY_MANAGER_ADAPTER::LoadSymbol( const wxString& aNickname,
+LIB_SYMBOL* SYMBOL_LIBRARY_ADAPTER::LoadSymbol( const wxString& aNickname,
                                                         const wxString& aName )
 {
     if( std::optional<const LIB_DATA*> lib = fetchIfLoaded( aNickname ) )
@@ -290,21 +290,21 @@ LIB_SYMBOL* SYMBOL_LIBRARY_MANAGER_ADAPTER::LoadSymbol( const wxString& aNicknam
 }
 
 
-SYMBOL_LIBRARY_MANAGER_ADAPTER::SAVE_T SYMBOL_LIBRARY_MANAGER_ADAPTER::SaveSymbol(
+SYMBOL_LIBRARY_ADAPTER::SAVE_T SYMBOL_LIBRARY_ADAPTER::SaveSymbol(
     const wxString& aNickname, const LIB_SYMBOL* aSymbol, bool aOverwrite )
 {
     wxCHECK_MSG( false, SAVE_SKIPPED, "Unimplemented!" );
 }
 
 
-void SYMBOL_LIBRARY_MANAGER_ADAPTER::DeleteSymbol( const wxString& aNickname,
+void SYMBOL_LIBRARY_ADAPTER::DeleteSymbol( const wxString& aNickname,
                                                    const wxString& aSymbolName )
 {
     wxCHECK_MSG( false, /* void */, "Unimplemented!" );
 }
 
 
-bool SYMBOL_LIBRARY_MANAGER_ADAPTER::IsSymbolLibWritable( const wxString& aLib )
+bool SYMBOL_LIBRARY_ADAPTER::IsSymbolLibWritable( const wxString& aLib )
 {
     if( m_libraries.contains( aLib ) )
         return m_libraries[aLib].plugin->IsLibraryWritable( getUri( m_libraries[aLib].row ) );
@@ -316,7 +316,7 @@ bool SYMBOL_LIBRARY_MANAGER_ADAPTER::IsSymbolLibWritable( const wxString& aLib )
 }
 
 
-bool SYMBOL_LIBRARY_MANAGER_ADAPTER::IsLibraryLoaded( const wxString& aNickname )
+bool SYMBOL_LIBRARY_ADAPTER::IsLibraryLoaded( const wxString& aNickname )
 {
     // TODO: row->IsOK() doesn't actually tell you if a library is loaded
     // Once we are preloading libraries we can cache the status of plugin load instead
@@ -331,7 +331,7 @@ bool SYMBOL_LIBRARY_MANAGER_ADAPTER::IsLibraryLoaded( const wxString& aNickname 
 }
 
 
-void SYMBOL_LIBRARY_MANAGER_ADAPTER::AsyncLoad()
+void SYMBOL_LIBRARY_ADAPTER::AsyncLoad()
 {
     // TODO(JE) any reason to clean these up earlier?
     std::erase_if( m_futures,
@@ -459,7 +459,7 @@ void SYMBOL_LIBRARY_MANAGER_ADAPTER::AsyncLoad()
 }
 
 
-void SYMBOL_LIBRARY_MANAGER_ADAPTER::abortLoad()
+void SYMBOL_LIBRARY_ADAPTER::abortLoad()
 {
     if( m_futures.empty() )
         return;
@@ -476,7 +476,7 @@ void SYMBOL_LIBRARY_MANAGER_ADAPTER::abortLoad()
 }
 
 
-std::optional<float> SYMBOL_LIBRARY_MANAGER_ADAPTER::AsyncLoadProgress() const
+std::optional<float> SYMBOL_LIBRARY_ADAPTER::AsyncLoadProgress() const
 {
     if( m_loadTotal == 0 )
         return std::nullopt;
@@ -486,14 +486,14 @@ std::optional<float> SYMBOL_LIBRARY_MANAGER_ADAPTER::AsyncLoadProgress() const
 }
 
 
-void SYMBOL_LIBRARY_MANAGER_ADAPTER::BlockUntilLoaded()
+void SYMBOL_LIBRARY_ADAPTER::BlockUntilLoaded()
 {
     for( const std::future<void>& future : m_futures )
         future.wait();
 }
 
 
-std::optional<LIBRARY_ERROR> SYMBOL_LIBRARY_MANAGER_ADAPTER::LibraryError(
+std::optional<LIBRARY_ERROR> SYMBOL_LIBRARY_ADAPTER::LibraryError(
         const wxString& aNickname ) const
 {
     if( m_libraries.contains( aNickname ) )
@@ -510,7 +510,7 @@ std::optional<LIBRARY_ERROR> SYMBOL_LIBRARY_MANAGER_ADAPTER::LibraryError(
 }
 
 
-std::optional<wxString> SYMBOL_LIBRARY_MANAGER_ADAPTER::FindLibraryByURI( const wxString& aURI ) const
+std::optional<wxString> SYMBOL_LIBRARY_ADAPTER::FindLibraryByURI( const wxString& aURI ) const
 {
     for( const LIBRARY_TABLE_ROW* row : m_manager.Rows( LIBRARY_TABLE_TYPE::SYMBOL ) )
     {
@@ -522,7 +522,7 @@ std::optional<wxString> SYMBOL_LIBRARY_MANAGER_ADAPTER::FindLibraryByURI( const 
 }
 
 
-std::vector<wxString> SYMBOL_LIBRARY_MANAGER_ADAPTER::GetLibraryNames() const
+std::vector<wxString> SYMBOL_LIBRARY_ADAPTER::GetLibraryNames() const
 {
     std::vector<wxString> ret;
 
@@ -536,7 +536,7 @@ std::vector<wxString> SYMBOL_LIBRARY_MANAGER_ADAPTER::GetLibraryNames() const
 }
 
 
-std::optional<wxString> SYMBOL_LIBRARY_MANAGER_ADAPTER::GetLibraryDescription( const wxString& aNickname ) const
+std::optional<wxString> SYMBOL_LIBRARY_ADAPTER::GetLibraryDescription( const wxString& aNickname ) const
 {
     if( std::optional<const LIB_DATA*> optRow = fetchIfLoaded( aNickname ); optRow )
         return ( *optRow )->row->Description();
@@ -545,8 +545,8 @@ std::optional<wxString> SYMBOL_LIBRARY_MANAGER_ADAPTER::GetLibraryDescription( c
 }
 
 
-bool SYMBOL_LIBRARY_MANAGER_ADAPTER::HasLibrary( const wxString& aNickname,
-                                                 bool aCheckEnabled ) const
+bool SYMBOL_LIBRARY_ADAPTER::HasLibrary( const wxString& aNickname,
+                                         bool aCheckEnabled ) const
 {
     if( std::optional<const LIB_DATA*> r = fetchIfLoaded( aNickname ); r.has_value() )
         return !aCheckEnabled || !( *r )->row->Disabled();
@@ -555,7 +555,7 @@ bool SYMBOL_LIBRARY_MANAGER_ADAPTER::HasLibrary( const wxString& aNickname,
 }
 
 
-bool SYMBOL_LIBRARY_MANAGER_ADAPTER::DeleteLibrary( const wxString& aNickname )
+bool SYMBOL_LIBRARY_ADAPTER::DeleteLibrary( const wxString& aNickname )
 {
     if( LIBRARY_RESULT<LIB_DATA*> result = loadIfNeeded( aNickname ); result.has_value() )
     {
@@ -576,7 +576,7 @@ bool SYMBOL_LIBRARY_MANAGER_ADAPTER::DeleteLibrary( const wxString& aNickname )
 }
 
 
-bool SYMBOL_LIBRARY_MANAGER_ADAPTER::CreateLibrary( const wxString& aNickname )
+bool SYMBOL_LIBRARY_ADAPTER::CreateLibrary( const wxString& aNickname )
 {
     LOCALE_IO toggle;
 
@@ -600,7 +600,7 @@ bool SYMBOL_LIBRARY_MANAGER_ADAPTER::CreateLibrary( const wxString& aNickname )
 }
 
 
-std::optional<LIB_STATUS> SYMBOL_LIBRARY_MANAGER_ADAPTER::GetLibraryStatus( const wxString& aNickname ) const
+std::optional<LIB_STATUS> SYMBOL_LIBRARY_ADAPTER::GetLibraryStatus( const wxString& aNickname ) const
 {
     if( m_libraries.contains( aNickname ) )
         return m_libraries.at( aNickname ).status;
@@ -612,7 +612,7 @@ std::optional<LIB_STATUS> SYMBOL_LIBRARY_MANAGER_ADAPTER::GetLibraryStatus( cons
 }
 
 
-std::vector<std::pair<wxString, LIB_STATUS>> SYMBOL_LIBRARY_MANAGER_ADAPTER::GetLibraryStatuses() const
+std::vector<std::pair<wxString, LIB_STATUS>> SYMBOL_LIBRARY_ADAPTER::GetLibraryStatuses() const
 {
     std::vector<std::pair<wxString, LIB_STATUS>> ret;
 
@@ -636,7 +636,7 @@ std::vector<std::pair<wxString, LIB_STATUS>> SYMBOL_LIBRARY_MANAGER_ADAPTER::Get
 }
 
 
-std::vector<wxString> SYMBOL_LIBRARY_MANAGER_ADAPTER::GetAvailableExtraFields(
+std::vector<wxString> SYMBOL_LIBRARY_ADAPTER::GetAvailableExtraFields(
         const wxString& aNickname )
 {
     std::vector<wxString> fields;
@@ -659,7 +659,7 @@ std::vector<wxString> SYMBOL_LIBRARY_MANAGER_ADAPTER::GetAvailableExtraFields(
 }
 
 
-bool SYMBOL_LIBRARY_MANAGER_ADAPTER::SupportsSubLibraries( const wxString& aNickname ) const
+bool SYMBOL_LIBRARY_ADAPTER::SupportsSubLibraries( const wxString& aNickname ) const
 {
     if( std::optional<const LIB_DATA*> result = fetchIfLoaded( aNickname ) )
     {
@@ -671,7 +671,7 @@ bool SYMBOL_LIBRARY_MANAGER_ADAPTER::SupportsSubLibraries( const wxString& aNick
 }
 
 
-std::vector<SUB_LIBRARY> SYMBOL_LIBRARY_MANAGER_ADAPTER::GetSubLibraries(
+std::vector<SUB_LIBRARY> SYMBOL_LIBRARY_ADAPTER::GetSubLibraries(
         const wxString& aNickname ) const
 {
     std::vector<SUB_LIBRARY> ret;
@@ -695,7 +695,7 @@ std::vector<SUB_LIBRARY> SYMBOL_LIBRARY_MANAGER_ADAPTER::GetSubLibraries(
 }
 
 
-bool SYMBOL_LIBRARY_MANAGER_ADAPTER::SupportsConfigurationDialog( const wxString& aNickname ) const
+bool SYMBOL_LIBRARY_ADAPTER::SupportsConfigurationDialog( const wxString& aNickname ) const
 {
     if( std::optional<const LIB_DATA*> result = fetchIfLoaded( aNickname ) )
         return ( *result )->plugin->SupportsConfigurationDialog();
@@ -704,7 +704,7 @@ bool SYMBOL_LIBRARY_MANAGER_ADAPTER::SupportsConfigurationDialog( const wxString
 }
 
 
-void SYMBOL_LIBRARY_MANAGER_ADAPTER::ShowConfigurationDialog( const wxString& aNickname,
+void SYMBOL_LIBRARY_ADAPTER::ShowConfigurationDialog( const wxString& aNickname,
                                                               wxWindow* aParent ) const
 {
     std::optional<const LIB_DATA*> optRow = fetchIfLoaded( aNickname );
@@ -717,7 +717,7 @@ void SYMBOL_LIBRARY_MANAGER_ADAPTER::ShowConfigurationDialog( const wxString& aN
 }
 
 
-int SYMBOL_LIBRARY_MANAGER_ADAPTER::GetModifyHash() const
+int SYMBOL_LIBRARY_ADAPTER::GetModifyHash() const
 {
     int hash = 0;
 
@@ -735,7 +735,7 @@ int SYMBOL_LIBRARY_MANAGER_ADAPTER::GetModifyHash() const
 }
 
 
-bool SYMBOL_LIBRARY_MANAGER_ADAPTER::IsWritable( const wxString& aNickname ) const
+bool SYMBOL_LIBRARY_ADAPTER::IsWritable( const wxString& aNickname ) const
 {
     if( std::optional<const LIB_DATA*> result = fetchIfLoaded( aNickname ) )
     {

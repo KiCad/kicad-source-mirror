@@ -58,7 +58,7 @@
 #include <progress_reporter.h>
 #include <kiway.h>
 #include <pgm_base.h>
-#include <libraries/symbol_library_manager_adapter.h>
+#include <libraries/symbol_library_adapter.h>
 
 
 /* ERC tests :
@@ -1450,7 +1450,7 @@ int ERC_TESTER::TestLibSymbolIssues()
     wxCHECK( m_schematic, 0 );
 
     LIBRARY_MANAGER& manager = Pgm().GetLibraryManager();
-    SYMBOL_LIBRARY_MANAGER_ADAPTER* adapter = PROJECT_SCH::SymbolLibManager( &m_schematic->Project() );
+    SYMBOL_LIBRARY_ADAPTER* adapter = PROJECT_SCH::SymbolLibAdapter( &m_schematic->Project() );
     wxString          msg;
     int               err_count = 0;
 

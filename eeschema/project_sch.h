@@ -27,7 +27,7 @@ class SYMBOL_LIB_TABLE;
 class PROJECT;
 class SEARCH_STACK;
 class LEGACY_SYMBOL_LIBS;
-class SYMBOL_LIBRARY_MANAGER_ADAPTER;
+class SYMBOL_LIBRARY_ADAPTER;
 
 class PROJECT_SCH
 {
@@ -41,10 +41,8 @@ public:
     /// Accessor for Eeschema search stack.
     static SEARCH_STACK* SchSearchS( PROJECT* aProject );
 
-    /// Accessor for project symbol library table.
-    //static SYMBOL_LIB_TABLE* SchSymbolLibTable( PROJECT* aProject );
-
-    static SYMBOL_LIBRARY_MANAGER_ADAPTER*  SymbolLibManager( PROJECT* aProject );
+    /// Accessor for project symbol library manager adapter.
+    static SYMBOL_LIBRARY_ADAPTER* SymbolLibAdapter( PROJECT* aProject );
 
 private:
     PROJECT_SCH() {}

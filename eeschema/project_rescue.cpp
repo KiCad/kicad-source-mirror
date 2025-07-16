@@ -40,7 +40,7 @@
 #include <cctype>
 #include <map>
 #include <pgm_base.h>
-#include <libraries/symbol_library_manager_adapter.h>
+#include <libraries/symbol_library_adapter.h>
 
 
 // Helper sort function, used in getSymbols, to sort a symbol list by lib_id
@@ -383,7 +383,7 @@ void RESCUE_SYMBOL_LIB_TABLE_CANDIDATE::FindRescues( RESCUER& aRescuer,
             }
 
             // Get the library symbol from the symbol library table.
-            lib_match = SchGetLibSymbol( symbol_id, PROJECT_SCH::SymbolLibManager( aRescuer.GetPrj() ) );
+            lib_match = SchGetLibSymbol( symbol_id, PROJECT_SCH::SymbolLibAdapter( aRescuer.GetPrj() ) );
 
             if( !cache_match && !lib_match )
                 continue;
@@ -779,7 +779,7 @@ void SYMBOL_LIB_TABLE_RESCUER::OpenRescueLibrary()
     wxFileName fn = GetRescueLibraryFileName( m_schematic );
 
     LIBRARY_MANAGER& manager = Pgm().GetLibraryManager();
-    SYMBOL_LIBRARY_MANAGER_ADAPTER* adapter = PROJECT_SCH::SymbolLibManager( m_prj );
+    SYMBOL_LIBRARY_ADAPTER* adapter = PROJECT_SCH::SymbolLibAdapter( m_prj );
 
     // If a rescue library already exists copy the contents of that library so we do not
     // lose any previous rescues.

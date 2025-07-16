@@ -32,7 +32,7 @@
 #include <i18n_utility.h>
 #include <wx/arrstr.h>
 
-class SYMBOL_LIBRARY_MANAGER_ADAPTER;
+class SYMBOL_LIBRARY_ADAPTER;
 
 /**
  * Base class that schematic file and library loading and saving plugins should derive from.
@@ -356,7 +356,7 @@ public:
      * Some library plugins need to interface with other loaded libraries.
      * To do this, they receive a reference to the project-specific manager adapter.
      */
-    virtual void SetLibraryManagerAdapter( SYMBOL_LIBRARY_MANAGER_ADAPTER* aAdapter ) {}
+    virtual void SetLibraryManagerAdapter( SYMBOL_LIBRARY_ADAPTER* aAdapter ) {}
 
     //-----</PUBLIC SCH_IO API>------------------------------------------------
 

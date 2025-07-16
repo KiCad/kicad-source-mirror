@@ -54,7 +54,7 @@ class LIB_SYMBOL;
 class LEGACY_SYMBOL_LIB;
 class SYMBOL_LIBRARY_FILTER;
 class LIB_ID;
-class SYMBOL_LIBRARY_MANAGER_ADAPTER;
+class SYMBOL_LIBRARY_ADAPTER;
 class EESCHEMA_SETTINGS;
 class SYMBOL_EDITOR_SETTINGS;
 struct SCH_SELECTION_FILTER_OPTIONS;
@@ -98,7 +98,7 @@ class wxFileSystemWatcherEvent;
  *
  * @return The symbol found in the library or NULL if the symbol was not found.
  */
-LIB_SYMBOL* SchGetLibSymbol( const LIB_ID& aLibId, SYMBOL_LIBRARY_MANAGER_ADAPTER* aLibMgr,
+LIB_SYMBOL* SchGetLibSymbol( const LIB_ID& aLibId, SYMBOL_LIBRARY_ADAPTER* aLibMgr,
                              LEGACY_SYMBOL_LIB* aCacheLib = nullptr, wxWindow* aParent = nullptr,
                              bool aShowErrorMsg = false );
 

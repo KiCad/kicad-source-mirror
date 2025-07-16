@@ -28,7 +28,7 @@
 #include <kiface_base.h>
 #include <sch_base_frame.h>
 #include <project_sch.h>
-#include <libraries/symbol_library_manager_adapter.h>
+#include <libraries/symbol_library_adapter.h>
 #include <widgets/lib_tree.h>
 #include <widgets/symbol_preview_widget.h>
 #include <widgets/footprint_preview_widget.h>
@@ -77,7 +77,7 @@ PANEL_SYMBOL_CHOOSER::PANEL_SYMBOL_CHOOSER( SCH_BASE_FRAME* aFrame, wxWindow* aP
 {
     m_frame = aFrame;
 
-    SYMBOL_LIBRARY_MANAGER_ADAPTER* libmgr = PROJECT_SCH::SymbolLibManager( &m_frame->Prj() );
+    SYMBOL_LIBRARY_ADAPTER* libmgr = PROJECT_SCH::SymbolLibAdapter( &m_frame->Prj() );
     COMMON_SETTINGS::SESSION& session = Pgm().GetCommonSettings()->m_Session;
     PROJECT_FILE&             project = m_frame->Prj().GetProjectFile();
 
@@ -547,7 +547,7 @@ void PANEL_SYMBOL_CHOOSER::showFootprintFor( LIB_ID const& aLibId )
 
     try
     {
-        symbol = PROJECT_SCH::SymbolLibManager( &m_frame->Prj() )->LoadSymbol( aLibId );
+        symbol = PROJECT_SCH::SymbolLibAdapter( &m_frame->Prj() )->LoadSymbol( aLibId );
     }
     catch( const IO_ERROR& ioe )
     {
@@ -606,7 +606,7 @@ void PANEL_SYMBOL_CHOOSER::populateFootprintSelector( LIB_ID const& aLibId )
     {
         try
         {
-            symbol = PROJECT_SCH::SymbolLibManager( &m_frame->Prj() )->LoadSymbol( aLibId );
+            symbol = PROJECT_SCH::SymbolLibAdapter( &m_frame->Prj() )->LoadSymbol( aLibId );
         }
         catch( const IO_ERROR& ioe )
         {

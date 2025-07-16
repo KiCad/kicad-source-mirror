@@ -50,7 +50,7 @@
 #include "symbol_saveas_type.h"
 #include <widgets/symbol_library_save_as_filedlg_hook.h>
 #include <io/kicad/kicad_io_utils.h>
-#include <libraries/symbol_library_manager_adapter.h>
+#include <libraries/symbol_library_adapter.h>
 
 
 void SYMBOL_EDIT_FRAME::UpdateTitle()
@@ -147,7 +147,7 @@ bool SYMBOL_EDIT_FRAME::LoadSymbol( const LIB_ID& aLibId, int aUnit, int aBodySt
 {
     LIB_ID libId = aLibId;
     LIBRARY_MANAGER& manager = Pgm().GetLibraryManager();
-    SYMBOL_LIBRARY_MANAGER_ADAPTER* adapter = PROJECT_SCH::SymbolLibManager( &Prj() );
+    SYMBOL_LIBRARY_ADAPTER* adapter = PROJECT_SCH::SymbolLibAdapter( &Prj() );
 
     // Some libraries can't be edited, so load the underlying chosen symbol
     if( auto optRow = manager.GetRow( LIBRARY_TABLE_TYPE::SYMBOL, aLibId.GetLibNickname() );
@@ -231,7 +231,7 @@ bool SYMBOL_EDIT_FRAME::LoadSymbolFromCurrentLib( const wxString& aSymbolName, i
 
     try
     {
-        symbol = PROJECT_SCH::SymbolLibManager( &Prj() )->LoadSymbol( GetCurLib(), aSymbolName );
+        symbol = PROJECT_SCH::SymbolLibAdapter( &Prj() )->LoadSymbol( GetCurLib(), aSymbolName );
     }
     catch( const IO_ERROR& ioe )
     {
@@ -1507,7 +1507,7 @@ bool SYMBOL_EDIT_FRAME::saveLibrary( const wxString& aLibrary, bool aNewFile )
     SCH_IO_MGR::SCH_FILE_T fileType = SCH_IO_MGR::SCH_FILE_T::SCH_KICAD;
     PROJECT& prj = Prj();
 
-    SYMBOL_LIBRARY_MANAGER_ADAPTER* adapter = PROJECT_SCH::SymbolLibManager( &prj );
+    SYMBOL_LIBRARY_ADAPTER* adapter = PROJECT_SCH::SymbolLibAdapter( &prj );
 
     m_toolManager->RunAction( ACTIONS::cancelInteractive );
 

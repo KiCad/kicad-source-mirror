@@ -23,7 +23,7 @@
 #include <pgm_base.h>
 #include "eeschema_test_utils.h"
 
-#include <libraries/symbol_library_manager_adapter.h>
+#include <libraries/symbol_library_adapter.h>
 
 // NOTE: this is for the new symbol library manager adapter and
 // library manager system.  There is also test_symbol_library_manager.cpp
@@ -67,7 +67,7 @@ BOOST_AUTO_TEST_CASE( ProjectLibraryTable )
     BOOST_REQUIRE( rows[0]->Nickname() == "Device" );
     BOOST_REQUIRE( rows[0]->URI() == "${KIPRJMOD}/Device.kicad_sym" );
 
-    SYMBOL_LIBRARY_MANAGER_ADAPTER adapter( manager );
+    SYMBOL_LIBRARY_ADAPTER adapter( manager );
     adapter.LoadOne( "Device" );
 
     std::vector<LIB_SYMBOL*> symbols = adapter.GetSymbols( "Device" );
@@ -91,7 +91,7 @@ BOOST_AUTO_TEST_CASE( AsyncLoad )
     manager.LoadGlobalTables();
 
     Pgm().GetSettingsManager().LoadProject( "" );
-    SYMBOL_LIBRARY_MANAGER_ADAPTER adapter( manager );
+    SYMBOL_LIBRARY_ADAPTER adapter( manager );
 
     auto tstart = std::chrono::high_resolution_clock::now();
     adapter.AsyncLoad();

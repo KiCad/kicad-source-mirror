@@ -35,7 +35,7 @@
 #include <project_sch.h>
 #include <string_utils.h>
 #include <symbol_preview_widget.h>
-#include <libraries/symbol_library_manager_adapter.h>
+#include <libraries/symbol_library_adapter.h>
 #include <widgets/wx_panel.h>
 
 
@@ -82,7 +82,7 @@ void SYMBOL_TREE_SYNCHRONIZING_ADAPTER::Sync( const wxString& aForceRefresh,
     m_lastSyncHash = m_libMgr->GetHash();
     int i = 0, max = GetLibrariesCount();
 
-    SYMBOL_LIBRARY_MANAGER_ADAPTER* adapter = PROJECT_SCH::SymbolLibManager( &m_frame->Prj() );
+    SYMBOL_LIBRARY_ADAPTER* adapter = PROJECT_SCH::SymbolLibAdapter( &m_frame->Prj() );
 
     // Process already stored libraries
     for( auto it = m_tree.m_Children.begin(); it != m_tree.m_Children.end(); )
@@ -273,7 +273,7 @@ void SYMBOL_TREE_SYNCHRONIZING_ADAPTER::GetValue( wxVariant& aVariant, wxDataVie
         {
             if( node->m_Type == LIB_TREE_NODE::TYPE::LIBRARY )
             {
-                SYMBOL_LIBRARY_MANAGER_ADAPTER* adapter = PROJECT_SCH::SymbolLibManager(
+                SYMBOL_LIBRARY_ADAPTER* adapter = PROJECT_SCH::SymbolLibAdapter(
                         &m_frame->Prj() );
 
                 if( auto optRow = adapter->GetRow( node->m_LibId.GetLibNickname() ) )

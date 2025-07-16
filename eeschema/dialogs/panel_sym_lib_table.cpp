@@ -56,7 +56,7 @@
 #include <wx/filedlg.h>
 #include <wx/msgdlg.h>
 #include <project_sch.h>
-#include <libraries/symbol_library_manager_adapter.h>
+#include <libraries/symbol_library_adapter.h>
 #include <widgets/grid_button.h>
 
 
@@ -161,7 +161,7 @@ protected:
             // Errored rows should have the warning button, so we show their error
             // Configurable libraries will have the options button, so we launch the config
             // Chained tables will have the open button, so we request the table be opened
-            SYMBOL_LIBRARY_MANAGER_ADAPTER* adapter = PROJECT_SCH::SymbolLibManager( &m_project );
+            SYMBOL_LIBRARY_ADAPTER* adapter = PROJECT_SCH::SymbolLibAdapter( &m_project );
 
             auto libTable = static_cast<SYMBOL_LIB_TABLE_GRID*>( m_grid->GetTable() );
             const LIBRARY_TABLE_ROW& row = libTable->at( aEvent.GetRow() );
@@ -290,7 +290,7 @@ void PANEL_SYM_LIB_TABLE::setupGrid( WX_GRID* aGrid )
                 aCurrGrid->SetColSize( aCol, std::max( prevWidth, aCurrGrid->GetColSize( aCol ) ) );
             };
 
-    SYMBOL_LIBRARY_MANAGER_ADAPTER* adapter = PROJECT_SCH::SymbolLibManager( m_project );
+    SYMBOL_LIBRARY_ADAPTER* adapter = PROJECT_SCH::SymbolLibAdapter( m_project );
 
     for( int ii = 0; ii < aGrid->GetNumberRows(); ++ii )
     {

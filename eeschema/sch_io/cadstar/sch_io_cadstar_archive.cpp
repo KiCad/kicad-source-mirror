@@ -34,7 +34,7 @@
 #include <wildcards_and_files_ext.h>
 #include <wx_filename.h>
 #include <libraries/library_table.h>
-#include <libraries/symbol_library_manager_adapter.h>
+#include <libraries/symbol_library_adapter.h>
 #include <wx/dir.h>
 #include <wx/wfstream.h>
 #include <wx/txtstrm.h>
@@ -103,7 +103,7 @@ SCH_SHEET* SCH_IO_CADSTAR_ARCHIVE::LoadSchematicFile( const wxString&        aFi
     csaLoader.Load( aSchematic, rootSheet );
 
     // Save symbols to project library
-    SYMBOL_LIBRARY_MANAGER_ADAPTER* adapter = PROJECT_SCH::SymbolLibManager( &aSchematic->Project() );
+    SYMBOL_LIBRARY_ADAPTER* adapter = PROJECT_SCH::SymbolLibAdapter( &aSchematic->Project() );
     LIBRARY_TABLE* table = adapter->ProjectTable().value_or( nullptr );
     wxCHECK_MSG( table, nullptr, "Could not load symbol lib table." );
 

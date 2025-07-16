@@ -25,7 +25,7 @@
 #include <lib_symbol.h>
 #include <symbol_lib_table.h>
 
-#include <libraries/symbol_library_manager_adapter.h>
+#include <libraries/symbol_library_adapter.h>
 #include <http_lib/http_lib_connection.h>
 #include "sch_io_http_lib.h"
 

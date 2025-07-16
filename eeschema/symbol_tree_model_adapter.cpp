@@ -36,7 +36,7 @@
 #include <symbol_lib_table.h>
 #include <string_utils.h>
 #include <trace_helpers.h>
-#include <libraries/symbol_library_manager_adapter.h>
+#include <libraries/symbol_library_adapter.h>
 
 bool SYMBOL_TREE_MODEL_ADAPTER::m_show_progress = true;
 
@@ -45,7 +45,7 @@ bool SYMBOL_TREE_MODEL_ADAPTER::m_show_progress = true;
 
 wxObjectDataPtr<LIB_TREE_MODEL_ADAPTER>
 SYMBOL_TREE_MODEL_ADAPTER::Create( SCH_BASE_FRAME* aParent,
-                                   SYMBOL_LIBRARY_MANAGER_ADAPTER* aManager )
+                                   SYMBOL_LIBRARY_ADAPTER* aManager )
 {
     auto* adapter = new SYMBOL_TREE_MODEL_ADAPTER( aParent, aManager );
     return wxObjectDataPtr<LIB_TREE_MODEL_ADAPTER>( adapter );
@@ -53,7 +53,7 @@ SYMBOL_TREE_MODEL_ADAPTER::Create( SCH_BASE_FRAME* aParent,
 
 
 SYMBOL_TREE_MODEL_ADAPTER::SYMBOL_TREE_MODEL_ADAPTER( SCH_BASE_FRAME* aParent,
-                                                      SYMBOL_LIBRARY_MANAGER_ADAPTER* aLibs ) :
+                                                      SYMBOL_LIBRARY_ADAPTER* aLibs ) :
         LIB_TREE_MODEL_ADAPTER( aParent, "pinned_symbol_libs",
                                 aParent->GetViewerSettingsBase()->m_LibTree ),
         m_adapter( aLibs ),
@@ -202,9 +202,9 @@ void SYMBOL_TREE_MODEL_ADAPTER::AddLibraries( SCH_BASE_FRAME* aFrame )
 
 void SYMBOL_TREE_MODEL_ADAPTER::AddLibrary( wxString const& aLibNickname, bool pinned )
 {
-    SYMBOL_LIBRARY_MANAGER_ADAPTER::SYMBOL_TYPE type =
-            ( GetFilter() != nullptr ) ? SYMBOL_LIBRARY_MANAGER_ADAPTER::SYMBOL_TYPE::POWER_ONLY
-                                       : SYMBOL_LIBRARY_MANAGER_ADAPTER::SYMBOL_TYPE::ALL_SYMBOLS;
+    SYMBOL_LIBRARY_ADAPTER::SYMBOL_TYPE type =
+            ( GetFilter() != nullptr ) ? SYMBOL_LIBRARY_ADAPTER::SYMBOL_TYPE::POWER_ONLY
+                                       : SYMBOL_LIBRARY_ADAPTER::SYMBOL_TYPE::ALL_SYMBOLS;
     std::vector<LIB_SYMBOL*>    symbols = m_adapter->GetSymbols( aLibNickname, type );
     std::vector<LIB_TREE_ITEM*> comp_list;
 

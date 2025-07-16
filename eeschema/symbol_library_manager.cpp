@@ -42,7 +42,7 @@
 #include <confirm.h>
 #include <string_utils.h>
 #include <libraries/library_manager.h>
-#include <libraries/symbol_library_manager_adapter.h>
+#include <libraries/symbol_library_adapter.h>
 
 #include "lib_logger.h"
 
@@ -74,7 +74,7 @@ bool SYMBOL_LIBRARY_MANAGER::HasModifications() const
 
 int SYMBOL_LIBRARY_MANAGER::GetHash() const
 {
-    SYMBOL_LIBRARY_MANAGER_ADAPTER* adapter = PROJECT_SCH::SymbolLibManager( &m_frame.Prj() );
+    SYMBOL_LIBRARY_ADAPTER* adapter = PROJECT_SCH::SymbolLibAdapter( &m_frame.Prj() );
     return adapter->GetModifyHash();
 }
 
@@ -301,7 +301,7 @@ bool SYMBOL_LIBRARY_MANAGER::IsLibraryReadOnly( const wxString& aLibrary ) const
     wxCHECK_MSG( LibraryExists( aLibrary ), true,
                  wxString::Format( "Library missing: %s", aLibrary ) );
 
-    SYMBOL_LIBRARY_MANAGER_ADAPTER* adapter = PROJECT_SCH::SymbolLibManager( &m_frame.Prj() );
+    SYMBOL_LIBRARY_ADAPTER* adapter = PROJECT_SCH::SymbolLibAdapter( &m_frame.Prj() );
     return !adapter->IsSymbolLibWritable( aLibrary );
 }
 
@@ -311,7 +311,7 @@ bool SYMBOL_LIBRARY_MANAGER::IsLibraryLoaded( const wxString& aLibrary ) const
     wxCHECK_MSG( LibraryExists( aLibrary ), false,
                  wxString::Format( "Library missing: %s", aLibrary ) );
 
-    SYMBOL_LIBRARY_MANAGER_ADAPTER* adapter = PROJECT_SCH::SymbolLibManager( &m_frame.Prj() );
+    SYMBOL_LIBRARY_ADAPTER* adapter = PROJECT_SCH::SymbolLibAdapter( &m_frame.Prj() );
     return adapter->IsLibraryLoaded( aLibrary );
 }
 
@@ -331,7 +331,7 @@ std::list<LIB_SYMBOL*> SYMBOL_LIBRARY_MANAGER::EnumerateSymbols( const wxString&
     }
     else
     {
-        SYMBOL_LIBRARY_MANAGER_ADAPTER* adapter = PROJECT_SCH::SymbolLibManager( &m_frame.Prj() );
+        SYMBOL_LIBRARY_ADAPTER* adapter = PROJECT_SCH::SymbolLibAdapter( &m_frame.Prj() );
         std::vector<LIB_SYMBOL*> symbols = adapter->GetSymbols( aLibrary );
 
         std::copy( symbols.begin(), symbols.end(), std::back_inserter( ret ) );
@@ -354,7 +354,7 @@ LIB_SYMBOL* SYMBOL_LIBRARY_MANAGER::GetBufferedSymbol( const wxString& aSymbolNa
 
     if( !bufferedSymbol ) // no buffer symbol found
     {
-        SYMBOL_LIBRARY_MANAGER_ADAPTER* adapter = PROJECT_SCH::SymbolLibManager( &m_frame.Prj() );
+        SYMBOL_LIBRARY_ADAPTER* adapter = PROJECT_SCH::SymbolLibAdapter( &m_frame.Prj() );
 
         // create a copy of the symbol
         try
@@ -573,7 +573,7 @@ LIB_SYMBOL* SYMBOL_LIBRARY_MANAGER::GetSymbol( const wxString& aSymbolName,
     }
 
     // Get the original symbol
-    SYMBOL_LIBRARY_MANAGER_ADAPTER* adapter = PROJECT_SCH::SymbolLibManager( &m_frame.Prj() );
+    SYMBOL_LIBRARY_ADAPTER* adapter = PROJECT_SCH::SymbolLibAdapter( &m_frame.Prj() );
     LIB_SYMBOL* symbol = nullptr;
 
     try
@@ -603,7 +603,7 @@ bool SYMBOL_LIBRARY_MANAGER::SymbolExists( const wxString& aSymbolName,
     if( libBufIt != m_libs.end() )
         return libBufIt->second.GetBuffer( aSymbolName ) != nullptr;
 
-    SYMBOL_LIBRARY_MANAGER_ADAPTER* adapter = PROJECT_SCH::SymbolLibManager( &m_frame.Prj() );
+    SYMBOL_LIBRARY_ADAPTER* adapter = PROJECT_SCH::SymbolLibAdapter( &m_frame.Prj() );
 
     try
     {
@@ -645,7 +645,7 @@ bool SYMBOL_LIBRARY_MANAGER::LibraryExists( const wxString& aLibrary, bool aChec
     if( m_libs.count( aLibrary ) > 0 )
         return true;
 
-    SYMBOL_LIBRARY_MANAGER_ADAPTER* adapter = PROJECT_SCH::SymbolLibManager( &m_frame.Prj() );
+    SYMBOL_LIBRARY_ADAPTER* adapter = PROJECT_SCH::SymbolLibAdapter( &m_frame.Prj() );
 
     return adapter->HasLibrary( aLibrary, aCheckEnabled );
 }
@@ -701,7 +701,7 @@ size_t SYMBOL_LIBRARY_MANAGER::GetDerivedSymbolNames( const wxString& aSymbolNam
 
 size_t SYMBOL_LIBRARY_MANAGER::GetLibraryCount() const
 {
-    SYMBOL_LIBRARY_MANAGER_ADAPTER* adapter = PROJECT_SCH::SymbolLibManager( &m_frame.Prj() );
+    SYMBOL_LIBRARY_ADAPTER* adapter = PROJECT_SCH::SymbolLibAdapter( &m_frame.Prj() );
     return adapter->GetLibraryNames().size();
 }
 
@@ -743,7 +743,7 @@ bool SYMBOL_LIBRARY_MANAGER::addLibrary( const wxString& aFilePath, bool aCreate
     {
         wxCHECK( schFileType != SCH_IO_MGR::SCH_FILE_T::SCH_LEGACY, false );
 
-        SYMBOL_LIBRARY_MANAGER_ADAPTER* adapter = PROJECT_SCH::SymbolLibManager( &m_frame.Prj() );
+        SYMBOL_LIBRARY_ADAPTER* adapter = PROJECT_SCH::SymbolLibAdapter( &m_frame.Prj() );
 
         if( !adapter->CreateLibrary( libName ) )
         {
@@ -763,7 +763,7 @@ std::set<LIB_SYMBOL*> SYMBOL_LIBRARY_MANAGER::getOriginalSymbols( const wxString
     std::set<LIB_SYMBOL*> symbols;
     wxCHECK( LibraryExists( aLibrary ), symbols );
 
-    SYMBOL_LIBRARY_MANAGER_ADAPTER* adapter = PROJECT_SCH::SymbolLibManager( &m_frame.Prj() );
+    SYMBOL_LIBRARY_ADAPTER* adapter = PROJECT_SCH::SymbolLibAdapter( &m_frame.Prj() );
 
     for( LIB_SYMBOL* symbol : adapter->GetSymbols( aLibrary ) )
         symbols.insert( symbol );

@@ -26,7 +26,7 @@
 #include <symbol_lib_table.h>
 #include <project_sch.h>
 #include <libraries/legacy_symbol_library.h>
-#include <libraries/symbol_library_manager_adapter.h>
+#include <libraries/symbol_library_adapter.h>
 
 static std::mutex s_symbolTableMutex;
 
@@ -179,7 +179,7 @@ SYMBOL_LIB_TABLE* PROJECT_SCH::SchSymbolLibTable( PROJECT* aProject )
 #endif
 
 
-SYMBOL_LIBRARY_MANAGER_ADAPTER* PROJECT_SCH::SymbolLibManager( PROJECT* aProject )
+SYMBOL_LIBRARY_ADAPTER* PROJECT_SCH::SymbolLibAdapter( PROJECT* aProject )
 {
     LIBRARY_MANAGER& mgr = Pgm().GetLibraryManager();
     std::optional<LIBRARY_MANAGER_ADAPTER*> adapter = mgr.Adapter( LIBRARY_TABLE_TYPE::SYMBOL );
@@ -187,13 +187,13 @@ SYMBOL_LIBRARY_MANAGER_ADAPTER* PROJECT_SCH::SymbolLibManager( PROJECT* aProject
     if( !adapter )
     {
         mgr.RegisterAdapter( LIBRARY_TABLE_TYPE::SYMBOL,
-                             std::make_unique<SYMBOL_LIBRARY_MANAGER_ADAPTER>( mgr ) );
+                             std::make_unique<SYMBOL_LIBRARY_ADAPTER>( mgr ) );
 
         std::optional<LIBRARY_MANAGER_ADAPTER*> created = mgr.Adapter( LIBRARY_TABLE_TYPE::SYMBOL );
         wxCHECK( created && ( *created )->Type() == LIBRARY_TABLE_TYPE::SYMBOL, nullptr );
-        return static_cast<SYMBOL_LIBRARY_MANAGER_ADAPTER*>( *created );
+        return static_cast<SYMBOL_LIBRARY_ADAPTER*>( *created );
     }
 
     wxCHECK( ( *adapter )->Type() == LIBRARY_TABLE_TYPE::SYMBOL, nullptr );
-    return static_cast<SYMBOL_LIBRARY_MANAGER_ADAPTER*>( *adapter );
+    return static_cast<SYMBOL_LIBRARY_ADAPTER*>( *adapter );
 }

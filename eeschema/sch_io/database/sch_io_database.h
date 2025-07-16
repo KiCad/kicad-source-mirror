@@ -77,7 +77,7 @@ public:
     // Database libraries can never be written using the symbol editing API
     bool IsLibraryWritable( const wxString& aLibraryPath ) override { return false; }
 
-    void SetLibraryManagerAdapter( SYMBOL_LIBRARY_MANAGER_ADAPTER* aAdapter ) override
+    void SetLibraryManagerAdapter( SYMBOL_LIBRARY_ADAPTER* aAdapter ) override
     {
         m_adapter = aAdapter;
     }
@@ -105,7 +105,7 @@ private:
 
     static std::optional<bool> boolFromAny( const std::any& aVal );
 
-    SYMBOL_LIBRARY_MANAGER_ADAPTER* m_adapter;
+    SYMBOL_LIBRARY_ADAPTER* m_adapter;
 
     std::unique_ptr<DATABASE_LIB_SETTINGS> m_settings;
 

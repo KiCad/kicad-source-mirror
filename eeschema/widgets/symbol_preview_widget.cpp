@@ -24,7 +24,7 @@
 #include <math/vector2wx.h>
 #include <symbol_lib_table.h>
 #include <lib_symbol.h>
-#include <libraries/symbol_library_manager_adapter.h>
+#include <libraries/symbol_library_adapter.h>
 #include <sch_preview_panel.h>
 #include <pgm_base.h>
 #include <sch_painter.h>
@@ -193,7 +193,7 @@ void SYMBOL_PREVIEW_WIDGET::DisplaySymbol( const LIB_ID& aSymbolID, int aUnit, i
 
     try
     {
-        LIB_SYMBOL* tmp = PROJECT_SCH::SymbolLibManager( &m_kiway->Prj() )->LoadSymbol( aSymbolID );
+        LIB_SYMBOL* tmp = PROJECT_SCH::SymbolLibAdapter( &m_kiway->Prj() )->LoadSymbol( aSymbolID );
 
         if( tmp )
             symbol = tmp->Flatten();

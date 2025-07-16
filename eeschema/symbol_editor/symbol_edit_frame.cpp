@@ -83,7 +83,7 @@
 #include <wildcards_and_files_ext.h>
 #include <panel_sym_lib_table.h>
 #include <string_utils.h>
-#include <libraries/symbol_library_manager_adapter.h>
+#include <libraries/symbol_library_adapter.h>
 #include <wx/msgdlg.h>
 #include <wx/combobox.h>
 #include <wx/log.h>
@@ -836,7 +836,7 @@ bool SYMBOL_EDIT_FRAME::IsSymbolFromLegacyLibrary() const
 {
     if( m_symbol )
     {
-        SYMBOL_LIBRARY_MANAGER_ADAPTER* adapter = PROJECT_SCH::SymbolLibManager( &Prj() );
+        SYMBOL_LIBRARY_ADAPTER* adapter = PROJECT_SCH::SymbolLibAdapter( &Prj() );
 
         if( auto row = adapter->GetRow( m_symbol->GetLibNickname() ); row.has_value() )
         {
@@ -855,7 +855,7 @@ wxString SYMBOL_EDIT_FRAME::GetCurLib() const
 
     if( !libNickname.empty() )
     {
-        if( !PROJECT_SCH::SymbolLibManager( &Prj() )->HasLibrary( libNickname ) )
+        if( !PROJECT_SCH::SymbolLibAdapter( &Prj() )->HasLibrary( libNickname ) )
         {
             Prj().SetRString( PROJECT::SCH_LIBEDIT_CUR_LIB, wxEmptyString );
             libNickname = wxEmptyString;
@@ -870,7 +870,7 @@ wxString SYMBOL_EDIT_FRAME::SetCurLib( const wxString& aLibNickname )
 {
     wxString old = GetCurLib();
 
-    if( aLibNickname.empty() || !PROJECT_SCH::SymbolLibManager( &Prj() )->HasLibrary( aLibNickname ) )
+    if( aLibNickname.empty() || !PROJECT_SCH::SymbolLibAdapter( &Prj() )->HasLibrary( aLibNickname ) )
         Prj().SetRString( PROJECT::SCH_LIBEDIT_CUR_LIB, wxEmptyString );
     else
         Prj().SetRString( PROJECT::SCH_LIBEDIT_CUR_LIB, aLibNickname );
@@ -1146,7 +1146,7 @@ wxString SYMBOL_EDIT_FRAME::AddLibraryFile( bool aCreateNew )
     if( libName.IsEmpty() )
         return wxEmptyString;
 
-    SYMBOL_LIBRARY_MANAGER_ADAPTER* adapter = PROJECT_SCH::SymbolLibManager( &Prj() );
+    SYMBOL_LIBRARY_ADAPTER* adapter = PROJECT_SCH::SymbolLibAdapter( &Prj() );
 
     if( adapter->HasLibrary( libName ) )
     {
@@ -1200,7 +1200,7 @@ void SYMBOL_EDIT_FRAME::DdAddLibrary( wxString aLibFile )
     if( libName.IsEmpty() )
         return;
 
-    SYMBOL_LIBRARY_MANAGER_ADAPTER* adapter = PROJECT_SCH::SymbolLibManager( &Prj() );
+    SYMBOL_LIBRARY_ADAPTER* adapter = PROJECT_SCH::SymbolLibAdapter( &Prj() );
 
     if( adapter->HasLibrary( libName ) )
     {
@@ -1630,7 +1630,7 @@ void SYMBOL_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
             wxString libNickname;
             wxString msg;
 
-            SYMBOL_LIBRARY_MANAGER_ADAPTER* adapter = PROJECT_SCH::SymbolLibManager( &Prj() );
+            SYMBOL_LIBRARY_ADAPTER* adapter = PROJECT_SCH::SymbolLibAdapter( &Prj() );
             std::optional<const LIBRARY_TABLE_ROW*> libTableRow = adapter->FindRowByURI( uri );
 
             if( !libTableRow )
@@ -1674,7 +1674,7 @@ void SYMBOL_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
 
         // Check if the currently selected symbol library been removed or disabled.
         if( !currentLib.empty()
-            && !PROJECT_SCH::SymbolLibManager( &Prj() )->HasLibrary( currentLib, true ) )
+            && !PROJECT_SCH::SymbolLibAdapter( &Prj() )->HasLibrary( currentLib, true ) )
         {
             SetCurLib( wxEmptyString );
             emptyScreen();
@@ -1689,7 +1689,7 @@ void SYMBOL_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
 
     case MAIL_REFRESH_SYMBOL:
     {
-        SYMBOL_LIBRARY_MANAGER_ADAPTER* adapter = PROJECT_SCH::SymbolLibManager( &Prj() );
+        SYMBOL_LIBRARY_ADAPTER* adapter = PROJECT_SCH::SymbolLibAdapter( &Prj() );
         LIB_SYMBOL* symbol = GetCurSymbol();
 
     wxLogTrace( traceLibWatch, "Received refresh symbol request for %s", payload );
@@ -1921,7 +1921,7 @@ bool SYMBOL_EDIT_FRAME::addLibTableEntry( const wxString& aLibFile, LIBRARY_TABL
     wxFileName libTableFileName( Prj().GetProjectPath(),
                                  SYMBOL_LIB_TABLE::GetSymbolLibTableFileName() );
     wxString libNickname = fn.GetName();
-    SYMBOL_LIBRARY_MANAGER_ADAPTER* adapter = PROJECT_SCH::SymbolLibManager( &Prj() );
+    SYMBOL_LIBRARY_ADAPTER* adapter = PROJECT_SCH::SymbolLibAdapter( &Prj() );
     const ENV_VAR_MAP& envVars = Pgm().GetLocalEnvVariables();
 
     if( adapter->HasLibrary( libNickname ) )
@@ -1982,7 +1982,7 @@ bool SYMBOL_EDIT_FRAME::addLibTableEntry( const wxString& aLibFile, LIBRARY_TABL
 bool SYMBOL_EDIT_FRAME::replaceLibTableEntry( const wxString& aLibNickname,
                                               const wxString& aLibFile )
 {
-    SYMBOL_LIBRARY_MANAGER_ADAPTER* adapter = PROJECT_SCH::SymbolLibManager( &Prj() );
+    SYMBOL_LIBRARY_ADAPTER* adapter = PROJECT_SCH::SymbolLibAdapter( &Prj() );
     LIBRARY_TABLE* table = nullptr;
     LIBRARY_TABLE_SCOPE scope = LIBRARY_TABLE_SCOPE::GLOBAL;
 

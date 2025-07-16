@@ -80,7 +80,7 @@
 #include <wx/treectrl.h>
 #include <wx/msgdlg.h>
 #include <io/kicad/kicad_io_utils.h>
-#include <libraries/symbol_library_manager_adapter.h>
+#include <libraries/symbol_library_adapter.h>
 #include <printing/dialog_print.h>
 
 #ifdef KICAD_IPC_API
@@ -383,8 +383,7 @@ int SCH_EDITOR_CONTROL::ExportSymbolsToLibrary( const TOOL_EVENT& aEvent )
 
     bool                   append = false;
     SCH_COMMIT             commit( m_frame );
-    LIBRARY_MANAGER& manager = Pgm().GetLibraryManager();
-    SYMBOL_LIBRARY_MANAGER_ADAPTER* adapter = PROJECT_SCH::SymbolLibManager( &m_frame->Prj() );
+    SYMBOL_LIBRARY_ADAPTER* adapter = PROJECT_SCH::SymbolLibAdapter( &m_frame->Prj() );
 
     auto optRow = adapter->GetRow( targetLib );
     wxCHECK( optRow, 0 );

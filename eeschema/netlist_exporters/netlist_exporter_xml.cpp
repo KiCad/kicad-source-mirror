@@ -42,7 +42,7 @@
 #include <symbol_lib_table.h>
 
 #include <set>
-#include <libraries/symbol_library_manager_adapter.h>
+#include <libraries/symbol_library_adapter.h>
 
 static bool sortPinsByNumber( SCH_PIN* aPin1, SCH_PIN* aPin2 );
 

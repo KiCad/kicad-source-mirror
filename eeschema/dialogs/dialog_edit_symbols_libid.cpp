@@ -34,7 +34,7 @@
 #include <sch_symbol.h>
 #include <sch_reference_list.h>
 #include <schematic.h>
-#include <libraries/symbol_library_manager_adapter.h>
+#include <libraries/symbol_library_adapter.h>
 #include <trace_helpers.h>
 #include <widgets/wx_grid.h>
 
@@ -577,7 +577,7 @@ void DIALOG_EDIT_SYMBOLS_LIBID::onCellBrowseLib( wxGridEvent& event )
 
 void DIALOG_EDIT_SYMBOLS_LIBID::onClickOrphansButton( wxCommandEvent& event )
 {
-    std::vector<wxString> libs = PROJECT_SCH::SymbolLibManager( &Prj() )->GetLibraryNames();
+    std::vector<wxString> libs = PROJECT_SCH::SymbolLibAdapter( &Prj() )->GetLibraryNames();
     std::vector<wxString> aliasNames;
     wxArrayString candidateSymbNames;
 
@@ -606,7 +606,7 @@ void DIALOG_EDIT_SYMBOLS_LIBID::onClickOrphansButton( wxCommandEvent& event )
 
             try
             {
-                aliasNames = PROJECT_SCH::SymbolLibManager( &Prj() )->GetSymbolNames( lib );
+                aliasNames = PROJECT_SCH::SymbolLibAdapter( &Prj() )->GetSymbolNames( lib );
             }
             catch( const IO_ERROR& ) {}   // ignore, it is handled below
 
@@ -737,7 +737,7 @@ bool DIALOG_EDIT_SYMBOLS_LIBID::TransferDataFromWindow()
 
             try
             {
-                symbol = PROJECT_SCH::SymbolLibManager( &Prj() )->LoadSymbol( id );
+                symbol = PROJECT_SCH::SymbolLibAdapter( &Prj() )->LoadSymbol( id );
             }
             catch( const IO_ERROR& ioe )
             {

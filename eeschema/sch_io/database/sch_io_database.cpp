@@ -26,7 +26,7 @@
 
 #include <boost/algorithm/string.hpp>
 
-#include <libraries/symbol_library_manager_adapter.h>
+#include <libraries/symbol_library_adapter.h>
 #include <database/database_connection.h>
 #include <database/database_lib_settings.h>
 #include <fmt.h>

@@ -47,7 +47,7 @@
 #include <core/map_helpers.h>
 #include <project_sch.h>
 #include <libraries/library_table.h>
-#include <libraries/symbol_library_manager_adapter.h>
+#include <libraries/symbol_library_adapter.h>
 
 
 struct SCH_IO_EASYEDAPRO::PRJ_DATA
@@ -604,7 +604,7 @@ SCH_SHEET* SCH_IO_EASYEDAPRO::LoadSchematicFile( const wxString& aFileName,
 
     IO_RELEASER<SCH_IO> sch_plugin( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_KICAD ) );
 
-    SYMBOL_LIBRARY_MANAGER_ADAPTER* adapter = PROJECT_SCH::SymbolLibManager( &aSchematic->Project() );
+    SYMBOL_LIBRARY_ADAPTER* adapter = PROJECT_SCH::SymbolLibAdapter( &aSchematic->Project() );
     LIBRARY_TABLE* table = adapter->ProjectTable().value_or( nullptr );
     wxCHECK_MSG( table, nullptr, "Could not load symbol lib table." );
 

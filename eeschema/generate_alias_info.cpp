@@ -23,7 +23,7 @@
 #include <string_utils.h>
 #include <template_fieldnames.h>
 #include <lib_symbol.h>
-#include <libraries/symbol_library_manager_adapter.h>
+#include <libraries/symbol_library_adapter.h>
 #include <wx/log.h>
 
 static const wxString DescriptionFormat = wxS(
@@ -50,7 +50,7 @@ static const wxString LinkFormat = wxS( "<a href=\"__HREF__\">__TEXT__</a>" );
 class FOOTPRINT_INFO_GENERATOR
 {
 public:
-    FOOTPRINT_INFO_GENERATOR( SYMBOL_LIBRARY_MANAGER_ADAPTER* aLibs, LIB_ID const& aLibId, int aUnit ) :
+    FOOTPRINT_INFO_GENERATOR( SYMBOL_LIBRARY_ADAPTER* aLibs, LIB_ID const& aLibId, int aUnit ) :
             m_html( DescriptionFormat ),
             m_libs( aLibs ),
             m_lib_id( aLibId ),
@@ -255,14 +255,14 @@ protected:
 
 private:
     wxString                        m_html;
-    SYMBOL_LIBRARY_MANAGER_ADAPTER* m_libs;
+    SYMBOL_LIBRARY_ADAPTER* m_libs;
     LIB_ID const                    m_lib_id;
     LIB_SYMBOL*                     m_symbol;
     int                             m_unit;
 };
 
 
-wxString GenerateAliasInfo( SYMBOL_LIBRARY_MANAGER_ADAPTER* aLibs, LIB_ID const& aLibId, int aUnit )
+wxString GenerateAliasInfo( SYMBOL_LIBRARY_ADAPTER* aLibs, LIB_ID const& aLibId, int aUnit )
 {
     FOOTPRINT_INFO_GENERATOR gen( aLibs, aLibId, aUnit );
     gen.GenerateHtml();

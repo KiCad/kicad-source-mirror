@@ -57,7 +57,7 @@
 #include <string_utils.h>
 #include <symbol_lib_table.h>
 #include <wildcards_and_files_ext.h>
-#include <libraries/symbol_library_manager_adapter.h>
+#include <libraries/symbol_library_adapter.h>
 
 
 // Eagle schematic axes are aligned with x increasing left to right and Y increasing bottom to top
@@ -422,7 +422,7 @@ SCH_SHEET* SCH_IO_EAGLE::LoadSchematicFile( const wxString& aFileName, SCHEMATIC
         m_sheetPath.SetPageNumber( wxT( "1" ) );
     }
 
-    SYMBOL_LIBRARY_MANAGER_ADAPTER* adapter = PROJECT_SCH::SymbolLibManager( &aSchematic->Project() );
+    SYMBOL_LIBRARY_ADAPTER* adapter = PROJECT_SCH::SymbolLibAdapter( &aSchematic->Project() );
     LIBRARY_TABLE* table = adapter->ProjectTable().value_or( nullptr );
     wxCHECK_MSG( table, nullptr, "Could not load symbol lib table." );
 
@@ -1982,7 +1982,7 @@ void SCH_IO_EAGLE::loadInstance( const std::unique_ptr<EINSTANCE>& aInstance,
 
     // Save the pin positions
     LIB_SYMBOL* libSymbol =
-            PROJECT_SCH::SymbolLibManager( &m_schematic->Project() )->LoadSymbol( symbol->GetLibId() );
+            PROJECT_SCH::SymbolLibAdapter( &m_schematic->Project() )->LoadSymbol( symbol->GetLibId() );
 
     wxCHECK( libSymbol, /*void*/ );
 

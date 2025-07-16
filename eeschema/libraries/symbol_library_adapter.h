@@ -75,14 +75,14 @@ struct SUB_LIBRARY
  * and linked to one project in particular.  This is what can return actual concrete
  * schematic library content (symbols).
  */
-class SYMBOL_LIBRARY_MANAGER_ADAPTER : public LIBRARY_MANAGER_ADAPTER
+class SYMBOL_LIBRARY_ADAPTER : public LIBRARY_MANAGER_ADAPTER
 {
 public:
     static const char* PropPowerSymsOnly;
     static const char* PropNonPowerSymsOnly;
 
 public:
-    SYMBOL_LIBRARY_MANAGER_ADAPTER( LIBRARY_MANAGER& aManager );
+    SYMBOL_LIBRARY_ADAPTER( LIBRARY_MANAGER& aManager );
 
     LIBRARY_TABLE_TYPE Type() const override { return LIBRARY_TABLE_TYPE::SYMBOL; }
 

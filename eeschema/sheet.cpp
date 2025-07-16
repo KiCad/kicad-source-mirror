@@ -49,7 +49,7 @@
 
 #include <advanced_config.h>
 #include <pgm_base.h>
-#include <libraries/symbol_library_manager_adapter.h>
+#include <libraries/symbol_library_adapter.h>
 
 #include "printing/sch_printout.h"
 
@@ -285,7 +285,7 @@ bool SCH_EDIT_FRAME::LoadSheetFromFile( SCH_SHEET* aSheet, SCH_SHEET_PATH* aCurr
         }
     }
 
-    SYMBOL_LIBRARY_MANAGER_ADAPTER* adapter = PROJECT_SCH::SymbolLibManager( &Prj() );
+    SYMBOL_LIBRARY_ADAPTER* adapter = PROJECT_SCH::SymbolLibAdapter( &Prj() );
     std::optional<LIBRARY_TABLE*> optTable = adapter->ProjectTable();
     wxCHECK( optTable, false );
     LIBRARY_TABLE* projectTable = *optTable;
@@ -345,7 +345,7 @@ bool SCH_EDIT_FRAME::LoadSheetFromFile( SCH_SHEET* aSheet, SCH_SHEET_PATH* aCurr
             // library links are valid but it's better than nothing.
             for( const wxString& name : names )
             {
-                if( !PROJECT_SCH::SymbolLibManager( &Prj() )->HasLibrary( name ) )
+                if( !PROJECT_SCH::SymbolLibAdapter( &Prj() )->HasLibrary( name ) )
                     newLibNames.Add( name );
             }
 
@@ -376,7 +376,7 @@ bool SCH_EDIT_FRAME::LoadSheetFromFile( SCH_SHEET* aSheet, SCH_SHEET_PATH* aCurr
 
             for( const wxString& name : names )
             {
-                if( !PROJECT_SCH::SymbolLibManager( &Prj() )->HasLibrary( name ) )
+                if( !PROJECT_SCH::SymbolLibAdapter( &Prj() )->HasLibrary( name ) )
                     newLibNames.Add( name );
                 else
                     duplicateLibNames.Add( name );

@@ -24,7 +24,7 @@
 #include <template_fieldnames.h>
 #include <lib_symbol.h>
 #include <sch_field.h>
-#include <libraries/symbol_library_manager_adapter.h>
+#include <libraries/symbol_library_adapter.h>
 
 
 // TODO(JE) library tables -- this class doesn't need to exist anymore
@@ -44,7 +44,7 @@ void LIB_SYMBOL_LIBRARY_MANAGER::Sync( const wxString& aForceRefresh,
     m_logger->Activate();
     {
         getAdapter()->Sync( aForceRefresh, aProgressCallback );
-        SYMBOL_LIBRARY_MANAGER_ADAPTER* adapter = PROJECT_SCH::SymbolLibManager( &m_frame.Prj() );
+        SYMBOL_LIBRARY_ADAPTER* adapter = PROJECT_SCH::SymbolLibAdapter( &m_frame.Prj() );
         m_syncHash = adapter->GetModifyHash();
     }
     m_logger->Deactivate();

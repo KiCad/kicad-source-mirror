@@ -49,7 +49,7 @@
 #include <dialogs/html_message_box.h>
 #include <dialogs/dialog_erc.h>
 #include <dialogs/dialog_book_reporter.h>
-#include <libraries/symbol_library_manager_adapter.h>
+#include <libraries/symbol_library_adapter.h>
 #include <widgets/wx_html_report_box.h>
 #include <widgets/symbol_diff_widget.h>
 #include <math/util.h>      // for KiROUND
@@ -368,7 +368,7 @@ void SCH_INSPECTION_TOOL::DiffSymbol( SCH_SYMBOL* symbol )
 
     r->Report( "" );
 
-    SYMBOL_LIBRARY_MANAGER_ADAPTER* libs = PROJECT_SCH::SymbolLibManager( &m_frame->Prj() );
+    SYMBOL_LIBRARY_ADAPTER* libs = PROJECT_SCH::SymbolLibAdapter( &m_frame->Prj() );
 
     if( !libs->HasLibrary( libName, false ) )
     {

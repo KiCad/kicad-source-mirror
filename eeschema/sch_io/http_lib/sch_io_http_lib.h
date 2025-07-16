@@ -70,7 +70,7 @@ public:
 
     bool IsLibraryWritable( const wxString& aLibraryPath ) override { return false; }
 
-    void SetLibraryManagerAdapter( SYMBOL_LIBRARY_MANAGER_ADAPTER* aAdapter ) override
+    void SetLibraryManagerAdapter( SYMBOL_LIBRARY_ADAPTER* aAdapter ) override
     {
         m_adapter = aAdapter;
     }
@@ -97,7 +97,7 @@ private:
                                     const HTTP_LIB_PART& aPart );
 
 private:
-    SYMBOL_LIBRARY_MANAGER_ADAPTER*      m_adapter;
+    SYMBOL_LIBRARY_ADAPTER*              m_adapter;
 
     /// Generally will be null if no valid connection is established
     std::unique_ptr<HTTP_LIB_CONNECTION> m_conn;

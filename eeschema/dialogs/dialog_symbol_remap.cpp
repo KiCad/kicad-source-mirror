@@ -33,7 +33,7 @@
 #include "widgets/wx_html_report_panel.h"
 
 #include <libraries/legacy_symbol_library.h>
-#include <libraries/symbol_library_manager_adapter.h>
+#include <libraries/symbol_library_adapter.h>
 #include <core/kicad_algo.h>
 #include <symbol_viewer_frame.h>
 #include <project_rescue.h>
@@ -316,7 +316,7 @@ bool DIALOG_SYMBOL_REMAP::remapSymbolToLibTable( SCH_SYMBOL* aSymbol )
             wxString libFileName = lib.GetFullFileName();
 
             if( std::optional<wxString> nickname =
-                    PROJECT_SCH::SymbolLibManager( &Prj() )->FindLibraryByURI( libFileName ) )
+                    PROJECT_SCH::SymbolLibAdapter( &Prj() )->FindLibraryByURI( libFileName ) )
             {
                 LIB_ID id = aSymbol->GetLibId();
 

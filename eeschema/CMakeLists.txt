@@ -433,7 +433,7 @@ set( EESCHEMA_SRCS
     api/api_sch_utils.cpp
 
     libraries/legacy_symbol_library.cpp
-    libraries/symbol_library_manager_adapter.cpp
+    libraries/symbol_library_adapter.cpp
 
     netlist_exporters/netlist_exporter_allegro.cpp
     netlist_exporters/netlist_exporter_base.cpp
