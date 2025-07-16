@@ -823,6 +823,16 @@ public:
     bool SetLayerDescr( PCB_LAYER_ID aIndex, const LAYER& aLayer );
 
     /**
+     * @return true if the layer is a front layer, or a user layer designated "Off-board, front"
+     */
+    bool IsFrontLayer( PCB_LAYER_ID aLayer ) const;
+
+    /**
+     * @return true if the layer is a back layer, or a user layer designated "Off-board, back"
+     */
+    bool IsBackLayer( PCB_LAYER_ID aLayer ) const;
+
+    /**
      * Return the type of the copper layer given by aLayer.
      *
      * @param aLayer A layer index, like B_Cu, etc.

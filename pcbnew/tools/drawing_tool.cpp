@@ -316,7 +316,7 @@ void DRAWING_TOOL::Reset( RESET_REASON aReason )
     InferBold( &m_textAttrs );
     m_textAttrs.m_Italic = bds.GetTextItalic( m_layer );
     m_textAttrs.m_KeepUpright = bds.GetTextUpright( m_layer );
-    m_textAttrs.m_Mirrored = IsBackLayer( m_layer );
+    m_textAttrs.m_Mirrored = m_board->IsBackLayer( m_layer );
     m_textAttrs.m_Halign = GR_TEXT_H_ALIGN_LEFT;
     m_textAttrs.m_Valign = GR_TEXT_V_ALIGN_TOP;
 
@@ -988,7 +988,7 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
                 InferBold( &textAttrs );
                 textAttrs.m_Italic = bds.GetTextItalic( layer );
                 textAttrs.m_KeepUpright = bds.GetTextUpright( layer );
-                textAttrs.m_Mirrored = IsBackLayer( layer );
+                textAttrs.m_Mirrored = m_board->IsBackLayer( layer );
                 textAttrs.m_Halign = GR_TEXT_H_ALIGN_LEFT;
                 textAttrs.m_Valign = GR_TEXT_V_ALIGN_BOTTOM;
 
@@ -1548,7 +1548,7 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
                 t = dimension->Type();
 
                 dimension->SetLayer( layer );
-                dimension->SetMirrored( IsBackLayer( layer ) );
+                dimension->SetMirrored( m_board->IsBackLayer( layer ) );
                 dimension->SetTextSize( boardSettings.GetTextSize( layer ) );
                 dimension->SetTextThickness( boardSettings.GetTextThickness( layer ) );
                 dimension->SetItalic( boardSettings.GetTextItalic( layer ) );
@@ -2153,7 +2153,7 @@ bool DRAWING_TOOL::drawShape( const TOOL_EVENT& aTool, PCB_SHAPE** aGraphic,
         InferBold( &m_textAttrs );
         m_textAttrs.m_Italic = bds.GetTextItalic( m_layer );
         m_textAttrs.m_KeepUpright = bds.GetTextUpright( m_layer );
-        m_textAttrs.m_Mirrored = IsBackLayer( m_layer );
+        m_textAttrs.m_Mirrored = m_board->IsBackLayer( m_layer );
         m_textAttrs.m_Halign = GR_TEXT_H_ALIGN_LEFT;
         m_textAttrs.m_Valign = GR_TEXT_V_ALIGN_TOP;
     }
@@ -2277,7 +2277,7 @@ bool DRAWING_TOOL::drawShape( const TOOL_EVENT& aTool, PCB_SHAPE** aGraphic,
                 InferBold( &m_textAttrs );
                 m_textAttrs.m_Italic = bds.GetTextItalic( m_layer );
                 m_textAttrs.m_KeepUpright = bds.GetTextUpright( m_layer );
-                m_textAttrs.m_Mirrored = IsBackLayer( m_layer );
+                m_textAttrs.m_Mirrored = m_board->IsBackLayer( m_layer );
                 m_textAttrs.m_Halign = GR_TEXT_H_ALIGN_LEFT;
                 m_textAttrs.m_Valign = GR_TEXT_V_ALIGN_TOP;
             }

@@ -475,26 +475,18 @@ void BOARD_ADAPTER::InitSettings( REPORTER* aStatusReporter, REPORTER* aWarningR
     const float zpos_copperTop_front = m_layerZcoordTop[F_Cu];
 
     // Fill not copper layers zpos
-    for( int layer_id = 0; layer_id < PCB_LAYER_ID_COUNT; layer_id++ )
+    for( int layer = 0; layer < PCB_LAYER_ID_COUNT; layer++ )
     {
-        if( IsCopperLayer( (PCB_LAYER_ID)layer_id ) )
+        PCB_LAYER_ID layer_id = ToLAYER_ID( layer );
+
+        if( IsCopperLayer( layer_id ) )
             continue;
 
-        float zposBottom = zpos_copperTop_front + 2.0f * zpos_offset;
-        float zposTop = zposBottom + m_frontCopperThickness3DU;
+        float zposBottom;
+        float zposTop;
 
         switch( layer_id )
         {
-        case B_Adhes:
-            zposBottom = zpos_copperTop_back - 2.0f * zpos_offset;
-            zposTop    = zposBottom - m_nonCopperLayerThickness3DU;
-            break;
-
-        case F_Adhes:
-            zposBottom = zpos_copperTop_front + 2.0f * zpos_offset;
-            zposTop    = zposBottom + m_nonCopperLayerThickness3DU;
-            break;
-
         case B_Mask:
             zposBottom = zpos_copperTop_back;
             zposTop    = zpos_copperTop_back - m_nonCopperLayerThickness3DU;
@@ -526,11 +518,21 @@ void BOARD_ADAPTER::InitSettings( REPORTER* aStatusReporter, REPORTER* aWarningR
             break;
 
         default:
+            if( m_board->IsBackLayer( layer_id ) )
+            {
+                zposBottom = zpos_copperTop_back - 2.0f * zpos_offset;
+                zposTop    = zposBottom - m_nonCopperLayerThickness3DU;
+            }
+            else
+            {
+                zposBottom = zpos_copperTop_front + 2.0f * zpos_offset;
+                zposTop    = zposBottom + m_nonCopperLayerThickness3DU;
+            }
             break;
         }
 
-        m_layerZcoordTop[(PCB_LAYER_ID)layer_id] = zposTop;
-        m_layerZcoordBottom[(PCB_LAYER_ID)layer_id] = zposBottom;
+        m_layerZcoordTop[layer_id] = zposTop;
+        m_layerZcoordBottom[layer_id] = zposBottom;
     }
 
     m_boardCenter = SFVEC3F( m_boardPos.x * m_biuTo3Dunits, m_boardPos.y * m_biuTo3Dunits, 0.0f );

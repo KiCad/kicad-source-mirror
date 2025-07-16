@@ -310,7 +310,11 @@ void PCB_TEXT::StyleFromSettings( const BOARD_DESIGN_SETTINGS& settings )
     SetTextThickness( settings.GetTextThickness( GetLayer() ) );
     SetItalic( settings.GetTextItalic( GetLayer() ) );
     SetKeepUpright( settings.GetTextUpright( GetLayer() ) );
-    SetMirrored( IsBackLayer( GetLayer() ) );
+
+    if( BOARD* board = GetBoard() )
+        SetMirrored( board->IsBackLayer( GetLayer() ) );
+    else
+        SetMirrored( IsBackLayer( GetLayer() ) );
 }
 
 
