@@ -90,6 +90,9 @@ APP_SETTINGS_BASE::APP_SETTINGS_BASE( const std::string& aFilename, int aSchemaV
     m_params.emplace_back( new PARAM<bool>( "design_block_chooser.place_as_sheet",
             &m_DesignBlockChooserPanel.place_as_sheet, false ) );
 
+    m_params.emplace_back( new PARAM<bool>( "design_block_chooser.place_as_group",
+            &m_DesignBlockChooserPanel.place_as_group, true ) );
+
     m_params.emplace_back( new PARAM<bool>( "design_block_chooser.keep_annotations",
             &m_DesignBlockChooserPanel.keep_annotations, false ) );
 
