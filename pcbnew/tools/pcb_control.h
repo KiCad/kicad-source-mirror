@@ -111,8 +111,7 @@ public:
     int PlaceLinkedDesignBlock( const TOOL_EVENT& aEvent );
     int SaveToLinkedDesignBlock( const TOOL_EVENT& aEvent );
     int AppendBoard( PCB_IO& pi, const wxString& fileName, DESIGN_BLOCK* aDesignBlock = nullptr,
-                     BOARD_COMMIT* aCommit = nullptr, bool aHasPosition = false,
-                     VECTOR2I aPosition = VECTOR2I( 0, 0 ) );
+                     BOARD_COMMIT* aCommit = nullptr, bool aSkipMove = false );
     int UpdateMessagePanel( const TOOL_EVENT& aEvent );
     int PlaceCharacteristics( const TOOL_EVENT& aEvent );
     int PlaceStackup( const TOOL_EVENT& aEvent );

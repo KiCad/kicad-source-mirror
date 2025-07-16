@@ -1414,10 +1414,10 @@ int PCB_CONTROL::ApplyDesignBlockLayout( const TOOL_EVENT& aEvent )
 
     int ret = 1;
 
-    VECTOR2I placementPos( 0, 0 );
+    bool skipMove = true;
 
     // If we succeeded in placing the linked design block, we're ready to apply the multichannel tool
-    if( m_toolMgr->RunSynchronousAction( PCB_ACTIONS::placeLinkedDesignBlock, &tempCommit, &placementPos ) )
+    if( m_toolMgr->RunSynchronousAction( PCB_ACTIONS::placeLinkedDesignBlock, &tempCommit, &skipMove ) )
     {
         // Lambda for the bounding box of all the components
         auto generateBoundingBox = [&]( std::unordered_set<EDA_ITEM*> aItems )
@@ -1593,9 +1593,9 @@ int PCB_CONTROL::PlaceLinkedDesignBlock( const TOOL_EVENT& aEvent )
     if( !pi )
         return 1;
 
-    if( aEvent.Parameter<VECTOR2I*>() != nullptr )
+    if( aEvent.Parameter<bool*>() != nullptr )
         return AppendBoard( *pi, designBlock->GetBoardFile(), nullptr, static_cast<BOARD_COMMIT*>( aEvent.Commit() ),
-                            true, *aEvent.Parameter<VECTOR2I*>() );
+                            *aEvent.Parameter<bool*>() );
     else
         return AppendBoard( *pi, designBlock->GetBoardFile() );
 }
@@ -1817,7 +1817,7 @@ bool PCB_CONTROL::placeBoardItems( BOARD_COMMIT* aCommit, std::vector<BOARD_ITEM
 
 
 int PCB_CONTROL::AppendBoard( PCB_IO& pi, const wxString& fileName, DESIGN_BLOCK* aDesignBlock, BOARD_COMMIT* aCommit,
-                              bool aHasPosition, VECTOR2I aPosition )
+                              bool aSkipMove )
 {
     PCB_EDIT_FRAME* editFrame = dynamic_cast<PCB_EDIT_FRAME*>( m_frame );
 
@@ -1940,7 +1940,7 @@ int PCB_CONTROL::AppendBoard( PCB_IO& pi, const wxString& fileName, DESIGN_BLOCK
     if( APP_SETTINGS_BASE* cfg = editFrame->config() )
         placeAsGroup = cfg->m_DesignBlockChooserPanel.place_as_group;
 
-    if( placeBoardItems( commit, brd, false, false /* Don't reannotate dupes on Append Board */, aHasPosition ) )
+    if( placeBoardItems( commit, brd, false, false /* Don't reannotate dupes on Append Board */, aSkipMove ) )
     {
         if( placeAsGroup )
         {
