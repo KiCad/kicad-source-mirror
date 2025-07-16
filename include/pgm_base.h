@@ -35,6 +35,7 @@
 #include <singleton.h>
 #include <exception>
 #include <map>
+#include <future>
 #include <vector>
 #include <memory>
 #include <search_stack.h>
@@ -47,6 +48,7 @@ class wxWindow;
 class wxSplashScreen;
 class wxSingleInstanceChecker;
 
+struct BACKGROUND_JOB;
 class BACKGROUND_JOBS_MONITOR;
 class NOTIFICATIONS_MANAGER;
 class COMMON_SETTINGS;
@@ -351,6 +353,13 @@ public:
     }
 
     /**
+     * Starts a background job to preload the global and project design block libraries.
+     * Design block handling code is not associated with a particular KIFACE so this is
+     * handled here unlike symbol/footprint loading which are taken care of by the KIFACEs.
+     */
+    void PreloadDesignBlockLibraries( KIWAY* aKiway );
+
+    /**
      * wxWidgets on MSW tends to crash if you spool up more than one print job at a time.
      */
     bool m_Printing;
@@ -417,6 +426,11 @@ protected:
     int m_argcUtf8;
 
     wxSplashScreen* m_splash;
+
+    std::shared_ptr<BACKGROUND_JOB> m_libraryPreloadBackgroundJob;
+    std::future<void>               m_libraryPreloadReturn;
+    std::atomic_bool                m_libraryPreloadInProgress;
+    std::atomic_bool                m_libraryPreloadAbort;
 };
 
 

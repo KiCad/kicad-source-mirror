@@ -35,7 +35,6 @@
 #include <tools/ee_grid_helper.h>
 #include <tools/rule_area_create_helper.h>
 #include <gal/graphics_abstraction_layer.h>
-#include <design_block_lib_table.h>
 #include <sch_actions.h>
 #include <sch_tool_utils.h>
 #include <sch_edit_frame.h>

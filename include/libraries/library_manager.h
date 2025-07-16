@@ -21,10 +21,13 @@
 #ifndef LIBRARY_MANAGER_H
 #define LIBRARY_MANAGER_H
 
+#include <future>
+#include <memory>
 #include <tl/expected.hpp>
 
 #include <kicommon.h>
 #include <libraries/library_table.h>
+#include <io/io_base.h>
 
 
 struct KICOMMON_API LIBRARY_ERROR
@@ -152,6 +155,35 @@ private:
     static const std::map<LIBRARY_TABLE_TYPE, const std::string&> m_typeToFilenameMap;
 };
 
+/// Status of a library load managed by a library adapter
+enum class LOAD_STATUS
+{
+    INVALID,
+    LOADING,
+    LOADED,
+    ERROR
+};
+
+/// The overall status of a loaded or loading library
+struct KICOMMON_API LIB_STATUS
+{
+    LOAD_STATUS load_status = LOAD_STATUS::INVALID;
+    std::optional<LIBRARY_ERROR> error;
+};
+
+
+/// Storage for an actual loaded library (including library content owned by the plugin)
+struct KICOMMON_API LIB_DATA
+{
+    std::unique_ptr<IO_BASE> plugin;
+    const LIBRARY_TABLE_ROW* row = nullptr;
+    std::mutex mutex;
+    LIB_STATUS status;
+
+    int modify_hash;
+    std::vector<wxString> available_fields_cache;
+};
+
 
 /**
  * The interface used by the classes that actually can load IO plugins for the
@@ -167,9 +199,7 @@ public:
      *
      * @param aManager should usually be Pgm().GetLibraryManager() except in QA tests
      */
-    LIBRARY_MANAGER_ADAPTER( LIBRARY_MANAGER& aManager ) :
-            m_manager( aManager )
-    {}
+    LIBRARY_MANAGER_ADAPTER( LIBRARY_MANAGER& aManager );
 
     virtual ~LIBRARY_MANAGER_ADAPTER();
 
@@ -184,6 +214,24 @@ public:
     /// Retrieves the project library table for this adapter type, or nullopt if one doesn't exist
     std::optional<LIBRARY_TABLE*> ProjectTable() const;
 
+    std::optional<wxString> FindLibraryByURI( const wxString& aURI ) const;
+
+    /// Returns a list of library nicknames that are available (skips any that failed to load)
+    std::vector<wxString> GetLibraryNames() const;
+
+    /**
+     * Test for the existence of \a aNickname in the library tables.
+     *
+     * @param aCheckEnabled if true will only return true for enabled libraries
+     * @return true if a library \a aNickname exists in the loaded tables.
+     */
+    bool HasLibrary( const wxString& aNickname, bool aCheckEnabled = false ) const;
+
+    /// Deletes the given library from disk if it exists; returns true if deleted
+    bool DeleteLibrary( const wxString& aNickname );
+
+    std::optional<wxString> GetLibraryDescription( const wxString& aNickname ) const;
+
     /// Like LIBRARY_MANAGER::Rows but filtered to the LIBRARY_TABLE_TYPE of this adapter
     std::vector<LIBRARY_TABLE_ROW *> Rows(
         LIBRARY_TABLE_SCOPE aScope = LIBRARY_TABLE_SCOPE::BOTH,
@@ -195,22 +243,61 @@ public:
 
     /// Like LIBRARY_MANAGER::FindRowByURI but filtered to the LIBRARY_TABLE_TYPE of this adapter
     std::optional<LIBRARY_TABLE_ROW*> FindRowByURI( const wxString &aUri,
-                                                    LIBRARY_TABLE_SCOPE aScope =
-                                                            LIBRARY_TABLE_SCOPE::BOTH ) const;
-
-    virtual int GetModifyHash() const { return 0; };
+                                                    LIBRARY_TABLE_SCOPE aScope = LIBRARY_TABLE_SCOPE::BOTH ) const;
 
     /// Notify the adapter that the active project has changed
-    virtual void ProjectChanged() {};
+    virtual void ProjectChanged();
+
+    /// Loads all available libraries for this adapter type in the background
+    virtual void AsyncLoad() = 0;
+
+    /// Returns async load progress between 0.0 and 1.0, or nullopt if load is not in progress
+    std::optional<float> AsyncLoadProgress() const;
+
+    void BlockUntilLoaded();
+
+    bool IsLibraryLoaded( const wxString& aNickname );
 
     /// Return true if the given nickname exists and is not a read-only library
     virtual bool IsWritable( const wxString& aNickname ) const { return false; }
 
 protected:
+    static wxString getUri( const LIBRARY_TABLE_ROW* aRow );
 
-    virtual void doPreload() = 0;
+    std::optional<const LIB_DATA*> fetchIfLoaded( const wxString& aNickname ) const;
+
+    std::optional<LIB_DATA*> fetchIfLoaded( const wxString& aNickname );
+
+    /// Fetches a loaded library, triggering a load of that library if it isn't loaded yet
+    LIBRARY_RESULT<LIB_DATA*> loadIfNeeded( const wxString& aNickname );
+
+    /// Aborts any async load in progress; blocks until fully done aborting
+    void abortLoad();
+
+    /// Creates a concrete plugin for the given row
+    virtual LIBRARY_RESULT<IO_BASE*> createPlugin( const LIBRARY_TABLE_ROW* row ) = 0;
 
     LIBRARY_MANAGER& m_manager;
+
+    // The actual library content is held in an associated IO plugin
+    // TODO(JE) should this be an expected<LIB_ROW> so we can store the
+    // error result if a lib can't be loaded instead of retrying the load every time
+    // content is requested?
+    std::map<wxString, LIB_DATA> m_libraries;
+
+    std::mutex m_libraries_mutex;
+
+    std::atomic_bool m_abort;
+    std::vector<std::future<void>> m_futures;
+
+    std::atomic<size_t> m_loadCount;
+    size_t m_loadTotal;
+
+    // The global libraries, potentially shared between multiple different open
+    // projects, each of which has their own instance of this adapter class
+    static std::map<wxString, LIB_DATA> GlobalLibraries;
+
+    static std::mutex GlobalLibraryMutex;
 };
 
 

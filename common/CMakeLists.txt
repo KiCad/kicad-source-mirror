@@ -185,10 +185,9 @@ set( KICOMMON_SRCS
 
     database/database_lib_settings.cpp
 
-    design_block_lib_table.cpp
+    design_block.cpp
     design_block_io.cpp
-    design_block_info.cpp
-    design_block_info_impl.cpp
+    design_block_library_adapter.cpp
 
     advanced_config.cpp
     app_monitor.cpp

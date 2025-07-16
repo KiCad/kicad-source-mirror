@@ -26,8 +26,9 @@
 #include <wx/log.h>
 
 #include <lib_symbol.h>
-#include <locale_io.h>
 #include <libraries/symbol_library_adapter.h>
+
+#include <env_vars.h>
 #include <pgm_base.h>
 #include <project.h>
 #include <thread_pool.h>
@@ -35,36 +36,32 @@
 #include <settings/settings_manager.h>
 
 
-std::map<wxString, LIB_DATA> SYMBOL_LIBRARY_ADAPTER::GlobalLibraries;
-
-std::mutex SYMBOL_LIBRARY_ADAPTER::GlobalLibraryMutex;
-
 const char* SYMBOL_LIBRARY_ADAPTER::PropPowerSymsOnly = "pwr_sym_only";
 const char* SYMBOL_LIBRARY_ADAPTER::PropNonPowerSymsOnly = "non_pwr_sym_only";
 
 
 SYMBOL_LIBRARY_ADAPTER::SYMBOL_LIBRARY_ADAPTER( LIBRARY_MANAGER& aManager ) :
-            LIBRARY_MANAGER_ADAPTER( aManager ),
-            m_loadTotal( 0 )
+            LIBRARY_MANAGER_ADAPTER( aManager )
 {
 }
 
 
-void SYMBOL_LIBRARY_ADAPTER::ProjectChanged()
+wxString SYMBOL_LIBRARY_ADAPTER::GlobalPathEnvVariableName()
 {
-    abortLoad();
+    return ENV_VAR::GetVersionedEnvVarName( wxS( "SYMBOL_DIR" ) );
+}
 
-    {
-        std::lock_guard lock( m_libraries_mutex );
-        m_libraries.clear();
-    }
+
+SCH_IO* SYMBOL_LIBRARY_ADAPTER::plugin( const LIB_DATA* aRow )
+{
+    SCH_IO* ret = dynamic_cast<SCH_IO*>( aRow->plugin.get() );
+    wxCHECK( aRow->plugin && ret, nullptr );
+    return ret;
 }
 
 
 std::optional<LIB_STATUS> SYMBOL_LIBRARY_ADAPTER::LoadOne( const wxString& aNickname )
 {
-    LOCALE_IO toggle;
-
     if( LIBRARY_RESULT<LIB_DATA*> result = loadIfNeeded( aNickname ); result.has_value() )
     {
         LIB_DATA*       lib = *result;
@@ -76,15 +73,15 @@ std::optional<LIB_STATUS> SYMBOL_LIBRARY_ADAPTER::LoadOne( const wxString& aNick
         try
         {
             wxArrayString dummyList;
-            lib->plugin->EnumerateSymbolLib( dummyList, getUri( lib->row ), &options );
-            wxLogTrace( traceLibraries, "%s: library enumerated %zu items", aNickname, dummyList.size() );
+            plugin( lib )->EnumerateSymbolLib( dummyList, getUri( lib->row ), &options );
+            wxLogTrace( traceLibraries, "Sym: %s: library enumerated %zu items", aNickname, dummyList.size() );
             lib->status.load_status = LOAD_STATUS::LOADED;
         }
         catch( IO_ERROR& e )
         {
             lib->status.load_status = LOAD_STATUS::ERROR;
             lib->status.error = LIBRARY_ERROR( { e.What() } );
-            wxLogTrace( traceLibraries, "%s: plugin threw exception: %s", aNickname, e.What() );
+            wxLogTrace( traceLibraries, "Sym: %s: plugin threw exception: %s", aNickname, e.What() );
         }
 
         return lib->status;
@@ -94,115 +91,26 @@ std::optional<LIB_STATUS> SYMBOL_LIBRARY_ADAPTER::LoadOne( const wxString& aNick
 }
 
 
-LIBRARY_RESULT<LIB_DATA*> SYMBOL_LIBRARY_ADAPTER::loadIfNeeded( const wxString& aNickname )
+LIBRARY_RESULT<IO_BASE*> SYMBOL_LIBRARY_ADAPTER::createPlugin( const LIBRARY_TABLE_ROW* row )
 {
-    auto tryLoadFromScope =
-        [&]( LIBRARY_TABLE_SCOPE aScope, std::map<wxString, LIB_DATA>& aTarget,
-             std::mutex& aMutex ) -> LIBRARY_RESULT<LIB_DATA*>
-        {
-            bool present = false;
+    SCH_IO_MGR::SCH_FILE_T type = SCH_IO_MGR::EnumFromStr( row->Type() );
 
-            {
-                std::lock_guard lock( aMutex );
-                present = aTarget.contains( aNickname );
-            }
-
-            if( !present )
-            {
-                if( auto result = m_manager.GetRow( LIBRARY_TABLE_TYPE::SYMBOL, aNickname, aScope) )
-                {
-                    const LIBRARY_TABLE_ROW* row = *result;
-                    wxLogTrace( traceLibraries, "Library %s (%s) not yet loaded, will attempt...",
-                                aNickname, magic_enum::enum_name( aScope ) );
-
-                    // TODO(JE) do we maintain a precondition that URIs are absolute paths after expansion?
-                    SCH_IO_MGR::SCH_FILE_T type = SCH_IO_MGR::EnumFromStr( row->Type() );
-
-                    if( type == SCH_IO_MGR::SCH_FILE_UNKNOWN )
-                    {
-                        wxLogTrace( traceLibraries, "Plugin type %s is unknown!", row->Type() );
-                        wxString msg =
-                            wxString::Format( _( "Unknown library type %s " ), row->Type() );
-                        return tl::unexpected( LIBRARY_ERROR( msg ) );
-                    }
-
-                    SCH_IO* plugin = SCH_IO_MGR::FindPlugin( type );
-                    wxCHECK( plugin, tl::unexpected( LIBRARY_ERROR( _( "Internal error" ) ) ) );
-
-                    plugin->SetLibraryManagerAdapter( this );
-
-                    std::lock_guard lock( aMutex );
-
-                    aTarget[ row->Nickname() ].status.load_status = LOAD_STATUS::LOADING;
-                    aTarget[ row->Nickname() ].row = row;
-                    aTarget[ row->Nickname() ].plugin.reset( plugin );
-
-                    wxLogTrace( traceLibraries, "Library %s (%s) plugin created",
-                                aNickname, magic_enum::enum_name( aScope ) );
-
-                    return &aTarget.at( aNickname );
-                }
-
-                return nullptr;
-            }
-
-            return &aTarget.at( aNickname );
-        };
-
-    LIBRARY_RESULT<LIB_DATA*> result =
-            tryLoadFromScope( LIBRARY_TABLE_SCOPE::PROJECT, m_libraries, m_libraries_mutex );
-
-    if( !result.has_value() || *result )
-        return result;
-
-    result = tryLoadFromScope( LIBRARY_TABLE_SCOPE::GLOBAL, GlobalLibraries, GlobalLibraryMutex );
-
-    if( !result.has_value() || *result )
-        return result;
-
-    wxString msg = wxString::Format( _( "Library %s not found" ), aNickname );
-    return tl::unexpected( LIBRARY_ERROR( msg ) );
-}
-
-
-std::optional<const LIB_DATA*> SYMBOL_LIBRARY_ADAPTER::fetchIfLoaded(
-        const wxString& aNickname ) const
-{
-    if( m_libraries.contains( aNickname )
-        && m_libraries.at( aNickname ).status.load_status == LOAD_STATUS::LOADED )
+    if( type == SCH_IO_MGR::SCH_FILE_UNKNOWN )
     {
-        return &m_libraries.at( aNickname );
+        wxLogTrace( traceLibraries, "Sym: Plugin type %s is unknown!", row->Type() );
+        wxString msg = wxString::Format( _( "Unknown library type %s " ), row->Type() );
+        return tl::unexpected( LIBRARY_ERROR( msg ) );
     }
 
-    if( GlobalLibraries.contains( aNickname )
-        && GlobalLibraries.at( aNickname ).status.load_status == LOAD_STATUS::LOADED )
-    {
-        return &GlobalLibraries.at( aNickname );
-    }
+    SCH_IO* plugin = SCH_IO_MGR::FindPlugin( type );
+    wxCHECK( plugin, tl::unexpected( LIBRARY_ERROR( _( "Internal error" ) ) ) );
 
-    return std::nullopt;
-}
+    plugin->SetLibraryManagerAdapter( this );
 
+    wxLogTrace( traceLibraries, "Sym: Library %s (%s) plugin created",
+                 row->Nickname(), magic_enum::enum_name( row->Scope() ) );
 
-std::optional<LIB_DATA*> SYMBOL_LIBRARY_ADAPTER::fetchIfLoaded(
-        const wxString& aNickname )
-{
-    if( m_libraries.contains( aNickname ) && m_libraries.at( aNickname ).status.load_status == LOAD_STATUS::LOADED )
-        return &m_libraries.at( aNickname );
-
-    if( GlobalLibraries.contains( aNickname )
-        && GlobalLibraries.at( aNickname ).status.load_status == LOAD_STATUS::LOADED )
-    {
-        return &GlobalLibraries.at( aNickname );
-    }
-
-    return std::nullopt;
-}
-
-
-wxString SYMBOL_LIBRARY_ADAPTER::getUri( const LIBRARY_TABLE_ROW* aRow )
-{
-    return LIBRARY_MANAGER::ExpandURI( aRow->URI(), Pgm().GetSettingsManager().Prj() );
+    return plugin;
 }
 
 
@@ -224,11 +132,11 @@ std::vector<LIB_SYMBOL*> SYMBOL_LIBRARY_ADAPTER::GetSymbols( const wxString& aNi
 
     try
     {
-        lib->plugin->EnumerateSymbolLib( symbols, getUri( lib->row ), &options );
+        plugin( lib )->EnumerateSymbolLib( symbols, getUri( lib->row ), &options );
     }
     catch( IO_ERROR& e )
     {
-        wxLogTrace( traceLibraries, "Exception enumerating library %s: %s",
+        wxLogTrace( traceLibraries, "Sym: Exception enumerating library %s: %s",
                     lib->row->Nickname(), e.What() );
     }
 
@@ -243,8 +151,7 @@ std::vector<LIB_SYMBOL*> SYMBOL_LIBRARY_ADAPTER::GetSymbols( const wxString& aNi
 }
 
 
-std::vector<wxString> SYMBOL_LIBRARY_ADAPTER::GetSymbolNames( const wxString& aNickname,
-                                                                      SYMBOL_TYPE aType )
+std::vector<wxString> SYMBOL_LIBRARY_ADAPTER::GetSymbolNames( const wxString& aNickname, SYMBOL_TYPE aType )
 {
     // TODO(JE) can we kill wxArrayString in internal API?
     wxArrayString namesAS;
@@ -258,7 +165,7 @@ std::vector<wxString> SYMBOL_LIBRARY_ADAPTER::GetSymbolNames( const wxString& aN
         if( aType == SYMBOL_TYPE::POWER_ONLY )
             options[PropPowerSymsOnly] = "";
 
-        lib->plugin->EnumerateSymbolLib( namesAS, getUri( lib->row ), &options );
+        plugin( lib )->EnumerateSymbolLib( namesAS, getUri( lib->row ), &options );
     }
 
     for( const wxString& name : namesAS )
@@ -268,12 +175,11 @@ std::vector<wxString> SYMBOL_LIBRARY_ADAPTER::GetSymbolNames( const wxString& aN
 }
 
 
-LIB_SYMBOL* SYMBOL_LIBRARY_ADAPTER::LoadSymbol( const wxString& aNickname,
-                                                        const wxString& aName )
+LIB_SYMBOL* SYMBOL_LIBRARY_ADAPTER::LoadSymbol( const wxString& aNickname, const wxString& aName )
 {
     if( std::optional<const LIB_DATA*> lib = fetchIfLoaded( aNickname ) )
     {
-        if( LIB_SYMBOL* symbol = ( *lib )->plugin->LoadSymbol( getUri( ( *lib )->row ), aName ) )
+        if( LIB_SYMBOL* symbol = plugin( *lib )->LoadSymbol( getUri( ( *lib )->row ), aName ) )
         {
             LIB_ID id = symbol->GetLibId();
             id.SetLibNickname( ( *lib )->row->Nickname() );
@@ -316,21 +222,6 @@ bool SYMBOL_LIBRARY_ADAPTER::IsSymbolLibWritable( const wxString& aLib )
 }
 
 
-bool SYMBOL_LIBRARY_ADAPTER::IsLibraryLoaded( const wxString& aNickname )
-{
-    // TODO: row->IsOK() doesn't actually tell you if a library is loaded
-    // Once we are preloading libraries we can cache the status of plugin load instead
-
-    if( m_libraries.contains( aNickname ) )
-        return m_libraries[aNickname].row->IsOk();
-
-    if( GlobalLibraries.contains( aNickname ) )
-        return GlobalLibraries[aNickname].row->IsOk();
-
-    return false;
-}
-
-
 void SYMBOL_LIBRARY_ADAPTER::AsyncLoad()
 {
     // TODO(JE) any reason to clean these up earlier?
@@ -339,7 +230,7 @@ void SYMBOL_LIBRARY_ADAPTER::AsyncLoad()
 
     if( !m_futures.empty() )
     {
-        wxLogTrace( traceLibraries, "Cannot AsyncLoad, futures from a previous call remain!" );
+        wxLogTrace( traceLibraries, "Sym: Cannot AsyncLoad, futures from a previous call remain!" );
         return;
     }
 
@@ -350,7 +241,7 @@ void SYMBOL_LIBRARY_ADAPTER::AsyncLoad()
 
     if( m_loadTotal == 0 )
     {
-        wxLogTrace( traceLibraries, "AsyncLoad: no libraries left to load; exiting" );
+        wxLogTrace( traceLibraries, "Sym: AsyncLoad: no libraries left to load; exiting" );
         return;
     }
 
@@ -393,6 +284,9 @@ void SYMBOL_LIBRARY_ADAPTER::AsyncLoad()
         m_futures.emplace_back( tp.submit_task(
             [this, nickname, scope]()
             {
+                if( m_abort.load() )
+                    return;
+
                 LIBRARY_RESULT<LIB_DATA*> result = loadIfNeeded( nickname );
 
                 if( result.has_value() )
@@ -406,15 +300,15 @@ void SYMBOL_LIBRARY_ADAPTER::AsyncLoad()
 
                     try
                     {
-                        lib->plugin->EnumerateSymbolLib( dummyList, getUri( lib->row ), &options );
-                        wxLogTrace( traceLibraries, "%s: library enumerated %zu items", nickname, dummyList.size() );
+                        plugin( lib )->EnumerateSymbolLib( dummyList, getUri( lib->row ), &options );
+                        wxLogTrace( traceLibraries, "Sym: %s: library enumerated %zu items", nickname, dummyList.size() );
                         lib->status.load_status = LOAD_STATUS::LOADED;
                     }
                     catch( IO_ERROR& e )
                     {
                         lib->status.load_status = LOAD_STATUS::ERROR;
                         lib->status.error = LIBRARY_ERROR( { e.What() } );
-                        wxLogTrace( traceLibraries, "%s: plugin threw exception: %s", nickname, e.What() );
+                        wxLogTrace( traceLibraries, "Sym: %s: plugin threw exception: %s", nickname, e.What() );
                     }
                 }
                 else
@@ -435,7 +329,7 @@ void SYMBOL_LIBRARY_ADAPTER::AsyncLoad()
 
                     case LIBRARY_TABLE_SCOPE::PROJECT:
                     {
-                        wxLogTrace( traceLibraries, "project library error: %s: %s", nickname, result.error().message );
+                        wxLogTrace( traceLibraries, "Sym: project library error: %s: %s", nickname, result.error().message );
                         std::lock_guard lock( m_libraries_mutex );
 
                         m_libraries[nickname].status = LIB_STATUS( {
@@ -455,41 +349,7 @@ void SYMBOL_LIBRARY_ADAPTER::AsyncLoad()
             } ) );
     }
 
-    wxLogTrace( traceLibraries, "Started async load of %zu libraries", m_loadTotal );
-}
-
-
-void SYMBOL_LIBRARY_ADAPTER::abortLoad()
-{
-    if( m_futures.empty() )
-        return;
-
-    wxLogTrace( traceLibraries, "Aborting library load..." );
-    m_abort.store( true );
-
-    BlockUntilLoaded();
-    wxLogTrace( traceLibraries, "Aborted" );
-
-    m_abort.store( false );
-    m_futures.clear();
-    m_loadTotal = 0;
-}
-
-
-std::optional<float> SYMBOL_LIBRARY_ADAPTER::AsyncLoadProgress() const
-{
-    if( m_loadTotal == 0 )
-        return std::nullopt;
-
-    size_t loaded = m_loadCount.load();
-    return loaded / static_cast<float>( m_loadTotal );
-}
-
-
-void SYMBOL_LIBRARY_ADAPTER::BlockUntilLoaded()
-{
-    for( const std::future<void>& future : m_futures )
-        future.wait();
+    wxLogTrace( traceLibraries, "Sym: Started async load of %zu libraries", m_loadTotal );
 }
 
 
@@ -510,76 +370,8 @@ std::optional<LIBRARY_ERROR> SYMBOL_LIBRARY_ADAPTER::LibraryError(
 }
 
 
-std::optional<wxString> SYMBOL_LIBRARY_ADAPTER::FindLibraryByURI( const wxString& aURI ) const
-{
-    for( const LIBRARY_TABLE_ROW* row : m_manager.Rows( LIBRARY_TABLE_TYPE::SYMBOL ) )
-    {
-        if( LIBRARY_MANAGER::UrisAreEquivalent( row->URI(), aURI ) )
-            return row->Nickname();
-    }
-
-    return std::nullopt;
-}
-
-
-std::vector<wxString> SYMBOL_LIBRARY_ADAPTER::GetLibraryNames() const
-{
-    std::vector<wxString> ret;
-
-    for( const LIBRARY_TABLE_ROW* row : m_manager.Rows( LIBRARY_TABLE_TYPE::SYMBOL ) )
-    {
-        if( fetchIfLoaded( row->Nickname() ) )
-            ret.emplace_back( row->Nickname() );
-    }
-
-    return ret;
-}
-
-
-std::optional<wxString> SYMBOL_LIBRARY_ADAPTER::GetLibraryDescription( const wxString& aNickname ) const
-{
-    if( std::optional<const LIB_DATA*> optRow = fetchIfLoaded( aNickname ); optRow )
-        return ( *optRow )->row->Description();
-
-    return std::nullopt;
-}
-
-
-bool SYMBOL_LIBRARY_ADAPTER::HasLibrary( const wxString& aNickname,
-                                         bool aCheckEnabled ) const
-{
-    if( std::optional<const LIB_DATA*> r = fetchIfLoaded( aNickname ); r.has_value() )
-        return !aCheckEnabled || !( *r )->row->Disabled();
-
-    return false;
-}
-
-
-bool SYMBOL_LIBRARY_ADAPTER::DeleteLibrary( const wxString& aNickname )
-{
-    if( LIBRARY_RESULT<LIB_DATA*> result = loadIfNeeded( aNickname ); result.has_value() )
-    {
-        LIB_DATA* data = *result;
-        std::map<std::string, UTF8> options = data->row->GetOptionsMap();
-
-        try
-        {
-            return data->plugin->DeleteLibrary( getUri( data->row ), &options );
-        }
-        catch( ... )
-        {
-            return false;
-        }
-    }
-
-    return false;
-}
-
-
 bool SYMBOL_LIBRARY_ADAPTER::CreateLibrary( const wxString& aNickname )
 {
-    LOCALE_IO toggle;
-
     if( LIBRARY_RESULT<LIB_DATA*> result = loadIfNeeded( aNickname ); result.has_value() )
     {
         LIB_DATA* data = *result;
@@ -644,12 +436,12 @@ std::vector<wxString> SYMBOL_LIBRARY_ADAPTER::GetAvailableExtraFields(
     if( std::optional<LIB_DATA*> result = fetchIfLoaded( aNickname ) )
     {
         LIB_DATA* rowData = *result;
-        int hash = rowData->plugin->GetModifyHash();
+        int hash = plugin( rowData )->GetModifyHash();
 
         if( hash != rowData->modify_hash )
         {
             rowData->modify_hash = hash;
-            rowData->plugin->GetAvailableSymbolFields( rowData->available_fields_cache );
+            plugin( rowData )->GetAvailableSymbolFields( rowData->available_fields_cache );
         }
 
         return rowData->available_fields_cache;
@@ -664,7 +456,7 @@ bool SYMBOL_LIBRARY_ADAPTER::SupportsSubLibraries( const wxString& aNickname ) c
     if( std::optional<const LIB_DATA*> result = fetchIfLoaded( aNickname ) )
     {
         const LIB_DATA* rowData = *result;
-        return rowData->plugin->SupportsSubLibraries();
+        return plugin( rowData )->SupportsSubLibraries();
     }
 
     return false;
@@ -680,13 +472,13 @@ std::vector<SUB_LIBRARY> SYMBOL_LIBRARY_ADAPTER::GetSubLibraries(
     {
         const LIB_DATA* rowData = *result;
         std::vector<wxString> names;
-        rowData->plugin->GetSubLibraryNames( names );
+        plugin( rowData )->GetSubLibraryNames( names );
 
         for( const wxString& name : names )
         {
             ret.emplace_back( SUB_LIBRARY {
                     .nickname = name,
-                    .description = rowData->plugin->GetSubLibraryDescription( name )
+                    .description = plugin( rowData )->GetSubLibraryDescription( name )
                 } );
         }
     }
@@ -721,13 +513,13 @@ int SYMBOL_LIBRARY_ADAPTER::GetModifyHash() const
 {
     int hash = 0;
 
-    for( const LIBRARY_TABLE_ROW* row : m_manager.Rows( LIBRARY_TABLE_TYPE::SYMBOL ) )
+    for( const LIBRARY_TABLE_ROW* row : m_manager.Rows( Type() ) )
     {
         if( std::optional<const LIB_DATA*> result = fetchIfLoaded( row->Nickname() ) )
         {
             const LIB_DATA* rowData = *result;
             wxCHECK2( rowData->row, continue );
-            hash += rowData->plugin->GetModifyHash();
+            hash += plugin( rowData )->GetModifyHash();
         }
     }
 

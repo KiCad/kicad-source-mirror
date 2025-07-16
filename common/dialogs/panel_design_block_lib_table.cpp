@@ -42,8 +42,7 @@
 #include <project.h>
 #include <env_vars.h>
 #include <lib_id.h>
-#include <design_block_lib_table.h>
-#include <lib_table_lexer.h>
+#include <lib_table_base.h>
 #include <bitmaps.h>
 #include <lib_table_grid_tricks.h>
 #include <widgets/wx_grid.h>
@@ -54,6 +53,7 @@
 #include <pgm_base.h>
 #include <env_paths.h>
 #include <dialogs/panel_design_block_lib_table.h>
+#include <design_block_library_adapter.h>
 #include <dialogs/dialog_edit_library_tables.h>
 #include <dialogs/dialog_plugin_options.h>
 #include <kiway.h>
@@ -1062,7 +1062,7 @@ void PANEL_DESIGN_BLOCK_LIB_TABLE::populateEnvironReadOnlyTable()
     // not used yet.  It is automatically set by KiCad to the directory holding
     // the current project.
     unique.insert( PROJECT_VAR_NAME );
-    unique.insert( DESIGN_BLOCK_LIB_TABLE::GlobalPathEnvVariableName() );
+    unique.insert( DESIGN_BLOCK_LIBRARY_ADAPTER::GlobalPathEnvVariableName() );
 
     // This special environment variable is used to locate 3d shapes
     unique.insert( ENV_VAR::GetVersionedEnvVarName( wxS( "3DMODEL_DIR" ) ) );
@@ -1134,6 +1134,9 @@ void InvokeEditDesignBlockLibTable( KIWAY* aKiway, wxWindow *aParent )
         // Trigger a reload of the table and cancel an in-progress background load
         Pgm().GetLibraryManager().ProjectChanged();
     }
+
+    // Trigger a load of any new block libraries
+    Pgm().PreloadDesignBlockLibraries( aKiway );
 
     std::string payload = "";
     aKiway->ExpressMail( FRAME_SCH, MAIL_RELOAD_LIB, payload );

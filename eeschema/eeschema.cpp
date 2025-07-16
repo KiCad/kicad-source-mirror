@@ -34,7 +34,6 @@
 #include "eeschema_helpers.h"
 #include <eeschema_settings.h>
 #include <sch_edit_frame.h>
-#include <design_block_lib_table.h>
 #include <libraries/symbol_library_adapter.h>
 #include <symbol_edit_frame.h>
 #include <symbol_viewer_frame.h>
@@ -408,8 +407,6 @@ static struct IFACE : public KIFACE_BASE, public UNITS_PROVIDER
     void ProjectChanged() override;
 
 private:
-    bool loadGlobalDesignBlockLibTable();
-
     std::unique_ptr<EESCHEMA_JOBS_HANDLER> m_jobHandler;
     std::shared_ptr<BACKGROUND_JOB>        m_libraryPreloadBackgroundJob;
     std::future<void>                      m_libraryPreloadReturn;
@@ -452,15 +449,6 @@ bool IFACE::OnKifaceStart( PGM_BASE* aProgram, int aCtlBits, KIWAY* aKiway )
     aProgram->GetSettingsManager().RegisterSettings( KifaceSettings() );
 
     start_common( aCtlBits );
-
-    // TODO(JE) library tables - remove once design block table is handled
-    if( !loadGlobalDesignBlockLibTable() )
-    {
-        // we didnt get anywhere deregister the settings
-        aProgram->GetSettingsManager().FlushAndRelease( symSettings, false );
-        aProgram->GetSettingsManager().FlushAndRelease( KifaceSettings(), false );
-        return false;
-    }
 
     m_jobHandler = std::make_unique<EESCHEMA_JOBS_HANDLER>( aKiway );
 
@@ -550,41 +538,6 @@ void IFACE::ProjectChanged()
 {
     if( m_libraryPreloadInProgress.load() )
         m_libraryPreloadAbort.store( true );
-}
-
-
-bool IFACE::loadGlobalDesignBlockLibTable()
-{
-    try
-    {
-        wxFileName fn = DESIGN_BLOCK_LIB_TABLE::GetGlobalTableFileName();
-
-        if( !fn.FileExists() )
-        {
-            DESIGN_BLOCK_LIB_TABLE emptyTable;
-            emptyTable.Save( fn.GetFullPath() );
-        }
-
-        // The global table is not related to a specific project.  All projects
-        // will use the same global table.  So the KIFACE::OnKifaceStart() contract
-        // of avoiding anything project specific is not violated here.
-        if( !DESIGN_BLOCK_LIB_TABLE::LoadGlobalTable(
-                    DESIGN_BLOCK_LIB_TABLE::GetGlobalLibTable() ) )
-            return false;
-    }
-    catch( const IO_ERROR& ioe )
-    {
-        // if we are here, a incorrect global design block library table was found.
-        // Incorrect global design block library table is not a fatal error:
-        // the user just has to edit the (partially) loaded table.
-        wxString msg =
-                _( "An error occurred attempting to load the global design block library table.\n"
-                   "Please edit this global design block library table in Preferences menu." );
-
-        DisplayErrorMessage( nullptr, msg, ioe.What() );
-    }
-
-    return true;
 }
 
 

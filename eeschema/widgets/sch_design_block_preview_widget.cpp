@@ -24,7 +24,6 @@
 #include <gal/gal_display_options.h>
 #include <gal/graphics_abstraction_layer.h>
 #include <math/vector2wx.h>
-#include <design_block_lib_table.h>
 #include <design_block.h>
 #include <sch_preview_panel.h>
 #include <pgm_base.h>
@@ -205,7 +204,7 @@ void SCH_DESIGN_BLOCK_PREVIEW_WIDGET::DisplayDesignBlock( DESIGN_BLOCK* aDesignB
     if( aDesignBlock && wxFileExists( aDesignBlock->GetSchematicFile() ) )
     {
         m_previewItem = EESCHEMA_HELPERS::LoadSchematic( aDesignBlock->GetSchematicFile(), SCH_IO_MGR::SCH_KICAD,
-                                                         false, true );
+                                                         false, true, nullptr, false );
         BOX2I bBox;
 
         if( m_previewItem )

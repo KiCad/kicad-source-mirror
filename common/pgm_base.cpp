@@ -59,6 +59,7 @@
 #include <notifications_manager.h>
 #include <paths.h>
 #include <pgm_base.h>
+#include <design_block_library_adapter.h>
 #include <policy_keys.h>
 #include <python_scripting.h>
 #include <settings/common_settings.h>
@@ -864,6 +865,78 @@ void PGM_BASE::WritePdfBrowserInfos()
 {
     GetCommonSettings()->m_System.pdf_viewer_name = GetPdfBrowserName();
     GetCommonSettings()->m_System.use_system_pdf_viewer = m_use_system_pdf_browser;
+}
+
+
+void PGM_BASE::PreloadDesignBlockLibraries( KIWAY* aKiway )
+{
+    // TODO(JE) much of this code can be shared across the 3 preloads
+    constexpr static int interval = 150;
+    constexpr static int timeLimit = 120000;
+
+    if( m_libraryPreloadInProgress.load() )
+        return;
+
+    m_libraryPreloadBackgroundJob =
+            Pgm().GetBackgroundJobMonitor().Create( _( "Loading Design Block Libraries" ) );
+
+    auto preload =
+        [this, aKiway]() -> void
+        {
+            std::shared_ptr<BACKGROUND_JOB_REPORTER> reporter =
+                    m_libraryPreloadBackgroundJob->m_reporter;
+
+            DESIGN_BLOCK_LIBRARY_ADAPTER* adapter = aKiway->Prj().DesignBlockLibs();
+
+            int elapsed = 0;
+
+            reporter->Report( _( "Loading Design Block Libraries" ) );
+            adapter->AsyncLoad();
+
+            while( true )
+            {
+                if( m_libraryPreloadAbort.load() )
+                {
+                    m_libraryPreloadAbort.store( false );
+                    break;
+                }
+
+                std::this_thread::sleep_for( std::chrono::milliseconds( interval ) );
+
+                if( std::optional<float> loadStatus = adapter->AsyncLoadProgress() )
+                {
+                    float progress = *loadStatus;
+                    reporter->SetCurrentProgress( progress );
+
+                    if( progress >= 1 )
+                        break;
+                }
+                else
+                {
+                    reporter->SetCurrentProgress( 1 );
+                    break;
+                }
+
+                elapsed += interval;
+
+                if( elapsed > timeLimit )
+                    break;
+            }
+
+            adapter->BlockUntilLoaded();
+
+            Pgm().GetBackgroundJobMonitor().Remove( m_libraryPreloadBackgroundJob );
+            m_libraryPreloadBackgroundJob.reset();
+            m_libraryPreloadInProgress.store( false );
+
+            std::string payload = "";
+            aKiway->ExpressMail( FRAME_SCH, MAIL_RELOAD_LIB, payload );
+            aKiway->ExpressMail( FRAME_PCB_EDITOR, MAIL_RELOAD_LIB, payload );
+        };
+
+    thread_pool& tp = GetKiCadThreadPool();
+    m_libraryPreloadInProgress.store( true );
+    m_libraryPreloadReturn = tp.submit_task( preload );
 }
 
 

@@ -24,7 +24,7 @@
 #include <pgm_base.h>
 #include <kiway.h>
 #include <design_block.h>
-#include <design_block_lib_table.h>
+#include <design_block_library_adapter.h>
 #include <sch_design_block_pane.h>
 #include <sch_edit_frame.h>
 #include <sch_group.h>
@@ -119,6 +119,7 @@ bool SCH_EDIT_FRAME::SaveSheetAsDesignBlock( const wxString& aLibraryName, SCH_S
 
     // Save a temporary copy of the schematic file, as the plugin is just going to move it
     wxString tempFile = wxFileName::CreateTempFileName( "design_block" );
+
     if( !saveSchematicFile( aSheetPath.Last(), tempFile ) )
     {
         DisplayErrorMessage( this, _( "Error saving temporary schematic file to create design block." ) );
@@ -132,7 +133,8 @@ bool SCH_EDIT_FRAME::SaveSheetAsDesignBlock( const wxString& aLibraryName, SCH_S
 
     try
     {
-        success = Prj().DesignBlockLibs()->DesignBlockSave( aLibraryName, &blk ) == DESIGN_BLOCK_LIB_TABLE::SAVE_OK;
+        success = Prj().DesignBlockLibs()->SaveDesignBlock( aLibraryName, &blk )
+                  == DESIGN_BLOCK_LIBRARY_ADAPTER::SAVE_OK;
     }
     catch( const IO_ERROR& ioe )
     {
@@ -172,7 +174,7 @@ bool SCH_EDIT_FRAME::SaveSheetToDesignBlock( const LIB_ID& aLibId, SCH_SHEET_PAT
 
     try
     {
-        blk.reset( Prj().DesignBlockLibs()->DesignBlockLoad( aLibId.GetLibNickname(), aLibId.GetLibItemName() ) );
+        blk.reset( Prj().DesignBlockLibs()->LoadDesignBlock( aLibId.GetLibNickname(), aLibId.GetLibItemName() ) );
     }
     catch( const IO_ERROR& ioe )
     {
@@ -214,8 +216,8 @@ bool SCH_EDIT_FRAME::SaveSheetToDesignBlock( const LIB_ID& aLibId, SCH_SHEET_PAT
 
     try
     {
-        success = Prj().DesignBlockLibs()->DesignBlockSave( aLibId.GetLibNickname(), blk.get() )
-                  == DESIGN_BLOCK_LIB_TABLE::SAVE_OK;
+        success = Prj().DesignBlockLibs()->SaveDesignBlock( aLibId.GetLibNickname(), blk.get() )
+                  == DESIGN_BLOCK_LIBRARY_ADAPTER::SAVE_OK;
     }
     catch( const IO_ERROR& ioe )
     {
@@ -356,7 +358,8 @@ bool SCH_EDIT_FRAME::SaveSelectionAsDesignBlock( const wxString& aLibraryName )
 
     try
     {
-        success = Prj().DesignBlockLibs()->DesignBlockSave( aLibraryName, &blk ) == DESIGN_BLOCK_LIB_TABLE::SAVE_OK;
+        success = Prj().DesignBlockLibs()->SaveDesignBlock( aLibraryName, &blk )
+                  == DESIGN_BLOCK_LIBRARY_ADAPTER::SAVE_OK;
     }
     catch( const IO_ERROR& ioe )
     {
@@ -438,7 +441,7 @@ bool SCH_EDIT_FRAME::SaveSelectionToDesignBlock( const LIB_ID& aLibId )
 
     try
     {
-        blk.reset( Prj().DesignBlockLibs()->DesignBlockLoad( aLibId.GetLibNickname(), aLibId.GetLibItemName() ) );
+        blk.reset( Prj().DesignBlockLibs()->LoadDesignBlock( aLibId.GetLibNickname(), aLibId.GetLibItemName() ) );
     }
     catch( const IO_ERROR& ioe )
     {
@@ -499,8 +502,8 @@ bool SCH_EDIT_FRAME::SaveSelectionToDesignBlock( const LIB_ID& aLibId )
 
     try
     {
-        success = Prj().DesignBlockLibs()->DesignBlockSave( aLibId.GetLibNickname(), blk.get() )
-                  == DESIGN_BLOCK_LIB_TABLE::SAVE_OK;
+        success = Prj().DesignBlockLibs()->SaveDesignBlock( aLibId.GetLibNickname(), blk.get() )
+                  == DESIGN_BLOCK_LIBRARY_ADAPTER::SAVE_OK;
 
         // If we had a group, we need to reselect it
         if( group )

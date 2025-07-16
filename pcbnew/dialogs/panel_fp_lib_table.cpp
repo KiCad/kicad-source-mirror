@@ -85,36 +85,10 @@ class FP_LIB_TABLE_GRID : public LIB_TABLE_GRID
     friend class PANEL_FP_LIB_TABLE;
     friend class FP_GRID_TRICKS;
 
-protected:
-    LIBRARY_TABLE_ROW& at( size_t aIndex ) override { return m_table.Rows().at( aIndex ); }
-
-    size_t size() const override { return m_table.Rows().size(); }
-
-    LIBRARY_TABLE_ROW makeNewRow() override
-    {
-        return LIBRARY_TABLE_ROW();
-    }
-
-    LIBRARY_TABLE_ROWS_ITER begin() override { return m_table.Rows().begin(); }
-
-    LIBRARY_TABLE_ROWS_ITER insert( LIBRARY_TABLE_ROWS_ITER aIterator,
-                                    const LIBRARY_TABLE_ROW& aRow ) override
-    {
-        return m_table.Rows().insert( aIterator, aRow );
-    }
-
-    void push_back( const LIBRARY_TABLE_ROW& aRow ) override { m_table.Rows().push_back( aRow ); }
-
-    LIBRARY_TABLE_ROWS_ITER erase( LIBRARY_TABLE_ROWS_ITER aFirst,
-                                   LIBRARY_TABLE_ROWS_ITER aLast ) override
-    {
-        return m_table.Rows().erase( aFirst, aLast );
-    }
-
 public:
 
     FP_LIB_TABLE_GRID( const LIBRARY_TABLE& aTableToEdit ) :
-            m_table( aTableToEdit )
+            LIB_TABLE_GRID( aTableToEdit )
     {
     }
 
@@ -137,10 +111,6 @@ public:
             SetValue( aRow, COL_TYPE, PCB_IO_MGR::ShowType( pluginType ) );
         }
     }
-
-private:
-    /// Working copy of a table
-    LIBRARY_TABLE m_table;
 };
 
 

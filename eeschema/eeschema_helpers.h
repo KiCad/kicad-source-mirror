@@ -46,11 +46,13 @@ public:
     static PROJECT*          GetDefaultProject( bool aSetActive );
     static SCHEMATIC*        LoadSchematic( const wxString& aFileName, bool aSetActive,
                                             bool aForceDefaultProject,
-                                            PROJECT* aProject = nullptr );
+                                            PROJECT* aProject = nullptr,
+                                            bool aCalculateConnectivity = true );
     static SCHEMATIC*        LoadSchematic( const wxString& aFileName,
                                             SCH_IO_MGR::SCH_FILE_T aFormat,
                                             bool aSetActive, bool aForceDefaultProject,
-                                            PROJECT* aProject = nullptr );
+                                            PROJECT* aProject = nullptr,
+                                            bool aCalculateConnectivity = true );
 
 private:
     static SCH_EDIT_FRAME*   s_SchEditFrame;

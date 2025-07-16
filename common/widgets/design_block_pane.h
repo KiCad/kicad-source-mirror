@@ -24,6 +24,7 @@
 #define DESIGN_BLOCK_PANE_H
 
 #include <design_block_tree_model_adapter.h>
+#include <libraries/library_table.h>
 #include <widgets/html_window.h>
 #include <widgets/wx_panel.h>
 #include <wx/checkbox.h>
@@ -76,7 +77,7 @@ public:
      * @return true if successfully added.
      */
     bool AddDesignBlockLibrary( const wxString& aDialogTitle, const wxString& aFilename,
-                                DESIGN_BLOCK_LIB_TABLE* aTable );
+                                LIBRARY_TABLE_SCOPE aScope );
 
     bool DeleteDesignBlockLibrary( const wxString& aLibName, bool aConfirm );
 

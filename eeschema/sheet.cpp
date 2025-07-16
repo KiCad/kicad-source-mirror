@@ -286,9 +286,7 @@ bool SCH_EDIT_FRAME::LoadSheetFromFile( SCH_SHEET* aSheet, SCH_SHEET_PATH* aCurr
     }
 
     SYMBOL_LIBRARY_ADAPTER* adapter = PROJECT_SCH::SymbolLibAdapter( &Prj() );
-    std::optional<LIBRARY_TABLE*> optTable = adapter->ProjectTable();
-    wxCHECK( optTable, false );
-    LIBRARY_TABLE* projectTable = *optTable;
+    LIBRARY_TABLE* projectTable = adapter->ProjectTable().value_or( nullptr );
 
     SCH_SHEET_LIST loadedSheets( tmpSheet.get() );
     Schematic().RefreshHierarchy();
@@ -364,7 +362,7 @@ bool SCH_EDIT_FRAME::LoadSheetFromFile( SCH_SHEET* aSheet, SCH_SHEET_PATH* aCurr
                     return false;
             }
         }
-        else if( fileName.GetPathWithSep() != Prj().GetProjectPath() )
+        else if( fileName.GetPathWithSep() != Prj().GetProjectPath() && projectTable )
         {
             // A schematic loaded from a path other than the current project path.
 
@@ -564,7 +562,7 @@ bool SCH_EDIT_FRAME::LoadSheetFromFile( SCH_SHEET* aSheet, SCH_SHEET_PATH* aCurr
     SCH_SCREEN* newScreen = tmpSheet->GetScreen();
     wxCHECK_MSG( newScreen, false, "No screen defined for sheet." );
 
-    if( libTableChanged )
+    if( libTableChanged && projectTable )
     {
         Pgm().GetLibraryManager().Save( projectTable ).map_error(
             [&]( const LIBRARY_ERROR& aError )

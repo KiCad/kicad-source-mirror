@@ -42,7 +42,7 @@
 /// default name for nameless projects
 #define NAMELESS_PROJECT _( "untitled" )
 
-class DESIGN_BLOCK_LIB_TABLE;
+class DESIGN_BLOCK_LIBRARY_ADAPTER;
 class FP_LIB_TABLE;
 class LEGACY_SYMBOL_LIBS;
 class SEARCH_STACK;
@@ -297,7 +297,7 @@ public:
     /**
      * Return the table of design block libraries.
      */
-    virtual DESIGN_BLOCK_LIB_TABLE* DesignBlockLibs();
+    virtual DESIGN_BLOCK_LIBRARY_ADAPTER* DesignBlockLibs();
 
     void SetProjectLock( LOCKFILE* aLockFile );
 

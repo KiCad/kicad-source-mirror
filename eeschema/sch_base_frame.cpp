@@ -51,7 +51,6 @@
 #include <sch_base_frame.h>
 #include <dialogs/dialog_sch_find.h>
 #include <design_block.h>
-#include <design_block_lib_table.h>
 #include <thread_pool.h>
 #include <tool/actions.h>
 #include <tool/action_toolbar.h>

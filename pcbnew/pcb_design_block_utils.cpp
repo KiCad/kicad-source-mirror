@@ -25,7 +25,7 @@
 #include <kiway.h>
 #include <board_commit.h>
 #include <design_block.h>
-#include <design_block_lib_table.h>
+#include <design_block_library_adapter.h>
 #include <footprint.h>
 #include <pad.h>
 #include <pcb_group.h>
@@ -162,7 +162,8 @@ bool PCB_EDIT_FRAME::SaveBoardAsDesignBlock( const wxString& aLibraryName )
 
     try
     {
-        success = Prj().DesignBlockLibs()->DesignBlockSave( aLibraryName, &blk ) == DESIGN_BLOCK_LIB_TABLE::SAVE_OK;
+        success = Prj().DesignBlockLibs()->SaveDesignBlock( aLibraryName, &blk )
+                == DESIGN_BLOCK_LIBRARY_ADAPTER::SAVE_OK;
     }
     catch( const IO_ERROR& ioe )
     {
@@ -192,7 +193,7 @@ bool PCB_EDIT_FRAME::SaveBoardToDesignBlock( const LIB_ID& aLibId )
 
     try
     {
-        blk.reset( Prj().DesignBlockLibs()->DesignBlockLoad( aLibId.GetLibNickname(), aLibId.GetLibItemName() ) );
+        blk.reset( Prj().DesignBlockLibs()->LoadDesignBlock( aLibId.GetLibNickname(), aLibId.GetLibItemName() ) );
     }
     catch( const IO_ERROR& ioe )
     {
@@ -219,8 +220,8 @@ bool PCB_EDIT_FRAME::SaveBoardToDesignBlock( const LIB_ID& aLibId )
 
     try
     {
-        success = Prj().DesignBlockLibs()->DesignBlockSave( aLibId.GetLibNickname(), blk.get() )
-                  == DESIGN_BLOCK_LIB_TABLE::SAVE_OK;
+        success = Prj().DesignBlockLibs()->SaveDesignBlock( aLibId.GetLibNickname(), blk.get() )
+                  == DESIGN_BLOCK_LIBRARY_ADAPTER::SAVE_OK;
     }
     catch( const IO_ERROR& ioe )
     {
@@ -325,7 +326,8 @@ bool PCB_EDIT_FRAME::saveSelectionToDesignBlock( const wxString& aNickname, PCB_
 
     try
     {
-        success = Prj().DesignBlockLibs()->DesignBlockSave( aNickname, &aBlock ) == DESIGN_BLOCK_LIB_TABLE::SAVE_OK;
+        success = Prj().DesignBlockLibs()->SaveDesignBlock( aNickname, &aBlock )
+                == DESIGN_BLOCK_LIBRARY_ADAPTER::SAVE_OK;
     }
     catch( const IO_ERROR& ioe )
     {
@@ -422,7 +424,7 @@ bool PCB_EDIT_FRAME::SaveSelectionToDesignBlock( const LIB_ID& aLibId )
 
     try
     {
-        blk.reset( Prj().DesignBlockLibs()->DesignBlockLoad( aLibId.GetLibNickname(), aLibId.GetLibItemName() ) );
+        blk.reset( Prj().DesignBlockLibs()->LoadDesignBlock( aLibId.GetLibNickname(), aLibId.GetLibItemName() ) );
     }
     catch( const IO_ERROR& ioe )
     {

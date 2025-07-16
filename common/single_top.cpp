@@ -48,6 +48,8 @@
 #include <kiway_player.h>
 #include <macros.h>
 #include <confirm.h>
+#include <design_block_library_adapter.h>
+
 #include <settings/kicad_settings.h>
 #include <settings/settings_manager.h>
 #include <paths.h>
@@ -409,6 +411,8 @@ bool PGM_SINGLE_TOP::OnPgmInit()
     // Preload libraries, since for single-top this won't have been done earlier
     if( KIFACE* topFrame = Kiway.KiFACE( KIWAY::KifaceType( TOP_FRAME ) ) )
         topFrame->PreloadLibraries( &Kiway.Prj() );
+
+    PreloadDesignBlockLibraries( &Kiway );
 
     App().SetTopWindow( frame );      // wxApp gets a face.
     App().SetAppDisplayName( frame->GetAboutTitle() );

@@ -29,11 +29,13 @@
 #include <pgm_base.h>
 #include <confirm.h>
 #include <core/kicad_algo.h>
-#include <design_block_lib_table.h>
+#include <design_block_library_adapter.h>
 #include <fp_lib_table.h>
 #include <string_utils.h>
 #include <kiface_ids.h>
 #include <kiway.h>
+#include <libraries/library_manager.h>
+#include <libraries/library_table.h>
 #include <lockfile.h>
 #include <macros.h>
 #include <git/project_git_utils.h>
@@ -442,39 +444,23 @@ FP_LIB_TABLE* PROJECT::PcbFootprintLibs( KIWAY& aKiway )
 }
 
 
-DESIGN_BLOCK_LIB_TABLE* PROJECT::DesignBlockLibs()
+DESIGN_BLOCK_LIBRARY_ADAPTER* PROJECT::DesignBlockLibs()
 {
-    // This is a lazy loading function, it loads the project specific table when
-    // that table is asked for, not before.
+    LIBRARY_MANAGER& mgr = Pgm().GetLibraryManager();
+    std::optional<LIBRARY_MANAGER_ADAPTER*> adapter = mgr.Adapter( LIBRARY_TABLE_TYPE::DESIGN_BLOCK );
 
-    DESIGN_BLOCK_LIB_TABLE* tbl = (DESIGN_BLOCK_LIB_TABLE*) GetElem( ELEM::DESIGN_BLOCK_LIB_TABLE );
-
-    if( tbl )
+    if( !adapter )
     {
-        wxASSERT( tbl->ProjectElementType() == PROJECT::ELEM::DESIGN_BLOCK_LIB_TABLE );
-    }
-    else
-    {
-        try
-        {
-            tbl = new DESIGN_BLOCK_LIB_TABLE( &DESIGN_BLOCK_LIB_TABLE::GetGlobalLibTable() );
-            tbl->Load( DesignBlockLibTblName() );
+        mgr.RegisterAdapter( LIBRARY_TABLE_TYPE::DESIGN_BLOCK,
+                             std::make_unique<DESIGN_BLOCK_LIBRARY_ADAPTER>( mgr ) );
 
-            SetElem( ELEM::DESIGN_BLOCK_LIB_TABLE, tbl );
-        }
-        catch( const IO_ERROR& ioe )
-        {
-            DisplayErrorMessage( nullptr, _( "Error loading project design block library table." ),
-                                 ioe.What() );
-        }
-        catch( ... )
-        {
-            DisplayErrorMessage( nullptr,
-                                 _( "Error loading project design block library table." ) );
-        }
+        std::optional<LIBRARY_MANAGER_ADAPTER*> created = mgr.Adapter( LIBRARY_TABLE_TYPE::DESIGN_BLOCK );
+        wxCHECK( created && ( *created )->Type() == LIBRARY_TABLE_TYPE::DESIGN_BLOCK, nullptr );
+        return static_cast<DESIGN_BLOCK_LIBRARY_ADAPTER*>( *created );
     }
 
-    return tbl;
+    wxCHECK( ( *adapter )->Type() == LIBRARY_TABLE_TYPE::DESIGN_BLOCK, nullptr );
+    return static_cast<DESIGN_BLOCK_LIBRARY_ADAPTER*>( *adapter );
 }
 
 

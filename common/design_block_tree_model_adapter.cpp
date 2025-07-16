@@ -29,12 +29,11 @@
 #include <string_utils.h>
 #include <eda_pattern_match.h>
 #include <design_block.h>
-#include <design_block_lib_table.h>
-#include <design_block_info.h>
+#include <design_block_library_adapter.h>
 #include <design_block_tree_model_adapter.h>
 
 wxObjectDataPtr<LIB_TREE_MODEL_ADAPTER>
-DESIGN_BLOCK_TREE_MODEL_ADAPTER::Create( EDA_BASE_FRAME* aParent, LIB_TABLE* aLibs,
+DESIGN_BLOCK_TREE_MODEL_ADAPTER::Create( EDA_BASE_FRAME* aParent, DESIGN_BLOCK_LIBRARY_ADAPTER* aLibs,
                                          APP_SETTINGS_BASE::LIB_TREE& aSettings,
                                          TOOL_INTERACTIVE* aContextMenuTool )
 {
@@ -43,12 +42,12 @@ DESIGN_BLOCK_TREE_MODEL_ADAPTER::Create( EDA_BASE_FRAME* aParent, LIB_TABLE* aLi
 }
 
 
-DESIGN_BLOCK_TREE_MODEL_ADAPTER::DESIGN_BLOCK_TREE_MODEL_ADAPTER( EDA_BASE_FRAME* aParent, LIB_TABLE* aLibs,
+DESIGN_BLOCK_TREE_MODEL_ADAPTER::DESIGN_BLOCK_TREE_MODEL_ADAPTER( EDA_BASE_FRAME* aParent, DESIGN_BLOCK_LIBRARY_ADAPTER* aLibs,
                                                                   APP_SETTINGS_BASE::LIB_TREE& aSettings,
                                                                   TOOL_INTERACTIVE*            aContextMenuTool ) :
         LIB_TREE_MODEL_ADAPTER( aParent, wxT( "pinned_design_block_libs" ),
                                 Kiface().KifaceSettings()->m_DesignBlockChooserPanel.tree ),
-        m_libs( (DESIGN_BLOCK_LIB_TABLE*) aLibs ),
+        m_libs( aLibs ),
         m_frame( aParent ),
         m_contextMenuTool( aContextMenuTool )
 {
@@ -59,24 +58,19 @@ void DESIGN_BLOCK_TREE_MODEL_ADAPTER::AddLibraries( EDA_BASE_FRAME* aParent )
 {
     COMMON_SETTINGS* cfg = Pgm().GetCommonSettings();
     PROJECT_FILE&    project = aParent->Prj().GetProjectFile();
+    LIBRARY_MANAGER& manager = Pgm().GetLibraryManager();
 
-    for( const wxString& libName : m_libs->GetLogicalLibs() )
+    for( const LIBRARY_TABLE_ROW* row : manager.Rows( LIBRARY_TABLE_TYPE::DESIGN_BLOCK ) )
     {
-        const DESIGN_BLOCK_LIB_TABLE_ROW* library = nullptr;
-
-        try
-        {
-            library = m_libs->FindRow( libName, true );
-        }
-        catch( ... )
-        {
-            // Skip loading this library, if not exists/ not found
+        if( row->Hidden() )
             continue;
-        }
+
+        wxString libName = row->Nickname();
+
         bool pinned = alg::contains( cfg->m_Session.pinned_design_block_libs, libName )
                       || alg::contains( project.m_PinnedDesignBlockLibs, libName );
 
-        DoAddLibrary( libName, library->GetDescr(), getDesignBlocks( aParent, libName ), pinned, true );
+        DoAddLibrary( libName, row->Description(), getDesignBlocks( aParent, libName ), pinned, true );
     }
 
     m_tree.AssignIntrinsicRanks( m_shownColumns );
@@ -94,21 +88,17 @@ std::vector<LIB_TREE_ITEM*> DESIGN_BLOCK_TREE_MODEL_ADAPTER::getDesignBlocks( ED
 {
     std::vector<LIB_TREE_ITEM*> libList;
 
-    auto fullListStart = DESIGN_BLOCK_LIB_TABLE::GetGlobalList().GetList().begin();
-    auto fullListEnd = DESIGN_BLOCK_LIB_TABLE::GetGlobalList().GetList().end();
+    DESIGN_BLOCK_LIBRARY_ADAPTER* libs = m_frame->Prj().DesignBlockLibs();
 
-    std::unique_ptr<DESIGN_BLOCK_INFO> dummy = std::make_unique<DESIGN_BLOCK_INFO_IMPL>( aLibName, wxEmptyString );
+    std::vector<DESIGN_BLOCK*> blocks = libs->GetDesignBlocks( aLibName );
 
-    // List is sorted, so use a binary search to find the range of footnotes for our library
-    auto libBounds = std::equal_range(
-            fullListStart, fullListEnd, dummy,
-            []( const std::unique_ptr<DESIGN_BLOCK_INFO>& a, const std::unique_ptr<DESIGN_BLOCK_INFO>& b )
-            {
-                return StrNumCmp( a->GetLibNickname(), b->GetLibNickname(), false ) < 0;
-            } );
-
-    for( auto i = libBounds.first; i != libBounds.second; ++i )
-        libList.push_back( i->get() );
+    for( DESIGN_BLOCK* block : blocks )
+    {
+        LIB_ID id = block->GetLIB_ID();
+        id.SetLibNickname( aLibName );
+        block->SetLibId( id );
+        libList.emplace_back( block );
+    }
 
     return libList;
 }

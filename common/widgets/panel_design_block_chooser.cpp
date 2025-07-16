@@ -24,7 +24,7 @@
 #include <pgm_base.h>
 #include <design_block.h>
 #include <design_block_pane.h>
-#include <design_block_lib_table.h>
+#include <design_block_library_adapter.h>
 #include <panel_design_block_chooser.h>
 #include <design_block_preview_widget.h>
 #include <kiface_base.h>
@@ -65,23 +65,7 @@ PANEL_DESIGN_BLOCK_CHOOSER::PANEL_DESIGN_BLOCK_CHOOSER( EDA_DRAW_FRAME* aFrame, 
         m_selectHandler( std::move( aSelectHandler ) ),
         m_historyList( aHistoryList )
 {
-    DESIGN_BLOCK_LIB_TABLE* libs = m_frame->Prj().DesignBlockLibs();
-
-    // Load design block files:
-    auto* progressReporter = new WX_PROGRESS_REPORTER( aParent, _( "Load Design Block Libraries" ), 1,
-                                                       PR_CAN_ABORT );
-
-    DESIGN_BLOCK_LIB_TABLE::GetGlobalList().ReadDesignBlockFiles( libs, nullptr, progressReporter );
-
-    // Force immediate deletion of the WX_PROGRESS_REPORTER.  Do not use Destroy(), or use
-    // Destroy() followed by wxSafeYield() because on Windows, APP_PROGRESS_DIALOG and
-    // WX_PROGRESS_REPORTER have some side effects on the event loop manager.  For instance, a
-    // subsequent call to ShowModal() or ShowQuasiModal() for a dialog following the use of a
-    // WX_PROGRESS_REPORTER results in incorrect modal or quasi modal behavior.
-    delete progressReporter;
-
-    if( DESIGN_BLOCK_LIB_TABLE::GetGlobalList().GetErrorCount() )
-        displayErrors( aFrame );
+    DESIGN_BLOCK_LIBRARY_ADAPTER* libs = m_frame->Prj().DesignBlockLibs();
 
     m_adapter = DESIGN_BLOCK_TREE_MODEL_ADAPTER::Create(
             m_frame, libs, m_frame->config()->m_DesignBlockChooserPanel.tree, aContextMenuTool );
@@ -263,24 +247,6 @@ void PANEL_DESIGN_BLOCK_CHOOSER::RefreshLibs( bool aProgress )
     // Clear all existing libraries then re-add
     adapter->ClearLibraries();
 
-    // Read the libraries from disk if they've changed
-    DESIGN_BLOCK_LIB_TABLE* fpTable = m_frame->Prj().DesignBlockLibs();
-    adapter->SetLibTable( fpTable );
-
-    // Sync FOOTPRINT_INFO list to the libraries on disk
-    if( aProgress )
-    {
-        WX_PROGRESS_REPORTER progressReporter( this, _( "Update Design Block Libraries" ), 2,
-                                               PR_CAN_ABORT );
-
-        DESIGN_BLOCK_LIB_TABLE::GetGlobalList().ReadDesignBlockFiles( fpTable, nullptr, &progressReporter );
-        progressReporter.Show( false );
-    }
-    else
-    {
-        DESIGN_BLOCK_LIB_TABLE::GetGlobalList().ReadDesignBlockFiles( fpTable, nullptr, nullptr );
-    }
-
     rebuildHistoryNode();
 
     if( !m_historyList.empty() )
@@ -289,6 +255,7 @@ void PANEL_DESIGN_BLOCK_CHOOSER::RefreshLibs( bool aProgress )
     adapter->AddLibraries( m_frame );
 
     m_tree->Regenerate( true );
+    Refresh();
 }
 
 
@@ -405,14 +372,15 @@ void PANEL_DESIGN_BLOCK_CHOOSER::rebuildHistoryNode()
     // Build the history list
     std::vector<LIB_TREE_ITEM*> historyInfos;
 
+    DESIGN_BLOCK_LIBRARY_ADAPTER* adapter = m_frame->Prj().DesignBlockLibs();
+
     for( const LIB_ID& lib : m_historyList )
     {
-        LIB_TREE_ITEM* fp_info = DESIGN_BLOCK_LIB_TABLE::GetGlobalList().GetDesignBlockInfo( lib.GetLibNickname(),
-                                                                                             lib.GetLibItemName() );
+        LIB_TREE_ITEM* info = adapter->LoadDesignBlock( lib.GetLibNickname(), lib.GetLibItemName() );
 
         // this can be null, for example, if the design block has been deleted from a library.
-        if( fp_info != nullptr )
-            historyInfos.push_back( fp_info );
+        if( info != nullptr )
+            historyInfos.push_back( info );
     }
 
     m_adapter->DoAddLibrary( wxT( "-- " ) + _( "Recently Used" ) + wxT( " --" ), wxEmptyString,
@@ -432,7 +400,8 @@ void PANEL_DESIGN_BLOCK_CHOOSER::displayErrors( wxTopLevelWindow* aWindow )
     dlg.MessageSet( _( "Errors were encountered loading design blocks:" ) );
 
     wxString msg;
-
+    // TODO(JE) library tables - this function isn't even called, but would need fixup if so
+#if 0
     while( std::unique_ptr<IO_ERROR> error = DESIGN_BLOCK_LIB_TABLE::GetGlobalList().PopError() )
     {
         wxString tmp = EscapeHTML( error->Problem() );
@@ -441,7 +410,7 @@ void PANEL_DESIGN_BLOCK_CHOOSER::displayErrors( wxTopLevelWindow* aWindow )
         tmp.Replace( wxS( "\n" ), wxS( "<BR>" ) );
         msg += wxT( "<p>" ) + tmp + wxT( "</p>" );
     }
-
+#endif
     dlg.AddHTML_Text( msg );
 
     dlg.ShowModal();

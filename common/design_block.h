@@ -27,14 +27,23 @@
 
 #include <kicommon.h>
 #include <lib_id.h>
+#include <lib_tree_item.h>
 #include <json_common.h>
 
 
-class KICOMMON_API DESIGN_BLOCK
+class KICOMMON_API DESIGN_BLOCK : public LIB_TREE_ITEM
 {
 public:
+    // LIB_TREE_ITEM interface
+    LIB_ID GetLIB_ID() const override { return GetLibId(); }
+    wxString GetName() const override { return m_lib_id.GetLibItemName(); }
+    wxString GetLibNickname() const override { return m_lib_id.GetLibNickname(); }
+    wxString GetDesc() override { return GetLibDescription(); }
+    std::vector<SEARCH_TERM> GetSearchTerms() override;
+
     void          SetLibId( const LIB_ID& aName ) { m_lib_id = aName; }
     const LIB_ID& GetLibId() const { return m_lib_id; }
+    LIB_ID& GetLibId() { return m_lib_id; }
 
     const wxString& GetLibDescription() const { return m_libDescription; }
     void            SetLibDescription( const wxString& aDesc ) { m_libDescription = aDesc; }

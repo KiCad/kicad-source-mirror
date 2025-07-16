@@ -24,7 +24,6 @@
 #include <gal/gal_display_options.h>
 #include <gal/graphics_abstraction_layer.h>
 #include <math/vector2wx.h>
-#include <design_block_lib_table.h>
 #include <design_block.h>
 #include <footprint_preview_panel.h>
 #include <pgm_base.h>
