@@ -665,6 +665,7 @@ int SCH_DRAWING_TOOLS::ImportSheet( const TOOL_EVENT& aEvent )
 
     std::unique_ptr<DESIGN_BLOCK> designBlock;
     wxString                      sheetFileName = wxEmptyString;
+    int                           suffix = 1;
 
     if( placingDesignBlock )
     {
@@ -705,6 +706,7 @@ int SCH_DRAWING_TOOLS::ImportSheet( const TOOL_EVENT& aEvent )
                 EDA_ITEMS newItems;
                 bool      keepAnnotations = cfg->m_DesignBlockChooserPanel.keep_annotations;
                 bool      placeAsGroup = cfg->m_DesignBlockChooserPanel.place_as_group;
+                bool      repeatPlacement = cfg->m_DesignBlockChooserPanel.repeated_placement;
 
                 selectionTool->ClearSelection();
 
@@ -739,6 +741,9 @@ int SCH_DRAWING_TOOLS::ImportSheet( const TOOL_EVENT& aEvent )
                     {
                         group->SetName( wxFileName( sheetFileName ).GetName() );
                     }
+
+                    if( repeatPlacement )
+                        group->SetName( group->GetName() + wxString::Format( "%d", suffix++ ) );
                 }
 
                 // Select all new items
