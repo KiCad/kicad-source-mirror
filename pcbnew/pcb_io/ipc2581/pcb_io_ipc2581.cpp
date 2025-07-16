@@ -617,7 +617,7 @@ void PCB_IO_IPC2581::addText( wxXmlNode* aContentNode, EDA_TEXT* aText,
                               const KIFONT::METRICS& aFontMetrics )
 {
     KIGFX::GAL_DISPLAY_OPTIONS empty_opts;
-    KIFONT::FONT*              font = aText->GetFont();
+    KIFONT::FONT*              font = aText->GetDrawFont( nullptr );
     TEXT_ATTRIBUTES            attrs = aText->GetAttributes();
 
     attrs.m_StrokeWidth = aText->GetEffectiveTextPenWidth();
@@ -625,9 +625,6 @@ void PCB_IO_IPC2581::addText( wxXmlNode* aContentNode, EDA_TEXT* aText,
     attrs.m_Multiline = false;
 
     wxXmlNode* text_node = appendNode( aContentNode, "UserSpecial" );
-
-    if( !font )
-        font = KIFONT::FONT::GetFont();
 
     std::list<VECTOR2I> pts;
 

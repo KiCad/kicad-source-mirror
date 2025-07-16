@@ -22,6 +22,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include "font/kicad_font_name.h"
 #include <pgm_base.h>
 #include <settings/settings_manager.h>
 #include <eeschema_settings.h>
@@ -475,12 +476,18 @@ int SCH_ITEM::compare( const SCH_ITEM& aOther, int aCompareFlags ) const
 }
 
 
-const wxString& SCH_ITEM::GetDefaultFont() const
+const wxString& SCH_ITEM::GetDefaultFont( const RENDER_SETTINGS* aSettings ) const
 {
-    SETTINGS_MANAGER&  mgr = Pgm().GetSettingsManager();
-    EESCHEMA_SETTINGS* cfg = mgr.GetAppSettings<EESCHEMA_SETTINGS>( "eeschema" );
+    static wxString defaultName = KICAD_FONT_NAME;
 
-    return cfg->m_Appearance.default_font;
+    SETTINGS_MANAGER&  mgr = Pgm().GetSettingsManager();
+
+    if( aSettings )
+        return aSettings->GetDefaultFont();
+    else if( EESCHEMA_SETTINGS* cfg = mgr.GetAppSettings<EESCHEMA_SETTINGS>( "eeschema" ) )
+        return cfg->m_Appearance.default_font;
+    else
+        return defaultName;
 }
 
 

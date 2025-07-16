@@ -730,7 +730,7 @@ const BOX2I PCB_DIMENSION_BASE::GetBoundingBox() const
     BOX2I bBox;
     int   xmin, xmax, ymin, ymax;
 
-    bBox    = GetTextBox();
+    bBox    = GetTextBox( nullptr );
     xmin    = bBox.GetX();
     xmax    = bBox.GetRight();
     ymin    = bBox.GetY();
@@ -947,7 +947,7 @@ void PCB_DIM_ALIGNED::updateGeometry()
 
     // Now that we have the text updated, we can determine how to draw the crossbar.
     // First we need to create an appropriate bounding polygon to collide with
-    BOX2I textBox = GetTextBox().Inflate( GetTextWidth() / 2, - GetEffectiveTextPenWidth() );
+    BOX2I textBox = GetTextBox( nullptr ).Inflate( GetTextWidth() / 2, - GetEffectiveTextPenWidth() );
 
     SHAPE_POLY_SET polyBox;
     polyBox.NewOutline();
@@ -1183,7 +1183,7 @@ void PCB_DIM_ORTHOGONAL::updateGeometry()
 
     // Now that we have the text updated, we can determine how to draw the crossbar.
     // First we need to create an appropriate bounding polygon to collide with
-    BOX2I textBox = GetTextBox().Inflate( GetTextWidth() / 2, GetEffectiveTextPenWidth() );
+    BOX2I textBox = GetTextBox( nullptr ).Inflate( GetTextWidth() / 2, GetEffectiveTextPenWidth() );
 
     SHAPE_POLY_SET polyBox;
     polyBox.NewOutline();
@@ -1400,7 +1400,7 @@ void PCB_DIM_LEADER::updateGeometry()
 
     // Now that we have the text updated, we can determine how to draw the second line
     // First we need to create an appropriate bounding polygon to collide with
-    BOX2I textBox = GetTextBox().Inflate( GetTextWidth() / 2, GetEffectiveTextPenWidth() * 2 );
+    BOX2I textBox = GetTextBox( nullptr ).Inflate( GetTextWidth() / 2, GetEffectiveTextPenWidth() * 2 );
 
     SHAPE_POLY_SET polyBox;
     polyBox.NewOutline();
@@ -1623,7 +1623,7 @@ void PCB_DIM_RADIAL::updateGeometry()
 
     // Now that we have the text updated, we can determine how to draw the second line
     // First we need to create an appropriate bounding polygon to collide with
-    BOX2I textBox = GetTextBox().Inflate( GetTextWidth() / 2, GetEffectiveTextPenWidth() );
+    BOX2I textBox = GetTextBox( nullptr ).Inflate( GetTextWidth() / 2, GetEffectiveTextPenWidth() );
 
     SHAPE_POLY_SET polyBox;
     polyBox.NewOutline();

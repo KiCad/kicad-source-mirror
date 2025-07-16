@@ -272,11 +272,10 @@ bool SCH_PAINTER::isUnitAndConversionShown( const SCH_ITEM* aItem ) const
 
 KIFONT::FONT* SCH_PAINTER::getFont( const EDA_TEXT* aItem ) const
 {
-    if( KIFONT::FONT* font = aItem->GetFont() )
+    if( KIFONT::FONT* font = aItem->GetDrawFont( &m_schSettings ) )
         return font;
 
-    return KIFONT::FONT::GetFont( m_schSettings.GetDefaultFont(), aItem->IsBold(),
-                                  aItem->IsItalic() );
+    return KIFONT::FONT::GetFont( m_schSettings.GetDefaultFont(), aItem->IsBold(), aItem->IsItalic() );
 }
 
 
@@ -1084,71 +1083,73 @@ void SCH_PAINTER::draw( const SCH_PIN* aPin, int aLayer, bool aDimmed )
                                m_schSettings.m_ShowPinsElectricalType,
                                m_schSettings.m_ShowPinAltIcons );
 
-    const auto textRendersAsBitmap = [&]( KIGFX::GAL& aGal, int aTextSize )
-    {
-        // Rendering text is expensive (particularly when using outline fonts).  At small effective
-        // sizes (ie: zoomed out) the visual differences between outline and/or stroke fonts and the
-        // bitmap font becomes immaterial, and there's often more to draw when zoomed out so the
-        // performance gain becomes more significant.
-        static const float BITMAP_FONT_SIZE_THRESHOLD = 3.5;
+    const auto textRendersAsBitmap =
+            [&]( KIGFX::GAL& aGal, int aTextSize )
+            {
+                // Rendering text is expensive (particularly when using outline fonts).  At small effective
+                // sizes (ie: zoomed out) the visual differences between outline and/or stroke fonts and the
+                // bitmap font becomes immaterial, and there's often more to draw when zoomed out so the
+                // performance gain becomes more significant.
+                static const float BITMAP_FONT_SIZE_THRESHOLD = 3.5;
 
-        // Any text non bitmappable?
-        return aTextSize * aGal.GetWorldScale() < BITMAP_FONT_SIZE_THRESHOLD;
-    };
+                // Any text non bitmappable?
+                return aTextSize * aGal.GetWorldScale() < BITMAP_FONT_SIZE_THRESHOLD;
+            };
 
     const auto drawTextInfo =
             [&]( const PIN_LAYOUT_CACHE::TEXT_INFO& aTextInfo, const COLOR4D& aColor )
-    {
-        // const double iconSize = std::min( aPin->GetNameTextSize(), schIUScale.mmToIU( 1.5 ) );
-        const bool renderTextAsBitmap = textRendersAsBitmap( *m_gal, aTextInfo.m_TextSize );
-
-        // Which of these gets used depends on the font technology, so set both
-        m_gal->SetStrokeColor( aColor );
-        m_gal->SetFillColor( aColor );
-
-        TEXT_ATTRIBUTES attrs;
-        attrs.m_Font = KIFONT::FONT::GetFont( eeconfig()->m_Appearance.default_font );
-        attrs.m_Size = VECTOR2I( aTextInfo.m_TextSize, aTextInfo.m_TextSize );
-        attrs.m_Halign = aTextInfo.m_HAlign;
-        attrs.m_Valign = aTextInfo.m_VAlign;
-        attrs.m_Angle = aTextInfo.m_Angle;
-        attrs.m_StrokeWidth = aTextInfo.m_Thickness;
-
-        if( drawingShadows )
-        {
-            attrs.m_StrokeWidth += KiROUND( shadowWidth );
-
-            if( !attrs.m_Font->IsOutline() )
             {
-                strokeText( *m_gal, aTextInfo.m_Text, aTextInfo.m_TextPosition, attrs,
-                            aPin->GetFontMetrics() );
-            }
-            else
+                // const double iconSize = std::min( aPin->GetNameTextSize(), schIUScale.mmToIU( 1.5 ) );
+                const bool renderTextAsBitmap = textRendersAsBitmap( *m_gal, aTextInfo.m_TextSize );
+
+                // Which of these gets used depends on the font technology, so set both
+                m_gal->SetStrokeColor( aColor );
+                m_gal->SetFillColor( aColor );
+
+                TEXT_ATTRIBUTES attrs;
+                attrs.m_Font = KIFONT::FONT::GetFont( eeconfig()->m_Appearance.default_font );
+                attrs.m_Size = VECTOR2I( aTextInfo.m_TextSize, aTextInfo.m_TextSize );
+                attrs.m_Halign = aTextInfo.m_HAlign;
+                attrs.m_Valign = aTextInfo.m_VAlign;
+                attrs.m_Angle = aTextInfo.m_Angle;
+                attrs.m_StrokeWidth = aTextInfo.m_Thickness;
+
+                if( drawingShadows )
+                {
+                    attrs.m_StrokeWidth += KiROUND( shadowWidth );
+
+                    if( !attrs.m_Font->IsOutline() )
+                    {
+                        strokeText( *m_gal, aTextInfo.m_Text, aTextInfo.m_TextPosition, attrs,
+                                    aPin->GetFontMetrics() );
+                    }
+                    else
+                    {
+                        boxText( *m_gal, aTextInfo.m_Text, aTextInfo.m_TextPosition, attrs,
+                                 aPin->GetFontMetrics() );
+                    }
+                }
+                else if( nonCached( aPin ) && renderTextAsBitmap )
+                {
+                    bitmapText( *m_gal, aTextInfo.m_Text, aTextInfo.m_TextPosition, attrs );
+                    const_cast<SCH_PIN*>( aPin )->SetFlags( IS_SHOWN_AS_BITMAP );
+                }
+                else
+                {
+                    strokeText( *m_gal, aTextInfo.m_Text, aTextInfo.m_TextPosition, attrs,
+                                aPin->GetFontMetrics() );
+                    const_cast<SCH_PIN*>( aPin )->SetFlags( IS_SHOWN_AS_BITMAP );
+                }
+            };
+
+    const auto getColorForLayer =
+            [&]( int aDrawnLayer )
             {
-                boxText( *m_gal, aTextInfo.m_Text, aTextInfo.m_TextPosition, attrs,
-                         aPin->GetFontMetrics() );
-            }
-        }
-        else if( nonCached( aPin ) && renderTextAsBitmap )
-        {
-            bitmapText( *m_gal, aTextInfo.m_Text, aTextInfo.m_TextPosition, attrs );
-            const_cast<SCH_PIN*>( aPin )->SetFlags( IS_SHOWN_AS_BITMAP );
-        }
-        else
-        {
-            strokeText( *m_gal, aTextInfo.m_Text, aTextInfo.m_TextPosition, attrs,
-                        aPin->GetFontMetrics() );
-            const_cast<SCH_PIN*>( aPin )->SetFlags( IS_SHOWN_AS_BITMAP );
-        }
-    };
+                if( !aPin->IsVisible() )
+                    return getRenderColor( aPin, LAYER_HIDDEN, drawingShadows, aDimmed );
 
-    const auto getColorForLayer = [&]( int aDrawnLayer )
-    {
-        if( !aPin->IsVisible() )
-            return getRenderColor( aPin, LAYER_HIDDEN, drawingShadows, aDimmed );
-
-        return getRenderColor( aPin, aDrawnLayer, drawingShadows, aDimmed );
-    };
+                return getRenderColor( aPin, aDrawnLayer, drawingShadows, aDimmed );
+            };
 
     // Request text layout info and draw it
 
@@ -1775,7 +1776,7 @@ void SCH_PAINTER::draw( const SCH_TEXT* aText, int aLayer, bool aDimmed )
         // SCH_FIELD text.
         if( font->IsOutline() && aText->Type() == SCH_TEXT_T )
         {
-            BOX2I    firstLineBBox = aText->GetTextBox( 0 );
+            BOX2I    firstLineBBox = aText->GetTextBox( nullptr, 0 );
             int      sizeDiff = firstLineBBox.GetHeight() - aText->GetTextSize().y;
             int      adjust = KiROUND( sizeDiff * 0.4 );
             VECTOR2I adjust_offset( 0, - adjust );

@@ -178,7 +178,7 @@ HANDLER_RESULT<types::Box2> API_HANDLER_COMMON::handleGetTextExtents(
 
     types::Box2 response;
 
-    BOX2I bbox = text.GetTextBox();
+    BOX2I bbox = text.GetTextBox( nullptr );
     EDA_ANGLE angle = text.GetTextAngle();
 
     if( !angle.IsZero() )

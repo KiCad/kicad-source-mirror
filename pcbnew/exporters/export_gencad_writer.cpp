@@ -805,7 +805,7 @@ void GENCAD_EXPORTER::createComponentsSection()
                      layer.c_str(),
                      TO_UTF8( escapeString( textItem->GetText() ) ) );
 
-            BOX2I textBox = textItem->GetTextBox();
+            BOX2I textBox = textItem->GetTextBox( nullptr );
 
             fprintf( m_file, " 0 0 %g %g\n",
                      textBox.GetWidth() / SCALE_FACTOR,

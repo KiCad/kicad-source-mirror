@@ -1733,7 +1733,7 @@ const LIB_SYMBOL* CADSTAR_SCH_ARCHIVE_LOADER::loadSymdef( const SYMDEF_ID& aSymd
 
             for( size_t ii = 0; ii < strings.size(); ++ii )
             {
-                BOX2I    bbox = libtext->GetTextBox( ii );
+                BOX2I    bbox = libtext->GetTextBox( nullptr, ii );
                 VECTOR2I linePos = { bbox.GetLeft(), -bbox.GetBottom() };
 
                 RotatePoint( linePos, libtext->GetTextPos(), -libtext->GetTextAngle() );

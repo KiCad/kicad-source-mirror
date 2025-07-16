@@ -318,7 +318,7 @@ public:
      *         this rectangle is calculated for 0 orient text.
      *         If orientation is not 0 the rect must be rotated to match the physical area
      */
-    BOX2I GetTextBox( int aLine = -1 ) const;
+    BOX2I GetTextBox( const RENDER_SETTINGS* aSettings, int aLine = -1 ) const;
 
     /**
      * Return the distance between two lines of text.
@@ -327,7 +327,7 @@ public:
      * interline distance plus room for characters like j, {, and [.  It also used for single
      * line text, to calculate the text bounding box.
      */
-    int GetInterline() const;
+    int GetInterline( const RENDER_SETTINGS* aSettings ) const;
 
     /**
      * @return a wxString with the style name( Normal, Italic, Bold, Bold+Italic).
@@ -341,7 +341,8 @@ public:
      * @param aPositions is the list to populate by the VECTOR2I positions.
      * @param aLineCount is the number of lines (not recalculated here for efficiency reasons.
      */
-    void GetLinePositions( std::vector<VECTOR2I>& aPositions, int aLineCount ) const;
+    void GetLinePositions( const RENDER_SETTINGS* aSettings, std::vector<VECTOR2I>& aPositions,
+                           int aLineCount ) const;
 
     /**
      * Return the levenstein distance between two texts.
@@ -364,6 +365,8 @@ public:
 
     virtual EDA_ANGLE GetDrawRotation() const               { return GetTextAngle(); }
     virtual VECTOR2I GetDrawPos() const                     { return GetTextPos(); }
+
+    virtual KIFONT::FONT* GetDrawFont( const RENDER_SETTINGS* aSettings ) const;
 
     virtual void ClearRenderCache();
     virtual void ClearBoundingBoxCache();
@@ -415,8 +418,6 @@ public:
     static wxString GotoPageHref( const wxString& aDestination );
 
 protected:
-    virtual KIFONT::FONT* getDrawFont() const;
-
     virtual const KIFONT::METRICS& getFontMetrics() const;
 
     virtual void cacheShownText();

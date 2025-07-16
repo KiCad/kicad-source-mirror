@@ -631,12 +631,17 @@ void EDA_TEXT::cacheShownText()
 }
 
 
-KIFONT::FONT* EDA_TEXT::getDrawFont() const
+KIFONT::FONT* EDA_TEXT::GetDrawFont( const RENDER_SETTINGS* aSettings ) const
 {
     KIFONT::FONT* font = GetFont();
 
     if( !font )
-        font = KIFONT::FONT::GetFont( wxEmptyString, IsBold(), IsItalic() );
+    {
+        if( aSettings )
+            font = KIFONT::FONT::GetFont( aSettings->GetDefaultFont(), IsBold(), IsItalic() );
+        else
+            font = KIFONT::FONT::GetFont( wxEmptyString, IsBold(), IsItalic() );
+    }
 
     return font;
 }
@@ -714,13 +719,13 @@ void EDA_TEXT::AddRenderCacheGlyph( const SHAPE_POLY_SET& aPoly )
 }
 
 
-int EDA_TEXT::GetInterline() const
+int EDA_TEXT::GetInterline( const RENDER_SETTINGS* aSettings ) const
 {
-    return KiROUND( getDrawFont()->GetInterline( GetTextHeight(), getFontMetrics() ) );
+    return KiROUND( GetDrawFont( aSettings )->GetInterline( GetTextHeight(), getFontMetrics() ) );
 }
 
 
-BOX2I EDA_TEXT::GetTextBox( int aLine ) const
+BOX2I EDA_TEXT::GetTextBox( const RENDER_SETTINGS* aSettings, int aLine ) const
 {
     VECTOR2I drawPos = GetDrawPos();
 
@@ -748,12 +753,11 @@ BOX2I EDA_TEXT::GetTextBox( int aLine ) const
     }
 
     // calculate the H and V size
-    KIFONT::FONT* font = getDrawFont();
+    KIFONT::FONT* font = GetDrawFont( aSettings );
     VECTOR2D      fontSize( GetTextSize() );
     bool          bold = IsBold();
     bool          italic = IsItalic();
-    VECTOR2I      extents = font->StringBoundaryLimits( text, fontSize, thickness, bold, italic,
-                                                        getFontMetrics() );
+    VECTOR2I      extents = font->StringBoundaryLimits( text, fontSize, thickness, bold, italic, getFontMetrics() );
     int           overbarOffset = 0;
 
     // Creates bounding box (rectangle) for horizontal, left and top justified text. The
@@ -779,15 +783,13 @@ BOX2I EDA_TEXT::GetTextBox( int aLine ) const
         for( unsigned ii = 1; ii < strings.GetCount(); ii++ )
         {
             text = strings.Item( ii );
-            extents = font->StringBoundaryLimits( text, fontSize, thickness, bold, italic,
-                                                  getFontMetrics() );
+            extents = font->StringBoundaryLimits( text, fontSize, thickness, bold, italic, getFontMetrics() );
             textsize.x = std::max( textsize.x, extents.x );
         }
 
         // interline spacing is only *between* lines, so total height is the height of the first
         // line plus the interline distance (with interline spacing) for all subsequent lines
-        textsize.y += KiROUND( ( strings.GetCount() - 1 )
-                               * font->GetInterline( fontSize.y, getFontMetrics() ) );
+        textsize.y += KiROUND( ( strings.GetCount() - 1 ) * font->GetInterline( fontSize.y, getFontMetrics() ) );
     }
 
     textsize.y += overbarOffset;
@@ -852,7 +854,7 @@ BOX2I EDA_TEXT::GetTextBox( int aLine ) const
 
 bool EDA_TEXT::TextHitTest( const VECTOR2I& aPoint, int aAccuracy ) const
 {
-    const BOX2I    rect = GetTextBox().GetInflated( aAccuracy );
+    const BOX2I    rect = GetTextBox( nullptr ).GetInflated( aAccuracy );
     const VECTOR2I location = GetRotated( aPoint, GetDrawPos(), -GetDrawRotation() );
     return rect.Contains( location );
 }
@@ -863,9 +865,9 @@ bool EDA_TEXT::TextHitTest( const BOX2I& aRect, bool aContains, int aAccuracy ) 
     const BOX2I rect = aRect.GetInflated( aAccuracy );
 
     if( aContains )
-        return rect.Contains( GetTextBox() );
+        return rect.Contains( GetTextBox( nullptr ) );
 
-    return rect.Intersects( GetTextBox(), GetDrawRotation() );
+    return rect.Intersects( GetTextBox( nullptr ), GetDrawRotation() );
 }
 
 
@@ -880,7 +882,7 @@ void EDA_TEXT::Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset,
 
         positions.reserve( strings.Count() );
 
-        GetLinePositions( positions, (int) strings.Count() );
+        GetLinePositions( aSettings, positions, (int) strings.Count() );
 
         for( unsigned ii = 0; ii < strings.Count(); ii++ )
             printOneLineOfText( aSettings, aOffset, aColor, aFillMode, strings[ii], positions[ii] );
@@ -893,14 +895,15 @@ void EDA_TEXT::Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset,
 }
 
 
-void EDA_TEXT::GetLinePositions( std::vector<VECTOR2I>& aPositions, int aLineCount ) const
+void EDA_TEXT::GetLinePositions( const RENDER_SETTINGS* aSettings, std::vector<VECTOR2I>& aPositions,
+                                 int aLineCount ) const
 {
     VECTOR2I pos = GetDrawPos();    // Position of first line of the multiline text according
                                     // to the center of the multiline text block
 
     VECTOR2I offset;                // Offset to next line.
 
-    offset.y = GetInterline();
+    offset.y = GetInterline( aSettings );
 
     if( aLineCount > 1 )
     {
@@ -952,10 +955,7 @@ void EDA_TEXT::printOneLineOfText( const RENDER_SETTINGS* aSettings, const VECTO
     if( IsMirrored() )
         size.x = -size.x;
 
-    KIFONT::FONT* font = GetFont();
-
-    if( !font )
-        font = KIFONT::FONT::GetFont( aSettings->GetDefaultFont(), IsBold(), IsItalic() );
+    KIFONT::FONT* font = GetDrawFont( aSettings );
 
     GRPrintText( DC, aOffset + aPos, aColor, aText, GetDrawRotation(), size, GetHorizJustify(),
                  GetVertJustify(), penWidth, IsItalic(), IsBold(), font, getFontMetrics() );
@@ -1123,7 +1123,7 @@ std::shared_ptr<SHAPE_COMPOUND> EDA_TEXT::GetEffectiveTextShape( bool aTriangula
 {
     std::shared_ptr<SHAPE_COMPOUND> shape = std::make_shared<SHAPE_COMPOUND>();
     KIGFX::GAL_DISPLAY_OPTIONS      empty_opts;
-    KIFONT::FONT*                   font = getDrawFont();
+    KIFONT::FONT*                   font = GetDrawFont( nullptr );
     int                             penWidth = GetEffectiveTextPenWidth();
     wxString                        shownText( GetShownText( true ) );
     VECTOR2I                        drawPos = GetDrawPos();

@@ -560,7 +560,7 @@ double SCH_LABEL_BASE::Similarity( const SCH_ITEM& aOther ) const
 void SCH_LABEL_BASE::AutoplaceFields( SCH_SCREEN* aScreen, AUTOPLACE_ALGO aAlgo )
 {
     int margin = GetTextOffset() * 2;
-    int labelLen = GetBodyBoundingBox().GetSizeMax();
+    int labelLen = GetBodyBoundingBox( nullptr ).GetSizeMax();
     int accumulated = GetTextHeight() / 2;
 
     if( Type() == SCH_GLOBAL_LABEL_T )
@@ -960,14 +960,14 @@ int SCH_LABEL_BASE::GetLabelBoxExpansion( const RENDER_SETTINGS* aSettings ) con
 }
 
 
-const BOX2I SCH_LABEL_BASE::GetBodyBoundingBox() const
+const BOX2I SCH_LABEL_BASE::GetBodyBoundingBox( const RENDER_SETTINGS* aSettings ) const
 {
     // build the bounding box of the label only, without taking into account its fields
 
     BOX2I                 box;
     std::vector<VECTOR2I> pts;
 
-    CreateGraphicShape( nullptr, pts, GetTextPos() );
+    CreateGraphicShape( aSettings, pts, GetTextPos() );
 
     for( const VECTOR2I& pt : pts )
         box.Merge( pt );
@@ -982,7 +982,7 @@ const BOX2I SCH_LABEL_BASE::GetBoundingBox() const
 {
     // build the bounding box of the entire label, including its fields
 
-    BOX2I box = GetBodyBoundingBox();
+    BOX2I box = GetBodyBoundingBox( nullptr );
 
     for( const SCH_FIELD& field : m_fields )
     {
@@ -1005,7 +1005,7 @@ const BOX2I SCH_LABEL_BASE::GetBoundingBox() const
 
 bool SCH_LABEL_BASE::HitTest( const VECTOR2I& aPosition, int aAccuracy ) const
 {
-    BOX2I bbox = GetBodyBoundingBox();
+    BOX2I bbox = GetBodyBoundingBox( nullptr );
     bbox.Inflate( aAccuracy );
 
     if( bbox.Contains( aPosition ) )
@@ -1042,7 +1042,7 @@ bool SCH_LABEL_BASE::HitTest( const BOX2I& aRect, bool aContained, int aAccuracy
     }
     else
     {
-        if( rect.Intersects( GetBodyBoundingBox() ) )
+        if( rect.Intersects( GetBodyBoundingBox( nullptr ) ) )
             return true;
 
         for( const SCH_FIELD& field : m_fields )
@@ -1285,13 +1285,10 @@ void SCH_LABEL_BASE::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_O
     penWidth = std::max( penWidth, settings->GetMinPenWidth() );
     aPlotter->SetCurrentLineWidth( penWidth );
 
-    KIFONT::FONT* font = GetFont();
+    KIFONT::FONT* font = GetDrawFont( settings );
 
-    if( !font )
-        font = KIFONT::FONT::GetFont( settings->GetDefaultFont(), IsBold(), IsItalic() );
-
-    VECTOR2I textpos = GetTextPos() + GetSchematicTextOffset( aPlotter->RenderSettings() );
-    CreateGraphicShape( aPlotter->RenderSettings(), s_poly, GetTextPos() );
+    VECTOR2I textpos = GetTextPos() + GetSchematicTextOffset( settings );
+    CreateGraphicShape( settings, s_poly, GetTextPos() );
 
     TEXT_ATTRIBUTES attrs = GetAttributes();
     attrs.m_StrokeWidth = penWidth;
@@ -1303,8 +1300,7 @@ void SCH_LABEL_BASE::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_O
     }
     else
     {
-        aPlotter->PlotText( textpos, color, GetShownText( sheet, true ), attrs, font,
-                            GetFontMetrics() );
+        aPlotter->PlotText( textpos, color, GetShownText( sheet, true ), attrs, font, GetFontMetrics() );
 
         if( aPlotter->GetColorMode() )
         {
@@ -1341,7 +1337,8 @@ void SCH_LABEL_BASE::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_O
         }
 
         // Make sheet pins and hierarchical labels clickable hyperlinks
-        bool linkAlreadyPlotted = false;
+        bool  linkAlreadyPlotted = false;
+        BOX2I bodyBBox = GetBodyBoundingBox( settings );
 
         if( aPlotOpts.m_PDFHierarchicalLinks )
         {
@@ -1351,8 +1348,7 @@ void SCH_LABEL_BASE::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_O
                 {
                     SCH_SHEET_PATH path = *sheet;
                     path.pop_back();
-                    aPlotter->HyperlinkBox( GetBodyBoundingBox(),
-                                            EDA_TEXT::GotoPageHref( path.GetPageNumber() ) );
+                    aPlotter->HyperlinkBox( bodyBBox, EDA_TEXT::GotoPageHref( path.GetPageNumber() ) );
                     linkAlreadyPlotted = true;
                 }
             }
@@ -1361,8 +1357,7 @@ void SCH_LABEL_BASE::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_O
                 SCH_SHEET_PATH path = *sheet;
                 SCH_SHEET*     parent = static_cast<SCH_SHEET*>( m_parent );
                 path.push_back( parent );
-                aPlotter->HyperlinkBox( GetBodyBoundingBox(),
-                                        EDA_TEXT::GotoPageHref( path.GetPageNumber() ) );
+                aPlotter->HyperlinkBox( bodyBBox, EDA_TEXT::GotoPageHref( path.GetPageNumber() ) );
                 linkAlreadyPlotted = true;
             }
         }
@@ -1378,9 +1373,9 @@ void SCH_LABEL_BASE::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_O
                                                            _( "Net" ),
                                                            connection->Name() ) );
 
-                properties.emplace_back(
-                        wxString::Format( wxT( "!%s = %s" ), _( "Resolved netclass" ),
-                                          GetEffectiveNetClass()->GetHumanReadableName() ) );
+                properties.emplace_back( wxString::Format( wxT( "!%s = %s" ),
+                                                           _( "Resolved netclass" ),
+                                                           GetEffectiveNetClass()->GetHumanReadableName() ) );
             }
 
             for( const SCH_FIELD& field : GetFields() )
@@ -1391,14 +1386,11 @@ void SCH_LABEL_BASE::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_O
             }
 
             if( !properties.empty() )
-                aPlotter->HyperlinkMenu( GetBodyBoundingBox(), properties );
+                aPlotter->HyperlinkMenu( bodyBBox, properties );
         }
 
         if( Type() == SCH_HIER_LABEL_T )
-        {
-            aPlotter->Bookmark( GetBodyBoundingBox(), GetShownText( false ),
-                                _( "Hierarchical Labels" ) );
-        }
+            aPlotter->Bookmark( bodyBBox, GetShownText( false ), _( "Hierarchical Labels" ) );
     }
 
     for( SCH_FIELD& field : m_fields )
@@ -1498,9 +1490,9 @@ bool SCH_LABEL::Deserialize( const google::protobuf::Any &aContainer )
 }
 
 
-const BOX2I SCH_LABEL::GetBodyBoundingBox() const
+const BOX2I SCH_LABEL::GetBodyBoundingBox( const RENDER_SETTINGS* aSettings ) const
 {
-    BOX2I rect = GetTextBox();
+    BOX2I rect = GetTextBox( aSettings );
 
     rect.Offset( 0, -GetTextOffset() );
     rect.Inflate( GetEffectiveTextPenWidth() );
@@ -1987,7 +1979,7 @@ void SCH_GLOBALLABEL::CreateGraphicShape( const RENDER_SETTINGS* aRenderSettings
     int margin    = GetLabelBoxExpansion( aRenderSettings );
     int halfSize  = ( GetTextHeight() / 2 ) + margin;
     int linewidth = GetPenWidth();
-    int symb_len  = GetTextBox().GetWidth() + 2 * margin;
+    int symb_len  = GetTextBox( aRenderSettings ).GetWidth() + 2 * margin;
 
     int x = symb_len + linewidth + 3;
     int y = halfSize + linewidth + 3;
@@ -2122,7 +2114,7 @@ void SCH_HIERLABEL::CreateGraphicShape( const RENDER_SETTINGS* aSettings,
 }
 
 
-const BOX2I SCH_HIERLABEL::GetBodyBoundingBox() const
+const BOX2I SCH_HIERLABEL::GetBodyBoundingBox( const RENDER_SETTINGS* aSettings ) const
 {
     int penWidth = GetEffectiveTextPenWidth();
     int margin = GetTextOffset();
@@ -2131,7 +2123,7 @@ const BOX2I SCH_HIERLABEL::GetBodyBoundingBox() const
     int y  = GetTextPos().y;
 
     int height = GetTextHeight() + penWidth + margin;
-    int length = GetTextBox().GetWidth();
+    int length = GetTextBox( aSettings ).GetWidth();
 
     length += height;       // add height for triangular shapes
 

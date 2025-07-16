@@ -1734,7 +1734,7 @@ void ALTIUM_PCB::HelperParseDimensions6Radial(const ADIMENSION6 &aElem)
     dimension->SetVertJustify( GR_TEXT_V_ALIGN_BOTTOM );
     dimension->SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
 
-    int yAdjust = dimension->GetTextBox().GetCenter().y - dimension->GetTextPos().y;
+    int yAdjust = dimension->GetTextBox( nullptr ).GetCenter().y - dimension->GetTextPos().y;
     dimension->SetTextPos( dimension->GetTextPos() + VECTOR2I( 0, yAdjust + aElem.textgap ) );
     dimension->SetVertJustify( GR_TEXT_V_ALIGN_CENTER );
 

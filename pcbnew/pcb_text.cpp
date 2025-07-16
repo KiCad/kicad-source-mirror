@@ -342,7 +342,7 @@ void PCB_TEXT::KeepUpright()
 const BOX2I PCB_TEXT::GetBoundingBox() const
 {
     EDA_ANGLE angle = GetDrawRotation();
-    BOX2I     rect = GetTextBox();
+    BOX2I     rect = GetTextBox( nullptr );
 
     if( IsKnockout() )
         rect.Inflate( getKnockoutMargin() );
@@ -551,7 +551,7 @@ void PCB_TEXT::TransformTextToPolySet( SHAPE_POLY_SET& aBuffer, int aClearance, 
                                        ERROR_LOC aErrorLoc ) const
 {
     KIGFX::GAL_DISPLAY_OPTIONS empty_opts;
-    KIFONT::FONT*              font = getDrawFont();
+    KIFONT::FONT*              font = GetDrawFont( nullptr );
     int                        penWidth = GetEffectiveTextPenWidth();
     TEXT_ATTRIBUTES            attrs = GetAttributes();
     wxString                   shownText = GetShownText( true );

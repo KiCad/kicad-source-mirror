@@ -691,19 +691,8 @@ void BRDITEMS_PLOTTER::PlotFootprintGraphicItems( const FOOTPRINT* aFootprint )
 void BRDITEMS_PLOTTER::PlotText( const EDA_TEXT* aText, PCB_LAYER_ID aLayer, bool aIsKnockout,
                                  const KIFONT::METRICS& aFontMetrics, bool aStrikeout )
 {
-    KIFONT::FONT* font = aText->GetFont();
-
-    if( !font )
-    {
-        wxString defaultFontName;   // empty string is the KiCad stroke font
-
-        if( m_plotter->RenderSettings() )
-            defaultFontName = m_plotter->RenderSettings()->GetDefaultFont();
-
-        font = KIFONT::FONT::GetFont( defaultFontName, aText->IsBold(), aText->IsItalic() );
-    }
-
-    wxString shownText( aText->GetShownText( true ) );
+    KIFONT::FONT* font = aText->GetDrawFont( m_plotter->RenderSettings() );
+    wxString      shownText( aText->GetShownText( true ) );
 
     if( shownText.IsEmpty() )
         return;
@@ -787,7 +776,7 @@ void BRDITEMS_PLOTTER::PlotText( const EDA_TEXT* aText, PCB_LAYER_ID aLayer, boo
             wxStringSplit( shownText, strings_list, '\n' );
             positions.reserve(  strings_list.Count() );
 
-            aText->GetLinePositions( positions, (int) strings_list.Count() );
+            aText->GetLinePositions( m_plotter->RenderSettings(), positions, (int) strings_list.Count() );
 
             for( unsigned ii = 0; ii < strings_list.Count(); ii++ )
             {

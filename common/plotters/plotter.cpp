@@ -688,7 +688,7 @@ void PLOTTER::PlotPoly( const SHAPE_LINE_CHAIN& aCornerList, FILL_T aFill, int a
 }
 
 
-void PLOTTER::Text( const VECTOR2I&       aPos,
+void PLOTTER::Text( const VECTOR2I&        aPos,
                     const COLOR4D&         aColor,
                     const wxString&        aText,
                     const EDA_ANGLE&       aOrient,
@@ -745,7 +745,7 @@ void PLOTTER::Text( const VECTOR2I&       aPos,
     }
 
     if( !aFont )
-        aFont = KIFONT::FONT::GetFont();
+        aFont = KIFONT::FONT::GetFont( m_renderSettings->GetDefaultFont() );
 
     aFont->Draw( &callback_gal, aText, aPos, attributes, aFontMetrics );
 }
@@ -790,7 +790,7 @@ void PLOTTER::PlotText( const VECTOR2I&        aPos,
             } );
 
     if( !aFont )
-        aFont = KIFONT::FONT::GetFont();
+        aFont = KIFONT::FONT::GetFont( m_renderSettings->GetDefaultFont() );
 
     aFont->Draw( &callback_gal, aText, aPos, attributes, aFontMetrics );
 }
