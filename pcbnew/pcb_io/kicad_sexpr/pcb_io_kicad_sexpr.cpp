@@ -125,15 +125,8 @@ void FP_CACHE::Save( FOOTPRINT* aFootprintFilter )
         // Allow file output stream to go out of scope to close the file stream before
         // renaming the file.
         {
-#ifdef USE_TMP_FILE
-            fileName = wxFileName::CreateTempFileName( fn.GetPath() );
-
-            wxLogTrace( traceKicadPcbPlugin, wxT( "Creating temporary library file '%s'." ),
-                        fileName );
-#else
             wxLogTrace( traceKicadPcbPlugin, wxT( "Writing library file '%s'." ),
                         fileName );
-#endif
 
             PRETTIFIED_FILE_OUTPUTFORMATTER formatter( fileName );
 
@@ -141,24 +134,6 @@ void FP_CACHE::Save( FOOTPRINT* aFootprintFilter )
             m_owner->Format( footprint.get() );
         }
 
-#ifdef USE_TMP_FILE
-        wxRemove( fn.GetFullPath() );     // it is not an error if this does not exist
-
-        // Even on Linux you can see an _intermittent_ error when calling wxRename(),
-        // and it is fully inexplicable.  See if this dodges the error.
-        wxMilliSleep( 250L );
-
-        // Preserve the permissions of the current file
-        KIPLATFORM::IO::DuplicatePermissions( fn.GetFullPath(), fileName );
-
-        if( !wxRenameFile( fileName, fn.GetFullPath() ) )
-        {
-            wxString msg = wxString::Format( _( "Cannot rename temporary file '%s' to '%s'" ),
-                                             fileName,
-                                             fn.GetFullPath() );
-            THROW_IO_ERROR( msg );
-        }
-#endif
         m_cache_timestamp += fn.GetTimestamp();
     }
 

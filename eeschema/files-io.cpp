@@ -780,8 +780,6 @@ bool SCH_EDIT_FRAME::saveSchematicFile( SCH_SHEET* aSheet, const wxString& aSave
         saveProjectSettings();
     }
 
-    wxString tempFile = wxFileName::CreateTempFileName( wxS( "eeschema" ) );
-
     // Save
     wxLogTrace( traceAutoSave, wxS( "Saving file " ) + schematicFileName.GetFullPath() );
 
@@ -798,7 +796,7 @@ bool SCH_EDIT_FRAME::saveSchematicFile( SCH_SHEET* aSheet, const wxString& aSave
 
     try
     {
-        pi->SaveSchematicFile( tempFile, aSheet, &Schematic() );
+        pi->SaveSchematicFile( schematicFileName.GetFullPath(), aSheet, &Schematic() );
         success = true;
     }
     catch( const IO_ERROR& ioe )
@@ -808,36 +806,7 @@ bool SCH_EDIT_FRAME::saveSchematicFile( SCH_SHEET* aSheet, const wxString& aSave
                     ioe.What() );
         DisplayError( this, msg );
 
-        msg.Printf( _( "Failed to create temporary file '%s'." ),
-                    tempFile );
-        SetMsgPanel( wxEmptyString, msg );
-
-        // In case we started a file but didn't fully write it, clean up
-        wxRemoveFile( tempFile );
-
         success = false;
-    }
-
-    if( success )
-    {
-        // Preserve the permissions of the current file
-        KIPLATFORM::IO::DuplicatePermissions( schematicFileName.GetFullPath(), tempFile );
-
-        // Replace the original with the temporary file we just wrote
-        success = wxRenameFile( tempFile, schematicFileName.GetFullPath() );
-
-        if( !success )
-        {
-            msg.Printf( _( "Error saving schematic file '%s'.\n"
-                           "Failed to rename temporary file '%s'." ),
-                        schematicFileName.GetFullPath(),
-                        tempFile );
-            DisplayError( this, msg );
-
-            msg.Printf( _( "Failed to rename temporary file '%s'." ),
-                        tempFile );
-            SetMsgPanel( wxEmptyString, msg );
-        }
     }
 
     if( success )
@@ -859,10 +828,6 @@ bool SCH_EDIT_FRAME::saveSchematicFile( SCH_SHEET* aSheet, const wxString& aSave
 
         msg.Printf( _( "File '%s' saved." ),  screen->GetFileName() );
         SetStatusText( msg, 0 );
-    }
-    else
-    {
-        DisplayError( this, _( "File write operation failed." ) );
     }
 
     return success;
