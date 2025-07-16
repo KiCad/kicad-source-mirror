@@ -714,6 +714,18 @@ bool BOARD::SetLayerName( PCB_LAYER_ID aLayer, const wxString& aLayerName )
 }
 
 
+bool BOARD::IsFrontLayer( PCB_LAYER_ID aLayer ) const
+{
+    return ::IsFrontLayer( aLayer ) || GetLayerType( aLayer ) == LT_FRONT;
+}
+
+
+bool BOARD::IsBackLayer( PCB_LAYER_ID aLayer ) const
+{
+    return ::IsBackLayer( aLayer ) || GetLayerType( aLayer ) == LT_BACK;
+}
+
+
 LAYER_T BOARD::GetLayerType( PCB_LAYER_ID aLayer ) const
 {
     if( IsLayerEnabled( aLayer ) )

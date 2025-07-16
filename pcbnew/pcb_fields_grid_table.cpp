@@ -430,7 +430,12 @@ void PCB_FIELDS_GRID_TABLE::SetValueAsLong( int aRow, int aCol, long aValue )
     {
     case PFC_LAYER:
         field.SetLayer( ToLAYER_ID( (int) aValue ) );
-        field.SetMirrored( IsBackLayer( field.GetLayer() ) );
+
+        if( BOARD* board = field.GetBoard() )
+            field.SetMirrored( board->IsBackLayer( field.GetLayer() ) );
+        else
+            field.SetMirrored( IsBackLayer( field.GetLayer() ) );
+
         break;
 
     default:

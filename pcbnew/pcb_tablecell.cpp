@@ -25,6 +25,7 @@
 #include <font/font.h>
 #include <widgets/msgpanel.h>
 #include <string_utils.h>
+#include <board.h>
 #include <pcb_table.h>
 #include <pcb_tablecell.h>
 
@@ -34,8 +35,10 @@ PCB_TABLECELL::PCB_TABLECELL( BOARD_ITEM* aParent ) :
         m_colSpan( 1 ),
         m_rowSpan( 1 )
 {
-    if( IsBackLayer( aParent->GetLayer() ) )
-        SetMirrored( true );
+    if( BOARD* board = GetBoard() )
+        SetMirrored( board->IsBackLayer( aParent->GetLayer() ) );
+    else
+        SetMirrored( IsBackLayer( aParent->GetLayer() ) );
 
     SetRectangleHeight( std::numeric_limits<int>::max() / 2 );
     SetRectangleWidth( std::numeric_limits<int>::max() / 2 );

@@ -458,9 +458,9 @@ void ODB_MATRIX_ENTITY::AddAuxilliaryMatrixLayer()
         }
         else
         {
-            if( IsFrontLayer( std::get<1>( aLayerPair ) ) )
+            if( m_board->IsFrontLayer( std::get<1>( aLayerPair ) ) )
                 dLayerName = wxString::Format( "%s_front", featureName );
-            else if( IsBackLayer( std::get<1>( aLayerPair ) ) )
+            else if( m_board->IsBackLayer( std::get<1>( aLayerPair ) ) )
                 dLayerName = wxString::Format( "%s_back", featureName );
             else
                 return;
@@ -775,9 +775,9 @@ void ODB_LAYER_ENTITY::InitAuxilliaryData()
         }
         else
         {
-            if( IsFrontLayer( std::get<1>( layer_pair ) ) )
+            if( m_board->IsFrontLayer( std::get<1>( layer_pair ) ) )
                 dLayerName = wxString::Format( "%s_front", featureName );
-            else if( IsBackLayer( std::get<1>( layer_pair ) ) )
+            else if( m_board->IsBackLayer( std::get<1>( layer_pair ) ) )
                 dLayerName = wxString::Format( "%s_back", featureName );
             else
                 return;
