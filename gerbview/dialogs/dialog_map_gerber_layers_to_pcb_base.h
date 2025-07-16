@@ -28,28 +28,12 @@
 
 ///////////////////////////////////////////////////////////////////////////
 
-#define ID_LAYERS_MAP_DIALOG_BASE 1000
-#define ID_M_STATICLINESEP 1001
-#define ID_M_STATICTEXTCOPPERLAYERCOUNT 1002
-#define ID_M_COMBOCOPPERLAYERSCOUNT 1003
-#define ID_STORE_CHOICE 1004
-#define ID_GET_PREVIOUS_CHOICE 1005
-#define ID_RESET_CHOICE 1006
-
 ///////////////////////////////////////////////////////////////////////////////
 /// Class DIALOG_MAP_GERBER_LAYERS_TO_PCB_BASE
 ///////////////////////////////////////////////////////////////////////////////
 class DIALOG_MAP_GERBER_LAYERS_TO_PCB_BASE : public DIALOG_SHIM
 {
-	DECLARE_EVENT_TABLE()
 	private:
-
-		// Private event handlers
-		void _wxFB_OnBrdLayersCountSelection( wxCommandEvent& event ){ OnBrdLayersCountSelection( event ); }
-		void _wxFB_OnStoreSetup( wxCommandEvent& event ){ OnStoreSetup( event ); }
-		void _wxFB_OnGetSetup( wxCommandEvent& event ){ OnGetSetup( event ); }
-		void _wxFB_OnResetClick( wxCommandEvent& event ){ OnResetClick( event ); }
-
 
 	protected:
 		wxStaticText* m_staticTextLayerSel;
@@ -75,7 +59,7 @@ class DIALOG_MAP_GERBER_LAYERS_TO_PCB_BASE : public DIALOG_SHIM
 
 	public:
 
-		DIALOG_MAP_GERBER_LAYERS_TO_PCB_BASE( wxWindow* parent, wxWindowID id = ID_LAYERS_MAP_DIALOG_BASE, const wxString& title = _("Layer Selection"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+		DIALOG_MAP_GERBER_LAYERS_TO_PCB_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Layer Selection"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
 
 		~DIALOG_MAP_GERBER_LAYERS_TO_PCB_BASE();
 

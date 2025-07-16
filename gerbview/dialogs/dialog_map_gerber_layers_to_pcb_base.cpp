@@ -9,13 +9,6 @@
 
 ///////////////////////////////////////////////////////////////////////////
 
-BEGIN_EVENT_TABLE( DIALOG_MAP_GERBER_LAYERS_TO_PCB_BASE, DIALOG_SHIM )
-	EVT_COMBOBOX( ID_M_COMBOCOPPERLAYERSCOUNT, DIALOG_MAP_GERBER_LAYERS_TO_PCB_BASE::_wxFB_OnBrdLayersCountSelection )
-	EVT_BUTTON( ID_STORE_CHOICE, DIALOG_MAP_GERBER_LAYERS_TO_PCB_BASE::_wxFB_OnStoreSetup )
-	EVT_BUTTON( ID_GET_PREVIOUS_CHOICE, DIALOG_MAP_GERBER_LAYERS_TO_PCB_BASE::_wxFB_OnGetSetup )
-	EVT_BUTTON( ID_RESET_CHOICE, DIALOG_MAP_GERBER_LAYERS_TO_PCB_BASE::_wxFB_OnResetClick )
-END_EVENT_TABLE()
-
 DIALOG_MAP_GERBER_LAYERS_TO_PCB_BASE::DIALOG_MAP_GERBER_LAYERS_TO_PCB_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : DIALOG_SHIM( parent, id, title, pos, size, style )
 {
 	this->SetSizeHints( wxDefaultSize, wxDefaultSize );
@@ -49,7 +42,7 @@ DIALOG_MAP_GERBER_LAYERS_TO_PCB_BASE::DIALOG_MAP_GERBER_LAYERS_TO_PCB_BASE( wxWi
 
 	m_bSizerLayerList->Add( m_flexLeftColumnBoxSizer, 1, wxEXPAND, 5 );
 
-	m_staticlineSep = new wxStaticLine( this, ID_M_STATICLINESEP, wxDefaultPosition, wxDefaultSize, wxLI_VERTICAL );
+	m_staticlineSep = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_VERTICAL );
 	m_bSizerLayerList->Add( m_staticlineSep, 0, wxEXPAND | wxALL, 5 );
 
 	m_flexRightColumnBoxSizer = new wxFlexGridSizer( 4, 0, 0 );
@@ -75,11 +68,11 @@ DIALOG_MAP_GERBER_LAYERS_TO_PCB_BASE::DIALOG_MAP_GERBER_LAYERS_TO_PCB_BASE( wxWi
 	wxBoxSizer* bSizerLyrCnt;
 	bSizerLyrCnt = new wxBoxSizer( wxVERTICAL );
 
-	m_staticTextCopperlayerCount = new wxStaticText( this, ID_M_STATICTEXTCOPPERLAYERCOUNT, _("Copper layers count:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextCopperlayerCount = new wxStaticText( this, wxID_ANY, _("Copper layers count:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextCopperlayerCount->Wrap( -1 );
 	bSizerLyrCnt->Add( m_staticTextCopperlayerCount, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 
-	m_comboCopperLayersCount = new wxComboBox( this, ID_M_COMBOCOPPERLAYERSCOUNT, _("2 Layers"), wxDefaultPosition, wxDefaultSize, 0, NULL, 0 );
+	m_comboCopperLayersCount = new wxComboBox( this, wxID_ANY, _("2 Layers"), wxDefaultPosition, wxDefaultSize, 0, NULL, 0 );
 	m_comboCopperLayersCount->Append( _("2 Layers") );
 	m_comboCopperLayersCount->Append( _("4 Layers") );
 	m_comboCopperLayersCount->Append( _("6 Layers") );
@@ -107,13 +100,13 @@ DIALOG_MAP_GERBER_LAYERS_TO_PCB_BASE::DIALOG_MAP_GERBER_LAYERS_TO_PCB_BASE( wxWi
 	wxBoxSizer* bSizerButtons;
 	bSizerButtons = new wxBoxSizer( wxVERTICAL );
 
-	m_buttonStore = new wxButton( this, ID_STORE_CHOICE, _("Store Choice"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_buttonStore = new wxButton( this, wxID_ANY, _("Store Choice"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizerButtons->Add( m_buttonStore, 0, wxALL|wxEXPAND, 5 );
 
-	m_buttonRetrieve = new wxButton( this, ID_GET_PREVIOUS_CHOICE, _("Get Stored Choice"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_buttonRetrieve = new wxButton( this, wxID_ANY, _("Get Stored Choice"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizerButtons->Add( m_buttonRetrieve, 0, wxALL|wxEXPAND, 5 );
 
-	m_buttonReset = new wxButton( this, ID_RESET_CHOICE, _("Reset"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_buttonReset = new wxButton( this, wxID_ANY, _("Reset"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizerButtons->Add( m_buttonReset, 0, wxALL|wxEXPAND, 5 );
 
 
@@ -140,8 +133,20 @@ DIALOG_MAP_GERBER_LAYERS_TO_PCB_BASE::DIALOG_MAP_GERBER_LAYERS_TO_PCB_BASE( wxWi
 	bSizerMain->Fit( this );
 
 	this->Centre( wxBOTH );
+
+	// Connect Events
+	m_comboCopperLayersCount->Connect( wxEVT_COMMAND_COMBOBOX_SELECTED, wxCommandEventHandler( DIALOG_MAP_GERBER_LAYERS_TO_PCB_BASE::OnBrdLayersCountSelection ), NULL, this );
+	m_buttonStore->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_MAP_GERBER_LAYERS_TO_PCB_BASE::OnStoreSetup ), NULL, this );
+	m_buttonRetrieve->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_MAP_GERBER_LAYERS_TO_PCB_BASE::OnGetSetup ), NULL, this );
+	m_buttonReset->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_MAP_GERBER_LAYERS_TO_PCB_BASE::OnResetClick ), NULL, this );
 }
 
 DIALOG_MAP_GERBER_LAYERS_TO_PCB_BASE::~DIALOG_MAP_GERBER_LAYERS_TO_PCB_BASE()
 {
+	// Disconnect Events
+	m_comboCopperLayersCount->Disconnect( wxEVT_COMMAND_COMBOBOX_SELECTED, wxCommandEventHandler( DIALOG_MAP_GERBER_LAYERS_TO_PCB_BASE::OnBrdLayersCountSelection ), NULL, this );
+	m_buttonStore->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_MAP_GERBER_LAYERS_TO_PCB_BASE::OnStoreSetup ), NULL, this );
+	m_buttonRetrieve->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_MAP_GERBER_LAYERS_TO_PCB_BASE::OnGetSetup ), NULL, this );
+	m_buttonReset->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_MAP_GERBER_LAYERS_TO_PCB_BASE::OnResetClick ), NULL, this );
+
 }

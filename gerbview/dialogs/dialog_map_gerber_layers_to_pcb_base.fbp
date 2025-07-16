@@ -5,7 +5,7 @@
     <property name="code_generation">C++</property>
     <property name="cpp_class_decoration"></property>
     <property name="cpp_disconnect_events">1</property>
-    <property name="cpp_event_generation">table</property>
+    <property name="cpp_event_generation">connect</property>
     <property name="cpp_help_provider">none</property>
     <property name="cpp_namespace"></property>
     <property name="cpp_precompiled_header"></property>
@@ -45,7 +45,7 @@
       <property name="fg"></property>
       <property name="font"></property>
       <property name="hidden">0</property>
-      <property name="id">ID_LAYERS_MAP_DIALOG_BASE</property>
+      <property name="id">wxID_ANY</property>
       <property name="maximum_size"></property>
       <property name="minimum_size"></property>
       <property name="name">DIALOG_MAP_GERBER_LAYERS_TO_PCB_BASE</property>
@@ -213,7 +213,7 @@
                         <property name="font"></property>
                         <property name="gripper">0</property>
                         <property name="hidden">0</property>
-                        <property name="id">ID_M_STATICLINESEP</property>
+                        <property name="id">wxID_ANY</property>
                         <property name="max_size"></property>
                         <property name="maximize_button">0</property>
                         <property name="maximum_size"></property>
@@ -312,7 +312,7 @@
                         <property name="font"></property>
                         <property name="gripper">0</property>
                         <property name="hidden">0</property>
-                        <property name="id">ID_M_STATICTEXTCOPPERLAYERCOUNT</property>
+                        <property name="id">wxID_ANY</property>
                         <property name="label">Copper layers count:</property>
                         <property name="markup">0</property>
                         <property name="max_size"></property>
@@ -375,7 +375,7 @@
                         <property name="font"></property>
                         <property name="gripper">0</property>
                         <property name="hidden">0</property>
-                        <property name="id">ID_M_COMBOCOPPERLAYERSCOUNT</property>
+                        <property name="id">wxID_ANY</property>
                         <property name="max_size"></property>
                         <property name="maximize_button">0</property>
                         <property name="maximum_size"></property>
@@ -468,7 +468,7 @@
                         <property name="font"></property>
                         <property name="gripper">0</property>
                         <property name="hidden">0</property>
-                        <property name="id">ID_STORE_CHOICE</property>
+                        <property name="id">wxID_ANY</property>
                         <property name="label">Store Choice</property>
                         <property name="margins"></property>
                         <property name="markup">0</property>
@@ -543,7 +543,7 @@
                         <property name="font"></property>
                         <property name="gripper">0</property>
                         <property name="hidden">0</property>
-                        <property name="id">ID_GET_PREVIOUS_CHOICE</property>
+                        <property name="id">wxID_ANY</property>
                         <property name="label">Get Stored Choice</property>
                         <property name="margins"></property>
                         <property name="markup">0</property>
@@ -618,7 +618,7 @@
                         <property name="font"></property>
                         <property name="gripper">0</property>
                         <property name="hidden">0</property>
-                        <property name="id">ID_RESET_CHOICE</property>
+                        <property name="id">wxID_ANY</property>
                         <property name="label">Reset</property>
                         <property name="margins"></property>
                         <property name="markup">0</property>
