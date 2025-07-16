@@ -1034,7 +1034,6 @@ bool PCB_EDIT_FRAME::SavePcbFile( const wxString& aFileName, bool addToHistory,
         GetBoard()->SynchronizeNetsAndNetClasses( false );
     }
 
-    wxString   tempFile = wxFileName::CreateTempFileName( wxS( "pcbnew" ) );
     wxString   upperTxt;
     wxString   lowerTxt;
 
@@ -1042,40 +1041,13 @@ bool PCB_EDIT_FRAME::SavePcbFile( const wxString& aFileName, bool addToHistory,
     {
         IO_RELEASER<PCB_IO> pi( PCB_IO_MGR::PluginFind( PCB_IO_MGR::KICAD_SEXP ) );
 
-        pi->SaveBoard( tempFile, GetBoard(), nullptr );
+        pi->SaveBoard( pcbFileName.GetFullPath(), GetBoard(), nullptr );
     }
     catch( const IO_ERROR& ioe )
     {
         DisplayError( this, wxString::Format( _( "Error saving board file '%s'.\n%s" ),
                                               pcbFileName.GetFullPath(),
                                               ioe.What() ) );
-
-        lowerTxt.Printf( _( "Failed to create temporary file '%s'." ), tempFile );
-
-        SetMsgPanel( upperTxt, lowerTxt );
-
-        // In case we started a file but didn't fully write it, clean up
-        wxRemoveFile( tempFile );
-
-        return false;
-    }
-
-    // Preserve the permissions of the current file
-    KIPLATFORM::IO::DuplicatePermissions( pcbFileName.GetFullPath(), tempFile );
-
-    // If save succeeded, replace the original with what we just wrote
-    if( !wxRenameFile( tempFile, pcbFileName.GetFullPath() ) )
-    {
-        DisplayError( this, wxString::Format( _( "Error saving board file '%s'.\n"
-                                                 "Failed to rename temporary file '%s." ),
-                                              pcbFileName.GetFullPath(),
-                                              tempFile ) );
-
-        lowerTxt.Printf( _( "Failed to rename temporary file '%s'." ),
-                         tempFile );
-
-        SetMsgPanel( upperTxt, lowerTxt );
-
         return false;
     }
 
@@ -1084,7 +1056,10 @@ bool PCB_EDIT_FRAME::SavePcbFile( const wxString& aFileName, bool addToHistory,
         WX_STRING_REPORTER backupReporter;
 
         if( !GetSettingsManager()->TriggerBackupIfNeeded( backupReporter ) )
+        {
             upperTxt = backupReporter.GetMessages();
+            SetStatusText( upperTxt, 1 );
+        }
     }
 
     GetBoard()->SetFileName( pcbFileName.GetFullPath() );
@@ -1117,6 +1092,7 @@ bool PCB_EDIT_FRAME::SavePcbFile( const wxString& aFileName, bool addToHistory,
 
     GetScreen()->SetContentModified( false );
     UpdateTitle();
+    UpdateStatusBar();
     return true;
 }
 
