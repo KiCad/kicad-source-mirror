@@ -568,13 +568,16 @@ int SCH_ITEM::compare( const SCH_ITEM& aOther, int aCompareFlags ) const
 }
 
 
-const wxString& SCH_ITEM::GetDefaultFont() const
+const wxString& SCH_ITEM::GetDefaultFont( const RENDER_SETTINGS* aSettings ) const
 {
     static wxString defaultName = KICAD_FONT_NAME;
 
-    EESCHEMA_SETTINGS* cfg = GetAppSettings<EESCHEMA_SETTINGS>( "eeschema" );
-
-    return cfg ? cfg->m_Appearance.default_font : defaultName;
+    if( aSettings )
+        return aSettings->GetDefaultFont();
+    else if( EESCHEMA_SETTINGS* cfg = GetAppSettings<EESCHEMA_SETTINGS>( "eeschema" ) )
+        return cfg->m_Appearance.default_font;
+    else
+        return defaultName;
 }
 
 

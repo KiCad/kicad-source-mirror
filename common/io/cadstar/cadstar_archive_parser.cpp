@@ -2784,7 +2784,7 @@ void CADSTAR_ARCHIVE_PARSER::FixTextPositionNoAlignment( EDA_TEXT* aKiCadTextIte
 {
     if( !aKiCadTextItem->GetText().IsEmpty() )
     {
-        VECTOR2I positionOffset( 0, aKiCadTextItem->GetInterline() );
+        VECTOR2I positionOffset( 0, aKiCadTextItem->GetInterline( nullptr ) );
         RotatePoint( positionOffset, aKiCadTextItem->GetTextAngle() );
 
         //Count num of additional lines

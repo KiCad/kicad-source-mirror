@@ -82,7 +82,7 @@ void SCH_TEXT::NormalizeJustification( bool inverse )
         return;
 
     VECTOR2I delta( 0, 0 );
-    BOX2I    bbox = GetTextBox();
+    BOX2I    bbox = GetTextBox( nullptr );
 
     if( GetTextAngle().IsHorizontal() )
     {
@@ -283,12 +283,12 @@ int SCH_TEXT::GetPenWidth() const
 }
 
 
-KIFONT::FONT* SCH_TEXT::getDrawFont() const
+KIFONT::FONT* SCH_TEXT::GetDrawFont( const RENDER_SETTINGS* aSettings ) const
 {
     KIFONT::FONT* font = EDA_TEXT::GetFont();
 
     if( !font )
-        font = KIFONT::FONT::GetFont( GetDefaultFont(), IsBold(), IsItalic() );
+        font = KIFONT::FONT::GetFont( GetDefaultFont( aSettings ), IsBold(), IsItalic() );
 
     return font;
 }
@@ -296,7 +296,7 @@ KIFONT::FONT* SCH_TEXT::getDrawFont() const
 
 const BOX2I SCH_TEXT::GetBoundingBox() const
 {
-    BOX2I bbox = GetTextBox();
+    BOX2I bbox = GetTextBox( nullptr );
 
     if( !GetTextAngle().IsZero() ) // Rotate bbox.
     {
@@ -464,11 +464,7 @@ void SCH_TEXT::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS& a
     penWidth = std::max( penWidth, renderSettings->GetMinPenWidth() );
     aPlotter->SetCurrentLineWidth( penWidth );
 
-    KIFONT::FONT* font = GetFont();
-
-    if( !font )
-        font = KIFONT::FONT::GetFont( renderSettings->GetDefaultFont(), IsBold(), IsItalic() );
-
+    KIFONT::FONT*   font = GetDrawFont( renderSettings );
     TEXT_ATTRIBUTES attrs = GetAttributes();
     attrs.m_StrokeWidth = penWidth;
 
@@ -510,7 +506,7 @@ void SCH_TEXT::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS& a
         // SCH_FIELD text.
         if( font->IsOutline() )
         {
-            BOX2I    firstLineBBox = GetTextBox( 0 );
+            BOX2I    firstLineBBox = GetTextBox( renderSettings, 0 );
             int      sizeDiff = firstLineBBox.GetHeight() - GetTextSize().y;
             int      adjust = KiROUND( sizeDiff * 0.4 );
             VECTOR2I adjust_offset( 0, - adjust );
@@ -524,7 +520,7 @@ void SCH_TEXT::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS& a
         wxStringSplit( GetShownText( sheet, true ), strings_list, '\n' );
         positions.reserve( strings_list.Count() );
 
-        GetLinePositions( positions, (int) strings_list.Count() );
+        GetLinePositions( renderSettings, positions, (int) strings_list.Count() );
 
         attrs.m_Multiline = false;
 

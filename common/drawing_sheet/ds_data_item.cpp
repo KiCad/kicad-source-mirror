@@ -701,7 +701,7 @@ void DS_DATA_ITEM_TEXT::SetConstrainedTextSize()
         dummy.SetVertJustify( m_Vjustify );
         dummy.SetTextAngle( EDA_ANGLE( m_Orient, DEGREES_T ) );
 
-        BOX2I    rect = dummy.GetTextBox();
+        BOX2I    rect = dummy.GetTextBox( nullptr );
         VECTOR2D size;
         size.x = KiROUND( (int) rect.GetWidth() / FSCALE );
         size.y = KiROUND( (int) rect.GetHeight() / FSCALE );

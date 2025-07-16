@@ -933,8 +933,7 @@ void FIELDS_GRID_TABLE::SetValue( int aRow, int aCol, const wxString &aValue )
         if( value == DEFAULT_FONT_NAME )
             field.SetFont( nullptr );
         else if( value == KICAD_FONT_NAME )
-            field.SetFont( KIFONT::FONT::GetFont( wxEmptyString, field.IsBold(),
-                                                  field.IsItalic() ) );
+            field.SetFont( KIFONT::FONT::GetFont( wxEmptyString, field.IsBold(), field.IsItalic() ) );
         else
             field.SetFont( KIFONT::FONT::GetFont( aValue, field.IsBold(), field.IsItalic() ) );
 

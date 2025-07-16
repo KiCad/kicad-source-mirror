@@ -133,10 +133,7 @@ bool DRC_TEST_PROVIDER_TEXT_DIMS::Run()
                 if( constraint.GetSeverity() == RPT_SEVERITY_IGNORE )
                     return true;
 
-                KIFONT::FONT* font = text->GetFont();
-
-                if( !font )
-                    font = KIFONT::FONT::GetFont( wxEmptyString, text->IsBold(), text->IsItalic() );
+                KIFONT::FONT* font = text->GetDrawFont( nullptr );
 
                 if( font->IsOutline() )
                 {

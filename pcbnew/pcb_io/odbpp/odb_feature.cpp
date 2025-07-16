@@ -613,17 +613,8 @@ void FEATURES_MANAGER::InitFeatureList( PCB_LAYER_ID aLayer, std::vector<BOARD_I
             isKnockout = static_cast<PCB_TEXTBOX*>( item )->IsKnockout();
 
         const KIFONT::METRICS& fontMetrics = item->GetFontMetrics();
-
-        KIFONT::FONT* font = text_item->GetFont();
-
-        if( !font )
-        {
-            wxString defaultFontName; // empty string is the KiCad stroke font
-
-            font = KIFONT::FONT::GetFont( defaultFontName, text_item->IsBold(), text_item->IsItalic() );
-        }
-
-        wxString shownText( text_item->GetShownText( true ) );
+        KIFONT::FONT*          font = text_item->GetDrawFont( nullptr );
+        wxString               shownText( text_item->GetShownText( true ) );
 
         if( shownText.IsEmpty() )
             return;
@@ -662,7 +653,7 @@ void FEATURES_MANAGER::InitFeatureList( PCB_LAYER_ID aLayer, std::vector<BOARD_I
             wxStringSplit( shownText, strings_list, '\n' );
             positions.reserve( strings_list.Count() );
 
-            text_item->GetLinePositions( positions, strings_list.Count() );
+            text_item->GetLinePositions( nullptr, positions, strings_list.Count() );
 
             for( unsigned ii = 0; ii < strings_list.Count(); ii++ )
             {

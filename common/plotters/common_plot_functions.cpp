@@ -135,14 +135,8 @@ void PlotDrawingSheet( PLOTTER* plotter, const PROJECT* aProject, const TITLE_BL
             case WSG_TEXT_T:
             {
                 DS_DRAW_ITEM_TEXT* text = (DS_DRAW_ITEM_TEXT*) item;
-                KIFONT::FONT*      font = text->GetFont();
+                KIFONT::FONT*      font = text->GetDrawFont( settings );
                 COLOR4D            color = plotColor;
-
-                if( !font )
-                {
-                    font = KIFONT::FONT::GetFont( settings->GetDefaultFont(), text->IsBold(),
-                                                  text->IsItalic() );
-                }
 
                 if( plotter->GetColorMode() && text->GetTextColor() != COLOR4D::UNSPECIFIED )
                     color = text->GetTextColor();

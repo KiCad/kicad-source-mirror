@@ -443,7 +443,7 @@ wxString PCB_TEXTBOX::GetShownText( bool aAllowExtraText, int aDepth ) const
             text = ExpandTextVars( text, &resolver );
     }
 
-    KIFONT::FONT*         font = getDrawFont();
+    KIFONT::FONT*         font = GetDrawFont( nullptr );
     EDA_ANGLE             drawAngle = GetDrawRotation();
     std::vector<VECTOR2I> corners = GetCornersInSequence( drawAngle );
     int                   colWidth = ( corners[1] - corners[0] ).EuclideanNorm();
@@ -626,7 +626,7 @@ void PCB_TEXTBOX::TransformTextToPolySet( SHAPE_POLY_SET& aBuffer, int aClearanc
                                           ERROR_LOC aErrorLoc ) const
 {
     KIGFX::GAL_DISPLAY_OPTIONS empty_opts;
-    KIFONT::FONT*              font = getDrawFont();
+    KIFONT::FONT*              font = GetDrawFont( nullptr );
     int                        penWidth = GetEffectiveTextPenWidth();
     TEXT_ATTRIBUTES            attrs = GetAttributes();
     wxString                   shownText = GetShownText( true );

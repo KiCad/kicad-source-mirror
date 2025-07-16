@@ -258,19 +258,19 @@ bool SCH_TEXTBOX::operator<( const SCH_ITEM& aItem ) const
 }
 
 
-KIFONT::FONT* SCH_TEXTBOX::getDrawFont() const
+KIFONT::FONT* SCH_TEXTBOX::GetDrawFont( const RENDER_SETTINGS* aSettings ) const
 {
     KIFONT::FONT* font = EDA_TEXT::GetFont();
 
     if( !font )
-        font = KIFONT::FONT::GetFont( GetDefaultFont(), IsBold(), IsItalic() );
+        font = KIFONT::FONT::GetFont( GetDefaultFont( aSettings ), IsBold(), IsItalic() );
 
     return font;
 }
 
 
-wxString SCH_TEXTBOX::GetShownText( const SCH_SHEET_PATH* aPath, bool aAllowExtraText,
-                                    int aDepth ) const
+wxString SCH_TEXTBOX::GetShownText( const RENDER_SETTINGS* aSettings, const SCH_SHEET_PATH* aPath,
+                                    bool aAllowExtraText, int aDepth ) const
 {
     SCH_SHEET* sheet = nullptr;
 
@@ -305,8 +305,8 @@ wxString SCH_TEXTBOX::GetShownText( const SCH_SHEET_PATH* aPath, bool aAllowExtr
     else
         colWidth = abs( size.x ) - ( GetMarginLeft() + GetMarginRight() );
 
-    getDrawFont()->LinebreakText( text, colWidth, GetTextSize(), GetEffectiveTextPenWidth(),
-                                  IsBold(), IsItalic() );
+    GetDrawFont( aSettings )->LinebreakText( text, colWidth, GetTextSize(), GetEffectiveTextPenWidth(),
+                                             IsBold(), IsItalic() );
 
     return text;
 }
@@ -387,7 +387,7 @@ void SCH_TEXTBOX::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS
     COLOR4D              color = GetStroke().GetColor();
     COLOR4D              bg = renderSettings->GetBackgroundColor();
 
-    KIFONT::FONT* font = getDrawFont();
+    KIFONT::FONT* font = GetDrawFont( renderSettings );
 
     color = GetTextColor();
 
@@ -411,7 +411,7 @@ void SCH_TEXTBOX::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS
     std::vector<VECTOR2I> positions;
     wxArrayString         strings_list;
 
-    wxStringSplit( GetShownText( sheet, true ), strings_list, '\n' );
+    wxStringSplit( GetShownText( renderSettings, sheet, true ), strings_list, '\n' );
     positions.reserve( strings_list.Count() );
 
     if( renderSettings->m_Transform != TRANSFORM() || aOffset != VECTOR2I() )
@@ -428,12 +428,12 @@ void SCH_TEXTBOX::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS
         temp.SetEnd( renderSettings->TransformCoordinate( m_end ) + aOffset );
 
         attrs = temp.GetAttributes();
-        temp.GetLinePositions( positions, (int) strings_list.Count() );
+        temp.GetLinePositions( renderSettings, positions, (int) strings_list.Count() );
     }
     else
     {
         attrs = GetAttributes();
-        GetLinePositions( positions, (int) strings_list.Count() );
+        GetLinePositions( renderSettings, positions, (int) strings_list.Count() );
     }
 
     attrs.m_StrokeWidth = penWidth;

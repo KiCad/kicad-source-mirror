@@ -321,7 +321,7 @@ public:
 
     int GetEffectivePenWidth( const SCH_RENDER_SETTINGS* aSettings ) const;
 
-    const wxString& GetDefaultFont() const;
+    const wxString& GetDefaultFont( const RENDER_SETTINGS* aSettings ) const;
 
     const KIFONT::METRICS& GetFontMetrics() const;
 

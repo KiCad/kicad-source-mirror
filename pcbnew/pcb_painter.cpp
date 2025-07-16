@@ -2289,13 +2289,7 @@ void PCB_PAINTER::draw( const PCB_TEXT* aText, int aLayer )
     const COLOR4D&         color = m_pcbSettings.GetColor( aText, aLayer );
     bool                   outline_mode = !viewer_settings()->m_ViewersDisplay.m_DisplayTextFill;
 
-    KIFONT::FONT* font = aText->GetFont();
-
-    if( !font )
-    {
-        font = KIFONT::FONT::GetFont( m_pcbSettings.GetDefaultFont(), aText->IsBold(),
-                                      aText->IsItalic() );
-    }
+    KIFONT::FONT* font = aText->GetDrawFont( &m_pcbSettings );
 
     m_gal->SetStrokeColor( color );
     m_gal->SetFillColor( color );
@@ -2324,7 +2318,7 @@ void PCB_PAINTER::draw( const PCB_TEXT* aText, int aLayer )
             // So we need to recalculate the text position to keep it at the same position
             // on the canvas
             VECTOR2I textPos = aText->GetTextPos();
-            VECTOR2I textWidth = VECTOR2I( aText->GetTextBox().GetWidth(), 0 );
+            VECTOR2I textWidth = VECTOR2I( aText->GetTextBox( &m_pcbSettings ).GetWidth(), 0 );
 
             if( aText->GetHorizJustify() == GR_TEXT_H_ALIGN_RIGHT )
                 textWidth.x = -textWidth.x;
@@ -2381,18 +2375,11 @@ void PCB_PAINTER::draw( const PCB_TEXTBOX* aTextBox, int aLayer )
             return;
     }
 
-    COLOR4D    color = m_pcbSettings.GetColor( aTextBox, aLayer );
-    int        thickness = getLineThickness( aTextBox->GetWidth() );
-    LINE_STYLE lineStyle = aTextBox->GetStroke().GetLineStyle();
-    wxString   resolvedText( aTextBox->GetShownText( true ) );
-
-    KIFONT::FONT* font = aTextBox->GetFont();
-
-    if( !font )
-    {
-        font = KIFONT::FONT::GetFont( m_pcbSettings.GetDefaultFont(), aTextBox->IsBold(),
-                                      aTextBox->IsItalic() );
-    }
+    COLOR4D       color = m_pcbSettings.GetColor( aTextBox, aLayer );
+    int           thickness = getLineThickness( aTextBox->GetWidth() );
+    LINE_STYLE    lineStyle = aTextBox->GetStroke().GetLineStyle();
+    wxString      resolvedText( aTextBox->GetShownText( true ) );
+    KIFONT::FONT* font = aTextBox->GetDrawFont( &m_pcbSettings );
 
     if( aLayer == LAYER_LOCKED_ITEM_SHADOW )    // happens only if locked
     {

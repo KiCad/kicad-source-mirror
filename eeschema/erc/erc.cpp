@@ -310,7 +310,7 @@ void ERC_TESTER::TestTextVars( DS_PROXY_VIEW_ITEM* aDrawingSheet )
                                 {
                                     SCH_TEXTBOX* textboxItem = static_cast<SCH_TEXTBOX*>( child );
 
-                                    if( unresolved( textboxItem->GetShownText( &sheet, true ) ) )
+                                    if( unresolved( textboxItem->GetShownText( nullptr, &sheet, true ) ) )
                                     {
                                         auto ercItem = ERC_ITEM::Create( ERCE_UNRESOLVED_VARIABLE );
                                         ercItem->SetItems( symbol );
@@ -399,7 +399,7 @@ void ERC_TESTER::TestTextVars( DS_PROXY_VIEW_ITEM* aDrawingSheet )
             }
             else if( SCH_TEXTBOX* textBox = dynamic_cast<SCH_TEXTBOX*>( item ) )
             {
-                if( textBox->GetShownText( &sheet, true ).Matches( wxS( "*${*}*" ) ) )
+                if( textBox->GetShownText( nullptr, &sheet, true ).Matches( wxS( "*${*}*" ) ) )
                 {
                     auto ercItem = ERC_ITEM::Create( ERCE_UNRESOLVED_VARIABLE );
                     ercItem->SetItems( textBox );

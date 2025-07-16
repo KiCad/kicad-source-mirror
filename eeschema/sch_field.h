@@ -181,6 +181,8 @@ public:
      */
     EDA_ANGLE GetDrawRotation() const override;
 
+    KIFONT::FONT* GetDrawFont( const RENDER_SETTINGS* aSettings ) const override;
+
     const BOX2I GetBoundingBox() const override;
 
     /**
@@ -302,8 +304,6 @@ public:
 
 protected:
     friend class SCH_IO_KICAD_SEXPR_PARSER;
-
-    KIFONT::FONT* getDrawFont() const override;
 
     const KIFONT::METRICS& getFontMetrics() const override { return GetFontMetrics(); }
 

@@ -221,7 +221,7 @@ const BOX2I DS_DRAW_ITEM_TEXT::GetApproxBBox()
 
 const BOX2I DS_DRAW_ITEM_TEXT::GetBoundingBox() const
 {
-    return EDA_TEXT::GetTextBox();
+    return EDA_TEXT::GetTextBox( nullptr );
 }
 
 

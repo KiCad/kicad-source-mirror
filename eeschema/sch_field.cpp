@@ -319,12 +319,12 @@ int SCH_FIELD::GetPenWidth() const
 }
 
 
-KIFONT::FONT* SCH_FIELD::getDrawFont() const
+KIFONT::FONT* SCH_FIELD::GetDrawFont( const RENDER_SETTINGS* aSettings ) const
 {
     KIFONT::FONT* font = EDA_TEXT::GetFont();
 
     if( !font )
-        font = KIFONT::FONT::GetFont( GetDefaultFont(), IsBold(), IsItalic() );
+        font = KIFONT::FONT::GetFont( GetDefaultFont( aSettings ), IsBold(), IsItalic() );
 
     return font;
 }
@@ -348,10 +348,7 @@ std::vector<std::unique_ptr<KIFONT::GLYPH>>*
 SCH_FIELD::GetRenderCache( const wxString& forResolvedText, const VECTOR2I& forPosition,
                            TEXT_ATTRIBUTES& aAttrs ) const
 {
-    KIFONT::FONT* font = GetFont();
-
-    if( !font )
-        font = KIFONT::FONT::GetFont( GetDefaultFont(), IsBold(), IsItalic() );
+    KIFONT::FONT* font = GetDrawFont( nullptr );
 
     if( font->IsOutline() )
     {
@@ -491,7 +488,7 @@ EDA_ANGLE SCH_FIELD::GetDrawRotation() const
 
 const BOX2I SCH_FIELD::GetBoundingBox() const
 {
-    BOX2I bbox = GetTextBox();
+    BOX2I bbox = GetTextBox( nullptr );
 
     // Calculate the bounding box position relative to the parent:
     VECTOR2I origin = GetParentPosition();
@@ -1286,11 +1283,7 @@ void SCH_FIELD::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS& 
             color = nc->GetSchematicColor();
     }
 
-    KIFONT::FONT* font = GetFont();
-
-    if( !font )
-        font = KIFONT::FONT::GetFont( renderSettings->GetDefaultFont(), IsBold(), IsItalic() );
-
+    KIFONT::FONT*   font = GetDrawFont( renderSettings );
     TEXT_ATTRIBUTES attrs = GetAttributes();
     attrs.m_StrokeWidth = penWidth;
     attrs.m_Halign = hjustify;

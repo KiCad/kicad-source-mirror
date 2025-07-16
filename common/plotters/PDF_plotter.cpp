@@ -1729,9 +1729,8 @@ void PDF_PLOTTER::Text( const VECTOR2I&        aPos,
 
     wxStringTokenizer str_tok( aText, " ", wxTOKEN_RET_DELIMS );
 
-    // If aFont is not specilied (== nullptr), use the default kicad stroke font
     if( !aFont )
-        aFont = KIFONT::FONT::GetFont();
+        aFont = KIFONT::FONT::GetFont( m_renderSettings->GetDefaultFont() );
 
     VECTOR2I full_box( aFont->StringBoundaryLimits( aText, t_size, aWidth, aBold, aItalic,
                                                     aFontMetrics ) );

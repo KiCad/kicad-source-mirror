@@ -59,6 +59,8 @@ public:
         return _( "Text" );
     }
 
+    KIFONT::FONT* GetDrawFont( const RENDER_SETTINGS* aSettings ) const override;
+
     virtual wxString GetShownText( const SCH_SHEET_PATH* aPath, bool aAllowExtraText,
                                    int aDepth = 0 ) const;
 
@@ -167,8 +169,6 @@ public:
 
 protected:
     void swapData( SCH_ITEM* aItem ) override;
-
-    KIFONT::FONT* getDrawFont() const override;
 
     const KIFONT::METRICS& getFontMetrics() const override { return GetFontMetrics(); }
 
