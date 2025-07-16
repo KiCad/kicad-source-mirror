@@ -92,35 +92,12 @@ class SYMBOL_LIB_TABLE_GRID : public LIB_TABLE_GRID
     friend class PANEL_SYM_LIB_TABLE;
     friend class SYMBOL_GRID_TRICKS;
 
-protected:
-    LIBRARY_TABLE_ROW& at( size_t aIndex ) override { return m_table.Rows().at( aIndex ); }
-
-    size_t size() const override { return m_table.Rows().size(); }
-
-    LIBRARY_TABLE_ROW makeNewRow() override
-    {
-        return m_table.MakeRow();
-    }
-
-    LIBRARY_TABLE_ROWS_ITER begin() override { return m_table.Rows().begin(); }
-
-    LIBRARY_TABLE_ROWS_ITER insert( LIBRARY_TABLE_ROWS_ITER aIterator,
-                                    const LIBRARY_TABLE_ROW& aRow ) override
-    {
-        return m_table.Rows().insert( aIterator, aRow );
-    }
-
-    void push_back( const LIBRARY_TABLE_ROW& aRow ) override { m_table.Rows().push_back( aRow ); }
-
-    LIBRARY_TABLE_ROWS_ITER erase( LIBRARY_TABLE_ROWS_ITER aFirst,
-                                   LIBRARY_TABLE_ROWS_ITER aLast ) override
-    {
-        return m_table.Rows().erase( aFirst, aLast );
-    }
-
-    LIBRARY_TABLE& Table() { return m_table; }
-
 public:
+    SYMBOL_LIB_TABLE_GRID( const LIBRARY_TABLE& aTableToEdit ) :
+            LIB_TABLE_GRID( aTableToEdit )
+    {
+    }
+
     void SetValue( int aRow, int aCol, const wxString &aValue ) override
     {
         wxCHECK( aRow < (int) size(), /* void */ );
@@ -150,16 +127,6 @@ public:
             }
         }
     }
-
-
-    SYMBOL_LIB_TABLE_GRID( const LIBRARY_TABLE& aTableToEdit ) :
-            m_table( aTableToEdit )
-    {
-    }
-
-private:
-    /// Working copy of a table
-    LIBRARY_TABLE m_table;
 };
 
 
@@ -323,8 +290,6 @@ void PANEL_SYM_LIB_TABLE::setupGrid( WX_GRID* aGrid )
                 aCurrGrid->SetColSize( aCol, std::max( prevWidth, aCurrGrid->GetColSize( aCol ) ) );
             };
 
-    SETTINGS_MANAGER&  mgr = Pgm().GetSettingsManager();
-    EESCHEMA_SETTINGS* cfg = mgr.GetAppSettings<EESCHEMA_SETTINGS>( "eeschema" );
     SYMBOL_LIBRARY_MANAGER_ADAPTER* adapter = PROJECT_SCH::SymbolLibManager( m_project );
 
     for( int ii = 0; ii < aGrid->GetNumberRows(); ++ii )

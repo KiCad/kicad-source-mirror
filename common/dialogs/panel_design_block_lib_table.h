@@ -36,12 +36,7 @@ class PROJECT;
 class PANEL_DESIGN_BLOCK_LIB_TABLE : public PANEL_DESIGN_BLOCK_LIB_TABLE_BASE
 {
 public:
-    PANEL_DESIGN_BLOCK_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent, PROJECT* aProject,
-                                  DESIGN_BLOCK_LIB_TABLE* aGlobalTable,
-                                  const wxString&         aGlobalTblPath,
-                                  DESIGN_BLOCK_LIB_TABLE* aProjectTable,
-                                  const wxString&         aProjectTblPath,
-                                  const wxString&         aProjectBasePath );
+    PANEL_DESIGN_BLOCK_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent, PROJECT* aProject );
     ~PANEL_DESIGN_BLOCK_LIB_TABLE() override;
 
 private:
@@ -85,11 +80,7 @@ private:
         return (DESIGN_BLOCK_LIB_TABLE_GRID*) m_cur_grid->GetTable();
     }
 
-    // caller's tables are modified only on OK button and successful verification.
-    DESIGN_BLOCK_LIB_TABLE* m_globalTable;
-    DESIGN_BLOCK_LIB_TABLE* m_projectTable;
-    PROJECT*                m_project;
-    wxString                m_projectBasePath;
+    PROJECT* m_project;
 
     DIALOG_EDIT_LIBRARY_TABLES* m_parent;
 

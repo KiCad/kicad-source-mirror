@@ -137,6 +137,7 @@ set( KICOMMON_SRCS
     libraries/library_manager.cpp
     libraries/library_table.cpp
     libraries/library_table_parser.cpp
+    libraries/lib_table_grid.cpp
 
     settings/app_settings.cpp
     settings/aui_settings.cpp
