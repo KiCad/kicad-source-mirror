@@ -501,14 +501,15 @@ protected:
     bool addInstance( const KIID_PATH& aInstance );
 
     /**
-     * Return the sheet page number for \a aInstance.
+     * Return the sheet page number for \a aParentPath.
      *
      * @warning The #KIID_PATH object must be a full hierarchical path which means the sheet
      *          at index 0 must be the root sheet.
+     * @param aParentPath is the hierarchical path of the sheet that contains an instance of this SCH_SHEET
      *
      * @return the page number for the requested sheet instance.
      */
-    wxString getPageNumber( const KIID_PATH& aInstance ) const;
+    wxString getPageNumber( const KIID_PATH& aParentPath ) const;
 
     /**
      * Set the page number for the sheet instance \a aInstance.

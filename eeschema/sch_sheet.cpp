@@ -1442,13 +1442,13 @@ const SCH_SHEET_INSTANCE& SCH_SHEET::GetRootInstance() const
 }
 
 
-wxString SCH_SHEET::getPageNumber( const KIID_PATH& aPath ) const
+wxString SCH_SHEET::getPageNumber( const KIID_PATH& aParentPath ) const
 {
     wxString pageNumber;
 
     for( const SCH_SHEET_INSTANCE& instance : m_instances )
     {
-        if( instance.m_Path == aPath )
+        if( instance.m_Path == aParentPath )
         {
             pageNumber = instance.m_PageNumber;
             break;
