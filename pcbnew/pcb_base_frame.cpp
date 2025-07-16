@@ -263,6 +263,7 @@ void PCB_BASE_FRAME::FocusOnItems( std::vector<BOARD_ITEM*> aItems, PCB_LAYER_ID
 {
     static std::vector<KIID> lastBrightenedItemIDs;
 
+    bool itemsUnbrightened = false;
     BOARD_ITEM* lastItem = nullptr;
 
     for( KIID lastBrightenedItemID : lastBrightenedItemIDs )
@@ -287,9 +288,12 @@ void PCB_BASE_FRAME::FocusOnItems( std::vector<BOARD_ITEM*> aItems, PCB_LAYER_ID
         {
             lastItem->ClearBrightened();
             GetCanvas()->GetView()->Update( lastItem );
-            GetCanvas()->Refresh();
+            itemsUnbrightened = true;
         }
     }
+
+    if( itemsUnbrightened )
+        GetCanvas()->Refresh();
 
     lastBrightenedItemIDs.clear();
 
