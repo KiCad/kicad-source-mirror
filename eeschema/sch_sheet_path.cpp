@@ -847,16 +847,13 @@ void SCH_SHEET_LIST::SortByHierarchicalPageNumbers( bool aUpdateVirtualPageNums 
             SCH_SHEET* sheet_b = b.at( common_len );
 
             // Create partial paths to get to these sheets for page number comparison
-            KIID_PATH path_a, path_b;
-            for( size_t i = 0; i <= common_len; i++ )
-            {
-                path_a.push_back( a.at( i )->m_Uuid );
-                path_b.push_back( b.at( i )->m_Uuid );
-            }
+            KIID_PATH ancestor;
+            for( size_t i = 0; i < common_len; i++ )
+                ancestor.push_back( a.at( i )->m_Uuid );
 
             // Compare page numbers - use the last sheet's page number
-            wxString page_a = sheet_a->getPageNumber( path_a );
-            wxString page_b = sheet_b->getPageNumber( path_b );
+            wxString page_a = sheet_a->getPageNumber( ancestor );
+            wxString page_b = sheet_b->getPageNumber( ancestor );
 
             int retval = SCH_SHEET::ComparePageNum( page_a, page_b );
 
