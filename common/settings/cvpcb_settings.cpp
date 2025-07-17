@@ -51,10 +51,10 @@ CVPCB_SETTINGS::CVPCB_SETTINGS() :
 
     addParamsForWindow( &m_FootprintViewer, "footprint_viewer" );
 
-    m_params.emplace_back( new PARAM<double>( "footprint_viewer.zoom", &m_FootprintViewerZoom,
-                                              1.0 ) );
+    m_params.emplace_back( new PARAM<double>( "footprint_viewer.zoom",
+            &m_FootprintViewerZoom, 1.0 ) );
     m_params.emplace_back( new PARAM<bool>( "footprint_viewer.autozoom",
-                                            &m_FootprintViewerAutoZoomOnSelect, true ) );
+            &m_FootprintViewerAutoZoomOnSelect, true ) );
 
     m_params.emplace_back( new PARAM<bool>( "footprint_viewer.use_45_limit",
             &m_ViewersDisplay.m_Use45Limit, true ) );

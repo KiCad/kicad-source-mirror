@@ -275,7 +275,8 @@ WINDOW_SETTINGS* SIMULATOR_FRAME::GetWindowSettings( APP_SETTINGS_BASE* aCfg )
     EESCHEMA_SETTINGS* cfg = dynamic_cast<EESCHEMA_SETTINGS*>( aCfg );
     wxASSERT( cfg );
 
-    return cfg ? &cfg->m_Simulator.window : nullptr;
+    wxFAIL_MSG( wxT( "SIMULATOR not running with EESCHEMA_SETTINGS" ) );
+    return &aCfg->m_Window;     // non-null fail-safe
 }
 
 

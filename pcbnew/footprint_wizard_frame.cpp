@@ -520,10 +520,11 @@ void FOOTPRINT_WIZARD_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
 
 WINDOW_SETTINGS* FOOTPRINT_WIZARD_FRAME::GetWindowSettings( APP_SETTINGS_BASE* aCfg )
 {
-    auto cfg = dynamic_cast<PCBNEW_SETTINGS*>( aCfg );
-    wxASSERT( cfg );
+    if( PCBNEW_SETTINGS* cfg = dynamic_cast<PCBNEW_SETTINGS*>( aCfg ) )
+        return &cfg->m_FootprintWizard;
 
-    return cfg ? &cfg->m_FootprintWizard : nullptr;
+    wxFAIL_MSG( wxT( "FOOTPRINT_CHOOSER not running with PCBNEW_SETTINGS" ) );
+    return &aCfg->m_Window;     // non-null fail-safe
 }
 
 

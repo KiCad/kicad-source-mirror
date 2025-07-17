@@ -913,7 +913,12 @@ PCB_VIEWERS_SETTINGS_BASE* PCB_BASE_FRAME::GetViewerSettingsBase() const
 
 MAGNETIC_SETTINGS* PCB_BASE_FRAME::GetMagneticItemsSettings()
 {
-    return &GetPcbNewSettings()->m_MagneticItems;
+    static MAGNETIC_SETTINGS fallback;
+
+    if( PCBNEW_SETTINGS* cfg = GetPcbNewSettings() )
+        return &cfg->m_MagneticItems;
+
+    return &fallback;
 }
 
 
