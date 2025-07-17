@@ -1600,7 +1600,8 @@ void ALTIUM_PCB::HelperParseDimensions6Linear( const ADIMENSION6& aElem )
          * This should give us a valid measurement point where we can place the drawsegment.
          */
         VECTOR2I     direction             = aElem.xy1 - referencePoint0;
-        VECTOR2I     directionNormalVector = VECTOR2I( -direction.y, direction.x );
+        VECTOR2I     referenceDiff         = referencePoint1 - referencePoint0;
+        VECTOR2I     directionNormalVector = direction.Perpendicular();
         SEG          segm1( referencePoint0, referencePoint0 + directionNormalVector );
         SEG          segm2( referencePoint1, referencePoint1 + direction );
         OPT_VECTOR2I intersection( segm1.Intersect( segm2, true, true ) );
@@ -1612,7 +1613,7 @@ void ALTIUM_PCB::HelperParseDimensions6Linear( const ADIMENSION6& aElem )
 
         int height = direction.EuclideanNorm();
 
-        if( ( direction.x > 0 || direction.y < 0 ) != ( aElem.angle >= 180.0 ) )
+        if( direction.Cross( referenceDiff ) > 0 )
             height = -height;
 
         dimension->SetHeight( height );
@@ -1626,6 +1627,12 @@ void ALTIUM_PCB::HelperParseDimensions6Linear( const ADIMENSION6& aElem )
 
     dimension->SetUnitsFormat( DIM_UNITS_FORMAT::NO_SUFFIX );
     dimension->SetPrefix( aElem.textprefix );
+
+
+    int dist = ( dimension->GetEnd() - dimension->GetStart() ).EuclideanNorm();
+
+    if( dist < 3 * dimension->GetArrowLength() )
+        dimension->SetArrowDirection( DIM_ARROW_DIRECTION::INWARD );
 
     // Suffix normally (but not always) holds the units
     wxRegEx units( wxS( "(mm)|(in)|(mils)|(thou)|(')|(\")" ), wxRE_ADVANCED );
