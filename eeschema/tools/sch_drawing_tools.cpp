@@ -1766,8 +1766,11 @@ bool SCH_DRAWING_TOOLS::createNewLabel( const VECTOR2I& aPosition, int aType,
         m_lastNetClassFlagShape = labelItem->GetShape();
     }
 
-    // Return elements are kept in aLabelList
-    delete labelItem;
+    if( aLabelList.empty() )
+        aLabelList.push_back( std::unique_ptr<SCH_LABEL_BASE>( labelItem ) );
+    else // DIALOG_LABEL_PROPERTIES already filled in aLabelList; labelItem is extraneous to needs
+        delete labelItem;
+
     return true;
 }
 
