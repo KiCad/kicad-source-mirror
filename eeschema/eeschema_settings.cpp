@@ -568,26 +568,7 @@ EESCHEMA_SETTINGS::EESCHEMA_SETTINGS() :
     m_params.emplace_back( new PARAM<bool>( "plot.other_open_file_after_plot",
             &m_PlotPanel.open_file_after_plot, false ) );
 
-    m_params.emplace_back( new PARAM<int>( "simulator.window.pos_x",
-            &m_Simulator.window.state.pos_x, 0 ) );
-
-    m_params.emplace_back( new PARAM<int>( "simulator.window.pos_y",
-            &m_Simulator.window.state.pos_y, 0 ) );
-
-    m_params.emplace_back( new PARAM<int>( "simulator.window.size_x",
-            &m_Simulator.window.state.size_x, 500 ) );
-
-    m_params.emplace_back( new PARAM<int>( "simulator.window.size_y",
-            &m_Simulator.window.state.size_y, 400 ) );
-
-    m_params.emplace_back( new PARAM<unsigned int>( "simulator.window.display",
-            &m_Simulator.window.state.display, 0 ) );
-
-    m_params.emplace_back( new PARAM<bool>( "simulator.window.maximized",
-            &m_Simulator.window.state.maximized, false ) );
-
-    m_params.emplace_back( new PARAM<wxString>( "simulator.window.perspective",
-            &m_Simulator.window.perspective, "" ) );
+    addParamsForWindow( &m_Simulator.window, "simulator.window", 500, 400 );
 
     m_params.emplace_back( new PARAM<int>( "simulator.plot_panel_width",
             &m_Simulator.view.plot_panel_width, 0 ) );
@@ -676,7 +657,7 @@ EESCHEMA_SETTINGS::EESCHEMA_SETTINGS() :
     m_params.emplace_back( new PARAM<bool>( "system.never_show_rescue_dialog",
             &m_RescueNeverShow, false ) );
 
-    addParamsForWindow( &m_LibViewPanel.window, "lib_view.window" );
+    addParamsForWindow( &m_LibViewPanel.window, "lib_view.window", 500, 400 );
 
     m_params.emplace_back( new PARAM<int>( "lib_view.lib_list_width",
             &m_LibViewPanel.lib_list_width, 150 ) );

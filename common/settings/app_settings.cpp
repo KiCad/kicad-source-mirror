@@ -410,7 +410,8 @@ bool APP_SETTINGS_BASE::migrateWindowConfig( wxConfigBase* aCfg, const std::stri
 }
 
 
-void APP_SETTINGS_BASE::addParamsForWindow( WINDOW_SETTINGS* aWindow, const std::string& aJsonPath )
+void APP_SETTINGS_BASE::addParamsForWindow( WINDOW_SETTINGS* aWindow, const std::string& aJsonPath,
+                                            int aDefaultWidth, int aDefaultHeight )
 {
     m_params.emplace_back( new PARAM<bool>( aJsonPath + ".maximized",
             &aWindow->state.maximized, false ) );
@@ -418,9 +419,9 @@ void APP_SETTINGS_BASE::addParamsForWindow( WINDOW_SETTINGS* aWindow, const std:
     m_params.emplace_back( new PARAM<wxString>( aJsonPath + ".mru_path",
             &aWindow->mru_path, wxS( "" ) ) );
 
-    m_params.emplace_back( new PARAM<int>( aJsonPath + ".size_x", &aWindow->state.size_x, 0 ) );
+    m_params.emplace_back( new PARAM<int>( aJsonPath + ".size_x", &aWindow->state.size_x, aDefaultWidth ) );
 
-    m_params.emplace_back( new PARAM<int>( aJsonPath + ".size_y", &aWindow->state.size_y, 0 ) );
+    m_params.emplace_back( new PARAM<int>( aJsonPath + ".size_y", &aWindow->state.size_y, aDefaultHeight ) );
 
     m_params.emplace_back( new PARAM<wxString>( aJsonPath + ".perspective",
             &aWindow->perspective, wxS( "" ) ) );

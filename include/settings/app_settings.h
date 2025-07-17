@@ -267,7 +267,8 @@ protected:
      * @param aWindow is the target window settings object.
      * @param aJsonPath is the path to read parameters from.
      */
-    void addParamsForWindow( WINDOW_SETTINGS* aWindow, const std::string& aJsonPath );
+    void addParamsForWindow( WINDOW_SETTINGS* aWindow, const std::string& aJsonPath,
+                             int aDefaultWidth = 0, int aDefaultHeight = 0 );
 
     /**
      * Migrate the library tree width setting from a single column (Item) to multi-column.
