@@ -211,7 +211,7 @@ static double dpoint_dist( const VECTOR2D& a, const VECTOR2D& b );
 // PM 2; ends the polygon definition and closes it if not closed
 // FP;   fills the polygon
 // EP;   draws the polygon outline. It usually gives a better look to the filled polygon
-static const char hpgl_end_polygon_cmd[] = "PM 2; FP; EP;\n";
+static const char hpgl_end_polygon_cmd[] = "PM 2; EP; FP;\n";
 
 
 // HPGL scale factor (1 Plotter Logical Unit = 1/40mm = 25 micrometers)
