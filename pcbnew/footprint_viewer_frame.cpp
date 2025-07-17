@@ -846,10 +846,11 @@ void FOOTPRINT_VIEWER_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
 
 WINDOW_SETTINGS* FOOTPRINT_VIEWER_FRAME::GetWindowSettings( APP_SETTINGS_BASE* aCfg )
 {
-    PCBNEW_SETTINGS* cfg = dynamic_cast<PCBNEW_SETTINGS*>( aCfg );
-    wxCHECK_MSG( cfg, nullptr, wxT( "config not existing" ) );
+    if( PCBNEW_SETTINGS* cfg = dynamic_cast<PCBNEW_SETTINGS*>( aCfg ) )
+        return &cfg->m_FootprintViewer;
 
-    return &cfg->m_FootprintViewer;
+    wxFAIL_MSG( wxT( "FOOTPRINT_CHOOSER not running with PCBNEW_SETTINGS" ) );
+    return &aCfg->m_Window;     // non-null fail-safe
 }
 
 

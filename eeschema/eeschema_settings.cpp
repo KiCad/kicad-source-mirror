@@ -247,8 +247,7 @@ EESCHEMA_SETTINGS::EESCHEMA_SETTINGS() :
     m_params.emplace_back( new PARAM<bool>( "appearance.show_sexpr_file_convert_warning",
             &m_Appearance.show_sexpr_file_convert_warning, true ) );
 
-    m_params.emplace_back(
-            new PARAM<bool>( "appearance.show_sheet_filename_case_sensitivity_dialog",
+    m_params.emplace_back( new PARAM<bool>( "appearance.show_sheet_filename_case_sensitivity_dialog",
             &m_Appearance.show_sheet_filename_case_sensitivity_dialog, true ) );
 
     m_params.emplace_back( new PARAM<bool>( "aui.show_schematic_hierarchy",
@@ -356,8 +355,8 @@ EESCHEMA_SETTINGS::EESCHEMA_SETTINGS() :
     m_params.emplace_back( new PARAM<wxString>( "drawing.field_names",
             &m_Drawing.field_names, "" ) );
 
-    m_params.emplace_back( new PARAM<int>( "drawing.line_mode", &m_Drawing.line_mode,
-                                           LINE_MODE::LINE_MODE_90 ) );
+    m_params.emplace_back( new PARAM<int>( "drawing.line_mode",
+            &m_Drawing.line_mode, LINE_MODE::LINE_MODE_90 ) );
 
     m_params.emplace_back( new PARAM<int>( "editing.arc_edit_mode",
             reinterpret_cast<int*>( &m_Drawing.arc_edit_mode ),
@@ -375,9 +374,8 @@ EESCHEMA_SETTINGS::EESCHEMA_SETTINGS() :
     m_params.emplace_back( new PARAM<COLOR4D>( "drawing.default_sheet_background_color",
             &m_Drawing.default_sheet_background_color, COLOR4D::UNSPECIFIED ) );
 
-    m_params.emplace_back( new PARAM_ENUM<POWER_SYMBOLS>(
-            "drawing.new_power_symbols", &m_Drawing.new_power_symbols, POWER_SYMBOLS::DEFAULT,
-            POWER_SYMBOLS::DEFAULT, POWER_SYMBOLS::LOCAL ) );
+    m_params.emplace_back( new PARAM_ENUM<POWER_SYMBOLS>( "drawing.new_power_symbols",
+            &m_Drawing.new_power_symbols, POWER_SYMBOLS::DEFAULT, POWER_SYMBOLS::DEFAULT, POWER_SYMBOLS::LOCAL ) );
 
     m_params.emplace_back( new PARAM_LIST<double>( "drawing.junction_size_mult_list",
             &m_Drawing.junction_size_mult_list, { 0.0, 1.7, 4.0, 6.0, 9.0, 12.0 } ) );
@@ -389,17 +387,16 @@ EESCHEMA_SETTINGS::EESCHEMA_SETTINGS() :
             &m_Drawing.hop_over_size_choice, 0 ) );
 
     m_params.emplace_back( new PARAM<bool>( "find_replace.search_all_fields",
-                                            &m_FindReplaceExtra.search_all_fields, false ) );
+            &m_FindReplaceExtra.search_all_fields, false ) );
 
     m_params.emplace_back( new PARAM<bool>( "find_replace.search_all_pins",
-                                            &m_FindReplaceExtra.search_all_pins, false ) );
+            &m_FindReplaceExtra.search_all_pins, false ) );
 
     m_params.emplace_back( new PARAM<bool>( "find_replace.search_current_sheet_only",
-                                            &m_FindReplaceExtra.search_current_sheet_only,
-                                            false ) );
+            &m_FindReplaceExtra.search_current_sheet_only, false ) );
 
     m_params.emplace_back( new PARAM<bool>( "find_replace.replace_references",
-                                            &m_FindReplaceExtra.replace_references, false ) );
+            &m_FindReplaceExtra.replace_references, false ) );
 
     m_params.emplace_back( new PARAM<bool>( "input.drag_is_move",
             &m_Input.drag_is_move, false ) );
@@ -524,21 +521,25 @@ EESCHEMA_SETTINGS::EESCHEMA_SETTINGS() :
             &m_PageSettings.export_comment9, false ) );
 
     m_params.emplace_back( new PARAM_MAP<int>( "field_editor.field_widths",
-                                               &m_FieldEditorPanel.field_widths, {} ) );
+            &m_FieldEditorPanel.field_widths, {} ) );
 
-    m_params.emplace_back( new PARAM<int>( "field_editor.width", &m_FieldEditorPanel.width, 0 ) );
+    m_params.emplace_back( new PARAM<int>( "field_editor.width",
+            &m_FieldEditorPanel.width, 0 ) );
 
-    m_params.emplace_back( new PARAM<int>( "field_editor.height", &m_FieldEditorPanel.height, 0 ) );
+    m_params.emplace_back( new PARAM<int>( "field_editor.height",
+            &m_FieldEditorPanel.height, 0 ) );
 
-    m_params.emplace_back( new PARAM<int>( "field_editor.page", &m_FieldEditorPanel.page, 0 ) );
+    m_params.emplace_back( new PARAM<int>( "field_editor.page",
+            &m_FieldEditorPanel.page, 0 ) );
 
     m_params.emplace_back( new PARAM<wxString>( "field_editor.export_filename",
-                                                &m_FieldEditorPanel.export_filename, wxT( "" ) ) );
+            &m_FieldEditorPanel.export_filename, wxT( "" ) ) );
 
     m_params.emplace_back( new PARAM<int>( "field_editor.selection_mode",
-                                           &m_FieldEditorPanel.selection_mode, 0 ) );
+            &m_FieldEditorPanel.selection_mode, 0 ) );
 
-    m_params.emplace_back( new PARAM<int>( "field_editor.scope", &m_FieldEditorPanel.scope, 0 ) );
+    m_params.emplace_back( new PARAM<int>( "field_editor.scope",
+            &m_FieldEditorPanel.scope, 0 ) );
 
     m_params.emplace_back( new PARAM<bool>( "plot.background_color",
             &m_PlotPanel.background_color, false ) );
@@ -589,49 +590,44 @@ EESCHEMA_SETTINGS::EESCHEMA_SETTINGS() :
             &m_Simulator.window.perspective, "" ) );
 
     m_params.emplace_back( new PARAM<int>( "simulator.plot_panel_width",
-        &m_Simulator.view.plot_panel_width, 0 ) );
+            &m_Simulator.view.plot_panel_width, 0 ) );
 
     m_params.emplace_back( new PARAM<int>( "simulator.plot_panel_height",
-        &m_Simulator.view.plot_panel_height, 0 ) );
+            &m_Simulator.view.plot_panel_height, 0 ) );
 
     m_params.emplace_back( new PARAM<int>( "simulator.signal_panel_height",
-        &m_Simulator.view.signal_panel_height, 0 ) );
+            &m_Simulator.view.signal_panel_height, 0 ) );
 
     m_params.emplace_back( new PARAM<int>( "simulator.cursors_panel_height",
-        &m_Simulator.view.cursors_panel_height, 0 ) );
+            &m_Simulator.view.cursors_panel_height, 0 ) );
 
     m_params.emplace_back( new PARAM<int>( "simulator.measurements_panel_height",
-        &m_Simulator.view.measurements_panel_height, 0 ) );
+            &m_Simulator.view.measurements_panel_height, 0 ) );
 
     m_params.emplace_back( new PARAM<bool>( "simulator.white_background",
-        &m_Simulator.view.white_background, false ) );
+            &m_Simulator.view.white_background, false ) );
 
-    m_params.emplace_back( new PARAM_ENUM<SIM_MOUSE_WHEEL_ACTION>(
-            "simulator.mouse_wheel_actions.vertical_unmodified",
+    m_params.emplace_back( new PARAM_ENUM<SIM_MOUSE_WHEEL_ACTION>( "simulator.mouse_wheel_actions.vertical_unmodified",
             &m_Simulator.preferences.mouse_wheel_actions.vertical_unmodified,
             SIM_MOUSE_WHEEL_ACTION::ZOOM, SIM_MOUSE_WHEEL_ACTION::NONE,
             SIM_MOUSE_WHEEL_ACTION::ZOOM_VERTICALLY ) );
 
-    m_params.emplace_back( new PARAM_ENUM<SIM_MOUSE_WHEEL_ACTION>(
-            "simulator.mouse_wheel_actions.vertical_with_ctrl",
+    m_params.emplace_back( new PARAM_ENUM<SIM_MOUSE_WHEEL_ACTION>( "simulator.mouse_wheel_actions.vertical_with_ctrl",
             &m_Simulator.preferences.mouse_wheel_actions.vertical_with_ctrl,
             SIM_MOUSE_WHEEL_ACTION::PAN_LEFT_RIGHT, SIM_MOUSE_WHEEL_ACTION::NONE,
             SIM_MOUSE_WHEEL_ACTION::ZOOM_VERTICALLY ) );
 
-    m_params.emplace_back( new PARAM_ENUM<SIM_MOUSE_WHEEL_ACTION>(
-            "simulator.mouse_wheel_actions.vertical_with_shift",
+    m_params.emplace_back( new PARAM_ENUM<SIM_MOUSE_WHEEL_ACTION>( "simulator.mouse_wheel_actions.vertical_with_shift",
             &m_Simulator.preferences.mouse_wheel_actions.vertical_with_shift,
             SIM_MOUSE_WHEEL_ACTION::PAN_UP_DOWN, SIM_MOUSE_WHEEL_ACTION::NONE,
             SIM_MOUSE_WHEEL_ACTION::ZOOM_VERTICALLY ) );
 
-    m_params.emplace_back( new PARAM_ENUM<SIM_MOUSE_WHEEL_ACTION>(
-            "simulator.mouse_wheel_actions.vertical_with_alt",
+    m_params.emplace_back( new PARAM_ENUM<SIM_MOUSE_WHEEL_ACTION>( "simulator.mouse_wheel_actions.vertical_with_alt",
             &m_Simulator.preferences.mouse_wheel_actions.vertical_with_alt,
             SIM_MOUSE_WHEEL_ACTION::NONE, SIM_MOUSE_WHEEL_ACTION::NONE,
             SIM_MOUSE_WHEEL_ACTION::ZOOM_VERTICALLY ) );
 
-    m_params.emplace_back( new PARAM_ENUM<SIM_MOUSE_WHEEL_ACTION>(
-            "simulator.mouse_wheel_actions.horizontal",
+    m_params.emplace_back( new PARAM_ENUM<SIM_MOUSE_WHEEL_ACTION>( "simulator.mouse_wheel_actions.horizontal",
             &m_Simulator.preferences.mouse_wheel_actions.horizontal, SIM_MOUSE_WHEEL_ACTION::NONE,
             SIM_MOUSE_WHEEL_ACTION::NONE, SIM_MOUSE_WHEEL_ACTION::ZOOM_VERTICALLY ) );
 
@@ -680,26 +676,7 @@ EESCHEMA_SETTINGS::EESCHEMA_SETTINGS() :
     m_params.emplace_back( new PARAM<bool>( "system.never_show_rescue_dialog",
             &m_RescueNeverShow, false ) );
 
-    m_params.emplace_back( new PARAM<int>( "lib_view.window.pos_x",
-            &m_LibViewPanel.window.state.pos_x, 0 ) );
-
-    m_params.emplace_back( new PARAM<int>( "lib_view.window.pos_y",
-            &m_LibViewPanel.window.state.pos_y, 0 ) );
-
-    m_params.emplace_back( new PARAM<int>( "lib_view.window.size_x",
-            &m_LibViewPanel.window.state.size_x, 500 ) );
-
-    m_params.emplace_back( new PARAM<int>( "lib_view.window.size_y",
-            &m_LibViewPanel.window.state.size_y, 400 ) );
-
-    m_params.emplace_back( new PARAM<unsigned int>( "lib_view.window.display",
-            &m_LibViewPanel.window.state.display, 0 ) );
-
-    m_params.emplace_back( new PARAM<bool>( "lib_view.window.maximized",
-            &m_LibViewPanel.window.state.maximized, false ) );
-
-    m_params.emplace_back( new PARAM<wxString>( "lib_view.window.perspective",
-            &m_LibViewPanel.window.perspective, "" ) );
+    addParamsForWindow( &m_LibViewPanel.window, "lib_view.window" );
 
     m_params.emplace_back( new PARAM<int>( "lib_view.lib_list_width",
             &m_LibViewPanel.lib_list_width, 150 ) );

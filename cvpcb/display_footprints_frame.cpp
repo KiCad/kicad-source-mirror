@@ -239,10 +239,11 @@ void DISPLAY_FOOTPRINTS_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
 
 WINDOW_SETTINGS* DISPLAY_FOOTPRINTS_FRAME::GetWindowSettings( APP_SETTINGS_BASE* aCfg )
 {
-    static WINDOW_SETTINGS defaultCfg;
+    if( CVPCB_SETTINGS* cfg = GetAppSettings<CVPCB_SETTINGS>( "cvpcb" ) )
+        return &cfg->m_FootprintViewer;
 
-    CVPCB_SETTINGS* cfg = GetAppSettings<CVPCB_SETTINGS>( "cvpcb" );
-    return cfg ? &cfg->m_FootprintViewer : &defaultCfg;
+    wxFAIL_MSG( wxT( "DISPLAY_FOOTPRINTS_FRAME not running with CVPCB_SETTINGS" ) );
+    return &aCfg->m_Window;     // non-null fail-safe
 }
 
 
@@ -254,10 +255,13 @@ PCB_VIEWERS_SETTINGS_BASE* DISPLAY_FOOTPRINTS_FRAME::GetViewerSettingsBase() con
 
 MAGNETIC_SETTINGS* DISPLAY_FOOTPRINTS_FRAME::GetMagneticItemsSettings()
 {
-    static MAGNETIC_SETTINGS defaultCfg;
+    static MAGNETIC_SETTINGS fallback;
 
-    CVPCB_SETTINGS* cfg = GetAppSettings<CVPCB_SETTINGS>( "cvpcb" );
-    return cfg ? &cfg->m_FootprintViewerMagneticSettings : &defaultCfg;
+    if( CVPCB_SETTINGS* cfg = GetAppSettings<CVPCB_SETTINGS>( "cvpcb" ) )
+        return &cfg->m_FootprintViewerMagneticSettings;
+
+    wxFAIL_MSG( wxT( "DISPLAY_FOOTPRINTS_FRAME not running with CVPCB_SETTINGS" ) );
+    return &fallback;
 }
 
 

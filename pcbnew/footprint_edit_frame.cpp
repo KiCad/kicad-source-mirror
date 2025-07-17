@@ -808,10 +808,12 @@ COLOR_SETTINGS* FOOTPRINT_EDIT_FRAME::GetColorSettings( bool aForceRefresh ) con
 
 MAGNETIC_SETTINGS* FOOTPRINT_EDIT_FRAME::GetMagneticItemsSettings()
 {
-    // Get the actual frame settings for magnetic items
-    FOOTPRINT_EDITOR_SETTINGS* cfg = GetSettings();
-    wxCHECK( cfg, nullptr );
-    return &cfg->m_MagneticItems;
+    static MAGNETIC_SETTINGS fallback;
+
+    if( FOOTPRINT_EDITOR_SETTINGS* cfg = GetSettings() )
+        return &cfg->m_MagneticItems;
+
+    return &fallback;
 }
 
 
