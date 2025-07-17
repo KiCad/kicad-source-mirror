@@ -783,7 +783,7 @@ bool DIALOG_EDIT_SYMBOLS_LIBID::TransferDataFromWindow()
         }
     }
 
-    if( m_modified )
+    if( m_isModified )
         commit.Push( wxS( "Change Symbol Library Indentifier" ) );
 
     return true;
