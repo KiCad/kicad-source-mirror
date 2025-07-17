@@ -50,7 +50,7 @@
 
 wxString PANEL_SYMBOL_CHOOSER::g_symbolSearchString;
 wxString PANEL_SYMBOL_CHOOSER::g_powerSearchString;
-
+SCH_BASE_FRAME* PANEL_SYMBOL_CHOOSER::m_frame = nullptr;
 
 PANEL_SYMBOL_CHOOSER::PANEL_SYMBOL_CHOOSER( SCH_BASE_FRAME* aFrame, wxWindow* aParent,
                                             const SYMBOL_LIBRARY_FILTER* aFilter,
@@ -67,13 +67,14 @@ PANEL_SYMBOL_CHOOSER::PANEL_SYMBOL_CHOOSER( SCH_BASE_FRAME* aFrame, wxWindow* aP
         m_fp_preview( nullptr ),
         m_tree( nullptr ),
         m_details( nullptr ),
-        m_frame( aFrame ),
         m_acceptHandler( std::move( aAcceptHandler ) ),
         m_escapeHandler( std::move( aEscapeHandler ) ),
         m_showPower( false ),
         m_allow_field_edits( aAllowFieldEdits ),
         m_show_footprints( aShowFootprints )
 {
+    m_frame = aFrame;
+
     SYMBOL_LIB_TABLE*         libs = PROJECT_SCH::SchSymbolLibTable( &m_frame->Prj() );
     COMMON_SETTINGS::SESSION& session = Pgm().GetCommonSettings()->m_Session;
     PROJECT_FILE&             project = m_frame->Prj().GetProjectFile();
@@ -110,12 +111,19 @@ PANEL_SYMBOL_CHOOSER::PANEL_SYMBOL_CHOOSER( SCH_BASE_FRAME* aFrame, wxWindow* aP
 
         if( aFilter->GetFilterPowerSymbols() )
         {
-            // HACK ALERT: when loading symbols we presume that *any* filter is a power symbol
-            // filter.  So the filter only needs to return true for libraries.
             static std::function<bool( LIB_TREE_NODE& )> powerFilter =
                     []( LIB_TREE_NODE& aNode ) -> bool
                     {
-                        return true;
+                        if (PANEL_SYMBOL_CHOOSER::m_frame)
+                        {
+                            LIB_SYMBOL* symbol = PANEL_SYMBOL_CHOOSER::m_frame->GetLibSymbol(aNode.m_LibId);
+
+                            if (symbol && symbol->IsPower())
+                                return true;
+
+                        }
+
+                        return false;
                     };
 
             adapter->SetFilter( &powerFilter );
@@ -341,6 +349,8 @@ PANEL_SYMBOL_CHOOSER::~PANEL_SYMBOL_CHOOSER()
 
         cfg->m_SymChooserPanel.sort_mode = m_tree->GetSortMode();
     }
+
+    m_frame = nullptr;
 }
 
 
