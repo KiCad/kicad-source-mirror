@@ -1116,6 +1116,7 @@ void ALTIUM_PCB::ParseBoard6Data( const ALTIUM_PCB_COMPOUND_FILE&     aAltiumPcb
     }
 
     HelperCreateBoardOutline( elem.board_vertices );
+    m_board->GetDesignSettings().SetBoardThickness( stackup.BuildBoardThicknessFromStackup() );
 }
 
 
@@ -1450,13 +1451,21 @@ void ALTIUM_PCB::ConvertComponentBody6ToFootprintItem( const ALTIUM_PCB_COMPOUND
         orientation              = -orientation;
     }
 
+    VECTOR3D modelRotation( aElem.modelRotation );
+
+    if( aElem.body_projection == 1 )
+    {
+        modelRotation.x += 180;
+        modelRotation.z += 180;
+    }
+
     RotatePoint( &modelSettings.m_Offset.x, &modelSettings.m_Offset.y, orientation );
 
-    modelSettings.m_Rotation.x = normalizeAngleDegrees( -aElem.modelRotation.x, -180, 180 );
-    modelSettings.m_Rotation.y = normalizeAngleDegrees( -aElem.modelRotation.y, -180, 180 );
-    modelSettings.m_Rotation.z = normalizeAngleDegrees( -aElem.modelRotation.z + aElem.rotation
-                                                                               + orientation.AsDegrees(),
-                                                                                 -180, 180 );
+    modelSettings.m_Rotation.x = normalizeAngleDegrees( -modelRotation.x, -180, 180 );
+    modelSettings.m_Rotation.y = normalizeAngleDegrees( -modelRotation.y, -180, 180 );
+    modelSettings.m_Rotation.z = normalizeAngleDegrees( -modelRotation.z + aElem.rotation
+                                                                         + orientation.AsDegrees(),
+                                                                           -180, 180 );
     modelSettings.m_Opacity = aElem.body_opacity_3d;
 
     aFootprint->Models().push_back( modelSettings );
@@ -1539,6 +1548,14 @@ void ALTIUM_PCB::ParseComponentsBodies6Data( const ALTIUM_PCB_COMPOUND_FILE&    
         {
             modelSettings.m_Offset.y = -modelSettings.m_Offset.y;
             orientation              = -orientation;
+        }
+
+        if( elem.body_projection == 1 )
+        {
+            elem.modelRotation.x += 180;
+            elem.modelRotation.z += 180;
+            modelSettings.m_Offset.z =  pcbIUScale.IUTomm( m_board->GetDesignSettings().GetBoardThickness() )
+                                       + modelSettings.m_Offset.z;
         }
 
         RotatePoint( &modelSettings.m_Offset.x, &modelSettings.m_Offset.y, orientation );

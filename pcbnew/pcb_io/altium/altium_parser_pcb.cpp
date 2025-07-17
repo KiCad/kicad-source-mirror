@@ -702,6 +702,7 @@ ACOMPONENTBODY6::ACOMPONENTBODY6( ALTIUM_BINARY_PARSER& aReader )
     rotation = ALTIUM_PROPS_UTILS::ReadDouble( properties, wxT( "MODEL.2D.ROTATION" ), 0. );
 
     body_opacity_3d = ALTIUM_PROPS_UTILS::ReadDouble( properties, wxT( "BODYOPACITY3D" ), 1. );
+    body_projection = ALTIUM_PROPS_UTILS::ReadInt( properties, wxT( "BODYPROJECTION" ), 0 );
 
     aReader.SkipSubrecord();
 
