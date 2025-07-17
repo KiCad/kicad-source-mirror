@@ -38,7 +38,7 @@
 #include <kiplatform/ui.h>
 #include <confirm.h>
 #include <string_utils.h>
-#include <locale_io.h>
+
 #include <wx/filedlg.h>
 #include <fmt/format.h>
 #include <sch_edit_frame.h>
@@ -50,7 +50,7 @@
 
 using CATEGORY = SIM_MODEL::PARAM::CATEGORY;
 
-#define FORCE_UPDATE_PINS true
+#define FORCE_REFRESH_FROM_MODEL true
 
 
 bool equivalent( SIM_MODEL::DEVICE_T a, SIM_MODEL::DEVICE_T b )
@@ -153,12 +153,8 @@ DIALOG_SIM_MODEL<T>::~DIALOG_SIM_MODEL()
     // destruction of DIALOG_SIM_MODEL, oddly. When disabled, they never access their models.
     for( wxPropertyGridIterator it = m_paramGrid->GetIterator(); !it.AtEnd(); ++it )
     {
-        SIM_PROPERTY* prop = dynamic_cast<SIM_PROPERTY*>( *it );
-
-        if( !prop )
-            continue;
-
-        prop->Disable();
+        if( SIM_PROPERTY* prop = dynamic_cast<SIM_PROPERTY*>( *it ) )
+            prop->Disable();
     }
 
     // Delete the GRID_TRICKS.
@@ -253,7 +249,7 @@ bool DIALOG_SIM_MODEL<T>::TransferDataToWindow()
             if( m_modelListBoxEntryToLibraryIdx.contains( sel ) )
                 idx = m_modelListBoxEntryToLibraryIdx.at( sel );
 
-            auto ibismodel = dynamic_cast<SIM_MODEL_IBIS*>( &m_libraryModelsMgr.GetModels()[idx].get() );
+            SIM_MODEL_IBIS* ibismodel = dynamic_cast<SIM_MODEL_IBIS*>( &m_libraryModelsMgr.GetModels()[idx].get() );
 
             if( ibismodel )
             {
@@ -471,7 +467,7 @@ void DIALOG_SIM_MODEL<T>::updateWidgets()
     updateBuiltinModelWidgets( model );
     updateModelParamsTab( model );
     updateModelCodeTab( model );
-    updatePinAssignments( model, model != m_prevModel );
+    updatePinAssignments( model, false );
 
     std::string ref = GetFieldValue( &m_fields, SIM_REFERENCE_FIELD, false, 0 );
 
@@ -489,8 +485,7 @@ void DIALOG_SIM_MODEL<T>::updateWidgets()
 template <typename T>
 void DIALOG_SIM_MODEL<T>::updateIbisWidgets( SIM_MODEL* aModel )
 {
-    SIM_MODEL_IBIS* modelibis = isIbisLoaded() ? dynamic_cast<SIM_MODEL_IBIS*>( aModel )
-                                               : nullptr;
+    SIM_MODEL_IBIS* modelibis = isIbisLoaded() ? dynamic_cast<SIM_MODEL_IBIS*>( aModel ) : nullptr;
 
     m_pinLabel->Show( isIbisLoaded() );
     m_pinCombobox->Show( isIbisLoaded() );
@@ -571,8 +566,7 @@ void DIALOG_SIM_MODEL<T>::updateBuiltinModelWidgets( SIM_MODEL* aModel )
                     m_deviceSubtypeChoice->Append( SIM_MODEL::TypeInfo( type ).description );
 
                     if( type == aModel->GetType() )
-                        m_deviceSubtypeChoice->SetSelection( m_deviceSubtypeChoice->GetCount()
-                                                             - 1 );
+                        m_deviceSubtypeChoice->SetSelection( m_deviceSubtypeChoice->GetCount() - 1 );
                 }
             }
         }
@@ -724,11 +718,11 @@ void DIALOG_SIM_MODEL<T>::updateModelCodeTab( SIM_MODEL* aModel )
 
 
 template <typename T>
-void DIALOG_SIM_MODEL<T>::updatePinAssignments( SIM_MODEL* aModel, bool aForceUpdatePins )
+void DIALOG_SIM_MODEL<T>::updatePinAssignments( SIM_MODEL* aModel, bool aForceRefreshFromModel )
 {
     if( m_pinAssignmentsGrid->GetNumberRows() == 0 )
     {
-        m_pinAssignmentsGrid->AppendRows( static_cast<int>( m_sortedPartPins.size() ) );
+        m_pinAssignmentsGrid->AppendRows( (int) m_sortedPartPins.size() );
 
         for( int ii = 0; ii < m_pinAssignmentsGrid->GetNumberRows(); ++ii )
         {
@@ -738,10 +732,10 @@ void DIALOG_SIM_MODEL<T>::updatePinAssignments( SIM_MODEL* aModel, bool aForceUp
             m_pinAssignmentsGrid->SetCellValue( ii, PIN_COLUMN::SYMBOL, symbolPinString );
         }
 
-        aForceUpdatePins = true;
+        aForceRefreshFromModel = true;
     }
 
-    if( aForceUpdatePins )
+    if( aForceRefreshFromModel )
     {
         // Reset the grid.
         for( int row = 0; row < m_pinAssignmentsGrid->GetNumberRows(); ++row )
@@ -784,11 +778,15 @@ void DIALOG_SIM_MODEL<T>::updatePinAssignments( SIM_MODEL* aModel, bool aForceUp
         modelPinIcons.push_back( BITMAPS::INVALID_BITMAP );
         modelPinChoices.Add( _( "Not Connected" ) );
 
-        // Using `new` here shouldn't cause a memory leak because `SetCellEditor()` calls
-        // `DecRef()` on its last editor.
+        // This is not a memory leak; `SetCellEditor()` calls `DecRef()` on its previous editor.
         m_pinAssignmentsGrid->SetCellEditor( ii, PIN_COLUMN::MODEL,
-                                             new GRID_CELL_ICON_TEXT_POPUP( modelPinIcons,
-                                                                            modelPinChoices ) );
+                                             new GRID_CELL_ICON_TEXT_POPUP( modelPinIcons, modelPinChoices ) );
+
+        // Assignment stays the same, but model pin names need to be updated
+        int modelPinIndex = getModelPinIndex( m_pinAssignmentsGrid->GetCellValue( ii, PIN_COLUMN::MODEL ) );
+
+        if( modelPinIndex >= 0 )
+            m_pinAssignmentsGrid->SetCellValue( ii, PIN_COLUMN::MODEL, getModelPinString( aModel, modelPinIndex ) );
     }
 
     // TODO: Show a preview of the symbol with the pin numbers shown.
@@ -819,8 +817,7 @@ void DIALOG_SIM_MODEL<T>::removeOrphanedPinAssignments( SIM_MODEL* aModel )
 
 
 template <typename T>
-bool DIALOG_SIM_MODEL<T>::loadLibrary( const wxString& aLibraryPath, REPORTER& aReporter,
-                                       bool aForceReload )
+bool DIALOG_SIM_MODEL<T>::loadLibrary( const wxString& aLibraryPath, REPORTER& aReporter, bool aForceReload )
 {
     if( m_prevLibrary == aLibraryPath && !aForceReload )
         return true;
@@ -863,6 +860,7 @@ bool DIALOG_SIM_MODEL<T>::loadLibrary( const wxString& aLibraryPath, REPORTER& a
     {
         modelNames.Add( name );
         m_modelListBoxEntryToLibraryIdx[name] = m_modelListBoxEntryToLibraryIdx.size();
+
         if( name == modelName )
             modelNameExists = true;
     }
@@ -874,8 +872,9 @@ bool DIALOG_SIM_MODEL<T>::loadLibrary( const wxString& aLibraryPath, REPORTER& a
 
     if( !modelNameExists )
     {
-        m_infoBar->ShowMessage(
-                wxString::Format( _( "No model named '%s' in '%s'." ), modelName, aLibraryPath ) );
+        m_infoBar->ShowMessage( wxString::Format( _( "No model named '%s' in '%s'." ),
+                                                  modelName,
+                                                  aLibraryPath ) );
         return false;
     }
 
@@ -1026,8 +1025,7 @@ wxPGProperty* DIALOG_SIM_MODEL<T>::newParamProperty( SIM_MODEL* aModel, int aPar
                 SPICE_CIRCUIT_MODEL circuit( &schEditFrame->Schematic() );
                 NULL_REPORTER       devNul;
 
-                circuit.ReadSchematicAndLibraries( NETLIST_EXPORTER_SPICE::OPTION_DEFAULT_FLAGS,
-                                                   devNul );
+                circuit.ReadSchematicAndLibraries( NETLIST_EXPORTER_SPICE::OPTION_DEFAULT_FLAGS, devNul );
 
                 for( const SPICE_ITEM& item : circuit.GetItems() )
                 {
@@ -1044,19 +1042,19 @@ wxPGProperty* DIALOG_SIM_MODEL<T>::newParamProperty( SIM_MODEL* aModel, int aPar
 
             if( inductors.empty() )
             {
-                prop = new SIM_STRING_PROPERTY( paramDescription, param.info.name, *aModel,
-                                                aParamIndex, SIM_VALUE::TYPE_STRING );
+                prop = new SIM_STRING_PROPERTY( paramDescription, param.info.name, *aModel, aParamIndex,
+                                                SIM_VALUE::TYPE_STRING );
             }
             else
             {
-                prop = new SIM_ENUM_PROPERTY( paramDescription, param.info.name, *aModel,
-                                              aParamIndex, inductors );
+                prop = new SIM_ENUM_PROPERTY( paramDescription, param.info.name, *aModel, aParamIndex,
+                                              inductors );
             }
         }
         else if( param.info.enumValues.empty() )
         {
-            prop = new SIM_STRING_PROPERTY( paramDescription, param.info.name, *aModel,
-                                            aParamIndex, SIM_VALUE::TYPE_STRING );
+            prop = new SIM_STRING_PROPERTY( paramDescription, param.info.name, *aModel, aParamIndex,
+                                            SIM_VALUE::TYPE_STRING );
         }
         else
         {
@@ -1124,18 +1122,15 @@ SIM_MODEL& DIALOG_SIM_MODEL<T>::curModel() const
         wxString sel = m_modelListBox->GetStringSelection();
 
         if( m_modelListBoxEntryToLibraryIdx.contains( sel ) )
-            return m_libraryModelsMgr.GetModels()
-                    .at( m_modelListBoxEntryToLibraryIdx.at( sel ) )
-                    .get();
+            return m_libraryModelsMgr.GetModels().at( m_modelListBoxEntryToLibraryIdx.at( sel ) ).get();
     }
     else
     {
-        if( static_cast<int>( m_curModelType )
-            < static_cast<int>( m_builtinModelsMgr.GetModels().size() ) )
+        if( (int) m_curModelType < (int) m_builtinModelsMgr.GetModels().size() )
             return m_builtinModelsMgr.GetModels().at( static_cast<int>( m_curModelType ) );
     }
 
-    return m_builtinModelsMgr.GetModels().at( static_cast<int>( SIM_MODEL::TYPE::NONE ) );
+    return m_builtinModelsMgr.GetModels().at( (int) SIM_MODEL::TYPE::NONE );
 }
 
 
@@ -1172,9 +1167,10 @@ wxString DIALOG_SIM_MODEL<T>::getSymbolPinString( int symbolPinIndex ) const
 template <typename T>
 wxString DIALOG_SIM_MODEL<T>::getModelPinString( SIM_MODEL* aModel, int aModelPinIndex ) const
 {
-    const wxString& modelPinName = aModel->GetPin( aModelPinIndex ).modelPinName;
+    wxString modelPinName;
 
-    LOCALE_IO toggle;
+    if( aModelPinIndex >= 0 && aModelPinIndex < aModel->GetPinCount() )
+        modelPinName = aModel->GetPin( aModelPinIndex ).modelPinName;
 
     wxString modelPinNumber = wxString::Format( "%d", aModelPinIndex + 1 );
 
@@ -1463,8 +1459,7 @@ void DIALOG_SIM_MODEL<T>::onPinModelCombobox( wxCommandEvent& aEvent )
 template <typename T>
 void DIALOG_SIM_MODEL<T>::onPinModelComboboxTextEnter( wxCommandEvent& aEvent )
 {
-    m_pinModelCombobox->SetSelection(
-            m_pinModelCombobox->FindString( m_pinModelCombobox->GetValue() ) );
+    m_pinModelCombobox->SetSelection( m_pinModelCombobox->FindString( m_pinModelCombobox->GetValue() ) );
 }
 
 
@@ -1488,8 +1483,7 @@ void DIALOG_SIM_MODEL<T>::onDeviceTypeChoice( wxCommandEvent& aEvent )
 
     for( SIM_MODEL::DEVICE_T deviceType : SIM_MODEL::DEVICE_T_ITERATOR() )
     {
-        if( SIM_MODEL::DeviceInfo( deviceType ).description
-            == m_deviceChoice->GetStringSelection() )
+        if( SIM_MODEL::DeviceInfo( deviceType ).description == m_deviceChoice->GetStringSelection() )
         {
             m_curModelType = m_curModelTypeOfDeviceType.at( deviceType );
             break;
@@ -1520,15 +1514,13 @@ void DIALOG_SIM_MODEL<T>::onWaveformChoice( wxCommandEvent& aEvent )
             if( m_modelListBoxEntryToLibraryIdx.contains( sel ) )
                 idx = m_modelListBoxEntryToLibraryIdx.at( sel );
 
-            auto& baseModel =
-                    static_cast<SIM_MODEL_IBIS&>( m_libraryModelsMgr.GetModels()[idx].get() );
+            SIM_MODEL_IBIS& baseModel = static_cast<SIM_MODEL_IBIS&>( m_libraryModelsMgr.GetModels()[idx].get() );
 
             m_libraryModelsMgr.SetModel( idx, std::make_unique<SIM_MODEL_IBIS>( type, baseModel ) );
 
             try
             {
-                m_libraryModelsMgr.GetModels()[idx].get().ReadDataFields( &m_fields, true, 0,
-                                                                          m_sortedPartPins );
+                m_libraryModelsMgr.GetModels()[idx].get().ReadDataFields( &m_fields, true, 0, m_sortedPartPins );
             }
             catch( IO_ERROR& err )
             {
@@ -1593,7 +1585,7 @@ void DIALOG_SIM_MODEL<T>::onPinAssignmentsGridCellChange( wxGridEvent& aEvent )
         curModel().AssignSymbolPinNumberToModelPin( modelPinIndex, symbolPin->GetShownNumber() );
     }
 
-    updatePinAssignments( &curModel(), FORCE_UPDATE_PINS );
+    updatePinAssignments( &curModel(), FORCE_REFRESH_FROM_MODEL );
 
     aEvent.Skip();
 }
@@ -1745,8 +1737,7 @@ void DIALOG_SIM_MODEL<T>::adjustParamGridColumns( int aWidth, bool aForce )
             if( ii == PARAM_COLUMN::DESCRIPTION )
                 colWidths.push_back( grid->GetState()->GetColumnWidth( ii ) + margin + indent );
             else if( ii == PARAM_COLUMN::VALUE )
-                colWidths.push_back( std::max( 72,
-                                               grid->GetState()->GetColumnWidth( ii ) ) + margin );
+                colWidths.push_back( std::max( 72, grid->GetState()->GetColumnWidth( ii ) ) + margin );
             else
                 colWidths.push_back( 60 + margin );
 
