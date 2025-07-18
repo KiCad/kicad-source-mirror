@@ -391,13 +391,6 @@ int POSITION_RELATIVE_TOOL::PositionRelativeInteractively( const TOOL_EVENT& aEv
             canvas()->Refresh();
             evt->SetPassEvent();
         }
-        else if( evt->IsClick( BUT_RIGHT ) )
-        {
-            // TODO: This does not work
-            PCB_SELECTION    dummy;
-            PCB_PICKER_TOOL* picker = m_toolMgr->GetTool<PCB_PICKER_TOOL>();
-            picker->GetToolMenu().ShowContextMenu( dummy );
-        }
         else if( !evt->IsMouseAction() )
         {
             // Often this will end up changing the items we just moved, so the ruler will be
