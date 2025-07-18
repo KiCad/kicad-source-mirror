@@ -681,6 +681,9 @@ struct APAD6
     ALTIUM_LAYER tolayer;
     ALTIUM_LAYER fromlayer;
 
+    int32_t pad_to_die_length;
+    int32_t pad_to_die_delay;
+
     std::unique_ptr<APAD6_SIZE_AND_SHAPE> sizeAndShape;
 
     explicit APAD6( ALTIUM_BINARY_PARSER& aReader );
