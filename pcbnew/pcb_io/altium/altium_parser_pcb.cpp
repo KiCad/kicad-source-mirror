@@ -787,6 +787,9 @@ APAD6::APAD6( ALTIUM_BINARY_PARSER& aReader )
     soldermaskexpansionmode = static_cast<ALTIUM_MODE>( aReader.Read<uint8_t>() );
     aReader.Skip( 3 ); // to 106
 
+    pad_to_die_length = 0;
+    pad_to_die_delay = 0;
+
     if( subrecord5 == 110 )
     {
         // Don't know exactly what this is, but it's always been 0 in the files with
@@ -818,6 +821,14 @@ APAD6::APAD6( ALTIUM_BINARY_PARSER& aReader )
     }
     else if( subrecord5 == 171 )
     {
+    }
+
+    if( subrecord5 >= 202 )
+    {
+        aReader.Skip( 40 );
+        pad_to_die_length = aReader.ReadKicadUnit();
+        aReader.Skip( 32 );
+        pad_to_die_delay = KiROUND( aReader.Read<double>() * 1e18 );
     }
 
     aReader.SkipSubrecord();

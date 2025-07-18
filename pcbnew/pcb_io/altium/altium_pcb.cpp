@@ -3618,6 +3618,9 @@ void ALTIUM_PCB::ConvertPads6ToFootprintItemOnCopper( FOOTPRINT* aFootprint, con
     if( aElem.is_tent_bottom )
         pad->SetLayerSet( pad->GetLayerSet().reset( B_Mask ) );
 
+    pad->SetPadToDieLength( aElem.pad_to_die_length );
+    pad->SetPadToDieDelay( aElem.pad_to_die_delay );
+
     aFootprint->Add( pad.release(), ADD_MODE::APPEND );
 }
 
