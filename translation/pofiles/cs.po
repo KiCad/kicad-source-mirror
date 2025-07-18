@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-18 07:52-0700\n"
+"POT-Creation-Date: 2025-07-18 08:09-0700\n"
 "PO-Revision-Date: 2025-06-22 20:04+0000\n"
 "Last-Translator: Jan Straka <bach@email.cz>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/kicad/master-"
@@ -8727,19 +8727,19 @@ msgstr "Oznámení"
 msgid "There are no notifications available"
 msgstr "Nejsou k dispozici žádná oznámení"
 
-#: common/pgm_base.cpp:208
+#: common/pgm_base.cpp:217
 msgid "No default editor found, you must choose one."
 msgstr "Výchozí editor nenalezen, je třeba jej zvolit."
 
-#: common/pgm_base.cpp:228 common/pgm_base.cpp:230
+#: common/pgm_base.cpp:237 common/pgm_base.cpp:239
 msgid "Executable file"
 msgstr "Spustitelný soubor"
 
-#: common/pgm_base.cpp:240
+#: common/pgm_base.cpp:249
 msgid "Select Preferred Editor"
 msgstr "Vybrat preferovaný editor"
 
-#: common/pgm_base.cpp:258
+#: common/pgm_base.cpp:267
 msgid ""
 "KiCad can anonymously report crashes and special event data to developers in "
 "order to aid identifying critical bugs and help profile functionality to "
@@ -8755,28 +8755,28 @@ msgstr ""
 "hlášení, když dojde k haváriím nebo událostem. \n"
 "Návrhové soubory jako schémata nebo DPS nejsou v tomto procesu sdíleny."
 
-#: common/pgm_base.cpp:263
+#: common/pgm_base.cpp:272
 #, fuzzy
 msgid "Data Collection Opt In"
 msgstr "Shromážděná data"
 
-#: common/pgm_base.cpp:265
+#: common/pgm_base.cpp:274
 msgid "Opt In"
 msgstr ""
 
-#: common/pgm_base.cpp:265
+#: common/pgm_base.cpp:274
 msgid "Decline"
 msgstr "Odmítnout"
 
-#: common/pgm_base.cpp:367
+#: common/pgm_base.cpp:376
 msgid "Environment variable HOME is empty.  Unable to continue."
 msgstr "Proměnná prostředí HOME je prázdná. Nelze pokračovat."
 
-#: common/pgm_base.cpp:604
+#: common/pgm_base.cpp:613
 msgid "This language is not supported by the operating system."
 msgstr "Tento jazyk není operačním systémem podporován."
 
-#: common/pgm_base.cpp:655 common/pgm_base.cpp:696
+#: common/pgm_base.cpp:664 common/pgm_base.cpp:705
 msgid "The KiCad language file for this language is not installed."
 msgstr "Jazykový soubor KiCadu pro tento jazyk není nainstalován."
 

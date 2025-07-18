@@ -32,7 +32,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-18 07:52-0700\n"
+"POT-Creation-Date: 2025-07-18 08:09-0700\n"
 "PO-Revision-Date: 2025-07-09 01:02+0000\n"
 "Last-Translator: YÜKSEL AÇIKGÖZ <yukselacikgoz@gmail.com>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/kicad/master-"
@@ -8712,19 +8712,19 @@ msgstr "Bildirimler"
 msgid "There are no notifications available"
 msgstr "Kullanılabilir bildirim yok"
 
-#: common/pgm_base.cpp:208
+#: common/pgm_base.cpp:217
 msgid "No default editor found, you must choose one."
 msgstr "Varsayılan düzenleyici bulunamadı, bir tane seçmelisiniz."
 
-#: common/pgm_base.cpp:228 common/pgm_base.cpp:230
+#: common/pgm_base.cpp:237 common/pgm_base.cpp:239
 msgid "Executable file"
 msgstr "Çalıştırılabilir dosya"
 
-#: common/pgm_base.cpp:240
+#: common/pgm_base.cpp:249
 msgid "Select Preferred Editor"
 msgstr "Tercih Edilen Düzenleyiciyi Seç"
 
-#: common/pgm_base.cpp:258
+#: common/pgm_base.cpp:267
 msgid ""
 "KiCad can anonymously report crashes and special event data to developers in "
 "order to aid identifying critical bugs and help profile functionality to "
@@ -8740,27 +8740,27 @@ msgstr ""
 "geldiğinde bu raporları otomatik olarak gönderir.\n"
 "Şematik ve kart gibi tasarım dosyalarınız bu süreçte paylaşılmaz."
 
-#: common/pgm_base.cpp:263
+#: common/pgm_base.cpp:272
 msgid "Data Collection Opt In"
 msgstr "Veri Toplamaya Katıl"
 
-#: common/pgm_base.cpp:265
+#: common/pgm_base.cpp:274
 msgid "Opt In"
 msgstr "Katıl"
 
-#: common/pgm_base.cpp:265
+#: common/pgm_base.cpp:274
 msgid "Decline"
 msgstr "Reddet"
 
-#: common/pgm_base.cpp:367
+#: common/pgm_base.cpp:376
 msgid "Environment variable HOME is empty.  Unable to continue."
 msgstr "HOME ortam değişkeni boş. Devam edilemiyor."
 
-#: common/pgm_base.cpp:604
+#: common/pgm_base.cpp:613
 msgid "This language is not supported by the operating system."
 msgstr "Bu dil işletim sistemi tarafından desteklenmiyor."
 
-#: common/pgm_base.cpp:655 common/pgm_base.cpp:696
+#: common/pgm_base.cpp:664 common/pgm_base.cpp:705
 msgid "The KiCad language file for this language is not installed."
 msgstr "Bu dil için KiCad dil dosyası kurulu değil."
 

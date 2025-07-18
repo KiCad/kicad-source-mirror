@@ -15,7 +15,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-18 07:52-0700\n"
+"POT-Creation-Date: 2025-07-18 08:09-0700\n"
 "PO-Revision-Date: 2025-07-15 19:28+0000\n"
 "Last-Translator: 2tama3 <2tama3@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/master-"
@@ -8699,19 +8699,19 @@ msgstr "通知"
 msgid "There are no notifications available"
 msgstr "通知はありません"
 
-#: common/pgm_base.cpp:208
+#: common/pgm_base.cpp:217
 msgid "No default editor found, you must choose one."
 msgstr "デフォルトのエディターが見つからないので、指定する必要があります。"
 
-#: common/pgm_base.cpp:228 common/pgm_base.cpp:230
+#: common/pgm_base.cpp:237 common/pgm_base.cpp:239
 msgid "Executable file"
 msgstr "実行ファイル"
 
-#: common/pgm_base.cpp:240
+#: common/pgm_base.cpp:249
 msgid "Select Preferred Editor"
 msgstr "優先するエディターを選択"
 
-#: common/pgm_base.cpp:258
+#: common/pgm_base.cpp:267
 msgid ""
 "KiCad can anonymously report crashes and special event data to developers in "
 "order to aid identifying critical bugs and help profile functionality to "
@@ -8727,27 +8727,27 @@ msgstr ""
 "に自動的にレポートを送信します。回路図やPCBのようなユーザーが作成したファイル"
 "がこの過程で共有されることはありません。"
 
-#: common/pgm_base.cpp:263
+#: common/pgm_base.cpp:272
 msgid "Data Collection Opt In"
 msgstr "データ収集のオプトイン"
 
-#: common/pgm_base.cpp:265
+#: common/pgm_base.cpp:274
 msgid "Opt In"
 msgstr "オプトイン"
 
-#: common/pgm_base.cpp:265
+#: common/pgm_base.cpp:274
 msgid "Decline"
 msgstr "拒否"
 
-#: common/pgm_base.cpp:367
+#: common/pgm_base.cpp:376
 msgid "Environment variable HOME is empty.  Unable to continue."
 msgstr "環境変数 HOME が空です。続行できません。"
 
-#: common/pgm_base.cpp:604
+#: common/pgm_base.cpp:613
 msgid "This language is not supported by the operating system."
 msgstr "この言語はオペレーティングシステムでサポートされていません。"
 
-#: common/pgm_base.cpp:655 common/pgm_base.cpp:696
+#: common/pgm_base.cpp:664 common/pgm_base.cpp:705
 msgid "The KiCad language file for this language is not installed."
 msgstr "この言語向けのKiCadの言語ファイルがインストールされていません。"
 

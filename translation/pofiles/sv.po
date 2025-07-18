@@ -15,7 +15,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-18 07:52-0700\n"
+"POT-Creation-Date: 2025-07-18 08:09-0700\n"
 "PO-Revision-Date: 2025-07-15 19:28+0000\n"
 "Last-Translator: Stefan Bjornelund the Gnome "
 "<stefan.bjornelund.gnome@gmail.com>\n"
@@ -8721,19 +8721,19 @@ msgstr "Underrättelser"
 msgid "There are no notifications available"
 msgstr "Det finns inga meddelanden"
 
-#: common/pgm_base.cpp:208
+#: common/pgm_base.cpp:217
 msgid "No default editor found, you must choose one."
 msgstr "Ingen standardredigerare hittades, du måste välja en."
 
-#: common/pgm_base.cpp:228 common/pgm_base.cpp:230
+#: common/pgm_base.cpp:237 common/pgm_base.cpp:239
 msgid "Executable file"
 msgstr "Körbar fil"
 
-#: common/pgm_base.cpp:240
+#: common/pgm_base.cpp:249
 msgid "Select Preferred Editor"
 msgstr "Välj önskad redigerare"
 
-#: common/pgm_base.cpp:258
+#: common/pgm_base.cpp:267
 msgid ""
 "KiCad can anonymously report crashes and special event data to developers in "
 "order to aid identifying critical bugs and help profile functionality to "
@@ -8751,27 +8751,27 @@ msgstr ""
 "Dina designfiler såsom kretsschema och mönsterkort delas inte i denna "
 "process."
 
-#: common/pgm_base.cpp:263
+#: common/pgm_base.cpp:272
 msgid "Data Collection Opt In"
 msgstr "Medgivande till datainsamling"
 
-#: common/pgm_base.cpp:265
+#: common/pgm_base.cpp:274
 msgid "Opt In"
 msgstr "medgivande"
 
-#: common/pgm_base.cpp:265
+#: common/pgm_base.cpp:274
 msgid "Decline"
 msgstr "Avböj"
 
-#: common/pgm_base.cpp:367
+#: common/pgm_base.cpp:376
 msgid "Environment variable HOME is empty.  Unable to continue."
 msgstr "Miljövariabeln HOME är tom. Kan inte fortsätta."
 
-#: common/pgm_base.cpp:604
+#: common/pgm_base.cpp:613
 msgid "This language is not supported by the operating system."
 msgstr "Det här språket stöds inte av operativsystemet."
 
-#: common/pgm_base.cpp:655 common/pgm_base.cpp:696
+#: common/pgm_base.cpp:664 common/pgm_base.cpp:705
 msgid "The KiCad language file for this language is not installed."
 msgstr "KiCad-språkfilen för detta språk är inte installerad."
 

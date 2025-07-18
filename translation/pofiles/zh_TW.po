@@ -19,7 +19,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-18 07:52-0700\n"
+"POT-Creation-Date: 2025-07-18 08:09-0700\n"
 "PO-Revision-Date: 2025-07-14 16:07+0000\n"
 "Last-Translator: pominglee <pominglee@gmail.com>\n"
 "Language-Team: Chinese (Traditional Han script) <https://hosted.weblate.org/"
@@ -8603,19 +8603,19 @@ msgstr "通知"
 msgid "There are no notifications available"
 msgstr "沒有通知"
 
-#: common/pgm_base.cpp:208
+#: common/pgm_base.cpp:217
 msgid "No default editor found, you must choose one."
 msgstr "找不到預設的文字編輯器, 必須選擇一個。"
 
-#: common/pgm_base.cpp:228 common/pgm_base.cpp:230
+#: common/pgm_base.cpp:237 common/pgm_base.cpp:239
 msgid "Executable file"
 msgstr "可執行檔案"
 
-#: common/pgm_base.cpp:240
+#: common/pgm_base.cpp:249
 msgid "Select Preferred Editor"
 msgstr "選擇首選編輯器"
 
-#: common/pgm_base.cpp:258
+#: common/pgm_base.cpp:267
 msgid ""
 "KiCad can anonymously report crashes and special event data to developers in "
 "order to aid identifying critical bugs and help profile functionality to "
@@ -8631,27 +8631,27 @@ msgstr ""
 "自動處理併發送這些報告。在此過程中, 您的設計檔案, 如原理圖或 PCB 檔案, 不會被"
 "上傳。"
 
-#: common/pgm_base.cpp:263
+#: common/pgm_base.cpp:272
 msgid "Data Collection Opt In"
 msgstr "數據收集"
 
-#: common/pgm_base.cpp:265
+#: common/pgm_base.cpp:274
 msgid "Opt In"
 msgstr "選擇加入"
 
-#: common/pgm_base.cpp:265
+#: common/pgm_base.cpp:274
 msgid "Decline"
 msgstr "線條草圖"
 
-#: common/pgm_base.cpp:367
+#: common/pgm_base.cpp:376
 msgid "Environment variable HOME is empty.  Unable to continue."
 msgstr "環境變數 HOME 為空。無法繼續。"
 
-#: common/pgm_base.cpp:604
+#: common/pgm_base.cpp:613
 msgid "This language is not supported by the operating system."
 msgstr "作業系統不支援此語言。"
 
-#: common/pgm_base.cpp:655 common/pgm_base.cpp:696
+#: common/pgm_base.cpp:664 common/pgm_base.cpp:705
 msgid "The KiCad language file for this language is not installed."
 msgstr "未安裝此語言的 KiCad 語言檔案。"
 

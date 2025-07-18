@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-18 07:52-0700\n"
+"POT-Creation-Date: 2025-07-18 08:09-0700\n"
 "PO-Revision-Date: 2025-02-26 02:05+0000\n"
 "Last-Translator: An Nguyen <annguyen.it.utc@gmail.com>\n"
 "Language-Team: Vietnamese <https://hosted.weblate.org/projects/kicad/master-"
@@ -8953,22 +8953,22 @@ msgstr "Vertical Justification"
 msgid "There are no notifications available"
 msgstr ""
 
-#: common/pgm_base.cpp:208
+#: common/pgm_base.cpp:217
 msgid "No default editor found, you must choose one."
 msgstr ""
 "Không tìm thấy trình chỉnh sửa mặc định nào, bạn phải chọn một trình chỉnh "
 "sửa."
 
-#: common/pgm_base.cpp:228 common/pgm_base.cpp:230
+#: common/pgm_base.cpp:237 common/pgm_base.cpp:239
 #, fuzzy
 msgid "Executable file"
 msgstr "Các tập tin thực thi ("
 
-#: common/pgm_base.cpp:240
+#: common/pgm_base.cpp:249
 msgid "Select Preferred Editor"
 msgstr "Chọn Trình soạn thảo Ưu tiên"
 
-#: common/pgm_base.cpp:258
+#: common/pgm_base.cpp:267
 #, fuzzy
 msgid ""
 "KiCad can anonymously report crashes and special event data to developers in "
@@ -8986,29 +8986,29 @@ msgstr ""
 "Các tệp thiết kế của bạn như sơ đồ hoặc PCB không được chia sẻ trong quá "
 "trình này."
 
-#: common/pgm_base.cpp:263
+#: common/pgm_base.cpp:272
 #, fuzzy
 msgid "Data Collection Opt In"
 msgstr "Thu thập dữ liệu"
 
-#: common/pgm_base.cpp:265
+#: common/pgm_base.cpp:274
 msgid "Opt In"
 msgstr ""
 
-#: common/pgm_base.cpp:265
+#: common/pgm_base.cpp:274
 msgid "Decline"
 msgstr ""
 
-#: common/pgm_base.cpp:367
+#: common/pgm_base.cpp:376
 #, fuzzy
 msgid "Environment variable HOME is empty.  Unable to continue."
 msgstr "Tên biến môi trường không thể để trống."
 
-#: common/pgm_base.cpp:604
+#: common/pgm_base.cpp:613
 msgid "This language is not supported by the operating system."
 msgstr "Ngôn ngữ này không được hỗ trợ bởi hệ điều hành."
 
-#: common/pgm_base.cpp:655 common/pgm_base.cpp:696
+#: common/pgm_base.cpp:664 common/pgm_base.cpp:705
 msgid "The KiCad language file for this language is not installed."
 msgstr "Tệp ngôn ngữ KiCad cho ngôn ngữ này không được cài đặt."
 
