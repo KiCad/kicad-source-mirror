@@ -481,7 +481,10 @@ int ALIGN_DISTRIBUTE_TOOL::DistributeItems( const TOOL_EVENT& aEvent )
             {
                 sTool->FilterCollectorForMarkers( aCollector );
                 sTool->FilterCollectorForHierarchy( aCollector, true );
-                sTool->FilterCollectorForFreePads( aCollector );
+
+                // Don't filter for free pads.  We want to allow for distributing other
+                // items (such as a via) between two pads.
+                // sTool->FilterCollectorForFreePads( aCollector );
             },
             m_frame->IsType( FRAME_PCB_EDITOR ) /* prompt user regarding locked items */
     );
