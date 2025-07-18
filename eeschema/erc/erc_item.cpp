@@ -102,12 +102,12 @@ ERC_ITEM ERC_ITEM::noConnectDangling( ERCE_NOCONNECT_NOT_CONNECTED,
         wxT( "no_connect_dangling" ) );
 
 ERC_ITEM ERC_ITEM::labelDangling( ERCE_LABEL_NOT_CONNECTED,
-        _HKI( "Label not connected to anything" ),
+        _HKI( "Label not connected" ),
         wxT( "label_dangling" ) );
 
-ERC_ITEM ERC_ITEM::globalLabelDangling( ERCE_GLOBLABEL_DANGLING,
-        _HKI( "Global label not connected anywhere else in the schematic" ),
-        wxT( "global_label_dangling" ) );
+ERC_ITEM ERC_ITEM::isolatedPinLabel( ERCE_LABEL_SINGLE_PIN,
+        _HKI( "Label connected to only one pin" ),
+        wxT( "isolated_pin_label" ) );
 
 ERC_ITEM ERC_ITEM::similarLabels( ERCE_SIMILAR_LABELS,
         _HKI( "Labels are similar (lower/upper case difference only)"),
@@ -237,8 +237,8 @@ std::vector<std::reference_wrapper<RC_ITEM>> ERC_ITEM::allItemTypes(
             ERC_ITEM::powerpinNotDriven,
             ERC_ITEM::noConnectConnected,
             ERC_ITEM::noConnectDangling,
-            ERC_ITEM::globalLabelDangling,
             ERC_ITEM::labelDangling,
+            ERC_ITEM::isolatedPinLabel,
             ERC_ITEM::singleGlobalLabel,
             ERC_ITEM::sameLocalGlobalLabel,
             ERC_ITEM::wireDangling,
@@ -326,7 +326,7 @@ std::shared_ptr<ERC_ITEM> ERC_ITEM::Create( int aErrorCode )
     case ERCE_BUS_ENTRY_CONFLICT:      return std::make_shared<ERC_ITEM>( netNotBusMember );
     case ERCE_BUS_TO_BUS_CONFLICT:     return std::make_shared<ERC_ITEM>( busToBusConflict );
     case ERCE_BUS_TO_NET_CONFLICT:     return std::make_shared<ERC_ITEM>( busToNetConflict );
-    case ERCE_GLOBLABEL_DANGLING:      return std::make_shared<ERC_ITEM>( globalLabelDangling );
+    case ERCE_LABEL_SINGLE_PIN:        return std::make_shared<ERC_ITEM>( isolatedPinLabel );
     case ERCE_UNRESOLVED_VARIABLE:     return std::make_shared<ERC_ITEM>( unresolvedVariable );
     case ERCE_UNDEFINED_NETCLASS:      return std::make_shared<ERC_ITEM>( undefinedNetclass );
     case ERCE_SIMULATION_MODEL:        return std::make_shared<ERC_ITEM>( simulationModelIssues );

@@ -213,7 +213,7 @@ private:
     static ERC_ITEM labelMultipleWires;
     static ERC_ITEM noConnectDangling;
     static ERC_ITEM labelDangling;
-    static ERC_ITEM globalLabelDangling;
+    static ERC_ITEM isolatedPinLabel;
     static ERC_ITEM singleGlobalLabel;
     static ERC_ITEM sameLocalGlobalLabel;
     static ERC_ITEM similarLabels;

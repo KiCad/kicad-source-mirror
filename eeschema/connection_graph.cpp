@@ -3326,7 +3326,7 @@ int CONNECTION_GRAPH::RunERC()
         }
 
         if( settings.IsTestEnabled( ERCE_LABEL_NOT_CONNECTED )
-                || settings.IsTestEnabled( ERCE_GLOBLABEL_DANGLING ) )
+                || settings.IsTestEnabled( ERCE_LABEL_SINGLE_PIN ) )
         {
             if( !ercCheckLabels( subgraph ) )
                 error_count++;
@@ -4073,9 +4073,7 @@ bool CONNECTION_GRAPH::ercCheckLabels( const CONNECTION_SUBGRAPH* aSubgraph )
             // connected to other valid things by way of another label on the same sheet.
             if( text->IsDangling() )
             {
-                reportError( text, item->Type() == SCH_GLOBAL_LABEL_T ?
-                                    ERCE_GLOBLABEL_DANGLING :
-                                    ERCE_LABEL_NOT_CONNECTED );
+                reportError( text, ERCE_LABEL_NOT_CONNECTED );
                 return false;
             }
 
@@ -4128,20 +4126,6 @@ bool CONNECTION_GRAPH::ercCheckLabels( const CONNECTION_SUBGRAPH* aSubgraph )
 
     for( auto& [type, label_vec] : label_map )
     {
-        switch( type )
-        {
-        case SCH_GLOBAL_LABEL_T:
-            if( !settings.IsTestEnabled( ERCE_GLOBLABEL_DANGLING ) )
-                continue;
-
-            break;
-        default:
-            if( !settings.IsTestEnabled( ERCE_LABEL_NOT_CONNECTED ) )
-                continue;
-
-            break;
-        }
-
         for( SCH_TEXT* text : label_vec )
         {
             size_t allPins = pinCount;
@@ -4164,15 +4148,13 @@ bool CONNECTION_GRAPH::ercCheckLabels( const CONNECTION_SUBGRAPH* aSubgraph )
 
             if( allPins == 1 && !has_nc )
             {
-                reportError( text, type == SCH_GLOBAL_LABEL_T ? ERCE_GLOBLABEL_DANGLING
-                                                              : ERCE_LABEL_NOT_CONNECTED );
+                reportError( text,  ERCE_LABEL_SINGLE_PIN );
                 ok = false;
             }
 
             if( allPins == 0 )
             {
-                reportError( text, type == SCH_GLOBAL_LABEL_T ? ERCE_GLOBLABEL_DANGLING
-                                                              : ERCE_LABEL_NOT_CONNECTED );
+                reportError( text, ERCE_LABEL_NOT_CONNECTED );
                 ok = false;
             }
         }
