@@ -43,35 +43,35 @@ void PANEL_PCBNEW_DISPLAY_ORIGIN::loadSettings( APP_SETTINGS_BASE* aCfg )
 {
     if( m_frameType == FRAME_FOOTPRINT_EDITOR )
     {
-        FOOTPRINT_EDITOR_SETTINGS* cfg = static_cast<FOOTPRINT_EDITOR_SETTINGS*>( aCfg );
+        FOOTPRINT_EDITOR_SETTINGS* cfg = GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>( "fpedit" );
 
-        if( cfg->m_DisplayInvertXAxis )
+        if( cfg && cfg->m_DisplayInvertXAxis )
             m_xIncreasesLeft->SetValue( true );
         else
             m_xIncreasesRight->SetValue( true );
 
-        if( cfg->m_DisplayInvertYAxis )
+        if( cfg && cfg->m_DisplayInvertYAxis )
             m_yIncreasesUp->SetValue( true );
         else
             m_yIncreasesDown->SetValue( true );
     }
     else
     {
-        PCBNEW_SETTINGS* cfg = static_cast<PCBNEW_SETTINGS*>( aCfg );
+        PCBNEW_SETTINGS* cfg = GetAppSettings<PCBNEW_SETTINGS>( "pcbnew" );
 
-        if( cfg->m_Display.m_DisplayOrigin == PCB_DISPLAY_ORIGIN::PCB_ORIGIN_PAGE )
+        if( cfg && cfg->m_Display.m_DisplayOrigin == PCB_DISPLAY_ORIGIN::PCB_ORIGIN_PAGE )
             m_pageOrigin->SetValue( true );
-        else if( cfg->m_Display.m_DisplayOrigin == PCB_DISPLAY_ORIGIN::PCB_ORIGIN_GRID )
+        else if( cfg && cfg->m_Display.m_DisplayOrigin == PCB_DISPLAY_ORIGIN::PCB_ORIGIN_GRID )
             m_gridOrigin->SetValue( true );
         else
             m_drillPlaceOrigin->SetValue( true );
 
-        if( cfg->m_Display.m_DisplayInvertXAxis )
+        if( cfg &&cfg->m_Display.m_DisplayInvertXAxis )
             m_xIncreasesLeft->SetValue( true );
         else
             m_xIncreasesRight->SetValue( true );
 
-        if( cfg->m_Display.m_DisplayInvertYAxis )
+        if( cfg && cfg->m_Display.m_DisplayInvertYAxis )
             m_yIncreasesUp->SetValue( true );
         else
             m_yIncreasesDown->SetValue( true );
@@ -91,24 +91,26 @@ bool PANEL_PCBNEW_DISPLAY_ORIGIN::TransferDataFromWindow()
 {
     if( m_frameType == FRAME_FOOTPRINT_EDITOR )
     {
-        FOOTPRINT_EDITOR_SETTINGS* cfg = static_cast<FOOTPRINT_EDITOR_SETTINGS*>( m_cfg );
-
+        if( FOOTPRINT_EDITOR_SETTINGS* cfg = GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>( "fpedit" ) )
+        {
         cfg->m_DisplayInvertXAxis = m_xIncreasesLeft->GetValue();
         cfg->m_DisplayInvertYAxis = m_yIncreasesUp->GetValue();
+        }
     }
     else
     {
-        PCBNEW_SETTINGS* cfg = static_cast<PCBNEW_SETTINGS*>( m_cfg );
+        if( PCBNEW_SETTINGS* cfg = GetAppSettings<PCBNEW_SETTINGS>( "pcbnew" ) )
+        {
+            if( m_pageOrigin->GetValue() )
+                cfg->m_Display.m_DisplayOrigin = PCB_DISPLAY_ORIGIN::PCB_ORIGIN_PAGE;
+            else if( m_gridOrigin->GetValue() )
+                cfg->m_Display.m_DisplayOrigin = PCB_DISPLAY_ORIGIN::PCB_ORIGIN_GRID;
+            else
+                cfg->m_Display.m_DisplayOrigin = PCB_DISPLAY_ORIGIN::PCB_ORIGIN_AUX;
 
-        if( m_pageOrigin->GetValue() )
-            cfg->m_Display.m_DisplayOrigin = PCB_DISPLAY_ORIGIN::PCB_ORIGIN_PAGE;
-        else if( m_gridOrigin->GetValue() )
-            cfg->m_Display.m_DisplayOrigin = PCB_DISPLAY_ORIGIN::PCB_ORIGIN_GRID;
-        else
-            cfg->m_Display.m_DisplayOrigin = PCB_DISPLAY_ORIGIN::PCB_ORIGIN_AUX;
-
-        cfg->m_Display.m_DisplayInvertXAxis = m_xIncreasesLeft->GetValue();
-        cfg->m_Display.m_DisplayInvertYAxis = m_yIncreasesUp->GetValue();
+            cfg->m_Display.m_DisplayInvertXAxis = m_xIncreasesLeft->GetValue();
+            cfg->m_Display.m_DisplayInvertYAxis = m_yIncreasesUp->GetValue();
+        }
     }
 
     return true;

@@ -34,15 +34,11 @@
 ITEMS_LISTBOX_BASE::ITEMS_LISTBOX_BASE( CVPCB_MAINFRAME* aParent, wxWindowID aId,
                                         const wxPoint& aLocation, const wxSize& aSize,
                                         long aStyle ) :
-    wxListView( aParent, aId, aLocation, aSize, LISTBOX_STYLE | aStyle ),
-    columnWidth( 0 )
+        wxListView( aParent, aId, aLocation, aSize, LISTBOX_STYLE | aStyle ),
+        m_isClosing( false ),
+        m_columnWidth( 0 )
 {
     InsertColumn( 0, wxEmptyString );
-}
-
-
-ITEMS_LISTBOX_BASE::~ITEMS_LISTBOX_BASE()
-{
 }
 
 
@@ -54,12 +50,10 @@ void ITEMS_LISTBOX_BASE::UpdateWidth( int aLine )
     // Less than zero: recalculate width of all items.
     if( aLine < 0 )
     {
-        columnWidth = 0;
+        m_columnWidth = 0;
 
         for( int ii = 0; ii < itemCount; ii++ )
-        {
             UpdateLineWidth( (unsigned)ii, dc );
-        }
     }
     // Zero or above: update from a single line.
     else
@@ -87,10 +81,10 @@ void ITEMS_LISTBOX_BASE::UpdateLineWidth( unsigned aLine, wxClientDC& dc )
     dc.GetTextExtent( str, &w, nullptr );
     newWidth += w;
 
-    if( newWidth > columnWidth )
+    if( newWidth > m_columnWidth )
     {
-        columnWidth = newWidth;
-        SetColumnWidth( 0, columnWidth );
+        m_columnWidth = newWidth;
+        SetColumnWidth( 0, m_columnWidth );
     }
 }
 

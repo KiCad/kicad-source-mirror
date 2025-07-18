@@ -35,18 +35,13 @@
 
 
 SYMBOLS_LISTBOX::SYMBOLS_LISTBOX( CVPCB_MAINFRAME* parent, wxWindowID id ) :
-    ITEMS_LISTBOX_BASE( parent, id ),
-    m_warningAttr( std::make_unique<wxListItemAttr>() )
+        ITEMS_LISTBOX_BASE( parent, id ),
+        m_warningAttr( std::make_unique<wxListItemAttr>() )
 {
     m_warningAttr->SetBackgroundColour( KIPLATFORM::UI::IsDarkTheme() ? wxColour( 112, 96, 32 )
                                                                       : wxColour( 255, 248, 212 ) );
 }
 
-
-SYMBOLS_LISTBOX::~SYMBOLS_LISTBOX()
-{
-}
-;
 
 BEGIN_EVENT_TABLE( SYMBOLS_LISTBOX, ITEMS_LISTBOX_BASE )
     EVT_CHAR( SYMBOLS_LISTBOX::OnChar )
@@ -117,9 +112,8 @@ wxString SYMBOLS_LISTBOX::OnGetItemText( long item, long column ) const
 wxListItemAttr* SYMBOLS_LISTBOX::OnGetItemAttr( long item ) const
 {
     if( std::count( m_symbolWarning.begin(), m_symbolWarning.end(), item ) )
-    {
         return m_warningAttr.get();
-    }
+
     return nullptr;
 }
 
@@ -143,6 +137,9 @@ void SYMBOLS_LISTBOX::SetSelection( int index, bool State )
 
 void SYMBOLS_LISTBOX::OnChar( wxKeyEvent& event )
 {
+    if( m_isClosing )
+        return;
+
     wxLogTrace( kicadTraceKeyEvent, wxS( "SYMBOLS_LISTBOX::OnChar %s" ), dump( event ) );
 
     int key = event.GetKeyCode();
@@ -201,6 +198,9 @@ void SYMBOLS_LISTBOX::OnChar( wxKeyEvent& event )
 
 void SYMBOLS_LISTBOX::OnSelectComponent( wxListEvent& event )
 {
+    if( m_isClosing )
+        return;
+
     SetFocus();
     GetParent()->OnSelectComponent( event );
 }

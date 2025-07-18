@@ -46,7 +46,7 @@ public:
                         const wxPoint& aLocation = wxDefaultPosition,
                         const wxSize& aSize = wxDefaultSize, long aStyle = 0 );
 
-    ~ITEMS_LISTBOX_BASE();
+    virtual ~ITEMS_LISTBOX_BASE() = default;
 
     /**
      * @return the index of the selected item in lists allowing only one item selected
@@ -70,6 +70,8 @@ public:
      */
     void UpdateWidth( int aLine = -1 );
 
+    void Shutdown() { m_isClosing = true; }
+
 private:
     /**
      * Calculate the width of the given line, and increase the column width
@@ -78,7 +80,11 @@ private:
      */
     void UpdateLineWidth( unsigned aLine, wxClientDC& dc );
 
-    int columnWidth;
+protected:
+    bool m_isClosing;
+
+private:
+    int  m_columnWidth;
 };
 
 
@@ -98,7 +104,7 @@ public:
     };
 
     FOOTPRINTS_LISTBOX( CVPCB_MAINFRAME* parent, wxWindowID id );
-    ~FOOTPRINTS_LISTBOX() override {};
+    virtual ~FOOTPRINTS_LISTBOX() = default;
 
     int      GetCount();
     void     SetSelection( int aIndex, bool aState = true );
@@ -143,7 +149,7 @@ class LIBRARY_LISTBOX : public ITEMS_LISTBOX_BASE
 {
 public:
     LIBRARY_LISTBOX( CVPCB_MAINFRAME* parent, wxWindowID id );
-    ~LIBRARY_LISTBOX() override {};
+    virtual ~LIBRARY_LISTBOX() = default;
 
     int      GetCount();
     void     SetSelection( int index, bool State = true );
@@ -181,8 +187,7 @@ class SYMBOLS_LISTBOX : public ITEMS_LISTBOX_BASE
 {
 public:
     SYMBOLS_LISTBOX( CVPCB_MAINFRAME* parent, wxWindowID id );
-
-    ~SYMBOLS_LISTBOX();
+    virtual ~SYMBOLS_LISTBOX() = default;
 
     void     Clear();
     int      GetCount();
@@ -223,7 +228,7 @@ public:
     DECLARE_EVENT_TABLE();
 
 public:
-    wxArrayString      m_SymbolList;
+    wxArrayString                   m_SymbolList;
 
 private:
     std::vector<long>               m_symbolWarning;

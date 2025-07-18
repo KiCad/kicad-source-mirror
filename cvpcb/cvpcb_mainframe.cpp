@@ -207,6 +207,16 @@ CVPCB_MAINFRAME::CVPCB_MAINFRAME( KIWAY* aKiway, wxWindow* aParent ) :
     // Connect Events
     setupEventHandlers();
 
+    // Toolbar events
+    Bind( wxEVT_TEXT, &CVPCB_MAINFRAME::onTextFilterChanged, this );
+
+    // Attach the events to the tool dispatcher
+    Bind( wxEVT_CHAR, &TOOL_DISPATCHER::DispatchWxEvent, m_toolDispatcher );
+    Bind( wxEVT_CHAR_HOOK, &TOOL_DISPATCHER::DispatchWxEvent, m_toolDispatcher );
+
+    m_filterTimer = new wxTimer( this );
+    Bind( wxEVT_TIMER, &CVPCB_MAINFRAME::onTextFilterChangedTimer, this, m_filterTimer->GetId() );
+
     // Start the main processing loop
     m_toolManager->InvokeTool( "cvpcb.Control" );
 
@@ -224,13 +234,6 @@ CVPCB_MAINFRAME::~CVPCB_MAINFRAME()
 
     Unbind( wxEVT_TIMER, &CVPCB_MAINFRAME::onTextFilterChangedTimer, this, m_filterTimer->GetId() );
     Unbind( wxEVT_IDLE, &CVPCB_MAINFRAME::updateFootprintViewerOnIdle, this );
-
-    // Stop the timer during destruction early to avoid potential race conditions (that do happen)
-    m_filterTimer->Stop();
-
-    // Shutdown all running tools
-    if( m_toolManager )
-        m_toolManager->ShutdownAllTools();
 
     // Clean up the tool infrastructure
     delete m_actions;
@@ -289,11 +292,10 @@ void CVPCB_MAINFRAME::setupUIConditions()
 #define ENABLE( x ) ACTION_CONDITIONS().Enable( x )
 #define CHECK( x )  ACTION_CONDITIONS().Check( x )
 
-    mgr->SetConditions( CVPCB_ACTIONS::saveAssociationsToSchematic,
-                        ENABLE( cond.ContentModified() ) );
-    mgr->SetConditions( CVPCB_ACTIONS::saveAssociationsToFile, ENABLE( cond.ContentModified() ) );
-    mgr->SetConditions( ACTIONS::undo,                         ENABLE( cond.UndoAvailable() ) );
-    mgr->SetConditions( ACTIONS::redo,                         ENABLE( cond.RedoAvailable() ) );
+    mgr->SetConditions( CVPCB_ACTIONS::saveAssociationsToSchematic, ENABLE( cond.ContentModified() ) );
+    mgr->SetConditions( CVPCB_ACTIONS::saveAssociationsToFile,      ENABLE( cond.ContentModified() ) );
+    mgr->SetConditions( ACTIONS::undo,                              ENABLE( cond.UndoAvailable() ) );
+    mgr->SetConditions( ACTIONS::redo,                              ENABLE( cond.RedoAvailable() ) );
 
     auto compFilter =
             [this] ( const SELECTION& )
@@ -372,22 +374,12 @@ void CVPCB_MAINFRAME::setupEventHandlers()
                 Close( false );
             }, wxID_EXIT );
 
-    // Toolbar events
-    Bind( wxEVT_TEXT, &CVPCB_MAINFRAME::onTextFilterChanged, this );
-
     // Just skip the resize events
     Bind( wxEVT_SIZE,
           []( wxSizeEvent& aEvent )
           {
               aEvent.Skip();
           } );
-
-    // Attach the events to the tool dispatcher
-    Bind( wxEVT_CHAR, &TOOL_DISPATCHER::DispatchWxEvent, m_toolDispatcher );
-    Bind( wxEVT_CHAR_HOOK, &TOOL_DISPATCHER::DispatchWxEvent, m_toolDispatcher );
-
-    m_filterTimer = new wxTimer( this );
-    Bind( wxEVT_TIMER, &CVPCB_MAINFRAME::onTextFilterChangedTimer, this, m_filterTimer->GetId() );
 }
 
 
@@ -396,14 +388,10 @@ bool CVPCB_MAINFRAME::canCloseWindow( wxCloseEvent& aEvent )
     if( m_modified )
     {
         // Shutdown blocks must be determined and vetoed as early as possible
-        if( KIPLATFORM::APP::SupportsShutdownBlockReason()
-                && aEvent.GetId() == wxEVT_QUERY_END_SESSION )
-        {
+        if( KIPLATFORM::APP::SupportsShutdownBlockReason() && aEvent.GetId() == wxEVT_QUERY_END_SESSION )
             return false;
-        }
 
-        if( !HandleUnsavedChanges( this, _( "Symbol to Footprint links have been modified. "
-                                            "Save changes?" ),
+        if( !HandleUnsavedChanges( this, _( "Symbol to Footprint links have been modified. Save changes?" ),
                                    [&]() -> bool
                                    {
                                        return SaveFootprintAssociation( false );
@@ -422,10 +410,20 @@ bool CVPCB_MAINFRAME::canCloseWindow( wxCloseEvent& aEvent )
 
 void CVPCB_MAINFRAME::doCloseWindow()
 {
+    m_symbolsListBox->Shutdown();
+    m_footprintListBox->Shutdown();
+
     if( GetFootprintViewerFrame() )
         GetFootprintViewerFrame()->Close( true );
 
     m_modified = false;
+
+    // Stop the timer during destruction early to avoid potential race conditions (that do happen)
+    m_filterTimer->Stop();
+
+    // Shutdown all running tools
+    if( m_toolManager )
+        m_toolManager->ShutdownAllTools();
 
     // clear symbol selection in schematic:
     SendComponentSelectionToSch( true );
@@ -533,9 +531,8 @@ void CVPCB_MAINFRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
 {
     EDA_BASE_FRAME::LoadSettings( aCfg );
 
-    CVPCB_SETTINGS* cfg = static_cast<CVPCB_SETTINGS*>( aCfg );
-
-    m_filteringOptions = cfg->m_FilterFlags;
+    if( CVPCB_SETTINGS* cfg = dynamic_cast<CVPCB_SETTINGS*>( aCfg ) )
+        m_filteringOptions = cfg->m_FilterFlags;
 }
 
 
@@ -543,12 +540,14 @@ void CVPCB_MAINFRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
 {
     EDA_BASE_FRAME::SaveSettings( aCfg );
 
-    CVPCB_SETTINGS* cfg = static_cast<CVPCB_SETTINGS*>( aCfg );
-    cfg->m_FilterFlags = m_filteringOptions;
-    cfg->m_FilterString = m_tcFilterString->GetValue();
+    if( CVPCB_SETTINGS* cfg = dynamic_cast<CVPCB_SETTINGS*>( aCfg ) )
+    {
+        cfg->m_FilterFlags = m_filteringOptions;
+        cfg->m_FilterString = m_tcFilterString->GetValue();
 
-    cfg->m_LibrariesWidth = m_librariesListBox->GetSize().x;
-    cfg->m_FootprintsWidth = m_footprintListBox->GetSize().x;
+        cfg->m_LibrariesWidth = m_librariesListBox->GetSize().x;
+        cfg->m_FootprintsWidth = m_footprintListBox->GetSize().x;
+    }
 }
 
 
