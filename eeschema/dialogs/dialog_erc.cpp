@@ -23,6 +23,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <settings/settings_manager.h>
 #include <advanced_config.h>
 #include <gestfich.h>
 #include <sch_screen.h>
@@ -82,8 +83,8 @@ DIALOG_ERC::DIALOG_ERC( SCH_EDIT_FRAME* parent ) :
     SetName( DIALOG_ERC_WINDOW_NAME ); // Set a window name to be able to find it
     KIPLATFORM::UI::SetFloatLevel( this );
 
-    EESCHEMA_SETTINGS* settings = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
-    m_severities = settings->m_Appearance.erc_severities;
+    if( EESCHEMA_SETTINGS* cfg = GetAppSettings<EESCHEMA_SETTINGS>( "eeschema" ) )
+        m_severities = cfg->m_Appearance.erc_severities;
 
     m_messages->SetImmediateMode();
 
@@ -144,16 +145,10 @@ DIALOG_ERC::~DIALOG_ERC()
     g_lastERCIgnored.clear();
 
     for( int ii = 0; ii < m_ignoredList->GetItemCount(); ++ii )
-    {
-        g_lastERCIgnored.push_back( { m_ignoredList->GetItemText( ii ),
-                                      m_ignoredList->GetItemData( ii ) } );
-    }
+        g_lastERCIgnored.push_back( { m_ignoredList->GetItemText( ii ), m_ignoredList->GetItemData( ii ) } );
 
-    EESCHEMA_SETTINGS* settings = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
-    wxASSERT( settings );
-
-    if( settings )
-        settings->m_Appearance.erc_severities = m_severities;
+    if( EESCHEMA_SETTINGS* cfg = GetAppSettings<EESCHEMA_SETTINGS>( "eeschema" ) )
+        cfg->m_Appearance.erc_severities = m_severities;
 
     m_markerTreeModel->DecRef();
 }
@@ -161,27 +156,26 @@ DIALOG_ERC::~DIALOG_ERC()
 
 void DIALOG_ERC::UpdateAnnotationWarning()
 {
-    if( m_parent->CheckAnnotate( []( ERCE_T, const wxString&, SCH_REFERENCE*, SCH_REFERENCE* )
-                                 { } ) )
+    if( m_parent->CheckAnnotate(
+                []( ERCE_T, const wxString&, SCH_REFERENCE*, SCH_REFERENCE* )
+                {
+                } ) )
     {
         if( !m_infoBar->IsShownOnScreen() )
         {
-            wxHyperlinkCtrl* button = new wxHyperlinkCtrl( m_infoBar, wxID_ANY,
-                                                           _( "Show Annotation dialog" ),
+            wxHyperlinkCtrl* button = new wxHyperlinkCtrl( m_infoBar, wxID_ANY, _( "Show Annotation dialog" ),
                                                            wxEmptyString );
 
             button->Bind( wxEVT_COMMAND_HYPERLINK, std::function<void( wxHyperlinkEvent& aEvent )>(
                           [&]( wxHyperlinkEvent& aEvent )
                           {
-                              wxHtmlLinkEvent htmlEvent( aEvent.GetId(),
-                                                         wxHtmlLinkInfo( aEvent.GetURL() ) );
+                              wxHtmlLinkEvent htmlEvent( aEvent.GetId(), wxHtmlLinkInfo( aEvent.GetURL() ) );
                               OnLinkClicked( htmlEvent );
                           } ) );
 
             m_infoBar->RemoveAllButtons();
             m_infoBar->AddButton( button );
-            m_infoBar->ShowMessage( _( "Schematic is not fully annotated. "
-                                       "ERC results will be incomplete." ) );
+            m_infoBar->ShowMessage( _( "Schematic is not fully annotated. ERC results will be incomplete." ) );
         }
     }
     else
