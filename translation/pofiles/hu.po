@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-18 08:10-0700\n"
-"PO-Revision-Date: 2025-07-11 20:01+0000\n"
+"PO-Revision-Date: 2025-07-19 14:45+0000\n"
 "Last-Translator: Sárkány Lőrinc <lsarkany@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/kicad/v9/hu/>\n"
 "Language: hu\n"
@@ -21487,14 +21487,12 @@ msgid ""
 msgstr ""
 
 #: eeschema/sheet.cpp:780
-#, fuzzy
 msgid "Do not show this message again."
 msgstr "Ne mutassa újra ezt az üzenetet."
 
 #: eeschema/sheet.cpp:781
-#, fuzzy
 msgid "Create New Sheet"
-msgstr "Új projekt létrehozása"
+msgstr "Új lap létrehozása"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:68 eeschema/sim/kibis/ibis_parser.cpp:97
 #: eeschema/sim/kibis/ibis_parser.cpp:120
