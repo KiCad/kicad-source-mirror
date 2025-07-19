@@ -18,7 +18,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-18 08:10-0700\n"
-"PO-Revision-Date: 2025-07-10 06:02+0000\n"
+"PO-Revision-Date: 2025-07-19 14:45+0000\n"
 "Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/kicad/v9/pl/>\n"
 "Language: pl\n"
@@ -18324,9 +18324,8 @@ msgid "&Duplicate '%s'"
 msgstr "Powiel '%s'"
 
 #: eeschema/picksymbol.cpp:179
-#, fuzzy
 msgid "Swap Units"
-msgstr "Jednostki"
+msgstr "Zamień jednostki"
 
 #: eeschema/picksymbol.cpp:181
 msgid "Change Unit"
@@ -20143,19 +20142,16 @@ msgid "Row Height"
 msgstr "Wysokość pola"
 
 #: eeschema/sch_tablecell.cpp:256
-#, fuzzy
 msgid "Cell Properties"
-msgstr "Użyj wszystkich właściwości"
+msgstr "Właściwości komórki"
 
 #: eeschema/sch_tablecell.cpp:258
-#, fuzzy
 msgid "Background Fill"
 msgstr "Wypełnienie drugoplanowe"
 
 #: eeschema/sch_tablecell.cpp:262
-#, fuzzy
 msgid "Background Fill Color"
-msgstr "Kolor Tła"
+msgstr "Kolor wypełnienia tła"
 
 #: eeschema/sch_text.cpp:467
 #, c-format
@@ -23996,14 +23992,12 @@ msgid "All units of this symbol are already placed."
 msgstr "Wszystkie części składowe tego symbolu są już umieszczone."
 
 #: eeschema/tools/sch_drawing_tools.cpp:757
-#, fuzzy
 msgid "Add Design Block"
 msgstr "Dodaj blok projektowy"
 
 #: eeschema/tools/sch_drawing_tools.cpp:758
-#, fuzzy
 msgid "Import Schematic Sheet Content"
-msgstr "Dołącz zawartość arkusza schematu..."
+msgstr "Dołącz zawartość arkusza schematu"
 
 #: eeschema/tools/sch_drawing_tools.cpp:792
 msgid "Choose Schematic"
@@ -24254,12 +24248,10 @@ msgid "Net must be labeled to assign a netclass."
 msgstr "Sieci muszą być nazwane by je dołączyć do klas sieci."
 
 #: eeschema/tools/sch_editor_control.cpp:1714 pcbnew/tools/pcb_control.cpp:1067
-#, fuzzy
 msgid ""
 "Pasting a long text text string may be very slow.  Do you want to continue?"
 msgstr ""
-"Zmiana rozszerzenia pliku zmieni typ pliku.\n"
-"Czy chcesz kontynuować?"
+"Wklejanie długich ciągów znaków może być powolne.  Czy chcesz kontynuować?"
 
 #: eeschema/tools/sch_editor_control.cpp:1836
 #, c-format
@@ -24564,6 +24556,8 @@ msgstr "Ta pozycja jest zajmowana przez inny pin, w elemencie %d."
 #: eeschema/tools/symbol_editor_pin_tool.cpp:243
 msgid "Disable the 'Synchronized Pins Mode' option to avoid this message."
 msgstr ""
+"Zablokuj opcję 'Synchronizuj tryb pracy pinów' by komunikat ten się nie "
+"pojawiał."
 
 #: eeschema/tools/symbol_editor_pin_tool.cpp:244
 msgid "Place Pin Anyway"
@@ -32233,12 +32227,9 @@ msgstr ""
 "**********************************************************\n"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:452
-#, fuzzy, c-format
+#, c-format
 msgid "Excluding: %s from reannotation<br/>"
-msgstr ""
-"\n"
-"Wykluczenie: %s wykluczony z ponownej numeracji\n"
-"\n"
+msgstr "Wykluczenie: %s wykluczony z ponownej numeracji<br/>"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:455
 #, fuzzy
@@ -32321,12 +32312,8 @@ msgid "Aborted: too many errors"
 msgstr "Przerwano: zbyt dużo błędów"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:749
-#, fuzzy
 msgid "<br/><br/>Front Footprints"
-msgstr ""
-"\n"
-"\n"
-"Footprinty na stronie górnej"
+msgstr "<br/><br/>Footprinty na stronie górnej"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:750
 #, fuzzy
@@ -50931,9 +50918,8 @@ msgid "Actual Clearance"
 msgstr "Obecny prześwit"
 
 #: pcbnew/tools/pcb_control.cpp:1828
-#, fuzzy
 msgid "Resolved Hole Clearance"
-msgstr "Rozpoznany prześwit otworu"
+msgstr "Przeanalizowany prześwit otworu"
 
 #: pcbnew/tools/pcb_control.cpp:1833
 #, fuzzy
@@ -50941,9 +50927,8 @@ msgid "Actual Hole Clearance"
 msgstr "Obecny prześwit otworu"
 
 #: pcbnew/tools/pcb_control.cpp:1868
-#, fuzzy
 msgid "Resolved Edge Clearance"
-msgstr "Rozpoznany prześwit względem krawędzi"
+msgstr "Przeanalizowany prześwit względem krawędzi"
 
 #: pcbnew/tools/pcb_control.cpp:1873
 #, fuzzy
