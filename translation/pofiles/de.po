@@ -30,7 +30,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-18 08:10-0700\n"
-"PO-Revision-Date: 2025-07-10 08:29+0000\n"
+"PO-Revision-Date: 2025-07-19 14:45+0000\n"
 "Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v9/de/>\n"
 "Language: de\n"
@@ -4056,7 +4056,6 @@ msgid "Add"
 msgstr "Hinzufügen"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:20
-#, fuzzy
 msgid "Enable Git tracking"
 msgstr "Git-Nachverfolgung aktivieren"
 
@@ -11828,9 +11827,8 @@ msgstr "Feld-Positionen aktualisieren/zurücksetzen"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:149
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:124
-#, fuzzy
 msgid "Check All Update Options"
-msgstr "Aktualisierungsoptionen"
+msgstr "Alle Aktualisierungsoptionen wählen"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:159
 msgid "Update symbol shape and pins"
@@ -11841,7 +11839,6 @@ msgid "Update keywords and footprint filters"
 msgstr "Schlüsselwörter und Footprint-Filter aktualisieren"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:175
-#, fuzzy
 msgid "Update/reset pin name/number visibility"
 msgstr "Feld-Sichtbarkeiten aktualisieren/zurücksetzen"
 
@@ -11859,9 +11856,8 @@ msgstr "Benutzerdefinierte Spannungssymbole zurücksetzen"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:190
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:142
-#, fuzzy
 msgid "Uncheck All Update Options"
-msgstr "Aktualisierungsoptionen"
+msgstr "Alle Aktualisierungsoptionen deaktivieren"
 
 #: eeschema/dialogs/dialog_change_symbols_base.h:107
 msgid "Update Symbols from Library"
@@ -16841,24 +16837,20 @@ msgid "Keep pins attached when dragging edges"
 msgstr "Beim Ziehen von Kanten Pins verbunden halten"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:447
-#, fuzzy
 msgid "Nickname and path cannot be empty."
-msgstr "Der Pin-Name darf nicht leer sein."
+msgstr "Nickname und Pfad dürfen nicht leer sein."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:452
-#, fuzzy
 msgid "Nickname cannot be empty."
-msgstr "Der Pin-Name darf nicht leer sein."
+msgstr "Nickname darf nicht leer sein."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:457
-#, fuzzy
 msgid "Path cannot be empty."
-msgstr "Text darf nicht leer sein."
+msgstr "Pfad darf nicht leer sein."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:470
-#, fuzzy
 msgid "Library Table Error"
-msgstr "Bibliothek-Aliasnamen-Fehler"
+msgstr "Bibliothekstabellen-Fehler"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:478
 #, c-format
@@ -17102,9 +17094,9 @@ msgstr "Es wurde kein Symbol zum Speichern ausgewählt."
 
 #: eeschema/eeschema_jobs_handler.cpp:1029 pcbnew/pcbnew_jobs_handler.cpp:1141
 #: pcbnew/pcbnew_jobs_handler.cpp:1815
-#, fuzzy, c-format
+#, c-format
 msgid "Exporting %s"
-msgstr "Erwarte %s"
+msgstr "Exportiere %s"
 
 #: eeschema/eeschema_jobs_handler.cpp:1059 pcbnew/pcbnew_jobs_handler.cpp:1695
 msgid "Output path must not conflict with existing path\n"
@@ -18419,9 +18411,8 @@ msgid "&Duplicate '%s'"
 msgstr "&Dupliziere \"%s\""
 
 #: eeschema/picksymbol.cpp:179
-#, fuzzy
 msgid "Swap Units"
-msgstr "Umschalten mil/mm"
+msgstr "Einheiten tauschen"
 
 #: eeschema/picksymbol.cpp:181
 msgid "Change Unit"
@@ -20238,29 +20229,24 @@ msgid "Cell Height"
 msgstr "Zellhöhe"
 
 #: eeschema/sch_tablecell.cpp:246 pcbnew/pcb_tablecell.cpp:247
-#, fuzzy
 msgid "Column Width"
-msgstr "Zellbreite"
+msgstr "Spaltenbreite"
 
 #: eeschema/sch_tablecell.cpp:251 pcbnew/pcb_tablecell.cpp:252
-#, fuzzy
 msgid "Row Height"
-msgstr "Feldhöhe"
+msgstr "Zeilenhöhe"
 
 #: eeschema/sch_tablecell.cpp:256
-#, fuzzy
 msgid "Cell Properties"
-msgstr "Benutze alle Eigenschaften"
+msgstr "Zelleigenschaften"
 
 #: eeschema/sch_tablecell.cpp:258
-#, fuzzy
 msgid "Background Fill"
 msgstr "Hintergrundfüllung"
 
 #: eeschema/sch_tablecell.cpp:262
-#, fuzzy
 msgid "Background Fill Color"
-msgstr "Hintergrundfarbe"
+msgstr "Hintergrundfüllfarbe"
 
 #: eeschema/sch_text.cpp:467
 #, c-format
@@ -24124,14 +24110,12 @@ msgid "All units of this symbol are already placed."
 msgstr "Alle Einheiten des Symbols sind bereits eingefügt."
 
 #: eeschema/tools/sch_drawing_tools.cpp:757
-#, fuzzy
 msgid "Add Design Block"
-msgstr "Designblock einzufügen"
+msgstr "Designblock einfügen"
 
 #: eeschema/tools/sch_drawing_tools.cpp:758
-#, fuzzy
 msgid "Import Schematic Sheet Content"
-msgstr "Schaltplanblattinhalt importieren..."
+msgstr "Schaltplanblattinhalt importieren"
 
 #: eeschema/tools/sch_drawing_tools.cpp:792
 msgid "Choose Schematic"
@@ -24384,12 +24368,11 @@ msgid "Net must be labeled to assign a netclass."
 msgstr "Das Netz muss beschriftet sein, um eine Netzklasse zuzuweisen."
 
 #: eeschema/tools/sch_editor_control.cpp:1714 pcbnew/tools/pcb_control.cpp:1067
-#, fuzzy
 msgid ""
 "Pasting a long text text string may be very slow.  Do you want to continue?"
 msgstr ""
-"Ändern der Dateiendung verändert den Dateityp.\n"
-"Möchten Sie trotzdem fortfahren?"
+"Das Einfügen einer langen Zeichenkette könnte sehr langsam sein.  Möchten "
+"Sie trotzdem fortfahren?"
 
 #: eeschema/tools/sch_editor_control.cpp:1836
 #, c-format
@@ -24606,9 +24589,9 @@ msgstr "Keine Symbolbibliothek gewählt."
 #: eeschema/tools/symbol_editor_control.cpp:263
 #: eeschema/tools/symbol_editor_control.cpp:413
 #: eeschema/tools/symbol_editor_control.cpp:457
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol library '%s' not found."
-msgstr "Bauteilbibliothek nicht gefunden."
+msgstr "Symbolbibliothek \"%s\" nicht gefunden."
 
 #: eeschema/tools/symbol_editor_control.cpp:349
 #: pcbnew/tools/footprint_editor_control.cpp:650
@@ -24700,6 +24683,8 @@ msgstr ""
 #: eeschema/tools/symbol_editor_pin_tool.cpp:243
 msgid "Disable the 'Synchronized Pins Mode' option to avoid this message."
 msgstr ""
+"Deaktivieren Sie den \"Synchronisierten Pin-Bearbeitungsmodus\" um diese "
+"Meldung zu vermeiden."
 
 #: eeschema/tools/symbol_editor_pin_tool.cpp:244
 msgid "Place Pin Anyway"
@@ -26905,6 +26890,8 @@ msgstr "Renderqualität. Optionen: %s"
 #, c-format
 msgid "Appearance preset. Options: %s, %s, or user-defined preset name"
 msgstr ""
+"Darstellungsvoreinstellung. Optionen: %s, %s, oder benutzerdefinierter "
+"Voreinstellungsname"
 
 #: kicad/cli/command_pcb_render.cpp:264
 msgid ""
@@ -26967,9 +26954,8 @@ msgid "Side lights elevation angle in degrees, range: 0-90"
 msgstr "Seitenlichthöhen-Winkel in Grad, Bereich: 0-90"
 
 #: kicad/cli/command_pcb_render.cpp:334
-#, fuzzy
 msgid "Invalid preset\n"
-msgstr "Ungültiges Format\n"
+msgstr "Ungültige Voreinstellung\n"
 
 #: kicad/cli/command_pcb_render.cpp:350
 msgid "Invalid background\n"
@@ -27236,7 +27222,7 @@ msgstr "Enthaltene Aufträge:"
 
 #: kicad/dialogs/dialog_executecommand_job_settings.cpp:150
 msgid "<value set at runtime>"
-msgstr ""
+msgstr "<Wert zur Laufzeit gesetzt>"
 
 #: kicad/dialogs/dialog_executecommand_job_settings_base.cpp:79
 msgid "Record output messages"
@@ -27247,9 +27233,8 @@ msgid "Ignore non-zero exit code"
 msgstr "Ergebniscode ungleich Null ignorieren"
 
 #: kicad/dialogs/dialog_executecommand_job_settings_base.cpp:92
-#, fuzzy
 msgid "Available text variables:"
-msgstr "Verfügbare Materialien:"
+msgstr "Verfügbare Textvariablen:"
 
 #: kicad/dialogs/dialog_executecommand_job_settings_base.h:58
 msgid "Execute Command Job Settings"
@@ -27367,7 +27352,6 @@ msgid "Last run failed"
 msgstr "Letzter Lauf fehlgeschlagen"
 
 #: kicad/dialogs/panel_jobset.cpp:264 kicad/dialogs/panel_jobset.cpp:976
-#, fuzzy
 msgid "Running Jobs"
 msgstr "Führe Aufträge aus"
 
@@ -27579,9 +27563,9 @@ msgid "Import EasyEDA Pro Project"
 msgstr "EasyEDA Pro-Projekt importieren"
 
 #: kicad/jobs_runner.cpp:257
-#, fuzzy, c-format
+#, c-format
 msgid "Running job %d: %s"
-msgstr "Führe Aufträge aus"
+msgstr "Führe Auftrag %d aus: %s"
 
 #: kicad/jobs_runner.cpp:301
 msgid "Job successful"
@@ -32381,64 +32365,47 @@ msgstr ""
 "Leiterplatte aktualisieren\" mit dem Schaltplan synchronisiert werden."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:436
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<br/>There are %i reference designator prefixes in use<br/"
 ">**********************************************************<br/>"
 msgstr ""
-"\n"
-"\n"
-"Es gibt %i Arten von Referenzbezeichnungen\n"
-"********************************************************** ********\n"
+"<br/>Es werden %i Referenzbezeichner-Prefixe genutzt<br/"
+">**********************************************************<br/>"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:452
-#, fuzzy, c-format
+#, c-format
 msgid "Excluding: %s from reannotation<br/>"
-msgstr ""
-"\n"
-"Ausgenommen: %s von Neu-Annotierung\n"
-"\n"
+msgstr "Ausgenommen: %s von Neu-Annotierung<br/>"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:455
-#, fuzzy
 msgid ""
 "<br/>Change Array\n"
 "***********************<br/>"
 msgstr ""
-"\n"
-"    Array ändern\n"
-"***********************\n"
+"<br/>Array ändern\n"
+"***********************<br/>"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:463
-#, fuzzy
 msgid "(will be ignored)"
-msgstr " wird ignoriert"
+msgstr "(wird ignoriert)"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:476
-#, fuzzy
 msgid "<br/>No footprints"
-msgstr "Keine Footprints"
+msgstr "<br/>Keine Footprints"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:482
-#, fuzzy
 msgid "<br/>*********** Sort on Footprint Coordinates ***********"
-msgstr ""
-"\n"
-"*********** Nach %s sortieren ***********"
+msgstr "<br/>*********** Nach Footprintkoordinaten sortieren ***********"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:484
-#, fuzzy
 msgid "<br/>*********** Sort on Reference Coordinates ***********"
-msgstr ""
-"\n"
-"*********** Nach %s sortieren ***********"
+msgstr "<br/>*********** Nach Referenzkoordinaten sortieren ***********"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:488
-#, fuzzy, c-format
+#, c-format
 msgid "<br/>%d %s X, Y: %s; rounded X, Y: %s"
-msgstr ""
-"\n"
-"%d %s UUID: [%s], X, Y: %s, gerundet X, Y, %s"
+msgstr "<br/>%d %s X, Y: %s; gerundet X, Y: %s"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:510
 msgid "Selected options resulted in errors! Change them and try again."
@@ -32447,22 +32414,19 @@ msgstr ""
 "Sie es erneut."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:517
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<br/>PCB has %d empty or invalid reference designations.<br/>Recommend "
 "running DRC with 'Test for parity between PCB and schematic' checked.\n"
 msgstr ""
-"\n"
-"Die Platine hat %d leere oder ungültige Referenzbezeichner.\n"
-"Es wird empfohlen, DRC mit aktivierter Option \"Platine und Schaltplan auf "
-"Parität prüfen\" auszuführen.\n"
+"<br/>Die Platine hat %d leere oder ungültige Referenzbezeichner.<br/>Es wird "
+"empfohlen, den DRC mit aktivierter Option "
+"\"Platine und Schaltplan auf Parität prüfen\" auszuführen.\n"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:523
-#, fuzzy, c-format
+#, c-format
 msgid "<br/>RefDes: %s Footprint: %s:%s at %s on PCB."
-msgstr ""
-"\n"
-"RefDes: %s Footprint: %s: %s bei %s auf der Leiterplatte."
+msgstr "<br/>RefDes: %s Footprint: %s: %s bei %s auf der Leiterplatte."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:531
 msgid "Reannotate anyway?"
@@ -32482,20 +32446,12 @@ msgid "Aborted: too many errors"
 msgstr "Abgebrochen: zu viele Fehler"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:749
-#, fuzzy
 msgid "<br/><br/>Front Footprints"
-msgstr ""
-"\n"
-"\n"
-"Vorderseitige Footprints"
+msgstr "<br/><br/>Vorderseitige Footprints"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:750
-#, fuzzy
 msgid "<br/><br/>Back Footprints"
-msgstr ""
-"\n"
-"\n"
-"Rückseitige Footprints"
+msgstr "<br/><br/>Rückseitige Footprints"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:814
 msgid "Footprint not found in changelist"
@@ -34330,10 +34286,9 @@ msgid "New footprint library id:"
 msgstr "Neue Footprintbliotheks-ID:"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:107
-#, fuzzy
 msgid "Remove text items if not in library footprint"
 msgstr ""
-"Textelemente entfernen, welche im Bibliotheks-Footprint nicht enthalten sind"
+"Textelemente, die nicht im Bibliotheks-Footprint enthalten sind, entfernen"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:112
 msgid "Update/reset text layers and visibilities"
@@ -38176,9 +38131,8 @@ msgid "x"
 msgstr "x"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:71
-#, fuzzy
 msgid "Appearance preset:"
-msgstr "Darstellung"
+msgstr "Darstellungsvoreinstellung:"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:81
 msgid "Background style:"
@@ -38233,7 +38187,6 @@ msgid "°"
 msgstr "°"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:254
-#, fuzzy
 msgid "Lights Intensity"
 msgstr "Lichtintensität"
 
@@ -38242,7 +38195,6 @@ msgid "Camera:"
 msgstr "Kamera:"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:303
-#, fuzzy
 msgid "Lights Position"
 msgstr "Lichtposition"
 
@@ -51167,32 +51119,26 @@ msgid "DP Gap Constraints: %s"
 msgstr "DP-Abstandsbeschränkungen: %s"
 
 #: pcbnew/tools/pcb_control.cpp:1774
-#, fuzzy
 msgid "Resolved Clearance"
 msgstr "Ermittelter Freiraum"
 
 #: pcbnew/tools/pcb_control.cpp:1785
-#, fuzzy
 msgid "Actual Clearance"
 msgstr "Tatsächlicher Freiraum"
 
 #: pcbnew/tools/pcb_control.cpp:1828
-#, fuzzy
 msgid "Resolved Hole Clearance"
 msgstr "Ermittelter Loch-Freiraum"
 
 #: pcbnew/tools/pcb_control.cpp:1833
-#, fuzzy
 msgid "Actual Hole Clearance"
 msgstr "Tatsächlicher Loch-Freiraum"
 
 #: pcbnew/tools/pcb_control.cpp:1868
-#, fuzzy
 msgid "Resolved Edge Clearance"
 msgstr "Ermittelter Kanten-Abstand"
 
 #: pcbnew/tools/pcb_control.cpp:1873
-#, fuzzy
 msgid "Resolved Margin Clearance"
 msgstr "Ermittelter Randabstand"
 
