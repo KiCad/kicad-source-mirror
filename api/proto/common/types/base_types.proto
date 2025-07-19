@@ -223,6 +223,12 @@ message Ratio
   double value = 1;
 }
 
+// Represents a time delay in picoseconds. Since 10.0.0.
+message Time
+{
+  int64 value_ps = 1;
+}
+
 // Corresponds to COLOR4D.  Each color channel is a double from 0.0 to 1.0.
 message Color
 {
