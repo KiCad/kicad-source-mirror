@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Farsi\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-18 08:09-0700\n"
-"PO-Revision-Date: 2025-07-19 14:45+0000\n"
+"PO-Revision-Date: 2025-07-20 17:02+0000\n"
 "Last-Translator: Mahdi Ahmadzadeh <mahdiahmadi83427@gmail.com>\n"
 "Language-Team: Persian <https://hosted.weblate.org/projects/kicad/"
 "master-source/fa/>\n"
@@ -23,126 +23,130 @@ msgstr "همه فایل ها"
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:330
 msgid "Build board outline"
-msgstr ""
+msgstr "طرح کلی برد را بسازید"
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:566
 msgid "Create layers"
-msgstr ""
+msgstr "ایجاد لایه ها"
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:991
 #: pcbnew/dialogs/dialog_footprint_checker.cpp:116
 msgid "No footprint loaded."
-msgstr ""
+msgstr "فوت پرینت (Footprint) وجود ندارد."
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:1006
 msgid ""
 "Footprint outline is missing or malformed. Run Footprint Checker for a full "
 "analysis."
 msgstr ""
+"طرح کلی فوت پرینت (Footprint) وجود ندارد یا نادرست و ناقص است. برای تحلیل "
+"کامل، ابزار\" بررسی فوت پرینت (Footprint)\" را اجرا کنید."
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:1015
 msgid "Board outline is missing or malformed. Run DRC for a full analysis."
 msgstr ""
+"کادرو مرز برد وجود ندارد یا نادرست است. برای تحلیل کامل، ابزار بررسی قواعد "
+"طراحی ابزار \"بررسی قواعد طراحی\" را اجرا کنید."
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:291
 msgid "Create tracks and vias"
-msgstr ""
+msgstr "ایجاد مسیر ها (Tracks) و وایا ها (Vias)"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:760
 msgid "Create zones"
-msgstr ""
+msgstr "ایجاد ناحیه ها"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:840
 msgid "Build Tech layers"
-msgstr ""
+msgstr "ساخت لایه های فنی"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:917
 #, c-format
 msgid "Build Tech layer %d"
-msgstr ""
+msgstr "ساخت لایه های فنی %d"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:1180
 msgid "Simplifying copper layer polygons"
-msgstr ""
+msgstr "ساده سازی چند ضلعی های لایه مسی"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:1185
 msgid "Calculating plated copper"
-msgstr ""
+msgstr "محاسبه مس آبکاری شده"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:1235
 #, c-format
 msgid "Simplifying %d copper layers"
-msgstr ""
+msgstr "ساده سازی %d لایه مسی"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:1276
 msgid "Simplify holes contours"
-msgstr ""
+msgstr "ساده سازی خطوط سوراخ ها"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:1296
 msgid "Build BVH for holes and vias"
-msgstr ""
+msgstr "ساخت سلسله مراتب محدوده برای سوراخ ها (Holes) و وایا ها (Vias)"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:403
 msgid "OpenGL context creation error"
-msgstr ""
+msgstr "خطا در ایجاد محیط OpenGL"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:434
 msgid "Your OpenGL version is not supported. Minimum required is 1.5."
-msgstr ""
+msgstr "نسخه OpenGL شما پشتیبانی نمی شود. حداقل نسخه مورد نیاز ۱.۵ است."
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:568
 #, c-format
 msgid "Last render time %.0f ms"
-msgstr ""
+msgstr "آخرین زمان پردازش، %.0f میلی ثانیه"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:756
 #, c-format
 msgid "Net %s\tNet class %s"
-msgstr ""
+msgstr "نت %s \tبه رده و کلاس نت %s"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:779
 #, c-format
 msgid "Pad %s\t"
-msgstr ""
+msgstr "نقطه اتصال (پَد) %s\t"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:810
 #, c-format
 msgid "Rule area %s\t"
-msgstr ""
+msgstr "منطقه قاعده و قانون %s\t"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:812
 #, c-format
 msgid "Zone %s\t"
-msgstr ""
+msgstr "ناحیه زون (Zone) %s\t"
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:466
 msgid "Load OpenGL: board"
-msgstr ""
+msgstr "بارگذار OpenGL: برد"
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:492
 msgid "Load OpenGL: holes and vias"
-msgstr ""
+msgstr "بارگذار OpenGL: سوراخ های معمولی و سوراخ های ارتباطی"
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:545
 msgid "Load OpenGL: layers"
-msgstr ""
+msgstr "بارگذار OpenGL: لایه ها"
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:559
 #, c-format
 msgid "Load OpenGL layer %s"
-msgstr ""
+msgstr "بارگذاری OpenGL لایه %s"
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:653
 #: 3d-viewer/3d_rendering/raytracing/create_scene.cpp:795
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2015
 msgid "Loading 3D models..."
-msgstr ""
+msgstr "در حال بارگذاری مدل های سه بعدی ..."
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:662
 #: 3d-viewer/3d_rendering/raytracing/create_scene.cpp:976
 #, c-format
 msgid "Reload time %.3f s"
-msgstr ""
+msgstr "زمان بارگذاری مجدد %.3f ثانیه"
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:957
 #: eeschema/sch_io/eagle/sch_io_eagle.cpp:361
@@ -157,35 +161,35 @@ msgstr ""
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2776
 #, c-format
 msgid "Loading %s..."
-msgstr ""
+msgstr "در حال بارگذاری %s ..."
 
 #: 3d-viewer/3d_rendering/opengl/render_3d_opengl.cpp:509
 #: 3d-viewer/3d_rendering/raytracing/render_3d_raytrace_gl.cpp:107
 #: 3d-viewer/3d_rendering/raytracing/render_3d_raytrace_ram.cpp:99
 msgid "Loading..."
-msgstr ""
+msgstr "در حال بارگذاری ..."
 
 #: 3d-viewer/3d_rendering/raytracing/create_scene.cpp:391
 msgid "Load Raytracing: board"
-msgstr ""
+msgstr "بارگذاری ردیابی پرتو: برد"
 
 #: 3d-viewer/3d_rendering/raytracing/create_scene.cpp:565
 msgid "Load Raytracing: layers"
-msgstr ""
+msgstr "بارگذاری ردیابی پرتو: لایه ها"
 
 #: 3d-viewer/3d_rendering/raytracing/render_3d_raytrace_base.cpp:240
 #, c-format
 msgid "Rendering time %.3f s"
-msgstr ""
+msgstr "مدت زمان پردازش %.3f ثانیه"
 
 #: 3d-viewer/3d_rendering/raytracing/render_3d_raytrace_base.cpp:287
 #, c-format
 msgid "Rendering: %.0f %%"
-msgstr ""
+msgstr "در حال پردازش: %.0f%%"
 
 #: 3d-viewer/3d_rendering/raytracing/render_3d_raytrace_base.cpp:700
 msgid "Rendering: Post processing shader"
-msgstr ""
+msgstr "پردازشگر: شیدر پس پردازش"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:55
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:611
@@ -193,15 +197,15 @@ msgstr ""
 #: common/tool/actions.cpp:1232 pcbnew/footprint_chooser_frame.cpp:350
 #: pcbnew/footprint_viewer_frame.cpp:963 pcbnew/pcb_base_frame.cpp:672
 msgid "3D Viewer"
-msgstr ""
+msgstr "نمای 3 بعدی"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:77
 msgid "3D Grid"
-msgstr ""
+msgstr "حالت شبکه ای در نمای 3 بعدی"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:119
 msgid "Reset to Default Settings"
-msgstr ""
+msgstr "بازنشانی به تنظیمات پیش فرض"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:126
 #: bitmap2component/bitmap2cmp_frame.cpp:307 cvpcb/menubar.cpp:79
@@ -213,7 +217,7 @@ msgstr ""
 #: pcbnew/menubar_footprint_editor.cpp:236 pcbnew/menubar_pcb_editor.cpp:464
 #: pcbnew/toolbars_footprint_viewer.cpp:133
 msgid "&File"
-msgstr ""
+msgstr "&فایل"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:127 cvpcb/menubar.cpp:80
 #: eeschema/menubar.cpp:345
@@ -221,7 +225,7 @@ msgstr ""
 #: pagelayout_editor/menubar.cpp:151 pcbnew/menubar_footprint_editor.cpp:237
 #: pcbnew/menubar_pcb_editor.cpp:465
 msgid "&Edit"
-msgstr ""
+msgstr "&ویرایش"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:128 eeschema/menubar.cpp:346
 #: eeschema/sim/toolbars_simulator_frame.cpp:175
@@ -231,19 +235,19 @@ msgstr ""
 #: pcbnew/menubar_footprint_editor.cpp:238 pcbnew/menubar_pcb_editor.cpp:466
 #: pcbnew/toolbars_footprint_viewer.cpp:134
 msgid "&View"
-msgstr ""
+msgstr "&نما"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:129
 #: bitmap2component/bitmap2cmp_frame.cpp:308 cvpcb/menubar.cpp:81
 #: eeschema/sim/toolbars_simulator_frame.cpp:177 gerbview/menubar.cpp:234
 #: kicad/menubar.cpp:224 pcb_calculator/pcb_calculator_frame.cpp:234
 msgid "&Preferences"
-msgstr ""
+msgstr "&تنظیمات"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:101
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:68
 msgid "KiCad 3D Viewer"
-msgstr ""
+msgstr "نمایشگر سه بعدی KiCad"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:168
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:617
@@ -253,36 +257,36 @@ msgstr ""
 #: pcbnew/pcb_edit_frame.cpp:306 pcbnew/pcb_edit_frame.cpp:1792
 #: pcbnew/tools/pcb_actions.cpp:1524
 msgid "Appearance"
-msgstr ""
+msgstr "شکل ظاهری"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:332
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:709
 #: 3d-viewer/dialogs/appearance_controls_3D_base.cpp:43
 msgid "Follow PCB Editor"
-msgstr ""
+msgstr "پیروی از ویرایشگر مدارچاپی (PCB)"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:334
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:710
 #: 3d-viewer/dialogs/appearance_controls_3D_base.cpp:43
 msgid "Follow PCB Plot Settings"
-msgstr ""
+msgstr "پیروی از تنظیمات نقشه کشی مدارچاپی (PCB)"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:551
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:735
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:921
 msgid "legacy colors"
-msgstr ""
+msgstr "رنگ های کلاسیک"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:677
 msgid "3D Image File Name"
-msgstr ""
+msgstr "نام فایل تصویر سه بعدی"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:698
 #: common/eda_base_frame.cpp:1500 common/eda_base_frame.cpp:1504
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:337
 #, c-format
 msgid "Insufficient permissions to save file '%s'."
-msgstr ""
+msgstr "‬‬مجوزهای کافی برای ذخیره فایل '%s' وجود ندارد."
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:699 common/confirm.cpp:185
 #: common/confirm.cpp:210 common/dialogs/dialog_design_block_properties.cpp:104
@@ -320,526 +324,532 @@ msgstr ""
 #: pcbnew/drc/drc_item.cpp:228 pcbnew/pcb_marker.cpp:236
 #: pcbnew/widgets/appearance_controls.cpp:2787
 msgid "Error"
-msgstr ""
+msgstr "خطا"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:739
 msgid "Failed to copy image to clipboard"
-msgstr ""
+msgstr "کپی کردن تصویر در کلیپ بورد (Clipboard) ناموفق بود"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:750
 msgid "Can't save file"
-msgstr ""
+msgstr "فایل ذخیره نمی شود"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:48
 msgid "Reload board"
-msgstr ""
+msgstr "بارگیری مجدد برد"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:49
 msgid "Reload board and refresh 3D view"
-msgstr ""
+msgstr "بارگیری مجدد برد و بروز کردن نمای سه بعدی"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:55
 msgid "Use raytracing"
-msgstr ""
+msgstr "استفاده از ردیابی پرتو (Raytracing)"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:56
 msgid "Render current view using Raytracing"
-msgstr ""
+msgstr "پردازش نمای فعلی با استفاده از ردیابی پرتو (Raytracing)"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:63
 msgid "Copy 3D image to clipboard"
-msgstr ""
+msgstr "کپی کردن تصویر سه بعدی در کلیپ بورد (Clipboard)"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:64
 msgid "Copy the current 3D image to the clipboard"
-msgstr ""
+msgstr "کپی کردن تصویر سه بعدی فعلی در کلیپ بورد (Clipboard)"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:71
 msgid "Export Current View as PNG..."
-msgstr ""
+msgstr "خروجی گرفتن از نمای فعلی با فرمت PNG ..."
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:72
 msgid "Export the Current View as a PNG image"
-msgstr ""
+msgstr "خروجی تصویری از نمای فعلی با فرمت PNG ..."
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:79
 msgid "Export Current View as JPEG..."
-msgstr ""
+msgstr "خروجی گرفتن از نمای فعلی با فرمت JPEG ..."
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:80
 msgid "Export the Current View as a JPEG image"
-msgstr ""
+msgstr "خروجی تصویری از نمای فعلی با فرمت JPEG ..."
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:88
 msgid "Set Pivot"
-msgstr ""
+msgstr "تنظیم نقطه محوری"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:89
 msgid "Place point around which the board will be rotated (middle mouse click)"
-msgstr ""
+msgstr "نقطه ای را قرار دهید که برد حول آن بچرخد (کلیک وسط ماوس)"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:96
 msgid "Rotate X Clockwise"
-msgstr ""
+msgstr "چرخش X در جهت عقربه های ساعت"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:104
 msgid "Rotate X Counterclockwise"
-msgstr ""
+msgstr "چرخش X در خلاف جهت عقربه های ساعت"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:112
 msgid "Rotate Y Clockwise"
-msgstr ""
+msgstr "چرخش Y در جهت عقربه های ساعت"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:120
 msgid "Rotate Y Counterclockwise"
-msgstr ""
+msgstr "چرخش Y در خلاف جهت عقربه های ساعت"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:129
 msgid "Rotate Z Clockwise"
-msgstr ""
+msgstr "چرخش Z در جهت عقربه های ساعت"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:138
 msgid "Rotate Z Counterclockwise"
-msgstr ""
+msgstr "چرخش Z در خلاف جهت عقربه های ساعت"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:147
 msgid "Move Board Left"
-msgstr ""
+msgstr "حرکت دادن برد به سمت چپ"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:156
 msgid "Move Board Right"
-msgstr ""
+msgstr "حرکت دادن برد به سمت راست"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:165
 msgid "Move Board Up"
-msgstr ""
+msgstr "حرکت دادن برد به سمت بالا"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:174
 msgid "Move Board Down"
-msgstr ""
+msgstr "حرکت دادن برد به سمت پایین"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:183
 msgid "Home View"
-msgstr ""
+msgstr "نمای خانه (صفحه اصلی)"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:184
 msgid "Redraw at the home position and zoom"
-msgstr ""
+msgstr "ترسیم مجدد در موقعیت اولیه و بزرگ نمایی"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:192
 msgid "Flip Board"
-msgstr ""
+msgstr "وارون کردن برد"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:193
 msgid "Flip the board view"
-msgstr ""
+msgstr "وارون کردن نمای برد"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:201
 msgid "Toggle Orthographic Projection"
-msgstr ""
+msgstr "تعویض طرح ریزی پرسپکتیو"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:202
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:202
 msgid "Enable/disable orthographic projection"
-msgstr ""
+msgstr "فعال/غیرفعال کردن طرح ریزی ارتوگرافیک"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:210
 msgid "View Front"
-msgstr ""
+msgstr "نمای جلو"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:219
 msgid "View Back"
-msgstr ""
+msgstr "نمای پشت"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:228
 msgid "View Left"
-msgstr ""
+msgstr "نمای چپ"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:237
 msgid "View Right"
-msgstr ""
+msgstr "نمای راست"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:246
 msgid "View Top"
-msgstr ""
+msgstr "نمای بالا"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:255
 msgid "View Bottom"
-msgstr ""
+msgstr "نمای پایین"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:263
 msgid "No 3D Grid"
-msgstr ""
+msgstr "بدون شبکه بندی سه بعدی"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:270
 msgid "3D Grid 10mm"
-msgstr ""
+msgstr "شبکه بندی سه بعدی 10 میلی متر"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:277
 msgid "3D Grid 5mm"
-msgstr ""
+msgstr "شبکه بندی سه بعدی 5 میلی متر"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:284
 msgid "3D Grid 2.5mm"
-msgstr ""
+msgstr "شبکه بندی سه بعدی 2.5 میلی متر"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:291
 msgid "3D Grid 1mm"
-msgstr ""
+msgstr "شبکه بندی سه بعدی 1 میلی متر"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:298
 msgid "Render Realistic Materials"
-msgstr ""
+msgstr "پردازشگر واقع گرایانه مواد"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:299
 msgid "Use all material properties from each 3D model file"
-msgstr ""
+msgstr "استفاده از تمام ویژگی های مواد از هر فایل مدل سه بعدی"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:306
 msgid "Render Solid Colors"
-msgstr ""
+msgstr "پردازش رنگ های ثابت و یکنواخت"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:307
 msgid "Use only the diffuse color property from 3D model file"
-msgstr ""
+msgstr "‬فقط رنگ بازتابی فایل مدل سه بعدی استفاده شود"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:314
 msgid "Render CAD Colors"
-msgstr ""
+msgstr "پردازش رنگ های CAD"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:315
 msgid "Use a CAD color style based on the diffuse color of the material"
-msgstr ""
+msgstr "استفاده از سبک رنگ‌ CAD بر پایه رنگ بازتابی ماده"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:323
 msgid "Show Through Hole 3D Models"
-msgstr ""
+msgstr "نمایش مدل های سه بعدی سوراخ دار"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:324
 msgid "Show 3D models for 'Through hole' type footprints"
 msgstr ""
+"نمایش مدل های سه بعدی بر اساس نصب از طریق' پایه های سوراخ دار' در فوت پرینت "
+"(Footprints)"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:332
 msgid "Show SMD 3D Models"
-msgstr ""
+msgstr "نمایش مدل های سه بعدی SMD"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:333
 msgid "Show 3D models for 'Surface mount' type footprints"
 msgstr ""
+"نمایش مدل های سه بعدی بر اساس نصب از طریق' پایه های SMD' در فوت پرینت "
+"(Footprints)"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:341
 msgid "Show Unspecified 3D Models"
-msgstr ""
+msgstr "نمایش مدل های سه بعدی نامشخص"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:342
 msgid "Show 3D models for 'unspecified' type footprints"
-msgstr ""
+msgstr "نمایش مدل های سه بعدی از نوع 'نامشخص' در فوت پرینت ها (Footprints)"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:350
 msgid "Show 3D Models not in POS File"
-msgstr ""
+msgstr "نمایش مدل های سه بعدی که در فایل POS نیستند"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:351
 msgid "Show 3D models even if not found in .pos file"
-msgstr ""
+msgstr "نمایش مدل های سه بعدی حتی اگر در فایل ‎.pos‎ یافت نشوند"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:359
 msgid "Show 3D Models marked DNP"
-msgstr ""
+msgstr "نمایش مدل های سه بعدی با علامت DNP"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:360
 msgid "Show 3D models even if marked 'Do Not Place'"
-msgstr ""
+msgstr "نمایش مدل های سه بعدی حتی اگر با علامت 'قرار ندهید' مشخص شده باشند"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:367
 msgid "Show Model Bounding Boxes"
-msgstr ""
+msgstr "نمایش جعبه های محدوده مدل"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:368
 msgid "Show 3D model bounding boxes in realtime renderer"
 msgstr ""
+"نمایش مدل های سه بعدی در داخل محدوده مکعب (Bounding Boxes) در پردازش بلادرنگ "
+"(Real-Time)"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:375
 msgid "Show 3D Navigator"
-msgstr ""
+msgstr "نمایش ابزار هدایت (Navigator) سه بعدی"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:382
 msgid "Show Appearance Manager"
-msgstr ""
+msgstr "نمایش مدیریت ظاهری (Appearance)"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:383
 #: pcbnew/tools/pcb_actions.cpp:1525
 msgid "Show/hide the appearance manager"
-msgstr ""
+msgstr "نمایش/پنهان کردن مدیریت ظاهری (Appearance)"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:54
 msgid "Board Body"
-msgstr ""
+msgstr "بدنه برد"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:54
 msgid "Show board body"
-msgstr ""
+msgstr "نمایش بدنه برد"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:55
 msgid "Show front copper / surface finish color"
-msgstr ""
+msgstr "نمایش رنگ مس در روی سطح برد"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:56
 msgid "Show back copper / surface finish color"
-msgstr ""
+msgstr "نمایش رنگ مس در پشت سطح برد"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:57
 msgid "Adhesive"
-msgstr ""
+msgstr "چسب (Adhesive)"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:57
 msgid "Show adhesive"
-msgstr ""
+msgstr "نمایش چسب (Adhesive)"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:58
 #: pcbnew/tools/board_inspection_tool.cpp:1449
 msgid "Solder Paste"
-msgstr ""
+msgstr "خمیر لحیم (Solder Paste)"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:58
 msgid "Show solder paste"
-msgstr ""
+msgstr "نمایش خمیر لحیم (Solder Paste)"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:59
 msgid "Show front silkscreen"
-msgstr ""
+msgstr "نمایش خطوط راهنما در روی برد"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:60
 msgid "Show back silkscreen"
-msgstr ""
+msgstr "نمایش خطوط چاپ راهنما در پشت برد"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:61
 msgid "Show front solder mask"
-msgstr ""
+msgstr "نمایش پوشش لایه محافظ (چاپ سبز) در روی برد"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:62
 msgid "Show back solder mask"
-msgstr ""
+msgstr "نمایش پوشش لایه محافظ (چاپ سبز) در پشت برد"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:63
 msgid "Show user drawings layer"
-msgstr ""
+msgstr "نمایش لایه ترسیمات کاربر"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:64
 msgid "Show user comments layer"
-msgstr ""
+msgstr "نمایش لایه نظرات کاربر"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:65
 msgid "Show user ECO1 layer"
-msgstr ""
+msgstr "‫نمایش لایه ECO1 کاربر"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:66
 msgid "Show user ECO2 layer"
-msgstr ""
+msgstr "نمایش لایه ECO2 کاربر"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:67
 msgid "Show user defined layer 1"
-msgstr ""
+msgstr "نمایش لایه تعریف شده توسط کاربر، شماره 1"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:68
 msgid "Show user defined layer 2"
-msgstr ""
+msgstr "نمایش لایه تعریف شده توسط کاربر، شماره 2"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:69
 msgid "Show user defined layer 3"
-msgstr ""
+msgstr "نمایش لایه تعریف شده توسط کاربر، شماره 3"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:70
 msgid "Show user defined layer 4"
-msgstr ""
+msgstr "نمایش لایه تعریف شده توسط کاربر، شماره 4"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:71
 msgid "Show user defined layer 5"
-msgstr ""
+msgstr "نمایش لایه تعریف شده توسط کاربر، شماره 5"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:72
 msgid "Show user defined layer 6"
-msgstr ""
+msgstr "نمایش لایه تعریف شده توسط کاربر، شماره 6"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:73
 msgid "Show user defined layer 7"
-msgstr ""
+msgstr "نمایش لایه تعریف شده توسط کاربر، شماره 7"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:74
 msgid "Show user defined layer 8"
-msgstr ""
+msgstr "نمایش لایه تعریف شده توسط کاربر، شماره 8"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:75
 msgid "Show user defined layer 9"
-msgstr ""
+msgstr "نمایش لایه تعریف شده توسط کاربر، شماره 9"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:76
 msgid "Show user defined layer 10"
-msgstr ""
+msgstr "نمایش لایه تعریف شده توسط کاربر، شماره 10"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:77
 msgid "Show user defined layer 11"
-msgstr ""
+msgstr "نمایش لایه تعریف شده توسط کاربر، شماره 11"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:78
 msgid "Show user defined layer 12"
-msgstr ""
+msgstr "نمایش لایه تعریف شده توسط کاربر، شماره 12"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:79
 msgid "Show user defined layer 13"
-msgstr ""
+msgstr "نمایش لایه تعریف شده توسط کاربر، شماره 13"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:80
 msgid "Show user defined layer 14"
-msgstr ""
+msgstr "نمایش لایه تعریف شده توسط کاربر، شماره 14"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:81
 msgid "Show user defined layer 15"
-msgstr ""
+msgstr "نمایش لایه تعریف شده توسط کاربر، شماره 15"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:82
 msgid "Show user defined layer 16"
-msgstr ""
+msgstr "نمایش لایه تعریف شده توسط کاربر، شماره 16"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:83
 msgid "Show user defined layer 17"
-msgstr ""
+msgstr "نمایش لایه تعریف شده توسط کاربر، شماره 17"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:84
 msgid "Show user defined layer 18"
-msgstr ""
+msgstr "نمایش لایه تعریف شده توسط کاربر، شماره 18"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:85
 msgid "Show user defined layer 19"
-msgstr ""
+msgstr "نمایش لایه تعریف شده توسط کاربر، شماره 19"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:86
 msgid "Show user defined layer 20"
-msgstr ""
+msgstr "نمایش لایه تعریف شده توسط کاربر، شماره 20"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:87
 msgid "Show user defined layer 21"
-msgstr ""
+msgstr "نمایش لایه تعریف شده توسط کاربر، شماره 21"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:88
 msgid "Show user defined layer 22"
-msgstr ""
+msgstr "نمایش لایه تعریف شده توسط کاربر، شماره 22"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:89
 msgid "Show user defined layer 23"
-msgstr ""
+msgstr "نمایش لایه تعریف شده توسط کاربر، شماره 23"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:90
 msgid "Show user defined layer 24"
-msgstr ""
+msgstr "نمایش لایه تعریف شده توسط کاربر، شماره 24"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:91
 msgid "Show user defined layer 25"
-msgstr ""
+msgstr "نمایش لایه تعریف شده توسط کاربر، شماره 25"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:92
 msgid "Show user defined layer 26"
-msgstr ""
+msgstr "نمایش لایه تعریف شده توسط کاربر، شماره 26"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:93
 msgid "Show user defined layer 27"
-msgstr ""
+msgstr "نمایش لایه تعریف شده توسط کاربر، شماره 27"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:94
 msgid "Show user defined layer 28"
-msgstr ""
+msgstr "نمایش لایه تعریف شده توسط کاربر، شماره 28"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:95
 msgid "Show user defined layer 29"
-msgstr ""
+msgstr "نمایش لایه تعریف شده توسط کاربر، شماره 29"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:96
 msgid "Show user defined layer 30"
-msgstr ""
+msgstr "نمایش لایه تعریف شده توسط کاربر، شماره 30"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:97
 msgid "Show user defined layer 31"
-msgstr ""
+msgstr "نمایش لایه تعریف شده توسط کاربر، شماره 31"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:98
 msgid "Show user defined layer 32"
-msgstr ""
+msgstr "نمایش لایه تعریف شده توسط کاربر، شماره 32"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:99
 msgid "Show user defined layer 33"
-msgstr ""
+msgstr "نمایش لایه تعریف شده توسط کاربر، شماره 33"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:100
 msgid "Show user defined layer 34"
-msgstr ""
+msgstr "نمایش لایه تعریف شده توسط کاربر، شماره 34"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:101
 msgid "Show user defined layer 35"
-msgstr ""
+msgstr "نمایش لایه تعریف شده توسط کاربر، شماره 35"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:102
 msgid "Show user defined layer 36"
-msgstr ""
+msgstr "نمایش لایه تعریف شده توسط کاربر، شماره 36"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:103
 msgid "Show user defined layer 37"
-msgstr ""
+msgstr "نمایش لایه تعریف شده توسط کاربر، شماره 37"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:104
 msgid "Show user defined layer 38"
-msgstr ""
+msgstr "نمایش لایه تعریف شده توسط کاربر، شماره 38"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:105
 msgid "Show user defined layer 39"
-msgstr ""
+msgstr "نمایش لایه تعریف شده توسط کاربر، شماره 39"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:106
 msgid "Show user defined layer 40"
-msgstr ""
+msgstr "نمایش لایه تعریف شده توسط کاربر، شماره 40"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:107
 msgid "Show user defined layer 41"
-msgstr ""
+msgstr "نمایش لایه تعریف شده توسط کاربر، شماره 41"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:108
 msgid "Show user defined layer 42"
-msgstr ""
+msgstr "نمایش لایه تعریف شده توسط کاربر، شماره 42"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:109
 msgid "Show user defined layer 43"
-msgstr ""
+msgstr "نمایش لایه تعریف شده توسط کاربر، شماره 43"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:110
 msgid "Show user defined layer 44"
-msgstr ""
+msgstr "نمایش لایه تعریف شده توسط کاربر، شماره 44"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:111
 msgid "Show user defined layer 45"
-msgstr ""
+msgstr "نمایش لایه تعریف شده توسط کاربر، شماره 45"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:113
 msgid "Through-hole Models"
-msgstr ""
+msgstr "مدل‌های سوراخ دار (THT)"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:114
 msgid "SMD Models"
-msgstr ""
+msgstr "مدل های SMD"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:115
 msgid "Virtual Models"
-msgstr ""
+msgstr "مدل های مجازی"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:116
 msgid "Models not in POS File"
-msgstr ""
+msgstr "مدل های موجود در فایل POS نیستند"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:117
 msgid "Models marked DNP"
-msgstr ""
+msgstr "مدل های علامت گذاری شده به عنوان DNP"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:118
 msgid "Model Bounding Boxes"
-msgstr ""
+msgstr "مدل 3 بعدی در جعبه مکعب مرزی"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:120 common/layer_id.cpp:125
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:30
@@ -848,74 +858,76 @@ msgstr ""
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:39
 #: pcbnew/widgets/appearance_controls.cpp:342
 msgid "Values"
-msgstr ""
+msgstr "مقادیر"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:120
 #: pcbnew/widgets/appearance_controls.cpp:342
 msgid "Show footprint values"
-msgstr ""
+msgstr "نمایش مقادیر فوت پرینت (Footprint)"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:121
 #: pcbnew/widgets/appearance_controls.cpp:343
 msgid "References"
-msgstr ""
+msgstr "مراجع"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:121
 #: pcbnew/widgets/appearance_controls.cpp:343
 msgid "Show footprint references"
-msgstr ""
+msgstr "نمایش مراجع و منابع فوت پرینت (Footprint)"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:122
 #: pcbnew/widgets/appearance_controls.cpp:344
 msgid "Footprint Text"
-msgstr ""
+msgstr "متن فوت پرینت (Footprint)"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:122
 #: pcbnew/widgets/appearance_controls.cpp:344
 msgid "Show all footprint text"
-msgstr ""
+msgstr "نمایش همه متن فوت پرینت (Footprint)"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:123
 msgid "Off-board Silkscreen"
-msgstr ""
+msgstr "خطوط راهنما در خارج از برد"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:123
 msgid "Do not clip silk layers to board outline"
-msgstr ""
+msgstr "محدودیت نمایش خطوط راهنما به مرز و محدوده برد"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:125
 msgid "3D Navigator"
-msgstr ""
+msgstr "نویگیتور (Navigator) سه بعدی"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:126
 msgid "Background Start"
-msgstr ""
+msgstr "بخش ابتدایی رنگ پس زمینه"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:126
 msgid "Background gradient start color"
-msgstr ""
+msgstr "تنظیم پاشش رنگ پس زمینه از سمت بالا"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:127
 msgid "Background End"
-msgstr ""
+msgstr "بخش پایانی رنگ پس زمینه"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:127
 msgid "Background gradient end color"
-msgstr ""
+msgstr "تنظیم پاشش رنگ پس زمینه از سمت پایین"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:168
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:269
 msgid "Use board stackup colors"
-msgstr ""
+msgstr "استفاده از رنگ های لایه بندی برد (Stackup)"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:182
 msgid "Use PCB editor copper colors"
-msgstr ""
+msgstr "استفاده از رنگ های ویرایشگر PCB"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:184
 msgid ""
 "Use the board editor layer colors for copper layers (realtime renderer only)"
 msgstr ""
+"از رنگ‌ های استفاده شده درلایه های محیط ویرایشگر PCB برای مسیر های مسی "
+"استفاده کنید (فقط در پزدازشگر بلادرنگ (Real-Time))"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:201
 #, c-format
@@ -50498,11 +50510,11 @@ msgstr ""
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:36
 msgid "EDA"
-msgstr ""
+msgstr "EDA (طراحی الکترونیک به کمک کامپیوتر)"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:39
 msgid "Circuit board"
-msgstr ""
+msgstr "برد مدار"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:51
 msgid ""
@@ -50513,43 +50525,49 @@ msgid ""
 "featuring thousands of symbols, footprints, and 3D models. KiCad has minimal "
 "system requirements and runs on Linux, Windows, and macOS."
 msgstr ""
+"کیکد (KiCad) یک مجموعه نرم افزاری رایگان و متن باز برای طراحی الکترونیک (EDA)"
+" است. این نرم‌افزار دارای قابلیت های طراحی شماتیک، شبیه سازی مدارهای مجتمع، "
+"طراحی برد مدار چاپی (PCB)، پردازشگر سه بعدی و خروجی گیری در فرمت های مختلف "
+"می باشد. کیکد همچنین شامل یک کتابخانه قطعات با کیفیت بالا با هزاران نماد، "
+"فوتپرینت و مدل سه بعدی است. این نرم‌افزار نیازمندی های سخت افزاری سیستمی کمی "
+"دارد و روی سیستم عامل های لینوکس، ویندوز و مک اواس اجرا می شود."
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:63
 msgid "KiCad PCB Layout Editor"
-msgstr ""
+msgstr "ویرایشگر لایه بندی برد PCB در KiCad"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:83
 msgid "The KiCad Developers"
-msgstr ""
+msgstr "توسعه دهندگان KiCad"
 
 #: resources/linux/mime/kicad-gerbers.xml.in:5
 msgid "Gerber file"
-msgstr ""
+msgstr "فایل گربر (Gerber)"
 
 #: resources/linux/mime/kicad-gerbers.xml.in:27
 msgid "Excellon drill file"
-msgstr ""
+msgstr "فایل سوراخکاری اکسلون (Excellon Drill)"
 
 #: resources/linux/mime/kicad-kicad.xml.in:5
 msgid "KiCad Project"
-msgstr ""
+msgstr "پروژه KiCad"
 
 #: resources/linux/mime/kicad-kicad.xml.in:12
 msgid "KiCad Schematic"
-msgstr ""
+msgstr "شماتیک Project"
 
 #: resources/linux/mime/kicad-kicad.xml.in:27
 msgid "KiCad Printed Circuit Board"
-msgstr ""
+msgstr "برد مدار چاپی KiCad"
 
 #: resources/linux/mime/kicad-kicad.xml.in:41
 msgid "KiCad Footprint"
-msgstr ""
+msgstr "فوت پرینت KiCad"
 
 #: resources/linux/mime/kicad-kicad.xml.in:55
 msgid "KiCad Schematic Symbol"
-msgstr ""
+msgstr "نماد شماتیک KiCad"
 
 #: resources/linux/mime/kicad-kicad.xml.in:69
 msgid "KiCad Drawing Sheet"
-msgstr ""
+msgstr "برگه طراحی KiCad"
