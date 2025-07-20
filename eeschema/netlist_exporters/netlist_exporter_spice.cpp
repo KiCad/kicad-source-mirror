@@ -312,7 +312,7 @@ void NETLIST_EXPORTER_SPICE::ReadDirectives( unsigned aNetlistOptions )
             if( item->Type() == SCH_TEXT_T )
                 text = static_cast<SCH_TEXT*>( item )->GetShownText( &sheet, false );
             else if( item->Type() == SCH_TEXTBOX_T )
-                text = static_cast<SCH_TEXTBOX*>( item )->GetShownText( &sheet, false );
+                text = static_cast<SCH_TEXTBOX*>( item )->GetShownText( nullptr, &sheet, false );
             else
                 continue;
 
