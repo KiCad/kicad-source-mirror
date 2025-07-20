@@ -597,12 +597,57 @@ bool doConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aShapeList, SHAPE_POLY_
     // All of the silliness that follows is to work around the segment iterator while checking
     // for collisions.
     // TODO: Implement proper segment and point iterators that follow std
-    for( auto seg1 = aPolygons.IterateSegmentsWithHoles(); seg1; seg1++ )
+    std::vector<SEG> segments;
+    size_t total = 0;
+
+    for( int ii = 0; ii < aPolygons.OutlineCount(); ++ii )
+    {
+        const SHAPE_LINE_CHAIN& contour = aPolygons.Outline( ii );
+        total += contour.SegmentCount();
+
+        for( int jj = 0; jj < aPolygons.HoleCount( ii ); ++jj )
+        {
+            const SHAPE_LINE_CHAIN& hole = aPolygons.Hole( ii, jj );
+            total += hole.SegmentCount();
+        }
+    }
+
+    segments.reserve( total );
+
+    for( auto seg = aPolygons.IterateSegmentsWithHoles(); seg; seg++ )
+    {
+        if( LexicographicalCompare( ( *seg ).A, ( *seg ).B ) > 0 )
+        {
+            // Ensure segments are always ordered A < B
+            VECTOR2I tmp = ( *seg ).A;
+            ( *seg ).A = ( *seg ).B;
+            ( *seg ).B = tmp;
+        }
+
+        segments.push_back( *seg );
+    }
+
+    std::sort( segments.begin(), segments.end(),
+               []( const SEG& a, const SEG& b )
+               {
+                   if( a.A != b.A )
+                       return LexicographicalCompare( a.A, b.A ) < 0;
+
+                   return LexicographicalCompare( a.B, b.B ) < 0;
+               } );
+
+    for( auto seg1 = segments.begin(); seg1 != segments.end(); seg1++ )
     {
         auto seg2 = seg1;
 
-        for( ++seg2; seg2; seg2++ )
+        for( ++seg2; seg2 != segments.end(); seg2++ )
         {
+            if( ( *seg2 ).A > ( *seg1 ).B )
+            {
+                // No more segments to check, as they are sorted by A and B.
+                break;
+            }
+
             // Check for exact overlapping segments.
             if( *seg1 == *seg2 || ( ( *seg1 ).A == ( *seg2 ).B && ( *seg1 ).B == ( *seg2 ).A ) )
             {
@@ -616,7 +661,7 @@ bool doConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aShapeList, SHAPE_POLY_
                 selfIntersecting = true;
             }
 
-            if( OPT_VECTOR2I pt = seg1.Get().Intersect( seg2.Get(), true ) )
+            if( OPT_VECTOR2I pt = seg1->Intersect( *seg2, true ) )
             {
                 if( aErrorHandler )
                 {
