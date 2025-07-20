@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-18 08:10-0700\n"
-"PO-Revision-Date: 2025-07-19 14:45+0000\n"
+"PO-Revision-Date: 2025-07-20 20:02+0000\n"
 "Last-Translator: Sárkány Lőrinc <lsarkany@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/kicad/v9/hu/>\n"
 "Language: hu\n"
@@ -14925,14 +14925,13 @@ msgstr "Szerkesztés Rajzjel szerkesztővel"
 
 #: eeschema/dialogs/dialog_shape_properties_base.h:103
 #: pcbnew/dialogs/dialog_shape_properties_base.h:97
-#, fuzzy, c-format
+#, c-format
 msgid "%s Properties"
-msgstr "Tulajdonságok"
+msgstr "%s tulajdonságok"
 
 #: eeschema/dialogs/dialog_sheet_pin_properties.cpp:167
-#, fuzzy
 msgid "Edit Sheet Pin Properties"
-msgstr "Lap kivezető láb tulajdonságai"
+msgstr "Lap láb tulajdonságainak szerkesztése"
 
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.h:84
 #, fuzzy
@@ -15096,7 +15095,6 @@ msgid "Fill"
 msgstr "Kitöltés"
 
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:253
-#, fuzzy
 msgid "Hierarchical path:"
 msgstr "Hierarchikus útvonal:"
 
@@ -15126,9 +15124,8 @@ msgid "A frequency range must be specified."
 msgstr "Némely projekt fájlról nem lehetett biztonsági mentést készíteni."
 
 #: eeschema/dialogs/dialog_sim_command.cpp:620
-#, fuzzy
 msgid "New Simulation Tab"
-msgstr "Szimulátor"
+msgstr "Új szimulációs fül"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:21
 msgid "Analysis type:"
@@ -16413,27 +16410,23 @@ msgstr "Rajzjel tulajdonságok"
 
 #: eeschema/dialogs/dialog_tablecell_properties_base.cpp:43
 #: pcbnew/dialogs/dialog_tablecell_properties_base.cpp:39
-#, fuzzy
 msgid "Horizontal alignment:"
 msgstr "Vízszintes igazítás:"
 
 #: eeschema/dialogs/dialog_tablecell_properties_base.cpp:45
 #: pcbnew/dialogs/dialog_tablecell_properties_base.cpp:41
-#, fuzzy
 msgid "Horizontal alignment"
-msgstr "Vízszintes igazítás:"
+msgstr "Vízszintes igazítás"
 
 #: eeschema/dialogs/dialog_tablecell_properties_base.cpp:70
 #: pcbnew/dialogs/dialog_tablecell_properties_base.cpp:66
-#, fuzzy
 msgid "Vertical alignment:"
 msgstr "Függőleges igazítás:"
 
 #: eeschema/dialogs/dialog_tablecell_properties_base.cpp:72
 #: pcbnew/dialogs/dialog_tablecell_properties_base.cpp:68
-#, fuzzy
 msgid "Vertical alignment"
-msgstr "Függőleges igazítás:"
+msgstr "Függőleges igazítás"
 
 #: eeschema/dialogs/dialog_tablecell_properties_base.cpp:172
 #: eeschema/dialogs/dialog_tablecell_properties_base.cpp:218
@@ -16443,38 +16436,32 @@ msgstr "-- Többféle érték --"
 
 #: eeschema/dialogs/dialog_tablecell_properties_base.cpp:172
 #: eeschema/dialogs/dialog_tablecell_properties_base.cpp:218
-#, fuzzy
 msgid "Set Color..."
-msgstr "Forrasztópaszta színe..."
+msgstr "Szín beállítása..."
 
 #: eeschema/dialogs/dialog_tablecell_properties_base.cpp:208
-#, fuzzy
 msgid "Background fill:"
 msgstr "Háttér kitöltés:"
 
 #: eeschema/dialogs/dialog_tablecell_properties_base.cpp:264
 #: pcbnew/dialogs/dialog_tablecell_properties_base.cpp:191
-#, fuzzy
 msgid "Cell margins:"
-msgstr "Margin_layer"
+msgstr "Cella margók:"
 
 #: eeschema/dialogs/dialog_tablecell_properties_base.cpp:306
 #: pcbnew/dialogs/dialog_tablecell_properties_base.cpp:230
-#, fuzzy
 msgid "Edit table properties and cell contents"
-msgstr "Mappa és tartalmának törlése"
+msgstr "Táblázat tulajdonságainak és cella tartalmának szerkesztése"
 
 #: eeschema/dialogs/dialog_tablecell_properties_base.h:98
 #: pcbnew/dialogs/dialog_tablecell_properties_base.h:89
-#, fuzzy
 msgid "Table Cell Properties"
-msgstr "Címke tulajdonságok"
+msgstr "Cella tulajdonságai"
 
 #: eeschema/dialogs/dialog_text_properties.cpp:60
 #: pcbnew/dialogs/dialog_textbox_properties_base.h:106
-#, fuzzy
 msgid "Text Box Properties"
-msgstr "Szövegdoboz tulajdonságok"
+msgstr "Szövegdoboz tulajdonságai"
 
 #: eeschema/dialogs/dialog_text_properties.cpp:175 eeschema/schematic.cpp:501
 #, fuzzy
@@ -16482,14 +16469,13 @@ msgid "<root sheet>"
 msgstr "<root sheet>"
 
 #: eeschema/dialogs/dialog_text_properties.cpp:179
-#, fuzzy, c-format
+#, c-format
 msgid "Page %s (%s)"
-msgstr "Lap %s (%s)"
+msgstr "Oldal %s (%s)"
 
 #: eeschema/dialogs/dialog_text_properties.cpp:494
-#, fuzzy
 msgid "Text can not be empty."
-msgstr "%s nem lehet üres."
+msgstr "A szöveg nem lehet üres."
 
 #: eeschema/dialogs/dialog_text_properties.cpp:517
 msgid ""
@@ -16508,28 +16494,24 @@ msgid "Edit Text Properties"
 msgstr "Szöveg tulajdonságok"
 
 #: eeschema/dialogs/dialog_text_properties_base.cpp:266
-#, fuzzy
 msgid "Background fill"
 msgstr "Háttér kitöltés"
 
 #: eeschema/dialogs/dialog_text_properties_base.cpp:292
-#, fuzzy
 msgid "Link:"
 msgstr "Link:"
 
 #: eeschema/dialogs/dialog_text_properties_base.cpp:294
 msgid "Make this text item a clickable hyperlink"
-msgstr ""
+msgstr "Szöveg átalakítása hiperhivatkozássá"
 
 #: eeschema/dialogs/dialog_update_from_pcb.cpp:43
 #: pcbnew/dialogs/dialog_import_netlist.cpp:79
 #: pcbnew/dialogs/dialog_update_pcb.cpp:50
-#, fuzzy
 msgid "Changes to Be Applied"
-msgstr "Alkalmazandó módosítások:"
+msgstr "Alkalmazandó módosítások"
 
 #: eeschema/dialogs/dialog_update_from_pcb.cpp:67
-#, fuzzy
 msgid "Update Schematic"
 msgstr "Kapcsolási rajz frissítése"
 
@@ -16576,9 +16558,8 @@ msgid "Net names"
 msgstr "Vezetéknév"
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:75
-#, fuzzy
 msgid "Other fields"
-msgstr "adatlap mező"
+msgstr "Egyéb mezők"
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:76
 msgid "Update all other fields in the symbol from the footprint"
@@ -16586,9 +16567,8 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.h:57
 #: eeschema/tools/backannotate.cpp:579
-#, fuzzy
 msgid "Update Schematic from PCB"
-msgstr "Kapcsolásirajz frissítése a NYÁK rajzból"
+msgstr "Kapcsolási rajz frissítése a NYÁK-ból"
 
 #: eeschema/dialogs/dialog_update_symbol_fields.cpp:227
 #: eeschema/dialogs/dialog_update_symbol_fields_base.h:68
@@ -21497,7 +21477,7 @@ msgstr "Új lap létrehozása"
 #: eeschema/sim/kibis/ibis_parser.cpp:68 eeschema/sim/kibis/ibis_parser.cpp:97
 #: eeschema/sim/kibis/ibis_parser.cpp:120
 msgid "Dimension of matrices should be >= 1."
-msgstr ""
+msgstr "A mátrix mérete >= 1 kell, hogy legyen."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:74
 msgid "Bandwidth of banded matrices should be >= 1."
@@ -21506,82 +21486,67 @@ msgstr ""
 #: eeschema/sim/kibis/ibis_parser.cpp:82 eeschema/sim/kibis/ibis_parser.cpp:105
 #: eeschema/sim/kibis/ibis_parser.cpp:128
 msgid "There are NaN elements in a matrix."
-msgstr ""
+msgstr "NaN elemek találhatóak a mátrixban."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:167
-#, fuzzy
 msgid "Invalid R_pkg value."
-msgstr "Érvénytelen SPICE érték karakterlánc"
+msgstr "Érvénytelen R_pkg érték."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:173
-#, fuzzy
 msgid "Invalid L_pkg value."
-msgstr "Érvénytelen SPICE érték karakterlánc"
+msgstr "Érvénytelen L_pkg érték."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:179
-#, fuzzy
 msgid "Invalid C_pkg value."
-msgstr "Érvénytelen SPICE érték karakterlánc"
+msgstr "Érvénytelen C_pkg érték."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:194
-#, fuzzy
 msgid "Checking pin "
-msgstr "Zóna kitöltések ellenőrzése...\n"
+msgstr "Láb ellenőrzése "
 
 #: eeschema/sim/kibis/ibis_parser.cpp:201
-#, fuzzy
 msgid "Pin name cannot be empty."
-msgstr "%s nem lehet üres."
+msgstr "A láb neve nem lehet üres."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:210
-#, fuzzy
 msgid "Signal name cannot be empty."
-msgstr "Környezeti változó neve nem lehet üres."
+msgstr "A jel neve nem lehet üres."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:219
-#, fuzzy
 msgid "Model name cannot be empty."
-msgstr "%s nem lehet üres."
+msgstr "A modell neve nem lehet üres."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:228
-#, fuzzy
 msgid "Rpin is not valid."
-msgstr "Érvénytelen fájlnév!"
+msgstr "Rpin érvénytelen."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:237
-#, fuzzy
 msgid "Lpin is not valid."
-msgstr "Érvénytelen fájlnév!"
+msgstr "Lpin érvénytelen."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:246
-#, fuzzy
 msgid "Cpin is not valid."
-msgstr "Érvénytelen fájlnév!"
+msgstr "Cpin érvénytelen."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:260
-#, fuzzy
 msgid "Checking component "
-msgstr "Zónák ellenőrzése"
+msgstr "Alkatrész ellenőrzése "
 
 #: eeschema/sim/kibis/ibis_parser.cpp:267
-#, fuzzy
 msgid "Component: name cannot be empty."
-msgstr "%s nem lehet üres."
+msgstr "Alkatrész: a név nem lehet üres."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:276
-#, fuzzy
 msgid "Component: manufacturer cannot be empty."
-msgstr "%s nem lehet üres."
+msgstr "Alkatrész: a gyártó nem lehet üres."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:285
-#, fuzzy
 msgid "Component: invalid package."
-msgstr "Alkatrész értéke:"
+msgstr "Alkatrész: érvénytelen csomag."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:294
-#, fuzzy
 msgid "Component: no pin"
-msgstr "Alkatrész"
+msgstr "Alkatrész: nincs láb"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:388
 msgid "Cannot interpolate the current based on this IV table."
@@ -21596,9 +21561,8 @@ msgid "There is an invalid current in an IV table"
 msgstr ""
 
 #: eeschema/sim/kibis/ibis_parser.cpp:460
-#, fuzzy
 msgid "Invalid R_load."
-msgstr "Érvénytelen jel név"
+msgstr "Érvénytelen R_load."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:465
 #, fuzzy
@@ -21611,64 +21575,52 @@ msgid "Invalid rising dV/dt."
 msgstr "Érvénytelen SPICE érték karakterlánc"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:486
-#, fuzzy
 msgid "Model name cannot be empty"
-msgstr "%s nem lehet üres."
+msgstr "Modell neve nem lehet üres"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:491
-#, fuzzy
 msgid "Checking model "
-msgstr "Zónák ellenőrzése"
+msgstr "Modell ellenőrzése "
 
 #: eeschema/sim/kibis/ibis_parser.cpp:498
-#, fuzzy
 msgid "Undefined model type."
-msgstr "Meghatározatlan rétegek:"
+msgstr "Definiálatlan modell típus."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:507
-#, fuzzy
 msgid "Invalid Vinh value."
-msgstr "Érvénytelen SPICE érték karakterlánc"
+msgstr "Érvénytelen Vinh érték."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:516
-#, fuzzy
 msgid "Invalid Vinl value."
-msgstr "Érvénytelen SPICE érték karakterlánc"
+msgstr "Érvénytelen Vinl érték."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:525
-#, fuzzy
 msgid "Invalid R_ref value."
-msgstr "Érvénytelen SPICE érték karakterlánc"
+msgstr "Érvénytelen R_ref érték."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:534
-#, fuzzy
 msgid "Invalid C_ref value."
-msgstr "Érvénytelen SPICE érték karakterlánc"
+msgstr "Érvénytelen C_ref érték."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:543
-#, fuzzy
 msgid "Invalid V_ref value."
-msgstr "Érvénytelen SPICE érték karakterlánc"
+msgstr "Érvénytelen V_ref érték."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:552
-#, fuzzy
 msgid "Invalid V_meas value."
-msgstr "Érvénytelen SPICE érték karakterlánc"
+msgstr "Érvénytelen V_meas érték."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:561
-#, fuzzy
 msgid "C_comp is invalid."
-msgstr "Érvénytelen fájlnév!"
+msgstr "C_comp érvénytelen."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:570
-#, fuzzy
 msgid "Temperature Range is invalid."
-msgstr "Hőmérséklet-emelkedés:"
+msgstr "Hőmérséklet Tartomány érvénytelen."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:590
-#, fuzzy
 msgid "Voltage Range is invalid."
-msgstr "Érvénytelen fájlnév!"
+msgstr "Feszültség Tartomány érvénytelen."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:597
 #, fuzzy
@@ -21696,14 +21648,12 @@ msgid "Invalid Ramp"
 msgstr "Érvénytelen jel név"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:635
-#, fuzzy
 msgid "Checking Header..."
-msgstr "Zóna kitöltések ellenőrzése...\n"
+msgstr "Fejléc ellenőrzése..."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:642
-#, fuzzy
 msgid "Missing [IBIS Ver]"
-msgstr "3D kép fájlnév"
+msgstr "Hiányzó [IBIS verzió]"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:651
 msgid "The parser does not handle this IBIS version"
@@ -21715,9 +21665,8 @@ msgid "Missing [File Rev]"
 msgstr "3D kép fájlnév"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:669
-#, fuzzy
 msgid "Missing [File Name]"
-msgstr "3D kép fájlnév"
+msgstr "Hiányzó [Fájlnév]"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:694
 #, fuzzy
@@ -21730,73 +21679,60 @@ msgid "Checking package model "
 msgstr "Zónakitöltések ellenőrzése..."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:706
-#, fuzzy
 msgid "Manufacturer cannot be empty."
-msgstr "%s nem lehet üres."
+msgstr "Gyártó nem lehet üres."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:715
-#, fuzzy
 msgid "OEM cannot be empty."
-msgstr "%s nem lehet üres."
+msgstr "OEM nem lehet üres."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:724
-#, fuzzy
 msgid "Negative number of pins."
-msgstr "Pontok száma"
+msgstr "Negatív láb darabszám."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:744
-#, fuzzy
 msgid "Empty pin number."
-msgstr "Elvárt \"%s\""
+msgstr "Üres láb szám."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:755
-#, fuzzy
 msgid "Resistance matrix is incorrect."
-msgstr "Vezetősáv hossz:"
+msgstr "Hibás ellenállás mátrix."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:766
-#, fuzzy
 msgid "Capacitance matrix is undefined."
-msgstr "Vezetősáv hossz:"
+msgstr "A kapacitás mátrix nem definiált."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:775
-#, fuzzy
 msgid "Capacitance matrix is incorrect."
-msgstr "Vezetősáv hossz:"
+msgstr "A kapacitás mátrix hibás."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:784
-#, fuzzy
 msgid "Capacitance matrix is nullptr."
-msgstr "Vezetősáv hossz:"
+msgstr "A kapacitás mátrix null mutató."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:795
-#, fuzzy
 msgid "Inductance matrix is undefined."
-msgstr "Vezetősáv hossz:"
+msgstr "Az induktivitás mátrix nem definiált."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:804
-#, fuzzy
 msgid "Inductance matrix is incorrect."
-msgstr "Vezetősáv hossz:"
+msgstr "Az induktivitás mátrix hibás."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:813
-#, fuzzy
 msgid "Inductance matrix is nullptr."
-msgstr "Vezetősáv hossz:"
+msgstr "Az induktivitás mátrix null mutató."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:829
-#, fuzzy
 msgid "Cannot open file "
-msgstr "A(z) \"%s\" fájl nem másolható."
+msgstr "Nem sikerült megnyitni a fájlt "
 
 #: eeschema/sim/kibis/ibis_parser.cpp:853
 msgid "Unexpected end of file. Missing [END] ?"
 msgstr "Váratlan fájlvége jelzés. Hiányzó [END] ?"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:863
-#, fuzzy
 msgid "Error on line "
-msgstr "Hiba történt a nyomtatóinformációk inicializálása közben."
+msgstr "Hiba az alábbi sorban "
 
 #: eeschema/sim/kibis/ibis_parser.cpp:889
 #, fuzzy
@@ -21806,7 +21742,7 @@ msgstr "Némely projekt fájlról nem lehetett biztonsági mentést készíteni.
 #: eeschema/sim/kibis/ibis_parser.cpp:1022
 #: eeschema/sim/kibis/ibis_parser.cpp:1037
 msgid "Line exceeds maximum length."
-msgstr ""
+msgstr "A sor hossza meghaladja a maximális megengedett értéket."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1062
 #, fuzzy
@@ -21820,9 +21756,8 @@ msgid "Failed to read a word."
 msgstr "\"%s\" betöltése sikertelen"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1105
-#, fuzzy
 msgid "Number is not an integer"
-msgstr "Rajzjel részegység jelölés:"
+msgstr "A szám nem egész"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1193
 #, fuzzy
@@ -21858,38 +21793,33 @@ msgid "Cannot specify a bandwidth for that kind of matrix"
 msgstr ""
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1546
-#, fuzzy
 msgid "Invalid row in matrix"
-msgstr "Érvénytelen jel név"
+msgstr "Érvénytelen sor a mátrixban"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1578
-#, fuzzy
 msgid "Too much data for this matrix row."
-msgstr "Az alkatrészrajzolaton nincsenek forrszemek."
+msgstr "Túl sok adat a mátrix ezen sorához."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1586
-#, fuzzy
 msgid "Too much data for this matrix."
-msgstr "Az alkatrészrajzolaton nincsenek forrszemek."
+msgstr "Túl sok adat a mátrixhoz."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1592
 #: eeschema/sim/kibis/ibis_parser.cpp:1623
 msgid "Can't read a matrix element"
-msgstr ""
+msgstr "Nem sikerült olvasni a mátrix egy elemét"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1628
 msgid "Can't read a matrix index"
 msgstr ""
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1696
-#, fuzzy
 msgid "Unknown matrix type"
-msgstr "ismeretlen via típus (%d)"
+msgstr "Ismeretlen mátrix típus"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1704
-#, fuzzy
 msgid "Missing matrix type"
-msgstr "Hiányzó alkatrészrajzolatok"
+msgstr "Hiányzó mátrix típus"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1710
 msgid " Matrix is already init. But m_continue was not set ( internal error )"
@@ -21897,7 +21827,7 @@ msgstr ""
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1735
 msgid "Tried to read a row from an undefined matrix"
-msgstr ""
+msgstr "Egy definiálatlan mátrix sorát próbálta olvasni"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1740
 msgid "matrix pointer is null"
@@ -21908,9 +21838,8 @@ msgid "Typ-Min-Max Values requires at least Typ."
 msgstr ""
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1969
-#, fuzzy
 msgid "Unknown Model_type "
-msgstr "Ismeretlen eljárás"
+msgstr "Ismeretlen Modell_típus "
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1976
 #, fuzzy
@@ -22161,27 +22090,20 @@ msgid "Unable to load ngspice shared library. Please check your install."
 msgstr ""
 
 #: eeschema/sim/sim_lib_mgr.cpp:91 eeschema/sim/sim_lib_mgr.cpp:144
-#, fuzzy, c-format
+#, c-format
 msgid "Simulation model library not found at '%s'"
-msgstr ""
-"Hiba történt a(z) %s könyvtár betöltése során.\n"
-"\n"
-"%s"
+msgstr "A szimulációs modell könyvtár nem található itt: \"%s\""
 
 #: eeschema/sim/sim_lib_mgr.cpp:96
-#, fuzzy, c-format
+#, c-format
 msgid "Simulation model library not found at '%s' or '%s'"
 msgstr ""
-"Hiba történt a(z) %s könyvtár betöltése során.\n"
-"\n"
-"%s"
+"A szimulációs modell könyvtár nem található itt: \"%s\" vagy itt: \"%s\""
 
 #: eeschema/sim/sim_lib_mgr.cpp:306
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading simulation model: no '%s' field"
-msgstr ""
-"Hiba a kapcsolási rajz betöltésekor.\n"
-"%s"
+msgstr "Hiba a szimulációs modell betöltésekor: nincs \"%s\" mező"
 
 #: eeschema/sim/sim_lib_mgr.cpp:311
 #: pcbnew/dialogs/dialog_board_statistics.cpp:462
@@ -22214,9 +22136,8 @@ msgid "No simulation model definition found for symbol '%s'."
 msgstr "Nem található szimulációs modell a(z) %s rajzjelhez."
 
 #: eeschema/sim/sim_model.cpp:420
-#, fuzzy
 msgid "No simulation model definition found."
-msgstr "SPICE modell szerkesztő"
+msgstr "Nem található szimulációs modell definíció."
 
 #: eeschema/sim/sim_model.cpp:594 eeschema/sim/sim_model.cpp:642
 #, fuzzy, c-format
@@ -22269,24 +22190,20 @@ msgid "Power supply"
 msgstr "Tápszimbólum"
 
 #: eeschema/sim/sim_model_ibis.cpp:348
-#, fuzzy
 msgid "Parasitic pin resistance"
-msgstr "Fajlagos ellenállás"
+msgstr "Szórt láb-ellenállás"
 
 #: eeschema/sim/sim_model_ibis.cpp:358
-#, fuzzy
 msgid "Parasitic pin inductance"
-msgstr "Fajlagos ellenállás"
+msgstr "Szórt láb-induktivitás"
 
 #: eeschema/sim/sim_model_ibis.cpp:368
-#, fuzzy
 msgid "Parasitic pin capacitance"
-msgstr "Fajlagos ellenállás"
+msgstr "Szórt láb-kapacitás"
 
 #: eeschema/sim/sim_model_ibis.cpp:412
-#, fuzzy
 msgid "DC Value"
-msgstr "Érték"
+msgstr "DC érték"
 
 #: eeschema/sim/sim_model_ibis.cpp:430
 #, fuzzy
@@ -22374,7 +22291,7 @@ msgstr "Feszültség (mért)"
 #: eeschema/sim/simulator_frame_ui.cpp:2277
 #: eeschema/sim/simulator_frame_ui.cpp:2278
 msgid " (gain)"
-msgstr ""
+msgstr " (erősítés)"
 
 #: eeschema/sim/sim_plot_tab.h:148 eeschema/sim/simulator_frame_ui.cpp:215
 #: eeschema/sim/simulator_frame_ui.cpp:767
@@ -22384,14 +22301,15 @@ msgstr ""
 #: eeschema/sim/simulator_frame_ui.cpp:1049
 #: eeschema/sim/simulator_frame_ui.cpp:2275
 #: eeschema/sim/simulator_frame_ui.cpp:2276
-#, fuzzy
 msgid " (phase)"
-msgstr "AC fázis:"
+msgstr " (fázis)"
 
 #: eeschema/sim/sim_tab.cpp:91 eeschema/sim/sim_tab.cpp:108
 msgid ""
 "Simulation provided no plots. Please refer to console window for results."
 msgstr ""
+"A szimuláció során nem készültek ábrák. Az eredmények a konzol ablakban "
+"találhatóak."
 
 #: eeschema/sim/simulator_frame.cpp:332
 msgid "SPICE Simulator"
