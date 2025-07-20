@@ -380,8 +380,8 @@ public:
     }
 
 private:
-    bool ccw( const VECTOR2I& aA, const VECTOR2I& aB, const VECTOR2I &aC ) const;
 
+    bool checkCollinearOverlap( const SEG& aSeg, bool useXAxis, bool aIgnoreEndpoints, VECTOR2I* aPt ) const;
     bool intersects( const SEG& aSeg, bool aIgnoreEndpoints = false, bool aLines = false,
                      VECTOR2I* aPt = nullptr ) const;
 
