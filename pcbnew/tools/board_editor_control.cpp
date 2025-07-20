@@ -282,13 +282,6 @@ int BOARD_EDITOR_CONTROL::ExportFootprints( const TOOL_EVENT& aEvent )
 }
 
 
-int BOARD_EDITOR_CONTROL::ExportFootprintsAs( const TOOL_EVENT& aEvent )
-{
-    m_frame->ExportFootprintsToLibrary( true );
-    return 0;
-}
-
-
 int BOARD_EDITOR_CONTROL::PageSettings( const TOOL_EVENT& aEvent )
 {
     PICKED_ITEMS_LIST   undoCmd;
@@ -1798,7 +1791,6 @@ void BOARD_EDITOR_CONTROL::setTransitions()
     Go( &BOARD_EDITOR_CONTROL::RescueAutosave,         PCB_ACTIONS::rescueAutosave.MakeEvent() );
     Go( &BOARD_EDITOR_CONTROL::OpenNonKicadBoard,      PCB_ACTIONS::openNonKicadBoard.MakeEvent() );
     Go( &BOARD_EDITOR_CONTROL::ExportFootprints,       PCB_ACTIONS::exportFootprints.MakeEvent() );
-    Go( &BOARD_EDITOR_CONTROL::ExportFootprintsAs,     PCB_ACTIONS::exportFootprintsAs.MakeEvent() );
     Go( &BOARD_EDITOR_CONTROL::BoardSetup,             PCB_ACTIONS::boardSetup.MakeEvent() );
     Go( &BOARD_EDITOR_CONTROL::ImportNetlist,          PCB_ACTIONS::importNetlist.MakeEvent() );
     Go( &BOARD_EDITOR_CONTROL::ImportSpecctraSession,  PCB_ACTIONS::importSpecctraSession.MakeEvent() );

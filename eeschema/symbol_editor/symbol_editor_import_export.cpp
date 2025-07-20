@@ -35,7 +35,6 @@
 #include <wx/filename.h>
 #include <wx/filedlg.h>
 #include <string_utils.h>
-#include <io/eagle/eagle_parser.h>
 
 
 void SYMBOL_EDIT_FRAME::ImportSymbol()
@@ -44,12 +43,10 @@ void SYMBOL_EDIT_FRAME::ImportSymbol()
     wxString libName = getTargetLib();
 
     if( !m_libMgr->LibraryExists( libName ) )
-    {
-        libName = SelectLibraryFromList();
+        libName = SelectLibrary( _( "Import Symbol" ), _( "Import symbol to library:" ) );
 
-        if( !m_libMgr->LibraryExists( libName ) )
-            return;
-    }
+    if( !m_libMgr->LibraryExists( libName ) )
+        return;
 
     wxString fileFiltersStr;
     wxString allWildcardsStr;

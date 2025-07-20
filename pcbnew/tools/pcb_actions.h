@@ -406,7 +406,6 @@ public:
     static TOOL_ACTION rescueAutosave;
     static TOOL_ACTION openNonKicadBoard;
     static TOOL_ACTION exportFootprints;
-    static TOOL_ACTION exportFootprintsAs;
     static TOOL_ACTION boardSetup;
 
     static TOOL_ACTION importNetlist;

@@ -188,19 +188,15 @@ public:
     /**
      * Display a list of loaded libraries and allows the user to select a library.
      *
-     * This list is sorted, with the library cache always at end of the list
-     *
+     * @param aDialogTitle title for the dialog window
+     * @param aListLabel label over the list of libraries
+     * @param aExtraCheckboxes [optional] list of label/valuePointer pairs from which to construct extra
+     *                         checkboxes in the dialog.  Values are written back to the pointers when
+     *                         the dialog is finished.
      * @return the library nickname used in the symbol library table.
      */
-    wxString SelectLibraryFromList();
-
-    /**
-     * Display a dialog asking the user to select a symbol library table.
-     *
-     * @param aOptional if set the Cancel button will be relabelled "Skip".
-     * @return Pointer to the selected symbol library table or nullptr if canceled.
-     */
-    SYMBOL_LIB_TABLE* SelectSymLibTable( bool aOptional = false );
+    wxString SelectLibrary( const wxString& aDialogTitle, const wxString& aListLabel,
+                            const std::vector<std::pair<wxString, bool*>>& aExtraCheckboxes = {} );
 
     virtual void RedrawScreen( const VECTOR2I& aCenterPoint, bool aWarpPointer );
 
@@ -268,6 +264,8 @@ public:
     }
 
     SCH_SELECTION_TOOL* GetSelectionTool() override;
+
+    void GetLibraryItemsForListDialog( wxArrayString& aHeaders, std::vector<wxArrayString>& aItemsToDisplay );
 
 protected:
     void handleActivateEvent( wxActivateEvent& aEvent ) override;

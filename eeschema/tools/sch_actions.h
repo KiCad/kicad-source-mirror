@@ -179,7 +179,6 @@ public:
     static TOOL_ACTION generateBOMExternal;
     static TOOL_ACTION addSymbolToSchematic;
     static TOOL_ACTION exportSymbolsToLibrary;
-    static TOOL_ACTION exportSymbolsToNewLibrary;
 
     // Attribute Toggles
     static TOOL_ACTION setExcludeFromBOM;

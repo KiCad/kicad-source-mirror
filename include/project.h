@@ -225,6 +225,7 @@ public:
         VIEWER_3D_PATH,
         VIEWER_3D_FILTER_INDEX,
 
+        PCB_LIB_PATH,
         PCB_LIB_NICKNAME,
         PCB_FOOTPRINT,
         PCB_FOOTPRINT_EDITOR_FP_NAME,

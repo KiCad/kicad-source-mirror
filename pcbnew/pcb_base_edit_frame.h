@@ -37,6 +37,7 @@ class PCB_TEXTBOX;
 class PCB_TABLE;
 class PCB_TEXT;
 class PCB_SHAPE;
+class FILEDLG_HOOK_NEW_LIBRARY;
 
 /**
  * Common, abstract interface for edit frames.
@@ -61,15 +62,27 @@ public:
      * If library exists, user is warned about that, and is given a chance
      * to abort the new creation, and in that case existing library is first deleted.
      *
-     * @param aProposedName is the initial path and filename shown in the file chooser dialog.
+     * @param aDialogTitle title for the file browser
+     * @param aInitialPath is the initial path and filename shown in the file chooser dialog.
      * @return The newly created library path if library was successfully created, else
      *         wxEmptyString because user aborted or error.
      */
-    wxString CreateNewLibrary( const wxString& aLibName = wxEmptyString,
-                               const wxString& aProposedName = wxEmptyString );
+    wxString CreateNewLibrary( const wxString& aDialogTitle, const wxString& aInitialPath = wxEmptyString );
 
-    wxString CreateNewProjectLibrary( const wxString& aLibName = wxEmptyString,
-                                      const wxString& aProposedName = wxEmptyString );
+    wxString CreateNewProjectLibrary( const wxString& aDialogTitle, const wxString& aLibName );
+
+    /**
+     * Put up a dialog and allows the user to pick a library, for unspecified use.
+     *
+     * @param aDialogTitle title for the dialog window
+     * @param aListLabel label for the list of libraries
+     * @param aExtraCheckboxes [optional] list of label/valuePointer pairs from which to construct extra
+     *                         checkboxes in the dialog.  Values are written back to the pointers when
+     *                         the dialog is finished.
+     * @return the library or wxEmptyString on abort.
+     */
+    wxString SelectLibrary( const wxString& aDialogTitle, const wxString& aListLabel,
+                            const std::vector<std::pair<wxString, bool*>>& aExtraCheckboxes = {} );
 
     /**
      * Add an existing library to either the global or project library table.
@@ -77,7 +90,8 @@ public:
      * @param aFileName the library to add; a file open dialog will be displayed if empty.
      * @return true if successfully added.
      */
-    bool AddLibrary( const wxString& aLibName = wxEmptyString, FP_LIB_TABLE* aTable = nullptr );
+    bool AddLibrary( const wxString& aDialogTitle, const wxString& aLibName = wxEmptyString,
+                     FP_LIB_TABLE* aTable = nullptr );
 
     /**
      * Install the corresponding dialog editor for the given item.
@@ -235,18 +249,10 @@ protected:
     void configureToolbars() override;
 
     /**
-     * Prompts a user to select global or project library tables
-     *
-     * @return Pointer to library table selected or nullptr if none selected/canceled
+     * Create a new library in the given table.  (The user will be consulted if the table is null.)
      */
-    FP_LIB_TABLE* selectLibTable( bool aOptional = false );
-
-    /**
-     * Create a new library in the given table (presumed to be either the global or project
-     * library table).
-     */
-    wxString createNewLibrary( const wxString& aLibName, const wxString& aProposedName,
-                               FP_LIB_TABLE* aTable );
+    wxString createNewLibrary( const wxString& aDialogTitle, const wxString& aLibName,
+                               const wxString& aInitialPath, FP_LIB_TABLE* aTable );
 
     void handleActivateEvent( wxActivateEvent& aEvent ) override;
 

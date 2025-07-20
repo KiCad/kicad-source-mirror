@@ -28,6 +28,8 @@
 #include <lib_tree_model_adapter.h>
 #include <pgm_base.h>
 #include <eda_list_dialog.h>
+#include <widgets/filedlg_hook_new_library.h>
+#include <symbol_library_manager.h>
 #include <eeschema_settings.h>
 #include <gal/graphics_abstraction_layer.h>
 #include <project/project_file.h>
@@ -274,50 +276,6 @@ bool SCH_BASE_FRAME::saveSymbolLibTables( bool aGlobal, bool aProject )
     }
 
     return success;
-}
-
-
-SYMBOL_LIB_TABLE* SCH_BASE_FRAME::SelectSymLibTable( bool aOptional )
-{
-    // If no project is loaded, always work with the global table
-    if( Prj().IsNullProject() )
-    {
-        SYMBOL_LIB_TABLE* ret = &SYMBOL_LIB_TABLE::GetGlobalLibTable();
-
-        if( aOptional )
-        {
-            wxMessageDialog dlg( this, _( "Add the library to the global library table?" ),
-                                 _( "Add To Global Library Table" ), wxYES_NO );
-
-            if( dlg.ShowModal() != wxID_OK )
-                ret = nullptr;
-        }
-
-        return ret;
-    }
-
-    wxArrayString libTableNames;
-    libTableNames.Add( _( "Global" ) );
-    libTableNames.Add( _( "Project" ) );
-
-    wxSingleChoiceDialog dlg( this, _( "Choose the Library Table to add the library to:" ),
-                              _( "Add To Library Table" ), libTableNames );
-
-    if( aOptional )
-    {
-        dlg.FindWindow( wxID_CANCEL )->SetLabel( _( "Skip" ) );
-        dlg.FindWindow( wxID_OK )->SetLabel( _( "Add" ) );
-    }
-
-    if( dlg.ShowModal() != wxID_OK )
-        return nullptr;
-
-    switch( dlg.GetSelection() )
-    {
-    case 0:  return &SYMBOL_LIB_TABLE::GetGlobalLibTable();
-    case 1:  return PROJECT_SCH::SchSymbolLibTable( &Prj() );
-    default: return nullptr;
-    }
 }
 
 
@@ -600,75 +558,126 @@ void SCH_BASE_FRAME::handleIconizeEvent( wxIconizeEvent& aEvent )
 }
 
 
-wxString SCH_BASE_FRAME::SelectLibraryFromList()
+void SCH_BASE_FRAME::GetLibraryItemsForListDialog( wxArrayString& aHeaders,
+                                                   std::vector<wxArrayString>& aItemsToDisplay )
 {
-    COMMON_SETTINGS* cfg = Pgm().GetCommonSettings();
-    PROJECT&         prj = Prj();
+    COMMON_SETTINGS*      cfg = Pgm().GetCommonSettings();
+    PROJECT_FILE&         project = Prj().GetProjectFile();
+    SYMBOL_LIB_TABLE*     tbl = PROJECT_SCH::SchSymbolLibTable( &Prj() );
+    std::vector<wxString> libNicknames = tbl->GetLogicalLibs();
 
-    if( PROJECT_SCH::SchSymbolLibTable( &prj )->IsEmpty() )
+    aHeaders.Add( _( "Library" ) );
+    aHeaders.Add( _( "Description" ) );
+
+    for( const wxString& nickname : libNicknames )
     {
-        ShowInfoBarError( _( "No symbol libraries are loaded." ) );
-        return wxEmptyString;
-    }
-
-    wxArrayString headers;
-
-    headers.Add( _( "Library" ) );
-
-    std::vector< wxArrayString > itemsToDisplay;
-    std::vector< wxString > libNicknames = PROJECT_SCH::SchSymbolLibTable( &prj )->GetLogicalLibs();
-
-    for( const wxString& name : libNicknames )
-    {
-        // Exclude read only libraries.
-        if( !PROJECT_SCH::SchSymbolLibTable( &prj )->IsSymbolLibWritable( name ) )
-            continue;
-
-        if( alg::contains( prj.GetProjectFile().m_PinnedSymbolLibs, name )
-            || alg::contains( cfg->m_Session.pinned_symbol_libs, name ) )
+        if( alg::contains( project.m_PinnedSymbolLibs, nickname )
+            || alg::contains( cfg->m_Session.pinned_symbol_libs, nickname ) )
         {
             wxArrayString item;
 
-            item.Add( LIB_TREE_MODEL_ADAPTER::GetPinningSymbol() + name );
-            itemsToDisplay.push_back( item );
+            item.Add( LIB_TREE_MODEL_ADAPTER::GetPinningSymbol() + nickname );
+            item.Add( tbl->GetDescription( nickname ) );
+            aItemsToDisplay.push_back( item );
         }
     }
 
-    for( const wxString& name : libNicknames )
+    for( const wxString& nickname : libNicknames )
     {
-        // Exclude read only libraries.
-        if( !PROJECT_SCH::SchSymbolLibTable( &prj )->IsSymbolLibWritable( name ) )
-            continue;
-
-        if( !alg::contains( prj.GetProjectFile().m_PinnedSymbolLibs, name )
-            && !alg::contains( cfg->m_Session.pinned_symbol_libs, name ) )
+        if( !alg::contains( project.m_PinnedSymbolLibs, nickname )
+                && !alg::contains( cfg->m_Session.pinned_symbol_libs, nickname ) )
         {
             wxArrayString item;
 
-            item.Add( name );
-            itemsToDisplay.push_back( item );
+            item.Add( nickname );
+            item.Add( tbl->GetDescription( nickname ) );
+            aItemsToDisplay.push_back( item );
         }
     }
+}
 
-    wxString oldLibName = prj.GetRString( PROJECT::SCH_LIB_SELECT );
 
-    EDA_LIST_DIALOG dlg( this, _( "Select Symbol Library" ), headers, itemsToDisplay, oldLibName,
-                         false );
+wxString SCH_BASE_FRAME::SelectLibrary( const wxString& aDialogTitle, const wxString& aListLabel,
+                                        const std::vector<std::pair<wxString, bool*>>& aExtraCheckboxes )
+{
+    static const int ID_MAKE_NEW_LIBRARY = wxID_HIGHEST;
 
-    if( dlg.ShowModal() != wxID_OK )
-        return wxEmptyString;
-
-    wxString libName = dlg.GetTextSelection();
-
-    if( !libName.empty() )
+    // Keep asking the user for a new name until they give a valid one or cancel the operation
+    while( true )
     {
-        if( PROJECT_SCH::SchSymbolLibTable( &prj )->HasLibrary( libName ) )
-            prj.SetRString( PROJECT::SCH_LIB_SELECT, libName );
-        else
-            libName = wxEmptyString;
-    }
+        wxArrayString              headers;
+        std::vector<wxArrayString> itemsToDisplay;
 
-    return libName;
+        GetLibraryItemsForListDialog( headers, itemsToDisplay );
+
+        wxString libraryName = Prj().GetRString( PROJECT::SCH_LIB_SELECT );
+
+        EDA_LIST_DIALOG dlg( this, aDialogTitle, headers, itemsToDisplay, libraryName, false, aExtraCheckboxes );
+        dlg.SetListLabel( aListLabel );
+
+        wxButton* newLibraryButton = new wxButton( &dlg, ID_MAKE_NEW_LIBRARY, _( "New Library..." ) );
+        dlg.m_ButtonsSizer->Prepend( 80, 20 );
+        dlg.m_ButtonsSizer->Prepend( newLibraryButton, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 10 );
+
+        newLibraryButton->Bind( wxEVT_BUTTON,
+                [&dlg]( wxCommandEvent& )
+                {
+                    dlg.EndModal( ID_MAKE_NEW_LIBRARY );
+                }, ID_MAKE_NEW_LIBRARY );
+
+        dlg.Layout();
+        dlg.GetSizer()->Fit( &dlg );
+
+        int ret = dlg.ShowModal();
+
+        switch( ret )
+        {
+        case wxID_CANCEL:
+            return wxEmptyString;
+
+        case wxID_OK:
+            libraryName = dlg.GetTextSelection();
+            Prj().SetRString( PROJECT::SCH_LIB_SELECT, libraryName );
+            dlg.GetExtraCheckboxValues();
+            return libraryName;
+
+        case ID_MAKE_NEW_LIBRARY:
+        {
+            SYMBOL_LIBRARY_MANAGER   mgr( *this );
+            wxFileName               fn( Prj().GetRString( PROJECT::SCH_LIB_PATH ) );
+            bool                     useGlobalTable = false;
+            FILEDLG_HOOK_NEW_LIBRARY tableChooser( useGlobalTable );
+
+            if( !LibraryFileBrowser( _( "Create New Library" ), false, fn, FILEEXT::KiCadSymbolLibFileWildcard(),
+                                     FILEEXT::KiCadSymbolLibFileExtension, false, &tableChooser ) )
+            {
+                break;
+            }
+
+            libraryName = fn.GetName();
+            Prj().SetRString( PROJECT::SCH_LIB_PATH, fn.GetPath() );
+
+            useGlobalTable = tableChooser.GetUseGlobalTable();
+
+            SYMBOL_LIB_TABLE* libTable = useGlobalTable ? &SYMBOL_LIB_TABLE::GetGlobalLibTable()
+                                                        : PROJECT_SCH::SchSymbolLibTable( &Prj() );
+
+            if( libTable->HasLibrary( libraryName, false ) )
+            {
+                DisplayError( this, wxString::Format( _( "Library '%s' already exists." ), libraryName ) );
+                break;
+            }
+
+            if( !mgr.CreateLibrary( fn.GetFullPath(), *libTable ) )
+                DisplayError( this, wxString::Format( _( "Could not add library '%s'." ), libraryName ) );
+
+            break;
+        }
+
+        default:
+            break;
+        }
+    }
 }
 
 

@@ -66,6 +66,7 @@
 #include <widgets/msgpanel.h>
 #include <widgets/properties_panel.h>
 #include <widgets/net_inspector_panel.h>
+#include <widgets/filedlg_hook_new_library.h>
 #include <wx/event.h>
 #include <wx/snglinst.h>
 #include <widgets/ui_common.h>
@@ -1158,35 +1159,20 @@ wxString EDA_DRAW_FRAME::GetFullScreenDesc() const
 }
 
 
-bool EDA_DRAW_FRAME::LibraryFileBrowser( bool doOpen, wxFileName& aFilename,
+bool EDA_DRAW_FRAME::LibraryFileBrowser( const wxString& aTitle, bool doOpen, wxFileName& aFilename,
                                          const wxString& wildcard, const wxString& ext,
-                                         bool isDirectory, bool aIsGlobal,
-                                         const wxString& aGlobalPath )
+                                         bool isDirectory, FILEDLG_HOOK_NEW_LIBRARY* aFileDlgHook )
 {
-    wxString prompt = doOpen ? _( "Select Library" ) : _( "New Library" );
     aFilename.SetExt( ext );
 
-    wxString projectDir = Prj().IsNullProject() ? aFilename.GetPath() : Prj().GetProjectPath();
-    wxString defaultDir;
+    wxString defaultDir = aFilename.GetPath();
 
-    if( aIsGlobal )
-    {
-        if( !GetMruPath().IsEmpty() && !GetMruPath().StartsWith( projectDir ) )
-            defaultDir = GetMruPath();
-        else
-            defaultDir = aGlobalPath;
-    }
-    else
-    {
-        if( !GetMruPath().IsEmpty() && GetMruPath().StartsWith( projectDir ) )
-            defaultDir = GetMruPath();
-        else
-            defaultDir = projectDir;
-    }
+    if( defaultDir.IsEmpty() )
+        defaultDir = GetMruPath();
 
     if( isDirectory && doOpen )
     {
-        wxDirDialog dlg( this, prompt, defaultDir, wxDD_DEFAULT_STYLE | wxDD_DIR_MUST_EXIST );
+        wxDirDialog dlg( this, aTitle, defaultDir, wxDD_DEFAULT_STYLE | wxDD_DIR_MUST_EXIST );
 
         if( dlg.ShowModal() == wxID_CANCEL )
             return false;
@@ -1200,9 +1186,12 @@ bool EDA_DRAW_FRAME::LibraryFileBrowser( bool doOpen, wxFileName& aFilename,
         if( aFilename.GetName().empty() )
             aFilename.SetName( wxS( "Library" ) );
 
-        wxFileDialog dlg( this, prompt, defaultDir, aFilename.GetFullName(),
-                          wildcard, doOpen ? wxFD_OPEN | wxFD_FILE_MUST_EXIST
-                                           : wxFD_SAVE | wxFD_CHANGE_DIR | wxFD_OVERWRITE_PROMPT );
+        wxFileDialog dlg( this, aTitle, defaultDir, aFilename.GetFullName(), wildcard,
+                          doOpen ? wxFD_OPEN | wxFD_FILE_MUST_EXIST
+                                 : wxFD_SAVE | wxFD_CHANGE_DIR | wxFD_OVERWRITE_PROMPT );
+
+        if( aFileDlgHook )
+            dlg.SetCustomizeHook( *aFileDlgHook );
 
         if( dlg.ShowModal() == wxID_CANCEL )
             return false;

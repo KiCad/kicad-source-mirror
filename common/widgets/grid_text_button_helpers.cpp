@@ -39,7 +39,7 @@
 #include <env_paths.h>
 #include <pgm_base.h>
 #include <widgets/wx_grid.h>
-#include <widgets/filedlg_open_embed_file.h>
+#include <widgets/filedlg_hook_embed_file.h>
 #include <widgets/grid_text_button_helpers.h>
 #include <eda_doc.h>
 
@@ -366,7 +366,7 @@ protected:
 
         if( filename.IsEmpty() || filename == wxT( "~" ) )
         {
-            FILEDLG_OPEN_EMBED_FILE customize;
+            FILEDLG_HOOK_EMBED_FILE customize;
 
             wxFileDialog openFileDialog( this, _( "Open file" ), "", "",
                                          _( "All Files" ) + wxT( " (*.*)|*.*" ),

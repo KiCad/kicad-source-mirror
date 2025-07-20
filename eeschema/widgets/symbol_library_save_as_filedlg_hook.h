@@ -23,20 +23,19 @@
 #include <symbol_editor/symbol_saveas_type.h>
 #include <wx/filedlgcustomize.h>
 
-class SYMBOL_FILEDLG_SAVE_AS : public wxFileDialogCustomizeHook
+class SYMBOL_LIBRARY_SAVE_AS_FILEDLG_HOOK : public wxFileDialogCustomizeHook
 {
 public:
-    SYMBOL_FILEDLG_SAVE_AS( SYMBOL_SAVEAS_TYPE aOption ) : m_option( aOption ){};
+    SYMBOL_LIBRARY_SAVE_AS_FILEDLG_HOOK( SYMBOL_SAVEAS_TYPE aOption ) :
+            m_option( aOption )
+    {};
 
     virtual void AddCustomControls( wxFileDialogCustomize& customizer ) override
     {
-        m_simpleSaveAs = customizer.AddRadioButton( _( "Do not update library tables" ) );
-        m_replaceTableEntry =
-                customizer.AddRadioButton( _( "Update existing library table entry" ) );
-        m_addGlobalTableEntry =
-                customizer.AddRadioButton( _( "Add new global library table entry" ) );
-        m_addProjectTableEntry =
-                customizer.AddRadioButton(  _( "Add new project library table entry" ) );
+        m_simpleSaveAs         = customizer.AddRadioButton( _( "Do not update library tables" ) );
+        m_replaceTableEntry    = customizer.AddRadioButton( _( "Update existing library table entry" ) );
+        m_addGlobalTableEntry  = customizer.AddRadioButton( _( "Add new global library table entry" ) );
+        m_addProjectTableEntry = customizer.AddRadioButton( _( "Add new project library table entry" ) );
 
         // Note, due to windows api, wx does not actually support calling SetValue( false ) (it asserts)
         if( m_option == SYMBOL_SAVEAS_TYPE::NORMAL_SAVE_AS )
@@ -74,7 +73,7 @@ private:
     wxFileDialogRadioButton* m_addGlobalTableEntry  = nullptr;
     wxFileDialogRadioButton* m_addProjectTableEntry = nullptr;
 
-    wxDECLARE_NO_COPY_CLASS( SYMBOL_FILEDLG_SAVE_AS );
+    wxDECLARE_NO_COPY_CLASS( SYMBOL_LIBRARY_SAVE_AS_FILEDLG_HOOK );
 };
 
 #endif

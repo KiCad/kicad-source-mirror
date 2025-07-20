@@ -60,7 +60,6 @@ public:
     int RescueAutosave( const TOOL_EVENT& aEvent );
     int OpenNonKicadBoard( const TOOL_EVENT& aEvent );
     int ExportFootprints( const TOOL_EVENT& aEvent );
-    int ExportFootprintsAs( const TOOL_EVENT& aEvent );
     int PageSettings( const TOOL_EVENT& aEvent );
     int Plot( const TOOL_EVENT& aEvent );
 

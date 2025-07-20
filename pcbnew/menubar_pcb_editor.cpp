@@ -133,8 +133,7 @@ void PCB_EDIT_FRAME::doReCreateMenuBar()
         submenuExport->Add( *m_exportNetlistAction );
 
     submenuExport->AppendSeparator();
-    submenuExport->Add( PCB_ACTIONS::exportFootprints );
-    submenuExport->Add( PCB_ACTIONS::exportFootprintsAs );
+    submenuExport->Add( PCB_ACTIONS::exportFootprints,  ACTION_MENU::NORMAL, _( "Footprints..." ) );
 
     fileMenu->Add( submenuExport );
 

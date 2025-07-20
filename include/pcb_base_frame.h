@@ -241,14 +241,6 @@ public:
     GENERAL_COLLECTORS_GUIDE GetCollectorsGuide();
 
     /**
-     * Put up a dialog and allows the user to pick a library, for unspecified use.
-     *
-     * @param aNicknameExisting is the current choice to highlight.
-     * @return the library or wxEmptyString on abort.
-     */
-    wxString SelectLibrary( const wxString& aNicknameExisting );
-
-    /**
      * Must be called after a change in order to set the "modify" flag and update other data
      * structures and GUI elements.
      */
@@ -397,6 +389,9 @@ public:
      * Handler for the filesystem watcher debounce timer.
      */
     void OnFpChangeDebounceTimer( wxTimerEvent& aEvent );
+
+    void GetLibraryItemsForListDialog( wxArrayString& aHeaders,
+                                       std::vector<wxArrayString>& aItemsToDisplay );
 
 protected:
     bool canCloseWindow( wxCloseEvent& aCloseEvent ) override;

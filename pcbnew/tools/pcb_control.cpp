@@ -53,6 +53,7 @@
 #include <pcb_textbox.h>
 #include <pcb_track.h>
 #include <pcb_generator.h>
+#include <project_pcb.h>
 #include <wildcards_and_files_ext.h>
 #include <zone.h>
 #include <confirm.h>
@@ -117,9 +118,9 @@ int PCB_CONTROL::AddLibrary( const TOOL_EVENT& aEvent )
     if( m_frame->IsType( FRAME_FOOTPRINT_EDITOR ) || m_frame->IsType( FRAME_PCB_EDITOR ) )
     {
         if( aEvent.IsAction( &ACTIONS::newLibrary ) )
-            static_cast<PCB_BASE_EDIT_FRAME*>( m_frame )->CreateNewLibrary();
+            static_cast<PCB_BASE_EDIT_FRAME*>( m_frame )->CreateNewLibrary( _( "New Footprint Library" ) );
         else if( aEvent.IsAction( &ACTIONS::addLibrary ) )
-            static_cast<PCB_BASE_EDIT_FRAME*>( m_frame )->AddLibrary();
+            static_cast<PCB_BASE_EDIT_FRAME*>( m_frame )->AddLibrary( _( "Add Footprint Library" ) );
     }
 
     return 0;
@@ -149,7 +150,8 @@ int PCB_CONTROL::SaveFpToBoard( const TOOL_EVENT& aEvent )
 int PCB_CONTROL::DdAddLibrary( const TOOL_EVENT& aEvent )
 {
     const wxString fn = *aEvent.Parameter<wxString*>();
-    static_cast<PCB_BASE_EDIT_FRAME*>( m_frame )->AddLibrary( fn );
+    static_cast<PCB_BASE_EDIT_FRAME*>( m_frame )->AddLibrary( _( "Add Footprint Library" ), fn,
+                                                              PROJECT_PCB::PcbFootprintLibs( &m_frame->Prj() ) );
     return 0;
 }
 

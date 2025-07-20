@@ -44,7 +44,7 @@
 #include <sch_edit_frame.h>
 #include <sim/sim_model_l_mutual.h>
 #include <sim/spice_circuit_model.h>
-#include <widgets/filedlg_open_embed_file.h>
+#include <widgets/filedlg_hook_embed_file.h>
 #include <wx/filedlg.h>
 #include <wx/log.h>
 
@@ -1256,7 +1256,7 @@ void DIALOG_SIM_MODEL<T>::onBrowseButtonClick( wxCommandEvent& aEvent )
 
     wxString                path = s_mruPath.IsEmpty() ? Prj().GetProjectPath() : s_mruPath;
     wxFileDialog            dlg( this, _( "Browse Models" ), path );
-    FILEDLG_OPEN_EMBED_FILE customize( false );
+    FILEDLG_HOOK_EMBED_FILE customize( false );
 
     dlg.SetCustomizeHook( customize );
 

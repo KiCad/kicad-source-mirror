@@ -30,6 +30,7 @@
 
 
 class EDA_DRAW_FRAME;
+class wxCheckBox;
 
 /**
  * A dialog which shows:
@@ -52,7 +53,8 @@ public:
     EDA_LIST_DIALOG( wxWindow* aParent, const wxString& aTitle, const wxArrayString& aItemHeaders,
                      const std::vector<wxArrayString>& aItemList,
                      const wxString& aPreselectText = wxEmptyString,
-                     bool aSortList = true );
+                     bool aSortList = true,
+                     const std::vector<std::pair<wxString, bool*>>& aExtraCheckboxes = {} );
 
     EDA_LIST_DIALOG( wxWindow* aParent, const wxString& aTitle, bool aSortList = true );
 
@@ -71,6 +73,11 @@ public:
      */
     wxString GetTextSelection( int aColumn = 0 );
 
+    /**
+     * Fills in the value pointers from the checkboxes after the dialog has run.
+     */
+    void GetExtraCheckboxValues();
+
     long GetSelection();
 
     bool Show( bool show ) override;
@@ -88,8 +95,9 @@ private:
 
 private:
     // The list of items, locally stored
-    std::vector<wxArrayString> m_itemsList;
-    bool                       m_sortList;
+    std::vector<wxArrayString>   m_itemsList;
+    bool                         m_sortList;
+    std::map<wxCheckBox*, bool*> m_extraCheckboxMap;
 };
 
 

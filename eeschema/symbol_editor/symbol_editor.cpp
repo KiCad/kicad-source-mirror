@@ -49,8 +49,7 @@
 #include <project_sch.h>
 #include <string_utils.h>
 #include "symbol_saveas_type.h"
-
-#include <widgets/symbol_filedlg_save_as.h>
+#include <widgets/symbol_library_save_as_filedlg_hook.h>
 #include <io/kicad/kicad_io_utils.h>
 
 
@@ -91,7 +90,7 @@ void SYMBOL_EDIT_FRAME::SelectActiveLibrary( const wxString& aLibrary )
     wxString selectedLib = aLibrary;
 
     if( selectedLib.empty() )
-        selectedLib = SelectLibraryFromList();
+        selectedLib = SelectLibrary( _( "Select Symbol Library" ), _( "Library:" ) );
 
     if( !selectedLib.empty() )
         SetCurLib( selectedLib );
@@ -348,7 +347,7 @@ void SYMBOL_EDIT_FRAME::CreateNewSymbol( const wxString& aInheritFrom )
 
     if( !m_libMgr->LibraryExists( lib ) )
     {
-        lib = SelectLibraryFromList();
+        lib = SelectLibrary( _( "New Symbol" ), _( "Create symbol in library:" ) );
 
         if( !m_libMgr->LibraryExists( lib ) )
             return;
@@ -709,7 +708,7 @@ public:
         // Add a suffix until we find a name that doesn't conflict
         RENAME,
         // Could have a mode that asks for every one, be then we'll need a fancier
-        // SAVE_AS_DIALOG subdialog with Overwrite/Rename/Prompt/Cancel
+        // SAVE_SYMBOL_AS_DIALOG subdialog with Overwrite/Rename/Prompt/Cancel
         // PROMPT
     };
 
@@ -827,52 +826,24 @@ enum SAVE_AS_IDS
 };
 
 
-class SAVE_AS_DIALOG : public EDA_LIST_DIALOG
+class SAVE_SYMBOL_AS_DIALOG : public EDA_LIST_DIALOG
 {
 public:
-    using SymLibNameValidator =
-            std::function<int( const wxString& libName, const wxString& symbolName )>;
+    using SymLibNameValidator = std::function<int( const wxString& libName, const wxString& symbolName )>;
 
-    SAVE_AS_DIALOG( SYMBOL_EDIT_FRAME* aParent, const wxString& aSymbolName,
-                    const wxString& aLibraryPreselect, SymLibNameValidator aValidator,
-                    SYMBOL_SAVE_AS_HANDLER::CONFLICT_STRATEGY& aConflictStrategy ) :
+    SAVE_SYMBOL_AS_DIALOG( SYMBOL_EDIT_FRAME* aParent, const wxString& aSymbolName,
+                           const wxString& aLibraryPreselect, SymLibNameValidator aValidator,
+                           SYMBOL_SAVE_AS_HANDLER::CONFLICT_STRATEGY& aConflictStrategy ) :
             EDA_LIST_DIALOG( aParent, _( "Save Symbol As" ), false ),
-            m_validator( std::move( aValidator ) ), m_conflictStrategy( aConflictStrategy )
+            m_validator( std::move( aValidator ) ),
+            m_conflictStrategy( aConflictStrategy )
     {
-        COMMON_SETTINGS*           cfg = Pgm().GetCommonSettings();
-        PROJECT_FILE&              project = aParent->Prj().GetProjectFile();
         SYMBOL_LIB_TABLE*          tbl = PROJECT_SCH::SchSymbolLibTable( &Prj() );
         std::vector<wxString>      libNicknames = tbl->GetLogicalLibs();
         wxArrayString              headers;
         std::vector<wxArrayString> itemsToDisplay;
 
-        headers.Add( _( "Nickname" ) );
-        headers.Add( _( "Description" ) );
-
-        for( const wxString& nickname : libNicknames )
-        {
-            if( alg::contains( project.m_PinnedSymbolLibs, nickname )
-                || alg::contains( cfg->m_Session.pinned_symbol_libs, nickname ) )
-            {
-                wxArrayString item;
-                item.Add( LIB_TREE_MODEL_ADAPTER::GetPinningSymbol() + nickname );
-                item.Add( tbl->GetDescription( nickname ) );
-                itemsToDisplay.push_back( item );
-            }
-        }
-
-        for( const wxString& nickname : libNicknames )
-        {
-            if( !alg::contains( project.m_PinnedSymbolLibs, nickname )
-                    && !alg::contains( cfg->m_Session.pinned_symbol_libs, nickname ) )
-            {
-                wxArrayString item;
-                item.Add( nickname );
-                item.Add( tbl->GetDescription( nickname ) );
-                itemsToDisplay.push_back( item );
-            }
-        }
-
+        aParent->GetLibraryItemsForListDialog( headers, itemsToDisplay );
         initDialog( headers, itemsToDisplay, aLibraryPreselect );
 
         SetListLabel( _( "Save in library:" ) );
@@ -989,8 +960,8 @@ void SYMBOL_EDIT_FRAME::saveSymbolCopyAs( bool aOpenCopy )
                  * If we save over a symbol that is in the inheritance chain of the symbol we're
                  * saving, we'll end up with a circular inheritance chain, which is bad.
                  */
-                const auto& [inAncestry, inDescendents] =
-                        CheckSavingIntoOwnInheritance( *m_libMgr, *symbol, newName, newLib );
+                const auto& [inAncestry, inDescendents] = CheckSavingIntoOwnInheritance( *m_libMgr, *symbol,
+                                                                                         newName, newLib );
 
                 if( inAncestry )
                 {
@@ -1012,8 +983,8 @@ void SYMBOL_EDIT_FRAME::saveSymbolCopyAs( bool aOpenCopy )
                     return wxID_CANCEL;
                 }
 
-                const std::vector<wxString> conflicts =
-                        CheckForParentalChainConflicts( *m_libMgr, *symbol, newName, newLib );
+                const std::vector<wxString> conflicts = CheckForParentalChainConflicts( *m_libMgr, *symbol,
+                                                                                        newName, newLib );
 
                 if( conflicts.size() == 1 && conflicts.front() == newName )
                 {
@@ -1023,12 +994,10 @@ void SYMBOL_EDIT_FRAME::saveSymbolCopyAs( bool aOpenCopy )
                                             UnescapeString( newName ),
                                             newLib );
 
-                    KIDIALOG errorDlg( this, msg, _( "Confirmation" ),
-                                       wxOK | wxCANCEL | wxICON_WARNING );
+                    KIDIALOG errorDlg( this, msg, _( "Confirmation" ), wxOK | wxCANCEL | wxICON_WARNING );
                     errorDlg.SetOKLabel( _( "Overwrite" ) );
 
-                    return errorDlg.ShowModal() == wxID_OK ? ID_OVERWRITE_CONFLICTS
-                                                           : (int) wxID_CANCEL;
+                    return errorDlg.ShowModal() == wxID_OK ? ID_OVERWRITE_CONFLICTS : (int) wxID_CANCEL;
                 }
                 else if( !conflicts.empty() )
                 {
@@ -1046,10 +1015,8 @@ void SYMBOL_EDIT_FRAME::saveSymbolCopyAs( bool aOpenCopy )
 
                     msg += _( "\nDo you want to overwrite all of them, or rename the new symbols?" );
 
-                    KIDIALOG errorDlg( this, msg, _( "Confirmation" ),
-                                       wxYES_NO | wxCANCEL | wxICON_WARNING );
-                    errorDlg.SetYesNoCancelLabels( _( "Overwrite All" ), _( "Rename All" ),
-                                                   _( "Cancel" ) );
+                    KIDIALOG errorDlg( this, msg, _( "Confirmation" ), wxYES_NO | wxCANCEL | wxICON_WARNING );
+                    errorDlg.SetYesNoCancelLabels( _( "Overwrite All" ), _( "Rename All" ), _( "Cancel" ) );
 
                     switch( errorDlg.ShowModal() )
                     {
@@ -1067,7 +1034,7 @@ void SYMBOL_EDIT_FRAME::saveSymbolCopyAs( bool aOpenCopy )
     // Keep asking the user for a new name until they give a valid one or cancel the operation
     while( !done )
     {
-        SAVE_AS_DIALOG dlg( this, symbolName, libraryName, dialogValidatorFunc, strategy );
+        SAVE_SYMBOL_AS_DIALOG dlg( this, symbolName, libraryName, dialogValidatorFunc, strategy );
 
         int ret = dlg.ShowModal();
 
@@ -1579,11 +1546,10 @@ bool SYMBOL_EDIT_FRAME::saveLibrary( const wxString& aLibrary, bool aNewFile )
 
         wxString wildcards = FILEEXT::KiCadSymbolLibFileWildcard();
 
-        wxFileDialog dlg( this, wxString::Format( _( "Save Library '%s' As..." ), aLibrary ),
-                          default_path, fn.GetFullName(), wildcards,
-                          wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
+        wxFileDialog dlg( this, wxString::Format( _( "Save Library '%s' As..." ), aLibrary ), default_path,
+                          fn.GetFullName(), wildcards, wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
-        SYMBOL_FILEDLG_SAVE_AS saveAsHook( type );
+        SYMBOL_LIBRARY_SAVE_AS_FILEDLG_HOOK saveAsHook( type );
         dlg.SetCustomizeHook( saveAsHook );
 
         if( dlg.ShowModal() == wxID_CANCEL )

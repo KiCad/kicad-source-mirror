@@ -40,7 +40,7 @@
 #include <drawing_sheet/ds_painter.h>
 #include <string_utils.h>
 #include <widgets/std_bitmap_button.h>
-#include <widgets/filedlg_open_embed_file.h>
+#include <widgets/filedlg_hook_embed_file.h>
 #include <wx/valgen.h>
 #include <wx/tokenzr.h>
 #include <wx/filedlg.h>
@@ -799,7 +799,7 @@ void DIALOG_PAGES_SETTINGS::OnWksFileSelection( wxCommandEvent& event )
     }
 
     // Display a file picker dialog
-    FILEDLG_OPEN_EMBED_FILE customize;
+    FILEDLG_HOOK_EMBED_FILE customize;
     wxFileDialog fileDialog( this, _( "Drawing Sheet File" ), path, name,
                              FILEEXT::DrawingSheetFileWildcard(),
                              wxFD_DEFAULT_STYLE | wxFD_FILE_MUST_EXIST );

@@ -1154,18 +1154,10 @@ TOOL_ACTION PCB_ACTIONS::openNonKicadBoard( TOOL_ACTION_ARGS()
 TOOL_ACTION PCB_ACTIONS::exportFootprints( TOOL_ACTION_ARGS()
         .Name( "pcbnew.EditorControl.exportFootprints" )
         .Scope( AS_GLOBAL )
-        .FriendlyName( _( "Footprints to Library..." ) )
-        .Tooltip( _( "Add footprints used on board to an existing footprint library\n"
+        .FriendlyName( _( "Export Footprints..." ) )
+        .Tooltip( _( "Add footprints from board to a new or an existing footprint library\n"
                      "(does not remove other footprints from this library)" ) )
         .Icon( BITMAPS::library_archive ) );
-
-TOOL_ACTION PCB_ACTIONS::exportFootprintsAs( TOOL_ACTION_ARGS()
-        .Name( "pcbnew.EditorControl.exportFootprintsAs" )
-        .Scope( AS_GLOBAL )
-        .FriendlyName( _( "Footprints to New Library..." ) )
-        .Tooltip( _( "Create a new footprint library containing the footprints used on board\n"
-                     "(if the library already exists it will be replaced)" ) )
-        .Icon( BITMAPS::library_archive_as ) );
 
 TOOL_ACTION PCB_ACTIONS::boardSetup( TOOL_ACTION_ARGS()
         .Name( "pcbnew.EditorControl.boardSetup" )

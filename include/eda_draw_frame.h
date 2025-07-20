@@ -52,6 +52,7 @@ class HOTKEY_CYCLE_POPUP;
 class PROPERTIES_PANEL;
 class NET_INSPECTOR_PANEL;
 enum class BITMAP_TYPE;
+class FILEDLG_HOOK_NEW_LIBRARY;
 
 namespace KIGFX
 {
@@ -184,17 +185,19 @@ public:
     virtual COLOR_SETTINGS* GetColorSettings( bool aForceRefresh = false ) const;
 
     /**
+     * @param aTitle dialog title
      * @param doOpen if true runs an Open Library browser, otherwise New Library
      * @param aFilename for New may contain a default name; in both cases return the chosen
      *                  filename.
      * @param wildcard a wildcard to filter the displayed files
      * @param ext the library file extension
      * @param isDirectory indicates the library files are directories
+     * @param aFileDlgHook optional; adds customized controls to dialog
      * @return true for OK; false for Cancel.
      */
-    bool LibraryFileBrowser( bool doOpen, wxFileName& aFilename, const wxString& wildcard,
-                             const wxString& ext, bool isDirectory = false, bool aIsGlobal = false,
-                             const wxString& aGlobalPath = wxEmptyString );
+    bool LibraryFileBrowser( const wxString& aTitle, bool doOpen, wxFileName& aFilename,
+                             const wxString& wildcard, const wxString& ext, bool isDirectory,
+                             FILEDLG_HOOK_NEW_LIBRARY* aFileDlgHook = nullptr );
 
     void CommonSettingsChanged( int aFlags ) override;
 

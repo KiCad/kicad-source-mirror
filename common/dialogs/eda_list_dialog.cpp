@@ -27,6 +27,7 @@
 #include <eda_draw_frame.h>
 #include <string_utils.h>
 #include <macros.h>
+#include <wx/checkbox.h>
 #include "lib_tree_model_adapter.h"
 
 // wxWidgets spends *far* too long calculating column widths (most of it, believe it or
@@ -40,7 +41,8 @@ static int DEFAULT_COL_WIDTHS[] = { 200, 300 };
 EDA_LIST_DIALOG::EDA_LIST_DIALOG( wxWindow* aParent, const wxString& aTitle,
                                   const wxArrayString& aItemHeaders,
                                   const std::vector<wxArrayString>& aItemList,
-                                  const wxString& aPreselectText, bool aSortList ) :
+                                  const wxString& aPreselectText, bool aSortList,
+                                  const std::vector<std::pair<wxString, bool*>>& aExtraCheckboxes ) :
     EDA_LIST_DIALOG_BASE( aParent, wxID_ANY, aTitle ),
     m_sortList( aSortList )
 {
@@ -60,6 +62,19 @@ EDA_LIST_DIALOG::EDA_LIST_DIALOG( wxWindow* aParent, const wxString& aTitle,
     // because so many dialogs share this same class, with different numbers of
     // columns, different column names, and column widths.
     m_hash_key = TO_UTF8( aTitle );
+
+    if( !aExtraCheckboxes.empty() )
+    {
+        m_ExtrasSizer->AddSpacer( 5 );
+
+        for( const auto& [label, valuePtr] : aExtraCheckboxes )
+        {
+            wxCheckBox* cb = new wxCheckBox( this, wxID_ANY, label );
+            cb->SetValue( *valuePtr );
+            m_ExtrasSizer->Add( cb, 0, wxBOTTOM, 5 );
+            m_extraCheckboxMap[cb] = valuePtr;
+        }
+    }
 
     SetupStandardButtons();
 
@@ -206,6 +221,13 @@ wxString EDA_LIST_DIALOG::GetTextSelection( int aColumn )
     }
 
     return text;
+}
+
+
+void EDA_LIST_DIALOG::GetExtraCheckboxValues()
+{
+    for( const auto& [checkbox, valuePtr] : m_extraCheckboxMap )
+        *valuePtr = checkbox->GetValue();
 }
 
 

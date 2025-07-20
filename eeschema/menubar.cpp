@@ -115,10 +115,9 @@ void SCH_EDIT_FRAME::doReCreateMenuBar()
     ACTION_MENU* submenuExport = new ACTION_MENU( false, selTool );
     submenuExport->SetTitle( _( "Export" ) );
     submenuExport->SetIcon( BITMAPS::export_file );
-    submenuExport->Add( SCH_ACTIONS::drawSheetOnClipboard,      ACTION_MENU::NORMAL, _( "Drawing to Clipboard" ) );
-    submenuExport->Add( SCH_ACTIONS::exportNetlist,             ACTION_MENU::NORMAL, _( "Netlist..." ) );
-    submenuExport->Add( SCH_ACTIONS::exportSymbolsToLibrary,    ACTION_MENU::NORMAL, _( "Symbols to Library..." ) );
-    submenuExport->Add( SCH_ACTIONS::exportSymbolsToNewLibrary, ACTION_MENU::NORMAL, _( "Symbols to New Library..." ) );
+    submenuExport->Add( SCH_ACTIONS::drawSheetOnClipboard,   ACTION_MENU::NORMAL, _( "Drawing to Clipboard" ) );
+    submenuExport->Add( SCH_ACTIONS::exportNetlist,          ACTION_MENU::NORMAL, _( "Netlist..." ) );
+    submenuExport->Add( SCH_ACTIONS::exportSymbolsToLibrary, ACTION_MENU::NORMAL, _( "Symbols..." ) );
     fileMenu->Add( submenuExport );
 
     fileMenu->AppendSeparator();
@@ -166,9 +165,9 @@ void SCH_EDIT_FRAME::doReCreateMenuBar()
     submenuAttributes->SetTitle( _( "Attributes" ) );
 
     submenuAttributes->Add( SCH_ACTIONS::setExcludeFromSimulation, ACTION_MENU::CHECK );
-    submenuAttributes->Add( SCH_ACTIONS::setExcludeFromBOM, ACTION_MENU::CHECK );
-    submenuAttributes->Add( SCH_ACTIONS::setExcludeFromBoard, ACTION_MENU::CHECK );
-    submenuAttributes->Add( SCH_ACTIONS::setDNP, ACTION_MENU::CHECK );
+    submenuAttributes->Add( SCH_ACTIONS::setExcludeFromBOM,        ACTION_MENU::CHECK );
+    submenuAttributes->Add( SCH_ACTIONS::setExcludeFromBoard,      ACTION_MENU::CHECK );
+    submenuAttributes->Add( SCH_ACTIONS::setDNP,                   ACTION_MENU::CHECK );
 
     editMenu->Add( submenuAttributes );
 

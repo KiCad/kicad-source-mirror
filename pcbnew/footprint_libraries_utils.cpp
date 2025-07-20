@@ -43,6 +43,7 @@
 #include <footprint_edit_frame.h>
 #include <wildcards_and_files_ext.h>
 #include <pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.h>
+#include <widgets/filedlg_hook_new_library.h>
 #include <env_paths.h>
 #include <paths.h>
 #include <settings/settings_manager.h>
@@ -52,9 +53,11 @@
 #include <footprint_viewer_frame.h>
 #include <io/kicad/kicad_io_utils.h>
 #include <view/view_controls.h>
-#include <wx/choicdlg.h>
 #include <wx/filedlg.h>
 #include <wx/fswatcher.h>
+
+
+static constexpr int ID_MAKE_NEW_LIBRARY = 4173;
 
 
 // unique, "file local" translations:
@@ -272,7 +275,7 @@ void FOOTPRINT_EDIT_FRAME::ExportFootprint( FOOTPRINT* aFootprint )
         if( fp == nullptr )
         {
             DisplayErrorMessage( this, wxString::Format( _( "Insufficient permissions to write file '%s'." ),
-                                            dlg.GetPath() ) );
+                                                         dlg.GetPath() ) );
             return;
         }
 
@@ -293,47 +296,53 @@ void FOOTPRINT_EDIT_FRAME::ExportFootprint( FOOTPRINT* aFootprint )
 }
 
 
-wxString PCB_BASE_EDIT_FRAME::CreateNewProjectLibrary( const wxString& aLibName,
-                                                       const wxString& aProposedName )
+wxString PCB_BASE_EDIT_FRAME::CreateNewProjectLibrary( const wxString& aDialogTitle, const wxString& aLibName )
 {
-    return createNewLibrary( aLibName, aProposedName, PROJECT_PCB::PcbFootprintLibs( &Prj() ) );
+    return createNewLibrary( aDialogTitle, aLibName, wxEmptyString, PROJECT_PCB::PcbFootprintLibs( &Prj() ) );
 }
 
 
-wxString PCB_BASE_EDIT_FRAME::CreateNewLibrary( const wxString& aLibName,
-                                                const wxString& aProposedName )
+wxString PCB_BASE_EDIT_FRAME::CreateNewLibrary( const wxString& aDialogTitle, const wxString& aInitialPath )
 {
-    FP_LIB_TABLE* table  = selectLibTable();
-
-    return createNewLibrary( aLibName, aProposedName, table );
+    return createNewLibrary( aDialogTitle, wxEmptyString, aInitialPath, nullptr );
 }
 
 
-wxString PCB_BASE_EDIT_FRAME::createNewLibrary( const wxString& aLibName,
-                                                const wxString& aProposedName,
-                                                FP_LIB_TABLE* aTable )
+wxString PCB_BASE_EDIT_FRAME::createNewLibrary( const wxString& aDialogTitle, const wxString& aLibName,
+                                                const wxString& aInitialPath, FP_LIB_TABLE* aTable )
 {
     // Kicad cannot write legacy format libraries, only .pretty new format because the legacy
     // format cannot handle current features.
     // The footprint library is actually a directory.
 
-    if( aTable == nullptr )
-        return wxEmptyString;
+    wxFileName                fn;
+    bool                      doAdd = false;
+    bool                      isGlobal = false;
+    FP_LIB_TABLE*             libTable = PROJECT_PCB::PcbFootprintLibs( &Prj() );
+    FILEDLG_HOOK_NEW_LIBRARY  tableChooser( isGlobal );
+    FILEDLG_HOOK_NEW_LIBRARY* fileDlgHook = &tableChooser;
 
-    wxString   initialPath = aProposedName.IsEmpty() ? Prj().GetProjectPath() : aProposedName;
-    wxFileName fn;
-    bool       doAdd = false;
-    bool       isGlobal = ( aTable == &GFootprintTable );
+    if( aTable )
+    {
+        isGlobal = ( aTable == &GFootprintTable );
+        libTable = aTable;
+        fileDlgHook = nullptr;
+    }
 
     if( aLibName.IsEmpty() )
     {
-        fn = initialPath;
+        fn = aInitialPath.IsEmpty() ? Prj().GetProjectPath() : aInitialPath;
 
-        if( !LibraryFileBrowser( false, fn, FILEEXT::KiCadFootprintLibPathWildcard(),
-                                 FILEEXT::KiCadFootprintLibPathExtension, false, isGlobal,
-                                 PATHS::GetDefaultUserFootprintsPath() ) )
+        if( !LibraryFileBrowser( aDialogTitle, false, fn, FILEEXT::KiCadFootprintLibPathWildcard(),
+                                 FILEEXT::KiCadFootprintLibPathExtension, false, fileDlgHook ) )
         {
             return wxEmptyString;
+        }
+
+        if( fileDlgHook )
+        {
+            isGlobal = fileDlgHook->GetUseGlobalTable();
+            libTable = isGlobal ? &GFootprintTable : PROJECT_PCB::PcbFootprintLibs( &Prj() );
         }
 
         doAdd = true;
@@ -345,13 +354,13 @@ wxString PCB_BASE_EDIT_FRAME::createNewLibrary( const wxString& aLibName,
         if( !fn.IsAbsolute() )
         {
             fn.SetName( aLibName );
-            fn.MakeAbsolute( initialPath );
+            fn.MakeAbsolute( Prj().GetProjectPath() );
         }
     }
 
     // We can save fp libs only using PCB_IO_MGR::KICAD_SEXP format (.pretty libraries)
     PCB_IO_MGR::PCB_FILE_T piType  = PCB_IO_MGR::KICAD_SEXP;
-    wxString           libPath = fn.GetFullPath();
+    wxString               libPath = fn.GetFullPath();
 
     try
     {
@@ -401,75 +410,100 @@ wxString PCB_BASE_EDIT_FRAME::createNewLibrary( const wxString& aLibName,
     }
 
     if( doAdd )
-        AddLibrary( libPath, aTable );
+        AddLibrary( aDialogTitle, libPath, libTable );
 
     return libPath;
 }
 
 
-FP_LIB_TABLE* PCB_BASE_EDIT_FRAME::selectLibTable( bool aOptional )
+wxString PCB_BASE_EDIT_FRAME::SelectLibrary( const wxString& aDialogTitle, const wxString& aListLabel,
+                                             const std::vector<std::pair<wxString, bool*>>& aExtraCheckboxes )
 {
-    // If no project is loaded, always work with the global table
-    if( Prj().IsNullProject() )
+    // Keep asking the user for a new name until they give a valid one or cancel the operation
+    while( true )
     {
-        FP_LIB_TABLE* ret = &GFootprintTable;
+        wxArrayString              headers;
+        std::vector<wxArrayString> itemsToDisplay;
 
-        if( aOptional )
+        GetLibraryItemsForListDialog( headers, itemsToDisplay );
+
+        wxString libraryName = Prj().GetRString( PROJECT::PCB_LIB_NICKNAME );
+
+        EDA_LIST_DIALOG dlg( this, aDialogTitle, headers, itemsToDisplay, libraryName, false, aExtraCheckboxes );
+        dlg.SetListLabel( aListLabel );
+
+        wxButton* newLibraryButton = new wxButton( &dlg, ID_MAKE_NEW_LIBRARY, _( "New Library..." ) );
+        dlg.m_ButtonsSizer->Prepend( 80, 20 );
+        dlg.m_ButtonsSizer->Prepend( newLibraryButton, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 10 );
+
+        newLibraryButton->Bind( wxEVT_BUTTON,
+                [&dlg]( wxCommandEvent& )
+                {
+                    dlg.EndModal( ID_MAKE_NEW_LIBRARY );
+                }, ID_MAKE_NEW_LIBRARY );
+
+        dlg.Layout();
+        dlg.GetSizer()->Fit( &dlg );
+
+        int ret = dlg.ShowModal();
+
+        switch( ret )
         {
-            wxMessageDialog dlg( this, _( "Add the library to the global library table?" ),
-                                 _( "Add To Global Library Table" ), wxYES_NO );
+        case wxID_CANCEL:
+            return wxEmptyString;
 
-            if( dlg.ShowModal() != wxID_OK )
-                ret = nullptr;
+        case wxID_OK:
+            libraryName = dlg.GetTextSelection();
+            Prj().SetRString( PROJECT::PCB_LIB_NICKNAME, libraryName );
+            dlg.GetExtraCheckboxValues();
+            return libraryName;
+
+        case ID_MAKE_NEW_LIBRARY:
+        {
+            wxFileName fn = CreateNewLibrary( _( "New Footprint Library" ),
+                                              Prj().GetRString( PROJECT::PCB_LIB_PATH ) );
+
+            Prj().SetRString( PROJECT::PCB_LIB_PATH, fn.GetPath() );
+            Prj().SetRString( PROJECT::PCB_LIB_NICKNAME, fn.GetName() );
+            break;
         }
 
-        return ret;
-    }
-
-    wxArrayString libTableNames;
-    libTableNames.Add( _( "Global" ) );
-    libTableNames.Add( _( "Project" ) );
-
-    wxSingleChoiceDialog dlg( this, _( "Choose the Library Table to add the library to:" ),
-                              _( "Add To Library Table" ), libTableNames );
-
-    if( aOptional )
-    {
-        dlg.FindWindow( wxID_CANCEL )->SetLabel( _( "Skip" ) );
-        dlg.FindWindow( wxID_OK )->SetLabel( _( "Add" ) );
-    }
-
-    if( dlg.ShowModal() != wxID_OK )
-        return nullptr;
-
-    switch( dlg.GetSelection() )
-    {
-    case 0: return &GFootprintTable;
-    case 1: return PROJECT_PCB::PcbFootprintLibs( &Prj() );
-    default: return nullptr;
+        default:
+            break;
+        }
     }
 }
 
 
-bool PCB_BASE_EDIT_FRAME::AddLibrary( const wxString& aFilename, FP_LIB_TABLE* aTable )
+bool PCB_BASE_EDIT_FRAME::AddLibrary( const wxString& aDialogTitle, const wxString& aFilename,
+                                      FP_LIB_TABLE* aTable )
 {
-    if( aTable == nullptr )
-        aTable = selectLibTable();
+    bool                      isGlobal = false;
+    FP_LIB_TABLE*             libTable = PROJECT_PCB::PcbFootprintLibs( &Prj() );
+    FILEDLG_HOOK_NEW_LIBRARY  tableChooser( isGlobal );
+    FILEDLG_HOOK_NEW_LIBRARY* fileDlgHook = &tableChooser;
 
-    if( aTable == nullptr )
-        return wxEmptyString;
-
-    bool isGlobal = ( aTable == &GFootprintTable );
+    if( aTable )
+    {
+        isGlobal = ( aTable == &GFootprintTable );
+        libTable = aTable;
+        fileDlgHook = nullptr;
+    }
 
     wxFileName fn( aFilename );
 
     if( aFilename.IsEmpty() )
     {
-        if( !LibraryFileBrowser( true, fn, FILEEXT::KiCadFootprintLibPathWildcard(),
-                                 FILEEXT::KiCadFootprintLibPathExtension, true, isGlobal,
-                                 PATHS::GetDefaultUserFootprintsPath() ) )
+        if( !LibraryFileBrowser( aDialogTitle, true, fn, FILEEXT::KiCadFootprintLibPathWildcard(),
+                                 FILEEXT::KiCadFootprintLibPathExtension, true, fileDlgHook ) )
         {
             return false;
+        }
+
+        if( fileDlgHook )
+        {
+            isGlobal = fileDlgHook->GetUseGlobalTable();
+            libTable = isGlobal ? &GFootprintTable : PROJECT_PCB::PcbFootprintLibs( &Prj() );
         }
     }
 
@@ -488,8 +522,7 @@ bool PCB_BASE_EDIT_FRAME::AddLibrary( const wxString& aFilename, FP_LIB_TABLE* a
 
     // KiCad lib is our default guess.  So it might not have the .pretty extension
     // In this case, the extension is part of the library name
-    if( lib_type == PCB_IO_MGR::KICAD_SEXP
-        && fn.GetExt() != FILEEXT::KiCadFootprintLibPathExtension )
+    if( lib_type == PCB_IO_MGR::KICAD_SEXP && fn.GetExt() != FILEEXT::KiCadFootprintLibPathExtension )
         libName = fn.GetFullName();
 
     // try to use path normalized to an environmental variable or project path
@@ -498,12 +531,12 @@ bool PCB_BASE_EDIT_FRAME::AddLibrary( const wxString& aFilename, FP_LIB_TABLE* a
     try
     {
         FP_LIB_TABLE_ROW* row = new FP_LIB_TABLE_ROW( libName, normalizedPath, type, wxEmptyString );
-        aTable->InsertRow( row );
+        libTable->InsertRow( row );
 
         if( isGlobal )
-            GFootprintTable.Save( FP_LIB_TABLE::GetGlobalTableFileName() );
+            libTable->Save( FP_LIB_TABLE::GetGlobalTableFileName() );
         else
-            PROJECT_PCB::PcbFootprintLibs( &Prj() )->Save( Prj().FootprintLibTblName() );
+            libTable->Save( Prj().FootprintLibTblName() );
     }
     catch( const IO_ERROR& ioe )
     {
@@ -600,130 +633,51 @@ void PCB_EDIT_FRAME::ExportFootprintsToLibrary( bool aStoreInNewLib, const wxStr
         return;
     }
 
-    auto resetReference =
-            []( FOOTPRINT* aFootprint )
-            {
-                aFootprint->SetReference( "REF**" );
-            };
+    bool     map = false;
+    PROJECT& prj = Prj();
+    wxString nickname = SelectLibrary( _( "Export Footprints" ), _( "Export footprints to library:" ),
+                                       { { _( "Update board footprints to link to exported footprints" ), &map } } );
 
-    auto resetGroup =
-            []( FOOTPRINT* aFootprint )
-            {
-                if( EDA_GROUP* parentGroup = aFootprint->GetParentGroup() )
-                    parentGroup->RemoveItem( aFootprint );
-            };
+    if( !nickname )     // Aborted
+        return;
 
-    auto resetZones =
-            []( FOOTPRINT* aFootprint )
-            {
-                for( ZONE* zone : aFootprint->Zones() )
-                    zone->Move( -aFootprint->GetPosition() );
-            };
+    prj.SetRString( PROJECT::PCB_LIB_NICKNAME, nickname );
 
-    if( !aStoreInNewLib )
+    for( FOOTPRINT* footprint : GetBoard()->Footprints() )
     {
-        // The footprints are saved in an existing .pretty library in the fp lib table
-        PROJECT& prj = Prj();
-        wxString last_nickname = prj.GetRString( PROJECT::PCB_LIB_NICKNAME );
-        wxString nickname = SelectLibrary( last_nickname );
-
-        if( !nickname )     // Aborted
-            return;
-
-        bool map = IsOK( this, wxString::Format( _( "Update footprints on board to refer to %s?" ),
-                                                 nickname ) );
-
-        prj.SetRString( PROJECT::PCB_LIB_NICKNAME, nickname );
-
-        for( FOOTPRINT* footprint : GetBoard()->Footprints() )
+        try
         {
-            try
+            FP_LIB_TABLE* tbl = PROJECT_PCB::PcbFootprintLibs( &prj );
+
+            if( !footprint->GetFPID().GetLibItemName().empty() )    // Handle old boards.
             {
-                FP_LIB_TABLE* tbl = PROJECT_PCB::PcbFootprintLibs( &prj );
+                FOOTPRINT* fpCopy = static_cast<FOOTPRINT*>( footprint->Duplicate( IGNORE_PARENT_GROUP ) );
 
-                if( !footprint->GetFPID().GetLibItemName().empty() )    // Handle old boards.
-                {
-                    FOOTPRINT* fpCopy = static_cast<FOOTPRINT*>( footprint->Duplicate( IGNORE_PARENT_GROUP ) );
+                // Reset reference designator, group membership, and zone offset before saving
 
-                    // Reset reference designator and group membership before saving
-                    resetReference( fpCopy );
-                    resetGroup( fpCopy );
-                    resetZones( fpCopy );
+                fpCopy->SetReference( "REF**" );
 
-                    tbl->FootprintSave( nickname, fpCopy, true );
+                if( EDA_GROUP* parentGroup = fpCopy->GetParentGroup() )
+                    parentGroup->RemoveItem( fpCopy );
 
-                    delete fpCopy;
-                }
-            }
-            catch( const IO_ERROR& ioe )
-            {
-                DisplayError( this, ioe.What() );
-            }
+                for( ZONE* zone : fpCopy->Zones() )
+                    zone->Move( -fpCopy->GetPosition() );
 
-            if( map )
-            {
-                LIB_ID id = footprint->GetFPID();
-                id.SetLibNickname( nickname );
-                footprint->SetFPID( id );
+                tbl->FootprintSave( nickname, fpCopy, true );
+
+                delete fpCopy;
             }
         }
-    }
-    else
-    {
-        // The footprints are saved in a new .pretty library.
-        // If this library already exists, all previous footprints will be deleted
-        wxString libPath = CreateNewLibrary( aLibName );
-
-        if( libPath.IsEmpty() )     // Aborted
-            return;
-
-        if( aLibPath )
-            *aLibPath = libPath;
-
-        wxString libNickname;
-        bool     map = IsOK( this, _( "Update footprints on board to refer to new library?" ) );
+        catch( const IO_ERROR& ioe )
+        {
+            DisplayError( this, ioe.What() );
+        }
 
         if( map )
         {
-            const LIB_TABLE_ROW* row = PROJECT_PCB::PcbFootprintLibs( &Prj() )->FindRowByURI( libPath );
-
-            if( row )
-                libNickname = row->GetNickName();
-        }
-
-        PCB_IO_MGR::PCB_FILE_T piType = PCB_IO_MGR::KICAD_SEXP;
-        IO_RELEASER<PCB_IO>    pi( PCB_IO_MGR::PluginFind( piType ) );
-        std::map<std::string, UTF8> options { { "skip_cache_validation", "1" } }; // Skip cache validation -- we just created it
-
-        for( FOOTPRINT* footprint : GetBoard()->Footprints() )
-        {
-            try
-            {
-                if( !footprint->GetFPID().GetLibItemName().empty() )    // Handle old boards.
-                {
-                    FOOTPRINT* fpCopy = static_cast<FOOTPRINT*>( footprint->Duplicate( IGNORE_PARENT_GROUP ) );
-
-                    // Reset reference designator and group membership before saving
-                    resetReference( fpCopy );
-                    resetGroup( fpCopy );
-                    resetZones( fpCopy );
-
-                    pi->FootprintSave( libPath, fpCopy, &options );
-
-                    delete fpCopy;
-                }
-            }
-            catch( const IO_ERROR& ioe )
-            {
-                DisplayError( this, ioe.What() );
-            }
-
-            if( map )
-            {
-                LIB_ID id = footprint->GetFPID();
-                id.SetLibNickname( libNickname );
-                footprint->SetFPID( id );
-            }
+            LIB_ID id = footprint->GetFPID();
+            id.SetLibNickname( nickname );
+            footprint->SetFPID( id );
         }
     }
 }
@@ -1000,9 +954,6 @@ bool FOOTPRINT_EDIT_FRAME::SaveFootprintToBoard( bool aAddNew )
 }
 
 
-static int ID_MAKE_NEW_LIBRARY = 4173;
-
-
 class SAVE_AS_DIALOG : public EDA_LIST_DIALOG
 {
 public:
@@ -1012,41 +963,12 @@ public:
             EDA_LIST_DIALOG( aParent, _( "Save Footprint As" ), false ),
             m_validator( std::move( aValidator ) )
     {
-        COMMON_SETTINGS*           cfg = Pgm().GetCommonSettings();
-        PROJECT_FILE&              project = aParent->Prj().GetProjectFile();
         FP_LIB_TABLE*              tbl = PROJECT_PCB::PcbFootprintLibs( &aParent->Prj() );
         std::vector<wxString>      nicknames = tbl->GetLogicalLibs();
         wxArrayString              headers;
         std::vector<wxArrayString> itemsToDisplay;
 
-        headers.Add( _( "Nickname" ) );
-        headers.Add( _( "Description" ) );
-
-        for( const wxString& nickname : nicknames )
-        {
-            if( alg::contains( project.m_PinnedFootprintLibs, nickname )
-                    || alg::contains( cfg->m_Session.pinned_fp_libs, nickname ) )
-            {
-                wxArrayString item;
-
-                item.Add( LIB_TREE_MODEL_ADAPTER::GetPinningSymbol() + nickname );
-                item.Add( tbl->GetDescription( nickname ) );
-                itemsToDisplay.push_back( item );
-            }
-        }
-
-        for( const wxString& nickname : nicknames )
-        {
-            if( !alg::contains( project.m_PinnedFootprintLibs, nickname )
-                    && !alg::contains( cfg->m_Session.pinned_fp_libs, nickname ) )
-            {
-                wxArrayString item;
-
-                item.Add( nickname );
-                item.Add( tbl->GetDescription( nickname ) );
-                itemsToDisplay.push_back( item );
-            }
-        }
+        aParent->GetLibraryItemsForListDialog( headers, itemsToDisplay );
         initDialog( headers, itemsToDisplay, aLibraryPreselect );
 
         SetListLabel( _( "Save in library:" ) );
@@ -1162,8 +1084,7 @@ bool FOOTPRINT_EDIT_FRAME::SaveFootprintAs( FOOTPRINT* aFootprint )
                                                          newName,
                                                          newLib );
 
-                        KIDIALOG errorDlg( this, msg, _( "Confirmation" ),
-                                           wxOK | wxCANCEL | wxICON_WARNING );
+                        KIDIALOG errorDlg( this, msg, _( "Confirmation" ), wxOK | wxCANCEL | wxICON_WARNING );
                         errorDlg.SetOKLabel( _( "Overwrite" ) );
 
                         return errorDlg.ShowModal() == wxID_OK;
@@ -1186,8 +1107,12 @@ bool FOOTPRINT_EDIT_FRAME::SaveFootprintAs( FOOTPRINT* aFootprint )
         }
         else if( ret == ID_MAKE_NEW_LIBRARY )
         {
-            wxFileName newLibrary( CreateNewLibrary() );
-            libraryName = newLibrary.GetName();
+            wxFileName fn = CreateNewLibrary( _( "New Footprint Library" ),
+                                              Prj().GetRString( PROJECT::PCB_LIB_PATH ) );
+
+            Prj().SetRString( PROJECT::PCB_LIB_PATH, fn.GetPath() );
+            Prj().SetRString( PROJECT::PCB_LIB_NICKNAME, fn.GetName() );
+            libraryName = fn.GetName();
         }
     }
 
@@ -1351,18 +1276,16 @@ FOOTPRINT* PCB_BASE_FRAME::CreateNewFootprint( wxString aFootprintName, const wx
 }
 
 
-wxString PCB_BASE_FRAME::SelectLibrary( const wxString& aNicknameExisting )
+void PCB_BASE_FRAME::GetLibraryItemsForListDialog( wxArrayString& aHeaders,
+                                                   std::vector<wxArrayString>& aItemsToDisplay )
 {
-    wxArrayString headers;
+    aHeaders.Add( _( "Library" ) );
+    aHeaders.Add( _( "Description" ) );
 
-    headers.Add( _( "Nickname" ) );
-    headers.Add( _( "Description" ) );
-
-    COMMON_SETTINGS*             cfg = Pgm().GetCommonSettings();
-    PROJECT_FILE&                project = Kiway().Prj().GetProjectFile();
-    FP_LIB_TABLE*                fptbl = PROJECT_PCB::PcbFootprintLibs( &Prj() );
-    std::vector< wxArrayString > itemsToDisplay;
-    std::vector< wxString >      nicknames = fptbl->GetLogicalLibs();
+    COMMON_SETTINGS*      cfg = Pgm().GetCommonSettings();
+    PROJECT_FILE&         project = Kiway().Prj().GetProjectFile();
+    FP_LIB_TABLE*         fptbl = PROJECT_PCB::PcbFootprintLibs( &Prj() );
+    std::vector<wxString> nicknames = fptbl->GetLogicalLibs();
 
     for( const wxString& nickname : nicknames )
     {
@@ -1373,7 +1296,7 @@ wxString PCB_BASE_FRAME::SelectLibrary( const wxString& aNicknameExisting )
 
             item.Add( LIB_TREE_MODEL_ADAPTER::GetPinningSymbol() + nickname );
             item.Add( fptbl->GetDescription( nickname ) );
-            itemsToDisplay.push_back( item );
+            aItemsToDisplay.push_back( item );
         }
     }
 
@@ -1386,15 +1309,9 @@ wxString PCB_BASE_FRAME::SelectLibrary( const wxString& aNicknameExisting )
 
             item.Add( nickname );
             item.Add( fptbl->GetDescription( nickname ) );
-            itemsToDisplay.push_back( item );
+            aItemsToDisplay.push_back( item );
         }
     }
-
-    EDA_LIST_DIALOG dlg( this, _( "Select Library" ), headers, itemsToDisplay, aNicknameExisting,
-                         false );
-
-    if( dlg.ShowModal() != wxID_OK )
-        return wxEmptyString;
-
-    return dlg.GetTextSelection();
 }
+
+

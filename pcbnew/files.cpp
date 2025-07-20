@@ -832,7 +832,8 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
             // The footprints are saved in a new .pretty library.
             // If this library already exists, all previous footprints will be deleted
             std::vector<FOOTPRINT*> loadedFootprints = pi->GetImportedCachedLibraryFootprints();
-            wxString                newLibPath = CreateNewProjectLibrary( libNickName );
+            wxString                newLibPath = CreateNewProjectLibrary( _( "New Footprint Library" ),
+                                                                          libNickName );
 
             // Only create the new library if CreateNewLibrary succeeded (note that this fails if
             // the library already exists and the user aborts after seeing the warning message

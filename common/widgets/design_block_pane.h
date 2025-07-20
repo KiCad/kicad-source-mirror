@@ -62,26 +62,21 @@ public:
     void RefreshLibs();
 
     /**
-     * If a library name is given, creates a new design block library in the project folder
-     * with the given name. If no library name is given it prompts user for a library path,
-     * then creates a new design block library at that location.
-     * If library exists, user is warned about that, and is given a chance
-     * to abort the new creation, and in that case existing library is first deleted.
+     * Creates a new design block library.
      *
-     * @param aProposedName is the initial path and filename shown in the file chooser dialog.
      * @return The newly created library path if library was successfully created, else
      *         wxEmptyString because user aborted or error.
      */
-    wxString CreateNewDesignBlockLibrary( const wxString& aLibName = wxEmptyString,
-                                          const wxString& aProposedName = wxEmptyString );
+    wxString CreateNewDesignBlockLibrary( const wxString& aDialogTitle );
 
     /**
-     * Add an existing library to either the global or project library table.
+     * Add an existing library to a library table (presumed to be either the global or project
+     * design block table).
      *
-     * @param aFileName the library to add; a file open dialog will be displayed if empty.
      * @return true if successfully added.
      */
-    bool AddDesignBlockLibrary( const wxString& aFilename, DESIGN_BLOCK_LIB_TABLE* aTable );
+    bool AddDesignBlockLibrary( const wxString& aDialogTitle, const wxString& aFilename,
+                                DESIGN_BLOCK_LIB_TABLE* aTable );
 
     bool DeleteDesignBlockLibrary( const wxString& aLibName, bool aConfirm );
 
@@ -101,9 +96,8 @@ protected:
     PANEL_DESIGN_BLOCK_CHOOSER* m_chooserPanel = nullptr;
 
 private:
-    bool                    checkOverwrite( wxWindow* aFrame, wxString& libname, wxString& newName );
-    DESIGN_BLOCK_LIB_TABLE* selectDesignBlockLibTable( bool aOptional = false );
-    wxString                createNewDesignBlockLibrary( const wxString& aLibName, const wxString& aProposedName,
-                                                         DESIGN_BLOCK_LIB_TABLE* aTable );
+    bool checkOverwrite( wxWindow* aFrame, wxString& libname, wxString& newName );
+
+    wxString createNewDesignBlockLibrary( const wxString& aDialogTitle );
 };
 #endif

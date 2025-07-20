@@ -79,6 +79,7 @@
 #include <widgets/sch_properties_panel.h>
 #include <widgets/symbol_tree_pane.h>
 #include <widgets/wx_aui_utils.h>
+#include <widgets/filedlg_hook_new_library.h>
 #include <wildcards_and_files_ext.h>
 #include <panel_sym_lib_table.h>
 #include <string_utils.h>
@@ -1076,18 +1077,13 @@ bool SYMBOL_EDIT_FRAME::SynchronizePins()
 
 wxString SYMBOL_EDIT_FRAME::AddLibraryFile( bool aCreateNew )
 {
-    // Select the target library table (global/project)
-    SYMBOL_LIB_TABLE* libTable = SelectSymLibTable();
+    wxFileName               fn = m_libMgr->GetUniqueLibraryName();
+    bool                     useGlobalTable = false;
+    FILEDLG_HOOK_NEW_LIBRARY tableChooser( useGlobalTable );
 
-    if( !libTable )
-        return wxEmptyString;
-
-    wxFileName fn = m_libMgr->GetUniqueLibraryName();
-
-    if( !LibraryFileBrowser( !aCreateNew, fn, FILEEXT::KiCadSymbolLibFileWildcard(),
-                             FILEEXT::KiCadSymbolLibFileExtension, false,
-                             ( libTable == &SYMBOL_LIB_TABLE::GetGlobalLibTable() ),
-                             PATHS::GetDefaultUserSymbolsPath() ) )
+    if( !LibraryFileBrowser( aCreateNew ? _( "New Symbol Library" ) : _( "Add Symbol Library" ),
+                             !aCreateNew, fn, FILEEXT::KiCadSymbolLibFileWildcard(),
+                             FILEEXT::KiCadSymbolLibFileExtension, false, &tableChooser ) )
     {
         return wxEmptyString;
     }
@@ -1097,11 +1093,16 @@ wxString SYMBOL_EDIT_FRAME::AddLibraryFile( bool aCreateNew )
     if( libName.IsEmpty() )
         return wxEmptyString;
 
+    useGlobalTable = tableChooser.GetUseGlobalTable();
+
     if( m_libMgr->LibraryExists( libName ) )
     {
         DisplayError( this, wxString::Format( _( "Library '%s' already exists." ), libName ) );
         return wxEmptyString;
     }
+
+    SYMBOL_LIB_TABLE* libTable = useGlobalTable ? &SYMBOL_LIB_TABLE::GetGlobalLibTable()
+                                                : PROJECT_SCH::SchSymbolLibTable( &Prj() );
 
     if( aCreateNew )
     {
@@ -1135,15 +1136,8 @@ wxString SYMBOL_EDIT_FRAME::AddLibraryFile( bool aCreateNew )
 
 void SYMBOL_EDIT_FRAME::DdAddLibrary( wxString aLibFile )
 {
-        // Select the target library table (global/project)
-    SYMBOL_LIB_TABLE* libTable = SelectSymLibTable();
-
-    if( !libTable )
-        return;
-
     wxFileName fn = wxFileName( aLibFile );
-
-    wxString libName = fn.GetName();
+    wxString   libName = fn.GetName();
 
     if( libName.IsEmpty() )
         return;
@@ -1154,14 +1148,13 @@ void SYMBOL_EDIT_FRAME::DdAddLibrary( wxString aLibFile )
         return;
     }
 
-    if( !m_libMgr->AddLibrary( fn.GetFullPath(), *libTable ) )
+    if( !m_libMgr->AddLibrary( fn.GetFullPath(), *PROJECT_SCH::SchSymbolLibTable( &Prj() ) ) )
     {
         DisplayError( this, _( "Could not open the library file." ) );
         return;
     }
 
-    bool globalTable = ( libTable == &SYMBOL_LIB_TABLE::GetGlobalLibTable() );
-    saveSymbolLibTables( globalTable, !globalTable );
+    saveSymbolLibTables( false, true );
 
     std::string packet = fn.GetFullPath().ToStdString();
     this->Kiway().ExpressMail( FRAME_SCH_SYMBOL_EDITOR, MAIL_LIB_EDIT, packet );

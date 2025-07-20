@@ -118,7 +118,7 @@ int DESIGN_BLOCK_CONTROL::UnpinLibrary( const TOOL_EVENT& aEvent )
 
 int DESIGN_BLOCK_CONTROL::NewLibrary( const TOOL_EVENT& aEvent )
 {
-    if( getDesignBlockPane()->CreateNewDesignBlockLibrary() != wxEmptyString )
+    if( !getDesignBlockPane()->CreateNewDesignBlockLibrary( _( "New Design Block Library" ) ).IsEmpty() )
     {
         notifyOtherFrames();
         return 0;

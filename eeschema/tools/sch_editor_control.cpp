@@ -350,10 +350,18 @@ void SCH_EDITOR_CONTROL::doCrossProbeSchToPcb( const TOOL_EVENT& aEvent, bool aF
 
 int SCH_EDITOR_CONTROL::ExportSymbolsToLibrary( const TOOL_EVENT& aEvent )
 {
-    bool savePowerSymbols = IsOK( m_frame,
-                                  _( "Include power symbols in schematic to the library?" ) );
+    bool                   savePowerSymbols = false;
+    bool                   map = false;
+    SYMBOL_LIBRARY_MANAGER mgr( *m_frame );
+    wxString               targetLib;
 
-    bool createNew = aEvent.IsAction( &SCH_ACTIONS::exportSymbolsToNewLibrary );
+    targetLib = m_frame->SelectLibrary( _( "Export Symbols" ), _( "Export symbols to library:" ),
+                                        { { _( "Include power symbols in export" ), &savePowerSymbols },
+                                          { _( "Update schematic symbols to link to exported symbols" ), &map }
+                                        } );
+
+    if( targetLib.empty() )
+        return 0;
 
     SCH_SHEET_LIST     sheets = m_frame->Schematic().BuildSheetListSortedByPageNumbers();
     SCH_REFERENCE_LIST symbols;
@@ -381,62 +389,11 @@ int SCH_EDITOR_CONTROL::ExportSymbolsToLibrary( const TOOL_EVENT& aEvent )
         symbolMap[id].emplace_back( symbol );
     }
 
-    SYMBOL_LIBRARY_MANAGER mgr( *m_frame );
-
-    wxString targetLib;
-
-    if( createNew )
-    {
-        wxFileName fn;
-        SYMBOL_LIB_TABLE* libTable = m_frame->SelectSymLibTable();
-
-        if( !libTable )     // Cancelled by user
-            return 0;
-
-        if( !m_frame->LibraryFileBrowser( false, fn, FILEEXT::KiCadSymbolLibFileWildcard(),
-                                          FILEEXT::KiCadSymbolLibFileExtension, false,
-                                          ( libTable == &SYMBOL_LIB_TABLE::GetGlobalLibTable() ),
-                                          PATHS::GetDefaultUserSymbolsPath() ) )
-        {
-            return 0;
-        }
-
-        targetLib = fn.GetName();
-
-        if( libTable->HasLibrary( targetLib, false ) )
-        {
-            DisplayError( m_frame, wxString::Format( _( "Library '%s' already exists." ),
-                                                     targetLib ) );
-            return 0;
-        }
-
-        // if the "new" library is in fact an existing library and the used asked for replacing
-        // it by the recreated lib, erase it:
-        if( fn.FileExists() )
-            wxRemoveFile( fn.GetFullPath() );
-
-        if( !mgr.CreateLibrary( fn.GetFullPath(), *libTable ) )
-        {
-            DisplayError( m_frame, wxString::Format( _( "Could not add library '%s'." ),
-                                                     targetLib ) );
-            return 0;
-        }
-    }
-    else
-    {
-        targetLib = m_frame->SelectLibraryFromList();
-    }
-
-    if( targetLib.IsEmpty() )
-        return 0;
-
-    bool map = IsOK( m_frame, _( "Update symbols in schematic to refer to new library?" ) );
-    bool append = false;
-
-    SCH_COMMIT commit( m_frame );
-    SYMBOL_LIB_TABLE_ROW* row = mgr.GetLibrary( targetLib );
+    bool                   append = false;
+    SCH_COMMIT             commit( m_frame );
+    SYMBOL_LIB_TABLE_ROW*  row = mgr.GetLibrary( targetLib );
     SCH_IO_MGR::SCH_FILE_T type = SCH_IO_MGR::EnumFromStr( row->GetType() );
-    IO_RELEASER<SCH_IO> pi( SCH_IO_MGR::FindPlugin( type ) );
+    IO_RELEASER<SCH_IO>    pi( SCH_IO_MGR::FindPlugin( type ) );
 
     wxFileName dest = row->GetFullURI( true );
     dest.Normalize( FN_NORMALIZE_FLAGS | wxPATH_NORM_ENV_VARS );
@@ -3146,7 +3103,6 @@ void SCH_EDITOR_CONTROL::setTransitions()
     Go( &SCH_EDITOR_CONTROL::RepairSchematic,        SCH_ACTIONS::repairSchematic.MakeEvent() );
 
     Go( &SCH_EDITOR_CONTROL::ExportSymbolsToLibrary, SCH_ACTIONS::exportSymbolsToLibrary.MakeEvent() );
-    Go( &SCH_EDITOR_CONTROL::ExportSymbolsToLibrary, SCH_ACTIONS::exportSymbolsToNewLibrary.MakeEvent() );
 
     Go( &SCH_EDITOR_CONTROL::PlaceLinkedDesignBlock, SCH_ACTIONS::placeLinkedDesignBlock.MakeEvent() );
     Go( &SCH_EDITOR_CONTROL::SaveToLinkedDesignBlock, SCH_ACTIONS::saveToLinkedDesignBlock.MakeEvent() );

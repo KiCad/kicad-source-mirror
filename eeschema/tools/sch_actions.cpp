@@ -1183,18 +1183,10 @@ TOOL_ACTION SCH_ACTIONS::generateBOMExternal( TOOL_ACTION_ARGS()
 TOOL_ACTION SCH_ACTIONS::exportSymbolsToLibrary( TOOL_ACTION_ARGS()
        .Name( "eeschema.EditorControl.exportSymbolsToLibrary" )
        .Scope( AS_GLOBAL )
-       .FriendlyName( _( "Export Symbols to Library..." ) )
-       .Tooltip( _( "Add symbols used in schematic to an existing symbol library\n"
+       .FriendlyName( _( "Export Symbols..." ) )
+       .Tooltip( _( "Add symbols from schematic to a new or an existing symbol library\n"
                     "(does not remove other symbols from this library)" ) )
        .Icon( BITMAPS::library_archive ) );
-
-TOOL_ACTION SCH_ACTIONS::exportSymbolsToNewLibrary( TOOL_ACTION_ARGS()
-       .Name( "eeschema.EditorControl.exportSymbolsToNewLibrary" )
-       .Scope( AS_GLOBAL )
-       .FriendlyName( _( "Export Symbols to New Library..." ) )
-       .Tooltip( _( "Create a new symbol library using the symbols used in the schematic\n"
-                    "(if the library already exists it will be replaced)" ) )
-       .Icon( BITMAPS::library_archive_as ) );
 
 TOOL_ACTION SCH_ACTIONS::selectOnPCB( TOOL_ACTION_ARGS()
         .Name( "eeschema.EditorControl.selectOnPCB" )

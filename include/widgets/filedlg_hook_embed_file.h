@@ -17,23 +17,22 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef KICAD_FILEDLG_OPEN_EMBED_FILE_H
-#define KICAD_FILEDLG_OPEN_EMBED_FILE_H
+#pragma once
 
 #include <wx/wx.h>
 #include <wx/filedlgcustomize.h>
 
 
-class FILEDLG_OPEN_EMBED_FILE : public wxFileDialogCustomizeHook
+class FILEDLG_HOOK_EMBED_FILE : public wxFileDialogCustomizeHook
 {
 public:
-    FILEDLG_OPEN_EMBED_FILE( bool aDefaultEmbed = true ) :
+    FILEDLG_HOOK_EMBED_FILE( bool aDefaultEmbed = true ) :
             m_embed( aDefaultEmbed )
     {};
 
     virtual void AddCustomControls( wxFileDialogCustomize& customizer ) override
     {
-        m_cb = customizer.AddCheckBox( _( "Embed File" ) );
+        m_cb = customizer.AddCheckBox( _( "Embed file" ) );
         m_cb->SetValue( m_embed );
     }
 
@@ -49,7 +48,5 @@ private:
 
     wxFileDialogCheckBox* m_cb = nullptr;
 
-    wxDECLARE_NO_COPY_CLASS( FILEDLG_OPEN_EMBED_FILE );
+    wxDECLARE_NO_COPY_CLASS( FILEDLG_HOOK_EMBED_FILE );
 };
-
-#endif //KICAD_FILEDLG_OPEN_EMBED_FILE_H
