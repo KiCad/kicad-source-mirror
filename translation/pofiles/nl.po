@@ -18,16 +18,15 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-18 08:10-0700\n"
-"PO-Revision-Date: 2025-02-19 03:14+0000\n"
-"Last-Translator: Seth Hillbrand <seth@kipro-pcb.com>\n"
-"Language-Team: Dutch <https://hosted.weblate.org/projects/kicad/master-"
-"source/nl/>\n"
+"PO-Revision-Date: 2025-07-20 20:02+0000\n"
+"Last-Translator: Stefan De Raedemaeker <stefandr.dev@gmail.com>\n"
+"Language-Team: Dutch <https://hosted.weblate.org/projects/kicad/v9/nl/>\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.10.1-dev\n"
+"X-Generator: Weblate 5.13-dev\n"
 "X-Poedit-Basepath: ../../\n"
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-SearchPath-0: pcbnew\n"
@@ -656,229 +655,184 @@ msgid "Show user ECO2 layer"
 msgstr "Gebruikers-ECO2 laag weergeven"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:68
-#, fuzzy
 msgid "Show user defined layer 1"
-msgstr "Gebruikersgedefinieerde laag 1"
+msgstr "Gebruikersgedefinieerde laag 1 weergeven"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:69
-#, fuzzy
 msgid "Show user defined layer 2"
-msgstr "Gebruikersgedefinieerde laag 2"
+msgstr "Gebruikersgedefinieerde laag 2 weergeven"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:70
-#, fuzzy
 msgid "Show user defined layer 3"
-msgstr "Gebruikersgedefinieerde laag 3"
+msgstr "Gebruikersgedefinieerde laag 3 weergeven"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:71
-#, fuzzy
 msgid "Show user defined layer 4"
-msgstr "Gebruikersgedefinieerde laag 4"
+msgstr "Gebruikersgedefinieerde laag 4 weergeven"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:72
-#, fuzzy
 msgid "Show user defined layer 5"
-msgstr "Gebruikersgedefinieerde laag 5"
+msgstr "Gebruikersgedefinieerde laag 5 weergeven"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:73
-#, fuzzy
 msgid "Show user defined layer 6"
-msgstr "Gebruikersgedefinieerde laag 6"
+msgstr "Gebruikersgedefinieerde laag 6 weergeven"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:74
-#, fuzzy
 msgid "Show user defined layer 7"
-msgstr "Gebruikersgedefinieerde laag 7"
+msgstr "Gebruikersgedefinieerde laag 7 weergeven"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:75
-#, fuzzy
 msgid "Show user defined layer 8"
-msgstr "Gebruikersgedefinieerde laag 8"
+msgstr "Gebruikersgedefinieerde laag 8 weergeven"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:76
-#, fuzzy
 msgid "Show user defined layer 9"
-msgstr "Gebruikersgedefinieerde laag 9"
+msgstr "Gebruikersgedefinieerde laag 9 weergeven"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:77
-#, fuzzy
 msgid "Show user defined layer 10"
-msgstr "Gebruikersgedefinieerde laag 1"
+msgstr "Gebruikersgedefinieerde laag 10 weergeven"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:78
-#, fuzzy
 msgid "Show user defined layer 11"
-msgstr "Gebruikersgedefinieerde laag 1"
+msgstr "Gebruikersgedefinieerde laag 11 weergeven"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:79
-#, fuzzy
 msgid "Show user defined layer 12"
-msgstr "Gebruikersgedefinieerde laag 1"
+msgstr "Gebruikersgedefinieerde laag 12 weergeven"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:80
-#, fuzzy
 msgid "Show user defined layer 13"
-msgstr "Gebruikersgedefinieerde laag 1"
+msgstr "Gebruikersgedefinieerde laag 13 weergeven"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:81
-#, fuzzy
 msgid "Show user defined layer 14"
-msgstr "Gebruikersgedefinieerde laag 1"
+msgstr "Gebruikersgedefinieerde laag 14 weergeven"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:82
-#, fuzzy
 msgid "Show user defined layer 15"
-msgstr "Gebruikersgedefinieerde laag 1"
+msgstr "Gebruikersgedefinieerde laag 15 weergeven"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:83
-#, fuzzy
 msgid "Show user defined layer 16"
-msgstr "Gebruikersgedefinieerde laag 1"
+msgstr "Gebruikersgedefinieerde laag 16 weergeven"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:84
-#, fuzzy
 msgid "Show user defined layer 17"
-msgstr "Gebruikersgedefinieerde laag 1"
+msgstr "Gebruikersgedefinieerde laag 17 weergeven"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:85
-#, fuzzy
 msgid "Show user defined layer 18"
-msgstr "Gebruikersgedefinieerde laag 1"
+msgstr "Gebruikersgedefinieerde laag 18 weergeven"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:86
-#, fuzzy
 msgid "Show user defined layer 19"
-msgstr "Gebruikersgedefinieerde laag 1"
+msgstr "Gebruikersgedefinieerde laag 19 weergeven"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:87
-#, fuzzy
 msgid "Show user defined layer 20"
-msgstr "Gebruikersgedefinieerde laag 2"
+msgstr "Gebruikersgedefinieerde laag 20 weergeven"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:88
-#, fuzzy
 msgid "Show user defined layer 21"
-msgstr "Gebruikersgedefinieerde laag 2"
+msgstr "Gebruikersgedefinieerde laag 21 weergeven"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:89
-#, fuzzy
 msgid "Show user defined layer 22"
-msgstr "Gebruikersgedefinieerde laag 2"
+msgstr "Gebruikersgedefinieerde laag 22 weergeven"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:90
-#, fuzzy
 msgid "Show user defined layer 23"
-msgstr "Gebruikersgedefinieerde laag 2"
+msgstr "Gebruikersgedefinieerde laag 23 weergeven"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:91
-#, fuzzy
 msgid "Show user defined layer 24"
-msgstr "Gebruikersgedefinieerde laag 2"
+msgstr "Gebruikersgedefinieerde laag 24 weergeven"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:92
-#, fuzzy
 msgid "Show user defined layer 25"
-msgstr "Gebruikersgedefinieerde laag 2"
+msgstr "Gebruikersgedefinieerde laag 25 weergeven"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:93
-#, fuzzy
 msgid "Show user defined layer 26"
-msgstr "Gebruikersgedefinieerde laag 2"
+msgstr "Gebruikersgedefinieerde laag 26 weergeven"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:94
-#, fuzzy
 msgid "Show user defined layer 27"
-msgstr "Gebruikersgedefinieerde laag 2"
+msgstr "Gebruikersgedefinieerde laag 27 weergeven"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:95
-#, fuzzy
 msgid "Show user defined layer 28"
-msgstr "Gebruikersgedefinieerde laag 2"
+msgstr "Gebruikersgedefinieerde laag 28 weergeven"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:96
-#, fuzzy
 msgid "Show user defined layer 29"
-msgstr "Gebruikersgedefinieerde laag 2"
+msgstr "Gebruikersgedefinieerde laag 29 weergeven"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:97
-#, fuzzy
 msgid "Show user defined layer 30"
-msgstr "Gebruikersgedefinieerde laag 3"
+msgstr "Gebruikersgedefinieerde laag 30 weergeven"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:98
-#, fuzzy
 msgid "Show user defined layer 31"
-msgstr "Gebruikersgedefinieerde laag 3"
+msgstr "Gebruikersgedefinieerde laag 31 weergeven"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:99
-#, fuzzy
 msgid "Show user defined layer 32"
-msgstr "Gebruikersgedefinieerde laag 3"
+msgstr "Gebruikersgedefinieerde laag 32 weergeven"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:100
-#, fuzzy
 msgid "Show user defined layer 33"
-msgstr "Gebruikersgedefinieerde laag 3"
+msgstr "Gebruikersgedefinieerde laag 33 weergeven"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:101
-#, fuzzy
 msgid "Show user defined layer 34"
-msgstr "Gebruikersgedefinieerde laag 3"
+msgstr "Gebruikersgedefinieerde laag 34 weergeven"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:102
-#, fuzzy
 msgid "Show user defined layer 35"
-msgstr "Gebruikersgedefinieerde laag 3"
+msgstr "Gebruikersgedefinieerde laag 35 weergeven"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:103
-#, fuzzy
 msgid "Show user defined layer 36"
-msgstr "Gebruikersgedefinieerde laag 3"
+msgstr "Gebruikersgedefinieerde laag 36 weergeven"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:104
-#, fuzzy
 msgid "Show user defined layer 37"
-msgstr "Gebruikersgedefinieerde laag 3"
+msgstr "Gebruikersgedefinieerde laag 37 weergeven"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:105
-#, fuzzy
 msgid "Show user defined layer 38"
-msgstr "Gebruikersgedefinieerde laag 3"
+msgstr "Gebruikersgedefinieerde laag 38 weergeven"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:106
-#, fuzzy
 msgid "Show user defined layer 39"
-msgstr "Gebruikersgedefinieerde laag 3"
+msgstr "Gebruikersgedefinieerde laag 39 weergeven"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:107
-#, fuzzy
 msgid "Show user defined layer 40"
-msgstr "Gebruikersgedefinieerde laag 4"
+msgstr "Gebruikersgedefinieerde laag 40 weergeven"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:108
-#, fuzzy
 msgid "Show user defined layer 41"
-msgstr "Gebruikersgedefinieerde laag 4"
+msgstr "Gebruikersgedefinieerde laag 41 weergeven"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:109
-#, fuzzy
 msgid "Show user defined layer 42"
-msgstr "Gebruikersgedefinieerde laag 4"
+msgstr "Gebruikersgedefinieerde laag 42 weergeven"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:110
-#, fuzzy
 msgid "Show user defined layer 43"
-msgstr "Gebruikersgedefinieerde laag 4"
+msgstr "Gebruikersgedefinieerde laag 43 weergeven"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:111
-#, fuzzy
 msgid "Show user defined layer 44"
-msgstr "Gebruikersgedefinieerde laag 4"
+msgstr "Gebruikersgedefinieerde laag 44 weergeven"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:112
-#, fuzzy
 msgid "Show user defined layer 45"
-msgstr "Gebruikersgedefinieerde laag 4"
+msgstr "Gebruikersgedefinieerde laag 45 weergeven"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:114
 msgid "Through-hole Models"
@@ -1156,9 +1110,8 @@ msgid "Configure Paths"
 msgstr "Paden instellen"
 
 #: 3d-viewer/dialogs/dialog_select_3d_model_base.cpp:82
-#, fuzzy
 msgid "Embed model"
-msgstr "Verplaats Alle Modules"
+msgstr "Model embedden"
 
 #: 3d-viewer/dialogs/dialog_select_3d_model_base.h:64
 msgid "Select 3D Model"
@@ -2160,9 +2113,8 @@ msgid "UNKNOWN (%d)"
 msgstr "ONBEKEND (%d)"
 
 #: common/design_block_io.cpp:137
-#, fuzzy
 msgid "KiCad Design Block folders"
-msgstr "Verouderde KiCad projectbestanden"
+msgstr "KiCad ontwerpblokmappen"
 
 #: common/design_block_io.cpp:174
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:3009
@@ -2198,18 +2150,18 @@ msgid "Unexpected folder '%s' found in library path '%s'."
 msgstr "Onverwacht bestand '%s' gevonden in bibliotheekpad '%s'."
 
 #: common/design_block_io.cpp:247
-#, fuzzy, c-format
+#, c-format
 msgid "Design block library '%s' cannot be deleted."
-msgstr "Bibliotheek '%s' kan niet worden verwijderd."
+msgstr "Ontwerpblokken bibliotheek '%s' kan niet worden verwijderd."
 
 #: common/design_block_io.cpp:339
-#, fuzzy, c-format
+#, c-format
 msgid "Design block metadata file '%s' could not be read."
-msgstr "Bestand '%s' kan niet worden aangemaakt."
+msgstr "Ontwerpblokken metadata bestand '%s' kan niet worden aangemaakt."
 
 #: common/design_block_io.cpp:355
 msgid "Design block does not have a valid library ID."
-msgstr ""
+msgstr "Ontwerpblok heeft geen geldige bibliotheek-ID."
 
 #: common/design_block_io.cpp:362
 #, fuzzy, c-format
@@ -2217,38 +2169,39 @@ msgid "Schematic source file '%s' does not exist."
 msgstr "Schema-bestand '%s' bestaat al."
 
 #: common/design_block_io.cpp:376
-#, fuzzy, c-format
+#, c-format
 msgid "Design block folder '%s' could not be created."
-msgstr "Bestand '%s' kan niet worden aangemaakt."
+msgstr "Ontwerpblokken map '%s' kan niet worden aangemaakt."
 
 #: common/design_block_io.cpp:393
-#, fuzzy, c-format
+#, c-format
 msgid "Schematic file '%s' could not be saved as design block at '%s'."
-msgstr "Schema-bestand '%s' bestaat al."
+msgstr ""
+"Schemabestand '%s' kan niet worden opgeslagen als ontwerpblok onder '%s'."
 
 #: common/design_block_io.cpp:427
-#, fuzzy, c-format
+#, c-format
 msgid "Design block metadata file '%s' could not be saved."
-msgstr "Bestand '%s' kan niet worden aangemaakt."
+msgstr "Ontwerpblok metadata bestand '%s' kan niet worden opgeslagen."
 
 #: common/design_block_io.cpp:441
-#, fuzzy, c-format
+#, c-format
 msgid "Design block '%s' does not exist."
-msgstr "Map '%s' bestaat niet"
+msgstr "Ontwerpblok '%s' bestaat niet"
 
 #: common/design_block_io.cpp:447
-#, fuzzy, c-format
+#, c-format
 msgid "Design block folder '%s' could not be deleted."
-msgstr "Bestand '%s' kan niet worden aangemaakt."
+msgstr "Ontwerpblok map '%s' kan niet worden aangemaakt."
 
 #: common/design_block_lib_table.cpp:234
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Duplicate library nickname '%s' found in design block library table file "
 "line %d."
 msgstr ""
 "Dubbele bijnaam voor bibliotheek '%s' gevonden in bestandregel %d van de "
-"symboolbibliotheektabel"
+"ontwerpblok bibliotheek."
 
 #: common/design_block_lib_table.cpp:348
 #, fuzzy, c-format
