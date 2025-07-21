@@ -48,9 +48,9 @@
 // Notes: These strings are static, so wxGetTranslation must be called to display the
 // transalted text
 static std::vector<std::pair<PCM_PACKAGE_TYPE, wxString>> PACKAGE_TYPE_LIST = {
-    { PT_PLUGIN, _( "Plugins (%d)" ) },
-    { PT_FAB, _( "Fabrication plugins (%d)" ) },
-    { PT_LIBRARY, _( "Libraries (%d)" ) },
+    { PT_PLUGIN,     _( "Plugins (%d)" ) },
+    { PT_FAB,        _( "Fabrication plugins (%d)" ) },
+    { PT_LIBRARY,    _( "Libraries (%d)" ) },
     { PT_COLORTHEME, _( "Color themes (%d)" ) },
 };
 
@@ -111,17 +111,17 @@ DIALOG_PCM::DIALOG_PCM( EDA_BASE_FRAME* parent, std::shared_ptr<PLUGIN_CONTENT_M
 
         case PPA_UPDATE:
             m_gridPendingActions->SetCellValue( row, PENDING_COL_ACTION, _( "Update" ) );
-            m_gridPendingActions->SetCellValue(
-                    row, PENDING_COL_VERSION,
-                    wxString::Format( wxT( "%s \u279C %s" ), aData.current_version, aVersion ) );
+            m_gridPendingActions->SetCellValue( row, PENDING_COL_VERSION,
+                                                wxString::Format( wxT( "%s \u279C %s" ),
+                                                                  aData.current_version,
+                                                                  aVersion ) );
             new_state = PPS_PENDING_UPDATE;
             break;
 
         case PPA_UNINSTALL:
             m_gridPendingActions->SetCellValue( row, PENDING_COL_ACTION, _( "Uninstall" ) );
-            m_gridPendingActions->SetCellValue(
-                    row, PENDING_COL_VERSION,
-                    m_pcm->GetInstalledPackageVersion( aData.package.identifier ) );
+            m_gridPendingActions->SetCellValue( row, PENDING_COL_VERSION,
+                                                m_pcm->GetInstalledPackageVersion( aData.package.identifier ) );
             new_state = PPS_PENDING_UNINSTALL;
             break;
         }
@@ -291,8 +291,7 @@ void DIALOG_PCM::OnRefreshClicked( wxCommandEvent& event )
 void DIALOG_PCM::OnInstallFromFileClicked( wxCommandEvent& event )
 {
     wxFileDialog open_file_dialog( this, _( "Install Package" ), wxEmptyString, wxEmptyString,
-                                   wxT( "Zip files (*.zip)|*.zip" ),
-                                   wxFD_OPEN | wxFD_FILE_MUST_EXIST );
+                                   wxT( "Zip files (*.zip)|*.zip" ), wxFD_OPEN | wxFD_FILE_MUST_EXIST );
 
     if( open_file_dialog.ShowModal() == wxID_CANCEL )
         return;

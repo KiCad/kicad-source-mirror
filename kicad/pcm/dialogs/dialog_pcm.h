@@ -106,6 +106,7 @@ private:
     ///< Discards specified pending action
     void discardAction( int aIndex );
 
+private:
     EDA_BASE_FRAME*                                            m_parentFrame;
     std::shared_ptr<PLUGIN_CONTENT_MANAGER>                    m_pcm;
     ActionCallback                                             m_actionCallback;
