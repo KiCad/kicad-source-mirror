@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Farsi\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-18 08:09-0700\n"
-"PO-Revision-Date: 2025-07-21 13:50+0000\n"
+"PO-Revision-Date: 2025-07-21 13:52+0000\n"
 "Last-Translator: Mahdi Ahmadzadeh <mahdiahmadi83427@gmail.com>\n"
 "Language-Team: Persian <https://hosted.weblate.org/projects/kicad/"
 "master-source/fa/>\n"
@@ -1282,11 +1282,11 @@ msgstr "سایه ها:"
 msgid ""
 "Number of rays that will be cast, into light direction, to evaluate a shadow "
 "point"
-msgstr ""
+msgstr "تعداد پرتوهایی که در جهت نور برای ارزیابی نقطهٔ سایه تابانده می شوند"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:84
 msgid "Reflections:"
-msgstr ""
+msgstr "بازتاب ها:"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:89
 msgid "Number of rays that will be cast to evaluate a reflection point"
