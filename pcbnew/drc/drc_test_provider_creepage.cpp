@@ -137,7 +137,7 @@ int DRC_TEST_PROVIDER_CREEPAGE::testCreepage( CREEPAGE_GRAPH& aGraph, int aNetCo
     std::shared_ptr<GRAPH_NODE> NetB = aGraph.AddNetElements( aNetCodeB, aLayer, creepageValue );
 
 
-    aGraph.GeneratePaths( creepageValue, aLayer, false );
+    aGraph.GeneratePaths( creepageValue, aLayer );
 
     std::vector<std::shared_ptr<GRAPH_NODE>> temp_nodes;
 
@@ -347,7 +347,7 @@ int DRC_TEST_PROVIDER_CREEPAGE::testCreepage()
     graph.RemoveDuplicatedShapes();
     graph.TransformCreepShapesToNodes( graph.m_shapeCollection );
 
-    graph.GeneratePaths( maxConstraint, Edge_Cuts, false );
+    graph.GeneratePaths( maxConstraint, Edge_Cuts );
 
     int  beNodeSize = graph.m_nodes.size();
     int  beConnectionsSize = graph.m_connections.size();

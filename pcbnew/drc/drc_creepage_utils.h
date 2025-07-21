@@ -69,7 +69,7 @@ struct PATH_CONNECTION
     bool isValid( const BOARD& aBoard, PCB_LAYER_ID aLayer,
                   const std::vector<BOARD_ITEM*>&       aBoardEdges,
                   const std::vector<const BOARD_ITEM*>& aIgnoreForTest, SHAPE_POLY_SET* aOutline,
-                  const std::pair<bool, bool>& aTestLocalConcavity, int aMinGrooveWidth )
+                  const std::pair<bool, bool>& aTestLocalConcavity, int aMinGrooveWidth ) const
     {
         if( !aOutline )
             return true; // We keep the segment if there is a problem
@@ -760,7 +760,7 @@ public:
     double Solve( std::shared_ptr<GRAPH_NODE>& aFrom, std::shared_ptr<GRAPH_NODE>& aTo,
                   std::vector<std::shared_ptr<GRAPH_CONNECTION>>& aResult );
 
-    void GeneratePaths( double aMaxWeight, PCB_LAYER_ID aLayer, bool aClearance );
+    void GeneratePaths( double aMaxWeight, PCB_LAYER_ID aLayer );
 
     std::shared_ptr<GRAPH_NODE> AddNetElements( int aNetCode, PCB_LAYER_ID aLayer, int aMaxCreepage );
 

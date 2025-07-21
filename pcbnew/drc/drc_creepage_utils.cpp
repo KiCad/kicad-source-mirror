@@ -2245,7 +2245,7 @@ void CREEPAGE_GRAPH::Addshape( const SHAPE& aShape, std::shared_ptr<GRAPH_NODE>&
     }
 }
 
-void CREEPAGE_GRAPH::GeneratePaths( double aMaxWeight, PCB_LAYER_ID aLayer, bool aClearance )
+void CREEPAGE_GRAPH::GeneratePaths( double aMaxWeight, PCB_LAYER_ID aLayer )
 {
     std::vector<std::shared_ptr<GRAPH_NODE>> nodes;
     std::mutex                               nodes_lock;
@@ -2265,101 +2265,133 @@ void CREEPAGE_GRAPH::GeneratePaths( double aMaxWeight, PCB_LAYER_ID aLayer, bool
                                                                 && gn1->m_net < gn2->m_net );
               } );
 
-    auto processNodes = [&]( size_t i, size_t j ) -> bool
+    // Build parent -> net -> nodes mapping for efficient filtering
+    std::unordered_map<const BOARD_ITEM*, std::unordered_map<int, std::vector<std::shared_ptr<GRAPH_NODE>>>> parent_net_groups;
+    std::vector<const BOARD_ITEM*> parent_keys;
+
+    for( const auto& gn : nodes )
     {
-            for( size_t ii = i; ii < j; ii++ )
+        const BOARD_ITEM* parent = gn->m_parent->GetParent();
+
+        if( parent_net_groups[parent].empty() )
+            parent_keys.push_back( parent );
+
+        parent_net_groups[parent][gn->m_net].push_back( gn );
+    }
+
+    // Generate work items: compare nodes between different parents only
+    struct WorkItem {
+        std::shared_ptr<GRAPH_NODE> node1, node2;
+    };
+    std::vector<WorkItem> work_items;
+
+    for( size_t i = 0; i < parent_keys.size(); ++i )
+    {
+        for( size_t j = i + 1; j < parent_keys.size(); ++j )
+        {
+            const auto& group1_nets = parent_net_groups[parent_keys[i]];
+            const auto& group2_nets = parent_net_groups[parent_keys[j]];
+
+            for( const auto& [net1, nodes1] : group1_nets )
             {
-                std::shared_ptr<GRAPH_NODE> gn1 = nodes[ii];
-
-                for( size_t jj = ii + 1; jj < nodes.size(); jj++ )
+                for( const auto& [net2, nodes2] : group2_nets )
                 {
-                    std::shared_ptr<GRAPH_NODE> gn2 = nodes[jj];
-
-                    if( gn1->m_parent->GetParent() == gn2->m_parent->GetParent() )
-                        continue;
-
-                    if( ( gn1->m_net == gn2->m_net ) && ( gn1->m_parent->IsConductive() )
-                        && ( gn2->m_parent->IsConductive() ) )
-                        continue;
-
-                    for( PATH_CONNECTION pc : GetPaths( gn1->m_parent, gn2->m_parent, aMaxWeight ) )
+                    // Skip if same net and both nets have only conductive nodes
+                    if( net1 == net2 )
                     {
-                        std::vector<const BOARD_ITEM*> IgnoreForTest;
-                        IgnoreForTest.push_back( gn1->m_parent->GetParent() );
-                        IgnoreForTest.push_back( gn2->m_parent->GetParent() );
+                        bool all_conductive_1 = std::all_of( nodes1.begin(), nodes1.end(),
+                            []( const auto& n ) { return n->m_parent->IsConductive(); } );
+                        bool all_conductive_2 = std::all_of( nodes2.begin(), nodes2.end(),
+                            []( const auto& n ) { return n->m_parent->IsConductive(); } );
 
-                        if( !pc.isValid( m_board, aLayer, m_boardEdge, IgnoreForTest, m_boardOutline,
-                                        { false, true }, m_minGrooveWidth ) )
+                        if( all_conductive_1 && all_conductive_2 )
                             continue;
-
-                        std::shared_ptr<GRAPH_NODE>* connect1 = &gn1;
-                        std::shared_ptr<GRAPH_NODE>* connect2 = &gn2;
-                        std::shared_ptr<GRAPH_NODE>  gnt1 = nullptr;
-                        std::shared_ptr<GRAPH_NODE>  gnt2 = nullptr;
-                        std::lock_guard<std::mutex> lock( nodes_lock );
-
-                        if( gn1->m_parent->GetType() != CREEP_SHAPE::TYPE::POINT )
-                        {
-                            gnt1 = AddNode( GRAPH_NODE::POINT, gn1->m_parent, pc.a1 );
-                            gnt1->m_connectDirectly = false;
-
-                            if( gn1->m_parent->IsConductive() )
-                            {
-                                std::shared_ptr<GRAPH_CONNECTION> gc = AddConnection( gn1, gnt1 );
-
-                                if( gc )
-                                    gc->m_path.m_show = false;
-                            }
-                            connect1 = &gnt1;
-                        }
-
-                        if( gn2->m_parent->GetType() != CREEP_SHAPE::TYPE::POINT )
-                        {
-                            gnt2 = AddNode( GRAPH_NODE::POINT, gn2->m_parent, pc.a2 );
-                            gnt2->m_connectDirectly = false;
-
-                            if( gn2->m_parent->IsConductive() )
-                            {
-                                std::shared_ptr<GRAPH_CONNECTION> gc = AddConnection( gn2, gnt2 );
-
-                                if( gc )
-                                    gc->m_path.m_show = false;
-                            }
-                            connect2 = &gnt2;
-                        }
-
-                        AddConnection( *connect1, *connect2, pc );
                     }
-                } // for jj
-            } // for ii
 
-            return true;
-        };
+                    // Add all node pairs from these net groups
+                    for( const auto& gn1 : nodes1 )
+                        for( const auto& gn2 : nodes2 )
+                            work_items.push_back( { gn1, gn2 } );
+                }
+            }
+        }
+    }
 
-    // Running in the clearance test, we are already in a parallelized loop, so parallelizing again
-    // will run into deadlock as all threads start waiting
-    if( aClearance )
-        processNodes( 0, nodes.size() );
+    auto processWorkItems = [&]( size_t start_idx, size_t end_idx ) -> bool
+    {
+        for( size_t idx = start_idx; idx < end_idx; ++idx )
+        {
+            auto [gn1, gn2] = work_items[idx];
+
+            for( PATH_CONNECTION pc : GetPaths( gn1->m_parent, gn2->m_parent, aMaxWeight ) )
+            {
+                std::vector<const BOARD_ITEM*> IgnoreForTest = {
+                    gn1->m_parent->GetParent(), gn2->m_parent->GetParent()
+                };
+
+                if( !pc.isValid( m_board, aLayer, m_boardEdge, IgnoreForTest, m_boardOutline,
+                                { false, true }, m_minGrooveWidth ) )
+                    continue;
+
+                std::shared_ptr<GRAPH_NODE> connect1 = gn1, connect2 = gn2;
+                std::lock_guard<std::mutex> lock( nodes_lock );
+
+                // Handle non-point node1
+                if( gn1->m_parent->GetType() != CREEP_SHAPE::TYPE::POINT )
+                {
+                    auto gnt1 = AddNode( GRAPH_NODE::POINT, gn1->m_parent, pc.a1 );
+                    gnt1->m_connectDirectly = false;
+                    connect1 = gnt1;
+
+                    if( gn1->m_parent->IsConductive() )
+                    {
+                        if( auto gc = AddConnection( gn1, gnt1 ) )
+                            gc->m_path.m_show = false;
+                    }
+                }
+
+                // Handle non-point node2
+                if( gn2->m_parent->GetType() != CREEP_SHAPE::TYPE::POINT )
+                {
+                    auto gnt2 = AddNode( GRAPH_NODE::POINT, gn2->m_parent, pc.a2 );
+                    gnt2->m_connectDirectly = false;
+                    connect2 = gnt2;
+
+                    if( gn2->m_parent->IsConductive() )
+                    {
+                        if( auto gc = AddConnection( gn2, gnt2 ) )
+                            gc->m_path.m_show = false;
+                    }
+                }
+
+                AddConnection( connect1, connect2, pc );
+            }
+        }
+        return true;
+    };
+
+    // If the number of tasks is high enough, this indicates that the calling process
+    // has already parallelized the work, so we can process all items in one go.
+    if( tp.get_tasks_total() >= tp.get_thread_count() - 4 )
+    {
+        processWorkItems( 0, work_items.size() );
+    }
     else
     {
-        auto ret = tp.parallelize_loop( nodes.size(), processNodes );
+        auto ret = tp.parallelize_loop( work_items.size(), processWorkItems );
 
         for( size_t ii = 0; ii < ret.size(); ii++ )
         {
             std::future<bool>& r = ret[ii];
 
-            if( r.valid() )
-            {
-                std::future_status status = r.wait_for( std::chrono::seconds( 0 ) );
+            if( !r.valid() )
+                continue;
 
-                while( status != std::future_status::ready )
-                {
-                    status = r.wait_for( std::chrono::milliseconds( 100 ) );
-                }
-            }
+            while( r.wait_for( std::chrono::milliseconds( 100 ) ) != std::future_status::ready ){}
         }
     }
 }
+
 
 void CREEPAGE_GRAPH::Trim( double aWeightLimit )
 {
