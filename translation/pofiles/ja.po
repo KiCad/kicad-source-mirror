@@ -16,8 +16,8 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-18 08:10-0700\n"
-"PO-Revision-Date: 2025-07-15 11:02+0000\n"
-"Last-Translator: 2tama3 <2tama3@gmail.com>\n"
+"PO-Revision-Date: 2025-07-21 21:03+0000\n"
+"Last-Translator: co8 j <co8@nifty.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/v9/ja/>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
@@ -3995,7 +3995,6 @@ msgid "Add"
 msgstr "追加"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:20
-#, fuzzy
 msgid "Enable Git tracking"
 msgstr "Gitトラッキングを有効化"
 
@@ -11682,9 +11681,8 @@ msgstr "フィールドの位置を更新/リセット"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:149
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:124
-#, fuzzy
 msgid "Check All Update Options"
-msgstr "更新オプション"
+msgstr "全ての更新オプションをチェック"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:159
 msgid "Update symbol shape and pins"
@@ -11695,9 +11693,8 @@ msgid "Update keywords and footprint filters"
 msgstr "キーワードとフットプリントフィルターを更新します"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:175
-#, fuzzy
 msgid "Update/reset pin name/number visibility"
-msgstr "フィールドの可視性を更新/リセット"
+msgstr "ピン名/ピン番号の可視性を更新/リセット"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:178
 msgid "Reset alternate pin to default"
@@ -11713,9 +11710,8 @@ msgstr "カスタム電源シンボルをリセット"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:190
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:142
-#, fuzzy
 msgid "Uncheck All Update Options"
-msgstr "更新オプション"
+msgstr "全ての更新オプションのチェックを外す"
 
 #: eeschema/dialogs/dialog_change_symbols_base.h:107
 msgid "Update Symbols from Library"
@@ -16646,24 +16642,20 @@ msgid "Keep pins attached when dragging edges"
 msgstr "エッジのドラッグ中にピンを追従させます"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:447
-#, fuzzy
 msgid "Nickname and path cannot be empty."
-msgstr "ピン名を空欄にはできません。"
+msgstr "ニックネームとパスを空欄にはできません。"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:452
-#, fuzzy
 msgid "Nickname cannot be empty."
-msgstr "ピン名を空欄にはできません。"
+msgstr "ニックネームを空欄にはできません。"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:457
-#, fuzzy
 msgid "Path cannot be empty."
-msgstr "テキストは空にできません。"
+msgstr "パスは空欄にできません。"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:470
-#, fuzzy
 msgid "Library Table Error"
-msgstr "ライブラリのニックネームのエラー"
+msgstr "ライブラリのテーブルのエラー"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:478
 #, c-format
@@ -16906,9 +16898,9 @@ msgstr "保存するシンボルが選択されていません。"
 
 #: eeschema/eeschema_jobs_handler.cpp:1029 pcbnew/pcbnew_jobs_handler.cpp:1141
 #: pcbnew/pcbnew_jobs_handler.cpp:1815
-#, fuzzy, c-format
+#, c-format
 msgid "Exporting %s"
-msgstr "予期される %s"
+msgstr "%sをエクスポート中"
 
 #: eeschema/eeschema_jobs_handler.cpp:1059 pcbnew/pcbnew_jobs_handler.cpp:1695
 msgid "Output path must not conflict with existing path\n"
@@ -18195,7 +18187,6 @@ msgid "&Duplicate '%s'"
 msgstr "'%s' を複製(&D)"
 
 #: eeschema/picksymbol.cpp:179
-#, fuzzy
 msgid "Swap Units"
 msgstr "単位を切替"
 
@@ -19993,27 +19984,22 @@ msgid "Cell Height"
 msgstr "セルの高さ"
 
 #: eeschema/sch_tablecell.cpp:246 pcbnew/pcb_tablecell.cpp:247
-#, fuzzy
 msgid "Column Width"
-msgstr "セルの幅"
+msgstr "列の幅"
 
 #: eeschema/sch_tablecell.cpp:251 pcbnew/pcb_tablecell.cpp:252
-#, fuzzy
 msgid "Row Height"
-msgstr "ボックスの高さ"
+msgstr "行の高さ"
 
 #: eeschema/sch_tablecell.cpp:256
-#, fuzzy
 msgid "Cell Properties"
-msgstr "全てのプロパティを使用"
+msgstr "セルのプロパティ"
 
 #: eeschema/sch_tablecell.cpp:258
-#, fuzzy
 msgid "Background Fill"
 msgstr "背景塗りつぶし"
 
 #: eeschema/sch_tablecell.cpp:262
-#, fuzzy
 msgid "Background Fill Color"
 msgstr "背景色"
 
@@ -23812,14 +23798,12 @@ msgid "All units of this symbol are already placed."
 msgstr "このシンボルのユニットはすべて配置済です。"
 
 #: eeschema/tools/sch_drawing_tools.cpp:757
-#, fuzzy
 msgid "Add Design Block"
 msgstr "デザインブロックを追加"
 
 #: eeschema/tools/sch_drawing_tools.cpp:758
-#, fuzzy
 msgid "Import Schematic Sheet Content"
-msgstr "回路図シートの内容を挿入..."
+msgstr "回路図シートの内容をインポート"
 
 #: eeschema/tools/sch_drawing_tools.cpp:792
 msgid "Choose Schematic"
@@ -24067,12 +24051,10 @@ msgid "Net must be labeled to assign a netclass."
 msgstr "ネットクラスを割り当てるには、ネットへのラベル付けが必要です。"
 
 #: eeschema/tools/sch_editor_control.cpp:1714 pcbnew/tools/pcb_control.cpp:1067
-#, fuzzy
 msgid ""
 "Pasting a long text text string may be very slow.  Do you want to continue?"
-msgstr ""
-"ファイル拡張子を変更するとファイルのタイプが変更されます。 \n"
-"続けますか？"
+msgstr "長いテキスト文字列を貼り付けると、非常に時間がかかる場合があります。  "
+"続けますか?"
 
 #: eeschema/tools/sch_editor_control.cpp:1836
 #, c-format
@@ -24285,9 +24267,9 @@ msgstr "シンボル ライブラリが選択されていません。"
 #: eeschema/tools/symbol_editor_control.cpp:263
 #: eeschema/tools/symbol_editor_control.cpp:413
 #: eeschema/tools/symbol_editor_control.cpp:457
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol library '%s' not found."
-msgstr "シンボル ライブラリーが見つかりません。"
+msgstr "シンボル ライブラリー '%s' が見つかりません。"
 
 #: eeschema/tools/symbol_editor_control.cpp:349
 #: pcbnew/tools/footprint_editor_control.cpp:650
@@ -24378,7 +24360,8 @@ msgstr "ユニット %d 内で、この位置にはすでに他のピンがあ�
 
 #: eeschema/tools/symbol_editor_pin_tool.cpp:243
 msgid "Disable the 'Synchronized Pins Mode' option to avoid this message."
-msgstr ""
+msgstr "このメッセージを表示しないようにするためには、'Synchronized Pins Mode' "
+"オプションを無効にしてください。"
 
 #: eeschema/tools/symbol_editor_pin_tool.cpp:244
 msgid "Place Pin Anyway"
@@ -26610,9 +26593,8 @@ msgid "Side lights elevation angle in degrees, range: 0-90"
 msgstr "サイドライトの角度、範囲：0～90"
 
 #: kicad/cli/command_pcb_render.cpp:334
-#, fuzzy
 msgid "Invalid preset\n"
-msgstr "不正な フォーマットです\n"
+msgstr "不正な プリセットです\n"
 
 #: kicad/cli/command_pcb_render.cpp:350
 msgid "Invalid background\n"
@@ -26870,7 +26852,7 @@ msgstr "インクルード JOBs:"
 
 #: kicad/dialogs/dialog_executecommand_job_settings.cpp:150
 msgid "<value set at runtime>"
-msgstr ""
+msgstr "<value set at runtime>"
 
 #: kicad/dialogs/dialog_executecommand_job_settings_base.cpp:79
 msgid "Record output messages"
@@ -26881,9 +26863,8 @@ msgid "Ignore non-zero exit code"
 msgstr "ゼロ以外の終了コードを無視する"
 
 #: kicad/dialogs/dialog_executecommand_job_settings_base.cpp:92
-#, fuzzy
 msgid "Available text variables:"
-msgstr "利用可能な材料:"
+msgstr "利用可能なテキスト:"
 
 #: kicad/dialogs/dialog_executecommand_job_settings_base.h:58
 msgid "Execute Command Job Settings"
@@ -27000,7 +26981,6 @@ msgid "Last run failed"
 msgstr "ジョブが失敗しました"
 
 #: kicad/dialogs/panel_jobset.cpp:264 kicad/dialogs/panel_jobset.cpp:976
-#, fuzzy
 msgid "Running Jobs"
 msgstr "実行中のジョブ"
 
@@ -27210,9 +27190,9 @@ msgid "Import EasyEDA Pro Project"
 msgstr "EasyEDA Pro プロジェクトをインポート"
 
 #: kicad/jobs_runner.cpp:257
-#, fuzzy, c-format
+#, c-format
 msgid "Running job %d: %s"
-msgstr "実行中のジョブ"
+msgstr "実行中のジョブ %d: %s"
 
 #: kicad/jobs_runner.cpp:301
 msgid "Job successful"
@@ -31957,86 +31937,66 @@ msgstr ""
 "同期する必要があります。"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:436
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<br/>There are %i reference designator prefixes in use<br/"
 ">**********************************************************<br/>"
 msgstr ""
-"\n"
-"\n"
-"リファレンス指定子は%i種類あります\n"
-"**********************************************************\n"
+"<br/> %i 個のリファレンス指定子を使っています<br/"
+">**********************************************************<br/>"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:452
-#, fuzzy, c-format
+#, c-format
 msgid "Excluding: %s from reannotation<br/>"
-msgstr ""
-"\n"
-"%s を再アノテーションから除外\n"
-"\n"
+msgstr "%s を再アノテーションから除外<br/>"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:455
-#, fuzzy
 msgid ""
 "<br/>Change Array\n"
 "***********************<br/>"
 msgstr ""
-"\n"
-"    配列の変更\n"
-"***********************\n"
+"<br/>配列の変更\n"
+"***********************<br/>"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:463
-#, fuzzy
 msgid "(will be ignored)"
-msgstr " は無視されます"
+msgstr "(は無視されます)"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:476
-#, fuzzy
 msgid "<br/>No footprints"
-msgstr "フットプリントなし"
+msgstr "<br/>フットプリントなし"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:482
-#, fuzzy
 msgid "<br/>*********** Sort on Footprint Coordinates ***********"
-msgstr ""
-"\n"
-"*********** %sで並べ替え***********"
+msgstr "<br/>*********** フットプリント座標で並べ替え ***********"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:484
-#, fuzzy
 msgid "<br/>*********** Sort on Reference Coordinates ***********"
-msgstr ""
-"\n"
-"*********** %sで並べ替え***********"
+msgstr "<br/>********** 参照座標で並べ替え ***********"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:488
-#, fuzzy, c-format
+#, c-format
 msgid "<br/>%d %s X, Y: %s; rounded X, Y: %s"
-msgstr ""
-"\n"
-"%d %s UUID: [%s], X, Y: %s, 丸められたX, Y, %s"
+msgstr "<br/>%d %s X, Y: %s; 丸められた X, Y: %s"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:510
 msgid "Selected options resulted in errors! Change them and try again."
 msgstr "選択したオプションでエラーが発生しました！変更してやり直してください。"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:517
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<br/>PCB has %d empty or invalid reference designations.<br/>Recommend "
 "running DRC with 'Test for parity between PCB and schematic' checked.\n"
 msgstr ""
-"\n"
-"PCB には%d 個の空または無効なリファレンス指定子があります。\n"
-"「回路図に対するフットプリントのテスト」を有効にしてDRCを実行することをお勧め"
-"します。\n"
+"<br/>PCB には%d 個の空または無効なリファレンス指定子があります。<br/"
+">「回路図に対するフットプリントのテスト」を有効にしてDRCを実行することをお勧"
+"めします。\n"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:523
-#, fuzzy, c-format
+#, c-format
 msgid "<br/>RefDes: %s Footprint: %s:%s at %s on PCB."
-msgstr ""
-"\n"
-"リファレンス指定子: %s フットプリント: %s:%s (PCB 上の %s)."
+msgstr "<br/>リファレンス指定子: %s フットプリント: %s:%s PCB 上の %s。"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:531
 msgid "Reannotate anyway?"
@@ -32056,20 +32016,12 @@ msgid "Aborted: too many errors"
 msgstr "中断: 大量のエラーのため"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:749
-#, fuzzy
 msgid "<br/><br/>Front Footprints"
-msgstr ""
-"\n"
-"\n"
-"表面のフットプリント"
+msgstr "<br/><br/>表面のフットプリント"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:750
-#, fuzzy
 msgid "<br/><br/>Back Footprints"
-msgstr ""
-"\n"
-"\n"
-"裏面のフットプリント"
+msgstr "<br/><br/>裏面のフットプリント"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:814
 msgid "Footprint not found in changelist"
@@ -33881,7 +33833,6 @@ msgid "New footprint library id:"
 msgstr "新しいフットプリント ライブラリID:"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:107
-#, fuzzy
 msgid "Remove text items if not in library footprint"
 msgstr "ライブラリのフットプリントにないテキスト アイテムを削除"
 
@@ -37663,9 +37614,8 @@ msgid "x"
 msgstr "かける(x)"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:71
-#, fuzzy
 msgid "Appearance preset:"
-msgstr "外観"
+msgstr "外観のプリセット:"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:81
 msgid "Background style:"
@@ -37720,7 +37670,6 @@ msgid "°"
 msgstr "°"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:254
-#, fuzzy
 msgid "Lights Intensity"
 msgstr "光源の強さ"
 
@@ -37729,7 +37678,6 @@ msgid "Camera:"
 msgstr "カメラ:"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:303
-#, fuzzy
 msgid "Lights Position"
 msgstr "光源の位置"
 
@@ -50411,32 +50359,26 @@ msgid "DP Gap Constraints: %s"
 msgstr "差動ペアのギャップの制約: %s"
 
 #: pcbnew/tools/pcb_control.cpp:1774
-#, fuzzy
 msgid "Resolved Clearance"
 msgstr "解決済みクリアランス"
 
 #: pcbnew/tools/pcb_control.cpp:1785
-#, fuzzy
 msgid "Actual Clearance"
 msgstr "実際のクリアランス"
 
 #: pcbnew/tools/pcb_control.cpp:1828
-#, fuzzy
 msgid "Resolved Hole Clearance"
 msgstr "解決済みの穴のクリアランス"
 
 #: pcbnew/tools/pcb_control.cpp:1833
-#, fuzzy
 msgid "Actual Hole Clearance"
 msgstr "実際の穴のクリアランス"
 
 #: pcbnew/tools/pcb_control.cpp:1868
-#, fuzzy
 msgid "Resolved Edge Clearance"
 msgstr "解決済みのエッジクリアランス"
 
 #: pcbnew/tools/pcb_control.cpp:1873
-#, fuzzy
 msgid "Resolved Margin Clearance"
 msgstr "解決済みのマージンクリアランス"
 
