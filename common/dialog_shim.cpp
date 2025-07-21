@@ -61,7 +61,9 @@ DIALOG_SHIM::DIALOG_SHIM( wxWindow* aParent, wxWindowID id, const wxString& titl
         m_qmodal_loop( nullptr ),
         m_qmodal_showing( false ),
         m_qmodal_parent_disabler( nullptr ),
-        m_parentFrame( nullptr )
+        m_parentFrame( nullptr ),
+        m_userPositioned( false ),
+        m_userResized( false )
 {
     KIWAY_HOLDER* kiwayHolder = nullptr;
     m_initialSize = size;
@@ -102,6 +104,8 @@ DIALOG_SHIM::DIALOG_SHIM( wxWindow* aParent, wxWindowID id, const wxString& titl
 
     Bind( wxEVT_CLOSE_WINDOW, &DIALOG_SHIM::OnCloseWindow, this );
     Bind( wxEVT_BUTTON, &DIALOG_SHIM::OnButton, this );
+    Bind( wxEVT_SIZE, &DIALOG_SHIM::OnSize, this );
+    Bind( wxEVT_MOVE, &DIALOG_SHIM::OnMove, this );
 
 #ifdef __WINDOWS__
     // On Windows, the app top windows can be brought to the foreground (at least temporarily)
@@ -125,6 +129,8 @@ DIALOG_SHIM::~DIALOG_SHIM()
     Unbind( wxEVT_CLOSE_WINDOW, &DIALOG_SHIM::OnCloseWindow, this );
     Unbind( wxEVT_BUTTON, &DIALOG_SHIM::OnButton, this );
     Unbind( wxEVT_PAINT, &DIALOG_SHIM::OnPaint, this );
+    Unbind( wxEVT_SIZE, &DIALOG_SHIM::OnSize, this );
+    Unbind( wxEVT_MOVE, &DIALOG_SHIM::OnMove, this );
 
     std::function<void( wxWindowList& )> disconnectFocusHandlers =
             [&]( wxWindowList& children )
@@ -133,12 +139,14 @@ DIALOG_SHIM::~DIALOG_SHIM()
                 {
                     if( wxTextCtrl* textCtrl = dynamic_cast<wxTextCtrl*>( child ) )
                     {
-                        textCtrl->Disconnect( wxEVT_SET_FOCUS, wxFocusEventHandler( DIALOG_SHIM::onChildSetFocus ),
+                        textCtrl->Disconnect( wxEVT_SET_FOCUS,
+                                              wxFocusEventHandler( DIALOG_SHIM::onChildSetFocus ),
                                               nullptr, this );
                     }
                     else if( wxStyledTextCtrl* scintilla = dynamic_cast<wxStyledTextCtrl*>( child ) )
                     {
-                        scintilla->Disconnect( wxEVT_SET_FOCUS, wxFocusEventHandler( DIALOG_SHIM::onChildSetFocus ),
+                        scintilla->Disconnect( wxEVT_SET_FOCUS,
+                                               wxFocusEventHandler( DIALOG_SHIM::onChildSetFocus ),
                                                nullptr, this );
                     }
                     else
@@ -291,11 +299,24 @@ bool DIALOG_SHIM::Show( bool show )
         // shown on another display)
         if( wxDisplay::GetFromWindow( this ) == wxNOT_FOUND )
             Centre();
+
+        m_userPositioned = false;
+        m_userResized = false;
     }
     else
     {
-        // Save the dialog's position & size before hiding, using classname as key
-        class_map[ hash_key ] = wxRect( wxDialog::GetPosition(), wxDialog::GetSize() );
+        // Save the dialog's position & size before hiding, using classname as key.
+        // Be careful of rounding errors: only re-save if the user modified the value or
+        // it has not yet been saved.
+        wxRect rect = class_map[ hash_key ];
+
+        if( m_userPositioned || rect.GetPosition() == wxPoint() )
+            rect.SetPosition( wxDialog::GetPosition() );
+
+        if( m_userResized || rect.GetSize() == wxSize() )
+            rect.SetSize( wxDialog::GetSize() );
+
+        class_map[ hash_key ] = rect;
 
 #ifdef __WXMAC__
         if ( m_eventLoop )
@@ -334,6 +355,20 @@ void DIALOG_SHIM::resetSize()
     wxRect rect = it->second;
     rect.SetSize( wxSize( 0, 0 ) );
     class_map[ hash_key ] = rect;
+}
+
+
+void DIALOG_SHIM::OnSize( wxSizeEvent& aEvent )
+{
+    m_userResized = true;
+    aEvent.Skip();
+}
+
+
+void DIALOG_SHIM::OnMove( wxMoveEvent& aEvent )
+{
+    m_userPositioned = true;
+    aEvent.Skip();
 }
 
 
