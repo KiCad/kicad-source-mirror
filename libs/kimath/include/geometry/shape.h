@@ -249,6 +249,17 @@ public:
     virtual SEG::ecoord SquaredDistance( const VECTOR2I& aP, bool aOutlineOnly = false ) const;
 
     /**
+     * Return the two points that mark the closest distance between this shape and \a aOther.
+     * If the shapes are overlapping, the points will be the same.
+     *
+     * @param aOther the other shape to compare with
+     * @param aPtThis [out] the point on this shape closest to \a aOther
+     * @param aPtOther [out] the point on \a aOther closest to this shape
+     * @return true if the points were found
+     */
+    bool NearestPoints( const SHAPE* aOther, VECTOR2I& aPtThis, VECTOR2I& aPtOther ) const;
+
+    /**
      * Check if point \a aP lies inside a closed shape.  Always returns false if this shape is not closed.
      *
      * @param aPt point to check
