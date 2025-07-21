@@ -737,6 +737,10 @@ void CN_VISITOR::checkZoneItemConnection( CN_ZONE_LAYER* aZoneLayer, CN_ITEM* aI
     auto connect =
             [&]()
             {
+                // We don't propagate nets from zones, so any free-via net changes need to happen now.
+                if( aItem->Parent()->Type() == PCB_VIA_T && aItem->CanChangeNet() )
+                    aItem->Parent()->SetNetCode( aZoneLayer->Net() );
+
                 aZoneLayer->Connect( aItem );
                 aItem->Connect( aZoneLayer );
             };
