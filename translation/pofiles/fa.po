@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Farsi\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-18 08:09-0700\n"
-"PO-Revision-Date: 2025-07-21 14:02+0000\n"
+"PO-Revision-Date: 2025-07-21 14:04+0000\n"
 "Last-Translator: Mahdi Ahmadzadeh <mahdiahmadi83427@gmail.com>\n"
 "Language-Team: Persian <https://hosted.weblate.org/projects/kicad/"
 "master-source/fa/>\n"
@@ -1340,39 +1340,39 @@ msgstr "زاویه افقی (Azimuth) (درجه)"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:212
 msgid "Light 1:"
-msgstr ""
+msgstr "نور، شماره 1:"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:230
 msgid "Light 5:"
-msgstr ""
+msgstr "نور، شماره 5:"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:245
 msgid "Light 2:"
-msgstr ""
+msgstr "نور، شماره 2:"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:263
 msgid "Light 6:"
-msgstr ""
+msgstr "نور، شماره 6:"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:278
 msgid "Light 3:"
-msgstr ""
+msgstr "نور، شماره 3:"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:296
 msgid "Light 7:"
-msgstr ""
+msgstr "نور، شماره 7:"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:311
 msgid "Light 4:"
-msgstr ""
+msgstr "نور، شماره 4:"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:329
 msgid "Light 8:"
-msgstr ""
+msgstr "نور، شماره 8:"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model.cpp:407
 msgid "3D Preview Options"
-msgstr ""
+msgstr "تنظیمات پیش نمایش سه بعدی"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model.cpp:407
 msgid "Board thickness:"
