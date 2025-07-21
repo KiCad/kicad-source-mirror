@@ -10,7 +10,7 @@
 # johanneswilkens <wilkensjohannes@gmail.com>, 2023.
 # Ranforingus <ranforingus@hotmail.com>, 2023, 2024.
 # Laurens Holst <laurens@grauw.nl>, 2024.
-# Stefan De Raedemaeker <stefandr.dev@gmail.com>, 2024.
+# Stefan De Raedemaeker <stefandr.dev@gmail.com>, 2024, 2025.
 # John Beard <john.j.beard@gmail.com>, 2025.
 # Robin Janssens <robin@robinjanssens.net>, 2025.
 msgid ""
@@ -18,16 +18,16 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-18 08:09-0700\n"
-"PO-Revision-Date: 2025-02-19 03:14+0000\n"
-"Last-Translator: Seth Hillbrand <seth@kipro-pcb.com>\n"
-"Language-Team: Dutch <https://hosted.weblate.org/projects/kicad/master-"
-"source/nl/>\n"
+"PO-Revision-Date: 2025-07-21 13:20+0000\n"
+"Last-Translator: Stefan De Raedemaeker <stefandr.dev@gmail.com>\n"
+"Language-Team: Dutch <https://hosted.weblate.org/projects/kicad/"
+"master-source/nl/>\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.10.1-dev\n"
+"X-Generator: Weblate 5.13-dev\n"
 "X-Poedit-Basepath: ../../\n"
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-SearchPath-0: pcbnew\n"
@@ -364,14 +364,12 @@ msgid "Reload board"
 msgstr "Bord herladen"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:49
-#, fuzzy
 msgid "Reload board and refresh 3D view"
-msgstr "Bord en 3D-modellen herladen"
+msgstr "Bord en 3D-weergave herladen"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:55
-#, fuzzy
 msgid "Use raytracing"
-msgstr "Raytracen"
+msgstr "Raytracing gebruiken"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:56
 msgid "Render current view using Raytracing"
@@ -382,27 +380,24 @@ msgid "Copy 3D image to clipboard"
 msgstr "3D-afbeelding naar klembord kopiëren"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:64
-#, fuzzy
 msgid "Copy the current 3D image to the clipboard"
-msgstr "3D-afbeelding naar klembord kopiëren"
+msgstr "Huidige 3D-afbeelding naar klembord kopiëren"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:71
 msgid "Export Current View as PNG..."
 msgstr "Huidige weergave exporteren als PNG..."
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:72
-#, fuzzy
 msgid "Export the Current View as a PNG image"
-msgstr "Huidige weergave exporteren als PNG..."
+msgstr "Huidige weergave exporteren als PNG afbeelding"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:79
 msgid "Export Current View as JPEG..."
 msgstr "Huidige weergave als JPEG exporteren..."
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:80
-#, fuzzy
 msgid "Export the Current View as a JPEG image"
-msgstr "Huidige weergave als JPEG exporteren..."
+msgstr "Huidige weergave exporteren als JPEG afbeelding"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:88
 msgid "Set Pivot"
@@ -598,9 +593,8 @@ msgid "Show 3D model bounding boxes in realtime renderer"
 msgstr "3D-modelbegrenzingsvakken weergeven in de realtime renderer"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:375
-#, fuzzy
 msgid "Show 3D Navigator"
-msgstr "Netnavigatie weergeven"
+msgstr "3D navigatie weergeven"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:382
 msgid "Show Appearance Manager"
@@ -677,229 +671,184 @@ msgid "Show user ECO2 layer"
 msgstr "Gebruikers-ECO2 laag weergeven"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:67
-#, fuzzy
 msgid "Show user defined layer 1"
-msgstr "Gebruikersgedefinieerde laag 1"
+msgstr "Gebruikersgedefinieerde laag 1 weergeven"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:68
-#, fuzzy
 msgid "Show user defined layer 2"
-msgstr "Gebruikersgedefinieerde laag 2"
+msgstr "Gebruikersgedefinieerde laag 2 weergeven"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:69
-#, fuzzy
 msgid "Show user defined layer 3"
-msgstr "Gebruikersgedefinieerde laag 3"
+msgstr "Gebruikersgedefinieerde laag 3 weergeven"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:70
-#, fuzzy
 msgid "Show user defined layer 4"
-msgstr "Gebruikersgedefinieerde laag 4"
+msgstr "Gebruikersgedefinieerde laag 4 weergeven"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:71
-#, fuzzy
 msgid "Show user defined layer 5"
-msgstr "Gebruikersgedefinieerde laag 5"
+msgstr "Gebruikersgedefinieerde laag 5 weergeven"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:72
-#, fuzzy
 msgid "Show user defined layer 6"
-msgstr "Gebruikersgedefinieerde laag 6"
+msgstr "Gebruikersgedefinieerde laag 6 weergeven"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:73
-#, fuzzy
 msgid "Show user defined layer 7"
-msgstr "Gebruikersgedefinieerde laag 7"
+msgstr "Gebruikersgedefinieerde laag 7 weergeven"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:74
-#, fuzzy
 msgid "Show user defined layer 8"
-msgstr "Gebruikersgedefinieerde laag 8"
+msgstr "Gebruikersgedefinieerde laag 8 weergeven"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:75
-#, fuzzy
 msgid "Show user defined layer 9"
-msgstr "Gebruikersgedefinieerde laag 9"
+msgstr "Gebruikersgedefinieerde laag 9 weergeven"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:76
-#, fuzzy
 msgid "Show user defined layer 10"
-msgstr "Gebruikersgedefinieerde laag 1"
+msgstr "Gebruikersgedefinieerde laag 10 weergeven"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:77
-#, fuzzy
 msgid "Show user defined layer 11"
-msgstr "Gebruikersgedefinieerde laag 1"
+msgstr "Gebruikersgedefinieerde laag 11 weergeven"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:78
-#, fuzzy
 msgid "Show user defined layer 12"
-msgstr "Gebruikersgedefinieerde laag 1"
+msgstr "Gebruikersgedefinieerde laag 12 weergeven"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:79
-#, fuzzy
 msgid "Show user defined layer 13"
-msgstr "Gebruikersgedefinieerde laag 1"
+msgstr "Gebruikersgedefinieerde laag 13 weergeven"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:80
-#, fuzzy
 msgid "Show user defined layer 14"
-msgstr "Gebruikersgedefinieerde laag 1"
+msgstr "Gebruikersgedefinieerde laag 14 weergeven"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:81
-#, fuzzy
 msgid "Show user defined layer 15"
-msgstr "Gebruikersgedefinieerde laag 1"
+msgstr "Gebruikersgedefinieerde laag 15 weergeven"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:82
-#, fuzzy
 msgid "Show user defined layer 16"
-msgstr "Gebruikersgedefinieerde laag 1"
+msgstr "Gebruikersgedefinieerde laag 16 weergeven"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:83
-#, fuzzy
 msgid "Show user defined layer 17"
-msgstr "Gebruikersgedefinieerde laag 1"
+msgstr "Gebruikersgedefinieerde laag 17 weergeven"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:84
-#, fuzzy
 msgid "Show user defined layer 18"
-msgstr "Gebruikersgedefinieerde laag 1"
+msgstr "Gebruikersgedefinieerde laag 18 weergeven"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:85
-#, fuzzy
 msgid "Show user defined layer 19"
-msgstr "Gebruikersgedefinieerde laag 1"
+msgstr "Gebruikersgedefinieerde laag 19 weergeven"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:86
-#, fuzzy
 msgid "Show user defined layer 20"
-msgstr "Gebruikersgedefinieerde laag 2"
+msgstr "Gebruikersgedefinieerde laag 20 weergeven"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:87
-#, fuzzy
 msgid "Show user defined layer 21"
-msgstr "Gebruikersgedefinieerde laag 2"
+msgstr "Gebruikersgedefinieerde laag 21 weergeven"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:88
-#, fuzzy
 msgid "Show user defined layer 22"
-msgstr "Gebruikersgedefinieerde laag 2"
+msgstr "Gebruikersgedefinieerde laag 22 weergeven"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:89
-#, fuzzy
 msgid "Show user defined layer 23"
-msgstr "Gebruikersgedefinieerde laag 2"
+msgstr "Gebruikersgedefinieerde laag 23 weergeven"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:90
-#, fuzzy
 msgid "Show user defined layer 24"
-msgstr "Gebruikersgedefinieerde laag 2"
+msgstr "Gebruikersgedefinieerde laag 24 weergeven"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:91
-#, fuzzy
 msgid "Show user defined layer 25"
-msgstr "Gebruikersgedefinieerde laag 2"
+msgstr "Gebruikersgedefinieerde laag 25 weergeven"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:92
-#, fuzzy
 msgid "Show user defined layer 26"
-msgstr "Gebruikersgedefinieerde laag 2"
+msgstr "Gebruikersgedefinieerde laag 26 weergeven"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:93
-#, fuzzy
 msgid "Show user defined layer 27"
-msgstr "Gebruikersgedefinieerde laag 2"
+msgstr "Gebruikersgedefinieerde laag 27 weergeven"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:94
-#, fuzzy
 msgid "Show user defined layer 28"
-msgstr "Gebruikersgedefinieerde laag 2"
+msgstr "Gebruikersgedefinieerde laag 28 weergeven"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:95
-#, fuzzy
 msgid "Show user defined layer 29"
-msgstr "Gebruikersgedefinieerde laag 2"
+msgstr "Gebruikersgedefinieerde laag 29 weergeven"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:96
-#, fuzzy
 msgid "Show user defined layer 30"
-msgstr "Gebruikersgedefinieerde laag 3"
+msgstr "Gebruikersgedefinieerde laag 30 weergeven"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:97
-#, fuzzy
 msgid "Show user defined layer 31"
-msgstr "Gebruikersgedefinieerde laag 3"
+msgstr "Gebruikersgedefinieerde laag 31 weergeven"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:98
-#, fuzzy
 msgid "Show user defined layer 32"
-msgstr "Gebruikersgedefinieerde laag 3"
+msgstr "Gebruikersgedefinieerde laag 32 weergeven"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:99
-#, fuzzy
 msgid "Show user defined layer 33"
-msgstr "Gebruikersgedefinieerde laag 3"
+msgstr "Gebruikersgedefinieerde laag 33 weergeven"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:100
-#, fuzzy
 msgid "Show user defined layer 34"
-msgstr "Gebruikersgedefinieerde laag 3"
+msgstr "Gebruikersgedefinieerde laag 34 weergeven"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:101
-#, fuzzy
 msgid "Show user defined layer 35"
-msgstr "Gebruikersgedefinieerde laag 3"
+msgstr "Gebruikersgedefinieerde laag 35 weergeven"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:102
-#, fuzzy
 msgid "Show user defined layer 36"
-msgstr "Gebruikersgedefinieerde laag 3"
+msgstr "Gebruikersgedefinieerde laag 36 weergeven"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:103
-#, fuzzy
 msgid "Show user defined layer 37"
-msgstr "Gebruikersgedefinieerde laag 3"
+msgstr "Gebruikersgedefinieerde laag 37 weergeven"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:104
-#, fuzzy
 msgid "Show user defined layer 38"
-msgstr "Gebruikersgedefinieerde laag 3"
+msgstr "Gebruikersgedefinieerde laag 38 weergeven"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:105
-#, fuzzy
 msgid "Show user defined layer 39"
-msgstr "Gebruikersgedefinieerde laag 3"
+msgstr "Gebruikersgedefinieerde laag 39 weergeven"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:106
-#, fuzzy
 msgid "Show user defined layer 40"
-msgstr "Gebruikersgedefinieerde laag 4"
+msgstr "Gebruikersgedefinieerde laag 40 weergeven"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:107
-#, fuzzy
 msgid "Show user defined layer 41"
-msgstr "Gebruikersgedefinieerde laag 4"
+msgstr "Gebruikersgedefinieerde laag 41 weergeven"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:108
-#, fuzzy
 msgid "Show user defined layer 42"
-msgstr "Gebruikersgedefinieerde laag 4"
+msgstr "Gebruikersgedefinieerde laag 42 weergeven"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:109
-#, fuzzy
 msgid "Show user defined layer 43"
-msgstr "Gebruikersgedefinieerde laag 4"
+msgstr "Gebruikersgedefinieerde laag 43 weergeven"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:110
-#, fuzzy
 msgid "Show user defined layer 44"
-msgstr "Gebruikersgedefinieerde laag 4"
+msgstr "Gebruikersgedefinieerde laag 44 weergeven"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:111
-#, fuzzy
 msgid "Show user defined layer 45"
-msgstr "Gebruikersgedefinieerde laag 4"
+msgstr "Gebruikersgedefinieerde laag 45 weergeven"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:113
 msgid "Through-hole Models"
@@ -968,9 +917,8 @@ msgid "Do not clip silk layers to board outline"
 msgstr "Silkscreenlagen niet afsnijden op bordgrenzen"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:125
-#, fuzzy
 msgid "3D Navigator"
-msgstr "Netnavigatie"
+msgstr "3D Navigatie"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:126
 msgid "Background Start"
@@ -994,15 +942,14 @@ msgid "Use board stackup colors"
 msgstr "Bordopbouwkleuren gebruiken"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:182
-#, fuzzy
 msgid "Use PCB editor copper colors"
-msgstr "Bordopbouwkleuren gebruiken"
+msgstr "PCB-editor koperkleuren gebruiken"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:184
-#, fuzzy
 msgid ""
 "Use the board editor layer colors for copper layers (realtime renderer only)"
-msgstr "Gebruik kale-koperkleur voor ongeplateerd koper (langzaam)"
+msgstr ""
+"Bordeditor laagkleuren gebruiken voor koperlagen (enkel realtime renderer)"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:201
 #, c-format
@@ -1178,9 +1125,8 @@ msgid "Configure Paths"
 msgstr "Paden instellen"
 
 #: 3d-viewer/dialogs/dialog_select_3d_model_base.cpp:82
-#, fuzzy
 msgid "Embed model"
-msgstr "Verplaats Alle Modules"
+msgstr "Model embedden"
 
 #: 3d-viewer/dialogs/dialog_select_3d_model_base.h:64
 msgid "Select 3D Model"
@@ -1268,9 +1214,8 @@ msgid "Show model bounding boxes"
 msgstr "Modelbegrenzingsvakken weergeven"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:35
-#, fuzzy
 msgid "Show copper and tech layers thickness (slow)"
-msgstr "Koper- en technische laagdikte weergeven (erg langzaam)"
+msgstr "Koper- en technische laagdikte weergeven (langzaam)"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:38
 msgid "Highlight items on rollover"
@@ -1318,14 +1263,12 @@ msgid "Disable thickness"
 msgstr "Dikte uitschakelen"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:91
-#, fuzzy
 msgid "Disable uVia holes"
-msgstr "Gaten uitschakelen"
+msgstr "uVia gaten uitschakelen"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:94
-#, fuzzy
 msgid "Disable all plated holes"
-msgstr "Gaten uitschakelen"
+msgstr "Geplateerde gaten uitschakelen"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:30
 msgid "Procedural textures (slow)"
@@ -1811,14 +1754,12 @@ msgid "Errors"
 msgstr "Fouten"
 
 #: bitmap2component/bitmap2cmp_panel.cpp:587
-#, fuzzy
 msgid "Replace Loaded File?"
-msgstr "Vervang en volgende zoeken"
+msgstr "Geladen bestand vervangen?"
 
 #: bitmap2component/bitmap2cmp_panel.cpp:588
-#, fuzzy
 msgid "There is already a file loaded. Do you want to replace it?"
-msgstr "Pdf viewer voorkeuren"
+msgstr "Er is al een bestand geladen. Wilt u het vervangen?"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:22
 msgid "Original Picture"
@@ -2001,7 +1942,7 @@ msgstr "Tekenblad (.kicad_wks bestand)"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:200
 msgid "Export to File..."
-msgstr "Naar bestand exporteren"
+msgstr "Naar bestand exporteren…"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:203
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:147
@@ -2174,9 +2115,8 @@ msgid "UNKNOWN (%d)"
 msgstr "ONBEKEND (%d)"
 
 #: common/design_block_io.cpp:137
-#, fuzzy
 msgid "KiCad Design Block folders"
-msgstr "Verouderde KiCad projectbestanden"
+msgstr "KiCad ontwerpblokmappen"
 
 #: common/design_block_io.cpp:174
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:3106
@@ -2185,13 +2125,13 @@ msgid "Cannot overwrite library path '%s'."
 msgstr "Kan bibliotheekpad '%s' niet overschrijven."
 
 #: common/design_block_io.cpp:184
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Library path '%s' could not be created.\n"
 "\n"
 "Make sure you have write permissions and try again."
 msgstr ""
-"Map '%s' kan niet worden aangemaakt.\n"
+"Bibliotheekpad '%s' kan niet aangemaakt worden.\n"
 "\n"
 "Zorg dat u schrijfrechten heeft en probeer het opnieuw."
 
@@ -2202,88 +2142,91 @@ msgid "Insufficient permissions to delete folder '%s'."
 msgstr "Onvoldoende rechten om map '%s' te verwijderen."
 
 #: common/design_block_io.cpp:212
-#, fuzzy, c-format
+#, c-format
 msgid "Library folder '%s' has unexpected files."
-msgstr "Bibliotheekmap '%s' heeft onverwachte submappen."
+msgstr "Bibliotheekmap '%s' heeft onverwachte bestanden."
 
 #: common/design_block_io.cpp:230
-#, fuzzy, c-format
+#, c-format
 msgid "Unexpected folder '%s' found in library path '%s'."
-msgstr "Onverwacht bestand '%s' gevonden in bibliotheekpad '%s'."
+msgstr "Onverwachte map '%s' gevonden in bibliotheekpad '%s'."
 
 #: common/design_block_io.cpp:247
-#, fuzzy, c-format
+#, c-format
 msgid "Design block library '%s' cannot be deleted."
-msgstr "Bibliotheek '%s' kan niet worden verwijderd."
+msgstr "Ontwerpblokbibliotheek '%s' kan niet worden verwijderd."
 
 #: common/design_block_io.cpp:271 common/design_block_io.cpp:298
 #: common/design_block_io.cpp:492
-#, fuzzy, c-format
+#, c-format
 msgid "Design block '%s' does not exist."
-msgstr "Map '%s' bestaat niet"
+msgstr "Ontwerpblok '%s' bestaat niet."
 
 #: common/design_block_io.cpp:348
-#, fuzzy, c-format
+#, c-format
 msgid "Design block metadata file '%s' could not be read."
-msgstr "Bestand '%s' kan niet worden aangemaakt."
+msgstr "Ontwerpblok metadata bestand '%s' kan niet worden gelezen."
 
 #: common/design_block_io.cpp:374
 msgid "Design block does not have a valid library ID."
-msgstr ""
+msgstr "Ontwerpblok heeft geen geldige bibliotheek-ID."
 
 #: common/design_block_io.cpp:379
-#, fuzzy
 msgid "Design block does not have a schematic or board file."
-msgstr "Map '%s' bestaat niet"
+msgstr "Ontwerpblok heeft geen schema- of bordbestand."
 
 #: common/design_block_io.cpp:388
-#, fuzzy, c-format
+#, c-format
 msgid "Schematic source file '%s' does not exist."
-msgstr "Schema-bestand '%s' bestaat al."
+msgstr "Schemabronbestand '%s' bestaat niet."
 
 #: common/design_block_io.cpp:393
-#, fuzzy, c-format
+#, c-format
 msgid "Board source file '%s' does not exist."
-msgstr "Schema-bestand '%s' bestaat al."
+msgstr "Bordbestand '%s' bestaat niet."
 
 #: common/design_block_io.cpp:406
-#, fuzzy, c-format
+#, c-format
 msgid "Design block folder '%s' could not be created."
-msgstr "Bestand '%s' kan niet worden aangemaakt."
+msgstr "Ontwerpblokmap '%s' kan niet worden aangemaakt."
 
 #: common/design_block_io.cpp:425
-#, fuzzy, c-format
+#, c-format
 msgid "Schematic file '%s' could not be saved as design block at '%s'."
-msgstr "Schema-bestand '%s' bestaat al."
+msgstr ""
+"Schemabestand '%s' kan niet worden opgeslagen als ontwerpblok onder '%s'."
 
 #: common/design_block_io.cpp:444
-#, fuzzy, c-format
+#, c-format
 msgid "Board file '%s' could not be saved as design block at '%s'."
-msgstr "Schema-bestand '%s' bestaat al."
+msgstr ""
+"Bordbestand '%s' kan niet worden opgeslagen als ontwerpblok onder '%s' ."
 
 #: common/design_block_io.cpp:478
-#, fuzzy, c-format
+#, c-format
 msgid "Design block metadata file '%s' could not be saved."
-msgstr "Bestand '%s' kan niet worden aangemaakt."
+msgstr "Ontwerpblok metadata bestand '%s' kan niet worden opgeslagen."
 
 #: common/design_block_io.cpp:498
-#, fuzzy, c-format
+#, c-format
 msgid "Design block folder '%s' could not be deleted."
-msgstr "Bestand '%s' kan niet worden aangemaakt."
+msgstr "Ontwerpblokmap '%s' kan niet worden verwijderd."
 
 #: common/design_block_lib_table.cpp:250
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Duplicate library nickname '%s' found in design block library table file "
 "line %d."
 msgstr ""
 "Dubbele bijnaam voor bibliotheek '%s' gevonden in bestandregel %d van de "
-"symboolbibliotheektabel"
+"ontwerpblok bibliotheektabel."
 
 #: common/design_block_lib_table.cpp:354
-#, fuzzy, c-format
+#, c-format
 msgid "design-block-lib-table files contain no library named '%s'."
-msgstr "fp-lib-table-bestanden bevatten geen bibliotheek met de naam '%s'."
+msgstr ""
+"ontwerpblok bibliotheektabelbestanden bevatten geen bibliotheek met de naam "
+"'%s'."
 
 #: common/design_block_lib_table.cpp:593 common/fp_lib_table.cpp:573
 #: eeschema/symbol_lib_table.cpp:605
@@ -2308,9 +2251,9 @@ msgstr "Trefwoorden"
 #: common/design_block_tree_model_adapter.cpp:148
 #: common/design_block_tree_model_adapter.cpp:199
 #: common/widgets/design_block_pane.cpp:125
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading design block %s from library '%s'."
-msgstr "Fout bij laden van symbool %s uit bibliotheek '%s'."
+msgstr "Fout bij laden van ontwerpblok %s uit bibliotheek '%s'."
 
 #: common/dialog_about/AboutDialog_main.cpp:112
 #: common/dialogs/panel_design_block_lib_table_base.cpp:50
@@ -2746,9 +2689,9 @@ msgid "Path"
 msgstr "Pad"
 
 #: common/dialogs/dialog_design_block_properties.cpp:100
-#, fuzzy, c-format
+#, c-format
 msgid "Illegal character '%c' in name '%s'."
-msgstr "Ongeldig teken '%c' in bijnaam '%s'."
+msgstr "Ongeldig teken '%c' in naam '%s'."
 
 #: common/dialogs/dialog_design_block_properties.cpp:126
 #: eeschema/dialogs/panel_template_fieldnames.cpp:102
@@ -2756,14 +2699,12 @@ msgid "Untitled Field"
 msgstr "Naamloos veld"
 
 #: common/dialogs/dialog_design_block_properties.cpp:251
-#, fuzzy
 msgid "Duplicate fields are not allowed."
-msgstr "Polygonen die zichzelf snijden zijn niet toegestaan."
+msgstr "Gedupliceerde velden zijn niet toegestaan."
 
 #: common/dialogs/dialog_design_block_properties_base.cpp:26
-#, fuzzy
 msgid "Default Fields"
-msgstr "Veld Verwijderen"
+msgstr "Standaard velden"
 
 #: common/dialogs/dialog_design_block_properties_base.cpp:43
 #: common/dialogs/dialog_plugin_options_base.cpp:44
@@ -2825,30 +2766,25 @@ msgid "Description:"
 msgstr "Beschrijving:"
 
 #: common/dialogs/dialog_design_block_properties_base.h:70
-#, fuzzy
 msgid "Design Block Properties"
-msgstr ""
-"\n"
-"Verken Alle Bibliotheken?"
+msgstr "Ontwerpblokeigenschappen"
 
 #: common/dialogs/dialog_global_design_block_lib_table_config.cpp:33
-#, fuzzy
 msgid "design block"
-msgstr "Voeg signalen toe om te plotten"
+msgstr "ontwerpblok"
 
 #: common/dialogs/dialog_global_design_block_lib_table_config.cpp:63
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error creating design block library table '%s'.\n"
 "%s"
 msgstr ""
-"Fout bij maken van symboolbibliotheektabel '%s'.\n"
+"Fout bij maken van ontwerpblok bibliotheektabel '%s'.\n"
 "%s"
 
 #: common/dialogs/dialog_global_design_block_lib_table_config.cpp:76
-#, fuzzy
 msgid "Please select a design block library table file."
-msgstr "Selecteer een symboolbibliotheektabel-bestand."
+msgstr "Selecteer een ontwerpblok bibliotheektabelbestand."
 
 #: common/dialogs/dialog_global_design_block_lib_table_config.cpp:85
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:83
@@ -2859,12 +2795,12 @@ msgid "File '%s' not found."
 msgstr "Bestand '%s' niet gevonden."
 
 #: common/dialogs/dialog_global_design_block_lib_table_config.cpp:100
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error reading design block library table '%s'.\n"
 "%s"
 msgstr ""
-"Fout bij inlezen van symboolbibliotheektabel '%s'.\n"
+"Fout bij inlezen van ontwerpblok bibliotheektabel '%s'.\n"
 "%s"
 
 #: common/dialogs/dialog_global_design_block_lib_table_config.cpp:112
@@ -2874,9 +2810,9 @@ msgid "Cannot create global library table '%s'."
 msgstr "Kan globale bibliotheektabel '%s' niet aanmaken."
 
 #: common/dialogs/dialog_global_design_block_lib_table_config.cpp:122
-#, fuzzy, c-format
+#, c-format
 msgid "Error copying global design block library table '%s' to '%s'."
-msgstr "Fout bij kopiëren globale bibliotheektabel '%s' naar '%s'."
+msgstr "Fout bij kopiëren globale ontwerpblok bibliotheektabel '%s' naar '%s'."
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:41
 #, c-format
@@ -3110,9 +3046,9 @@ msgid "Grid Settings"
 msgstr "Rasterinstellingen"
 
 #: common/dialogs/dialog_group_properties.cpp:112
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid library link: '%s'"
-msgstr "Ongeldig bibliotheek-ID"
+msgstr "Ongeldige bibliotheeklink: '%s'"
 
 #: common/dialogs/dialog_group_properties.cpp:135
 msgid "Edit Group Properties"
@@ -3214,9 +3150,9 @@ msgid ""
 msgstr ""
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:30
-#, fuzzy, c-format
+#, c-format
 msgid "The selection contains %zu locked items."
-msgstr "De selectie bevat %d vergrendelde items."
+msgstr "De selectie bevat %zu vergrendelde items."
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:34
 msgid "These items will be skipped unless you override the locks."
@@ -3416,11 +3352,13 @@ msgid "Drawing Sheet File"
 msgstr "Tekenbladbestand"
 
 #: common/dialogs/dialog_page_settings.cpp:841
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error loading drawing sheet '%s'.\n"
 "%s"
-msgstr "Fout bij laden van tekenblad '%s'."
+msgstr ""
+"Fout bij laden van tekenblad '%s'.\n"
+"%s"
 
 #: common/dialogs/dialog_page_settings_base.cpp:41
 msgid "dummy text"
@@ -3488,7 +3426,7 @@ msgstr "Aangepaste papierbreedte."
 #: common/dialogs/dialog_page_settings_base.cpp:369
 #: common/dialogs/dialog_page_settings_base.cpp:381
 msgid "Export to other sheets"
-msgstr "Naar andere tekeningen exporteren"
+msgstr "Naar andere bladen exporteren"
 
 #: common/dialogs/dialog_page_settings_base.cpp:148 common/rc_item.cpp:443
 #: eeschema/erc/erc_item.cpp:425 eeschema/sch_marker.cpp:380
@@ -3705,27 +3643,26 @@ msgid "Close"
 msgstr "Sluiten"
 
 #: common/dialogs/dialog_print_generic.cpp:161
-#, fuzzy
 msgid "Warning: scale is not a number."
-msgstr "Waarschuwing: onjuist schaalnummer"
+msgstr "Waarschuwing: schaal is geen getal."
 
 #: common/dialogs/dialog_print_generic.cpp:169
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Warning: scale set to a very large value.\n"
 "It will be clamped to %f."
 msgstr ""
-"Waarschuwing: schaaloptie ingesteld op een zeer hoge waarde.\n"
-" Begrensd tot %f"
+"Waarschuwing: schaal ingesteld op een zeer hoge waarde.\n"
+"Zal begrensd worden tot %f."
 
 #: common/dialogs/dialog_print_generic.cpp:177
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Warning: scale set to a very small value.\n"
 "It will be clamped to %f."
 msgstr ""
-"Waarschuwing: schaaloptie ingesteld op een zeer kleine waarde.\n"
-" Begrensd tot %f"
+"Waarschuwing: schaal ingesteld op een zeer kleine waarde.\n"
+"Zal begrensd worden tot %f."
 
 #: common/dialogs/dialog_print_generic.cpp:249
 #: common/dialogs/dialog_print_generic.cpp:307
@@ -3837,9 +3774,8 @@ msgid "Format:"
 msgstr "Indeling:"
 
 #: common/dialogs/dialog_rc_job_base.cpp:43
-#, fuzzy
 msgid "Include:"
-msgstr "Inclusief &via’s"
+msgstr "Inclusief:"
 
 #: common/dialogs/dialog_rc_job_base.cpp:56
 #: common/widgets/wx_html_report_panel_base.cpp:52
@@ -4127,9 +4063,8 @@ msgstr "Voer een URL in voor de repository"
 
 #: common/dialogs/git/dialog_git_repository.cpp:421
 #: common/dialogs/git/dialog_git_repository_base.cpp:106
-#, fuzzy
 msgid "SSH key password:"
-msgstr "Wachtwoord SSH-sleutel"
+msgstr "Wachtwoord SSH-sleutel:"
 
 #: common/dialogs/git/dialog_git_repository.cpp:429
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:54
@@ -4137,14 +4072,12 @@ msgid "Password:"
 msgstr "Wachtwoord:"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:42
-#, fuzzy
 msgid "Location:"
-msgstr "Locatie"
+msgstr "Locatie:"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:49
-#, fuzzy
 msgid "Connection type:"
-msgstr "Verbindingstype"
+msgstr "Verbindingstype:"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:58
 msgid "HTTPS"
@@ -4157,9 +4090,8 @@ msgid "Local"
 msgstr "Lokaal"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:91
-#, fuzzy
 msgid "SSH private key:     "
-msgstr "SSH-privésleutel"
+msgstr "SSH-privésleutel:     "
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:94
 msgid "Select SSH private key file"
@@ -4211,19 +4143,16 @@ msgid "Add"
 msgstr "Toevoegen"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:20
-#, fuzzy
 msgid "Enable Git tracking"
-msgstr "Inschakelen Auto Verwijd. Spoor"
+msgstr "Git-versiebeheer inschakelen"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:28
-#, fuzzy
 msgid "Remote Tracking"
-msgstr "Verwijder Spoor"
+msgstr "Remote versiebeheer"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:41
-#, fuzzy
 msgid "Update interval:"
-msgstr "Velden bijwerken"
+msgstr "Update-interval:"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:46
 msgid ""
@@ -4409,9 +4338,8 @@ msgid "Text editor:"
 msgstr "Teksteditor:"
 
 #: common/dialogs/panel_common_settings_base.cpp:99
-#, fuzzy
 msgid "File manager:"
-msgstr "Bestandsnaam:"
+msgstr "Bestandsbeheerder:"
 
 #: common/dialogs/panel_common_settings_base.cpp:115
 msgid "System default PDF viewer"
@@ -4599,9 +4527,8 @@ msgid "Editing"
 msgstr "Bewerken"
 
 #: common/dialogs/panel_common_settings_base.cpp:294
-#, fuzzy
 msgid "Warp mouse to anchor of moved object"
-msgstr "Muis verplaatsen naar oorsprong van verplaatste object"
+msgstr "Muis naar de oorsprong van een verplaatst object verplaatsen"
 
 #: common/dialogs/panel_common_settings_base.cpp:298
 msgid "First hotkey selects tool"
@@ -4848,9 +4775,9 @@ msgid "Multiple libraries cannot share the same nickname ('%s')."
 msgstr "Meerdere bibliotheken kunnen niet dezelfde bijnaam ('%s') hebben."
 
 #: common/dialogs/panel_design_block_lib_table.cpp:586
-#, fuzzy, c-format
+#, c-format
 msgid "Design block library '%s' failed to load."
-msgstr "Symboolbibliotheek '%s' kan niet worden geladen."
+msgstr "Ontwerpblokbibliotheek '%s' kan niet worden geladen."
 
 #: common/dialogs/panel_design_block_lib_table.cpp:589
 #: eeschema/dialogs/panel_sym_lib_table.cpp:583
@@ -4890,10 +4817,10 @@ msgid "Library '%s' not found."
 msgstr "Bibliotheek '%s' niet gevonden."
 
 #: common/dialogs/panel_design_block_lib_table.cpp:817
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Folder '%s' already exists. Do you want overwrite any existing design blocks?"
-msgstr "Map '%s' bestaat al. Wilt u bestaande footprints overschrijven?"
+msgstr "Map '%s' bestaat al. Wilt u bestaande ontwerpblokken overschrijven?"
 
 #: common/dialogs/panel_design_block_lib_table.cpp:821
 #: eeschema/dialogs/panel_sym_lib_table.cpp:972
@@ -4902,9 +4829,9 @@ msgid "Migrate Library"
 msgstr "Bibliotheken migreren"
 
 #: common/dialogs/panel_design_block_lib_table.cpp:848
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to save design block library file '%s'."
-msgstr "Opslaan van symboolbibliotheekbestand '%s' mislukt."
+msgstr "Opslaan van ontwerpblok bibliotheekbestand '%s' mislukt."
 
 #: common/dialogs/panel_design_block_lib_table.cpp:883
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:867
@@ -4949,11 +4876,8 @@ msgid "Add Anyway"
 msgstr "Toch toevoegen"
 
 #: common/dialogs/panel_design_block_lib_table.cpp:1113
-#, fuzzy
 msgid "Design Block Libraries"
-msgstr ""
-"\n"
-"Verken Alle Bibliotheken?"
+msgstr "Ontwerpblok bibliotheken"
 
 #: common/dialogs/panel_design_block_lib_table.cpp:1134
 #: eeschema/dialogs/panel_sym_lib_table.cpp:1194
@@ -5109,9 +5033,8 @@ msgstr ""
 "Dit is een alleen-lezentabel die relevante omgevingsvariabelen weergeeft."
 
 #: common/dialogs/panel_embedded_files.cpp:55
-#, fuzzy
 msgid "Copy Embedded Reference"
-msgstr "Kopiëren met referentie"
+msgstr "Ingesloten referentie kopiëren"
 
 #: common/dialogs/panel_embedded_files.cpp:56
 msgid "Copy the reference for this embedded file"
@@ -5154,66 +5077,60 @@ msgid "Failed to add file '%s'."
 msgstr "Toevoegen van bestand '%s' mislukt."
 
 #: common/dialogs/panel_embedded_files.cpp:322
-#, fuzzy
 msgid "Select a file to embed"
-msgstr "Waarde selecteren om af te stemmen"
+msgstr "Bestand om in te sluiten selecteren"
 
 #: common/dialogs/panel_embedded_files.cpp:388
-#, fuzzy
 msgid "Select a directory to export files"
-msgstr "Selecteer een GenCAD-exportbestandsnaam"
+msgstr "Map om bestanden naar te exporteren selecteren"
 
 #: common/dialogs/panel_embedded_files.cpp:418
-#, fuzzy, c-format
+#, c-format
 msgid "Directory '%s' is not writable."
-msgstr "Symboolbibliotheek '%s' is niet schrijfbaar."
+msgstr "Map '%s' is niet schrijfbaar."
 
 #: common/dialogs/panel_embedded_files.cpp:420
-#, fuzzy, c-format
+#, c-format
 msgid "Folder '%s' is not writable."
-msgstr "Symboolbibliotheek '%s' is niet schrijfbaar."
+msgstr "Map '%s' is niet schrijfbaar."
 
 #: common/dialogs/panel_embedded_files.cpp:424
 msgid "Retry"
 msgstr ""
 
 #: common/dialogs/panel_embedded_files.cpp:452
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to open file '%s'."
-msgstr "Fout tijdens openen van bestand"
+msgstr "Kan bestand '%s' is niet openen."
 
 #: common/dialogs/panel_embedded_files.cpp:463
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to write file '%s'."
-msgstr "Aanmaken van bestand '%s' mislukt."
+msgstr "Kan bestand '%s' niet schrijven."
 
 #: common/dialogs/panel_embedded_files_base.cpp:38
-#, fuzzy
 msgid "Embedded Reference"
-msgstr "Kopiëren met referentie"
+msgstr "Ingesloten referentie"
 
 #: common/dialogs/panel_embedded_files_base.cpp:61
 msgid "Add embedded file"
 msgstr ""
 
 #: common/dialogs/panel_embedded_files_base.cpp:69
-#, fuzzy
 msgid "Remove embedded file"
-msgstr "Voeding symbool"
+msgstr "Ingesloten bestand verwijderen"
 
 #: common/dialogs/panel_embedded_files_base.cpp:76
-#, fuzzy
 msgid "Embed fonts"
-msgstr "Verplaats Alle Modules"
+msgstr "Ingesloten lettertypes"
 
 #: common/dialogs/panel_embedded_files_base.cpp:77
 msgid "Store a copy of all fonts used"
 msgstr ""
 
 #: common/dialogs/panel_embedded_files_base.cpp:84
-#, fuzzy
 msgid "&Export..."
-msgstr "Exporteren..."
+msgstr "&Exporteren…"
 
 #: common/dialogs/panel_grid_settings.cpp:53
 msgid "Pads:"
@@ -5602,9 +5519,8 @@ msgid "Check for package updates on startup"
 msgstr "Controleren op pakketupdates bij opstarten"
 
 #: common/dialogs/panel_packages_and_updates_base.cpp:60
-#, fuzzy
 msgid "Library Package Handling"
-msgstr "Afhandeling bibliotheekpakketten"
+msgstr "Bibliotheekpakket verwerking"
 
 #: common/dialogs/panel_packages_and_updates_base.cpp:70
 msgid "Automatically add installed libraries to global library table"
@@ -5710,14 +5626,12 @@ msgstr "Python-interpreterstatus"
 
 #: common/dialogs/panel_printer_list.cpp:155
 #: common/dialogs/panel_printer_list.cpp:176
-#, fuzzy
 msgid "Default printer"
-msgstr "Standaardlettertype"
+msgstr "Standaard printer"
 
 #: common/dialogs/panel_printer_list_base.cpp:17
-#, fuzzy
 msgid "Printers"
-msgstr "Afdrukken"
+msgstr "Printers"
 
 #: common/dialogs/panel_printer_list_base.cpp:27
 #: common/widgets/wx_html_report_panel.cpp:246
@@ -5725,9 +5639,8 @@ msgid "Info:"
 msgstr "Informatie:"
 
 #: common/dialogs/panel_setup_netclasses.cpp:100
-#, fuzzy
 msgid "<Not defined>"
-msgstr "Niet verbonden"
+msgstr "<Niet gedefinieerd>"
 
 #: common/dialogs/panel_setup_netclasses.cpp:102 common/eda_shape.cpp:2532
 #: common/eda_shape.cpp:2544 common/stroke_params.cpp:40
@@ -5869,9 +5782,8 @@ msgid "<b>Nets matching '%s':</b>"
 msgstr "<b>Netten overeenkomend met '%s':</b>"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:32
-#, fuzzy
 msgid "Netclasses"
-msgstr "Netklassen:"
+msgstr "Netklassen"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:52
 #: pcbnew/tools/board_inspection_tool.cpp:642
@@ -5912,9 +5824,8 @@ msgid "DP Gap"
 msgstr "DP-tussenruimte"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:60
-#, fuzzy
 msgid "Delay Profile"
-msgstr "Vertragingstijd:"
+msgstr "Vertragingsprofiel"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:61
 msgid "PCB Color"
@@ -5967,9 +5878,8 @@ msgid "Import colors from schematic"
 msgstr "Kleuren importeren van schema"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:123
-#, fuzzy
 msgid "Netclass Assignments"
-msgstr "Netklassetoewijzing:"
+msgstr "Netklassetoewijzingen"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:147
 msgid "Pattern"
@@ -6068,25 +5978,21 @@ msgid "Top main"
 msgstr ""
 
 #: common/dialogs/panel_toolbar_customization.cpp:49
-#, fuzzy
 msgid "Top auxillary"
-msgstr "Bovenste laag"
+msgstr "Bovenste auxillary"
 
 #: common/dialogs/panel_toolbar_customization.cpp:143
 #: common/dialogs/panel_toolbar_customization_base.cpp:71
-#, fuzzy
 msgid "Insert separator"
-msgstr "Celscheidingstekens"
+msgstr "Scheidingsteken invoegen"
 
 #: common/dialogs/panel_toolbar_customization.cpp:149
-#, fuzzy
 msgid "Insert spacer"
-msgstr "Invoegen"
+msgstr "Afstandhouder invoegen"
 
 #: common/dialogs/panel_toolbar_customization.cpp:150
-#, fuzzy
 msgid "Insert group"
-msgstr "Groep binnengaan"
+msgstr "Groep invoegen"
 
 #: common/dialogs/panel_toolbar_customization.cpp:552 common/eda_item.cpp:440
 #: common/eda_item.cpp:464 eeschema/sch_group.cpp:335 pcbnew/pcb_group.cpp:388
@@ -6095,9 +6001,8 @@ msgid "Group"
 msgstr "Groep"
 
 #: common/dialogs/panel_toolbar_customization_base.cpp:19
-#, fuzzy
 msgid "Customize toolbars"
-msgstr "Aangepaste laagset"
+msgstr "Werkbalken aanpassen"
 
 #: common/draw_panel_gal.cpp:320 common/draw_panel_gal.cpp:507
 msgid "Could not use OpenGL, falling back to software rendering"
@@ -6128,14 +6033,12 @@ msgid "File not found."
 msgstr "Bestand is niet gevonden."
 
 #: common/drawing_sheet/drawing_sheet_parser.cpp:996
-#, fuzzy
 msgid "File could not be opened."
-msgstr "Bestand '%s' kan niet worden aangemaakt."
+msgstr "Bestand kan niet worden geopend."
 
 #: common/drawing_sheet/drawing_sheet_parser.cpp:1010
-#, fuzzy
 msgid "Drawing sheet was not fully read."
-msgstr "Tekenblad '%s' is niet volledig gelezen."
+msgstr "Tekenblad was niet volledig gelezen."
 
 #: common/drawing_sheet/drawing_sheet_parser.cpp:1037
 msgid "Ran out of memory."
@@ -6390,9 +6293,8 @@ msgstr "Kleuren"
 #: common/eda_base_frame.cpp:1318 common/eda_base_frame.cpp:1335
 #: common/eda_base_frame.cpp:1346 common/eda_base_frame.cpp:1372
 #: common/eda_base_frame.cpp:1400
-#, fuzzy
 msgid "Toolbars"
-msgstr "E&xtra"
+msgstr "Werkbalken"
 
 #: common/eda_base_frame.cpp:1280 common/hotkey_store.cpp:77
 #: common/tool/common_tools.cpp:611 eeschema/menubar.cpp:133
@@ -6427,14 +6329,13 @@ msgid "Origins & Axes"
 msgstr "Nulpunten & assen"
 
 #: common/eda_base_frame.cpp:1320
-#, fuzzy
 msgid "Footprint Defaults"
-msgstr "Nieuwe footprint"
+msgstr "Standaardwaarden footprint"
 
 #: common/eda_base_frame.cpp:1322
 #, fuzzy
 msgid "Graphics Defaults"
-msgstr "Tekeningen opschonen"
+msgstr "Standaardwaarden afbeeldingen"
 
 #: common/eda_base_frame.cpp:1327 common/hotkey_store.cpp:78
 #: common/tool/common_tools.cpp:613 kicad/tools/kicad_manager_actions.cpp:136
@@ -6777,7 +6678,7 @@ msgstr "Bladspeld"
 #: common/eda_item.cpp:463 eeschema/dialogs/dialog_migrate_buses.cpp:114
 #: pcbnew/tools/pcb_actions.cpp:2311
 msgid "Sheet"
-msgstr "Layout"
+msgstr "Blad"
 
 #: common/eda_item.cpp:471
 msgid "SCH Screen"
@@ -6924,23 +6825,20 @@ msgstr "Bézier"
 #: common/eda_shape.cpp:2545
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:149
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:238
-#, fuzzy
 msgid "Hatch"
-msgstr "Gearceerd"
+msgstr "Arcering"
 
 #: common/eda_shape.cpp:2546
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:149
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:238
-#, fuzzy
 msgid "Reverse Hatch"
-msgstr "Inverteren"
+msgstr "Omgekeerde arcering"
 
 #: common/eda_shape.cpp:2547
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:149
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:238
-#, fuzzy
 msgid "Cross-hatch"
-msgstr "Kruisverwijzing"
+msgstr "Kruisarcering"
 
 #: common/eda_shape.cpp:2583 eeschema/sch_shape.cpp:566
 msgid "Shape Properties"
@@ -7135,9 +7033,8 @@ msgid "Font"
 msgstr "Lettertype"
 
 #: common/eda_text.cpp:1361
-#, fuzzy
 msgid "Auto Thickness"
-msgstr "Busdikte"
+msgstr "Automatische dikte"
 
 #: common/eda_text.cpp:1364 eeschema/sch_field.cpp:1622
 #: eeschema/sch_label.cpp:2350 eeschema/sch_tablecell.cpp:230
@@ -7247,20 +7144,18 @@ msgstr ""
 "projectspecifieke footprintbibliotheek met de naam footprints.pretty."
 
 #: common/env_vars.cpp:141
-#, fuzzy
 msgid "A directory containing system-wide scripts installed with KiCad."
-msgstr "Een map met systeembrede scripts die met KiCad zijn geïnstalleerd"
+msgstr "Een map met systeembrede scripts die met KiCad zijn geïnstalleerd."
 
 #: common/env_vars.cpp:144
-#, fuzzy
 msgid "A directory containing user-specific scripts installed with KiCad."
 msgstr ""
-"Een map met gebruikersspecifieke scripts die met KiCad zijn geïnstalleerd"
+"Een map met gebruikersspecifieke scripts die met KiCad zijn geïnstalleerd."
 
 #: common/env_vars.cpp:147
-#, fuzzy, c-format
+#, c-format
 msgid "Deprecated version of %s."
-msgstr "Verouderde versie van KICAD_SYMBOL_DIR."
+msgstr "Verouderde versie van %s."
 
 #: common/exceptions.cpp:78
 #, c-format
@@ -7363,8 +7258,8 @@ msgid ""
 "Duplicate library nickname '%s' found in footprint library table file line "
 "%d."
 msgstr ""
-"Dubbele bibliotheekbijnaam '%s' gevonden in tabelbestand "
-"footprintbibliotheek op regel %d."
+"Dubbele bijnaam voor bibliotheek '%s' gevonden in bestandregel %d van de "
+"footprintbibliotheektabel."
 
 #: common/gestfich.cpp:248
 #, c-format
@@ -7408,34 +7303,34 @@ msgid "Error removing directory '%s': %s"
 msgstr "Fout bij verwijderen van map '%s': %s"
 
 #: common/gestfich.cpp:366 common/gestfich.cpp:440 common/gestfich.cpp:554
-#, fuzzy, c-format
+#, c-format
 msgid "Could not open source directory: %s"
-msgstr "Kan map '%s' niet aanmaken"
+msgstr "Kon bronmap niet openen: %s"
 
 #: common/gestfich.cpp:373 common/gestfich.cpp:511
-#, fuzzy, c-format
+#, c-format
 msgid "Could not create destination directory: %s"
-msgstr "Kan map '%s' niet aanmaken"
+msgstr "Kon doelmap niet aanmaken: %s"
 
 #: common/gestfich.cpp:397 common/gestfich.cpp:428
-#, fuzzy, c-format
+#, c-format
 msgid "Could not copy file: %s to %s"
-msgstr "Kan niet verbinden met '%s' "
+msgstr "Kan bestand niet kopiëren: %s naar %s"
 
 #: common/gestfich.cpp:477
-#, fuzzy, c-format
+#, c-format
 msgid "Could not copy directory: %s to %s"
-msgstr "Kan niet verbinden met '%s' "
+msgstr "Kan map niet kopiëren: %s naar %s"
 
 #: common/gestfich.cpp:529
-#, fuzzy, c-format
+#, c-format
 msgid "Source directory does not exist: %s"
-msgstr "Map '%s' bestaat niet"
+msgstr "Bronmap bestaat niet: %s"
 
 #: common/gestfich.cpp:584
-#, fuzzy, c-format
+#, c-format
 msgid "Could not read file: %s"
-msgstr "Kan bestand niet inlezen. "
+msgstr "Kan bestand niet lezen: %s"
 
 #: common/git/git_clone_handler.cpp:58
 #, c-format
@@ -7453,14 +7348,14 @@ msgid "Could not lookup remote '%s'"
 msgstr "Kan remote '%s' niet vinden"
 
 #: common/git/git_pull_handler.cpp:87
-#, fuzzy, c-format
+#, c-format
 msgid "Could not connect to remote '%s': %s"
-msgstr "Kan niet verbinden met remote '%s'"
+msgstr "Kan niet verbinden met remote '%s': '%s'"
 
 #: common/git/git_pull_handler.cpp:99
-#, fuzzy, c-format
+#, c-format
 msgid "Could not fetch data from remote '%s': %s"
-msgstr "Kan geen data ophalen van remote '%s'"
+msgstr "Kan geen data ophalen van remote '%s': %s"
 
 #: common/git/git_pull_handler.cpp:127
 msgid "Could not read 'FETCH_HEAD'"
@@ -7507,9 +7402,9 @@ msgid "Failed to perform checkout operation."
 msgstr "Uitchecken mislukt."
 
 #: common/git/git_pull_handler.cpp:338
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to update reference '%s' to point to '%s'"
-msgstr "Bijwerken HEAD-referentie voor branch '%s' mislukt"
+msgstr "Bijwerken referentie '%s' verwijzend naar '%s' mislukt"
 
 #: common/git/git_pull_handler.cpp:348
 #, fuzzy
@@ -7527,9 +7422,9 @@ msgid "Failed to push reference to revision walker."
 msgstr "Wijzigingen pushen naar remote repository mislukt."
 
 #: common/git/git_pull_handler.cpp:381
-#, fuzzy, c-format
+#, c-format
 msgid "Could not lookup commit '%s'"
-msgstr "Kan commit '{}' niet vinden"
+msgstr "Kan commit %s niet vinden"
 
 #: common/git/git_pull_handler.cpp:414
 msgid "Could not merge commits"
@@ -7565,9 +7460,9 @@ msgid "Could not connect to remote: %s"
 msgstr "Kan niet verbinden met remote '%s'"
 
 #: common/git/git_push_handler.cpp:104
-#, fuzzy, c-format
+#, c-format
 msgid "Could not push to remote: %s"
-msgstr "Kan niet pushen naar remote"
+msgstr "Kan niet pushen naar remote: %s"
 
 #: common/git/kicad_git_common.cpp:844
 #, c-format
@@ -7978,9 +7873,9 @@ msgid "Invalid size %lld: too large"
 msgstr "Ongeldige maat %lld: te groot"
 
 #: common/io/eagle/eagle_parser.cpp:528
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid Arc with radius %0.2f and angle %0.2f"
-msgstr "Ongeldige boog met straal %f en hoek %f"
+msgstr "Ongeldige boog met straal %0.2f en hoek %0.2f"
 
 #: common/io/easyeda/easyeda_parser_base.cpp:38
 #, c-format
@@ -8045,19 +7940,16 @@ msgid "PCB: Export 3D Model"
 msgstr "3D-model exporteren"
 
 #: common/jobs/job_export_pcb_drill.cpp:128
-#, fuzzy
 msgid "Export drill data"
-msgstr "Soldeerpasta exporteren"
+msgstr "Boorgegevens exporteren"
 
 #: common/jobs/job_export_pcb_drill.cpp:134
-#, fuzzy
 msgid "Export Drill Data Job Settings"
-msgstr "Opties bewerken..."
+msgstr "Taakinstellingen boorgegevens exporteren"
 
 #: common/jobs/job_export_pcb_drill.cpp:137
-#, fuzzy
 msgid "PCB: Export Drill Data"
-msgstr "Soldeerpasta exporteren"
+msgstr "PCB: Boorgegevens exporteren"
 
 #: common/jobs/job_export_pcb_dxf.cpp:58
 #: common/jobs/job_export_sch_plot.cpp:127 kicad/kicad_cli.cpp:148
@@ -8066,9 +7958,8 @@ msgstr "DXF exporteren"
 
 #: common/jobs/job_export_pcb_dxf.cpp:64
 #: common/jobs/job_export_sch_plot.cpp:133
-#, fuzzy
 msgid "Export DXF Job Settings"
-msgstr "Opties bewerken..."
+msgstr "Taakinstellingen DXF exporteren"
 
 #: common/jobs/job_export_pcb_dxf.cpp:68
 #, fuzzy
@@ -8162,9 +8053,8 @@ msgid "Export ODB++"
 msgstr "XAP exporteren"
 
 #: common/jobs/job_export_pcb_odb.cpp:63
-#, fuzzy
 msgid "Export ODB++ Job Settings"
-msgstr "Opties bewerken..."
+msgstr "Taakinstellingen ODB++ exporteren"
 
 #: common/jobs/job_export_pcb_odb.cpp:76
 #, fuzzy
@@ -8178,9 +8068,8 @@ msgstr "PDF exporteren"
 
 #: common/jobs/job_export_pcb_pdf.cpp:69
 #: common/jobs/job_export_sch_plot.cpp:114
-#, fuzzy
 msgid "Export PDF Job Settings"
-msgstr "Opties bewerken..."
+msgstr "Taakinstellingen PDF exporteren"
 
 #: common/jobs/job_export_pcb_pdf.cpp:73
 #, fuzzy
@@ -8207,9 +8096,8 @@ msgid "Export Postscript"
 msgstr "Plot PostScript"
 
 #: common/jobs/job_export_pcb_ps.cpp:63 common/jobs/job_export_sch_plot.cpp:171
-#, fuzzy
 msgid "Export Postscript Job Settings"
-msgstr "Opties bewerken..."
+msgstr "Taakinstellingen PostScript exporteren"
 
 #: common/jobs/job_export_pcb_ps.cpp:67
 #, fuzzy
@@ -8223,9 +8111,8 @@ msgstr "SVG exporteren"
 
 #: common/jobs/job_export_pcb_svg.cpp:56
 #: common/jobs/job_export_sch_plot.cpp:152
-#, fuzzy
 msgid "Export SVG Job Settings"
-msgstr "Opties bewerken..."
+msgstr "Taakinstellingen SVG exporteren"
 
 #: common/jobs/job_export_pcb_svg.cpp:60
 #, fuzzy
@@ -8233,24 +8120,21 @@ msgid "PCB: Export SVG"
 msgstr "SVG exporteren"
 
 #: common/jobs/job_export_sch_bom.cpp:92
-#, fuzzy
 msgid "Generate bill of materials"
-msgstr "Stuklijst (BOM) genereren..."
+msgstr "Stuklijst (BOM) genereren"
 
 #: common/jobs/job_export_sch_bom.cpp:98
-#, fuzzy
 msgid "Generate Bill of Materials Job Settings"
-msgstr "Stuklijst (BOM) genereren..."
+msgstr "Taakinstellingen stuklijst (BOM) genereren"
 
 #: common/jobs/job_export_sch_bom.cpp:102
-#, fuzzy
 msgid "Schematic: Generate Bill of Materials"
-msgstr "Stuklijst (BOM) genereren..."
+msgstr "Schema: Stuklijst (BOM) genereren"
 
 #: common/jobs/job_export_sch_netlist.cpp:80
-#, fuzzy, c-format
+#, c-format
 msgid "Export %s netlist"
-msgstr "Netlijst exporteren"
+msgstr "Netlijst %s exporteren"
 
 #: common/jobs/job_export_sch_netlist.cpp:86
 #, fuzzy
@@ -8307,14 +8191,13 @@ msgid "PCB: Perform DRC"
 msgstr ""
 
 #: common/jobs/job_pcb_render.cpp:131
-#, fuzzy, c-format
+#, c-format
 msgid "Render %s"
-msgstr "PCB herannoteren"
+msgstr "%s renderen"
 
 #: common/jobs/job_pcb_render.cpp:137
-#, fuzzy
 msgid "Render PCB Job Settings"
-msgstr "Opties bewerken..."
+msgstr "Taakinstellingen PCB renderen"
 
 #: common/jobs/job_pcb_render.cpp:141
 msgid "PCB: Render"
@@ -8350,9 +8233,8 @@ msgid "Archive"
 msgstr "&Uitpakken"
 
 #: common/jobs/jobs_output_folder.cpp:80 common/jobs/jobset.cpp:43
-#, fuzzy
 msgid "Folder"
-msgstr "Map:"
+msgstr "Map"
 
 #: common/json_schema_validator.cpp:48
 #, c-format
@@ -8489,9 +8371,8 @@ msgid "Symbol body fills"
 msgstr "Symboolvulling"
 
 #: common/layer_id.cpp:88
-#, fuzzy
 msgid "Shape fills"
-msgstr "Sheet-bestand"
+msgstr "Vormvullingen"
 
 #: common/layer_id.cpp:89
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:72
@@ -9003,9 +8884,9 @@ msgid "Error loading project footprint library table."
 msgstr "Fout bij het laden van de projectspecifieke footprintbibliotheektabel."
 
 #: common/project.cpp:453 common/project.cpp:459
-#, fuzzy
 msgid "Error loading project design block library table."
-msgstr "Fout bij het laden van de projectspecifieke footprintbibliotheektabel."
+msgstr ""
+"Fout bij het laden van de projectspecifieke ontwerpblok bibliotheektabel."
 
 #: common/project/net_settings.cpp:67 pcbnew/board.cpp:138
 msgid "This is the default net class."
@@ -9059,9 +8940,9 @@ msgid "Failed to create file '%s'."
 msgstr "Aanmaken van bestand '%s' mislukt."
 
 #: common/project/project_archiver.cpp:263
-#, fuzzy, c-format
+#, c-format
 msgid "Error opening directory: '%s'."
-msgstr "Fout bij verwijderen van map '%s': %s"
+msgstr "Fout bij openen van map: '%s'."
 
 #: common/project/project_archiver.cpp:315
 #, c-format
@@ -9097,9 +8978,9 @@ msgid "Error: "
 msgstr "Foutmelding: "
 
 #: common/richio.cpp:102 eeschema/tools/sch_drawing_tools.cpp:2981
-#, fuzzy, c-format
+#, c-format
 msgid "File '%s' does not exist."
-msgstr "Map '%s' bestaat niet"
+msgstr "Bestand '%s' bestaat niet."
 
 #: common/richio.cpp:129 eeschema/sch_io/eagle/sch_io_eagle.cpp:593
 #: eeschema/sch_io/eagle/sch_io_eagle.cpp:610
@@ -9221,9 +9102,8 @@ msgid "Region to hold the IPC/Scripting action buttons"
 msgstr ""
 
 #: common/tool/action_toolbar.cpp:1062
-#, fuzzy
 msgid "Layer selector"
-msgstr "Laag selectie:"
+msgstr "Laagkiezer"
 
 #: common/tool/action_toolbar.cpp:1063
 #, fuzzy
@@ -9231,9 +9111,8 @@ msgid "Control to select the layer"
 msgstr "Geselecteerde grafische laag wissen"
 
 #: common/tool/action_toolbar.cpp:1065
-#, fuzzy
 msgid "Symbol unit selector"
-msgstr "Symbooleenheidnotatie:"
+msgstr "Symbooleenheidkiezer"
 
 #: common/tool/action_toolbar.cpp:1066
 #, fuzzy
@@ -9282,9 +9161,8 @@ msgid "Open a library file with a text editor"
 msgstr "Bibliotheekbestand openen met teksteditor"
 
 #: common/tool/actions.cpp:83
-#, fuzzy
 msgid "Open in file explorer..."
-msgstr "Open map in bestandsverkenner"
+msgstr "In bestandsverkenner openen…"
 
 #: common/tool/actions.cpp:84
 #, fuzzy
@@ -9528,9 +9406,8 @@ msgstr "Alles samenvouwen"
 #: common/tool/actions.cpp:441 eeschema/tools/sch_edit_tool.cpp:3214
 #: eeschema/tools/symbol_editor_edit_tool.cpp:1233
 #: pcbnew/tools/edit_tool.cpp:3170
-#, fuzzy
 msgid "Increment"
-msgstr "Verhogingsstap:"
+msgstr "Verhoog"
 
 #: common/tool/actions.cpp:442
 #, fuzzy
@@ -9538,9 +9415,8 @@ msgid "Increment the selected item(s)"
 msgstr "Verwijderd geselecteerde item(s)"
 
 #: common/tool/actions.cpp:447
-#, fuzzy
 msgid "Increment Primary"
-msgstr "Verhogingsstap:"
+msgstr "Primair veld verhogen"
 
 #: common/tool/actions.cpp:448
 #, fuzzy
@@ -9548,9 +9424,8 @@ msgid "Increment the primary field of the selected item(s)"
 msgstr "Maakt grafische lijnen van de selectie"
 
 #: common/tool/actions.cpp:454
-#, fuzzy
 msgid "Decrement Primary"
-msgstr "Verhogingsstap:"
+msgstr "Primair veld verlagen"
 
 #: common/tool/actions.cpp:455
 #, fuzzy
@@ -9558,9 +9433,8 @@ msgid "Decrement the primary field of the selected item(s)"
 msgstr "Dupliceert de geselecteerde item(s)"
 
 #: common/tool/actions.cpp:461
-#, fuzzy
 msgid "Increment Secondary"
-msgstr "Verhogingsstap:"
+msgstr "Secundair veld verhogen"
 
 #: common/tool/actions.cpp:462
 #, fuzzy
@@ -9776,7 +9650,7 @@ msgstr "Zoomen tot het past"
 
 #: common/tool/actions.cpp:699
 msgid "Zoom to worksheet area if exists or edited object"
-msgstr ""
+msgstr "Zoomen op tekenblad als dat bestaat, of bewerkte objecten"
 
 #: common/tool/actions.cpp:706
 #, fuzzy
@@ -10190,9 +10064,8 @@ msgid "Show Datasheet"
 msgstr "Datasheet weergeven"
 
 #: common/tool/actions.cpp:1293
-#, fuzzy
 msgid "Open the datasheet in a browser"
-msgstr "Opent het gegevensblad in een webbrowser"
+msgstr "Datasheet in een webbrowser openen"
 
 #: common/tool/actions.cpp:1301
 msgid "Update PCB from Schematic..."
@@ -10244,14 +10117,12 @@ msgid "Edit the global and project footprint library lists"
 msgstr "Bibliotheeklijsten globale en projectfootprints bewerken"
 
 #: common/tool/actions.cpp:1345
-#, fuzzy
 msgid "Manage Design Block Libraries..."
-msgstr "Symboolbibliotheken beheren..."
+msgstr "Ontwerpblokbibliotheken beheren..."
 
 #: common/tool/actions.cpp:1346
-#, fuzzy
 msgid "Edit the global and project design block library lists"
-msgstr "Bibliotheeklijsten globale en projectsymbolen bewerken"
+msgstr "Bibliotheeklijsten globale en projectontwerpblokken bewerken"
 
 #: common/tool/actions.cpp:1352
 msgid "Getting Started with KiCad"
@@ -10328,9 +10199,8 @@ msgid "Remove File"
 msgstr "Bestand verwijderen"
 
 #: common/tool/actions.cpp:1424
-#, fuzzy
 msgid "Remove an embedded file"
-msgstr "Alle overeenkomende lagen verwijderen."
+msgstr "Ingesloten bestand verwijderen"
 
 #: common/tool/actions.cpp:1429
 #, fuzzy
@@ -10448,11 +10318,11 @@ msgstr "De waarde van het veld mag niet leeg zijn."
 
 #: common/validators.cpp:315
 msgid "carriage return"
-msgstr "carriage return"
+msgstr "regelafbreking"
 
 #: common/validators.cpp:317
 msgid "line feed"
-msgstr "line feed"
+msgstr "lijninvoer"
 
 #: common/validators.cpp:319
 msgid "tab"
@@ -10536,9 +10406,8 @@ msgid "Library %s already exists."
 msgstr "Bibliotheek %s bestaat al."
 
 #: common/widgets/design_block_pane.cpp:274
-#, fuzzy
 msgid "Enter a description for the library:"
-msgstr "Opties voor deze bibliotheekvermelding bewerken"
+msgstr "Beschrijving voor de bibliotheek invoeren:"
 
 #: common/widgets/design_block_pane.cpp:274 eeschema/sch_symbol.cpp:2894
 #: eeschema/widgets/search_handlers.cpp:171 pcbnew/footprint.cpp:4162
@@ -10568,33 +10437,34 @@ msgid ""
 "Delete design block library '%s' from disk? This will delete all design "
 "blocks within the library."
 msgstr ""
+"Ontwerpblokbibliotheek '%s' van schijf verwijderen? Dit zal alle "
+"ontwerpblokken in de bibliotheek verwijderen."
 
 #: common/widgets/design_block_pane.cpp:350
-#, fuzzy, c-format
+#, c-format
 msgid "Design block library '%s' deleted"
-msgstr "[geen bibliotheek geselecteerd]"
+msgstr "Ontwerpblokbibliotheek '%s' verwijderd"
 
 #: common/widgets/design_block_pane.cpp:375
-#, fuzzy, c-format
+#, c-format
 msgid "Delete design block '%s' in library '%s' from disk?"
-msgstr "Footprint '%s' verwijderen uit bibliotheek '%s'?"
+msgstr "Ontwerpblok '%s' in bibliotheek '%s' van schijf verwijderen?"
 
 #: common/widgets/design_block_pane.cpp:391
-#, fuzzy, c-format
+#, c-format
 msgid "Design block '%s' deleted from library '%s'"
-msgstr "Footprint '%s' verwijderd uit bibliotheek '%s'"
+msgstr "Ontwerpblok '%s' uit bibliotheek '%s' verwijderd"
 
 #: common/widgets/design_block_pane.cpp:460
 #: eeschema/sch_design_block_utils.cpp:47 pcbnew/pcb_design_block_utils.cpp:54
-#, fuzzy, c-format
+#, c-format
 msgid "Design block '%s' already exists in library '%s'."
-msgstr "Symbool '%s' bestaat al in bibliotheek '%s'."
+msgstr "Ontwerpblok '%s' bestaat al in bibliotheek '%s'."
 
 #: common/widgets/design_block_pane.cpp:463
 #: eeschema/sch_design_block_utils.cpp:51 pcbnew/pcb_design_block_utils.cpp:57
-#, fuzzy
 msgid "Overwrite existing design block?"
-msgstr "Bestaande voorinstelling overschrijven?"
+msgstr "Bestaande ontwerpblok overschrijven?"
 
 #: common/widgets/design_block_pane.cpp:482 eeschema/sch_base_frame.cpp:289
 #: pcbnew/footprint_libraries_utils.cpp:419
@@ -11165,12 +11035,11 @@ msgstr "KiCad-footprintbibliotheekpaden"
 
 #: common/wildcards_and_files_ext.cpp:368
 msgid "KiCad design block path"
-msgstr ""
+msgstr "KiCad ontwerpblok pad"
 
 #: common/wildcards_and_files_ext.cpp:375
-#, fuzzy
 msgid "KiCad design block library paths"
-msgstr "KiCad-footprintbibliotheekpaden"
+msgstr "KiCad ontwerpblok bibliotheekpaden"
 
 #: common/wildcards_and_files_ext.cpp:382
 msgid "Drawing sheet files"
@@ -11543,9 +11412,8 @@ msgid "Footprint '%s' not found."
 msgstr "Footprint '%s' niet gevonden."
 
 #: cvpcb/display_footprints_frame.cpp:316
-#, fuzzy
 msgid "Error loading footprint"
-msgstr "Fout bij het laden van lettertype '%s'."
+msgstr "Fout bij het laden van footprint"
 
 #: cvpcb/display_footprints_frame.cpp:381 pcbnew/footprint.cpp:1756
 #, c-format
@@ -11619,14 +11487,12 @@ msgid "Footprint Filters:"
 msgstr "Footprintfilters:"
 
 #: cvpcb/toolbars_cvpcb.cpp:122
-#, fuzzy
 msgid "Footprint filters"
-msgstr "Footprintfilters:"
+msgstr "Footprintfilters"
 
 #: cvpcb/toolbars_cvpcb.cpp:123
-#, fuzzy
 msgid "Footprint filtering controls"
-msgstr "Footprintfilters:"
+msgstr "Footprintfilterbediening"
 
 #: cvpcb/tools/cvpcb_actions.cpp:48
 #, fuzzy
@@ -11700,9 +11566,8 @@ msgid "Automatically Assign Footprints"
 msgstr "Automatisch footprints toewijzen"
 
 #: cvpcb/tools/cvpcb_actions.cpp:126
-#, fuzzy
 msgid "Assign footprints automatically using a footprint association file"
-msgstr "Selecteer een footprint voor een footprintassociatiesrapport."
+msgstr "Footprints automatisch toewijzen met een footprintassociatiebestand"
 
 #: cvpcb/tools/cvpcb_actions.cpp:133
 #, fuzzy
@@ -11745,14 +11610,14 @@ msgid "Delete all associations?"
 msgstr "Alle associaties verwijderen?"
 
 #: eeschema/annotate.cpp:82
-#, fuzzy, c-format
+#, c-format
 msgid "Cleared annotation for %s (unit %s)."
-msgstr "%s (eenheid %s) als %s geannoteerd ."
+msgstr "Annotatie verwijderd voor %s (eenheid %s)."
 
 #: eeschema/annotate.cpp:88
-#, fuzzy, c-format
+#, c-format
 msgid "Cleared annotation for %s."
-msgstr "Annotatie wissen"
+msgstr "Annotatie verwijderd voor %s."
 
 #: eeschema/annotate.cpp:174
 msgid "Delete Annotation"
@@ -11831,12 +11696,13 @@ msgid "Unconnected wire to bus entry"
 msgstr "Niet verbonden"
 
 #: eeschema/connection_graph.cpp:4282
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Hierarchical label \"%s\" in root sheet cannot be connected to non-existent "
 "parent sheet"
 msgstr ""
-"Hiërarchielabel %s heeft geen corresponderende pin in het bovenliggende blad"
+"Hiërarchielabel \"%s\" in hoofdblad kan niet met onbestaand bovenliggende "
+"blad verbonden worden"
 
 #: eeschema/connection_graph.cpp:4347
 #, c-format
@@ -12910,7 +12776,7 @@ msgstr "Netlijst exporteren in SPICE-indeling"
 #: eeschema/dialogs/dialog_export_netlist.cpp:311
 #: eeschema/dialogs/dialog_export_netlist.cpp:372
 msgid "Use current sheet as root"
-msgstr "Huidige blad gebruiken als hoofdblad"
+msgstr "Huidige blad als hoofdblad gebruiken"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:312
 #: eeschema/dialogs/dialog_export_netlist.cpp:373
@@ -13468,9 +13334,8 @@ msgid "Increment by:"
 msgstr "Verhogingsstap:"
 
 #: eeschema/dialogs/dialog_increment_annotations_base.cpp:54
-#, fuzzy
 msgid "All sheets"
-msgstr "Layout Toevoegen"
+msgstr "Alle bladen"
 
 #: eeschema/dialogs/dialog_increment_annotations_base.h:49
 #, fuzzy
@@ -14031,9 +13896,8 @@ msgid "Exclude from board"
 msgstr "Weglaten van bord"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:95
-#, fuzzy
 msgid "Keep linked datasheet"
-msgstr "Regelafbrekingen behouden"
+msgstr "Gekoppelde datasheet behouden"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:98
 #, fuzzy
@@ -14218,6 +14082,8 @@ msgid ""
 "Local power symbols create labels that are limited to the sheet in which "
 "they are used"
 msgstr ""
+"Lokale voedingssymbolen maken labels die alleen gelden op het blad waarin ze "
+"worden gebruikt"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:221
 msgid "Pin Text Options"
@@ -16008,7 +15874,7 @@ msgstr "Footprint kiezen"
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:102
 #: eeschema/fields_grid_table.cpp:1085
 msgid "Show datasheet in browser"
-msgstr "Gegevensblad in webbrowser weergeven"
+msgstr "Datasheet in webbrowser weergeven"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:197
 #, fuzzy
@@ -17732,14 +17598,13 @@ msgstr ""
 "Bewerk deze globale symboolbibliotheektabel in het menu Voorkeuren."
 
 #: eeschema/eeschema.cpp:529
-#, fuzzy
 msgid ""
 "An error occurred attempting to load the global design block library table.\n"
 "Please edit this global design block library table in Preferences menu."
 msgstr ""
 "Er is een fout opgetreden bij het laden van de globale "
-"symboolbibliotheektabel.\n"
-"Bewerk deze globale symboolbibliotheektabel in het menu Voorkeuren."
+"ontwerpblokbibliotheektabel.\n"
+"Bewerk deze globale ontwerpblokbibliotheektabel in het menu Voorkeuren."
 
 #: eeschema/eeschema.cpp:588
 #, c-format
@@ -17896,9 +17761,8 @@ msgstr "Selectiefilter"
 #: eeschema/sch_edit_frame.cpp:1977 eeschema/sch_edit_frame.cpp:1983
 #: eeschema/tools/sch_actions.cpp:123 pcbnew/menubar_pcb_editor.cpp:219
 #: pcbnew/pcb_edit_frame.cpp:327 pcbnew/tools/pcb_actions.cpp:477
-#, fuzzy
 msgid "Design Blocks"
-msgstr "Ontwerpregels"
+msgstr "Ontwerpblokken"
 
 #: eeschema/erc/erc.cpp:79 eeschema/erc/erc.cpp:96
 msgid "Input Pin"
@@ -17951,9 +17815,8 @@ msgstr "Geen verbinding"
 #: eeschema/erc/erc.cpp:210 eeschema/erc/erc.cpp:229
 #: pcbnew/drc/drc_test_provider_misc.cpp:311
 #: pcbnew/drc/drc_test_provider_misc.cpp:331
-#, fuzzy
 msgid " (in drawing sheet)"
-msgstr "Tekenblad afdrukken"
+msgstr " (in tekenblad)"
 
 #: eeschema/erc/erc.cpp:427
 msgid "Unresolved text variable in drawing sheet"
@@ -18168,7 +18031,7 @@ msgstr "Diversen"
 
 #: eeschema/erc/erc_item.cpp:45
 msgid "Duplicate sheet names within a given sheet"
-msgstr "Dubbele schemanamen binnen een gegeven schema"
+msgstr "Dubbele bladnamen binnen een gegeven schema"
 
 #: eeschema/erc/erc_item.cpp:49
 msgid "Symbol pin or wire end off connection grid"
@@ -18431,8 +18294,8 @@ msgid ""
 "The entire schematic could not be loaded.  Errors occurred attempting to "
 "load hierarchical sheets."
 msgstr ""
-"Het volledige schema kan niet worden geladen. Er zijn fouten opgetreden bij "
-"het laden van het hiërarchische schema."
+"Het volledige schema kan niet worden geladen.  Er zijn fouten opgetreden bij "
+"het laden van hiërarchische bladen."
 
 #: eeschema/files-io.cpp:296 eeschema/files-io.cpp:304
 #: eeschema/files-io.cpp:1378 eeschema/sheet.cpp:231
@@ -19124,9 +18987,9 @@ msgid "Error: duplicate sheet names. Continue?"
 msgstr "Fout: gedupliceerde bladnamen. Doorgaan?"
 
 #: eeschema/picksymbol.cpp:129
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol unit '%s' is already placed (on sheet '%s')"
-msgstr "Schema '%s' is al geopend door '%s' op '%s'."
+msgstr "Symbooleenheid '%s' is al geplaatst (op blad '%s')"
 
 #: eeschema/picksymbol.cpp:132
 #, fuzzy
@@ -19440,26 +19303,23 @@ msgstr "Bestaande voorinstelling overschrijven?"
 #: eeschema/sch_design_block_utils.cpp:259
 #: pcbnew/pcb_design_block_utils.cpp:127 pcbnew/pcb_design_block_utils.cpp:187
 #: pcbnew/pcb_design_block_utils.cpp:338 pcbnew/pcb_design_block_utils.cpp:378
-#, fuzzy
 msgid "Please select a library to save the design block to."
-msgstr "Selecteer een symboolbibliotheektabel-bestand."
+msgstr "Selecteer een bibliotheek om ontwerpblok in op te slaan."
 
 #: eeschema/sch_design_block_utils.cpp:91
 #: eeschema/sch_design_block_utils.cpp:172
 #: eeschema/sch_design_block_utils.cpp:276
 #: eeschema/sch_design_block_utils.cpp:377
 msgid "Design blocks with nested sheets are not supported."
-msgstr ""
+msgstr "Ontwerpblokken met geneste bladen zijn niet ondersteund."
 
 #: eeschema/sch_design_block_utils.cpp:129
 #: eeschema/sch_design_block_utils.cpp:216
 #: eeschema/sch_design_block_utils.cpp:316
 #: eeschema/sch_design_block_utils.cpp:459
-#, fuzzy
 msgid "Error saving temporary schematic file to create design block."
 msgstr ""
-"Fout bij het opslaan van schema-bestand '%s'.\n"
-"%s"
+"Fout bij opslaan van tijdelijk schemabestand om ontwerpblok aan te maken."
 
 #: eeschema/sch_design_block_utils.cpp:162
 #: eeschema/sch_design_block_utils.cpp:360
@@ -19471,7 +19331,7 @@ msgstr "Selecteer een symboolbibliotheektabel-bestand."
 #: eeschema/sch_design_block_utils.cpp:353
 #: pcbnew/pcb_design_block_utils.cpp:347 pcbnew/pcb_design_block_utils.cpp:387
 msgid "Please select some items to save as a design block."
-msgstr ""
+msgstr "Selecteer enkele items om als ontwerpblok op te slaan."
 
 #: eeschema/sch_edit_frame.cpp:159
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:58
@@ -19598,7 +19458,7 @@ msgstr "Ga naar pagina %s (%s)"
 
 #: eeschema/sch_field.cpp:1056
 msgid "Back to Previous Selected Sheet"
-msgstr "Terug naar de vorige pagina"
+msgstr "Terug naar vorig geselecteerde blad"
 
 #: eeschema/sch_field.cpp:1615
 msgid "Show Field Name"
@@ -19785,8 +19645,8 @@ msgid ""
 "The CADSTAR design contains re-use blocks which has no KiCad equivalent. The "
 "re-use block information has been discarded during the import."
 msgstr ""
-"Het CADSTAR-ontwerp bevat blokken voor hergebruik die geen KiCad-equivalent "
-"hebben. De blokinformatie voor hergebruik is tijdens het importeren "
+"Het CADSTAR ontwerp bevat herbruikbare blokken die geen KiCad equivalent "
+"hebben. De informatie voor herbruikbare blokken is tijdens het importeren "
 "verwijderd."
 
 #: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:514
@@ -19958,8 +19818,8 @@ msgid ""
 "to another sheet in the design. KiCad requires all sheet symbols to be "
 "associated to a sheet, so the block was not loaded."
 msgstr ""
-"Het blok-ID %s (bloknaam: '%s') is getekend op vel '%s' maar is niet "
-"gekoppeld aan een ander vel in het ontwerp. KiCad vereist dat alle "
+"Het blok-ID %s (bloknaam: '%s') is getekend op blad '%s' maar is niet "
+"gekoppeld aan een ander blad in het ontwerp. KiCad vereist dat alle "
 "bladsymbolen aan een blad zijn gekoppeld, dus het blok is niet geladen."
 
 #: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:2547
@@ -20389,7 +20249,7 @@ msgstr "Ongeldige bladpinnaam"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:2397
 msgid "Empty sheet pin name"
-msgstr "Lege pin-naam"
+msgstr "Lege pinnaam"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:2963
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:2976
@@ -20717,9 +20577,8 @@ msgid "Pin Name"
 msgstr "Pinnaam"
 
 #: eeschema/sch_plotter.cpp:118
-#, fuzzy
 msgid "No sheets to plot."
-msgstr "Bladpin importeren"
+msgstr "Geen bladen om te plotten."
 
 #: eeschema/sch_plotter.cpp:229 pcbnew/pcbnew_jobs_handler.cpp:1292
 #, c-format
@@ -21388,15 +21247,15 @@ msgid "Schematic Cleanup"
 msgstr "Schema-opschoning"
 
 #: eeschema/sheet.cpp:76
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The sheet changes cannot be made because the destination sheet already has "
 "the sheet '%s' or one of its subsheets as a parent somewhere in the "
 "schematic hierarchy."
 msgstr ""
-"De bladwijzigingen kunnen niet worden aangebracht omdat het bestemmingsblad "
-"al het blad '%s' of één van zijn subbladen als ouder ergens in de schema-"
-"hiërarchie heeft."
+"De wijzigingen aan het blad kunnen niet worden doorgevoerd omdat het "
+"bestemmingsblad al dit blad '%s' of één van zijn subbladen ergens erboven in "
+"de schemahiërarchie heeft."
 
 #: eeschema/sheet.cpp:97
 #, c-format
@@ -21550,7 +21409,7 @@ msgstr "Dit bericht niet meer tonen."
 
 #: eeschema/sheet.cpp:775
 msgid "Create New Sheet"
-msgstr "Maak een nieuw blad"
+msgstr "Nieuw blad maken"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:68 eeschema/sim/kibis/ibis_parser.cpp:97
 #: eeschema/sim/kibis/ibis_parser.cpp:120
@@ -22368,7 +22227,7 @@ msgid ""
 "Schematic sheet simulation command directive has changed.  Do you wish to "
 "update the Simulation Command?"
 msgstr ""
-"Simulatieopdrachtrichtlijn van het schemablad is gewijzigd. Wilt u de "
+"Richtlijn van simulatieopdracht op schemablad is gewijzigd. Wilt u de "
 "simulatieopdracht bijwerken?"
 
 #: eeschema/sim/simulator_frame.cpp:482 eeschema/sim/simulator_frame.cpp:866
@@ -23428,7 +23287,7 @@ msgstr "Bladpinnen verwijderen"
 
 #: eeschema/sync_sheet_pin/panel_sync_sheet_pins_base.cpp:59
 msgid "Sheet name"
-msgstr "Sheet naam"
+msgstr "Bladnaam"
 
 #: eeschema/sync_sheet_pin/panel_sync_sheet_pins_base.cpp:69
 msgid "Add Sheet Pins"
@@ -23439,19 +23298,21 @@ msgid "Delete Hierarchical Labels"
 msgstr "Hiërarchische labels verwijderen"
 
 #: eeschema/sync_sheet_pin/panel_sync_sheet_pins_base.cpp:99
-#, fuzzy
 msgid ""
 "Associate selected sheet pin and hierarchical label using the label name"
-msgstr "Bladpinnen en hiërarchische labels synchroniseren"
+msgstr ""
+"Geselecteerde bladpin en hiërarchisch label koppelen met behulp van de "
+"labelnaam"
 
 #: eeschema/sync_sheet_pin/panel_sync_sheet_pins_base.cpp:104
-#, fuzzy
 msgid "Associate selected sheet pin and hierarchical label using the pin name"
-msgstr "Verbreek koppeling(en) tussen bladpin(nen) en hiërarchische label(s)"
+msgstr ""
+"Geselecteerde bladpin en hiërarchisch label koppelen met behulp van de "
+"pinnaam"
 
 #: eeschema/sync_sheet_pin/panel_sync_sheet_pins_base.cpp:109
 msgid "Break sheet pin and hierarchical label association(s)"
-msgstr "Verbreek koppeling(en) tussen bladpin(nen) en hiërarchische label(s)"
+msgstr "Koppeling(en) tussen bladpin(nen) en hiërarchische label(s) verbreken"
 
 #: eeschema/toolbars_symbol_viewer.cpp:122
 msgid "Symbol Viewer"
@@ -23661,28 +23522,24 @@ msgid "Select a complete connection"
 msgstr "Volledige verbinding selecteren"
 
 #: eeschema/tools/sch_actions.cpp:124 pcbnew/tools/pcb_actions.cpp:478
-#, fuzzy
 msgid "Show/hide design blocks library"
-msgstr "KiCad-footprintbibliotheekpaden"
+msgstr "Ontwerpblokkenbibliotheek weergeven/verbergen"
 
 #: eeschema/tools/sch_actions.cpp:130
-#, fuzzy
 msgid "Save Current Sheet as Design Block..."
-msgstr "Kopie van deze tekening opslaan als..."
+msgstr "Huidig blad als ontwerpblok opslaan..."
 
 #: eeschema/tools/sch_actions.cpp:131
-#, fuzzy
 msgid "Create a new design block from the current sheet"
-msgstr "PNG-bestand maken van de huidige weergave"
+msgstr "Nieuwe ontwerpblok van huidig blad maken"
 
 #: eeschema/tools/sch_actions.cpp:137 pcbnew/tools/pcb_actions.cpp:491
 msgid "Save Selection as Design Block..."
-msgstr ""
+msgstr "Huidige selectie als ontwerpblok opslaan..."
 
 #: eeschema/tools/sch_actions.cpp:138 pcbnew/tools/pcb_actions.cpp:492
-#, fuzzy
 msgid "Create a new design block from the current selection"
-msgstr "Maakt een regelgebied van de selectie"
+msgstr "Nieuwe ontwerpblok van huidige selectie maken"
 
 #: eeschema/tools/sch_actions.cpp:144
 #, fuzzy
@@ -23705,14 +23562,12 @@ msgid "Add current selection to design block"
 msgstr "Huidige selectie omlaag verplaatsen"
 
 #: eeschema/tools/sch_actions.cpp:158 pcbnew/tools/pcb_actions.cpp:512
-#, fuzzy
 msgid "Delete Design Block"
-msgstr "Verwijder Block"
+msgstr "Ontwerpblok verwijderen"
 
 #: eeschema/tools/sch_actions.cpp:159 pcbnew/tools/pcb_actions.cpp:513
-#, fuzzy
 msgid "Remove the selected design block from its library"
-msgstr "Geselecteerde symbool verwijderen uit zijn bibliotheek"
+msgstr "Geselecteerde ontwerpblok uit zijn bibliotheek verwijderen"
 
 #: eeschema/tools/sch_actions.cpp:165 eeschema/tools/sch_actions.cpp:777
 #: pcbnew/tools/pcb_actions.cpp:519 pcbnew/tools/pcb_actions.cpp:789
@@ -23720,9 +23575,8 @@ msgid "Properties..."
 msgstr "Instelllingen..."
 
 #: eeschema/tools/sch_actions.cpp:166 pcbnew/tools/pcb_actions.cpp:520
-#, fuzzy
 msgid "Edit properies of design block"
-msgstr "Voer een naam in voor de repository"
+msgstr "Eigenschappen van ontwerpblok bewerken"
 
 #: eeschema/tools/sch_actions.cpp:176
 msgid "Save Library As..."
@@ -23972,13 +23826,12 @@ msgid "Place Power Symbols"
 msgstr "Voedingssymbool"
 
 #: eeschema/tools/sch_actions.cpp:459 pcbnew/tools/pcb_actions.cpp:452
-#, fuzzy
 msgid "Place Design Block"
-msgstr "Plaats Block"
+msgstr "Ontwerpblok plaatsen"
 
 #: eeschema/tools/sch_actions.cpp:460
 msgid "Add selected design block to current sheet"
-msgstr ""
+msgstr "Geselecteerde ontwerpblok aan huidig blad toevoegen"
 
 #: eeschema/tools/sch_actions.cpp:468 pcbnew/tools/pcb_actions.cpp:461
 #, fuzzy
@@ -24036,28 +23889,24 @@ msgid "Draw Hierarchical Sheets"
 msgstr "Hiërarchische bladen tekenen"
 
 #: eeschema/tools/sch_actions.cpp:557
-#, fuzzy
 msgid "Draw Sheet from File"
-msgstr "Tekenbladbestand"
+msgstr "Blad uit bestaand tekenen"
 
 #: eeschema/tools/sch_actions.cpp:558
 msgid "Copy sheet into project and draw on current sheet"
-msgstr ""
+msgstr "Blad in project kopiëren en op huidig blad tekenen"
 
 #: eeschema/tools/sch_actions.cpp:566
-#, fuzzy
 msgid "Draw Sheet from Design Block"
-msgstr "Verwijder Block"
+msgstr "Blad van ontwerpblok tekenen"
 
 #: eeschema/tools/sch_actions.cpp:567
-#, fuzzy
 msgid "Copy design block into project as a sheet on current sheet"
-msgstr "PNG-bestand maken van de huidige weergave"
+msgstr "Ontwerpblok als een blad op het huidige blad in project kopiëren"
 
 #: eeschema/tools/sch_actions.cpp:575
-#, fuzzy
 msgid "Place Sheet Pins"
-msgstr "Bladpinnen verwijderen"
+msgstr "Bladpinnen plaatsen"
 
 #: eeschema/tools/sch_actions.cpp:583
 #, fuzzy
@@ -24070,19 +23919,16 @@ msgid "Imports and auto places all sheet pins"
 msgstr "Hiërarchische bladpinnen importeren"
 
 #: eeschema/tools/sch_actions.cpp:589 eeschema/tools/sch_actions.cpp:597
-#, fuzzy
 msgid "Sync Sheet Pins..."
-msgstr "Bladpinnen synchroniseren"
+msgstr "Bladpinnen synchroniseren…"
 
 #: eeschema/tools/sch_actions.cpp:605
-#, fuzzy
 msgid "Import Sheet..."
-msgstr "Bladpin importeren"
+msgstr "Blad importeren…"
 
 #: eeschema/tools/sch_actions.cpp:606
-#, fuzzy
 msgid "Import sheet into project"
-msgstr "Bladpin importeren"
+msgstr "Blad in project importeren"
 
 #: eeschema/tools/sch_actions.cpp:616
 #, fuzzy
@@ -24202,12 +24048,11 @@ msgid "Autoplace Fields"
 msgstr "Velden automatisch plaatsen"
 
 #: eeschema/tools/sch_actions.cpp:810
-#, fuzzy
 msgid ""
 "Runs the automatic placement algorithm on the symbol's (or sheet's) fields"
 msgstr ""
-"Voert het automatische plaatsingsalgoritme uit op de velden van het symbool "
-"of het blad"
+"Voert het automatische plaatsingsalgoritme uit op de velden van het symbool ("
+"of het blad)"
 
 #: eeschema/tools/sch_actions.cpp:816
 msgid "Change Symbols..."
@@ -24498,7 +24343,7 @@ msgstr "Paginanummer bewerken..."
 
 #: eeschema/tools/sch_actions.cpp:1100
 msgid "Edit the page number of the current or selected sheet"
-msgstr "Paginanummer bewerken van het huidige of geselecteerde blad"
+msgstr "Paginanummer van het huidige of geselecteerde blad bewerken"
 
 #: eeschema/tools/sch_actions.cpp:1105
 msgid "Rescue Symbols..."
@@ -24828,9 +24673,8 @@ msgid "Hierarchy Navigator"
 msgstr "Hiërarchienavigatie"
 
 #: eeschema/tools/sch_actions.cpp:1410
-#, fuzzy
 msgid "Show/hide the schematic sheet hierarchy navigator"
-msgstr "Hiërarchienavigatie voor schemabladen weergeven of verbergen"
+msgstr "Hiërarchienavigatie voor schemabladen weergeven/verbergen"
 
 #: eeschema/tools/sch_actions.cpp:1423
 #: eeschema/tools/sch_line_wire_bus_tool.cpp:786
@@ -25049,14 +24893,12 @@ msgid "All units of this symbol are already placed."
 msgstr ""
 
 #: eeschema/tools/sch_drawing_tools.cpp:821
-#, fuzzy
 msgid "Add Design Block"
-msgstr "Voeg signalen toe om te plotten"
+msgstr "Ontwerpblok toevoegen"
 
 #: eeschema/tools/sch_drawing_tools.cpp:822
-#, fuzzy
 msgid "Import Schematic Sheet Content"
-msgstr "Inhoud van schemablad importeren..."
+msgstr "Inhoud van schemablad importeren"
 
 #: eeschema/tools/sch_drawing_tools.cpp:856
 #, fuzzy
@@ -25183,9 +25025,8 @@ msgid "Symbol Unit"
 msgstr "Symbool eenheid"
 
 #: eeschema/tools/sch_edit_tool.cpp:113
-#, fuzzy
 msgid " (already placed)"
-msgstr "Al geplaatst"
+msgstr " (reeds geplaatst)"
 
 #: eeschema/tools/sch_edit_tool.cpp:181
 msgid "Pin Function"
@@ -25739,9 +25580,8 @@ msgid "Invalid footprint specified"
 msgstr "Ongeldige footprint opgegeven"
 
 #: eeschema/widgets/sch_design_block_pane.cpp:42
-#, fuzzy
 msgid "Place as sheet"
-msgstr "Plaats een tekst"
+msgstr "Als blad plaatsen"
 
 #: eeschema/widgets/sch_design_block_pane.cpp:43
 #: pcbnew/widgets/pcb_design_block_pane.cpp:44
@@ -25757,9 +25597,8 @@ msgstr "Bestaande annotaties behouden"
 
 #: eeschema/widgets/sch_design_block_pane.cpp:106
 #: pcbnew/widgets/pcb_design_block_pane.cpp:100
-#, fuzzy
 msgid "Place copies of the design block on subsequent clicks."
-msgstr "Symbool geselecteerd houden voor volgende klikken."
+msgstr "Kopieën van de ontwerpblok bij opeenvolgende klikken plaatsen."
 
 #: eeschema/widgets/sch_design_block_pane.cpp:113
 #: pcbnew/widgets/pcb_design_block_pane.cpp:107
@@ -25769,7 +25608,7 @@ msgstr "Plaats Block"
 
 #: eeschema/widgets/sch_design_block_pane.cpp:119
 msgid "Place the design block as a new sheet."
-msgstr ""
+msgstr "Ontwerpblok als nieuw blad plaatsen."
 
 #: eeschema/widgets/sch_design_block_pane.cpp:125
 msgid ""
@@ -30301,9 +30140,8 @@ msgid "Page Selector"
 msgstr "Laagselectie"
 
 #: pagelayout_editor/toolbars_pl_editor.cpp:163
-#, fuzzy
 msgid "Select the page to simulate item displays"
-msgstr " Selecteer hoe items worden weergegeven"
+msgstr "Pagina selecteren om itemweergaven te simuleren"
 
 #: pagelayout_editor/tools/pl_actions.cpp:72
 #, fuzzy
@@ -30315,9 +30153,8 @@ msgid "Append Existing Drawing Sheet..."
 msgstr "Bestaand tekenblad toevoegen..."
 
 #: pagelayout_editor/tools/pl_actions.cpp:94
-#, fuzzy
 msgid "Append an existing drawing sheet file to the current file"
-msgstr "Bestaand tekenbladbestand toevoegen aan het huidige bestand"
+msgstr "Bestaand tekenbladbestand aan het huidige bestand toevoegen"
 
 #: pagelayout_editor/tools/pl_actions.cpp:105
 msgid "Show Design Inspector"
@@ -33573,19 +33410,16 @@ msgstr ""
 "\n"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:427
-#, fuzzy
 msgid ""
 "<br/>Change Array\n"
 "***********************<br/>"
 msgstr ""
-"\n"
-"    Reeks wijzigen\n"
-"***********************\n"
+"<br/>Reeks wijzigen\n"
+"***********************<br/>"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:435
-#, fuzzy
 msgid "(will be ignored)"
-msgstr " wordt genegeerd"
+msgstr "(wordt genegeerd)"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:448
 #, fuzzy
@@ -38090,9 +37924,8 @@ msgid "Move Item"
 msgstr "Item verplaatsen"
 
 #: pcbnew/dialogs/dialog_multichannel_generate_rule_areas.cpp:64
-#, fuzzy
 msgid "Sheet Path"
-msgstr "Pad selecteren"
+msgstr "Bladpad"
 
 #: pcbnew/dialogs/dialog_multichannel_generate_rule_areas.cpp:93
 #: pcbnew/footprint.cpp:1752 pcbnew/footprint.cpp:4171 pcbnew/zone.cpp:1794
@@ -39719,9 +39552,8 @@ msgid "Convert to Rule Area"
 msgstr "Omzetten naar regelgebied"
 
 #: pcbnew/dialogs/dialog_rule_area_properties.cpp:315
-#, fuzzy
 msgid "Not found on board: "
-msgstr "Geen PCB rand gevonden, bord groote onbekend!"
+msgstr "Niet gevonden op bord: "
 
 #: pcbnew/dialogs/dialog_rule_area_properties.cpp:484
 msgid "No layers selected."
@@ -40565,9 +40397,8 @@ msgid "Field Value:"
 msgstr "Eindwaarde:"
 
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:462
-#, fuzzy
 msgid "Sheet Name:"
-msgstr "Bladnaam"
+msgstr "Bladnaam:"
 
 #: pcbnew/dialogs/panel_display_options.cpp:299
 #, fuzzy, c-format
@@ -41070,9 +40901,8 @@ msgid "No placement"
 msgstr "Plaatsing"
 
 #: pcbnew/dialogs/panel_rule_area_properties_placement_base.cpp:24
-#, fuzzy
 msgid "Place items from sheet:"
-msgstr "Plaats een tekst"
+msgstr "Items van blad plaatsen:"
 
 #: pcbnew/dialogs/panel_rule_area_properties_placement_base.cpp:33
 #, fuzzy
@@ -47056,9 +46886,9 @@ msgid "Footprint field of %s (%s)"
 msgstr "Footprint '%s' van %s"
 
 #: pcbnew/pcb_field.cpp:173
-#, fuzzy, c-format
+#, c-format
 msgid "Datasheet field of %s (%s)"
-msgstr "Datasheet '%s' van %s"
+msgstr "Datasheetveld van %s (%s)"
 
 #: pcbnew/pcb_field.cpp:177
 #, fuzzy, c-format
@@ -48384,7 +48214,7 @@ msgstr "Bestand '%s' heeft een niet-herkende versie: %d."
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:794
 #, c-format
 msgid "Unknown sheet type '%s' on line: %d."
-msgstr "Onbekend pagina-type '%s' op regel: %d."
+msgstr "Onbekend paginatype '%s' op regel: %d."
 
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:1374
 #, c-format
@@ -49319,9 +49149,9 @@ msgid "Exception on python footprint wizard code"
 msgstr "Exceptie in de python-code van de footprint wizard"
 
 #: pcbnew/python/scripting/pcbnew_scripting_helpers.cpp:210
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading drawing sheet '%s': %s"
-msgstr "Fout bij laden van tekenblad '%s'."
+msgstr "Fout bij laden van tekenblad '%s': %s"
 
 #: pcbnew/router/pns_diff_pair_placer.cpp:525
 msgid ""
@@ -50731,9 +50561,8 @@ msgid "Error renaming footprint"
 msgstr "Van bovenliggende footprint"
 
 #: pcbnew/tools/footprint_editor_control.cpp:726
-#, fuzzy
 msgid "No datasheet found in the footprint."
-msgstr "Geen datasheet gedefinieerd."
+msgstr "Geen datasheet in de footprint gevonden."
 
 #: pcbnew/tools/footprint_editor_control.cpp:908
 msgid "No footprint problems found."
@@ -50913,6 +50742,8 @@ msgid ""
 "Cannot auto-generate any placement areas because the schematic has only one "
 "or no hierarchical sheet(s) or component classes."
 msgstr ""
+"Kan geen plaatsingsgebieden automatisch genereren omdat het schema slechts "
+"één of geen hiërarchische blad(en) of componentklassen heeft."
 
 #: pcbnew/tools/multichannel_tool.cpp:1254
 #, fuzzy
