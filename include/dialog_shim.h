@@ -179,6 +179,9 @@ private:
      */
     void OnCloseWindow( wxCloseEvent& aEvent );
 
+    void OnSize( wxSizeEvent& aEvent );
+    void OnMove( wxMoveEvent& aEvent );
+
     /**
      * Properly handle the default button events when in the quasimodal mode when not
      * calling EndQuasiModal which is possible with any dialog derived from #DIALOG_SHIM.
@@ -215,6 +218,9 @@ protected:
 
     // The size asked by the caller, used the first time the dialog is created
     wxSize                 m_initialSize;
+    bool                   m_userPositioned;
+    bool                   m_userResized;
+
 
     // Used to support first-esc-cancels-edit logic
     std::map<wxWindow*, wxString> m_beforeEditValues;
