@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Farsi\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-18 08:09-0700\n"
-"PO-Revision-Date: 2025-07-21 13:58+0000\n"
+"PO-Revision-Date: 2025-07-21 14:00+0000\n"
 "Last-Translator: Mahdi Ahmadzadeh <mahdiahmadi83427@gmail.com>\n"
 "Language-Team: Persian <https://hosted.weblate.org/projects/kicad/"
 "master-source/fa/>\n"
@@ -1314,15 +1314,15 @@ msgstr "تعداد بازتاب هایی که یک پرتو می تواند از
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:124
 msgid "Lights Configuration"
-msgstr ""
+msgstr "پیکربندی نور ها"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:137
 msgid "Ambient camera light:"
-msgstr ""
+msgstr "نور محیطی دوربین:"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:149
 msgid "Top light:"
-msgstr ""
+msgstr "‬‬نور از بالا:"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:161
 msgid "Bottom light:"
