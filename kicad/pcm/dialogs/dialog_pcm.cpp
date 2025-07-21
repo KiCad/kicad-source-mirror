@@ -84,7 +84,7 @@ DIALOG_PCM::DIALOG_PCM( EDA_BASE_FRAME* parent, std::shared_ptr<PLUGIN_CONTENT_M
                                                    "from version %s to %s?" ),
                                                 aData.current_version, aVersion ),
                               _( "Confirm update" ), wxICON_QUESTION | wxYES_NO, this )
-                == wxNO )
+                    == wxNO )
             {
                 return;
             }
@@ -143,15 +143,14 @@ DIALOG_PCM::DIALOG_PCM( EDA_BASE_FRAME* parent, std::shared_ptr<PLUGIN_CONTENT_M
                 updatePackageState( aPackageId, aState );
             };
 
-    m_installedPanel = new PANEL_PACKAGES_VIEW( m_panelInstalledHolder, m_pcm, m_actionCallback,
-                                                m_pinCallback );
+    m_installedPanel = new PANEL_PACKAGES_VIEW( m_panelInstalledHolder, m_pcm, m_actionCallback, m_pinCallback );
     m_panelInstalledHolder->GetSizer()->Add( m_installedPanel, 1, wxEXPAND );
     m_panelInstalledHolder->Layout();
 
     for( const std::pair<PCM_PACKAGE_TYPE, wxString>& entry : PACKAGE_TYPE_LIST )
     {
-        PANEL_PACKAGES_VIEW* panel = new PANEL_PACKAGES_VIEW( m_contentNotebook, m_pcm,
-                                                              m_actionCallback, m_pinCallback );
+        PANEL_PACKAGES_VIEW* panel = new PANEL_PACKAGES_VIEW( m_contentNotebook, m_pcm, m_actionCallback,
+                                                              m_pinCallback );
         wxString             label = wxGetTranslation( entry.second );
         m_contentNotebook->AddPage( panel, wxString::Format( label, 0 ) );
         m_repositoryContentPanels.insert( { entry.first, panel } );
@@ -164,8 +163,8 @@ DIALOG_PCM::DIALOG_PCM( EDA_BASE_FRAME* parent, std::shared_ptr<PLUGIN_CONTENT_M
 
     m_dialogNotebook->SetSelection( 0 );
 
-    SetupStandardButtons( { { wxID_OK, _( "Close" ) },
-                            { wxID_APPLY, _( "Apply Pending Changes" ) },
+    SetupStandardButtons( { { wxID_OK,     _( "Close" ) },
+                            { wxID_APPLY,  _( "Apply Pending Changes" ) },
                             { wxID_CANCEL, _( "Discard Pending Changes" ) } } );
 
     Bind( wxEVT_CLOSE_WINDOW, &DIALOG_PCM::OnCloseWindow, this );
@@ -236,8 +235,8 @@ void DIALOG_PCM::OnManageRepositoriesClicked( wxCommandEvent& event )
     std::vector<std::pair<wxString, wxString>>            dialog_data;
     std::vector<std::tuple<wxString, wxString, wxString>> repo_list = m_pcm->GetRepositoryList();
 
-    for( const std::tuple<wxString, wxString, wxString>& repo : repo_list )
-        dialog_data.push_back( std::make_pair( std::get<1>( repo ), std::get<2>( repo ) ) );
+    for( const auto& [id, url, name] : repo_list )
+        dialog_data.push_back( std::make_pair( url, name ) );
 
     dialog->SetData( dialog_data );
 
@@ -264,11 +263,8 @@ void DIALOG_PCM::setRepositoryListFromPcm()
 
     m_choiceRepository->Clear();
 
-    for( const std::tuple<wxString, wxString, wxString>& entry : repositories )
-    {
-        m_choiceRepository->Append( std::get<1>( entry ),
-                                    new wxStringClientData( std::get<0>( entry ) ) );
-    }
+    for( const auto& [id, url, name] : repositories )
+        m_choiceRepository->Append( url, new wxStringClientData( id ) );
 
     if( repositories.size() > 0 )
     {
