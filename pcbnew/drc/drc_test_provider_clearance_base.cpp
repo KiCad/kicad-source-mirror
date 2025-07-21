@@ -113,7 +113,7 @@ void DRC_TEST_PROVIDER_CLEARANCE_BASE::ReportAndShowPathCuToCu( std::shared_ptr<
     graph.Addshape( *( aItem1->GetEffectiveShape( layer ) ), NetA, nullptr );
     graph.Addshape( *( aItem2->GetEffectiveShape( layer ) ), NetB, nullptr );
 
-    graph.GeneratePaths( aDistance * 2, layer, true );
+    graph.GeneratePaths( aDistance * 2, layer );
 
     double           minValue = aDistance * 2;
     GRAPH_CONNECTION* minGc = nullptr;
