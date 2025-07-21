@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Farsi\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-18 08:09-0700\n"
-"PO-Revision-Date: 2025-07-21 13:28+0000\n"
+"PO-Revision-Date: 2025-07-21 13:30+0000\n"
 "Last-Translator: Mahdi Ahmadzadeh <mahdiahmadi83427@gmail.com>\n"
 "Language-Team: Persian <https://hosted.weblate.org/projects/kicad/"
 "master-source/fa/>\n"
@@ -1199,7 +1199,7 @@ msgstr "برجسته سازی اِلمان ها در زیر اشاره گر ما
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:44
 msgid "Anti-aliasing:"
-msgstr "ضد اثرات ناهمواری (Anti-aliasing):"
+msgstr "هموار کننده تصویر (Anti-aliasing):"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:48
 msgid "Disabled"
@@ -1231,11 +1231,11 @@ msgstr "در حین حرکت"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:85
 msgid "Disable anti-aliasing"
-msgstr ""
+msgstr "غیر فعال کردن هموار کننده تصویر (Anti-aliasing)"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:88
 msgid "Disable thickness"
-msgstr ""
+msgstr "غیرفعال کردن ضخامت"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:91
 msgid "Disable uVia holes"
