@@ -16,10 +16,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-18 08:09-0700\n"
-"PO-Revision-Date: 2025-07-15 19:28+0000\n"
-"Last-Translator: 2tama3 <2tama3@gmail.com>\n"
-"Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/master-"
-"source/ja/>\n"
+"PO-Revision-Date: 2025-07-21 13:20+0000\n"
+"Last-Translator: co8 j <co8@nifty.com>\n"
+"Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
+"master-source/ja/>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -7827,9 +7827,9 @@ msgid "Invalid size %lld: too large"
 msgstr "不正なサイズ %lld: 大きすぎます"
 
 #: common/io/eagle/eagle_parser.cpp:528
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid Arc with radius %0.2f and angle %0.2f"
-msgstr "不正な円弧 (半径 %f 、角度 %f )"
+msgstr "不正な円弧 (半径 %0.2f 、角度 %0.2f )"
 
 #: common/io/easyeda/easyeda_parser_base.cpp:38
 #, c-format
@@ -18719,7 +18719,6 @@ msgid "&Duplicate '%s'"
 msgstr "'%s' を複製(&D)"
 
 #: eeschema/picksymbol.cpp:179
-#, fuzzy
 msgid "Swap Units"
 msgstr "単位を切替"
 
@@ -20602,17 +20601,14 @@ msgid "Row Height"
 msgstr "行の高さ"
 
 #: eeschema/sch_tablecell.cpp:248
-#, fuzzy
 msgid "Cell Properties"
-msgstr "全てのプロパティを使用"
+msgstr "セルのプロパティ"
 
 #: eeschema/sch_tablecell.cpp:250
-#, fuzzy
 msgid "Background Fill"
 msgstr "背景塗りつぶし"
 
 #: eeschema/sch_tablecell.cpp:254
-#, fuzzy
 msgid "Background Fill Color"
 msgstr "背景色"
 
@@ -24490,14 +24486,12 @@ msgid "All units of this symbol are already placed."
 msgstr "このシンボルのユニットはすべて配置済です。"
 
 #: eeschema/tools/sch_drawing_tools.cpp:821
-#, fuzzy
 msgid "Add Design Block"
 msgstr "デザインブロックを追加"
 
 #: eeschema/tools/sch_drawing_tools.cpp:822
-#, fuzzy
 msgid "Import Schematic Sheet Content"
-msgstr "回路図シートの内容を挿入..."
+msgstr "回路図シートの内容をインポート"
 
 #: eeschema/tools/sch_drawing_tools.cpp:856
 msgid "Choose Schematic"
@@ -25073,7 +25067,8 @@ msgstr "ユニット %d 内で、この位置にはすでに他のピンがあ�
 
 #: eeschema/tools/symbol_editor_pin_tool.cpp:235
 msgid "Disable the 'Synchronized Pins Mode' option to avoid this message."
-msgstr ""
+msgstr "このメッセージを表示しないようにするためには、'Synchronized Pins Mode' "
+"オプションを無効にしてください。"
 
 #: eeschema/tools/symbol_editor_pin_tool.cpp:236
 msgid "Place Pin Anyway"
@@ -27628,7 +27623,7 @@ msgstr "インクルード JOBs:"
 
 #: kicad/dialogs/dialog_executecommand_job_settings.cpp:151
 msgid "<value set at runtime>"
-msgstr ""
+msgstr "<value set at runtime>"
 
 #: kicad/dialogs/dialog_executecommand_job_settings_base.cpp:79
 msgid "Record output messages"
@@ -29057,18 +29052,16 @@ msgid "Launch preferred text editor"
 msgstr "お気に入りのテキスト エディターを起動します"
 
 #: kicad/tools/kicad_manager_actions.cpp:221
-#, fuzzy
 msgid "Archive Project..."
-msgstr "プロジェクトをアーカイブ (&A)..."
+msgstr "プロジェクトをアーカイブ..."
 
 #: kicad/tools/kicad_manager_actions.cpp:222
 msgid "Archive all project files"
 msgstr "プロジェクトのすべてのファイルをアーカイブ"
 
 #: kicad/tools/kicad_manager_actions.cpp:228
-#, fuzzy
 msgid "Unarchive Project..."
-msgstr "プロジェクトを展開 (&U)..."
+msgstr "プロジェクトを展開..."
 
 #: kicad/tools/kicad_manager_actions.cpp:229
 msgid "Unarchive project files from zip archive"
@@ -29107,7 +29100,6 @@ msgid "Clone Project from Git Repository"
 msgstr "Gitリポジトリからプロジェクトをクローン"
 
 #: kicad/tools/kicad_manager_control.cpp:183
-#, fuzzy
 msgid "Clone Repository"
 msgstr "リポジトリをクローン"
 
@@ -29346,7 +29338,6 @@ msgid "(paper size)"
 msgstr "(用紙サイズ)"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:29
-#, fuzzy
 msgid "Item Type"
 msgstr "アイテム タイプ"
 
@@ -29615,9 +29606,8 @@ msgid "Select the origin of the status bar coordinates"
 msgstr "ステータスバーの座標の原点を選択する"
 
 #: pagelayout_editor/toolbars_pl_editor.cpp:162
-#, fuzzy
 msgid "Page Selector"
-msgstr "レイヤー選択"
+msgstr "ページ選択"
 
 #: pagelayout_editor/toolbars_pl_editor.cpp:163
 #, fuzzy
@@ -34045,7 +34035,6 @@ msgid "Centre on source items"
 msgstr "選択元の中心に合わせる"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:197
-#, fuzzy
 msgid "Renumber pads"
 msgstr "パッドの番号を付け直す"
 
@@ -34154,9 +34143,8 @@ msgid "Anti-clockwise"
 msgstr "右回転"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:362
-#, fuzzy
 msgid "Direction"
-msgstr "向き:"
+msgstr "向き"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:366
 #: pcbnew/dialogs/dialog_create_array_base.cpp:419
@@ -34221,14 +34209,12 @@ msgid "Circular Array"
 msgstr "円配列"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:503
-#, fuzzy
 msgid "Item Source"
-msgstr "ソース"
+msgstr "アイテムソース"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:505
-#, fuzzy
 msgid "Duplicate selection"
-msgstr "シート名の重複"
+msgstr "選択の重複"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:509
 #: pcbnew/tools/array_tool.cpp:219
@@ -34609,7 +34595,6 @@ msgid "Show design rules."
 msgstr "デザインルールを表示します。"
 
 #: pcbnew/dialogs/dialog_drc.cpp:351
-#, fuzzy
 msgid "-------- DRC canceled by user.<br><br>"
 msgstr "-------- DRCがユーザーによってキャンセルされました。<br><br>"
 
@@ -34813,7 +34798,6 @@ msgid "New footprint library id:"
 msgstr "新しいフットプリント ライブラリID:"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:107
-#, fuzzy
 msgid "Remove text items if not in library footprint"
 msgstr "ライブラリのフットプリントにないテキスト アイテムを削除"
 
@@ -35193,7 +35177,7 @@ msgstr "STL"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:27
 msgid "STPZ"
-msgstr ""
+msgstr "STPZ"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:56
 msgid "Board Options"
@@ -36080,7 +36064,6 @@ msgid "Pad groups allowed to short different nets:"
 msgstr "異なるネットを接続しても問題ないパッドのグループを定義:"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:420
-#, fuzzy
 msgid "Jumpers"
 msgstr "ジャンパー"
 
@@ -37328,7 +37311,6 @@ msgid "Outset must be a positive value."
 msgstr "拡張量は正の値でなければなりません。"
 
 #: pcbnew/dialogs/dialog_outset_items.cpp:183
-#, fuzzy
 msgid "Line width must be a positive value."
 msgstr "線幅は０より大きくする必要があります。"
 
@@ -38685,7 +38667,6 @@ msgid "Background style:"
 msgstr "背景のスタイル:"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:96
-#, fuzzy
 msgid "Procedural textures"
 msgstr "プロシージャル テクスチャ"
 
