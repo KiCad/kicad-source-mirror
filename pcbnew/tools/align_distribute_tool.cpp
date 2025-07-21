@@ -23,7 +23,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 #include "tool/selection.h"
-#include "placement_tool.h"
+#include "align_distribute_tool.h"
 #include "pcb_actions.h"
 #include "pcb_selection_tool.h"
 

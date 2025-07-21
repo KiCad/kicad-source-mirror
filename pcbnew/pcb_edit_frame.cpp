@@ -86,7 +86,7 @@
 #include <tools/pcb_editor_conditions.h>
 #include <tools/pcb_viewer_tools.h>
 #include <tools/board_reannotate_tool.h>
-#include <tools/placement_tool.h>
+#include <tools/align_distribute_tool.h>
 #include <tools/pad_tool.h>
 #include <microwave/microwave_tool.h>
 #include <tools/position_relative_tool.h>

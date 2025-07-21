@@ -30,7 +30,7 @@
 #include "tools/pcb_actions.h"
 #include "tools/pcb_control.h"
 #include "tools/pcb_picker_tool.h"
-#include "tools/placement_tool.h"
+#include "tools/align_distribute_tool.h"
 #include "tools/pcb_point_editor.h"
 #include "tools/pcb_selection_tool.h"
 #include <python/scripting/pcb_scripting_tool.h>
