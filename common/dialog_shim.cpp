@@ -126,28 +126,27 @@ DIALOG_SHIM::~DIALOG_SHIM()
     Unbind( wxEVT_BUTTON, &DIALOG_SHIM::OnButton, this );
     Unbind( wxEVT_PAINT, &DIALOG_SHIM::OnPaint, this );
 
-    std::function<void( wxWindowList& )> disconnectFocusHandlers = [&]( wxWindowList& children )
-    {
-        for( wxWindow* child : children )
-        {
-            if( wxTextCtrl* textCtrl = dynamic_cast<wxTextCtrl*>( child ) )
+    std::function<void( wxWindowList& )> disconnectFocusHandlers =
+            [&]( wxWindowList& children )
             {
-                textCtrl->Disconnect( wxEVT_SET_FOCUS,
-                                      wxFocusEventHandler( DIALOG_SHIM::onChildSetFocus ),
-                                      nullptr, this );
-            }
-            else if( wxStyledTextCtrl* scintilla = dynamic_cast<wxStyledTextCtrl*>( child ) )
-            {
-                scintilla->Disconnect( wxEVT_SET_FOCUS,
-                                       wxFocusEventHandler( DIALOG_SHIM::onChildSetFocus ),
-                                       nullptr, this );
-            }
-            else
-            {
-                disconnectFocusHandlers( child->GetChildren() );
-            }
-        }
-    };
+                for( wxWindow* child : children )
+                {
+                    if( wxTextCtrl* textCtrl = dynamic_cast<wxTextCtrl*>( child ) )
+                    {
+                        textCtrl->Disconnect( wxEVT_SET_FOCUS, wxFocusEventHandler( DIALOG_SHIM::onChildSetFocus ),
+                                              nullptr, this );
+                    }
+                    else if( wxStyledTextCtrl* scintilla = dynamic_cast<wxStyledTextCtrl*>( child ) )
+                    {
+                        scintilla->Disconnect( wxEVT_SET_FOCUS, wxFocusEventHandler( DIALOG_SHIM::onChildSetFocus ),
+                                               nullptr, this );
+                    }
+                    else
+                    {
+                        disconnectFocusHandlers( child->GetChildren() );
+                    }
+                }
+            };
 
     disconnectFocusHandlers( GetChildren() );
 
@@ -268,15 +267,16 @@ bool DIALOG_SHIM::Show( bool show )
             {
                 SetSize( savedDialogRect.GetPosition().x, savedDialogRect.GetPosition().y,
                          std::max( wxDialog::GetSize().x, savedDialogRect.GetSize().x ),
-                         std::max( wxDialog::GetSize().y, savedDialogRect.GetSize().y ),
-                         0 );
+                         std::max( wxDialog::GetSize().y, savedDialogRect.GetSize().y ), 0 );
             }
 #ifdef __WXMAC__
             if( m_parent != nullptr )
             {
                 if( wxDisplay::GetFromPoint( m_parent->GetPosition() )
                     != wxDisplay::GetFromPoint( savedDialogRect.GetPosition() ) )
+                {
                     Centre();
+                }
             }
 #endif
         }
