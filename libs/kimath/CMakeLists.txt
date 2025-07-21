@@ -52,7 +52,6 @@ add_library( kimath STATIC
 target_link_libraries( kimath
     core
     clipper2
-    othermath
     rtree
     Boost::headers
     ${wxWidgets_LIBRARIES}      # wxLogDebug, wxASSERT

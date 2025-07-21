@@ -22,7 +22,6 @@
  */
 
 #include <common.h>
-#include <math_for_graphics.h>
 #include <board_design_settings.h>
 #include <footprint.h>
 #include <layer_range.h>
@@ -1263,8 +1262,10 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testZonesToZones()
                                 if( ax2 < bx1 )
                                     break;
 
-                                actual = GetClearanceBetweenSegments( bx1, by1, bx2, by2, 0, ax1, ay1, ax2, ay2, 0,
-                                                                      clearance, &pt.x, &pt.y );
+                                int64_t dist_sq = 0;
+                                VECTOR2I other_pt;
+                                refSegment.NearestPoints( testSegment, pt, other_pt, dist_sq );
+                                actual = std::floor( std::sqrt( dist_sq ) + 0.5 );
 
                                 if( actual < clearance )
                                 {

@@ -43,7 +43,6 @@
 #include <vector>
 
 #include <clipper2/clipper.h>
-#include <math_for_graphics.h>
 #include <geometry/geometry_utils.h>
 #include <geometry/polygon_triangulation.h>
 #include <geometry/seg.h>                    // for SEG, OPT_VECTOR2I
@@ -3203,15 +3202,23 @@ const std::vector<SEG> SHAPE_POLY_SET::GenerateHatchLines( const std::vector<dou
         for( int64_t a = min_a; a < max_a; a += aSpacing )
         {
             pointbuffer.clear();
+            SEG hatch_line( VECTOR2I( 0, a ), VECTOR2I( 1, a + slope ) );
 
             // Iterate through all vertices
             for( auto iterator = CIterateSegmentsWithHoles(); iterator; iterator++ )
             {
                 const SEG seg = *iterator;
-                double    x, y;
+                VECTOR2I  pt;
 
-                if( FindLineSegmentIntersection( a, slope, seg.A.x, seg.A.y, seg.B.x, seg.B.y, x, y ) )
-                    pointbuffer.emplace_back( KiROUND( x ), KiROUND( y ) );
+                if( seg.IntersectsLine( slope, a, pt ) )
+                {
+                    // If the intersection point is outside the polygon, skip it
+                    if( pt.x < min_x || pt.x > max_x || pt.y < min_y || pt.y > max_y )
+                        continue;
+
+                    // Add the intersection point to the buffer
+                    pointbuffer.emplace_back( KiROUND( pt.x ), KiROUND( pt.y ) );
+                }
             }
 
             // sort points in order of descending x (if more than 2) to

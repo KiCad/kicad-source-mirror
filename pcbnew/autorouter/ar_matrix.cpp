@@ -28,7 +28,6 @@
 #include "ar_matrix.h"
 #include <lset.h>
 #include <math/util.h>      // for KiROUND
-#include <math_for_graphics.h>
 #include <trigo.h>
 
 #include <pcb_shape.h>
@@ -407,7 +406,10 @@ void AR_MATRIX::traceCircle( int ux0, int uy0, int ux1, int uy1, int lg, int lay
     int x1, y1;     // End point.
     int ii;
 
-    radius = KiROUND( Distance( ux0, uy0, ux1, uy1 ) );
+    VECTOR2I pt1( ux0, uy0 );
+    VECTOR2I pt2( ux1, uy1 );
+
+    radius = pt1.Distance( pt2 );
 
     x0 = x1 = radius;
     y0 = y1 = 0;
@@ -567,7 +569,10 @@ void AR_MATRIX::traceArc( int ux0, int uy0, int ux1, int uy1, const EDA_ANGLE& a
     int       ii;
     EDA_ANGLE angle, startAngle;
 
-    radius = KiROUND( Distance( ux0, uy0, ux1, uy1 ) );
+    VECTOR2I pt1( ux0, uy0 );
+    VECTOR2I pt2( ux1, uy1 );
+
+    radius = pt1.Distance( pt2 );
 
     x0 = ux1 - ux0;
     y0 = uy1 - uy0;
@@ -632,7 +637,9 @@ void AR_MATRIX::TraceFilledRectangle( int ux0, int uy0, int ux1, int uy1, double
 
     cx = ( ux0 + ux1 ) / 2;
     cy = ( uy0 + uy1 ) / 2;
-    radius = KiROUND( Distance( ux0, uy0, cx, cy ) );
+    VECTOR2I pt1( ux0, uy0 );
+    VECTOR2I pt2( cx, cy );
+    radius = pt1.Distance( pt2 );
 
     // Calculating coordinate limits belonging to the rectangle.
     row_max = ( cy + radius ) / m_GridRouting;

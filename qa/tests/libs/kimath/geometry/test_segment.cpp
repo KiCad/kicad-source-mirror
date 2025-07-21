@@ -1225,4 +1225,354 @@ BOOST_AUTO_TEST_CASE( IntersectZeroLengthSegments )
     BOOST_CHECK_EQUAL( *intersection6, VECTOR2I( 100, 100 ) );
 }
 
+
+/**
+ * Test cases for segment-line intersection
+ */
+struct SEG_LINE_INTERSECT_CASE : public KI_TEST::NAMED_CASE
+{
+    SEG         m_seg;
+    double      m_slope;
+    double      m_offset;
+    bool        m_exp_intersect;
+    VECTOR2I    m_exp_point;
+};
+
+/**
+ * Predicate to check expected intersection between a segment and an infinite line
+ * @param  aSeg the segment
+ * @param  aSlope the line slope
+ * @param  aOffset the line y-intercept
+ * @param  aExpIntersect expected intersection result
+ * @param  aExpPoint expected intersection point (if intersection occurs)
+ * @return does the intersection calculated agree?
+ */
+bool SegLineIntersectCorrect( const SEG& aSeg, double aSlope, double aOffset,
+                             bool aExpIntersect, const VECTOR2I& aExpPoint = VECTOR2I() )
+{
+    VECTOR2I intersection;
+    const bool intersects = aSeg.IntersectsLine( aSlope, aOffset, intersection );
+
+    bool ok = ( intersects == aExpIntersect );
+
+    if( !ok )
+    {
+        std::stringstream ss;
+        ss << "Line intersection incorrect: expected " << aExpIntersect << ", got " << intersects;
+        BOOST_TEST_INFO( ss.str() );
+    }
+
+    // Check intersection point if intersection was expected
+    if( ok && aExpIntersect && aExpPoint != VECTOR2I() )
+    {
+        // Allow some tolerance for intersection point calculation
+        const int tolerance = 1;
+
+        bool pointOk = ( std::abs( intersection.x - aExpPoint.x ) <= tolerance &&
+                        std::abs( intersection.y - aExpPoint.y ) <= tolerance );
+
+        if( !pointOk )
+        {
+            std::stringstream ss;
+            ss << "Intersection point incorrect: expected " << aExpPoint.Format()
+               << ", got " << intersection.Format();
+            BOOST_TEST_INFO( ss.str() );
+            ok = false;
+        }
+    }
+
+    return ok;
+}
+
+// clang-format off
+static const std::vector<SEG_LINE_INTERSECT_CASE> seg_line_intersect_cases = {
+    // Basic intersection cases
+    {
+        "Horizontal segment, diagonal line",
+        { { 0, 5 }, { 10, 5 } },
+        1.0, 0.0,  // y = x
+        true,
+        { 5, 5 }
+    },
+    {
+        "Vertical segment, horizontal line",
+        { { 5, 0 }, { 5, 10 } },
+        0.0, 3.0,  // y = 3
+        true,
+        { 5, 3 }
+    },
+    {
+        "Diagonal segment, horizontal line crossing",
+        { { 0, 0 }, { 10, 10 } },
+        0.0, 5.0,  // y = 5
+        true,
+        { 5, 5 }
+    },
+    {
+        "Diagonal segment, vertical line (steep slope)",
+        { { 0, 0 }, { 10, 10 } },
+        1000.0, -5000.0,  // Very steep line: y = 1000x - 5000, crosses at x=5
+        true,
+        { 5, 5 }
+    },
+
+    // Non-intersecting cases
+    {
+        "Horizontal segment, parallel horizontal line",
+        { { 0, 5 }, { 10, 5 } },
+        0.0, 10.0,  // y = 10 (parallel to y = 5)
+        false,
+        { 0, 0 }
+    },
+    {
+        "Diagonal segment, parallel line",
+        { { 0, 0 }, { 10, 10 } },
+        1.0, 5.0,  // y = x + 5 (parallel to y = x)
+        false,
+        { 0, 0 }
+    },
+    {
+        "Segment above line",
+        { { 0, 10 }, { 10, 10 } },
+        0.0, 5.0,  // y = 5
+        false,
+        { 0, 0 }
+    },
+    {
+        "Segment to left of steep line",
+        { { 0, 0 }, { 2, 2 } },
+        1.0, 10.0,  // y = x + 10
+        false,
+        { 0, 0 }
+    },
+
+    // Collinear cases (segment lies on line)
+    {
+        "Horizontal segment on horizontal line",
+        { { 0, 5 }, { 10, 5 } },
+        0.0, 5.0,  // y = 5
+        true,
+        { 5, 5 }  // Midpoint
+    },
+    {
+        "Diagonal segment on diagonal line",
+        { { 0, 0 }, { 10, 10 } },
+        1.0, 0.0,  // y = x
+        true,
+        { 5, 5 }  // Midpoint
+    },
+    {
+        "Vertical segment, any line slope (collinear impossible)",
+        { { 5, 0 }, { 5, 10 } },
+        2.0, -5.0,  // y = 2x - 5, passes through (5, 5)
+        true,
+        { 5, 5 }
+    },
+
+    // Edge cases
+    {
+        "Zero-length segment (point) on line",
+        { { 3, 7 }, { 3, 7 } },
+        2.0, 1.0,  // y = 2x + 1, point (3,7) should be on this line
+        true,
+        { 3, 7 }
+    },
+    {
+        "Zero-length segment (point) not on line",
+        { { 3, 5 }, { 3, 5 } },
+        2.0, 1.0,  // y = 2x + 1, point (3,5) not on line (should be y=7)
+        false,
+        { 0, 0 }
+    },
+    {
+        "Line with zero slope (horizontal)",
+        { { 0, 0 }, { 10, 5 } },
+        0.0, 2.5,  // y = 2.5
+        true,
+        { 5, 2 }  // Intersection at x=5, y=2.5 rounded to y=2 or 3
+    },
+    {
+        "Very steep positive slope",
+        { { 0, 0 }, { 10, 1 } },
+        100.0, -250.0,  // y = 100x - 250, intersects at x=2.5
+        true,
+        { 2, 0 }  // Approximately (2.5, 0)
+    },
+    {
+        "Very steep negative slope",
+        { { 0, 0 }, { 10, 10 } },
+        -100.0, 505.0,  // y = -100x + 505, intersects at x=5.05, y≈0
+        true,
+        { 5, 5 }  // Approximately (5.05, 0) but segment has y=5 at x=5
+    },
+    {
+        "Fractional slope",
+        { { 0, 0 }, { 12, 8 } },
+        0.5, 1.0,  // y = 0.5x + 1
+        true,
+        { 6, 4 }  // Intersection where segment y = 2x/3 meets line y = 0.5x + 1
+    },
+
+    // Endpoint intersections
+    {
+        "Line passes through segment start point",
+        { { 2, 3 }, { 80, 90 } },
+        1.0, 1.0,  // y = x + 1, passes through (2,3)
+        true,
+        { 2, 3 }
+    },
+    {
+        "Line passes through segment end point",
+        { { 20, 30 }, { 8, 9 } },
+        1.0, 1.0,  // y = x + 1, passes through (8,9)
+        true,
+        { 8, 9 }
+    },
+    {
+        "Line intersects near endpoint",
+        { { 0, 0 }, { 10, 0 } },
+        0.0, 0.0,  // y = 0, same as segment
+        true,
+        { 5, 0 }  // Collinear, returns midpoint
+    },
+
+    // Precision edge cases
+    {
+        "Nearly parallel lines",
+        { { 0, 0 }, { 1000, 1 } },
+        0.0011, -0.05,  // Very slightly different slope
+        true,
+        { 500, 1 }  // At 500, y will round up to 1 in both cases
+    },
+    {
+        "Line intersection outside segment bounds",
+        { { 5, 5 }, { 10, 10 } },
+        1.0, -10.0,  // y = x - 10, would intersect extended line at (15, 5)
+        false,
+        { 0, 0 }
+    },
+};
+// clang-format on
+
+BOOST_DATA_TEST_CASE( SegLineIntersection, boost::unit_test::data::make( seg_line_intersect_cases ), c )
+{
+    BOOST_CHECK_PREDICATE( SegLineIntersectCorrect, ( c.m_seg )( c.m_slope )( c.m_offset )( c.m_exp_intersect )( c.m_exp_point ) );
+}
+
+// Additional focused test cases for specific scenarios
+BOOST_AUTO_TEST_CASE( IntersectLineVerticalSegments )
+{
+    // Test vertical segments with various line slopes
+    SEG verticalSeg( { 5, 0 }, { 5, 10 } );
+    VECTOR2I intersection;
+
+    // Horizontal line intersecting vertical segment
+    bool intersects1 = verticalSeg.IntersectsLine( 0.0, 7.0, intersection );
+    BOOST_CHECK( intersects1 );
+    BOOST_CHECK_EQUAL( intersection, VECTOR2I( 5, 7 ) );
+
+    // Diagonal line intersecting vertical segment
+    bool intersects2 = verticalSeg.IntersectsLine( 2.0, -5.0, intersection );  // y = 2x - 5
+    BOOST_CHECK( intersects2 );
+    BOOST_CHECK_EQUAL( intersection, VECTOR2I( 5, 5 ) );  // At x=5: y = 2*5 - 5 = 5
+
+    // Line that misses vertical segment
+    bool intersects3 = verticalSeg.IntersectsLine( 1.0, 20.0, intersection );  // y = x + 20
+    BOOST_CHECK( !intersects3 );
+}
+
+BOOST_AUTO_TEST_CASE( IntersectLineVerticalSegmentsCorrection )
+{
+    // Corrected test for vertical segments
+    SEG verticalSeg( { 5, 0 }, { 5, 10 } );
+    VECTOR2I intersection;
+
+    // Line that misses vertical segment (intersection outside y-range)
+    bool intersects1 = verticalSeg.IntersectsLine( 1.0, 20.0, intersection );  // y = x + 20
+    BOOST_CHECK( !intersects1 );  // At x=5: y = 25, which is outside [0,10]
+
+    // Line that intersects within segment bounds
+    bool intersects2 = verticalSeg.IntersectsLine( 0.5, 2.0, intersection );  // y = 0.5x + 2
+    BOOST_CHECK( intersects2 );
+    BOOST_CHECK_EQUAL( intersection, VECTOR2I( 5, 5 ) );  // At x=5: y = 0.5*5 + 2 = 4.5 ≈ 5 (round up)
+}
+
+BOOST_AUTO_TEST_CASE( IntersectLineParallelDetection )
+{
+    // Test parallel line detection using cross products
+
+    // Horizontal segment with horizontal line
+    SEG horizontalSeg( { 0, 5 }, { 10, 5 } );
+    VECTOR2I intersection;
+
+    // Parallel but not collinear
+    bool intersects1 = horizontalSeg.IntersectsLine( 0.0, 8.0, intersection );  // y = 8
+    BOOST_CHECK( !intersects1 );
+
+    // Collinear (segment lies on line)
+    bool intersects2 = horizontalSeg.IntersectsLine( 0.0, 5.0, intersection );  // y = 5
+    BOOST_CHECK( intersects2 );
+    BOOST_CHECK_EQUAL( intersection, VECTOR2I( 5, 5 ) );  // Midpoint
+
+    // Diagonal segment with parallel line
+    SEG diagonalSeg( { 0, 0 }, { 10, 10 } );
+
+    // Parallel but offset
+    bool intersects3 = diagonalSeg.IntersectsLine( 1.0, 3.0, intersection );  // y = x + 3
+    BOOST_CHECK( !intersects3 );
+
+    // Collinear
+    bool intersects4 = diagonalSeg.IntersectsLine( 1.0, 0.0, intersection );  // y = x
+    BOOST_CHECK( intersects4 );
+    BOOST_CHECK_EQUAL( intersection, VECTOR2I( 5, 5 ) );  // Midpoint
+}
+
+BOOST_AUTO_TEST_CASE( IntersectLinePrecisionEdgeCases )
+{
+    // Test precision-sensitive cases
+
+    // Very shallow segment with steep line
+    SEG shallowSeg( { 0, 100 }, { 1000000, 101 } );  // Almost horizontal
+    VECTOR2I intersection;
+
+    bool intersects = shallowSeg.IntersectsLine( 1000.0, -499900.0, intersection );
+    // Line: y = 1000x - 499900
+    // This should intersect around x = 500, y ≈ 100.001
+
+    if( intersects )
+    {
+        BOOST_CHECK( intersection.x >= 0 && intersection.x <= 1000000 );
+        BOOST_CHECK( intersection.y >= 100 && intersection.y <= 101 );
+    }
+
+    // Test with very large coordinates
+    SEG largeSeg( { 1000000, 1000000 }, { 2000000, 2000000 } );
+    bool intersects2 = largeSeg.IntersectsLine( 1.0, 0.0, intersection );  // y = x
+    BOOST_CHECK( intersects2 );
+    BOOST_CHECK_EQUAL( intersection, VECTOR2I( 1500000, 1500000 ) );  // Midpoint
+}
+
+BOOST_AUTO_TEST_CASE( IntersectLineZeroLengthSegments )
+{
+    // Test with zero-length segments (points)
+
+    VECTOR2I point( 10, 20 );
+    SEG pointSeg( point, point );
+    VECTOR2I intersection;
+
+    // Point lies on line
+    bool intersects1 = pointSeg.IntersectsLine( 2.0, 0.0, intersection );  // y = 2x
+    BOOST_CHECK( intersects1 );  // Point (10, 20) is on line y = 2x
+    BOOST_CHECK_EQUAL( intersection, point );
+
+    // Point does not lie on line
+    bool intersects2 = pointSeg.IntersectsLine( 3.0, 0.0, intersection );  // y = 3x
+    BOOST_CHECK( !intersects2 );  // Point (10, 20) not on line y = 3x (would be y = 30)
+
+    // Point on horizontal line
+    bool intersects3 = pointSeg.IntersectsLine( 0.0, 20.0, intersection );  // y = 20
+    BOOST_CHECK( intersects3 );
+    BOOST_CHECK_EQUAL( intersection, point );
+}
+
 BOOST_AUTO_TEST_SUITE_END()

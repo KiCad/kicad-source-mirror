@@ -447,6 +447,76 @@ OPT_VECTOR2I SEG::Intersect( const SEG& aSeg, bool aIgnoreEndpoints, bool aLines
 }
 
 
+bool SEG::IntersectsLine( double aSlope, double aOffset, VECTOR2I& aIntersection ) const
+{
+    const VECTOR2L segA( A );
+    const VECTOR2L segB( B );
+    const VECTOR2L segDir = segB - segA;
+
+    // Handle vertical segment case
+    if( segDir.x == 0 )
+    {
+        // Vertical segment: x = A.x, find y on the line
+        const double intersect_y = aSlope * A.x + aOffset;
+        const int intersect_y_int = KiROUND( intersect_y );
+
+        // Check if intersection is within segment's y-range
+        const int seg_min_y = std::min( A.y, B.y );
+        const int seg_max_y = std::max( A.y, B.y );
+
+        if( intersect_y_int >= seg_min_y && intersect_y_int <= seg_max_y )
+        {
+            aIntersection = VECTOR2I( A.x, intersect_y_int );
+            return true;
+        }
+        return false;
+    }
+
+    const VECTOR2L lineDir( 1000, static_cast<ecoord>( aSlope * 1000 ) );
+    const ecoord cross_product = segDir.Cross( lineDir );
+
+    if( cross_product == 0 )
+    {
+        // Parallel lines - check if segment lies on the line
+        const double expected_y = aSlope * A.x + aOffset;
+        const double diff = std::abs( A.y - expected_y );
+
+        if( diff < 0.5 )
+        {
+            // Collinear: segment lies on the line, return midpoint
+            aIntersection = ( A + B ) / 2;
+            return true;
+        }
+
+        return false; // Parallel but not collinear
+    }
+
+    // Find intersection using parametric equations
+    // Segment: P = segA + t * segDir
+    // Line: y = aSlope * x + aOffset
+    //
+    // At intersection: segA.y + t * segDir.y = aSlope * (segA.x + t * segDir.x) + aOffset
+    // Solving for t: t = (aSlope * segA.x + aOffset - segA.y) / (segDir.y - aSlope * segDir.x)
+
+    const double numerator = aSlope * segA.x + aOffset - segA.y;
+    const double denominator = segDir.y - aSlope * segDir.x;
+
+    const double t = numerator / denominator;
+
+    // Check if intersection is within segment bounds
+    if( t >= 0.0 && t <= 1.0 )
+    {
+        const double intersect_x = segA.x + t * segDir.x;
+        const double intersect_y = segA.y + t * segDir.y;
+
+        aIntersection = VECTOR2I( KiROUND( intersect_x ), KiROUND( intersect_y ) );
+        return true;
+    }
+
+    return false;
+}
+
+
 SEG SEG::PerpendicularSeg( const VECTOR2I& aP ) const
 {
     VECTOR2I slope( B - A );
@@ -616,13 +686,8 @@ int SEG::Distance( const VECTOR2I& aP ) const
 
 SEG::ecoord SEG::SquaredDistance( const VECTOR2I& aP ) const
 {
-    // Using the VECTOR2L() reflexive c'tor is a performance hit.
-    // Even sticking these in a lambda still invokes it.
-    VECTOR2L ab, ap;
-    ab.x = static_cast<int64_t>( B.x ) - A.x;
-    ab.y = static_cast<int64_t>( B.y ) - A.y;
-    ap.x = static_cast<int64_t>( aP.x ) - A.x;
-    ap.y = static_cast<int64_t>( aP.y ) - A.y;
+    VECTOR2<ecoord> ab( ecoord( B.x ) - A.x, ecoord( B.y ) - A.y );
+    VECTOR2<ecoord> ap( ecoord( aP.x ) - A.x, ecoord( aP.y ) - A.y );
 
     ecoord e = ap.Dot( ab );
 
@@ -633,9 +698,8 @@ SEG::ecoord SEG::SquaredDistance( const VECTOR2I& aP ) const
 
     if( e >= f )
     {
-        VECTOR2L bp;
-        bp.x = static_cast<int64_t>( aP.x ) - B.x;
-        bp.y = static_cast<int64_t>( aP.y ) - B.y;
+        VECTOR2<ecoord> bp( ecoord( aP.x ) - B.x, ecoord( aP.y ) - B.y );
+
         return bp.Dot( bp );
     }
 

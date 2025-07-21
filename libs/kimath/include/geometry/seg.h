@@ -223,6 +223,16 @@ public:
     }
 
     /**
+     * Check if this segment intersects a line defined by slope \a aSlope and offset \a aOffset.
+     *
+     * @param aSlope slope of the line
+     * @param aOffset offset of the line
+     * @param aIntersection output intersection point, if exists
+     * @return true if the segment intersects the line, false otherwise
+     */
+    bool IntersectsLine( double aSlope, double aOffset, VECTOR2I& aIntersection ) const;
+
+    /**
      * Compute a segment perpendicular to this one, passing through point \a aP.
      *
      * @param aP Point through which the new segment will pass
